@@ -4,87 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B789FCDE002
-	for <buildroot@archiver.kernel.org>; Wed, 24 Jun 2026 14:06:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 81D37CDE003
+	for <buildroot@archiver.kernel.org>; Wed, 24 Jun 2026 14:06:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5967C60872;
+	by smtp3.osuosl.org (Postfix) with ESMTP id EFFBF60AD3;
 	Wed, 24 Jun 2026 14:06:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id e5r3Vb6i_gZ6; Wed, 24 Jun 2026 14:06:55 +0000 (UTC)
+ id r06SyK7D5w4w; Wed, 24 Jun 2026 14:06:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2EAFB60881
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 364FC607F0
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1782310014;
-	bh=HfjC0SjYQ3ibMv0zjHTyXXrExZRYk3iE+DFYhZS0kN8=;
+	s=default; t=1782310013;
+	bh=w1fjpvQTQUpU59UN0iY8wsvYOB0DAj7Vzs5J3INMPk4=;
 	h=To:Date:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
 	 From;
-	b=HC4PrE3mk7cPinvVUwRNVjFMlhwAk0qf5xMImzVKn7gU11fv5wsK5IvINXTNvP44i
-	 Qgbqy+n0e/I1Qulbd0KZ1IWloUc+QwTfhDd2sJc93tU5HpdD5vip/Y8i0x7KD4YIjH
-	 +1NgZ4l4zurTcrAe/t8F42ymUNu4OrRoS0aYahkJY0QWKroJhEXG2/WehZ7FwMi/Rd
-	 +/Re/vq0+nvpY0rka0USTFd97cK+Yep9KrbcleKVYybPl6gtDxkfaP1Nx30TxH8dsK
-	 /cpj5WkvR6/C+pp+PbZOJ6f4B+K2KrEx4e2Io5bAY4zpCI6YgsYso7w7GCLogdijLL
-	 FkwqLFaum7BVw==
+	b=NhwGBaR7LHJXmvcQwEwSWtvJVNExVZxEuiDmOaTBi5JOOVsWq799aCd9cM5C7sx1A
+	 sm3zJXI4kUqevrW6pe1O6lyjKgNZ4OSVdrpiwA5SSp+uLubGit1G7DFMahteRHMYRb
+	 L/7CUAcNq8x6PC//KJ3dMtJuEIaN7HQYgbFo+ME53MClBE+iDTxSc+mJCtXQrFRYuJ
+	 lKRKvfYuvT38cncxiKSq5CARCetJTKw+lyYqbqie3BbmGeVqvvi2omWd603RK74j2F
+	 OpGOf642OiZlsU9AWWxVZY72o7NzxOoGOvc2g9lcPghJOvCKuSut5EJDESk+ShmabG
+	 X8LSwgq61KD4g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2EAFB60881;
-	Wed, 24 Jun 2026 14:06:54 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id E6014367
+	by smtp3.osuosl.org (Postfix) with ESMTP id 364FC607F0;
+	Wed, 24 Jun 2026 14:06:53 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3A037363
  for <buildroot@buildroot.org>; Wed, 24 Jun 2026 14:06:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D6C3D607F0
- for <buildroot@buildroot.org>; Wed, 24 Jun 2026 14:06:50 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2C20B40911
+ for <buildroot@buildroot.org>; Wed, 24 Jun 2026 14:06:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pdEQVdfkqWi2 for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UqmxYM27IEeo for <buildroot@buildroot.org>;
  Wed, 24 Jun 2026 14:06:50 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
+ client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 34CEA60829
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 34CEA60829
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
- [IPv6:2a00:1450:4864:20::333])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 34CEA60829
- for <buildroot@buildroot.org>; Wed, 24 Jun 2026 14:06:50 +0000 (UTC)
-Received: by mail-wm1-x333.google.com with SMTP id
- 5b1f17b1804b1-490b9318997so5779435e9.2
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org CAA71408AF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CAA71408AF
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
+ [IPv6:2a00:1450:4864:20::32f])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id CAA71408AF
+ for <buildroot@buildroot.org>; Wed, 24 Jun 2026 14:06:49 +0000 (UTC)
+Received: by mail-wm1-x32f.google.com with SMTP id
+ 5b1f17b1804b1-490bc6a7958so15961475e9.1
  for <buildroot@buildroot.org>; Wed, 24 Jun 2026 07:06:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20251104; t=1782310008; x=1782914808;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=k1VfvOGJWECHbJAxrOIWtyhFz95ARBNLSjXnFWFVXRo=;
- b=IcJkwQzEGQD3z/j3qfOqUH8J1LcsGcX1Hb0C8d9xaCzjqe2nCP5nKkCAcIw/P2QEAn
- WlGhQiWANtWBPBAamT0sDCI/lApj/vT3mT+n6AdyVCPOMdYp/Q8BgYJ/mQDgYeYIKZMR
- 4u5CLCS+CImn6pQ36fgrRW5ZoJqAy5pAAug2SnUnSBZhqlhWIM698vS5QYPYEPA3rKtZ
- QC4030VA1+InGMqo6YHDC5+38fkr3ODoSY5ZZ8ovpT6uzqntWqnMpxaAqtFBp2+Ug+zu
- efzDgpIFZG/ubJEr0CbvZQHXViPF01tYW6aazrsraxVDDWVBEMp794eD514Ermk5+5nZ
- ja9A==
-X-Gm-Message-State: AOJu0Ywd3FR+zz8wfhYk5sDU3OMWuEJX9pNAfqc/4KAjLlUCjtGsqE1o
- t2zUOPfbitnLxRux1+mEfG7EVWlcTiGqgTTkR97MqBUTW89MFiMMRvDECBCdMNyZvB4bteQvDDT
- 8ue4P
-X-Gm-Gg: AfdE7clNRumBmGDY8VpCrGNMpOuXcsD7R/U2uvb8UAPdIsR6aApxgTXVrPdPKpUdnwb
- hVjSbgWV+QmzRnChoPlyP1JsR956sxyxat8XyKmfpjxwS7Jo3snzWopeiMnMGrRcUXF1a/DTkNA
- 1WstN7OYLOYOkUD6D10XH0FH0E6ij671E3MKuS8NwOcZZu8lbbf8+o9xx4zhtRzOwB/9TXCCKbt
- 0s3HDn846h04FBXEl/Lr6aZjSpyQFFFOI+AhvoljrzyuERFzNTKyXDcmJcF3ycgEJPgUuRiCE1f
- ZrjwkmSV3KLVsuVfGqy0nVC/2NfbGlrP0+Q0+tU6m4Myg/6p25Ml2HQ4I7cFyJBF6EDcGT6d4Tr
- idZ+Kbnog0vGVx75TU4q0mYdZIlU9JrDd8ryv0uBTh3u0vSmvuwfvJMNB3U6GJh//hiI5I9otei
- CC+eYI
-X-Received: by 2002:a05:600c:1d0f:b0:492:4a70:faaa with SMTP id
- 5b1f17b1804b1-492608523b1mr46681805e9.11.1782310007994; 
+ bh=X+8uYXfEUZbj0uJzeMLgDZRNTNRk+xjm7XU9vg2cn8Y=;
+ b=igj+p0PQd1t9ghnjLRL/sR044d5KGQTRHS7mD9aND4PCt+whmy5w+nNG0sPsu+XBcV
+ RMztvnt+nZFmOXLAT6VJFy8T7IBeR5YhA6P+W9IX2JCaj2jGmVUyFJMdxER6Rxuk/waF
+ 7MZ+k/Ly6gFc0Jse1ZBwYAynG71Mhi04qvJLSXSe5vFOfLuaiV18gNBus+ZQiqYe6zYE
+ IDXTis9OigVxxPFEPc8ILz44mSok5FSuVojwG3UTKe0h4Mb9DcQKs3OY3jIkndQIWaM7
+ cziBv8NxyJp2sXuxQ4BPtp1QnRuOo/a38xY0mCGVE9DsmeA+sb7F8uV5FW4P7qaVDAVo
+ L/FQ==
+X-Gm-Message-State: AOJu0YzkbwdLqbhq9I7IktKKfgOuDKgNg7Z+5K/c+0hUKezrpaLQoCMI
+ DzWdmbrBkxVAFHR6bvKQPfePFaGy06V7lEt6R0orGmLtbqaziB0ADhnU2rxHt3nYA5l2Nuc3Brq
+ XENXi
+X-Gm-Gg: AfdE7cmPo8qtq/Ua+1pxy7+i8En7Xcgt7VelFvVXcmuMo78mhZ5NGp66s467Tvrp49C
+ q3xW6ar2Q2vHtX8wPy6loGd+RzETwl7ZpRkK1KFndREAYDs5EgnBo1oabMUkxmGJksGMPVC9pkD
+ 1V/+ccWBnVbWlAgmbtm6npECQdV38/QJBEUJTnjUJ3FuAei+OpYHDHv/OmxgNX60kJjtTIwlvga
+ tHB1dccxMueBhUa5JYXvWfdi4m6jxY8dNfFgWmDIlfW0zRb+PFHytvGWGdEx4dPGgBEkqBT41Y8
+ GNWjv/LgwVs8fssj6N4tnzw+F0my7q6tXZ7sWRLuIivQMsb6NnqFyo4TUHVHwbPYf8bwlRojXnX
+ TinGikf6TG3yKGkCbEh3YCiUyTq0CSoJOPnjhZmsRPgmI8SCbPNbk6w6JYCqeC2JhE0qWpyQnlS
+ qres9/bqYITo0X/6Y=
+X-Received: by 2002:a05:600c:4747:b0:490:3cf0:8d81 with SMTP id
+ 5b1f17b1804b1-492632b20b7mr8970385e9.13.1782310007482; 
  Wed, 24 Jun 2026 07:06:47 -0700 (PDT)
 Received: from arch ([77.109.126.38]) by smtp.gmail.com with ESMTPSA id
  5b1f17b1804b1-49260e14d0asm43700205e9.0.2026.06.24.07.06.47
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
  Wed, 24 Jun 2026 07:06:47 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Wed, 24 Jun 2026 16:06:33 +0200
-Message-ID: <20260624140645.185318-3-thomas.perale@mind.be>
+Date: Wed, 24 Jun 2026 16:06:32 +0200
+Message-ID: <20260624140645.185318-2-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260624140645.185318-1-thomas.perale@mind.be>
 References: <20260624140645.185318-1-thomas.perale@mind.be>
@@ -94,21 +94,22 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=k1VfvOGJWECHbJAxrOIWtyhFz95ARBNLSjXnFWFVXRo=;
- b=DO4nrOv0D7Hs1iKrI0c/YDysDvej5cH/Ka4wmRkn+CfhMtQ0ctg0rK3hd4ZjQJERCQ
- cwk9AvxVk3Yau/GK+oK6h5z7/u+QGEvC5dRTzNGFPX+FoFFNN4udTma7uT3ZX+Y7tU62
- 2J3as8ZVm4JbOdv0wbEinmJdw8VyvfPEoJ/ChrMXQiF7wRLueZuC6t9XgpTHABNaWR3f
- q0T4fENZrhN1Scb/dNwCUA8lSHWEsOM8shXcK3a6IyQfrqw52OPpT2KxabYcRkvRai3i
- JnzVSzEDxEWfRN37rJAx/6G1MpQbDzEULMQ71aZdaE1h2WavSvaI23irliGCFFCIBqUC
- 1g6w==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=X+8uYXfEUZbj0uJzeMLgDZRNTNRk+xjm7XU9vg2cn8Y=;
+ b=UWowOXZZWHv/LlNYzxl5LbOAPxBrHQ9U1Rb2Sdj1+AZ1W09+tKbdENzjYekRcOjgm2
+ 2RYwLiAChdkS2M7XWEIVIWgd2DExo+rqe2SDhDCyCt7kycp11LVCrG7lRIpSVnjmneL2
+ oZk3jQzVv6+YjQiL80MGB2tbbTkSdBAAzY47dBO+HiIUZNTVx52U0RiWl9rWlbBWthbr
+ YDziS1biuTnoHn6y2eWxFEbqGh5uLngVmISzImw9mxPDggZMBbjmRlZKPoV5tZQnBnlX
+ KhnzhY9PZjiz+8Dboh49ZvHOjZCgVtZ4ltsEkkifoUOuw1bo5DFPM2ovFCJWdeipohRL
+ QdWA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=DO4nrOv0
-Subject: [Buildroot] [RFC PATCH 02/14] utils/checkpackagelib/lib_mk.py:
- check _STATUS value is supported
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=UWowOXZZ
+Subject: [Buildroot] [RFC PATCH 01/14] docs/manual: add vulnerability status
+ and justification
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -129,44 +130,95 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Check that `<pkg>_<vuln-id>_STATUS` variable values are using a status
-value supported.
+In Buildroot, we can put the ignore CVEs entries in different
+categories:
+
+- Vulnerability fixed by a patch.
+- Vulnerability ignored because the internal tooling detect it as a
+  false positive
+- Vulnerability ignored because the database is wrong or not up-to-date.
+- Vulnerability ignored because it doesn't apply to Buildroot
+  (platform/hardware specific, ...).
+- Vulnerability ignored because Buildroot is using an upstream fixed
+  version (based on a hash for instance) while the CPE metadata
+  reference the latest known version.
+
+Since the introduction of `_IGNORE_CVES` the justification for the
+vulnerability were added as a comment on top of the ignored
+vulnerability. With the introduction of the rule for the `CVE:` trailer
+it's now possible to distinguish the vulnerabilities that are patched
+from the one that are not-applicable for another unknown reason.
+
+This commit add documentation to introduce two new variables:
+
+- `<pkg>_<vuln-id>_STATUS`
+- `<pkg>_<vuln-id>_DETAIL`
+
+This allows to have machine readable variables that are exposed and
+contains the reasons why a vulnerability is set as ignored instead of
+storing this knowledge in a comment on top of the `_IGNORE_CVES` entry.
+
+The `<pkg>_<vuln-id>_STATUS` syntax is based on OpenVex statuses syntax
+[1][2]. This varialbe only needs to be used if a patch on the Buildroot
+tree isn't present.
+
+The `<pkg>_<vuln-id>_DETAIL` is a free text field that allows to add
+more information to justify the status.
+
+[1] https://github.com/openvex/spec/blob/main/OPENVEX-SPEC.md#status-labels
+[2] https://github.com/openvex/ospec/blob/main/OPENVEX-SPEC.md#status-justifications
 
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- utils/checkpackagelib/lib_mk.py | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+ docs/manual/adding-packages-generic.adoc | 35 ++++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-diff --git a/utils/checkpackagelib/lib_mk.py b/utils/checkpackagelib/lib_mk.py
-index 5d48e8929c..6201d324fa 100644
---- a/utils/checkpackagelib/lib_mk.py
-+++ b/utils/checkpackagelib/lib_mk.py
-@@ -443,3 +443,25 @@ class CPEVariables(_CheckFunction):
-             if field == "VALID":
-                 self.valid = {"lineno": lineno, "text": text}
-             self.non_defaults += 1
+diff --git a/docs/manual/adding-packages-generic.adoc b/docs/manual/adding-packages-generic.adoc
+index e7547460fd..47b28adf4b 100644
+--- a/docs/manual/adding-packages-generic.adoc
++++ b/docs/manual/adding-packages-generic.adoc
+@@ -520,6 +520,41 @@ LIBFOO_IGNORE_CVES += CVE-2020-12345
+ LIBFOO_IGNORE_CVES += CVE-2020-54321
+ ----
+ 
++* +LIBFOO_<VULN-ID>_STATUS+ informs about the impact of the vulnerability
++  +<VULN-ID>+. This variable needs to be set only if the referenced +<VULN-ID>+
++  is not fixed by a patch present in the Buildroot tree. It support different
++  labels based on
++  https://github.com/openvex/spec/blob/main/OPENVEX-SPEC.md#status-labels[OpenVex
++  statuses] and
++  https://github.com/openvex/spec/blob/main/OPENVEX-SPEC.md#status-justifications[justification]:
++  ** +fixed+: referenced by the package Makefile already includes the fix but
++     no new version has been issued by the upstream project. This typically
++     happens when the version is using an +hash+ and the CPE reference the
++     latest known version.
++  ** +not-affected-component-not-present+: the vulnerability is incorrect and
++     should reference another package. Or the package is not part of the final
++     image.
++  ** +not-affected-vulnerable-code-not-present+: the code affected by the
++     vulnerability is not included in the final image. Could be a not supported
++     architecture, flags that are disabled by the package configuration,
++     busybox commands not built, dependencies not supported, ...
++  ** +not-affected-vulnerable-code-not-in-execute-path+: the vulnerable code is
++     present in the generated image but cannot be reached because of the
++     system's runtime configuration.
++  ** +not-affected-vulnerable-code-cannot-be-controlled-by-adversary+: the
++     vulnerable code may be executed, but an attacker cannot control the inputs
++     required to trigger the vulnerability.
++* +LIBFOO_<VULN-ID>_DETAIL+ is an optional free text entry that add
++  additional information on the reason a +STATUS+ has been set for a
++  +<VULN-ID>+.
+++
++----
++LIBFOO_IGNORE_CVES += CVE-2020-54321
 +
++LIBFOO_CVE-2020-54321_STATUS = not-affected-vulnerable-code-not-present
++LIBFOO_CVE-2020-54321_DETAIL = Only when built with libbaz, which Buildroot doesn't support
++----
 +
-+class VulnerabilityStatus(_CheckFunction):
-+    VALID_STATUSES = [
-+        "fixed",
-+        "not-affected-component-not-present",
-+        "not-affected-vulnerable-code-not-present",
-+        "not-affected-vulnerable-code-not-in-execute-path",
-+        "not-affected-vulnerable-code-cannot-be-controlled-by-adversary",
-+    ]
-+    CVE_STATUS = re.compile(r"^[A-Z0-9_]+(CVE-\d{4}-\d+)_STATUS\s*=\s*(\S+)")
-+
-+    def check_line(self, lineno, text):
-+        m = self.CVE_STATUS.match(text.rstrip())
-+        if m is None:
-+            return
-+        status = m.group(2)
-+        if status not in self.VALID_STATUSES:
-+            return ["{}:{}: invalid _STATUS value '{}', expected one of: {} ({})".format(
-+                self.filename, lineno, status,
-+                ", ".join(self.VALID_STATUSES), self.url_to_manual),
-+                text]
+ * [[cpe-id]] +LIBFOO_CPE_ID_*+ variables is a set of variables that allows the
+   package to define its https://nvd.nist.gov/products/cpe[CPE
+   identifier]. The available variables are:
 -- 
 2.54.0
 
