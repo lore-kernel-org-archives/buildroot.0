@@ -4,110 +4,110 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DD7ACDE003
-	for <buildroot@archiver.kernel.org>; Wed, 24 Jun 2026 14:07:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48446CDB481
+	for <buildroot@archiver.kernel.org>; Wed, 24 Jun 2026 14:07:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 867EE60D4F;
-	Wed, 24 Jun 2026 14:07:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DF32760D70;
+	Wed, 24 Jun 2026 14:07:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qX1zKqkg93ow; Wed, 24 Jun 2026 14:07:09 +0000 (UTC)
+ id p7hdp5OyztVA; Wed, 24 Jun 2026 14:07:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 44E1560C28
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C149360D67
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1782310029;
-	bh=HqiFeC9If6/TEZkD3YaXpE4P1pQb9GJc+67dkSuz7hk=;
+	s=default; t=1782310030;
+	bh=xQ8szUma5xLofRGbn6PaQVUZONxBjgCsB8yTr4pbnfM=;
 	h=To:Date:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
 	 From;
-	b=pM9TcOOgeqgj8YSOU/Sfb7+8kjQkIU1p+j06YM9rxmQ7+hhopDDgzIoSVHXcTZGrL
-	 ve8/H6UuhiVb5VTfnQzkTmxNEtrGOnRgILpeh+TqRmuIPfQdtoSxhANJN7uZ4GgPOC
-	 cYUsxqZIEouqQTiHxiVBHq9mNA1s5Zmqp3gV6RmFkpL5ZnqnWwEQZRuddVsjTT5u8I
-	 2DcIcXwMMSQWQaXY0eYuZLXPcNyXsy0E/S0s1beuMRwsYPBqd0zEHk1W39N1+rqaq+
-	 yflz6smGg343tQarRA7sSGNgmYi2qEE5DMQkD2Vn5WE/IurCueQP/faRWKIU6PdpmR
-	 ZwDZyOVMJvxDg==
+	b=SgH5lJYMqKEpmiCqVjFeBTE86Fdne0iLf8gDSnGPl+l1ClvsL7+PCEQCJmu4jofTW
+	 bNGeam1SpQui4MqWG1G9/Blcn5AhYbDIc8LqBHm2JRfMsgJqaYDJejEZn/czzXi9im
+	 CA00MQPYA/n8kPZOLqOEsf0ZjaRKU+ruSE94r6QGo0/di7H4wWMETw8aTWPy7DIjiZ
+	 JZENTZGZv97g+m41IaWLyYAcSSBDyKli3WVcwzmqSZkNSjRX/GEvUUYvEfx7a3qRZB
+	 F7PFIAoRf1okptzver9jJKQuGe7fuFvRvOQ9YgMK49yZhDpe4u+C8Iv9h7h9fESo2E
+	 nPc8QzGw5W4PQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 44E1560C28;
-	Wed, 24 Jun 2026 14:07:09 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 75FAF367
+	by smtp3.osuosl.org (Postfix) with ESMTP id C149360D67;
+	Wed, 24 Jun 2026 14:07:10 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7DA3A4D1
  for <buildroot@buildroot.org>; Wed, 24 Jun 2026 14:06:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 396D460B04
+ by smtp4.osuosl.org (Postfix) with ESMTP id 634B9408EE
  for <buildroot@buildroot.org>; Wed, 24 Jun 2026 14:06:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Pg0iNTGKeD64 for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UVJoP-oBtHBn for <buildroot@buildroot.org>;
  Wed, 24 Jun 2026 14:06:57 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::335; helo=mail-wm1-x335.google.com;
+ client-ip=2a00:1450:4864:20::331; helo=mail-wm1-x331.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org AF55660AB7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AF55660AB7
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
- [IPv6:2a00:1450:4864:20::335])
- by smtp3.osuosl.org (Postfix) with ESMTPS id AF55660AB7
- for <buildroot@buildroot.org>; Wed, 24 Jun 2026 14:06:56 +0000 (UTC)
-Received: by mail-wm1-x335.google.com with SMTP id
- 5b1f17b1804b1-49261a64cf4so3924475e9.2
- for <buildroot@buildroot.org>; Wed, 24 Jun 2026 07:06:56 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org AF629408AF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AF629408AF
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
+ [IPv6:2a00:1450:4864:20::331])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id AF629408AF
+ for <buildroot@buildroot.org>; Wed, 24 Jun 2026 14:06:57 +0000 (UTC)
+Received: by mail-wm1-x331.google.com with SMTP id
+ 5b1f17b1804b1-490b613a17bso10508025e9.3
+ for <buildroot@buildroot.org>; Wed, 24 Jun 2026 07:06:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1782310015; x=1782914815;
+ d=1e100.net; s=20251104; t=1782310016; x=1782914816;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=FJ9NcvHCizDuyZLSQisZrDQ6QmGBalsIRGa3vy7hwQg=;
- b=bC00kuWJSYxiv41XpwhGylFCZOsIDynrkSUUAGIfTJeyCsmMnjXQvOSVsojhTDu1fu
- 5juyot+JK/dS5PvZXaJA+PKzpqqA/wXgA9sXzqrv8njl6DWzC1o4h7DPdKON2JEtAcp2
- hquxhZR5bpauGlCygSx9MsPbkx5MWrBXwRbY+24IljdAkc+L2SP0fvVVPYZNJuSdCZV3
- OgbDh3ZH63MvZG7+yuYm2WQreYfQCTv8C3riyIMbd/pMm5RqGJCYC1GObBAjbspu/ZKz
- IgFU6rVduSADv/YASJ8VKmWHyLtYfrzO9eFRCC/GWr9ve64M9CDygD5D6CQyNJWrd6tG
- MM+A==
-X-Gm-Message-State: AOJu0Yxj/+UKjKZPk8BCKW6e8fqHyktpXQ1SywUtPmcOAMbj2Scv1eHJ
- wQpvP/LkmE96d1ciM2y+F1iRZiT4mOjDl/u1EdteTCBP2zvduCFfQ4L99Q0eMcmoePzcr1boRIY
- 0UW+b
-X-Gm-Gg: AfdE7ckYewzsVygJGue58QdqGRuFHBrsbeKKvDzpWUzcniuexK00iUJ6Mi9W2vuU0TO
- EeIkymKdaLOkGVyXT9/cn1ez4VIjHRsRDGHqILtVNOclmjW2xGOxQARXDTSaEVhnFpoZbGV8UmS
- jeFvVXiPCBuwjchASdEnddtknnyk+anljPS30sak/bl3U37n1tbp0tCbAbhFu2wOHwc8XZnFgv4
- O5cQ4HXCaqf27/HmpWBsgiFZ7zV48z/SHln4M/cv2368h8NeqvWCGcsLnfQq4qxae6674jknhU8
- 9lOQC1tDDNDZu3nmsSIlN/24gVF9ocGHHpLNldSx2wEDhnBO7jkVRC5dMRXZAcqhz5Y2kP4QotQ
- cO2Rosu6aFJQrgz4003tkEITe46Foh0UzLKY74OEytqVkAmkkIaPyFOM6jeiUw/xe7udz0+AKxW
- 2OkerJYHGSfhJc4gY=
-X-Received: by 2002:a05:600c:c4a2:b0:492:604b:c77b with SMTP id
- 5b1f17b1804b1-49260875ae9mr47804915e9.26.1782310014458; 
- Wed, 24 Jun 2026 07:06:54 -0700 (PDT)
+ bh=IRGEZITvU6KDSRAdY3Nl6F4TtG9CRmX/ZxGQ0bw6rog=;
+ b=S8q3tGzlXn1mkdyzUPzc217Fh2a8yjOqVVLma/ke6XYP+9nspfqhDJDaCl2yJjDO21
+ cZNhRbsz4cFHBu0rS6BTN56m0c8j573FReAiyxj1CWY6cz7SEpvbXGUWn/SzYOzWd4uS
+ Py04/l3xG479O0ooYZNR9j1ST4VHxaxyvn5p/T39BNflchrokzisx8OQSJdtEKzSGkDi
+ vpbtowoL34qATVdgl9MFUH7AddqFdVtflcSFnZ6k6UqjYyJABShVPKj5mahmLHIUsUDx
+ +AW13ayM8vC8y9W0rJ+Z0YWBRwhYcS1yrmYFWVCnxAIgvD5D/4KecsOy94rR9NVsobF0
+ Sxdw==
+X-Gm-Message-State: AOJu0YwNeyEWKhpSLU+hxsuv8fijWswhyuFrGQm1VvWl+CtUNB777RPS
+ 0tDkfxQ65PtP9134FxLdfrL3oOgr6Aa9XYLtSsDvyJUgHk3Zg2JYTvGtdz5W3WTj3ymXoD04Lep
+ 7deyZ
+X-Gm-Gg: AfdE7clKuuh/SdOs9q+pkuDSkHBwOhGePnwSi2isL+ztT9abe+vvhGjs00Nqsh8UUiR
+ 7wKAczkCxlLXY3/gJpWdSSDoyEymTtc3YkzfvK+GlRkJ7LSCtZ7YQqFSJB1eGRwkcMcmAScs9jD
+ t2IJxMCvSEpNadJrKgyq6NMQs0Gqv5yBtK42N/o3X8B0w9CEQYOukL1kQGZ5J794s4DzxAkPI18
+ SeUYCFfyAfcL8eACY6z5NLeYCctUjNnpLmQJNUI2efCDOFH0igsc14j69LtEOXDcb9FlBh6XweX
+ kGDQrcLCOswLTzBpOxjPaxxI0EnKhWFsTNHUAF86GZcdOtNoJjt/ZAT3yfowf5ztBnxiaXJuNq6
+ Z3DdH31BbHC/tGuFOvlUfxizW8z3SPNKHt2iW6JrpZ/IslCwQFDup3dOIRSK5KGLVLPVSZy4oSj
+ woowC7
+X-Received: by 2002:a05:600c:154a:b0:492:3e66:6c84 with SMTP id
+ 5b1f17b1804b1-492490af5c2mr299472575e9.30.1782310015625; 
+ Wed, 24 Jun 2026 07:06:55 -0700 (PDT)
 Received: from arch ([77.109.126.38]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-49260e14d0asm43700205e9.0.2026.06.24.07.06.53
+ 5b1f17b1804b1-49260e14d0asm43700205e9.0.2026.06.24.07.06.55
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 24 Jun 2026 07:06:53 -0700 (PDT)
+ Wed, 24 Jun 2026 07:06:55 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Wed, 24 Jun 2026 16:06:42 +0200
-Message-ID: <20260624140645.185318-12-thomas.perale@mind.be>
+Date: Wed, 24 Jun 2026 16:06:44 +0200
+Message-ID: <20260624140645.185318-14-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260624140645.185318-1-thomas.perale@mind.be>
 References: <20260624140645.185318-1-thomas.perale@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1782310015; x=1782914815; darn=buildroot.org;
+ d=mind.be; s=google; t=1782310016; x=1782914816; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=FJ9NcvHCizDuyZLSQisZrDQ6QmGBalsIRGa3vy7hwQg=;
- b=UKvKb/wTx3MVPaWiq3MeKVnWR06bseKIH3Te+u4ZZ88q47fxmESUv36RJMu77MP3pn
- FviEKffnfodmfrGXwuEaWT8749fOVirkJBfJ7j/CkKm5LbTN2Rr4jzFVpfsdfS5SsiRF
- QXmscOgfJi30uc7oHRkunDRdG/zhcW8y7/jZK5jd3pSh2fWXFcshR4cUr1qADm5kXvqE
- m5c4OFo3K910l4mEFqxYTJKryw1XF8MVt821TNPGf6bE8gyle/C/u6vk+ffeQCLhR/ZC
- 5BzTXaHl7HmGfK4dERh7UcLtVGh4710hV7nZmAL7OEhytEyAav91Eld1qnCwObD6rd6N
- U+yQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=IRGEZITvU6KDSRAdY3Nl6F4TtG9CRmX/ZxGQ0bw6rog=;
+ b=RAFxdGhGZzIdvC9cvVDvgxhsPx90zhedwcjOcK0ziM1TWTESB9RDZBMCnRRZSS45+7
+ uPT7YXaBqIlufIRihVH1Q8cW6sb/6melKqm11DJs01usP6XgDAVTAqgSQyS2JCElSPd9
+ 25+WkRKfGu/xxR7l6/XLQVNVdBNdSEthAiISb2/Ow41nJgNutTwNUEMZv/MGntvY8mlb
+ OMcDqBRcU5pPL0LD+g7HTfCbFtPHXa1vyM4zJe09c3CxfK17e306ZrMHPEkFTbh4vTAt
+ 4M7GI9/imQWo8mnBDb7hia6PdYVzMwcpaL6BHkR4XBejoSSXJy4LLYQlxz107az1PUe8
+ qSOA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=UKvKb/wT
-Subject: [Buildroot] [RFC PATCH 11/14] package/glibc: add vulnerability
+ header.a=rsa-sha256 header.s=google header.b=RAFxdGhG
+Subject: [Buildroot] [RFC PATCH 13/14] package/flex: add vulnerability
  details
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -129,79 +129,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Those vulnerabilities has already been addressed upstream but no new
-package version have been released with those fixes.
-
-The CVE-2010-4756 is not considered as a security issue by the upstream
-project and is then marked as fixed.
+The upstream project as discarded the vulnerability as it works as
+expected.
 
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/glibc/glibc.mk | 32 ++++++++++++++++++++------------
- 1 file changed, 20 insertions(+), 12 deletions(-)
+ package/flex/flex.mk | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index 4a6bc94634..9edab5e4d2 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -19,37 +19,45 @@ GLIBC_CPE_ID_VENDOR = gnu
- # allow proper matching with the CPE database.
- GLIBC_CPE_ID_VERSION = $(word 1, $(subst -,$(space),$(GLIBC_VERSION)))
+diff --git a/package/flex/flex.mk b/package/flex/flex.mk
+index c6417fea83..2acd6d1e3d 100644
+--- a/package/flex/flex.mk
++++ b/package/flex/flex.mk
+@@ -10,12 +10,13 @@ FLEX_INSTALL_STAGING = YES
+ FLEX_LICENSE = FLEX
+ FLEX_LICENSE_FILES = COPYING
+ FLEX_CPE_ID_VENDOR = westes
+-# bug does not cause stack overflows in the generated code and has been
+-# noted upstream as a bug in the code generator
+-FLEX_IGNORE_CVES = CVE-2019-6293
+ FLEX_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES) host-m4
+ HOST_FLEX_DEPENDENCIES = host-m4
  
--# Fixed by glibc-2.41-64-g1e16d0096d80a6e12d5bfa8e0aafdd13c47efd65
- GLIBC_IGNORE_CVES += CVE-2025-8058
-+GLIBC_CVE-2026-8058_STATUS = fixed
-+GLIBC_CVE-2026-8058_DETAIL = glibc-2.41-64-g1e16d0096d80a6e12d5bfa8e0aafdd13c47efd65
- 
--# Fixed by glibc-2.42-49-gb0ec8fb689df862171f0f78994a3bdeb51313545
- GLIBC_IGNORE_CVES += CVE-2026-0861
-+GLIBC_CVE-2026-0861_STATUS = fixed
-+GLIBC_CVE-2026-0861_DETAIL = glibc-2.42-49-gb0ec8fb689df862171f0f78994a3bdeb51313545
- 
--# Fixed by glibc-2.42-50-g453e6b8dbab935257eb0802b0c97bca6b67ba30e
- GLIBC_IGNORE_CVES += CVE-2026-0915
-+GLIBC_CVE-2026-0915_STATUS = fixed
-+GLIBC_CVE-2026-0915_DETAIL = glibc-2.42-50-g453e6b8dbab935257eb0802b0c97bca6b67ba30e
- 
--# Fixed by glibc-2.42-51-gcbf39c26b25801e9bc88499b4fd361ac172d4125
- GLIBC_IGNORE_CVES += CVE-2025-15281
-+GLIBC_CVE-2025-15281_STATUS = fixed
-+GLIBC_CVE-2025-15281_DETAIL = glibc-2.42-51-gcbf39c26b25801e9bc88499b4fd361ac172d4125
- 
--# Fixed by glibc-2.43-16-g5c6fca0c62ce5bd6e68e259f138097756cbafd4d
- GLIBC_IGNORE_CVES += CVE-2026-4437
-+GLIBC_CVE-2026-4437_STATUS = fixed
-+GLIBC_CVE-2026-4437_DETAIL = glibc-2.43-16-g5c6fca0c62ce5bd6e68e259f138097756cbafd4d
- 
--# Fixed by glibc-2.43-17-gdd9945c0ba40d2dbc9eb7c99291ba6b69bd66718
- GLIBC_IGNORE_CVES += CVE-2026-4438
-+GLIBC_CVE-2026-4438_STATUS = fixed
-+GLIBC_CVE-2026-4438_DETAIL = glibc-2.43-17-gdd9945c0ba40d2dbc9eb7c99291ba6b69bd66718
- 
--# Fixed by glibc-2.43-22-g8362e8ce10b24068bacc19552c128dd10e082fd9
- GLIBC_IGNORE_CVES += CVE-2026-4046
-+GLIBC_CVE-2026-4046_STATUS = fixed
-+GLIBC_CVE-2026-4046_DETAIL = glibc-2.43-22-g8362e8ce10b24068bacc19552c128dd10e082fd9
- 
--# Fixed by glibc-2.43-26-g2890b35cd361df2517525bf2c5f8c63f6f0d4a20
- GLIBC_IGNORE_CVES += CVE-2026-5928
-+GLIBC_CVE-2026-5928_STATUS = fixed
-+GLIBC_CVE-2026-5928_DETAIL = glibc-2.43-26-g2890b35cd361df2517525bf2c5f8c63f6f0d4a20
- 
--# Fixed by glibc-2.43-27-g4070d808bea1c077eb7e7d52b52b91cae98205d5
- GLIBC_IGNORE_CVES += CVE-2026-5450
-+GLIBC_CVE-2026-5450_STATUS = fixed
-+GLIBC_CVE-2026-5450_DETAIL = glibc-2.43-27-g4070d808bea1c077eb7e7d52b52b91cae98205d5
- 
--# This CVE is considered as not being security issues by
--# upstream glibc:
--#  https://security-tracker.debian.org/tracker/CVE-2010-4756
- GLIBC_IGNORE_CVES += CVE-2010-4756
-+GLIBC_CVE-2010-4756_STATUS = fixed
-+GLIBC_CVE-2010-4756_DETAIL = This CVE is considered as not being security issues by upstream glibc: https://security-tracker.debian.org/tracker/CVE-2010-4756
- 
- # glibc is part of the toolchain so disable the toolchain dependency
- GLIBC_ADD_TOOLCHAIN_DEPENDENCY = NO
++FLEX_IGNORE_CVES = CVE-2019-6293
++FLEX_CVE-2019-6293_STATUS = not-affected-vulnerable-code-not-present
++FLEX_CVE-2019-6293_DETAIL = bug does not cause stack overflows in the generated code and has been noted upstream as a bug in the code generator
++
+ # 0001-build-AC_USE_SYSTEM_EXTENSIONS-in-configure.ac.patch
+ # 0002-build-make-it-possible-to-disable-the-build-of-the-f.patch
+ # 0003-build-make-it-possible-to-disable-the-build-of-the-d.patch
 -- 
 2.54.0
 
