@@ -1,92 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99E28CDB479
-	for <buildroot@archiver.kernel.org>; Thu, 25 Jun 2026 15:45:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB24DCDE001
+	for <buildroot@archiver.kernel.org>; Thu, 25 Jun 2026 15:47:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4E00B6104D;
-	Thu, 25 Jun 2026 15:45:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7EBDB82C9C;
+	Thu, 25 Jun 2026 15:47:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id usNk4294dxys; Thu, 25 Jun 2026 15:45:21 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PIWah5yJMPOm; Thu, 25 Jun 2026 15:47:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 82C3861045
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9C0D482EFC
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1782402321;
-	bh=xEePiraUEPWwMk4yOhBNrMftNezb4xeMo/tgAHJFnbs=;
-	h=Date:References:In-Reply-To:To:Cc:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=roi1kgxNYFz+qBPuha8Bw6JWlDVWiIBcc2ZbKioR9E4U4ELnL9W0E0Q2Gda+nOg2K
-	 9ZYmr9/D0++PhnZrySZkohDsIZTd6VgMvvl7SaH5dNNE5OHUM4aor156X/pAb3fB9o
-	 awPx94FX2lSC368dfyIB08PL4Q8yLC1gAM9xlWisKrnPj40AvsQsIiIlKAihwK+Nav
-	 GstMrTpQeHXZ/D7bNdRFUR4ZFt3UsZlbIeWDBaPucpxmhXMRIpt6ggFlRaZDFB7D/3
-	 5rNW5cfPi3igGqDmcFWe9O1gpcMAwD+ATOJ2BZqRgcCb7lg3z6JlwcI4NMxsH2cPVs
-	 aniPQdYn2rKeg==
+	s=default; t=1782402436;
+	bh=iIl60wBRpcSqRO8Qi+o0xluqcSckoHn9lXIao1B2MmE=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=dXSWOGUEVB/+sjQsGuARdhrbv47gatXONUiMHGTg7o4eszqM7zT2gKzTJpmIP14T6
+	 lHjLDNWHDycCHl6LiEnbpaLRySSdpR2yZzJhkdghJF6gbRHjvKZMqc9Z2s+YaGhsQF
+	 TBy6n/xfEU8zJxlem7zzt6apsqaZwk704TeuEfOZo5oyrPyxv3kTvSRdJqm22Jcj91
+	 /dDCt7VovwXP5KqytSeEZCA/a7K7Y2SL+oiOUKn+vqu8FNBqGkIvtS5YSdAgQwxvsF
+	 tOAt/hpgiOVbG1xBxSw0SpiY4+vrjIyokw1gXzS+YAvppaN5y0zLniHINauXCDP9eP
+	 fjrJlY37Jv2EA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 82C3861045;
-	Thu, 25 Jun 2026 15:45:21 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 7FCC82C7
- for <buildroot@buildroot.org>; Thu, 25 Jun 2026 15:45:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9C0D482EFC;
+	Thu, 25 Jun 2026 15:47:16 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 663DB254
+ for <buildroot@buildroot.org>; Thu, 25 Jun 2026 15:47:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 65ACA408AB
- for <buildroot@buildroot.org>; Thu, 25 Jun 2026 15:45:20 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5B9AE408AB
+ for <buildroot@buildroot.org>; Thu, 25 Jun 2026 15:47:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VudsxgjiVHTP for <buildroot@buildroot.org>;
- Thu, 25 Jun 2026 15:45:19 +0000 (UTC)
-X-Greylist: delayed 435 seconds by postgrey-1.37 at util1.osuosl.org;
- Thu, 25 Jun 2026 15:45:19 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 504B74025E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 504B74025E
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=45.157.188.12;
- helo=smtp-bc0c.mail.infomaniak.ch; envelope-from=foss+buildroot@0leil.net;
+ id Sttuwow8hYVk for <buildroot@buildroot.org>;
+ Thu, 25 Jun 2026 15:47:14 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-Received: from smtp-bc0c.mail.infomaniak.ch (smtp-bc0c.mail.infomaniak.ch
- [45.157.188.12])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 504B74025E
- for <buildroot@buildroot.org>; Thu, 25 Jun 2026 15:45:19 +0000 (UTC)
-Received: from smtp-4-0000.mail.infomaniak.ch (smtp-4-0000.mail.infomaniak.ch
- [10.7.10.107])
- by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4gmNHD11t6z4Jw;
- Thu, 25 Jun 2026 17:38:00 +0200 (CEST)
-Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA
- id 4gmNHC2V14zV8B; Thu, 25 Jun 2026 17:37:59 +0200 (CEST)
-Date: Thu, 25 Jun 2026 17:37:45 +0200
-MIME-Version: 1.0
-Message-Id: <20260625-tf-cpe-update-v1-2-b315a596d23b@cherry.de>
-References: <20260625-tf-cpe-update-v1-0-b315a596d23b@cherry.de>
-In-Reply-To: <20260625-tf-cpe-update-v1-0-b315a596d23b@cherry.de>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A66E84025E
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id A66E84025E
+ for <buildroot@buildroot.org>; Thu, 25 Jun 2026 15:47:14 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 1FC3B857AC; Thu, 25 Jun 2026 15:46:49 +0000 (UTC)
 To: buildroot@buildroot.org
-Cc: Dick Olsson <hi@senzilla.io>, Sergey Matyukevich <geomatsi@gmail.com>, 
- Etienne Carriere <etienne.carriere@foss.st.com>, 
- Fabrice Fontaine <fontaine.fabrice@gmail.com>, 
- Quentin Schulz <quentin.schulz@cherry.de>
-X-Mailer: b4 0.15-dev-47773
-X-Infomaniak-Routing: alpha
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=0leil.net; s=20231125; t=1782401879;
- bh=E5M+x5Y6xiu1Lahb2LypMEW/SEKI0ii49yZ64ePPq8w=;
- h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
- b=O/f7JtaGNp00u9XLi+tmmIlDdFdaZ+h1SRY2PvgLG/kmhuc2YtDPnWMV4T7NmVf4k
- O3TwK/v0eMgYqXPtU3hlfnWDpWQS9L9TXrix01ijLIIxp9r47sBrqb187ZkSeGOD2x
- uyg/I7hVAanM77fiUDe8hqtogKBcG0dNeGxftNypOKiTH672yjWpjg4OeODdEl/1Hl
- CJWrMD5AekVTBhTl6AIOl0cM+gKzxeMA/LWhzUQ2lfBnzkhkkE5G2mgAILfyELkcbH
- fSxrPS050oTrGqR9rRrCrFzjSKsXoizfJ187G1n5QYLo8/C7aeEQG2kK5jCYeZ2Mq1
- tKTyh1FxZSBoQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=0leil.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=0leil.net header.i=@0leil.net
- header.a=rsa-sha256 header.s=20231125 header.b=O/f7JtaG
-Subject: [Buildroot] [PATCH 2/3] boot/optee-os: fix CPE
+Date: Thu, 25 Jun 2026 17:46:49 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 1db28a86877f6c2ec0797802ec667374aee59546
+X-Git-Newrev: 54f96add94901511862df18e527e456982005b8e
+X-Patchwork-Hint: ignore
+Message-Id: <20260625154649.1FC3B857AC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/bind: security bump version to
+ 9.20.24
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -98,49 +69,109 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Quentin Schulz via buildroot <buildroot@buildroot.org>
-Reply-To: Quentin Schulz <foss+buildroot@0leil.net>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Quentin Schulz <quentin.schulz@cherry.de>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/54f96add94901511862df18e527e456982005b8e
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-A new (and hopefully definitive) CPE is to be used for OP-TEE OS:
+Release notes:
+https://ftp.isc.org/isc/bind9/9.20.24/doc/arm/html/notes.html
 
-cpe:2.3:o:trustedfirmware:op-tee:
+Changelog:
+https://ftp.isc.org/isc/bind9/9.20.24/doc/arm/html/changelog.html
 
-as reported during review for a TF-A CPE fix[1]. NVD correctly
-reports[2] the new CPE deprecates the "old" one Buildroot was using.
+Fixes CVE-2026-3593.
 
-CVEs for projects under the TrustedFirmware umbrella are now seemingly
-handled under the CPE vendor "trustedfirmware".
+NOTE: Libraries libcap, liburcu are now mandatory.
 
-[1] https://review.trustedfirmware.org/c/TF-A/trusted-firmware-a/+/49486/comment/2fd93ed7_df27998e/ before last comment from Sandrine
-[2] https://nvd.nist.gov/products/cpe/detail/EB42962B-24FD-4716-B3E2-69F3258A57CF
-Signed-off-by: Quentin Schulz <quentin.schulz@cherry.de>
+NOTE 2: the bind version 9.18.x series is marked by upstream as
+end-of-life. This commit switches to the current stable release
+series 9.20.x. See:
+https://kb.isc.org/docs/bind-9-end-of-life-dates
+https://www.isc.org/bind/
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+[Julien: add note 2 in commit log]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- boot/optee-os/optee-os.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/bind/Config.in | 15 ++++++++++-----
+ package/bind/bind.hash |  4 ++--
+ package/bind/bind.mk   |  4 ++--
+ 3 files changed, 14 insertions(+), 9 deletions(-)
 
-diff --git a/boot/optee-os/optee-os.mk b/boot/optee-os/optee-os.mk
-index 1639597407..38faf8bff7 100644
---- a/boot/optee-os/optee-os.mk
-+++ b/boot/optee-os/optee-os.mk
-@@ -9,7 +9,7 @@ OPTEE_OS_LICENSE = BSD-2-Clause
- OPTEE_OS_LICENSE_FILES = $(call qstrip,$(BR2_TARGET_OPTEE_OS_LICENSE_FILES))
+diff --git a/package/bind/Config.in b/package/bind/Config.in
+index 512e948ca2..6f5f14a6bb 100644
+--- a/package/bind/Config.in
++++ b/package/bind/Config.in
+@@ -1,10 +1,14 @@
+ config BR2_PACKAGE_BIND
+ 	bool "bind"
+-	depends on BR2_USE_MMU # fork(), libuv
++	depends on BR2_USE_MMU # fork(), libcap, libuv
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libuv
+-	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # libuv
++	depends on BR2_TOOLCHAIN_HAS_THREADS # liburcu, libuv
++	depends on BR2_INSTALL_LIBSTDCPP # liburcu
+ 	depends on !BR2_STATIC_LIBS # libuv
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libuv
++	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS # liburcu
++	select BR2_PACKAGE_LIBCAP
++	select BR2_PACKAGE_LIBURCU
+ 	select BR2_PACKAGE_LIBUV
+ 	select BR2_PACKAGE_OPENSSL
+ 	help
+@@ -44,8 +48,9 @@ config BR2_PACKAGE_BIND_TOOLS
  
- OPTEE_OS_CPE_ID_PREFIX = cpe:2.3:o
--OPTEE_OS_CPE_ID_VENDOR = linaro
-+OPTEE_OS_CPE_ID_VENDOR = trustedfirmware
- OPTEE_OS_CPE_ID_PRODUCT = op-tee
+ endif
  
- OPTEE_OS_INSTALL_STAGING = YES
-
--- 
-2.54.0
-
+-comment "bind needs a toolchain w/ NPTL, dynamic library, gcc >= 4.9"
++comment "bind needs a toolchain w/ threads, dynamic library, C++, gcc >= 4.9"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS \
+-		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS \
++		|| BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 \
++		|| BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
+diff --git a/package/bind/bind.hash b/package/bind/bind.hash
+index 766540ee22..a1ff3c6101 100644
+--- a/package/bind/bind.hash
++++ b/package/bind/bind.hash
+@@ -1,4 +1,4 @@
+-# Verified from https://ftp.isc.org/isc/bind9/9.18.50/bind-9.18.50.tar.xz.asc
++# Verified from https://ftp.isc.org/isc/bind9/9.20.24/bind-9.20.24.tar.xz.asc
+ # with key D99CCEAF879747014F038D63182E23579462EFAA
+-sha256  a24f93be94712a8c11752294410f2f8a2510ec7fdc931d207fc61cdf30e54f4d  bind-9.18.50.tar.xz
++sha256  989fef1fc88ea59d04cd86f854dca5a4616a20a9968bcdde3c1a3668ab36be08  bind-9.20.24.tar.xz
+ sha256  9734825d67a3ac967b2c2f7c9a83c9e5db1c2474dbe9599157c3a4188749ebd4  COPYRIGHT
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index 54870bfa4e..2b8156d0d0 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BIND_VERSION = 9.18.50
++BIND_VERSION = 9.20.24
+ BIND_SOURCE= bind-$(BIND_VERSION).tar.xz
+ BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ BIND_INSTALL_STAGING = YES
+@@ -32,7 +32,7 @@ BIND_CONF_OPTS = \
+ 	--disable-static \
+ 	--with-openssl=$(STAGING_DIR)/usr
+ 
+-BIND_DEPENDENCIES = host-pkgconf libuv openssl
++BIND_DEPENDENCIES = host-pkgconf libcap liburcu libuv openssl
+ 
+ BIND_CFLAGS = $(TARGET_CFLAGS)
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
