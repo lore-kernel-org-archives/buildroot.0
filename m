@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1AD79C43458
-	for <buildroot@archiver.kernel.org>; Fri, 26 Jun 2026 14:49:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 151C6C43327
+	for <buildroot@archiver.kernel.org>; Fri, 26 Jun 2026 14:49:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A079560F25;
-	Fri, 26 Jun 2026 14:49:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D1C9081FBD;
+	Fri, 26 Jun 2026 14:49:52 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id O_iqxSp__4KK; Fri, 26 Jun 2026 14:49:52 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D179781FC8
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1782485391;
+	bh=b4kVMiVKPD67UEl/WpnUKqrn6IvB7FmIdfie9r+1700=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=TsCOYgmL8O3y+QsIL0j/NptunqdkD1iaHKOJJzbNREctTcSolWNudSIOyonuwtQq6
+	 cxMtJ6olo9JXChLRdx0FTYDjZdFcjACLIq1Fi00R9bGa3/bL85u0QT39qDDt2qFZ7N
+	 2v1+sFq8dE09nH5Ry3sLG3U1ZOUe6TyZfAARyc22jVIPcFzFE2v1zP4Je5ZaqxkIa3
+	 UVfS5669qoT0Eeb6htsk0p3EVNY3Wb48kEhK5pPlEH9NSbWO25ZuR3vGejJe5C8SGM
+	 9KQq6/Vb55OF2ARe942rfPOKtxnc1yFwC6J6owR2DJcUuzONNQbLXugF0bulC7UxaH
+	 L2badxaXAilnA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id D179781FC8;
+	Fri, 26 Jun 2026 14:49:51 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2305514A4
+ for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:49:47 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 05CF360F29
+ for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:49:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6PK3AtVIaeg5; Fri, 26 Jun 2026 14:49:47 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C5EB060F27
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1782485387;
-	bh=YOzfXW5sn10xw6r3U1OX5/gHaAG2TAtBiJKv74w6ztk=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=K5BCOanwhuET96V9mcyAYOU+yRhzfBz6Xe9ydQbuB7ITPbQysHltHEC3+GeShTxnr
-	 3m5YMqq9VdalcVPfzjChDB4TyqRrK/eYg2FZMGwmJWNv81dYuJLtTfxdwNvjGOQYSm
-	 emLD9cqbB/c3uA9Btt1vFO82ebw0RiFIg8WoCS3XnhOEWTfA8Y071P/9rJ4BRLJEDb
-	 df5/XwWlIBgEGEdiDOQ/fVB6YXoi/Yunq9g8FCyA9rd1Uw3EUnaNkW/Q52TBELWr/D
-	 Nly6gDClsrcBGe84b6n7WlAwqzekQKN4qEPLVusBcbRiYXvXHlzyU1sa6H7rQ+xMHk
-	 lmAndiMbjiAbw==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C5EB060F27;
-	Fri, 26 Jun 2026 14:49:47 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0DD8A3A1
- for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:49:47 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DF06540E21
- for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:49:46 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3bzbkntmuCMK for <buildroot@buildroot.org>;
+ id QlALRW64nbvX for <buildroot@buildroot.org>;
  Fri, 26 Jun 2026 14:49:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B4AC540E17
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D94CE60EFD
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B4AC540E17
+ by smtp3.osuosl.org (Postfix) with ESMTP id D94CE60EFD
  for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:49:45 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B2E0A864B7; Fri, 26 Jun 2026 14:49:19 +0000 (UTC)
+ id CC25E864EC; Fri, 26 Jun 2026 14:49:19 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 25 Jun 2026 16:23:46 +0200
+Date: Thu, 25 Jun 2026 16:25:09 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: f543b8dc40cf91d1dee6cec9554c83e91106e105
-X-Git-Newrev: 16914bd73fbaeec764236d200261e5db200a5c4f
+X-Git-Oldrev: 2a0f17ea9da27de58c44006fcb292f168c3c552b
+X-Git-Newrev: defefd4ddfca989aa42a3d70c658d5e0e4d48433
 X-Patchwork-Hint: ignore
-Message-Id: <20260626144919.B2E0A864B7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x]
- package/kodi-screensaver-rsxs: remove dependencies to gli & glm
+Message-Id: <20260626144919.CC25E864EC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] linux: select
+ host-openssl for all architectures when building latest CIP version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,48 +77,58 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/16914bd73fbaeec764236d200261e5db200a5c4f
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/defefd4ddfca989aa42a3d70c658d5e0e4d48433
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-Upstream commit
-https://github.com/xbmc/screensavers.rsxs/commit/a00a3cce3c5f24ea7274968b5b16c8d2db656a8b
-added the code of gli & glm in-tree and removed the usage as external
-packages.
+This is a follow-up for buildroot commit
+bba86304b0ac4ae266cfb52e54a239b0850b10ca to extend the fix to CIP
+kernels.
+
+Fixes:
+aarch64: https://autobuild.buildroot.net/results/f91/f910c1e0e864055120e2deaf4d56b127cabb89bd/
+aarch64_be: https://autobuild.buildroot.net/results/6e6/6e651c586f9b2a1c9b39cafaf5bebc8b501e8369/
+arcbe: https://autobuild.buildroot.net/results/9fe/9fe7b4c66ac139926e9a3686bc951af703e78b29/
+arm: https://autobuild.buildroot.net/results/288/2888b0b6f5473e9c7ec7c443b02b42e1f5d4c814/
+armeb: https://autobuild.buildroot.net/results/d6c/d6cbbfdcbebe985d743232070824779e790aa5a8/
+microblazeel: https://autobuild.buildroot.net/results/bf3/bf3b4c61cdaf3527e9e315050bf21456bbb24a48/
+mips: https://autobuild.buildroot.net/results/c6b/c6b9c82352be01dd4bab2021a223e72dfaf1f522/
+or1k: https://autobuild.buildroot.net/results/231/23144a8108c5837e3a9cf26ad6ac73fa16dc740f/
+riscv: https://autobuild.buildroot.net/results/31c/31c3abdb23bfe16e248e094e9b0feafbbb0d6a94/
+s390x: https://autobuild.buildroot.net/results/bda/bdaaf6767f8c239bbf22e4619b2d6944ef951b2e/
+sparc: https://autobuild.buildroot.net/results/426/42614f77be9fa1b3a596cdcb40cfb81f5496b41b/
+sparc64: https://autobuild.buildroot.net/results/1f2/1f226d028d85c085d82f3890e804b39bccd2c2dc/
+x86_64: https://autobuild.buildroot.net/results/7be/7be86c261a42e1a16c3d38a640be226b5f51bccb/
+
+Supersedes
+https://patchwork.ozlabs.org/project/buildroot/patch/20251101102346.109307-1-bernd@kuhls.net/
+and includes Edgar's comment.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 8bcb156d33e5c8f39fa6d52154736a3585a5a81c)
+(cherry picked from commit 7ee8e9f12a461c01ca6e26adc2293aae05cdd39e)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/kodi-screensaver-rsxs/Config.in                | 2 --
- package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk | 2 +-
- 2 files changed, 1 insertion(+), 3 deletions(-)
+ linux/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-screensaver-rsxs/Config.in b/package/kodi-screensaver-rsxs/Config.in
-index e88df1fe49..8185f3c424 100644
---- a/package/kodi-screensaver-rsxs/Config.in
-+++ b/package/kodi-screensaver-rsxs/Config.in
-@@ -2,8 +2,6 @@ config BR2_PACKAGE_KODI_SCREENSAVER_RSXS
- 	bool "kodi-screensaver-rsxs"
- 	depends on BR2_PACKAGE_KODI_RENDER_SYSTEM_GL
- 	select BR2_PACKAGE_BZIP2
--	select BR2_PACKAGE_GLI
--	select BR2_PACKAGE_GLM
+diff --git a/linux/Config.in b/linux/Config.in
+index dd209666f4..2f7a58f70a 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -183,9 +183,11 @@ config BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG
+ 	bool "Use the architecture default configuration"
+ 	# We know that the default configuration on many architectures
+ 	# requires host-openssl, so select it for the latest kernel
+-	# version. This is mainly needed to fix autobuilder testing.
++	# version and the latest CIP version.
++	# This is mainly needed to fix autobuilder testing.
+ 	select BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL if \
+-	       BR2_LINUX_KERNEL_LATEST_VERSION
++	       BR2_LINUX_KERNEL_LATEST_VERSION || \
++	       BR2_LINUX_KERNEL_LATEST_CIP_VERSION
  	help
- 	  RSXS screensaver add-ons for Kodi
- 
-diff --git a/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk b/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk
-index ff554a2e1a..dcca031b51 100644
---- a/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk
-+++ b/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk
-@@ -8,6 +8,6 @@ KODI_SCREENSAVER_RSXS_VERSION = 21.1.2-Omega
- KODI_SCREENSAVER_RSXS_SITE = $(call github,xbmc,screensavers.rsxs,$(KODI_SCREENSAVER_RSXS_VERSION))
- KODI_SCREENSAVER_RSXS_LICENSE = GPL-2.0+
- KODI_SCREENSAVER_RSXS_LICENSE_FILES = LICENSE.md
--KODI_SCREENSAVER_RSXS_DEPENDENCIES = bzip2 gli glm kodi
-+KODI_SCREENSAVER_RSXS_DEPENDENCIES = bzip2 kodi
- 
- $(eval $(cmake-package))
+ 	  This option will use the default configuration for the
+ 	  selected architecture. I.e, it is equivalent to running
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
