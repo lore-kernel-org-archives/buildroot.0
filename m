@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01139C43602
-	for <buildroot@archiver.kernel.org>; Fri, 26 Jun 2026 14:50:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9DF41C43458
+	for <buildroot@archiver.kernel.org>; Fri, 26 Jun 2026 14:50:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CE42A60F2D;
-	Fri, 26 Jun 2026 14:50:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 618CA40F65;
+	Fri, 26 Jun 2026 14:50:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5akUtGZSlkDY; Fri, 26 Jun 2026 14:50:06 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id E5qVgqbGn1HX; Fri, 26 Jun 2026 14:50:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CC0F760F34
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D9D0040F2B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1782485406;
-	bh=dKWSrFH/1j985eFmdfRR7Y7fFa6bkBEclY8mlqRWTao=;
+	s=default; t=1782485407;
+	bh=WK8VwWJ9eR0TEt8k4pZZk2HCPlbTqeBvMWtUN1kzTg4=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=I8xAueTPqH6jNRJFfFgGp80DV5y4JeiRoc+lhRk2h2jQ+L14WvfKS0dhO9LDisIBp
-	 e5J0ZnloNxsXvydf+mtfuyPjXy5cDuNjfwvyctnieaEye61R17rw+w0Wk+15ex8vxQ
-	 pv3SvZ5dQlBKEUOWegeCZlwP5aMmm+9D6on3wsoPH++obzGXlKhK6yxC1nucFHDm7y
-	 OXLPLHXOBrHlNlrPt3QYZblOD9Ehvq/zIQrX7dP9mkXPASkl7FVg3ziXQEcgxAjGYH
-	 6cvRHU689MrtTxxY3syCghD32vbpmkKZtyA3UiC2p2IJLlKMaavzJcnyFbDKe7la6x
-	 pV7uhSlBLfZEQ==
+	b=TF3C3VPCDphc6N3Q4em5BQt5U0klBUhCLBJ/FTr/JLwhBy+jxGz2fqChGxmKr1UYS
+	 ftuKM3XS/TqI1B7nhFAn74SVp1CPaseJdEt5n6MjwKeFAKcS4h12hgmfhl23L8XT10
+	 FlsWA6BSbMfhoHDllkGZGIMLD+PdaUE18AcWOLowg4QEM3By3PEvCHc32uiP/KEpqK
+	 YMUGF1cIyUVpQ/64DV1vCVs/Wc18NOWOm+7HeIAmfq4E85hfNX90E43oubGW6F69xp
+	 W+ZtTUR77ALuooARQy/XIp1Fsoni/2zmfkuOOgnw8Lw7L3bHtEGmZFLKIt0CN1S/xn
+	 ne6gfs3OPtXAw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CC0F760F34;
-	Fri, 26 Jun 2026 14:50:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D9D0040F2B;
+	Fri, 26 Jun 2026 14:50:07 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id D3845231
+ by lists1.osuosl.org (Postfix) with ESMTP id EE31D231
  for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:49:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C5ACF81FBD
+ by smtp1.osuosl.org (Postfix) with ESMTP id DFFC981FBD
  for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:49:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yqNAue4KqoJd for <buildroot@buildroot.org>;
+ id 0MbYZk_KTBI1 for <buildroot@buildroot.org>;
  Fri, 26 Jun 2026 14:49:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4F2188218C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 400B88217F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4F2188218C
+ by smtp1.osuosl.org (Postfix) with ESMTP id 400B88217F
  for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:49:46 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4FC4B864AD; Fri, 26 Jun 2026 14:49:20 +0000 (UTC)
+ id 418A3864A8; Fri, 26 Jun 2026 14:49:20 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 25 Jun 2026 16:35:11 +0200
+Date: Thu, 25 Jun 2026 16:34:39 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: b0e734b11a2c61e3560a7f3334cba44ba1a78e18
-X-Git-Newrev: 8efc2ef588ee2e22b86c8804d333f9d4652dc15d
+X-Git-Oldrev: aeb8e127a23232efb67de32af9eced0f8310f1c1
+X-Git-Newrev: b0e734b11a2c61e3560a7f3334cba44ba1a78e18
 X-Patchwork-Hint: ignore
-Message-Id: <20260626144920.4FC4B864AD@busybox.osuosl.org>
+Message-Id: <20260626144920.418A3864A8@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/2025.02.x] support/testing:
- test_acl.py: use assertRunNotOk()
+ test_systemd.py: use assertRun{, Not}Ok()
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,49 +77,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/8efc2ef588ee2e22b86c8804d333f9d4652dc15d
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/b0e734b11a2c61e3560a7f3334cba44ba1a78e18
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-Use the helper to simplify the test.
+Use the helpers to simplify the test.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 8caecb62a31aef9fa7d79c89abda41cc7a420c74)
+(cherry picked from commit 8c301eed0e43ab03b195ca7a64a07e07d02881ce)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- support/testing/tests/package/test_acl.py | 9 +++------
+ support/testing/tests/init/test_systemd.py | 9 +++------
  1 file changed, 3 insertions(+), 6 deletions(-)
 
-diff --git a/support/testing/tests/package/test_acl.py b/support/testing/tests/package/test_acl.py
-index e4827c7bec..4511c6db5b 100644
---- a/support/testing/tests/package/test_acl.py
-+++ b/support/testing/tests/package/test_acl.py
-@@ -52,8 +52,7 @@ class TestAcl(infra.basetest.BRTest):
+diff --git a/support/testing/tests/init/test_systemd.py b/support/testing/tests/init/test_systemd.py
+index 3e47c7cdfc..ff88863766 100644
+--- a/support/testing/tests/init/test_systemd.py
++++ b/support/testing/tests/init/test_systemd.py
+@@ -320,19 +320,16 @@ class InitSystemSystemdBaseOverlayfs():
  
-         # Reading the file as the test user is expected to fail.
-         test_read_cmd = f"su - {test_user} -c 'cat {test_file}'"
--        _, ret = self.emulator.run(test_read_cmd)
--        self.assertNotEqual(ret, 0)
-+        self.assertRunNotOk(test_read_cmd)
+         # /var/foo/bar is from the pre-populated /var, so it should
+         # not be present in the upper of the overlay
+-        _, exit_code = self.emulator.run("test -e /run/buildroot/mounts/var/upper/foo/bar")
+-        self.assertNotEqual(exit_code, 0)
++        self.assertRunNotOk("test -e /run/buildroot/mounts/var/upper/foo/bar")
  
-         # We add a special read ACL for the test user.
-         cmd = f"setfacl -m u:{test_user}:r {test_file}"
-@@ -73,8 +72,7 @@ class TestAcl(infra.basetest.BRTest):
-         # Attempting to write to the file as the test user is expected
-         # to fail (since we put an ACL only for reading).
-         cmd = f"su - {test_user} -c 'echo WriteTest > {test_file}'"
--        _, ret = self.emulator.run(cmd)
--        self.assertNotEqual(ret, 0)
-+        self.assertRunNotOk(cmd)
- 
-         # Remove all ACLs. This could have been done with the command
-         # "setfacl -b". Instead, we use the "chacl -B" command which
-@@ -83,5 +81,4 @@ class TestAcl(infra.basetest.BRTest):
-         self.assertRunOk(f"chacl -B {test_file}")
- 
-         # Reading the file as the test user is expected to fail again.
--        _, ret = self.emulator.run(test_read_cmd)
--        self.assertNotEqual(ret, 0)
-+        self.assertRunNotOk(test_read_cmd)
+         # We can write in /var/foo/bar
+-        _, exit_code = self.emulator.run("echo barfoo >/var/foo/bar")
+-        self.assertEqual(exit_code, 0)
++        self.assertRunOk("echo barfoo >/var/foo/bar")
+         # ... and it contains the new content
+         out, exit_code = self.emulator.run("cat /var/foo/bar")
+         self.assertEqual(exit_code, 0)
+         self.assertEqual(out[0], "barfoo")
+         # ... and it to appears in the upper
+-        _, exit_code = self.emulator.run("test -e /run/buildroot/mounts/var/upper/foo/bar")
+-        self.assertEqual(exit_code, 0)
++        self.assertRunOk("test -e /run/buildroot/mounts/var/upper/foo/bar")
+         # ... with the new content
+         out, exit_code = self.emulator.run("cat /run/buildroot/mounts/var/upper/foo/bar")
+         self.assertEqual(exit_code, 0)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
