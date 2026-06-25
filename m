@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 151C6C43327
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ADB78C43602
 	for <buildroot@archiver.kernel.org>; Fri, 26 Jun 2026 14:49:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D1C9081FBD;
+	by smtp4.osuosl.org (Postfix) with ESMTP id B92A240EE4;
 	Fri, 26 Jun 2026 14:49:52 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UOj8jaCdrH30; Fri, 26 Jun 2026 14:49:51 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DB65040E17
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1782485390;
+	bh=xaSztx6u9nNcS9TjB8gS1pgpeLt0ErI3Thhtp1O3JI4=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=H1tDZei/Hv6NN85QZ0adyfTabKMrvts6gFTYnzuq2QIvvRjFVXh7yCTKSZtE6KLWD
+	 DNqrsavIBm2xihiFYX2fx0pbZXmH9IYbQqXyuOXlSbVGSIbl5Wc6QhsX+FvRndbDw9
+	 HkRcQkZhXtGQ3BXQd/Us1n1e9rE1QyrSm9b2mqVQ5sxLp7zYyZYxXF/VNQo4+UMXeZ
+	 kwDNuUwpgEbNpRPtkiTfekAu/7fOvDVqkpqeFXxC25Y7EkYRrvmahvCF585fWx1NLz
+	 Tw+pkpuuDqKPpbHVvtka5A5V+iK6LI01v3e1K5SqXgI40H713v4nLnqSlQy21Br5h8
+	 Jq6BxH+4wJhLw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id DB65040E17;
+	Fri, 26 Jun 2026 14:49:50 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1DDC014A2
+ for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:49:47 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 03EF38221D
+ for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:49:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id O_iqxSp__4KK; Fri, 26 Jun 2026 14:49:52 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D179781FC8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1782485391;
-	bh=b4kVMiVKPD67UEl/WpnUKqrn6IvB7FmIdfie9r+1700=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=TsCOYgmL8O3y+QsIL0j/NptunqdkD1iaHKOJJzbNREctTcSolWNudSIOyonuwtQq6
-	 cxMtJ6olo9JXChLRdx0FTYDjZdFcjACLIq1Fi00R9bGa3/bL85u0QT39qDDt2qFZ7N
-	 2v1+sFq8dE09nH5Ry3sLG3U1ZOUe6TyZfAARyc22jVIPcFzFE2v1zP4Je5ZaqxkIa3
-	 UVfS5669qoT0Eeb6htsk0p3EVNY3Wb48kEhK5pPlEH9NSbWO25ZuR3vGejJe5C8SGM
-	 9KQq6/Vb55OF2ARe942rfPOKtxnc1yFwC6J6owR2DJcUuzONNQbLXugF0bulC7UxaH
-	 L2badxaXAilnA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D179781FC8;
-	Fri, 26 Jun 2026 14:49:51 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 2305514A4
- for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:49:47 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 05CF360F29
- for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:49:47 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QlALRW64nbvX for <buildroot@buildroot.org>;
- Fri, 26 Jun 2026 14:49:45 +0000 (UTC)
+ id HIdZVJW1jB6w for <buildroot@buildroot.org>;
+ Fri, 26 Jun 2026 14:49:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D94CE60EFD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F196E81FC8
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D94CE60EFD
+ by smtp1.osuosl.org (Postfix) with ESMTP id F196E81FC8
  for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:49:45 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CC25E864EC; Fri, 26 Jun 2026 14:49:19 +0000 (UTC)
+ id F24B8864AD; Fri, 26 Jun 2026 14:49:19 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 25 Jun 2026 16:25:09 +0200
+Date: Thu, 25 Jun 2026 16:28:20 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 2a0f17ea9da27de58c44006fcb292f168c3c552b
-X-Git-Newrev: defefd4ddfca989aa42a3d70c658d5e0e4d48433
+X-Git-Oldrev: 26af331ea3073e396044ff5340609b1612cb1f82
+X-Git-Newrev: 4cc43ad01416e6c817d825c64ed9fc09bc742ed2
 X-Patchwork-Hint: ignore
-Message-Id: <20260626144919.CC25E864EC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] linux: select
- host-openssl for all architectures when building latest CIP version
+Message-Id: <20260626144919.F24B8864AD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/mpd/S95mpd: do
+ not wait for exit if sending stop failed
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,58 +77,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/defefd4ddfca989aa42a3d70c658d5e0e4d48433
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/4cc43ad01416e6c817d825c64ed9fc09bc742ed2
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-This is a follow-up for buildroot commit
-bba86304b0ac4ae266cfb52e54a239b0850b10ca to extend the fix to CIP
-kernels.
+If sending the stop signal failed for whatever reason, waiting for an
+existing PID file to disappear is likely to block indefinitely.
 
-Fixes:
-aarch64: https://autobuild.buildroot.net/results/f91/f910c1e0e864055120e2deaf4d56b127cabb89bd/
-aarch64_be: https://autobuild.buildroot.net/results/6e6/6e651c586f9b2a1c9b39cafaf5bebc8b501e8369/
-arcbe: https://autobuild.buildroot.net/results/9fe/9fe7b4c66ac139926e9a3686bc951af703e78b29/
-arm: https://autobuild.buildroot.net/results/288/2888b0b6f5473e9c7ec7c443b02b42e1f5d4c814/
-armeb: https://autobuild.buildroot.net/results/d6c/d6cbbfdcbebe985d743232070824779e790aa5a8/
-microblazeel: https://autobuild.buildroot.net/results/bf3/bf3b4c61cdaf3527e9e315050bf21456bbb24a48/
-mips: https://autobuild.buildroot.net/results/c6b/c6b9c82352be01dd4bab2021a223e72dfaf1f522/
-or1k: https://autobuild.buildroot.net/results/231/23144a8108c5837e3a9cf26ad6ac73fa16dc740f/
-riscv: https://autobuild.buildroot.net/results/31c/31c3abdb23bfe16e248e094e9b0feafbbb0d6a94/
-s390x: https://autobuild.buildroot.net/results/bda/bdaaf6767f8c239bbf22e4619b2d6944ef951b2e/
-sparc: https://autobuild.buildroot.net/results/426/42614f77be9fa1b3a596cdcb40cfb81f5496b41b/
-sparc64: https://autobuild.buildroot.net/results/1f2/1f226d028d85c085d82f3890e804b39bccd2c2dc/
-x86_64: https://autobuild.buildroot.net/results/7be/7be86c261a42e1a16c3d38a640be226b5f51bccb/
-
-Supersedes
-https://patchwork.ozlabs.org/project/buildroot/patch/20251101102346.109307-1-bernd@kuhls.net/
-and includes Edgar's comment.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 7ee8e9f12a461c01ca6e26adc2293aae05cdd39e)
+Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
+Tested-by: Andreas Ziegler <br025@umbiko.net>
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+(cherry picked from commit b2d84525f9115f4f04a4814f29b87a17db58569e)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- linux/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/mpd/S95mpd | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index dd209666f4..2f7a58f70a 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -183,9 +183,11 @@ config BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG
- 	bool "Use the architecture default configuration"
- 	# We know that the default configuration on many architectures
- 	# requires host-openssl, so select it for the latest kernel
--	# version. This is mainly needed to fix autobuilder testing.
-+	# version and the latest CIP version.
-+	# This is mainly needed to fix autobuilder testing.
- 	select BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL if \
--	       BR2_LINUX_KERNEL_LATEST_VERSION
-+	       BR2_LINUX_KERNEL_LATEST_VERSION || \
-+	       BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	help
- 	  This option will use the default configuration for the
- 	  selected architecture. I.e, it is equivalent to running
+diff --git a/package/mpd/S95mpd b/package/mpd/S95mpd
+index e33654a501..485747e96e 100644
+--- a/package/mpd/S95mpd
++++ b/package/mpd/S95mpd
+@@ -31,6 +31,7 @@ stop() {
+ 		echo "OK"
+ 	else
+ 		echo "FAIL"
++		return "$status"
+ 	fi
+ 	# $DAEMON deletes its PID file on exit, wait for it to be gone
+ 	while [ -f "$PIDFILE" ]; do
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
