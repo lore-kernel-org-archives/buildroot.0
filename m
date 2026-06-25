@@ -4,113 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9177AC43458
-	for <buildroot@archiver.kernel.org>; Fri, 26 Jun 2026 14:11:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1AD79C43458
+	for <buildroot@archiver.kernel.org>; Fri, 26 Jun 2026 14:49:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EA57860F27;
-	Fri, 26 Jun 2026 14:11:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A079560F25;
+	Fri, 26 Jun 2026 14:49:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gA5yH5Kv1WGJ; Fri, 26 Jun 2026 14:11:43 +0000 (UTC)
+ id 6PK3AtVIaeg5; Fri, 26 Jun 2026 14:49:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1382460F25
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C5EB060F27
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1782483103;
-	bh=zuBQqJWwrdIimd0vyDL/17G+YFp5ARJXQymx5p9axWg=;
-	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 From;
-	b=PkiQjvt/YW2hJm5uIFpBUEAisH+JXPYxnD4bvDYrE2A/vho4quiDflnzfb3xFqzsI
-	 Dz2Oa+dibNTEUFs2m+42xTttgas39UK+gNAd3fQ9AwhhnOsjJCugzyumzwXbKbFpsB
-	 yGq6XIVYq1gH5NyRXHsRTfzM0efVlUTV5zcHHKF6gVrOA2CuHj7a4H3AJR0iGqzeDo
-	 XhWANCpt6dOZIOX5sG4R0Z6yffBKdPFkueyBri88x7GWJlsPwRT0hQCrq1LrJSwquU
-	 RX+UlwfUieg3QvzjEhy06XOjn1FJGDzrVHQSpeu5dca2bdIymgnNDJvkARzF15AVZm
-	 4p2kZs91zO4lQ==
+	s=default; t=1782485387;
+	bh=YOzfXW5sn10xw6r3U1OX5/gHaAG2TAtBiJKv74w6ztk=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=K5BCOanwhuET96V9mcyAYOU+yRhzfBz6Xe9ydQbuB7ITPbQysHltHEC3+GeShTxnr
+	 3m5YMqq9VdalcVPfzjChDB4TyqRrK/eYg2FZMGwmJWNv81dYuJLtTfxdwNvjGOQYSm
+	 emLD9cqbB/c3uA9Btt1vFO82ebw0RiFIg8WoCS3XnhOEWTfA8Y071P/9rJ4BRLJEDb
+	 df5/XwWlIBgEGEdiDOQ/fVB6YXoi/Yunq9g8FCyA9rd1Uw3EUnaNkW/Q52TBELWr/D
+	 Nly6gDClsrcBGe84b6n7WlAwqzekQKN4qEPLVusBcbRiYXvXHlzyU1sa6H7rQ+xMHk
+	 lmAndiMbjiAbw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1382460F25;
-	Fri, 26 Jun 2026 14:11:43 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 5FD8F231
- for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:11:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C5EB060F27;
+	Fri, 26 Jun 2026 14:49:47 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0DD8A3A1
+ for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:49:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4621B80E4D
- for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:11:41 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id DF06540E21
+ for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:49:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id S2YEX8tBf7-5 for <buildroot@buildroot.org>;
- Fri, 26 Jun 2026 14:11:40 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::429; helo=mail-wr1-x429.google.com;
- envelope-from=dowan.gullient@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 53E9B80E19
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 53E9B80E19
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 53E9B80E19
- for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:11:39 +0000 (UTC)
-Received: by mail-wr1-x429.google.com with SMTP id
- ffacd0b85a97d-4629051c946so674549f8f.1
- for <buildroot@buildroot.org>; Fri, 26 Jun 2026 07:11:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1782483098; x=1783087898;
- h=content-transfer-encoding:in-reply-to:content-language:references
- :to:subject:from:user-agent:mime-version:date:message-id:x-gm-gg
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=9jZ++0hiwNxZ1MqGOc8ed6F79yqcETICwl/K/w9i4mI=;
- b=nZAQvnGEeHr9xVEjqmwFj9vqsoXm0sBMG7LYr/U2uBTctur1RxsvcIfuW/6bqmsnaS
- lTsCuiP2BZKsevNcDAeUMhrsqoP18hj/Stv6Q38PD/ukbYv9N9NLGoKZ1TUmHtqDMt3m
- n9THapJu4zBB5vCuIja0SveJA1jzAZHnv586FShap5gjYq+INbhfU4PoIreJlu6jvyaL
- XMnEUQ3gmar90Dwm6NiDLdtJoavkH30RqMLI8ORLzaVzH3d+egNQQu2GqKYsVWH5CbK0
- KUQoXeyT82zm776Hi9nlcljqLPIpWmXMnr3Jq3Xapvn7FkTqoj75ES0yup/awwZb129r
- zefg==
-X-Forwarded-Encrypted: i=1;
- AHgh+Rpf5JH9S/4k25aCXVFyWi3IQS7M4+bQhuJsKREU2h967txg72Uoc+Za8FW6uVd5uF06KGuQOyxQAh4=@buildroot.org
-X-Gm-Message-State: AOJu0YwQ6szwpWqsJVaNQLpbexLg+4hW1WXGwmuZvH0ee+ZU4D0m34gH
- GJsMWXOaID9X5oU3c5kBUrw/vCZvT7Ruc5wLai7Gb96JEzhmW7B7+cT8jMeyGN4u9B0=
-X-Gm-Gg: AfdE7ckaykgAfI+4L2U6ODhpfxZQBJLjjLwIXjkSfhPuSDZb1bhHTsO5zXvzXBvX6qV
- YY8bIFi1jzewkitXj/OpYO/l54IDOt2LbkoGe/cdo2JT8apIWzsl12PEX6TSJjlaIn6DoIBzBJL
- ZXR8eu1/30SQ23TtCzNLg7wkebz51naFyNzfglJN7ebRF/+4Fd4kilwqON59MKhh7fvZlY4DW7E
- N+hISs0pU4Nvn50iV5EEiazYIkltl+ET4p0xJVDkENz3McGXn6wn+BE6gNDiIEcguwOLP95U2M6
- 2Rnfw9mnh1u7nf6lqHnwXSvTzXwIxYYgvuzTh3N9904RZxtQikRB8N2Kh4u9WJsrnPbHdvgjwET
- IM8Nf6tZ6jCaNqkJAD1k5EyzQUi8VvIeYCjSq6hWu3JdwH24UdP06K8SpxOFiMreAmrGX+qeeC4
- tiRHYx11C2VuUkg9vIueJnnbA5tBxevlmEZcEytVa7nlvTXnCf9UX5CFOc5b4Xo6lL7Js59v1NV
- 80sL+E=
-X-Received: by 2002:a05:6000:993:b0:43d:7606:5a47 with SMTP id
- ffacd0b85a97d-46da706dc66mr11372586f8f.2.1782483098055; 
- Fri, 26 Jun 2026 07:11:38 -0700 (PDT)
-Received: from [10.5.90.81]
- (static-css-ccs-204145.business.bouyguestelecom.com. [176.157.204.145])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-46c1b754471sm24476238f8f.0.2026.06.26.07.11.37
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Fri, 26 Jun 2026 07:11:37 -0700 (PDT)
-Message-ID: <f3d370e6-5cb6-4f54-99ac-883afa561379@smile.fr>
-Date: Fri, 26 Jun 2026 16:11:37 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: chakrabortyshubham66@gmail.com, buildroot@buildroot.org
-References: <20260430121520.2565804-1-chakrabortyshubham66@gmail.com>
-Content-Language: en-US
-In-Reply-To: <20260430121520.2565804-1-chakrabortyshubham66@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1782483098; x=1783087898; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:content-language:references
- :to:subject:from:user-agent:mime-version:date:message-id:from:to:cc
- :subject:date:message-id:reply-to;
- bh=9jZ++0hiwNxZ1MqGOc8ed6F79yqcETICwl/K/w9i4mI=;
- b=VnACSLXf0gdeiANiEJ57tR1wkYjjsjn7wupjqOhRDI44LQayJcYFrhoj13ER54maNZ
- uXJuQe84hZkOH8844QS2Q7j4ZqZG3rt80wCoy+zgi6DGyeANVjNqXReAJ5so4wQNn02K
- w7PUmBWXiOvjXch+bm5tevjn6HsmhB6LAKt34=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
- header.s=google header.b=VnACSLXf
-Subject: Re: [Buildroot] [PATCH] package/bash: bump to version 5.3
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3bzbkntmuCMK for <buildroot@buildroot.org>;
+ Fri, 26 Jun 2026 14:49:45 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B4AC540E17
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id B4AC540E17
+ for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:49:45 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id B2E0A864B7; Fri, 26 Jun 2026 14:49:19 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 25 Jun 2026 16:23:46 +0200
+X-Git-Refname: refs/heads/2025.02.x
+X-Git-Oldrev: f543b8dc40cf91d1dee6cec9554c83e91106e105
+X-Git-Newrev: 16914bd73fbaeec764236d200261e5db200a5c4f
+X-Patchwork-Hint: ignore
+Message-Id: <20260626144919.B2E0A864B7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x]
+ package/kodi-screensaver-rsxs: remove dependencies to gli & glm
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -122,31 +69,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: dowan gullient via buildroot <buildroot@buildroot.org>
-Reply-To: dowan gullient <dowan.gullient@smile.fr>
+From: Thomas Perale via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Perale <thomas.perale@mind.be>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Shubham Chakraborty, thanks for your patch.
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/16914bd73fbaeec764236d200261e5db200a5c4f
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-> +Upstream: N/A
-I think that marking these patches as "Upstream: N/A" might not be the 
-best. Since these patches fix legitimate build failures in the Bash 
-source code, they are relevant to the upstream maintainers. It might be 
-better to also submit them to the bug-bash mailing list and provide a 
-link to the archive, similar to what was done for patch 0002.
+Upstream commit
+https://github.com/xbmc/screensavers.rsxs/commit/a00a3cce3c5f24ea7274968b5b16c8d2db656a8b
+added the code of gli & glm in-tree and removed the usage as external
+packages.
 
-If you think these patches are Buildroot-specific, or will not be merged 
-soon to the Bash project, then I have nothing more to say, this patch 
-seems ready to be merged for me .
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 8bcb156d33e5c8f39fa6d52154736a3585a5a81c)
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+---
+ package/kodi-screensaver-rsxs/Config.in                | 2 --
+ package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk | 2 +-
+ 2 files changed, 1 insertion(+), 3 deletions(-)
 
-
-Best regards,
-Gullient Dowan.
-Assisted by Buildroot Review Assistant (used openrouter).
-
+diff --git a/package/kodi-screensaver-rsxs/Config.in b/package/kodi-screensaver-rsxs/Config.in
+index e88df1fe49..8185f3c424 100644
+--- a/package/kodi-screensaver-rsxs/Config.in
++++ b/package/kodi-screensaver-rsxs/Config.in
+@@ -2,8 +2,6 @@ config BR2_PACKAGE_KODI_SCREENSAVER_RSXS
+ 	bool "kodi-screensaver-rsxs"
+ 	depends on BR2_PACKAGE_KODI_RENDER_SYSTEM_GL
+ 	select BR2_PACKAGE_BZIP2
+-	select BR2_PACKAGE_GLI
+-	select BR2_PACKAGE_GLM
+ 	help
+ 	  RSXS screensaver add-ons for Kodi
+ 
+diff --git a/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk b/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk
+index ff554a2e1a..dcca031b51 100644
+--- a/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk
++++ b/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk
+@@ -8,6 +8,6 @@ KODI_SCREENSAVER_RSXS_VERSION = 21.1.2-Omega
+ KODI_SCREENSAVER_RSXS_SITE = $(call github,xbmc,screensavers.rsxs,$(KODI_SCREENSAVER_RSXS_VERSION))
+ KODI_SCREENSAVER_RSXS_LICENSE = GPL-2.0+
+ KODI_SCREENSAVER_RSXS_LICENSE_FILES = LICENSE.md
+-KODI_SCREENSAVER_RSXS_DEPENDENCIES = bzip2 gli glm kodi
++KODI_SCREENSAVER_RSXS_DEPENDENCIES = bzip2 kodi
+ 
+ $(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
