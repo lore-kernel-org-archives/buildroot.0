@@ -1,113 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9C20CDB479
-	for <buildroot@archiver.kernel.org>; Thu, 25 Jun 2026 12:34:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E3FECDE000
+	for <buildroot@archiver.kernel.org>; Thu, 25 Jun 2026 12:35:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 74DEA41047;
-	Thu, 25 Jun 2026 12:34:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id ADFE861009;
+	Thu, 25 Jun 2026 12:35:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Z-So7YpBdirM; Thu, 25 Jun 2026 12:34:58 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JrN6rUs5CCHm; Thu, 25 Jun 2026 12:35:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8EB9041028
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9423F60FF4
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1782390898;
-	bh=pENcJmoYKJ3xdeqSVr7SasJHTKHfz03NXsinlmyAAIE=;
+	s=default; t=1782390945;
+	bh=wZ5LQ7iOkqZ/5ggpC8opLjF3DT3AUAnOd1KLUEPaOcA=;
 	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=lH0wnDlMfaC8rAdnp2diKh6Xp7548bOz5qu10X4ip92f9RreBcm1KcL89XO+LnmF/
-	 6rqU5Z+8H4z3G614xbEZ5uKFqL6qMzpZeeFR7sE46uFg5KBdEQxvj+YFwZA7ufE8+p
-	 ch5cZB419Tras9HKTdb/g4556JZcOs0bii3rla5qTwSDhTq1FZ0x641CIoxC4Sl1w6
-	 4crLYivAeaxq6YzgAOMG7n2qn/plDap2dvWikHRHqcB1DOcpSJ1pY3nVhl+LEpQ40t
-	 8/7FVBA9AxxqsX5s+bOO6EKXvBALGRS5ujYAJHo2mtuhGzzmrfH/bDG5YEgFs7Z1Rd
-	 ybcKMogOfMS+g==
+	b=XOtQVAG/czj7K+UBnW0Br2CHRBFXqS5cC6fVi4QQJnRBvJpCP3RJy+t45VJtk+OxN
+	 ZS/d8a0E2Vb31jjj2mJr8/dtatPP/d3nnsGYndveY7SAh1V+cToDfxLrdNkXONKwIk
+	 +eq6YE1xCQQBKF0oe/IyIjFkzUdw9+guCfMW1tuOsSKDUx7bbcNh3EOGQboqaExNOL
+	 hcV1WJwnD/Q8bHXJO0pJ8JwFoK786WNvz8UkQE32jDY9kh3652N3ztVxxCEfQQy0xg
+	 5GYLlc+B1Kya56nF8C45NDLs5tk52ruO/eviAanTS6/OGHBkReZ69Ur9jrzK0lsvsE
+	 h4+5xOp1YWH+A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8EB9041028;
-	Thu, 25 Jun 2026 12:34:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9423F60FF4;
+	Thu, 25 Jun 2026 12:35:45 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 8AF2F254
- for <buildroot@buildroot.org>; Thu, 25 Jun 2026 12:34:57 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 18883254
+ for <buildroot@buildroot.org>; Thu, 25 Jun 2026 12:35:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7099F82301
- for <buildroot@buildroot.org>; Thu, 25 Jun 2026 12:34:57 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 15CF8828EF
+ for <buildroot@buildroot.org>; Thu, 25 Jun 2026 12:35:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CtyYz-22X0j2 for <buildroot@buildroot.org>;
- Thu, 25 Jun 2026 12:34:56 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::62e; helo=mail-ej1-x62e.google.com;
- envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5A90682282
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5A90682282
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com
- [IPv6:2a00:1450:4864:20::62e])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5A90682282
- for <buildroot@buildroot.org>; Thu, 25 Jun 2026 12:34:56 +0000 (UTC)
-Received: by mail-ej1-x62e.google.com with SMTP id
- a640c23a62f3a-c07a6527453so411328866b.0
- for <buildroot@buildroot.org>; Thu, 25 Jun 2026 05:34:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1782390894; x=1782995694;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=hxkRhQ8dvn4Ap9qON3xgExwBLhs17PkiYex9nx+O3mA=;
- b=kyq4xgtYahiZJ+PFWHIGif5b/hYFhaL93xn7cGRfBk9mLwjyj8a1UXLDGoR2Z1JSBg
- OQzbw32KKzO46vX1hZPoR4kxNEXGc0ciWrvXaXZhywuUQ4FKUjIlH4I4xtoEPNteNj2P
- vbAZVM+fe5q7TU6v+4Vo3zh6bWM2XS1MhDn0LS52v58WSY3EY0kehQHNK/8XQQ32jYLM
- 0JH9wHUNlSkY36mXVDzm2Lt3YW5K6epqm8NEBE/BPVZA6eJv1YDZAan+4O/N6iNtc6Zb
- cd2Mru5pNugJoWqoGwAk44GiVOlbaVJMwVwrHI1l/U8Q4E3AIE9QI0SOLH7W1Xsm2KPE
- A39Q==
-X-Gm-Message-State: AOJu0Yz/LF+lQwSKyKLZXTzZco+592l2E+iHgLhMlj/TTN5i5nkTd6g7
- 8fMqKrNgg4PypDjn9uyI3YJJbUBaEDEi3Hu+CE5/LTVx/LkPhkba7douZwjfAnIYmjnBHDEKzq4
- KhxvXHAo=
-X-Gm-Gg: AfdE7ck7/878SSoYy7FzrjGGn5oB7lwxoqtqMD9hZJSDJwQh+soRScI+Z/+yTbUYgDs
- IqMeBdxFvC7zSc5Zb9pxudCADu/mXb7R7RFFYMF2crU2Z7sE/S4NGesCK7wa0mPJMVZ1B1eGd4i
- nUun/m9pwzkBMS3x7T7E42jySRMqP0Vvja19QQqrjtGmOL2Fl1hDmiv958Q34TBX4Hqj0Sk36J+
- X7dLjQJDJ8vXI6yv68vOngPDv99qfbtoyHGMNMZTwEeg3ZiHtMbj8Ps+zYUJownTVl5RBOT2ksg
- 6InB+JsW4MTy2D9Zs0DiB+0Bf4VucHWw7gKPifITd1S1lQMNXfaYZMluiVi5fdV3CsQsRIJgeZF
- 4FnLKl9DNlotc9mt79tYKCyAxQcBD717YQWoPXCAuZHt5HwpQFHDdrldQULxfvswMiFEEoz88G4
- k1h3GLUdtAmzNHVQobyAz2Cx5JwPD1ZBqlEyBGdFpDK/Qge9HODWjd0B/L57PBKqw5+w6xJ68Mf
- KFiR79HwTv8Jr6KgCIAcYS61QDdtkIy3Myf
-X-Received: by 2002:a17:907:968c:b0:c12:3f6:f644 with SMTP id
- a640c23a62f3a-c1205f178b3mr160248066b.36.1782390894020; 
- Thu, 25 Jun 2026 05:34:54 -0700 (PDT)
-Received: from dario-ThinkPad-P14s-Gen-5.amarulasolutions.com ([2.196.41.20])
- by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-c11fbffcb40sm171017866b.63.2026.06.25.05.34.52
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 25 Jun 2026 05:34:53 -0700 (PDT)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+ id 51bj6HPujonW for <buildroot@buildroot.org>;
+ Thu, 25 Jun 2026 12:35:43 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.158.146;
+ helo=smtpweb146.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3B8E5828E3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3B8E5828E3
+Received: from smtpweb146.aruba.it (smtpweb146.aruba.it [62.149.158.146])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3B8E5828E3
+ for <buildroot@buildroot.org>; Thu, 25 Jun 2026 12:35:41 +0000 (UTC)
+Received: from localhost.localdomain ([84.33.84.190])
+ by Aruba SMTP with ESMTPSA
+ id cjIwwFJ5IrbJKcjIxw2RVB; Thu, 25 Jun 2026 14:35:39 +0200
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- linux-amarula@amarulasolutions.com
-Date: Thu, 25 Jun 2026 14:34:47 +0200
-Message-ID: <20260625123447.61478-1-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.43.0
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Pierre-Jean Texier <texier.pj2@gmail.com>
+Date: Thu, 25 Jun 2026 14:35:36 +0200
+Message-ID: <20260625123536.3814862-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1782390894; x=1782995694;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=hxkRhQ8dvn4Ap9qON3xgExwBLhs17PkiYex9nx+O3mA=;
- b=NH0kLwxfFrhjns6ubhEgRC+T4ba8nvredsxV/jYF9v3T8P9uDK1Ns9HgkS0ttHxQj7
- A5H5n9oFIwBNOR0ECFC/JhKOC289CalARH9Aw4i1TCuE1WvfXgwpf/i2os+7V7Vf0y9L
- Cicj4WoNpD0whxUHnjnP5+nEiaAwPf7REh32Y=
+X-CMAE-Envelope: MS4xfER4+ME/CQbS6COOnf0uHXtKW6tG2bKkkZ4+sEKuTHSfcGMlOaK1XvqY8cn5knNpGJyw7tHCNZFQMqM4doU/BzuGNO2A+BBILWl89+NEhZsfNKkH4ArD
+ k8XIQ+wpErD2bRRkb+M6mMjCglqgFZPzVWCTaketDiefhTrsc5/8TEEJID44tMIVIo10eW+IpCvd8yNSnIrGFJ6J1gDI9Li8W67NLsKw1hxccEAlibH3oFgg
+ 5MiMKro5k4voi+36aG1S5oSNoz0b4fjUKmMfqkD7Wewl6ObKxOnBk4j45PuOtwio2HkDWhZiMjhyGQWKGN3grw==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1782390939; bh=ktoZvxbk4YQfYUa83wNkOHqUD8CYVyeVNP07gzZ72OE=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=T8k7FZaAgbtHn01mTx+7gkEnwihQhq3wVNJYmWNMXKvQhflYRTtnQXXECFg+4R9cH
+ PaLLinwOsNdo8cfReUiriHiaxGeGSXoJVnlVx7Zetzk4L9Pd+2qre7OlzJFyeQQmp5
+ Ne7IE1RmFzyr0CI4/DnAbQRFOT37z/jMu3ODi77fj9s1X3XTrr5gjV0ERzxaYghWCZ
+ 5kT7vLsYaqI2iqh5pZP91mkDdy2UfUiff7p7U8djf1DPFR211biy817hESpY0KfIcd
+ lXMy7alPIHWlWMMOKA6TLta0xDpn1deqZG/mXlGfMN8O5P2iZPKENAcR85bKrWjC16
+ iBvuGWXALzisA==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
+ header.from=benettiengineering.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=NH0kLwxf
-Subject: [Buildroot] [PATCH 1/1] package/armadillo: bump to version 15.4.0
+ dkim=pass (2048-bit key,
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=T8k7FZaA
+Subject: [Buildroot] [PATCH] package/mongoose: security bump to version 7.22
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -125,39 +97,40 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Release notes:
-https://arma.sourceforge.net/docs.html#changelog
+https://github.com/cesanta/mongoose/releases/tag/7.22
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Fixes CVE-2026-37635.
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- package/armadillo/armadillo.hash | 2 +-
- package/armadillo/armadillo.mk   | 2 +-
+ package/mongoose/mongoose.hash | 2 +-
+ package/mongoose/mongoose.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/armadillo/armadillo.hash b/package/armadillo/armadillo.hash
-index e78cf1f1886d..70456a4fb278 100644
---- a/package/armadillo/armadillo.hash
-+++ b/package/armadillo/armadillo.hash
-@@ -1,4 +1,4 @@
+diff --git a/package/mongoose/mongoose.hash b/package/mongoose/mongoose.hash
+index 556a438880..1a60b0c89c 100644
+--- a/package/mongoose/mongoose.hash
++++ b/package/mongoose/mongoose.hash
+@@ -1,3 +1,3 @@
  # Locally computed:
--sha256  029230b29c3745924ea850c7046efd1db74b863fdfead8b1aaba3bdd5b0cf895  armadillo-15.2.7.tar.xz
-+sha256  f781e9d935db7e8b9a64c58b6a817354d38a1769e179b477364f5e6414953f6c  armadillo-15.4.0.tar.xz
- # License files, locally calculated
- sha256  3ddf9be5c28fe27dad143a5dc76eea25222ad1dd68934a047064e56ed2fa40c5  LICENSE.txt
-diff --git a/package/armadillo/armadillo.mk b/package/armadillo/armadillo.mk
-index 756a3fa8ab65..b806b0f1d1b7 100644
---- a/package/armadillo/armadillo.mk
-+++ b/package/armadillo/armadillo.mk
+-sha256  d4ddbd12c12f223abefcc0a74417a638ae5c118d7cf10ba546553c6b0e0b5ada  mongoose-7.21.tar.gz
++sha256  87727cd2c240ff559b16e9710d44b61ba3513dbee50428bd8ee1596d7c58460a  mongoose-7.22.tar.gz
+ sha256  f0d9cfd6f7d92f6ec061a5fb2882f67d2521a151bf09a637c33ca6181834b048  LICENSE
+diff --git a/package/mongoose/mongoose.mk b/package/mongoose/mongoose.mk
+index 8250751eb8..207d31cdfa 100644
+--- a/package/mongoose/mongoose.mk
++++ b/package/mongoose/mongoose.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ARMADILLO_VERSION = 15.2.7
-+ARMADILLO_VERSION = 15.4.0
- ARMADILLO_SOURCE = armadillo-$(ARMADILLO_VERSION).tar.xz
- ARMADILLO_SITE = https://downloads.sourceforge.net/project/arma
- ARMADILLO_INSTALL_STAGING = YES
+-MONGOOSE_VERSION = 7.21
++MONGOOSE_VERSION = 7.22
+ MONGOOSE_SITE = $(call github,cesanta,mongoose,$(MONGOOSE_VERSION))
+ MONGOOSE_LICENSE = GPL-2.0
+ MONGOOSE_LICENSE_FILES = LICENSE
 -- 
-2.43.0
+2.47.3
 
 _______________________________________________
 buildroot mailing list
