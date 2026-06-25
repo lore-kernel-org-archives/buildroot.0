@@ -1,62 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36AC5CDB479
-	for <buildroot@archiver.kernel.org>; Thu, 25 Jun 2026 15:17:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6EFACDB479
+	for <buildroot@archiver.kernel.org>; Thu, 25 Jun 2026 15:24:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F065A6102D;
-	Thu, 25 Jun 2026 15:17:30 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JLpAF6PxJOLO; Thu, 25 Jun 2026 15:17:28 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 88ED361029
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1782400648;
-	bh=gn4ATp/eh+ShQpm7AJk2n67PALRrTS7xsSWQUb1ti1Y=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=eoDIj/No0Tel2QqVZcUnNrVb7+LTkQSYecRQoOK/eOzsHEmHeez6H7457TQME1T/D
-	 nU6QPxu3Uavf6DCNdKdQ7ngjZxO0PdcDpLkHyDZ1WbXercZ1LAb026DmRoDhjqJlYC
-	 SuDjy2cBGSE60AMQRf1qvqlh9MFtEMIEL+4m0LbMudcxG5nGcTP7xtAjxIsNnAL0p+
-	 5ApezYWNlYhJ6F/5HR1EmdxAg+mrNUWr2kA4gR169HxAZDdPLpBYY2IN5B8v8A3zr9
-	 b1Wxk+12vT2R7jnyfoqXlBCmqmSZ4d9WVLQ3QItJuAWGS9E3ikHM4DGMnfsMBmUWO1
-	 VU/SE7oDWjNyw==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 88ED361029;
-	Thu, 25 Jun 2026 15:17:28 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id E8A762C7
- for <buildroot@buildroot.org>; Thu, 25 Jun 2026 15:17:26 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C603282D12
- for <buildroot@buildroot.org>; Thu, 25 Jun 2026 15:17:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 925CE82E29;
+	Thu, 25 Jun 2026 15:24:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sqdxt_njs0Yz for <buildroot@buildroot.org>;
- Thu, 25 Jun 2026 15:17:25 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 758DB82D0F
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 758DB82D0F
- for <buildroot@buildroot.org>; Thu, 25 Jun 2026 15:17:25 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CD346857A8; Thu, 25 Jun 2026 15:16:59 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 25 Jun 2026 17:07:03 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 92214c922de4f789dd8f1211e85e2cc77f62e189
-X-Git-Newrev: dd929c3d253dfaf9392d327c16c5e0d0f2b1353f
-X-Patchwork-Hint: ignore
-Message-Id: <20260625151659.CD346857A8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ghostscript: security bump to
+ id QIfkN5Xhbtpv; Thu, 25 Jun 2026 15:24:10 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C090682E14
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1782401050;
+	bh=xoH1hg53NJbAnK6956rTx/Vte2WkZS/mTTBQtQXFVg8=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=p/r5tSdap/Lr7k8UC7doDgKofkpazN9+S1G5Lc4VvzwZDfvq1CDR5LbAaS2+plaDe
+	 VedZoYwXX4248HGiubdEFJDuPLtPlkcWm/GKyQdAPE8VkDT5csYvJNCRaJf60wbRaX
+	 xc1OZMMHkU8jgZcgvxJXWUer6hR5+LLAyOHC1uScbqVTaWsxsiC3GfvPgKFB7Daqoo
+	 uzgMjktSli7eND250d0X2d/3Ja63aV6T8lZe4qJqXDtiqvajzRZ57nD50bhnTARGjN
+	 CtOWerH/sYXWMJdZnZ4d60GPHgTY8McH2llamWVnHtS6i2XycWqLR9DC8+n2hperWl
+	 js5ZIGnwwS7Qg==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id C090682E14;
+	Thu, 25 Jun 2026 15:24:10 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 09A01254
+ for <buildroot@buildroot.org>; Thu, 25 Jun 2026 15:24:10 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0617C41114
+ for <buildroot@buildroot.org>; Thu, 25 Jun 2026 15:24:10 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NJOZXy6JX2VA for <buildroot@buildroot.org>;
+ Thu, 25 Jun 2026 15:24:09 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D850441110
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D850441110
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D850441110
+ for <buildroot@buildroot.org>; Thu, 25 Jun 2026 15:24:08 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id 8B5075FFA3;
+ Thu, 25 Jun 2026 17:24:04 +0200 (CEST)
+Received: from 2a0d:e487:119f:5231:6cab:f084:5c2d:94e1
+ via 2a0d:e487:119f:5231:6cab:f084:5c2d:94e1 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Thu, 25 Jun 2026 17:24:04 +0200
+MIME-Version: 1.0
+Date: Thu, 25 Jun 2026 17:24:04 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20260619172810.3337739-1-bernd@kuhls.net>
+References: <20260619172810.3337739-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.16
+Message-ID: <77155b12a92976fd90ee9646f3d3ed32@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1782401045;
+ bh=VvQjssOY3qGPjQ+4lTWaZ8x54Xvtj6nYKXb3f45hdI8=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=Elza48ibtnor9HG1luxRFpa1CBaAXMbIVrV3Q6jVnxx4m7T44uhG06wKoRXy9n08v
+ L7HwpELzVN7TonU5LhZnNwDsuvrFaY8/s5/QS1bxNFDXZLsq37rgxs7ITY7DRlhcCH
+ BS2s3uAJ3Jc78tPM4Ij3MRF5mbHjBm7sZamPLGJJDhsSe/q9EE8eaykU3TfDkRM9X1
+ nLb1ytMMt1OVqFVcZorjgNQuW7qfi1sSnlfvSulDXChZGjhBmOTw5z7dnzOFGjZOVg
+ Rabv/GPZUlPcDdbxRcdQlf3qOnpVaW91fL6NyCbMSUmxqkLWz1FnvAFP4X90iQkLKq
+ btrViP4KAvKAA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=Elza48ib
+Subject: Re: [Buildroot] [PATCH 1/1] package/ghostscript: security bump to
  version 10.07.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -71,57 +95,20 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/dd929c3d253dfaf9392d327c16c5e0d0f2b1353f
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 19/06/2026 19:28, Bernd Kuhls wrote:
+> https://ghostscript.readthedocs.io/en/gs10.07.1/News.html
+> "This release addresses a number of potential security issues."
+> 
+> Renumbered patch which was forgotten during the last version bump.
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-https://ghostscript.readthedocs.io/en/gs10.07.1/News.html
-"This release addresses a number of potential security issues."
-
-Renumbered patch which was forgotten during the last version bump.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/ghostscript/{0002-brotli.patch => 0001-brotli.patch} | 0
- package/ghostscript/ghostscript.hash                         | 4 ++--
- package/ghostscript/ghostscript.mk                           | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/ghostscript/0002-brotli.patch b/package/ghostscript/0001-brotli.patch
-similarity index 100%
-rename from package/ghostscript/0002-brotli.patch
-rename to package/ghostscript/0001-brotli.patch
-diff --git a/package/ghostscript/ghostscript.hash b/package/ghostscript/ghostscript.hash
-index c2e48b01e6..94017262df 100644
---- a/package/ghostscript/ghostscript.hash
-+++ b/package/ghostscript/ghostscript.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs10070/SHA512SUMS
--sha512  1c2a14951223c975a53bd9767c28bd3a6e420c385a5e0d7a60a5ff5b091bc027929c815bf57cddf97611e8d265ece1c219321737f2cabb5646685c6e8cdb85c9  ghostscript-10.07.0.tar.xz
-+# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs10071/SHA512SUMS
-+sha512  7b38ca10fa7ab648924f7db3e2e4933c3d18e04c8db1346fca4d4f7b85dfbd7888d5fc46f413613b46429fb47b675a593994c25e50e9de4dcdbee3bdd8a5e449  ghostscript-10.07.1.tar.xz
- 
- # Hash for license file:
- sha256  8ce064f423b7c24a011b6ebf9431b8bf9861a5255e47c84bfb23fc526d030a8b  LICENSE
-diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
-index 159e06db91..250c851b28 100644
---- a/package/ghostscript/ghostscript.mk
-+++ b/package/ghostscript/ghostscript.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GHOSTSCRIPT_VERSION = 10.07.0
-+GHOSTSCRIPT_VERSION = 10.07.1
- GHOSTSCRIPT_SOURCE = ghostscript-$(GHOSTSCRIPT_VERSION).tar.xz
- GHOSTSCRIPT_SITE = https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs$(subst .,,$(GHOSTSCRIPT_VERSION))
- GHOSTSCRIPT_LICENSE = AGPL-3.0
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
