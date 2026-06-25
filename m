@@ -4,109 +4,110 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61C40CDB479
-	for <buildroot@archiver.kernel.org>; Thu, 25 Jun 2026 14:12:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B49DDCDE001
+	for <buildroot@archiver.kernel.org>; Thu, 25 Jun 2026 15:00:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E37F460FD1;
-	Thu, 25 Jun 2026 14:12:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 674186101C;
+	Thu, 25 Jun 2026 15:00:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wNuWbqEFfjSm; Thu, 25 Jun 2026 14:12:39 +0000 (UTC)
+ id bvTszHY8RAch; Thu, 25 Jun 2026 15:00:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F1F2261010
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8500A6101D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1782396759;
-	bh=pF8Zqhb8yIG4xtIqV7r9ODJi8EmXphCpH9We4dRqA10=;
-	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=nOyAfq1SGFiWTMsNHRBd3a4g1ajCSz2QRoJFxhRd9iLFQJEQjm6phGBFAzlL0ULov
-	 HNJPD+bbbgVNR3YFaVJ/sTqofPXiN9S0m5+M75nD1erxf0ERbj213sIcmIKMhVAkvk
-	 UI8l8RYtp2V64LlEu9pw6Y5ZNof+d3O2GXezXK/EnfWANruRSjWPswKMcSaz/Ieo3n
-	 hAol4mcWcjp5e68S+WA/SMHM0GY2GH4mDW20WChP7WF5Y1IemaGgtDxTJN2YsQkLLu
-	 endC5b10695suPl8GOOXVhDvUEzJ+Qw3bxd/b/qtm08QDTyAlf0zdfhOKTuqbhIXQA
-	 WZe0EGACVpUrw==
+	s=default; t=1782399622;
+	bh=vTUUSgjoqqlLQdYwBMtRN/xzajDrA8b1mwVmAy6DPLk=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=OFGkDnr66emOzrCxQGRG3+nGbuZwFmHpqJYUsebSuDT2lQ8CxBk8TKO+CiJ3HK2NO
+	 n2Sin3PU+OE8NQKfck/0ARqOVpBoXvD8ibKkMgqAf4eGa1rEc6mnEgzazOmVoVRdNu
+	 ItejAuJG93KbS/jS2tqmYN46wI30JvwWbiz4vEnf0+rKbT2LGIxqA0pAMXReU4ixLG
+	 3ffTCAZ0dZf0O+3MZf5g7Z7w2Cz+hCDd/cR+Wd63YcgQllkDIDTb8IWdwMLqnGTllM
+	 dVtpIoCY4XBkbdwiv5a28bqgLIibaHdyYl0zFXyyVTRan8n5Z/PdwAi6nDseRiXP+d
+	 DLOKSMCrJDjqg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F1F2261010;
-	Thu, 25 Jun 2026 14:12:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8500A6101D;
+	Thu, 25 Jun 2026 15:00:22 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 777612C7
- for <buildroot@buildroot.org>; Thu, 25 Jun 2026 14:12:37 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id BE75D2C7
+ for <buildroot@buildroot.org>; Thu, 25 Jun 2026 15:00:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 750EF6100F
- for <buildroot@buildroot.org>; Thu, 25 Jun 2026 14:12:37 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id AFE676101D
+ for <buildroot@buildroot.org>; Thu, 25 Jun 2026 15:00:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CmZagfji53qK for <buildroot@buildroot.org>;
- Thu, 25 Jun 2026 14:12:36 +0000 (UTC)
+ id rpmn4Ybpic_Q for <buildroot@buildroot.org>;
+ Thu, 25 Jun 2026 15:00:21 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
- envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 8ABBE60FD1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8ABBE60FD1
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
- [IPv6:2a00:1450:4864:20::329])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8ABBE60FD1
- for <buildroot@buildroot.org>; Thu, 25 Jun 2026 14:12:34 +0000 (UTC)
-Received: by mail-wm1-x329.google.com with SMTP id
- 5b1f17b1804b1-490b211ee6aso14834745e9.3
- for <buildroot@buildroot.org>; Thu, 25 Jun 2026 07:12:34 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::634; helo=mail-ej1-x634.google.com;
+ envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 8795D6101C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8795D6101C
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com
+ [IPv6:2a00:1450:4864:20::634])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8795D6101C
+ for <buildroot@buildroot.org>; Thu, 25 Jun 2026 15:00:19 +0000 (UTC)
+Received: by mail-ej1-x634.google.com with SMTP id
+ a640c23a62f3a-c0115a3794bso643330566b.0
+ for <buildroot@buildroot.org>; Thu, 25 Jun 2026 08:00:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1782396753; x=1783001553;
+ d=1e100.net; s=20251104; t=1782399618; x=1783004418;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to;
- bh=o6fmuax4yLnQcYXhKCgi8Hwm/FKorm88Ep8nAgkiGC4=;
- b=kIv/PH/pL00/CWGua66GfD88Scb2oVg8EuU5/HFbuiAndTkXxET/cLK9f6L3g2OfUz
- EsWWQXkkAXDEK2eTIWCPYdoIGWsbrq6W5PpMzb1rZMXdk7nd0swlNAEgfokxvynUJyji
- rktGDvRM16NsesIgrbq+ZIxlPJJwpN1IrevSgL0fmETVdghbjh4I3RA470vWasw8WG5a
- dFe1v1vB1tAr+MlSsc5xLhJ8v9ZNe4ZB2O8boI4PGsXxskBHjbANxOuVB0RkIJv2u/oB
- FY1P1V42oOBWAJAO4GewnOC5TZemKS7iw2OWIBYM/LfDQ6Q+0bgsMQ+wo8wXMExqxo1h
- C7+Q==
-X-Gm-Message-State: AOJu0Yx5JyXMp+bvQ49qlSpxc6YsEpVRCxAGnOOGKhfASuatxt5HMAMn
- voSWaL4fPJwo3EDl0RsPkscv4u9+7wdgusFf19WkikZmBrQYeMMjGI9h+GIA2EKBij8PI9T5wJL
- mRXYq
-X-Gm-Gg: AfdE7ckkLqBHn7cCb1MrKfScfVvzKQwqFWmhp40NWi+eNRXBIIoRN5Ec80SORWDc0yB
- //5Hgb0hwlOwKyyZdulD3A8DeGN+D30yFIiVTJpaitlPbcRWe8jlaqSAcasKIKXWwYMfj1WBJbE
- /G3hSIXTeZ1sVqUsI28CP8W980TsEWO4d5Lu5fX15iKb75s3DxDqjYd3PuftuViDeSD8ZteRyqZ
- xIsktbNWyN4dOyigS2saeWZR3nJSfKi51OQqHkikJeEqE+WSSq7YLeHllGSW1cidMLUVRbnrus5
- WFv8C3lAbiQ6l4GyHwiJlWXAqeLdJxq+T6YJaFwIfzMbaRJCRkAhIZgXCoF8tA5uml71IEiwokg
- oZQsuwXtQX9nhPKLszcPxfNYVuP4Cx6bp/3DTeOon/xtP4ALmsZ+FyK+YdZ+ikiMBXN8xeGkmWp
- quyU16P3KuRkwvJRM=
-X-Received: by 2002:a05:600c:6748:b0:490:c024:2eba with SMTP id
- 5b1f17b1804b1-4926688598fmr36809545e9.22.1782396752778; 
- Thu, 25 Jun 2026 07:12:32 -0700 (PDT)
-Received: from arch ([77.109.126.38]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-49264082426sm79611345e9.9.2026.06.25.07.12.32
+ bh=EBZtp12t8u6eY44sdTF5osPopsMChTRopI6Nudg8KjY=;
+ b=sucbYCrMaKRzgW3r7HjQlSmDv0skCNp13MzOK8E4yFffDTHUBMMZgETzQslvR09sjb
+ Lpu+iwtG83okUV21mURO1BsZoqP2pineMooO23G9dV4mp2nTVyirc+KcbUhcOSEF2NCp
+ EluMvTOat8BM60hmRMz9iltgIwh4bJ0m9iWbAjBuiWVN1l7hDiWC2qP8cBLOuRCw2fxI
+ qdS2oBH09HilJy36pfyIUGpTmWAthsXm/PXemAeomUt1q/WdvUKu4J6FECVGvfj/BlEt
+ IgmWqRMl/Hq6ZVWRxmU3S4LgJxHsvcc9SuFe3/BY5MfFX5Gq/TOFTS9UBqkvSUZgcX1j
+ uH8A==
+X-Gm-Message-State: AOJu0YyrUoP0oNpYR1rwQSMJ5WsXkeEsdHpOJ0BSjy2PZHIjUP3KCO1b
+ fWnSu6IzwCv0EZnke57rlB2HFb55TeDLLKbv1aNmjbt1nt76DQhUrIAlqrLeIpnYWPEKxY9ERlH
+ cJgl/es4=
+X-Gm-Gg: AfdE7clQ3E4DykWr55plxSzojHLwVsKqMzknKG+18aBVMaojoEiNFQXR3ZBAwy6HaCW
+ lTOgkg6lXydT+yu9SRLKGva3GR6VTwKwBTJIOcCrHXPH8TRYN+X2SE4ndr05Tg49Xfo7rI+3J6T
+ OnMSUXbMeYqedhD7Y8iPBM5swIn7BVV60Y/vp8O34gf2LioWsAI5KBcb9ZTLz5k8izeiBeFvaRt
+ Fheiq6n86dtr4V73unia8PGNiRE1AC3nBG9BnQ+yV3uZticCOJmitgWEztGBnwkrO2r51lianZ/
+ /F3MsgUZIxDvs4B48SX0vQTgkMNtxmz6cdKsO09jnWbQ0LoN7Dby5FMoFRgXExcZ8/i2v03A2TY
+ oH6qO/13fgrSvJ6cZyLDZVJx/c3hEaAkoeuQLffDnbav6EJ+YXeD+MONexqeNDKX/1XT84EJf1C
+ fkOZwECiMXYDB+7wXSXsGLU6UTh/8OxBoBEfXqUmSOiY/I0vQ9e50ZZZka79rtYXgqZZ34zorNx
+ OsHtbChJXfEMLcUfiLDUNBZy4aT+1m7oOnOhohfHuaQB+U=
+X-Received: by 2002:a17:907:6d25:b0:c0d:32c8:6f23 with SMTP id
+ a640c23a62f3a-c1205ec8f52mr209337866b.37.1782399617220; 
+ Thu, 25 Jun 2026 08:00:17 -0700 (PDT)
+Received: from dario-ThinkPad-P14s-Gen-5.amarulasolutions.com ([2.196.41.20])
+ by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-c11fbbe9f9asm211974166b.26.2026.06.25.08.00.15
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 25 Jun 2026 07:12:32 -0700 (PDT)
+ Thu, 25 Jun 2026 08:00:16 -0700 (PDT)
+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Thu, 25 Jun 2026 16:12:31 +0200
-Message-ID: <20260625141231.108067-1-thomas.perale@mind.be>
-X-Mailer: git-send-email 2.54.0
+Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+ linux-amarula@amarulasolutions.com
+Date: Thu, 25 Jun 2026 17:00:12 +0200
+Message-ID: <20260625150012.1505793-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1782396753; x=1783001553; darn=buildroot.org;
+ d=amarulasolutions.com; s=google; t=1782399618; x=1783004418;
+ darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=o6fmuax4yLnQcYXhKCgi8Hwm/FKorm88Ep8nAgkiGC4=;
- b=R2705cVsE3k3qmIuj+RTCVAbNsO/hl4I/jigEPItDL3vBz64ClfGDRGyiiBuhhblFc
- 8NKqRFb8N81gKsk2RFp0TlqREpTNJm6zQCo0QCKvYj44mQHb4vVL4eCSgT2lRzWbk2a8
- nybrgRcFb1Ze4TEhtj/5fpBRXOh+yEjo/+ts9luEpWT9r28VJfzZwOIO093ZJnk7IdFT
- oBfmJrYh7GldC5GzXpE2NcPxkWLTNirKoUsY6E6hYkgMCrGPGG5JBCDea3Jfile95NvS
- TLupLYN2byq9HTVIUxqZMjiUULqBiFiL8CVW8uhjUVwQfDSOD3ybrjXO5nrSuZF2vNlH
- HAlw==
+ bh=EBZtp12t8u6eY44sdTF5osPopsMChTRopI6Nudg8KjY=;
+ b=RMYH2E7zZfzkiO1K3GPJdtBgaDPmUE7ZyYGseuOO9LFyMjyatrdTlzFiLkVQ0/RI08
+ PfD0Jdveep0AkJ2E/0A9aXI3SS/6qqHjP3egM3FZMlu2mM2GPQzROckh7aCaJuTYrJFH
+ CWQg8c6uFwYh20sXbrbFSofbZbWwXkXkDgRw4=
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
+ dmarc=pass (p=none dis=none)
+ header.from=amarulasolutions.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=R2705cVs
-Subject: [Buildroot] [PATCH 2025.02.x] package/swupdate: add upstream patch
- for CVE-2026-28525
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=RMYH2E7z
+Subject: [Buildroot] [PATCH 1/1] package/babeld: bump to version 1.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -118,108 +119,93 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Perale via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Perale <thomas.perale@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- CVE-2026-28525:
-    SWUpdate contains an integer underflow vulnerability in the multipart
-    upload parser in mongoose_multipart.c that allows unauthenticated
-    attackers to cause a denial of service by sending a crafted HTTP POST
-    request to /upload with a malformed multipart boundary and controlled
-    TCP stream timing. Attackers can trigger an integer underflow in the
-    mg_http_multipart_continue_wait_for_chunk() function when the buffer
-    length falls within a specific range, causing an out-of-bounds heap
-    read past the allocated receive buffer to a local IPC socket.
+The removed patch has been merged [1].
 
-For more information, see:
-  - https://www.cve.org/CVERecord?id=CVE-2026-28525
-  - https://github.com/sbabic/swupdate/commit/beee2dc0feef1cfe84f1aa6fc980e104b2e47a74
+Release notes:
+https://github.com/jech/babeld/blob/master/CHANGES
 
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-(cherry picked from commit 0c6595aaac7288335e8d8bcccc383a8a12f635f7)
+[1] https://github.com/jech/babeld/commit/f8e5fbb33690b516b8516590def5136e6619de4c
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 ---
- package/swupdate/0002-CVE-2026-28525.patch | 51 ++++++++++++++++++++++
- package/swupdate/swupdate.mk               |  3 ++
- 2 files changed, 54 insertions(+)
- create mode 100644 package/swupdate/0002-CVE-2026-28525.patch
+ .../babeld/0001-Fix-uclibc-build-issue.patch  | 38 -------------------
+ package/babeld/babeld.hash                    |  2 +-
+ package/babeld/babeld.mk                      |  2 +-
+ 3 files changed, 2 insertions(+), 40 deletions(-)
+ delete mode 100644 package/babeld/0001-Fix-uclibc-build-issue.patch
 
-diff --git a/package/swupdate/0002-CVE-2026-28525.patch b/package/swupdate/0002-CVE-2026-28525.patch
-new file mode 100644
-index 0000000000..75f99a698f
---- /dev/null
-+++ b/package/swupdate/0002-CVE-2026-28525.patch
-@@ -0,0 +1,51 @@
-+From beee2dc0feef1cfe84f1aa6fc980e104b2e47a74 Mon Sep 17 00:00:00 2001
-+From: Stefano Babic <stefano.babic@swupdate.org>
-+Date: Thu, 19 Mar 2026 10:50:13 +0100
-+Subject: [PATCH] mongoose: Integer Underflow in Multipart Upload Parser
-+
-+The function mg_http_multipart_continue_wait_for_chunk() has
-+a discrepancy between its guard condition and a subsequent
-+subtraction in the else branch.  The guard at line 250 checks
-+`(int) io->len < mp_stream->boundary.len + 6`, allowing execution
-+to continue when io->len >= boundary.len + 6.
-+However, when mg_strstr() finds the boundary string in the
-+buffer (else branch at line 264), data_len is computed as
-+`io->len - (mp_stream->boundary.len + 8)`. The +6 vs +8
-+mismatch means that when io->len is in the range [boundary.len + 6,
-+boundary.len + 7], the subtraction underflows the size_t
-+variable to SIZE_MAX or SIZE_MAX - 1.
-+
-+This will fix CVE-2026-28525.
-+
-+Description of issue copied from vulnerability report - many thanks to
-+Kazuma for his analyses.
-+
-+Signed-off-by: Stefano Babic <stefano.babic@swupdate.org>
-+Reported by: Kazuma Matsumoto, a security researcher at GMO Cybersecurity by IERAE, Inc."
-+Upstream: https://github.com/sbabic/swupdate/commit/beee2dc0feef1cfe84f1aa6fc980e104b2e47a74
-+CVE: CVE-2026-28525
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-+---
-+ mongoose/mongoose_multipart.c | 6 +++---
-+ 1 file changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/mongoose/mongoose_multipart.c b/mongoose/mongoose_multipart.c
-+index 12ea54348..7fdc18632 100644
-+--- a/mongoose/mongoose_multipart.c
-++++ b/mongoose/mongoose_multipart.c
-+@@ -260,12 +260,12 @@ static int mg_http_multipart_continue_wait_for_chunk(struct mg_connection *c) {
-+ 		}
-+ 		return 0;
-+ 	} else {
-+-		size_t data_len = io->len - (mp_stream->boundary.len + 8);
-++		size_t data_len = io->len - (mp_stream->boundary.len + 6);
-+ 		size_t consumed = mg_http_multipart_call_handler(c, MG_EV_HTTP_PART_DATA,
-+-														 (char *) io->buf, data_len);
-++				 (char *) io->buf, data_len);
-+ 		mg_iobuf_del(io, 0, consumed);
-+ 		if (consumed == data_len) {
-+-			mg_iobuf_del(io, 0, mp_stream->boundary.len + 8);
-++			mg_iobuf_del(io, 0, mp_stream->boundary.len + 6);
-+ 			mp_stream->state = MPS_FINALIZE;
-+ 			return 1;
-+ 		} else {
-diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
-index 647a6f071b..ecf7864225 100644
---- a/package/swupdate/swupdate.mk
-+++ b/package/swupdate/swupdate.mk
-@@ -20,6 +20,9 @@ SWUPDATE_LICENSE_FILES = LICENSES/BSD-1-Clause.txt \
- SWUPDATE_INSTALL_STAGING = YES
- SWUPDATE_DEPENDENCIES = json-c libubootenv
+diff --git a/package/babeld/0001-Fix-uclibc-build-issue.patch b/package/babeld/0001-Fix-uclibc-build-issue.patch
+deleted file mode 100644
+index fb2f69e98bb1..000000000000
+--- a/package/babeld/0001-Fix-uclibc-build-issue.patch
++++ /dev/null
+@@ -1,38 +0,0 @@
+-From f8e5fbb33690b516b8516590def5136e6619de4c Mon Sep 17 00:00:00 2001
+-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+-Date: Tue, 17 Sep 2024 21:48:01 +0200
+-Subject: [PATCH] Fix uclibc build issue
+-
+-This patch fixes the following compilation error raised by the bump to
+-version 1.13.1 in Buildroot [1] using uclibc as the C library for the
+-cross-compilation toolchain:
+-
+-net.c: In function 'babel_send':
+-net.c:199:27: error: 'IPV6_DONTFRAG' undeclared (first use in this function)
+-  199 |         cmsg->cmsg_type = IPV6_DONTFRAG;;
+-
+-[1] https://patchwork.ozlabs.org/project/buildroot/patch/20240917201030.11583-1-dario.binacchi@amarulasolutions.com/
+-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+-Upstream: https://github.com/jech/babeld/pull/121
+----
+- net.c | 4 ++++
+- 1 file changed, 4 insertions(+)
+-
+-diff --git a/net.c b/net.c
+-index 7a7b57844e6c..30de3dafe1d9 100644
+---- a/net.c
+-+++ b/net.c
+-@@ -37,6 +37,10 @@ THE SOFTWARE.
+- #include <arpa/inet.h>
+- #include <errno.h>
+- 
+-+#if defined(__UCLIBC__)
+-+#include <linux/in6.h>
+-+#endif
+-+
+- #include "babeld.h"
+- #include "util.h"
+- #include "net.h"
+--- 
+-2.43.0
+-
+diff --git a/package/babeld/babeld.hash b/package/babeld/babeld.hash
+index ab2ffc6ef811..d24649dcd227 100644
+--- a/package/babeld/babeld.hash
++++ b/package/babeld/babeld.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  15f24d26da0ccfc073abcdef0309f281e4684f2aa71126f826572c4c845e8dd9  babeld-1.13.1.tar.gz
++sha256  c4ed13c04880ccc3a85a99645dcb64134beac8ab0607fe32a4d07e1057ad73b7  babeld-1.14.tar.gz
+ sha256  b415c41292cedef6c97b243609e50552887c29343566c639f23282d31efd2afd  LICENCE
+diff --git a/package/babeld/babeld.mk b/package/babeld/babeld.mk
+index e9d20111f93d..e20cadf9c031 100644
+--- a/package/babeld/babeld.mk
++++ b/package/babeld/babeld.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# 0002-CVE-2026-28525.patch
-+SWUPDATE_IGNORE_CVES += CVE-2026-28525
-+
- # swupdate uses $CROSS-cc instead of $CROSS-gcc, which is not
- # available in all external toolchains, and use CC for linking. Ensure
- # TARGET_CC is used for both.
+-BABELD_VERSION = 1.13.1
++BABELD_VERSION = 1.14
+ BABELD_SITE = https://www.irif.fr/~jch/software/files
+ BABELD_LICENSE = MIT
+ BABELD_LICENSE_FILES = LICENCE
 -- 
-2.54.0
+2.43.0
 
 _______________________________________________
 buildroot mailing list
