@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F1A5C43458
-	for <buildroot@archiver.kernel.org>; Fri, 26 Jun 2026 14:50:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2EB5FC43638
+	for <buildroot@archiver.kernel.org>; Fri, 26 Jun 2026 14:50:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 05F0A40F45;
-	Fri, 26 Jun 2026 14:50:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0481F82170;
+	Fri, 26 Jun 2026 14:50:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id b0yM-D17xYh8; Fri, 26 Jun 2026 14:50:11 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id u7zILZYSKVbC; Fri, 26 Jun 2026 14:50:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2E20E40EF0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2A1128215C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1782485411;
-	bh=eoDUaOuO6J0n7e8RWUy7w4iIBm25E8X02yb6Umg54yc=;
+	s=default; t=1782485412;
+	bh=QtAMyCcni60RoyOM+NfotDByW35roSQyhQS4pODnshI=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Iu28tZq0xaj5D0W3Z4i2sB5zo3zDquigRd5Cuui+KWOshpAaqFvCYLCzv8ajBkZcV
-	 c0epMCQTgml4q0x5K+jsdv913SWIa+q6ISCe6ndmU01Xru1rZtuhv6M5ZEmrK9BGWN
-	 qFO8JoHn+EZSTzdF/r//BZYkKzuCZ2T1LonjuAF0Ez0tKTP6newkGE4nVmrpzpTTWR
-	 bcHVwIL7Jbrn3t/zrZ+SfXD2Gqy0f0VH743UUJ24eo5vKxFUbIH9RU32/0g8d4ygr6
-	 FdtmVBGDyy+eAf3s3vR+1VViFfKHs73cW0hWOM6kCdl9Qb/fpqe4+lqXdjQeuaO7v3
-	 qvyf9S84WsPyA==
+	b=JJtslT0LtR7N6gUchvFdGJZa0qspe83up69yWssxvFDs5+wE6NuKW1S5/pSxTgqdO
+	 FcOVz4FrGN0sodb2Zat3eVLcXDBUBy4hFac9jCIHfhNt61aDDZDSLk7SRT2/D6soab
+	 9sZj7plQ3mLeDiVpVt83jpc7ja0nVzTCPzNlR80vGL8TN8lKetlCuW58wsX+vIApQY
+	 vif1ArYul7W1drhmqhm3G3UNfrka7FYmeQJ1Ik9SFvfXiSo4nY4CICP9w7sY4tM6x6
+	 PhReGrK8XJ8MSR9SsQmky35xoiQiyBvnt4GFjXTEQTmfdEJ/4z4vUcrDE0QLaJj57i
+	 BlnRbgkoG6f7g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2E20E40EF0;
-	Fri, 26 Jun 2026 14:50:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2A1128215C;
+	Fri, 26 Jun 2026 14:50:12 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 5CFD5231
+ by lists1.osuosl.org (Postfix) with ESMTP id 89F1F3A1
  for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:49:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4EE1081FBD
+ by smtp1.osuosl.org (Postfix) with ESMTP id 70BFC81FBD
  for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:49:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4TnydxRFhowx for <buildroot@buildroot.org>;
- Fri, 26 Jun 2026 14:49:47 +0000 (UTC)
+ id 9uOl4FtfBp_L for <buildroot@buildroot.org>;
+ Fri, 26 Jun 2026 14:49:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5BF7F82191
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2A52B82224
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5BF7F82191
- for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:49:46 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2A52B82224
+ for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:49:47 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5D1B6864A8; Fri, 26 Jun 2026 14:49:20 +0000 (UTC)
+ id 2B1498649C; Fri, 26 Jun 2026 14:49:21 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 25 Jun 2026 16:35:18 +0200
+Date: Thu, 25 Jun 2026 16:39:44 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 8efc2ef588ee2e22b86c8804d333f9d4652dc15d
-X-Git-Newrev: 0a891269b963874eba0925fef84650ba47456421
+X-Git-Oldrev: e37adc76dc16789afe1c3cd1eb5bffe93ba42aea
+X-Git-Newrev: 3b5e1a62f6f38cd4944516f09e3cb3ddcb544c47
 X-Patchwork-Hint: ignore
-Message-Id: <20260626144920.5D1B6864A8@busybox.osuosl.org>
+Message-Id: <20260626144921.2B1498649C@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/2025.02.x] support/testing:
- test_audit.py: use assertRunNotOk()
+ test_postgresql.py: use assertRunNotOk()
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,32 +77,32 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/0a891269b963874eba0925fef84650ba47456421
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/3b5e1a62f6f38cd4944516f09e3cb3ddcb544c47
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
 Use the helper to simplify the test.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit eb0ef1fd987a6b599c03b3b99499b882867cb58f)
+(cherry picked from commit 382146eff4d9706614d0167702df1caa20927266)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- support/testing/tests/package/test_audit.py | 3 +--
+ support/testing/tests/package/test_postgresql.py | 3 +--
  1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/support/testing/tests/package/test_audit.py b/support/testing/tests/package/test_audit.py
-index f68a4b6831..722542a845 100644
---- a/support/testing/tests/package/test_audit.py
-+++ b/support/testing/tests/package/test_audit.py
-@@ -80,8 +80,7 @@ class TestAudit(infra.basetest.BRTest):
-         # normal user. This command is expected to fail (as only root
-         # can root is supposed to read this file).
-         cmd = f"su - {user} -c 'cat /etc/shadow'"
--        _, ret = self.emulator.run(cmd)
--        self.assertNotEqual(ret, 0)
-+        self.assertRunNotOk(cmd)
+diff --git a/support/testing/tests/package/test_postgresql.py b/support/testing/tests/package/test_postgresql.py
+index bd41fc3f1b..08926b0ffc 100644
+--- a/support/testing/tests/package/test_postgresql.py
++++ b/support/testing/tests/package/test_postgresql.py
+@@ -180,8 +180,7 @@ class TestPostgreSQL(infra.basetest.BRTest):
+         self.assertRunOk(cmd)
  
-         # Our last failed read attempt is supposed to have generated
-         # an event. We check we can see it in the log.
+         # Check the server is no longer ready.
+-        _, exit_code = self.emulator.run("pg_isready")
+-        self.assertNotEqual(exit_code, 0)
++        self.assertRunNotOk("pg_isready")
+ 
+         # Restart the server.
+         cmd = f"su - {self.db_admin} -c 'pg_ctl start -D {self.pgdata_dir}'"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
