@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7979DC44500
-	for <buildroot@archiver.kernel.org>; Fri, 26 Jun 2026 14:52:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 623BFC43458
+	for <buildroot@archiver.kernel.org>; Fri, 26 Jun 2026 14:52:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4E72A8149A;
-	Fri, 26 Jun 2026 14:52:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0039F410F9;
+	Fri, 26 Jun 2026 14:52:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LTnM-dWKnYba; Fri, 26 Jun 2026 14:51:58 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9zWd2W0dl3hK; Fri, 26 Jun 2026 14:52:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0D351810E0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2F09B4113F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1782485518;
-	bh=q5FBRyXcTHJrkdqIETa9qDT0/15oWLSimPJEyJ3b8zk=;
+	s=default; t=1782485520;
+	bh=Rf6TEMc1h0lBr72vTp2b20z6hmdIJwZ8R8ll/lIW/is=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=kJKOGXLPO5toC79+5F9PmK5Lt7aj/+0xBzgbeSd98aEVa82/nvjRTD69x6x5E8riN
-	 sO2lMVNX56Mw54SEkwOYPeLrOTLfyAH6wpddrMYAzIcv7VbKjg71N9gaytTk65yOiP
-	 q7ntH3QqNSf5RQnXVK7CZtGraGhqXo7/R2DWTg7Z43GGjKykJk3OxIMaU1/ryNTjJ3
-	 dHv/h+UNyVBFBqu2jW+abAg34+8QseNtXNhAABzTbNcYCIOjebUsrG4naNIuCN0bGp
-	 BPu4kbiwJdRBSJLC8MrPig8iauJj/ggyyHvMuTsJoQ0t0yM1poM2u0zrGLE13RrRmh
-	 NYxM1sE9yvpng==
+	b=jhCSVoG/M0USRLb98/lSwZ3zrvxZ3Eq2A/5jsq01bhtI4T1C4rMk8WEqqtERRVFfQ
+	 J1RzpgLoT3R2wL+ZS+/kKQUvaYRm+rWjUacgROp1mwM+gfOoAgBU01oICqRANBrlTN
+	 s5fDQukJ4h/NvqMPksmuFmqKmrN05YGGt2Uce+dm/BfYCPkdZXce06PButG72VKA9a
+	 MKg+P/8fyk61i0TrzPkD5aY51sab21AtbCARoYTzEZ6eItDP4NKKKVOKEzaOXke272
+	 eKfusVVsAB2cz6EfnLeUCwQdijPaI0fGnjs2LImQxnnGhf+tCUZGifVxpCyaOf1KCZ
+	 mAdVDelNFG6cg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0D351810E0;
-	Fri, 26 Jun 2026 14:51:58 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 210773A1
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2F09B4113F;
+	Fri, 26 Jun 2026 14:52:00 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id B18F33A1
  for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:51:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0538B40702
+ by smtp3.osuosl.org (Postfix) with ESMTP id A2BBD60F8F
  for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:51:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DbVdI0ZA3Uds for <buildroot@buildroot.org>;
- Fri, 26 Jun 2026 14:51:39 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Plnai94qfXs8 for <buildroot@buildroot.org>;
+ Fri, 26 Jun 2026 14:51:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 497DF4070B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5737D60F30
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 497DF4070B
- for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:51:39 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5737D60F30
+ for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:51:37 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3E165864B9; Fri, 26 Jun 2026 14:51:13 +0000 (UTC)
+ id 57392864B9; Fri, 26 Jun 2026 14:51:11 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 25 Jun 2026 16:37:40 +0200
+Date: Thu, 25 Jun 2026 16:35:35 +0200
 X-Git-Refname: refs/heads/2026.05.x
-X-Git-Oldrev: 0c7e7d29567082d027324d99453e0da6e12b18a5
-X-Git-Newrev: e2e56f99d2f2f789b468b2383baeb19cd39294c5
+X-Git-Oldrev: 21bb39308fc64ba145f56e0be236afbb17361631
+X-Git-Newrev: 4f342f960d3a32580df4b7c57dd8b9a5afdcffb5
 X-Patchwork-Hint: ignore
-Message-Id: <20260626145113.3E165864B9@busybox.osuosl.org>
+Message-Id: <20260626145111.57392864B9@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/2026.05.x] support/testing:
- test_iptables.py: use assertRunNotOk()
+ test_connman.py: use assertRunNotOk()
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,42 +77,32 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/e2e56f99d2f2f789b468b2383baeb19cd39294c5
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/4f342f960d3a32580df4b7c57dd8b9a5afdcffb5
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.05.x
 
 Use the helper to simplify the test.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 75ae191b5f8bbe7fc971283922bb6b356a5e0c4d)
+(cherry picked from commit 2889d0f05277cf22fe10268026aa2f551739e2a9)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- support/testing/tests/package/test_iptables.py | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ support/testing/tests/package/test_connman.py | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/support/testing/tests/package/test_iptables.py b/support/testing/tests/package/test_iptables.py
-index 6e4db0ac06..72f2dd71a4 100644
---- a/support/testing/tests/package/test_iptables.py
-+++ b/support/testing/tests/package/test_iptables.py
-@@ -68,8 +68,7 @@ class TestIptables(infra.basetest.BRTest):
-         # A ping to 127.0.0.2 is expected to fail, because our rule is
-         # supposed to drop it.
-         ping_test_cmd = ping_cmd_prefix + "127.0.0.2"
--        _, exit_code = self.emulator.run(ping_test_cmd)
--        self.assertNotEqual(exit_code, 0)
-+        self.assertRunNotOk(ping_test_cmd)
+diff --git a/support/testing/tests/package/test_connman.py b/support/testing/tests/package/test_connman.py
+index 6fef95104c..2e53135208 100644
+--- a/support/testing/tests/package/test_connman.py
++++ b/support/testing/tests/package/test_connman.py
+@@ -47,8 +47,7 @@ class TestConnMan(infra.basetest.BRTest):
  
-         # Save the current rules to test the init script later.
-         self.assertRunOk("/etc/init.d/S35iptables save")
-@@ -85,8 +84,7 @@ class TestIptables(infra.basetest.BRTest):
-         self.assertRunOk("/etc/init.d/S35iptables start")
+         # If we try to ping again the qemu gateway,
+         # it should now fail.
+-        _, ret = self.emulator.run(ping_cmd)
+-        self.assertNotEqual(ret, 0)
++        self.assertRunNotOk(ping_cmd)
  
-         # Ping to 127.0.0.2 is expected to fail again.
--        _, exit_code = self.emulator.run(ping_test_cmd)
--        self.assertNotEqual(exit_code, 0)
-+        self.assertRunNotOk(ping_test_cmd)
- 
-         # And flush the rules again.
-         self.assertRunOk("/etc/init.d/S35iptables stop")
+         # We ask connman to re-enable Ethernet.
+         self.assertRunOk("connmanctl enable ethernet")
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
