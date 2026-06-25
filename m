@@ -1,87 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6EFACDB479
-	for <buildroot@archiver.kernel.org>; Thu, 25 Jun 2026 15:24:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 151AFCDE001
+	for <buildroot@archiver.kernel.org>; Thu, 25 Jun 2026 15:30:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 925CE82E29;
-	Thu, 25 Jun 2026 15:24:11 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QIfkN5Xhbtpv; Thu, 25 Jun 2026 15:24:10 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C090682E14
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1782401050;
-	bh=xoH1hg53NJbAnK6956rTx/Vte2WkZS/mTTBQtQXFVg8=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=p/r5tSdap/Lr7k8UC7doDgKofkpazN9+S1G5Lc4VvzwZDfvq1CDR5LbAaS2+plaDe
-	 VedZoYwXX4248HGiubdEFJDuPLtPlkcWm/GKyQdAPE8VkDT5csYvJNCRaJf60wbRaX
-	 xc1OZMMHkU8jgZcgvxJXWUer6hR5+LLAyOHC1uScbqVTaWsxsiC3GfvPgKFB7Daqoo
-	 uzgMjktSli7eND250d0X2d/3Ja63aV6T8lZe4qJqXDtiqvajzRZ57nD50bhnTARGjN
-	 CtOWerH/sYXWMJdZnZ4d60GPHgTY8McH2llamWVnHtS6i2XycWqLR9DC8+n2hperWl
-	 js5ZIGnwwS7Qg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C090682E14;
-	Thu, 25 Jun 2026 15:24:10 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 09A01254
- for <buildroot@buildroot.org>; Thu, 25 Jun 2026 15:24:10 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0617C41114
- for <buildroot@buildroot.org>; Thu, 25 Jun 2026 15:24:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C5A6940DD4;
+	Thu, 25 Jun 2026 15:30:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NJOZXy6JX2VA for <buildroot@buildroot.org>;
- Thu, 25 Jun 2026 15:24:09 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D850441110
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D850441110
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D850441110
- for <buildroot@buildroot.org>; Thu, 25 Jun 2026 15:24:08 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id 8B5075FFA3;
- Thu, 25 Jun 2026 17:24:04 +0200 (CEST)
-Received: from 2a0d:e487:119f:5231:6cab:f084:5c2d:94e1
- via 2a0d:e487:119f:5231:6cab:f084:5c2d:94e1 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Thu, 25 Jun 2026 17:24:04 +0200
-MIME-Version: 1.0
-Date: Thu, 25 Jun 2026 17:24:04 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20260619172810.3337739-1-bernd@kuhls.net>
-References: <20260619172810.3337739-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.16
-Message-ID: <77155b12a92976fd90ee9646f3d3ed32@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1782401045;
- bh=VvQjssOY3qGPjQ+4lTWaZ8x54Xvtj6nYKXb3f45hdI8=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=Elza48ibtnor9HG1luxRFpa1CBaAXMbIVrV3Q6jVnxx4m7T44uhG06wKoRXy9n08v
- L7HwpELzVN7TonU5LhZnNwDsuvrFaY8/s5/QS1bxNFDXZLsq37rgxs7ITY7DRlhcCH
- BS2s3uAJ3Jc78tPM4Ij3MRF5mbHjBm7sZamPLGJJDhsSe/q9EE8eaykU3TfDkRM9X1
- nLb1ytMMt1OVqFVcZorjgNQuW7qfi1sSnlfvSulDXChZGjhBmOTw5z7dnzOFGjZOVg
- Rabv/GPZUlPcDdbxRcdQlf3qOnpVaW91fL6NyCbMSUmxqkLWz1FnvAFP4X90iQkLKq
- btrViP4KAvKAA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=Elza48ib
-Subject: Re: [Buildroot] [PATCH 1/1] package/ghostscript: security bump to
- version 10.07.1
+ id y7PNGpY-SRnn; Thu, 25 Jun 2026 15:30:11 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E269E40E84
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1782401411;
+	bh=8aevvWUu1nkbXlFwlCSFRZ9FHy5q/NZXhBmfvmGuy00=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=ksGtemvvhSf/AguExp9eyg0vSY4SPpuqLnT04+e9yuD61ismGxH2+sYQ5VA7hrBs9
+	 xlDjOvW0REwfP8Zm+/VMBpmQRbu14Z0ljcpVXvDHr8SgnTdUeC3cOvKqrqhxo5xPh8
+	 NSrl7zK8CvMIkJQ4f3TejiD+u2+ZgOEsbNkLWephKQYTRHQgv2vEpbLvAUeKFvy6X4
+	 /FIGUlDeAMOJe9wnRKW2ehjRzqbwHDfsAAqehLoyy71TKBFmkRzqqxwp48BvsQopk9
+	 vnaCG3yyWGkZrp1x/JBT7KOvCmf6MMPUBI5a7K7yMiHzskIoL/TiDQNv5V3kLwW3Gm
+	 C1rXjy9p4HO0w==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id E269E40E84;
+	Thu, 25 Jun 2026 15:30:10 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id E36742C7
+ for <buildroot@buildroot.org>; Thu, 25 Jun 2026 15:30:08 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id C900B408BE
+ for <buildroot@buildroot.org>; Thu, 25 Jun 2026 15:30:08 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0WS2YEAIqtmd for <buildroot@buildroot.org>;
+ Thu, 25 Jun 2026 15:30:08 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E07A1408AB
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id E07A1408AB
+ for <buildroot@buildroot.org>; Thu, 25 Jun 2026 15:30:07 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 51CD5857A8; Thu, 25 Jun 2026 15:29:42 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 25 Jun 2026 17:29:22 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: dd929c3d253dfaf9392d327c16c5e0d0f2b1353f
+X-Git-Newrev: 1db28a86877f6c2ec0797802ec667374aee59546
+X-Patchwork-Hint: ignore
+Message-Id: <20260625152942.51CD5857A8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/util-linux: lsfd needs headers >=
+ 4.15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,22 +69,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+From: Fiona Klute via buildroot <buildroot@buildroot.org>
+Reply-To: Fiona Klute <fiona.klute@gmx.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 19/06/2026 19:28, Bernd Kuhls wrote:
-> https://ghostscript.readthedocs.io/en/gs10.07.1/News.html
-> "This release addresses a number of potential security issues."
-> 
-> Renumbered patch which was forgotten during the last version bump.
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/1db28a86877f6c2ec0797802ec667374aee59546
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Applied to master, thanks.
+Buildroot commit 31af509b4f4fe52f67bd9109b8732a55b8f9cd2d bumped the
+package to 2.41.1 which includes upstream commit
+https://github.com/util-linux/util-linux/commit/036d72749ca274294051b43fd66727061a772b9c
+adding a dependency to BPF_OBJ_NAME_LEN for lsfd.
+
+BPF_OBJ_NAME_LEN was added to the kernel headers in version 4.15:
+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=cb4d2b3f03d8eed90be3a194e5b54b734ec4bbe9
+
+so we need to raise the header version dependency for lsfd.
+
+The build error was found by the Gitlab pipelines for the defconfig
+bootlin-aarch64-glibc-old.
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
+---
+ package/util-linux/Config.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
+index c63cec2a9c..3df149b3de 100644
+--- a/package/util-linux/Config.in
++++ b/package/util-linux/Config.in
+@@ -233,15 +233,15 @@ config BR2_PACKAGE_UTIL_LINUX_LOSETUP
+ config BR2_PACKAGE_UTIL_LINUX_LSFD
+ 	bool "lsfd"
+ 	depends on BR2_USE_MMU # libsmartcols
+-	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_19
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_15
+ 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # process_vm_readv
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBSMARTCOLS
+ 	help
+ 	  List file descriptors (modern replacement for lsof)
+ 
+-comment "lsfd needs a musl or glibc toolchain w/ headers >= 3.19"
++comment "lsfd needs a musl or glibc toolchain w/ headers >= 4.15"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_19 \
++	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_15 \
+ 		|| BR2_TOOLCHAIN_USES_UCLIBC
+ 
+ config BR2_PACKAGE_UTIL_LINUX_LSLOGINS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
