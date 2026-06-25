@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6BA0EC43327
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5A5BC43458
 	for <buildroot@archiver.kernel.org>; Fri, 26 Jun 2026 14:52:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 465E1822E2;
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9BFA26108B;
 	Fri, 26 Jun 2026 14:52:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sciK_Qgephoh; Fri, 26 Jun 2026 14:52:14 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FAHPyXKqAVx6; Fri, 26 Jun 2026 14:52:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F0B3782317
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0585061003
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1782485534;
-	bh=Ts+Rv3ngHWejtGxRhdHAuBDlgLytaTNFHYSwK1BAOFo=;
+	s=default; t=1782485535;
+	bh=GsGutlrPhgw+ZSp//S3GbbbP5uZhyjOZiEEkO0swFmk=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=qx3dlXnUuai05V8brkgArNv0jOnD16qDA+004Ag5hGNRTiOQq/ea9VV4ZF7hqnzT7
-	 j40G7jnK5j+qRkNke4sf5nghgTdmu82aT56KOWUBE+CwY3EoYTZZmUr49D5+vf/2mK
-	 WvACiYvCdAUgfA5ocGGmwI0gZhXQJJT/e2n18cUbIeVZoTAFIPpAZZ3XZuM1YatIHW
-	 BT6TNaun1EY0UceENmaNoxWCv5d5h2LVlqBRupA7DTidRvB9kBZvUhecofQfKvBh8w
-	 ND2hoUjZoclWEE11XZRchE4Ok8UefKKO/W2RoHNaUwKRfnooJRk+MKDU2PgSh8ZpcC
-	 9/KFzNTwWYrGg==
+	b=gfFykqDJHo14VCVttrK2DCfbOZdycmjOig78CZLOhcmwnsqAglNQXJUGwSlWGZWBp
+	 6NrvVz876hjJqDPoQuKKAo9mIV4FOWTDancAVMavdTGD10NmW865RIoKe12umVzCYD
+	 irjME3yADSbhtbGTnu98lhvg7sh5vIdX86cajFiW49Fv3JVKXzMa/rxNBrBTWfd72Y
+	 uuubMGLiq+8C0cjpNl3BZ3bw1Ixqc4tmj5ABbHzTHJtiK5hIe2vHmfz7SPMPWJiWl2
+	 JJJ4FtaFDlwwFk8MX4vly/ewSHP4DPPaF1ItavvZNVLG5ZWOWPKd/J0GjSVQz/5e8u
+	 NkIbIiwQsG9HA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F0B3782317;
-	Fri, 26 Jun 2026 14:52:13 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 90290231
- for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:51:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0585061003;
+	Fri, 26 Jun 2026 14:52:15 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id D766A3A1
+ for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:51:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7656681063
- for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:51:48 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id BE5414071A
+ for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:51:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zoOqEMNjRm8t for <buildroot@buildroot.org>;
- Fri, 26 Jun 2026 14:51:47 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TcDMxlt-kv-m for <buildroot@buildroot.org>;
+ Fri, 26 Jun 2026 14:51:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 691688101D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CF8E240702
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 691688101D
- for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:51:47 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id CF8E240702
+ for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:51:48 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5D5C18649C; Fri, 26 Jun 2026 14:51:21 +0000 (UTC)
+ id C48668649C; Fri, 26 Jun 2026 14:51:22 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 25 Jun 2026 16:41:18 +0200
+Date: Thu, 25 Jun 2026 16:41:35 +0200
 X-Git-Refname: refs/heads/2026.05.x
-X-Git-Oldrev: 3536c9de39f3df9e9c6a92e4114c603ec724c74d
-X-Git-Newrev: 7c110848aa0b65bec849985b1376b44eadd6a182
+X-Git-Oldrev: dbe1e0f6ca99379a221757004e5b7163fb995276
+X-Git-Newrev: cfb6bea3fff9d55305c981ded8323cb5e7c2826c
 X-Patchwork-Hint: ignore
-Message-Id: <20260626145121.5D5C18649C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.05.x] support/testing:
- test_weston.py: use assertRunNotOk()
+Message-Id: <20260626145122.C48668649C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.05.x] package/tmux: security
+ bump to version 3.6b
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,29 +77,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/7c110848aa0b65bec849985b1376b44eadd6a182
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/cfb6bea3fff9d55305c981ded8323cb5e7c2826c
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.05.x
 
-Use the helper to simplify the test.
+https://raw.githubusercontent.com/tmux/tmux/3.6b/CHANGES
+https://github.com/tmux/tmux/issues/5109
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 8ffa0905607e7b642b30bcc6bb54b5feb5426704)
+Fixes CVE-2026-11623: https://seclists.org/oss-sec/2026/q2/934
+
+Switched to tarball hash provided by upstream.
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
+(cherry picked from commit 28c6fc47b45dd219b20640efc201a15d72370bf2)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- support/testing/tests/package/test_weston.py | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ package/tmux/tmux.hash | 3 ++-
+ package/tmux/tmux.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/support/testing/tests/package/test_weston.py b/support/testing/tests/package/test_weston.py
-index c8b243a6a7..737015f8c4 100644
---- a/support/testing/tests/package/test_weston.py
-+++ b/support/testing/tests/package/test_weston.py
-@@ -150,5 +150,4 @@ class TestWeston(infra.basetest.BRTest, GraphicsBase):
+diff --git a/package/tmux/tmux.hash b/package/tmux/tmux.hash
+index 867fbd6c55..34419940f3 100644
+--- a/package/tmux/tmux.hash
++++ b/package/tmux/tmux.hash
+@@ -1,3 +1,4 @@
++# From https://github.com/tmux/tmux/releases/tag/3.6b
++sha256  390759d25fdba016887ec982b808927e637070fd7d03a8021f8ef3102b9ae3c7  tmux-3.6b.tar.gz
+ # Locally computed:
+-sha256  b6d8d9c76585db8ef5fa00d4931902fa4b8cbe8166f528f44fc403961a3f3759  tmux-3.6a.tar.gz
+ sha256  c031bd37f464c534277814f6aa38686fa023d094261d57fd2545ad592bb53ccd  COPYING
+diff --git a/package/tmux/tmux.mk b/package/tmux/tmux.mk
+index 1f98cad706..b435c62a8c 100644
+--- a/package/tmux/tmux.mk
++++ b/package/tmux/tmux.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-         # Now weston is supposed to be stopped,
-         # a simple client is expected to fail.
--        _, exit_code = self.emulator.run("wayland-info")
--        self.assertNotEqual(exit_code, 0)
-+        self.assertRunNotOk("wayland-info")
+-TMUX_VERSION = 3.6a
++TMUX_VERSION = 3.6b
+ TMUX_SITE = https://github.com/tmux/tmux/releases/download/$(TMUX_VERSION)
+ TMUX_LICENSE = ISC
+ TMUX_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
