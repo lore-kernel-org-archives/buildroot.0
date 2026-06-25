@@ -1,90 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3131CDE00B
-	for <buildroot@archiver.kernel.org>; Thu, 25 Jun 2026 15:38:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A39CCDB479
+	for <buildroot@archiver.kernel.org>; Thu, 25 Jun 2026 15:42:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F1AB441133;
-	Thu, 25 Jun 2026 15:38:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 689646104C;
+	Thu, 25 Jun 2026 15:42:34 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id j5vmvTpaJgFR; Thu, 25 Jun 2026 15:42:32 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A589E6103A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1782402152;
+	bh=bAPppcriA4oySnxXfwgOAFPmkL4bf0SK6nHKLqZrFZU=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=DlfoEVGrJgNWUqDern3NTkXR4MqU1corDLU0kSQdOTnf6+rQhc/XTbHm2b5+W3+U4
+	 h5famp1nssdWhzZNk3OG+J6yIJDOphtvNMkGy2EKj3AcfdxoFIDx+8lC6+82TZ4TLY
+	 gf6mZ33BU8lLENhSeR/2UXwC+7nA3Bc+8uoGpRGTNL89xBbFsx/Aq9h79fVt7ATPxl
+	 pdBS9Zrr0mjTSlkjryUTYX4O10mF7uJx5cAxuebulo7STHerAmoOnelwcQbeifiwVH
+	 NF/q345CDhAb2alYEQ12IfMbCWUXC/n/zzlNdDV032EmXvYGznSt7k/LDeES0JebiW
+	 3Cs7YK4d1wcGA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id A589E6103A;
+	Thu, 25 Jun 2026 15:42:32 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 51F872C7
+ for <buildroot@buildroot.org>; Thu, 25 Jun 2026 15:42:31 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 476D440DBA
+ for <buildroot@buildroot.org>; Thu, 25 Jun 2026 15:42:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mDdtV1t46NK6; Thu, 25 Jun 2026 15:38:08 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 61F2E41125
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1782401888;
-	bh=aNJsI4it/8Fr3t8TWekslZFVDxxEuKa0bLu2ljZxbNo=;
-	h=Date:References:In-Reply-To:To:Cc:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=Dfgyq1e0SVq+W2SV+t2MFYVzTTVyT8CX6o5JufWbsFetAo8OykHogrxEWkC/3JOF6
-	 Z8LTnerWLqeKqZWE/RCG27Q5qn58gMc+Q+AmD7rB1XjOLE1EbQ7AuPbhO9bLxly6gx
-	 aXiIYE0sB9BBSZiZwnVmDXF44sFCknGuHvFt1bPCT87NK4FXXLQUXSjK2++8DrUvyV
-	 kVMPIrN36J5/Rk16mTyysFmKoo52nlgXKBuswTbH7A91695l3RmzkaO9IewVfBP1Q9
-	 zJwUwfSHCwHJ9C610gT+OCLRLLJ1ssIcYNm0B5etL35WZIlk+0MfiBg231Rsspmufh
-	 LCXu8p/0gXvdA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 61F2E41125;
-	Thu, 25 Jun 2026 15:38:08 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id C98E22C7
- for <buildroot@buildroot.org>; Thu, 25 Jun 2026 15:38:06 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B9FBA4025E
- for <buildroot@buildroot.org>; Thu, 25 Jun 2026 15:38:05 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JPyxWTsIXdPZ for <buildroot@buildroot.org>;
- Thu, 25 Jun 2026 15:38:03 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.125.25.8;
- helo=smtp-1908.mail.infomaniak.ch; envelope-from=foss+buildroot@0leil.net;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3EAD8408AB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3EAD8408AB
-Received: from smtp-1908.mail.infomaniak.ch (smtp-1908.mail.infomaniak.ch
- [185.125.25.8])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3EAD8408AB
- for <buildroot@buildroot.org>; Thu, 25 Jun 2026 15:38:02 +0000 (UTC)
-Received: from smtp-4-0000.mail.infomaniak.ch (unknown
- [IPv6:2001:1600:7:10::a6b])
- by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4gmNHD4dm5z2TC;
- Thu, 25 Jun 2026 17:38:00 +0200 (CEST)
-Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA
- id 4gmNHD0DGjzWPH; Thu, 25 Jun 2026 17:38:00 +0200 (CEST)
-Date: Thu, 25 Jun 2026 17:37:46 +0200
+ id co74zumMOMs9 for <buildroot@buildroot.org>;
+ Thu, 25 Jun 2026 15:42:30 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5810440DB9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5810440DB9
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5810440DB9
+ for <buildroot@buildroot.org>; Thu, 25 Jun 2026 15:42:30 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id 3975C5FFA3;
+ Thu, 25 Jun 2026 17:42:27 +0200 (CEST)
+Received: from 2a0d:e487:119f:5231:6cab:f084:5c2d:94e1
+ via 2a0d:e487:119f:5231:6cab:f084:5c2d:94e1 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Thu, 25 Jun 2026 17:42:27 +0200
 MIME-Version: 1.0
-Message-Id: <20260625-tf-cpe-update-v1-3-b315a596d23b@cherry.de>
-References: <20260625-tf-cpe-update-v1-0-b315a596d23b@cherry.de>
-In-Reply-To: <20260625-tf-cpe-update-v1-0-b315a596d23b@cherry.de>
-To: buildroot@buildroot.org
-Cc: Dick Olsson <hi@senzilla.io>, Sergey Matyukevich <geomatsi@gmail.com>, 
- Etienne Carriere <etienne.carriere@foss.st.com>, 
- Fabrice Fontaine <fontaine.fabrice@gmail.com>, 
- Quentin Schulz <quentin.schulz@cherry.de>
-X-Mailer: b4 0.15-dev-47773
-X-Infomaniak-Routing: alpha
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=0leil.net; s=20231125; t=1782401880;
- bh=UMq6GivMd5Ixtdd0SBsIjbd13xDI+XWKBiv7nwz5zIU=;
- h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
- b=TnLjamyhbcO0/bNbZ/XRglBXWHWY6sA+YFZWXAZvEIRIPjBayQHoCr0oF/8Po36Vt
- bqBwk+J3PU1Gg26JTBo4wlEVzyrVDZtm3dyl7YBSZwJVwYB+x8Dx23Y/3atPy2sBfL
- A4RYad+wbDHZTVElls65FVcP/AuBj0jrOxP6T1iEu53PqEJLg9jU3tBbh8jDEJ5nHj
- 3wOFWAahIUeGK65+oll7b+611rumpq5C808aouSvviLxQetH6tHTM4vWvCXoD3YXeE
- VYqVcvsaLc7MxYtarJ/ISOeQV0/K7w/vrDRiPJJCBx1MEgvnSAn8FgiP8YBbN8rucG
- aGWH+2iaG/BRA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=0leil.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=0leil.net header.i=@0leil.net
- header.a=rsa-sha256 header.s=20231125 header.b=TnLjamyh
-Subject: [Buildroot] [PATCH 3/3] package/mbedtls: fix CPE
+Date: Thu, 25 Jun 2026 17:42:27 +0200
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20260622185602.1397198-1-giulio.benetti@benettiengineering.com>
+References: <20260622185602.1397198-1-giulio.benetti@benettiengineering.com>
+User-Agent: Webmail Free/1.6.16
+Message-ID: <ee69282061052ca261881fc0951c545a@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1782402148;
+ bh=kF4xrjQqkQQAB9FuN14UxTDdUy26iMR6HZ29d9/Z4Og=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=vMXAEg1e4mbD9Qlo0MwW5X1XbPmQf9l54wdtIUyjXayQnRPldihX61SUat/NZEePu
+ j2Epo7OTr+5GQJewyGRqFgCtbS8pgHXPajUDgBKzEntSHC5uoBhIT7r0E9hNSrOzFZ
+ wz8W7SythDV9VwQL9QY1J3s+83sp5NRKAA101BhAMVj+s4HLUqXtjTNPBwpBdALdR0
+ GlhaTWHa7IAOXFHeJlf412RGhb/eXykZMVLLp5oJnrnZUUaBFDLp2ve+IvZrp+4rIH
+ TycoZUSfMERyPVGqUWNM3poVimu4UisefKoc7PzVzlGlvvp8gkjOhPQ9uTeaMM3ZQg
+ jBxzh2BmujFgg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=vMXAEg1e
+Subject: Re: [Buildroot] [PATCH v2] package/bind: security bump version to
+ 9.20.24
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,49 +93,27 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Quentin Schulz via buildroot <buildroot@buildroot.org>
-Reply-To: Quentin Schulz <foss+buildroot@0leil.net>
-Content-Type: text/plain; charset="us-ascii"
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Quentin Schulz <quentin.schulz@cherry.de>
+On 22/06/2026 20:56, Giulio Benetti wrote:
+> Release notes:
+> https://ftp.isc.org/isc/bind9/9.20.24/doc/arm/html/notes.html
+> 
+> Changelog:
+> https://ftp.isc.org/isc/bind9/9.20.24/doc/arm/html/changelog.html
+> 
+> Fixes CVE-2026-3593.
+> 
+> NOTE: Libraries libcap, liburcu are now mandatory.
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
-A new (and hopefully definitive) CPE is to be used for mbedtls:
-
-cpe:2.3:a:trustedfirmware:mbed_tls:
-
-CVEs for projects under the TrustedFirmware umbrella are now seemingly
-handled under the CPE vendor "trustedfirmware"[1].
-
-NVD correctly reports[2] the new CPE deprecates the "old" one Buildroot
-was using.
-
-[1] https://review.trustedfirmware.org/c/TF-A/trusted-firmware-a/+/49486/comment/2fd93ed7_df27998e/ before last comment from Sandrine
-[2] https://nvd.nist.gov/products/cpe/detail/453A781D-74D5-4FB5-9BB6-8C1F7F281A7A
-Signed-off-by: Quentin Schulz <quentin.schulz@cherry.de>
----
- package/mbedtls/mbedtls.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
-index e8bb0a71b9..9def876808 100644
---- a/package/mbedtls/mbedtls.mk
-+++ b/package/mbedtls/mbedtls.mk
-@@ -15,7 +15,7 @@ MBEDTLS_CONF_OPTS = \
- MBEDTLS_INSTALL_STAGING = YES
- MBEDTLS_LICENSE = Apache-2.0 or GPL-2.0+
- MBEDTLS_LICENSE_FILES = LICENSE
--MBEDTLS_CPE_ID_VENDOR = arm
-+MBEDTLS_CPE_ID_VENDOR = trustedfirmware
- MBEDTLS_CPE_ID_PRODUCT = mbed_tls
- 
- # This is mandatory for hiawatha
-
--- 
-2.54.0
-
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
