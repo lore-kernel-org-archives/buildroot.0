@@ -4,84 +4,89 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A39CCDB479
-	for <buildroot@archiver.kernel.org>; Thu, 25 Jun 2026 15:42:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99E28CDB479
+	for <buildroot@archiver.kernel.org>; Thu, 25 Jun 2026 15:45:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 689646104C;
-	Thu, 25 Jun 2026 15:42:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4E00B6104D;
+	Thu, 25 Jun 2026 15:45:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id j5vmvTpaJgFR; Thu, 25 Jun 2026 15:42:32 +0000 (UTC)
+ id usNk4294dxys; Thu, 25 Jun 2026 15:45:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A589E6103A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 82C3861045
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1782402152;
-	bh=bAPppcriA4oySnxXfwgOAFPmkL4bf0SK6nHKLqZrFZU=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	s=default; t=1782402321;
+	bh=xEePiraUEPWwMk4yOhBNrMftNezb4xeMo/tgAHJFnbs=;
+	h=Date:References:In-Reply-To:To:Cc:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=DlfoEVGrJgNWUqDern3NTkXR4MqU1corDLU0kSQdOTnf6+rQhc/XTbHm2b5+W3+U4
-	 h5famp1nssdWhzZNk3OG+J6yIJDOphtvNMkGy2EKj3AcfdxoFIDx+8lC6+82TZ4TLY
-	 gf6mZ33BU8lLENhSeR/2UXwC+7nA3Bc+8uoGpRGTNL89xBbFsx/Aq9h79fVt7ATPxl
-	 pdBS9Zrr0mjTSlkjryUTYX4O10mF7uJx5cAxuebulo7STHerAmoOnelwcQbeifiwVH
-	 NF/q345CDhAb2alYEQ12IfMbCWUXC/n/zzlNdDV032EmXvYGznSt7k/LDeES0JebiW
-	 3Cs7YK4d1wcGA==
+	b=roi1kgxNYFz+qBPuha8Bw6JWlDVWiIBcc2ZbKioR9E4U4ELnL9W0E0Q2Gda+nOg2K
+	 9ZYmr9/D0++PhnZrySZkohDsIZTd6VgMvvl7SaH5dNNE5OHUM4aor156X/pAb3fB9o
+	 awPx94FX2lSC368dfyIB08PL4Q8yLC1gAM9xlWisKrnPj40AvsQsIiIlKAihwK+Nav
+	 GstMrTpQeHXZ/D7bNdRFUR4ZFt3UsZlbIeWDBaPucpxmhXMRIpt6ggFlRaZDFB7D/3
+	 5rNW5cfPi3igGqDmcFWe9O1gpcMAwD+ATOJ2BZqRgcCb7lg3z6JlwcI4NMxsH2cPVs
+	 aniPQdYn2rKeg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A589E6103A;
-	Thu, 25 Jun 2026 15:42:32 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 51F872C7
- for <buildroot@buildroot.org>; Thu, 25 Jun 2026 15:42:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 82C3861045;
+	Thu, 25 Jun 2026 15:45:21 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7FCC82C7
+ for <buildroot@buildroot.org>; Thu, 25 Jun 2026 15:45:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 476D440DBA
- for <buildroot@buildroot.org>; Thu, 25 Jun 2026 15:42:31 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 65ACA408AB
+ for <buildroot@buildroot.org>; Thu, 25 Jun 2026 15:45:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id co74zumMOMs9 for <buildroot@buildroot.org>;
- Thu, 25 Jun 2026 15:42:30 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5810440DB9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5810440DB9
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5810440DB9
- for <buildroot@buildroot.org>; Thu, 25 Jun 2026 15:42:30 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id 3975C5FFA3;
- Thu, 25 Jun 2026 17:42:27 +0200 (CEST)
-Received: from 2a0d:e487:119f:5231:6cab:f084:5c2d:94e1
- via 2a0d:e487:119f:5231:6cab:f084:5c2d:94e1 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Thu, 25 Jun 2026 17:42:27 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VudsxgjiVHTP for <buildroot@buildroot.org>;
+ Thu, 25 Jun 2026 15:45:19 +0000 (UTC)
+X-Greylist: delayed 435 seconds by postgrey-1.37 at util1.osuosl.org;
+ Thu, 25 Jun 2026 15:45:19 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 504B74025E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 504B74025E
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=45.157.188.12;
+ helo=smtp-bc0c.mail.infomaniak.ch; envelope-from=foss+buildroot@0leil.net;
+ receiver=<UNKNOWN> 
+Received: from smtp-bc0c.mail.infomaniak.ch (smtp-bc0c.mail.infomaniak.ch
+ [45.157.188.12])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 504B74025E
+ for <buildroot@buildroot.org>; Thu, 25 Jun 2026 15:45:19 +0000 (UTC)
+Received: from smtp-4-0000.mail.infomaniak.ch (smtp-4-0000.mail.infomaniak.ch
+ [10.7.10.107])
+ by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4gmNHD11t6z4Jw;
+ Thu, 25 Jun 2026 17:38:00 +0200 (CEST)
+Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA
+ id 4gmNHC2V14zV8B; Thu, 25 Jun 2026 17:37:59 +0200 (CEST)
+Date: Thu, 25 Jun 2026 17:37:45 +0200
 MIME-Version: 1.0
-Date: Thu, 25 Jun 2026 17:42:27 +0200
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20260622185602.1397198-1-giulio.benetti@benettiengineering.com>
-References: <20260622185602.1397198-1-giulio.benetti@benettiengineering.com>
-User-Agent: Webmail Free/1.6.16
-Message-ID: <ee69282061052ca261881fc0951c545a@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1782402148;
- bh=kF4xrjQqkQQAB9FuN14UxTDdUy26iMR6HZ29d9/Z4Og=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=vMXAEg1e4mbD9Qlo0MwW5X1XbPmQf9l54wdtIUyjXayQnRPldihX61SUat/NZEePu
- j2Epo7OTr+5GQJewyGRqFgCtbS8pgHXPajUDgBKzEntSHC5uoBhIT7r0E9hNSrOzFZ
- wz8W7SythDV9VwQL9QY1J3s+83sp5NRKAA101BhAMVj+s4HLUqXtjTNPBwpBdALdR0
- GlhaTWHa7IAOXFHeJlf412RGhb/eXykZMVLLp5oJnrnZUUaBFDLp2ve+IvZrp+4rIH
- TycoZUSfMERyPVGqUWNM3poVimu4UisefKoc7PzVzlGlvvp8gkjOhPQ9uTeaMM3ZQg
- jBxzh2BmujFgg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=vMXAEg1e
-Subject: Re: [Buildroot] [PATCH v2] package/bind: security bump version to
- 9.20.24
+Message-Id: <20260625-tf-cpe-update-v1-2-b315a596d23b@cherry.de>
+References: <20260625-tf-cpe-update-v1-0-b315a596d23b@cherry.de>
+In-Reply-To: <20260625-tf-cpe-update-v1-0-b315a596d23b@cherry.de>
+To: buildroot@buildroot.org
+Cc: Dick Olsson <hi@senzilla.io>, Sergey Matyukevich <geomatsi@gmail.com>, 
+ Etienne Carriere <etienne.carriere@foss.st.com>, 
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>, 
+ Quentin Schulz <quentin.schulz@cherry.de>
+X-Mailer: b4 0.15-dev-47773
+X-Infomaniak-Routing: alpha
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=0leil.net; s=20231125; t=1782401879;
+ bh=E5M+x5Y6xiu1Lahb2LypMEW/SEKI0ii49yZ64ePPq8w=;
+ h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+ b=O/f7JtaGNp00u9XLi+tmmIlDdFdaZ+h1SRY2PvgLG/kmhuc2YtDPnWMV4T7NmVf4k
+ O3TwK/v0eMgYqXPtU3hlfnWDpWQS9L9TXrix01ijLIIxp9r47sBrqb187ZkSeGOD2x
+ uyg/I7hVAanM77fiUDe8hqtogKBcG0dNeGxftNypOKiTH672yjWpjg4OeODdEl/1Hl
+ CJWrMD5AekVTBhTl6AIOl0cM+gKzxeMA/LWhzUQ2lfBnzkhkkE5G2mgAILfyELkcbH
+ fSxrPS050oTrGqR9rRrCrFzjSKsXoizfJ187G1n5QYLo8/C7aeEQG2kK5jCYeZ2Mq1
+ tKTyh1FxZSBoQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=0leil.net
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=0leil.net header.i=@0leil.net
+ header.a=rsa-sha256 header.s=20231125 header.b=O/f7JtaG
+Subject: [Buildroot] [PATCH 2/3] boot/optee-os: fix CPE
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,27 +98,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+From: Quentin Schulz via buildroot <buildroot@buildroot.org>
+Reply-To: Quentin Schulz <foss+buildroot@0leil.net>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 22/06/2026 20:56, Giulio Benetti wrote:
-> Release notes:
-> https://ftp.isc.org/isc/bind9/9.20.24/doc/arm/html/notes.html
-> 
-> Changelog:
-> https://ftp.isc.org/isc/bind9/9.20.24/doc/arm/html/changelog.html
-> 
-> Fixes CVE-2026-3593.
-> 
-> NOTE: Libraries libcap, liburcu are now mandatory.
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+From: Quentin Schulz <quentin.schulz@cherry.de>
 
-Applied to master, thanks.
+A new (and hopefully definitive) CPE is to be used for OP-TEE OS:
+
+cpe:2.3:o:trustedfirmware:op-tee:
+
+as reported during review for a TF-A CPE fix[1]. NVD correctly
+reports[2] the new CPE deprecates the "old" one Buildroot was using.
+
+CVEs for projects under the TrustedFirmware umbrella are now seemingly
+handled under the CPE vendor "trustedfirmware".
+
+[1] https://review.trustedfirmware.org/c/TF-A/trusted-firmware-a/+/49486/comment/2fd93ed7_df27998e/ before last comment from Sandrine
+[2] https://nvd.nist.gov/products/cpe/detail/EB42962B-24FD-4716-B3E2-69F3258A57CF
+Signed-off-by: Quentin Schulz <quentin.schulz@cherry.de>
+---
+ boot/optee-os/optee-os.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/boot/optee-os/optee-os.mk b/boot/optee-os/optee-os.mk
+index 1639597407..38faf8bff7 100644
+--- a/boot/optee-os/optee-os.mk
++++ b/boot/optee-os/optee-os.mk
+@@ -9,7 +9,7 @@ OPTEE_OS_LICENSE = BSD-2-Clause
+ OPTEE_OS_LICENSE_FILES = $(call qstrip,$(BR2_TARGET_OPTEE_OS_LICENSE_FILES))
+ 
+ OPTEE_OS_CPE_ID_PREFIX = cpe:2.3:o
+-OPTEE_OS_CPE_ID_VENDOR = linaro
++OPTEE_OS_CPE_ID_VENDOR = trustedfirmware
+ OPTEE_OS_CPE_ID_PRODUCT = op-tee
+ 
+ OPTEE_OS_INSTALL_STAGING = YES
+
+-- 
+2.54.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
