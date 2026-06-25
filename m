@@ -4,84 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 006BFCDE001
-	for <buildroot@archiver.kernel.org>; Thu, 25 Jun 2026 16:04:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E9E0CDE001
+	for <buildroot@archiver.kernel.org>; Thu, 25 Jun 2026 16:22:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BA72782F31;
-	Thu, 25 Jun 2026 16:04:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C83C98236B;
+	Thu, 25 Jun 2026 16:22:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0f__1JL7Yvzz; Thu, 25 Jun 2026 16:04:15 +0000 (UTC)
+ id yeLyNHPud2UH; Thu, 25 Jun 2026 16:22:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ECA5382F13
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 04C3882A5D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1782403455;
-	bh=EtVVtc5lOUlTb2YG+JC2j6jCGJwtvWQojplfGsb4OJI=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=aTxtPhUmWJ4vLUkPrQBZp5/9I8d7Hh/IM6vompNzUl6QIXiXRIWUvsA/WQb977X6h
-	 Y9bq98NZxw/u26QdTDtrpw3J/Zdcw6nrL+2gwayU8rm54Ys1OSAO4pwzzs0YoHU6rU
-	 vYlxCvefWzGKaiqTI7FtXP+qbEGPOCQpR5r+aHE0GznKdeqlYdWZMzk0c8zkaOH10q
-	 uIEjgY+09x+G3csw5fDnUcg72+2WvQDIzRgYlZ3wj8rPTgnnwUBbbu0BH/gi7g0Oxz
-	 5BB6Mo2wEaKtA/6VBA0NnkwDscK4FWcrt4TqcPrO0VwMzKX8mtlHwgwpzZigMuBNZm
-	 8pPwylazehMAg==
+	s=default; t=1782404543;
+	bh=j7LGTUngs46LyrxsZr52E9HG94N/sEtc6kAH49QRDFg=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=mKYKeP7BaFw1Ia+LfSTW9e5goVj0ha7bk3wDs7TSIZlm3phT9akAQpmB8naKDq+1J
+	 i7+LGeg4b4JFy2wcYxDh+EjFqDcHugS+eurUseEF+J9ojvSKTXPUF6CieHEI1Un+cH
+	 8P4MV3z6GRjdm6rHx1tBFe2pc0RvPyDpd2fHtpLqprfCj4Jf7XwKJcllfQACMTuIQN
+	 gurVuTZtZB42LtU2LZQllTHsRQ4ZLkjFpW+aaGFrNWUG/eOxz6LVERo+1xsM4vL+DK
+	 J5RVvY0A94bJ7FaGnYPJkh8mk+jhhVB1wO10rp7/7sKCq/cT54x5NwKgvgzXt8g5lC
+	 tLAbzxDyOmZBw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ECA5382F13;
-	Thu, 25 Jun 2026 16:04:14 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 224CA18F
- for <buildroot@buildroot.org>; Thu, 25 Jun 2026 16:04:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 04C3882A5D;
+	Thu, 25 Jun 2026 16:22:23 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7FC433AD
+ for <buildroot@buildroot.org>; Thu, 25 Jun 2026 16:22:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1467C40289
- for <buildroot@buildroot.org>; Thu, 25 Jun 2026 16:04:14 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6505961051
+ for <buildroot@buildroot.org>; Thu, 25 Jun 2026 16:22:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UFn7uZozvW6U for <buildroot@buildroot.org>;
- Thu, 25 Jun 2026 16:04:13 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::15;
- helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0E9524025E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0E9524025E
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0E9524025E
- for <buildroot@buildroot.org>; Thu, 25 Jun 2026 16:04:12 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPA id A94FC78035B;
- Thu, 25 Jun 2026 18:04:07 +0200 (CEST)
-Received: from 2a0d:e487:119f:5231:6cab:f084:5c2d:94e1
- via 2a0d:e487:119f:5231:6cab:f084:5c2d:94e1 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Thu, 25 Jun 2026 18:04:07 +0200
-MIME-Version: 1.0
-Date: Thu, 25 Jun 2026 18:04:07 +0200
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Cc: buildroot@buildroot.org, Pierre-Jean Texier <texier.pj2@gmail.com>
-In-Reply-To: <20260625123536.3814862-1-giulio.benetti@benettiengineering.com>
-References: <20260625123536.3814862-1-giulio.benetti@benettiengineering.com>
-User-Agent: Webmail Free/1.6.16
-Message-ID: <130969657e9ffc7a29bf3e9a611bfa0c@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1782403449;
- bh=61tiyhvGzcFYkVe0DAwarrGdZX6OJTkrVKZ8t+RX/D4=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=ruHB5n9rYNTUdc6vNPxt4Ru2GfT+dqNs6/+M/+0f/thuKAiijV+p1IUbGCB6Yxtyd
- wz3KoyNQZnR6CBfwQxF5auwl8s3tkdiUwoHYYi4f3TG9VAnI2cdhKjsjsO7QQvnOxv
- MlAYS1fak3BnZMNmzf9iQUksF+sWY6OSFTdF78Hl3xrft/5cxAGGL0K5BTpiq0VM+d
- LqDmajRZlSGRF+07hbR86WFOD7wVcT24VDckTjH1FPNLbcnNy9eWxAd1mSyLVAYdwn
- Y2MIgjKhgXTR9ldqB5pKNCG+/oHoq0/Mg7Xh+0sLTcKVgsteJviwifipOTXtJzNjTC
- WSQMPtE+5w/jg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=ruHB5n9r
-Subject: Re: [Buildroot] [PATCH] package/mongoose: security bump to version
- 7.22
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DXJ9eczhFODl for <buildroot@buildroot.org>;
+ Thu, 25 Jun 2026 16:22:20 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 072D061050
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 072D061050
+ for <buildroot@buildroot.org>; Thu, 25 Jun 2026 16:22:20 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 671AA85A49; Thu, 25 Jun 2026 16:21:54 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 25 Jun 2026 18:21:16 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 8fe41d5506d1d1c7a453be9977a4ffa65d39e886
+X-Git-Newrev: 9998130badb6101cdf6f6da0bbd1228d79825b63
+X-Patchwork-Hint: ignore
+Message-Id: <20260625162154.671AA85A49@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/util-linux: fix CVE-2026-27456
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,22 +68,95 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+From: Fiona Klute via buildroot <buildroot@buildroot.org>
+Reply-To: Fiona Klute <fiona.klute@gmx.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 25/06/2026 14:35, Giulio Benetti wrote:
-> Release notes:
-> https://github.com/cesanta/mongoose/releases/tag/7.22
-> 
-> Fixes CVE-2026-37635.
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/9998130badb6101cdf6f6da0bbd1228d79825b63
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Applied to master, thanks.
+As mentioned here[1] we require patch[2] to fix CVE-2026-27456.
+
+[1]: https://lore.kernel.org/util-linux/c2fo4x3lcppsj77k564i4qodmon3wagx47qf4mqwjwdtiplupg@jmaqrlzp273h/T/#u
+[2]: https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git/commit/?h=stable/v2.41&id=2dacaf3eea391e3bbf48e7d3ecce02cafe045b6d
+
+Cc: Alexander Dahl <alex@netz39.de>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+[Fiona: add CVE trailer to patch file]
+Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
+---
+ ...-openat2-RESOLVE_NO_SYMLINKS-for-backing-.patch | 59 ++++++++++++++++++++++
+ 1 file changed, 59 insertions(+)
+
+diff --git a/package/util-linux/0003-loopdev-use-openat2-RESOLVE_NO_SYMLINKS-for-backing-.patch b/package/util-linux/0003-loopdev-use-openat2-RESOLVE_NO_SYMLINKS-for-backing-.patch
+new file mode 100644
+index 0000000000..7195c223ac
+--- /dev/null
++++ b/package/util-linux/0003-loopdev-use-openat2-RESOLVE_NO_SYMLINKS-for-backing-.patch
+@@ -0,0 +1,59 @@
++From 2dacaf3eea391e3bbf48e7d3ecce02cafe045b6d Mon Sep 17 00:00:00 2001
++From: Karel Zak <kzak@redhat.com>
++Date: Wed, 27 May 2026 15:15:22 +0200
++Subject: [PATCH] loopdev: use openat2(RESOLVE_NO_SYMLINKS) for backing file
++
++Use ul_open_no_symlinks() instead of open(O_NOFOLLOW) when
++LOOPDEV_FL_NOFOLLOW is set.  O_NOFOLLOW only rejects symlinks at the
++last path component, but TOCTOU attacks swap intermediate components.
++openat2(RESOLVE_NO_SYMLINKS) rejects symlinks at any component.
++
++Upstream: https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git/commit/?h=stable/v2.41&id=2dacaf3eea391e3bbf48e7d3ecce02cafe045b6d
++CVE: CVE-2026-27456
++Signed-off-by: Karel Zak <kzak@redhat.com>
++(cherry picked from commit 119d23f1e3f55cf10e3c66dab80fc308c9f26456)
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++[Fiona: add CVE trailer]
++Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
++---
++ lib/loopdev.c | 23 ++++++++++++++---------
++ 1 file changed, 14 insertions(+), 9 deletions(-)
++
++diff --git a/lib/loopdev.c b/lib/loopdev.c
++index 76685be70..31377fc9a 100644
++--- a/lib/loopdev.c
+++++ b/lib/loopdev.c
++@@ -1412,16 +1412,21 @@ int loopcxt_setup_device(struct loopdev_cxt *lc)
++ 	if (lc->config.info.lo_flags & LO_FLAGS_DIRECT_IO)
++ 		flags |= O_DIRECT;
++ 	if (lc->flags & LOOPDEV_FL_NOFOLLOW)
++-		flags |= O_NOFOLLOW;
++-
++-	if ((file_fd = open(lc->filename, mode | flags)) < 0) {
++-		if (mode != O_RDONLY && (errno == EROFS || errno == EACCES))
++-			file_fd = open(lc->filename, (mode = O_RDONLY) | flags);
+++		file_fd = ul_open_no_symlinks(lc->filename, mode | flags, 0);
+++	else
+++		file_fd = open(lc->filename, mode | flags);
++ 
++-		if (file_fd < 0) {
++-			DBG(SETUP, ul_debugobj(lc, "open backing file failed: %m"));
++-			return -errno;
++-		}
+++	if (file_fd < 0 && mode != O_RDONLY
+++	    && (errno == EROFS || errno == EACCES)) {
+++		mode = O_RDONLY;
+++		if (lc->flags & LOOPDEV_FL_NOFOLLOW)
+++			file_fd = ul_open_no_symlinks(lc->filename, mode | flags, 0);
+++		else
+++			file_fd = open(lc->filename, mode | flags);
+++	}
+++	if (file_fd < 0) {
+++		DBG(SETUP, ul_debugobj(lc, "open backing file failed: %m"));
+++		return -errno;
++ 	}
++ 	DBG(SETUP, ul_debugobj(lc, "backing file open: OK"));
++ 
++-- 
++2.47.3
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
