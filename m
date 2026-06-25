@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8DE5AC43458
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD2DFC43602
 	for <buildroot@archiver.kernel.org>; Fri, 26 Jun 2026 14:51:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 64A6660F8B;
+	by smtp1.osuosl.org (Postfix) with ESMTP id 845CD80AE3;
 	Fri, 26 Jun 2026 14:51:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iCzcOkfjqOmF; Fri, 26 Jun 2026 14:51:39 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qXbHHANeR7PT; Fri, 26 Jun 2026 14:51:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 876DB60F3A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7267D80E03
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1782485499;
-	bh=yXdCURUGOPev4dWx0O1WF7rDigax7Zgm6ev8CXTtHEc=;
+	s=default; t=1782485498;
+	bh=iZ/OdvWJteOmT9rnDdMWnSgZ+ZsGlrOOhPJmGDdfn8E=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=G5aWcWpHyHxjW5t25u0XDTUYTonbQTdVxhwqRU/XcMkkM2vNLWy6vSRAZq53SZlSf
-	 Jhf/8PQS5OM58qPGLbFYl5AdfGhQC51IgxAG8lCVshfgcwk0pWLQZFLwnTBeFC0ZBf
-	 EOz0gAHHs/LQB3yDTMYMgPbjpglkWZj/bs2HYf9LeivaGOFq6NmFUYEZFQJrVqqB07
-	 93B7UJwzFhvG5YZ4nQ3YAQjhTwreGT8Fkiscfx/KGbFQQR1DCtdUIlmU2XN+OwqAg1
-	 k0imW7s9GmdpkS/GQQsFu2T73EeUar/mllDVASDTryJHZHlihzei8QMIy73tBDLjsk
-	 Aldi+59PRaXYA==
+	b=a1kDnF2vrL6LVW/OHQwYUIl/UZArandgxgJ9ETRwjN/bkfBV15bgpV3lkfCDN2cmh
+	 nxIUF6SxP3h8Jb7jzK2WrbHZWm3umGfsqzrn3ZgtkXSjUbp2cna/hdnMSiewStUefW
+	 60IIx01Vu1f8EVgxgUE50mWsY40V6yVk4mjfjGNloJned/g6caSu7uiwN3//f4s+OL
+	 BPRkhhaF5zJLT58kj3dsK57r/38h1EJfXWpPem8zstwcN96bKyZv5sKRNrKpwcCIUE
+	 w4odfzq6eqxcOEUYs49cjoK+hrZmeqiOFOtEyumAwi0Wjv2bwBOZ90jY8k3MJ8OT0N
+	 aTQ3HC0dA/XcQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 876DB60F3A;
-	Fri, 26 Jun 2026 14:51:39 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 274E23A1
- for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:51:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7267D80E03;
+	Fri, 26 Jun 2026 14:51:38 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id B706F231
+ for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:51:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0C8C040F36
- for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:51:34 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A95674071F
+ for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:51:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MZ6nYVHEVqro for <buildroot@buildroot.org>;
- Fri, 26 Jun 2026 14:51:33 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id X9JcZxDWCtkm for <buildroot@buildroot.org>;
+ Fri, 26 Jun 2026 14:51:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6C4A140E21
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 171B54070B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6C4A140E21
+ by smtp2.osuosl.org (Postfix) with ESMTP id 171B54070B
  for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:51:32 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 53F18864B7; Fri, 26 Jun 2026 14:51:06 +0000 (UTC)
+ id 16ECD80DE0; Fri, 26 Jun 2026 14:51:06 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 25 Jun 2026 16:27:52 +0200
+Date: Thu, 25 Jun 2026 16:24:14 +0200
 X-Git-Refname: refs/heads/2026.05.x
-X-Git-Oldrev: 207b0a2699df2327a9502dddd7c9584eb2e760a6
-X-Git-Newrev: 834c844e3b52b9f55c55d8e6c30284c8ce48afcf
+X-Git-Oldrev: 8dec5402e01940d73d1a48b3aeae5da3b875c62d
+X-Git-Newrev: d5d96d16b20b8039c7bdf23d8015a145d16909e7
 X-Patchwork-Hint: ignore
-Message-Id: <20260626145106.53F18864B7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.05.x] package/mpd/S95mpd: avoid
- unnecessary exit
+Message-Id: <20260626145106.16ECD80DE0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.05.x] boot/shim: add patch to
+ fix builds with -O3 / -Ofast
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,40 +77,117 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/834c844e3b52b9f55c55d8e6c30284c8ce48afcf
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d5d96d16b20b8039c7bdf23d8015a145d16909e7
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.05.x
 
-The exit status of the last command automatically becomes the exit
-status of the script. And if there is no explicit exit shellcheck
-accepts unused functions (here: start/stop/... called via variable).
+Fixes:
+https://autobuild.buildroot.net/results/c6ad52a048ba030bb1adc3ee1aeb69ef880cbdad/
+https://autobuild.buildroot.net/results/136d1afc2ecacea6a4e12b915073e3eaf5c8ca01/
+https://autobuild.buildroot.net/results/a3f293371f6bd0125dc7baa5afb64373e4383f4f/
 
-Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
-Tested-by: Andreas Ziegler <br025@umbiko.net>
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
-(cherry picked from commit 118ffb20b5c739c61448ac6036f38a2aca6afcbc)
+Shim contains an embedded copy of OpenSSL.  Depending on the optimization
+level, an error is triggered from make_kn():
+
+In function 'make_kn',
+    inlined from 'make_kn' at crypto/cmac/cmac.c:81:13,
+    inlined from 'CMAC_Init' at crypto/cmac/cmac.c:205:9:
+crypto/cmac/cmac.c:92:20: error: writing 1 byte into a region of size 0 [-Werror=stringop-overflow=]
+   92 |         k1[bl - 1] ^= bl == 16 ? 0x87 : 0x1b;
+      |         ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+crypto/cmac/cmac.c: In function 'CMAC_Init':
+crypto/cmac/cmac.c:69:19: note: at offset 2147483647 into destination object 'k1' of size 32
+   69 |     unsigned char k1[EVP_MAX_BLOCK_LENGTH];
+      |                   ^~
+
+Fix it by including a patch submitted upstream which backports an upstream
+OpenSSL change to workaround this.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 96408d1313bface05f5dcc9e275eb118fce87fa9)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/mpd/S95mpd | 3 ---
- 1 file changed, 3 deletions(-)
+ ...mize-make_kn-and-move-zero_iv-to-const-se.patch | 72 ++++++++++++++++++++++
+ 1 file changed, 72 insertions(+)
 
-diff --git a/package/mpd/S95mpd b/package/mpd/S95mpd
-index ac971e04a2..e33654a501 100644
---- a/package/mpd/S95mpd
-+++ b/package/mpd/S95mpd
-@@ -2,7 +2,6 @@
- #
- # S95mpd	Starts Music Player daemon.
- #
--# shellcheck disable=SC2317 # functions are called via variable
- 
- DAEMON="mpd"
- PIDFILE="/var/run/$DAEMON.pid"
-@@ -57,5 +56,3 @@ case "$1" in
- 		echo "Usage: $0 {start|stop|reload|restart}"
- 		exit 1
- esac
--
--exit $?
+diff --git a/boot/shim/0002-cmac.c-optimize-make_kn-and-move-zero_iv-to-const-se.patch b/boot/shim/0002-cmac.c-optimize-make_kn-and-move-zero_iv-to-const-se.patch
+new file mode 100644
+index 0000000000..2baa0de56c
+--- /dev/null
++++ b/boot/shim/0002-cmac.c-optimize-make_kn-and-move-zero_iv-to-const-se.patch
+@@ -0,0 +1,72 @@
++From 7aee873d6f6b0737dfe566fc8c5cd4eaada9bd5e Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 8 Apr 2024 11:56:06 +0200
++Subject: [PATCH] cmac.c: optimize make_kn and move zero_iv to const segment.
++
++Backport
++https://github.com/openssl/openssl/commit/03cf7e784caa4c61febbf249be63cbae3e368ac9
++to fix the following k1 stringop-overflow:
++
++In function 'make_kn',
++    inlined from 'make_kn' at crypto/cmac/cmac.c:81:13,
++    inlined from 'CMAC_Init' at crypto/cmac/cmac.c:205:9:
++crypto/cmac/cmac.c:92:20: error: writing 1 byte into a region of size 0 [-Werror=stringop-overflow=]
++   92 |         k1[bl - 1] ^= bl == 16 ? 0x87 : 0x1b;
++      |         ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
++crypto/cmac/cmac.c: In function 'CMAC_Init':
++crypto/cmac/cmac.c:69:19: note: at offset [-2147483649, -1] into destination object 'k1' of size 32
++   69 |     unsigned char k1[EVP_MAX_BLOCK_LENGTH];
++      |                   ^~
++
++Fixes:
++ - http://autobuild.buildroot.org/results/97b6333cdc7bad24aba7af1b04890679e0058299
++
++Upstream: https://github.com/rhboot/shim/pull/652
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ Cryptlib/OpenSSL/crypto/cmac/cmac.c | 17 ++++++++---------
++ 1 file changed, 8 insertions(+), 9 deletions(-)
++
++diff --git a/Cryptlib/OpenSSL/crypto/cmac/cmac.c b/Cryptlib/OpenSSL/crypto/cmac/cmac.c
++index 2954b6eb..27dbfaac 100644
++--- a/Cryptlib/OpenSSL/crypto/cmac/cmac.c
+++++ b/Cryptlib/OpenSSL/crypto/cmac/cmac.c
++@@ -78,18 +78,17 @@ struct CMAC_CTX_st {
++ 
++ /* Make temporary keys K1 and K2 */
++ 
++-static void make_kn(unsigned char *k1, unsigned char *l, int bl)
+++static void make_kn(unsigned char *k1, const unsigned char *l, int bl)
++ {
++     int i;
+++    unsigned char c = l[0], carry = c>>7, cnext;
+++
++     /* Shift block to left, including carry */
++-    for (i = 0; i < bl; i++) {
++-        k1[i] = l[i] << 1;
++-        if (i < bl - 1 && l[i + 1] & 0x80)
++-            k1[i] |= 1;
++-    }
+++    for (i = 0; i < bl-1; i++, c = cnext)
+++        k1[i] = (c << 1) | ((cnext=l[i+1]) >> 7);
+++
++     /* If MSB set fixup with R */
++-    if (l[0] & 0x80)
++-        k1[bl - 1] ^= bl == 16 ? 0x87 : 0x1b;
+++    k1[i] = (c << 1) ^ ((0-carry)&(bl==16?0x87:0x1b));
++ }
++ 
++ CMAC_CTX *CMAC_CTX_new(void)
++@@ -151,7 +150,7 @@ int CMAC_CTX_copy(CMAC_CTX *out, const CMAC_CTX *in)
++ int CMAC_Init(CMAC_CTX *ctx, const void *key, size_t keylen,
++               const EVP_CIPHER *cipher, ENGINE *impl)
++ {
++-    static unsigned char zero_iv[EVP_MAX_BLOCK_LENGTH];
+++    static const unsigned char zero_iv[EVP_MAX_BLOCK_LENGTH] = {0};
++ #ifdef OPENSSL_FIPS
++     if (FIPS_mode()) {
++         /* If we have an ENGINE need to allow non FIPS */
++-- 
++2.47.3
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
