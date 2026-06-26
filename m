@@ -1,116 +1,117 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53F3CC43458
-	for <buildroot@archiver.kernel.org>; Fri, 26 Jun 2026 14:56:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95D2DC43211
+	for <buildroot@archiver.kernel.org>; Fri, 26 Jun 2026 14:56:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 02BA7610C1;
-	Fri, 26 Jun 2026 14:56:24 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KzMuWQLi-tdr; Fri, 26 Jun 2026 14:56:23 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 036BD610D5
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1782485783;
-	bh=YfAySDEKhso2UWNx9phmCUqJTMU7xOol7BgkC8gZ5fY=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=CGz27s12clQj5Om4Z8nxAhnCuHKRrwjv+mwqDPl1NYI5UPImAzbkZjucl+fFh9epC
-	 hhFxsakJZCwxbjARmxFArCjeyBPaN/BXOypYmKy6pGq+n92wvQuJklp7lxSRDc0jaW
-	 FEjcFqo4T3BicIEQ4tGnaoFtBIs0JH7xqBc1BqTDJgH1vlm6yreAJSSvv7WCYFhlsL
-	 GazQ69mWX+5GBNm0UxY2T1wtsWraB38NWw80ZW7JVFC+a+TZE5XCgJOKXZNU3DvX0w
-	 X1jWe96q75hpnoy3qDTQH823RxLNaYf7zBfFk+Sutjl5l4/3VDvs5Mk84spBsx9dX3
-	 5ksjJf+y0KIcg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 036BD610D5;
-	Fri, 26 Jun 2026 14:56:23 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id E48ED3A1
- for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:56:13 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CA06F411DA
- for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:56:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6729D411F2;
+	Fri, 26 Jun 2026 14:56:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id O8e25YjXF5Hq for <buildroot@buildroot.org>;
+ id 8vI23qw7YBgb; Fri, 26 Jun 2026 14:56:24 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 82512411F7
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1782485784;
+	bh=qdgY9usnBJM7+mbCAY31yH7X+hs+xlOtZytC8i4fO4U=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=CnIfKewndurwFPkPmhDl7ufz56P65BbbzaM1ZvW4LD6c29FTxcJY+eMj3qh6Awu24
+	 +If7s6eM3JB6Dhm6Mp6fE5fOP4ei4CXMKypluo5nYBfDU1hzjDiXJKyex7h+n5jvEv
+	 LsRECS0gA9aR5kEVBMukPIwZeyx+MomJPksVS2IoP5txHA6ToxSq/sF+XpV8fFaKhq
+	 GSnDTwPZ1J8d+hnIOv3XtVY8aXb3ydJMP+afeOjycPZDyj2y8QZQkgqZbCHhhdxqfH
+	 /vmgiQ4LtBWDMWv4ZSbCo2SpS3nyYGRsTOvgKs10t87SQ7l4DE7dE6/ZwJVGJyqRyA
+	 z8TmUirwRbxrg==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 82512411F7;
+	Fri, 26 Jun 2026 14:56:24 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9A7793A1
+ for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:56:14 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8C589823FF
+ for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:56:14 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ISJkAP-97fwN for <buildroot@buildroot.org>;
  Fri, 26 Jun 2026 14:56:13 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32e; helo=mail-wm1-x32e.google.com;
+ client-ip=2a00:1450:4864:20::32d; helo=mail-wm1-x32d.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 72A57411CE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 72A57411CE
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
- [IPv6:2a00:1450:4864:20::32e])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 72A57411CE
- for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:56:12 +0000 (UTC)
-Received: by mail-wm1-x32e.google.com with SMTP id
- 5b1f17b1804b1-49249707788so8990885e9.2
- for <buildroot@buildroot.org>; Fri, 26 Jun 2026 07:56:12 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6752E823C6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6752E823C6
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6752E823C6
+ for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:56:13 +0000 (UTC)
+Received: by mail-wm1-x32d.google.com with SMTP id
+ 5b1f17b1804b1-4927014c0deso1563935e9.2
+ for <buildroot@buildroot.org>; Fri, 26 Jun 2026 07:56:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1782485770; x=1783090570;
+ d=1e100.net; s=20251104; t=1782485771; x=1783090571;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=jr53YBeRE9Ff2Y7E3X8qruOu2GUutMiO0rSCCKrX4ik=;
- b=ZARzJbPHNPhzDSADvlNncExDGfU8Jr2UkwOM/c0896Jzts1Rv/jj6Q0ucIFRuy0Wo+
- sTzv2ebPYQH7Niv5+KleUw3lf7NvAhJypwkPSiNp80gZf4+QFdDsVFc8x2TkfR5vwxre
- nvFOrGa0rEqrYauuQgKXuYH3v+9siU3Kzt3PBuVWPo8l9DlerxjRNeze0BkaGP9OaNfi
- I/BlSG2q7XlDjQI9T2JcavtWh+q6XiAJp5NU1l3JkxUl/YHuM9t7hgONl3AY3FgqXa4a
- DmcCqyuHV8Lhz+luIlxfA4SXHN5zJDQW5vdWExG8fQbwpQt4+dV+XIzTjk9Wp232Rk0B
- kmEQ==
+ bh=JrUrlaXc3ZoInL0hQuDR+ABeOm9kelqzaSi7bmQ8pIo=;
+ b=B9eWPR/sUJTVdAOPEcAZSdMjNupFX2Jq8JIBnXejeOw80HOTi6uc2oqCAalbcy+7lm
+ mrhhNble2Sw70RJvFzhoJ/qAkiCJl2pKGCitKF3fHcphuM6CJ0R8uupFxWIoNDlqbhpQ
+ cdltxVekqMd94SOH02dnZNT11MTLWpd1sAXoHtMBbEgnLL04NfWuszyIfBopoM+b0VEQ
+ valLenOkMbx86fuHOQaSEW3etZ5WNBxjv0AK8fKB3Vo8jCUxnkrSNptN7w4BzlZwvL/D
+ xB2B2uKpk5c4fQoMwd0RatZTSQ2WjJJ97Nc2qbTWNZvsuJvDcwGOIcaybeBrR5sufxYx
+ t3Zg==
 X-Forwarded-Encrypted: i=1;
- AFNElJ9LKQ0TK6znFJkc27B7vPx+UjzqPaqqMvStYZo+mHtpRgSIjZdvKo3ewzPE706cNBB5UtnvfEgeM8Q=@buildroot.org
-X-Gm-Message-State: AOJu0YwQ5/UcNNE88t/IKIK24DI37FiA5g2L2VfeHIxZmH9opIctoWxP
- 9Ikg0Skavb1KMTK6j9ZKqrWxSISniEGBstCLd3LQ062EsnGeMgNfclpYAiJVoDdOoJw=
-X-Gm-Gg: AfdE7clzgwYndmVhQ0Y/UdIXqxoQYqg9MxSca5MUIF2tMB4DsgLwFA8JOT5jYhRgQFI
- jV2nYQeNOFk6WECIgwoJ/jHCzpnu9t3rGCqhcKUNALzSqbBAj9UHVzqTakCpy/boukFacp28Cc4
- zUWZKYH3yZACwVYgVgME6A2CLlt+6hl/St1nY2+PkV/rlRnEuJKe/EBYeAeAAnmqQIfVGhwV2mH
- 0mhetypCveaiMmBSDoLYaSJjLfNZXXxNKHgImz1ah+gb+KPyjtwGg9kZTPsF+ZxYrmEt6wVRVji
- jhb0C1mgiZ/D+6JJdjz8O7iprKuc3l/OhPPqD2j8or9GVEPgiOF6F65Oo8HinN2fmGI247C0kaV
- +iLLPEPM0Eepysay+93Xe79KbwhwIHD2vgK1TWHot6iJRgbNA0whNf6sUnp1x+ia2RJKElPElMP
- T6oJWi
-X-Received: by 2002:a05:600c:c047:b0:492:3e66:6c84 with SMTP id
- 5b1f17b1804b1-4926fc95e86mr13639445e9.30.1782485770278; 
- Fri, 26 Jun 2026 07:56:10 -0700 (PDT)
+ AFNElJ9Iob4XlIU6kJVD+ANF+1PMLE3CezPoNJQMpuBvYZStBFUo9gBGA9zwFiGHPMRDQjx6tATZ05g3vWE=@buildroot.org
+X-Gm-Message-State: AOJu0YxYf3NwdF1rJNPsWoFpuqF0OAMXImudZhqWY9ni5BzIa5MFrrWO
+ avRlVUSDaWLZofb3tMAb0POYnwdsryME62OhAYZpp4UzviV+Dk4Sye7ZcUrNYoloN4lR6zqPwra
+ ZmmR8
+X-Gm-Gg: AfdE7cmTVs9qQfIILw+r516MbuuTym/vpjW5opw5sk4FRjizwua06DWboNUgmx+XkXo
+ jscDzvegNZ3qoyFhM20MhnvMvfJzGj2pLo90//5XqrIo5wor65gn0TKVaY2rw6u8qsHMxwTwD0M
+ mcb7XIKXCcqil2IUOTOjpmGzPjMNVxNDjqNyzmit9YSS8rv945m2fVUrea87CcmStNqS9O/mjfx
+ 9aynRl7yy4ZKk0ulcd/MQqBZQ3VdyqjxUdIucuZ75RVOn0MhYV/VeE3kTqxjp2bH+bG0flYfcHf
+ EzoqXONGVT83tNGY0lWBvcSu5oWS+krSird29O0jzRUP0K+w1WqNAarPVFw25ripIw5OEYnSt83
+ kLH7Dm9iSuSHb52e997ZmbT4VNzSoLaOnnfGZApQWjBV2c7YkjsBwcb+Akfdb6qs8RXTrWUH/5b
+ TXHpis
+X-Received: by 2002:a05:600c:c4a5:b0:492:2e48:81e6 with SMTP id
+ 5b1f17b1804b1-4926684a6b7mr107374305e9.4.1782485771286; 
+ Fri, 26 Jun 2026 07:56:11 -0700 (PDT)
 Received: from arch ([77.109.126.38]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-49268fe949csm98509695e9.5.2026.06.26.07.56.09
+ ffacd0b85a97d-46e95f3d71fsm9173922f8f.12.2026.06.26.07.56.10
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
  Fri, 26 Jun 2026 07:56:10 -0700 (PDT)
 To: Peter Korsgaard <peter@korsgaard.com>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri, 26 Jun 2026 16:56:09 +0200
-Message-ID: <20260626145609.344083-1-thomas.perale@mind.be>
+Date: Fri, 26 Jun 2026 16:56:10 +0200
+Message-ID: <20260626145610.344138-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260618124835.2935850-7-peter@korsgaard.com>
-References: <20260618124835.2935850-7-peter@korsgaard.com>
+In-Reply-To: <20260618124835.2935850-8-peter@korsgaard.com>
+References: <20260618124835.2935850-8-peter@korsgaard.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1782485770; x=1783090570; darn=buildroot.org;
+ d=mind.be; s=google; t=1782485771; x=1783090571; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=jr53YBeRE9Ff2Y7E3X8qruOu2GUutMiO0rSCCKrX4ik=;
- b=K/AeYVczplpErw5eymParKXBq6/E0ECjD2RlqvwtDQ4mTV39EIPJZPtWsBA7hoLgbx
- HUzzAxYoFRr/LkBw8l+FDMbRQTweAUlKq99CY0gFe6gm7xKC3Qg2IHMyV4DH+NkOP58O
- vt5E+L0T2r3mljoIYagU3+jlnzv6EGXDo2CAebY3+mfEUMHUauGEhPrZkbR4sLEwS+X8
- JeZsnDuLhHxZ5fl5L2ULxwKWWr9laURG4WCl/+T3i3//0i+g7IbTEW2HHW3us27jIZAn
- DUySQB4NmvaSY3ARTo0lNUxgCqygEJvRQbSFO+sA+sqgkS41lkwCpJ08SlbFDIrmC6DF
- 5upw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=JrUrlaXc3ZoInL0hQuDR+ABeOm9kelqzaSi7bmQ8pIo=;
+ b=cKSMSSIXA8/dNHzxkgWfb/+X480Z7W2RNETle7+kVqa1lfNjHwTqOx0/AG3YTNNhVe
+ y7V7Aq0LhKVLB1sBpnDHp5nZ8MgZpGwab5VLgtm5y/6sV08D0F8LLK9wx2AAzp2fFEcW
+ CLji16PDFCubV5dYX5Vmft9KjGPOLJwTuFWioMhZDBxTnNIbzEthsrkH73g2VM6YT5q3
+ IJOfIwo5L2I+5XofQ4YPP2Q88eBpJE245FAP4chehC/w3ItgOfJ81b4lJ/Y16pRM6+DG
+ nj4i1NogRveFveC9Rs2PDNbGl2bIxPtOhAJQTrTj7iy2cOl5NbWo8/Imq7Q/NhQi0sSQ
+ rSNw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=K/AeYVcz
-Subject: Re: [Buildroot] [PATCH 07/29] support/testing: test_cryptsetup.py:
+ header.a=rsa-sha256 header.s=google header.b=cKSMSSIX
+Subject: Re: [Buildroot] [PATCH 08/29] support/testing: test_ddrescue.py:
  use assertRunNotOk()
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -138,41 +139,23 @@ In reply of:
 Applied to 2025.02.x & 2026.05.x. Thanks
 
 > ---
->  support/testing/tests/package/test_cryptsetup.py | 9 +++------
->  1 file changed, 3 insertions(+), 6 deletions(-)
+>  support/testing/tests/package/test_ddrescue.py | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 > 
-> diff --git a/support/testing/tests/package/test_cryptsetup.py b/support/testing/tests/package/test_cryptsetup.py
-> index e409ea93e6..32a65210b5 100644
-> --- a/support/testing/tests/package/test_cryptsetup.py
-> +++ b/support/testing/tests/package/test_cryptsetup.py
-> @@ -65,8 +65,7 @@ class TestCryptSetup(infra.basetest.BRTest):
->          # Check the device is NOT detected as a LUKS volume, because
->          # it is not formatted yet.
->          is_luks_cmd = f"cryptsetup isLuks {dev}"
-> -        _, ret = self.emulator.run(is_luks_cmd)
-> -        self.assertNotEqual(ret, 0)
-> +        self.assertRunNotOk(is_luks_cmd)
+> diff --git a/support/testing/tests/package/test_ddrescue.py b/support/testing/tests/package/test_ddrescue.py
+> index bd34694737..e7e71fefda 100644
+> --- a/support/testing/tests/package/test_ddrescue.py
+> +++ b/support/testing/tests/package/test_ddrescue.py
+> @@ -70,8 +70,7 @@ class TestDdrescue(infra.basetest.BRTest):
 >  
->          # Format the LUKS volume.
->          cmd = f"echo {passkey} | cryptsetup luksFormat {dev}"
-> @@ -110,15 +109,13 @@ class TestCryptSetup(infra.basetest.BRTest):
+>          # A normal 'dd' is expected to fail with I/O error
+>          cmd = f"dd if={dm_dev} of=/dev/null bs=512"
+> -        _, exit_code = self.emulator.run(cmd)
+> -        self.assertNotEqual(exit_code, 0)
+> +        self.assertRunNotOk(cmd)
 >  
->          # We are NOT supposed to find our plain text message on the
->          # encrypted storage device.
-> -        _, ret = self.emulator.run(f"grep -Fq '{msg}' {dev}", timeout=10)
-> -        self.assertNotEqual(ret, 0)
-> +        self.assertRunNotOk(f"grep -Fq '{msg}' {dev}", timeout=10)
->  
->          # Try to open LUKS volume with a wrong password. This is
->          # expected to fail.
->          cmd = f"echo 'Wrong{passkey}' | "
->          cmd += f"cryptsetup open --type luks {dev} {dm_name}"
-> -        _, ret = self.emulator.run(cmd, timeout=10)
-> -        self.assertNotEqual(ret, 0)
-> +        self.assertRunNotOk(cmd, timeout=10)
->  
->          # Check the device-mapper device was NOT created (since we
->          # tried to open it with a wrong password).
+>          # Where a normal 'dd' fails, 'ddrescue' is expected to succeed
+>          self.assertRunOk(f"ddrescue {dm_dev} {ddrescue_img}")
 > -- 
 > 2.47.3
 > 
