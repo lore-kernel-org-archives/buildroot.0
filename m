@@ -1,116 +1,117 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F8D8C43602
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EDDB1C43458
 	for <buildroot@archiver.kernel.org>; Fri, 26 Jun 2026 14:56:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F023141235;
-	Fri, 26 Jun 2026 14:56:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C414061128;
+	Fri, 26 Jun 2026 14:56:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4W9G790VdG3Z; Fri, 26 Jun 2026 14:56:36 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gGJERwIZLPKf; Fri, 26 Jun 2026 14:56:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D1BD241228
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D1AFB61144
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1782485796;
-	bh=JlAlG6FzMXX9Z8tAibXXgUGmIiBTcnOg7f5wKxpdXk4=;
+	s=default; t=1782485798;
+	bh=PSF3qO214LK/Lo43Zpl042tWTYHzGj1iDTYiUEJYosM=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=VGqn4SyYYwusaQ6KokelgcgOS3mkohZLKRb1Hlt7pEqz41MKCVgYMC9eEFuIAC20q
-	 zYWD06PVmxacMjt/b4jYSscVoe5F9cgtKaRbNt1k/MBRm6leRP0jZPLSpPJ5ZkLKom
-	 XFteT+/nj5MW5yCib8UXDflHQOQ+Cqm2N5keXXQ6n7jFmZtaJLkD+teHQIgW7GjpFC
-	 9oi7O2AG5zP7eI/Qj4GMbce15982a30xE6cklEAlzUSrIT24XeC9wGxqEgOhuC8n6A
-	 bamRIVjP1gK0xnMq7ZpHu/6L6VmqvS4+inhgVdKmnpbjHn/zwBy3JvQOMah61aTEwW
-	 pWjLkkZKFTWnQ==
+	b=hkaYo/NQAU1+d4Ysum3JmQPbhLqnnxJXS8U1iunuwRVdFbJogOhEdqbTfvTMFuW+F
+	 JtE1mpZgZDJscPRH/mbd2OMKIahl+UY4qyQv1G6r2WAOvnPaWQ2VVl8GzstW6ezVSn
+	 pxMDInb6pWOBIiktH4sE0BYI9vq6zvmP5SIHtE42lyXDhOcKXMO9yBhHeJR+q+4nLf
+	 ++rWYTjbBDEIqTGECJAZIz2HcXUG1mzGN2fdff1D07ADBJ66b3pg5DZcZybCA91SiO
+	 UDqgN4N7oZJ1TkqkHlQoc5WTgeabqzij7V806d/c83vW7H1lSEktcC8EA2LIu1NPVG
+	 8s0dZO4SJKpig==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D1BD241228;
-	Fri, 26 Jun 2026 14:56:36 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id BAED7231
- for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:56:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D1AFB61144;
+	Fri, 26 Jun 2026 14:56:38 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 31A18231
+ for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:56:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9EFB0411F9
- for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:56:21 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2392B4070B
+ for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:56:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id P9kY16slAEF1 for <buildroot@buildroot.org>;
- Fri, 26 Jun 2026 14:56:20 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ldqNsfQixDGp for <buildroot@buildroot.org>;
+ Fri, 26 Jun 2026 14:56:22 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::334; helo=mail-wm1-x334.google.com;
+ client-ip=2a00:1450:4864:20::32e; helo=mail-wm1-x32e.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 91942411E2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 91942411E2
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
- [IPv6:2a00:1450:4864:20::334])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 91942411E2
- for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:56:20 +0000 (UTC)
-Received: by mail-wm1-x334.google.com with SMTP id
- 5b1f17b1804b1-490b7866869so9140185e9.2
- for <buildroot@buildroot.org>; Fri, 26 Jun 2026 07:56:20 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0FEBB4071F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0FEBB4071F
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
+ [IPv6:2a00:1450:4864:20::32e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0FEBB4071F
+ for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:56:22 +0000 (UTC)
+Received: by mail-wm1-x32e.google.com with SMTP id
+ 5b1f17b1804b1-490b613a17bso10209885e9.3
+ for <buildroot@buildroot.org>; Fri, 26 Jun 2026 07:56:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1782485778; x=1783090578;
+ d=1e100.net; s=20251104; t=1782485780; x=1783090580;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=/XfWHKeEzCACik0ndc9Ef3ZXfMJ1nHzG+BnOMmSZ7AA=;
- b=go/7L7PRgfMP6BNAzvsT79YcDfJ6spk/iQ9tT2myJPeMwrkT1klgyjRUDWDriaOgnP
- GVccehdyQy2AtS7Y+VFaO2/aL32h2bIe9PPWIttwHNTXeiKEx1cw+kngiWlrANx8d4/D
- CgvHmWRCAGzKmqfEsQ6gJL6y4U1DtHldEv47UOe2iZsIBG4bJW9dczIQUPS++rxn1FAS
- YK+cY/Nd1a9mHG2BJ4Q5qP6SjXdAIL51QW9qBAD7y8rrm/2ZWAFsY02i8XLlTIvC9gA1
- gUjlj/dy08udY4JmPhlB3KKp2Jo37sSsbCf5LraAWeGyxpt5FyK5mheMnMebZNnqo2br
- iNRQ==
+ bh=HKtPYpB9ZS2k3tQXX8h3jn9uMLTg1xYVYvui7OTyUAU=;
+ b=Ugo39sblupIC87LwlZVWm6TKg+6gh49NF5ud1VlhDL3Vwt/vw8tDc7Xd2WtpM8LCNq
+ b03zrQkZQkqX2MImj+QS3NsBxnr9FxxdaUWv82f0tDfCRRb5pzlPU66CMjXZEYMFhNjR
+ hkS2mmDmkQ6oj+QeSxdPnCz+U3GlGQvNUTkU/XZKSTOKbDaL/6+PWJr7ZQvGenY0+e2i
+ fOB7tQvKF9wPclAGhcM1HNif+LrKw7u9QVc/1m4+3VdxHZeiy5XBOn9Dz/2qL1G6vqdI
+ 8PEXAzHo5Eo1L1pmL4GIrvgJEUo0CGdgy1EqH0tziek/mKc8808PA+OOV9VdrPdCBTSq
+ u+rg==
 X-Forwarded-Encrypted: i=1;
- AFNElJ/fiUTMJ8YOKkfxKdDjEEPZdQcIjFkCgctJvwFPwRQXG6niuGoKLcrDBRGF5/V8goYYwlWvVmrNIvI=@buildroot.org
-X-Gm-Message-State: AOJu0YwsHbBxHLWeylia2qs0fG3zi/p85iS1k7fcZVYJ7geU/RjOuwOX
- Q8kziVoGj8LxUky+qGTrUUb1nfezDN26C5sPC4V1IVjGv8S57cbbHwjzEVBBulzQ3CM=
-X-Gm-Gg: AfdE7cmcpjCnwSIMTzF628svCHOTbiA7/QR3+bHcGdmikGeTqUVuDGmFDE5o016PP97
- naNTtyDXJDcDsrIgiX5QXYrHIoyEcl0jjykZeCyoKNGtfUFNshDo96btIsg6YKwY2mr7LlM7Ybw
- sOirplbBpFFaRrFYYLJ+h98TgCYh7/Vmy/pR96MqxL8uVdeJZSAOvH3gj+AMYhyy6mvpPqR4sZe
- 26ZyXc9sOZXFlybkKJfmJ5kczL5wB10Swxn4iLpD93N3QMO0VYMGOOTFBkC12VG/GI3f7xC7g+e
- aO6Ur7CpqZm/KxlqkKiFvRA7XAIs9W2pa18jpAs9HYtMB7Oq9zIoNCV3nHZbv/uQPJKJrag1Awg
- cUwVyd/FULArgRalIJOW7MZY+ssygpaGg9XdV3ARS+4CuDeQ0Ps2VgOxFtPvxFTLdfe2MYseAgH
- dRerKZ
-X-Received: by 2002:a05:600c:c0c3:10b0:492:69f9:1314 with SMTP id
- 5b1f17b1804b1-4926a713d2amr42032765e9.23.1782485778336; 
- Fri, 26 Jun 2026 07:56:18 -0700 (PDT)
+ AFNElJ/KLmaNe7o80LgKkrI+e7QxNuQRCBgDbLtZ8Mhkd4bduvCFhvyDhhOgsASR2clUAor9Kz1AO7VCb+0=@buildroot.org
+X-Gm-Message-State: AOJu0YxnFD5c3vLZ3G+v5bZEddpDJi2ICT3zJ3xREVkX1WPzc5XBNeIf
+ MwIcGsJGRId/XblCXsTZzotqlzlqZFz2LmHD5N0e2BeDTPJKbm/S2yaoTy1Yp/49iuSt6jn0dSF
+ nvHgy
+X-Gm-Gg: AfdE7cmoy8hDEZPm75d9sbZxqR0Uf1WQ2HOk/FDZizLKxweCy6OvwUZuSRf2/Z8xYHj
+ gE5VLJTPhMIUd5xBanUgtXLLntct/nsU9QZBRdDdeQxOwo9nt0VypvXOrxep5Ee0yZ2kESU8V24
+ lMII/7rZS/E0iVyiKVHclJo1dXfXgEYKqzPfNb9Dk4TEn0uGpVQJC7Fp9tB6ylUCkekWsvkhlvG
+ M8SKaKwNbGRVaMq6FQZi1FW41qsls+13s1D1K+ebf7HXaps0TmNvrz1/YAyvTrreJmWNtT2Fbi6
+ y/3nt3JW03DWp20jQ6yx/Dg3HcjjQWAOiKAejO2C93CPCKVvrTtKAftK+QZq+pcqAdSbE3iQNHk
+ MwlIJkUBF25FuYQkpSohLGJ2RuaZjiZvXBXaYI9JJMzOIcwi4DAFfkSX0AARZto6qwIUGDrJK7K
+ kNQRAm
+X-Received: by 2002:a05:600c:3b29:b0:490:e5c1:b8b9 with SMTP id
+ 5b1f17b1804b1-4926fac56a2mr18826065e9.0.1782485779956; 
+ Fri, 26 Jun 2026 07:56:19 -0700 (PDT)
 Received: from arch ([77.109.126.38]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-49269002511sm83000195e9.8.2026.06.26.07.56.17
+ ffacd0b85a97d-46f978dc0a9sm2732214f8f.15.2026.06.26.07.56.19
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 26 Jun 2026 07:56:17 -0700 (PDT)
+ Fri, 26 Jun 2026 07:56:19 -0700 (PDT)
 To: Peter Korsgaard <peter@korsgaard.com>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri, 26 Jun 2026 16:56:17 +0200
-Message-ID: <20260626145617.344586-1-thomas.perale@mind.be>
+Date: Fri, 26 Jun 2026 16:56:19 +0200
+Message-ID: <20260626145619.344716-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260618124835.2935850-17-peter@korsgaard.com>
-References: <20260618124835.2935850-17-peter@korsgaard.com>
+In-Reply-To: <20260618124835.2935850-19-peter@korsgaard.com>
+References: <20260618124835.2935850-19-peter@korsgaard.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1782485778; x=1783090578; darn=buildroot.org;
+ d=mind.be; s=google; t=1782485780; x=1783090580; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=/XfWHKeEzCACik0ndc9Ef3ZXfMJ1nHzG+BnOMmSZ7AA=;
- b=Kz8Xa5vpUDb+TBc4R5UyYUxn/6NHyNz01ZV0EBZTFpuEEbnWNJpisRcmaE0Ya0qiNG
- aK6tV7FHQ5CNi+wT9dKJTcfo5iheSMwmYBAG4vUwBpSgSbrMMh6IpKr0iy/IYs91tqcU
- +wXS3TTEpBNu4if8EX6CxvhMtXDxYAfTwQvZvHtZFjZ6Of/2F+J5UdYs5ElyqitHxnhP
- E19QHDTxbHTksT3q9sTgQJHzy21CvJsp8wrQkPPPQL30x3Q3H32oWCnk+vNybw48Sm70
- 8pVvEYpBUC35Wal5pLxPip0xz2SQ/pI6FrFBC/iJyW+YA5Q6ovo8C5iv1ZT2QUymzYod
- vrEA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=HKtPYpB9ZS2k3tQXX8h3jn9uMLTg1xYVYvui7OTyUAU=;
+ b=DFaIpHtHr1k0NQO1KB+OfY0pjvE7I8j9iXJI7/qvH0KXB53MNiIEtlFzhGjI3FL2Rf
+ vP6bAHFBuq7JDwjrNWj/VueQyOPuhotkcikfYkinne15z7FWPN9YKbskI0kCZpzB/HAn
+ JgQGkM5M2eczRmvRKZjHdwTltHutyZcPQbbLl5ob5nrN65hH3/C6HX90cNJsDwmWJ1Mq
+ SlthjcSWi+vDw43yvHEmjCVj88PgBu3EzfqrvOSTnUpkL+Ow2t7XqMUbwpLsEGirCZUI
+ j18i4WShHhpzoobZIFpfnUzKARXb1YNGvLdYP0cLDgi6fIWPcCTL8sJP7Ea/0t44JmSB
+ qpxw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=Kz8Xa5vp
-Subject: Re: [Buildroot] [PATCH 17/29] support/testing: test_lsof.py: use
+ header.a=rsa-sha256 header.s=google header.b=DFaIpHtH
+Subject: Re: [Buildroot] [PATCH 19/29] support/testing: test_mtools.py: use
  assertRunNotOk()
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -138,23 +139,23 @@ In reply of:
 Applied to 2025.02.x & 2026.05.x. Thanks
 
 > ---
->  support/testing/tests/package/test_lsof.py | 3 +--
+>  support/testing/tests/package/test_mtools.py | 3 +--
 >  1 file changed, 1 insertion(+), 2 deletions(-)
 > 
-> diff --git a/support/testing/tests/package/test_lsof.py b/support/testing/tests/package/test_lsof.py
-> index b0478dfbb7..336a951549 100644
-> --- a/support/testing/tests/package/test_lsof.py
-> +++ b/support/testing/tests/package/test_lsof.py
-> @@ -28,8 +28,7 @@ class TestLsof(infra.basetest.BRTest):
->          self.assertRunOk("lsof")
->  
->          # Check lsof fails if requested file is not opened
-> -        _, exit_code = self.emulator.run("lsof {}".format(test_file))
+> diff --git a/support/testing/tests/package/test_mtools.py b/support/testing/tests/package/test_mtools.py
+> index 23ec08b6d6..8fc8766207 100644
+> --- a/support/testing/tests/package/test_mtools.py
+> +++ b/support/testing/tests/package/test_mtools.py
+> @@ -29,8 +29,7 @@ class TestMtools(infra.basetest.BRTest):
+>          # Any Mtools command is expected to fail on an unformatted
+>          # partition.
+>          cmd = f"minfo {mtools_opts} ::"
+> -        _, exit_code = self.emulator.run(cmd)
 > -        self.assertNotEqual(exit_code, 0)
-> +        self.assertRunNotOk("lsof {}".format(test_file))
+> +        self.assertRunNotOk(cmd)
 >  
->          # Open the test file from the shell on descriptor 10
->          self.assertRunOk("exec 10> {}".format(test_file))
+>          # Now, let's format the partition file to FAT
+>          self.assertRunOk(f"mformat {mtools_opts} ::")
 > -- 
 > 2.47.3
 > 
