@@ -1,118 +1,117 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EDDB1C43458
-	for <buildroot@archiver.kernel.org>; Fri, 26 Jun 2026 14:56:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A662AC43638
+	for <buildroot@archiver.kernel.org>; Fri, 26 Jun 2026 14:56:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C414061128;
-	Fri, 26 Jun 2026 14:56:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7D6A841240;
+	Fri, 26 Jun 2026 14:56:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gGJERwIZLPKf; Fri, 26 Jun 2026 14:56:38 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1QfTPcr3kEJX; Fri, 26 Jun 2026 14:56:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D1AFB61144
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E889E41214
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1782485798;
-	bh=PSF3qO214LK/Lo43Zpl042tWTYHzGj1iDTYiUEJYosM=;
+	s=default; t=1782485800;
+	bh=Rlz4Z/t7TH+KhSe+KxXNzPqP7kbuOTf2h24XZzYwgbw=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=hkaYo/NQAU1+d4Ysum3JmQPbhLqnnxJXS8U1iunuwRVdFbJogOhEdqbTfvTMFuW+F
-	 JtE1mpZgZDJscPRH/mbd2OMKIahl+UY4qyQv1G6r2WAOvnPaWQ2VVl8GzstW6ezVSn
-	 pxMDInb6pWOBIiktH4sE0BYI9vq6zvmP5SIHtE42lyXDhOcKXMO9yBhHeJR+q+4nLf
-	 ++rWYTjbBDEIqTGECJAZIz2HcXUG1mzGN2fdff1D07ADBJ66b3pg5DZcZybCA91SiO
-	 UDqgN4N7oZJ1TkqkHlQoc5WTgeabqzij7V806d/c83vW7H1lSEktcC8EA2LIu1NPVG
-	 8s0dZO4SJKpig==
+	b=ED1oqchFN0JrNDfVu2QCHz1xUfdxXqkRoVl/cvLMk1apk2uZvKS8wcgkcEwwa7s6N
+	 jJA/tNdgp0lasfGcleMorso+bOS7H7i6pmY21DIfKfqeF8EACLyxyXk+VYI8KTe+lH
+	 OpEzaJ8l0AfoYRXsLymWjao3vCXe/n8uagJNrkMcnMAde0wtxhcXGNBo/3Rx2ontaD
+	 TyBpmYoMn4HhqJ/2KxSEr5XsG3TjRZ8lJmtMEgxTtk779+CSvUapuvDmGkupP2zfMD
+	 TXSE+dFQnGrUik3zvaYWZWW7vWwAe95HjbZgAYIVSFzCV7tuAoXy6OPaTI27YsD3WQ
+	 WF0grB+A6ly7w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D1AFB61144;
-	Fri, 26 Jun 2026 14:56:38 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 31A18231
- for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:56:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E889E41214;
+	Fri, 26 Jun 2026 14:56:39 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 15C283A1
+ for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:56:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2392B4070B
- for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:56:23 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1398F4071A
+ for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:56:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ldqNsfQixDGp for <buildroot@buildroot.org>;
- Fri, 26 Jun 2026 14:56:22 +0000 (UTC)
+ id UNpSSgYLdaE4 for <buildroot@buildroot.org>;
+ Fri, 26 Jun 2026 14:56:23 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32e; helo=mail-wm1-x32e.google.com;
+ client-ip=2a00:1450:4864:20::436; helo=mail-wr1-x436.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0FEBB4071F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0FEBB4071F
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
- [IPv6:2a00:1450:4864:20::32e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0FEBB4071F
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org F3E9940702
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F3E9940702
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
+ [IPv6:2a00:1450:4864:20::436])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id F3E9940702
  for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:56:22 +0000 (UTC)
-Received: by mail-wm1-x32e.google.com with SMTP id
- 5b1f17b1804b1-490b613a17bso10209885e9.3
- for <buildroot@buildroot.org>; Fri, 26 Jun 2026 07:56:21 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id
+ ffacd0b85a97d-4631679f204so1223414f8f.0
+ for <buildroot@buildroot.org>; Fri, 26 Jun 2026 07:56:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1782485780; x=1783090580;
+ d=1e100.net; s=20251104; t=1782485781; x=1783090581;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=HKtPYpB9ZS2k3tQXX8h3jn9uMLTg1xYVYvui7OTyUAU=;
- b=Ugo39sblupIC87LwlZVWm6TKg+6gh49NF5ud1VlhDL3Vwt/vw8tDc7Xd2WtpM8LCNq
- b03zrQkZQkqX2MImj+QS3NsBxnr9FxxdaUWv82f0tDfCRRb5pzlPU66CMjXZEYMFhNjR
- hkS2mmDmkQ6oj+QeSxdPnCz+U3GlGQvNUTkU/XZKSTOKbDaL/6+PWJr7ZQvGenY0+e2i
- fOB7tQvKF9wPclAGhcM1HNif+LrKw7u9QVc/1m4+3VdxHZeiy5XBOn9Dz/2qL1G6vqdI
- 8PEXAzHo5Eo1L1pmL4GIrvgJEUo0CGdgy1EqH0tziek/mKc8808PA+OOV9VdrPdCBTSq
- u+rg==
+ bh=Sv30KWcBzHeJ/AcUNYMueYh6g+8EYhnvRzl4LXDuiOs=;
+ b=tN0PFb2T3DyQ8Gd4nYpZL1zS/IF25N+NrxcnlDo5514PYiCDwK5spR5jizZggZTBua
+ sMSwp30Qn1g3A7bhFC5Q/05fTJnHOb/DNVyxaM8NBTYvknq5MofY8OSRxOegf0GTumBy
+ rdqB2dqL69FWWKGiSppi5sMHsCVMLa1mvI5oNvh9CRRKgB7TgxJZdYLBhPbYHj1SZqDS
+ d1TOsO42LdPYLG7kcIj+5bWluw0jdSmqGmpX4J2jp4VffSu7rY1sFv3Pj6qJ0u8Q1W10
+ K0HhipkcRLjLtnZWXoqY0Nl0l0E/gG63onwt00Zn5Afqvvv+on4dppgPS6y9VpmG0QDX
+ nhWQ==
 X-Forwarded-Encrypted: i=1;
- AFNElJ/KLmaNe7o80LgKkrI+e7QxNuQRCBgDbLtZ8Mhkd4bduvCFhvyDhhOgsASR2clUAor9Kz1AO7VCb+0=@buildroot.org
-X-Gm-Message-State: AOJu0YxnFD5c3vLZ3G+v5bZEddpDJi2ICT3zJ3xREVkX1WPzc5XBNeIf
- MwIcGsJGRId/XblCXsTZzotqlzlqZFz2LmHD5N0e2BeDTPJKbm/S2yaoTy1Yp/49iuSt6jn0dSF
- nvHgy
-X-Gm-Gg: AfdE7cmoy8hDEZPm75d9sbZxqR0Uf1WQ2HOk/FDZizLKxweCy6OvwUZuSRf2/Z8xYHj
- gE5VLJTPhMIUd5xBanUgtXLLntct/nsU9QZBRdDdeQxOwo9nt0VypvXOrxep5Ee0yZ2kESU8V24
- lMII/7rZS/E0iVyiKVHclJo1dXfXgEYKqzPfNb9Dk4TEn0uGpVQJC7Fp9tB6ylUCkekWsvkhlvG
- M8SKaKwNbGRVaMq6FQZi1FW41qsls+13s1D1K+ebf7HXaps0TmNvrz1/YAyvTrreJmWNtT2Fbi6
- y/3nt3JW03DWp20jQ6yx/Dg3HcjjQWAOiKAejO2C93CPCKVvrTtKAftK+QZq+pcqAdSbE3iQNHk
- MwlIJkUBF25FuYQkpSohLGJ2RuaZjiZvXBXaYI9JJMzOIcwi4DAFfkSX0AARZto6qwIUGDrJK7K
- kNQRAm
-X-Received: by 2002:a05:600c:3b29:b0:490:e5c1:b8b9 with SMTP id
- 5b1f17b1804b1-4926fac56a2mr18826065e9.0.1782485779956; 
- Fri, 26 Jun 2026 07:56:19 -0700 (PDT)
+ AHgh+RpySfy7Ec62emWYOSXYy9rJ7UyeTs0qZZOboWJV4Yp4mCGm3bpt7Skke+KuIkrCn71RYQXNRBnj2EA=@buildroot.org
+X-Gm-Message-State: AOJu0YzkHE1UH4hIlI6cTVHPVyLxea/meCygmi+64Ru4FExQM5BGS6BO
+ LWkn93dyuArnA0doOEsELGIxzgvGqOtqXtxliU0YV9sDjYfF/2ZpjqnCrGQsIFVp4dA=
+X-Gm-Gg: AfdE7cnvFmBBWVpylnj/kpro27V3AcGaqtG8rp/dUQB8lUMom0/TxkahKloPfBeyEBJ
+ 3o1ql5lLJKpnmUDek0ImdsKiscq3KOZb4YK/yvqL8NMYpnxVf58icaHzVkroOlmG0cEmqzgw782
+ UKdeb99Hj5RTsBly0DhR0zH6F1q/hgW9BQ9rOd1nIXWoJNb1zgoCjdlFfx2/JEHnEej2rOsM1De
+ 5+XOMizDsbHgJuNPKugwlzKRzJrjU5U7H65gTHtbSHQJJr96SxjCrgUWIeOREK1wvgTGxz8hZtz
+ BqYDQTuTbhAc7RdA1c/BILsj7xvP4I+y744cTwmo6Awg9Swc1zcjn07UjrUl2jyE4QfYoMsyWkn
+ FIzdXGl34f946WBUVv8G2/d6YTvQ9QprymVH8t1VLFHr4N+gpNUewhkoiZGNeSiYTbJXbnSFHc+
+ M+kqgj
+X-Received: by 2002:a05:6000:2386:b0:45e:9304:a4c3 with SMTP id
+ ffacd0b85a97d-46da98e08f5mr12900721f8f.19.1782485781057; 
+ Fri, 26 Jun 2026 07:56:21 -0700 (PDT)
 Received: from arch ([77.109.126.38]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-46f978dc0a9sm2732214f8f.15.2026.06.26.07.56.19
+ ffacd0b85a97d-46e95f3d71fsm9174613f8f.12.2026.06.26.07.56.20
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 26 Jun 2026 07:56:19 -0700 (PDT)
+ Fri, 26 Jun 2026 07:56:20 -0700 (PDT)
 To: Peter Korsgaard <peter@korsgaard.com>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri, 26 Jun 2026 16:56:19 +0200
-Message-ID: <20260626145619.344716-1-thomas.perale@mind.be>
+Date: Fri, 26 Jun 2026 16:56:20 +0200
+Message-ID: <20260626145620.344771-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260618124835.2935850-19-peter@korsgaard.com>
-References: <20260618124835.2935850-19-peter@korsgaard.com>
+In-Reply-To: <20260618124835.2935850-22-peter@korsgaard.com>
+References: <20260618124835.2935850-22-peter@korsgaard.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1782485780; x=1783090580; darn=buildroot.org;
+ d=mind.be; s=google; t=1782485781; x=1783090581; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=HKtPYpB9ZS2k3tQXX8h3jn9uMLTg1xYVYvui7OTyUAU=;
- b=DFaIpHtHr1k0NQO1KB+OfY0pjvE7I8j9iXJI7/qvH0KXB53MNiIEtlFzhGjI3FL2Rf
- vP6bAHFBuq7JDwjrNWj/VueQyOPuhotkcikfYkinne15z7FWPN9YKbskI0kCZpzB/HAn
- JgQGkM5M2eczRmvRKZjHdwTltHutyZcPQbbLl5ob5nrN65hH3/C6HX90cNJsDwmWJ1Mq
- SlthjcSWi+vDw43yvHEmjCVj88PgBu3EzfqrvOSTnUpkL+Ow2t7XqMUbwpLsEGirCZUI
- j18i4WShHhpzoobZIFpfnUzKARXb1YNGvLdYP0cLDgi6fIWPcCTL8sJP7Ea/0t44JmSB
- qpxw==
+ bh=Sv30KWcBzHeJ/AcUNYMueYh6g+8EYhnvRzl4LXDuiOs=;
+ b=Y7RLllxiIGq9rej4uEFIyCRcgcskihYo16XXCJwRF5ud2tJpsz4GrVxCf8WmU5JMGl
+ DsR1uDmM1c5QWzNTEKrXOSiGHUnBVrN6bkbpwWLDMaiip2jGTlXrxVeWPRZu7LV7wjya
+ VdZE/kSVK4+o63zcK7El1I0yiNH6SGeAz4yxIZyeu7IGg8wXXLq3kAR4j9seE+NNf84t
+ nTfrgPWiJGpNgq+rTSlFJsbOe/ZIYQpAqhykYnJU3yJ0dzwa+cqf0UTLVIwmK3oQQIf3
+ n0O4C6RmpBXHxNI5RJUC0kP/p0gO1f33pUqCrvdGVuVFHVNXlu58/Wahysmd0v0/DTEC
+ Nflg==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=DFaIpHtH
-Subject: Re: [Buildroot] [PATCH 19/29] support/testing: test_mtools.py: use
- assertRunNotOk()
+ header.a=rsa-sha256 header.s=google header.b=Y7RLllxi
+Subject: Re: [Buildroot] [PATCH 22/29] support/testing: test_polkit.py: use
+ assertRun{, Not}Ok()
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -132,30 +131,62 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Use the helper to simplify the test.
+> Use the helpers to simplify the test.
 > 
 > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Applied to 2025.02.x & 2026.05.x. Thanks
 
 > ---
->  support/testing/tests/package/test_mtools.py | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
+>  support/testing/tests/package/test_polkit.py | 18 ++++++------------
+>  1 file changed, 6 insertions(+), 12 deletions(-)
 > 
-> diff --git a/support/testing/tests/package/test_mtools.py b/support/testing/tests/package/test_mtools.py
-> index 23ec08b6d6..8fc8766207 100644
-> --- a/support/testing/tests/package/test_mtools.py
-> +++ b/support/testing/tests/package/test_mtools.py
-> @@ -29,8 +29,7 @@ class TestMtools(infra.basetest.BRTest):
->          # Any Mtools command is expected to fail on an unformatted
->          # partition.
->          cmd = f"minfo {mtools_opts} ::"
-> -        _, exit_code = self.emulator.run(cmd)
-> -        self.assertNotEqual(exit_code, 0)
-> +        self.assertRunNotOk(cmd)
+> diff --git a/support/testing/tests/package/test_polkit.py b/support/testing/tests/package/test_polkit.py
+> index 3414fd5159..8ff02d91df 100644
+> --- a/support/testing/tests/package/test_polkit.py
+> +++ b/support/testing/tests/package/test_polkit.py
+> @@ -43,20 +43,16 @@ class TestPolkitSystemd(TestPolkitInfra):
+>          rule_file = "systemd-timesyncd-restart.rules"
+>          for rule_path in TestPolkitInfra.rule_paths:
+>              cmd = "su brtest -c '/bin/systemctl restart systemd-timesyncd.service'"
+> -            _, exit_code = self.emulator.run(cmd, 10)
+> -            self.assertNotEqual(exit_code, 0)
+> +            self.assertRunNotOk(cmd, 10)
 >  
->          # Now, let's format the partition file to FAT
->          self.assertRunOk(f"mformat {mtools_opts} ::")
+>              cmd = "cp /root/{file} {path}".format(file=rule_file, path=rule_path)
+> -            _, exit_code = self.emulator.run(cmd, 10)
+> -            self.assertEqual(exit_code, 0)
+> +            self.assertRunOk(cmd, 10)
+>  
+>              cmd = "su brtest -c '/bin/systemctl restart systemd-timesyncd.service'"
+> -            _, exit_code = self.emulator.run(cmd, 10)
+> -            self.assertEqual(exit_code, 0)
+> +            self.assertRunOk(cmd, 10)
+>  
+>              cmd = "rm {path}/{file}".format(file=rule_file, path=rule_path)
+> -            _, exit_code = self.emulator.run(cmd, 10)
+> -            self.assertEqual(exit_code, 0)
+> +            self.assertRunOk(cmd, 10)
+>  
+>  
+>  class TestPolkitInitd(TestPolkitInfra):
+> @@ -73,8 +69,7 @@ class TestPolkitInitd(TestPolkitInfra):
+>              self.assertEqual(output[0], "Error executing command as another user: Not authorized")
+>  
+>              cmd = "cp /root/{file} {path}/{file}".format(file=rule_file, path=rule_path)
+> -            _, exit_code = self.emulator.run(cmd, 10)
+> -            self.assertEqual(exit_code, 0)
+> +            self.assertRunOk(cmd, 10)
+>  
+>              cmd = "su brtest -c 'pkexec hello-polkit'"
+>              output, exit_code = self.emulator.run(cmd, 10)
+> @@ -82,5 +77,4 @@ class TestPolkitInitd(TestPolkitInfra):
+>              self.assertEqual(output[0], "Hello polkit!")
+>  
+>              cmd = "rm {path}/{file}".format(file=rule_file, path=rule_path)
+> -            _, exit_code = self.emulator.run(cmd, 10)
+> -            self.assertEqual(exit_code, 0)
+> +            self.assertRunOk(cmd, 10)
 > -- 
 > 2.47.3
 > 
