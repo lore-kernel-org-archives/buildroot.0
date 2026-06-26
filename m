@@ -1,117 +1,117 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C17DC43327
-	for <buildroot@archiver.kernel.org>; Fri, 26 Jun 2026 14:56:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB448C43458
+	for <buildroot@archiver.kernel.org>; Fri, 26 Jun 2026 14:56:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 63E5C61150;
-	Fri, 26 Jun 2026 14:56:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8E9C0824EE;
+	Fri, 26 Jun 2026 14:56:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HUifwP-h3Y1p; Fri, 26 Jun 2026 14:56:45 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PiBPGvmrknBO; Fri, 26 Jun 2026 14:56:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8408D6116F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9913C82542
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1782485805;
-	bh=F9emitD+n6B9yCHKc5BPlVC67fLSBvE2xTltWlxFTLk=;
+	s=default; t=1782485807;
+	bh=GMGAF/ER1Q9nX2pn+mVpFJ4Y9+T1f0ew7PFsJ/819a0=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=Y1k68evbjd5TCXPb5TODKd3zDIPJZdbR5NCokVjX7NlzeMqldqrMm82RIebda9Fm6
-	 +JJ8VfZOQR8QSw1h2jaBGp3lh8Ac0hhRwsSjK1ELXniIPnn30PlAA9nUjwTqsySr0d
-	 Kw26wBHBxJRC9zbfd8+YtqoLqJdjANxxD5QmCGI1OylK25mU1asVvzzyh8NnVfWYdr
-	 UxrUh9gQtg0zZ+ewNop+dWFuv/HpHV/wjgQYGGIhkCFRxqsjg1+BuUoLVyctbku0+3
-	 +jpVZ+u/IAiVJBmi7AEqRcJ5ohNF9I5w+VjhI8dNoliO5A482scux0uTwLq4w2eum1
-	 s/s4mvVSKV9yg==
+	b=sK6MxfcUGwzegL4spcnbAhFBfcuSnoJ6oXnmJztNgLlJqfaXJporaX4IPw2cxMGE4
+	 2zC/Z1E3DmFhR3SeiyqOQe+kWas+lviqux24LRxUtYHntHRLMiaNQULksGtk38EYB6
+	 +O4P8Sc6YGjRhq1pR9uBPiCIehglzNUWu8hsISz1xmGsB3+hEyZEesPXjrLtaLLc10
+	 yA3PWTU1/w7IaVNyqEyS2NgcnWBKGIkegiPg6ZNfrdo+XchRYM9w4kW8mdLq9l78y2
+	 mnGsXt1T7/dhvishqF6jKP1tmQ+Xf+tMcgBR0d6iCTt2slubbYk6llhq95WW83m0UR
+	 gHbp8znbuovSA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8408D6116F;
-	Fri, 26 Jun 2026 14:56:45 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 87AEC3A1
- for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:56:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9913C82542;
+	Fri, 26 Jun 2026 14:56:47 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8AD4D231
+ for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:56:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 792604070B
- for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:56:28 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 70CCD41211
+ for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:56:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ajbE0WzDJo6H for <buildroot@buildroot.org>;
- Fri, 26 Jun 2026 14:56:27 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hYnIvtMAUdtT for <buildroot@buildroot.org>;
+ Fri, 26 Jun 2026 14:56:30 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32e; helo=mail-wm1-x32e.google.com;
+ client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 68F9D40702
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 68F9D40702
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
- [IPv6:2a00:1450:4864:20::32e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 68F9D40702
- for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:56:27 +0000 (UTC)
-Received: by mail-wm1-x32e.google.com with SMTP id
- 5b1f17b1804b1-4903d730b1fso13869815e9.2
- for <buildroot@buildroot.org>; Fri, 26 Jun 2026 07:56:27 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 62D784121C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 62D784121C
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 62D784121C
+ for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:56:30 +0000 (UTC)
+Received: by mail-wm1-x336.google.com with SMTP id
+ 5b1f17b1804b1-4926fe5be4bso2720415e9.0
+ for <buildroot@buildroot.org>; Fri, 26 Jun 2026 07:56:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1782485785; x=1783090585;
+ d=1e100.net; s=20251104; t=1782485788; x=1783090588;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=qgdWJIS/Lv14UhUoFY166wdsmm4+blMahJofuePGl4o=;
- b=X5qh2k9RdVmSkBYQnVn+MfkM7KN7oJQyhULNVTQSrjaStOaCn8KPWumgb0U6DQdwWr
- ebz65MEXZZsWRa+v1Q9QWka5qJTsxdBVk7cfljyACVpFxl1N4gQRE1QzyD0CoxaCj/Vd
- A3ymM82rGyFoWKXMabweXk5PI3RdFLuo4xNtvAz2UONCSXfLhSqzyuAmjei/cHXuTCqs
- yVHx4mfB2tc/lkIiN1Gg8OcLThFZmRziu5G4Th36KPTTCEsLL35wywhs/WCWCyEUd8VG
- XtTA0Nnv6bbg7/6dXC0dA7OJ8xRS8FaicvLK7LHWHvn72boJQoh46cgFhBKY3IR/KY8K
- U40A==
+ bh=10EuPAGhcQiPLrURdJHv95ctfwMHKqRzopMeQfpv8pc=;
+ b=KqJrMDqa3PPRnXeAO8d/shbQ3ubOU3WfJEpsTJa5rds5tb9snf81KVoTEnJqLRTfN2
+ qon40pZppwVheToWaMg5GyJGylt8Xj9Xm6ODGAn9arTvJypLchglh/dBo4R+7FAV+MBi
+ f3pa+8tfix6/MkVWDvZJzl1hwesh5fFZeN2F4CN2F4Tr+R4+YEroLND7vhxTctIYST0t
+ hzDdjZRNh6IPfhlO7XSGQwqy4H83cXDoNxheeTOe3xUpu5FjPgzfuUl7JOgOxPX0/EPI
+ MezUQ+Xt9oDgO58hSzOpGGcBn6hL7oPSJpowYkL9lMXdPo5FJcPC/byXpO8g1WcnvLOa
+ XK1A==
 X-Forwarded-Encrypted: i=1;
- AFNElJ9Z0wgcVIzPaR2+DU2AofA1xcTr/sjmnzeALa4vXgGgBn58LeK07tVA491XNaHNbd74X4uR5x8cnrw=@buildroot.org
-X-Gm-Message-State: AOJu0YxEVfCreP5LUK40/hXqBMfK2iloW3n+6Lrge6ooXx4xeo3QwmJA
- 70khg8XZYF1S6o4hqEaO91DebewqCiTSCEbwYFC4xSw5ol/1v1B/lF+H8hgwjdf+Seo=
-X-Gm-Gg: AfdE7cl3un4IrjIJRViHva7uZL/S7cwVmRLU35sJJtEmPLIpIHW8TWpxeR3KD6n8oBq
- oQdKM4jcolqs5jfXF+aTs2gexF+0BTd4+D84LS88Vsq0H+tZ6YT7Ii36+1Gz4HYAFnVJnhfg2Rb
- O2A1VY/GoyFVjEzZIqbm8705Z+exRnXqRX8RCUGfKYKM4WpezSeINXUPge33qHr65pPX8HVJKxS
- HuKzCDeEtAvcBXYXWQzUgwM2jixc3bfvvTGzKwZeaEfR3BmMIZVqh7XuMuIWMl/M5PjTg09gWfM
- hWoEL2em8kW+8HdoE4WQnrM85oNSNvL2FalxzJJuK7HgNTMzqZJwWVj6Qn5w4Z/e26bpiDdkGUR
- ykZdAFaYw90MnrnXXWERd2bO4zgS18HyD+dbA5XRlgOMhO40QLlBj+cAnKOTzmhFlaMo04lcKAI
- +LCc1Z
-X-Received: by 2002:a05:600c:3b85:b0:490:50c5:8153 with SMTP id
- 5b1f17b1804b1-4926683231fmr106390205e9.2.1782485785375; 
- Fri, 26 Jun 2026 07:56:25 -0700 (PDT)
+ AFNElJ/rW2sfDC/nPyXJLJkZBbaL2S/cJ4aL8jJGQ5BwEuTtP+o8CiAPgWUhUt+0syEHu9+aYCMvgite8Mk=@buildroot.org
+X-Gm-Message-State: AOJu0YxwEYmRYtJRoQUptB1M1C0CXMzJnqKmOgjyILpRQx0Lvw8bwjIk
+ I0xqoBSJFi+3GYY+8pTI0mbVOtsbiAop7Iq5UH7nf6jVPeoIYBH4ZTYHGEnUMBtracs=
+X-Gm-Gg: AfdE7cmV8PHg5CpRhmSg+jQQp1Jpb8x9WayLfepaQG20C5kNDerSj6Sz70IipV+u2eS
+ 7bKqrFulTK1Mbe19TogBFd2+2gsRvyjgC5yVe+3qyyrY2X49whUJyglGSJ/HKVCxsmrBwveV2iJ
+ qgEQfnJkJDrME7qfOF9tSku4Wkjr4cQFz6f1aRnwwtPLOTzF2VANoImUstw9pZsEh1cB0820Fab
+ N2IglrDxHaOBC7ESl6rIBxO/tSrLIuFOJlQqKPdTWxxU5+gCEbh2+EebETFk2Nbtl+M33Q23pza
+ N80Htl3Mr6dmou4hRq0HL3wPZXXoTratAo6ectJt2PRF65FXerUAQQQljaSfJXyOa1cIs8cMtKv
+ COjKovQWRsuhWaIYEq2bZ7Nxs1d+V17zvbJhRDP5El3eH6ooIFlYGHBP1Kut/aTS5f3LDNso8Qb
+ LHyPDf
+X-Received: by 2002:a05:600c:4ed1:b0:492:4717:59fb with SMTP id
+ 5b1f17b1804b1-4926fc78e7amr20261015e9.17.1782485788449; 
+ Fri, 26 Jun 2026 07:56:28 -0700 (PDT)
 Received: from arch ([77.109.126.38]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4927038578bsm11506895e9.4.2026.06.26.07.56.24
+ 5b1f17b1804b1-49268fef710sm148073215e9.7.2026.06.26.07.56.27
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 26 Jun 2026 07:56:25 -0700 (PDT)
-To: Peter Korsgaard <peter@korsgaard.com>
+ Fri, 26 Jun 2026 07:56:27 -0700 (PDT)
+To: Bernd Kuhls <bernd@kuhls.net>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri, 26 Jun 2026 16:56:24 +0200
-Message-ID: <20260626145624.345059-1-thomas.perale@mind.be>
+Date: Fri, 26 Jun 2026 16:56:27 +0200
+Message-ID: <20260626145627.345249-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260618124835.2935850-27-peter@korsgaard.com>
-References: <20260618124835.2935850-27-peter@korsgaard.com>
+In-Reply-To: <20260619181321.3345513-1-bernd@kuhls.net>
+References: <20260619181321.3345513-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1782485785; x=1783090585; darn=buildroot.org;
+ d=mind.be; s=google; t=1782485788; x=1783090588; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=qgdWJIS/Lv14UhUoFY166wdsmm4+blMahJofuePGl4o=;
- b=OexLITaVT9TPEgV3n4RiUWUZAl8CBf7twFALdkPorB/aF7wJqloBdJi41gP1Z9DZ7r
- psYNZ+DlDlJUk6BkHN6qVinXn8BAh0251POf285sXXmuIBwSuqQEYAul5MFde3kz0miY
- FxzApUJPa+Ak1QukSf9MRYXBPaiUwNaIcb5pIsjs5CvEmV5dNbPtjaOyR7a6StCIDQnB
- 6+p3Vh+F3jSagbN5GDROgTCivkLH80IjQyXR7fwHEPZ7SGH43Iofvy4DyxZr4JjXdsVE
- q2Vx1rAIf8EFP+nv63GmoQBW68F8r/prLWECHkLXseQsc6Sz+niKY9FLbALPpACtw8u5
- 46cA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=10EuPAGhcQiPLrURdJHv95ctfwMHKqRzopMeQfpv8pc=;
+ b=bsAPuIRp+qU4+mSYnMeImFBfkgs7GCLuuC4Yzb/0QWqXiu2aI5sRhlk57ttDwTa+0W
+ ZfBp9yu0+nT29NUB2I2hyIkxRGOuIYbOq9Du8ialTHIDufpti9cRIMk+/Wu83iwKw1yi
+ 2UndcXYtaFv7dEKlJy1pCQQNF5Ci4sJYGnIQH9dNmFhZuC7KDSPW5siVbWILA0N425f1
+ fvO488KRhzAF0OiXEUAJN5kL4bAWuoXtB2/vME+Jy7RKn6Rktlcu7MtMayp5nP4N/sdo
+ uDFuFp2G1s1vD+/qKlSUZyeUZu9SVF8tx3sI4Xhg9oxQfsG4yhfHaOwlEVsMyfn+Wfyk
+ kSbg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=OexLITaV
-Subject: Re: [Buildroot] [PATCH 27/29] support/testing: test_usbip.py: use
- assertRunNotOk()
+ header.a=rsa-sha256 header.s=google header.b=bsAPuIRp
+Subject: Re: [Buildroot] [PATCH 1/1] package/libgsasl: security bump version
+ to 2.2.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -131,30 +131,61 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Use the helper to simplify the test.
+> 2.2.3: https://lists.gnu.org/archive/html/help-gsasl/2026-05/msg00001.html
+>        Fixes CVE-2026-48829: https://www.cvedetails.com/cve/CVE-2026-48829/
 > 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> 2.2.4: https://lists.gnu.org/archive/html/help-gsasl/2026-06/msg00001.html
+>        https://lists.gnu.org/archive/html/help-gsasl/2026-06/msg00002.html
+>        "GNU SASL Security Advisory: NTLM client use-of-uninitialized-value"
+> 
+> Upstream does not provide sha1/sha256 hashes anymore.
+> 
+> Updated license hash due to copyright year bump:
+> https://gitlab.com/gsasl/gsasl/-/commit/ec96bad53988cb79060964cf1f1568da4e301fd6
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
 Applied to 2025.02.x & 2026.05.x. Thanks
 
 > ---
->  support/testing/tests/package/test_usbip.py | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
+> Gitlab pipelines passed:
+> https://gitlab.com/bkuhls/buildroot/-/commits/cacbb2a74a1a47440ad8e193de23bc645f99817d
 > 
-> diff --git a/support/testing/tests/package/test_usbip.py b/support/testing/tests/package/test_usbip.py
-> index da94d6f92c..2fae8f7f6a 100644
-> --- a/support/testing/tests/package/test_usbip.py
-> +++ b/support/testing/tests/package/test_usbip.py
-> @@ -56,8 +56,7 @@ class TestUsbIp(infra.basetest.BRTest):
+>  package/libgsasl/libgsasl.hash | 8 ++------
+>  package/libgsasl/libgsasl.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 7 deletions(-)
+> 
+> diff --git a/package/libgsasl/libgsasl.hash b/package/libgsasl/libgsasl.hash
+> index de24d73c2d..4995ffe823 100644
+> --- a/package/libgsasl/libgsasl.hash
+> +++ b/package/libgsasl/libgsasl.hash
+> @@ -1,11 +1,7 @@
+> -# From https://lists.gnu.org/archive/html/help-gsasl/2025-03/msg00000.html
+> -sha1  8a845b7ec78e5f27bf69438074ad23867c00d4fe  gsasl-2.2.2.tar.gz
+> -sha256  d45b562e13bd13b9fc20b372f4b53269740cf6279f836f09ce11b9d32bcee075  gsasl-2.2.1.tar.gz
+> -
+>  # Locally calculated after checking pgp signature
+> -sha256  41e8e442648eccaf6459d9ad93d4b18530b96c8eaf50e3f342532ef275eff3ba  gsasl-2.2.2.tar.gz
+> +sha256  d32be15efd3a04cb19b232f721bdca02cc6ad7ab415df7d79fb2dd2c0da3e0be  gsasl-2.2.4.tar.gz
 >  
->          # The daemon is not running yet. Listing remote devices is
->          # expected to fail.
-> -        _, ret = self.emulator.run("usbip list --remote=127.0.0.1")
-> -        self.assertNotEqual(ret, 0)
-> +        self.assertRunNotOk("usbip list --remote=127.0.0.1")
+>  # Hash for license files:
+> -sha256  e3d1b8a82b97dc6083b2600a6beb0396bbefbe384fc1cd39d0e8cb04bbf2bd33  README
+> +sha256  16a8258f525326a71cba997365505ad32089be4be7a7100f64f308ed01419a11  README
+>  sha256  20e50fe7aae3e56378ebf0417d9de904f55a0e61e4df315333e632a4d3555d95  COPYING.LESSER
+>  sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
+> diff --git a/package/libgsasl/libgsasl.mk b/package/libgsasl/libgsasl.mk
+> index 8670f43b6f..db3b64e282 100644
+> --- a/package/libgsasl/libgsasl.mk
+> +++ b/package/libgsasl/libgsasl.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
 >  
->          # We start the USBIP daemon.
->          self.assertRunOk("usbipd -D")
+> -LIBGSASL_VERSION = 2.2.2
+> +LIBGSASL_VERSION = 2.2.4
+>  LIBGSASL_SOURCE = gsasl-$(LIBGSASL_VERSION).tar.gz
+>  LIBGSASL_SITE = $(BR2_GNU_MIRROR)/gsasl
+>  LIBGSASL_LICENSE = LGPL-2.1+ (library), GPL-3.0+ (programs)
 > -- 
 > 2.47.3
 > 
