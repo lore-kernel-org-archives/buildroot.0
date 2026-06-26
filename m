@@ -4,108 +4,109 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73AECC43458
-	for <buildroot@archiver.kernel.org>; Fri, 26 Jun 2026 19:59:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46A95C43458
+	for <buildroot@archiver.kernel.org>; Fri, 26 Jun 2026 20:30:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E6BC561076;
-	Fri, 26 Jun 2026 19:59:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 02419605EA;
+	Fri, 26 Jun 2026 20:30:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 22GbAqjxPUWA; Fri, 26 Jun 2026 19:59:45 +0000 (UTC)
+ id fzjUTd7e35a8; Fri, 26 Jun 2026 20:30:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 902A8610C5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0F35460768
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1782503985;
-	bh=C+FSIZMElya+WkYo7ZWsN7LLrjhEuRUpc3gnpbc2uu4=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=XNG40kthGlXTzOLQ7QH+DDv19LB1DooJ+JUc8UEYu4DGH16x00o1uiuLMYX04EVIB
-	 Vb58SEuy7NS/DU83N4G/DFYgvDnY8y0lxFwXWdO0RTI0h1PULsMYXzpgo89E0otebL
-	 9hVTwDEgmJro+rOA+BZXcd9hhnlZpzRZnJ9XnTmL8kHNWPdGe9ul148rroetOU939u
-	 C2BhyI06mioJzJSZ5tI1/c6YGm4heqtIQCzQuBabh0cqJNtDVd87laX2pBcJHGy5S2
-	 KmyZbPCunGAPx32W2clDbWjDRFpP9EneIklIvIL7Mosf1httOBIEJCdYwZcCnPPlz3
-	 ty1LKuGFfCx9w==
+	s=default; t=1782505805;
+	bh=qrWvTQkW0GsN9eLKvJRoAcBw2dq1pD39ei22PgH5xOw=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=AsQHYpb2gUTdsDM/SzNpUBIa7XLmTFuvEQJqkvSj81bnNz/haUP2FTBkuG59ogAQC
+	 Pgzk7FUF8S/d9FOIJT2xGO1JD/eEzATF60JPM03rho32vqCMrkj+jaI7eTV0wTymqS
+	 jZrelWzjIQxfjYL7hJV3KyqrRnunFAnWHC3NnaGNlmm+dDdJocq9ACW1TUVBaRY/Wa
+	 qX6Le9m0o7o/xlp/xxGBYWNKiVAzrXpn00b0hwb1DswmQbLg3kFDvm40WoPGGPKCIH
+	 nCMA2Fca7l/qDLzkBelEcHCzLMrRrPW8ouJCoFKbaNFyP1LUCNBWQtW4/MjDOQ+Axn
+	 BrsEPuK79L48g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 902A8610C5;
-	Fri, 26 Jun 2026 19:59:45 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 6D2FC28A
- for <buildroot@buildroot.org>; Fri, 26 Jun 2026 19:59:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0F35460768;
+	Fri, 26 Jun 2026 20:30:05 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id C60792F3
+ for <buildroot@buildroot.org>; Fri, 26 Jun 2026 20:30:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 52B7540DD6
- for <buildroot@buildroot.org>; Fri, 26 Jun 2026 19:59:43 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A8A31410EE
+ for <buildroot@buildroot.org>; Fri, 26 Jun 2026 20:30:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 59SsEWEuWBvW for <buildroot@buildroot.org>;
- Fri, 26 Jun 2026 19:59:42 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XVESjOfvf_Vp for <buildroot@buildroot.org>;
+ Fri, 26 Jun 2026 20:30:03 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
+ client-ip=2a00:1450:4864:20::42a; helo=mail-wr1-x42a.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1B1CB400BE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1B1CB400BE
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
- [IPv6:2a00:1450:4864:20::32f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1B1CB400BE
- for <buildroot@buildroot.org>; Fri, 26 Jun 2026 19:59:40 +0000 (UTC)
-Received: by mail-wm1-x32f.google.com with SMTP id
- 5b1f17b1804b1-492329c5514so6089225e9.1
- for <buildroot@buildroot.org>; Fri, 26 Jun 2026 12:59:40 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9446541101
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9446541101
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
+ [IPv6:2a00:1450:4864:20::42a])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9446541101
+ for <buildroot@buildroot.org>; Fri, 26 Jun 2026 20:30:01 +0000 (UTC)
+Received: by mail-wr1-x42a.google.com with SMTP id
+ ffacd0b85a97d-46cdcec58c2so1313965f8f.1
+ for <buildroot@buildroot.org>; Fri, 26 Jun 2026 13:30:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1782503979; x=1783108779;
- h=content-transfer-encoding:mime-version:message-id:date:subject:to
- :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=mmhWhi8VHSdFwDK5OiO1HBYCkvp6QyCAcTaG0jONQ3E=;
- b=YdGNu19OZKgWqNfaGkROVnRxEP5CPrPQP/Z/hC9PyE5WXixzEMOUVuC3eBEwjcBoM/
- bN3rVLmilLrhOX7ul7NrM+XW0LW3ZetqC+v6xbfmY29IfkkM9aybfC1sZt7CALp+DspJ
- Xa+GL/Nkui0ojcb6gOcho0JgPjj9cOhU7irZ51ARlr7bLBVMubIlipQ5D4leM3jQSEmQ
- aqSi3Lqc9TJJPQHgzm7zzP8ZR/oOYLXLJ//zHMLE8LYeg2p7SS+gwMdKPxi9uDBEtcS0
- 8ra8YBzGXaJ75FjzDRaWPZkCTBSm6cpJo8AVULgrYWtu29Yo+fzDFEf5q0eFIOYSik6M
- GorA==
-X-Gm-Message-State: AOJu0YxTxCIb/k7EFpQkqf/fU+LwoD7dWXGGC8NmFSNSJRoOW6sf/VfF
- CNJifLCTyqa9fedRyP04/9/Z9leZis1u0Uevz6eXH10zklbqe5i3z3IINZeclgWEsoj7wJBz/cu
- VdgFe
-X-Gm-Gg: AfdE7ckcGAtT/UkySg0QtYuswJ8ID3+L6KSAsCfEoxh37h9ugFIlzx2S5aa5/7/ucUR
- /INNUsa/nMSw+GdcOpPusuMtYFWxFWamapXgysQM87ASU4NRcT2ygkdOpFZ4zY9hMuehtqJN2CK
- uKxf7UJNeAwK1RSwVqo31tqnDqvh46ev1moprQAnF14i3aFNllVotrsAa+BzeKxRbduJ+fpbD1G
- EkG2ixqLta0xNbEu4i27ewdXj+c4GhUnJI7A0lV8SQaL0IS8/2J44vvxUix6ZBRv7K+A1iiTyrS
- Is0k90banDzmvZiiE0CU1MoLtbiZ92qk8HngXDQTkGf7XdmrzV/Pfbud3QOC8JgB0bcQjJ1r/sU
- ViCX4DbZoxPDy4RAImLSJ6J5gz9ASzhNkUz+GP3SYocuAjTVzNJdtef9kciVODbcmKlDlugNWTm
- VRTx/V
-X-Received: by 2002:a05:600c:638e:b0:490:7df7:9190 with SMTP id
- 5b1f17b1804b1-492663ea3d3mr97209825e9.8.1782503978622; 
- Fri, 26 Jun 2026 12:59:38 -0700 (PDT)
+ d=1e100.net; s=20251104; t=1782505800; x=1783110600;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=y1dMEKr88PGD8HilDu9pEEqotSYJPZyV6689DGDx7Kw=;
+ b=fvh3uAtwU/R8IEBiAUCqLyu7nzDf2vb0oCvHuEJAJA5Y4R/FjOvVH0o7XNTsy0daRu
+ kh66nqrIeA1CYH3H4/50NwEsK7AGRygvmwQQY5cTmcnMXlOAh8vDpcteSVRMxPyj34yj
+ cJpmCE5VFNgVNqNR1Il1vnsx3ZdMfzUrL6YGY4PYxcRrAbIenYLfdOEWPZtYJCQ4PC8v
+ NLGb65rk2V+bDwnYY2NG+tb5pzuO0jljVklH8OuAxtZSngqnnX4/AW9uKh0lzU9GF8qX
+ xbk5lcJX5Ybgh0cDhXBBozDKjqTYiKuwV4kIuDQ2O98V7fQ+FhyOuubwWWlXzamJLoqS
+ JN2A==
+X-Gm-Message-State: AOJu0Yxt2IJ+lWotxpl/P3OKn4es7/WUHja5FKKqPKEGHt6G/KtdSjWh
+ m0E6EkoXczHIUUvaTF9v4hzaPPVFq001tUbm/3zfRQICt40sOnWO6/Y9FRAKxpl+n5Cf7dbDFrr
+ oG0EN
+X-Gm-Gg: AfdE7ckesOmDZmhylN1sFg96zci2cvg/FAzKOkgv4kj+I/Ajh5e7/6aTf9MvfneXPch
+ gIjHF0XqUf1iYiIp3ad8TvIVNVhq57HZEa/Pf1kH9m01+pJiEDMCZyA2wAt9s+V+530cPTUEsGt
+ x3JLQPG68T48Dbo6yz/xNLRhCkzUMMFvSQatlgu4XEQK3EQj5P5j2zv2KBE70BK5QKPfFoFmA3K
+ PtBbYmUQTcetLMQuXyhVf+hhZyQZQK5Y3rErBwnGOYinD2NkMDmjj0nXdGXsnmjOyHzGisaYaCi
+ cYhpSaWwYnodnMIniyynSkrWzZQ91SqTsYI7NTBUg/+SLj4vx6qwvov3oUUgX6S7mNr4o6HFlQN
+ 6mLWlCzUWjem6tVCx/eb5uzUaht16QxmpPFoHvnPkDyoQYcViEhTUEfI85gbAIDWtE5XA0PN3AE
+ GiOLlt
+X-Received: by 2002:a05:6000:4284:b0:464:fff6:489a with SMTP id
+ ffacd0b85a97d-46a7e9f3eacmr31096950f8f.6.1782505800056; 
+ Fri, 26 Jun 2026 13:30:00 -0700 (PDT)
 Received: from arch ([77.109.126.38]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-49269071c9esm98118255e9.9.2026.06.26.12.59.38
- for <buildroot@buildroot.org>
+ ffacd0b85a97d-46e6167c05fsm13530740f8f.25.2026.06.26.13.29.59
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 26 Jun 2026 12:59:38 -0700 (PDT)
+ Fri, 26 Jun 2026 13:29:59 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Fri, 26 Jun 2026 21:59:37 +0200
-Message-ID: <20260626195937.49027-1-thomas.perale@mind.be>
+Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>,
+ Olivier Schonken <olivier.schonken@gmail.com>
+Date: Fri, 26 Jun 2026 22:29:59 +0200
+Message-ID: <20260626202959.282713-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1782503979; x=1783108779; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:to
- :from:from:to:cc:subject:date:message-id:reply-to;
- bh=mmhWhi8VHSdFwDK5OiO1HBYCkvp6QyCAcTaG0jONQ3E=;
- b=eDieWBDbQROOGD9IB+s4ZfH8mRdFhwUkeUb0e9TyRcqFaHthobWh9TubRp8R9WuPoO
- qAWVtmYoRrJ6TtkKPSoZtTEysnK0/p+nsfhRQ9oqr2XEZH51mpFHWXeoW+ahXRa9yEVY
- fFSzKc2GkZ8+yFHgyUrYAyYmrosyQ5WMUB/0GdIyQpNYeo1ZNxvcrspwQ3Fb3tJ7tEe+
- hyWaWIhGLrZdf8zjmbkzQeeonKD8QGGAqF6JY6IwVCfRToEyhC7QNOV2rsk+aI7pvhBI
- X9RxZ4mIXtnCknbdio36SPWuD3gT4jxclcRt5MPPJX5Dg6ZoBcL1vt0dOwKcO8DjioGH
- yLVA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=mind.be; s=google; t=1782505800; x=1783110600; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=y1dMEKr88PGD8HilDu9pEEqotSYJPZyV6689DGDx7Kw=;
+ b=F9mpYfc/6Sj10FZEnhd4GBEJKGuKAop0DlC8fal0Wj50MdtUD1QqaxcUR43x3VcO7A
+ IO+/O+kpLOW2qTeJL7U2kW1yGKyOcvckrcjF9ky8QGEcdjXtQO1036zr+dniyqITiarD
+ U+gtqrjBil9mfFlzOYI4n7kYLwSkcSSosKAam79jaCC7fgW0aqlpuVHrwp4eWUbDm8i4
+ i7E/mshrGMIxFtO1rQaRtcKb15be+rAUfUQfAh0vjY3j1JUSLgWCoq/MvI3TJj0YrI6P
+ d7xojxSBFcslRzWSCQHo7cYyOLdiDlRIzLI1ZN211ME2k+X9L4mGiQqPYlR2yOedbYZO
+ T1Tw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=eDieWBDb
-Subject: [Buildroot] [PATCH 1/1] package/avahi: upstream patch for
- CVE-2026-34933
+ header.a=rsa-sha256 header.s=google header.b=F9mpYfc/
+Subject: [Buildroot] [PATCH] package/cups-filters: upstream patch
+ CVE-2025-64503
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -119,161 +120,89 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This fixes the following vulnerability:
-
-- CVE-2026-34933:
-    Avahi is a system which facilitates service discovery on a local
-    network via the mDNS/DNS-SD protocol suite. Prior to version 0.9-rc4,
-    any unprivileged local user can crash avahi-daemon by sending a single
-    D-Bus method call with conflicting publish flags. This issue has been
-    patched in version 0.9-rc4.
-
-For more information, see:
-  - https://www.cve.org/CVERecord?id=CVE-2026-34933
-  - https://github.com/avahi/avahi/commit/0be89b6bb5c3983837b5e0febcbbbf452ecf7675
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
----
- ...both-wide-area-and-multicast-are-set.patch | 106 ++++++++++++++++++
- package/avahi/avahi.mk                        |   3 +
- 2 files changed, 109 insertions(+)
- create mode 100644 package/avahi/0017-core-refuse-to-accept-publish-flags-where-both-wide-area-and-multicast-are-set.patch
-
-diff --git a/package/avahi/0017-core-refuse-to-accept-publish-flags-where-both-wide-area-and-multicast-are-set.patch b/package/avahi/0017-core-refuse-to-accept-publish-flags-where-both-wide-area-and-multicast-are-set.patch
-new file mode 100644
-index 0000000000..de359b7d22
---- /dev/null
-+++ b/package/avahi/0017-core-refuse-to-accept-publish-flags-where-both-wide-area-and-multicast-are-set.patch
-@@ -0,0 +1,106 @@
-+From 0be89b6bb5c3983837b5e0febcbbbf452ecf7675 Mon Sep 17 00:00:00 2001
-+From: Evgeny Vereshchagin <evvers@ya.ru>
-+Date: Wed, 1 Apr 2026 05:31:58 +0000
-+Subject: [PATCH] core: refuse to accept publish flags where both wide_area and
-+ multicast are set
-+
-+It fixes a bug where it was possible for unprivileged local users to
-+crash avahi-daemon via D-Bus by calling EntryGroup methods accepting
-+flags and passing both AVAHI_PUBLISH_USE_WIDE_AREA and
-+AVAHI_PUBLISH_USE_MULTICAST there. For example when AddRecord was
-+invoked like that avahi-daemon crashed with
-+```
-+dbus-entry-group.c: interface=org.freedesktop.Avahi.EntryGroup, path=/Client0/EntryGroup1, member=AddRecord
-+avahi-daemon: entry.c:57: transport_flags_from_domain: Assertion `!((*flags & AVAHI_PUBLISH_USE_MULTICAST) && (*flags & AVAHI_PUBLISH_USE_WIDE_AREA))' failed.
-+==84944==
-+==84944== Process terminating with default action of signal 6 (SIGABRT)
-+==84944==    at 0x4B353BC: __pthread_kill_implementation (pthread_kill.c:44)
-+==84944==    by 0x4ADE941: raise (raise.c:26)
-+==84944==    by 0x4AC64AB: abort (abort.c:77)
-+==84944==    by 0x4AC641F: __assert_fail_base.cold (assert.c:118)
-+==84944==    by 0x48A9404: transport_flags_from_domain (entry.c:57)
-+==84944==    by 0x48A9F8F: server_add_internal (entry.c:224)
-+==84944==    by 0x48AA49F: avahi_server_add (entry.c:324)
-+==84944==    by 0x401A670: avahi_dbus_msg_entry_group_impl (dbus-entry-group.c:348)
-+==84944==    by 0x4A70741: ??? (in /usr/lib/x86_64-linux-gnu/libdbus-1.so.3.38.3)
-+==84944==    by 0x4A5FB22: dbus_connection_dispatch (in /usr/lib/x86_64-linux-gnu/libdbus-1.so.3.38.3)
-+==84944==    by 0x401D01D: dispatch_timeout_callback (dbus-watch-glue.c:105)
-+==84944==    by 0x488E3AE: timeout_callback (simple-watch.c:447)
-+==84944==
-+```
-+It's a follow-up to fbce111b069aa1e4c701ed37ee1d9f6d6cefaac5 where
-+those flags were introduced and consistent with the other places
-+where wide_area/multicast flags are used.
-+
-+It was discovered by
-+Guillaume Meunier - Head of Vulnerability Operations Center France - Orange Cyberdefense
-+
-+https://github.com/avahi/avahi/security/advisories/GHSA-w65r-6gxh-vhvc
-+
-+CVE: CVE-2026-34933
-+Upstream: https://github.com/avahi/avahi/commit/0be89b6bb5c3983837b5e0febcbbbf452ecf7675
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-+---
-+ avahi-core/entry.c | 7 +++++++
-+ 1 file changed, 7 insertions(+)
-+
-+diff --git a/avahi-core/entry.c b/avahi-core/entry.c
-+index 0d862133d..06eb12076 100644
-+--- a/avahi-core/entry.c
-++++ b/avahi-core/entry.c
-+@@ -207,6 +207,7 @@ static AvahiEntry * server_add_internal(
-+                                          AVAHI_PUBLISH_UPDATE|
-+                                          AVAHI_PUBLISH_USE_WIDE_AREA|
-+                                          AVAHI_PUBLISH_USE_MULTICAST), AVAHI_ERR_INVALID_FLAGS);
-++    AVAHI_CHECK_VALIDITY_RETURN_NULL(s, !(flags & AVAHI_PUBLISH_USE_WIDE_AREA) || !(flags & AVAHI_PUBLISH_USE_MULTICAST), AVAHI_ERR_INVALID_FLAGS);
-+     AVAHI_CHECK_VALIDITY_RETURN_NULL(s, avahi_is_valid_domain_name(r->key->name), AVAHI_ERR_INVALID_HOST_NAME);
-+     AVAHI_CHECK_VALIDITY_RETURN_NULL(s, r->ttl != 0, AVAHI_ERR_INVALID_TTL);
-+     AVAHI_CHECK_VALIDITY_RETURN_NULL(s, !avahi_key_is_pattern(r->key), AVAHI_ERR_IS_PATTERN);
-+@@ -454,6 +455,7 @@ int avahi_server_add_address(
-+                                               AVAHI_PUBLISH_UPDATE|
-+                                               AVAHI_PUBLISH_USE_WIDE_AREA|
-+                                               AVAHI_PUBLISH_USE_MULTICAST), AVAHI_ERR_INVALID_FLAGS);
-++    AVAHI_CHECK_VALIDITY(s, !(flags & AVAHI_PUBLISH_USE_WIDE_AREA) || !(flags & AVAHI_PUBLISH_USE_MULTICAST), AVAHI_ERR_INVALID_FLAGS);
-+     AVAHI_CHECK_VALIDITY(s, !name || avahi_is_valid_fqdn(name), AVAHI_ERR_INVALID_HOST_NAME);
-+ 
-+     /* Prepare the host naem */
-+@@ -595,6 +597,7 @@ static int server_add_service_strlst_nocopy(
-+                                                                 AVAHI_PUBLISH_UPDATE|
-+                                                                 AVAHI_PUBLISH_USE_WIDE_AREA|
-+                                                                 AVAHI_PUBLISH_USE_MULTICAST), AVAHI_ERR_INVALID_FLAGS);
-++    AVAHI_CHECK_VALIDITY_SET_RET_GOTO_FAIL(s, !(flags & AVAHI_PUBLISH_USE_WIDE_AREA) || !(flags & AVAHI_PUBLISH_USE_MULTICAST), AVAHI_ERR_INVALID_FLAGS);
-+     AVAHI_CHECK_VALIDITY_SET_RET_GOTO_FAIL(s, avahi_is_valid_service_name(name), AVAHI_ERR_INVALID_SERVICE_NAME);
-+     AVAHI_CHECK_VALIDITY_SET_RET_GOTO_FAIL(s, avahi_is_valid_service_type_strict(type), AVAHI_ERR_INVALID_SERVICE_TYPE);
-+     AVAHI_CHECK_VALIDITY_SET_RET_GOTO_FAIL(s, !domain || avahi_is_valid_domain_name(domain), AVAHI_ERR_INVALID_DOMAIN_NAME);
-+@@ -754,6 +757,7 @@ static int server_update_service_txt_strlst_nocopy(
-+                                                                 AVAHI_PUBLISH_NO_COOKIE|
-+                                                                 AVAHI_PUBLISH_USE_WIDE_AREA|
-+                                                                 AVAHI_PUBLISH_USE_MULTICAST), AVAHI_ERR_INVALID_FLAGS);
-++    AVAHI_CHECK_VALIDITY_SET_RET_GOTO_FAIL(s, !(flags & AVAHI_PUBLISH_USE_WIDE_AREA) || !(flags & AVAHI_PUBLISH_USE_MULTICAST), AVAHI_ERR_INVALID_FLAGS);
-+     AVAHI_CHECK_VALIDITY_SET_RET_GOTO_FAIL(s, avahi_is_valid_service_name(name), AVAHI_ERR_INVALID_SERVICE_NAME);
-+     AVAHI_CHECK_VALIDITY_SET_RET_GOTO_FAIL(s, avahi_is_valid_service_type_strict(type), AVAHI_ERR_INVALID_SERVICE_TYPE);
-+     AVAHI_CHECK_VALIDITY_SET_RET_GOTO_FAIL(s, !domain || avahi_is_valid_domain_name(domain), AVAHI_ERR_INVALID_DOMAIN_NAME);
-+@@ -843,6 +847,7 @@ int avahi_server_add_service_subtype(
-+     AVAHI_CHECK_VALIDITY_SET_RET_GOTO_FAIL(s, AVAHI_IF_VALID(interface), AVAHI_ERR_INVALID_INTERFACE);
-+     AVAHI_CHECK_VALIDITY_SET_RET_GOTO_FAIL(s, AVAHI_PROTO_VALID(protocol), AVAHI_ERR_INVALID_PROTOCOL);
-+     AVAHI_CHECK_VALIDITY_SET_RET_GOTO_FAIL(s, AVAHI_FLAGS_VALID(flags, AVAHI_PUBLISH_USE_MULTICAST|AVAHI_PUBLISH_USE_WIDE_AREA), AVAHI_ERR_INVALID_FLAGS);
-++    AVAHI_CHECK_VALIDITY_SET_RET_GOTO_FAIL(s, !(flags & AVAHI_PUBLISH_USE_WIDE_AREA) || !(flags & AVAHI_PUBLISH_USE_MULTICAST), AVAHI_ERR_INVALID_FLAGS);
-+     AVAHI_CHECK_VALIDITY_SET_RET_GOTO_FAIL(s, avahi_is_valid_service_name(name), AVAHI_ERR_INVALID_SERVICE_NAME);
-+     AVAHI_CHECK_VALIDITY_SET_RET_GOTO_FAIL(s, avahi_is_valid_service_type_strict(type), AVAHI_ERR_INVALID_SERVICE_TYPE);
-+     AVAHI_CHECK_VALIDITY_SET_RET_GOTO_FAIL(s, !domain || avahi_is_valid_domain_name(domain), AVAHI_ERR_INVALID_DOMAIN_NAME);
-+@@ -910,6 +915,7 @@ static AvahiEntry *server_add_dns_server_name(
-+     assert(name);
-+ 
-+     AVAHI_CHECK_VALIDITY_RETURN_NULL(s, AVAHI_FLAGS_VALID(flags, AVAHI_PUBLISH_USE_WIDE_AREA|AVAHI_PUBLISH_USE_MULTICAST), AVAHI_ERR_INVALID_FLAGS);
-++    AVAHI_CHECK_VALIDITY_RETURN_NULL(s, !(flags & AVAHI_PUBLISH_USE_WIDE_AREA) || !(flags & AVAHI_PUBLISH_USE_MULTICAST), AVAHI_ERR_INVALID_FLAGS);
-+     AVAHI_CHECK_VALIDITY_RETURN_NULL(s, type == AVAHI_DNS_SERVER_UPDATE || type == AVAHI_DNS_SERVER_RESOLVE, AVAHI_ERR_INVALID_FLAGS);
-+     AVAHI_CHECK_VALIDITY_RETURN_NULL(s, port != 0, AVAHI_ERR_INVALID_PORT);
-+     AVAHI_CHECK_VALIDITY_RETURN_NULL(s, avahi_is_valid_fqdn(name), AVAHI_ERR_INVALID_HOST_NAME);
-+@@ -967,6 +973,7 @@ int avahi_server_add_dns_server_address(
-+     AVAHI_CHECK_VALIDITY(s, AVAHI_IF_VALID(interface), AVAHI_ERR_INVALID_INTERFACE);
-+     AVAHI_CHECK_VALIDITY(s, AVAHI_PROTO_VALID(protocol) && AVAHI_PROTO_VALID(address->proto), AVAHI_ERR_INVALID_PROTOCOL);
-+     AVAHI_CHECK_VALIDITY(s, AVAHI_FLAGS_VALID(flags, AVAHI_PUBLISH_USE_MULTICAST|AVAHI_PUBLISH_USE_WIDE_AREA), AVAHI_ERR_INVALID_FLAGS);
-++    AVAHI_CHECK_VALIDITY(s, !(flags & AVAHI_PUBLISH_USE_WIDE_AREA) || !(flags & AVAHI_PUBLISH_USE_MULTICAST), AVAHI_ERR_INVALID_FLAGS);
-+     AVAHI_CHECK_VALIDITY(s, type == AVAHI_DNS_SERVER_UPDATE || type == AVAHI_DNS_SERVER_RESOLVE, AVAHI_ERR_INVALID_FLAGS);
-+     AVAHI_CHECK_VALIDITY(s, port != 0, AVAHI_ERR_INVALID_PORT);
-+     AVAHI_CHECK_VALIDITY(s, !domain || avahi_is_valid_domain_name(domain), AVAHI_ERR_INVALID_DOMAIN_NAME);
-diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
-index bcba0a0a4f..0a674182bc 100644
---- a/package/avahi/avahi.mk
-+++ b/package/avahi/avahi.mk
-@@ -60,6 +60,9 @@ AVAHI_IGNORE_CVES += CVE-2025-68471
- # 0016-core-fix-uncontrolled-recursion-bug-using-a-simple-loop-detection-algorithm.patch
- AVAHI_IGNORE_CVES += CVE-2026-24401
- 
-+# 0017-core-refuse-to-accept-publish-flags-where-both-wide-area-and-multicast-are-set.patch
-+AVAHI_IGNORE_CVES += CVE-2026-34933
-+
- AVAHI_CONF_ENV = \
- 	avahi_cv_sys_cxx_works=yes \
- 	DATADIRNAME=share
--- 
-2.54.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+VGhpcyBmaXhlcyB0aGUgZm9sbG93aW5nIHZ1bG5lcmFiaWxpdHk6CgotIENWRS0yMDI1LTY0NTAz
+OgogICAgY3Vwcy1maWx0ZXJzIGNvbnRhaW5zIGJhY2tlbmRzLCBmaWx0ZXJzLCBhbmQgb3RoZXIg
+c29mdHdhcmUgcmVxdWlyZWQKICAgIHRvIGdldCB0aGUgY3VwcyBwcmludGluZyBzZXJ2aWNlIHdv
+cmtpbmcgb24gb3BlcmF0aW5nIHN5c3RlbXMgb3RoZXIKICAgIHRoYW4gbWFjb3MuIEluIGN1cHMt
+ZmlsdGVycyBwcmlvciB0byAxLjI4LjE4LCBieSBjcmFmdGluZyBhIFBERiBmaWxlCiAgICB3aXRo
+IGEgbGFyZ2UgYE1lZGlhQm94YCB2YWx1ZSwgYW4gYXR0YWNrZXIgY2FuIGNhdXNlIENVUFMtRmls
+dGVyIDEueOKAmXMKICAgIGBwZGZ0b3Jhc3RlcmAgdG9vbCB0byB3cml0ZSBiZXlvbmQgdGhlIGJv
+dW5kcyBvZiBhbiBhcnJheS4gRmlyc3QsIGEKICAgIFBERiB3aXRoIGEgbGFyZ2UgYE1lZGlhQm94
+YCB3aWR0aCB2YWx1ZSBjYXVzZXMgYGhlYWRlci5jdXBzV2lkdGhgIHRvCiAgICBiZWNvbWUgbGFy
+Z2UuICBOZXh0LCB0aGUgY2FsY3VsYXRpb24gb2YgYGJ5dGVzUGVyTGluZSA9CiAgICAoaGVhZGVy
+LmN1cHNCaXRzUGVyUGl4ZWwgKiBoZWFkZXIuY3Vwc1dpZHRoICsgNykgLyA4YCBvdmVyZmxvd3Ms
+CiAgICByZXN1bHRpbmcgaW4gYSBzbWFsbCB2YWx1ZS4gVGhlbiwgYGxpbmVCdWZgIGlzIGFsbG9j
+YXRlZCB3aXRoIHRoZQogICAgc21hbGwgYGJ5dGVzUGVyTGluZWAgc2l6ZS4gRmluYWxseSwgYGNv
+bnZlcnRMaW5lQ2h1bmtlZGAgY2FsbHMKICAgIGB3cml0ZVBpeGVsOGAsIHdoaWNoIGF0dGVtcHRz
+IHRvIHdyaXRlIHRvIGBsaW5lQnVmYCBvdXRzaWRlIG9mIGl0cwogICAgYnVmZmVyIHNpemUgKG91
+dCBvZiBib3VuZHMgd3JpdGUpLiBJbiBsaWJjdXBzZmlsdGVycywgdGhlIG1haW50YWluZXJzCiAg
+ICBmb3VuZCB0aGUgc2FtZSBgYnl0ZXNQZXJMaW5lYCBtdWx0aXBsaWNhdGlvbiB3aXRob3V0IG92
+ZXJmbG93IGNoZWNrLAogICAgYnV0IHRoZSBwcm92aWRlZCB0ZXN0IGNhc2UgZG9lcyBub3QgY2F1
+c2UgYW4gb3ZlcmZsb3cgdGhlcmUsIGJlY2F1c2UKICAgIHRoZSB2YWx1ZXMgYXJlIGRpZmZlcmVu
+dC4gQ29tbWl0CiAgICA1MGQ5NGNhMGYyZmE2MTc3NjEzYzk3YzU5NzkxYmRlNTY4NjMxODY1IGNv
+bnRhaW5zIGEgcGF0Y2gsIHdoaWNoIGlzCiAgICBpbmNvcnBvcmF0ZWQgaW50byBjdXBzLWZpbHRl
+cnMgdmVyc2lvbiAxLjI4LjE4LgoKRm9yIG1vcmUgaW5mb3JtYXRpb24sIHNlZToKICAtIGh0dHBz
+Oi8vd3d3LmN2ZS5vcmcvQ1ZFUmVjb3JkP2lkPUNWRS0yMDI1LTY0NTAzCiAgLSBodHRwczovL2dp
+dGh1Yi5jb20vT3BlblByaW50aW5nL2N1cHMtZmlsdGVycy9jb21taXQvNTBkOTRjYTBmMmZhNjE3
+NzYxM2M5N2M1OTc5MWJkZTU2ODYzMTg2NQoKU2lnbmVkLW9mZi1ieTogVGhvbWFzIFBlcmFsZSA8
+dGhvbWFzLnBlcmFsZUBtaW5kLmJlPgotLS0KIC4uLngtb3V0LW9mLWJvdW5kcy13cml0ZS1pbi1w
+ZGZ0b3Jhc3Rlci5wYXRjaCB8IDQxICsrKysrKysrKysrKysrKysrKysKIHBhY2thZ2UvY3Vwcy1m
+aWx0ZXJzL2N1cHMtZmlsdGVycy5tayAgICAgICAgICB8ICAzICsrCiAyIGZpbGVzIGNoYW5nZWQs
+IDQ0IGluc2VydGlvbnMoKykKIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL2N1cHMtZmlsdGVy
+cy8wMDA1LWZpeC1vdXQtb2YtYm91bmRzLXdyaXRlLWluLXBkZnRvcmFzdGVyLnBhdGNoCgpkaWZm
+IC0tZ2l0IGEvcGFja2FnZS9jdXBzLWZpbHRlcnMvMDAwNS1maXgtb3V0LW9mLWJvdW5kcy13cml0
+ZS1pbi1wZGZ0b3Jhc3Rlci5wYXRjaCBiL3BhY2thZ2UvY3Vwcy1maWx0ZXJzLzAwMDUtZml4LW91
+dC1vZi1ib3VuZHMtd3JpdGUtaW4tcGRmdG9yYXN0ZXIucGF0Y2gKbmV3IGZpbGUgbW9kZSAxMDA2
+NDQKaW5kZXggMDAwMDAwMDAwMC4uMWRhMDRjYTk1OQotLS0gL2Rldi9udWxsCisrKyBiL3BhY2th
+Z2UvY3Vwcy1maWx0ZXJzLzAwMDUtZml4LW91dC1vZi1ib3VuZHMtd3JpdGUtaW4tcGRmdG9yYXN0
+ZXIucGF0Y2gKQEAgLTAsMCArMSw0MSBAQAorRnJvbSA1MGQ5NGNhMGYyZmE2MTc3NjEzYzk3YzU5
+NzkxYmRlNTY4NjMxODY1IE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQorRnJvbTogVGlsbCBLYW1w
+cGV0ZXIgPHRpbGwua2FtcHBldGVyQGdtYWlsLmNvbT4KK0RhdGU6IE1vbiwgMTAgTm92IDIwMjUg
+MTg6MzE6NDggKzAxMDAKK1N1YmplY3Q6IFtQQVRDSF0gRml4IG91dC1vZi1ib3VuZHMgd3JpdGUg
+aW4gcGRmdG9yYXN0ZXIKKworUERGcyB3aXRoIHRvbyBsYXJnZSBwYWdlIGRpbWVuc2lvbnMgY291
+bGQgY2F1c2UgYW4gaW50ZWdlciBvdmVyZmxvdyBhbmQgdGhlbiBhIHRvbyBzbWFsbCBidWZmZXIg
+Zm9yIHRoZSBwaXhlbCBsaW5lIHRvIGJlIGFsbG9jYXRlZC4KKworRml4ZWQgdGhpcyBieSBjcm9w
+cGluZyB0aGUgcGFnZSBzaXplIHRvIHRoZSBtYXhpbXVtIGFsbG93ZWQgYnkgdGhlIHN0YW5kYXJk
+LCAxNDQwMHgxNDQwMHB0LCAyMDB4MjAwaW4sIDV4NW0KKworaHR0cHM6Ly9jb21tdW5pdHkuYWRv
+YmUuY29tL3Q1L2luZGVzaWduLWRpc2N1c3Npb25zL21heGltdW0td2lkdGgtb2YtYS1wZGYvdGQt
+cC85MjE3MzcyCisKK0NWRTogQ1ZFLTIwMjUtNjQ1MDMKK1Vwc3RyZWFtOiBodHRwczovL2dpdGh1
+Yi5jb20vT3BlblByaW50aW5nL2N1cHMtZmlsdGVycy9jb21taXQvNTBkOTRjYTBmMmZhNjE3NzYx
+M2M5N2M1OTc5MWJkZTU2ODYzMTg2NQorU2lnbmVkLW9mZi1ieTogVGhvbWFzIFBlcmFsZSA8dGhv
+bWFzLnBlcmFsZUBtaW5kLmJlPgorLS0tCisgZmlsdGVyL3BkZnRvcmFzdGVyLmN4eCB8IDEyICsr
+KysrKysrKysrKworIDEgZmlsZSBjaGFuZ2VkLCAxMiBpbnNlcnRpb25zKCspCisKK2RpZmYgLS1n
+aXQgYS9maWx0ZXIvcGRmdG9yYXN0ZXIuY3h4IGIvZmlsdGVyL3BkZnRvcmFzdGVyLmN4eAoraW5k
+ZXggN2IzYWY5MjRmLi5iNjRiMzRjNjIgMTAwNzU1CistLS0gYS9maWx0ZXIvcGRmdG9yYXN0ZXIu
+Y3h4CisrKysgYi9maWx0ZXIvcGRmdG9yYXN0ZXIuY3h4CitAQCAtMTY5OCw2ICsxNjk4LDE4IEBA
+IHN0YXRpYyB2b2lkIG91dFBhZ2UocG9wcGxlcjo6ZG9jdW1lbnQgKmRvYywgaW50IHBhZ2VObywK
+KyAgICAgaGVhZGVyLlBhZ2VTaXplWzBdID0gKHVuc2lnbmVkKWw7CisgICBlbHNlCisgICAgIGhl
+YWRlci5QYWdlU2l6ZVsxXSA9ICh1bnNpZ25lZClsOworKyAgLyoKKysgICAgTWF4aW11bSBhbGxv
+d2VkIHBhZ2Ugc2l6ZSBmb3IgUERGIGlzIDIwMHgyMDAgaW5jaGVzICh+IDV4NSBtKSwgb3IgMTQ0
+MDB4MTQ0MDAgcHQKKysgICAgaHR0cHM6Ly9jb21tdW5pdHkuYWRvYmUuY29tL3Q1L2luZGVzaWdu
+LWRpc2N1c3Npb25zL21heGltdW0td2lkdGgtb2YtYS1wZGYvdGQtcC85MjE3MzcyCisrICAqLwor
+KyAgaWYgKGhlYWRlci5QYWdlU2l6ZVswXSA+IDE0NDAwKSB7CisrICAgIGZwcmludGYoc3RkZXJy
+LCAiRVJST1I6IFBhZ2Ugd2lkdGggaXMgJWRwdCwgdG9vIGxhcmdlLCBjcm9wcGluZyB0byAxNDQw
+MHB0XG4iLCBoZWFkZXIuUGFnZVNpemVbMF0pOworKyAgICBoZWFkZXIuUGFnZVNpemVbMF0gPSAx
+NDQwMDsKKysgIH0KKysgIGlmIChoZWFkZXIuUGFnZVNpemVbMV0gPiAxNDQwMCkgeworKyAgICBm
+cHJpbnRmKHN0ZGVyciwgIkVSUk9SOiBQYWdlIGhlaWdodCBpcyAlZHB0LCB0b28gbGFyZ2UsIGNy
+b3BwaW5nIHRvIDE0NDAwcHRcbiIsIGhlYWRlci5QYWdlU2l6ZVsxXSk7CisrICAgIGhlYWRlci5Q
+YWdlU2l6ZVsxXSA9IDE0NDAwOworKyAgfQorIAorICAgbWVtc2V0KHBhcGVyZGltZW5zaW9ucywg
+MCwgc2l6ZW9mKHBhcGVyZGltZW5zaW9ucykpOworICAgbWVtc2V0KG1hcmdpbnMsIDAsIHNpemVv
+ZihtYXJnaW5zKSk7CmRpZmYgLS1naXQgYS9wYWNrYWdlL2N1cHMtZmlsdGVycy9jdXBzLWZpbHRl
+cnMubWsgYi9wYWNrYWdlL2N1cHMtZmlsdGVycy9jdXBzLWZpbHRlcnMubWsKaW5kZXggMjA3YzQz
+MWJlZS4uMDllOGZhMzQzMiAxMDA2NDQKLS0tIGEvcGFja2FnZS9jdXBzLWZpbHRlcnMvY3Vwcy1m
+aWx0ZXJzLm1rCisrKyBiL3BhY2thZ2UvY3Vwcy1maWx0ZXJzL2N1cHMtZmlsdGVycy5tawpAQCAt
+MjEsNiArMjEsOSBAQCBDVVBTX0ZJTFRFUlNfSUdOT1JFX0NWRVMgKz0gQ1ZFLTIwMjMtMjQ4MDUK
+ICMgMDAwMi1yYXN0ZXJ0b3BjbHguYy1GaXgtaW5maW5pdGUtbG9vcC1jYXVzZWQtYnktY3JhZnRl
+ZC1mLnBhdGNoCiBDVVBTX0ZJTFRFUlNfSUdOT1JFX0NWRVMgKz0gQ1ZFLTIwMjUtNjQ1MjQKIAor
+IyAwMDA1LWZpeC1vdXQtb2YtYm91bmRzLXdyaXRlLWluLXBkZnRvcmFzdGVyLnBhdGNoCitDVVBT
+X0ZJTFRFUlNfSUdOT1JFX0NWRVMgKz0gQ1ZFLTIwMjUtNjQ1MDMKKwogQ1VQU19GSUxURVJTX0RF
+UEVOREVOQ0lFUyA9IGN1cHMgbGliZ2xpYjIgbGNtczIgcXBkZiBmb250Y29uZmlnIGZyZWV0eXBl
+IGpwZWcKIAogQ1VQU19GSUxURVJTX0NPTkZfT1BUUyA9IFwKLS0gCjIuNTQuMAoKX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcg
+bGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcv
+bWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
