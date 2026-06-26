@@ -1,117 +1,117 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83C4DC43327
-	for <buildroot@archiver.kernel.org>; Fri, 26 Jun 2026 14:55:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A1A3C43458
+	for <buildroot@archiver.kernel.org>; Fri, 26 Jun 2026 14:56:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 54047610A9;
-	Fri, 26 Jun 2026 14:55:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 44609411C4;
+	Fri, 26 Jun 2026 14:56:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2UlYGdP1z9UR; Fri, 26 Jun 2026 14:55:40 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oAnelJVbfZJg; Fri, 26 Jun 2026 14:56:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 61AFB6108E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7862E411C1
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1782485740;
-	bh=lp8mpYFQ72nVta3y+2qsK6R7rgBqZ3NEfhLrQbK+Bzw=;
+	s=default; t=1782485761;
+	bh=taZ/5Xl71cQqYtLtrOmhlPVeBmLESPxotH1yE1W+Ed4=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=p9gGfut6+HMc3nOmpsqTqBukbK83tNwrvggZ1mcO35W7i6bfdO+KoPf6ruUGDEtrO
-	 whTshzLuFaYYopwKexWBltIxOKh6sen/3Cs6RUJDjNxSKOxUckEyeuVpALTi1t/HkZ
-	 slTPttIqbsCR7gRPoyHHdBnAAuED4RRJ4/Bv08vBxApX7SWClTwauPQr37dYsNI9mr
-	 V2SWPnCjvS5nXQrqLFbeMV0b0DsVE4QzGL9Wr/Rwfw5fJ6xfBvquWFBgQZK955SoQu
-	 vS8DXhqwdGsusAt7sH4Y6TOvQr0bqBiS4FgXQnwMrD6jjuSDouGu1AjzsfA+IZoRyx
-	 FNJzTvsmU+CtA==
+	b=mUJOL+zfwJV6dgdV5hWaL0iK3sC2RQ7qSVCvwS+ZZpvDSgW4koGVJRLEeWdNxayYT
+	 1kKycuJNA6Y8+AVlCAPZL6mSvOc8UrWdY+clYT6vUd8QuaIeY9kKGBiqyPRGg5xJYA
+	 niqy9HYdET6+tB2GFx60uMZr9J7+Jcly0viOwJb7A/XfR/SfOWIkFSiY2tDAqmzc/Z
+	 Uy3RbsRSBhCX03ifmyKSFrAJdwtxkTLUP2rOyy8pbQuoeEORv5e6NsuWhiRSbIwrn4
+	 uQ3paV76Nk4fI5hD1ClRo7cc9niflqQ3zVQsRA1C3rghCDN2vtmHzJ9Lz8iDc4r5Gz
+	 IN/u73yPmUP1g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 61AFB6108E;
-	Fri, 26 Jun 2026 14:55:40 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 48BAE3A1
- for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:55:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7862E411C1;
+	Fri, 26 Jun 2026 14:56:01 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 828783A1
+ for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:56:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2F0AB40702
- for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:55:34 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 742A96100B
+ for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:56:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id y2Yi_nHa5w86 for <buildroot@buildroot.org>;
- Fri, 26 Jun 2026 14:55:33 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vgrDXwKBjyPf for <buildroot@buildroot.org>;
+ Fri, 26 Jun 2026 14:55:59 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32d; helo=mail-wm1-x32d.google.com;
+ client-ip=2a00:1450:4864:20::432; helo=mail-wr1-x432.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1E6424070B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1E6424070B
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
- [IPv6:2a00:1450:4864:20::32d])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1E6424070B
- for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:55:32 +0000 (UTC)
-Received: by mail-wm1-x32d.google.com with SMTP id
- 5b1f17b1804b1-4926f8e02e8so2866605e9.0
- for <buildroot@buildroot.org>; Fri, 26 Jun 2026 07:55:32 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6DBB46107D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6DBB46107D
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6DBB46107D
+ for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:55:59 +0000 (UTC)
+Received: by mail-wr1-x432.google.com with SMTP id
+ ffacd0b85a97d-46caaa805b2so681250f8f.0
+ for <buildroot@buildroot.org>; Fri, 26 Jun 2026 07:55:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1782485731; x=1783090531;
+ d=1e100.net; s=20251104; t=1782485757; x=1783090557;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=SzFVgdifylduiXV+C1Gzl6BTO6yIWvblt1crCYy1sQ4=;
- b=bxkytp1XkwNf2Igp2cveIeBNoD32WscOS2t0bDKo7PgnK0e8ZBuoNHx4bre7R9K5C4
- uqAJg8qbsHhnTj8oQWI1pIK6DQHBUD+f7Yi33M9h5tFHj9ZtsC34j+CdEry1goW6o3EF
- /aMtQOKUNZR4SDrGe/G6SFngw5+HwgpEKrP82/KYueoRjF4wIu7rcmLGVo3RaEf1N4cY
- y1Xq8kZe2o9wp7mnrXbxDORPB8JUDFG3eeFcZOgdcNkRTEJMt/2nGrslX//GbPYj+TTj
- thy1jn1HQooJapRXmVBPBEgrz1TtiJr1I0YXot8t19vuQVO36tqpcDOsljAOodaYv/SY
- 6YIg==
+ bh=lmR8Z7+EXKOX57zMPRXIxuWExFWi6RSSGgY3QkC0TiI=;
+ b=BoYOQOXms+rFsA2hygToGqIb3L9njJ6nDu7QET3fBEq/cGFK/gTOgAvtMHbxpUEgmJ
+ PFdq1UM63U80Tg9F/M5horWImN1ec+hAsM4P/mvUtPJbMCsV19RLVM7hBBE4heeuApoL
+ FCr5ZqzrRtpHPBUs+Qu7Apoq472wiheIqnvOrOxP4EFiKyXYpCrynwsOiY3ukispQKoe
+ C8Qcj8N+lT6DSfPfbVE+vWm04OJ8bTzdbOp8CSu3+orp6fGgvm00vti3OSvD4Mk5PDge
+ nhgpwM7UtR45m4eRvXz/aZur7xZ6aP1PyfJRu0LH3JAjrdRdsY/er9BLoPBusNCXRICV
+ BWNA==
 X-Forwarded-Encrypted: i=1;
- AFNElJ9yYDlSFeMSUB3fHdnyO2ReI9MF7R7vYo6wCEWcDcc0WTxoY5Kf4nKThlTelU0GlcSoqD8ohrDS07A=@buildroot.org
-X-Gm-Message-State: AOJu0Ywp+1nAzYE7yeWy8Y/rm6Olj6dYhHy/MqBYF/dzIDjwZ+Q7BgQE
- N6aTwgEexFc8IjN3Z3U3ZXPGHFwfLqJQ6voPShpaX11jndQLcwdSj4Qoj+9Wz2zJ0o0=
-X-Gm-Gg: AfdE7cmK2rQk+1jvU+YWdyslRZ2ZIiE4kJ/gXmoNQGEhMKOSs25VBC9ahGqnysMKCYW
- WFNTPZ8TClO2n8TGoaSDMmJfOQtNYZe8TChP2/cEEHewahXLJzZCCcjLj/c9esXXagsFjkT/EbM
- +V+sxsYSE55GM1f9ha6ZJvRqj+EAz/COg1VaFNoeapocsTJiyFjYnZvkWHNby05wYZK4nWYxk8G
- A2rgPhYXlhE79JcDn40HRHbE96tO5hIj7Z4dSQf0u4/Ydvk3ofJifWBA3BB5ohAZNhx+UN09uN8
- VT5O+bdjD1t89dT2xHSxrLtOcPnQZTKMvONpi24coQ6bV9DfuoAFDUQS23IdxpMY1GVePDvu3Lg
- VPrrfY3aWTNUEX+HEjggsej9z2WmnqSiuJG8A7LNbT+1wZU7cdQw1xHFhgzmnRVtegqJMFe34po
- FrSPJa
-X-Received: by 2002:a05:600c:8119:b0:492:6f8d:eb68 with SMTP id
- 5b1f17b1804b1-4926f8dec2fmr18185405e9.4.1782485730904; 
- Fri, 26 Jun 2026 07:55:30 -0700 (PDT)
+ AHgh+RpQZv3zr84ZkfY3f+rnnp04C/kdrHjD/0TdQvMBfBVQS7cgrmnxJz+9yUaINzimiNEjuLGgYezsXKQ=@buildroot.org
+X-Gm-Message-State: AOJu0YyeB27zVn63BIYPeBmgN7T9hk7kQ/+wNKMwJ08b7SaYa6/+XCk7
+ xQuMHnTZHg1BW4KCi4/5/2uuhpWlP/Olu8eSIvFuAKGVl1zwAIif8j5ha/f1bZL2H9c=
+X-Gm-Gg: AfdE7clqN2KLdi4Qt1e4rIHQhygZbafB3w/6HTvP+MfTcBW1PVOuZrVkKo3JE/WToaZ
+ l7Xujr9IVd0lckF/hfCbexynzehf96QQ2twaC2et8YCukZr3hNW6K/lp7u/jtI2J6ioZBfnIP9K
+ b/CKrLLLZKWyhOq/m80o2fMgLxJEd0r125NOime3ESMnRbCv+sUg3fUduBO5p87AHKoQnCWl2pi
+ h5OJfd/eF8KVGWxmVJ2ldG7tbe172cVj/nkvjgGgQTNBAz1t+IOzvzmkBwnLN0+/aHn8ReOrbhO
+ HCT6suh+eAAAsMWPQMEBfcSItCIilaLNN4Cit2ZCSI9Rf6pyGnTIVv0z/ECfzD8j/hrtwPL1oWu
+ 4KF5Cm0GhLmTJCysPhfk9LwxoKtwSn2OFJSJXftk6yZvDu8BohRkqwGYtrfZLsJjPU7oYdidZMV
+ pXRym6EW2svPu1L9o=
+X-Received: by 2002:a05:6000:470b:b0:46d:28a7:3ce7 with SMTP id
+ ffacd0b85a97d-46dbed35effmr10942721f8f.7.1782485757254; 
+ Fri, 26 Jun 2026 07:55:57 -0700 (PDT)
 Received: from arch ([77.109.126.38]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-49269071c9esm80826205e9.9.2026.06.26.07.55.30
+ ffacd0b85a97d-46f9db29a94sm2639445f8f.22.2026.06.26.07.55.56
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 26 Jun 2026 07:55:30 -0700 (PDT)
-To: Romain Naour <romain.naour@smile.fr>
+ Fri, 26 Jun 2026 07:55:57 -0700 (PDT)
+To: Fiona Klute <fiona.klute@gmx.de>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri, 26 Jun 2026 16:55:30 +0200
-Message-ID: <20260626145530.343165-1-thomas.perale@mind.be>
+Date: Fri, 26 Jun 2026 16:55:56 +0200
+Message-ID: <20260626145556.343328-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260621165109.2425496-1-romain.naour@smile.fr>
-References: <20260621165109.2425496-1-romain.naour@smile.fr>
+In-Reply-To: <20260606182032.3803327-4-fiona.klute@gmx.de>
+References: <20260606182032.3803327-4-fiona.klute@gmx.de>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1782485731; x=1783090531; darn=buildroot.org;
+ d=mind.be; s=google; t=1782485757; x=1783090557; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=SzFVgdifylduiXV+C1Gzl6BTO6yIWvblt1crCYy1sQ4=;
- b=M8/NiHHim9+qvQHdiVEPCVaRI8JsjjSTlde+htqd3ZmVaqnVTeKQVQ3DuX8bn7djzG
- BrXJ4oOFStlEfk9HkNxW3qaU/U6OR10BIcwGNY9hy8lscnBgU7l7tTG2hTSbMek2dhc1
- rA+NU9LNBai3L0n5otZ4+49jONzOk3vIqYeNrEiQVZikeu6TF75CSoXQR/uuPKzZMFQK
- jedD46mabIovBfEVJexy237+0TwzUhYyqWsEs2H1cI1e3/PxmIP77yen1LCY/Vj5baJp
- 1roz9qzMwCAN9KpM+plto5B4VIARflTt4RTsW4xTwfcbs0/2LfzSXN8g/0IiqE4rBw0b
- AReA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=lmR8Z7+EXKOX57zMPRXIxuWExFWi6RSSGgY3QkC0TiI=;
+ b=MgtwT35xfDx9sT8JyLuans/m5T/6XthP2t6f/bTnRPhPPWPabRSLjF24b6di8kZxtV
+ S5zXM2i54NGbJuelkMBJG5oxVFPCr1ijryS/xBCfnFp3UD45uDvavfBIS2oKOx58dfct
+ A+pjulMHOPa6eTrVdel+OpDGbNtuRy9a3c7Kpl0man0HWK4DRq5dXPI2kk/CkzQ0z2hC
+ lZowUDLDLD0uREkKYPUEl3bsW+ElUK6tEspxrM+QfGcxT74MkGRdm8hV9K8hrEuO9B7Z
+ m9yVzca/wdt7GolLgvqVlg1qfJIeNJvYr8v1Rhbq/9OK83p3PH7BBiiAat99eHXaBGpz
+ ZYyA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=M8/NiHHi
-Subject: Re: [Buildroot] [PATCH] package/passt: needs headers >= 5.9
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=MgtwT35x
+Subject: Re: [Buildroot] [PATCH 3/4] package/mdnsd/S50mdnsd: rewrite to
+ match current guidelines
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -131,71 +131,113 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Upstream passt only documents runtime dependencies; and they advertise
-> being able to run on kernel 3.8 or later. However, they do not document
-> the build dependencies.
+> With the action function as the last command in the script its return
+> code automatically becomes that of the script, and without explicit
+> exit shellcheck does not complain about unused functions.
 > 
-> Since 2025_06_11.0293c6f, upstream requires kernel headers >= 5.9, as
-> they make use of linux/close_range.h, only introduced in 5.9.
+> Also wait for the process to stop in "stop", and simplify restart.
 > 
-> Add a dependency to kernel headers, and propagate it to podman's passt
-> backend.
-> 
-> Fixes: 6a192b0d282cb85ff4272e26df082f5eacd8e3a6
-> 
-> Cc: Yann E. MORIN <yann.morin@orange.com>
-> Signed-off-by: Romain Naour <romain.naour@smile.fr>
+> Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
 
-Applied to 2026.05.x. Thanks
+Applied to 2025.02.x & 2026.05.x. Thanks
 
 > ---
-> Commit log from ed99b77e5d276d62c2f4c9959b5c558a4f3c9e36
-> ---
->  package/passt/Config.in  | 6 +++---
->  package/podman/Config.in | 6 +++---
->  2 files changed, 6 insertions(+), 6 deletions(-)
+>  package/mdnsd/S50mdnsd | 55 ++++++++++++++++++++++++++++--------------
+>  1 file changed, 37 insertions(+), 18 deletions(-)
 > 
-> diff --git a/package/passt/Config.in b/package/passt/Config.in
-> index a93a088670..fca1dff7c5 100644
-> --- a/package/passt/Config.in
-> +++ b/package/passt/Config.in
-> @@ -1,6 +1,6 @@
->  config BR2_PACKAGE_PASST
->  	bool "passt"
-> -	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0
-> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_9
->  	help
->  	  passt: Plug A Simple Socket Transport
->  	  pasta: Pack A Subtle Tap Abstraction
-> @@ -19,5 +19,5 @@ config BR2_PACKAGE_PASST
+> diff --git a/package/mdnsd/S50mdnsd b/package/mdnsd/S50mdnsd
+> index 803ac12a8e..a3d8835918 100644
+> --- a/package/mdnsd/S50mdnsd
+> +++ b/package/mdnsd/S50mdnsd
+> @@ -1,5 +1,4 @@
+>  #!/bin/sh
+> -# shellcheck disable=SC2317  # Don't warn about unreachable commands in this file
 >  
->  	  https://passt.top/passt/about/
+>  DAEMON=mdnsd
+>  MDNSD=/usr/sbin/$DAEMON
+> @@ -12,43 +11,63 @@ MDNSD_ARGS=""
+>  # shellcheck source=/dev/null
+>  [ -r "$CFGFILE" ] && . "$CFGFILE"
 >  
-> -comment "passt needs a toolchain w/ headers >= 5.0"
-> -	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0
-> +comment "passt needs a toolchain w/ headers >= 5.9"
-> +	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_9
-> diff --git a/package/podman/Config.in b/package/podman/Config.in
-> index a6554a3ddc..7884171380 100644
-> --- a/package/podman/Config.in
-> +++ b/package/podman/Config.in
-> @@ -72,11 +72,11 @@ choice
+> -# shellcheck disable=SC2086
+>  start() {
+> -	[ -n "$1" ] || printf 'Starting %s: ' "$DAEMON"
+> -	start-stop-daemon -S -q -p "$PIDFILE" -x "$MDNSD" -- $MDNSD_ARGS
+> +	printf 'Starting %s: ' "$DAEMON"
+> +	# shellcheck disable=SC2086 # we need word splitting
+> +	start-stop-daemon --start --pidfile "$PIDFILE" \
+> +		--exec "$MDNSD" -- $MDNSD_ARGS
+> +	status=$?
+> +	if [ "$status" -eq 0 ]; then
+> +		echo "OK"
+> +	else
+> +		echo "FAIL"
+> +	fi
+> +	return "$status"
+>  }
 >  
->  config BR2_PACKAGE_PODMAN_NET_PASST
->  	bool "passt/pasta"
-> -	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0  # passt
-> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_9  # passt
->  	select BR2_PACKAGE_PASST  # runtime
+>  stop() {
+> -	[ -n "$1" ] || printf 'Stopping %s: ' "$DAEMON"
+> -	start-stop-daemon -K -q -p "$PIDFILE" -x "$MDNSD"
+> +	printf "Stopping %s: " "$DAEMON"
+> +	start-stop-daemon --stop --pidfile "$PIDFILE" \
+> +		--exec "$MDNSD"
+> +	status=$?
+> +	if [ "$status" -eq 0 ]; then
+> +		echo "OK"
+> +	else
+> +		echo "FAIL"
+> +		return "$status"
+> +	fi
+> +	# mdnsd deletes its PID file on exit, wait for it to be gone
+> +	while [ -f "$PIDFILE" ]; do
+> +		sleep 0.1
+> +	done
+> +	return "$status"
+>  }
 >  
-> -comment "passt/pasta backend needs a toolchain w/ headers >= 5.0"
-> -	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0
-> +comment "passt/pasta backend needs a toolchain w/ headers >= 5.9"
-> +	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_9
+>  restart() {
+> -	printf 'Restarting %s: ' "$DAEMON"
+> -	stop  silent
+> -	start silent
+> +	stop
+> +	start
+>  }
 >  
->  config BR2_PACKAGE_PODMAN_NET_SLIRP4NETNS
->  	bool "slirp4netns"
+>  # SIGHUP reloads /etc/mdns.d/*.service
+>  reload() {
+>  	printf 'Reloading %s: ' "$DAEMON"
+> -	start-stop-daemon -K -s HUP -q -p "$PIDFILE" -x "$MDNSD"
+> +	start-stop-daemon --stop --signal HUP -q --pidfile "$PIDFILE" \
+> +		--exec "$MDNSD"
+> +	status=$?
+> +	if [ "$status" -eq 0 ]; then
+> +		echo "OK"
+> +	else
+> +		echo "FAIL"
+> +	fi
+> +	return "$status"
+>  }
+>  
+>  case "$1" in
+>  	start|stop|restart|reload)
+>  		"$1"
+> -		status=$?
+> -		if [ "$status" -eq 0 ]; then
+> -			echo "OK"
+> -		else
+> -			echo "FAIL"
+> -		fi
+>  		;;
+>  	*)
+>  		echo "Usage: $0 {start|stop|restart|reload}"
+>  		exit 1
+>  		;;
+>  esac
+> -
+> -exit "$status"
 > -- 
-> 2.54.0
+> 2.53.0
 > 
 > _______________________________________________
 > buildroot mailing list
