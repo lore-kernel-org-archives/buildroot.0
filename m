@@ -1,117 +1,118 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1B91C43458
-	for <buildroot@archiver.kernel.org>; Fri, 26 Jun 2026 14:56:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE489C43327
+	for <buildroot@archiver.kernel.org>; Fri, 26 Jun 2026 14:56:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6579D6112A;
-	Fri, 26 Jun 2026 14:56:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B9AC9812E6;
+	Fri, 26 Jun 2026 14:56:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8Ic9yZ9Owcgm; Fri, 26 Jun 2026 14:56:35 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PkxGnhBsX0Fl; Fri, 26 Jun 2026 14:56:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 669846112F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C70B78124F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1782485795;
-	bh=Weh86EFL56GLmkBN/+S7/Q+YGxit2/nyF0C0HWi2/dw=;
+	s=default; t=1782485797;
+	bh=YRzP6sGbArjMcuL37WFz7sYKm2TzYBTJbu5fdouZJAU=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=pYlG0rHN7BxtFJnQSREN+l08QB8i0WqKRdGmPO0Z7N31AeOp+yZ8xNgM9MKDBwUaY
-	 KrzF+Ulr2tYty4/onkqWaFqKf6iEIf4xXOyrRtf5ep/tdoKmZYS+i9RtBWIQ86rwBJ
-	 PQfqU6cvQKJyurqtQf/hrDpzcz8SqP/c/VKFns29/6P4UIBGnT1CRhPA6IYPDXh6/Y
-	 TxCWLOB5+VCr44m9gJdCGvL4FU7b7PC8v32A4IzvRG0O4efSU43xJUxXMmosuF4cy8
-	 D/DNHFVaa/cmgcQlmF5pAY+zvAH8xmvuxYh8+oFzxAHUEeLSRsxM0QST7T/SiE/gR+
-	 N/u/XtXkOEuOQ==
+	b=LYbbw09rg/NOHHQIZh378nuoHD2O4/Zcw8OWYk09m2Ds9g7zfn/+5Z8YkF6Y2zOkr
+	 RL8YGrs+O90eXEBLL14tYk3S0hBm0dBUfYKvY2XAKAHCQdxiWb4dp+GmYxvU1hD+Hp
+	 ZE5rFC7MlerIc/6r4y99QjD4krcEDziYgy5Yp70vlPP81jthR0xu2ctNS4EC3LAPkB
+	 /lzeG0xR+0Z2yuA7rzv+ASFxwc8dT1OL4NyXCTzJN0JQrc7DDS2alD4q/dXXWNDvKl
+	 2jPSUJ0hWzUQrHH+gXHrxsCDS6K0dhPBvb9nHXyHC9+GW99lWooysBUzfCMDjb8olp
+	 UKkuv82rTLCAw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 669846112F;
-	Fri, 26 Jun 2026 14:56:35 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 6B6D5231
- for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:56:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C70B78124F;
+	Fri, 26 Jun 2026 14:56:37 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 683653A1
+ for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:56:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6565E610B8
- for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:56:20 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5A2884070B
+ for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:56:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id G7xubZC4ujap for <buildroot@buildroot.org>;
- Fri, 26 Jun 2026 14:56:19 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id megkgiCFnwtL for <buildroot@buildroot.org>;
+ Fri, 26 Jun 2026 14:56:21 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42e; helo=mail-wr1-x42e.google.com;
+ client-ip=2a00:1450:4864:20::332; helo=mail-wm1-x332.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4ABC2610BE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4ABC2610BE
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
- [IPv6:2a00:1450:4864:20::42e])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4ABC2610BE
- for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:56:19 +0000 (UTC)
-Received: by mail-wr1-x42e.google.com with SMTP id
- ffacd0b85a97d-46cbf263113so1088944f8f.1
- for <buildroot@buildroot.org>; Fri, 26 Jun 2026 07:56:19 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 498174071A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 498174071A
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
+ [IPv6:2a00:1450:4864:20::332])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 498174071A
+ for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:56:21 +0000 (UTC)
+Received: by mail-wm1-x332.google.com with SMTP id
+ 5b1f17b1804b1-490cf322ed0so7797695e9.1
+ for <buildroot@buildroot.org>; Fri, 26 Jun 2026 07:56:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1782485777; x=1783090577;
+ d=1e100.net; s=20251104; t=1782485779; x=1783090579;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=vVTIKl40gLkm+hoOb5otJ9CPTm05y5ZZFirRyLaPZeA=;
- b=qDrReRALMyq4NIYhbXgerHtPsB2J+ShQbyCj5QezeYiOEAOgq3Ll2VqnbY1qQQQbmf
- r3946eSzYDFroW4kV5zWzNRx0FMBtpPCzCL8eoCwacPEdL/F+lmtqRsPTx/ILI98e+tY
- y8to+lcZUaAByG3bDyBYzox9NdV02cU1zU4+L9Cw4rsFZqvR1xQT3RpfpGsGWbRK2hYG
- XwRIYbhOOZrkp17wYhyU4mwouRfwreCORmQllg8hL9O8sQRCQQhcOp03vfs/xfclXRpK
- L5YfMGvlSb+lMtvuhrwIQibFXNFV07VkD1nGCARfn3awj2LsoazW3sgcBYfjcVoQmjja
- 65Lg==
+ bh=BKhmpCToqoqcg29eW6P5uovY5SPiGqBHIq4xI+rPgKU=;
+ b=FfeFvHwL1XiuCG8CW2hz+rljW3woyyvF6FTuutYQpbSaIDaR8m9Unf5E2K27iEZjcy
+ LXiv/K3zc8LNrqE84WvgVk79rOxbJdq6Om3AxXG2NavpVOB5etmokg0Di4RcwTalNeCw
+ wqGDjO45k2+sadPOBXOxcSNpaN3eHYxD0ZiS1FIv9vY+8CAJBzdUXVTS2UMKntYFHAA3
+ HvSdTs7M7vINp9+Tq19H5MZiJNS5mOVALoaRJbCwDYjJpIEVtCVL67CSpuBykcXdAkr8
+ yWXSwJfFPYc1NyHTkpb6gvI+lrWCLIk2UmCxaPTQrNG/e4D6rga/G8YBj0YykSJSuTj4
+ vSnw==
 X-Forwarded-Encrypted: i=1;
- AHgh+Rpy/BObvJ21syXB1Ts9V8QeYkOmDSzUpor8ddJeWI0cW2z4/baDBPI6lrs5X5UpHOLcXaiDZlgjfkI=@buildroot.org
-X-Gm-Message-State: AOJu0YwZ0jcowhOazg9U6YQUx0pLs9V0Eol3uMS/eDcerQ54g7/RkIpa
- M4/TQu3KptZBjAxhw0dtY9LGvoiVm1s4m8Lbgdo3SmQ+Lnhbfsfz8JqWlDFV13othi4=
-X-Gm-Gg: AfdE7cnehwiihT4d2z9zxuMPiqp9jHGlllal3zW/pslZ1mB5swBlbMkkYWTGFhHHC0V
- KKqKPjDCt3Uu/zos1jaeq1ovKE79YqYqiwkWiZDWDkaPNrhFgn9uJPyYSboul8vC8FD+lgL+HQI
- NicUo4pheIraSxu2Mq3HEV6eVLHwVYwtF4QuNJZTGLUbUomWInhGWHixhtc5NsZ90g6ETp24X2J
- NrjxEzbvT8cQbLx8hQSJ6tu2jtQG4K/4I8h4jl3I/+Ij8Q15mqsD77vu1m5Kw54Hmf/BODVJuY1
- 0vzDb5uz6IKKzON8gmcx2yePaH+/+3f4qJlAQIuDmOZVJkKl+Qvcz27SxpFGVZnDwUAEkY/WSnS
- hZzWDxRKr1nDRCSpf6xMpiOwNCvgav2AaAOEHGwhxeHalDoR0yld89gTC7HXu9mDo4iB4B2wQ/J
- a1+g2W
-X-Received: by 2002:a05:6000:29db:b0:46d:d5da:f0a8 with SMTP id
- ffacd0b85a97d-46dd5daf20amr7699118f8f.47.1782485777289; 
- Fri, 26 Jun 2026 07:56:17 -0700 (PDT)
+ AFNElJ8EF3oCE6l7HTCSlWlbPhKuBn0Am7I5jl05+kp+xclT3zeRzI5+Bak/nUkcirPHy2YY0bd6koyy4iw=@buildroot.org
+X-Gm-Message-State: AOJu0YyBlnF4JcwWEV0X5In7TBUoGT0qs2JM6l7X25MRLptkXPMNdgo2
+ EO/g2gPa1lTeKjfOi9Ur6SGDcJ7mXABZF9UUq04AWm3VFrCOuJ1rjE5fc5VHzM5Vh72rdbQFbXd
+ K21T5
+X-Gm-Gg: AfdE7cka+2TIGe03G5yIlXL1vNcUWRawGtM3y9HG4At2IDuA04TgB9JoBEx3RBlWk1E
+ fWtLudFR1AWWbW8fzvG170Gvt2lyQijuqp2c89Z5/8qp3zaRmBswFQQF5jb67lGZjS0jjHGcr2s
+ Y1GvSdiFQDDOfc7daK07+D6AVPoxEcVt0RVmIOdQzrYl+FzWzu9rpmC4vIHJpVQoRrOEBiY+RS1
+ UiJLdsdyZW4umADHW/+shr+dQmmo/qSEXNXqPamK8MYNxphzIjV6170R/++3V3lsLuheUhDtbiD
+ BDtW72g4VOw+Xguofn8j+/MtdJoOkCnxXVW19ptfRHi7wdwsWrT0l0MP3ITXVBtGojt6YMwv4J6
+ u8mkL/HK3rGn7qLVagYzeychYC7TlpVfXReLK9gsXWuBUKHRe0tTZpZjW2M8iUXpS2tOzRF42ZD
+ rvApwC
+X-Received: by 2002:a05:600c:c059:20b0:490:bb3e:30c2 with SMTP id
+ 5b1f17b1804b1-49266885955mr89712205e9.18.1782485779155; 
+ Fri, 26 Jun 2026 07:56:19 -0700 (PDT)
 Received: from arch ([77.109.126.38]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-46c221d9371sm27033551f8f.21.2026.06.26.07.56.16
+ 5b1f17b1804b1-492690168d5sm115039415e9.14.2026.06.26.07.56.18
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 26 Jun 2026 07:56:17 -0700 (PDT)
+ Fri, 26 Jun 2026 07:56:18 -0700 (PDT)
 To: Peter Korsgaard <peter@korsgaard.com>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri, 26 Jun 2026 16:56:16 +0200
-Message-ID: <20260626145616.344531-1-thomas.perale@mind.be>
+Date: Fri, 26 Jun 2026 16:56:18 +0200
+Message-ID: <20260626145618.344649-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260618124835.2935850-16-peter@korsgaard.com>
-References: <20260618124835.2935850-16-peter@korsgaard.com>
+In-Reply-To: <20260618124835.2935850-18-peter@korsgaard.com>
+References: <20260618124835.2935850-18-peter@korsgaard.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1782485777; x=1783090577; darn=buildroot.org;
+ d=mind.be; s=google; t=1782485779; x=1783090579; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=vVTIKl40gLkm+hoOb5otJ9CPTm05y5ZZFirRyLaPZeA=;
- b=R5gbIWuHVcUlmusDZyP4aIk6mmdFON50tHnCiKlVwxEy3xk4P+Ibcg9IxOLGKW8Jz6
- FXJPqVmkEt733xJgsB8tzleB1Dh1Zb+D34a6F7L05/I6I1BKorBDmPHThRjvat4iAISL
- 7ZidMihu01C8opgqIJAi0F7+nKlUr8zVByiVWbyN57D0Fl61ZtZF8IeVFPIXol7muksC
- H2f1vD5u9cd0XsUM8J/YX6abdfMZg6NYNv6TtzvzWkTmaE6WWb34X3Zh1EX7zTofqT3s
- QI7wgLuFSCbF4mAtIaCeqOrcJ9BPTy7NULv8o0yNcUTFY1krQnwNdWuXyzWLaOb7qzuM
- Et4A==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=BKhmpCToqoqcg29eW6P5uovY5SPiGqBHIq4xI+rPgKU=;
+ b=aokrl2WLKQcM8UkUgEaKDJsugfrpv9FSsG3s9yQ53zfI3lTSzOISsRbD8UvbkEnCzT
+ ujAqw3c49BOkkuQGDolCRtCvXf1OW+sTUf/8CoSncKe72vdESnZnLEFG3blPzm2/5izm
+ 8Os72SztGHk/cbuydmuFwWU4dKNg7+A0tgWur/c3xPBcLMpP3MSOgWY1C8H7MWNeEhUg
+ NZFtZwCOm/eNsL/LflFViCsAMZwEYphsCSwohMMMnQpxDPEf+QprKrLmI23mCJydhU5m
+ wG/ZKiGObeKJzVtRR+4fa9yHbC8GOH2aDLzeXRVt41nXcEZxnHqTnuj/2bf3oh5CQB0B
+ 4YzQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=R5gbIWuH
-Subject: Re: [Buildroot] [PATCH 16/29] support/testing: test_libgpgme.py:
- use assertRunNotOk()
+ header.a=rsa-sha256 header.s=google header.b=aokrl2WL
+Subject: Re: [Buildroot] [PATCH 18/29] support/testing: test_mariadb.py: use
+ assertRunNotOk()
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -138,33 +139,23 @@ In reply of:
 Applied to 2025.02.x & 2026.05.x. Thanks
 
 > ---
->  support/testing/tests/package/test_libgpgme.py | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
+>  support/testing/tests/package/test_mariadb.py | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 > 
-> diff --git a/support/testing/tests/package/test_libgpgme.py b/support/testing/tests/package/test_libgpgme.py
-> index b497891249..5d0ee34aa6 100644
-> --- a/support/testing/tests/package/test_libgpgme.py
-> +++ b/support/testing/tests/package/test_libgpgme.py
-> @@ -31,8 +31,7 @@ class TestLibGpgme(infra.basetest.BRTest):
->          # We did not create a gpg key yet. We should not be able to
->          # list our key.
->          gpgme_listkey = f"echo LISTKEYS | gpgme-tool | grep '{gpg_userid}'"
-> -        _, exit_code = self.emulator.run(gpgme_listkey)
+> diff --git a/support/testing/tests/package/test_mariadb.py b/support/testing/tests/package/test_mariadb.py
+> index 67ae61c3e1..9ffe6aa3b3 100644
+> --- a/support/testing/tests/package/test_mariadb.py
+> +++ b/support/testing/tests/package/test_mariadb.py
+> @@ -179,8 +179,7 @@ class TestMariaDB(infra.basetest.BRTest):
+>          self.assertRunOk("/etc/init.d/S97mysqld stop")
+>  
+>          # Check the server is stopped.
+> -        _, exit_code = self.emulator.run("mariadb-admin ping")
 > -        self.assertNotEqual(exit_code, 0)
-> +        self.assertRunNotOk(gpgme_listkey)
+> +        self.assertRunNotOk("mariadb-admin ping")
 >  
->          # We now create our gpg key.
->          cmd = "gpg --batch --passphrase ''"
-> @@ -66,8 +65,7 @@ class TestLibGpgme(infra.basetest.BRTest):
->  
->          # The output encrypted file is also expected to be different
->          # from the input plain text file.
-> -        _, exit_code = self.emulator.run(f"cmp {plain_file} {enc_file}")
-> -        self.assertNotEqual(exit_code, 0)
-> +        self.assertRunNotOk(f"cmp {plain_file} {enc_file}")
->  
->          # We now decrypt the encrypted file using gpgme-tool commands.
->          gpgme_dec_cmds = [
+>          # Restart the server.
+>          self.assertRunOk("/etc/init.d/S97mysqld start")
 > -- 
 > 2.47.3
 > 
