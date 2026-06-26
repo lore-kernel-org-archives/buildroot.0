@@ -1,111 +1,115 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1826CD4F26
-	for <buildroot@archiver.kernel.org>; Fri, 26 Jun 2026 09:57:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69654CDE008
+	for <buildroot@archiver.kernel.org>; Fri, 26 Jun 2026 09:57:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6392F60ECD;
-	Fri, 26 Jun 2026 09:57:32 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Qk0BGMMiXXb2; Fri, 26 Jun 2026 09:57:31 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 88FC560EC6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1782467851;
-	bh=uWEVd/aS60Lj1RArta7UXBlsp3olsR5EIN4yo9vxGS4=;
-	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=O9446VgUSENh6rvZ8JukWCG2C6m8ZkUpTpHtTA/nq118DcqfLO6y6QZLxM+53g/Lv
-	 nU1w7KVc8prVtFfqWqAcWWASeMSFIVfQVZprRIRu90xWRESJ59nqkVSJWetqmlHFdq
-	 dUngJrHYwnK3L8LMf9OPtUDdYXotOFYoA9FSUg01601E/HD/0znpOcRejjDpNBVneA
-	 KrVLfWOWUKw9V/hhWTGhcI48/x/ue9pYAiDntpbY0h+Z0Q4Yx0fp7o/PF3atSpwt4p
-	 1RTdT7qdmE9+H3O/8LNOo6BGvH9/90eBvC4iwJmwckv2jqJ7gvDFGoU9g+ZPwIszlM
-	 7v8VR6jTUJjJQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 88FC560EC6;
-	Fri, 26 Jun 2026 09:57:31 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1CB223A1
- for <buildroot@buildroot.org>; Fri, 26 Jun 2026 09:57:30 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 19A2C40DBE
- for <buildroot@buildroot.org>; Fri, 26 Jun 2026 09:57:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2B3DD40DBE;
+	Fri, 26 Jun 2026 09:57:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7KaxAo57502e for <buildroot@buildroot.org>;
+ id wIlfIAthDZ0K; Fri, 26 Jun 2026 09:57:33 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 31CF740DC9
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1782467853;
+	bh=OzyM+EkuS6rAXBcF/GX4s9Zg6MB6Atg9livTnJS9D2g=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=SI88WDgoi4Bl04oChU/P7wYHiLLosLQe8R2DkO6eJdXDmvl1hpH4a5T4j59dH/1uj
+	 BIs48faKssBPEcJZ8F+m+DnVKUhvf5pkotCVGQCjoEJWGu8nis57RLoKTJ1o5+oJfW
+	 ojH/ZKBAwn7gZ8dEKOwJ/5GQdBtEoPlcdG4OueDbaj4kSBG46tQfMO+efRKquzInv4
+	 HTe4snpEwIfxD9Hf6yqnmN7FTiK6kNGyK4yUVBegzw9AGQyEdkYzLY14VGHxq2SrnZ
+	 8BhayzS+oBt94A/ul+pasoiH4p13KINGm0kDjiLDvbmkuCeESe98/68QHP4G4vztIx
+	 mqvkOhMZs4hhA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 31CF740DC9;
+	Fri, 26 Jun 2026 09:57:33 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 346C514A2
+ for <buildroot@buildroot.org>; Fri, 26 Jun 2026 09:57:30 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 19C4381E4A
+ for <buildroot@buildroot.org>; Fri, 26 Jun 2026 09:57:30 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dSO2fkPiNtuk for <buildroot@buildroot.org>;
  Fri, 26 Jun 2026 09:57:29 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42b; helo=mail-wr1-x42b.google.com;
+ client-ip=2a00:1450:4864:20::32b; helo=mail-wm1-x32b.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0408540DAF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0408540DAF
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
- [IPv6:2a00:1450:4864:20::42b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0408540DAF
- for <buildroot@buildroot.org>; Fri, 26 Jun 2026 09:57:27 +0000 (UTC)
-Received: by mail-wr1-x42b.google.com with SMTP id
- ffacd0b85a97d-46dd46901dbso694274f8f.0
- for <buildroot@buildroot.org>; Fri, 26 Jun 2026 02:57:27 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1A49281EA4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1A49281EA4
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
+ [IPv6:2a00:1450:4864:20::32b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1A49281EA4
+ for <buildroot@buildroot.org>; Fri, 26 Jun 2026 09:57:28 +0000 (UTC)
+Received: by mail-wm1-x32b.google.com with SMTP id
+ 5b1f17b1804b1-490cf3000f0so8035055e9.1
+ for <buildroot@buildroot.org>; Fri, 26 Jun 2026 02:57:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1782467846; x=1783072646;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=0Ko8WJifBFILd1iXJInJu2yzDqXh332z8xX2fIy8y4I=;
- b=MuY6FvVXuusDwxvuqaPQ2DrwIYsSDJRQjbVRgt+0xW2k8uuusnomltJm6JRFAOllQh
- eGnVeTj34uGRuK2+LKYJrKpT3b0sHqsOHWSgUg1YYnm26/Tp8S1y0LzMwJxJbRSWTG7e
- LrV3R5kahPgJXKqLDxK4KTpIY3NVguY955Y+v9ptiFlF9VSiLwLRbxemnE9CQxjvgEav
- 8gA71F0UFxy+SP45562u0a6InusggAOxORbArfv+OKb5C9ESQc5mVwS3MzsJ0362xHuK
- WcYWENYY15+LQp9L6KaTrWbo3GDSrmnr1GVRWNtPnYCXaevpP49jVrtZlATRRZIWPW4o
- /MEA==
-X-Gm-Message-State: AOJu0YxrLE3eTk9kyRN5IOMf5Shew6krDURMttZdYmf927RbcBuHBx1I
- FqojRNKgr9yijlDk0E+wb8eXRacMCRtkubv46QtNLKgd0bmQbcxebSqhX8sIOcIICxXfQcm5FLE
- cbEPG
-X-Gm-Gg: AfdE7cnvrhtrY5QxxZQz7FjUamrtxOogrnLmalUloJK2QH8y5Ums3/iWj2v4th9b/3H
- OE306jwrZxxuSyxk344ebDYcb0cm00Gbks5oQWGDGA1VmlhPU8zlgbMBZvHox4sVmrFQF/7Nwez
- PUNilPiVJeBzaV3VZ0xg7zrZm8opjDcXNuJr+gWMjmbmrfN0KlhbgGU/lJWmnHI+hNhICv7XU4l
- CPqgoJyCttBmNizUtEbbgqu+r3/F0ji8tn7hn55I2Mh+PWkH2dsYxYq8W04aGT9XGVoscFV9LQN
- gDKpvyTeiVF1yuBxKNQAQxffC6BxIAtPtJ8OogC8vMYwWOiAeWntTgpcCnY8mm1UQRq7437hpwv
- 7BP3K9yTliBCMssZwnz6Kf7gGqd08JisyukNT9l6kBX9iytN6e1N8EVSmuVqg3iHXYzQ9UfrD2n
- 9SIFMstU2Z9daGMzU=
-X-Received: by 2002:a05:600c:1d18:b0:490:b65f:8b1 with SMTP id
- 5b1f17b1804b1-492668553cfmr89230085e9.5.1782467845862; 
- Fri, 26 Jun 2026 02:57:25 -0700 (PDT)
+ d=1e100.net; s=20251104; t=1782467847; x=1783072647;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=SQpqagCZMpVGLqBEv3RKtqLRf1jqc0eo71Nhku2FNek=;
+ b=XRMnjiBCBUmeGihjCAO+o8NArHNdBBdoAGOquutXfcFWEDAMEqn68pcE1P3XhUV9tD
+ YcvEBNCkswAJo1XAnN0iuQSth3soYQxygGieTgNp63bS7r39EsyAvjTfH+/PPhaVo9PB
+ ZphyrpTz4xjE9J1RCh0sszSyzgkc4K0zG2TNHe4hwPVfPDsd82pv1NOuz7AYnFSfOVU7
+ 3REEz7lXMMS5OeP5dTci7Z8XhXTubx7f1fnBGeylbD2sJUhbrjsEyKeGCTz6xXaSoOui
+ PkL/q7efKu4z4V2IEQdWj9yr3yT0N3Sn3Kya6CU0xv4e+JSAiYTp2LyNZ9Vdq2jIOaGw
+ DccQ==
+X-Gm-Message-State: AOJu0YyMRlXGf+PZaId9FOD9jcSKx83VTrI4zf1oZBzsO6eXXi6zEnzy
+ +qGg7EwfoKoVZ2aRdm27sLtWzcG1+fncSNr/bw4jpMzEckWGrVp6g+z9bvXF51AT81zRJV7gTid
+ Oe/J7
+X-Gm-Gg: AfdE7cmvNqjuJsVY3Hnr1IQPk9m+sXlZ0lA58DyHDvnEOkhixD/Coj6YJifwgmZz1TT
+ ViF7sGE6rwKj2r7TsUV1aCsrIdEUBrMtfMX2EFaoN2g7Q2F5ArEh8J+5LPeajbxP/j2/gMZ8Oim
+ X3QizAwMGHvV1CQeHjFmaEzZju4TLfAIYV/ezbCAXU7rd+jdZJlRO87FZITqCWFuRYYSD+rjUjc
+ RBh6cvE1Mk2QcLxLCRJNCDdZ1BOOUyS//qrkVh5rGJBxkf8QvaHd37poUqs9QRIvfleaMgveZNV
+ rkNBuQKhAUOURGsEkxjyf/wtVdscceKQlnaxB/HIgxqF7a4qZnZrvdLmWKdyv6rDunPbczWzVI7
+ xHt4sOOxl9cgctWf+Ma1LoiM2jZsQAadDHkAbKuZ2tL74sim8BXQH3raN9uAevp4ykx4PdCropz
+ zL6HXG
+X-Received: by 2002:a05:600c:6085:b0:490:44eb:c1dd with SMTP id
+ 5b1f17b1804b1-4926689f39cmr93831225e9.29.1782467846931; 
+ Fri, 26 Jun 2026 02:57:26 -0700 (PDT)
 Received: from arch ([77.109.126.38]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-492691f60bcsm68222045e9.1.2026.06.26.02.57.25
+ 5b1f17b1804b1-492691f60bcsm68222045e9.1.2026.06.26.02.57.26
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 26 Jun 2026 02:57:25 -0700 (PDT)
+ Fri, 26 Jun 2026 02:57:26 -0700 (PDT)
 To: buildroot@buildroot.org
 Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Fri, 26 Jun 2026 11:57:18 +0200
-Message-ID: <20260626095724.248205-1-thomas.perale@mind.be>
+Date: Fri, 26 Jun 2026 11:57:20 +0200
+Message-ID: <20260626095724.248205-3-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260626095724.248205-1-thomas.perale@mind.be>
+References: <20260626095724.248205-1-thomas.perale@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1782467846; x=1783072646; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=0Ko8WJifBFILd1iXJInJu2yzDqXh332z8xX2fIy8y4I=;
- b=ZxkUKr5IgzM6rPY1V99x+NC9Y6x3k2T4alUasjRZMKWddO4BVmAuMku5kYp6J51SVx
- xP7omvG6WAAwXuJKI77SsGQVUy1Lx9ANW8BJFouaB8ChmCV82U3ZIGv4xLfTQkLYmpRn
- v76P08fsoOemE0ThBqY2Kji+uwDDgKpNHRMlxcj0pVpIyCbe7s3cAD9I8Gy1rCRf5yNc
- dMOw/0H3+FTXIPulYy9cPrk3gm1TlVT2NOS+G/dL8vSjmLxRmhXIH+jZZs4TG9UXkHEg
- XA3kSgTUJozmDWJJ/8J9Uyr5gBmlvhri3EAGJ7q3Yj4vTasHppfKUOlhbT7iecJI5D7F
- AT1A==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=mind.be; s=google; t=1782467847; x=1783072647; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=SQpqagCZMpVGLqBEv3RKtqLRf1jqc0eo71Nhku2FNek=;
+ b=WkyX91ytg3QxHjOosQ/q/bTPmWmqHlsPnCqk4fkfLlLlcvsHNe4NZ1lWu3JsQQM/Tr
+ z1c5g+vl0fPmVYYCTfYuGPkv0Y+CKCJdV7kpB++uOAdiG2sekRvAwh1nk2VeD1wnkPl6
+ d/jnLHc/N0Lub+YRSgwp9/m3cBTmHxIEwjqrupYy5hjdINPn65yvGi517ZwdWCTQTkQv
+ UD9ILpoghyP5gmonHiXIi9YBsqeYbBJUIy3swhoUTuTNSbNc0TnJK2GvlOn9ypfSDBda
+ Cmg657xmWknYO9aTgH2CCbwYL5tOdZ9hyrRkgGgeWGslJVV4iavybjAuEZpZM9nJPt0O
+ kpiw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=ZxkUKr5I
-Subject: [Buildroot] [PATCH 2025.02.x 1/5] package/util-linux: bump to
- v2.40.4
+ header.a=rsa-sha256 header.s=google header.b=WkyX91yt
+Subject: [Buildroot] [PATCH 2025.02.x 3/5] package/util-linux: backport
+ patch CVE-2026-53612
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -124,81 +128,137 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-See the release notes:
- - https://www.kernel.org/pub/linux/utils/util-linux/v2.40/v2.40.3-ChangeLog
- - https://www.kernel.org/pub/linux/utils/util-linux/v2.40/v2.40.4-ChangeLog
+- CVE-2026-53612
+    A TOCTOU (Time-of-Check-Time-of-Use) vulnerability exists in the
+    SUID binary /usr/bin/mount from util-linux. The hook_owner.c
+    post-mount hook performs path-based chmod() and lchown() operations
+    on the mount target after mount() has completed, without verifying
+    that the target path still resolves to the same filesystem object.
+    An unprivileged local user can exploit this race window using
+    renameat2(RENAME_EXCHANGE) to redirect the chmod()/lchown() to an
+    arbitrary path, achieving arbitrary permission/ownership
+    modification on any file or directory.
 
-Also add 0007-lib-path-avoid-double-free-for-cpusets.patch introduced
-after the 2.40.4 release.
+For more information, see:
+ - https://github.com/util-linux/util-linux/security/advisories/GHSA-g8wm-75wr-g2vh
+ - https://github.com/util-linux/util-linux/commit/d0c5adaeb3a3d823aba1377794de8f009b8152cc
 
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...b-path-avoid-double-free-for-cpusets.patch | 30 +++++++++++++++++++
- package/util-linux/util-linux.hash            |  2 +-
- package/util-linux/util-linux.mk              |  2 +-
- 3 files changed, 32 insertions(+), 2 deletions(-)
- create mode 100644 package/util-linux/0007-lib-path-avoid-double-free-for-cpusets.patch
+ package/util-linux/0010-CVE-2026-53612.patch | 89 ++++++++++++++++++++
+ package/util-linux/util-linux.mk             |  3 +
+ 2 files changed, 92 insertions(+)
+ create mode 100644 package/util-linux/0010-CVE-2026-53612.patch
 
-diff --git a/package/util-linux/0007-lib-path-avoid-double-free-for-cpusets.patch b/package/util-linux/0007-lib-path-avoid-double-free-for-cpusets.patch
+diff --git a/package/util-linux/0010-CVE-2026-53612.patch b/package/util-linux/0010-CVE-2026-53612.patch
 new file mode 100644
-index 0000000000..f3d9e75652
+index 0000000000..b160f1946a
 --- /dev/null
-+++ b/package/util-linux/0007-lib-path-avoid-double-free-for-cpusets.patch
-@@ -0,0 +1,30 @@
-+From 27279d4ab2431e1afb3a125ae7306eb2323b86b7 Mon Sep 17 00:00:00 2001
++++ b/package/util-linux/0010-CVE-2026-53612.patch
+@@ -0,0 +1,89 @@
++From d0c5adaeb3a3d823aba1377794de8f009b8152cc Mon Sep 17 00:00:00 2001
 +From: Karel Zak <kzak@redhat.com>
-+Date: Wed, 2 Jul 2025 12:25:45 +0200
-+Subject: [PATCH] lib/path: avoid double free() for cpusets
++Date: Tue, 16 Jun 2026 11:15:19 +0200
++Subject: [PATCH] libmount: use fd-based fchownat/chmod in hook_owner
 +
-+Addresses: https://github.com/util-linux/util-linux/issues/3641
++Replace path-based lchown()/chmod() with fd-based operations in the
++X-mount.{owner,group,mode} post-mount hook.
++
++For restricted users the fd_target is pinned in prepare_target() and
++re-opened after mount in hook_attach_target() to point to the mounted
++filesystem root.  For root a local O_PATH fd is opened.  Ownership is
++changed via fchownat(fd, "", ..., AT_EMPTY_PATH), mode via
++/proc/self/fd/N.
++
++This prevents TOCTOU attacks where an ancestor directory is swapped
++between mount and the chmod/chown operations.
++
++Reported-by: Xinyao Hu <ctf_0x01@foxmail.com>
 +Signed-off-by: Karel Zak <kzak@redhat.com>
++(cherry picked from commit 24da33905c7115c4cbccd0afb2a469804e96467a)
 +
-+Upstream: https://github.com/util-linux/util-linux/commit/27279d4ab2431e1afb3a125ae7306eb2323b86b7
++Upstream: https://github.com/util-linux/util-linux/commit/d0c5adaeb3a3d823aba1377794de8f009b8152cc
++CVE: CVE-2026-53612
 +Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 +---
-+ lib/path.c | 4 +++-
-+ 1 file changed, 3 insertions(+), 1 deletion(-)
++ libmount/src/hook_owner.c | 32 ++++++++++++++++++++++++--------
++ 1 file changed, 24 insertions(+), 8 deletions(-)
 +
-+diff --git a/lib/path.c b/lib/path.c
-+index f897599fd06..29b074a959b 100644
-+--- a/lib/path.c
-++++ b/lib/path.c
-+@@ -1053,8 +1053,10 @@ static int ul_path_cpuparse(struct path_cxt *pc, cpu_set_t **set, int maxcpus, i
-+ 	rc = 0;
++diff --git a/libmount/src/hook_owner.c b/libmount/src/hook_owner.c
++index 11b238c8917..99f0e705d73 100644
++--- a/libmount/src/hook_owner.c
+++++ b/libmount/src/hook_owner.c
++@@ -17,6 +17,7 @@
++ #include <sched.h>
 + 
-+ out:
-+-	if (rc)
-++	if (rc) {
-+ 		cpuset_free(*set);
-++		*set = NULL;
-++	}
-+ 	free(buf);
++ #include "mountP.h"
+++#include "pathnames.h"
++ #include "fileutils.h"
++ 
++ struct hook_data {
++@@ -48,7 +49,7 @@ static int hook_post(
++ {
++ 	struct hook_data *hd = (struct hook_data *) data;
++ 	const char *target;
++-	int rc = 0;
+++	int rc = 0, fd;
++ 
++ 	assert(cxt);
++ 
++@@ -59,18 +60,33 @@ static int hook_post(
++ 	if (!target)
++ 		return 0;
++ 
+++	/* fd_target is pinned in restricted mode (see prepare_target()),
+++	 * for root open it here to keep chmod/chown fd-based too */
+++	if (mnt_context_target_fd_required(cxt))
+++		fd = mnt_context_get_target_fd(cxt);
+++	else
+++		fd = open(target, O_PATH | O_CLOEXEC);
+++
+++	if (fd < 0)
+++		return -MNT_ERR_CHMOD;
+++
++ 	if (hd->owner != (uid_t) -1 || hd->group != (uid_t) -1) {
++-		DBG(CXT, ul_debugobj(cxt, " lchown(%s, %u, %u)", target, hd->owner, hd->group));
++-		if (lchown(target, hd->owner, hd->group) == -1)
++-			return -MNT_ERR_CHOWN;
+++		DBG(CXT, ul_debugobj(cxt, " fchownat(%s, %u, %u)", target, hd->owner, hd->group));
+++		if (fchownat(fd, "", hd->owner, hd->group, AT_EMPTY_PATH) == -1)
+++			rc = -MNT_ERR_CHOWN;
++ 	}
++ 
++-	if (hd->mode != (mode_t) -1) {
++-		DBG(CXT, ul_debugobj(cxt, " chmod(%s, %04o)", target, hd->mode));
++-		if (chmod(target, hd->mode) == -1)
++-			return -MNT_ERR_CHMOD;
+++	if (!rc && hd->mode != (mode_t) -1) {
+++		char buf[sizeof(_PATH_PROC_FDDIR) + 1 + sizeof(stringify_value(INT_MAX))];
+++
+++		snprintf(buf, sizeof(buf), _PATH_PROC_FDDIR "/%d", fd);
+++		DBG(CXT, ul_debugobj(cxt, " chmod(%s, %04o)", buf, hd->mode));
+++		if (chmod(buf, hd->mode) == -1)
+++			rc = -MNT_ERR_CHMOD;
++ 	}
++ 
+++	if (!mnt_context_target_fd_required(cxt))
+++		close(fd);
 + 	return rc;
 + }
-diff --git a/package/util-linux/util-linux.hash b/package/util-linux/util-linux.hash
-index 317efebcbf..09f8874bf2 100644
---- a/package/util-linux/util-linux.hash
-+++ b/package/util-linux/util-linux.hash
-@@ -1,5 +1,5 @@
- # From https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v2.40/sha256sums.asc
--sha256  d78b37a66f5922d70edf3bdfb01a6b33d34ed3c3cafd6628203b2a2b67c8e8b3  util-linux-2.40.2.tar.xz
-+sha256  5c1daf733b04e9859afdc3bd87cc481180ee0f88b5c0946b16fdec931975fb79  util-linux-2.40.4.tar.xz
- # License files, locally calculated
- sha256  27f25514040a401b2ceb7057eae1f46cedb1666664b519b5be7e0960d1b35164  README.licensing
- sha256  9b718a9460fed5952466421235bc79eb49d4e9eacc920d7a9dd6285ab8fd6c6d  Documentation/licenses/COPYING.BSD-3-Clause
 diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index d30c26deb5..64da9ab5d5 100644
+index 22c314ce82..3f929a89a7 100644
 --- a/package/util-linux/util-linux.mk
 +++ b/package/util-linux/util-linux.mk
-@@ -8,7 +8,7 @@
- # util-linux-libs/util-linux-libs.mk needs to be updated accordingly as well.
+@@ -43,6 +43,9 @@ UTIL_LINUX_IGNORE_CVES += CVE-2026-27456
+ # 0009-CVE-2025-14104-2.patch
+ UTIL_LINUX_IGNORE_CVES += CVE-2025-14104
  
- UTIL_LINUX_VERSION_MAJOR = 2.40
--UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR).2
-+UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR).4
- UTIL_LINUX_SOURCE = util-linux-$(UTIL_LINUX_VERSION).tar.xz
- UTIL_LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/util-linux/v$(UTIL_LINUX_VERSION_MAJOR)
- 
++# 0010-CVE-2026-53612.patch
++UTIL_LINUX_IGNORE_CVES += CVE-2026-53612
++
+ UTIL_LINUX_INSTALL_STAGING = YES
+ UTIL_LINUX_DEPENDENCIES = \
+ 	host-pkgconf \
 -- 
 2.54.0
 
