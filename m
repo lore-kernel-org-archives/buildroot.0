@@ -1,117 +1,117 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D2F5C43458
-	for <buildroot@archiver.kernel.org>; Fri, 26 Jun 2026 14:55:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83C4DC43327
+	for <buildroot@archiver.kernel.org>; Fri, 26 Jun 2026 14:55:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 28F7882362;
-	Fri, 26 Jun 2026 14:55:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 54047610A9;
+	Fri, 26 Jun 2026 14:55:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bg1cUOxyFeIs; Fri, 26 Jun 2026 14:55:39 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2UlYGdP1z9UR; Fri, 26 Jun 2026 14:55:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 49ADE82369
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 61AFB6108E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1782485739;
-	bh=GjAk1+8WGkaWSNY/rVNrbwISSNgSP6+gdZNGXH/91ow=;
+	s=default; t=1782485740;
+	bh=lp8mpYFQ72nVta3y+2qsK6R7rgBqZ3NEfhLrQbK+Bzw=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=SNVmsG2bhtUhrXsQ5bpkn9iu7oM3Wq5UI3cSBcmbGPd4XQ0zZG5E84o3Aqvs8PsnU
-	 Sj8vhXbEpDXp9hbepc47eoewTsnXjjnSwozhidiuQ4SMpYhsUXbPR/sps9GNNuen8N
-	 yIA29vNQNONgxxfoZO/WhcgcqRm0nLc0YoPhIZeL+OZ3j8MdZHCMrJen9YAwSgzpk0
-	 f7eeylQ4v0kf9kj0qW8BN9/z3E1RJCjDelq23CF0KGG6F/PvN2Nou0oYXab58vM863
-	 18sjtqJNnIsls8d8vxmfKxNgLrmyXQbJhaxVXtExfGflaPLqC4rPlRbMA+5gE+K3j3
-	 BWtxd5MwHPJOA==
+	b=p9gGfut6+HMc3nOmpsqTqBukbK83tNwrvggZ1mcO35W7i6bfdO+KoPf6ruUGDEtrO
+	 whTshzLuFaYYopwKexWBltIxOKh6sen/3Cs6RUJDjNxSKOxUckEyeuVpALTi1t/HkZ
+	 slTPttIqbsCR7gRPoyHHdBnAAuED4RRJ4/Bv08vBxApX7SWClTwauPQr37dYsNI9mr
+	 V2SWPnCjvS5nXQrqLFbeMV0b0DsVE4QzGL9Wr/Rwfw5fJ6xfBvquWFBgQZK955SoQu
+	 vS8DXhqwdGsusAt7sH4Y6TOvQr0bqBiS4FgXQnwMrD6jjuSDouGu1AjzsfA+IZoRyx
+	 FNJzTvsmU+CtA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 49ADE82369;
-	Fri, 26 Jun 2026 14:55:39 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 22CBC231
- for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:55:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 61AFB6108E;
+	Fri, 26 Jun 2026 14:55:40 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 48BAE3A1
+ for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:55:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 07F9A4068F
- for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:55:33 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2F0AB40702
+ for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:55:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sgbJ1JR-XyPH for <buildroot@buildroot.org>;
- Fri, 26 Jun 2026 14:55:32 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id y2Yi_nHa5w86 for <buildroot@buildroot.org>;
+ Fri, 26 Jun 2026 14:55:33 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::433; helo=mail-wr1-x433.google.com;
+ client-ip=2a00:1450:4864:20::32d; helo=mail-wm1-x32d.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 20B87407B2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 20B87407B2
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
- [IPv6:2a00:1450:4864:20::433])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 20B87407B2
- for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:55:31 +0000 (UTC)
-Received: by mail-wr1-x433.google.com with SMTP id
- ffacd0b85a97d-46066e640easo583730f8f.1
- for <buildroot@buildroot.org>; Fri, 26 Jun 2026 07:55:31 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1E6424070B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1E6424070B
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1E6424070B
+ for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:55:32 +0000 (UTC)
+Received: by mail-wm1-x32d.google.com with SMTP id
+ 5b1f17b1804b1-4926f8e02e8so2866605e9.0
+ for <buildroot@buildroot.org>; Fri, 26 Jun 2026 07:55:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1782485730; x=1783090530;
+ d=1e100.net; s=20251104; t=1782485731; x=1783090531;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=XFpBfF5q+fqWNsLYnkSkHYb8krUULvgBBES2h798Nvw=;
- b=F8/v4vN+8hlHC43ZiMWwEuHAOJxf8pgfiOhEOd4YW/KcrLz/jn6M3/krNb5u0KQXNQ
- O76vVBGCwz6iZVXBxc2DlfTwnnf9BxDERJx/JF1t84K5HXBYEUZL1eMJafivGVKHEyhw
- F/C1vnATaNzrOd70TkpYJ8cNCdQ9oma4lzhEqGaSA/lB02OTJjHuMO0O15NP0y6NGQnk
- nu7m8SI5zbx3+fNvRfT+K0RXVbvDP6cPD0eo9Vt7gt0vQ/95soLoEqnKNVyyJEzbVsIi
- dklwpuLv7VPqP1dviEfXI1HTfPRHkdmQl/GDML4rAJr5mBpHXkkoN6NOzktL1DM/lNLo
- kT0Q==
+ bh=SzFVgdifylduiXV+C1Gzl6BTO6yIWvblt1crCYy1sQ4=;
+ b=bxkytp1XkwNf2Igp2cveIeBNoD32WscOS2t0bDKo7PgnK0e8ZBuoNHx4bre7R9K5C4
+ uqAJg8qbsHhnTj8oQWI1pIK6DQHBUD+f7Yi33M9h5tFHj9ZtsC34j+CdEry1goW6o3EF
+ /aMtQOKUNZR4SDrGe/G6SFngw5+HwgpEKrP82/KYueoRjF4wIu7rcmLGVo3RaEf1N4cY
+ y1Xq8kZe2o9wp7mnrXbxDORPB8JUDFG3eeFcZOgdcNkRTEJMt/2nGrslX//GbPYj+TTj
+ thy1jn1HQooJapRXmVBPBEgrz1TtiJr1I0YXot8t19vuQVO36tqpcDOsljAOodaYv/SY
+ 6YIg==
 X-Forwarded-Encrypted: i=1;
- AFNElJ99rJEpjfI+NTycNBhtSgAtID8pf2k6NkYabSl96hU5wU8JoK757kkcsVfdT4W8uBDUTI4Ho1dbzUw=@buildroot.org
-X-Gm-Message-State: AOJu0YzJzMVlUuC6CGsJ9hsKQW54KU9QaaQ/m3yUJPWMX96ZHu5v0oxg
- Zab4/aQ81f/GDscOR7pB8zRwH7uRe91kIC4lfzdwjZd9E7RJMUMMJ8Gm2kRcEqz+Mf4=
-X-Gm-Gg: AfdE7cnfFZdpXuRyayuedcAve0fqaoQNRy5iUlrjtu8lNDbyiNqCiRjtKG4mF4Y2YxI
- clStxmqTQzBsLlmiuD0pAN44koGzprjWM6UJOHPhQaNHxKYXeikowDuQrbhdMZv8xNmg8qak4Zr
- Kxy9uXV26xBxRFygNs1hHoPEqa4RHfliaUxbziaspMMh0Gcg5Ws8ifn4IQIIYV3Y059PTN7kFCs
- vpOo9t9UqUBRCN3lpEl1b+iWqjcJqpNpuZak2T2Y0P2e06iOR4EFHpfV4ZqsntfqtC4RuJCACVO
- BWEozTjUiXynBl0V8RvpQChrrUnSxvdjE9xLA7B5zEdSF4CGdey+0A3FHNtzTMNYhuSsAu8q6Oy
- NunqoCPtawXtqC+d+73Y7MH5fduBLa0dFYg/tcVFA92lzaPgYaCFyymZmjZHAiqhezX56lNipVn
- GMG7SG
-X-Received: by 2002:a05:600c:3b24:b0:490:bd66:db49 with SMTP id
- 5b1f17b1804b1-49266850100mr106200665e9.12.1782485730015; 
+ AFNElJ9yYDlSFeMSUB3fHdnyO2ReI9MF7R7vYo6wCEWcDcc0WTxoY5Kf4nKThlTelU0GlcSoqD8ohrDS07A=@buildroot.org
+X-Gm-Message-State: AOJu0Ywp+1nAzYE7yeWy8Y/rm6Olj6dYhHy/MqBYF/dzIDjwZ+Q7BgQE
+ N6aTwgEexFc8IjN3Z3U3ZXPGHFwfLqJQ6voPShpaX11jndQLcwdSj4Qoj+9Wz2zJ0o0=
+X-Gm-Gg: AfdE7cmK2rQk+1jvU+YWdyslRZ2ZIiE4kJ/gXmoNQGEhMKOSs25VBC9ahGqnysMKCYW
+ WFNTPZ8TClO2n8TGoaSDMmJfOQtNYZe8TChP2/cEEHewahXLJzZCCcjLj/c9esXXagsFjkT/EbM
+ +V+sxsYSE55GM1f9ha6ZJvRqj+EAz/COg1VaFNoeapocsTJiyFjYnZvkWHNby05wYZK4nWYxk8G
+ A2rgPhYXlhE79JcDn40HRHbE96tO5hIj7Z4dSQf0u4/Ydvk3ofJifWBA3BB5ohAZNhx+UN09uN8
+ VT5O+bdjD1t89dT2xHSxrLtOcPnQZTKMvONpi24coQ6bV9DfuoAFDUQS23IdxpMY1GVePDvu3Lg
+ VPrrfY3aWTNUEX+HEjggsej9z2WmnqSiuJG8A7LNbT+1wZU7cdQw1xHFhgzmnRVtegqJMFe34po
+ FrSPJa
+X-Received: by 2002:a05:600c:8119:b0:492:6f8d:eb68 with SMTP id
+ 5b1f17b1804b1-4926f8dec2fmr18185405e9.4.1782485730904; 
  Fri, 26 Jun 2026 07:55:30 -0700 (PDT)
 Received: from arch ([77.109.126.38]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-49268fe949csm98459225e9.5.2026.06.26.07.55.29
+ 5b1f17b1804b1-49269071c9esm80826205e9.9.2026.06.26.07.55.30
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 26 Jun 2026 07:55:29 -0700 (PDT)
-To: Bernd Kuhls <bernd@kuhls.net>
+ Fri, 26 Jun 2026 07:55:30 -0700 (PDT)
+To: Romain Naour <romain.naour@smile.fr>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri, 26 Jun 2026 16:55:29 +0200
-Message-ID: <20260626145529.343116-1-thomas.perale@mind.be>
+Date: Fri, 26 Jun 2026 16:55:30 +0200
+Message-ID: <20260626145530.343165-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260620062208.18846-1-bernd@kuhls.net>
-References: <20260620062208.18846-1-bernd@kuhls.net>
+In-Reply-To: <20260621165109.2425496-1-romain.naour@smile.fr>
+References: <20260621165109.2425496-1-romain.naour@smile.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1782485730; x=1783090530; darn=buildroot.org;
+ d=mind.be; s=google; t=1782485731; x=1783090531; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=XFpBfF5q+fqWNsLYnkSkHYb8krUULvgBBES2h798Nvw=;
- b=cBmRZNlsK122q8kiXM//lLZWNHm4bbUi8gIFjb/fWHvNkPjjQ/MeBXUrsIBlf/yJsU
- tkeiYSj5WpDlsLWa4wI+mLS1MaSLx9dpaKS8jXT3jUTv9Ak4yhrW1OsIosY3A1mv0ysU
- iJqqSUX6Sh4K+pmgasghbJvZlg3U4Xdbyu0ITNiyfYJgVal0+Ucfes3TTtl+/SuGfDYU
- kDgAAhVgIFA7NnB1CcE42e5Lb+RJFrF5xf4V/fsabXvoeZr8wcEF4Rz38FKVbSUeAitX
- PTs1jkhtmaeCesiHeb7FCdAbOImABC2HWeWYNStU9YITyjKb+gWDsdMyRMhze5M6eLyk
- MP4g==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=SzFVgdifylduiXV+C1Gzl6BTO6yIWvblt1crCYy1sQ4=;
+ b=M8/NiHHim9+qvQHdiVEPCVaRI8JsjjSTlde+htqd3ZmVaqnVTeKQVQ3DuX8bn7djzG
+ BrXJ4oOFStlEfk9HkNxW3qaU/U6OR10BIcwGNY9hy8lscnBgU7l7tTG2hTSbMek2dhc1
+ rA+NU9LNBai3L0n5otZ4+49jONzOk3vIqYeNrEiQVZikeu6TF75CSoXQR/uuPKzZMFQK
+ jedD46mabIovBfEVJexy237+0TwzUhYyqWsEs2H1cI1e3/PxmIP77yen1LCY/Vj5baJp
+ 1roz9qzMwCAN9KpM+plto5B4VIARflTt4RTsW4xTwfcbs0/2LfzSXN8g/0IiqE4rBw0b
+ AReA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=cBmRZNls
-Subject: Re: [Buildroot] [PATCH 1/1] package/fetchmail: security bump
- version to 6.6.5
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=M8/NiHHi
+Subject: Re: [Buildroot] [PATCH] package/passt: needs headers >= 5.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -131,50 +131,71 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> https://sourceforge.net/p/fetchmail/mailman/message/59347909/
+> Upstream passt only documents runtime dependencies; and they advertise
+> being able to run on kernel 3.8 or later. However, they do not document
+> the build dependencies.
 > 
-> "## SECURITY BUGFIX
-> * POP3 with RPA: fix calculation of buffer sizes to avoid buffer
->   overflow on long service challenges with long user IDs"
+> Since 2025_06_11.0293c6f, upstream requires kernel headers >= 5.9, as
+> they make use of linux/close_range.h, only introduced in 5.9.
 > 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> Add a dependency to kernel headers, and propagate it to podman's passt
+> backend.
+> 
+> Fixes: 6a192b0d282cb85ff4272e26df082f5eacd8e3a6
+> 
+> Cc: Yann E. MORIN <yann.morin@orange.com>
+> Signed-off-by: Romain Naour <romain.naour@smile.fr>
 
 Applied to 2026.05.x. Thanks
 
 > ---
-> Gitlab pipelines passed:
-> https://gitlab.com/bkuhls/buildroot/-/commits/36fbe2c58ab4004f93e49a1e6f74fc2f0b77cff3
+> Commit log from ed99b77e5d276d62c2f4c9959b5c558a4f3c9e36
+> ---
+>  package/passt/Config.in  | 6 +++---
+>  package/podman/Config.in | 6 +++---
+>  2 files changed, 6 insertions(+), 6 deletions(-)
 > 
->  package/fetchmail/fetchmail.hash | 4 ++--
->  package/fetchmail/fetchmail.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/fetchmail/fetchmail.hash b/package/fetchmail/fetchmail.hash
-> index 60c950476c..cbf1ef2afb 100644
-> --- a/package/fetchmail/fetchmail.hash
-> +++ b/package/fetchmail/fetchmail.hash
-> @@ -1,4 +1,4 @@
-> -# From https://sourceforge.net/p/fetchmail/mailman/message/59332343/
-> -sha256  efe01690d22bda359a579c77e2b0072658a092bff490ec0478a212c6b7d0eb70  fetchmail-6.6.4.tar.xz
-> +# From https://sourceforge.net/p/fetchmail/mailman/message/59347909/
-> +sha256  ab0320fe4df0b5ee8659189e66590d9de96aadbf929fe59f353ae7a317e9ef1e  fetchmail-6.6.5.tar.xz
->  # Locally computed:
->  sha256  48aea24325e55932dbd79b30f558b9c87a416d675fe5f94445e8be5cb6606fde  COPYING
-> diff --git a/package/fetchmail/fetchmail.mk b/package/fetchmail/fetchmail.mk
-> index d021c2c7bd..9b3c035844 100644
-> --- a/package/fetchmail/fetchmail.mk
-> +++ b/package/fetchmail/fetchmail.mk
-> @@ -5,7 +5,7 @@
->  ################################################################################
+> diff --git a/package/passt/Config.in b/package/passt/Config.in
+> index a93a088670..fca1dff7c5 100644
+> --- a/package/passt/Config.in
+> +++ b/package/passt/Config.in
+> @@ -1,6 +1,6 @@
+>  config BR2_PACKAGE_PASST
+>  	bool "passt"
+> -	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0
+> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_9
+>  	help
+>  	  passt: Plug A Simple Socket Transport
+>  	  pasta: Pack A Subtle Tap Abstraction
+> @@ -19,5 +19,5 @@ config BR2_PACKAGE_PASST
 >  
->  FETCHMAIL_VERSION_MAJOR = 6.6
-> -FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).4
-> +FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).5
->  FETCHMAIL_SOURCE = fetchmail-$(FETCHMAIL_VERSION).tar.xz
->  FETCHMAIL_SITE = https://downloads.sourceforge.net/project/fetchmail/branch_$(FETCHMAIL_VERSION_MAJOR)
->  FETCHMAIL_LICENSE = GPL-2.0; some exceptions are mentioned in COPYING
+>  	  https://passt.top/passt/about/
+>  
+> -comment "passt needs a toolchain w/ headers >= 5.0"
+> -	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0
+> +comment "passt needs a toolchain w/ headers >= 5.9"
+> +	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_9
+> diff --git a/package/podman/Config.in b/package/podman/Config.in
+> index a6554a3ddc..7884171380 100644
+> --- a/package/podman/Config.in
+> +++ b/package/podman/Config.in
+> @@ -72,11 +72,11 @@ choice
+>  
+>  config BR2_PACKAGE_PODMAN_NET_PASST
+>  	bool "passt/pasta"
+> -	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0  # passt
+> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_9  # passt
+>  	select BR2_PACKAGE_PASST  # runtime
+>  
+> -comment "passt/pasta backend needs a toolchain w/ headers >= 5.0"
+> -	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0
+> +comment "passt/pasta backend needs a toolchain w/ headers >= 5.9"
+> +	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_9
+>  
+>  config BR2_PACKAGE_PODMAN_NET_SLIRP4NETNS
+>  	bool "slirp4netns"
 > -- 
-> 2.47.3
+> 2.54.0
 > 
 > _______________________________________________
 > buildroot mailing list
