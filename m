@@ -1,117 +1,116 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1807C43638
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5D6EC43602
 	for <buildroot@archiver.kernel.org>; Fri, 26 Jun 2026 14:56:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CA2C18249E;
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9C3A9411F5;
 	Fri, 26 Jun 2026 14:56:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bF4j3CHhQT0h; Fri, 26 Jun 2026 14:56:22 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id h_5Do94jtipW; Fri, 26 Jun 2026 14:56:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EFFFC82433
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F3C9D411E5
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1782485782;
-	bh=mxUxhImxAUeyDNB1gdmzgXNIqCMczlzqsLuV8FXmfxI=;
+	s=default; t=1782485781;
+	bh=DaCPoprFnPShVVmeJS8Nw9oPabWJ8DFvq6MzqK9SsqU=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=YyVMxTLcjOGWz5MiAG83A0/W3F6Mu29hykWy5VwF+e6ZcDGQX+YPXYB5mfB+MEA17
-	 hgpXOZMON9LTPR/FE4LsAt89hv7ryCj1IYdgr/cJmBTKA87iFzUDo5rILoOiUL5np1
-	 gFcRBoMDhCG6+Jq8pVkChuiigrtUdPf6XdknWjbt9+j/EhUK+zLLYkCGuOwXV/iksg
-	 zxexwZyoyQGzSleWmcwHotntRCArcFWLoUKYLl4ljoIWWpqqryTHXTf4un2lvsD50d
-	 Cq6vwEU68itnU9JcypPXEbvcwYvwfIcGe4umgtgp3g+v+aFgqzDsVEVua6bVC5AO6p
-	 jENk7+ebfNtqQ==
+	b=j4BZwArDp6StBG4FY2M0VpvTA0hGa59NjujLYqcAywv5BcZMKl8j40wPrE9+ZsZ86
+	 P2jY6M573/DGF/t/PuttO8Gmvq8uxNrVTBSD55mj6ixFbxpj5VwOqSToa6Fi2S5FOB
+	 +EAkBQedpNwSZzJ820wLJioe4SMpLwQYiba/y+R4+kTqMmRfOw5KXkaFvv6tSWk1Tm
+	 xMhCi1PXCNMcbk8yTT/RIQMrCADjBO3LT6g/Fc2GurNBjI3TS4sxHEcWgLMVAl1XEi
+	 7E2QWYq4pNdFeYHpxSfim7BiKjrjxqI8Z37yuF8qKRmuxtVx989DBkk1jMwnFstIlx
+	 LTZ9UYfFXqfMQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EFFFC82433;
-	Fri, 26 Jun 2026 14:56:21 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id D0C56231
- for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:56:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F3C9D411E5;
+	Fri, 26 Jun 2026 14:56:20 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9CD433A1
+ for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:56:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B73174070B
- for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:56:12 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8B150823AA
+ for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:56:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VC-xkpBEPJmW for <buildroot@buildroot.org>;
- Fri, 26 Jun 2026 14:56:12 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id K8Fm0rKrchZc for <buildroot@buildroot.org>;
+ Fri, 26 Jun 2026 14:56:11 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
  client-ip=2a00:1450:4864:20::42e; helo=mail-wr1-x42e.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9593740702
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9593740702
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9E17D82361
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9E17D82361
 Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
  [IPv6:2a00:1450:4864:20::42e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9593740702
- for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:56:11 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9E17D82361
+ for <buildroot@buildroot.org>; Fri, 26 Jun 2026 14:56:10 +0000 (UTC)
 Received: by mail-wr1-x42e.google.com with SMTP id
- ffacd0b85a97d-463f1165e16so1060183f8f.0
- for <buildroot@buildroot.org>; Fri, 26 Jun 2026 07:56:11 -0700 (PDT)
+ ffacd0b85a97d-46cdcec58c2so1155734f8f.1
+ for <buildroot@buildroot.org>; Fri, 26 Jun 2026 07:56:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1782485769; x=1783090569;
+ d=1e100.net; s=20251104; t=1782485768; x=1783090568;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=slDbkGnxHmFxX7vTAUAXQ0WHiKufAIaV+5/7zKAR/VM=;
- b=fJsuTIwcvbMjZgPyFatinkIB56aRFYCdZyZjotntbHF9AIw40qI49f6o2NO6nFUFUu
- uVvm97Q6jqLhlOZZ2l6t8u7wxlIcvg86JyUYhGpK9SjzJV1UkuJXFUd1nglpn7vRyIpB
- 2WK+OJRfbVr4LNuyF51xBeUZbQSLAin0d/Q7bkJ+kl6yXH8CX34DGVopVIus/lQdUweC
- t3OUHRwGSGCke/UwGL2YZReERyfXvLvr8MJ9L4/69GL7LCArgV+CQ714Ut1xRXRBukZV
- RNsc+2jhoRoPPNJJWPbUAMFMH1CbmS+PZ41cgVdonu1y5SfJyCRfn0obTRcxGxbRS3YK
- vXuA==
+ bh=jgwlJ1kRos/JH/6lFRVemFGbSPT7WPt80nAirEz7gPA=;
+ b=FM8WOAqPtP2z4ODqAVPEhWg43WMGMcpNK3SZAtkJ0abRG90RbLRO9CzFcXpr1DC5F/
+ uoIeLIuhhMwSfLpolZX3dP0XRI/f98bRGLQbGKml3ShgP3fpjvZ7qJ5CPuD1jRuqxX6H
+ hjbCJt8UAc3dDty66ANUJhUzFulJ7YoBxU5V8SEB4JZnFc49R0iR5kQ9LuAXeaezY1RY
+ XLD4RvUD4/zXAMSnogTPGL2XofJXbNwJO8gVvFylWEHF0pZDCtZX0V0DElQjI3Snl6r6
+ 9dwRtyff3mb2EdACUPALtyI2du72u7g1Lvji8/wJzmfKnAZkjJAIGy3uiOa8NmqurF1T
+ CbEA==
 X-Forwarded-Encrypted: i=1;
- AFNElJ90CwiZH8iN6teb71PWC/c2/1g2HbiHPiseKbxJOoT5qdcmEqWr7jhScOJvXxn6ipKBtVBWe8RhK74=@buildroot.org
-X-Gm-Message-State: AOJu0Ywm8TaDDPGWflzXZdBLdNBDSPwfdDCfcKcP9cFdEFi9S1GjwRSb
- FhsczXTPesBy1F3lbgQu4WOhgqEAQr/PHfhag3wl9jzuQtgCKtesNlxXAIawW/SAme9F9RBSFMx
- S2Uxr
-X-Gm-Gg: AfdE7cnT722Ttoxxv0QeqwwUdaCUFoikh0MX/oauuilSwdIJQ+137uVZszqqXw5CaTX
- OB8M3DhPg+ilFwelxgzSNYTLZKQFgiVSG6VKmv014esSWg3E9Te6UFrRlc1YGLs62XJMdhs0RyN
- 80T+LT9fjDRg/y7uZXYV2pvB5qaviE/sTMwtdjSpuJ1GAX76H1pYn2FNFDgGm1YWI2NmRKuJ0+p
- QigQ05PZDbwDnxViWZyfZ0LTirGpyaU455svc0y+Z9ApgyKUojm8oSGLjITIcb3tXviK3LYghhY
- 5h7Ui/oOmHeLtMYAYQVmldixzb+s9S8XjttrzyKjbd9wNpri1J2RDhekEVOH99LV/KLelBzeIrr
- Kt0/Ekbl4eF1tpgj5cj93C+t/M+JPf0Tth1JRTYr7TYWCDVnHVDNlL7LYlxmwRiPQwXJpIPToRb
- bqOTUGlhDqKbMniGc=
-X-Received: by 2002:a05:600c:1908:b0:492:465c:56f6 with SMTP id
- 5b1f17b1804b1-49266873d4emr106797175e9.10.1782485769461; 
- Fri, 26 Jun 2026 07:56:09 -0700 (PDT)
+ AFNElJ+rORo+StYl9YvNSFFch4tYat+LGfGEXGcCyRHqh8F2AvwpMpPnvkfwTGDk/cZiZqJ6jlu1+1yqsqE=@buildroot.org
+X-Gm-Message-State: AOJu0YyQIQOaphbaXbJz9IjDUW+Nwuu5vIRE3ia2/5dXLxH9gaMQyeGC
+ 51VUkV50UAKA0HuMLzXMCYkyhU5grCJrjRotlURGQzUkXjkZgcxWWVkoeoVDuaU2h44=
+X-Gm-Gg: AfdE7cnQmPdqyaRlh9BET3ECR8G+7+pGfbP657v6k3YfjcwzR1hlAZRyMU7KE5xLP30
+ M1kGTluPiFc8ncTdExo6/RY/86z9qy/DZKL7fIOfgnKc46a0G7DbUwKkKLipLDp+MGmDnRHilUd
+ nlpJDv82cFB2V2X67kirgmg1xn6HJOBlL56It40yfHC/1pnxRt8bs+Zda5xb3263rpYrkR8ROgH
+ Ozk0lH+D2VyAHO8fiV8tK+mzKIZKsHV4VFlgDnCZCAj0Rfx+4Ej3ShdJspI10Wvo6TnFMJkXeXe
+ BNkZEvY5Ee28h4fkToKnFwvmUtoQYV0EBHChRwGBEpfwUK5Ve6NXjWHS31DBFz/uTcfBCeom5pF
+ zKELaMy0DjTCGrAhiY2r9J69ehsNXvxC8Finei9Sx3ZHv5XS7tFsbRaJIZWtS6/cIPDkuxf/aXj
+ 0OWsw2
+X-Received: by 2002:a05:600c:3e1a:b0:492:70c9:c50d with SMTP id
+ 5b1f17b1804b1-49270c9c64fmr1180185e9.9.1782485768548; 
+ Fri, 26 Jun 2026 07:56:08 -0700 (PDT)
 Received: from arch ([77.109.126.38]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-492690100c7sm91715695e9.12.2026.06.26.07.56.09
+ 5b1f17b1804b1-49268fd9e77sm79359035e9.4.2026.06.26.07.56.08
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 26 Jun 2026 07:56:09 -0700 (PDT)
+ Fri, 26 Jun 2026 07:56:08 -0700 (PDT)
 To: Peter Korsgaard <peter@korsgaard.com>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri, 26 Jun 2026 16:56:08 +0200
-Message-ID: <20260626145608.344029-1-thomas.perale@mind.be>
+Date: Fri, 26 Jun 2026 16:56:07 +0200
+Message-ID: <20260626145607.343975-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260618124835.2935850-6-peter@korsgaard.com>
-References: <20260618124835.2935850-6-peter@korsgaard.com>
+In-Reply-To: <20260618124835.2935850-5-peter@korsgaard.com>
+References: <20260618124835.2935850-5-peter@korsgaard.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1782485769; x=1783090569; darn=buildroot.org;
+ d=mind.be; s=google; t=1782485768; x=1783090568; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=slDbkGnxHmFxX7vTAUAXQ0WHiKufAIaV+5/7zKAR/VM=;
- b=T+GF13LC6yTAxtzrGPXMn2pzGB4WaxetY6I3U0wApumP8dKTt1BrVpFtX3FO4st7J6
- AtF2MDxAQAJBKxQshlQNHJ+2fazjKGn1BHHs79m7xKYmHXTNNS10GHH7YY3sSfsWDyT8
- PBdGygeoCZRi7wAi3zSUOiZ5BzhDZ6IfXnJjLaoo+z3gnwyyaU792hHMkMaT3mBUQc6s
- dh4kUEYWtmiQcCZ4M9IIqN7NgWfG0hU5jsqZQ06I3p6Dx4ZNI6o6mG9fS8gjqMuvxFSl
- uZptjB6d38MsQy8hF/luFzPg0Fjhj+nt2i/vhFop+jcBl0ccse1nQazSlfUyYS1iVGoo
- aZdQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=jgwlJ1kRos/JH/6lFRVemFGbSPT7WPt80nAirEz7gPA=;
+ b=eWfPWKYSEyt3P7uMWLrnGIAVDbnzlxoOfblGk9jgWuHl++QGpeTs+FVlZlYMpIk6SW
+ 0VbgYINNgmDk9yxoszcRiZgGA0I7ftq6PwtMn6ycZw0H+bL3hR6mLXMpedYzYX02zv8W
+ lvonrcniAxUgvKYi90GER4U953bIPkUcPxt2qjw9NXFvWTmTZGygM3rJrSBKYsd3gTD0
+ 6PlyY28l/A4Xq+aJdev3rAGKtRhCGs4SOMBgWgJUmIObV0IRhILlzRsnUIJz52Lr5f+0
+ ZhJVHwSB2aKDxV53k1UJ+56RuQPduqn/ApgUrduX/oYnFc2whDtla+BnHAjIrmJT83IA
+ jBHQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=T+GF13LC
-Subject: Re: [Buildroot] [PATCH 06/29] support/testing: test_connman.py: use
+ header.a=rsa-sha256 header.s=google header.b=eWfPWKYS
+Subject: Re: [Buildroot] [PATCH 05/29] support/testing: test_bitcoin.py: use
  assertRunNotOk()
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -139,23 +138,23 @@ In reply of:
 Applied to 2025.02.x & 2026.05.x. Thanks
 
 > ---
->  support/testing/tests/package/test_connman.py | 3 +--
+>  support/testing/tests/package/test_bitcoin.py | 3 +--
 >  1 file changed, 1 insertion(+), 2 deletions(-)
 > 
-> diff --git a/support/testing/tests/package/test_connman.py b/support/testing/tests/package/test_connman.py
-> index 6fef95104c..2e53135208 100644
-> --- a/support/testing/tests/package/test_connman.py
-> +++ b/support/testing/tests/package/test_connman.py
-> @@ -47,8 +47,7 @@ class TestConnMan(infra.basetest.BRTest):
->  
->          # If we try to ping again the qemu gateway,
->          # it should now fail.
+> diff --git a/support/testing/tests/package/test_bitcoin.py b/support/testing/tests/package/test_bitcoin.py
+> index 186240b280..9a7d78e5e8 100644
+> --- a/support/testing/tests/package/test_bitcoin.py
+> +++ b/support/testing/tests/package/test_bitcoin.py
+> @@ -108,8 +108,7 @@ class TestBitcoin(infra.basetest.BRTest):
+>          # The bitcoin daemon is not started. A client ping is expected
+>          # to fail.
+>          ping_cmd = f"{self.cli_cmd} ping"
 > -        _, ret = self.emulator.run(ping_cmd)
 > -        self.assertNotEqual(ret, 0)
 > +        self.assertRunNotOk(ping_cmd)
 >  
->          # We ask connman to re-enable Ethernet.
->          self.assertRunOk("connmanctl enable ethernet")
+>          # Start the daemon.
+>          cmd = f"bitcoind -regtest -daemonwait -fallbackfee={btc_fee:f}"
 > -- 
 > 2.47.3
 > 
