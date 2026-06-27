@@ -4,88 +4,166 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98975C43458
-	for <buildroot@archiver.kernel.org>; Sat, 27 Jun 2026 06:42:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66185C43458
+	for <buildroot@archiver.kernel.org>; Sat, 27 Jun 2026 11:34:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6CEDE40F69;
-	Sat, 27 Jun 2026 06:42:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E35D640EC1;
+	Sat, 27 Jun 2026 11:34:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id z95GmPUfsTyV; Sat, 27 Jun 2026 06:42:16 +0000 (UTC)
+ id BUstIulWTwiR; Sat, 27 Jun 2026 11:34:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7ABFE40F55
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 020EC40ED0
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1782542536;
-	bh=VXxBt9CUKB4eunpIHBnv3bjkiTnxsG5snGOpN+fYFtU=;
-	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=WWFiF7zvShQ02tkV7mJlQSGSPPfzXj40E36oHvoa/nrAln1ET55thdtVYZY6318mB
-	 qHnB6ZbYFSFwqHRCG0pDkVEyWcBNKjK7i0TpnXK9ybf7VB3V0nwtBcmKLBLlLCvAiG
-	 APC6AothlE5WKgb3aDey6SA/Keich6anaDw1DW0PdOeiyJ167jF2k17F8/3O+zKdsF
-	 bH+HBlpsHnhSG5DmoVv4B5h29HaNYI3tEJNfe+1slVDeZOcN/kRVREcpUaUaKEBsiu
-	 0Sl6AtOvpBOX0/0eRrDfZMsO0gVAL4iNwFNoQjSn4SD/dOhZCzdbv/FXtwBJJP8f9p
-	 A2W92xQxTTc4A==
+	s=default; t=1782560074;
+	bh=rcLqW7IaAx7N5FSYlNGbeg4KF1ykbepLsizPQWvwsvM=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=i6VyjYlLJeh4jq7PBi23Oq6GcEb9syKJYvpeEkdHgqhYHuH+in7tAWmbS56w47PAG
+	 G1FH+2JFZA03brIJbr72dBgh08jeXuiCXEwSZF2q4nEdua/pkRM+QBSR9eU+B8UuCJ
+	 kVT83N07y7oSHNw7HFHOD5Ij0IBbRbd7OLbQH5EdsxHzNQdk0Dv8NAS5PT9zaEnRTW
+	 9MbiazzOZNxpNoNQiS/l5QnM2oyxxom2QowKWHcL0bI1r2LIVX3M7xkjDDPcNy9/j3
+	 o8BoUwo+F0wiF1i/b3hBgDsabuPDZiVf8dDi4iHrvCyi3dbiK1RdsY/ElQwKSXHKPT
+	 GvywJZjOEeLvw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7ABFE40F55;
-	Sat, 27 Jun 2026 06:42:16 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 41919CD
- for <buildroot@buildroot.org>; Sat, 27 Jun 2026 06:42:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 020EC40ED0;
+	Sat, 27 Jun 2026 11:34:34 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9C6912F3
+ for <buildroot@buildroot.org>; Sat, 27 Jun 2026 11:34:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 335408219E
- for <buildroot@buildroot.org>; Sat, 27 Jun 2026 06:42:15 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 85B4B81FEA
+ for <buildroot@buildroot.org>; Sat, 27 Jun 2026 11:34:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Xw_p401WheZX for <buildroot@buildroot.org>;
- Sat, 27 Jun 2026 06:42:13 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org DA64782168
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DA64782168
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id DA64782168
- for <buildroot@buildroot.org>; Sat, 27 Jun 2026 06:42:12 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a0b44.dip0.t-ipconnect.de [91.58.11.68])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 2B6CAA4C32BB;
- Sat, 27 Jun 2026 08:41:58 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:48466)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.4)
- (envelope-from <bernd@kuhls.net>) id 1wdMjj-000000006ZV-3j3y;
- Sat, 27 Jun 2026 06:41:57 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+ id pUr9v2QhNBHF for <buildroot@buildroot.org>;
+ Sat, 27 Jun 2026 11:34:32 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.21;
+ helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3B7BF81FAB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3B7BF81FAB
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3B7BF81FAB
+ for <buildroot@buildroot.org>; Sat, 27 Jun 2026 11:34:30 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from client.hidden.invalid by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mt79F-1xRhTX2kbh-00uaiy; Sat, 27
+ Jun 2026 13:34:26 +0200
 To: buildroot@buildroot.org
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Romain Naour <romain.naour@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 27 Jun 2026 08:41:55 +0200
-Message-ID: <20260627064155.1938273-2-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260627064155.1938273-1-bernd@kuhls.net>
-References: <20260627064155.1938273-1-bernd@kuhls.net>
+Cc: Fiona Klute <fiona.klute@gmx.de>
+Date: Sat, 27 Jun 2026 13:34:09 +0200
+Message-ID: <20260627113409.777671-1-fiona.klute@gmx.de>
+X-Mailer: git-send-email 2.53.0
 MIME-Version: 1.0
-X-Spamd-Bar: /
+X-Provags-ID: V03:K1:k5x5+Jvoe6tI8BhI5jKETKFBwrEfQ0In32DSlXDIxF+WjR4/JpU
+ ZyMYvRKDiQEJK7UtA6GnH1Oa8Lbafnr0MX53b4rrIQQjB/6lEuf3y/CrLzDo5Pnmq45fihB
+ 9OfAfP1P2HMIUwQDoUNM4GBDAHknMnkG5OyJu9bayDN31OWqzs3lJgKsmtNzk7ptENQ2UUq
+ bRGfI+DgCD1//zjxEwoQg==
+UI-OutboundReport: notjunk:1;M01:P0:OqS1Z9NG7l4=;hP4zrzVPlKUT8PNk+SyWEROqpns
+ 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
+ EdWapf2aCtm4Q2gZ7X7io3dtupHbRntlx1luLev
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202605290044; t=1782542518;
- bh=9bLh8BSg3ip0U/leVKFfaLhY8yXk5q65guTeN/TJuuU=;
- h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=OtCcjPAdiVfXbH3ZYThOG6JshzUaRsa0j3H++oHfEEZH/4cuzbz3xIfj9LAi52x3y
- +cvSsbh4F0mBOoELjtQJw59Ubxe9LRABpxtsN/Sm+81taBvgnhzuipSt70IJuRwWh8
- 98fkaJfU8hXrYXx3NxUStDThibvZe2ZUQq9gwz0xHdWaAirm2kWfU4xU+E8bajCwph
- COlMwngd7vjYH4RQhJOtTlJ9XZxJjjyOtKw5E/Qf+mXlEQzIv5R9n4IXmfTBQOCQ5H
- vUVeEGxqqMzf8nB6YcrTszhk2g6Lf9euYqTBOlaUFgK1Yx1fnp9CXEMDpzpk/DLs1s
- i2IhfrI0NQ2yg==
+ d=gmx.de; 
+ s=s31663417; t=1782560066; x=1783164866; i=fiona.klute@gmx.de;
+ bh=P3e/SforpWiboMGqmKmhqCQjORIRO5ua72rFH9YOsLY=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
+ MIME-Version:Content-Transfer-Encoding:cc:
+ content-transfer-encoding:content-type:date:from:message-id:
+ mime-version:reply-to:subject:to;
+ b=ALDSONo2/IbMtfq4kshPpyQkiQYQKdqJ8Cu9yqhPDLDoYsk2cLO1/gOaMUogg8UF
+ C4OfSxyWWg2Fski2Byd/LKzSJwqPjc8rHtGik+Q8O25/O+CdTGPGwyGiLYM/NLKp6
+ 1IH49K5A4NQNuuVy/52LTxiZVLah6yScZI9uK6ZRZZauHfWhUPkPTKeV00kN74Bie
+ McxUAz7Zz7IjAGvvzddYwiZGMmYGs84JXEsKrVuf47QrrVgjvCHgG2GWnGdyWmdMq
+ tnOcGIfNAK4+/ykxz1jWcJVaCyE99D1IoKewbuFy26jFV3ws6pNc3t5pxBIlPLsTm
+ 1puOmd9E4e0Msj5l5w==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
+ dmarc=pass (p=quarantine dis=none)
+ header.from=gmx.de
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=OtCcjPAd
-Subject: [Buildroot] [PATCH 2/2] package/gcc: bump 14.x series to 14.4.0
+ unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
+ header.s=s31663417 header.b=ALDSONo2
+Subject: [Buildroot] [PATCH 1/1] support/testing:
+ TestPythonPy3NetworkmanagerGoi: check we actually get data
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -97,822 +175,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Fiona Klute via buildroot <buildroot@buildroot.org>
+Reply-To: Fiona Klute <fiona.klute@gmx.de>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Announcement:
-https://gcc.gnu.org/pipermail/gcc-announce/2026/000192.html
+The sample script would've passed even if the connections list was
+empty. Check that there is at least one connection, and that the
+sample script can read loopback device information.
 
-GCC 14.4 is a bug-fix release from the GCC 14 branch
-containing important fixes for regressions and serious bugs in
-GCC 14.3 with more than 104 bugs fixed since the previous release.
-
-For the list of bugs fixed in this version, see:
-https://gcc.gnu.org/gcc-14/changes.html#14.4
-
-Removed patches which are included in this release.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
 ---
- .checkpackageignore                           |   2 +-
- ...laze-add-atomic-test-and-set-support.patch | 286 ------------------
- ...bsanitizer-Fix-build-with-glibc-2.42.patch |  81 -----
- ...dy-Make-it-buildable-by-C-11-to-C-26.patch | 261 ----------------
- ...am-and-memory-include-above-safe-cty.patch |  78 -----
- ...le-split-stack-for-non-thread-builds.patch |   0
- ...o-undef-_TIME_BITS-in-sanitizer_proc.patch |   0
- package/gcc/Config.in.host                    |   2 +-
- package/gcc/gcc.hash                          |   4 +-
- 9 files changed, 4 insertions(+), 710 deletions(-)
- delete mode 100644 package/gcc/14.3.0/0003-microblaze-add-atomic-test-and-set-support.patch
- delete mode 100644 package/gcc/14.3.0/0004-libsanitizer-Fix-build-with-glibc-2.42.patch
- delete mode 100644 package/gcc/14.3.0/0005--libcody-Make-it-buildable-by-C-11-to-C-26.patch
- delete mode 100644 package/gcc/14.3.0/0006-build-Move-sstream-and-memory-include-above-safe-cty.patch
- rename package/gcc/{14.3.0 => 14.4.0}/0001-disable-split-stack-for-non-thread-builds.patch (100%)
- rename package/gcc/{14.3.0 => 14.4.0}/0002-libsanitizer-also-undef-_TIME_BITS-in-sanitizer_proc.patch (100%)
+ .../tests/package/sample_python_networkmanager_goi.py     | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 3aed62277a..6147f35b03 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -349,7 +349,7 @@ package/fstrcmp/0001-disable-rpath.patch lib_patch.Upstream
- package/ftop/0001-overflow.patch lib_patch.Upstream
- package/fxdiv/0001-CMake-don-t-enable-CXX-unless-building-tests-benchma.patch lib_patch.Upstream
- package/fxload/0001-fix-static-build.patch lib_patch.Upstream
--package/gcc/14.3.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
-+package/gcc/14.4.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
- package/gcc/15.3.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
- package/gcc/16.1.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
- package/gcc/8.4.0/0001-xtensa-fix-PR-target-91880.patch lib_patch.Upstream
-diff --git a/package/gcc/14.3.0/0003-microblaze-add-atomic-test-and-set-support.patch b/package/gcc/14.3.0/0003-microblaze-add-atomic-test-and-set-support.patch
-deleted file mode 100644
-index db6aefaef2..0000000000
---- a/package/gcc/14.3.0/0003-microblaze-add-atomic-test-and-set-support.patch
-+++ /dev/null
-@@ -1,286 +0,0 @@
--From cd01b277c4a9e03c83427290228e4b289a169431 Mon Sep 17 00:00:00 2001
--From: Gopi Kumar Bulusu <gopi@sankhya.com>
--Date: Thu, 10 Jul 2025 12:44:44 +0530
--Subject: [PATCH] MicroBlaze : Enhance support for atomics. Fix PR118280
--
--Atomic support enhanced to fix existing atomic_compare_and_swapsi pattern
--to handle side effects; new patterns atomic_fetch_op and atomic_test_and_set
--added. As MicroBlaze has no QImode test/set instruction, use shift magic
--to implement atomic_test_and_set. This fixes PR118280.
--
--Files Changed
--
--* gcc/config/microblaze/iterators.md: New
--* microblaze-protos.h/microblaze.cc : Add microblaze_subword_address
--* gcc/config/microblaze/microblaze.md: constants: Add UNSPECV_CAS_BOOL,
--  UNSPECV_CAS_MEM, UNSPECV_CAS_VAL, UNSPECV_ATOMIC_FETCH_OP
--  type: add atomic
--* gcc/config/microblaze/sync.md: Add atomic_fetch_<atomic_optab>si
--  atomic_test_and_set
--
--Fixes: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=118280
--Upstream: https://patchwork.ozlabs.org/project/gcc/list/?series=466193
--
--Signed-off-by: Kirk Meyer <kirk.meyer@sencore.com>
--Signed-off-by: David Holsgrove <david.holsgrove@xilinx.com>
--Signed-off-by: Gopi Kumar Bulusu <gopi@sankhya.com>
-----
-- gcc/config/microblaze/iterators.md        |  25 +++++
-- gcc/config/microblaze/microblaze-protos.h |   1 +
-- gcc/config/microblaze/microblaze.cc       |  28 ++++++
-- gcc/config/microblaze/microblaze.h        |   2 +-
-- gcc/config/microblaze/microblaze.md       |   7 +-
-- gcc/config/microblaze/sync.md             | 107 ++++++++++++++++++----
-- 6 files changed, 150 insertions(+), 20 deletions(-)
-- create mode 100644 gcc/config/microblaze/iterators.md
--
--diff --git a/gcc/config/microblaze/iterators.md b/gcc/config/microblaze/iterators.md
--new file mode 100644
--index 00000000000..2ffc2422a0a
----- /dev/null
--+++ b/gcc/config/microblaze/iterators.md
--@@ -0,0 +1,25 @@ 
--+;; Iterator definitions for GCC MicroBlaze machine description files.
--+;; Copyright (C) 2012-2024 Free Software Foundation, Inc.
--+;;
--+;; This file is part of GCC.
--+;;
--+;; GCC is free software; you can redistribute it and/or modify
--+;; it under the terms of the GNU General Public License as published by
--+;; the Free Software Foundation; either version 3, or (at your option)
--+;; any later version.
--+;;
--+;; GCC is distributed in the hope that it will be useful,
--+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
--+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
--+;; GNU General Public License for more details.
--+;;
--+;; You should have received a copy of the GNU General Public License
--+;; along with GCC; see the file COPYING3.  If not see
--+;; <http://www.gnu.org/licenses/>.
--+
--+; atomics code iterator
--+(define_code_iterator any_atomic [plus ior xor and])
--+
--+; atomics code attribute
--+(define_code_attr atomic_optab
--+  [(plus "add") (ior "or") (xor "xor") (and "and")])
--diff --git a/gcc/config/microblaze/microblaze-protos.h b/gcc/config/microblaze/microblaze-protos.h
--index 90b79cfe716..1cee0b3096c 100644
----- a/gcc/config/microblaze/microblaze-protos.h
--+++ b/gcc/config/microblaze/microblaze-protos.h
--@@ -62,6 +62,7 @@  extern int symbol_mentioned_p (rtx);
-- extern int label_mentioned_p (rtx);
-- extern bool microblaze_cannot_force_const_mem (machine_mode, rtx);
-- extern void microblaze_eh_return (rtx op0);
--+extern void microblaze_subword_address (rtx, rtx *, rtx *);
-- #endif  /* RTX_CODE */
-- 
-- /* Declare functions in microblaze-c.cc.  */
--diff --git a/gcc/config/microblaze/microblaze.cc b/gcc/config/microblaze/microblaze.cc
--index 2ab5ada4ec9..80d10ab60e0 100644
----- a/gcc/config/microblaze/microblaze.cc
--+++ b/gcc/config/microblaze/microblaze.cc
--@@ -1299,6 +1299,34 @@  microblaze_expand_block_move (rtx dest, rtx src, rtx length, rtx align_rtx)
--   return false;
-- }
-- 
--+/* Compute memory address *aligned_mem and corresponding shift value (*shift)
--+   from a QImode memory reference MEM */
--+void
--+microblaze_subword_address (rtx mem, rtx *aligned_mem, rtx *shift)
--+{
--+  /* Align the memory address to a word.  */
--+  rtx addr = force_reg (Pmode, XEXP (mem, 0));
--+
--+  rtx addr_mask = gen_int_mode (-4, Pmode);
--+
--+  rtx aligned_addr = gen_reg_rtx (Pmode);
--+
--+  emit_move_insn (aligned_addr,  gen_rtx_AND (Pmode, addr, addr_mask));
--+
--+  *aligned_mem = change_address (mem, SImode, aligned_addr);
--+
--+  /* Calculate the shift amount.  */
--+  emit_move_insn (*shift, gen_rtx_AND (SImode, addr, gen_int_mode (3, SImode)));
--+
--+  if (TARGET_LITTLE_ENDIAN == 0) {
--+    emit_move_insn (*shift,
--+		    gen_rtx_MINUS (SImode, gen_int_mode (3, SImode), *shift));
--+  }
--+
--+  emit_move_insn (*shift, gen_rtx_ASHIFT (SImode, *shift,
--+					  gen_int_mode (3, SImode)));
--+}
--+
-- static bool
-- microblaze_rtx_costs (rtx x, machine_mode mode, int outer_code ATTRIBUTE_UNUSED,
-- 		      int opno ATTRIBUTE_UNUSED, int *total,
--diff --git a/gcc/config/microblaze/microblaze.h b/gcc/config/microblaze/microblaze.h
--index 2390542434b..b2e9ccde363 100644
----- a/gcc/config/microblaze/microblaze.h
--+++ b/gcc/config/microblaze/microblaze.h
--@@ -57,7 +57,7 @@  extern enum pipeline_type microblaze_pipe;
-- 
-- /* Default target_flags if no switches are specified  */
-- #define TARGET_DEFAULT      (MASK_SOFT_MUL | MASK_SOFT_DIV | MASK_SOFT_FLOAT \
---                             | TARGET_ENDIAN_DEFAULT)
--+			      | TARGET_ENDIAN_DEFAULT)
-- 
-- /* Do we have CLZ?  */
-- #define TARGET_HAS_CLZ      (TARGET_PATTERN_COMPARE && microblaze_has_clz)
--diff --git a/gcc/config/microblaze/microblaze.md b/gcc/config/microblaze/microblaze.md
--index 45c48a71e8d..270df8da0c5 100644
----- a/gcc/config/microblaze/microblaze.md
--+++ b/gcc/config/microblaze/microblaze.md
--@@ -21,6 +21,7 @@ 
-- 
-- (include "constraints.md")
-- (include "predicates.md")
--+(include "iterators.md")
-- 
-- ;;----------------------------------------------------
-- ;; Constants
--@@ -43,6 +44,10 @@ 
--   (UNSPEC_TLS           106)    ;; jump table
--   (UNSPEC_SET_TEXT      107)    ;; set text start
--   (UNSPEC_TEXT          108)    ;; data text relative
--+  (UNSPECV_CAS_BOOL     201)    ;; compare and swap (bool)
--+  (UNSPECV_CAS_VAL      202)    ;; compare and swap (val)
--+  (UNSPECV_CAS_MEM      203)    ;; compare and swap (mem)
--+  (UNSPECV_ATOMIC_FETCH_OP     204)    ;; atomic fetch op
-- ])
-- 
-- (define_c_enum "unspec" [
--@@ -79,7 +84,7 @@ 
-- ;; bshift 	Shift operations
-- 
-- (define_attr "type"
---  "unknown,branch,jump,call,load,store,move,arith,darith,imul,idiv,icmp,multi,nop,no_delay_arith,no_delay_load,no_delay_store,no_delay_imul,no_delay_move,bshift,fadd,frsub,fmul,fdiv,fcmp,fsl,fsqrt,fcvt,trap"
--+  "unknown,branch,jump,call,load,store,move,arith,darith,imul,idiv,icmp,multi,nop,no_delay_arith,no_delay_load,no_delay_store,no_delay_imul,no_delay_move,bshift,fadd,frsub,fmul,fdiv,fcmp,fsl,fsqrt,fcvt,trap,atomic"
--   (const_string "unknown"))
-- 
-- ;; Main data type used by the insn
--diff --git a/gcc/config/microblaze/sync.md b/gcc/config/microblaze/sync.md
--index db7b11e5379..6478ab6dcac 100644
----- a/gcc/config/microblaze/sync.md
--+++ b/gcc/config/microblaze/sync.md
--@@ -18,26 +18,97 @@ 
-- ;; <http://www.gnu.org/licenses/>.
-- 
-- (define_insn "atomic_compare_and_swapsi"
---  [(match_operand:SI 0 "register_operand" "=&d")	;; bool output
---   (match_operand:SI 1 "register_operand" "=&d")	;; val output
---   (match_operand:SI 2 "nonimmediate_operand" "+Q")	;; memory
---   (match_operand:SI 3 "register_operand" "d")		;; expected value
---   (match_operand:SI 4 "register_operand" "d")		;; desired value
---   (match_operand:SI 5 "const_int_operand" "")		;; is_weak
---   (match_operand:SI 6 "const_int_operand" "")		;; mod_s
---   (match_operand:SI 7 "const_int_operand" "")		;; mod_f
--+  [(set (match_operand:SI 0 "register_operand" "=&d")		;; bool output
--+        (unspec_volatile:SI
--+          [(match_operand:SI 2 "nonimmediate_operand" "+Q")	;; memory
--+           (match_operand:SI 3 "register_operand" "d")		;; expected value
--+           (match_operand:SI 4 "register_operand" "d")]		;; desired value
--+          UNSPECV_CAS_BOOL))
--+   (set (match_operand:SI 1 "register_operand" "=&d")		;; val output
--+        (unspec_volatile:SI [(const_int 0)] UNSPECV_CAS_VAL))
--+   (set (match_dup 2)
--+        (unspec_volatile:SI [(const_int 0)] UNSPECV_CAS_MEM))
--+   (match_operand:SI 5 "const_int_operand" "")			;; is_weak
--+   (match_operand:SI 6 "const_int_operand" "")			;; mod_s
--+   (match_operand:SI 7 "const_int_operand" "")			;; mod_f
--    (clobber (match_scratch:SI 8 "=&d"))]
--   ""
--   {
---    output_asm_insn ("addc \tr0,r0,r0", operands);
---    output_asm_insn ("lwx  \t%1,%y2,r0", operands);
---    output_asm_insn ("addic\t%8,r0,0", operands);
---    output_asm_insn ("bnei \t%8,.-8", operands);
---    output_asm_insn ("cmp  \t%0,%1,%3", operands);
---    output_asm_insn ("bnei \t%0,.+16", operands);
---    output_asm_insn ("swx  \t%4,%y2,r0", operands);
---    output_asm_insn ("addic\t%8,r0,0", operands);
---    output_asm_insn ("bnei \t%8,.-28", operands);
---    return "";
--+    return "add  \t%0,r0,r0\n\t"
--+      "lwx  \t%1,%y2,r0\n\t"
--+      "addic\t%8,r0,0\n\t"
--+      "bnei \t%8,.-8\n\t"
--+      "cmp  \t%8,%1,%3\n\t"
--+      "bnei \t%8,.+20\n\t"
--+      "swx  \t%4,%y2,r0\n\t"
--+      "addic\t%8,r0,0\n\t"
--+      "bnei \t%8,.-28\n\t"
--+      "addi \t%0,r0,1";
--   }
--+  [(set_attr "type"	"atomic")
--+  (set_attr "mode"	"SI")
--+  (set_attr "length"	"40")]
-- )
--+
--+;;
--+;;
--+;;
--+;;
--+(define_insn "atomic_fetch_<atomic_optab>si"
--+  [(set (match_operand:SI 0 "register_operand" "=&d")
--+	(match_operand:SI 1 "memory_operand" "+Q"))
--+   (set (match_dup 1)
--+	(unspec_volatile:SI
--+	  [(any_atomic:SI (match_dup 1)
--+		   (match_operand:SI 2 "register_operand" "d"))
--+	   (match_operand:SI 3 "const_int_operand")] ;; model
--+	 UNSPECV_ATOMIC_FETCH_OP))
--+   (clobber (match_scratch:SI 4 "=&d"))]	  ;; tmp_1
--+  ""
--+  {
--+    return 
--+      "lwx  \t%0,%y1,r0\n\t"
--+      "addic\t%4,r0,0\n\t"
--+      "bnei \t%4,.-8\n\t"
--+      "<atomic_optab>\t%4,%0,%2\n\t"
--+      "swx  \t%4,%y1,r0\n\t"
--+      "addic\t%4,r0,0\n\t"
--+      "bnei \t%4,.-24";
--+  }
--+  [(set_attr "type"	"atomic")
--+  (set_attr "mode"	"SI")
--+  (set_attr "length"	"28")])
--+
--+;;
--+;; MicroBlaze only supports lx/sx instructions for word mode only
--+;;
--+;; Use shift|mask magic to implement atomic_test_and_set using lwx/swx
--+;;
--+(define_expand "atomic_test_and_set"
--+  [(match_operand:QI 0 "register_operand" "")    ;; bool output
--+   (match_operand:QI 1 "memory_operand" "m")    ;; memory
--+   (match_operand:SI 2 "const_int_operand" "")]  ;; model
--+  ""
--+{
--+  rtx old = gen_reg_rtx (SImode);
--+  rtx mem = operands[1];
--+  rtx model = operands[2];
--+  rtx set = gen_reg_rtx (SImode);
--+  rtx aligned_mem = gen_reg_rtx (SImode);
--+  rtx shift = gen_reg_rtx (SImode);
--+
--+  microblaze_subword_address (mem, &aligned_mem, &shift);
--+
--+  emit_move_insn (set, GEN_INT (1));
--+  rtx shifted_set = gen_reg_rtx (SImode);
--+
--+  emit_move_insn (shifted_set, gen_rtx_ASHIFT (SImode, set, shift));
--+
--+  emit_insn (gen_atomic_fetch_orsi (old, aligned_mem, shifted_set, model));
--+
--+  emit_move_insn (old, gen_rtx_ASHIFTRT (SImode, old, shift));
--+
--+  emit_move_insn (operands[0], gen_lowpart (QImode, old));
--+
--+  DONE;
--+})
---- 
--2.43.5
--
-diff --git a/package/gcc/14.3.0/0004-libsanitizer-Fix-build-with-glibc-2.42.patch b/package/gcc/14.3.0/0004-libsanitizer-Fix-build-with-glibc-2.42.patch
-deleted file mode 100644
-index 13f7f469c4..0000000000
---- a/package/gcc/14.3.0/0004-libsanitizer-Fix-build-with-glibc-2.42.patch
-+++ /dev/null
-@@ -1,81 +0,0 @@
--From d32ece49d32b00448d967e7dbc6900fb25cbc775 Mon Sep 17 00:00:00 2001
--From: Florian Weimer <fweimer@redhat.com>
--Date: Fri, 2 May 2025 17:41:43 +0200
--Subject: [PATCH] libsanitizer: Fix build with glibc 2.42
--
--The termio structure will be removed from glibc 2.42.  It has
--been deprecated since the late 80s/early 90s.
--
--Cherry-picked from LLVM commit 59978b21ad9c65276ee8e14f26759691b8a65763
--("[sanitizer_common] Remove interceptors for deprecated struct termio
--(#137403)").
--
--Co-Authored-By: Tom Stellard <tstellar@redhat.com>
--
--libsanitizer/
--
--	* sanitizer_common/sanitizer_common_interceptors_ioctl.inc: Cherry
--	picked from LLVM commit 59978b21ad9c65276ee8e14f26759691b8a65763.
--	* sanitizer_common/sanitizer_platform_limits_posix.cpp: Likewise.
--	* sanitizer_common/sanitizer_platform_limits_posix.h: Likewise.
--
--Upstream: 1789c57dc97ea2f9819ef89e28bf17208b6208e7 (gcc master branch)
--Upstream: d32ece49d32b00448d967e7dbc6900fb25cbc775 (gcc 15.x branch)
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-----
-- .../sanitizer_common_interceptors_ioctl.inc               | 8 --------
-- .../sanitizer_common/sanitizer_platform_limits_posix.cpp  | 3 ---
-- .../sanitizer_common/sanitizer_platform_limits_posix.h    | 1 -
-- 3 files changed, 12 deletions(-)
--
--diff --git a/libsanitizer/sanitizer_common/sanitizer_common_interceptors_ioctl.inc b/libsanitizer/sanitizer_common/sanitizer_common_interceptors_ioctl.inc
--index 49ec4097c90..dda11daa77f 100644
----- a/libsanitizer/sanitizer_common/sanitizer_common_interceptors_ioctl.inc
--+++ b/libsanitizer/sanitizer_common/sanitizer_common_interceptors_ioctl.inc
--@@ -338,17 +338,9 @@ static void ioctl_table_fill() {
--   _(SOUND_PCM_WRITE_CHANNELS, WRITE, sizeof(int));
--   _(SOUND_PCM_WRITE_FILTER, WRITE, sizeof(int));
--   _(TCFLSH, NONE, 0);
---#if SANITIZER_GLIBC
---  _(TCGETA, WRITE, struct_termio_sz);
---#endif
--   _(TCGETS, WRITE, struct_termios_sz);
--   _(TCSBRK, NONE, 0);
--   _(TCSBRKP, NONE, 0);
---#if SANITIZER_GLIBC
---  _(TCSETA, READ, struct_termio_sz);
---  _(TCSETAF, READ, struct_termio_sz);
---  _(TCSETAW, READ, struct_termio_sz);
---#endif
--   _(TCSETS, READ, struct_termios_sz);
--   _(TCSETSF, READ, struct_termios_sz);
--   _(TCSETSW, READ, struct_termios_sz);
--diff --git a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp
--index c87d5ef42c9..7bbc6f2edac 100644
----- a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp
--+++ b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp
--@@ -485,9 +485,6 @@ unsigned struct_ElfW_Phdr_sz = sizeof(Elf_Phdr);
--   unsigned struct_input_id_sz = sizeof(struct input_id);
--   unsigned struct_mtpos_sz = sizeof(struct mtpos);
--   unsigned struct_rtentry_sz = sizeof(struct rtentry);
---#if SANITIZER_GLIBC || SANITIZER_ANDROID
---  unsigned struct_termio_sz = sizeof(struct termio);
---#endif
--   unsigned struct_vt_consize_sz = sizeof(struct vt_consize);
--   unsigned struct_vt_sizes_sz = sizeof(struct vt_sizes);
--   unsigned struct_vt_stat_sz = sizeof(struct vt_stat);
--diff --git a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.h b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.h
--index c07f7cd0b0d..a80df656826 100644
----- a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.h
--+++ b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.h
--@@ -1029,7 +1029,6 @@ extern unsigned struct_hd_geometry_sz;
-- extern unsigned struct_input_absinfo_sz;
-- extern unsigned struct_input_id_sz;
-- extern unsigned struct_mtpos_sz;
---extern unsigned struct_termio_sz;
-- extern unsigned struct_vt_consize_sz;
-- extern unsigned struct_vt_sizes_sz;
-- extern unsigned struct_vt_stat_sz;
---- 
--2.50.1
--
-diff --git a/package/gcc/14.3.0/0005--libcody-Make-it-buildable-by-C-11-to-C-26.patch b/package/gcc/14.3.0/0005--libcody-Make-it-buildable-by-C-11-to-C-26.patch
-deleted file mode 100644
-index f9f983b464..0000000000
---- a/package/gcc/14.3.0/0005--libcody-Make-it-buildable-by-C-11-to-C-26.patch
-+++ /dev/null
-@@ -1,261 +0,0 @@
--From daa3e1ead791bc58208043cfc4595ba1a78cdd34 Mon Sep 17 00:00:00 2001
--From: Jakub Jelinek <jakub@redhat.com>
--Date: Fri, 21 Nov 2025 16:25:58 +0100
--Subject: [PATCH] libcody: Make it buildable by C++11 to C++26
--
--The following builds with -std=c++11 and c++14 and c++17 and c++20 and c++23
--and c++26.
--
--I see the u8 string literals are mixed e.g. with strerror, so in
---fexec-charset=IBM1047 there will still be garbage, so am not 100% sure if
--the u8 literals everywhere are worth it either.
--
--2025-11-21  Jakub Jelinek  <jakub@redhat.com>
--
--	* cody.hh (S2C): For __cpp_char8_t >= 201811 use char8_t instead of
--	char in argument type.
--	(MessageBuffer::Space): Revert 2025-11-15 change.
--	(MessageBuffer::Append): For __cpp_char8_t >= 201811 add overload
--	with char8_t const * type of first argument.
--	(Packet::Packet): Similarly for first argument.
--	* client.cc (CommunicationError, Client::ProcessResponse,
--	Client::Connect, ConnectResponse, PathnameResponse, OKResponse,
--	IncludeTranslateResponse): Cast u8 string literals to (const char *)
--	where needed.
--	* server.cc (Server::ProcessRequests, ConnectRequest): Likewise.
--
--(cherry picked from commit 07a767c7a50d1daae8ef7d4aba73fe53ad40c0b7)
--Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
--Upstream: https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=daa3e1ead791bc58208043cfc4595ba1a78cdd34
-----
-- libcody/client.cc | 36 +++++++++++++++++++-----------------
-- libcody/cody.hh   | 22 ++++++++++++++++++++++
-- libcody/server.cc | 28 ++++++++++++++--------------
-- 3 files changed, 55 insertions(+), 31 deletions(-)
--
--diff --git a/libcody/client.cc b/libcody/client.cc
--index ae69d190cb7..147fecdbe50 100644
----- a/libcody/client.cc
--+++ b/libcody/client.cc
--@@ -97,7 +97,7 @@ int Client::CommunicateWithServer ()
-- 
-- static Packet CommunicationError (int err)
-- {
---  std::string e {u8"communication error:"};
--+  std::string e {(const char *) u8"communication error:"};
--   e.append (strerror (err));
-- 
--   return Packet (Client::PC_ERROR, std::move (e));
--@@ -110,33 +110,34 @@ Packet Client::ProcessResponse (std::vector<std::string> &words,
--     {
--       if (e == EINVAL)
-- 	{
---	  std::string msg (u8"malformed string '");
--+	  std::string msg ((const char *) u8"malformed string '");
-- 	  msg.append (words[0]);
---	  msg.append (u8"'");
--+	  msg.append ((const char *) u8"'");
-- 	  return Packet (Client::PC_ERROR, std::move (msg));
-- 	}
--       else
---	return Packet (Client::PC_ERROR, u8"missing response");
--+	return Packet (Client::PC_ERROR, (const char *) u8"missing response");
--     }
-- 
--   Assert (!words.empty ());
---  if (words[0] == u8"ERROR")
--+  if (words[0] == (const char *) u8"ERROR")
--     return Packet (Client::PC_ERROR,
---		   words.size () == 2 ? words[1]: u8"malformed error response");
--+		   words.size () == 2 ? words[1]
--+		   : (const char *) u8"malformed error response");
-- 
--   if (isLast && !read.IsAtEnd ())
--     return Packet (Client::PC_ERROR,
---		   std::string (u8"unexpected extra response"));
--+		   std::string ((const char *) u8"unexpected extra response"));
-- 
--   Assert (code < Detail::RC_HWM);
--   Packet result (responseTable[code] (words));
--   result.SetRequest (code);
--   if (result.GetCode () == Client::PC_ERROR && result.GetString ().empty ())
--     {
---      std::string msg {u8"malformed response '"};
--+      std::string msg {(const char *) u8"malformed response '"};
-- 
--       read.LexedLine (msg);
---      msg.append (u8"'");
--+      msg.append ((const char *) u8"'");
--       result.GetString () = std::move (msg);
--     }
--   else if (result.GetCode () == Client::PC_CONNECT)
--@@ -199,7 +200,7 @@ Packet Client::Connect (char const *agent, char const *ident,
-- 			  size_t alen, size_t ilen)
-- {
--   write.BeginLine ();
---  write.AppendWord (u8"HELLO");
--+  write.AppendWord ((const char *) u8"HELLO");
--   write.AppendInteger (Version);
--   write.AppendWord (agent, true, alen);
--   write.AppendWord (ident, true, ilen);
--@@ -211,7 +212,8 @@ Packet Client::Connect (char const *agent, char const *ident,
-- // HELLO $version $agent [$flags]
-- Packet ConnectResponse (std::vector<std::string> &words)
-- {
---  if (words[0] == u8"HELLO" && (words.size () == 3 || words.size () == 4))
--+  if (words[0] == (const char *) u8"HELLO"
--+      && (words.size () == 3 || words.size () == 4))
--     {
--       char *eptr;
--       unsigned long val = strtoul (words[1].c_str (), &eptr, 10);
--@@ -247,7 +249,7 @@ Packet Client::ModuleRepo ()
-- // PATHNAME $dir | ERROR
-- Packet PathnameResponse (std::vector<std::string> &words)
-- {
---  if (words[0] == u8"PATHNAME" && words.size () == 2)
--+  if (words[0] == (const char *) u8"PATHNAME" && words.size () == 2)
--     return Packet (Client::PC_PATHNAME, std::move (words[1]));
-- 
--   return Packet (Client::PC_ERROR, u8"");
--@@ -256,7 +258,7 @@ Packet PathnameResponse (std::vector<std::string> &words)
-- // OK or ERROR
-- Packet OKResponse (std::vector<std::string> &words)
-- {
---  if (words[0] == u8"OK")
--+  if (words[0] == (const char *) u8"OK")
--     return Packet (Client::PC_OK);
--   else
--     return Packet (Client::PC_ERROR,
--@@ -319,11 +321,11 @@ Packet Client::IncludeTranslate (char const *include, Flags flags, size_t ilen)
-- // PATHNAME $cmifile
-- Packet IncludeTranslateResponse (std::vector<std::string> &words)
-- {
---  if (words[0] == u8"BOOL" && words.size () == 2)
--+  if (words[0] == (const char *) u8"BOOL" && words.size () == 2)
--     {
---      if (words[1] == u8"FALSE")
---	return Packet (Client::PC_BOOL, 0);
---      else if (words[1] == u8"TRUE")
--+      if (words[1] == (const char *) u8"FALSE")
--+	return Packet (Client::PC_BOOL);
--+      else if (words[1] == (const char *) u8"TRUE")
-- 	return Packet (Client::PC_BOOL, 1);
--       else
-- 	return Packet (Client::PC_ERROR, u8"");
--diff --git a/libcody/cody.hh b/libcody/cody.hh
--index 789ce9e70b7..93bce93aa94 100644
----- a/libcody/cody.hh
--+++ b/libcody/cody.hh
--@@ -47,12 +47,21 @@ namespace Detail  {
-- 
-- // C++11 doesn't have utf8 character literals :(
-- 
--+#if __cpp_char8_t >= 201811
--+template<unsigned I>
--+constexpr char S2C (char8_t const (&s)[I])
--+{
--+  static_assert (I == 2, "only single octet strings may be converted");
--+  return s[0];
--+}
--+#else
-- template<unsigned I>
-- constexpr char S2C (char const (&s)[I])
-- {
--   static_assert (I == 2, "only single octet strings may be converted");
--   return s[0];
-- }
--+#endif
-- 
-- /// Internal buffering class.  Used to concatenate outgoing messages
-- /// and Lex incoming ones.
--@@ -123,6 +132,13 @@ public:
--       Space ();
--     Append (str, maybe_quote, len);
--   }
--+#if __cpp_char8_t >= 201811
--+  void AppendWord (char8_t const *str, bool maybe_quote = false,
--+		   size_t len = ~size_t (0))
--+  {
--+    AppendWord ((const char *) str, maybe_quote, len);
--+  }
--+#endif
--   /// Add a word as with AppendWord
--   /// @param str the string to append
--   /// @param maybe_quote string might need quoting, as for Append
--@@ -264,6 +280,12 @@ public:
--     : string (s), cat (STRING), code (c)
--   {
--   }
--+#if __cpp_char8_t >= 201811
--+  Packet (unsigned c, const char8_t *s)
--+    : string ((const char *) s), cat (STRING), code (c)
--+  {
--+  }
--+#endif
--   Packet (unsigned c, std::vector<std::string> &&v)
--     : vector (std::move (v)), cat (VECTOR), code (c)
--   {
--diff --git a/libcody/server.cc b/libcody/server.cc
--index e2fa069bb93..c18469fae84 100644
----- a/libcody/server.cc
--+++ b/libcody/server.cc
--@@ -36,12 +36,12 @@ static RequestPair
--   const requestTable[Detail::RC_HWM] =
--   {
--     // Same order as enum RequestCode
---    RequestPair {u8"HELLO", nullptr},
---    RequestPair {u8"MODULE-REPO", ModuleRepoRequest},
---    RequestPair {u8"MODULE-EXPORT", ModuleExportRequest},
---    RequestPair {u8"MODULE-IMPORT", ModuleImportRequest},
---    RequestPair {u8"MODULE-COMPILED", ModuleCompiledRequest},
---    RequestPair {u8"INCLUDE-TRANSLATE", IncludeTranslateRequest},
--+    RequestPair {(const char *) u8"HELLO", nullptr},
--+    RequestPair {(const char *) u8"MODULE-REPO", ModuleRepoRequest},
--+    RequestPair {(const char *) u8"MODULE-EXPORT", ModuleExportRequest},
--+    RequestPair {(const char *) u8"MODULE-IMPORT", ModuleImportRequest},
--+    RequestPair {(const char *) u8"MODULE-COMPILED", ModuleCompiledRequest},
--+    RequestPair {(const char *) u8"INCLUDE-TRANSLATE", IncludeTranslateRequest},
--   };
-- }
-- 
--@@ -135,21 +135,21 @@ void Server::ProcessRequests (void)
-- 	  std::string msg;
-- 
-- 	  if (err > 0)
---	    msg = u8"error processing '";
--+	    msg = (const char *) u8"error processing '";
-- 	  else if (ix >= Detail::RC_HWM)
---	    msg = u8"unrecognized '";
--+	    msg = (const char *) u8"unrecognized '";
-- 	  else if (IsConnected () && ix == Detail::RC_CONNECT)
---	    msg = u8"already connected '";
--+	    msg = (const char *) u8"already connected '";
-- 	  else if (!IsConnected () && ix != Detail::RC_CONNECT)
---	    msg = u8"not connected '";
--+	    msg = (const char *) u8"not connected '";
-- 	  else
---	    msg = u8"malformed '";
--+	    msg = (const char *) u8"malformed '";
-- 
-- 	  read.LexedLine (msg);
---	  msg.append (u8"'");
--+	  msg.append ((const char *) u8"'");
-- 	  if (err > 0)
-- 	    {
---	      msg.append (u8" ");
--+	      msg.append ((const char *) u8" ");
-- 	      msg.append (strerror (err));
-- 	    }
-- 	  resolver->ErrorResponse (this, std::move (msg));
--@@ -176,7 +176,7 @@ Resolver *ConnectRequest (Server *s, Resolver *r,
--     return nullptr;
-- 
--   if (words.size () == 3)
---    words.emplace_back (u8"");
--+    words.emplace_back ((const char *) u8"");
--   unsigned version = ParseUnsigned (words[1]);
--   if (version == ~0u)
--     return nullptr;
---- 
--2.54.0
--
-diff --git a/package/gcc/14.3.0/0006-build-Move-sstream-and-memory-include-above-safe-cty.patch b/package/gcc/14.3.0/0006-build-Move-sstream-and-memory-include-above-safe-cty.patch
-deleted file mode 100644
-index e48dd91c18..0000000000
---- a/package/gcc/14.3.0/0006-build-Move-sstream-and-memory-include-above-safe-cty.patch
-+++ /dev/null
-@@ -1,78 +0,0 @@
--From 046776dac7cc74bdbab36f450af80644a045858a Mon Sep 17 00:00:00 2001
--From: Andrew Pinski <quic_apinski@quicinc.com>
--Date: Mon, 25 Nov 2024 14:03:27 -0800
--Subject: [PATCH] build: Move sstream and memory include above safe-ctype.h
-- [PR124830]
--
--This picks r15-5661-gf6e00226a4ca6 to older branches, also moving
--the <memory> include to fix build issues with a C++20 host compiler.
--
--sstream in some versions of libstdc++ include locale which might not have been
--included yet. safe-ctype.h defines the toupper, tolower, etc. as macros so the
--c++ header files needed to be included before hand as comment in system.h says:
--/* Include C++ standard headers before "safe-ctype.h" to avoid GCC
--   poisoning the ctype macros through safe-ctype.h */
--
--I don't understand how it was working before when memory was included after
--safe-ctype.h rather than before. But this makes sstream consistent with the
--other C++ headers.
--
--gcc/ChangeLog:
--
--	PR target/117771
--	PR c/124830
--	* system.h: Move the include of sstream and memory above safe-ctype.h.
--
--Signed-off-by: Andrew Pinski <quic_apinski@quicinc.com>
--Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
--Upstream: https://gcc.gnu.org/git?p=gcc.git;a=commit;h=046776dac7cc74bdbab36f450af80644a045858a
-----
-- gcc/system.h | 21 +++++++++------------
-- 1 file changed, 9 insertions(+), 12 deletions(-)
--
--diff --git a/gcc/system.h b/gcc/system.h
--index b18482c7190..da331f105ba 100644
----- a/gcc/system.h
--+++ b/gcc/system.h
--@@ -222,6 +222,15 @@ extern int fprintf_unlocked (FILE *, const char *, ...);
-- #ifdef INCLUDE_FUNCTIONAL
-- # include <functional>
-- #endif
--+#ifdef INCLUDE_SSTREAM
--+# include <sstream>
--+#endif
--+/* Some of the headers included by <memory> can use "abort" within a
--+   namespace, e.g. "_VSTD::abort();", which fails after we use the
--+   preprocessor to redefine "abort" as "fancy_abort" below.  */
--+#ifdef INCLUDE_MEMORY
--+# include <memory>
--+#endif
-- # include <cstring>
-- # include <initializer_list>
-- # include <new>
--@@ -758,22 +767,10 @@ private:
-- #define LIKELY(x) (__builtin_expect ((x), 1))
-- #define UNLIKELY(x) (__builtin_expect ((x), 0))
-- 
---/* Some of the headers included by <memory> can use "abort" within a
---   namespace, e.g. "_VSTD::abort();", which fails after we use the
---   preprocessor to redefine "abort" as "fancy_abort" below.  */
---
---#ifdef INCLUDE_MEMORY
---# include <memory>
---#endif
---
-- #ifdef INCLUDE_MUTEX
-- # include <mutex>
-- #endif
-- 
---#ifdef INCLUDE_SSTREAM
---# include <sstream>
---#endif
---
-- #ifdef INCLUDE_MALLOC_H
-- #if defined(HAVE_MALLINFO) || defined(HAVE_MALLINFO2)
-- #include <malloc.h>
---- 
--2.54.0
--
-diff --git a/package/gcc/14.3.0/0001-disable-split-stack-for-non-thread-builds.patch b/package/gcc/14.4.0/0001-disable-split-stack-for-non-thread-builds.patch
-similarity index 100%
-rename from package/gcc/14.3.0/0001-disable-split-stack-for-non-thread-builds.patch
-rename to package/gcc/14.4.0/0001-disable-split-stack-for-non-thread-builds.patch
-diff --git a/package/gcc/14.3.0/0002-libsanitizer-also-undef-_TIME_BITS-in-sanitizer_proc.patch b/package/gcc/14.4.0/0002-libsanitizer-also-undef-_TIME_BITS-in-sanitizer_proc.patch
-similarity index 100%
-rename from package/gcc/14.3.0/0002-libsanitizer-also-undef-_TIME_BITS-in-sanitizer_proc.patch
-rename to package/gcc/14.4.0/0002-libsanitizer-also-undef-_TIME_BITS-in-sanitizer_proc.patch
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 896bb3cfbb..e80c864cf1 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -68,7 +68,7 @@ config BR2_GCC_SUPPORTS_DLANG
- config BR2_GCC_VERSION
- 	string
- 	default "8.4.0"     if BR2_GCC_VERSION_POWERPC_SPE
--	default "14.3.0"    if BR2_GCC_VERSION_14_X
-+	default "14.4.0"    if BR2_GCC_VERSION_14_X
- 	default "15.3.0"    if BR2_GCC_VERSION_15_X
- 	default "16.1.0"    if BR2_GCC_VERSION_16_X
- 	default "arc-2024.12-release" if BR2_GCC_VERSION_ARC
-diff --git a/package/gcc/gcc.hash b/package/gcc/gcc.hash
-index 0890abc2ea..edd8ab7061 100644
---- a/package/gcc/gcc.hash
-+++ b/package/gcc/gcc.hash
-@@ -1,7 +1,7 @@
- # From https://gcc.gnu.org/pub/gcc/releases/gcc-8.4.0/sha512.sum
- sha512  6de904f552a02de33b11ef52312bb664396efd7e1ce3bbe37bfad5ef617f133095b3767b4804bc7fe78df335cb53bc83f1ac055baed40979ce4c2c3e46b70280  gcc-8.4.0.tar.xz
--# From https://gcc.gnu.org/pub/gcc/releases/gcc-14.3.0/sha512.sum
--sha512  cb4e3259640721bbd275c723fe4df53d12f9b1673afb3db274c22c6aa457865dccf2d6ea20b4fd4c591f6152e6d4b87516c402015900f06ce9d43af66d3b7a93  gcc-14.3.0.tar.xz
-+# From https://gcc.gnu.org/pub/gcc/releases/gcc-14.4.0/sha512.sum
-+sha512  725ed8bdd43ef1726ffe8b5e8615a13e247fac9575b7626ae013a2975d000ea213212dc414b2f2631ac4785c1c8beca85555222faf9904d3b2fa6a3807a83a15  gcc-14.4.0.tar.xz
- # From https://gcc.gnu.org/pub/gcc/releases/gcc-15.3.0/sha512.sum
- sha512  0de9e296153b52c021b1c7e63c9c62151d7a0ac03f23ce6e9f772c1b0eb783f6acdd81cc4567bfe4128a6f64968c2cfc8eff40b36229cba7425349f7d637c654  gcc-15.3.0.tar.xz
- # From https://gcc.gnu.org/pub/gcc/releases/gcc-16.1.0/sha512.sum
+diff --git a/support/testing/tests/package/sample_python_networkmanager_goi.py b/support/testing/tests/package/sample_python_networkmanager_goi.py
+index 240e8437fd..dff68e66f9 100644
+--- a/support/testing/tests/package/sample_python_networkmanager_goi.py
++++ b/support/testing/tests/package/sample_python_networkmanager_goi.py
+@@ -24,3 +24,11 @@ for c in connections:
+     print("{}:".format(c.get_id()))
+     c.for_each_setting_value(print_values, None)
+     print("\n")
++print("found {} defined connections".format(len(connections)))
++assert len(connections) > 0
++
++# check that we can find the loopback device ...
++loopback = client.get_device_by_iface("lo")
++# ... and read its type and status as expected
++assert loopback.get_device_type().name == "LOOPBACK"
++assert loopback.get_state().name == "ACTIVATED"
 -- 
-2.47.3
+2.53.0
 
 _______________________________________________
 buildroot mailing list
