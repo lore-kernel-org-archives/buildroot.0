@@ -4,216 +4,108 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0228FC43458
-	for <buildroot@archiver.kernel.org>; Sat, 27 Jun 2026 12:19:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 81E6DC43458
+	for <buildroot@archiver.kernel.org>; Sun, 28 Jun 2026 03:33:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E0CC760D92;
-	Sat, 27 Jun 2026 12:19:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E6AB560A7E;
+	Sun, 28 Jun 2026 03:33:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QT1XMiPmsCc7; Sat, 27 Jun 2026 12:19:22 +0000 (UTC)
+ id fpVUTQoqppv4; Sun, 28 Jun 2026 03:33:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 37EAD60809
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B3AB960770
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1782562762;
-	bh=V2kmqbZ+SVKAAQNMhuGJmpAAKoaHEcMbesJhHnLzBy4=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=BSe2o+u2UPWWC6yZ0goak5ysOZg3JPR/4mb+/BdBksKs3VBMnFSXl2gT7JnEDmaG1
-	 nrVjjUv3tsEActksY4xgwl00YmaJNdUOt4QqYyRF16GvBRpkCVzv1Cj3cFO43GkOKR
-	 iAyG2sQLpmMGOzdT0IqRpIVg0HLh8bHjfxrf0BbauNhxf56Svr6/EOasAib5dN2Tcw
-	 13KuP7VlqhSz5USLW98Iu/M25Le7DI/ADztcdhyCYaDgLphvc2NdzZZXHP1m9W1PeV
-	 IImrKMTmQrdusC4MIG4dTMlx3BVRdxOaRDvfhJkdPz+XlOiS9VI8lRkoO8N3ic5uTo
-	 FcAjgJTLIoi0A==
+	s=default; t=1782617585;
+	bh=ssDuvtnlojjnhejK7yxW/xW3pptExNvkpo1Hm6LILOQ=;
+	h=To:From:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=JZ/483m3SZ6BJD1J6PD9LElSLMyT0vQCzxFIZ6rquvP/rMWPtMTjQpHZmxjKcK9Pm
+	 DUDlPh9JWonulr3LbnogNqHMSmw0G56hcWqlkcp0RNlLq+pt6xi92eapbq/EJMN+ot
+	 55KhfaHktA59UrabT4XGjB5wjT0VajZRRI9G6FO7e/eqAEsANhFeAzDmclGAU1DnZJ
+	 YUw/ik6RwqYDxvUwQYEvdVokSYX0d4aunjZUVsQSErfGkmFPAHk87vZgvfCmrwBcpN
+	 bmJGs/Z+mehbTiyANvsA+mW9MxJQHhA5k0yT0yKdQtfdgCxuOq0vjh1nQ2sBHxo0Uy
+	 8co67rSYAyf2A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 37EAD60809;
-	Sat, 27 Jun 2026 12:19:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B3AB960770;
+	Sun, 28 Jun 2026 03:33:05 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 4FB6A2F3
- for <buildroot@buildroot.org>; Sat, 27 Jun 2026 12:19:21 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 264A8BC
+ for <buildroot@buildroot.org>; Sun, 28 Jun 2026 03:33:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2F46B6080A
- for <buildroot@buildroot.org>; Sat, 27 Jun 2026 12:19:21 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0C4C66075B
+ for <buildroot@buildroot.org>; Sun, 28 Jun 2026 03:33:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id x0buhTX7hA4x for <buildroot@buildroot.org>;
- Sat, 27 Jun 2026 12:19:20 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.20;
- helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C0304606E0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C0304606E0
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C0304606E0
- for <buildroot@buildroot.org>; Sat, 27 Jun 2026 12:19:19 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from client.hidden.invalid by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1N6sit-1xCmok1osh-015QZ5; Sat, 27
- Jun 2026 14:19:17 +0200
-Message-ID: <851a606a-c4a9-4e04-b8e7-da5698cfb734@gmx.de>
-Date: Sat, 27 Jun 2026 14:19:16 +0200
+ id LtKiOy4eYKCf for <buildroot@buildroot.org>;
+ Sun, 28 Jun 2026 03:33:04 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::42f; helo=mail-wr1-x42f.google.com;
+ envelope-from=buildroot.notifications@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 9C1F360770
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9C1F360770
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
+ [IPv6:2a00:1450:4864:20::42f])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9C1F360770
+ for <buildroot@buildroot.org>; Sun, 28 Jun 2026 03:33:03 +0000 (UTC)
+Received: by mail-wr1-x42f.google.com with SMTP id
+ ffacd0b85a97d-47013e1996aso666659f8f.1
+ for <buildroot@buildroot.org>; Sat, 27 Jun 2026 20:33:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20251104; t=1782617581; x=1783222381;
+ h=date:from:to:subject:content-transfer-encoding:mime-version
+ :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=jDu45NsOMZ3iNXS67zrbSgrmqs2ik4GnTxwLmU6TeJU=;
+ b=krEOAmbc5Vt/iKwjSor+EIlTNhFTIJ4avkBziteo9Ver/B33L/kxsT999jjy3w7cu3
+ NqEOoGr6TszZatauv4wagoEDzNWzhHCSP12M026lBqx4v3Ul7ELOOIP3F4VcNjE0n5K8
+ B+NNM8cxrT/g++kxkrqrTLhUHFg4qtskzBLek8hrG3Xlx+k+94bH0Y4Cgy0K9vcqv5Wy
+ yYpgWiBzl+O+Mt029xI0GGMvykl8bxkir5DGoFH4NikFcM9IumrFRdg/hPiS5ObVEbrV
+ KmJTJQ0/2Ct30RoiFWFkwyHdUaVZG1p//UvZ6tOh2ey5q1m0pIADyH3tU3RKfgQaNbBp
+ FIfQ==
+X-Gm-Message-State: AOJu0Yx+/OXSzU5/fOfCnd2K6s6JYGN2B2KYPBbwJgw8UB2ZqLc0lVan
+ LdhGNQ5/ZE248TczZ4q4XRNtoh76uTh9iTdIE5vcsitQQbuSIO1pMs0gh0K5EqoS
+X-Gm-Gg: AfdE7clf3jutl99IzoD2KB7JJ2LotyqcK6qZLpBLf24CT7XxKMZGPWAvjQ3lUjPAowA
+ +ZddPKScbU9iVRBmoc9aBIBZMbGGHG29fXYGAgf90CsW1G5DOnyGLYiNCZmCq9C+m9psyV11oOz
+ DIkENsHRjCpCnXOCV3AV2QWRh0dtORMJV7ZLkZJkKcXfPg5X8eFPsdRSiotDclU4z8h5FRgZJ0U
+ wOWQ5ZWscXZPjNrasAJ2/KAxhvmGwkvb6FSeIzOhcRXTdxWnwOTTXeoteyXbILCBg8V0FAVOR0W
+ PW91k0FDE+tEX0EUl0HNDQM/sLPUKCQtVydsllt/b7vRp+aE3uzWnIE9+GKJNmH0O7A6pdHqBnp
+ d2ib45xFAcy5HtrxKb3eDK7nGGKBQxUeS/FJE3evOb3TeaUiYpzZT5oTpRluYF/mNQQz4n1NFJJ
+ 8T1gY2oX6OGQyrhSZQM9YCefqmDA==
+X-Received: by 2002:a05:6000:25fa:b0:46f:7d90:8125 with SMTP id
+ ffacd0b85a97d-46f7d90825fmr10279409f8f.15.1782617581257; 
+ Sat, 27 Jun 2026 20:33:01 -0700 (PDT)
+Received: from [138.201.205.61] ([2a01:4f8:173:1526::2])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-471490336d5sm9502896f8f.35.2026.06.27.20.33.00
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 27 Jun 2026 20:33:00 -0700 (PDT)
+Message-ID: <6a4095ec.bb4da8e5.a1b33.56f2@mx.google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Peter Korsgaard <peter@korsgaard.com>,
- Thomas Perale <thomas.perale@mind.be>
-Cc: buildroot@buildroot.org, Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20260626093225.4121915-1-peter@korsgaard.com>
- <20260626124913.296693-1-thomas.perale@mind.be>
- <875x355u5y.fsf@dell.be.48ers.dk>
- <d3d478d2-ab49-40e3-94c1-4cd3f0a46ea7@gmx.de>
-Content-Language: en-US, de-DE-1901, de-DE
-Autocrypt: addr=fiona.klute@gmx.de; keydata=
- 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
-In-Reply-To: <d3d478d2-ab49-40e3-94c1-4cd3f0a46ea7@gmx.de>
-X-Provags-ID: V03:K1:zLQzuk0oEpxbDhQHFOGF2rcg5Dc4YNrEdfQa9bWv2cb5viIfg8Q
- esJZ5pGA9IH71EOhWCOT3t/4lOVdifZIRbYmUGS7LauUM9tV1H3S2pe5VJe+e9pEBoqBsqx
- jD098j94iPodVLt1xeddsSse+WKGsoO66OkKiinSA5uYpU5EXt83Ie3zw2Px5xmayFE4P07
- AZOQzloId2AeTDZMXIOIw==
-UI-OutboundReport: notjunk:1;M01:P0:yvX1KGk9Bmc=;mN6mT0A8ViNF0GLzWzrP6fk7r5f
- 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
- rc6kf2OY1Vvt7Z2bicp9ri37TKdqAwxgjkDZzGz
+To: buildroot@buildroot.org
+From: Buildroot Notifications <buildroot.notifications@gmail.com>
+Date: Sun, 28 Jun 2026 03:33:00 -0000
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmx.de; 
- s=s31663417; t=1782562757; x=1783167557; i=fiona.klute@gmx.de;
- bh=X2tn2nC6Gd6echj221Uz2tF0p7sgGH1RFrqqtGO0ehI=;
- h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:From:To:
- Cc:References:In-Reply-To:Content-Type:Content-Transfer-Encoding:
- cc:content-transfer-encoding:content-type:date:from:message-id:
- mime-version:reply-to:subject:to;
- b=j5Js20A1KOkhHA9NgLucr0pzHj6DIYxNuWSCaWkSBJmDhDVZ8/t8wTwKTHbFWpEr
- NI3a1vNtk5NizBrd5tPDYMSXzVsuPoS5limGLk+u6gSwP9HXVJBVmekMcXt/hbh94
- 2vpJxIQ6x+dXFQEGRlw8dBhvW8de96Qp3QWftBqc/a9aIIyk59Oev2XJ20ihMJg+J
- RLRllcmOjQ48vnqLgC05znKN/oOn31vPWw5sGtLuzQTazz/oApwZX/TSJNKiWvsrZ
- XPu3BPcrIthqrc+3pTmppC+AdyaieW1eOePAq7vhbF98sfsNA8rghccaOmBFzMKfC
- 383IBmf9ggZD0imA6A==
+ d=gmail.com; s=20251104; t=1782617581; x=1783222381; darn=buildroot.org;
+ h=date:from:to:subject:content-transfer-encoding:mime-version
+ :message-id:from:to:cc:subject:date:message-id:reply-to;
+ bh=jDu45NsOMZ3iNXS67zrbSgrmqs2ik4GnTxwLmU6TeJU=;
+ b=ZH5dbePc28miWCsfKlYTKIdonEK9LNNWWywASKSu7xStgRxWCHD2Kq1L1tvA6EFibE
+ eoSSaMJnCAQ58se2gxoUvB3W2gxPYYAHt3FYSi/O5JKHl5ygQbpZpGQJur9gxCwnmJOc
+ CYZlkrcNnlytLQr6fb63ZfnEuCWl2n7Akt/uyquKRS6xOUbDTM4pQ198ENnd3VlhdUp3
+ 26IQGPRpKG4MIHlvbfs+9tWBNwByucDbHq6oLT/OFFt4fT6IhRoCV1dfrq9O0vf3u7ji
+ 5GdLaTZ5C/lVD/NFDsdEFRE9aqDzKNi+mKa8pYOpW1QlNjF2SrYKIVQ1aICdXl+axuRa
+ tLzQ==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=gmx.de
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de
- header.a=rsa-sha256 header.s=s31663417 header.b=j5Js20A1
-Subject: Re: [Buildroot] [PATCH-2025.02.x] package/libglib2: backport
- security fixes for CVE-2025-14087
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20251104 header.b=ZH5dbePc
+Subject: [Buildroot] [autobuild.buildroot.org] Daily results for 2026-06-27
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -225,87 +117,182 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Fiona Klute via buildroot <buildroot@buildroot.org>
-Reply-To: Fiona Klute <fiona.klute@gmx.de>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-QW0gMjYuMDYuMjYgdW0gMTc6Mzkgc2NocmllYiBGaW9uYSBLbHV0ZToKPiBBbSAyNi4wNi4yNiB1
-bSAxNTowNSBzY2hyaWViIFBldGVyIEtvcnNnYWFyZDoKPj4+Pj4+PiAiVGhvbWFzIiA9PSBUaG9t
-YXMgUGVyYWxlIDx0aG9tYXMucGVyYWxlQG1pbmQuYmU+IHdyaXRlczoKPj4KPj4gwqAgPiBIaSBQ
-ZXRlciwKPj4gwqAgPiBUaGFua3MgZm9yIHRoZSBwYXRjaC4gSSB0aGluayB0aGVyZSBhcmUgYSBj
-b3VwbGUgb2Ygb3RoZXJzIAo+PiB2dWxuZXJhYmlsaXR5IHRoYXQKPj4gwqAgPiBzdGlsbCBhZmZl
-Y3RzIGxpYmdsaWIyLiBJIGNhbiBsb29rIGF0IGJhY2twb3J0cyBuZXh0IHdlZWsgYnV0IAo+PiBl
-dmVyeXRpbWUgSSBsb29rCj4+IMKgID4gYXQgbGliZ2xpYjIgdGhlcmUgaXMgYWx3YXlzIHNvbWV0
-aGluZyB0aGF0IGJvdGhlciBtZS4gSSB0aGluayBzb21lIAo+PiBvZiB0aG9zZQo+PiDCoCA+IHF1
-ZXN0aW9ucyBhbHNvIGFwcGxpZXMgdG8gbWFzdGVyIGJyYW5jaCBzbyBtYXliZSB5b3UgY2FuIGdp
-dmUgbWUgCj4+IGd1aWRhbmNlLgo+Pgo+PiBJJ2xsIHRyeS4gSSBhbSBhbHNvIG5vdCBhIGJpZyBs
-aWJnbGliMiB1c2VyLCBJIGp1c3QgZ290IHRpcmVkIG9mIHNlZWluZwo+PiB0aGUgdnVsbmVyYWJp
-bGl0eSBzaG93aW5nIHVwIGVhY2ggdGltZS4KPj4KPj4KPj4gwqAgPiAtIFRoZSBgMi44Mi4wYCBz
-dWJkaXJlY3RvcnksIGlmIEkgcnVuIHRoZSAnbGliZ2xpYjItcGF0Y2gnIG9yCj4+IMKgID7CoMKg
-ICdsaWJnbGliMi1ib290c3RyYXAtcGF0Y2gnIHRoZSBwYXRjaCBwcmVzZW50IGluIHRoYXQgZGly
-ZWN0b3J5IAo+PiBpcyBub3QgYXBwbGllZAo+Pgo+PiBQcmVzdW1hYmx5IHRoaXMgd2FzIGZvcmdv
-dHRlbiB3aGVuIEZpb25hIGJ1bXBlZCB0byAyLjgyLjUuIEZpb25hPwo+IAo+IFNlZW1zIGxpa2Vs
-eSwgeWVzLgo+IAo+Pj4gLSBsaWJnbGliMiAmIGxpYmdsaWIyLWJvb3RzdHJhcC4gSWYgd2UgYXBw
-bHkgYSBwYXRjaCB0bwo+PiDCoCA+wqDCoCBsaWJnbGliMiwgc2hvdWxkbid0IGl0IGJlIGFwcGxp
-ZWQgYXMgd2VsbCBvbiBsaWJnbGliMi1ib290c3RyYXAgCj4+IHNpbmNlIGl0J3MgdXNlZAo+PiDC
-oCA+wqDCoCB0byBidWlsZCBnb2JqZWN0LWludHJvc3BlY3Rpb24gPwo+Pgo+PiBJIGd1ZXNzIHNv
-LiBGaW9uYT8KPiAKPiBJdCdzIGJlZW4gYSB3aGlsZSBzbyBJIGRvbid0IHJlbWVtYmVyLCBidXQg
-bG9va2luZyBhdCAKPiAxMWFhMWNmYTVhZjlhNzdhMGE5ZjcyNmJkMzhmMWI3ZGI2NTljMGJmIHRo
-YXQgd2FzIGRlZmluaXRlbHkgdGhlIAo+IGludGVudGlvbi4gVGhlcmUgaXMgYSBzeW1saW5rOgo+
-IAo+IHBhY2thZ2UvbGliZ2xpYjIvbGliZ2xpYjItYm9vdHN0cmFwLzIuODIuMCAtPiAuLi8yLjgy
-LjAKPiAKPiBTbyBleGNlcHQgZm9yIHRoZSBmb3Jnb3R0ZW4gdmVyc2lvbiB1cGRhdGUgZm9yIHRo
-ZSBkaXJlY3Rvcnkvc3ltbGluayB0aGUgCj4gcGF0Y2ggd291bGQgYmUgYXBwbGllZC4gVGhlIGlk
-ZWEgd2FzIHRvIG9ubHkgaGF2ZSB0byB1cGRhdGUgdGhhdCBpbnN0ZWFkIAo+IG9mIHN5bWxpbmtz
-IGZvciBlYWNoIHBhdGNoIChpZiB0aGVyZSBzaG91bGQgYmUgbW9yZSB0aGFuIG9uZSBpbiB0aGUg
-Cj4gZnV0dXJlKS4KPiAKPiBXaGF0IGdpdmVzIG1lIHBhdXNlIGlzIHRoYXQgbm9ib2R5IGNvbXBs
-YWluZWQgYWJvdXQgdGhlIG1pc3NpbmcgcGF0Y2ggCj4gY2F1c2luZyBpc3N1ZXMuIFRoZSBwYXRj
-aCBkZXNjcmlwdGlvbiBtZW50aW9ucyBzcGVjaWZpYyBwYWNrYWdlcyB0aGF0IAo+IGdldCB0aGVp
-ciBzZWFyY2ggcGF0aHMgZm9yIEdJUiBmaWxlcyB3cm9uZyB3aXRob3V0IGl0OiBhdGsgYW5kIGxp
-Ym5pY2UuCj4gCj4gcGFja2FnZS9hdGsgaGFzIGJlZW4gcmVtb3ZlZCBpbiAKPiAyYzNjYTdiZWEx
-ZGU3NjE2M2FlZWY0MzI0MTJlYjE0NTUxZWQwNTgxLCB3aXRoIHRoZSBzdGF0ZWQgcmVhc29uIHRo
-YXQgaXQgCj4gaGFzIGJlZW4gbWVyZ2VkIGludG8gYXQtc3BpMi1jb3JlLiBwYWNrYWdlL2xpYm5p
-Y2Ugd2FzIGxhc3QgdXBkYXRlZCBpbiAKPiAyMDIzLiBGb3IgYm90aCBhdC1zcGkyLWNvcmUgYW5k
-IGxpYm5pY2UgZ29iamVjdC1pbnRyb3NwZWN0aW9uIGlzIGFuIAo+IG9wdGlvbmFsIGRlcGVuZGVu
-Y3ksIHdpdGhvdXQgaXQgdGhvc2UgR0lSIGZpbGVzIHNob3VsZG4ndCBiZSB1c2VkLCBzbyAKPiB0
-aGUgc2VhcmNoIHBhdGggc2hvdWxkbid0IG1hdHRlci4KPiAKPiBJJ20gbm90IHVzaW5nIGVpdGhl
-ciBwYWNrYWdlLCBzbyBJIHdvbmRlcjogSGFzIHRoZSBwYXRjaCBiZWNvbWUgCj4gb2Jzb2xldGUs
-IGFuZCBib3RoIHBhY2thZ2VzIG5vdyBmaW5kIHRoZSBHSVIgZmlsZXMgd2l0aG91dCBpdCB1c2lu
-ZyB0aGUgCj4gZGVmYXVsdHM/IE9yIGhhcyBub2JvZHkgYnVpbHQgdGhlbSB3aXRoIEdPSSBlbmFi
-bGVkIHNpbmNlPyBJbiB0aGUgZm9ybWVyIAo+IGNhc2Ugd2Ugc2hvdWxkIGRyb3AgdGhlIHBhdGNo
-IG9uIG1hc3RlciwgYW5kIGZvciBzdGFibGUgY2hlY2sgd2hlbiB0aGF0IAo+IGhhcHBlbmVkLiBJ
-J20gZ29pbmcgdG8gZG8gYSB0ZXN0LXBrZyBydW4gd2l0aCAKPiBCUjJfUEFDS0FHRV9HT0JKRUNU
-X0lOVFJPU1BFQ1RJT049eSBhdCBsZWFzdCwgd2UnbGwgc2VlIGlmIHRoZSBlcnJvciBpbiAKPiB0
-aGUgcGF0Y2ggZGVzY3JpcHRpb24gc2hvd3MgdXAuCgpSZXN1bHQ6IFRoZXkgYnVpbGQgZmluZSB3
-aXRob3V0IHRoZSBwYXRjaCwgc28gSSd2ZSBzZW50IGEgcGF0Y2ggdG8gCnJlbW92ZSBpdCBbMV0g
-KG1vcmUgZGV0YWlscyB0aGVyZSkuIFVuZm9ydHVuYXRlbHkgd2UgZG9uJ3QgaGF2ZSAKYXV0b21h
-dGVkIHJ1bnRpbWUgdGVzdHMgZm9yIHRoZSBwYWNrYWdlcy4KCj4+PiAtIFRoZSBzaGFyZWQgQ1BF
-IGJldHdlZW4gbGliZ2xpYjIgJiBsaWJnbGliMi1ib290c3RyYXAuIElmIHdlIGRvbid0IAo+Pj4g
-YXBwbHkgdGhlCj4+IMKgID7CoMKgIHNhbWUgc2V0IG9mIHBhdGNoIHRvIGxpYmdsaWIyLWJvb3Rz
-dHJhcCB0aGVuIHdlIHNob3VsZCBkcm9wIHRoZSBDUEUKPj4gwqAgPsKgwqAgZm9yIGxpYmdsaWIy
-LWJvb3RzdHJhcCBzbyBpdCBkb2Vzbid0IGFwcGVhciBpbiBzZWN1cml0eSB0cmFja2VyIAo+PiB3
-aXRoIHRoZSBzYW1lCj4+IMKgID7CoMKgIENWRXMgYXMgbGliZ2xpYjIuCj4gCj4gU2lkZSBub3Rl
-OiBXZSBzaG91bGQgcHJvYmFibHkgYWxzbyBzZXQKPiAKPiBMSUJHTElCMl9CT09UU1RSQVBfSU5T
-VEFMTF9UQVJHRVQgPSBOTwo+IAo+IE9ubHkgdGhlIHByaW1hcnkgcGFja2FnZSAoYm9vdHN0cmFw
-cGVkIG9yIG5vdCkgbmVlZHMgdG8gYmUgaW5zdGFsbGVkIG9uIAo+IHRoZSB0YXJnZXQuIFRoYXQg
-d2F5IGFueSBzZWN1cml0eSBpc3N1ZXMgaW4gbGliZ2xpYjItYm9vdHN0cmFwIHdvdWxkIAo+IGRl
-ZmluaXRlbHkgb25seSBtYXR0ZXIgaWYgZXhwbG9pdGFibGUgZHVyaW5nIEJ1aWxkcm9vdCBidWls
-ZC4gVGhlIAo+IGxpYmdsaWIyIHBhY2thZ2Ugc2hvdWxkIG92ZXJ3cml0ZSB0aGVtIGFueXdheSwg
-YnV0IHRoaXMgd291bGQgZ3VhcmFudGVlIGl0LgoKSSd2ZSBhbHNvIHNlbnQgYSBwYXRjaCBmb3Ig
-dGhhdCBbMl0uIEkndmUgdGVzdGVkIHVzaW5nIAp0ZXN0cy5wYWNrYWdlLnRlc3RfcHl0aG9uX25l
-dHdvcmttYW5hZ2VyX2dvaSwgYW5kIHNlbmQgYW5vdGhlciBzbWFsbCAKcGF0Y2ggZXh0ZW5kaW5n
-IGl0IGEgbGl0dGxlIHRvIGF2b2lkIG1pc3NpbmcgZXJyb3JzIFszXS4gSSBjb3VsZCd2ZSBzZW50
-IAp0aGVtIGFsbCBpbiBhIHNlcmllcywgYnV0IHRoZSBjYW4gYmUgYXBwbGllZCBpbmRlcGVuZGVu
-dGx5LCBhbmQgdGhlIApsYXR0ZXIgdHdvIHNob3VsZCBiZSByZWdhcmRsZXNzIG9mIHdoYXQgd2Ug
-ZGVjaWRlIHRvIGRvIGFib3V0IHRoZSB1bnVzZWQgCnBhdGNoLgoKQmVzdCByZWdhcmRzLApGaW9u
-YQoKWzFdIApodHRwczovL3BhdGNod29yay5vemxhYnMub3JnL3Byb2plY3QvYnVpbGRyb290L3Bh
-dGNoLzIwMjYwNjI3MTIwNDUyLjgwMzQ1MC0xLWZpb25hLmtsdXRlQGdteC5kZS8KWzJdIApodHRw
-czovL3BhdGNod29yay5vemxhYnMub3JnL3Byb2plY3QvYnVpbGRyb290L3BhdGNoLzIwMjYwNjI3
-MTEzNTQxLjc3OTYyNS0xLWZpb25hLmtsdXRlQGdteC5kZS8KWzNdIApodHRwczovL3BhdGNod29y
-ay5vemxhYnMub3JnL3Byb2plY3QvYnVpbGRyb290L3BhdGNoLzIwMjYwNjI3MTEzNDA5Ljc3NzY3
-MS0xLWZpb25hLmtsdXRlQGdteC5kZS8KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290
-Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJv
-b3QK
+Hello,
+
+Autobuild statistics for 2026-06-27
+===================================
+
+      branch |  OK | NOK | TIM | TOT |
+  2025.02.x  |  3  |  3  |  0  |  6  |
+  2026.02.x  |  1  |  1  |  0  |  2  |
+  2026.05.x  |  2  |  3  |  0  |  5  |
+    master   | 17  | 51  |  1  | 69  |
+
+Classification of failures by reason for master
+-----------------------------------------------
+
+host-vboot-utils-7dfa482d6a... | 4 
+            host-autoconf-2.73 | 3 
+              host-pahole-1.28 | 3 
+amazon-ecr-credential-helpe... | 2 
+                 gnupg2-2.5.20 | 2 
+  gobject-introspection-1.84.0 | 2 
+                  bcusdk-0.0.5 | 1 
+                   bird-2.15.1 | 1 
+                  broot-1.57.0 | 1 
+ docker-credential-gcr-v2.1.30 | 1 
+                    dpdk-25.11 | 1 
+                    dust-1.2.3 | 1 
+        edk2-edk2-stable202602 | 1 
+                enscript-1.6.6 | 1 
+                  ffmpeg-6.1.5 | 1 
+                    frr-10.5.4 | 1 
+                           gmp | 1 
+host-google-breakpad-f49c2f... | 1 
+              host-guile-3.0.9 | 1 
+                  iozone-3.508 | 1 
+                     kbd-2.9.0 | 1 
+     kvm-unit-tests-2025-06-05 | 1 
+libfutils-c326ce0cc2a735438... | 1 
+           libmicrohttpd-1.0.5 | 1 
+              libopenssl-3.6.3 | 1 
+                   linux-7.1.1 | 1 
+        ltp-testsuite-20260529 | 1 
+               madplay-0.15.2b | 1 
+                    olsr-0.9.8 | 1 
+               openblas-0.3.33 | 1 
+                opendoas-6.8.2 | 1 
+                   perl-5.42.2 | 1 
+            qbee-agent-2026.19 | 1 
+                  stunnel-5.78 | 1 
+                 systemd-258.7 | 1 
+                    szip-2.1.1 | 1 
+                 uclibc-1.0.58 | 1 
+uhttpd-15346de8d3ba42200249... | 1 
+                       unknown | 1 
+          usb_modeswitch-2.6.2 | 1 
+             util-linux-2.41.5 | 1 
+                 zabbix-7.2.13 | 1 
+
+
+Detail of failures for master
+-----------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    i686     | amazon-ecr-credential-helpe... | NOK | https://autobuild.buildroot.org/results/8bd9733f423467c1f0650e0a5ae946f9cdfe446f | ORPH
+    i586     | amazon-ecr-credential-helpe... | NOK | https://autobuild.buildroot.org/results/4f84245dc2ec6fc72d166a070ecbeaec815dc135 | ORPH
+powerpc64le  |          bcusdk-0.0.5          | NOK | https://autobuild.buildroot.org/results/12b4efedc5d5a01e174c5f659d4f06177bd8d238 |     
+  mips64el   |          bird-2.15.1           | NOK | https://autobuild.buildroot.org/results/ef29450dfe376b4049fdb3aa0239a014be5f4f51 |     
+    i586     |          broot-1.57.0          | NOK | https://autobuild.buildroot.org/results/5296dd21780a5b433e4d34c1526c41ad65cdf0f0 |     
+    i686     | docker-credential-gcr-v2.1.30  | NOK | https://autobuild.buildroot.org/results/8cc41164a4d1d3c6bca8839f259ce7f89c2aa812 | ORPH
+  aarch64    |           dpdk-25.11           | NOK | https://autobuild.buildroot.org/results/0dff5e01912639c756e6e40f1d89ce3a972a46ef |     
+    i686     |           dust-1.2.3           | NOK | https://autobuild.buildroot.org/results/ba82abc8d9a2be9a830359fe5a9524cc7f6721d8 | ORPH
+    i686     |     edk2-edk2-stable202602     | NOK | https://autobuild.buildroot.org/results/1e873399bd0a5913e7739bab8f9de56b79596e2c |     
+    i686     |         enscript-1.6.6         | NOK | https://autobuild.buildroot.org/results/a2ab79779f8bf83a5f5e4ba0fd1b4ccb0666b533 | ORPH
+    i686     |          ffmpeg-6.1.5          | NOK | https://autobuild.buildroot.org/results/4a0361a3d1e755b72e24dbf2c2b8c73bd6bf470d |     
+    i586     |           frr-10.5.4           | NOK | https://autobuild.buildroot.org/results/ff339c00d34c684ce3cbb07fd6739197a2073d89 |     
+  mips64el   |              gmp               | TIM | https://autobuild.buildroot.org/results/1db1c1980fb803c2f834bef826502d6b684ba52e |     
+powerpc64le  |         gnupg2-2.5.20          | NOK | https://autobuild.buildroot.org/results/4729d802978a7bfedfd47c6d4811151e1cff69e5 |     
+   s390x     |         gnupg2-2.5.20          | NOK | https://autobuild.buildroot.org/results/b65e7d4ee04956f85598a1f783a84f0868555aa9 |     
+   x86_64    |  gobject-introspection-1.84.0  | NOK | https://autobuild.buildroot.org/results/b0bb2988892db3c55a417feb8629d4087c583a7d | ORPH
+    i686     |  gobject-introspection-1.84.0  | NOK | https://autobuild.buildroot.org/results/f945fbed1942157bf6a53f5c5e96e25a8c621d6c | ORPH
+    i686     |       host-autoconf-2.73       | NOK | https://autobuild.buildroot.org/results/0b9d4d17ef398c73016a3f1b5dc1e3867709f105 | ORPH
+    i686     |       host-autoconf-2.73       | NOK | https://autobuild.buildroot.org/results/fdba3f8881c12cb22cac0e7e227cdf2bbd067bc3 | ORPH
+    i686     |       host-autoconf-2.73       | NOK | https://autobuild.buildroot.org/results/e6d2d54bce1c399efc87269fdb52d996afb1755a | ORPH
+    i686     | host-google-breakpad-f49c2f... | NOK | https://autobuild.buildroot.org/results/912ed8a083282e221bc34e451acd9b7b5d5b0e99 |     
+    i686     |        host-guile-3.0.9        | NOK | https://autobuild.buildroot.org/results/a561ab439ec24d7a8be8d43b5d6598c03c98e5ea |     
+    i686     |        host-pahole-1.28        | NOK | https://autobuild.buildroot.org/results/a09c4b8e92fe18de8cc5d846a7142b25c50f7644 |     
+    i686     |        host-pahole-1.28        | NOK | https://autobuild.buildroot.org/results/5e3494e60eb2af1cb8604e27b0c0668996e7126d |     
+    i686     |        host-pahole-1.28        | NOK | https://autobuild.buildroot.org/results/fbe89eecead5c5518df3d42ab616e96e190b6131 |     
+    i686     | host-vboot-utils-7dfa482d6a... | NOK | https://autobuild.buildroot.org/results/52131da0caa635268fc43efdd3c82c7686426a10 |     
+    i686     | host-vboot-utils-7dfa482d6a... | NOK | https://autobuild.buildroot.org/results/1018c24c977bc5206a5b80894145118566a69c4a |     
+    i686     | host-vboot-utils-7dfa482d6a... | NOK | https://autobuild.buildroot.org/results/310d3fd5fa655a19feae03cf1a128363be79851c |     
+    i686     | host-vboot-utils-7dfa482d6a... | NOK | https://autobuild.buildroot.org/results/7d3da379d0780c7979653f1ff9f250bc51f4b649 |     
+  powerpc    |          iozone-3.508          | NOK | https://autobuild.buildroot.org/results/b48fc1be561b214fe6f69940cbc5e22d3872f968 |     
+    i686     |           kbd-2.9.0            | NOK | https://autobuild.buildroot.org/results/194660db9af6fd7f3cf35dd9ef8417ac936a3c2a | ORPH
+  riscv64    |   kvm-unit-tests-2025-06-05    | NOK | https://autobuild.buildroot.org/results/234eee7f3439fd78434bace87ba2390b74f038ae |     
+   x86_64    | libfutils-c326ce0cc2a735438... | NOK | https://autobuild.buildroot.org/results/294a6223b21164fd88230dc5ef62a923fd1127a4 |     
+   x86_64    |      libmicrohttpd-1.0.5       | NOK | https://autobuild.buildroot.org/results/9d60453bd7de7869e9e6283a57cb425fff5ca18c |     
+  riscv64    |        libopenssl-3.6.3        | NOK | https://autobuild.buildroot.org/results/1d9199b20dd71005a92fdabf1bec295d1838c036 | ORPH
+    i686     |          linux-7.1.1           | NOK | https://autobuild.buildroot.org/results/6a27f052a5cb9c2f6c11ea4b2abfdae6ef91da13 | ORPH
+    i686     |     ltp-testsuite-20260529     | NOK | https://autobuild.buildroot.org/results/cdef3abbac3e42f526857b840edfddcedc2e48bb |     
+powerpc64le  |        madplay-0.15.2b         | NOK | https://autobuild.buildroot.org/results/cca8280757870d2b73d15f627d95811e0090bef8 | ORPH
+    i586     |           olsr-0.9.8           | NOK | https://autobuild.buildroot.org/results/4e888c3691976e96aeb018b6a523c85f2080cd38 | ORPH
+  riscv64    |        openblas-0.3.33         | NOK | https://autobuild.buildroot.org/results/d0adbfe43afad719660d3cf84e98350a74d4bfa3 |     
+    i586     |         opendoas-6.8.2         | NOK | https://autobuild.buildroot.org/results/cf63c9435d4ec8ae17b1cfd6d3a516be33d47105 |     
+    i686     |          perl-5.42.2           | NOK | https://autobuild.buildroot.org/results/2a4a8441fe0546602f272f57fd453c5afe4c7df6 |     
+    i686     |       qbee-agent-2026.19       | NOK | https://autobuild.buildroot.org/results/72a320579c5b72332695d07832317f2f1b29082a |     
+  aarch64    |          stunnel-5.78          | NOK | https://autobuild.buildroot.org/results/69b87d600ef9fa1d4eb8f65a7282c53808faf362 |     
+    i686     |         systemd-258.7          | NOK | https://autobuild.buildroot.org/results/7f99ee4150e4f6daf618ae80c2026003b5557b95 |     
+    i686     |           szip-2.1.1           | NOK | https://autobuild.buildroot.org/results/e2b1903b213b8b11aef18c7a6ddd20b8db8897a7 |     
+  riscv64    |         uclibc-1.0.58          | NOK | https://autobuild.buildroot.org/results/2dadbc68e3ca51119a485adbf1d77a36de999e04 |     
+    i586     | uhttpd-15346de8d3ba42200249... | NOK | https://autobuild.buildroot.org/results/1747ef7d64fe5c43d0fdd75973795b873653c06c | ORPH
+powerpc64le  |            unknown             | NOK | https://autobuild.buildroot.org/results/50184bd857c74e97693693a602be838e6a7535ad |     
+    i686     |      usb_modeswitch-2.6.2      | NOK | https://autobuild.buildroot.org/results/1129625e0e11c2048145bc554b5a144765f8f196 | ORPH
+  riscv64    |       util-linux-2.41.5        | NOK | https://autobuild.buildroot.org/results/717cf3a451ce25dfe18e5a2079e95288afd066f5 |     
+  mips64el   |         zabbix-7.2.13          | NOK | https://autobuild.buildroot.org/results/b90922b4e9f624f6a21033123d7d61b8ea37655d |     
+
+
+Classification of failures by reason for 2026.05.x
+--------------------------------------------------
+
+            host-mfgtools-0.02 | 1 
+                  libnfs-6.0.2 | 1 
+             sigsum-go-v0.13.1 | 1 
+
+
+Detail of failures for 2026.05.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    arm      |       host-mfgtools-0.02       | NOK | https://autobuild.buildroot.org/results/708895dd6b007d25c38651c52eab217d896d7940 |     
+    arm      |          libnfs-6.0.2          | NOK | https://autobuild.buildroot.org/results/6355c99bd3e11d59663e37fa762fad12deca4129 | ORPH
+    i686     |       sigsum-go-v0.13.1        | NOK | https://autobuild.buildroot.org/results/5a8db8b062480907da6f8a080cd4044a10ca6d0a |     
+
+
+Classification of failures by reason for 2026.02.x
+--------------------------------------------------
+
+                  bcusdk-0.0.5 | 1 
+
+
+Detail of failures for 2026.02.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    i686     |          bcusdk-0.0.5          | NOK | https://autobuild.buildroot.org/results/31ccf1b5b00a06ba48247d19586f2dc8e03aaccb |     
+
+
+Classification of failures by reason for 2025.02.x
+--------------------------------------------------
+
+              libmodbus-3.1.11 | 1 
+                 logsurfer-1.8 | 1 
+              tailscale-1.78.1 | 1 
+
+
+Detail of failures for 2025.02.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    i586     |        libmodbus-3.1.11        | NOK | https://autobuild.buildroot.org/results/ab205f164e4b83cb3745a73282188a958897c765 |     
+    i686     |         logsurfer-1.8          | NOK | https://autobuild.buildroot.org/results/84feb7a2a13f15a81746f09dc7d85a22ad6c3e3c |     
+    i686     |        tailscale-1.78.1        | NOK | https://autobuild.buildroot.org/results/f920cabd488815f61a564973fc354f74089cfebb |     
+
+
+
+-- 
+https://autobuild.buildroot.org
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
