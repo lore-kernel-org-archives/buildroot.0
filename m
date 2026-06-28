@@ -4,84 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55133C43602
-	for <buildroot@archiver.kernel.org>; Sun, 28 Jun 2026 13:33:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0E85C43458
+	for <buildroot@archiver.kernel.org>; Sun, 28 Jun 2026 13:33:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 24CA940C7A;
-	Sun, 28 Jun 2026 13:33:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9286A40C6B;
+	Sun, 28 Jun 2026 13:33:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ke8U9xghpF2k; Sun, 28 Jun 2026 13:33:31 +0000 (UTC)
+ id yeY32X_0NvaA; Sun, 28 Jun 2026 13:33:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BD45140C60
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9964B40C8C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1782653610;
-	bh=lM01H7cHZQ+i/s3n0RQOOjewEX7JDAGB+HNG7/rsgJw=;
-	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=qVWGkfJxm90LgP0Giud2c60Lt+RK4JLxgaTI1N6M4BM0jIMvtyGpbqG7H9faYoh+j
-	 plU8BCZPfaBWzaQuZT6HJ0Rj6+v9z+IQ+wxtJfc/Hlq7IMqG1NDKDfSXIjD0va3bZz
-	 O4VwSf3tETZNBH6RSl9ck6bb5MOJluDga2p0v12kNz1uioUc9E+T4zq+euoGdJEIsg
-	 MavsQMX+Q0HmMrbY3JdEIDqmbPZSSLqVkDh/0wFBite76N7ULcGVaU2XH6dCgqd5Bd
-	 QIL/ZeuxRno1/yIM79Y84p3lejkdzjDNG5Z5AGx/YhwCa9SP38zgw9pf6ljTPKl0ll
-	 8hnFtiPApms9A==
+	s=default; t=1782653627;
+	bh=JjOn//hKcT9VPSMVnVDxr41WZOj0Ywk6RwCaTJmyjJI=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=oabHi5R3X6PJJXbYwwDb3ivpbVTlyBFYUzw9hRgckJHHkmA/WwSYpQqj6/8sQVdZR
+	 dHoRvMSaB9BjvD5vW7w9hYT9tsiV/16tTsCV76tjgstTCMGta5FDz+JdwtelZweYRL
+	 iMEohbjunyiyCTcGzV7NotaDxbSVi6eBm9LIygKKp2WlhuBt/IK6FFQtHGJn8Oyt3J
+	 L8i9cyWCnfv73xguB26cqZNQxacrN2hAZRpffgvttYny4wHQ/Ts8veRQf1BAmtSUfS
+	 2ynGgFNAGik6auYPZ2Ic7Oa2XBLLp3DERyDK3evhToeo9dldlc6NZxIPUIr+Vdae6O
+	 Cb4SIw2uVr5eA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BD45140C60;
-	Sun, 28 Jun 2026 13:33:30 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 118CF2F3
- for <buildroot@buildroot.org>; Sun, 28 Jun 2026 13:33:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9964B40C8C;
+	Sun, 28 Jun 2026 13:33:47 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2AA752F3
+ for <buildroot@buildroot.org>; Sun, 28 Jun 2026 13:33:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0F4888156D
- for <buildroot@buildroot.org>; Sun, 28 Jun 2026 13:33:29 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1104481583
+ for <buildroot@buildroot.org>; Sun, 28 Jun 2026 13:33:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NsVxp-FLYDG7 for <buildroot@buildroot.org>;
- Sun, 28 Jun 2026 13:33:28 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+ id MFAk3A-cJnDN for <buildroot@buildroot.org>;
+ Sun, 28 Jun 2026 13:33:45 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org DFFB28156A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DFFB28156A
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp1.osuosl.org (Postfix) with ESMTPS id DFFB28156A
- for <buildroot@buildroot.org>; Sun, 28 Jun 2026 13:33:27 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 738964680; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Sun, 28 Jun 2026 13:33:24 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peter@korsgaard.com>) id 1wdpdS-0000000151d-1b1J;
- Sun, 28 Jun 2026 15:33:22 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 58FFC8156D
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 58FFC8156D
+ for <buildroot@buildroot.org>; Sun, 28 Jun 2026 13:33:45 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 6033186E73; Sun, 28 Jun 2026 13:33:18 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20260628113941.8068-2-bernd@kuhls.net> (Bernd Kuhls's message of
- "Sun, 28 Jun 2026 13:39:41 +0200")
-References: <20260628113941.8068-1-bernd@kuhls.net>
- <20260628113941.8068-2-bernd@kuhls.net>
-Date: Sun, 28 Jun 2026 15:33:22 +0200
-Message-ID: <8733y6x00t.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=rjkCB0tKPmC1YDVHlvRYHzDnEJjrHg6H0DA4oor4kQ6hjieIVcRy4T74/YpGOi6fQFrOtcbYNKKXqCLWa23htWVm/D6g8kPTuzySe/lDgIZSkWFc7r1kXBpR2gcOkdRGLW9A6W2TLpm342p58JDurhi4IEvM8Vb9fZ0XG0YE1uqWK/Ubo+zmaOB+bey/EYy+DMzBtMu2jdNGY9r4HrMSJf/hJ9h09EBwWJ3EP7ZztmumKyQch2KtfJSD0y8SOkRgvvgPJCNe9H7XoOu7Sqco9otIzIk8nfTyfm9l17vLUCioZAzPdLBSFS1JNQfiyIK1LwBXGM4UR8cVNPmnbzmVJQ==;
- s=purelymail2; d=purelymail.com; v=1;
- bh=qqjxv5ghl3uHSz6CLk8S7TdrlKKa7KUMl3jaCHhb04s=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail2 header.b=rjkCB0tK
-Subject: Re: [Buildroot] [PATCH 2/2] package/linux-headers: drop 7.0.x option
+To: buildroot@buildroot.org
+Date: Sun, 28 Jun 2026 15:32:51 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: a5c88de2808a67ade2d9dacb7e03447d35908da6
+X-Git-Newrev: 606f9ecbdec0b814e1fd6f07635985fbbf61e62c
+X-Patchwork-Hint: ignore
+Message-Id: <20260628133318.6033186E73@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/linux-headers: drop 7.0.x option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,25 +69,87 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/606f9ecbdec0b814e1fd6f07635985fbbf61e62c
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
- > The 7.0.x series is now EOL upstream, so drop the linux-headers
- > option and add legacy handling for it.
+The 7.0.x series is now EOL upstream, so drop the linux-headers
+option and add legacy handling for it.
 
- > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
- > ---
- > Gitlab pipeline passed:
- > https://gitlab.com/bkuhls/buildroot/-/commits/b174887ea602d2920b94cc8deaf3debb87905826
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ Config.in.legacy                     | 7 +++++++
+ linux/from-6.17/linux.hash           | 1 -
+ package/linux-headers/7.0.14         | 1 -
+ package/linux-headers/Config.in.host | 5 -----
+ 4 files changed, 7 insertions(+), 7 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/Config.in.legacy b/Config.in.legacy
+index b8a95fd812..4894fe7065 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,13 @@ endif
+ 
+ comment "Legacy options removed in 2026.08"
+ 
++config BR2_KERNEL_HEADERS_7_0
++	bool "kernel headers version 7.0.x are no longer supported"
++	select BR2_LEGACY
++	help
++	  Version 7.0.x of the Linux kernel headers are no longer
++	  maintained upstream and are now removed.
++
+ config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_SAP
+ 	bool "bluez sap plugin removed"
+ 	select BR2_LEGACY
+diff --git a/linux/from-6.17/linux.hash b/linux/from-6.17/linux.hash
+index e611478e30..2d6ab0f28a 100644
+--- a/linux/from-6.17/linux.hash
++++ b/linux/from-6.17/linux.hash
+@@ -1,6 +1,5 @@
+ # From https://www.kernel.org/pub/linux/kernel/v7.x/sha256sums.asc
+ sha256  37198c93727be247c9fb5309bb86cd5e496c61e5322cd8c4eca9476bb0b5883f  linux-7.1.2.tar.xz
+-sha256  de9999b784d2293f00d39c62d8f92a08ab8a54bc4e80ffd250a0c09cb07a0f98  linux-7.0.14.tar.xz
+ 
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+ sha256  a83cd200e6646db52866b8309e9137b9e9048b613cbda10ced2b811aae125255  linux-6.18.37.tar.xz
+diff --git a/package/linux-headers/7.0.14 b/package/linux-headers/7.0.14
+deleted file mode 120000
+index a4e1d3ec9c..0000000000
+--- a/package/linux-headers/7.0.14
++++ /dev/null
+@@ -1 +0,0 @@
+-../../linux/from-6.17
+\ No newline at end of file
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 54fa189217..d1eb93ce1c 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -52,10 +52,6 @@ config BR2_KERNEL_HEADERS_6_18
+ 	bool "Linux 6.18.x kernel headers"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_18
+ 
+-config BR2_KERNEL_HEADERS_7_0
+-	bool "Linux 7.0.x kernel headers"
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_7_0
+-
+ config BR2_KERNEL_HEADERS_7_1
+ 	bool "Linux 7.1.x kernel headers"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_7_1
+@@ -482,7 +478,6 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "6.6.143"	if BR2_KERNEL_HEADERS_6_6
+ 	default "6.12.94"	if BR2_KERNEL_HEADERS_6_12
+ 	default "6.18.37"	if BR2_KERNEL_HEADERS_6_18
+-	default "7.0.14"	if BR2_KERNEL_HEADERS_7_0
+ 	default "7.1.2"		if BR2_KERNEL_HEADERS_7_1
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
