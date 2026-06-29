@@ -4,113 +4,111 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7BF3DC43458
-	for <buildroot@archiver.kernel.org>; Mon, 29 Jun 2026 21:00:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 220B5C43458
+	for <buildroot@archiver.kernel.org>; Mon, 29 Jun 2026 21:00:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 41EE460F60;
-	Mon, 29 Jun 2026 21:00:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D75D860E7E;
+	Mon, 29 Jun 2026 21:00:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Rpf4F0O3XArl; Mon, 29 Jun 2026 21:00:10 +0000 (UTC)
+ id 54wzu6HzWDzu; Mon, 29 Jun 2026 21:00:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 55A3D60F77
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 56A3B60614
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1782766810;
-	bh=8sB+eYlKHBJ27W8IQc7h+GBSou/z6aQj1OEModL2GYE=;
-	h=To:Date:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 From;
-	b=LEH34AOsdIRaR9Cb5IDb1qHBGzga5jM9OkROGuIVyQdWxdftSGlIngHsbVUs2ge3y
-	 V+O/MwcZIwrRbwsG1uKsrE3LmROAaVWQJRR0HNRfokDb/+jbccCzftI1HUkf9hJYPH
-	 9K/q2KNkeHIWv5+bxlkBq81JqGsvLfQp1p4Qfhz8Nu94OKKoAXAWiKZRAzFgd8buZp
-	 K3NKJVbpK/Nfa+WUs3h2Jn92+KDRcK05OXP6931tK0pgFusnE4ar5y68UV3dcHX5bl
-	 ZCWLrhclnwDqKVKPHptY41ScvQEsxPih4kY5fsioIR2mJS4phN6epYMGDENey5yUEZ
-	 BnUVR6NWNB80w==
+	s=default; t=1782766846;
+	bh=d84ZVzoObzwyTn53g3DBwHZV0bUQnkhFcavvenyhLLA=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=oJgCWseRHXTIaHjtjQNWawKvRXpHfZ4U5vxvss5WBMY344ZUraEbHcBPRVy4I0p1D
+	 Kg5YRH9obRs/lVq20e1TpNnzUI/fAX2QsoT0UQivE9Aa1rwcf0EgunYhHL/xwswAh7
+	 TDF1umFMmxIyQm8OiTcSS9nPqEU0xLb1Gs1cUZgSLfSLlONkV/kSj2H3W3oZNQu8Rb
+	 iCzvNUjRRhwlqItgmqRz8PvYwwUTcUR0YR+XW+eSsK/1cNd07Z97JnFOlI99AEAuN3
+	 bmsK4SIv6bSb0XPkctqgx8iiypb3EUi034/a27tB+msst40+MJR+8QqV8Mn47B9hab
+	 /cb3fy6d7GtDw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 55A3D60F77;
-	Mon, 29 Jun 2026 21:00:10 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 27FF7149
- for <buildroot@buildroot.org>; Mon, 29 Jun 2026 21:00:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 56A3B60614;
+	Mon, 29 Jun 2026 21:00:46 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id E9FCE34C
+ for <buildroot@buildroot.org>; Mon, 29 Jun 2026 21:00:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0D5604104E
- for <buildroot@buildroot.org>; Mon, 29 Jun 2026 21:00:08 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id CFAB760614
+ for <buildroot@buildroot.org>; Mon, 29 Jun 2026 21:00:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iYbyvlwXTJCI for <buildroot@buildroot.org>;
- Mon, 29 Jun 2026 21:00:07 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7Yn-kCa70lP0 for <buildroot@buildroot.org>;
+ Mon, 29 Jun 2026 21:00:44 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::431; helo=mail-wr1-x431.google.com;
+ client-ip=2a00:1450:4864:20::434; helo=mail-wr1-x434.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 243704104A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 243704104A
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
- [IPv6:2a00:1450:4864:20::431])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 243704104A
- for <buildroot@buildroot.org>; Mon, 29 Jun 2026 21:00:07 +0000 (UTC)
-Received: by mail-wr1-x431.google.com with SMTP id
- ffacd0b85a97d-474560436c3so959752f8f.0
- for <buildroot@buildroot.org>; Mon, 29 Jun 2026 14:00:06 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A8D34605E1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A8D34605E1
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
+ [IPv6:2a00:1450:4864:20::434])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A8D34605E1
+ for <buildroot@buildroot.org>; Mon, 29 Jun 2026 21:00:43 +0000 (UTC)
+Received: by mail-wr1-x434.google.com with SMTP id
+ ffacd0b85a97d-472a14c9965so1618687f8f.1
+ for <buildroot@buildroot.org>; Mon, 29 Jun 2026 14:00:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1782766805; x=1783371605;
+ d=1e100.net; s=20251104; t=1782766841; x=1783371641;
  h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:to:from:x-gm-gg:x-gm-message-state:from:to
- :cc:subject:date:message-id:reply-to;
- bh=dC8CNv6C8sfSjGB6u1DyRZnbte4mNEvEQ7ihivls9i0=;
- b=c56d9rS4CWFkxKk8zBOSqYgx+yS8BmU2Le2B7IHOuE6rMnt6sYfpQxOkvF0c6dEzZU
- D+NyCHA+EFCzZihCUArddMLCC/lPwWj71bK7ENlg0qOUCovBRAdIVkfuAvxSppyoI+AY
- WEqPac3ktHaH0D4ec/E8O8s9EZ6uy7ggPZnWtMUR1MNNKPPpk05gl5LZHoIOrTHJjzg/
- pO3cn1jUFy5whNbCi01qqkuouXM+u0taQI1xQ3rz8cJQX8F4/vwftnqF30KVxYDsRrJ+
- nQvWFUOw8+p8PGMqzatsg8rWQcXJnmiCQX1i6hueNPz26w+8ppITDCOIsis7TdJdj83P
- F19Q==
-X-Gm-Message-State: AOJu0YwwNvypjFkLzOpVY2/1Fl8akKaXYiWc6B1Levx+e7z/Hqs9qDyP
- TaivrQjuGlDGtF5hhM7sYn0tUEMXoRI8qy5G17KPbNFo6qaIk9xxX6avSMRcRCemXlEf/O7NQk3
- sITF5
-X-Gm-Gg: AfdE7ckbFoXnoOVq5ekE0HuR1zJKyfrbjR8Cni7EekrJC+pobwvE31P04rkhe3wK1r6
- AGXnDrq3EWZ+Mu+yp2v1fdiNGhsnLjzPQGoPl39B12MqZfEmFcGmyxgRXyMUk+GCpQSXKwHfZ0o
- mkUJLvOghoOARGfaPLUMwxoW7sNSfH324FuFLF6IqDN3fMURXYali/gmXqTJYs0v7uHCKrd3p7e
- fG/5AzMoWieDTZovMjIla+cwTXayYVIaWgL5OOqm/qUOmQK5+nY8AGhcbQsptmpr7zJJtKK3U6u
- qMBIvyA9IN/97EHJRIpajIZqTCnLq3fwHqfeZvlFQezWSDGzcs6uFRvM67D62QZtrl8gDcxXYm7
- /Gw5i0+fbhXMD3p9TeX+K2WwxNWEyI5qGw06xMIB39ztUs4j6P5qpM4fhf0PGbRgbxfD6/JxZi8
- X93JVB
-X-Received: by 2002:a05:600c:1d09:b0:493:a535:5527 with SMTP id
- 5b1f17b1804b1-493b82ac8d4mr15974305e9.21.1782766805019; 
- Mon, 29 Jun 2026 14:00:05 -0700 (PDT)
+ :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=MVEnyjMWAkzlYJT3e0Gbs8BASyH+R5rzHUQEjpJzyMk=;
+ b=G1g6LqeUm5FSkDPnerxCA4qMvDAtSlra0T4shzp1q6b16RUCDfQrLaOLiDmrlUcybN
+ tskxCJM3rtxxUgDUZXdxeZP2uEIDa8s3xMmZ0xqWVjrTus9MGb7eZB8VHDh1+XiGr+o2
+ yj/XQbIAw1o9wWePkTQPFfHszuuZ9Tx6s5g4rmCf52IcSoZFzBRWtINxaZLwMOl9tGeA
+ Fntx93xS3hu9OVHtvt8ilpHo1YH2dOyu3wEHqNoJE/mDQJOgBSIWCSVRIR2kUcNei/re
+ DKlioVSgm183hv8hy6tkqlEsQLicj2KCVTPFHVG2kSQ20C+KTApDKdwRcDX90P0eWRQO
+ lgiw==
+X-Gm-Message-State: AOJu0Ywg4Pee6uRA2TWc5jSpQeVFaXkkwRVVVkKGDOfjNUXpNeHpJUUI
+ ZVsdL+ng8t65YbVBLyuh/tMNHkmpXAfFrAgAILr4ClugiOYggxpoajIOWgZpCb0IPifk5b9FEBn
+ KdolW
+X-Gm-Gg: AfdE7cnjhRt7qIETjBM10+1uEua9tcPqg589FGawBUsWAs89MiLJ9sa6+PcvvMUx6/x
+ Wt3dwNi4NBB1lKqCEtAmDLSLYNQWI3bIjdpAZugjojELKZwvvH+tlwkZbXCF/zLy7mc93FrO/He
+ x7sHReu5tzh5vAZOTYDLg/s9noXVvioqOrd0zc16R5PfBkaquZQdezwIH78BbRiwk8SthRnUQFs
+ B3HhLdJhFbIafB2xU3CRGEgQbcvegydxhWchqSILyJ6SJrgCqyRwXcpoXO7TQS+YhWhVPgIglKt
+ FEq4w4+SEXiBaj0Rm5KbgxUCwetCQqyobteO/mjmnNNXWkGclieMm9Doa3e7i3xk9q+YraXx292
+ w6rFmwwPquVjCzLiHUgjAtrcqXR1nBoNyz90fRKZOCJPLwxW/NJswzpwaOXaw+6695svWyZWsTn
+ VrXWJi
+X-Received: by 2002:a05:6000:460d:b0:474:8aad:2e0 with SMTP id
+ ffacd0b85a97d-475505f2fbamr1002604f8f.9.1782766841318; 
+ Mon, 29 Jun 2026 14:00:41 -0700 (PDT)
 Received: from arch ([77.109.126.77]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-493b8cd88e8sm15289115e9.7.2026.06.29.14.00.04
- for <buildroot@buildroot.org>
+ ffacd0b85a97d-47566c0deacsm1006782f8f.26.2026.06.29.14.00.40
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 29 Jun 2026 14:00:04 -0700 (PDT)
-To: buildroot@buildroot.org
-Date: Mon, 29 Jun 2026 23:00:03 +0200
-Message-ID: <20260629210003.623732-2-thomas.perale@mind.be>
+ Mon, 29 Jun 2026 14:00:40 -0700 (PDT)
+To: Thomas Perale <thomas.perale@mind.be>
+Cc: buildroot@buildroot.org
+Date: Mon, 29 Jun 2026 23:00:40 +0200
+Message-ID: <20260629210040.624167-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260629210003.623732-1-thomas.perale@mind.be>
-References: <20260629210003.623732-1-thomas.perale@mind.be>
+In-Reply-To: <20260629205930.623351-1-thomas.perale@mind.be>
+References: <20260629205930.623351-1-thomas.perale@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1782766805; x=1783371605; darn=buildroot.org;
+ d=mind.be; s=google; t=1782766841; x=1783371641; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
- :reply-to;
- bh=dC8CNv6C8sfSjGB6u1DyRZnbte4mNEvEQ7ihivls9i0=;
- b=bS3F0ak/TkKiKXj8awnYJJpFqZvgZozeSti2gfXhYKvZ8ldvaqWAkAETV/4KKGGVbg
- 8T5vmIfjbikRJDiPJnREpsEWJInjB4HC99QlarX3vVJj36ZMSYmWRllEzq8u9Ce8uR55
- n/LKxuGyojwykcsE3MzFLg8/fGTtFpR2yQZ4GjtbmyaL44phgMIVuja9mbnvcxM3rfNs
- v5vUG7Vmfrnk21bKg9dWtBqFQgOT6cMH2mfl0KXbzLu+Fkzs/zeHews+8XTUOvu3eyn3
- 928nPxRTB95P1XhTMK9y1Y4LUr/dQpj/aos4NbLfNq4tM4uaN9vut/VzVQlA7k92g7ww
- qWMg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=MVEnyjMWAkzlYJT3e0Gbs8BASyH+R5rzHUQEjpJzyMk=;
+ b=JT+p+AMGmKLQc29ZAe7fXhMBwVdUFFBt/Uv49TY/aD4zGq7nFVToN3M46qciStOlfk
+ 9pIzbuOAUw3+37hU/MKKm7NksjsgqbeBd2llL6oEDzrmlxGV9sC4Y940hOiBs97mk1tz
+ tvksl/diqPDV/pSkEs+f5IdASppJ1HonDBMm7mBNmipZKIXKZUbi1I3B5SeXCg+rD8iw
+ 7zKAY0YcoN6F7VUoYYr3xSuC77E7yAL4x4xhwA4cd8ZZV4H2F73wzamK9BtAnBriyejq
+ ZrxeksLTPoOPu1lSIw0DXCjl+WXkZpweNTYa8BLtU7h+tVQU5MhirziofTmbnENPNo7z
+ yaag==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=bS3F0ak/
-Subject: [Buildroot] [PATCH 2/2] package/libssh2: backport upstream patch
- for CVE-2026-55200
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=JT+p+AMG
+Subject: Re: [Buildroot] [PATCH] package/sudo: backport patch CVE-2026-35535
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -129,83 +127,204 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- CVE-2026-55200:
-    libssh2 through 1.11.1, fixed in commit 7acf3df contains an out-of-
-    bounds write vulnerability in ssh2_transport_read() that fails to
-    enforce upper bounds on packet_length field. Remote attackers can send
-    crafted SSH packets with excessively large packet_length values to
-    corrupt heap memory and achieve remote code execution.
+This is an error re-send. I superseeded it on patchwork.
 
-For more information, see:
-  - https://www.cve.org/CVERecord?id=CVE-2026-55200
-  - https://github.com/uclouvain/openjpeg/commit/839936aa33eb8899bbbd80fda02796bb65068951
+In reply of:
+> This backport is provided thanks to the Debian community [1].
+> 
+> - CVE-2026-35535:
+>     In Sudo through 1.9.17p2 before 3e474c2, a failure of a setuid,
+>     setgid, or setgroups call, during a privilege drop before running the
+>     mailer, is not a fatal error and can lead to privilege escalation.
+> 
+> For more information, see:
+>     https://www.cve.org/CVERecord?id=CVE-2026-35535
+> 
+> [1] https://salsa.debian.org/sudo-team/sudo/-/blob/debian/trixie/debian/patches/0006-exec_mailer-Set-group-as-well-as-uid-when-running-th.patch
+> 
+> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
----
- ...al-boundary-checks-for-packet-length.patch | 36 +++++++++++++++++++
- package/libssh2/libssh2.mk                    |  3 ++
- 2 files changed, 39 insertions(+)
- create mode 100644 package/libssh2/0003-transport-c-Additional-boundary-checks-for-packet-length.patch
-
-diff --git a/package/libssh2/0003-transport-c-Additional-boundary-checks-for-packet-length.patch b/package/libssh2/0003-transport-c-Additional-boundary-checks-for-packet-length.patch
-new file mode 100644
-index 0000000000..ef54771afc
---- /dev/null
-+++ b/package/libssh2/0003-transport-c-Additional-boundary-checks-for-packet-length.patch
-@@ -0,0 +1,36 @@
-+From 97acf3dfda80c91c3a8c9f2372546301d4a1a7a8 Mon Sep 17 00:00:00 2001
-+From: Will Cosgrove <will@panic.com>
-+Date: Fri, 12 Jun 2026 15:57:44 -0700
-+Subject: [PATCH] transport.c: Additional boundary checks for packet length
-+ (#2052)
-+
-+Add additional bounds checking on packet length to prevent OOB write.
-+
-+Credit: [TristanInSec](https://github.com/TristanInSec)
-+
-+CVE: CVE-2026-55200
-+Upstream: https://github.com/libssh2/libssh2/commit/97acf3dfda80c91c3a8c9f2372546301d4a1a7a8
-+[thomas: backport to 1.11.1, change ntohu32 call]
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-+---
-+ src/transport.c | 6 +++++-
-+ 1 file changed, 5 insertions(+), 1 deletion(-)
-+
-+diff --git a/src/transport.c b/src/transport.c
-+index 869fc5a4fa..7925ad33d1 100644
-+--- a/src/transport.c
-++++ b/src/transport.c
-+@@ -645,8 +645,12 @@ int ssh2_transport_read(LIBSSH2_SESSION *session)
-+                 total_num = 4;
-+ 
-+                 p->packet_length = _libssh2_ntohu32(block);
-+-                if(p->packet_length < 1)
-++                if(p->packet_length < 1) {
-+                     return LIBSSH2_ERROR_DECRYPT;
-++                }
-++                else if(p->packet_length > LIBSSH2_PACKET_MAXPAYLOAD) {
-++                    return LIBSSH2_ERROR_OUT_OF_BOUNDARY;
-++                }
-+ 
-+                 /* total_num may include size field, however due to existing
-+                  * logic it needs to be removed after the entire packet is read
-diff --git a/package/libssh2/libssh2.mk b/package/libssh2/libssh2.mk
-index c85129a7cd..0ccf5effb3 100644
---- a/package/libssh2/libssh2.mk
-+++ b/package/libssh2/libssh2.mk
-@@ -19,6 +19,9 @@ LIBSSH2_IGNORE_CVES += CVE-2026-7598
- # 0002-packet-check-libssh2-get-string-return-in-EXT-INFO-handler.patch
- LIBSSH2_IGNORE_CVES += CVE-2026-55199
- 
-+# 0003-transport-c-Additional-boundary-checks-for-packet-length.patch
-+LIBSSH2_IGNORE_CVES += CVE-2026-55200
-+
- ifeq ($(BR2_PACKAGE_LIBSSH2_MBEDTLS),y)
- LIBSSH2_DEPENDENCIES += mbedtls
- LIBSSH2_CONF_OPTS += --with-libmbedcrypto-prefix=$(STAGING_DIR)/usr \
--- 
-2.54.0
-
+> ---
+>  ...-well-as-uid-when-running-the-mailer.patch | 147 ++++++++++++++++++
+>  package/sudo/sudo.mk                          |   4 +
+>  2 files changed, 151 insertions(+)
+>  create mode 100644 package/sudo/0001-exec-mailer-set-group-as-well-as-uid-when-running-the-mailer.patch
+> 
+> diff --git a/package/sudo/0001-exec-mailer-set-group-as-well-as-uid-when-running-the-mailer.patch b/package/sudo/0001-exec-mailer-set-group-as-well-as-uid-when-running-the-mailer.patch
+> new file mode 100644
+> index 0000000000..0bfcdd6f93
+> --- /dev/null
+> +++ b/package/sudo/0001-exec-mailer-set-group-as-well-as-uid-when-running-the-mailer.patch
+> @@ -0,0 +1,147 @@
+> +From 3e474c2f201484be83d994ae10a4e20e8c81bb69 Mon Sep 17 00:00:00 2001
+> +From: "Todd C. Miller" <Todd.Miller@sudo.ws>
+> +Date: Sat, 8 Nov 2025 15:34:02 -0700
+> +Subject: [PATCH] exec_mailer: Set group as well as uid when running the mailer
+> +
+> +Also make a setuid(), setgid() or setgroups() failure fatal.
+> +
+> +Found by the ZeroPath AI Security Engineer <https://zeropath.com>
+> +
+> +CVE: CVE-2026-35535
+> +Upstream: https://github.com/sudo-project/sudo/commit/3e474c2f201484be83d994ae10a4e20e8c81bb69
+> +Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+> +---
+> + include/sudo_eventlog.h      |  3 ++-
+> + lib/eventlog/eventlog.c      | 21 +++++++++++++++++----
+> + lib/eventlog/eventlog_conf.c |  4 +++-
+> + plugins/sudoers/logging.c    |  2 +-
+> + plugins/sudoers/policy.c     |  2 +-
+> + 5 files changed, 24 insertions(+), 8 deletions(-)
+> +
+> +diff --git a/include/sudo_eventlog.h b/include/sudo_eventlog.h
+> +index eb9f4f4..485d259 100644
+> +--- a/include/sudo_eventlog.h
+> ++++ b/include/sudo_eventlog.h
+> +@@ -80,6 +80,7 @@ struct eventlog_config {
+> +     int syslog_rejectpri;
+> +     int syslog_alertpri;
+> +     uid_t mailuid;
+> ++    gid_t mailgid;
+> +     bool omit_hostname;
+> +     const char *logpath;
+> +     const char *time_fmt;
+> +@@ -151,7 +152,7 @@ void eventlog_set_syslog_rejectpri(int pri);
+> + void eventlog_set_syslog_alertpri(int pri);
+> + void eventlog_set_syslog_maxlen(size_t len);
+> + void eventlog_set_file_maxlen(size_t len);
+> +-void eventlog_set_mailuid(uid_t uid);
+> ++void eventlog_set_mailuser(uid_t uid, gid_t gid);
+> + void eventlog_set_omit_hostname(bool omit_hostname);
+> + void eventlog_set_logpath(const char *path);
+> + void eventlog_set_time_fmt(const char *fmt);
+> +diff --git a/lib/eventlog/eventlog.c b/lib/eventlog/eventlog.c
+> +index 5a32824..d56c4e4 100644
+> +--- a/lib/eventlog/eventlog.c
+> ++++ b/lib/eventlog/eventlog.c
+> +@@ -304,15 +304,13 @@ exec_mailer(int pipein)
+> + 	syslog(LOG_ERR, _("unable to dup stdin: %m")); // -V618
+> + 	sudo_debug_printf(SUDO_DEBUG_ERROR,
+> + 	    "unable to dup stdin: %s", strerror(errno));
+> +-	sudo_debug_exit(__func__, __FILE__, __LINE__, sudo_debug_subsys);
+> +-	_exit(127);
+> ++	goto bad;
+> +     }
+> + 
+> +     /* Build up an argv based on the mailer path and flags */
+> +     if ((mflags = strdup(evl_conf->mailerflags)) == NULL) {
+> + 	syslog(LOG_ERR, _("unable to allocate memory")); // -V618
+> +-	sudo_debug_exit(__func__, __FILE__, __LINE__, sudo_debug_subsys);
+> +-	_exit(127);
+> ++	goto bad;
+> +     }
+> +     argv[0] = sudo_basename(mpath);
+> + 
+> +@@ -331,11 +329,23 @@ exec_mailer(int pipein)
+> +     if (setuid(ROOT_UID) != 0) {
+> + 	sudo_debug_printf(SUDO_DEBUG_ERROR, "unable to change uid to %u",
+> + 	    ROOT_UID);
+> ++	goto bad;
+> ++    }
+> ++    if (setgid(evl_conf->mailgid) != 0) {
+> ++	sudo_debug_printf(SUDO_DEBUG_ERROR, "unable to change gid to %u",
+> ++	    (unsigned int)evl_conf->mailgid);
+> ++	goto bad;
+> ++    }
+> ++    if (setgroups(1, &evl_conf->mailgid) != 0) {
+> ++	sudo_debug_printf(SUDO_DEBUG_ERROR, "unable to set groups to %u",
+> ++	    (unsigned int)evl_conf->mailgid);
+> ++	goto bad;
+> +     }
+> +     if (evl_conf->mailuid != ROOT_UID) {
+> + 	if (setuid(evl_conf->mailuid) != 0) {
+> + 	    sudo_debug_printf(SUDO_DEBUG_ERROR, "unable to change uid to %u",
+> + 		(unsigned int)evl_conf->mailuid);
+> ++	    goto bad;
+> + 	}
+> +     }
+> +     sudo_debug_exit(__func__, __FILE__, __LINE__, sudo_debug_subsys);
+> +@@ -347,6 +357,9 @@ exec_mailer(int pipein)
+> +     sudo_debug_printf(SUDO_DEBUG_ERROR, "unable to execute %s: %s",
+> + 	mpath, strerror(errno));
+> +     _exit(127);
+> ++bad:
+> ++    sudo_debug_exit(__func__, __FILE__, __LINE__, sudo_debug_subsys);
+> ++    _exit(127);
+> + }
+> + 
+> + /* Send a message to the mailto user */
+> +diff --git a/lib/eventlog/eventlog_conf.c b/lib/eventlog/eventlog_conf.c
+> +index 0663a38..ec3b569 100644
+> +--- a/lib/eventlog/eventlog_conf.c
+> ++++ b/lib/eventlog/eventlog_conf.c
+> +@@ -70,6 +70,7 @@ static struct eventlog_config evl_conf = {
+> +     MAXSYSLOGLEN,		/* syslog_maxlen */
+> +     0,				/* file_maxlen */
+> +     ROOT_UID,			/* mailuid */
+> ++    ROOT_GID,			/* mailgid */
+> +     false,			/* omit_hostname */
+> +     _PATH_SUDO_LOGFILE,		/* logpath */
+> +     "%h %e %T",			/* time_fmt */
+> +@@ -151,9 +152,10 @@ eventlog_set_file_maxlen(size_t len)
+> + }
+> + 
+> + void
+> +-eventlog_set_mailuid(uid_t uid)
+> ++eventlog_set_mailuser(uid_t uid, gid_t gid)
+> + {
+> +     evl_conf.mailuid = uid;
+> ++    evl_conf.mailgid = gid;
+> + }
+> + 
+> + void
+> +diff --git a/plugins/sudoers/logging.c b/plugins/sudoers/logging.c
+> +index bd4de92..9535289 100644
+> +--- a/plugins/sudoers/logging.c
+> ++++ b/plugins/sudoers/logging.c
+> +@@ -1157,7 +1157,7 @@ init_eventlog_config(void)
+> +     eventlog_set_syslog_alertpri(def_syslog_badpri);
+> +     eventlog_set_syslog_maxlen(def_syslog_maxlen);
+> +     eventlog_set_file_maxlen(def_loglinelen);
+> +-    eventlog_set_mailuid(ROOT_UID);
+> ++    eventlog_set_mailuser(ROOT_UID, ROOT_GID);
+> +     eventlog_set_omit_hostname(!def_log_host);
+> +     eventlog_set_logpath(def_logfile);
+> +     eventlog_set_time_fmt(def_log_year ? "%h %e %T %Y" : "%h %e %T");
+> +diff --git a/plugins/sudoers/policy.c b/plugins/sudoers/policy.c
+> +index f3adfb0..27f6e58 100644
+> +--- a/plugins/sudoers/policy.c
+> ++++ b/plugins/sudoers/policy.c
+> +@@ -639,7 +639,7 @@ sudoers_policy_deserialize_info(struct sudoers_context *ctx, void *v,
+> +     }
+> + 
+> + #ifdef NO_ROOT_MAILER
+> +-    eventlog_set_mailuid(ctx->user.uid);
+> ++    eventlog_set_mailuser(ctx->user.uid, ctx->user.gid);
+> + #endif
+> + 
+> +     /* Dump settings and user info (XXX - plugin args) */
+> diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
+> index 8602e62b0b..e28f7815f9 100644
+> --- a/package/sudo/sudo.mk
+> +++ b/package/sudo/sudo.mk
+> @@ -12,6 +12,10 @@ SUDO_LICENSE = ISC, BSD-3-Clause
+>  SUDO_LICENSE_FILES = LICENSE.md
+>  SUDO_CPE_ID_VERSION = $(SUDO_VERSION_MAJOR)
+>  SUDO_CPE_ID_UPDATE = $(SUDO_VERSION_MINOR)
+> +
+> +# 0001-exec-mailer-set-group-as-well-as-uid-when-running-the-mailer.patch
+> +SUDO_IGNORE_CVES += CVE-2026-35535
+> +
+>  SUDO_SELINUX_MODULES = sudo
+>  # This is to avoid sudo's make install from chown()ing files which fails
+>  SUDO_INSTALL_TARGET_OPTS = INSTALL_OWNER="" DESTDIR="$(TARGET_DIR)" install
+> -- 
+> 2.54.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
