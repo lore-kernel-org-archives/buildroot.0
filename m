@@ -1,62 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CEF0EC43327
-	for <buildroot@archiver.kernel.org>; Mon, 29 Jun 2026 19:43:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 064B5C43458
+	for <buildroot@archiver.kernel.org>; Mon, 29 Jun 2026 19:43:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5EFC540BE4;
-	Mon, 29 Jun 2026 19:43:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 44DE860DC7;
+	Mon, 29 Jun 2026 19:43:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qpytUr0-gDkP; Mon, 29 Jun 2026 19:43:24 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xH5Tm9t8NwgT; Mon, 29 Jun 2026 19:43:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3D38D40BEF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 39DE860D73
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1782762204;
-	bh=D1RXTfQmDg/oWRAq7GkLpMcYPUK6itGvezLN3ald6Pg=;
+	s=default; t=1782762205;
+	bh=Fay+Rd+aA4LL1xXFlzX+r1CFO4qpdQSwPNF15oJ9cew=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Ghp041x6QPODY75hjLCLqF4ZnNII8aqrM6rkrTxe1BYgCcMxtELHKLbiONWyye/Yq
-	 SVEAnyJQQskywawo6ivlk+9qyhzWP4nKBOUw/PWhdfpZMVSl2ZE86vunua7DaYajWD
-	 FsRjerOBEhURF4cMtKJg6lE5CgGTNL1lK12L6JZe6F5AsvwSpiSLVP/w86Q0i6QhaP
-	 ahG5f2dVbh9Xk4ogFr0a+g5XcGulobkNpSOoZWfzlviF0QYTRgBaZODJhE6/QmyJCD
-	 sjqFvrAF2+6G1rghdB+EPdu0+LHagaPeRtX/metJ2XLMLE+OlU4xJfQSBuokjB0+DF
-	 QnZrQFyxuK6Mg==
+	b=HZO7ia8txtFFAvuagxLwOz4wHKrlfikYMmN93Sugr9953bZS+58IFOz6rOEdGFe02
+	 6ct0Dd1EmyF4qrVpiPiK8/HkQpD85CPYYe0AKv1/+ghIQlq21BZVLqc/TWMwgVCeyW
+	 SVJJ/lJOZHrvEKXZPeyADzyrN/AOQdxn7dPbeTJA7mAlSpb7/4gNjIi+sVxcDNVAqP
+	 SyJAUab/KmAOBf2dgaqbK/SPbJLDQQdwwi63PSqCC+FeDcx6pKaX+IWPY+wRKvzB7z
+	 FeGVO5ztzTEOYsH9GDuhY7u7kqGzoP2RoToTC36kn0nAk/48bfbcCEetI4kkc5XisN
+	 P9bBT9+qB45DQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3D38D40BEF;
-	Mon, 29 Jun 2026 19:43:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 39DE860D73;
+	Mon, 29 Jun 2026 19:43:25 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id CBDA32F3
- for <buildroot@buildroot.org>; Mon, 29 Jun 2026 19:43:20 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id A1C03149
+ for <buildroot@buildroot.org>; Mon, 29 Jun 2026 19:43:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BD2EA8201F
- for <buildroot@buildroot.org>; Mon, 29 Jun 2026 19:43:20 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8782F82051
+ for <buildroot@buildroot.org>; Mon, 29 Jun 2026 19:43:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uzMxboA7tYUk for <buildroot@buildroot.org>;
+ id QPKrHsSI8EPH for <buildroot@buildroot.org>;
  Mon, 29 Jun 2026 19:43:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 00E8E8201E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F188681FEB
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 00E8E8201E
- for <buildroot@buildroot.org>; Mon, 29 Jun 2026 19:43:19 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id F188681FEB
+ for <buildroot@buildroot.org>; Mon, 29 Jun 2026 19:43:18 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5B8EA87419; Mon, 29 Jun 2026 19:42:51 +0000 (UTC)
+ id 66E708741A; Mon, 29 Jun 2026 19:42:51 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 29 Jun 2026 21:42:18 +0200
+Date: Mon, 29 Jun 2026 21:42:20 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c9fabfcb9fe93fdf9fdf7fb0eabcb927c90182b7
-X-Git-Newrev: f8f6bcec0f523510a22882e4391999be81dc0e94
+X-Git-Oldrev: f8f6bcec0f523510a22882e4391999be81dc0e94
+X-Git-Newrev: ab3c1ec3b6a5fea7dfb9602af73f422e2d83f12a
 X-Patchwork-Hint: ignore
-Message-Id: <20260629194251.5B8EA87419@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gcc: bump 15.x series to 15.3.0
+Message-Id: <20260629194251.66E708741A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gcc: bump 14.x series to 14.4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,87 +76,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/f8f6bcec0f523510a22882e4391999be81dc0e94
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/ab3c1ec3b6a5fea7dfb9602af73f422e2d83f12a
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
 Announcement:
-https://gcc.gnu.org/pipermail/gcc-announce/2026/000191.html
+https://gcc.gnu.org/pipermail/gcc-announce/2026/000192.html
 
-GCC 15.3 is a bug-fix release from the GCC 15 branch
+GCC 14.4 is a bug-fix release from the GCC 14 branch
 containing important fixes for regressions and serious bugs in
-GCC 15.2 with more than 208 bugs fixed since the previous release.
+GCC 14.3 with more than 104 bugs fixed since the previous release.
 
 For the list of bugs fixed in this version, see:
-https://gcc.gnu.org/gcc-15/changes.html#15.3
+https://gcc.gnu.org/gcc-14/changes.html#14.4
 
-Removed patches which are included in this release,
-renumbered patch 0003.
+Removed patches which are included in this release.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ---
  .checkpackageignore                                |   2 +-
- ...disable-split-stack-for-non-thread-builds.patch |  26 --
- ...Enhance-support-for-atomics.-Fix-PR118280.patch | 286 ---------------------
- ...3-gcc-config-microblaze-fix-ira-for-GCC15.patch |  56 ----
- ...libgomp-Fix-GCC-build-after-glibc-cd748a6.patch |  77 ------
+ ...icroblaze-add-atomic-test-and-set-support.patch | 286 ---------------------
+ ...04-libsanitizer-Fix-build-with-glibc-2.42.patch |  81 ------
  ...libcody-Make-it-buildable-by-C-11-to-C-26.patch | 261 -------------------
+ ...sstream-and-memory-include-above-safe-cty.patch |  78 ------
+ ...disable-split-stack-for-non-thread-builds.patch |   0
+ ...r-also-undef-_TIME_BITS-in-sanitizer_proc.patch |   0
  package/gcc/Config.in.host                         |   2 +-
  package/gcc/gcc.hash                               |   4 +-
- 8 files changed, 4 insertions(+), 710 deletions(-)
+ 9 files changed, 4 insertions(+), 710 deletions(-)
 
 diff --git a/.checkpackageignore b/.checkpackageignore
-index 94f3b92d9c..3aed62277a 100644
+index 3aed62277a..6147f35b03 100644
 --- a/.checkpackageignore
 +++ b/.checkpackageignore
-@@ -350,7 +350,7 @@ package/ftop/0001-overflow.patch lib_patch.Upstream
+@@ -349,7 +349,7 @@ package/fstrcmp/0001-disable-rpath.patch lib_patch.Upstream
+ package/ftop/0001-overflow.patch lib_patch.Upstream
  package/fxdiv/0001-CMake-don-t-enable-CXX-unless-building-tests-benchma.patch lib_patch.Upstream
  package/fxload/0001-fix-static-build.patch lib_patch.Upstream
- package/gcc/14.3.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
--package/gcc/15.2.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
-+package/gcc/15.3.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
+-package/gcc/14.3.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
++package/gcc/14.4.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
+ package/gcc/15.3.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
  package/gcc/16.1.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
  package/gcc/8.4.0/0001-xtensa-fix-PR-target-91880.patch lib_patch.Upstream
- package/gcc/8.4.0/0002-Revert-re-PR-target-92095-internal-error-with-O1-mcp.patch lib_patch.Upstream
-diff --git a/package/gcc/15.2.0/0001-disable-split-stack-for-non-thread-builds.patch b/package/gcc/15.2.0/0001-disable-split-stack-for-non-thread-builds.patch
+diff --git a/package/gcc/14.3.0/0003-microblaze-add-atomic-test-and-set-support.patch b/package/gcc/14.3.0/0003-microblaze-add-atomic-test-and-set-support.patch
 deleted file mode 100644
-index c3b600cfb8..0000000000
---- a/package/gcc/15.2.0/0001-disable-split-stack-for-non-thread-builds.patch
-+++ /dev/null
-@@ -1,26 +0,0 @@
--From 7d5f59e035341430e20f47420535d0e987516e55 Mon Sep 17 00:00:00 2001
--From: Waldemar Brodkorb <wbx@openadk.org>
--Date: Mon, 25 Jul 2022 00:29:55 +0200
--Subject: [PATCH] disable split-stack for non-thread builds
--
--Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
--[Romain: convert to git format]
--Signed-off-by: Romain Naour <romain.naour@smile.fr>
-----
-- libgcc/config/t-stack | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/libgcc/config/t-stack b/libgcc/config/t-stack
--index cc0366b4cd8..f3f97e86d60 100644
----- a/libgcc/config/t-stack
--+++ b/libgcc/config/t-stack
--@@ -1,4 +1,6 @@
-- # Makefile fragment to provide generic support for -fsplit-stack.
-- # This should be used in config.host for any host which supports
-- # -fsplit-stack.
--+ifeq ($(enable_threads),yes)
-- LIB2ADD_ST += $(srcdir)/generic-morestack.c $(srcdir)/generic-morestack-thread.c
--+endif
---- 
--2.50.1
--
-diff --git a/package/gcc/15.2.0/0002-MicroBlaze-Enhance-support-for-atomics.-Fix-PR118280.patch b/package/gcc/15.2.0/0002-MicroBlaze-Enhance-support-for-atomics.-Fix-PR118280.patch
-deleted file mode 100644
-index 958339bf6c..0000000000
---- a/package/gcc/15.2.0/0002-MicroBlaze-Enhance-support-for-atomics.-Fix-PR118280.patch
+index db6aefaef2..0000000000
+--- a/package/gcc/14.3.0/0003-microblaze-add-atomic-test-and-set-support.patch
 +++ /dev/null
 @@ -1,286 +0,0 @@
--From f14e0b13a5abbc15b4b3b4c0c6a125bbb0509465 Mon Sep 17 00:00:00 2001
+-From cd01b277c4a9e03c83427290228e4b289a169431 Mon Sep 17 00:00:00 2001
 -From: Gopi Kumar Bulusu <gopi@sankhya.com>
 -Date: Thu, 10 Jul 2025 12:44:44 +0530
 -Subject: [PATCH] MicroBlaze : Enhance support for atomics. Fix PR118280
@@ -197,7 +165,7 @@ index 958339bf6c..0000000000
 -index 00000000000..2ffc2422a0a
 ---- /dev/null
 -+++ b/gcc/config/microblaze/iterators.md
--@@ -0,0 +1,25 @@
+-@@ -0,0 +1,25 @@ 
 -+;; Iterator definitions for GCC MicroBlaze machine description files.
 -+;; Copyright (C) 2012-2024 Free Software Foundation, Inc.
 -+;;
@@ -227,7 +195,7 @@ index 958339bf6c..0000000000
 -index 90b79cfe716..1cee0b3096c 100644
 ---- a/gcc/config/microblaze/microblaze-protos.h
 -+++ b/gcc/config/microblaze/microblaze-protos.h
--@@ -62,6 +62,7 @@ extern int symbol_mentioned_p (rtx);
+-@@ -62,6 +62,7 @@  extern int symbol_mentioned_p (rtx);
 - extern int label_mentioned_p (rtx);
 - extern bool microblaze_cannot_force_const_mem (machine_mode, rtx);
 - extern void microblaze_eh_return (rtx op0);
@@ -236,10 +204,10 @@ index 958339bf6c..0000000000
 - 
 - /* Declare functions in microblaze-c.cc.  */
 -diff --git a/gcc/config/microblaze/microblaze.cc b/gcc/config/microblaze/microblaze.cc
--index 4b7f0a1a5e0..78b9428ef3b 100644
+-index 2ab5ada4ec9..80d10ab60e0 100644
 ---- a/gcc/config/microblaze/microblaze.cc
 -+++ b/gcc/config/microblaze/microblaze.cc
--@@ -1300,6 +1300,34 @@ microblaze_expand_block_move (rtx dest, rtx src, rtx length, rtx align_rtx)
+-@@ -1299,6 +1299,34 @@  microblaze_expand_block_move (rtx dest, rtx src, rtx length, rtx align_rtx)
 -   return false;
 - }
 - 
@@ -278,7 +246,7 @@ index 958339bf6c..0000000000
 -index 2390542434b..b2e9ccde363 100644
 ---- a/gcc/config/microblaze/microblaze.h
 -+++ b/gcc/config/microblaze/microblaze.h
--@@ -57,7 +57,7 @@ extern enum pipeline_type microblaze_pipe;
+-@@ -57,7 +57,7 @@  extern enum pipeline_type microblaze_pipe;
 - 
 - /* Default target_flags if no switches are specified  */
 - #define TARGET_DEFAULT      (MASK_SOFT_MUL | MASK_SOFT_DIV | MASK_SOFT_FLOAT \
@@ -291,7 +259,7 @@ index 958339bf6c..0000000000
 -index 45c48a71e8d..270df8da0c5 100644
 ---- a/gcc/config/microblaze/microblaze.md
 -+++ b/gcc/config/microblaze/microblaze.md
--@@ -21,6 +21,7 @@
+-@@ -21,6 +21,7 @@ 
 - 
 - (include "constraints.md")
 - (include "predicates.md")
@@ -299,7 +267,7 @@ index 958339bf6c..0000000000
 - 
 - ;;----------------------------------------------------
 - ;; Constants
--@@ -43,6 +44,10 @@
+-@@ -43,6 +44,10 @@ 
 -   (UNSPEC_TLS           106)    ;; jump table
 -   (UNSPEC_SET_TEXT      107)    ;; set text start
 -   (UNSPEC_TEXT          108)    ;; data text relative
@@ -310,7 +278,7 @@ index 958339bf6c..0000000000
 - ])
 - 
 - (define_c_enum "unspec" [
--@@ -79,7 +84,7 @@
+-@@ -79,7 +84,7 @@ 
 - ;; bshift 	Shift operations
 - 
 - (define_attr "type"
@@ -323,7 +291,7 @@ index 958339bf6c..0000000000
 -index db7b11e5379..6478ab6dcac 100644
 ---- a/gcc/config/microblaze/sync.md
 -+++ b/gcc/config/microblaze/sync.md
--@@ -18,26 +18,97 @@
+-@@ -18,26 +18,97 @@ 
 - ;; <http://www.gnu.org/licenses/>.
 - 
 - (define_insn "atomic_compare_and_swapsi"
@@ -440,161 +408,102 @@ index 958339bf6c..0000000000
 -+  DONE;
 -+})
 --- 
--2.50.1
+-2.43.5
 -
-diff --git a/package/gcc/15.2.0/0003-gcc-config-microblaze-fix-ira-for-GCC15.patch b/package/gcc/15.2.0/0003-gcc-config-microblaze-fix-ira-for-GCC15.patch
+diff --git a/package/gcc/14.3.0/0004-libsanitizer-Fix-build-with-glibc-2.42.patch b/package/gcc/14.3.0/0004-libsanitizer-Fix-build-with-glibc-2.42.patch
 deleted file mode 100644
-index 663aab7218..0000000000
---- a/package/gcc/15.2.0/0003-gcc-config-microblaze-fix-ira-for-GCC15.patch
+index 13f7f469c4..0000000000
+--- a/package/gcc/14.3.0/0004-libsanitizer-Fix-build-with-glibc-2.42.patch
 +++ /dev/null
-@@ -1,56 +0,0 @@
--From d2fdbd8c4abe67eea86877dfb3b3b9d8508c165f Mon Sep 17 00:00:00 2001
--From: Romain Naour <romain.naour@gmail.com>
--Date: Wed, 6 Aug 2025 22:32:30 +0200
--Subject: [PATCH] gcc/config/microblaze: fix ira for GCC15
+@@ -1,81 +0,0 @@
+-From d32ece49d32b00448d967e7dbc6900fb25cbc775 Mon Sep 17 00:00:00 2001
+-From: Florian Weimer <fweimer@redhat.com>
+-Date: Fri, 2 May 2025 17:41:43 +0200
+-Subject: [PATCH] libsanitizer: Fix build with glibc 2.42
 -
--Add new hooks for callee-save on microblaze defined by [1] and
--return 1 to restore the old behavior prior to the commit [3].
+-The termio structure will be removed from glibc 2.42.  It has
+-been deprecated since the late 80s/early 90s.
 -
--Tested with qemu_microblazeel_mmu_defconfig and used to generate
--Microblaze toolchains for the Bootlin toolchains 2025.08-1 [4][5].
+-Cherry-picked from LLVM commit 59978b21ad9c65276ee8e14f26759691b8a65763
+-("[sanitizer_common] Remove interceptors for deprecated struct termio
+-(#137403)").
 -
--Upstream: suggested in the bug report: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=121432#c10
+-Co-Authored-By: Tom Stellard <tstellar@redhat.com>
 -
--[1] https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=b191e8bdecf881d11c1544c441e38f4c18392a15
--[2] https://gcc.gnu.org/git/?p=gcc.git;a=blob;f=gcc/config/i386/i386.cc;h=3128973ba79cccfc6761f451dcb716b9558cc4da;hb=d3ff498c478acefce35de04402f99171b4f64a1a#l20606
--[3] https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=3b9b8d6cfdf59337f4b7ce10ce92a98044b2657b
--[4] https://lore.kernel.org/buildroot/87sehzndtp.fsf@dell.be.48ers.dk/T/#mce7decd0b3f6a41008d5de577538a8525c91b374
--[5] https://toolchains.bootlin.com/
+-libsanitizer/
 -
--Signed-off-by: Romain Naour <romain.naour@gmail.com>
+-	* sanitizer_common/sanitizer_common_interceptors_ioctl.inc: Cherry
+-	picked from LLVM commit 59978b21ad9c65276ee8e14f26759691b8a65763.
+-	* sanitizer_common/sanitizer_platform_limits_posix.cpp: Likewise.
+-	* sanitizer_common/sanitizer_platform_limits_posix.h: Likewise.
+-
+-Upstream: 1789c57dc97ea2f9819ef89e28bf17208b6208e7 (gcc master branch)
+-Upstream: d32ece49d32b00448d967e7dbc6900fb25cbc775 (gcc 15.x branch)
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ----
-- gcc/config/microblaze/microblaze.cc | 11 +++++++++++
-- 1 file changed, 11 insertions(+)
+- .../sanitizer_common_interceptors_ioctl.inc               | 8 --------
+- .../sanitizer_common/sanitizer_platform_limits_posix.cpp  | 3 ---
+- .../sanitizer_common/sanitizer_platform_limits_posix.h    | 1 -
+- 3 files changed, 12 deletions(-)
 -
--diff --git a/gcc/config/microblaze/microblaze.cc b/gcc/config/microblaze/microblaze.cc
--index 78b9428ef3b..84ea7e8d55a 100644
----- a/gcc/config/microblaze/microblaze.cc
--+++ b/gcc/config/microblaze/microblaze.cc
--@@ -3228,6 +3228,14 @@ microblaze_secondary_reload (bool in_p ATTRIBUTE_UNUSED, rtx x ATTRIBUTE_UNUSED,
--   return NO_REGS;
-- }
-- 
--+/* Implement TARGET_CALLEE_SAVE_COST.  */
--+static int
--+microblaze_callee_save_cost (spill_cost_type, unsigned int hard_regno, machine_mode,
--+		       unsigned int, int mem_cost, const HARD_REG_SET &, bool)
--+{
--+  return 1;
--+}
--+
-- static void
-- microblaze_globalize_label (FILE * stream, const char *name)
-- {
--@@ -4066,6 +4074,9 @@ microblaze_starting_frame_offset (void)
-- #undef TARGET_SECONDARY_RELOAD
-- #define TARGET_SECONDARY_RELOAD		microblaze_secondary_reload
-- 
--+#undef TARGET_CALLEE_SAVE_COST
--+#define TARGET_CALLEE_SAVE_COST microblaze_callee_save_cost
--+
-- #undef  TARGET_ASM_OUTPUT_MI_THUNK
-- #define TARGET_ASM_OUTPUT_MI_THUNK      microblaze_asm_output_mi_thunk
-- 
+-diff --git a/libsanitizer/sanitizer_common/sanitizer_common_interceptors_ioctl.inc b/libsanitizer/sanitizer_common/sanitizer_common_interceptors_ioctl.inc
+-index 49ec4097c90..dda11daa77f 100644
+---- a/libsanitizer/sanitizer_common/sanitizer_common_interceptors_ioctl.inc
+-+++ b/libsanitizer/sanitizer_common/sanitizer_common_interceptors_ioctl.inc
+-@@ -338,17 +338,9 @@ static void ioctl_table_fill() {
+-   _(SOUND_PCM_WRITE_CHANNELS, WRITE, sizeof(int));
+-   _(SOUND_PCM_WRITE_FILTER, WRITE, sizeof(int));
+-   _(TCFLSH, NONE, 0);
+--#if SANITIZER_GLIBC
+--  _(TCGETA, WRITE, struct_termio_sz);
+--#endif
+-   _(TCGETS, WRITE, struct_termios_sz);
+-   _(TCSBRK, NONE, 0);
+-   _(TCSBRKP, NONE, 0);
+--#if SANITIZER_GLIBC
+--  _(TCSETA, READ, struct_termio_sz);
+--  _(TCSETAF, READ, struct_termio_sz);
+--  _(TCSETAW, READ, struct_termio_sz);
+--#endif
+-   _(TCSETS, READ, struct_termios_sz);
+-   _(TCSETSF, READ, struct_termios_sz);
+-   _(TCSETSW, READ, struct_termios_sz);
+-diff --git a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp
+-index c87d5ef42c9..7bbc6f2edac 100644
+---- a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp
+-+++ b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp
+-@@ -485,9 +485,6 @@ unsigned struct_ElfW_Phdr_sz = sizeof(Elf_Phdr);
+-   unsigned struct_input_id_sz = sizeof(struct input_id);
+-   unsigned struct_mtpos_sz = sizeof(struct mtpos);
+-   unsigned struct_rtentry_sz = sizeof(struct rtentry);
+--#if SANITIZER_GLIBC || SANITIZER_ANDROID
+--  unsigned struct_termio_sz = sizeof(struct termio);
+--#endif
+-   unsigned struct_vt_consize_sz = sizeof(struct vt_consize);
+-   unsigned struct_vt_sizes_sz = sizeof(struct vt_sizes);
+-   unsigned struct_vt_stat_sz = sizeof(struct vt_stat);
+-diff --git a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.h b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.h
+-index c07f7cd0b0d..a80df656826 100644
+---- a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.h
+-+++ b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.h
+-@@ -1029,7 +1029,6 @@ extern unsigned struct_hd_geometry_sz;
+- extern unsigned struct_input_absinfo_sz;
+- extern unsigned struct_input_id_sz;
+- extern unsigned struct_mtpos_sz;
+--extern unsigned struct_termio_sz;
+- extern unsigned struct_vt_consize_sz;
+- extern unsigned struct_vt_sizes_sz;
+- extern unsigned struct_vt_stat_sz;
 --- 
 -2.50.1
 -
-diff --git a/package/gcc/15.2.0/0004-libgomp-Fix-GCC-build-after-glibc-cd748a6.patch b/package/gcc/15.2.0/0004-libgomp-Fix-GCC-build-after-glibc-cd748a6.patch
+diff --git a/package/gcc/14.3.0/0005--libcody-Make-it-buildable-by-C-11-to-C-26.patch b/package/gcc/14.3.0/0005--libcody-Make-it-buildable-by-C-11-to-C-26.patch
 deleted file mode 100644
-index e24c4dd57e..0000000000
---- a/package/gcc/15.2.0/0004-libgomp-Fix-GCC-build-after-glibc-cd748a6.patch
-+++ /dev/null
-@@ -1,77 +0,0 @@
--From 9c9d3aef2f66625d9cb03ef4baee10ed6648e681 Mon Sep 17 00:00:00 2001
--From: Frank Scheiner <frank.scheiner@web.de>
--Date: Tue, 25 Nov 2025 16:58:23 -0700
--Subject: [PATCH] [PATCH] libgomp: Fix GCC build after glibc@cd748a6
--
--The toolchain autobuilds for ia64 failed ([1]) yesterday with:
--
--```
--libtool: compile:  /usr/src/t2-src/src.gcc.ia64-toolchain.251121.040147.278918/gcc-16-20251116/objs/gcc/xgcc-wrapper /usr/src/t2-src/src.gcc.ia64-toolchain.251121.040147.278918/gcc-16-20251116/objs/./gcc/xgcc -B/usr/src/t2-src/src.gcc.ia64-toolchain.251121.040147.278918/gcc-16-20251116/objs/./gcc/ -B/usr/src/t2-src/build/ia64-toolchain-24-svn-generic-ia64-itanium2-cross-linux/TOOLCHAIN/cross/usr/ia64-t2-linux-gnu/bin/ -B/usr/src/t2-src/build/ia64-toolchain-24-svn-generic-ia64-itanium2-cross-linux/TOOLCHAIN/cross/usr/ia64-t2-linux-gnu/lib/ -isystem /usr/src/t2-src/build/ia64-toolchain-24-svn-generic-ia64-itanium2-cross-linux/TOOLCHAIN/cross/usr/ia64-t2-linux-gnu/include -isystem /usr/src/t2-src/build/ia64-toolchain-24-svn-generic-ia64-itanium2-cross-linux/TOOLCHAIN/cross/usr/ia64-t2-linux-gnu/sys-include --sysroot=/usr/src/t2-src/build/ia64-toolchain-24-svn-generic-ia64-itanium2-cross-linux -DHAVE_CONFIG_H -I. -I../../../libgomp -I../../../libgomp/config/linux/ia64 -I../../../libgomp
- /config/linux -I../../../libgomp/config/posix -I../../../libgomp -I../../../libgomp/../include -Wall -Werror -ftls-model=initial-exec -pthread -DUSING_INITIAL_EXEC_TLS -g -O2 -MT oacc-cuda.lo -MD -MP -MF .deps/oacc-cuda.Tpo -c ../../../libgomp/oacc-cuda.c -o oacc-cuda.o >/dev/null 2>&1
--../../../libgomp/affinity-fmt.c: In function 'gomp_display_affinity':
--../../../libgomp/affinity-fmt.c:330:25: error: initialization discards 'const' qualifier from pointer target type [-Werror=discarded-qualifiers]
--  330 |               char *q = strchr (p + 1, '}');
--      |                         ^~~~~~
--```
--
--[1]: https://github.com/johnny-mnemonic/toolchain-autobuilds/actions/runs/19559235881
--
--This is not ia64-specific but due to the changes in the recent glibc
--commit "Implement C23 const-preserving standard library macros" (i.e.
--[2]) now requiring "char *q" to be a pointer to a const char to compile
--w/o error because of the return value of strchr() .
--
--[2]: https://sourceware.org/git/?p=glibc.git;a=commit;h=cd748a63ab1a7ae846175c532a3daab341c62690
--
--Also see the related discussion at [3] for details.
--
--[3]: https://sourceware.org/pipermail/libc-alpha/2025-November/172809.html
--
--The GCC build is fixed by the attached patch, see [4] for a successful
--build with the then latest snapshots of binutils, glibc and GCC.
--
--[4]: https://github.com/johnny-mnemonic/toolchain-autobuilds/actions/runs/19585045571
--
--Idea from Tomas, attached patch from me.
--
--Cheers,
--Frank
--
--0001-libgomp-Fix-GCC-build-after-glibc-cd748a6.patch
--
--From 80af9c233c694904174b54a59404d311378f41f8 Mon Sep 17 00:00:00 2001
--From: Frank Scheiner <frank.scheiner@web.de>
--Date: Sat, 22 Nov 2025 14:58:10 +0100
--Subject: [PATCH] libgomp: Fix GCC build after glibc@cd748a6
--
--char *q needs to be a pointer to a const char for the return value of
--strchr() with glibc after "Implement C23 const-preserving standard library
--macros".
--
--[glibc@cd748a6]: https://sourceware.org/git/?p=glibc.git;a=commit;h=cd748a63ab1a7ae846175c532a3daab341c62690
--
--libgomp/ChangeLog:
--	* affinity-fmt.c: Make char *q a pointer to a const char.
--
--Upstream: https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=9c9d3aef2f66625d9cb03ef4baee10ed6648e681
--
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-----
-- libgomp/affinity-fmt.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/libgomp/affinity-fmt.c b/libgomp/affinity-fmt.c
--index 1fae893cbaca..8d3df5f1cd55 100644
----- a/libgomp/affinity-fmt.c
--+++ b/libgomp/affinity-fmt.c
--@@ -327,7 +327,7 @@ gomp_display_affinity (char *buffer, size_t size,
-- 	      }
-- 	  if (c == '{')
-- 	    {
---	      char *q = strchr (p + 1, '}');
--+	      const char *q = strchr (p + 1, '}');
-- 	      if (q)
-- 		gomp_fatal ("unsupported long type name '%.*s' in affinity "
-- 			    "format", (int) (q - (p + 1)), p + 1);
---- 
--2.43.7
--
-diff --git a/package/gcc/15.2.0/0005-libcody-Make-it-buildable-by-C-11-to-C-26.patch b/package/gcc/15.2.0/0005-libcody-Make-it-buildable-by-C-11-to-C-26.patch
-deleted file mode 100644
-index 8788a0c0bd..0000000000
---- a/package/gcc/15.2.0/0005-libcody-Make-it-buildable-by-C-11-to-C-26.patch
+index f9f983b464..0000000000
+--- a/package/gcc/14.3.0/0005--libcody-Make-it-buildable-by-C-11-to-C-26.patch
 +++ /dev/null
 @@ -1,261 +0,0 @@
--From 1f0224e8ddb3d3d0bf4c7a11769b193a4df5cc37 Mon Sep 17 00:00:00 2001
+-From daa3e1ead791bc58208043cfc4595ba1a78cdd34 Mon Sep 17 00:00:00 2001
 -From: Jakub Jelinek <jakub@redhat.com>
 -Date: Fri, 21 Nov 2025 16:25:58 +0100
 -Subject: [PATCH] libcody: Make it buildable by C++11 to C++26
@@ -622,7 +531,7 @@ index 8788a0c0bd..0000000000
 -
 -(cherry picked from commit 07a767c7a50d1daae8ef7d4aba73fe53ad40c0b7)
 -Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
--Upstream: https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=1f0224e8ddb3d3d0bf4c7a11769b193a4df5cc37
+-Upstream: https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=daa3e1ead791bc58208043cfc4595ba1a78cdd34
 ----
 - libcody/client.cc | 36 +++++++++++++++++++-----------------
 - libcody/cody.hh   | 22 ++++++++++++++++++++++
@@ -855,34 +764,125 @@ index 8788a0c0bd..0000000000
 --- 
 -2.54.0
 -
+diff --git a/package/gcc/14.3.0/0006-build-Move-sstream-and-memory-include-above-safe-cty.patch b/package/gcc/14.3.0/0006-build-Move-sstream-and-memory-include-above-safe-cty.patch
+deleted file mode 100644
+index e48dd91c18..0000000000
+--- a/package/gcc/14.3.0/0006-build-Move-sstream-and-memory-include-above-safe-cty.patch
++++ /dev/null
+@@ -1,78 +0,0 @@
+-From 046776dac7cc74bdbab36f450af80644a045858a Mon Sep 17 00:00:00 2001
+-From: Andrew Pinski <quic_apinski@quicinc.com>
+-Date: Mon, 25 Nov 2024 14:03:27 -0800
+-Subject: [PATCH] build: Move sstream and memory include above safe-ctype.h
+- [PR124830]
+-
+-This picks r15-5661-gf6e00226a4ca6 to older branches, also moving
+-the <memory> include to fix build issues with a C++20 host compiler.
+-
+-sstream in some versions of libstdc++ include locale which might not have been
+-included yet. safe-ctype.h defines the toupper, tolower, etc. as macros so the
+-c++ header files needed to be included before hand as comment in system.h says:
+-/* Include C++ standard headers before "safe-ctype.h" to avoid GCC
+-   poisoning the ctype macros through safe-ctype.h */
+-
+-I don't understand how it was working before when memory was included after
+-safe-ctype.h rather than before. But this makes sstream consistent with the
+-other C++ headers.
+-
+-gcc/ChangeLog:
+-
+-	PR target/117771
+-	PR c/124830
+-	* system.h: Move the include of sstream and memory above safe-ctype.h.
+-
+-Signed-off-by: Andrew Pinski <quic_apinski@quicinc.com>
+-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+-Upstream: https://gcc.gnu.org/git?p=gcc.git;a=commit;h=046776dac7cc74bdbab36f450af80644a045858a
+----
+- gcc/system.h | 21 +++++++++------------
+- 1 file changed, 9 insertions(+), 12 deletions(-)
+-
+-diff --git a/gcc/system.h b/gcc/system.h
+-index b18482c7190..da331f105ba 100644
+---- a/gcc/system.h
+-+++ b/gcc/system.h
+-@@ -222,6 +222,15 @@ extern int fprintf_unlocked (FILE *, const char *, ...);
+- #ifdef INCLUDE_FUNCTIONAL
+- # include <functional>
+- #endif
+-+#ifdef INCLUDE_SSTREAM
+-+# include <sstream>
+-+#endif
+-+/* Some of the headers included by <memory> can use "abort" within a
+-+   namespace, e.g. "_VSTD::abort();", which fails after we use the
+-+   preprocessor to redefine "abort" as "fancy_abort" below.  */
+-+#ifdef INCLUDE_MEMORY
+-+# include <memory>
+-+#endif
+- # include <cstring>
+- # include <initializer_list>
+- # include <new>
+-@@ -758,22 +767,10 @@ private:
+- #define LIKELY(x) (__builtin_expect ((x), 1))
+- #define UNLIKELY(x) (__builtin_expect ((x), 0))
+- 
+--/* Some of the headers included by <memory> can use "abort" within a
+--   namespace, e.g. "_VSTD::abort();", which fails after we use the
+--   preprocessor to redefine "abort" as "fancy_abort" below.  */
+--
+--#ifdef INCLUDE_MEMORY
+--# include <memory>
+--#endif
+--
+- #ifdef INCLUDE_MUTEX
+- # include <mutex>
+- #endif
+- 
+--#ifdef INCLUDE_SSTREAM
+--# include <sstream>
+--#endif
+--
+- #ifdef INCLUDE_MALLOC_H
+- #if defined(HAVE_MALLINFO) || defined(HAVE_MALLINFO2)
+- #include <malloc.h>
+--- 
+-2.54.0
+-
+diff --git a/package/gcc/14.3.0/0001-disable-split-stack-for-non-thread-builds.patch b/package/gcc/14.4.0/0001-disable-split-stack-for-non-thread-builds.patch
+similarity index 100%
+rename from package/gcc/14.3.0/0001-disable-split-stack-for-non-thread-builds.patch
+rename to package/gcc/14.4.0/0001-disable-split-stack-for-non-thread-builds.patch
+diff --git a/package/gcc/14.3.0/0002-libsanitizer-also-undef-_TIME_BITS-in-sanitizer_proc.patch b/package/gcc/14.4.0/0002-libsanitizer-also-undef-_TIME_BITS-in-sanitizer_proc.patch
+similarity index 100%
+rename from package/gcc/14.3.0/0002-libsanitizer-also-undef-_TIME_BITS-in-sanitizer_proc.patch
+rename to package/gcc/14.4.0/0002-libsanitizer-also-undef-_TIME_BITS-in-sanitizer_proc.patch
 diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 1c4358f448..896bb3cfbb 100644
+index 896bb3cfbb..e80c864cf1 100644
 --- a/package/gcc/Config.in.host
 +++ b/package/gcc/Config.in.host
-@@ -69,7 +69,7 @@ config BR2_GCC_VERSION
+@@ -68,7 +68,7 @@ config BR2_GCC_SUPPORTS_DLANG
+ config BR2_GCC_VERSION
  	string
  	default "8.4.0"     if BR2_GCC_VERSION_POWERPC_SPE
- 	default "14.3.0"    if BR2_GCC_VERSION_14_X
--	default "15.2.0"    if BR2_GCC_VERSION_15_X
-+	default "15.3.0"    if BR2_GCC_VERSION_15_X
+-	default "14.3.0"    if BR2_GCC_VERSION_14_X
++	default "14.4.0"    if BR2_GCC_VERSION_14_X
+ 	default "15.3.0"    if BR2_GCC_VERSION_15_X
  	default "16.1.0"    if BR2_GCC_VERSION_16_X
  	default "arc-2024.12-release" if BR2_GCC_VERSION_ARC
- 
 diff --git a/package/gcc/gcc.hash b/package/gcc/gcc.hash
-index 0b17a809c8..0890abc2ea 100644
+index 0890abc2ea..edd8ab7061 100644
 --- a/package/gcc/gcc.hash
 +++ b/package/gcc/gcc.hash
-@@ -2,8 +2,8 @@
+@@ -1,7 +1,7 @@
+ # From https://gcc.gnu.org/pub/gcc/releases/gcc-8.4.0/sha512.sum
  sha512  6de904f552a02de33b11ef52312bb664396efd7e1ce3bbe37bfad5ef617f133095b3767b4804bc7fe78df335cb53bc83f1ac055baed40979ce4c2c3e46b70280  gcc-8.4.0.tar.xz
- # From https://gcc.gnu.org/pub/gcc/releases/gcc-14.3.0/sha512.sum
- sha512  cb4e3259640721bbd275c723fe4df53d12f9b1673afb3db274c22c6aa457865dccf2d6ea20b4fd4c591f6152e6d4b87516c402015900f06ce9d43af66d3b7a93  gcc-14.3.0.tar.xz
--# From https://gcc.gnu.org/pub/gcc/releases/gcc-15.2.0/sha512.sum
--sha512  89047a2e07bd9da265b507b516ed3635adb17491c7f4f67cf090f0bd5b3fc7f2ee6e4cc4008beef7ca884b6b71dffe2bb652b21f01a702e17b468cca2d10b2de  gcc-15.2.0.tar.xz
-+# From https://gcc.gnu.org/pub/gcc/releases/gcc-15.3.0/sha512.sum
-+sha512  0de9e296153b52c021b1c7e63c9c62151d7a0ac03f23ce6e9f772c1b0eb783f6acdd81cc4567bfe4128a6f64968c2cfc8eff40b36229cba7425349f7d637c654  gcc-15.3.0.tar.xz
+-# From https://gcc.gnu.org/pub/gcc/releases/gcc-14.3.0/sha512.sum
+-sha512  cb4e3259640721bbd275c723fe4df53d12f9b1673afb3db274c22c6aa457865dccf2d6ea20b4fd4c591f6152e6d4b87516c402015900f06ce9d43af66d3b7a93  gcc-14.3.0.tar.xz
++# From https://gcc.gnu.org/pub/gcc/releases/gcc-14.4.0/sha512.sum
++sha512  725ed8bdd43ef1726ffe8b5e8615a13e247fac9575b7626ae013a2975d000ea213212dc414b2f2631ac4785c1c8beca85555222faf9904d3b2fa6a3807a83a15  gcc-14.4.0.tar.xz
+ # From https://gcc.gnu.org/pub/gcc/releases/gcc-15.3.0/sha512.sum
+ sha512  0de9e296153b52c021b1c7e63c9c62151d7a0ac03f23ce6e9f772c1b0eb783f6acdd81cc4567bfe4128a6f64968c2cfc8eff40b36229cba7425349f7d637c654  gcc-15.3.0.tar.xz
  # From https://gcc.gnu.org/pub/gcc/releases/gcc-16.1.0/sha512.sum
- sha512  b3454958891ab47e1e5b6cb9396c0ad3b04f32fe2a7bf1153a143f21013fdb6b295ca94c98964698a688e4c1d7555ffd8ffbc20187507cce6b1c32cbcc09897a  gcc-16.1.0.tar.xz
- 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
