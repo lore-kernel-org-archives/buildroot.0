@@ -1,112 +1,112 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 530E0C43458
-	for <buildroot@archiver.kernel.org>; Mon, 29 Jun 2026 20:31:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3CFDEC43327
+	for <buildroot@archiver.kernel.org>; Mon, 29 Jun 2026 20:31:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E8C8860F29;
-	Mon, 29 Jun 2026 20:31:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DAEFF821F0;
+	Mon, 29 Jun 2026 20:31:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PyCnT4lD-hk7; Mon, 29 Jun 2026 20:30:55 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sfkMu-uTElGz; Mon, 29 Jun 2026 20:30:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B56DD607AE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E2AAC821F6
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1782765055;
-	bh=BX+tk6tUgsKd8h8D7x5W69X6sCJFGk/s4QsGvTy1OOQ=;
+	s=default; t=1782765057;
+	bh=IIH1BEA6gYxxFNfnzOyxWW0o+VuwK7jo2ERePE5WEZg=;
 	h=To:From:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=gz9VCj3mdpq2qhpBWG2g3c7UMkWM1fAm9UcQgcu0DpY1ZK7WMfD3/kRC8okJREHi4
-	 0zFELNz22cCipIFDqgL3F/woTdAgUWCMqKxcAOxu2CBvlAGb0KrtgGrHWzz+i3WU/h
-	 QkeVBXGAseelCQPy0nXyAMGqgW/yk+kTsx1/1yVeaaWRE9mMAOs3pvJ16kpDdDMA1l
-	 wHUmjw+N+DFEv66c6ABZ0PLd/lsr8SSn0cFuL07QYlp8Ocsfh/DnEJSSTKb/mytTUG
-	 zzXwPFzjzC+eC0ZncYI35/hPdHkwfDFFVuepMSiCi65FpfiwQxR67tB2NMq1q0RejQ
-	 Qpg0zgVTAPyKQ==
+	b=n5/Ud7reDiJNLvyCWCDb5dzhl+pq+mMiUEhEfq1s9i1GGWs8MkqRpVruO5AZ+J3mi
+	 ZSJiqYMAXLXi6fblITyVCEWf/PNtKz3VK9lhYJ2Nb8EFWVm1En/VnyRv3CDQ/OO4ii
+	 Bo0dytTpVnkbWearKwXZTOfE8U0p7Z6EMMPhqtIqz89jQoK2STVLd1UvCBiDWCgPoK
+	 LKrs57HKqAUNfdSacGVcP0+ZkrbZ2ASVuQ7h7JDqCsMcmfMV/z0c163xOFeeVUvsyF
+	 wSVlqQSnlzU9Sr7AdLFXT4TsPR12ih6urSI02Z87YlRnm8moU5c+TfbcPIgtGkZQ+4
+	 5vYhZxdecPziw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B56DD607AE;
-	Mon, 29 Jun 2026 20:30:55 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 52BDF24D
- for <buildroot@buildroot.org>; Mon, 22 Jun 2026 03:24:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E2AAC821F6;
+	Mon, 29 Jun 2026 20:30:56 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id A6274264
+ for <buildroot@buildroot.org>; Mon, 29 Jun 2026 03:32:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4BE574106F
- for <buildroot@buildroot.org>; Mon, 22 Jun 2026 03:24:17 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8D04D40DAB
+ for <buildroot@buildroot.org>; Mon, 29 Jun 2026 03:32:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id r4zsXs5u8u8o for <buildroot@buildroot.org>;
- Mon, 22 Jun 2026 03:24:14 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FXY3vr-gV-Gg for <buildroot@buildroot.org>;
+ Mon, 29 Jun 2026 03:32:06 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::332; helo=mail-wm1-x332.google.com;
+ client-ip=2a00:1450:4864:20::334; helo=mail-wm1-x334.google.com;
  envelope-from=buildroot.notifications@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C443A40622
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C443A40622
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
- [IPv6:2a00:1450:4864:20::332])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C443A40622
- for <buildroot@buildroot.org>; Mon, 22 Jun 2026 03:24:12 +0000 (UTC)
-Received: by mail-wm1-x332.google.com with SMTP id
- 5b1f17b1804b1-4922244f7c7so33035005e9.0
- for <buildroot@buildroot.org>; Sun, 21 Jun 2026 20:24:12 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 80B3A40DAA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 80B3A40DAA
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
+ [IPv6:2a00:1450:4864:20::334])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 80B3A40DAA
+ for <buildroot@buildroot.org>; Mon, 29 Jun 2026 03:32:05 +0000 (UTC)
+Received: by mail-wm1-x334.google.com with SMTP id
+ 5b1f17b1804b1-493a5392c60so5311945e9.2
+ for <buildroot@buildroot.org>; Sun, 28 Jun 2026 20:32:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1782098649; x=1782703449;
+ d=1e100.net; s=20251104; t=1782703923; x=1783308723;
  h=date:from:to:subject:content-transfer-encoding:mime-version
  :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to;
- bh=s+vj/3nS9NtsfZf6BNPrgy1Xa7rKe8a6BXswv8NKMFI=;
- b=ZLEJxEM/eha8jKsde3D3RTYq865kcJNu5+d0w3bJnjuwS31kAjccx1pp0Hg2Lql8gA
- 4o0Zjna+U6HP5IfMJqt+1/TQYcvL7gRSnWygxflgiijj+YndsKo8eSdOs/G/mXYgsv3G
- pRTvPtcxUjKB0xQHp3BKWqPePNTcGay4IpZNGwahKpKd4OtqLYbNs+P3WroYfS6keT/m
- LKyWu0VnJKyNTziVLH/ulna+fdPekC4r9M3yI9FEIJYLlK3LOQDRjENP/xJruUZLtK2Y
- uuZs9ffgM/uvVmKaGMgpKpgDOAgqn5b5SOsSV1VPg5RBobVMW0Teq13c376qXYj6+V17
- ccZw==
-X-Gm-Message-State: AOJu0Yzx1zWXlTThrjMcbrmLZqC4Tx8V/sNGTy16J7NtmtEf6JsaGvqu
- Dt/BPFMWQHKjBjRLGhBGzW4qqTbp8y65U+IFxyua/uerH6P0cw6W01w8ooZgNsRy
-X-Gm-Gg: AfdE7cnpA6Db5gB8ZJa97a33uY2vFJjBcmCehIm1cyAnJPx/M3QqBVd18BmN1iGrUBG
- DCPlBLFuPWn6g6uRZsKUVUboDFkcLjepTNVnblIvCjq0I/oDDq0p8p+qNiN0M+Gxn15KcXF4cKh
- xry4vw+nQJf2GjzTVfyxz/HMt2fntwqqSiiCgfVzfODo/0TQiuokF9OnIQpLrR+ow4MKkx1Nakq
- DflrcxJ40hn/B0b4L+weQ/9mBVTKCH/o5t8MNv0aZSiP11aaLnAEEokqr3aXEKQHv2xqnbMs19H
- XUgi3ehftTrKstzuQl+cDom3UTQevCEBUuSP66ix9TNTM35kCOV5QBS7w/qA5pA99TMKi+7ERTY
- DJ1G9vMwbo1Ji34/Iszzy/OUL8yhXaKb4B6xeUOjyumf5rNgesdHy6eXoLI61vJpbVgs+XgDJmy
- BagCbwUJjnCbPzxd8=
-X-Received: by 2002:a05:600c:3b15:b0:490:d38c:7836 with SMTP id
- 5b1f17b1804b1-4923ef47e73mr256465585e9.3.1782098647392; 
- Sun, 21 Jun 2026 20:24:07 -0700 (PDT)
+ bh=kPkP1btNN4hmZFaMkfAJmZQUO6oEY12Go8zbCB6z4g0=;
+ b=R/HAu7PsX+em6O55NmauSaOFbscfg839Pyauyp2O92PGICoY6O/YpILuqcKPk64bbH
+ wTBN5eEhXee/zFV1wI3asbTxVrQNUCvTQwRAHczITCQEqFMnfIyw9H00kROyBGBJququ
+ mcV0f0i8s+tC2rvJKlTP7jop1BNCFwQfkZPn9i0IvaOkJSDnufhquXtFge1CgKMwpivF
+ Cb9vOIQJdrPb2f+ssRdGUvs7tVoI+DP50thm6tKlSyOMrc1oZvAre7BoG5S7aTDYA2Ky
+ uI5LiPDGfj8e/jFX/71ZPcl+K0/996Ea8bVvmw+sLpcxQ/+XXxqbwCF3BdG2ePU6uuoa
+ Gmgw==
+X-Gm-Message-State: AOJu0YxMjcethG2V8/t1/iRZhhIzd7t4sK+eSUbJlHHD4jWTHN8qMhlj
+ LZ3JxybIvcG7tlpgg2RKcN4kEm1kPvKQa2r6Hgo/DJLUT00BV0NnIeYxkjkpojXR
+X-Gm-Gg: AfdE7cn1LP2hq0bm3pVxI1nwpI9nZzPMZRu0adRVAsgK0kstq189lUpj/reK0hlB81O
+ yPU0/igIWav/zz3lPc37tDemnvC0jjlm0rQ/rOWAp4MkzRwwpHhoW88GlF6fCZcdPhLVwgudlPv
+ Z9/gxtyOADFbJltBbBKlwpFJJV2uByF0j5w42BhKCD1/trUU8qwhPlO5M4MJRsi+kJh9NmQFFCZ
+ Vt38COadslY8KVjOU703k1nOm8OQ/zejC3AIrQ23K9I5MRp8CrfYvEwDHkEWkOGtDoZsb2xgWGB
+ 9p3eT8BH1EY4YkwH6MjsyyMQ7k2BbrPlhrijtyHcDwgvXxzVGPOCeuPIZyEaF+8VZrGbur5LiDE
+ ASnb5AujGs4999VHIxdQuLjOntzmkQ7tPu4RIZj0SsSNBwPm4y9eZkyD7y7JM3sfH2XEj4MjRm7
+ 9uYnTdyEbPn1FnL7A=
+X-Received: by 2002:a05:600c:4f8f:b0:490:c2a3:3302 with SMTP id
+ 5b1f17b1804b1-492668b7599mr234290185e9.35.1782703921602; 
+ Sun, 28 Jun 2026 20:32:01 -0700 (PDT)
 Received: from [138.201.205.61] ([2a01:4f8:173:1526::2])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4923fe7ba08sm261685515e9.11.2026.06.21.20.24.06
+ 5b1f17b1804b1-493ae96c85fsm36912075e9.5.2026.06.28.20.32.00
  for <buildroot@buildroot.org>
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 21 Jun 2026 20:24:06 -0700 (PDT)
-Message-ID: <6a38aad6.87c5160c.3b61f2.0854@mx.google.com>
+ Sun, 28 Jun 2026 20:32:00 -0700 (PDT)
+Message-ID: <6a41e730.2cf1dda8.befdc.232d@mx.google.com>
 MIME-Version: 1.0
 To: buildroot@buildroot.org
 From: Buildroot Notifications <buildroot.notifications@gmail.com>
-Date: Mon, 22 Jun 2026 03:24:06 -0000
+Date: Mon, 29 Jun 2026 03:32:00 -0000
 X-Mailman-Approved-At: Mon, 29 Jun 2026 20:30:54 +0000
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1782098649; x=1782703449; darn=buildroot.org;
+ d=gmail.com; s=20251104; t=1782703923; x=1783308723; darn=buildroot.org;
  h=date:from:to:subject:content-transfer-encoding:mime-version
  :message-id:from:to:cc:subject:date:message-id:reply-to;
- bh=s+vj/3nS9NtsfZf6BNPrgy1Xa7rKe8a6BXswv8NKMFI=;
- b=qt8WudIIR5tR440ar0ZP8cuZhYyjPAgIqz4j9ZMiL5mYezjUaz+Gwy9ysHytoO9fls
- vxKVqadBhkvnVrj3XfIZzw7RsZQ/V9siK8MR3OawaYPhDXXC9dsB92TEarESd+lDnE5S
- hsGklnZcZKhqoFlfVgfhwYlVrp8hNexXYksaGiNL969UkGsTYLDNet9P5AAoeM6vAfUS
- Br292L9FzwkzekOL4bVfVJGvxii7iZTxm84ymbogqPsKOM7PiQJ2gQHtpl2ReOF2WiVt
- z4Fdu9qB2e1ouwmawoAbQwMzjDO0lSSLL/k8PcJsUkJ4TYsvRJAJUwL2KuNLGR3usQVu
- WDcQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=kPkP1btNN4hmZFaMkfAJmZQUO6oEY12Go8zbCB6z4g0=;
+ b=IiX8XfB07M3eIDlGb4d6vnomEKNKvB4tNf7HPCo/zh/EmfiGEJH583gXpZhNINjo8L
+ 5YgLJMBpu0SFU3vCkFG9djkXwOi34FzpE6+sAS8yxK8VmFJCeT+X4TXc0FVCma3k35Po
+ Zlb/2eqjQzzDnOuTpPK58GJPYUhVnF8AhbhVBuXxm+zu9Nh1TMAMfPi/zY3F0XkAbvIh
+ 8SHl1jP3m2dVoEykmcQ6MsNpMhBVuul6i5MiyExZry9fbutNPWIyQ9eliQP/UfMt4cA+
+ Y48NWqpAAFuDXhI+B1Wv3SENLveGIMpjf5bIqlVZB9tc5167YYqBlDu6tQLEEZKJN2h3
+ 6IuQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20251104 header.b=qt8WudII
-Subject: [Buildroot] [autobuild.buildroot.org] Daily results for 2026-06-21
+ header.s=20251104 header.b=IiX8XfB0
+Subject: [Buildroot] [autobuild.buildroot.org] Daily results for 2026-06-28
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -125,59 +125,62 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Hello,
 
-Autobuild statistics for 2026-06-21
+Autobuild statistics for 2026-06-28
 ===================================
 
       branch |  OK | NOK | TIM | TOT |
-  2025.02.x  |  0  |  5  |  0  |  5  |
-  2026.02.x  |  0  |  4  |  0  |  4  |
-  2026.05.x  |  1  |  0  |  0  |  1  |
-    master   | 18  | 51  |  1  | 70  |
+  2025.02.x  |  3  |  2  |  0  |  5  |
+  2026.02.x  |  2  |  3  |  0  |  5  |
+  2026.05.x  |  0  |  5  |  0  |  5  |
+    master   | 16  | 57  |  0  | 73  |
 
 Classification of failures by reason for master
 -----------------------------------------------
 
-                       unknown | 4 
-             dahdi-linux-3.3.0 | 3 
-          host-binutils-2.45.1 | 3 
-                   perl-5.42.2 | 3 
-host-vboot-utils-7dfa482d6a... | 2 
-              libopenssl-3.6.3 | 2 
-                 aichat-0.30.0 | 1 
-                     am33x-cm3 | 1 
-am33x-cm3-fb484c5e54f2e31cf... | 1 
-                  bitcoin-31.0 | 1 
-          cloudflared-2025.8.1 | 1 
-             cni-plugins-1.7.1 | 1 
-           crucible-2025.05.28 | 1 
-                   dante-1.4.4 | 1 
+am33x-cm3-fb484c5e54f2e31cf... | 3 
+                  ntp-4.2.8p18 | 3 
+uhttpd-15346de8d3ba42200249... | 3 
+                   ccrypt-1.11 | 2 
+        edk2-edk2-stable202602 | 2 
+          host-binutils-2.45.1 | 2 
+              host-guile-3.0.9 | 2 
+              host-pahole-1.28 | 2 
+                 systemd-258.7 | 2 
+                       unknown | 2 
+amazon-ecr-credential-helpe... | 1 
+              containerd-2.0.7 | 1 
       docker-cli-buildx-0.25.0 | 1 
-                easydbus-0.1.0 | 1 
-              erlang-26.2.5.15 | 1 
-firmware-utils-c42a3bc53da8... | 1 
-  gobject-introspection-1.84.0 | 1 
-                haveged-1.9.21 | 1 
-         host-gcc-final-16.1.0 | 1 
+docker-credential-acr-env-0... | 1 
+                enscript-1.6.6 | 1 
+              fftw-quad-3.3.10 | 1 
+glibc-2.43-27-g4070d808bea1... | 1 
+            host-binutils-2.44 | 1 
        host-gcc-initial-15.2.0 | 1 
-host-google-breakpad-f49c2f... | 1 
-              host-guile-3.0.9 | 1 
-              host-pahole-1.28 | 1 
-              host-rust-1.96.0 | 1 
-                host-wine-11.0 | 1 
+                 host-gdb-14.2 | 1 
+            host-go-src-1.26.3 | 1 
+    host-mender-artifact-4.2.0 | 1 
+         host-opkg-utils-0.7.0 | 1 
+host-vboot-utils-7dfa482d6a... | 1 
           host-xfsprogs-6.19.0 | 1 
                    i2pd-2.59.0 | 1 
-              libcanberra-0.30 | 1 
-               libunwind-1.8.3 | 1 
-                   linux-7.1.1 | 1 
-                 mdevd-0.1.6.5 | 1 
+                  iozone-3.508 | 1 
+                     kbd-2.9.0 | 1 
+libesmtp-v1.1.0-14-g335ee8d... | 1 
+              libopenssl-3.6.3 | 1 
+                   linux-7.1.2 | 1 
+               linux-pam-1.7.2 | 1 
+                   linux-tools | 1 
+            minizip-zlib-1.3.1 | 1 
+                    musl-1.2.6 | 1 
                     olsr-0.9.8 | 1 
-   openvmtools-11.3.5-18557794 | 1 
-python-remi-2022.7.27-37-g1... | 1 
-                 rtl_433-25.02 | 1 
-                 systemd-258.7 | 1 
-               tcf-agent-1.8.0 | 1 
-               tcpreplay-4.5.2 | 1 
-x264-baee400fa9ced6f5481a72... | 1 
+                openntpd-6.8p1 | 1 
+                openocd-0.12.0 | 1 
+      passt-2025_06_11.0293c6f | 1 
+           python-zlmdb-23.1.1 | 1 
+rtl8822cs-55971663534233fd8... | 1 
+              tailscale-1.78.1 | 1 
+           uboot-tools-2026.04 | 1 
+wilink-bt-firmware-43fca73c... | 1 
 
 
 Detail of failures for master
@@ -185,67 +188,92 @@ Detail of failures for master
 
     arch     |             reason             | OK? |                                       url                                       | orph?
 -------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    i586     |         aichat-0.30.0          | NOK | https://autobuild.buildroot.org/results/3582c039e2dff49f2fca3ba85a27c6a253d833d1 |     
-    arm      |           am33x-cm3            | TIM | https://autobuild.buildroot.org/results/fd3515899509cc87ff87bdbd0af2687654779c61 |     
-    arm      | am33x-cm3-fb484c5e54f2e31cf... | NOK | https://autobuild.buildroot.org/results/92897b47ad0061098fa61a930d0e42ce7ac3b306 | ORPH
-    i686     |          bitcoin-31.0          | NOK | https://autobuild.buildroot.org/results/48acb28a61cbc83834897d04ba0e621d9ad34e37 |     
-    i686     |      cloudflared-2025.8.1      | NOK | https://autobuild.buildroot.org/results/2d9309fa88444853b8402661902a3442c193c1ba |     
-    i686     |       cni-plugins-1.7.1        | NOK | https://autobuild.buildroot.org/results/ef2cf21e1dde28220b403a8c9ebc5d883ebfc9a9 |     
-    i686     |      crucible-2025.05.28       | NOK | https://autobuild.buildroot.org/results/11bc43756ad4e517ed9cdaedb77156eadadc7fd7 |     
-    i586     |       dahdi-linux-3.3.0        | NOK | https://autobuild.buildroot.org/results/8037e1a7f1246a4b0458a41371d81c5f13a57d97 | ORPH
-    i686     |       dahdi-linux-3.3.0        | NOK | https://autobuild.buildroot.org/results/9627a2f7753221d03d974385a68d8c8624c9d9e6 | ORPH
-    i686     |       dahdi-linux-3.3.0        | NOK | https://autobuild.buildroot.org/results/82425593f57bc34892c6da26e6d80bcd60f82c62 | ORPH
-    i686     |          dante-1.4.4           | NOK | https://autobuild.buildroot.org/results/096b87f495a3426217c346051fa6949947ebc8bd | ORPH
-    i686     |    docker-cli-buildx-0.25.0    | NOK | https://autobuild.buildroot.org/results/71f83787d6445899aa48a73aa849bda540c5bc90 | ORPH
-    i686     |         easydbus-0.1.0         | NOK | https://autobuild.buildroot.org/results/bae7138a000e2571666cdfa7f728a54a31116ed4 |     
-    i686     |        erlang-26.2.5.15        | NOK | https://autobuild.buildroot.org/results/666d1747413ec0846caacc362ae21e4ae8d76e09 |     
-  mips64el   | firmware-utils-c42a3bc53da8... | NOK | https://autobuild.buildroot.org/results/0652dafc6b080de6993d7f6182a278d2f0fd8b91 |     
-    i686     |  gobject-introspection-1.84.0  | NOK | https://autobuild.buildroot.org/results/fb8088a3b5da9ffacc904915ea118ec9c217bbe2 | ORPH
-  riscv64    |         haveged-1.9.21         | NOK | https://autobuild.buildroot.org/results/8a1170839ba12293eb691e3200fb89ea3065c097 |     
-    i686     |      host-binutils-2.45.1      | NOK | https://autobuild.buildroot.org/results/f96a0911cffb712f7e5b5c301f26ae55a60192f8 |     
-    i686     |      host-binutils-2.45.1      | NOK | https://autobuild.buildroot.org/results/57b517e47145b2fcb963bca7fe53c49382b27455 |     
-  aarch64    |      host-binutils-2.45.1      | NOK | https://autobuild.buildroot.org/results/334991da214897dd0e20885abe633178a04f29dc |     
-  riscv64    |     host-gcc-final-16.1.0      | NOK | https://autobuild.buildroot.org/results/0faea71ae1752fa274d07b743dd27ee8b3c9806e |     
-    i686     |    host-gcc-initial-15.2.0     | NOK | https://autobuild.buildroot.org/results/17d7dde6a968fcce538f445d34c7cabfadfa006d |     
-    i686     | host-google-breakpad-f49c2f... | NOK | https://autobuild.buildroot.org/results/8332ae0d9eba54fc8855f11a1d7d9fc9f20d6394 |     
-    i686     |        host-guile-3.0.9        | NOK | https://autobuild.buildroot.org/results/68485474a1357e1845cfb4a444df9f15e1ddebac |     
-    i686     |        host-pahole-1.28        | NOK | https://autobuild.buildroot.org/results/313477ab47b3921ebf05a0a39e58d194bf29e194 |     
-   x86_64    |        host-rust-1.96.0        | NOK | https://autobuild.buildroot.org/results/8db3b9f4871c011360bf62146674a972ad215d60 |     
-    i686     | host-vboot-utils-7dfa482d6a... | NOK | https://autobuild.buildroot.org/results/3da1bf00705a7440ff82aaa3fc505ac4303bd004 |     
-    i686     | host-vboot-utils-7dfa482d6a... | NOK | https://autobuild.buildroot.org/results/db84d1ab223845f462b267746cebe6783ba32abe |     
-    i686     |         host-wine-11.0         | NOK | https://autobuild.buildroot.org/results/23a0ef36f5887d0dfea6363a3bec15c6579a60c2 |     
-    i686     |      host-xfsprogs-6.19.0      | NOK | https://autobuild.buildroot.org/results/1cbfb3acf80aabdf2b3fe4e888368acccc8354f2 | ORPH
-    i686     |          i2pd-2.59.0           | NOK | https://autobuild.buildroot.org/results/3a25bc67c3e3ed9759fa2cb974d22a6abf629663 |     
-    i686     |        libcanberra-0.30        | NOK | https://autobuild.buildroot.org/results/afbc80425da91d8e98f97a7d178d3ecd4653fbd1 |     
-  riscv64    |        libopenssl-3.6.3        | NOK | https://autobuild.buildroot.org/results/b54827203b9ae5b6e6d4d3e07041118db37101ac | ORPH
-  riscv64    |        libopenssl-3.6.3        | NOK | https://autobuild.buildroot.org/results/9e8f401385ad0ceebcbe458844f4b0891a47897f | ORPH
-    arm      |        libunwind-1.8.3         | NOK | https://autobuild.buildroot.org/results/01d86664f643e0d0c2ea8f220b39f227d5c8456b | ORPH
-    i686     |          linux-7.1.1           | NOK | https://autobuild.buildroot.org/results/a467b3b4b35f277816fa4ca4cb1e4073b2659cb9 | ORPH
-powerpc64le  |         mdevd-0.1.6.5          | NOK | https://autobuild.buildroot.org/results/4a0c2f12ebd378485682e2fcf05403960d516237 |     
-    i686     |           olsr-0.9.8           | NOK | https://autobuild.buildroot.org/results/c476305d0aebb4b0f07c1abec5ba972c39431f2d | ORPH
-    i686     |  openvmtools-11.3.5-18557794   | NOK | https://autobuild.buildroot.org/results/9c064a120cef03fa0b6dedbf2a0aa60c602eb45d |     
-    i686     |          perl-5.42.2           | NOK | https://autobuild.buildroot.org/results/c147bd0e820e88521ba87c848825feb0bc91823c |     
-    i686     |          perl-5.42.2           | NOK | https://autobuild.buildroot.org/results/cb7602d90bbc534d1128953638298f04938c397e |     
-    i686     |          perl-5.42.2           | NOK | https://autobuild.buildroot.org/results/97a777bc9164173383b5cd5771793955accae529 |     
-powerpc64le  | python-remi-2022.7.27-37-g1... | NOK | https://autobuild.buildroot.org/results/cce3c86c8413fbba80ccb3b403ec919150bcfe33 |     
-    i686     |         rtl_433-25.02          | NOK | https://autobuild.buildroot.org/results/555f13d887a031d24b546fcac14d7e855eaeb4d2 |     
-  mips64el   |         systemd-258.7          | NOK | https://autobuild.buildroot.org/results/d6d89a601774cc2772d3a8c7a11201adcfe913a5 |     
-    i686     |        tcf-agent-1.8.0         | NOK | https://autobuild.buildroot.org/results/6a5712bc050552329969589b2e758f95d8c45d42 |     
-  riscv64    |        tcpreplay-4.5.2         | NOK | https://autobuild.buildroot.org/results/3e4adc1b91860c7cabdf2781902324a5d7e3d362 | ORPH
-    i686     |            unknown             | NOK | https://autobuild.buildroot.org/results/aad69c4357c7a12c45e85841fac62bed4c5768b3 |     
-    i586     |            unknown             | NOK | https://autobuild.buildroot.org/results/9369456656627f2bbc49d49562c037c903611aa5 |     
-    i686     |            unknown             | NOK | https://autobuild.buildroot.org/results/8e5514a257c450faaf0c27fd3f2e94c88489d071 |     
-  riscv64    |            unknown             | NOK | https://autobuild.buildroot.org/results/df43307ed85810cebd576333d2802b5617f8cbd8 |     
-    i686     | x264-baee400fa9ced6f5481a72... | NOK | https://autobuild.buildroot.org/results/7b28d7b033af9aa3af3e89b820b87745e671fab6 |     
+    arm      | am33x-cm3-fb484c5e54f2e31cf... | NOK | https://autobuild.buildroot.org/results/dccf9e9f5cdba3d585bac5dac3151159e7809b6e | ORPH
+    arm      | am33x-cm3-fb484c5e54f2e31cf... | NOK | https://autobuild.buildroot.org/results/f0ff58086f271e7f0a3d822fb6a9bb9bc9734559 | ORPH
+    arm      | am33x-cm3-fb484c5e54f2e31cf... | NOK | https://autobuild.buildroot.org/results/2ddb9b74f386001113a7c97e965d50b9dd0ac559 | ORPH
+    i686     | amazon-ecr-credential-helpe... | NOK | https://autobuild.buildroot.org/results/b86b575b3f21f4e3517bd0d0967a5c79e2fbfee1 | ORPH
+    i686     |          ccrypt-1.11           | NOK | https://autobuild.buildroot.org/results/cf4554f5296c51716781957db46e275fee670986 | ORPH
+    i686     |          ccrypt-1.11           | NOK | https://autobuild.buildroot.org/results/009a16d092bfe35c908dec9e8a213cd0aaf8ed06 | ORPH
+powerpc64le  |        containerd-2.0.7        | NOK | https://autobuild.buildroot.org/results/ebfadc977f820abcc7a42f5a7a279077e5cf4061 |     
+    i686     |    docker-cli-buildx-0.25.0    | NOK | https://autobuild.buildroot.org/results/1933a7a17d041247fbc31946348351a9a4e5ed46 | ORPH
+    i686     | docker-credential-acr-env-0... | NOK | https://autobuild.buildroot.org/results/e279eb505a4676a386b455662a3269cdc9983042 | ORPH
+    i686     |     edk2-edk2-stable202602     | NOK | https://autobuild.buildroot.org/results/fde472ad29058b163c5943699abb92611dec8e5a |     
+    i686     |     edk2-edk2-stable202602     | NOK | https://autobuild.buildroot.org/results/b1f77bc59079f76160c59e469fc2781996db6074 |     
+    i686     |         enscript-1.6.6         | NOK | https://autobuild.buildroot.org/results/b38bc9cb0cfb12107b626358bb128b5dad4102b9 | ORPH
+powerpc64le  |        fftw-quad-3.3.10        | NOK | https://autobuild.buildroot.org/results/1650b1a386be242fd0d649a9b3029179ecac1bb7 | ORPH
+  mips64el   | glibc-2.43-27-g4070d808bea1... | NOK | https://autobuild.buildroot.org/results/37410d4e97ac2d3c8232ff7f074644efb193f536 |     
+    i686     |       host-binutils-2.44       | NOK | https://autobuild.buildroot.org/results/e36fd91c0f93d89b51a6fae9bb20f366c80ae0c4 |     
+    i586     |      host-binutils-2.45.1      | NOK | https://autobuild.buildroot.org/results/1617d31b62ca63ae8193ad108c691f5a2c696105 |     
+    i686     |      host-binutils-2.45.1      | NOK | https://autobuild.buildroot.org/results/7712bfcdf56ed8773cc9d62f0ec2a9f88f70178e |     
+    i686     |    host-gcc-initial-15.2.0     | NOK | https://autobuild.buildroot.org/results/ac67b17538fa76d38f49404daa22abdad38d7001 |     
+    i686     |         host-gdb-14.2          | NOK | https://autobuild.buildroot.org/results/6303a7521e279b6b387e7870c8dcf11d6624a646 | ORPH
+    arm      |       host-go-src-1.26.3       | NOK | https://autobuild.buildroot.org/results/f328862ad587ff79d8e05128d4bdd679902122f3 |     
+powerpc64le  |        host-guile-3.0.9        | NOK | https://autobuild.buildroot.org/results/dfa93e82b15ada9e32aefe3acfcdea8181ef6b71 |     
+    i686     |        host-guile-3.0.9        | NOK | https://autobuild.buildroot.org/results/9e8d86e6b3a6c98d618e7662b5e7ccf9c7e79610 |     
+    i686     |   host-mender-artifact-4.2.0   | NOK | https://autobuild.buildroot.org/results/d9f15f77a1da5c66fb99153ab4cc4f083d0d0643 |     
+    i686     |     host-opkg-utils-0.7.0      | NOK | https://autobuild.buildroot.org/results/dd3e16174271b5e6681b92fc96a5f2d1a8b24f7c | ORPH
+    i686     |        host-pahole-1.28        | NOK | https://autobuild.buildroot.org/results/c053471ba6ad6dbe6757d821866934423e75f613 |     
+  riscv64    |        host-pahole-1.28        | NOK | https://autobuild.buildroot.org/results/ccb0e12df705b0f10df9edb01eca401c342e71f0 |     
+    or1k     | host-vboot-utils-7dfa482d6a... | NOK | https://autobuild.buildroot.org/results/6b9b731a884a1153c58c1df64a9f29ea85faf7e8 |     
+    i686     |      host-xfsprogs-6.19.0      | NOK | https://autobuild.buildroot.org/results/32e0ee3416a07feddea9febfba6e82782fb7f6af | ORPH
+    i586     |          i2pd-2.59.0           | NOK | https://autobuild.buildroot.org/results/0154621892c61e5c070c1a21b78fc33aa1130470 |     
+    i686     |          iozone-3.508          | NOK | https://autobuild.buildroot.org/results/cd5187f752d62a802da6ae89f4d60654e826d4e5 |     
+  powerpc    |           kbd-2.9.0            | NOK | https://autobuild.buildroot.org/results/9cbb4ad83c163baaaaad90461f1998cb244bfd28 | ORPH
+    i686     | libesmtp-v1.1.0-14-g335ee8d... | NOK | https://autobuild.buildroot.org/results/23fbbf50bfeb45519dbbe865b4bffa5afd6ac6cb | ORPH
+powerpc64le  |        libopenssl-3.6.3        | NOK | https://autobuild.buildroot.org/results/ebcaf881a0053cb55eb341b3ce00175e0dcef4d2 | ORPH
+    i686     |          linux-7.1.2           | NOK | https://autobuild.buildroot.org/results/990ea9380b097f741b2678c57fe85067162f3b2b | ORPH
+microblazeel |        linux-pam-1.7.2         | NOK | https://autobuild.buildroot.org/results/6e877e4b5f03a4983ed3158f4b033579b9ed7b93 | ORPH
+    i686     |          linux-tools           | NOK | https://autobuild.buildroot.org/results/9abb6dcd13e90fe07276703aabfd327bc6ff8b73 | ORPH
+    i686     |       minizip-zlib-1.3.1       | NOK | https://autobuild.buildroot.org/results/7e648d957ba1c6f6c16011ceaaaf14e8e9058244 |     
+powerpc64le  |           musl-1.2.6           | NOK | https://autobuild.buildroot.org/results/cd2ce54dea39fcdd6be30fb30399920083933235 |     
+    i686     |          ntp-4.2.8p18          | NOK | https://autobuild.buildroot.org/results/76ef1abb3942ce13406e4f797d29272ff0c2706f |     
+  riscv64    |          ntp-4.2.8p18          | NOK | https://autobuild.buildroot.org/results/3fe2d8f60b02b5ae1cd041a02c150b136694c49f |     
+    arm      |          ntp-4.2.8p18          | NOK | https://autobuild.buildroot.org/results/882ec9302b3197b3af20372630582a4e5f1b2e31 |     
+  riscv64    |           olsr-0.9.8           | NOK | https://autobuild.buildroot.org/results/8c19c9d7c1caed24ff4cd75556c6d67cafb9c275 | ORPH
+  aarch64    |         openntpd-6.8p1         | NOK | https://autobuild.buildroot.org/results/206c5473521c881b788e95e15e4a86d854603d31 | ORPH
+    arm      |         openocd-0.12.0         | NOK | https://autobuild.buildroot.org/results/1872137cb391cbaa1cf5c29422d530bb2d74f4e5 | ORPH
+    i686     |    passt-2025_06_11.0293c6f    | NOK | https://autobuild.buildroot.org/results/b707bb31cc97da06ae4ffac31ddd560a3f06f057 | ORPH
+  sparc64    |      python-zlmdb-23.1.1       | NOK | https://autobuild.buildroot.org/results/9229c7cbac3d09c8ad40f39a1ed2fe10feb4d750 |     
+   x86_64    | rtl8822cs-55971663534233fd8... | NOK | https://autobuild.buildroot.org/results/02610987d1dcc2fae898a62a48f98b1e925cc39c |     
+  riscv64    |         systemd-258.7          | NOK | https://autobuild.buildroot.org/results/0ba97272fea576ff180e872bcb4ae1661129b587 |     
+    i686     |         systemd-258.7          | NOK | https://autobuild.buildroot.org/results/d7473d8376b80340dc0e8f3fabb91a9cf99b7dcb |     
+    i686     |        tailscale-1.78.1        | NOK | https://autobuild.buildroot.org/results/d2b61f5f63b107ab0e47dcf98937f92d317b8e25 |     
+    i686     |      uboot-tools-2026.04       | NOK | https://autobuild.buildroot.org/results/fb5f9ede3561452b45eb4614d566f23247fa9177 | ORPH
+    i686     | uhttpd-15346de8d3ba42200249... | NOK | https://autobuild.buildroot.org/results/2a5a888b890a277f863eeebd89543a2bcc4c81cf | ORPH
+  mips64el   | uhttpd-15346de8d3ba42200249... | NOK | https://autobuild.buildroot.org/results/a45f8ebdb059ca6d0f85cfe787808af593d4f4ce | ORPH
+powerpc64le  | uhttpd-15346de8d3ba42200249... | NOK | https://autobuild.buildroot.org/results/b1f3c26a9736468b61b6cee3d96d31b2bbd80594 | ORPH
+    i686     |            unknown             | NOK | https://autobuild.buildroot.org/results/7880cf1eb88efd3310651485695e4bc5d3c0da69 |     
+    mips     |            unknown             | NOK | https://autobuild.buildroot.org/results/9257cd18bd57648ea2cf9dfbe41ee08527663003 |     
+    i686     | wilink-bt-firmware-43fca73c... | NOK | https://autobuild.buildroot.org/results/8e5161ce186a5e46fc7389d6dcb068996906be19 | ORPH
+
+
+Classification of failures by reason for 2026.05.x
+--------------------------------------------------
+
+             dahdi-linux-3.3.0 | 2 
+                   perl-5.42.2 | 1 
+            python-iwlib-1.7.0 | 1 
+                       unknown | 1 
+
+
+Detail of failures for 2026.05.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+powerpc64le  |       dahdi-linux-3.3.0        | NOK | https://autobuild.buildroot.org/results/8abd6ab7a6de7b9b75bf092a904ed2be9474ba8a | ORPH
+    i686     |       dahdi-linux-3.3.0        | NOK | https://autobuild.buildroot.org/results/01c7c3d5414ccd4d8ca061b3b2eacc5f174383c3 | ORPH
+  riscv64    |          perl-5.42.2           | NOK | https://autobuild.buildroot.org/results/9645657cd4036fe1472359aaf3cfed14baf14ca8 |     
+    i686     |       python-iwlib-1.7.0       | NOK | https://autobuild.buildroot.org/results/6d46030743a4859dfb02a716c8d366ed5dbd961f |     
+  riscv64    |            unknown             | NOK | https://autobuild.buildroot.org/results/81c10e6d0fd38e089ac21ec1c5eccda46d389cb6 |     
 
 
 Classification of failures by reason for 2026.02.x
 --------------------------------------------------
 
-              erlang-26.2.5.15 | 1 
-  gobject-introspection-1.84.0 | 1 
-            host-go-src-1.26.3 | 1 
+                  libbpf-1.6.2 | 1 
                 memtest86-7.20 | 1 
+            resiprocate-1.13.2 | 1 
 
 
 Detail of failures for 2026.02.x
@@ -253,17 +281,16 @@ Detail of failures for 2026.02.x
 
     arch     |             reason             | OK? |                                       url                                       | orph?
 -------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    i686     |        erlang-26.2.5.15        | NOK | https://autobuild.buildroot.org/results/6dbad6dd67bd34dd87572024f13e7981a008476a |     
-    i686     |  gobject-introspection-1.84.0  | NOK | https://autobuild.buildroot.org/results/7a72c7d690e314736b9bba86c5044ffd87c18f8b | ORPH
-    i686     |       host-go-src-1.26.3       | NOK | https://autobuild.buildroot.org/results/05d8f0308c20812576147a5fc6bd477957bd8ebf |     
-    i686     |         memtest86-7.20         | NOK | https://autobuild.buildroot.org/results/79f8193eeef2276c0a5cea10350b1ad705b69a03 |     
+    or1k     |          libbpf-1.6.2          | NOK | https://autobuild.buildroot.org/results/3782ce41ef9561b64f9e0d830518fc394574d6f8 |     
+    i686     |         memtest86-7.20         | NOK | https://autobuild.buildroot.org/results/1c9cb6cf104605aea876f529dfe30db779108b2e |     
+  aarch64    |       resiprocate-1.13.2       | NOK | https://autobuild.buildroot.org/results/418ba079f38f8bb0fd0d1c06d669035f68a0c5a1 | ORPH
 
 
 Classification of failures by reason for 2025.02.x
 --------------------------------------------------
 
-        host-python-lxml-5.3.0 | 4 
-host-netsurf-buildsystem-75... | 1 
+        host-python-lxml-5.3.0 | 1 
+              libsodium-1.0.22 | 1 
 
 
 Detail of failures for 2025.02.x
@@ -271,11 +298,8 @@ Detail of failures for 2025.02.x
 
     arch     |             reason             | OK? |                                       url                                       | orph?
 -------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    i586     | host-netsurf-buildsystem-75... | NOK | https://autobuild.buildroot.org/results/30bb259b88575e89ed2284cb60d2a49f8c633d05 | ORPH
-    arm      |     host-python-lxml-5.3.0     | NOK | https://autobuild.buildroot.org/results/3392dfb34d6645323255993668ee7eea80935e96 |     
-    i686     |     host-python-lxml-5.3.0     | NOK | https://autobuild.buildroot.org/results/5dc811428664da02b0c59e493f5aea198fe3fecf |     
-    i686     |     host-python-lxml-5.3.0     | NOK | https://autobuild.buildroot.org/results/37f77564fa5a143445ec2a1b81b98439c7d9c86a |     
-    i686     |     host-python-lxml-5.3.0     | NOK | https://autobuild.buildroot.org/results/dfa0b7966e14b232ef24cae20bed7ff5bf34d30e |     
+    i686     |     host-python-lxml-5.3.0     | NOK | https://autobuild.buildroot.org/results/49bca8775e2227c6f98f7b1875a44374498ae3ad |     
+    i586     |        libsodium-1.0.22        | NOK | https://autobuild.buildroot.org/results/68d3f0e3a9361facb1f066a3f051a1f04d9d2df8 |     
 
 
 Packages having a newer version
@@ -296,9 +320,10 @@ Packages having a newer version
                       argparse |  DISTRO  | https://release-monitoring.org/project/007317 | 0.7.1-1      | 0.7.2        |     
                          argus |  DISTRO  | https://release-monitoring.org/project/000107 | 3.0.8.2      | 5.0.2        | ORPH
                      armadillo |  DISTRO  | https://release-monitoring.org/project/007006 | 15.2.7       | 15.4.0       |     
+                         asn1c |  DISTRO  | https://release-monitoring.org/project/016926 | 0.9.28       | 0.9.29       |     
                         assimp |  DISTRO  | https://release-monitoring.org/project/006988 | 6.0.2        | 6.0.5        | ORPH
-                      asterisk |  DISTRO  | https://release-monitoring.org/project/009838 | 22.9.0       | 23.4.0       |     
-                  at-spi2-core |  DISTRO  | https://release-monitoring.org/project/007841 | 2.58.2       | 2.60.4       |     
+                      asterisk |  DISTRO  | https://release-monitoring.org/project/009838 | 22.9.0       | 23.4.1       |     
+                  at-spi2-core |  DISTRO  | https://release-monitoring.org/project/007841 | 2.58.2       | 2.60.5       |     
                          atftp |  DISTRO  | https://release-monitoring.org/project/015219 | 0.8.0        | 0.8.1        |     
                          atkmm |  DISTRO  | https://release-monitoring.org/project/007962 | 2.36.3       | 2.36.4       |     
                      atkmm2_28 |  DISTRO  | https://release-monitoring.org/project/373360 | 2.28.4       | 2.28.5       |     
@@ -314,7 +339,6 @@ Packages having a newer version
                    bats-assert |  DISTRO  | https://release-monitoring.org/project/372274 | 2.2.0        | 2.2.4        |     
                   bcache-tools |  DISTRO  | https://release-monitoring.org/project/021397 | 1.0.8        | 1.1          | ORPH
                     berkeleydb |  GUESS   | https://release-monitoring.org/project/138386 | 5.3.28       | 18.1.15      | ORPH
-                          bind |  DISTRO  | https://release-monitoring.org/project/014923 | 9.18.50      | 9.20.24      |     
                       binutils |  DISTRO  | https://release-monitoring.org/project/007981 | 2.45.1       | 2.46.1       |     
                           bird |  DISTRO  | https://release-monitoring.org/project/000192 | 2.15.1       | 3.3.1        |     
                         blake3 |  DISTRO  | https://release-monitoring.org/project/369414 | 1.8.3        | 1.8.5        |     
@@ -340,7 +364,7 @@ Packages having a newer version
                         circus |  DISTRO  | https://release-monitoring.org/project/021726 | 0.16.1       | 0.19.0       |     
                          cli11 |  DISTRO  | https://release-monitoring.org/project/020578 | 2.6.1        | 2.6.2        |     
                    cloudflared |  DISTRO  | https://release-monitoring.org/project/186920 | 2025.8.1     | 2026.6.1     |     
-                        clpeak |  DISTRO  | https://release-monitoring.org/project/015180 | 1.1.5        | 2.0.13       |     
+                        clpeak |  DISTRO  | https://release-monitoring.org/project/015180 | 1.1.5        | 2.0.16       |     
                       collectl |  DISTRO  | https://release-monitoring.org/project/000330 | 4.3.20.1     | 4.3.20.2     |     
                  comix-cursors |  DISTRO  | https://release-monitoring.org/project/021882 | 0.9.1        | 0.10.1       | ORPH
                       composer |  DISTRO  | https://release-monitoring.org/project/009710 | 2.5.8        | 2.10.1       |     
@@ -349,7 +373,6 @@ Packages having a newer version
                     containerd |  DISTRO  | https://release-monitoring.org/project/016460 | 2.0.7        | 2.3.2        |     
        containers-image-config |  DISTRO  | https://release-monitoring.org/project/378977 | v5.35.0      | 5.36.2       | ORPH
                      coreutils |  DISTRO  | https://release-monitoring.org/project/000343 | 9.10         | 9.11         | ORPH
-                   cpp-httplib |  DISTRO  | https://release-monitoring.org/project/274636 | 0.43.1       | 0.48.0       |     
                         cramfs |  DISTRO  | https://release-monitoring.org/project/021408 | 2.1          | 2.2          |     
                           crun |  DISTRO  | https://release-monitoring.org/project/096792 | 1.24         | 1.28         |     
                   cups-filters |  DISTRO  | https://release-monitoring.org/project/005541 | 1.28.17      | 2.0.1        |     
@@ -363,7 +386,7 @@ Packages having a newer version
                    dbus-python |  DISTRO  | https://release-monitoring.org/project/000402 | 1.2.18       | 1.4.0        | ORPH
                          dc3dd |  DISTRO  | https://release-monitoring.org/project/015086 | 7.2.641      | 7.3.1        | ORPH
                     dehydrated |  DISTRO  | https://release-monitoring.org/project/011312 | 0.7.1        | 0.7.2        |     
-                         delve |  DISTRO  | https://release-monitoring.org/project/040149 | 1.22.1       | 1.26.3       |     
+                         delve |  DISTRO  | https://release-monitoring.org/project/040149 | 1.22.1       | 1.27.0       |     
             desktop-file-utils |  DISTRO  | https://release-monitoring.org/project/000421 | 0.26         | 0.28         | ORPH
                         dhcpcd |  DISTRO  | https://release-monitoring.org/project/011429 | 10.2.4       | 10.3.2       |     
                       dhcpdump |  DISTRO  | https://release-monitoring.org/project/021415 | 1.9          | 1.10         | ORPH
@@ -371,11 +394,11 @@ Packages having a newer version
                      ding-libs |  DISTRO  | https://release-monitoring.org/project/013710 | 0.6.2        | 0.7.0        |     
          distribution-registry |  DISTRO  | https://release-monitoring.org/project/378976 | v3.0.0       | 3.1.1        | ORPH
                           dlib |  DISTRO  | https://release-monitoring.org/project/018600 | 19.24.9      | 20.0.1       |     
-                    docker-cli |  DISTRO  | https://release-monitoring.org/project/021076 | 28.3.3       | 29.6.0       |     
+                    docker-cli |  DISTRO  | https://release-monitoring.org/project/021076 | 28.3.3       | 29.6.1       |     
              docker-cli-buildx |  DISTRO  | https://release-monitoring.org/project/325723 | 0.25.0       | 0.35.0       | ORPH
-                docker-compose |  DISTRO  | https://release-monitoring.org/project/006185 | 2.38.2       | 5.1.4        |     
+                docker-compose |  DISTRO  | https://release-monitoring.org/project/006185 | 2.38.2       | 5.2.0        |     
          docker-credential-gcr |  DISTRO  | https://release-monitoring.org/project/377457 | v2.1.30      | 2.1.32       | ORPH
-                 docker-engine |  DISTRO  | https://release-monitoring.org/project/000447 | 28.3.3       | 29.6.0       |     
+                 docker-engine |  DISTRO  | https://release-monitoring.org/project/000447 | 28.3.3       | 29.6.1       |     
                       domoticz |  DISTRO  | https://release-monitoring.org/project/021342 | 2024.4       | 2026.2       |     
                       dos2unix |  DISTRO  | https://release-monitoring.org/project/000453 | 7.5.5        | 7.5.6        |     
              double-conversion |  DISTRO  | https://release-monitoring.org/project/007454 | 3.3.1        | 3.4.0        |     
@@ -420,6 +443,7 @@ Packages having a newer version
                           fcft |  DISTRO  | https://release-monitoring.org/project/143240 | 3.3.2        | 3.3.3        | ORPH
                             fd |  DISTRO  | https://release-monitoring.org/project/373722 | 10.3.0       | 10.4.2       |     
                            feh |  DISTRO  | https://release-monitoring.org/project/000790 | 3.11.2       | 3.12.2       |     
+                     fetchmail |  DISTRO  | https://release-monitoring.org/project/000801 | 6.6.5        | 6.6.6        |     
                         ffmpeg |  DISTRO  | https://release-monitoring.org/project/005405 | 6.1.5        | 8.1.2        |     
                    fftw-double |  DISTRO  | https://release-monitoring.org/project/000803 | 3.3.10       | 3.3.11       | ORPH
               fftw-long-double |  DISTRO  | https://release-monitoring.org/project/000803 | 3.3.10       | 3.3.11       | ORPH
@@ -427,15 +451,16 @@ Packages having a newer version
                    fftw-single |  DISTRO  | https://release-monitoring.org/project/000803 | 3.3.10       | 3.3.11       | ORPH
                           ficl |  DISTRO  | https://release-monitoring.org/project/021430 | 3.065        | 3065         |     
                           file |  DISTRO  | https://release-monitoring.org/project/000807 | 5.47         | 5.48         | ORPH
-                     firewalld |  DISTRO  | https://release-monitoring.org/project/009989 | 2.0.2        | 2.4.2        | ORPH
+                     firewalld |  DISTRO  | https://release-monitoring.org/project/009989 | 2.0.2        | 2.4.3        | ORPH
                   firmware-imx |  GUESS   | https://release-monitoring.org/project/390526 | 8.27         | 8.31         |     
                        flannel |  DISTRO  | https://release-monitoring.org/project/007421 | 0.26.0       | 0.28.5       |     
                     flare-game |  DISTRO  | https://release-monitoring.org/project/021434 | 1.14         | 1.15         |     
                           fltk |  DISTRO  | https://release-monitoring.org/project/000823 | 1.3.7        | 1.4.5        | ORPH
-                    fluent-bit |  DISTRO  | https://release-monitoring.org/project/267335 | 4.2.0        | 5.0.7        |     
+                    fluent-bit |  DISTRO  | https://release-monitoring.org/project/267335 | 4.2.0        | 5.0.8        |     
                     fluidsynth |  DISTRO  | https://release-monitoring.org/project/010437 | 2.4.7        | 2.5.5        |     
                            fmt |  DISTRO  | https://release-monitoring.org/project/011526 | 12.1.0       | 12.2.0       |     
                        fmtools |  DISTRO  | https://release-monitoring.org/project/021435 | 2.0.7        | 2.0.8        | ORPH
+                  font-awesome |  DISTRO  | https://release-monitoring.org/project/000826 | 7.2.0        | 7.3.0        |     
                     fontconfig |  DISTRO  | https://release-monitoring.org/project/000827 | 2.17.1       | 2.18.1       | ORPH
                           foot |  DISTRO  | https://release-monitoring.org/project/141611 | 1.26.0       | 1.27.0       | ORPH
                          fping |  DISTRO  | https://release-monitoring.org/project/000834 | 5.4          | 5.5          |     
@@ -447,16 +472,16 @@ Packages having a newer version
                           fwup |  DISTRO  | https://release-monitoring.org/project/021438 | 1.9.1        | 1.16.0       |     
                          fwupd |  DISTRO  | https://release-monitoring.org/project/005833 | 2.0.4        | 2.1.5        |     
                           gdal |  DISTRO  | https://release-monitoring.org/project/000881 | 3.11.4       | 3.13.1       |     
-                    gdk-pixbuf |  DISTRO  | https://release-monitoring.org/project/009533 | 2.42.12      | 2.44.6       | ORPH
+                    gdk-pixbuf |  DISTRO  | https://release-monitoring.org/project/009533 | 2.42.12      | 2.44.7       | ORPH
                      genext2fs |  DISTRO  | https://release-monitoring.org/project/021440 | 1.5.0        | 1.6.2        |     
                         gensio |  DISTRO  | https://release-monitoring.org/project/067634 | 2.5.5        | 3.0.2        |     
                    gettext-gnu |  DISTRO  | https://release-monitoring.org/project/000898 | 0.22.4       | 1.0          | ORPH
                         gflags |  DISTRO  | https://release-monitoring.org/project/008735 | 2.2.2        | 2.3.0        |     
-                   ghostscript |  DISTRO  | https://release-monitoring.org/project/001157 | 10.07.0      | 10.07.1      |     
                      git-crypt |  DISTRO  | https://release-monitoring.org/project/017093 | 0.7.0        | 0.8.0        | ORPH
-                 gitlab-runner |  DISTRO  | https://release-monitoring.org/project/011337 | 15.5.0       | 19.1.0       |     
+                 gitlab-runner |  DISTRO  | https://release-monitoring.org/project/011337 | 15.5.0       | 19.1.1       |     
                glib-networking |  DISTRO  | https://release-monitoring.org/project/021353 | 2.76.0       | 2.80.1       | ORPH
-                        glibmm |  DISTRO  | https://release-monitoring.org/project/007960 | 2.76.0       | 2.88.0       |     
+                        glibmm |  DISTRO  | https://release-monitoring.org/project/007960 | 2.76.0       | 2.88.1       |     
+                    glibmm2_66 |  DISTRO  | https://release-monitoring.org/project/369440 | 2.66.8       | 2.66.9       |     
                            glm |  DISTRO  | https://release-monitoring.org/project/001181 | 1.0.1        | 1.0.3        | ORPH
                           glog |  DISTRO  | https://release-monitoring.org/project/008732 | 0.7.0        | 0.7.1        |     
             gmrender-resurrect |  DISTRO  | https://release-monitoring.org/project/021445 | 0.3          | 0.3.1        |     
@@ -467,15 +492,15 @@ Packages having a newer version
                          grout |  DISTRO  | https://release-monitoring.org/project/375897 | 0.14.3       | 0.16.0       |     
                           grpc |  DISTRO  | https://release-monitoring.org/project/019117 | 1.80.0       | 1.81.1       |     
      gsettings-desktop-schemas |  DISTRO  | https://release-monitoring.org/project/013139 | 45.0         | 50.1         |     
-                         gssdp |  DISTRO  | https://release-monitoring.org/project/001262 | 1.6.4        | 1.6.5        |     
-                 gst1-devtools |  DISTRO  | https://release-monitoring.org/project/021856 | 1.24.13      | 1.29.1       | ORPH
+                         gssdp |  DISTRO  | https://release-monitoring.org/project/001262 | 1.6.4        | 1.6.6        |     
+                 gst1-devtools |  DISTRO  | https://release-monitoring.org/project/021856 | 1.24.13      | 1.29.2       | ORPH
                       gst1-imx |  DISTRO  | https://release-monitoring.org/project/021846 | 0.13.1       | 2.2.0        |     
                 gst1-interpipe |  DISTRO  | https://release-monitoring.org/project/021847 | v1.1.8       | 1.1.10       | ORPH
                     gst1-libav |  DISTRO  | https://release-monitoring.org/project/021848 | 1.24.13      | 1.28.4       | ORPH
               gst1-plugins-bad |  DISTRO  | https://release-monitoring.org/project/021849 | 1.24.13      | 1.28.4       | ORPH
              gst1-plugins-base |  DISTRO  | https://release-monitoring.org/project/021850 | 1.24.13      | 1.28.4       | ORPH
              gst1-plugins-good |  DISTRO  | https://release-monitoring.org/project/021852 | 1.24.13      | 1.28.4       | ORPH
-             gst1-plugins-ugly |  DISTRO  | https://release-monitoring.org/project/015187 | 1.24.13      | 1.29.1       | ORPH
+             gst1-plugins-ugly |  DISTRO  | https://release-monitoring.org/project/015187 | 1.24.13      | 1.29.2       | ORPH
                    gst1-python |  DISTRO  | https://release-monitoring.org/project/003881 | 1.24.13      | 1.28.4       | ORPH
               gst1-rtsp-server |  DISTRO  | https://release-monitoring.org/project/021853 | 1.24.13      | 1.28.4       | ORPH
                     gst1-shark |  DISTRO  | https://release-monitoring.org/project/021854 | v0.8.1       | 0.9.1        |     
@@ -488,10 +513,11 @@ Packages having a newer version
                          guile |  DISTRO  | https://release-monitoring.org/project/001277 | 3.0.9        | 3.0.11       |     
                          gupnp |  DISTRO  | https://release-monitoring.org/project/001281 | 1.6.9        | 1.6.10       |     
                       gupnp-av |  DISTRO  | https://release-monitoring.org/project/001282 | 0.14.4       | 0.14.5       |     
+                   gupnp-tools |  DISTRO  | https://release-monitoring.org/project/001284 | 0.12.2       | 0.12.3       |     
                     gutenprint |  DISTRO  | https://release-monitoring.org/project/001285 | 5.2.14       | 5.3.5        | ORPH
-                          gvfs |  DISTRO  | https://release-monitoring.org/project/005496 | 1.57.2       | 1.60.0       | ORPH
-                       haproxy |  DISTRO  | https://release-monitoring.org/project/001298 | 2.6.27       | 3.4.0        |     
-                       haveged |  DISTRO  | https://release-monitoring.org/project/011695 | 1.9.21       | 1.9.24       |     
+                          gvfs |  DISTRO  | https://release-monitoring.org/project/005496 | 1.57.2       | 1.61.1       | ORPH
+                       haproxy |  DISTRO  | https://release-monitoring.org/project/001298 | 2.6.27       | 3.4.1        |     
+                       haveged |  DISTRO  | https://release-monitoring.org/project/011695 | 1.9.21       | 1.9.26       |     
                 heirloom-mailx |  DISTRO  | https://release-monitoring.org/project/095708 | 12.5         | 14.9.25      |     
                        highway |  DISTRO  | https://release-monitoring.org/project/205809 | 1.3.0        | 1.4.0        |     
                        hiredis |  DISTRO  | https://release-monitoring.org/project/001318 | 1.3.0        | 1.4.0        |     
@@ -506,14 +532,15 @@ Packages having a newer version
                    imagemagick |  DISTRO  | https://release-monitoring.org/project/001372 | 7.1.2-23     | 7.1.2-26     | ORPH
                         imlib2 |  DISTRO  | https://release-monitoring.org/project/021676 | 1.12.5       | 1.12.6       |     
                  inotify-tools |  DISTRO  | https://release-monitoring.org/project/008864 | 3.20.2.2     | 4.25.9.0     | ORPH
+              intel-vpl-gpu-rt |  DISTRO  | https://release-monitoring.org/project/372126 | 26.2.2       | 26.2.3       |     
                         iozone |  DISTRO  | https://release-monitoring.org/project/021679 | 3.508        | 3.510        |     
                       ipmiutil |  DISTRO  | https://release-monitoring.org/project/001391 | 3.1.9        | 3.2.2        | ORPH
                       iproute2 |  DISTRO  | https://release-monitoring.org/project/001392 | 7.0.0        | 7.1.0        |     
                       iptables |  DISTRO  | https://release-monitoring.org/project/001394 | 1.8.11       | 1.8.13       | ORPH
          jitterentropy-library |  DISTRO  | https://release-monitoring.org/project/029701 | 3.6.3        | 3.7.0        | ORPH
                            joe |  DISTRO  | https://release-monitoring.org/project/001467 | 4.6          | 4.8          | ORPH
-                          jose |  DISTRO  | https://release-monitoring.org/project/011761 | 14           | 15           |     
                             jq |  DISTRO  | https://release-monitoring.org/project/013252 | 1.8.1        | 1.8.2        |     
+                        json-c |  DISTRO  | https://release-monitoring.org/project/001477 | 0.18         | 0.19         |     
                        jsoncpp |  DISTRO  | https://release-monitoring.org/project/007483 | 1.9.7        | 1.9.8        |     
                            kbd |  DISTRO  | https://release-monitoring.org/project/001492 | 2.9.0        | 2.10.0       | ORPH
                     keepalived |  DISTRO  | https://release-monitoring.org/project/001504 | 2.2.8        | 2.3.4        |     
@@ -528,6 +555,7 @@ Packages having a newer version
                            lft |  DISTRO  | https://release-monitoring.org/project/021863 | 3.91         | 3.98         | ORPH
                  libabseil-cpp |  DISTRO  | https://release-monitoring.org/project/115295 | 20260107.1   | 20260526.0   |     
                    libapparmor |  DISTRO  | https://release-monitoring.org/project/094819 | 4.1.1        | 5.0.1        |     
+                        libass |  DISTRO  | https://release-monitoring.org/project/001560 | 0.17.4       | 0.17.5       |     
                         libbpf |  DISTRO  | https://release-monitoring.org/project/141355 | 1.6.2        | 1.7.0        |     
                      libcgroup |  DISTRO  | https://release-monitoring.org/project/001575 | 2.0.3        | 3.2.0        | ORPH
                  libcpprestsdk |  DISTRO  | https://release-monitoring.org/project/015531 | 2.10.18      | 2.10.19      | ORPH
@@ -540,13 +568,14 @@ Packages having a newer version
                          libfm |  DISTRO  | https://release-monitoring.org/project/008794 | 1.3.2        | 1.4.1        | ORPH
                    libfm-extra |  DISTRO  | https://release-monitoring.org/project/008794 | 1.3.2        | 1.4.1        | ORPH
                        libglew |  DISTRO  | https://release-monitoring.org/project/007878 | 2.2.0        | 2.3.1        |     
-                      libglib2 |  DISTRO  | https://release-monitoring.org/project/010024 | 2.86.5       | 2.88.1       |     
-                      libgpgme |  DISTRO  | https://release-monitoring.org/project/001239 | 1.24.3       | 2.1.0        | ORPH
+                      libglib2 |  DISTRO  | https://release-monitoring.org/project/010024 | 2.86.5       | 2.88.2       |     
+                      libgpgme |  DISTRO  | https://release-monitoring.org/project/001239 | 1.24.3       | 2.1.1        | ORPH
                       libgpiod |  GUESS   | https://release-monitoring.org/project/020640 | 1.6.5        | 2.3          | ORPH
                      libgpiod2 |  DISTRO  | https://release-monitoring.org/project/020640 | 2.2.4        | 2.3          |     
                         libgsm |  DISTRO  | https://release-monitoring.org/project/012587 | 1.0.23       | 1.0.24       | ORPH
                        libgtk3 |  DISTRO  | https://release-monitoring.org/project/311549 | 3.24.51      | 3.24.52      |     
                        libgtk4 |  DISTRO  | https://release-monitoring.org/project/013942 | 4.21.0       | 4.22.4       | ORPH
+                       libheif |  DISTRO  | https://release-monitoring.org/project/064439 | 1.23.0       | 1.23.1       |     
                         libhtp |  DISTRO  | https://release-monitoring.org/project/001632 | 0.5.51       | 0.5.53       |     
                        libical |  DISTRO  | https://release-monitoring.org/project/001637 | 3.0.20       | 4.0.3        |     
                         libidn |  DISTRO  | https://release-monitoring.org/project/001639 | 1.43         | 1.44         |     
@@ -565,7 +594,7 @@ Packages having a newer version
                 libmodsecurity |  DISTRO  | https://release-monitoring.org/project/068638 | 3.0.15       | 4.0.0.0      |     
                   libmpdclient |  DISTRO  | https://release-monitoring.org/project/021364 | 2.23         | 2.25         |     
                      libmspack |  DISTRO  | https://release-monitoring.org/project/016827 | 0.11alpha    | 1.11         |     
-                   libnetconf2 |  DISTRO  | https://release-monitoring.org/project/031639 | 3.7.10       | 4.2.14       |     
+                   libnetconf2 |  DISTRO  | https://release-monitoring.org/project/031639 | 3.7.10       | 4.4.10       |     
         libnetfilter_conntrack |  DISTRO  | https://release-monitoring.org/project/001675 | 1.0.9        | 1.1.1        |     
                       libnftnl |  DISTRO  | https://release-monitoring.org/project/001681 | 1.3.0        | 1.3.1        |     
                        libnice |  DISTRO  | https://release-monitoring.org/project/001683 | 0.1.21       | 0.1.23       |     
@@ -582,13 +611,14 @@ Packages having a newer version
                        libpeas |  DISTRO  | https://release-monitoring.org/project/006871 | 1.32.0       | 2.2.1        | ORPH
                        libpqxx |  DISTRO  | https://release-monitoring.org/project/021367 | 7.10.7       | 8.0.1        |     
                         libpri |  DISTRO  | https://release-monitoring.org/project/011042 | 1.6.0        | 1.6.1        | ORPH
+                        libpsl |  DISTRO  | https://release-monitoring.org/project/007305 | 0.21.5       | 0.22.0       |     
                          libqb |  DISTRO  | https://release-monitoring.org/project/009399 | 2.0.8        | 2.0.10       |     
                         libqmi |  DISTRO  | https://release-monitoring.org/project/007307 | 1.36.0       | 1.38.0       |     
                   libqrtr-glib |  DISTRO  | https://release-monitoring.org/project/192056 | 1.2.2        | 1.4.0        |     
                         libraw |  DISTRO  | https://release-monitoring.org/project/001709 | 0.21.4       | 0.22.1       |     
                        librelp |  DISTRO  | https://release-monitoring.org/project/001713 | 1.11.0       | 1.12.0       |     
                       libressl |  DISTRO  | https://release-monitoring.org/project/012102 | 3.9.2        | 4.3.2        | ORPH
-                       librsvg |  DISTRO  | https://release-monitoring.org/project/005420 | 2.50.9       | 2.62.3       |     
+                       librsvg |  DISTRO  | https://release-monitoring.org/project/005420 | 2.50.9       | 2.62.90      |     
                        librtas |  DISTRO  | https://release-monitoring.org/project/010717 | 2.0.5        | 2.0.7        | ORPH
                      libsecret |  DISTRO  | https://release-monitoring.org/project/013150 | 0.20.5       | 0.21.7       | ORPH
                        libsigc |  DISTRO  | https://release-monitoring.org/project/007961 | 3.4.0        | 3.8.1        |     
@@ -598,7 +628,7 @@ Packages having a newer version
                       libsoup3 |  DISTRO  | https://release-monitoring.org/project/011483 | 3.6.6        | 3.7.1        |     
                libspatialindex |  DISTRO  | https://release-monitoring.org/project/004864 | 1.9.3        | 2.1.0        |     
                        libsrtp |  DISTRO  | https://release-monitoring.org/project/018547 | 2.7.0        | 2.8.0        |     
-                    libtorrent |  DISTRO  | https://release-monitoring.org/project/001742 | 0.15.3       | 0.16.14      | ORPH
+                    libtorrent |  DISTRO  | https://release-monitoring.org/project/001742 | 0.15.3       | 0.16.15      | ORPH
           libtorrent-rasterbar |  DISTRO  | https://release-monitoring.org/project/004166 | 1.2.20       | 2.0.13       |     
                  libtraceevent |  DISTRO  | https://release-monitoring.org/project/288159 | 1.8.7        | 1.9.0        |     
                         libucl |  DISTRO  | https://release-monitoring.org/project/021371 | 0.8.2        | 0.9.4        |     
@@ -614,14 +644,15 @@ Packages having a newer version
                   libxkbcommon |  DISTRO  | https://release-monitoring.org/project/001780 | 1.9.2        | 1.13.2       |     
             libxml-parser-perl |  DISTRO  | https://release-monitoring.org/project/003531 | 2.47         | 2.59         |     
                       libxmlpp |  DISTRO  | https://release-monitoring.org/project/011129 | 5.2.0        | 5.6.1        | ORPH
-                    libxmlsec1 |  DISTRO  | https://release-monitoring.org/project/005200 | 1.3.9        | 1.3.11       |     
-                       libyang |  DISTRO  | https://release-monitoring.org/project/018554 | 3.13.6       | 5.4.9        |     
+                    libxmlsec1 |  DISTRO  | https://release-monitoring.org/project/005200 | 1.3.9        | 1.3.12       |     
+                       libyang |  DISTRO  | https://release-monitoring.org/project/018554 | 3.13.6       | 5.8.6        |     
                     libzenoh-c |  DISTRO  | https://release-monitoring.org/project/372354 | 1.2.1        | 1.9.0        |     
                  libzenoh-pico |  DISTRO  | https://release-monitoring.org/project/369957 | 1.2.1        | 1.9.0        |     
                       lighttpd |  DISTRO  | https://release-monitoring.org/project/001817 | 1.4.82       | 1.4.84       | ORPH
                           lilv |  DISTRO  | https://release-monitoring.org/project/001818 | 0.24.12      | 0.28.0       |     
+                linux-firmware |  DISTRO  | https://release-monitoring.org/project/141464 | 20260519     | 20260622     |     
                     liquid-dsp |  DISTRO  | https://release-monitoring.org/project/014535 | 1.6.0        | 1.8.0        |     
-                       live555 |  DISTRO  | https://release-monitoring.org/project/012414 | 2025.10.13   | 2026.06.12   | ORPH
+                       live555 |  DISTRO  | https://release-monitoring.org/project/012414 | 2025.10.13   | 2026.06.24   | ORPH
                   lksctp-tools |  DISTRO  | https://release-monitoring.org/project/021497 | 1.0.19       | 1.0.21       | ORPH
                          lldpd |  DISTRO  | https://release-monitoring.org/project/014019 | 1.0.20       | 1.0.22       | ORPH
                 lockfile-progs |  DISTRO  | https://release-monitoring.org/project/010135 | 0.1.19       | 0.2.0        | ORPH
@@ -645,6 +676,7 @@ Packages having a newer version
                            luv |  DISTRO  | https://release-monitoring.org/project/021510 | 1.51.0-1     | 1.52.1-0     | ORPH
                           lvm2 |  DISTRO  | https://release-monitoring.org/project/005354 | 2.03.31      | 2.03.41      | ORPH
                            lxc |  DISTRO  | https://release-monitoring.org/project/001860 | 6.0.6        | 7.0.0        |     
+                         lynis |  DISTRO  | https://release-monitoring.org/project/001862 | 3.1.6        | 3.1.7        |     
                           lynx |  DISTRO  | https://release-monitoring.org/project/001863 | 2.9.2        | 2.9.3        |     
                           lzip |  DISTRO  | https://release-monitoring.org/project/001866 | 1.25         | 1.26         | ORPH
                          lzlib |  DISTRO  | https://release-monitoring.org/project/021513 | 0.4.1.53-4   | 0.4.3        |     
@@ -661,8 +693,6 @@ Packages having a newer version
                      memtest86 |  DISTRO  | https://release-monitoring.org/project/001966 | 8.00         | 8.10         |     
                mender-artifact |  DISTRO  | https://release-monitoring.org/project/020630 | 4.2.0        | 4.4.0        |     
                     menu-cache |  DISTRO  | https://release-monitoring.org/project/001968 | 1.1.0        | 1.1.1        | ORPH
-                        mesa3d |  DISTRO  | https://release-monitoring.org/project/001970 | 26.1.2       | 26.1.3       |     
-                mesa3d-headers |  DISTRO  | https://release-monitoring.org/project/001970 | 26.1.2       | 26.1.3       | ORPH
                       mfgtools |  DISTRO  | https://release-monitoring.org/project/021519 | 0.02         | 2.8.0        |     
 microchip-hss-payload-gener... |  DISTRO  | https://release-monitoring.org/project/368767 | 2024.06      | 2026.04.1    |     
                       minetest |  DISTRO  | https://release-monitoring.org/project/001978 | 5.6.1        | 5.16.1       |     
@@ -670,8 +700,8 @@ microchip-hss-payload-gener... |  DISTRO  | https://release-monitoring.org/proje
                     mini-snmpd |  DISTRO  | https://release-monitoring.org/project/021523 | 1.6          | 1.7          |     
                        minizip |  DISTRO  | https://release-monitoring.org/project/301509 | 4.0.3        | 4.2.1        |     
                   minizip-zlib |  DISTRO  | https://release-monitoring.org/project/005303 | 1.3.1        | 1.3.2        |     
-                        moarvm |  DISTRO  | https://release-monitoring.org/project/021100 | 2024.12      | 2026.05.1    |     
-                 moby-buildkit |  DISTRO  | https://release-monitoring.org/project/020836 | 0.11.6       | 0.31.0       |     
+                        moarvm |  DISTRO  | https://release-monitoring.org/project/021100 | 2024.12      | 2026.06      |     
+                 moby-buildkit |  DISTRO  | https://release-monitoring.org/project/020836 | 0.11.6       | 0.31.1       |     
                   modsecurity2 |  DISTRO  | https://release-monitoring.org/project/068638 | 2.9.12       | 4.0.0.0      |     
                          monit |  DISTRO  | https://release-monitoring.org/project/005483 | 5.35.2       | 6.0.0        |     
                           mono |  DISTRO  | https://release-monitoring.org/project/006360 | 6.12.0.182   | 6.14.1       |     
@@ -684,14 +714,15 @@ microchip-hss-payload-gener... |  DISTRO  | https://release-monitoring.org/proje
                            mtr |  DISTRO  | https://release-monitoring.org/project/002029 | 0.95         | 0.96         | ORPH
                       multicat |  DISTRO  | https://release-monitoring.org/project/021734 | 2.3          | 2.4          | ORPH
                multipath-tools |  DISTRO  | https://release-monitoring.org/project/000424 | 0.9.8        | 0.14.3       |     
-                         mupdf |  DISTRO  | https://release-monitoring.org/project/002034 | 1.23.9       | 1.27.2       |     
+                         mupdf |  DISTRO  | https://release-monitoring.org/project/002034 | 1.23.9       | 1.28.0       |     
                           mutt |  DISTRO  | https://release-monitoring.org/project/002035 | 2.3.2        | 2.4.0        |     
                           mxml |  DISTRO  | https://release-monitoring.org/project/013545 | 3.3.1        | 4.0.4        |     
                        mxt-app |  DISTRO  | https://release-monitoring.org/project/373381 | 1.45         | 1.46         |     
+                          nano |  DISTRO  | https://release-monitoring.org/project/002046 | 9.0          | 9.1          | ORPH
                           nasm |  DISTRO  | https://release-monitoring.org/project/002048 | 2.16.03      | 3.01         | ORPH
                            nbd |  DISTRO  | https://release-monitoring.org/project/002052 | 3.26.1       | 3.27.1       | ORPH
                           ncdu |  DISTRO  | https://release-monitoring.org/project/006045 | 1.22         | 2.9.2        |     
-                       ncurses |  DISTRO  | https://release-monitoring.org/project/002057 | 6.6-20251231 | 6.6-20260620 | ORPH
+                       ncurses |  DISTRO  | https://release-monitoring.org/project/002057 | 6.6-20251231 | 6.6-20260627 | ORPH
                          ndctl |  DISTRO  | https://release-monitoring.org/project/010381 | 83           | 84           |     
                         ndisc6 |  DISTRO  | https://release-monitoring.org/project/021531 | 1.0.7        | 1.0.8        | ORPH
                          neard |  DISTRO  | https://release-monitoring.org/project/021866 | 0.19         | 0.20         |     
@@ -701,7 +732,7 @@ microchip-hss-payload-gener... |  DISTRO  | https://release-monitoring.org/proje
                 netcat-openbsd |  DISTRO  | https://release-monitoring.org/project/021534 | 1.234        | 1.238        | ORPH
                        netdata |  DISTRO  | https://release-monitoring.org/project/011046 | 1.37.1       | 2.10.3       |     
                        netifrc |  DISTRO  | https://release-monitoring.org/project/021917 | 0.7.3        | 0.7.14       |     
-                     netopeer2 |  DISTRO  | https://release-monitoring.org/project/114978 | 2.4.5        | 2.8.2        |     
+                     netopeer2 |  DISTRO  | https://release-monitoring.org/project/114978 | 2.4.5        | 2.8.7        |     
                        netsurf |  DISTRO  | https://release-monitoring.org/project/005386 | 3.10         | 3.11         | ORPH
                         nettle |  DISTRO  | https://release-monitoring.org/project/002073 | 3.10.2       | 4.0          | ORPH
                network-manager |  DISTRO  | https://release-monitoring.org/project/021197 | 1.56.0       | 1.56.1       | ORPH
@@ -712,8 +743,8 @@ microchip-hss-payload-gener... |  DISTRO  | https://release-monitoring.org/proje
                          nginx |  DISTRO  | https://release-monitoring.org/project/005413 | 1.30.2       | 1.31.2       | ORPH
                         ngircd |  DISTRO  | https://release-monitoring.org/project/002083 | 26.1         | 27           | ORPH
                            nnn |  DISTRO  | https://release-monitoring.org/project/017080 | 5.1          | 5.2          |     
-                    nodejs-bin |  DISTRO  | https://release-monitoring.org/project/008251 | 22.22.0      | 26.3.1       |     
-                    nodejs-src |  DISTRO  | https://release-monitoring.org/project/008251 | 22.22.0      | 26.3.1       |     
+                    nodejs-bin |  DISTRO  | https://release-monitoring.org/project/008251 | 22.22.0      | 26.4.0       |     
+                    nodejs-src |  DISTRO  | https://release-monitoring.org/project/008251 | 22.22.0      | 26.4.0       |     
                           noip |  DISTRO  | https://release-monitoring.org/project/021539 | 2.1.9        | 3.3.0        | ORPH
                           norm |  DISTRO  | https://release-monitoring.org/project/021540 | 1.5.8        | 1.5.9        | ORPH
                          nqptp |  DISTRO  | https://release-monitoring.org/project/293307 | 1.2.4        | 1.2.8        |     
@@ -723,7 +754,7 @@ microchip-hss-payload-gener... |  DISTRO  | https://release-monitoring.org/proje
                  nvidia-driver |  DISTRO  | https://release-monitoring.org/project/021843 | 390.151      | 390.157      | ORPH
                nvidia-modprobe |  DISTRO  | https://release-monitoring.org/project/141657 | 450.57       | 610.43.02    | ORPH
            nvidia-persistenced |  DISTRO  | https://release-monitoring.org/project/369496 | 580.95.05    | 610.43.02    |     
-                          nvme |  DISTRO  | https://release-monitoring.org/project/009074 | 2.15         | 3.0-a.5      | ORPH
+                          nvme |  DISTRO  | https://release-monitoring.org/project/009074 | 2.15         | 3.0-b.1      | ORPH
                         octave |  DISTRO  | https://release-monitoring.org/project/002528 | 11.1.0       | 11.3.0       |     
                            odb |  DISTRO  | https://release-monitoring.org/project/002531 | 2.4.0        | 2.5.0        | ORPH
                          ofono |  DISTRO  | https://release-monitoring.org/project/016859 | 2.18         | 2.19         |     
@@ -731,7 +762,7 @@ microchip-hss-payload-gener... |  DISTRO  | https://release-monitoring.org/proje
                        omniorb |  DISTRO  | https://release-monitoring.org/project/021545 | 4.3.1        | 4.3.4        | ORPH
                     open-iscsi |  DISTRO  | https://release-monitoring.org/project/010861 | 2.1.9        | 2.1.11       |     
                      open-isns |  DISTRO  | https://release-monitoring.org/project/009393 | 0.102        | 0.103        |     
-                     open62541 |  DISTRO  | https://release-monitoring.org/project/016896 | v1.3.15      | 1.5.4        | ORPH
+                     open62541 |  DISTRO  | https://release-monitoring.org/project/016896 | v1.3.15      | 1.5.5        | ORPH
                         openal |  DISTRO  | https://release-monitoring.org/project/008172 | 1.24.3       | 1.25.2       | ORPH
                   opencl-clhpp |  DISTRO  | https://release-monitoring.org/project/271141 | 2025.07.22   | 2026.05.29   |     
                 opencl-headers |  DISTRO  | https://release-monitoring.org/project/223257 | 2025.07.22   | 2026.05.29   |     
@@ -750,12 +781,14 @@ microchip-hss-payload-gener... |  DISTRO  | https://release-monitoring.org/proje
                      osm2pgsql |  DISTRO  | https://release-monitoring.org/project/002575 | 2.2.0        | 2.3.0        |     
                  paho-mqtt-cpp |  DISTRO  | https://release-monitoring.org/project/021376 | 1.3.2        | 1.6.0        |     
                         pahole |  DISTRO  | https://release-monitoring.org/project/231624 | 1.28         | 1.31         |     
-                       pangomm |  DISTRO  | https://release-monitoring.org/project/007958 | 2.50.1       | 2.56.1       |     
+                         pango |  DISTRO  | https://release-monitoring.org/project/011783 | 1.56.4       | 1.58.0       | ORPH
+                       pangomm |  DISTRO  | https://release-monitoring.org/project/007958 | 2.50.1       | 2.56.2       |     
+                   pangomm2_46 |  DISTRO  | https://release-monitoring.org/project/369412 | 2.46.4       | 2.46.5       |     
                     parprouted |  DISTRO  | https://release-monitoring.org/project/010309 | 0.7          | 0.65         | ORPH
                         parsec |  DISTRO  | https://release-monitoring.org/project/183223 | 1.4.1        | 1.5.0        |     
                         parted |  DISTRO  | https://release-monitoring.org/project/002596 | 3.6          | 3.7          |     
                          patch |  DISTRO  | https://release-monitoring.org/project/002597 | 2.7.6        | 2.8          | ORPH
-                      patchelf |  DISTRO  | https://release-monitoring.org/project/002598 | 0.13         | 0.18.0       | ORPH
+                      patchelf |  DISTRO  | https://release-monitoring.org/project/002598 | 0.13         | 0.19.0       | ORPH
                      pax-utils |  DISTRO  | https://release-monitoring.org/project/002601 | 1.3.7        | 1.3.10       | ORPH
                        pcmanfm |  DISTRO  | https://release-monitoring.org/project/002607 | 1.3.2        | 1.4.0        |     
                      pcsc-lite |  DISTRO  | https://release-monitoring.org/project/002611 | 2.1.0        | 2.5.1        | ORPH
@@ -766,14 +799,15 @@ microchip-hss-payload-gener... |  DISTRO  | https://release-monitoring.org/proje
         perl-crypt-openssl-rsa |  DISTRO  | https://release-monitoring.org/project/002748 | 0.33         | 0.41         |     
                perl-date-manip |  DISTRO  | https://release-monitoring.org/project/002785 | 6.98         | 6.99         |     
                 perl-dbd-mysql |  DISTRO  | https://release-monitoring.org/project/002807 | 4.046        | 5.013        |     
-                      perl-dbi |  DISTRO  | https://release-monitoring.org/project/002811 | 1.643        | 1.648        |     
+                      perl-dbi |  DISTRO  | https://release-monitoring.org/project/002811 | 1.643        | 1.649        |     
                perl-devel-size |  DISTRO  | https://release-monitoring.org/project/002835 | 0.85         | 0.87         |     
                        perl-gd |  DISTRO  | https://release-monitoring.org/project/012660 | 2.77         | 2.86         |     
               perl-html-parser |  DISTRO  | https://release-monitoring.org/project/002967 | 3.83         | 3.85         |     
               perl-http-daemon |  DISTRO  | https://release-monitoring.org/project/002975 | 6.16         | 6.17         |     
+                perl-http-date |  DISTRO  | https://release-monitoring.org/project/002976 | 6.06         | 6.07         |     
              perl-http-message |  DISTRO  | https://release-monitoring.org/project/002977 | 7.01         | 7.02         |     
            perl-image-exiftool |  DISTRO  | https://release-monitoring.org/project/006175 | 12.50        | 13.59        |     
-            perl-io-socket-ssl |  DISTRO  | https://release-monitoring.org/project/006569 | 2.080        | 2.097        |     
+            perl-io-socket-ssl |  DISTRO  | https://release-monitoring.org/project/006569 | 2.080        | 2.099        |     
               perl-libwww-perl |  DISTRO  | https://release-monitoring.org/project/003024 | 6.81         | 6.83         |     
        perl-lwp-protocol-https |  DISTRO  | https://release-monitoring.org/project/003050 | 6.14         | 6.15         |     
                perl-mime-tools |  DISTRO  | https://release-monitoring.org/project/011809 | 5.515        | 5.517        |     
@@ -794,10 +828,10 @@ microchip-hss-payload-gener... |  DISTRO  | https://release-monitoring.org/proje
                       php-ssh2 |  DISTRO  | https://release-monitoring.org/project/021742 | 1.4          | 1.5.0        | ORPH
                     php-xdebug |  DISTRO  | https://release-monitoring.org/project/013302 | 3.5.0        | 3.5.3        |     
                       pipewire |  DISTRO  | https://release-monitoring.org/project/057357 | 1.6.6        | 1.6.7        |     
-                       pkgconf |  DISTRO  | https://release-monitoring.org/project/012753 | 2.3.0        | 2.5.1        | ORPH
+                       pkgconf |  DISTRO  | https://release-monitoring.org/project/012753 | 2.3.0        | 2.9.95       | ORPH
                       pngquant |  DISTRO  | https://release-monitoring.org/project/003674 | 2.18.0       | 3.0.3        |     
                           poco |  DISTRO  | https://release-monitoring.org/project/005418 | 1.14.2       | 1.15.3       |     
-                        podman |  DISTRO  | https://release-monitoring.org/project/093284 | v5.7.0       | 5.8.3        | ORPH
+                        podman |  DISTRO  | https://release-monitoring.org/project/093284 | v5.7.0       | 6.0.0        | ORPH
                           poke |  DISTRO  | https://release-monitoring.org/project/179926 | 3.0          | 4.3          | ORPH
                         polkit |  DISTRO  | https://release-monitoring.org/project/003682 | 126          | 127          |     
                        poppler |  DISTRO  | https://release-monitoring.org/project/003686 | 25.10.0      | 26.06.0      |     
@@ -805,7 +839,7 @@ microchip-hss-payload-gener... |  DISTRO  | https://release-monitoring.org/proje
                          pound |  DISTRO  | https://release-monitoring.org/project/005436 | 4.17         | 4.23         | ORPH
                  powerpc-utils |  DISTRO  | https://release-monitoring.org/project/010715 | 1.3.13       | 1.3.14       | ORPH
                           pppd |  DISTRO  | https://release-monitoring.org/project/003703 | 2.5.2        | 2.5.3        |     
-                         procs |  DISTRO  | https://release-monitoring.org/project/076458 | 0.14.10      | 0.14.11      |     
+                         procs |  DISTRO  | https://release-monitoring.org/project/076458 | 0.14.10      | 0.14.12      |     
                        proftpd |  DISTRO  | https://release-monitoring.org/project/007609 | 1.3.9a       | 1.3.9b       | ORPH
                           proj |  DISTRO  | https://release-monitoring.org/project/009463 | 9.8.0        | 9.8.1        |     
                        prosody |  DISTRO  | https://release-monitoring.org/project/003709 | 0.11.14      | 13.0.6       |     
@@ -817,26 +851,27 @@ microchip-hss-payload-gener... |  DISTRO  | https://release-monitoring.org/proje
                  python-aiodns |  DISTRO  | https://release-monitoring.org/project/021245 | 4.0.0        | 4.0.4        |     
        python-aiohappyeyeballs |  DISTRO  | https://release-monitoring.org/project/373934 | 2.6.1        | 2.6.2        |     
                 python-aiohttp |  DISTRO  | https://release-monitoring.org/project/006713 | 3.13.5       | 3.14.1       |     
-                python-alembic |  DISTRO  | https://release-monitoring.org/project/003766 | 1.17.2       | 1.18.4       |     
-                  python-anyio |  DISTRO  | https://release-monitoring.org/project/049275 | 4.13.0       | 4.14.0       |     
-               python-asyncssh |  DISTRO  | https://release-monitoring.org/project/017555 | 2.22.0       | 2.23.1       |     
+                python-alembic |  DISTRO  | https://release-monitoring.org/project/003766 | 1.17.2       | 1.18.5       |     
+                  python-anyio |  DISTRO  | https://release-monitoring.org/project/049275 | 4.13.0       | 4.14.1       |     
+            python-apscheduler |  DISTRO  | https://release-monitoring.org/project/005641 | 3.11.2       | 3.11.3       |     
+               python-asyncssh |  DISTRO  | https://release-monitoring.org/project/017555 | 2.22.0       | 2.24.0       |     
                python-autobahn |  DISTRO  | https://release-monitoring.org/project/007015 | 25.12.2      | 26.6.2       |     
                   python-babel |  DISTRO  | https://release-monitoring.org/project/011984 | 2.17.0       | 2.18.0       |     
          python-beautifulsoup4 |  DISTRO  | https://release-monitoring.org/project/003779 | 4.14.3       | 4.15.0       |     
                python-bitarray |  DISTRO  | https://release-monitoring.org/project/011014 | 3.8.1        | 3.8.2        |     
                   python-bleak |  DISTRO  | https://release-monitoring.org/project/026271 | 3.0.1        | 3.0.2        |     
-                  python-boto3 |  DISTRO  | https://release-monitoring.org/project/029737 | 1.43.1       | 1.43.34      |     
-               python-botocore |  DISTRO  | https://release-monitoring.org/project/008748 | 1.43.1       | 1.43.34      |     
+                  python-boto3 |  DISTRO  | https://release-monitoring.org/project/029737 | 1.43.1       | 1.43.36      |     
+               python-botocore |  DISTRO  | https://release-monitoring.org/project/008748 | 1.43.1       | 1.43.36      |     
              python-cachetools |  DISTRO  | https://release-monitoring.org/project/007022 | 6.2.4        | 7.1.4        |     
                   python-cbor2 |  DISTRO  | https://release-monitoring.org/project/064102 | 5.9.0        | 6.1.2        |     
                python-cchardet |  DISTRO  | https://release-monitoring.org/project/014813 | 2.1.7        | 2.2.0a2      |     
                 python-certifi |  DISTRO  | https://release-monitoring.org/project/007995 | 2026.4.22    | 2026.6.17    |     
                 python-chardet |  DISTRO  | https://release-monitoring.org/project/003798 | 5.2.0        | 7.4.3        |     
      python-charset-normalizer |  DISTRO  | https://release-monitoring.org/project/055366 | 3.4.5        | 3.4.7        |     
-                  python-click |  DISTRO  | https://release-monitoring.org/project/003802 | 8.3.3        | 8.4.1        |     
+                  python-click |  DISTRO  | https://release-monitoring.org/project/003802 | 8.3.3        | 8.4.2        |     
          python-configshell-fb |  DISTRO  | https://release-monitoring.org/project/019734 | 1.1.30       | 2.0.3        |     
            python-cryptography |  DISTRO  | https://release-monitoring.org/project/005532 | 48.0.0       | 49.0.0       |     
-                 python-cython |  DISTRO  | https://release-monitoring.org/project/036699 | 3.1.3        | 3.2.5        |     
+                 python-cython |  DISTRO  | https://release-monitoring.org/project/036699 | 3.1.3        | 3.2.6        |     
                  python-daphne |  DISTRO  | https://release-monitoring.org/project/021939 | 4.2.1        | 4.2.2        |     
            python-dataproperty |  DISTRO  | https://release-monitoring.org/project/021697 | 1.1.0        | 1.1.1        |     
               python-dbus-fast |  DISTRO  | https://release-monitoring.org/project/287975 | 5.0.14       | 5.0.22       |     
@@ -847,9 +882,9 @@ microchip-hss-payload-gener... |  DISTRO  | https://release-monitoring.org/proje
                python-dtschema |  DISTRO  | https://release-monitoring.org/project/100908 | 2026.4       | 2026.6       |     
                   python-ecdsa |  DISTRO  | https://release-monitoring.org/project/008370 | 0.19.1       | 0.19.2       |     
                python-engineio |  DISTRO  | https://release-monitoring.org/project/015064 | 4.13.0       | 4.13.3       |     
-                python-esptool |  DISTRO  | https://release-monitoring.org/project/011619 | 5.1.0        | 5.3.0        |     
+                python-esptool |  DISTRO  | https://release-monitoring.org/project/011619 | 5.1.0        | 5.3.1        |     
                  python-falcon |  DISTRO  | https://release-monitoring.org/project/003860 | 4.2.0        | 4.3.1        |     
-                python-fastapi |  DISTRO  | https://release-monitoring.org/project/047977 | 0.136.3      | 0.138.0      |     
+                python-fastapi |  DISTRO  | https://release-monitoring.org/project/047977 | 0.136.3      | 0.138.1      |     
                python-filelock |  DISTRO  | https://release-monitoring.org/project/011739 | 3.29.0       | 3.29.4       |     
              python-flask-cors |  DISTRO  | https://release-monitoring.org/project/019867 | 6.0.2        | 6.0.5        |     
             python-flatbuffers |  DISTRO  | https://release-monitoring.org/project/085010 | 25.9.23      | 25.12.19     |     
@@ -858,19 +893,21 @@ microchip-hss-payload-gener... |  DISTRO  | https://release-monitoring.org/proje
                 python-glslang |  DISTRO  | https://release-monitoring.org/project/205796 | 16.1.0       | 16.3.0       |     
                 python-gobject |  DISTRO  | https://release-monitoring.org/project/013158 | 3.54.5       | 3.56.3       |     
         python-google-api-core |  DISTRO  | https://release-monitoring.org/project/025386 | 2.30.3       | 2.31.0       |     
-            python-google-auth |  DISTRO  | https://release-monitoring.org/project/038039 | 2.49.1       | 2.55.0       |     
+            python-google-auth |  DISTRO  | https://release-monitoring.org/project/038039 | 2.49.1       | 2.55.1       |     
 python-googleapis-common-pr... |  DISTRO  | https://release-monitoring.org/project/063943 | 1.74.0       | 1.75.0       |     
                   python-gpiod |  DISTRO  | https://release-monitoring.org/project/084415 | 2.4.2        | 2.5.0        |     
-               python-greenlet |  DISTRO  | https://release-monitoring.org/project/006870 | 3.5.0        | 3.5.2        |     
+               python-greenlet |  DISTRO  | https://release-monitoring.org/project/006870 | 3.5.0        | 3.5.3        |     
                  python-grpcio |  DISTRO  | https://release-monitoring.org/project/018429 | 1.76.0       | 1.81.1       |     
       python-grpcio-reflection |  DISTRO  | https://release-monitoring.org/project/030542 | 1.76.0       | 1.81.1       |     
                python-gunicorn |  DISTRO  | https://release-monitoring.org/project/003882 | 23.0.0       | 26.0.0       |     
               python-hatchling |  DISTRO  | https://release-monitoring.org/project/185085 | 1.29.0       | 1.30.1       |     
                 python-hiredis |  DISTRO  | https://release-monitoring.org/project/012002 | 3.3.1        | 3.4.0        |     
+                  python-hpack |  DISTRO  | https://release-monitoring.org/project/019034 | 4.1.0        | 4.2.0        |     
+               python-httplib2 |  DISTRO  | https://release-monitoring.org/project/003887 | 0.31.2       | 0.32.0       |     
                  python-hwdata |  DISTRO  | https://release-monitoring.org/project/011771 | 2.4.1        | 2.4.3-1      |     
                    python-idna |  DISTRO  | https://release-monitoring.org/project/005487 | 3.11         | 3.18         |     
               python-installer |  DISTRO  | https://release-monitoring.org/project/197662 | 1.0.0        | 1.0.1        |     
-                python-ipython |  DISTRO  | https://release-monitoring.org/project/001399 | 9.8.0        | 9.14.1       |     
+                python-ipython |  DISTRO  | https://release-monitoring.org/project/001399 | 9.8.0        | 9.15.0       |     
             python-iterable-io |  DISTRO  | https://release-monitoring.org/project/374467 | 1.0.1        | 1.0.4        |     
          python-jaraco-context |  DISTRO  | https://release-monitoring.org/project/062309 | 6.0.2        | 6.1.2        |     
        python-jaraco-functools |  DISTRO  | https://release-monitoring.org/project/020165 | 4.4.0        | 4.5.0        |     
@@ -892,12 +929,13 @@ python-magic-wormhole-mailb... |  DISTRO  | https://release-monitoring.org/proje
         python-mdit-py-plugins |  DISTRO  | https://release-monitoring.org/project/149444 | 0.5.0        | 0.6.1        |     
                  python-memray |  DISTRO  | https://release-monitoring.org/project/267110 | 1.19.1       | 1.19.3       |     
            python-meson-python |  DISTRO  | https://release-monitoring.org/project/248985 | 0.19.0       | 0.20.0       |     
-                python-mistune |  DISTRO  | https://release-monitoring.org/project/006189 | 3.2.0        | 3.3.0        |     
+                python-mistune |  DISTRO  | https://release-monitoring.org/project/006189 | 3.2.0        | 3.3.2        |     
          python-more-itertools |  DISTRO  | https://release-monitoring.org/project/012201 | 11.0.2       | 11.1.0       |     
                    python-mpd2 |  DISTRO  | https://release-monitoring.org/project/019721 | 3.1.1        | 3.1.2        |     
                  python-mpmath |  DISTRO  | https://release-monitoring.org/project/003930 | 1.3.0        | 1.4.1        |     
                 python-msgpack |  DISTRO  | https://release-monitoring.org/project/021831 | 1.1.2        | 1.2.1        |     
               python-multipart |  DISTRO  | https://release-monitoring.org/project/018463 | 0.0.22       | 0.0.32       |     
+                python-mutagen |  DISTRO  | https://release-monitoring.org/project/003931 | 1.47.0       | 1.48.1       |     
                    python-mypy |  DISTRO  | https://release-monitoring.org/project/008453 | 1.19.1       | 2.1.0        |     
                   python-numpy |  DISTRO  | https://release-monitoring.org/project/002509 | 2.4.0        | 2.5.0        |     
           python-opcua-asyncio |  DISTRO  | https://release-monitoring.org/project/131612 | 1.1.5        | 2.0a0        |     
@@ -935,8 +973,8 @@ python-magic-wormhole-mailb... |  DISTRO  | https://release-monitoring.org/proje
          python-pytest-asyncio |  DISTRO  | https://release-monitoring.org/project/007273 | 1.3.0        | 1.4.0        |     
                    python-pytz |  DISTRO  | https://release-monitoring.org/project/006537 | 2026.1.post1 | 2026.2       |     
                   python-pyzmq |  DISTRO  | https://release-monitoring.org/project/004104 | 25.1.2       | 27.1.0       |     
-                  python-redis |  DISTRO  | https://release-monitoring.org/project/003992 | 7.4.0        | 8.0.0        |     
-                  python-regex |  DISTRO  | https://release-monitoring.org/project/005548 | 2026.4.4     | 2026.5.9     |     
+                  python-redis |  DISTRO  | https://release-monitoring.org/project/003992 | 7.4.0        | 8.0.1        |     
+                  python-regex |  DISTRO  | https://release-monitoring.org/project/005548 | 2026.4.4     | 2026.6.28    |     
                python-requests |  DISTRO  | https://release-monitoring.org/project/004004 | 2.33.1       | 2.34.2       |     
                 python-rpds-py |  DISTRO  | https://release-monitoring.org/project/368622 | 0.30.0       | 2026.5.1     |     
                   python-rtoml |  DISTRO  | https://release-monitoring.org/project/062048 | 0.10.0       | 0.13.0       |     
@@ -948,7 +986,8 @@ python-magic-wormhole-mailb... |  DISTRO  | https://release-monitoring.org/proje
              python-sentry-sdk |  DISTRO  | https://release-monitoring.org/project/021603 | 2.58.0       | 2.63.0       |     
        python-service-identity |  DISTRO  | https://release-monitoring.org/project/007917 | 24.2.0       | 26.1.0       |     
              python-setuptools |  DISTRO  | https://release-monitoring.org/project/004021 | 80.9.0       | 82.0.1       |     
-         python-setuptools-scm |  DISTRO  | https://release-monitoring.org/project/007874 | 9.2.2        | 10.0.5       |     
+        python-setuptools-rust |  DISTRO  | https://release-monitoring.org/project/122284 | 1.12.1       | 1.13.0       |     
+         python-setuptools-scm |  DISTRO  | https://release-monitoring.org/project/007874 | 9.2.2        | 10.2.0       |     
                      python-sh |  DISTRO  | https://release-monitoring.org/project/010429 | 2.2.2        | 2.3.0        |     
                     python-sip |  DISTRO  | https://release-monitoring.org/project/013626 | 4.19.25      | 6.15.3       |     
                  python-smmap2 |  DISTRO  | https://release-monitoring.org/project/012729 | 5.0.3        | 6.0.0        |     
@@ -978,7 +1017,7 @@ python-magic-wormhole-mailb... |  DISTRO  | https://release-monitoring.org/proje
        python-types-setuptools |  DISTRO  | https://release-monitoring.org/project/214295 | 82.0.0.20... | 82.0.0.20... |     
                 python-tzlocal |  DISTRO  | https://release-monitoring.org/project/006911 | 5.3.1        | 5.4.3        |     
                   python-ujson |  DISTRO  | https://release-monitoring.org/project/004076 | 5.12.0       | 5.13.0       |     
-                  python-urwid |  DISTRO  | https://release-monitoring.org/project/004079 | 4.0.0        | 4.0.2        |     
+                  python-urwid |  DISTRO  | https://release-monitoring.org/project/004079 | 4.0.0        | 4.0.3        |     
                 python-uvicorn |  DISTRO  | https://release-monitoring.org/project/028526 | 0.46.0       | 0.49.0       |     
                 python-wcwidth |  DISTRO  | https://release-monitoring.org/project/008743 | 0.2.14       | 0.8.1        |     
              python-weasyprint |  DISTRO  | https://release-monitoring.org/project/011057 | 68.1         | 69.0         |     
@@ -994,7 +1033,7 @@ python-magic-wormhole-mailb... |  DISTRO  | https://release-monitoring.org/proje
          python-zope-interface |  DISTRO  | https://release-monitoring.org/project/004112 | 8.4          | 8.5          |     
                  python-zopfli |  DISTRO  | https://release-monitoring.org/project/050016 | 0.4.1        | 0.4.3        |     
           qcom-db410c-firmware |  DISTRO  | https://release-monitoring.org/project/235382 | 1034.2.1     | 1036.1       |     
-                          qemu |  DISTRO  | https://release-monitoring.org/project/013607 | 11.0.0       | 11.0.1       |     
+                          qemu |  DISTRO  | https://release-monitoring.org/project/013607 | 11.0.0       | 11.0.2       |     
                          qlibc |  DISTRO  | https://release-monitoring.org/project/021737 | 2.4.7        | 2.5.1        | ORPH
                qoriq-mc-binary |  DISTRO  | https://release-monitoring.org/project/377827 | 10.39.0      | 10.300.138   |     
                 qoriq-mc-utils |  DISTRO  | https://release-monitoring.org/project/377824 | 10.39.0      | 10.40.0      |     
@@ -1015,22 +1054,23 @@ python-magic-wormhole-mailb... |  DISTRO  | https://release-monitoring.org/proje
                     rabbitmq-c |  DISTRO  | https://release-monitoring.org/project/013768 | 0.14.0       | 0.16.0       |     
                          ragel |  DISTRO  | https://release-monitoring.org/project/012105 | 6.10         | 7.0.4        | ORPH
                         ranger |  DISTRO  | https://release-monitoring.org/project/007426 | 1.9.3        | 1.9.4        |     
+                     rasdaemon |  DISTRO  | https://release-monitoring.org/project/377958 | 0.8.4        | 0.8.5        |     
                      rdma-core |  DISTRO  | https://release-monitoring.org/project/012907 | 62.0         | 63.0         |     
                      refpolicy |  DISTRO  | https://release-monitoring.org/project/021663 | 2.20250923   | 2.20260616   |     
                         reproc |  DISTRO  | https://release-monitoring.org/project/151400 | 14.2.4       | 14.2.7       |     
                          rhash |  DISTRO  | https://release-monitoring.org/project/013843 | 1.4.4        | 1.4.6        | ORPH
                        ripgrep |  DISTRO  | https://release-monitoring.org/project/015461 | 14.1.1       | 15.1.0       |     
                         rlwrap |  DISTRO  | https://release-monitoring.org/project/004199 | 0.46.1       | 0.48         |     
-                       rocksdb |  DISTRO  | https://release-monitoring.org/project/015560 | 11.0.4       | 11.1.1       |     
-                       rsyslog |  DISTRO  | https://release-monitoring.org/project/004218 | 8.2510.0     | 8.2604.0     |     
+                       rocksdb |  DISTRO  | https://release-monitoring.org/project/015560 | 11.0.4       | 11.1.2       |     
+                       rsyslog |  DISTRO  | https://release-monitoring.org/project/004218 | 8.2510.0     | 8.2606.0     |     
                       rt-tests |  DISTRO  | https://release-monitoring.org/project/059450 | 2.8          | 2.10         |     
                        rtl_433 |  DISTRO  | https://release-monitoring.org/project/014997 | 25.02        | 25.12        |     
-                      rtorrent |  DISTRO  | https://release-monitoring.org/project/004221 | 0.15.3       | 0.16.14      | ORPH
+                      rtorrent |  DISTRO  | https://release-monitoring.org/project/004221 | 0.15.3       | 0.16.15      | ORPH
                           rtty |  DISTRO  | https://release-monitoring.org/project/087994 | 9.0.4        | 9.1.0        |     
                           ruby |  DISTRO  | https://release-monitoring.org/project/004223 | 4.0.3        | 4.0.5        |     
                           runc |  DISTRO  | https://release-monitoring.org/project/007462 | 1.3.5        | 1.5.0        |     
                          rygel |  DISTRO  | https://release-monitoring.org/project/004751 | 0.42.5       | 45.2         |     
-                    s390-tools |  DISTRO  | https://release-monitoring.org/project/010714 | 2.33.1       | 2.42.1       |     
+                    s390-tools |  DISTRO  | https://release-monitoring.org/project/010714 | 2.33.1       | 2.43.0       |     
                             s6 |  DISTRO  | https://release-monitoring.org/project/005485 | 2.13.1.0     | 2.15.0.0     |     
                         s6-dns |  DISTRO  | https://release-monitoring.org/project/016547 | 2.4.0.0      | 2.4.1.2      |     
                  s6-linux-init |  DISTRO  | https://release-monitoring.org/project/016552 | 1.1.2.1      | 1.2.0.1      |     
@@ -1052,10 +1092,10 @@ python-magic-wormhole-mailb... |  DISTRO  | https://release-monitoring.org/proje
                         sdparm |  DISTRO  | https://release-monitoring.org/project/004787 | 1.10         | 1.12         |     
                          seatd |  DISTRO  | https://release-monitoring.org/project/234932 | 0.9.1        | 0.9.3        | ORPH
                        sedutil |  DISTRO  | https://release-monitoring.org/project/015203 | 1.20.0       | 1.49.13      |     
-                 sentry-native |  DISTRO  | https://release-monitoring.org/project/135639 | 0.4.1        | 0.15.1       |     
+                 sentry-native |  DISTRO  | https://release-monitoring.org/project/135639 | 0.4.1        | 0.15.2       |     
                        ser2net |  DISTRO  | https://release-monitoring.org/project/021655 | 4.3.8        | 4.6.7        |     
                           serd |  DISTRO  | https://release-monitoring.org/project/230531 | 0.32.8       | 0.32.10      |     
-                       setools |  DISTRO  | https://release-monitoring.org/project/008951 | 4.5.1        | 4.6.0        | ORPH
+                       setools |  DISTRO  | https://release-monitoring.org/project/008951 | 4.5.1        | 4.7.0        | ORPH
                         shadow |  DISTRO  | https://release-monitoring.org/project/004802 | 4.18.0       | 4.19.4       |     
                 shairport-sync |  DISTRO  | https://release-monitoring.org/project/021384 | 4.3.7        | 5.0.4        | ORPH
                       shapelib |  DISTRO  | https://release-monitoring.org/project/004804 | 1.6.2        | 1.6.3        |     
@@ -1067,12 +1107,14 @@ python-magic-wormhole-mailb... |  DISTRO  | https://release-monitoring.org/proje
                         skopeo |  DISTRO  | https://release-monitoring.org/project/009216 | 1.22.2       | 1.23.0       |     
                          slirp |  DISTRO  | https://release-monitoring.org/project/096796 | 4.9.1        | 4.9.3        | ORPH
                    slirp4netns |  DISTRO  | https://release-monitoring.org/project/096795 | 1.3.3        | 1.3.4        |     
+                      smcroute |  DISTRO  | https://release-monitoring.org/project/017369 | 2.5.7        | 2.6.0        |     
                       snagboot |  DISTRO  | https://release-monitoring.org/project/351979 | 2.5          | 2.6.1        |     
                         sngrep |  DISTRO  | https://release-monitoring.org/project/017075 | 1.8.2        | 1.8.3        | ORPH
                   snmpclitools |  DISTRO  | https://release-monitoring.org/project/031640 | 0.6.4        | 0.7.2        | ORPH
                         snmppp |  DISTRO  | https://release-monitoring.org/project/021318 | 3.6.5        | 3.6.6        |     
                         snooze |  DISTRO  | https://release-monitoring.org/project/376662 | 0.5          | 0.5.1        |     
                         snort3 |  DISTRO  | https://release-monitoring.org/project/013263 | 3.11.1.0     | 3.12.2.0     |     
+                         socat |  DISTRO  | https://release-monitoring.org/project/004848 | 1.8.1.1      | 1.8.1.3      |     
                       softhsm2 |  DISTRO  | https://release-monitoring.org/project/004850 | 2.6.1        | 2.7.0        | ORPH
        sound-theme-freedesktop |  DISTRO  | https://release-monitoring.org/project/010152 | 0.7          | 0.8          |     
                     spawn-fcgi |  DISTRO  | https://release-monitoring.org/project/005388 | 1.6.4        | 1.6.6        | ORPH
@@ -1082,10 +1124,12 @@ python-magic-wormhole-mailb... |  DISTRO  | https://release-monitoring.org/proje
                  spirv-headers |  DISTRO  | https://release-monitoring.org/project/230542 | 1.4.350.0    | 1.4.350.1    | ORPH
                    spirv-tools |  DISTRO  | https://release-monitoring.org/project/334920 | 1.4.350.0    | 1.4.350.1    | ORPH
                      sqlcipher |  DISTRO  | https://release-monitoring.org/project/011213 | 4.5.5        | 4.16.0       |     
+                        sqlite |  DISTRO  | https://release-monitoring.org/project/004877 | 3.53.2       | 3.53.3       |     
                         sratom |  DISTRO  | https://release-monitoring.org/project/014903 | 0.6.14       | 0.6.22       |     
                           sslh |  DISTRO  | https://release-monitoring.org/project/006184 | 2.0.1        | 2.3.1        | ORPH
              start-stop-daemon |  DISTRO  | https://release-monitoring.org/project/008127 | 1.20.7.1     | 1.23.7       | ORPH
                         stella |  DISTRO  | https://release-monitoring.org/project/006861 | 6.7.1        | 7.0c         |     
+                    stellarium |  DISTRO  | https://release-monitoring.org/project/004891 | 26.1         | 26.2         |     
                      stress-ng |  DISTRO  | https://release-monitoring.org/project/012538 | 0.21.02      | 0.21.03      |     
                     strongswan |  DISTRO  | https://release-monitoring.org/project/004899 | 6.0.5        | 6.0.7        |     
                    superiotool |  DISTRO  | https://release-monitoring.org/project/010128 | 24.05        | 26.06        |     
@@ -1095,20 +1139,21 @@ python-magic-wormhole-mailb... |  DISTRO  | https://release-monitoring.org/proje
                         swaybg |  DISTRO  | https://release-monitoring.org/project/020562 | 1.2.1        | 1.2.2        |     
                           swig |  DISTRO  | https://release-monitoring.org/project/004919 | 4.1.1        | 4.4.1        |     
                          swipl |  DISTRO  | https://release-monitoring.org/project/236197 | 10.0.2       | 10.1.5       |     
+                      swupdate |  DISTRO  | https://release-monitoring.org/project/015714 | 2026.05      | 2026.05.1    |     
                        synergy |  DISTRO  | https://release-monitoring.org/project/005718 | 2.0.12-beta  | 2.3.2        |     
                         sysdig |  DISTRO  | https://release-monitoring.org/project/016898 | 0.29.3       | 0.41.4       |     
                      syslog-ng |  DISTRO  | https://release-monitoring.org/project/004930 | 4.11.0       | 4.12.0       |     
                        sysprof |  DISTRO  | https://release-monitoring.org/project/021649 | 49.0         | 50.0         |     
-                       sysrepo |  DISTRO  | https://release-monitoring.org/project/034820 | 3.7.11       | 4.5.4        |     
+                       sysrepo |  DISTRO  | https://release-monitoring.org/project/034820 | 3.7.11       | 5.1.0        |     
                        sysstat |  DISTRO  | https://release-monitoring.org/project/004931 | 12.7.5       | 12.7.9       | ORPH
-                       systemd |  DISTRO  | https://release-monitoring.org/project/005440 | 258.7        | 261          |     
+                       systemd |  DISTRO  | https://release-monitoring.org/project/005440 | 258.7        | 261.1        |     
              systemd-bootchart |  DISTRO  | https://release-monitoring.org/project/011774 | 233          | 235          | ORPH
                       sysvinit |  DISTRO  | https://release-monitoring.org/project/021648 | 3.14         | 3.18         | ORPH
                      tailscale |  DISTRO  | https://release-monitoring.org/project/141585 | 1.78.1       | 1.98.5       |     
                   targetcli-fb |  DISTRO  | https://release-monitoring.org/project/009174 | 2.1.58       | 3.0.2        |     
                            tbb |  DISTRO  | https://release-monitoring.org/project/008217 | 2021.12.0    | 2023.0.0     |     
                      tcf-agent |  DISTRO  | https://release-monitoring.org/project/021833 | 1.8.0        | 1.11.0       |     
-                           tcl |  DISTRO  | https://release-monitoring.org/project/004941 | 8.6.15       | 9.0.3        | ORPH
+                           tcl |  DISTRO  | https://release-monitoring.org/project/004941 | 8.6.15       | 9.0.4        | ORPH
                          tclap |  DISTRO  | https://release-monitoring.org/project/004942 | 1.2.4        | 1.2.5        | ORPH
                         tcllib |  DISTRO  | https://release-monitoring.org/project/004943 | 1.21         | 2.0          |     
                       tealdeer |  DISTRO  | https://release-monitoring.org/project/084521 | 1.6.1        | 1.8.1        |     
@@ -1117,13 +1162,15 @@ python-magic-wormhole-mailb... |  DISTRO  | https://release-monitoring.org/proje
                       thermald |  DISTRO  | https://release-monitoring.org/project/014500 | 2.5.6        | 2.15.10      |     
                            tig |  DISTRO  | https://release-monitoring.org/project/004969 | 2.6.0        | 2.6.1        |     
                           time |  DISTRO  | https://release-monitoring.org/project/004971 | 1.9          | 1.10         |     
-                   timescaledb |  DISTRO  | https://release-monitoring.org/project/017545 | 2.27.1       | 2.28.0       |     
+                   timescaledb |  DISTRO  | https://release-monitoring.org/project/017545 | 2.27.1       | 2.28.1       |     
                       tinifier |  DISTRO  | https://release-monitoring.org/project/241900 | 4.1.0        | 5.1.2        |     
                      tinyproxy |  DISTRO  | https://release-monitoring.org/project/008699 | 1.11.2       | 1.11.3       | ORPH
                        tinyssh |  DISTRO  | https://release-monitoring.org/project/014678 | 20240101     | 20260601     |     
                        tipidee |  DISTRO  | https://release-monitoring.org/project/373437 | 0.0.5.1      | 0.0.7.2      |     
-                            tk |  DISTRO  | https://release-monitoring.org/project/011426 | 8.6.15       | 9.0.3        |     
+                            tk |  DISTRO  | https://release-monitoring.org/project/011426 | 8.6.15       | 9.0.4        |     
                    tl-expected |  DISTRO  | https://release-monitoring.org/project/112689 | v1.0.0       | 1.3.1        |     
+                          tmux |  DISTRO  | https://release-monitoring.org/project/004980 | 3.6b         | 3.7          |     
+                           tor |  DISTRO  | https://release-monitoring.org/project/004991 | 0.4.9.9      | 0.4.9.11     |     
                      tpm-tools |  DISTRO  | https://release-monitoring.org/project/021640 | 1.3.9.1      | 1.3.9.2      |     
                   tpm2-openssl |  DISTRO  | https://release-monitoring.org/project/242488 | 1.2.0        | 1.3.0        |     
                    tpm2-pkcs11 |  DISTRO  | https://release-monitoring.org/project/018777 | 1.9.1        | 1.10.0       |     
@@ -1140,16 +1187,17 @@ python-magic-wormhole-mailb... |  DISTRO  | https://release-monitoring.org/proje
                       utf8proc |  DISTRO  | https://release-monitoring.org/project/007455 | 2.10.0       | 2.11.3       | ORPH
                     util-linux |  DISTRO  | https://release-monitoring.org/project/008179 | 2.41.5       | 2.42.2       |     
                util-linux-libs |  DISTRO  | https://release-monitoring.org/project/008179 | 2.41.5       | 2.42.2       |     
+                  v4l2loopback |  DISTRO  | https://release-monitoring.org/project/010956 | 0.15.3       | 0.15.4       |     
                           vala |  DISTRO  | https://release-monitoring.org/project/005065 | 0.56.18      | 0.56.19      | ORPH
                       valgrind |  DISTRO  | https://release-monitoring.org/project/013639 | 3.26.0       | 3.27.1       | ORPH
                       valijson |  DISTRO  | https://release-monitoring.org/project/018452 | 1.0.2        | 1.1.0        | ORPH
                            vdr |  DISTRO  | https://release-monitoring.org/project/005069 | 2.6.5        | 2.8.2        | ORPH
          vdr-plugin-vnsiserver |  DISTRO  | https://release-monitoring.org/project/005080 | 1.8.0        | 1.8.4        | ORPH
-                           vim |  DISTRO  | https://release-monitoring.org/project/005092 | 9.1.2148     | 9.2.0699     |     
+                           vim |  DISTRO  | https://release-monitoring.org/project/005092 | 9.1.2148     | 9.2.0747     |     
                           volk |  DISTRO  | https://release-monitoring.org/project/147733 | 3.2.0        | 3.3.0        |     
                            vte |  DISTRO  | https://release-monitoring.org/project/010895 | 0.66.2       | 0.84.0       | ORPH
-                vulkan-headers |  DISTRO  | https://release-monitoring.org/project/088835 | 1.4.317      | 1.4.354      | ORPH
-                 vulkan-loader |  DISTRO  | https://release-monitoring.org/project/230557 | 1.4.317      | 1.4.354      | ORPH
+                vulkan-headers |  DISTRO  | https://release-monitoring.org/project/088835 | 1.4.317      | 1.4.355      | ORPH
+                 vulkan-loader |  DISTRO  | https://release-monitoring.org/project/230557 | 1.4.317      | 1.4.355      | ORPH
                     vulkan-sdk |  DISTRO  | https://release-monitoring.org/project/370476 | 1.4.313.0    | 1.4.350.1    | ORPH
                   vulkan-tools |  DISTRO  | https://release-monitoring.org/project/242111 | 1.4.317      | 1.4.354      | ORPH
                        wavemon |  DISTRO  | https://release-monitoring.org/project/005120 | 0.9.5        | 0.9.7        | ORPH
@@ -1157,7 +1205,7 @@ python-magic-wormhole-mailb... |  DISTRO  | https://release-monitoring.org/proje
                        wayland |  DISTRO  | https://release-monitoring.org/project/010061 | 1.24.0       | 1.25.0       |     
              wayland-protocols |  DISTRO  | https://release-monitoring.org/project/013997 | 1.48         | 1.49         | ORPH
                  wayland-utils |  DISTRO  | https://release-monitoring.org/project/129361 | 1.2.0        | 1.3.0        | ORPH
-                     webkitgtk |  DISTRO  | https://release-monitoring.org/project/005355 | 2.52.3       | 2.53.3       |     
+                     webkitgtk |  DISTRO  | https://release-monitoring.org/project/005355 | 2.52.3       | 2.53.4       |     
        webrtc-audio-processing |  DISTRO  | https://release-monitoring.org/project/015929 | 1.3          | 2.1          | ORPH
                          which |  DISTRO  | https://release-monitoring.org/project/005127 | 2.23         | 2.25         | ORPH
                           wine |  DISTRO  | https://release-monitoring.org/project/005134 | 11.0         | 11.11        |     
@@ -1182,9 +1230,12 @@ python-magic-wormhole-mailb... |  DISTRO  | https://release-monitoring.org/proje
                 xapp_setxkbmap |  DISTRO  | https://release-monitoring.org/project/012314 | 1.3.4        | 1.3.5        | ORPH
                     xapp_xbiff |  DISTRO  | https://release-monitoring.org/project/015034 | 1.0.5        | 1.0.6        | ORPH
                     xapp_xcalc |  DISTRO  | https://release-monitoring.org/project/005164 | 1.1.2        | 1.1.3        | ORPH
+                   xapp_xclock |  DISTRO  | https://release-monitoring.org/project/015032 | 1.1.1        | 1.2.0        | ORPH
                  xapp_xconsole |  DISTRO  | https://release-monitoring.org/project/015030 | 1.1.0        | 1.1.1        |     
+                    xapp_xedit |  DISTRO  | https://release-monitoring.org/project/005180 | 1.2.4        | 1.2.5        | ORPH
                       xapp_xev |  DISTRO  | https://release-monitoring.org/project/015026 | 1.2.6        | 1.2.7        | ORPH
                       xapp_xfd |  DISTRO  | https://release-monitoring.org/project/015024 | 1.1.4        | 1.1.5        | ORPH
+                 xapp_xfontsel |  DISTRO  | https://release-monitoring.org/project/015023 | 1.1.1        | 1.1.2        | ORPH
                     xapp_xkill |  DISTRO  | https://release-monitoring.org/project/014993 | 1.0.6        | 1.0.7        | ORPH
                xapp_xlsclients |  DISTRO  | https://release-monitoring.org/project/014989 | 1.1.5        | 1.1.6        | ORPH
                    xapp_xrandr |  DISTRO  | https://release-monitoring.org/project/014957 | 1.5.3        | 1.5.4        | ORPH
@@ -1287,14 +1338,16 @@ CVEs for the 'master' branch
                       composer | CVE-2026-40176   | https://security-tracker.debian.org/tracker/CVE-2026-40176  
                      coreutils | CVE-2016-2781    | https://security-tracker.debian.org/tracker/CVE-2016-2781   
                           cpio | CVE-2010-4226    | https://security-tracker.debian.org/tracker/CVE-2010-4226   
-                   cpp-httplib | CVE-2026-45352   | https://security-tracker.debian.org/tracker/CVE-2026-45352  
-                   cpp-httplib | CVE-2026-45372   | https://security-tracker.debian.org/tracker/CVE-2026-45372  
-                   cpp-httplib | CVE-2026-46527   | https://security-tracker.debian.org/tracker/CVE-2026-46527  
                           crun | CVE-2026-30892   | https://security-tracker.debian.org/tracker/CVE-2026-30892  
                       cryptopp | CVE-2023-50981   | https://security-tracker.debian.org/tracker/CVE-2023-50981  
                       cryptopp | CVE-2023-50979   | https://security-tracker.debian.org/tracker/CVE-2023-50979  
                       cryptopp | CVE-2023-50980   | https://security-tracker.debian.org/tracker/CVE-2023-50980  
                   cups-filters | CVE-2025-64503   | https://security-tracker.debian.org/tracker/CVE-2025-64503  
+                        dhcpcd | CVE-2026-56113   | https://security-tracker.debian.org/tracker/CVE-2026-56113  
+                        dhcpcd | CVE-2026-56114   | https://security-tracker.debian.org/tracker/CVE-2026-56114  
+                        dhcpcd | CVE-2026-56115   | https://security-tracker.debian.org/tracker/CVE-2026-56115  
+                        dhcpcd | CVE-2026-56116   | https://security-tracker.debian.org/tracker/CVE-2026-56116  
+                        dhcpcd | CVE-2026-56117   | https://security-tracker.debian.org/tracker/CVE-2026-56117  
                         docker | CVE-2014-0048    | https://security-tracker.debian.org/tracker/CVE-2014-0048   
                         docker | CVE-2014-8179    | https://security-tracker.debian.org/tracker/CVE-2014-8179   
                         docker | CVE-2014-8178    | https://security-tracker.debian.org/tracker/CVE-2014-8178   
@@ -1385,7 +1438,6 @@ CVEs for the 'master' branch
                         erlang | CVE-2026-49760   | https://security-tracker.debian.org/tracker/CVE-2026-49760  
                         erlang | CVE-2026-49759   | https://security-tracker.debian.org/tracker/CVE-2026-49759  
                          exiv2 | CVE-2026-27631   | https://security-tracker.debian.org/tracker/CVE-2026-27631  
-                         expat | CVE-2026-50219   | https://security-tracker.debian.org/tracker/CVE-2026-50219  
                         ffmpeg | CVE-2023-50007   | https://security-tracker.debian.org/tracker/CVE-2023-50007  
                         ffmpeg | CVE-2023-50008   | https://security-tracker.debian.org/tracker/CVE-2023-50008  
                         ffmpeg | CVE-2023-50009   | https://security-tracker.debian.org/tracker/CVE-2023-50009  
@@ -1501,6 +1553,8 @@ CVEs for the 'master' branch
                     gstreamer1 | CVE-2026-3083    | https://security-tracker.debian.org/tracker/CVE-2026-3083   
                     gstreamer1 | CVE-2026-3086    | https://security-tracker.debian.org/tracker/CVE-2026-3086   
                     gstreamer1 | CVE-2026-3082    | https://security-tracker.debian.org/tracker/CVE-2026-3082   
+                       haproxy | CVE-2026-55204   | https://security-tracker.debian.org/tracker/CVE-2026-55204  
+                       haproxy | CVE-2026-55203   | https://security-tracker.debian.org/tracker/CVE-2026-55203  
                          hplip | CVE-2025-43023   | https://security-tracker.debian.org/tracker/CVE-2025-43023  
                          hplip | CVE-2026-8632    | https://security-tracker.debian.org/tracker/CVE-2026-8632   
                          hplip | CVE-2026-8631    | https://security-tracker.debian.org/tracker/CVE-2026-8631   
@@ -1519,6 +1573,7 @@ CVEs for the 'master' branch
                    imagemagick | CVE-2026-49219   | https://security-tracker.debian.org/tracker/CVE-2026-49219  
                          jhead | CVE-2025-44906   | https://security-tracker.debian.org/tracker/CVE-2025-44906  
                             jq | CVE-2026-44777   | https://security-tracker.debian.org/tracker/CVE-2026-44777  
+                            jq | CVE-2026-49839   | https://security-tracker.debian.org/tracker/CVE-2026-49839  
                             jq | CVE-2026-41257   | https://security-tracker.debian.org/tracker/CVE-2026-41257  
                             jq | CVE-2026-41256   | https://security-tracker.debian.org/tracker/CVE-2026-41256  
                             jq | CVE-2026-33947   | https://security-tracker.debian.org/tracker/CVE-2026-33947  
@@ -1529,6 +1584,8 @@ CVEs for the 'master' branch
                             jq | CVE-2026-32316   | https://security-tracker.debian.org/tracker/CVE-2026-32316  
                             jq | CVE-2026-40612   | https://security-tracker.debian.org/tracker/CVE-2026-40612  
                             jq | CVE-2026-39979   | https://security-tracker.debian.org/tracker/CVE-2026-39979  
+                            jq | CVE-2026-47770   | https://security-tracker.debian.org/tracker/CVE-2026-47770  
+                            jq | CVE-2026-54679   | https://security-tracker.debian.org/tracker/CVE-2026-54679  
                        libldns | CVE-2026-10846   | https://security-tracker.debian.org/tracker/CVE-2026-10846  
                         libmad | CVE-2018-7263    | https://security-tracker.debian.org/tracker/CVE-2018-7263   
                  libmicrohttpd | CVE-2025-62689   | https://security-tracker.debian.org/tracker/CVE-2025-62689  
@@ -1544,6 +1601,9 @@ CVEs for the 'master' branch
                     libsndfile | CVE-2026-37555   | https://security-tracker.debian.org/tracker/CVE-2026-37555  
                        libsolv | CVE-2026-9150    | https://security-tracker.debian.org/tracker/CVE-2026-9150   
                        libsolv | CVE-2026-9149    | https://security-tracker.debian.org/tracker/CVE-2026-9149   
+                       libssh2 | CVE-2025-15661   | https://security-tracker.debian.org/tracker/CVE-2025-15661  
+                       libssh2 | CVE-2026-55200   | https://security-tracker.debian.org/tracker/CVE-2026-55200  
+                       libssh2 | CVE-2026-55199   | https://security-tracker.debian.org/tracker/CVE-2026-55199  
                     libtorrent | CVE-2016-5301    | https://security-tracker.debian.org/tracker/CVE-2016-5301   
                         libucl | CVE-2025-6499    | https://security-tracker.debian.org/tracker/CVE-2025-6499   
                         libucl | CVE-2026-0708    | https://security-tracker.debian.org/tracker/CVE-2026-0708   
@@ -1571,6 +1631,7 @@ CVEs for the 'master' branch
                   modsecurity2 | CVE-2026-30923   | https://security-tracker.debian.org/tracker/CVE-2026-30923  
                          mp4v2 | CVE-2023-33719   | https://security-tracker.debian.org/tracker/CVE-2023-33719  
                          mp4v2 | CVE-2023-33716   | https://security-tracker.debian.org/tracker/CVE-2023-33716  
+                         mupdf | CVE-2025-71382   | https://security-tracker.debian.org/tracker/CVE-2025-71382  
                          mupdf | CVE-2025-46206   | https://security-tracker.debian.org/tracker/CVE-2025-46206  
                          mupdf | CVE-2026-7233    | https://security-tracker.debian.org/tracker/CVE-2026-7233   
                          mupdf | CVE-2026-40505   | https://security-tracker.debian.org/tracker/CVE-2026-40505  
@@ -1609,16 +1670,28 @@ CVEs for the 'master' branch
        perl-lwp-protocol-https | CVE-2014-3230    | https://security-tracker.debian.org/tracker/CVE-2014-3230   
                            php | CVE-2007-3205    | https://security-tracker.debian.org/tracker/CVE-2007-3205   
                         podman | CVE-2022-2989    | https://security-tracker.debian.org/tracker/CVE-2022-2989   
+                        podman | CVE-2026-55686   | https://security-tracker.debian.org/tracker/CVE-2026-55686  
                        prosody | CVE-2026-43506   | https://security-tracker.debian.org/tracker/CVE-2026-43506  
                        prosody | CVE-2026-43504   | https://security-tracker.debian.org/tracker/CVE-2026-43504  
                        prosody | CVE-2026-43505   | https://security-tracker.debian.org/tracker/CVE-2026-43505  
                        prosody | CVE-2026-43507   | https://security-tracker.debian.org/tracker/CVE-2026-43507  
                 proxychains-ng | CVE-2025-34451   | https://security-tracker.debian.org/tracker/CVE-2025-34451  
                 python-aiohttp | CVE-2026-47265   | https://security-tracker.debian.org/tracker/CVE-2026-47265  
+                python-aiohttp | CVE-2026-54280   | https://security-tracker.debian.org/tracker/CVE-2026-54280  
+                python-aiohttp | CVE-2026-54274   | https://security-tracker.debian.org/tracker/CVE-2026-54274  
+                python-aiohttp | CVE-2026-54273   | https://security-tracker.debian.org/tracker/CVE-2026-54273  
+                python-aiohttp | CVE-2026-54279   | https://security-tracker.debian.org/tracker/CVE-2026-54279  
+                python-aiohttp | CVE-2026-54275   | https://security-tracker.debian.org/tracker/CVE-2026-54275  
+                python-aiohttp | CVE-2026-54278   | https://security-tracker.debian.org/tracker/CVE-2026-54278  
                 python-aiohttp | CVE-2026-34993   | https://security-tracker.debian.org/tracker/CVE-2026-34993  
+                python-aiohttp | CVE-2026-50269   | https://security-tracker.debian.org/tracker/CVE-2026-50269  
                  python-dotenv | CVE-2026-28684   | https://security-tracker.debian.org/tracker/CVE-2026-28684  
                   python-ecdsa | CVE-2026-33936   | https://security-tracker.debian.org/tracker/CVE-2026-33936  
                    python-lxml | CVE-2026-41066   | https://security-tracker.debian.org/tracker/CVE-2026-41066  
+              python-multipart | CVE-2026-53538   | https://security-tracker.debian.org/tracker/CVE-2026-53538  
+              python-multipart | CVE-2026-53540   | https://security-tracker.debian.org/tracker/CVE-2026-53540  
+              python-multipart | CVE-2026-53539   | https://security-tracker.debian.org/tracker/CVE-2026-53539  
+              python-multipart | CVE-2026-53537   | https://security-tracker.debian.org/tracker/CVE-2026-53537  
               python-multipart | CVE-2026-40347   | https://security-tracker.debian.org/tracker/CVE-2026-40347  
                  python-pillow | CVE-2026-40192   | https://security-tracker.debian.org/tracker/CVE-2026-40192  
                  python-pillow | CVE-2026-42311   | https://security-tracker.debian.org/tracker/CVE-2026-42311  
@@ -1632,6 +1705,8 @@ CVEs for the 'master' branch
                   python-pyjwt | CVE-2026-48524   | https://security-tracker.debian.org/tracker/CVE-2026-48524  
                   python-pyjwt | CVE-2026-48526   | https://security-tracker.debian.org/tracker/CVE-2026-48526  
                   python-pyjwt | CVE-2026-48525   | https://security-tracker.debian.org/tracker/CVE-2026-48525  
+              python-starlette | CVE-2026-54282   | https://security-tracker.debian.org/tracker/CVE-2026-54282  
+              python-starlette | CVE-2026-54283   | https://security-tracker.debian.org/tracker/CVE-2026-54283  
                 python-twisted | CVE-2026-42304   | https://security-tracker.debian.org/tracker/CVE-2026-42304  
                        python3 | CVE-2026-7210    | https://security-tracker.debian.org/tracker/CVE-2026-7210   
                        python3 | CVE-2026-6019    | https://security-tracker.debian.org/tracker/CVE-2026-6019   
@@ -1664,6 +1739,7 @@ CVEs for the 'master' branch
                          smack | CVE-2014-0364    | https://security-tracker.debian.org/tracker/CVE-2014-0364   
                          smack | CVE-2014-0363    | https://security-tracker.debian.org/tracker/CVE-2014-0363   
                          smack | CVE-2016-10027   | https://security-tracker.debian.org/tracker/CVE-2016-10027  
+                         socat | CVE-2026-56123   | https://security-tracker.debian.org/tracker/CVE-2026-56123  
                           sudo | CVE-2026-35535   | https://security-tracker.debian.org/tracker/CVE-2026-35535  
                      syslog-ng | CVE-2022-38725   | https://security-tracker.debian.org/tracker/CVE-2022-38725  
                        systemd | CVE-2026-40223   | https://security-tracker.debian.org/tracker/CVE-2026-40223  
@@ -1673,6 +1749,7 @@ CVEs for the 'master' branch
                            upx | CVE-2023-23457   | https://security-tracker.debian.org/tracker/CVE-2023-23457  
                            upx | CVE-2024-3209    | https://security-tracker.debian.org/tracker/CVE-2024-3209   
                            upx | CVE-2025-2849    | https://security-tracker.debian.org/tracker/CVE-2025-2849   
+                           vim | CVE-2026-55693   | https://security-tracker.debian.org/tracker/CVE-2026-55693  
                            vim | CVE-2026-52860   | https://security-tracker.debian.org/tracker/CVE-2026-52860  
                            vim | CVE-2026-52858   | https://security-tracker.debian.org/tracker/CVE-2026-52858  
                            vim | CVE-2026-52859   | https://security-tracker.debian.org/tracker/CVE-2026-52859  
@@ -1684,6 +1761,11 @@ CVEs for the 'master' branch
                            vim | CVE-2026-28420   | https://security-tracker.debian.org/tracker/CVE-2026-28420  
                            vim | CVE-2026-28417   | https://security-tracker.debian.org/tracker/CVE-2026-28417  
                            vim | CVE-2026-45130   | https://security-tracker.debian.org/tracker/CVE-2026-45130  
+                           vim | CVE-2026-57456   | https://security-tracker.debian.org/tracker/CVE-2026-57456  
+                           vim | CVE-2026-57451   | https://security-tracker.debian.org/tracker/CVE-2026-57451  
+                           vim | CVE-2026-57453   | https://security-tracker.debian.org/tracker/CVE-2026-57453  
+                           vim | CVE-2026-57452   | https://security-tracker.debian.org/tracker/CVE-2026-57452  
+                           vim | CVE-2026-57455   | https://security-tracker.debian.org/tracker/CVE-2026-57455  
                            vim | CVE-2026-39881   | https://security-tracker.debian.org/tracker/CVE-2026-39881  
                            vim | CVE-2026-41411   | https://security-tracker.debian.org/tracker/CVE-2026-41411  
                            vim | CVE-2026-47167   | https://security-tracker.debian.org/tracker/CVE-2026-47167  
@@ -1692,8 +1774,40 @@ CVEs for the 'master' branch
                            vim | CVE-2026-33412   | https://security-tracker.debian.org/tracker/CVE-2026-33412  
                            vim | CVE-2026-44656   | https://security-tracker.debian.org/tracker/CVE-2026-44656  
                            vim | CVE-2026-34982   | https://security-tracker.debian.org/tracker/CVE-2026-34982  
+                           vim | CVE-2026-55895   | https://security-tracker.debian.org/tracker/CVE-2026-55895  
+                           vim | CVE-2026-55892   | https://security-tracker.debian.org/tracker/CVE-2026-55892  
                            vim | CVE-2026-42307   | https://security-tracker.debian.org/tracker/CVE-2026-42307  
                            vim | CVE-2026-34714   | https://security-tracker.debian.org/tracker/CVE-2026-34714  
+                       wolfssl | CVE-2026-8720    | https://security-tracker.debian.org/tracker/CVE-2026-8720   
+                       wolfssl | CVE-2026-11999   | https://security-tracker.debian.org/tracker/CVE-2026-11999  
+                       wolfssl | CVE-2026-11703   | https://security-tracker.debian.org/tracker/CVE-2026-11703  
+                       wolfssl | CVE-2026-11310   | https://security-tracker.debian.org/tracker/CVE-2026-11310  
+                       wolfssl | CVE-2026-6094    | https://security-tracker.debian.org/tracker/CVE-2026-6094   
+                       wolfssl | CVE-2026-6092    | https://security-tracker.debian.org/tracker/CVE-2026-6092   
+                       wolfssl | CVE-2026-6091    | https://security-tracker.debian.org/tracker/CVE-2026-6091   
+                       wolfssl | CVE-2026-55967   | https://security-tracker.debian.org/tracker/CVE-2026-55967  
+                       wolfssl | CVE-2026-55962   | https://security-tracker.debian.org/tracker/CVE-2026-55962  
+                       wolfssl | CVE-2026-55964   | https://security-tracker.debian.org/tracker/CVE-2026-55964  
+                       wolfssl | CVE-2026-55960   | https://security-tracker.debian.org/tracker/CVE-2026-55960  
+                       wolfssl | CVE-2026-55958   | https://security-tracker.debian.org/tracker/CVE-2026-55958  
+                       wolfssl | CVE-2026-55961   | https://security-tracker.debian.org/tracker/CVE-2026-55961  
+                       wolfssl | CVE-2026-6291    | https://security-tracker.debian.org/tracker/CVE-2026-6291   
+                       wolfssl | CVE-2026-6412    | https://security-tracker.debian.org/tracker/CVE-2026-6412   
+                       wolfssl | CVE-2026-6450    | https://security-tracker.debian.org/tracker/CVE-2026-6450   
+                       wolfssl | CVE-2026-12340   | https://security-tracker.debian.org/tracker/CVE-2026-12340  
+                       wolfssl | CVE-2026-6731    | https://security-tracker.debian.org/tracker/CVE-2026-6731   
+                       wolfssl | CVE-2026-10592   | https://security-tracker.debian.org/tracker/CVE-2026-10592  
+                       wolfssl | CVE-2026-10512   | https://security-tracker.debian.org/tracker/CVE-2026-10512  
+                       wolfssl | CVE-2026-7532    | https://security-tracker.debian.org/tracker/CVE-2026-7532   
+                       wolfssl | CVE-2026-7511    | https://security-tracker.debian.org/tracker/CVE-2026-7511   
+                       wolfssl | CVE-2026-7531    | https://security-tracker.debian.org/tracker/CVE-2026-7531   
+                       wolfssl | CVE-2026-10098   | https://security-tracker.debian.org/tracker/CVE-2026-10098  
+                       wolfssl | CVE-2026-10097   | https://security-tracker.debian.org/tracker/CVE-2026-10097  
+                       wolfssl | CVE-2026-6325    | https://security-tracker.debian.org/tracker/CVE-2026-6325   
+                       wolfssl | CVE-2026-6329    | https://security-tracker.debian.org/tracker/CVE-2026-6329   
+                       wolfssl | CVE-2026-6330    | https://security-tracker.debian.org/tracker/CVE-2026-6330   
+                       wolfssl | CVE-2026-6331    | https://security-tracker.debian.org/tracker/CVE-2026-6331   
+                       wolfssl | CVE-2026-6678    | https://security-tracker.debian.org/tracker/CVE-2026-6678   
                            xen | CVE-2014-3672    | https://security-tracker.debian.org/tracker/CVE-2014-3672   
                            xen | CVE-2015-7504    | https://security-tracker.debian.org/tracker/CVE-2015-7504   
                            xen | CVE-2016-9383    | https://security-tracker.debian.org/tracker/CVE-2016-9383   
@@ -1848,6 +1962,11 @@ CVEs for the '2026.05.x' branch
                       cryptopp | CVE-2023-50979   | https://security-tracker.debian.org/tracker/CVE-2023-50979  
                       cryptopp | CVE-2023-50980   | https://security-tracker.debian.org/tracker/CVE-2023-50980  
                   cups-filters | CVE-2025-64503   | https://security-tracker.debian.org/tracker/CVE-2025-64503  
+                        dhcpcd | CVE-2026-56113   | https://security-tracker.debian.org/tracker/CVE-2026-56113  
+                        dhcpcd | CVE-2026-56114   | https://security-tracker.debian.org/tracker/CVE-2026-56114  
+                        dhcpcd | CVE-2026-56115   | https://security-tracker.debian.org/tracker/CVE-2026-56115  
+                        dhcpcd | CVE-2026-56116   | https://security-tracker.debian.org/tracker/CVE-2026-56116  
+                        dhcpcd | CVE-2026-56117   | https://security-tracker.debian.org/tracker/CVE-2026-56117  
                         docker | CVE-2014-0048    | https://security-tracker.debian.org/tracker/CVE-2014-0048   
                         docker | CVE-2014-8179    | https://security-tracker.debian.org/tracker/CVE-2014-8179   
                         docker | CVE-2014-8178    | https://security-tracker.debian.org/tracker/CVE-2014-8178   
@@ -1938,6 +2057,18 @@ CVEs for the '2026.05.x' branch
                         erlang | CVE-2026-49760   | https://security-tracker.debian.org/tracker/CVE-2026-49760  
                         erlang | CVE-2026-49759   | https://security-tracker.debian.org/tracker/CVE-2026-49759  
                          exiv2 | CVE-2026-27631   | https://security-tracker.debian.org/tracker/CVE-2026-27631  
+                         expat | CVE-2026-56412   | https://security-tracker.debian.org/tracker/CVE-2026-56412  
+                         expat | CVE-2026-56406   | https://security-tracker.debian.org/tracker/CVE-2026-56406  
+                         expat | CVE-2026-56410   | https://security-tracker.debian.org/tracker/CVE-2026-56410  
+                         expat | CVE-2026-56409   | https://security-tracker.debian.org/tracker/CVE-2026-56409  
+                         expat | CVE-2026-56403   | https://security-tracker.debian.org/tracker/CVE-2026-56403  
+                         expat | CVE-2026-56407   | https://security-tracker.debian.org/tracker/CVE-2026-56407  
+                         expat | CVE-2026-56408   | https://security-tracker.debian.org/tracker/CVE-2026-56408  
+                         expat | CVE-2026-56404   | https://security-tracker.debian.org/tracker/CVE-2026-56404  
+                         expat | CVE-2026-56405   | https://security-tracker.debian.org/tracker/CVE-2026-56405  
+                         expat | CVE-2026-56411   | https://security-tracker.debian.org/tracker/CVE-2026-56411  
+                         expat | CVE-2026-56131   | https://security-tracker.debian.org/tracker/CVE-2026-56131  
+                         expat | CVE-2026-56132   | https://security-tracker.debian.org/tracker/CVE-2026-56132  
                          expat | CVE-2026-50219   | https://security-tracker.debian.org/tracker/CVE-2026-50219  
                         ffmpeg | CVE-2023-50007   | https://security-tracker.debian.org/tracker/CVE-2023-50007  
                         ffmpeg | CVE-2023-50008   | https://security-tracker.debian.org/tracker/CVE-2023-50008  
@@ -2055,6 +2186,8 @@ CVEs for the '2026.05.x' branch
                     gstreamer1 | CVE-2026-3083    | https://security-tracker.debian.org/tracker/CVE-2026-3083   
                     gstreamer1 | CVE-2026-3086    | https://security-tracker.debian.org/tracker/CVE-2026-3086   
                     gstreamer1 | CVE-2026-3082    | https://security-tracker.debian.org/tracker/CVE-2026-3082   
+                       haproxy | CVE-2026-55204   | https://security-tracker.debian.org/tracker/CVE-2026-55204  
+                       haproxy | CVE-2026-55203   | https://security-tracker.debian.org/tracker/CVE-2026-55203  
                          hplip | CVE-2025-43023   | https://security-tracker.debian.org/tracker/CVE-2025-43023  
                          hplip | CVE-2026-8632    | https://security-tracker.debian.org/tracker/CVE-2026-8632   
                          hplip | CVE-2026-8631    | https://security-tracker.debian.org/tracker/CVE-2026-8631   
@@ -2073,6 +2206,7 @@ CVEs for the '2026.05.x' branch
                    imagemagick | CVE-2026-49219   | https://security-tracker.debian.org/tracker/CVE-2026-49219  
                          jhead | CVE-2025-44906   | https://security-tracker.debian.org/tracker/CVE-2025-44906  
                             jq | CVE-2026-44777   | https://security-tracker.debian.org/tracker/CVE-2026-44777  
+                            jq | CVE-2026-49839   | https://security-tracker.debian.org/tracker/CVE-2026-49839  
                             jq | CVE-2026-41257   | https://security-tracker.debian.org/tracker/CVE-2026-41257  
                             jq | CVE-2026-41256   | https://security-tracker.debian.org/tracker/CVE-2026-41256  
                             jq | CVE-2026-33947   | https://security-tracker.debian.org/tracker/CVE-2026-33947  
@@ -2083,6 +2217,8 @@ CVEs for the '2026.05.x' branch
                             jq | CVE-2026-32316   | https://security-tracker.debian.org/tracker/CVE-2026-32316  
                             jq | CVE-2026-40612   | https://security-tracker.debian.org/tracker/CVE-2026-40612  
                             jq | CVE-2026-39979   | https://security-tracker.debian.org/tracker/CVE-2026-39979  
+                            jq | CVE-2026-47770   | https://security-tracker.debian.org/tracker/CVE-2026-47770  
+                            jq | CVE-2026-54679   | https://security-tracker.debian.org/tracker/CVE-2026-54679  
                        libcoap | CVE-2026-29013   | https://security-tracker.debian.org/tracker/CVE-2026-29013  
                        libldns | CVE-2026-10846   | https://security-tracker.debian.org/tracker/CVE-2026-10846  
                         libmad | CVE-2018-7263    | https://security-tracker.debian.org/tracker/CVE-2018-7263   
@@ -2100,6 +2236,9 @@ CVEs for the '2026.05.x' branch
                        libsolv | CVE-2026-9150    | https://security-tracker.debian.org/tracker/CVE-2026-9150   
                        libsolv | CVE-2026-9149    | https://security-tracker.debian.org/tracker/CVE-2026-9149   
                         libssh | CVE-2025-14821   | https://security-tracker.debian.org/tracker/CVE-2025-14821  
+                       libssh2 | CVE-2025-15661   | https://security-tracker.debian.org/tracker/CVE-2025-15661  
+                       libssh2 | CVE-2026-55200   | https://security-tracker.debian.org/tracker/CVE-2026-55200  
+                       libssh2 | CVE-2026-55199   | https://security-tracker.debian.org/tracker/CVE-2026-55199  
                     libtorrent | CVE-2016-5301    | https://security-tracker.debian.org/tracker/CVE-2016-5301   
                         libucl | CVE-2025-6499    | https://security-tracker.debian.org/tracker/CVE-2025-6499   
                         libucl | CVE-2026-0708    | https://security-tracker.debian.org/tracker/CVE-2026-0708   
@@ -2128,6 +2267,7 @@ CVEs for the '2026.05.x' branch
                   modsecurity2 | CVE-2026-30923   | https://security-tracker.debian.org/tracker/CVE-2026-30923  
                          mp4v2 | CVE-2023-33719   | https://security-tracker.debian.org/tracker/CVE-2023-33719  
                          mp4v2 | CVE-2023-33716   | https://security-tracker.debian.org/tracker/CVE-2023-33716  
+                         mupdf | CVE-2025-71382   | https://security-tracker.debian.org/tracker/CVE-2025-71382  
                          mupdf | CVE-2025-46206   | https://security-tracker.debian.org/tracker/CVE-2025-46206  
                          mupdf | CVE-2026-7233    | https://security-tracker.debian.org/tracker/CVE-2026-7233   
                          mupdf | CVE-2026-40505   | https://security-tracker.debian.org/tracker/CVE-2026-40505  
@@ -2166,16 +2306,28 @@ CVEs for the '2026.05.x' branch
        perl-lwp-protocol-https | CVE-2014-3230    | https://security-tracker.debian.org/tracker/CVE-2014-3230   
                            php | CVE-2007-3205    | https://security-tracker.debian.org/tracker/CVE-2007-3205   
                         podman | CVE-2022-2989    | https://security-tracker.debian.org/tracker/CVE-2022-2989   
+                        podman | CVE-2026-55686   | https://security-tracker.debian.org/tracker/CVE-2026-55686  
                        prosody | CVE-2026-43506   | https://security-tracker.debian.org/tracker/CVE-2026-43506  
                        prosody | CVE-2026-43504   | https://security-tracker.debian.org/tracker/CVE-2026-43504  
                        prosody | CVE-2026-43505   | https://security-tracker.debian.org/tracker/CVE-2026-43505  
                        prosody | CVE-2026-43507   | https://security-tracker.debian.org/tracker/CVE-2026-43507  
                 proxychains-ng | CVE-2025-34451   | https://security-tracker.debian.org/tracker/CVE-2025-34451  
                 python-aiohttp | CVE-2026-47265   | https://security-tracker.debian.org/tracker/CVE-2026-47265  
+                python-aiohttp | CVE-2026-54280   | https://security-tracker.debian.org/tracker/CVE-2026-54280  
+                python-aiohttp | CVE-2026-54274   | https://security-tracker.debian.org/tracker/CVE-2026-54274  
+                python-aiohttp | CVE-2026-54273   | https://security-tracker.debian.org/tracker/CVE-2026-54273  
+                python-aiohttp | CVE-2026-54279   | https://security-tracker.debian.org/tracker/CVE-2026-54279  
+                python-aiohttp | CVE-2026-54275   | https://security-tracker.debian.org/tracker/CVE-2026-54275  
+                python-aiohttp | CVE-2026-54278   | https://security-tracker.debian.org/tracker/CVE-2026-54278  
                 python-aiohttp | CVE-2026-34993   | https://security-tracker.debian.org/tracker/CVE-2026-34993  
+                python-aiohttp | CVE-2026-50269   | https://security-tracker.debian.org/tracker/CVE-2026-50269  
                  python-dotenv | CVE-2026-28684   | https://security-tracker.debian.org/tracker/CVE-2026-28684  
                   python-ecdsa | CVE-2026-33936   | https://security-tracker.debian.org/tracker/CVE-2026-33936  
                    python-lxml | CVE-2026-41066   | https://security-tracker.debian.org/tracker/CVE-2026-41066  
+              python-multipart | CVE-2026-53538   | https://security-tracker.debian.org/tracker/CVE-2026-53538  
+              python-multipart | CVE-2026-53540   | https://security-tracker.debian.org/tracker/CVE-2026-53540  
+              python-multipart | CVE-2026-53539   | https://security-tracker.debian.org/tracker/CVE-2026-53539  
+              python-multipart | CVE-2026-53537   | https://security-tracker.debian.org/tracker/CVE-2026-53537  
               python-multipart | CVE-2026-40347   | https://security-tracker.debian.org/tracker/CVE-2026-40347  
                  python-pillow | CVE-2026-40192   | https://security-tracker.debian.org/tracker/CVE-2026-40192  
                  python-pillow | CVE-2026-42311   | https://security-tracker.debian.org/tracker/CVE-2026-42311  
@@ -2189,6 +2341,10 @@ CVEs for the '2026.05.x' branch
                   python-pyjwt | CVE-2026-48524   | https://security-tracker.debian.org/tracker/CVE-2026-48524  
                   python-pyjwt | CVE-2026-48526   | https://security-tracker.debian.org/tracker/CVE-2026-48526  
                   python-pyjwt | CVE-2026-48525   | https://security-tracker.debian.org/tracker/CVE-2026-48525  
+              python-starlette | CVE-2026-48818   | https://security-tracker.debian.org/tracker/CVE-2026-48818  
+              python-starlette | CVE-2026-48817   | https://security-tracker.debian.org/tracker/CVE-2026-48817  
+              python-starlette | CVE-2026-54282   | https://security-tracker.debian.org/tracker/CVE-2026-54282  
+              python-starlette | CVE-2026-54283   | https://security-tracker.debian.org/tracker/CVE-2026-54283  
               python-starlette | CVE-2026-48710   | https://security-tracker.debian.org/tracker/CVE-2026-48710  
                 python-twisted | CVE-2026-42304   | https://security-tracker.debian.org/tracker/CVE-2026-42304  
                        python3 | CVE-2026-7210    | https://security-tracker.debian.org/tracker/CVE-2026-7210   
@@ -2231,6 +2387,7 @@ CVEs for the '2026.05.x' branch
                          smack | CVE-2014-0364    | https://security-tracker.debian.org/tracker/CVE-2014-0364   
                          smack | CVE-2014-0363    | https://security-tracker.debian.org/tracker/CVE-2014-0363   
                          smack | CVE-2016-10027   | https://security-tracker.debian.org/tracker/CVE-2016-10027  
+                         socat | CVE-2026-56123   | https://security-tracker.debian.org/tracker/CVE-2026-56123  
                           sudo | CVE-2026-35535   | https://security-tracker.debian.org/tracker/CVE-2026-35535  
                       swupdate | CVE-2026-28525   | https://security-tracker.debian.org/tracker/CVE-2026-28525  
                      syslog-ng | CVE-2022-38725   | https://security-tracker.debian.org/tracker/CVE-2022-38725  
@@ -2243,6 +2400,7 @@ CVEs for the '2026.05.x' branch
                            upx | CVE-2023-23457   | https://security-tracker.debian.org/tracker/CVE-2023-23457  
                            upx | CVE-2024-3209    | https://security-tracker.debian.org/tracker/CVE-2024-3209   
                            upx | CVE-2025-2849    | https://security-tracker.debian.org/tracker/CVE-2025-2849   
+                           vim | CVE-2026-55693   | https://security-tracker.debian.org/tracker/CVE-2026-55693  
                            vim | CVE-2026-52860   | https://security-tracker.debian.org/tracker/CVE-2026-52860  
                            vim | CVE-2026-52858   | https://security-tracker.debian.org/tracker/CVE-2026-52858  
                            vim | CVE-2026-52859   | https://security-tracker.debian.org/tracker/CVE-2026-52859  
@@ -2254,6 +2412,11 @@ CVEs for the '2026.05.x' branch
                            vim | CVE-2026-28420   | https://security-tracker.debian.org/tracker/CVE-2026-28420  
                            vim | CVE-2026-28417   | https://security-tracker.debian.org/tracker/CVE-2026-28417  
                            vim | CVE-2026-45130   | https://security-tracker.debian.org/tracker/CVE-2026-45130  
+                           vim | CVE-2026-57456   | https://security-tracker.debian.org/tracker/CVE-2026-57456  
+                           vim | CVE-2026-57451   | https://security-tracker.debian.org/tracker/CVE-2026-57451  
+                           vim | CVE-2026-57453   | https://security-tracker.debian.org/tracker/CVE-2026-57453  
+                           vim | CVE-2026-57452   | https://security-tracker.debian.org/tracker/CVE-2026-57452  
+                           vim | CVE-2026-57455   | https://security-tracker.debian.org/tracker/CVE-2026-57455  
                            vim | CVE-2026-39881   | https://security-tracker.debian.org/tracker/CVE-2026-39881  
                            vim | CVE-2026-41411   | https://security-tracker.debian.org/tracker/CVE-2026-41411  
                            vim | CVE-2026-47167   | https://security-tracker.debian.org/tracker/CVE-2026-47167  
@@ -2262,8 +2425,40 @@ CVEs for the '2026.05.x' branch
                            vim | CVE-2026-33412   | https://security-tracker.debian.org/tracker/CVE-2026-33412  
                            vim | CVE-2026-44656   | https://security-tracker.debian.org/tracker/CVE-2026-44656  
                            vim | CVE-2026-34982   | https://security-tracker.debian.org/tracker/CVE-2026-34982  
+                           vim | CVE-2026-55895   | https://security-tracker.debian.org/tracker/CVE-2026-55895  
+                           vim | CVE-2026-55892   | https://security-tracker.debian.org/tracker/CVE-2026-55892  
                            vim | CVE-2026-42307   | https://security-tracker.debian.org/tracker/CVE-2026-42307  
                            vim | CVE-2026-34714   | https://security-tracker.debian.org/tracker/CVE-2026-34714  
+                       wolfssl | CVE-2026-8720    | https://security-tracker.debian.org/tracker/CVE-2026-8720   
+                       wolfssl | CVE-2026-11999   | https://security-tracker.debian.org/tracker/CVE-2026-11999  
+                       wolfssl | CVE-2026-11703   | https://security-tracker.debian.org/tracker/CVE-2026-11703  
+                       wolfssl | CVE-2026-11310   | https://security-tracker.debian.org/tracker/CVE-2026-11310  
+                       wolfssl | CVE-2026-6094    | https://security-tracker.debian.org/tracker/CVE-2026-6094   
+                       wolfssl | CVE-2026-6092    | https://security-tracker.debian.org/tracker/CVE-2026-6092   
+                       wolfssl | CVE-2026-6091    | https://security-tracker.debian.org/tracker/CVE-2026-6091   
+                       wolfssl | CVE-2026-55967   | https://security-tracker.debian.org/tracker/CVE-2026-55967  
+                       wolfssl | CVE-2026-55962   | https://security-tracker.debian.org/tracker/CVE-2026-55962  
+                       wolfssl | CVE-2026-55964   | https://security-tracker.debian.org/tracker/CVE-2026-55964  
+                       wolfssl | CVE-2026-55960   | https://security-tracker.debian.org/tracker/CVE-2026-55960  
+                       wolfssl | CVE-2026-55958   | https://security-tracker.debian.org/tracker/CVE-2026-55958  
+                       wolfssl | CVE-2026-55961   | https://security-tracker.debian.org/tracker/CVE-2026-55961  
+                       wolfssl | CVE-2026-6291    | https://security-tracker.debian.org/tracker/CVE-2026-6291   
+                       wolfssl | CVE-2026-6412    | https://security-tracker.debian.org/tracker/CVE-2026-6412   
+                       wolfssl | CVE-2026-6450    | https://security-tracker.debian.org/tracker/CVE-2026-6450   
+                       wolfssl | CVE-2026-12340   | https://security-tracker.debian.org/tracker/CVE-2026-12340  
+                       wolfssl | CVE-2026-6731    | https://security-tracker.debian.org/tracker/CVE-2026-6731   
+                       wolfssl | CVE-2026-10592   | https://security-tracker.debian.org/tracker/CVE-2026-10592  
+                       wolfssl | CVE-2026-10512   | https://security-tracker.debian.org/tracker/CVE-2026-10512  
+                       wolfssl | CVE-2026-7532    | https://security-tracker.debian.org/tracker/CVE-2026-7532   
+                       wolfssl | CVE-2026-7511    | https://security-tracker.debian.org/tracker/CVE-2026-7511   
+                       wolfssl | CVE-2026-7531    | https://security-tracker.debian.org/tracker/CVE-2026-7531   
+                       wolfssl | CVE-2026-10098   | https://security-tracker.debian.org/tracker/CVE-2026-10098  
+                       wolfssl | CVE-2026-10097   | https://security-tracker.debian.org/tracker/CVE-2026-10097  
+                       wolfssl | CVE-2026-6325    | https://security-tracker.debian.org/tracker/CVE-2026-6325   
+                       wolfssl | CVE-2026-6329    | https://security-tracker.debian.org/tracker/CVE-2026-6329   
+                       wolfssl | CVE-2026-6330    | https://security-tracker.debian.org/tracker/CVE-2026-6330   
+                       wolfssl | CVE-2026-6331    | https://security-tracker.debian.org/tracker/CVE-2026-6331   
+                       wolfssl | CVE-2026-6678    | https://security-tracker.debian.org/tracker/CVE-2026-6678   
                            xen | CVE-2014-3672    | https://security-tracker.debian.org/tracker/CVE-2014-3672   
                            xen | CVE-2015-7504    | https://security-tracker.debian.org/tracker/CVE-2015-7504   
                            xen | CVE-2016-9383    | https://security-tracker.debian.org/tracker/CVE-2016-9383   
@@ -2439,6 +2634,11 @@ CVEs for the '2026.02.x' branch
                       cryptopp | CVE-2023-50979   | https://security-tracker.debian.org/tracker/CVE-2023-50979  
                       cryptopp | CVE-2023-50980   | https://security-tracker.debian.org/tracker/CVE-2023-50980  
                   cups-filters | CVE-2025-64503   | https://security-tracker.debian.org/tracker/CVE-2025-64503  
+                        dhcpcd | CVE-2026-56113   | https://security-tracker.debian.org/tracker/CVE-2026-56113  
+                        dhcpcd | CVE-2026-56114   | https://security-tracker.debian.org/tracker/CVE-2026-56114  
+                        dhcpcd | CVE-2026-56115   | https://security-tracker.debian.org/tracker/CVE-2026-56115  
+                        dhcpcd | CVE-2026-56116   | https://security-tracker.debian.org/tracker/CVE-2026-56116  
+                        dhcpcd | CVE-2026-56117   | https://security-tracker.debian.org/tracker/CVE-2026-56117  
                         docker | CVE-2014-0048    | https://security-tracker.debian.org/tracker/CVE-2014-0048   
                         docker | CVE-2014-8179    | https://security-tracker.debian.org/tracker/CVE-2014-8179   
                         docker | CVE-2014-8178    | https://security-tracker.debian.org/tracker/CVE-2014-8178   
@@ -2529,6 +2729,18 @@ CVEs for the '2026.02.x' branch
                         erlang | CVE-2026-49760   | https://security-tracker.debian.org/tracker/CVE-2026-49760  
                         erlang | CVE-2026-49759   | https://security-tracker.debian.org/tracker/CVE-2026-49759  
                          exiv2 | CVE-2026-27631   | https://security-tracker.debian.org/tracker/CVE-2026-27631  
+                         expat | CVE-2026-56412   | https://security-tracker.debian.org/tracker/CVE-2026-56412  
+                         expat | CVE-2026-56406   | https://security-tracker.debian.org/tracker/CVE-2026-56406  
+                         expat | CVE-2026-56410   | https://security-tracker.debian.org/tracker/CVE-2026-56410  
+                         expat | CVE-2026-56409   | https://security-tracker.debian.org/tracker/CVE-2026-56409  
+                         expat | CVE-2026-56403   | https://security-tracker.debian.org/tracker/CVE-2026-56403  
+                         expat | CVE-2026-56407   | https://security-tracker.debian.org/tracker/CVE-2026-56407  
+                         expat | CVE-2026-56408   | https://security-tracker.debian.org/tracker/CVE-2026-56408  
+                         expat | CVE-2026-56404   | https://security-tracker.debian.org/tracker/CVE-2026-56404  
+                         expat | CVE-2026-56405   | https://security-tracker.debian.org/tracker/CVE-2026-56405  
+                         expat | CVE-2026-56411   | https://security-tracker.debian.org/tracker/CVE-2026-56411  
+                         expat | CVE-2026-56131   | https://security-tracker.debian.org/tracker/CVE-2026-56131  
+                         expat | CVE-2026-56132   | https://security-tracker.debian.org/tracker/CVE-2026-56132  
                          expat | CVE-2026-50219   | https://security-tracker.debian.org/tracker/CVE-2026-50219  
                         ffmpeg | CVE-2023-50007   | https://security-tracker.debian.org/tracker/CVE-2023-50007  
                         ffmpeg | CVE-2023-50008   | https://security-tracker.debian.org/tracker/CVE-2023-50008  
@@ -2658,6 +2870,8 @@ CVEs for the '2026.02.x' branch
                     gstreamer1 | CVE-2026-3083    | https://security-tracker.debian.org/tracker/CVE-2026-3083   
                     gstreamer1 | CVE-2026-3086    | https://security-tracker.debian.org/tracker/CVE-2026-3086   
                     gstreamer1 | CVE-2026-3082    | https://security-tracker.debian.org/tracker/CVE-2026-3082   
+                       haproxy | CVE-2026-55204   | https://security-tracker.debian.org/tracker/CVE-2026-55204  
+                       haproxy | CVE-2026-55203   | https://security-tracker.debian.org/tracker/CVE-2026-55203  
                          hplip | CVE-2025-43023   | https://security-tracker.debian.org/tracker/CVE-2025-43023  
                          hplip | CVE-2026-8632    | https://security-tracker.debian.org/tracker/CVE-2026-8632   
                          hplip | CVE-2026-8631    | https://security-tracker.debian.org/tracker/CVE-2026-8631   
@@ -2680,6 +2894,7 @@ CVEs for the '2026.02.x' branch
                          janet | CVE-2026-2869    | https://security-tracker.debian.org/tracker/CVE-2026-2869   
                          jhead | CVE-2025-44906   | https://security-tracker.debian.org/tracker/CVE-2025-44906  
                             jq | CVE-2026-44777   | https://security-tracker.debian.org/tracker/CVE-2026-44777  
+                            jq | CVE-2026-49839   | https://security-tracker.debian.org/tracker/CVE-2026-49839  
                             jq | CVE-2026-41257   | https://security-tracker.debian.org/tracker/CVE-2026-41257  
                             jq | CVE-2026-41256   | https://security-tracker.debian.org/tracker/CVE-2026-41256  
                             jq | CVE-2026-33947   | https://security-tracker.debian.org/tracker/CVE-2026-33947  
@@ -2690,6 +2905,8 @@ CVEs for the '2026.02.x' branch
                             jq | CVE-2026-32316   | https://security-tracker.debian.org/tracker/CVE-2026-32316  
                             jq | CVE-2026-40612   | https://security-tracker.debian.org/tracker/CVE-2026-40612  
                             jq | CVE-2026-39979   | https://security-tracker.debian.org/tracker/CVE-2026-39979  
+                            jq | CVE-2026-47770   | https://security-tracker.debian.org/tracker/CVE-2026-47770  
+                            jq | CVE-2026-54679   | https://security-tracker.debian.org/tracker/CVE-2026-54679  
                        libcoap | CVE-2026-29013   | https://security-tracker.debian.org/tracker/CVE-2026-29013  
                       libfuse3 | CVE-2026-33150   | https://security-tracker.debian.org/tracker/CVE-2026-33150  
                       libfuse3 | CVE-2026-33179   | https://security-tracker.debian.org/tracker/CVE-2026-33179  
@@ -2729,6 +2946,9 @@ CVEs for the '2026.02.x' branch
                        libsolv | CVE-2026-9150    | https://security-tracker.debian.org/tracker/CVE-2026-9150   
                        libsolv | CVE-2026-9149    | https://security-tracker.debian.org/tracker/CVE-2026-9149   
                         libssh | CVE-2025-14821   | https://security-tracker.debian.org/tracker/CVE-2025-14821  
+                       libssh2 | CVE-2025-15661   | https://security-tracker.debian.org/tracker/CVE-2025-15661  
+                       libssh2 | CVE-2026-55200   | https://security-tracker.debian.org/tracker/CVE-2026-55200  
+                       libssh2 | CVE-2026-55199   | https://security-tracker.debian.org/tracker/CVE-2026-55199  
                     libtorrent | CVE-2016-5301    | https://security-tracker.debian.org/tracker/CVE-2016-5301   
                         libucl | CVE-2025-6499    | https://security-tracker.debian.org/tracker/CVE-2025-6499   
                         libucl | CVE-2026-0708    | https://security-tracker.debian.org/tracker/CVE-2026-0708   
@@ -2766,6 +2986,7 @@ CVEs for the '2026.02.x' branch
                       mongoose | CVE-2026-5246    | https://security-tracker.debian.org/tracker/CVE-2026-5246   
                          mp4v2 | CVE-2023-33719   | https://security-tracker.debian.org/tracker/CVE-2023-33719  
                          mp4v2 | CVE-2023-33716   | https://security-tracker.debian.org/tracker/CVE-2023-33716  
+                         mupdf | CVE-2025-71382   | https://security-tracker.debian.org/tracker/CVE-2025-71382  
                          mupdf | CVE-2025-46206   | https://security-tracker.debian.org/tracker/CVE-2025-46206  
                          mupdf | CVE-2026-7233    | https://security-tracker.debian.org/tracker/CVE-2026-7233   
                          mupdf | CVE-2026-40505   | https://security-tracker.debian.org/tracker/CVE-2026-40505  
@@ -2811,6 +3032,7 @@ CVEs for the '2026.02.x' branch
        perl-lwp-protocol-https | CVE-2014-3230    | https://security-tracker.debian.org/tracker/CVE-2014-3230   
                            php | CVE-2007-3205    | https://security-tracker.debian.org/tracker/CVE-2007-3205   
                         podman | CVE-2022-2989    | https://security-tracker.debian.org/tracker/CVE-2022-2989   
+                        podman | CVE-2026-55686   | https://security-tracker.debian.org/tracker/CVE-2026-55686  
                        prosody | CVE-2026-43506   | https://security-tracker.debian.org/tracker/CVE-2026-43506  
                        prosody | CVE-2026-43504   | https://security-tracker.debian.org/tracker/CVE-2026-43504  
                        prosody | CVE-2026-43505   | https://security-tracker.debian.org/tracker/CVE-2026-43505  
@@ -2818,6 +3040,12 @@ CVEs for the '2026.02.x' branch
                 proxychains-ng | CVE-2025-34451   | https://security-tracker.debian.org/tracker/CVE-2025-34451  
                 python-aiohttp | CVE-2026-47265   | https://security-tracker.debian.org/tracker/CVE-2026-47265  
                 python-aiohttp | CVE-2026-22815   | https://security-tracker.debian.org/tracker/CVE-2026-22815  
+                python-aiohttp | CVE-2026-54280   | https://security-tracker.debian.org/tracker/CVE-2026-54280  
+                python-aiohttp | CVE-2026-54274   | https://security-tracker.debian.org/tracker/CVE-2026-54274  
+                python-aiohttp | CVE-2026-54273   | https://security-tracker.debian.org/tracker/CVE-2026-54273  
+                python-aiohttp | CVE-2026-54279   | https://security-tracker.debian.org/tracker/CVE-2026-54279  
+                python-aiohttp | CVE-2026-54275   | https://security-tracker.debian.org/tracker/CVE-2026-54275  
+                python-aiohttp | CVE-2026-54278   | https://security-tracker.debian.org/tracker/CVE-2026-54278  
                 python-aiohttp | CVE-2026-34516   | https://security-tracker.debian.org/tracker/CVE-2026-34516  
                 python-aiohttp | CVE-2026-34514   | https://security-tracker.debian.org/tracker/CVE-2026-34514  
                 python-aiohttp | CVE-2026-34519   | https://security-tracker.debian.org/tracker/CVE-2026-34519  
@@ -2828,6 +3056,7 @@ CVEs for the '2026.02.x' branch
                 python-aiohttp | CVE-2026-34518   | https://security-tracker.debian.org/tracker/CVE-2026-34518  
                 python-aiohttp | CVE-2026-34515   | https://security-tracker.debian.org/tracker/CVE-2026-34515  
                 python-aiohttp | CVE-2026-34993   | https://security-tracker.debian.org/tracker/CVE-2026-34993  
+                python-aiohttp | CVE-2026-50269   | https://security-tracker.debian.org/tracker/CVE-2026-50269  
            python-cryptography | CVE-2026-26007   | https://security-tracker.debian.org/tracker/CVE-2026-26007  
            python-cryptography | CVE-2026-39892   | https://security-tracker.debian.org/tracker/CVE-2026-39892  
            python-cryptography | CVE-2026-34073   | https://security-tracker.debian.org/tracker/CVE-2026-34073  
@@ -2840,6 +3069,10 @@ CVEs for the '2026.02.x' branch
                   python-ecdsa | CVE-2026-33936   | https://security-tracker.debian.org/tracker/CVE-2026-33936  
                    python-lxml | CVE-2026-41066   | https://security-tracker.debian.org/tracker/CVE-2026-41066  
                    python-mako | CVE-2026-41205   | https://security-tracker.debian.org/tracker/CVE-2026-41205  
+              python-multipart | CVE-2026-53538   | https://security-tracker.debian.org/tracker/CVE-2026-53538  
+              python-multipart | CVE-2026-53540   | https://security-tracker.debian.org/tracker/CVE-2026-53540  
+              python-multipart | CVE-2026-53539   | https://security-tracker.debian.org/tracker/CVE-2026-53539  
+              python-multipart | CVE-2026-53537   | https://security-tracker.debian.org/tracker/CVE-2026-53537  
               python-multipart | CVE-2026-40347   | https://security-tracker.debian.org/tracker/CVE-2026-40347  
                  python-pillow | CVE-2026-40192   | https://security-tracker.debian.org/tracker/CVE-2026-40192  
                  python-pillow | CVE-2026-42311   | https://security-tracker.debian.org/tracker/CVE-2026-42311  
@@ -2853,6 +3086,10 @@ CVEs for the '2026.02.x' branch
                   python-pyjwt | CVE-2026-48524   | https://security-tracker.debian.org/tracker/CVE-2026-48524  
                   python-pyjwt | CVE-2026-48526   | https://security-tracker.debian.org/tracker/CVE-2026-48526  
                   python-pyjwt | CVE-2026-48525   | https://security-tracker.debian.org/tracker/CVE-2026-48525  
+              python-starlette | CVE-2026-48818   | https://security-tracker.debian.org/tracker/CVE-2026-48818  
+              python-starlette | CVE-2026-48817   | https://security-tracker.debian.org/tracker/CVE-2026-48817  
+              python-starlette | CVE-2026-54282   | https://security-tracker.debian.org/tracker/CVE-2026-54282  
+              python-starlette | CVE-2026-54283   | https://security-tracker.debian.org/tracker/CVE-2026-54283  
               python-starlette | CVE-2026-48710   | https://security-tracker.debian.org/tracker/CVE-2026-48710  
                 python-twisted | CVE-2026-42304   | https://security-tracker.debian.org/tracker/CVE-2026-42304  
                python-werkzeug | CVE-2026-21860   | https://security-tracker.debian.org/tracker/CVE-2026-21860  
@@ -2900,6 +3137,7 @@ CVEs for the '2026.02.x' branch
                          smack | CVE-2014-0364    | https://security-tracker.debian.org/tracker/CVE-2014-0364   
                          smack | CVE-2014-0363    | https://security-tracker.debian.org/tracker/CVE-2014-0363   
                          smack | CVE-2016-10027   | https://security-tracker.debian.org/tracker/CVE-2016-10027  
+                         socat | CVE-2026-56123   | https://security-tracker.debian.org/tracker/CVE-2026-56123  
                         sqlite | CVE-2026-11822   | https://security-tracker.debian.org/tracker/CVE-2026-11822  
                         sqlite | CVE-2026-11824   | https://security-tracker.debian.org/tracker/CVE-2026-11824  
                           sudo | CVE-2026-35535   | https://security-tracker.debian.org/tracker/CVE-2026-35535  
@@ -2948,6 +3186,7 @@ CVEs for the '2026.02.x' branch
                            upx | CVE-2023-23457   | https://security-tracker.debian.org/tracker/CVE-2023-23457  
                            upx | CVE-2024-3209    | https://security-tracker.debian.org/tracker/CVE-2024-3209   
                            upx | CVE-2025-2849    | https://security-tracker.debian.org/tracker/CVE-2025-2849   
+                           vim | CVE-2026-55693   | https://security-tracker.debian.org/tracker/CVE-2026-55693  
                            vim | CVE-2026-52860   | https://security-tracker.debian.org/tracker/CVE-2026-52860  
                            vim | CVE-2026-52858   | https://security-tracker.debian.org/tracker/CVE-2026-52858  
                            vim | CVE-2026-52859   | https://security-tracker.debian.org/tracker/CVE-2026-52859  
@@ -2959,6 +3198,11 @@ CVEs for the '2026.02.x' branch
                            vim | CVE-2026-28420   | https://security-tracker.debian.org/tracker/CVE-2026-28420  
                            vim | CVE-2026-28417   | https://security-tracker.debian.org/tracker/CVE-2026-28417  
                            vim | CVE-2026-45130   | https://security-tracker.debian.org/tracker/CVE-2026-45130  
+                           vim | CVE-2026-57456   | https://security-tracker.debian.org/tracker/CVE-2026-57456  
+                           vim | CVE-2026-57451   | https://security-tracker.debian.org/tracker/CVE-2026-57451  
+                           vim | CVE-2026-57453   | https://security-tracker.debian.org/tracker/CVE-2026-57453  
+                           vim | CVE-2026-57452   | https://security-tracker.debian.org/tracker/CVE-2026-57452  
+                           vim | CVE-2026-57455   | https://security-tracker.debian.org/tracker/CVE-2026-57455  
                            vim | CVE-2026-39881   | https://security-tracker.debian.org/tracker/CVE-2026-39881  
                            vim | CVE-2026-41411   | https://security-tracker.debian.org/tracker/CVE-2026-41411  
                            vim | CVE-2026-47167   | https://security-tracker.debian.org/tracker/CVE-2026-47167  
@@ -2967,9 +3211,41 @@ CVEs for the '2026.02.x' branch
                            vim | CVE-2026-33412   | https://security-tracker.debian.org/tracker/CVE-2026-33412  
                            vim | CVE-2026-44656   | https://security-tracker.debian.org/tracker/CVE-2026-44656  
                            vim | CVE-2026-34982   | https://security-tracker.debian.org/tracker/CVE-2026-34982  
+                           vim | CVE-2026-55895   | https://security-tracker.debian.org/tracker/CVE-2026-55895  
+                           vim | CVE-2026-55892   | https://security-tracker.debian.org/tracker/CVE-2026-55892  
                            vim | CVE-2026-42307   | https://security-tracker.debian.org/tracker/CVE-2026-42307  
                            vim | CVE-2026-34714   | https://security-tracker.debian.org/tracker/CVE-2026-34714  
                      wireshark | CVE-2026-9759    | https://security-tracker.debian.org/tracker/CVE-2026-9759   
+                       wolfssl | CVE-2026-8720    | https://security-tracker.debian.org/tracker/CVE-2026-8720   
+                       wolfssl | CVE-2026-11999   | https://security-tracker.debian.org/tracker/CVE-2026-11999  
+                       wolfssl | CVE-2026-11703   | https://security-tracker.debian.org/tracker/CVE-2026-11703  
+                       wolfssl | CVE-2026-11310   | https://security-tracker.debian.org/tracker/CVE-2026-11310  
+                       wolfssl | CVE-2026-6094    | https://security-tracker.debian.org/tracker/CVE-2026-6094   
+                       wolfssl | CVE-2026-6092    | https://security-tracker.debian.org/tracker/CVE-2026-6092   
+                       wolfssl | CVE-2026-6091    | https://security-tracker.debian.org/tracker/CVE-2026-6091   
+                       wolfssl | CVE-2026-55967   | https://security-tracker.debian.org/tracker/CVE-2026-55967  
+                       wolfssl | CVE-2026-55962   | https://security-tracker.debian.org/tracker/CVE-2026-55962  
+                       wolfssl | CVE-2026-55964   | https://security-tracker.debian.org/tracker/CVE-2026-55964  
+                       wolfssl | CVE-2026-55960   | https://security-tracker.debian.org/tracker/CVE-2026-55960  
+                       wolfssl | CVE-2026-55958   | https://security-tracker.debian.org/tracker/CVE-2026-55958  
+                       wolfssl | CVE-2026-55961   | https://security-tracker.debian.org/tracker/CVE-2026-55961  
+                       wolfssl | CVE-2026-6291    | https://security-tracker.debian.org/tracker/CVE-2026-6291   
+                       wolfssl | CVE-2026-6412    | https://security-tracker.debian.org/tracker/CVE-2026-6412   
+                       wolfssl | CVE-2026-6450    | https://security-tracker.debian.org/tracker/CVE-2026-6450   
+                       wolfssl | CVE-2026-12340   | https://security-tracker.debian.org/tracker/CVE-2026-12340  
+                       wolfssl | CVE-2026-6731    | https://security-tracker.debian.org/tracker/CVE-2026-6731   
+                       wolfssl | CVE-2026-10592   | https://security-tracker.debian.org/tracker/CVE-2026-10592  
+                       wolfssl | CVE-2026-10512   | https://security-tracker.debian.org/tracker/CVE-2026-10512  
+                       wolfssl | CVE-2026-7532    | https://security-tracker.debian.org/tracker/CVE-2026-7532   
+                       wolfssl | CVE-2026-7511    | https://security-tracker.debian.org/tracker/CVE-2026-7511   
+                       wolfssl | CVE-2026-7531    | https://security-tracker.debian.org/tracker/CVE-2026-7531   
+                       wolfssl | CVE-2026-10098   | https://security-tracker.debian.org/tracker/CVE-2026-10098  
+                       wolfssl | CVE-2026-10097   | https://security-tracker.debian.org/tracker/CVE-2026-10097  
+                       wolfssl | CVE-2026-6325    | https://security-tracker.debian.org/tracker/CVE-2026-6325   
+                       wolfssl | CVE-2026-6329    | https://security-tracker.debian.org/tracker/CVE-2026-6329   
+                       wolfssl | CVE-2026-6330    | https://security-tracker.debian.org/tracker/CVE-2026-6330   
+                       wolfssl | CVE-2026-6331    | https://security-tracker.debian.org/tracker/CVE-2026-6331   
+                       wolfssl | CVE-2026-6678    | https://security-tracker.debian.org/tracker/CVE-2026-6678   
                            xen | CVE-2014-3672    | https://security-tracker.debian.org/tracker/CVE-2014-3672   
                            xen | CVE-2015-7504    | https://security-tracker.debian.org/tracker/CVE-2015-7504   
                            xen | CVE-2016-9383    | https://security-tracker.debian.org/tracker/CVE-2016-9383   
@@ -3163,6 +3439,11 @@ CVEs for the '2025.02.x' branch
                       cryptopp | CVE-2023-50979   | https://security-tracker.debian.org/tracker/CVE-2023-50979  
                       cryptopp | CVE-2023-50980   | https://security-tracker.debian.org/tracker/CVE-2023-50980  
                   cups-filters | CVE-2025-64503   | https://security-tracker.debian.org/tracker/CVE-2025-64503  
+                        dhcpcd | CVE-2026-56113   | https://security-tracker.debian.org/tracker/CVE-2026-56113  
+                        dhcpcd | CVE-2026-56114   | https://security-tracker.debian.org/tracker/CVE-2026-56114  
+                        dhcpcd | CVE-2026-56115   | https://security-tracker.debian.org/tracker/CVE-2026-56115  
+                        dhcpcd | CVE-2026-56116   | https://security-tracker.debian.org/tracker/CVE-2026-56116  
+                        dhcpcd | CVE-2026-56117   | https://security-tracker.debian.org/tracker/CVE-2026-56117  
                         docker | CVE-2014-0048    | https://security-tracker.debian.org/tracker/CVE-2014-0048   
                         docker | CVE-2014-8179    | https://security-tracker.debian.org/tracker/CVE-2014-8179   
                         docker | CVE-2014-8178    | https://security-tracker.debian.org/tracker/CVE-2014-8178   
@@ -3253,6 +3534,18 @@ CVEs for the '2025.02.x' branch
                         erlang | CVE-2026-49760   | https://security-tracker.debian.org/tracker/CVE-2026-49760  
                         erlang | CVE-2026-49759   | https://security-tracker.debian.org/tracker/CVE-2026-49759  
                          exiv2 | CVE-2026-27631   | https://security-tracker.debian.org/tracker/CVE-2026-27631  
+                         expat | CVE-2026-56412   | https://security-tracker.debian.org/tracker/CVE-2026-56412  
+                         expat | CVE-2026-56406   | https://security-tracker.debian.org/tracker/CVE-2026-56406  
+                         expat | CVE-2026-56410   | https://security-tracker.debian.org/tracker/CVE-2026-56410  
+                         expat | CVE-2026-56409   | https://security-tracker.debian.org/tracker/CVE-2026-56409  
+                         expat | CVE-2026-56403   | https://security-tracker.debian.org/tracker/CVE-2026-56403  
+                         expat | CVE-2026-56407   | https://security-tracker.debian.org/tracker/CVE-2026-56407  
+                         expat | CVE-2026-56408   | https://security-tracker.debian.org/tracker/CVE-2026-56408  
+                         expat | CVE-2026-56404   | https://security-tracker.debian.org/tracker/CVE-2026-56404  
+                         expat | CVE-2026-56405   | https://security-tracker.debian.org/tracker/CVE-2026-56405  
+                         expat | CVE-2026-56411   | https://security-tracker.debian.org/tracker/CVE-2026-56411  
+                         expat | CVE-2026-56131   | https://security-tracker.debian.org/tracker/CVE-2026-56131  
+                         expat | CVE-2026-56132   | https://security-tracker.debian.org/tracker/CVE-2026-56132  
                          expat | CVE-2026-50219   | https://security-tracker.debian.org/tracker/CVE-2026-50219  
                         ffmpeg | CVE-2023-50007   | https://security-tracker.debian.org/tracker/CVE-2023-50007  
                         ffmpeg | CVE-2023-50008   | https://security-tracker.debian.org/tracker/CVE-2023-50008  
@@ -3401,6 +3694,8 @@ CVEs for the '2025.02.x' branch
                     gstreamer1 | CVE-2026-3083    | https://security-tracker.debian.org/tracker/CVE-2026-3083   
                     gstreamer1 | CVE-2026-3086    | https://security-tracker.debian.org/tracker/CVE-2026-3086   
                     gstreamer1 | CVE-2026-3082    | https://security-tracker.debian.org/tracker/CVE-2026-3082   
+                       haproxy | CVE-2026-55204   | https://security-tracker.debian.org/tracker/CVE-2026-55204  
+                       haproxy | CVE-2026-55203   | https://security-tracker.debian.org/tracker/CVE-2026-55203  
                       harfbuzz | CVE-2026-22693   | https://security-tracker.debian.org/tracker/CVE-2026-22693  
                          hplip | CVE-2025-43023   | https://security-tracker.debian.org/tracker/CVE-2025-43023  
                          hplip | CVE-2026-8632    | https://security-tracker.debian.org/tracker/CVE-2026-8632   
@@ -3425,6 +3720,7 @@ CVEs for the '2025.02.x' branch
                          janet | CVE-2026-2869    | https://security-tracker.debian.org/tracker/CVE-2026-2869   
                          jhead | CVE-2025-44906   | https://security-tracker.debian.org/tracker/CVE-2025-44906  
                             jq | CVE-2026-44777   | https://security-tracker.debian.org/tracker/CVE-2026-44777  
+                            jq | CVE-2026-49839   | https://security-tracker.debian.org/tracker/CVE-2026-49839  
                             jq | CVE-2026-41257   | https://security-tracker.debian.org/tracker/CVE-2026-41257  
                             jq | CVE-2026-41256   | https://security-tracker.debian.org/tracker/CVE-2026-41256  
                             jq | CVE-2026-33947   | https://security-tracker.debian.org/tracker/CVE-2026-33947  
@@ -3435,6 +3731,8 @@ CVEs for the '2025.02.x' branch
                             jq | CVE-2026-32316   | https://security-tracker.debian.org/tracker/CVE-2026-32316  
                             jq | CVE-2026-40612   | https://security-tracker.debian.org/tracker/CVE-2026-40612  
                             jq | CVE-2026-39979   | https://security-tracker.debian.org/tracker/CVE-2026-39979  
+                            jq | CVE-2026-47770   | https://security-tracker.debian.org/tracker/CVE-2026-47770  
+                            jq | CVE-2026-54679   | https://security-tracker.debian.org/tracker/CVE-2026-54679  
                          libao | CVE-2017-11548   | https://security-tracker.debian.org/tracker/CVE-2017-11548  
                        libbson | CVE-2024-6381    | https://security-tracker.debian.org/tracker/CVE-2024-6381   
                        libbson | CVE-2025-0755    | https://security-tracker.debian.org/tracker/CVE-2025-0755   
@@ -3479,6 +3777,9 @@ CVEs for the '2025.02.x' branch
                        libsolv | CVE-2026-9150    | https://security-tracker.debian.org/tracker/CVE-2026-9150   
                        libsolv | CVE-2026-9149    | https://security-tracker.debian.org/tracker/CVE-2026-9149   
                         libssh | CVE-2025-14821   | https://security-tracker.debian.org/tracker/CVE-2025-14821  
+                       libssh2 | CVE-2025-15661   | https://security-tracker.debian.org/tracker/CVE-2025-15661  
+                       libssh2 | CVE-2026-55200   | https://security-tracker.debian.org/tracker/CVE-2026-55200  
+                       libssh2 | CVE-2026-55199   | https://security-tracker.debian.org/tracker/CVE-2026-55199  
                     libtorrent | CVE-2009-1760    | https://security-tracker.debian.org/tracker/CVE-2009-1760   
                     libtorrent | CVE-2016-5301    | https://security-tracker.debian.org/tracker/CVE-2016-5301   
                         libucl | CVE-2025-6499    | https://security-tracker.debian.org/tracker/CVE-2025-6499   
@@ -3516,6 +3817,7 @@ CVEs for the '2025.02.x' branch
                       mongoose | CVE-2026-5246    | https://security-tracker.debian.org/tracker/CVE-2026-5246   
                          mp4v2 | CVE-2023-33719   | https://security-tracker.debian.org/tracker/CVE-2023-33719  
                          mp4v2 | CVE-2023-33716   | https://security-tracker.debian.org/tracker/CVE-2023-33716  
+                         mupdf | CVE-2025-71382   | https://security-tracker.debian.org/tracker/CVE-2025-71382  
                          mupdf | CVE-2025-46206   | https://security-tracker.debian.org/tracker/CVE-2025-46206  
                          mupdf | CVE-2026-7233    | https://security-tracker.debian.org/tracker/CVE-2026-7233   
                          mupdf | CVE-2026-40505   | https://security-tracker.debian.org/tracker/CVE-2026-40505  
@@ -3572,6 +3874,12 @@ CVEs for the '2025.02.x' branch
                 python-aiohttp | CVE-2025-69225   | https://security-tracker.debian.org/tracker/CVE-2025-69225  
                 python-aiohttp | CVE-2026-47265   | https://security-tracker.debian.org/tracker/CVE-2026-47265  
                 python-aiohttp | CVE-2026-22815   | https://security-tracker.debian.org/tracker/CVE-2026-22815  
+                python-aiohttp | CVE-2026-54280   | https://security-tracker.debian.org/tracker/CVE-2026-54280  
+                python-aiohttp | CVE-2026-54274   | https://security-tracker.debian.org/tracker/CVE-2026-54274  
+                python-aiohttp | CVE-2026-54273   | https://security-tracker.debian.org/tracker/CVE-2026-54273  
+                python-aiohttp | CVE-2026-54279   | https://security-tracker.debian.org/tracker/CVE-2026-54279  
+                python-aiohttp | CVE-2026-54275   | https://security-tracker.debian.org/tracker/CVE-2026-54275  
+                python-aiohttp | CVE-2026-54278   | https://security-tracker.debian.org/tracker/CVE-2026-54278  
                 python-aiohttp | CVE-2026-34516   | https://security-tracker.debian.org/tracker/CVE-2026-34516  
                 python-aiohttp | CVE-2026-34514   | https://security-tracker.debian.org/tracker/CVE-2026-34514  
                 python-aiohttp | CVE-2026-34519   | https://security-tracker.debian.org/tracker/CVE-2026-34519  
@@ -3582,12 +3890,17 @@ CVEs for the '2025.02.x' branch
                 python-aiohttp | CVE-2026-34518   | https://security-tracker.debian.org/tracker/CVE-2026-34518  
                 python-aiohttp | CVE-2026-34515   | https://security-tracker.debian.org/tracker/CVE-2026-34515  
                 python-aiohttp | CVE-2026-34993   | https://security-tracker.debian.org/tracker/CVE-2026-34993  
+                python-aiohttp | CVE-2026-50269   | https://security-tracker.debian.org/tracker/CVE-2026-50269  
            python-cryptography | CVE-2026-26007   | https://security-tracker.debian.org/tracker/CVE-2026-26007  
            python-cryptography | CVE-2026-34073   | https://security-tracker.debian.org/tracker/CVE-2026-34073  
                  python-dotenv | CVE-2026-28684   | https://security-tracker.debian.org/tracker/CVE-2026-28684  
                   python-ecdsa | CVE-2026-33936   | https://security-tracker.debian.org/tracker/CVE-2026-33936  
                    python-lxml | CVE-2026-41066   | https://security-tracker.debian.org/tracker/CVE-2026-41066  
                    python-mako | CVE-2026-41205   | https://security-tracker.debian.org/tracker/CVE-2026-41205  
+              python-multipart | CVE-2026-53538   | https://security-tracker.debian.org/tracker/CVE-2026-53538  
+              python-multipart | CVE-2026-53540   | https://security-tracker.debian.org/tracker/CVE-2026-53540  
+              python-multipart | CVE-2026-53539   | https://security-tracker.debian.org/tracker/CVE-2026-53539  
+              python-multipart | CVE-2026-53537   | https://security-tracker.debian.org/tracker/CVE-2026-53537  
               python-multipart | CVE-2026-40347   | https://security-tracker.debian.org/tracker/CVE-2026-40347  
                  python-pillow | CVE-2026-40192   | https://security-tracker.debian.org/tracker/CVE-2026-40192  
                  python-pillow | CVE-2026-42311   | https://security-tracker.debian.org/tracker/CVE-2026-42311  
@@ -3600,6 +3913,10 @@ CVEs for the '2025.02.x' branch
                   python-pyjwt | CVE-2026-48524   | https://security-tracker.debian.org/tracker/CVE-2026-48524  
                   python-pyjwt | CVE-2026-48526   | https://security-tracker.debian.org/tracker/CVE-2026-48526  
                   python-pyjwt | CVE-2026-48525   | https://security-tracker.debian.org/tracker/CVE-2026-48525  
+              python-starlette | CVE-2026-48818   | https://security-tracker.debian.org/tracker/CVE-2026-48818  
+              python-starlette | CVE-2026-48817   | https://security-tracker.debian.org/tracker/CVE-2026-48817  
+              python-starlette | CVE-2026-54282   | https://security-tracker.debian.org/tracker/CVE-2026-54282  
+              python-starlette | CVE-2026-54283   | https://security-tracker.debian.org/tracker/CVE-2026-54283  
               python-starlette | CVE-2026-48710   | https://security-tracker.debian.org/tracker/CVE-2026-48710  
                 python-tornado | CVE-2026-35536   | https://security-tracker.debian.org/tracker/CVE-2026-35536  
                 python-tornado | CVE-2026-31958   | https://security-tracker.debian.org/tracker/CVE-2026-31958  
@@ -3659,6 +3976,7 @@ CVEs for the '2025.02.x' branch
                          smack | CVE-2014-0364    | https://security-tracker.debian.org/tracker/CVE-2014-0364   
                          smack | CVE-2014-0363    | https://security-tracker.debian.org/tracker/CVE-2014-0363   
                          smack | CVE-2016-10027   | https://security-tracker.debian.org/tracker/CVE-2016-10027  
+                         socat | CVE-2026-56123   | https://security-tracker.debian.org/tracker/CVE-2026-56123  
                         sqlite | CVE-2026-11822   | https://security-tracker.debian.org/tracker/CVE-2026-11822  
                         sqlite | CVE-2026-11824   | https://security-tracker.debian.org/tracker/CVE-2026-11824  
                          squid | CVE-2026-33515   | https://security-tracker.debian.org/tracker/CVE-2026-33515  
@@ -3722,6 +4040,7 @@ CVEs for the '2025.02.x' branch
                            upx | CVE-2024-3209    | https://security-tracker.debian.org/tracker/CVE-2024-3209   
                            upx | CVE-2025-2849    | https://security-tracker.debian.org/tracker/CVE-2025-2849   
                util-linux-libs | CVE-2026-27456   | https://security-tracker.debian.org/tracker/CVE-2026-27456  
+                           vim | CVE-2026-55693   | https://security-tracker.debian.org/tracker/CVE-2026-55693  
                            vim | CVE-2026-52860   | https://security-tracker.debian.org/tracker/CVE-2026-52860  
                            vim | CVE-2026-52858   | https://security-tracker.debian.org/tracker/CVE-2026-52858  
                            vim | CVE-2026-52859   | https://security-tracker.debian.org/tracker/CVE-2026-52859  
@@ -3733,6 +4052,11 @@ CVEs for the '2025.02.x' branch
                            vim | CVE-2026-28420   | https://security-tracker.debian.org/tracker/CVE-2026-28420  
                            vim | CVE-2026-28417   | https://security-tracker.debian.org/tracker/CVE-2026-28417  
                            vim | CVE-2026-45130   | https://security-tracker.debian.org/tracker/CVE-2026-45130  
+                           vim | CVE-2026-57456   | https://security-tracker.debian.org/tracker/CVE-2026-57456  
+                           vim | CVE-2026-57451   | https://security-tracker.debian.org/tracker/CVE-2026-57451  
+                           vim | CVE-2026-57453   | https://security-tracker.debian.org/tracker/CVE-2026-57453  
+                           vim | CVE-2026-57452   | https://security-tracker.debian.org/tracker/CVE-2026-57452  
+                           vim | CVE-2026-57455   | https://security-tracker.debian.org/tracker/CVE-2026-57455  
                            vim | CVE-2026-39881   | https://security-tracker.debian.org/tracker/CVE-2026-39881  
                            vim | CVE-2026-41411   | https://security-tracker.debian.org/tracker/CVE-2026-41411  
                            vim | CVE-2026-47167   | https://security-tracker.debian.org/tracker/CVE-2026-47167  
@@ -3741,9 +4065,41 @@ CVEs for the '2025.02.x' branch
                            vim | CVE-2026-33412   | https://security-tracker.debian.org/tracker/CVE-2026-33412  
                            vim | CVE-2026-44656   | https://security-tracker.debian.org/tracker/CVE-2026-44656  
                            vim | CVE-2026-34982   | https://security-tracker.debian.org/tracker/CVE-2026-34982  
+                           vim | CVE-2026-55895   | https://security-tracker.debian.org/tracker/CVE-2026-55895  
+                           vim | CVE-2026-55892   | https://security-tracker.debian.org/tracker/CVE-2026-55892  
                            vim | CVE-2026-42307   | https://security-tracker.debian.org/tracker/CVE-2026-42307  
                            vim | CVE-2026-34714   | https://security-tracker.debian.org/tracker/CVE-2026-34714  
                      wireshark | CVE-2026-0962    | https://security-tracker.debian.org/tracker/CVE-2026-0962   
+                       wolfssl | CVE-2026-8720    | https://security-tracker.debian.org/tracker/CVE-2026-8720   
+                       wolfssl | CVE-2026-11999   | https://security-tracker.debian.org/tracker/CVE-2026-11999  
+                       wolfssl | CVE-2026-11703   | https://security-tracker.debian.org/tracker/CVE-2026-11703  
+                       wolfssl | CVE-2026-11310   | https://security-tracker.debian.org/tracker/CVE-2026-11310  
+                       wolfssl | CVE-2026-6094    | https://security-tracker.debian.org/tracker/CVE-2026-6094   
+                       wolfssl | CVE-2026-6092    | https://security-tracker.debian.org/tracker/CVE-2026-6092   
+                       wolfssl | CVE-2026-6091    | https://security-tracker.debian.org/tracker/CVE-2026-6091   
+                       wolfssl | CVE-2026-55967   | https://security-tracker.debian.org/tracker/CVE-2026-55967  
+                       wolfssl | CVE-2026-55962   | https://security-tracker.debian.org/tracker/CVE-2026-55962  
+                       wolfssl | CVE-2026-55964   | https://security-tracker.debian.org/tracker/CVE-2026-55964  
+                       wolfssl | CVE-2026-55960   | https://security-tracker.debian.org/tracker/CVE-2026-55960  
+                       wolfssl | CVE-2026-55958   | https://security-tracker.debian.org/tracker/CVE-2026-55958  
+                       wolfssl | CVE-2026-55961   | https://security-tracker.debian.org/tracker/CVE-2026-55961  
+                       wolfssl | CVE-2026-6291    | https://security-tracker.debian.org/tracker/CVE-2026-6291   
+                       wolfssl | CVE-2026-6412    | https://security-tracker.debian.org/tracker/CVE-2026-6412   
+                       wolfssl | CVE-2026-6450    | https://security-tracker.debian.org/tracker/CVE-2026-6450   
+                       wolfssl | CVE-2026-12340   | https://security-tracker.debian.org/tracker/CVE-2026-12340  
+                       wolfssl | CVE-2026-6731    | https://security-tracker.debian.org/tracker/CVE-2026-6731   
+                       wolfssl | CVE-2026-10592   | https://security-tracker.debian.org/tracker/CVE-2026-10592  
+                       wolfssl | CVE-2026-10512   | https://security-tracker.debian.org/tracker/CVE-2026-10512  
+                       wolfssl | CVE-2026-7532    | https://security-tracker.debian.org/tracker/CVE-2026-7532   
+                       wolfssl | CVE-2026-7511    | https://security-tracker.debian.org/tracker/CVE-2026-7511   
+                       wolfssl | CVE-2026-7531    | https://security-tracker.debian.org/tracker/CVE-2026-7531   
+                       wolfssl | CVE-2026-10098   | https://security-tracker.debian.org/tracker/CVE-2026-10098  
+                       wolfssl | CVE-2026-10097   | https://security-tracker.debian.org/tracker/CVE-2026-10097  
+                       wolfssl | CVE-2026-6325    | https://security-tracker.debian.org/tracker/CVE-2026-6325   
+                       wolfssl | CVE-2026-6329    | https://security-tracker.debian.org/tracker/CVE-2026-6329   
+                       wolfssl | CVE-2026-6330    | https://security-tracker.debian.org/tracker/CVE-2026-6330   
+                       wolfssl | CVE-2026-6331    | https://security-tracker.debian.org/tracker/CVE-2026-6331   
+                       wolfssl | CVE-2026-6678    | https://security-tracker.debian.org/tracker/CVE-2026-6678   
                            xen | CVE-2014-3672    | https://security-tracker.debian.org/tracker/CVE-2014-3672   
                            xen | CVE-2015-7504    | https://security-tracker.debian.org/tracker/CVE-2015-7504   
                            xen | CVE-2016-9383    | https://security-tracker.debian.org/tracker/CVE-2016-9383   
