@@ -1,218 +1,111 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A131CC43458
-	for <buildroot@archiver.kernel.org>; Mon, 29 Jun 2026 20:46:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A9A1C43327
+	for <buildroot@archiver.kernel.org>; Mon, 29 Jun 2026 20:59:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4590040FF6;
-	Mon, 29 Jun 2026 20:46:41 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jVBG2YmWxcL5; Mon, 29 Jun 2026 20:46:39 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 263B940A54
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1782765999;
-	bh=GnWErewESDjGEQwDhP0Hbu5pajfj4cOTfbxGMt08yF0=;
-	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 From;
-	b=SKIhqhYGBs8hPL7DHnHSH2Xu0cnClQR9PqQRP9YuWgqsWjrelP8M30MlnWqN7wpK1
-	 ce9CxtpS+vJeVDfpjrv6Y+b0yRD1XVXE4cpRuDibOFE+By2vP80U2yDVKnTvyopf3I
-	 W8gVgpjhaBQsIdjC2YyFB5l+Pw5HlG2LF9UzyTMkEpHfWtckeoRAMGLE5W9vpnRETH
-	 qH/uGo0044+E/7WadQptc2nw8KuMjiYRHhQn3iEFgfXYOEjpu/hXjuBbTaGNIqfuGd
-	 G+wwnk++PwWq8LTXCjLAREViv/hRt0icTRJnE65XYwKGhPVJo8THIIU8e7QX4qoVXo
-	 swehFJdu4ZU7Q==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 263B940A54;
-	Mon, 29 Jun 2026 20:46:39 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id C0AEA149
- for <buildroot@buildroot.org>; Mon, 29 Jun 2026 20:46:37 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B1D9A80ADA
- for <buildroot@buildroot.org>; Mon, 29 Jun 2026 20:46:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 92153821B0;
+	Mon, 29 Jun 2026 20:59:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TX_Ch8UZ3lB9 for <buildroot@buildroot.org>;
- Mon, 29 Jun 2026 20:46:37 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.19;
- helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 37D0A80AA3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 37D0A80AA3
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 37D0A80AA3
- for <buildroot@buildroot.org>; Mon, 29 Jun 2026 20:46:35 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from client.hidden.invalid by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MrQIv-1xRPSw1Tol-00glXc; Mon, 29
- Jun 2026 22:46:33 +0200
-Message-ID: <271ee7e9-d141-4174-b990-ea2171b89424@gmx.de>
-Date: Mon, 29 Jun 2026 22:46:32 +0200
+ id BhwMeojOwmEj; Mon, 29 Jun 2026 20:59:37 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4AFEF82037
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1782766777;
+	bh=BtYnZEfPGdBqQzzYR01oaw5QDm07PdMpq22iOe267o0=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=cPlKQXZK3AwDSlStR+MCNAkh2TcgKYDYesAiW9AmcbKGHYXz4SOS/AQMJWMdYZi8k
+	 vdQillJmqe29cGYmAJgETO375ahb1lzkGoqLYsIDsf5qxofDlkVrClgcfGJTLpEJOk
+	 PRJgli1bWtGRB57Y+mgV/WjKASzna5P3mqPk+h0eKjjsYT6HdTJWEt3nbMvX4LzDMm
+	 wCJ/ASWD726ya97+PTgWtfGLiPttkZzxqZGVq+vDRDRn6/hdHlapX/bvzuw2+hdbD0
+	 /xRwQO1Qqz7wV7nk7pBYPjg2p7Iv+nntx5yDf5CbB505c+iHX9Ph+qpOz5Ikux9sFZ
+	 BL8szW6+NoyMg==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4AFEF82037;
+	Mon, 29 Jun 2026 20:59:37 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2B26C34C
+ for <buildroot@buildroot.org>; Mon, 29 Jun 2026 20:59:36 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1BCD560F77
+ for <buildroot@buildroot.org>; Mon, 29 Jun 2026 20:59:36 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LQna1vkQnpqc for <buildroot@buildroot.org>;
+ Mon, 29 Jun 2026 20:59:34 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::32a; helo=mail-wm1-x32a.google.com;
+ envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 486B060F60
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 486B060F60
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
+ [IPv6:2a00:1450:4864:20::32a])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 486B060F60
+ for <buildroot@buildroot.org>; Mon, 29 Jun 2026 20:59:33 +0000 (UTC)
+Received: by mail-wm1-x32a.google.com with SMTP id
+ 5b1f17b1804b1-493b6f1b14bso3329885e9.0
+ for <buildroot@buildroot.org>; Mon, 29 Jun 2026 13:59:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20251104; t=1782766772; x=1783371572;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:to
+ :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=OxEt96V8HQ75ZOPN+iO6b3qXe/T6xE9722KAShARk5s=;
+ b=tZGQQ59kZMwy1EBbvvBJrfbi6NQmCLMdJ4qqC6aGQnjQ05uiALr/iAwp6OXVFDjAlM
+ 3Hm0af7FQdhmWMlbAF2CAwRtdwm2JUzUgC4ALictVlqEfyT4OdQGdPDBe4xJftidipab
+ gTis2gUUbwRM1kDjjFvbgMhe22HOnps+d/8UN8g1juPGc8e0x4w5UlkAH45et2kdcldy
+ XAofhQF4SyPGSsiTcZoGwSnO4UyexlhixR6wuSBCaUBuZkxny9WyviuB0Z1OCGP4wzQ6
+ PXcI1FeKM7gxE87qXM/4W+nN5VHn+gycGpG6tq/2MKvli9phzk9C4JpbHIuRjaKGIThi
+ TFzw==
+X-Gm-Message-State: AOJu0YwVpHadq1WbpRauSUigyraJzSiMoW6hEEXZC+tcg65/P3NeV16h
+ HJRC/PJzWmIOq3TorZOcDfKIxKSgQ1BKhafcIF8VXVoOX+5QpBQ0IFgNP6Z2fob17HKwTdJTai4
+ 7bgaP
+X-Gm-Gg: AfdE7cl7p3O+7r8dbC6RYr0d7YIPJEUhFRhnzsH8QZIOq5aLXnD5ODQza0eBntdP/3D
+ xGfBvTw1Pj3lhRWQrnox2C9S0onft903I9TKyVtVS31nW7MWkEg9J8XGEGasw/tZ6Cr3+igrbuz
+ APElf6qVSKkEWTpxCftJIceyfOMB6dFdkEeo7Prt2oCBV/bUyncAl0I6+T9XoR+53vAjFFX8Z8y
+ GUKtAslLKffEi07jr/8Zl2ojUR3B3mQ3cbuzmZ1b7IlFlpWU9m/6LpJ3Jog/vMtvo+uGA+UZdF1
+ VKtBBZIznfhktaxnQ/rjMr4Rs/SyxdZVmsplgW4Jk0N9hJ5wapEcWqa1D+anxzKxPHZ46UV3H9t
+ dwtcRpOm+iO4nuwq8nxWs7zH9aU7i0NxbaFeWWQZZmbCjsVOz1wl06pB9kc6YHDqAsJA53Ib0BJ
+ yT/k2cPpSw49L9raQ=
+X-Received: by 2002:a05:600c:4e8b:b0:493:aa28:38ad with SMTP id
+ 5b1f17b1804b1-493b82861b2mr16694675e9.10.1782766771822; 
+ Mon, 29 Jun 2026 13:59:31 -0700 (PDT)
+Received: from arch ([77.109.126.77]) by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-493b8caff4csm16021105e9.12.2026.06.29.13.59.30
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 29 Jun 2026 13:59:31 -0700 (PDT)
+To: buildroot@buildroot.org
+Date: Mon, 29 Jun 2026 22:59:30 +0200
+Message-ID: <20260629205930.623351-1-thomas.perale@mind.be>
+X-Mailer: git-send-email 2.54.0
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Romain Naour <romain.naour@smile.fr>, buildroot@buildroot.org
-References: <20260627113409.777671-1-fiona.klute@gmx.de>
- <b2d7cf01-3a85-4791-bbe5-5f041bfbfdfb@smile.fr>
-Content-Language: en-US, de-DE-1901, de-DE
-Autocrypt: addr=fiona.klute@gmx.de; keydata=
- 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
-In-Reply-To: <b2d7cf01-3a85-4791-bbe5-5f041bfbfdfb@smile.fr>
-X-Provags-ID: V03:K1:aHOVnUDuvMzQcfOUlNjHRU7Tj4iYUtFYNZmK97bRfZc7wW8+c1q
- pKfhcoTl63WWXqiq2GPx6b37zXhSjNxJ+hHPKjsjSxAFrMMosuHFmLW7DESYj498wQ/pEPv
- oQQIptYMHD+cby/Z8mk4VNCy241JRVDLgSyVEzE9nB7AIq1P91mgFTH/vMeRF7duRHSFrUC
- rmZg6W/ynmcuiejvmwj3g==
-UI-OutboundReport: notjunk:1;M01:P0:2UjISZo1GWY=;0GizpC+wqJBCexBDFcrIsPh2ZaE
- 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
- rUQcRGDAeMLCCY2G0WMCPZk22DXZ+n
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmx.de; 
- s=s31663417; t=1782765993; x=1783370793; i=fiona.klute@gmx.de;
- bh=UhzO7+8JFXtdpHxG5yh2PKiYdR2Sho9sfVQxm6sxbh4=;
- h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:
- References:From:In-Reply-To:Content-Type:
- Content-Transfer-Encoding:cc:content-transfer-encoding:
- content-type:date:from:message-id:mime-version:reply-to:subject:
- to;
- b=KXhPVEOUrwx3ljzRzi2OyVpzeZjzDjc7Ag9TJYd3r2CVzrVIQV++f7c/Qd0IR77m
- GMvVSlJCzXXdEo6vk7l5ALBOQsyUU/clICCtp+VDOZRMpwNtn9M3lR86kHnfFvxFn
- 5AfKt7wuFO+BTTno2S2VnvJNiez6DRFKG6oY5O6QtShiflNCffO9HgSZyKjOPprcH
- t/71fYq43n2BiCu1CN2TRcpDx6KnkA2jnb3Up6z4bwub9Yg+OwnvrT4804uAYiphU
- yW0r4hfmk8vWigcJHot/5LC6OfwLVfW4E+440tWQ2cf4XXLIVxcgkrDxEdBBkdu3A
- 5MO6at73xWxCJYCfEQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=mind.be; s=google; t=1782766772; x=1783371572; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:to
+ :from:from:to:cc:subject:date:message-id:reply-to;
+ bh=OxEt96V8HQ75ZOPN+iO6b3qXe/T6xE9722KAShARk5s=;
+ b=LfZLuY+HrQBUD01YNyYNUtICtmDpXGs/YalClh9A5p9zPTC1jmPBFYbLWgZobm2/em
+ PR9t7GK2n7vkY3AZSW5Cvt5oHra2u7PbnZuN2HDF4sObZ2ximHz8W1zzSOQlxvEU/3fb
+ wY9AL0OS+4fUxnV9pIbRgnREU0qjKSm56ZU3gCZbkoHkMVW65DPs55ngrXVc7pwQSnay
+ 23HZg9FRZg+XKmZFVrcLFcFTgAuD2WEfN5CelerHhxDzw9qouIX0JWPeSkU+TEf0Q8aP
+ awnaxxvWSZw38YcFRMc0mra9jIfZ5L0Y38I9+a4iFmqOtobf0ldcsL/DdVBU+w0dHmb8
+ jwWA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
- header.from=gmx.de
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
- header.s=s31663417 header.b=KXhPVEOU
-Subject: Re: [Buildroot] [PATCH 1/1] support/testing:
- TestPythonPy3NetworkmanagerGoi: check we actually get data
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=LfZLuY+H
+Subject: [Buildroot] [PATCH] package/sudo: backport patch CVE-2026-35535
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -224,59 +117,204 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Fiona Klute via buildroot <buildroot@buildroot.org>
-Reply-To: Fiona Klute <fiona.klute@gmx.de>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+From: Thomas Perale via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Perale <thomas.perale@mind.be>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgUm9tYWluIQoKQW0gMjkuMDYuMjYgdW0gMjI6MTQgc2NocmllYiBSb21haW4gTmFvdXI6Cj4g
-SGVsbG8gRmlvbmEsIEFsbCwKPiAKPiBMZSAyNy8wNi8yMDI2IMOgIDEzOjM0LCBGaW9uYSBLbHV0
-ZSB2aWEgYnVpbGRyb290IGEgw6ljcml0wqA6Cj4+IFRoZSBzYW1wbGUgc2NyaXB0IHdvdWxkJ3Zl
-IHBhc3NlZCBldmVuIGlmIHRoZSBjb25uZWN0aW9ucyBsaXN0IHdhcwo+PiBlbXB0eS4gQ2hlY2sg
-dGhhdCB0aGVyZSBpcyBhdCBsZWFzdCBvbmUgY29ubmVjdGlvbiwgYW5kIHRoYXQgdGhlCj4+IHNh
-bXBsZSBzY3JpcHQgY2FuIHJlYWQgbG9vcGJhY2sgZGV2aWNlIGluZm9ybWF0aW9uLgo+Pgo+PiBT
-aWduZWQtb2ZmLWJ5OiBGaW9uYSBLbHV0ZSA8ZmlvbmEua2x1dGVAZ214LmRlPgo+PiAtLS0KPj4g
-ICAuLi4vdGVzdHMvcGFja2FnZS9zYW1wbGVfcHl0aG9uX25ldHdvcmttYW5hZ2VyX2dvaS5weSAg
-ICAgfCA4ICsrKysrKysrCj4+ICAgMSBmaWxlIGNoYW5nZWQsIDggaW5zZXJ0aW9ucygrKQo+Pgo+
-PiBkaWZmIC0tZ2l0IGEvc3VwcG9ydC90ZXN0aW5nL3Rlc3RzL3BhY2thZ2Uvc2FtcGxlX3B5dGhv
-bl9uZXR3b3JrbWFuYWdlcl9nb2kucHkgYi9zdXBwb3J0L3Rlc3RpbmcvdGVzdHMvcGFja2FnZS9z
-YW1wbGVfcHl0aG9uX25ldHdvcmttYW5hZ2VyX2dvaS5weQo+PiBpbmRleCAyNDBlODQzN2ZkLi5k
-ZmY2OGU2NmY5IDEwMDY0NAo+PiAtLS0gYS9zdXBwb3J0L3Rlc3RpbmcvdGVzdHMvcGFja2FnZS9z
-YW1wbGVfcHl0aG9uX25ldHdvcmttYW5hZ2VyX2dvaS5weQo+PiArKysgYi9zdXBwb3J0L3Rlc3Rp
-bmcvdGVzdHMvcGFja2FnZS9zYW1wbGVfcHl0aG9uX25ldHdvcmttYW5hZ2VyX2dvaS5weQo+PiBA
-QCAtMjQsMyArMjQsMTEgQEAgZm9yIGMgaW4gY29ubmVjdGlvbnM6Cj4+ICAgICAgIHByaW50KCJ7
-fToiLmZvcm1hdChjLmdldF9pZCgpKSkKPj4gICAgICAgYy5mb3JfZWFjaF9zZXR0aW5nX3ZhbHVl
-KHByaW50X3ZhbHVlcywgTm9uZSkKPj4gICAgICAgcHJpbnQoIlxuIikKPj4gK3ByaW50KCJmb3Vu
-ZCB7fSBkZWZpbmVkIGNvbm5lY3Rpb25zIi5mb3JtYXQobGVuKGNvbm5lY3Rpb25zKSkpCj4+ICth
-c3NlcnQgbGVuKGNvbm5lY3Rpb25zKSA+IDAKPj4gKwo+PiArIyBjaGVjayB0aGF0IHdlIGNhbiBm
-aW5kIHRoZSBsb29wYmFjayBkZXZpY2UgLi4uCj4+ICtsb29wYmFjayA9IGNsaWVudC5nZXRfZGV2
-aWNlX2J5X2lmYWNlKCJsbyIpCj4+ICsjIC4uLiBhbmQgcmVhZCBpdHMgdHlwZSBhbmQgc3RhdHVz
-IGFzIGV4cGVjdGVkCj4+ICthc3NlcnQgbG9vcGJhY2suZ2V0X2RldmljZV90eXBlKCkubmFtZSA9
-PSAiTE9PUEJBQ0siCj4+ICthc3NlcnQgbG9vcGJhY2suZ2V0X3N0YXRlKCkubmFtZSA9PSAiQUNU
-SVZBVEVEIgo+IAo+IEhhdmUgeW91IGNoZWNrZWQgdGhhdCB0aGlzIHRlc3QgaXMgd29ya2luZyBh
-cyBleHBlY3RlZCB1c2luZyBhIGdpdGxhYiBydW5uZXIgPwo+IAo+IFdlIGhhZCBzb21lIGlzc3Vl
-IHJlY2VudGx5IHVzaW5nIGxvY2FsIG5ldHdvcms6Cj4gCj4gU2VlOgo+IGh0dHBzOi8vZ2l0bGFi
-LmNvbS9idWlsZHJvb3Qub3JnL2J1aWxkcm9vdC8tL2NvbW1pdC9hMzY3MzYyYWYwMGVkMzQ5OTE1
-YjBiNDQ5NmViZWI5OTEwZmM4NmU0Cj4gCj4gQ2FuIHlvdSBkb3VibGUgY2hlY2s/Cklzc3VlIHRo
-ZXJlIHdhcyB1c2luZyB0aGUgbG9vcGJhY2sgZGV2aWNlIG9mIHRoZSBHaXRsYWIgcnVubmVyLgoK
-VGhpcyB0ZXN0IGRvZXNuJ3QgZG8gdGhhdDogVGhlIHBhdGNoIGNoYW5nZXMgdGhlIHNhbXBsZSBz
-Y3JpcHQgcnVubmluZyAKaW4gdGhlIHRlc3QgVk0gKHRoZSBRZW11IGluc3RhbmNlIHN0YXJ0ZWQg
-YnkgdGhlIHRlc3QpLCB0byBjaGVjayB0aGF0IApOZXR3b3JrTWFuYWdlciBydW5uaW5nIGluIHRo
-YXQgVk0gY2FuIHByb3ZpZGUgaW5mb3JtYXRpb24gb24gdGhlIApsb29wYmFjayBkZXZpY2Ugb2Yg
-dGhlIFZNIGl0c2VsZi4gRXZlcnl0aGluZyBpcyBjb250YWluZWQgd2l0aGluIFFlbXUsIAppZiB0
-aGF0IGRvZXNuJ3Qgd29yayBjbGVhcmx5IHNvbWV0aGluZyBpbiB0aGUgYnVpbGQgaXMgYnJva2Vu
-LiBBbHNvIGl0IApkb2Vzbid0IGRvIGFueSBJUCBjb21tdW5pY2F0aW9uLCBub3QgZXZlbiBhIHBp
-bmcsIGl0IGp1c3QgY2hlY2tzIHRoYXQgTk0gCmNhbiBzZWUgdGhlIGxvb3BiYWNrIGRldmljZS4g
-VGhlIHRlc3QgaXMgZGVmaW5lZCBpbiAKc3VwcG9ydC90ZXN0aW5nL3Rlc3RzL3BhY2thZ2UvdGVz
-dF9weXRob25fbmV0d29ya21hbmFnZXJfZ29pLnB5IAoodW5jaGFuZ2VkIGluIHRoZSBwYXRjaCku
-CgpJZiBHaXRsYWIgcnVubmVyIHNlY3VyaXR5IHBvbGljaWVzIGNvdWxkIGNhdXNlIHRoZSBsb29w
-YmFjayBkZXZpY2UgCmluc2lkZSB0aGUgUWVtdSBWTSB0byBkaXNhcHBlYXIgKG5vdCBzdXJlIGhv
-dyB0aGF0IGNvdWxkIGhhcHBlbiB3aXRob3V0IApzb21laG93IGJyZWFraW5nIFFlbXUgdG8gdGhl
-IHBvaW50IG9mIG5vdCBib290aW5nKSwgdGhlIHNhbWUgd291bGQgCmFmZmVjdCBhbGwgb3RoZXIg
-dGVzdHMgdXNpbmcgaXQsIGxpa2UgdGhlIGlwdGFibGVzIGFuZCBuZnRhYmxlcyBvbmVzIAooYW5k
-IHByb2JhYmx5IG1vcmUpLgoKQmVzdCByZWdhcmRzLApGaW9uYQoKX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWls
-ZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9s
-aXN0aW5mby9idWlsZHJvb3QK
+This backport is provided thanks to the Debian community [1].
+
+- CVE-2026-35535:
+    In Sudo through 1.9.17p2 before 3e474c2, a failure of a setuid,
+    setgid, or setgroups call, during a privilege drop before running the
+    mailer, is not a fatal error and can lead to privilege escalation.
+
+For more information, see:
+    https://www.cve.org/CVERecord?id=CVE-2026-35535
+
+[1] https://salsa.debian.org/sudo-team/sudo/-/blob/debian/trixie/debian/patches/0006-exec_mailer-Set-group-as-well-as-uid-when-running-th.patch
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+---
+ ...-well-as-uid-when-running-the-mailer.patch | 147 ++++++++++++++++++
+ package/sudo/sudo.mk                          |   4 +
+ 2 files changed, 151 insertions(+)
+ create mode 100644 package/sudo/0001-exec-mailer-set-group-as-well-as-uid-when-running-the-mailer.patch
+
+diff --git a/package/sudo/0001-exec-mailer-set-group-as-well-as-uid-when-running-the-mailer.patch b/package/sudo/0001-exec-mailer-set-group-as-well-as-uid-when-running-the-mailer.patch
+new file mode 100644
+index 0000000000..0bfcdd6f93
+--- /dev/null
++++ b/package/sudo/0001-exec-mailer-set-group-as-well-as-uid-when-running-the-mailer.patch
+@@ -0,0 +1,147 @@
++From 3e474c2f201484be83d994ae10a4e20e8c81bb69 Mon Sep 17 00:00:00 2001
++From: "Todd C. Miller" <Todd.Miller@sudo.ws>
++Date: Sat, 8 Nov 2025 15:34:02 -0700
++Subject: [PATCH] exec_mailer: Set group as well as uid when running the mailer
++
++Also make a setuid(), setgid() or setgroups() failure fatal.
++
++Found by the ZeroPath AI Security Engineer <https://zeropath.com>
++
++CVE: CVE-2026-35535
++Upstream: https://github.com/sudo-project/sudo/commit/3e474c2f201484be83d994ae10a4e20e8c81bb69
++Signed-off-by: Thomas Perale <thomas.perale@mind.be>
++---
++ include/sudo_eventlog.h      |  3 ++-
++ lib/eventlog/eventlog.c      | 21 +++++++++++++++++----
++ lib/eventlog/eventlog_conf.c |  4 +++-
++ plugins/sudoers/logging.c    |  2 +-
++ plugins/sudoers/policy.c     |  2 +-
++ 5 files changed, 24 insertions(+), 8 deletions(-)
++
++diff --git a/include/sudo_eventlog.h b/include/sudo_eventlog.h
++index eb9f4f4..485d259 100644
++--- a/include/sudo_eventlog.h
+++++ b/include/sudo_eventlog.h
++@@ -80,6 +80,7 @@ struct eventlog_config {
++     int syslog_rejectpri;
++     int syslog_alertpri;
++     uid_t mailuid;
+++    gid_t mailgid;
++     bool omit_hostname;
++     const char *logpath;
++     const char *time_fmt;
++@@ -151,7 +152,7 @@ void eventlog_set_syslog_rejectpri(int pri);
++ void eventlog_set_syslog_alertpri(int pri);
++ void eventlog_set_syslog_maxlen(size_t len);
++ void eventlog_set_file_maxlen(size_t len);
++-void eventlog_set_mailuid(uid_t uid);
+++void eventlog_set_mailuser(uid_t uid, gid_t gid);
++ void eventlog_set_omit_hostname(bool omit_hostname);
++ void eventlog_set_logpath(const char *path);
++ void eventlog_set_time_fmt(const char *fmt);
++diff --git a/lib/eventlog/eventlog.c b/lib/eventlog/eventlog.c
++index 5a32824..d56c4e4 100644
++--- a/lib/eventlog/eventlog.c
+++++ b/lib/eventlog/eventlog.c
++@@ -304,15 +304,13 @@ exec_mailer(int pipein)
++ 	syslog(LOG_ERR, _("unable to dup stdin: %m")); // -V618
++ 	sudo_debug_printf(SUDO_DEBUG_ERROR,
++ 	    "unable to dup stdin: %s", strerror(errno));
++-	sudo_debug_exit(__func__, __FILE__, __LINE__, sudo_debug_subsys);
++-	_exit(127);
+++	goto bad;
++     }
++ 
++     /* Build up an argv based on the mailer path and flags */
++     if ((mflags = strdup(evl_conf->mailerflags)) == NULL) {
++ 	syslog(LOG_ERR, _("unable to allocate memory")); // -V618
++-	sudo_debug_exit(__func__, __FILE__, __LINE__, sudo_debug_subsys);
++-	_exit(127);
+++	goto bad;
++     }
++     argv[0] = sudo_basename(mpath);
++ 
++@@ -331,11 +329,23 @@ exec_mailer(int pipein)
++     if (setuid(ROOT_UID) != 0) {
++ 	sudo_debug_printf(SUDO_DEBUG_ERROR, "unable to change uid to %u",
++ 	    ROOT_UID);
+++	goto bad;
+++    }
+++    if (setgid(evl_conf->mailgid) != 0) {
+++	sudo_debug_printf(SUDO_DEBUG_ERROR, "unable to change gid to %u",
+++	    (unsigned int)evl_conf->mailgid);
+++	goto bad;
+++    }
+++    if (setgroups(1, &evl_conf->mailgid) != 0) {
+++	sudo_debug_printf(SUDO_DEBUG_ERROR, "unable to set groups to %u",
+++	    (unsigned int)evl_conf->mailgid);
+++	goto bad;
++     }
++     if (evl_conf->mailuid != ROOT_UID) {
++ 	if (setuid(evl_conf->mailuid) != 0) {
++ 	    sudo_debug_printf(SUDO_DEBUG_ERROR, "unable to change uid to %u",
++ 		(unsigned int)evl_conf->mailuid);
+++	    goto bad;
++ 	}
++     }
++     sudo_debug_exit(__func__, __FILE__, __LINE__, sudo_debug_subsys);
++@@ -347,6 +357,9 @@ exec_mailer(int pipein)
++     sudo_debug_printf(SUDO_DEBUG_ERROR, "unable to execute %s: %s",
++ 	mpath, strerror(errno));
++     _exit(127);
+++bad:
+++    sudo_debug_exit(__func__, __FILE__, __LINE__, sudo_debug_subsys);
+++    _exit(127);
++ }
++ 
++ /* Send a message to the mailto user */
++diff --git a/lib/eventlog/eventlog_conf.c b/lib/eventlog/eventlog_conf.c
++index 0663a38..ec3b569 100644
++--- a/lib/eventlog/eventlog_conf.c
+++++ b/lib/eventlog/eventlog_conf.c
++@@ -70,6 +70,7 @@ static struct eventlog_config evl_conf = {
++     MAXSYSLOGLEN,		/* syslog_maxlen */
++     0,				/* file_maxlen */
++     ROOT_UID,			/* mailuid */
+++    ROOT_GID,			/* mailgid */
++     false,			/* omit_hostname */
++     _PATH_SUDO_LOGFILE,		/* logpath */
++     "%h %e %T",			/* time_fmt */
++@@ -151,9 +152,10 @@ eventlog_set_file_maxlen(size_t len)
++ }
++ 
++ void
++-eventlog_set_mailuid(uid_t uid)
+++eventlog_set_mailuser(uid_t uid, gid_t gid)
++ {
++     evl_conf.mailuid = uid;
+++    evl_conf.mailgid = gid;
++ }
++ 
++ void
++diff --git a/plugins/sudoers/logging.c b/plugins/sudoers/logging.c
++index bd4de92..9535289 100644
++--- a/plugins/sudoers/logging.c
+++++ b/plugins/sudoers/logging.c
++@@ -1157,7 +1157,7 @@ init_eventlog_config(void)
++     eventlog_set_syslog_alertpri(def_syslog_badpri);
++     eventlog_set_syslog_maxlen(def_syslog_maxlen);
++     eventlog_set_file_maxlen(def_loglinelen);
++-    eventlog_set_mailuid(ROOT_UID);
+++    eventlog_set_mailuser(ROOT_UID, ROOT_GID);
++     eventlog_set_omit_hostname(!def_log_host);
++     eventlog_set_logpath(def_logfile);
++     eventlog_set_time_fmt(def_log_year ? "%h %e %T %Y" : "%h %e %T");
++diff --git a/plugins/sudoers/policy.c b/plugins/sudoers/policy.c
++index f3adfb0..27f6e58 100644
++--- a/plugins/sudoers/policy.c
+++++ b/plugins/sudoers/policy.c
++@@ -639,7 +639,7 @@ sudoers_policy_deserialize_info(struct sudoers_context *ctx, void *v,
++     }
++ 
++ #ifdef NO_ROOT_MAILER
++-    eventlog_set_mailuid(ctx->user.uid);
+++    eventlog_set_mailuser(ctx->user.uid, ctx->user.gid);
++ #endif
++ 
++     /* Dump settings and user info (XXX - plugin args) */
+diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
+index 8602e62b0b..e28f7815f9 100644
+--- a/package/sudo/sudo.mk
++++ b/package/sudo/sudo.mk
+@@ -12,6 +12,10 @@ SUDO_LICENSE = ISC, BSD-3-Clause
+ SUDO_LICENSE_FILES = LICENSE.md
+ SUDO_CPE_ID_VERSION = $(SUDO_VERSION_MAJOR)
+ SUDO_CPE_ID_UPDATE = $(SUDO_VERSION_MINOR)
++
++# 0001-exec-mailer-set-group-as-well-as-uid-when-running-the-mailer.patch
++SUDO_IGNORE_CVES += CVE-2026-35535
++
+ SUDO_SELINUX_MODULES = sudo
+ # This is to avoid sudo's make install from chown()ing files which fails
+ SUDO_INSTALL_TARGET_OPTS = INSTALL_OWNER="" DESTDIR="$(TARGET_DIR)" install
+-- 
+2.54.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
