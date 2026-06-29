@@ -1,113 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24337C43327
-	for <buildroot@archiver.kernel.org>; Mon, 29 Jun 2026 10:23:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9798C43458
+	for <buildroot@archiver.kernel.org>; Mon, 29 Jun 2026 10:54:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A2BCD812F6;
-	Mon, 29 Jun 2026 10:23:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6CC1840C35;
+	Mon, 29 Jun 2026 10:54:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MK8VTWZvSKF2; Mon, 29 Jun 2026 10:23:17 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id stHgIi3lU5VA; Mon, 29 Jun 2026 10:54:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D104881337
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 858CF40B8B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1782728596;
-	bh=5nc5B6+eDuvDGQMxDBJvMbpQDm/4eaz8wbwznSQM5do=;
-	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=PSpnJ4o0CCVH5IHyh1XqvnPZqxk6CrTQrDTUGZD9V+WkSo5WWtOTCJENJ5YiIqAWo
-	 2HfGthFX2UByl3iA5Sac29MPd+wxBk9M1FyS84lTZObf9lKpFtCDmjPIqp4MOqdBlp
-	 MfmENzN3/7Ac7QF/rxZmWy/GAyOZO5clLKEDY4ZlpJEdzagBKrkmtWOeeE8nPlDduT
-	 hqcLZcSoTzAklf5udgQFIGgC9aK+8yAgsmWDbaW5pInl1TVmF0eG+Td43yQ5suP44h
-	 vGAzQ/PZc0bVK/VUZHEjNM2Yppv2AJGb/cC5DfYTM11hZGJIi9flw/6gEJCEEg8D2f
-	 Vu/27kmypkcsw==
+	s=default; t=1782730464;
+	bh=PFtfs68l57Brx2mYqZsJtj7ZjVquIBkmecBraduQl4k=;
+	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=arqQpskdYReypERDcohF5E8TSCAk2QRHv3Vpj+o9l/XpewZWkq3K6pu2TGQu0DHSb
+	 ZeWtx+OVFr2pkGiNchPU6dXkTpU2GmRaUNzhqCB8cuPyvKdSkUD8ynuH7YX90qCjO+
+	 QcaasK7ivMV7l8Wjs5PuyN3kLk8glO45Q/ovVaicuaP/Q7zNhS5fbZTRGNlPYjuHR8
+	 OtqldJ0cqk+bSJZwKPjIxcDy0AZGc9VIesZr0lZ0aOgrw8yd964LWxn2GEWwhrP/cY
+	 mAgaWkw1lPe3DUY24Q71Owdxv21xAoZJ3r1kIcw7zxSiDX2WaIrWxr5GGHcEOvpQSC
+	 qkr1xYJC+H1Xg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D104881337;
-	Mon, 29 Jun 2026 10:23:16 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 2E9D9264
- for <buildroot@buildroot.org>; Mon, 29 Jun 2026 10:23:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 858CF40B8B;
+	Mon, 29 Jun 2026 10:54:24 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9C9C9264
+ for <buildroot@buildroot.org>; Mon, 29 Jun 2026 10:54:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2427B81337
- for <buildroot@buildroot.org>; Mon, 29 Jun 2026 10:23:15 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 91A8A6079A
+ for <buildroot@buildroot.org>; Mon, 29 Jun 2026 10:54:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RNDr2sazTqMm for <buildroot@buildroot.org>;
- Mon, 29 Jun 2026 10:23:14 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::434; helo=mail-wr1-x434.google.com;
- envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 125B4812F6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 125B4812F6
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
- [IPv6:2a00:1450:4864:20::434])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 125B4812F6
- for <buildroot@buildroot.org>; Mon, 29 Jun 2026 10:23:13 +0000 (UTC)
-Received: by mail-wr1-x434.google.com with SMTP id
- ffacd0b85a97d-471eeac43bfso1633125f8f.3
- for <buildroot@buildroot.org>; Mon, 29 Jun 2026 03:23:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1782728591; x=1783333391;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=aI/3GlDT5qjYbSjU8FIcw7RfwyXw1yxeaX+ZtLLRr14=;
- b=DguPrIPxzU2zgOg9SW7IJ+12w5exTknc6aYtxx3qrgQ3OadNSZoi6gsCqKJ3jyJjMn
- HIFc/F8xXKE3dDk9lJ5Utggv5Iv7JceGFBHyfFoITT4DYYLGTld8JyIH5DYs+CV1pjxC
- /KkSD0j0s+thOyhSRYfF5A7vbapm7khtLPtDUjuheTx0cl93dGWstWBrHp1QqGJ4KAvb
- 9UhdclWrEEA8Llz+eJoDePmhnm3eEklzjrgBmF50rD5KScrLkEYJU0JyW3If987JWYdM
- L3cLpPocfCEjvzaKSUfJkCO9/myUKYfUMliFSDcPVKnBwO17NvPGJt7Oz+RPXGPcMmAx
- 5BWQ==
-X-Gm-Message-State: AOJu0YxYLkdut0Yz9iFfzamCSE8yYA9EO/ugwFhRJx3syhS6gXpPnWC1
- 4EbcIuSRRn/h3svVjr17ztxJlcZF4YkB+5f75/SbTQOkMTLKifJGZbKtvt4+kTYCGAftnG6/sAo
- 23IOp
-X-Gm-Gg: AfdE7cmEbZDaAkMSZbanKh374RDZYYK/SOrKZLeAnQPdDvVen/ESwxxij3GBrBnaJ4t
- GfW4kqrWEqd93Q8vKI0sNXGxJPVTfy+y9xrQTAY9731mSOyIMVpaprv7rECyYSnHGThGctTmQtN
- VcPkg0lR5xK2khm+/JepqKllHHZoRP0t0dIkUDSaBOJ7bwiMTue1zxZ3Z//4Rht+lmaUVCqFZnP
- CUd1y0plYv3aeRj21E1BrKHJpNNbWfQ6W4uI11mAkWG9L1yaIh701CERN1faDlgvBM3iUHjkRy+
- B7DRKqWCVD4d5xjcnrkgtr8V7Sp1kspP9RXEulotKxJ333h9Iyp18Csv7alqt1cUCkA4YRSQd03
- M7vjLYYQXvpOFKOPGNiu6DmF/pjePhkIoolIxb8p3IwZEy2xADfiggDepVrtmkfhdWqR3ddkakp
- mWVQ50tjwL8ZOETMIQArXsI22GT8MuWT8leVO6ng76NTj/hxmw0INS22mqgstSkvTszA==
-X-Received: by 2002:a05:6000:2483:b0:472:79bc:3919 with SMTP id
- ffacd0b85a97d-47279bc3aa5mr8483090f8f.39.1782728591339; 
- Mon, 29 Jun 2026 03:23:11 -0700 (PDT)
-Received: from dragon.home (154.186-200-80.adsl-dyn.isp.belgacom.be.
- [80.200.186.154]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-46c221d93eesm46941432f8f.20.2026.06.29.03.23.10
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 29 Jun 2026 03:23:11 -0700 (PDT)
-To: buildroot@buildroot.org
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Pierre-Jean Texier <texier.pj2@gmail.com>, thomas.perale@mind.be
-Date: Mon, 29 Jun 2026 12:22:20 +0200
-Message-ID: <20260629102220.2654363-1-titouan.christophe@mind.be>
-X-Mailer: git-send-email 2.54.0
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id N6giwxe_3uW5 for <buildroot@buildroot.org>;
+ Mon, 29 Jun 2026 10:54:21 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 35F4560744
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 35F4560744
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 35F4560744
+ for <buildroot@buildroot.org>; Mon, 29 Jun 2026 10:54:20 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 1078637367; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Mon, 29 Jun 2026 10:54:15 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
+ (envelope-from <peter@korsgaard.com>) id 1we9cz-00000001yjM-1lgq;
+ Mon, 29 Jun 2026 12:54:13 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Fiona Klute <fiona.klute@gmx.de>
+Cc: buildroot@buildroot.org,  Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Thomas Perale <thomas.perale@mind.be>
+In-Reply-To: <20260627120452.803450-1-fiona.klute@gmx.de> (Fiona Klute's
+ message of "Sat, 27 Jun 2026 14:04:52 +0200")
+References: <20260627120452.803450-1-fiona.klute@gmx.de>
+Date: Mon, 29 Jun 2026 12:54:13 +0200
+Message-ID: <877bnhvcq2.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1782728591; x=1783333391; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=aI/3GlDT5qjYbSjU8FIcw7RfwyXw1yxeaX+ZtLLRr14=;
- b=XfUkzncdoLZ9qTR1Q2q0/hQPaQwdDsBkvOLcdquqMv4BrEntq0wu0LtqTzgULGjbML
- px0t3nNqfCgbZxmRybcFVYX+5JogxwI+0YxVA+GPxxlvpb//crLMn/rn0KJVxKfPcjS2
- 7iisMKMBYYCUaxR3INyd073VXziXcn00i+JT0VXOmRQZZRYyHH+S61u/aU1nZTMI8wTX
- VFns1u6FdIH/DlefG3t0LhcmhyKwah/gWJdypYS9mIpvX/TFtw3qDnF+i9zZ5VdtotVr
- e3NAvM8H2PBwOW1NMw7AXFRjpuDh94d3af7hsZX853BEo3yOl6TwrdhAaQhqAxHSu90Y
- MoDQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=XfUkzncd
-Subject: [Buildroot] [PATCH for 2025.02.x] package/mongoose: security bump
- to v7.22
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=Es7tDGK2/poZop7iRxGhc89m+TkbTE2C/oeRR/40SoEzdN8/MtZByUKceiliFRIgJZOadnhnkCekdv1+tDkcsTBsxO3ErgAqlc4nbIiIB9ShC5mSQylLJpVaflTnLg4BxsS6FRJ9PmcYNnNQD/McHUFG0v7jmr9SM6a/M3zHoVYyKUhvMITs81Z68zPfyVIb7n5ZHtvrpEn18iclEH75fJxcabYEivKD5AX2HW1NiRMMT5yxpUBBeLNvO4SN/xtnjrqORrvwqSab2lA4h2C1zYzZIn6bYdE7Ut6CsIvUUku2rPF+XB9pb5PDntgt/bcHmVYQrTuxdlxcP9lUm5RI1A==;
+ s=purelymail2; d=purelymail.com; v=1;
+ bh=xXNTRKYMnASIZs7kbVwjkj6gaiqGPRTKV7Tor9LjbZk=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail2 header.b=Es7tDGK2
+Subject: Re: [Buildroot] [PATCH 1/1] package/libglib2: drop unused
+ 0001-meson.build-add-girdir-to-gio-2.0.pc-and-glib-2.0.pc.patch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -119,119 +94,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Titouan Christophe via buildroot <buildroot@buildroot.org>
-Reply-To: Titouan Christophe <titouan.christophe@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-As indicated in the release notes:
-https://github.com/cesanta/mongoose/releases/tag/7.22
+>>>>> "Fiona" == Fiona Klute <fiona.klute@gmx.de> writes:
 
-    This release includes a substantial number of security fixes,
-    reflecting increased use of AI-powered security tools and valuable
-    contributions from the security research community.
+ > In 11aa1cfa5af9a77a0a9f726bd38f1b7db659c0bf the patch was accidentally
+ > moved into a versioned directory with the wrong version (2.82.0
+ > instead of 2.82.4) and thus not applied. However, there have been no
+ > issues reported.
 
-    Please note that many of the resolved issues have not yet been assigned
-    CVE identifiers. The assignment process is underway, and these release
-    notes will be updated as additional CVEs become available.
+ > The patch description mentions being needed to fix build errors in
+ > package/atk and package/libnice. It was originally added in
+ > b094f88a4d501101bfba9b65491209e6a0fe0397, and amended for libnice in
+ > 2c916b400bc608512db790d97df010ca666b6dd2. package/atk was removed in
+ > 2c3ca7bea1de76163aeef432412eb14551ed0581, because atk has been merged
+ > into at-spi2-core. Both at-spi2-core and libnice are Meson packages,
+ > as was atk at the time of its removal.
 
-Given the large number of security fixes included in that release, bump the
-version for Buildroot LTS instead of applying individual patches
+ > Both current packages build with the following configuration (tested
+ > using utils/test-pkg):
 
-Along with the version bump:
-- Remove patch for a security issue fixed by the version bump
-- Update license hash following the update of the copyright year in
-  https://github.com/cesanta/mongoose/commit/1f9e1a38b55455ed63a616aeb7b1070f2a2d4ddd
+ > BR2_PACKAGE_PYTHON3=y
+ > BR2_PACKAGE_GOBJECT_INTROSPECTION=y
+ > BR2_PACKAGE_LIBNICE=y
+ > BR2_PACKAGE_AT_SPI2_CORE=y
 
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
----
- .../mongoose/0001-improve-resiliency.patch    | 37 -------------------
- package/mongoose/mongoose.hash                |  4 +-
- package/mongoose/mongoose.mk                  |  5 +--
- 3 files changed, 3 insertions(+), 43 deletions(-)
- delete mode 100644 package/mongoose/0001-improve-resiliency.patch
+ > Evidently the patch is no longer needed, presumably because the
+ > correct search path for GIR files is set by other means, and we can
+ > remove it instead of fixing the version number of the patch directory.
 
-diff --git a/package/mongoose/0001-improve-resiliency.patch b/package/mongoose/0001-improve-resiliency.patch
-deleted file mode 100644
-index edeea4efba..0000000000
---- a/package/mongoose/0001-improve-resiliency.patch
-+++ /dev/null
-@@ -1,37 +0,0 @@
--From 64abf061bf018fd78f31c200a57a3fb04f9f3ef2 Mon Sep 17 00:00:00 2001
--From: "Sergio R. Caprile" <scaprile@cesanta.com>
--Date: Mon, 13 Oct 2025 10:43:45 -0300
--Subject: [PATCH] improve resiliency
--
--CVE: CVE-2025-65502
--Upstream: https://github.com/cesanta/mongoose/commit/64abf061bf018fd78f31c200a57a3fb04f9f3ef2
--Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-----
-- mongoose.c        | 1 +
-- src/tls_openssl.c | 1 +
-- 2 files changed, 2 insertions(+)
--
--diff --git a/mongoose.c b/mongoose.c
--index 4c72be8201..f860ab3b07 100644
----- a/mongoose.c
--+++ b/mongoose.c
--@@ -14581,6 +14581,7 @@ static STACK_OF(X509_INFO) * load_ca_certs(struct mg_str ca) {
-- static bool add_ca_certs(SSL_CTX *ctx, STACK_OF(X509_INFO) * certs) {
--   int i;
--   X509_STORE *cert_store = SSL_CTX_get_cert_store(ctx);
--+  if (cert_store == NULL) return false;
--   for (i = 0; i < sk_X509_INFO_num(certs); i++) {
--     X509_INFO *cert_info = sk_X509_INFO_value(certs, i);
--     if (cert_info->x509 && !X509_STORE_add_cert(cert_store, cert_info->x509))
--diff --git a/src/tls_openssl.c b/src/tls_openssl.c
--index 37838d95ba..f51d6dd8b7 100644
----- a/src/tls_openssl.c
--+++ b/src/tls_openssl.c
--@@ -39,6 +39,7 @@ static STACK_OF(X509_INFO) * load_ca_certs(struct mg_str ca) {
-- static bool add_ca_certs(SSL_CTX *ctx, STACK_OF(X509_INFO) * certs) {
--   int i;
--   X509_STORE *cert_store = SSL_CTX_get_cert_store(ctx);
--+  if (cert_store == NULL) return false;
--   for (i = 0; i < sk_X509_INFO_num(certs); i++) {
--     X509_INFO *cert_info = sk_X509_INFO_value(certs, i);
--     if (cert_info->x509 && !X509_STORE_add_cert(cert_store, cert_info->x509))
-diff --git a/package/mongoose/mongoose.hash b/package/mongoose/mongoose.hash
-index 18b5e222ac..1a60b0c89c 100644
---- a/package/mongoose/mongoose.hash
-+++ b/package/mongoose/mongoose.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  b6a6f69912c2cd0c67f85633c6b578d4dcdf385c3628acdcd21de28787c676e5  mongoose-7.17.tar.gz
--sha256  9abc2509d90c01ff2a0c91abf73582cdbcf1d2dbcc0b7973097eced43cf4cdd4  LICENSE
-+sha256  87727cd2c240ff559b16e9710d44b61ba3513dbee50428bd8ee1596d7c58460a  mongoose-7.22.tar.gz
-+sha256  f0d9cfd6f7d92f6ec061a5fb2882f67d2521a151bf09a637c33ca6181834b048  LICENSE
-diff --git a/package/mongoose/mongoose.mk b/package/mongoose/mongoose.mk
-index 9b8920a9f3..207d31cdfa 100644
---- a/package/mongoose/mongoose.mk
-+++ b/package/mongoose/mongoose.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MONGOOSE_VERSION = 7.17
-+MONGOOSE_VERSION = 7.22
- MONGOOSE_SITE = $(call github,cesanta,mongoose,$(MONGOOSE_VERSION))
- MONGOOSE_LICENSE = GPL-2.0
- MONGOOSE_LICENSE_FILES = LICENSE
-@@ -13,9 +13,6 @@ MONGOOSE_INSTALL_STAGING = YES
- # static library
- MONGOOSE_INSTALL_TARGET = NO
- 
--# 0001-improve-resiliency.patch
--MONGOOSE_IGNORE_CVES += CVE-2025-65502
--
- MONGOOSE_CFLAGS = $(TARGET_CFLAGS) -std=gnu99
- 
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ > Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
+ > ---
+ > I admit it is a bit unsatisfying that it's unclear exactly *what*
+ > fixed that search path. Another bit of evidence I have is that when
+ > working on that libglib2 2.82.x and gobject-introspection 1.82.0
+ > version bump it was primarily for package/python-gobject, which also
+ > uses Meson, so it probably was either that bump or a Meson bump at
+ > some point before.
+
+Committed, thanks.
+
 -- 
-2.54.0
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
