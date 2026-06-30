@@ -1,112 +1,112 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54A4DC43458
-	for <buildroot@archiver.kernel.org>; Tue, 30 Jun 2026 03:05:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53BD0C43458
+	for <buildroot@archiver.kernel.org>; Tue, 30 Jun 2026 03:26:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BAEE581311;
-	Tue, 30 Jun 2026 03:05:16 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wTMmwF0kIu7i; Tue, 30 Jun 2026 03:05:16 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DBE958131B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1782788716;
-	bh=u7ljRDPZF0mJw+EM8zfwvzspWXOpm8d9kc5eomfipZ4=;
-	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=gQkIM7XZuxtAG6VS1RwX7rBuzl2b4SRWC5yi5RGrWtCP0TuqZ5G+siXyJ9oUYKFki
-	 vjzlBSLcF8OAI+j0LSP0yMnnzGiuvKBstxw3PWg5DbCPKbGxeWqqn+ODeluiapuDv8
-	 lJJxWWDhN0kNApn8jQ5bbr54EtMcPbnMHFAg5lA7aHTLqz9TVWlEQd6AO2oBZ+x9Bs
-	 vGk0zag/QqO+F38tGOQpsAKJyvrkTq+Xjd0rm+6VPJf2EOUZYTjXNfyHWwM9+oIE/T
-	 EOnjuDRPjA8q3k17wQSEHJse+hz/aL07JSp2JezXNTTUhDtbV5BOk3pJ75wK/cQ0CZ
-	 kzDPZFYCqSEyQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DBE958131B;
-	Tue, 30 Jun 2026 03:05:15 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id F19F4149
- for <buildroot@buildroot.org>; Tue, 30 Jun 2026 03:05:12 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D6EDB60891
- for <buildroot@buildroot.org>; Tue, 30 Jun 2026 03:05:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 238BF607EF;
+	Tue, 30 Jun 2026 03:26:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AfzpucFgnGpB for <buildroot@buildroot.org>;
- Tue, 30 Jun 2026 03:05:11 +0000 (UTC)
+ id pnCmnBe0uYcq; Tue, 30 Jun 2026 03:26:17 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 293C260880
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1782789977;
+	bh=dTDNH/MjckDj2zkHMmU6F009GoM4iloDY7RWdArn1zk=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=jnYabFdsUasE8SuWRokrECifagoSlWXRS65iMQHY+LmJIaL0VN4+FEIrnu7C7sOEl
+	 T60OqN2lWlZLmCSe4794WSCjrqik4S9E33o2nDx84KoCNxl7c4YdlnK/UedERMk9Py
+	 wOsh7H8IcqxX1jRz5Wwqyz3wIefzEUMeXLnp+b4xRcB8r+cYx8YRBZsHhVTTF2pc6o
+	 Fe340/n6uapn6phQEq86Z2BEGucJq+FV211c13Nwb4TlmXuaWpITO3iM5pS8YncNH9
+	 pfp47e+5+dbI9jnJIiUU5V3OmqKtHTape/fu54HHXy+Xej5rW57orP4BVANgQdhawj
+	 YJbAQeCiaIUOA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 293C260880;
+	Tue, 30 Jun 2026 03:26:17 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id B4DB21338
+ for <buildroot@buildroot.org>; Tue, 30 Jun 2026 03:26:15 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9AE3840127
+ for <buildroot@buildroot.org>; Tue, 30 Jun 2026 03:26:15 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id O90QP4oTnOJ0 for <buildroot@buildroot.org>;
+ Tue, 30 Jun 2026 03:26:15 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::42e; helo=mail-pf1-x42e.google.com;
+ client-ip=2607:f8b0:4864:20::42b; helo=mail-pf1-x42b.google.com;
  envelope-from=jms@tenstorrent.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 950AD605CA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 950AD605CA
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com
- [IPv6:2607:f8b0:4864:20::42e])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 950AD605CA
- for <buildroot@buildroot.org>; Tue, 30 Jun 2026 03:05:07 +0000 (UTC)
-Received: by mail-pf1-x42e.google.com with SMTP id
- d2e1a72fcca58-847a483e344so108554b3a.0
- for <buildroot@buildroot.org>; Mon, 29 Jun 2026 20:05:07 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org DDA9540111
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DDA9540111
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com
+ [IPv6:2607:f8b0:4864:20::42b])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id DDA9540111
+ for <buildroot@buildroot.org>; Tue, 30 Jun 2026 03:26:14 +0000 (UTC)
+Received: by mail-pf1-x42b.google.com with SMTP id
+ d2e1a72fcca58-847968ca62fso839522b3a.2
+ for <buildroot@buildroot.org>; Mon, 29 Jun 2026 20:26:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1782788707; x=1783393507;
+ d=1e100.net; s=20251104; t=1782789974; x=1783394774;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to;
- bh=yMEEIqVy9gtA+rfOd73nXPIDEMbjqskA3LJ/Ev3lraM=;
- b=QKiuuJpXZDbdduHo6n9CgE+xbuD3MiF2Cvs9BFAQCrDhcb3ngUU9wdok/5hB3Tsd1Z
- CIGluaybgJ3GLPntU/vODTOqZkjhC/2L4Nofpyve0dv2TSYFOurXFvzkoBJwvaf1Uofb
- nTE+us1rJCyzMB9mbw/vcaNPQQYq4iQNA7Cz72HxN7mx2LJc7VP+wDc2xD23d9nS3Ed0
- FhTc6tbwOygn3AvQ8bRJ2LqWq4Qc2MHDRgHFeQIBUQxvdQIgxzbQCFX0uoXmC2nesE2D
- DFXisckEiHNSAOPLeG04QKZFFPGZMU8/8Rf2TwsIbFdnXZrlFLWYB3kkiRjkyRkBLeXJ
- tSXA==
-X-Gm-Message-State: AOJu0YxYn82vEF3a6rqpgPyc+A4EE9rEiiyI0O2HhFifPzTaF5ExnDcp
- 2IfJpr3ypyMJjr14Cz0MnoXqDeYEGUXCM/c2ibiEPuWsH0JwiE6JfVdBCdPXQc68oyl/yfzUdMk
- CQiVHRII=
-X-Gm-Gg: AfdE7clQEl+0lLOWT+PW8khY70B6k0sfUii/zIauJiKDi8tc4djUJNbKnzS0ceJS6UD
- 7SvadFH2QqJDFu1qerQ2air5negIJ4CttdqU00wrU21cmomVuYpwnu1l5Qg34aHi9ZUDvg+uXh7
- Um/kKlpxvwafIhLs0LMhwyP95vStvKYU36TsCHxOvluxmJCSnegIhUipeHb9b4NH6ULzmhrXfJY
- K6GZm+GwOvHwQFg5bXkmLw2c3q14FgROwU7UuBx6Wf79tb4/cuG89+i1LnrT5VMydp8wDdhQjbf
- 93UG4kyawHfsoJHY/2PccfC8LqQUTpVgt/678NFjb84ryqp/3FEJQcLHpVnhEnBxni9PHuXgonU
- kIRTItinGrLAhn50sl2Hl4y5Bj5p2Q8N0bB0H2rtNFV1+O3f94zjwhlLu8Cp5Vf6htRKnZBoeuJ
- /P3spKbj2qExm5XqxdyPKaezYwf6zzeSbyuQyEjkK6J7ED
-X-Received: by 2002:a05:6a00:8c8:b0:847:9570:d408 with SMTP id
- d2e1a72fcca58-847a81827a0mr52323b3a.2.1782788707136; 
- Mon, 29 Jun 2026 20:05:07 -0700 (PDT)
+ bh=Tjgezf4DmAukAgjn1JS9AqVh3b+js08d7H9TK3AHLVw=;
+ b=b3XSXkK8S+XopMmHDAUsMC7VQ81E3fvy+2J15X6Eyx8JFI2D3enSYp4oMReRmWnMie
+ 3XDvbDLEzH5UScEMHdZhv01KlOgIiFFGmkfIcG7HWSEZv0CDGsylohf3IteDTYr4XOMK
+ yjhY4bDvkRWzm2df8b/1cc/2Uhi6ybqkmerW8VdsbT1W9hX795soOvE6ywwHPq9LDo9V
+ bT3uZk5f+6WYG/0BAjSIzPub7XNaSkibOUZRqm/GqFgVCe08fAU+/z8i+ZIUfEIo7UKv
+ OvFw0KvVkR7i5MCBPjiVI8X2+sMcZH/hdRgDvP6DaUVk7+5L01rCVcODMoIDqunr5ykU
+ XUqA==
+X-Gm-Message-State: AOJu0YzAZzcCXEcOV3p/3dip77T9529ebGOo92lheE6XWMFP83fU+gxL
+ 7AonKA6lTHGq+SyQs4xDits7iu/h3MdMF+GAtvBScuFbj4TOQwiQM5+q5mOeZc3YQDCkeXDkABl
+ aWWP+7V0=
+X-Gm-Gg: AfdE7cny7LxXobZoKJIatr1A1yRYXVbO7smvfFWwKrPe4LEpGCXm+ecZ2OLVF0cpdLQ
+ Pd0Su5lHEi2tagDg6Z8Emo5JeLJKdQB1/yYqC0ICPPwxUG7UhomUTjqR3Nd4jvfTzczrjHsa4cP
+ ZwKRgpNa6ZH0ZD1gfP6GUoY8LSuI1cH5noil9PsQrIv4dTRtdi/EHIKph0/OrJUHPf8DMjMr6Nb
+ k/KnCxHK5XHO5+xAnqbqmTXgr5P+uPdVH8hGxmi0cSzBrDeEsci6CoCqNmalrk7bojvlGTPB6H5
+ gDKEXWqLignVPVmkx0B6ANCDilOC1hIrG4JqvuXr2XvOOBV1ues7NgNqUOaHiiKFsvrWtt2VvXI
+ 5OE91+Fp0I8w61sNsnVmQBHOXmJ6ON5dpNU+M9YLThbL4GtS0D7reTRPAhe243RyZjkLmL7Wy4Q
+ GiUReuOOX6W+2zRV1OxBlqvBlU3lWbrEQckQ==
+X-Received: by 2002:a05:6a00:1253:b0:845:e2da:91a3 with SMTP id
+ d2e1a72fcca58-8479f27b323mr1403555b3a.30.1782789974013; 
+ Mon, 29 Jun 2026 20:26:14 -0700 (PDT)
 Received: from donnager-debian.. ([45.124.203.15])
  by smtp.gmail.com with ESMTPSA id
- d2e1a72fcca58-8479ff89f93sm823368b3a.4.2026.06.29.20.05.05
+ d2e1a72fcca58-8479fcfacafsm859733b3a.0.2026.06.29.20.26.12
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 29 Jun 2026 20:05:06 -0700 (PDT)
+ Mon, 29 Jun 2026 20:26:13 -0700 (PDT)
 To: buildroot@buildroot.org
-Cc: Alistair Francis <alistair@alistair23.me>
-Date: Tue, 30 Jun 2026 12:34:41 +0930
-Message-ID: <20260630030441.1520601-1-jms@oss.tenstorrent.com>
+Cc: Cyril Bur <cyrilbur@gmail.com>,
+	Thomas Huth <th.huth+br@posteo.eu>
+Date: Tue, 30 Jun 2026 12:56:00 +0930
+Message-ID: <20260630032600.1521428-1-jms@oss.tenstorrent.com>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=tenstorrent.com; s=google; t=1782788707; x=1783393507; darn=buildroot.org;
+ d=tenstorrent.com; s=google; t=1782789974; x=1783394774; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=yMEEIqVy9gtA+rfOd73nXPIDEMbjqskA3LJ/Ev3lraM=;
- b=BXAGAPs5GFxVI879+po63Ltrp/gTlkDK1wesfg647Y+Psw23PXuXL11Cs88gtgvZVd
- uizpGIaFMaiQJQIv9KOLNOl4TUHOtdpgRmlEVUYnoXxROfc6FwbpAYJBU/QHCyxh9Wyx
- vd0aXvEIC68U7ObjNBeyzMMUMbtBvuhEjSrQbZQD/tK5ZrjGP3aYk+ZemqeMsqL8CKsq
- 147s9P8mFMKRtAjII1Y4Q2wyz+tcSdjNLHc4ozbqrvrftTo/fTX12Du0c9m5Zl/ozOlg
- sCnIF0/GSFJjIfqWpVAQP3M0RKnJxFz/YgIwzew5AzmUHcU/dl3GAqVc5kCElnNYzwFb
- 2uTw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=Tjgezf4DmAukAgjn1JS9AqVh3b+js08d7H9TK3AHLVw=;
+ b=CUZUQOy6uKzu18KJqiVj8GOnhFjBEwYcJUUEy6hC39d8jNZoF4BmCRNdEWJupnRbov
+ yqvUgoToAnp2jSy/N5W3EgZdTSxi7BYPAQTTfvvDWLJsaIIvdxEw4xHYYGrD0ym2uVMW
+ AkWWZlVZh/cIUdO/cK3ZcHSBlSh/BzYuQ8suH5NG/H7qqBmWvwp0vSb3zBEaAUB+ioff
+ KJpYSgeg4d0zmQVznHenQcmPq8K9PvPmy6rVsMni9KHaLjsQNs8yYhXyHJ+lobLVNS8o
+ N5gkHs9c45lI/aaXnZLo0XwqEtHQPmpSiJbETyhIeT1+2z2YF5t1VHBiP8Kl7JQh6cBm
+ 2d8A==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=oss.tenstorrent.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=tenstorrent.com header.i=@tenstorrent.com
- header.a=rsa-sha256 header.s=google header.b=BXAGAPs5
-Subject: [Buildroot] [PATCH] boot/opensbi: Bump to v1.8.1
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=tenstorrent.com header.i=@tenstorrent.com
+ header.a=rsa-sha256 header.s=google header.b=CUZUQOy6
+Subject: [Buildroot] [PATCH] package: kvm-unit-tests: Update to latest
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -125,50 +125,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-v1.8 release notes:
+This resolves the risc-v build failure [1].
 
-  https://github.com/riscv-software-src/opensbi/releases/tag/v1.8
-  https://github.com/riscv-software-src/opensbi/releases/tag/v1.8.1
+[1] https://autobuild.buildroot.org/results/234eee7f3439fd78434bace87ba2390b74f038ae/
 
 Signed-off-by: Joel Stanley <jms@oss.tenstorrent.com>
 ---
- boot/opensbi/Config.in    | 4 ++--
- boot/opensbi/opensbi.hash | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/kvm-unit-tests/kvm-unit-tests.hash | 2 +-
+ package/kvm-unit-tests/kvm-unit-tests.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/boot/opensbi/Config.in b/boot/opensbi/Config.in
-index 986e380b48dd..6e26da63449e 100644
---- a/boot/opensbi/Config.in
-+++ b/boot/opensbi/Config.in
-@@ -19,7 +19,7 @@ choice
- 	  Select the specific OpenSBI version you want to use
+diff --git a/package/kvm-unit-tests/kvm-unit-tests.hash b/package/kvm-unit-tests/kvm-unit-tests.hash
+index ad0922df5904..f2f07a0731aa 100644
+--- a/package/kvm-unit-tests/kvm-unit-tests.hash
++++ b/package/kvm-unit-tests/kvm-unit-tests.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  60015b023f34261c134d714f4670926ac81483e286a16475eb4a5cedab00eefa  kvm-unit-tests-v2025-06-05.tar.bz2
++sha256  0d3b588163064be2188b668abdebb4183ac211eab83d0a3cdc9a93f463686bc3  kvm-unit-tests-v2026-04-17.tar.bz2
+ sha256  b3c9ca9e257f2eaae070cf0ccdf8770764f05a947a39a835e633413750a5777b  COPYRIGHT
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
+diff --git a/package/kvm-unit-tests/kvm-unit-tests.mk b/package/kvm-unit-tests/kvm-unit-tests.mk
+index 1ed902b1a006..b5b141574435 100644
+--- a/package/kvm-unit-tests/kvm-unit-tests.mk
++++ b/package/kvm-unit-tests/kvm-unit-tests.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_TARGET_OPENSBI_LATEST_VERSION
--	bool "1.7"
-+	bool "Latest version (1.8.1)"
- 
- config BR2_TARGET_OPENSBI_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -57,7 +57,7 @@ endif
- 
- config BR2_TARGET_OPENSBI_VERSION
- 	string
--	default "1.7" if BR2_TARGET_OPENSBI_LATEST_VERSION
-+	default "1.8.1" if BR2_TARGET_OPENSBI_LATEST_VERSION
- 	default BR2_TARGET_OPENSBI_CUSTOM_VERSION_VALUE \
- 		if BR2_TARGET_OPENSBI_CUSTOM_VERSION
- 	default "custom" if BR2_TARGET_OPENSBI_CUSTOM_TARBALL
-diff --git a/boot/opensbi/opensbi.hash b/boot/opensbi/opensbi.hash
-index c82d2de236e7..661f08189ea2 100644
---- a/boot/opensbi/opensbi.hash
-+++ b/boot/opensbi/opensbi.hash
-@@ -1,3 +1,3 @@
- # locally computed
--sha256  2cf856a4e5e2e052948ddb54ba48232b1f698b7f52e0374fc7d17d51e8c8f7ce  opensbi-1.7.tar.gz
-+sha256  fb1ae61a85e966322101acb1c982f84d9eaafc4de7dd474a7d7546d9bb321c6f  opensbi-1.8.1.tar.gz
- sha256  82d13fb1bf6bb162629deeea9eb9c117e74548d3b707e478967691fe79a68e21  COPYING.BSD
+-KVM_UNIT_TESTS_VERSION = 2025-06-05
++KVM_UNIT_TESTS_VERSION = 2026-04-17
+ KVM_UNIT_TESTS_SOURCE = kvm-unit-tests-v$(KVM_UNIT_TESTS_VERSION).tar.bz2
+ KVM_UNIT_TESTS_SITE = https://gitlab.com/kvm-unit-tests/kvm-unit-tests/-/archive/v$(KVM_UNIT_TESTS_VERSION)
+ KVM_UNIT_TESTS_LICENSE = GPL-2.0, LGPL-2.0
 -- 
-2.53.0
+2.47.3
 
 _______________________________________________
 buildroot mailing list
