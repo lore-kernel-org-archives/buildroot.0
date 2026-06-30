@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F077C43458
-	for <buildroot@archiver.kernel.org>; Tue, 30 Jun 2026 20:10:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D670FC43458
+	for <buildroot@archiver.kernel.org>; Tue, 30 Jun 2026 20:10:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A41D46079B;
-	Tue, 30 Jun 2026 20:10:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E3DA561089;
+	Tue, 30 Jun 2026 20:10:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iYCqQ8VMmkPO; Tue, 30 Jun 2026 20:10:47 +0000 (UTC)
+ id Gp8ZOUpix9xM; Tue, 30 Jun 2026 20:10:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C54AF60838
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B5C5B60838
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1782850247;
-	bh=m1RkKLHQhou1sIHSUl3RRBx9S/B2BWw4bZNTfWl+K+E=;
+	s=default; t=1782850249;
+	bh=RkzDMCewZYRO/OgQ/C3r+jOcg0/LMAnw06im5/WZdf0=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=AulmZJKyU7BEHfRp/xrnAHPEfOVJJv1h97Q2cAuhZpDQMO1cufcbuT2rsi/LZTTKg
-	 /MxMXe32qyOfdhMhOKJUzYZpv2+5MWC+53966eCJ8E9Bgws1SL3Y0ezwmHG8jO6w5/
-	 eK2KbJNwL6IftrU83Mv6N34Cbquq2iEH2CgB+eAnhBE98cZaVmbXKZIInAYrsfJ+Rw
-	 7qcRM8GNT9pWzEvvTnIre7WFho+waSMLOpRz7t53wM5ERTkykO9vPjNoAnJjXTM+xy
-	 9p4qZoQvIGOE/JBJ5sU47kcsDiv6GR9f8J7+MNJp0nzLtTnF92s6lWI/33G2FkOqjV
-	 fDR94P6QW+obw==
+	b=Da6sWyHSrKsUJAmFUH0D+uJ1MFtn5i0aQCKG812hRPuBEgtJBs+SCUXM+oUbK8BGi
+	 mKgkWQdgGotDO2lOzTJr3MnWXNtAaDhgtQbj8fCxpbnM+TdJs/Af5DVIObklFtjnhC
+	 XOzOS4UyK6KdM4Y46RJLVWpUZ+yQoae6vgw/iCERwpUK4HenqkSUR8CVpxb7b2Yndz
+	 SOQ5z6JEJzdiLGzmN+3gmqnGwrVoUCkSIi/iHVxrMYS2/gXBJEuz5xKEtwC+n37FU1
+	 cslP6U5OYqoKwN7RPjy10osM1zZ7bbklmlCd4CFYlUWd0Gumxx67+YzU6BAWfAte6F
+	 i0CW4QMdfYS9A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C54AF60838;
-	Tue, 30 Jun 2026 20:10:47 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id A25F91338
+	by smtp3.osuosl.org (Postfix) with ESMTP id B5C5B60838;
+	Tue, 30 Jun 2026 20:10:48 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id ACD0D332C
  for <buildroot@buildroot.org>; Tue, 30 Jun 2026 20:10:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 941D04007D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 924E160727
  for <buildroot@buildroot.org>; Tue, 30 Jun 2026 20:10:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Q0KMLKPIjBqR for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KOddK8WnZNSM for <buildroot@buildroot.org>;
  Tue, 30 Jun 2026 20:10:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5923F400BB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4E5D8606AE
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5923F400BB
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4E5D8606AE
  for <buildroot@buildroot.org>; Tue, 30 Jun 2026 20:10:45 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3E60F875AB; Tue, 30 Jun 2026 20:10:17 +0000 (UTC)
+ id 30F02875A9; Tue, 30 Jun 2026 20:10:17 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Tue, 30 Jun 2026 21:58:47 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3c8cfad8045a2b731177e6f9b150b065980410b5
-X-Git-Newrev: c5aa9327458fceb21e0278f37765af1d5175e1cf
+X-Git-Oldrev: 54de8d26d0ec1d0b7651a0f9866f6846ebe0f758
+X-Git-Newrev: 3c8cfad8045a2b731177e6f9b150b065980410b5
 X-Patchwork-Hint: ignore
-Message-Id: <20260630201017.3E60F875AB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libssh2: backport upstream patch
- for CVE-2026-55200
+Message-Id: <20260630201017.30F02875A9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libssh2: add upstream patch for
+ CVE-2026-55199
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,79 +77,91 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/c5aa9327458fceb21e0278f37765af1d5175e1cf
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/3c8cfad8045a2b731177e6f9b150b065980410b5
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-- CVE-2026-55200:
-    libssh2 through 1.11.1, fixed in commit 97acf3df contains an out-of-
-    bounds write vulnerability in ssh2_transport_read() that fails to
-    enforce upper bounds on packet_length field. Remote attackers can send
-    crafted SSH packets with excessively large packet_length values to
-    corrupt heap memory and achieve remote code execution.
+Fixes the following vulnerability:
+
+- CVE-2026-55199:
+    libssh2 through 1.11.1, fixed in commit 1762685, contains a pre-
+    authentication denial of service vulnerability in the SSH_MSG_EXT_INFO
+    handler in src/packet.c that allows a malicious SSH server to cause a
+    client CPU exhaustion loop by sending a crafted extension count value.
+    A malicious server can set nr_extensions to 0xFFFFFFFF during key
+    exchange, causing the client to spin in a tight CPU loop for over 60
+    seconds because return values from _libssh2_get_string() are unchecked
+    and the session timeout does not apply to CPU-bound loops.
 
 For more information, see:
-  - https://www.cve.org/CVERecord?id=CVE-2026-55200
-  - https://github.com/libssh2/libssh2/commit/97acf3dfda80c91c3a8c9f2372546301d4a1a7a8
+  - https://www.cve.org/CVERecord?id=CVE-2026-55199
+  - https://github.com/libssh2/libssh2/commit/17626857d20b3c9a1addfa45979dadcee1cd84a4
 
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
 ---
- ...itional-boundary-checks-for-packet-length.patch | 36 ++++++++++++++++++++++
+ ...sh2-get-string-return-in-EXT-INFO-handler.patch | 43 ++++++++++++++++++++++
  package/libssh2/libssh2.mk                         |  3 ++
- 2 files changed, 39 insertions(+)
+ 2 files changed, 46 insertions(+)
 
-diff --git a/package/libssh2/0003-transport-c-Additional-boundary-checks-for-packet-length.patch b/package/libssh2/0003-transport-c-Additional-boundary-checks-for-packet-length.patch
+diff --git a/package/libssh2/0002-packet-check-libssh2-get-string-return-in-EXT-INFO-handler.patch b/package/libssh2/0002-packet-check-libssh2-get-string-return-in-EXT-INFO-handler.patch
 new file mode 100644
-index 0000000000..ef54771afc
+index 0000000000..c7319a6b51
 --- /dev/null
-+++ b/package/libssh2/0003-transport-c-Additional-boundary-checks-for-packet-length.patch
-@@ -0,0 +1,36 @@
-+From 97acf3dfda80c91c3a8c9f2372546301d4a1a7a8 Mon Sep 17 00:00:00 2001
-+From: Will Cosgrove <will@panic.com>
-+Date: Fri, 12 Jun 2026 15:57:44 -0700
-+Subject: [PATCH] transport.c: Additional boundary checks for packet length
-+ (#2052)
++++ b/package/libssh2/0002-packet-check-libssh2-get-string-return-in-EXT-INFO-handler.patch
+@@ -0,0 +1,43 @@
++From 17626857d20b3c9a1addfa45979dadcee1cd84a4 Mon Sep 17 00:00:00 2001
++From: TristanInSec <tristan.mtn@gmail.com>
++Date: Wed, 15 Apr 2026 14:51:08 -0400
++Subject: [PATCH] packet: check `_libssh2_get_string()` return in `EXT_INFO`
++ handler
 +
-+Add additional bounds checking on packet length to prevent OOB write.
++The `SSH_MSG_EXT_INFO` handler discards the return values from
++`_libssh2_get_string()` when parsing extension name/value pairs. When
++the buffer is exhausted before all claimed extensions are parsed,
++the loop continues with no-op iterations until `nr_extensions` reaches
++zero.
 +
-+Credit: [TristanInSec](https://github.com/TristanInSec)
++The `nr_extensions >= 1024` cap limits the worst case, but the loop
++should still break on parse failure for correctness and consistency
++with other parsers in this file (e.g. `SSH_MSG_CHANNEL_OPEN`,
++`SSH_MSG_KEXINIT`) that check `_libssh2_get_string()` return values.
 +
-+CVE: CVE-2026-55200
-+Upstream: https://github.com/libssh2/libssh2/commit/97acf3dfda80c91c3a8c9f2372546301d4a1a7a8
-+[thomas: backport to 1.11.1, change ntohu32 call]
++Closes #1864
++
++CVE: CVE-2026-55199
++Upstream: https://github.com/libssh2/libssh2/commit/17626857d20b3c9a1addfa45979dadcee1cd84a4
 +Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 +---
-+ src/transport.c | 6 +++++-
-+ 1 file changed, 5 insertions(+), 1 deletion(-)
++ src/packet.c | 6 ++++--
++ 1 file changed, 4 insertions(+), 2 deletions(-)
 +
-+diff --git a/src/transport.c b/src/transport.c
-+index 869fc5a4fa..7925ad33d1 100644
-+--- a/src/transport.c
-++++ b/src/transport.c
-+@@ -645,8 +645,12 @@ int ssh2_transport_read(LIBSSH2_SESSION *session)
-+                 total_num = 4;
++diff --git a/src/packet.c b/src/packet.c
++index ae86365d2a..8a7a0d2690 100644
++--- a/src/packet.c
+++++ b/src/packet.c
++@@ -868,8 +868,10 @@ _libssh2_packet_add(LIBSSH2_SESSION * session, unsigned char *data,
 + 
-+                 p->packet_length = _libssh2_ntohu32(block);
-+-                if(p->packet_length < 1)
-++                if(p->packet_length < 1) {
-+                     return LIBSSH2_ERROR_DECRYPT;
-++                }
-++                else if(p->packet_length > LIBSSH2_PACKET_MAXPAYLOAD) {
-++                    return LIBSSH2_ERROR_OUT_OF_BOUNDARY;
-++                }
++                     nr_extensions -= 1;
 + 
-+                 /* total_num may include size field, however due to existing
-+                  * logic it needs to be removed after the entire packet is read
++-                    _libssh2_get_string(&buf, &name, &name_len);
++-                    _libssh2_get_string(&buf, &value, &value_len);
+++                    if(_libssh2_get_string(&buf, &name, &name_len))
+++                        break;
+++                    if(_libssh2_get_string(&buf, &value, &value_len))
+++                        break;
++ 
++                     if(name && value) {
++                         _libssh2_debug((session,
 diff --git a/package/libssh2/libssh2.mk b/package/libssh2/libssh2.mk
-index c85129a7cd..0ccf5effb3 100644
+index 1843d25051..c85129a7cd 100644
 --- a/package/libssh2/libssh2.mk
 +++ b/package/libssh2/libssh2.mk
-@@ -19,6 +19,9 @@ LIBSSH2_IGNORE_CVES += CVE-2026-7598
- # 0002-packet-check-libssh2-get-string-return-in-EXT-INFO-handler.patch
- LIBSSH2_IGNORE_CVES += CVE-2026-55199
+@@ -16,6 +16,9 @@ LIBSSH2_CONF_OPTS = --disable-examples-build --disable-rpath
+ # 0001-username-len-bound-checking.patch
+ LIBSSH2_IGNORE_CVES += CVE-2026-7598
  
-+# 0003-transport-c-Additional-boundary-checks-for-packet-length.patch
-+LIBSSH2_IGNORE_CVES += CVE-2026-55200
++# 0002-packet-check-libssh2-get-string-return-in-EXT-INFO-handler.patch
++LIBSSH2_IGNORE_CVES += CVE-2026-55199
 +
  ifeq ($(BR2_PACKAGE_LIBSSH2_MBEDTLS),y)
  LIBSSH2_DEPENDENCIES += mbedtls
