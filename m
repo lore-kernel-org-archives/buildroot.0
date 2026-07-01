@@ -4,60 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04736C43458
-	for <buildroot@archiver.kernel.org>; Wed,  1 Jul 2026 20:08:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5BE0AC43458
+	for <buildroot@archiver.kernel.org>; Wed,  1 Jul 2026 20:12:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 38EC0411EC;
-	Wed,  1 Jul 2026 20:08:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 14DC741241;
+	Wed,  1 Jul 2026 20:12:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fh0_XaGGILv4; Wed,  1 Jul 2026 20:08:06 +0000 (UTC)
+ id OQJkQo_TM7Jv; Wed,  1 Jul 2026 20:12:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 305C7408B6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BC6B9410E6
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1782936486;
-	bh=arcbKkWyl4VwzUuhxJoXdOyB7URnSsF2et279EyNYfA=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=i2Lh0TMi4KM4KCex2cY3C0idicQaQThr+TeKJhBYTIvPupnfVH6JUpcWcME0BY2Yh
-	 q3+jEZekRBkSt2ISWJLmhcuQkIHcDwQuiHnsvwMOZUScwPTrnq3viv8JhUvH3OiPLk
-	 FGGbeuSy3SaM/emB0Mwr6L0wEIoLnys9y6+Bi/PmuuP7bZOJLe3A9uySRzKwwD6KFg
-	 kLlP1fpLEWjHrzkZIwJCy97QdWIlKguw3eJWZdGR1NLd9KordnMlcwQUObUt5vSqsr
-	 mfFLgJRaF2d9FoyxImUda48Siz01buSPsASTXmXy8LH8+9r8kAWtgwuCY2o0/aW0Nw
-	 /3pESPVzKQ1IA==
+	s=default; t=1782936728;
+	bh=RmlKprm4GZsXkARbcuHRchCJjLxLwEbRQzUqEF+yZSc=;
+	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=RsiYVlwzmZQqQiFfAL/Wi5jbOGBp3KjsvC5ykBo6MK5+Xt5Kwg25KhbaxcfjCxyXM
+	 szEG8poFSEyhaptcUEgNI3Zl9CKjV/xd8UBIYqaZWSEQh2zMqnrOZ7x/sW33bVvOgn
+	 dM9A2Titp21Do/yVshUj1/s79GRXysH8j0gh4j6lx1bn24u5LbZyhepiuc9MMuzow+
+	 f5Kbut63guEQsIj5FL5ayEZoAoLV5PWfxOrBOzoYOrIjxKcFUITZZL6d2x4oMnQiI1
+	 hVXzqSQrT8QqUGhignlCoL1oEGO6kguRH7pbTuJ48FecL4kxUZaRTLgcAFh+VKHT5k
+	 Tj5RqSX2eVONg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 305C7408B6;
-	Wed,  1 Jul 2026 20:08:06 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id ED29F316
- for <buildroot@buildroot.org>; Wed,  1 Jul 2026 20:08:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BC6B9410E6;
+	Wed,  1 Jul 2026 20:12:08 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9EA10127
+ for <buildroot@buildroot.org>; Wed,  1 Jul 2026 20:12:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D38A561046
- for <buildroot@buildroot.org>; Wed,  1 Jul 2026 20:08:04 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9044A410E6
+ for <buildroot@buildroot.org>; Wed,  1 Jul 2026 20:12:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id f5A7lXThm99r for <buildroot@buildroot.org>;
- Wed,  1 Jul 2026 20:08:03 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1ES3I6S8GbgY for <buildroot@buildroot.org>;
+ Wed,  1 Jul 2026 20:12:06 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D806261043
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D806261043
- for <buildroot@buildroot.org>; Wed,  1 Jul 2026 20:08:03 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 489B387A0E; Wed,  1 Jul 2026 20:07:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 512BE410BD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 512BE410BD
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 512BE410BD
+ for <buildroot@buildroot.org>; Wed,  1 Jul 2026 20:12:06 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 1269556137; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Wed, 01 Jul 2026 20:12:02 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
+ (envelope-from <peter@korsgaard.com>) id 1wf1Ht-000000033DR-0IJL;
+ Wed, 01 Jul 2026 22:12:01 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 1 Jul 2026 22:04:39 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9f1c7f7db28595cc2ecc9345a296501a7797ba12
-X-Git-Newrev: 411055ed371ebb56fb8a21c9ea230ac67a572cc9
-X-Patchwork-Hint: ignore
-Message-Id: <20260701200735.489B387A0E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/armadillo: bump to version 15.4.0
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20260624184746.1062142-1-bernd@kuhls.net> (Bernd Kuhls's message
+ of "Wed, 24 Jun 2026 20:47:45 +0200")
+References: <20260624184746.1062142-1-bernd@kuhls.net>
+Date: Wed, 01 Jul 2026 22:12:01 +0200
+Message-ID: <87mrwapizy.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=d8tYuhNEB5yKx9VulLhdl/BzSMiZerEXuljH82q1Ga67C/hWThzeftVL+ukL6CJ+/sqwhYO11kNd1lUMA/Xd8JPNF66lxCXzFayrHthZEtrRN70KHTw2vHHftVJt2A+QeLVvJrW53RKuDyuzFH/H3V6I4kSCkmyQccdGkTVdkHiAPvnTkjMm7WQR6AhAr0YCf9U9QnT5DBCNobCswdeCeFxzhhdo9pmllS7icDaMJ0Q90qnroN0LCyLPCbaPdoERyqzmfIvDN1fGKOUAvFMBjcnCKX2oISqVHmwJMXA6+EcOTM+ICHhRWrIg/216Rt7F/RyILyW8KDxdQDWv4hxkTg==;
+ s=purelymail3; d=purelymail.com; v=1;
+ bh=LNrKDYqIAKp50SwwMTFbZgKJME3aS4GRntjKDfUk5uc=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail3 header.b=d8tYuhNE
+Subject: Re: [Buildroot] [PATCH 1/2] package/intel-mediadriver: bump version
+ to 26.2.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -69,48 +93,23 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/411055ed371ebb56fb8a21c9ea230ac67a572cc9
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+>>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
 
-Release notes:
-https://arma.sourceforge.net/docs.html#changelog
+ > https://github.com/intel/media-driver/releases/tag/intel-media-26.2.3
+ > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+ > ---
+ > Series passed Gitlab pipeline:
+ > https://gitlab.com/bkuhls/buildroot/-/commits/f3c6f26dcce9d0f92511575ab5642189311fcd57
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/armadillo/armadillo.hash | 2 +-
- package/armadillo/armadillo.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Committed, thanks.
 
-diff --git a/package/armadillo/armadillo.hash b/package/armadillo/armadillo.hash
-index e78cf1f188..70456a4fb2 100644
---- a/package/armadillo/armadillo.hash
-+++ b/package/armadillo/armadillo.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
--sha256  029230b29c3745924ea850c7046efd1db74b863fdfead8b1aaba3bdd5b0cf895  armadillo-15.2.7.tar.xz
-+sha256  f781e9d935db7e8b9a64c58b6a817354d38a1769e179b477364f5e6414953f6c  armadillo-15.4.0.tar.xz
- # License files, locally calculated
- sha256  3ddf9be5c28fe27dad143a5dc76eea25222ad1dd68934a047064e56ed2fa40c5  LICENSE.txt
-diff --git a/package/armadillo/armadillo.mk b/package/armadillo/armadillo.mk
-index 756a3fa8ab..b806b0f1d1 100644
---- a/package/armadillo/armadillo.mk
-+++ b/package/armadillo/armadillo.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ARMADILLO_VERSION = 15.2.7
-+ARMADILLO_VERSION = 15.4.0
- ARMADILLO_SOURCE = armadillo-$(ARMADILLO_VERSION).tar.xz
- ARMADILLO_SITE = https://downloads.sourceforge.net/project/arma
- ARMADILLO_INSTALL_STAGING = YES
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
