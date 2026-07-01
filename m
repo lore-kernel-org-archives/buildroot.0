@@ -4,61 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 075F3C43458
-	for <buildroot@archiver.kernel.org>; Wed,  1 Jul 2026 19:59:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AA37FC43458
+	for <buildroot@archiver.kernel.org>; Wed,  1 Jul 2026 20:03:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 73BFB40FA7;
-	Wed,  1 Jul 2026 19:59:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6FC2041957;
+	Wed,  1 Jul 2026 20:03:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id J1XzCNOSMsqB; Wed,  1 Jul 2026 19:59:45 +0000 (UTC)
+ id rYKJwz2rgmkr; Wed,  1 Jul 2026 20:03:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 352FC41263
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E0E46418B3
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1782935985;
-	bh=SQrSfNDiP88ACdPiGnS56RmPSIYLZbCHZB7/yaNG294=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=X3rxdUEjbES3G4HCxgS0sq522rzhyblKOgmob6ifEjEKIu+OkGHbQOoPMB9Zxl+O6
-	 WMcaa3yRSlPn+aWpyJZbtQqcHDxYrLJng/+DmC3Drk+/RhVNneoAHNszdrWUJ9BHl5
-	 El9+rrpQyRgUnUksuqrmc3oMiTEcb1wxG09Y0YJJe52lEQhJv50xwSwoVkammxA9x5
-	 QZO2vOVjx5ANtMZ/hmtLKamLmWAY6ZcNyNbFmVZ0kcULd9fD2/o8op3kYYoyQi3lRK
-	 EwlXTXvLt0uh8YwVyjbL9WJAYBnk5L1lHMVeaffIoLUVdW61N6C2GgI1FrMuNKQlyX
-	 r+m42MUMzeYWg==
+	s=default; t=1782936234;
+	bh=EIMYsvVCLjtnR3CZRJ+4fY84gcITZ9KNIcuRAMJ8x6k=;
+	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=czaqplAnyUXJMTU/Tx2w8/YyIiYkmx7rbxyVxPD+xS/flTzUXWu4BSp6Y20AVEH6o
+	 nWre6+92HB8sQtua/KHUW0QT8NBsKol64N/jA+F++BlDs9RxVfdUqprJOsG0d/pqQZ
+	 mM60SVP6+/NNIlz1TzgvK2VOg4qFnY5wqfwNziJcrfuREc42KOIJqMTcq+e0F47XZ4
+	 RpwrpDhqHyCU1EtgR2jdSMaNosHF0YCuok/NhEwgl5B/aEmsE7ZUWDdUAVx5JGuETD
+	 YhlE2q9ZfZ3f5SKg7uzELDPPKA0s0xMNLDpEJ9nfG0qPS+T9bf7+FhYNpOhklnwLrV
+	 0E/FbajdBBM2w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 352FC41263;
-	Wed,  1 Jul 2026 19:59:45 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 240A1316
- for <buildroot@buildroot.org>; Wed,  1 Jul 2026 19:59:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E0E46418B3;
+	Wed,  1 Jul 2026 20:03:53 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 502EF316
+ for <buildroot@buildroot.org>; Wed,  1 Jul 2026 20:03:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0A37440061
- for <buildroot@buildroot.org>; Wed,  1 Jul 2026 19:59:42 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 41CEB41946
+ for <buildroot@buildroot.org>; Wed,  1 Jul 2026 20:03:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id z0sM47zewUxS for <buildroot@buildroot.org>;
- Wed,  1 Jul 2026 19:59:40 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wxKPl_cNnj3O for <buildroot@buildroot.org>;
+ Wed,  1 Jul 2026 20:03:50 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3DCBC4005B
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3DCBC4005B
- for <buildroot@buildroot.org>; Wed,  1 Jul 2026 19:59:40 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A2A3F87A6C; Wed,  1 Jul 2026 19:59:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0A376417F9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0A376417F9
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0A376417F9
+ for <buildroot@buildroot.org>; Wed,  1 Jul 2026 20:03:48 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 548854372; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Wed, 01 Jul 2026 20:03:47 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
+ (envelope-from <peter@korsgaard.com>) id 1wf19u-000000032VN-1odx;
+ Wed, 01 Jul 2026 22:03:46 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 1 Jul 2026 21:58:34 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6bb532a100139d3189ed180945e165e3a941efb8
-X-Git-Newrev: 48dd3eedc4da52a2c1740c8d25772c06ab3010d6
-X-Patchwork-Hint: ignore
-Message-Id: <20260701195911.A2A3F87A6C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/tor: security bump version to
- 0.4.9.11
+To: Fiona Klute via buildroot <buildroot@buildroot.org>
+Cc: Dowan Gullient <dowan.gullient@smile.fr>,  Fiona Klute
+ <fiona.klute@gmx.de>,  thomas.perale@mind.be
+In-Reply-To: <193cd268-b895-4ee4-aab0-df26283f651b@gmx.de> (Fiona Klute via
+ buildroot's message of "Wed, 1 Jul 2026 19:59:43 +0200")
+References: <20260701125741.4064511-1-dowan.gullient@smile.fr>
+ <193cd268-b895-4ee4-aab0-df26283f651b@gmx.de>
+Date: Wed, 01 Jul 2026 22:03:46 +0200
+Message-ID: <87qzlmqxy5.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=Uszk8/g9F4KG/hGy6QSNXYOLs+tiEtb5vy08yqI204axhDKs+PSBMAASnRid7ObYit4sp5Nq698I8hOESAnJfgOCZ1O8YGR5va6Q+3w1dRBNtt0TAUM7aHzGwleL1QNdoOflYPPmpU46MgZpkpwIuwGClDurYhmva2qWvcVWph8zzK9eGF6e/SwwhKIBVwtQT40b7gsraY+AHGMedi1qpE3GE4xazMvHilDY+o5mguA6XyfC/uwcsaWI4MTLGxwXTLSkfezQUVsB8xLlWXeqJ6HdCfbXoO4ctJ54viXnYio7Abf67jLlBMujf6Q1q6LlP8b6EH7NL1dsdRL7uqGL+w==;
+ s=purelymail3; d=purelymail.com; v=1;
+ bh=UPh5rc/Kz3yTTqcWnzGG/Kptf8NtAJjpzU9xkRrlQ0g=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail3 header.b=Uszk8/g9
+Subject: Re: [Buildroot] [PATCH] [PATCH v2 1/1] support/testing :
+ test_gnupg2 : fix runtime failure
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,50 +95,31 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/48dd3eedc4da52a2c1740c8d25772c06ab3010d6
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+>>>>> "Fiona" == Fiona Klute via buildroot <buildroot@buildroot.org> writes:
 
-https://gitlab.torproject.org/tpo/core/tor/-/blob/tor-0.4.9.11/ReleaseNotes
+ > Am 01.07.26 um 14:57 schrieb Dowan Gullient via buildroot:
+ >> In the precedent patch "support/testing: test_gnupg2.py: use assertRunNotOk()" [1]
+ >> a small typo (OK instead of Ok) was introduced in the test_gnupg2.py file,
+ >> which caused a runtime failure.
+ >> This patch simply replace "self.assertRunNotOK(cmd)" with
+ >> "self.assertRunNotOk(cmd)" to correct this typo.
+ >> [1] cb791850ada782beca4b03e26356fd8506912d52
+ >> Signed-off-by: Dowan Gullient <dowan.gullient@smile.fr>
 
-Fixes TROVE-2026-025 & TROVE-2026-026.
+ > There were a few formatting issues in the commit message (space before
+ > colons in the subject, lines in first paragraph too long). Applied to
+ > master with that fixed (see cfd7483a26e17ca4ea95793ea7a618c6cc1b1b78),
+ > thank you!
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/tor/tor.hash | 4 ++--
- package/tor/tor.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Ups, thanks for the fix.
 
-diff --git a/package/tor/tor.hash b/package/tor/tor.hash
-index a6771b1fa1..b888270f14 100644
---- a/package/tor/tor.hash
-+++ b/package/tor/tor.hash
-@@ -1,4 +1,4 @@
--# From https://dist.torproject.org/tor-0.4.9.9.tar.gz.sha256sum
--sha256  bd75ba7fd68f607c7806fcf70156a300aa926e9ad69a5e56a8e6414f5227e833  tor-0.4.9.9.tar.gz
-+# From https://dist.torproject.org/tor-0.4.9.11.tar.gz.sha256sum
-+sha256  2e6c1720118c812acf0079fd47cf91b6bfaba5d766c321c4d3d2a28d6a11a8ed  tor-0.4.9.11.tar.gz
- # Locally computed
- sha256  5dc29ea302cc75db6db4a7c88d7b5d4638b4e0f5f1d2e6d21ce71f707470b766  LICENSE
-diff --git a/package/tor/tor.mk b/package/tor/tor.mk
-index ca5a4d026c..3e63fbacac 100644
---- a/package/tor/tor.mk
-+++ b/package/tor/tor.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TOR_VERSION = 0.4.9.9
-+TOR_VERSION = 0.4.9.11
- TOR_SITE = https://dist.torproject.org
- TOR_LICENSE = BSD-3-Clause
- TOR_LICENSE_FILES = LICENSE
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
