@@ -1,84 +1,82 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C214FC43458
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C218CC44508
 	for <buildroot@archiver.kernel.org>; Wed,  1 Jul 2026 12:19:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7DE8E83AAC;
-	Wed,  1 Jul 2026 12:19:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 49E3C614C9;
+	Wed,  1 Jul 2026 12:19:53 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZsyzKtgE6v1w; Wed,  1 Jul 2026 12:19:51 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A3C6260F0A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1782908391;
+	bh=ux0XGREnilNGOkLW9Y6tLopM0r3Tb39GQlhysmp1n1o=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=kBt9g1YrUAs8annz8+rA+BQ1A5c50QOxFaCEVUKvAv+fsQF4M7o22Kcp493V1/KeZ
+	 nH9p55Y6WvG6RBHtJpgPAqzK3qm8ClT+5qbMGV3IhOjEAIlYDW/wemL1ffxQhLOIXx
+	 rYCf8eS4qhtKzn4dzGAi8N6zkWXTSnzP5OtpKYP76Yn4dpt/sQZjBt3AhCJbEsiKBT
+	 E1Fn6bqwu8yP0am2xtxOfOiyKc4xxqMaLj8c4ZMkjmFfe2JQYt81se7LV6QnUK77wj
+	 mpxmK573HIWc9PxLvVlLF6oHdqsl4W8cpnILB2wPDWdiSw1EE1jCJCJ5bEzI8bmtNA
+	 Q3nbXQvTWUOjw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id A3C6260F0A;
+	Wed,  1 Jul 2026 12:19:51 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 42A592EB
+ for <buildroot@buildroot.org>; Wed,  1 Jul 2026 12:19:50 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1F86D83AB8
+ for <buildroot@buildroot.org>; Wed,  1 Jul 2026 12:19:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hhVNy6UPc86a; Wed,  1 Jul 2026 12:19:53 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A10A583AB8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1782908393;
-	bh=wSp4ptoYhbNmp3DevrvR3Hj12VGter10SOh94jMDiyo=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=BLKJZdJP6ezBv/6obqo6MVxO0mpjYwL6iQUU8VXBHa3Kcta4mvcxyOM6FRwC6yNFd
-	 PpODN0fltmaP/uHkr0DpzjJ1x1BEwpTsIMySOZN7R3NXEx747nUII6zLWOZgcd/U0l
-	 8z/yG8HfKngUIJvXZc7cnnAQpTVk24YWw4Y5+nfCHXZGbB4J18m14kjl1VJtv1l2lM
-	 qBbygcPeUD//ajQtR28Jeo4zEkvJPsIoxLsgInP6QLZ0NcsxZ7NzonlRbVAn0O01q6
-	 ZDHyIQvGxQpBAmj869u+paFR6Nk6aq++UWB83PcxTzZoJrQIIkKLBhzSNT69SZkJMs
-	 ETiwqRJW/zydQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A10A583AB8;
-	Wed,  1 Jul 2026 12:19:53 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 1C3D22D5
- for <buildroot@buildroot.org>; Wed,  1 Jul 2026 12:19:53 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0E14540EC9
- for <buildroot@buildroot.org>; Wed,  1 Jul 2026 12:19:53 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id l60Dq_XSIDik for <buildroot@buildroot.org>;
- Wed,  1 Jul 2026 12:19:52 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
+ id ks00ooVUw4TA for <buildroot@buildroot.org>;
+ Wed,  1 Jul 2026 12:19:49 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
  helo=smtp2-g21.free.fr; envelope-from=nunes.philippe@free.fr;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D58AD40207
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D58AD40207
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D58AD40207
- for <buildroot@buildroot.org>; Wed,  1 Jul 2026 12:19:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1934B83AAC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1934B83AAC
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1934B83AAC
+ for <buildroot@buildroot.org>; Wed,  1 Jul 2026 12:19:48 +0000 (UTC)
 Received: from pnunes-ThinkPad.proxad.net (unknown
  [IPv6:2a01:e0a:ad7:ca0:5e8f:f9af:2d01:45e3])
  (Authenticated sender: nunes.philippe@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPSA id C5D0B2003DA;
- Wed,  1 Jul 2026 14:19:47 +0200 (CEST)
+ by smtp2-g21.free.fr (Postfix) with ESMTPSA id 118672003D6;
+ Wed,  1 Jul 2026 14:19:45 +0200 (CEST)
 To: buildroot@buildroot.org
 Cc: Philippe Nunes <nunes.philippe@free.fr>
-Date: Wed,  1 Jul 2026 14:19:35 +0200
-Message-ID: <20260701121937.346945-2-nunes.philippe@free.fr>
+Date: Wed,  1 Jul 2026 14:19:34 +0200
+Message-ID: <20260701121937.346945-1-nunes.philippe@free.fr>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260701121937.346945-1-nunes.philippe@free.fr>
-References: <20260701121937.346945-1-nunes.philippe@free.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1782908389;
- bh=9S1UGXMXERePswBTBP3+nQi0UcAKM5L+hXSlBx1RB5o=;
- h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=uBurdhIg1wqeC+1Cpwx4+8Wu8g7PwHIABmqU9XI9Xbgbk1esC06BNo82BCcz/GXlx
- qzDahyzdw5pRLOHktXES5GQxujo73n2GtiUPkrmrMQW+M3Qo+WgDtye7FRjTIKT+LB
- rBbGG/fXK3NzolqOPx9VIEBvnJDXcTITxHb5a7txekoKeOl2IefrpEqBVUs4TUcjkd
- RCigu707+V8G3xNv28NQ/6d6fAMjXTzjyNXTheI9aq3aBPGPmT5kjGRvj+xIRRVbnS
- WTVIsfoScgeQXMho11NK5I1TpbYp/4egAod8yIfi3Z8q2guvNpHMCu0Zf4LQkd+ZR8
- ZHFVsaelnvpcw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=free.fr; s=smtp-20201208; t=1782908386;
+ bh=chHnpVsn53rvICGcgPvLv+jiUeev3b1YIFsYAjiflIQ=;
+ h=From:To:Cc:Subject:Date:From;
+ b=rQWY00tYiu4oSRZHksE45nZhL5Qgp90mQyO+vaofofLBQp7xb+NGac3RiBIkwYdk2
+ nwVGXKWSYx5YHb+V3ItbT0s4Wnf0A809uMOHTm2gsJAnv1/RrYT96HBxHqjrn/mxO+
+ v54O2nLPJVSnQ9hQ3yU+iUzmonQc6aDTfj3fVnD1ervaku9X20ySp9119vELnPJH4+
+ 6xnGzYx4Sy2BPinb9wF6KU3cyvoPgo9EscZKfMLc5KFs41aT+iD1NHm0UGEmu0LNar
+ xeR9T9tV7c9LFLASlUxml16JpnQ7WIUHuPT5a5qD1c/QD+pGinGGJfIFiJThweVIMk
+ Kt3DQNiPOMtxg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=uBurdhIg
-Subject: [Buildroot] [PATCH 1/3] package/mcpp: new package
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=rQWY00tY
+Subject: [Buildroot] [PATCH 0/3] Add qoriq-rcw C reimplementation + libmcpp
+ dep
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -97,108 +95,94 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-mcpp (Matsui CPP) is a portable C/C++ preprocessor, implemented as
-both a CLI and a reusable library (libmcpp). It is conformant to
-ISO/ANSI C90, C99 and C++98 standards and validated against the
-official preprocessor test suite.
+This series adds a host-only C reimplementation of NXP's rcw.py for the
+pbiformat=2 QorIQ family (LS1028, LS1088, LS2088, LX2160), packaged as
+a reusable library (libqoriq-rcw) and a CLI built on top (qoriq-rcw-c).
+The library depends on mcpp (a portable C preprocessor that ships as a
+reusable libmcpp) for in-process preprocessing of .rcw sources.
 
-This Buildroot package builds a host-only flavour of mcpp with
---enable-mcpplib, so that libmcpp.{a,so} and the public header
-mcpp_lib.h are available for other host packages to embed
-preprocessor functionality in-process (i.e. without forking a
-real cpp binary). The standalone mcpp(1) CLI is installed as
-well.
+Motivation:
 
-Upstream: https://mcpp.sourceforge.net/
+  - The existing host-qoriq-rcw package wraps NXP's rcw.py reference,
+    which (a) is slow due to Python startup overhead on every invocation,
+    (b) requires host Python at build time, and (c) shells out to
+    gcc -E for preprocessing. The C implementation here uses libmcpp
+    in-process for hermetic preprocessing and runs ~10x faster on
+    typical .rcw inputs.
 
-Signed-off-by: Philippe Nunes <nunes.philippe@free.fr>
----
- DEVELOPERS                  |  3 +++
- package/Config.in.host      |  1 +
- package/mcpp/Config.in.host |  9 +++++++++
- package/mcpp/mcpp.hash      |  5 +++++
- package/mcpp/mcpp.mk        | 18 ++++++++++++++++++
- 5 files changed, 36 insertions(+)
+  - Beyond the rcw.py reference, qoriq-rcw-c adds two recovery features:
+      --dump        read live RCW from /dev/mem on a running board
+      --dump-flash  recover PBL + PBI from the bootrom slot(s) in
+                    NOR / SD / eMMC
+    Useful when bringing up a new board or debugging a bad flash.
+
+  - The existing host-qoriq-rcw package is untouched. Users who prefer
+    the rcw.py reference can keep using it; the new package is fully
+    independent.
+
+Patch breakdown:
+
+  1/3  package/mcpp: new package
+       Matsui CPP, a portable C90/C99/C++98 preprocessor with a
+       reusable libmcpp. Built host-only with --enable-mcpplib so the
+       library + public header are available to other host packages.
+
+  2/3  package/libqoriq-rcw: new package
+       Library form of the C reimplementation. host-meson-package,
+       depends on host-mcpp. Sets -Dtests=false and -Dman=disabled:
+       the tests/ subdir links libcmocka (only validates library
+       internals, never executed by Buildroot), and the man-page
+       step requires pandoc. Both options were added upstream (v1.0.1
+       for 'tests', v1.0.2 for 'man') specifically to support
+       distro/Buildroot packaging.
+
+  3/3  package/qoriq-rcw-c: new package
+       CLI on top of libqoriq-rcw. host-meson-package, depends on
+       host-libqoriq-rcw (transitively pulling in host-mcpp). Also
+       sets -Dman=disabled; the option landed upstream in v1.0.1.
+
+Naming note: the upstream project is just called "qoriq-rcw"; the "-c"
+suffix on the Buildroot package name is purely a disambiguator from
+the existing host-qoriq-rcw package (which is the rcw.py wrapper).
+The installed binary itself is still named qoriq-rcw.
+
+Tested:
+  - check-package clean on all files (0 warnings).
+  - End-to-end build of host-qoriq-rcw-c succeeds against the real
+    upstream tarballs (mcpp 2.7.2 from SourceForge, libqoriq-rcw 1.0.2
+    and qoriq-rcw 1.0.1 from GitHub).
+  - 'qoriq-rcw --help' runs from host/bin/, .rcwi data files install
+    cleanly under host/share/qoriq-rcw/.
+  - Fork CI test-pkg matrix (32 toolchains), all green:
+    https://gitlab.com/evAdopter/buildroot/-/pipelines/2641099395
+
+Philippe Nunes (3):
+  package/mcpp: new package
+  package/libqoriq-rcw: new package
+  package/qoriq-rcw-c: new package
+
+ DEVELOPERS                             |  5 +++++
+ package/Config.in.host                 |  3 +++
+ package/libqoriq-rcw/Config.in.host    | 14 +++++++++++++
+ package/libqoriq-rcw/libqoriq-rcw.hash |  5 +++++
+ package/libqoriq-rcw/libqoriq-rcw.mk   | 27 ++++++++++++++++++++++++++
+ package/mcpp/Config.in.host            |  9 +++++++++
+ package/mcpp/mcpp.hash                 |  5 +++++
+ package/mcpp/mcpp.mk                   | 18 +++++++++++++++++
+ package/qoriq-rcw-c/Config.in.host     | 19 ++++++++++++++++++
+ package/qoriq-rcw-c/qoriq-rcw-c.hash   |  5 +++++
+ package/qoriq-rcw-c/qoriq-rcw-c.mk     | 25 ++++++++++++++++++++++++
+ 11 files changed, 135 insertions(+)
+ create mode 100644 package/libqoriq-rcw/Config.in.host
+ create mode 100644 package/libqoriq-rcw/libqoriq-rcw.hash
+ create mode 100644 package/libqoriq-rcw/libqoriq-rcw.mk
  create mode 100644 package/mcpp/Config.in.host
  create mode 100644 package/mcpp/mcpp.hash
  create mode 100644 package/mcpp/mcpp.mk
+ create mode 100644 package/qoriq-rcw-c/Config.in.host
+ create mode 100644 package/qoriq-rcw-c/qoriq-rcw-c.hash
+ create mode 100644 package/qoriq-rcw-c/qoriq-rcw-c.mk
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 5a09be9bff..03fe739986 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2725,6 +2725,9 @@ F:	package/adsp-ldr/
- N:	Philipp Richter <richterphilipp.pops@gmail.com>
- F:	package/libtorrent-rasterbar/
- 
-+N:	Philippe Nunes <nunes.philippe@free.fr>
-+F:	package/mcpp/
-+
- N:	Philippe Proulx <eeppeliteloop@gmail.com>
- F:	package/babeltrace2/
- F:	package/lttng-babeltrace/
-diff --git a/package/Config.in.host b/package/Config.in.host
-index df57cc0c17..50798d142b 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -65,6 +65,7 @@ menu "Host utilities"
- 	source "package/lpc3250loader/Config.in.host"
- 	source "package/lttng-babeltrace/Config.in.host"
- 	source "package/lzma-alone/Config.in.host"
-+	source "package/mcpp/Config.in.host"
- 	source "package/mender-artifact/Config.in.host"
- 	source "package/meson-tools/Config.in.host"
- 	source "package/mfgtools/Config.in.host"
-diff --git a/package/mcpp/Config.in.host b/package/mcpp/Config.in.host
-new file mode 100644
-index 0000000000..b5fb6e30c4
---- /dev/null
-+++ b/package/mcpp/Config.in.host
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_HOST_MCPP
-+	bool "host mcpp"
-+	help
-+	  A portable C/C++ preprocessor, implemented as both a library
-+	  (libmcpp) and a stand-alone command-line tool. Designed to be
-+	  embedded by other tools that need in-process C-preprocessor
-+	  expansion without forking gcc -E.
-+
-+	  http://mcpp.sourceforge.net/
-diff --git a/package/mcpp/mcpp.hash b/package/mcpp/mcpp.hash
-new file mode 100644
-index 0000000000..b61627fb04
---- /dev/null
-+++ b/package/mcpp/mcpp.hash
-@@ -0,0 +1,5 @@
-+# Locally calculated
-+sha256  3b9b4421888519876c4fc68ade324a3bbd81ceeb7092ecdbbc2055099fcb8864  mcpp-2.7.2.tar.gz
-+
-+# Locally calculated
-+sha256  adcd59c07ccdb072c8e1d40adb5cac670fcf3f51ba3a7fb41d46362bfd883b1b  LICENSE
-diff --git a/package/mcpp/mcpp.mk b/package/mcpp/mcpp.mk
-new file mode 100644
-index 0000000000..18cf99bc66
---- /dev/null
-+++ b/package/mcpp/mcpp.mk
-@@ -0,0 +1,18 @@
-+################################################################################
-+#
-+# mcpp
-+#
-+################################################################################
-+
-+MCPP_VERSION = 2.7.2
-+MCPP_SITE = https://downloads.sourceforge.net/project/mcpp/mcpp/V.$(MCPP_VERSION)
-+
-+MCPP_LICENSE = BSD-2-Clause
-+MCPP_LICENSE_FILES = LICENSE
-+
-+# --enable-mcpplib builds libmcpp.{a,so} alongside the mcpp CLI. The
-+# library is what most consumers embed (libqoriq-rcw, etc.); without
-+# this flag only the standalone CLI is built.
-+HOST_MCPP_CONF_OPTS = --enable-mcpplib
-+
-+$(eval $(host-autotools-package))
 -- 
 2.50.1
 
