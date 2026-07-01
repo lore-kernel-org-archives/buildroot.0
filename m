@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8273EC43458
-	for <buildroot@archiver.kernel.org>; Wed,  1 Jul 2026 20:08:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50933C43602
+	for <buildroot@archiver.kernel.org>; Wed,  1 Jul 2026 20:08:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5966A83131;
-	Wed,  1 Jul 2026 20:08:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2A9DB4084F;
+	Wed,  1 Jul 2026 20:08:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nPBVfqUxsRRd; Wed,  1 Jul 2026 20:08:03 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id q0GUkZW-bsOl; Wed,  1 Jul 2026 20:08:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 22556830E2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 35B5E40899
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1782936483;
-	bh=VY0Dn/uLA7EnkTj9+KGLniZY7pKnzMM4XMtFiFMuhac=;
+	s=default; t=1782936484;
+	bh=kJyCS+5RR9QaKKVq9KruqsKngyuOZPh51rTH7JV5y6A=;
 	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=CeNGhmI9grcPPcziF5hf6cJr6VGC8Z6kLQoQegbaRfx/WVzF7zOBadrZJLujjh+5v
-	 prjLUVx4RbmVH6obu03laK0upK7DKE099x5OWBJSiJFgHxlArSLGVL/4Vcx8CD5AhW
-	 POS7ypnK7vfSMy0RJFYXYtL+7QI4igm0DA4JfihOKienhfgYcsO/YrkSAc3LXZbHMM
-	 GHclQBWKGBXFN44h/IC2OSMkT1SSVAiNROv1IUWarm0Vatnit78Rdv2usjAOpHM1P0
-	 PAtUFvfQ24MP1yMGf7l1r+zJvxZwtfjmBxGrq5pdNRZ+T/jt968KInNAh/eyIBI+1o
-	 7zauUb5iTzkyQ==
+	b=OMTHNSYBn3BpV62IqqS1fsi+rKSZr1mN+SZ9drE4eYd59lkhbE12t6E3O7M0GQgKA
+	 NhuzfdGnKLNLOhzt8fP/cOcmYFfOkSwJ/iSzvaaZGA6x3B9Z7YY+fV37IQcNHbbD9Q
+	 dVrgFCD8qWhXidOQQq6pcYYRheqbO3V1MQC9df3KKBEehr7ecbUFRKXnapmYhXAqdu
+	 6gqbON1b1i8WwNOb5TXQ6Pz8OaTZlZa4+9+mLbP5xITD5Jo+oYZf5kUL4FmThtJwyr
+	 zp8NeCNLfDlyfMMpiX8tB3grAu6xYciPlHDhWciGp7bqhVUwLD239NeQdVm1w7F7JT
+	 xlqe442GAClAg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 22556830E2;
-	Wed,  1 Jul 2026 20:08:03 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 3C6A5127
- for <buildroot@buildroot.org>; Wed,  1 Jul 2026 20:08:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 35B5E40899;
+	Wed,  1 Jul 2026 20:08:04 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id EE421127
+ for <buildroot@buildroot.org>; Wed,  1 Jul 2026 20:08:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2E54383365
- for <buildroot@buildroot.org>; Wed,  1 Jul 2026 20:08:01 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id DFE3561046
+ for <buildroot@buildroot.org>; Wed,  1 Jul 2026 20:08:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eR_26Y12qo6d for <buildroot@buildroot.org>;
- Wed,  1 Jul 2026 20:08:00 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id MfjMjEhhG2oo for <buildroot@buildroot.org>;
+ Wed,  1 Jul 2026 20:08:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 45220830E2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DD93F61043
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 45220830E2
- for <buildroot@buildroot.org>; Wed,  1 Jul 2026 20:08:00 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id DD93F61043
+ for <buildroot@buildroot.org>; Wed,  1 Jul 2026 20:08:01 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2A760879B5; Wed,  1 Jul 2026 20:07:31 +0000 (UTC)
+ id 58344879B3; Wed,  1 Jul 2026 20:07:33 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 1 Jul 2026 22:01:31 +0200
+Date: Wed, 1 Jul 2026 22:02:26 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4bebe90835ec2333ef67a5294c5c3c8b34c2555c
-X-Git-Newrev: 3bd4b9f434af91b088e527b90f1f01dca77f1557
+X-Git-Oldrev: 3bd4b9f434af91b088e527b90f1f01dca77f1557
+X-Git-Newrev: 9f1c7f7db28595cc2ecc9345a296501a7797ba12
 X-Patchwork-Hint: ignore
-Message-Id: <20260701200731.2A760879B5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/agec: new package
+Message-Id: <20260701200733.58344879B3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/sigsum-c: bump version to 1.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -75,226 +75,120 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/3bd4b9f434af91b088e527b90f1f01dca77f1557
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/9f1c7f7db28595cc2ecc9345a296501a7797ba12
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Agec is a simple file encryption tool that implements the
-age format in C with minimal dependencies. The tool supports
-asymmetric encryption based on X25519, and a passphrase
-encryption based on scrypt.
+This release now includes our local patch so we can drop it.
 
-https://git.sr.ht/~min/agec
-https://age-encryption.org
+Changelog: https://git.glasklar.is/sigsum/core/sigsum-c/-/blob/v1.1.0/NEWS?ref_type=tags#L1-28
 
-Encryption is silently broken for files <35 bytes, so add a patch submitted
-upstream to fix that.
-
+Signed-off-by: Florian Larysch <fl@n621.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS                                         |  2 +
- package/Config.in                                  |  1 +
- ...-isarmor-do-not-set-eof-for-35-byte-files.patch | 35 +++++++++++++
- package/agec/Config.in                             | 10 ++++
- package/agec/agec.hash                             |  3 ++
- package/agec/agec.mk                               | 24 +++++++++
- support/testing/tests/package/test_agec.py         | 61 ++++++++++++++++++++++
- 7 files changed, 136 insertions(+)
+ .../0001-Make-command-line-tools-optional.patch    | 71 ----------------------
+ package/sigsum-c/sigsum-c.hash                     |  2 +-
+ package/sigsum-c/sigsum-c.mk                       |  2 +-
+ 3 files changed, 2 insertions(+), 73 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 5a09be9bff..1770eeeb43 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2649,6 +2649,7 @@ F:	configs/orangepi_pc_defconfig
- F:	configs/orangepi_r1_defconfig
- F:	configs/sheevaplug_defconfig
- F:	configs/visionfive_defconfig
-+F:	package/agec/
- F:	package/bats-core/
- F:	package/dfu-programmer/
- F:	package/docker-compose/
-@@ -2683,6 +2684,7 @@ F:	package/triggerhappy/
- F:	package/ugetty/
- F:	package/wireguard-linux-compat/
- F:	package/wireguard-tools/
-+F:	support/testing/tests/package/test_agec.py
- F:	support/testing/tests/package/test_docker_compose.py
- F:	support/testing/tests/package/test_python_hid.py
+diff --git a/package/sigsum-c/0001-Make-command-line-tools-optional.patch b/package/sigsum-c/0001-Make-command-line-tools-optional.patch
+deleted file mode 100644
+index 3ce986b8bd..0000000000
+--- a/package/sigsum-c/0001-Make-command-line-tools-optional.patch
++++ /dev/null
+@@ -1,71 +0,0 @@
+-From 5c74c6d0dd2dd1707b178083815f3a165e3e7dc3 Mon Sep 17 00:00:00 2001
+-From: Florian Larysch <fl@n621.de>
+-Date: Fri, 22 May 2026 14:36:02 +0200
+-Subject: [PATCH] Make command line tools optional
+-
+-When only using the sigsum-c library in another program, the
+-dedicated sigsum-c-verify tool might be redundant.
+-
+-Allow disabling it to save space/avoid littering /bin.
+-
+-Upstream: https://git.glasklar.is/sigsum/core/sigsum-c/-/commit/5c74c6d0dd2dd1707b178083815f3a165e3e7dc3
+-Signed-off-by: Florian Larysch <fl@n621.de>
+----
+- Makefile.in  |  4 ++--
+- configure.ac | 11 +++++++++++
+- 2 files changed, 13 insertions(+), 2 deletions(-)
+-
+-diff --git a/Makefile.in b/Makefile.in
+-index 0648adb..771551a 100644
+---- a/Makefile.in
+-+++ b/Makefile.in
+-@@ -12,7 +12,7 @@ lib:
+- tools: lib
+- 	cd tools && $(MAKE) all
+- 
+--all:	lib @IF_PARSERS@ tools
+-+all:	lib @IF_TOOLS@ tools
+- 
+- clean distclean:
+- 	cd lib && $(MAKE) $@
+-@@ -34,7 +34,7 @@ install-lib: lib
+- install-tools: tools
+- 	cd tools && $(MAKE) install
+- 
+--install: install-lib @IF_PARSERS@ install-tools
+-+install: install-lib @IF_TOOLS@ install-tools
+- 
+- # Remake configure-generated files.
+- # From the autoconf manual (4.8.5 Automatic Remaking)
+-diff --git a/configure.ac b/configure.ac
+-index 37a18b7..8305789 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -19,6 +19,16 @@ else
+-    IF_PARSERS='#'
+- fi
+- 
+-+AC_ARG_ENABLE(tools,
+-+	AS_HELP_STRING([--disable-tools], [Do not build or install command-line tools.]),,
+-+	[enable_tools="$enable_parsers"])
+-+
+-+if test "$enable_tools" = yes ; then
+-+   IF_TOOLS=''
+-+else
+-+   IF_TOOLS='#'
+-+fi
+-+
+- AC_ARG_ENABLE(static,
+-   AS_HELP_STRING([--disable-static], [Do not build any static library]),,
+-   [enable_static=yes])
+-@@ -47,6 +57,7 @@ if test -z "$PIC_CFLAGS" ; then
+- fi
+- 
+- AC_SUBST(IF_PARSERS)
+-+AC_SUBST(IF_TOOLS)
+- AC_SUBST(IF_STATIC)
+- AC_SUBST(IF_SHARED)
+- AC_SUBST(IF_NOT_SHARED)
+--- 
+-2.54.0
+-
+diff --git a/package/sigsum-c/sigsum-c.hash b/package/sigsum-c/sigsum-c.hash
+index 5941eafc5d..4abfae3b9d 100644
+--- a/package/sigsum-c/sigsum-c.hash
++++ b/package/sigsum-c/sigsum-c.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  147ab839b22c5584aa9982c912bdb629cc717dcd978528233889789544e5fe51  sigsum-c-v1.0.0-git4.tar.gz
++sha256  f0c4d070c4ffb417c65f3b376c6f8ce0b81d148dd1d4ce9964508f1b70bc9cb0  sigsum-c-v1.1.0-git4.tar.gz
+ sha256  f592312f5d5756846c43becd06fc1d826eafe05b1b45f88e95af460d59d24ad0  LICENSE
+diff --git a/package/sigsum-c/sigsum-c.mk b/package/sigsum-c/sigsum-c.mk
+index a6021f0587..b7c8fb2b15 100644
+--- a/package/sigsum-c/sigsum-c.mk
++++ b/package/sigsum-c/sigsum-c.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-diff --git a/package/Config.in b/package/Config.in
-index 27f61ca7bc..b6f23308af 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2729,6 +2729,7 @@ comment "Shells"
- 	source "package/nushell/Config.in"
- 	source "package/zsh/Config.in"
- comment "Utilities"
-+	source "package/agec/Config.in"
- 	source "package/apg/Config.in"
- 	source "package/at/Config.in"
- 	source "package/bash-completion/Config.in"
-diff --git a/package/agec/0001-io.c-isarmor-do-not-set-eof-for-35-byte-files.patch b/package/agec/0001-io.c-isarmor-do-not-set-eof-for-35-byte-files.patch
-new file mode 100644
-index 0000000000..fa4af2a9c0
---- /dev/null
-+++ b/package/agec/0001-io.c-isarmor-do-not-set-eof-for-35-byte-files.patch
-@@ -0,0 +1,35 @@
-+From eb8ccfe5bb32273226d80236caab7a9386d71071 Mon Sep 17 00:00:00 2001
-+From: Peter Korsgaard <peter@korsgaard.com>
-+Date: Thu, 18 Jun 2026 15:12:38 +0200
-+Subject: [PATCH] io.c: isarmor(): do not set eof for <35 byte files
-+
-+Encryption is silently broken for <35 byte files since commit b374d8de5a
-+("stop reading after first EOF"), as readall() sets the eof flag when it was
-+unable to read the entire 35 bytes in isarmor(), causing bread() to return
-+EOF and ignore the <35 bytes already read.
-+
-+Fix it by only setting the eof flag in isarmor() if nothing could be read.
-+
-+Upstream: mailed to amin@firemail.cc
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ io.c | 3 +--
-+ 1 file changed, 1 insertion(+), 2 deletions(-)
-+
-+diff --git a/io.c b/io.c
-+index 15ed4f7..2773022 100644
-+--- a/io.c
-++++ b/io.c
-+@@ -128,8 +128,7 @@ isarmor(Ibuf *b)
-+ 	nr = readall(b->fd, b->buf, sizeof(armorfirst) - 1, &b->eof);
-+ 	if(nr == -1)
-+ 		return -1;
-+-	if(nr == 0)
-+-		b->eof = 1;
-++	b->eof = (nr == 0);
-+ 	b->size = nr;
-+ 	if((usize)nr < sizeof(armorfirst) - 1)
-+ 		return 0;
-+-- 
-+2.47.3
-+
-diff --git a/package/agec/Config.in b/package/agec/Config.in
-new file mode 100644
-index 0000000000..8ca9240917
---- /dev/null
-+++ b/package/agec/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_AGEC
-+	bool "agec"
-+	select BR2_PACKAGE_OPENSSL
-+	help
-+	  Agec is a simple file encryption tool that implements the
-+	  age format in C with minimal dependencies. The tool supports
-+	  asymmetric encryption based on X25519, and a passphrase
-+	  encryption based on scrypt.
-+
-+	  https://git.sr.ht/~min/agec
-diff --git a/package/agec/agec.hash b/package/agec/agec.hash
-new file mode 100644
-index 0000000000..0b6982f913
---- /dev/null
-+++ b/package/agec/agec.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  97958ff82eaa6aa89328f4319d585e362130168c478cf6a85ba3f4d05e453669  0.1.0.tar.gz
-+sha256  f7f37a8bb7d993825b10f5ce2838c1c452d902eda63cd180fdabc7c3a5dd0341  LICENSE
-diff --git a/package/agec/agec.mk b/package/agec/agec.mk
-new file mode 100644
-index 0000000000..b19eac94a4
---- /dev/null
-+++ b/package/agec/agec.mk
-@@ -0,0 +1,24 @@
-+################################################################################
-+#
-+# agec
-+#
-+################################################################################
-+
-+AGEC_VERSION = 0.1.0
-+AGEC_SOURCE = $(AGEC_VERSION).tar.gz
-+AGEC_SITE = https://git.sr.ht/~min/agec/archive
-+AGEC_LICENSE = BSD-0-Clause
-+AGEC_LICENSE_FILES = LICENSE
-+AGEC_DEPENDENCIES = host-pkgconf openssl
-+
-+define AGEC_BUILD_CMDS
-+	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) \
-+		LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs openssl`"
-+endef
-+
-+define AGEC_INSTALL_TARGET_CMDS
-+	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) \
-+		PREFIX=$(TARGET_DIR)/usr install
-+endef
-+
-+$(eval $(generic-package))
-diff --git a/support/testing/tests/package/test_agec.py b/support/testing/tests/package/test_agec.py
-new file mode 100644
-index 0000000000..45fd0fbf69
---- /dev/null
-+++ b/support/testing/tests/package/test_agec.py
-@@ -0,0 +1,61 @@
-+import os
-+
-+import infra.basetest
-+
-+
-+class TestAgec(infra.basetest.BRTest):
-+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + """
-+    BR2_PACKAGE_AGEC=y
-+    BR2_TARGET_ROOTFS_CPIO=y
-+    """
-+
-+    # generate keypair in file and return pubkey
-+    def generate_keypair(self, filename):
-+        self.assertRunOk(f"agec-keygen > {filename}")
-+
-+        output, exit_code = self.emulator.run(f"agec-keygen -y < {filename}")
-+        self.assertEqual(exit_code, 0)
-+        pubkey = output[0].strip()
-+        self.assertNotEqual(pubkey, "")
-+        return pubkey
-+
-+    def test_run(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv5",
-+                           kernel="builtin",
-+                           options=["-initrd", cpio_file])
-+        self.emulator.login()
-+
-+        # We define two keypairs
-+        key1 = "/tmp/key1.txt"
-+        key2 = "/tmp/key2.txt"
-+
-+        # And files to work on
-+        orig_file = "/bin/busybox"
-+        decrypted_file = "/tmp/busybox"
-+        encrypted_file = decrypted_file + ".age"
-+
-+        # should output a valid looking keypair to stdout
-+        output, exit_code = self.emulator.run("agec-keygen")
-+        self.assertEqual(exit_code, 0)
-+        self.assertIn("public key:", output[0])
-+        self.assertIn("AGE-SECRET-KEY-", output[1])
-+
-+        # generate keypairs and extract pubkeys
-+        pubkey1 = self.generate_keypair(key1)
-+        _ = self.generate_keypair(key2)
-+
-+        # encrypt file
-+        self.assertRunOk(f"agec -r {pubkey1} {orig_file} > {encrypted_file}")
-+
-+        # should be encrypted
-+        self.assertRunNotOk(f"cmp {orig_file} {encrypted_file}")
-+
-+        # should be decryptable with key1
-+        self.assertRunOk(f"agec -d -i {key1} {encrypted_file} > {decrypted_file}")
-+
-+        # and equal to original
-+        self.assertRunOk(f"cmp {orig_file} {decrypted_file} ")
-+
-+        # should NOT be decryptable with key2
-+        self.assertRunNotOk(f"agec -d -i {key2} {encrypted_file} > {decrypted_file}")
+-SIGSUM_C_VERSION = v1.0.0
++SIGSUM_C_VERSION = v1.1.0
+ SIGSUM_C_SITE = https://git.glasklar.is/sigsum/core/sigsum-c
+ SIGSUM_C_SITE_METHOD = git
+ SIGSUM_C_LICENSE = BSD-2-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
