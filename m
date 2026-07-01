@@ -1,89 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AA37FC43458
-	for <buildroot@archiver.kernel.org>; Wed,  1 Jul 2026 20:03:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12370C43458
+	for <buildroot@archiver.kernel.org>; Wed,  1 Jul 2026 20:04:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6FC2041957;
-	Wed,  1 Jul 2026 20:03:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D7146841AF;
+	Wed,  1 Jul 2026 20:04:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rYKJwz2rgmkr; Wed,  1 Jul 2026 20:03:56 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fHzzuOXHdIWV; Wed,  1 Jul 2026 20:04:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E0E46418B3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0BD97841D4
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1782936234;
-	bh=EIMYsvVCLjtnR3CZRJ+4fY84gcITZ9KNIcuRAMJ8x6k=;
+	s=default; t=1782936267;
+	bh=pDbjvKLRtOQPvco6+c8+s1FQaOjJCOBg4P2fEuNvm7Y=;
 	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=czaqplAnyUXJMTU/Tx2w8/YyIiYkmx7rbxyVxPD+xS/flTzUXWu4BSp6Y20AVEH6o
-	 nWre6+92HB8sQtua/KHUW0QT8NBsKol64N/jA+F++BlDs9RxVfdUqprJOsG0d/pqQZ
-	 mM60SVP6+/NNIlz1TzgvK2VOg4qFnY5wqfwNziJcrfuREc42KOIJqMTcq+e0F47XZ4
-	 RpwrpDhqHyCU1EtgR2jdSMaNosHF0YCuok/NhEwgl5B/aEmsE7ZUWDdUAVx5JGuETD
-	 YhlE2q9ZfZ3f5SKg7uzELDPPKA0s0xMNLDpEJ9nfG0qPS+T9bf7+FhYNpOhklnwLrV
-	 0E/FbajdBBM2w==
+	b=aOVDEPJBTxihODjlxNx+i6vYZkWPkGuuZ/DhCExtpR0tneWnh0xWXRL+BldGE2LDV
+	 oiI94+MGuMaqmbKIkisNojyP151aFC8qmlxlgAPxEGOXh0Pe1kaQYBDq6cl3Jt2tWM
+	 5K30kT0umjB9okf5O/lO9BKaILNqlBhLwkN4+90RznX00Zi4CuWrKi5OorxAHoFFji
+	 r5FtrQqzycuUu09h3kDrLZuagpzbdz5i6e7LNBxPfxjUoEaiLliEEtPghnTiRFT96f
+	 6hvcVdlOQ/MDIXfkzBD113DEDWfMNZ/IsZ1lEkLbjVkExXMTXEy7x1lBfuDr0/zGOF
+	 e4cJhjj04Cy5g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E0E46418B3;
-	Wed,  1 Jul 2026 20:03:53 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 502EF316
- for <buildroot@buildroot.org>; Wed,  1 Jul 2026 20:03:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0BD97841D4;
+	Wed,  1 Jul 2026 20:04:27 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 53132316
+ for <buildroot@buildroot.org>; Wed,  1 Jul 2026 20:04:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 41CEB41946
- for <buildroot@buildroot.org>; Wed,  1 Jul 2026 20:03:52 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4433541483
+ for <buildroot@buildroot.org>; Wed,  1 Jul 2026 20:04:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wxKPl_cNnj3O for <buildroot@buildroot.org>;
- Wed,  1 Jul 2026 20:03:50 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RqxCPMMYTbt4 for <buildroot@buildroot.org>;
+ Wed,  1 Jul 2026 20:04:24 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
  helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0A376417F9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0A376417F9
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 84630406D1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 84630406D1
 Received: from sendmail.purelymail.com (sendmail.purelymail.com
  [34.202.193.197])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0A376417F9
- for <buildroot@buildroot.org>; Wed,  1 Jul 2026 20:03:48 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 84630406D1
+ for <buildroot@buildroot.org>; Wed,  1 Jul 2026 20:04:24 +0000 (UTC)
 Feedback-ID: 21632:4007:null:purelymail
 X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 548854372; 
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -2118223764; 
  (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Wed, 01 Jul 2026 20:03:47 +0000 (UTC)
+ Wed, 01 Jul 2026 20:04:21 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peter@korsgaard.com>) id 1wf19u-000000032VN-1odx;
- Wed, 01 Jul 2026 22:03:46 +0200
+ (envelope-from <peter@korsgaard.com>) id 1wf1AS-000000032Wp-0kfn;
+ Wed, 01 Jul 2026 22:04:20 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fiona Klute via buildroot <buildroot@buildroot.org>
-Cc: Dowan Gullient <dowan.gullient@smile.fr>,  Fiona Klute
- <fiona.klute@gmx.de>,  thomas.perale@mind.be
-In-Reply-To: <193cd268-b895-4ee4-aab0-df26283f651b@gmx.de> (Fiona Klute via
- buildroot's message of "Wed, 1 Jul 2026 19:59:43 +0200")
-References: <20260701125741.4064511-1-dowan.gullient@smile.fr>
- <193cd268-b895-4ee4-aab0-df26283f651b@gmx.de>
-Date: Wed, 01 Jul 2026 22:03:46 +0200
-Message-ID: <87qzlmqxy5.fsf@dell.be.48ers.dk>
+To: Florian Larysch <fl@n621.de>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20260625105642.24181-3-fl@n621.de> (Florian Larysch's message of
+ "Thu, 25 Jun 2026 12:56:26 +0200")
+References: <20260625105642.24181-3-fl@n621.de>
+Date: Wed, 01 Jul 2026 22:04:20 +0200
+Message-ID: <87fr22qxx7.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=Uszk8/g9F4KG/hGy6QSNXYOLs+tiEtb5vy08yqI204axhDKs+PSBMAASnRid7ObYit4sp5Nq698I8hOESAnJfgOCZ1O8YGR5va6Q+3w1dRBNtt0TAUM7aHzGwleL1QNdoOflYPPmpU46MgZpkpwIuwGClDurYhmva2qWvcVWph8zzK9eGF6e/SwwhKIBVwtQT40b7gsraY+AHGMedi1qpE3GE4xazMvHilDY+o5mguA6XyfC/uwcsaWI4MTLGxwXTLSkfezQUVsB8xLlWXeqJ6HdCfbXoO4ctJ54viXnYio7Abf67jLlBMujf6Q1q6LlP8b6EH7NL1dsdRL7uqGL+w==;
+ b=LVmR+z7BNpS0mc4orizCaOmMO1nVqByIkl/odjsm4VJbzxxdvfEMn2GvPjOlW68CRXYo+wwWS36a6sscLHiIv+a15l7yLIMMkOSoBcegCPWKGp87xOVIfxHilMPW4EvfSY8L58jnYg4KXj2kkXKhZ9sF24ShC06crKbjpocHA8Le/b5+j1qiCsrZhdtU3/byE/7iAvniAgWkqLgswUkGjqTmVkfSw7u9sVAQoMpvX6/a6m432cOzeLSvry6IqxeU76Bo6MQ97o1kVKz01x5ByG58zfeUbuKTMf0iqK52rCtPd37ixNt/mc/TMVPq+jo9Er+F6D7JZrfDXtJLNy0BkA==;
  s=purelymail3; d=purelymail.com; v=1;
- bh=UPh5rc/Kz3yTTqcWnzGG/Kptf8NtAJjpzU9xkRrlQ0g=;
+ bh=7/YCfvMiRrvhSVvsFLfgGBuF9XdFcA4uDeCrInIW6Lw=;
  h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail3 header.b=Uszk8/g9
-Subject: Re: [Buildroot] [PATCH] [PATCH v2 1/1] support/testing :
- test_gnupg2 : fix runtime failure
+ header.a=rsa-sha256 header.s=purelymail3 header.b=LVmR+z7B
+Subject: Re: [Buildroot] [PATCH 1/1] package/sigsum-c: bump version to 1.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -100,23 +97,14 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fiona" == Fiona Klute via buildroot <buildroot@buildroot.org> writes:
+>>>>> "Florian" == Florian Larysch <fl@n621.de> writes:
 
- > Am 01.07.26 um 14:57 schrieb Dowan Gullient via buildroot:
- >> In the precedent patch "support/testing: test_gnupg2.py: use assertRunNotOk()" [1]
- >> a small typo (OK instead of Ok) was introduced in the test_gnupg2.py file,
- >> which caused a runtime failure.
- >> This patch simply replace "self.assertRunNotOK(cmd)" with
- >> "self.assertRunNotOk(cmd)" to correct this typo.
- >> [1] cb791850ada782beca4b03e26356fd8506912d52
- >> Signed-off-by: Dowan Gullient <dowan.gullient@smile.fr>
+ > This release now includes our local patch so we can drop it.
+ > Changelog: https://git.glasklar.is/sigsum/core/sigsum-c/-/blob/v1.1.0/NEWS?ref_type=tags#L1-28
 
- > There were a few formatting issues in the commit message (space before
- > colons in the subject, lines in first paragraph too long). Applied to
- > master with that fixed (see cfd7483a26e17ca4ea95793ea7a618c6cc1b1b78),
- > thank you!
+ > Signed-off-by: Florian Larysch <fl@n621.de>
 
-Ups, thanks for the fix.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
