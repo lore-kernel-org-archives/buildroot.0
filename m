@@ -1,116 +1,111 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF373C43602
-	for <buildroot@archiver.kernel.org>; Tue, 30 Jun 2026 21:27:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0E95C43458
+	for <buildroot@archiver.kernel.org>; Wed,  1 Jul 2026 03:26:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8996540F1E;
-	Tue, 30 Jun 2026 21:27:27 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id g2NCYcHCE7ng; Tue, 30 Jun 2026 21:27:26 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9FF7240F31
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1782854846;
-	bh=cUkK58redxxUEU+CuJSspmfIAJDzDfdztLGKCaC/kdE=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=k+/BcRs+kgqDePkYkrsEboY2/BFGtUXpB6IuTe7vGaO9P7AoWtO7D35Ws6qjcY2gL
-	 gYP8ETT1dAPZ4rPgczhZAsO0PTs+UZiqI4pWvfXqwTk1kQ9ochEKgXzbkd3uBUQjB2
-	 W+amUykruV2cg3zJRt6b5BseOSfBvDLoKTULj4mR5em7RGyFuFYUrY596jenxPCyIL
-	 F2P6l9SmV/p+854w3sIawq7xesayZelhF0Xd+3PBwi2wk9qEdc1i1xauQPNRUEIdP3
-	 hNG0iJM6Dyr2l8vG1ZReholGNstUBykBdfmHHyDC/xKyFfLcdMJ5DnDOdOhrVYfkgS
-	 cccjL6lEeua2A==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9FF7240F31;
-	Tue, 30 Jun 2026 21:27:26 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 3B665149
- for <buildroot@buildroot.org>; Tue, 30 Jun 2026 21:27:25 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2CF0360658
- for <buildroot@buildroot.org>; Tue, 30 Jun 2026 21:27:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3245161341;
+	Wed,  1 Jul 2026 03:26:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id I-76U5q_PlQA for <buildroot@buildroot.org>;
- Tue, 30 Jun 2026 21:27:24 +0000 (UTC)
+ id AwjgBfxYyaNK; Wed,  1 Jul 2026 03:26:47 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E310561340
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1782876407;
+	bh=SjR3RfT+Idpog+/bvyB1LdnEVscbvqIHIIEullvQlI8=;
+	h=To:From:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=AaT0p2v88vhY02xTYJ1c17jh06lJ5ridy1W2IAnDwwFLeO3UroLAMmkvoeYbzglwx
+	 jW+GrgF9m/JEAMQdvWcTz3wmpUpPTgdkQ5G/wvZTFjIT+xZr2mxlgbRbDUlfdpMEFj
+	 /gD8CwrJFY4s1JEiGcUivLhyf/KvPXmPZ0qK0kMV3ranzqt7D4Bw94UkkQ0MPYUTGl
+	 w3iDx0LKeFxQvYHX24QTyRod2WJIiVrm25JNdAYWr09DoHVGNS5Zek9Hc3J0XihRQh
+	 9At3UPbQY2DN2rqUyBNkGbPBK86bAhXw3LFPMrZXDpyXuvFyz1De5K92o/yUV5iH5W
+	 s6dntoVN/Neog==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id E310561340;
+	Wed,  1 Jul 2026 03:26:46 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 715BB2EB
+ for <buildroot@buildroot.org>; Wed,  1 Jul 2026 03:26:45 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 573B34021C
+ for <buildroot@buildroot.org>; Wed,  1 Jul 2026 03:26:45 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wcWcHG74aTvG for <buildroot@buildroot.org>;
+ Wed,  1 Jul 2026 03:26:44 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::335; helo=mail-wm1-x335.google.com;
- envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 1B23F60679
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1B23F60679
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
- [IPv6:2a00:1450:4864:20::335])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1B23F60679
- for <buildroot@buildroot.org>; Tue, 30 Jun 2026 21:27:24 +0000 (UTC)
-Received: by mail-wm1-x335.google.com with SMTP id
- 5b1f17b1804b1-493a97fad2fso27041685e9.0
- for <buildroot@buildroot.org>; Tue, 30 Jun 2026 14:27:23 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
+ envelope-from=buildroot.notifications@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1B2BA4012D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1B2BA4012D
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1B2BA4012D
+ for <buildroot@buildroot.org>; Wed,  1 Jul 2026 03:26:43 +0000 (UTC)
+Received: by mail-wm1-x32c.google.com with SMTP id
+ 5b1f17b1804b1-493b779003fso506575e9.3
+ for <buildroot@buildroot.org>; Tue, 30 Jun 2026 20:26:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1782854842; x=1783459642;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=uzHbYNaTup7PpHcQ4xnPYNBKwV1PkjMCEsO6eUabBRQ=;
- b=BfVCaFFICpmwq53958d/00f806+DFzaj4P4kyfFGChziylIT64uBoiEyUvATBLyjhu
- OO0RbokQ6tWK0GasQI8PXBBYg3sp2UI0EjcpzqXIDRhPzEi3+CW6hTLHcdhfrzzjCacn
- 9IO81oIqytxMiJghgnM0by/sRkMfoPIfxH4ihDQWTVuksRNPhRi/fzpiawsZIZh9PP04
- ksv/nJNCqNaEHuI8/hPgUjZ+WATlVGP1RBIPq6ALhI5FMC92ZGlDpUnF3RgDiwCV11ky
- GuHGr2k2EVC8w2lwXFDWmZbH0GFrdSkuCxN0cEtQ/LmpuQUMcokP8Pnjob1cIy35WGEx
- t8XA==
-X-Gm-Message-State: AOJu0YzmGgeoRlk2Nfuh2buf3YIL4CA86MTBttmmsuAmQf1QyVTqw7MU
- eFkjfbYi9AT/RDNdoXOdZUfbaA42N1dT7UxLS/m99gH53I4ABnBT1WlZoWZyox7OD7Hrf2ya/3/
- dYHL+
-X-Gm-Gg: AfdE7cmB0WpvClvL6z374PSF6+u2TvEfvzI5ZV7beoaJOrURBM+Hn0YeZJ1pM/Iwhut
- EOYx81U+ZqxvMz2gDonVjjcQxUGkER6WDy3JQ/TLfAGYAcOrDqrLWuZxpZm8Mzx0/PxC/bYmq+9
- o+cwyHvvL0rU82bQBLaPhYwzoBREIW5YrZPHjDQOOSA5ItILe3LnSCwjRbbdvk6s40ZfwjvoZQA
- JKC5B8czSXUTzvIr7q17E2ryizI6DqNIp+S/TC6MT3yo+m/9HjKGu21+np31i2USvWnKcLl9wex
- 8bBAawGhMUPej3ej8uo63It+72yDT8Qh5xn96dUYJJjIa26v9vLDMTgLyQ3Qvis4yPkeBPe9lpO
- HN84n/TeFzzSQkVry85/pg9YgKspUqdRhiZZy6tx8PQ/hzEFNsKRIq5ssy96TTG4xQ8ktU9N9Rx
- CAo3/1tP3sCG6diqM=
-X-Received: by 2002:a05:600c:8216:b0:493:bed9:b53d with SMTP id
- 5b1f17b1804b1-493bed9b678mr12908365e9.31.1782854841283; 
- Tue, 30 Jun 2026 14:27:21 -0700 (PDT)
-Received: from arch ([77.109.126.77]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-493be4d9daasm26032245e9.9.2026.06.30.14.27.20
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 30 Jun 2026 14:27:20 -0700 (PDT)
-To: buildroot@buildroot.org
-Cc: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>,
- Sergio Prado <sergio.prado@e-labworks.com>
-Date: Tue, 30 Jun 2026 23:27:17 +0200
-Message-ID: <20260630212717.604030-2-thomas.perale@mind.be>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260630212717.604030-1-thomas.perale@mind.be>
-References: <20260630212717.604030-1-thomas.perale@mind.be>
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1782854842; x=1783459642; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ d=1e100.net; s=20251104; t=1782876402; x=1783481202;
+ h=date:from:to:subject:content-transfer-encoding:mime-version
+ :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to;
- bh=uzHbYNaTup7PpHcQ4xnPYNBKwV1PkjMCEsO6eUabBRQ=;
- b=bngDB6TyVDlNW925b34sSvbVJ2H4Lr/ZUZhzsmP2DmQehmg7XTcXieJ16QnU0iLe/v
- hAG/aPkZJHsWY46KfehL+jTROXpzuT+GNghH/5VRiIQGqUCxlxZXfHG/ik+23K6HyQvj
- UpO9+yBI0wIRmpLJtTuB+dxTD25SivLd3oOcs1C0I1Q5uCwxP8DS6fJtxFCP/fg5hAUF
- GTibHajMBocRuFIMd7mRCwKk+kvIMWwtlNC1OgkLBN3Dv4Azvs0BdosC2/58XMNiVnM+
- +i+ojjpMzfLBrRHW9YSwz+Ig6zaueUBb8ftpQ/8uQLa+/bsU79GQ8tA4SePvKtNEXYNs
- bidg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=F+cn3otS/ZWIV0CrdXcuBJZ1eBf0mwAgEoY+2WzAPJc=;
+ b=gREpSL9buZoEAW8PiaNW4h1fMFOokY5//w6eSn6Q7g8dpi3HdQ5DWX9oxeiSg5HkG3
+ syQt9u6wDGiPjGMCXRPQhf4yOrmm7dVfdVXCIGj5pMVHGYUxLQCV9k6yvqNWyexvnGx3
+ pnGYmUNmWyrQTqz7EEmheWfhE6MzH1jZCGSsFTo8Ez9GP7oQ6K6amNDEaZG7e11nE5za
+ 5C1BHuN5hny963PsrhVz31wdOg1beJtuGfG6wDfcyaX+N9RjeWT5vBBNpXBC1B44u9yV
+ cSfLr6VR8jMYcohFGHhH0478kWvHMxe/JY89OXAm0eLlGQNEblhcBjXfF2LDX+ADDaZI
+ LInQ==
+X-Gm-Message-State: AOJu0YyTR2lG5UO8eQM0FnK1GbPXP8sqV7ibZBSmQxrfkrrxcV2fTjqa
+ U6QFp0GrG6FBY+lsup5S6HNK3QIpnzfDrvgfRhEp1Bvg/ztH4oCIkZ0XLYu050CR
+X-Gm-Gg: AfdE7cnkHyJ3THHs7QjY8A50qTTW8rS9+CW4rG3MVYIIQ2W5l6NCOHc1e+hS5xfOMQZ
+ 0ouLMftqOVqqKUz0GwnVDaM31f21GjmIQBZR2AYX/NxoSTdYLsA4IknuYTlsEiXc9r1/+1BkqcV
+ b5gQ6M39TzIPjcc0dOQGh0+ZQnG1nxhfDkMg66exFSx0Sd9zMPSMAMNhy/Jq0bseELsuCtwhy9j
+ rKRyvmSbk+lXccLCKeAmw2puMGrwxCT5bgGPwie/EApmRwIV3NSAm4x0LxkptgoyRUgDZcTm2TM
+ GciKFNMJu3puONyrXdo80qJtIDu9ejFWxrbuA94MxS9EF+orSPvshUdJrPjBk3W9pIE+l7kv2R0
+ zruP2yL6gERx1mPmU3chVTvi0FJzu+Nnb640nZYM7csXsXiWAGtssHQ+MH05Bd3RU4UXzrZ9Mhf
+ MPrucGTHmC/URAN1d8xcdA7kuR6g==
+X-Received: by 2002:a05:600c:3484:b0:493:bdaf:83a7 with SMTP id
+ 5b1f17b1804b1-493bdaf84d5mr42735615e9.28.1782876401688; 
+ Tue, 30 Jun 2026 20:26:41 -0700 (PDT)
+Received: from [138.201.205.61] ([2a01:4f8:173:1526::2])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-493be4bfd47sm56073215e9.2.2026.06.30.20.26.41
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 30 Jun 2026 20:26:41 -0700 (PDT)
+Message-ID: <6a4488f1.51d65a57.22a612.f8d6@mx.google.com>
+MIME-Version: 1.0
+To: buildroot@buildroot.org
+From: Buildroot Notifications <buildroot.notifications@gmail.com>
+Date: Wed, 01 Jul 2026 03:26:41 -0000
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20251104; t=1782876402; x=1783481202; darn=buildroot.org;
+ h=date:from:to:subject:content-transfer-encoding:mime-version
+ :message-id:from:to:cc:subject:date:message-id:reply-to;
+ bh=F+cn3otS/ZWIV0CrdXcuBJZ1eBf0mwAgEoY+2WzAPJc=;
+ b=KBLkGMbfk0fYBFV7Gns8Ca9n6ppjdsKIywccEvqA18BjR6a+zQnrWuAwUv3mMtbXkK
+ O7NCSpAGsiK4yNUmeKFNd8V4Ru7zkQveRyl5fDmX/YanycVku1kFceiYHeKrzIUQJ8lN
+ M8wD0o0IIdE6gUObPLHifYR+ZbnJBopKdrIYpnFNBsWebLm79lEC4wIeirQWiHjLUXlu
+ JjbSUqEOiTtMwOqS12YEYWqio0Z62qIhhi3Es8fqyeTY8xFN8Xmih+6C6sU/AVvFBmsA
+ KxWjQhAV9H93kQx85xMPDlGBZT6527VNbdiNiKSZdQ6lNBgMmVy4+ubgG+iSRHLyAnCM
+ sSpg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=bngDB6Ty
-Subject: [Buildroot] [PATCH 2/2] package/wolfssl: security bump to v5.9.2
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20251104 header.b=KBLkGMbf
+Subject: [Buildroot] [autobuild.buildroot.org] Daily results for 2026-06-30
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -122,181 +117,170 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Perale via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Perale <thomas.perale@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For more information about the release, see:
+Hello,
 
-- https://github.com/wolfSSL/wolfssl/releases/tag/v5.9.2-stable
+Autobuild statistics for 2026-06-30
+===================================
 
-Fixes the following vulnerabilities:
+      branch |  OK | NOK | TIM | TOT |
+  2025.02.x  |  0  |  4  |  0  |  4  |
+  2026.02.x  |  0  |  1  |  0  |  1  |
+  2026.05.x  |  1  |  1  |  0  |  2  |
+    master   | 19  | 47  |  0  | 66  |
 
-- CVE-2026-6091: https://www.cve.org/CVERecord?id=CVE-2026-6091
+Classification of failures by reason for master
+-----------------------------------------------
 
-- CVE-2026-6092: https://www.cve.org/CVERecord?id=CVE-2026-6092
+              host-pahole-1.28 | 3 
+        edk2-edk2-stable202602 | 2 
+  gobject-introspection-1.84.0 | 2 
+              host-guile-3.0.9 | 2 
+host-vboot-utils-7dfa482d6a... | 2 
+                    lua-ev-1.5 | 2 
+ustream-ssl-5a81c108d20e247... | 2 
+amazon-ecr-credential-helpe... | 1 
+android-tools-4.2.2+git2013... | 1 
+                   bird-2.15.1 | 1 
+              containerd-2.0.7 | 1 
+             dahdi-linux-3.3.0 | 1 
+              erlang-26.2.5.15 | 1 
+                  ffmpeg-6.1.5 | 1 
+                      fio-3.42 | 1 
+              fluent-bit-4.2.0 | 1 
+                    grub2-2.14 | 1 
+            host-binutils-2.44 | 1 
+          host-binutils-2.45.1 | 1 
+       host-gcc-initial-15.3.0 | 1 
+          host-intltool-0.51.0 | 1 
+          host-xfsprogs-6.19.0 | 1 
+            igd2-for-linux-2.2 | 1 
+                     kbd-2.9.0 | 1 
+                 lcdproc-0.5.9 | 1 
+libfutils-c326ce0cc2a735438... | 1 
+               libglib2-2.86.5 | 1 
+               libxmlrpc-r3335 | 1 
+                   linux-tools | 1 
+                  ltrace-0.8.1 | 1 
+                   lynis-3.1.6 | 1 
+python-remi-2022.7.27-37-g1... | 1 
+                 rtl_433-25.02 | 1 
+                  stunnel-5.78 | 1 
+                 uclibc-1.0.58 | 1 
+          usb_modeswitch-2.6.2 | 1 
+wilink-bt-firmware-43fca73c... | 1 
+x264-baee400fa9ced6f5481a72... | 1 
+                  xvisor-0.3.2 | 1 
 
-- CVE-2026-6094: https://www.cve.org/CVERecord?id=CVE-2026-6094
 
-- CVE-2026-6291: https://www.cve.org/CVERecord?id=CVE-2026-6291
+Detail of failures for master
+-----------------------------
 
-- CVE-2026-6325: https://www.cve.org/CVERecord?id=CVE-2026-6325
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    i686     | amazon-ecr-credential-helpe... | NOK | https://autobuild.buildroot.org/results/466ed323327928ead7707acbb9ad24abcfb391e6 | ORPH
+    arc      | android-tools-4.2.2+git2013... | NOK | https://autobuild.buildroot.org/results/8b24032e2341b58fb806f8d0fd6dc315ae7eabbc |     
+    i686     |          bird-2.15.1           | NOK | https://autobuild.buildroot.org/results/6e33a75ab0297934f95bf08b4abd13723cba97a1 |     
+  aarch64    |        containerd-2.0.7        | NOK | https://autobuild.buildroot.org/results/a5d33cee5a4438eaf782555cfda4119b14a39a81 |     
+    i686     |       dahdi-linux-3.3.0        | NOK | https://autobuild.buildroot.org/results/b13088bc868bcfabc2d1e4c478558aaaf65e58c5 | ORPH
+    i686     |     edk2-edk2-stable202602     | NOK | https://autobuild.buildroot.org/results/0a22b6854dd827fb1c85d00d20b21a584d920499 |     
+    i686     |     edk2-edk2-stable202602     | NOK | https://autobuild.buildroot.org/results/19f80315bbf194c35c1749af474431e12f4d1014 |     
+    i686     |        erlang-26.2.5.15        | NOK | https://autobuild.buildroot.org/results/cc01efd70ea455a2a787ec7ac5d45efcbe7137ff |     
+    i686     |          ffmpeg-6.1.5          | NOK | https://autobuild.buildroot.org/results/4cf41a24309ffa229d60ea3b9222fd8d0764e2ae |     
+    i686     |            fio-3.42            | NOK | https://autobuild.buildroot.org/results/575ea9260b7fc70e455a72e813f98db56ccdcc41 |     
+    i686     |        fluent-bit-4.2.0        | NOK | https://autobuild.buildroot.org/results/c0b7e6cfa7ee21d06b6c1bd535f286df848c0b0b |     
+    i686     |  gobject-introspection-1.84.0  | NOK | https://autobuild.buildroot.org/results/0ce98e17358bc352292ce189476d800d1e91d72b | ORPH
+    i686     |  gobject-introspection-1.84.0  | NOK | https://autobuild.buildroot.org/results/e26f115b33c8071a799881458cdc4c9bd5efc06b | ORPH
+    i686     |           grub2-2.14           | NOK | https://autobuild.buildroot.org/results/1963d892f398dc1891a9347f06aac1950e9bae9f |     
+    i686     |       host-binutils-2.44       | NOK | https://autobuild.buildroot.org/results/94a28a8bc66087c5d0910b00c0cf23dece50a533 |     
+    i686     |      host-binutils-2.45.1      | NOK | https://autobuild.buildroot.org/results/2204ee287464b9f9783802c21b3288af8016cf9d |     
+    i586     |    host-gcc-initial-15.3.0     | NOK | https://autobuild.buildroot.org/results/084b6815a55e5941c8900521e07990c9437d4d76 |     
+  riscv64    |        host-guile-3.0.9        | NOK | https://autobuild.buildroot.org/results/f5a28af0f29fe7ee180c43e69ce1f2b76b55c7bb |     
+    i686     |        host-guile-3.0.9        | NOK | https://autobuild.buildroot.org/results/a71d441894774f13810027e4ab9be6e4674dbb83 |     
+    i686     |      host-intltool-0.51.0      | NOK | https://autobuild.buildroot.org/results/5c3808ea5912d44f61b8bb94f174c6be5d660262 |     
+    i686     |        host-pahole-1.28        | NOK | https://autobuild.buildroot.org/results/6ee27d997701f28348aaaf613e60809b55020bd4 |     
+   x86_64    |        host-pahole-1.28        | NOK | https://autobuild.buildroot.org/results/c107ebe3568135a14ea733be6a0739576d0afa52 |     
+    i686     |        host-pahole-1.28        | NOK | https://autobuild.buildroot.org/results/fe67d0aa0bdf32f8eed10473f4343a5d968c904b |     
+   x86_64    | host-vboot-utils-7dfa482d6a... | NOK | https://autobuild.buildroot.org/results/5a2122661723b79abd95bf0e88d2b8b82ac98716 |     
+    i686     | host-vboot-utils-7dfa482d6a... | NOK | https://autobuild.buildroot.org/results/c30e2c6001d54930ba3609f22e361a33dbbb49a7 |     
+    i686     |      host-xfsprogs-6.19.0      | NOK | https://autobuild.buildroot.org/results/4025cc1c8e111eba3d00bd5dc03d5303ec409f28 | ORPH
+    i686     |       igd2-for-linux-2.2       | NOK | https://autobuild.buildroot.org/results/473929bef6485c0f66346340fb670fcb5b52e8f6 |     
+  aarch64    |           kbd-2.9.0            | NOK | https://autobuild.buildroot.org/results/cc14a5ac4047b1478eb1a233a8588bee50ffcd07 | ORPH
+    i686     |         lcdproc-0.5.9          | NOK | https://autobuild.buildroot.org/results/10cb4b3229d17e9e0f48c8b3468039a40771cbf2 | ORPH
+    i686     | libfutils-c326ce0cc2a735438... | NOK | https://autobuild.buildroot.org/results/687c71b2c5aaaecfdc9c74dd1bcf6d038cc311ea |     
+    i686     |        libglib2-2.86.5         | NOK | https://autobuild.buildroot.org/results/2092c1c1475f0ea0dad7e3528d267c23d8d7689f |     
+    i686     |        libxmlrpc-r3335         | NOK | https://autobuild.buildroot.org/results/4ccb5f808e4a81875fc1ede7ba48b82e8a36f7da |     
+    i686     |          linux-tools           | NOK | https://autobuild.buildroot.org/results/cd0f2b4e4d3e48f1e42178fd3a98c94ec7abd560 | ORPH
+    i586     |          ltrace-0.8.1          | NOK | https://autobuild.buildroot.org/results/bbd5ca8233e2c2a92446d0b24cef5388c7689a76 | ORPH
+   x86_64    |           lua-ev-1.5           | NOK | https://autobuild.buildroot.org/results/fa1a5e370928a78eb7e9ab11978f7bf08e44b11e |     
+    hppa     |           lua-ev-1.5           | NOK | https://autobuild.buildroot.org/results/714db7ad16b86162179771e1c3ac6f5770d401ba |     
+    i686     |          lynis-3.1.6           | NOK | https://autobuild.buildroot.org/results/815f1b5d1513c7a000376930a628e1b7d4ee91ea |     
+    i686     | python-remi-2022.7.27-37-g1... | NOK | https://autobuild.buildroot.org/results/14fa186b836f1995c4cff4a804f8b22791cd3b54 |     
+    i686     |         rtl_433-25.02          | NOK | https://autobuild.buildroot.org/results/4316692d6898777f9fe83c85224fd8ee9ec7c6a5 |     
+    arm      |          stunnel-5.78          | NOK | https://autobuild.buildroot.org/results/31ae368c3702f09c57cd905c1910f4c311158c93 |     
+  riscv64    |         uclibc-1.0.58          | NOK | https://autobuild.buildroot.org/results/b03deac520749a9d8cda795be0c5c92afce847ec |     
+  mips64el   |      usb_modeswitch-2.6.2      | NOK | https://autobuild.buildroot.org/results/249d08a61d319a1bdf02299009a0a1a3b6c2979f | ORPH
+    i686     | ustream-ssl-5a81c108d20e247... | NOK | https://autobuild.buildroot.org/results/2986c59474efedbefeac00bc493c4c749e73ceb7 | ORPH
+    i686     | ustream-ssl-5a81c108d20e247... | NOK | https://autobuild.buildroot.org/results/6400d210fc48a570ae579974847d0458a63b22b7 | ORPH
+  mips64el   | wilink-bt-firmware-43fca73c... | NOK | https://autobuild.buildroot.org/results/e3e4ceb2e362b009f9477bccee4236775c93dc85 | ORPH
+    i686     | x264-baee400fa9ced6f5481a72... | NOK | https://autobuild.buildroot.org/results/854e09fc04ad60ed58458a25afd200529d7a140d |     
+  aarch64    |          xvisor-0.3.2          | NOK | https://autobuild.buildroot.org/results/e67495c0ce01b2ad880b0c49638eac102881b82f |     
 
-- CVE-2026-6329: https://www.cve.org/CVERecord?id=CVE-2026-6329
 
-- CVE-2026-6330: https://www.cve.org/CVERecord?id=CVE-2026-6330
+Classification of failures by reason for 2026.05.x
+--------------------------------------------------
 
-- CVE-2026-6331: https://www.cve.org/CVERecord?id=CVE-2026-6331
+               valgrind-3.26.0 | 1 
 
-- CVE-2026-6412: https://www.cve.org/CVERecord?id=CVE-2026-6412
 
-- CVE-2026-6450: https://www.cve.org/CVERecord?id=CVE-2026-6450
+Detail of failures for 2026.05.x
+--------------------------------
 
-- CVE-2026-6678: https://www.cve.org/CVERecord?id=CVE-2026-6678
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    i686     |        valgrind-3.26.0         | NOK | https://autobuild.buildroot.org/results/fd9100de087586c06a756705fd928ca34bce6514 | ORPH
 
-- CVE-2026-6681: https://www.cve.org/CVERecord?id=CVE-2026-6681
 
-- CVE-2026-6731: https://www.cve.org/CVERecord?id=CVE-2026-6731
+Classification of failures by reason for 2026.02.x
+--------------------------------------------------
 
-- CVE-2026-7511: https://www.cve.org/CVERecord?id=CVE-2026-7511
+       python-autobahn-25.12.2 | 1 
 
-- CVE-2026-7531: https://www.cve.org/CVERecord?id=CVE-2026-7531
 
-- CVE-2026-7532: https://www.cve.org/CVERecord?id=CVE-2026-7532
+Detail of failures for 2026.02.x
+--------------------------------
 
-- CVE-2026-8720: https://www.cve.org/CVERecord?id=CVE-2026-8720
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+powerpc64le  |    python-autobahn-25.12.2     | NOK | https://autobuild.buildroot.org/results/eced196b8374c30f44dd1c32aa8d0b52e2595f0f |     
 
-- CVE-2026-10097: https://www.cve.org/CVERecord?id=CVE-2026-10097
 
-- CVE-2026-10098: https://www.cve.org/CVERecord?id=CVE-2026-10098
+Classification of failures by reason for 2025.02.x
+--------------------------------------------------
 
-- CVE-2026-10512: https://www.cve.org/CVERecord?id=CVE-2026-10512
+        ltp-testsuite-20250130 | 2 
+            host-go-src-1.26.3 | 1 
+host-netsurf-buildsystem-75... | 1 
 
-- CVE-2026-10592: https://www.cve.org/CVERecord?id=CVE-2026-10592
 
-- CVE-2026-11310: https://www.cve.org/CVERecord?id=CVE-2026-11310
+Detail of failures for 2025.02.x
+--------------------------------
 
-- CVE-2026-11703: https://www.cve.org/CVERecord?id=CVE-2026-11703
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    i686     |       host-go-src-1.26.3       | NOK | https://autobuild.buildroot.org/results/b9c17eb7b45e5362daa3ab3bb23bbe7a32610c10 |     
+    i586     | host-netsurf-buildsystem-75... | NOK | https://autobuild.buildroot.org/results/dbabb4d8a26f126ce410f8662bd6de31a6907f6d | ORPH
+    i686     |     ltp-testsuite-20250130     | NOK | https://autobuild.buildroot.org/results/73fc5a00acd1f708c07d1242946dd263f9bc657c |     
+    i686     |     ltp-testsuite-20250130     | NOK | https://autobuild.buildroot.org/results/969ef273f5187924605653e56f574f66d46425ae |     
 
-- CVE-2026-11999: https://www.cve.org/CVERecord?id=CVE-2026-11999
 
-- CVE-2026-12340: https://www.cve.org/CVERecord?id=CVE-2026-12340
 
-- CVE-2026-55958: https://www.cve.org/CVERecord?id=CVE-2026-55958
-
-- CVE-2026-55960: https://www.cve.org/CVERecord?id=CVE-2026-55960
-
-- CVE-2026-55961: https://www.cve.org/CVERecord?id=CVE-2026-55961
-
-- CVE-2026-55962: https://www.cve.org/CVERecord?id=CVE-2026-55962
-
-- CVE-2026-55964: https://www.cve.org/CVERecord?id=CVE-2026-55964
-
-- CVE-2026-55967: https://www.cve.org/CVERecord?id=CVE-2026-55967
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
----
- ...TS_H-in-options.h-rather-than-config.patch | 59 -------------------
- package/wolfssl/wolfssl.hash                  |  2 +-
- package/wolfssl/wolfssl.mk                    |  2 +-
- 3 files changed, 2 insertions(+), 61 deletions(-)
- delete mode 100644 package/wolfssl/0001-Define-HAVE_LIMITS_H-in-options.h-rather-than-config.patch
-
-diff --git a/package/wolfssl/0001-Define-HAVE_LIMITS_H-in-options.h-rather-than-config.patch b/package/wolfssl/0001-Define-HAVE_LIMITS_H-in-options.h-rather-than-config.patch
-deleted file mode 100644
-index 0599f9d615..0000000000
---- a/package/wolfssl/0001-Define-HAVE_LIMITS_H-in-options.h-rather-than-config.patch
-+++ /dev/null
-@@ -1,59 +0,0 @@
--From b54173fc402c30e81d66b84e2f9725cb6d944b40 Mon Sep 17 00:00:00 2001
--From: Kareem <kareem@wolfssl.com>
--Date: Fri, 27 Mar 2026 17:01:02 -0700
--Subject: [PATCH] Define HAVE_LIMITS_H in options.h rather than config.h since
-- types.h depends on this definition and config.h isn't consistently available
-- at runtime. Fixes #9936.
--
--Upstream: https://github.com/wolfSSL/wolfssl/pull/10097
--
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-----
-- cmake/config.in    | 3 ---
-- cmake/options.h.in | 3 +++
-- configure.ac       | 4 +++-
-- 3 files changed, 6 insertions(+), 4 deletions(-)
--
--diff --git a/cmake/config.in b/cmake/config.in
--index f2524e41e43..6054b6dbe7b 100644
----- a/cmake/config.in
--+++ b/cmake/config.in
--@@ -19,9 +19,6 @@
-- /* Define to 1 if you have the `gmtime_r' function. */
-- #cmakedefine HAVE_GMTIME_R @HAVE_GMTIME_R@
-- 
---/* Define to 1 if you have the <limits.h> header file. */
---#cmakedefine HAVE_LIMITS_H @HAVE_LIMITS_H@
---
-- /* Define to 1 if you have the <pcap/pcap.h> header file. */
-- #cmakedefine HAVE_PCAP_PCAP_H @HAVE_PCAP_PCAP_H@
-- 
--diff --git a/cmake/options.h.in b/cmake/options.h.in
--index 985b54241d6..c46ada8045d 100644
----- a/cmake/options.h.in
--+++ b/cmake/options.h.in
--@@ -33,6 +33,9 @@ extern "C" {
-- #endif
-- 
-- #ifndef WOLFSSL_OPTIONS_IGNORE_SYS
--+/* Since types.h depends on HAVE_LIMITS_H, we must define it in options.h. */
--+#undef HAVE_LIMITS_H
--+#cmakedefine HAVE_LIMITS_H @HAVE_LIMITS_H@
-- #undef _GNU_SOURCE
-- #cmakedefine _GNU_SOURCE
-- #undef _POSIX_THREADS
--diff --git a/configure.ac b/configure.ac
--index bce600f2ecc..c5cf9f320c7 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -185,7 +185,9 @@ AC_ARG_ENABLE([freebsdkm-crypto-register],
--     [ENABLED_BSDKM_REGISTER=no]
--     )
-- 
---AC_CHECK_HEADERS([arpa/inet.h fcntl.h limits.h netdb.h netinet/in.h stddef.h time.h sys/ioctl.h sys/socket.h sys/time.h errno.h sys/un.h ctype.h sys/random.h])
--+AC_CHECK_HEADERS([arpa/inet.h fcntl.h netdb.h netinet/in.h stddef.h time.h sys/ioctl.h sys/socket.h sys/time.h errno.h sys/un.h ctype.h sys/random.h])
--+# Special case: Since types.h depends on HAVE_LIMITS_H, we must define it in options.h.
--+AC_CHECK_HEADER([limits.h], [AM_CPPFLAGS="$AM_CPPFLAGS -DHAVE_LIMITS_H=1"], [])
-- AC_CHECK_LIB([network],[socket])
-- AC_C_BIGENDIAN
-- AC_C___ATOMIC
-diff --git a/package/wolfssl/wolfssl.hash b/package/wolfssl/wolfssl.hash
-index e1ecd5f98a..c259734875 100644
---- a/package/wolfssl/wolfssl.hash
-+++ b/package/wolfssl/wolfssl.hash
-@@ -1,5 +1,5 @@
- # Locally computed:
--sha256  d5ca7af48cd2d9a91d539e9baedeba55a0605a28d7ac8b01dc3d5254a13ca341  wolfssl-5.9.1.tar.gz
-+sha256  2f4ef3d4fd387a9b3191d36a6316d69116c46ff69bb9583b6c82b36d7b8ca114  wolfssl-5.9.2.tar.gz
- 
- # Hash for license files:
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/wolfssl/wolfssl.mk b/package/wolfssl/wolfssl.mk
-index 44f51e06e6..779fd2cabf 100644
---- a/package/wolfssl/wolfssl.mk
-+++ b/package/wolfssl/wolfssl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WOLFSSL_VERSION = 5.9.1
-+WOLFSSL_VERSION = 5.9.2
- WOLFSSL_SITE = $(call github,wolfSSL,wolfssl,v$(WOLFSSL_VERSION)-stable)
- WOLFSSL_INSTALL_STAGING = YES
- 
 -- 
-2.54.0
-
+https://autobuild.buildroot.org
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
