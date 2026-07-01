@@ -4,81 +4,110 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08374C44502
-	for <buildroot@archiver.kernel.org>; Wed,  1 Jul 2026 12:20:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0464C43458
+	for <buildroot@archiver.kernel.org>; Wed,  1 Jul 2026 12:48:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AF96760F0A;
-	Wed,  1 Jul 2026 12:20:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7D8366103D;
+	Wed,  1 Jul 2026 12:48:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WvcIZTSpulBS; Wed,  1 Jul 2026 12:20:02 +0000 (UTC)
+ id QmyYOC5mWuA2; Wed,  1 Jul 2026 12:48:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C41AE60FEA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9987A60824
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1782908402;
-	bh=Oizzv1w03ftHSdlp8z4Zf4PGY3NwQ3JfBC3/x7qhqGQ=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=hsPHqpm0IMU+0j41vtZipvGXPZVrqhRaiqZoE2a7Wn3VyhCWvzXs2VmG0kwp5vKk+
-	 cS/eaTRGl3lidBQ2lUoELqISKq6qPefBFcK8aF2V6vCavk822alLoYGm4RHApIf1wQ
-	 bbblxEVAGp5V+KZVAUqvW6PNFQ3Q4xKgTSuLhDctJtnyFfoOpOzf9AJquzTWIXesx6
-	 5Ca2B6Nfry/gyUxk9GezoTSmIzyNpJeBQ/Va1AKjdO+jf9PTPaC1lNHcu0yOc3M1eW
-	 SlL5ANnMolzM6LqkTCh3dcCr5aLBsjb+10jAflR/PO10sCVWqzw2PSa25nDC35bXax
-	 sYpQ50ARkpnUg==
+	s=default; t=1782910094;
+	bh=ETjAUoOre4WVDiT7Rca0cmtUdFJtecAYYpOK+f2+e1Y=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=VUrMNSpRaRSTn2KW6J4nq2nJnMnLdmiZvH/QaDvyI+aCxwbHIi5zwO5+24peISoF0
+	 YxHbuDMXJHJ4lse8UpK2nA2y0z1dGlvE9q3CapgJrz3UX/cEOXHIj9ewukfi4OeHMl
+	 iJL1loFL6PB+AgW715Ncvuty5C+46+O4JQR/IFpbpJ6IiynnJbCYtEu8TrENTf2ije
+	 Siyu90I+tLjjrnr0CHu+BVBQS4mJFNIIAYkoIzlcRxvusSjSS/sSaklz1RYQIr3Ccj
+	 D3zqQKwWZ/VHmwqCXQDN05ZhkfGWFUQMx6f/aC6xjeiEi1byU5+2pWL+r1BudDDpNO
+	 Y8pVSxlfCevcQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C41AE60FEA;
-	Wed,  1 Jul 2026 12:20:02 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id B09AB2D5
- for <buildroot@buildroot.org>; Wed,  1 Jul 2026 12:20:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9987A60824;
+	Wed,  1 Jul 2026 12:48:14 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6A1892D5
+ for <buildroot@buildroot.org>; Wed,  1 Jul 2026 12:48:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A1E6A405CA
- for <buildroot@buildroot.org>; Wed,  1 Jul 2026 12:20:01 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4FF1741738
+ for <buildroot@buildroot.org>; Wed,  1 Jul 2026 12:48:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id T6gSZM0A5vD0 for <buildroot@buildroot.org>;
- Wed,  1 Jul 2026 12:20:00 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
- helo=smtp2-g21.free.fr; envelope-from=nunes.philippe@free.fr;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 972DC40207
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 972DC40207
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 972DC40207
- for <buildroot@buildroot.org>; Wed,  1 Jul 2026 12:20:00 +0000 (UTC)
-Received: from pnunes-ThinkPad.proxad.net (unknown
- [IPv6:2a01:e0a:ad7:ca0:5e8f:f9af:2d01:45e3])
- (Authenticated sender: nunes.philippe@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPSA id DD0C82003DA;
- Wed,  1 Jul 2026 14:19:56 +0200 (CEST)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZgES74iOgJ8q for <buildroot@buildroot.org>;
+ Wed,  1 Jul 2026 12:48:11 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::430; helo=mail-wr1-x430.google.com;
+ envelope-from=dowan.gullient@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 40328404DC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 40328404DC
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
+ [IPv6:2a00:1450:4864:20::430])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 40328404DC
+ for <buildroot@buildroot.org>; Wed,  1 Jul 2026 12:48:10 +0000 (UTC)
+Received: by mail-wr1-x430.google.com with SMTP id
+ ffacd0b85a97d-472493849a3so758753f8f.2
+ for <buildroot@buildroot.org>; Wed, 01 Jul 2026 05:48:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20251104; t=1782910089; x=1783514889;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=Oo/+kx2HtOl06gAMe/0qh40PNthfwEbu+Xg1NLcwsrk=;
+ b=lbvduxHf2Gm+S5A7x78X5BnbvW0XczoOvDUtA4t5jvFprAu9MukombNKnRyH2Kgomo
+ wv4XzPACVcNpSLodERR7AXuJ91od2Yqu+vXZbdzJ+x/NvxhggnSxjjUbu4bt/wXLl8Vm
+ XMmE7vWd/Q1i5SrwYiPJ6FLmVoA/RskGxRFyKukEulBNFatQ/ZfDZH1SG9VjjGXJ5323
+ DZmlwqre0voAgi3xRIw8oVw/BdO0hYnKGOfT42jdbQDrlOi3owxr6j4O8wlkkoufUwZa
+ SKfoY+xFJXmkqoaj8q7OOMgo08rk+7Y7A7mdOGF87uaC7UldSZqlxeD9hbuMP5/vVCdl
+ oXcg==
+X-Gm-Message-State: AOJu0YwuovMaYlWuNW+6ZhtUt+Cj3JlaP965czny4LRXnL5AuIjCSejY
+ 3S6q13V3mpakucQ+1U4kEI4dKqlT0x/MNBhGEJCehpqGvfgtTdtqZW4ks1gJWBdIRfE6NvpprNH
+ kc8+eXd4=
+X-Gm-Gg: AfdE7ck4fNNmoX8AfD7BbC4CEPhxGtkt4uk9rBHUbaBcInC6awBsuP+2N9D+EL6OeYn
+ 86qc75tWmQR1/Qx6kIerAc8e5Rk6cbkMeryuhUkwGEnnUyvUfBbppTr484JEbwUtByJmo1JJ3Vx
+ zD/3GiqbEdMLPJiCk10xP2LdUMSg3IKmw82zh5GJyu65rqyG3Mgwhdhkp/tLE1oBXLbzhNCWGTO
+ mS2eAomWyqMjJDVKZpcHnfQXfxg2lvUv/swI4BvXNKDit5+lL48sFz0fm2ZLb2yilEvXBO4TgN/
+ HUsga7rRT5KUU/20msSqNPBMSrqrSsvxrzQpW9gMbDPEXgrZA7I/6N7Y+QFDR3tmEJepU/2Y2Og
+ UhM/BwFL+ucw7EbZsfkimtMn/or0yNh4xpiDIaE5GpY7AThxwhsAx4eYp0KQ4N79sayAP8/Sj8I
+ lhi2QxE36eiyJfmCT7kw7iO8yOO68De02hVaiD3MpGDVvpKEhui2JcUyNpFuaJbvQ1trdalCkhL
+ cXXH5ij5Ukv00zwib/q
+X-Received: by 2002:adf:eccc:0:b0:470:eb60:bed5 with SMTP id
+ ffacd0b85a97d-477af5ef989mr624842f8f.20.1782910088737; 
+ Wed, 01 Jul 2026 05:48:08 -0700 (PDT)
+Received: from P-NAN-NAPALM..
+ (static-css-ccs-204145.business.bouyguestelecom.com. [176.157.204.145])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-47563e0eee5sm17284470f8f.5.2026.07.01.05.48.08
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 01 Jul 2026 05:48:08 -0700 (PDT)
 To: buildroot@buildroot.org
-Cc: Philippe Nunes <nunes.philippe@free.fr>
-Date: Wed,  1 Jul 2026 14:19:37 +0200
-Message-ID: <20260701121937.346945-4-nunes.philippe@free.fr>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260701121937.346945-1-nunes.philippe@free.fr>
-References: <20260701121937.346945-1-nunes.philippe@free.fr>
+Cc: thomas.perale@mind.be,
+	Dowan Gullient <dowan.gullient@smile.fr>
+Date: Wed,  1 Jul 2026 14:48:02 +0200
+Message-ID: <20260701124802.4062980-1-dowan.gullient@smile.fr>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1782908399;
- bh=fETPw8Qeif4H+uaCXo2WIXqtSTOpDgf9lXGQw7Eu3xM=;
- h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=DX4DHmH4QGoUASeTCLHejZU5Roko3634DUIOiNe/JKOCCK94IdFQKYquITZuArsGa
- pf034DIEusTW4fK0/ToOEPUagR2yriwDT7yhQfBg2gfJbYy0So3vmmUHP8hUKkEcvn
- 9qUtf1tAgh6TRzVWx2wn3HDMxdia1/ShZFeau6aqSnFo1v/i/o+yfTVRbGq8EaH58M
- H1aR3F/vQg7qFoybYVa3YuLujfh/ZyBcOGuJMJUmTBrMpor/l+xwNXOq3YrBXprZxp
- T+K15jMhiVvduwy28N4RD6IiGsmv5onbgMURUPrKY9JfqPkIwVWPl7Mh9WAB3htDEC
- B4W/9aMk1CsLQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=DX4DHmH4
-Subject: [Buildroot] [PATCH 3/3] package/qoriq-rcw-c: new package
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=smile.fr; s=google; t=1782910089; x=1783514889; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=Oo/+kx2HtOl06gAMe/0qh40PNthfwEbu+Xg1NLcwsrk=;
+ b=nI11g3mCUtX8UxHveRX4aQfnaAzWtmkcQ0N/WNaoua1hNVXciVCtw19+h0Rz4q+Vkx
+ wiYOr3uGRE9csOsHZQqOopUvz/RE5lK6l1beGURwUnFbDxvppYZnavXUXtYbQqe5t3Yo
+ MB1rbnF7NNoha3nXaL9Tslx+XsVVYY4G5g/MA=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=smile.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
+ header.s=google header.b=nI11g3mC
+Subject: [Buildroot] [PATCH] support/testing : test_gnupg2 : fix build
+ failure
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -90,144 +119,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Philippe Nunes via buildroot <buildroot@buildroot.org>
-Reply-To: Philippe Nunes <nunes.philippe@free.fr>
+From: Dowan Gullient via buildroot <buildroot@buildroot.org>
+Reply-To: Dowan Gullient <dowan.gullient@smile.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-qoriq-rcw-c is a C reimplementation of NXP's rcw.py CLI for the
-pbiformat=2 QorIQ family (LS1028, LS1088, LS2088, LX2160). Built on
-top of libqoriq-rcw, it compiles a .rcw source file (preprocessed
-in-process via libmcpp) to the binary RCW + PBI image consumed by
-the SoC bootrom.
+In the precedent patch "support/testing: test_gnupg2.py: use assertRunNotOk()" [1]
+a small typo (OK instead of Ok) was introduced in the test_gnupg2.py file,
+which caused a build failure.
 
-Beyond the rcw.py reference, qoriq-rcw-c adds two recovery features:
+This patch simply replace "self.assertRunNotOK(cmd)" with
+"self.assertRunNotOk(cmd)" to correct this typo.
 
-  --dump        read the live RCW from /dev/mem on a running board
-                (post-PLL-lock RCWSR state; no PBI commands)
-  --dump-flash  recover the PBL preamble + PBI commands from the
-                bootrom slot(s) in NOR / SD / eMMC
+[1] https://lore.kernel.org/all/20260626145113.1FE598649C@busybox.osuosl.org/
 
-Built as a host-only meson package with -Dman=disabled to skip the
-pandoc-based man page (host packages don't install man pages anyway,
-and pandoc is a heavy Haskell-runtime build dep). The 'man' feature
-option landed upstream in v1.0.1; we pin to v1.0.1.
-
-The "-c" suffix in the Buildroot package name distinguishes the
-independent C implementation from the existing host-qoriq-rcw
-package, which wraps NXP's rcw.py reference. The upstream project
-itself is just "qoriq-rcw"; the suffix is purely a Buildroot-side
-disambiguator (the installed binary is still named qoriq-rcw).
-
-Upstream: https://github.com/vjardin/qoriq-rcw
-
-Signed-off-by: Philippe Nunes <nunes.philippe@free.fr>
+Signed-off-by: Dowan Gullient <dowan.gullient@smile.fr>
 ---
- DEVELOPERS                           |  1 +
- package/Config.in.host               |  1 +
- package/qoriq-rcw-c/Config.in.host   | 19 +++++++++++++++++++
- package/qoriq-rcw-c/qoriq-rcw-c.hash |  5 +++++
- package/qoriq-rcw-c/qoriq-rcw-c.mk   | 25 +++++++++++++++++++++++++
- 5 files changed, 51 insertions(+)
- create mode 100644 package/qoriq-rcw-c/Config.in.host
- create mode 100644 package/qoriq-rcw-c/qoriq-rcw-c.hash
- create mode 100644 package/qoriq-rcw-c/qoriq-rcw-c.mk
+ support/testing/tests/package/test_gnupg2.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 830ea99cb7..36edb3a767 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2728,6 +2728,7 @@ F:	package/libtorrent-rasterbar/
- N:	Philippe Nunes <nunes.philippe@free.fr>
- F:	package/libqoriq-rcw/
- F:	package/mcpp/
-+F:	package/qoriq-rcw-c/
+diff --git a/support/testing/tests/package/test_gnupg2.py b/support/testing/tests/package/test_gnupg2.py
+index 6f862c31ce..c8fb029c95 100644
+--- a/support/testing/tests/package/test_gnupg2.py
++++ b/support/testing/tests/package/test_gnupg2.py
+@@ -108,4 +108,4 @@ class TestGnupg2(infra.basetest.BRTest):
+         self.assertRunNotOk(cmd)
  
- N:	Philippe Proulx <eeppeliteloop@gmail.com>
- F:	package/babeltrace2/
-diff --git a/package/Config.in.host b/package/Config.in.host
-index e44506198d..5192f4b18d 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -102,6 +102,7 @@ menu "Host utilities"
- 	source "package/python3/Config.in.host"
- 	source "package/qemu/Config.in.host"
- 	source "package/qoriq-rcw/Config.in.host"
-+	source "package/qoriq-rcw-c/Config.in.host"
- 	source "package/qt6/Config.in.host"
- 	source "package/raspberrypi-usbboot/Config.in.host"
- 	source "package/rauc/Config.in.host"
-diff --git a/package/qoriq-rcw-c/Config.in.host b/package/qoriq-rcw-c/Config.in.host
-new file mode 100644
-index 0000000000..f8ca8d0de6
---- /dev/null
-+++ b/package/qoriq-rcw-c/Config.in.host
-@@ -0,0 +1,19 @@
-+config BR2_PACKAGE_HOST_QORIQ_RCW_C
-+	bool "host qoriq-rcw-c (C implementation)"
-+	select BR2_PACKAGE_HOST_LIBQORIQ_RCW
-+	help
-+	  C CLI built on top of libqoriq-rcw -- a faster drop-in
-+	  replacement for NXP's rcw.py for the pbiformat=2 SoC family
-+	  (LS1028, LS1088, LS2088, LX2160).
-+
-+	  Adds two capabilities beyond rcw.py:
-+	    --dump          read live RCW from /dev/mem on a running
-+	                    board (post-PLL-lock RCWSR state, no PBI)
-+	    --dump-flash    recover PBL + PBI from the bootrom slot(s)
-+	                    in NOR / SD / eMMC
-+
-+	  Naming note: the existing host-qoriq-rcw package consumes
-+	  the upstream NXP rcw.py reference implementation; the "-c"
-+	  suffix here distinguishes the independent C implementation.
-+
-+	  https://github.com/vjardin/qoriq-rcw
-diff --git a/package/qoriq-rcw-c/qoriq-rcw-c.hash b/package/qoriq-rcw-c/qoriq-rcw-c.hash
-new file mode 100644
-index 0000000000..911a2c2e63
---- /dev/null
-+++ b/package/qoriq-rcw-c/qoriq-rcw-c.hash
-@@ -0,0 +1,5 @@
-+# Locally calculated
-+sha256  977d501752045533fa725fe93e6e21b8cbbdf118da8944a939e9932ee1160529  qoriq-rcw-1.0.1.tar.gz
-+
-+# Locally calculated
-+sha256  30a111209bd81aa8d8c110087bff83ba112f82eb4e42630e5cba46cf0daa21ac  LICENSE
-diff --git a/package/qoriq-rcw-c/qoriq-rcw-c.mk b/package/qoriq-rcw-c/qoriq-rcw-c.mk
-new file mode 100644
-index 0000000000..a8258b121e
---- /dev/null
-+++ b/package/qoriq-rcw-c/qoriq-rcw-c.mk
-@@ -0,0 +1,25 @@
-+################################################################################
-+#
-+# qoriq-rcw-c
-+#
-+################################################################################
-+
-+# The upstream project is named "qoriq-rcw"; the "-c" suffix in the
-+# Buildroot package name distinguishes it from the existing
-+# host-qoriq-rcw package (which wraps NXP's rcw.py reference).
-+QORIQ_RCW_C_VERSION = 1.0.1
-+QORIQ_RCW_C_SITE = $(call github,vjardin,qoriq-rcw,v$(QORIQ_RCW_C_VERSION))
-+QORIQ_RCW_C_SOURCE = qoriq-rcw-$(QORIQ_RCW_C_VERSION).tar.gz
-+
-+QORIQ_RCW_C_LICENSE = BSD-3-Clause
-+QORIQ_RCW_C_LICENSE_FILES = LICENSE
-+
-+HOST_QORIQ_RCW_C_DEPENDENCIES = host-libqoriq-rcw
-+
-+# Skip the pandoc-rendered man page: pandoc is a heavy Haskell-
-+# runtime build-time tool typically absent from packagers' minimal
-+# images, and host packages don't install man pages anyway. The
-+# 'man' feature option landed upstream in v1.0.1.
-+HOST_QORIQ_RCW_C_CONF_OPTS = -Dman=disabled
-+
-+$(eval $(host-meson-package))
+         cmd = "gpg --armor --verify {}".format(asc_file)
+-        self.assertRunNotOK(cmd)
++        self.assertRunNotOk(cmd)
 -- 
-2.50.1
+2.43.0
 
 _______________________________________________
 buildroot mailing list
