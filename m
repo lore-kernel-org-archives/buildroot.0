@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64D40C44501
-	for <buildroot@archiver.kernel.org>; Fri,  3 Jul 2026 14:27:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37F5FC44502
+	for <buildroot@archiver.kernel.org>; Fri,  3 Jul 2026 14:27:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3916541172;
+	by smtp3.osuosl.org (Postfix) with ESMTP id F3B0C60ADC;
 	Fri,  3 Jul 2026 14:27:09 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MWJ424zoYfqk; Fri,  3 Jul 2026 14:27:08 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4FABF4116B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1783088828;
-	bh=AVOtcIyatAFDbPfYcQIPs+jspEcsoP8HX0w5Mm/b5kc=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=s6qaInG4zIWXHAvb94N7MEH3IY2MLE6qr7y4uw9xjfzVBg0A9DUtBgI+XLrITj6X3
-	 bJ2gKU+FqH2mOWNe7nL9bfDiwaNDKLmkXRK4TNoHMEleYLu57kifgkN18N3Z5mB6sU
-	 qiug6d2ALLXcPdaZSvMaMZjO71nWNC7vjB0CR3VnPmr3Xqe8ffF0TkFjp40Z7tXbNV
-	 71nAfuFGEVc6sY9V5gJ6L5X+05Us6DyvcHTeZgJBZm5XnLS3yOtxnk38AyPhR+DeTu
-	 uceKCrG2vUwqsYrxdqqG4NQ0xZVg+38LN5DWsd1YYjTt6HZj2qdlYUVglkwVWTMhvB
-	 +fvtryhoQLICg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4FABF4116B;
-	Fri,  3 Jul 2026 14:27:08 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 7B92847E
- for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:26:46 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6278660648
- for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:26:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id c_yx7wjD71FM for <buildroot@buildroot.org>;
+ id S94RH4oRRxDW; Fri,  3 Jul 2026 14:27:07 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3E6A660BEF
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1783088827;
+	bh=nX8ujU/orp2AmBFFvBXuJBXHyueFlooSx+XCtVTRRaQ=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=bF2WDhVMjLADsMilhlntvQSQ4CqJytlSeyYxTJV9l35VaR3DyuZTKbr8fdl34G+OF
+	 GC+P4fOYnSdgo/DvzjjtRIuy23dLKQ1WbK4AuOvlqwU7DJdcYgbd5hAY2PihszCmn3
+	 5U4drDIyBW37xO53tPdJo+581xfprTDlAzZUnjTpvUSB4SL5DrdNemGdUhF4rHUEgT
+	 8RBC7IJ85nkdt25URg0fy350O4M4qlcmGqRb5+ZTQSM76OJROK5pPsRIRPcdeCPwXW
+	 SEFTI8dABEm7K04EDwIV4XAFydHV1v0RuiNBo/RLGncIxHTap3Vdx4JeIxGzYZqE3R
+	 4UZSl0S2aHhsw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3E6A660BEF;
+	Fri,  3 Jul 2026 14:27:07 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 76C2B363
+ for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:26:46 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6905940420
+ for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:26:46 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cfK4IZ4Wv7ZP for <buildroot@buildroot.org>;
  Fri,  3 Jul 2026 14:26:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1B8A160ADA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 134F6405BE
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1B8A160ADA
+ by smtp2.osuosl.org (Postfix) with ESMTP id 134F6405BE
  for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:26:45 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B2425883A1; Fri,  3 Jul 2026 14:26:15 +0000 (UTC)
+ id AA192883A3; Fri,  3 Jul 2026 14:26:15 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 2 Jul 2026 21:53:54 +0200
+Date: Thu, 2 Jul 2026 21:53:53 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 6401cd531a3444f826560e993813704ff27186e0
-X-Git-Newrev: 7938b9236b0b5e69b25f583056942ad5d604785b
+X-Git-Oldrev: acea9f47033cd5b6b0024bf1118531b9381b8bac
+X-Git-Newrev: 6401cd531a3444f826560e993813704ff27186e0
 X-Patchwork-Hint: ignore
-Message-Id: <20260703142615.B2425883A1@busybox.osuosl.org>
+Message-Id: <20260703142615.AA192883A3@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/2025.02.x] package/squid: backport
- patch for CVE-2026-33526
+ patch for CVE-2026-33515
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,79 +77,245 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/7938b9236b0b5e69b25f583056942ad5d604785b
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/6401cd531a3444f826560e993813704ff27186e0
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-- CVE-2026-33526:
+- CVE-2026-33515:
     Squid is a caching proxy for the Web. Prior to version 7.5, due to
-    heap Use-After-Free, Squid is vulnerable to Denial of Service when
-    handling ICP traffic. This problem allows a remote attacker to perform
-    a reliable and repeatable Denial of Service attack against the Squid
-    service using ICP protocol. This attack is limited to Squid
-    deployments that explicitly enable ICP support (i.e. configure non-
-    zero `icp_port`). This problem _cannot_ be mitigated by denying ICP
-    queries using `icp_access` rules. Version 7.5 contains a patch.
+    improper input validation, Squid is vulnerable to out of bounds read
+    when handling ICP traffic. This problem allows a remote attacker to
+    receive small amounts of memory potentially containing sensitive
+    information when responding with errors to invalid ICP requests. This
+    attack is limited to Squid deployments that explicitly enable ICP
+    support (i.e. configure non-zero `icp_port`). This problem cannot be
+    mitigated by denying ICP queries using `icp_access` rules. Version 7.5
+    contains a patch.
 
 For more information, see:
-  - https://www.cve.org/CVERecord?id=CVE-2026-33526
+  - https://www.cve.org/CVERecord?id=CVE-2026-33515
   - https://github.com/squid-cache/squid/commit/8138e909d2058d4401e0ad49b583afaec912b165
 
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/squid/0004-CVE-2026-33526.patch | 34 +++++++++++++++++++++++++++++++++
- package/squid/squid.mk                  |  3 +++
- 2 files changed, 37 insertions(+)
+ package/squid/0003-CVE-2026-33515.patch | 199 ++++++++++++++++++++++++++++++++
+ package/squid/squid.mk                  |   3 +
+ 2 files changed, 202 insertions(+)
 
-diff --git a/package/squid/0004-CVE-2026-33526.patch b/package/squid/0004-CVE-2026-33526.patch
+diff --git a/package/squid/0003-CVE-2026-33515.patch b/package/squid/0003-CVE-2026-33515.patch
 new file mode 100644
-index 0000000000..572a0197cb
+index 0000000000..c99a0362cf
 --- /dev/null
-+++ b/package/squid/0004-CVE-2026-33526.patch
-@@ -0,0 +1,34 @@
-+From 8a7d42f9d44befb8fcbbb619505587c8de6a1e91 Mon Sep 17 00:00:00 2001
-+From: Joshua Rogers <megamansec@gmail.com>
-+Date: Tue, 10 Feb 2026 19:58:49 +0000
-+Subject: [PATCH] Do not escape malformed URI twice when sending ICP errors
-+ (#2374)
++++ b/package/squid/0003-CVE-2026-33515.patch
+@@ -0,0 +1,199 @@
++From 8138e909d2058d4401e0ad49b583afaec912b165 Mon Sep 17 00:00:00 2001
++From: Joshua Rogers <MegaManSec@users.noreply.github.com>
++Date: Thu, 12 Feb 2026 20:28:43 +0000
++Subject: [PATCH] ICP: Fix validation of packet sizes and URLs (#2220)
 +
-+In this context, escaping escaped URI always produces incorrect URI
-+because `%` character in the escaped URI gets escaped again. Feeding the
-+result of the first rfc1738_escape() call to the second call is also
-+dangerously wrong because the result of the first call gets invalidated
-+during the second call.
++Fix handling of malformed ICP queries and replies instead of passing
++invalid URL pointer to consumers, leading to out-of-bounds memory reads
++and other problems. These fixes affect both ICP v2 and ICP v3 traffic.
 +
-+No other cases of such "chained" rfc1738_escape() calls were found.
++* Reject packets with URLs that are not NUL-terminated.
++* Reject packets with URLs containing embedded NULs or trailing garbage.
 +
-+Broken since 2002 commit e6ccf245.
++The above two restrictions may backfire if popular ICP agents do send
++such malformed URLs, and we will need to do more to handle them
++correctly, but it is _safe_ to reject them for now.
++
++Also protect icpHandleUdp() from dereferencing a nil icpOutgoingConn
++pointer. It is not clear whether icpHandleUdp() can be exposed to nil
++icpOutgoingConn in current code. More work is needed to polish this.
++
 +Upstream: https://github.com/squid-cache/squid/commit/8138e909d2058d4401e0ad49b583afaec912b165
-+CVE: CVE-2026-33526
++CVE: CVE-2026-33515
 +Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 +---
-+ src/icp_v2.cc | 1 -
-+ 1 file changed, 1 deletion(-)
++ src/ICP.h             |  8 ++++--
++ src/icp_v2.cc         | 57 +++++++++++++++++++++++++++++++++++++------
++ src/icp_v3.cc         | 10 +++++---
++ src/tests/stub_icp.cc |  5 ++--
++ 4 files changed, 66 insertions(+), 14 deletions(-)
 +
++diff --git a/src/ICP.h b/src/ICP.h
++index 10a8e1c673b..e9ad8d0cef1 100644
++--- a/src/ICP.h
+++++ b/src/ICP.h
++@@ -89,8 +89,12 @@ extern Comm::ConnectionPointer icpIncomingConn;
++ extern Comm::ConnectionPointer icpOutgoingConn;
++ extern Ip::Address theIcpPublicHostID;
++ 
+++/// A URI extracted from the given raw packet buffer.
+++/// On errors, details the problem and returns nil.
+++const char *icpGetUrl(const Ip::Address &from, const char *, const icp_common_t &);
+++
++ /// \ingroup ServerProtocolICPAPI
++-HttpRequest* icpGetRequest(char *url, int reqnum, int fd, Ip::Address &from);
+++HttpRequest *icpGetRequest(const char *url, int reqnum, int fd, const Ip::Address &from);
++ 
++ /// \ingroup ServerProtocolICPAPI
++ bool icpAccessAllowed(Ip::Address &from, HttpRequest * icp_request);
++@@ -102,7 +106,7 @@ void icpCreateAndSend(icp_opcode, int flags, char const *url, int reqnum, int pa
++ icp_opcode icpGetCommonOpcode();
++ 
++ /// \ingroup ServerProtocolICPAPI
++-void icpDenyAccess(Ip::Address &from, char *url, int reqnum, int fd);
+++void icpDenyAccess(const Ip::Address &from, const char *url, int reqnum, int fd);
++ 
++ /// \ingroup ServerProtocolICPAPI
++ PF icpHandleUdp;
 +diff --git a/src/icp_v2.cc b/src/icp_v2.cc
-+index 2a4ced3bfab..25f7b71d25e 100644
++index 25f7b71d25e..312104024de 100644
 +--- a/src/icp_v2.cc
 ++++ b/src/icp_v2.cc
-+@@ -490,7 +490,6 @@ HttpRequest *
-+ icpGetRequest(const char * const url, const int reqnum, const int fd, const Ip::Address &from)
++@@ -425,7 +425,7 @@ icpCreateAndSend(icp_opcode opcode, int flags, char const *url, int reqnum, int
++ }
++ 
++ void
++-icpDenyAccess(Ip::Address &from, char *url, int reqnum, int fd)
+++icpDenyAccess(const Ip::Address &from, const char * const url, const int reqnum, const int fd)
++ {
++     debugs(12, 2, "icpDenyAccess: Access Denied for " << from << " by " << AclMatchedName << ".");
++ 
++@@ -453,8 +453,41 @@ icpAccessAllowed(Ip::Address &from, HttpRequest * icp_request)
++     return checklist.fastCheck().allowed();
++ }
++ 
+++const char *
+++icpGetUrl(const Ip::Address &from, const char * const buf, const icp_common_t &header)
+++{
+++    const auto receivedPacketSize = static_cast<size_t>(header.length);
+++    const auto payloadOffset = sizeof(header);
+++
+++    // Query payload contains a "Requester Host Address" followed by a URL.
+++    // Payload of other ICP packets (with opcode that we recognize) is a URL.
+++    const auto urlOffset = payloadOffset + ((header.opcode == ICP_QUERY) ? sizeof(uint32_t) : 0);
+++
+++    // A URL field cannot be empty because it includes a terminating NUL char.
+++    // Ensure that the packet has at least one URL field byte.
+++    if (urlOffset >= receivedPacketSize) {
+++        debugs(12, 3, "too small packet from " << from << ": " << urlOffset << " >= " << receivedPacketSize);
+++        return nullptr;
+++    }
+++
+++    // All ICP packets (with opcode that we recognize) _end_ with a URL field.
+++    // RFC 2186 requires all URLs to be "Null-Terminated".
+++    if (buf[receivedPacketSize - 1] != '\0') {
+++        debugs(12, 3, "unterminated URL or trailing garbage from " << from);
+++        return nullptr;
+++    }
+++
+++    const auto url = buf + urlOffset; // a possibly empty c-string
+++    if (urlOffset + strlen(url) + 1 != receivedPacketSize) {
+++        debugs(12, 3, "URL with an embedded NUL or trailing garbage from " << from);
+++        return nullptr;
+++    }
+++
+++    return url;
+++}
+++
++ HttpRequest *
++-icpGetRequest(char *url, int reqnum, int fd, Ip::Address &from)
+++icpGetRequest(const char * const url, const int reqnum, const int fd, const Ip::Address &from)
 + {
 +     if (strpbrk(url, w_space)) {
-+-        url = rfc1738_escape(url);
-+         icpCreateAndSend(ICP_ERR, 0, rfc1738_escape(url), reqnum, 0, fd, from, nullptr);
-+         return nullptr;
++         url = rfc1738_escape(url);
++@@ -472,13 +505,18 @@ icpGetRequest(char *url, int reqnum, int fd, Ip::Address &from)
++ }
++ 
++ static void
++-doV2Query(int fd, Ip::Address &from, char *buf, icp_common_t header)
+++doV2Query(const int fd, Ip::Address &from, const char * const buf, icp_common_t header)
++ {
++     int rtt = 0;
++     int src_rtt = 0;
++     uint32_t flags = 0;
++-    /* We have a valid packet */
++-    char *url = buf + sizeof(icp_common_t) + sizeof(uint32_t);
+++
+++    const auto url = icpGetUrl(from, buf, header);
+++    if (!url) {
+++        icpCreateAndSend(ICP_ERR, 0, "", header.reqnum, 0, fd, from, nullptr);
+++        return;
+++    }
+++
++     HttpRequest *icp_request = icpGetRequest(url, header.reqnum, fd, from);
++ 
++     if (!icp_request)
++@@ -545,7 +583,9 @@ icp_common_t::handleReply(char *buf, Ip::Address &from)
++         neighbors_do_private_keys = 0;
 +     }
++ 
++-    char *url = buf + sizeof(icp_common_t);
+++    const auto url = icpGetUrl(from, buf, *this);
+++    if (!url)
+++        return;
++     debugs(12, 3, "icpHandleIcpV2: " << icp_opcode_str[opcode] << " from " << from << " for '" << url << "'");
++ 
++     const cache_key *key = icpGetCacheKey(url, (int) reqnum);
++@@ -680,7 +720,10 @@ icpHandleUdp(int sock, void *)
++ 
++         icp_version = (int) buf[1]; /* cheat! */
++ 
++-        if (icpOutgoingConn->local == from)
+++        // XXX: The IP equality comparison below ignores port differences but
+++        // should not. It also fails to detect loops when `local` is a wildcard
+++        // address (e.g., [::]:3130) because `from` address is never a wildcard.
+++        if (icpOutgoingConn && icpOutgoingConn->local == from)
++             // ignore ICP packets which loop back (multicast usually)
++             debugs(12, 4, "icpHandleUdp: Ignoring UDP packet sent by myself");
++         else if (icp_version == ICP_VERSION_2)
++diff --git a/src/icp_v3.cc b/src/icp_v3.cc
++index c912dd4c062..844768aa0bc 100644
++--- a/src/icp_v3.cc
+++++ b/src/icp_v3.cc
++@@ -32,10 +32,14 @@ class ICP3State: public ICPState
++ 
++ /// \ingroup ServerProtocolICPInternal3
++ static void
++-doV3Query(int fd, Ip::Address &from, char *buf, icp_common_t header)
+++doV3Query(int fd, Ip::Address &from, const char * const buf, icp_common_t header)
++ {
++-    /* We have a valid packet */
++-    char *url = buf + sizeof(icp_common_t) + sizeof(uint32_t);
+++    const auto url = icpGetUrl(from, buf, header);
+++    if (!url) {
+++        icpCreateAndSend(ICP_ERR, 0, "", header.reqnum, 0, fd, from, nullptr);
+++        return;
+++    }
+++
++     HttpRequest *icp_request = icpGetRequest(url, header.reqnum, fd, from);
++ 
++     if (!icp_request)
++diff --git a/src/tests/stub_icp.cc b/src/tests/stub_icp.cc
++index 44091838b58..d148ab66d48 100644
++--- a/src/tests/stub_icp.cc
+++++ b/src/tests/stub_icp.cc
++@@ -29,11 +29,12 @@ Comm::ConnectionPointer icpIncomingConn;
++ Comm::ConnectionPointer icpOutgoingConn;
++ Ip::Address theIcpPublicHostID;
++ 
++-HttpRequest* icpGetRequest(char *, int, int, Ip::Address &) STUB_RETVAL(nullptr)
+++const char *icpGetUrl(const Ip::Address &, const char *, const icp_common_t &) STUB_RETVAL(nullptr)
+++HttpRequest* icpGetRequest(const char *, int, int, const Ip::Address &) STUB_RETVAL(nullptr)
++ bool icpAccessAllowed(Ip::Address &, HttpRequest *) STUB_RETVAL(false)
++ void icpCreateAndSend(icp_opcode, int, char const *, int, int, int, const Ip::Address &, AccessLogEntryPointer) STUB
++ icp_opcode icpGetCommonOpcode() STUB_RETVAL(ICP_INVALID)
++-void icpDenyAccess(Ip::Address &, char *, int, int) STUB
+++void icpDenyAccess(const Ip::Address &, const char *, int, int) STUB
++ void icpHandleIcpV3(int, Ip::Address &, char *, int) STUB
++ void icpConnectionShutdown(void) STUB
++ int icpSetCacheKey(const cache_key *) STUB_RETVAL(0)
 diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index 4a56e32e59..e072ec6137 100644
+index c031f1aa03..4a56e32e59 100644
 --- a/package/squid/squid.mk
 +++ b/package/squid/squid.mk
-@@ -21,6 +21,9 @@ SQUID_IGNORE_CVES += CVE-2025-62168
- # 0003-CVE-2026-33515.patch
- SQUID_IGNORE_CVES += CVE-2026-33515
+@@ -18,6 +18,9 @@ SQUID_IGNORE_CVES += CVE-2025-59362
+ # 0002-Proxy-auth-data-visible-to-scripts.patch
+ SQUID_IGNORE_CVES += CVE-2025-62168
  
-+# 0004-CVE-2026-33526.patch
-+SQUID_IGNORE_CVES += CVE-2026-33526
++# 0003-CVE-2026-33515.patch
++SQUID_IGNORE_CVES += CVE-2026-33515
 +
  SQUID_DEPENDENCIES = libcap host-libcap libtool libxml2 host-pkgconf \
  	$(if $(BR2_PACKAGE_LIBNETFILTER_CONNTRACK),libnetfilter_conntrack)
