@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29A24C43458
-	for <buildroot@archiver.kernel.org>; Fri,  3 Jul 2026 14:27:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05E4CC43458
+	for <buildroot@archiver.kernel.org>; Fri,  3 Jul 2026 14:28:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DE95E60BEF;
-	Fri,  3 Jul 2026 14:27:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CFC8780E3D;
+	Fri,  3 Jul 2026 14:28:30 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id C8iPvL_J-c99; Fri,  3 Jul 2026 14:28:29 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1C3E080BA4
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1783088909;
+	bh=tx8YsdoWyXWDNQQYPmyzXrdGRekBohw4XSf0riuPgxU=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=TM7qn0iGFnWhuZDljifcnXcRjE8v4dN/IvBbuBozvXe5TLmufpzJWdmyXM4P6AUmc
+	 8NMuBQavQMA/evq3l4uzIzoVayx5KufbaURQ9Lhm1WAT3ZT+ZEsqo7oEYY1n9vrl4j
+	 OCHOAmhZxJOAj7M7ajorhQJ7Yyscurg0K/0BL/idHNXm7bRbzECfvWRDFrDhKQWRQx
+	 MEkVUcEFIO3i9aB9D65Wr5Cg+RTNRXpj6QsBlopY/Kg7TfSigBStYvNjbz4zBczzPF
+	 qfvKUsDqAUIkXSPgKkOeKTRTd3u32kBHPh/iVLQvtqCRntqbwfja1To3JSQdpWWgVn
+	 N2Ythl6uOp0Sg==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1C3E080BA4;
+	Fri,  3 Jul 2026 14:28:29 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id EE6D514F
+ for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:28:27 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id E067760A55
+ for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:28:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ob0hJX2jZ5YJ; Fri,  3 Jul 2026 14:27:14 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 335B860C1E
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1783088834;
-	bh=eO9Lrm9ruAnuiNLO3zks88BTvv0kfbp2kJgXpyCqGU4=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=SR/n129ciZxnQJhBCQAgaA+1EFV6w92vllGM6lub+lOnrswlb+WRASwP6HyH4w80I
-	 0fgP/pMb1Aolnh6+C0F1H0iPhmY8FpfJEUxoILyk9KCazJ/4z2eA7PV9xLKTKnwXHx
-	 5KJCX+zmvVnBdv8VL2wez9C4Y8Rn8gNZOnv2FGnclnnotW+CBRVOjBKOUcdPLqtErV
-	 xdKtfyoIgxf/gt115nuEr/KbNJ8dWSZvTy8UYSSnthegmrwFoWb7XFekMdR3wsYVlH
-	 deUGoT1a6AHeM8KwKHfpw6qAkSeohzCFlwB7LSG1zrTbe9qZe2aQk/9F1BrMWxyAv9
-	 oA6YowPLajshw==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 335B860C1E;
-	Fri,  3 Jul 2026 14:27:14 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 2CE03363
- for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:26:47 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1D7C540E90
- for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:26:47 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cTbYhFM8J0GZ for <buildroot@buildroot.org>;
- Fri,  3 Jul 2026 14:26:44 +0000 (UTC)
+ id OsRA-TYL5mRq for <buildroot@buildroot.org>;
+ Fri,  3 Jul 2026 14:28:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CAEBC40ECA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0AAE660648
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id CAEBC40ECA
- for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:26:44 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0AAE660648
+ for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:28:27 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6D6F4883A2; Fri,  3 Jul 2026 14:26:15 +0000 (UTC)
+ id 8F580883A1; Fri,  3 Jul 2026 14:27:57 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 2 Jul 2026 21:47:38 +0200
-X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: a8b23da63e8dcd1be5268f14973a0ab5c1b23eed
-X-Git-Newrev: 4f7f72e10ab8ddbe427620e75b0f99b6e0fb1a1f
+Date: Thu, 2 Jul 2026 21:26:58 +0200
+X-Git-Refname: refs/heads/2026.05.x
+X-Git-Oldrev: 6d8efb145e50432b1c8662939a35ecb3ad39e5fd
+X-Git-Newrev: 1e06978a0f009f105e54f63b83b764f4e05b9a80
 X-Patchwork-Hint: ignore
-Message-Id: <20260703142615.6D6F4883A2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/util-linux:
- backport patch CVE-2026-53614
+Message-Id: <20260703142757.8F580883A1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.05.x] package/libepoxy: remove
+ gl/egl dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,137 +77,71 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/4f7f72e10ab8ddbe427620e75b0f99b6e0fb1a1f
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/1e06978a0f009f105e54f63b83b764f4e05b9a80
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.05.x
 
-- CVE-2026-53614
-    The SUID binary /usr/bin/mount from util-linux trusts the
-    environment variable LIBMOUNT_FORCE_MOUNT2 via a raw getenv() call
-    in libmount/src/hook_mount.c. An unprivileged user can set
-    LIBMOUNT_FORCE_MOUNT2=always to force the mount process to use the
-    legacy (non-atomic) bind mount path instead of the secure new mount
-    API path.
+Libepoxy is a library for handling OpenGL function pointer management.
 
-    In the legacy path, a bind mount is performed in two separate
-    syscalls: first mount(src, tgt, MS_BIND) which exposes the source
-    directory without security flags, then mount(tgt,
-    MS_REMOUNT|MS_BIND|MS_NOSUID|MS_NOEXEC|MS_NODEV) which applies the
-    flags. Between these two syscalls, a brief window exists where the
-    bind-mounted directory is visible without nosuid/noexec protection.
-    A concurrent process can execute a SUID binary from the bind target
-    during this window.
+It has backends for egl/glx, which may at one point have been mandatory
+to enable, but the library now builds with none of the above enabled
+features, as seen below.
 
-For more information, see:
- - https://github.com/util-linux/util-linux/security/advisories/GHSA-67r7-8m5w-22wx
- - https://github.com/util-linux/util-linux/commit/cc81bbcec598cb91f0eb8456282f33eed820ed5f
+  libepoxy 1.5.10
 
+    User defined options
+      Cross files            : /home/joseph/br-test-pkg/arm-aarch64/build/libepoxy-1.5.10//buildroot-build/cross-compilation.conf
+      b_pie                  : false
+      b_staticpic            : true
+      buildtype              : release
+      build.cmake_prefix_path: /home/joseph/br-test-pkg/arm-aarch64/host/lib/cmake
+      default_library        : shared
+      docs                   : false
+      egl                    : no
+      glx                    : no
+      libdir                 : lib
+      build.pkg_config_path  : /home/joseph/br-test-pkg/arm-aarch64/host/lib/pkgconfig
+      prefix                 : /usr
+      strip                  : false
+      tests                  : false
+      x11                    : false
+
+Removing these dependencies allows for some applications that require it
+as a build dependency, but otherwise can run headless or without GL, to
+build and function, using other graphics APIs or display pipelines.
+
+Weston, for example, can still use Vulkan and DRM when linked to
+libepoxy without GL/EGL/X11 support.
+
+Acked-by: Arnout Vanecappelle <arnout@rnout.be>
+Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+(cherry picked from commit cd2583ca0a993cb44e8822966f101e820ac2619e)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/util-linux/0013-CVE-2026-53614.patch | 81 ++++++++++++++++++++++++++++
- package/util-linux/util-linux.mk             |  3 ++
- 2 files changed, 84 insertions(+)
+ package/libepoxy/Config.in | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/util-linux/0013-CVE-2026-53614.patch b/package/util-linux/0013-CVE-2026-53614.patch
-new file mode 100644
-index 0000000000..2e4315500f
---- /dev/null
-+++ b/package/util-linux/0013-CVE-2026-53614.patch
-@@ -0,0 +1,81 @@
-+From 31e37c1c7dcf25b76ccf41391fe934a75644c661 Mon Sep 17 00:00:00 2001
-+From: Karel Zak <kzak@redhat.com>
-+Date: Tue, 16 Jun 2026 10:58:32 +0200
-+Subject: [PATCH] libmount: fix SUID bypass via LIBMOUNT_FORCE_MOUNT2 and
-+ legacy mount path
-+
-+Use safe_getenv() for LIBMOUNT_FORCE_MOUNT2 to ignore the variable
-+in SUID context, consistent with LIBMOUNT_FSTAB and other sensitive
-+environment variables.
-+
-+Additionally, refuse multi-step mount(2) sequences (bind+remount and
-+propagation) for restricted (non-root) users in the legacy mount path.
-+The two-step approach has a window between syscalls where security
-+flags (nosuid, noexec, ...) are not yet applied.  The new mount API
-+handles this atomically.
-+
-+Reported-by: Xinyao Hu <ctf_0x01@foxmail.com>
-+Signed-off-by: Karel Zak <kzak@redhat.com>
-+(cherry picked from commit 9cbfb823500f510b34767edabd3ffd5b436987b4)
-+
-+Upstream: https://github.com/util-linux/util-linux/commit/cc81bbcec598cb91f0eb8456282f33eed820ed5f
-+CVE: CVE-2026-53614
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-+---
-+ libmount/src/hook_mount.c        | 3 ++-
-+ libmount/src/hook_mount_legacy.c | 8 ++++++++
-+ 2 files changed, 10 insertions(+), 1 deletion(-)
-+
-+diff --git a/libmount/src/hook_mount.c b/libmount/src/hook_mount.c
-+index 374078c97f8..570ee8e01f9 100644
-+--- a/libmount/src/hook_mount.c
-++++ b/libmount/src/hook_mount.c
-+@@ -44,6 +44,7 @@
-+  */
-+ 
-+ #include "mountP.h"
-++#include "env.h"
-+ #include "fileutils.h"	/* statx() fallback */
-+ #include "strutils.h"
-+ #include "mount-api-utils.h"
-+@@ -658,7 +659,7 @@ static int init_sysapi(struct libmnt_context *cxt,
-+ 
-+ static int force_classic_mount(struct libmnt_context *cxt)
-+ {
-+-	const char *env = getenv("LIBMOUNT_FORCE_MOUNT2");
-++	const char *env = safe_getenv("LIBMOUNT_FORCE_MOUNT2");
-+ 
-+ 	if (env) {
-+ 		if (strcmp(env, "always") == 0)
-+diff --git a/libmount/src/hook_mount_legacy.c b/libmount/src/hook_mount_legacy.c
-+index cfdd7af2b2c..942e26e7770 100644
-+--- a/libmount/src/hook_mount_legacy.c
-++++ b/libmount/src/hook_mount_legacy.c
-+@@ -285,6 +285,8 @@ static int hook_prepare(struct libmnt_context *cxt,
-+ 
-+ 	/* add extra mount(2) calls for each propagation flag  */
-+ 	if (flags & MS_PROPAGATION) {
-++		if (mnt_context_is_restricted(cxt))
-++			goto eperm;
-+ 		rc = prepare_propagation(cxt, hs);
-+ 		if (rc)
-+ 			return rc;
-+@@ -294,12 +296,18 @@ static int hook_prepare(struct libmnt_context *cxt,
-+ 	if ((flags & MS_BIND)
-+ 	    && (flags & MNT_BIND_SETTABLE)
-+ 	    && !(flags & MS_REMOUNT)) {
-++		if (mnt_context_is_restricted(cxt))
-++			goto eperm;
-+ 		rc = prepare_bindremount(cxt, hs);
-+ 		if (rc)
-+ 			return rc;
-+ 	}
-+ 
-+ 	return rc;
-++eperm:
-++	DBG(HOOK, ul_debugobj(hs,
-++		"multi-step mount(2) refused for non-root user"));
-++	return -EPERM;
-+ }
-+ 
-+ const struct libmnt_hookset hookset_mount_legacy =
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index b0f7b7e988..cf75171e55 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -50,6 +50,9 @@ UTIL_LINUX_IGNORE_CVES += CVE-2026-53612
- # 0012-CVE-2026-53613-2.patch
- UTIL_LINUX_IGNORE_CVES += CVE-2026-53613
+diff --git a/package/libepoxy/Config.in b/package/libepoxy/Config.in
+index 9da190b895..4b23497d46 100644
+--- a/package/libepoxy/Config.in
++++ b/package/libepoxy/Config.in
+@@ -1,12 +1,12 @@
+ config BR2_PACKAGE_LIBEPOXY
+ 	bool "libepoxy"
+-	depends on BR2_PACKAGE_HAS_LIBEGL || BR2_PACKAGE_HAS_LIBGL
+ 	select BR2_PACKAGE_XUTIL_UTIL_MACROS
+ 	help
+ 	  Epoxy is a library for handling OpenGL function pointer
+ 	  management for you.
  
-+# 0013-CVE-2026-53614.patch
-+UTIL_LINUX_IGNORE_CVES += CVE-2026-53614
-+
- UTIL_LINUX_INSTALL_STAGING = YES
- UTIL_LINUX_DEPENDENCIES = \
- 	host-pkgconf \
+-	  https://github.com/anholt/libepoxy
++	  It can be built without EGL or GLX support for packages
++	  that use libepoxy as a mandatory dependency but do not need
++	  OpenGL entry points at runtime.
+ 
+-comment "libepoxy needs an OpenGL and/or OpenGL EGL backend"
+-	depends on !BR2_PACKAGE_HAS_LIBEGL && !BR2_PACKAGE_HAS_LIBGL
++	  https://github.com/anholt/libepoxy
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
