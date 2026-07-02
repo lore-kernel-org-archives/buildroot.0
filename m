@@ -4,120 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93F39C43458
-	for <buildroot@archiver.kernel.org>; Thu,  2 Jul 2026 08:46:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EFB4FC43458
+	for <buildroot@archiver.kernel.org>; Thu,  2 Jul 2026 16:53:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 442E860E92;
-	Thu,  2 Jul 2026 08:46:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 83EAD60835;
+	Thu,  2 Jul 2026 16:53:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9cKz4zPv80Cc; Thu,  2 Jul 2026 08:46:51 +0000 (UTC)
+ id yNbtkzYBTZGh; Thu,  2 Jul 2026 16:53:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8B6A160D5E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7E99B61156
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1782982011;
-	bh=xbo5hQTBBMuQU0keIeaD84+KF60lGHUV+EMcLPnCIMI=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	s=default; t=1783011227;
+	bh=L9rU0a+YPyu+InOvXmR4+EqoEPOHudSK8ajw7Czt0o8=;
+	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=sZrmEn3L4NUS5RVwzw/Uu0D+5EZWUq67Zo6spCTeIqmu1Zr3nkQOqqNmRFt3oh4K3
-	 v7rbl0Gfx0dZjOxCXen5yDveIG8Go8cwEy8o1U3beySHMy6gqbgg4iaQuvmiwvzaGR
-	 M0hbU4QJS/PYwmLqXy30/LpDSbPsQcUe2J6YiSzCX6EkYCHe7p9+Fykofo0lYbfR9d
-	 TZX58UTMrDUMCF5y2Mc5H42KJ30FwDotapNWQGr+kQ3+MynI/aFXy6arv+7TdxZKtp
-	 MNmQsadx9I7OCYmxA1FAmTP3HsJ4q8CIBmguyApc9188NoW6i75ddltahmh7xB/NEZ
-	 PrdFmI8uLpqHg==
+	 From;
+	b=nidSiWaD3prYW7FDqO2UVcIoU9KrbYXS3MhYFZFiFPAcDUVm8rIdQ5iR/xhSXWMCa
+	 kEh4Jn3npq+PCbkMLT+d2tXfrXDnDC97bYzSX7Wh1H4KUWw/Agl6nKsq+7SxcgouJ/
+	 33DodoAuy+brDCZ1ZfN2BMIH/NAavVtW+lJP8dbjPJGrDBgZ4OvEQa8uj6NfirYiIC
+	 WESjeWyFe0UZ8PKGSz5fryHMSwiftzsxGE3aRz9aSplaJeBlgEw8x7HzO0/+0d81n6
+	 WrFT6hfyYtZFVzMiqfEalG9SDwR0/umIVAXoq0q0KX0DhP0cwNL4x7Q99snOG1jd+x
+	 vkjgn+JTIUUdA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8B6A160D5E;
-	Thu,  2 Jul 2026 08:46:51 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id DABCC4B5
- for <buildroot@buildroot.org>; Thu,  2 Jul 2026 08:46:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7E99B61156;
+	Thu,  2 Jul 2026 16:53:47 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id CAF3647E
+ for <buildroot@buildroot.org>; Thu,  2 Jul 2026 16:53:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C008940248
- for <buildroot@buildroot.org>; Thu,  2 Jul 2026 08:46:49 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id BCE594066D
+ for <buildroot@buildroot.org>; Thu,  2 Jul 2026 16:53:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kmom_OIL7hjR for <buildroot@buildroot.org>;
- Thu,  2 Jul 2026 08:46:48 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::432; helo=mail-wr1-x432.google.com;
- envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org EB19040203
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EB19040203
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
- [IPv6:2a00:1450:4864:20::432])
- by smtp2.osuosl.org (Postfix) with ESMTPS id EB19040203
- for <buildroot@buildroot.org>; Thu,  2 Jul 2026 08:46:47 +0000 (UTC)
-Received: by mail-wr1-x432.google.com with SMTP id
- ffacd0b85a97d-4629051c9d1so1009419f8f.2
- for <buildroot@buildroot.org>; Thu, 02 Jul 2026 01:46:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1782982005; x=1783586805;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=bFFGYlEnjNpODYp8bjXmmn8XihM3pckK8phwJcoHZ/o=;
- b=ss7ef0431V+mMTCD0vgJ/TSlokVM5srxRjd5hIbzZX1KsAc8AoQB1zxIuCNGVqgvyg
- oQNgxFR2ZYO1ESTFWs4ymBJaemRR0x+W2OoCBbxKT4uNmtIijVjevMkTnlRF6vMY2MQi
- wi716P3+8S0r4mmFbpGjzXGJ3QxrwvKBB38M8i8NICwpA/Mzbnjoi1phLcVuZuZS1pFQ
- URTNXqAi17kFYqQMYnnr74RdkBp9rR3ZwBfL546SHNQibT3yDReky1Ylpsyfl7dRMReW
- /3/TJfP8xxIhtxrHNNfK+bJDT5PGJaMSOVM7D2pZ59nET5g2QLGSs+inRoNzXu8tVqwP
- kgOQ==
-X-Forwarded-Encrypted: i=1;
- AHgh+RrKqcc45OrxsuJTHyZ8Uo1J2THZuP4xFuA3jakFzC8pad3LKXse3oSpIz1rGZuDmrwvkV+WCTE0MMc=@buildroot.org
-X-Gm-Message-State: AOJu0YyG+2rE3vtcYMzoiWiw8QapUSBaKKU/Ag0Fm688OE12PqCCxcyN
- 5UnU3EEkyLz80Cbf5P35Y5j/rYRfM7Sn8QE85V+XHmmWBlLfnC7Lx4rB0pSUlKsyiGY=
-X-Gm-Gg: AfdE7ckng7Uhqt+QIO2D06oL/P7Hrzqfj4iEd2jp0lJX3SZJzWqugVQZd7i8PYLC6Rx
- DEhdVH7hknbQcZXBDRb4pbcdjqROHP0wQ125d6vYG1T7ieDfEKaoUKRL8FkfoKS4CMd+UKhxNcQ
- CnJiA7cpsJnWAmZDrey0O6x0Td8vdcbSHHpybL1T5Amg/5dw9R8cNRv3nd0DuWdRRmwIC30c6+c
- xugtZ7xYQwPFO1l3qCrw7Jd7RP/wzysmh59My4/kIrZ6KZmvOgo7YjOofkQiSKcxgctWKCpWnWz
- r9eS0yE6w4Wn/pdvAsWaTEu6FSxOZXSjH2EfdM2JEueUrwtcjWJNQFZgW2ptc/Z+FzTrHWS/QrA
- DPHL+nBWIk2tJdVppBNl0JfhnlYP5OTI6Pd3hQLSurMAp4vmAx+N66zehAvRRM0/WpVrvimzEwt
- y4mPtn9vaWzmi/aV3esgDXuS5V8MdJ+CfEr3yCSeDgOF3BeyU7iEtp+b/u
-X-Received: by 2002:a05:6000:18a7:b0:474:d7a5:4b6d with SMTP id
- ffacd0b85a97d-477b38897b8mr6059136f8f.21.1782982004975; 
- Thu, 02 Jul 2026 01:46:44 -0700 (PDT)
-Received: from [10.0.8.112] (ip-94-140-185-241.reverse.destiny.be.
- [94.140.185.241]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-477db8a4a09sm7152547f8f.13.2026.07.02.01.46.44
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 02 Jul 2026 01:46:44 -0700 (PDT)
-Message-ID: <b21d3ec7-9201-409e-a922-255fef71b915@mind.be>
-Date: Thu, 2 Jul 2026 10:46:44 +0200
+ id Ke3PK3X3Qqll for <buildroot@buildroot.org>;
+ Thu,  2 Jul 2026 16:53:44 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 07730404B4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 07730404B4
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 07730404B4
+ for <buildroot@buildroot.org>; Thu,  2 Jul 2026 16:53:43 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 646228731; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Thu, 02 Jul 2026 16:53:38 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
+ (envelope-from <peter@korsgaard.com>) id 1wfKfR-00000003RMg-0Fc1;
+ Thu, 02 Jul 2026 18:53:37 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Waldemar Brodkorb <wbx@openadk.org>
+Cc: buildroot@buildroot.org
+In-Reply-To: <akYJYnK3kBeCeV4B@waldemar-brodkorb.de> (Waldemar Brodkorb's
+ message of "Thu, 2 Jul 2026 08:46:58 +0200")
+References: <akYJYnK3kBeCeV4B@waldemar-brodkorb.de>
+Date: Thu, 02 Jul 2026 18:53:36 +0200
+Message-ID: <87o6gpnxin.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Peter Korsgaard <peter@korsgaard.com>,
- Thomas Perale via buildroot <buildroot@buildroot.org>
-Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>,
- Danomi Manchego <danomimanchego123@gmail.com>
-References: <20260630201512.283396-1-thomas.perale@mind.be>
- <20260630201512.283396-2-thomas.perale@mind.be>
- <87y0ftopqd.fsf@dell.be.48ers.dk>
-Content-Language: en-US
-In-Reply-To: <87y0ftopqd.fsf@dell.be.48ers.dk>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1782982005; x=1783586805; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=bFFGYlEnjNpODYp8bjXmmn8XihM3pckK8phwJcoHZ/o=;
- b=cxgLFtoEis+SBsowypuuUqxygplDHT0Zwm/OPYpqSTKULfAX22XhdLVZ/yavO2i9oV
- Udg8OnEWpoigPeACfzLUVTOOZZqKxZHxVU1eM+Ec/DkXwbtDLWOzg93pZdhE6t0Ybqe/
- iqIeGMGVQqxHN4pLgSZYbKLD/zA1xMDOqJvFwErlRmHqdadkAt4hHC5MbjybWIKLXjDZ
- +KKVYp9GJIC6qztntAXVox9/OCxANUc728GPwnxUgJlqfpRyX9Zr6l1vWIPKESJ+7wzH
- Bb3nLLUgVOcvGzndHa2euNe3I9wQf2LUpde7z9EHxqaDsnGF0ZcJoGC2udqkHxJX41os
- BK5Q==
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=APP6MpywyJjk8fDPO/pAWZEo+Myylyg5eVUxukTPY6NESgC9xNiRpjgTV4fMxD4pCRzdCaG7kzLFp0Yv+aldi9kpS4px4yF611uspRHnLgUtC60o4FCXaT+A6DJHtH5BNKwZYLdJl8SQXbPG2kauoIMZkXDNEZ8jIvRvdD9KVeqHfGnKOEat6xbH77q7M2DRZxNJ9HEnosOuuSc1g/GTGQSeFQyqlsaEtsJKRUCA47veu/Y0jSPIVwG9iGBRXWV21yfft9AznbvjhjUybI0VuJAqks79O3PcjuXcOZ7mUa6Y2TtimGh6KquV8jV3/nF5ESztlPRqVNcziFVtuERu8g==;
+ s=purelymail3; d=purelymail.com; v=1;
+ bh=n5RK4qBQRB2kEATjkEbQ9qknOYuh7IpyGhsVXPh7Le0=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=cxgLFtoE
-Subject: Re: [Buildroot] [PATCH 2/2] package/jq: security bump to v1.8.2
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail3 header.b=APP6Mpyw
+Subject: Re: [Buildroot] [PATCH] package/asterisk: security bump to 22.10.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -129,37 +92,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Perale via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Perale <thomas.perale@mind.be>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Peter,
+>>>>> "Waldemar" == Waldemar Brodkorb <wbx@openadk.org> writes:
 
-On 7/2/26 8:44 AM, Peter Korsgaard wrote:
->>>>>> "Thomas" == Thomas Perale via buildroot <buildroot@buildroot.org> writes:
->   > For more information about the release, see:
->   >  - https://github.com/jqlang/jq/releases/tag/jq-1.8.2
->
->   > All the CVEs were addressed by a patch but non-CVEs security fixes such
->   > as GHSA-gf4g-95wj-4q4r or GHSA-hj52-j2c9-r8r4 are fixed by this release.
->
->   > Signed-off-by: Thomas Perale <thomas.perale@mind.be>
->
-> I don't really think it makes a lot of sense to do this in two steps as
-> you presumably want to backport the 1.8.2 bugfix bump to the stable
-> series as well?
->
-> But anyway, committed series - Thanks.
+ > See here for a complete Changelog:
+ > https://downloads.asterisk.org/pub/telephony/asterisk/ChangeLog-22-current.html
 
-Yes it's unnecessary but it's to avoid having to send a different 
-backport series for the LTS branch based on 1.7.1.
+ > Security Fixes:
+ >     GHSA-3g56-cgrh-95p5: chan_unistim DIALPAGE digit handling can overflow phone_number and crash Asterisk
+ >     GHSA-3rhj-hhw7-m6fw: NULL Pointer Dereference in HTTP AMI Digest Authentication
+ >     GHSA-4pgv-j3mr-3rcp: Reflected XSS in Phone Provisioning HTTP Error Pages
+ >     GHSA-589g-qgf8-m6mx: Stack buffer overflow in MWI NOTIFY Message-Account parsing
+ >     GHSA-746q-794h-cc7f: Out-of-Bounds Read in Q.931 Information Element Parser (H.323 Addon)
+ >     GHSA-8jhw-m2hg-vp3h: Heap Buffer Overflow in OGG/Speex File Playback (format_ogg_speex)
+ >     GHSA-8jw3-ccr9-xrmf: Buffer over-read in Asterisk PJSIP MWI body parser
+ >     GHSA-g8q2-p36q-94f6: Heap-use-after-free in Asterisk PJSIP TCP/SDP handling when TCP connection closes during SDP processing
+ >     GHSA-h5hv-jmgj-92q2: CVE-2022-37325 fix is absent from current chan_ooh323 Q.931 party-number parser
+ >     GHSA-j2mm-57pq-jh94: Possible RED T.140 Generation Accumulation OOB Write
+ >     GHSA-mxgm-8c6f-5p8f: Stack buffer overflow in res_xmpp XMPP namespace prefix handling
+ >     GHSA-ph27-3m5q-mj5m: SQL Injection in cel_pgsql and cel_tds via CELGenUserEvent eventtype Field
+ >     GHSA-q9fr-m7g8-6ph5: Asterisk app_sms.c copies externally controlled SMS lengths into fixed in-struct buffers
+ >     GHSA-qf8j-jp7h-c5hx: Out-of-Bounds Write in Codec2 Decoder Due to Floor/Ceil Sample Count Mismatch
+ >     GHSA-r6c2-hwc2-j4mp: LDAP Filter Injection in res_config_ldap via SIP Username (Unauthenticated Information Disclosure)
+ >     GHSA-vfhr-r9x9-c687: Possible RED T.140 Heap Buffer Overflow
+ >     GHSA-vrfp-mg3q-3959: ARI setChannelVar bypasses live_dangerously and permits FILE() writes
+ >     GHSA-wcvv-g26m-wx5c: ARI REST-over-WebSocket read-only bypass allows arbitrary module path load and conditional RCE
+ >     GHSA-x348-j6c9-77f3: Stack Buffer Overflow in H.323 ooTrace() via Unbounded vsprintf into Fixed 2048-byte Buffer
+ >     GHSA-xgj6-2gc5-5x9c: ast_loggrabber executes python script in world writable directory(/tmp) leading to potential privilege escalation And RCE
 
-Thanks !
-PERALE Thomas
+ > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
