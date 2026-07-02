@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD001C43458
-	for <buildroot@archiver.kernel.org>; Fri,  3 Jul 2026 14:26:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 122DEC44500
+	for <buildroot@archiver.kernel.org>; Fri,  3 Jul 2026 14:26:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A869180BD4;
+	by smtp4.osuosl.org (Postfix) with ESMTP id D0BD640FE8;
 	Fri,  3 Jul 2026 14:26:53 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id EmxToDFA9XZT; Fri,  3 Jul 2026 14:26:51 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8114241145
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1783088811;
+	bh=qSsJVB1X+V4520COefiGz1mTpTbyS4O0By6N0i/OY7U=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=K4DVW1KAlzm0SJCEjERXF+YgNWW9xFuQH+WkANl6BC8HAkn/LBBEKBGkAgjnWyV5W
+	 w4QBs6dJw4RddiilwkbyBdVx5YIwkolWOcLHatbsrjUTbBmSRmJCiUeQIFjpsG005F
+	 CmY3ZO2br/C0gpsRPCL1M01BNT41GmYR0+7qNq2srWDMP5DHVlm5eMP+XQtgbcXW2Y
+	 2iAlaBNMMJfLBDASR8NMzOenXV8QIdmP2wXa+8nlrUwZlsf4EXaKhCC03czq63n7po
+	 QrkzNrGu7Rb9eBPEx3pv4Df1H+HI0rWDBT4B/Hl/v5/sGJDrl74RcTbSmjsjUh5EN8
+	 tDlnotru2zOrA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8114241145;
+	Fri,  3 Jul 2026 14:26:51 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id A097F79DB
+ for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:26:45 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8363A80A84
+ for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:26:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vs4VUCtYv2Rh; Fri,  3 Jul 2026 14:26:52 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B1EA780A9F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1783088812;
-	bh=PFewvqFZFpWcKxlSUR3qXvM8jVmnlYdipUHzb4ye8Fg=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=lqdsdrCdqDciPSWVf9f49VsSJzPvaQjGcNzNTPP/tn1eQEtuDw8vpdMwvJ+aP3xQq
-	 woKbY7NFH7Cpvwvnng1dNsB+5ckdVAMXTogi1njS2PwS1NLBeUm5LEPmIERn52+Y56
-	 Y4FopXfMx9uRbkMWuXRWQ2NNULFYLbeh4qWR0WthUGCoklWIs+u94lAr1mKaMXJLSb
-	 3Mb4q6SoTrxv/vJ/lQjXlXWT/L2vfVnaAidldO7PkBVX7PGCVrXpvY75Fpwwr42C8X
-	 3Tp84tzVgi39P5wXQKHqPdLa1vVtCa4kKSq9NiPbgaeEpHjmEftO/A227qPjxJGXe9
-	 0Hdg9ncUGqDow==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B1EA780A9F;
-	Fri,  3 Jul 2026 14:26:52 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id A1C1E79E4
- for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:26:45 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9FAE860648
- for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:26:45 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dwkcX9aygcMQ for <buildroot@buildroot.org>;
+ id CzgmIhZZT1O3 for <buildroot@buildroot.org>;
  Fri,  3 Jul 2026 14:26:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8F1E160A5C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AB60C80A75
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8F1E160A5C
+ by smtp1.osuosl.org (Postfix) with ESMTP id AB60C80A75
  for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:26:44 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 23CEC883A1; Fri,  3 Jul 2026 14:26:15 +0000 (UTC)
+ id 41548883A3; Fri,  3 Jul 2026 14:26:15 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 2 Jul 2026 21:31:50 +0200
+Date: Thu, 2 Jul 2026 21:34:07 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 5df5aff9caa43c896551b7c54e08114a32a3f669
-X-Git-Newrev: d50310a64a0f6c8f4c2a70b4b7c0659e5e7c3b7f
+X-Git-Oldrev: 353fb2cbe8ef550c5ae6a5eb313b76aa8952712b
+X-Git-Newrev: a175b0592ce010b16bedfd0fee33fb77c1615c03
 X-Patchwork-Hint: ignore
-Message-Id: <20260703142615.23CEC883A1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/ghostscript:
- security bump to version 10.07.1
+Message-Id: <20260703142615.41548883A3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/mongoose:
+ security bump to v7.22
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,53 +77,113 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d50310a64a0f6c8f4c2a70b4b7c0659e5e7c3b7f
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/a175b0592ce010b16bedfd0fee33fb77c1615c03
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-https://ghostscript.readthedocs.io/en/gs10.07.1/News.html
-"This release addresses a number of potential security issues."
+As indicated in the release notes:
+https://github.com/cesanta/mongoose/releases/tag/7.22
 
-Renumbered patch which was forgotten during the last version bump.
+    This release includes a substantial number of security fixes,
+    reflecting increased use of AI-powered security tools and valuable
+    contributions from the security research community.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit dd929c3d253dfaf9392d327c16c5e0d0f2b1353f)
+    Please note that many of the resolved issues have not yet been assigned
+    CVE identifiers. The assignment process is underway, and these release
+    notes will be updated as additional CVEs become available.
+
+Given the large number of security fixes included in that release, bump the
+version for Buildroot LTS instead of applying individual patches
+
+Along with the version bump:
+- Remove patch for a security issue fixed by the version bump
+- Update license hash following the update of the copyright year in
+  https://github.com/cesanta/mongoose/commit/1f9e1a38b55455ed63a616aeb7b1070f2a2d4ddd
+
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+(cherry picked from commit 8fe41d5506d1d1c7a453be9977a4ffa65d39e886)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/ghostscript/{0002-brotli.patch => 0001-brotli.patch} | 0
- package/ghostscript/ghostscript.hash                         | 4 ++--
- package/ghostscript/ghostscript.mk                           | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ package/mongoose/0001-improve-resiliency.patch | 37 --------------------------
+ package/mongoose/mongoose.hash                 |  4 +--
+ package/mongoose/mongoose.mk                   |  5 +---
+ 3 files changed, 3 insertions(+), 43 deletions(-)
 
-diff --git a/package/ghostscript/0002-brotli.patch b/package/ghostscript/0001-brotli.patch
-similarity index 100%
-rename from package/ghostscript/0002-brotli.patch
-rename to package/ghostscript/0001-brotli.patch
-diff --git a/package/ghostscript/ghostscript.hash b/package/ghostscript/ghostscript.hash
-index c2e48b01e6..94017262df 100644
---- a/package/ghostscript/ghostscript.hash
-+++ b/package/ghostscript/ghostscript.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs10070/SHA512SUMS
--sha512  1c2a14951223c975a53bd9767c28bd3a6e420c385a5e0d7a60a5ff5b091bc027929c815bf57cddf97611e8d265ece1c219321737f2cabb5646685c6e8cdb85c9  ghostscript-10.07.0.tar.xz
-+# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs10071/SHA512SUMS
-+sha512  7b38ca10fa7ab648924f7db3e2e4933c3d18e04c8db1346fca4d4f7b85dfbd7888d5fc46f413613b46429fb47b675a593994c25e50e9de4dcdbee3bdd8a5e449  ghostscript-10.07.1.tar.xz
- 
- # Hash for license file:
- sha256  8ce064f423b7c24a011b6ebf9431b8bf9861a5255e47c84bfb23fc526d030a8b  LICENSE
-diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
-index 159e06db91..250c851b28 100644
---- a/package/ghostscript/ghostscript.mk
-+++ b/package/ghostscript/ghostscript.mk
+diff --git a/package/mongoose/0001-improve-resiliency.patch b/package/mongoose/0001-improve-resiliency.patch
+deleted file mode 100644
+index edeea4efba..0000000000
+--- a/package/mongoose/0001-improve-resiliency.patch
++++ /dev/null
+@@ -1,37 +0,0 @@
+-From 64abf061bf018fd78f31c200a57a3fb04f9f3ef2 Mon Sep 17 00:00:00 2001
+-From: "Sergio R. Caprile" <scaprile@cesanta.com>
+-Date: Mon, 13 Oct 2025 10:43:45 -0300
+-Subject: [PATCH] improve resiliency
+-
+-CVE: CVE-2025-65502
+-Upstream: https://github.com/cesanta/mongoose/commit/64abf061bf018fd78f31c200a57a3fb04f9f3ef2
+-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+----
+- mongoose.c        | 1 +
+- src/tls_openssl.c | 1 +
+- 2 files changed, 2 insertions(+)
+-
+-diff --git a/mongoose.c b/mongoose.c
+-index 4c72be8201..f860ab3b07 100644
+---- a/mongoose.c
+-+++ b/mongoose.c
+-@@ -14581,6 +14581,7 @@ static STACK_OF(X509_INFO) * load_ca_certs(struct mg_str ca) {
+- static bool add_ca_certs(SSL_CTX *ctx, STACK_OF(X509_INFO) * certs) {
+-   int i;
+-   X509_STORE *cert_store = SSL_CTX_get_cert_store(ctx);
+-+  if (cert_store == NULL) return false;
+-   for (i = 0; i < sk_X509_INFO_num(certs); i++) {
+-     X509_INFO *cert_info = sk_X509_INFO_value(certs, i);
+-     if (cert_info->x509 && !X509_STORE_add_cert(cert_store, cert_info->x509))
+-diff --git a/src/tls_openssl.c b/src/tls_openssl.c
+-index 37838d95ba..f51d6dd8b7 100644
+---- a/src/tls_openssl.c
+-+++ b/src/tls_openssl.c
+-@@ -39,6 +39,7 @@ static STACK_OF(X509_INFO) * load_ca_certs(struct mg_str ca) {
+- static bool add_ca_certs(SSL_CTX *ctx, STACK_OF(X509_INFO) * certs) {
+-   int i;
+-   X509_STORE *cert_store = SSL_CTX_get_cert_store(ctx);
+-+  if (cert_store == NULL) return false;
+-   for (i = 0; i < sk_X509_INFO_num(certs); i++) {
+-     X509_INFO *cert_info = sk_X509_INFO_value(certs, i);
+-     if (cert_info->x509 && !X509_STORE_add_cert(cert_store, cert_info->x509))
+diff --git a/package/mongoose/mongoose.hash b/package/mongoose/mongoose.hash
+index 18b5e222ac..1a60b0c89c 100644
+--- a/package/mongoose/mongoose.hash
++++ b/package/mongoose/mongoose.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  b6a6f69912c2cd0c67f85633c6b578d4dcdf385c3628acdcd21de28787c676e5  mongoose-7.17.tar.gz
+-sha256  9abc2509d90c01ff2a0c91abf73582cdbcf1d2dbcc0b7973097eced43cf4cdd4  LICENSE
++sha256  87727cd2c240ff559b16e9710d44b61ba3513dbee50428bd8ee1596d7c58460a  mongoose-7.22.tar.gz
++sha256  f0d9cfd6f7d92f6ec061a5fb2882f67d2521a151bf09a637c33ca6181834b048  LICENSE
+diff --git a/package/mongoose/mongoose.mk b/package/mongoose/mongoose.mk
+index 9b8920a9f3..207d31cdfa 100644
+--- a/package/mongoose/mongoose.mk
++++ b/package/mongoose/mongoose.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GHOSTSCRIPT_VERSION = 10.07.0
-+GHOSTSCRIPT_VERSION = 10.07.1
- GHOSTSCRIPT_SOURCE = ghostscript-$(GHOSTSCRIPT_VERSION).tar.xz
- GHOSTSCRIPT_SITE = https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs$(subst .,,$(GHOSTSCRIPT_VERSION))
- GHOSTSCRIPT_LICENSE = AGPL-3.0
+-MONGOOSE_VERSION = 7.17
++MONGOOSE_VERSION = 7.22
+ MONGOOSE_SITE = $(call github,cesanta,mongoose,$(MONGOOSE_VERSION))
+ MONGOOSE_LICENSE = GPL-2.0
+ MONGOOSE_LICENSE_FILES = LICENSE
+@@ -13,9 +13,6 @@ MONGOOSE_INSTALL_STAGING = YES
+ # static library
+ MONGOOSE_INSTALL_TARGET = NO
+ 
+-# 0001-improve-resiliency.patch
+-MONGOOSE_IGNORE_CVES += CVE-2025-65502
+-
+ MONGOOSE_CFLAGS = $(TARGET_CFLAGS) -std=gnu99
+ 
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
