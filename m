@@ -1,84 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8501AC43458
-	for <buildroot@archiver.kernel.org>; Thu,  2 Jul 2026 16:58:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 805D8C43458
+	for <buildroot@archiver.kernel.org>; Thu,  2 Jul 2026 18:04:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5607460FF5;
-	Thu,  2 Jul 2026 16:58:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 276F54189C;
+	Thu,  2 Jul 2026 18:04:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9PGYD1dA5Ivq; Thu,  2 Jul 2026 16:58:01 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id n13r5t_Ka_bf; Thu,  2 Jul 2026 18:04:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5BDC26138F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 11FB9418A0
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1783011481;
-	bh=MmOSZDL78RqvLWAC7u3LO53U9ToFjciGmhHBMAzeD1s=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Cc:From;
-	b=ro2JgciUeeBaM1cjQWQjcL9jBD/EvDjOGpA/8dOPH/nT6grYSF7Fz4lwrPcUmNGuE
-	 b1QYYnlyeTx/YuBPNLqntkD2JCD21lls7M9m0Y/Eg3xfaIHZOgENOW4eiDlesM7v+A
-	 76ujL4KQBOjqPwHM8RbAd+69gQYOZg/M1YEiAokIRdUmE4h1njqmUMvCTFeIg4JHH0
-	 ZNXrK9qOgIJVdHpfEl44qevFDHkhpqiNJTdB213sQfljvoPtpcRrxkzxNIdaHdw0hC
-	 PG3ESmhSOXJ8/nA4mijQ4dFnylC9T7/TiF5MPGV6TXKUbCN/3HCiLm0TjCAOulwz4/
-	 lil3LkZI6z4tA==
+	s=default; t=1783015450;
+	bh=YCDGqhmNL4/HgHZaopsTjsM5BXHltapqsdtPUzVydK4=;
+	h=Date:From:To:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=M2FiMrrenvP4bKFuJL/vJ3iszMYMHGekBujjczTlNRIacuzV0bau9XqRnN5suTAl4
+	 +EBRaJCrliCb/O5icKmN1vw9ePnGNC20QY9CvqrM3gkIMY8tr2AGFwWSFvMe3cEUes
+	 yEw7yYKLp7nx2yItbhCQ18dLCWi6ngQrVpWtCw3Yt+w1Vv96SeBWkaXud34uiNloAU
+	 tqlL0WcdKjGRvcmD5kFu0pZheborQGHN5atAfHj47JiCtz2PcaacB5x85RZ31ur/Av
+	 liAsOaQUyqAhy0IzTr12ghCnJjIMpDrXKQY9p5Pv67UWiVT2gDY0//70rI0hs75Ypa
+	 F0n8ZFdNHFsXA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5BDC26138F;
-	Thu,  2 Jul 2026 16:58:01 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 4A374392
- for <buildroot@buildroot.org>; Thu,  2 Jul 2026 16:58:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 11FB9418A0;
+	Thu,  2 Jul 2026 18:04:10 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 43D8C363
+ for <buildroot@buildroot.org>; Thu,  2 Jul 2026 18:04:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 30433402B0
- for <buildroot@buildroot.org>; Thu,  2 Jul 2026 16:58:00 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 369AB40291
+ for <buildroot@buildroot.org>; Thu,  2 Jul 2026 18:04:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LdPDA6tmhasG for <buildroot@buildroot.org>;
- Thu,  2 Jul 2026 16:57:59 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peko@korsgaard.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0AE704025F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0AE704025F
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0AE704025F
- for <buildroot@buildroot.org>; Thu,  2 Jul 2026 16:57:58 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 1025191311; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Thu, 02 Jul 2026 16:57:55 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peko@dell.be.48ers.dk>) id 1wfKja-00000003RiT-1KgJ;
- Thu, 02 Jul 2026 18:57:54 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
+ id hDOBU5b4970U for <buildroot@buildroot.org>;
+ Thu,  2 Jul 2026 18:04:07 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.238.66.15;
+ helo=helium.openadk.org; envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 19F5E4025A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 19F5E4025A
+Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 19F5E4025A
+ for <buildroot@buildroot.org>; Thu,  2 Jul 2026 18:04:06 +0000 (UTC)
+Received: by helium.openadk.org (Postfix, from userid 1000)
+ id 6987831E0B1F; Thu, 02 Jul 2026 20:04:04 +0200 (CEST)
+Date: Thu, 2 Jul 2026 20:04:04 +0200
+From: Waldemar Brodkorb <wbx@openadk.org>
 To: buildroot@buildroot.org
-Date: Thu,  2 Jul 2026 18:57:43 +0200
-Message-ID: <20260702165744.821512-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.47.3
+Message-ID: <akaoFOYUuiUwVnnc@waldemar-brodkorb.de>
 MIME-Version: 1.0
-X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=baWpIBGoB+259Jhw0un+wW6QiTChgUXfdS8w3SFP4u1h5TRwfo4yDDhWUgafit39pEgyO7ku82/I9NDDyIUaItXF8AKdb+GcrT7nduqeMpd6kwqQvn+Uaw2czRFGk7WAEmSMmHYfBf7xzvUfZWhlpCg48dOWOIUnN0RwYXAJzMflroJe9BEkw7IMzi7vtqUib9htGVGKOx9maYP3yKurCFobF62btWtoSR+2GrFBYYYDC7kyLzxyR0KsR2/mneirQKVKqST03Xax5oFikbhxw5Nq/Q/i0k3lnFUyiZbXRCjtbqQMhCF9Q6RGyNB+ab6YEPkbsuIcggir+WcNMrqEdQ==;
- s=purelymail3; d=purelymail.com; v=1;
- bh=VCH/R48gtAO1/bET8PJ+Y36VtVjvypmE81zzKBpedXY=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+Content-Disposition: inline
+X-Operating-System: Linux 6.12.90+deb13.1-amd64 x86_64
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=openadk.org; s=2022; 
+ t=1783015444; bh=tr/i9iJb5m3ayau3uFif2xM+aa7OamJPc+9ZjBv75KY=;
+ h=Date:From:To:Subject:From;
+ b=XEnbUfpWrZcoSCOgBcg/YXWpdqxV08FBhxrQyBlY4FNbI9/CazZHce/UJXqReyb6x
+ nCKzkwXB8LUc3H0GL5AfUWRtJz+pcMfdIs8cfWF7CVnhY+WtujguQs9Qm7wVkYspYe
+ UVR59JvJj/D79zE34ptQWkGmVDYWvoxMS2O1VgLgx+9G6r2EK1j08UOT7u1IsRMWcX
+ hTOwKcziF6usxiKojHtnBZZigPSEP+crDjq4aJ8VzX/V3JiVj7W577xwFGO68n7yrK
+ 4KI3M8h6WLKuiNG8oeP3deoE6ndLk0nUeZJod4TGEUb5DZ8lYeGhUiONj9S/jQ+TP6
+ 7UVkCPiTIlngQ==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail3 header.b=baWpIBGo
-X-Mailman-Original-Authentication-Results: purelymail.com; auth=pass
-Subject: [Buildroot] [PATCH-2025.02.x] package/{glibc,
- localedef}: security bump to version 2.41-143-gfc7a48bc9
+ header.from=openadk.org
+Subject: [Buildroot] [PATCH] package/lighttpd: bump to 1.4.84
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -90,136 +81,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes the following vulnerabilities:
+See here for changes:
+https://www.lighttpd.net/2026/06/17/1.4.84/
+https://www.lighttpd.net/2026/06/14/1.4.83/
 
-GLIBC-SA-2026-0009:
-===================
-scanf %mc off-by-one heap buffer overflow
-
-Calling the scanf family of functions with a %mc (malloc'd character
-match) in the GNU C Library version 2.7 to version 2.43 with a format
-width specifier with an explicit width greater than 1024 could result in
-a one byte heap buffer overflow.
-
-The bug is in the buffer growth formula in __vfscanf_internal, which
-under-allocates by one byte during realloc expansion, allowing a
-controlled single-byte overwrite past the end of the heap buffer.
-
-The impact is limited by the fact that to execute the overwrite you need
-both user controlled input data and a specific choice of maximum width
-that yields a smaller than needed allocation. The latter point has to
-take into account malloc's particular chunk size rounding process.  The
-"%[width]mc" format specifier does not appear to have notable use in
-major Linux-based OS distributions, due to which the real world impact
-may be limited to bespoke use cases.
-
-CVE-Id: CVE-2026-5450
-
-GLIBC-SA-2026-0010:
-===================
-Potential buffer under-read in ungetwc
-
-Calling the ungetwc function on a FILE stream with wide characters
-encoded in a character set that has overlaps between its single byte and
-multi-byte character encodings, in the GNU C Library version 2.43 or
-earlier, may result in an attempt to read bytes before an allocated
-buffer, potentially resulting in unintentional disclosure of neighboring
-data in the heap, or a program crash.
-
-A bug in the wide character pushback implementation
-(_IO_wdefault_pbackfail in libio/wgenops.c) causes ungetwc() to operate
-on the regular character buffer (fp->_IO_read_ptr) instead of the actual
-wide-stream read pointer (fp->_wide_data->_IO_read_ptr). The program
-crash may happen in cases where fp->_IO_read_ptr is not initialized and
-hence points to NULL. The buffer under-read requires a special situation
-where the input character encoding is such that there are overlaps
-between single byte representations and multibyte representations in
-that encoding, resulting in spurious matches.  The spurious match case
-is not possible in the standard Unicode character sets.
-
-CVE-Id: CVE-2026-5928
-
-https://inbox.sourceware.org/libc-announce/b11f0003-6ec1-4bd6-b9de-9e38a4efeca3@redhat.com/T/
-
-git shortlog b676adadbc1f5fb2f31bc484a7628cca89ae6f22..
-DJ Delorie (1):
-      stdio-common: Allow partially-filled %mc buffers [BZ #12701]
-
-Florian Weimer (1):
-      iconv: Suppress intermediate errors with //TRANSLIT (bug 34236)
-
-Maciej W. Rozycki (2):
-      support: Implement 'xfmemopen' for seamless 'fmemopen' use
-      stdio-common: Reject insufficient character data in scanf [BZ #12701]
-
-Rocket Ma (2):
-      libio: Fix ungetwc operating on byte stream [BZ #33998]
-      stdio-common: Fix buffer overflow in scanf %mc [BZ #34008]
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- package/glibc/glibc.hash       | 2 +-
- package/glibc/glibc.mk         | 8 +++++++-
- package/localedef/localedef.mk | 2 +-
- 3 files changed, 9 insertions(+), 3 deletions(-)
+ package/lighttpd/lighttpd.hash | 8 ++++----
+ package/lighttpd/lighttpd.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
-index 3f1df7058a..03e8722057 100644
---- a/package/glibc/glibc.hash
-+++ b/package/glibc/glibc.hash
-@@ -1,5 +1,5 @@
- # Locally calculated (fetched from git)
--sha256  c5856a16a8576d35adddd92f7e86c58faeedd849633582a7926f9a3e766ffe2d  glibc-2.41-137-gb676adadbc1f5fb2f31bc484a7628cca89ae6f22-git4.tar.gz
-+sha256  130d77e16a08f7e52e14b49d8554997877a4fe82ac6b840a0202716146ac8fb5  glibc-2.41-143-gfc7a48bc9e999c0f9a1f9fa1b209eac1d6a93363-git4.tar.gz
+diff --git a/package/lighttpd/lighttpd.hash b/package/lighttpd/lighttpd.hash
+index 2a7c3c5e84..d0ee0a5da9 100644
+--- a/package/lighttpd/lighttpd.hash
++++ b/package/lighttpd/lighttpd.hash
+@@ -1,6 +1,6 @@
+-# From https://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-1.4.82.sha512sum
+-sha512  a8ced6e61b6768d31fb643c1f75af906ee975000286a9a522415571878c7979fd9e5e39f36871e8f34f6ca5d3702fa4b20a0c1203b57ba446dae2dbb6efa71b4  lighttpd-1.4.82.tar.xz
+-# From https://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-1.4.82.sha256sum
+-sha256  abfe74391f9cbd66ab154ea07e64f194dbe7e906ef4ed47eb3b0f3b46246c962  lighttpd-1.4.82.tar.xz
++# From https://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-1.4.84.sha512sum
++sha512  47d3e802093822f5aa42b9b3324a95668d305c2e2074366b12be9bc812291ba423576e08b2a163a5f752b110139a76c7973086fbc01051f8f639998d8146ed00  lighttpd-1.4.84.tar.xz
++# From https://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-1.4.84.sha256sum
++sha256  076dd43bec8f2ba9ce6db7e7ca7e8ad72271cd529805ead2400b56efaa026f70  lighttpd-1.4.84.tar.xz
+ # Locally calculated
+ sha256  5c98cad2fbaf5c5e2562bcbab401a7c557c1bb1bac9914ecc63730925052fb13  COPYING
+diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
+index a126e96167..613715b889 100644
+--- a/package/lighttpd/lighttpd.mk
++++ b/package/lighttpd/lighttpd.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- # Hashes for license files
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index 3ce6265a6d..8121968e02 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -7,7 +7,7 @@
- # Generate version string using:
- #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
- # When updating the version, please also update localedef
--GLIBC_VERSION = 2.41-137-gb676adadbc1f5fb2f31bc484a7628cca89ae6f22
-+GLIBC_VERSION = 2.41-143-gfc7a48bc9e999c0f9a1f9fa1b209eac1d6a93363
- GLIBC_SITE = https://sourceware.org/git/glibc.git
- GLIBC_SITE_METHOD = git
- 
-@@ -60,6 +60,12 @@ GLIBC_IGNORE_CVES += CVE-2026-4438
- # Fixed by glibc-2.41-135-g61737f43b1f0d9f64a6f16649625476b70f9f4d3
- GLIBC_IGNORE_CVES += CVE-2026-4046
- 
-+# Fixed by glibc-2.41-138-g8941538b92a574a24e9308e164869239d2b0d845
-+GLIBC_IGNORE_CVES += CVE-2026-5928
-+
-+# Fixed by glibc-2.41-142-g1a74f82eedaf0987eda1f522121e6a48fac502e7
-+GLIBC_IGNORE_CVES += CVE-2026-5450
-+
- # glibc is part of the toolchain so disable the toolchain dependency
- GLIBC_ADD_TOOLCHAIN_DEPENDENCY = NO
- 
-diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
-index c3a959c5f5..7b16932125 100644
---- a/package/localedef/localedef.mk
-+++ b/package/localedef/localedef.mk
-@@ -7,7 +7,7 @@
- # Use the same VERSION and SITE as target glibc
- # As in glibc.mk, generate version string using:
- #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
--LOCALEDEF_VERSION = 2.41-137-gb676adadbc1f5fb2f31bc484a7628cca89ae6f22
-+LOCALEDEF_VERSION = 2.41-143-gfc7a48bc9e999c0f9a1f9fa1b209eac1d6a93363
- LOCALEDEF_SOURCE = glibc-$(LOCALEDEF_VERSION)$(BR_FMT_VERSION_git).tar.gz
- LOCALEDEF_SITE = https://sourceware.org/git/glibc.git
- LOCALEDEF_SITE_METHOD = git
+ LIGHTTPD_VERSION_MAJOR = 1.4
+-LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).82
++LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).84
+ LIGHTTPD_SOURCE = lighttpd-$(LIGHTTPD_VERSION).tar.xz
+ LIGHTTPD_SITE = http://download.lighttpd.net/lighttpd/releases-$(LIGHTTPD_VERSION_MAJOR).x
+ LIGHTTPD_LICENSE = BSD-3-Clause
 -- 
 2.47.3
 
