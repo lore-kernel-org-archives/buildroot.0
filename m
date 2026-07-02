@@ -1,89 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5E11C43327
-	for <buildroot@archiver.kernel.org>; Thu,  2 Jul 2026 06:44:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B3B9C43327
+	for <buildroot@archiver.kernel.org>; Thu,  2 Jul 2026 06:45:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7AEE860B11;
-	Thu,  2 Jul 2026 06:44:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CA9E240EB1;
+	Thu,  2 Jul 2026 06:45:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9qt-n25qitwN; Thu,  2 Jul 2026 06:44:16 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Z7ccSDYrhM3Z; Thu,  2 Jul 2026 06:45:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B4D4760B76
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EC00240EE8
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1782974656;
-	bh=WqhtJ+RTnzEoFujePayWB5buI28GAEaFCvRNI5sZaHE=;
-	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=cJHsgKX7G59hsvrGyfnl1FEGzh8m7pcJQLaMTKYF8+cKPTx7xaTq5YDORD2cxivxH
-	 gbnpQVe0L4AZ83MMVyKSl2BUNgrMh1DpYTckd9uuIbZCgL7ReyulJR40L+YAuATwgT
-	 U4UCDsz20lwEZf+JRmKiWRqwoVqxgRCip+nahIlJAoU04LEH24CHDlvxu5opTBltll
-	 7ptWnAr8uxMmsregXPG8oWhRY0CTYRwhL5TLF6Xk9HHxhiJaSV3lUHlI0eGOovM/se
-	 XkbC4Cdp5+XmgIs3+Kf/dFYQY0o9SB6Rs50Vvw8WmyP4ntCoi1ODHV8rPbtyW58Rud
-	 QaUfolXtJ0Eqw==
+	s=default; t=1782974710;
+	bh=6+29wxnse8n1/Zsla7/9pzndXH1dtQBCmDPF5XBBMHI=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=ihKmcEhHe57+f4D5siMXMWiPUDXBf0QsmkMFM4ykt9AyazXOTV4HCfQy8Xqncjxsf
+	 zvS9Cz/2ZgAnjmrx+/6hBCoADbZT1IJALZYtWO+Ve8amhxiMbdKXTmO7hwBl9ynvgy
+	 ZyUbzrzl5YaAl4HOkma4A5nxRY+NUvGwAwoD+mk7ZjZbhChe06zYpv5ajiIr+pdDCq
+	 PMVjvqSwaiJxbToW+M8AzkwasLCb6I5cI76WY+M66CDurXP8vENDLzXYz9Jxy4kdta
+	 WKGObYzHKR2GPjcenFDYjBmJ7tlDRK0fEkACPk/oSkuf6V0LOb/2Ibv6Hh36QZ46Ih
+	 TpkukzJICHeGQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B4D4760B76;
-	Thu,  2 Jul 2026 06:44:16 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id D61BB316
- for <buildroot@buildroot.org>; Thu,  2 Jul 2026 06:44:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EC00240EE8;
+	Thu,  2 Jul 2026 06:45:09 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4FA8E4B5
+ for <buildroot@buildroot.org>; Thu,  2 Jul 2026 06:45:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B4417831F1
- for <buildroot@buildroot.org>; Thu,  2 Jul 2026 06:44:14 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4C8AF40EB1
+ for <buildroot@buildroot.org>; Thu,  2 Jul 2026 06:45:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6A8rrQyXpfws for <buildroot@buildroot.org>;
- Thu,  2 Jul 2026 06:44:13 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id y7veySoLsDM9 for <buildroot@buildroot.org>;
+ Thu,  2 Jul 2026 06:45:07 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 742A682CE5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 742A682CE5
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 742A682CE5
- for <buildroot@buildroot.org>; Thu,  2 Jul 2026 06:44:13 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 393579880; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Thu, 02 Jul 2026 06:44:11 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peter@korsgaard.com>) id 1wfB9e-00000003N78-0q0E;
- Thu, 02 Jul 2026 08:44:10 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A5C0740EA8
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id A5C0740EA8
+ for <buildroot@buildroot.org>; Thu,  2 Jul 2026 06:45:07 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id DFAE8880A1; Thu,  2 Jul 2026 06:44:38 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Thomas Perale via buildroot <buildroot@buildroot.org>
-Cc: Thomas Perale <thomas.perale@mind.be>,  Angelo Compagnucci
- <angelo.compagnucci@gmail.com>,  Danomi Manchego
- <danomimanchego123@gmail.com>
-In-Reply-To: <20260630201512.283396-2-thomas.perale@mind.be> (Thomas Perale
- via buildroot's message of "Tue, 30 Jun 2026 22:15:07 +0200")
-References: <20260630201512.283396-1-thomas.perale@mind.be>
- <20260630201512.283396-2-thomas.perale@mind.be>
-Date: Thu, 02 Jul 2026 08:44:10 +0200
-Message-ID: <87y0ftopqd.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=LK9gRT0MVZCO9rLCfv0Ld0so0WZ/Mf5gFIVQP4ETk+e+j+bGI55VNdobQSo4pr/5t/eaX8rwTTcW2tHTM0ojMeSaq35JwXpB7WTrANy2dXZSgMvE+VR7ZxayeWhOLOmCZc45CGgLjf33NPIYmY273zz9ELZ8WlT4clnmplOrhlF+uIA++bmC/qRVwuhs0iDQOuf/FtdiTzlbMaBxjEFwuF8fkaU4slW4oa/GkYQZXnydYF3MHLV7ThxHtrDqkaBQmd4x0cEG+SkYmOFg/TJ4uh7u4uQg6GdYr4E/a6C8cfmJ3HJ3XKLBPkObdC0HVKswpm904uVzSMx1CUgplFiTEw==;
- s=purelymail3; d=purelymail.com; v=1;
- bh=L97yaJYg+MeDwGPXIzcqV0kdUP0v2FW29vg/bwK11io=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail3 header.b=LK9gRT0M
-Subject: Re: [Buildroot] [PATCH 2/2] package/jq: security bump to v1.8.2
+To: buildroot@buildroot.org
+Date: Thu, 2 Jul 2026 08:29:45 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 8a66e2f197c850f23689087c468308559cd9b8a6
+X-Git-Newrev: a8e8fc2fa453060093c6651ef81409bf4cae9788
+X-Patchwork-Hint: ignore
+Message-Id: <20260702064438.DFAE8880A1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] boot/opensbi: Bump to v1.8.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,29 +69,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Thomas" == Thomas Perale via buildroot <buildroot@buildroot.org> writes:
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/a8e8fc2fa453060093c6651ef81409bf4cae9788
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
- > For more information about the release, see:
- >  - https://github.com/jqlang/jq/releases/tag/jq-1.8.2
+v1.8 release notes:
 
- > All the CVEs were addressed by a patch but non-CVEs security fixes such
- > as GHSA-gf4g-95wj-4q4r or GHSA-hj52-j2c9-r8r4 are fixed by this release.
+  https://github.com/riscv-software-src/opensbi/releases/tag/v1.8
+  https://github.com/riscv-software-src/opensbi/releases/tag/v1.8.1
 
- > Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Joel Stanley <jms@oss.tenstorrent.com>
+Reviewed-by: Alistair Francis <alistair.francis@wdc.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ boot/opensbi/Config.in    | 4 ++--
+ boot/opensbi/opensbi.hash | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-I don't really think it makes a lot of sense to do this in two steps as
-you presumably want to backport the 1.8.2 bugfix bump to the stable
-series as well?
-
-But anyway, committed series - Thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/boot/opensbi/Config.in b/boot/opensbi/Config.in
+index 986e380b48..6e26da6344 100644
+--- a/boot/opensbi/Config.in
++++ b/boot/opensbi/Config.in
+@@ -19,7 +19,7 @@ choice
+ 	  Select the specific OpenSBI version you want to use
+ 
+ config BR2_TARGET_OPENSBI_LATEST_VERSION
+-	bool "1.7"
++	bool "Latest version (1.8.1)"
+ 
+ config BR2_TARGET_OPENSBI_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -57,7 +57,7 @@ endif
+ 
+ config BR2_TARGET_OPENSBI_VERSION
+ 	string
+-	default "1.7" if BR2_TARGET_OPENSBI_LATEST_VERSION
++	default "1.8.1" if BR2_TARGET_OPENSBI_LATEST_VERSION
+ 	default BR2_TARGET_OPENSBI_CUSTOM_VERSION_VALUE \
+ 		if BR2_TARGET_OPENSBI_CUSTOM_VERSION
+ 	default "custom" if BR2_TARGET_OPENSBI_CUSTOM_TARBALL
+diff --git a/boot/opensbi/opensbi.hash b/boot/opensbi/opensbi.hash
+index c82d2de236..661f08189e 100644
+--- a/boot/opensbi/opensbi.hash
++++ b/boot/opensbi/opensbi.hash
+@@ -1,3 +1,3 @@
+ # locally computed
+-sha256  2cf856a4e5e2e052948ddb54ba48232b1f698b7f52e0374fc7d17d51e8c8f7ce  opensbi-1.7.tar.gz
++sha256  fb1ae61a85e966322101acb1c982f84d9eaafc4de7dd474a7d7546d9bb321c6f  opensbi-1.8.1.tar.gz
+ sha256  82d13fb1bf6bb162629deeea9eb9c117e74548d3b707e478967691fe79a68e21  COPYING.BSD
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
