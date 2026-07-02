@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05E4CC43458
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32077C44500
 	for <buildroot@archiver.kernel.org>; Fri,  3 Jul 2026 14:28:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CFC8780E3D;
-	Fri,  3 Jul 2026 14:28:30 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id C8iPvL_J-c99; Fri,  3 Jul 2026 14:28:29 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1C3E080BA4
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1783088909;
-	bh=tx8YsdoWyXWDNQQYPmyzXrdGRekBohw4XSf0riuPgxU=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=TM7qn0iGFnWhuZDljifcnXcRjE8v4dN/IvBbuBozvXe5TLmufpzJWdmyXM4P6AUmc
-	 8NMuBQavQMA/evq3l4uzIzoVayx5KufbaURQ9Lhm1WAT3ZT+ZEsqo7oEYY1n9vrl4j
-	 OCHOAmhZxJOAj7M7ajorhQJ7Yyscurg0K/0BL/idHNXm7bRbzECfvWRDFrDhKQWRQx
-	 MEkVUcEFIO3i9aB9D65Wr5Cg+RTNRXpj6QsBlopY/Kg7TfSigBStYvNjbz4zBczzPF
-	 qfvKUsDqAUIkXSPgKkOeKTRTd3u32kBHPh/iVLQvtqCRntqbwfja1To3JSQdpWWgVn
-	 N2Ythl6uOp0Sg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1C3E080BA4;
-	Fri,  3 Jul 2026 14:28:29 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id EE6D514F
- for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:28:27 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E067760A55
- for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:28:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0968360648;
+	Fri,  3 Jul 2026 14:28:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OsRA-TYL5mRq for <buildroot@buildroot.org>;
+ id 3jGsoTt2JucH; Fri,  3 Jul 2026 14:28:30 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2D9C460A55
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1783088910;
+	bh=XjSqgtuJip6XOF7O2uqAGxSa7r3UOKpZ/IW8Tq2Q+/0=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=IruWe8c1rXVfyhTNIf/uB/esvqUvAW6rJXVDWvsYFRfz9sm85aCTaEaAQv0VS+UXV
+	 hkW4WNvzg3qTdQ7lgCraATugn4OuTgF/TH4U1xww5qXyUcd3N4XPib95phajlle3rQ
+	 umSaKZ2QnQrlJSwFxqC3YyhlV+MMst7gxlnTDeasbxxpOoyb7oz49jZSS9opWqiTXy
+	 NU3Vajb46mHYhCKZMZ8en5a2EY9iGFkDEwViQm+EAbZtGMmKl0sS51yi844PEOhHKz
+	 TPLy6m2MAzI03/HU9fOBu68XoSusKaKP5s6tMyUizAq8GBrwbtEOvjnWEMNAqccEL+
+	 ZwmSEmtBl/C8Q==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2D9C460A55;
+	Fri,  3 Jul 2026 14:28:30 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id F3983363
+ for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:28:27 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id D9FD980BA4
+ for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:28:27 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id P1BkikAfFms1 for <buildroot@buildroot.org>;
  Fri,  3 Jul 2026 14:28:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0AAE660648
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0B70780AF1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0AAE660648
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0B70780AF1
  for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:28:27 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8F580883A1; Fri,  3 Jul 2026 14:27:57 +0000 (UTC)
+ id 9ED0B883A2; Fri,  3 Jul 2026 14:27:57 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 2 Jul 2026 21:26:58 +0200
+Date: Thu, 2 Jul 2026 21:27:26 +0200
 X-Git-Refname: refs/heads/2026.05.x
-X-Git-Oldrev: 6d8efb145e50432b1c8662939a35ecb3ad39e5fd
-X-Git-Newrev: 1e06978a0f009f105e54f63b83b764f4e05b9a80
+X-Git-Oldrev: 1e06978a0f009f105e54f63b83b764f4e05b9a80
+X-Git-Newrev: a2d659937bb3823c3fb928a1bc805f0de676bfc0
 X-Patchwork-Hint: ignore
-Message-Id: <20260703142757.8F580883A1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.05.x] package/libepoxy: remove
- gl/egl dependency
+Message-Id: <20260703142757.9ED0B883A2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.05.x] package/mosquitto:
+ requires cmake >= 4.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,71 +77,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/1e06978a0f009f105e54f63b83b764f4e05b9a80
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/a2d659937bb3823c3fb928a1bc805f0de676bfc0
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.05.x
 
-Libepoxy is a library for handling OpenGL function pointer management.
+With an older cmake version, like the 3.25.1 as available in the docker
+reference image, mosquitto fails to build when ccache is enabled:
 
-It has backends for egl/glx, which may at one point have been mandatory
-to enable, but the library now builds with none of the above enabled
-features, as seen below.
+    [ 98%] Building CXX object lib/cpp/CMakeFiles/mosquittopp.dir/mosquittopp.cpp.o
+    In file included from [...]/buildroot/output/build/mosquitto-2.1.2/lib/cpp/mosquittopp.cpp:17:
+    [...]/buildroot/output/host/opt/ext-toolchain/i686-buildroot-linux-gnu/include/c++/15.1.0/cstdlib:83:15: fatal error: stdlib.h: No such file or directory
+       83 | #include_next <stdlib.h>
+          |               ^~~~~~~~~~
+    compilation terminated.
 
-  libepoxy 1.5.10
+Officially, mosquitto only requires cmake 3.18, but that proves to not
+be enough, in fact...
 
-    User defined options
-      Cross files            : /home/joseph/br-test-pkg/arm-aarch64/build/libepoxy-1.5.10//buildroot-build/cross-compilation.conf
-      b_pie                  : false
-      b_staticpic            : true
-      buildtype              : release
-      build.cmake_prefix_path: /home/joseph/br-test-pkg/arm-aarch64/host/lib/cmake
-      default_library        : shared
-      docs                   : false
-      egl                    : no
-      glx                    : no
-      libdir                 : lib
-      build.pkg_config_path  : /home/joseph/br-test-pkg/arm-aarch64/host/lib/pkgconfig
-      prefix                 : /usr
-      strip                  : false
-      tests                  : false
-      x11                    : false
+We workaround that by requiring cmake 4.3, which is the one version that
+could be tested with our host-cmake.
 
-Removing these dependencies allows for some applications that require it
-as a build dependency, but otherwise can run headless or without GL, to
-build and function, using other graphics APIs or display pipelines.
-
-Weston, for example, can still use Vulkan and DRM when linked to
-libepoxy without GL/EGL/X11 support.
-
-Acked-by: Arnout Vanecappelle <arnout@rnout.be>
-Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Titouan Christophe <titouan.christophe@mind.be>
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
-(cherry picked from commit cd2583ca0a993cb44e8822966f101e820ac2619e)
+(cherry picked from commit da9dcddff15af3e99cbc20297f4a3d25e89c66e1)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/libepoxy/Config.in | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ package/mosquitto/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libepoxy/Config.in b/package/libepoxy/Config.in
-index 9da190b895..4b23497d46 100644
---- a/package/libepoxy/Config.in
-+++ b/package/libepoxy/Config.in
-@@ -1,12 +1,12 @@
- config BR2_PACKAGE_LIBEPOXY
- 	bool "libepoxy"
--	depends on BR2_PACKAGE_HAS_LIBEGL || BR2_PACKAGE_HAS_LIBGL
- 	select BR2_PACKAGE_XUTIL_UTIL_MACROS
+diff --git a/package/mosquitto/Config.in b/package/mosquitto/Config.in
+index 08223bc5db..c26b1ece9c 100644
+--- a/package/mosquitto/Config.in
++++ b/package/mosquitto/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_MOSQUITTO
+ 	bool "mosquitto"
+ 	depends on BR2_USE_MMU  # lib peeks in malloc() internals; broker fork()s
+ 	depends on !BR2_STATIC_LIBS
++	select BR2_HOST_CMAKE_AT_LEAST_4_3
+ 	select BR2_PACKAGE_CJSON
  	help
- 	  Epoxy is a library for handling OpenGL function pointer
- 	  management for you.
- 
--	  https://github.com/anholt/libepoxy
-+	  It can be built without EGL or GLX support for packages
-+	  that use libepoxy as a mandatory dependency but do not need
-+	  OpenGL entry points at runtime.
- 
--comment "libepoxy needs an OpenGL and/or OpenGL EGL backend"
--	depends on !BR2_PACKAGE_HAS_LIBEGL && !BR2_PACKAGE_HAS_LIBGL
-+	  https://github.com/anholt/libepoxy
+ 	  Eclipse Mosquitto is an open source (EPL/EDL licensed) message
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
