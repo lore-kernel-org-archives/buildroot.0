@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91789C44501
-	for <buildroot@archiver.kernel.org>; Fri,  3 Jul 2026 14:26:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9557CC43458
+	for <buildroot@archiver.kernel.org>; Fri,  3 Jul 2026 14:27:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 600E680F47;
-	Fri,  3 Jul 2026 14:26:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6B42980A75;
+	Fri,  3 Jul 2026 14:27:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id esjVZ5eV17Zf; Fri,  3 Jul 2026 14:26:56 +0000 (UTC)
+ id tTYvUJvTulZG; Fri,  3 Jul 2026 14:26:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2A55680A9F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7EB7380B48
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1783088816;
-	bh=j9WAvKiLghYTd0Ts+Wfjzo2of2BlFfZGLD6h4tc4Dr4=;
+	s=default; t=1783088819;
+	bh=IsA7wAUIx0ZFDyRv+2EK6QzbZXozmfaxlAtAeZtzSCo=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=TuaRNVnkRveX6F0KnW0tk0SZD7mQ20nXJ+Ovvh/eOQpnYlOesTEoiqIpk0jkoBziK
-	 xx1pGacf3X21Z8CmWjFAdvbfVI6RULQMMx1JunhgOIba+H9KWzQxJpqBX7pitW0jjv
-	 GPZF2mbRnjUt2Zn0CzVZhuLb4IOz3CLQd3/R/gOZlWqyGkIYx/0DqHEDp/XG30hIgM
-	 i2FEHIQqbCvhJ+oa93JdW/NGGc7wrsMbhMaqWJ/BOkTXS+ezhwo8TmUiPv5RvsX3n+
-	 oUOZ8GbLaMngsOcHtZ8md+BqKhez1MmJRQ21hk4Fjuy2f1eeJalO8wZ4FUZCVXiEgg
-	 /mGGlKGy3LhnQ==
+	b=scoBGMoYzDOGdaqt3rsrax/imZivQ3242JzlE7dL3UpfwD4fPxeJ1v9h9+YqEhIkP
+	 it9qrdgbDjYarWAwkzjiqSg8mZ+RMhfSuFhW9rw6bXHb2ObUJtcpdZmfIF43bUXwAt
+	 jSEXXp1HHCRrdPBF7z9rLP/MBsen8GwTnntSAQdrYtiq1bTbk8l61V1XOtMaaXSooa
+	 5pE9AbwoRbqkNvbPC6ontBV2Oteuk3FphM+mPq9GxJ31fEkKaXn/6bM4BksWuBOimt
+	 PcDSY+BqQpnQcDOA1WG+UaBn1R/ppsn91oIwp2ZookJVKPyjBPptzbHsUQ/+H2NZyN
+	 pfrwm/3NTtLpA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2A55680A9F;
-	Fri,  3 Jul 2026 14:26:56 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id BE2E5363
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7EB7380B48;
+	Fri,  3 Jul 2026 14:26:59 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id D9EBF79DB
  for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:26:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id ACE6040420
+ by smtp2.osuosl.org (Postfix) with ESMTP id BFCF14008F
  for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:26:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GEyQEKKIW4aR for <buildroot@buildroot.org>;
- Fri,  3 Jul 2026 14:26:44 +0000 (UTC)
+ id xzFfhkbmBG5y for <buildroot@buildroot.org>;
+ Fri,  3 Jul 2026 14:26:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D3B634059C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EDB8B405B9
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id D3B634059C
+ by smtp2.osuosl.org (Postfix) with ESMTP id EDB8B405B9
  for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:26:44 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 763EF883A3; Fri,  3 Jul 2026 14:26:15 +0000 (UTC)
+ id 8FFE6883A3; Fri,  3 Jul 2026 14:26:15 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 2 Jul 2026 21:48:53 +0200
+Date: Thu, 2 Jul 2026 21:49:18 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 4f7f72e10ab8ddbe427620e75b0f99b6e0fb1a1f
-X-Git-Newrev: 6b69a1f30eedd1f7afb044ef9150b86a5ed25be5
+X-Git-Oldrev: 6d844f4383090f6f9a6816e713056b4b72e0bba1
+X-Git-Newrev: c4418f288470fac2652a075700cd657b37f70605
 X-Patchwork-Hint: ignore
-Message-Id: <20260703142615.763EF883A3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/util-linux: fix
- CVE-2026-27456
+Message-Id: <20260703142615.8FFE6883A3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/cpp-httplib:
+ security bump version to 0.48.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,102 +77,60 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/6b69a1f30eedd1f7afb044ef9150b86a5ed25be5
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/c4418f288470fac2652a075700cd657b37f70605
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-As mentioned here[1] we require patch[2] to fix CVE-2026-27456.
+https://github.com/yhirose/cpp-httplib/releases/tag/v0.48.0
+- this bump includes a security fix for the Mbed TLS and wolfSSL
+  backends which are unused by buildroot
+https://github.com/yhirose/cpp-httplib/releases/tag/v0.47.0
+- this bump includes a security fix for the Mbed TLS and wolfSSL
+  backends which are unused by buildroot
+https://github.com/yhirose/cpp-httplib/releases/tag/v0.46.1
+https://github.com/yhirose/cpp-httplib/releases/tag/v0.46.0
+- this bump includes a security fix
+https://github.com/yhirose/cpp-httplib/releases/tag/v0.45.1
+https://github.com/yhirose/cpp-httplib/releases/tag/v0.45.0
+https://github.com/yhirose/cpp-httplib/releases/tag/v0.44.0
+- fixes CVE-2026-45372 & CVE-2026-46527
+https://github.com/yhirose/cpp-httplib/releases/tag/v0.43.4
+- fixes CVE-2026-45352
+https://github.com/yhirose/cpp-httplib/releases/tag/v0.43.3
+https://github.com/yhirose/cpp-httplib/releases/tag/v0.43.2
 
-[1]: https://lore.kernel.org/util-linux/c2fo4x3lcppsj77k564i4qodmon3wagx47qf4mqwjwdtiplupg@jmaqrlzp273h/T/#u
-[2]: https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git/commit/?h=stable/v2.41&id=2dacaf3eea391e3bbf48e7d3ecce02cafe045b6d
+https://github.com/yhirose/cpp-httplib/compare/v0.43.1...v0.48.0
 
-Cc: Alexander Dahl <alex@netz39.de>
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-[Fiona: add CVE trailer to patch file]
-Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
-(cherry picked from commit 9998130badb6101cdf6f6da0bbd1228d79825b63)
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 614c32d2dd21eee612830e2608adc7aff3bef64d)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...-openat2-RESOLVE_NO_SYMLINKS-for-backing-.patch | 59 ++++++++++++++++++++++
- package/util-linux/util-linux.mk                   |  1 +
- 2 files changed, 60 insertions(+)
+ package/cpp-httplib/cpp-httplib.hash | 2 +-
+ package/cpp-httplib/cpp-httplib.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/util-linux/0014-loopdev-use-openat2-RESOLVE_NO_SYMLINKS-for-backing-.patch b/package/util-linux/0014-loopdev-use-openat2-RESOLVE_NO_SYMLINKS-for-backing-.patch
-new file mode 100644
-index 0000000000..7195c223ac
---- /dev/null
-+++ b/package/util-linux/0014-loopdev-use-openat2-RESOLVE_NO_SYMLINKS-for-backing-.patch
-@@ -0,0 +1,59 @@
-+From 2dacaf3eea391e3bbf48e7d3ecce02cafe045b6d Mon Sep 17 00:00:00 2001
-+From: Karel Zak <kzak@redhat.com>
-+Date: Wed, 27 May 2026 15:15:22 +0200
-+Subject: [PATCH] loopdev: use openat2(RESOLVE_NO_SYMLINKS) for backing file
-+
-+Use ul_open_no_symlinks() instead of open(O_NOFOLLOW) when
-+LOOPDEV_FL_NOFOLLOW is set.  O_NOFOLLOW only rejects symlinks at the
-+last path component, but TOCTOU attacks swap intermediate components.
-+openat2(RESOLVE_NO_SYMLINKS) rejects symlinks at any component.
-+
-+Upstream: https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git/commit/?h=stable/v2.41&id=2dacaf3eea391e3bbf48e7d3ecce02cafe045b6d
-+CVE: CVE-2026-27456
-+Signed-off-by: Karel Zak <kzak@redhat.com>
-+(cherry picked from commit 119d23f1e3f55cf10e3c66dab80fc308c9f26456)
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+[Fiona: add CVE trailer]
-+Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
-+---
-+ lib/loopdev.c | 23 ++++++++++++++---------
-+ 1 file changed, 14 insertions(+), 9 deletions(-)
-+
-+diff --git a/lib/loopdev.c b/lib/loopdev.c
-+index 76685be70..31377fc9a 100644
-+--- a/lib/loopdev.c
-++++ b/lib/loopdev.c
-+@@ -1412,16 +1412,21 @@ int loopcxt_setup_device(struct loopdev_cxt *lc)
-+ 	if (lc->config.info.lo_flags & LO_FLAGS_DIRECT_IO)
-+ 		flags |= O_DIRECT;
-+ 	if (lc->flags & LOOPDEV_FL_NOFOLLOW)
-+-		flags |= O_NOFOLLOW;
-+-
-+-	if ((file_fd = open(lc->filename, mode | flags)) < 0) {
-+-		if (mode != O_RDONLY && (errno == EROFS || errno == EACCES))
-+-			file_fd = open(lc->filename, (mode = O_RDONLY) | flags);
-++		file_fd = ul_open_no_symlinks(lc->filename, mode | flags, 0);
-++	else
-++		file_fd = open(lc->filename, mode | flags);
-+ 
-+-		if (file_fd < 0) {
-+-			DBG(SETUP, ul_debugobj(lc, "open backing file failed: %m"));
-+-			return -errno;
-+-		}
-++	if (file_fd < 0 && mode != O_RDONLY
-++	    && (errno == EROFS || errno == EACCES)) {
-++		mode = O_RDONLY;
-++		if (lc->flags & LOOPDEV_FL_NOFOLLOW)
-++			file_fd = ul_open_no_symlinks(lc->filename, mode | flags, 0);
-++		else
-++			file_fd = open(lc->filename, mode | flags);
-++	}
-++	if (file_fd < 0) {
-++		DBG(SETUP, ul_debugobj(lc, "open backing file failed: %m"));
-++		return -errno;
-+ 	}
-+ 	DBG(SETUP, ul_debugobj(lc, "backing file open: OK"));
-+ 
-+-- 
-+2.47.3
-+
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index cf75171e55..b5364b710b 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -37,6 +37,7 @@ UTIL_LINUX_CPE_ID_VENDOR = kernel
- UTIL_LINUX_AUTORECONF = YES
+diff --git a/package/cpp-httplib/cpp-httplib.hash b/package/cpp-httplib/cpp-httplib.hash
+index f3e05951e9..842b96f3eb 100644
+--- a/package/cpp-httplib/cpp-httplib.hash
++++ b/package/cpp-httplib/cpp-httplib.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  000832a5b50b67b82a77845c09d832f6e492011cd0ef1d4f72f808eb6a4fbeb3  cpp-httplib-0.43.1.tar.gz
++sha256  d9ed142d319c6e19a961f477257e67f846909ce15288502188df2281941be84e  cpp-httplib-0.48.0.tar.gz
+ sha256  4b45cbe16d7b71b89ae6127e26e0d90a029198ca5e958ad8e3d0b8bbed364d8b  LICENSE
+diff --git a/package/cpp-httplib/cpp-httplib.mk b/package/cpp-httplib/cpp-httplib.mk
+index c21224ee3d..e723e30b44 100644
+--- a/package/cpp-httplib/cpp-httplib.mk
++++ b/package/cpp-httplib/cpp-httplib.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # 0006-add-loopdev-fl-nofollow.patch
-+# 0014-loopdev-use-openat2-RESOLVE_NO_SYMLINKS-for-backing-.patch
- UTIL_LINUX_IGNORE_CVES += CVE-2026-27456
- 
- # 0008-CVE-2025-14104-1.patch
+-CPP_HTTPLIB_VERSION = 0.43.1
++CPP_HTTPLIB_VERSION = 0.48.0
+ CPP_HTTPLIB_SITE = $(call github,yhirose,cpp-httplib,v$(CPP_HTTPLIB_VERSION))
+ CPP_HTTPLIB_LICENSE = MIT
+ CPP_HTTPLIB_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
