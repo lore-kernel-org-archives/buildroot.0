@@ -1,118 +1,117 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44BBDC43458
-	for <buildroot@archiver.kernel.org>; Fri,  3 Jul 2026 14:32:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7DD26C43458
+	for <buildroot@archiver.kernel.org>; Fri,  3 Jul 2026 14:32:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1B05A4129E;
-	Fri,  3 Jul 2026 14:32:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4B69582A87;
+	Fri,  3 Jul 2026 14:32:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jYRnH0Mmnf-C; Fri,  3 Jul 2026 14:32:41 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bDeH6GAfP3gM; Fri,  3 Jul 2026 14:32:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 17A98412B3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0A8D182A26
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1783089161;
-	bh=sHz0h6WnMkN6JKuec45DDeHReOfOgv5enTSgrp970b4=;
+	s=default; t=1783089177;
+	bh=bY+pY/v780RIyC7sOpDVorWOQOKLTJppMSZT1GYjjOw=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=XxBS1Mut07jXCVyyWzlz13VsVG10J/aWUPWjxYvUlhMfLPJQ6rDZb3JkdySp0mdhM
-	 tTSl6fo5SY/4p1i4UBuE96gpaXiBkeq/wJwFu0PuV3mkYtX3bdgxtddtYiEU0pAAmO
-	 T/J+KAs5wKljUAHu5jE/epxxIH/S+h3lr9/U1IcOhl/j582/bfNBF7SaQgfmiw0ePv
-	 eUux21fRyrrybn3FXcORl4EoW+9rG1HVbgrlbQ9qF4NUKEYz53QTx2SdVbA/V06KW/
-	 twouqP6aJgtq7KLCLGaXSjZVhSeVrDICNgekn3AjOqr548UF82aeiretXO6XT7E3Pu
-	 1mQZ6CE99mSnw==
+	b=lwiBxBALJ6iXHrRUnSgn+BWFoMx8T4ha6MEprq4uTpD8lq91V9UkVAnjWjKfVZYfY
+	 JKcGXLvSggZZhCf9aD8jgl8jF6+O+oZBZbxquv/yC7UqMdwa3AxaZQZIUupPZSYSFS
+	 wCRiqBxwxiRMM/KB1T4d9cTz79wrY1uc9tY/mSZHiYRa9oVLFIRLjNfkGIh8FWUgOO
+	 ytx4U8yGUzfHRpWKltww4G02QudBJHEaeW+lIt5/sZQf3inywmKtE6eTh+wEDCQuxI
+	 qTSFFipTs45h8t4CBpcm1sNYPSl+G5MVVdee7SDKqNy//z+UCqT7mxkuBwnsro6vJ+
+	 JeYfD612v4PcQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 17A98412B3;
-	Fri,  3 Jul 2026 14:32:41 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 9B0C114F
- for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:32:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0A8D182A26;
+	Fri,  3 Jul 2026 14:32:57 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 911CE363
+ for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:32:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8D2E74117D
- for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:32:39 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 82E9A60EDE
+ for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:32:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kkydlqEGDlB5 for <buildroot@buildroot.org>;
- Fri,  3 Jul 2026 14:32:38 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xiPpMTJY3BJ7 for <buildroot@buildroot.org>;
+ Fri,  3 Jul 2026 14:32:54 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::331; helo=mail-wm1-x331.google.com;
+ client-ip=2a00:1450:4864:20::32b; helo=mail-wm1-x32b.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5EC9C412BB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5EC9C412BB
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
- [IPv6:2a00:1450:4864:20::331])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5EC9C412BB
- for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:32:38 +0000 (UTC)
-Received: by mail-wm1-x331.google.com with SMTP id
- 5b1f17b1804b1-490cf3000f0so5654755e9.1
- for <buildroot@buildroot.org>; Fri, 03 Jul 2026 07:32:38 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7F55A60EDB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7F55A60EDB
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
+ [IPv6:2a00:1450:4864:20::32b])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7F55A60EDB
+ for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:32:54 +0000 (UTC)
+Received: by mail-wm1-x32b.google.com with SMTP id
+ 5b1f17b1804b1-493bc8fda98so6495515e9.0
+ for <buildroot@buildroot.org>; Fri, 03 Jul 2026 07:32:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1783089156; x=1783693956;
+ d=1e100.net; s=20251104; t=1783089172; x=1783693972;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=MxQcXL5SptZdAXS16ihL7GFO+5Vn3olcz8WB3FK4PKE=;
- b=Ev+yIc8ZvWwr0Rk6ncT+G8PS9gCDi2GgdmkzI5z3nO+ESpI8eRx7lp+Mk46IBr2UkS
- HB+9QB/xf3UWAibU2/uoZNcPMYT99G46tL8QCMiaQI1RYPvIgsWtYyMCXr61WcY7XTfJ
- boGTGCjx77pfWufkIbK0HWtOkTSsJMKm4HNLE8XNK2egKhjMSk6FNxC/GC87gkyk9W3B
- 8sZ1ziiivDYZkhVU3bvrslSB7oXf1bWqSByQ3/3uaCShZ9bC0fBsNfIlB5xkBowbLwPA
- fgmtErjhqjRZ2DRzfAVEiNtp4k8GaVQ+OSvFZlz1uPa/YDCSeYulKM676mtO4Uv8KYRR
- e0lA==
+ :to:cc:subject:date:message-id:reply-to:content-type;
+ bh=+0FqxYcvFOThBp2HXLVpx/hOWitkbD985juqHdlIIHU=;
+ b=PxNeivEr5mQfyihrSYSo6MzSszc4BWN6dPc9h7dc5gHBMfqBGPArox4f3bVljKkhMq
+ q4YwoqSWFyLV7XhlDgG9CKkdvExcGD+0mgGtHQAIwC4t5zXnEAK3Avsdovl3xYXFv5sm
+ ++c63Xtd54Gc1LMlUVZNJwponUMKh0t3BGDE7WJ8OZLJdTCHGivJRpMZihUh8u7PRKmB
+ hN5HADJRWqbY2DyJmLTkYLkho/ohOvlTX92bTXZ5wECveVK4VZKhW/Zk7jH/wjmDIW70
+ dvnBNVNbAqPBT1CWOthBCXDnk3Vyg9zLSlpHK/YaZGm1ZQJhV2PWowNxfGxwBjtr7Upm
+ 11SQ==
 X-Forwarded-Encrypted: i=1;
- AFNElJ+JLpzI+RkYR9E6dDpZ6WtjeEQiy2pKblSLiWG+VZ6c5xZeOaKXNnjG7H2d7UYWqD2FDvS+nAf+kLQ=@buildroot.org
-X-Gm-Message-State: AOJu0YzwfGvEJDg1dlo1giU3ZzzovD8AH/eHVhoq1AVMpxq7kFtlda/q
- jkcudTUR8UIvmfxl+aR8usrddz+8aZ3HCfO99aAmg7Pl/VM3/jwXRfrcTcg9dzb18ehQHQ5PZPF
- qoCl2
-X-Gm-Gg: AfdE7ckAp8SjXODIpkMecuNI6dVQWjq2Y6meLwYG8CfkO4f9k+SWgxEffffuNMYXXeQ
- UUKhHi9tkuaWsm/xvmsk444+bjlH9dr3G77aim5SqZ78fkUZTgrK8rB/9rFlAweea3e5dmlkn7N
- t+FhZWmjjq+YL388mcNWhYcgdpsCvvnVv6ctfGEna3CidTLTsrgWz8Lw/GmvG2zq9QAmnzmjl8G
- 64xdL72rXQ0odLAcDf1xt0BTs6xuZDgdmiX7XIHkIdWHk65qUgGCBG84Wkd37H8QNjeBtvOC26I
- orAdy1EU25beElhCh6QrLd55Om+FusO/bwic/sKtBYHJBq/sEXDiuoeItMcBaikZG83H7bWyuxZ
- +bi0tKqv1+CeQ+Q/5CUIrhCDFQZb/yUYeDTGojuNHdDTr4YeUgt2mfiQp1Fr+1/BLo5zEMASzPI
- mUfRyM
-X-Received: by 2002:a05:600d:6450:10b0:493:c1a1:68f0 with SMTP id
- 5b1f17b1804b1-493d0f2bff6mr1067985e9.20.1783089156046; 
- Fri, 03 Jul 2026 07:32:36 -0700 (PDT)
+ AFNElJ+Tm+3k3vfpjstY6dJ28GSIkI1tzWvoyAqvSFJvNaJHMBRxEXPEmuqASkVYACA030i0xlgQJY+mL8c=@buildroot.org
+X-Gm-Message-State: AOJu0YzSx4yGHTjwt7feB5GgHeUA5Tr95Jq0DxwLw+XoCvLAWBgm+n2w
+ 7NcdT1257S0mtHtywcxWXVholpmm7xX+6LUZJr3cjj6W73LuoXVZGZbWUmME2ZAsm4I=
+X-Gm-Gg: AfdE7cljT4bzEc2bzyb0nnshOZ3kr9wg20UsMQITduk3trWWitrA6s7fDOvzyFTeNBp
+ tdUW3zIUHxzsQCl6W/skSz1uSNx3EtBlqbbhw+ulA6pqmoV8kuPylpRMO1oZgzSiUE+JxEuOyRB
+ JodTK41JzlDAytXlYpdc73j5in9dG0ZSytmnEOXrWaPi8kyBPaCj5CKIxZrpLaQL6YsyBcJktGp
+ punummDdCQPJrwy6l9N+rty4KUyQJFTJcCiURHGYSdB2f71whJuIWn3zX6//8avgP3UujzvFZIT
+ vvvc749ahDZoDgS9TtBS/XGHSa1G7TIG/U6WeqF+NhEjoISxZ05Y/2R3PSnMVd4aEHA8xrk2Vs4
+ L6lQeQaWsyWJSybiBA2GRjsyw6m67iTtMObxsZimjjL+Jw++L2FiPaIRqbQXNhpTodBlvPZf7HM
+ lygfji
+X-Received: by 2002:a05:600c:1906:b0:48f:d5b8:5b07 with SMTP id
+ 5b1f17b1804b1-493d0f30e15mr1157565e9.20.1783089172317; 
+ Fri, 03 Jul 2026 07:32:52 -0700 (PDT)
 Received: from arch ([77.109.126.77]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-493cce0a7cfsm53195875e9.9.2026.07.03.07.32.34
+ ffacd0b85a97d-477dd94cb64sm19784229f8f.23.2026.07.03.07.32.51
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 03 Jul 2026 07:32:35 -0700 (PDT)
-To: Peter Korsgaard <peter@korsgaard.com>
+ Fri, 03 Jul 2026 07:32:51 -0700 (PDT)
+To: Joseph Kogut <joseph.kogut@gmail.com>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri,  3 Jul 2026 16:32:34 +0200
-Message-ID: <20260703143234.274966-1-thomas.perale@mind.be>
+Date: Fri,  3 Jul 2026 16:32:51 +0200
+Message-ID: <20260703143251.275141-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260702165744.821512-1-peter@korsgaard.com>
-References: <20260702165744.821512-1-peter@korsgaard.com>
+In-Reply-To: <20260607-b4-virglrenderer-v1-3-15cd736c623c@gmail.com>
+References: <20260607-b4-virglrenderer-v1-3-15cd736c623c@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1783089156; x=1783693956; darn=buildroot.org;
+ d=mind.be; s=google; t=1783089172; x=1783693972; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=MxQcXL5SptZdAXS16ihL7GFO+5Vn3olcz8WB3FK4PKE=;
- b=GgNZUD9j9zdNOSjU2X3ID2ZwuxSdsU9e4oayRWzMdtwB9ADqBvpRnfMN/QCKAJjjUD
- 978fv0qATNwvkj0K01k8a+MMPavOWxSOj4mGZRczVAyqI4SDznXjOCYXi4NY9bmd9X6f
- WqLGKE4h18jhYzpAoypCEcdoX+am4kgHTmOq30/o0Nj/sSMBJvOvtPCatcK12asko5KQ
- id51O4Qda9nZQ5ng1HB8bYsIg3k0j/bcb5Z/UFbN0UPYj6dTPoVokC5bmBkNwxaIQQc9
- mmyLdOjOHvhA8bfh7g7eCcn7Wske0XnnjB5qPKI4zIFc6ndPWSiIEoQw2nzGwRtDtqBI
- nyoA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ :message-id:reply-to:content-type;
+ bh=+0FqxYcvFOThBp2HXLVpx/hOWitkbD985juqHdlIIHU=;
+ b=cZfJVTNhUkQsCMRThfcQlvGZ+YfHcex8JG0DJaRGF7MIvlb9XFfFrfVR8rKUbunOSg
+ 4OuZrYrFWrR7xJNbkijeGpNeFYGnBz3+5/5KnN5PN1TBMn4WSNrwxTG3kzCQ3K9Sb90/
+ JSfZOgb4dcC7qe7JALGXC1y/Fb83VRlfXJ7yPn/rvw5Ln9Qsau3qAawmPRTlUtoDU5hw
+ 32ku+1NLL7uoNelJlegK/WD2uLRrcfN43EQa1PmnrCIx+tScO4Q6JS/LmfBUW2duVUWU
+ uAs6pRssBtq8bVogSqvuitZ5ZGvJkjbxKvWWGa9H47dmuGam+SNq8Rodi93u6RG1cXVX
+ GVWw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=GgNZUD9j
-Subject: Re: [Buildroot] [PATCH-2025.02.x] package/{glibc,
- localedef}: security bump to version 2.41-143-gfc7a48bc9
+ header.a=rsa-sha256 header.s=google header.b=cZfJVTNh
+Subject: Re: [Buildroot] [PATCH 3/7] package/libepoxy: remove gl/egl
+ dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -132,134 +131,71 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Fixes the following vulnerabilities:
+> Libepoxy is a library for handling OpenGL function pointer management.
 > 
-> GLIBC-SA-2026-0009:
-> ===================
-> scanf %mc off-by-one heap buffer overflow
+> It has backends for egl/glx, which may at one point have been mandatory
+> to enable, but the library now builds with none of the above enabled
+> features, as seen below.
 > 
-> Calling the scanf family of functions with a %mc (malloc'd character
-> match) in the GNU C Library version 2.7 to version 2.43 with a format
-> width specifier with an explicit width greater than 1024 could result in
-> a one byte heap buffer overflow.
+>   libepoxy 1.5.10
 > 
-> The bug is in the buffer growth formula in __vfscanf_internal, which
-> under-allocates by one byte during realloc expansion, allowing a
-> controlled single-byte overwrite past the end of the heap buffer.
+>     User defined options
+>       Cross files            : /home/joseph/br-test-pkg/arm-aarch64/build/libepoxy-1.5.10//buildroot-build/cross-compilation.conf
+>       b_pie                  : false
+>       b_staticpic            : true
+>       buildtype              : release
+>       build.cmake_prefix_path: /home/joseph/br-test-pkg/arm-aarch64/host/lib/cmake
+>       default_library        : shared
+>       docs                   : false
+>       egl                    : no
+>       glx                    : no
+>       libdir                 : lib
+>       build.pkg_config_path  : /home/joseph/br-test-pkg/arm-aarch64/host/lib/pkgconfig
+>       prefix                 : /usr
+>       strip                  : false
+>       tests                  : false
+>       x11                    : false
 > 
-> The impact is limited by the fact that to execute the overwrite you need
-> both user controlled input data and a specific choice of maximum width
-> that yields a smaller than needed allocation. The latter point has to
-> take into account malloc's particular chunk size rounding process.  The
-> "%[width]mc" format specifier does not appear to have notable use in
-> major Linux-based OS distributions, due to which the real world impact
-> may be limited to bespoke use cases.
+> Removing these dependencies allows for some applications that require it
+> as a build dependency, but otherwise can run headless or without GL, to
+> build and function, using other graphics APIs or display pipelines.
 > 
-> CVE-Id: CVE-2026-5450
+> Weston, for example, can still use Vulkan and DRM when linked to
+> libepoxy without GL/EGL/X11 support.
 > 
-> GLIBC-SA-2026-0010:
-> ===================
-> Potential buffer under-read in ungetwc
-> 
-> Calling the ungetwc function on a FILE stream with wide characters
-> encoded in a character set that has overlaps between its single byte and
-> multi-byte character encodings, in the GNU C Library version 2.43 or
-> earlier, may result in an attempt to read bytes before an allocated
-> buffer, potentially resulting in unintentional disclosure of neighboring
-> data in the heap, or a program crash.
-> 
-> A bug in the wide character pushback implementation
-> (_IO_wdefault_pbackfail in libio/wgenops.c) causes ungetwc() to operate
-> on the regular character buffer (fp->_IO_read_ptr) instead of the actual
-> wide-stream read pointer (fp->_wide_data->_IO_read_ptr). The program
-> crash may happen in cases where fp->_IO_read_ptr is not initialized and
-> hence points to NULL. The buffer under-read requires a special situation
-> where the input character encoding is such that there are overlaps
-> between single byte representations and multibyte representations in
-> that encoding, resulting in spurious matches.  The spurious match case
-> is not possible in the standard Unicode character sets.
-> 
-> CVE-Id: CVE-2026-5928
-> 
-> https://inbox.sourceware.org/libc-announce/b11f0003-6ec1-4bd6-b9de-9e38a4efeca3@redhat.com/T/
-> 
-> git shortlog b676adadbc1f5fb2f31bc484a7628cca89ae6f22..
-> DJ Delorie (1):
->       stdio-common: Allow partially-filled %mc buffers [BZ #12701]
-> 
-> Florian Weimer (1):
->       iconv: Suppress intermediate errors with //TRANSLIT (bug 34236)
-> 
-> Maciej W. Rozycki (2):
->       support: Implement 'xfmemopen' for seamless 'fmemopen' use
->       stdio-common: Reject insufficient character data in scanf [BZ #12701]
-> 
-> Rocket Ma (2):
->       libio: Fix ungetwc operating on byte stream [BZ #33998]
->       stdio-common: Fix buffer overflow in scanf %mc [BZ #34008]
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> Acked-by: Arnout Vanecappelle <arnout@rnout.be>
+> Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
 
-Applied to 2025.02.x. Thanks
+Applied to 2025.02.x & 2026.05.x. Thanks
 
 > ---
->  package/glibc/glibc.hash       | 2 +-
->  package/glibc/glibc.mk         | 8 +++++++-
->  package/localedef/localedef.mk | 2 +-
->  3 files changed, 9 insertions(+), 3 deletions(-)
+>  package/libepoxy/Config.in | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
-> index 3f1df7058a..03e8722057 100644
-> --- a/package/glibc/glibc.hash
-> +++ b/package/glibc/glibc.hash
-> @@ -1,5 +1,5 @@
->  # Locally calculated (fetched from git)
-> -sha256  c5856a16a8576d35adddd92f7e86c58faeedd849633582a7926f9a3e766ffe2d  glibc-2.41-137-gb676adadbc1f5fb2f31bc484a7628cca89ae6f22-git4.tar.gz
-> +sha256  130d77e16a08f7e52e14b49d8554997877a4fe82ac6b840a0202716146ac8fb5  glibc-2.41-143-gfc7a48bc9e999c0f9a1f9fa1b209eac1d6a93363-git4.tar.gz
+> diff --git a/package/libepoxy/Config.in b/package/libepoxy/Config.in
+> index 9da190b895..4b23497d46 100644
+> --- a/package/libepoxy/Config.in
+> +++ b/package/libepoxy/Config.in
+> @@ -1,12 +1,12 @@
+>  config BR2_PACKAGE_LIBEPOXY
+>  	bool "libepoxy"
+> -	depends on BR2_PACKAGE_HAS_LIBEGL || BR2_PACKAGE_HAS_LIBGL
+>  	select BR2_PACKAGE_XUTIL_UTIL_MACROS
+>  	help
+>  	  Epoxy is a library for handling OpenGL function pointer
+>  	  management for you.
 >  
->  # Hashes for license files
->  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-> diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-> index 3ce6265a6d..8121968e02 100644
-> --- a/package/glibc/glibc.mk
-> +++ b/package/glibc/glibc.mk
-> @@ -7,7 +7,7 @@
->  # Generate version string using:
->  #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
->  # When updating the version, please also update localedef
-> -GLIBC_VERSION = 2.41-137-gb676adadbc1f5fb2f31bc484a7628cca89ae6f22
-> +GLIBC_VERSION = 2.41-143-gfc7a48bc9e999c0f9a1f9fa1b209eac1d6a93363
->  GLIBC_SITE = https://sourceware.org/git/glibc.git
->  GLIBC_SITE_METHOD = git
+> -	  https://github.com/anholt/libepoxy
+> +	  It can be built without EGL or GLX support for packages
+> +	  that use libepoxy as a mandatory dependency but do not need
+> +	  OpenGL entry points at runtime.
 >  
-> @@ -60,6 +60,12 @@ GLIBC_IGNORE_CVES += CVE-2026-4438
->  # Fixed by glibc-2.41-135-g61737f43b1f0d9f64a6f16649625476b70f9f4d3
->  GLIBC_IGNORE_CVES += CVE-2026-4046
->  
-> +# Fixed by glibc-2.41-138-g8941538b92a574a24e9308e164869239d2b0d845
-> +GLIBC_IGNORE_CVES += CVE-2026-5928
-> +
-> +# Fixed by glibc-2.41-142-g1a74f82eedaf0987eda1f522121e6a48fac502e7
-> +GLIBC_IGNORE_CVES += CVE-2026-5450
-> +
->  # glibc is part of the toolchain so disable the toolchain dependency
->  GLIBC_ADD_TOOLCHAIN_DEPENDENCY = NO
->  
-> diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
-> index c3a959c5f5..7b16932125 100644
-> --- a/package/localedef/localedef.mk
-> +++ b/package/localedef/localedef.mk
-> @@ -7,7 +7,7 @@
->  # Use the same VERSION and SITE as target glibc
->  # As in glibc.mk, generate version string using:
->  #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
-> -LOCALEDEF_VERSION = 2.41-137-gb676adadbc1f5fb2f31bc484a7628cca89ae6f22
-> +LOCALEDEF_VERSION = 2.41-143-gfc7a48bc9e999c0f9a1f9fa1b209eac1d6a93363
->  LOCALEDEF_SOURCE = glibc-$(LOCALEDEF_VERSION)$(BR_FMT_VERSION_git).tar.gz
->  LOCALEDEF_SITE = https://sourceware.org/git/glibc.git
->  LOCALEDEF_SITE_METHOD = git
+> -comment "libepoxy needs an OpenGL and/or OpenGL EGL backend"
+> -	depends on !BR2_PACKAGE_HAS_LIBEGL && !BR2_PACKAGE_HAS_LIBGL
+> +	  https://github.com/anholt/libepoxy
+> 
 > -- 
-> 2.47.3
+> 2.54.0
 > 
 > _______________________________________________
 > buildroot mailing list
