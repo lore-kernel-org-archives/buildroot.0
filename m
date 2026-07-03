@@ -1,117 +1,118 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3AC2CC44500
-	for <buildroot@archiver.kernel.org>; Fri,  3 Jul 2026 14:33:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4ECEC43458
+	for <buildroot@archiver.kernel.org>; Fri,  3 Jul 2026 14:33:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 13D9F60EDB;
-	Fri,  3 Jul 2026 14:33:00 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Gd7y6tcXGYWR; Fri,  3 Jul 2026 14:32:59 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2B58160EDE
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1783089179;
-	bh=uPdz0CouAlo2Y3zykWKN+uYde/rPpjtWtoo7cPkmdjA=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=Q5laGB+HzJ5nOzctHM/cnQ74lnWbU3tX+LMRNxNaTN9A4oWIdy/cMw0hwXI97z2Qj
-	 VN1gRazm+WAL7fbJP/zxEw0nvbl64HL7bVRgBaSbotIe1TOdCPgU8+FQ0rRMnGH2CH
-	 ya2iIfjZF1CMr4P44kG4uPbch3U6bGF/YjxsD7uXOcchWhvT27oOyTjOOBhIPne7hd
-	 TaaqaQ098CEwvB1+i5MUt3BZFBs5rQCkMVtkeRuMG/9ZbR5zavYrj39XynO5+z6ib5
-	 24nvqsmiatmfePoyTHkqoMQduV+m/e4luKY7dRWaaAgy2pIi1FT/05lsNHDOOHNv33
-	 r2yIq7ufRzPbA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2B58160EDE;
-	Fri,  3 Jul 2026 14:32:59 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0C1ED363
- for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:32:57 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F22A2412D4
- for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:32:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BDF5941332;
+	Fri,  3 Jul 2026 14:33:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rQBAjbwSJB2X for <buildroot@buildroot.org>;
- Fri,  3 Jul 2026 14:32:56 +0000 (UTC)
+ id xvNv-1LteUcS; Fri,  3 Jul 2026 14:33:01 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 230A2412D8
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1783089181;
+	bh=FQkDMykQtKK9sWkhxJMKM2P19Ecwm50JZgi9chHi930=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=lDRckP+4FzfxJQB3lUP77Ym2AAXRm0ykB7em7tkrH7tgalFQMW3PBat2mWkOj8lag
+	 NO6dTSEHN6MsXersHe8liC6cbx28Er1pDGyBwHVnUNle14Fmw0ZlQDNPCTIqP0iKuV
+	 CZDS88GAag309sndV5p4azZU6/RrTvIF/OTsj13WskTCfTxD07NklEdoHGguZha4Al
+	 Wdy1N/89Y1IzwYHGhUw6M15/FqyK5ICZIi0/D5stfCWTjPROdnEaq3LTQGCDOo7BZn
+	 sqrpNUDxllwH8DSf5lkqj3YxU8TIO6HJWI6aBSQPLvMTVIjjcYIs3OTKUcLTwjATVd
+	 jz1ujPTuCOdEA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 230A2412D8;
+	Fri,  3 Jul 2026 14:33:01 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 09AE014F
+ for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:32:59 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 076F960EDE
+ for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:32:59 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VPmPVDo7hXe1 for <buildroot@buildroot.org>;
+ Fri,  3 Jul 2026 14:32:58 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42a; helo=mail-wr1-x42a.google.com;
+ client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E89D7412D2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E89D7412D2
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
- [IPv6:2a00:1450:4864:20::42a])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E89D7412D2
- for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:32:55 +0000 (UTC)
-Received: by mail-wr1-x42a.google.com with SMTP id
- ffacd0b85a97d-4763b0c1dcdso646011f8f.2
- for <buildroot@buildroot.org>; Fri, 03 Jul 2026 07:32:55 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E67E060EDB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E67E060EDB
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E67E060EDB
+ for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:32:57 +0000 (UTC)
+Received: by mail-wm1-x336.google.com with SMTP id
+ 5b1f17b1804b1-493b27c7451so17006525e9.0
+ for <buildroot@buildroot.org>; Fri, 03 Jul 2026 07:32:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1783089174; x=1783693974;
+ d=1e100.net; s=20251104; t=1783089176; x=1783693976;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to:content-type;
- bh=4vbaa7R0ryeydU4nNsvWntci91Db6zbryTORJzZUCn0=;
- b=sugcd7zHp6kJdm7sJB4/gKBAu6woRk1xjAbBl2Z13X+apv0xRszdxZBowOFd8PaMAe
- q+SLK9EtfIOBiKKP0NUzmqUKbHFShkbyHmDbPoj+nxTabJGNoPt4DM73KzM3CH5jxmvP
- oIgYtanDNn2VgkcsYSbpl0MJPnLXfKJ46kS3Uo9ylJYWBdYGKqDfGZQbcV4XpwFwSK0S
- eeTmC8+/m+PJ/bRQh+B3G34tokYbQdvU0RIJ4hSDLOXjnWdWltDDgxUA6RTTNwXmirAO
- UWjU8/gDFusgLPMkg0rWZ5LjkwsnARXmo5HAoIezPc8FW2D4EX/it2XQPDMvdwBAiQUn
- QfXw==
+ :to:cc:subject:date:message-id:reply-to;
+ bh=fNDzk46d+sR5FIDwil9AXA+sV7yMFRNbDQ91oof8Pfk=;
+ b=pQkHPKzhNUIKU/5M+gxXjkjx8rUVMZOu0HXGwAMyewNwTSeh9Dvh3SV7blfnp/6Fl2
+ vJ0YbHcxPJrzxIySmL/zDfCs+C9YZ4phOHVne6hwaCqzcichbf6LNNcUhl9kYyUq55f4
+ 15NxUN2eQB1st4amM0zqwsE/w2YPqb6sO5Mpfxz0WkY1JLqVztCB8lCSsYACMWJFh4zS
+ KzWJf0f2n6hAt38RzdcIzw/Ne7D4fVUQpnFoMe5u5IBH45hCKAl2kpXPSuySc0qrdGrn
+ 4VcY8EPVXBNefuPnq+ve89H8do27x1lk7R3zunsFN2cklbcpzmcFivHUWArTC7dDSkni
+ 1BlA==
 X-Forwarded-Encrypted: i=1;
- AFNElJ/KkVZRZ76Ir/Uo1MPfl2CLRtsyMgJzoItC8kwk6GW31TuJFyN5tNjUTMLC1iDzohrt6SHWP+D0fe0=@buildroot.org
-X-Gm-Message-State: AOJu0YzgH+Y9zNoKx8OFfoXMRXiKDOM+k6mnVmSUWq7AsxRkfhOqcbry
- y1Yyqp/5f3TGwp4zHMPzlK/foe42XbS1DiQl/j4onIk5+/cg7UhpYvfThoTyeHL14Qc=
-X-Gm-Gg: AfdE7ckd9J+1kl+5+46fOBI3lFSo3IrDj+lHl969xbYH/KHDeVhPavSDDUA+1qVLwgS
- LHZCWFKTq/hXBPnIAGZYzKZg8B69XduAYL8tmdUY+d353++eaW4//zrn6I2Xa5d7Y2m9EMzD+Zq
- i+ySpVqGC2ptqxFul3gH55/Hmw0EWGluJPnYBGjUD7cyJQIPYyO67KiISk8jm/Wwao5d2GTiMz3
- mZfMjmtlw2Ov1MnzZ/bqNgIa5cSgQt0Hg/Jb2aCovsCH3X1CEglzyDvmhZufzhMU+gT9hAQNCYf
- qoE75qJX/6zstraEqbkphjDgJVgKsOliOA5/6h9G8bpnj6l88MFYJsAWY6w0WBJKqvcxiRvfbtO
- oC7nqsLUmuGtLqAW58zmlZ3U8XB7SkoCD6t0W/CCKmlbcF47r7ghv0ew1+Za0vSaR51dgr58HfT
- wlLPxd
-X-Received: by 2002:a05:600c:154f:b0:493:c845:bc20 with SMTP id
- 5b1f17b1804b1-493d0f0793amr1606035e9.4.1783089173766; 
- Fri, 03 Jul 2026 07:32:53 -0700 (PDT)
+ AFNElJ+DBrm24ps4gt7dB4SJKWFfmAb5kEa7YSm6PEChBzBWE5yw2BsLPBvf3dmtBXu33gWItOYRoMfLBCM=@buildroot.org
+X-Gm-Message-State: AOJu0YwWlu0m7nbwUYDQFvpmV9fkeP79PKxx2J9Kzdx0TdCsA0uHAQRa
+ xhrv7nMGr7GCKaopdbAsNe8N6W5OQjO+SRWzE2NADfsB4WlPZWIM/Ft/eppXTFNtDf9XJ7fe0zT
+ K9evN
+X-Gm-Gg: AfdE7cmCqyk9+eBnml2P8L5B8j67ucOnunM0WP1NxAx+Hp64kesbala3uzjWDqAENO6
+ O8axEG8w+aqjmQBPGYBG4HFYXZQI9Qg+FCXDYz3mCw5kRhiNk/0VQIJV2rpWWQ8Lap65Jl6B/wD
+ S1T9HbUObuEx0mNeGKelnxoVp3srrzjWfuYRCVbuBLb9QBpBcmb1Cwb3CnYhL5pRWq1XK9YRQhz
+ KGPghVjNt+yvZnumT58raSGY1A39VqBwZWtf1FQ5m6rIVSfC8MEpQO7sNJZnBHjrVybUqfZjQ7t
+ V+p+A+pXmfs0F0j95CCHuK2lnszBHBPnh4+VlJQL4zlx+cuHJ0RSGEF45wJlmhiv0YNYZUuOSPk
+ mm2a8sc7lR0W03yQcqkEzxxEHguHsesqOaf1rAMq8/YrDuceWa9C7GaYOOGt+aVYsJBHoEKYIq/
+ Jg0icFaOaX4faUsV8=
+X-Received: by 2002:a05:600c:34ca:b0:490:b26c:64ad with SMTP id
+ 5b1f17b1804b1-493c9b4d759mr50868845e9.5.1783089175745; 
+ Fri, 03 Jul 2026 07:32:55 -0700 (PDT)
 Received: from arch ([77.109.126.77]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-493ccd9d607sm73453155e9.2.2026.07.03.07.32.52
+ 5b1f17b1804b1-493cfb6f199sm28348645e9.3.2026.07.03.07.32.54
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 03 Jul 2026 07:32:53 -0700 (PDT)
+ Fri, 03 Jul 2026 07:32:54 -0700 (PDT)
 To: Bernd Kuhls <bernd@kuhls.net>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri,  3 Jul 2026 16:32:52 +0200
-Message-ID: <20260703143252.275197-1-thomas.perale@mind.be>
+Date: Fri,  3 Jul 2026 16:32:54 +0200
+Message-ID: <20260703143254.275251-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260619172810.3337739-1-bernd@kuhls.net>
-References: <20260619172810.3337739-1-bernd@kuhls.net>
+In-Reply-To: <20260620070414.86981-1-bernd@kuhls.net>
+References: <20260620070414.86981-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1783089174; x=1783693974; darn=buildroot.org;
+ d=mind.be; s=google; t=1783089176; x=1783693976; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to:content-type;
- bh=4vbaa7R0ryeydU4nNsvWntci91Db6zbryTORJzZUCn0=;
- b=R2OjJOz1B8b9C10felvq+990UhUHdOhO9Onh/8i+aqvKrt2iyVtA0VaNd5I/o4B/qg
- OOxmnW/pI8ZbxITKl3PvbpnoNS1qEKpWVcL7/uEudxoWWlcQHTSLaaI0KmZGcJcvFMNL
- Gea69LNOilu30q7ueEIpgJFAbUq4s+CmzpKuDmT1hjINYzpkqtkNShYcaPMjWiz2uOUn
- pRqa6N5ia/R8yedD7y2dvbJkhKSbJdUWwNS+KoHeCW1HpAcwibnqhTb3wzz8ZwXK1gbw
- cfOMaeOhUtuwGneiEvB/FxP/0y6uPm+0i9cv4xUgHYDUfklD0IIgFwyv2PHbADJROHOi
- CXrg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ :message-id:reply-to;
+ bh=fNDzk46d+sR5FIDwil9AXA+sV7yMFRNbDQ91oof8Pfk=;
+ b=SbeLj3LL2rwIXICWNuviBqxQSkgLDbIk3YsGySWxdTyeBfYGno+N8VqPhQnq4gg8Sc
+ M2NC4fL9K/DZRQaiXJYt6BYGrGAjztF8CFN+qn8Nmp/iZnJAbnyRC6M+cNoenDYxvl9Y
+ KDqOqhpy7gFI5LYsZhsh14YAXOGqXTJHoleXEOHbQtks9H9rYxGfP0VVc9CUmsbA7pJr
+ lxdDnkQFr8cDVzMvB2EprfpSE8H1FQoAQU5fa+598/DNjzXGmVpZsPBVZAPmPYtymOxi
+ BKZcsezxeF8vWxag12Qxu7sTAxVd2pdAEjUrni39ixXsI8Tzqy6eAW6A+BNU6+/ZfSXc
+ DDyQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=R2OjJOz1
-Subject: Re: [Buildroot] [PATCH 1/1] package/ghostscript: security bump to
- version 10.07.1
+ header.a=rsa-sha256 header.s=google header.b=SbeLj3LL
+Subject: Re: [Buildroot] [PATCH 1/1] package/cpp-httplib: security bump
+ version to 0.48.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -131,10 +132,25 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> https://ghostscript.readthedocs.io/en/gs10.07.1/News.html
-> "This release addresses a number of potential security issues."
+> https://github.com/yhirose/cpp-httplib/releases/tag/v0.48.0
+> - this bump includes a security fix for the Mbed TLS and wolfSSL
+>   backends which are unused by buildroot
+> https://github.com/yhirose/cpp-httplib/releases/tag/v0.47.0
+> - this bump includes a security fix for the Mbed TLS and wolfSSL
+>   backends which are unused by buildroot
+> https://github.com/yhirose/cpp-httplib/releases/tag/v0.46.1
+> https://github.com/yhirose/cpp-httplib/releases/tag/v0.46.0
+> - this bump includes a security fix
+> https://github.com/yhirose/cpp-httplib/releases/tag/v0.45.1
+> https://github.com/yhirose/cpp-httplib/releases/tag/v0.45.0
+> https://github.com/yhirose/cpp-httplib/releases/tag/v0.44.0
+> - fixes CVE-2026-45372 & CVE-2026-46527
+> https://github.com/yhirose/cpp-httplib/releases/tag/v0.43.4
+> - fixes CVE-2026-45352
+> https://github.com/yhirose/cpp-httplib/releases/tag/v0.43.3
+> https://github.com/yhirose/cpp-httplib/releases/tag/v0.43.2
 > 
-> Renumbered patch which was forgotten during the last version bump.
+> https://github.com/yhirose/cpp-httplib/compare/v0.43.1...v0.48.0
 > 
 > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
@@ -142,45 +158,34 @@ Applied to 2025.02.x & 2026.05.x. Thanks
 
 > ---
 > Gitlab pipelines passed:
-> https://gitlab.com/bkuhls/buildroot/-/commits/d32cbd8763906d5edae166f4f9020475ba03bc8e
-> with the exception of an unrelated build error with the
-> bootlin-arcle-hs38-uclibc toolchain.
+> https://gitlab.com/bkuhls/buildroot/-/commits/8fcef356cfff282f19aea18a7ef8f1c214bcefc1
 > 
->  package/ghostscript/{0002-brotli.patch => 0001-brotli.patch} | 0
->  package/ghostscript/ghostscript.hash                         | 4 ++--
->  package/ghostscript/ghostscript.mk                           | 2 +-
->  3 files changed, 3 insertions(+), 3 deletions(-)
->  rename package/ghostscript/{0002-brotli.patch => 0001-brotli.patch} (100%)
+>  package/cpp-httplib/cpp-httplib.hash | 2 +-
+>  package/cpp-httplib/cpp-httplib.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/ghostscript/0002-brotli.patch b/package/ghostscript/0001-brotli.patch
-> similarity index 100%
-> rename from package/ghostscript/0002-brotli.patch
-> rename to package/ghostscript/0001-brotli.patch
-> diff --git a/package/ghostscript/ghostscript.hash b/package/ghostscript/ghostscript.hash
-> index c2e48b01e6..94017262df 100644
-> --- a/package/ghostscript/ghostscript.hash
-> +++ b/package/ghostscript/ghostscript.hash
-> @@ -1,5 +1,5 @@
-> -# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs10070/SHA512SUMS
-> -sha512  1c2a14951223c975a53bd9767c28bd3a6e420c385a5e0d7a60a5ff5b091bc027929c815bf57cddf97611e8d265ece1c219321737f2cabb5646685c6e8cdb85c9  ghostscript-10.07.0.tar.xz
-> +# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs10071/SHA512SUMS
-> +sha512  7b38ca10fa7ab648924f7db3e2e4933c3d18e04c8db1346fca4d4f7b85dfbd7888d5fc46f413613b46429fb47b675a593994c25e50e9de4dcdbee3bdd8a5e449  ghostscript-10.07.1.tar.xz
->  
->  # Hash for license file:
->  sha256  8ce064f423b7c24a011b6ebf9431b8bf9861a5255e47c84bfb23fc526d030a8b  LICENSE
-> diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
-> index 23dd3d3860..08e2667981 100644
-> --- a/package/ghostscript/ghostscript.mk
-> +++ b/package/ghostscript/ghostscript.mk
+> diff --git a/package/cpp-httplib/cpp-httplib.hash b/package/cpp-httplib/cpp-httplib.hash
+> index f3e05951e9..842b96f3eb 100644
+> --- a/package/cpp-httplib/cpp-httplib.hash
+> +++ b/package/cpp-httplib/cpp-httplib.hash
+> @@ -1,3 +1,3 @@
+>  # Locally computed:
+> -sha256  000832a5b50b67b82a77845c09d832f6e492011cd0ef1d4f72f808eb6a4fbeb3  cpp-httplib-0.43.1.tar.gz
+> +sha256  d9ed142d319c6e19a961f477257e67f846909ce15288502188df2281941be84e  cpp-httplib-0.48.0.tar.gz
+>  sha256  4b45cbe16d7b71b89ae6127e26e0d90a029198ca5e958ad8e3d0b8bbed364d8b  LICENSE
+> diff --git a/package/cpp-httplib/cpp-httplib.mk b/package/cpp-httplib/cpp-httplib.mk
+> index e8bc0a56fe..94f270df94 100644
+> --- a/package/cpp-httplib/cpp-httplib.mk
+> +++ b/package/cpp-httplib/cpp-httplib.mk
 > @@ -4,7 +4,7 @@
 >  #
 >  ################################################################################
 >  
-> -GHOSTSCRIPT_VERSION = 10.07.0
-> +GHOSTSCRIPT_VERSION = 10.07.1
->  GHOSTSCRIPT_SOURCE = ghostscript-$(GHOSTSCRIPT_VERSION).tar.xz
->  GHOSTSCRIPT_SITE = https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs$(subst .,,$(GHOSTSCRIPT_VERSION))
->  GHOSTSCRIPT_LICENSE = AGPL-3.0
+> -CPP_HTTPLIB_VERSION = 0.43.1
+> +CPP_HTTPLIB_VERSION = 0.48.0
+>  CPP_HTTPLIB_SITE = $(call github,yhirose,cpp-httplib,v$(CPP_HTTPLIB_VERSION))
+>  CPP_HTTPLIB_LICENSE = MIT
+>  CPP_HTTPLIB_LICENSE_FILES = LICENSE
 > -- 
 > 2.47.3
 > 
