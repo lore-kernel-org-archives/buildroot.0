@@ -1,117 +1,117 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C87F3C43458
-	for <buildroot@archiver.kernel.org>; Fri,  3 Jul 2026 14:33:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5347AC44500
+	for <buildroot@archiver.kernel.org>; Fri,  3 Jul 2026 14:33:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A1399413AC;
-	Fri,  3 Jul 2026 14:33:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2A91882890;
+	Fri,  3 Jul 2026 14:33:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id M9Xt3PsGTtxK; Fri,  3 Jul 2026 14:33:29 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id mPTlf-R1ddOr; Fri,  3 Jul 2026 14:33:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 44C4D41395
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 51A8F82B49
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1783089209;
-	bh=68LJDNfdw68Y+3NYB7utXvT++n+G6zidOKYG9QZxfKM=;
+	s=default; t=1783089210;
+	bh=MbLVFz6ejLxAfVfa8vug8xfEupewuMMYWD2WVg3uO0U=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=A6MyG4H80Ap+C2Z5GF9xsGTDyCl+XHnGEI4ra8Ii/O0bIUumia9LOyxIGfNs/Johd
-	 Ax6nIM00Mpna3p7Tj26sh6HsF2bp0k2bp8DSh33LjcUWyAV760QMHgUkwZsIY/l9pE
-	 3RZ3unO21saOz0WbzeQCDxw7t1Ui/rrV4AWeAp4MLxG+neugXa65zWEmIJg10SZG/7
-	 DLgiMBhBqmEUP4ZTtBcKeak/ZQVyQSmpYXKMn8cBag2n4y8gJJiDPoWHzLNQW8w91z
-	 Let4Pj2fbUJBI8keu0UBZPrmnLdTY7Srwo1J+M5dUWhEXXNG86gKmZ8xOGWTogipjr
-	 3nDqeUgvxrFVQ==
+	b=VKRu2dyIsotL9rSDFncoJhVjjZxpFnqO6d99tFfQulzYqz+aJjIXy1yPzs8tppNA0
+	 3It7k2uEAwzPOIirqilR5smdiCPBFycmnn5Cd3ocxj40FuLp8hV9IreFxfLOS7+02Y
+	 YarOVNAthnOrm6SQGqDqbn5TytdEbMQ0nfwAKNF0QhT1Vb8qePkbs1ZSa/07CidVGp
+	 fCYisDrmt3Hss7JHlqYfHO36oNuS4DwgyEN87S2goHsZrvbwyGDkojmPfuqei3NjsI
+	 s3d9wSAIPZDkJNYQtr0UMkLyto2Lm+R+Rbq2bFRioEuYlBFF7U9x6mM++Mp8XbqRu6
+	 tqcT2StjsXoqw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 44C4D41395;
-	Fri,  3 Jul 2026 14:33:29 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id E83F914F
- for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:33:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 51A8F82B49;
+	Fri,  3 Jul 2026 14:33:30 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id CF698363
+ for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:33:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DA76F41300
- for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:33:27 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id CCD43610B6
+ for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:33:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9lFiDLl76NLx for <buildroot@buildroot.org>;
- Fri,  3 Jul 2026 14:33:27 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id R6MAMS3PQA_F for <buildroot@buildroot.org>;
+ Fri,  3 Jul 2026 14:33:28 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32a; helo=mail-wm1-x32a.google.com;
+ client-ip=2a00:1450:4864:20::32d; helo=mail-wm1-x32d.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B842041385
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B842041385
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
- [IPv6:2a00:1450:4864:20::32a])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B842041385
- for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:33:26 +0000 (UTC)
-Received: by mail-wm1-x32a.google.com with SMTP id
- 5b1f17b1804b1-493c00f74baso3987385e9.0
- for <buildroot@buildroot.org>; Fri, 03 Jul 2026 07:33:26 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C02AB60E5D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C02AB60E5D
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C02AB60E5D
+ for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:33:27 +0000 (UTC)
+Received: by mail-wm1-x32d.google.com with SMTP id
+ 5b1f17b1804b1-493c19bad03so5856255e9.2
+ for <buildroot@buildroot.org>; Fri, 03 Jul 2026 07:33:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1783089204; x=1783694004;
+ d=1e100.net; s=20251104; t=1783089205; x=1783694005;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=YsxocMwwygz47Qc4bajUHIH6O63BE4tINLkX8whNgsk=;
- b=ovCvC/gyOFgpQAfSSPS5BlzNT5aUDcOpn3jSzBDb6veqfQrHG/uJ52ga69vpNVHWDN
- 5ZvSgC8bHwPP8KOaaIBUlmgFXGxy2ObBFAVF/KP1rk7Ds5Q5wvl4z97g3bXui6FkPYIT
- Gxe8ynHO8jg5Rw+VV6iBhILz3QnBPWIVBbYLNoxDCwYjkMkt+mzthJKvo37kV6/kIPUE
- foAeEDAGZ3cWIfDKDOvcxQvolVqbrOw+x/7qawb0uzWIFWyvbXun56K8wis2jOFelptr
- 6Mb1Pf9Rw0GCyEP08fmk4mUU/hT2bfBFuP/bxQdgdd9hgqEUi0CLaXPw5M3PtfaN16LL
- LziA==
+ bh=33vZnekMY1yH7YGO4FVBD/GXPRqpx4g3fsUw7qBCBDE=;
+ b=RDwz6kOx1bC/Fpg5JcptYHBFL1bNho/KR1KA5n8SfY9yI3wTbdK0Lr3VkS/1H3CI0V
+ bqUuN3tzHPinWg3Ivy3KSZpBk5qfFB7+IxMs2jywc/IQU37WYXMN0+FKG9XFynOamIBd
+ XLbH1qAvnp57Z3omi5iH+jgzBfj7w8pPMuQk9wcZ/IEf9+W2DTlvXhwP5tXR9jFdDnkp
+ S1gW9HriA2Q2B6aFD9lijvSeXH6zuuGHrv6PBZRGNv48TN8CaGpFRVs/yIfiNvb1pYmh
+ AdFZIgDb+25No61yY9QZHXbpm+1akTClyE8JnHfWvHKatw+Lcalveso7VrlQlW98Uusl
+ kAOQ==
 X-Forwarded-Encrypted: i=1;
- AFNElJ9RlZzCE65h67qZJFscQYcWy/kW8IKyqn3z486fKsUUMvaVDagDU9uZG0xQs50/Qp3O4erUBSz/kbk=@buildroot.org
-X-Gm-Message-State: AOJu0Yz3dv9Qn0vwFqjC2r887VRn0CzQZVVeFH75RR2CYKOoOUXZCHKW
- TwS+Jc6MTCbXWaT0tgtx56aTMKFyLeoe4cKjPZVPlMnVvQdN2XNI/Eo9w7KdOEOiiOlZEKFgqi/
- K01QW
-X-Gm-Gg: AfdE7cmuYWsSgfNU4TT+4/GIbKF8JrEUDt2EVHrDNpIXiKmCA/+unrWI4W+gzPSgGWa
- JFxK2DBqzQVtYnAk3Gn7imHpzU/Jji0oOh62oOSsW1/DRalZ44EsglezALwbW8bSFzWzh5OeA2S
- RQYJmupYiS6No2Th4UA806IdxiDrsbMkvIvhgQZ98SZyATG4310lfuOWqDq7Ozer8TjqU6maeQ3
- B3i/YuWDZDo9IwzDGl+H+LnjB3kkr4xSih7EWXsaKAkPnjaCmMLLCcR1oQ1ADe3rKD8KDbIPx8J
- vkUPjYOto1bJWwmOdIZKMSdFI7TLBXr4OMyEVPf5kXPsh59fSr2CjZ6QjJSQD8GpBowRCJJKZhw
- pBv9CKr//X2YWy84gPttNJHanQKNbKfmzTAObybul0vjhFvxrWMzbzq1KLtJtdYDjqRmm2EWq6E
- hLqDS4
-X-Received: by 2002:a05:600c:46ce:b0:493:c548:87fb with SMTP id
- 5b1f17b1804b1-493d0f464afmr1142405e9.36.1783089204498; 
- Fri, 03 Jul 2026 07:33:24 -0700 (PDT)
+ AFNElJ+YW+m+FrPSCZ3DCqPHFHOcL5SKtBteYPZoxB9/79d3oIlC1jTeYYYYx52I9fXV5cgmPYdJ1t20Y/Q=@buildroot.org
+X-Gm-Message-State: AOJu0Yzi4kqjr4s9GgQ3yE4hD9Gdm0ucRmB4UTOvoaD1Rq7j+hG2RlhK
+ t2QiI1qrzmXUuXI48EpIhSh5e/CfEesWNntLR3732lpbcFD3xSziM/KS9lJuTOCmZAg=
+X-Gm-Gg: AfdE7cmvu5TXTLDDnbTq5LXrRMV1rr5Gc/YNUReFT/c/nih7rPn3/uFPud/AfWKjEdi
+ pzODHHgDyXPll8BPQtqeWvyPCj69YA4ge6FRoYU3gCBugpnA7bDvlkYBWWwtaHrl3rea2ra6/Fl
+ gCD61gpgy3JoyRo6xPcYRW2y5Ts9+MjaY55V/EjoAQldKbF/NvYE27SoeZhjbfEJjqh6ut3CVx2
+ wi8iopwPZ8mfOKAcxLNdCoPOQ+cefRorXdrVjNNy7WurpUa6pF84VgUlRem1RXlCDt1DDtVxw0B
+ xToaG3JGoYyBnFkZKJd3Ea1bsGbfaJuLyg01yfEYIeJFvPk20YEIBmuSOPQ+0gTntmzy/AUEDif
+ DU8l4g7Cmx/vzOMLYPVGSn5W/T+FknmC7tUWmhB3Q/T64zSQCBiWSC7sq0pa6cOwmiUZ63K5tVR
+ 9KZlQY
+X-Received: by 2002:a05:600c:1f87:b0:492:3d05:5639 with SMTP id
+ 5b1f17b1804b1-493d0f53f9fmr682495e9.36.1783089205654; 
+ Fri, 03 Jul 2026 07:33:25 -0700 (PDT)
 Received: from arch ([77.109.126.77]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-493cfb6f199sm28380915e9.3.2026.07.03.07.33.23
+ ffacd0b85a97d-477db8a450bsm20088091f8f.10.2026.07.03.07.33.25
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 03 Jul 2026 07:33:23 -0700 (PDT)
-To: yann.morin@orange.com
+ Fri, 03 Jul 2026 07:33:25 -0700 (PDT)
+To: Bernd Kuhls <bernd@kuhls.net>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri,  3 Jul 2026 16:33:23 +0200
-Message-ID: <20260703143323.275776-1-thomas.perale@mind.be>
+Date: Fri,  3 Jul 2026 16:33:24 +0200
+Message-ID: <20260703143324.275832-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.55.0
-In-Reply-To: <5eb533070f62b66decb39cb42067e453ef577bfc.1781861320.git.yann.morin@orange.com>
-References: <5eb533070f62b66decb39cb42067e453ef577bfc.1781861320.git.yann.morin@orange.com>
+In-Reply-To: <20260621075519.924777-1-bernd@kuhls.net>
+References: <20260621075519.924777-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1783089204; x=1783694004; darn=buildroot.org;
+ d=mind.be; s=google; t=1783089205; x=1783694005; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=YsxocMwwygz47Qc4bajUHIH6O63BE4tINLkX8whNgsk=;
- b=Fc23RZMPfaiuHBCnG1jM5cuY/YF6jUMbSqXj4lSzFSgizkABSiC85K8LlRwiqUdge1
- tgJwRFIT2Ej6BN4CU7OTedHwPhQLFM4NCTao4givJFyJC65z8lzkxR21naU2nrKu/4kq
- vWvLbSlQUpR14mCvROt2Udwdg1A1cNnpw5Hvh3iY3kSCQXqliPVcCRLucDqsPV9ELRUr
- DwREJQXDHfVmej+mzbGEi+N50kseys9v+FDBQgEAby1oi5S+XLejbXbkHyhGAzkVY0uw
- VQ7zl4CrZXXcFgFmgen8NIxFGlSgXzxoIk/DrwG8l57r6HuBIbUi3mIlRoWoYc3OoR0/
- retg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=33vZnekMY1yH7YGO4FVBD/GXPRqpx4g3fsUw7qBCBDE=;
+ b=fCmy74tbrHDqGft5pJE/bxQo6EJjfOwnLwV57Dhhn1aoBGBjVwZHKIwjxb67wSxtct
+ Vneu/8dh5Aa1FQ13H4bGo+po1wqJAK3wIWN90F8GybSAaT80slrJvE1AD7Efm5xFf3ch
+ nZSRH48G3o/Ajhy6pa2jh2/KIaNRbZlOpFTT5WHrlKzt/IEz6aEjpTsT4+VYYEI2DFvI
+ lB7jN8n/mIcafzyxCzx3TaeRiSUom848EvtVlnXsjja6yQdkREHRc/0axLkm6Ef3N9hz
+ Kz4x3pQ3179OwueOFO8plI8AjGKfpin4tcxuhwr83ePR2RyRUJ6jf6uD0WKVs/ykt/bg
+ pasQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=Fc23RZMP
-Subject: Re: [Buildroot] [PATCH 1/1] package/mosquitto: requires cmake >= 4.3
+ header.a=rsa-sha256 header.s=google header.b=fCmy74tb
+Subject: Re: [Buildroot] [PATCH 1/1] package/util-linux: lsfd needs headers
+ >= 4.15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -131,58 +131,55 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> With an older cmake version, like the 3.25.1 as available in the docker
-> reference image, mosquitto fails to build when ccache is enabled:
+> Buildroot commit 31af509b4f4fe52f67bd9109b8732a55b8f9cd2d bumped the
+> package to 2.41.1 which includes upstream commit
+> https://github.com/util-linux/util-linux/commit/036d72749ca274294051b43fd66727061a772b9c
+> adding a dependency to BPF_OBJ_NAME_LEN for lsfd.
 > 
->     [ 98%] Building CXX object lib/cpp/CMakeFiles/mosquittopp.dir/mosquittopp.cpp.o
->     In file included from [...]/buildroot/output/build/mosquitto-2.1.2/lib/cpp/mosquittopp.cpp:17:
->     [...]/buildroot/output/host/opt/ext-toolchain/i686-buildroot-linux-gnu/include/c++/15.1.0/cstdlib:83:15: fatal error: stdlib.h: No such file or directory
->        83 | #include_next <stdlib.h>
->           |               ^~~~~~~~~~
->     compilation terminated.
+> BPF_OBJ_NAME_LEN was added to the kernel headers in version 4.15:
+> https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=cb4d2b3f03d8eed90be3a194e5b54b734ec4bbe9
 > 
-> Officially, mosquitto only requires cmake 3.18, but that proves to not
-> be enough, in fact...
+> so we need to raise the header version dependency for lsfd.
 > 
-> We workaround that by requiring cmake 4.3, which is the one version that
-> could be tested with our host-cmake.
+> The build error was found by the Gitlab pipelines for the defconfig
+> bootlin-aarch64-glibc-old.
 > 
-> Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
-> Cc: Titouan Christophe <titouan.christophe@mind.be>
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
 Applied to 2026.05.x. Thanks
 
 > ---
->  package/mosquitto/Config.in | 1 +
->  1 file changed, 1 insertion(+)
+> Gitlab pipelines passed:
+> https://gitlab.com/bkuhls/buildroot/-/commits/bba1881a5eaf4a127a6580872c665fd095724b03
 > 
-> diff --git a/package/mosquitto/Config.in b/package/mosquitto/Config.in
-> index 08223bc5db..d553d2fe5c 100644
-> --- a/package/mosquitto/Config.in
-> +++ b/package/mosquitto/Config.in
-> @@ -2,6 +2,7 @@ config BR2_PACKAGE_MOSQUITTO
->  	bool "mosquitto"
->  	depends on BR2_USE_MMU  # lib peeks in malloc() internals; broker fork()s
->  	depends on !BR2_STATIC_LIBS
-> +	select BR2_HOST_CMAKE_AT_LEAST_4_3
->  	select BR2_PACKAGE_CJSON
+>  package/util-linux/Config.in | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
+> index c63cec2a9c..3df149b3de 100644
+> --- a/package/util-linux/Config.in
+> +++ b/package/util-linux/Config.in
+> @@ -233,15 +233,15 @@ config BR2_PACKAGE_UTIL_LINUX_LOSETUP
+>  config BR2_PACKAGE_UTIL_LINUX_LSFD
+>  	bool "lsfd"
+>  	depends on BR2_USE_MMU # libsmartcols
+> -	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_19
+> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_15
+>  	depends on !BR2_TOOLCHAIN_USES_UCLIBC # process_vm_readv
+>  	select BR2_PACKAGE_UTIL_LINUX_LIBSMARTCOLS
 >  	help
->  	  Eclipse Mosquitto is an open source (EPL/EDL licensed) message
+>  	  List file descriptors (modern replacement for lsof)
+>  
+> -comment "lsfd needs a musl or glibc toolchain w/ headers >= 3.19"
+> +comment "lsfd needs a musl or glibc toolchain w/ headers >= 4.15"
+>  	depends on BR2_USE_MMU
+> -	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_19 \
+> +	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_15 \
+>  		|| BR2_TOOLCHAIN_USES_UCLIBC
+>  
+>  config BR2_PACKAGE_UTIL_LINUX_LSLOGINS
 > -- 
-> 2.34.1
-> 
-> ____________________________________________________________________________________________________________
-> Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-> pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-> a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-> Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
-> 
-> This message and its attachments may contain confidential or privileged information that may be protected by law;
-> they should not be distributed, used or copied without authorisation.
-> If you have received this email in error, please notify the sender and delete this message and its attachments.
-> As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-> Thank you.
+> 2.47.3
 > 
 > _______________________________________________
 > buildroot mailing list
