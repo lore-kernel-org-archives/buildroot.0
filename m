@@ -1,61 +1,61 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10706C43458
-	for <buildroot@archiver.kernel.org>; Fri,  3 Jul 2026 10:28:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D990AC43458
+	for <buildroot@archiver.kernel.org>; Fri,  3 Jul 2026 10:28:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B4D9D41104;
-	Fri,  3 Jul 2026 10:28:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9AE5160AC0;
+	Fri,  3 Jul 2026 10:28:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lv_zPqe78LK2; Fri,  3 Jul 2026 10:28:36 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3ctb6CQV7yY5; Fri,  3 Jul 2026 10:28:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D463541115
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CC6AC60C01
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1783074515;
-	bh=JO+gMgGPDp8leMeXheZ+A970c60PmWdZDJJ9zmXxxvw=;
+	s=default; t=1783074518;
+	bh=18yfqtcZbxiwJrdTkw7oZyF4DwA+7gwHP7u8/s2SuEU=;
 	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=CyoFQMHxmn7a8YTyrV1L0DeNahXwgcQTCY/w+/r17AHCxgttN0eJ7dc1xd5xq15ZR
-	 WT6F4RaIfyg4ePxsmPD00aUcotJpbVXvcHOrN0LNWYTz6AOoqNHDJyQAkr/IMfSaGJ
-	 PCDZ5ohv9etxDiPAPw9UfjwfBiOlxPjgKsYTxZPm8oX5/amm3NqSscmMXS2jU5FCxv
-	 1vkVAA6Xfo8rLxTIAXv//yU5/OZjAOFF4y+s7M3m0p7oyxe4TZ0Crs4U69ezVSmJK1
-	 ksOojUc/SzGo1bPqJD3U+BT9QPxGuLXREuw2H7PqF5OuxgNmlv/WGCpOA5RZGFulEk
-	 7FfGopYzBopeQ==
+	b=fvs0lkFFOpOd73YASTZ1X81J7ar37/ul87c/BKxyTYnew0ntzTkfTtIWU0/Ie9iGv
+	 5BJLnNPoqGKJJw4s5v57huGgDqjU4qJy7qTE04IXF9MZ5aYiMD8n9w85KcrDI6fiDE
+	 N+ptGHkbaM3YqPZNPx4Itx3qJ5tlZ784TWwviCuELdsFjWq4mBaWBSpSjh45jtlIEJ
+	 ovmJ8FrrtWm5YBNyRwO9aAiEhLB0Nip8E7O7/170aMR0wW121FkJEwwEUP5doyYBMs
+	 7eEUxMhRRfsD1s1ZjUPYUd6jEW/rFkJEfuxJQHtMIVl8sFkyiPYTElriicgs35hYpv
+	 mZ0oeCBe2DUaw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D463541115;
-	Fri,  3 Jul 2026 10:28:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CC6AC60C01;
+	Fri,  3 Jul 2026 10:28:38 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id E48D0363
- for <buildroot@buildroot.org>; Fri,  3 Jul 2026 10:28:33 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 4C21114F
+ for <buildroot@buildroot.org>; Fri,  3 Jul 2026 10:28:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CB46341115
- for <buildroot@buildroot.org>; Fri,  3 Jul 2026 10:28:33 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3B576411BF
+ for <buildroot@buildroot.org>; Fri,  3 Jul 2026 10:28:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id g4vVkkkA6B4J for <buildroot@buildroot.org>;
- Fri,  3 Jul 2026 10:28:33 +0000 (UTC)
+ id YCQkcWzs9VIT for <buildroot@buildroot.org>;
+ Fri,  3 Jul 2026 10:28:36 +0000 (UTC)
 Received-SPF: None (mailfrom) identity=mailfrom; client-ip=176.9.89.163;
  helo=serv15.avernis.de; envelope-from=br025@umbiko.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 183B641104
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 183B641104
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1E07541146
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1E07541146
 Received: from serv15.avernis.de (serv15.avernis.de [176.9.89.163])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 183B641104
- for <buildroot@buildroot.org>; Fri,  3 Jul 2026 10:28:31 +0000 (UTC)
-Received: by serv15.avernis.de (Postfix) with ESMTPSA id 44A29BDE0C78;
- Fri, 03 Jul 2026 12:28:29 +0200 (CEST)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1E07541146
+ for <buildroot@buildroot.org>; Fri,  3 Jul 2026 10:28:36 +0000 (UTC)
+Received: by serv15.avernis.de (Postfix) with ESMTPSA id AD7E5BDE0C78;
+ Fri, 03 Jul 2026 12:28:33 +0200 (CEST)
 From: Andreas Ziegler <br025@umbiko.net>
 To: buildroot@buildroot.org
 Cc: Marcus Hoffmann <buildroot@bubu1.eu>,
 	Andreas Ziegler <br025@umbiko.net>
-Date: Fri,  3 Jul 2026 12:26:52 +0200
-Message-ID: <20260703102732.782347-2-br025@umbiko.net>
+Date: Fri,  3 Jul 2026 12:26:53 +0200
+Message-ID: <20260703102732.782347-3-br025@umbiko.net>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260703102732.782347-1-br025@umbiko.net>
 References: <20260703102732.782347-1-br025@umbiko.net>
@@ -64,20 +64,20 @@ X-Virus-Scanned: clamav-milter 1.4.3 at serv15.avernis.de
 X-Virus-Status: Clean
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=umbiko.net; s=mail; 
- t=1783074509; bh=7eu4ioOv82/jhoojrQdgKgOAmRFWKSJCx31mIbEX3k0=;
+ t=1783074514; bh=QTsve5vfBXkSGUqaW7qN+6kD9lIeenxk6xacxziUE4I=;
  h=From:To:Cc:Subject:Date:In-Reply-To:References;
- b=B5afdm5KBYKN40ndupjsZEIqr7Ssk6RWk6qF/PTASDzmXK8k+wIvOCmXN1kYV0sG4
- mV0aFRMriZuStwmZK//qY4PwBQ++XzO/nSeI16ujoX9aM5IHPTCUEBe+zpUj1ChyRU
- QGDP73/pheFItOROtuLbqIMXMf4t0bokRYKULOU4=
+ b=YdyP9on9z9vyRaedhdTGqLKDDk1mW9hPhnq30X4SjGGfB4F8FLYXThBm9ReXP46/Z
+ Wk0ezuyLCqeNVAVO7pMJKnZPeFjWkAUBxDvGWCFgwaxULnlQhxia3cJuT2ijzgZM/5
+ lYq35FX50jRKd6LsxvCvl7AdLPBuppgWbvSvS3lE=
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=umbiko.net
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=umbiko.net header.i=@umbiko.net header.a=rsa-sha256
- header.s=mail header.b=B5afdm5K
-Subject: [Buildroot] [PATCH 1/5] package/mpd: install provided sample
- configuration file as mpd.conf
+ dkim=pass (1024-bit key) header.d=umbiko.net header.i=@umbiko.net
+ header.a=rsa-sha256 header.s=mail header.b=YdyP9on9
+Subject: [Buildroot] =?utf-8?q?=5BPATCH_2/5=5D_package/mpd=3A_remove_depe?=
+ =?utf-8?q?ndencies_from_sub-=C3=BCptions_that_are_already_satisfied_by_th?=
+ =?utf-8?q?e_main_option?=
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,72 +94,75 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The configuration file supplied by Buildroot is only a sample; it will not
-start MPD on a default installation. Usually a custom mpd.conf is supplied
-in a rootfs overlay.
+After various updates since version 0.20, most dependencies placing
+restrictions on sub-components are now superseded by restrictions placed on
+MPD itself. Example: io_uring needs kernel headers > 5.1; MPD needs kernel
+headers > 5.6.
 
-Drop the Buildroot configuration file and install the sample supplied by
-MPD instead, it is more complete, contains useful examples and is updated
-regularly.
+Remove dependencies from sub-options if they are already imposed on MPD. 
 
 Signed-off-by: Andreas Ziegler <br025@umbiko.net>
 ---
- package/mpd/mpd.conf | 32 --------------------------------
- package/mpd/mpd.mk   |  2 +-
- 2 files changed, 1 insertion(+), 33 deletions(-)
- delete mode 100644 package/mpd/mpd.conf
+ package/mpd/Config.in | 19 +++----------------
+ 1 file changed, 3 insertions(+), 16 deletions(-)
 
-diff --git a/package/mpd/mpd.conf b/package/mpd/mpd.conf
-deleted file mode 100644
-index 5956b75e24..0000000000
---- a/package/mpd/mpd.conf
-+++ /dev/null
-@@ -1,32 +0,0 @@
--#
--# Sample configuration file for mpd
--# This is a minimal configuration, see the manpage for more options
--#
--
--# Directory where the music is stored
--music_directory		"/var/lib/mpd/music"
--
--# Directory where user-made playlists are stored (RW)
--playlist_directory	"/var/lib/mpd/playlists"
--
--# Database file (RW)
--db_file			"/var/lib/mpd/database"
--
--# Log file (RW)
--log_file		"/var/log/mpd.log"
--
--# Process ID file (RW)
--pid_file		"/var/run/mpd.pid"
--
--# State file (RW)
--state_file		"/var/lib/mpd/state"
--
--# User id to run the daemon as
--#user			"nobody"
--
--# TCP socket binding
--bind_to_address		"any"
--#bind_to_address	"localhost"
--
--# Unix socket to listen on
--bind_to_address		"/var/lib/mpd/socket"
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index 65cd390ff9..2014488520 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -346,7 +346,7 @@ MPD_CONF_OPTS += -Dzzip=disabled
- endif
+diff --git a/package/mpd/Config.in b/package/mpd/Config.in
+index 1b6815e904..e0ee7fa533 100644
+--- a/package/mpd/Config.in
++++ b/package/mpd/Config.in
+@@ -217,15 +217,10 @@ config BR2_PACKAGE_MPD_LIBMMS
  
- define MPD_INSTALL_EXTRA_FILES
--	$(INSTALL) -m 0644 -D package/mpd/mpd.conf $(TARGET_DIR)/etc/mpd.conf
-+	$(INSTALL) -m 0644 -D $(@D)/doc/mpdconf.example $(TARGET_DIR)/etc/mpd.conf
- 	mkdir -p $(TARGET_DIR)/var/lib/mpd/music
- 	mkdir -p $(TARGET_DIR)/var/lib/mpd/playlists
- endef
+ config BR2_PACKAGE_MPD_LIBNFS
+ 	bool "nfs"
+-	# libnfs -> libtirpc
+-	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC || BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_LIBNFS
+ 	help
+ 	  Enable Network File System (NFS) support.
+ 
+-comment "nfs support needs a toolchain w/ threads support"
+-	depends on !(BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_HAS_NATIVE_RPC)
+-
+ comment "samba support needs a glibc toolchain w/ dynamic library, RPC"
+ 	depends on !BR2_TOOLCHAIN_USES_GLIBC || BR2_STATIC_LIBS || \
+ 		!BR2_TOOLCHAIN_HAS_NATIVE_RPC
+@@ -295,18 +290,14 @@ config BR2_PACKAGE_MPD_OSS
+ config BR2_PACKAGE_MPD_PULSEAUDIO
+ 	bool "pulseaudio"
+ 	depends on BR2_PACKAGE_PULSEAUDIO_HAS_ATOMIC
+-	depends on BR2_USE_WCHAR
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_STATIC_LIBS
+-	depends on BR2_USE_MMU
+ 	select BR2_PACKAGE_PULSEAUDIO
+ 	help
+ 	  Enable pulseaudio output support.
+ 
+-comment "pulseaudio support needs a toolchain w/ threads, wchar, dynamic library"
+-	depends on BR2_USE_MMU
+-	depends on BR2_PACKAGE_PULSEAUDIO_HAS_ATOMIC
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || !BR2_USE_WCHAR
++comment "pulseaudio support needs dynamic library"
++	depends on !BR2_PACKAGE_PULSEAUDIO_HAS_ATOMIC
++	depends on BR2_STATIC_LIBS
+ 
+ config BR2_PACKAGE_MPD_SHOUTCAST
+ 	bool "shoutcast"
+@@ -333,14 +324,10 @@ comment "avahi support needs a toolchain w/ dynamic library"
+ 
+ config BR2_PACKAGE_MPD_IO_URING
+ 	bool "io_uring"
+-	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1
+ 	select BR2_PACKAGE_LIBURING
+ 	help
+ 	  Asynchronous I/O using kernel io_uring subsystem
+ 
+-comment "io_uring support needs a toolchain w/ headers >= 5.1"
+-	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1
+-
+ config BR2_PACKAGE_MPD_LIBMPDCLIENT
+ 	bool "libmpdclient"
+ 	select BR2_PACKAGE_MPD_TCP
 -- 
 2.53.0
 
