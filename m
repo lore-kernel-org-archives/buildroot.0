@@ -1,116 +1,166 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20E84C43458
-	for <buildroot@archiver.kernel.org>; Fri,  3 Jul 2026 08:32:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47F99C43458
+	for <buildroot@archiver.kernel.org>; Fri,  3 Jul 2026 09:20:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CB73740FFF;
-	Fri,  3 Jul 2026 08:32:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E8CC882BA1;
+	Fri,  3 Jul 2026 09:20:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YcPaUXJGok9E; Fri,  3 Jul 2026 08:32:00 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PLQJRdOCGcGz; Fri,  3 Jul 2026 09:20:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CD8CF4107D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EF7D082B21
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1783067520;
-	bh=Pfm50mz8UreE3dH7D1BIAiO4xZe0h+4YAQlXcRxxsRg=;
-	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=k0fXgH3NgSKg2/9TnkvkP90YB+lBEOzguczqNyW1ZDMMclbNzn1mgIL3xSonSC6DA
-	 ZbvScJh+eTUhAJJw6enDM4RksZ21ZA7fpxFSZibJWWpHQNDQdRPKADrNQhoubljyMP
-	 CKBvpNx2yhLbv//vx4GL1Y0Xqa3y+DJmBx4+ucnZ5m1AXEJ6D9XbHAdT3RIUw6gW5H
-	 BjzAOB+5B+Kjp1t4PacbDovEhLtk5X1lSCJXLa+q4zzoUIe8Pbu6OIugvaKeKtCLaW
-	 qMVKA/Cxm2MDD7FfmikINRpIJJqUvTG8TMCdjmW6NhxbE92RIAfQFc7xXkqekUWZeB
-	 1NIps4cJmRHfg==
+	s=default; t=1783070447;
+	bh=9xw28GuWrhC3XWhSzWufc0TtJFPtTYh2HRVXh0eUluY=;
+	h=Date:To:References:Cc:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=fr28RJDTXrWo9usDbV63HhQVkIgJuq2J5cNIwa84FQrXYKWVmaRKsQSp9UxE4519M
+	 3ZlhHRtCaMCD2TElSGqCgBCqbpXKbZgnqJjxLN0JTRp6/TEdfwiL+Wfhn2w5zqkaLR
+	 X/IrF/JLuHFyqS97MFFvsg0eGz4UfGTkLsZ4bu2Fu4e3mh4QiFLUbMad2TmLP2iDPc
+	 IOMId9JjAACVCKhUlGKFyq1vEU/fLIbIzxEayYK3V8QwjDtNcrj5cgk0hSsbRjzl8m
+	 XPkRxET9B3GMOw06HWii1GXMcC33STbMPgJuaOKk2EUN7fpO/XsiFjDYqc2wDnk8Jh
+	 S8co4pfr1t1RA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CD8CF4107D;
-	Fri,  3 Jul 2026 08:32:00 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 5116447E
- for <buildroot@buildroot.org>; Fri,  3 Jul 2026 08:31:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EF7D082B21;
+	Fri,  3 Jul 2026 09:20:46 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id CF653363
+ for <buildroot@buildroot.org>; Fri,  3 Jul 2026 09:20:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 37A8540330
- for <buildroot@buildroot.org>; Fri,  3 Jul 2026 08:31:58 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B5A7A606C5
+ for <buildroot@buildroot.org>; Fri,  3 Jul 2026 09:20:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id r13sOXhbtUMO for <buildroot@buildroot.org>;
- Fri,  3 Jul 2026 08:31:57 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VDgopgBbUez4 for <buildroot@buildroot.org>;
+ Fri,  3 Jul 2026 09:20:45 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32b; helo=mail-wm1-x32b.google.com;
- envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 19765401C2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 19765401C2
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
- [IPv6:2a00:1450:4864:20::32b])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 19765401C2
- for <buildroot@buildroot.org>; Fri,  3 Jul 2026 08:31:56 +0000 (UTC)
-Received: by mail-wm1-x32b.google.com with SMTP id
- 5b1f17b1804b1-493c2c0b9a8so2273115e9.1
- for <buildroot@buildroot.org>; Fri, 03 Jul 2026 01:31:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1783067514; x=1783672314;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to:content-type;
- bh=z2ktUVt0kZQqSsxvIwATrjTh+6yUqz6+LjKoXGQElUU=;
- b=jE15wSrd4K+iSFHSZx1qxjLa6yg6yP5e6nmFuG+zRlEKitVlv740M1NKJZ7x5rKAMm
- H078/mZzbVHsom9QeOhfbeyQltMee3uFoCrye0vLJwcOcM/fyV7bYHx+p79n+KxiLUXn
- 4pmFMzPaklF7I7Jg4bNPr6lzVQTpua/4pCx/nVUsCBwprkKJr4PWGFFIQtvT3mTgeBna
- rmVdy0Arg7C/gw5+YbRmgL59yca9VOn7vGBNoL+hMWYo0/dK/NvVIE70MJZCEwz9Dhk7
- ranRX0wOMPexrQVnwz8M9Hy1ubQp5wY56ebkyrT0p76E8gHTuu1LQkX94tt4JeRRIOZL
- EU+Q==
-X-Gm-Message-State: AOJu0YxIgm7xPgyoX6y0gaLka6FlEG0HNlNOPjoemwWFRnr1iXnS8O7t
- /74zuGbVmLA+BS1l3GhduVTHKjELIfU937vQ7QM+iUyc9EyNkFpT9C3+yCVeIQMlFRzB8BcFgkB
- +vSJD
-X-Gm-Gg: AfdE7cnnO1fX6+eaRqKAR2PAsuQNFHt/mwAJWSh62i9jOBjUsmgmCXtu8ZE63qZrHQV
- wF6RTr/D/RO4gv1WBxA9+clWm0nagxgZX8+CL2Af7qSigTbbiFZuJX5DzDtmkD1gcOc0kFbGyoF
- gleOOIeqAgwKU2DEZyhx1/6mGPFKay7enhOgNPACWkIr2c/RJXKedTQUjYQ01/ouneq3zrC4All
- 3IpE8bUqS4RXT/bcoHsOaEZuIEyYbsWtfApxBkijclRX29zP5qt9OlYfaOOx5iiAM9aMuUCGwYs
- IZtvcIy/x5RW9HBrYqLQtqoNsC8Ehfkv6e6T0LmM84iaVxjVLpKfnA3CnSaRP8bMoo7n4gwrV7s
- iJAKlDzVYBQXtT2gXZdT6qmPdy5qHz6EqVkY0McMLcj9oMcZbRifh6RQwFq/88ci/E/RHDIriEs
- tv7GaBOqI/82CwG7hAFbupG80yRQ==
-X-Received: by 2002:a05:600c:e494:20b0:493:9661:f55d with SMTP id
- 5b1f17b1804b1-493c3cfd391mr101895375e9.30.1783067513983; 
- Fri, 03 Jul 2026 01:31:53 -0700 (PDT)
-Received: from dragon.home ([2a02:a03f:63ab:dc01:1291:d1ff:fe92:3b5a])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-493c63172fesm197106005e9.0.2026.07.03.01.31.53
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 03 Jul 2026 01:31:53 -0700 (PDT)
-To: buildroot@buildroot.org
-Cc: Bernd Kuhls <bernd@kuhls.net>, Chris Packham <judge.packham@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Ricardo Martincoski <ricardo.martincoski@datacom.com.br>,
- Romain Naour <romain.naour@gmail.com>,
- "Yann E . MORIN" <yann.morin@orange.com>, thomas.perale@mind.be
-Date: Fri,  3 Jul 2026 10:31:36 +0200
-Message-ID: <20260703083137.155274-1-titouan.christophe@mind.be>
-X-Mailer: git-send-email 2.54.0
+ client-ip=2a01:111:f403:c200::3;
+ helo=du2pr03cu002.outbound.protection.outlook.com;
+ envelope-from=quentin.schulz@cherry.de; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 152C960741
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 152C960741
+Received: from DU2PR03CU002.outbound.protection.outlook.com
+ (mail-northeuropeazlp170110003.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:c200::3])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 152C960741
+ for <buildroot@buildroot.org>; Fri,  3 Jul 2026 09:20:42 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=nSzfyxxcxSP3Oeat2/u7IUfgO3u1+UC6UrXeET9BHPAhHLyocvj6eChRFyM0unyl5WGT3CspfixfPbu+guie+tOBu7l/Qqp5nz1z6P15E4tSuK7XwPYHBCEkFWX5XS+WXWwPZb4TCDPEi4xQF9nf2NQe7v/U3tu7EP41n+Bjc//G0VKikXc3n17/q3RPxaMiI/C+JcEW6Q69C29D5CcOYcIZAThk5vNptQCGVM2bhxU3MMf0JckFRnX0hYDQXuOIRjsyP0qcYDpR52Jxrl5lQoMKQi6oDUsSrXGax+OaMKlBvzGCYF34TN4CJc6/fkUklWdo0hPVyl3jVS06MN8gCA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=kLW3hxHnDCq9GfCJsauRojCvMcnWcNwDcC33Frfca+w=;
+ b=fUb99Dhj6nsvaK2yMOx45zfnztKk54tg8TDq9seVMp5M254JXVOVo+aJ5Wa+EnSBJ5CTORJ+MK3UB8sFpuQ75LEq1aNe71vuwzGseUVsmbX81ADsLOzVurdCI1N3oh8mVTQ09TuQ5cqIvFIXZsNdr1sVUUav7Hm8gyt/y0cdA+aaoMY0xy0eNl96pN2xI7FMeEP5dqzjDHisSitI6WyGB7Dpn9HbUQonxSHS8Jtjh/arRTDZxfaceenDfn0ZEfKgqNMLZNFayckgR1gLgc1hPksxMjrktS5hfplsruFPEAcSre2S7z7JZOSqALMfN7cQGWcD/iwb1B6EceKyC7dptA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=cherry.de; dmarc=pass action=none header.from=cherry.de;
+ dkim=pass header.d=cherry.de; arc=none
+Received: from DBBPR04MB7737.eurprd04.prod.outlook.com (2603:10a6:10:1e5::22)
+ by AM9PR04MB8746.eurprd04.prod.outlook.com (2603:10a6:20b:43f::13)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.181.11; Fri, 3 Jul
+ 2026 09:20:38 +0000
+Received: from DBBPR04MB7737.eurprd04.prod.outlook.com
+ ([fe80::5960:fb4b:9313:2b00]) by DBBPR04MB7737.eurprd04.prod.outlook.com
+ ([fe80::5960:fb4b:9313:2b00%5]) with mapi id 15.21.0181.009; Fri, 3 Jul 2026
+ 09:20:38 +0000
+Message-ID: <f6b4e9a2-8ee5-4799-960f-36dbf5710da6@cherry.de>
+Date: Fri, 3 Jul 2026 11:20:37 +0200
+User-Agent: Mozilla Thunderbird
+To: Thomas Perale <thomas.perale@mind.be>
+References: <20260702203020.322896-1-thomas.perale@mind.be>
+Content-Language: en-US
+Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>
+In-Reply-To: <20260702203020.322896-1-thomas.perale@mind.be>
+X-ClientProxiedBy: VIVP296CA0042.AUTP296.PROD.OUTLOOK.COM
+ (2603:10a6:800:356::17) To DBBPR04MB7737.eurprd04.prod.outlook.com
+ (2603:10a6:10:1e5::22)
 MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DBBPR04MB7737:EE_|AM9PR04MB8746:EE_
+X-MS-Office365-Filtering-Correlation-Id: 030d4903-f9a2-484c-6860-08ded8e4584c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+ ARA:13230040|366016|23010399003|1800799024|376014|56012099006|11063799006|22082099003|18002099003|6133799003;
+X-Microsoft-Antispam-Message-Info: C5vTym9Hwtuee57apvu52fYNhNTyYNC+FNL06puGTd49zxfqIrO941WwQbaC5gsNsh13YJCJcLtAg8CLV8co+qhoG2ZkLhhdD+mI3nd1l4i9kMziEqOmtps5Yk+aHIne7SW50Du1UZSzzhj1sbnLsQ1a/iDUZ+nTg74Smkecf97WXqQP7BCIGQqBZ37ySIG8AoN/wFMwAlG610L8gUDTu4jneMkPlcfl2p3AhNOMcfusFOMsDaF0SiGBLvG7lGvHMKJD9Ti3/4mJNUDnvBGEAvKhjMQN7ZggUwElfRy63mQr20YFa+8jC+39Tm3HkMId/lMXK4fWPmJguHttdjNIh59fPS5QYh9idgWdZrLsuPHEuKM3Vl3uvpIPUU1xnT53QMSPyTHwNei3Rjvga4SrqQ38ItowlIkpTHzjnIZ+v6JNUsLe4ZDuf4kEE7zMfp8z+ZmNtsRMyWy2Le5MpeEfT1gSnJ9zOl+S1/77YkcQCFqo/MbRSgcjicVN35aHwsE702KF1ABSokan1yF6uSRObIUpf1kRkMl+TSRPATKojB+yKD1jkTQMMOorxmyV2B8cKNQa9j5DHP+YMOMQOC3yGRSpbeTG0m1ejoUS4eCMhSEJqnU3FBqiHMTX6Me8erbBzebiw4HGqdKant45jKNNvlmAvsV9KllNlcnJm02zAuc=
+X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:DBBPR04MB7737.eurprd04.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(13230040)(366016)(23010399003)(1800799024)(376014)(56012099006)(11063799006)(22082099003)(18002099003)(6133799003);
+ DIR:OUT; SFP:1101; 
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Wjk5TC94MFl0MWtPR0lrcFhxSjFWSklzcGU1Z2g1VmJrZFpmQnYxVzZIY2hk?=
+ =?utf-8?B?STFaZWw0L29HMmJKdXpOdVlmVmZsNlRZL1l6cmdSZzYvRHA1MGpaY3I4aEY2?=
+ =?utf-8?B?OWo3aTRiRjBDOHRpeFg2VmhjZnBvMVhaa0VKd1laS3hJdlNRVE9hL0htRlRr?=
+ =?utf-8?B?R1pFZElwb1YxeVZ1TEdad2Q1Z29SaW9QSlZXaFlBSmZCSGRXaGxRNWo1cjd4?=
+ =?utf-8?B?Z3EwSHVNUXk5K3VYKzNRS0p5aHhGbE4ybm05ZlZBeWJ1N1hBN0tFdkxGRVBW?=
+ =?utf-8?B?TkExZEZld2pzVGIxK2dETlNaT3Q5SXE3UnhDdGUwei9VNXFnRkxkM0dHWmdN?=
+ =?utf-8?B?NndIMysrVG95ZjhJaFJrQXNseEpMK1BzdGNaaFM4eWVOOXlSc2dJaTNrNWNs?=
+ =?utf-8?B?aEhDSGhWZCszMXNnb2F1UmlSbFk2S0YxNkhKTFUzOHBubFFtc1dnektFdVFh?=
+ =?utf-8?B?cytES0xadDFxdmNFYkRQR002b0ZMa3VSOGJkemF2SXZ0M0Uvc1BhSFZhNldu?=
+ =?utf-8?B?c3BGMERkMnlibXAxYjMwNjZPSEkrZkR1VXhzekszYWd0bWRlUkZrYVovVXg3?=
+ =?utf-8?B?UDhrS3Q2Qll2NmcrRkdQR3RXRXlwaFhWQW83ZjYzK0NUd0doQVdlUGRNbGo0?=
+ =?utf-8?B?SFFiTUI4WFJXVlc5RDJNQ0huVk8weE9wRjhRbFFjRjhuVWE3OUdEWXpGWnNM?=
+ =?utf-8?B?dDJ2cnlIZERNUnk5Z0hUVk1HQndLcVdmdkNiMEQ3QXBPMVZpNkhKc1NnYjNJ?=
+ =?utf-8?B?S2MrTENEQVBCZExCSUZNcSt6dGtGWjN0NDZmLzljOVNTdXZjS0xYU2kvcDBJ?=
+ =?utf-8?B?TFRMU01DbEdaT0o5eWRhOUQvTnpvd3ZLYndzcW9YVmNwNHJKWEhpSVVFKzRW?=
+ =?utf-8?B?MkwycXQ5UFAyd3RGNk1JUXJiZjd6ZCthcmJXWHRxajViN2UwYlpTZFFubmpz?=
+ =?utf-8?B?VFhpMVZjdk1IUnE3alNTV1N5cmZxT1BpdHZpazRadHZVQzRqRlJQNnZRd1Uv?=
+ =?utf-8?B?WWxCWFJ1ajV2cGN0a2JhNis4SHE3MDQ5cjEwZ1h5NW9kV0kvanRMNnM0TGVJ?=
+ =?utf-8?B?U3hQbFcyampyMW9jVitISC9JUExoaGlvUzVBM0ZCWVVsTEQ4NnN2NE5jWWlI?=
+ =?utf-8?B?SzlMeEFONE10cURZVU5hWXhTaFl3MHMxYnF6eHJMWVFtMmxSYjhiaTZ5MkNv?=
+ =?utf-8?B?SVRlMjRXRENvZ3M5bUc4UHJ6Nis3Mkk4U2hNUUNiUWh5dUI2MzVFb241YXFk?=
+ =?utf-8?B?S1NGRk1qWUVScU5hOXlLTGkxSkNzZjJFdm1mTHV3K2p3OTdDbDJWaDJsY0lq?=
+ =?utf-8?B?cnd5SEJlNHphblVRTi9uMkN5T2UyUEk3NnR5VXVoL0xnWFM1OGtyTzlNSytu?=
+ =?utf-8?B?NkFYNFQ5QUk1eWY1VXNpOVYwRkRRdkpteTJNZnZadHAyOExJSXJVeWgwM0lN?=
+ =?utf-8?B?Q2U3N213OGpSU1JucjlLaWdDZHFvVk9scnJSSWNsTmYzYWk2TGQwbFFjcmFo?=
+ =?utf-8?B?VW5YWE1zTHZUMEVHNWVVczkwMnE2V2xWVnpLTTVDcitWVmdQeEJWYzNFcXll?=
+ =?utf-8?B?MVI2eVF3cEtNaVFWbDEza1M0eEQrT3JlUjFWdGJwVmkxMk9SZTd5Z1Y0SCt3?=
+ =?utf-8?B?NjRrSUNLWXo2Umo4M2JnY3dCMktVZ0dzTmR3T0I0QnYxSzllcGpvREdFS1Ew?=
+ =?utf-8?B?N09RL1dlSjRKQXdsY1BveWNqSzlPLzIzOVRrZEM5blcrMkoxYldiZkcvekg5?=
+ =?utf-8?B?ZkR2V2Z5bkxqSU9zNGNPMFp3aHZSejNRb0g2VXZibDRPUUFPK05wVmcyQUYy?=
+ =?utf-8?B?eThYOTJrR0NkTUFRVndEaWdSLzFLVWtwVEtOblNTTlpxUW94K3puZ2EwV01U?=
+ =?utf-8?B?TU1sTlptUXZFTjRuWm41Rm91UXppMGZuVUh0cWdIdGVTQitKSzkxNllyMCsr?=
+ =?utf-8?B?KzNCclphR1RxVDFTWUptSXgxaldyZzZKSHRmdW5NdWY5ck03cy96MjFLcGxP?=
+ =?utf-8?B?cnJVZFlTRlFNOG5aakthMjdNc2lIL3AwaEVjWGdsM21RbTBYNnhZTHRGdER0?=
+ =?utf-8?B?aXQ5K3pDRHcyR08vR0swci9WVnZuaDBXNmF3V3QzMHZTRTNDNkI4b2o3NWVS?=
+ =?utf-8?B?bVY1ZVRWS3Q4OHNFMmZJaUVzOGlwNUlnTHFnZmpmUW9FNkNpMVRyYUdBeEZp?=
+ =?utf-8?B?K1lYSXQ2eFlRdGxLMUgvODhLQVlTc3NUeXRiN0VrVXFKenlieW1odk1nSE4x?=
+ =?utf-8?B?UndpSXV0RDNoTEdPWVNGc2FjTFdPQWxGWHlZNktXSWc3RUtiQUsvUDZDZXFS?=
+ =?utf-8?B?bTdrQ3k2SFVJZWhWUWd4RzM4Mk1IWDZ5MXR0VVZiTnFrcEU4Q0FpUT09?=
+X-OriginatorOrg: cherry.de
+X-MS-Exchange-CrossTenant-Network-Message-Id: 030d4903-f9a2-484c-6860-08ded8e4584c
+X-MS-Exchange-CrossTenant-AuthSource: DBBPR04MB7737.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jul 2026 09:20:38.0310 (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 5e0e1b52-21b5-4e7b-83bb-514ec460677e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: uswEy0qjQ/Cpaw8hbPShJCmGsp3blL2H/3dGbUhJh74/fgc1J+aIWXu7cc75rL5NYYeqBKi36VC877D+L6OsCZWvSNN6blIEDhEw/wEaybs=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8746
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1783067514; x=1783672314; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
- bh=z2ktUVt0kZQqSsxvIwATrjTh+6yUqz6+LjKoXGQElUU=;
- b=fjC6jw3/A3Pe61SQgOeD7kVGP7fvK9DLbth1X2QrAf4oAoGT3ldD9J9nSR29f2do3A
- NAhKbJyQnLL9IijrYgf/K+KtamIOkfBLbzM9Tgjejqs5ZZJhSxya6oAlerrSm7w8+LM6
- YxyykHAhHo8IsGenBqnIax1sSuLur7IJbFIN4sifyb/XGIs9tYDPmfti5gIqvI6Oec9Y
- aCSRosT2TZglM7fRcGHUrYZfJVBO03EyxeG2AY1jwv5cWzvubMCGGHUmTTunmEiFoex6
- One/Js9ukTeJLRMDhq7RZdMTphvUGFakeq7Ed2fVd22+w5zvD/dc/zulxFMrdMKUdyKT
- xnGg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=cherry.de; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kLW3hxHnDCq9GfCJsauRojCvMcnWcNwDcC33Frfca+w=;
+ b=gvbQqIH1ZmSk8IO3fFwh6/Kmz2PTVrm14ajEnc+96KMymTgjKcd2cXeDb1AJI+6/UblvZH9Hs+HXru5fo2OGUB7GjCHF2cU/5Ip6YP87KQQmjqLifoCLk0tZ4THDIIvTVSd74EpjePDwlStJFpNtd8zQ3EEmwt1g2hrCedhX+w0=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=fjC6jw3/
-Subject: [Buildroot] [PATCH v2 1/2] utils/checkpackagelib: add new check
- MissingCVEPatch
+ header.from=cherry.de
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=cherry.de header.i=@cherry.de header.a=rsa-sha256
+ header.s=selector1 header.b=gvbQqIH1
+X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=cherry.de;
+Subject: Re: [Buildroot] [PATCH 1/1] docs/website: link LTS tooling
+ documentation and staging branch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -122,173 +172,65 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Titouan Christophe via buildroot <buildroot@buildroot.org>
-Reply-To: Titouan Christophe <titouan.christophe@mind.be>
-Content-Type: text/plain; charset="us-ascii"
+From: Quentin Schulz via buildroot <buildroot@buildroot.org>
+Reply-To: Quentin Schulz <quentin.schulz@cherry.de>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-To indicate that a patch fixes a vulnerability in Buildroot, the convention is:
-1. In the patch file, add a tag 'CVE: <cve id>'
-2. In <pkg>.mk, and an entry to <PKG>_IGNORE_CVES, and add a comment above
-   that new entry to reference the patch file(s)
+Hi Thomas,
 
-However, as packages get bumped and their patches are added, removed or
-rebased; it happens that IGNORE_CVES get outdated. One important issue is
-marking a CVE as ignored, while the corresponding patch is not in Buildroot.
+Thanks for doing this!
 
-To detect such cases, add a new checker to checkpackagelib that finds
-occurences of:
+On 7/2/26 10:30 PM, Thomas Perale via buildroot wrote:
+> Users asked where the notes are available and if the information are
+> publicly available.
+> 
+> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+> ---
+>   docs/website/lts.html | 18 +++++++++++-------
+>   1 file changed, 11 insertions(+), 7 deletions(-)
+> 
+> diff --git a/docs/website/lts.html b/docs/website/lts.html
+> index 3bfd2a4374..9252127a50 100644
+> --- a/docs/website/lts.html
+> +++ b/docs/website/lts.html
+> @@ -180,13 +180,17 @@
+>       Each week, the LTS stewards define the set of commits to
+>       analyze based on the previous week's commits to the master branch. The
+>       commits are then annotated to define a list of candidates for the LTS
+> -    branches.
+> -    <br><br>
+> -    On Thursday, the candidates are cherry-picked to a staging branch to be
+> -    reviewed by the other maintainers. On Thursday evening the branch is
+> -    synced with upstream and contributors are notified. Feedback from
+> -    users, sponsors and autobuilders are then collected and vulnerability
+> -    analyses updated.
+> +    branches.<br>
+> +    For more information about the development workflow, see the
+> +    <a href="https://gitlab.com/buildroot.org/buildroot-lts-tools/-/blob/main/tools/README.md">documentation</a>.
+> +    </p>
+> +    <p>
+> +    On Thursday, the candidates are cherry-picked to a
+> +    <a href="https://gitlab.com/essensium-mind/buildroot/-/commits/2025.02.pre">staging branch</a>
 
-    # 000x-some-patch.patch
-    PKG_IGNORE_CVES += CVE-XXXX-YYYY
+Two issues with this. The first is that it applies only to 2025.02.x 
+branch but there are at least two LTSes at one point in time (e.g. 
+today, 2026.05.x). Second, this link will likely be forgotten and it'll 
+stay for that branch even once 2025.02.x is EOL.
 
-For each one of them, ensure that the mentioned patch files actually exist
-and contain the `CVE: ...` tag.
+I would recommend simply pointing at 
+https://gitlab.com/essensium-mind/buildroot and explaining the staging 
+branch is named after the initial release of the LTS, e.g. 2025.02, with 
+the .pre suffix. Or simply point to 
+https://gitlab.com/essensium-mind/buildroot/-/branches where one could 
+see all the active branches and extrapolate the information by themselves?
 
-Assisted-by: Claude:claude-opus-4.8
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
----
-Changes v1->v2:
-- Support multiple patch files for a single <PKG>_IGNORE_CVES line
-- Add check for `CVE:` tag present in patch file
----
- utils/checkpackagelib/lib_mk.py      | 42 ++++++++++++++++++++
- utils/checkpackagelib/test_lib_mk.py | 57 ++++++++++++++++++++++++++++
- 2 files changed, 99 insertions(+)
+Don't hesitate to Cc me on a v2.
 
-diff --git a/utils/checkpackagelib/lib_mk.py b/utils/checkpackagelib/lib_mk.py
-index 5d48e8929c..eb5fbf474c 100644
---- a/utils/checkpackagelib/lib_mk.py
-+++ b/utils/checkpackagelib/lib_mk.py
-@@ -6,6 +6,7 @@
- 
- import os
- import re
-+from pathlib import Path
- 
- from checkpackagelib.base import _CheckFunction
- from checkpackagelib.lib import ConsecutiveEmptyLines  # noqa: F401
-@@ -117,6 +118,47 @@ class Indent(_CheckFunction):
-                         text]
- 
- 
-+class MissingCVEPatch(_CheckFunction):
-+    PATCH_COMMENT = re.compile(r"^#\s*(\S+\.patch)\s*$")
-+    IGNORE_CVES = re.compile(r"^[A-Z0-9_]+_IGNORE_CVES\s*\+?=")
-+    CVE_TAG_IN_PATCH = re.compile(r"^CVE: *CVE-\d+-\d+$")
-+
-+    def before(self):
-+        self.pending_patches = []
-+        self.package_dir = Path(self.filename).parent
-+
-+    def check_patch_files(self):
-+        for patch_lineno, patch_name, patch_text in self.pending_patches:
-+            patch_file = self.package_dir / patch_name
-+            self.pending_patch = None
-+
-+            if not patch_file.is_file():
-+                return ["{}:{}: patch file '{}' mentioned for ignored CVEs is missing"
-+                        .format(self.filename, patch_lineno, patch_name),
-+                        patch_text]
-+
-+            if not any(map(self.CVE_TAG_IN_PATCH.match, patch_file.open())):
-+                return ["{}: patch file '{}' is missing 'CVE:' tag"
-+                        .format(self.filename, patch_name),
-+                        patch_text]
-+
-+    def check_line(self, lineno, text):
-+        m = self.PATCH_COMMENT.match(text.rstrip())
-+        if m:
-+            self.pending_patches.append((lineno, m.group(1), text))
-+            return
-+
-+        # other comments do not break the association between the patch
-+        # comment and the following _IGNORE_CVES assignment
-+        if text.lstrip().startswith("#"):
-+            return
-+
-+        if self.IGNORE_CVES.search(text):
-+            return self.check_patch_files()
-+
-+        self.pending_patches = []
-+
-+
- class OverriddenVariable(_CheckFunction):
-     CONCATENATING = re.compile(r"^([A-Z0-9_]+)\s*(\+|:|)=\s*\$\(\1\)")
-     END_CONDITIONAL = re.compile(r"^\s*({})".format("|".join(end_conditional)))
-diff --git a/utils/checkpackagelib/test_lib_mk.py b/utils/checkpackagelib/test_lib_mk.py
-index 3f97c25b2d..21effa9489 100644
---- a/utils/checkpackagelib/test_lib_mk.py
-+++ b/utils/checkpackagelib/test_lib_mk.py
-@@ -197,6 +197,63 @@ def test_Indent(testname, filename, string, expected):
-     assert warnings == expected
- 
- 
-+MissingCVEPatch = [
-+    ('patches present',
-+     {'0001-some-fix.patch': 'CVE: CVE-2000-1234', '0002-other-fix.patch': 'CVE: CVE-2000-1234'},
-+     '# 0001-some-fix.patch\n'
-+     '# 0002-other-fix.patch\n'
-+     'FOO_IGNORE_CVES += CVE-2000-1234\n',
-+     []),
-+    ('patch missing',
-+     {'0002-other-fix.patch': 'CVE: CVE-2000-1234'},
-+     '# 0001-some-fix.patch\n'
-+     '# 0002-other-fix.patch\n'
-+     'FOO_IGNORE_CVES += CVE-2000-1234\n',
-+     [['{}:1: patch file \'0001-some-fix.patch\' mentioned for ignored CVEs is missing',
-+       '# 0001-some-fix.patch\n']]),
-+    ('CVE tag missing',
-+     {'0001-some-fix.patch': ''},
-+     '# 0001-some-fix.patch\n'
-+     'FOO_IGNORE_CVES += CVE-2000-1234\n',
-+     [['{}: patch file \'0001-some-fix.patch\' is missing \'CVE:\' tag',
-+       '# 0001-some-fix.patch\n']]),
-+    ('patch in version subdir',
-+     {'1.0/0001-some-fix.patch': 'CVE: CVE-2000-1234'},
-+     '# 1.0/0001-some-fix.patch\n'
-+     'FOO_IGNORE_CVES += CVE-2000-1234\n',
-+     []),
-+    ('comments between patch and ignore',
-+     {},
-+     '# 0001-some-fix.patch\n'
-+     '# this entry is not stale\n'
-+     'FOO_IGNORE_CVES += CVE-2000-1234\n',
-+     [['{}:1: patch file \'0001-some-fix.patch\' mentioned for ignored CVEs is missing',
-+       '# 0001-some-fix.patch\n']]),
-+    ('comment not followed by ignore',
-+     {},
-+     '# 0001-some-fix.patch\n'
-+     'FOO_DEPENDENCIES = host-foo\n'
-+     'FOO_IGNORE_CVES += CVE-2000-1234\n',
-+     []),
-+    ('ignore without patch comment',
-+     {},
-+     'FOO_IGNORE_CVES += CVE-2000-1234\n',
-+     []),
-+    ]
-+
-+
-+@pytest.mark.parametrize('testname,patches,string,expected', MissingCVEPatch)
-+def test_MissingCVEPatch(testname, patches, string, expected, tmp_path):
-+    filename = str(tmp_path / 'foo.mk')
-+    for patch_name, content in patches.items():
-+        patch_path = tmp_path / patch_name
-+        patch_path.parent.mkdir(parents=True, exist_ok=True)
-+        patch_path.write_text(content)
-+    warnings = util.check_file(m.MissingCVEPatch, filename, string)
-+    expected = [[w[0].format(filename)] + w[1:] for w in expected]
-+    assert warnings == expected
-+
-+
- OverriddenVariable = [
-     ('simple assignment',
-      'any.mk',
--- 
-2.54.0
-
+Cheers,
+Quentin
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
