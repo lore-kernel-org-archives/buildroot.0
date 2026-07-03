@@ -4,163 +4,166 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73E51C43458
-	for <buildroot@archiver.kernel.org>; Fri,  3 Jul 2026 15:00:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F29DCC43458
+	for <buildroot@archiver.kernel.org>; Fri,  3 Jul 2026 18:04:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 51B7960B13;
-	Fri,  3 Jul 2026 15:00:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A09E9606CC;
+	Fri,  3 Jul 2026 18:04:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1uEffKY-RYnt; Fri,  3 Jul 2026 15:00:41 +0000 (UTC)
+ id mJ4h0fUBXkmn; Fri,  3 Jul 2026 18:04:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5C04B60739
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BB3B26077F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1783090841;
-	bh=1WJb/UFE3c//MOkeBX7RIrj6qacv9I9uhaXDTBR8z7E=;
-	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 From;
-	b=TNdyQfBeE0B3PiZMek3lDCslAcxfwp1aI9nb4RUAbEOpTAZ4jIh8UBB6avY0Og0dj
-	 zMWHa+GoOzS5VXVc96y0Yv3bNO97XXbBScPRvyJWETSboCxuO3pAIc4y8JulmyhcVH
-	 /TiezsdZRB41eW7yjE2uEoV/KSGhOXIj+lcYh1q+0colQ7cH/u+IpCrTH9DRI9xuYK
-	 WsFf0/6iOBEex0H99/2TjVN2dqudm137MnaogHQvXidTzitUfIDHGKYT5OXzwu1zs0
-	 6MedvaUsmO+GPkivpcLprUzMO8pzv2RjnVFrhoHW9+1HhMKjqEpRuJMfFB174OvmJn
-	 vfBFG+znFB9sw==
+	s=default; t=1783101860;
+	bh=mV01Qw26wtF4RnIfHNlwOQtv7M5CiQr490n0b99omLY=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=ReufuYrXmjQwTIsdfj1nhCwMyVRQhOuBbPiF0Wa42sRHzrBOQ8EDmGe0iRAprJhkn
+	 NbAMhgrdX5NBt4txXIbQlZ9qXMbMDCbEaxe1zD6OGgLVmYGiGUgIw2Cy2fnb9vfBYY
+	 FiUd7m3ya1w655EtM7dK2e9BrjKyWxYg/OdkQCUqbt/f9sv49RfwhWCaxvpBBUOxz7
+	 z39XGmytAuaJzfDH/7V59JU2YWHA/d/45axNVo9gIuHlD6MUPR6urCa0XLQp1itEgS
+	 VjZESWsApc5U3MQXmReovX339r3WimnZbwhRyYfAvC2LZSeN6YngDn4GC4B+n7X8n9
+	 mpe3GUNRPYCQw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5C04B60739;
-	Fri,  3 Jul 2026 15:00:41 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 123A414F
- for <buildroot@buildroot.org>; Fri,  3 Jul 2026 15:00:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BB3B26077F;
+	Fri,  3 Jul 2026 18:04:20 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7412D14F
+ for <buildroot@buildroot.org>; Fri,  3 Jul 2026 18:04:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EBFEB406DF
- for <buildroot@buildroot.org>; Fri,  3 Jul 2026 15:00:39 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 51BD46077F
+ for <buildroot@buildroot.org>; Fri,  3 Jul 2026 18:04:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ubq-6dVidP6j for <buildroot@buildroot.org>;
- Fri,  3 Jul 2026 15:00:39 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f403:c201::1;
- helo=am0pr83cu005.outbound.protection.outlook.com;
- envelope-from=quentin.schulz@cherry.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 03EC840689
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 03EC840689
-Received: from AM0PR83CU005.outbound.protection.outlook.com
- (mail-westeuropeazlp170100001.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:c201::1])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 03EC840689
- for <buildroot@buildroot.org>; Fri,  3 Jul 2026 15:00:38 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=DgZZxOm/OowXX4NRS0JSmWY/0X/x++v/mvyh3Km6F8sb0M8ryPMGi2YhYB7jzHFGn6IRacCVFdbJI5+AAaCCo6QpQ9s36ArLjWgZp/xy8x8HEuGJNN7/bQZ25m39cHJhdqFGzG6GRwTMdHB9qW84AJ5My+FEEplXrwy2HjyQW8YER+jV9hIvHLY5DRYzFTm66sR3+RYZ3jS/3sg83XwD0IQ5cYSfRd6NHEnZHJt2g1cenfp9zlRumPWYY30WJri8wzafu8FqR0UK6Bpi2WVN/WNY8Ju9vf6lqKSxauBXy8MpKrBOEQCrUf1PCMYyizV2q8rnLoPY7/+dQn4PHU5Xpg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3r7pBkgCnRj6fF++gZ+vUSxjnspC89JK0cECHaMa0Fk=;
- b=yzm09TH2oI6SXxzy/i0Elp7DU6crfZ5hD8iCluDvH5p4c+lUXnu2Hpz2E/3+Vkr6xtspaUmUl0wUjGVME/Ln/jPSaBJTU3gCVNnUdsAqfosnFSphs1eX+0L3Ps1c9o9dAr/Ot5LfZ+m71FmP8gguCKub1S+6t/co0Emuf+WwoI28kWfB+CBsOeYqefzoVmn3zxwjlGDYt98Q7lbrhvhIGPY/ubadEDLYPn70WvwRCFL0aaCcU57LwWRgKYBARLN6FqlOrJNPhIkfGD9p34IM9KMTfmBiindVR43gKz6hTvEMqN2es5O4l1qCecGRpaJb4CkRTiga31KbS7ISh/n4eg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=cherry.de; dmarc=pass action=none header.from=cherry.de;
- dkim=pass header.d=cherry.de; arc=none
-Received: from DBBPR04MB7737.eurprd04.prod.outlook.com (2603:10a6:10:1e5::22)
- by DB9PR04MB9790.eurprd04.prod.outlook.com (2603:10a6:10:4c5::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.181.11; Fri, 3 Jul
- 2026 15:00:33 +0000
-Received: from DBBPR04MB7737.eurprd04.prod.outlook.com
- ([fe80::5960:fb4b:9313:2b00]) by DBBPR04MB7737.eurprd04.prod.outlook.com
- ([fe80::5960:fb4b:9313:2b00%5]) with mapi id 15.21.0181.009; Fri, 3 Jul 2026
- 15:00:33 +0000
-Message-ID: <2f6f9a46-afd4-433a-9a0b-6a985a96a98e@cherry.de>
-Date: Fri, 3 Jul 2026 17:00:32 +0200
-User-Agent: Mozilla Thunderbird
-To: Thomas Perale <thomas.perale@mind.be>, buildroot@buildroot.org
-References: <20260624101340.80670-1-thomas.perale@mind.be>
- <20260624101340.80670-4-thomas.perale@mind.be>
-Content-Language: en-US
-In-Reply-To: <20260624101340.80670-4-thomas.perale@mind.be>
-X-ClientProxiedBy: WA2P291CA0022.POLP291.PROD.OUTLOOK.COM
- (2603:10a6:1d0:1e::24) To DBBPR04MB7737.eurprd04.prod.outlook.com
- (2603:10a6:10:1e5::22)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id A31SnX5Zbczt for <buildroot@buildroot.org>;
+ Fri,  3 Jul 2026 18:04:18 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.18;
+ helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 0CBA9606CC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0CBA9606CC
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0CBA9606CC
+ for <buildroot@buildroot.org>; Fri,  3 Jul 2026 18:04:17 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from client.hidden.invalid by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MG9kM-1wtxKK0L7s-004Or8; Fri, 03
+ Jul 2026 20:04:12 +0200
+To: buildroot@buildroot.org
+Cc: Bernd Kuhls <bernd@kuhls.net>, Dowan Gullient <dowan.gullient@smile.fr>,
+ Fiona Klute <fiona.klute@gmx.de>
+Date: Fri,  3 Jul 2026 20:03:54 +0200
+Message-ID: <20260703180354.600761-1-fiona.klute@gmx.de>
+X-Mailer: git-send-email 2.53.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DBBPR04MB7737:EE_|DB9PR04MB9790:EE_
-X-MS-Office365-Filtering-Correlation-Id: d984ceb0-7c91-472d-2641-08ded913d4ec
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
- ARA:13230040|376014|23010399003|1800799024|366016|6133799003|13003099007|18002099003|22082099003|4143699003|11063799006|56012099006;
-X-Microsoft-Antispam-Message-Info: tX/XidOjK8ccXsjhgUpOT81jJQKGwsLnmycoeTc9uc5G6up2tj+PhAI14A0LH7cCUBOjaDWYQnQbhOjM+6ieCnJRELGjjhKmBMWtPrLF5cNGvaGNX/ntXksb3vdWDKyyjMkgUECLvOUlhKVTxTdY+mlkrIKxs9sS7zyMwNrCe4ljx9qBWk53ddHN/GkgfgZmI+JetfEmOmPtVx9YS+O6ctaKxgrzApK9F9uJxuPhsBJXc0XXXGmMLuy5kLcUFTgaONoOALq44FmcZwQ/VQExyypzs15s2DFAegyc6zwhvH97i9GtPE5ig3GAuq7KcMND86KNpzmmTQrkvlGz5cvClBuxAvM2eFzdEadcN6ZwiaVcoijaHA7b1kEF2DnI7QmeBFVf1EibR36aJBij7doy2fKSEg9YdnjguPfuuArKLpAPzANZo2OGcRZGoPg6R8itvJvz8HwYTBo5V25zzL98chESvgRFLLuE4ntxBpLhHDarTTVK3ZrmK/eav1WtabmoQWvAuVcFwuZ8+YWgd3z/J4Ci/MEhvQE5MAEk0mO4gpulVzZ3egyCOER6ygHsDay3G08TZ5r6EyXuTC+Qs250iK0s+vsM4NGfdRwwuUhkneg=
-X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:DBBPR04MB7737.eurprd04.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230040)(376014)(23010399003)(1800799024)(366016)(6133799003)(13003099007)(18002099003)(22082099003)(4143699003)(11063799006)(56012099006);
- DIR:OUT; SFP:1101; 
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?d2l6OXg4RGs0RFNxaEFVN2lVTHZ5dVdGUGtTYmVhRmtZK2lDK2g4VWFjckdn?=
- =?utf-8?B?R29iSm9RcUVGN0QvVUVnK2gyN0N2RjV0UHRUZDhUWkpuZWN3NUwwNGVjQVZ4?=
- =?utf-8?B?ZkVRNmZRVG5nbUpFRW51K05hNGw5N0tKbFQ5OWhSSkJubTZIUldsYmVwbkxn?=
- =?utf-8?B?SUgxZnlOUEhsZlYrNGVpSlJKckU3YVJvU2E1RGVBVUpqaHpZM2toQjBFYmsy?=
- =?utf-8?B?UWRjNjA0TWg4ZW0xbzVCZ3o2YnNaMnBoem5RRzZkYmU2QnpsY3FuSVBqOGlS?=
- =?utf-8?B?a1pmeG12TENMUTl0ckQ0RC82MXdYNFJlUjVudmNMaHdzdnlLRlBOcC84L3gv?=
- =?utf-8?B?cml2aW9NQVZBQVB3SGwyMjVJWkMrZlpMa3J3U2VGZVhldHYrbkhrSUFZR3ZY?=
- =?utf-8?B?aUJEbEtEejFzcFlVcWxKR1JpTjNZaXZUZ0pqSHV5OHZTWGEyN0twMEdwNjl5?=
- =?utf-8?B?MFlPMlc2dVhscmovc2VzL3RJQnBZV3lsVWJKRVNrTkNOQjZveUs1WkFOT2la?=
- =?utf-8?B?a2kvMnNiK00xMHJQSyt4VGFBVVMzWFB4SXdpVlhnZTJheXJEZksveWhlYVdj?=
- =?utf-8?B?Rk1acUE0SGdDUDNTRUpiaFBvMHdJQXhwUnBGTkVyb3dxNUJFYjQxSkU0NDhI?=
- =?utf-8?B?VEtOMnp1dXh1NFRLZzVpUnhja01YZ0JUYXp2Rkh3UERBRHlpbis0b3ZRaUJN?=
- =?utf-8?B?MGpLUG5hc0lkR24wU3pGdXJ0bXZSZVBjdm1kNTlXS3FCV0NKL3pHTFl5THMx?=
- =?utf-8?B?ejdGVnBOL28rYUhLcE16V1RDTk9GZjYzSFE3TGI5RjR6bXdWZmZLenZkbGE5?=
- =?utf-8?B?ZlZ1NzVXVUtEOXlCTmplMG84MWw3eUtaaHdBcWtsKytHWWdEM21JQ20zMVhU?=
- =?utf-8?B?QTNkQm16Qkl5TUExMk5lZC81ZVBDTmZmM3VicjdoUHQ0NXdkVVhuSjVFUW1n?=
- =?utf-8?B?TEh0RmYyT0ZPSHhIR1ZLOExQcWJpaFRvWmplS0pTQ3ErdEk1Z2toZlNjOFM5?=
- =?utf-8?B?OU8vcXFWWTdKUWZiVWVLTUFOTFp4b1BlblBIQWpzTW85dWdUczdQaGRtRXdr?=
- =?utf-8?B?NEp3SzRCVFh6Wk1vOGxHRTkzaGpuMDhENEVWWi9SR1M2dVJuOThiY2FFUWkz?=
- =?utf-8?B?Q2w0VFY5UHdiNTU3Nm9SdUpMSi9ZVjE0NE5Ga2dMc2lPQVVsSUcxTzFqcUtQ?=
- =?utf-8?B?YzNBZjRHa0ZjVStJWm9vQ1c5aFFqRER3VlRTMEQ4akxEbDc3T1c3UG1qU1Mz?=
- =?utf-8?B?cnNDcGJPQ1FpWjF2TmpsSUQwdGxQWklNeEc1SDRpQ2JkNCtHaXlyRVpkcUhr?=
- =?utf-8?B?RGE3M3dvNnR2aitCcUUyRjg2RnFudml6SzZjR3FBajFvKzM3WFZrVThESXhh?=
- =?utf-8?B?WVNqc05KRXpFUnFxQjNRL1lkR2hTR3NuTXkzTVMyV1VRZFVPeEdVVGwwOXkv?=
- =?utf-8?B?bTVLNlZZWGJoNVFXVjdkL3ZIbEM5S3JYMUt2SlNTOUlOZkdaT01qajVYZXo2?=
- =?utf-8?B?U1RiRnprNG1xai9weFRycWRYcTlML3NXZ3p0TVdXbTF3WHBUWCtNVkxnS21C?=
- =?utf-8?B?UHVqTU1rRXNuZDN5V0JBcmZHODZ3VVBleW1PSGhzUHpmZ2ZHdXM0cnM0RkVI?=
- =?utf-8?B?bDBEOXJKcEsvNjBMbXFhWnk1MkVwRkhsbEM5ZTFmMkVoOXlGWDhJRmI5eVQz?=
- =?utf-8?B?dDNUQVcvaHczK3UyeTR5bytHaG50L2R2bWJYc1FrNmVGTUdXY1d1VmlnOUV4?=
- =?utf-8?B?aXRQVkJhZFpyL1pQVlF1eUtsaitDeEZNYTQ4cWZZdFNVRS9iQlA5RkdFWlpX?=
- =?utf-8?B?aGJ5cmp1Wlg5Z2Rsb242NXdoQTBXUnV0R1Z6NkZieE5PRmtwVjVSdHNjOXBR?=
- =?utf-8?B?ZW5pcDBqL01zakhzbkdSV1pwdG96YnNuVzRTZkFTTUFWNE82RkMrcitaSlJx?=
- =?utf-8?B?YlVzeXlIaExSaDBxQStBeExINzl0bHJJOWlzaXBXUnFhSXRjK2k1TnAzMDdl?=
- =?utf-8?B?ZVN1N3d2YjJINXQxeStycGl0M1FzL1VPNXdycUw0UUhLRkVIRVY4Vm4rK1NK?=
- =?utf-8?B?WW1EZWpvTXNzVjV3ZlpWZUtSTm1lL2xZWFlwTzJNRllxZm5qbUFrYmExTTVm?=
- =?utf-8?B?WDVVb2pTaXdTVUxsUHBEaXk5Yk1WUTQ3SFZ6UU0raml4OThTUUEwWmhvQjBR?=
- =?utf-8?B?UWZ6TWpEUWhuMVRqcXFQSDYrdVhLU0RsMDF5ZkVKUmpsOVBtdzBRUXptWmZQ?=
- =?utf-8?B?WE9meEhhR3hHbERkVy9rOExZR21SVGJRaVZZMzZLdHlLOUNqVjJ3OGRGWkRU?=
- =?utf-8?B?YVg1bW9kYks2ZzBSZnIrSXQxNEczNUJEaUJJVjh6VytuOEVid1luQT09?=
-X-OriginatorOrg: cherry.de
-X-MS-Exchange-CrossTenant-Network-Message-Id: d984ceb0-7c91-472d-2641-08ded913d4ec
-X-MS-Exchange-CrossTenant-AuthSource: DBBPR04MB7737.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jul 2026 15:00:33.4565 (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 5e0e1b52-21b5-4e7b-83bb-514ec460677e
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: OLZ6jxrIqDovkxmoHFmrvqfUKHAIQ6BRV0wbviRSzOC/5ahnj/bJHoDsymfuzwwpFf+tTpCGfNWBTUQQGVulw2DdbEva3iBQobQ8k3jKkTk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR04MB9790
+X-Provags-ID: V03:K1:9gGhawaFCPeNy6JbVAdT5baaXdDDnPIKHIi2w7A4x1eq5uVAzSV
+ R//X3rXT04VXtGmSO+kX56xib5iW64bfP9X/htNLllStKnnFcO6wtD5kfAwpsDqjEr7CKYp
+ 0ZdbvHCuLt8hfFFj9eaD2eaXuHXeuyNwoYZSxvQoCoRDbAf5JIIfnMI8feXSOpKzMn4zuJd
+ wwrUBqQs5d6ltYIiF4E1A==
+UI-OutboundReport: notjunk:1;M01:P0:XD62oKnt/A4=;Dk1PQFDo4dVTPRhGMpcLVltFVwC
+ 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
+ fDf4JT160orRR9E3VYm4OiZ/LlgiqA+XpPYoel5
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=cherry.de; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3r7pBkgCnRj6fF++gZ+vUSxjnspC89JK0cECHaMa0Fk=;
- b=T9XxXMR6EjJyXtxuGOauYbp3qjKtN5oARy/s66y/sMOZPxud1DRXO/t4SP+fhwwmRRngd5NPMC5Qy03vFJOnfKQ7X32SaBaGUchWmkhZMxJyy0h9M0MmZRnls5aYVzBnuJAW8heMUwKOgKUf4oI6ES1h2w7bRiGJbO8EmqYkoOU=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=gmx.de; 
+ s=s31663417; t=1783101852; x=1783706652; i=fiona.klute@gmx.de;
+ bh=JCXrbWeXdBgf24b+sZMZt/R/+VgstvCQnG488GHOxfA=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
+ MIME-Version:Content-Transfer-Encoding:cc:
+ content-transfer-encoding:content-type:date:from:message-id:
+ mime-version:reply-to:subject:to;
+ b=kEMERh91g8uL51oeyUrt/IaPb1fDHw15wqwlav1flbE+iw1+r/OrXPc+bMeqM31d
+ mwGeDPLfxwQGV3QbNVPkPoEe2z8Ckcm154CazF2NxOikr2o0dq+KC3KcMOj6chmlN
+ HGX1f6a7ofIGwkyn8ZYR5B55XS/u+BRnlrJoF3qnoGVFPmodpWt3M1NiDDqoi81id
+ ZOfad+TGPxZg3Pvk6002bqZM4gchxAU/U9gp45ZPNH9yDiwwNswujpH4Ph4RMbANg
+ acHfdQBm+o1Sn0ATDDLpg30YzbYXDPZFwNdJ8c85jgaSrWCIZXse7pNed79NNABgb
+ 9SHcFk1+O5oqF63xjA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
- header.from=cherry.de
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=cherry.de header.i=@cherry.de header.a=rsa-sha256
- header.s=selector1 header.b=T9XxXMR6
-X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=cherry.de;
-Subject: Re: [Buildroot] [PATCH 4/9] utils/generate-cyclonedx: mark host
- packages as excluded
+ header.from=gmx.de
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de
+ header.a=rsa-sha256 header.s=s31663417 header.b=kEMERh91
+Subject: [Buildroot] [PATCH 1/1] package/apr: fix build failure with GCC >=
+ 14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -172,70 +175,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Quentin Schulz via buildroot <buildroot@buildroot.org>
-Reply-To: Quentin Schulz <quentin.schulz@cherry.de>
+From: Fiona Klute via buildroot <buildroot@buildroot.org>
+Reply-To: Fiona Klute <fiona.klute@gmx.de>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Thomas,
+The workaround in 3d06661fc1bf0f88356981a44cb93b7b0c76a669 for the
+broken C23 check was incorrect: When overriding ac_cv_prog_cc_c23 the
+value must either be "no" (to indicate that C23 is not supported) or
+contain the command line parameters to enable C23 with the C compiler
+in use (e.g. "-std=gnu23", may be an empty string if appropriate). The
+workaround set it to "yes" for host GCC >= 14, making builds fail.
 
-On 6/24/26 12:13 PM, Thomas Perale wrote:
-> Mark Buildroot's host packages as 'excluded' with the scope
-> property [1]. The excluded scope is defined like the following:
-> 
->> Components that are excluded provide the ability to document component
->> usage for test and other non-runtime purposes. Excluded components are
->> not reachable within a call graph at runtime.
-> 
-> This fits the usage of 'host' packages : a package without a runtime
-> purpose.
-> 
-> See the mailing list discussion around this property [2][3][4][5]
-> 
-> [1] https://cyclonedx.org/docs/1.6/json/#metadata_tools_oneOf_i0_components_items_scope
-> [2] https://lore.kernel.org/r/<de0bb761-ca88-4bc6-8d7b-6bd14e9d1cbe@cherry.de>
-> [3] https://lore.kernel.org/r/<20260409204208.302842-1-thomas.perale@mind.be>
-> [4] https://lore.kernel.org/r/<bd0f43c9-ebdc-4717-b8d4-783ec712bed2@cherry.de>
-> [5] https://lore.kernel.org/r/<176c5c42-50bc-4b39-a7b3-845b085f010e@rnout.be>
-> 
+However, the original issue was that apr may try to enable C23 in host
+CC calls if the target CC supports it. So instead of figuring out the
+correct arguments for GCC >= 14, we can set ac_cv_prog_cc_c23=no only
+for host GCC <= 13 and leave it unset otherwise, as in that case
+enabling C23 will do no harm.
 
-I was wondering if the toolchain (which brings a libc for example) would 
-be impacted by this, but no, so this here is likely fine.
+Fixes: 3d06661fc1bf0f88356981a44cb93b7b0c76a669
+Fixes:
+- https://autobuild.buildroot.net/results/77c/77cd5456169e04c2f92dc328c4b6828513d1195f/
+- https://autobuild.buildroot.net/results/7a4/7a4fb2b21027f98df607871d9fe0dd234d44aebb/
+- https://autobuild.buildroot.net/results/a6c/a6cef4c5965fdeb40d3b39cbd40941329f4fc1c8/
+(and more)
 
-> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-> ---
->   utils/generate-cyclonedx | 3 +++
->   1 file changed, 3 insertions(+)
-> 
-> diff --git a/utils/generate-cyclonedx b/utils/generate-cyclonedx
-> index 902b4276ec..9e3bc9d4b8 100755
-> --- a/utils/generate-cyclonedx
-> +++ b/utils/generate-cyclonedx
-> @@ -371,6 +371,9 @@ def cyclonedx_component(name, comp):
->       return {
->           "bom-ref": name,
->           "type": "library",
-> +        **({
-> +            "scope": "excluded"
-> +        } if comp["type"] == "host" else {}),
+Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
+---
+ package/apr/apr.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-The spec says there can be three states here, excluded, required and 
-optional, the default being required. I'm assuming with the example of 
-the toolchain above, we may not want to make all target packages 
-"required" (explicitly, that is, though that is essentially the same as 
-not setting it). But maybe we can filter packages we know cannot be 
-called on the target (e.g. a toolchain, but then, can we have a 
-toolchain in the final image, such that we can compile on the target for 
-e.g. another device?).
+diff --git a/package/apr/apr.mk b/package/apr/apr.mk
+index e8cf0f309e..f7f7553e54 100644
+--- a/package/apr/apr.mk
++++ b/package/apr/apr.mk
+@@ -34,7 +34,6 @@ APR_CONF_ENV = \
+ 	ac_cv_mmap__dev_zero=yes \
+ 	ac_cv_func_setpgrp_void=yes \
+ 	apr_cv_process_shared_works=yes \
+-	ac_cv_prog_cc_c23=$(if $(BR2_HOST_GCC_AT_LEAST_14),yes,no) \
+ 	apr_cv_mutex_robust_shared=no \
+ 	apr_cv_tcp_nodelay_with_cork=yes \
+ 	ac_cv_sizeof_struct_iovec=8 \
+@@ -51,6 +50,10 @@ APR_CONF_ENV = \
+ 	apr_preload_done=yes
+ APR_CONFIG_SCRIPTS = apr-1-config
+ 
++ifeq ($(BR2_HOST_GCC_AT_LEAST_14),)
++APR_CONF_ENV += ac_cv_prog_cc_c23=no
++endif
++
+ # Doesn't even try to guess when cross compiling
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+ APR_CONF_ENV += apr_cv_pthreads_lib="-lpthread"
+-- 
+2.53.0
 
-This seems fine to me for host packages in any case, so
-
-Reviewed-by: Quentin Schulz <quentin.schulz@cherry.de>
-
-Thanks!
-Quentin
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
