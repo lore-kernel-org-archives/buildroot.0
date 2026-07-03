@@ -1,118 +1,117 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C92FC43458
-	for <buildroot@archiver.kernel.org>; Fri,  3 Jul 2026 14:33:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 891F8C44500
+	for <buildroot@archiver.kernel.org>; Fri,  3 Jul 2026 14:33:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7327D610B6;
-	Fri,  3 Jul 2026 14:33:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 65C3A413C2;
+	Fri,  3 Jul 2026 14:33:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Mq48cbS9tTV6; Fri,  3 Jul 2026 14:33:32 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 09gi8KCiTfU2; Fri,  3 Jul 2026 14:33:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6308B6152F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 57EA9413A7
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1783089212;
-	bh=IhOwVobIbMbSZU/fQQAEeQGXeS2GWetw5ibWGnFeaaw=;
+	s=default; t=1783089216;
+	bh=N1UkMOyGTwssXmeCM7KXhd2JsdxUMLRgcc2wTpcWBhs=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=sgkJ7ZN5dfIwE7CKkCXiMEd1dm/VXSREgazeP4lpk11wE3YhA6OKdt1mDGX2XEb8v
-	 MBNvpXv3KLIT7jaBkRgzJVjy2tfTRl+wqls/3xtGupazoFBrtvvgrxaQ3Vyo9d798F
-	 xHe4fccFHHibSxKn2Wv+nTBn7qF+P2ocL4j1sF2i4znk3bH7ho9pecjAW3uV2MxMAJ
-	 JHL3+bxAzwQIxvvHmHoUqoyhGSqb0/8xLSRsTfsAixPUomDuJUP1iJN8yTNrC0AXUN
-	 TVKcD5CoeMB6zK2fXuTSD1E6GZUBNXWj5JKy6TBNkerVREtuXb7kPxpM5bil5mz/5I
-	 2kIdyL9au1mFg==
+	b=THskP1H1JxJ/bNz7Vjc1Ux2UBf9VR912NVA0c+7bmdCNjoxAl0UKf5e8zmpMkDEEK
+	 gqgnJVn+H5azGQPS+4d7pUqZeFWU/eKGMNQZiETVO/idZvHTMm1PECo695ZY5m4wgM
+	 SkhHGvWwYbEzU1JgjMrsILzK+/XR7JuqkZWVOd6fNHQNQMWJqjS/a+nKGTcMvGUWwZ
+	 ne8MfmfaYYppmWnoG94+42wQ38zVjxNuPOPtigDblmzScvOJ6JAoGDTxzDCmEAjtsm
+	 CZVRAWBdr+wlBoPZujR3Chrx2VwZXFCpjSgxUzUd3QT+2pZ1x/JQkzYpn52iUSNzZ6
+	 Nlnsp7VGavJpg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6308B6152F;
-	Fri,  3 Jul 2026 14:33:32 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 70B56363
- for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:33:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 57EA9413A7;
+	Fri,  3 Jul 2026 14:33:36 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id CFB7B14F
+ for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:33:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 632AA40420
- for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:33:30 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C205E6154C
+ for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:33:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fpIuqBzK3Eew for <buildroot@buildroot.org>;
- Fri,  3 Jul 2026 14:33:29 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tW6nCDSzCf0c for <buildroot@buildroot.org>;
+ Fri,  3 Jul 2026 14:33:34 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::330; helo=mail-wm1-x330.google.com;
+ client-ip=2a00:1450:4864:20::32d; helo=mail-wm1-x32d.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 35FA04008F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 35FA04008F
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
- [IPv6:2a00:1450:4864:20::330])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 35FA04008F
- for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:33:29 +0000 (UTC)
-Received: by mail-wm1-x330.google.com with SMTP id
- 5b1f17b1804b1-493b68b4643so3569135e9.0
- for <buildroot@buildroot.org>; Fri, 03 Jul 2026 07:33:28 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2872B61541
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2872B61541
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2872B61541
+ for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:33:32 +0000 (UTC)
+Received: by mail-wm1-x32d.google.com with SMTP id
+ 5b1f17b1804b1-493b691cb44so4389385e9.0
+ for <buildroot@buildroot.org>; Fri, 03 Jul 2026 07:33:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1783089207; x=1783694007;
+ d=1e100.net; s=20251104; t=1783089211; x=1783694011;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to:content-type;
- bh=xD1tDNCjr4eobx8V2nruxgM5WbmPgcKHWyPqkbuAf1U=;
- b=sGg0AhdzcFKmuN1VPZpwoplbL+G2IR1qTo2p9JmqevSYkfB1IimjiXVlKG/1HFqCpc
- rD8vvo26gPOAQKkasrjBhChM84WXK/gHYd0xKk2Zfx9KaxXHrWQ2PBpTrVtZAlbN4cv/
- kmp1642jNGBEfnUyO7HROafcklzVCavKrBTzE2SMncfVG8dWpfT0RKfJ/teZP+H606ma
- roCHdWNNFLWzpnu+Irk0F8hTA5IZKmNUL9Bse5fBQQGjN0Vyc8/h4nWL5Fw6v8SW5XsT
- lcECcg4zO9TXjcpJSvvANGaLZkUSzJLo/XIHSrqyhoytUuHgE+5euA2Uamswd+2lzyEx
- OrzA==
+ :to:cc:subject:date:message-id:reply-to;
+ bh=nzmLuHJqvBlOOZFPth2tnxcDg4XrZnwfbwtXCUWc9Gw=;
+ b=FSyQGfu8aiWuIr79Pq1GGXfEL6lu75HnRUwtBTIpPvwkKTZkoyuvP0vcVDfD5LKYMV
+ dH/Tn/lt3H5NH4IQdukyzuN7RewdQLVBOSogc0JUwANlM8/TvYynEBq4uuQjoAk7ztGo
+ QiQrk27EUCd90A3SYVNY/EARUM3EZacab0bk7EQe9aCsQrQ2uBTGEVvlEDb+USQCMpM1
+ e5tTfPILgJTBfG588o4hFZlkl3IOfY1t9SO7xgdc/BZGlAkapwVt/HD/Pr0s9rfxLiu6
+ kIcVtZZvJOlj7n1AgxoQczimqNPBPbIu6e/b8JxSAuZ2hGJjpAvLadgtsbcO6unJZE+r
+ sLsA==
 X-Forwarded-Encrypted: i=1;
- AFNElJ89pBQwvuTCTLvzkoKwRi8lZiNgHfhEqT12wJ0xdiog3cjFHv6PHs9nboQGMyR576lutfIcB8WqSUE=@buildroot.org
-X-Gm-Message-State: AOJu0YzVXwK2v8Dhxn+ZD12ro2eNZwODgfnU4prw1wQyjNwFZ4L2w709
- oi5OWIHsIGufOADuBN7Sg9l3uxkfmn5rHv3SVpsn8mKk53bfl+AuQ6sIqVImmfMhudT7sxYUZ8K
- FOxKO
-X-Gm-Gg: AfdE7clffZByR+5AndFWUh3BaAEJH9mDP0b7G6ClHcyAwFZvqnU7eLRyK9cqR5VxZ/D
- F6G6Xkk6eDPgMctDDDBr3Ri4C1Ic5p2T2nnCuBOgRvuRCe8iGRoR0jp6Dh8yOznTT8rv3lmQ1BQ
- xPvJE4CGWgTn3O6MsW0IsAjmAfoJBdUIUlm48jnipulheWG+BNmcOyCKPaHcKH+F3dbh8qW0cdt
- 9gcqha+/4/ecj35TmceeGX4B1PMUk2sPTcOyfKhvnt4yh4iiyt1+N5hfxXpdzojTtqWNd9Fo19q
- k8dVnTG5qBggkL0cDn0iWsJRdsQmb2zGcyk+Hh0bjzhF4V30APY5xkI9NObQpDm2KgpWA07dQ60
- DZ1/Dx2IZ6UO5tUIOM9FwqbJaJg1lWgEn0XLgOfChuhLTsRFyA2aXlD+FDrZ+qJ2lUCGCTVfcvR
- 3e4IFb
-X-Received: by 2002:a05:600c:8189:b0:492:465c:56f6 with SMTP id
- 5b1f17b1804b1-493d0f0ed37mr1863455e9.10.1783089206885; 
- Fri, 03 Jul 2026 07:33:26 -0700 (PDT)
+ AFNElJ+Hdic/LBtPkwYxTYhVwDytvPPIYc8rR3yrpKno2f7Wr0mE0M8cm5rIx89HfrNN+WbmA5YRDqDpKPI=@buildroot.org
+X-Gm-Message-State: AOJu0YwpbASQ1A5P+9rKgMhRaeZ98Hkhx8f/r4p+4r5YA520kt7pSyTt
+ Fg43BV3R9F7mBuH3MXvv11+56JntiV8XvM5r6wAMurAIqNtBGGITTzYn8nns+r1DSvY=
+X-Gm-Gg: AfdE7clyt2KOo9P8/Sx1yyzKV2bafHx9QVIWWl5ZJvnT6CqQQcwrWZF9m8P6lJ/eae2
+ hjvv82CWGY0iml1T9gPzN0YYvKbyuA8eG06Du/Qc74JYETzIt4c16y7TBMIZ8CXP1ICKnpPP/rR
+ eAR9bESjope1dSstdKK9o94+hSXfO7KyCdZy/SmA4RnvQRu32PGQ3KaRiNlakdjlmrnyv2yNjjY
+ nZTT5FfVrt0YwSQ2lYIl6ACubGAweALI6XoZ/jjdwfVC4vjGxsR+BlGoZPvHkg0OncmzXr2wJKU
+ Y/cRW8lt/W8mmm/dROO5ZOfxn1jR5FU43zhhauC3J+WvOjZ2r/iTpd3kIJIf/evx+ajQcPOSMxs
+ Y+5P4j0z1lm5Wuj0CzTs5dSBeU/NfliK6lkbqwAbA0e8Q8Ly1W1JinFW2p1n9LZUiySTKaS/uQ7
+ dwahsX
+X-Received: by 2002:a05:600c:4ed4:b0:493:bacb:1341 with SMTP id
+ 5b1f17b1804b1-493d0f08442mr1961765e9.4.1783089211069; 
+ Fri, 03 Jul 2026 07:33:31 -0700 (PDT)
 Received: from arch ([77.109.126.77]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-493be4a343csm168916415e9.0.2026.07.03.07.33.26
+ 5b1f17b1804b1-493ccdabda3sm58473525e9.5.2026.07.03.07.33.27
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 03 Jul 2026 07:33:26 -0700 (PDT)
-To: Bernd Kuhls <bernd@kuhls.net>
+ Fri, 03 Jul 2026 07:33:27 -0700 (PDT)
+To: Romain Naour <romain.naour@smile.fr>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri,  3 Jul 2026 16:33:25 +0200
-Message-ID: <20260703143325.275886-1-thomas.perale@mind.be>
+Date: Fri,  3 Jul 2026 16:33:27 +0200
+Message-ID: <20260703143327.275936-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260623182024.2068785-1-bernd@kuhls.net>
-References: <20260623182024.2068785-1-bernd@kuhls.net>
+In-Reply-To: <20260624125154.1869177-1-romain.naour@smile.fr>
+References: <20260624125154.1869177-1-romain.naour@smile.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1783089207; x=1783694007; darn=buildroot.org;
+ d=mind.be; s=google; t=1783089211; x=1783694011; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to:content-type;
- bh=xD1tDNCjr4eobx8V2nruxgM5WbmPgcKHWyPqkbuAf1U=;
- b=hLRWxmakGNwOyh5/nDXT9UddbfzmOzVPk/fHG3MpWVMSWUe1mEtcYkd7hiKPAy5NDY
- SVOva52HTt8uGH3g5WsybPzojVnzPKRiQfdtxvA0UX9BQ54uKK6wBDCFEW55sU/fZP3D
- G4LfrWZuepy+hKCTyxhYavGE01pfcJOkALamGAnsWEKR36urYxkkF6JYruAE3fFCmDDA
- +Jy0FY/+6NAPfWUHW3z4jOBJYWjOQ6m/ouOzuvsHJWqHa9l2dHy+E5c6dBToqlRnCEgp
- MJ+bwFHCiDD3f62Hoo7y/DBTiBcYyMdaSVWisbOdXiq0SwyX/2tggSeaUx6tJ3D+O4jd
- kQ9A==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ :message-id:reply-to;
+ bh=nzmLuHJqvBlOOZFPth2tnxcDg4XrZnwfbwtXCUWc9Gw=;
+ b=DnmBO1HWxlhJVgMzZCynbexu/JE64R40kdqxquluoFdikhC9tU3lbRq+aZoHz/nm1E
+ yh8YEygA5kgJcytrbk1Ymz8xs2LZbQ18vJutmc6v6lvuo9pnXfhfpDSm/tyXrOqof7bI
+ MA5L9pZyDWS8CSCWyZAClIINQ9LZYsOmpHWlvyOPa8OnLk4khKblLGLTjFHvyPLkXfhs
+ oscxPUJpB1juoCOXTkfSS1nY6H3ngUqX/5rGNiXf6CW2IwWoe8Zz267HxXr7GByravRS
+ 3+yTquoUKfsekGsalxvqEOZfAPTarDSCGuuH7A4IYqrIWQFMVhj7qCehvoish2yTm3LT
+ +FwQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=hLRWxmak
-Subject: Re: [Buildroot] [PATCH 1/1] package/python3: add upstream security
- patch for CVE-2026-11940
+ header.a=rsa-sha256 header.s=google header.b=DnmBO1HW
+Subject: Re: [Buildroot] [PATCHv2 1/3] package/iptables: improve kernel
+ support for iptables-legacy and iptables-nft
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -132,128 +131,97 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> https://seclists.org/oss-sec/2026/q2/1006
-> https://www.cve.org/CVERecord?id=CVE-2026-11940
-> https://github.com/python/cpython/pull/151559
+> Since kernels 6.17, support for netfilter legacy tables were disabled
+> by default [1] but iptables package needs Netfilter legacy tables
+> support enabled in the kernel when nftables compat is not enabled.
 > 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> Make sure to enable CONFIG_IP_NF_IPTABLES_LEGACY and
+> CONFIG_NETFILTER_XTABLES_LEGACY for kernels >= 6.17.
+> 
+> Fixes:
+> 
+>   [BRTEST# iptables --flush
+>   modprobe: module ip_tables not found in modules.dep
+>   iptables v1.8.11 (legacy): can't initialize iptables table `filter': Table does not exist (do you need to insmod?)
+>   Perhaps iptables or your kernel needs to be upgraded.
+> 
+> On the other hand, when nftables compat (iptables-nft) is used by
+> default (BR2_PACKAGE_IPTABLES_NFTABLES_DEFAULT=y) we have to enable
+> nft protocol support in the kernel.
+> 
+>   iptables --version
+>   iptables: Failed to initialize nft: Protocol not supported
+> 
+> Enable CONFIG_NF_TABLES and CONFIG_NF_TABLES_INET as for
+> NFTABLES_LINUX_CONFIG_FIXUPS and complete the list with
+> CONFIG_NFT_SOCKET needed to pass the TestIptables with
+> nftables compat (iptables-nft) enabled.
+> 
+> Without CONFIG_NFT_SOCKET:
+> 
+>   iptables --policy INPUT ACCEPT
+>   iptables v1.8.11 (nf_tables):  TABLE_ADD failed (Operation not supported): table filter
+> 
+> So, disable iptables-legacy support only when nftables compat is not
+> enabled by default. Enable iptables-nft support when nftables compat is
+> enabled, even if not used by default.
+> 
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=9fce66583f06c212e95e4b76dd61d8432ffa56b6
+> 
+> Signed-off-by: Romain Naour <romain.naour@smile.fr>
 
 Applied to 2026.05.x. Thanks
 
 > ---
-> Gitlab pipeline passed:
-> https://gitlab.com/bkuhls/buildroot/-/commits/8200789782546a265af81c894a442a2e64091bcc
+> v2:
+>  - Enable kernel support for iptables-nft even if nftables compat is not
+>    enabled by default (Fiona Klute).
+>  - Enable kernel support for iptables-legacy only if nftables compat is not
+>    enabled by default (Fiona Klute).
+> ---
+>  package/iptables/iptables.mk | 22 ++++++++++++++++++++++
+>  1 file changed, 22 insertions(+)
 > 
->  ...ix-symlink-escape-via-tarfile-hardli.patch | 83 +++++++++++++++++++
->  package/python3/python3.mk                    |  3 +
->  2 files changed, 86 insertions(+)
->  create mode 100644 package/python3/0011-3.14-gh-151558-Fix-symlink-escape-via-tarfile-hardli.patch
-> 
-> diff --git a/package/python3/0011-3.14-gh-151558-Fix-symlink-escape-via-tarfile-hardli.patch b/package/python3/0011-3.14-gh-151558-Fix-symlink-escape-via-tarfile-hardli.patch
-> new file mode 100644
-> index 0000000000..d3454a7a6b
-> --- /dev/null
-> +++ b/package/python3/0011-3.14-gh-151558-Fix-symlink-escape-via-tarfile-hardli.patch
-> @@ -0,0 +1,83 @@
-> +From 79c06bd5c6afa3c440d50faf7ee1b147c8832b4c Mon Sep 17 00:00:00 2001
-> +From: "Miss Islington (bot)"
-> + <31488909+miss-islington@users.noreply.github.com>
-> +Date: Tue, 23 Jun 2026 15:58:47 +0200
-> +Subject: [PATCH] [3.14] gh-151558: Fix symlink escape via `tarfile`
-> + hardlink-extraction fallback (GH-151559)
-> +
-> +(cherry picked from commit 27dd970bf6b17ebca7c8ed486a40ab043ed7af8f)
-> +
-> +Co-authored-by: Stan Ulbrych <stan@python.org>
-> +
-> +Upstream: https://github.com/python/cpython/commit/79c06bd5c6afa3c440d50faf7ee1b147c8832b4c
-> +CVE: CVE-2026-11940
-> +
-> +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> +---
-> + Lib/tarfile.py                                |  3 +++
-> + Lib/test/test_tarfile.py                      | 24 +++++++++++++++++++
-> + ...-06-10-13-08-19.gh-issue-151558.mL74i2.rst |  3 +++
-> + 3 files changed, 30 insertions(+)
-> + create mode 100644 Misc/NEWS.d/next/Security/2026-06-10-13-08-19.gh-issue-151558.mL74i2.rst
-> +
-> +diff --git a/Lib/tarfile.py b/Lib/tarfile.py
-> +index 39b1cd6514c..399f906efdf 100644
-> +--- a/Lib/tarfile.py
-> ++++ b/Lib/tarfile.py
-> +@@ -2784,6 +2784,9 @@ def makelink_with_filter(self, tarinfo, targetpath,
-> +                     "makelink_with_filter: if filter_function is not None, "
-> +                     + "extraction_root must also not be None")
-> +             try:
-> ++                filter_function(
-> ++                    unfiltered.replace(name=tarinfo.name, deep=False),
-> ++                    extraction_root)
-> +                 filtered = filter_function(unfiltered, extraction_root)
-> +             except _FILTER_ERRORS as cause:
-> +                 raise LinkFallbackError(tarinfo, unfiltered.name) from cause
-> +diff --git a/Lib/test/test_tarfile.py b/Lib/test/test_tarfile.py
-> +index 8503024a690..045377d620c 100644
-> +--- a/Lib/test/test_tarfile.py
-> ++++ b/Lib/test/test_tarfile.py
-> +@@ -4344,6 +4344,30 @@ def test_sneaky_hardlink_fallback(self):
-> +                     self.expect_file("boom", symlink_to='../../link_here')
-> +                     self.expect_file("c", symlink_to='b')
-> + 
-> ++    @symlink_test
-> ++    def test_sneaky_hardlink_fallback_deep(self):
-> ++        # (CVE-2026-11940)
-> ++        with ArchiveMaker() as arc:
-> ++            arc.add("a/b/s", symlink_to=os.path.join("..", "escape"))
-> ++            arc.add("s", hardlink_to=os.path.join("a", "b", "s"))
-> ++
-> ++        with self.check_context(arc.open(), 'data'):
-> ++            e = self.expect_exception(
-> ++                tarfile.LinkFallbackError,
-> ++                "link 's' would be extracted as a copy of "
-> ++                + "'a/b/s', which was rejected")
-> ++            self.assertIsInstance(e.__cause__,
-> ++                                  tarfile.LinkOutsideDestinationError)
-> ++
-> ++        for filter in 'tar', 'fully_trusted':
-> ++            with self.subTest(filter), self.check_context(arc.open(), filter):
-> ++                if not os_helper.can_symlink():
-> ++                    self.expect_file("a/")
-> ++                    self.expect_file("a/b/")
-> ++                else:
-> ++                    self.expect_file("a/b/s", symlink_to=os.path.join('..', 'escape'))
-> ++                    self.expect_file("s", symlink_to=os.path.join('..', 'escape'))
-> ++
-> +     @symlink_test
-> +     def test_exfiltration_via_symlink(self):
-> +         # (CVE-2025-4138)
-> +diff --git a/Misc/NEWS.d/next/Security/2026-06-10-13-08-19.gh-issue-151558.mL74i2.rst b/Misc/NEWS.d/next/Security/2026-06-10-13-08-19.gh-issue-151558.mL74i2.rst
-> +new file mode 100644
-> +index 00000000000..74459d5680e
-> +--- /dev/null
-> ++++ b/Misc/NEWS.d/next/Security/2026-06-10-13-08-19.gh-issue-151558.mL74i2.rst
-> +@@ -0,0 +1,3 @@
-> ++Fixed an vulnerability in the :mod:`tarfile` ``data`` and ``tar`` extraction
-> ++filters where crafted archives could create a symlink pointing outside the
-> ++destination directory. This was a bypass of :cve:`2025-4330`.
-> +-- 
-> +2.47.3
-> +
-> diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-> index ff9afbb5a9..fabbdac384 100644
-> --- a/package/python3/python3.mk
-> +++ b/package/python3/python3.mk
-> @@ -13,6 +13,9 @@ PYTHON3_LICENSE_FILES = LICENSE
->  PYTHON3_CPE_ID_VENDOR = python
->  PYTHON3_CPE_ID_PRODUCT = python
+> diff --git a/package/iptables/iptables.mk b/package/iptables/iptables.mk
+> index a9d912f6cc..bb01c07a43 100644
+> --- a/package/iptables/iptables.mk
+> +++ b/package/iptables/iptables.mk
+> @@ -49,11 +49,33 @@ else
+>  IPTABLES_CONF_OPTS += --disable-bpf-compiler --disable-nfsynproxy
+>  endif
 >  
-> +# 0011-3.14-gh-151558-Fix-symlink-escape-via-tarfile-hardli.patch
-> +PYTHON3_IGNORE_CVES += CVE-2026-11940
+> +# Enable kernel support for iptables-nft even if nftables compat is not
+> +# enabled by default.
+> +ifeq ($(BR2_PACKAGE_IPTABLES_NFTABLES),y)
+> +define IPTABLES_LINUX_CONFIG_FIXUPS_IPTABLES_NFT
+> +	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_TABLES)
+> +	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_TABLES_INET)
+> +	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_SOCKET)
+> +endef
+> +endif
 > +
->  # This host Python is installed in $(HOST_DIR), as it is needed when
->  # cross-compiling third-party Python modules.
+> +# Enable kernel support for iptables-legacy only if nftables compat is not
+> +# enabled by default.
+> +ifeq ($(BR2_PACKAGE_IPTABLES_NFTABLES_DEFAULT),)
+> +define IPTABLES_LINUX_CONFIG_FIXUPS_IPTABLES_LEGACY
+> +	# [for Linux kernel versions 6.17 and later]
+> +	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_IPTABLES_LEGACY)
+> +	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XTABLES_LEGACY)
+> +endef
+> +endif
+> +
+>  define IPTABLES_LINUX_CONFIG_FIXUPS
+>  	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_IPTABLES)
+>  	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_FILTER)
+>  	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER)
+>  	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XTABLES)
+> +	$(IPTABLES_LINUX_CONFIG_FIXUPS_IPTABLES_LEGACY)
+> +	$(IPTABLES_LINUX_CONFIG_FIXUPS_IPTABLES_NFT)
+>  endef
 >  
+>  define IPTABLES_INSTALL_INIT_SYSV
 > -- 
-> 2.47.3
+> 2.54.0
 > 
 > _______________________________________________
 > buildroot mailing list
