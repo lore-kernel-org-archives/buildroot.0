@@ -4,81 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D253C43458
-	for <buildroot@archiver.kernel.org>; Fri,  3 Jul 2026 19:48:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8357C43458
+	for <buildroot@archiver.kernel.org>; Fri,  3 Jul 2026 19:50:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B22AB607EE;
-	Fri,  3 Jul 2026 19:48:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9B282607EE;
+	Fri,  3 Jul 2026 19:50:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id F7OxHxZ4TX7P; Fri,  3 Jul 2026 19:48:53 +0000 (UTC)
+ id Bqlz7kjzPLoG; Fri,  3 Jul 2026 19:50:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E79B660757
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0EEB260757
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1783108133;
-	bh=Ib43im+DLL1j/CqD1wcIR/yY7plR429iZc9JWbVA1BQ=;
+	s=default; t=1783108206;
+	bh=1Y44FbWH7Xz+LFPmdUCtNMAv0NR4ac+cvnB5v7lUM2s=;
 	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=U8ZWaSoLWh5veomuZ7YT60u2ohjZUlpkplzfUpeOy+cYdMdtEgW23mNi3Q018+gQR
-	 wE0UyhYBueuhSNwu5gihlXK6GZfBTsbU3ImHv9cNlvxiooFOQ6DpZKyDe3DMFsDld5
-	 mv6UJBwZDLZR3FkjeuEt/g4x0XvMqOv7vQpPbmv7O1kweoJiyRGfpqU50EDDifAcLQ
-	 SLmen8W++fUoI1XmDzGShOnpOv9awHxjW4Eue6B7GPTWevIF6FmEml9hA2hlhL7vt9
-	 rDxP5jmhea5nGwuIdqtQkeEIJ/2cSlZtAXvLGn69reIDayUuvjgTKB6yBtuIIFn1oG
-	 agB81E44XCVcg==
+	b=UlhzuvZwm6U+sTJAzfLcNIms2pzqbKfyhPMbKMTLE1Oy5RVW1e8gyFn8w8w5jgKZJ
+	 o3p+cwW2Kl601tkOw8OL4RIzicjFTM0igA5g+l4KApLO4aq9/VXuUCVkri7CIFFkyE
+	 G2kQUl5t2PefT6oiNUup0E54peJpcTk++hJyBt4dWN2SRL7ajnbhMdP2B9eJg185D4
+	 iGwy98ng+bYn02ed4wkeVvmaWV+WGL6xamslnoM20v+WgTFkzdENZCpyl3MMeJwpxX
+	 7b7ghGdTMCj520CwG/Nr/y7zboFL+yhsN1AjIp6qoZvN2tFLFDAT9KhMRZXv3JdLYk
+	 0Bzs64lkKqThA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E79B660757;
-	Fri,  3 Jul 2026 19:48:52 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 9BCC414F
- for <buildroot@buildroot.org>; Fri,  3 Jul 2026 19:48:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0EEB260757;
+	Fri,  3 Jul 2026 19:50:06 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4F34F14F
+ for <buildroot@buildroot.org>; Fri,  3 Jul 2026 19:50:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8583981E19
- for <buildroot@buildroot.org>; Fri,  3 Jul 2026 19:48:51 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 35913400E4
+ for <buildroot@buildroot.org>; Fri,  3 Jul 2026 19:50:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Cm8MjXwnKzSl for <buildroot@buildroot.org>;
- Fri,  3 Jul 2026 19:48:50 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TblGf9MBanAv for <buildroot@buildroot.org>;
+ Fri,  3 Jul 2026 19:50:03 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A523A81B8A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A523A81B8A
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 181CB40086
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 181CB40086
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A523A81B8A
- for <buildroot@buildroot.org>; Fri,  3 Jul 2026 19:48:50 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 181CB40086
+ for <buildroot@buildroot.org>; Fri,  3 Jul 2026 19:50:03 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a0df2.dip0.t-ipconnect.de [91.58.13.242])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id CD669A4C0A0E
- for <buildroot@buildroot.org>; Fri,  3 Jul 2026 21:48:48 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:42954)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 1FD83A4C0A0E
+ for <buildroot@buildroot.org>; Fri,  3 Jul 2026 21:50:01 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:58620)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.4)
- (envelope-from <bernd@kuhls.net>) id 1wfjsW-000000000lD-1zGW
- for buildroot@buildroot.org; Fri, 03 Jul 2026 19:48:48 +0000
+ (envelope-from <bernd@kuhls.net>) id 1wfjtg-0000000017w-3Jlb
+ for buildroot@buildroot.org; Fri, 03 Jul 2026 19:50:00 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Fri,  3 Jul 2026 21:48:48 +0200
-Message-ID: <20260703194848.3699100-1-bernd@kuhls.net>
+Date: Fri,  3 Jul 2026 21:50:00 +0200
+Message-ID: <20260703195000.3703134-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Spamd-Bar: +
+X-Spamd-Bar: /
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202605290044; t=1783108128;
- bh=YMIWTwyHk0sKPjpJFu8KxAhntNOjfnwjnnBXMI7wVlw=;
+ s=kas202605290044; t=1783108201;
+ bh=ha2quK4iIXEBHLLZ0a5VvMpqcewzWC4wJ1E7hmLmScE=;
  h=From:To:Subject:Date:From;
- b=Ad+Na1vU5KfQ9V7FsuDMdW+wSPpr7/IKt4oagGyNvQ8jb7l+ypOXYET7vXa8IxMyk
- UpBb7KARDFOrD7QkIGwG8sHEAvM8/NLeA8yZZNnXb4qFVzOJ1Q+wehpmQN3q9WvP9s
- 7gUDW++w2MQB4O2VBHBmtCh0JVV4nWBQbiZjqwN4uWOy0S5r8/OVlC14UcvaPXvoMT
- fvzg1QnuKZTk8w7w8wBe7jxyqprwGyPa9lq1hQ+CTZLQBF1Kov7aKG2rZ0l1lppJqd
- i1NuHGFql1rxH/wGEXc7I/Uj6XDllPg1hCiP1oSyfQi0trHhv1IEmUS1yyJGl4FOiU
- XwMpH+dZpZSQg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=o4pSuaND25dzPPYsH8Z3nEZIw+YU68wdbBWCyhXRQW+he1mAr9axYzPGSw4kNYz/1
+ fuvQxZnAgrsodlJmSROr5wwll2h8mZ9Rai/1UulcWpw9fEo5sUhHmaMklHk0i8LdOd
+ zd2cT1IUh73Sr1xI0OyFUiUNu4o633WnB5c/ydDpADX4TY4n0Hp8jZU/HDFjCvwtae
+ Z5mBK9VccFAgVlnDerkCJ3VP0rIwaHzC6ByPF08onvUjssW4a9KkLLSMCUflW+9dM+
+ k4ZdBIPm9V20ABc9ENfthJldJPOHE3BRl7+DrSolPwygTCsjHM6awVeOozypa1OGM8
+ OfesBGohVGk7Q==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202605290044 header.b=Ad+Na1vU
-Subject: [Buildroot] [PATCH 1/1] package/transmission: bump version to 4.1.3
+ header.a=rsa-sha256 header.s=kas202605290044 header.b=o4pSuaND
+Subject: [Buildroot] [PATCH 1/1] package/openvpn: security bump version to
+ 2.7.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,40 +96,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/transmission/transmission/releases/tag/4.1.3
+https://github.com/OpenVPN/openvpn/blob/v2.7.5/Changes.rst
+
+Fixes CVE-2026-11771, CVE-2026-12932, CVE-2026-12996, CVE-2026-13117,
+CVE-2026-13122, CVE-2026-13379 & CVE-2026-13698.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
 Gitlab pipelines passed:
-https://gitlab.com/bkuhls/buildroot/-/commits/dd4c4d10f4774c0771dbd6b9b1c8430fe467b36a
+https://gitlab.com/bkuhls/buildroot/-/commits/03d2baa5c943ea74a3fb5ec4220efa52b52084bb
 
- package/transmission/transmission.hash | 2 +-
- package/transmission/transmission.mk   | 2 +-
+ package/openvpn/openvpn.hash | 2 +-
+ package/openvpn/openvpn.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/transmission/transmission.hash b/package/transmission/transmission.hash
-index 45a3863dca..0e81ec8ec1 100644
---- a/package/transmission/transmission.hash
-+++ b/package/transmission/transmission.hash
-@@ -1,4 +1,4 @@
- # From https://transmissionbt.com/download
--sha256  4c6070bdfae264a629cb2b0f1eaf567cb9c6208f9218aa446c0aee883eb0f1fc  transmission-4.1.2.tar.xz
-+sha256  ce7d2d8b101f7eb54bc3cf0bc55f52f7ebd4a25fa48e00bdca9a7e0fc02617da  transmission-4.1.3.tar.xz
- # Locally calculated
- sha256  9715b55d11caa499d34a6e23498c766fe1ece4ace57777553313e27d688dee78  COPYING
-diff --git a/package/transmission/transmission.mk b/package/transmission/transmission.mk
-index c811dcd6e5..0f5ee5d6ac 100644
---- a/package/transmission/transmission.mk
-+++ b/package/transmission/transmission.mk
+diff --git a/package/openvpn/openvpn.hash b/package/openvpn/openvpn.hash
+index 438212a4bb..651f430534 100644
+--- a/package/openvpn/openvpn.hash
++++ b/package/openvpn/openvpn.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking signature
+-sha256  18db05f3d5eee3663db1914590044e5f96ff5cd47b6e7846c6a350806c23dbce  openvpn-2.7.4.tar.gz
++sha256  c6864b3c7d4e059c7d6ce22d1b5fa646c8b379a06af872eeb9792b6083a44ac4  openvpn-2.7.5.tar.gz
+ sha256  edaef632cbb643e4e7a221717a6c441a4c1a7c918e6e4d56debc3d8739b233f6  COPYRIGHT.GPL
+diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
+index 68f0d30e4c..d5fd308e63 100644
+--- a/package/openvpn/openvpn.mk
++++ b/package/openvpn/openvpn.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TRANSMISSION_VERSION = 4.1.2
-+TRANSMISSION_VERSION = 4.1.3
- TRANSMISSION_SOURCE = transmission-$(TRANSMISSION_VERSION).tar.xz
- TRANSMISSION_SITE = https://github.com/transmission/transmission/releases/download/$(TRANSMISSION_VERSION)
- TRANSMISSION_DEPENDENCIES = \
+-OPENVPN_VERSION = 2.7.4
++OPENVPN_VERSION = 2.7.5
+ OPENVPN_SITE = https://swupdate.openvpn.net/community/releases
+ OPENVPN_DEPENDENCIES = host-pkgconf libcap-ng
+ OPENVPN_LICENSE = GPL-2.0
 -- 
 2.47.3
 
