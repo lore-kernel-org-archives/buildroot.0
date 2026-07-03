@@ -1,117 +1,117 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AA4E8C44500
-	for <buildroot@archiver.kernel.org>; Fri,  3 Jul 2026 14:33:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6DA1BC43458
+	for <buildroot@archiver.kernel.org>; Fri,  3 Jul 2026 14:33:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 81F9080B33;
-	Fri,  3 Jul 2026 14:33:05 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id e4JW0bT1DjoA; Fri,  3 Jul 2026 14:33:03 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2BDBA82B21
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1783089183;
-	bh=sDhx1m/OQIsKjApp5ywh30nIgzG1GT6N8S82b2+kTg4=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=BijJbFBcz56hokKJy+aNF4tlOL9Oicng0+NXxHpptj14zxtQwVv1pQevMnaYzBXRn
-	 qH+A6F8VZ7xHpJaPvM9iiCiuBVDWuZz4esA8N0DDYIQI4UrM/+8QQcwfK+KLjxH8i0
-	 g+Wu/UWWVi0DXHw0986+kz3XbYHOwd+d4MTaTNSj8ijwZbZm1FLl/I2pXGcZYSyyGR
-	 Yw4XfNFeT28F3c5CvBHBbH7/sOT60ZAuR0V4ylM5QnfW2wsg4CovtYEhkRRvxyy8jR
-	 fvJlCrnnYrZB1lmVp0sGesGKe606ONGKW8nNf7Kwm85kxveXAFUsmfaPYJQkNTOLol
-	 ZWBpcVsGhUrbQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2BDBA82B21;
-	Fri,  3 Jul 2026 14:33:03 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 428A3363
- for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:33:01 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 349086152B
- for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:33:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 47EA261524;
+	Fri,  3 Jul 2026 14:33:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FhkmNi-hYwGp for <buildroot@buildroot.org>;
- Fri,  3 Jul 2026 14:33:00 +0000 (UTC)
+ id m4i7MRiNiHJa; Fri,  3 Jul 2026 14:33:05 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 373146112E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1783089185;
+	bh=FTiqhhiiUzZATJ/X5ICPgK4G7FVsAxUfdW3TS5Bj8IY=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=rtj0b3eiIrSamW8T9EOgiwxFlnew8P+cfzASBJ2iNBAIf+cvcdvzoi7ocQcBFdju+
+	 csN+WQxdB8cPMA8ogZnCDHMmKeumsYOekRK6ot0fws7JTd4HrhkJUhR48ewUc5rw4t
+	 PBlscAxxuSS2Nvienm6itFYxX7q5X21KUlhT4eWbcc9zRVn27rCAhfd5njW2ZOsz8R
+	 6qTw9QQIGfkTZrSz8RNw7DbgMZltVVPh1zUgEto4LHWknklRue4+b33NKuKqOd6mYN
+	 wVh83RlDokJWsNQ+xMZPxJbrVTnvR9scpgD22tPL5UOdHWhXrNGmwrVw6QJ+U6AqgN
+	 ZCAfdMZaaR2XA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 373146112E;
+	Fri,  3 Jul 2026 14:33:05 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 66C66363
+ for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:33:02 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4D157412D4
+ for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:33:02 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id de2qBSTjsvhD for <buildroot@buildroot.org>;
+ Fri,  3 Jul 2026 14:33:01 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42c; helo=mail-wr1-x42c.google.com;
+ client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 74F65610D9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 74F65610D9
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
- [IPv6:2a00:1450:4864:20::42c])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 74F65610D9
- for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:32:59 +0000 (UTC)
-Received: by mail-wr1-x42c.google.com with SMTP id
- ffacd0b85a97d-476a130c138so638365f8f.0
- for <buildroot@buildroot.org>; Fri, 03 Jul 2026 07:32:59 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 19C59412D5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 19C59412D5
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
+ [IPv6:2a00:1450:4864:20::333])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 19C59412D5
+ for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:33:00 +0000 (UTC)
+Received: by mail-wm1-x333.google.com with SMTP id
+ 5b1f17b1804b1-493be1b9682so5354145e9.2
+ for <buildroot@buildroot.org>; Fri, 03 Jul 2026 07:33:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1783089177; x=1783693977;
+ d=1e100.net; s=20251104; t=1783089179; x=1783693979;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to:content-type;
- bh=j7u0MQgoW/tkdnXPfsb5d9m42sWoxfrwosBD8spY2C4=;
- b=Acr2Pvcjyl6yktPJ9nSrYkxi3+NJXfrfakA/q2FtsaLYB1o88Fpr150VPbFTidA6tc
- eZFzN0ngWIpLU55TzlErt8SOPBWPPeKBFyJCgdZ8JamUx1wSjObLtE1hQ2xrc2pKw5sf
- DiCBNKDDdaOsQfzCOwAFmD5s3nnmS4M5l4Kw7s4bgHOQxEpjeTlZdSoK8i9MNkbyi3Vz
- ADzRcda1iydN0CCBLrWrTQL7n93FeL6JEMTjXJ07ZHhAU7vSr5H/TOeyTZY23v3HatGH
- 9lbKYx4VxzW5Y2eU3lztuuiItgbmUv0F6FihqNRncRpGStQQoGBcYkvnQG6T9+WPT015
- hP7Q==
+ :to:cc:subject:date:message-id:reply-to;
+ bh=TG/iWjSgUvehK/D7KHxCntTAFOPeO/PdfaBaOWZZW0A=;
+ b=SAos7zpo5h6JhFdyZY0zFFWAm8+QXayHjY6C9syiYBkLEI0OJKrybobqcdOkyg6g2L
+ lBvTsMrvDlY8VGmWP2TPEmK9QJHu0yt3+cz5UcCFFYPJIlREfG3scJ0/415o2QSRtZw6
+ vAB39xuPe/iCX6aXReKyed0SeVmiiZe50S3pPMpaZxjJ9NKUnKMwY2aRxvP9TnuLd5lT
+ OKr1aekeiFsokDunCftwPOpsM6M+mOlzYssJjVzQbVyhieMa12jckUKyfxbwrzjpN3Ya
+ tt+gMuGeOzC5h85QZ/RarBrOELp52WmJQ02RK2pPScf1qyHxqj0tdb298pyhHNcHVngY
+ 9ndw==
 X-Forwarded-Encrypted: i=1;
- AFNElJ9BGVLe3ioZiBe8uKCysr11e6klXrJibGRw8kjJYkyfk2p14616S1aYrNV1NllV7XOD8E+rKV4i1UE=@buildroot.org
-X-Gm-Message-State: AOJu0YzWhte1vJa1+hDv/U18MQF1UE+Gl3n+IwHWDes9lWPIJx4pfkn+
- xyHT1J7uQtLptOonkPWzca9PaW9jDFrIwfvvhH09EH3oI35Mo8GFh9QuPsX2bizmHVs=
-X-Gm-Gg: AfdE7cn2oLtKp2AayZw1MqFgbGbFVgPcH4VgoAuEZFmBBDPnnyf17robFQvrf0mjdnk
- R8hj24mi5GVMJxQTKaEpdHud4Zb0qkV0Fq7fcGaG9DZ5pVTgpHvgvG9dlpD0Aa879dWQd7x37mc
- c9fGxks24ljFEyJs8lXYF7G3kGbHccBQPX7pa4AWgSwUaN/SZGwzBzZOeG2+lzr17A433o5HwWQ
- yzZ75hi1Td2+Eppb+LsCwCFHlzcOlIUY1Dln0J6TuNylDFzY7BDoDv+5jfPrp/bABchwIYQE0fE
- K6O92N1z66oLGrTPaSyHsE0komy26sgjI1ZKO9j44ENsoM/DZwvaG1IP8A897eoH6FPlBGLcSxI
- D6NI3lPOgYNQR+ZyXg/VuI5pqGEsDh2iXhBrYbHQmSqEk7a8/0n1yI50UR5Qp+nPzOart8dH7Fw
- EUpu7z
-X-Received: by 2002:a05:600c:548f:b0:493:b6d5:72df with SMTP id
- 5b1f17b1804b1-493d0f4dab7mr1093865e9.35.1783089177321; 
- Fri, 03 Jul 2026 07:32:57 -0700 (PDT)
+ AFNElJ+QCJU+XskvJIz4Ar+M1plIsrHeczKFz8hKqoyXLBhG/WKYr5VYv/LdiK3TYgJibjmS8/S0ZDT+gKg=@buildroot.org
+X-Gm-Message-State: AOJu0YwTOfvguOOXSt4752LeOnLAuNpFCcJm0tZzancoYMSOOjabE+l4
+ G3WhQ+hH0CsSvhJJgAmkkxYNXVDeT1uwEjCoE7XddcacM1/ZVyAw4a7tzi1rKy8kNcA=
+X-Gm-Gg: AfdE7cmW/MfhAqg/KdLk9rTl4eMh6seziyLcuvCXfsVcffCMy2g56/hnbzas4fqtk5o
+ Z0v7qJbQEGbtHgIiTH/3GnpUmZsaZ4NsEETt5rFtvcUnt0lH110Y0e/jxk31nhrkMqu2fz7wc5F
+ 2KMjF5G4RkQxgAMm7D7WXuHlR1jc8Iiez+zUC1Ngo2z3BBZG0p5wCnYRPz63pkHV7QtbqDkTLE1
+ 43naQ+gM6jJ6+O+xdcRKHw0ku1NCUbNNEgPvTTrV1oKW+bYzioXwj+JuQnQEiev5eCDNTD3ImIf
+ YzQ91J+8PU0udD0fm+PvQZ3Q3fhkv20xkPYoYRJAc2B5a3k0oRHkP3NYEhQkeFsR/e0STa79J56
+ tLlQqabw/zsK4e2ZAGL4WrHRKUoiqkCLFp/1JdkTER+UcVjiLwXn+g02+I31sKPS4GJdS4DVUoI
+ pfQOQ99GWmP+D2A88=
+X-Received: by 2002:a05:600c:6206:b0:492:62d9:4e57 with SMTP id
+ 5b1f17b1804b1-493d0f0972cmr1638945e9.2.1783089178842; 
+ Fri, 03 Jul 2026 07:32:58 -0700 (PDT)
 Received: from arch ([77.109.126.77]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-493bef17c82sm142631915e9.1.2026.07.03.07.32.56
+ 5b1f17b1804b1-493bfe7427dsm127005255e9.2.2026.07.03.07.32.58
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 03 Jul 2026 07:32:56 -0700 (PDT)
-To: Bernd Kuhls <bernd@kuhls.net>
+ Fri, 03 Jul 2026 07:32:58 -0700 (PDT)
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri,  3 Jul 2026 16:32:56 +0200
-Message-ID: <20260703143256.275306-1-thomas.perale@mind.be>
+Date: Fri,  3 Jul 2026 16:32:57 +0200
+Message-ID: <20260703143257.275374-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260620184651.3823451-1-bernd@kuhls.net>
-References: <20260620184651.3823451-1-bernd@kuhls.net>
+In-Reply-To: <20260622185602.1397198-1-giulio.benetti@benettiengineering.com>
+References: <20260622185602.1397198-1-giulio.benetti@benettiengineering.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1783089177; x=1783693977; darn=buildroot.org;
+ d=mind.be; s=google; t=1783089179; x=1783693979; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to:content-type;
- bh=j7u0MQgoW/tkdnXPfsb5d9m42sWoxfrwosBD8spY2C4=;
- b=Wwz8ZIqHO2w9GgLWi2nlkISREoA/EKwa/fmcB3O0wFVFDWPaJLlklkkKIQO/w5roHu
- pL0oRRiVC+ZZkAo0wiplVd8pmzsBSmCeKeypOdxKPsm0pVR/Lh8zXUo7P++w/4xdVD26
- G0hv+BouVZVAExcKf8qpzstxppWMN/KO6qP5bpmTkeGKX6Z62+4Ss+NTQG/9hLU1BO7L
- sUemxJrhh6//8XtW/qazqiyqtzZ3JJ7/5ugBTg6uOK591rUC6Qbho1vKdH+iWichKz+U
- +fNNf6oO9m4GgqONL8jcJH4HqZhhiYLASZFAJk96SXtBUsIihR8iQVxobfqW9gJ7Xpch
- O/KA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ :message-id:reply-to;
+ bh=TG/iWjSgUvehK/D7KHxCntTAFOPeO/PdfaBaOWZZW0A=;
+ b=c1Jg+Gov6MIxufjonJsuTc8isI+wYivz+9EKhTS14iaKmzi5vCcyK4M7Lujg2xso2h
+ PCf+OmPuYrnpHvl9T/mCehxgmw4dT90VsdIiwEPJTxUHBZYSCWR5XatGbG3W+Q+6DcHr
+ LSb/ugx9Mkh8daY46pR+cOzgoMJvFW48Lj+ExcImMZcetL9Jo6CZTzWCI+9PrgYp9wAp
+ varTWNINlun6SbYkEmpCNFoTQy1XovntcJF72DYLRS6YRjl+wA60D3MobzCTHV9ptmXJ
+ RMAUW93dj0nR/HG0+Vc6Ogrt8qBWR/y1bh3168dq7DY7OWjkt/azfMdOKUN4HciXCiIs
+ HJoQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=Wwz8ZIqH
-Subject: Re: [Buildroot] [PATCH 1/1] package/util-linux: allow musl build
- for login/runuser/su
+ header.a=rsa-sha256 header.s=google header.b=c1Jg+Gov
+Subject: Re: [Buildroot] [PATCH v2] package/bind: security bump version to
+ 9.20.24
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -131,88 +131,96 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Buildroot commit f89ca996b6deb660b53c33196b8b309fac659bf9 fixed the
-> build of linux-pam with musl in 2020 but did not remove the restric-
-> tions in place for login/runuser/su which were added earlier with
-> these commits:
+> Release notes:
+> https://ftp.isc.org/isc/bind9/9.20.24/doc/arm/html/notes.html
 > 
-> login (2015): 25ecd24579f293ef4fcc6847094c4af39f4113af
-> runuser (2017): 09860f354ae0824cfead384e994d3f119e22b851
-> su (2017): c6488923fb785ac11f6ec78e53db5da22203b178
+> Changelog:
+> https://ftp.isc.org/isc/bind9/9.20.24/doc/arm/html/changelog.html
 > 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> Fixes CVE-2026-3593.
+> 
+> NOTE: Libraries libcap, liburcu are now mandatory.
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
 Applied to 2025.02.x & 2026.05.x. Thanks
 
 > ---
-> Gitlab pipeline passed:
-> https://gitlab.com/bkuhls/buildroot/-/commits/75fbf2c4a4cb132b66c59560f0470ebc063416fc
+> V1->V2:
+> * rebased on latest master branch commit
+> ---
+>  package/bind/Config.in | 15 ++++++++++-----
+>  package/bind/bind.hash |  4 ++--
+>  package/bind/bind.mk   |  4 ++--
+>  3 files changed, 14 insertions(+), 9 deletions(-)
 > 
->  package/util-linux/Config.in | 12 +++---------
->  1 file changed, 3 insertions(+), 9 deletions(-)
-> 
-> diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
-> index c63cec2a9c..df7435e71a 100644
-> --- a/package/util-linux/Config.in
-> +++ b/package/util-linux/Config.in
-> @@ -210,17 +210,15 @@ config BR2_PACKAGE_UTIL_LINUX_LOGIN
->  	depends on BR2_ENABLE_LOCALE # linux-pam
->  	depends on BR2_USE_WCHAR # linux-pam
->  	depends on !BR2_STATIC_LIBS # linux-pam
-> -	depends on !BR2_TOOLCHAIN_USES_MUSL # linux-pam
->  	depends on BR2_USE_MMU # fork(), linux-pam
->  	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # linux-pam
->  	select BR2_PACKAGE_LINUX_PAM
+> diff --git a/package/bind/Config.in b/package/bind/Config.in
+> index 512e948ca2..6f5f14a6bb 100644
+> --- a/package/bind/Config.in
+> +++ b/package/bind/Config.in
+> @@ -1,10 +1,14 @@
+>  config BR2_PACKAGE_BIND
+>  	bool "bind"
+> -	depends on BR2_USE_MMU # fork(), libuv
+> +	depends on BR2_USE_MMU # fork(), libcap, libuv
+>  	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libuv
+> -	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # libuv
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # liburcu, libuv
+> +	depends on BR2_INSTALL_LIBSTDCPP # liburcu
+>  	depends on !BR2_STATIC_LIBS # libuv
+>  	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libuv
+> +	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS # liburcu
+> +	select BR2_PACKAGE_LIBCAP
+> +	select BR2_PACKAGE_LIBURCU
+>  	select BR2_PACKAGE_LIBUV
+>  	select BR2_PACKAGE_OPENSSL
 >  	help
->  	  Begin a session on the system
+> @@ -44,8 +48,9 @@ config BR2_PACKAGE_BIND_TOOLS
 >  
-> -comment "login needs a uClibc or glibc toolchain w/ wchar, locale, dynamic library, gcc >= 4.9"
-> +comment "login needs a toolchain w/ wchar, locale, dynamic library, gcc >= 4.9"
->  	depends on !(BR2_ENABLE_LOCALE && BR2_USE_WCHAR) \
->  		|| BR2_STATIC_LIBS \
-> -		|| BR2_TOOLCHAIN_USES_MUSL \
->  		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+>  endif
 >  
->  config BR2_PACKAGE_UTIL_LINUX_LOSETUP
-> @@ -366,7 +364,6 @@ config BR2_PACKAGE_UTIL_LINUX_RUNUSER
->  	bool "runuser"
->  	depends on (BR2_ENABLE_LOCALE && BR2_USE_WCHAR) # linux-pam
->  	depends on !BR2_STATIC_LIBS
-> -	depends on !BR2_TOOLCHAIN_USES_MUSL # linux-pam
->  	depends on BR2_USE_MMU # fork(), linux-pam
->  	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # linux-pam
->  	select BR2_PACKAGE_LINUX_PAM
-> @@ -375,10 +372,9 @@ config BR2_PACKAGE_UTIL_LINUX_RUNUSER
->  	  to ask for a password, because it may be executed by the root
->  	  user only)
+> -comment "bind needs a toolchain w/ NPTL, dynamic library, gcc >= 4.9"
+> +comment "bind needs a toolchain w/ threads, dynamic library, C++, gcc >= 4.9"
+>  	depends on BR2_USE_MMU
+>  	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+> -	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS \
+> -		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+> +	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS \
+> +		|| BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 \
+> +		|| BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
+> diff --git a/package/bind/bind.hash b/package/bind/bind.hash
+> index 766540ee22..a1ff3c6101 100644
+> --- a/package/bind/bind.hash
+> +++ b/package/bind/bind.hash
+> @@ -1,4 +1,4 @@
+> -# Verified from https://ftp.isc.org/isc/bind9/9.18.50/bind-9.18.50.tar.xz.asc
+> +# Verified from https://ftp.isc.org/isc/bind9/9.20.24/bind-9.20.24.tar.xz.asc
+>  # with key D99CCEAF879747014F038D63182E23579462EFAA
+> -sha256  a24f93be94712a8c11752294410f2f8a2510ec7fdc931d207fc61cdf30e54f4d  bind-9.18.50.tar.xz
+> +sha256  989fef1fc88ea59d04cd86f854dca5a4616a20a9968bcdde3c1a3668ab36be08  bind-9.20.24.tar.xz
+>  sha256  9734825d67a3ac967b2c2f7c9a83c9e5db1c2474dbe9599157c3a4188749ebd4  COPYRIGHT
+> diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+> index 54870bfa4e..2b8156d0d0 100644
+> --- a/package/bind/bind.mk
+> +++ b/package/bind/bind.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
 >  
-> -comment "runuser needs a uClibc or glibc toolchain w/ wchar, locale, dynamic library, gcc >= 4.9"
-> +comment "runuser needs a toolchain w/ wchar, locale, dynamic library, gcc >= 4.9"
->  	depends on !(BR2_ENABLE_LOCALE && BR2_USE_WCHAR) \
->  		|| BR2_STATIC_LIBS \
-> -		|| BR2_TOOLCHAIN_USES_MUSL \
->  		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+> -BIND_VERSION = 9.18.50
+> +BIND_VERSION = 9.20.24
+>  BIND_SOURCE= bind-$(BIND_VERSION).tar.xz
+>  BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+>  BIND_INSTALL_STAGING = YES
+> @@ -32,7 +32,7 @@ BIND_CONF_OPTS = \
+>  	--disable-static \
+>  	--with-openssl=$(STAGING_DIR)/usr
 >  
->  config BR2_PACKAGE_UTIL_LINUX_SCHEDUTILS
-> @@ -411,17 +407,15 @@ config BR2_PACKAGE_UTIL_LINUX_SU
->  	bool "su"
->  	depends on (BR2_ENABLE_LOCALE && BR2_USE_WCHAR) # linux-pam
->  	depends on !BR2_STATIC_LIBS
-> -	depends on !BR2_TOOLCHAIN_USES_MUSL # linux-pam
->  	depends on BR2_USE_MMU # fork(), linux-pam
->  	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # linux-pam
->  	select BR2_PACKAGE_LINUX_PAM
->  	help
->  	  Run a command with substitute user and group ID
+> -BIND_DEPENDENCIES = host-pkgconf libuv openssl
+> +BIND_DEPENDENCIES = host-pkgconf libcap liburcu libuv openssl
 >  
-> -comment "su needs a uClibc or glibc toolchain w/ wchar, locale, dynamic library, gcc >= 4.9"
-> +comment "su needs a toolchain w/ wchar, locale, dynamic library, gcc >= 4.9"
->  	depends on !(BR2_ENABLE_LOCALE && BR2_USE_WCHAR) \
->  		|| BR2_STATIC_LIBS \
-> -		|| BR2_TOOLCHAIN_USES_MUSL \
->  		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+>  BIND_CFLAGS = $(TARGET_CFLAGS)
 >  
->  config BR2_PACKAGE_UTIL_LINUX_SULOGIN
 > -- 
 > 2.47.3
 > 
