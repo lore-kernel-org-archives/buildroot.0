@@ -1,118 +1,117 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C773C43458
-	for <buildroot@archiver.kernel.org>; Fri,  3 Jul 2026 14:33:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E2F3C44500
+	for <buildroot@archiver.kernel.org>; Fri,  3 Jul 2026 14:33:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2226A61551;
-	Fri,  3 Jul 2026 14:33:42 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0lTe_lRZXBz1; Fri,  3 Jul 2026 14:33:40 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6C1D861543
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1783089220;
-	bh=Ms875mWlSeAo1LsrrcxSDr9RBqz4F1owbCQjs1rbaaI=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=LmWH+HoQzMq8retCwhUH2S2Twqz6iBXS+N1bPe3VvXFXJgoSNfIZj8D+PjA3QrLYb
-	 L52K4yjB96OoMpOGzdenMl5wps5NGlFFQL/3Xcog53VUTMxDysz+06c1/ORa/t35D7
-	 CPsKCCAQbpm9UM0ARxwLzox6DiMFVVa1fZB4kYyYOSCyPJCoK4cZSMDCJFyTPcuByq
-	 HmP2nk4dON/Lgh8cZKYfs1ZQ+NY+udEjUdFQ3bmf2Lr3hlazV3Tq3YVaKN4tBV/SoC
-	 kTxk7USKWaoKUx2tnuYLFwqYUGruQNleF4sm6iQFioWG3mmDNMzjQJ8K9js5ZSOpZG
-	 5rlSXhTN8O37Q==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6C1D861543;
-	Fri,  3 Jul 2026 14:33:40 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 12DF5363
- for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:33:39 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 04FD7413BB
- for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:33:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 22FCB413CC;
+	Fri,  3 Jul 2026 14:33:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id G0bKsQtvcUvv for <buildroot@buildroot.org>;
- Fri,  3 Jul 2026 14:33:37 +0000 (UTC)
+ id Zh3_pLiLdhze; Fri,  3 Jul 2026 14:33:42 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 53F6C413CD
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1783089222;
+	bh=B9qFHpAP6qwaOcHv+++jq9KEgTAJux/JnbS5K5gl1PI=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=ld9bLHV2g0uxblqRMIjmWfHXjQjvLssrj9NrZ00uTQWBli8eI5LtucFVq7F78WZs8
+	 wHeLcOguvs579jq6mBgygZpJJlvPwO1leHrGHuI1/gHm115KhEMFOvUps47DBy7wyL
+	 OpEOCWBjIN9udS4rvFhH29dfGEbxVyl//xY5LGSjE7EweQD9xCuiLlH2xhAnajPEjP
+	 1xQGJUCAs08hUJtF0PR7AqtZy8tJvVeI6eHHbhlmf6fqi5jqCmB+99TFx8yy+srZR0
+	 m6nVsrp3BZfhdT/1GPha7SoOT4cNdhUatdsrRo7u+/B8ZTmDvcaoXNX1SzubWWFIVD
+	 4IrjR0O96B3oQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 53F6C413CD;
+	Fri,  3 Jul 2026 14:33:42 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7E02E14F
+ for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:33:40 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6381682CEC
+ for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:33:40 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DqBL7XL1QhxH for <buildroot@buildroot.org>;
+ Fri,  3 Jul 2026 14:33:39 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
+ client-ip=2a00:1450:4864:20::429; helo=mail-wr1-x429.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 2623F413A9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2623F413A9
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
- [IPv6:2a00:1450:4864:20::32f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2623F413A9
- for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:33:36 +0000 (UTC)
-Received: by mail-wm1-x32f.google.com with SMTP id
- 5b1f17b1804b1-493be1b9564so4539335e9.2
- for <buildroot@buildroot.org>; Fri, 03 Jul 2026 07:33:36 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org DF30D82E14
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DF30D82E14
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DF30D82E14
+ for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:33:38 +0000 (UTC)
+Received: by mail-wr1-x429.google.com with SMTP id
+ ffacd0b85a97d-47122683cf3so465148f8f.0
+ for <buildroot@buildroot.org>; Fri, 03 Jul 2026 07:33:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1783089215; x=1783694015;
+ d=1e100.net; s=20251104; t=1783089217; x=1783694017;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to:content-type;
- bh=Xf2BJgFymH5qQ70PEyrspL9RnvohQsM9ZJcOcdBsWHY=;
- b=M19XG8DyyI35sHZ4jS1NU8ciXzH/OTHi9omVRTgNgyhEQw7m0ZTE5v6d7a4CbMMoSa
- qU4zHGmBzkD37oNt8d3XckNwA8GI8kc2XFg4Rm8WDKb6ZXNunkGSvcnbQ9xPfmGjUk41
- x4oriJCOVJvTNBqwSaHCFG9b+DUXcJ8Ps+Iko/Jrp05OQXLF3durpCt7E++OzeeGfM5k
- NF+gMatDx8V/7g436CaeeUk7gdY7G+CDF489WzMr0t3nbLUoctbDokr/M3NApArbHoLr
- NynHWzqxm4odm+AfAhFeO7CcE1HI9AhWGtoKMIusvilg2Qo2T2KOJC+32Sfn0o4R4l49
- qm3w==
+ :to:cc:subject:date:message-id:reply-to;
+ bh=p0U1El715Pwn3eaE61IpAcSOHFSdRXmAaMFqNfVICQI=;
+ b=oeKpWJuS9k12CDVhWg96nuDZSH55efqlwW0SSPqP9BvW6DhcliXGBQW2GG/F8Q1J8L
+ dFTGe4w8K59KLceTgugMYDEXZWklRtuPWUDvfCH1ZGlQIKAt0WONzzRUSk+AKEWi4YVc
+ pbmiyn1SlxGKKZFZKjrbcyrG7ZSRvDI4jvb7u815OT0Iw+wOyZenUrFUUOlQ58ajpjLD
+ 26as1NWit+l6EjDoldmMEqOPvnkHkkbOx0zq4H0QOcmF7uz733GUwZd2hJg38KQzDt7M
+ I1KhKeX4PIPAlOwlQygQgxO3HgjsxscedTgFdwG4XW+bCCDtJkwJrFXB2p1piTjvoUJ+
+ XGRQ==
 X-Forwarded-Encrypted: i=1;
- AFNElJ8WRdoRWLILSu3JEL1s2kGvtmCKPWNt5A4j1p+JV2QH/TECNWBv/90TMSBR0uA1Fgv9vNSc1Xhr8wg=@buildroot.org
-X-Gm-Message-State: AOJu0YzZzpmJ7q2iAwN+QX1aVNB5h4EGMF+iLtCBTuSQwu5K1VKjmS4H
- wR6FsMYPrliXPmuKmxPo4vZ3k6NoTdQ1hxQu2hzeg2zdZMaQPQd+UOosPlVpLZaYbxINZ9w033y
- ABq+b
-X-Gm-Gg: AfdE7ckS+6+lFuNrlr3Kl6oHz6+4Z4tVpSh1r9oI+MNqbOwYT/vkedRhm892rWYD3EJ
- XcnCa546CM+C6a3L28DD/Ru2PrwuFiMcntYFlw0kwJeLZKBVzAos3Xum2wXdanfl+x1cQn/NXNR
- HZUoEJiefGjDwSvB2Pah/l/R0ZOsOqA4C9YlMLYIe4/03a+pUSj6ycr0BHxEK3stcwNOIuVuOQc
- 0xLRJNXa4yG2EUTsn6NfHKvsD8X424McJOTeq2AnaQ0j/A+hyydemfrK9WwIR+lckkk7npaaAHT
- PZbK/J75IlmDxYk+yZOMe4Wul0WL6GB8s+DyKojCniFjGpP2dAs4C1pUwkJHR9yNqv/31/nd2OS
- iBboUOniv+MKkRQ+2KjL+c97mRwOJDaW0B3UHYx85m9Xx3Jd1xHUAiw/4zAn5tT8wfpqhf4s1br
- pHQUte
-X-Received: by 2002:a05:600c:4f81:b0:493:b2c1:b2f8 with SMTP id
- 5b1f17b1804b1-493d0f08a00mr1619185e9.4.1783089215003; 
- Fri, 03 Jul 2026 07:33:35 -0700 (PDT)
+ AHgh+RoJV5bkLBKqIgrmn8fHy/2M9rKCRdd9xVZq7/bqh/VK/rtFCVhJ3lpBecAJfKMa8ftRVn+MtyC4Cls=@buildroot.org
+X-Gm-Message-State: AOJu0YyBrK04sla03KsB54UNypJ/xKxxTIIdOB8+8dTYe/ea4+5wHfLD
+ 22qIazCFLpJS1C0Cg9jNUTXdoSvfP/Y/IWz8ysP/s6TYKkcOZYILmwZlfvhxFUlbfp0=
+X-Gm-Gg: AfdE7cloqMAVuAxVTYp+w/eNnrNroi7h+5X7ybFYj1Do18kPqfjXk4rUWECXZvyOcxt
+ eSEerNfITUODB8RoWzwCl8Zz0K4vCn1QipvWlva634RXy2ihHDmfNyts4mkaTFTf1WxA9B8jp9G
+ KBX0uvK7g+Adou2WLR0U8QEWwAavwA1yPt7T+SSTQvYY0hIrDxjt/906R/BcyZUKgqhzXG5cUC1
+ 7bC1MNSavrAOuY1AR2YbsjEeXXPfnEgz19Lzi2F+udCxV+eVEIjIrGY1X4ajPLAmVkfRt/nJ4Bx
+ vgoA0ZnTZvZnoKcL+YNpUi9MO128rMe/BKTGTE3KuhhgkMGF8N6yF/8n4qNiXA11yaXKFrx3P24
+ sZXeGpLC7Gae6C9s2gG9wHfqigSO+B0/mo8SFu/9Ivfy4Cx99hdoa+7gQDCvIdaFFe/MgV1CUT5
+ lBvtbb
+X-Received: by 2002:a5d:5f52:0:b0:460:3233:beee with SMTP id
+ ffacd0b85a97d-4775a6d21b4mr15594563f8f.42.1783089216928; 
+ Fri, 03 Jul 2026 07:33:36 -0700 (PDT)
 Received: from arch ([77.109.126.77]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-493ccdb62d3sm62097475e9.8.2026.07.03.07.33.33
+ ffacd0b85a97d-477de3dc77bsm19063708f8f.33.2026.07.03.07.33.35
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 03 Jul 2026 07:33:33 -0700 (PDT)
-To: Romain Naour <romain.naour@smile.fr>
+ Fri, 03 Jul 2026 07:33:35 -0700 (PDT)
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri,  3 Jul 2026 16:33:33 +0200
-Message-ID: <20260703143333.276056-1-thomas.perale@mind.be>
+Date: Fri,  3 Jul 2026 16:33:35 +0200
+Message-ID: <20260703143335.276121-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260624125154.1869177-2-romain.naour@smile.fr>
-References: <20260624125154.1869177-2-romain.naour@smile.fr>
+In-Reply-To: <20260625123536.3814862-1-giulio.benetti@benettiengineering.com>
+References: <20260625123536.3814862-1-giulio.benetti@benettiengineering.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1783089215; x=1783694015; darn=buildroot.org;
+ d=mind.be; s=google; t=1783089217; x=1783694017; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to:content-type;
- bh=Xf2BJgFymH5qQ70PEyrspL9RnvohQsM9ZJcOcdBsWHY=;
- b=Mb4j44qpxYrhCV18LeAbCYDTq5hb5UF+HnQh08GPfLdQ+dMidKakp7bxxXPr8LOUCW
- +tuYkF+FDNfyML8sta7bM9RXJLm5RpUzMj7H+k/ujMetz6c1vJ9QAQXuIMvROrJ/iea8
- WmnFd/4/TJWmTyBiU1vUgo/uSF9K3tEdBfOT37Q4R9XljFi84HXRcSZ9zUFlkLxwJ15U
- 0MUCehRTzKVnDAbZINLJ5t+dClVXr+U40QBfQB3KNis8HI5S83vnkn4QvTUKgmggvWy+
- 9XiN902jSy72sDK7O3KScrV03WSo2xEPlDx5yOJFqGDc9JnaLc3RIqhSuc6Lr1cA62O6
- 8Hmg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ :message-id:reply-to;
+ bh=p0U1El715Pwn3eaE61IpAcSOHFSdRXmAaMFqNfVICQI=;
+ b=ZK475saEdVoO9Yd5vU6uxp9KQ1MuTQ7P5QOX5OvIezNxDj1UAyHEVWt2oTVi7DlUHV
+ g6EZ/7n0eEjGCssFst5atM9pvs0GLg66mFeQWqUaVBrYZyed8cIny8P/H1FDyt17Bjw9
+ IXohJDGHEU5/ylxz8IRDszwD/v6nLw1oJpadlE1k9krmOByI1SVsIuIWMKpVc+vZxa7p
+ Z12YODXjJKWw4fQaayxdBCY+Bcie3dZ8ZmkibaS0xhjmJixQrmHp1Ox/++5o5Zk8mKQ5
+ qByzpjiqb9QeM3nFR0JR3dbwN2MBHVNL60CP/wzypBxFP+lpVtt8xzMejiFSiPjRXdac
+ 6xMw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=Mb4j44qp
-Subject: Re: [Buildroot] [PATCHv2 2/3] support/testing: TestIptables: check
- for netfilter legacy tables enabled
+ header.a=rsa-sha256 header.s=google header.b=ZK475saE
+Subject: Re: [Buildroot] [PATCH] package/mongoose: security bump to version
+ 7.22
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -132,54 +131,44 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> TestIptables expect netfilter legacy tables enabled in the kernel.
+> Release notes:
+> https://github.com/cesanta/mongoose/releases/tag/7.22
 > 
-> Make sure we use iptables-legacy:
+> Fixes CVE-2026-37635.
 > 
->   iptables --version
->   iptables v1.8.11 (legacy)
-> 
-> The test would fail if nftables compat (iptables-nft) is enabled.
-> 
->   iptables --version
->   iptables v1.8.11 (nf_tables)
-> 
-> Add the following configuration fragment to enable iptables-nft:
-> 
->   BR2_PACKAGE_IPTABLES_NFTABLES=y
->   BR2_PACKAGE_IPTABLES_NFTABLES_DEFAULT=y
-> 
-> Acked-by: Fiona Klute <fiona.klute@gmx.de>
-> Tested-by: Fiona Klute <fiona.klute@gmx.de>
-> Signed-off-by: Romain Naour <romain.naour@smile.fr>
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
 Applied to 2026.05.x. Thanks
 
 > ---
-> TestIptables should be extended to test with iptables-nft by adding
-> a new TestIptablesNftables test case.
-> ---
->  support/testing/tests/package/test_iptables.py | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
+>  package/mongoose/mongoose.hash | 2 +-
+>  package/mongoose/mongoose.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/support/testing/tests/package/test_iptables.py b/support/testing/tests/package/test_iptables.py
-> index 72f2dd71a4..eeb4ccb5dd 100644
-> --- a/support/testing/tests/package/test_iptables.py
-> +++ b/support/testing/tests/package/test_iptables.py
-> @@ -38,7 +38,10 @@ class TestIptables(infra.basetest.BRTest):
->          self.emulator.login()
+> diff --git a/package/mongoose/mongoose.hash b/package/mongoose/mongoose.hash
+> index 556a438880..1a60b0c89c 100644
+> --- a/package/mongoose/mongoose.hash
+> +++ b/package/mongoose/mongoose.hash
+> @@ -1,3 +1,3 @@
+>  # Locally computed:
+> -sha256  d4ddbd12c12f223abefcc0a74417a638ae5c118d7cf10ba546553c6b0e0b5ada  mongoose-7.21.tar.gz
+> +sha256  87727cd2c240ff559b16e9710d44b61ba3513dbee50428bd8ee1596d7c58460a  mongoose-7.22.tar.gz
+>  sha256  f0d9cfd6f7d92f6ec061a5fb2882f67d2521a151bf09a637c33ca6181834b048  LICENSE
+> diff --git a/package/mongoose/mongoose.mk b/package/mongoose/mongoose.mk
+> index 8250751eb8..207d31cdfa 100644
+> --- a/package/mongoose/mongoose.mk
+> +++ b/package/mongoose/mongoose.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
 >  
->          # We check the program can execute.
-> -        self.assertRunOk("iptables --version")
-> +        cmd = "iptables --version"
-> +        output, exit_code = self.emulator.run(cmd)
-> +        self.assertEqual(exit_code, 0)
-> +        self.assertTrue(output[0].endswith("(legacy)"))
->  
->          # We delete all rules in all chains. We also set default
->          # policies to ACCEPT for INPUT and OUTPUT chains. This should
+> -MONGOOSE_VERSION = 7.21
+> +MONGOOSE_VERSION = 7.22
+>  MONGOOSE_SITE = $(call github,cesanta,mongoose,$(MONGOOSE_VERSION))
+>  MONGOOSE_LICENSE = GPL-2.0
+>  MONGOOSE_LICENSE_FILES = LICENSE
 > -- 
-> 2.54.0
+> 2.47.3
 > 
 > _______________________________________________
 > buildroot mailing list
