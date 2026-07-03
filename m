@@ -1,114 +1,117 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EBE01C44500
-	for <buildroot@archiver.kernel.org>; Fri,  3 Jul 2026 14:32:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA44CC43458
+	for <buildroot@archiver.kernel.org>; Fri,  3 Jul 2026 14:32:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C2A05412BA;
-	Fri,  3 Jul 2026 14:32:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B5A9D82882;
+	Fri,  3 Jul 2026 14:32:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PkMwDKm12a1Y; Fri,  3 Jul 2026 14:32:33 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id IKVizMR9ZjlY; Fri,  3 Jul 2026 14:32:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CF1A9412B3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C49B782884
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1783089153;
-	bh=avePcxNHVvvoyeCA1ODptpZzG//QMtTPzUW90HRmwc0=;
+	s=default; t=1783089156;
+	bh=mSVsHpgVsbG9W5alSzHe1UrIk8IVLD/52vQ7nJYGIiM=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=KbeSGMHCIMYg5u+qkkyPbBg1iSWw1tulCXdddN9Pwn5E6gsXhClx+a2ICdBUcyfxr
-	 ztHOfnYkvDqStOn9Xq/07K1Qyd/g1LWG5iljCw2sRmxrocrDi7MXMXPLv5+/kpJ+Xy
-	 vtJos2TS7oSiiPkYuO4aD6enj+CIPiWNm8HQXsUwQcDVNCMLUFsqaxi7uJ+9tbPqJb
-	 UbrjySie2FyIukvsRQbV6jErvFfXp7ZSFrWUyhmgEsPjvcMzaAtjE9NwTsQN/Bntd9
-	 cLv7QKDv6U1zJmbu38AUPbumuS3CYunvmQU2RGTaC1Is1L7suscvZxHaT8Fe8lQEzW
-	 AajBKkZVgYQvg==
+	b=p7+WWpNDZjubbG+rXjZoZzc1nBMGQEJqvvnTK6fBC/q9icjlQomPBiOIsNerVVVPa
+	 POu3LmiHDK7p5WpnCKqE5YjIB895z3idunqHwsLLITKtt1PCjQT0cpIMzMdyl1P7sD
+	 57gSTuXbXKZQ+j6Fe80BvSvxqIKwDJTxEUudZBDGXHm8Me3slqBdHBPDBaPHKXj+Qb
+	 EgC/9zndaIhQxe95CB+ESJLqOyLZ+4E7y4m8rMZqoZSusqDAcHJYFD24i8eXyqjrLZ
+	 3HROmoY4taZQNCMPbqTnlDzPIFTPCT4qUaIeQKgPvSULn9zX0v268HOWM+miiqzEBf
+	 DbUGFaNCtjALw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CF1A9412B3;
-	Fri,  3 Jul 2026 14:32:33 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 36EC6363
- for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:32:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C49B782884;
+	Fri,  3 Jul 2026 14:32:36 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 33A2114F
+ for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:32:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1D5C94008F
- for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:32:32 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 259CB60F2C
+ for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:32:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 65PqDfgWCQ9I for <buildroot@buildroot.org>;
- Fri,  3 Jul 2026 14:32:31 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dyQCCYZgNUKm for <buildroot@buildroot.org>;
+ Fri,  3 Jul 2026 14:32:34 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
  client-ip=2a00:1450:4864:20::436; helo=mail-wr1-x436.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 04B5540420
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 04B5540420
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 1A81760FBD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1A81760FBD
 Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
  [IPv6:2a00:1450:4864:20::436])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 04B5540420
- for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:32:30 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1A81760FBD
+ for <buildroot@buildroot.org>; Fri,  3 Jul 2026 14:32:33 +0000 (UTC)
 Received: by mail-wr1-x436.google.com with SMTP id
- ffacd0b85a97d-479b7aada85so659170f8f.1
- for <buildroot@buildroot.org>; Fri, 03 Jul 2026 07:32:30 -0700 (PDT)
+ ffacd0b85a97d-472055b0efaso475318f8f.2
+ for <buildroot@buildroot.org>; Fri, 03 Jul 2026 07:32:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1783089149; x=1783693949;
+ d=1e100.net; s=20251104; t=1783089152; x=1783693952;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to:content-type;
- bh=OR6rZz3jWR1DPfpwt425ii738V6AanyPJcSFrcjiEHE=;
- b=piOgOrmiFBDhGj9tGisIXT+7l6BGOu8oiNP56p8ocMyarOUx0fvNE2990fYgm1c/uJ
- WoY1bvTTwhCnXLU5rLGgh+jrG2y7Kn6koSg58oMGZtwOuYX1DK9Mlt/XD6qg19YHvPOU
- MNDhtApmIBbOrqk74P2xUzZpwLO8+bWWmQkRkCl/X7DQDoSeA0TJIbuQx3g+xs5CEx4G
- h2CaKOD3/4nLD4kZARGdKYgT44U/uT/Az+wEpCf4h2N4pdYYlXooGi7ve4rgf7AXeE2N
- Ko2aYgotTiVCLBoCOsWA0JawngPn7gXGYrOiQbS1dVI7+iEpRbW0QIEIRoF96jVaK+JM
- hvBw==
-X-Gm-Message-State: AOJu0YwJZcyRhLQtXFSiC8xyCL8ngeHtonIRhsyn+wQqNWcbHZ7L3OhF
- E9hRWKZmIMoqOnytY+UPbxMvZfG8XAzxMob/NdED84BVox0oahZJWcQtoTY/3bUbCU0=
-X-Gm-Gg: AfdE7cmj9qLRZQPH8zmFBmBQh1Hdcx73NXv2hRW7T1rGrQ9IDL5QFdW9GzxpAjBiHXa
- Xj0MPkpEEWVAGvVNQt3IK+ytky9v08K8cwxBNhre4e1xaJbGT5PIbUaJ0kDEqmQgmCzCYmBH3yp
- zILtaPk04niU9O0KJ1cMlMviurQlUIRBuTTvB3RY2r+/yDR86kBIODfENLZevAjsIDc3WpFPVnS
- qcqloVpBgB8NCKa2L10M1+6iT/ECAyHB11iUAZ6tqsEWZY/pLb0HZxbPEckAbc3SohMXUO3z5kU
- I9+KgbBEGakHK9ERtWWj88cD1w4y9ZeZ9vWjlvt2j1edaqckoh0l9PEL8OCYjTrU82mt5NXSOlN
- FSv7C6MKLH7u5TpRg5mNK5J79frtmHx3f2agA8oLpqspxUUOZ0GiFmkxEkBo2p7TEPPuo2nptOX
- I5jWlo
-X-Received: by 2002:a05:6000:1788:b0:474:6a5b:85f8 with SMTP id
- ffacd0b85a97d-477b34b05d3mr14520486f8f.6.1783089148834; 
- Fri, 03 Jul 2026 07:32:28 -0700 (PDT)
+ :to:cc:subject:date:message-id:reply-to;
+ bh=NbrBAyDEWIHk1rmwFA4/+MkMPMg9Em2XZvvlpNr0ZTo=;
+ b=q+Cr+3U4IOyMR2Lz1lj3OCb4anIyLK2idsqhRgWdKH1BjwBQ8qzT+U/kYS9tZ3yiab
+ Cxmf99x7TqkyrxHQGUPB48kwYOAJa1+yro2pnSj9YRAjTmky3Whkecu7unjCnZai6apW
+ rzYxrZTtws3HZsdtAoh8r+Kn4fmTnIsnS7cr6e7njIzqQbyxYFnve9syYVmeUN0HFkJ1
+ 18c6k8VUJjvfSgNqhXwAsUSqcpugZyiKQa1+MOdKdwdIOnBN4FWo2LT2RA++Vk4EYEv6
+ qMBLS+D+ouMmLS6ZgiWjNMAwUk9BxbHfg2w1ymHuMfg4NKywY+EA40hv/1MWlmyp2HKV
+ 7VdA==
+X-Forwarded-Encrypted: i=1;
+ AHgh+RpvBEp58UCWLZPgq7ajhpZVbRS+e5rkCyzet7sZ7TZiZoEqAnIP3p3AEf32WFTxTTA0HUCGfkb2CdY=@buildroot.org
+X-Gm-Message-State: AOJu0YzkWhlyAq+hZuwS17KaoyLBeOPKfp3r2o6qE4YXquQhXmFDUFPJ
+ lmN0XgQdKDfg1pGGRlqnfB1ljGzm6BxubqQM1lNtpofUbHswHtwYeLyq45ldHWPw4Dg=
+X-Gm-Gg: AfdE7cln8VjvZfQrJvi5t4NTHUiPSQmUXL96keYXpy7+1ylmiJ8sYwqSyIhuM/megvP
+ kWlRTMp9zinTIGbbCRwMgSiUKHpAwSG/d2QfVBzvez8LfYfBh8pEjZu3drHB9y0uyIkboCPXvPs
+ 5serxTM7XRKMdINd3+Z/97gZPitnAswHNf/xdcJPXeC4ESRj3eyVMmgvpK42MWE101UdrqGtk++
+ jaPoSh6fE8LMX1FYk8Cf9ukB6UY/IhAmpNOoVe78Ivt7n0fi+tqNiTI5bU8C2oPqBYQYJZb/K7f
+ aeDU4MDMkc4l3DJ/Pu/hmwLBDcBvHQ1lnjoEF9EUCDHyy2SEYEJXstnZuzjhwk/JbmrDfe20gi+
+ ieZ/ubdvin8+cDAR64sJd9LcZmWijmj8lOvU1BSVoDO7riwwbydrhBA1UGOK4K9yAl5LPC5vb6Q
+ NoUwGvT1bQM29kdck=
+X-Received: by 2002:adf:e009:0:20b0:474:6301:3e25 with SMTP id
+ ffacd0b85a97d-4775918fa79mr11864587f8f.28.1783089151878; 
+ Fri, 03 Jul 2026 07:32:31 -0700 (PDT)
 Received: from arch ([77.109.126.77]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-477de3dd0b1sm18632631f8f.35.2026.07.03.07.32.27
+ ffacd0b85a97d-477dde19e8dsm20181637f8f.27.2026.07.03.07.32.29
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 03 Jul 2026 07:32:27 -0700 (PDT)
-To: Thomas Perale <thomas.perale@mind.be>
-Cc: buildroot@buildroot.org
-Date: Fri,  3 Jul 2026 16:32:26 +0200
-Message-ID: <20260703143226.274772-1-thomas.perale@mind.be>
+ Fri, 03 Jul 2026 07:32:30 -0700 (PDT)
+To: Titouan Christophe <titouan.christophe@mind.be>
+Cc: Thomas Perale <thomas.perale@mind.be>,
+	buildroot@buildroot.org
+Date: Fri,  3 Jul 2026 16:32:29 +0200
+Message-ID: <20260703143229.274822-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260626082852.96329-2-thomas.perale@mind.be>
-References: <20260626082852.96329-2-thomas.perale@mind.be>
+In-Reply-To: <20260629102220.2654363-1-titouan.christophe@mind.be>
+References: <20260629102220.2654363-1-titouan.christophe@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1783089149; x=1783693949; darn=buildroot.org;
+ d=mind.be; s=google; t=1783089152; x=1783693952; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to:content-type;
- bh=OR6rZz3jWR1DPfpwt425ii738V6AanyPJcSFrcjiEHE=;
- b=eTrUpV+dMGWQZloFSguyGhLSxnjBbGcrm8mvhWMhyO8W7Rtrt98jgLbipDYa9R0QAy
- PimTCsavidVAiQQJ8tcr+JdLxnXCIz8zK8OvcT5plH+5b9tMJRhG46YqEBZdkz9IkWlp
- tkB/6rQpFr2iJ3RRMWlCqFslM4deeH9lz+SwKcNiL0eIqJ06NrH2AzWs1my3/lyIrRO8
- D0G0FVbQZKvGuN+vn+Wj06u89AEK+0Jpm98KhNdeMnwlAYB0EP6PouNL/nfUSnXjP9e2
- KPZfbXeWBATHZSYcQQe8EQnsMYJS2WQjm9jpS2JvwnWDrt+5wpDr3b+jvFTonEX2ItUz
- 8C8g==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ :message-id:reply-to;
+ bh=NbrBAyDEWIHk1rmwFA4/+MkMPMg9Em2XZvvlpNr0ZTo=;
+ b=Cmf/LQDwYWMPB3Kfqowx0QiWQXoYePXszKukD1SdApgU/KH0n2dfv9FPt0HjZMzXFv
+ qBHj4B0cLMUGFfhQLopsHud3JBT4XyCRN0X7pLdVopyokZOktSZmFljY8TFSMQWNUlm2
+ NPbb0ERt2eDavCLHwfbtbZffm+FiH7Imd/lYu8kebQSqeq29rQ9KGyRym6PZn5YAAVva
+ c/YIEHbiP5aFTQVOfLik2G8/rg4tF9H8q3J92NcgUERp7s21rXfr3fbeVdr72G5z3n4m
+ q06wehSIXdXR3aSmTcefYB9uBzMqEorJhs9GEHTg9u9dlx66JCSeQRArT82gv5eSjcXk
+ xEwQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=eTrUpV+d
-Subject: Re: [Buildroot] [PATCH 2025.02.x 2/4] package/squid: backport patch
- for CVE-2026-33526
+ header.a=rsa-sha256 header.s=google header.b=Cmf/LQDw
+Subject: Re: [Buildroot] [PATCH for 2025.02.x] package/mongoose: security
+ bump to v7.22
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -128,84 +131,112 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> - CVE-2026-33526:
->     Squid is a caching proxy for the Web. Prior to version 7.5, due to
->     heap Use-After-Free, Squid is vulnerable to Denial of Service when
->     handling ICP traffic. This problem allows a remote attacker to perform
->     a reliable and repeatable Denial of Service attack against the Squid
->     service using ICP protocol. This attack is limited to Squid
->     deployments that explicitly enable ICP support (i.e. configure non-
->     zero `icp_port`). This problem _cannot_ be mitigated by denying ICP
->     queries using `icp_access` rules. Version 7.5 contains a patch.
+> As indicated in the release notes:
+> https://github.com/cesanta/mongoose/releases/tag/7.22
 > 
-> For more information, see:
->   - https://www.cve.org/CVERecord?id=CVE-2026-33526
->   - https://github.com/squid-cache/squid/commit/8138e909d2058d4401e0ad49b583afaec912b165
+>     This release includes a substantial number of security fixes,
+>     reflecting increased use of AI-powered security tools and valuable
+>     contributions from the security research community.
 > 
-> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+>     Please note that many of the resolved issues have not yet been assigned
+>     CVE identifiers. The assignment process is underway, and these release
+>     notes will be updated as additional CVEs become available.
+> 
+> Given the large number of security fixes included in that release, bump the
+> version for Buildroot LTS instead of applying individual patches
+> 
+> Along with the version bump:
+> - Remove patch for a security issue fixed by the version bump
+> - Update license hash following the update of the copyright year in
+>   https://github.com/cesanta/mongoose/commit/1f9e1a38b55455ed63a616aeb7b1070f2a2d4ddd
+> 
+> Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 
 Applied to 2025.02.x. Thanks
 
 > ---
->  package/squid/0004-CVE-2026-33526.patch | 34 +++++++++++++++++++++++++
->  package/squid/squid.mk                  |  3 +++
->  2 files changed, 37 insertions(+)
->  create mode 100644 package/squid/0004-CVE-2026-33526.patch
+>  .../mongoose/0001-improve-resiliency.patch    | 37 -------------------
+>  package/mongoose/mongoose.hash                |  4 +-
+>  package/mongoose/mongoose.mk                  |  5 +--
+>  3 files changed, 3 insertions(+), 43 deletions(-)
+>  delete mode 100644 package/mongoose/0001-improve-resiliency.patch
 > 
-> diff --git a/package/squid/0004-CVE-2026-33526.patch b/package/squid/0004-CVE-2026-33526.patch
-> new file mode 100644
-> index 0000000000..572a0197cb
-> --- /dev/null
-> +++ b/package/squid/0004-CVE-2026-33526.patch
-> @@ -0,0 +1,34 @@
-> +From 8a7d42f9d44befb8fcbbb619505587c8de6a1e91 Mon Sep 17 00:00:00 2001
-> +From: Joshua Rogers <megamansec@gmail.com>
-> +Date: Tue, 10 Feb 2026 19:58:49 +0000
-> +Subject: [PATCH] Do not escape malformed URI twice when sending ICP errors
-> + (#2374)
-> +
-> +In this context, escaping escaped URI always produces incorrect URI
-> +because `%` character in the escaped URI gets escaped again. Feeding the
-> +result of the first rfc1738_escape() call to the second call is also
-> +dangerously wrong because the result of the first call gets invalidated
-> +during the second call.
-> +
-> +No other cases of such "chained" rfc1738_escape() calls were found.
-> +
-> +Broken since 2002 commit e6ccf245.
-> +Upstream: https://github.com/squid-cache/squid/commit/8138e909d2058d4401e0ad49b583afaec912b165
-> +CVE: CVE-2026-33526
-> +Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-> +---
-> + src/icp_v2.cc | 1 -
-> + 1 file changed, 1 deletion(-)
-> +
-> +diff --git a/src/icp_v2.cc b/src/icp_v2.cc
-> +index 2a4ced3bfab..25f7b71d25e 100644
-> +--- a/src/icp_v2.cc
-> ++++ b/src/icp_v2.cc
-> +@@ -490,7 +490,6 @@ HttpRequest *
-> + icpGetRequest(const char * const url, const int reqnum, const int fd, const Ip::Address &from)
-> + {
-> +     if (strpbrk(url, w_space)) {
-> +-        url = rfc1738_escape(url);
-> +         icpCreateAndSend(ICP_ERR, 0, rfc1738_escape(url), reqnum, 0, fd, from, nullptr);
-> +         return nullptr;
-> +     }
-> diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-> index 4a56e32e59..e072ec6137 100644
-> --- a/package/squid/squid.mk
-> +++ b/package/squid/squid.mk
-> @@ -21,6 +21,9 @@ SQUID_IGNORE_CVES += CVE-2025-62168
->  # 0003-CVE-2026-33515.patch
->  SQUID_IGNORE_CVES += CVE-2026-33515
+> diff --git a/package/mongoose/0001-improve-resiliency.patch b/package/mongoose/0001-improve-resiliency.patch
+> deleted file mode 100644
+> index edeea4efba..0000000000
+> --- a/package/mongoose/0001-improve-resiliency.patch
+> +++ /dev/null
+> @@ -1,37 +0,0 @@
+> -From 64abf061bf018fd78f31c200a57a3fb04f9f3ef2 Mon Sep 17 00:00:00 2001
+> -From: "Sergio R. Caprile" <scaprile@cesanta.com>
+> -Date: Mon, 13 Oct 2025 10:43:45 -0300
+> -Subject: [PATCH] improve resiliency
+> -
+> -CVE: CVE-2025-65502
+> -Upstream: https://github.com/cesanta/mongoose/commit/64abf061bf018fd78f31c200a57a3fb04f9f3ef2
+> -Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+> ----
+> - mongoose.c        | 1 +
+> - src/tls_openssl.c | 1 +
+> - 2 files changed, 2 insertions(+)
+> -
+> -diff --git a/mongoose.c b/mongoose.c
+> -index 4c72be8201..f860ab3b07 100644
+> ---- a/mongoose.c
+> -+++ b/mongoose.c
+> -@@ -14581,6 +14581,7 @@ static STACK_OF(X509_INFO) * load_ca_certs(struct mg_str ca) {
+> - static bool add_ca_certs(SSL_CTX *ctx, STACK_OF(X509_INFO) * certs) {
+> -   int i;
+> -   X509_STORE *cert_store = SSL_CTX_get_cert_store(ctx);
+> -+  if (cert_store == NULL) return false;
+> -   for (i = 0; i < sk_X509_INFO_num(certs); i++) {
+> -     X509_INFO *cert_info = sk_X509_INFO_value(certs, i);
+> -     if (cert_info->x509 && !X509_STORE_add_cert(cert_store, cert_info->x509))
+> -diff --git a/src/tls_openssl.c b/src/tls_openssl.c
+> -index 37838d95ba..f51d6dd8b7 100644
+> ---- a/src/tls_openssl.c
+> -+++ b/src/tls_openssl.c
+> -@@ -39,6 +39,7 @@ static STACK_OF(X509_INFO) * load_ca_certs(struct mg_str ca) {
+> - static bool add_ca_certs(SSL_CTX *ctx, STACK_OF(X509_INFO) * certs) {
+> -   int i;
+> -   X509_STORE *cert_store = SSL_CTX_get_cert_store(ctx);
+> -+  if (cert_store == NULL) return false;
+> -   for (i = 0; i < sk_X509_INFO_num(certs); i++) {
+> -     X509_INFO *cert_info = sk_X509_INFO_value(certs, i);
+> -     if (cert_info->x509 && !X509_STORE_add_cert(cert_store, cert_info->x509))
+> diff --git a/package/mongoose/mongoose.hash b/package/mongoose/mongoose.hash
+> index 18b5e222ac..1a60b0c89c 100644
+> --- a/package/mongoose/mongoose.hash
+> +++ b/package/mongoose/mongoose.hash
+> @@ -1,3 +1,3 @@
+>  # Locally computed:
+> -sha256  b6a6f69912c2cd0c67f85633c6b578d4dcdf385c3628acdcd21de28787c676e5  mongoose-7.17.tar.gz
+> -sha256  9abc2509d90c01ff2a0c91abf73582cdbcf1d2dbcc0b7973097eced43cf4cdd4  LICENSE
+> +sha256  87727cd2c240ff559b16e9710d44b61ba3513dbee50428bd8ee1596d7c58460a  mongoose-7.22.tar.gz
+> +sha256  f0d9cfd6f7d92f6ec061a5fb2882f67d2521a151bf09a637c33ca6181834b048  LICENSE
+> diff --git a/package/mongoose/mongoose.mk b/package/mongoose/mongoose.mk
+> index 9b8920a9f3..207d31cdfa 100644
+> --- a/package/mongoose/mongoose.mk
+> +++ b/package/mongoose/mongoose.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
 >  
-> +# 0004-CVE-2026-33526.patch
-> +SQUID_IGNORE_CVES += CVE-2026-33526
-> +
->  SQUID_DEPENDENCIES = libcap host-libcap libtool libxml2 host-pkgconf \
->  	$(if $(BR2_PACKAGE_LIBNETFILTER_CONNTRACK),libnetfilter_conntrack)
->  SQUID_CONF_ENV = \
+> -MONGOOSE_VERSION = 7.17
+> +MONGOOSE_VERSION = 7.22
+>  MONGOOSE_SITE = $(call github,cesanta,mongoose,$(MONGOOSE_VERSION))
+>  MONGOOSE_LICENSE = GPL-2.0
+>  MONGOOSE_LICENSE_FILES = LICENSE
+> @@ -13,9 +13,6 @@ MONGOOSE_INSTALL_STAGING = YES
+>  # static library
+>  MONGOOSE_INSTALL_TARGET = NO
+>  
+> -# 0001-improve-resiliency.patch
+> -MONGOOSE_IGNORE_CVES += CVE-2025-65502
+> -
+>  MONGOOSE_CFLAGS = $(TARGET_CFLAGS) -std=gnu99
+>  
+>  ifeq ($(BR2_PACKAGE_OPENSSL),y)
 > -- 
 > 2.54.0
 > 
