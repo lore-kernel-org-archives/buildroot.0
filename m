@@ -1,86 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5FA2C43458
-	for <buildroot@archiver.kernel.org>; Sat,  4 Jul 2026 07:58:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5741DC43602
+	for <buildroot@archiver.kernel.org>; Sat,  4 Jul 2026 08:52:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A1B038110D;
-	Sat,  4 Jul 2026 07:58:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F1C13408E1;
+	Sat,  4 Jul 2026 08:52:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qRheMKLRMsGx; Sat,  4 Jul 2026 07:58:51 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kjIyb4pK60UQ; Sat,  4 Jul 2026 08:52:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3DD79810F2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3A97C408E4
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1783151931;
-	bh=3Clni/ZvkrIi2ONPO7X7tCt1vkICkB8JzkTF7weeyHw=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=Qi9fPH4niquqJjBqwd8AOvMBYaFOyqSSzu6SSNVYevdJsZShNErgCYrAIXGKjjYL1
-	 QvGWItVs4pKSkYXuT79MPOnyD+QpXtcjf6Mr1BHcRmfCEPSvMp8/fvGquUDCpsn0KU
-	 /bu2a9ctNJCIdmDNhEd7TdNn+0eGNUZ+Vt5DoZt9Haiesic6RYq5VNLTOImUqT7uBn
-	 Zqp/XBXoTWt05xXoXxz23pP9IY0TADc7UjSUnLYikJiydmmQvSal/YCb7vaMEaFPGP
-	 d5fACtjm/1YOP4BkozF17qpK/VVDuCqkuG2ydR4pV6eeoiZjxUo/lU9BzVdJ8MetUO
-	 AWWMlQKGqPK7A==
+	s=default; t=1783155165;
+	bh=eXIj5pBM8mz8xMLumur4Kxox3TAFzpC0MZVUyabfzHs=;
+	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=UqSp4JeK6XeP4NSWoj2bv2OVKHMbuCL7Hs4n9l6SFSnqgg2KgFA4YWCZiYLjwz3jI
+	 rvtFPLWF0hUoIEwtVXupe5/Z1f5clrt0yYDMQ4gC7jxUppDoNozK8kl826v02zuFSy
+	 lqJvSis2j62avNrQriuQqlWtePQw+LM234H2orkoZsAk4NvigA9PgyaYIY/to2UP1/
+	 4qSWVzl68/inUpUFS6zcRS8P0yU5gU1VpqUbYwxRI69rP8IxaigoePqLNvT71WxZRU
+	 8x41hPls+MRE7w/deBHyn+R/QD1SxNDdEQIun+PQibknoAqEPjQVBe6VUDcNiieu4h
+	 DsnwuvBuLc6RA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3DD79810F2;
-	Sat,  4 Jul 2026 07:58:51 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id C2F2B316
- for <buildroot@buildroot.org>; Sat,  4 Jul 2026 07:58:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3A97C408E4;
+	Sat,  4 Jul 2026 08:52:45 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id DBA0D316
+ for <buildroot@buildroot.org>; Sat,  4 Jul 2026 08:52:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A93A7810F0
- for <buildroot@buildroot.org>; Sat,  4 Jul 2026 07:58:49 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B322F4005F
+ for <buildroot@buildroot.org>; Sat,  4 Jul 2026 08:52:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wD5J3WNjNP_2 for <buildroot@buildroot.org>;
- Sat,  4 Jul 2026 07:58:48 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uiYiO39NW0cT for <buildroot@buildroot.org>;
+ Sat,  4 Jul 2026 08:52:43 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0901E810F2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0901E810F2
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C2A2D400B0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C2A2D400B0
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0901E810F2
- for <buildroot@buildroot.org>; Sat,  4 Jul 2026 07:58:47 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C2A2D400B0
+ for <buildroot@buildroot.org>; Sat,  4 Jul 2026 08:52:42 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a0df2.dip0.t-ipconnect.de [91.58.13.242])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 75235A4C07F5;
- Sat,  4 Jul 2026 09:58:44 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:49848)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 71843A4C0FC3
+ for <buildroot@buildroot.org>; Sat,  4 Jul 2026 10:52:40 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:53940)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.4)
- (envelope-from <bernd@kuhls.net>) id 1wfvGt-000000000d1-1IQC;
- Sat, 04 Jul 2026 07:58:43 +0000
+ (envelope-from <bernd@kuhls.net>) id 1wfw76-000000001Nv-0X9r
+ for buildroot@buildroot.org; Sat, 04 Jul 2026 08:52:40 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Cc: Joachim Wiberg <troglobit@gmail.com>
-Date: Sat,  4 Jul 2026 09:58:43 +0200
-Message-ID: <20260704075843.1758771-1-bernd@kuhls.net>
+Date: Sat,  4 Jul 2026 10:52:39 +0200
+Message-ID: <20260704085239.2901837-2-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260704085239.2901837-1-bernd@kuhls.net>
+References: <20260704085239.2901837-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202605290044; t=1783151924;
- bh=VpYQrMfgF9HmK6paCY0vxThdnpTEmSm4EVhizhJcmTs=;
- h=From:To:Cc:Subject:Date:From;
- b=MRsM5RytvMAepaGYmIDkTz8jnGBKk6kELV/YqEKcN3XVDZY84oK4F8THM+aeZbMaK
- JlHFPWBl5knP3b/j8oYVaLwBxPXp0LO8WgQRWCMGYGkmry40ABCLgQXLIAD+47xvXt
- jhLbD+ZoeJ3tldSHvKoPURoF1UAP3aJOky3L16+q6RD65FWkAd0DzQQLmVzOui5HHa
- 9NZ0g2HERXC5ez8QGwIj99WzA9/dGOtptn20eBFli2AU3m+OXmWhtU0piq/DnPdRcI
- +zSUnKVg5yk3i6QOMc1klMDplOadZf8O5k62hlI1xBwRyQj3g5fIclUm2FkgWAY7wl
- muPRAQwcEYWlA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ s=kas202605290044; t=1783155160;
+ bh=D2Nava1x74iQOaYtnGARRLeJg8UiX5CeooOyeU2g7OY=;
+ h=From:To:Subject:Date:In-Reply-To:From;
+ b=LAjlIP0uNwWropKQdhBRgcd7g+Vce7EWOjjij5FiwpxgnvnVa2aklh734nmH8cmYx
+ lwWBVeMpZ+lHgl2PlPtbSAx6EQyqnNh25XoSgffdU73z+dmIj1LMx0JnqAGEUk9BHB
+ TcpQCZDEVK2Zab1iLVM8JAi5HVPbxX/Fri6zZnhSygNQ5x25ZDXcsDFQ+8i2X5RLCq
+ vY1HoMdifRy161DbnEwpPKg4KsVNDDueMlmj7xp8nRofyC/AA0Mdd5nC220nmY4EyI
+ FmUcmg5J95CjcyAU/P9AozZ3B7VQj2BpJK0Uxpq1lV7yqCEz2KaIA1lBUCeV6S92oH
+ lyhAnCvlf86WQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=MRsM5Ryt
-Subject: [Buildroot] [PATCH 1/1] package/smcroute: bump version to 2.6.0
+ header.s=kas202605290044 header.b=LAjlIP0u
+Subject: [Buildroot] [PATCH 2/2] package/samba4: bump version to 4.24.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -97,43 +99,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/troglobit/smcroute/blob/2.6.0/ChangeLog.md
-
-Used sha256 tarball hash provided by upstream.
+https://www.samba.org/samba/history/samba-4.24.4.html
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
-Gitlab pipelines passed:
-https://gitlab.com/bkuhls/buildroot/-/commits/efea758b6f7d3caf9ead9ac5fc571049156942ec
+Series passed Gitlab pipelines:
+https://gitlab.com/bkuhls/buildroot/-/commits/00a09b88bb7905e5daf558adf59cbb13a05e05dc
 
- package/smcroute/smcroute.hash | 4 ++--
- package/smcroute/smcroute.mk   | 2 +-
+ package/samba4/samba4.hash | 4 ++--
+ package/samba4/samba4.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/smcroute/smcroute.hash b/package/smcroute/smcroute.hash
-index d51745c076..03739f0463 100644
---- a/package/smcroute/smcroute.hash
-+++ b/package/smcroute/smcroute.hash
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index 83e77f039b..7c44ed747a 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
 @@ -1,4 +1,4 @@
--# Hash from https://github.com/troglobit/smcroute/releases/ generated by GitHub
--sha256  7d2c83e11908fe37844fa9b49ae50924555c4e1bb440fb059a95c94e442ea8a5  smcroute-2.5.7.tar.gz
-+# From https://github.com/troglobit/smcroute/releases/download/2.6.0/smcroute-2.6.0.tar.gz.sha256
-+sha256  b92b291279819af1cabe1d319e9f3c9b34f309a7371f93eda5fe337999651b8e  smcroute-2.6.0.tar.gz
- # Locally generated
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/smcroute/smcroute.mk b/package/smcroute/smcroute.mk
-index f8866f6672..63593e6f3a 100644
---- a/package/smcroute/smcroute.mk
-+++ b/package/smcroute/smcroute.mk
+ # Locally calculated after checking pgp signature
+-# https://download.samba.org/pub/samba/stable/samba-4.24.3.tar.asc
+-sha256  4a5e0ed1ea192b798c873d9957c50a5767c10c2767cccb00d56ecc427e94f8e9  samba-4.24.3.tar.gz
++# https://download.samba.org/pub/samba/stable/samba-4.24.4.tar.asc
++sha256  df2c51ab4361ec626ab9988e5946efcca8465bc7afae834291d5558468265ff8  samba-4.24.4.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 006fbff6c5..d481f9d417 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SMCROUTE_VERSION = 2.5.7
-+SMCROUTE_VERSION = 2.6.0
- SMCROUTE_SITE = https://github.com/troglobit/smcroute/releases/download/$(SMCROUTE_VERSION)
- SMCROUTE_LICENSE = GPL-2.0+
- SMCROUTE_LICENSE_FILES = COPYING
+-SAMBA4_VERSION = 4.24.3
++SAMBA4_VERSION = 4.24.4
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
 -- 
 2.47.3
 
