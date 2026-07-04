@@ -4,84 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF436C43458
-	for <buildroot@archiver.kernel.org>; Sat,  4 Jul 2026 16:24:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB461C43458
+	for <buildroot@archiver.kernel.org>; Sat,  4 Jul 2026 16:31:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7442E408FD;
-	Sat,  4 Jul 2026 16:24:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 022E64098E;
+	Sat,  4 Jul 2026 16:31:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id D4nL-ggp2aPH; Sat,  4 Jul 2026 16:24:31 +0000 (UTC)
+ id KHkbWOXAx6Wy; Sat,  4 Jul 2026 16:31:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 025BB408D5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BEA4440979
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1783182271;
-	bh=uqFZc/H26YFttbo3ZSh993CiuE3/tiaGlPEURuiKSrc=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=YI5ZOpwoVvvSFQPpl9ttgPBNMEgdmp0ZVPbBe+t3W8OcqUmIFcIDeukEmYciR4DlV
-	 ft+2YVfECLEDAOYEtpC/qzdNy4vw3R8WwbxCVKg5fK0CQDdCTFO6zZw5f50UZz+e3y
-	 lWZqBGcpEyIyO1+vW9q0YCK4YNwPF+qXqb45eu1HpmZVpxNTiq8HuG2czXGdx3SAxL
-	 t+yjvL4e0MOBI9PisMrSdNIXbp2eTDfKM1gsJRlnnRyrLJmzQx6t+H5CsaI1+gvj6l
-	 4sjkPaBrupuHJGsXchOtpM0UZMcvhdfR5GpoCTK79kHZPe6CamVOlGA6mOCfmBdCjo
-	 TaPokoZQSY4kg==
+	s=default; t=1783182697;
+	bh=MiQCRPVVpmaX8P8YPWT8KsNGqHKYFLf9UfQ3X4Pz+F8=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=VlzUeZPOfj09t/XtSCkaaMGO8zXW5zIZcQ7wAthZqkCDRUER809OH4xgoLDP9DCwP
+	 7ADJtJIr7wzK/AAr8Xrbaos04vlJrn5atdXVc433VWgNaa9CL/8BGoP100f1EY8bqx
+	 2Hm8Q7Gt8tIPtTP7HVtsyJYxzdtRprMM2FEMXFDxV15vNNrcibpOE4k10r8xfzLp11
+	 6Ly0quNiKGz0NFFczyCLp6KWZVj3+I4D18WHkLEAI5NztQhRmuPX913oJ+AE3sg6W+
+	 KPM7A5+PErPE1rkSUmTjwkwnOpqUKf3mM24P1cye/nxW8gkhyx75Q/sa1gaSWiZjlR
+	 VkpaSa6WFKK7g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 025BB408D5;
-	Sat,  4 Jul 2026 16:24:31 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 31482363
- for <buildroot@buildroot.org>; Sat,  4 Jul 2026 16:24:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BEA4440979;
+	Sat,  4 Jul 2026 16:31:37 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5D696363
+ for <buildroot@buildroot.org>; Sat,  4 Jul 2026 16:31:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2332340105
- for <buildroot@buildroot.org>; Sat,  4 Jul 2026 16:24:29 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4F98480A61
+ for <buildroot@buildroot.org>; Sat,  4 Jul 2026 16:31:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JlQ-zcmGp-fj for <buildroot@buildroot.org>;
- Sat,  4 Jul 2026 16:24:28 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4DA7B40103
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4DA7B40103
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4DA7B40103
- for <buildroot@buildroot.org>; Sat,  4 Jul 2026 16:24:28 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id 301B213F89A;
- Sat,  4 Jul 2026 18:24:25 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 04 Jul 2026 18:24:25 +0200
-MIME-Version: 1.0
-Date: Sat, 04 Jul 2026 18:24:25 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20260703195000.3703134-1-bernd@kuhls.net>
-References: <20260703195000.3703134-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.16
-Message-ID: <034a73d4dfef8b0b8a71940b7e2962fe@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1783182266;
- bh=720pP02AzWkl0aN16EYb17OSo434Tcwvh67zqfat4Os=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=GCNqWwKNQYDu2UWnM9XKQ5T5NDE7TG8pW7SmPenEN5RToQSez+0EUiF3dOkyIRciO
- QtbiwowbbIVr9bp6t8wskQJR0UCXZJ9S1WcsyZO7puU5IALeRbX9qyeVl0IIn6c55o
- zu5OrTxLOLov7uYoEBOCb/TxKj9ilg+YcgkQjsL5NMTXYIJMVJlX18fVUqddzDjBk+
- XFgQxU0d103kNtljduQWVKQjDse2OLhPS7r29dW9ImFDLdezrCRsHCKthIfrYUKMr9
- CawEHlAEbDnjnw1vR0VovyJLsUMrBkygU5WZfCBnwo/apV3fl0/jOop11rEw3IA5rb
- qTf5OEIWDFHeQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=GCNqWwKN
-Subject: Re: [Buildroot] [PATCH 1/1] package/openvpn: security bump version
- to 2.7.5
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id L_E11atOUtrf for <buildroot@buildroot.org>;
+ Sat,  4 Jul 2026 16:31:35 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8EB2D809BB
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8EB2D809BB
+ for <buildroot@buildroot.org>; Sat,  4 Jul 2026 16:31:35 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 933B188400; Sat,  4 Jul 2026 16:31:05 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 4 Jul 2026 18:26:52 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 56940f0620025509d141da6dfca01a714a18392d
+X-Git-Newrev: 31cd41c84b7d76800c85df4433dc280e713890e7
+X-Patchwork-Hint: ignore
+Message-Id: <20260704163105.933B188400@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/clamav: security bump version to
+ 1.5.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,20 +71,55 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 03/07/2026 21:50, Bernd Kuhls wrote:
-> https://github.com/OpenVPN/openvpn/blob/v2.7.5/Changes.rst
-> 
-> Fixes CVE-2026-11771, CVE-2026-12932, CVE-2026-12996, CVE-2026-13117,
-> CVE-2026-13122, CVE-2026-13379 & CVE-2026-13698.
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/31cd41c84b7d76800c85df4433dc280e713890e7
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Applied to master, thanks.
+https://blog.clamav.net/2026/07/clamav-153-and-145-security-patch.html
+
+Fixes CVE-2026-20213, CVE-2026-20214, CVE-2026-20215, CVE-2026-20216,
+CVE-2026-20217, CVE-2026-20243 & CVE-2026-20244.
+
+"Upgraded the Rust tar dependency to resolve the RUSTSEC-2026-0067 and
+ RUSTSEC-2026-0068 advisories, and upgraded the Rust openssl dependency
+ to resolve CVE-2026-41676."
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/clamav/clamav.hash | 2 +-
+ package/clamav/clamav.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/clamav/clamav.hash b/package/clamav/clamav.hash
+index db50d77194..be5a2ec5c7 100644
+--- a/package/clamav/clamav.hash
++++ b/package/clamav/clamav.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  f34018cf22f05bdd9d1a1574ca07193e3e030ca52050c3e5c220e23a32314965  clamav-1.5.2.tar.gz
++sha256  89af57a45bbf13de4dc91ed7f20b435388c88428eb7dc30639a02b2f0fc2dad1  clamav-1.5.3.tar.gz
+ sha256  0c4fd2fa9733fc9122503797648710851e4ee6d9e4969dd33fcbd8c63cd2f584  COPYING.txt
+ sha256  d72a145c90918184a05ef65a04c9e6f7466faa59bc1b82c8f6a8ddc7ddcb9bed  COPYING/COPYING.bzip2
+ sha256  dfb818a0d41411c6fb1c193c68b73018ceadd1994bda41ad541cbff292894bc6  COPYING/COPYING.file
+diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
+index 7f8008ab5f..9467174e93 100644
+--- a/package/clamav/clamav.mk
++++ b/package/clamav/clamav.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CLAMAV_VERSION = 1.5.2
++CLAMAV_VERSION = 1.5.3
+ CLAMAV_SITE = https://www.clamav.net/downloads/production
+ CLAMAV_LICENSE = GPL-2.0
+ CLAMAV_LICENSE_FILES = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
