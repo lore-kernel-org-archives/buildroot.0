@@ -1,62 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4BD1C43458
-	for <buildroot@archiver.kernel.org>; Sat,  4 Jul 2026 16:01:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E4C3C43458
+	for <buildroot@archiver.kernel.org>; Sat,  4 Jul 2026 16:02:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5BC888116E;
-	Sat,  4 Jul 2026 16:01:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3A069408E6;
+	Sat,  4 Jul 2026 16:02:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1taATzyW5_ik; Sat,  4 Jul 2026 16:01:29 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9CSWZURCuOwK; Sat,  4 Jul 2026 16:02:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 34BEA8116A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5EA62408D0
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1783180889;
-	bh=5oq6V1+xTHnDxPf6BKc9rZ1+bIZ2sdzi18ORUSEY3UQ=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=cWSJxiYa3IJivWt55qZJzIqkDSYZkXGiv98BxtIocrzWkWsNkyPA9p56OdM6IjPum
-	 K8GpXOOS8OSq+MLhoW/YvrUnNAaVO3xzXqbF5QM4xVwHGOdszn0m8uGfOn9x08OMdT
-	 XCmNKDXZOV4GKUwPjvPPpr6GjzegIDI9+7O4bsX9I/kVwgowTJs599chpmFhQlQ3vM
-	 WpM/wv6SJJnKerdgjRr5t4TmDRkIixFjfIwqhWMIudFpcp4rYl3KBFfL4q4WyN8cXG
-	 oQdEQPQFi4rx9ce+WoUgBmFchJmKJv6xLFVQ9wxaLUoiZXL0eJDSKCHOuMKjTqnlRi
-	 Blt7OJIbvwInQ==
+	s=default; t=1783180929;
+	bh=LHOEY29tWV5L5ceGF4KicPRgwHqEFQXtuFNqPHJiH+A=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=PIqouhF75jsRB5zWxrkWbx6oYyNunHgAHZIK3wtKxNxzXURKTwELgLQBwmD7PSlIa
+	 BF+d3nYcU1Wh1OcWg+l3ZR22ucZng8xpTOiEgUOvMioSbHpnJv9y9MLI8Jnx8Pm6xE
+	 zXjbuc8VMebcosyKYaRsa06r4OmqORTRgfG+nwC9yfmDePqi1UR0ZfG25OfvqkhBze
+	 VIiwuGJkKZhrYXBP0ABN3JWM8XhsXDjnm13a1vu0IikJFUjVDv+bZV4+J/haRPpHOy
+	 xr3iDBBClgaTRApgbPzmZ60YHYK6cHaL+/xQU0lnsHNAT8giGj0uwW/DapuOkTDjyH
+	 b3WZiLTJG1RIg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 34BEA8116A;
-	Sat,  4 Jul 2026 16:01:29 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 6F804363
- for <buildroot@buildroot.org>; Sat,  4 Jul 2026 16:01:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5EA62408D0;
+	Sat,  4 Jul 2026 16:02:09 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 06553316
+ for <buildroot@buildroot.org>; Sat,  4 Jul 2026 16:02:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6D91881164
- for <buildroot@buildroot.org>; Sat,  4 Jul 2026 16:01:27 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 042AF408D0
+ for <buildroot@buildroot.org>; Sat,  4 Jul 2026 16:02:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UxeA4wh4DVgX for <buildroot@buildroot.org>;
- Sat,  4 Jul 2026 16:01:26 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 303618116A
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 303618116A
- for <buildroot@buildroot.org>; Sat,  4 Jul 2026 16:01:26 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 33FA6883FE; Sat,  4 Jul 2026 16:00:56 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 4 Jul 2026 17:15:14 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: beb6be6b06e3dc536a24ea99c0e94d81c75a1212
-X-Git-Newrev: 42d63edf4ca144c5522fbf988fb341b90163d462
-X-Patchwork-Hint: ignore
-Message-Id: <20260704160056.33FA6883FE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/{glibc,
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0tvlVJR_MZIt for <buildroot@buildroot.org>;
+ Sat,  4 Jul 2026 16:02:07 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 2FF60408CC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2FF60408CC
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 2FF60408CC
+ for <buildroot@buildroot.org>; Sat,  4 Jul 2026 16:02:06 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id F3D8CB00548;
+ Sat,  4 Jul 2026 18:02:00 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 04 Jul 2026 18:02:00 +0200
+MIME-Version: 1.0
+Date: Sat, 04 Jul 2026 18:02:00 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org, Romain Naour <romain.naour@gmail.com>, Thomas
+ Petazzoni <thomas.petazzoni@bootlin.com>
+In-Reply-To: <20260703191731.3691858-1-bernd@kuhls.net>
+References: <20260703191731.3691858-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.16
+Message-ID: <96e106a9a43492bb219e283433ebe3aa@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1783180924;
+ bh=Eg3EYFJ4zaeKkfAoDpIZfykhvfWDV6x6SlFebW384uE=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=a4ZJvgv3iI1gf4Xa9EeS/t5YbLbEpw1Fga95sPfZctjMJtdcqvzh2ifGhoxZLAU8r
+ p06RrSu78OUFSBsMn6kcEGF3caOcaVOJrifw8C0s8Eb+ZLp+JJJ3N/Wz5jS1czkgjp
+ YNhMGT9CzsqZS48i6qaO6jvWedV+pmC3mjrczTW9nPY3dz6vxrVkoSm2INczFmBdJG
+ eR+3zytMoMHcEQTGOX70Nud1RTX2U98SMG6dCxKVGEdTd6RxmxFffFQPnnEQFkyR5R
+ DkJ8ZL4ANdyn0sL8TnACiDLuna6s1bQjxmhZI4dWdbZuKJRUcqoRBkf6coXRw31pOa
+ bDX+rM1eC1oxg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=a4ZJvgv3
+Subject: Re: [Buildroot] [PATCH 1/1] package/{glibc,
  localedef}: security bump to version
  2.43-45-gdae425b554207f7c4599c7fac707ad4c08545674
 X-BeenThere: buildroot@buildroot.org
@@ -72,206 +97,19 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/42d63edf4ca144c5522fbf988fb341b90163d462
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 03/07/2026 21:17, Bernd Kuhls wrote:
+> Removed patch which is included in this bump.
+> 
+> Fixes CVE-2026-5435, CVE-2026-6238 & CVE-2026-6791.
+[...]
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Removed patch which is included in this bump.
-
-Fixes CVE-2026-5435, CVE-2026-6238 & CVE-2026-6791.
-
-git shortlog  4070d808bea1c077eb7e7d52b52b91cae98205d5..
-
-Adhemerval Zanella (3):
-      math: Fix fma alignment when exponent difference is exactly 64 (BZ 34183)
-      arm: Save/restore VFP registers in PLT trampolines (BZ 34144, BZ 15792)
-      posix: Fix stack overflow in wordexp tilde expansion (BZ 34091, CVE-2026-6791)
-
-Florian Weimer (8):
-      iconv: Suppress intermediate errors with //TRANSLIT (bug 34236)
-      resolv: Declare __p_class_syms, __p_type_syms for internal use
-      resolv: Fix ns_sprintrrf formatting of class, type values (bug 34289)
-      resolv: Improve formatting of unknown records in ns_sprintrrf
-      resolv: Check for inet_ntop failure in ns_sprintrrf
-      resolv: More types as unknown in ns_sprintrrf (CVE-2026-5435)
-      resolv: Fix buffer overreads in ns_sprintrrf (CVE-2026-6238)
-      resolv: Add test case tst-ns_sprintrr (bug 34033, bug 34069)
-
-Jakub Jelinek (1):
-      Rename __unused fields to __glibc_reserved.
-
-John David Anglin (1):
-      hppa: Fix missing call to __feraiseexcept (BZ 34306)
-
-Pino Toscano (1):
-      Hurd: comment PF_LINK/AF_LINK defines
-
-Sam James (1):
-      elf: don't clobber ld.so.conf in tst-glibc-hwcaps-prepend-cache [BZ #34210]
-
-Samuel Thibault (3):
-      Hurd: comment PF_ROUTE/AF_ROUTE defines
-      Hurd: comment ioctls which cannot currently compile
-      Hurd: restore some SIOC ioctls
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- ...ename-__unused-fields-to-__glibc_reserved.patch | 85 ----------------------
- package/glibc/glibc.hash                           |  2 +-
- package/glibc/glibc.mk                             | 11 ++-
- package/localedef/localedef.mk                     |  2 +-
- 4 files changed, 12 insertions(+), 88 deletions(-)
-
-diff --git a/package/glibc/0001-Rename-__unused-fields-to-__glibc_reserved.patch b/package/glibc/0001-Rename-__unused-fields-to-__glibc_reserved.patch
-deleted file mode 100644
-index ae832a6035..0000000000
---- a/package/glibc/0001-Rename-__unused-fields-to-__glibc_reserved.patch
-+++ /dev/null
-@@ -1,85 +0,0 @@
--From 243bdfec8f7cd4a85a8ce6e4e9a5a5accd3ce1aa Mon Sep 17 00:00:00 2001
--From: Jakub Jelinek <jakub@redhat.com>
--Date: Tue, 17 Feb 2026 17:06:48 +0100
--Subject: [PATCH] Rename __unused fields to __glibc_reserved.
--
--__unused is often defined to __attribute__((unused)) in BSD
--sources and furthermore libstdc++ testsuite uses it as a macro
--to verify libstdc++ headers don't use __unused identifiers.
--In ~2012 glibc headers have been cleaned up, but some new
--uses of __unused have reappeared (s390 fenv.h already many
--years ago, the rest last November).
--
--Reviewed-by: Florian Weimer <fweimer@redhat.com>
--
--Upstream: https://sourceware.org/git/?p=glibc.git;a=commit;h=18b97b03b7442d8ba0860e43145f8724c9e77b17
--
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-----
-- sysdeps/powerpc/nptl/bits/struct_mutex.h | 2 +-
-- sysdeps/s390/fpu/bits/fenv.h             | 8 ++++----
-- sysdeps/s390/nptl/bits/struct_mutex.h    | 2 +-
-- sysdeps/x86/nptl/bits/struct_mutex.h     | 2 +-
-- 4 files changed, 7 insertions(+), 7 deletions(-)
--
--diff --git a/sysdeps/powerpc/nptl/bits/struct_mutex.h b/sysdeps/powerpc/nptl/bits/struct_mutex.h
--index 1472af21f7..ebf2d50922 100644
----- a/sysdeps/powerpc/nptl/bits/struct_mutex.h
--+++ b/sysdeps/powerpc/nptl/bits/struct_mutex.h
--@@ -32,7 +32,7 @@ struct __pthread_mutex_s
--   int __kind;
-- #if __WORDSIZE == 64
--   short __spins;
---  short __unused;
--+  short __glibc_reserved;
--   __pthread_list_t __list;
-- # define __PTHREAD_MUTEX_HAVE_PREV      1
-- #else
--diff --git a/sysdeps/s390/fpu/bits/fenv.h b/sysdeps/s390/fpu/bits/fenv.h
--index b9e844e393..33e88fbe9d 100644
----- a/sysdeps/s390/fpu/bits/fenv.h
--+++ b/sysdeps/s390/fpu/bits/fenv.h
--@@ -76,10 +76,10 @@ typedef unsigned int fexcept_t; /* size of fpc */
-- typedef struct
-- {
--   fexcept_t __fpc;
---  void *__unused;
---  /* The field __unused (formerly __ieee_instruction_pointer) is a relict from
---     commit "Remove PTRACE_PEEKUSER" (87b9b50f0d4b92248905e95a06a13c513dc45e59)
---     and isn't used anymore.  */
--+  void *__glibc_reserved;
--+  /* The field __glibc_reserved (formerly __ieee_instruction_pointer) is a
--+     relict from commit "Remove PTRACE_PEEKUSER"
--+     (87b9b50f0d4b92248905e95a06a13c513dc45e59) and isn't used anymore.  */
-- } fenv_t;
-- 
-- /* If the default argument is used we use this value.  */
--diff --git a/sysdeps/s390/nptl/bits/struct_mutex.h b/sysdeps/s390/nptl/bits/struct_mutex.h
--index d069b485d1..571265267c 100644
----- a/sysdeps/s390/nptl/bits/struct_mutex.h
--+++ b/sysdeps/s390/nptl/bits/struct_mutex.h
--@@ -32,7 +32,7 @@ struct __pthread_mutex_s
--   int __kind;
-- #if __WORDSIZE == 64
--   short __spins;
---  short __unused;
--+  short __glibc_reserved;
--   __pthread_list_t __list;
-- # define __PTHREAD_MUTEX_HAVE_PREV      1
-- #else
--diff --git a/sysdeps/x86/nptl/bits/struct_mutex.h b/sysdeps/x86/nptl/bits/struct_mutex.h
--index 9c19dff660..13c9894ad4 100644
----- a/sysdeps/x86/nptl/bits/struct_mutex.h
--+++ b/sysdeps/x86/nptl/bits/struct_mutex.h
--@@ -32,7 +32,7 @@ struct __pthread_mutex_s
--   int __kind;
-- #ifdef __x86_64__
--   short __spins;
---  short __unused;
--+  short __glibc_reserved;
--   __pthread_list_t __list;
-- # define __PTHREAD_MUTEX_HAVE_PREV      1
-- #else
---- 
--2.47.3
--
-diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
-index a6e6874e1f..97862aef14 100644
---- a/package/glibc/glibc.hash
-+++ b/package/glibc/glibc.hash
-@@ -1,5 +1,5 @@
- # Locally calculated (fetched from git)
--sha256  668f890b45fd8d32bb73783ad3b75fe1f396c5c3aa3c3832e616b4c3f0c6066b  glibc-2.43-27-g4070d808bea1c077eb7e7d52b52b91cae98205d5-git4.tar.gz
-+sha256  647325cc2e9f2c6260f3c48d0385ac5e30cb60d2ec2e5afd649555c518c9bf60  glibc-2.43-45-gdae425b554207f7c4599c7fac707ad4c08545674-git4.tar.gz
- 
- # Hashes for license files
- sha256  edaef632cbb643e4e7a221717a6c441a4c1a7c918e6e4d56debc3d8739b233f6  COPYINGv2
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index 4a6bc94634..5aa2ef5f99 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -7,7 +7,7 @@
- # Generate version string using:
- #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
- # When updating the version, please also update localedef
--GLIBC_VERSION = 2.43-27-g4070d808bea1c077eb7e7d52b52b91cae98205d5
-+GLIBC_VERSION = 2.43-45-gdae425b554207f7c4599c7fac707ad4c08545674
- GLIBC_SITE = https://sourceware.org/git/glibc.git
- GLIBC_SITE_METHOD = git
- 
-@@ -46,6 +46,15 @@ GLIBC_IGNORE_CVES += CVE-2026-5928
- # Fixed by glibc-2.43-27-g4070d808bea1c077eb7e7d52b52b91cae98205d5
- GLIBC_IGNORE_CVES += CVE-2026-5450
- 
-+# Fixed by glibc-2.43-42-ge64ae5a591f0604b7504df4df631857bb11cc78b
-+GLIBC_IGNORE_CVES += CVE-2026-5435
-+
-+# Fixed by glibc-2.43-43-g3a418da6a3938756763980541e440dbdd46900fb
-+GLIBC_IGNORE_CVES += CVE-2026-6238
-+
-+# Fixed by glibc-2.43-45-gdae425b554207f7c4599c7fac707ad4c08545674
-+GLIBC_IGNORE_CVES += CVE-2026-6791
-+
- # This CVE is considered as not being security issues by
- # upstream glibc:
- #  https://security-tracker.debian.org/tracker/CVE-2010-4756
-diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
-index 4890e095e3..732ed6d4ad 100644
---- a/package/localedef/localedef.mk
-+++ b/package/localedef/localedef.mk
-@@ -7,7 +7,7 @@
- # Use the same VERSION and SITE as target glibc
- # As in glibc.mk, generate version string using:
- #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
--LOCALEDEF_VERSION = 2.43-27-g4070d808bea1c077eb7e7d52b52b91cae98205d5
-+LOCALEDEF_VERSION = 2.43-45-gdae425b554207f7c4599c7fac707ad4c08545674
- LOCALEDEF_SOURCE = glibc-$(LOCALEDEF_VERSION)$(BR_FMT_VERSION_git).tar.gz
- LOCALEDEF_SITE = https://sourceware.org/git/glibc.git
- LOCALEDEF_SITE_METHOD = git
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
