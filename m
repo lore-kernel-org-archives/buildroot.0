@@ -1,88 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11B46C43458
-	for <buildroot@archiver.kernel.org>; Sat,  4 Jul 2026 19:12:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C94E9C44500
+	for <buildroot@archiver.kernel.org>; Sat,  4 Jul 2026 19:12:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ABBD480FEF;
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0CEC240956;
 	Sat,  4 Jul 2026 19:12:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ee73pvglJjSn; Sat,  4 Jul 2026 19:12:32 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id W6UabkE23UCd; Sat,  4 Jul 2026 19:12:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C29A980FFA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CD19F407E7
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1783192352;
-	bh=FjTv2S2z7VzGSTbvcrZmDssKeuUq0kLr0/jq3Z2fsXg=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=U3I/d0siP3ZtL4FEN2AJAwKwkysSrqejvt89Z74ml405s0d8Sv9V1EbI3f44Jq2ux
-	 qeEyZ2RfjEnY+wfY9rdYnkKFkkE9u2wRadVmIxn3iWUshqA1MqTU18ogWYbEsKidSt
-	 AXmFNbr6wIghCiXrC605ktd8pEeAHuGcKTn6EdzvnWHY0FE3RjEue2GVou45MGZaJY
-	 1PkbjyJk+UqSyyPIt/BksYP8GpRbEeTP8HWjRsYIQKrW/D00grEeCIPmd4NA2vgWh3
-	 dFYS4AebqyP0C4Mk8CAdORtXPDCDEdgtTZAp+jTzg0pbwKghlNT+xNV17LcD5wp7C9
-	 G2Z+2ZpOCTGSQ==
+	s=default; t=1783192350;
+	bh=9yLl8WiyLLbFFTL6Nz28ywUO+x+Twbf8M/XMgpWImr0=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=alhff7RGRwPueg+mR+a3tUEcwexI+ZhBXpTtlRvTGeD+PnmAFlbww8rbN7kDeySop
+	 zi6rvdgSbSxtxu0FYBb6iZ0bZHsrJdMt9ffnikyadxPaBpxrvzzQ9bZFDiAVCBydkR
+	 ls/1gpL3hcksbcfJuRhQF7J4gCVdvP3mj1ldDkmIXfE2h1hZBRBHflhoiy6Od64AUf
+	 dxUo9TQCdv3lStbwcZO4tI0/CUHW3/rYRdcyELVyPb1MLKtKS5FMKF7v3D8lyIG/fU
+	 E9dlRZ8/lbOAYJ5USXPVOtd/k3solmoRBnkIK5VkQ/vFw098DMnv4OAnJT46zTNpKQ
+	 2JDilw2BK4Fww==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C29A980FFA;
-	Sat,  4 Jul 2026 19:12:32 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 8CD06316
- for <buildroot@buildroot.org>; Sat,  4 Jul 2026 19:12:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CD19F407E7;
+	Sat,  4 Jul 2026 19:12:30 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id A2E5C316
+ for <buildroot@buildroot.org>; Sat,  4 Jul 2026 19:12:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8AA806064E
- for <buildroot@buildroot.org>; Sat,  4 Jul 2026 19:12:30 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 88FEA407E4
+ for <buildroot@buildroot.org>; Sat,  4 Jul 2026 19:12:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eKbEz8QGP6rY for <buildroot@buildroot.org>;
- Sat,  4 Jul 2026 19:12:29 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org EF51160683
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EF51160683
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp3.osuosl.org (Postfix) with ESMTPS id EF51160683
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qSXcPhpiPQXU for <buildroot@buildroot.org>;
+ Sat,  4 Jul 2026 19:12:28 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8B0514079A
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8B0514079A
  for <buildroot@buildroot.org>; Sat,  4 Jul 2026 19:12:28 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPA id CCB5CB00563;
- Sat,  4 Jul 2026 21:12:22 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 04 Jul 2026 21:12:22 +0200
-MIME-Version: 1.0
-Date: Sat, 04 Jul 2026 21:12:22 +0200
-To: Manuel Diener <manuel.diener@oss.othermo.de>
-Cc: buildroot@buildroot.org, James Hilliard <james.hilliard1@gmail.com>,
- Marcus Hoffmann <bubu@bubu1.eu>
-In-Reply-To: <20260622094517.1342785-1-manuel.diener@oss.othermo.de>
-References: <20260622094517.1342785-1-manuel.diener@oss.othermo.de>
-User-Agent: Webmail Free/1.6.16
-Message-ID: <148d421ac17cc3a4910189c34a418285@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1783192346;
- bh=IaFD/tYxeIxwNbfydd2y5UrdOxC4VHsOm5CPfav4694=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=AqJEPz0GMO+Al7JnQgXM7TrlhT99A9XiE+oPRQWPpTqxwvU5gtA+dQcbzwfaq07je
- 02JqXuh4tY5+zdCmKdMqKGbRkiuarrhHXPm44aqgchAFzxaTojqZ7zusPIEttIT53H
- VseuZzJOQ9cS94Sl8qtR5AZ0trUSqIjB3HAgUh12S1T7GbD7tT2VFR/f4qzNw6wSmM
- zfT1LuPxlRUgVSIWyNT+skyeVDNJorsUH3IXQDyIavNM0UMMHgYPvEtl8msz+TG/uV
- L+0Hg1cfQmf0ArLxxQkAFPVD+NO33c1zuzOReXU51aJxU/1/jTDm8oIrqlMMcWDgFc
- TtwyQCfY/o/Ug==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=AqJEPz0G
-Subject: Re: [Buildroot] [PATCH] package/python-jc: bump to version 1.25.7
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 7DFB988415; Sat,  4 Jul 2026 19:11:58 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 4 Jul 2026 21:02:12 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 4853fb2a1b84870d59ee1bc06b8bfc819a9d586e
+X-Git-Newrev: 48f8ab703c44c2739d112bd9046749b9e2f2d732
+X-Patchwork-Hint: ignore
+Message-Id: <20260704191158.7DFB988415@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-jc: bump to version 1.25.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,18 +70,52 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 22/06/2026 11:45, Manuel Diener wrote:
-> See the release notes here: 
-> https://github.com/kellyjonbrazil/jc/blob/master/CHANGELOG
-> 
-> Signed-off-by: Manuel Diener <manuel.diener@oss.othermo.de>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/48f8ab703c44c2739d112bd9046749b9e2f2d732
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Applied to master, thanks.
+See the release notes here: https://github.com/kellyjonbrazil/jc/blob/master/CHANGELOG
+
+Signed-off-by: Manuel Diener <manuel.diener@oss.othermo.de>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/python-jc/python-jc.hash | 4 ++--
+ package/python-jc/python-jc.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/python-jc/python-jc.hash b/package/python-jc/python-jc.hash
+index d2eb47d41c..49372996e8 100644
+--- a/package/python-jc/python-jc.hash
++++ b/package/python-jc/python-jc.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/jc/json
+-md5  f3fbc012843d192e446462e45ab2ebe1  jc-1.25.6.tar.gz
+-sha256  27f58befc7ae0a4c63322926c5f1ec892e3eac4a065eff3b07cfe420a6924a07  jc-1.25.6.tar.gz
++md5  9cf85817e3a9553b19d413f9d1ce3687  jc-1.25.7.tar.gz
++sha256  63481e34d92715781e1b094eca7d76d122a14489463d45b7f3e8180f44ea3a10  jc-1.25.7.tar.gz
+ # Locally computed sha256 checksums
+ sha256  6493f2db400f4166ca0956cf192a41aa092bd1396ff463e7fdaf51f257c10497  LICENSE.md
+diff --git a/package/python-jc/python-jc.mk b/package/python-jc/python-jc.mk
+index 0404275277..e07fe671a2 100644
+--- a/package/python-jc/python-jc.mk
++++ b/package/python-jc/python-jc.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_JC_VERSION = 1.25.6
++PYTHON_JC_VERSION = 1.25.7
+ PYTHON_JC_SOURCE = jc-$(PYTHON_JC_VERSION).tar.gz
+-PYTHON_JC_SITE = https://files.pythonhosted.org/packages/7c/fa/f174bfb1ecfd3bdc6259b2de32052f09cccba11c9a1b733aedf618fadd05
++PYTHON_JC_SITE = https://files.pythonhosted.org/packages/a9/da/7827d3389d87fa645556d595a2a437576de83f7a7d4a5fceda9c32208c0b
+ PYTHON_JC_SETUP_TYPE = setuptools
+ PYTHON_JC_LICENSE = MIT, BSD-3-Clause (bundled pbPlist)
+ PYTHON_JC_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
