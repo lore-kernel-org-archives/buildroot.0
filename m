@@ -1,62 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96710C43458
-	for <buildroot@archiver.kernel.org>; Sun,  5 Jul 2026 16:13:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE7D5C43458
+	for <buildroot@archiver.kernel.org>; Sun,  5 Jul 2026 16:24:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 19757406DE;
-	Sun,  5 Jul 2026 16:13:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 478DE60629;
+	Sun,  5 Jul 2026 16:24:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TeWJCHW_oLBM; Sun,  5 Jul 2026 16:13:23 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zUj5VAzkDZxI; Sun,  5 Jul 2026 16:24:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 40AC5406E1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 685D660703
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1783268003;
-	bh=8B5NQk0n9Ohu52KB4ACEYucTvSuzAUhK0XD4PAAP60Y=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Ah7JxtyhVAU0vvQqbPOGFSs2MyzeQ2plF4FeQXAvzC9kZmZiOvPKzy/jAGoXk9ROo
-	 pZj0FT2ofbNZlys3QldpNRJT3ZxTpaaSpi2TqAAfKo6K3vp7d5K0H/CQQTyP+4Ohzy
-	 omuyOJqlUJp8lkdglYxMyz6pHlKN3djT83zbERFj2k/lqpaWx+WjdSriA1tqErFWsD
-	 YjVHuMU7vtcpHWtQuYxkJGDO+nJR8aAxTrTiomCgC0ZyhX3JPjB/J34Ig2BPgz2cgT
-	 6m9OJGFx7Dn81Ol/PalNh7wEdLfr9fjCmhREXTpv12AYbsK5sbUZJsnUkmtvFbbKYB
-	 kCYcFAwi0QsEQ==
+	s=default; t=1783268670;
+	bh=cRstxJypgPM+LhI3Xppsd5Um6LgbPMOj/bFac4MnV9o=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=RuFkIc9qkTVFYvFG4xhgO3CET/bjfDx8Fk+AgpQSdgBU8NHFxb5DUNqb+rVqjIwIE
+	 k/9juP0AohH+jrAN1MAnC1gw7Ddi96FfBmtbboaG2LBIwKK8/XKkcEDbIl28JGw2iQ
+	 LULBueE4rRpFOVZPTqJnLjEIY/Iq1wBGn7AkBh+R/UeS/IjmFaLslzFXcC6PqaUtm2
+	 p2D+44tKKoF3D6sfVYzYiy0zONdNlOjhrdd69K1AM0UamwNEuNIYvC09ebQqzOK6Xo
+	 fqPd1cDFJForjQfW/ITFbrQK15xUlCmYYIIoe8Ko119uLPPfNb831wsinqLg/ZrftE
+	 6MapaN8gthxKQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 40AC5406E1;
-	Sun,  5 Jul 2026 16:13:23 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 23A5A2A8
- for <buildroot@buildroot.org>; Sun,  5 Jul 2026 16:13:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 685D660703;
+	Sun,  5 Jul 2026 16:24:30 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 88FC52A8
+ for <buildroot@buildroot.org>; Sun,  5 Jul 2026 16:24:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0964040071
- for <buildroot@buildroot.org>; Sun,  5 Jul 2026 16:13:22 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6729B80E77
+ for <buildroot@buildroot.org>; Sun,  5 Jul 2026 16:24:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hJzP8hkwjHLe for <buildroot@buildroot.org>;
- Sun,  5 Jul 2026 16:13:21 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EF69C40056
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id EF69C40056
- for <buildroot@buildroot.org>; Sun,  5 Jul 2026 16:13:20 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8892B88499; Sun,  5 Jul 2026 16:12:50 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 5 Jul 2026 16:51:28 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6021eda8a7532c6cbe71b7a7523fbf82a403f6b7
-X-Git-Newrev: 82fcd634ac81fb7e0f6fc32cc600a42528912d42
-X-Patchwork-Hint: ignore
-Message-Id: <20260705161250.8892B88499@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libxmlrpc: bump to version 3341
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id czN3obPK565u for <buildroot@buildroot.org>;
+ Sun,  5 Jul 2026 16:24:27 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 651B780E75
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 651B780E75
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 651B780E75
+ for <buildroot@buildroot.org>; Sun,  5 Jul 2026 16:24:27 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id 217B3780509;
+ Sun,  5 Jul 2026 18:24:20 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 05 Jul 2026 18:24:20 +0200
+MIME-Version: 1.0
+Date: Sun, 05 Jul 2026 18:24:20 +0200
+To: Sofiane HAMAM <sofiane.hamam@smile.fr>
+Cc: buildroot@buildroot.org, Gary Bisson <bisson.gary@gmail.com>, Refik
+ Tuzakli <tuzakli.refik@gmail.com>, Thomas Petazzoni
+ <thomas.petazzoni@bootlin.com>, Fabio Estevam <festevam@gmail.com>
+In-Reply-To: <20260705160851.817019-1-sofiane.hamam@smile.fr>
+References: <20260705160851.817019-1-sofiane.hamam@smile.fr>
+User-Agent: Webmail Free/1.6.16
+Message-ID: <c2b38f84845c057f48715f66fd035010@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1783268665;
+ bh=P11wJ2gvMXqDwQowH8ufLAaU1u8QL30olD9vZLSObyM=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=lrDS0b30kmfY712/gSRc7Ksm9saqPMc7HcJweC4oCKC3EoCd8vZIP5LYe9lbghbm/
+ V6Y67amxb2MR1y+X+AS7gH7B+x1qkwtFvn2JCnGbEvsaTdpDye6IjjrAjUuNYxXXLq
+ CrYNslHgzIvPETnDgpopja2W1/C9B7XD4dz0FrQTZevtDporuE0IVGmWImwVT/J+Lq
+ hSKDOpDEVZY0PebtcRL2ULo2/SJpAe1OyoI+kJIBy2pev3WUZ4uX7cXmzGStRZPEjv
+ uGA42uLmUa508PvmosmtIx9+kWFSbjONyeFHnGJD1YAJwnbmOzg+GHYrh1oobykZiy
+ ekC/gYr3bTguA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=lrDS0b30
+Subject: Re: [Buildroot] [PATCH 1/1] configs/freescale_imx95frdm_defconfig:
+ add support for freescale FRDM i.MX95 board
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,53 +97,34 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/82fcd634ac81fb7e0f6fc32cc600a42528912d42
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+Hi Sofiane,
 
-This version fixes boolean usage for musl toolchains:
+Thanks for the patch.
 
-Use <stdbool.h> whenever possible to work around musl libc incorrectly
-defining __bool_true_false_are_defined.
+On 05/07/2026 18:08, Sofiane HAMAM via buildroot wrote:
+> Add board support for FRDM i.MX 95 Development Board.
 
-Fixes:
+There was already a patch series for that board proposed at:
+https://patchwork.ozlabs.org/project/buildroot/list/?series=490838
 
-https://autobuild.buildroot.org/results/5719bb7f5bd709cebc8012341c0b448a8fec3aba/
+Could you describe in what ways your submission is different?
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/libxmlrpc/libxmlrpc.hash | 2 +-
- package/libxmlrpc/libxmlrpc.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On my side, I was waiting for the board to be publicly available so I 
+can
+order one, to test this defconfig. I'm still waiting for my unit.
 
-diff --git a/package/libxmlrpc/libxmlrpc.hash b/package/libxmlrpc/libxmlrpc.hash
-index 00cef19b77..d7555c3be8 100644
---- a/package/libxmlrpc/libxmlrpc.hash
-+++ b/package/libxmlrpc/libxmlrpc.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  4a071da3204132585a40313e17e01699d428e0fc9b58d30fcd7e538037254668  libxmlrpc-r3335-svn5.tar.gz
-+sha256  b7fbe0fe9f6393c59c31f85c0ca7d050db83bb630fceef75ca7cabfd2fc3fc3a  libxmlrpc-r3341-svn5.tar.gz
- sha256  db7a6d3f187b218c3534010a83424c6bcdef88e6a0b6b1aa3a8762238bd642e6  doc/COPYING
-diff --git a/package/libxmlrpc/libxmlrpc.mk b/package/libxmlrpc/libxmlrpc.mk
-index 283914ca81..c2ccfe80ab 100644
---- a/package/libxmlrpc/libxmlrpc.mk
-+++ b/package/libxmlrpc/libxmlrpc.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # 1.67.00 (code/advanced@r3335)
--LIBXMLRPC_VERSION = r3335
-+LIBXMLRPC_VERSION = r3341
- LIBXMLRPC_SITE = https://svn.code.sf.net/p/xmlrpc-c/code/advanced
- LIBXMLRPC_SITE_METHOD = svn
- LIBXMLRPC_LICENSE = BSD-3-Clause (xml-rpc main code and abyss web server), BSD like (lib/expat), Python 1.5.2 license (parts of xmlrpc_base64.c)
+> https://www.nxp.com/design/design-center/development-boards-and-designs/FRDM-IMX95
+> 
+> Signed-off-by: Sofiane HAMAM <sofiane.hamam@smile.fr>
+
+Best regards,
+
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
