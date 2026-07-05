@@ -1,89 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0082C43458
-	for <buildroot@archiver.kernel.org>; Sun,  5 Jul 2026 10:01:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5710CC43458
+	for <buildroot@archiver.kernel.org>; Sun,  5 Jul 2026 10:09:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 34CB340872;
-	Sun,  5 Jul 2026 10:01:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1240280FA8;
+	Sun,  5 Jul 2026 10:09:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5_rEc_YuQtaw; Sun,  5 Jul 2026 10:01:27 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UDRBCtJVqea0; Sun,  5 Jul 2026 10:09:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F235C4086D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2FEA780FB3
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1783245687;
-	bh=7oiCU/yjtDmvR4GQPSwiuboweehyHYdB0p50Pm7vTd0=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=oBMgFuyw9xpP42iLjiVyNgewMs2SkjySUnDCJsEgiDWzsKWwki7BwQmlBIPun7I3e
-	 aWgbGXxoHWvaGFwEewPdB2UCmST2ye2tyDN8LNn68FNMI8KT3J4b+Caw7jY05IcUXO
-	 vg79QsXIrczQeh7O8rIBMvNTK2whotj9OS0brzDPVVa0CUeOUt4Z2aIVjvMno3ce9j
-	 HoulBqtHvsjT+sh9JcCyMuOz0Ilwa0+wXaDSZ53KRYIQVUMw1ycDk3gZDLIE6cTU8V
-	 7VG2WDPSQKFllFzmvD7aef/sJLWF41Nx43S6erXoARcc+9V61mRQcNfZp3tU6tjfJx
-	 Fcx8l8lA1PC+Q==
+	s=default; t=1783246180;
+	bh=vqe1i7A02IbzVIb9SuoxxBaDaSLQxn7derEws0UEKbo=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=pPrIonJ9oGcxsDJH2+TD6elZKf4O0TNldUAcrW5kxf7GPRGTKoKVOX5nNmphfF0FW
+	 Pi3HAFQjK7/f7lERQYly13g2yc4FRTPRDYTctpLmwqjkrsd8vuOiLTTxRLdQoEEFtZ
+	 RUXE4/6+Fh1jkSOxeR7Jf97iAemEGCsTqDpXhhHHaBi5B8US7HQhHkOQjQ+GXS+lgQ
+	 FyjhbF4QCRLdhWJNaAgaz1ZHPrn28hhYCzaRtwpkNhKZdWxK9JHhoCladOgecTxAI4
+	 +91kcxjx5gqhtWtVVOXb3KL5KFwoID8OqlFH6BJaLYKzkoYPQrsfqC8bLmg2Dqce/m
+	 u9EcL+J9g1LEQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F235C4086D;
-	Sun,  5 Jul 2026 10:01:26 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 3D4EE316
- for <buildroot@buildroot.org>; Sun,  5 Jul 2026 10:01:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2FEA780FB3;
+	Sun,  5 Jul 2026 10:09:40 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id C3223F2
+ for <buildroot@buildroot.org>; Sun,  5 Jul 2026 10:09:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3B2454086D
- for <buildroot@buildroot.org>; Sun,  5 Jul 2026 10:01:26 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A99F2606E0
+ for <buildroot@buildroot.org>; Sun,  5 Jul 2026 10:09:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id U3RHuNMxR9lm for <buildroot@buildroot.org>;
- Sun,  5 Jul 2026 10:01:25 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 35AF44086C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 35AF44086C
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 35AF44086C
- for <buildroot@buildroot.org>; Sun,  5 Jul 2026 10:01:25 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id 0B9B819F5B2;
- Sun,  5 Jul 2026 12:01:19 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 05 Jul 2026 12:01:19 +0200
-MIME-Version: 1.0
-Date: Sun, 05 Jul 2026 12:01:19 +0200
-To: Thomas Perale <thomas.perale@mind.be>
-Cc: buildroot@buildroot.org, Angelo Compagnucci
- <angelo.compagnucci@gmail.com>, Olivier Schonken
- <olivier.schonken@gmail.com>
-In-Reply-To: <20260626202959.282713-1-thomas.perale@mind.be>
-References: <20260626202959.282713-1-thomas.perale@mind.be>
-User-Agent: Webmail Free/1.6.16
-Message-ID: <69793c87da5d0a7ee6b2975e149bb1f6@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1783245683;
- bh=ETZPvxuEADXgzhxM4Dxg2ni5dGXZjoroQslXCtgmQ0Q=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=ciP8Ih371KfILphdD77z2R9NmAODwYXWuE0X9M3NWqutnIskEfA09DUGy5yM7pUBA
- Hh1b5VUJ2QMql8FayQkG6kEktKjQH9SOgec4DTPZM/vfblYekpa/V4voAy3nB7GKSK
- rd8jUsASOMdAV62RJmdtF+Bys0iG0rxikYtQN8VN1VFxf8ZLGziDlUmGyfwGOjFRFd
- XuzMDYbtHXD/Bg74m6o1Z4jO6GkyI3vYokygADg9s1VoCU95LsduBdeyL++//hLVjK
- iKy+LyeuZDFBJleqnXKziM5Atoo10U3xUKswCvUXMPFAYA4OJRP/v9ThktOGO9QSRB
- vPAAFaFhtTHeQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=ciP8Ih37
-Subject: Re: [Buildroot] [PATCH] package/cups-filters: upstream patch
- CVE-2025-64503
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TPkIBkTkpaD4 for <buildroot@buildroot.org>;
+ Sun,  5 Jul 2026 10:09:38 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E7CE4606D7
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id E7CE4606D7
+ for <buildroot@buildroot.org>; Sun,  5 Jul 2026 10:09:37 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 924CF8846C; Sun,  5 Jul 2026 10:09:07 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 5 Jul 2026 12:02:08 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: def2405f39f949813148cc973660845bff30b3ca
+X-Git-Newrev: be70e1b9f30eb0df8b0a40ff06fe5056ed853504
+X-Patchwork-Hint: ignore
+Message-Id: <20260705100907.924CF8846C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gnupg2: security bump version to
+ 2.5.21
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -97,39 +71,52 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gMjYvMDYvMjAyNiAyMjoyOSwgVGhvbWFzIFBlcmFsZSB2aWEgYnVpbGRyb290IHdyb3RlOgo+
-IFRoaXMgZml4ZXMgdGhlIGZvbGxvd2luZyB2dWxuZXJhYmlsaXR5Ogo+IAo+IC0gQ1ZFLTIwMjUt
-NjQ1MDM6Cj4gICAgIGN1cHMtZmlsdGVycyBjb250YWlucyBiYWNrZW5kcywgZmlsdGVycywgYW5k
-IG90aGVyIHNvZnR3YXJlIAo+IHJlcXVpcmVkCj4gICAgIHRvIGdldCB0aGUgY3VwcyBwcmludGlu
-ZyBzZXJ2aWNlIHdvcmtpbmcgb24gb3BlcmF0aW5nIHN5c3RlbXMgb3RoZXIKPiAgICAgdGhhbiBt
-YWNvcy4gSW4gY3Vwcy1maWx0ZXJzIHByaW9yIHRvIDEuMjguMTgsIGJ5IGNyYWZ0aW5nIGEgUERG
-IAo+IGZpbGUKPiAgICAgd2l0aCBhIGxhcmdlIGBNZWRpYUJveGAgdmFsdWUsIGFuIGF0dGFja2Vy
-IGNhbiBjYXVzZSBDVVBTLUZpbHRlciAKPiAxLnjigJlzCj4gICAgIGBwZGZ0b3Jhc3RlcmAgdG9v
-bCB0byB3cml0ZSBiZXlvbmQgdGhlIGJvdW5kcyBvZiBhbiBhcnJheS4gRmlyc3QsIGEKPiAgICAg
-UERGIHdpdGggYSBsYXJnZSBgTWVkaWFCb3hgIHdpZHRoIHZhbHVlIGNhdXNlcyBgaGVhZGVyLmN1
-cHNXaWR0aGAgCj4gdG8KPiAgICAgYmVjb21lIGxhcmdlLiAgTmV4dCwgdGhlIGNhbGN1bGF0aW9u
-IG9mIGBieXRlc1BlckxpbmUgPQo+ICAgICAoaGVhZGVyLmN1cHNCaXRzUGVyUGl4ZWwgKiBoZWFk
-ZXIuY3Vwc1dpZHRoICsgNykgLyA4YCBvdmVyZmxvd3MsCj4gICAgIHJlc3VsdGluZyBpbiBhIHNt
-YWxsIHZhbHVlLiBUaGVuLCBgbGluZUJ1ZmAgaXMgYWxsb2NhdGVkIHdpdGggdGhlCj4gICAgIHNt
-YWxsIGBieXRlc1BlckxpbmVgIHNpemUuIEZpbmFsbHksIGBjb252ZXJ0TGluZUNodW5rZWRgIGNh
-bGxzCj4gICAgIGB3cml0ZVBpeGVsOGAsIHdoaWNoIGF0dGVtcHRzIHRvIHdyaXRlIHRvIGBsaW5l
-QnVmYCBvdXRzaWRlIG9mIGl0cwo+ICAgICBidWZmZXIgc2l6ZSAob3V0IG9mIGJvdW5kcyB3cml0
-ZSkuIEluIGxpYmN1cHNmaWx0ZXJzLCB0aGUgCj4gbWFpbnRhaW5lcnMKPiAgICAgZm91bmQgdGhl
-IHNhbWUgYGJ5dGVzUGVyTGluZWAgbXVsdGlwbGljYXRpb24gd2l0aG91dCBvdmVyZmxvdyAKPiBj
-aGVjaywKPiAgICAgYnV0IHRoZSBwcm92aWRlZCB0ZXN0IGNhc2UgZG9lcyBub3QgY2F1c2UgYW4g
-b3ZlcmZsb3cgdGhlcmUsIAo+IGJlY2F1c2UKPiAgICAgdGhlIHZhbHVlcyBhcmUgZGlmZmVyZW50
-LiBDb21taXQKPiAgICAgNTBkOTRjYTBmMmZhNjE3NzYxM2M5N2M1OTc5MWJkZTU2ODYzMTg2NSBj
-b250YWlucyBhIHBhdGNoLCB3aGljaCBpcwo+ICAgICBpbmNvcnBvcmF0ZWQgaW50byBjdXBzLWZp
-bHRlcnMgdmVyc2lvbiAxLjI4LjE4Lgo+IAo+IEZvciBtb3JlIGluZm9ybWF0aW9uLCBzZWU6Cj4g
-ICAtIGh0dHBzOi8vd3d3LmN2ZS5vcmcvQ1ZFUmVjb3JkP2lkPUNWRS0yMDI1LTY0NTAzCj4gICAt
-IAo+IGh0dHBzOi8vZ2l0aHViLmNvbS9PcGVuUHJpbnRpbmcvY3Vwcy1maWx0ZXJzL2NvbW1pdC81
-MGQ5NGNhMGYyZmE2MTc3NjEzYzk3YzU5NzkxYmRlNTY4NjMxODY1Cj4gCj4gU2lnbmVkLW9mZi1i
-eTogVGhvbWFzIFBlcmFsZSA8dGhvbWFzLnBlcmFsZUBtaW5kLmJlPgoKQXBwbGllZCB0byBtYXN0
-ZXIsIHRoYW5rcy4KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczov
-L2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/be70e1b9f30eb0df8b0a40ff06fe5056ed853504
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+
+https://lists.gnupg.org/pipermail/gnupg-announce/2026q3/000506.html
+
+Fixes CVE-2026-34182.
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/gnupg2/gnupg2.hash | 4 ++--
+ package/gnupg2/gnupg2.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
+index f69b7c6eac..a53f46c67a 100644
+--- a/package/gnupg2/gnupg2.hash
++++ b/package/gnupg2/gnupg2.hash
+@@ -1,5 +1,5 @@
+ # From https://www.gnupg.org/download/integrity_check.html
+-sha1  96371ec0260da5a22edbf8e4d3bf0e54b3ea5b8e  gnupg-2.5.20.tar.bz2
+-sha256  6461266e99c308419a379abe6c356d54c214136c4589bd65951091138989ffc6  gnupg-2.5.20.tar.bz2
++sha1  51fae4f4d902787624eb7047f6d3e7c263ad7690  gnupg-2.5.21.tar.bz2
++sha256  e3af2c8caa46a66a9329fa7c6880af260451914d819595beabc2c26597b31352  gnupg-2.5.21.tar.bz2
+ # Locally calculated
+ sha256  bc2d6664f6276fa0a72d57633b3ae68dc7dcb677b71018bf08c8e93e509f1357  COPYING
+diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
+index 7756023798..05acd4811d 100644
+--- a/package/gnupg2/gnupg2.mk
++++ b/package/gnupg2/gnupg2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GNUPG2_VERSION = 2.5.20
++GNUPG2_VERSION = 2.5.21
+ GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
+ GNUPG2_SITE = https://gnupg.org/ftp/gcrypt/gnupg
+ GNUPG2_LICENSE = GPL-3.0+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
