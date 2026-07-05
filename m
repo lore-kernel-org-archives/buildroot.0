@@ -1,63 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8CAC7C43458
-	for <buildroot@archiver.kernel.org>; Sun,  5 Jul 2026 16:32:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07A25C43458
+	for <buildroot@archiver.kernel.org>; Sun,  5 Jul 2026 16:33:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3FBFE40531;
-	Sun,  5 Jul 2026 16:32:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6BA6C60718;
+	Sun,  5 Jul 2026 16:33:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ozlFd0-sHBiI; Sun,  5 Jul 2026 16:32:12 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ykWcT2ixDXUY; Sun,  5 Jul 2026 16:33:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4213E40743
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 64C0A606A7
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1783269132;
-	bh=6R1mZ+YmY1RHucQTr6/eSSQ/+mQ2RHB017I6Tk7UYNs=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=c6su7ANUU78uB45QCU6PKmF+9lv0rv6c2hnZxQKKdqmaeMBoza/UXVUvkZJfbS188
-	 qGJ4emAhoHNLIl6VDGpLLVVFxO4KeETW072BADnB8focjy/0Q5JFNuvZkIgOBjZDpv
-	 UVTst1gkQRzgfhapU/xV3xnwoojKTPNbTVOfxVbfNTs44CKQw6kdoCdjKTwOVVcYpm
-	 lJholmCNKVW3JhzK7tIt0uYTgeqDqskO8Je/jHFyoanSCoFd1zqrOnb+Zo1WTyPldC
-	 MaPcR9RDM+Y6x2elbzhkThgiYKctfolv4aYUB5wVdA+WUwOcp8Gu9ia0M030t9paUX
-	 QFFCV6uec8zOw==
+	s=default; t=1783269219;
+	bh=aBejyD+wCLf43xmGxlv1W6imJuNVvlq4JsFfmJfjREo=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=oMLsYSqXb9HdoDQl9oALBt/ZSERMJLS633PdhDeFBkeJqVnWGeJaokNCKkvBhQBGG
+	 fTZoInZqQbDYrw8ir0oTbjXIPty4bk72U1CTMyDwIzkAESR2dlJc2EJHJdQ6inwkyS
+	 Mmnqs55P5dkj210oqLR76UR+r/05MopYRRW7F0mBEDqknEmZgbRN2zuWfn/2BfHYGo
+	 +DU/XTyJAgD7izafRkzLYLJHYJ76plHKfwoK2ve7MhVB6c7rG2h50GztNhX9QDwAEw
+	 AoUvDGJGxNAu0SlYUNM1kTLZRqPaSqaeWmkZLNYX72omaOwbFbfqby71LsZ31cGNn7
+	 LfDsHNuKdOR0A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4213E40743;
-	Sun,  5 Jul 2026 16:32:12 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id C62FB316
- for <buildroot@buildroot.org>; Sun,  5 Jul 2026 16:32:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 64C0A606A7;
+	Sun,  5 Jul 2026 16:33:39 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id DA64C316
+ for <buildroot@buildroot.org>; Sun,  5 Jul 2026 16:33:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B75B540743
- for <buildroot@buildroot.org>; Sun,  5 Jul 2026 16:32:10 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id CC61F400AB
+ for <buildroot@buildroot.org>; Sun,  5 Jul 2026 16:33:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ss73l-ENjwD9 for <buildroot@buildroot.org>;
- Sun,  5 Jul 2026 16:32:09 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 679DF40531
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 679DF40531
- for <buildroot@buildroot.org>; Sun,  5 Jul 2026 16:32:09 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E85B08849F; Sun,  5 Jul 2026 16:31:38 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 5 Jul 2026 18:29:11 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 82fcd634ac81fb7e0f6fc32cc600a42528912d42
-X-Git-Newrev: 013612b4962332ef528682a037a91c7a420f5bab
-X-Patchwork-Hint: ignore
-Message-Id: <20260705163138.E85B08849F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/webkitgtk: security bump to
- version 2.52.4
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sZElgccc0Fc1 for <buildroot@buildroot.org>;
+ Sun,  5 Jul 2026 16:33:37 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E3730400C7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E3730400C7
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E3730400C7
+ for <buildroot@buildroot.org>; Sun,  5 Jul 2026 16:33:36 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id 013F8B00539;
+ Sun,  5 Jul 2026 18:33:31 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 05 Jul 2026 18:33:31 +0200
+MIME-Version: 1.0
+Date: Sun, 05 Jul 2026 18:33:31 +0200
+To: Thomas Devoogdt <thomas@devoogdt.com>
+Cc: buildroot@buildroot.org, Adrian Perez de Castro <aperez@igalia.com>,
+ Thomas Devoogdt <thomas.devoogdt@barco.com>
+In-Reply-To: <20260624182117.362190-1-thomas.devoogdt@barco.com>
+References: <20260624182117.362190-1-thomas.devoogdt@barco.com>
+User-Agent: Webmail Free/1.6.16
+Message-ID: <c2a07ec87530f4bc88b4381bb70f6387@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1783269215;
+ bh=5kL7+w/ouUVGsrqslcOqy/TMEVKrSElxLA69lDUbgso=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=D+R1eED/JiTBuPIvdz8k+eOkdSdtO5x7OjhrGCyxwELTITdxaOqVfSM44lM9gpBr6
+ 6al4Ns/44cwJHyYA2TJOQ0/39wedwoeVPiwqrkHWTDrdCQrVePnLZxgsxBLN3O8JiH
+ MesqqMIIVv4ZpXVxJwT4HTwlPJVfJ8bYxPaqrRgPUeiF1JON0exQTYDOWkSQHmH46w
+ DqDNzQL9yXY7qD2PGWzuvMm3Jt5ctBiWkx8fYuwK0axLcMikmu6/Tn+an7UDh1kx9m
+ h+blVdIJml2ldAZs8kUyj8Qtj1c18PHLMbL80IP6+GML9XeOzGfg6AsqAsMQWn/Dny
+ upefxUgj+cFWg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=D+R1eED/
+Subject: Re: [Buildroot] [PATCH] package/webkitgtk: bump to version 2.52.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,126 +95,40 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/013612b4962332ef528682a037a91c7a420f5bab
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 24/06/2026 20:21, Thomas Devoogdt wrote:
+> Release notes:
+> 
+> https://webkitgtk.org/2026/06/02/webkitgtk2.52.4-released.html
+> 
+> Fixes the following security issues:
+> 
+> https://webkitgtk.org/security/WSA-2026-0003.html
+> 
+> Includes fixes (among others) for CVE-2026-28847, CVE-2026-28883,
+> CVE-2026-28901, CVE-2026-28902, CVE-2026-28903, CVE-2026-28904,
+> CVE-2026-28905, CVE-2026-28907, CVE-2026-28942, CVE-2026-28946,
+> CVE-2026-28947, CVE-2026-28953, CVE-2026-28955, CVE-2026-28958,
+> CVE-2026-43658, and CVE-2026-43660.
+> 
+> Also added 
+> 0001-REGRESSION-313606-main-Fails-to-build-with-system-ma.patch,
+> to get webkitgtk compiled when -DUSE_SYSTEM_MALLOC=ON is in use.
+> 
+> Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
 
-Release notes:
+Applied to master.
 
-https://webkitgtk.org/2026/06/02/webkitgtk2.52.4-released.html
+Since this bump fixes several CVEs, I added the "security" mention in 
+the commit title.
 
-Fixes the following security issues:
+Best regards,
 
-https://webkitgtk.org/security/WSA-2026-0003.html
-
-Includes fixes (among others) for CVE-2026-28847, CVE-2026-28883,
-CVE-2026-28901, CVE-2026-28902, CVE-2026-28903, CVE-2026-28904,
-CVE-2026-28905, CVE-2026-28907, CVE-2026-28942, CVE-2026-28946,
-CVE-2026-28947, CVE-2026-28953, CVE-2026-28955, CVE-2026-28958,
-CVE-2026-43658, and CVE-2026-43660.
-
-Also added 0001-REGRESSION-313606-main-Fails-to-build-with-system-ma.patch,
-to get webkitgtk compiled when -DUSE_SYSTEM_MALLOC=ON is in use.
-
-Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
-[Julien: add "security" in commit log title]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- ...313606-main-Fails-to-build-with-system-ma.patch | 52 ++++++++++++++++++++++
- package/webkitgtk/webkitgtk.hash                   |  6 +--
- package/webkitgtk/webkitgtk.mk                     |  2 +-
- 3 files changed, 56 insertions(+), 4 deletions(-)
-
-diff --git a/package/webkitgtk/0001-REGRESSION-313606-main-Fails-to-build-with-system-ma.patch b/package/webkitgtk/0001-REGRESSION-313606-main-Fails-to-build-with-system-ma.patch
-new file mode 100644
-index 0000000000..decdba6814
---- /dev/null
-+++ b/package/webkitgtk/0001-REGRESSION-313606-main-Fails-to-build-with-system-ma.patch
-@@ -0,0 +1,52 @@
-+From 146cdc86b7345ac8f513fdf649979e80db01a2ca Mon Sep 17 00:00:00 2001
-+From: Alberto Garcia <berto@igalia.com>
-+Date: Tue, 2 Jun 2026 07:24:38 -0700
-+Subject: [PATCH] REGRESSION(313606@main): Fails to build with system malloc
-+ https://bugs.webkit.org/show_bug.cgi?id=316083
-+
-+Reviewed by Fujii Hironori.
-+
-+Don't add bmalloc_CopyHeaders to LLIntOffsetsExtractor_DEPENDENCIES if
-+USE_SYSTEM_MALLOC is on.
-+
-+* Source/JavaScriptCore/CMakeLists.txt:
-+
-+Canonical link: https://commits.webkit.org/305877.698@webkitglib/2.52
-+
-+Upstream: https://github.com/WebKit/WebKit/commit/a6bc685a685c8f16c919dc6310a62a26971d396e
-+Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
-+---
-+ Source/JavaScriptCore/CMakeLists.txt | 8 ++++++--
-+ 1 file changed, 6 insertions(+), 2 deletions(-)
-+
-+diff --git a/Source/JavaScriptCore/CMakeLists.txt b/Source/JavaScriptCore/CMakeLists.txt
-+index a2a6d724608a..ea9ea17802f2 100644
-+--- a/Source/JavaScriptCore/CMakeLists.txt
-++++ b/Source/JavaScriptCore/CMakeLists.txt
-+@@ -412,8 +412,10 @@ set(LLIntSettingsExtractor_DEPENDENCIES
-+     JavaScriptCore_CopyHeaders
-+     JavaScriptCore_CopyPrivateHeaders
-+     WTF_CopyHeaders
-+-    bmalloc_CopyHeaders
-+ )
-++if (NOT USE_SYSTEM_MALLOC)
-++    list(APPEND LLIntSettingsExtractor_DEPENDENCIES bmalloc_CopyHeaders)
-++endif ()
-+ WEBKIT_EXECUTABLE(LLIntSettingsExtractor)
-+ 
-+ # LLIntSettingsExtractor target needs to have a direct or indirect
-+@@ -439,8 +441,10 @@ set(LLIntOffsetsExtractor_DEPENDENCIES
-+     JavaScriptCore_CopyHeaders
-+     JavaScriptCore_CopyPrivateHeaders
-+     WTF_CopyHeaders
-+-    bmalloc_CopyHeaders
-+ )
-++if (NOT USE_SYSTEM_MALLOC)
-++    list(APPEND LLIntOffsetsExtractor_DEPENDENCIES bmalloc_CopyHeaders)
-++endif ()
-+ WEBKIT_EXECUTABLE(LLIntOffsetsExtractor)
-+ 
-+ # The build system will execute asm.rb every time LLIntOffsetsExtractor's mtime is newer than
-+-- 
-+2.43.0
-+
-diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
-index 03b8d0a9be..f8c0e0297a 100644
---- a/package/webkitgtk/webkitgtk.hash
-+++ b/package/webkitgtk/webkitgtk.hash
-@@ -1,6 +1,6 @@
--# From https://webkitgtk.org/releases/webkitgtk-2.52.3.tar.xz.sums
--sha1  17f9b127618040a5f3fcbb70e37ea16ab6d69b0b  webkitgtk-2.52.3.tar.xz
--sha256  5b3e0d174e63dcc28848b1194e0e7448d5948c3c2427ecd931c2c5be5261aebb  webkitgtk-2.52.3.tar.xz
-+# From https://webkitgtk.org/releases/webkitgtk-2.52.4.tar.xz.sums
-+sha1  1bfaa562ae46a420abaad2b3b9175dc823cc7a93  webkitgtk-2.52.4.tar.xz
-+sha256  cf4076a1ca2a64788edca8c452d8ebb68d5e2965e588fe46a388a016513edce4  webkitgtk-2.52.4.tar.xz
- 
- # Hashes for license files:
- sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index 54e769d589..6cab2c6a24 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WEBKITGTK_VERSION = 2.52.3
-+WEBKITGTK_VERSION = 2.52.4
- WEBKITGTK_SITE = https://www.webkitgtk.org/releases
- WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
- WEBKITGTK_INSTALL_STAGING = YES
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
