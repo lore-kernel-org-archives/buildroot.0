@@ -4,84 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E82F0C43458
-	for <buildroot@archiver.kernel.org>; Mon,  6 Jul 2026 19:42:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5921FC43458
+	for <buildroot@archiver.kernel.org>; Mon,  6 Jul 2026 19:52:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9B63660677;
-	Mon,  6 Jul 2026 19:42:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1393F606CE;
+	Mon,  6 Jul 2026 19:52:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HKQPPgn4-ifj; Mon,  6 Jul 2026 19:42:37 +0000 (UTC)
+ id VClzBh9z0mvs; Mon,  6 Jul 2026 19:52:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CBCFB606A8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B1B026068D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1783366957;
-	bh=h/5nro4dfj2SAMVRazCX4h0V4eNMm5glG+6zq4PTF7Q=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=NVRA7C5KHje4KWAddiq+iYfEr6Nz04eXkYPe0Hb+OFGmMBV5mUvk5dYKN3Bae7kid
-	 qfBepJfroo65+0mm58QZQzTraMGwD/bOuCsHcDU6S3OTaxYhTKcSmZI7sa184qJZpQ
-	 aVbtpnity3YrpX3dauCkPfbD4SjvM+2iLPr8U7q8zOWgzUW5s8fe3KCy3CpOLFNtyO
-	 mrYFaiOvT2w25ol+5/AS9QJdeRPk0KBx6QM6tcoHW0q/mDTuHU4bk0s9jNLvbtxwT5
-	 IxPdxGXVIppD1jvmxyECkFROzNcuYR++BM6QdTxZgISy+IQT+plTBZmbCY6ck9vkk9
-	 kGWuIpqeU/F3w==
+	s=default; t=1783367547;
+	bh=becENFFZuLEiuzVmjph5lIXAIlpE7d22u6Aot8sL+3M=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=ejoQwzLym6rXM8won5rcnHl6b5HfwMh2lHPJETvlJvbjpXvI6HTQUrduoRMaHru96
+	 otzeBVtnTLjl3bfKBbo4XOaYecNDNmD3beYlZd06suHX4wS12bDwCNpTkW6oUjclHZ
+	 3qyRiSovzp30LMUg3/ftKxSzcDJAHPrkRMdm06NRawPjzotPAshe8sFvBn2MdYKlE1
+	 L4i1ljUS6EI3T/L45ATxTXM18S4No0jlwF3nTZnoAPnmwLyN9tgEHzkNur5MAT5i73
+	 0iI6IgBKOcfNtTrBNAEvqjXE2UzaM/zvfgQp5vkPtIP3KxVnIwqkySRE3//OhgexWC
+	 0btL/q6wPCh6Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CBCFB606A8;
-	Mon,  6 Jul 2026 19:42:37 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id E282C316
- for <buildroot@buildroot.org>; Mon,  6 Jul 2026 19:42:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B1B026068D;
+	Mon,  6 Jul 2026 19:52:27 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id EA734F2
+ for <buildroot@buildroot.org>; Mon,  6 Jul 2026 19:52:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C8A2B60677
- for <buildroot@buildroot.org>; Mon,  6 Jul 2026 19:42:36 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D1697400FF
+ for <buildroot@buildroot.org>; Mon,  6 Jul 2026 19:52:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZJzjuGjFM86n for <buildroot@buildroot.org>;
- Mon,  6 Jul 2026 19:42:36 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org BF06F606A8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BF06F606A8
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp3.osuosl.org (Postfix) with ESMTPS id BF06F606A8
- for <buildroot@buildroot.org>; Mon,  6 Jul 2026 19:42:35 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id 1C7FE19F59C;
- Mon,  6 Jul 2026 21:42:32 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Mon, 06 Jul 2026 21:42:31 +0200
-MIME-Version: 1.0
-Date: Mon, 06 Jul 2026 21:42:31 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20260706173349.2555859-1-bernd@kuhls.net>
-References: <20260706173349.2555859-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.17
-Message-ID: <bb1db2eaac2ca62448845d68f3952ee6@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1783366953;
- bh=xsseNXpyNXpG6JgFnrCaaPGFGXpK+ePYXkeLi/B+fo4=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=fJhxhitlseAhRhjCFVIh4IoNTo2HMDpT1sRsa8hTeAlXVl66Dh1M0TSCjWOxtN5Hy
- JNV1L6GYIpNQ5gbzxecVIRU2EuL7/7mWe8URL4+UkrP80c79Ye4kpYhNlKTZbin1jS
- xKtJxejyo7vu2LLtQjzQJhs6v8Jv4abjah1h1YGmbuHKbjpnUGNOEEG1SGLprbyna+
- Np6B5nGYsV0ZZkoqPKouI6+XSqsZT64gXKf7Bzj73jBVAzOnpa4qN40fIkRrRuBvtr
- UKL0EBwbDrWi3wPQ1Jhghe6EAic2JPvtQOHqZ1DfZuTc9ZAG2TXIVCL2QF/iUGw0h+
- lFhX6KGsyBSXg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=fJhxhitl
-Subject: Re: [Buildroot] [PATCH 1/1] package/openssh: security bump to
- version 10.4p1
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PGp46SG3uYHM for <buildroot@buildroot.org>;
+ Mon,  6 Jul 2026 19:52:26 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 21FD04007E
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 21FD04007E
+ for <buildroot@buildroot.org>; Mon,  6 Jul 2026 19:52:26 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 1AB6988549; Mon,  6 Jul 2026 19:51:55 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 6 Jul 2026 21:44:03 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 90add0c09e18e1f7d500f06feb9c9d02d723f8e6
+X-Git-Newrev: 6854ee9aa3826d5036a7d3cc19056d43c0452320
+X-Patchwork-Hint: ignore
+Message-Id: <20260706195155.1AB6988549@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/swupdate: bump to version 2026.05.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,67 +70,49 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 06/07/2026 19:33, Bernd Kuhls wrote:
-> https://www.openssh.org/releasenotes.html#10.4p1
-> 
-> Changes since OpenSSH 10.3
-> ==========================
-> 
-> This release contains a number of security fixes as well as general
-> bugfixes and a couple of new features.
-> 
-> Security
-> ========
-> 
->  * sftp(1): when downloading files on the command-line using
->    "sftp host:/path .", a malicious server could cause the file to
->    be downloaded to an unexpected location. This issue was identified
->    by the Swival Security Scanner.
-> 
->  * scp(1): when copying files between two remote destinations, do
->    not allow a malicious server to write files to the parent
->    directory of the intended target directory.  This issue was
->    identified by the Swival Security Scanner.
-> 
->  * sshd(8): when using the "internal-sftp" SFTP server implementation
->    (this is not the default), long command lines were previously
->    truncated silently after the 9th argument. If a security-relevant
->    option was in the 10th or later position, it would be discarded.
->    Reported by Steve Caffrey.
-> 
->  * sshd(8): add a documentation note to mention that the
->    GSSAPIStrictAcceptorCheck option is ineffective when the server
->    is joined to a Windows Active Directory. Reported by Yarin Aharoni
->    of Safebreach.
-> 
->  * sshd(8): DisableForwarding=yes didn't override PermitTunnel=yes
->    as it was documented to do. Note that PermitTunnel is not enabled
->    by default. Reported independently by Huzaifa Sidhpurwala of
->    Redhat and Marko Jevtic.
-> 
->  * sshd(8): avoid a potential pre-authentication denial of service
->    when GSSAPIAuthentication was enabled (this feature is off by
->    default). This was not mitigated by MaxAuthTries, but would be
->    penalised by PerSourcePenalties. This was reported by Manfred
->    Kaiser of the milCERT AT (Austrian Ministry of Defence).
-> 
->  * sshd(8): fix a number of cases where the minimum authentication
->    delay was not being enforced. Reported by the Orange Cyberdefense
->    Vulnerability Team.
-> 
->  * ssh(1): fix a possible client-side use-after-free if the server
->    changes its host key during a key reexchange. This was reported by
->    Zhenpeng (Leo) Lin of Depthfirst.
-> [...]
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/6854ee9aa3826d5036a7d3cc19056d43c0452320
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Applied to master, thanks.
+For release note, see:
+https://github.com/sbabic/swupdate/releases/tag/2026.05.1
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/swupdate/swupdate.hash | 2 +-
+ package/swupdate/swupdate.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/swupdate/swupdate.hash b/package/swupdate/swupdate.hash
+index 06583ade35..6a32b38c95 100644
+--- a/package/swupdate/swupdate.hash
++++ b/package/swupdate/swupdate.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  fd70cdfc7224b4209f5f657c3d6052688412325ea5d4e9e792575fa22eb65cef  swupdate-2026.05.tar.gz
++sha256  26236a354e8cf21806d20a76728b3805ae49c23cfb2eb794fe91d1f0b280298e  swupdate-2026.05.1.tar.gz
+ sha256  4cf04ed34ff0ebbf5c71345b56e6af5093fc17206364cca0ebbae92ef3940683  LICENSES/BSD-1-Clause.txt
+ sha256  e27a3e87706b3aa5ff2e50eaafe2e6ed5397fbf2d7679eaf444a6d000518a3a6  LICENSES/BSD-3-Clause.txt
+ sha256  0558101984550fa84d1d13c2af11d116c20079d2be58711e8d99cadce7009192  LICENSES/CC0-1.0.txt
+diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
+index 983cd6eccc..2384dea33a 100644
+--- a/package/swupdate/swupdate.mk
++++ b/package/swupdate/swupdate.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SWUPDATE_VERSION = 2026.05
++SWUPDATE_VERSION = 2026.05.1
+ SWUPDATE_SITE = $(call github,sbabic,swupdate,$(SWUPDATE_VERSION))
+ SWUPDATE_LICENSE = GPL-2.0, GPL-2.0+, LGPL-2.1+, MIT, ISC, BSD-1-Clause, BSD-3-Clause, CC0-1.0, CC-BY-SA-4.0, OFL-1.1
+ SWUPDATE_LICENSE_FILES = LICENSES/BSD-1-Clause.txt \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
