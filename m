@@ -1,117 +1,118 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C74C4C44500
-	for <buildroot@archiver.kernel.org>; Mon,  6 Jul 2026 04:52:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46DCEC43458
+	for <buildroot@archiver.kernel.org>; Mon,  6 Jul 2026 04:52:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AEEF881183;
-	Mon,  6 Jul 2026 04:52:26 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cPZgRN9dQCGM; Mon,  6 Jul 2026 04:52:24 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0DE7D8113F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1783313544;
-	bh=V4AgmF348pUe4wmaqPjx72LoiFHaUturToBheoHdJZg=;
-	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=WAcAOXSgpNrGVGsn6nZPNFxKaMjExf9UXdRoUzlZAL+NWxYvoehvbSDPg25H7SM5Z
-	 0ln57xr596J5gtxY3DvPflLMeLmk44hn+gETvzaiOxtoXx0786IFoYOf61j3EhdrpT
-	 oPccMbdEj/mx3Io10LDnGcJJb/pKbCi8oLqXC0l2CIuJFvVBQJEj9ErpEwqDeobTKP
-	 6MqBVZBLFbl0YMp6f12mtTjWRZ4+2x4FxsOA0tXTLfszIkgygPdQ7PegaWiTVlxqcZ
-	 PabGW0qR5h9SJf/2KzyIQHxJEHut3qspzZfrk+Jtjvla/Wcf/g3W57X4b5QJTglZ0G
-	 74TxqP+gIcEGA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0DE7D8113F;
-	Mon,  6 Jul 2026 04:52:24 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id A79FAF2
- for <buildroot@buildroot.org>; Mon,  6 Jul 2026 04:52:22 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8D574409E7
- for <buildroot@buildroot.org>; Mon,  6 Jul 2026 04:52:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4E31D40A37;
+	Mon,  6 Jul 2026 04:52:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id b0ekStvT-1qu for <buildroot@buildroot.org>;
- Mon,  6 Jul 2026 04:52:21 +0000 (UTC)
+ id tNcLUlc5u2b4; Mon,  6 Jul 2026 04:52:29 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 29081409E7
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1783313549;
+	bh=0Z/UAGzhnEV3KeuKqqcOoBwXY7wjyD0Y7ori0md6f1E=;
+	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=iwPDgLnch1huY98bff/T3PvoD5pvWCj3L3yFwO6hCtBdavdN7wPEBUmFUJS7QXWlg
+	 GVdVfgwbx1J8r+zSZhBEzKUYwL4YRXD5oj7tan60LXN4GaJbw8754aYXXRjl6CPYP7
+	 XZbUEhrtRjsSKqkKH+J1ZLEpoahqMCg6EIbgvgu7ATGm/CtaW8QqfZBGrvQ/az9M1d
+	 ljZzCfCa4ojwZhMVNKrkRJouEvyBQ9eEvkWOcXcnD0RG56IYJYAUTzgQu4e3GDEH0r
+	 +j2QwVGVBllO9HS8jdxKtObCmDH8WTIYMWnb+ZUEffJMJpBqpDuILadQhDA9auIU2L
+	 7z7G4+I3jjuQw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 29081409E7;
+	Mon,  6 Jul 2026 04:52:29 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 212FAF2
+ for <buildroot@buildroot.org>; Mon,  6 Jul 2026 04:52:27 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1EDFE6087B
+ for <buildroot@buildroot.org>; Mon,  6 Jul 2026 04:52:27 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Ufek90Qbsyu6 for <buildroot@buildroot.org>;
+ Mon,  6 Jul 2026 04:52:26 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::230; helo=mail-lj1-x230.google.com;
+ client-ip=2a00:1450:4864:20::12c; helo=mail-lf1-x12c.google.com;
  envelope-from=troglobit@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8AF2C408F3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8AF2C408F3
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com
- [IPv6:2a00:1450:4864:20::230])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8AF2C408F3
- for <buildroot@buildroot.org>; Mon,  6 Jul 2026 04:52:21 +0000 (UTC)
-Received: by mail-lj1-x230.google.com with SMTP id
- 38308e7fff4ca-39b293079d1so21280771fa.3
- for <buildroot@buildroot.org>; Sun, 05 Jul 2026 21:52:21 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3DE3D60693
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3DE3D60693
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com
+ [IPv6:2a00:1450:4864:20::12c])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3DE3D60693
+ for <buildroot@buildroot.org>; Mon,  6 Jul 2026 04:52:26 +0000 (UTC)
+Received: by mail-lf1-x12c.google.com with SMTP id
+ 2adb3069b0e04-5aebfa21c62so3018317e87.3
+ for <buildroot@buildroot.org>; Sun, 05 Jul 2026 21:52:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1783313539; x=1783918339;
+ d=1e100.net; s=20251104; t=1783313544; x=1783918344;
  h=content-transfer-encoding:organization:mime-version:references
  :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=74EdZxlZWI7RQg/8eZMGZOohX4B/xXcOSoDTwrmq7wo=;
- b=WeYiu8eCIVx99mRwvwVxhg8nMKPirHmLZ35gjpIPaA/p1qatgKa8Ls2Urqso/Wyvyr
- sjWnjZLVqUYMOcC5AlDwTZ9YOb+P/+Y9EZA59AP1zT5vGjnbj2ez7PWR6CX+NMvPj0lv
- VCeuFMhsu2FIjmKTDSIGE/WyjjKgfDJ+VtNVGEyuDRmjTLLYHoE0hXLbvYZVWHNZRwmb
- 9Q7giv/86rzXjlHmQVauX9qQCEux+dUeuGcTpfdeHChWTtoMeFTZtTuNWZwt7ZKVL1SH
- oCpsszVbFWCBF4BNi3M0BvguglqVxs6TnKKdF60ePSr2YY2E60GvQHjZov/R6RDoNx+5
- nJYQ==
-X-Gm-Message-State: AOJu0YwwDz72jq/Ve34EnznBD+IURm3FSMtNa+x6PB0CQY3RcaCv205s
- eMdx1j2AISXCFITGOWEL93auiMCVKTxF5gzBXrdqkfOCj/RrZJBT/CzHERhaNNRiy5M=
-X-Gm-Gg: AfdE7cneQ6dOjL57KTMMzNTbZVEBLsIT7Vt7YhBbCFNPF+B8ICd/jw1CqN8eckcPh4P
- SItPJY+iXU/rdNIUQntbxVWJFw4pVPXDpu+v78SUpBnYKduIfAPX3S4HHKVDzTyFWJCEkku3fp4
- fpyDpCyOkyid/bNSMOR3hQf2KdexM7aFpYYwRFJeaKHHoQ2aTa2TH/fLTwC++zj3bP4831tnMT3
- ZWC8ppZYziVUaXqZdU6nKSviIpbK/8r2ONwkK2Q1qcRhEV2+U5KiTM+Dsn7Tm+w123ZKGk1aCC8
- hcnBLBRF0sUuV4bhrQkjfriKpRhPTApst0BuI7bdqIW1JRcarN/t0w5GqYVNTnYFon99HHJqp/b
- PieioTE68bQvmxCzoNejsqL3XqKczpptXMlqZwgWfpiUsuHXepgFYg4NKU7KS4YBM2ku9yx3AEZ
- 4S69DVLYl6h0z8K193Qcob23DfNGIIna9phHyhXQem
-X-Received: by 2002:a2e:bc25:0:b0:396:7fa2:e082 with SMTP id
- 38308e7fff4ca-39b53c3fdb2mr15171451fa.6.1783313538965; 
- Sun, 05 Jul 2026 21:52:18 -0700 (PDT)
+ bh=EQ4iJ28p7ZRztbmNJfAQTSCaE0HJSrLIYNxYMB/iGRU=;
+ b=R3g24KDFzNAaxCvQXsOSRi7ukTgsu4rE6JF6jA0zee6AhQ6WfSDnJiL28Fy66vLxBp
+ pD2hdpP7/cKQff/I/67KwRtNkOHdpF4oED1E9KjIs1Pw0foC1hZnLzl81zyP0SKsCFql
+ AAlcyxMSVNkhfj6keuyxAhWi4C3pbndmO0BP0N3OEASLLTeER81hrPGWGq7quwfkE+A4
+ Bem+l+U+I1wfLEiW1dKfob84U7svSC8FIuf1Tto2nHpCiTav2X2Jn4Lssw+lbxG5v5xg
+ 9Yhgzq94lo5QMinJ9KZJv6zGlZ2MuX0GZ7htISQqSsP5j+zVUxzGJu8jluLpVUKQVnFq
+ U2Bw==
+X-Gm-Message-State: AOJu0YzMsMirfolXbd6IlGpXurTp6qlfXRdT8Msrp7orw66d7L92buiM
+ qqskN3ia5zw42k/tiuahnDebFVjiN2G4dQBGEy7R+6gtkfr6MJnvThQZhsgR8r0uHDE=
+X-Gm-Gg: AfdE7ckoaXHFHpphKVZ2h3Kxzrs8JbJDqYEcOyO+msjuzbcwuET7LWawCwmRD6YdGDT
+ 5FtIrfAxRjaEY2+XeljuZ5P6e/cBaFt0k9GNI2EDMD+YdlMOZTgKKooBLMM4NSsKS/dSQVrCq/U
+ FnLDmb+VYoV2YlSkngODMaPkhdynncx1kZPnmEVun1nKf5W9h6vIaDtyHGZe+FfWvGkyKoc02XN
+ 2fUNrnuF/ohCGNN3vhzsXNky0a2ZZfdGvOPOu9nSMj0AM8S14aWQlYarwB71ocF0RFa1gfsOuI0
+ 4KPPz94vTV+KbJ5m8LTYNf8WriSFwBQU/rbArMS1sveNJ0emXSaMkTIrUqcbS6NDnQPdqfE3SqA
+ XY20jst3Tv5tpYJJ5am/N5Ura8UWJ1oLVBkoO1Rm5Ot0H79ZqgYBW/uh3i8hTaB7D7qhUA8mM82
+ B4GVJY5nHA1oplBYyIphTkwjYSJ2VvpvRu6vTp5eO3
+X-Received: by 2002:a05:6512:6419:b0:5ae:a553:3318 with SMTP id
+ 2adb3069b0e04-5aed5094a80mr1348836e87.49.1783313543615; 
+ Sun, 05 Jul 2026 21:52:23 -0700 (PDT)
 Received: from gimli.. (h-158-174-22-6.NA.cust.bahnhof.se. [158.174.22.6])
  by smtp.gmail.com with ESMTPSA id
- 38308e7fff4ca-39b4ad1887csm16866441fa.6.2026.07.05.21.52.17
+ 38308e7fff4ca-39b4ad1887csm16866441fa.6.2026.07.05.21.52.20
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 05 Jul 2026 21:52:17 -0700 (PDT)
+ Sun, 05 Jul 2026 21:52:22 -0700 (PDT)
 From: Joachim Wiberg <troglobit@gmail.com>
 To: buildroot@buildroot.org
 Cc: Alexander Sverdlin <alexander.sverdlin@gmail.com>,
  Fiona Klute <fiona.klute@gmx.de>, Joachim Wiberg <troglobit@gmail.com>
-Date: Mon,  6 Jul 2026 06:52:04 +0200
-Message-ID: <20260706045206.2395575-2-troglobit@gmail.com>
+Date: Mon,  6 Jul 2026 06:52:05 +0200
+Message-ID: <20260706045206.2395575-3-troglobit@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260706045206.2395575-1-troglobit@gmail.com>
 References: <20260706045206.2395575-1-troglobit@gmail.com>
 MIME-Version: 1.0
 Organization: Wires
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1783313539; x=1783918339; darn=buildroot.org;
+ d=gmail.com; s=20251104; t=1783313544; x=1783918344; darn=buildroot.org;
  h=content-transfer-encoding:organization:mime-version:references
  :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
  :date:message-id:reply-to;
- bh=74EdZxlZWI7RQg/8eZMGZOohX4B/xXcOSoDTwrmq7wo=;
- b=OtelZHlH/R0cwFVUZZrAtPq3eziNY6ocUiVBN3KPuROtmQWN4qdMKz4KFA7YEd7SzK
- pyyUGQmzwUOvM3Xvlt2yJfFZ5hFxTRQlZnhHIAsTVy1Zc1+5KhuLN9wzixsu32NYcvRT
- IvXTHGhS9ERk+huTVfiQ/5qvevT4SCvYXsHNeMaD0+sJjlFJrcAyR1G8KODQvJLbLeTv
- RyUxBL04BYtUwnLpC97kHS4HnSG5sBVvl2v42jxWn6V9jIQ+Oq4XmDjzLd+kUQR6qtjL
- bnZJUXs55XogoX5v8e5xtlHwiE4PWoFOAXpLZegd2E+/A1fji2Dt80NDNSmU4/RgU0/l
- qt1w==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=EQ4iJ28p7ZRztbmNJfAQTSCaE0HJSrLIYNxYMB/iGRU=;
+ b=bqZmQUsXQgN4HPB4Ahcl5j8lmFeCiRi8JtUNE7zguun+BumdMnyvH9H1jqwGoEzlPY
+ qzUA+trBLU1/Amh9soGZFZqZFNACXUQX2c9RRfWdFp2fbRhZE760egi0K5xstjRb0NM3
+ FFD7hLwymd5dCfhQpWBwNyM6mCB3yejVYPo3EaHDZht8efQH5ul8M6WEZAAsvENWehi8
+ 1HXCzNMtP6er6uZunXCI2Q2bjGQvxL91h5BwqYdHHV77afYseCVW/pDFwqFqPPeV2k40
+ g0cPxPQJnZK5Xyc1/Wp49td/ybc3PcEWB7H4eXDSUg9IMIU76cd0uKNSyYZy+QCaQpJ2
+ b4pw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20251104 header.b=OtelZHlH
-Subject: [Buildroot] [PATCH 1/3] package/mini-snmpd: bump to version 2.0
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20251104 header.b=bqZmQUsX
+Subject: [Buildroot] [PATCH 2/3] package/mini-snmpd: add sysv init script
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -128,104 +129,100 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This bumps from v1.6 directly to v2.0, for details, please see:
+A start script has been missing since the package was added, so the
+daemon was not started automatically on sysv/busybox systems.
 
- - https://github.com/troglobit/mini-snmpd/releases/tag/v1.7
- - https://github.com/troglobit/mini-snmpd/releases/tag/v2.0
-
-The release tarball is the canonical supported source for the project
-and also ships a pre-generated configure script, hence the switch.
+This also fixes a regression in systemd builds introduced in fccdc6bd,
+when the package switched from local unit file to upstream.
 
 Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
 ---
- .../0001-linux.c-fix-musl-build.patch         | 46 -------------------
- package/mini-snmpd/mini-snmpd.hash            |  3 +-
- package/mini-snmpd/mini-snmpd.mk              |  5 +-
- 3 files changed, 4 insertions(+), 50 deletions(-)
- delete mode 100644 package/mini-snmpd/0001-linux.c-fix-musl-build.patch
+ package/mini-snmpd/S60mini-snmpd | 52 ++++++++++++++++++++++++++++++++
+ package/mini-snmpd/mini-snmpd    |  2 +-
+ package/mini-snmpd/mini-snmpd.mk |  5 +++
+ 3 files changed, 58 insertions(+), 1 deletion(-)
+ create mode 100644 package/mini-snmpd/S60mini-snmpd
 
-diff --git a/package/mini-snmpd/0001-linux.c-fix-musl-build.patch b/package/mini-snmpd/0001-linux.c-fix-musl-build.patch
-deleted file mode 100644
-index 8e8bb090fd..0000000000
---- a/package/mini-snmpd/0001-linux.c-fix-musl-build.patch
-+++ /dev/null
-@@ -1,46 +0,0 @@
--From 73fa408f51ec25121075aaccac9c9db1c68567cd Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Thu, 12 Mar 2020 10:02:18 +0100
--Subject: [PATCH] linux.c: fix musl build
--
--Remove include on linux/if_link.h to avoid the following build failure
--with musl:
--
--In file included from /home/buildroot/autobuild/instance-2/output-1/host/i586-buildroot-linux-musl/sysroot/usr/include/linux/kernel.h:4,
--                 from /home/buildroot/autobuild/instance-2/output-1/host/i586-buildroot-linux-musl/sysroot/usr/include/linux/netlink.h:4,
--                 from /home/buildroot/autobuild/instance-2/output-1/host/i586-buildroot-linux-musl/sysroot/usr/include/linux/if_link.h:5,
--                 from linux.c:21:
--/home/buildroot/autobuild/instance-2/output-1/host/i586-buildroot-linux-musl/sysroot/usr/include/linux/sysinfo.h:7:8: error: redefinition of 'struct sysinfo'
-- struct sysinfo {
--        ^~~~~~~
--In file included from linux.c:19:
--/home/buildroot/autobuild/instance-2/output-1/host/i586-buildroot-linux-musl/sysroot/usr/include/sys/sysinfo.h:10:8: note: originally defined here
-- struct sysinfo {
--        ^~~~~~~
--  CC       mini_snmpd-globals.o
--
--Fixes:
-- - http://autobuild.buildroot.org/results/6903a0f685076b4a2c2824de6158da40e9e712d8
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Retrieved from:
--https://github.com/troglobit/mini-snmpd/commit/73fa408f51ec25121075aaccac9c9db1c68567cd]
-----
-- linux.c | 1 -
-- 1 file changed, 1 deletion(-)
--
--diff --git a/linux.c b/linux.c
--index a657912..86a7085 100644
----- a/linux.c
--+++ b/linux.c
--@@ -18,7 +18,6 @@
-- #include <netpacket/packet.h>
-- #include <sys/sysinfo.h>
-- #include <sys/socket.h>
---#include <linux/if_link.h>
-- #include <sys/ioctl.h>
-- #include <sys/types.h>
-- #include <sys/time.h>
---- 
--2.25.1
--
-diff --git a/package/mini-snmpd/mini-snmpd.hash b/package/mini-snmpd/mini-snmpd.hash
-index fee76c07a3..d1e8f51f8e 100644
---- a/package/mini-snmpd/mini-snmpd.hash
-+++ b/package/mini-snmpd/mini-snmpd.hash
-@@ -1,3 +1,4 @@
-+# sha256 from https://github.com/troglobit/mini-snmpd/releases/tag/v2.0
-+sha256  851acf49a1a36356664af0a7a040fa31f75403eb26e03627eba188ee15d4854c  mini-snmpd-2.0.tar.gz
- # Locally calculated
--sha256  de00c475a3c70c56f3ee97cd683cb71009d3521d60b1f589c5a91b4671ede9f3  mini-snmpd-1.6.tar.gz
- sha256  8a43b895972a24567297f44f35dab0f5f9ed3b7db6dac0bf6094075b27ab9d56  COPYING
+diff --git a/package/mini-snmpd/S60mini-snmpd b/package/mini-snmpd/S60mini-snmpd
+new file mode 100644
+index 0000000000..e7c61d7a85
+--- /dev/null
++++ b/package/mini-snmpd/S60mini-snmpd
+@@ -0,0 +1,52 @@
++#!/bin/sh
++
++DAEMON="mini-snmpd"
++PIDFILE="/var/run/$DAEMON.pid"
++
++DAEMON_OPTS=""
++
++# shellcheck source=/dev/null
++[ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
++
++start() {
++	printf 'Starting %s: ' "$DAEMON"
++	# shellcheck disable=SC2086 # we need the word splitting
++	start-stop-daemon --start --quiet --pidfile "$PIDFILE" \
++		--exec "/usr/sbin/$DAEMON" -- $DAEMON_OPTS
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
++stop() {
++	printf 'Stopping %s: ' "$DAEMON"
++	start-stop-daemon --stop --quiet --pidfile "$PIDFILE" \
++		--exec "/usr/sbin/$DAEMON"
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
++restart() {
++	stop
++	start
++}
++
++case "$1" in
++	start|stop|restart)
++		"$1";;
++	reload)
++		# Restart, since there is no true "reload" feature.
++		restart;;
++	*)
++		echo "Usage: $0 {start|stop|restart|reload}"
++		exit 1
++esac
+diff --git a/package/mini-snmpd/mini-snmpd b/package/mini-snmpd/mini-snmpd
+index 0ca9901d58..371f57f15f 100644
+--- a/package/mini-snmpd/mini-snmpd
++++ b/package/mini-snmpd/mini-snmpd
+@@ -1,2 +1,2 @@
+ # Require client authentication, thus SNMP version 2c
+-EXTRA_PARAMS=-a
++DAEMON_OPTS="-a -c public -s"
 diff --git a/package/mini-snmpd/mini-snmpd.mk b/package/mini-snmpd/mini-snmpd.mk
-index 1f6e5c1919..89eca4ce79 100644
+index 89eca4ce79..99bef47477 100644
 --- a/package/mini-snmpd/mini-snmpd.mk
 +++ b/package/mini-snmpd/mini-snmpd.mk
-@@ -4,13 +4,12 @@
- #
- ################################################################################
+@@ -19,4 +19,9 @@ endef
  
--MINI_SNMPD_VERSION = 1.6
--MINI_SNMPD_SITE = $(call github,troglobit,mini-snmpd,v$(MINI_SNMPD_VERSION))
-+MINI_SNMPD_VERSION = 2.0
-+MINI_SNMPD_SITE = https://github.com/troglobit/mini-snmpd/releases/download/v$(MINI_SNMPD_VERSION)
- MINI_SNMPD_LICENSE = GPL-2.0
- MINI_SNMPD_LICENSE_FILES = COPYING
- MINI_SNMPD_CPE_ID_VENDOR = minisnmpd_project
- MINI_SNMPD_CPE_ID_PRODUCT = minisnmpd
--MINI_SNMPD_AUTORECONF = YES
- MINI_SNMPD_DEPENDENCIES = host-pkgconf
+ MINI_SNMPD_POST_INSTALL_TARGET_HOOKS += MINI_SNMPD_INSTALL_ETC_DEFAULT
  
- define MINI_SNMPD_INSTALL_ETC_DEFAULT
++define MINI_SNMPD_INSTALL_INIT_SYSV
++	$(INSTALL) -D -m 0755 package/mini-snmpd/S60mini-snmpd \
++		$(TARGET_DIR)/etc/init.d/S60mini-snmpd
++endef
++
+ $(eval $(autotools-package))
 -- 
 2.43.0
 
