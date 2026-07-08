@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8398C44501
-	for <buildroot@archiver.kernel.org>; Fri, 10 Jul 2026 13:43:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84583C43458
+	for <buildroot@archiver.kernel.org>; Fri, 10 Jul 2026 13:43:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7099640A22;
-	Fri, 10 Jul 2026 13:43:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4914B40A37;
+	Fri, 10 Jul 2026 13:43:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3Yx79aXWnstZ; Fri, 10 Jul 2026 13:43:24 +0000 (UTC)
+ id Rh1JzIJftetg; Fri, 10 Jul 2026 13:43:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C5D4B409CF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 596CD409F3
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1783691002;
-	bh=4CHerSu5gp+XhdZP6pViwOOeLsvf6knN+wly2tYumVc=;
+	s=default; t=1783691005;
+	bh=CXMYClQDQw95+EuVL9Cs1E/JqzdyrkWiKQMOxnVa3IU=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=nB2+UajY0QDnX7REASG38/OcGnc3TjUXpb4WVzdZ/QLfyptUO/FsV0ZQA5TVz3JXq
-	 OfzzS+NqO5vS4EnJVrUH0r8WI2QBN48iiYXCWgmjApenpXqaHoKYaeftd3ooAwj6WX
-	 zYh3T39juyaA5RsDBbTniPoErkACmrM7lJ1ux4NXcxqBR34gCabx3ViQULe+wspqGZ
-	 yr9cSJUPgp+b039qPUmJLlzk6PqEVRrOmcXsfGx5YRvTMB9hrsAYyRWnZLvuYnH1DX
-	 grIGKUj6XgXsl+FAtkceT3Y6STgnDeZBFkfX5kSuhdsgTwWi8bo9eoyhx3eqS95VUC
-	 jX2EbWE+2C2Iw==
+	b=NDgUA4Z1Xg9oKvfcEFvCfeUfTe6r9svSnDHBm4ea6JLrhgQ062PUnlOFZVRb5cBVJ
+	 bzFVmwd9d9auxIJKTCfk1O7AksGZSR/4hpwn3x5dT5UysN3gKW5POv/l2cGZKhaZAA
+	 z5hqx8Fu/lLTrQ37TK4ipq78RD1u1lN39h6p/Zx7MO2r8typivUe4QTC7ftCPuiyPe
+	 GC4GMaGmwB8ZmRfN76mGKxt9i48VMoiE+Gn+bmgI6jDKLZ7N9FPTkn2VcUvWYBcCzJ
+	 f5ppea81QKRQCCp7i92VOIeYlwuf7CP/bYjHKLvX4cYx+z97MQYpTf/oddCRLFz+li
+	 iUcHiW1eP4b8w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C5D4B409CF;
-	Fri, 10 Jul 2026 13:43:22 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 365C42FE
+	by smtp4.osuosl.org (Postfix) with ESMTP id 596CD409F3;
+	Fri, 10 Jul 2026 13:43:25 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 536352FE
  for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:42:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1C7384076A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 396D34076A
  for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:42:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2D5gLEelPhPI for <buildroot@buildroot.org>;
- Fri, 10 Jul 2026 13:42:50 +0000 (UTC)
+ id hgx-p0LNpg4l for <buildroot@buildroot.org>;
+ Fri, 10 Jul 2026 13:42:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4616E408FC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7183F40768
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4616E408FC
- for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:42:50 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7183F40768
+ for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:42:49 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7B4B288678; Fri, 10 Jul 2026 13:42:17 +0000 (UTC)
+ id 9772988678; Fri, 10 Jul 2026 13:42:16 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 8 Jul 2026 14:30:52 +0200
+Date: Wed, 8 Jul 2026 13:36:25 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: fee844130be960f70dd63c8f82f20b1f7b90a4cc
-X-Git-Newrev: 634b2da1f72f42ac75cd5aec0c8a741991b18561
+X-Git-Oldrev: a80bcffff11fa3eea8c4aabfedd4b4929a4020dc
+X-Git-Newrev: 58e91efc9b094b1d84ee8b395a650aeb1fb0b4c2
 X-Patchwork-Hint: ignore
-Message-Id: <20260710134217.7B4B288678@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/ruby: security
- bump to v3.4.10
+Message-Id: <20260710134216.9772988678@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/libglib2: drop
+ unused 0001-meson.build-add-girdir-to-gio-2.0.pc-and-glib-2.0.pc.patch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,137 +77,111 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/634b2da1f72f42ac75cd5aec0c8a741991b18561
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/58e91efc9b094b1d84ee8b395a650aeb1fb0b4c2
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-See the release announcement:
-https://www.ruby-lang.org/en/news/2026/06/30/ruby-3-4-10-released/
+In 11aa1cfa5af9a77a0a9f726bd38f1b7db659c0bf the patch was accidentally
+moved into a versioned directory with the wrong version (2.82.0
+instead of 2.82.4) and thus not applied. However, there have been no
+issues reported.
 
-Also drop patch that is now included upstream
+The patch description mentions being needed to fix build errors in
+package/atk and package/libnice. It was originally added in
+b094f88a4d501101bfba9b65491209e6a0fe0397, and amended for libnice in
+2c916b400bc608512db790d97df010ca666b6dd2. package/atk was removed in
+2c3ca7bea1de76163aeef432412eb14551ed0581, because atk has been merged
+into at-spi2-core. Both at-spi2-core and libnice are Meson packages,
+as was atk at the time of its removal.
 
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-[thomas: drop ignore_cves entry]
+Both current packages build with the following configuration (tested
+using utils/test-pkg):
+
+BR2_PACKAGE_PYTHON3=y
+BR2_PACKAGE_GOBJECT_INTROSPECTION=y
+BR2_PACKAGE_LIBNICE=y
+BR2_PACKAGE_AT_SPI2_CORE=y
+
+Evidently the patch is no longer needed, presumably because the
+correct search path for GIR files is set by other means, and we can
+remove it instead of fixing the version number of the patch directory.
+
+Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
+Tested-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit c9fabfcb9fe93fdf9fdf7fb0eabcb927c90182b7)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/ruby/0001-fix-CVE-2026-41316.patch | 73 ------------------------------
- package/ruby/ruby.hash                     |  4 +-
- package/ruby/ruby.mk                       |  5 +-
- 3 files changed, 3 insertions(+), 79 deletions(-)
+ ...-add-girdir-to-gio-2.0.pc-and-glib-2.0.pc.patch | 53 ----------------------
+ package/libglib2/libglib2-bootstrap/2.82.0         |  1 -
+ 2 files changed, 54 deletions(-)
 
-diff --git a/package/ruby/0001-fix-CVE-2026-41316.patch b/package/ruby/0001-fix-CVE-2026-41316.patch
+diff --git a/package/libglib2/2.82.0/0001-meson.build-add-girdir-to-gio-2.0.pc-and-glib-2.0.pc.patch b/package/libglib2/2.82.0/0001-meson.build-add-girdir-to-gio-2.0.pc-and-glib-2.0.pc.patch
 deleted file mode 100644
-index 1c5949c221..0000000000
---- a/package/ruby/0001-fix-CVE-2026-41316.patch
+index c6135b15a1..0000000000
+--- a/package/libglib2/2.82.0/0001-meson.build-add-girdir-to-gio-2.0.pc-and-glib-2.0.pc.patch
 +++ /dev/null
-@@ -1,73 +0,0 @@
--From c35379df5279777fb4e02d989064eecd9cbbf338 Mon Sep 17 00:00:00 2001
--From: Takashi Kokubun <takashikkbn@gmail.com>
--Date: Tue, 21 Apr 2026 16:27:44 +0900
--Subject: [PATCH] [ruby/erb] Prohibit def_method on marshal-loaded ERB instances
+@@ -1,53 +0,0 @@
+-From 3fcd5f431dee9909b6bcbd9b8b61d4b1fe4b5f92 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Fri, 12 Nov 2021 18:01:05 +0100
+-Subject: [PATCH] meson.build: add girdir to gio-2.0.pc and glib-2.0.pc
 -
--Extends the @_init guard to def_method so that an ERB object created
--via Marshal.load (which bypasses initialize) raises ArgumentError
--instead of evaluating arbitrary source. def_module and def_class both
--delegate to def_method and are covered by the same check.
+-Add girdir to gio-2.0.pc and glib-2.0.pc to fix the following build
+-failure with atk or libnice:
 -
--Co-authored-by: Tristan Madani <TristanInSec@gmail.com>
+-/home/giuliobenetti/autobuild/run/instance-1/output-1/host/riscv32-buildroot-linux-gnu/sysroot/usr/bin/g-ir-compiler atk/Atk-1.0.gir --output atk/Atk-1.0.typelib --includedir=/usr/share/gir-1.0
+-Could not find GIR file 'GObject-2.0.gir'; check XDG_DATA_DIRS or use --includedir
 -
--Upstream: https://github.com/ruby/ruby/commit/c35379df5279777fb4e02d989064eecd9cbbf338
--CVE: CVE-2026-41316
--[Titouan: Rebase on top of Ruby 3.4.9]
--Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+-Fixes:
+- - http://autobuild.buildroot.org/results/2716929db638977e6bf665352a08bd580e1dd0ae
+- - http://autobuild.buildroot.org/results/3088ef32b03e0bb984291b1227b187f1ff816eb7
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Dario: make the patch to be applied with fuzz factor 0]
+-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+-[Fiona: refresh for glib 2.80.4]
+-Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+-Upstream: Never submitted
 ----
-- lib/erb.rb           |  3 +++
-- test/erb/test_erb.rb | 27 +++++++++++++++++++++++++++
-- 2 files changed, 30 insertions(+)
+- gio/meson.build  | 1 +
+- glib/meson.build | 1 +
+- 2 files changed, 2 insertions(+)
 -
--diff --git a/lib/erb.rb b/lib/erb.rb
--index bc1615d7da..a7317c0856 100644
----- a/lib/erb.rb
--+++ b/lib/erb.rb
--@@ -463,6 +463,9 @@ def new_toplevel(vars = nil)
--   #   erb.def_method(MyClass, 'render(arg1, arg2)', filename)
--   #   print MyClass.new.render('foo', 123)
--   def def_method(mod, methodname, fname='(ERB)')
--+    unless @_init.equal?(self.class.singleton_class)
--+      raise ArgumentError, "not initialized"
--+    end
--     src = self.src.sub(/^(?!#|$)/) {"def #{methodname}\n"} << "\nend\n"
--     mod.module_eval do
--       eval(src, binding, fname, -1)
--diff --git a/test/erb/test_erb.rb b/test/erb/test_erb.rb
--index 09496d31e25ca2..9eec43da158c0c 100644
----- a/test/erb/test_erb.rb
--+++ b/test/erb/test_erb.rb
--@@ -664,6 +664,33 @@ def test_prohibited_marshal_load
--     assert_raise(ArgumentError) {erb.result}
--   end
-- 
--+  def test_prohibited_marshal_load_def_method
--+    erb = ERB.allocate
--+    erb.instance_variable_set(:@src, "")
--+    erb.instance_variable_set(:@lineno, 1)
--+    erb.instance_variable_set(:@_init, true)
--+    erb = Marshal.load(Marshal.dump(erb))
--+    assert_raise(ArgumentError) {erb.def_method(Class.new, 'render')}
--+  end
--+
--+  def test_prohibited_marshal_load_def_module
--+    erb = ERB.allocate
--+    erb.instance_variable_set(:@src, "")
--+    erb.instance_variable_set(:@lineno, 1)
--+    erb.instance_variable_set(:@_init, true)
--+    erb = Marshal.load(Marshal.dump(erb))
--+    assert_raise(ArgumentError) {erb.def_module}
--+  end
--+
--+  def test_prohibited_marshal_load_def_class
--+    erb = ERB.allocate
--+    erb.instance_variable_set(:@src, "")
--+    erb.instance_variable_set(:@lineno, 1)
--+    erb.instance_variable_set(:@_init, true)
--+    erb = Marshal.load(Marshal.dump(erb))
--+    assert_raise(ArgumentError) {erb.def_class}
--+  end
--+
--   def test_multi_line_comment_lineno
--     erb = ERB.new(<<~EOS)
--       <%= __LINE__ %>
-diff --git a/package/ruby/ruby.hash b/package/ruby/ruby.hash
-index e8bf51ea43..dd97a6d867 100644
---- a/package/ruby/ruby.hash
-+++ b/package/ruby/ruby.hash
-@@ -1,5 +1,5 @@
--# https://www.ruby-lang.org/en/news/2026/03/11/ruby-3-4-9-released/
--sha512  356fb47cc56f2d25198cb95253fc20ff7d9a6fd1fa53bc475e5c440012aebe27562537c399d271357235114ade263fd625029b66cb0f9b526f9c04f169fb9580  ruby-3.4.9.tar.xz
-+# https://www.ruby-lang.org/en/news/2026/06/30/ruby-3-4-10-released/
-+sha512  c28d59946c0a1b8e4385a772e0651c6f4154c18ab8a2a62289c3213eb4fe937cec0942e0076cda429576e58ad277b18f4b5611e644d15b122c1cd96baf10f284  ruby-3.4.10.tar.xz
- 
- # License files, Locally calculated
- sha256  a2021e52d5d6adf7e3f45aab9d2b860ce03cdf6153776853e11d5668193eecfd  LEGAL
-diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
-index a66bbd4cbf..ebe3004c6a 100644
---- a/package/ruby/ruby.mk
-+++ b/package/ruby/ruby.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- RUBY_VERSION_MAJOR = 3.4
--RUBY_VERSION = $(RUBY_VERSION_MAJOR).9
-+RUBY_VERSION = $(RUBY_VERSION_MAJOR).10
- RUBY_VERSION_EXT = 3.4.0
- RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
- RUBY_SOURCE = ruby-$(RUBY_VERSION).tar.xz
-@@ -19,9 +19,6 @@ RUBY_LICENSE_FILES = LEGAL COPYING BSDL
- 
- RUBY_CPE_ID_VENDOR = ruby-lang
- 
--# 0001-fix-CVE-2026-41316.patch
--RUBY_IGNORE_CVES += CVE-2026-41316
+-diff --git a/gio/meson.build b/gio/meson.build
+-index 59c2b0f..5120537 100644
+---- a/gio/meson.build
+-+++ b/gio/meson.build
+-@@ -885,6 +885,7 @@ pkg.generate(libgio,
+-   variables : [
+-     'schemasdir=' + '${datadir}' / schemas_subdir,
+-     'dtdsdir=' + '${datadir}' / dtds_subdir,
+-+    'girdir=' + join_paths('${libdir}', '../share/gir-1.0'),
+-     'giomoduledir=' + pkgconfig_giomodulesdir,
+-     'gio=' + '${bindir}' / 'gio',
+-     'gio_querymodules=' + pkgconfig_multiarch_bindir / 'gio-querymodules',
+-diff --git a/glib/meson.build b/glib/meson.build
+-index d2efeba..a69532b 100644
+---- a/glib/meson.build
+-+++ b/glib/meson.build
+-@@ -447,6 +447,7 @@ pkg.generate(libglib,
+-   subdirs : ['glib-2.0'],
+-   extra_cflags : ['-I${libdir}/glib-2.0/include'] + win32_cflags,
+-   variables : [
+-+    'girdir=' + join_paths('${libdir}', '../share/gir-1.0'),
+-     'glib_genmarshal=' + '${bindir}' / 'glib-genmarshal',
+-     'gobject_query=' + '${bindir}' / 'gobject-query',
+-     'glib_mkenums=' + '${bindir}' / 'glib-mkenums',
+--- 
+-2.45.2
 -
- RUBY_DEPENDENCIES = host-pkgconf host-ruby
- HOST_RUBY_DEPENDENCIES = host-libyaml host-pkgconf host-openssl
- RUBY_MAKE_ENV = $(TARGET_MAKE_ENV)
+diff --git a/package/libglib2/libglib2-bootstrap/2.82.0 b/package/libglib2/libglib2-bootstrap/2.82.0
+deleted file mode 120000
+index 28b180f102..0000000000
+--- a/package/libglib2/libglib2-bootstrap/2.82.0
++++ /dev/null
+@@ -1 +0,0 @@
+-../2.82.0
+\ No newline at end of file
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
