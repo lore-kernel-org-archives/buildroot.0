@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88AD1C44506
-	for <buildroot@archiver.kernel.org>; Fri, 10 Jul 2026 13:42:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C433CC43458
+	for <buildroot@archiver.kernel.org>; Fri, 10 Jul 2026 13:42:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5252D6068F;
-	Fri, 10 Jul 2026 13:42:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 99EBD40907;
+	Fri, 10 Jul 2026 13:42:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YQCgdQhAAFD7; Fri, 10 Jul 2026 13:42:53 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GOwaQY3K95PV; Fri, 10 Jul 2026 13:42:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 902BC60693
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9007540912
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1783690973;
-	bh=JGVbWVvlguXJB1K+cpXUEcTnKGuFa/6AAT6h8pNFQb8=;
+	s=default; t=1783690974;
+	bh=WiKwcxaJCmc5Adqc8jPDuye6S9rnOenGWViVolG/i7A=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=QBu740zURfWyUxQSl2gt0KilEQUWNEI6pNtaEwfWqw1m6UR46OxmYx41mJgdOB0lF
-	 cZGZuJLCowpwba2Bzf44pZow8N6JEF4VwEMkzHf/5aEu50tXGBgJZIDvlD5ohUdu7c
-	 yUDHd0kmE75sQ45vLAMqE5tcoO4cb6PdSm4S9vELRMNYh6Ykjd18h4X/S/YOCwvq2u
-	 a4oZHoVUh2lr/9RX3OiTrNwn1x78bso1RDHbp0YEffgtb2/B/Bk3HVdoZBDx3+lL+R
-	 12LnJ05tO79l9zw5Yyxqv9Xp2KISGWHswIdmAxX91nhdnlQS1PUwdNwYxeHIZVlX0L
-	 G3IDV9ObBNd2g==
+	b=k+n3sbNtYwIHgmD2kYLGcCMJL6eqc8mnI2OauMATAhELg4CWxQtlR1M4Bp51TGJzG
+	 t9JKfgekX4GPvCyEAsjke2oXNcEKWSUf4FClh0M6/jBGiK3ihUm1rHxfalnaCxGP1t
+	 3jqLNvGD0u+Y6YpM6/bPOXMiPK67n7x8fJi3TySbelL9AqznBB3vU/CpptqdVmxIlP
+	 JNSt5fVQO/YKD8a4TNSAvyKXPy393r4puGhmy4Kn+BGAGi3T8D0QzZZbA3TeUfv2CR
+	 udtnYpIbIvd8ofGviEVjqEFGc31dOwJQiuzuQfMVl53CvdR2kng0sNoEThMJeGAnkD
+	 rA5sPoP4HPcVw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 902BC60693;
-	Fri, 10 Jul 2026 13:42:53 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 7A666FD1
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9007540912;
+	Fri, 10 Jul 2026 13:42:54 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 901F52FE
  for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:42:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5A096810BA
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8E1304076A
  for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:42:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wtg5-k_k3DG6 for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Zq0v6b2vLBP0 for <buildroot@buildroot.org>;
  Fri, 10 Jul 2026 13:42:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 90EDE810B3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C4E45408F0
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 90EDE810B3
+ by smtp4.osuosl.org (Postfix) with ESMTP id C4E45408F0
  for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:42:49 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B823E88689; Fri, 10 Jul 2026 13:42:16 +0000 (UTC)
+ id 065BF88678; Fri, 10 Jul 2026 13:42:17 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 8 Jul 2026 13:48:29 +0200
+Date: Wed, 8 Jul 2026 13:49:59 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 8e74f24dd6db0f8b7517403a817996848f66ab00
-X-Git-Newrev: 6b4daa210f49ddfc90b4ea794751b7a2b7fe3a0c
+X-Git-Oldrev: 3ec41904238ff46a45101f884525edb75555fc82
+X-Git-Newrev: 33c43cb2279899c32509de6b0c5343a7b96e78e5
 X-Patchwork-Hint: ignore
-Message-Id: <20260710134216.B823E88689@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] support/testing:
- TestPythonPy3NetworkmanagerGoi: check we actually get data
+Message-Id: <20260710134217.065BF88678@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/libssh2: backport
+ upstream patch for CVE-2026-55200
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,37 +77,85 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/6b4daa210f49ddfc90b4ea794751b7a2b7fe3a0c
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/33c43cb2279899c32509de6b0c5343a7b96e78e5
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-The sample script would've passed even if the connections list was
-empty. Check that there is at least one connection, and that the
-sample script can read loopback device information.
+- CVE-2026-55200:
+    libssh2 through 1.11.1, fixed in commit 97acf3df contains an out-of-
+    bounds write vulnerability in ssh2_transport_read() that fails to
+    enforce upper bounds on packet_length field. Remote attackers can send
+    crafted SSH packets with excessively large packet_length values to
+    corrupt heap memory and achieve remote code execution.
 
+For more information, see:
+  - https://www.cve.org/CVERecord?id=CVE-2026-55200
+  - https://github.com/libssh2/libssh2/commit/97acf3dfda80c91c3a8c9f2372546301d4a1a7a8
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-(cherry picked from commit f38f5bb5939fc3fe896ace714182e2ed8d8c0a2f)
+(cherry picked from commit c5aa9327458fceb21e0278f37765af1d5175e1cf)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- support/testing/tests/package/sample_python_networkmanager_goi.py | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ ...itional-boundary-checks-for-packet-length.patch | 36 ++++++++++++++++++++++
+ package/libssh2/libssh2.mk                         |  3 ++
+ 2 files changed, 39 insertions(+)
 
-diff --git a/support/testing/tests/package/sample_python_networkmanager_goi.py b/support/testing/tests/package/sample_python_networkmanager_goi.py
-index 240e8437fd..dff68e66f9 100644
---- a/support/testing/tests/package/sample_python_networkmanager_goi.py
-+++ b/support/testing/tests/package/sample_python_networkmanager_goi.py
-@@ -24,3 +24,11 @@ for c in connections:
-     print("{}:".format(c.get_id()))
-     c.for_each_setting_value(print_values, None)
-     print("\n")
-+print("found {} defined connections".format(len(connections)))
-+assert len(connections) > 0
+diff --git a/package/libssh2/0003-transport-c-Additional-boundary-checks-for-packet-length.patch b/package/libssh2/0003-transport-c-Additional-boundary-checks-for-packet-length.patch
+new file mode 100644
+index 0000000000..ef54771afc
+--- /dev/null
++++ b/package/libssh2/0003-transport-c-Additional-boundary-checks-for-packet-length.patch
+@@ -0,0 +1,36 @@
++From 97acf3dfda80c91c3a8c9f2372546301d4a1a7a8 Mon Sep 17 00:00:00 2001
++From: Will Cosgrove <will@panic.com>
++Date: Fri, 12 Jun 2026 15:57:44 -0700
++Subject: [PATCH] transport.c: Additional boundary checks for packet length
++ (#2052)
 +
-+# check that we can find the loopback device ...
-+loopback = client.get_device_by_iface("lo")
-+# ... and read its type and status as expected
-+assert loopback.get_device_type().name == "LOOPBACK"
-+assert loopback.get_state().name == "ACTIVATED"
++Add additional bounds checking on packet length to prevent OOB write.
++
++Credit: [TristanInSec](https://github.com/TristanInSec)
++
++CVE: CVE-2026-55200
++Upstream: https://github.com/libssh2/libssh2/commit/97acf3dfda80c91c3a8c9f2372546301d4a1a7a8
++[thomas: backport to 1.11.1, change ntohu32 call]
++Signed-off-by: Thomas Perale <thomas.perale@mind.be>
++---
++ src/transport.c | 6 +++++-
++ 1 file changed, 5 insertions(+), 1 deletion(-)
++
++diff --git a/src/transport.c b/src/transport.c
++index 869fc5a4fa..7925ad33d1 100644
++--- a/src/transport.c
+++++ b/src/transport.c
++@@ -645,8 +645,12 @@ int ssh2_transport_read(LIBSSH2_SESSION *session)
++                 total_num = 4;
++ 
++                 p->packet_length = _libssh2_ntohu32(block);
++-                if(p->packet_length < 1)
+++                if(p->packet_length < 1) {
++                     return LIBSSH2_ERROR_DECRYPT;
+++                }
+++                else if(p->packet_length > LIBSSH2_PACKET_MAXPAYLOAD) {
+++                    return LIBSSH2_ERROR_OUT_OF_BOUNDARY;
+++                }
++ 
++                 /* total_num may include size field, however due to existing
++                  * logic it needs to be removed after the entire packet is read
+diff --git a/package/libssh2/libssh2.mk b/package/libssh2/libssh2.mk
+index c85129a7cd..0ccf5effb3 100644
+--- a/package/libssh2/libssh2.mk
++++ b/package/libssh2/libssh2.mk
+@@ -19,6 +19,9 @@ LIBSSH2_IGNORE_CVES += CVE-2026-7598
+ # 0002-packet-check-libssh2-get-string-return-in-EXT-INFO-handler.patch
+ LIBSSH2_IGNORE_CVES += CVE-2026-55199
+ 
++# 0003-transport-c-Additional-boundary-checks-for-packet-length.patch
++LIBSSH2_IGNORE_CVES += CVE-2026-55200
++
+ ifeq ($(BR2_PACKAGE_LIBSSH2_MBEDTLS),y)
+ LIBSSH2_DEPENDENCIES += mbedtls
+ LIBSSH2_CONF_OPTS += --with-libmbedcrypto-prefix=$(STAGING_DIR)/usr \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
