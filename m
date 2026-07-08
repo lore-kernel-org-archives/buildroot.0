@@ -1,63 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E497C43458
-	for <buildroot@archiver.kernel.org>; Fri, 10 Jul 2026 13:45:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47CF8C4450A
+	for <buildroot@archiver.kernel.org>; Fri, 10 Jul 2026 13:45:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5507740BA5;
-	Fri, 10 Jul 2026 13:45:18 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZhEaIWVwt8NF; Fri, 10 Jul 2026 13:45:17 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D387140B77
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1783691116;
-	bh=s3+I25WqXaD6lCJ9FFzSTSOofZHfXr+Xf3EMN5CWDcw=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=ojRJ6OHL86Gc6yuUmi40OnoemEWsw0gmGI/ewuA1nFspJ9TimZDNIh3mv3cfCjKE1
-	 oY40HuL5FbKxfn2UMLO9+mY/AXG9V/E4iUQ7VkQIsE1vwI+cy8wPuW6LYaoKII3jpi
-	 oBZQRNjPFf1vCgWqcgMyfVeEuaCcqH+3ZUmr4wYgD/Jectmy+kZahUweWte+xPQcof
-	 yXm9EG2ZOz49ZVlCy8wUPpS43d9cZ+4BW6OVyHnlRzac+fpgJp28xGUiMjO8fz6uZN
-	 QX+ZwODyS557u2XpnpufdZ4QhFmU03H+2ccaCWb5LBjd4cMgrWdMmT436fn+4GXD6t
-	 Xl44GekttA63w==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D387140B77;
-	Fri, 10 Jul 2026 13:45:16 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 23B062FE
- for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:44:53 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 07188810B6
- for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:44:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 20A498113A;
+	Fri, 10 Jul 2026 13:45:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xvaLZAjlWROI for <buildroot@buildroot.org>;
+ id rVaZqWh6_mUX; Fri, 10 Jul 2026 13:45:18 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F019D8112F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1783691118;
+	bh=WoV3SLz5kawU6UqZAKjySfJXyh2sRbMvwC9RqmzsKJY=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=YK2bj96lnwne/5IDnV0y2Rel6dG13W3TQRN2nbhk5MwiJ7OUCDJ3iPMoLH8kRF2jr
+	 YeDe83/0cTKET4nbEGGCe1W/HTPdL/epSOMiYOCCaZqlWrzyQyGYUO9hVamL+D4TZj
+	 icY16Jem/OXDQRSU4qdSKzfmcsFsYnX7M+B2ozzkNqZJvAtMuDM2aYnI0CdVxUP2cT
+	 gGpT7MF9ywv97CHMGzXd+8/ABkd44cHjeM0JDb/dNqAyArvfSPJEBXyJTBLpMUtbBv
+	 xmWosGQ1G+VgQczW8sIRHF3xx0woUVdGr0RyA7+lwydl3rLJky4Q4S+2Ha8wVO5d67
+	 5uflzCEVVhz7w==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id F019D8112F;
+	Fri, 10 Jul 2026 13:45:17 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 31E9BFD1
+ for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:44:53 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 243AB400D1
+ for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:44:53 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KQWUo5is2t7D for <buildroot@buildroot.org>;
  Fri, 10 Jul 2026 13:44:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A0B59810BE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 243A84022E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id A0B59810BE
- for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:44:50 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 243A84022E
+ for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:44:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C4FA78867A; Fri, 10 Jul 2026 13:44:17 +0000 (UTC)
+ id 58AFC8867A; Fri, 10 Jul 2026 13:44:19 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 8 Jul 2026 14:53:26 +0200
+Date: Wed, 8 Jul 2026 14:54:17 +0200
 X-Git-Refname: refs/heads/2026.05.x
-X-Git-Oldrev: 023a2fffa5dec0758793ad966925d145bef51112
-X-Git-Newrev: 190ea0849b161af57507c89e462083b813b6d0cb
+X-Git-Oldrev: 190ea0849b161af57507c89e462083b813b6d0cb
+X-Git-Newrev: 57216f1a906e7748575835a3f6b21dda27e47872
 X-Patchwork-Hint: ignore
-Message-Id: <20260710134417.C4FA78867A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.05.x] package/php: security
- bump version to 8.5.8
+Message-Id: <20260710134419.58AFC8867A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.05.x] package/{glibc,
+ localedef}: security bump to version
+ 2.43-45-gdae425b554207f7c4599c7fac707ad4c08545674
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,48 +78,202 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/190ea0849b161af57507c89e462083b813b6d0cb
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/57216f1a906e7748575835a3f6b21dda27e47872
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.05.x
 
-https://www.php.net/ChangeLog-8.php#8.5.8
-https://news-web.php.net/php.announce/498
-https://github.com/php/php-src/blob/php-8.5.8/NEWS
+Removed patch which is included in this bump.
 
-Fixes CVE-2026-14355.
+Fixes CVE-2026-5435, CVE-2026-6238 & CVE-2026-6791.
+
+git shortlog  4070d808bea1c077eb7e7d52b52b91cae98205d5..
+
+Adhemerval Zanella (3):
+      math: Fix fma alignment when exponent difference is exactly 64 (BZ 34183)
+      arm: Save/restore VFP registers in PLT trampolines (BZ 34144, BZ 15792)
+      posix: Fix stack overflow in wordexp tilde expansion (BZ 34091, CVE-2026-6791)
+
+Florian Weimer (8):
+      iconv: Suppress intermediate errors with //TRANSLIT (bug 34236)
+      resolv: Declare __p_class_syms, __p_type_syms for internal use
+      resolv: Fix ns_sprintrrf formatting of class, type values (bug 34289)
+      resolv: Improve formatting of unknown records in ns_sprintrrf
+      resolv: Check for inet_ntop failure in ns_sprintrrf
+      resolv: More types as unknown in ns_sprintrrf (CVE-2026-5435)
+      resolv: Fix buffer overreads in ns_sprintrrf (CVE-2026-6238)
+      resolv: Add test case tst-ns_sprintrr (bug 34033, bug 34069)
+
+Jakub Jelinek (1):
+      Rename __unused fields to __glibc_reserved.
+
+John David Anglin (1):
+      hppa: Fix missing call to __feraiseexcept (BZ 34306)
+
+Pino Toscano (1):
+      Hurd: comment PF_LINK/AF_LINK defines
+
+Sam James (1):
+      elf: don't clobber ld.so.conf in tst-glibc-hwcaps-prepend-cache [BZ #34210]
+
+Samuel Thibault (3):
+      Hurd: comment PF_ROUTE/AF_ROUTE defines
+      Hurd: comment ioctls which cannot currently compile
+      Hurd: restore some SIOC ioctls
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit beb6be6b06e3dc536a24ea99c0e94d81c75a1212)
+(cherry picked from commit 42d63edf4ca144c5522fbf988fb341b90163d462)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...ename-__unused-fields-to-__glibc_reserved.patch | 85 ----------------------
+ package/glibc/glibc.hash                           |  2 +-
+ package/glibc/glibc.mk                             | 11 ++-
+ package/localedef/localedef.mk                     |  2 +-
+ 4 files changed, 12 insertions(+), 88 deletions(-)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index 2a89d03ecd..3c18506359 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
+diff --git a/package/glibc/0001-Rename-__unused-fields-to-__glibc_reserved.patch b/package/glibc/0001-Rename-__unused-fields-to-__glibc_reserved.patch
+deleted file mode 100644
+index ae832a6035..0000000000
+--- a/package/glibc/0001-Rename-__unused-fields-to-__glibc_reserved.patch
++++ /dev/null
+@@ -1,85 +0,0 @@
+-From 243bdfec8f7cd4a85a8ce6e4e9a5a5accd3ce1aa Mon Sep 17 00:00:00 2001
+-From: Jakub Jelinek <jakub@redhat.com>
+-Date: Tue, 17 Feb 2026 17:06:48 +0100
+-Subject: [PATCH] Rename __unused fields to __glibc_reserved.
+-
+-__unused is often defined to __attribute__((unused)) in BSD
+-sources and furthermore libstdc++ testsuite uses it as a macro
+-to verify libstdc++ headers don't use __unused identifiers.
+-In ~2012 glibc headers have been cleaned up, but some new
+-uses of __unused have reappeared (s390 fenv.h already many
+-years ago, the rest last November).
+-
+-Reviewed-by: Florian Weimer <fweimer@redhat.com>
+-
+-Upstream: https://sourceware.org/git/?p=glibc.git;a=commit;h=18b97b03b7442d8ba0860e43145f8724c9e77b17
+-
+-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+----
+- sysdeps/powerpc/nptl/bits/struct_mutex.h | 2 +-
+- sysdeps/s390/fpu/bits/fenv.h             | 8 ++++----
+- sysdeps/s390/nptl/bits/struct_mutex.h    | 2 +-
+- sysdeps/x86/nptl/bits/struct_mutex.h     | 2 +-
+- 4 files changed, 7 insertions(+), 7 deletions(-)
+-
+-diff --git a/sysdeps/powerpc/nptl/bits/struct_mutex.h b/sysdeps/powerpc/nptl/bits/struct_mutex.h
+-index 1472af21f7..ebf2d50922 100644
+---- a/sysdeps/powerpc/nptl/bits/struct_mutex.h
+-+++ b/sysdeps/powerpc/nptl/bits/struct_mutex.h
+-@@ -32,7 +32,7 @@ struct __pthread_mutex_s
+-   int __kind;
+- #if __WORDSIZE == 64
+-   short __spins;
+--  short __unused;
+-+  short __glibc_reserved;
+-   __pthread_list_t __list;
+- # define __PTHREAD_MUTEX_HAVE_PREV      1
+- #else
+-diff --git a/sysdeps/s390/fpu/bits/fenv.h b/sysdeps/s390/fpu/bits/fenv.h
+-index b9e844e393..33e88fbe9d 100644
+---- a/sysdeps/s390/fpu/bits/fenv.h
+-+++ b/sysdeps/s390/fpu/bits/fenv.h
+-@@ -76,10 +76,10 @@ typedef unsigned int fexcept_t; /* size of fpc */
+- typedef struct
+- {
+-   fexcept_t __fpc;
+--  void *__unused;
+--  /* The field __unused (formerly __ieee_instruction_pointer) is a relict from
+--     commit "Remove PTRACE_PEEKUSER" (87b9b50f0d4b92248905e95a06a13c513dc45e59)
+--     and isn't used anymore.  */
+-+  void *__glibc_reserved;
+-+  /* The field __glibc_reserved (formerly __ieee_instruction_pointer) is a
+-+     relict from commit "Remove PTRACE_PEEKUSER"
+-+     (87b9b50f0d4b92248905e95a06a13c513dc45e59) and isn't used anymore.  */
+- } fenv_t;
+- 
+- /* If the default argument is used we use this value.  */
+-diff --git a/sysdeps/s390/nptl/bits/struct_mutex.h b/sysdeps/s390/nptl/bits/struct_mutex.h
+-index d069b485d1..571265267c 100644
+---- a/sysdeps/s390/nptl/bits/struct_mutex.h
+-+++ b/sysdeps/s390/nptl/bits/struct_mutex.h
+-@@ -32,7 +32,7 @@ struct __pthread_mutex_s
+-   int __kind;
+- #if __WORDSIZE == 64
+-   short __spins;
+--  short __unused;
+-+  short __glibc_reserved;
+-   __pthread_list_t __list;
+- # define __PTHREAD_MUTEX_HAVE_PREV      1
+- #else
+-diff --git a/sysdeps/x86/nptl/bits/struct_mutex.h b/sysdeps/x86/nptl/bits/struct_mutex.h
+-index 9c19dff660..13c9894ad4 100644
+---- a/sysdeps/x86/nptl/bits/struct_mutex.h
+-+++ b/sysdeps/x86/nptl/bits/struct_mutex.h
+-@@ -32,7 +32,7 @@ struct __pthread_mutex_s
+-   int __kind;
+- #ifdef __x86_64__
+-   short __spins;
+--  short __unused;
+-+  short __glibc_reserved;
+-   __pthread_list_t __list;
+- # define __PTHREAD_MUTEX_HAVE_PREV      1
+- #else
+--- 
+-2.47.3
+-
+diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
+index a6e6874e1f..97862aef14 100644
+--- a/package/glibc/glibc.hash
++++ b/package/glibc/glibc.hash
 @@ -1,5 +1,5 @@
- # From https://www.php.net/downloads.php?source=Y
--sha256  01ba2ed1c2658dacf91bebc8be6a4885f69b811c7993831fc48e26107ab29985  php-8.5.7.tar.xz
-+sha256  58910198d19e873048fe87cdfe16bc790025417ede3d1651bfa1c4b533d573f2  php-8.5.8.tar.xz
+ # Locally calculated (fetched from git)
+-sha256  668f890b45fd8d32bb73783ad3b75fe1f396c5c3aa3c3832e616b4c3f0c6066b  glibc-2.43-27-g4070d808bea1c077eb7e7d52b52b91cae98205d5-git4.tar.gz
++sha256  647325cc2e9f2c6260f3c48d0385ac5e30cb60d2ec2e5afd649555c518c9bf60  glibc-2.43-45-gdae425b554207f7c4599c7fac707ad4c08545674-git4.tar.gz
  
- # License file
- sha256  b42e4df5e50e6ecda1047d503d6d91d71032d09ed1027ba1ef29eed26f890c5a  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 0bfb12a8eb..56d66e40d7 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ # Hashes for license files
+ sha256  edaef632cbb643e4e7a221717a6c441a4c1a7c918e6e4d56debc3d8739b233f6  COPYINGv2
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index 4a6bc94634..5aa2ef5f99 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -7,7 +7,7 @@
+ # Generate version string using:
+ #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
+ # When updating the version, please also update localedef
+-GLIBC_VERSION = 2.43-27-g4070d808bea1c077eb7e7d52b52b91cae98205d5
++GLIBC_VERSION = 2.43-45-gdae425b554207f7c4599c7fac707ad4c08545674
+ GLIBC_SITE = https://sourceware.org/git/glibc.git
+ GLIBC_SITE_METHOD = git
  
--PHP_VERSION = 8.5.7
-+PHP_VERSION = 8.5.8
- PHP_SITE = https://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+@@ -46,6 +46,15 @@ GLIBC_IGNORE_CVES += CVE-2026-5928
+ # Fixed by glibc-2.43-27-g4070d808bea1c077eb7e7d52b52b91cae98205d5
+ GLIBC_IGNORE_CVES += CVE-2026-5450
+ 
++# Fixed by glibc-2.43-42-ge64ae5a591f0604b7504df4df631857bb11cc78b
++GLIBC_IGNORE_CVES += CVE-2026-5435
++
++# Fixed by glibc-2.43-43-g3a418da6a3938756763980541e440dbdd46900fb
++GLIBC_IGNORE_CVES += CVE-2026-6238
++
++# Fixed by glibc-2.43-45-gdae425b554207f7c4599c7fac707ad4c08545674
++GLIBC_IGNORE_CVES += CVE-2026-6791
++
+ # This CVE is considered as not being security issues by
+ # upstream glibc:
+ #  https://security-tracker.debian.org/tracker/CVE-2010-4756
+diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
+index 4890e095e3..732ed6d4ad 100644
+--- a/package/localedef/localedef.mk
++++ b/package/localedef/localedef.mk
+@@ -7,7 +7,7 @@
+ # Use the same VERSION and SITE as target glibc
+ # As in glibc.mk, generate version string using:
+ #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
+-LOCALEDEF_VERSION = 2.43-27-g4070d808bea1c077eb7e7d52b52b91cae98205d5
++LOCALEDEF_VERSION = 2.43-45-gdae425b554207f7c4599c7fac707ad4c08545674
+ LOCALEDEF_SOURCE = glibc-$(LOCALEDEF_VERSION)$(BR_FMT_VERSION_git).tar.gz
+ LOCALEDEF_SITE = https://sourceware.org/git/glibc.git
+ LOCALEDEF_SITE_METHOD = git
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
