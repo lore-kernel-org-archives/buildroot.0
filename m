@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5045FC44506
-	for <buildroot@archiver.kernel.org>; Fri, 10 Jul 2026 13:44:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4AAB8C44508
+	for <buildroot@archiver.kernel.org>; Fri, 10 Jul 2026 13:44:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E5FF640A68;
-	Fri, 10 Jul 2026 13:44:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 16F2F80FF5;
+	Fri, 10 Jul 2026 13:44:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id X86eTp0bHhyS; Fri, 10 Jul 2026 13:44:48 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1eRHRSWhBxR1; Fri, 10 Jul 2026 13:44:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 28CB240A12
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 50114810BC
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1783691088;
-	bh=/kPlQPfnNMsM4pRhe15myqRcuxX7yZBdh7vVveXMCdo=;
+	s=default; t=1783691089;
+	bh=FdQPbWwM++vBh0/OnwZ68x/rsXTQDbaWw5JUMBMGmg0=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=n0on+TDKXg2XJVPsk5tkp6saFstq7gB9UAyEXUc1hWzLZFDcQLbpi/GRoZrkwOVcS
-	 Fm73e5dEIjQBMdPK+aMKczZnNIFAC3ouX7k0CJORnHZvMKfKyfJvCrjZhi4h5OiCP5
-	 D39nwqbXjn7o4e991AtVAt3fATtmgUE59cqKyGsBfiE9rWPqWFidL2Y62Kj4bZV39v
-	 LStAVxh8FAYfm/tHZ/vKmV0/2ZTEtv+uVU8Wl+Sdl3h7tkFNIsJAx8ALM7lPL56wl4
-	 tcE6y8L5pq4WvKUZdADQbeqYm+Zgceyw+9xfblyQb+4la/AWJFEZ+6VwJdAzQWRzAW
-	 MVimPQWasa9ig==
+	b=DDSKrEu1Jza8kuCcCA4x7xKN3kgitJmWg+7qRTFgon4Ibz5fewVd2NbcOali/owHb
+	 k+7Fz1UxSRH6opf8mglxxGO7phQcIhCSWJJBk1nH/NKM/whbw46UXVpX2eyESeuAOw
+	 l7h6yWFFcUxdn94EtG9vMvs4BVKqiyUXLBWWuTKoYbJdNOUAH65HhLNWznO1NP82An
+	 y1htk8OhgHKefa7MQpmkykl2zHh7bnb7cEHzwuD7hBisCLGwAliGzmQATwK3Uyuy3+
+	 15JrXH45t4OHmYpVSmh94YxqVJIbPgOM95uvX/6aWH9SY8r29qwPfOm/CI7Qo8fkZO
+	 WpfRzZSHuP4zQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 28CB240A12;
-	Fri, 10 Jul 2026 13:44:48 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 74C472FE
+	by smtp1.osuosl.org (Postfix) with ESMTP id 50114810BC;
+	Fri, 10 Jul 2026 13:44:49 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 68B17FD1
  for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:44:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 59758408FC
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4E715606A8
  for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:44:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8tEB8FRsqKN5 for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NGnDT1gTaO3Q for <buildroot@buildroot.org>;
  Fri, 10 Jul 2026 13:44:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 939AF40768
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 872646068F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 939AF40768
+ by smtp3.osuosl.org (Postfix) with ESMTP id 872646068F
  for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:44:41 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C8B958868B; Fri, 10 Jul 2026 13:44:08 +0000 (UTC)
+ id AF7698868E; Fri, 10 Jul 2026 13:44:08 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 8 Jul 2026 13:48:57 +0200
+Date: Wed, 8 Jul 2026 13:48:32 +0200
 X-Git-Refname: refs/heads/2026.05.x
-X-Git-Oldrev: 2723abb9f43e99257371a4f89f6b72a79f256921
-X-Git-Newrev: f532ff0fef11f95fd982e84b6647cab6790913b9
+X-Git-Oldrev: 68895e688225e21e6d2d2a9d1af615ba82e968cc
+X-Git-Newrev: 2723abb9f43e99257371a4f89f6b72a79f256921
 X-Patchwork-Hint: ignore
-Message-Id: <20260710134408.C8B958868B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.05.x] package/openjpeg: add
- upstream patch for CVE-2026-6192
+Message-Id: <20260710134408.AF7698868E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.05.x] support/testing:
+ TestPythonPy3NetworkmanagerGoi: check we actually get data
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,86 +77,37 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/f532ff0fef11f95fd982e84b6647cab6790913b9
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/2723abb9f43e99257371a4f89f6b72a79f256921
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.05.x
 
-- CVE-2026-6192:
-    A vulnerability was identified in uclouvain openjpeg up to 2.5.4. This
-    impacts the function opj_pi_initialise_encode in the library
-    src/lib/openjp2/pi.c. The manipulation leads to integer overflow. The
-    attack must be carried out locally. The exploit is publicly available
-    and might be used. The identifier of the patch is
-    839936aa33eb8899bbbd80fda02796bb65068951. It is suggested to install a
-    patch to address this issue.
+The sample script would've passed even if the connections list was
+empty. Check that there is at least one connection, and that the
+sample script can read loopback device information.
 
-For more information, see:
-  - https://www.cve.org/CVERecord?id=CVE-2026-6192
-  - https://github.com/uclouvain/openjpeg/commit/839936aa33eb8899bbbd80fda02796bb65068951
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
-(cherry picked from commit 353007cf40f3fc68e1cb2b8878d30f5cdc40ac6a)
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+(cherry picked from commit f38f5bb5939fc3fe896ace714182e2ed8d8c0a2f)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...leading-to-insufficient-memory-allocation.patch | 35 ++++++++++++++++++++++
- package/openjpeg/openjpeg.mk                       |  3 ++
- 2 files changed, 38 insertions(+)
+ support/testing/tests/package/sample_python_networkmanager_goi.py | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/package/openjpeg/0001-opj-pi-initialise-encode-avoid-potential-integer-overflow-leading-to-insufficient-memory-allocation.patch b/package/openjpeg/0001-opj-pi-initialise-encode-avoid-potential-integer-overflow-leading-to-insufficient-memory-allocation.patch
-new file mode 100644
-index 0000000000..de5c925ec0
---- /dev/null
-+++ b/package/openjpeg/0001-opj-pi-initialise-encode-avoid-potential-integer-overflow-leading-to-insufficient-memory-allocation.patch
-@@ -0,0 +1,35 @@
-+From 839936aa33eb8899bbbd80fda02796bb65068951 Mon Sep 17 00:00:00 2001
-+From: Even Rouault <even.rouault@spatialys.com>
-+Date: Sun, 5 Apr 2026 13:25:27 +0200
-+Subject: [PATCH] opj_pi_initialise_encode() (write code path): avoid potential
-+ integer overflow leading to insufficient memory allocation
+diff --git a/support/testing/tests/package/sample_python_networkmanager_goi.py b/support/testing/tests/package/sample_python_networkmanager_goi.py
+index 240e8437fd..dff68e66f9 100644
+--- a/support/testing/tests/package/sample_python_networkmanager_goi.py
++++ b/support/testing/tests/package/sample_python_networkmanager_goi.py
+@@ -24,3 +24,11 @@ for c in connections:
+     print("{}:".format(c.get_id()))
+     c.for_each_setting_value(print_values, None)
+     print("\n")
++print("found {} defined connections".format(len(connections)))
++assert len(connections) > 0
 +
-+Fixes #1619
-+
-+CVE: CVE-2026-6192
-+Upstream: https://github.com/uclouvain/openjpeg/commit/839936aa33eb8899bbbd80fda02796bb65068951
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-+---
-+ src/lib/openjp2/pi.c | 9 ++++++---
-+ 1 file changed, 6 insertions(+), 3 deletions(-)
-+
-+diff --git a/src/lib/openjp2/pi.c b/src/lib/openjp2/pi.c
-+index 15ac33142..4abb87af2 100644
-+--- a/src/lib/openjp2/pi.c
-++++ b/src/lib/openjp2/pi.c
-+@@ -1694,9 +1694,12 @@ opj_pi_iterator_t *opj_pi_initialise_encode(const opj_image_t *p_image,
-+     l_current_pi = l_pi;
-+ 
-+     /* memory allocation for include*/
-+-    l_current_pi->include_size = l_tcp->numlayers * l_step_l;
-+-    l_current_pi->include = (OPJ_INT16*) opj_calloc(l_current_pi->include_size,
-+-                            sizeof(OPJ_INT16));
-++    l_current_pi->include = NULL;
-++    if (l_step_l <= UINT_MAX / l_tcp->numlayers) {
-++        l_current_pi->include_size = l_tcp->numlayers * l_step_l;
-++        l_current_pi->include = (OPJ_INT16*) opj_calloc(l_current_pi->include_size,
-++                                sizeof(OPJ_INT16));
-++    }
-+     if (!l_current_pi->include) {
-+         opj_free(l_tmp_data);
-+         opj_free(l_tmp_ptr);
-diff --git a/package/openjpeg/openjpeg.mk b/package/openjpeg/openjpeg.mk
-index bc5d8143a6..7ded900856 100644
---- a/package/openjpeg/openjpeg.mk
-+++ b/package/openjpeg/openjpeg.mk
-@@ -11,6 +11,9 @@ OPENJPEG_LICENSE_FILES = LICENSE
- OPENJPEG_CPE_ID_VENDOR = uclouvain
- OPENJPEG_INSTALL_STAGING = YES
- 
-+# 0001-opj-pi-initialise-encode-avoid-potential-integer-overflow-leading-to-insufficient-memory-allocation.patch
-+OPENJPEG_IGNORE_CVES += CVE-2026-6192
-+
- OPENJPEG_DEPENDENCIES += $(if $(BR2_PACKAGE_ZLIB),zlib)
- OPENJPEG_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBPNG),libpng)
- OPENJPEG_DEPENDENCIES += $(if $(BR2_PACKAGE_TIFF),tiff)
++# check that we can find the loopback device ...
++loopback = client.get_device_by_iface("lo")
++# ... and read its type and status as expected
++assert loopback.get_device_type().name == "LOOPBACK"
++assert loopback.get_state().name == "ACTIVATED"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
