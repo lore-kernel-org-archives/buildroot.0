@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C202BC44506
-	for <buildroot@archiver.kernel.org>; Fri, 10 Jul 2026 13:43:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8952CC43458
+	for <buildroot@archiver.kernel.org>; Fri, 10 Jul 2026 13:44:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6E74840AAC;
-	Fri, 10 Jul 2026 13:43:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6209340907;
+	Fri, 10 Jul 2026 13:44:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Y1AlFPRAJIlr; Fri, 10 Jul 2026 13:43:38 +0000 (UTC)
+ id 0w12YXztaif1; Fri, 10 Jul 2026 13:44:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A22C940A35
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9020940929
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1783691014;
-	bh=BJI72sg0vzWSx2DukzL0BPsFNZZKRw3sb/2h7lXn+vQ=;
+	s=default; t=1783691083;
+	bh=GSJ+LYEXlGwe4EoTHRWuxBnp6So7PNYfL3hdteDuYis=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=oQE64A5tUhmGjTVlX37th5TIliS1coZgtq0V3zFd/w5sslMOnPrYvq5MdsQsQ58sK
-	 T6VdXYjT+KVIR1HP0F1IPO1hpdeDyeGM/xKZBDlrBrNQNoB8aRbRDitvglOpcvv7gb
-	 hxN9FVB1gLIvh9yAL3zEVXvXcDcN7zJjYCSZRMUfq7OZ83mFZIVvVduXau3k8nA23Z
-	 21Y3v0uDatZFx5Tqiiw4/RUlhA2FMV6orR4G6Por1jbR0On/Of1dpfXeXPRN8i0ioF
-	 5ViAu1lpFPpKA9esgKhCCY3VJUqsvZ0/d9gEQKdytDVq3KZnEaLGrocGbf7S2flTq6
-	 kE+usGt3P+PxQ==
+	b=MwQcXyx7i06ev3CwYhkOKwvwBHdtHPiPhXadLaiKcLrt77lW8JsrFMCv8fzaQpp0e
+	 TuHds9AI0oFM7dKnYWpTI+ye1/dzV3FC3nQBUXfEzPH6lYEf5VTTEk0thPz7iXA35A
+	 0dF5XFe1/0uswlgOQxSTSZLo9CvV9R9kmYvP9MHiPkdNIgPyXqFNNWVietRaXE3bNI
+	 2KLk1d5k8nBQGtC4eKAJNuTN6xPUm89OuX7H1mclTL/4LuSLTYUI25m5NVO0xMuLCo
+	 F0Ulhmxy18OxqXM2YQZNGLvap57AWKfJKQaMdBDfh/uLSl5wBWgTLaCHTg92tsa/j2
+	 WVhJjqISo2soA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A22C940A35;
-	Fri, 10 Jul 2026 13:43:34 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id A7A3DA3C
- for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:42:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9020940929;
+	Fri, 10 Jul 2026 13:44:43 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 40D6DA3C
+ for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:44:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9679140913
- for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:42:54 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 32FF8810B3
+ for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:44:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 65G2o7pzoUVI for <buildroot@buildroot.org>;
- Fri, 10 Jul 2026 13:42:50 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UeHRsYpaFuZE for <buildroot@buildroot.org>;
+ Fri, 10 Jul 2026 13:44:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7E4C940902
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4D29C80FF5
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7E4C940902
- for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:42:50 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4D29C80FF5
+ for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:44:39 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B41AB8864C; Fri, 10 Jul 2026 13:42:17 +0000 (UTC)
+ id 6BC978867A; Fri, 10 Jul 2026 13:44:06 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 8 Jul 2026 14:53:52 +0200
-X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: d3d411aa79b89ee2311741369c2bcb47f94b8f42
-X-Git-Newrev: 0dfac4dd3fda47baf4f60a0e570b27526dea9e59
+Date: Wed, 8 Jul 2026 13:36:08 +0200
+X-Git-Refname: refs/heads/2026.05.x
+X-Git-Oldrev: 5ca85cc299ab07cde4d697308adc7feb5e5e1343
+X-Git-Newrev: 83c68022c228c9acd43f4924f207afd7a326dead
 X-Patchwork-Hint: ignore
-Message-Id: <20260710134217.B41AB8864C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/php: security
- bump to v8.3.32
+Message-Id: <20260710134406.6BC978867A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.05.x]
+ package/libglib2/libglib2-bootstrap: do not install to target
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,47 +77,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/0dfac4dd3fda47baf4f60a0e570b27526dea9e59
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/83c68022c228c9acd43f4924f207afd7a326dead
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.05.x
 
-See the release notes: https://www.php.net/ChangeLog-8.php#8.3.32
+Libglib2-bootstrap is only used as dependency to build
+gobject-introspection and then libglib2 with GOI support. It should
+not be installed to target, even if in practice libglib2 should
+overwrite anything it has installed.
 
-This fixes 2 vulnerabilities:
-- CVE-2026-12184: Segfault in file_get_contents w/ a https URL and a proxy set
-- CVE-2026-14355: Memory corruption (zend_mm_heap corrupted) in
-                  openssl_encrypt with AES-WRAP-PAD
-
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 866462e8dd79311c34b7318a988e920372080928)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libglib2/libglib2-bootstrap/libglib2-bootstrap.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index 978987ee46..11c0b2e6b0 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From https://www.php.net/downloads.php
--sha256  66410cee07f4b2baeb0843140bb2a2b52ef930b5cf9b3d6e6d158b33aae8fa37  php-8.3.31.tar.xz
-+sha256  8698ec1f9402fa5e5e872ae3d0916b62f5f27503c1fbfc9cc3521e113355ea92  php-8.3.32.tar.xz
+diff --git a/package/libglib2/libglib2-bootstrap/libglib2-bootstrap.mk b/package/libglib2/libglib2-bootstrap/libglib2-bootstrap.mk
+index 72a32bd825..665f320684 100644
+--- a/package/libglib2/libglib2-bootstrap/libglib2-bootstrap.mk
++++ b/package/libglib2/libglib2-bootstrap/libglib2-bootstrap.mk
+@@ -24,6 +24,7 @@ LIBGLIB2_BOOTSTRAP_LICENSE = $(LIBGLIB2_LICENSE)
+ LIBGLIB2_BOOTSTRAP_LICENSE_FILES = $(LIBGLIB2_LICENSE_FILES)
+ LIBGLIB2_BOOTSTRAP_CPE_ID_VENDOR = $(LIBGLIB2_CPE_ID_VENDOR)
+ LIBGLIB2_BOOTSTRAP_CPE_ID_PRODUCT = $(LIBGLIB2_CPE_ID_PRODUCT)
++LIBGLIB2_BOOTSTRAP_INSTALL_TARGET = NO
+ LIBGLIB2_BOOTSTRAP_INSTALL_STAGING = YES
+ LIBGLIB2_BOOTSTRAP_DL_SUBDIR = libglib2
  
- # License file
- sha256  b42e4df5e50e6ecda1047d503d6d91d71032d09ed1027ba1ef29eed26f890c5a  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 7d9cd3cb11..9ce3b280ac 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PHP_VERSION = 8.3.31
-+PHP_VERSION = 8.3.32
- PHP_SITE = https://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
