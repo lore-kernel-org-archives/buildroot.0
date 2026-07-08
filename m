@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7EF1C44506
-	for <buildroot@archiver.kernel.org>; Fri, 10 Jul 2026 13:45:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 098A8C44501
+	for <buildroot@archiver.kernel.org>; Fri, 10 Jul 2026 13:45:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AEA94810EC;
-	Fri, 10 Jul 2026 13:45:08 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id j1efrgZzm0tR; Fri, 10 Jul 2026 13:45:07 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C736B810EF
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1783691107;
-	bh=6eQYQsmJSwxOTtSMJWPFustwo/OehSAN8q49I7+JVmA=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Y/sOKkcZU+Wwe25CJOtTIWDS9PDkgdJ9hWkTT/reTnCb8wEuAYQyk7roXWNdfUJsm
-	 dnszYafV4iKP54q4Ow5TUwQ78YvlYdOcrVfDON/QDZCOPdK15FdKeS5mDXWMZ8oGY4
-	 +4YMo40DXHcbWY8Jfx86v22vRU1J46655kGolu5vzNvUDjftiPFLQ4RZTM9ZKWwUuL
-	 LdnOc0xvNRr5FO6G1H8m9iTAMYUfIRSYsMDq7DC84LOD//mkQL0OI9D7WRC5IjMiCq
-	 OwopDSFIuTYEHnsLN5uneMD2wgjtovA6tBBYlzHB7YJrajG941ityySXpEiYSZPbK9
-	 ocA9mZe5z2GMA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C736B810EF;
-	Fri, 10 Jul 2026 13:45:07 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1CBCF2FE
- for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:44:50 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0B05D40A6B
- for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:44:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CD85F40B66;
+	Fri, 10 Jul 2026 13:45:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id D8J9lcYzx7xF for <buildroot@buildroot.org>;
+ id xO1h1HJ_A3Oq; Fri, 10 Jul 2026 13:45:07 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D1CB440B56
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1783691106;
+	bh=avAp6woe4NbGkaRfdTUpxSjFRGYAANNK+vODF9H3FA8=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=ECnpEwDXHjPgGWCu1/K2CrsvlY8RGF77NGrd8MMwIfd+GN4Aijv01BqIExPKwSBxN
+	 BJoODYpoEiXSm3lR9DhALll/28WEckaj3sy7RBkNxy34fO46m+dHLe4sl/kalhmWfC
+	 HCG3cKCnCkgYGoZ12TVzEB7cLnQuKpaSY3F/x1VotenJouwy2AIPCLnOsODR7Tbzff
+	 2CKuLqRWcV2BJhjyXQ4xDdik9P/pYXJlrFqSwpUzUf8L0mZtSS17g84x9nDO5byf1b
+	 vzDNT+pDlv4v3heh1rb+pvkF9QV6Mr0cKqQMqmN9DiaoC3GJJwiidlkw8PoY+a3Mjy
+	 9MRH6K/3EUJqA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id D1CB440B56;
+	Fri, 10 Jul 2026 13:45:05 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id E11582FE
+ for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:44:49 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id D21FD810C1
+ for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:44:49 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id U9pAVh_T5Udd for <buildroot@buildroot.org>;
  Fri, 10 Jul 2026 13:44:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A8E7240A23
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 804B4810BA
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A8E7240A23
+ by smtp1.osuosl.org (Postfix) with ESMTP id 804B4810BA
  for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:44:48 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D16748867A; Fri, 10 Jul 2026 13:44:15 +0000 (UTC)
+ id A744C8867A; Fri, 10 Jul 2026 13:44:15 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 8 Jul 2026 14:29:44 +0200
+Date: Wed, 8 Jul 2026 13:52:18 +0200
 X-Git-Refname: refs/heads/2026.05.x
-X-Git-Oldrev: d10430adb6d016ab17b17c45d55c96387d7649f9
-X-Git-Newrev: 17d604e3e4df79628f97559ad099051a69e95ea6
+X-Git-Oldrev: 1526d90b3d1f6a679bf65a85d7b4de01ac748924
+X-Git-Newrev: e0f6f17ca844c84553ced5464128d6b112240c18
 X-Patchwork-Hint: ignore
-Message-Id: <20260710134415.D16748867A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.05.x] package/ruby: security
- bump to 4.0.5
+Message-Id: <20260710134415.A744C8867A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.05.x] package/jq: security bump
+ to v1.8.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,55 +77,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/17d604e3e4df79628f97559ad099051a69e95ea6
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/e0f6f17ca844c84553ced5464128d6b112240c18
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.05.x
 
-See changes here:
-https://github.com/ruby/ruby/releases/tag/v4.0.5
-https://github.com/ruby/ruby/releases/tag/v4.0.4
+For more information about the release, see:
+ - https://github.com/jqlang/jq/releases/tag/jq-1.8.2
 
-Security fix for:
-CVE-2026-46727: Use-after-free in pthread-based getaddrinfo timeout handler
+All the CVEs were addressed by a patch but non-CVEs security fixes such
+as GHSA-gf4g-95wj-4q4r or GHSA-hj52-j2c9-r8r4 are fixed by this release.
 
-See here for details:
-https://www.ruby-lang.org/en/news/2026/05/20/getaddrinfo-cve-2026-46727/
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 515b3b3eeba3dacea944f0ebaf516248f44906f0)
+(cherry picked from commit d67a214c37ab6b434d97a8c88587619a31f14e2b)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/ruby/ruby.hash | 6 +++---
- package/ruby/ruby.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...-fix-out-of-bounds-read-in-jv-parse-sized.patch |   30 -
+ ...002-fix-NUL-truncation-in-the-JSON-parser.patch |   35 -
+ ...imit-path-depth-to-prevent-stack-overflow.patch |   72 -
+ ...ng-append-and-jvp-string-copy-replace-bad.patch |   53 -
+ ...ed-to-mitigate-hash-collision-DoS-attacks.patch |   90 --
+ .../0006-limit-the-containment-check-depth.patch   |  120 --
+ ...truncation-in-program-files-loaded-with-f.patch |   34 -
+ ...x-signed-int-overflow-in-stack-reallocate.patch |   53 -
+ ...meric-literals-longer-than-DEC-MAX-DIGITS.patch |   53 -
+ ...embedded-NUL-bytes-in-module-import-paths.patch | 1512 --------------------
+ ...ect-merge-depth-to-prevent-stack-overflow.patch |   66 -
+ ...-module-imports-to-prevent-stack-overflow.patch |  142 --
+ ...uctural-equality-and-comparison-recursion.patch |  423 ------
+ ...-heap-buffer-overflow-in-raw-file-loading.patch |   32 -
+ ...ounds-and-propagate-invalid-jv-in-implode.patch |   73 -
+ package/jq/jq.hash                                 |    2 +-
+ package/jq/jq.mk                                   |   47 +-
+ 17 files changed, 2 insertions(+), 2835 deletions(-)
 
-diff --git a/package/ruby/ruby.hash b/package/ruby/ruby.hash
-index 7512d1153b..453c028d22 100644
---- a/package/ruby/ruby.hash
-+++ b/package/ruby/ruby.hash
-@@ -1,6 +1,6 @@
--# https://www.ruby-lang.org/en/news/2026/04/21/ruby-4-0-3-released/
--sha256  22cf6005d25bbe496b5ebe9224d63a1aaabfbfe02591bb5d612517c5a7836f29  ruby-4.0.3.tar.xz
--sha512  5816fb264ce76df59f4bfe0cadceb45025fada2e61f2c14024d6b03f63d304820cddf94afcf82a4951fd12f3b0d9148683f856f3f2245d56042fc8407b6cbff5  ruby-4.0.3.tar.xz
-+# https://www.ruby-lang.org/en/news/2026/05/20/ruby-4-0-5-released/
-+sha256  5dc5521ea54c726e6cc10b1b5a0f4004b27b482e61c04c99aed79315e30895e5  ruby-4.0.5.tar.xz
-+sha512  379d78a6d1af0455df60da46551f43438ad3ee81f83787554fc34cb1c8febb1bd363e3dc1a057b34a69f96526efc308d3dccc4b87d368897c2d1ccf179096463  ruby-4.0.5.tar.xz
- 
- # License files, Locally calculated
- sha256  a74812486cffbdc55141a5d9f165d782cbb202660d827622ec966237d4717b99  LEGAL
-diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
-index 7e6f6d8146..eae9db2156 100644
---- a/package/ruby/ruby.mk
-+++ b/package/ruby/ruby.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- RUBY_VERSION_MAJOR = 4.0
--RUBY_VERSION = $(RUBY_VERSION_MAJOR).3
-+RUBY_VERSION = $(RUBY_VERSION_MAJOR).5
- RUBY_VERSION_EXT = 4.0.0
- RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
- RUBY_SOURCE = ruby-$(RUBY_VERSION).tar.xz
+Patch is too large, so refusing to show it
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
