@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A918DC44501
-	for <buildroot@archiver.kernel.org>; Fri, 10 Jul 2026 13:45:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7A77C44507
+	for <buildroot@archiver.kernel.org>; Fri, 10 Jul 2026 13:45:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7B79240BD8;
-	Fri, 10 Jul 2026 13:45:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8DC1440BEE;
+	Fri, 10 Jul 2026 13:45:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Bv8_QpsdznF8; Fri, 10 Jul 2026 13:45:24 +0000 (UTC)
+ id MhaoEXL9ukuJ; Fri, 10 Jul 2026 13:45:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EC10340B2D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3C7F240BD6
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1783691124;
-	bh=RfbiN+DpxQkIiRykTsmqdtR1ydhKgTY1w8sle9GOGyk=;
+	s=default; t=1783691125;
+	bh=5MG5dJxE5NY7OqbDkltXfsQJulC3NaOd/kqo5wiG1M8=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=OLhrz6dFZdPqtTJkfL2D3/cSDnjLEDdp1BXz1F6dBh9lqxwLhsPrGDiNskRjfFypV
-	 dti3Q11oQCKJ1scr6T1OrkvtEK2KzlxLmqvDSKRY3BTtfISds19Kp5xs230jDork/M
-	 qPqLawmrwbUPZEUOG2CbK96DzYtoL+XUAetNP56Gm8IzwAkeEFVzhPIOfRr3X4SFs1
-	 I96WbWzpDKAcNA2eniFKMzjkAKRaDZv+OHXyJxdqLkucf+oneV5GUGOaR9q8+7v7zK
-	 X1pKyaJ0OLG7wyibt5p/utiJLh0MuBnAVhgPMILB5jm4GB8rHxUf1ibJ/j3Owf2yYF
-	 7Id1QLryGOhkQ==
+	b=Ze35YzvX53x9XsUiEclEnDIY2FDxT3h/5WZkt372oaq34ZyhrnFn9U+ylyDz4fGLS
+	 v6Sn+wnQbAB4arNmXeS8I0LLUD8/71yG4HqTCFlaftqVZn24Ya+CvxxD0oIubF6s23
+	 SwDbsbFurqQT88z9uaqx/XrDhcgDqX3RoQuFEFeStNFAdH3U5PeV7n2YBmsdYq37f/
+	 OjjNtDL9ocnEnWobQO5joxgeqSjVMXRJLUa8vjRGK+I6g3WQZTzHbcTxDrhpmAs75r
+	 efOo9b7cHg6elcI56Y9SilZcswcS8HxjP9s1jrOO9kgB5SBnvMwdOMfIj18bUDzFBP
+	 9hnDyH+JoKZ+A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EC10340B2D;
-	Fri, 10 Jul 2026 13:45:23 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id E94892FE
- for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:44:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3C7F240BD6;
+	Fri, 10 Jul 2026 13:45:25 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 95559A3C
+ for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:44:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D81D1810DD
- for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:44:54 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 92D2340AFF
+ for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:44:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 77Z9-TLULJNR for <buildroot@buildroot.org>;
- Fri, 10 Jul 2026 13:44:54 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oN6MsvrcO_i6 for <buildroot@buildroot.org>;
+ Fri, 10 Jul 2026 13:44:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0E62D810D5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BF69E40AD5
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0E62D810D5
- for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:44:54 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id BF69E40AD5
+ for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:44:53 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 36AC38867A; Fri, 10 Jul 2026 13:44:21 +0000 (UTC)
+ id F3BF18867A; Fri, 10 Jul 2026 13:44:20 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 8 Jul 2026 14:59:36 +0200
+Date: Wed, 8 Jul 2026 14:57:55 +0200
 X-Git-Refname: refs/heads/2026.05.x
-X-Git-Oldrev: d31b2b495d0101a8d3a56dc886d8e5e664a4ffc3
-X-Git-Newrev: af91dcfe1c97aca19bb1c33f3d27caf8343002ad
+X-Git-Oldrev: b8deb2b794815871a09f6a56e32871f48c3f0a7c
+X-Git-Newrev: d31b2b495d0101a8d3a56dc886d8e5e664a4ffc3
 X-Patchwork-Hint: ignore
-Message-Id: <20260710134421.36AC38867A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.05.x] package/hwdata: bump
- version to 0.409
+Message-Id: <20260710134420.F3BF18867A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.05.x] package/tiff: security
+ bump version to 4.7.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,45 +77,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/af91dcfe1c97aca19bb1c33f3d27caf8343002ad
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d31b2b495d0101a8d3a56dc886d8e5e664a4ffc3
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.05.x
 
-https://github.com/vcrhonek/hwdata/releases/tag/v0.409
-https://github.com/vcrhonek/hwdata/releases/tag/v0.408
-https://github.com/vcrhonek/hwdata/releases/tag/v0.407
+https://gitlab.com/libtiff/libtiff/-/releases/v4.7.2
+
+Fixes CVE-2026-36849: https://seclists.org/oss-sec/2026/q2/952
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit a34e6a1938040d95372f81da0a8a1d699754d066)
+(cherry picked from commit 85a98f81488914ddbdb2be56c7f44a6c37c6a513)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/hwdata/hwdata.hash | 2 +-
- package/hwdata/hwdata.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/tiff/tiff.hash | 4 ++--
+ package/tiff/tiff.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/hwdata/hwdata.hash b/package/hwdata/hwdata.hash
-index b7323fe117..74a7f5e7e7 100644
---- a/package/hwdata/hwdata.hash
-+++ b/package/hwdata/hwdata.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  1ccfd1ca723595b1fe8794f4157ec5635be1ebedb5d13769b4be75d0b75bc199  hwdata-0.406.tar.gz
-+sha256  23006accc0f931dd5187d0307a57d0744e2b8feb85e73c37bc0f5229fb31eadd  hwdata-0.409.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  21d0406f93e884a050426ebc21931839a45d56bfcbcbfdda7686d583f36f107f  LICENSE
-diff --git a/package/hwdata/hwdata.mk b/package/hwdata/hwdata.mk
-index e12ce7efb6..7300b908b1 100644
---- a/package/hwdata/hwdata.mk
-+++ b/package/hwdata/hwdata.mk
+diff --git a/package/tiff/tiff.hash b/package/tiff/tiff.hash
+index ff0b698345..5c9031bfb4 100644
+--- a/package/tiff/tiff.hash
++++ b/package/tiff/tiff.hash
+@@ -1,5 +1,5 @@
+ # Locally computed after checking pgp signature
+-# https://download.osgeo.org/libtiff/tiff-4.7.1.tar.xz.sig
++# https://download.osgeo.org/libtiff/tiff-4.7.2.tar.xz.sig
+ # with key: B1FA7D81EEB8E66399178B9733EBBFC47B3DD87D
+-sha256  b92017489bdc1db3a4c97191aa4b75366673cb746de0dce5d7a749d5954681ba  tiff-4.7.1.tar.xz
++sha256  4996f0c4f93094719b1ca5c6279b20e588773ba8a247533e486416fb662ddb88  tiff-4.7.2.tar.xz
+ sha256  0e27c2382d7b8147972bbb746e04059a1152c8d0fda9d03ef1399d1a433c4ade  LICENSE.md
+diff --git a/package/tiff/tiff.mk b/package/tiff/tiff.mk
+index e64a6baf83..b1efa5be5a 100644
+--- a/package/tiff/tiff.mk
++++ b/package/tiff/tiff.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--HWDATA_VERSION = 0.406
-+HWDATA_VERSION = 0.409
- HWDATA_SITE = $(call github,vcrhonek,hwdata,v$(HWDATA_VERSION))
- HWDATA_LICENSE = GPL-2.0+, BSD-3-Clause, XFree86 1.0
- HWDATA_LICENSE_FILES = COPYING LICENSE
+-TIFF_VERSION = 4.7.1
++TIFF_VERSION = 4.7.2
+ TIFF_SOURCE = tiff-$(TIFF_VERSION).tar.xz
+ TIFF_SITE = https://download.osgeo.org/libtiff
+ TIFF_LICENSE = tiff license
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
