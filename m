@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 859C1C43458
-	for <buildroot@archiver.kernel.org>; Fri, 10 Jul 2026 13:43:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E5A9C44501
+	for <buildroot@archiver.kernel.org>; Fri, 10 Jul 2026 13:43:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5981C409B4;
+	by smtp3.osuosl.org (Postfix) with ESMTP id DBD656069C;
 	Fri, 10 Jul 2026 13:43:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Dnw3Qd3tqs1z; Fri, 10 Jul 2026 13:43:17 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Ye-dsKnKkKLA; Fri, 10 Jul 2026 13:43:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 155984092B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0269360721
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1783690997;
-	bh=HtvVPs/5WzIGEB1vSRUfW7aUyr3nZonclIxC+BrG0WI=;
+	s=default; t=1783691000;
+	bh=i+37b5/UFLzgiSZw1ei/w/N0dkxjeXBnKYuY/rsGC1o=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=KLSPLnfmVQUeqvtZ6+LU5xQitpER3t8idFDg8mHqxWf6LqTVygejtQ1HpS5tjuNK3
-	 j5S7SIRRPxNQ0HEeQo7B8fcnQzxdahkIvJ0UJiCobt5ixlfwvSKuEhu1arytZxecpG
-	 Xa4/q9evH6x1c9XwxFNfF4+IjIIs/l9AdEXFmE/xEtQjdKZyO6B4fkDSGjX9HU5UK1
-	 iO/i6djiz+gFmSwaiPm2ne4tGPgNEBTpsuShKlPRteG5lTHSk3+zWfnAKYCWK85o/a
-	 7QwkwGOWMB+G6gCLGaS3Gl3utjDnAfhvNC0Es9kN/jvxAtk89uj8q5T5sPylO6A7o3
-	 YQDUhTtoKdCHw==
+	b=riC2sFlMJ4VWBf3AwJ3w98eufdjlGQ7+La4xkMrJYzvnC/v1Q6cv9COkta9nLEjWB
+	 n0WH5l9X15inb0DkbdX+FgDyNtLXYEyZn84aLiqpanL76bdhetOFVnDlsVFFBRwZ2u
+	 eeYL2VLVz1KCR0Rii63jMXY0gKeUG4xx+g0ROCkWjlb/fGa5r/uFgiH6aOsF4nBsSz
+	 C1ID7iT0tz8U4EJ93i3ibWG+N7CjJWlndS6a2gtM1/rvgF5ka4JqI/JvWE+NW3jXTk
+	 1CPSxFS1r2obC48Lkxh27Q+rObr5BlyjTsptg+HkBY9+6XKaw5je40rE0vFNxGtfuB
+	 GlLHVoH3pQVyw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 155984092B;
-	Fri, 10 Jul 2026 13:43:17 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id C369FFD1
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0269360721;
+	Fri, 10 Jul 2026 13:43:20 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id F298E2FE
  for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:42:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B588380FF5
+ by smtp1.osuosl.org (Postfix) with ESMTP id F0BF9810B3
  for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:42:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mrGThbNEPAvY for <buildroot@buildroot.org>;
+ id DqmcZOfi329K for <buildroot@buildroot.org>;
  Fri, 10 Jul 2026 13:42:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C08C9810B5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8B3D9810BA
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id C08C9810B5
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8B3D9810BA
  for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:42:50 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 026968867A; Fri, 10 Jul 2026 13:42:18 +0000 (UTC)
+ id C0F8E8866C; Fri, 10 Jul 2026 13:42:17 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 8 Jul 2026 14:59:59 +0200
+Date: Wed, 8 Jul 2026 14:54:48 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 7508b24b8f1b5788b27863c17f9383035ca4f364
-X-Git-Newrev: 413158f39b9d070983821f6157f7abb20de6790c
+X-Git-Oldrev: 0dfac4dd3fda47baf4f60a0e570b27526dea9e59
+X-Git-Newrev: 596b580f049d823e1090bd43c7d9a2d45e855392
 X-Patchwork-Hint: ignore
-Message-Id: <20260710134218.026968867A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/avahi: upstream
- patch for CVE-2026-34933
+Message-Id: <20260710134217.C0F8E8866C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/libevent:
+ security bump version to 2.1.13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,157 +77,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/413158f39b9d070983821f6157f7abb20de6790c
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/596b580f049d823e1090bd43c7d9a2d45e855392
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-This fixes the following vulnerability:
+https://github.com/libevent/libevent/releases/tag/release-2.1.13-stable
 
-- CVE-2026-34933:
-    Avahi is a system which facilitates service discovery on a local
-    network via the mDNS/DNS-SD protocol suite. Prior to version 0.9-rc4,
-    any unprivileged local user can crash avahi-daemon by sending a single
-    D-Bus method call with conflicting publish flags. This issue has been
-    patched in version 0.9-rc4.
+https://seclists.org/oss-sec/2026/q3/7
+"[None of the GHSA's list CVE id's at this time.  -alan-]"
 
-For more information, see:
-  - https://www.cve.org/CVERecord?id=CVE-2026-34933
-  - https://github.com/avahi/avahi/commit/0be89b6bb5c3983837b5e0febcbbbf452ecf7675
+Switched to sha256 tarball hash provided by Github, drop sha1 hash.
 
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 88f3b8366ba8b7272e3e0b4c901a9aab75c9304a)
+(cherry picked from commit e224289c147f316704c3672899f9964c5f1cdd9c)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...here-both-wide-area-and-multicast-are-set.patch | 106 +++++++++++++++++++++
- package/avahi/avahi.mk                             |   3 +
- 2 files changed, 109 insertions(+)
+ package/libevent/libevent.hash | 4 ++--
+ package/libevent/libevent.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/avahi/0017-core-refuse-to-accept-publish-flags-where-both-wide-area-and-multicast-are-set.patch b/package/avahi/0017-core-refuse-to-accept-publish-flags-where-both-wide-area-and-multicast-are-set.patch
-new file mode 100644
-index 0000000000..de359b7d22
---- /dev/null
-+++ b/package/avahi/0017-core-refuse-to-accept-publish-flags-where-both-wide-area-and-multicast-are-set.patch
-@@ -0,0 +1,106 @@
-+From 0be89b6bb5c3983837b5e0febcbbbf452ecf7675 Mon Sep 17 00:00:00 2001
-+From: Evgeny Vereshchagin <evvers@ya.ru>
-+Date: Wed, 1 Apr 2026 05:31:58 +0000
-+Subject: [PATCH] core: refuse to accept publish flags where both wide_area and
-+ multicast are set
-+
-+It fixes a bug where it was possible for unprivileged local users to
-+crash avahi-daemon via D-Bus by calling EntryGroup methods accepting
-+flags and passing both AVAHI_PUBLISH_USE_WIDE_AREA and
-+AVAHI_PUBLISH_USE_MULTICAST there. For example when AddRecord was
-+invoked like that avahi-daemon crashed with
-+```
-+dbus-entry-group.c: interface=org.freedesktop.Avahi.EntryGroup, path=/Client0/EntryGroup1, member=AddRecord
-+avahi-daemon: entry.c:57: transport_flags_from_domain: Assertion `!((*flags & AVAHI_PUBLISH_USE_MULTICAST) && (*flags & AVAHI_PUBLISH_USE_WIDE_AREA))' failed.
-+==84944==
-+==84944== Process terminating with default action of signal 6 (SIGABRT)
-+==84944==    at 0x4B353BC: __pthread_kill_implementation (pthread_kill.c:44)
-+==84944==    by 0x4ADE941: raise (raise.c:26)
-+==84944==    by 0x4AC64AB: abort (abort.c:77)
-+==84944==    by 0x4AC641F: __assert_fail_base.cold (assert.c:118)
-+==84944==    by 0x48A9404: transport_flags_from_domain (entry.c:57)
-+==84944==    by 0x48A9F8F: server_add_internal (entry.c:224)
-+==84944==    by 0x48AA49F: avahi_server_add (entry.c:324)
-+==84944==    by 0x401A670: avahi_dbus_msg_entry_group_impl (dbus-entry-group.c:348)
-+==84944==    by 0x4A70741: ??? (in /usr/lib/x86_64-linux-gnu/libdbus-1.so.3.38.3)
-+==84944==    by 0x4A5FB22: dbus_connection_dispatch (in /usr/lib/x86_64-linux-gnu/libdbus-1.so.3.38.3)
-+==84944==    by 0x401D01D: dispatch_timeout_callback (dbus-watch-glue.c:105)
-+==84944==    by 0x488E3AE: timeout_callback (simple-watch.c:447)
-+==84944==
-+```
-+It's a follow-up to fbce111b069aa1e4c701ed37ee1d9f6d6cefaac5 where
-+those flags were introduced and consistent with the other places
-+where wide_area/multicast flags are used.
-+
-+It was discovered by
-+Guillaume Meunier - Head of Vulnerability Operations Center France - Orange Cyberdefense
-+
-+https://github.com/avahi/avahi/security/advisories/GHSA-w65r-6gxh-vhvc
-+
-+CVE: CVE-2026-34933
-+Upstream: https://github.com/avahi/avahi/commit/0be89b6bb5c3983837b5e0febcbbbf452ecf7675
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-+---
-+ avahi-core/entry.c | 7 +++++++
-+ 1 file changed, 7 insertions(+)
-+
-+diff --git a/avahi-core/entry.c b/avahi-core/entry.c
-+index 0d862133d..06eb12076 100644
-+--- a/avahi-core/entry.c
-++++ b/avahi-core/entry.c
-+@@ -207,6 +207,7 @@ static AvahiEntry * server_add_internal(
-+                                          AVAHI_PUBLISH_UPDATE|
-+                                          AVAHI_PUBLISH_USE_WIDE_AREA|
-+                                          AVAHI_PUBLISH_USE_MULTICAST), AVAHI_ERR_INVALID_FLAGS);
-++    AVAHI_CHECK_VALIDITY_RETURN_NULL(s, !(flags & AVAHI_PUBLISH_USE_WIDE_AREA) || !(flags & AVAHI_PUBLISH_USE_MULTICAST), AVAHI_ERR_INVALID_FLAGS);
-+     AVAHI_CHECK_VALIDITY_RETURN_NULL(s, avahi_is_valid_domain_name(r->key->name), AVAHI_ERR_INVALID_HOST_NAME);
-+     AVAHI_CHECK_VALIDITY_RETURN_NULL(s, r->ttl != 0, AVAHI_ERR_INVALID_TTL);
-+     AVAHI_CHECK_VALIDITY_RETURN_NULL(s, !avahi_key_is_pattern(r->key), AVAHI_ERR_IS_PATTERN);
-+@@ -454,6 +455,7 @@ int avahi_server_add_address(
-+                                               AVAHI_PUBLISH_UPDATE|
-+                                               AVAHI_PUBLISH_USE_WIDE_AREA|
-+                                               AVAHI_PUBLISH_USE_MULTICAST), AVAHI_ERR_INVALID_FLAGS);
-++    AVAHI_CHECK_VALIDITY(s, !(flags & AVAHI_PUBLISH_USE_WIDE_AREA) || !(flags & AVAHI_PUBLISH_USE_MULTICAST), AVAHI_ERR_INVALID_FLAGS);
-+     AVAHI_CHECK_VALIDITY(s, !name || avahi_is_valid_fqdn(name), AVAHI_ERR_INVALID_HOST_NAME);
-+ 
-+     /* Prepare the host naem */
-+@@ -595,6 +597,7 @@ static int server_add_service_strlst_nocopy(
-+                                                                 AVAHI_PUBLISH_UPDATE|
-+                                                                 AVAHI_PUBLISH_USE_WIDE_AREA|
-+                                                                 AVAHI_PUBLISH_USE_MULTICAST), AVAHI_ERR_INVALID_FLAGS);
-++    AVAHI_CHECK_VALIDITY_SET_RET_GOTO_FAIL(s, !(flags & AVAHI_PUBLISH_USE_WIDE_AREA) || !(flags & AVAHI_PUBLISH_USE_MULTICAST), AVAHI_ERR_INVALID_FLAGS);
-+     AVAHI_CHECK_VALIDITY_SET_RET_GOTO_FAIL(s, avahi_is_valid_service_name(name), AVAHI_ERR_INVALID_SERVICE_NAME);
-+     AVAHI_CHECK_VALIDITY_SET_RET_GOTO_FAIL(s, avahi_is_valid_service_type_strict(type), AVAHI_ERR_INVALID_SERVICE_TYPE);
-+     AVAHI_CHECK_VALIDITY_SET_RET_GOTO_FAIL(s, !domain || avahi_is_valid_domain_name(domain), AVAHI_ERR_INVALID_DOMAIN_NAME);
-+@@ -754,6 +757,7 @@ static int server_update_service_txt_strlst_nocopy(
-+                                                                 AVAHI_PUBLISH_NO_COOKIE|
-+                                                                 AVAHI_PUBLISH_USE_WIDE_AREA|
-+                                                                 AVAHI_PUBLISH_USE_MULTICAST), AVAHI_ERR_INVALID_FLAGS);
-++    AVAHI_CHECK_VALIDITY_SET_RET_GOTO_FAIL(s, !(flags & AVAHI_PUBLISH_USE_WIDE_AREA) || !(flags & AVAHI_PUBLISH_USE_MULTICAST), AVAHI_ERR_INVALID_FLAGS);
-+     AVAHI_CHECK_VALIDITY_SET_RET_GOTO_FAIL(s, avahi_is_valid_service_name(name), AVAHI_ERR_INVALID_SERVICE_NAME);
-+     AVAHI_CHECK_VALIDITY_SET_RET_GOTO_FAIL(s, avahi_is_valid_service_type_strict(type), AVAHI_ERR_INVALID_SERVICE_TYPE);
-+     AVAHI_CHECK_VALIDITY_SET_RET_GOTO_FAIL(s, !domain || avahi_is_valid_domain_name(domain), AVAHI_ERR_INVALID_DOMAIN_NAME);
-+@@ -843,6 +847,7 @@ int avahi_server_add_service_subtype(
-+     AVAHI_CHECK_VALIDITY_SET_RET_GOTO_FAIL(s, AVAHI_IF_VALID(interface), AVAHI_ERR_INVALID_INTERFACE);
-+     AVAHI_CHECK_VALIDITY_SET_RET_GOTO_FAIL(s, AVAHI_PROTO_VALID(protocol), AVAHI_ERR_INVALID_PROTOCOL);
-+     AVAHI_CHECK_VALIDITY_SET_RET_GOTO_FAIL(s, AVAHI_FLAGS_VALID(flags, AVAHI_PUBLISH_USE_MULTICAST|AVAHI_PUBLISH_USE_WIDE_AREA), AVAHI_ERR_INVALID_FLAGS);
-++    AVAHI_CHECK_VALIDITY_SET_RET_GOTO_FAIL(s, !(flags & AVAHI_PUBLISH_USE_WIDE_AREA) || !(flags & AVAHI_PUBLISH_USE_MULTICAST), AVAHI_ERR_INVALID_FLAGS);
-+     AVAHI_CHECK_VALIDITY_SET_RET_GOTO_FAIL(s, avahi_is_valid_service_name(name), AVAHI_ERR_INVALID_SERVICE_NAME);
-+     AVAHI_CHECK_VALIDITY_SET_RET_GOTO_FAIL(s, avahi_is_valid_service_type_strict(type), AVAHI_ERR_INVALID_SERVICE_TYPE);
-+     AVAHI_CHECK_VALIDITY_SET_RET_GOTO_FAIL(s, !domain || avahi_is_valid_domain_name(domain), AVAHI_ERR_INVALID_DOMAIN_NAME);
-+@@ -910,6 +915,7 @@ static AvahiEntry *server_add_dns_server_name(
-+     assert(name);
-+ 
-+     AVAHI_CHECK_VALIDITY_RETURN_NULL(s, AVAHI_FLAGS_VALID(flags, AVAHI_PUBLISH_USE_WIDE_AREA|AVAHI_PUBLISH_USE_MULTICAST), AVAHI_ERR_INVALID_FLAGS);
-++    AVAHI_CHECK_VALIDITY_RETURN_NULL(s, !(flags & AVAHI_PUBLISH_USE_WIDE_AREA) || !(flags & AVAHI_PUBLISH_USE_MULTICAST), AVAHI_ERR_INVALID_FLAGS);
-+     AVAHI_CHECK_VALIDITY_RETURN_NULL(s, type == AVAHI_DNS_SERVER_UPDATE || type == AVAHI_DNS_SERVER_RESOLVE, AVAHI_ERR_INVALID_FLAGS);
-+     AVAHI_CHECK_VALIDITY_RETURN_NULL(s, port != 0, AVAHI_ERR_INVALID_PORT);
-+     AVAHI_CHECK_VALIDITY_RETURN_NULL(s, avahi_is_valid_fqdn(name), AVAHI_ERR_INVALID_HOST_NAME);
-+@@ -967,6 +973,7 @@ int avahi_server_add_dns_server_address(
-+     AVAHI_CHECK_VALIDITY(s, AVAHI_IF_VALID(interface), AVAHI_ERR_INVALID_INTERFACE);
-+     AVAHI_CHECK_VALIDITY(s, AVAHI_PROTO_VALID(protocol) && AVAHI_PROTO_VALID(address->proto), AVAHI_ERR_INVALID_PROTOCOL);
-+     AVAHI_CHECK_VALIDITY(s, AVAHI_FLAGS_VALID(flags, AVAHI_PUBLISH_USE_MULTICAST|AVAHI_PUBLISH_USE_WIDE_AREA), AVAHI_ERR_INVALID_FLAGS);
-++    AVAHI_CHECK_VALIDITY(s, !(flags & AVAHI_PUBLISH_USE_WIDE_AREA) || !(flags & AVAHI_PUBLISH_USE_MULTICAST), AVAHI_ERR_INVALID_FLAGS);
-+     AVAHI_CHECK_VALIDITY(s, type == AVAHI_DNS_SERVER_UPDATE || type == AVAHI_DNS_SERVER_RESOLVE, AVAHI_ERR_INVALID_FLAGS);
-+     AVAHI_CHECK_VALIDITY(s, port != 0, AVAHI_ERR_INVALID_PORT);
-+     AVAHI_CHECK_VALIDITY(s, !domain || avahi_is_valid_domain_name(domain), AVAHI_ERR_INVALID_DOMAIN_NAME);
-diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
-index b3d95f3d79..d01dc0cd87 100644
---- a/package/avahi/avahi.mk
-+++ b/package/avahi/avahi.mk
-@@ -60,6 +60,9 @@ AVAHI_IGNORE_CVES += CVE-2025-68471
- # 0016-core-fix-uncontrolled-recursion-bug-using-a-simple-loop-detection-algorithm.patch
- AVAHI_IGNORE_CVES += CVE-2026-24401
+diff --git a/package/libevent/libevent.hash b/package/libevent/libevent.hash
+index 77574e784b..e047031f48 100644
+--- a/package/libevent/libevent.hash
++++ b/package/libevent/libevent.hash
+@@ -1,4 +1,4 @@
++# From https://github.com/libevent/libevent/releases/tag/release-2.1.13-stable
++sha256  f7e9383b8c0baa81b687e5b5eecc01beefaf1b19b64151d95ed61647fe7a315c  libevent-2.1.13-stable.tar.gz
+ # locally computed
+-sha1  cd55656a9b5bed630b08f05495230affb7996b21  libevent-2.1.12-stable.tar.gz
+-sha256  92e6de1be9ec176428fd2367677e61ceffc2ee1cb119035037a27d346b0403bb  libevent-2.1.12-stable.tar.gz
+ sha256  ff02effc9b331edcdac387d198691bfa3e575e7d244ad10cb826aa51ef085670  LICENSE
+diff --git a/package/libevent/libevent.mk b/package/libevent/libevent.mk
+index 355dfedcc1..cc8fb21915 100644
+--- a/package/libevent/libevent.mk
++++ b/package/libevent/libevent.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# 0017-core-refuse-to-accept-publish-flags-where-both-wide-area-and-multicast-are-set.patch
-+AVAHI_IGNORE_CVES += CVE-2026-34933
-+
- AVAHI_CONF_ENV = \
- 	avahi_cv_sys_cxx_works=yes \
- 	DATADIRNAME=share
+-LIBEVENT_VERSION = 2.1.12
++LIBEVENT_VERSION = 2.1.13
+ LIBEVENT_SITE = https://github.com/libevent/libevent/releases/download/release-$(LIBEVENT_VERSION)-stable
+ LIBEVENT_SOURCE = libevent-$(LIBEVENT_VERSION)-stable.tar.gz
+ LIBEVENT_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
