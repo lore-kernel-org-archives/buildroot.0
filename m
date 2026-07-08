@@ -4,101 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E0C8C43458
-	for <buildroot@archiver.kernel.org>; Wed,  8 Jul 2026 04:57:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B519C43458
+	for <buildroot@archiver.kernel.org>; Wed,  8 Jul 2026 07:24:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F11B560E20;
-	Wed,  8 Jul 2026 04:57:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A35F160E38;
+	Wed,  8 Jul 2026 07:24:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id M43Kil2TZADo; Wed,  8 Jul 2026 04:57:27 +0000 (UTC)
+ id qsyuMpk-Om7D; Wed,  8 Jul 2026 07:24:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D3D4660E17
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CDE3F60E3A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1783486646;
-	bh=rQEuTDbwCm1mMIrKYfmYGj+tD/Xs5wdb9/48dEZOO1M=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Cc:From;
-	b=nJphHLIqd4F4Tej5UgtmDF2OW/ZJhYfjM1/ZSKGTRysdhUq9J3dagDrF0zG/znY5o
-	 ZOm8LY3xxhiLHJTNOinpfM0Cx/ApLhgiQN5dYoe04HtFwkKbGxr1C9GhPTjf9Lj50k
-	 2+8HNHIPtsRQYAauFkY0Z3V5WbpT2W2G7Pp5MW73cqKn7Ksa5i8B07wbyE4l+O5zpI
-	 Q8UwhdEQRKJ0+9k57DL+FSVDjZyaC+qjV/+iYHaTIhCZqRLn/K2aeyRvIIr4Xlg3yr
-	 JTiY7rPwxKBHcvdsqL6ZBkuU6ptyQAD35PznGh+Dtrnx9XhqqGe5+a5y25hsjM/p8j
-	 pvcAECGQn/cSA==
+	s=default; t=1783495484;
+	bh=h8IlLIHtL7WVSNX2nJvwT1RqFIU71ojHQlBKvF8moMk=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
+	b=OnoNU7+KxNkbky44VPmYNBdN0uRGvh7BTufiRPOrO7LTSzwp1CYim+3YsKcivFfTz
+	 iThZVC/Ym3cHPSn3Hv5AsjPjPG+Udnf9TO26rqxACivX/bWiqr5ffSIQK+JmDpWkkf
+	 /kpqRoGEaU+5pj8x4X7fVE1FpPPZ00ww96zYXICmdhCQX6g524yfIkKDn1z8qP+lKZ
+	 j3NmPJeV7AbftZS5uNf5lkHfTc08zBapygNgZ87JRFOhRaUZyh2+7C1/ma1dmHcGy0
+	 NL+b62hkD0U4QHFNWtpoqn0leLRBiAfOx1VE5w5G3nMQf5DcJH1sUZ+giW413y0YZ/
+	 J9r8m6DmCipiQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D3D4660E17;
-	Wed,  8 Jul 2026 04:57:26 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 4428C15C
- for <buildroot@buildroot.org>; Wed,  8 Jul 2026 04:57:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CDE3F60E3A;
+	Wed,  8 Jul 2026 07:24:44 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id C888315C
+ for <buildroot@buildroot.org>; Wed,  8 Jul 2026 07:24:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2A30A4062D
- for <buildroot@buildroot.org>; Wed,  8 Jul 2026 04:57:25 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A982560E38
+ for <buildroot@buildroot.org>; Wed,  8 Jul 2026 07:24:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id W72_Roo_D-IL for <buildroot@buildroot.org>;
- Wed,  8 Jul 2026 04:57:24 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.126.236;
- helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E8D204007A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E8D204007A
-Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.126.236])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E8D204007A
- for <buildroot@buildroot.org>; Wed,  8 Jul 2026 04:57:23 +0000 (UTC)
-X-CSE-ConnectionGUID: 8G+jvV5RQXOJYdf01zlb3A==
-X-CSE-MsgGUID: r1gVuW/ITfe4dp0EASEJzg==
-Received: from unknown (HELO opfedv3rlp0c.nor.fr.ftgroup) ([x.x.x.x]) by
- smtp-out.orange.com with ESMTP/TLS/TLS_AES_256_GCM_SHA384;
- 08 Jul 2026 06:57:21 +0200
-Received: from unknown (HELO OPE16NORMBX506.corporate.adroot.infra.ftgroup)
- ([x.x.x.x]) by opfedv3rlp0c.nor.fr.ftgroup with
- ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2026 06:57:20 +0200
-Received: from yd-6wlzhs3 [x.x.x.x] by
- OPE16NORMBX506.corporate.adroot.infra.ftgroup
- [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.43;
- Wed, 8 Jul 2026 06:57:19 +0200
-Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
- Wed, 08 Jul 2026 06:57:18 +0200
-X-CSE-ConnectionGUID: +YqEnLmITk6CEjkg93aUyA==
-X-CSE-MsgGUID: ilqNr6YeT5SuP+LdWQ8FKQ==
-X-IronPort-AV: E=Sophos;i="6.25,153,1779141600"; d="scan'208";a="444347915"
-X-Amp-Result: SKIPPED(no attachment in message)
-From: <yann.morin@orange.com>
-To: <buildroot@buildroot.org>
-Date: Wed, 8 Jul 2026 06:57:18 +0200
-Message-ID: <8e7b71af93abe216c7715fb7394428cc6bf06aa2.1783486638.git.yann.morin@orange.com>
-X-Mailer: git-send-email 2.34.1
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NP3zXQ-CaDLv for <buildroot@buildroot.org>;
+ Wed,  8 Jul 2026 07:24:42 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a01:4f8:1c0c:5073::1; helo=mail.heine.tech;
+ envelope-from=buildroot@heine.tech; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6144F60E3A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6144F60E3A
+Received: from mail.heine.tech (mail.heine.tech [IPv6:2a01:4f8:1c0c:5073::1])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6144F60E3A
+ for <buildroot@buildroot.org>; Wed,  8 Jul 2026 07:24:40 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 0596B1814BE; Wed,  8 Jul 2026 09:24:35 +0200 (CEST)
+To: buildroot@buildroot.org
+Date: Wed,  8 Jul 2026 09:23:52 +0200
+Message-ID: <20260708072408.19685-2-buildroot@heine.tech>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Originating-IP: [10.115.27.53]
-X-ClientProxiedBy: OPE16NORMBX508.corporate.adroot.infra.ftgroup
- (10.115.27.28) To OPE16NORMBX506.corporate.adroot.infra.ftgroup
- (10.115.27.26)
+X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
- t=1783486644; x=1815022644;
- h=from:to:cc:subject:date:message-id:mime-version:
- content-transfer-encoding;
- bh=HKnZYNM/GT+jlppjQ7Nc9A/EUwu8vZzsRRF/+qdE3/4=;
- b=mdkpMmEpAJ7Oq57BYbmSedm15KlBARsSbbJnLUdyWzBwt/9tDWRLuyUL
- /QmPOpEkODwYzUqpkOf51icHrpiBpzcRUlliLqdtvbcs1XYt9wPxGvmLo
- JUPmianLC7Px6rJftbRZJXnhNC6WSUeRB5oId+XDt+JLsr6Us6wBrA74a
- CewPb1dohrHXgoU51mEsDxHN6E6v0GHi8dkTAsyhSu64F+aMJG6g2p8zP
- orGMxDiAZYvdYNrkjq/IFrNkbA2tAPtwugXKiOjPwFHnzwwiuXX1YIrdB
- la+49l/CARZg+lPQKtVTOGneSRY5NoB/QggYuoQS6sfY5VXtyf4bkS9I6
- A==;
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=orange.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
- header.s=orange002 header.b=mdkpMmEp
-Subject: [Buildroot] [PATCH] package/mosquitto: host variant also needs
- cmake >= 4.3
+ d=heine.tech; s=dkim; 
+ t=1783495477; h=from:subject:date:message-id:to:cc:mime-version:
+ content-transfer-encoding; bh=4sQ89Zx+IW4vwDuDOU/2TkogvEHTkUFNiNK3Iac6lhE=;
+ b=B1B8y1Y+Rv68akDu170p/91KGFMRwywI5bLaP7WHTRscvCu1ADPeHeln9NBfINRIxrJhiY
+ NhB4JrDvWiCmW9gUDRBIyNvWfhYSslCr8TjY10EciHpkpCR2JqO3zNRe6zlKvdmmVBNO/S
+ xaJT5cqkYNZtmxml1ytjitr6/A0ordY=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=heine.tech
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=heine.tech header.i=@heine.tech header.a=rsa-sha256
+ header.s=dkim header.b=B1B8y1Y+
+Subject: [Buildroot] [PATCH] package/fmt: fix 32-bit builds
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -110,54 +82,75 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: yann.morin@orange.com, Titouan Christophe <titouan.christophe@mind.be>
+From: Michael Nosthoff via buildroot <buildroot@buildroot.org>
+Reply-To: Michael Nosthoff <buildroot@heine.tech>
+Cc: Semyon Kolganov <semenak94@mail.ru>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: "Yann E. MORIN" <yann.morin@orange.com>
+Provide a fallback when native __int128 is not available.
 
-Commit da9dcddff15a (package/mosquitto: requires cmake >= 4.3) added
-a requirement against cmake 4.3 for the target variant, but forgot
-to add the same requirement to the host variant.
+Fixes:
+https://autobuild.buildroot.org/results/39df217ad5a1036d5e606ae0e8291d885e9d0e1a/
 
-Do so, for the same reasons as reported for the target variant in
-da9dcddff15a.
-
-Fixes: da9dcddff15af3e99cbc20297f4a3d25e89c66e1
-
-Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Titouan Christophe <titouan.christophe@mind.be>
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 ---
- package/mosquitto/Config.in.host | 1 +
- 1 file changed, 1 insertion(+)
+ ...001-fix-fallback-uint128-bitwise-not.patch | 42 +++++++++++++++++++
+ 1 file changed, 42 insertions(+)
+ create mode 100644 package/fmt/0001-fix-fallback-uint128-bitwise-not.patch
 
-diff --git a/package/mosquitto/Config.in.host b/package/mosquitto/Config.in.host
-index 39e287ee89..7b94003fae 100644
---- a/package/mosquitto/Config.in.host
-+++ b/package/mosquitto/Config.in.host
-@@ -1,4 +1,5 @@
- config BR2_PACKAGE_HOST_MOSQUITTO
- 	bool "host mosquitto (mosquitto_passwd)"
-+	select BR2_HOST_CMAKE_AT_LEAST_4_3
- 	help
- 	  Only installs mosquitto_passwd.
+diff --git a/package/fmt/0001-fix-fallback-uint128-bitwise-not.patch b/package/fmt/0001-fix-fallback-uint128-bitwise-not.patch
+new file mode 100644
+index 0000000000..123c43ab2c
+--- /dev/null
++++ b/package/fmt/0001-fix-fallback-uint128-bitwise-not.patch
+@@ -0,0 +1,42 @@
++From 588b3a0f8f6a8bcf2a959cae882d5b2703e86737 Mon Sep 17 00:00:00 2001
++From: Vinay Kumar <vkslog69@gmail.com>
++Date: Thu, 18 Jun 2026 12:22:12 +0530
++Subject: [PATCH] Fix fallback uint128 bitwise not (#4813)
++
++Upstream: https://github.com/fmtlib/fmt/commit/588b3a0f8f6a8bcf2a959cae882d5b2703e86737
++Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
++---
++ include/fmt/format.h | 3 +++
++ test/format-test.cc  | 5 +++++
++ 2 files changed, 8 insertions(+)
++
++diff --git a/include/fmt/format.h b/include/fmt/format.h
++index 5044befdd863..570627922c62 100644
++--- a/include/fmt/format.h
+++++ b/include/fmt/format.h
++@@ -326,6 +326,9 @@ class uint128 {
++       -> uint128 {
++     return {lhs.hi_ & rhs.hi_, lhs.lo_ & rhs.lo_};
++   }
+++  friend constexpr auto operator~(const uint128& n) -> uint128 {
+++    return {~n.hi_, ~n.lo_};
+++  }
++   friend FMT_CONSTEXPR auto operator+(const uint128& lhs, const uint128& rhs)
++       -> uint128 {
++     auto result = uint128(lhs);
++diff --git a/test/format-test.cc b/test/format-test.cc
++index 9a2258d5921f..8c2670a19fc3 100644
++--- a/test/format-test.cc
+++++ b/test/format-test.cc
++@@ -82,6 +82,11 @@ TEST(uint128_test, minus) {
++   EXPECT_EQ(n - 2, 40);
++ }
++ 
+++TEST(uint128_test, bitwise_not) {
+++  auto n = ~uint128(0x123456789abcdef0, 0x0fedcba987654321);
+++  EXPECT_EQ(n, uint128(0xedcba9876543210f, 0xf0123456789abcde));
+++}
+++
++ TEST(uint128_test, plus_assign) {
++   auto n = uint128(32);
++   n += uint128(10);
 -- 
-2.34.1
-
-____________________________________________________________________________________________________________
-Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
-
-This message and its attachments may contain confidential or privileged information that may be protected by law;
-they should not be distributed, used or copied without authorisation.
-If you have received this email in error, please notify the sender and delete this message and its attachments.
-As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-Thank you.
+2.43.0
 
 _______________________________________________
 buildroot mailing list
