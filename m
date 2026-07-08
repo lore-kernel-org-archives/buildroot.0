@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72E67C44506
-	for <buildroot@archiver.kernel.org>; Fri, 10 Jul 2026 13:45:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E497C43458
+	for <buildroot@archiver.kernel.org>; Fri, 10 Jul 2026 13:45:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3030140B82;
-	Fri, 10 Jul 2026 13:45:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5507740BA5;
+	Fri, 10 Jul 2026 13:45:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4icGaMUjTpaW; Fri, 10 Jul 2026 13:45:12 +0000 (UTC)
+ id ZhEaIWVwt8NF; Fri, 10 Jul 2026 13:45:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EF1AA40B96
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D387140B77
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1783691112;
-	bh=ZPZ0Eg7En02WIJg+mJvCIXfqdlfMqLDZFWkP9HZgazg=;
+	s=default; t=1783691116;
+	bh=s3+I25WqXaD6lCJ9FFzSTSOofZHfXr+Xf3EMN5CWDcw=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=hs1bdRAD9cGFruGBJ65Y/KXXa/l24wUicIKBnjRn6eqkJZtcMn+iXY5ulolMHvFd1
-	 4gKziuamaTPwKe6viDBKSokdrM2U2sCR6GozNTi1kcXly1iAsLm5Gc+IklApiHnt5S
-	 KTwvn3/uFTq+5LM9JRD+SKbm1Nd69v8ixfBb2zEbDKDIdaJpRxwAEfv9WxiuPg619Y
-	 xILpEEsR5GgLx5H/Ch2ZQh55d967btNyu9zrSeTkajbe0KENO3CE6sWGV9/jwgljls
-	 8eBs5sU+C6VP8j1qrr7GVj4k1RN3dHR/ex6HDyImF6QOMoANZBzQabLnqAgVRm7J78
-	 8A7DkqUY+OWKw==
+	b=ojRJ6OHL86Gc6yuUmi40OnoemEWsw0gmGI/ewuA1nFspJ9TimZDNIh3mv3cfCjKE1
+	 oY40HuL5FbKxfn2UMLO9+mY/AXG9V/E4iUQ7VkQIsE1vwI+cy8wPuW6LYaoKII3jpi
+	 oBZQRNjPFf1vCgWqcgMyfVeEuaCcqH+3ZUmr4wYgD/Jectmy+kZahUweWte+xPQcof
+	 yXm9EG2ZOz49ZVlCy8wUPpS43d9cZ+4BW6OVyHnlRzac+fpgJp28xGUiMjO8fz6uZN
+	 QX+ZwODyS557u2XpnpufdZ4QhFmU03H+2ccaCWb5LBjd4cMgrWdMmT436fn+4GXD6t
+	 Xl44GekttA63w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EF1AA40B96;
-	Fri, 10 Jul 2026 13:45:11 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 1820C2FE
- for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:44:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D387140B77;
+	Fri, 10 Jul 2026 13:45:16 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 23B062FE
+ for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:44:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 15C35606A7
- for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:44:51 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 07188810B6
+ for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:44:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4ezw5gg8pfZP for <buildroot@buildroot.org>;
- Fri, 10 Jul 2026 13:44:50 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xvaLZAjlWROI for <buildroot@buildroot.org>;
+ Fri, 10 Jul 2026 13:44:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 34DD16068F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A0B59810BE
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 34DD16068F
+ by smtp1.osuosl.org (Postfix) with ESMTP id A0B59810BE
  for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:44:50 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5DA718867A; Fri, 10 Jul 2026 13:44:17 +0000 (UTC)
+ id C4FA78867A; Fri, 10 Jul 2026 13:44:17 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 8 Jul 2026 14:31:25 +0200
+Date: Wed, 8 Jul 2026 14:53:26 +0200
 X-Git-Refname: refs/heads/2026.05.x
-X-Git-Oldrev: 17d604e3e4df79628f97559ad099051a69e95ea6
-X-Git-Newrev: c27982162e3d64f3b6ba9609341b9cb33c755f44
+X-Git-Oldrev: 023a2fffa5dec0758793ad966925d145bef51112
+X-Git-Newrev: 190ea0849b161af57507c89e462083b813b6d0cb
 X-Patchwork-Hint: ignore
-Message-Id: <20260710134417.5DA718867A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.05.x] package/nginx: security
- bump to 1.30.3
+Message-Id: <20260710134417.C4FA78867A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.05.x] package/php: security
+ bump version to 8.5.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,58 +77,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/c27982162e3d64f3b6ba9609341b9cb33c755f44
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/190ea0849b161af57507c89e462083b813b6d0cb
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.05.x
 
-Changes with nginx 1.30.3
+https://www.php.net/ChangeLog-8.php#8.5.8
+https://news-web.php.net/php.announce/498
+https://github.com/php/php-src/blob/php-8.5.8/NEWS
 
-    *) Security: a heap memory buffer overflow might occur in a worker
-       process when using a configuration with "ignore_invalid_headers off;"
-       and "large_client_header_buffers" with large configured values when
-       proxying a specially crafted request to HTTP/2 or gRPC backend,
-       allowing an attacker to cause worker process memory corruption or
-       segmentation fault in a worker process (CVE-2026-42055).
-       Thanks to Mufeed VH of Winfunc Research.
+Fixes CVE-2026-14355.
 
-    *) Security: a heap memory buffer overread might occur in a worker
-       process while handling a specially sent response with decoding from
-       UTF-8 via the "charset_map" directive, allowing an attacker to cause
-       a limited disclosure of worker process memory or segmentation fault
-       in a worker process (CVE-2026-48142).
-       Thanks to Han Yan of Xiaomi and p4p3r of CYBERONE.
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 9b8c65a6c1f2329d5d7dacc6b559023ef2bcafc1)
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit beb6be6b06e3dc536a24ea99c0e94d81c75a1212)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/nginx/nginx.hash | 2 +-
- package/nginx/nginx.mk   | 2 +-
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/nginx/nginx.hash b/package/nginx/nginx.hash
-index 5055b4bd57..6c3afa889d 100644
---- a/package/nginx/nginx.hash
-+++ b/package/nginx/nginx.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256  7df3090907fca3cc0e456d6dc00ceb230da74ea88026ceff0affc29dbbd9ac4c  nginx-1.30.2.tar.gz
-+sha256  e5823dc6f45610993def93ebf6cfce68264af4958c77e874b7d20f3709001b8f  nginx-1.30.3.tar.gz
- # License files, locally calculated
- sha256  08845fe39e06b51dad7685c28140ab49577a86e947523e16b536a46caf89ad5c  LICENSE
-diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-index 3f6aecebef..ad61ef6140 100644
---- a/package/nginx/nginx.mk
-+++ b/package/nginx/nginx.mk
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 2a89d03ecd..3c18506359 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From https://www.php.net/downloads.php?source=Y
+-sha256  01ba2ed1c2658dacf91bebc8be6a4885f69b811c7993831fc48e26107ab29985  php-8.5.7.tar.xz
++sha256  58910198d19e873048fe87cdfe16bc790025417ede3d1651bfa1c4b533d573f2  php-8.5.8.tar.xz
+ 
+ # License file
+ sha256  b42e4df5e50e6ecda1047d503d6d91d71032d09ed1027ba1ef29eed26f890c5a  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 0bfb12a8eb..56d66e40d7 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NGINX_VERSION = 1.30.2
-+NGINX_VERSION = 1.30.3
- NGINX_SITE = https://nginx.org/download
- NGINX_LICENSE = BSD-2-Clause
- NGINX_LICENSE_FILES = LICENSE
+-PHP_VERSION = 8.5.7
++PHP_VERSION = 8.5.8
+ PHP_SITE = https://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
