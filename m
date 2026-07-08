@@ -1,63 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C18FC43458
-	for <buildroot@archiver.kernel.org>; Fri, 10 Jul 2026 13:43:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E413C44506
+	for <buildroot@archiver.kernel.org>; Fri, 10 Jul 2026 13:43:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6421440966;
+	by smtp3.osuosl.org (Postfix) with ESMTP id D961460711;
 	Fri, 10 Jul 2026 13:43:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eAOmMXtnp93r; Fri, 10 Jul 2026 13:43:14 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wvLGRDdFqJ7Z; Fri, 10 Jul 2026 13:43:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3FAAF409CA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1DF91606FA
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1783690994;
-	bh=dIzta7lqZItFOV1CdeuJzeVI9kdr+pntAg6YsRRPbL8=;
+	s=default; t=1783690996;
+	bh=6u/N04DTQdFR3iRAgP+Vxk+3GCwE6vVwtybmJyXob1k=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=or5faxSqBOt/tTG62IrXCSRLy7OJ5XLD4ALvCz9YBIcXNQHjVHB4L/tW5qdPrZ6Zw
-	 PEDrTfsVYi0shJaMDexB0tCLfcT2aUzIDsaSYW71M1gf4gQZtxjbUC6D09DVeOvxyp
-	 XZznQ9+VByzcCSOU3YoIfd38Wbs++rDNCols36D8ivya7KPa79GKbFYcbsUpnY+828
-	 F6UwPPvrDM409YWUUxblMqGSN8xG/6J0LA0A9j/FThxvWet9iQIqUbQH5B2vEq5gz3
-	 Zet7DnOGc243Empl6kAIeieI17OjT9sNx6J++FxJUxz+kceVWgXJaUtcplWawuJDkv
-	 9Wd81nTixPlqQ==
+	b=KppoW5c+44eY83sPqC7k5e1/hlt6C3C1f5u01xNMI1XqtUOORzmo+QcDFkG7OyfBT
+	 uzIl7+njzSQhnLTGHnwhqkwnMIeU0m3p5OrE1qccid0ehJKa9BHqO0ERr24vXeIuMo
+	 sQsdbeOZESMHsmmpsbtXplzrBBsmUOqfELTKkH9xbOYbS5NG+svXEUqpXonKcuem4o
+	 61SOqabAamSE68PJAjQzsD2lrd9Pnt7CxoNTO3UCXGgmVD3hSZFBCdZlHUHmLZsenZ
+	 TwqtiHw8D4wvip5W8Mnoz4E2DwamqtyhEj05rIk3hBktRjyWKAoWzQ+noCs7rxFgdJ
+	 eBZTYWIKoGCcQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3FAAF409CA;
-	Fri, 10 Jul 2026 13:43:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1DF91606FA;
+	Fri, 10 Jul 2026 13:43:16 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 8EFF32FE
+ by lists1.osuosl.org (Postfix) with ESMTP id B6A782FE
  for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:42:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 75890810B4
+ by smtp1.osuosl.org (Postfix) with ESMTP id A8C0F810B4
  for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:42:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7Kc0DnI0gvRK for <buildroot@buildroot.org>;
- Fri, 10 Jul 2026 13:42:50 +0000 (UTC)
+ id Jf4XXMT2o0ti for <buildroot@buildroot.org>;
+ Fri, 10 Jul 2026 13:42:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 72E4580FF5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E2437810B3
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 72E4580FF5
+ by smtp1.osuosl.org (Postfix) with ESMTP id E2437810B3
  for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:42:50 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A702C88683; Fri, 10 Jul 2026 13:42:17 +0000 (UTC)
+ id 2341388675; Fri, 10 Jul 2026 13:42:18 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 8 Jul 2026 14:53:13 +0200
+Date: Wed, 8 Jul 2026 15:01:03 +0200
+Subject: [git commit branch/2025.02.x] DEVELOPERS: add Vincent Stehlé for aarch64-efi files
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: f42704121d98a1d186ca248a5167220447bb3a13
-X-Git-Newrev: d3d411aa79b89ee2311741369c2bcb47f94b8f42
+X-Git-Oldrev: 2b412e077cbe63172d8554f3bfd72c8be89c3171
+X-Git-Newrev: e690698e33e1eb0fdd4508bfe6d77433f01539f9
 X-Patchwork-Hint: ignore
-Message-Id: <20260710134217.A702C88683@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/wolfssl: security
- bump to v5.9.2
+Message-Id: <20260710134218.2341388675@busybox.osuosl.org>
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -72,182 +71,51 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0562539503217617769=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d3d411aa79b89ee2311741369c2bcb47f94b8f42
+--===============0562539503217617769==
+Content-Type: text/plain
+
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/e690698e33e1eb0fdd4508bfe6d77433f01539f9
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-For more information about the release, see:
-
-- https://github.com/wolfSSL/wolfssl/releases/tag/v5.9.2-stable
-
-Fixes the following vulnerabilities:
-
-- CVE-2026-6091: https://www.cve.org/CVERecord?id=CVE-2026-6091
-
-- CVE-2026-6092: https://www.cve.org/CVERecord?id=CVE-2026-6092
-
-- CVE-2026-6094: https://www.cve.org/CVERecord?id=CVE-2026-6094
-
-- CVE-2026-6291: https://www.cve.org/CVERecord?id=CVE-2026-6291
-
-- CVE-2026-6325: https://www.cve.org/CVERecord?id=CVE-2026-6325
-
-- CVE-2026-6329: https://www.cve.org/CVERecord?id=CVE-2026-6329
-
-- CVE-2026-6330: https://www.cve.org/CVERecord?id=CVE-2026-6330
-
-- CVE-2026-6331: https://www.cve.org/CVERecord?id=CVE-2026-6331
-
-- CVE-2026-6412: https://www.cve.org/CVERecord?id=CVE-2026-6412
-
-- CVE-2026-6450: https://www.cve.org/CVERecord?id=CVE-2026-6450
-
-- CVE-2026-6678: https://www.cve.org/CVERecord?id=CVE-2026-6678
-
-- CVE-2026-6681: https://www.cve.org/CVERecord?id=CVE-2026-6681
-
-- CVE-2026-6731: https://www.cve.org/CVERecord?id=CVE-2026-6731
-
-- CVE-2026-7511: https://www.cve.org/CVERecord?id=CVE-2026-7511
-
-- CVE-2026-7531: https://www.cve.org/CVERecord?id=CVE-2026-7531
-
-- CVE-2026-7532: https://www.cve.org/CVERecord?id=CVE-2026-7532
-
-- CVE-2026-8720: https://www.cve.org/CVERecord?id=CVE-2026-8720
-
-- CVE-2026-10097: https://www.cve.org/CVERecord?id=CVE-2026-10097
-
-- CVE-2026-10098: https://www.cve.org/CVERecord?id=CVE-2026-10098
-
-- CVE-2026-10512: https://www.cve.org/CVERecord?id=CVE-2026-10512
-
-- CVE-2026-10592: https://www.cve.org/CVERecord?id=CVE-2026-10592
-
-- CVE-2026-11310: https://www.cve.org/CVERecord?id=CVE-2026-11310
-
-- CVE-2026-11703: https://www.cve.org/CVERecord?id=CVE-2026-11703
-
-- CVE-2026-11999: https://www.cve.org/CVERecord?id=CVE-2026-11999
-
-- CVE-2026-12340: https://www.cve.org/CVERecord?id=CVE-2026-12340
-
-- CVE-2026-55958: https://www.cve.org/CVERecord?id=CVE-2026-55958
-
-- CVE-2026-55960: https://www.cve.org/CVERecord?id=CVE-2026-55960
-
-- CVE-2026-55961: https://www.cve.org/CVERecord?id=CVE-2026-55961
-
-- CVE-2026-55962: https://www.cve.org/CVERecord?id=CVE-2026-55962
-
-- CVE-2026-55964: https://www.cve.org/CVERecord?id=CVE-2026-55964
-
-- CVE-2026-55967: https://www.cve.org/CVERecord?id=CVE-2026-55967
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Vincent Stehlé <vincent.stehle@arm.com>
+Cc: Dick Olsson <hi@senzilla.io>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 45a0ce557d9508f437dd196eb95107958283abf5)
+(cherry picked from commit bff9d7181f53886332df55877eda9507cbda2ec4)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ..._LIMITS_H-in-options.h-rather-than-config.patch | 59 ----------------------
- package/wolfssl/wolfssl.hash                       |  2 +-
- package/wolfssl/wolfssl.mk                         |  2 +-
- 3 files changed, 2 insertions(+), 61 deletions(-)
+ DEVELOPERS | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/wolfssl/0001-Define-HAVE_LIMITS_H-in-options.h-rather-than-config.patch b/package/wolfssl/0001-Define-HAVE_LIMITS_H-in-options.h-rather-than-config.patch
-deleted file mode 100644
-index 0599f9d615..0000000000
---- a/package/wolfssl/0001-Define-HAVE_LIMITS_H-in-options.h-rather-than-config.patch
-+++ /dev/null
-@@ -1,59 +0,0 @@
--From b54173fc402c30e81d66b84e2f9725cb6d944b40 Mon Sep 17 00:00:00 2001
--From: Kareem <kareem@wolfssl.com>
--Date: Fri, 27 Mar 2026 17:01:02 -0700
--Subject: [PATCH] Define HAVE_LIMITS_H in options.h rather than config.h since
-- types.h depends on this definition and config.h isn't consistently available
-- at runtime. Fixes #9936.
--
--Upstream: https://github.com/wolfSSL/wolfssl/pull/10097
--
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-----
-- cmake/config.in    | 3 ---
-- cmake/options.h.in | 3 +++
-- configure.ac       | 4 +++-
-- 3 files changed, 6 insertions(+), 4 deletions(-)
--
--diff --git a/cmake/config.in b/cmake/config.in
--index f2524e41e43..6054b6dbe7b 100644
----- a/cmake/config.in
--+++ b/cmake/config.in
--@@ -19,9 +19,6 @@
-- /* Define to 1 if you have the `gmtime_r' function. */
-- #cmakedefine HAVE_GMTIME_R @HAVE_GMTIME_R@
-- 
---/* Define to 1 if you have the <limits.h> header file. */
---#cmakedefine HAVE_LIMITS_H @HAVE_LIMITS_H@
---
-- /* Define to 1 if you have the <pcap/pcap.h> header file. */
-- #cmakedefine HAVE_PCAP_PCAP_H @HAVE_PCAP_PCAP_H@
-- 
--diff --git a/cmake/options.h.in b/cmake/options.h.in
--index 985b54241d6..c46ada8045d 100644
----- a/cmake/options.h.in
--+++ b/cmake/options.h.in
--@@ -33,6 +33,9 @@ extern "C" {
-- #endif
-- 
-- #ifndef WOLFSSL_OPTIONS_IGNORE_SYS
--+/* Since types.h depends on HAVE_LIMITS_H, we must define it in options.h. */
--+#undef HAVE_LIMITS_H
--+#cmakedefine HAVE_LIMITS_H @HAVE_LIMITS_H@
-- #undef _GNU_SOURCE
-- #cmakedefine _GNU_SOURCE
-- #undef _POSIX_THREADS
--diff --git a/configure.ac b/configure.ac
--index bce600f2ecc..c5cf9f320c7 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -185,7 +185,9 @@ AC_ARG_ENABLE([freebsdkm-crypto-register],
--     [ENABLED_BSDKM_REGISTER=no]
--     )
-- 
---AC_CHECK_HEADERS([arpa/inet.h fcntl.h limits.h netdb.h netinet/in.h stddef.h time.h sys/ioctl.h sys/socket.h sys/time.h errno.h sys/un.h ctype.h sys/random.h])
--+AC_CHECK_HEADERS([arpa/inet.h fcntl.h netdb.h netinet/in.h stddef.h time.h sys/ioctl.h sys/socket.h sys/time.h errno.h sys/un.h ctype.h sys/random.h])
--+# Special case: Since types.h depends on HAVE_LIMITS_H, we must define it in options.h.
--+AC_CHECK_HEADER([limits.h], [AM_CPPFLAGS="$AM_CPPFLAGS -DHAVE_LIMITS_H=1"], [])
-- AC_CHECK_LIB([network],[socket])
-- AC_C_BIGENDIAN
-- AC_C___ATOMIC
-diff --git a/package/wolfssl/wolfssl.hash b/package/wolfssl/wolfssl.hash
-index e1ecd5f98a..c259734875 100644
---- a/package/wolfssl/wolfssl.hash
-+++ b/package/wolfssl/wolfssl.hash
-@@ -1,5 +1,5 @@
- # Locally computed:
--sha256  d5ca7af48cd2d9a91d539e9baedeba55a0605a28d7ac8b01dc3d5254a13ca341  wolfssl-5.9.1.tar.gz
-+sha256  2f4ef3d4fd387a9b3191d36a6316d69116c46ff69bb9583b6c82b36d7b8ca114  wolfssl-5.9.2.tar.gz
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 0b130cbbd9..110338753e 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -3243,9 +3243,11 @@ F:	package/nss-myhostname/
+ F:	package/utp_com/
  
- # Hash for license files:
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/wolfssl/wolfssl.mk b/package/wolfssl/wolfssl.mk
-index 44f51e06e6..779fd2cabf 100644
---- a/package/wolfssl/wolfssl.mk
-+++ b/package/wolfssl/wolfssl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WOLFSSL_VERSION = 5.9.1
-+WOLFSSL_VERSION = 5.9.2
- WOLFSSL_SITE = $(call github,wolfSSL,wolfssl,v$(WOLFSSL_VERSION)-stable)
- WOLFSSL_INSTALL_STAGING = YES
- 
+ N:	Vincent Stehlé <vincent.stehle@arm.com>
++F:	board/aarch64-efi/
+ F:	board/arm/fvp-ebbr/
+ F:	board/qemu/aarch64-ebbr/
+ F:	board/qemu/arm-ebbr/
++F:	configs/aarch64_efi_defconfig
+ F:	configs/arm_fvp_ebbr_defconfig
+ F:	configs/qemu_aarch64_ebbr_defconfig
+ F:	configs/qemu_arm_ebbr_defconfig
+
+--===============0562539503217617769==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0562539503217617769==--
