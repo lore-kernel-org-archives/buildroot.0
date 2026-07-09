@@ -1,87 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F9A7C43458
-	for <buildroot@archiver.kernel.org>; Thu,  9 Jul 2026 19:17:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF780C43458
+	for <buildroot@archiver.kernel.org>; Thu,  9 Jul 2026 21:32:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 089096100E;
-	Thu,  9 Jul 2026 19:17:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6ED464108D;
+	Thu,  9 Jul 2026 21:32:09 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4ZvDvwqIFl-T; Thu,  9 Jul 2026 21:32:07 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 612F441096
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1783632727;
+	bh=TEzEkfJ9j9MzY3iuo/sggu0Z4r/uDKrzK97co3kUxUU=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:Cc:From;
+	b=oFKeN90CWdTFDnl3S7RNnsvadjdI1x4B0997aujKwYYwDFYoniEs/gsKKsLgpt1Zx
+	 JAyf1TdGq8nD3Zv5W/UY/9JzIXKxcP5TxCvR8WAV8HFa2Rk82/PgWeOkDzhBIP6L+y
+	 NhLJPDjfyzQJ/0LRneWcpjuTWBzBIOGqMRQxtHjD11Y1uQk7o6Q2vnG99bHvG0saVs
+	 wTZwPEshGNCF6LbVAnYv0TI9RnEVJGHuHQte64QsudEz05xl+lkA5ONDDECmrWLVzj
+	 E5TXvOj1E54U68g/GZVK5ZTNrVGGIou95j2VuTAVXzxpvfUQEyhhlGC2K0UHzOkyf9
+	 zsbZ4aj+1Ggsg==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 612F441096;
+	Thu,  9 Jul 2026 21:32:07 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id BB2842FE
+ for <buildroot@buildroot.org>; Thu,  9 Jul 2026 21:32:06 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 98D936102D
+ for <buildroot@buildroot.org>; Thu,  9 Jul 2026 21:32:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hRDd-JlU1j4Y; Thu,  9 Jul 2026 19:17:47 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2825260FDC
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1783624667;
-	bh=QKYi8Hrho/gDJ9fM+Dhss1EZXEYxXFIAD3DygDrfVrU=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=Q4DKADtvq8k1yHRD5aGvnFTrS3CbpGSBUfuLS+e7CTXNWOjeqEdbnKKg5xPmuMTJ+
-	 ZaYy1yDwp9YO7hR8VJVa0JpRWLTT/r6Uh3cvbxNcNY2lC9Wgzy+7GSlpS4qdr2jc1d
-	 1aE/PXklACB004P2/usUcIy1i+Rb6Uw16MRP2RopRCOXLZeLvoiREBA2vg0DJt5558
-	 +k+aYIJsed+fcjwf6IHAzvDkEcTGNqb9uvaJmdJbpyIFbQ6nrbEQ15DGSslaNS3fIK
-	 ry4LdfS/thIDLsvDjBEnpVCDKoXnclVtGiVPxSl5oVdodNV9YScON2TcgxDXGN2duy
-	 Ot3TNys8+3thw==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2825260FDC;
-	Thu,  9 Jul 2026 19:17:47 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 36AC4300
- for <buildroot@buildroot.org>; Thu,  9 Jul 2026 19:17:45 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 150C140544
- for <buildroot@buildroot.org>; Thu,  9 Jul 2026 19:17:45 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7uwihPlz4a3z for <buildroot@buildroot.org>;
- Thu,  9 Jul 2026 19:17:43 +0000 (UTC)
+ id ljhdhFU6NkZF for <buildroot@buildroot.org>;
+ Thu,  9 Jul 2026 21:32:05 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org DCC0A4030D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DCC0A4030D
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3185E60F9A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3185E60F9A
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id DCC0A4030D
- for <buildroot@buildroot.org>; Thu,  9 Jul 2026 19:17:42 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a0a01.dip0.t-ipconnect.de [91.58.10.1])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 3E1E2A4C2441;
- Thu,  9 Jul 2026 21:17:39 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:44498)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3185E60F9A
+ for <buildroot@buildroot.org>; Thu,  9 Jul 2026 21:32:03 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p4fd6c4f9.dip0.t-ipconnect.de [79.214.196.249])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 915A4A4C0A96;
+ Thu,  9 Jul 2026 23:32:00 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:34438)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.4)
- (envelope-from <bernd@kuhls.net>) id 1whuFe-000000000Di-33oC;
- Thu, 09 Jul 2026 19:17:38 +0000
+ (envelope-from <bernd@kuhls.net>) id 1whwLe-0000000072k-28SL;
+ Thu, 09 Jul 2026 21:31:59 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Cc: Alexander Clouter <alex+buildroot@digriz.org.uk>
-Date: Thu,  9 Jul 2026 21:17:37 +0200
-Message-ID: <20260709191738.408892-1-bernd@kuhls.net>
+Date: Thu,  9 Jul 2026 23:31:58 +0200
+Message-ID: <20260709213158.3869905-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Spamd-Bar: ---
+X-Spamd-Bar: -
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202605290044; t=1783624659;
- bh=RMQw7wr1H2GQTpc2oDQ1mpvziiNYl8JTVWjykbAdFL4=;
+ s=kas202605290044; t=1783632720;
+ bh=Cw0BFu8yhNTtwDZTFh/buDNIegfMSBDiF3jtqUiNbJk=;
  h=From:To:Cc:Subject:Date:From;
- b=hmz/xXLaoEnIGqfExedKR0AtsVCxjMTl6OvtA+6gb9eR0MbUj/vd3n3PWr9pm1kzf
- itEAytnLuK6l9uN0HD2whNicMQyA1GTsP4TpEjwt+j1KHi/01Dq6qRhppDCvxq0MMZ
- MiTLRsomch5uzeJbRo0Wt9Wz+3k7zvs1kwZMDuM9sgaDQ3Qpk2jehCR6RDw8VUDI/O
- wZubry59fKtSp5Q9A+CmsjbFfA3g5g4QWRrhPc95EIUzrDQ7J+5uIPg3Bzw7tA00O4
- b5QEUQwJzyj35DUPm18q6cfQPjR1OoBL02jOjDavX/GghcqciX8zSmbADpKutbMz+E
- Wj2+WQaK/WyOw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=rjpG/mScv84qLLcHvzY1pQjU1hlu4zLV2q1rnFI4UIZw1GOjFllC2os/ga6G0yrbP
+ lkY8LSHFJQ9ykrFZb7V6bMVwif99nOdYlK/kVtdktXKGfneP4KZe44jeTMjf1k+vRj
+ aZM65jf6z2fVmQcYz/2wvjFUDmDNXBSS1xrZD5W/28w86E3gCgAZPRSEdop6b2C+O2
+ wAH/sg1FXUpYdeqZZZXpBsgyhWd7Fl1g4M2WpA3L6S8ZfxUxWythRyLoXjn4VndWN8
+ bXsWHrnkSozeh5NJ3Wn4zD78V6YgJIPdFjEMCrqGsYjSg8VQRN9qW2lMP7BABgGtk+
+ Fsparv3k1HLPA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=hmz/xXLa
-Subject: [Buildroot] [PATCH 1/1] package/odhcp6c: bump version to git
- 10a52220ae
+ header.s=kas202605290044 header.b=rjpG/mSc
+Subject: [Buildroot] [PATCH 1/1] package/python3: add upstream security
+ patches for CVE-2026-0864, CVE-2026-11972, CVE-2026-4360 & CVE-2026-15308
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,170 +92,513 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-aHR0cHM6Ly9naXRodWIuY29tL29wZW53cnQvb2RoY3A2Yy9jb21wYXJlL2YxOWRkMzdmYjQ2N2M5
-Y2YxMGNhZDU3YWVmYTBkMDQ4MzEyZDdkZmQuLi4xMGE1MjIyMGFlYzlkNDU4MDM1MThkOGNjNGQ2
-M2U1NTI0ODRlZDYxCgpSZW1vdmVkIHBhdGNoZXMgd2hpY2ggYXJlIGluY2x1ZGVkIGluIHRoaXMg
-cmVsZWFzZS4KClBsZWFzZSBub3RlIHRoYXQgdXBzdHJlYW0gY29tbWl0dGVkCmh0dHBzOi8vZ2l0
-Lm9wZW53cnQub3JnL3Byb2plY3Qvb2RoY3A2Yy9jb21taXQvP2lkPTEwYTUyMjIwYWVjOWQ0NTgw
-MzUxOGQ4Y2M0ZDYzZTU1MjQ4NGVkNjEKaW5zdGVhZCBvZiBwYXRjaCAwMDAxLgoKU2lnbmVkLW9m
-Zi1ieTogQmVybmQgS3VobHMgPGJlcm5kQGt1aGxzLm5ldD4KLS0tCkdpdGxhYiBwaXBlbGluZXMg
-cGFzc2VkOgpodHRwczovL2dpdGxhYi5jb20vYmt1aGxzL2J1aWxkcm9vdC8tL2NvbW1pdHMvMzFh
-MTg5MjY2YzJlMjVjZjk2OThiNTVlZTNkOTk2MGU5MTNlMjhmNQoKIC4uLnA2Yy1jb25zdC1jYXN0
-LWZvci1jMjMtY29tcGF0aWJpbGl0eS5wYXRjaCB8IDEwMiAtLS0tLS0tLS0tLS0tLS0tLS0KIC4u
-LjAwMi1kaGNwdjYtdXNlLXN0YWJsZS1JQUlELWZvci1JQV9OQS5wYXRjaCB8ICA5NSAtLS0tLS0t
-LS0tLS0tLS0tCiBwYWNrYWdlL29kaGNwNmMvb2RoY3A2Yy5oYXNoICAgICAgICAgICAgICAgICAg
-fCAgIDIgKy0KIHBhY2thZ2Uvb2RoY3A2Yy9vZGhjcDZjLm1rICAgICAgICAgICAgICAgICAgICB8
-ICAgMiArLQogNCBmaWxlcyBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDE5OSBkZWxldGlvbnMo
-LSkKIGRlbGV0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL29kaGNwNmMvMDAwMS1vZGhjcDZjLWNvbnN0
-LWNhc3QtZm9yLWMyMy1jb21wYXRpYmlsaXR5LnBhdGNoCiBkZWxldGUgbW9kZSAxMDA2NDQgcGFj
-a2FnZS9vZGhjcDZjLzAwMDItZGhjcHY2LXVzZS1zdGFibGUtSUFJRC1mb3ItSUFfTkEucGF0Y2gK
-CmRpZmYgLS1naXQgYS9wYWNrYWdlL29kaGNwNmMvMDAwMS1vZGhjcDZjLWNvbnN0LWNhc3QtZm9y
-LWMyMy1jb21wYXRpYmlsaXR5LnBhdGNoIGIvcGFja2FnZS9vZGhjcDZjLzAwMDEtb2RoY3A2Yy1j
-b25zdC1jYXN0LWZvci1jMjMtY29tcGF0aWJpbGl0eS5wYXRjaApkZWxldGVkIGZpbGUgbW9kZSAx
-MDA2NDQKaW5kZXggY2RiMjZhNzQzNC4uMDAwMDAwMDAwMAotLS0gYS9wYWNrYWdlL29kaGNwNmMv
-MDAwMS1vZGhjcDZjLWNvbnN0LWNhc3QtZm9yLWMyMy1jb21wYXRpYmlsaXR5LnBhdGNoCisrKyAv
-ZGV2L251bGwKQEAgLTEsMTAyICswLDAgQEAKLUZyb20gM2I2OTM3ODEyNWFiYTYxYjMzOTFiZjVm
-ZTYwNzk4M2NlNzViODM5YyBNb24gU2VwIDE3IDAwOjAwOjAwIDIwMDEKLUZyb206IFJvc2VuIFBl
-bmV2IDxyb3NlbnBAZ21haWwuY29tPgotRGF0ZTogV2VkLCA4IEFwciAyMDI2IDE0OjE0OjU2IC0w
-NzAwCi1TdWJqZWN0OiBbUEFUQ0hdIG9kaGNwNmM6IGNvbnN0IGNhc3QgZm9yIGMyMyBjb21wYXRp
-YmlsaXR5Ci0KLXN0cnBicmsgaXMgbm93IGEgbWFjcm8gdGhhdCByZXR1cm5zIGNvbnN0IGJhc2Vk
-IG9uIHRoZSBwYXJhbWV0ZXIuIENhc3QKLWl0IGF3YXkgd2hlbiB3ZSBkb24ndCB3YW50IGNvbnN0
-LgotCi1TaWduZWQtb2ZmLWJ5OiBSb3NlbiBQZW5ldiA8cm9zZW5wQGdtYWlsLmNvbT4KLQotVXBz
-dHJlYW06IGh0dHBzOi8vZ2l0aHViLmNvbS9vcGVud3J0L29kaGNwNmMvcHVsbC8xNTYKLQotU2ln
-bmVkLW9mZi1ieTogQmVybmQgS3VobHMgPGJlcm5kQGt1aGxzLm5ldD4KLS0tLQotIHNyYy9jb25m
-aWcuYyB8IDE4ICsrKysrKysrKy0tLS0tLS0tLQotIDEgZmlsZSBjaGFuZ2VkLCA5IGluc2VydGlv
-bnMoKyksIDkgZGVsZXRpb25zKC0pCi0KLWRpZmYgLS1naXQgYS9zcmMvY29uZmlnLmMgYi9zcmMv
-Y29uZmlnLmMKLWluZGV4IDU0ZTJkMzUuLmMxYTNhOTkgMTAwNjQ0Ci0tLS0gYS9zcmMvY29uZmln
-LmMKLSsrKyBiL3NyYy9jb25maWcuYwotQEAgLTMzOCw3ICszMzgsNyBAQCBzdGF0aWMgaW50IGNv
-bmZpZ19wYXJzZV9vcHRfdTgoY29uc3QgY2hhciAqc3JjLCB1aW50OF90ICoqZHN0KQotIHN0YXRp
-YyBpbnQgY29uZmlnX3BhcnNlX29wdF9zdHJpbmcoY29uc3QgY2hhciAqc3JjLCB1aW50OF90ICoq
-ZHN0LCBjb25zdCBib29sIGFycmF5KQotIHsKLSAJaW50IG9fbGVuID0gMDsKLS0JY2hhciAqc2Vw
-ID0gc3RycGJyayhzcmMsIEFSUkFZX1NFUCk7Ci0rCWNoYXIgKnNlcCA9IHN0cnBicmsoKGNoYXIq
-KXNyYywgQVJSQVlfU0VQKTsKLSAKLSAJaWYgKHNlcCAmJiAhYXJyYXkpCi0gCQlyZXR1cm4gLTE7
-Ci1AQCAtMzYyLDcgKzM2Miw3IEBAIHN0YXRpYyBpbnQgY29uZmlnX3BhcnNlX29wdF9zdHJpbmco
-Y29uc3QgY2hhciAqc3JjLCB1aW50OF90ICoqZHN0LCBjb25zdCBib29sIGFyCi0gCQlzcmMgPSBz
-ZXA7Ci0gCi0gCQlpZiAoc2VwKQotLQkJCXNlcCA9IHN0cnBicmsoc3JjLCBBUlJBWV9TRVApOwot
-KwkJCXNlcCA9IHN0cnBicmsoKGNoYXIqKXNyYywgQVJSQVlfU0VQKTsKLSAJfSB3aGlsZSAoc3Jj
-KTsKLSAKLSAJcmV0dXJuIG9fbGVuOwotQEAgLTM3MSw3ICszNzEsNyBAQCBzdGF0aWMgaW50IGNv
-bmZpZ19wYXJzZV9vcHRfc3RyaW5nKGNvbnN0IGNoYXIgKnNyYywgdWludDhfdCAqKmRzdCwgY29u
-c3QgYm9vbCBhcgotIHN0YXRpYyBpbnQgY29uZmlnX3BhcnNlX29wdF9kbnNfc3RyaW5nKGNvbnN0
-IGNoYXIgKnNyYywgdWludDhfdCAqKmRzdCwgY29uc3QgYm9vbCBhcnJheSkKLSB7Ci0gCWludCBv
-X2xlbiA9IDA7Ci0tCWNoYXIgKnNlcCA9IHN0cnBicmsoc3JjLCBBUlJBWV9TRVApOwotKwljaGFy
-ICpzZXAgPSBzdHJwYnJrKChjaGFyKilzcmMsIEFSUkFZX1NFUCk7Ci0gCi0gCWlmIChzZXAgJiYg
-IWFycmF5KQotIAkJcmV0dXJuIC0xOwotQEAgLTM5OSw3ICszOTksNyBAQCBzdGF0aWMgaW50IGNv
-bmZpZ19wYXJzZV9vcHRfZG5zX3N0cmluZyhjb25zdCBjaGFyICpzcmMsIHVpbnQ4X3QgKipkc3Qs
-IGNvbnN0IGJvbwotIAkJc3JjID0gc2VwOwotIAotIAkJaWYgKHNlcCkKLS0JCQlzZXAgPSBzdHJw
-YnJrKHNyYywgQVJSQVlfU0VQKTsKLSsJCQlzZXAgPSBzdHJwYnJrKChjaGFyKilzcmMsIEFSUkFZ
-X1NFUCk7Ci0gCX0gd2hpbGUgKHNyYyk7Ci0gCi0gCXJldHVybiBvX2xlbjsKLUBAIC00MDgsNyAr
-NDA4LDcgQEAgc3RhdGljIGludCBjb25maWdfcGFyc2Vfb3B0X2Ruc19zdHJpbmcoY29uc3QgY2hh
-ciAqc3JjLCB1aW50OF90ICoqZHN0LCBjb25zdCBib28KLSBzdGF0aWMgaW50IGNvbmZpZ19wYXJz
-ZV9vcHRfaXA2KGNvbnN0IGNoYXIgKnNyYywgdWludDhfdCAqKmRzdCwgY29uc3QgYm9vbCBhcnJh
-eSkKLSB7Ci0gCWludCBvX2xlbiA9IDA7Ci0tCWNoYXIgKnNlcCA9IHN0cnBicmsoc3JjLCBBUlJB
-WV9TRVApOwotKwljaGFyICpzZXAgPSBzdHJwYnJrKChjaGFyKilzcmMsIEFSUkFZX1NFUCk7Ci0g
-Ci0gCWlmIChzZXAgJiYgIWFycmF5KQotIAkJcmV0dXJuIC0xOwotQEAgLTQzMyw3ICs0MzMsNyBA
-QCBzdGF0aWMgaW50IGNvbmZpZ19wYXJzZV9vcHRfaXA2KGNvbnN0IGNoYXIgKnNyYywgdWludDhf
-dCAqKmRzdCwgY29uc3QgYm9vbCBhcnJheQotIAkJc3JjID0gc2VwOwotIAotIAkJaWYgKHNlcCkK
-LS0JCQlzZXAgPSBzdHJwYnJrKHNyYywgQVJSQVlfU0VQKTsKLSsJCQlzZXAgPSBzdHJwYnJrKChj
-aGFyKilzcmMsIEFSUkFZX1NFUCk7Ci0gCX0gd2hpbGUgKHNyYyk7Ci0gCi0gCXJldHVybiBvX2xl
-bjsKLUBAIC00NDIsNyArNDQyLDcgQEAgc3RhdGljIGludCBjb25maWdfcGFyc2Vfb3B0X2lwNihj
-b25zdCBjaGFyICpzcmMsIHVpbnQ4X3QgKipkc3QsIGNvbnN0IGJvb2wgYXJyYXkKLSBzdGF0aWMg
-aW50IGNvbmZpZ19wYXJzZV9vcHRfdXNlcl9jbGFzcyhjb25zdCBjaGFyICpzcmMsIHVpbnQ4X3Qg
-Kipkc3QsIGNvbnN0IGJvb2wgYXJyYXkpCi0gewotIAlpbnQgb19sZW4gPSAwOwotLQljaGFyICpz
-ZXAgPSBzdHJwYnJrKHNyYywgQVJSQVlfU0VQKTsKLSsJY2hhciAqc2VwID0gc3RycGJyaygoY2hh
-ciopc3JjLCBBUlJBWV9TRVApOwotIAotIAlpZiAoc2VwICYmICFhcnJheSkKLSAJCXJldHVybiAt
-MTsKLUBAIC00NzEsNyArNDcxLDcgQEAgc3RhdGljIGludCBjb25maWdfcGFyc2Vfb3B0X3VzZXJf
-Y2xhc3MoY29uc3QgY2hhciAqc3JjLCB1aW50OF90ICoqZHN0LCBjb25zdCBib28KLSAJCXNyYyA9
-IHNlcDsKLSAKLSAJCWlmIChzZXApCi0tCQkJc2VwID0gc3RycGJyayhzcmMsIEFSUkFZX1NFUCk7
-Ci0rCQkJc2VwID0gc3RycGJyaygoY2hhciopc3JjLCBBUlJBWV9TRVApOwotIAl9IHdoaWxlIChz
-cmMpOwotIAotIAlyZXR1cm4gb19sZW47Ci1AQCAtNTU1LDcgKzU1NSw3IEBAIGludCBjb25maWdf
-cGFyc2Vfb3B0KGNvbnN0IGNoYXIgKm9wdCkKLSAJc3RydWN0IG9kaGNwNmNfb3B0ICpkb3B0ID0g
-TlVMTDsKLSAJaW50IHJldCA9IC0xOwotIAotLQlkYXRhID0gc3RycGJyayhvcHQsICI6Iik7Ci0r
-CWRhdGEgPSBzdHJwYnJrKChjaGFyKilvcHQsICI6Iik7Ci0gCWlmICghZGF0YSkKLSAJCXJldHVy
-biAtMTsKLSAKZGlmZiAtLWdpdCBhL3BhY2thZ2Uvb2RoY3A2Yy8wMDAyLWRoY3B2Ni11c2Utc3Rh
-YmxlLUlBSUQtZm9yLUlBX05BLnBhdGNoIGIvcGFja2FnZS9vZGhjcDZjLzAwMDItZGhjcHY2LXVz
-ZS1zdGFibGUtSUFJRC1mb3ItSUFfTkEucGF0Y2gKZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0Cmlu
-ZGV4IGZjNzAyMDVjY2MuLjAwMDAwMDAwMDAKLS0tIGEvcGFja2FnZS9vZGhjcDZjLzAwMDItZGhj
-cHY2LXVzZS1zdGFibGUtSUFJRC1mb3ItSUFfTkEucGF0Y2gKKysrIC9kZXYvbnVsbApAQCAtMSw5
-NSArMCwwIEBACi1Gcm9tIDlhNGQ2ZmU4MDJkMjFlNGZjMWI4NGY3ZDU1YjVjM2MyM2U3MWQ2YmEg
-TW9uIFNlcCAxNyAwMDowMDowMCAyMDAxCi1Gcm9tOiBQYXVsIERvbmFsZCA8bmV3dHdlbitnaXRo
-dWJAZ21haWwuY29tPgotRGF0ZTogVGh1LCAxOCBEZWMgMjAyNSAxNToxMDoyNCArMDEwMAotU3Vi
-amVjdDogW1BBVENIXSBkaGNwdjY6IHVzZSBzdGFibGUgSUFJRCBmb3IgSUFfTkEKLU1JTUUtVmVy
-c2lvbjogMS4wCi1Db250ZW50LVR5cGU6IHRleHQvcGxhaW47IGNoYXJzZXQ9VVRGLTgKLUNvbnRl
-bnQtVHJhbnNmZXItRW5jb2Rpbmc6IDhiaXQKLQotaHR0cHM6Ly93d3cucmZjLWVkaXRvci5vcmcv
-cmZjL3JmYzg0MTUuaHRtbCNzZWN0aW9uLTEyCi0KLSAgIC4uLi4uLi4uICBUaGUgSUFJRCBpcyBj
-aG9zZW4gYnkgdGhlIGNsaWVudC4gIEZvciBhbnkgZ2l2ZW4gdXNlIG9mIGFuCi0gICBJQSBieSB0
-aGUgY2xpZW50LCB0aGUgSUFJRCBmb3IgdGhhdCBJQSBNVVNUIGJlIGNvbnNpc3RlbnQgYWNyb3Nz
-Ci0gICByZXN0YXJ0cyBvZiB0aGUgREhDUCBjbGllbnQuICBUaGUgY2xpZW50IG1heSBtYWludGFp
-biBjb25zaXN0ZW5jeSBieQotICAgZWl0aGVyIHN0b3JpbmcgdGhlIElBSUQgaW4gbm9uLXZvbGF0
-aWxlIHN0b3JhZ2Ugb3IgdXNpbmcgYW4gYWxnb3JpdGhtCi0gICB0aGF0IHdpbGwgY29uc2lzdGVu
-dGx5IHByb2R1Y2UgdGhlIHNhbWUgSUFJRCBhcyBsb25nIGFzIHRoZQotICAgY29uZmlndXJhdGlv
-biBvZiB0aGUgY2xpZW50IGhhcyBub3QgY2hhbmdlZC4KLQotU2lnbmVkLW9mZi1ieTogUGF1bCBE
-b25hbGQgPG5ld3R3ZW4rZ2l0aHViQGdtYWlsLmNvbT4KLUxpbms6IGh0dHBzOi8vZ2l0aHViLmNv
-bS9vcGVud3J0L29kaGNwNmMvcHVsbC8xNDAKLVNpZ25lZC1vZmYtYnk6IMOBbHZhcm8gRmVybsOh
-bmRleiBSb2phcyA8bm9sdGFyaUBnbWFpbC5jb20+Ci0KLVVwc3RyZWFtOiBodHRwczovL2dpdGh1
-Yi5jb20vb3BlbndydC9vZGhjcDZjL2NvbW1pdC85YTRkNmZlODAyZDIxZTRmYzFiODRmN2Q1NWI1
-YzNjMjNlNzFkNmJhCi0KLVNpZ25lZC1vZmYtYnk6IEJlcm5kIEt1aGxzIDxiZXJuZEBrdWhscy5u
-ZXQ+Ci0tLS0KLSBzcmMvZGhjcHY2LmMgIHwgMTUgKysrKysrKysrKysrKy0tCi0gc3JjL29kaGNw
-NmMuaCB8ICAxICsKLSAyIGZpbGVzIGNoYW5nZWQsIDE0IGluc2VydGlvbnMoKyksIDIgZGVsZXRp
-b25zKC0pCi0KLWRpZmYgLS1naXQgYS9zcmMvZGhjcHY2LmMgYi9zcmMvZGhjcHY2LmMKLWluZGV4
-IGQ4YmI4YmUuLjk3ODYwYjEgMTAwNjQ0Ci0tLS0gYS9zcmMvZGhjcHY2LmMKLSsrKyBiL3NyYy9k
-aGNwdjYuYwotQEAgLTI2Miw2ICsyNjIsOSBAQCBzdGF0aWMgc3RydWN0IGRoY3B2Nl9zdGF0cyBk
-aGNwdjZfc3RhdHMgPSB7MH07Ci0gLy8gY29uZmlnCi0gc3RhdGljIHN0cnVjdCBjb25maWdfZGhj
-cCogY29uZmlnX2RoY3AgPSBOVUxMOwotIAotKy8vIHN0b3JlIHVuaXF1ZSBpZm5hbWUgaGFzaCB0
-byB1c2UgYXMgSUEtPklBSUQKLStzdGF0aWMgdWludDMyX3QgaWZuYW1lX2hhc2hfaWFpZCA9IDA7
-Ci0rCi0gc3RhdGljIHVpbnQzMl90IG50b2hsX3VuYWxpZ25lZChjb25zdCB1aW50OF90ICpkYXRh
-KQotIHsKLSAJdWludDMyX3QgYnVmOwotQEAgLTU0Miw2ICs1NDUsMTIgQEAgdm9pZCBkaGNwdjZf
-cmVzZXRfc3RhdHModm9pZCkKLSAJbWVtc2V0KCZkaGNwdjZfc3RhdHMsIDAsIHNpemVvZihkaGNw
-djZfc3RhdHMpKTsKLSB9Ci0gCi0rdWludDMyX3QgaGFzaF9pZm5hbWUoY29uc3QgY2hhciAqcykg
-ewotKwl1aW50MzJfdCBoID0gMDsKLSsJd2hpbGUgKCpzKSBoID0gaCAqIDMxICsgKnMrKzsKLSsJ
-cmV0dXJuIGg7Ci0rfQotKwotIGludCBpbml0X2RoY3B2Nihjb25zdCBjaGFyICppZm5hbWUpCi0g
-ewotIAljb25maWdfZGhjcCA9IGNvbmZpZ19kaGNwX2dldCgpOwotQEAgLTU2Niw2ICs1NzUsOCBA
-QCBpbnQgaW5pdF9kaGNwdjYoY29uc3QgY2hhciAqaWZuYW1lKQotIAlpZiAoaW9jdGwoc29jaywg
-U0lPQ0dJRklOREVYLCAmaWZyKSA8IDApCi0gCQlnb3RvIGZhaWx1cmU7Ci0gCi0rCWlmbmFtZV9o
-YXNoX2lhaWQgPSBoYXNoX2lmbmFtZShpZm5hbWUpOwotKwotIAlpZmluZGV4ID0gaWZyLmlmcl9p
-ZmluZGV4OwotIAotIAkvLyBTZXQgdGhlIHNvY2tldCB0byBub24tYmxvY2tpbmcgbW9kZQotQEAg
-LTgzOCw3ICs4NDksNyBAQCBzdGF0aWMgdm9pZCBkaGNwdjZfc2VuZChlbnVtIGRoY3B2Nl9tc2cg
-cmVxX21zZ190eXBlLCB1aW50OF90IHRyaWRbM10sIHVpbnQzMl90Ci0gCXN0cnVjdCBkaGNwdjZf
-aWFfaGRyIGhkcl9pYV9uYSA9IHsKLSAJCS50eXBlID0gaHRvbnMoREhDUFY2X09QVF9JQV9OQSks
-Ci0gCQkubGVuID0gaHRvbnMoc2l6ZW9mKGhkcl9pYV9uYSkgLSBESENQVjZfT1BUX0hEUl9TSVpF
-KSwKLS0JCS5pYWlkID0gaHRvbmwoaWZpbmRleCksCi0rCQkuaWFpZCA9IGh0b25sKGlmbmFtZV9o
-YXNoX2lhaWQpLAotIAkJLnQxID0gMCwKLSAJCS50MiA9IDAsCi0gCX07Ci1AQCAtMTM5Miw3ICsx
-NDAzLDcgQEAgc3RhdGljIGludCBkaGNwdjZfaGFuZGxlX3JlcGx5KGVudW0gZGhjcHY2X21zZyBv
-cmlnLCBfb191bnVzZWQgY29uc3QgaW50IHJjLAotIAkJCQkJCWNvbnRpbnVlOwotIAotIAkJCQkJ
-Ly8gVGVzdCBJRAotLQkJCQkJaWYgKGlhX2hkci0+aWFpZCAhPSBodG9ubChpZmluZGV4KSAmJiBv
-dHlwZSA9PSBESENQVjZfT1BUX0lBX05BKQotKwkJCQkJaWYgKGlhX2hkci0+aWFpZCAhPSBodG9u
-bChpZm5hbWVfaGFzaF9pYWlkKSAmJiBvdHlwZSA9PSBESENQVjZfT1BUX0lBX05BKQotIAkJCQkJ
-CWNvbnRpbnVlOwotIAotIAkJCQkJdWludDE2X3QgY29kZSA9IERIQ1BWNl9TdWNjZXNzOwotZGlm
-ZiAtLWdpdCBhL3NyYy9vZGhjcDZjLmggYi9zcmMvb2RoY3A2Yy5oCi1pbmRleCBhYTczYmJjLi5j
-NTdmODg1IDEwMDY0NAotLS0tIGEvc3JjL29kaGNwNmMuaAotKysrIGIvc3JjL29kaGNwNmMuaAot
-QEAgLTU0MCw2ICs1NDAsNyBAQCBzdHJ1Y3Qgb2RoY3A2Y19vcHQgewotIAljb25zdCBjaGFyICpz
-dHI7Ci0gfTsKLSAKLSt1aW50MzJfdCBoYXNoX2lmbmFtZShjb25zdCBjaGFyICpzKTsKLSBpbnQg
-aW5pdF9kaGNwdjYoY29uc3QgY2hhciAqaWZuYW1lKTsKLSBpbnQgZGhjcHY2X2dldF9pYV9tb2Rl
-KHZvaWQpOwotIGludCBkaGNwdjZfcHJvbW90ZV9zZXJ2ZXJfY2FuZCh2b2lkKTsKZGlmZiAtLWdp
-dCBhL3BhY2thZ2Uvb2RoY3A2Yy9vZGhjcDZjLmhhc2ggYi9wYWNrYWdlL29kaGNwNmMvb2RoY3A2
-Yy5oYXNoCmluZGV4IDg2YzljNjU5YzQuLjFlMGI4MjliN2EgMTAwNjQ0Ci0tLSBhL3BhY2thZ2Uv
-b2RoY3A2Yy9vZGhjcDZjLmhhc2gKKysrIGIvcGFja2FnZS9vZGhjcDZjL29kaGNwNmMuaGFzaApA
-QCAtMSwzICsxLDMgQEAKICMgTG9jYWxseSBjb21wdXRlZAotc2hhMjU2ICBlOWNmZGRmY2MxMmM0
-Y2EwYmY4ZDgyMTFiYjcyYzcwMThjMGUwZjhkYTY5MDNkNjgwZGExMjJiNGNlNTUxYzU2ICBvZGhj
-cDZjLWYxOWRkMzdmYjQ2N2M5Y2YxMGNhZDU3YWVmYTBkMDQ4MzEyZDdkZmQtZ2l0NC50YXIuZ3oK
-K3NoYTI1NiAgZDJmNDhjNTdhZGJlMmMyMzA0Y2E3YTg5MDA0Mjk3OTdlNDYyNjdjNmYyZTM3NmFj
-MDE2NmZjZWI4NTA5NTg0NyAgb2RoY3A2Yy0xMGE1MjIyMGFlYzlkNDU4MDM1MThkOGNjNGQ2M2U1
-NTI0ODRlZDYxLWdpdDQudGFyLmd6CiBzaGEyNTYgIGU2ZDZhMDA5NTA1ZTM0NWZlOTQ5ZTEzMTAz
-MzRmY2IwNzQ3ZjI4ZGFlMjg1Njc1OWRlMTAyYWI2NmI3MjJjYjQgIENPUFlJTkcKZGlmZiAtLWdp
-dCBhL3BhY2thZ2Uvb2RoY3A2Yy9vZGhjcDZjLm1rIGIvcGFja2FnZS9vZGhjcDZjL29kaGNwNmMu
-bWsKaW5kZXggOTI2ODhiNzIzNy4uYjkzNTU5NjMxMiAxMDA2NDQKLS0tIGEvcGFja2FnZS9vZGhj
-cDZjL29kaGNwNmMubWsKKysrIGIvcGFja2FnZS9vZGhjcDZjL29kaGNwNmMubWsKQEAgLTQsNyAr
-NCw3IEBACiAjCiAjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwogCi1PREhDUDZDX1ZFUlNJT04gPSBm
-MTlkZDM3ZmI0NjdjOWNmMTBjYWQ1N2FlZmEwZDA0ODMxMmQ3ZGZkCitPREhDUDZDX1ZFUlNJT04g
-PSAxMGE1MjIyMGFlYzlkNDU4MDM1MThkOGNjNGQ2M2U1NTI0ODRlZDYxCiBPREhDUDZDX1NJVEUg
-PSBodHRwczovL2dpdC5vcGVud3J0Lm9yZy9wcm9qZWN0L29kaGNwNmMuZ2l0CiBPREhDUDZDX1NJ
-VEVfTUVUSE9EID0gZ2l0CiBPREhDUDZDX0xJQ0VOU0UgPSBHUEwtMi4wCi0tIAoyLjQ3LjMKCl9f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBt
-YWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJv
-b3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+CVE-2026-0864:
+https://mail.python.org/archives/list/security-announce@python.org/thread/CV4NE6AFCRJL7XQOHX7J5TSDHUWVWGJS/
+
+CVE-2026-11972:
+https://mail.python.org/archives/list/security-announce@python.org/thread/AXPSKKTSRKXTTJULW3XSIC74WZNAAPPB/
+
+CVE-2026-4360:
+https://mail.python.org/archives/list/security-announce@python.org/thread/TWZW2PC2AZOV6FENIHFSRC63OM7MBGSB/
+
+CVE-2026-15308:
+https://mail.python.org/archives/list/security-announce@python.org/thread/F6453LWKSHKCTWFLCOURWPLETNUIW2Z5/
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+Gitlab pipelines passed:
+https://gitlab.com/bkuhls/buildroot/-/commits/2fbc2a1d4ed87e5f58e3257989ac5ea60160a455
+
+ ...ormalize-all-line-endings-CR-CRLF-an.patch |  71 ++++++++
+ ...ake-tarfile._Stream.seek-break-at-EO.patch |  76 +++++++++
+ ...ass-filter_function-to-TarFile._extr.patch | 151 ++++++++++++++++++
+ ...ix-quadratic-complexity-in-increment.patch | 123 ++++++++++++++
+ package/python3/python3.mk                    |  12 ++
+ 5 files changed, 433 insertions(+)
+ create mode 100644 package/python3/0012-3.14-gh-143927-Normalize-all-line-endings-CR-CRLF-an.patch
+ create mode 100644 package/python3/0013-3.14-gh-151981-Make-tarfile._Stream.seek-break-at-EO.patch
+ create mode 100644 package/python3/0014-3.14-gh-151987-Pass-filter_function-to-TarFile._extr.patch
+ create mode 100644 package/python3/0015-3.14-gh-153030-Fix-quadratic-complexity-in-increment.patch
+
+diff --git a/package/python3/0012-3.14-gh-143927-Normalize-all-line-endings-CR-CRLF-an.patch b/package/python3/0012-3.14-gh-143927-Normalize-all-line-endings-CR-CRLF-an.patch
+new file mode 100644
+index 0000000000..8c9b35a8d2
+--- /dev/null
++++ b/package/python3/0012-3.14-gh-143927-Normalize-all-line-endings-CR-CRLF-an.patch
+@@ -0,0 +1,71 @@
++From 71f2e02a52d47417a6fd69f456346cd8aa7aca98 Mon Sep 17 00:00:00 2001
++From: "Miss Islington (bot)"
++ <31488909+miss-islington@users.noreply.github.com>
++Date: Wed, 24 Jun 2026 11:46:33 +0200
++Subject: [PATCH] [3.14] gh-143927: Normalize all line endings (CR, CRLF, and
++ LF) in configparser (GH-143929) (GH-152003)
++
++gh-143927: Normalize all line endings (CR, CRLF, and LF) in configparser (GH-143929)
++(cherry picked from commit 5858e42c539dac8394636a6e9b30472b8994851f)
++
++Co-authored-by: Seth Larson <seth@python.org>
++
++Upstream: https://github.com/python/cpython/commit/71f2e02a52d47417a6fd69f456346cd8aa7aca98
++CVE: CVE-2026-0864
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ Lib/configparser.py                                   |  4 +++-
++ Lib/test/test_configparser.py                         | 11 +++++++++++
++ .../2026-01-16-11-58-19.gh-issue-143927.aviFeG.rst    |  2 ++
++ 3 files changed, 16 insertions(+), 1 deletion(-)
++ create mode 100644 Misc/NEWS.d/next/Security/2026-01-16-11-58-19.gh-issue-143927.aviFeG.rst
++
++diff --git a/Lib/configparser.py b/Lib/configparser.py
++index a53ac872764..3c452afe8ad 100644
++--- a/Lib/configparser.py
+++++ b/Lib/configparser.py
++@@ -992,7 +992,9 @@ def _write_section(self, fp, section_name, section_items, delimiter, unnamed=Fal
++             value = self._interpolation.before_write(self, section_name, key,
++                                                      value)
++             if value is not None or not self._allow_no_value:
++-                value = delimiter + str(value).replace('\n', '\n\t')
+++                # Convert all possible line-endings into '\n\t'
+++                value = (delimiter + str(value).replace('\r\n', '\n')
+++                         .replace('\r', '\n').replace('\n', '\n\t'))
++             else:
++                 value = ""
++             fp.write("{}{}\n".format(key, value))
++diff --git a/Lib/test/test_configparser.py b/Lib/test/test_configparser.py
++index 8d8dd2a2bf2..4783943f71a 100644
++--- a/Lib/test/test_configparser.py
+++++ b/Lib/test/test_configparser.py
++@@ -526,6 +526,17 @@ def test_default_case_sensitivity(self):
++             cf.get(self.default_section, "Foo"), "Bar",
++             "could not locate option, expecting case-insensitive defaults")
++ 
+++    def test_crlf_normalization(self):
+++        cf = self.newconfig({"key1": "a\nb","key2": "a\rb", "key3": "a\r\nb", "key4": "a\r\nb"})
+++        buf = io.StringIO()
+++        cf.write(buf)
+++        cf_str = buf.getvalue()
+++        self.assertNotIn("\r", cf_str)
+++        self.assertNotIn("\r\n", cf_str)
+++        self.assertEqual(cf_str.count("\n"), 10)
+++        self.assertEqual(cf_str.count("\n\t"), 4)
+++        self.assertTrue(cf_str.endswith("\n\n"))
+++
++     def test_parse_errors(self):
++         cf = self.newconfig()
++         self.parse_error(cf, configparser.ParsingError,
++diff --git a/Misc/NEWS.d/next/Security/2026-01-16-11-58-19.gh-issue-143927.aviFeG.rst b/Misc/NEWS.d/next/Security/2026-01-16-11-58-19.gh-issue-143927.aviFeG.rst
++new file mode 100644
++index 00000000000..ca554997e5c
++--- /dev/null
+++++ b/Misc/NEWS.d/next/Security/2026-01-16-11-58-19.gh-issue-143927.aviFeG.rst
++@@ -0,0 +1,2 @@
+++Normalize all line endings (CR, CRLF, and LF) to LF+TAB when writing
+++multi-line configparser values.
++-- 
++2.47.3
++
+diff --git a/package/python3/0013-3.14-gh-151981-Make-tarfile._Stream.seek-break-at-EO.patch b/package/python3/0013-3.14-gh-151981-Make-tarfile._Stream.seek-break-at-EO.patch
+new file mode 100644
+index 0000000000..7db9439639
+--- /dev/null
++++ b/package/python3/0013-3.14-gh-151981-Make-tarfile._Stream.seek-break-at-EO.patch
+@@ -0,0 +1,76 @@
++From e86666c9dd256d52d0fbef6feb1ea4a51768fdec Mon Sep 17 00:00:00 2001
++From: "Miss Islington (bot)"
++ <31488909+miss-islington@users.noreply.github.com>
++Date: Tue, 23 Jun 2026 15:46:18 +0200
++Subject: [PATCH] [3.14] gh-151981: Make tarfile._Stream.seek break at EOF
++ (GH-151982) (#151992)
++
++(cherry picked from commit f50bf13566189c8d0ce5a814f33eff3d89951896)
++
++Co-authored-by: Petr Viktorin <encukou@gmail.com>
++Co-authored-by: Stan Ulbrych <stan@python.org>
++
++Upstream: https://github.com/python/cpython/commit/e86666c9dd256d52d0fbef6feb1ea4a51768fdec
++CVE: CVE-2026-11972
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ Lib/tarfile.py                                   |  4 +++-
++ Lib/test/test_tarfile.py                         | 16 ++++++++++++++++
++ ...026-06-23-13-28-16.gh-issue-151981.xBHEcU.rst |  2 ++
++ 3 files changed, 21 insertions(+), 1 deletion(-)
++ create mode 100644 Misc/NEWS.d/next/Security/2026-06-23-13-28-16.gh-issue-151981.xBHEcU.rst
++
++diff --git a/Lib/tarfile.py b/Lib/tarfile.py
++index e6734db24f6..39b1cd6514c 100644
++--- a/Lib/tarfile.py
+++++ b/Lib/tarfile.py
++@@ -524,7 +524,9 @@ def seek(self, pos=0):
++         if pos - self.pos >= 0:
++             blocks, remainder = divmod(pos - self.pos, self.bufsize)
++             for i in range(blocks):
++-                self.read(self.bufsize)
+++                data = self.read(self.bufsize)
+++                if not data:
+++                    break
++             self.read(remainder)
++         else:
++             raise StreamError("seeking backwards is not allowed")
++diff --git a/Lib/test/test_tarfile.py b/Lib/test/test_tarfile.py
++index d974c7d46ec..8503024a690 100644
++--- a/Lib/test/test_tarfile.py
+++++ b/Lib/test/test_tarfile.py
++@@ -4762,6 +4762,22 @@ def valueerror_filter(tarinfo, path):
++         with self.check_context(arc.open(errorlevel='boo!'), filtererror_filter):
++             self.expect_exception(TypeError)  # errorlevel is not int
++ 
+++    @support.subTests('format', [tarfile.GNU_FORMAT, tarfile.PAX_FORMAT])
+++    def test_getmembers_big_size(self, format):
+++        # gh-151981: A loop in seek() for streaming files tried to read the
+++        # declared number of blocks even at EOF
+++        tinfo = tarfile.TarInfo("huge-file")
+++        tinfo.size = 1 << 64
+++        bio = io.BytesIO()
+++        # Write header without data
+++        bio.write(tinfo.tobuf(format))
+++
+++        # Reset & try to get contents
+++        bio.seek(0)
+++        with tarfile.open(fileobj=bio, mode="r|") as tar:
+++            with self.assertRaises(tarfile.ReadError):
+++                tar.getmembers()
+++
++ 
++ class OverwriteTests(archiver_tests.OverwriteTests, unittest.TestCase):
++     testdir = os.path.join(TEMPDIR, "testoverwrite")
++diff --git a/Misc/NEWS.d/next/Security/2026-06-23-13-28-16.gh-issue-151981.xBHEcU.rst b/Misc/NEWS.d/next/Security/2026-06-23-13-28-16.gh-issue-151981.xBHEcU.rst
++new file mode 100644
++index 00000000000..2123ab8e081
++--- /dev/null
+++++ b/Misc/NEWS.d/next/Security/2026-06-23-13-28-16.gh-issue-151981.xBHEcU.rst
++@@ -0,0 +1,2 @@
+++In :mod:`tarfile`, seeking a stream now stops when end of the stream is
+++reached.
++-- 
++2.47.3
++
+diff --git a/package/python3/0014-3.14-gh-151987-Pass-filter_function-to-TarFile._extr.patch b/package/python3/0014-3.14-gh-151987-Pass-filter_function-to-TarFile._extr.patch
+new file mode 100644
+index 0000000000..3b38594c75
+--- /dev/null
++++ b/package/python3/0014-3.14-gh-151987-Pass-filter_function-to-TarFile._extr.patch
+@@ -0,0 +1,151 @@
++From 5e0ef3f1afe892e4f64eb83368db57ac4c40cba0 Mon Sep 17 00:00:00 2001
++From: "Miss Islington (bot)"
++ <31488909+miss-islington@users.noreply.github.com>
++Date: Mon, 29 Jun 2026 21:11:22 +0200
++Subject: [PATCH] [3.14] gh-151987: Pass filter_function to
++ `TarFile._extract_one()` during `.extract()` (GH-151988) (#152609)
++
++(cherry picked from commit 7ccdbaba2c54250a70d7f25632152df7655a5e0a)
++
++Co-authored-by: Petr Viktorin <encukou@gmail.com>
++Co-authored-by: Seth Michael Larson <seth@python.org>
++
++Upstream: https://github.com/python/cpython/commit/5e0ef3f1afe892e4f64eb83368db57ac4c40cba0
++CVE: CVE-2026-4360
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ Lib/tarfile.py                                |  3 +-
++ Lib/test/test_tarfile.py                      | 92 +++++++++++++++++++
++ ...-06-23-14-19-30.gh-issue-151987.8mNIMf.rst |  2 +
++ 3 files changed, 96 insertions(+), 1 deletion(-)
++ create mode 100644 Misc/NEWS.d/next/Security/2026-06-23-14-19-30.gh-issue-151987.8mNIMf.rst
++
++diff --git a/Lib/tarfile.py b/Lib/tarfile.py
++index cb09e307c46..d3c48999700 100644
++--- a/Lib/tarfile.py
+++++ b/Lib/tarfile.py
++@@ -2538,7 +2538,8 @@ def extract(self, member, path="", set_attrs=True, *, numeric_owner=False,
++         tarinfo, unfiltered = self._get_extract_tarinfo(
++             member, filter_function, path)
++         if tarinfo is not None:
++-            self._extract_one(tarinfo, path, set_attrs, numeric_owner)
+++            self._extract_one(tarinfo, path, set_attrs, numeric_owner,
+++                              filter_function=filter_function)
++ 
++     def _get_extract_tarinfo(self, member, filter_function, path):
++         """Get (filtered, unfiltered) TarInfos from *member*
++diff --git a/Lib/test/test_tarfile.py b/Lib/test/test_tarfile.py
++index 804c3e6d809..f3b61d9fbad 100644
++--- a/Lib/test/test_tarfile.py
+++++ b/Lib/test/test_tarfile.py
++@@ -4470,6 +4470,98 @@ def test_chmod_outside_dir(self):
++                     st_mode = cc.outerdir.stat().st_mode
++                     self.assertNotEqual(st_mode & 0o777, 0o777)
++ 
+++    @symlink_test
+++    @unittest.skipUnless(hasattr(os, 'chown'), "missing os.chown")
+++    @unittest.skipUnless(hasattr(os, 'lchown'), "missing os.lchown")
+++    @unittest.skipUnless(hasattr(os, 'geteuid'), "missing os.geteuid")
+++    @support.subTests('link_type', (tarfile.SYMTYPE, tarfile.LNKTYPE))
+++    def test_chown_links_on_extract(self, link_type):
+++        with ArchiveMaker() as arc:
+++            arc.add("test.txt",
+++                    uid=1337, gid=1337, uname="", gname="", mode='-rwxr-xr-x')
+++            arc.add("link",
+++                    type=link_type,
+++                    linkname='test.txt',
+++                    uid=1337, gid=1337, uname="", gname="", mode='-rwxr-xr-x')
+++
+++        with (
+++            os_helper.temp_dir() as tmpdir,
+++            arc.open() as tar,
+++            unittest.mock.patch("os.chown") as mock_chown,
+++            unittest.mock.patch("os.lchown") as mock_lchown,
+++            unittest.mock.patch("os.geteuid") as mock_geteuid,
+++        ):
+++            # Set UID to 0 so chown() is attempted.
+++            mock_geteuid.return_value = 0
+++            tar.extract("link", path=tmpdir, filter='data')
+++            extract_path = os.path.join(tmpdir, "link")
+++
+++            if link_type == tarfile.SYMTYPE:
+++                mock_chown.assert_not_called()
+++                mock_lchown.assert_called_once_with(extract_path, -1, -1)
+++            else:
+++                mock_chown.assert_has_calls([
+++                    unittest.mock.call(extract_path, -1, -1),
+++                    unittest.mock.call(extract_path, -1, -1)
+++                ])
+++                mock_lchown.assert_not_called()
+++
+++    @symlink_test
+++    @unittest.skipUnless(hasattr(os, 'chown'), "missing os.chown")
+++    @unittest.skipUnless(hasattr(os, 'lchown'), "missing os.lchown")
+++    @unittest.skipUnless(hasattr(os, 'geteuid'), "missing os.geteuid")
+++    @support.subTests('link_type', (tarfile.SYMTYPE, tarfile.LNKTYPE))
+++    def test_chown_links_on_extractall(self, link_type):
+++        with ArchiveMaker() as arc:
+++            arc.add("test.txt",
+++                    uid=1337, gid=1337, uname="", gname="", mode='-rwxr-xr-x')
+++            arc.add("link",
+++                    type=link_type,
+++                    linkname='test.txt',
+++                    uid=1337, gid=1337, uname="", gname="", mode='-rwxr-xr-x')
+++
+++        with (
+++            os_helper.temp_dir() as tmpdir,
+++            arc.open() as tar,
+++            unittest.mock.patch("os.chown") as mock_chown,
+++            unittest.mock.patch("os.lchown") as mock_lchown,
+++            unittest.mock.patch("os.geteuid") as mock_geteuid,
+++        ):
+++            # Set UID to 0 so chown() is attempted.
+++            mock_geteuid.return_value = 0
+++            tar.extractall(path=tmpdir, filter='data')
+++            extract_link_path = os.path.join(tmpdir, "link")
+++            extract_file_path = os.path.join(tmpdir, "test.txt")
+++
+++            if link_type == tarfile.SYMTYPE:
+++                mock_chown.assert_called_once_with(extract_file_path, -1, -1)
+++                mock_lchown.assert_called_once_with(extract_link_path, -1, -1)
+++            else:
+++                mock_chown.assert_has_calls([
+++                    unittest.mock.call(extract_file_path, -1, -1),
+++                    unittest.mock.call(extract_link_path, -1, -1)
+++                ])
+++                mock_lchown.assert_not_called()
+++
+++    def test_extract_filters_target(self):
+++        # Test that when extract() falls back to extracting (rather than
+++        # linking) a hardlink target, it filters the target.
+++        with ArchiveMaker() as arc:
+++            arc.add("target")
+++            arc.add("link", hardlink_to="target")
+++        def testing_filter(member, path):
+++            if member.name == 'target':
+++                # target: set read-only
+++                return member.replace(mode=stat.S_IRUSR)
+++            # link: don't overwrite the mode
+++            return member.replace(mode=None)
+++        tempdir = pathlib.Path(TEMPDIR) / 'extract'
+++        with os_helper.temp_dir(tempdir), arc.open() as tar:
+++            tar.extract("link", path=tempdir, filter=testing_filter)
+++            path = tempdir / 'link'
+++            if os_helper.can_chmod():
+++                self.assertFalse(path.stat().st_mode & stat.S_IWUSR)
+++
++     def test_link_fallback_normalizes(self):
++         # Make sure hardlink fallbacks work for non-normalized paths for all
++         # filters
++diff --git a/Misc/NEWS.d/next/Security/2026-06-23-14-19-30.gh-issue-151987.8mNIMf.rst b/Misc/NEWS.d/next/Security/2026-06-23-14-19-30.gh-issue-151987.8mNIMf.rst
++new file mode 100644
++index 00000000000..9eea7b32c4d
++--- /dev/null
+++++ b/Misc/NEWS.d/next/Security/2026-06-23-14-19-30.gh-issue-151987.8mNIMf.rst
++@@ -0,0 +1,2 @@
+++The :meth:`tarfile.TarFile.extract` method now applies the given filter when
+++it extracts a link target from the archive as a fallback.
++-- 
++2.47.3
++
+diff --git a/package/python3/0015-3.14-gh-153030-Fix-quadratic-complexity-in-increment.patch b/package/python3/0015-3.14-gh-153030-Fix-quadratic-complexity-in-increment.patch
+new file mode 100644
+index 0000000000..e9c3f40cc0
+--- /dev/null
++++ b/package/python3/0015-3.14-gh-153030-Fix-quadratic-complexity-in-increment.patch
+@@ -0,0 +1,123 @@
++From 07efb08123ba9367a7107325adb9d5626dca1ca9 Mon Sep 17 00:00:00 2001
++From: "Miss Islington (bot)"
++ <31488909+miss-islington@users.noreply.github.com>
++Date: Sat, 4 Jul 2026 20:08:05 +0200
++Subject: [PATCH] [3.14] gh-153030: Fix quadratic complexity in incremental
++ parsing in HTMLParser (GH-153031) (GH-153039)
++
++When an unterminated construct (e.g. a tag or comment) spanned many
++feed() calls, rescanning the growing buffer and concatenating new data
++onto it were both quadratic.  New data is now accumulated in a list and
++only joined and parsed once enough has piled up.
++(cherry picked from commit bcf98ddbc40ec9b3ee87da0124a5660b19b7e606)
++
++Co-authored-by: Serhiy Storchaka <storchaka@gmail.com>
++Co-authored-by: Claude Opus 4.8 <noreply@anthropic.com>
++
++Upstream: https://github.com/python/cpython/commit/07efb08123ba9367a7107325adb9d5626dca1ca9
++CVE: CVE-2026-15308
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ Lib/html/parser.py                            | 32 +++++++++++++++++--
++ Lib/test/test_htmlparser.py                   | 20 ++++++++++++
++ ...-07-04-17-00-00.gh-issue-153030.RovkP6.rst |  3 ++
++ 3 files changed, 53 insertions(+), 2 deletions(-)
++ create mode 100644 Misc/NEWS.d/next/Security/2026-07-04-17-00-00.gh-issue-153030.RovkP6.rst
++
++diff --git a/Lib/html/parser.py b/Lib/html/parser.py
++index 38ddf9ef442..fbe0d3665e0 100644
++--- a/Lib/html/parser.py
+++++ b/Lib/html/parser.py
++@@ -157,6 +157,9 @@ def reset(self):
++         self.cdata_elem = None
++         self._support_cdata = True
++         self._escapable = True
+++        self._pending = []
+++        self._pending_len = 0
+++        self._parse_threshold = 1
++         super().reset()
++ 
++     def feed(self, data):
++@@ -165,11 +168,36 @@ def feed(self, data):
++         Call this as often as you want, with as little or as much text
++         as you want (may include '\n').
++         """
++-        self.rawdata = self.rawdata + data
++-        self.goahead(0)
+++        # Accumulate new data in a list and only join and parse it once
+++        # enough has piled up.  Rescanning an unparsed buffer (e.g. an
+++        # unterminated tag) and concatenating onto it on every call would
+++        # both be quadratic in the input size.
+++        self._pending_len += len(data)
+++        if self._pending_len < self._parse_threshold:
+++            self._pending.append(data)
+++        else:
+++            if not self._pending:
+++                self.rawdata += data
+++            else:
+++                self._pending.append(data)
+++                self.rawdata += ''.join(self._pending)
+++                self._pending.clear()
+++            self._pending_len = 0
+++            n = len(self.rawdata)
+++            self.goahead(0)
+++            if len(self.rawdata) < n:
+++                # Some data was parsed; resume on the next call.
+++                self._parse_threshold = 1
+++            else:
+++                # Nothing was parsed; wait until the buffer doubles.
+++                self._parse_threshold = len(self.rawdata)
++ 
++     def close(self):
++         """Handle any buffered data."""
+++        if self._pending:
+++            self.rawdata += ''.join(self._pending)
+++            self._pending.clear()
+++            self._pending_len = 0
++         self.goahead(1)
++ 
++     __starttag_text = None
++diff --git a/Lib/test/test_htmlparser.py b/Lib/test/test_htmlparser.py
++index 6b7624f1150..3fdaed4ff46 100644
++--- a/Lib/test/test_htmlparser.py
+++++ b/Lib/test/test_htmlparser.py
++@@ -1041,6 +1041,26 @@ def check(source):
++         check("<![CDATA[" * 9 * n)
++         check("<!doctype" * 35 * n)
++ 
+++    @support.requires_resource('cpu')
+++    def test_incremental_no_quadratic_complexity(self):
+++        # An unterminated construct fed in many small chunks used to take
+++        # quadratic time, both to rescan and to concatenate the buffer.
+++        # Now it takes a fraction of a second.
+++        def check(prefix, chunk, suffix):
+++            parser = html.parser.HTMLParser()
+++            parser.feed(prefix)
+++            for _ in range(200_000):
+++                parser.feed(chunk)
+++            parser.feed(suffix)
+++            parser.close()
+++        chunk = "a" * 64
+++        check("<!--", chunk, "-->")       # comment
+++        check("<?", chunk, ">")           # processing instruction
+++        check("<!doctype ", chunk, ">")   # doctype
+++        check("<![CDATA[", chunk, "]]>")  # CDATA section
+++        check("<a href='", chunk, "'>")   # start tag
+++        check("<script>", chunk, "</script>")  # RAWTEXT element
+++
++ 
++ class AttributesTestCase(TestCaseBase):
++ 
++diff --git a/Misc/NEWS.d/next/Security/2026-07-04-17-00-00.gh-issue-153030.RovkP6.rst b/Misc/NEWS.d/next/Security/2026-07-04-17-00-00.gh-issue-153030.RovkP6.rst
++new file mode 100644
++index 00000000000..d1d60593f4b
++--- /dev/null
+++++ b/Misc/NEWS.d/next/Security/2026-07-04-17-00-00.gh-issue-153030.RovkP6.rst
++@@ -0,0 +1,3 @@
+++Fixed quadratic complexity in incremental parsing of long unterminated
+++constructs (such as tags or comments) in :class:`html.parser.HTMLParser`,
+++which could be exploited for a denial of service.
++-- 
++2.47.3
++
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index fabbdac384..9a47a1f306 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -16,6 +16,18 @@ PYTHON3_CPE_ID_PRODUCT = python
+ # 0011-3.14-gh-151558-Fix-symlink-escape-via-tarfile-hardli.patch
+ PYTHON3_IGNORE_CVES += CVE-2026-11940
+ 
++# 0012-3.14-gh-143927-Normalize-all-line-endings-CR-CRLF-an.patch
++PYTHON3_IGNORE_CVES += CVE-2026-0864
++
++# 0013-3.14-gh-151981-Make-tarfile._Stream.seek-break-at-EO.patch
++PYTHON3_IGNORE_CVES += CVE-2026-11972
++
++# 0014-3.14-gh-151987-Pass-filter_function-to-TarFile._extr.patch
++PYTHON3_IGNORE_CVES += CVE-2026-4360
++
++# 0015-3.14-gh-153030-Fix-quadratic-complexity-in-increment.patch
++PYTHON3_IGNORE_CVES += CVE-2026-15308
++
+ # This host Python is installed in $(HOST_DIR), as it is needed when
+ # cross-compiling third-party Python modules.
+ 
+-- 
+2.47.3
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
