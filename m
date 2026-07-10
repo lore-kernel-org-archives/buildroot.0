@@ -4,85 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32413C43458
-	for <buildroot@archiver.kernel.org>; Fri, 10 Jul 2026 16:36:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D884C43458
+	for <buildroot@archiver.kernel.org>; Fri, 10 Jul 2026 16:37:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 44EE9606B4;
-	Fri, 10 Jul 2026 16:36:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3C95360A43;
+	Fri, 10 Jul 2026 16:37:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sEVfzCsd5nNA; Fri, 10 Jul 2026 16:36:20 +0000 (UTC)
+ id w4P0iYNmR_zk; Fri, 10 Jul 2026 16:37:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5EBCF606F8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7EF69606B4
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1783701380;
-	bh=AK0QNjru0xDgHlqLFakxJzwpm7mbETM0UgbSMXd/46Q=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=rEM5bC/dzAp+xvB0nYMMzXrcY52TZUiAECAVkCXLNxcdr1wIEK11cGKg8voYof0wK
-	 yKryFpkSixySeYkyrBEYN39KgvmqJBrzbF3VL5NAAFutFp0IMd/rmgHCtXTBvpS+Sb
-	 L+AGgOVeoS2ZhRFOJDYPUEZIIVAL8Elf2Rg0Ia0weQ7Mbr1G/4b+QRzB6BqME+YYVf
-	 T+6fi2KMSN73eZgRXMvJl9jyhWs4At68MpOZjPYa8o007w1etQH6Gu3OK3jtJYQrhc
-	 qXoyPcxzexbRF8CK0L/XIUQVzENuqGlOChnwpMePZvz7jyYBnajCeEr7PCjVG6Rx82
-	 hOdE3jCJo8GeQ==
+	s=default; t=1783701472;
+	bh=ZEXf1YDc0SViwDmhSLQpOsdj1LnaWDu1DtFE/ItWm3U=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=dd/arIJ41wjM+j3mRrR+QlbpUxXgEG24YQdXK8iLx7i4ROi1yyiFzB2j/c7m811ks
+	 ygDILteDRW/twSZ7iCtc/eoDoC1H0HyEoYQoSXiU4U5bImYweAZvqEfpIHvWTMZOap
+	 lRUp9RVF1a+r0YxgYO5fQH+yWQnCTD+Atfzbm/dq49h4MbzBd1ttsQlow4YOzmJdsm
+	 ceycXM2Fpq3p0WYyJpA0FEfG+qFvJt8hxk2vft2p6ZRrdKrQcldpFySoviiJdhmjG+
+	 EsjUSR70ekR5YymXastem7aNlirD3lHwzm5QrreOEXfOisLH0QvMN7YOkpVRMBtddn
+	 DrZID/Dgn0+sw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5EBCF606F8;
-	Fri, 10 Jul 2026 16:36:20 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 8624B2FE
- for <buildroot@buildroot.org>; Fri, 10 Jul 2026 16:36:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7EF69606B4;
+	Fri, 10 Jul 2026 16:37:52 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id A61BF2FE
+ for <buildroot@buildroot.org>; Fri, 10 Jul 2026 16:37:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 83F2181094
- for <buildroot@buildroot.org>; Fri, 10 Jul 2026 16:36:19 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8C800606B4
+ for <buildroot@buildroot.org>; Fri, 10 Jul 2026 16:37:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Q0W_cJ2eN5yu for <buildroot@buildroot.org>;
- Fri, 10 Jul 2026 16:36:19 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org BDE1880FF5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BDE1880FF5
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BDE1880FF5
- for <buildroot@buildroot.org>; Fri, 10 Jul 2026 16:36:18 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPA id 61CAEB00583;
- Fri, 10 Jul 2026 18:36:13 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 10 Jul 2026 18:36:13 +0200
-MIME-Version: 1.0
-Date: Fri, 10 Jul 2026 18:36:13 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org, James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-In-Reply-To: <20260709213158.3869905-1-bernd@kuhls.net>
-References: <20260709213158.3869905-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.17
-Message-ID: <b4ef6ba5edd0820a1b9b6e6dafffc3b2@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1783701376;
- bh=4Lobq5qw1K9KE8xOamrZvjvy+iluGUNSQO8Fk4+b6QU=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=mZU/2V0ynTuMu7UHK8WeUSJA+xfAFlb5Nm9jihh4j7mr6qkFqair3rR/ITnnOIZh1
- qFJwSe8QQp+3zjXI2cr+UWl5QYTd8v0wCUsZ+gWW70L37hBsbHRyfUB3Nl+bXKTJHO
- vpXB2cpmWdUj2AywlUz9DA4cKIiZzBBBwV/kkwQPjo3589vs8hH34JVcNsnm8HeZd6
- HXPQgSMmw8xyFVmg1A9UGCN2zSL2tx9XT6QVpWmMbT3yIs1m1PkO63hsQwDQnqKzF0
- qeq+uHJC+7xAq0SAD7bVsWqNR1eKqSNkWzNh4w2pq79fwlEGEtCUAQkCFwShQJGrR/
- o+tJtRzdXWl8A==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=mZU/2V0y
-Subject: Re: [Buildroot] [PATCH 1/1] package/python3: add upstream security
- patches for CVE-2026-0864, CVE-2026-11972, CVE-2026-4360 & CVE-2026-15308
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aVbSkvuWdFMt for <buildroot@buildroot.org>;
+ Fri, 10 Jul 2026 16:37:50 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AF45860644
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id AF45860644
+ for <buildroot@buildroot.org>; Fri, 10 Jul 2026 16:37:50 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id C38CD8869B; Fri, 10 Jul 2026 16:37:17 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 10 Jul 2026 18:36:45 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: e36f9af3a5a2899dd0f48699c6cf4b46970041cd
+X-Git-Newrev: 760f471db1857bbd33f338d58a2501a69680f6f3
+X-Patchwork-Hint: ignore
+Message-Id: <20260710163717.C38CD8869B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/socat: security bump to version
+ 1.8.1.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,27 +71,54 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 09/07/2026 23:31, Bernd Kuhls wrote:
-> CVE-2026-0864:
-> https://mail.python.org/archives/list/security-announce@python.org/thread/CV4NE6AFCRJL7XQOHX7J5TSDHUWVWGJS/
-> 
-> CVE-2026-11972:
-> https://mail.python.org/archives/list/security-announce@python.org/thread/AXPSKKTSRKXTTJULW3XSIC74WZNAAPPB/
-> 
-> CVE-2026-4360:
-> https://mail.python.org/archives/list/security-announce@python.org/thread/TWZW2PC2AZOV6FENIHFSRC63OM7MBGSB/
-> 
-> CVE-2026-15308:
-> https://mail.python.org/archives/list/security-announce@python.org/thread/F6453LWKSHKCTWFLCOURWPLETNUIW2Z5/
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/760f471db1857bbd33f338d58a2501a69680f6f3
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Applied to master, thanks.
+Fixes CVE-2026-56123: SOCKS5 client buffer overflow. Only signed char
+platforms are affected.
+
+  http://www.dest-unreach.org/socat/CHANGES
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/socat/socat.hash | 4 ++--
+ package/socat/socat.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/socat/socat.hash b/package/socat/socat.hash
+index 3a4eec60c1..2fc8e40853 100644
+--- a/package/socat/socat.hash
++++ b/package/socat/socat.hash
+@@ -1,7 +1,7 @@
+ # From http://www.dest-unreach.org/socat/download.md5sum
+-md5  5456f0f0c5d4505b68edcb10e23ef128  socat-1.8.1.1.tar.bz2
++md5  1a5b8ddff793847d80aa100d54b7cf76  socat-1.8.1.3.tar.bz2
+ # From http://www.dest-unreach.org/socat/download.sha256sum
+-sha256  5ebc636b7f427053f98806696521653a614c7e06464910353cbf54e2327adc1b  socat-1.8.1.1.tar.bz2
++sha256  25bc6476292b2e614220989c77b0b6fca87bb2525d9747b31a6639b1fb602418  socat-1.8.1.3.tar.bz2
+ # Locally calculated
+ sha256  86e46422f9381b386bd2eb6606f9d6c3ff479f905660d0f318c571292ab304b8  README
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/socat/socat.mk b/package/socat/socat.mk
+index 3d40540599..311bdfda3a 100644
+--- a/package/socat/socat.mk
++++ b/package/socat/socat.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SOCAT_VERSION = 1.8.1.1
++SOCAT_VERSION = 1.8.1.3
+ SOCAT_SOURCE = socat-$(SOCAT_VERSION).tar.bz2
+ SOCAT_SITE = http://www.dest-unreach.org/socat/download
+ SOCAT_LICENSE = GPL-2.0 with OpenSSL exception
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
