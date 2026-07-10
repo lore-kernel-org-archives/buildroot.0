@@ -1,62 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 395C6C44506
-	for <buildroot@archiver.kernel.org>; Fri, 10 Jul 2026 16:44:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0222C43458
+	for <buildroot@archiver.kernel.org>; Fri, 10 Jul 2026 16:44:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 81D3960A47;
-	Fri, 10 Jul 2026 16:44:14 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sgwBJwMyFkD4; Fri, 10 Jul 2026 16:44:13 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1B24F606F8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1783701853;
-	bh=esYweuTTJ5yXOVb8XXEtXboAjpApBX4Mjd7xDP6sqGY=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=KdCAsxXBeB4VNqgljXIyuSrZwkXM7eOsR7CUwCLpTKgYyGskupXs8ORoTdotFEYPq
-	 LNWWVZUSm/twweXYPJ2WT0Tpzk4YH/F9rxoDQgrqBASl7YAQm+aQaq9Eb5hitcVZzc
-	 bc4yPwd9JK5N9zuDyvO6Bdh2BVs14OuBxEgod0hkxYuWnVEq6oEjNORehpTM2CvCzS
-	 HIwht8yi58uDaIemdn7pIsjx+obY5pNkXImh1Zs7mgRojgEFzj6dZ3sGlB8FAxFt4g
-	 2TgRXplFFxv4Cw8B8w7Fg6Xpj5axV4SUXKQamRhb4yvZl8zqg2/yqqaCqmc48F2qBu
-	 uZPjZMf9AiD0w==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1B24F606F8;
-	Fri, 10 Jul 2026 16:44:13 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 9DDBAFD1
- for <buildroot@buildroot.org>; Fri, 10 Jul 2026 16:44:10 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 84788409DB
- for <buildroot@buildroot.org>; Fri, 10 Jul 2026 16:44:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BBB4A409FE;
+	Fri, 10 Jul 2026 16:44:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YQvOPgaaqQhV for <buildroot@buildroot.org>;
+ id EqOhpMFBD3l5; Fri, 10 Jul 2026 16:44:16 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E185D409FF
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1783701856;
+	bh=YDF2QnbzEKiIUAojnuksR+1MQHPIKvqmM4g27G8pLWA=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=IW+HJrHIYopyvSMJxqt8POI20hOX71qXLAz+Wf7lvm+8/xqymlWmxfWE9CbvhBcdb
+	 xj5NNjv+CGXfBX1fODeO9AstZkexbtv353o2cpUcy757ghDeEzZCwz7goNddfrFqX0
+	 I5aBwZhhGrNaDvAQVvpVd2Ba4r+hme8vK7unHjI+uUGWMOq1VVdVJWGgbZoclchVpp
+	 z6jm1eW4QCu6iyuWOOJBM0faNKM/dwu8AdTQd0xXOH577uaNXMl4bMs/pHqB4E0G2P
+	 ZtliHTdgWT8zyIGkwP258QtHtPWrB+yLzG2rNrHwd6VWyUGEp6gq1Z6wKHLiJIh7kM
+	 EJNRDLFYNi0TQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id E185D409FF;
+	Fri, 10 Jul 2026 16:44:15 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3281BFD1
+ for <buildroot@buildroot.org>; Fri, 10 Jul 2026 16:44:11 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 24AE8606B4
+ for <buildroot@buildroot.org>; Fri, 10 Jul 2026 16:44:11 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Hmza2iBzbCmb for <buildroot@buildroot.org>;
  Fri, 10 Jul 2026 16:44:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ABF32409D5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BBD476069A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id ABF32409D5
+ by smtp3.osuosl.org (Postfix) with ESMTP id BBD476069A
  for <buildroot@buildroot.org>; Fri, 10 Jul 2026 16:44:09 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C1F42886A2; Fri, 10 Jul 2026 16:43:36 +0000 (UTC)
+ id E0609886A5; Fri, 10 Jul 2026 16:43:36 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Fri, 10 Jul 2026 18:42:25 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e33010926ccb94cfd4b8c635b56a3e287183c4bf
-X-Git-Newrev: b4c690d22029fbba59d31d02fbf392d9f7cbe654
+X-Git-Oldrev: 9f469f24cbd947e1094483dde9038b82c9549d9c
+X-Git-Newrev: 4c2b9973818852bafc12526c80608cf2a22084bc
 X-Patchwork-Hint: ignore
-Message-Id: <20260710164336.C1F42886A2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libva: bump version to 2.24.1
+Message-Id: <20260710164336.E0609886A5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/intel-mediadriver: bump version to
+ 26.2.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,40 +77,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/b4c690d22029fbba59d31d02fbf392d9f7cbe654
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/4c2b9973818852bafc12526c80608cf2a22084bc
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-https://github.com/intel/libva/blob/2.24.1/NEWS
+https://github.com/intel/media-driver/releases/tag/intel-media-26.2.4
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/libva/libva.hash | 2 +-
- package/libva/libva.mk   | 2 +-
+ package/intel-mediadriver/intel-mediadriver.hash | 2 +-
+ package/intel-mediadriver/intel-mediadriver.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libva/libva.hash b/package/libva/libva.hash
-index 2d7e8b7ee8..918230e1c0 100644
---- a/package/libva/libva.hash
-+++ b/package/libva/libva.hash
+diff --git a/package/intel-mediadriver/intel-mediadriver.hash b/package/intel-mediadriver/intel-mediadriver.hash
+index 6fbe8689ea..99764cef98 100644
+--- a/package/intel-mediadriver/intel-mediadriver.hash
++++ b/package/intel-mediadriver/intel-mediadriver.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  b10aceb30e93ddf13b2030eb70079574ba437be9b3b76065caf28a72c07e23e7  libva-2.23.0.tar.gz
-+sha256  0b4a3649ee8d683b9cce2ef094df4fb039d276c0cef7e49337c43d3b297b9f42  libva-2.24.1.tar.gz
- sha256  c86a782ee845b52472dae9b9d79fb915d333628ac0efe49cdce63644814931de  COPYING
-diff --git a/package/libva/libva.mk b/package/libva/libva.mk
-index f41a0c00ff..9f044293d8 100644
---- a/package/libva/libva.mk
-+++ b/package/libva/libva.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+-sha256  2e10b1565f45fd2052c9704639bb6144fc56b21979039f3b44151dfe5b281e18  intel-media-26.2.3.tar.gz
++sha256  a23185fca05c8fa8bdec09ea9ee8a20361163c87035ec978de4e2bb048a55534  intel-media-26.2.4.tar.gz
+ sha256  74979d5aaee78b8da82e3aafd415a216b6131dfff6d95d6930927c8a4e3bded3  LICENSE.md
+diff --git a/package/intel-mediadriver/intel-mediadriver.mk b/package/intel-mediadriver/intel-mediadriver.mk
+index a197c2a6de..6c77ef83a7 100644
+--- a/package/intel-mediadriver/intel-mediadriver.mk
++++ b/package/intel-mediadriver/intel-mediadriver.mk
+@@ -6,7 +6,7 @@
  
--LIBVA_VERSION = 2.23.0
-+LIBVA_VERSION = 2.24.1
- LIBVA_SITE = $(call github,intel,libva,$(LIBVA_VERSION))
- LIBVA_LICENSE = MIT
- LIBVA_LICENSE_FILES = COPYING
+ # based on https://software.intel.com/en-us/articles/build-and-debug-open-source-media-stack
+ 
+-INTEL_MEDIADRIVER_VERSION = 26.2.3
++INTEL_MEDIADRIVER_VERSION = 26.2.4
+ INTEL_MEDIADRIVER_SITE = https://github.com/intel/media-driver/archive
+ INTEL_MEDIADRIVER_SOURCE= intel-media-$(INTEL_MEDIADRIVER_VERSION).tar.gz
+ INTEL_MEDIADRIVER_LICENSE = MIT, BSD-3-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
