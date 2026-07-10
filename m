@@ -1,80 +1,113 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2508C43458
-	for <buildroot@archiver.kernel.org>; Fri, 10 Jul 2026 12:05:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AEF16C43458
+	for <buildroot@archiver.kernel.org>; Fri, 10 Jul 2026 13:32:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 57B9940925;
-	Fri, 10 Jul 2026 12:05:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 51A26606A8;
+	Fri, 10 Jul 2026 13:32:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RTrIH5-mUg4O; Fri, 10 Jul 2026 12:05:01 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id BFnbVebHYEQn; Fri, 10 Jul 2026 13:32:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 854BC40928
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B095460693
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1783685101;
-	bh=9G/++yQHPxuRnMWdIbPRznRitCkvMO7lTDaG1YHyUH4=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=j1mEB/dSs2uIG9fSe8JE/QQqLDCZmhkfvNP5DL6NjYHRvLpRxGfB4+IUBSWjUSEn1
-	 ZbPJQllSajfbCQG3ZxR9ZFUOjiyW+qYugihpH6LeLe54ihzr16MSJwoJyPuo3nmWv9
-	 jksPA+EZJ87PCuYxq184//h+tBov0Q52ndTxv7IT/wRbbV4ZBsoLFbgM/BmJRcW+8g
-	 GD6LNpgmR6tdUMfAvAYc3KOWj8FRq35aiOaYtrZ4u7C8/kcP7Xa2fMi5D7CXneyF8j
-	 KOxOUS6Mo+0Arva6IIKdvZY077dgws6bSO2kAjv9sbURrcVMM/0XYsODQfd1/WvSdt
-	 khULOZ1JFT17g==
+	s=default; t=1783690353;
+	bh=PA/UzCb2PxnqttnL/xtTXcDC6z5Xjvby0IdL6CUEqxI=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=hqZL3xOdlehmytA79tgbjVB4AsEHPK3nTf0i41UU9SKHz2sHzh5ND00AQcxD5BVQl
+	 2X4YCfYnSbx/CBPFqtA/J8u3yQ8HLgyinI+LQMtBq/sPlX63nhqVZp6XZbBMTuOis3
+	 Nk0V/aXScoP1B3tNS4WrlUbk/gQi01GvnGei/PSxlRD+Idic8WJLqcyDDzUGn66hJy
+	 aZ3EUYHT/4gspa9gog0658zqxhq7JlG5IRS5tHQF0l21bxHTho9VId8h3u9bxlJRhp
+	 NUWNyyBGLnVj3SxjP+m0EyRf5pGg58v6CVhT3oosao2phXS5bwUNfYccarxMJrzvpb
+	 BU3rGB/GjrK8g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 854BC40928;
-	Fri, 10 Jul 2026 12:05:01 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 270A9320
- for <buildroot@buildroot.org>; Fri, 10 Jul 2026 12:05:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B095460693;
+	Fri, 10 Jul 2026 13:32:33 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 82EA7A3C
+ for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:32:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1CDA4810FE
- for <buildroot@buildroot.org>; Fri, 10 Jul 2026 12:05:00 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6133760693
+ for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:32:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8KDzqS4PZpvZ for <buildroot@buildroot.org>;
- Fri, 10 Jul 2026 12:04:59 +0000 (UTC)
-Received-SPF: Permerror (mailfrom) identity=mailfrom; client-ip=84.110.109.230;
- helo=mail.tkos.co.il; envelope-from=baruch@tkos.co.il; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9E61B810FD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9E61B810FD
-Received: from mail.tkos.co.il (mail.tkos.co.il [84.110.109.230])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9E61B810FD
- for <buildroot@buildroot.org>; Fri, 10 Jul 2026 12:04:58 +0000 (UTC)
-Received: from tarshish.tkos.co.il (unknown [10.0.8.2])
- (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
- (No client certificate requested)
- by mail.tkos.co.il (Postfix) with ESMTPS id 34EC44403F3;
- Fri, 10 Jul 2026 15:04:51 +0300 (IDT)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id O84GRjGao9uq for <buildroot@buildroot.org>;
+ Fri, 10 Jul 2026 13:32:30 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::833; helo=mail-qt1-x833.google.com;
+ envelope-from=aford173@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org ABB876068C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ABB876068C
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com
+ [IPv6:2607:f8b0:4864:20::833])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id ABB876068C
+ for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:32:30 +0000 (UTC)
+Received: by mail-qt1-x833.google.com with SMTP id
+ d75a77b69052e-51bf2479349so5787761cf.2
+ for <buildroot@buildroot.org>; Fri, 10 Jul 2026 06:32:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20251104; t=1783690349; x=1784295149;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to:content-type;
+ bh=rWjyh5iBuxfwTV5rlGkWRFwMwKwO5ef6yqW5Dvzt7FQ=;
+ b=PuouEXtA6GjiJjuuWT5jLxzLu2cTD8S3tO7IT7rWOLKaU8jAxoQJ2s/2MA3PK0lQ5N
+ T/csyRmWEtelI8dj96TpB/KTyrhvXS4FQpfPCn9AQnOK+VaE0XRJBX5hpS5JnnauRw/z
+ HGjfgu66mfMZWCpWVCgDwAHCS5z1ZFEEcGlVjvI3oACANcBirPcqSmhYHCTQJFn86CS0
+ lusXhGcKTtalqFc4VWQwUcBWK/1ap5i9sfl4CVPu6yGJM+wNpuXXPZOqdm1DDGNtRkc6
+ O+Tt5QS5lXntyqDCpiuLmcb54uywmOKuvIMN5w2flJMJiwP3daXhr+Fu34eaolqC5Hw8
+ Edgw==
+X-Gm-Message-State: AOJu0YyqaygWoAKxm27VcLTQQM4YvTPLbXNqbzjY7DkAVn2wh6ZjaTPe
+ 0fLNE9L4PlbtTuS8cG3guWfQ7a09gvwZ61IFY6jWiu/LJVrXZWkVn3vZbcLrBg==
+X-Gm-Gg: AfdE7cliPqZzsL+NCWVexDYWow+X8LoqIMFb6s8a/ltrl20s1rR5T0vQA3uU52MpXJ3
+ uW4LzsSxqO0M26Dq55psBMjlChEQ5vXlwFQAfPqDAizH+/i9SGx4WnOPTFX9dGe3KcUpsqIvqPA
+ 9blja7PH2NOj/WgszH98PfNMMpTyF/7GzTjMqmJgQLUQj1Kulp22WKmaleV4JX789VuYUiE6BpF
+ QDLOFlORmipU8RGJgft/ozmQu4i7/4C3GwtZ6FpjbGj65MQN5FYJ2oKab8d1sMSeCK/FThZ2VgD
+ fZ+atgLViLNAaP2salcesEMyjb4CxNka5f1BupOmVVdR0W9RITlP+9TkJK8O9nrdDGnIuaKxMPZ
+ Pf9Rmlp1kodQh6tPjV88eloQum3zu2anMigMijwqVds5Vo1QyMeGRvS7JSmgjvvckonnFilBupB
+ H0WhDeEMwo+mCavIqYE56dbyXvK4KzcpL0EIKLorbZ6Kj72lvripOWPP3eplL7IaQOqQ==
+X-Received: by 2002:ac8:5f89:0:b0:51c:8fb:fa54 with SMTP id
+ d75a77b69052e-51c8b4d5a86mr119915001cf.57.1783690348978; 
+ Fri, 10 Jul 2026 06:32:28 -0700 (PDT)
+Received: from aford-System-Version.lan (c-73-94-212-116.hsd1.mn.comcast.net.
+ [73.94.212.116]) by smtp.gmail.com with ESMTPSA id
+ d75a77b69052e-51cba49439dsm1656951cf.27.2026.07.10.06.32.27
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 10 Jul 2026 06:32:28 -0700 (PDT)
+From: Adam Ford <aford173@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 10 Jul 2026 15:04:07 +0300
-Message-ID: <bb6119f10459ad2ecba91904dbb3bc122f381a5c.1783685047.git.baruch@tkos.co.il>
+Cc: Bernd Kuhls <bernd@kuhls.net>, Joseph Kogut <joseph.kogut@gmail.com>,
+ Romain Naour <romain.naour@gmail.com>, Adam Ford <aford173@gmail.com>
+Date: Fri, 10 Jul 2026 08:32:25 -0500
+Message-ID: <20260710133225.484041-1-aford173@gmail.com>
 X-Mailer: git-send-email 2.53.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=tkos.co.il; s=default; t=1783685091;
- bh=cR6Gtks+Hbta9v683zLt75+DozCELRkJheF2HVWBmc0=;
- h=From:To:Cc:Subject:Date:From;
- b=i0YOl52LrzPSZxy6E1XNYiSXr6yX/llnS0d6kMmi8DnP0oud+ZYlB5c7Rb46q21FK
- HK5Gnk+ZeFWBlhdmgyiWxRxpKYNj8d38Ar3iQN7QTI8d0gckJDCvYirIGPZs3LVenx
- 6Zn3cqBy8AHkrkkRMkKaV56x7qLQQQbEFkxrUHQpy6BnaNjyZQxtMOSX6aSqjCbWiD
- q4iNOoih2lcNaV8NqzXBl/GCJUx7lraggT9WfcABDbrrRwiOf25sYc5anJ26G7SGw2
- zv5SDnQseW0TeKphd/X3Cky3Jopf2rPMOzackMSLlY/JfyKEI7xDafDtJgzpKcAsVn
- zEr7/0Tq81J0g==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=tkos.co.il
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=tkos.co.il header.i=@tkos.co.il header.a=rsa-sha256
- header.s=default header.b=i0YOl52L
-Subject: [Buildroot] [PATCH] package/socat: security bump to version 1.8.1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20251104; t=1783690349; x=1784295149; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+ bh=rWjyh5iBuxfwTV5rlGkWRFwMwKwO5ef6yqW5Dvzt7FQ=;
+ b=lCqASA8FMO2EC4xC+iLxxQO9XzMiTxM0nff+sYAmC5PzjF+R1zdkKh+CfAEC9Aea0n
+ z69RWJbIwUb6DL8rbi+FjCDW/lAVDoXtqUCr8ASkNkHjqAxWiGav/oK6lwzn8DM5Q4DZ
+ daORUuzbuXjXDCyt6uUGcHF2ViYhoNuI+BLbWCr9qmvv6+7Dh7cLMwMgtLJcVdpc1syq
+ YoqiLFS6I93cPa2A3xF4YzFyNtP3vRwKKz6A97N+nTx7tmEWxwkg3oD1EnH+80UoizNf
+ MjrtysPFQGWAe6JRE+JNRJp4vTC2UMCJ0zpIIwaHVD4OF8wNvFoluJwZNlaa6Tt9F4FA
+ 9J1g==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20251104 header.b=lCqASA8F
+Subject: [Buildroot] [PATCH] package/mesa3d: add intel-virtio host native
+ context config
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,51 +119,91 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Baruch Siach via buildroot <buildroot@buildroot.org>
-Reply-To: Baruch Siach <baruch@tkos.co.il>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes CVE-2026-56123: SOCKS5 client buffer overflow. Only signed char
-platforms are affected.
+Add BR2_PACKAGE_MESA3D_HOST_NATIVE_CONTEXT_DRIVER_INTEL in the same
+pattern as amdgpu-virtio. When enabled, -Dintel-virtio-experimental=true
+defines HAVE_INTEL_VIRTIO so the guest-side Intel native context
+(i915 and xe context types) is compiled in. This is the guest half
+of the Intel vDRM GPU passthrough path, usable by the crocus/iris
+(OpenGL) and ANV (Vulkan) drivers.
 
-  http://www.dest-unreach.org/socat/CHANGES
+Note that this is an experimental Mesa feature (the upstream meson
+option is named intel-virtio-experimental) and is disabled by default.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/socat/socat.hash | 4 ++--
- package/socat/socat.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Signed-off-by: Adam Ford <aford173@gmail.com>
 
-diff --git a/package/socat/socat.hash b/package/socat/socat.hash
-index 3a4eec60c1cb..2fc8e4085317 100644
---- a/package/socat/socat.hash
-+++ b/package/socat/socat.hash
-@@ -1,7 +1,7 @@
- # From http://www.dest-unreach.org/socat/download.md5sum
--md5  5456f0f0c5d4505b68edcb10e23ef128  socat-1.8.1.1.tar.bz2
-+md5  1a5b8ddff793847d80aa100d54b7cf76  socat-1.8.1.3.tar.bz2
- # From http://www.dest-unreach.org/socat/download.sha256sum
--sha256  5ebc636b7f427053f98806696521653a614c7e06464910353cbf54e2327adc1b  socat-1.8.1.1.tar.bz2
-+sha256  25bc6476292b2e614220989c77b0b6fca87bb2525d9747b31a6639b1fb602418  socat-1.8.1.3.tar.bz2
- # Locally calculated
- sha256  86e46422f9381b386bd2eb6606f9d6c3ff479f905660d0f318c571292ab304b8  README
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/socat/socat.mk b/package/socat/socat.mk
-index 3d40540599d7..311bdfda3abf 100644
---- a/package/socat/socat.mk
-+++ b/package/socat/socat.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index e184039150..ad02b5e829 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -130,6 +130,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_CROCUS
+ 	bool "Gallium crocus driver"
+ 	depends on BR2_i386 || BR2_x86_64
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
++	select BR2_PACKAGE_MESA3D_HOST_NATIVE_CONTEXT_SUPPORTED_DRIVER
+ 	help
+ 	  Mesa driver for gen4-7 Intel GPUs.
  
--SOCAT_VERSION = 1.8.1.1
-+SOCAT_VERSION = 1.8.1.3
- SOCAT_SOURCE = socat-$(SOCAT_VERSION).tar.bz2
- SOCAT_SITE = http://www.dest-unreach.org/socat/download
- SOCAT_LICENSE = GPL-2.0 with OpenSSL exception
+@@ -167,6 +168,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS
+ 	bool "Gallium iris driver"
+ 	depends on BR2_PACKAGE_MESA3D_LLVM
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
++	select BR2_PACKAGE_MESA3D_HOST_NATIVE_CONTEXT_SUPPORTED_DRIVER
+ 	select BR2_PACKAGE_MESA3D_NEEDS_PRECOMP_COMPILER
+ 	select BR2_PACKAGE_MESA3D_RUSTICL_SUPPORTED_DRIVER
+ 	help
+@@ -393,6 +395,7 @@ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # memfd.h
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC # ifunc, static_assert
+ 	depends on BR2_PACKAGE_MESA3D_LLVM
++	select BR2_PACKAGE_MESA3D_HOST_NATIVE_CONTEXT_SUPPORTED_DRIVER
+ 	select BR2_PACKAGE_MESA3D_NEEDS_PRECOMP_COMPILER
+ 	select BR2_PACKAGE_MESA3D_VULKAN_DRIVER
+ 	help
+@@ -459,6 +462,22 @@ config BR2_PACKAGE_MESA3D_HOST_NATIVE_CONTEXT_DRIVER_FREEDRENO
+ 	  Select this when running Mesa inside a virtual machine
+ 	  with virtio-gpu host native context support.
+ 
++config BR2_PACKAGE_MESA3D_HOST_NATIVE_CONTEXT_DRIVER_INTEL
++	bool "intel-virtio"
++	depends on BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_CROCUS || \
++		BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS || \
++		BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL
++	help
++	  Enable VirtIO support for Intel native contexts
++	  used by the crocus/iris (OpenGL) and ANV (Vulkan)
++	  drivers.
++
++	  This is an experimental Mesa feature and is disabled
++	  by default.
++
++	  Select this when running Mesa inside a virtual machine
++	  with virtio-gpu host native context support.
++
+ config BR2_PACKAGE_MESA3D_HOST_NATIVE_CONTEXT_SUPPORTED_DRIVER
+ 	bool
+ 
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 8e6c2ee5b8..87377b7ce4 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -164,6 +164,12 @@ else
+ MESA3D_CONF_OPTS += -Damdgpu-virtio=false
+ endif
+ 
++ifeq ($(BR2_PACKAGE_MESA3D_HOST_NATIVE_CONTEXT_DRIVER_INTEL),y)
++MESA3D_CONF_OPTS += -Dintel-virtio-experimental=true
++else
++MESA3D_CONF_OPTS += -Dintel-virtio-experimental=false
++endif
++
+ ifneq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_FREEDRENO)$(BR2_PACKAGE_MESA3D_VULKAN_DRIVER_FREEDRENO),)
+ MESA3D_FREEDRENO_KMDS = msm
+ ifeq ($(BR2_PACKAGE_MESA3D_HOST_NATIVE_CONTEXT_DRIVER_FREEDRENO),y)
 -- 
 2.53.0
 
