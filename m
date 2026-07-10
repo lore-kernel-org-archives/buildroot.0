@@ -1,114 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71CAFC44501
-	for <buildroot@archiver.kernel.org>; Fri, 10 Jul 2026 07:21:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80BF3C43458
+	for <buildroot@archiver.kernel.org>; Fri, 10 Jul 2026 07:51:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9346160868;
-	Fri, 10 Jul 2026 07:21:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 606FC80DE3;
+	Fri, 10 Jul 2026 07:51:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id imLRdIM3wqZv; Fri, 10 Jul 2026 07:21:21 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UKhh0DntwUKq; Fri, 10 Jul 2026 07:51:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8A40160856
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 470C080DE5
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1783668081;
-	bh=7a3370zUta0O7UNM8NojN+BvaTQkdm2c0SZmyhyXCic=;
+	s=default; t=1783669916;
+	bh=Bnthdj8s+Ng14XHninoQ24oVa6q4fNLFWjBjZOQGnW0=;
 	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=Kodig/rUbGtxVDZPOu59e7vavjW3zZ+1y/XTQpcVXecf90C3IJAMMSgkvC/BrImwR
-	 inpD7JVCot/kEsEB04S/8GJ1r/ZIysVTch0YmZp3RsVUxFfrgGFVpAELNNOXNoDi86
-	 PJeLeN/SDRmjENVDgKq4RsxXly4WbKFQ7TO3RbQ0krE5/bnE32Wfmn5CHaf/k3y4Lm
-	 2JM2Ic5XHIlMfX/qsmMdT7G06S5+YvN7zwsnYd1XtYxBAW8QhskgDWx/hT/eF3295J
-	 ysu/9xcrskUHCWRZLRSUOvSCHaEWkC6Ght4NvIAhXkcYeyJsQuIxFYXAdwX/cRO8l5
-	 1vyyRr9cpqA1g==
+	b=NaqN9XBpYb2XtGSESUeSIN8wUEwjICZc+HvKsqWAI3NmFaX6H2z0coq6ZN5+2yMrw
+	 KZOXaLmVuJk0GlGdD9fszJ05BeBqa+Xho0G+m4mPDP1mRXFL/XetNP4J+1uGRWd11D
+	 eiOe92cYYBm2CygehmNFrACJjfTjChqDs58jTfXVmTM2b5Ad/GlD/r73o0A+bQlGG4
+	 OU//JiP2GwXn2oWcA/djzUf3peYHSFB4Lx2k1kFUyZ6jDawfost7jFA3/2P+RmyyjU
+	 xrMH065DIqV3HQndEFixQPnLD4/lFx1SqZ/Uxdshq8UeIHBY58NgkA77cIGlss3s//
+	 Rc+G42GYfH3lg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8A40160856;
-	Fri, 10 Jul 2026 07:21:21 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id ED463320
- for <buildroot@buildroot.org>; Fri, 10 Jul 2026 07:21:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 470C080DE5;
+	Fri, 10 Jul 2026 07:51:56 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8B753320
+ for <buildroot@buildroot.org>; Fri, 10 Jul 2026 07:51:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D34D36078A
- for <buildroot@buildroot.org>; Fri, 10 Jul 2026 07:21:19 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7D15280DE5
+ for <buildroot@buildroot.org>; Fri, 10 Jul 2026 07:51:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kRDF0DwusjNG for <buildroot@buildroot.org>;
- Fri, 10 Jul 2026 07:21:19 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
- envelope-from=andrea.ricchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A5AE3605CA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A5AE3605CA
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
- [IPv6:2a00:1450:4864:20::32f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A5AE3605CA
- for <buildroot@buildroot.org>; Fri, 10 Jul 2026 07:21:18 +0000 (UTC)
-Received: by mail-wm1-x32f.google.com with SMTP id
- 5b1f17b1804b1-493ec555a26so3984825e9.0
- for <buildroot@buildroot.org>; Fri, 10 Jul 2026 00:21:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1783668076; x=1784272876;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to:content-type;
- bh=ndfMlj2lTAUs/bCVymdUTB7TNy8Q3rIELeFu9bX9eWc=;
- b=EbcsCHnh9rT/iMBIoqzeRDJN7B0UbUDBwnXiiBm8kgETiuyxppPnuKmzREYOUOMH/k
- n65DSAjomYkTmQa3qXCjm9HtVscoixVCMP/UKRRVCXksLS8uOxI9rLGY+JINXjexeEZ4
- T58VUBo89tDE6emn+NnIoO9i3ZR2ishFBSBnz+qmI+rrxBdHrSc8DupLaiwTBrU7XqVO
- FPWCPFphKXSpt7nVet/iMtb3Facp1byN31KBmWAJPwn28IkDnX8r2oRUVg8b8QabJzRo
- Aqa7IL/Ze73t16pah6H1YcZR0VUCf/ie9ia78uc2qkKGhfYMHyz6E057Sy1JYSJ3Jnp+
- XvvA==
-X-Gm-Message-State: AOJu0YwgT/2HHtA5FUhl2tiTmk2IIMA+OKZLtN9fjpOF6qIhNt+MJ8Ij
- kHTdzP5kNkmlJciRjf2DKHlyTFWjUTbnvYEuJP34z43yIn53yOtXdpF4CC/SCEcehk6K8RgKNV3
- YkcXYFIU=
-X-Gm-Gg: AfdE7cnf52ie3TT4FPhX5Ndab88t9bM4K7qO+XyyX7QVas5tHvdybe6xQ/x+zOkzMcm
- /CCdYFx8fmUvjr75Ti+sKn56qohMPtE8q4nluTXoWRkAY2mqFRvBwApTZ7h5ck5C10I8KMQDKYD
- HgIHiTztebmUsCcR/maoYkglfGmcXTuzySp6W3PYi8mamHndJ5P4AL9jF9VqBG+wWd0SIesA9f+
- 2Svy9rGvCJfbTY8sZKu5vs0tp/p5Lo5o/ewc0MfrtL18vfeqXVowB4wma3IBJIZmQhdDnXRrOSd
- xP71Xh5Re8JeucsUInMIexQwpcU+Z0tFPd1IBAjEsZCSw89hwc7YbvOJF85F22NY3IWK13oyDE3
- U1ZAWeM6939KeIE2rN8VoxqaIPb5hEHE8yMD7Hg2xCqPADCny6qdYw2TA4sq0XF+Ld0ul9/gXan
- 0Ob/T+877LboiTNbvk5QPvGNVvGxcHIGj2tAJfEFh4SuZfYmMBmKqI9iUuOSjRzOrBtjErhYIyD
- ueo7DILRdQmwcVrHIHnpQl99J4CyzxKIKtk4nuiRQHV9zev4TazGVsyq1LVaWSUDBtkKX6bZKnu
- Jog8RNoWoEGLhrzYSg5LvZcX
-X-Received: by 2002:a05:600c:3e0c:b0:493:c548:87fb with SMTP id
- 5b1f17b1804b1-493f536ceb3mr8224385e9.36.1783668076393; 
- Fri, 10 Jul 2026 00:21:16 -0700 (PDT)
-Received: from rcc-ThinkPad-P14s-Gen-5.homenet.telecomitalia.it
- ([95.236.1.245]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-493eb6ccdbbsm120194765e9.3.2026.07.10.00.21.15
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 10 Jul 2026 00:21:16 -0700 (PDT)
-From: Andrea Ricchi <andrea.ricchi@amarulasolutions.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jLAi5JxVFunY for <buildroot@buildroot.org>;
+ Fri, 10 Jul 2026 07:51:54 +0000 (UTC)
+Received-SPF: None (mailfrom) identity=mailfrom; client-ip=176.9.89.163;
+ helo=serv15.avernis.de; envelope-from=br025@umbiko.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 23AE680DE3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 23AE680DE3
+Received: from serv15.avernis.de (serv15.avernis.de [176.9.89.163])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 23AE680DE3
+ for <buildroot@buildroot.org>; Fri, 10 Jul 2026 07:51:52 +0000 (UTC)
+Received: by serv15.avernis.de (Postfix) with ESMTPSA id 08BAABDE6036;
+ Fri, 10 Jul 2026 09:51:48 +0200 (CEST)
+From: Andreas Ziegler <br025@umbiko.net>
 To: buildroot@buildroot.org
-Cc: Andrea Ricchi <andrea.ricchi@amarulasolutions.com>
-Date: Fri, 10 Jul 2026 09:21:10 +0200
-Message-ID: <20260710072112.51856-1-andrea.ricchi@amarulasolutions.com>
+Cc: bernd@kuhls.net,
+	Andreas Ziegler <br025@umbiko.net>
+Date: Fri, 10 Jul 2026 09:51:23 +0200
+Message-ID: <20260710075124.126624-1-br025@umbiko.net>
 X-Mailer: git-send-email 2.53.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1783668076; x=1784272876;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
- bh=ndfMlj2lTAUs/bCVymdUTB7TNy8Q3rIELeFu9bX9eWc=;
- b=Kwde/rUpFv4EGu3lXGxLPByW9ywoJVKsEVTdYQBUCAOg3x0/OVJ5xMe7pDMC/DmQjB
- U76ys2JdO7bjlbnK9x4yFPKFZeb4K9ktJWgQ++uZmxLsWgt0f15QoDTlZ+H/Z2iS0nJ1
- 8Dj+m1jkYG5K6PLtpUGUdhmk/c2TbN/icVQVU=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Virus-Scanned: clamav-milter 1.4.3 at serv15.avernis.de
+X-Virus-Status: Clean
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=umbiko.net; s=mail; 
+ t=1783669909; bh=uBz9BufzODVnDdyzdjJrCh3R3MmzHBs22HeXVuur4WU=;
+ h=From:To:Cc:Subject:Date;
+ b=HSYb1Kh6TOrvORV4UCJT1qMc0OSgdLAWxVNkgO/E/JcJMg1yj/2IHW9gYQeAt+eTQ
+ QwtMlvFrmJY5GHxOWHhzaq5kNLPa4FSBjvF4fONQPlpitMChA7cb2NviAJsrUSN2vT
+ cEpjJHCWxCM1UKGL7gBB9yq3Rf86BImwbtkpWBJ0=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=umbiko.net
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=Kwde/rUp
-Subject: [Buildroot] [PATCH RESEND 1/2] package/libcppconnman: add new
- package
+ unprotected) header.d=umbiko.net header.i=@umbiko.net header.a=rsa-sha256
+ header.s=mail header.b=HSYb1Kh6
+Subject: [Buildroot] [PATCH v2 1/1] package/mpd: fix build failure w/ fmt
+ 12.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -125,102 +91,260 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-libcppconnman is a C++ library that provides an easy-to-use API
-to communicate with ConnMan over D-Bus using GDBus.
+Building mpd with fmt 12.2.0 fails with:
 
-https://github.com/amarula/libcppconnman
+../src/net/ToString.cxx: In function 'std::string ToString(SocketAddress)':
+../src/net/ToString.cxx:80:37: error: 'format' is not a member of 'fmt'
+   80 |                         return fmt::format("[{}]:{}", host, serv);
+      |                                     ^~~~~~
+../src/net/ToString.cxx:84:29: error: 'format' is not a member of 'fmt'
+   84 |                 return fmt::format("{}:{}", host, serv);
+      |                             ^~~~~~
 
-Signed-off-by: Andrea Ricchi <andrea.ricchi@amarulasolutions.com>
+Root cause is an API change in fmt:
+
+Made the <fmt/core.h> header equivalent to <fmt/base.h> by default. Code
+that relied on <fmt/core.h> pulling in <fmt/format.h> must now either
+include <fmt/format.h> directly or define FMT_DEPRECATED_HEAVY_CORE to
+opt back in. (https://github.com/fmtlib/fmt/releases#release-12.2.0)
+
+Add a patch containing the corresponding upstream commit
+(https://github.com/MusicPlayerDaemon/MPD/commit/88d5b52).
+
+Signed-off-by: Andreas Ziegler <br025@umbiko.net>
 ---
- Resending this patch as it has been a couple of months since the original submission. 
- No changes have been made.
+ ...pport-use-fmt-format.h-not-fmt-core..patch | 220 ++++++++++++++++++
+ 1 file changed, 220 insertions(+)
+ create mode 100644 package/mpd/0002-libfmt-12.2.0-support-use-fmt-format.h-not-fmt-core..patch
 
-
- package/cutekeyboard/cutekeyboard.hash | 2 +-
- package/cutekeyboard/cutekeyboard.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
- package/libcppconnman/Config.in          | 26 ++++++++++++++++++++++++
- package/libcppconnman/libcppconnman.hash |  3 +++
- package/libcppconnman/libcppconnman.mk   | 24 ++++++++++++++++++++++
- 3 files changed, 53 insertions(+)
- create mode 100644 package/libcppconnman/Config.in
- create mode 100644 package/libcppconnman/libcppconnman.hash
- create mode 100644 package/libcppconnman/libcppconnman.mk
-
-diff --git a/package/libcppconnman/Config.in b/package/libcppconnman/Config.in
+diff --git a/package/mpd/0002-libfmt-12.2.0-support-use-fmt-format.h-not-fmt-core..patch b/package/mpd/0002-libfmt-12.2.0-support-use-fmt-format.h-not-fmt-core..patch
 new file mode 100644
-index 0000000000..f1fee9ae72
+index 0000000000..96ac522a9e
 --- /dev/null
-+++ b/package/libcppconnman/Config.in
-@@ -0,0 +1,26 @@
-+config BR2_PACKAGE_LIBCPPCONNMAN
-+	bool "libcppconnman"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_USE_WCHAR # libglib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
-+	depends on BR2_USE_MMU # libglib2
-+	select BR2_PACKAGE_LIBGLIB2
-+	help
-+	  libcppconnman provide easy to use C++ API to communicate
-+	  with ConnMan via the DBus using GDBus.
++++ b/package/mpd/0002-libfmt-12.2.0-support-use-fmt-format.h-not-fmt-core..patch
+@@ -0,0 +1,220 @@
++Building mpd 0.24.12 with fmt 12.2.0 fails with:
 +
-+	  https://amarula.github.io/libcppconnman/
++../src/net/ToString.cxx: In function 'std::string ToString(SocketAddress)':
++../src/net/ToString.cxx:80:37: error: 'format' is not a member of 'fmt'
++   80 |                         return fmt::format("[{}]:{}", host, serv);
++      |                                     ^~~~~~
++../src/net/ToString.cxx:84:29: error: 'format' is not a member of 'fmt'
++   84 |                 return fmt::format("{}:{}", host, serv);
++      |                             ^~~~~~
 +
-+comment "libcppconnman needs a toolchain w/ C++, wchar, threads"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
-+		!BR2_TOOLCHAIN_HAS_THREADS
++Root cause is an API change in fmt:
 +
-+if BR2_PACKAGE_LIBCPPCONNMAN
++Made the <fmt/core.h> header equivalent to <fmt/base.h> by default. Code
++that relied on <fmt/core.h> pulling in <fmt/format.h> must now either
++include <fmt/format.h> directly or define FMT_DEPRECATED_HEAVY_CORE to
++opt back in. (https://github.com/fmtlib/fmt/releases#release-12.2.0)
 +
-+config BR2_PACKAGE_LIBCPPCONNMAN_EXAMPLE
-+	bool "libcppconnman example"
-+	help
-+	  Compile CLI example.
++Add the corresponding upstream fix in this patch.
 +
-+endif
-\ No newline at end of file
-diff --git a/package/libcppconnman/libcppconnman.hash b/package/libcppconnman/libcppconnman.hash
-new file mode 100644
-index 0000000000..6367503e7f
---- /dev/null
-+++ b/package/libcppconnman/libcppconnman.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  6fe3f4eb7372786f76b6be8cf77720066f4aa216c6596e99d8015e7139a00073  libcppconnman-1.0.0.tar.gz
-+sha256  7ffe1954587c77dfba1cf8eb9b2ea743671fa6e63f9e7a2f258119d42e14eefe  LICENSE
-diff --git a/package/libcppconnman/libcppconnman.mk b/package/libcppconnman/libcppconnman.mk
-new file mode 100644
-index 0000000000..2a0eb10ec9
---- /dev/null
-+++ b/package/libcppconnman/libcppconnman.mk
-@@ -0,0 +1,24 @@
-+################################################################################
-+#
-+# libcppconnman
-+#
-+################################################################################
++Upstream: https://github.com/MusicPlayerDaemon/MPD/commit/88d5b52
++Signed-off-by: Andreas Ziegler <br025@umbiko.net>
++---
++From 88d5b5248d71862815da336cfd1c6f66626bb4d4 Mon Sep 17 00:00:00 2001
++From: Rudi Heitbaum <rudi@heitbaum.com>
++Date: Thu, 18 Jun 2026 13:32:33 +0000
++Subject: [PATCH] libfmt 12.2.0 support: use fmt/format.h not fmt/core.h
 +
-+LIBCPPCONNMAN_VERSION = 1.0.0
-+LIBCPPCONNMAN_SITE = $(call github,amarula,libcppconnman,v$(LIBCPPCONNMAN_VERSION))
-+LIBCPPCONNMAN_LICENSE = LGPL-2.1-or-later
-+LIBCPPCONNMAN_LICENSE_FILES = LICENSE
++Since libfmt 12.2.0, fmt/core.h is a shim that only includes
++fmt/base.h which does not provide fmt::format(). Include
++fmt/format.h directly in files that call fmt::format().
 +
-+LIBCPPCONNMAN_INSTALL_STAGING = YES
++Signed-off-by: Rudi Heitbaum <rudi@heitbaum.com>
++---
++ src/input/plugins/AlsaInputPlugin.cxx          | 2 +-
++ src/input/plugins/QobuzClient.cxx              | 2 +-
++ src/input/plugins/QobuzLoginRequest.cxx        | 2 +-
++ src/input/plugins/QobuzTrackRequest.cxx        | 2 +-
++ src/lib/avahi/Publisher.cxx                    | 2 +-
++ src/lib/nfs/FileReader.cxx                     | 2 +-
++ src/net/ToString.cxx                           | 2 +-
++ src/output/plugins/httpd/HttpdClient.cxx       | 2 +-
++ src/output/plugins/httpd/IcyMetaDataServer.cxx | 2 +-
++ src/song/AddedSinceSongFilter.cxx              | 2 +-
++ src/song/AudioFormatSongFilter.cxx             | 2 +-
++ src/song/ModifiedSinceSongFilter.cxx           | 2 +-
++ src/storage/plugins/NfsStorage.cxx             | 2 +-
++ 13 files changed, 13 insertions(+), 13 deletions(-)
 +
-+LIBCPPCONNMAN_DEPENDENCIES = host-pkgconf libglib2
++diff --git a/src/input/plugins/AlsaInputPlugin.cxx b/src/input/plugins/AlsaInputPlugin.cxx
++index 6bf8034dc..5fc8dd99a 100644
++--- a/src/input/plugins/AlsaInputPlugin.cxx
+++++ b/src/input/plugins/AlsaInputPlugin.cxx
++@@ -27,7 +27,7 @@
++ 
++ #include <alsa/asoundlib.h>
++ 
++-#include <fmt/core.h>
+++#include <fmt/format.h>
++ 
++ #include <cassert>
++ 
++diff --git a/src/input/plugins/QobuzClient.cxx b/src/input/plugins/QobuzClient.cxx
++index 233c1bbad..92de56695 100644
++--- a/src/input/plugins/QobuzClient.cxx
+++++ b/src/input/plugins/QobuzClient.cxx
++@@ -5,7 +5,7 @@
++ #include "lib/crypto/MD5.hxx"
++ #include "thread/ScopeUnlock.hxx"
++ 
++-#include <fmt/core.h>
+++#include <fmt/format.h>
++ 
++ #include <cassert>
++ #include <stdexcept>
++diff --git a/src/input/plugins/QobuzLoginRequest.cxx b/src/input/plugins/QobuzLoginRequest.cxx
++index 41d4dcabf..7e2e6b64c 100644
++--- a/src/input/plugins/QobuzLoginRequest.cxx
+++++ b/src/input/plugins/QobuzLoginRequest.cxx
++@@ -6,7 +6,7 @@
++ #include "QobuzSession.hxx"
++ #include "lib/curl/Form.hxx"
++ 
++-#include <fmt/core.h>
+++#include <fmt/format.h>
++ #include <nlohmann/json.hpp>
++ 
++ #include <cassert>
++diff --git a/src/input/plugins/QobuzTrackRequest.cxx b/src/input/plugins/QobuzTrackRequest.cxx
++index 59b6cf480..3de5e7ea0 100644
++--- a/src/input/plugins/QobuzTrackRequest.cxx
+++++ b/src/input/plugins/QobuzTrackRequest.cxx
++@@ -5,7 +5,7 @@
++ #include "QobuzErrorParser.hxx"
++ #include "QobuzClient.hxx"
++ 
++-#include <fmt/core.h>
+++#include <fmt/format.h>
++ #include <nlohmann/json.hpp>
++ 
++ using std::string_view_literals::operator""sv;
++diff --git a/src/lib/avahi/Publisher.cxx b/src/lib/avahi/Publisher.cxx
++index 1ac4d61e6..174f57198 100644
++--- a/src/lib/avahi/Publisher.cxx
+++++ b/src/lib/avahi/Publisher.cxx
++@@ -13,7 +13,7 @@
++ #include <avahi-common/malloc.h>
++ #include <avahi-common/alternative.h>
++ 
++-#include <fmt/core.h>
+++#include <fmt/format.h>
++ 
++ #include <cassert>
++ 
++diff --git a/src/lib/nfs/FileReader.cxx b/src/lib/nfs/FileReader.cxx
++index 20b79ce3c..2678039e2 100644
++--- a/src/lib/nfs/FileReader.cxx
+++++ b/src/lib/nfs/FileReader.cxx
++@@ -10,7 +10,7 @@
++ 
++ #include <nfsc/libnfs.h> // for struct nfs_stat_64
++ 
++-#include <fmt/core.h>
+++#include <fmt/format.h>
++ 
++ #include <cassert>
++ #include <cstring>
++diff --git a/src/net/ToString.cxx b/src/net/ToString.cxx
++index 41421d8e5..046257cb2 100644
++--- a/src/net/ToString.cxx
+++++ b/src/net/ToString.cxx
++@@ -6,7 +6,7 @@
++ #include "SocketAddress.hxx"
++ #include "IPv4Address.hxx"
++ 
++-#include <fmt/core.h>
+++#include <fmt/format.h>
++ 
++ #include <algorithm>
++ #include <cassert>
++diff --git a/src/output/plugins/httpd/HttpdClient.cxx b/src/output/plugins/httpd/HttpdClient.cxx
++index 7192b6ae4..5b23a385c 100644
++--- a/src/output/plugins/httpd/HttpdClient.cxx
+++++ b/src/output/plugins/httpd/HttpdClient.cxx
++@@ -13,7 +13,7 @@
++ #include "util/StringSplit.hxx"
++ #include "Log.hxx"
++ 
++-#include <fmt/core.h>
+++#include <fmt/format.h>
++ 
++ #include <cassert>
++ 
++diff --git a/src/output/plugins/httpd/IcyMetaDataServer.cxx b/src/output/plugins/httpd/IcyMetaDataServer.cxx
++index 0314089f1..0796bffcb 100644
++--- a/src/output/plugins/httpd/IcyMetaDataServer.cxx
+++++ b/src/output/plugins/httpd/IcyMetaDataServer.cxx
++@@ -5,7 +5,7 @@
++ #include "tag/Tag.hxx"
++ #include "util/TruncateString.hxx"
++ 
++-#include <fmt/core.h>
+++#include <fmt/format.h>
++ 
++ #include <iterator>
++ 
++diff --git a/src/song/AddedSinceSongFilter.cxx b/src/song/AddedSinceSongFilter.cxx
++index efc394fd0..dfe397542 100644
++--- a/src/song/AddedSinceSongFilter.cxx
+++++ b/src/song/AddedSinceSongFilter.cxx
++@@ -6,7 +6,7 @@
++ #include "time/ISO8601.hxx"
++ #include "util/StringBuffer.hxx"
++ 
++-#include <fmt/core.h>
+++#include <fmt/format.h>
++ 
++ using std::string_view_literals::operator""sv;
++ 
++diff --git a/src/song/AudioFormatSongFilter.cxx b/src/song/AudioFormatSongFilter.cxx
++index 69bd2b1a8..c1f209730 100644
++--- a/src/song/AudioFormatSongFilter.cxx
+++++ b/src/song/AudioFormatSongFilter.cxx
++@@ -5,7 +5,7 @@
++ #include "LightSong.hxx"
++ #include "util/StringBuffer.hxx"
++ 
++-#include <fmt/core.h>
+++#include <fmt/format.h>
++ 
++ using std::string_view_literals::operator""sv;
++ 
++diff --git a/src/song/ModifiedSinceSongFilter.cxx b/src/song/ModifiedSinceSongFilter.cxx
++index 43879c789..715f65e15 100644
++--- a/src/song/ModifiedSinceSongFilter.cxx
+++++ b/src/song/ModifiedSinceSongFilter.cxx
++@@ -6,7 +6,7 @@
++ #include "time/ISO8601.hxx"
++ #include "util/StringBuffer.hxx"
++ 
++-#include <fmt/core.h>
+++#include <fmt/format.h>
++ 
++ using std::string_view_literals::operator""sv;
++ 
++diff --git a/src/storage/plugins/NfsStorage.cxx b/src/storage/plugins/NfsStorage.cxx
++index 106afe788..b69ee807c 100644
++--- a/src/storage/plugins/NfsStorage.cxx
+++++ b/src/storage/plugins/NfsStorage.cxx
++@@ -29,7 +29,7 @@ extern "C" {
++ #include <nfsc/libnfs-raw-nfs.h>
++ }
++ 
++-#include <fmt/core.h>
+++#include <fmt/format.h>
++ 
++ #include <cassert>
++ #include <string>
++-- 
++2.53.0
 +
-+LIBCPPCONNMAN_CONF_OPTS = -DBUILD_CONNMAN=ON
-+
-+ifeq ($(BR2_PACKAGE_LIBCPPCONNMAN_EXAMPLE),y)
-+LIBCPPCONNMAN_CONF_OPTS += -DBUILD_EXAMPLES=ON
-+else
-+LIBCPPCONNMAN_CONF_OPTS += -DBUILD_EXAMPLES=OFF
-+endif
-+
-+$(eval $(cmake-package))
 -- 
-2.43.0
+2.53.0
 
 _______________________________________________
 buildroot mailing list
