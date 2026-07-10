@@ -4,113 +4,111 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C67DC43458
-	for <buildroot@archiver.kernel.org>; Fri, 10 Jul 2026 13:51:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE817C43458
+	for <buildroot@archiver.kernel.org>; Fri, 10 Jul 2026 13:51:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D724F40BDB;
-	Fri, 10 Jul 2026 13:51:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B946B40B8C;
+	Fri, 10 Jul 2026 13:51:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YMqGSipGlWVO; Fri, 10 Jul 2026 13:51:48 +0000 (UTC)
+ id se9KJLwNAQLl; Fri, 10 Jul 2026 13:51:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EA0AA40B2F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E1E1940BDF
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1783691508;
-	bh=vx0k6ig0wK22QwLNR/eUBecF6TZ9FuGv/vWrQOE8oIo=;
+	s=default; t=1783691509;
+	bh=AwBSmFLmRNhr7aeQO2jck+uR0sqdxY7ZInB1iDzjYM0=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=hRMIQXjfHmGJ/pHrbSKA3Nv2svUPexGsqZQWEvBqwBGevRfo/sTzzKgULdigYWTpe
-	 uyKj8en9CRe0cNOF2oyK1+rAxVP2lUMs81Fn960d9AA1KpPcdcrd13ym7cKq+BOFhs
-	 j1fepdE6Lz1kxNSqw64WRY67M0N2PclxqIUEZNBzNED/N87keIJ+nKSU6Cc5c7NlNG
-	 xLGsyLad0PFk8Tm6YkhJd9YhhsH7RruLfoIrzCRsR5G4rJ/BnCuBAQvphGRXOhItZP
-	 ezy7yEihGJ3DOxeHnXDl7l4TmoJ/R2lGtuIly5LvDdivX/8fw7c8IEbszbtDfwVLIS
-	 8mpBJYNMflOUA==
+	b=Wu5s/I3HEZaNH2lA0witQs11vwKhs45LqMrJ2QzRbqy4DakAPaxsuqzfWkXtRZEe2
+	 EQtFP5F1JjlYzrtR1uaWNWOc6YY4Uuvi3/frBEer+g+a8ViZoBTjq1Tw00Hq7YU0SJ
+	 i7xjmY9vDtM3BfK+wT4lCt9wQrJdpPp/C1GxKIruO+DQTcHLb4yQAJDVpKpbG5jrRS
+	 B/GqvyUcqCpj1Z9yc6450uuF3btVOVALcO07QvYGx5ZCKN/cOt3WKfnpB/0LHrvQrZ
+	 f/xU5U7eBYAbGujKWdDejF75uXBIBhr0zvcelrHgFw1S/i3wGpuP+/WN+lBuDcZW52
+	 5TWOMDiSAGqhQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EA0AA40B2F;
-	Fri, 10 Jul 2026 13:51:47 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id E088FA3C
- for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:51:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E1E1940BDF;
+	Fri, 10 Jul 2026 13:51:48 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 51F1E2FE
+ for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:51:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C7192810E9
- for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:51:45 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 42C6D606B4
+ for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:51:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SYiFxovMDRix for <buildroot@buildroot.org>;
- Fri, 10 Jul 2026 13:51:45 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iKWhQ1yYqRjD for <buildroot@buildroot.org>;
+ Fri, 10 Jul 2026 13:51:46 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
+ client-ip=2a00:1450:4864:20::330; helo=mail-wm1-x330.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org AC9D8810ED
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AC9D8810ED
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
- [IPv6:2a00:1450:4864:20::333])
- by smtp1.osuosl.org (Postfix) with ESMTPS id AC9D8810ED
- for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:51:44 +0000 (UTC)
-Received: by mail-wm1-x333.google.com with SMTP id
- 5b1f17b1804b1-493c2c0b9a8so8069725e9.1
- for <buildroot@buildroot.org>; Fri, 10 Jul 2026 06:51:44 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E51AA606C6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E51AA606C6
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
+ [IPv6:2a00:1450:4864:20::330])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E51AA606C6
+ for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:51:45 +0000 (UTC)
+Received: by mail-wm1-x330.google.com with SMTP id
+ 5b1f17b1804b1-493d92b7db3so9076525e9.2
+ for <buildroot@buildroot.org>; Fri, 10 Jul 2026 06:51:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1783691502; x=1784296302;
+ d=1e100.net; s=20251104; t=1783691504; x=1784296304;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=i+1BvfF6ShdlUPhOovAt4Lir60wT048VKT9391hjDWU=;
- b=IjalfU+ftKZrTUeslBAe2ymsJqz2cwm7nZ5+MBm6Y0B21OGMtZi3Qznj5XVEVFBrJ/
- Vhri8UIq5pZxpvBCEOEVuMdfoHa4ATmAldmnCGNR5oqOHNfI/k+HC25Ua5gD0xN5bJxK
- wg/SfHRAeDVE7k3u+LOgTnKiMtvkm2y/67D7AAxGJircYNcbvgc79NGJ0OH5jsXFsOsm
- Kg7wOnsWKH/u5rSEtSFXgbQW/UcexckYBOZuK852aH7UkdrUHu1XzTerZ5uLJhJTTu5a
- GHBH9K1PGxM46rT40Koj7BE0HXVafFmJgnKKH32C5eeB0PMGh92JY0LX7XWrYC7049Z2
- YC5g==
-X-Forwarded-Encrypted: i=1;
- AHgh+RoedhcmRH2t9qTsF/a6/6bZHmN+vXaMCnTPjefDSGxuo5+W1/sPfV84xroFvik3dgt9OfCXYAM8+X4=@buildroot.org
-X-Gm-Message-State: AOJu0YwB17VCBQ7vThSK8gIb1UobaNU7RO458FBTENI/bU8q6wfD1Zyl
- j184iTYGSl1SyFYbyG211Omm8nrQYGKTGzA1vkJV4nr/rLwjYSKvTTuIEkKNCm7YnoQ=
-X-Gm-Gg: AfdE7clSA5akks33IqkBV9E3GNXMQdYcyJN2leqKzn0+zqNCdBt7QoKYwGUJ8ZYKbp3
- fz8mGRpKovoe2cyOXcf4S3QpUlwsVNd93ZP0Na5K2HEFYRFVsS6W+OCLmA/GvdxctWUrr6qzctx
- kRDIv5vXsnTH0GadYwKxRGjWnLiEghf3aprEy3mCbutTWBKk2hwGo2jXQXyXpundG3KO/rH9Lmh
- 4IhwTu9akL5Gjz2pekKN/E9Q7E7hhG7KOVjHoD2cCvu+NjQWMjxUGRlGwfsayfdu0Fa5Gj3q8a4
- erKC0127STxmYu3BMGk2/58zlc8qeLzpqpV/YepHgoaM/WAd7CyFcyp1DDvDBs1OeTewRoLVwST
- fds67LZ3swj2nzoZxe8DLLnqSuliIxdDJLYffgKiedGMMA+MpQsyz8v4ExwyYfQAaApNMDsGQO2
- vrbyT/ww==
-X-Received: by 2002:a05:600c:6c55:b0:493:a7bc:5bcf with SMTP id
- 5b1f17b1804b1-493e68ddc7bmr85941185e9.24.1783691502275; 
- Fri, 10 Jul 2026 06:51:42 -0700 (PDT)
+ bh=DrUQxWWpWZLlegcS6W5jFlysbfx3J0NeNfNTdZ8tgaE=;
+ b=Y/oK+3rtJbrRHSU8MozuNbAI1IvfCDLSTXlUlzsk2Of0uZ+20cpiV5Rn7hVoo2T/Cp
+ UZKdGnSopKe+mwxGA1Iv7q8VfKQQpX1gcPquHqvf+BsIuFPneuFpEcvQp5/yVWnwnjS2
+ 7tn/i5DGkWntwT1Rno8+eoCT51Ov4vANDSyOxvEyTHn96JZfYN9B0MYj54pg/j97oSIa
+ +s9g7ffAiVkTZiJ/ZHoGsL9A3JEswHy/aRwBn2H7eTCRzspr/OL1vWdBwjTP7+t1zmic
+ f0jtuV8IlxBQXzrzPjRm7XsSmGdWui1eyJ3//orw9ZfpD9b0yMZrlYsimhyARTMr/vvQ
+ XPFg==
+X-Gm-Message-State: AOJu0YwTBa0H8V27tQDcLq2gMXbBOCCMmPRKJy+2BIGlzPo6bDCUz8Ga
+ mHlsj0tCeINVdZaLHUTqOXwUO+tnTH9EHpjoDZhmh5nh1JxOYlWpU1dBpsJhNiFKzEg=
+X-Gm-Gg: AfdE7clwrwZFCT2ALqt27RhvNFRmU635fd6nC+y2wNjT/puz/TiWbVsT5fzldYSekTl
+ WWr0sbAwmazkg1/46Nw9aX6ni46jReF8Thuq7j1dlfZUiCrNBWdb4CSuYjDvosPah1upykAJy27
+ PCZmuGkI1PuqHBKFZXGrVoOo0AyrqKul7muGbXc+j+e/ECfi9jEkXkHKC+ezR9NAJeDT5gdD876
+ 1Pj88A2oogVD6egW8IZVD34vqk1PJG/6PxMD0uTGHgtz2VWlXZ3NMtkP4CjS02GatKBoGIGlBJc
+ +H81oitVzcdzN1zmShgW4EZjMjXl/CbTnomZySFmRvKwA3kUPe9/Aq1WZqxtX9vV5z3FadewIsq
+ LpEEKs5HazNB7d7Wr8l0oWBepOQMFgaR1POeBi3+fALezhxGDqPyqLOuLLNiMo1Kt+7nRmDNl20
+ 9zFgjglA==
+X-Received: by 2002:a05:600c:6297:b0:493:ee2b:c8c7 with SMTP id
+ 5b1f17b1804b1-493ee2bcb92mr72183455e9.4.1783691503681; 
+ Fri, 10 Jul 2026 06:51:43 -0700 (PDT)
 Received: from arch ([212.233.37.141]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-47a9b4d850dsm61503332f8f.0.2026.07.10.06.51.41
+ ffacd0b85a97d-47aa0960b06sm60570761f8f.28.2026.07.10.06.51.43
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 10 Jul 2026 06:51:42 -0700 (PDT)
-To: Thomas Devoogdt <thomas@devoogdt.com>
-Cc: Thomas Perale <thomas.perale@mind.be>,
-	buildroot@buildroot.org
-Date: Fri, 10 Jul 2026 15:51:41 +0200
-Message-ID: <20260710135141.759238-1-thomas.perale@mind.be>
+ Fri, 10 Jul 2026 06:51:43 -0700 (PDT)
+To: Thomas Perale <thomas.perale@mind.be>
+Cc: buildroot@buildroot.org
+Date: Fri, 10 Jul 2026 15:51:42 +0200
+Message-ID: <20260710135142.759288-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260624182117.362190-1-thomas.devoogdt@barco.com>
-References: <20260624182117.362190-1-thomas.devoogdt@barco.com>
+In-Reply-To: <20260626195937.49027-1-thomas.perale@mind.be>
+References: <20260626195937.49027-1-thomas.perale@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1783691502; x=1784296302; darn=buildroot.org;
+ d=mind.be; s=google; t=1783691504; x=1784296304; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to:content-type;
- bh=i+1BvfF6ShdlUPhOovAt4Lir60wT048VKT9391hjDWU=;
- b=KMYL8lles1l/+wkretoXVtWvL7Pf/OsVqwZgxIOZ6BbZ9g8eBNHZWxE4XY3oEvASCj
- c1Ei92fJDXafkXrK8q8maVIF+Qyb5nKINPeSwtkBBU8aain1k0fuHdYCXBERvottYmFl
- xTh+DBkEC5A5/OeaxXOf5gElqnRgnEDVbw3S5koxyJtQj4G9jn1Pph8sV5lrrJ9VCb9j
- PD/wgVx25rtpOnHCs2DRMRLg4AL3Aa6UixtuFfk8AQK/uuF09hZNtmugRbEOErBLoxpo
- 9eOjXyvgARVUi6CSd4ncI3mxI2KvdF538uqPTsm2bKQmJYUDDch0qBbDV42/5FOefcL/
- 24TA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=DrUQxWWpWZLlegcS6W5jFlysbfx3J0NeNfNTdZ8tgaE=;
+ b=Tu//dW2s7F++UJjL3vy1mTmXzEP3Qfg16yOPnbaghS0HVR0Aivzr2BaLU/k5BW6AwE
+ XjkzJ/IsukdjI7RrFpZo0xMtfzG5J5P7HUC25j2JWfWR2U+7i14pfL4v6ANHlxkQ4zvk
+ 7AzhnLBQaLjNOxAG9RFPEyIh4Lmbo78EEmw6taVxJvGa5Hno+sx3jyOScMgyiuMMv2Qh
+ S2+dxGtJVh+eX6VmKzttUO+ypfD+UHM3wDCkAs7wG5e4YpSdlYBpILZvm0pXXkADD1yf
+ mrXBe8aaIg5r4sEo8ProS/UPcr6Gp8pilY1PwUcJHnVMunalO8X1/tjCfZwRaSE9xV7f
+ 9Y4A==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=KMYL8lle
-Subject: Re: [Buildroot] [PATCH] package/webkitgtk: bump to version 2.52.4
+ header.a=rsa-sha256 header.s=google header.b=Tu//dW2s
+Subject: Re: [Buildroot] [PATCH 1/1] package/avahi: upstream patch for
+ CVE-2026-34933
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -130,121 +128,157 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Release notes:
+> This fixes the following vulnerability:
 > 
-> https://webkitgtk.org/2026/06/02/webkitgtk2.52.4-released.html
+> - CVE-2026-34933:
+>     Avahi is a system which facilitates service discovery on a local
+>     network via the mDNS/DNS-SD protocol suite. Prior to version 0.9-rc4,
+>     any unprivileged local user can crash avahi-daemon by sending a single
+>     D-Bus method call with conflicting publish flags. This issue has been
+>     patched in version 0.9-rc4.
 > 
-> Fixes the following security issues:
+> For more information, see:
+>   - https://www.cve.org/CVERecord?id=CVE-2026-34933
+>   - https://github.com/avahi/avahi/commit/0be89b6bb5c3983837b5e0febcbbbf452ecf7675
 > 
-> https://webkitgtk.org/security/WSA-2026-0003.html
-> 
-> Includes fixes (among others) for CVE-2026-28847, CVE-2026-28883,
-> CVE-2026-28901, CVE-2026-28902, CVE-2026-28903, CVE-2026-28904,
-> CVE-2026-28905, CVE-2026-28907, CVE-2026-28942, CVE-2026-28946,
-> CVE-2026-28947, CVE-2026-28953, CVE-2026-28955, CVE-2026-28958,
-> CVE-2026-43658, and CVE-2026-43660.
-> 
-> Also added 0001-REGRESSION-313606-main-Fails-to-build-with-system-ma.patch,
-> to get webkitgtk compiled when -DUSE_SYSTEM_MALLOC=ON is in use.
-> 
-> Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
+> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 
 Applied to 2026.05.x & 2025.02.x. Thanks
 
 > ---
->  ...6-main-Fails-to-build-with-system-ma.patch | 52 +++++++++++++++++++
->  package/webkitgtk/webkitgtk.hash              |  6 +--
->  package/webkitgtk/webkitgtk.mk                |  2 +-
->  3 files changed, 56 insertions(+), 4 deletions(-)
->  create mode 100644 package/webkitgtk/0001-REGRESSION-313606-main-Fails-to-build-with-system-ma.patch
+>  ...both-wide-area-and-multicast-are-set.patch | 106 ++++++++++++++++++
+>  package/avahi/avahi.mk                        |   3 +
+>  2 files changed, 109 insertions(+)
+>  create mode 100644 package/avahi/0017-core-refuse-to-accept-publish-flags-where-both-wide-area-and-multicast-are-set.patch
 > 
-> diff --git a/package/webkitgtk/0001-REGRESSION-313606-main-Fails-to-build-with-system-ma.patch b/package/webkitgtk/0001-REGRESSION-313606-main-Fails-to-build-with-system-ma.patch
+> diff --git a/package/avahi/0017-core-refuse-to-accept-publish-flags-where-both-wide-area-and-multicast-are-set.patch b/package/avahi/0017-core-refuse-to-accept-publish-flags-where-both-wide-area-and-multicast-are-set.patch
 > new file mode 100644
-> index 00000000000..decdba68148
+> index 0000000000..de359b7d22
 > --- /dev/null
-> +++ b/package/webkitgtk/0001-REGRESSION-313606-main-Fails-to-build-with-system-ma.patch
-> @@ -0,0 +1,52 @@
-> +From 146cdc86b7345ac8f513fdf649979e80db01a2ca Mon Sep 17 00:00:00 2001
-> +From: Alberto Garcia <berto@igalia.com>
-> +Date: Tue, 2 Jun 2026 07:24:38 -0700
-> +Subject: [PATCH] REGRESSION(313606@main): Fails to build with system malloc
-> + https://bugs.webkit.org/show_bug.cgi?id=316083
+> +++ b/package/avahi/0017-core-refuse-to-accept-publish-flags-where-both-wide-area-and-multicast-are-set.patch
+> @@ -0,0 +1,106 @@
+> +From 0be89b6bb5c3983837b5e0febcbbbf452ecf7675 Mon Sep 17 00:00:00 2001
+> +From: Evgeny Vereshchagin <evvers@ya.ru>
+> +Date: Wed, 1 Apr 2026 05:31:58 +0000
+> +Subject: [PATCH] core: refuse to accept publish flags where both wide_area and
+> + multicast are set
 > +
-> +Reviewed by Fujii Hironori.
+> +It fixes a bug where it was possible for unprivileged local users to
+> +crash avahi-daemon via D-Bus by calling EntryGroup methods accepting
+> +flags and passing both AVAHI_PUBLISH_USE_WIDE_AREA and
+> +AVAHI_PUBLISH_USE_MULTICAST there. For example when AddRecord was
+> +invoked like that avahi-daemon crashed with
+> +```
+> +dbus-entry-group.c: interface=org.freedesktop.Avahi.EntryGroup, path=/Client0/EntryGroup1, member=AddRecord
+> +avahi-daemon: entry.c:57: transport_flags_from_domain: Assertion `!((*flags & AVAHI_PUBLISH_USE_MULTICAST) && (*flags & AVAHI_PUBLISH_USE_WIDE_AREA))' failed.
+> +==84944==
+> +==84944== Process terminating with default action of signal 6 (SIGABRT)
+> +==84944==    at 0x4B353BC: __pthread_kill_implementation (pthread_kill.c:44)
+> +==84944==    by 0x4ADE941: raise (raise.c:26)
+> +==84944==    by 0x4AC64AB: abort (abort.c:77)
+> +==84944==    by 0x4AC641F: __assert_fail_base.cold (assert.c:118)
+> +==84944==    by 0x48A9404: transport_flags_from_domain (entry.c:57)
+> +==84944==    by 0x48A9F8F: server_add_internal (entry.c:224)
+> +==84944==    by 0x48AA49F: avahi_server_add (entry.c:324)
+> +==84944==    by 0x401A670: avahi_dbus_msg_entry_group_impl (dbus-entry-group.c:348)
+> +==84944==    by 0x4A70741: ??? (in /usr/lib/x86_64-linux-gnu/libdbus-1.so.3.38.3)
+> +==84944==    by 0x4A5FB22: dbus_connection_dispatch (in /usr/lib/x86_64-linux-gnu/libdbus-1.so.3.38.3)
+> +==84944==    by 0x401D01D: dispatch_timeout_callback (dbus-watch-glue.c:105)
+> +==84944==    by 0x488E3AE: timeout_callback (simple-watch.c:447)
+> +==84944==
+> +```
+> +It's a follow-up to fbce111b069aa1e4c701ed37ee1d9f6d6cefaac5 where
+> +those flags were introduced and consistent with the other places
+> +where wide_area/multicast flags are used.
 > +
-> +Don't add bmalloc_CopyHeaders to LLIntOffsetsExtractor_DEPENDENCIES if
-> +USE_SYSTEM_MALLOC is on.
+> +It was discovered by
+> +Guillaume Meunier - Head of Vulnerability Operations Center France - Orange Cyberdefense
 > +
-> +* Source/JavaScriptCore/CMakeLists.txt:
+> +https://github.com/avahi/avahi/security/advisories/GHSA-w65r-6gxh-vhvc
 > +
-> +Canonical link: https://commits.webkit.org/305877.698@webkitglib/2.52
-> +
-> +Upstream: https://github.com/WebKit/WebKit/commit/a6bc685a685c8f16c919dc6310a62a26971d396e
-> +Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
+> +CVE: CVE-2026-34933
+> +Upstream: https://github.com/avahi/avahi/commit/0be89b6bb5c3983837b5e0febcbbbf452ecf7675
+> +Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 > +---
-> + Source/JavaScriptCore/CMakeLists.txt | 8 ++++++--
-> + 1 file changed, 6 insertions(+), 2 deletions(-)
+> + avahi-core/entry.c | 7 +++++++
+> + 1 file changed, 7 insertions(+)
 > +
-> +diff --git a/Source/JavaScriptCore/CMakeLists.txt b/Source/JavaScriptCore/CMakeLists.txt
-> +index a2a6d724608a..ea9ea17802f2 100644
-> +--- a/Source/JavaScriptCore/CMakeLists.txt
-> ++++ b/Source/JavaScriptCore/CMakeLists.txt
-> +@@ -412,8 +412,10 @@ set(LLIntSettingsExtractor_DEPENDENCIES
-> +     JavaScriptCore_CopyHeaders
-> +     JavaScriptCore_CopyPrivateHeaders
-> +     WTF_CopyHeaders
-> +-    bmalloc_CopyHeaders
-> + )
-> ++if (NOT USE_SYSTEM_MALLOC)
-> ++    list(APPEND LLIntSettingsExtractor_DEPENDENCIES bmalloc_CopyHeaders)
-> ++endif ()
-> + WEBKIT_EXECUTABLE(LLIntSettingsExtractor)
+> +diff --git a/avahi-core/entry.c b/avahi-core/entry.c
+> +index 0d862133d..06eb12076 100644
+> +--- a/avahi-core/entry.c
+> ++++ b/avahi-core/entry.c
+> +@@ -207,6 +207,7 @@ static AvahiEntry * server_add_internal(
+> +                                          AVAHI_PUBLISH_UPDATE|
+> +                                          AVAHI_PUBLISH_USE_WIDE_AREA|
+> +                                          AVAHI_PUBLISH_USE_MULTICAST), AVAHI_ERR_INVALID_FLAGS);
+> ++    AVAHI_CHECK_VALIDITY_RETURN_NULL(s, !(flags & AVAHI_PUBLISH_USE_WIDE_AREA) || !(flags & AVAHI_PUBLISH_USE_MULTICAST), AVAHI_ERR_INVALID_FLAGS);
+> +     AVAHI_CHECK_VALIDITY_RETURN_NULL(s, avahi_is_valid_domain_name(r->key->name), AVAHI_ERR_INVALID_HOST_NAME);
+> +     AVAHI_CHECK_VALIDITY_RETURN_NULL(s, r->ttl != 0, AVAHI_ERR_INVALID_TTL);
+> +     AVAHI_CHECK_VALIDITY_RETURN_NULL(s, !avahi_key_is_pattern(r->key), AVAHI_ERR_IS_PATTERN);
+> +@@ -454,6 +455,7 @@ int avahi_server_add_address(
+> +                                               AVAHI_PUBLISH_UPDATE|
+> +                                               AVAHI_PUBLISH_USE_WIDE_AREA|
+> +                                               AVAHI_PUBLISH_USE_MULTICAST), AVAHI_ERR_INVALID_FLAGS);
+> ++    AVAHI_CHECK_VALIDITY(s, !(flags & AVAHI_PUBLISH_USE_WIDE_AREA) || !(flags & AVAHI_PUBLISH_USE_MULTICAST), AVAHI_ERR_INVALID_FLAGS);
+> +     AVAHI_CHECK_VALIDITY(s, !name || avahi_is_valid_fqdn(name), AVAHI_ERR_INVALID_HOST_NAME);
 > + 
-> + # LLIntSettingsExtractor target needs to have a direct or indirect
-> +@@ -439,8 +441,10 @@ set(LLIntOffsetsExtractor_DEPENDENCIES
-> +     JavaScriptCore_CopyHeaders
-> +     JavaScriptCore_CopyPrivateHeaders
-> +     WTF_CopyHeaders
-> +-    bmalloc_CopyHeaders
-> + )
-> ++if (NOT USE_SYSTEM_MALLOC)
-> ++    list(APPEND LLIntOffsetsExtractor_DEPENDENCIES bmalloc_CopyHeaders)
-> ++endif ()
-> + WEBKIT_EXECUTABLE(LLIntOffsetsExtractor)
+> +     /* Prepare the host naem */
+> +@@ -595,6 +597,7 @@ static int server_add_service_strlst_nocopy(
+> +                                                                 AVAHI_PUBLISH_UPDATE|
+> +                                                                 AVAHI_PUBLISH_USE_WIDE_AREA|
+> +                                                                 AVAHI_PUBLISH_USE_MULTICAST), AVAHI_ERR_INVALID_FLAGS);
+> ++    AVAHI_CHECK_VALIDITY_SET_RET_GOTO_FAIL(s, !(flags & AVAHI_PUBLISH_USE_WIDE_AREA) || !(flags & AVAHI_PUBLISH_USE_MULTICAST), AVAHI_ERR_INVALID_FLAGS);
+> +     AVAHI_CHECK_VALIDITY_SET_RET_GOTO_FAIL(s, avahi_is_valid_service_name(name), AVAHI_ERR_INVALID_SERVICE_NAME);
+> +     AVAHI_CHECK_VALIDITY_SET_RET_GOTO_FAIL(s, avahi_is_valid_service_type_strict(type), AVAHI_ERR_INVALID_SERVICE_TYPE);
+> +     AVAHI_CHECK_VALIDITY_SET_RET_GOTO_FAIL(s, !domain || avahi_is_valid_domain_name(domain), AVAHI_ERR_INVALID_DOMAIN_NAME);
+> +@@ -754,6 +757,7 @@ static int server_update_service_txt_strlst_nocopy(
+> +                                                                 AVAHI_PUBLISH_NO_COOKIE|
+> +                                                                 AVAHI_PUBLISH_USE_WIDE_AREA|
+> +                                                                 AVAHI_PUBLISH_USE_MULTICAST), AVAHI_ERR_INVALID_FLAGS);
+> ++    AVAHI_CHECK_VALIDITY_SET_RET_GOTO_FAIL(s, !(flags & AVAHI_PUBLISH_USE_WIDE_AREA) || !(flags & AVAHI_PUBLISH_USE_MULTICAST), AVAHI_ERR_INVALID_FLAGS);
+> +     AVAHI_CHECK_VALIDITY_SET_RET_GOTO_FAIL(s, avahi_is_valid_service_name(name), AVAHI_ERR_INVALID_SERVICE_NAME);
+> +     AVAHI_CHECK_VALIDITY_SET_RET_GOTO_FAIL(s, avahi_is_valid_service_type_strict(type), AVAHI_ERR_INVALID_SERVICE_TYPE);
+> +     AVAHI_CHECK_VALIDITY_SET_RET_GOTO_FAIL(s, !domain || avahi_is_valid_domain_name(domain), AVAHI_ERR_INVALID_DOMAIN_NAME);
+> +@@ -843,6 +847,7 @@ int avahi_server_add_service_subtype(
+> +     AVAHI_CHECK_VALIDITY_SET_RET_GOTO_FAIL(s, AVAHI_IF_VALID(interface), AVAHI_ERR_INVALID_INTERFACE);
+> +     AVAHI_CHECK_VALIDITY_SET_RET_GOTO_FAIL(s, AVAHI_PROTO_VALID(protocol), AVAHI_ERR_INVALID_PROTOCOL);
+> +     AVAHI_CHECK_VALIDITY_SET_RET_GOTO_FAIL(s, AVAHI_FLAGS_VALID(flags, AVAHI_PUBLISH_USE_MULTICAST|AVAHI_PUBLISH_USE_WIDE_AREA), AVAHI_ERR_INVALID_FLAGS);
+> ++    AVAHI_CHECK_VALIDITY_SET_RET_GOTO_FAIL(s, !(flags & AVAHI_PUBLISH_USE_WIDE_AREA) || !(flags & AVAHI_PUBLISH_USE_MULTICAST), AVAHI_ERR_INVALID_FLAGS);
+> +     AVAHI_CHECK_VALIDITY_SET_RET_GOTO_FAIL(s, avahi_is_valid_service_name(name), AVAHI_ERR_INVALID_SERVICE_NAME);
+> +     AVAHI_CHECK_VALIDITY_SET_RET_GOTO_FAIL(s, avahi_is_valid_service_type_strict(type), AVAHI_ERR_INVALID_SERVICE_TYPE);
+> +     AVAHI_CHECK_VALIDITY_SET_RET_GOTO_FAIL(s, !domain || avahi_is_valid_domain_name(domain), AVAHI_ERR_INVALID_DOMAIN_NAME);
+> +@@ -910,6 +915,7 @@ static AvahiEntry *server_add_dns_server_name(
+> +     assert(name);
 > + 
-> + # The build system will execute asm.rb every time LLIntOffsetsExtractor's mtime is newer than
-> +-- 
-> +2.43.0
+> +     AVAHI_CHECK_VALIDITY_RETURN_NULL(s, AVAHI_FLAGS_VALID(flags, AVAHI_PUBLISH_USE_WIDE_AREA|AVAHI_PUBLISH_USE_MULTICAST), AVAHI_ERR_INVALID_FLAGS);
+> ++    AVAHI_CHECK_VALIDITY_RETURN_NULL(s, !(flags & AVAHI_PUBLISH_USE_WIDE_AREA) || !(flags & AVAHI_PUBLISH_USE_MULTICAST), AVAHI_ERR_INVALID_FLAGS);
+> +     AVAHI_CHECK_VALIDITY_RETURN_NULL(s, type == AVAHI_DNS_SERVER_UPDATE || type == AVAHI_DNS_SERVER_RESOLVE, AVAHI_ERR_INVALID_FLAGS);
+> +     AVAHI_CHECK_VALIDITY_RETURN_NULL(s, port != 0, AVAHI_ERR_INVALID_PORT);
+> +     AVAHI_CHECK_VALIDITY_RETURN_NULL(s, avahi_is_valid_fqdn(name), AVAHI_ERR_INVALID_HOST_NAME);
+> +@@ -967,6 +973,7 @@ int avahi_server_add_dns_server_address(
+> +     AVAHI_CHECK_VALIDITY(s, AVAHI_IF_VALID(interface), AVAHI_ERR_INVALID_INTERFACE);
+> +     AVAHI_CHECK_VALIDITY(s, AVAHI_PROTO_VALID(protocol) && AVAHI_PROTO_VALID(address->proto), AVAHI_ERR_INVALID_PROTOCOL);
+> +     AVAHI_CHECK_VALIDITY(s, AVAHI_FLAGS_VALID(flags, AVAHI_PUBLISH_USE_MULTICAST|AVAHI_PUBLISH_USE_WIDE_AREA), AVAHI_ERR_INVALID_FLAGS);
+> ++    AVAHI_CHECK_VALIDITY(s, !(flags & AVAHI_PUBLISH_USE_WIDE_AREA) || !(flags & AVAHI_PUBLISH_USE_MULTICAST), AVAHI_ERR_INVALID_FLAGS);
+> +     AVAHI_CHECK_VALIDITY(s, type == AVAHI_DNS_SERVER_UPDATE || type == AVAHI_DNS_SERVER_RESOLVE, AVAHI_ERR_INVALID_FLAGS);
+> +     AVAHI_CHECK_VALIDITY(s, port != 0, AVAHI_ERR_INVALID_PORT);
+> +     AVAHI_CHECK_VALIDITY(s, !domain || avahi_is_valid_domain_name(domain), AVAHI_ERR_INVALID_DOMAIN_NAME);
+> diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
+> index bcba0a0a4f..0a674182bc 100644
+> --- a/package/avahi/avahi.mk
+> +++ b/package/avahi/avahi.mk
+> @@ -60,6 +60,9 @@ AVAHI_IGNORE_CVES += CVE-2025-68471
+>  # 0016-core-fix-uncontrolled-recursion-bug-using-a-simple-loop-detection-algorithm.patch
+>  AVAHI_IGNORE_CVES += CVE-2026-24401
+>  
+> +# 0017-core-refuse-to-accept-publish-flags-where-both-wide-area-and-multicast-are-set.patch
+> +AVAHI_IGNORE_CVES += CVE-2026-34933
 > +
-> diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
-> index 03b8d0a9bec..f8c0e0297a3 100644
-> --- a/package/webkitgtk/webkitgtk.hash
-> +++ b/package/webkitgtk/webkitgtk.hash
-> @@ -1,6 +1,6 @@
-> -# From https://webkitgtk.org/releases/webkitgtk-2.52.3.tar.xz.sums
-> -sha1  17f9b127618040a5f3fcbb70e37ea16ab6d69b0b  webkitgtk-2.52.3.tar.xz
-> -sha256  5b3e0d174e63dcc28848b1194e0e7448d5948c3c2427ecd931c2c5be5261aebb  webkitgtk-2.52.3.tar.xz
-> +# From https://webkitgtk.org/releases/webkitgtk-2.52.4.tar.xz.sums
-> +sha1  1bfaa562ae46a420abaad2b3b9175dc823cc7a93  webkitgtk-2.52.4.tar.xz
-> +sha256  cf4076a1ca2a64788edca8c452d8ebb68d5e2965e588fe46a388a016513edce4  webkitgtk-2.52.4.tar.xz
->  
->  # Hashes for license files:
->  sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
-> diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-> index 54e769d5892..6cab2c6a247 100644
-> --- a/package/webkitgtk/webkitgtk.mk
-> +++ b/package/webkitgtk/webkitgtk.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -WEBKITGTK_VERSION = 2.52.3
-> +WEBKITGTK_VERSION = 2.52.4
->  WEBKITGTK_SITE = https://www.webkitgtk.org/releases
->  WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
->  WEBKITGTK_INSTALL_STAGING = YES
+>  AVAHI_CONF_ENV = \
+>  	avahi_cv_sys_cxx_works=yes \
+>  	DATADIRNAME=share
 > -- 
-> 2.43.0
+> 2.54.0
 > 
 > _______________________________________________
 > buildroot mailing list
