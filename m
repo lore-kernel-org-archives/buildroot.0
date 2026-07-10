@@ -4,85 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3EA58C43458
-	for <buildroot@archiver.kernel.org>; Fri, 10 Jul 2026 16:28:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A71CC44506
+	for <buildroot@archiver.kernel.org>; Fri, 10 Jul 2026 16:30:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EEDAB60840;
-	Fri, 10 Jul 2026 16:28:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EC55C606FF;
+	Fri, 10 Jul 2026 16:30:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wNcm4z1RCqE1; Fri, 10 Jul 2026 16:28:54 +0000 (UTC)
+ id 6_cpMQ1ziRfG; Fri, 10 Jul 2026 16:30:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A277360693
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B0AF560693
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1783700934;
-	bh=TUrnk1JFr864qQxJI2PUScOMZU0f12DvlN8XtlBFT/0=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=s6Y2vGbB6Fw1qJu2mcfC2W/Jb/C4Xkj5djplQ5g32Qfsua077jf9rfaaLQ5kvBcXJ
-	 nW14vdp5WaPXW1oI/tdOuMhTCaZj0vFZgGTZAPNmY3dm3rDuAqOabnkVZK7f8znPM+
-	 rvx9zq1/ScV29R1zml0Ph8PDpma6Q+p9+GKksYk4TkibwtvypV8gD6MS8P6E09T2v1
-	 XerN1p+xm26gqvAML/N4A9o9bGiGb94CSgIwVDYqhU/xFv/ytkh0Wkt1X3XnEIr2Qu
-	 dLEQGoIURwYDzMxJFNizVbaSxcHKGUr0GOhXFsFUKXsqRlaAXm77yv9SZi0NnmJl3u
-	 JU9KE0hT+4yxg==
+	s=default; t=1783701018;
+	bh=RMhH4Q1+fmAaaq2VygITli3Se4DzXygBf/AqnPCujxo=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=lcPPuqfOLKERPOlMdp+NwER6RZtpaeETKYvGodCXTjoekQ4Bfn3FB5d+xtoY81t4+
+	 548F7k2T2/K26xtpW7QJyULoCt2j35xdTLw5vXmRHSEt5721dkjH27cQIA1XutK/hZ
+	 PRQKYHKm9XT/bOT4dd22sh5I8LSyU+wxigsMDiW14do67PgaBjIv5r4nCdqs680C59
+	 9ZIPjZOegEVRtxdWC61SbvpWDs7dCb8j125HAHoYaagejF4lkaMYHfUCXOWKVqWV+/
+	 AElgd2uOsn8fddN7gHvahZQxn4/2VVwJRgkDOLkw6mfaT4zW/lqKkJG7zoThjggqc+
+	 5EZ4F0clo6Ehw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A277360693;
-	Fri, 10 Jul 2026 16:28:54 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 9A271A3C
- for <buildroot@buildroot.org>; Fri, 10 Jul 2026 16:28:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B0AF560693;
+	Fri, 10 Jul 2026 16:30:18 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 77399320
+ for <buildroot@buildroot.org>; Fri, 10 Jul 2026 16:30:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8BFA380FEF
- for <buildroot@buildroot.org>; Fri, 10 Jul 2026 16:28:53 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6965240361
+ for <buildroot@buildroot.org>; Fri, 10 Jul 2026 16:30:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vZCWc0PWFLJx for <buildroot@buildroot.org>;
- Fri, 10 Jul 2026 16:28:52 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org EB8A680F24
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EB8A680F24
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp1.osuosl.org (Postfix) with ESMTPS id EB8A680F24
- for <buildroot@buildroot.org>; Fri, 10 Jul 2026 16:28:51 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id 0739213F8B9;
- Fri, 10 Jul 2026 18:28:47 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 10 Jul 2026 18:28:47 +0200
-MIME-Version: 1.0
-Date: Fri, 10 Jul 2026 18:28:47 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20260707185207.2387124-1-bernd@kuhls.net>
-References: <20260707185207.2387124-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.17
-Message-ID: <92970db0171d49a50a0a85052f18e884@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1783700929;
- bh=fLWU6EwjhMxiaC1Y9VJ8M6+wKw9pA9vRBxNTOKn2Y3A=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=Evx8bxeCJvJ4vxoIneB6wB5M33FbEkEE6PqnCbSs+ggjWMVTV3LkdLn+0/ZiuPKjA
- 6VamkT0jc5z86SaEn6n++Rg4Mx5Xa0PJ0NEvSG1j1B/vGGCNo5m4Wfn/jmYu1G/7nI
- S50TDx999NmAJqNmONv88tKUMQ0Lup3yGP/feldK9sN/K9WLaPEzkcwt7HbhBLbo5n
- WXRb3Jiqg6YGnAKFezIkL6zEfem3WdJvnfUrU1433YmLE5gdVZdBMUjcrR1mZp494W
- Ne2OH+S6TSyaJZX9BH+Kf18RXoKexHLM4LsNLupCDibjWQfBzRf9Ou+226c22Hec6n
- 8bCfbzDtrLHpg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=Evx8bxeC
-Subject: Re: [Buildroot] [PATCH 1/1] package/dropbear: security bump version
- to 2026.92
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id D3MCegdwCIji for <buildroot@buildroot.org>;
+ Fri, 10 Jul 2026 16:30:16 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 846D34033D
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 846D34033D
+ for <buildroot@buildroot.org>; Fri, 10 Jul 2026 16:30:16 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 979C78869C; Fri, 10 Jul 2026 16:29:43 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 10 Jul 2026 18:29:09 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: ce9ed75bbcc12dd8dc4dee2bdbaffe2f8bf240f8
+X-Git-Newrev: e7a6967d280be1bd8461f9c924852d47635348ef
+X-Patchwork-Hint: ignore
+Message-Id: <20260710162943.979C78869C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/tar: fix build with acl-2.4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,34 +70,152 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 07/07/2026 20:52, Bernd Kuhls wrote:
-> https://matt.ucc.asn.au/dropbear/CHANGES
-> 
-> - Security: server: Don't allow -B (accept blank password) with
->   -t (two factor auth). If run with -t and -B a user configured with a
->   blank password would be allowed to log in without pubkey auth.
->   
-> https://github.com/mkj/dropbear/commit/23ec78285639edf068d86bb96f91cba755039740
->   Reported by nvidia
-> 
-> - Security: server: Fix parsing of long authorized_keys lines.
->   The remainder of a long line would be handled as the start of a new 
-> line.
->   In the case where external programs add semi-trusted public keys to
->   authorized_keys, a crafted key might bypass restrictions such as 
-> "command=".
->   
-> https://github.com/mkj/dropbear/commit/8d8e1930b866eb44135ae393a793cbeb03b6b9d6
->   Reported by nvidia
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/e7a6967d280be1bd8461f9c924852d47635348ef
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Applied to master, thanks.
+Add upstream commit to buildroot to fix build errors introduced by the
+upcoming bump of acl to 2.4.0:
+
+https://lists.nongnu.org/archive/html/acl-devel/2026-06/msg00000.html
+"Compatibility Notes
+
+  - libacl now exports the new functions acl_get_file_at(),
+    acl_set_file_at(), acl_delete_def_file_at(), and acl_extended_file_at(),
+    which are declared in <sys/acl.h>.  This may cause conflicts in programs
+    that define functions of the same name and link against libacl.
+
+    One such program is GNU tar which defines its own versions of functions
+    like acl_get_file_at().  The fix is to rename those functions.  (In the
+    case if GNU tar, a fix is already on the way.)"
+
+This patch will also fix build errors seen on the autobuilders for
+host-tar on hosts which already provide acl >= 2.4.0.
+
+Fixes:
+https://autobuild.buildroot.net/results/478/478a9781f481df7cf2eecda80a4c13f900a0dc80/
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ .../tar/0004-Avoid-acl_-prefix-for-functions.patch | 104 +++++++++++++++++++++
+ 1 file changed, 104 insertions(+)
+
+diff --git a/package/tar/0004-Avoid-acl_-prefix-for-functions.patch b/package/tar/0004-Avoid-acl_-prefix-for-functions.patch
+new file mode 100644
+index 0000000000..aebdc6b2d8
+--- /dev/null
++++ b/package/tar/0004-Avoid-acl_-prefix-for-functions.patch
+@@ -0,0 +1,104 @@
++From 08c3fc2e9337094aff01a511170fd35fdb8f1ee3 Mon Sep 17 00:00:00 2001
++From: Pavel Cahyna <pcahyna@redhat.com>
++Date: Wed, 24 Jun 2026 18:45:30 +0200
++Subject: [PATCH] Avoid acl_ prefix for functions
++
++The acl.h header from libacl uses acl_ prefix for its functions. Avoid
++defining functions with the same name in order to protect its namespace.
++
++Upstream: https://cgit.git.savannah.gnu.org/cgit/tar.git/commit/?id=08c3fc2e9337094aff01a511170fd35fdb8f1ee3
++
++[Bernd: backported to version 1.35]
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ src/xattrs.c | 30 +++++++++++++++---------------
++ 1 file changed, 15 insertions(+), 15 deletions(-)
++
++diff --git a/src/xattrs.c b/src/xattrs.c
++index 4f5872c1..f98e8e0f 100644
++--- a/src/xattrs.c
+++++ b/src/xattrs.c
++@@ -139,13 +139,13 @@ static struct
++ #ifdef HAVE_POSIX_ACLS
++ 
++ /* acl-at wrappers, TODO: move to gnulib in future? */
++-static acl_t acl_get_file_at (int, const char *, acl_type_t);
++-static int acl_set_file_at (int, const char *, acl_type_t, acl_t);
+++static acl_t tar_acl_get_file_at (int, const char *, acl_type_t);
+++static int tar_acl_set_file_at (int, const char *, acl_type_t, acl_t);
++ static int file_has_acl_at (int, char const *, struct stat const *);
++-static int acl_delete_def_file_at (int, char const *);
+++static int tar_acl_delete_def_file_at (int, char const *);
++ 
++-/* acl_get_file_at */
++-#define AT_FUNC_NAME acl_get_file_at
+++/* tar_acl_get_file_at */
+++#define AT_FUNC_NAME tar_acl_get_file_at
++ #define AT_FUNC_RESULT acl_t
++ #define AT_FUNC_FAIL (acl_t)NULL
++ #define AT_FUNC_F1 acl_get_file
++@@ -159,8 +159,8 @@ static int acl_delete_def_file_at (int, char const *);
++ #undef AT_FUNC_POST_FILE_PARAM_DECLS
++ #undef AT_FUNC_POST_FILE_ARGS
++ 
++-/* acl_set_file_at */
++-#define AT_FUNC_NAME acl_set_file_at
+++/* tar_acl_set_file_at */
+++#define AT_FUNC_NAME tar_acl_set_file_at
++ #define AT_FUNC_F1 acl_set_file
++ #define AT_FUNC_POST_FILE_PARAM_DECLS   , acl_type_t type, acl_t acl
++ #define AT_FUNC_POST_FILE_ARGS          , type, acl
++@@ -170,8 +170,8 @@ static int acl_delete_def_file_at (int, char const *);
++ #undef AT_FUNC_POST_FILE_PARAM_DECLS
++ #undef AT_FUNC_POST_FILE_ARGS
++ 
++-/* acl_delete_def_file_at */
++-#define AT_FUNC_NAME acl_delete_def_file_at
+++/* tar_acl_delete_def_file_at */
+++#define AT_FUNC_NAME tar_acl_delete_def_file_at
++ #define AT_FUNC_F1 acl_delete_def_file
++ #define AT_FUNC_POST_FILE_PARAM_DECLS
++ #define AT_FUNC_POST_FILE_ARGS
++@@ -299,10 +299,10 @@
++       /* No "default" IEEE 1003.1e ACL set for directory.  At this moment,
++          FILE_NAME may already have inherited default acls from parent
++          directory;  clean them up. */
++-      if (acl_delete_def_file_at (chdir_fd, file_name))
+++      if (tar_acl_delete_def_file_at (chdir_fd, file_name))
++         WARNOPT (WARN_XATTR_WRITE,
++                 (0, errno,
++-                 _("acl_delete_def_file_at: Cannot drop default POSIX ACLs "
+++                 _("tar_acl_delete_def_file_at: Cannot drop default POSIX ACLs "
++                    "for file '%s'"),
++                  file_name));
++       return;
++@@ -316,11 +316,11 @@
++       return;
++     }
++ 
++-  if (acl_set_file_at (chdir_fd, file_name, type, acl) == -1)
+++  if (tar_acl_set_file_at (chdir_fd, file_name, type, acl) == -1)
++     /* warn even if filesystem does not support acls */
++     WARNOPT (WARN_XATTR_WRITE,
++ 	     (0, errno,
++-	      _ ("acl_set_file_at: Cannot set POSIX ACLs for file '%s'"),
+++	      _ ("tar_acl_set_file_at: Cannot set POSIX ACLs for file '%s'"),
++ 	      file_name));
++ 
++   acl_free (acl);
++@@ -357,10 +357,10 @@ acls_get_text (int parentfd, const char *file_name, acl_type_t type,
++   char *val = NULL;
++   acl_t acl;
++ 
++-  if (!(acl = acl_get_file_at (parentfd, file_name, type)))
+++  if (!(acl = tar_acl_get_file_at (parentfd, file_name, type)))
++     {
++       if (errno != ENOTSUP)
++-        call_arg_warn ("acl_get_file_at", file_name);
+++        call_arg_warn ("tar_acl_get_file_at", file_name);
++       return;
++     }
++ 
++-- 
++2.47.3
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
