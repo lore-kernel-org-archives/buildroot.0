@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0A72C43458
-	for <buildroot@archiver.kernel.org>; Fri, 10 Jul 2026 13:43:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39F46C43458
+	for <buildroot@archiver.kernel.org>; Fri, 10 Jul 2026 13:43:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C6175409F0;
-	Fri, 10 Jul 2026 13:43:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 06DC4608D6;
+	Fri, 10 Jul 2026 13:43:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rN741DSEgmN4; Fri, 10 Jul 2026 13:43:21 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zDK176h2-Ajn; Fri, 10 Jul 2026 13:43:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 18843409F3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 55259608B5
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1783691001;
-	bh=oPulMdXmT6Bjxkeqx3rIozMl3RzjqBA/zJ5vozxV4Xs=;
+	s=default; t=1783691004;
+	bh=zR8YfgTMHkJNjm+O8hU8FymIS9cP1Sil/8pzzkTpGKE=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=jq77yS4gCNZPC2S53Q6lr8afnL9upAKI5CGJklrGiudC11zDj8MeewcP2kkMrTwIe
-	 bUYwkf90MrbQHjiLmn9QVrRT40mYqz5huhbM/ogiGV3fnt9CbGwENLSP+nrwRb0MxK
-	 +IHiTDCBtriI0ZcjhQmzgZyrVcuSkePV8IsomS5vTlkOTPTaHBPPX3Tfd2FxNPm/NC
-	 obxtmf0eaC7HkGPRB9wAb95eUogUHOeyXKb0CsvjkzJ/U0YRWb3fKS4Igru7xwZmJv
-	 A8q4D2qIkQKC2JBBq/YNHuCxhUQvKWgUqsizg0ikHkGXYhuR5ZqIA0CHPWwvsGrPgu
-	 AiWTCoIaiXE2g==
+	b=fe5O8mH2My6PenbaaA/fxEqDUn1yITDOSEcTThGKyCUJiVJo9tiLht5RpglC2WR/S
+	 Bf1ShOJYHyJVKBdt3Pxt3dToG+UWg1Nj8UPiJi1dXkWC70GcEF/VcYHjz2xaT806IE
+	 2v5nmrYj/2h9b9d8E4rd2+SdakLbD/PYk51ESPunbPYuFH4DRvN2Pj2s+m3jWpVjOK
+	 n1bvDuccszWdKBVAqazLnBEDeg/f7ZGr1mqgBoUy6VonLylSTF+KatESS+jblIQe0R
+	 umvk1RkDSkUGwSjy4IEh9NpJWegYYlrWOBY0YZw2QToGgCjGMZmb5fDm+pB23l56EG
+	 GsxgZVNr5pfAg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 18843409F3;
-	Fri, 10 Jul 2026 13:43:21 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0753AA3C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 55259608B5;
+	Fri, 10 Jul 2026 13:43:24 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 36DA0A3C
  for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:42:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E1A8180FF5
- for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:42:51 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1C9E24022E
+ for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:42:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KO49Jyv2lBOL for <buildroot@buildroot.org>;
- Fri, 10 Jul 2026 13:42:50 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RJPSpudMCMoK for <buildroot@buildroot.org>;
+ Fri, 10 Jul 2026 13:42:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3897F810B9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2C2D7400D1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3897F810B9
- for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:42:50 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2C2D7400D1
+ for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:42:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6DC668867C; Fri, 10 Jul 2026 13:42:17 +0000 (UTC)
+ id 4F4DC88660; Fri, 10 Jul 2026 13:42:18 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 8 Jul 2026 14:28:15 +0200
+Date: Fri, 10 Jul 2026 11:32:21 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 4dec614d3172cad6363e39d84480cfff2970d932
-X-Git-Newrev: fee844130be960f70dd63c8f82f20b1f7b90a4cc
+X-Git-Oldrev: b47eb5a096ea364ddcbc5a52ced9d729f08b9801
+X-Git-Newrev: 9e52961485534e92e407e3305a5df20fead02f6c
 X-Patchwork-Hint: ignore
-Message-Id: <20260710134217.6DC668867C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/asterisk:
- security bump to 22.10.1
+Message-Id: <20260710134218.4F4DC88660@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/qt5: bump
+ packages to latest 5.15 kde submodule version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,67 +77,156 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/fee844130be960f70dd63c8f82f20b1f7b90a4cc
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/9e52961485534e92e407e3305a5df20fead02f6c
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-See here for a complete Changelog:
-https://downloads.asterisk.org/pub/telephony/asterisk/ChangeLog-22-current.html
+Bump qt5 packages to latest submodule versions from
+https://invent.kde.org/qt/qt/qt5/-/tree/kde/5.15
 
-Security Fixes:
-    GHSA-3g56-cgrh-95p5: chan_unistim DIALPAGE digit handling can overflow phone_number and crash Asterisk
-    GHSA-3rhj-hhw7-m6fw: NULL Pointer Dereference in HTTP AMI Digest Authentication
-    GHSA-4pgv-j3mr-3rcp: Reflected XSS in Phone Provisioning HTTP Error Pages
-    GHSA-589g-qgf8-m6mx: Stack buffer overflow in MWI NOTIFY Message-Account parsing
-    GHSA-746q-794h-cc7f: Out-of-Bounds Read in Q.931 Information Element Parser (H.323 Addon)
-    GHSA-8jhw-m2hg-vp3h: Heap Buffer Overflow in OGG/Speex File Playback (format_ogg_speex)
-    GHSA-8jw3-ccr9-xrmf: Buffer over-read in Asterisk PJSIP MWI body parser
-    GHSA-g8q2-p36q-94f6: Heap-use-after-free in Asterisk PJSIP TCP/SDP handling when TCP connection closes during SDP processing
-    GHSA-h5hv-jmgj-92q2: CVE-2022-37325 fix is absent from current chan_ooh323 Q.931 party-number parser
-    GHSA-j2mm-57pq-jh94: Possible RED T.140 Generation Accumulation OOB Write
-    GHSA-mxgm-8c6f-5p8f: Stack buffer overflow in res_xmpp XMPP namespace prefix handling
-    GHSA-ph27-3m5q-mj5m: SQL Injection in cel_pgsql and cel_tds via CELGenUserEvent eventtype Field
-    GHSA-q9fr-m7g8-6ph5: Asterisk app_sms.c copies externally controlled SMS lengths into fixed in-struct buffers
-    GHSA-qf8j-jp7h-c5hx: Out-of-Bounds Write in Codec2 Decoder Due to Floor/Ceil Sample Count Mismatch
-    GHSA-r6c2-hwc2-j4mp: LDAP Filter Injection in res_config_ldap via SIP Username (Unauthenticated Information Disclosure)
-    GHSA-vfhr-r9x9-c687: Possible RED T.140 Heap Buffer Overflow
-    GHSA-vrfp-mg3q-3959: ARI setChannelVar bypasses live_dangerously and permits FILE() writes
-    GHSA-wcvv-g26m-wx5c: ARI REST-over-WebSocket read-only bypass allows arbitrary module path load and conditional RCE
-    GHSA-x348-j6c9-77f3: Stack Buffer Overflow in H.323 ooTrace() via Unbounded vsprintf into Fixed 2048-byte Buffer
-    GHSA-xgj6-2gc5-5x9c: ast_loggrabber executes python script in world writable directory(/tmp) leading to potential privilege escalation And RCE
+qtbase repo is a few commits after a tag named v5.15.18-lts-lgpl so
+assume it's now 5.15.18.
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 7f48325de69ddaed921572edad875694a8154419)
+qt5base patches are updated to make them apply silently and cleanly.
+
+For qt5webengine-chromium:
+- 0001-Add-python3-build-support.patc is removed as commit 68302c9ea158
+  ("Enable building with Python 3") contains similar changes,
+- 0004-Migrate-presubmit-to-python3.patch is only partially kept as
+  commit 68302c9ea158 ("Enable building with Python 3") contains similar
+  changes,
+- 0006-Fix-build-in-Python-3.11-invalid-mode-rU.patch is only partially
+  kept as commit 68302c9ea158 ("Enable building with Python 3") contains
+  similar changes,
+- 0007-Replace-imp.load_source-with-importlib-equivalent.patch is
+  removed as commit 68302c9ea158 ("Enable building with Python 3")
+  contains similar changes,
+- 0010-Fix-building-with-system-libxml2.patch is removed as commit
+  c98d28f2f0f2 ("Fix building with system libxml2") contains similar
+  changes,
+- 0012-Include-cstdint-for-uintptr_t-uint8_t-etc.patch is renamed
+  0009-Include-cstdint-for-uintptr_t-uint8_t-etc.patch and contains more
+  file patching to make qt5webengine build again,
+
+Also make sure that the patches that have an upstream reference use the
+proper Upstream: tag, so we can remove them from checkpackageignore.
+
+For qt5webengine:
+- 0002-Add-python3-build-support.patch is removed as commit 2294cc4ed5fd
+  ("Add option to chose python version for building 5.15 WebEngine")
+  contains similar changes. It now supports both Python2 and Python3 and
+  defaults to Python2 if found first. This can be overridden with
+  -webengine-python-version python3 in QT5WEBENGINE_CONF_OPTS but this
+  was unnecessary in my tests as Python3 was properly selected from
+  $(HOST_DIR)/bin/.
+
+qt5webengine-chromium is updated with qt5webengine following the logic
+stated in Buildroot commit c53455ea4ffa
+("package/qt5/qt5webengine-chromium: bump version after qtwebengine
+bump").
+
+I am unsure whether qt5webengine-chromium-catapult also requires an
+update.
+
+(cherry picked from commit ff4243147d54f37521b0af252695459f36d4350d)
+[qt5webengine-chromium/0011-Shorted-printed-cmd-when-long-commands-fail.patch
+ doesn't exist in 2025.02.x, file renaming not done]
+[qt5webengine-chromium/0012-Include-cstdint-for-uintptr_t-uint8_t-etc.patch
+ is named 0011-Include-cstdint-for-uintptr_t-uint8_t-etc.patch in
+ 2025.02.x, adapt renaming]
+
+Signed-off-by: Quentin Schulz <quentin.schulz@cherry.de>
+[Arnout: fix Upstream: tags]
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+Signed-off-by: Quentin Schulz <quentin.schulz@cherry.de>
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/asterisk/asterisk.hash | 2 +-
- package/asterisk/asterisk.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .checkpackageignore                                |    8 +-
+ package/qt5/qt5.mk                                 |    2 +-
+ package/qt5/qt53d/qt53d.hash                       |    2 +-
+ package/qt5/qt53d/qt53d.mk                         |    2 +-
+ .../0003-double-conversion-enable-for-nios2.patch  |    6 +-
+ .../0004-double-conversion-enable-for-xtensa.patch |    2 +-
+ .../qt5/qt5base/0006-Fix-build-on-riscv32.patch    |    7 +-
+ ...b-configure.json-fix-atomicfptr-detection.patch |    3 +-
+ package/qt5/qt5base/qt5base.hash                   |    2 +-
+ package/qt5/qt5base/qt5base.mk                     |    4 +-
+ package/qt5/qt5charts/qt5charts.hash               |    2 +-
+ package/qt5/qt5charts/qt5charts.mk                 |    2 +-
+ package/qt5/qt5connectivity/qt5connectivity.hash   |    2 +-
+ package/qt5/qt5connectivity/qt5connectivity.mk     |    2 +-
+ package/qt5/qt5declarative/qt5declarative.hash     |    2 +-
+ package/qt5/qt5declarative/qt5declarative.mk       |    2 +-
+ package/qt5/qt5doc/qt5doc.hash                     |    2 +-
+ package/qt5/qt5doc/qt5doc.mk                       |    2 +-
+ .../qt5graphicaleffects/qt5graphicaleffects.hash   |    2 +-
+ .../qt5/qt5graphicaleffects/qt5graphicaleffects.mk |    2 +-
+ package/qt5/qt5imageformats/qt5imageformats.hash   |    2 +-
+ package/qt5/qt5imageformats/qt5imageformats.mk     |    2 +-
+ package/qt5/qt5location/qt5location.hash           |    2 +-
+ package/qt5/qt5location/qt5location.mk             |    2 +-
+ package/qt5/qt5lottie/qt5lottie.hash               |    2 +-
+ package/qt5/qt5lottie/qt5lottie.mk                 |    2 +-
+ package/qt5/qt5multimedia/qt5multimedia.hash       |    2 +-
+ package/qt5/qt5multimedia/qt5multimedia.mk         |    2 +-
+ package/qt5/qt5quickcontrols/qt5quickcontrols.hash |    2 +-
+ package/qt5/qt5quickcontrols/qt5quickcontrols.mk   |    2 +-
+ .../qt5/qt5quickcontrols2/qt5quickcontrols2.hash   |    2 +-
+ package/qt5/qt5quickcontrols2/qt5quickcontrols2.mk |    2 +-
+ package/qt5/qt5quicktimeline/qt5quicktimeline.hash |    2 +-
+ package/qt5/qt5quicktimeline/qt5quicktimeline.mk   |    2 +-
+ package/qt5/qt5remoteobjects/qt5remoteobjects.hash |    2 +-
+ package/qt5/qt5remoteobjects/qt5remoteobjects.mk   |    2 +-
+ package/qt5/qt5script/qt5script.hash               |    2 +-
+ package/qt5/qt5script/qt5script.mk                 |    2 +-
+ package/qt5/qt5scxml/qt5scxml.hash                 |    2 +-
+ package/qt5/qt5scxml/qt5scxml.mk                   |    2 +-
+ package/qt5/qt5sensors/qt5sensors.hash             |    2 +-
+ package/qt5/qt5sensors/qt5sensors.mk               |    2 +-
+ package/qt5/qt5serialbus/qt5serialbus.hash         |    2 +-
+ package/qt5/qt5serialbus/qt5serialbus.mk           |    2 +-
+ package/qt5/qt5serialport/qt5serialport.hash       |    2 +-
+ package/qt5/qt5serialport/qt5serialport.mk         |    2 +-
+ package/qt5/qt5speech/qt5speech.hash               |    2 +-
+ package/qt5/qt5speech/qt5speech.mk                 |    2 +-
+ package/qt5/qt5svg/qt5svg.hash                     |    2 +-
+ package/qt5/qt5svg/qt5svg.mk                       |    2 +-
+ package/qt5/qt5tools/qt5tools.hash                 |    2 +-
+ package/qt5/qt5tools/qt5tools.mk                   |    2 +-
+ .../qt5/qt5virtualkeyboard/qt5virtualkeyboard.hash |    2 +-
+ .../qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk   |    2 +-
+ package/qt5/qt5wayland/qt5wayland.hash             |    2 +-
+ package/qt5/qt5wayland/qt5wayland.mk               |    2 +-
+ package/qt5/qt5webchannel/qt5webchannel.hash       |    2 +-
+ package/qt5/qt5webchannel/qt5webchannel.mk         |    2 +-
+ .../0001-Add-python3-build-support.patch           | 1858 --------------------
+ ....patch => 0001-Don-t-rebase-sysroot-path.patch} |    0
+ ...atch => 0002-Remove-unused-python-import.patch} |    0
+ .../0003-Migrate-presubmit-to-python3.patch        |   49 +
+ .../0004-Migrate-presubmit-to-python3.patch        |  132 --
+ ...grit-util.py-fix-Python-3.12-build-issue.patch} |    0
+ ...Fix-build-in-Python-3.11-invalid-mode-rU.patch} |   19 +-
+ ...hon-google-protobuf-internal-python_mess.patch} |    0
+ ...imp.load_source-with-importlib-equivalent.patch |   55 -
+ ...-command_buffer-service-program_manager..patch} |    0
+ ...Include-cstdint-for-uintptr_t-uint8_t-etc.patch |  297 ++++
+ .../0010-Fix-building-with-system-libxml2.patch    |   57 -
+ ...Include-cstdint-for-uintptr_t-uint8_t-etc.patch |  101 --
+ .../qt5webengine-chromium.hash                     |    2 +-
+ .../qt5webengine-chromium/qt5webengine-chromium.mk |    2 +-
+ .../0002-Add-python3-build-support.patch           |  168 --
+ ...i-remove-some-of-the-thumb-detection-log.patch} |    4 +-
+ package/qt5/qt5webengine/qt5webengine.hash         |    2 +-
+ package/qt5/qt5websockets/qt5websockets.hash       |    2 +-
+ package/qt5/qt5websockets/qt5websockets.mk         |    2 +-
+ package/qt5/qt5webview/qt5webview.hash             |    2 +-
+ package/qt5/qt5webview/qt5webview.mk               |    2 +-
+ package/qt5/qt5x11extras/qt5x11extras.hash         |    2 +-
+ package/qt5/qt5x11extras/qt5x11extras.mk           |    2 +-
+ package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash     |    2 +-
+ package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk       |    2 +-
+ 84 files changed, 423 insertions(+), 2473 deletions(-)
 
-diff --git a/package/asterisk/asterisk.hash b/package/asterisk/asterisk.hash
-index 8d620a0ee3..35aa1282e8 100644
---- a/package/asterisk/asterisk.hash
-+++ b/package/asterisk/asterisk.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  dd664a9600874d0b0c0e63a8fda2e08efc9f5fdc95781022fbf39ed9b15196f6  asterisk-22.9.0.tar.gz
-+sha256  373c98f4d4a1b923b42def0aee03f4e36aca9d1c244a8eeda646da8a97f89663  asterisk-22.10.1.tar.gz
- 
- # Locally computed
- sha256  633c3dc34ffb21af8ac9ee160245c9c174379391e35cace1b6c9f516a260f683  pjproject-2.16.tar.bz2
-diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
-index b15a83f6f8..b6b40645ee 100644
---- a/package/asterisk/asterisk.mk
-+++ b/package/asterisk/asterisk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ASTERISK_VERSION = 22.9.0
-+ASTERISK_VERSION = 22.10.1
- # Use the github mirror: it's an official mirror maintained by Digium, and
- # provides tarballs, which the main Asterisk git tree (behind Gerrit) does not.
- ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
+Patch is too large, so refusing to show it
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
