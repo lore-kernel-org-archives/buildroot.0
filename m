@@ -4,111 +4,112 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE817C43458
-	for <buildroot@archiver.kernel.org>; Fri, 10 Jul 2026 13:51:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 556BEC43458
+	for <buildroot@archiver.kernel.org>; Fri, 10 Jul 2026 13:51:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B946B40B8C;
-	Fri, 10 Jul 2026 13:51:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2D07A40BFC;
+	Fri, 10 Jul 2026 13:51:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id se9KJLwNAQLl; Fri, 10 Jul 2026 13:51:49 +0000 (UTC)
+ id 5SG6gyrF-WNd; Fri, 10 Jul 2026 13:51:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E1E1940BDF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 32EA440C96
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1783691509;
-	bh=AwBSmFLmRNhr7aeQO2jck+uR0sqdxY7ZInB1iDzjYM0=;
+	s=default; t=1783691513;
+	bh=qBYwumIcRC9xBFx2T/MIGn5rjYluy2ar6ZhRUz1vems=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=Wu5s/I3HEZaNH2lA0witQs11vwKhs45LqMrJ2QzRbqy4DakAPaxsuqzfWkXtRZEe2
-	 EQtFP5F1JjlYzrtR1uaWNWOc6YY4Uuvi3/frBEer+g+a8ViZoBTjq1Tw00Hq7YU0SJ
-	 i7xjmY9vDtM3BfK+wT4lCt9wQrJdpPp/C1GxKIruO+DQTcHLb4yQAJDVpKpbG5jrRS
-	 B/GqvyUcqCpj1Z9yc6450uuF3btVOVALcO07QvYGx5ZCKN/cOt3WKfnpB/0LHrvQrZ
-	 f/xU5U7eBYAbGujKWdDejF75uXBIBhr0zvcelrHgFw1S/i3wGpuP+/WN+lBuDcZW52
-	 5TWOMDiSAGqhQ==
+	b=qMlTdLt3RsKENtLnIdmfM7KTZGczPwabviXEbshvrQsBqgpRNCtPnE1LNWf1cn9sY
+	 gFFpYwsQe4XcvoXbn8JinFQMVPS1lz6/v79sLDbsKQYhSc9DFbIu4wt+zq4IRnILSn
+	 UU2Vmvf0QwpYCbBfiqQTpfruTQ4SylwCE2DP4FsGYqgrsTZN0IeCpC120Vq3jYK7c9
+	 JFOsaIGO3DLSdEZerkLKaigFw/ofLr1EPHUZGZUNnsfiXZHY6RMOZwiUul+6O0gMof
+	 0SYDAAq5E1QQ7pscYiSBEVPWsTHvcIvLYYrIyJRpbIy0OnOs8WOlL2Ub8jAxKHykcG
+	 iOT/PzX0g+EUg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E1E1940BDF;
-	Fri, 10 Jul 2026 13:51:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 32EA440C96;
+	Fri, 10 Jul 2026 13:51:53 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 51F1E2FE
- for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:51:47 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 72E512FE
+ for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:51:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 42C6D606B4
- for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:51:47 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 590A0606C6
+ for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:51:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iKWhQ1yYqRjD for <buildroot@buildroot.org>;
- Fri, 10 Jul 2026 13:51:46 +0000 (UTC)
+ id inrLzMHGHb3T for <buildroot@buildroot.org>;
+ Fri, 10 Jul 2026 13:51:50 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::330; helo=mail-wm1-x330.google.com;
+ client-ip=2a00:1450:4864:20::332; helo=mail-wm1-x332.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E51AA606C6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E51AA606C6
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
- [IPv6:2a00:1450:4864:20::330])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E51AA606C6
- for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:51:45 +0000 (UTC)
-Received: by mail-wm1-x330.google.com with SMTP id
- 5b1f17b1804b1-493d92b7db3so9076525e9.2
- for <buildroot@buildroot.org>; Fri, 10 Jul 2026 06:51:45 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4333E606B4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4333E606B4
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
+ [IPv6:2a00:1450:4864:20::332])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4333E606B4
+ for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:51:50 +0000 (UTC)
+Received: by mail-wm1-x332.google.com with SMTP id
+ 5b1f17b1804b1-493f60208a5so4485745e9.3
+ for <buildroot@buildroot.org>; Fri, 10 Jul 2026 06:51:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1783691504; x=1784296304;
+ d=1e100.net; s=20251104; t=1783691508; x=1784296308;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=DrUQxWWpWZLlegcS6W5jFlysbfx3J0NeNfNTdZ8tgaE=;
- b=Y/oK+3rtJbrRHSU8MozuNbAI1IvfCDLSTXlUlzsk2Of0uZ+20cpiV5Rn7hVoo2T/Cp
- UZKdGnSopKe+mwxGA1Iv7q8VfKQQpX1gcPquHqvf+BsIuFPneuFpEcvQp5/yVWnwnjS2
- 7tn/i5DGkWntwT1Rno8+eoCT51Ov4vANDSyOxvEyTHn96JZfYN9B0MYj54pg/j97oSIa
- +s9g7ffAiVkTZiJ/ZHoGsL9A3JEswHy/aRwBn2H7eTCRzspr/OL1vWdBwjTP7+t1zmic
- f0jtuV8IlxBQXzrzPjRm7XsSmGdWui1eyJ3//orw9ZfpD9b0yMZrlYsimhyARTMr/vvQ
- XPFg==
-X-Gm-Message-State: AOJu0YwTBa0H8V27tQDcLq2gMXbBOCCMmPRKJy+2BIGlzPo6bDCUz8Ga
- mHlsj0tCeINVdZaLHUTqOXwUO+tnTH9EHpjoDZhmh5nh1JxOYlWpU1dBpsJhNiFKzEg=
-X-Gm-Gg: AfdE7clwrwZFCT2ALqt27RhvNFRmU635fd6nC+y2wNjT/puz/TiWbVsT5fzldYSekTl
- WWr0sbAwmazkg1/46Nw9aX6ni46jReF8Thuq7j1dlfZUiCrNBWdb4CSuYjDvosPah1upykAJy27
- PCZmuGkI1PuqHBKFZXGrVoOo0AyrqKul7muGbXc+j+e/ECfi9jEkXkHKC+ezR9NAJeDT5gdD876
- 1Pj88A2oogVD6egW8IZVD34vqk1PJG/6PxMD0uTGHgtz2VWlXZ3NMtkP4CjS02GatKBoGIGlBJc
- +H81oitVzcdzN1zmShgW4EZjMjXl/CbTnomZySFmRvKwA3kUPe9/Aq1WZqxtX9vV5z3FadewIsq
- LpEEKs5HazNB7d7Wr8l0oWBepOQMFgaR1POeBi3+fALezhxGDqPyqLOuLLNiMo1Kt+7nRmDNl20
- 9zFgjglA==
-X-Received: by 2002:a05:600c:6297:b0:493:ee2b:c8c7 with SMTP id
- 5b1f17b1804b1-493ee2bcb92mr72183455e9.4.1783691503681; 
- Fri, 10 Jul 2026 06:51:43 -0700 (PDT)
+ bh=p/azf37a6gIQcNP+H1eQnjrn3o3oEUauIYXs4SL0VEA=;
+ b=JM29luzdH3b6gxg8A8Dmh1mRFYFTX3uYrvc0kyGuacKLcUsqmRErt7ppJriR8oaHmp
+ CjotPGa9x51CCirF3qgE0md7VE5anBrVKk2ilgJq/V9TeqNnYkevAFEbb62QGEIN3+5P
+ TnwgQybl/BzB5lGJeNExyT4kPjjKnspNz6w+//L0SLtuc/h2A+AvrBQk/K2NyU4uq1Zd
+ HCB5bXxNuCiwkuYB9ktGnyDYn+r0zoNy+Z791kM+q8+fquN4fyea1x5Tp5t4uu2B3jMB
+ cgXSgp84r7fmZauwFOvFikBBhltolj2bDEeBAm8/3GEIGP1cV9J9JOIPmmb0GkUTFaWn
+ jGLQ==
+X-Gm-Message-State: AOJu0YzjVeyOzdujcngmyy3xhtxwzBGOn7FAWzold3Ni+0yc0OUj7OXs
+ aZol2YJlVL9I4QiAuFG9GIOXyNuI2Mc9Qmgan9rVIjNzT97AlR2P1/YOp6hsqbZRDSHOpj1ceWb
+ Zt/qf
+X-Gm-Gg: AfdE7cm8n6a4NOMFzKDdZyWDfeRbEXQy6HiI1YbOPkeVZURXuIRs+sIFqcQgbQoo808
+ 6KAMyyvPH5AAPdPiMwEbjnJsJEv0Ie+B+smL4vMjlUETCEP9f1mDUKtfYkhHNOXU9RdAQp+Z9Wn
+ ygjn5tsEvkmZoGxqGGDJpYbXt4RWZupdGZGdx3uE1nsLuZyaIkx3eH6tyMNUGTIV6rqNMOt+cL4
+ HgkSg58YCiB1UfozAH0gZkfjLcaxfjOsxWmtMhI1FVqjAaUSxP73ItMBi6iX3XLNE/DXGAQ8Q96
+ TF2bhMQBNMFHh6pPqJqXlk9CKQIFnfjX+TB5jw8MG6rgaUKncUkuV/JzGBCJgz5wE9znQECFuDG
+ /GKT2mme4eFLHNYq0bBLzqFj/cLrXlzw8P65fLaAWhOjSdcsGCRN4YduXvZ4x8nqSKCbVobztWS
+ 6COfZVfA==
+X-Received: by 2002:a05:600c:5309:b0:493:f262:b8 with SMTP id
+ 5b1f17b1804b1-493f26200ecmr42442675e9.1.1783691508109; 
+ Fri, 10 Jul 2026 06:51:48 -0700 (PDT)
 Received: from arch ([212.233.37.141]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-47aa0960b06sm60570761f8f.28.2026.07.10.06.51.43
+ 5b1f17b1804b1-493f2c8de2asm59291215e9.1.2026.07.10.06.51.47
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 10 Jul 2026 06:51:43 -0700 (PDT)
+ Fri, 10 Jul 2026 06:51:47 -0700 (PDT)
 To: Thomas Perale <thomas.perale@mind.be>
 Cc: buildroot@buildroot.org
-Date: Fri, 10 Jul 2026 15:51:42 +0200
-Message-ID: <20260710135142.759288-1-thomas.perale@mind.be>
+Date: Fri, 10 Jul 2026 15:51:47 +0200
+Message-ID: <20260710135147.759396-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260626195937.49027-1-thomas.perale@mind.be>
-References: <20260626195937.49027-1-thomas.perale@mind.be>
+In-Reply-To: <20260626203415.303763-1-thomas.perale@mind.be>
+References: <20260626203415.303763-1-thomas.perale@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1783691504; x=1784296304; darn=buildroot.org;
+ d=mind.be; s=google; t=1783691508; x=1784296308; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to:content-type;
- bh=DrUQxWWpWZLlegcS6W5jFlysbfx3J0NeNfNTdZ8tgaE=;
- b=Tu//dW2s7F++UJjL3vy1mTmXzEP3Qfg16yOPnbaghS0HVR0Aivzr2BaLU/k5BW6AwE
- XjkzJ/IsukdjI7RrFpZo0xMtfzG5J5P7HUC25j2JWfWR2U+7i14pfL4v6ANHlxkQ4zvk
- 7AzhnLBQaLjNOxAG9RFPEyIh4Lmbo78EEmw6taVxJvGa5Hno+sx3jyOScMgyiuMMv2Qh
- S2+dxGtJVh+eX6VmKzttUO+ypfD+UHM3wDCkAs7wG5e4YpSdlYBpILZvm0pXXkADD1yf
- mrXBe8aaIg5r4sEo8ProS/UPcr6Gp8pilY1PwUcJHnVMunalO8X1/tjCfZwRaSE9xV7f
- 9Y4A==
+ bh=p/azf37a6gIQcNP+H1eQnjrn3o3oEUauIYXs4SL0VEA=;
+ b=RJ90pNGM+hbAGibyvFtP318gnUb0ntMYBE4RHtwfHJGhKgkTjYmbR1wOKGHNxpxRXL
+ 6D1CF/K2ZXNmA/TkQD6x20J80sSs1+cL3aBt1Kooh3/KOge+IcWKHepfJJleUEfn8xpl
+ Z/1AQjFJxAI3EJtKtaMyoKhktTrihzhAq8TXl0XC0kWUfcGdPxfG2HVlknn9YnN5DuCZ
+ C53f39cYzr8+T41YKwdHE7pGfCa12wy6cXmGvRghOwcr2T21t8h88jpZd2BRgFDWpKDZ
+ OJIEkI41jmUBUeYSZIGi4cykpkyo+FB3nPCbOTF5dI3xwn4ocMuS1Us06caDYB6LoObv
+ 2fwg==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=Tu//dW2s
-Subject: Re: [Buildroot] [PATCH 1/1] package/avahi: upstream patch for
- CVE-2026-34933
+ header.a=rsa-sha256 header.s=google header.b=RJ90pNGM
+Subject: Re: [Buildroot] [PATCH] package/imagemagick: security bump to
+ v7.1.2-26
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -128,155 +129,61 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> This fixes the following vulnerability:
+> See the changelog:
 > 
-> - CVE-2026-34933:
->     Avahi is a system which facilitates service discovery on a local
->     network via the mDNS/DNS-SD protocol suite. Prior to version 0.9-rc4,
->     any unprivileged local user can crash avahi-daemon by sending a single
->     D-Bus method call with conflicting publish flags. This issue has been
->     patched in version 0.9-rc4.
+> - https://github.com/ImageMagick/Website/blob/main/ChangeLog.md#712-24---2026-05-26
+> - https://github.com/ImageMagick/Website/blob/main/ChangeLog.md#712-25---2026-06-04
+> - https://github.com/ImageMagick/ImageMagick/compare/7.1.2-25...7.1.2-26
 > 
-> For more information, see:
->   - https://www.cve.org/CVERecord?id=CVE-2026-34933
->   - https://github.com/avahi/avahi/commit/0be89b6bb5c3983837b5e0febcbbbf452ecf7675
+> The bump to the v7.1.2-25 fixes the following vulnerabilities:
+> 
+> - CVE-2026-53465
+> - CVE-2026-53464
+> - CVE-2026-53463
+> - CVE-2026-53462
+> - CVE-2026-53461
+> - CVE-2026-53460
+> 
+> The bump to the v7.1.2-24 fixes the following vulnerabilities:
+> 
+> - CVE-2026-49219
+> - CVE-2026-49218
+> - CVE-2026-48994
+> - CVE-2026-48734
+> - CVE-2026-48733
+> - CVE-2026-48724
 > 
 > Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 
 Applied to 2026.05.x & 2025.02.x. Thanks
 
 > ---
->  ...both-wide-area-and-multicast-are-set.patch | 106 ++++++++++++++++++
->  package/avahi/avahi.mk                        |   3 +
->  2 files changed, 109 insertions(+)
->  create mode 100644 package/avahi/0017-core-refuse-to-accept-publish-flags-where-both-wide-area-and-multicast-are-set.patch
+>  package/imagemagick/imagemagick.hash | 2 +-
+>  package/imagemagick/imagemagick.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/avahi/0017-core-refuse-to-accept-publish-flags-where-both-wide-area-and-multicast-are-set.patch b/package/avahi/0017-core-refuse-to-accept-publish-flags-where-both-wide-area-and-multicast-are-set.patch
-> new file mode 100644
-> index 0000000000..de359b7d22
-> --- /dev/null
-> +++ b/package/avahi/0017-core-refuse-to-accept-publish-flags-where-both-wide-area-and-multicast-are-set.patch
-> @@ -0,0 +1,106 @@
-> +From 0be89b6bb5c3983837b5e0febcbbbf452ecf7675 Mon Sep 17 00:00:00 2001
-> +From: Evgeny Vereshchagin <evvers@ya.ru>
-> +Date: Wed, 1 Apr 2026 05:31:58 +0000
-> +Subject: [PATCH] core: refuse to accept publish flags where both wide_area and
-> + multicast are set
-> +
-> +It fixes a bug where it was possible for unprivileged local users to
-> +crash avahi-daemon via D-Bus by calling EntryGroup methods accepting
-> +flags and passing both AVAHI_PUBLISH_USE_WIDE_AREA and
-> +AVAHI_PUBLISH_USE_MULTICAST there. For example when AddRecord was
-> +invoked like that avahi-daemon crashed with
-> +```
-> +dbus-entry-group.c: interface=org.freedesktop.Avahi.EntryGroup, path=/Client0/EntryGroup1, member=AddRecord
-> +avahi-daemon: entry.c:57: transport_flags_from_domain: Assertion `!((*flags & AVAHI_PUBLISH_USE_MULTICAST) && (*flags & AVAHI_PUBLISH_USE_WIDE_AREA))' failed.
-> +==84944==
-> +==84944== Process terminating with default action of signal 6 (SIGABRT)
-> +==84944==    at 0x4B353BC: __pthread_kill_implementation (pthread_kill.c:44)
-> +==84944==    by 0x4ADE941: raise (raise.c:26)
-> +==84944==    by 0x4AC64AB: abort (abort.c:77)
-> +==84944==    by 0x4AC641F: __assert_fail_base.cold (assert.c:118)
-> +==84944==    by 0x48A9404: transport_flags_from_domain (entry.c:57)
-> +==84944==    by 0x48A9F8F: server_add_internal (entry.c:224)
-> +==84944==    by 0x48AA49F: avahi_server_add (entry.c:324)
-> +==84944==    by 0x401A670: avahi_dbus_msg_entry_group_impl (dbus-entry-group.c:348)
-> +==84944==    by 0x4A70741: ??? (in /usr/lib/x86_64-linux-gnu/libdbus-1.so.3.38.3)
-> +==84944==    by 0x4A5FB22: dbus_connection_dispatch (in /usr/lib/x86_64-linux-gnu/libdbus-1.so.3.38.3)
-> +==84944==    by 0x401D01D: dispatch_timeout_callback (dbus-watch-glue.c:105)
-> +==84944==    by 0x488E3AE: timeout_callback (simple-watch.c:447)
-> +==84944==
-> +```
-> +It's a follow-up to fbce111b069aa1e4c701ed37ee1d9f6d6cefaac5 where
-> +those flags were introduced and consistent with the other places
-> +where wide_area/multicast flags are used.
-> +
-> +It was discovered by
-> +Guillaume Meunier - Head of Vulnerability Operations Center France - Orange Cyberdefense
-> +
-> +https://github.com/avahi/avahi/security/advisories/GHSA-w65r-6gxh-vhvc
-> +
-> +CVE: CVE-2026-34933
-> +Upstream: https://github.com/avahi/avahi/commit/0be89b6bb5c3983837b5e0febcbbbf452ecf7675
-> +Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-> +---
-> + avahi-core/entry.c | 7 +++++++
-> + 1 file changed, 7 insertions(+)
-> +
-> +diff --git a/avahi-core/entry.c b/avahi-core/entry.c
-> +index 0d862133d..06eb12076 100644
-> +--- a/avahi-core/entry.c
-> ++++ b/avahi-core/entry.c
-> +@@ -207,6 +207,7 @@ static AvahiEntry * server_add_internal(
-> +                                          AVAHI_PUBLISH_UPDATE|
-> +                                          AVAHI_PUBLISH_USE_WIDE_AREA|
-> +                                          AVAHI_PUBLISH_USE_MULTICAST), AVAHI_ERR_INVALID_FLAGS);
-> ++    AVAHI_CHECK_VALIDITY_RETURN_NULL(s, !(flags & AVAHI_PUBLISH_USE_WIDE_AREA) || !(flags & AVAHI_PUBLISH_USE_MULTICAST), AVAHI_ERR_INVALID_FLAGS);
-> +     AVAHI_CHECK_VALIDITY_RETURN_NULL(s, avahi_is_valid_domain_name(r->key->name), AVAHI_ERR_INVALID_HOST_NAME);
-> +     AVAHI_CHECK_VALIDITY_RETURN_NULL(s, r->ttl != 0, AVAHI_ERR_INVALID_TTL);
-> +     AVAHI_CHECK_VALIDITY_RETURN_NULL(s, !avahi_key_is_pattern(r->key), AVAHI_ERR_IS_PATTERN);
-> +@@ -454,6 +455,7 @@ int avahi_server_add_address(
-> +                                               AVAHI_PUBLISH_UPDATE|
-> +                                               AVAHI_PUBLISH_USE_WIDE_AREA|
-> +                                               AVAHI_PUBLISH_USE_MULTICAST), AVAHI_ERR_INVALID_FLAGS);
-> ++    AVAHI_CHECK_VALIDITY(s, !(flags & AVAHI_PUBLISH_USE_WIDE_AREA) || !(flags & AVAHI_PUBLISH_USE_MULTICAST), AVAHI_ERR_INVALID_FLAGS);
-> +     AVAHI_CHECK_VALIDITY(s, !name || avahi_is_valid_fqdn(name), AVAHI_ERR_INVALID_HOST_NAME);
-> + 
-> +     /* Prepare the host naem */
-> +@@ -595,6 +597,7 @@ static int server_add_service_strlst_nocopy(
-> +                                                                 AVAHI_PUBLISH_UPDATE|
-> +                                                                 AVAHI_PUBLISH_USE_WIDE_AREA|
-> +                                                                 AVAHI_PUBLISH_USE_MULTICAST), AVAHI_ERR_INVALID_FLAGS);
-> ++    AVAHI_CHECK_VALIDITY_SET_RET_GOTO_FAIL(s, !(flags & AVAHI_PUBLISH_USE_WIDE_AREA) || !(flags & AVAHI_PUBLISH_USE_MULTICAST), AVAHI_ERR_INVALID_FLAGS);
-> +     AVAHI_CHECK_VALIDITY_SET_RET_GOTO_FAIL(s, avahi_is_valid_service_name(name), AVAHI_ERR_INVALID_SERVICE_NAME);
-> +     AVAHI_CHECK_VALIDITY_SET_RET_GOTO_FAIL(s, avahi_is_valid_service_type_strict(type), AVAHI_ERR_INVALID_SERVICE_TYPE);
-> +     AVAHI_CHECK_VALIDITY_SET_RET_GOTO_FAIL(s, !domain || avahi_is_valid_domain_name(domain), AVAHI_ERR_INVALID_DOMAIN_NAME);
-> +@@ -754,6 +757,7 @@ static int server_update_service_txt_strlst_nocopy(
-> +                                                                 AVAHI_PUBLISH_NO_COOKIE|
-> +                                                                 AVAHI_PUBLISH_USE_WIDE_AREA|
-> +                                                                 AVAHI_PUBLISH_USE_MULTICAST), AVAHI_ERR_INVALID_FLAGS);
-> ++    AVAHI_CHECK_VALIDITY_SET_RET_GOTO_FAIL(s, !(flags & AVAHI_PUBLISH_USE_WIDE_AREA) || !(flags & AVAHI_PUBLISH_USE_MULTICAST), AVAHI_ERR_INVALID_FLAGS);
-> +     AVAHI_CHECK_VALIDITY_SET_RET_GOTO_FAIL(s, avahi_is_valid_service_name(name), AVAHI_ERR_INVALID_SERVICE_NAME);
-> +     AVAHI_CHECK_VALIDITY_SET_RET_GOTO_FAIL(s, avahi_is_valid_service_type_strict(type), AVAHI_ERR_INVALID_SERVICE_TYPE);
-> +     AVAHI_CHECK_VALIDITY_SET_RET_GOTO_FAIL(s, !domain || avahi_is_valid_domain_name(domain), AVAHI_ERR_INVALID_DOMAIN_NAME);
-> +@@ -843,6 +847,7 @@ int avahi_server_add_service_subtype(
-> +     AVAHI_CHECK_VALIDITY_SET_RET_GOTO_FAIL(s, AVAHI_IF_VALID(interface), AVAHI_ERR_INVALID_INTERFACE);
-> +     AVAHI_CHECK_VALIDITY_SET_RET_GOTO_FAIL(s, AVAHI_PROTO_VALID(protocol), AVAHI_ERR_INVALID_PROTOCOL);
-> +     AVAHI_CHECK_VALIDITY_SET_RET_GOTO_FAIL(s, AVAHI_FLAGS_VALID(flags, AVAHI_PUBLISH_USE_MULTICAST|AVAHI_PUBLISH_USE_WIDE_AREA), AVAHI_ERR_INVALID_FLAGS);
-> ++    AVAHI_CHECK_VALIDITY_SET_RET_GOTO_FAIL(s, !(flags & AVAHI_PUBLISH_USE_WIDE_AREA) || !(flags & AVAHI_PUBLISH_USE_MULTICAST), AVAHI_ERR_INVALID_FLAGS);
-> +     AVAHI_CHECK_VALIDITY_SET_RET_GOTO_FAIL(s, avahi_is_valid_service_name(name), AVAHI_ERR_INVALID_SERVICE_NAME);
-> +     AVAHI_CHECK_VALIDITY_SET_RET_GOTO_FAIL(s, avahi_is_valid_service_type_strict(type), AVAHI_ERR_INVALID_SERVICE_TYPE);
-> +     AVAHI_CHECK_VALIDITY_SET_RET_GOTO_FAIL(s, !domain || avahi_is_valid_domain_name(domain), AVAHI_ERR_INVALID_DOMAIN_NAME);
-> +@@ -910,6 +915,7 @@ static AvahiEntry *server_add_dns_server_name(
-> +     assert(name);
-> + 
-> +     AVAHI_CHECK_VALIDITY_RETURN_NULL(s, AVAHI_FLAGS_VALID(flags, AVAHI_PUBLISH_USE_WIDE_AREA|AVAHI_PUBLISH_USE_MULTICAST), AVAHI_ERR_INVALID_FLAGS);
-> ++    AVAHI_CHECK_VALIDITY_RETURN_NULL(s, !(flags & AVAHI_PUBLISH_USE_WIDE_AREA) || !(flags & AVAHI_PUBLISH_USE_MULTICAST), AVAHI_ERR_INVALID_FLAGS);
-> +     AVAHI_CHECK_VALIDITY_RETURN_NULL(s, type == AVAHI_DNS_SERVER_UPDATE || type == AVAHI_DNS_SERVER_RESOLVE, AVAHI_ERR_INVALID_FLAGS);
-> +     AVAHI_CHECK_VALIDITY_RETURN_NULL(s, port != 0, AVAHI_ERR_INVALID_PORT);
-> +     AVAHI_CHECK_VALIDITY_RETURN_NULL(s, avahi_is_valid_fqdn(name), AVAHI_ERR_INVALID_HOST_NAME);
-> +@@ -967,6 +973,7 @@ int avahi_server_add_dns_server_address(
-> +     AVAHI_CHECK_VALIDITY(s, AVAHI_IF_VALID(interface), AVAHI_ERR_INVALID_INTERFACE);
-> +     AVAHI_CHECK_VALIDITY(s, AVAHI_PROTO_VALID(protocol) && AVAHI_PROTO_VALID(address->proto), AVAHI_ERR_INVALID_PROTOCOL);
-> +     AVAHI_CHECK_VALIDITY(s, AVAHI_FLAGS_VALID(flags, AVAHI_PUBLISH_USE_MULTICAST|AVAHI_PUBLISH_USE_WIDE_AREA), AVAHI_ERR_INVALID_FLAGS);
-> ++    AVAHI_CHECK_VALIDITY(s, !(flags & AVAHI_PUBLISH_USE_WIDE_AREA) || !(flags & AVAHI_PUBLISH_USE_MULTICAST), AVAHI_ERR_INVALID_FLAGS);
-> +     AVAHI_CHECK_VALIDITY(s, type == AVAHI_DNS_SERVER_UPDATE || type == AVAHI_DNS_SERVER_RESOLVE, AVAHI_ERR_INVALID_FLAGS);
-> +     AVAHI_CHECK_VALIDITY(s, port != 0, AVAHI_ERR_INVALID_PORT);
-> +     AVAHI_CHECK_VALIDITY(s, !domain || avahi_is_valid_domain_name(domain), AVAHI_ERR_INVALID_DOMAIN_NAME);
-> diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
-> index bcba0a0a4f..0a674182bc 100644
-> --- a/package/avahi/avahi.mk
-> +++ b/package/avahi/avahi.mk
-> @@ -60,6 +60,9 @@ AVAHI_IGNORE_CVES += CVE-2025-68471
->  # 0016-core-fix-uncontrolled-recursion-bug-using-a-simple-loop-detection-algorithm.patch
->  AVAHI_IGNORE_CVES += CVE-2026-24401
+> diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+> index fa46fc7cde..2330507566 100644
+> --- a/package/imagemagick/imagemagick.hash
+> +++ b/package/imagemagick/imagemagick.hash
+> @@ -1,3 +1,3 @@
+>  # Locally computed
+> -sha256  f129f7d87fc21da453d032dd291b80ea13faf2497f13ef8279d97759ed7d5c46  imagemagick-7.1.2-23.tar.gz
+> +sha256  d63594e334e1c410f600fb9370d78d49e4dc6f315722ca4ba083e864e5c354cb  imagemagick-7.1.2-26.tar.gz
+>  sha256  131447ad0099069beaa32acf1700716eea294a5bdf936d8211d7026b1849e5d4  LICENSE
+> diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+> index e08f0a803c..1cae5c83fa 100644
+> --- a/package/imagemagick/imagemagick.mk
+> +++ b/package/imagemagick/imagemagick.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
 >  
-> +# 0017-core-refuse-to-accept-publish-flags-where-both-wide-area-and-multicast-are-set.patch
-> +AVAHI_IGNORE_CVES += CVE-2026-34933
-> +
->  AVAHI_CONF_ENV = \
->  	avahi_cv_sys_cxx_works=yes \
->  	DATADIRNAME=share
+> -IMAGEMAGICK_VERSION = 7.1.2-23
+> +IMAGEMAGICK_VERSION = 7.1.2-26
+>  IMAGEMAGICK_SITE = $(call github,ImageMagick,ImageMagick,$(IMAGEMAGICK_VERSION))
+>  IMAGEMAGICK_LICENSE = Apache-2.0
+>  IMAGEMAGICK_LICENSE_FILES = LICENSE
 > -- 
 > 2.54.0
 > 
