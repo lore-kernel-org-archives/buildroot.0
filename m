@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84583C43458
-	for <buildroot@archiver.kernel.org>; Fri, 10 Jul 2026 13:43:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5384AC44506
+	for <buildroot@archiver.kernel.org>; Fri, 10 Jul 2026 13:43:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4914B40A37;
-	Fri, 10 Jul 2026 13:43:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E69DA40A59;
+	Fri, 10 Jul 2026 13:43:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Rh1JzIJftetg; Fri, 10 Jul 2026 13:43:26 +0000 (UTC)
+ id F3djq-bl_8ce; Fri, 10 Jul 2026 13:43:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 596CD409F3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 737FC409FF
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1783691005;
-	bh=CXMYClQDQw95+EuVL9Cs1E/JqzdyrkWiKQMOxnVa3IU=;
+	s=default; t=1783691007;
+	bh=VmTKBJ+GuIMjD2k07qc34PHxxxR/Yv3Zh/qOG9oihTI=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=NDgUA4Z1Xg9oKvfcEFvCfeUfTe6r9svSnDHBm4ea6JLrhgQ062PUnlOFZVRb5cBVJ
-	 bzFVmwd9d9auxIJKTCfk1O7AksGZSR/4hpwn3x5dT5UysN3gKW5POv/l2cGZKhaZAA
-	 z5hqx8Fu/lLTrQ37TK4ipq78RD1u1lN39h6p/Zx7MO2r8typivUe4QTC7ftCPuiyPe
-	 GC4GMaGmwB8ZmRfN76mGKxt9i48VMoiE+Gn+bmgI6jDKLZ7N9FPTkn2VcUvWYBcCzJ
-	 f5ppea81QKRQCCp7i92VOIeYlwuf7CP/bYjHKLvX4cYx+z97MQYpTf/oddCRLFz+li
-	 iUcHiW1eP4b8w==
+	b=GFvpgkXm9uTg5HPeGpKUWgTSpftyJVMcoD3RtFYmtepgcEUP6hNTJbXa0IJXh20ok
+	 ry7gYRgVtkwK4NJwjyeXIIS6+GbagXzHXV587L2CVn+Wncohy7viaznQA3TqeuJCmf
+	 tpkBdbR+woEdHnW/BdlYADlMe/ps7TVD4W3bJcxUWTyV3WICmq7NaX0D34iRaJ9div
+	 J07vQ7GvqcAjgBUy10PIeBD1d2WovKOCKp9peIy/ueiCd5SdxmwAe6RIzhg6o5Y0Yq
+	 22NngkPTy/b/UKbaV7BX3+x+msP/OlV+/MiwAmD8D6ijjwtfXUxmMZqmPLNcX7tz83
+	 iq4DCONmW/fLg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 596CD409F3;
-	Fri, 10 Jul 2026 13:43:25 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 536352FE
+	by smtp4.osuosl.org (Postfix) with ESMTP id 737FC409FF;
+	Fri, 10 Jul 2026 13:43:27 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 54245FD1
  for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:42:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 396D34076A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 51E7B400D1
  for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:42:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hgx-p0LNpg4l for <buildroot@buildroot.org>;
- Fri, 10 Jul 2026 13:42:49 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id BtOCkRaHs0Ka for <buildroot@buildroot.org>;
+ Fri, 10 Jul 2026 13:42:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7183F40768
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3273340120
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7183F40768
- for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:42:49 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3273340120
+ for <buildroot@buildroot.org>; Fri, 10 Jul 2026 13:42:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9772988678; Fri, 10 Jul 2026 13:42:16 +0000 (UTC)
+ id 5B89A8868A; Fri, 10 Jul 2026 13:42:18 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 8 Jul 2026 13:36:25 +0200
+Date: Fri, 10 Jul 2026 11:41:58 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: a80bcffff11fa3eea8c4aabfedd4b4929a4020dc
-X-Git-Newrev: 58e91efc9b094b1d84ee8b395a650aeb1fb0b4c2
+X-Git-Oldrev: 9e52961485534e92e407e3305a5df20fead02f6c
+X-Git-Newrev: ff80cc77b16055420e4569e0b5fbc7a72fb42f72
 X-Patchwork-Hint: ignore
-Message-Id: <20260710134216.9772988678@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/libglib2: drop
- unused 0001-meson.build-add-girdir-to-gio-2.0.pc-and-glib-2.0.pc.patch
+Message-Id: <20260710134218.5B89A8868A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/icu: backport
+ upstream security fix for CVE-2025-5222
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,111 +77,216 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/58e91efc9b094b1d84ee8b395a650aeb1fb0b4c2
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/ff80cc77b16055420e4569e0b5fbc7a72fb42f72
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-In 11aa1cfa5af9a77a0a9f726bd38f1b7db659c0bf the patch was accidentally
-moved into a versioned directory with the wrong version (2.82.0
-instead of 2.82.4) and thus not applied. However, there have been no
-issues reported.
+Fixes CVE-2025-5222[1]. The patch is generated with
+git format-patch -1 2c667e31cfd0b6bb1923627a932fd3453a5bac77 --relative=icu4c
+and matches the Debian patch[2] aside from s/NULL/nullptr/ in the git
+context. This is expected as the Debian patch is based on 72-1 and we
+are on 73-2, so we have commit 2e0d30cfcf43 ("ICU-21833 Replace NULL
+with nullptr in all C++ code.")
 
-The patch description mentions being needed to fix build errors in
-package/atk and package/libnice. It was originally added in
-b094f88a4d501101bfba9b65491209e6a0fe0397, and amended for libnice in
-2c916b400bc608512db790d97df010ca666b6dd2. package/atk was removed in
-2c3ca7bea1de76163aeef432412eb14551ed0581, because atk has been merged
-into at-spi2-core. Both at-spi2-core and libnice are Meson packages,
-as was atk at the time of its removal.
+While NVD[1] and Debian[3] list ICU-22957 in their bug reports, looking
+at the icu bug report[4] one can see it's marked as a duplicate of
+ICU-22973[5] which also happens to be the bug ID specified in the commit
+log of the commit listed in the Debian advisory[3].
 
-Both current packages build with the following configuration (tested
-using utils/test-pkg):
+[1] https://nvd.nist.gov/vuln/detail/CVE-2025-5222
+[2] https://sources.debian.org/src/icu/72.1-3%2Bdeb12u1/debian/patches/0001-ICU-22973-Fix-buffer-overflow-by-using-CharString.patch
+[3] https://security-tracker.debian.org/tracker/CVE-2025-5222
+[4] https://unicode-org.atlassian.net/browse/ICU-22957
+[5] https://unicode-org.atlassian.net/browse/ICU-22973
 
-BR2_PACKAGE_PYTHON3=y
-BR2_PACKAGE_GOBJECT_INTROSPECTION=y
-BR2_PACKAGE_LIBNICE=y
-BR2_PACKAGE_AT_SPI2_CORE=y
-
-Evidently the patch is no longer needed, presumably because the
-correct search path for GIR files is set by other means, and we can
-remove it instead of fixing the version number of the patch directory.
-
-Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
-Tested-by: Thomas Perale <thomas.perale@mind.be>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit c9fabfcb9fe93fdf9fdf7fb0eabcb927c90182b7)
+Signed-off-by: Quentin Schulz <quentin.schulz@cherry.de>
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...-add-girdir-to-gio-2.0.pc-and-glib-2.0.pc.patch | 53 ----------------------
- package/libglib2/libglib2-bootstrap/2.82.0         |  1 -
- 2 files changed, 54 deletions(-)
+ ...3-Fix-buffer-overflow-by-using-CharString.patch | 162 +++++++++++++++++++++
+ package/icu/icu.mk                                 |   3 +
+ 2 files changed, 165 insertions(+)
 
-diff --git a/package/libglib2/2.82.0/0001-meson.build-add-girdir-to-gio-2.0.pc-and-glib-2.0.pc.patch b/package/libglib2/2.82.0/0001-meson.build-add-girdir-to-gio-2.0.pc-and-glib-2.0.pc.patch
-deleted file mode 100644
-index c6135b15a1..0000000000
---- a/package/libglib2/2.82.0/0001-meson.build-add-girdir-to-gio-2.0.pc-and-glib-2.0.pc.patch
-+++ /dev/null
-@@ -1,53 +0,0 @@
--From 3fcd5f431dee9909b6bcbd9b8b61d4b1fe4b5f92 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Fri, 12 Nov 2021 18:01:05 +0100
--Subject: [PATCH] meson.build: add girdir to gio-2.0.pc and glib-2.0.pc
--
--Add girdir to gio-2.0.pc and glib-2.0.pc to fix the following build
--failure with atk or libnice:
--
--/home/giuliobenetti/autobuild/run/instance-1/output-1/host/riscv32-buildroot-linux-gnu/sysroot/usr/bin/g-ir-compiler atk/Atk-1.0.gir --output atk/Atk-1.0.typelib --includedir=/usr/share/gir-1.0
--Could not find GIR file 'GObject-2.0.gir'; check XDG_DATA_DIRS or use --includedir
--
--Fixes:
-- - http://autobuild.buildroot.org/results/2716929db638977e6bf665352a08bd580e1dd0ae
-- - http://autobuild.buildroot.org/results/3088ef32b03e0bb984291b1227b187f1ff816eb7
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Dario: make the patch to be applied with fuzz factor 0]
--Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
--[Fiona: refresh for glib 2.80.4]
--Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
--Upstream: Never submitted
-----
-- gio/meson.build  | 1 +
-- glib/meson.build | 1 +
-- 2 files changed, 2 insertions(+)
--
--diff --git a/gio/meson.build b/gio/meson.build
--index 59c2b0f..5120537 100644
----- a/gio/meson.build
--+++ b/gio/meson.build
--@@ -885,6 +885,7 @@ pkg.generate(libgio,
--   variables : [
--     'schemasdir=' + '${datadir}' / schemas_subdir,
--     'dtdsdir=' + '${datadir}' / dtds_subdir,
--+    'girdir=' + join_paths('${libdir}', '../share/gir-1.0'),
--     'giomoduledir=' + pkgconfig_giomodulesdir,
--     'gio=' + '${bindir}' / 'gio',
--     'gio_querymodules=' + pkgconfig_multiarch_bindir / 'gio-querymodules',
--diff --git a/glib/meson.build b/glib/meson.build
--index d2efeba..a69532b 100644
----- a/glib/meson.build
--+++ b/glib/meson.build
--@@ -447,6 +447,7 @@ pkg.generate(libglib,
--   subdirs : ['glib-2.0'],
--   extra_cflags : ['-I${libdir}/glib-2.0/include'] + win32_cflags,
--   variables : [
--+    'girdir=' + join_paths('${libdir}', '../share/gir-1.0'),
--     'glib_genmarshal=' + '${bindir}' / 'glib-genmarshal',
--     'gobject_query=' + '${bindir}' / 'gobject-query',
--     'glib_mkenums=' + '${bindir}' / 'glib-mkenums',
---- 
--2.45.2
--
-diff --git a/package/libglib2/libglib2-bootstrap/2.82.0 b/package/libglib2/libglib2-bootstrap/2.82.0
-deleted file mode 120000
-index 28b180f102..0000000000
---- a/package/libglib2/libglib2-bootstrap/2.82.0
-+++ /dev/null
-@@ -1 +0,0 @@
--../2.82.0
-\ No newline at end of file
+diff --git a/package/icu/0005-ICU-22973-Fix-buffer-overflow-by-using-CharString.patch b/package/icu/0005-ICU-22973-Fix-buffer-overflow-by-using-CharString.patch
+new file mode 100644
+index 0000000000..3068ab7f98
+--- /dev/null
++++ b/package/icu/0005-ICU-22973-Fix-buffer-overflow-by-using-CharString.patch
+@@ -0,0 +1,162 @@
++From 2c667e31cfd0b6bb1923627a932fd3453a5bac77 Mon Sep 17 00:00:00 2001
++From: Frank Tang <ftang@chromium.org>
++Date: Wed, 22 Jan 2025 11:50:59 -0800
++Subject: [PATCH] ICU-22973 Fix buffer overflow by using CharString
++
++Upstream: https://github.com/unicode-org/icu/commit/2c667e31cfd0b6bb1923627a932fd3453a5bac77
++CVE: CVE-2025-5222
++Signed-off-by: Quentin Schulz <quentin.schulz@cherry.de>
++---
++ source/tools/genrb/parse.cpp | 49 +++++++++++++++++++++---------------
++ 1 file changed, 29 insertions(+), 20 deletions(-)
++
++diff --git a/source/tools/genrb/parse.cpp b/source/tools/genrb/parse.cpp
++index f487241cc18..eb85d5157a6 100644
++--- a/source/tools/genrb/parse.cpp
+++++ b/source/tools/genrb/parse.cpp
++@@ -1153,7 +1153,7 @@ addCollation(ParseState* state, TableResource  *result, const char *collationTyp
++     struct UString    *tokenValue;
++     struct UString     comment;
++     enum   ETokenType  token;
++-    char               subtag[1024];
+++    CharString         subtag;
++     UnicodeString      rules;
++     UBool              haveRules = false;
++     UVersionInfo       version;
++@@ -1189,15 +1189,15 @@ addCollation(ParseState* state, TableResource  *result, const char *collationTyp
++             return nullptr;
++         }
++ 
++-        u_UCharsToChars(tokenValue->fChars, subtag, u_strlen(tokenValue->fChars) + 1);
++-
+++        subtag.clear();
+++        subtag.appendInvariantChars(tokenValue->fChars, u_strlen(tokenValue->fChars), *status);
++         if (U_FAILURE(*status))
++         {
++             res_close(result);
++             return nullptr;
++         }
++ 
++-        member = parseResource(state, subtag, nullptr, status);
+++        member = parseResource(state, subtag.data(), nullptr, status);
++ 
++         if (U_FAILURE(*status))
++         {
++@@ -1208,7 +1208,7 @@ addCollation(ParseState* state, TableResource  *result, const char *collationTyp
++         {
++             // Ignore the parsed resources, continue parsing.
++         }
++-        else if (uprv_strcmp(subtag, "Version") == 0 && member->isString())
+++        else if (uprv_strcmp(subtag.data(), "Version") == 0 && member->isString())
++         {
++             StringResource *sr = static_cast<StringResource *>(member);
++             char     ver[40];
++@@ -1225,11 +1225,11 @@ addCollation(ParseState* state, TableResource  *result, const char *collationTyp
++             result->add(member, line, *status);
++             member = nullptr;
++         }
++-        else if(uprv_strcmp(subtag, "%%CollationBin")==0)
+++        else if(uprv_strcmp(subtag.data(), "%%CollationBin")==0)
++         {
++             /* discard duplicate %%CollationBin if any*/
++         }
++-        else if (uprv_strcmp(subtag, "Sequence") == 0 && member->isString())
+++        else if (uprv_strcmp(subtag.data(), "Sequence") == 0 && member->isString())
++         {
++             StringResource *sr = static_cast<StringResource *>(member);
++             rules = sr->fString;
++@@ -1395,7 +1395,7 @@ parseCollationElements(ParseState* state, char *tag, uint32_t startline, UBool n
++     struct UString    *tokenValue;
++     struct UString     comment;
++     enum   ETokenType  token;
++-    char               subtag[1024], typeKeyword[1024];
+++    CharString         subtag, typeKeyword;
++     uint32_t           line;
++ 
++     result = table_open(state->bundle, tag, nullptr, status);
++@@ -1437,7 +1437,8 @@ parseCollationElements(ParseState* state, char *tag, uint32_t startline, UBool n
++                 return nullptr;
++             }
++ 
++-            u_UCharsToChars(tokenValue->fChars, subtag, u_strlen(tokenValue->fChars) + 1);
+++            subtag.clear();
+++            subtag.appendInvariantChars(tokenValue->fChars, u_strlen(tokenValue->fChars), *status);
++ 
++             if (U_FAILURE(*status))
++             {
++@@ -1445,9 +1446,9 @@ parseCollationElements(ParseState* state, char *tag, uint32_t startline, UBool n
++                 return nullptr;
++             }
++ 
++-            if (uprv_strcmp(subtag, "default") == 0)
+++            if (uprv_strcmp(subtag.data(), "default") == 0)
++             {
++-                member = parseResource(state, subtag, nullptr, status);
+++                member = parseResource(state, subtag.data(), nullptr, status);
++ 
++                 if (U_FAILURE(*status))
++                 {
++@@ -1466,22 +1467,29 @@ parseCollationElements(ParseState* state, char *tag, uint32_t startline, UBool n
++                 if(token == TOK_OPEN_BRACE) {
++                     token = getToken(state, &tokenValue, &comment, &line, status);
++                     TableResource *collationRes;
++-                    if (keepCollationType(subtag)) {
++-                        collationRes = table_open(state->bundle, subtag, nullptr, status);
+++                    if (keepCollationType(subtag.data())) {
+++                        collationRes = table_open(state->bundle, subtag.data(), nullptr, status);
++                     } else {
++                         collationRes = nullptr;
++                     }
++                     // need to parse the collation data regardless
++-                    collationRes = addCollation(state, collationRes, subtag, startline, status);
+++                    collationRes = addCollation(state, collationRes, subtag.data(), startline, status);
++                     if (collationRes != nullptr) {
++                         result->add(collationRes, startline, *status);
++                     }
++                 } else if(token == TOK_COLON) { /* right now, we'll just try to see if we have aliases */
++                     /* we could have a table too */
++                     token = peekToken(state, 1, &tokenValue, &line, &comment, status);
++-                    u_UCharsToChars(tokenValue->fChars, typeKeyword, u_strlen(tokenValue->fChars) + 1);
++-                    if(uprv_strcmp(typeKeyword, "alias") == 0) {
++-                        member = parseResource(state, subtag, nullptr, status);
+++                    typeKeyword.clear();
+++                    typeKeyword.appendInvariantChars(tokenValue->fChars, u_strlen(tokenValue->fChars), *status);
+++                    if (U_FAILURE(*status))
+++                    {
+++                        res_close(result);
+++                        return nullptr;
+++                    }
+++
+++                    if(uprv_strcmp(typeKeyword.data(), "alias") == 0) {
+++                        member = parseResource(state, subtag.data(), nullptr, status);
++                         if (U_FAILURE(*status))
++                         {
++                             res_close(result);
++@@ -1523,7 +1531,7 @@ realParseTable(ParseState* state, TableResource *table, char *tag, uint32_t star
++     struct UString    *tokenValue=nullptr;
++     struct UString    comment;
++     enum   ETokenType token;
++-    char              subtag[1024];
+++    CharString        subtag;
++     uint32_t          line;
++     UBool             readToken = false;
++ 
++@@ -1562,7 +1570,8 @@ realParseTable(ParseState* state, TableResource *table, char *tag, uint32_t star
++         }
++ 
++         if(uprv_isInvariantUString(tokenValue->fChars, -1)) {
++-            u_UCharsToChars(tokenValue->fChars, subtag, u_strlen(tokenValue->fChars) + 1);
+++            subtag.clear();
+++            subtag.appendInvariantChars(tokenValue->fChars, u_strlen(tokenValue->fChars), *status);
++         } else {
++             *status = U_INVALID_FORMAT_ERROR;
++             error(line, "invariant characters required for table keys");
++@@ -1575,7 +1584,7 @@ realParseTable(ParseState* state, TableResource *table, char *tag, uint32_t star
++             return nullptr;
++         }
++ 
++-        member = parseResource(state, subtag, &comment, status);
+++        member = parseResource(state, subtag.data(), &comment, status);
++ 
++         if (member == nullptr || U_FAILURE(*status))
++         {
+diff --git a/package/icu/icu.mk b/package/icu/icu.mk
+index e0dffd543c..afc0693b7f 100644
+--- a/package/icu/icu.mk
++++ b/package/icu/icu.mk
+@@ -17,6 +17,9 @@ ICU_CPE_ID_VENDOR = unicode
+ ICU_CPE_ID_PRODUCT = international_components_for_unicode
+ ICU_CPE_ID_VERSION = $(subst -,.,$(ICU_VERSION))
+ 
++# 0005-ICU-22973-Fix-buffer-overflow-by-using-CharString.patch
++ICU_IGNORE_CVES += CVE-2025-5222
++
+ ICU_DEPENDENCIES = host-icu
+ ICU_INSTALL_STAGING = YES
+ ICU_CONFIG_SCRIPTS = icu-config
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
