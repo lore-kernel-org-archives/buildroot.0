@@ -1,89 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7C49C43458
-	for <buildroot@archiver.kernel.org>; Fri, 10 Jul 2026 07:20:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F90DC43458
+	for <buildroot@archiver.kernel.org>; Fri, 10 Jul 2026 07:20:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C915F812CA;
-	Fri, 10 Jul 2026 07:20:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id ECE0B60697;
+	Fri, 10 Jul 2026 07:20:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id y8a_HEoGpHIs; Fri, 10 Jul 2026 07:20:23 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YJhsKSGYQl0S; Fri, 10 Jul 2026 07:20:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0D042812C0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 136FD606AA
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1783668023;
-	bh=yhDkHiNxlJf4LiSJWThxVDIQrgwkCCDVxykKqK8S678=;
+	s=default; t=1783668035;
+	bh=W9ZuGAT7/dE/2m82x92aLyfb3+9uTZ/Drj4nBtdn7u8=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=EVzb65t1LF1kKA5PeOdrvqDh/rRj9sFgmv650Ml1ZFg4LKxPdSzw/sRal8bXe12mS
-	 y3iSuxHq5EycFExEDgRoV6NAF/DEzK085gQoekivEQN20h37TvSy+qDteY+CPGreNj
-	 1Yd3lLyyjdqF7YkPmKs0AVmYk317q7kqxHlvbBjLBpxM5rjY4jH3BhoePUeFtZV8Gt
-	 337c56cYdo+JhRsKs0cCf5zbgFaM2C71vrjW+M2BMlt7pt0m/zgSNlDBaQgUjj6ywo
-	 tlH18n2Wchmb3PegT9t8CcJXZxfl85cnqdlAiR9FHAmpq7CXaGLBmPEyM2LQ/2DXwS
-	 e+YozESNvF/MQ==
+	b=G6S9AKQyb/qCRJN7+WSAlDM8pkwdQvAcUQDnoSGbX2CKbVqXZSh2CUKcU3+dz0bYl
+	 SbGNGGwB2ZhX+pXHAaSH8R+0vdA1fCaCnQmCaMeeMZZbcuVzx6FPirYyR9cT9Q96Li
+	 cayMfSfscfnQ1QkJpt5An/wBO86lVM7h5YNg18d1MXfI3CLb9FGHCQUpyrFL0v2G+2
+	 ekBGuINmTYKHL8tFxsfEOY6llgfQpbThF1im3n+EpKzI3I3n2q69G61hwf6IL6m7sp
+	 nCq/bQkTIZM9eWzLNATQUPlwmnADlsLKP18Cegs8G5selzxLcVFKjKpr0Ls7js7UyI
+	 YPH9Eic+hWEMQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0D042812C0;
-	Fri, 10 Jul 2026 07:20:23 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id C6D08320
- for <buildroot@buildroot.org>; Fri, 10 Jul 2026 07:20:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 136FD606AA;
+	Fri, 10 Jul 2026 07:20:35 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4E840320
+ for <buildroot@buildroot.org>; Fri, 10 Jul 2026 07:20:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B93D9812C0
- for <buildroot@buildroot.org>; Fri, 10 Jul 2026 07:20:21 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 40D5640120
+ for <buildroot@buildroot.org>; Fri, 10 Jul 2026 07:20:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BHtzU6jTm5XF for <buildroot@buildroot.org>;
- Fri, 10 Jul 2026 07:20:20 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id T3OQwSdA3DqS for <buildroot@buildroot.org>;
+ Fri, 10 Jul 2026 07:20:33 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 82C16812BF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 82C16812BF
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 250DC400A1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 250DC400A1
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 82C16812BF
- for <buildroot@buildroot.org>; Fri, 10 Jul 2026 07:20:20 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 250DC400A1
+ for <buildroot@buildroot.org>; Fri, 10 Jul 2026 07:20:32 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6c4f9.dip0.t-ipconnect.de [79.214.196.249])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id ADB83A4C328A
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 959EDA4C324A
  for <buildroot@buildroot.org>; Fri, 10 Jul 2026 09:20:04 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:50068)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.4)
- (envelope-from <bernd@kuhls.net>) id 1wi5Wl-000000008GF-34G2
+ (envelope-from <bernd@kuhls.net>) id 1wi5Wl-000000008GF-2FHy
  for buildroot@buildroot.org; Fri, 10 Jul 2026 07:20:03 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Fri, 10 Jul 2026 09:20:03 +0200
-Message-ID: <20260710072003.160464-5-bernd@kuhls.net>
+Date: Fri, 10 Jul 2026 09:20:00 +0200
+Message-ID: <20260710072003.160464-2-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260710072003.160464-1-bernd@kuhls.net>
 References: <20260710072003.160464-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: +++
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202605290044; t=1783668004;
- bh=+YVL1eCeu5dbZjLh/nscsf2JSxTjJ7PybpsMYLwhJXg=;
+ bh=oezjHnB91UuPa7Ax890ML8CvGaTW2MjI9OcQsgWEmQ4=;
  h=From:To:Subject:Date:In-Reply-To:From;
- b=OEoJNVpEesteJViEtdPdRDe12OseEeAFWEn4KcGPMafH9NcKAegKKWabE0T4aXn7V
- NbjPf8+sWGxnMcw7ijG/NbNIqBIqeQeKaDUPOtF5F+20GsGKDBKOGJkcPEDAywAifh
- P4UIr1FQHSYTGu9WfqtqvWmoVjChpSpCDadYYj8AUdfIFbpqMqC7csFBxUSX4rfcAZ
- MXMyA9FgVvwzGH3DTUu0T6anfRm+tPDMzpYV/PadCuCXO58cKHtl6dbgLRE75xpdW5
- vP/enpoh+mLOfZKQk8M1Sis/cj//PF8ElEEo7phrdr/foxux5mm/nKMbpeNxADPrjN
- 7isT2M6XtrHmw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=Qj33nVx0rMx4GCNA+zQ2A9t7gzYNBTSqIV5YCrL4lnoZJb7SuKmRgSp7SVZX0bHLq
+ XYsgDEqCe3vqzxHaQ9bwlc47PsQm/0nsP+XqF7dKnC7cSYQecqjWZUbG/5yx/3dLJy
+ BlCteK/hZRLpzXnTOCkCP+sauwooJpe+HoF5l73YOv9RPWswwTl9Hb5mEPlldJgKgV
+ zMRIFh/Tn6QunX2OicZqluRj+4d5AXIFUFgndt2IVMnh9XiUKzS4BE4VrYA5eqjezM
+ ybZo+yePTTFzff/EWUd6gCAL6GeFlZBjZfMyiHvRfqc+7FU9eU6cVSL+O6KrcMai8v
+ ef0o5p/PmVNDw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=OEoJNVpE
-Subject: [Buildroot] [PATCH 5/5] package/intel-vpl-gpu-rt: bump version to
- 26.2.4
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202605290044 header.b=Qj33nVx0
+Subject: [Buildroot] [PATCH 2/5] package/libva-utils: bump version to 2.24.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -100,39 +98,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/intel/vpl-gpu-rt/releases/tag/intel-onevpl-26.2.4
+https://github.com/intel/libva-utils/blob/2.24.0/NEWS
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
 Gitlab pipelines passed:
 https://gitlab.com/bkuhls/buildroot/-/commits/668fc1fd6c25e7abbad7dbfe140e34c7187e1f75
 
- package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash | 2 +-
- package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk   | 2 +-
+ package/libva-utils/libva-utils.hash | 2 +-
+ package/libva-utils/libva-utils.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash b/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash
-index 325ceff9ff..ab25475be0 100644
---- a/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash
-+++ b/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash
+diff --git a/package/libva-utils/libva-utils.hash b/package/libva-utils/libva-utils.hash
+index 6888647865..d7b1a0789b 100644
+--- a/package/libva-utils/libva-utils.hash
++++ b/package/libva-utils/libva-utils.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  7cb0ce0c3b22e7f370053db5c363244feb8900fbd63da84f1e13f82776f8fddb  intel-vpl-gpu-rt-26.2.3.tar.gz
-+sha256  c103d936d708a3910ef8572e9403aabf423197cfce6c8a6fcf870072b6564ada  intel-vpl-gpu-rt-26.2.4.tar.gz
- sha256  c31c3cc5fd66d1250dbca1c3d9011a9f874537442ac71c8de80f2f0fed13f297  LICENSE
-diff --git a/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk b/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk
-index b2bef9c6dd..3cdcb40d9a 100644
---- a/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk
-+++ b/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk
+-sha256  fa7ff29847b55010fbbb775b35382f97f29b7b97abe9a2f6fb3e22b36db5440a  libva-utils-2.23.0.tar.gz
++sha256  bf959a1ced3cde8176a7ff50ad358ee98e93301ac068581a8b2617c5b83afcb3  libva-utils-2.24.0.tar.gz
+ sha256  c6220c9f87832c27abcb8a32eafdd2823e13ce146b3ea63d5deae2a76798ef50  COPYING
+diff --git a/package/libva-utils/libva-utils.mk b/package/libva-utils/libva-utils.mk
+index 3fdb6bcf70..38dd14610c 100644
+--- a/package/libva-utils/libva-utils.mk
++++ b/package/libva-utils/libva-utils.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--INTEL_VPL_GPU_RT_VERSION = 26.2.3
-+INTEL_VPL_GPU_RT_VERSION = 26.2.4
- INTEL_VPL_GPU_RT_SITE = $(call github,intel,vpl-gpu-rt,intel-onevpl-$(INTEL_VPL_GPU_RT_VERSION))
- INTEL_VPL_GPU_RT_LICENSE = MIT
- INTEL_VPL_GPU_RT_LICENSE_FILES = LICENSE
+-LIBVA_UTILS_VERSION = 2.23.0
++LIBVA_UTILS_VERSION = 2.24.0
+ LIBVA_UTILS_SITE = $(call github,intel,libva-utils,$(LIBVA_UTILS_VERSION))
+ LIBVA_UTILS_LICENSE = MIT
+ LIBVA_UTILS_LICENSE_FILES = COPYING
 -- 
 2.47.3
 
