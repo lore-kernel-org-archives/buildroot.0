@@ -1,218 +1,112 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF8F7C43458
-	for <buildroot@archiver.kernel.org>; Fri, 10 Jul 2026 23:04:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F477C43458
+	for <buildroot@archiver.kernel.org>; Sat, 11 Jul 2026 03:24:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8263C60A90;
-	Fri, 10 Jul 2026 23:04:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0247981414;
+	Sat, 11 Jul 2026 03:24:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zWvb1gAcEhOW; Fri, 10 Jul 2026 23:04:14 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZDq-jDm2DqJc; Sat, 11 Jul 2026 03:24:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9E1DC60A98
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B1EAD81416
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1783724654;
-	bh=GaTWy4akZggBDYrm6iRF47lSN5LDWnDT2OG+uyQfDJI=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=C3bn7qJfjkimTMdoieF7Urxg8WnjORys7uIQQSCRvc+Q+pG4lBt8F7m4x6BAJjvh/
-	 8UmA0IB26jaC7jkUnycgNfr2WMtqrBAQoQ59baGRgrCmcys6L7LN8DBFisZut9PYdq
-	 CRI/Nlm75xjqahQYgakC+MoI6Oohvq0coDjYyxgRMSsZPf3XdUIyQ2ux817VLOCtWw
-	 nEx/36lBvFYSIkUXu2RuO0Fl+ItjIVDu6iexi02njl1OE3CvkK5p30oKe2BEmJLDWp
-	 BfEMK/B1m/Kxid7EphwraFaDvciHRrRdRi08G1trlhkpoVaSUkNcJy4TcsopdxmcUn
-	 GDMnAbM01743Q==
+	s=default; t=1783740275;
+	bh=Rug2RfJs8UtjYlOaP753blPfIMWcpC40MSBElWPVDvY=;
+	h=To:From:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=rTJistuoFBz+RxK/nKkiG8gyY7a3OeAvM93HudsvZnLJ2GP67B0P2vnAT3q6t7J8Q
+	 /yssFB1g3rPJiJDfjKB2b7ixSYhCHUFg/35xULgjzhwx/TrwAZF0IUCxP9EUwcnOtk
+	 4TZQ+9RB7vQhl2mSK6npAY08aJCNMRr8xWfU3CdAVnuy/bKlQKQU2OXPx5jNmqwT3x
+	 rywR7Gsina3RipFJvtHMG3SG8UlxgP7cWaq8K8PWxF+6815jKwdzbbpM34RdGqLOy9
+	 NqJ02ChjfSRo4Xas80977pHTkIV9Um5l7CBFrqbTTY56FW9XZ7dj/yAJFbvTGxY2UI
+	 yk6m37nZfZ6Lw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9E1DC60A98;
-	Fri, 10 Jul 2026 23:04:14 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 86CF3372
- for <buildroot@buildroot.org>; Fri, 10 Jul 2026 23:04:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B1EAD81416;
+	Sat, 11 Jul 2026 03:24:35 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4F019372
+ for <buildroot@buildroot.org>; Sat, 11 Jul 2026 03:24:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6CF9040AD0
- for <buildroot@buildroot.org>; Fri, 10 Jul 2026 23:04:13 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 34DF640411
+ for <buildroot@buildroot.org>; Sat, 11 Jul 2026 03:24:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id H4DiVQ0-6UYY for <buildroot@buildroot.org>;
- Fri, 10 Jul 2026 23:04:12 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.21;
- helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E1F4240AC7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E1F4240AC7
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E1F4240AC7
- for <buildroot@buildroot.org>; Fri, 10 Jul 2026 23:04:11 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from client.hidden.invalid by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1N1OXT-1xBDwB3m15-0163cn; Sat, 11
- Jul 2026 01:04:09 +0200
-Message-ID: <c0070672-b8e2-4074-bba6-5aaea533386e@gmx.de>
-Date: Sat, 11 Jul 2026 01:04:07 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id z0Aj8cEzecoz for <buildroot@buildroot.org>;
+ Sat, 11 Jul 2026 03:24:33 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::433; helo=mail-wr1-x433.google.com;
+ envelope-from=buildroot.notifications@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org EB15E400C2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EB15E400C2
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
+ [IPv6:2a00:1450:4864:20::433])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id EB15E400C2
+ for <buildroot@buildroot.org>; Sat, 11 Jul 2026 03:24:32 +0000 (UTC)
+Received: by mail-wr1-x433.google.com with SMTP id
+ ffacd0b85a97d-474560436c3so1286650f8f.0
+ for <buildroot@buildroot.org>; Fri, 10 Jul 2026 20:24:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20251104; t=1783740271; x=1784345071;
+ h=date:from:to:subject:content-transfer-encoding:mime-version
+ :content-type:message-id:x-gm-gg:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to:content-type;
+ bh=GVajMau9YK1hd+wtxZhoFHh3WNlFJOU2LIVf45fAFcs=;
+ b=TMtLmo/2SGpuY01XZfZ2MPQfrZZlp6p1ufF4Eg4KY2OKH5zVwV9/aWj6Ca6YheTt9D
+ Y7jSn/xLwfyR0WhqGDuMK9bzc9crNro2uJfb02SL7uwfBvgNptXExg47Rxf1/1HqW01D
+ jbF5D1FbVt5grDJyDndqsvm+dUxJYRrBRKgeKG78EHXBKf1VgKSwJjoK2JXNZRK1P6SN
+ KQNTnXiFKQEJHg1mATfOFlnsJZ+ZJpI4Z+/sgeh4GT+tXtEtZ6esspDQe7MPmFM1XlMH
+ xc901AxkWIiklIhEE1RKQtHjX0wQoHBueX/tj1Fy8lK8ZRwSmFLa7WUuVnd3SCBpJZRc
+ rmVQ==
+X-Gm-Message-State: AOJu0YyIS2KkRzQop2dc8iZsZ9JvklkC36PG1NTk9UgqYDFPG2ruNlY/
+ 4aCa4yxELf2ZCpiYMdx80toLyxU+Iohia9BZnbt7cwF+7zagGZhdMyHAGy+Jz70b
+X-Gm-Gg: AfdE7cm1dzp6yNdDrKXgM8PVHuwWuXsTjSM3mR7Sipn7OPmhRjwl9IFwSv1IOPNPSOw
+ BNtbplrDeLP50okdps5I5fD0z50nn//1xgcFvXrUYVbfXDRY5JrPH6yOQPezuGLLpQjwm/D032k
+ jsmm4xX2WqN0vQbkg7/TlPOJQIwtxv2QBhWNSk0gB+7bLehcfJj0I29ys6OhFYxa43OMHHZyhTQ
+ u/NkUaz6jUUhaL4KziN43hpKJjEkJtXJ7ZJL+y77EJ49VgxyLfEHvf5YWWoVijYuHyeKytZXFr3
+ MzknEcA1FWISM+AM4i/rDskK6VBxtkycQQud+ayjca54Fay4Jbr3+Q8xc2UWSE4zHSnJIiU4MEL
+ iE1NUNA13SXOrD39UqOFBXyQrZcPCc4LoPT5585WdF87ZY4tmlQcsbvyq0fV8FYLHiXWVEC4I0D
+ eiOWvaNeoiuDwEcTlobMLaFk4E3w==
+X-Received: by 2002:a05:6000:22c9:b0:47d:fc45:8587 with SMTP id
+ ffacd0b85a97d-47f2da5c00amr1295128f8f.0.1783740270676; 
+ Fri, 10 Jul 2026 20:24:30 -0700 (PDT)
+Received: from [138.201.205.61] ([2a01:4f8:173:1526::2])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-47a9de1d910sm62947548f8f.6.2026.07.10.20.24.30
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 10 Jul 2026 20:24:30 -0700 (PDT)
+Message-ID: <6a51b76e.cc089686.163bc6.f4a0@mx.google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: =?UTF-8?Q?Vincent_Stehl=C3=A9?= <vincent.stehle@arm.com>,
- buildroot@buildroot.org
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20260605-p11-v1-0-f3a206958d94@arm.com>
-Content-Language: en-US, de-DE-1901, de-DE
-Autocrypt: addr=fiona.klute@gmx.de; keydata=
- xsFNBFrLsicBEADA7Px5KipL9zM7AVkZ6/U4QaWQyxhqim6MX88TxZ6KnqFiTSmevecEWbls
- ppqPES8FiSl+M00Xe5icsLsi4mkBujgbuSDiugjNyqeOH5iqtg69xTd/r5DRMqt0K93GzmIj
- 7ipWA+fomAMyX9FK3cHLBgoSLeb+Qj28W1cH94NGmpKtBxCkKfT+mjWvYUEwVdviMymdCAJj
- Iabr/QJ3KVZ7UPWr29IJ9Dv+SwW7VRjhXVQ5IwSBMDaTnzDOUILTxnHptB9ojn7t6bFhub9w
- xWXJQCsNkp+nUDESRwBeNLm4G5D3NFYVTg4qOQYLI/k/H1N3NEgaDuZ81NfhQJTIFVx+h0eT
- pjuQ4vATShJWea6N7ilLlyw7K81uuQoFB6VcG5hlAQWMejuHI4UBb+35r7fIFsy95ZwjxKqE
- QVS8P7lBKoihXpjcxRZiynx/Gm2nXm9ZmY3fG0fuLp9PQK9SpM9gQr/nbqguBoRoiBzONM9H
- pnxibwqgskVKzunZOXZeqyPNTC63wYcQXhidWxB9s+pBHP9FR+qht//8ivI29aTukrj3WWSU
- Q2S9ejpSyELLhPT9/gbeDzP0dYdSBiQjfd5AYHcMYQ0fSG9Tb1GyMsvh4OhTY7QwDz+1zT3x
- EzB0I1wpKu6m20C7nriWnJTCwXE6XMX7xViv6h8ev+uUHLoMEwARAQABzSBGaW9uYSBLbHV0
- ZSA8ZmlvbmEua2x1dGVAZ214LmRlPsLBlAQTAQgAPgIbIwULCQgHAwUVCgkICwUWAgMBAAIe
- AQIXgBYhBOTTE4/i2fL6gVL9ke6nJs4hI1pYBQJn9S5IBQkQ6+MhAAoJEO6nJs4hI1pYvz0P
- /34nPCo/g0WbeJB6N75/1EkM9gDD1+lT4GdFEYYnCzslSxrIsL3kWuzG2kpqrErU8i7Ao/B2
- iE3J9NinRe613xlVUy2CU1VKaekm3YTkcfR7u8G/STNEQ42S46+3JRBMlLg1YldRsfVXq8tc
- jdwo193h4zrEeEmUDm8n43BPBhhwNRf+igtI8cNVyn9nBt6BrDnSswg497lrRjGjoP2zTkLT
- Q/Sb/6rCHoyFAxVcicA7n2xvaW0Pg0rTOrtA9mVku5J3zqyS4ABtoUwPmyoTLa7vpZdC33hy
- g7+srYNdo9a1i9OKF+CK9q/4auf3bMMeJB472Q5N8yuthM+Qx8ICySElyVDYSbbQIle/h/L7
- XYgm4oE1CxwiVCi8/Y/GOqhHt+RHLRGG1Ic+btNTiW+R+4W4yGUxL7qLwepIMY9L/0UcdnUa
- OBJk4waEX2mgOTmyjKR0FAGtaSH1ebz2UbY6pz5H9tZ4BIX7ZcQN0fLZLoi/SbbF+WJgT4cd
- 8BooqbaNRoglaNCtTsJ7oyDesL9l0pzQb/ni1HGAXKW3WBq49r7uPOsDBP8ygyoAOYw4b/TX
- qUjJYpp9HcoQHv0sybSbXCFUMnL1E5WUhy8bBjA9fNtU43Fv3OR2n5/5xSn6o33XVMYMtkrN
- 0AvEfAOGGOMJWktEYA7rxy0TQiy0ttUq0eQszsFNBGQ1Nr0BEADTlcWyLC5GoRfQoYsgyPgO
- Z4ANz31xoQf4IU4i24b9oC7BBFDE+WzfsK5hNUqLADeSJo5cdTCXw5Vw3eSSBSoDP0Q9OUdi
- PNEbbblZ/tSaLadCm4pyh1e+/lHI4j2TjKmIO4vw0K59Kmyv44mW38KJkLmGuZDg5fHQrA9G
- 4oZLnBUBhBQkPQvcbwImzWWuyGA+jDEoE2ncmpWnMHoc4Lzpn1zxGNQlDVRUNnRCwkeclm55
- Dz4juffDWqWcC2NrY5KkjZ1+UtPjWMzRKlmItYlHF1vMqdWAskA6QOJNE//8TGsBGAPrwD7G
- cv4RIesk3Vl2IClyZWgJ67pOKbLhu/jz5x6wshFhB0yleOp94I/MY8OmbgdyVpnO7F5vqzb1
- LRmfSPHu0D8zwDQyg3WhUHVaKQ54TOmZ0Sjl0cTJRZMyOmwRZUEawel6ITgO+QQS147IE7uh
- Wa6IdWKNQ+LGLocAlTAi5VpMv+ne15JUsMQrHTd03OySOqtEstZz2FQV5jSS1JHivAmfH0xG
- fwxY6aWLK2PIFgyQkdwWJHIaacj0Vg6Kc1/IWIrM0m3yKQLJEaL5WsCv7BRfEtd5SEkl9wDI
- pExHHdTplCI9qoCmiQPYaZM5uPuirA5taUCJEmW9moVszl6nCdBesG2rgH5mvgPCMAwsPOz9
- 7n+uBiMk0ZSyTQARAQABwsF8BBgBCAAmAhsMFiEE5NMTj+LZ8vqBUv2R7qcmziEjWlgFAmf1
- LrEFCQeCXvQACgkQ7qcmziEjWljtgBAAnsoRDd6TlyntiKS8aJEPnFjcFX/LqujnCT4/eIn1
- bpbIjNbGH9Toz63H5JkqqXWcX1TKmlZGHZT2xU/fKzjcyTJzji9JP+z1gQl4jNESQeqO1qEO
- kqYe6/hZ5v/yCjpv2Y1sqBnPXKcm21fkyzUwYKPuX9O1Sy1VmP1rMzIRQHXnNapJJWn0wJAW
- 079YqdX1NzESJyj4stoLxIcDMkIEvOy3uhco8Bm8wS88MquJoR0KlyBR30QZy9KoxmTiWKws
- Mn6sy4aX9nac3W0pD+EyR+j/J9SWSvOENAmn4Km+ONxz93+oVLWb+KHtQQloxOsadO0wwiaZ
- xUT7vJcxSgjrHugSs+mOLznX/D8PfG/+tYLFlddphcOGldzH0rxKfs53BplAUe+LEZY1AU8p
- 0WDK2h097ZQ0eZiVZlvAKSjwsjow2tpqwamtfNKrFg/GFRbNZcoQuYsf3vBW1CiZ5JQ6Vh2A
- bCn+vBDsJwD9Hcht1eVRxnIq745SQ0naL48Q3HGpKdXZpJoBQZ8bSAFhRSb3m+P4PE272rLY
- 6FCkqS+UeX7RBpPkkIDoL7WS9HdvDHuQ751D56WkTnIpoF+sgW6tOEcfgFrYf3rVvh6G3B8S
- FPSOJuHYnwzMFrDNxQQKb0uS/j1s2dnlS55MouCvd5pShM5iRFzE7k3CMeS4NkhFim0=
-In-Reply-To: <20260605-p11-v1-0-f3a206958d94@arm.com>
-X-Provags-ID: V03:K1:/k8CHV5laSyBQ3g8YsqccTGhd/07rKROumTQzQl+qA/D04xbMlT
- 4tzB9kVTF4g4wCAnZzSdPlKcHVMxh/HwIJlQ9uose2safUTTUmt86rM3K9gNTRDHe+ltNX4
- hOHkZk5ICvdmJGAWisRwssY4rBRtsVxgU6taXPM/Ca//KDOsUbgYcsfmy2FPIhv4OGUmokt
- pkZeuQG+DKbbmUmKAVheQ==
-UI-OutboundReport: notjunk:1;M01:P0:mkE+8NxwC0k=;yQOee7BuFj5pphi/0gknVcC6IB+
- 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
+To: buildroot@buildroot.org
+From: Buildroot Notifications <buildroot.notifications@gmail.com>
+Date: Sat, 11 Jul 2026 03:24:30 -0000
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmx.de; 
- s=s31663417; t=1783724649; x=1784329449; i=fiona.klute@gmx.de;
- bh=/Y/UpTRH0ym0xbHiDbagZw7pnoYAkvv6B4Do0ualE00=;
- h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
- References:From:In-Reply-To:Content-Type:
- Content-Transfer-Encoding:cc:content-transfer-encoding:
- content-type:date:from:message-id:mime-version:reply-to:subject:
- to;
- b=f1BIlVkC/0I0Kj8kN3sw33UWt1INfxNWmIYOEd7PXKuxiySka7Tf9+cetxZtbsd2
- oJFrfZALmMSzQSnrCj6TziYQ++X1iJH65NWYaJu9em3T2h+C54E/tm9g7rHRBj/KD
- l8LQgF/EDNqmDOj+PtZJywgN+OYbUfWqIB8MAbk1bxfLUs3UIqeyGd0/OpylCttOu
- IQKZgrlP2Hpz8dq4f0d80lr4vRjR3ZyZ6PiMNeej6WumG+oQPLnEqCnPJBZmuDhCb
- Ee1Zv8oo70ERk9QQYLFZGqvW8AkfuUXHHPargavEmT2j0XJYLOP00UoO5pkeKo6JL
- y0d7RmuYfAqs7DTnmQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=gmx.de
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de
- header.a=rsa-sha256 header.s=s31663417 header.b=f1BIlVkC
-Subject: Re: [Buildroot] [PATCH next 0/2] Add support for pkcs11 to
- host-gnutls
+ d=gmail.com; s=20251104; t=1783740271; x=1784345071; darn=buildroot.org;
+ h=date:from:to:subject:content-transfer-encoding:mime-version
+ :content-type:message-id:from:to:cc:subject:date:message-id:reply-to
+ :content-type;
+ bh=GVajMau9YK1hd+wtxZhoFHh3WNlFJOU2LIVf45fAFcs=;
+ b=Vjm3/zGQX+5RgwHPbZbGRAJsEC9RCHci49Ut0/Pq2VCkHpf7xdMUJ7H8pPCHn1Ot23
+ 9V7ptSjzlua/dQrN8wEV+ZBgnFqONtSDS3s8UZep2o++wXkj4BYQvUEjPOcbJgVKEiWm
+ dv7qyyVjp6PF95AfL3a1ilLhFLNZWy5mhis9KjSv4F7XLxHowQReqqoE4ugK2tbPDWSK
+ UzkmNjb24fcxJhHelKB3xnZsuvjfTN+RGkUh9DyRZcwzSkizouGG4tJDYmPKWBIVvdJa
+ 2JoGwEWif6Up08MFinePASaTuIrQw27WykJXHAR+7eFSXZKNaYvrGJAus7D2yP5vdUAr
+ w/jQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20251104 header.b=Vjm3/zGQ
+Subject: [Buildroot] [autobuild.buildroot.org] Daily results for 2026-07-10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -224,43 +118,165 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Fiona Klute via buildroot <buildroot@buildroot.org>
-Reply-To: Fiona Klute <fiona.klute@gmx.de>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-QW0gMDUuMDYuMjYgdW0gMTE6NDMgc2NocmllYiBWaW5jZW50IFN0ZWhsw6k6Cj4gRnV0dXJlIFUt
-Qm9vdCAyMDI2LjA3IHdpbGwgYnVpbGQgbWtlZmljYXBzdWxlIHdpdGggcGtjczExIHN1cHBvcnQu
-IFsxXQo+IAo+IFRoaXMgY2F1c2VzIGxpbmsgZXJyb3JzIHdpdGggQnVpbGRyb290LCBzdWNoIGFz
-IHRoZSBmb2xsb3dpbmcgb25lOgo+IAo+ICAgIG1rZWZpY2Fwc3VsZS5jOigudGV4dC5zdGFydHVw
-KzB4Y2QzKTogdW5kZWZpbmVkIHJlZmVyZW5jZSB0byBgZ251dGxzX3BrY3MxMV9pbml0Jwo+IAo+
-IChPdGhlciBzeW1ib2xzIHRoZSBsaW5rZXIgY29tcGxhaW5zIGFib3V0IGFyZTogZ251dGxzX3Br
-Y3MxMV9hZGRfcHJvdmlkZXIsCj4gZ251dGxzX3BrY3MxMV9vYmpfbGlzdF9pbXBvcnRfdXJsNCwg
-Z251dGxzX3g1MDlfY3J0X2ltcG9ydF9wa2NzMTEgYW5kCj4gZ251dGxzX3BrY3MxMV9kZWluaXQu
-KQo+IAo+IFRoZSBmb2xsb3dpbmcgZXhhbXBsZSBjb21tYW5kcyBjYW4gYmUgdXNlZCB0byByZXBy
-b2R1Y2UgdGhlIGlzc3VlOgo+IAo+ICAgIG1ha2UgcWVtdV9hYXJjaDY0X2ViYnJfZGVmY29uZmln
-Cj4gICAgZWNobyAnQlIyX1RBUkdFVF9VQk9PVF9DVVNUT01fVkVSU0lPTl9WQUxVRT0iMjAyNi4w
-Ny1yYzMiJyA+Pi5jb25maWcKPiAgICBlY2hvICdCUjJfVEFSR0VUX1VCT09UX05FRURTX0dOVVRM
-Uz15JyA+Pi5jb25maWcKPiAgICBlY2hvICcjIEJSMl9ET1dOTE9BRF9GT1JDRV9DSEVDS19IQVNI
-RVMgaXMgbm90IHNldCcgPj4uY29uZmlnCj4gICAgbWFrZSBvbGRkZWZjb25maWcKPiAgICBtYWtl
-IHVib290Cj4gCj4gVGhpcyBzZXJpZXMgZG9lcyB0aGUgZm9sbG93aW5nIGNoYW5nZXMgdG8gc29s
-dmUgdGhpcyBpc3N1ZToKPiAxLiBFbmFibGUgaG9zdCBjb21waWxhdGlvbiBmb3IgcDExLWtpdAo+
-IDIuIEJ1aWxkIGhvc3QtZ251dGxzIHdpdGggcGtjczExIHN1cHBvcnQsIGxldmVyYWdpbmcgdGhl
-IG5ldyBob3N0LXAxMS1raXQuCj4gCj4gRm9yIHRoZSBzYWtlIG9mIHNpbXBsaWNpdHksIHBrY3Mx
-MSBzdXBwb3J0IGlzIGFkZGVkIHVuY29uZGl0aW9uYWxseSB0bwo+IGhvc3QtZ251dGxzLiBJZiB0
-aGlzIGlzIHByZWZlcnJlZCwgYSBjb25maWcgb3B0aW9uIGNvdWxkIGJlIGFkZGVkIGluc3RlYWQu
-Cj4gCj4gTGluazogaHR0cHM6Ly9naXRodWIuY29tL3UtYm9vdC91LWJvb3QvY29tbWl0LzBjNzE2
-YTE1N2JlNDYwMDA2YTRiNzYyNjI1ZGUzMjliNWUzNmRiZjkgWzFdCj4gU2lnbmVkLW9mZi1ieTog
-VmluY2VudCBTdGVobMOpIDx2aW5jZW50LnN0ZWhsZUBhcm0uY29tPgoKU2VyaWVzIGFwcGxpZWQg
-dG8gbWFzdGVyLCB0aGFuayB5b3UhCgo+IC0tLQo+IFZpbmNlbnQgU3RlaGzDqSAoMik6Cj4gICAg
-ICAgIHBhY2thZ2UvcDExLWtpdDogZW5hYmxlIGhvc3QgYnVpbGQKPiAgICAgICAgcGFja2FnZS9n
-bnV0bHM6IGFkZCBob3N0IHN1cHBvcnQgZm9yIHBrY3MxMQo+IAo+ICAgcGFja2FnZS9nbnV0bHMv
-Z251dGxzLm1rICAgfCA1ICsrKy0tCj4gICBwYWNrYWdlL3AxMS1raXQvcDExLWtpdC5tayB8IDkg
-KysrKysrKysrCj4gICAyIGZpbGVzIGNoYW5nZWQsIDEyIGluc2VydGlvbnMoKyksIDIgZGVsZXRp
-b25zKC0pCj4gLS0tCj4gYmFzZS1jb21taXQ6IDMyMzUxZjk3OTgyMmEwYjNhNDViODJjMmQ4MmJk
-YjIzMjhiMDJmNWEKPiBjaGFuZ2UtaWQ6IDIwMjYwNjAzLXAxMS01M2E2Zjg3YzdkMmUKPiAKPiBC
-ZXN0IHJlZ2FyZHMsCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBz
-Oi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+Hello,
+
+Autobuild statistics for 2026-07-10
+===================================
+
+      branch |  OK | NOK | TIM | TOT |
+  2025.02.x  |  5  |  5  |  0  | 10  |
+  2026.02.x  |  1  |  2  |  0  |  3  |
+  2026.05.x  |  1  |  2  |  0  |  3  |
+    master   | 31  | 41  |  0  | 72  |
+
+Classification of failures by reason for master
+-----------------------------------------------
+
+              host-pahole-1.28 | 6 
+              host-guile-3.0.9 | 3 
+                   bird-2.15.1 | 2 
+             alsa-lib-1.2.16.1 | 1 
+        balena-engine-20.10.26 | 1 
+                easydbus-0.1.0 | 1 
+        edk2-edk2-stable202602 | 1 
+                enscript-1.6.6 | 1 
+              execline-2.9.6.1 | 1 
+                      fio-3.42 | 1 
+                    fmt-12.2.0 | 1 
+glibc-2.43-45-gdae425b55420... | 1 
+  gobject-introspection-1.84.0 | 1 
+            host-binutils-2.44 | 1 
+          host-binutils-2.45.1 | 1 
+               host-dracut-110 | 1 
+                host-lzip-1.25 | 1 
+host-vboot-utils-7dfa482d6a... | 1 
+                   iotools-1.8 | 1 
+      libabseil-cpp-20260107.1 | 1 
+               libepoxy-1.5.10 | 1 
+                libgeos-3.14.1 | 1 
+                libsoup3-3.6.6 | 1 
+               linux-pam-1.7.2 | 1 
+              luabitop-1.0.2-1 | 1 
+                   perl-5.42.2 | 1 
+ qcom-db410c-firmware-1034.2.1 | 1 
+        riemann-c-client-2.2.2 | 1 
+         s6-linux-init-1.1.2.1 | 1 
+         s6-networking-2.7.0.4 | 1 
+       sp-oops-extract-0.0.7-1 | 1 
+           uboot-tools-2026.04 | 1 
+uhttpd-15346de8d3ba42200249... | 1 
+
+
+Detail of failures for master
+-----------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    i686     |       alsa-lib-1.2.16.1        | NOK | https://autobuild.buildroot.org/results/fd9e6a6f9e2d37df3cfc1ed36707aef9a338f24d |     
+  riscv64    |     balena-engine-20.10.26     | NOK | https://autobuild.buildroot.org/results/1ba6d19ef4d019b247c401c571e7b30940a36da6 |     
+    i686     |          bird-2.15.1           | NOK | https://autobuild.buildroot.org/results/8aaa629e29b3bdef18516448e43a90a3ec37ee2e |     
+    i686     |          bird-2.15.1           | NOK | https://autobuild.buildroot.org/results/c310d797458fb3a4df3365f417139f376a844c63 |     
+    i686     |         easydbus-0.1.0         | NOK | https://autobuild.buildroot.org/results/ebaba76c05ae317008505ef39679ae9f239acccf |     
+    i686     |     edk2-edk2-stable202602     | NOK | https://autobuild.buildroot.org/results/47afb796790f95f59a103c7b6076e83ba1303e1d |     
+    i686     |         enscript-1.6.6         | NOK | https://autobuild.buildroot.org/results/0e392e807dd8dda64585542bf0572f586b41f662 | ORPH
+    i686     |        execline-2.9.6.1        | NOK | https://autobuild.buildroot.org/results/32d0bc696ee07f9384ca4d567a4b7342e5587399 |     
+powerpc64le  |            fio-3.42            | NOK | https://autobuild.buildroot.org/results/1bf366a923749a54b9284c469285ab74fdac979d |     
+    i686     |           fmt-12.2.0           | NOK | https://autobuild.buildroot.org/results/55ebbb9da027c1972871a1512e8ba77537ba9040 |     
+  mips64el   | glibc-2.43-45-gdae425b55420... | NOK | https://autobuild.buildroot.org/results/cf0cf65ffffdb582846d0733a66ab01e0f7b7081 |     
+  aarch64    |  gobject-introspection-1.84.0  | NOK | https://autobuild.buildroot.org/results/7dd6c30c38398b7941193e6665810cce6fd83877 | ORPH
+    i686     |       host-binutils-2.44       | NOK | https://autobuild.buildroot.org/results/d940741e90ca30b2ac1332c33d46ee522bb4b313 |     
+    i686     |      host-binutils-2.45.1      | NOK | https://autobuild.buildroot.org/results/b4c831f421eb170afd26f88d5dfdbfc3ac19a2f6 |     
+    i686     |        host-dracut-110         | NOK | https://autobuild.buildroot.org/results/31b9d560a357b099a39dac5beb80393f61f88c5b |     
+    i686     |        host-guile-3.0.9        | NOK | https://autobuild.buildroot.org/results/bc76696d311364eec57f34ff9d29208ec086f1c4 |     
+  aarch64    |        host-guile-3.0.9        | NOK | https://autobuild.buildroot.org/results/9bbf12a22a2868d738c6d7eafa7a3a761be3dff1 |     
+   x86_64    |        host-guile-3.0.9        | NOK | https://autobuild.buildroot.org/results/3104e12c2b2579c69923f26b1bcadc013647f1e6 |     
+    i586     |         host-lzip-1.25         | NOK | https://autobuild.buildroot.org/results/2e94c231de6f7c532bc55536a4c887f33eee57ff | ORPH
+    i686     |        host-pahole-1.28        | NOK | https://autobuild.buildroot.org/results/9db08c77b7150bb1e6a19720c2221b8ae94ff45e |     
+  riscv64    |        host-pahole-1.28        | NOK | https://autobuild.buildroot.org/results/3d81b9de62e507b0cd91609285391ed25df7fcf3 |     
+    i686     |        host-pahole-1.28        | NOK | https://autobuild.buildroot.org/results/6a5254616c3aa28be2aad7fc3899d5b8a5de884c |     
+  aarch64    |        host-pahole-1.28        | NOK | https://autobuild.buildroot.org/results/7124e92d73d86c862937a9360c0bf992816c2e17 |     
+    i686     |        host-pahole-1.28        | NOK | https://autobuild.buildroot.org/results/b8ef874b2672ce222c14aa26c73f2aa9fbe94b7c |     
+    i686     |        host-pahole-1.28        | NOK | https://autobuild.buildroot.org/results/43c5cbff978e9b9b978766be2e620002e228c736 |     
+    i586     | host-vboot-utils-7dfa482d6a... | NOK | https://autobuild.buildroot.org/results/122d23e499b52c0c2cbc28367bb69a6cab6dc519 |     
+powerpc64le  |          iotools-1.8           | NOK | https://autobuild.buildroot.org/results/b1836e8f235a01f13f0d8cf594bce54b212809ff |     
+    i686     |    libabseil-cpp-20260107.1    | NOK | https://autobuild.buildroot.org/results/ede4878523420cd8367b0868ae63b932c5285513 |     
+    i586     |        libepoxy-1.5.10         | NOK | https://autobuild.buildroot.org/results/42b91e405fb767a83b742c1fe2842a7dd71c777d |     
+    or1k     |         libgeos-3.14.1         | NOK | https://autobuild.buildroot.org/results/55b82090455b770a667b3e0f3b65f8c704c82f94 |     
+  mips64el   |         libsoup3-3.6.6         | NOK | https://autobuild.buildroot.org/results/82dc5b09862418853e8f7809e4002787795dd7a6 |     
+    i686     |        linux-pam-1.7.2         | NOK | https://autobuild.buildroot.org/results/3cdc349a4820cb1e6e444fcaed62445958bb678b | ORPH
+    i686     |        luabitop-1.0.2-1        | NOK | https://autobuild.buildroot.org/results/e6b9385130dd046295b07012d917fbf883316772 |     
+    i686     |          perl-5.42.2           | NOK | https://autobuild.buildroot.org/results/6390af193294b5e940653d9d73fdc24d018dd9af |     
+   x86_64    | qcom-db410c-firmware-1034.2.1  | NOK | https://autobuild.buildroot.org/results/647d2170268e3d579ef5116da42bf88f437c34b2 |     
+    i686     |     riemann-c-client-2.2.2     | NOK | https://autobuild.buildroot.org/results/362241ad5822a69b7d13c9afd27eec1b775bde79 | ORPH
+    i586     |     s6-linux-init-1.1.2.1      | NOK | https://autobuild.buildroot.org/results/b8e489a6f4a0221d6c8c9291a15a3052f49466f7 |     
+    i686     |     s6-networking-2.7.0.4      | NOK | https://autobuild.buildroot.org/results/5af298b76121f727b8625c40aad418d56858f12a |     
+    i686     |    sp-oops-extract-0.0.7-1     | NOK | https://autobuild.buildroot.org/results/5f4d5e19d010bcb2eb7eebb7f97b7b73af7974e5 |     
+  riscv64    |      uboot-tools-2026.04       | NOK | https://autobuild.buildroot.org/results/bb11fb5add6a2270a6d8d5cfafeebfa0ce46acfc | ORPH
+  mips64el   | uhttpd-15346de8d3ba42200249... | NOK | https://autobuild.buildroot.org/results/b26d4236b842267048ec5ebe41c8dd7cf290d3d7 | ORPH
+
+
+Classification of failures by reason for 2026.05.x
+--------------------------------------------------
+
+          linux-5.10.254-cip72 | 1 
+                     mtd-2.3.1 | 1 
+
+
+Detail of failures for 2026.05.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    i686     |      linux-5.10.254-cip72      | NOK | https://autobuild.buildroot.org/results/dba064b33e31780726533fe19bbbe1ac09a8b373 | ORPH
+   x86_64    |           mtd-2.3.1            | NOK | https://autobuild.buildroot.org/results/0f98ecdf6da7198c28fa06dcedfe7779959b12be |     
+
+
+Classification of failures by reason for 2026.02.x
+--------------------------------------------------
+
+                openntpd-6.8p1 | 1 
+                openswan-3.0.0 | 1 
+
+
+Detail of failures for 2026.02.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+   x86_64    |         openntpd-6.8p1         | NOK | https://autobuild.buildroot.org/results/bd234d4ac45b26f59340c0e4ff8714c1d4c9f873 | ORPH
+    sh4a     |         openswan-3.0.0         | NOK | https://autobuild.buildroot.org/results/7070c9d0bc8de38aa37cfe47c8b9e86e15c307ad |     
+
+
+Classification of failures by reason for 2025.02.x
+--------------------------------------------------
+
+        host-python-lxml-5.3.0 | 2 
+                  libva-2.22.0 | 1 
+              luabitop-1.0.2-1 | 1 
+                    sslh-2.0.1 | 1 
+
+
+Detail of failures for 2025.02.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    i586     |     host-python-lxml-5.3.0     | NOK | https://autobuild.buildroot.org/results/1fde181e2af01051b3c4b82be0d9026702f082ad |     
+powerpc64le  |     host-python-lxml-5.3.0     | NOK | https://autobuild.buildroot.org/results/974a2ff66aa87539252c334dfa9d292cd77e22c8 |     
+   arceb     |          libva-2.22.0          | NOK | https://autobuild.buildroot.org/results/20006eb564b07d7c66405b5616dc6e5ce783e56a |     
+  powerpc    |        luabitop-1.0.2-1        | NOK | https://autobuild.buildroot.org/results/9a46a994cc7197e021e265f4fccf7f87f2f5cdcf |     
+    i686     |           sslh-2.0.1           | NOK | https://autobuild.buildroot.org/results/8d3a1a6071a3cf6202acddf36ce4dfbec0992dfd | ORPH
+
+
+
+-- 
+https://autobuild.buildroot.org
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
