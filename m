@@ -4,59 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64489C43458
-	for <buildroot@archiver.kernel.org>; Sat, 11 Jul 2026 17:35:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F03EBC43458
+	for <buildroot@archiver.kernel.org>; Sat, 11 Jul 2026 17:37:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F184E606CA;
-	Sat, 11 Jul 2026 17:35:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2978560DCA;
+	Sat, 11 Jul 2026 17:37:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NTSo6bJVTTvN; Sat, 11 Jul 2026 17:35:45 +0000 (UTC)
+ id x7zOBQHHF7PR; Sat, 11 Jul 2026 17:37:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DD36E60621
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 163B26064A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1783791344;
-	bh=cYVfoqAkbeAAB8b5+GNwirGL7ITTrunfrY5nQuj/1ac=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=sUsAb2/T0Iwu1/3GftdGOcE5MBLPzzRiBfzl3yWoARnCvoEPkjXaSTuRQRxX6LqGo
-	 WsVBzQNEEtLa9f1fx8lkU+e+Ti5omKmTTP1BEqfOWEAIfoPC99UHUAk/T8e0HUyZAQ
-	 2E+h2B9LV1myU+rQ990usAQkDnHXUHsf2XF755VPB0BKfxa499aOXpCovRkFr8BeLl
-	 HoURSw7THGDDipxwvOtihqNQN6uLQz+NwbPw2FfoQNoKGxVxcvkPBpqctgGFUtiz1K
-	 wgZXvvQ+Hp90Cw/Y+zeYJyK7YmXeh6CtgLawyAXEw/XWgm+28T1Ikmdk9Fscn9+AOw
-	 E4QFabBX/jqPQ==
+	s=default; t=1783791474;
+	bh=AkZ5+kmkHxauZU1PBuEN4H/UC34eTBftml9QPEVOcyU=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=RlHt5KsIQHVjxWGUK0YxCb933W7Zvuyy7oZGp0o3ad9dP2bbuKiLoGa3E+dnZ+tkt
+	 PbwTeIgooB8TCy76NsyWKqJfbKmRw/OZ7P3FfZUDdOu7DmKie/dseddiD1R995ld+B
+	 ONlq3udx6Z8RtXPhU9+J9gIDzhuEtapijjaqE7907Apabbyn1uZJU/Z/OhiNE9Hn6N
+	 A0V03nJpIg1G3rzmTIx8B+vfiEmaVQrEtGGu0mTL48p31EgZNa5zzUKhiQIWij+R7/
+	 lVFY2hcKMs3nSzFSLzHG0VpXcb/pW1Ayw8hFMXOqdRZjC1ayttVoHm2g5e8WwO62LQ
+	 acPYJnHCQzKEw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DD36E60621;
-	Sat, 11 Jul 2026 17:35:44 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 8C791372
- for <buildroot@buildroot.org>; Sat, 11 Jul 2026 17:35:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 163B26064A;
+	Sat, 11 Jul 2026 17:37:54 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 022A02EE
+ for <buildroot@buildroot.org>; Sat, 11 Jul 2026 17:37:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 69B394068B
- for <buildroot@buildroot.org>; Sat, 11 Jul 2026 17:35:43 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E87536064A
+ for <buildroot@buildroot.org>; Sat, 11 Jul 2026 17:37:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iODpA3vdMwwE for <buildroot@buildroot.org>;
- Sat, 11 Jul 2026 17:35:42 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4AE2B4067A
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4AE2B4067A
- for <buildroot@buildroot.org>; Sat, 11 Jul 2026 17:35:42 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DBF238872F; Sat, 11 Jul 2026 17:35:08 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 11 Jul 2026 19:27:09 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 29f09f3ac4284890eda4a13f3748cb59d390d410
-X-Git-Newrev: 1dfcb841f9021310bc81a2d0bb3c52c90050a325
-X-Patchwork-Hint: ignore
-Message-Id: <20260711173508.DBF238872F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/qemu_arm_vexpress_tz_defconfig:
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AqG0DpM8A1Vp for <buildroot@buildroot.org>;
+ Sat, 11 Jul 2026 17:37:52 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::15;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A93C260618
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A93C260618
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A93C260618
+ for <buildroot@buildroot.org>; Sat, 11 Jul 2026 17:37:50 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id 38D31780389;
+ Sat, 11 Jul 2026 19:37:46 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 11 Jul 2026 19:37:46 +0200
+MIME-Version: 1.0
+Date: Sat, 11 Jul 2026 19:37:46 +0200
+To: Romain Naour <romain.naour@smile.fr>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20260624114538.1705870-1-romain.naour@smile.fr>
+References: <20260624114538.1705870-1-romain.naour@smile.fr>
+User-Agent: Webmail Free/1.6.17
+Message-ID: <253f57e5354df78ebbf9047b57374301@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1783791467;
+ bh=FxJm1WhrB6bHOTXXjyYsK7Kmn1oM0IaHfA4oLsz8Ii8=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=YbdZdBzmTeUuFrlJBUutRnIhKESz8u78dg9GOKKVyMqRuu9qiptua0aGo9WpyL945
+ 8uJ5vKe4HqTjvg1bW6h3yJJqOEXOrGuvh31H2u9zDmaMt1W55/8MjLLgZSPJV0y6j8
+ CKXzJxDV7MFOtexOUltrJ9W5D5w1epI4/+lujDPP7F8YspalDzIwdDc0PEpt6OHacG
+ kzIriNmpQZl47SPWT/SlfTAnHMC3/bi0AH6DYbLEQP44zUZQFE8C97cyVMR935f7nX
+ V7AIvoU10HL4kD/yLB7PiGSEEd3BK1SSJyME+LzVlCZF898o50ieUeFOF5Glx9zM2n
+ n9UYLjEB2wO9Q==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=YbdZdBzm
+Subject: Re: [Buildroot] [PATCH] configs/qemu_arm_vexpress_tz_defconfig:
  bump tf-a and u-boot versions
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -71,99 +96,34 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/1dfcb841f9021310bc81a2d0bb3c52c90050a325
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 24/06/2026 13:45, Romain Naour via buildroot wrote:
+> - Bump TF-A LTS 2.12
+> - Bump u-boot to version 2026.04.
+> 
+> smhload command has been removed from u-boot 2022.07 [1], use
+> "load hostfs" generic command as suggested by the documentation [2].
+> 
+> [1] 
+> https://source.denx.de/u-boot/u-boot/-/commit/dcc4f9623e27b92a1e0b97326631b0d5841c49cb
+> [2] 
+> https://docs.u-boot-project.org/en/latest/usage/semihosting.html#migrating-from-smhload
+> 
+> Signed-off-by: Romain Naour <romain.naour@smile.fr>
 
-- Bump TF-A LTS 2.12
-- Bump u-boot to version 2026.04.
+Applied to master, thanks.
 
-smhload command has been removed from u-boot 2022.07 [1], use
-"load hostfs" generic command as suggested by the documentation [2].
+For info, I added BR2_TARGET_UBOOT_NEEDS_DTC=y and also removed
+BR2_TOOLCHAIN_BUILDROOT_CXX=y. See:
+https://gitlab.com/buildroot.org/buildroot/-/commit/1dfcb841f9021310bc81a2d0bb3c52c90050a325
 
-This commit adds BR2_TARGET_UBOOT_NEEDS_DTC=y, because the new
-2026.04 version does need dtc. Adding host-dtc also avoid uboot build
-failures on hosts with libyaml (uboot builds its own dtc if none is
-defined in DTC build variable).
+Best regards,
 
-This commit also removes BR2_TOOLCHAIN_BUILDROOT_CXX=y, which was
-forgotten when the defconfig was switched to Bootlin toolchain, in
-commit [3].
-
-[1] https://source.denx.de/u-boot/u-boot/-/commit/dcc4f9623e27b92a1e0b97326631b0d5841c49cb
-[2] https://docs.u-boot-project.org/en/latest/usage/semihosting.html#migrating-from-smhload
-[3] https://gitlab.com/buildroot.org/buildroot/-/commit/dbe0896826e7394da71d653c6987d1a119d85336
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-[Julien:
- - add BR2_TARGET_UBOOT_NEEDS_DTC=y
- - remove BR2_TOOLCHAIN_BUILDROOT_CXX=y
-]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- board/qemu/arm-vexpress-tz/u-boot.config | 2 +-
- board/qemu/patches/uboot/uboot.hash      | 2 +-
- configs/qemu_arm_vexpress_tz_defconfig   | 7 +++----
- 3 files changed, 5 insertions(+), 6 deletions(-)
-
-diff --git a/board/qemu/arm-vexpress-tz/u-boot.config b/board/qemu/arm-vexpress-tz/u-boot.config
-index 48b1d06fdb..8633ea18d0 100644
---- a/board/qemu/arm-vexpress-tz/u-boot.config
-+++ b/board/qemu/arm-vexpress-tz/u-boot.config
-@@ -1,5 +1,5 @@
- CONFIG_SYS_TEXT_BASE=0x60000000
--CONFIG_BOOTCOMMAND="smhload zImage ${kernel_addr_r} && smhload rootfs.cpio.uboot ${ramdisk_addr_r} && setenv bootargs console=ttyAMA0,115200 earlyprintk=serial,ttyAMA0,115200 && bootz ${kernel_addr_r} ${ramdisk_addr_r} ${fdt_addr}"
-+CONFIG_BOOTCOMMAND="load hostfs - ${kernel_addr_r} zImage && load hostfs - ${ramdisk_addr_r} rootfs.cpio.uboot  && setenv bootargs console=ttyAMA0,115200 earlyprintk=serial,ttyAMA0,115200 && bootz ${kernel_addr_r} ${ramdisk_addr_r} ${fdt_addr}"
- CONFIG_SEMIHOSTING=y
- # Drop flash accesses
- CONFIG_ENV_IS_IN_FLASH=n
-diff --git a/board/qemu/patches/uboot/uboot.hash b/board/qemu/patches/uboot/uboot.hash
-index 7762ff3f8f..594d7ebeae 100644
---- a/board/qemu/patches/uboot/uboot.hash
-+++ b/board/qemu/patches/uboot/uboot.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  68e065413926778e276ec3abd28bb32fa82abaa4a6898d570c1f48fbdb08bcd0  u-boot-2022.04.tar.bz2
- sha256  b99611f1ed237bf3541bdc8434b68c96a6e05967061f992443cb30aabebef5b3  u-boot-2024.01.tar.bz2
-+sha256  ac7c04b8b7004923b00a4e5d6699c5df4d21233bac9fda690d8cfbc209fff2fd  u-boot-2026.04.tar.bz2
-diff --git a/configs/qemu_arm_vexpress_tz_defconfig b/configs/qemu_arm_vexpress_tz_defconfig
-index 48273cdf5a..84dca264da 100644
---- a/configs/qemu_arm_vexpress_tz_defconfig
-+++ b/configs/qemu_arm_vexpress_tz_defconfig
-@@ -4,7 +4,6 @@ BR2_ARM_FPU_VFPV3D16=y
- BR2_TOOLCHAIN_EXTERNAL=y
- BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
- BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_GLIBC_STABLE=y
--BR2_TOOLCHAIN_BUILDROOT_CXX=y
- BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-@@ -24,8 +23,7 @@ BR2_TARGET_ROOTFS_CPIO_GZIP=y
- BR2_TARGET_ROOTFS_CPIO_UIMAGE=y
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.7"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_LTS_2_12_VERSION=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="qemu"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL32_OPTEE=y
-@@ -37,8 +35,9 @@ BR2_TARGET_OPTEE_OS_PLATFORM="vexpress-qemu_virt"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.04"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2026.04"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="qemu_arm"
- BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/qemu/arm-vexpress-tz/u-boot.config"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_PACKAGE_HOST_QEMU=y
- BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
