@@ -1,63 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7196C44506
-	for <buildroot@archiver.kernel.org>; Sun, 12 Jul 2026 14:19:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29812C43458
+	for <buildroot@archiver.kernel.org>; Sun, 12 Jul 2026 14:20:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8DE04607A2;
-	Sun, 12 Jul 2026 14:19:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F18B4812B4;
+	Sun, 12 Jul 2026 14:20:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jxlDOS9Vuhoo; Sun, 12 Jul 2026 14:19:35 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OaiV2TrMdAFL; Sun, 12 Jul 2026 14:20:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 46CED606C5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 47E5F811DD
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1783865975;
-	bh=wmCVvmT617SeKge7FevEi0sFWGRuJR//LnSN/Em/cTg=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=HoKoW1fenvRUOyRWXtKUgSJv6Q1Mteg49KTHaIVGoPGniwB9WdtDExAl/Uiyy9ftp
-	 rAKNq+Y44lO2dQvKYnXPpWW9R6xRbQPLH6zKWbN9rBR/5IvSOnB+gbBja44y5jHO2P
-	 1jg8vRBApzfzgab0ta/F6ShIuo2Wo9cdY9GCUHA53KL1OH9rUgEIgQMEAf938YY9zy
-	 WsPa6dTqRcbKHF4K1QoodA3aExncVY60ZNWsYT4j+4uUV+YrF1V07ao7W90VfWwu3U
-	 XvyZt+aNwWbxIw2d3wiF/oMtc42JsiFG5nrDtNQBe2UFOuLS3jWV0aqtobS4VYYgjG
-	 54YRNDERx9O8g==
+	s=default; t=1783866004;
+	bh=XMovYZ4ktItA8RUqcM7FusI9JuPw2WMlT7clOW9bycA=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=YfToqsDv8RrpcjaHBzYJBiVbHMvfvM55orFEGS2wIt4/FqbHvvdjMGgi9Z/uvF2mg
+	 YWffnxmqZ4m/rQjkSPoPpVfzy7DtLYM6BXKPwuEfvycCt0Qxon5dUvVkon2bYwVfkT
+	 3UpJW/mcUJ/sukQ02DBjPWDZPOUBx4JfS+PdCEGg2VU4lfqXYsncIjMkSy/Mdj+sAK
+	 mt72iGVGrBMoX9GwFynTha8PXGEW9lm+C/2GLxXEmOoID/CCs85wlMbJcC2NoKa939
+	 FLWP2BhSchLi5AP1ADx+L5pETZnbhfdbAnERcDH25aZx1dUlHRnPnIVzu03EikkCSJ
+	 1Z2dliu/JWlbw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 46CED606C5;
-	Sun, 12 Jul 2026 14:19:35 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 926EA2EE
- for <buildroot@buildroot.org>; Sun, 12 Jul 2026 14:19:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 47E5F811DD;
+	Sun, 12 Jul 2026 14:20:04 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2EFA32EE
+ for <buildroot@buildroot.org>; Sun, 12 Jul 2026 14:20:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 842A54077E
- for <buildroot@buildroot.org>; Sun, 12 Jul 2026 14:19:18 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 14C88811E9
+ for <buildroot@buildroot.org>; Sun, 12 Jul 2026 14:20:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qd8veSPBpUKE for <buildroot@buildroot.org>;
- Sun, 12 Jul 2026 14:19:16 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8D47A407C8
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8D47A407C8
- for <buildroot@buildroot.org>; Sun, 12 Jul 2026 14:19:16 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C875A88733; Sun, 12 Jul 2026 14:18:42 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 12 Jul 2026 16:18:57 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4412e6e1af11637ae8ff8dec4adf9cf37a8a2bd3
-X-Git-Newrev: abc25b9c3b2b1328a8dfe4be3e03eedb6bfe49ff
-X-Patchwork-Hint: ignore
-Message-Id: <20260712141842.C875A88733@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/xilinx-fpgautil: bump to
- xlnx-rel-v2026.1
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id A5hCRAfrtgHW for <buildroot@buildroot.org>;
+ Sun, 12 Jul 2026 14:20:02 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 64CD6811CA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 64CD6811CA
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 64CD6811CA
+ for <buildroot@buildroot.org>; Sun, 12 Jul 2026 14:20:02 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id B78BD13F89C;
+ Sun, 12 Jul 2026 16:19:51 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 12 Jul 2026 16:19:51 +0200
+MIME-Version: 1.0
+Date: Sun, 12 Jul 2026 16:19:51 +0200
+To: Neal Frager <neal.frager@amd.com>
+Cc: buildroot@buildroot.org, ibai.erkiaga-elorza@amd.com,
+ luca.ceresoli@bootlin.com, brandon.maier@collins.com,
+ thomas.petazzoni@bootlin.com, romain.naour@smile.fr, michal.simek@amd.com,
+ romain.naour@gmail.com
+In-Reply-To: <20260617050535.2670810-1-neal.frager@amd.com>
+References: <20260617050535.2670810-1-neal.frager@amd.com>
+User-Agent: Webmail Free/1.6.17
+Message-ID: <5035d5db3ad2e9354fd7733b6b489bc8@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1783866000;
+ bh=LJLhvM6Op+zy1YAh4j8kGRHxBMnGXXBUvwnOrmHrBTI=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=qwnpfo89m5bFvAgHljWG5CqhR0FaLEhMC5aTnUj4d8plwLmpfvTvAAz+Bu8mbRLU9
+ hDfnyp+9QqFFcvlyAf0DudE+pMVSNdwS9pWLMWZVqSASksBB6Mc78jwmYbWvXioj7G
+ 1eidlfKtSLMgKrcY3PlkuUwHNtBkVUED/gTI0K00gjrlelwMKzYwCp3CBpFuUA+/1P
+ pbdcecaaFJy6u+U4+WyGliwF+BfP8mjWXghncQjwElJK1BUZwShqAL44l567Ww/VCF
+ z4+hl48+APvFPfnzf0/DCc0UA/RvBYD1NMs6BdM0Ggxk6XsMPoT0snRTjhP3aOwmrG
+ ZCdjbJAUU7MXQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=qwnpfo89
+Subject: Re: [Buildroot] [PATCH v1 01/10] boot/xilinx-embeddedsw: add
+ xilinx_v2026.1 hash
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,46 +98,17 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/abc25b9c3b2b1328a8dfe4be3e03eedb6bfe49ff
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 17/06/2026 07:05, Neal Frager via buildroot wrote:
+> Add hash to xilinx-embeddedsw for xilinx_v2026.1 release tag.
+> 
+> Signed-off-by: Neal Frager <neal.frager@amd.com>
 
-Bump xilinx-fpgautil to xlnx-rel-v2026.1 version.
-
-Signed-off-by: Neal Frager <neal.frager@amd.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/xilinx-fpgautil/xilinx-fpgautil.hash | 2 +-
- package/xilinx-fpgautil/xilinx-fpgautil.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/xilinx-fpgautil/xilinx-fpgautil.hash b/package/xilinx-fpgautil/xilinx-fpgautil.hash
-index b66ef8186b..42a10c40bd 100644
---- a/package/xilinx-fpgautil/xilinx-fpgautil.hash
-+++ b/package/xilinx-fpgautil/xilinx-fpgautil.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  043d87f12550283008ee0850f18ca807a48cc4ee085182ae84f8bed65fa73425  xilinx-fpgautil-xlnx-rel-v2025.2.tar.gz
-+sha256  6126a6d1baa937bf94e044fdde1eaecbd1c0b545835293bad51bbf5a8e6b7cc0  xilinx-fpgautil-xlnx-rel-v2026.1.tar.gz
- sha256  89807acf2309bd285f033404ee78581602f3cd9b819a16ac2f0e5f60ff4a473e  COPYING.MIT
-diff --git a/package/xilinx-fpgautil/xilinx-fpgautil.mk b/package/xilinx-fpgautil/xilinx-fpgautil.mk
-index f53ed80e2f..bc63427f18 100644
---- a/package/xilinx-fpgautil/xilinx-fpgautil.mk
-+++ b/package/xilinx-fpgautil/xilinx-fpgautil.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XILINX_FPGAUTIL_VERSION = xlnx-rel-v2025.2
-+XILINX_FPGAUTIL_VERSION = xlnx-rel-v2026.1
- XILINX_FPGAUTIL_SITE = $(call github,Xilinx,meta-xilinx,$(XILINX_FPGAUTIL_VERSION))
- XILINX_FPGAUTIL_LICENSE = MIT
- XILINX_FPGAUTIL_LICENSE_FILES = COPYING.MIT
+Series applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
