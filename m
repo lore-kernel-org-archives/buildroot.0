@@ -1,62 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA401C43458
-	for <buildroot@archiver.kernel.org>; Sun, 12 Jul 2026 14:19:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10E6BC44501
+	for <buildroot@archiver.kernel.org>; Sun, 12 Jul 2026 14:19:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 133AE81311;
-	Sun, 12 Jul 2026 14:19:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DD01060664;
+	Sun, 12 Jul 2026 14:19:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1p25T8CoiYTt; Sun, 12 Jul 2026 14:19:26 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id a91gkvfUeVTy; Sun, 12 Jul 2026 14:19:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C35BB81170
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 08738606B9
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1783865966;
-	bh=t4pvwrtJpWUYJ0LXxD4S9TprUt9SFXt1nOedp9OLMPw=;
+	s=default; t=1783865971;
+	bh=lTFpu2QX38ej6dZas3W6QDyB9bw80D9/JH25KJGkoOA=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=YBAAIqv6aNzMXz5/JAqZiKvFCAhSug35Nun0oCaJv9Mmf6k+X3+EAEfkn7U661Wr/
-	 MXTx1ZfPAq2WrqsfUX43KVLEAzxeHE/dDo96OqN61zzgu6utVF0tRvf09cQ0pX2vUk
-	 vn/txeLId3vH3nizp5Ym6/pGqm11700W9gh3asOdnx+7t/v73nuF+1/W2a4e/i91Lw
-	 0c8dyx6ZeM5gRPg9sSILIINQ2cJvHbmGbe1nEkifqCnbGB1WfcZHIpq8blC7AP/1n5
-	 lFM7rEgikwAZMLyQdnhshSpH7pno/cmE9U1SkQFupKrmJu28CgaP/lRQIeHGfsmyhL
-	 52jo8j7pPPfJA==
+	b=NW2X6+kAFCaTN4be/8jVHccN92ragbpR4rgcgiGr5nKFTdPKXtd+Rutzek0kEzGxm
+	 a9t2UilT1srV9ZgLOGoeU5X1c95wFH5kwNqnyT+faG8XCFENkauBZjxy9I1PIM+SHo
+	 +2LRY3rnGskyzsV2kxjgtbhTTieHtfxYavyjMr8hEtGOJHnxuKYVX0Vudf5JPKapP8
+	 tyYLfsPkEPkqPcDylMYVfEFzZOGtFc6LDAzscOP/dvYGXnRDUgsjWDn+ceR0Dh+E7I
+	 sjvcA0zRQWu0RCFTlHdnAinv0TzOqq4BJOXVpMVd9pBqh4NOf+1S/bwbhUh9FVkJJ1
+	 q+NrIGwOVhbzg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C35BB81170;
-	Sun, 12 Jul 2026 14:19:26 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 4E39F79E4
+	by smtp3.osuosl.org (Postfix) with ESMTP id 08738606B9;
+	Sun, 12 Jul 2026 14:19:31 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5C351442
  for <buildroot@buildroot.org>; Sun, 12 Jul 2026 14:19:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4032381177
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4B81440783
  for <buildroot@buildroot.org>; Sun, 12 Jul 2026 14:19:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iVnU7c7W7MRY for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DFHiEh6QJu0X for <buildroot@buildroot.org>;
  Sun, 12 Jul 2026 14:19:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 55FCE810CC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 77E79407C6
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 55FCE810CC
+ by smtp4.osuosl.org (Postfix) with ESMTP id 77E79407C6
  for <buildroot@buildroot.org>; Sun, 12 Jul 2026 14:19:16 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 844B688731; Sun, 12 Jul 2026 14:18:42 +0000 (UTC)
+ id B30B888731; Sun, 12 Jul 2026 14:18:42 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Sun, 12 Jul 2026 16:18:57 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 52a7a4eb4ef3ff92a9e749ffa9c7c65b08e349c4
-X-Git-Newrev: 602e0ce19b8ac883d796158f2361c4d6f4f692d2
+X-Git-Oldrev: eb9e52a5dad503f50e3d03a37dc693310938f552
+X-Git-Newrev: ce153495126d058053bb3c2148da08ab9d581ba8
 X-Patchwork-Hint: ignore
-Message-Id: <20260712141842.844B688731@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/versal_*: bump to xilinx_v2026.1
+Message-Id: <20260712141842.B30B888731@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] boot/xilinx-prebuilt: bump default to
+ xilinx_v2026.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,223 +77,105 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/602e0ce19b8ac883d796158f2361c4d6f4f692d2
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/ce153495126d058053bb3c2148da08ab9d581ba8
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Bump versal defconfigs to xilinx_v2026.1.
-
-xilinx_v2026.1 includes the following software versions:
-arm-trusted-firmware v2.14
-linux v6.18.10
-plm xilinx_v2026.1
-psmfw xilinx_v2026.1
-uboot v2026.01
-with all Xilinx downstream commits included with xilinx_v2026.1.
-
-xilinx_v2026.1 was run tested on a vek280 evaluation board.
+Now that all Xilinx board configs have been bumped to xilinx_v2026.1, bump the
+default version of xilinx-prebuilt to xilinx_v2026.1.
 
 Signed-off-by: Neal Frager <neal.frager@amd.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- configs/versal_vck190_defconfig | 10 ++++++----
- configs/versal_vek280_defconfig | 10 ++++++----
- configs/versal_vpk120_defconfig | 10 ++++++----
- configs/versal_vpk180_defconfig | 10 ++++++----
- 4 files changed, 24 insertions(+), 16 deletions(-)
+ boot/xilinx-prebuilt/Config.in                           | 2 +-
+ boot/xilinx-prebuilt/xilinx_v2025.2/xilinx-prebuilt.hash | 5 -----
+ configs/versal2_vek385_defconfig                         | 1 -
+ configs/versal_vck190_defconfig                          | 1 -
+ configs/versal_vek280_defconfig                          | 1 -
+ configs/versal_vpk120_defconfig                          | 1 -
+ configs/versal_vpk180_defconfig                          | 1 -
+ 7 files changed, 1 insertion(+), 11 deletions(-)
 
+diff --git a/boot/xilinx-prebuilt/Config.in b/boot/xilinx-prebuilt/Config.in
+index 7926b6cb9e..ff129ed5b5 100644
+--- a/boot/xilinx-prebuilt/Config.in
++++ b/boot/xilinx-prebuilt/Config.in
+@@ -17,7 +17,7 @@ if BR2_TARGET_XILINX_PREBUILT
+ 
+ config BR2_TARGET_XILINX_PREBUILT_VERSION
+ 	string "prebuilt version"
+-	default "xilinx_v2025.2"
++	default "xilinx_v2026.1"
+ 	help
+ 	  Release version of Xilinx firmware.
+ 	  Must be xilinx_v2023.1 or newer.
+diff --git a/boot/xilinx-prebuilt/xilinx_v2025.2/xilinx-prebuilt.hash b/boot/xilinx-prebuilt/xilinx_v2025.2/xilinx-prebuilt.hash
+deleted file mode 100644
+index 9828b6595e..0000000000
+--- a/boot/xilinx-prebuilt/xilinx_v2025.2/xilinx-prebuilt.hash
++++ /dev/null
+@@ -1,5 +0,0 @@
+-# Locally calculated
+-sha256  d292a52ac167631860b5e9a8d8356946289da164ddde4c5393977dc1652dcadb  xilinx-prebuilt-xilinx_v2025.2.tar.gz
+-
+-# Locally calculated
+-sha256  e7ed8599c0cbf9e28d07883f94ee6ff694f6a702daa56c75b2cf4b30105baecc  LICENSE
+diff --git a/configs/versal2_vek385_defconfig b/configs/versal2_vek385_defconfig
+index 5a09e855d3..76eb455043 100644
+--- a/configs/versal2_vek385_defconfig
++++ b/configs/versal2_vek385_defconfig
+@@ -49,7 +49,6 @@ BR2_TARGET_XILINX_EMBEDDEDSW=y
+ BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL2_ASUFW=y
+ BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL2_PLM=y
+ BR2_TARGET_XILINX_PREBUILT=y
+-BR2_TARGET_XILINX_PREBUILT_VERSION="xilinx_v2026.1"
+ BR2_PACKAGE_HOST_BOOTGEN=y
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
 diff --git a/configs/versal_vck190_defconfig b/configs/versal_vck190_defconfig
-index d05217775c..481dfd7656 100644
+index 9b59d1c9fb..100af782cf 100644
 --- a/configs/versal_vck190_defconfig
 +++ b/configs/versal_vck190_defconfig
-@@ -5,14 +5,14 @@ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
- BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
- BR2_TOOLCHAIN_BARE_METAL_BUILDROOT=y
- BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-buildroot-elf"
--BR2_GLOBAL_PATCH_DIR="board/xilinx/patches"
-+BR2_GLOBAL_PATCH_DIR="board/xilinx/xilinx_v2026.1/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/versal/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/versal/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="ttyAMA0,115200 mmcblk0p2"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.12_LTS_merge_6.12.70)/xlnx_rebase_v6.12_LTS_merge_6.12.70.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.18_LTS_2026.1)/xlnx_rebase_v6.18_LTS_2026.1.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/versal-vck190-rev1.1"
-@@ -23,13 +23,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.12_2025.2)/xlnx_rebase_v2.12_2025.2.tar.gz"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx-rebase-v2.14_2026.1)/xlnx-rebase-v2.14_2026.1.tar.gz"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="versal"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2025.01_2025.2)/xlnx_rebase_v2025.01_2025.2.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx-rebase-v2026.01_2026.1)/xlnx-rebase-v2026.01_2026.1.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_versal_virt"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-@@ -40,9 +40,11 @@ BR2_TARGET_UBOOT_FORMAT_DTB=y
- BR2_TARGET_UBOOT_FORMAT_REMAKE_ELF=y
- BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=versal-vck190-rev1.1"
- BR2_TARGET_XILINX_EMBEDDEDSW=y
-+BR2_TARGET_XILINX_EMBEDDEDSW_VERSION="xilinx_v2026.1"
+@@ -43,7 +43,6 @@ BR2_TARGET_XILINX_EMBEDDEDSW=y
  BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PLM=y
  BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PSMFW=y
  BR2_TARGET_XILINX_PREBUILT=y
-+BR2_TARGET_XILINX_PREBUILT_VERSION="xilinx_v2026.1"
+-BR2_TARGET_XILINX_PREBUILT_VERSION="xilinx_v2026.1"
  BR2_PACKAGE_HOST_BOOTGEN=y
  BR2_PACKAGE_HOST_DOSFSTOOLS=y
  BR2_PACKAGE_HOST_GENIMAGE=y
 diff --git a/configs/versal_vek280_defconfig b/configs/versal_vek280_defconfig
-index 9db372f0ba..0da0210306 100644
+index f76ac682fc..42562603d6 100644
 --- a/configs/versal_vek280_defconfig
 +++ b/configs/versal_vek280_defconfig
-@@ -5,14 +5,14 @@ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
- BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
- BR2_TOOLCHAIN_BARE_METAL_BUILDROOT=y
- BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-buildroot-elf"
--BR2_GLOBAL_PATCH_DIR="board/xilinx/patches"
-+BR2_GLOBAL_PATCH_DIR="board/xilinx/xilinx_v2026.1/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/versal/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/versal/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="ttyAMA0,115200 mmcblk0p2"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.12_LTS_merge_6.12.70)/xlnx_rebase_v6.12_LTS_merge_6.12.70.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.18_LTS_2026.1)/xlnx_rebase_v6.18_LTS_2026.1.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/versal-vek280-revB"
-@@ -23,13 +23,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.12_2025.2)/xlnx_rebase_v2.12_2025.2.tar.gz"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx-rebase-v2.14_2026.1)/xlnx-rebase-v2.14_2026.1.tar.gz"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="versal"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2025.01_2025.2)/xlnx_rebase_v2025.01_2025.2.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx-rebase-v2026.01_2026.1)/xlnx-rebase-v2026.01_2026.1.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_versal_virt"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-@@ -40,9 +40,11 @@ BR2_TARGET_UBOOT_FORMAT_DTB=y
- BR2_TARGET_UBOOT_FORMAT_REMAKE_ELF=y
- BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=versal-vek280-revB"
- BR2_TARGET_XILINX_EMBEDDEDSW=y
-+BR2_TARGET_XILINX_EMBEDDEDSW_VERSION="xilinx_v2026.1"
+@@ -43,7 +43,6 @@ BR2_TARGET_XILINX_EMBEDDEDSW=y
  BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PLM=y
  BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PSMFW=y
  BR2_TARGET_XILINX_PREBUILT=y
-+BR2_TARGET_XILINX_PREBUILT_VERSION="xilinx_v2026.1"
+-BR2_TARGET_XILINX_PREBUILT_VERSION="xilinx_v2026.1"
  BR2_TARGET_XILINX_PREBUILT_BOARD="vek280"
  BR2_PACKAGE_HOST_BOOTGEN=y
  BR2_PACKAGE_HOST_DOSFSTOOLS=y
 diff --git a/configs/versal_vpk120_defconfig b/configs/versal_vpk120_defconfig
-index 1af9baaf3a..d988865846 100644
+index ebb944a27a..67dfd9e424 100644
 --- a/configs/versal_vpk120_defconfig
 +++ b/configs/versal_vpk120_defconfig
-@@ -5,14 +5,14 @@ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
- BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
- BR2_TOOLCHAIN_BARE_METAL_BUILDROOT=y
- BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-buildroot-elf"
--BR2_GLOBAL_PATCH_DIR="board/xilinx/patches"
-+BR2_GLOBAL_PATCH_DIR="board/xilinx/xilinx_v2026.1/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/versal/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/versal/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="ttyAMA0,115200 mmcblk0p2"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.12_LTS_merge_6.12.70)/xlnx_rebase_v6.12_LTS_merge_6.12.70.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.18_LTS_2026.1)/xlnx_rebase_v6.18_LTS_2026.1.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/versal-vpk120-revB"
-@@ -23,13 +23,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.12_2025.2)/xlnx_rebase_v2.12_2025.2.tar.gz"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx-rebase-v2.14_2026.1)/xlnx-rebase-v2.14_2026.1.tar.gz"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="versal"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2025.01_2025.2)/xlnx_rebase_v2025.01_2025.2.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx-rebase-v2026.01_2026.1)/xlnx-rebase-v2026.01_2026.1.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_versal_virt"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-@@ -40,9 +40,11 @@ BR2_TARGET_UBOOT_FORMAT_DTB=y
- BR2_TARGET_UBOOT_FORMAT_REMAKE_ELF=y
- BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=versal-vpk120-revB"
- BR2_TARGET_XILINX_EMBEDDEDSW=y
-+BR2_TARGET_XILINX_EMBEDDEDSW_VERSION="xilinx_v2026.1"
+@@ -43,7 +43,6 @@ BR2_TARGET_XILINX_EMBEDDEDSW=y
  BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PLM=y
  BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PSMFW=y
  BR2_TARGET_XILINX_PREBUILT=y
-+BR2_TARGET_XILINX_PREBUILT_VERSION="xilinx_v2026.1"
+-BR2_TARGET_XILINX_PREBUILT_VERSION="xilinx_v2026.1"
  BR2_TARGET_XILINX_PREBUILT_BOARD="vpk120"
  BR2_PACKAGE_HOST_BOOTGEN=y
  BR2_PACKAGE_HOST_DOSFSTOOLS=y
 diff --git a/configs/versal_vpk180_defconfig b/configs/versal_vpk180_defconfig
-index ef6a078ead..cd37287a27 100644
+index c904602fcd..0537fce6e0 100644
 --- a/configs/versal_vpk180_defconfig
 +++ b/configs/versal_vpk180_defconfig
-@@ -5,14 +5,14 @@ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
- BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
- BR2_TOOLCHAIN_BARE_METAL_BUILDROOT=y
- BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-buildroot-elf"
--BR2_GLOBAL_PATCH_DIR="board/xilinx/patches"
-+BR2_GLOBAL_PATCH_DIR="board/xilinx/xilinx_v2026.1/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/versal/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/versal/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="ttyAMA0,115200 mmcblk0p2"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.12_LTS_merge_6.12.70)/xlnx_rebase_v6.12_LTS_merge_6.12.70.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.18_LTS_2026.1)/xlnx_rebase_v6.18_LTS_2026.1.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/versal-vpk180-revA"
-@@ -23,13 +23,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.12_2025.2)/xlnx_rebase_v2.12_2025.2.tar.gz"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx-rebase-v2.14_2026.1)/xlnx-rebase-v2.14_2026.1.tar.gz"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="versal"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2025.01_2025.2)/xlnx_rebase_v2025.01_2025.2.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx-rebase-v2026.01_2026.1)/xlnx-rebase-v2026.01_2026.1.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_versal_virt"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-@@ -40,9 +40,11 @@ BR2_TARGET_UBOOT_FORMAT_DTB=y
- BR2_TARGET_UBOOT_FORMAT_REMAKE_ELF=y
- BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=versal-vpk180-revA"
- BR2_TARGET_XILINX_EMBEDDEDSW=y
-+BR2_TARGET_XILINX_EMBEDDEDSW_VERSION="xilinx_v2026.1"
+@@ -43,7 +43,6 @@ BR2_TARGET_XILINX_EMBEDDEDSW=y
  BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PLM=y
  BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PSMFW=y
  BR2_TARGET_XILINX_PREBUILT=y
-+BR2_TARGET_XILINX_PREBUILT_VERSION="xilinx_v2026.1"
+-BR2_TARGET_XILINX_PREBUILT_VERSION="xilinx_v2026.1"
  BR2_TARGET_XILINX_PREBUILT_BOARD="vpk180"
  BR2_PACKAGE_HOST_BOOTGEN=y
  BR2_PACKAGE_HOST_DOSFSTOOLS=y
