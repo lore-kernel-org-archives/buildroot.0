@@ -1,89 +1,113 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87F0BC43458
-	for <buildroot@archiver.kernel.org>; Sun, 12 Jul 2026 11:31:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED750C43458
+	for <buildroot@archiver.kernel.org>; Sun, 12 Jul 2026 13:08:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5971640AFF;
-	Sun, 12 Jul 2026 11:31:43 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lqs2iMoMskTB; Sun, 12 Jul 2026 11:31:40 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D824B409EE
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1783855899;
-	bh=bzzij+gL+sddYU1tl0ZquhLk8cjopzdqmr5uOTOXqlE=;
-	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=r/AhA3exraZaCxpQsNJ2Mgqg3AOFl9GgdkmkdwDgjt5P4HfcKS/yCH71K+r1MvOOH
-	 f4uyv6CGCLjo2fP0W1dKYsfIAedl7tDZuRwclAFr9AsNi/iTESqE0YJbJ1PUnpTGH9
-	 z10/XiBAf2okOAXlUmuUXLKuDv//8YAuzsfZq4vAJlfkeWvkfPfmc26Qyq7M0u2/T/
-	 jSVzfa1nDLPB5BSeWTje1Tfrb8t06fX3I6R/wxonTDHJUHHPtT1hOcsnxPczYXSKtv
-	 D34HkjVBnrjgu1a4/PKkFiphg7t3f/45yK7ETyicUXJndAmT6/3c6gb30FOvS8vSUC
-	 pjsVjGD2WbUrA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D824B409EE;
-	Sun, 12 Jul 2026 11:31:39 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id DC7C82EE
- for <buildroot@buildroot.org>; Sun, 12 Jul 2026 11:31:38 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D9E0680DFC
- for <buildroot@buildroot.org>; Sun, 12 Jul 2026 11:31:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A64FF81395;
+	Sun, 12 Jul 2026 13:08:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CXvjy5baMXkJ for <buildroot@buildroot.org>;
- Sun, 12 Jul 2026 11:31:38 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C628080DF9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C628080DF9
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C628080DF9
- for <buildroot@buildroot.org>; Sun, 12 Jul 2026 11:31:37 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a0d51.dip0.t-ipconnect.de [91.58.13.81])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id B85C4A4C209B;
- Sun, 12 Jul 2026 13:31:01 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:35390)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.4)
- (envelope-from <bernd@kuhls.net>) id 1wisOg-000000002jy-2qUM;
- Sun, 12 Jul 2026 11:30:58 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+ id KopYg8xlVUOe; Sun, 12 Jul 2026 13:08:50 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8BA228137C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1783861730;
+	bh=jWdfgPW4IYBPyWm18jIhKvbDRXySNXRm1oNKdaYKguM=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=bMhMs01eAnumeQoYvlYT2WP48el24vj4E+7YksSLm3EU1QjKRE9SmVxpx9u13uqGR
+	 hTenW70HG7AXVs5eCzG5U29gYyFMAxpFNz3EvQ1VPLJaX6MSGOjHm4jS9fYRkdKWJH
+	 Ud5yI2R8yZsP4M3GBvdkJpc8dZzT5wJgnm37DBlToHz+307tGojGWewucRaHlpqvSm
+	 pmFhDTqPrRBkf1LCUkF5W8ckR/AccBJyKaHtruuW0GOaMG7bm/2yuI1efVT1INc48c
+	 3fD6AxKTkj09LZv+B4ni+cmm7qIKE6UT4l/pqnGVtZ5jMJp+FtK1Vb8knXSjOnTECg
+	 ly50+NEu71kVA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8BA228137C;
+	Sun, 12 Jul 2026 13:08:50 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 440C12EE
+ for <buildroot@buildroot.org>; Sun, 12 Jul 2026 13:08:48 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 220E58137C
+ for <buildroot@buildroot.org>; Sun, 12 Jul 2026 13:08:48 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZP799MTsKDyZ for <buildroot@buildroot.org>;
+ Sun, 12 Jul 2026 13:08:47 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::102c; helo=mail-pj1-x102c.google.com;
+ envelope-from=fancp2007@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 52FCB81373
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 52FCB81373
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com
+ [IPv6:2607:f8b0:4864:20::102c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 52FCB81373
+ for <buildroot@buildroot.org>; Sun, 12 Jul 2026 13:08:47 +0000 (UTC)
+Received: by mail-pj1-x102c.google.com with SMTP id
+ 98e67ed59e1d1-3811074a8c5so1744127a91.1
+ for <buildroot@buildroot.org>; Sun, 12 Jul 2026 06:08:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20251104; t=1783861726; x=1784466526;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to:content-type;
+ bh=crFkFSrc4fZQSh6WPW1Lmy4pETckMvUgNKOxD5aT6Lw=;
+ b=ItESG1Q+f+SALbs2sJci414aX95YfzX8wuOeLX7EJDxY1qwcLcRnYJSbTzIVq6oLmq
+ PEhQVsnqQFsGisNKiiKjTpt6VtCZTIdhDkR4riTGtmEt8O8PjaKfhvCL3SY0786RzhWf
+ p+b8eHJp1rqXpXspMLpnnzF35sLUNv3u0uJZ7EVeYvCesKUpexpNyVAynchXJOyZ8Lby
+ KjYMVfgavNtqdWiUQgEMw9erNkkwaSYezKQ5lTAPTMD23HR56T0g/304gUH1rjZijvNA
+ qicYCO8hIuqytRP1/w/Ut2zAJaEMImuSictfEa88vK48BVSAtfkpM85bPhw4E+Qd/qru
+ DwlA==
+X-Gm-Message-State: AOJu0YxNsPygh10ayE2NPCczXHtjpQ7A5umACBAR1bf0VMMadsqrE3rX
+ 06UAhT+qlOsiLjnV7LcprrB54LVf8L/YQaxTowAQXOlvphpLCWhuFbqnQrzkng==
+X-Gm-Gg: AfdE7cmE8G4uMPlsfZaEzWsA9h8jwGfwQifrlnxTUeSThq0wlCnH5bkUMLqjWv8qEP3
+ sp+rLfpGeedPY5SYYur31BseETvymbmzvKQPM3xwkrvsbxt+5bS1LYmyNxi6NxKX2whgJqTM1Ua
+ rh7KOK9R/NgABVJtc9W82LqL8U1puU4qazA/MC3wma5C0/iMo5gdZlwJW1w09kZRhmcJrRG4LJH
+ aIwejcsL0Z9T7wkbhAaAbORQBEynEXvpESl/olxSW1OCEjmmomV8MgV0YWcnEJsLKVi4LEj3dKP
+ JGHYCZVfZhsWVZR6hsC8dpB9fjWZAaCzIKIya3vpAV7zPBxKKe4qeWvQbXMs7d4TPe0JrCbII2z
+ bA+Rnh6BXn3T2JEEoKOAAqyKUVsDhXpHYe73yOKApzxkPigaOhSHilov9Famn45zVkXrlPNsPVj
+ 8Xqgkk29bF
+X-Received: by 2002:a17:90b:2f50:b0:387:e0db:bc26 with SMTP id
+ 98e67ed59e1d1-38dc77c61camr5123368a91.38.1783861726338; 
+ Sun, 12 Jul 2026 06:08:46 -0700 (PDT)
+Received: from localhost ([66.112.214.180]) by smtp.gmail.com with ESMTPSA id
+ 5a478bee46e88-313b4b97661sm27068953eec.7.2026.07.12.06.08.45
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 12 Jul 2026 06:08:45 -0700 (PDT)
+From: Scott Fan <fancp2007@gmail.com>
 To: buildroot@buildroot.org
-Cc: Raphael Pavlidis <raphael.pavlidis@gmail.com>
-Date: Sun, 12 Jul 2026 13:30:58 +0200
-Message-ID: <20260712113058.1579954-4-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260712113058.1579954-1-bernd@kuhls.net>
-References: <20260712113058.1579954-1-bernd@kuhls.net>
+Cc: Scott Fan <fancp2007@gmail.com>,
+ Alexey Brodkin <alexey.brodkin@synopsys.com>,
+ Gero Schwaericke <gero.schwaericke@posteo.de>
+Date: Sun, 12 Jul 2026 21:08:35 +0800
+Message-ID: <20260712130836.821439-1-fancp2007@gmail.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Spamd-Bar: -
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202605290044; t=1783855861;
- bh=ScGMCRM1Xso5lzQFkruzPnOKa4fe7miPyEpdKShpjBE=;
- h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=bh+kSsjD8vyKGS/5XGyaXuZIigKPxsdLDpahane8lO6wszgXcwyabEiw15OXugNcB
- jDwSOnVmqFt8VmxHa3xn2K8V44YSPuutX6dh4rXHs+Irn/Rhio5S72j1SBeKYmaYRp
- oDoFYOR9sVGDCVpdS+8WyOHIT23iPqNZXr6qNz7iWrhkaa5Ux+iJdltmY9dUP/JBkW
- dDwuVA0fnCqnk/zL3WoCi5QnFoSgV95wFf4/JRduL/14ytEyyrMB2CZt2ekDaH1ysX
- P1/dIlDNzSvasIXZpRkIyN3YGI/F2GTDi732CslzSo99yA+cBa8YzZbZLaFdj42w2J
- on5jSo1QPFugw==
+ d=gmail.com; s=20251104; t=1783861726; x=1784466526; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+ bh=crFkFSrc4fZQSh6WPW1Lmy4pETckMvUgNKOxD5aT6Lw=;
+ b=Efm9un4xLYWB+5Ct7miCUz11nDbKMyIKGiVOo6ZmdmdBhGeyj7OMRohT2VoUAdcEpS
+ tS4/SDOyq1S8bhaHSgMqn13VPS60AQx6m697QwGXEp4RgM1CVpoRAg0MJikc3j2P3Dbn
+ PFaEBxvSgRzsrjt3gdo92YBrMUOwFW1iuOBwWtLEyW46lntrzw8H6jYmNoLuMkIV3iW6
+ HyNQfEIn9XfWyWnqJuZoNXEVEeWsHyt46ONTWmQKPd+TiHZcqfN/3Av8rqvs1iiKPnJv
+ 8zdzICxhp/Eb96ZMlGbdD+MDItswzS8uuvu5WMcT/yAOlrkOWnHRJu8vzCNG53DGT2U1
+ ddEA==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=kuhls.net
+ header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202605290044 header.b=bh+kSsjD
-Subject: [Buildroot] [PATCH 4/4] package/x11r7/xlib_libXfont2: security bump
- version to 2.0.8
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20251104 header.b=Efm9un4x
+Subject: [Buildroot] [PATCH] configs/cubieboard{1,
+ 2}: bump Linux to 7.1.3 and U-Boot to 2026.07
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -100,52 +124,96 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://lists.x.org/archives/xorg-announce/2026-July/003715.html
-https://lists.x.org/archives/xorg-announce/2026-July/003714.html
-
-Fixes
-- CVE-2026-56001: BitmapScaleBitmaps Integer Overflow Heap Buffer Overflow
-- CVE-2026-56002: PCF Font Parsing Heap Buffer Overflow
-- CVE-2026-56003: computeProps Property Buffer Heap Buffer Overflow
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Scott Fan <fancp2007@gmail.com>
 ---
-Gitlab pipelines passed:
-https://gitlab.com/bkuhls/buildroot/-/commits/ac5c6561894d41b86a43af13c4a5af16612c9195
-https://gitlab.com/bkuhls/buildroot/-/commits/9c78a853c88fa85f7a31404b4ab324370cf049f6
+ board/cubietech/cubieboard1/patches/linux/linux.hash | 4 ++--
+ board/cubietech/cubieboard1/patches/uboot/uboot.hash | 2 +-
+ board/cubietech/cubieboard2/patches/linux/linux.hash | 4 ++--
+ board/cubietech/cubieboard2/patches/uboot/uboot.hash | 2 +-
+ configs/cubieboard1_defconfig                        | 4 ++--
+ configs/cubieboard2_defconfig                        | 4 ++--
+ 6 files changed, 10 insertions(+), 10 deletions(-)
 
- package/x11r7/xlib_libXfont2/xlib_libXfont2.hash | 6 +++---
- package/x11r7/xlib_libXfont2/xlib_libXfont2.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/x11r7/xlib_libXfont2/xlib_libXfont2.hash b/package/x11r7/xlib_libXfont2/xlib_libXfont2.hash
-index 4f50b2dbd2..86e972a0e8 100644
---- a/package/x11r7/xlib_libXfont2/xlib_libXfont2.hash
-+++ b/package/x11r7/xlib_libXfont2/xlib_libXfont2.hash
-@@ -1,5 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2024-August/003523.html
--sha256  8b7b82fdeba48769b69433e8e3fbb984a5f6bf368b0d5f47abeec49de3e58efb  libXfont2-2.0.7.tar.xz
--sha512  f703127df5d5b1093c9b73e019153ed7799523573d52e61d344209f0acfd4df42e11be12bdd1880479c47c2b70de581a4f2ef74e199e9b1ac438f426593d56b0  libXfont2-2.0.7.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2026-July/003715.html
-+sha256  f556c0e1093a4e6911cc90bc4b106d201902ee187fd74af206ff162f7e6a24d5  libXfont2-2.0.8.tar.xz
-+sha512  e14cc3fa03d7baa4554ee5754ab33f69ac1da3d509c686a5f705fde8cd07772be564d68cc18d9fd0beb5ed7b2f864fcd7f6bf4983f5c0db08a9c747d0e001531  libXfont2-2.0.8.tar.xz
+diff --git a/board/cubietech/cubieboard1/patches/linux/linux.hash b/board/cubietech/cubieboard1/patches/linux/linux.hash
+index aac576b5f9..cd7c9607f2 100644
+--- a/board/cubietech/cubieboard1/patches/linux/linux.hash
++++ b/board/cubietech/cubieboard1/patches/linux/linux.hash
+@@ -1,2 +1,2 @@
+-# From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  4d9f3ff73214f68c0194ef02db9ca4b7ba713253ac1045441d4e9f352bc22e14  linux-6.19.6.tar.xz
++# From https://www.kernel.org/pub/linux/kernel/v7.x/sha256sums.asc
++sha256  be41c068e88f5242a19bccdbffbe077b18c47b45f627e2325504b4fab79dd1dc  linux-7.1.3.tar.xz
+diff --git a/board/cubietech/cubieboard1/patches/uboot/uboot.hash b/board/cubietech/cubieboard1/patches/uboot/uboot.hash
+index b6a925ea4e..ff6e4ed2e2 100644
+--- a/board/cubietech/cubieboard1/patches/uboot/uboot.hash
++++ b/board/cubietech/cubieboard1/patches/uboot/uboot.hash
+@@ -1,2 +1,2 @@
  # Locally calculated
- sha256  3b1047f0d45584973866a40e3eedc74aea4c6ac636960d650ae05af603e6d1a8  COPYING
-diff --git a/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk b/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk
-index c95f6c6395..a881a4c55b 100644
---- a/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk
-+++ b/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XLIB_LIBXFONT2_VERSION = 2.0.7
-+XLIB_LIBXFONT2_VERSION = 2.0.8
- XLIB_LIBXFONT2_SOURCE = libXfont2-$(XLIB_LIBXFONT2_VERSION).tar.xz
- XLIB_LIBXFONT2_SITE = https://xorg.freedesktop.org/archive/individual/lib
- XLIB_LIBXFONT2_LICENSE = MIT
+-sha256  b60d5865cefdbc75da8da4156c56c458e00de75a49b80c1a2e58a96e30ad0d54  u-boot-2026.01.tar.bz2
++sha256  78e8bfc382fe388f9b55aa1daf8c563522a037779b5d4c349d1415e381f1243e  u-boot-2026.07.tar.bz2
+diff --git a/board/cubietech/cubieboard2/patches/linux/linux.hash b/board/cubietech/cubieboard2/patches/linux/linux.hash
+index aac576b5f9..cd7c9607f2 100644
+--- a/board/cubietech/cubieboard2/patches/linux/linux.hash
++++ b/board/cubietech/cubieboard2/patches/linux/linux.hash
+@@ -1,2 +1,2 @@
+-# From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  4d9f3ff73214f68c0194ef02db9ca4b7ba713253ac1045441d4e9f352bc22e14  linux-6.19.6.tar.xz
++# From https://www.kernel.org/pub/linux/kernel/v7.x/sha256sums.asc
++sha256  be41c068e88f5242a19bccdbffbe077b18c47b45f627e2325504b4fab79dd1dc  linux-7.1.3.tar.xz
+diff --git a/board/cubietech/cubieboard2/patches/uboot/uboot.hash b/board/cubietech/cubieboard2/patches/uboot/uboot.hash
+index b6a925ea4e..ff6e4ed2e2 100644
+--- a/board/cubietech/cubieboard2/patches/uboot/uboot.hash
++++ b/board/cubietech/cubieboard2/patches/uboot/uboot.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  b60d5865cefdbc75da8da4156c56c458e00de75a49b80c1a2e58a96e30ad0d54  u-boot-2026.01.tar.bz2
++sha256  78e8bfc382fe388f9b55aa1daf8c563522a037779b5d4c349d1415e381f1243e  u-boot-2026.07.tar.bz2
+diff --git a/configs/cubieboard1_defconfig b/configs/cubieboard1_defconfig
+index 47d882c04f..217303dc47 100644
+--- a/configs/cubieboard1_defconfig
++++ b/configs/cubieboard1_defconfig
+@@ -10,7 +10,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/cubietech/cubieboard1/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.19.6"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="7.1.3"
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun4i-a10-cubieboard"
+@@ -20,7 +20,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2026.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2026.07"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Cubieboard"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+diff --git a/configs/cubieboard2_defconfig b/configs/cubieboard2_defconfig
+index 0de3edb93e..a0d6d968c4 100644
+--- a/configs/cubieboard2_defconfig
++++ b/configs/cubieboard2_defconfig
+@@ -11,7 +11,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/cubietech/cubieboard2/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.19.6"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="7.1.3"
+ BR2_LINUX_KERNEL_DEFCONFIG="multi_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun7i-a20-cubieboard2"
+@@ -21,7 +21,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2026.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2026.07"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Cubieboard2"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
 -- 
-2.47.3
+2.43.0
 
 _______________________________________________
 buildroot mailing list
