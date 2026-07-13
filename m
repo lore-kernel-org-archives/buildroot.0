@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61ED2C43458
-	for <buildroot@archiver.kernel.org>; Mon, 13 Jul 2026 10:33:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B1E9C44507
+	for <buildroot@archiver.kernel.org>; Mon, 13 Jul 2026 10:33:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A712F408E3;
-	Mon, 13 Jul 2026 10:33:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6CAD240904;
+	Mon, 13 Jul 2026 10:33:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Rm9c7kAtnXCF; Mon, 13 Jul 2026 10:33:16 +0000 (UTC)
+ id IkAx3uwvSFVL; Mon, 13 Jul 2026 10:33:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A49DA408C2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3B61B408F4
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1783938796;
-	bh=vNfmzax/GM1umr6aDi/AodbxV4lN2bQ3ldYMje0ZdlQ=;
+	s=default; t=1783938798;
+	bh=5HjYLnoE8KlBvee3i9jfu8s18B69nymuOGZNUtNLc30=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=OPz309Lezsy4DKm6gWEDHO+S0B6pVUydGd1KobTYfZuE8o141imHI/w1c5SchLXC1
-	 p5si2Dh47bQUzxYmtKQpQBSCQExRgvJN7+n5efbUvwQjn9TDjBivSOi/svi83z2YA6
-	 tpY70X0dFAamSRsogi/H9txHN5KxMa0RMpcV28DhevSsYK1X1rcFlxegLs56au4aCW
-	 VLj10SxtBjTj9OHow0t8d32e2up3tPsRP3vQu9ea/uOoZjV+1q+zoXUsmQlaE67SgB
-	 +iWz5cuTY0ve71MhVIbyozAG8GpodMjgHaqHuWkU6uFh9d2prbGvRC+pFxD1ULev56
-	 yLX9FXrxa919A==
+	b=Aqj2nu8GISVNiC0hjS+7ex5tPnbpyuKdqJ16N6gkWW8FnPbZddpLlU1HO6JvERuLF
+	 heWi8kmRvp3BJA2KC5vnyH0lk0g75fOzn4HZuHP1CLNvxazcHLhGKeNIGdWuKnskx7
+	 idHB/3deJZCF9IMPsE96aPoUSJOIeWMHrWFoi8f83ZKa+08cubTyu1uNfJih/rrR9n
+	 oZ46mm4zuRVayh6eG/YkJnaSMsQPGepDC9zd4RjFW2smvUfzbbAI50osTmGGVQLaJk
+	 VHvLlAFbuGRBmLp4s+VqX6d2OmjYFVEUo9UsTgzSyhmArYzfCCxUtgBbVMxf3JzTQk
+	 3joN/kyf3d4xg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A49DA408C2;
-	Mon, 13 Jul 2026 10:33:16 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id DF0DA28D
- for <buildroot@buildroot.org>; Mon, 13 Jul 2026 10:33:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3B61B408F4;
+	Mon, 13 Jul 2026 10:33:18 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9C6F328D
+ for <buildroot@buildroot.org>; Mon, 13 Jul 2026 10:33:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D08F3401B9
- for <buildroot@buildroot.org>; Mon, 13 Jul 2026 10:33:13 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8EC8B60744
+ for <buildroot@buildroot.org>; Mon, 13 Jul 2026 10:33:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QfQa3x0OBpX6 for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id liQE51YeMTYB for <buildroot@buildroot.org>;
  Mon, 13 Jul 2026 10:33:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 19A59402ED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 10B806075A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 19A59402ED
- for <buildroot@buildroot.org>; Mon, 13 Jul 2026 10:33:13 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 10B806075A
+ for <buildroot@buildroot.org>; Mon, 13 Jul 2026 10:33:12 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C677F887BC; Mon, 13 Jul 2026 10:32:38 +0000 (UTC)
+ id BCC7D887BB; Mon, 13 Jul 2026 10:32:38 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Mon, 13 Jul 2026 12:26:03 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0d01f6fcee4435651224066e36ac8ae8038ac463
-X-Git-Newrev: c6e304f3835b6989c828c13c83c9b03b68b82dab
+X-Git-Oldrev: 3b15bf90f183a8e0e4877a3ffeeff479dd0949d9
+X-Git-Newrev: 0d01f6fcee4435651224066e36ac8ae8038ac463
 X-Patchwork-Hint: ignore
-Message-Id: <20260713103238.C677F887BC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xlib_libXfont2: security
- bump version to 2.0.8
+Message-Id: <20260713103238.BCC7D887BB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xwayland: security bump
+ version to 24.1.13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,50 +77,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/c6e304f3835b6989c828c13c83c9b03b68b82dab
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/0d01f6fcee4435651224066e36ac8ae8038ac463
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-https://lists.x.org/archives/xorg-announce/2026-July/003715.html
-https://lists.x.org/archives/xorg-announce/2026-July/003714.html
+https://lists.x.org/archives/xorg-announce/2026-July/003717.html
+https://lists.x.org/archives/xorg-announce/2026-July/003716.html
 
 Fixes
-- CVE-2026-56001: BitmapScaleBitmaps Integer Overflow Heap Buffer Overflow
-- CVE-2026-56002: PCF Font Parsing Heap Buffer Overflow
-- CVE-2026-56003: computeProps Property Buffer Heap Buffer Overflow
+-  CVE-2026-55999: glamor Font Atlas Heap Buffer Overflow
+-  CVE-2026-56000: GLX contextTags Use-After-Free in CommonMakeCurrent()
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/x11r7/xlib_libXfont2/xlib_libXfont2.hash | 6 +++---
- package/x11r7/xlib_libXfont2/xlib_libXfont2.mk   | 2 +-
+ package/x11r7/xwayland/xwayland.hash | 6 +++---
+ package/x11r7/xwayland/xwayland.mk   | 2 +-
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXfont2/xlib_libXfont2.hash b/package/x11r7/xlib_libXfont2/xlib_libXfont2.hash
-index 4f50b2dbd2..86e972a0e8 100644
---- a/package/x11r7/xlib_libXfont2/xlib_libXfont2.hash
-+++ b/package/x11r7/xlib_libXfont2/xlib_libXfont2.hash
-@@ -1,5 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2024-August/003523.html
--sha256  8b7b82fdeba48769b69433e8e3fbb984a5f6bf368b0d5f47abeec49de3e58efb  libXfont2-2.0.7.tar.xz
--sha512  f703127df5d5b1093c9b73e019153ed7799523573d52e61d344209f0acfd4df42e11be12bdd1880479c47c2b70de581a4f2ef74e199e9b1ac438f426593d56b0  libXfont2-2.0.7.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2026-July/003715.html
-+sha256  f556c0e1093a4e6911cc90bc4b106d201902ee187fd74af206ff162f7e6a24d5  libXfont2-2.0.8.tar.xz
-+sha512  e14cc3fa03d7baa4554ee5754ab33f69ac1da3d509c686a5f705fde8cd07772be564d68cc18d9fd0beb5ed7b2f864fcd7f6bf4983f5c0db08a9c747d0e001531  libXfont2-2.0.8.tar.xz
+diff --git a/package/x11r7/xwayland/xwayland.hash b/package/x11r7/xwayland/xwayland.hash
+index 2bf2d19020..c9b931b6e2 100644
+--- a/package/x11r7/xwayland/xwayland.hash
++++ b/package/x11r7/xwayland/xwayland.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.x.org/archives/xorg-announce/2026-June/003704.html
+-sha256  6df02c511b92c1b9848734d9d1b03a4c24f8375ba3cada44e9684a21b5f78e21  xwayland-24.1.12.tar.xz
+-sha512  b4ee41761c2caa7332573be07d9143b60015bb4a7910c90b6ae079dde0a1bf6b0b4773ff4e6fba48279cdee83b4de5eb4a19b9369b5753e4147b94fa2deece96  xwayland-24.1.12.tar.xz
++# From https://lists.x.org/archives/xorg-announce/2026-July/003717.html
++sha256  173aea3d6f79609164c04528e1c8e4c9b60fcd59391c3c9dad4667297d727fb6  xwayland-24.1.13.tar.xz
++sha512  e06e58025b441892fdd17ac55fd5c7e137bffc941b76ad784dc008047c778c6ee2895fcc47b9e8c74b1d8372491e69c39933c4186aec4df55571614f8ba98e3c  xwayland-24.1.13.tar.xz
+ 
  # Locally calculated
- sha256  3b1047f0d45584973866a40e3eedc74aea4c6ac636960d650ae05af603e6d1a8  COPYING
-diff --git a/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk b/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk
-index c95f6c6395..a881a4c55b 100644
---- a/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk
-+++ b/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk
+ sha256  c9f90a6669109aad6c9a7c3b46cc2c574221a73b792afa419336816b49da5c11  COPYING
+diff --git a/package/x11r7/xwayland/xwayland.mk b/package/x11r7/xwayland/xwayland.mk
+index 2b8513602c..02a21b96c1 100644
+--- a/package/x11r7/xwayland/xwayland.mk
++++ b/package/x11r7/xwayland/xwayland.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XLIB_LIBXFONT2_VERSION = 2.0.7
-+XLIB_LIBXFONT2_VERSION = 2.0.8
- XLIB_LIBXFONT2_SOURCE = libXfont2-$(XLIB_LIBXFONT2_VERSION).tar.xz
- XLIB_LIBXFONT2_SITE = https://xorg.freedesktop.org/archive/individual/lib
- XLIB_LIBXFONT2_LICENSE = MIT
+-XWAYLAND_VERSION = 24.1.12
++XWAYLAND_VERSION = 24.1.13
+ XWAYLAND_SOURCE = xwayland-$(XWAYLAND_VERSION).tar.xz
+ XWAYLAND_SITE = https://xorg.freedesktop.org/archive/individual/xserver
+ XWAYLAND_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
