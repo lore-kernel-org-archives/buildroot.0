@@ -4,59 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C44AEC44501
-	for <buildroot@archiver.kernel.org>; Mon, 13 Jul 2026 10:22:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D0B5C43458
+	for <buildroot@archiver.kernel.org>; Mon, 13 Jul 2026 10:23:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1B0A18101C;
-	Mon, 13 Jul 2026 10:22:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E744A81029;
+	Mon, 13 Jul 2026 10:23:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4Q46blOHnIqp; Mon, 13 Jul 2026 10:22:47 +0000 (UTC)
+ id 7HEbG3cVUd4k; Mon, 13 Jul 2026 10:23:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3A90A80EBB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7456B8101C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1783938167;
-	bh=IzFXW7KhCfkVIrQaxEjzeeCJaeHoqgfD9NyRZCKDYco=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=d41MSkqj2ybKv++ceVGoEELONBpiVtKmQtnC9zFiBE1k95x2Liuu+ZZ1K3Nq/KaTe
-	 1QwURlSQgXXjcakP65K9IIq+RiFXJMN1EDC14VsM6XvM9PplMy9wSomENMDu3plsuH
-	 dQnoMpIkwpg06xo1UBYczGmUMqYna9TA32MKrdV/d8NLHGS0Gcnw2jzPesxkulTuF9
-	 sOqvr8z1pMZK4Xsua6ZPrOAAIxFvk0ysAHl7VQ/4PlRdOJo3VD/E6wWdXR8MBrU0kb
-	 vQlclKJ8ykch9AlgqVOs4bXJQ9Vp8KT4n83jAhd71AVoQ7QTuEzX4/YuOD9NHxXUjt
-	 3ehZTcdfbPWFg==
+	s=default; t=1783938233;
+	bh=L4dVVsA10ChZGdC6O64vW0+j4lqTaWh0nHsQtikiK8w=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=BBFkyY9oz/44grkrgIQEuOi6Ma9f6Ye0/3lcIcbCdARzeIWnK2VNc05DF62S8a0tW
+	 NUUceLz0+t5S2Qde8wf85gIgHwq3iXFye7LNUvct1XO6ecjdMZyywYGfnc5wBH+KOP
+	 YUp6PLbW7eAN7gOSD9F+Z4IC8u+4My+qg750YaLzB7ipvD5++1evS9qfyWleqjE13C
+	 PM6d48rm9nKMnWNaTIw2td/aCPpbJNyhW8BGYQHObLm+6V/3H9g5eUJiDpwg0Jw6Xe
+	 +pinD1MUNgTlnDS2tL38Bczj2C1UPjQPSJDorb8GSQ7YAAFrhDP55h8g5/696uZbeS
+	 AP8YLjo0d23ZQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3A90A80EBB;
-	Mon, 13 Jul 2026 10:22:47 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id C04C928D
- for <buildroot@buildroot.org>; Mon, 13 Jul 2026 10:22:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7456B8101C;
+	Mon, 13 Jul 2026 10:23:53 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id A9AD828D
+ for <buildroot@buildroot.org>; Mon, 13 Jul 2026 10:23:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B246B60717
- for <buildroot@buildroot.org>; Mon, 13 Jul 2026 10:22:45 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9BC9560717
+ for <buildroot@buildroot.org>; Mon, 13 Jul 2026 10:23:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id L9wsDKJvsGIV for <buildroot@buildroot.org>;
- Mon, 13 Jul 2026 10:22:45 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 05809606DF
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 05809606DF
- for <buildroot@buildroot.org>; Mon, 13 Jul 2026 10:22:45 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C2D34887B2; Mon, 13 Jul 2026 10:22:10 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 13 Jul 2026 11:57:13 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0875457c116c432431118cb2d5e34afb6a321bdd
-X-Git-Newrev: 5638ee04c8dddb9ebfb7b047efb574f657e1b052
-X-Patchwork-Hint: ignore
-Message-Id: <20260713102210.C2D34887B2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libecoli: bump version to 0.11.3
+ id Se5MDmbRjmRt for <buildroot@buildroot.org>;
+ Mon, 13 Jul 2026 10:23:51 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D21DD606DF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D21DD606DF
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D21DD606DF
+ for <buildroot@buildroot.org>; Mon, 13 Jul 2026 10:23:50 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id 8F91919F732;
+ Mon, 13 Jul 2026 12:23:46 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Mon, 13 Jul 2026 12:23:46 +0200
+MIME-Version: 1.0
+Date: Mon, 13 Jul 2026 12:23:46 +0200
+To: Maxime Leroy <maxime@leroys.fr>
+Cc: buildroot@buildroot.org, Vincent Jardin <vjardin@free.fr>
+In-Reply-To: <20260413151148.42226-2-maxime@leroys.fr>
+References: <20260413151148.42226-1-maxime@leroys.fr>
+ <20260413151148.42226-2-maxime@leroys.fr>
+User-Agent: Webmail Free/1.6.17
+Message-ID: <da99fca7529a68e647c65295f9c55e2a@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1783938228;
+ bh=Bxu8RCQOWZZj3byc5htoDCWg6pnRIYgHbtqup63jP8U=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=QmKC0Kb2wFEf7DnlS7f4ufTmoSNme3o9WNq7xXL1YmS7THEtAtGcRwqoozfihjUa0
+ saxkzoJwPnHC65qkYqyDDggjrCrUZQj5z1g0jTI1pTep3tyh6Z11h2uXXWV0JOZ/ij
+ oejBjW2HxtTd9W8eeOdaPGUmzBF4ntaOx/4iPwjsKf4rjiMDtZqTpJatC0yXaxvUvC
+ afmA9yk5yS916nmwnagU6/F6XNvQfLecXyBIWm0imqx00HNmPx4F9iJF7Xz0TNYHUu
+ 1rwxIjmle6rYqTCtkOFQO1s4ay3SYEbd2Kyc+ekR9Ik/DVxkvO82/lKRQ54p6x+Rn0
+ LQlOKXtcwudaQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=QmKC0Kb2
+Subject: Re: [Buildroot] [PATCH 1/3] package/libecoli: bump version to 0.11.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,51 +95,29 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/5638ee04c8dddb9ebfb7b047efb574f657e1b052
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+Hi Maxime,
 
-See the release note of the new versions:
-https://github.com/rjarry/libecoli/releases/tag/v0.11.3
-https://github.com/rjarry/libecoli/releases/tag/v0.11.2
-https://github.com/rjarry/libecoli/releases/tag/v0.11.1
-https://github.com/rjarry/libecoli/releases/tag/v0.11.0
+On 13/04/2026 17:11, Maxime Leroy wrote:
+> See the release note of the new versions:
+> https://github.com/rjarry/libecoli/releases/tag/v0.11.3
+> https://github.com/rjarry/libecoli/releases/tag/v0.11.2
+> https://github.com/rjarry/libecoli/releases/tag/v0.11.1
+> https://github.com/rjarry/libecoli/releases/tag/v0.11.0
+> 
+> Signed-off-by: Maxime Leroy <maxime@leroys.fr>
 
-Signed-off-by: Maxime Leroy <maxime@leroys.fr>
-Reviewed-by: Vincent Jardin <vjardin@free.fr>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/libecoli/libecoli.hash | 2 +-
- package/libecoli/libecoli.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+I applied the patch 1 and 3 of this series (the package bumps).
+I'm skipping the patch 2 adding the dpdk install target option for
+the time being.
 
-diff --git a/package/libecoli/libecoli.hash b/package/libecoli/libecoli.hash
-index 4045c7e19d..882f01fa99 100644
---- a/package/libecoli/libecoli.hash
-+++ b/package/libecoli/libecoli.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  ec359850f4f338b607d05200d508736b14eaa30fca8aefdfde980a283afd789d  libecoli-0.10.1.tar.gz
-+sha256  25ed9638452fa050749746c863574dfd47df95bde98347d210c9deedea188151  libecoli-0.11.3.tar.gz
- sha256  e58bf9ec962bee9b3e37abcaa0bc0ec940b05efdc1d1a5a4d9e2fdbcc08b7bdd  LICENSE
-diff --git a/package/libecoli/libecoli.mk b/package/libecoli/libecoli.mk
-index 96617a1689..5d4b3993f8 100644
---- a/package/libecoli/libecoli.mk
-+++ b/package/libecoli/libecoli.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBECOLI_VERSION = 0.10.1
-+LIBECOLI_VERSION = 0.11.3
- LIBECOLI_SITE = $(call github,rjarry,libecoli,v$(LIBECOLI_VERSION))
- LIBECOLI_INSTALL_STAGING = YES
- LIBECOLI_LICENSE = BSD-3-Clause
+Best regards,
+
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
