@@ -4,60 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D0A2C43458
-	for <buildroot@archiver.kernel.org>; Mon, 13 Jul 2026 14:43:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31C55C43458
+	for <buildroot@archiver.kernel.org>; Mon, 13 Jul 2026 14:44:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E5979606AE;
-	Mon, 13 Jul 2026 14:43:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E8ED260883;
+	Mon, 13 Jul 2026 14:44:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id g6YRBYgzEiJg; Mon, 13 Jul 2026 14:43:41 +0000 (UTC)
+ id 0Hos7tavdJpc; Mon, 13 Jul 2026 14:44:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 136996081F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E06C260847
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1783953821;
-	bh=MusmQs2qhDR2AP/CJzL50c3htgmac3IvYkQjLdDPvXk=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Br1JL9nXJp12/fe+h9RajUweoSyf5Ujn8D139Co3aPE6h+Q1CPRTBafZ2OiCycKp3
-	 OYYGavsVXVqLz7cdCGVKm4EQpK9nM0qhqtnX3DavW4y0psyvVaIxYQRdEDHsKMtn/W
-	 jFaQyaGxFnPPm2Nk4ZqTWacgylqFPpu4/wW8Y/1+kLYb5JQ9qELAvQQQRKPUTmco8N
-	 kWNwEUFY8bxh64uQMY/vF/k3ggazTnZOwq+mEtJEmMgzJtY4FBt4PJQLwmW/ZZaRFB
-	 VJMm9lSQZ2+3h67R8MiXii9dc1e65YLxQwJATLCufKg2DKjCaxf/uXtxWYoaftjVWi
-	 w3eG1fkH+WCyw==
+	s=default; t=1783953863;
+	bh=Ak+PtV3QtGIyoFclcDgUF8XMZ679+hptC0m+0sZvkBQ=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=pugFtPLTRljvH9VeOynZgDQ4IaJ95a3o5vwZRe1BRh97N+4oPGtVgS2MXjkqHplSt
+	 8ioHFb1mGcSJ5awHsFGzHeB1YFkO+O+ZOc6Px/P4sDkMG71L45MysIrKFglqeLgNud
+	 v1rd9UKqfefdsm5srU7im8TNP1ygF73dZNZTrt8+1VCGEEl2Oih5OBVI0EfnkREb4E
+	 CHvGGiGVBr5p9yAXNckZZvb/r2Ceiy5drNdTtQh9KwXHThwFOJJWEYv4fBovB/tXwn
+	 tLA3Wpt2f4Qee/JaIwhlN9x1TYpZdo2Fg5RylRtBD7k3vVlhR6KWgEMwPE9oo5aw3W
+	 4nqblhFUlpIlQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 136996081F;
-	Mon, 13 Jul 2026 14:43:41 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id CDD03128
- for <buildroot@buildroot.org>; Mon, 13 Jul 2026 14:43:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E06C260847;
+	Mon, 13 Jul 2026 14:44:22 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 484F328D
+ for <buildroot@buildroot.org>; Mon, 13 Jul 2026 14:44:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BF5AD60847
- for <buildroot@buildroot.org>; Mon, 13 Jul 2026 14:43:38 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2E8A580F00
+ for <buildroot@buildroot.org>; Mon, 13 Jul 2026 14:44:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bCp7ztdLwcw4 for <buildroot@buildroot.org>;
- Mon, 13 Jul 2026 14:43:36 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AA4A2606AE
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id AA4A2606AE
- for <buildroot@buildroot.org>; Mon, 13 Jul 2026 14:43:36 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 66885887D6; Mon, 13 Jul 2026 14:43:02 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 13 Jul 2026 16:14:36 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6d8a1bb4c845159fd174661055cf9113fcd62a97
-X-Git-Newrev: 024dfbd0fb0ee38fd03965223ee94fd8d8c4ad72
-X-Patchwork-Hint: ignore
-Message-Id: <20260713144302.66885887D6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/vboot-utils: bump version to git
- 042312c6e7
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6fiyyUg4lUkQ for <buildroot@buildroot.org>;
+ Mon, 13 Jul 2026 14:44:20 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 095AA80EEF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 095AA80EEF
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 095AA80EEF
+ for <buildroot@buildroot.org>; Mon, 13 Jul 2026 14:44:19 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id 64EDB2003BE;
+ Mon, 13 Jul 2026 16:44:15 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Mon, 13 Jul 2026 16:44:15 +0200
+MIME-Version: 1.0
+Date: Mon, 13 Jul 2026 16:44:15 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org, Alex Suykov <alex.suykov@gmail.com>
+In-Reply-To: <20260711112902.966095-1-bernd@kuhls.net>
+References: <20260711112902.966095-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.17
+Message-ID: <e187e4eaf796f5ae978c6f30f8ea9217@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1783953857;
+ bh=/osZaDVipgrYXCJZ53lk3TmxUf6dyDW8nqc4391MDrY=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=FyBg/R/64HcpfmICbLxZOhEvZHhtUK8LwqfdlYgx6bDEuzjZ0m565o2Fi+0aJnz+a
+ pn3SR+gi5gUQaqIjx3d2ZGVVhoWD0WBDjlN8jpiNQhn/YZN+baPOt41pbLmPm9+mTD
+ 2HQ2/oNqc7JXQAnNC4s5YjRVfJ4IF4oC1MuhthsD5BpJIzv0wlUkx8FpCZtrcBLIzV
+ f8BmQJrihpCe0qxyl5Lxi6m7YFYPWwXHRAJRg6suaaBUY8dZ5W/9J1WQtIyjtMlU8c
+ wSYOqstplH7h/L2/WQSHdp9igWUo5zh2s5xZHt7wLP6uxqX/BL0BFOH3zeovfmCxIX
+ 13ZuO0qVib+1A==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=FyBg/R/6
+Subject: Re: [Buildroot] [PATCH 1/1] package/vboot-utils: bump version to
+ git 042312c6e7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,44 +95,15 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/024dfbd0fb0ee38fd03965223ee94fd8d8c4ad72
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 11/07/2026 13:29, Bernd Kuhls wrote:
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/vboot-utils/vboot-utils.hash | 2 +-
- package/vboot-utils/vboot-utils.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/vboot-utils/vboot-utils.hash b/package/vboot-utils/vboot-utils.hash
-index 6f1de06d3f..a40dcdcac3 100644
---- a/package/vboot-utils/vboot-utils.hash
-+++ b/package/vboot-utils/vboot-utils.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  b8bfffa49f9f4f82c68ad56de977eb2601d96dbff319a16945efb169d3c17278  vboot-utils-7dfa482d6a843e1e25b615d6b0200028cedce29f-git4.tar.gz
-+sha256  da9ad5ccbd6873904fa52dd0134e4c0ab8cdbacfb6c3407add3b4da0c8b62c15  vboot-utils-042312c6e7fce9dd106b329be0ecb51a8a347337-git4.tar.gz
- sha256  cb9dc8e96aedf9120b6757a60387db10f3c1a8e3fd97bb9d0f11327be5a7ed4d  LICENSE
-diff --git a/package/vboot-utils/vboot-utils.mk b/package/vboot-utils/vboot-utils.mk
-index 72742266d7..dc0b1365b7 100644
---- a/package/vboot-utils/vboot-utils.mk
-+++ b/package/vboot-utils/vboot-utils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--VBOOT_UTILS_VERSION = 7dfa482d6a843e1e25b615d6b0200028cedce29f
-+VBOOT_UTILS_VERSION = 042312c6e7fce9dd106b329be0ecb51a8a347337
- VBOOT_UTILS_SITE = https://chromium.googlesource.com/chromiumos/platform/vboot_reference
- VBOOT_UTILS_SITE_METHOD = git
- VBOOT_UTILS_LICENSE = BSD-3-Clause
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
