@@ -4,84 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 198CAC43458
-	for <buildroot@archiver.kernel.org>; Tue, 14 Jul 2026 11:08:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36273C43458
+	for <buildroot@archiver.kernel.org>; Tue, 14 Jul 2026 11:12:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C22334094A;
-	Tue, 14 Jul 2026 11:08:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EDF974094A;
+	Tue, 14 Jul 2026 11:12:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2Gn1yrYbsfZn; Tue, 14 Jul 2026 11:08:37 +0000 (UTC)
+ id cz5FryEpqCGh; Tue, 14 Jul 2026 11:12:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0143C4094C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0EDA94094C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1784027317;
-	bh=jK+Pu3bMhV8zJ2GyT+KT7M3fGW+oWkmW3R1QORP4o9A=;
+	s=default; t=1784027532;
+	bh=w58jk0gTPnUWCG+gpB5nBJNhn6orKFWiJ3PD5lJJLzA=;
 	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=i+1FXfl7n4exh9DQEbD2Q6HH4WzC0Xbvf7MjlQWC8760qs+oRokVk9lQSMeIVviDW
-	 9+UvoJfHv4cWzx8W/iYM6LV5X6O3jLJJO7gxilUAXeJokxSUCrLNK7f4/vqL/6La9c
-	 HrXJAvC0RliQon4ZZEL/65fKdPOMP8deWXNrqFgqmoAixOWDt/0675g4CgoZmE0ikD
-	 P2+Uh8aYzwmT89CwXdr4gvEp/GISYtvIgZvBSMz7n+WB/ILZ6EPR2ame67TGJnVx9p
-	 Ial1BTYCKe/oMmccnUL7dWRQHEBcl8xJTord42Fzbb6lYH+FrsyYNpDvJ+gg3hiCZ3
-	 O1kmxjTGucKAA==
+	b=iLGW/NU8uHdIbW2Cm2g1zD7XrBao1uwID47b/I0+ZPy89uXGlNDSt3VXA97vGHKk+
+	 voNjgYQFN0UehA+7SAScvSh2rPc/pHntvywBVbnS6P5ODSx/TqD7Yu5qm73XtKFHmg
+	 DAZuOxyLd9iziJkLgrkcvkORed+8UdpxI21Ja4LJ9x6wq9hTsvfEoRDQnYpuQDlljq
+	 iyWlDEKx+e+dNaD5VLs8Gwx5A0AUBgTQUX7M8yDbrFnpIm5zkSZCokM0tyGIxFBAOm
+	 9yu1zd1KWF3H+ImfDCrPK69jKJBoIi1Iq+PW1QRhWIhBS4cyu8lPi7DzNngWG2D/OR
+	 AaE90uqzz5w3Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0143C4094C;
-	Tue, 14 Jul 2026 11:08:37 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id A1F6796C
- for <buildroot@buildroot.org>; Tue, 14 Jul 2026 11:08:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0EDA94094C;
+	Tue, 14 Jul 2026 11:12:12 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 592F596C
+ for <buildroot@buildroot.org>; Tue, 14 Jul 2026 11:12:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 941264094C
- for <buildroot@buildroot.org>; Tue, 14 Jul 2026 11:08:35 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4A3F64094A
+ for <buildroot@buildroot.org>; Tue, 14 Jul 2026 11:12:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VJaIUK8pWZwn for <buildroot@buildroot.org>;
- Tue, 14 Jul 2026 11:08:34 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::15;
- helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A522D4094A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A522D4094A
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A522D4094A
- for <buildroot@buildroot.org>; Tue, 14 Jul 2026 11:08:34 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
+ id Q9JI5yIW-A3O for <buildroot@buildroot.org>;
+ Tue, 14 Jul 2026 11:12:08 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8AA454094C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8AA454094C
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8AA454094C
+ for <buildroot@buildroot.org>; Tue, 14 Jul 2026 11:12:08 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
  (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPA id 1C81578034D;
- Tue, 14 Jul 2026 13:08:30 +0200 (CEST)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id C33876014F;
+ Tue, 14 Jul 2026 13:12:04 +0200 (CEST)
 Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
  via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Tue, 14 Jul 2026 13:08:30 +0200
+ with HTTP (HTTP/1.0 POST); Tue, 14 Jul 2026 13:12:04 +0200
 MIME-Version: 1.0
-Date: Tue, 14 Jul 2026 13:08:30 +0200
+Date: Tue, 14 Jul 2026 13:12:04 +0200
 To: Bernd Kuhls <bernd@kuhls.net>
 Cc: buildroot@buildroot.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-In-Reply-To: <20260620150203.4036943-1-bernd@kuhls.net>
+In-Reply-To: <20260620150203.4036943-2-bernd@kuhls.net>
 References: <20260620150203.4036943-1-bernd@kuhls.net>
+ <20260620150203.4036943-2-bernd@kuhls.net>
 User-Agent: Webmail Free/1.6.17
-Message-ID: <5ccccd1ecfe8271b7a4e364083ff6ab8@free.fr>
+Message-ID: <a0dbf44700c5ac6a0ee61917ae7ac228@free.fr>
 X-Sender: ju.o@free.fr
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1784027312;
- bh=NtrB9QGzqiLcAPAOybZafzK4CjMc+TzvmpGYaewtAzI=;
+ d=free.fr; s=smtp-20201208; t=1784027527;
+ bh=Z/oqW/7kETVv4+nGcVOFxP042G3c56giT4pzb2CKMQc=;
  h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=IJ02V2XGFMyQJ/Q6UJMGtkJb24kIKWcKI39Y54CPNBgVa5MZKEzwQNOGJDkLhUMd2
- MkZVMnNOIV0Q9yWRZlswo1VhxET70vxuouoyxi9cTCAUJXqRSNEaBBC5wpDSycDSC5
- y2hZPUTqCvRIP5MRWk7RcZAif/COVaPEEJdR/rI4JTPc5O5wHD4kLB9Gr80C/nxbJu
- +5KdtPluVuurd8kVTWybIsV9TRhaOAbAxYp3Irv2dCh+gVLgy7GGQMCteTDa053fhT
- Btk66Br5845fkOuim0/6+Tcizrb1z3eKCCTCioF9ANyRr3L44yYqqtmWOmSE12clFz
- Ug7Djt6DcwWtg==
+ b=TuCXr9vMXI90No6rgd17cceU+Jud2kKv9MPRCwrxQLiRayO6NFT51l7Td+JTgMceM
+ nbnPwfyUXKfyGDQ8zM4P/FfOGZNq3sP668UVK80MXTG3oYdlkSy0shI02Kk25PppT7
+ mewWDcuX3ZFemUcBpxH2ZzIN+SzAkdAgf2o/Q6Kqiigz0dYPMkKuDJyhWnOzyqDiNu
+ JBww1XpQ37wxiiy5ZM+FqpqIpFfwTySxJnosN3s2ImjqSUnFcl7oeJkQ55CVZ59kQR
+ +mCLXJW/S0dEWq0O6Bgv0bgWloLFrjglLRftetbyIYcGICrJj2+IlfNQSV7d05X2E7
+ ivmsE4ARlYOjQ==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=free.fr
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=IJ02V2XG
-Subject: Re: [Buildroot] [PATCH 1/2] package/cifs-utils: remove NO_WERROR
- hook
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=TuCXr9vM
+Subject: Re: [Buildroot] [PATCH 2/2] package/cifs-utils: bump version to 7.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -100,27 +100,62 @@ Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Hi Bernd,
+
 On 20/06/2026 17:02, Bernd Kuhls wrote:
-> Buildroot commit 18bd541dd02b153427fb4f010a6426c8e91bef1b added the 
-> hook
-> to remove -Werror after upstream added it to CFLAGS in version 5.4:
-> https://git.samba.org/?p=cifs-utils.git;a=commitdiff;h=dc0dd017a856185422d2f3691062737a9e93ecae
+> https://lists.samba.org/archive/samba-technical/2026-June/140908.html
 > 
-> Upstream however removed -Werror again in version 5.6
-> https://git.samba.org/?p=cifs-utils.git;a=commitdiff;h=74edf24d9780900f3ce15d2403c6e331b031d454
-> This version was bumped in buildroot with commit
-> 839546dd3aaff56f26536ea7373978e32563c473 but the NO_WERROR hook was not
-> removed until now.
-> 
-> The tarball of version 7.6 does not include Makefile.in anymore which
-> broke the build of the package. As this hook is not needed anymore it 
-> is
-> removed.
+> Version 7.5 was not announced separately:
+> https://wiki.samba.org/index.php/LinuxCIFS_utils
+> "December, 2025: Release 7.5
+>  - Various fixes for utilities"
+> https://git.samba.org/?p=cifs-utils.git;a=shortlog;h=refs/tags/cifs-utils-7.5
 > 
 > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> ---
+> Gitlab pipelines passed:
+> https://gitlab.com/bkuhls/buildroot/-/commits/f73f3d6fa47e362d38c258e823b6bbaaa559e616
+> 
+>  package/cifs-utils/cifs-utils.hash | 2 +-
+>  package/cifs-utils/cifs-utils.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/cifs-utils/cifs-utils.hash 
+> b/package/cifs-utils/cifs-utils.hash
+> index e6a5eefeaa..cfa2a84648 100644
+> --- a/package/cifs-utils/cifs-utils.hash
+> +++ b/package/cifs-utils/cifs-utils.hash
+> @@ -1,5 +1,5 @@
+>  # Locally calculated after checking pgp signature
+> -sha256  
+> 53353d05c30b4fc9dac006a8f0c5054cdd8a1834c176313c91e4694025c4b891  
+> cifs-utils-7.4.tar.bz2
+> +sha256  
+> 7db875ff2868e5fa4e445ada0bd23ea70b9161b96188c7e276321e061ed51dd6  
+> cifs-utils-7.6.tar.bz2
 
-I applied this patch (only) to master, thanks.
-See my comment on the patch #2.
+This archive hash is now failing. I have the error:
+
+ERROR: while checking hashes from package/cifs-utils/cifs-utils.hash
+ERROR: cifs-utils-7.6.tar.bz2 has wrong sha256 hash:
+ERROR: expected: 
+7db875ff2868e5fa4e445ada0bd23ea70b9161b96188c7e276321e061ed51dd6
+ERROR: got     : 
+b8993bc4112af331a2f31c4e1a69bcd32b44c25a8c9fb82c0f38c1ed9a49f28d
+
+Looking at: https://download.samba.org/pub/linux-cifs/cifs-utils/
+it seems the archive has been regenerated and resigned on 2026-07-09.
+
+Also, there was a new 7.7 released on that day:
+https://lists.samba.org/archive/samba-technical/2026-July/140952.html
+So you might consider using this new version.
+
+Could you have a look to what happened and send an updated patch please?
+
+>  # Hash for license file:
+>  sha256  
+> 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  
+> COPYING
 
 Best regards,
 
