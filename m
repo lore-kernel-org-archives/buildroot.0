@@ -4,86 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1DB2BC43458
-	for <buildroot@archiver.kernel.org>; Tue, 14 Jul 2026 09:38:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8B9DC44501
+	for <buildroot@archiver.kernel.org>; Tue, 14 Jul 2026 09:44:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DB6B5608EC;
-	Tue, 14 Jul 2026 09:38:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 820B4608A8;
+	Tue, 14 Jul 2026 09:44:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NpGiIs_3gL29; Tue, 14 Jul 2026 09:38:54 +0000 (UTC)
+ id J17-XfRLtW5C; Tue, 14 Jul 2026 09:44:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4A0CF608DA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6A8B6608C5
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1784021934;
-	bh=amMitZy6+MTF4XIPtHoGjfxqitX+YROvSYF3e3yMnwI=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=TBltALlInG4zqvqSOyjRjKXkYrdAeFDeFjxy8uJ77AuchljYLatcbC+PVAt7vdKKV
-	 QD1tKC+oJcTohRlKC7yglY7+3T2A+sV4Y1IqVbpc2CEvtf5WiAj+yYxb/UMncjkWOb
-	 hX29P2vs4AYYp7KEumUsjcmkJ+ldCdPzbiKq16twTePfa+K3kwfzwNhCm9CqeHwe2i
-	 nJrlMaZPFnPzZcGpOskXSQ3mXBs68gjZ8jv/We9OTNJ+MaGAbYdCoZ+AdWwlpXnC3n
-	 AlK6/AjQm4Fbw5ALkuk2vQMlCC1DmWoJc++o0sEurEZqTgLULJy/cjQ057CF5bOLdx
-	 fv9ZcemhF59HA==
+	s=default; t=1784022285;
+	bh=63fg+Z82wYfdlemFteoD/qKCjpwqCletCMXKWdrePBc=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=IAwBmvGrY6g0pSIr6mZuEiNXheMn0TlXzZgztxZvhW3jo+65G1ThbnmoXGvRfRnM2
+	 34vNN3or2PaP3irb79bNn0GXpaG9Dz1wiUjgQICsQVmMxrMdFsg74YX4mQQfCL3C6i
+	 WKcejiKhdwFK0EAugev20m3aOmxZdEPIoUUbhyuyKbuRvZ+MUzCEJXM+bJtEQuYhro
+	 PstNl+6MtTO8mJaUNeY1/6zFRrc9lxOKfOQh3C6bPY7m1MvAm5ZrxylCPR6tzkvBhF
+	 P7eQe6gupRX/wWJ8dKbzu3T38kjyWY7rbjuCNRyscyfP2XFBdnUpupeg8vSu5ATd81
+	 lG11z+jn1i0aQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4A0CF608DA;
-	Tue, 14 Jul 2026 09:38:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6A8B6608C5;
+	Tue, 14 Jul 2026 09:44:45 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 3C6A796C
- for <buildroot@buildroot.org>; Tue, 14 Jul 2026 09:38:53 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 023D396C
+ for <buildroot@buildroot.org>; Tue, 14 Jul 2026 09:44:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 22493406A3
- for <buildroot@buildroot.org>; Tue, 14 Jul 2026 09:38:53 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id DC86040740
+ for <buildroot@buildroot.org>; Tue, 14 Jul 2026 09:44:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6BdFc-g1RoPO for <buildroot@buildroot.org>;
- Tue, 14 Jul 2026 09:38:52 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E4847405BB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E4847405BB
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E4847405BB
- for <buildroot@buildroot.org>; Tue, 14 Jul 2026 09:38:51 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id C1B552003E0;
- Tue, 14 Jul 2026 11:38:45 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Tue, 14 Jul 2026 11:38:45 +0200
-MIME-Version: 1.0
-Date: Tue, 14 Jul 2026 11:38:45 +0200
-To: Thomas Perale <thomas.perale@mind.be>
-Cc: buildroot@buildroot.org, Romain Naour <romain.naour@gmail.com>, Angelo
- Compagnucci <angelo.compagnucci@gmail.com>, James Hilliard
- <james.hilliard1@gmail.com>
-In-Reply-To: <20260706100301.60854-1-thomas.perale@mind.be>
-References: <20260706100301.60854-1-thomas.perale@mind.be>
-User-Agent: Webmail Free/1.6.17
-Message-ID: <ab13d9259139130265c3f5dd4823afe1@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1784021930;
- bh=2+++7lp5obboqcLBHDD0geYXqlK5wlCxxj5AaODJFLk=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=K6cbqvgxKsy4i4miyrhYhY+n9z/7Svkfzb+atAqu3EDLEGvqcW72e2eDIE5op1Fdq
- cnyvr/6AFqDW5ZvQTJryRZthEQMpqoCpZY5h9lW/YrUg1os2MslC/PAr2ShrwZscCR
- aWJZL69crVcdqcqqUL8dGBslHkDqoYoIBviv8pIZdA5DKEyrurDd2gnP91sJNN+Aox
- JmJps3jUh1wZPW06T9k4HzyBREyJ3It/pzIicdSWEUlkpaj81xL/OzYX5PkCVJX4Vz
- ixzlaPPai9DIF/cj+BG2IB9qFU2FHqUGRBupeHkQ6UYgp8R7sxxhd+my8FVMxHO8kD
- jlfOo5YmUIWgw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=K6cbqvgx
-Subject: Re: [Buildroot] [PATCH 1/3] package/ogre: add CPE
+ id bMxlNszpgXka for <buildroot@buildroot.org>;
+ Tue, 14 Jul 2026 09:44:42 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 99BBE40730
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 99BBE40730
+ for <buildroot@buildroot.org>; Tue, 14 Jul 2026 09:44:42 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id E28E288840; Tue, 14 Jul 2026 09:44:07 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 14 Jul 2026 11:43:33 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: b7266597bc179db6b258368519afe1eedeada5da
+X-Git-Newrev: 9f7c484b4ab0190765dc81fb79083ae8e2be211b
+X-Patchwork-Hint: ignore
+Message-Id: <20260714094407.E28E288840@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/stunnel: update download site
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -97,26 +70,52 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 06/07/2026 12:02, Thomas Perale via buildroot wrote:
-> Vulnerabilities such as [1][2] are assigned to the ogre package with 
-> the
-> cpe: ogre3d:ogre.
-> 
-> To correctly match against those vulnerabilities the CPE_ID_VERSION 
-> uses
-> the version without the 'v' prepended.
-> 
-> [1] https://nvd.nist.gov/vuln/detail/CVE-2025-11014
-> [2] https://nvd.nist.gov/vuln/detail/CVE-2025-11017
-> 
-> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/9f7c484b4ab0190765dc81fb79083ae8e2be211b
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Series applied to master, thanks.
+Fix the download site, which seems to be changed after
+a new release. Use the more permanent /archive.
+
+Fixes:
+ - https://autobuild.buildroot.net/results/a1a/a1a88bea6fdf5ae28d813f0a12d08e504b2fad06/
+ - https://autobuild.buildroot.net/results/b3d/b3d0588fbc02ede6d5f82fb5d2fefcf610a69299/
+
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/stunnel/stunnel.hash | 2 +-
+ package/stunnel/stunnel.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/stunnel/stunnel.hash b/package/stunnel/stunnel.hash
+index dc61f6d5b9..572f226861 100644
+--- a/package/stunnel/stunnel.hash
++++ b/package/stunnel/stunnel.hash
+@@ -1,4 +1,4 @@
+-# From https://www.stunnel.org/downloads/stunnel-5.78.tar.gz.sha256
++# From https://www.stunnel.org/archive/5.x/stunnel-5.78.tar.gz.sha256
+ sha256  8727e53bb8b7528f850327a2a149158422c02183bc120d1d733cc65b1e2c349d  stunnel-5.78.tar.gz
+ # Locally calculated
+ sha256  716f18b10eac3f1875ea2205418dd1b0084bd210bd17d615df6b180cfc4d65b6  COPYING.md
+diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
+index 8bd680af32..adae204148 100644
+--- a/package/stunnel/stunnel.mk
++++ b/package/stunnel/stunnel.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ STUNNEL_VERSION = 5.78
+-STUNNEL_SITE = https://www.stunnel.org/downloads
++STUNNEL_SITE = https://www.stunnel.org/archive/5.x
+ STUNNEL_DEPENDENCIES = host-pkgconf openssl
+ STUNNEL_CONF_OPTS = --with-ssl=$(STAGING_DIR)/usr --with-threads=fork \
+ 	--disable-libwrap
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
