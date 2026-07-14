@@ -4,77 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6A71C44501
-	for <buildroot@archiver.kernel.org>; Tue, 14 Jul 2026 15:32:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 922CFC44508
+	for <buildroot@archiver.kernel.org>; Tue, 14 Jul 2026 18:00:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 74BD0409D8;
-	Tue, 14 Jul 2026 15:32:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3594B409C7;
+	Tue, 14 Jul 2026 18:00:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oJ2sTOhfmf3K; Tue, 14 Jul 2026 15:32:55 +0000 (UTC)
+ id 7RYhsNnsHapg; Tue, 14 Jul 2026 18:00:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 730AC409E3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9FAF2409D5
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1784043175;
-	bh=Q1224BLBcGo9BsUAdd5PHu/VG7xySnIuTW+C+6r3t9g=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=HE3hynEYFczVbyks9kEMtd+AOUpDXCJ9wQ0FuJ3Evk5JigN8DUlo52sK57cPkSLwI
-	 Y8JqGPH0/i9aQRUZQ4RDzMQu/g6PCEUD8oY2DfLKPYOBVPEmN+i8zzWiXTsyg7I/18
-	 tyxPmOfLZvt78d179FGsEtztfFhaXGG39py6Tl0ZcITGKlJ2abfz2H1gbGl7d79/ZS
-	 aVgVI81kPjAlxXNy5yH45t5QFgZYXwelT80praEq9uHPCty2nDqlX7w+9Re3wj+5if
-	 2OmSEArmjv4STsKNsXq0bHD6zE+jUEZVWdIlFYtyaP9XJzW3hhJvZqjL+ZSmP6jfEh
-	 JXF3w8UyvvFmQ==
+	s=default; t=1784052010;
+	bh=Om6cSfB9smzyBpWNgsg++PVKWLBKhXr7QZRWe4H1nwM=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=ksjf4HRQCQpMgNuORw9k8qrnxhEOpufGHXzb4Ovukhq9CuvWyfQTmtBy8IjLflq7F
+	 2jfkp9z+D5ehheOhWWRFgJNukgLkdp9U7kKKXYGosrG9NCbbSSVrlR7H2vpbaVaJsW
+	 wwsLQ4a0M3LdObmjPenQ6v4RNBRwkH0j1V9iT1mI/k3IiWfrQG6CLacnimlUk5mDsY
+	 pSt/lAoO3e/b3PdgWPasE4OR9RI23yUEsg/0yD9M71G61u0L7Uez0uV9jQGXi9JRCc
+	 EvOiFVTj5cJuaaAWgNpRMJULEgQEsFlaxg52RlQcqKmJDSaFTbk+Vf8+1nsSTwNJMX
+	 dF8yp+qFWWkMQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 730AC409E3;
-	Tue, 14 Jul 2026 15:32:55 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 8E9F3270
- for <buildroot@buildroot.org>; Tue, 14 Jul 2026 15:32:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9FAF2409D5;
+	Tue, 14 Jul 2026 18:00:10 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6808D49D
+ for <buildroot@buildroot.org>; Tue, 14 Jul 2026 18:00:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8C064409E3
- for <buildroot@buildroot.org>; Tue, 14 Jul 2026 15:32:54 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 654728111E
+ for <buildroot@buildroot.org>; Tue, 14 Jul 2026 18:00:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id l501DRpYYMrw for <buildroot@buildroot.org>;
- Tue, 14 Jul 2026 15:32:53 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=136.243.2.102;
- helo=nyx.n621.de; envelope-from=fl@n621.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 45A10409D8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 45A10409D8
-Received: from nyx.n621.de (v4gw.hekate.n621.de [136.243.2.102])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 45A10409D8
- for <buildroot@buildroot.org>; Tue, 14 Jul 2026 15:32:53 +0000 (UTC)
-Received: from charybdis.office.fixme.cloud (localhost [127.0.0.1])
- by nyx.n621.de (Postfix) with ESMTP id 18F7DE002E4;
- Tue, 14 Jul 2026 17:32:50 +0200 (CEST)
-From: Florian Larysch <fl@n621.de>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KMl9T4KNAlKa for <buildroot@buildroot.org>;
+ Tue, 14 Jul 2026 18:00:07 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 48D60810FC
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 48D60810FC
+ for <buildroot@buildroot.org>; Tue, 14 Jul 2026 18:00:07 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 6B222888B8; Tue, 14 Jul 2026 17:59:32 +0000 (UTC)
 To: buildroot@buildroot.org
-Cc: Francis Laniel <flaniel@linux.microsoft.com>, Florian Larysch <fl@n621.de>
-Date: Tue, 14 Jul 2026 17:32:33 +0200
-Message-ID: <20260714153242.20947-1-fl@n621.de>
-X-Mailer: git-send-email 2.55.0
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=n621.de; s=dkim; t=1784043170;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding;
- bh=OZUEj8SQkf4zeNl0HE3JRh+BWCicnbbH0GfB8c1ZFlc=;
- b=caQXxiIgwkImF2+3q5PXAUYc+8kC1AirvhO5ciNFekWPJEPUNVuUTMHODo6ZzYzzwU2C85
- ZsRFe5/ygft8zMQvaNct6UZHx03pvo5+ycxQw6e7wZhRqIypvB4qHfEg1dXLvZth9V359f
- uFfZzBZ62IjV/P9g7F7etEeXYkZ8nEs=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=n621.de
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=n621.de header.i=@n621.de header.a=rsa-sha256
- header.s=dkim header.b=caQXxiIg
-Subject: [Buildroot] [PATCH 2025.02.x 1/1] package/pahole: fix build on
- modern toolchains
+Date: Tue, 14 Jul 2026 19:31:20 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: c912c6b4a52761ff98251251ec14b10cc4907bc8
+X-Git-Newrev: 643f480f4379afe5677ec399c802b8d33734b601
+X-Patchwork-Hint: ignore
+Message-Id: <20260714175932.6B222888B8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/guile: bump to version 3.0.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,137 +68,135 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-V2hlbiBidWlsZGluZyBwYWhvbGUgdXNpbmcgYSBtb2Rlcm4gR0NDIChlLmcuIHdoZW4gYnVpbGRp
-bmcKaG9zdC1wYWhvbGUpLCBkaXNjYXJkZWQtcXVhbGlmaWVycyB3YXJuaW5ncyBhcmUgcHJvZHVj
-ZWQuIEluIGJ1aWxkcyB0aGF0CmRvbid0IHNldCBDTUFLRV9CVUlMRF9UWVBFPVJlbGVhc2UsIC1X
-ZXJyb3IgZ2V0cyBzZXQgYW5kIGNhdXNlcyBhIGJ1aWxkCmZhaWx1cmUuCgpGaXggdGhpcyBieSBi
-YWNrcG9ydGluZyB0aGUgYXBwbGljYWJsZSBwYXJ0cyBvZiBhbiB1cHN0cmVhbSBwYXRjaCBhbmQK
-Zml4aW5nIGEgcmVtYWluaW5nIGlzc3VlIHRoYXQgaW1wbGljaXRseSBnb3QgcmVmYWN0b3JlZCBh
-d2F5IHVwc3RyZWFtCmFscmVhZHkuCgpTaWduZWQtb2ZmLWJ5OiBGbG9yaWFuIExhcnlzY2ggPGZs
-QG42MjEuZGU+Ci0tLQogLi4uc2NhcmRlZC1xdWFsaWZpZXJzLWZvci1zdHJjaHItc3Ryc3RyLnBh
-dGNoIHwgMTM0ICsrKysrKysrKysrKysrKysrKwogLi4ucmVzZXJ2ZS1jb25zdC1uZXNzLW9mLWJz
-ZWFyY2gtcmVzdWx0LnBhdGNoIHwgIDM4ICsrKysrCiAyIGZpbGVzIGNoYW5nZWQsIDE3MiBpbnNl
-cnRpb25zKCspCiBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9wYWhvbGUvMDAwMi1wYWhvbGUt
-Rml4LWRpc2NhcmRlZC1xdWFsaWZpZXJzLWZvci1zdHJjaHItc3Ryc3RyLnBhdGNoCiBjcmVhdGUg
-bW9kZSAxMDA2NDQgcGFja2FnZS9wYWhvbGUvMDAwMy1wYWhvbGUtcHJlc2VydmUtY29uc3QtbmVz
-cy1vZi1ic2VhcmNoLXJlc3VsdC5wYXRjaAoKZGlmZiAtLWdpdCBhL3BhY2thZ2UvcGFob2xlLzAw
-MDItcGFob2xlLUZpeC1kaXNjYXJkZWQtcXVhbGlmaWVycy1mb3Itc3RyY2hyLXN0cnN0ci5wYXRj
-aCBiL3BhY2thZ2UvcGFob2xlLzAwMDItcGFob2xlLUZpeC1kaXNjYXJkZWQtcXVhbGlmaWVycy1m
-b3Itc3RyY2hyLXN0cnN0ci5wYXRjaApuZXcgZmlsZSBtb2RlIDEwMDY0NAppbmRleCAwMDAwMDAw
-MDAwLi5mYzBiY2M0ZjdjCi0tLSAvZGV2L251bGwKKysrIGIvcGFja2FnZS9wYWhvbGUvMDAwMi1w
-YWhvbGUtRml4LWRpc2NhcmRlZC1xdWFsaWZpZXJzLWZvci1zdHJjaHItc3Ryc3RyLnBhdGNoCkBA
-IC0wLDAgKzEsMTM0IEBACitGcm9tIDVlZWI1MzRlMDIxODNiY2FmMmI4NmY3MWUwZTk2ZWZhMmQy
-Y2UzZDAgTW9uIFNlcCAxNyAwMDowMDowMCAyMDAxCitGcm9tOiBEYW1pZW4gSG91cnRvdWxsZSA8
-ZGFtaWVuLmhvdXJ0b3VsbGVAZ21haWwuY29tPgorRGF0ZTogV2VkLCAxMSBNYXIgMjAyNiAxNTow
-OTozOSArMDEwMAorU3ViamVjdDogW1BBVENIXSBwYWhvbGU6IEZpeCBkaXNjYXJkZWQtcXVhbGlm
-aWVycyBmb3Igc3RyY2hyL3N0cnN0ci4KKworR2xpYmMgMi40MyBhZGRlZCBDMjMgY29uc3QtcHJl
-c2VydmluZyBvdmVybG9hZHMgOgoraHR0cHM6Ly9zb3VyY2V3YXJlLm9yZy9nbGliYy93aWtpL1Jl
-bGVhc2UvMi40My4KKworRm9yIHRoZSBmdW5jdGlvbiBwcm90b3R5cGVfX25ldywgZml4IGxvY2Fs
-IHZhcmlhYmxlIGRlY2xhcmF0aW9uIHRvIHVzZQordGhlIGNvcnJlY3QgY29uc3QgY2hhciogdHlw
-ZSBpbnN0ZWFkIG9mIGNoYXIqLCByZW1vdmluZyB0aGUgbmVlZCB0bworZGlzY2FyZCB0aGUgY29u
-c3QgcXVhbGlmaWVyLgorCitBbHNvIGZpeCBhIHByZS1leGlzdGluZyBidWcgaW4gdHlwZV9fZmlu
-ZF90eXBlX2VudW06IHdoZW4gaXRlcmF0aW5nCitvdmVyIGEgJysnLWNvbmNhdGVuYXRlZCBsaXN0
-IG9mIGVudW0gbmFtZXMsIGFmdGVyIGFkdmFuY2luZyB0byB0aGUgbmV4dAorc2VnbWVudCB0aGUg
-bmV3IHNlcGFyYXRvciB3YXMgbm90IG51bGxpZmllZCwgY2F1c2luZyAic2Vjb25kK3RoaXJkIiB0
-bworYmUgcGFzc2VkIHRvIGN1X19maW5kX2VudW1lcmF0aW9uX2J5X25hbWUgaW5zdGVhZCBvZiAi
-c2Vjb25kIi4gIEFkZCBhCitudWxsIGNoZWNrIGJlZm9yZSB3cml0aW5nIHRvIHNlcF9tdXRhYmxl
-IHRvIGF2b2lkIGEgbnVsbCBkZXJlZmVyZW5jZQord2hlbiBubyBmdXJ0aGVyICcrJyBpcyBwcmVz
-ZW50LgorCitTaWduZWQtb2ZmLWJ5OiBEYW1pZW4gSG91cnRvdWxsZSA8ZGFtaWVuLmhvdXJ0b3Vs
-bGVAZ21haWwuY29tPgorU2lnbmVkLW9mZi1ieTogQWxhbiBNYWd1aXJlIDxhbGFuLm1hZ3VpcmVA
-b3JhY2xlLmNvbT4KK0xpbms6IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2R3YXJ2ZXMvMjAyNjAz
-MTExNDA5MzguODE0NTktMi1kLmhvdXJ0b3VsbGVAZ2VvaWRlLmZyLworCitVcHN0cmVhbTogaHR0
-cHM6Ly9naXQua2VybmVsLm9yZy9wdWIvc2NtL2RldmVsL3BhaG9sZS9wYWhvbGUuZ2l0L2NvbW1p
-dC8/aWQ9YmEzMWNmYTA4ZmZjZmU2ZmY1NzU3ZjMyNWRlNWIwM2NhMTU3Y2I3OAorW0Zsb3JpYW46
-IEJhY2twb3J0IG9mIHRoZSBhcHBsaWNhYmxlIGJpdHMgdG8gdjEuMjddCitTaWduZWQtb2ZmLWJ5
-OiBGbG9yaWFuIExhcnlzY2ggPGZsQG42MjEuZGU+CistLS0KKyBwYWhvbGUuYyB8IDM1ICsrKysr
-KysrKysrKysrKysrKy0tLS0tLS0tLS0tLS0tLS0tCisgMSBmaWxlIGNoYW5nZWQsIDE4IGluc2Vy
-dGlvbnMoKyksIDE3IGRlbGV0aW9ucygtKQorCitkaWZmIC0tZ2l0IGEvcGFob2xlLmMgYi9wYWhv
-bGUuYworaW5kZXggOTU0NDk4ZC4uM2RjYjUyNSAxMDA2NDQKKy0tLSBhL3BhaG9sZS5jCisrKysg
-Yi9wYWhvbGUuYworQEAgLTI1MDUsNyArMjUwNSw3IEBAIHN0YXRpYyBpbnQ2NF90IHR5cGVfaW5z
-dGFuY2VfX2ludF92YWx1ZShzdHJ1Y3QgdHlwZV9pbnN0YW5jZSAqaW5zdGFuY2UsIGNvbnN0IGNo
-CisgCWludCBieXRlX29mZnNldCA9IDA7CisgCisgCWlmICghbWVtYmVyKSB7CistCQljaGFyICpz
-ZXAgPSBzdHJjaHIobWVtYmVyX25hbWVfb3JpZywgJy4nKTsKKysJCWNvbnN0IGNoYXIgKnNlcCA9
-IHN0cmNocihtZW1iZXJfbmFtZV9vcmlnLCAnLicpOworIAorIAkJaWYgKCFzZXApCisgCQkJcmV0
-dXJuIC0xOworQEAgLTI1MTgsOCArMjUxOCw4IEBAIHN0YXRpYyBpbnQ2NF90IHR5cGVfaW5zdGFu
-Y2VfX2ludF92YWx1ZShzdHJ1Y3QgdHlwZV9pbnN0YW5jZSAqaW5zdGFuY2UsIGNvbnN0IGNoCisg
-CQljaGFyICptZW1iZXJfbmFtZSA9IG1lbWJlcl9uYW1lX2FsbG9jOworIAkJc3RydWN0IHR5cGUg
-KnR5cGUgPSBpbnN0YW5jZS0+dHlwZTsKKyAKKy0JCXNlcCA9IG1lbWJlcl9uYW1lX2FsbG9jICsg
-KHNlcCAtIG1lbWJlcl9uYW1lX29yaWcpOworLQkJKnNlcCA9IDA7CisrCQljaGFyICpzZXBfbXV0
-YWJsZSA9IG1lbWJlcl9uYW1lX2FsbG9jICsgKHNlcCAtIG1lbWJlcl9uYW1lX29yaWcpOyAgLy8g
-c2VwIG11dGFibGUgZm9yIHRoZSBjb3B5CisrCQkqc2VwX211dGFibGUgPSAwOworIAorIAkJd2hp
-bGUgKDEpIHsKKyAJCQltZW1iZXIgPSB0eXBlX19maW5kX21lbWJlcl9ieV9uYW1lKHR5cGUsIG1l
-bWJlcl9uYW1lKTsKK0BAIC0yNTMyLDkgKzI1MzIsOSBAQCBvdXRfZnJlZV9tZW1iZXJfbmFtZToK
-KyAJCQl0eXBlID0gdGFnX190eXBlKGN1X190eXBlKGN1LCBtZW1iZXItPnRhZy50eXBlKSk7Cisg
-CQkJaWYgKHR5cGUgPT0gTlVMTCkKKyAJCQkJZ290byBvdXRfZnJlZV9tZW1iZXJfbmFtZTsKKy0J
-CQltZW1iZXJfbmFtZSA9IHNlcCArIDE7CistCQkJc2VwID0gc3RyY2hyKG1lbWJlcl9uYW1lLCAn
-LicpOworLQkJCWlmICghc2VwKQorKwkJCW1lbWJlcl9uYW1lID0gc2VwX211dGFibGUgKyAxOwor
-KwkJCXNlcF9tdXRhYmxlID0gc3RyY2hyKG1lbWJlcl9uYW1lLCAnLicpOworKwkJCWlmICghc2Vw
-X211dGFibGUpCisgCQkJCWJyZWFrOworIAorIAkJfQorQEAgLTI5NzIsNyArMjk3Miw3IEBAIHN0
-YXRpYyBzdHJ1Y3QgcHJvdG90eXBlICpwcm90b3R5cGVfX25ldyhjb25zdCBjaGFyICpleHByZXNz
-aW9uKQorIAorIAlzdHJjcHkocHJvdG90eXBlLT5uYW1lLCBleHByZXNzaW9uKTsKKyAKKy0JY29u
-c3QgY2hhciAqbmFtZSA9IHByb3RvdHlwZS0+bmFtZTsKKysJY2hhciAqbmFtZSA9IHByb3RvdHlw
-ZS0+bmFtZTsKKyAKKyAJcHJvdG90eXBlLT5ucl9hcmdzID0gMDsKKyAKK0BAIC0yOTg2LDEwICsy
-OTg2LDkgQEAgc3RhdGljIHN0cnVjdCBwcm90b3R5cGUgKnByb3RvdHlwZV9fbmV3KGNvbnN0IGNo
-YXIgKmV4cHJlc3Npb24pCisgCWlmIChhcmdzX2Nsb3NlID09IE5VTEwpCisgCQlnb3RvIG91dF9u
-b19jbG9zaW5nX3BhcmVuczsKKyAKKysJKmFyZ3Nfb3BlbisrID0gKmFyZ3NfY2xvc2UgPSAnXDAn
-OworIAljaGFyICphcmdzID0gYXJnc19vcGVuOworIAorLQkqYXJncysrID0gKmFyZ3NfY2xvc2Ug
-PSAnXDAnOworLQorIAl3aGlsZSAoaXNzcGFjZSgqYXJncykpCisgCQkrK2FyZ3M7CisgCitAQCAt
-MzEzNiw3ICszMTM1LDcgQEAgc3RhdGljIGludCB0eXBlX19maW5kX3R5cGVfZW51bShzdHJ1Y3Qg
-dHlwZSAqdHlwZSwgc3RydWN0IGN1ICpjdSwgY29uc3QgY2hhciAqdHkKKyAJCXJldHVybiB0eXBl
-X19hZGRfdHlwZV9lbnVtKHR5cGUsIHRlLCBjdSk7CisgCisgCS8vIE5vdyBsb29rIGF0IGEgJ3Zp
-cnR1YWwgZW51bScsIGkuZS4gdGhlIGNvbmNhdGVuYXRpb24gb2YgbXVsdGlwbGUgZW51bXMKKy0J
-Y2hhciAqc2VwID0gc3RyY2hyKHR5cGVfZW51bSwgJysnKTsKKysJY29uc3QgY2hhciAqc2VwID0g
-c3RyY2hyKHR5cGVfZW51bSwgJysnKTsKKyAKKyAJaWYgKCFzZXApCisgCQlyZXR1cm4gLTE7CitA
-QCAtMzE0OCwxMyArMzE0NywxMyBAQCBzdGF0aWMgaW50IHR5cGVfX2ZpbmRfdHlwZV9lbnVtKHN0
-cnVjdCB0eXBlICp0eXBlLCBzdHJ1Y3QgY3UgKmN1LCBjb25zdCBjaGFyICp0eQorIAorIAlpbnQg
-cmV0ID0gLTE7CisgCistCXNlcCA9IHR5cGVfZW51bXMgKyAoc2VwIC0gdHlwZV9lbnVtKTsKKysJ
-Y2hhciAqc2VwX211dGFibGUgPSB0eXBlX2VudW1zICsgKHNlcCAtIHR5cGVfZW51bSk7CisrCWNo
-YXIgKmN1ciA9IHR5cGVfZW51bXM7CisgCistCXR5cGVfZW51bSA9IHR5cGVfZW51bXM7CistCSpz
-ZXAgPSAnXDAnOworKwkqc2VwX211dGFibGUgPSAnXDAnOworIAorIAl3aGlsZSAoMSkgeworLQkJ
-dGUgPSBjdV9fZmluZF9lbnVtZXJhdGlvbl9ieV9uYW1lKGN1LCB0eXBlX2VudW0sIE5VTEwpOwor
-KwkJdGUgPSBjdV9fZmluZF9lbnVtZXJhdGlvbl9ieV9uYW1lKGN1LCBjdXIsIE5VTEwpOworIAor
-IAkJaWYgKCF0ZSkKKyAJCQlnb3RvIG91dDsKK0BAIC0zMTYzLDEwICszMTYyLDEyIEBAIHN0YXRp
-YyBpbnQgdHlwZV9fZmluZF90eXBlX2VudW0oc3RydWN0IHR5cGUgKnR5cGUsIHN0cnVjdCBjdSAq
-Y3UsIGNvbnN0IGNoYXIgKnR5CisgCQlpZiAocmV0KQorIAkJCWdvdG8gb3V0OworIAorLQkJaWYg
-KHNlcCA9PSBOVUxMKQorKwkJaWYgKHNlcF9tdXRhYmxlID09IE5VTEwpCisgCQkJYnJlYWs7Cist
-CQl0eXBlX2VudW0gPSBzZXAgKyAxOworLQkJc2VwID0gc3RyY2hyKHR5cGVfZW51bSwgJysnKTsK
-KysJCWN1ciA9IHNlcF9tdXRhYmxlICsgMTsKKysJCXNlcF9tdXRhYmxlID0gc3RyY2hyKGN1ciwg
-JysnKTsKKysJCWlmIChzZXBfbXV0YWJsZSkKKysJCQkqc2VwX211dGFibGUgPSAnXDAnOworIAl9
-CisgCisgCXJldCA9IDA7CistLSAKKzIuNTUuMAorCmRpZmYgLS1naXQgYS9wYWNrYWdlL3BhaG9s
-ZS8wMDAzLXBhaG9sZS1wcmVzZXJ2ZS1jb25zdC1uZXNzLW9mLWJzZWFyY2gtcmVzdWx0LnBhdGNo
-IGIvcGFja2FnZS9wYWhvbGUvMDAwMy1wYWhvbGUtcHJlc2VydmUtY29uc3QtbmVzcy1vZi1ic2Vh
-cmNoLXJlc3VsdC5wYXRjaApuZXcgZmlsZSBtb2RlIDEwMDY0NAppbmRleCAwMDAwMDAwMDAwLi43
-YTRjZGRmNWQxCi0tLSAvZGV2L251bGwKKysrIGIvcGFja2FnZS9wYWhvbGUvMDAwMy1wYWhvbGUt
-cHJlc2VydmUtY29uc3QtbmVzcy1vZi1ic2VhcmNoLXJlc3VsdC5wYXRjaApAQCAtMCwwICsxLDM4
-IEBACitGcm9tIGY1MTBiZjVkM2YzZTM0MDU3MTAzMTFjZWI0YTM1MzkyNjcyMThiZGUgTW9uIFNl
-cCAxNyAwMDowMDowMCAyMDAxCitGcm9tOiBGbG9yaWFuIExhcnlzY2ggPGxhcnlzY2hAZml4bWUu
-Z21iaD4KK0RhdGU6IFR1ZSwgMTQgSnVsIDIwMjYgMTY6MDM6MTIgKzAyMDAKK1N1YmplY3Q6IFtQ
-QVRDSF0gcGFob2xlOiBwcmVzZXJ2ZSBjb25zdC1uZXNzIG9mIGJzZWFyY2ggcmVzdWx0CitNSU1F
-LVZlcnNpb246IDEuMAorQ29udGVudC1UeXBlOiB0ZXh0L3BsYWluOyBjaGFyc2V0PVVURi04CitD
-b250ZW50LVRyYW5zZmVyLUVuY29kaW5nOiA4Yml0CisKK0ZpeGVzOgorCitwYWhvbGUvYnRmX2Vu
-Y29kZXIuYzogSW4gZnVuY3Rpb24g4oCYYnRmX2VuY29kZXJfX3RhZ19rZnVuY+KAmToKK3BhaG9s
-ZS9idGZfZW5jb2Rlci5jOjE1MjY6MTY6IGVycm9yOiBhc3NpZ25tZW50IGRpc2NhcmRzIOKAmGNv
-bnN04oCZIHF1YWxpZmllciBmcm9tIHBvaW50ZXIgdGFyZ2V0IHR5cGUgWy1XZXJyb3I9ZGlzY2Fy
-ZGVkLXF1YWxpZmllcnNdCisgMTUyNiB8ICAgICAgICAgdGFyZ2V0ID0gYnNlYXJjaCgma2V5LCBi
-YXNlLCBjbnQsIHNpemVvZihrZXkpLCBidGZfZnVuY19jbXApOworICAgICAgfCAgICAgICAgICAg
-ICAgICBeCisKK1Vwc3RyZWFtOiBOL0EgKGltcGxpY2l0bHkgZml4ZWQgYXMgcGFydCBvZiBhIHJl
-ZmFjdG9yIGluIGNvbW1pdCBjNTY3NzE3CisoImJ0Zl9lbmNvZGVyOiBSZWZhY3RvciBidGZfZW5j
-b2Rlcl9fdGFnX2tmdW5jcygpIiksIHJlbGVhc2VkIGluIHYxLjMwKQorU2lnbmVkLW9mZi1ieTog
-RmxvcmlhbiBMYXJ5c2NoIDxmbEBuNjIxLmRlPgorLS0tCisgYnRmX2VuY29kZXIuYyB8IDIgKy0K
-KyAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkKKworZGlmZiAt
-LWdpdCBhL2J0Zl9lbmNvZGVyLmMgYi9idGZfZW5jb2Rlci5jCitpbmRleCBjMmRmMmJjLi40MTE4
-MDI4IDEwMDY0NAorLS0tIGEvYnRmX2VuY29kZXIuYworKysrIGIvYnRmX2VuY29kZXIuYworQEAg
-LTE1MTYsNyArMTUxNiw3IEBAIHN0YXRpYyBpbnQgYnRmX2VuY29kZXJfX3RhZ19rZnVuYyhzdHJ1
-Y3QgYnRmX2VuY29kZXIgKmVuY29kZXIsIHN0cnVjdCBnb2J1ZmZlciAqCisgeworIAlzdHJ1Y3Qg
-YnRmX2Z1bmMga2V5ID0geyAubmFtZSA9IGtmdW5jIH07CisgCXN0cnVjdCBidGYgKmJ0ZiA9IGVu
-Y29kZXItPmJ0ZjsKKy0Jc3RydWN0IGJ0Zl9mdW5jICp0YXJnZXQ7CisrCWNvbnN0IHN0cnVjdCBi
-dGZfZnVuYyAqdGFyZ2V0OworIAljb25zdCB2b2lkICpiYXNlOworIAl1bnNpZ25lZCBpbnQgY250
-OworIAlpbnQgZXJyID0gLTE7CistLSAKKzIuNTUuMAorCi0tIAoyLjU1LjAKCl9fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxp
-c3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21h
-aWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/643f480f4379afe5677ec399c802b8d33734b601
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+
+The patch 0002-Makefile.am-fix-build-without-makeinfo.patch is not longer
+needed since it builds even if 'makeinfo' is not installed, so it's removed.
+
+For release annoucne, see:
+https://lists.gnu.org/archive/html/info-gnu/2025-12/msg00002.html
+
+Changelog:
+Changes are detailed in the git repo logs:
+$ git clone git://git.sv.gnu.org/guile.git
+$ git whatchanged
+
+Signed-off-by: Pedro Aguilar <paguilar@paguilar.org>
+[Julien:
+ - remove .checkpackageignore entry to fix check-package error
+ - add link to release announce
+]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ .checkpackageignore                                |  1 -
+ ...02-Makefile.am-fix-build-without-makeinfo.patch | 51 ----------------------
+ package/guile/guile.hash                           |  2 +-
+ package/guile/guile.mk                             |  2 +-
+ 4 files changed, 2 insertions(+), 54 deletions(-)
+
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 4ec39f9f36..e502d52138 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -407,7 +407,6 @@ package/gpsd/S50gpsd Shellcheck lib_sysv.Indent lib_sysv.Variables
+ package/gptfdisk/0001-gptcurses-partially-revert-Tweaks-for-building-on-th.patch lib_patch.Upstream
+ package/gstreamer1/gstd/0001-Don-t-require-gstd-check-user-xenv.sh-for-systemd-se.patch lib_patch.Upstream
+ package/guile/0001-calculate-csqrt_manually.patch lib_patch.Upstream
+-package/guile/0002-Makefile.am-fix-build-without-makeinfo.patch lib_patch.Upstream
+ package/gutenprint/0001-use-pregen-xmli18n-header.patch lib_patch.Upstream
+ package/gutenprint/0002-cups-support-replaces-static-with-static-libtool-lib.patch lib_patch.Upstream
+ package/harfbuzz/0001-meson.build-check-for-pthread.h.patch lib_patch.Upstream
+diff --git a/package/guile/0002-Makefile.am-fix-build-without-makeinfo.patch b/package/guile/0002-Makefile.am-fix-build-without-makeinfo.patch
+deleted file mode 100644
+index 0d16f92387..0000000000
+--- a/package/guile/0002-Makefile.am-fix-build-without-makeinfo.patch
++++ /dev/null
+@@ -1,51 +0,0 @@
+-From 9304ad88a5f4b083d348563c5de00da53b34cf46 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Fri, 6 Mar 2020 23:20:39 +0100
+-Subject: [PATCH] Makefile.am: fix build without makeinfo
+-
+-Don't build doc subdir if makeinfo is not available otherwise build
+-fails on:
+-
+-make[4]: Entering directory '/nvmedata/autobuild/instance-7/output-1/build/host-guile-2.0.14/doc/ref'
+-  MAKEINFO guile.info
+-/nvmedata/autobuild/instance-7/output-1/build/host-guile-2.0.14/build-aux/missing: line 81: makeinfo: command not found
+-WARNING: 'makeinfo' is missing on your system.
+-         You should only need it if you modified a '.texi' file, or
+-         any other file indirectly affecting the aspect of the manual.
+-         You might want to install the Texinfo package:
+-         <http://www.gnu.org/software/texinfo/>
+-         The spurious makeinfo call might also be the consequence of
+-         using a buggy 'make' (AIX, DU, IRIX), in which case you might
+-         want to install GNU make:
+-         <http://www.gnu.org/software/make/>
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/9605aac6f760bfff190d0ab95fa50f65486ffe90
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: sent to bug-guile@gnu.org]
+----
+- Makefile.am | 6 +++++-
+- 1 file changed, 5 insertions(+), 1 deletion(-)
+-
+-diff --git a/Makefile.am b/Makefile.am
+-index ebbf6d476..2270afb9f 100644
+---- a/Makefile.am
+-+++ b/Makefile.am
+-@@ -38,8 +38,12 @@ SUBDIRS =					\
+- 	test-suite				\
+- 	benchmark-suite				\
+- 	gc-benchmarks				\
+--	am					\
+-+	am
+-+
+-+if HAVE_MAKEINFO
+-+SUBDIRS +=					\
+- 	doc
+-+endif
+- 
+- DIST_SUBDIRS = $(SUBDIRS) prebuilt
+- 
+--- 
+-2.25.0
+-
+diff --git a/package/guile/guile.hash b/package/guile/guile.hash
+index b671edad9d..4db8b1855b 100644
+--- a/package/guile/guile.hash
++++ b/package/guile/guile.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256  1a2625ac72b2366e95792f3fe758fd2df775b4044a90a4a9787326e66c0d750d  guile-3.0.9.tar.xz
++sha256  818c79d236657a7fa96fb364137cc7b41b3bdee0d65c6174ca03769559579460  guile-3.0.11.tar.xz
+ # Locally computed
+ sha256  b51c6f20e6d029cb5b3e5bf235ac562c9a188c5bdc4ffcdc663897772d6e0260  LICENSE
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/guile/guile.mk b/package/guile/guile.mk
+index 82daaf5ad4..467a21f5a2 100644
+--- a/package/guile/guile.mk
++++ b/package/guile/guile.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GUILE_VERSION = 3.0.9
++GUILE_VERSION = 3.0.11
+ GUILE_SOURCE = guile-$(GUILE_VERSION).tar.xz
+ GUILE_SITE = $(BR2_GNU_MIRROR)/guile
+ GUILE_INSTALL_STAGING = YES
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
