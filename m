@@ -4,84 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36273C43458
-	for <buildroot@archiver.kernel.org>; Tue, 14 Jul 2026 11:12:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D331C43458
+	for <buildroot@archiver.kernel.org>; Tue, 14 Jul 2026 11:32:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EDF974094A;
-	Tue, 14 Jul 2026 11:12:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 22D44407CB;
+	Tue, 14 Jul 2026 11:32:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cz5FryEpqCGh; Tue, 14 Jul 2026 11:12:12 +0000 (UTC)
+ id 04zYUX1EUKVo; Tue, 14 Jul 2026 11:32:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0EDA94094C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3B451407D6
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1784027532;
-	bh=w58jk0gTPnUWCG+gpB5nBJNhn6orKFWiJ3PD5lJJLzA=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=iLGW/NU8uHdIbW2Cm2g1zD7XrBao1uwID47b/I0+ZPy89uXGlNDSt3VXA97vGHKk+
-	 voNjgYQFN0UehA+7SAScvSh2rPc/pHntvywBVbnS6P5ODSx/TqD7Yu5qm73XtKFHmg
-	 DAZuOxyLd9iziJkLgrkcvkORed+8UdpxI21Ja4LJ9x6wq9hTsvfEoRDQnYpuQDlljq
-	 iyWlDEKx+e+dNaD5VLs8Gwx5A0AUBgTQUX7M8yDbrFnpIm5zkSZCokM0tyGIxFBAOm
-	 9yu1zd1KWF3H+ImfDCrPK69jKJBoIi1Iq+PW1QRhWIhBS4cyu8lPi7DzNngWG2D/OR
-	 AaE90uqzz5w3Q==
+	s=default; t=1784028736;
+	bh=PZtGyNyPNmiywO8/i8nT9w/8kBdrxP8szd3JU5jGBR0=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=gWjAcMOA6fYRvyEAeiff/RDpMvj+73QsiV6OXjtOinWnh9QiPGDetwfCTF9MHBi3W
+	 sQ1zE1HR6acIcwtXpjHvSBxPpxzpMsOVY/Fy5heRpij6YWeiCHU9XWyVlBfxQ4mPZL
+	 dkHqZtfuwXKZPiwReaHhHeLhwMhddhfIQbjrxOql0XFEPc+WJ55/E0pEYn83j2mgFC
+	 oX3lurXyV7024fx7Avccdv/KsQwikkDYl+OfnAIDxATErFiH+kVIPyW6bP249i4Wpg
+	 693OtLh1P/1AhpzEI5mttcG+2O4rleB0CTHS94NI7HXKh79dtNgY8kZ3fhiEW+w3Qs
+	 OiqGqxbRpP9ZQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0EDA94094C;
-	Tue, 14 Jul 2026 11:12:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3B451407D6;
+	Tue, 14 Jul 2026 11:32:16 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 592F596C
- for <buildroot@buildroot.org>; Tue, 14 Jul 2026 11:12:10 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 9606796C
+ for <buildroot@buildroot.org>; Tue, 14 Jul 2026 11:32:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4A3F64094A
- for <buildroot@buildroot.org>; Tue, 14 Jul 2026 11:12:10 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 93542407D6
+ for <buildroot@buildroot.org>; Tue, 14 Jul 2026 11:32:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Q9JI5yIW-A3O for <buildroot@buildroot.org>;
- Tue, 14 Jul 2026 11:12:08 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8AA454094C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8AA454094C
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8AA454094C
- for <buildroot@buildroot.org>; Tue, 14 Jul 2026 11:12:08 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id C33876014F;
- Tue, 14 Jul 2026 13:12:04 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Tue, 14 Jul 2026 13:12:04 +0200
-MIME-Version: 1.0
-Date: Tue, 14 Jul 2026 13:12:04 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-In-Reply-To: <20260620150203.4036943-2-bernd@kuhls.net>
-References: <20260620150203.4036943-1-bernd@kuhls.net>
- <20260620150203.4036943-2-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.17
-Message-ID: <a0dbf44700c5ac6a0ee61917ae7ac228@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1784027527;
- bh=Z/oqW/7kETVv4+nGcVOFxP042G3c56giT4pzb2CKMQc=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=TuCXr9vMXI90No6rgd17cceU+Jud2kKv9MPRCwrxQLiRayO6NFT51l7Td+JTgMceM
- nbnPwfyUXKfyGDQ8zM4P/FfOGZNq3sP668UVK80MXTG3oYdlkSy0shI02Kk25PppT7
- mewWDcuX3ZFemUcBpxH2ZzIN+SzAkdAgf2o/Q6Kqiigz0dYPMkKuDJyhWnOzyqDiNu
- JBww1XpQ37wxiiy5ZM+FqpqIpFfwTySxJnosN3s2ImjqSUnFcl7oeJkQ55CVZ59kQR
- +mCLXJW/S0dEWq0O6Bgv0bgWloLFrjglLRftetbyIYcGICrJj2+IlfNQSV7d05X2E7
- ivmsE4ARlYOjQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=TuCXr9vM
-Subject: Re: [Buildroot] [PATCH 2/2] package/cifs-utils: bump version to 7.6
+ id FZyeaeWHud-o for <buildroot@buildroot.org>;
+ Tue, 14 Jul 2026 11:32:13 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 810FD407CB
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 810FD407CB
+ for <buildroot@buildroot.org>; Tue, 14 Jul 2026 11:32:13 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id C2BE08889A; Tue, 14 Jul 2026 11:31:38 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 14 Jul 2026 13:31:33 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 6fe70fb484c35620877384bafdd1cd3865e1e583
+X-Git-Newrev: 21bf78411ea52c1f67afac7b76a6f56f75b28434
+X-Patchwork-Hint: ignore
+Message-Id: <20260714113138.C2BE08889A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libgpg-error: make sure to use
+ host-gawk
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,72 +71,113 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============6452506270385305274=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Bernd,
+--===============6452506270385305274==
+Content-Type: text/plain
 
-On 20/06/2026 17:02, Bernd Kuhls wrote:
-> https://lists.samba.org/archive/samba-technical/2026-June/140908.html
-> 
-> Version 7.5 was not announced separately:
-> https://wiki.samba.org/index.php/LinuxCIFS_utils
-> "December, 2025: Release 7.5
->  - Various fixes for utilities"
-> https://git.samba.org/?p=cifs-utils.git;a=shortlog;h=refs/tags/cifs-utils-7.5
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> ---
-> Gitlab pipelines passed:
-> https://gitlab.com/bkuhls/buildroot/-/commits/f73f3d6fa47e362d38c258e823b6bbaaa559e616
-> 
->  package/cifs-utils/cifs-utils.hash | 2 +-
->  package/cifs-utils/cifs-utils.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/cifs-utils/cifs-utils.hash 
-> b/package/cifs-utils/cifs-utils.hash
-> index e6a5eefeaa..cfa2a84648 100644
-> --- a/package/cifs-utils/cifs-utils.hash
-> +++ b/package/cifs-utils/cifs-utils.hash
-> @@ -1,5 +1,5 @@
->  # Locally calculated after checking pgp signature
-> -sha256  
-> 53353d05c30b4fc9dac006a8f0c5054cdd8a1834c176313c91e4694025c4b891  
-> cifs-utils-7.4.tar.bz2
-> +sha256  
-> 7db875ff2868e5fa4e445ada0bd23ea70b9161b96188c7e276321e061ed51dd6  
-> cifs-utils-7.6.tar.bz2
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/21bf78411ea52c1f67afac7b76a6f56f75b28434
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-This archive hash is now failing. I have the error:
+During its configure step, libgpg-error needs awk:
 
-ERROR: while checking hashes from package/cifs-utils/cifs-utils.hash
-ERROR: cifs-utils-7.6.tar.bz2 has wrong sha256 hash:
-ERROR: expected: 
-7db875ff2868e5fa4e445ada0bd23ea70b9161b96188c7e276321e061ed51dd6
-ERROR: got     : 
-b8993bc4112af331a2f31c4e1a69bcd32b44c25a8c9fb82c0f38c1ed9a49f28d
+  configure -> src/gen-lock-obj.sh -> objdump + awk on test binary
 
-Looking at: https://download.samba.org/pub/linux-cifs/cifs-utils/
-it seems the archive has been regenerated and resigned on 2026-07-09.
+This call is used on the output from objdump on a test binary to
+retrieve the size of some data structure, and generate accordingly an
+internal header (lock-obj-pub.native.h). However, libgpg-error buildroot
+package does not depend explicitely on host-gawk: if host-gawk is not
+part of the build, or if it is built later than libgpg-error,
+libgpg-error autotool tooling will eventually pick the build machine
+awk. On top of this issue, despite the configure.ac suggesting that it
+supports different implementations of awk, libgpg-error configure step
+will not parse correctly the output from objdump when using mawk,
+leading to a wrong lock-obj-pub.native.h header being generated:
 
-Also, there was a new 7.7 released on that day:
-https://lists.samba.org/archive/samba-technical/2026-July/140952.html
-So you might consider using this new version.
+With gawk:
 
-Could you have a look to what happened and send an updated patch please?
+  typedef struct
+  {
+    long _vers;
+    union {
+      volatile char _priv[24];
+      long _x_align;
+      long *_xp_align;
+    } u;
+  } gpgrt_lock_t;
 
->  # Hash for license file:
->  sha256  
-> 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  
-> COPYING
+  #define GPGRT_LOCK_INITIALIZER {1,{{0,0,0,0,0,0,0,0, \
+                                      0,0,0,0,0,0,0,0, \
+                                      0,0,0,0,0,0,0,0}}}
 
-Best regards,
+With mawk:
 
-Julien.
+  typedef struct
+  {
+    long _vers;
+    union {
+      volatile char _priv[0];
+      long _x_align;
+      long *_xp_align;
+    } u;
+  } gpgrt_lock_t;
+
+  #define GPGRT_LOCK_INITIALIZER {1,{{}}}
+
+This issue has been observed for example on Debian 13 with mawk
+installed: it fails to parse mtx_size, leading to a size 0, and so
+generating crashes at runtime because of the invalid size embedded in
+libgpg-error.
+
+Side note: the lock-obj-pub.native.h header file is correctly
+generated, when using mawk 1.3.4 20200120 from Debian 12.
+The described issue happen with mawk 1.3.4 20250131 from Debian 13.
+
+libgpg-error should be fixed upstream to properly handle this data
+structure size guessing even when using mawk, but anyway the
+corresponding buildroot package should not randomly use the build
+machine host tooling or buildroot-provided host tooling depending on
+whether host-gawk has been selected and built before it.
+
+Enforce an explicit dependency on host-gawk for libgpg-error to make
+sure that it systematically uses the buildroot-provided awk.
+
+Co-developped-by: Bernard Gautier <bernard.gautier@nav-timing.safrangroup.com>
+Signed-off-by: Bernard Gautier <bernard.gautier@nav-timing.safrangroup.com>
+Co-developped-by: Alexis Lothoré <alexis.lothore@bootlin.com>
+Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
+[Julien: add the side note that mawk from debian 12 works]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/libgpg-error/libgpg-error.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/libgpg-error/libgpg-error.mk b/package/libgpg-error/libgpg-error.mk
+index df95e5fe0c..31ffcee743 100644
+--- a/package/libgpg-error/libgpg-error.mk
++++ b/package/libgpg-error/libgpg-error.mk
+@@ -12,7 +12,7 @@ LIBGPG_ERROR_LICENSE_FILES = COPYING COPYING.LIB
+ LIBGPG_ERROR_CPE_ID_VENDOR = gnupg
+ LIBGPG_ERROR_INSTALL_STAGING = YES
+ LIBGPG_ERROR_CONFIG_SCRIPTS = gpg-error-config
+-LIBGPG_ERROR_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
++LIBGPG_ERROR_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES) host-gawk
+ LIBGPG_ERROR_CONF_OPTS = \
+ 	cross_compiling=yes \
+ 	--host=$(BR2_PACKAGE_LIBGPG_ERROR_SYSCFG) \
+
+--===============6452506270385305274==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6452506270385305274==--
