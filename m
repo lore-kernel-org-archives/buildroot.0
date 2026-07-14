@@ -4,59 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94ABAC44508
-	for <buildroot@archiver.kernel.org>; Tue, 14 Jul 2026 15:19:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF917C44508
+	for <buildroot@archiver.kernel.org>; Tue, 14 Jul 2026 15:19:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 192A240738;
-	Tue, 14 Jul 2026 15:19:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 92BF0409E9;
+	Tue, 14 Jul 2026 15:19:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BBLWDsoq1BUx; Tue, 14 Jul 2026 15:19:23 +0000 (UTC)
+ id qJONIGPwTen3; Tue, 14 Jul 2026 15:19:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 25624409BE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2F41B40738
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1784042363;
-	bh=WQXV1JoGPpDgi4Xn7wciJIW6CvS7byjqzIuOrnj3ivg=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=W3FlGk5tLaM5Dnl196Xl4mTBt7Yq2mx9lEqEiAuDTb5Nd8+JXJeDVzoRQhAiqhrl1
-	 kmum3YWsW9a1lZ/gqCWdPZO1+HlNLuNFlfPMpb/jrQXYa3XR/Wa9A16Cfdfpfl0dje
-	 QkhaHhwgxZGuK7c2I6mvpNGX1McMq7y4GvcKKBfSSxDdT8FivHe6udTClu8Dis5LZa
-	 G4YbiiUzzVUFSh2aveCGfKMSKj+4SmdkpxTzr2n3mkhFFssOQJcc0ug472qTc8uZHr
-	 QtZWmlDn8D2RjJ4AVMAsYth+DMyDhk4rA6pJEaD/lTOEhhp6QT4v8mbrZv4Pv6p+tQ
-	 JpifpgmKhRBxA==
+	s=default; t=1784042378;
+	bh=Si/l7VRVfFatrYlAtfFyGSnBxz1RfaysbZm2wlg07vI=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=CFe8ObSMTOVxn8OJrunPEBxEdEFX4Qfe7875XvnJCTHkcPjPWfgnCTb8Kx5FQ2R+O
+	 kZt0jjzNr2qf2XGb7r6/oD9elu8Hjr6m3RJnmqfBU8telqS8KV+5K2aEgjCqgFWHU7
+	 deTT3xs/5zMjDYGPmk/txAs0J/TvrvtqkZJITrf5oIcvE4rqD/zjggmkgoaJWT9jDa
+	 7Dl4yIl/4K2rucYRSp5dL6g0gmTH0A6f+5UwAd8WdYkeGq/9jFPU8ZILb4jA4eruFT
+	 PMJAMaWarAE8L4PnQNdV4L5sbSScFbWBQOpL9OzSdV7EILwmSH+ddPxVkOzDmLaIfc
+	 QXE/qZCIGgTww==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 25624409BE;
-	Tue, 14 Jul 2026 15:19:23 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 9BA7D270
- for <buildroot@buildroot.org>; Tue, 14 Jul 2026 15:19:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2F41B40738;
+	Tue, 14 Jul 2026 15:19:38 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 32AF496C
+ for <buildroot@buildroot.org>; Tue, 14 Jul 2026 15:19:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8156F404C5
- for <buildroot@buildroot.org>; Tue, 14 Jul 2026 15:19:22 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 24A0460A99
+ for <buildroot@buildroot.org>; Tue, 14 Jul 2026 15:19:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YhgmP-QUGbiR for <buildroot@buildroot.org>;
- Tue, 14 Jul 2026 15:19:21 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AEDAC40086
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id AEDAC40086
- for <buildroot@buildroot.org>; Tue, 14 Jul 2026 15:19:21 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DE8BB888B8; Tue, 14 Jul 2026 15:18:46 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 14 Jul 2026 16:41:29 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 09ea72e44c944cefaa60071b0e037b1c8f20327c
-X-Git-Newrev: c912c6b4a52761ff98251251ec14b10cc4907bc8
-X-Patchwork-Hint: ignore
-Message-Id: <20260714151846.DE8BB888B8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/wget2: new package
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pvw5Xvjf-QZq for <buildroot@buildroot.org>;
+ Tue, 14 Jul 2026 15:19:36 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4B7F160A95
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4B7F160A95
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4B7F160A95
+ for <buildroot@buildroot.org>; Tue, 14 Jul 2026 15:19:36 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id 3341A19F5C6;
+ Tue, 14 Jul 2026 17:19:32 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Tue, 14 Jul 2026 17:19:32 +0200
+MIME-Version: 1.0
+Date: Tue, 14 Jul 2026 17:19:32 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+In-Reply-To: <20260617212408.1374984-1-bernd@kuhls.net>
+References: <20260617212408.1374984-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.17
+Message-ID: <38beb1276b3af1cfff6fe2305deb447a@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1784042374;
+ bh=uGrYydKoExBMajpTdMpYspOzv+Ugu41SVhPqImD+TFc=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=LZ8D/O0m8ZO81tG0pP/JDtAkg6Kjh4pY21CM+7iF2mbME0XMJRNytt5d5y88vPRQe
+ CGmCeArdaVT5EtHHPXfXMJdyS+tJPkYNJDSWel5L6LzjtKf9LiEat5yEcvCSb/UNB3
+ OUf6Lk3ZxNYYJUF5fRh87NprR8UT365/m6vY09qvWl7tcaei+WLXav0/xT9Yw4gyBy
+ t0OsklJDBUTahKVX3aZD3G3aTsZf2NZ1KdFuIB1Xcix0iuD9P0FGt93MXht2CLoKmb
+ /uae+FC1r48o6mu4IYTthUHLerr4LnkPr7tgjzFJLkuPN61kFuY/baG7ZDy+EoWP0B
+ i2xes+cone+cA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=LZ8D/O0m
+Subject: Re: [Buildroot] [PATCH 1/1] package/wget2: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,186 +94,15 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/c912c6b4a52761ff98251251ec14b10cc4907bc8
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 17/06/2026 23:24, Bernd Kuhls wrote:
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- DEVELOPERS               |   1 +
- package/Config.in        |   1 +
- package/wget2/Config.in  |  15 +++++++
- package/wget2/wget2.hash |   4 ++
- package/wget2/wget2.mk   | 100 +++++++++++++++++++++++++++++++++++++++++++++++
- 5 files changed, 121 insertions(+)
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index fdfab8b489..1601e6b408 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -533,6 +533,7 @@ F:	package/unixodbc/
- F:	package/utfcpp/
- F:	package/vlc/
- F:	package/wget/
-+F:	package/wget2/
- F:	package/wireless-regdb/
- F:	package/wireless_tools/
- F:	package/x264/
-diff --git a/package/Config.in b/package/Config.in
-index b6f23308af..015f635ad1 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2665,6 +2665,7 @@ endif
- 	source "package/vtun/Config.in"
- 	source "package/wavemon/Config.in"
- 	source "package/wget/Config.in"
-+	source "package/wget2/Config.in"
- 	source "package/whois/Config.in"
- 	source "package/wireguard-linux-compat/Config.in"
- 	source "package/wireguard-tools/Config.in"
-diff --git a/package/wget2/Config.in b/package/wget2/Config.in
-new file mode 100644
-index 0000000000..9be8971489
---- /dev/null
-+++ b/package/wget2/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_WGET2
-+	bool "wget2"
-+	depends on BR2_USE_MMU # fork()
-+	depends on BR2_USE_WCHAR
-+	select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_GNUTLS
-+	select BR2_PACKAGE_LIBOPENSSL_ENABLE_RMD160 if BR2_PACKAGE_LIBOPENSSL
-+	help
-+	  GNU Wget2 is the successor of GNU Wget, a file and recursive
-+	  website downloader.
-+
-+	  https://gitlab.com/gnuwget/wget2
-+
-+comment "wget2 needs a toolchain w/ wchar"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_USE_WCHAR
-diff --git a/package/wget2/wget2.hash b/package/wget2/wget2.hash
-new file mode 100644
-index 0000000000..0e5742aed4
---- /dev/null
-+++ b/package/wget2/wget2.hash
-@@ -0,0 +1,4 @@
-+# Locally calculated
-+sha256  d7544b13e37f18e601244fce5f5f40688ac1d6ab9541e0fbb01a32ee1fb447b4  wget2-2.2.1.tar.gz
-+sha256  e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b  COPYING
-+sha256  e3a994d82e644b03a792a930f574002658412f62407f5fee083f2555c5f23118  COPYING.LESSER
-diff --git a/package/wget2/wget2.mk b/package/wget2/wget2.mk
-new file mode 100644
-index 0000000000..21005bd708
---- /dev/null
-+++ b/package/wget2/wget2.mk
-@@ -0,0 +1,100 @@
-+################################################################################
-+#
-+# wget2
-+#
-+################################################################################
-+
-+WGET2_VERSION = 2.2.1
-+WGET2_SITE = $(BR2_GNU_MIRROR)/wget
-+WGET2_DEPENDENCIES = host-pkgconf
-+WGET2_LICENSE = GPL-3.0+, LGPL-3.0+
-+WGET2_LICENSE_FILES = COPYING COPYING.LESSER
-+WGET2_CPE_ID_VENDOR = gnu
-+
-+WGET2_CONF_OPTS = \
-+	--without-libhsts \
-+	--without-libmicrohttpd \
-+	--without-lzip
-+
-+ifeq ($(BR2_PACKAGE_BROTLI),y)
-+WGET2_CONF_OPTS += --with-brotlidec
-+WGET2_DEPENDENCIES += brotli
-+else
-+WGET2_CONF_OPTS += --without-brotlidec
-+endif
-+
-+ifeq ($(BR2_PACKAGE_BZIP2),y)
-+WGET2_CONF_OPTS += --with-bzip2
-+WGET2_DEPENDENCIES += bzip2
-+else
-+WGET2_CONF_OPTS += --without-bzip2
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GNUTLS),y)
-+WGET2_CONF_OPTS += --with-ssl=gnutls
-+WGET2_DEPENDENCIES += gnutls
-+else ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+WGET2_CONF_OPTS += --with-ssl=openssl
-+WGET2_DEPENDENCIES += openssl
-+else
-+WGET2_CONF_OPTS += --without-ssl
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBGPGME),y)
-+WGET2_CONF_OPTS += --with-gpgme
-+WGET2_DEPENDENCIES += libgpgme
-+else
-+WGET2_CONF_OPTS += --without-gpgme
-+endif
-+
-+# BR2_ENABLE_LOCALE and BR2_PACKAGE_LIBICONV are mutually exclusive
-+ifeq ($(BR2_ENABLE_LOCALE)$(BR2_PACKAGE_LIBICONV)$(BR2_PACKAGE_LIBIDN2),yy)
-+WGET2_CONF_OPTS += --with-libidn2
-+WGET2_DEPENDENCIES += libidn2
-+else
-+WGET2_CONF_OPTS += --without-libidn2
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBPSL),y)
-+WGET2_CONF_OPTS += --with-libpsl
-+WGET2_DEPENDENCIES += libpsl
-+else
-+WGET2_CONF_OPTS += --without-libpsl
-+endif
-+
-+ifeq ($(BR2_PACKAGE_NGHTTP2),y)
-+WGET2_CONF_OPTS += --with-libnghttp2
-+WGET2_DEPENDENCIES += nghttp2
-+else
-+WGET2_CONF_OPTS += --without-libnghttp2
-+endif
-+
-+ifeq ($(BR2_PACKAGE_PCRE2),y)
-+WGET2_CONF_OPTS += --with-libpcre2
-+WGET2_DEPENDENCIES += pcre2
-+else
-+WGET2_CONF_OPTS += --without-libpcre2
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XZ),y)
-+WGET2_CONF_OPTS += --with-lzma
-+WGET2_DEPENDENCIES += xz
-+else
-+WGET2_CONF_OPTS += --without-lzma
-+endif
-+
-+ifeq ($(BR2_PACKAGE_ZLIB),y)
-+WGET2_CONF_OPTS += --with-zlib
-+WGET2_DEPENDENCIES += zlib
-+else
-+WGET2_CONF_OPTS += --without-zlib
-+endif
-+
-+ifeq ($(BR2_PACKAGE_ZSTD),y)
-+WGET2_CONF_OPTS += --with-zstd
-+WGET2_DEPENDENCIES += zstd
-+else
-+WGET2_CONF_OPTS += --without-zstd
-+endif
-+
-+$(eval $(autotools-package))
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
