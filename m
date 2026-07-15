@@ -1,105 +1,92 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A55E8C44508
-	for <buildroot@archiver.kernel.org>; Wed, 15 Jul 2026 07:31:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22736C44501
+	for <buildroot@archiver.kernel.org>; Wed, 15 Jul 2026 12:30:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 81C2E4057B;
-	Wed, 15 Jul 2026 07:31:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 03F4F6062A;
+	Wed, 15 Jul 2026 12:30:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Mcn8umT_THol; Wed, 15 Jul 2026 07:31:26 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qlehIt7FXYF9; Wed, 15 Jul 2026 12:30:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E20554054B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7B2C76069D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1784100686;
-	bh=pBeUKSR8vyS1310E4u38YHKwJt7FbaGQqnZs+bGdP/k=;
-	h=From:To:CC:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=LdQEW6pVXrP8/X+iCn75dicAXND3hJGcfolCtySe6K9hjn6FtKhEV4zg5RjfGYC+f
-	 wAw1oD0xug1xlRiz8hjTJV4RZcmH9F5gd+MbEIgSCFWoufNWUPUoy9qgNkt6rTd6Af
-	 GMNl06Y+cEAbR6GazSZIM6yi8GkA5JVsZfFgZfjRwOSZl+S1cQDqndK3+FLam81q8b
-	 rkkTkl4F7+c2ZveCSmi03ahJjwG5J/pCd7ag616xIQ+Phh0j8L6GY3Fhhs8eattOpc
-	 cdKyxt6cK1/yu+OXWJeUO63aYKMny5dnY89+gPpuf+q2r6Hdp/fcgFeefQosUYYfoU
-	 6P5VN1qESXEfQ==
+	s=default; t=1784118618;
+	bh=Zc4mCveLA+DUCd/QLx5TOH1hlNkG2hpNTjVIQqH9jy8=;
+	h=Date:To:Cc:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=nI3Shsv4NR6zREtcOYlFXR9Xgb/lQUTwEk1jZ58MHfj8w47r8xnkYTcigkKVnf59e
+	 Pnx2rPErtLswobeXhJyEya1amLPoGEx2nuzEIZJ53rTdeCMgzdJf1f+Q0b7DpKRzmR
+	 oHH/Kl/TPTnR8c2UfKh+elD92QJXVAyoqpQK7kUDNuo+lRPTD7um/0S2Cy5GXVp3lJ
+	 oRCgKiE4/NNTHb5cOQ/K4C5zsqLVjBhuS5s5QfovkaUgm6c4CVH7kZdbthah8VZD8c
+	 HAkBrybMH8a6uNj0sUQBiXwZkvpdx7JQ3DqHPsnbvSlWBOMskbAtSqnuTTmtqAfcu/
+	 L57r/YXjE/owg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E20554054B;
-	Wed, 15 Jul 2026 07:31:25 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id B6C28203
- for <buildroot@buildroot.org>; Wed, 15 Jul 2026 07:31:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7B2C76069D;
+	Wed, 15 Jul 2026 12:30:18 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5AF8E499
+ for <buildroot@buildroot.org>; Wed, 15 Jul 2026 12:30:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9D09840055
- for <buildroot@buildroot.org>; Wed, 15 Jul 2026 07:31:24 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4CA5A400A2
+ for <buildroot@buildroot.org>; Wed, 15 Jul 2026 12:30:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pzc4dA5w0_QF for <buildroot@buildroot.org>;
- Wed, 15 Jul 2026 07:31:24 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.210.124;
- helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
+ id iYtYa7doa1lk for <buildroot@buildroot.org>;
+ Wed, 15 Jul 2026 12:30:16 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
+ helo=smtpout-02.galae.net; envelope-from=alexis.lothore@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 8D95A4004C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8D95A4004C
-Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.210.124])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 8D95A4004C
- for <buildroot@buildroot.org>; Wed, 15 Jul 2026 07:31:23 +0000 (UTC)
-X-CSE-ConnectionGUID: 9FXXjCUjRN2GIjuJcrqF+Q==
-X-CSE-MsgGUID: pXIUrM6xRjSp1wkosBvrAw==
-Received: from unknown (HELO opfedv3rlp0e.nor.fr.ftgroup) ([x.x.x.x]) by
- smtp-out.orange.com with ESMTP/TLS/TLS_AES_256_GCM_SHA384;
- 15 Jul 2026 09:31:20 +0200
-Received: from unknown (HELO OPE16NORMBX506.corporate.adroot.infra.ftgroup)
- ([x.x.x.x]) by opfedv3rlp0e.nor.fr.ftgroup with
- ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2026 09:31:20 +0200
-Received: from yd-6wlzhs3 [x.x.x.x] by
- OPE16NORMBX506.corporate.adroot.infra.ftgroup
- [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.43;
- Wed, 15 Jul 2026 09:31:19 +0200
-Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
- Wed, 15 Jul 2026 09:31:18 +0200
-X-CSE-ConnectionGUID: x5QsGHVeREmabuOpvPEG3Q==
-X-CSE-MsgGUID: sxOwckHSQ8WT6ca2IVqzYA==
-X-IronPort-AV: E=Sophos;i="6.25,165,1779141600"; d="scan'208";a="446533532"
-X-Amp-Result: SKIPPED(no attachment in message)
-From: <yann.morin@orange.com>
-To: <buildroot@buildroot.org>
-CC: <yann.morin@orange.com>
-Date: Wed, 15 Jul 2026 09:31:18 +0200
-Message-ID: <7d8b63ec3a6f67c7935cfbda74cadcb5864d8cbe.1784100678.git.yann.morin@orange.com>
-X-Mailer: git-send-email 2.34.1
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5D63A40051
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5D63A40051
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5D63A40051
+ for <buildroot@buildroot.org>; Wed, 15 Jul 2026 12:30:15 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-02.galae.net (Postfix) with ESMTPS id 5AF011A0FF1;
+ Wed, 15 Jul 2026 12:30:13 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 2F98C6035C;
+ Wed, 15 Jul 2026 12:30:13 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 8AD5111BD3AD3; 
+ Wed, 15 Jul 2026 14:30:10 +0200 (CEST)
+Date: Wed, 15 Jul 2026 14:30:00 +0200
 MIME-Version: 1.0
-X-Originating-IP: [10.115.26.51]
-X-ClientProxiedBy: OPE16NORMBX606.corporate.adroot.infra.ftgroup
- (10.115.27.30) To OPE16NORMBX506.corporate.adroot.infra.ftgroup
- (10.115.27.26)
+Message-Id: <20260715-legal-info-localdef-v1-1-5c44106ea59d@bootlin.com>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXMwQqDMAyA4VeRnA1YxY35KsNDFhOXUdrR6hiI7
+ 77qjt/h/zfIkkwyDNUGST6WLYYCV1fATwqzoE3F0Dbtpbm6Hr3M5NGCRvSRyU+iyHxjUkeddgS
+ lfCdR+57X+/h3Xh8v4eVYwb7/ABDjn9F3AAAA
+X-Change-ID: 20260715-legal-info-localdef-cc9caf1a3f3a
+To: buildroot@buildroot.org
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ Nicolas Carrier <nicolas.carrier@nav-timing.safrangroup.com>, 
+ =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+X-Mailer: b4 0.15.2
+X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
- t=1784100683; x=1815636683;
- h=from:to:cc:subject:date:message-id:mime-version:
- content-transfer-encoding;
- bh=o9Rh6xNAjmECfTjeCTPXk0RW/+q7z3A+3/wxdM9JlCw=;
- b=Q5eM+blI9UZzbEHFBjP6JmGjYiXyyz/AN3D/ELPyy8a0AzaB7adP+IDe
- eu/n4PvwoUjl8YFKO9r6H7Zo0WBANZYTENQCVEwIJ0YJ4cMNLPbNkuAPP
- n1eorUpXfeQ9VeOO1S24hOTB2vE33lcUBKt1DC3y/1p2M5iceaLgYLh3I
- ng5PgYq1DU0keVE35m48OgVaK4ZsrA95MFS0MhrIhTMsnW4thgBIurtsX
- jeb8Fd1UfYha8WAUp7TOu2RJ3cRs5jRvqQOjkUlm7kNWRbo3yLJqhLWAn
- dbkNuq0R5BJ5yFUIY8Ncc+1K9gyAdk/Us8OY3OgRonfRwZwAm+Cnxt1ny
- Q==;
+ d=bootlin.com; s=dkim; 
+ t=1784118612; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ content-transfer-encoding; bh=fPdj5IUSewsDyD0S7Pgezpevif2d7ZNLBT4t/bqZRuA=;
+ b=Pm4/kRqIEQlou5K4f0Djqh71afxTgItKhqnouHpL8IZdBGbi0S9j2s0csVau3LcqWuWHZM
+ 2UOytuiSA26QCtTJ1kDdV9B+boeeGIDPOyCIRN6WdAjg9DoOb19CyDcVLob/xoiUIOzalh
+ BC1MLnYJ9e3Ig9VZvxBjSiuPcaFaf/Vm6f6f2AoPnjXcZ/4YPrR9JN1QqZSnIxUYU1D1Sr
+ 39FPUFPp90Rt2Dlb42OVe9gpBu0ZLgiXh0UptlKNKoDqpqTY57ffP5F+u3iqp0NH00cuqP
+ 5Ks5boH96TKYrZeH1gqv+g2m+NkDBG46+sTbk3VpbbSBoG4+BsbmYyN7IF0vfg==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=orange.com
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
- header.s=orange002 header.b=Q5eM+blI
-Subject: [Buildroot] [PATCH] DEVELOPERS: add Yann E. MORIN (Orange) for
- docker credential helpers
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=dkim header.b=Pm4/kRqI
+Subject: [Buildroot] [PATCH] package/localedef: add license data
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -111,48 +98,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: =?utf-8?q?Alexis_Lothor=C3=A9_via_buildroot?= <buildroot@buildroot.org>
+Reply-To: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: "Yann E. MORIN" <yann.morin@orange.com>
-
-Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
----
- DEVELOPERS | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 1601e6b408..42418d01a2 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -3489,6 +3489,9 @@ F:	package/tpm2-pkcs11/
- 
- N:	Yann E. MORIN <yann.morin@orange.com>
- F:	.editorconfig
-+F:	package/amazon-ecr-credential-helper/
-+F:	package/docker-credential-acr-env/
-+F:	package/docker-credential-gcr/
- F:	package/gpsd/
- F:	package/mosquitto/
- F:	package/python-humanfriendly/
--- 
-2.34.1
-
-____________________________________________________________________________________________________________
-Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
-
-This message and its attachments may contain confidential or privileged information that may be protected by law;
-they should not be distributed, used or copied without authorisation.
-If you have received this email in error, please notify the sender and delete this message and its attachments.
-As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-Thank you.
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+V2hlbiBydW5uaW5nIGBtYWtlIGxlZ2FsLWluZm9gIGZvciBhIGJ1aWwgYmFzZWQgb24gZ2xpYmMg
+YW5kIGNvbmZpZ3VyZWQKdG8gZ2VuZXJhdGUgc29tZSBsb2NhbGUgZGF0YSAoZWc6IEJSMl9HRU5F
+UkFURV9MT0NBTEU9IkMuVVRGLTgiKSwgdGhlCmZvbGxvd2luZyB3YXJuaW5nIGlzIHByaW50ZWQ6
+CgogIFdBUk5JTkc6IGxvY2FsZWRlZi0yLjQzLTQ1LWdkYWU0MjViNTU0MjA3ZjdjNDU5OWM3ZmFj
+NzA3YWQ0YzA4NTQ1Njc0OiBcCiAgY2Fubm90IHNhdmUgbGljZW5zZSAoSE9TVF9MT0NBTEVERUZf
+TElDRU5TRV9GSUxFUyBub3QgZGVmaW5lZCkKCkRlZmluZSB0aGUgbWlzc2luZyBMT0NBTEVERUZf
+TElDRU5TRSBhbmQgTE9DQUxFREVGX0xJQ0VOU0VfRklMRVMgdG8gZ2V0CnJpZCBvZiB0aGUgd2Fy
+bmluZy4gVGhlIGhlYWRlciBpbiBsb2NhbGUvcHJvZ3JhbXMvbG9jYWxlZGVmLmMgc3RhdGVzCnRo
+YXQgdGhlIHByb2dyYW0gaXMgcmVsZWFzZWQgdW5kZXIgR1BMLCBzbyB1c2UgR1BMdjIsIGFzIGFs
+c28gc3Qgc3RhdGVkCmJ5IGdsaWJjLm1rIGluIHRoZSBnbGliYyBwYWNrYWdlIGluIGJ1aWxkcm9v
+dC4KClNpZ25lZC1vZmYtYnk6IEFsZXhpcyBMb3Rob3LDqSA8YWxleGlzLmxvdGhvcmVAYm9vdGxp
+bi5jb20+Ci0tLQpVcCB0byBteSBrbm93bGVkZ2UgdGhpcyBwYWNrYWdlIG5ldmVyIGhhZCB0aGUg
+bmVlZGVkIGxpY2Vuc2UgZGF0YSwgc28KYWxsIGN1cnJlbnRseSBtYWludGFpbmVkIHZlcnNpb25z
+IGFyZSBhZmZlY3RlZCBieSB0aGUgaXNzdWUuCi0tLQogcGFja2FnZS9sb2NhbGVkZWYvbG9jYWxl
+ZGVmLm1rIHwgMiArKwogMSBmaWxlIGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygrKQoKZGlmZiAtLWdp
+dCBhL3BhY2thZ2UvbG9jYWxlZGVmL2xvY2FsZWRlZi5tayBiL3BhY2thZ2UvbG9jYWxlZGVmL2xv
+Y2FsZWRlZi5tawppbmRleCA3MzJlZDZkNGFkMWQuLmFhN2RiYTJiNTE3MCAxMDA2NDQKLS0tIGEv
+cGFja2FnZS9sb2NhbGVkZWYvbG9jYWxlZGVmLm1rCisrKyBiL3BhY2thZ2UvbG9jYWxlZGVmL2xv
+Y2FsZWRlZi5tawpAQCAtMTEsNiArMTEsOCBAQCBMT0NBTEVERUZfVkVSU0lPTiA9IDIuNDMtNDUt
+Z2RhZTQyNWI1NTQyMDdmN2M0NTk5YzdmYWM3MDdhZDRjMDg1NDU2NzQKIExPQ0FMRURFRl9TT1VS
+Q0UgPSBnbGliYy0kKExPQ0FMRURFRl9WRVJTSU9OKSQoQlJfRk1UX1ZFUlNJT05fZ2l0KS50YXIu
+Z3oKIExPQ0FMRURFRl9TSVRFID0gaHR0cHM6Ly9zb3VyY2V3YXJlLm9yZy9naXQvZ2xpYmMuZ2l0
+CiBMT0NBTEVERUZfU0lURV9NRVRIT0QgPSBnaXQKK0xPQ0FMRURFRl9MSUNFTlNFID0gR1BMLTIu
+MCsKK0xPQ0FMRURFRl9MSUNFTlNFX0ZJTEVTID0gQ09QWUlOR3YyCiBIT1NUX0xPQ0FMRURFRl9E
+TF9TVUJESVIgPSBnbGliYwogCiBIT1NUX0xPQ0FMRURFRl9ERVBFTkRFTkNJRVMgPSBcCgotLS0K
+YmFzZS1jb21taXQ6IDY0M2Y0ODBmNDM3OWFmZTU2NzdlYzM5OWM4MDJiOGQzMzczNGI2MDEKY2hh
+bmdlLWlkOiAyMDI2MDcxNS1sZWdhbC1pbmZvLWxvY2FsZGVmLWNjOWNhZjFhM2YzYQoKQmVzdCBy
+ZWdhcmRzLAotLSAgCkFsZXhpcyBMb3Rob3LDqSA8YWxleGlzLmxvdGhvcmVAYm9vdGxpbi5jb20+
+CgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJv
+b3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVp
+bGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
