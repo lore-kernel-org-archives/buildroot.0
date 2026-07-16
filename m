@@ -4,109 +4,110 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6AE65C4450A
-	for <buildroot@archiver.kernel.org>; Thu, 16 Jul 2026 13:30:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E977DC4450A
+	for <buildroot@archiver.kernel.org>; Thu, 16 Jul 2026 13:30:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6398F4091C;
-	Thu, 16 Jul 2026 13:30:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AB31A40557;
+	Thu, 16 Jul 2026 13:30:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YS1V250GFAIy; Thu, 16 Jul 2026 13:30:09 +0000 (UTC)
+ id Eu0PZub-0rFz; Thu, 16 Jul 2026 13:30:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 13F3540622
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 498FD407FD
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1784208609;
-	bh=KdVoX17qkC6szQMpx8o+aWOM4LtGOYx3jNCONTfMuXU=;
+	s=default; t=1784208650;
+	bh=sOmTdvf6GmC6k3I4WxlsTKHSwDNuIaT+w1LBaHzME2Y=;
 	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=oOdiw/j93TFWrXVfNPaZ3FpA4LaLEceGrMRZJ+ncLmfmixB+A/Yf8Abf7DJ1h2DzQ
-	 iUiBlHgwxodpYWnKyvQZtt63wYEEdVPlzlaGFI/pWQIwzGpNqcIZocydlIfmGdd1p0
-	 XgBeFnxiwQBCG3IIjNKeqYd+z6GysE0CW14C/QhzXN48V+RhCd6oHsC7kwqDlq3xES
-	 lnb+E4fUZnb2ntaWnAUWp40+KvvqO5HkPHt9o0dUCtVcajosiT2xtUkX4VWRea2OGN
-	 yYyMfS4rPJI88uVbWa4kEabim2xxTYyGISOEw+or3aNAFU1nkPijw6XC+XI0MNxIr1
-	 ITDb0db+B6krg==
+	b=KPOosu19y2ft3PfExsPkw+g60I3tz4LtzFDxNgumHbisRj9ATDXpdhL5IVto0v4Y4
+	 zzdtoBhMUl4XrsyQGMq2UlkD4EUC+ejB9OJNK6V++nnYXSF55SeV7m/D9OYtzf46pr
+	 m5bue2zmId+p0JRJeEKEup7+TfsfmSoICInRenEFs6DiDcTNTlLzpZxqTaBA2jqNIY
+	 +I2uTvPPFA5MqbPmMwFIR0xx369mmZagMp3PFjCjKy0X7Ukkhbde79c6SKXNtXnWqm
+	 TbrTyPMDMXmcvmqjtvp1JKobM2sfUFDtC7Vv7sn+JYiWiDRcIwLsvTmmY2i1UrQqCy
+	 v3bZhcrDtKqHg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 13F3540622;
-	Thu, 16 Jul 2026 13:30:09 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 41CFE320
- for <buildroot@buildroot.org>; Thu, 16 Jul 2026 13:30:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 498FD407FD;
+	Thu, 16 Jul 2026 13:30:50 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7247636E
+ for <buildroot@buildroot.org>; Thu, 16 Jul 2026 13:30:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1F54340622
- for <buildroot@buildroot.org>; Thu, 16 Jul 2026 13:30:08 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 63A9A80E75
+ for <buildroot@buildroot.org>; Thu, 16 Jul 2026 13:30:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GjcmyqbrPkE3 for <buildroot@buildroot.org>;
- Thu, 16 Jul 2026 13:30:07 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NhqxnxPRpOwW for <buildroot@buildroot.org>;
+ Thu, 16 Jul 2026 13:30:47 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::82f; helo=mail-qt1-x82f.google.com;
+ client-ip=2607:f8b0:4864:20::829; helo=mail-qt1-x829.google.com;
  envelope-from=aford173@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5B31F405FA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5B31F405FA
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com
- [IPv6:2607:f8b0:4864:20::82f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5B31F405FA
- for <buildroot@buildroot.org>; Thu, 16 Jul 2026 13:30:07 +0000 (UTC)
-Received: by mail-qt1-x82f.google.com with SMTP id
- d75a77b69052e-51c4436d02cso18215311cf.1
- for <buildroot@buildroot.org>; Thu, 16 Jul 2026 06:30:07 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org EF91380E6E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EF91380E6E
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com
+ [IPv6:2607:f8b0:4864:20::829])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id EF91380E6E
+ for <buildroot@buildroot.org>; Thu, 16 Jul 2026 13:30:46 +0000 (UTC)
+Received: by mail-qt1-x829.google.com with SMTP id
+ d75a77b69052e-51c16ac21acso22623771cf.0
+ for <buildroot@buildroot.org>; Thu, 16 Jul 2026 06:30:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1784208606; x=1784813406;
+ d=1e100.net; s=20251104; t=1784208645; x=1784813445;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to:content-type;
- bh=/ljl+p61XsLSBjxT/ltTDnUkeDzJpGLxrC+6HuiXnWc=;
- b=corAU6iu1DDU+5uNE+HhdHxNIbpUg/njcQIfXX1Ag/tx82QZMpTXY+nlfFLJd9Vgo4
- tyrloBryquvIiP8XcoB5+yVJT/WFxvJR3HVQyhBjiDRNhnx3PmkdEPehP7g8ahTL9tbI
- COxMFefEXtB04X6D40NFHKKyVblzTUt89eJLlHr6e/TVg7+1+NH0gG9bg5sAlXgsLcPg
- OqDNJwIiaX1x6uyeWEti0Q81rbENQA40dwW201o2B4Og48FWD4tS5iMm+7EfzmpJCpbA
- RHLqzSgIXawVdnQ9w8RrUSNeSbQnfe+O9KIgWUYrAu9jZo4WAUFT7PvqN6t79vlSzL5n
- 9SSg==
-X-Gm-Message-State: AOJu0YzFytWU/qfZLs8/M/TWRBC1gB7AUfYaBrg5BMJ8+JYoh/1VN2nD
- pa7cYLCDtHYxwCeN5SkansuLOWCeze08ogypJTEXRjdF3PYJFou9HwjRI1TF98dRxeg=
-X-Gm-Gg: AfdE7clIFGOfZ8wslnfUG0GIZKJFnGUAC+7/l5QL6Laa7og+uvk9UdHy7UGGfIhCS3u
- X5iiEnxbrmMVG7TFZSIs5mSoXvusYQd85Ll8Z4KFNVk4JoSiTs26XyhZtxhpgVDVCuGCHFTwudl
- OClaSTMXFJISA5TrGPnADDCswCYWIpAKz9kfgp+PfUb9qOiycMVbtEThUvIbKqjw5GFBHT1dG3l
- Fzj8OsxGgyJvBHcHEzWtulLPED4IyZjPnOcSNTRgxrwi0HtR1cni1UX47Sb34MVRRFCGawvjUAA
- qwU9ekZgOCgX/oSNEqF0kTlvpBYwLG060Cp3hBy35xyPrOY2MwuYZ3Mqyo4Lo/B7noRyCNWQGvi
- Cl6XXhvlow7F4lZNrBdjl3LZeXjXYvUFrYk3MR94oLd/VeJ1HwdOwkiqiSOwwGVryJdiHztVsYh
- 28htLQNa/PMT+uSsJVsgFBl3QFOAzCwTEn9hFq1gliigKNnaDyTPgDvzk=
-X-Received: by 2002:a05:622a:2287:b0:51c:1811:6eaf with SMTP id
- d75a77b69052e-51cbf27f480mr212397971cf.65.1784208605876; 
- Thu, 16 Jul 2026 06:30:05 -0700 (PDT)
+ bh=OES7/i299xDOKi03WkzvvaaBLeCyj5G1MlBuZyK/Lzw=;
+ b=mZIuCakRgzlJFzAPEy8CILahmioha59zeXiBhMvZ1DhHGfsuXHIMqdhNj1m5sbmXsn
+ XXv1bVZoJSMa9VMR6V5azMIaRjykl1B6H46aMBoLlqZu7tNckjKRAnOSQ5RNimRjNM8Q
+ j4e2ASH0egtdw8hOmvand18vV33RA34o9Eqi/iJWt+i2oCZ/xz27hxSPM/Fie0VZBYNj
+ WnZmv08CWUlD+sJYt5YggETwy6F9W830HALwEksle26K9IjJmqQAXOHT9jIAbqWbd+30
+ 1PmMbcJnhMQE9RY1kFcQW1FSiCiJ+Yjjqv9MkI41vn9NomI/r+253Lve4RaF193gAah4
+ dw3w==
+X-Gm-Message-State: AOJu0Yw2Ufre2HtQEBfJASFEcM8M6R8c3F1JfeAOYWlAwvozE6JtjuIo
+ Zje6ExlKbptUhbKJ6USBcoDsCC8KaQw7i5noqLsRK+aGtXQ7XSoCrjS7MgcVIx8KIMc=
+X-Gm-Gg: AfdE7ck4LTMkON4aDGuKvYouYzp54JstHLjxqMC1gUdej3PDaIKGNSEIfpvXg7wMg4e
+ i5TjV76tR4I2QnCJF7J1hanXAAibBiSmbyGb44hfMAZmUviw8psvpjPi/1i1K5LOsk1mH9SxF9L
+ BP1cE/lhlW7V3opBgoPAvmGc5d8KNpOaFWRZN7ZMb2Ryx7lRum3ev2cbqN3mcEQAN5D2mE7IsG5
+ wiZ9MeU+1Udpi+92vyn0NIbOrS3RuzHoU0+8hpKqVVtq+MZGnMg2dbQdY7dk+Yj85721fZp2nSI
+ t7zWS6Ntq7KEQ8bWImQncCC//is8fvOCxyslQHiXiut55Mh5wGtBPUs+IhkKoi3x6GOZ3BB6Yb0
+ Tnb4+5XbrpSBR9PNEw3HN3UoVyBNe3dpjYk7H2UiVEwdDq24FBMi56aix/uO6atHDOGsTcHHPg9
+ h5DCu3YZ/kAbCAJcfR1+7L1Wj8JRAf6H6gUf/78N/v1NGeTbJvne64jt0=
+X-Received: by 2002:a05:622a:420b:b0:51c:7b12:1207 with SMTP id
+ d75a77b69052e-51cbf304042mr217089031cf.85.1784208645250; 
+ Thu, 16 Jul 2026 06:30:45 -0700 (PDT)
 Received: from aford-System-Version.lan (c-73-94-212-116.hsd1.mn.comcast.net.
  [73.94.212.116]) by smtp.gmail.com with ESMTPSA id
- 6a1803df08f44-8ffd80fd82csm217630386d6.35.2026.07.16.06.30.03
+ d75a77b69052e-51caab6d574sm158025281cf.3.2026.07.16.06.30.43
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 16 Jul 2026 06:30:04 -0700 (PDT)
+ Thu, 16 Jul 2026 06:30:43 -0700 (PDT)
 From: Adam Ford <aford173@gmail.com>
 To: buildroot@buildroot.org
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+Cc: Raphael Pavlidis <raphael.pavlidis@gmail.com>,
  Adam Ford <aford173@gmail.com>
-Date: Thu, 16 Jul 2026 08:30:01 -0500
-Message-ID: <20260716133001.2147463-1-aford173@gmail.com>
+Date: Thu, 16 Jul 2026 08:30:41 -0500
+Message-ID: <20260716133041.2147516-1-aford173@gmail.com>
 X-Mailer: git-send-email 2.53.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1784208606; x=1784813406; darn=buildroot.org;
+ d=gmail.com; s=20251104; t=1784208645; x=1784813445; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
- bh=/ljl+p61XsLSBjxT/ltTDnUkeDzJpGLxrC+6HuiXnWc=;
- b=gV/Z1hv3snxYLw3lVTsfsOK/9cBY3Cw1XEx3suTFRVcbj8DFm9IN7F0ze80ZDPemUj
- cspCKndhGWlix8WhLFDTKQjod+9DlLqf05tPHpyC5eR4o6BTW0t1GUzR08eP8VJfdEP4
- OpgBbSRiTyA5L3PiLkwWg/IoY4u+D23RsOo9Ltu+RgDKjvrlBahxiIPzGgsg8Knpebjf
- vHnsaRcVW0RAXt5UsvzXxciCTVH7ZfaPDfSBFaSaN/0xXAiZu/0Nyvh4305+i9R3rrfi
- GYh0mRdb0WEq2q3ysCsxv2X3IXRHe/UdBQTpvFjBe30/ZeCt41KImqso2WbT8AvSkhGy
- XY3g==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=OES7/i299xDOKi03WkzvvaaBLeCyj5G1MlBuZyK/Lzw=;
+ b=sHLprD73R36+YMXAliTvkLM9l+EpryW1orV6/K+tPu2K3+yFL0ZOFp90ZwNQnRwgWm
+ 41GHYqmtnWrq4NDvoWQW1Xj01jh7Tdyt00zrAqCpcH9pH60qp1bT12k9ZlxccR2yKzI5
+ r0DotX4qG+jUNWkWiMOawYEu+djP5YoqOVZWXwb5x5Jlf19rLamZ+Z5tFCTl0VDiV5/X
+ vyFf2940XL+9XQkG40WvO4hmAuz5GECMm11b2D5mUBk4uixNI0qH9AVd7QPfIeKewobE
+ 97a9v/wu+pUmTJvKWTdC6TbeJCbcKw/W/jV0Sd/toTVU/EoSSQEfgjzLsLHNO5FaSlLo
+ aJJA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20251104 header.b=gV/Z1hv3
-Subject: [Buildroot] [PATCH] package/libxml-parser-perl: add host-libxcrypt
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20251104 header.b=sHLprD73
+Subject: [Buildroot] [PATCH] package/x11r7/xwayland: add mesa3d ordering
  dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -124,30 +125,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-host-libxml-parser-perl compiles XS modules against the system perl
-headers, which #include <crypt.h>. On build hosts without libcrypt-dev
-installed, the build fails:
+Xwayland's glamor/DRI configure check looks for Mesa's dri.pc in staging.
+Without an explicit ordering dependency, a highly parallel build can run
+Xwayland's configure before mesa3d is installed, failing with:
 
-    .../CORE/reentr.h:126:16: fatal error: crypt.h: No such file or directory
+    ERROR: Dependency "dri" not found
 
-Declaring host-libxcrypt ensures crypt.h is present in the per-package
-host sysroot before the build.
+Add mesa3d to XWAYLAND_DEPENDENCIES when it is enabled.
 
 Signed-off-by: Adam Ford <aford173@gmail.com>
 
-diff --git a/package/libxml-parser-perl/libxml-parser-perl.mk b/package/libxml-parser-perl/libxml-parser-perl.mk
-index 06bbd3b1ad..7cc60774bd 100644
---- a/package/libxml-parser-perl/libxml-parser-perl.mk
-+++ b/package/libxml-parser-perl/libxml-parser-perl.mk
-@@ -7,7 +7,7 @@
- LIBXML_PARSER_PERL_VERSION = 2.47
- LIBXML_PARSER_PERL_SOURCE = XML-Parser-$(LIBXML_PARSER_PERL_VERSION).tar.gz
- LIBXML_PARSER_PERL_SITE = $(BR2_CPAN_MIRROR)/authors/id/T/TO/TODDR
--HOST_LIBXML_PARSER_PERL_DEPENDENCIES = host-expat
-+HOST_LIBXML_PARSER_PERL_DEPENDENCIES = host-expat host-libxcrypt
- LIBXML_PARSER_PERL_LICENSE = Artistic or GPL-1.0+
- LIBXML_PARSER_PERL_LICENSE_FILES = README
- LIBXML_PARSER_PERL_RUN_PERL = `which perl`
+diff --git a/package/x11r7/xwayland/xwayland.mk b/package/x11r7/xwayland/xwayland.mk
+index 2b8513602c..bce9a572ab 100644
+--- a/package/x11r7/xwayland/xwayland.mk
++++ b/package/x11r7/xwayland/xwayland.mk
+@@ -30,6 +30,14 @@ XWAYLAND_CONF_OPTS = \
+ 	-Ddtrace=false \
+ 	-Ddocs=false
+ 
++# Xwayland's glamor/DRI configure check needs Mesa's dri.pc in staging.
++# Without an explicit ordering dependency, a highly parallel build can run
++# Xwayland's configure before mesa3d is installed, failing with:
++#   ERROR: Dependency "dri" not found
++ifeq ($(BR2_PACKAGE_MESA3D),y)
++XWAYLAND_DEPENDENCIES += mesa3d
++endif
++
+ ifeq ($(BR2_PACKAGE_HAS_LIBEGL)$(BR2_PACKAGE_LIBEPOXY),yy)
+ XWAYLAND_CONF_OPTS += -Dglamor=true
+ XWAYLAND_DEPENDENCIES += libepoxy
 -- 
 2.53.0
 
