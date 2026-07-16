@@ -4,84 +4,109 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D5C7C4450A
-	for <buildroot@archiver.kernel.org>; Thu, 16 Jul 2026 11:34:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04212C4450A
+	for <buildroot@archiver.kernel.org>; Thu, 16 Jul 2026 13:07:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E476660858;
-	Thu, 16 Jul 2026 11:34:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 78A3260873;
+	Thu, 16 Jul 2026 13:07:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hx0_T4MnEa35; Thu, 16 Jul 2026 11:34:07 +0000 (UTC)
+ id CE-54_FumD98; Thu, 16 Jul 2026 13:07:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7A08D6083B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5A69B60872
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1784201647;
-	bh=K7Bf8NEIhQKqwGjuiXmW8Qzit2a58rwP5zfgiy4jLXo=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=FI99qdLzA1i23szOWFocGOochmL+sVV6lkeRY/hyKB0kZGz2d8NvYJIJYyh5l4iTr
-	 6fcM2dg/tJg8AJP8+LDcEnhgyl31uFBrfwnchoh8uKkMhNJjsBzBsWS3O5gjiWOHhz
-	 AaXUzcQzlrQrkrQgQO5cXJS/GAX8vzA+WUO9BWM9lrYbb+nUUBR30cHs3qSt1ljnAt
-	 o/gJoAG3A0FJmbKK5Uleohjvs/PGIgdk0XG9PYbRK2O+s0ztDys7kJ8XSOogUXchsi
-	 PgleXaGQ9cviza21e1K8GJq5VpmYz2ha6JgtSPwR4Pz3u0DAwfhrENF/D69DTvg/zt
-	 zNwdfCjOqt2zg==
+	s=default; t=1784207249;
+	bh=xm+5rNz/O7rSkdEF96++Rnem/3XXVCcInHk4Q52Fzb8=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=SDky/Oe6MwTmxiYFiAR0noDf2GJ51bEecBHJ+bVOcY+wFnABETENK0lNYimYT1HNK
+	 HZgi4aZarjNgUD5a0VskcBXWEaQ2DtYMXMfkL/cGZfRwu8IwH78XtXQBFQxF+gprKo
+	 NNKlshtViEuB2Gq+rkIZXVmv2vepiD8TtjFZB7e3wmAHQhxfdmwSImDu6/7qzcvgg1
+	 Y8AmRVZz8+R3gEtwoQcc3xO+4ElNHaWdtWWUvefzVv/+Mxz0QJ4TCgRFXyprz8xw+O
+	 ts2TVa8gLxgFl/zmGqA4ACPJ5p+/OznrsLq00xrY5dJKU7WDRSFjostNOdjmEwJYdX
+	 ktmXZwqBaJvag==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7A08D6083B;
-	Thu, 16 Jul 2026 11:34:07 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id E4321320
- for <buildroot@buildroot.org>; Thu, 16 Jul 2026 11:34:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5A69B60872;
+	Thu, 16 Jul 2026 13:07:29 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id B12D2320
+ for <buildroot@buildroot.org>; Thu, 16 Jul 2026 13:07:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D9710407BA
- for <buildroot@buildroot.org>; Thu, 16 Jul 2026 11:34:05 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A26B760872
+ for <buildroot@buildroot.org>; Thu, 16 Jul 2026 13:07:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OpZfw5S4_yVH for <buildroot@buildroot.org>;
- Thu, 16 Jul 2026 11:34:05 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
- helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D010140788
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D010140788
-Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D010140788
- for <buildroot@buildroot.org>; Thu, 16 Jul 2026 11:34:04 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 6C999B97776D; Thu, 16 Jul 2026 13:34:00 +0200 (CEST)
-Message-ID: <ecd077db-2ded-4ba5-bf23-eec72b143ed5@rnout.be>
-Date: Thu, 16 Jul 2026 13:33:58 +0200
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zsHd-1XlgFri for <buildroot@buildroot.org>;
+ Thu, 16 Jul 2026 13:07:26 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::42a; helo=mail-wr1-x42a.google.com;
+ envelope-from=maxime.leroys@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 0988960871
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0988960871
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
+ [IPv6:2a00:1450:4864:20::42a])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0988960871
+ for <buildroot@buildroot.org>; Thu, 16 Jul 2026 13:07:25 +0000 (UTC)
+Received: by mail-wr1-x42a.google.com with SMTP id
+ ffacd0b85a97d-475417f010dso3369163f8f.2
+ for <buildroot@buildroot.org>; Thu, 16 Jul 2026 06:07:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20251104; t=1784207243; x=1784812043;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to:content-type;
+ bh=OA3G69uwvY4qAqPgOAbgTlgD1VH7L5sQ/Qf+Oo6F62E=;
+ b=nVRsajk7ie0rJLfr4nJ/T/AO+HLnWyGcT9xeb6o6sIhZoAwDwHeRPpaFeroFR1drFZ
+ jZucise/8Ud7PuIuezD0/OYD6SSaqNsRar2dwryI93Yf/he65az+Jx8LwJsqiR+gZxaF
+ CXdfLdugmsdUnjM0q5dG+nBRGA1om394inL6zhF6RIXkzI44rLREDOPtc3/JkAQHjE/9
+ 2yecrTHDNwRnmt/5fSZkPuDOVZY5Ou8XIGal49PTKYVF6bQ/hIGfUPBlpTVARCPUO/j8
+ 4BIPc49WkCEmBBhCmgDGtXMYbZ3Ah92rcuI/oZs2RBxE/qp6qn0vJrjiJZwd0wAgqLlC
+ 2S1A==
+X-Gm-Message-State: AOJu0YwS4AE4yFR0cZb++DZt1SfIhGPh0HYLlxuGVr2b5h4IDhPSDYuX
+ 0i8TMeRUA5FPXvxGwwstJc9MUWcUv6OGXUMPwZorjH0oHYh580pAi4/+c3mY+ZFnqtE=
+X-Gm-Gg: AfdE7cnoMpRvBz5xclY2ClUT7zfOyIJkWYaNfKkDIselxKaH2UkzcW/3iUE/3kYp1Gr
+ JWST0eQKDHboM5wcDf83099iSvkCoYSjV6KsdZy7HV2xRXSQ5Mqr8/boqYUQYXteiX45dhxtGq9
+ puwEjpFLaG/ALaWtHzPlzKnEsT7dBkDPjCGrOz1VcqYwBsti/+xxj0bW9GkZhBAyYd7aTeYJ5h0
+ WhUQBEewlVGzsRGTNQ7gNOJtZFm2E7VbW7p6gq0teUyO87yAy/94l3N1o0DyibHO55pHHjABbRN
+ cVTrpAqkU81WWFnAJRTXEM1PlIyvlO99kMkGr0hVbmHnUcMCRQQNcHDqNwt3FUPcvbYkwP1dNFz
+ /LHxYoFU4DyANJz1iBnRxsmsYJT0RO3nS4+QbtUrKRFokfXq3UCHHAi3t7xLsZFLJ2X8zPJk=
+X-Received: by 2002:a05:6000:29d8:b0:47f:5b4e:a7c4 with SMTP id
+ ffacd0b85a97d-47f5b4ead47mr1708471f8f.34.1784207243327; 
+ Thu, 16 Jul 2026 06:07:23 -0700 (PDT)
+Received: from freepad.. ([2a01:e0a:6f:bdf0:a746:3d60:eb91:79a0])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-47f464b7f84sm23494376f8f.27.2026.07.16.06.07.22
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 16 Jul 2026 06:07:22 -0700 (PDT)
+From: Maxime Leroy <maxime@leroys.fr>
+To: buildroot@buildroot.org
+Cc: Vincent Jardin <vjardin@free.fr>,
+	Maxime Leroy <maxime@leroys.fr>
+Date: Thu, 16 Jul 2026 15:07:15 +0200
+Message-ID: <20260716130715.101592-1-maxime@leroys.fr>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Michael Nosthoff <buildroot@heine.tech>,
- Thomas Perale <thomas.perale@mind.be>,
- Titouan Christophe <titouan.christophe@mind.be>
-Cc: buildroot@buildroot.org
-References: <20260715193512.46B9288999@busybox.osuosl.org>
- <d69f1972-f7e5-a606-5ec3-9c82324726f8@heine.tech>
-Content-Language: en-GB, fr-BE
-In-Reply-To: <d69f1972-f7e5-a606-5ec3-9c82324726f8@heine.tech>
-X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rnout.be; s=dkim; 
- t=1784201641; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding:content-language:in-reply-to:references;
- bh=r9k8IGdTqmLtGc2LA4/nwjLhZYNk00RA/Z92ovIXr3o=;
- b=MKbvxUuiKQFGP79gZKjMDGGN+0GeHrry6BDvuQmK/assetxb1FpoG9pFhFFG5D7RgGmVOH
- U91cx4YcUglSmkCaWLntMboYddFz/JRJPgDqzwke3k1Z4qWSax7zKLbqv+KmfIHwD5I04D
- EjkZShNjJWBWo+xYzRG4mjUJZS8bHq7QPx9nLrzx+XJOmeXetS5rVBc1IX2SplQ47KQB/T
- Ypp1mLEnV59CxDvyUoaks/prd4C4EEo9/UKcxDVQ65hsmTeNOvq8neHRmunX8qUt5WW8iT
- TUArMvOy+vU3Ws5A5e3Uk58cz6cCU8hUe1u08NMOr7i5oTR/SJ+iDVnIgud2dw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
- header.s=dkim header.b=MKbvxUui
-Subject: Re: [Buildroot] [git commit] docs/website/download.html: remove old
- stable
+ d=gmail.com; s=20251104; t=1784207243; x=1784812043; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:from:to:cc:subject:date:message-id:reply-to
+ :content-type;
+ bh=OA3G69uwvY4qAqPgOAbgTlgD1VH7L5sQ/Qf+Oo6F62E=;
+ b=SJgxwQvGERE9grb1q/yB636DRvJlQVMNxo3p3YCtRe6qLlFUE3Ej5jiDj/ms0ioHXz
+ +HolPY6MtPbpCfSf/oGbjPjYSJZYyOuX2Sx3grOTigSs5TdpNPOjCHp9tiZ19FkZxDlh
+ V9g6GVHmYdY/xB0lNq/5n7XDKFnP99tKaFFS0wrXZTfLcV/chcB1/QuAPKFHsAnwsIAr
+ bqZZ4LW5ZkEGKZXXYJOxU1vdEI/lxhGDyWxGhrqFlaUpD2ZnDcYvgTSUy2de1t6Yvoa1
+ SRzn2L1Vjzki778EKtMiEjbTpkXwQuKh5f6hVlMp5kw/9RVwm3Bb0KcAafdG1leHysUR
+ LGyQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=leroys.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20251104 header.b=SJgxwQvG
+Subject: [Buildroot] [PATCH] package/dpdk: bump to 25.11.2 version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,94 +118,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@rnout.be>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+See the release note of the new versions:
+- https://doc.dpdk.org/guides-25.11/rel_notes/release_25_11.html#release-notes
+- https://doc.dpdk.org/guides-25.11/rel_notes/release_25_11.html#id1
 
+Signed-off-by: Maxime Leroy <maxime@leroys.fr>
+---
+Tested in GitLab CI (all jobs passed):
+  https://gitlab.com/maxime-leroy/buildroot/-/pipelines/2681272497
 
-On 16/07/2026 09:06, Michael Nosthoff wrote:
-> Hi Arnout,
-> 
-> I'm a bit confused. Was there a change to the policy described in [0] that "The first release of each year is a long term support release, LTS"?
-> I couldn't find any announcement related to this. Can you enlighten me here?
+ package/dpdk/dpdk.hash | 2 +-
+ package/dpdk/dpdk.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-  Oh yes, we changed that to a 3-year LTS (instead of 1 year) that is started 
-every 2 years (so with 1 year of overlap). See [1].
-
-  It looks like we forgot to update the manual. Thomas, Titouan, care to take 
-care of that?
-
-  Regards,
-  Arnout
-
-[1] https://buildroot.org/lts.html#releases
-
-> 
-> Regards,
-> Michael
-> 
-> 
-> [0] https://buildroot.org/downloads/manual/manual.html#_releases
-> 
-> On Wednesday, July 15, 2026 21:33 CEST, Arnout Vandecappelle via buildroot <buildroot@buildroot.org> wrote:
-> 
->> commit: https://gitlab.com/buildroot.org/buildroot/-/commit/931803d24d37243af45c76fb8087e77141caa544
->> branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
->>
->> Now 2026.05.1 is released, we no longer need to advertise the EOL old
->> stable.
->>
->> Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
->> ---
->>   docs/website/download.html | 26 --------------------------
->>   1 file changed, 26 deletions(-)
->>
->> diff --git a/docs/website/download.html b/docs/website/download.html
->> index 57183da23c..35d8c28dae 100644
->> --- a/docs/website/download.html
->> +++ b/docs/website/download.html
->> @@ -70,32 +70,6 @@
->>               <a href="/downloads/buildroot-2026.05.1.tar.xz.sign">[PGP sig]</a>
->>             </td>
->>           </tr>
->> -        <tr>
->> -          <th>Old stable (EOL)</th>
->> -          <th>2026.02.x</th>
->> -          <td>June 2026</td>
->> -          <td>
->> -            2026.02.3<br/>
->> -            <a href="https://gitlab.com/buildroot.org/buildroot/-/blob/2026.02.3/CHANGES">
->> -              Changelog
->> -            </a>
->> -          </td>
->> -          <td>2026-06-16</td>
->> -          <td>
->> -            <a href="/downloads/buildroot-2026.02.3.tar.gz">
->> -              <img src="images/zip.png" width="24" alt="">
->> -              .tar.gz
->> -            </a><br/>
->> -            <a href="/downloads/buildroot-2026.02.3.tar.gz.sign">[PGP sig]</a>
->> -          </td>
->> -          <td>
->> -            <a href="/downloads/buildroot-2026.02.3.tar.xz">
->> -              <img src="images/package.png" width="24" alt="">
->> -              .tar.xz
->> -            </a><br/>
->> -            <a href="/downloads/buildroot-2026.02.3.tar.xz.sign">[PGP sig]</a>
->> -          </td>
->> -        </tr>
->>           <tr>
->>             <th>Long-term support</th>
->>             <th>2025.02.x</th>
->> _______________________________________________
->> buildroot mailing list
->> buildroot@buildroot.org
->> https://lists.buildroot.org/mailman/listinfo/buildroot
-> 
+diff --git a/package/dpdk/dpdk.hash b/package/dpdk/dpdk.hash
+index 7e8ef0674c..adafe2dac6 100644
+--- a/package/dpdk/dpdk.hash
++++ b/package/dpdk/dpdk.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  52e90d2a531ef3ded0283bd91abc94980698f1f6471fa09658a0217cf6609526  dpdk-25.11.tar.xz
++sha256  418bfe3212640ee95a1cb10af6ed360cad2387686fe2721f8a3a9cd02d5ef4f2  dpdk-25.11.2.tar.xz
+ sha256  9acc4bc871a4742550158e3696dcb381953172ef808d04ca248184f9f6322712  license/bsd-3-clause.txt
+ sha256  ec514554f1b9e90c4f55167267c22da9d511f884877c32a5b18bee6b7c8b18cd  license/exceptions.txt
+ sha256  6c54c4d44faf3cba829b3d0c21c6955953e758767018fd7244f809b01d4f4845  license/mit.txt
+diff --git a/package/dpdk/dpdk.mk b/package/dpdk/dpdk.mk
+index 080f924329..147bdb23d3 100644
+--- a/package/dpdk/dpdk.mk
++++ b/package/dpdk/dpdk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DPDK_VERSION = 25.11
++DPDK_VERSION = 25.11.2
+ DPDK_SOURCE = dpdk-$(DPDK_VERSION).tar.xz
+ DPDK_SITE = https://fast.dpdk.org/rel
+ DPDK_LICENSE = \
+-- 
+2.43.0
 
 _______________________________________________
 buildroot mailing list
