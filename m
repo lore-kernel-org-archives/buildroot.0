@@ -1,110 +1,113 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D33CC4450F
-	for <buildroot@archiver.kernel.org>; Fri, 17 Jul 2026 06:19:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D022C44507
+	for <buildroot@archiver.kernel.org>; Fri, 17 Jul 2026 09:32:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 247B58100D;
-	Fri, 17 Jul 2026 06:19:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AFED140850;
+	Fri, 17 Jul 2026 09:32:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id k5kijXipJOIF; Fri, 17 Jul 2026 06:19:53 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id b0P7fnzc-QIQ; Fri, 17 Jul 2026 09:32:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B875A80E05
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A6F8A409DA
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1784269193;
-	bh=ai9bRAsvesbBvlZ10oczY9rDYHJWjXGp8VHJuCiHeeE=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Cc:From;
-	b=hMRkTlUxGIhqlP0pZ24Agylx1mgyWj/m9G4ZFAmF6mNykyxRYfSv/RvcAwnQr1hVZ
-	 MnAMlZ9kYn3vvfsVlnHp9DX72lhrWQFY50ttiCr635q9L1OywNPKO+f8BRn1hdSQZQ
-	 s5CtCHMj+nLW7J7GalfTOaWa2M+XkcsYZPnRhYD1QWsQp6ZiCBv6hk6a7VjO5ZC5Hh
-	 4RIXFGOvf9UjWFVNa3/kxQNYbiBjzM1vi72OqEILOYtC9eTaCplVlRc6ElOr9qQr9O
-	 zxkkjHvH1++bfgULJNG0BJnpW48GudQ6BHwVais/C3t0kA/IzSBYmZqVIA3hxXXv5d
-	 n6Bl2RiPGgONA==
+	s=default; t=1784280778;
+	bh=5dCPRlr8nN2CuccN7LyL3SfUHGwLSfST7usEcLWoz4c=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=VkXKH1XYz28ofS+9xq5JfpgJqZF6sQ/RtC2fn6AP/xL9DMGTludXQEyseyytUWIbb
+	 AlvKgfh0XDmd3GqwhsG4O4yUac3XZtO943KGNs35JclvS7UzcyC/PQbh29CXoXK4K5
+	 mRD/EgO8B02Mb3/PhZRY0CjJvGi5AfbeKv+aZ5E53PyrSG/onO3mikVMGHguFrlvYi
+	 28/H0Y5M7taktN8MfFLj4hiT4HxniBY+x0PDSgEoR62VM1HFwB8ep0kXkruJ/qYsdu
+	 q4J2AmBNmbHWPlaOM3w/Bjm2HKltQbYUcjyq9FrKTa9SuzaE/b4sTZilS5ogu5KNre
+	 zOM5GDlHRfkeA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B875A80E05;
-	Fri, 17 Jul 2026 06:19:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A6F8A409DA;
+	Fri, 17 Jul 2026 09:32:58 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 883FE36E
- for <buildroot@buildroot.org>; Fri, 17 Jul 2026 06:19:52 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1B8B836E
+ for <buildroot@buildroot.org>; Fri, 17 Jul 2026 09:32:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6E6036084B
- for <buildroot@buildroot.org>; Fri, 17 Jul 2026 06:19:52 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 01BF36084B
+ for <buildroot@buildroot.org>; Fri, 17 Jul 2026 09:32:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IePRGw1wEEd2 for <buildroot@buildroot.org>;
- Fri, 17 Jul 2026 06:19:51 +0000 (UTC)
+ id MH2O9Jla8nCa for <buildroot@buildroot.org>;
+ Fri, 17 Jul 2026 09:32:56 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32a; helo=mail-wm1-x32a.google.com;
- envelope-from=flaviu.nistor@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5956360852
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5956360852
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
- [IPv6:2a00:1450:4864:20::32a])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5956360852
- for <buildroot@buildroot.org>; Fri, 17 Jul 2026 06:19:51 +0000 (UTC)
-Received: by mail-wm1-x32a.google.com with SMTP id
- 5b1f17b1804b1-49544a80b9dso7610435e9.1
- for <buildroot@buildroot.org>; Thu, 16 Jul 2026 23:19:51 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::32e; helo=mail-wm1-x32e.google.com;
+ envelope-from=andrea.ricchi@amarulasolutions.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 885246078C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 885246078C
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
+ [IPv6:2a00:1450:4864:20::32e])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 885246078C
+ for <buildroot@buildroot.org>; Fri, 17 Jul 2026 09:32:55 +0000 (UTC)
+Received: by mail-wm1-x32e.google.com with SMTP id
+ 5b1f17b1804b1-4954d383e64so29775e9.1
+ for <buildroot@buildroot.org>; Fri, 17 Jul 2026 02:32:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1784269189; x=1784873989;
+ d=1e100.net; s=20251104; t=1784280773; x=1784885573;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to:content-type;
- bh=eW7P/eyghXAwpq3t6H1jGS59WaoXZ36Vd9J3OXe+/zU=;
- b=LMnQd4nlpjKSEFmitSyuQIx+QSn/1f/z7CtbPDNR0Jyb/D3LyfYdhVyAbfIoeIr7ce
- ill2WpXlYzcsSUzkm5LR+k/48sTdVktnDMSUA9ZwWsbf3xzURwH1XPwNCypWTfVdXCRK
- eXiXdq9+WRrtffDsxIyQhx3VE++FEM3OaqranGbyotn5JeiD7oGjjI4o8rY9mxQTDR+B
- /kzVEpUI+LMPrhWQt2geD6uASqlnC3JTMrzYRa7EQMsj3M4vfKlWkg1FvVTupnPXp2d5
- AXUaPH6PRJDf6+IfN1VgaW4OubN4hRAGr4fCx4CU/AV6RXTUXX6kATZUjbWzNDCoJW86
- xY3w==
-X-Gm-Message-State: AOJu0YxK+tiVSE1wTrZmfmwoyIQEYWuKuyi+/MQdCpVR2Px6D8zV9JLx
- mAgD/75OaeLaPAFq5bTP1xIb/jD2xKm0e1jdQRsRBlFBjnQAKEJ+WADSvj8Glw7L
-X-Gm-Gg: AfdE7cntRfkNjv1SMwovJiSyV6ZRpI9Rk/FcYskyPfGbhjS+ePh7B+4DYXCtZGA18z1
- ahZ+6tjdx0YZYM2WZAwU7yI8uQ9zAINdhtxQxjieNSUyXx75wi/IcW32IdCpa+W48a+UtSHj/eg
- ZA2AxrY8pdBuXIixwywIs1PYDWeNGvgnlI9cn2AGWvTJUeXuQJdcBjagyaaZ/FFEwpNBpBQP1+r
- fbhyzUMXfuFAy97rYIy8a7+bOhrVeTJUnwM4r6ypAQUa21FbafBzC735a3ltEFlkj8zwYYy6h01
- QqsmtvmA+3f5BWpamOYbudNQs8OigxvGE14jmiees3axur7jJd3NQm+lKz1QY0lx98lrWReQsGY
- bxC/wW2oGjwyJ+f9mkK5YNszPM1eg+SaY8agIiqfjbyBmH2YaEjBZSRvqKvixw1gK0OwBSNXkQZ
- ck6jRbeUjx7Z/M+EcCTkhg97u2XHuQx9DlG9iCYYGA5T47vswcrGhYCco=
-X-Received: by 2002:a05:600c:55c9:b0:493:bd2f:c5fc with SMTP id
- 5b1f17b1804b1-4954a3e4926mr9427935e9.15.1784269188902; 
- Thu, 16 Jul 2026 23:19:48 -0700 (PDT)
-Received: from flaviu-Aspire-E5-572G.. ([93.122.248.125])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4954a2b87c6sm35506275e9.7.2026.07.16.23.19.47
+ bh=d0SHLnZMz0udmKMGSOnKhrCu9Cq5PHhjqrw+IQRE1W8=;
+ b=gfBy4Xx98b6R+rKTp6edsaFgegPiMq4K3I5AUZxK1v31U0Zxx3iayhn8uw07U+TvhV
+ e85cvxvqoHeigQYc3rEE16v9kvBT1jadnuh86S+iblGLev/m31qxv7H7WbyUZ2K3jF1a
+ CJoaj5dEfIiDde47/YyQNAf1TyD3lhTNkXMnWvaQeVlKzjmbsK9uymQoxYpBvId3u6MV
+ epiFvtNMxO6jysBV114mvp6ODPHfxEy2Wjk/h2BiwlakCGATvVm3H0ZLBXJW/nF7IcpY
+ Dc/50Qw9bam1YnHhxgVsBDh1uSsYdhVMTq3tGCyqtvIr7MaFj5xFvuWaHPpOVycPAWXz
+ XBQQ==
+X-Gm-Message-State: AOJu0Yz7zvxOjqIIib62XmUYfkvJzZUwVs8xr0Lh55EvHuZ0BM8xJ184
+ c7rJxgX3e6Nq42NGkXPOz0NZ9gGaQfPM7ekPZp/lDV8/+9EJ2N9XworABgGXSPIof96I9I1AI2p
+ mOqIZTQM=
+X-Gm-Gg: AfdE7cmqo4BGa23VAjAyMMQ9aGlyAxPwA0gNkKiLR/j/cqFFIwBJJ80mSBQHP2wshnC
+ 27GDPOrct1QT5lrfcIR5MNhTGM+1U9upIjyeAe1baR0LEOBlhtZfBODhBVvZ4Lrmvc+DlE0Acl9
+ pcM9m7JY1XBibpVTVCryE1HI5zKoZerKhPLyg4mpVoJJub3HG09lFRD/QcUJ/rC2X7C+9IPYN8q
+ nJSUIHiC7sK/93noccR4xsGf0vdAqUu5efYADI+uAoP7VjVVA6o9XX83kWgmbx16+7jOoKhDk2C
+ YXJsKwoaKpj5qoWmxNj1RIlWjfvj8WoMUhRv2EwoIZCfyAEddrZUsrMwRZA8HSeoR6roMewPGjc
+ LRF+Ie9CHGIhdHkztFW1Mo0tk/PH5XNqxGRM69bOQJreUNtZLtkdn1zgEBH53XfhavL0uNWHuVD
+ nr3DBb0/zNqfhv3v1UGxj3UXU7Acq8J02y203MzfD0tY77npe+Ui9uSHW5Kq5LEr/nXfVbvSmJq
+ BCat+ue+NlTnQtzateJy+yv0aFmWdTVLJvn2VbkJC5x2Kx4l/Q9j+/bqki4ITWHQ9U5OekTeQNZ
+ Bj7nOrJvjSbCzA==
+X-Received: by 2002:a05:600c:138f:b0:495:4a34:16d9 with SMTP id
+ 5b1f17b1804b1-4954a50ea3bmr20808155e9.31.1784280773140; 
+ Fri, 17 Jul 2026 02:32:53 -0700 (PDT)
+Received: from rcc-ThinkPad-P14s-Gen-5.homenet.telecomitalia.it
+ ([95.236.1.245]) by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-47f63e49acesm2129679f8f.6.2026.07.17.02.32.51
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 16 Jul 2026 23:19:48 -0700 (PDT)
-From: Flaviu Nistor <flaviu.nistor@gmail.com>
+ Fri, 17 Jul 2026 02:32:52 -0700 (PDT)
+From: Andrea Ricchi <andrea.ricchi@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Fri, 17 Jul 2026 09:19:43 +0300
-Message-ID: <20260717061943.4491-1-flaviu.nistor@gmail.com>
-X-Mailer: git-send-email 2.43.0
+Cc: Andrea Ricchi <andrea.ricchi@amarulasolutions.com>
+Date: Fri, 17 Jul 2026 11:32:48 +0200
+Message-ID: <20260717093249.2183039-1-andrea.ricchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.53.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1784269189; x=1784873989; darn=buildroot.org;
+ d=amarulasolutions.com; s=google; t=1784280773; x=1784885573;
+ darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
- bh=eW7P/eyghXAwpq3t6H1jGS59WaoXZ36Vd9J3OXe+/zU=;
- b=Rtv3l5KvbA5uGyNppkanZVYRvJbza9EPHIt8xqabSDXuP3NlaARwVyV32KHzSrHWww
- Qmzte9dSRTWYMeXHplACJXrFl6HepOhvX7CZPBUnEyI2P3EW+wlVzVq2Yu54WWMvVuRb
- TlEBdf2NHEJBOdsY6OMpthJQDe6bluoNdlqzQZxPRm3+V7cRYcULIkxDSKyc/+AZmnWv
- y/+euounActC7cMXXbG4muHBYiyZzf2PGbk4vnX0OEYXPkKFdhFqdF27gTcBJ96PEET9
- 7qaCKrOopNhGbwuamCLQog/hcqtZY1r5ohjxt2AfQzCFwwOMmwD0q7pkBXemtYIgDhKr
- lAQw==
+ bh=d0SHLnZMz0udmKMGSOnKhrCu9Cq5PHhjqrw+IQRE1W8=;
+ b=EQ15N5KJoNmxCegVUEUFQu5qfksREFKQICDYkU2XL0M/4VB+dHrwgUbhMklK2YBECc
+ udIFY0B1yrSvTYWetoOkxJ5lZT3ag450MzbQRa/qiVkhR70m3kTV28u1BZ8wyVq+A/kM
+ tDuGetaBBDgUNprqZqWuxUpsUbe4mBGJ1HhGc=
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
+ header.from=amarulasolutions.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20251104 header.b=Rtv3l5Kv
-Subject: [Buildroot] [PATCH v2] package/python-snappy: bump version to 0.7.2
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=EQ15N5KJ
+Subject: [Buildroot] [PATCH v2] package/libcppconnman: add new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -116,57 +119,131 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Flaviu Nistor <flaviu.nistor@gmail.com>,
- James Hilliard <james.hilliard1@gmail.com>, Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Even if there is a 0.7.3 on Pypi, there is no 0.7.3 release
-on the project homepage, hence the bump to 0.7.2.
-Add also PYTHON_SNAPPY_SOURCE for correct package on Pypi.
+libcppconnman is a C++ library that provides an easy-to-use API
+to communicate with ConnMan over D-Bus using GDBus.
 
-Signed-off-by: Flaviu Nistor <flaviu.nistor@gmail.com>
+https://github.com/amarula/libcppconnman
+
+Also add myself to DEVELOPERS for this package.
+
+Signed-off-by: Andrea Ricchi <andrea.ricchi@amarulasolutions.com>
 ---
-Changes in v2:
-- Fix error indicated by Julien Olivain when running make python-snappy-legal-info.
-- Link to v1: https://lore.kernel.org/all/20260409152520.5894-1-flaviu.nistor@gmail.com/
+Changes v1 -> v2:
+  - add missing libcppconnman entry in package/Config.in
+  - merge the DEVELOPERS addition into this patch
 
- package/python-snappy/python-snappy.hash | 4 ++--
- package/python-snappy/python-snappy.mk   | 5 +++--
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ DEVELOPERS                               |  1 +
+ package/Config.in                        |  1 +
+ package/libcppconnman/Config.in          | 26 ++++++++++++++++++++++++
+ package/libcppconnman/libcppconnman.hash |  3 +++
+ package/libcppconnman/libcppconnman.mk   | 24 ++++++++++++++++++++++
+ 5 files changed, 55 insertions(+)
+ create mode 100644 package/libcppconnman/Config.in
+ create mode 100644 package/libcppconnman/libcppconnman.hash
+ create mode 100644 package/libcppconnman/libcppconnman.mk
 
-diff --git a/package/python-snappy/python-snappy.hash b/package/python-snappy/python-snappy.hash
-index c4dbc72077..2f40b6c531 100644
---- a/package/python-snappy/python-snappy.hash
-+++ b/package/python-snappy/python-snappy.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/python-snappy/json
--md5  fc84cfa3526fba06d66f0d0b2e764300  python-snappy-0.6.1.tar.gz
--sha256  b6a107ab06206acc5359d4c5632bd9b22d448702a79b3169b0c62e0fb808bb2a  python-snappy-0.6.1.tar.gz
-+md5  04a4e58b0a932403bb285900e67c778d  python_snappy-0.7.2.tar.gz
-+sha256  04bf182f9d9f67b7a846dae2f1df36180ceeee8d3380e4b6799deff5272c4978  python_snappy-0.7.2.tar.gz
- # Locally computed sha256 checksums
- sha256  d007cb05f143d99d16d5cd0d1bf291daf037adb36800344e440ec26edb938f9a  LICENSE
-diff --git a/package/python-snappy/python-snappy.mk b/package/python-snappy/python-snappy.mk
-index e80aa861df..b1bd8ca6ca 100644
---- a/package/python-snappy/python-snappy.mk
-+++ b/package/python-snappy/python-snappy.mk
-@@ -4,8 +4,9 @@
- #
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 42418d01a2..997fd6be74 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -186,6 +186,7 @@ F:	package/wine/
  
--PYTHON_SNAPPY_VERSION = 0.6.1
--PYTHON_SNAPPY_SITE = https://files.pythonhosted.org/packages/98/7a/44a24bad98335b2c72e4cadcdecf79f50197d1bab9f22f863a274f104b96
-+PYTHON_SNAPPY_VERSION = 0.7.2
-+PYTHON_SNAPPY_SOURCE = python_snappy-$(PYTHON_SNAPPY_VERSION).tar.gz
-+PYTHON_SNAPPY_SITE = https://files.pythonhosted.org/packages/cb/52/acd87583175fa930e4385f8a6164eb5909acd683c0e62ee01d41de8195a2
- PYTHON_SNAPPY_SETUP_TYPE = setuptools
- PYTHON_SNAPPY_LICENSE = BSD-3-Clause
- PYTHON_SNAPPY_LICENSE_FILES = LICENSE
+ N:	Andrea Ricchi <andrea.ricchi@amarulasolutions.com>
+ F:	package/cutekeyboard/
++F:	package/libcppconnman/
+ 
+ N:	Andreas Klinger <ak@it-klinger.de>
+ F:	package/ply/
+diff --git a/package/Config.in b/package/Config.in
+index 015f635ad1..fc1e57d30d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2007,6 +2007,7 @@ menu "Networking"
+ 	source "package/ibrdtn/Config.in"
+ 	source "package/libcgicc/Config.in"
+ 	source "package/libcoap/Config.in"
++	source "package/libcppconnman/Config.in"
+ 	source "package/libcpprestsdk/Config.in"
+ 	source "package/libcurl/Config.in"
+ 	source "package/libdnet/Config.in"
+diff --git a/package/libcppconnman/Config.in b/package/libcppconnman/Config.in
+new file mode 100644
+index 0000000000..19dc0bbd2d
+--- /dev/null
++++ b/package/libcppconnman/Config.in
+@@ -0,0 +1,26 @@
++config BR2_PACKAGE_LIBCPPCONNMAN
++	bool "libcppconnman"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_USE_WCHAR # libglib2
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
++	depends on BR2_USE_MMU # libglib2
++	select BR2_PACKAGE_LIBGLIB2
++	help
++	  libcppconnman provide easy to use C++ API to communicate
++	  with ConnMan via the DBus using GDBus.
++
++	  https://amarula.github.io/libcppconnman/
++
++comment "libcppconnman needs a toolchain w/ C++, wchar, threads"
++	depends on BR2_USE_MMU
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
++		!BR2_TOOLCHAIN_HAS_THREADS
++
++if BR2_PACKAGE_LIBCPPCONNMAN
++
++config BR2_PACKAGE_LIBCPPCONNMAN_EXAMPLE
++	bool "libcppconnman example"
++	help
++	  Compile CLI example.
++
++endif
+diff --git a/package/libcppconnman/libcppconnman.hash b/package/libcppconnman/libcppconnman.hash
+new file mode 100644
+index 0000000000..70960d4a17
+--- /dev/null
++++ b/package/libcppconnman/libcppconnman.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256  5eb38232c3f9fcf2136c6508472841f6ee88d7155c384f4e6f2f3de1cd2fba62  libcppconnman-2.0.0.tar.gz
++sha256  7ffe1954587c77dfba1cf8eb9b2ea743671fa6e63f9e7a2f258119d42e14eefe  LICENSE
+diff --git a/package/libcppconnman/libcppconnman.mk b/package/libcppconnman/libcppconnman.mk
+new file mode 100644
+index 0000000000..b2a445cb2c
+--- /dev/null
++++ b/package/libcppconnman/libcppconnman.mk
+@@ -0,0 +1,24 @@
++################################################################################
++#
++# libcppconnman
++#
++################################################################################
++
++LIBCPPCONNMAN_VERSION = 2.0.0
++LIBCPPCONNMAN_SITE = $(call github,amarula,libcppconnman,v$(LIBCPPCONNMAN_VERSION))
++LIBCPPCONNMAN_LICENSE = LGPL-2.1-or-later
++LIBCPPCONNMAN_LICENSE_FILES = LICENSE
++
++LIBCPPCONNMAN_INSTALL_STAGING = YES
++
++LIBCPPCONNMAN_DEPENDENCIES = host-pkgconf libglib2
++
++LIBCPPCONNMAN_CONF_OPTS = -DBUILD_CONNMAN=ON
++
++ifeq ($(BR2_PACKAGE_LIBCPPCONNMAN_EXAMPLE),y)
++LIBCPPCONNMAN_CONF_OPTS += -DBUILD_EXAMPLES=ON
++else
++LIBCPPCONNMAN_CONF_OPTS += -DBUILD_EXAMPLES=OFF
++endif
++
++$(eval $(cmake-package))
 -- 
-2.34.1
+2.53.0
 
 _______________________________________________
 buildroot mailing list
