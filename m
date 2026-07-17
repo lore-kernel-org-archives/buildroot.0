@@ -4,59 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C0F5C4451B
-	for <buildroot@archiver.kernel.org>; Fri, 17 Jul 2026 15:44:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BFD36C44515
+	for <buildroot@archiver.kernel.org>; Fri, 17 Jul 2026 15:44:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CD9A680B3F;
-	Fri, 17 Jul 2026 15:44:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C164180BBD;
+	Fri, 17 Jul 2026 15:44:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id j5SOxMsS5xhK; Fri, 17 Jul 2026 15:44:21 +0000 (UTC)
+ id 80-LTfoO9_AJ; Fri, 17 Jul 2026 15:44:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B89AF80B50
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D3EC580CD8
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1784303061;
-	bh=+7TqfrRaVoDUyh3+A432/4ARtAz4KUbRTmFFHuSO0OM=;
+	s=default; t=1784303064;
+	bh=IVCNwrCKnJ/WluXnxih1Gb5GOYXBzDIbPFV3RbRRrtY=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=J9wjGE4vHQ7uKQC1zfw/cu+nykx7nVWcX66fw/Rnxyfu10Bn3x0/DucgMvKD8kZuW
-	 IqkOUw06Uz4/cS4JBrMI1Yuxew5rb41GIFas6sUNq8K3l6uIjbdgCM9fMZjT0iDUM6
-	 loLHyEkjY9Ixod7Ct3ILC8e8h/uv1cLR72Kk3sPTo3lySYloXNSwaiSLAhVdIuaTu4
-	 myPxNiEbGcRZu0HAZxmT8kXT7mso/vfUBo0Oz84ELZnPlgEp+H0WuWjlzi2RGARIgI
-	 MSOXYqhhAjZobHfFMFax7nosVVRqnHZt2WniyNsFMkD9pNpquhlcz3GUCe1w/8qt7W
-	 e3dFioHv8tSsQ==
+	b=myKjMIX5fSj6lKD7LIP+OybrEqc8cCT1ghy+v6F6c2bU3oqXOBx0FbpSJGXUqGtSL
+	 s7C6qMuq6JXmr0JZH0E5E0ispZCuwPqlxdjr1SzVmfm8ofIHc6HcQDHb1J3u428hLr
+	 pD8sUe6uOU6Yr2Hl6RHZhV4i5GzRP4tnCZ26z2rm7LMf9G8zBbm7Ot9aKRXkV4wief
+	 djXGxDRY9cmw/H1DxtweJwWYoxA397J3HW8hxh5DtaaE09Zx9aCCO5Q8Sug3Pqe1tD
+	 /B2h4siGpUar40wUudUCHyd/b1ER2pcoFAfNTdKbywOBlA7X2xyZJdlj3QyEazWSpP
+	 cM7wADZoRAjMw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B89AF80B50;
-	Fri, 17 Jul 2026 15:44:21 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 2DF3E1F6
+	by smtp1.osuosl.org (Postfix) with ESMTP id D3EC580CD8;
+	Fri, 17 Jul 2026 15:44:24 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 85AD61F6
  for <buildroot@buildroot.org>; Fri, 17 Jul 2026 15:44:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1FEC640A0F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6BEF760ACA
  for <buildroot@buildroot.org>; Fri, 17 Jul 2026 15:44:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1SsICA1eLFEw for <buildroot@buildroot.org>;
- Fri, 17 Jul 2026 15:44:20 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id j_eeq0ad8jCu for <buildroot@buildroot.org>;
+ Fri, 17 Jul 2026 15:44:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1B851409CF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D66D560732
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1B851409CF
- for <buildroot@buildroot.org>; Fri, 17 Jul 2026 15:44:20 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D66D560732
+ for <buildroot@buildroot.org>; Fri, 17 Jul 2026 15:44:19 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DC93988E51; Fri, 17 Jul 2026 15:43:43 +0000 (UTC)
+ id 954CB88E55; Fri, 17 Jul 2026 15:43:43 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 17 Jul 2026 11:11:04 +0200
+Date: Fri, 17 Jul 2026 11:01:02 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: ab8cf429b93a52299ed01297aed87fe2d5b33253
-X-Git-Newrev: f20bcc4a4ff22d4a47b9e73f7e6d00a9971ab16f
+X-Git-Oldrev: 17e452aee00023236b8707869d001ac6102c6521
+X-Git-Newrev: 6a54f8f044ee48bde782986558c505a15d41f7fc
 X-Patchwork-Hint: ignore
-Message-Id: <20260717154343.DC93988E51@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/ogre: add CPE
+Message-Id: <20260717154343.954CB88E55@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/libcamera: update
+ source URL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,47 +77,37 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/f20bcc4a4ff22d4a47b9e73f7e6d00a9971ab16f
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/6a54f8f044ee48bde782986558c505a15d41f7fc
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-Vulnerabilities such as [1][2] are assigned to the ogre package with the
-cpe: ogre3d:ogre.
+libcamera has moved for a while now to gitlab.freedesktop.org. The
+mirror on git.linuxtv.org is still active, but it isn't the canonical
+repository and has less bandwidth than freedesktop.org. Switch the
+libcamera source URL to gitlab.freedesktop.org.
 
-To correctly match against those vulnerabilities the CPE_ID_VERSION uses
-the version without the 'v' prepended.
-
-[1] https://nvd.nist.gov/vuln/detail/CVE-2025-11014
-[2] https://nvd.nist.gov/vuln/detail/CVE-2025-11017
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Reviewed-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
+[Julien: removed trailing slash in _SITE]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit fe1f45c1330f5975722c416e4d1c518471e49307)
+(cherry picked from commit 138713f39a999c30adec7f2e2829aa67af87a110)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/ogre/ogre.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ package/libcamera/libcamera.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/ogre/ogre.mk b/package/ogre/ogre.mk
-index 3fd2fc4650..2ad2275f51 100644
---- a/package/ogre/ogre.mk
-+++ b/package/ogre/ogre.mk
-@@ -4,12 +4,15 @@
+diff --git a/package/libcamera/libcamera.mk b/package/libcamera/libcamera.mk
+index 2712687913..265d2abae6 100644
+--- a/package/libcamera/libcamera.mk
++++ b/package/libcamera/libcamera.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OGRE_VERSION = v1.12.12
-+OGRE_VERSION_UPSTREAM = 1.12.12
-+OGRE_VERSION = v$(OGRE_VERSION_UPSTREAM)
- OGRE_SITE = https://github.com/OGRECave/ogre
- OGRE_SITE_METHOD = git
- OGRE_LICENSE = MIT (main library, DeferredShadingMedia samples), Public Domain (samples and plugins)
- OGRE_LICENSE_FILES = LICENSE
- OGRE_INSTALL_STAGING = YES
-+OGRE_CPE_ID_VENDOR = ogre3d
-+OGRE_CPE_ID_VERSION = $(OGRE_VERSION_UPSTREAM)
- 
- # Download with imgui submodule (https://github.com/ocornut/imgui
- OGRE_GIT_SUBMODULES = YES
+-LIBCAMERA_SITE = https://git.linuxtv.org/libcamera.git
++LIBCAMERA_SITE = https://gitlab.freedesktop.org/camera/libcamera.git
+ LIBCAMERA_VERSION = v0.4.0
+ LIBCAMERA_SITE_METHOD = git
+ LIBCAMERA_DEPENDENCIES = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
