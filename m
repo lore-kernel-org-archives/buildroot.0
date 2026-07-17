@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6FA9C44523
-	for <buildroot@archiver.kernel.org>; Fri, 17 Jul 2026 15:44:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E300C4451C
+	for <buildroot@archiver.kernel.org>; Fri, 17 Jul 2026 15:44:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3512D409D9;
-	Fri, 17 Jul 2026 15:44:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 59E6A40A51;
+	Fri, 17 Jul 2026 15:44:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id llGUqdujari0; Fri, 17 Jul 2026 15:44:28 +0000 (UTC)
+ id qo8rUAiR5-UI; Fri, 17 Jul 2026 15:44:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EF46940A55
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 54E0E409D9
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1784303068;
-	bh=YYwM+w4OTKhmoqbLpNoE5G3TEGwBs0BVJFlbChHtkJc=;
+	s=default; t=1784303066;
+	bh=Qz0t6OLk+J/iWSEzB1oP6EIFk/+XygMhPU/hmgIsXRY=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=NpvYyCaOYfA7uLpT5RAwcxoiU6xA/lnrzEd27aWUolHpPaeIN8dJ3iXWlHlfmlhtG
-	 NIC89VhkvJyJ2HBDWTLE1W0wez1mH8JmgqlmdN+LtLxtNlfaZDMmdaJ1oEnAY/P0pe
-	 3re/sgbgyq2P0mkezl8jrzG1bcyBlfSPnj0Eq1BSr6lJ+Pk0gHvUYDj4ORFJdmLiLh
-	 hNKS/YzAt0xfWRsQ7LVTuS7zdqz3kfCYisuNjPMxElPIIOqrmGE6AkX3reNVC2ff0m
-	 Lh9OGy599KSG81S6J1yG4406BH3VncyA1oZm1XmfzBFyHU7s8tD4uVZpMJ3VNmqBEp
-	 0+vpJznLteBbg==
+	b=YPQXw7iK1GXsQZJ0Kie/GURGPv/K/vKlGx+Fc7Onj3lrmGO7JmkDGPWQerGk/nAMv
+	 lsLjRa4t1fasI7gyeXA210uK9nmJRR38Hx8uvYkJzY+rBT1qfsI+J/lZwLNafv1TyI
+	 HEuk+sCon5qM0rrqSEqJuVC47KvcwlaHYHQhipRbKzYPRVWy5eKyGeIO5kpWN2NC3c
+	 MFQ4ZK7qpufL0oK2zlz0laCNRtGIkRL4t4Fn2iSj6GdgpIt8uGOGxBuHBN2zilaXel
+	 PYSTEcPy6m6CTpD1Zfoy2PSp3u6/zO+EfENKwB/HkpyQK3LOZZP4q8T+j3DdtwXP9Z
+	 yQpzxOh+Ohzlg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EF46940A55;
-	Fri, 17 Jul 2026 15:44:27 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id DF64E36E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 54E0E409D9;
+	Fri, 17 Jul 2026 15:44:26 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id E0944435
  for <buildroot@buildroot.org>; Fri, 17 Jul 2026 15:44:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D1A9340626
+ by smtp3.osuosl.org (Postfix) with ESMTP id D2FBD60732
  for <buildroot@buildroot.org>; Fri, 17 Jul 2026 15:44:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HGexwLraBGDn for <buildroot@buildroot.org>;
- Fri, 17 Jul 2026 15:44:20 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7UvT644TRpFG for <buildroot@buildroot.org>;
+ Fri, 17 Jul 2026 15:44:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0952C409C4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B4CD66065E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0952C409C4
- for <buildroot@buildroot.org>; Fri, 17 Jul 2026 15:44:20 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B4CD66065E
+ for <buildroot@buildroot.org>; Fri, 17 Jul 2026 15:44:19 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CA86788E52; Fri, 17 Jul 2026 15:43:43 +0000 (UTC)
+ id 710FB88E51; Fri, 17 Jul 2026 15:43:43 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 17 Jul 2026 11:08:29 +0200
+Date: Fri, 17 Jul 2026 10:51:21 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 62e534d8e4937930e7ac1eec29b8f3df0907c7dd
-X-Git-Newrev: e783c375a7eb23b23c80c7f556d7ec9e3d61f4ae
+X-Git-Oldrev: 135af563b945b8c3d18f8fd370370075b9edb140
+X-Git-Newrev: b115701c06ca7123d9bd37616bbeec5efc7174bf
 X-Patchwork-Hint: ignore
-Message-Id: <20260717154343.CA86788E52@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x]
- package/x11r7/xlib_libXfont2: bump version to 2.0.7
+Message-Id: <20260717154343.710FB88E51@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] support/docker: make the
+ image reproducible again
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,50 +77,114 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/e783c375a7eb23b23c80c7f556d7ec9e3d61f4ae
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/b115701c06ca7123d9bd37616bbeec5efc7174bf
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-https://lists.x.org/archives/xorg-announce/2024-August/003523.html
+The Debian 12 Bookworm snapshot we use, 20250203, uses the new deb822
+format [0] for source list files; it carries a source list file that
+points to the current repository, not to the snapshot.
 
-Updated license hash due to upstream commit:
-https://gitlab.freedesktop.org/xorg/lib/libxfont/-/commit/a3a85df9a65a5185bdbd47823f336c4cb3fa14c3
+Even though we do inject an old-style source list that points to the
+snapshot repository, the packages in the current repository are more
+recent than the one in the snapshot, so when we install our packages,
+they get retrieved mostly from the current repository rather than from
+the snapshot. The image is not reproducible.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit ddff52556103046cfcae4eb5dcb8eb99f8bddd84)
+Switch to using the new deb822-style source list file.
+
+Note: we do not need to carry the "Latest just before" trick: the
+snapshot repository will use the most recent actual snapshot before the
+requested dated, so we can just use the date of the image we use (stuck
+at midnight because we don't have better).
+
+Since the snapshot repository can be really slow, while at the same time
+the remote http server not dropping connections, it can take a very long
+while to build the image; add a timeout so that stale connections are
+detected and re-attemped early-ish (the timeout applies to both the
+connect and the actual download, so it should be large enough to
+accomodate slowish network connections).
+
+Fixes: c95d5b8e1eb9 (support/docker: move to current bookworm (Debian
+12) snapshot)
+
+[0] https://manpages.debian.org/trixie/apt/sources.list.5.en.html#DEB822-STYLE_FORMAT
+
+Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+(cherry picked from commit 3460675872a8c5a60ee45946794686ec544af042)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/x11r7/xlib_libXfont2/xlib_libXfont2.hash | 8 ++++----
- package/x11r7/xlib_libXfont2/xlib_libXfont2.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ support/docker/Dockerfile       | 11 +++++++----
+ support/docker/apt-sources.list |  4 ----
+ support/docker/debian.sources   | 13 +++++++++++++
+ 3 files changed, 20 insertions(+), 8 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXfont2/xlib_libXfont2.hash b/package/x11r7/xlib_libXfont2/xlib_libXfont2.hash
-index f2ae5925f8..4f50b2dbd2 100644
---- a/package/x11r7/xlib_libXfont2/xlib_libXfont2.hash
-+++ b/package/x11r7/xlib_libXfont2/xlib_libXfont2.hash
-@@ -1,5 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2022-August/003203.html
--sha256  74ca20017eb0fb3f56d8d5e60685f560fc85e5ff3d84c61c4cb891e40c27aef4  libXfont2-2.0.6.tar.xz
--sha512  24d6baeef8dc2ca2730925c6b790a97f4a3f46ea7b4d908555e7df29cee6e27b63d638b50c88dd30c853cecff7d9b079402cb617f4498f96410c5770b8815cbd  libXfont2-2.0.6.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2024-August/003523.html
-+sha256  8b7b82fdeba48769b69433e8e3fbb984a5f6bf368b0d5f47abeec49de3e58efb  libXfont2-2.0.7.tar.xz
-+sha512  f703127df5d5b1093c9b73e019153ed7799523573d52e61d344209f0acfd4df42e11be12bdd1880479c47c2b70de581a4f2ef74e199e9b1ac438f426593d56b0  libXfont2-2.0.7.tar.xz
- # Locally calculated
--sha256  97e413bb4962bbb5773085cd5405502bf1d4eadeaf98ff5be015eacacc840462  COPYING
-+sha256  3b1047f0d45584973866a40e3eedc74aea4c6ac636960d650ae05af603e6d1a8  COPYING
-diff --git a/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk b/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk
-index 7f90f67046..c95f6c6395 100644
---- a/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk
-+++ b/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/support/docker/Dockerfile b/support/docker/Dockerfile
+index e7677ac6a9..687eee8110 100644
+--- a/support/docker/Dockerfile
++++ b/support/docker/Dockerfile
+@@ -24,7 +24,7 @@ ARG TAR_VERSION="1.35"
+ ENV DEBIAN_FRONTEND=noninteractive
  
--XLIB_LIBXFONT2_VERSION = 2.0.6
-+XLIB_LIBXFONT2_VERSION = 2.0.7
- XLIB_LIBXFONT2_SOURCE = libXfont2-$(XLIB_LIBXFONT2_VERSION).tar.xz
- XLIB_LIBXFONT2_SITE = https://xorg.freedesktop.org/archive/individual/lib
- XLIB_LIBXFONT2_LICENSE = MIT
+ # This repository can be a bit slow at times. Don't panic...
+-COPY apt-sources.list /etc/apt/sources.list
++COPY debian.sources /etc/apt/sources.list.d/debian.sources
+ 
+ # Install 32bit variant on x86_64 image.
+ RUN if [ "$TARGETPLATFORM" = "linux/amd64" ]; then \
+@@ -32,15 +32,18 @@ RUN if [ "$TARGETPLATFORM" = "linux/amd64" ]; then \
+ fi
+ 
+ # The container has no package lists, so need to update first
+-RUN apt-get -o APT::Retries=3 update -y
++RUN apt-get -o APT::Retries=3 -o APT::Acquire::http::Timeout=60 \
++        update -y
+ 
+ RUN if [ "$TARGETPLATFORM" = "linux/amd64" ]; then \
+-    apt-get -o APT::Retries=3 install -y --no-install-recommends \
++    apt-get -o APT::Retries=3 -o APT::Acquire::http::Timeout=60 \
++        install -y --no-install-recommends \
+         g++-multilib \
+         libc6:i386; \
+ fi
+ 
+-RUN apt-get -o APT::Retries=3 install -y --no-install-recommends \
++RUN apt-get -o APT::Retries=3 -o APT::Acquire::http::Timeout=60 \
++        install -y --no-install-recommends \
+         bc \
+         build-essential \
+         bzr \
+diff --git a/support/docker/apt-sources.list b/support/docker/apt-sources.list
+deleted file mode 100644
+index d6fbf85270..0000000000
+--- a/support/docker/apt-sources.list
++++ /dev/null
+@@ -1,4 +0,0 @@
+-# Latest just before 20250218211000Z:
+-deb [check-valid-until=no] http://snapshot.debian.org/archive/debian/20250218T144938Z/ bookworm main
+-deb [check-valid-until=no] http://snapshot.debian.org/archive/debian-security/20250218T144938Z/ bookworm-security main
+-deb [check-valid-until=no] http://snapshot.debian.org/archive/debian/20250218T144938Z/ bookworm-updates main
+diff --git a/support/docker/debian.sources b/support/docker/debian.sources
+new file mode 100644
+index 0000000000..36e1eeb3e7
+--- /dev/null
++++ b/support/docker/debian.sources
+@@ -0,0 +1,13 @@
++Types: deb
++URIs: http://snapshot.debian.org/archive/debian/20250203T000000Z
++Suites: bookworm bookworm-updates
++Components: main
++Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
++Check-Valid-Until: no
++
++Types: deb
++URIs: http://snapshot.debian.org/archive/debian-security/20250203T000000Z
++Suites: bookworm-security
++Components: main
++Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
++Check-Valid-Until: no
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
