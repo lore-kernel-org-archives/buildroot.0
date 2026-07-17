@@ -1,116 +1,116 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A972EC4451B
-	for <buildroot@archiver.kernel.org>; Fri, 17 Jul 2026 15:47:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65E14C44515
+	for <buildroot@archiver.kernel.org>; Fri, 17 Jul 2026 15:47:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5398040BE5;
-	Fri, 17 Jul 2026 15:47:53 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1O5RyZMDN8-h; Fri, 17 Jul 2026 15:47:52 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EF09640BC0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1784303272;
-	bh=fKfJlH7HfbVAgOPtRCMDoibu0eg7a+zZ1WfnbCf1C1M=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=ejoJYzdW1EI90+YSw5na3AUQI6ma+JtxDY0q/iPzf0Ib2RDLzJlp+J2hHJneqvn93
-	 qZoXcJ2Td5bi4tSCER7T9CcyL5bDABgTWZwTumct3UEeeqBKb0QuFaPreNgnV1Ourl
-	 dGsw/JS0HtIlGfqGMnCi2ft/lEGypb5DcSUngKTZ0C2MkoNzsZGRb6fFv38g5s5IQo
-	 y4FWPCnd9buVI1EjM/OPp9bxN9MZ41YIr8QGfN02MUK0wRe5Uy2AcWKUh3e9X67Mtg
-	 u4XPYWZUL1PbuUNNBpIt24PCLdVh2J5cCook4pKFwduKDexDtOOM2zrJen0Hn8cD90
-	 +gtLpSMqNbE2A==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EF09640BC0;
-	Fri, 17 Jul 2026 15:47:51 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 4ABDC1F6
- for <buildroot@buildroot.org>; Fri, 17 Jul 2026 15:47:46 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 309028121A
- for <buildroot@buildroot.org>; Fri, 17 Jul 2026 15:47:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3182481240;
+	Fri, 17 Jul 2026 15:47:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HOPZG6hNAzdV for <buildroot@buildroot.org>;
- Fri, 17 Jul 2026 15:47:45 +0000 (UTC)
+ id hNsCtJR5JHul; Fri, 17 Jul 2026 15:47:53 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4732581230
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1784303273;
+	bh=c8XujWKp6nBQyKr+Y+8nCPcMJdLzEUW30WwQ1nhjSP0=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=EhNPIAm57cyvUA2Iqj4WrD57wvxy8vYun4/0GppTS8IELb08tHncBNQTVNQeUjN58
+	 u6sVQYNweKacryyAcIBsjvdoKhXKxeLgSH5K+MiGqMAscE+Reqfi/rmavorQBd7RAl
+	 o6NbAZzS1o7oCpy3ZCt8FraXkw0jesJDr/Imc3pXJHpp69ydZIN67wN3rJMQzy8Exk
+	 4fbtUN4aY8nvXJUxAZVNw/3HzsXgAbeFWIecnoav4uEx/PYPd7EQdk5XYZNxaLK6DU
+	 gF43YbvAH7hmDpHORpExSSYwv1tD/a9dD06c/ew4EmBqGe1ZG38yKU1EINMCFKcA52
+	 Z7W8p4hubMlBw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4732581230;
+	Fri, 17 Jul 2026 15:47:53 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 609BA36E
+ for <buildroot@buildroot.org>; Fri, 17 Jul 2026 15:47:47 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 45F0540BBE
+ for <buildroot@buildroot.org>; Fri, 17 Jul 2026 15:47:47 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aq8PLS6Uot0L for <buildroot@buildroot.org>;
+ Fri, 17 Jul 2026 15:47:46 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::330; helo=mail-wm1-x330.google.com;
+ client-ip=2a00:1450:4864:20::334; helo=mail-wm1-x334.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 17BAA81216
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 17BAA81216
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
- [IPv6:2a00:1450:4864:20::330])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 17BAA81216
- for <buildroot@buildroot.org>; Fri, 17 Jul 2026 15:47:44 +0000 (UTC)
-Received: by mail-wm1-x330.google.com with SMTP id
- 5b1f17b1804b1-4953ddae026so22048695e9.3
- for <buildroot@buildroot.org>; Fri, 17 Jul 2026 08:47:44 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 364FB40BA7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 364FB40BA7
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
+ [IPv6:2a00:1450:4864:20::334])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 364FB40BA7
+ for <buildroot@buildroot.org>; Fri, 17 Jul 2026 15:47:46 +0000 (UTC)
+Received: by mail-wm1-x334.google.com with SMTP id
+ 5b1f17b1804b1-4953e04ef16so23932215e9.2
+ for <buildroot@buildroot.org>; Fri, 17 Jul 2026 08:47:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1784303263; x=1784908063;
+ d=1e100.net; s=20251104; t=1784303264; x=1784908064;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=fOWNBLSREfys3qiq6mMg4xp6SnwrpXE90POy5cSp8zo=;
- b=KryBFsXXXzVBcUUIz825krqEvYsRKqPVfh6/S/b4QLKSAI/1oGV2rVn27iNEdZomlR
- A7z2JOkHCZ41eBWTOlWElsPNGqp6mUz8+8rPGa5RbI67D81AI3suy5wolaEPnb3MW409
- OgiiuC5FwH616tKTBzqtHsYx9Ct4PazqkWKh+xhUogD2lRLV8ErtDmMqPp86UvjVPcDD
- HCFUf/9R3HUTKhKsUp/3SvdyF+GWvkDUVi3WHf8XpuG7Ezqv0BRhOolWJs9S/c9KioVa
- pHZ3eigK++Fbjpf1Eu1avG15817MsHPNM0aMyws+jmiNZlxH+4P78iOrCyTZTMzb2PMz
- f+4g==
+ bh=ttX1autRU/Pa8MOVFhY70f1EPZXuaWchWtwq6YtxpaQ=;
+ b=ANogvyFo+fzgFaTuB/HiYBOq/dfXbD+W9pAt7TEtx71zOk3CJHmFqMUFDmWrxEPG9i
+ ryk0AZyzeUORWj3iD3AoJ/d/bZNY3eBBe7ska3zr8DZA5gM/EL9lcF0juhgOOkRzcll/
+ UmYfhdCTrnYanImFt4EWxZdHEQWW3FOMO468oXztXcqhM9QQjCuqQtUm0zblg9afDkH7
+ EoXS++0JwIkNZSoKIwwavXsJCOffTacJNyIMIfoDw0B3Ua9Vodym+Dk/yT6Rg84AJFRS
+ 53P1wVHraBiwNRrjYFLQuK0ceSl8+pyZcIHvuT5RVLTD6CpJgJBAXaPslglwGSQ2Vnlb
+ PLMQ==
 X-Forwarded-Encrypted: i=1;
- AHgh+Rr6Oydmr/X3fuHIVcsAJgEFq8t8GzhnXq5ZI4wJ9wnz/8VQmMbLTE70sePdjq2qqj1cgnrC3Y9Mzz0=@buildroot.org
-X-Gm-Message-State: AOJu0YzxET/SnQpagTtEL6JYzCl59lQ2ovpAo/LtYsjga4pP50LVMitn
- tcWs/IoD4wN2RAzTzbVl98k6pIjaiJi6YwgZnVlq+pfuHZ3m6EoRQrIxyRefEqhcEDDGcKY/WdB
- MhzHj
-X-Gm-Gg: AfdE7cnQ+UFyfeyDks2RMosIPjTXnwoKcs5rxDuG3yjWgr5PlaLMVcn8lCkNkei+RGU
- NVIreJd65zb330A9EfGTRRpkzOmx1XUScoJlcLb9niQ9ZfKNTf8COvGz2v8sbtiDR/Htp1WL3QT
- EWKzL2XqvRuxDRzwUgWuwMCQfwNkQ4atzi0ONATiPlkV65tKZEy1fO9ahhZFjtivk0pgGYMCyQA
- R5xYmJT/7/o3/ypfe+BhsvLPClFovGjirzI2WKNZLaGP5Rmbd22wY8G5AqUjhIt0uYBKec1y692
- bRt6R4CX/hlVkNRPxKCZFpPwiYqrHOWYXQzGkZi99RuZsmCd0CFYoO4ndgvBiRxgbKF73lUrR6n
- tkH9hEFZirhB+7BquLjtQRCTAbvd9cGJpzmzfhIZC8qG0FGZTuwWfwxwuL1INrsJK70gs36E=
-X-Received: by 2002:a05:600c:19c8:b0:495:43ab:4f78 with SMTP id
- 5b1f17b1804b1-4954a3d0ad9mr37869065e9.7.1784303263041; 
- Fri, 17 Jul 2026 08:47:43 -0700 (PDT)
+ AHgh+Rq2oxo9wlfQJpupX2/8sMVCHQ+yS99SiiFsXujL/Hpuk3nV/2PbP40cXR0zuGwXGLXNo9qsCRhMaSg=@buildroot.org
+X-Gm-Message-State: AOJu0YwzLDbI/QE1134jBP+MAGBrqyxowW1hla9yDyHE+BIM3crl579y
+ y2V5GnxozuxCNmdFx+iSbTSgyjLpWleMs5XeZ36U/7QWS06fva6BBPdDqtWyVDlsc8E=
+X-Gm-Gg: AfdE7cmUogRmF2Auhy9Lmplm3nLJOd4AnGdImUQ4PSSQgHjQjjMpfz6EG7R/pbWtH4i
+ IdGResU9z9s7nvGd+w336//3z+iXavyBsoO8BkLZoPmqR47RI4b1nudXl/rlrT6mR+UZdlUxqsl
+ 1vpE8eU6hvB8a+YjQ4KOqBTA6siVr9UbkOSJQmN1wPqT4HJZNKeJ3TPdbovpLCWqNeVNMg6836o
+ GmBKuG1ztv8CUPOBkMKdD5DDVnkionUruez2BIig7l8A95HJs5CYYPUYHubkS5eb+xoXJH6mVii
+ 8SLaCyWqg9Qvex3+lVvr2t5W95W2uZSTXY0cCN4cELpr/RhLU7+3hHXk8rbX+VcFpxX0ss2I6IR
+ 2r7KnTW0m/opgLgCVTs+iCpBfBpfzbKCCza4OMkchHfsqTLSGlG9mifC6sboYUXaQJmFONaE=
+X-Received: by 2002:a05:600c:4f92:b0:495:f31:7340 with SMTP id
+ 5b1f17b1804b1-4954a3d06e4mr36746075e9.5.1784303264238; 
+ Fri, 17 Jul 2026 08:47:44 -0700 (PDT)
 Received: from arch ([212.233.37.141]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4954ba2abd0sm36817545e9.15.2026.07.17.08.47.42
+ 5b1f17b1804b1-49549c96ff7sm56819265e9.10.2026.07.17.08.47.43
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 17 Jul 2026 08:47:42 -0700 (PDT)
+ Fri, 17 Jul 2026 08:47:43 -0700 (PDT)
 To: Bernd Kuhls <bernd@kuhls.net>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri, 17 Jul 2026 17:47:42 +0200
-Message-ID: <20260717154742.192487-1-thomas.perale@mind.be>
+Date: Fri, 17 Jul 2026 17:47:43 +0200
+Message-ID: <20260717154743.192542-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260712113058.1579954-1-bernd@kuhls.net>
-References: <20260712113058.1579954-1-bernd@kuhls.net>
+In-Reply-To: <20260712113058.1579954-3-bernd@kuhls.net>
+References: <20260712113058.1579954-3-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1784303263; x=1784908063; darn=buildroot.org;
+ d=mind.be; s=google; t=1784303264; x=1784908064; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to:content-type;
- bh=fOWNBLSREfys3qiq6mMg4xp6SnwrpXE90POy5cSp8zo=;
- b=T4VIF98+0H5IiYqwDZKfzs0Thfs25zQxrgiOOyCsyo4fmZeiYr1tpu+dwsVz+yRyRp
- u0sPjVbmXXbXjA/v7TjR9B0CRxHbg4R2wC5VxMI4plBE/G0r4CoERFqjMeDUjX614woC
- x4H7vJ0kePZMdruwNFAYgj8EM4xuJxqur5VkgGT+0q02DQ8bDD1SrBf2+k7G0D7qgXFZ
- Hps1NKmB5MaZcg1oduPfLoZ/hRWCFn86Dv8Tq5CU3ULNGl1TtqiQb8yEaf03sa9LmC7R
- aOgLqZ+T/jQt/J1i5NugYOV6Ozc9wMFMEk3q1kVB+cxicWIUbCfxILTyfgBD39JSsMbG
- wqxA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=ttX1autRU/Pa8MOVFhY70f1EPZXuaWchWtwq6YtxpaQ=;
+ b=GIoEThnVyootFVJCH9xgMczF6l9ZEk43L35i3Ri6WkOdey8W4aO5kyKXyTv47TcIlX
+ TDTSXx0Zo8e2jsunM6NKZbFK6hUV8poOJjM1TRrbkEQ3vDelDG/XTT9v26Wvqe98xppK
+ WcL0TKEpU+clTBT6UjAvO+MYopjL+U6ZJcXXLzM68zYmtc+ouE2RK55iPax291208G8p
+ figc0bLucI/EdF3T88sXO+bgWhKpGo+ni+bqAY1Zz6t31pEyj0jKtqdeUbfI1mqTarsn
+ n5hVdB3oYw2m5MyH++OOtzmUqD6OQSeIK3VcwEQlGGXMX8dk6PXNNEFiVSmWbgRQJnfg
+ qFSA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=T4VIF98+
-Subject: Re: [Buildroot] [PATCH 1/4] package/x11r7/xwayland: fix uClibc build
+ header.a=rsa-sha256 header.s=google header.b=GIoEThnV
+Subject: Re: [Buildroot] [PATCH 3/4] package/x11r7/xwayland: security bump
+ version to 24.1.13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -130,10 +130,12 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Copy patch from xserver_xorg-server to fix build errors with uClibc.
+> https://lists.x.org/archives/xorg-announce/2026-July/003717.html
+> https://lists.x.org/archives/xorg-announce/2026-July/003716.html
 > 
-> Fixes:
-> https://autobuild.buildroot.net/results/c03/c03d57ad7ed3feac008091a38ea50bfccfa62b08/
+> Fixes
+> -  CVE-2026-55999: glamor Font Atlas Heap Buffer Overflow
+> -  CVE-2026-56000: GLX contextTags Use-After-Free in CommonMakeCurrent()
 > 
 > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
@@ -144,60 +146,37 @@ Applied to 2025.02.x & 2026.05.x. Thanks
 > https://gitlab.com/bkuhls/buildroot/-/commits/ac5c6561894d41b86a43af13c4a5af16612c9195
 > https://gitlab.com/bkuhls/buildroot/-/commits/9c78a853c88fa85f7a31404b4ab324370cf049f6
 > 
->  .checkpackageignore                           |  1 +
->  ...0001-include-misc.h-fix-uClibc-build.patch | 31 +++++++++++++++++++
->  2 files changed, 32 insertions(+)
->  create mode 100644 package/x11r7/xwayland/0001-include-misc.h-fix-uClibc-build.patch
+>  package/x11r7/xwayland/xwayland.hash | 6 +++---
+>  package/x11r7/xwayland/xwayland.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/.checkpackageignore b/.checkpackageignore
-> index 6147f35b03..4ec39f9f36 100644
-> --- a/.checkpackageignore
-> +++ b/.checkpackageignore
-> @@ -971,6 +971,7 @@ package/x11r7/xdriver_xf86-video-mach64/0001-cross-compile.patch lib_patch.Upstr
->  package/x11r7/xdriver_xf86-video-tdfx/0001-cross.patch lib_patch.Upstream
->  package/x11r7/xserver_xorg-server/0001-include-misc.h-fix-uClibc-build.patch lib_patch.Upstream
->  package/x11r7/xserver_xorg-server/S40xorg Shellcheck lib_sysv.Variables
-> +package/x11r7/xwayland/0001-include-misc.h-fix-uClibc-build.patch lib_patch.Upstream
->  package/xl2tp/xl2tpd lib_shellscript.TrailingSpace
->  package/yajl/0001-Let-the-shared-and-the-static-library-have-the-same-.patch lib_patch.Upstream
->  package/yajl/0002-cmake-disable-shared-library-build-when-BUILD_SHARED.patch lib_patch.Upstream
-> diff --git a/package/x11r7/xwayland/0001-include-misc.h-fix-uClibc-build.patch b/package/x11r7/xwayland/0001-include-misc.h-fix-uClibc-build.patch
-> new file mode 100644
-> index 0000000000..562aa79fbb
-> --- /dev/null
-> +++ b/package/x11r7/xwayland/0001-include-misc.h-fix-uClibc-build.patch
-> @@ -0,0 +1,31 @@
-> +From 2e8fca00f5bdb02f2f59aaa428d1e9d808ab0e86 Mon Sep 17 00:00:00 2001
-> +From: Bernd Kuhls <bernd.kuhls@t-online.de>
-> +Date: Sat, 16 Jun 2018 19:20:16 +0200
-> +Subject: [PATCH] include/misc.h: fix uClibc build
-> +
-> +A similar fix was used for Dovecot:
-> +https://www.dovecot.org/list/dovecot/2017-November/110019.html
-> +
-> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> +---
-> + include/misc.h | 4 ++++
-> + 1 file changed, 4 insertions(+)
-> +
-> +diff --git a/include/misc.h b/include/misc.h
-> +index 14920c3c3..390e52b60 100644
-> +--- a/include/misc.h
-> ++++ b/include/misc.h
-> +@@ -185,6 +185,10 @@ typedef struct _xReq *xReqPtr;
-> + #endif
-> + #endif
-> + 
-> ++#undef bswap_16
-> ++#undef bswap_32
-> ++#undef bswap_64
-> ++
-> + /**
-> +  * Calculate the number of bytes needed to hold bits.
-> +  * @param bits The minimum number of bits needed.
-> +-- 
-> +2.17.1
-> +
+> diff --git a/package/x11r7/xwayland/xwayland.hash b/package/x11r7/xwayland/xwayland.hash
+> index 2bf2d19020..c9b931b6e2 100644
+> --- a/package/x11r7/xwayland/xwayland.hash
+> +++ b/package/x11r7/xwayland/xwayland.hash
+> @@ -1,6 +1,6 @@
+> -# From https://lists.x.org/archives/xorg-announce/2026-June/003704.html
+> -sha256  6df02c511b92c1b9848734d9d1b03a4c24f8375ba3cada44e9684a21b5f78e21  xwayland-24.1.12.tar.xz
+> -sha512  b4ee41761c2caa7332573be07d9143b60015bb4a7910c90b6ae079dde0a1bf6b0b4773ff4e6fba48279cdee83b4de5eb4a19b9369b5753e4147b94fa2deece96  xwayland-24.1.12.tar.xz
+> +# From https://lists.x.org/archives/xorg-announce/2026-July/003717.html
+> +sha256  173aea3d6f79609164c04528e1c8e4c9b60fcd59391c3c9dad4667297d727fb6  xwayland-24.1.13.tar.xz
+> +sha512  e06e58025b441892fdd17ac55fd5c7e137bffc941b76ad784dc008047c778c6ee2895fcc47b9e8c74b1d8372491e69c39933c4186aec4df55571614f8ba98e3c  xwayland-24.1.13.tar.xz
+>  
+>  # Locally calculated
+>  sha256  c9f90a6669109aad6c9a7c3b46cc2c574221a73b792afa419336816b49da5c11  COPYING
+> diff --git a/package/x11r7/xwayland/xwayland.mk b/package/x11r7/xwayland/xwayland.mk
+> index 2b8513602c..02a21b96c1 100644
+> --- a/package/x11r7/xwayland/xwayland.mk
+> +++ b/package/x11r7/xwayland/xwayland.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -XWAYLAND_VERSION = 24.1.12
+> +XWAYLAND_VERSION = 24.1.13
+>  XWAYLAND_SOURCE = xwayland-$(XWAYLAND_VERSION).tar.xz
+>  XWAYLAND_SITE = https://xorg.freedesktop.org/archive/individual/xserver
+>  XWAYLAND_LICENSE = MIT
 > -- 
 > 2.47.3
 > 
