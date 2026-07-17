@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97EEEC4451B
-	for <buildroot@archiver.kernel.org>; Fri, 17 Jul 2026 15:44:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2D05C44523
+	for <buildroot@archiver.kernel.org>; Fri, 17 Jul 2026 15:44:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F2B3D40A74;
-	Fri, 17 Jul 2026 15:44:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C9EAC40A4D;
+	Fri, 17 Jul 2026 15:44:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ys_cWehpbRra; Fri, 17 Jul 2026 15:44:33 +0000 (UTC)
+ id ev5_dp554YCf; Fri, 17 Jul 2026 15:44:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AB68440A6A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9E7E240A79
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1784303072;
-	bh=78LHRiHBpBUjOFb47nKB+OGT2kFT2Ofa773Bj51ebKU=;
+	s=default; t=1784303075;
+	bh=cjeYt+27AdEm7S6B/6fUf8H07K96NuGjP85fqdGC5mo=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=UgXfO18T4uAZz02tyS8X/md51THIGlvL42WJBOjh9QwWW/VUsa4ddVT3eESlN2gEw
-	 I1/DI53d9xNgQmA0LzjHhRxROmrSC87Ws8qgvmLCSjBwzkDz5xLJAwOOWd+sJlJkHR
-	 1vAWFMUxHNpC+zMpotjMuUj7kpZ2OfknorIt4iXG0KFe08OnviW2FP+wN3WaJj5zFO
-	 zYx+EsScNHJOMvX3CppBbQ/BFyZbHtSan93FdFyrJchKG9T9LLSLORdg/bdy4jlgKp
-	 POPZpp/VwE/43hHwQlWbQ0suMzMQcYnUMH+g7Q7JFFY7eZjN90RHSXi6RU/doEcKBW
-	 jSCVrDWrnVYiw==
+	b=pHNHpZzdr7WZEjxa0dHNl6iyBNVa6eR4APxs+zNxqlBiaf/Rsu9IWTHveg6b6U93N
+	 kdOZ62sJVPesutiBkzRociQsXwDxdfE7sYw0YflzV+OiTHz0S6aq4K6EUOlfB7SEv6
+	 3XaSSBWIsLLqAMQ+FxjBKNisWpRpgU34dIgps9OTAdjTo6a4EOWMkFT6If/VRC+0Vt
+	 WxDG5byvb2at26Z1xfwDWerl2qbC9hH2zkvnyC43Y1P2xID505QpdfdOtbg7O9qBK6
+	 UmTln3Hg04CXkiR2lUf/ZjDbZX/12JwYgX8BlWxoVp1Sb7JKOkeCoppfNxahRFqKCV
+	 h9jSGl35hOOvw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AB68440A6A;
-	Fri, 17 Jul 2026 15:44:32 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 1E42E435
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9E7E240A79;
+	Fri, 17 Jul 2026 15:44:35 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2DFFFA58
  for <buildroot@buildroot.org>; Fri, 17 Jul 2026 15:44:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 101286065E
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1C67740626
  for <buildroot@buildroot.org>; Fri, 17 Jul 2026 15:44:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PngkqXd4bRWJ for <buildroot@buildroot.org>;
- Fri, 17 Jul 2026 15:44:20 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id taTITWiF_B9o for <buildroot@buildroot.org>;
+ Fri, 17 Jul 2026 15:44:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F061060AC7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F525409DA
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id F061060AC7
- for <buildroot@buildroot.org>; Fri, 17 Jul 2026 15:44:19 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3F525409DA
+ for <buildroot@buildroot.org>; Fri, 17 Jul 2026 15:44:20 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B0A6A88E53; Fri, 17 Jul 2026 15:43:43 +0000 (UTC)
+ id 0C74F88E52; Fri, 17 Jul 2026 15:43:44 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 17 Jul 2026 11:05:40 +0200
+Date: Fri, 17 Jul 2026 11:15:30 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 0923a07dfd94e123e46a3b2d523703a5f0627288
-X-Git-Newrev: c03b63fe1ffe6bfb8a649f4187016e1d617de61f
+X-Git-Oldrev: 0703fc5606f96e5bd210f7c260ea7b61ea812c56
+X-Git-Newrev: c8f60dff7af44157b460b1873e98de567ebd0d7c
 X-Patchwork-Hint: ignore
-Message-Id: <20260717154343.B0A6A88E53@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/x11r7/xwayland:
- fix uClibc build
+Message-Id: <20260717154344.0C74F88E52@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/cifs-utils:
+ remove NO_WERROR hook
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,72 +77,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/c03b63fe1ffe6bfb8a649f4187016e1d617de61f
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/c8f60dff7af44157b460b1873e98de567ebd0d7c
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-Copy patch from xserver_xorg-server to fix build errors with uClibc.
+Buildroot commit 18bd541dd02b153427fb4f010a6426c8e91bef1b added the hook
+to remove -Werror after upstream added it to CFLAGS in version 5.4:
+https://git.samba.org/?p=cifs-utils.git;a=commitdiff;h=dc0dd017a856185422d2f3691062737a9e93ecae
 
-Fixes:
-https://autobuild.buildroot.net/results/c03/c03d57ad7ed3feac008091a38ea50bfccfa62b08/
+Upstream however removed -Werror again in version 5.6
+https://git.samba.org/?p=cifs-utils.git;a=commitdiff;h=74edf24d9780900f3ce15d2403c6e331b031d454
+This version was bumped in buildroot with commit
+839546dd3aaff56f26536ea7373978e32563c473 but the NO_WERROR hook was not
+removed until now.
+
+The tarball of version 7.6 does not include Makefile.in anymore which
+broke the build of the package. As this hook is not needed anymore it is
+removed.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 4325c62d419f4223cfabed43a6d77c25f240e340)
+(cherry picked from commit 6fe70fb484c35620877384bafdd1cd3865e1e583)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- .checkpackageignore                                |  1 +
- .../0001-include-misc.h-fix-uClibc-build.patch     | 31 ++++++++++++++++++++++
- 2 files changed, 32 insertions(+)
+ package/cifs-utils/cifs-utils.mk | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 8ed1848cee..2853907c7f 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -1179,6 +1179,7 @@ package/x11r7/xdriver_xf86-video-nouveau/0001-nouveau-fixup-driver-for-new-X-ser
- package/x11r7/xdriver_xf86-video-tdfx/0001-cross.patch lib_patch.Upstream
- package/x11r7/xserver_xorg-server/0001-include-misc.h-fix-uClibc-build.patch lib_patch.Upstream
- package/x11r7/xserver_xorg-server/S40xorg Shellcheck lib_sysv.Variables
-+package/x11r7/xwayland/0001-include-misc.h-fix-uClibc-build.patch lib_patch.Upstream
- package/xen/0001-9pfs-include-linux-limits.h-for-XATTR_SIZE_MAX.patch lib_patch.Upstream
- package/xen/0002-Fix-build-with-64-bits-time_t.patch lib_patch.Upstream
- package/xen/0003-libs-light-fix-tv_sec-printf-format.patch lib_patch.Upstream
-diff --git a/package/x11r7/xwayland/0001-include-misc.h-fix-uClibc-build.patch b/package/x11r7/xwayland/0001-include-misc.h-fix-uClibc-build.patch
-new file mode 100644
-index 0000000000..562aa79fbb
---- /dev/null
-+++ b/package/x11r7/xwayland/0001-include-misc.h-fix-uClibc-build.patch
-@@ -0,0 +1,31 @@
-+From 2e8fca00f5bdb02f2f59aaa428d1e9d808ab0e86 Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Sat, 16 Jun 2018 19:20:16 +0200
-+Subject: [PATCH] include/misc.h: fix uClibc build
-+
-+A similar fix was used for Dovecot:
-+https://www.dovecot.org/list/dovecot/2017-November/110019.html
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ include/misc.h | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/include/misc.h b/include/misc.h
-+index 14920c3c3..390e52b60 100644
-+--- a/include/misc.h
-++++ b/include/misc.h
-+@@ -185,6 +185,10 @@ typedef struct _xReq *xReqPtr;
-+ #endif
-+ #endif
-+ 
-++#undef bswap_16
-++#undef bswap_32
-++#undef bswap_64
-++
-+ /**
-+  * Calculate the number of bytes needed to hold bits.
-+  * @param bits The minimum number of bits needed.
-+-- 
-+2.17.1
-+
+diff --git a/package/cifs-utils/cifs-utils.mk b/package/cifs-utils/cifs-utils.mk
+index 9e1e822c4c..58ac594b20 100644
+--- a/package/cifs-utils/cifs-utils.mk
++++ b/package/cifs-utils/cifs-utils.mk
+@@ -25,12 +25,6 @@ ifeq ($(BR2_PACKAGE_KEYUTILS),y)
+ CIFS_UTILS_DEPENDENCIES += keyutils
+ endif
+ 
+-define CIFS_UTILS_NO_WERROR
+-	$(SED) 's/-Werror//' $(@D)/Makefile.in
+-endef
+-
+-CIFS_UTILS_POST_PATCH_HOOKS += CIFS_UTILS_NO_WERROR
+-
+ ifeq ($(BR2_PACKAGE_CIFS_UTILS_SMBTOOLS),)
+ define CIFS_UTILS_REMOVE_SMBTOOLS
+ 	rm -f $(TARGET_DIR)/usr/bin/smbinfo
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
