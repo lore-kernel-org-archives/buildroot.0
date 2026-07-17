@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15A6AC44523
-	for <buildroot@archiver.kernel.org>; Fri, 17 Jul 2026 15:44:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F06EC4451B
+	for <buildroot@archiver.kernel.org>; Fri, 17 Jul 2026 15:44:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B626340A92;
-	Fri, 17 Jul 2026 15:44:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1C77E8111F;
+	Fri, 17 Jul 2026 15:44:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9s_TLlTiuwnC; Fri, 17 Jul 2026 15:44:42 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kjTzefMsfP4h; Fri, 17 Jul 2026 15:44:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 88E1940A89
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A020380F29
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1784303082;
-	bh=UCfTOeK7Zmb06IH9JypvgwMU9iG8B4sg/ymnPMJ44lw=;
+	s=default; t=1784303084;
+	bh=mqaO60xIpqXcmVpbgJSMytHm9oaIwWmzvuwCT5qt45U=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=DKho/97erzXPx46mW/zM8HDG+gqS6OsWHtbZfMJNjlJGbdJ+L+pONAcy94XUOWoOm
-	 ogr5Q2It0A05iGC6QmB6z2qLTEFpE/snLlEHbQVWk/gF9cuoFdI0Iby1ee/FojXBqD
-	 ta4KZz+7DKI4JL1RUanjyCIleIZuhYrvxgt39BI+r+31ibbrIAeZMf2TvuQuu4HKLe
-	 k8xRDBWItXHs7kJN3uqSDKwI57iugecHMep7ljWS979X3pajVUuOX6YvEbpI58JHL2
-	 //m//R4l3cjQHXeEQ03JPo/TqvfzHJC+dt+jvtctN1W7Q/Ex1kfKS7q/5u25jogANc
-	 xFksu98re5ERw==
+	b=QEYl4YQVeupsWuEfKxgYgGwjWuFcUA7frLNM+2BiO9Kr3lAnJdW7O6VCCR4qCe/Vr
+	 5OgU0bf4F/cKBX0clLqrgR0uol6Siga1mhdZR5RAoetZ/RtwvsYs11HYP8vvDZOonR
+	 gxOL5AmKwegaE3Lt62W1qetaaFcmitCatYAqxejHlmmNEIFhx/rz54g1ILyKFNyS1D
+	 efFjWjU1oEvjNI6DgsOHPKH6YY7eZMYtiRFYd6w6NKmYf7OPHQv5s2DzbU3bFpSonC
+	 ZoE5IcQXRXHBujsj7PrJE9bYg7rnTa50Vt+ejoINChNea4MSJrrLiCejjhUBmHCfl2
+	 AsUt1ibVoFVCA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 88E1940A89;
-	Fri, 17 Jul 2026 15:44:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A020380F29;
+	Fri, 17 Jul 2026 15:44:44 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 0703F1F6
+ by lists1.osuosl.org (Postfix) with ESMTP id 113F5435
  for <buildroot@buildroot.org>; Fri, 17 Jul 2026 15:44:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E232F40056
+ by smtp2.osuosl.org (Postfix) with ESMTP id EBC6940279
  for <buildroot@buildroot.org>; Fri, 17 Jul 2026 15:44:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uIGbS6aWvo0j for <buildroot@buildroot.org>;
- Fri, 17 Jul 2026 15:44:19 +0000 (UTC)
+ id gOYRipHYryZi for <buildroot@buildroot.org>;
+ Fri, 17 Jul 2026 15:44:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BC20740279
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ECDA9402C7
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id BC20740279
+ by smtp2.osuosl.org (Postfix) with ESMTP id ECDA9402C7
  for <buildroot@buildroot.org>; Fri, 17 Jul 2026 15:44:19 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7B29688E52; Fri, 17 Jul 2026 15:43:43 +0000 (UTC)
+ id B939088E56; Fri, 17 Jul 2026 15:43:43 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 17 Jul 2026 10:52:10 +0200
+Date: Fri, 17 Jul 2026 11:06:27 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: b115701c06ca7123d9bd37616bbeec5efc7174bf
-X-Git-Newrev: a734a5f13b8b1f2692af5aeb61664ca49401271a
+X-Git-Oldrev: c03b63fe1ffe6bfb8a649f4187016e1d617de61f
+X-Git-Newrev: b7e1513e66a4c7c679ec853a59e3661d4210ded0
 X-Patchwork-Hint: ignore
-Message-Id: <20260717154343.7B29688E52@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/dropbear:
- security bump version to 2026.92
+Message-Id: <20260717154343.B939088E56@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x]
+ package/x11r7/xserver_xorg-server: security bump version to 21.1.24
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,57 +77,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/a734a5f13b8b1f2692af5aeb61664ca49401271a
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/b7e1513e66a4c7c679ec853a59e3661d4210ded0
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-https://matt.ucc.asn.au/dropbear/CHANGES
+https://lists.x.org/archives/xorg-announce/2026-July/003718.html
+https://lists.x.org/archives/xorg-announce/2026-July/003716.html
 
-- Security: server: Don't allow -B (accept blank password) with
-  -t (two factor auth). If run with -t and -B a user configured with a
-  blank password would be allowed to log in without pubkey auth.
-  https://github.com/mkj/dropbear/commit/23ec78285639edf068d86bb96f91cba755039740
-  Reported by nvidia
-
-- Security: server: Fix parsing of long authorized_keys lines.
-  The remainder of a long line would be handled as the start of a new line.
-  In the case where external programs add semi-trusted public keys to
-  authorized_keys, a crafted key might bypass restrictions such as "command=".
-  https://github.com/mkj/dropbear/commit/8d8e1930b866eb44135ae393a793cbeb03b6b9d6
-  Reported by nvidia
+Fixes
+-  CVE-2026-55999: glamor Font Atlas Heap Buffer Overflow
+-  CVE-2026-56000: GLX contextTags Use-After-Free in CommonMakeCurrent()
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit ce9ed75bbcc12dd8dc4dee2bdbaffe2f8bf240f8)
+(cherry picked from commit 3b15bf90f183a8e0e4877a3ffeeff479dd0949d9)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/dropbear/dropbear.hash | 2 +-
- package/dropbear/dropbear.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.hash | 6 +++---
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/dropbear/dropbear.hash b/package/dropbear/dropbear.hash
-index 31ac153b89..9df81ea4b5 100644
---- a/package/dropbear/dropbear.hash
-+++ b/package/dropbear/dropbear.hash
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
+index 5f10908c8a..1f664e88e4 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
 @@ -1,5 +1,5 @@
- # From https://matt.ucc.asn.au/dropbear/releases/SHA256SUM.asc
--sha256  defa924475abf6bc1e74abc00173e46bfdc804bd47caafa14f5a4ef0cc76da34  dropbear-2026.91.tar.bz2
-+sha256  91dcb5234de8dea68dd82c55411c9fc986b457ab58372a780ee8a870419c2f7e  dropbear-2026.92.tar.bz2
- 
- # License file, locally computed
- sha256  a99ce657d790b761c132ee7e0de18edb437ae6361e536d991c6a12f36e770445  LICENSE
-diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
-index a7de8432af..e7e6703057 100644
---- a/package/dropbear/dropbear.mk
-+++ b/package/dropbear/dropbear.mk
+-# From https://lists.x.org/archives/xorg-announce/2026-June/003703.html
+-sha256  e39832e5617dadaf072fdf9f0e19e5d2e1c2a13607ac280bac1aba9f8fe14634  xorg-server-21.1.23.tar.xz
+-sha512  7eae854af1b5db1f5d1e59cb9d26b86d98fa176d4f80f70935c707f17982d0446a0a8ad8d29c922edbd208435f995b027604fbb72e62a7bf3ba79f2f570aa0bb  xorg-server-21.1.23.tar.xz
++# From https://lists.x.org/archives/xorg-announce/2026-July/003718.html
++sha256  1a4eb36ca65cc3b1b936566d677a9786e13c11cd5806e951ac55f3f5ce3984af  xorg-server-21.1.24.tar.xz
++sha512  f51372b04fe21632fc778ff240705161ed2dccc0114dbe3ee25156d8ac85ec945e2ac05d8638bc7d8d54bad4dfc89cb26b6bd2058b7804d54ab7179e1ac2eb13  xorg-server-21.1.24.tar.xz
+ # Locally calculated
+ sha256  c9f90a6669109aad6c9a7c3b46cc2c574221a73b792afa419336816b49da5c11  COPYING
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index cecbb821ae..d1596a8a3f 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DROPBEAR_VERSION = 2026.91
-+DROPBEAR_VERSION = 2026.92
- DROPBEAR_SITE = https://matt.ucc.asn.au/dropbear/releases
- DROPBEAR_SOURCE = dropbear-$(DROPBEAR_VERSION).tar.bz2
- DROPBEAR_LICENSE = MIT, BSD-2-Clause, Public domain
+-XSERVER_XORG_SERVER_VERSION = 21.1.23
++XSERVER_XORG_SERVER_VERSION = 21.1.24
+ XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.xz
+ XSERVER_XORG_SERVER_SITE = https://xorg.freedesktop.org/archive/individual/xserver
+ XSERVER_XORG_SERVER_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
