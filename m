@@ -1,86 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53A81C4451B
-	for <buildroot@archiver.kernel.org>; Fri, 17 Jul 2026 17:03:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28AB4C4451B
+	for <buildroot@archiver.kernel.org>; Fri, 17 Jul 2026 20:17:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2868640A72;
-	Fri, 17 Jul 2026 17:03:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B0EA480E49;
+	Fri, 17 Jul 2026 20:17:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ilvWpMktqA2P; Fri, 17 Jul 2026 17:03:00 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xsy6reXkZiQE; Fri, 17 Jul 2026 20:17:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 35216409B6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A92B980E50
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1784307780;
-	bh=6QyYphIsLxSlHBo2SWeH9eSbeXRRXFQDDfrfEDEG298=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	s=default; t=1784319472;
+	bh=wawX8wXFzrvR1NNGOh0DR/5GZgSo30oP0nn4H1Q2lZw=;
+	h=From:To:In-Reply-To:References:Date:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=Squf/bK564Vl5e2MrpUxEgXiqp1JTyr6CqaKTXnICb3MNQDNhqwJad9B6FvF9H0za
-	 xseADtEv/OLDDmuYhR4/4b+6eXp0NfNKsWRWDvmiYYjkFE6msuC4sA4B4I1ToueXf3
-	 N0NtVoE2xnlA4Azmo5vV8562sW50hfC3mWJfp+HRyaMVx9lHGfQVLvrV09IDYwMdU+
-	 hStRzQ4KsYERFcNwWy4pUDxgaNL4p418d71maTTRMdefBYR+SDnT5wNaWamSJ+WYGz
-	 Thjdppj1amp5NXrqeg7GshUjff1xTQxZKdRQSwqnG/lZOubulpNSZQ84FlExenCMz9
-	 z5J7AqqwVrCgw==
+	 From;
+	b=E4nYnjYwDNKd9vgx9TvX+aut6FRL48fxjHYcVIktcV+M+9BaCU9AeBpvUy8s9RVoA
+	 Ow33TSu9RzgFZaKLrzKe2/XtARr3eSG9g6Twgdf8774OJV3EOX6ZUEuYlYLiUi5pck
+	 GukVNb0+NFMRzDeB6lzWmm5Hb+txwoYLGqYL3xP9HxpgpgpiejU4kaHrSek7jJDnn0
+	 NeeOaLMcB9Qlf0VRGqXzKyTpklKSHDuSdaWvmHnx3aC1buspWR5KaYTUdeLUV0vDYJ
+	 RePv0fol3AKBTiIjsZ7z39GPv4H7eoA8oBNK/vh+5Tav3h+gBXFIjdCVXLj/zDMdmj
+	 7kR4alpf/x7mw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 35216409B6;
-	Fri, 17 Jul 2026 17:03:00 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 166C8320
- for <buildroot@buildroot.org>; Fri, 17 Jul 2026 17:02:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A92B980E50;
+	Fri, 17 Jul 2026 20:17:52 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7458836E
+ for <buildroot@buildroot.org>; Fri, 17 Jul 2026 20:17:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 085C940279
- for <buildroot@buildroot.org>; Fri, 17 Jul 2026 17:02:59 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 719B880E50
+ for <buildroot@buildroot.org>; Fri, 17 Jul 2026 20:17:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1G7Sp2pHpJ2z for <buildroot@buildroot.org>;
- Fri, 17 Jul 2026 17:02:58 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 01CF940056
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 01CF940056
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 01CF940056
- for <buildroot@buildroot.org>; Fri, 17 Jul 2026 17:02:57 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPA id E9852B0054E;
- Fri, 17 Jul 2026 19:02:54 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 17 Jul 2026 19:02:54 +0200
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kPk2wQcHf7Gk for <buildroot@buildroot.org>;
+ Fri, 17 Jul 2026 20:17:49 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 70BC680E49
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 70BC680E49
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 70BC680E49
+ for <buildroot@buildroot.org>; Fri, 17 Jul 2026 20:17:47 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 1173389924; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Fri, 17 Jul 2026 20:17:44 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
+ (envelope-from <peter@korsgaard.com>) id 1wkp0A-00000000EP0-3mSt;
+ Fri, 17 Jul 2026 22:17:42 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Ans dhdij Bdkb <ansdhdijbdkb@gmail.com>, buildroot@buildroot.org
+In-Reply-To: <CAJO3WigJJMVOKW43ujKRuOQSjnACgnT-7=n7XrVXTy6HyXc+Qw@mail.gmail.com>
+ (Ans dhdij Bdkb's message of "Fri, 17 Jul 2026 23:35:49 +0400")
+References: <CAJO3WigJJMVOKW43ujKRuOQSjnACgnT-7=n7XrVXTy6HyXc+Qw@mail.gmail.com>
+User-Agent: Gnus/5.13 (Gnus v5.13)
+Date: Fri, 17 Jul 2026 22:17:42 +0200
+Message-ID: <877bmt74m1.fsf@dell.be.48ers.dk>
 MIME-Version: 1.0
-Date: Fri, 17 Jul 2026 19:02:54 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20260715203510.1121926-1-bernd@kuhls.net>
-References: <20260715203510.1121926-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.17
-Message-ID: <0de8319aeab457805ececec6f65c50d0@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1784307776;
- bh=7E8pl6xLPMu5KHnZ4fRH7ylsPHMz+CQr2X5njNrbyM8=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=F8iggCaM4Pq1q/EjqQOJe02C2xO5sJGYftCzDZiIQEIyw73nq4SynPvlS2mlfNUKQ
- DtvOWb20qqAHWqht+qzCe3FBFvVvBGmMT4ubc1nnJpw/t/xFpLKpYfXGKLNf5PZIEc
- PHEWnBiNNGv3UJp6wZEA0QG0CkGnqWhYVau1JZfEw4tbojjlkVfJomleGqMtEFCWXy
- AQ5hzlnkqI6cjXPoqjxg3GPUDwSMYOtahpxOEAjR/DY86bNlid/I8i/B86HsLlgn1J
- +EMmGnAU6eZgiE5u4hU5atbaaNT+hfbnloIJOallrbBF2O5iRn6mWQay+4BzdMC8C3
- X5UfgyvXRvsJQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=F8iggCaM
-Subject: Re: [Buildroot] [PATCH 1/1] package/pppd: bump version to 2.5.3
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=hIgOaqYuS5bNXKhecOclDpwYk9zJ6+VzY3dNXyo5X0mu8NRB2/VNBvIwkMPeeVbgdDoc+/DxfwcD5X0R9WwXs53gmMlYe+v4i1EqLrLYM/FJST5mlPxp+5yern6A7FrFixMDA1jy/VQC4fiJg4CG6XLoN0qqAqM4HoE8+PRp8nfUhbqWphfZInn+fPvCh9ooe8rA4eHOzxeNdkgKTEjUDCExJuE9d/dzB/pK6ZgvY4wSrBl+oiTpv3GIxch6EBd4JqRs9ZxeEyQKlcuFWE6OGeEKZ4xFWHoU0Fdl1xaei/DCIn1jQZV7pJq05nhIeZGzLBZYYXiEATRWkP/FRDmlPw==;
+ s=purelymail2; d=purelymail.com; v=1;
+ bh=ain6dlmPztOO2hyU8fRIen5Bqy+2ZV6Fnu1MZdkcApY=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail2 header.b=hIgOaqYu
+Subject: Re: [Buildroot] Please bump the WireGuard buildroot package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -92,37 +91,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 15/07/2026 22:35, Bernd Kuhls wrote:
-> https://github.com/ppp-project/ppp/releases/tag/v2.5.3
-> 
-> Removed patch 0001 which is not needed anymore due to fixes committed 
-> to
-> all relevant kernel versions:
-> https://github.com/ppp-project/ppp/pull/504#issuecomment-2337005682
-> 
-> Removed patches 0002 & 0003 which are included in this release.
-> 
-> Added new patch to fix build errors seen with older gcc versions
-> detected by the Gitlab pipelines. These build errors are introduced in
-> the new dhcpv6relay plugin which was added to pppd 2.5.3, no backport 
-> to
-> buildroot LTS branches necessary.
-> 
-> Switched back to upstream tarball which now contains the previously
-> missing license files added by upstream commit
-> https://github.com/ppp-project/ppp/commit/9f612dc02c34509f062ed63b60bcc7e937e25178
-> and drop autoreconf as well.
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+>>>>> "Ans" == Ans dhdij Bdkb <ansdhdijbdkb@gmail.com> writes:
+Hello,
 
-Applied to master, thanks.
+ > Hey,
+ > As a user of your WireGuard buildroot package, I thought I'd let you know
+ > that wireguard-tools version 1.0.20260223 has been released. Could you bump
+ > your package?
+
+I am not sure I follow? The wireguard-tools package was bumped back in
+March with:
+
+commit ef12f5bb2c79a533e978cbaaf911b5ba96e97439
+Author: Peter Korsgaard <peter@korsgaard.com>
+Date:   Fri Mar 20 07:53:29 2026 +0100
+
+    package/wireguard-tools: bump version to 1.0.20260223
+
+    For details, see the announcement:
+    https://lists.zx2c4.com/pipermail/wireguard/2026-February/009514.html
+
+    Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+    Signed-off-by: Julien Olivain <ju.o@free.fr>
+
+What Buildroot version are you using? If you are using the 2025.02.x LTS
+series which indeed does not have this version, can you explain why you
+think bumping the version would be good there (E.G. specific bugfixes)?
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
