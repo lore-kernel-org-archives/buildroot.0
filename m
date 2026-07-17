@@ -1,117 +1,116 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45994C44523
-	for <buildroot@archiver.kernel.org>; Fri, 17 Jul 2026 15:47:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 740B7C44515
+	for <buildroot@archiver.kernel.org>; Fri, 17 Jul 2026 15:47:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0F11640B71;
-	Fri, 17 Jul 2026 15:47:48 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZvNnuvxuEcHS; Fri, 17 Jul 2026 15:47:47 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 16FE740BAA
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1784303267;
-	bh=jaSF+8CPk3KWqGrfhiE/Gxn2qxuhvGFLhOwNp8toRs0=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=bHfvuItuHJl0xvRXqr9GFZDWeRedq3XfXU1mxaiIKMU4yRE6HkZC6e+VGKlgXaUBv
-	 vQmxTlendfmZa509pLJnDGSEmyPyuEHRiJtCf+mAzrVhnHzOCQ426YR10YcXZAQsGn
-	 f9BE7C4NOZJ3s59rg+yY8qem0cgUP3mKWecS/MZutQHH9MJEhqZ52msG1t9rQ4fKOS
-	 c3qGyL5xMp9Ro2q8M8QMZtddVU03QdwYcBPzaV+UFpQFDa9XTumv1AGdZfhQTexLfL
-	 lA7y9PLPNPKcabtC1fWAROXu6Pc3L0PvOYyvlpJd3iIHgYl9kvdI7Vt8h+eTiV095c
-	 876vZlPQCYazg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 16FE740BAA;
-	Fri, 17 Jul 2026 15:47:47 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id CCE8736E
- for <buildroot@buildroot.org>; Fri, 17 Jul 2026 15:47:42 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BD82A81220
- for <buildroot@buildroot.org>; Fri, 17 Jul 2026 15:47:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 44A958116C;
+	Fri, 17 Jul 2026 15:47:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tgqdAXiaSDeS for <buildroot@buildroot.org>;
- Fri, 17 Jul 2026 15:47:42 +0000 (UTC)
+ id Lf7fgai2JX8a; Fri, 17 Jul 2026 15:47:49 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3508C8122A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1784303269;
+	bh=RIgWVL4AJq/C0zwdoDTyeUdR54kUmkqoVqGy09+xsdU=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=HOMShRBunCfRmfvxlPU2h0hHKUDs9eGY0nnpur17zsdvTBsy+1erExf+C1Lj3kITm
+	 Buf7JaBsMncrFFc4OuXNKl7k+G7MJwcWO9LT/DEIF0fTj12bYE2mTh1ePRuhIJrPNT
+	 HkNrvoaS9vVJZGXYxqSLwF1L53RKQQrpK9iSHLARehu7rUg3Gd68WXeCG4I+1YX7Qs
+	 Y9+Szjrwr7KPZ/o8WMW9t+kkTMrmgFWklff34st8xi534iZGbRASPvlr7q05ZTTYr7
+	 WvJ4uTjRovLppbuAz8uyG/crV0eSEnPd0pzKtu1/daXKoZHAz3PHFk/K2lkQ3mdYmJ
+	 20MWxnlnuHV3A==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3508C8122A;
+	Fri, 17 Jul 2026 15:47:49 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 782A81F6
+ for <buildroot@buildroot.org>; Fri, 17 Jul 2026 15:47:45 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 68D3B40B88
+ for <buildroot@buildroot.org>; Fri, 17 Jul 2026 15:47:45 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tYNC465uBAP8 for <buildroot@buildroot.org>;
+ Fri, 17 Jul 2026 15:47:44 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::436; helo=mail-wr1-x436.google.com;
+ client-ip=2a00:1450:4864:20::42e; helo=mail-wr1-x42e.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 531448120D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 531448120D
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
- [IPv6:2a00:1450:4864:20::436])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 531448120D
- for <buildroot@buildroot.org>; Fri, 17 Jul 2026 15:47:41 +0000 (UTC)
-Received: by mail-wr1-x436.google.com with SMTP id
- ffacd0b85a97d-476d8e647e9so7298335f8f.0
- for <buildroot@buildroot.org>; Fri, 17 Jul 2026 08:47:41 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 3455540B76
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3455540B76
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
+ [IPv6:2a00:1450:4864:20::42e])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3455540B76
+ for <buildroot@buildroot.org>; Fri, 17 Jul 2026 15:47:43 +0000 (UTC)
+Received: by mail-wr1-x42e.google.com with SMTP id
+ ffacd0b85a97d-476a130c138so4440696f8f.0
+ for <buildroot@buildroot.org>; Fri, 17 Jul 2026 08:47:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1784303259; x=1784908059;
+ d=1e100.net; s=20251104; t=1784303261; x=1784908061;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=mBHpEPpwlHdwJ7Q6c1TqqGsgKInilu0sYhX3so9iT60=;
- b=ZL9E49qILicwVS3V9EUW8E1bTBfVUkdnzAPpd0mH5RjQyEotKc1RlkgMTHMuNl1JCi
- X/5kRMOAWxLiDfZKsXZVuIFj6nB7zDeRRo99lAanMuP1jCKocqG39WiFhd0SR6hG+DRa
- HzCUx8QgKpgv7vbwUfhlQ1gCmLyQjJaDFnkoHEBBIk1d8IVl9ElluZUrKIwei6kJdD83
- QcWb+Jz6N2dlAXJZjxShPDL49qoQn4kFENLSfY739wLPpQPy4beYPRXGGZJRrAS3FK5l
- X0TIeIDnQ/5PGjtxcWhlwd/8QrCbVqq8DHYcnvilIitcm/emDuH3vBH9gXCojtqDAbbD
- bMXg==
+ bh=6MARHhTO7LTTAlMoeP1kmOM3ZzduXGvojDCP1WXx+Y0=;
+ b=h2e1h6DX9lI+zapsteRMgcN5t9tcYnl0oTXyRZ/jsrCmAsps6V0ZNO2JlBy/6MveYZ
+ s0hNckNzm7iBQNobCImeqH8hva5Gj+RoUsEPIbLbvvS1grZu9S/A192v/6wd7civ90FI
+ DpVIzebI+AzT8EwJUHZGyNNz6cQmGgM2d2XFtpJTXl7SsBj+qmKvSNjaE1JJrW4CZPcJ
+ 7+uCd0aZvW0uRlBSF3u0ZhlFL02DysfCK7bKNQhHYIsjrTSaoQ7SrBuv/atnbKq1ERj6
+ OF802NrWmu3jAPF8A/MSMJ5ZgliE/QP96qydcJAwym07HntCin4QyFdPWeNrob2w+vtv
+ BAsg==
 X-Forwarded-Encrypted: i=1;
- AHgh+RpGLM3MNo1kig2SOyhHmKEeYuYLm0BCRHBXAYfnbeHZlHr2UTtRVBvTmXoXaS2ac+HtZ/QWg1zbO38=@buildroot.org
-X-Gm-Message-State: AOJu0YyBtFFhQGqqr52R1e1WmpG+IGjkyIgRlL3hgLvfNx0w6BQ7ceuX
- EwAiPYDtSJc0lvuLCvc8pRpEHigC36cbDrPAhKvkLxWNDHB970kbiMqmo9Fq1UgdD+U=
-X-Gm-Gg: AfdE7cktGagkG7tIKzJtrrg3yiTUjfbdAZhmcNGhnCyAqI8YOR7LcaHbkkaHB9sTDUG
- EZp6iDNGYiUB6bMwajLkiRbxCk0XUzwvEWyKAWP73VKLxw8epdK9HXf1Eyqm7HupayZrPnIkDZ1
- lJo/Vppa06Ot2x/rwyD1NTkoGrwEigr4pnPYRImq/HtGjczsbkNBAJ6Tk/Rsp1iCCdEUJzh2Kcq
- y8f6pVb1jZvhVOydA/ICtSdJvPusScRKJhAsPiIxp6sRTcHI/OFZddnBMqzYJUHdqYUI+HunGHR
- ORHWIoHUy86vWvq3NLF4m0Zxm8YTpFeZNaPkkFaE5oFQ3q/uMnedwnUEJ6UPp4E9xZduZ3G5C+u
- g7kYvSxfLwtPv7p+NfACSDfRcPcSgxHoiq5kDCUA7PCTGkFThF56kjvFOh09vQld07qCMuhUg29
- SNqkNTGw==
-X-Received: by 2002:a05:6000:43c7:20b0:47f:48d5:2986 with SMTP id
- ffacd0b85a97d-47f6233f164mr3579903f8f.53.1784303259277; 
- Fri, 17 Jul 2026 08:47:39 -0700 (PDT)
+ AHgh+RrqDxRG6fy8eeVtPbs8yy2x1fDi2RW9zonop62B8Z6E6S564PWjxGRZrb5RsLef0hlpVmo+jbnp1uI=@buildroot.org
+X-Gm-Message-State: AOJu0YzSNnxsT/bfKDtRg5qf3lmCMkrJJ171nxgzJiLNtugV6B9OQFSl
+ GgkL8t3B3P/F7JrWfCHuOX0I/DOAtJPDMyy/Ov3pcYxm3551sCPndMXfgIqySMUPsIc=
+X-Gm-Gg: AfdE7cklkA76+5puPp339vK5nnJhaIUNPGgSSrvXlnmyJMsIyc8H8WpGHMPC0u7zPFN
+ uyNYbRhWV40jjjdF5gqdq+GMzAtX3Za9GwjspeZVac34POY3obR1JX5VxsUXHSFFkI2/OzaO9Fg
+ mtIFAJ/FVO6fNevbIyjgVYMnYTAg7V7RdQWc/BUT4QroyZ9EEONnx6Dc3rJ1FKvGeIGupnKCPdU
+ Ah+BIyU/0pK2/8sR1rWYMJSifQVKp0bL0jJcGoHrN3G9nAN7pcPalapeBzHedhiSXOIQi5bm24/
+ +NVJz6wngQivTHiKMdZ0IvI43CKJ3oHbXuKLGRmdORDA2O+1f0og1av9VkomMIIsIoL5LI2+tEn
+ V6dOKbscLgvRD0UrqdBtnSkz9ZJPvtzDNiD5/53G1Vx1nZ9ZU0+0jwOpHmqKi0pNV439cSck=
+X-Received: by 2002:a05:6000:46cf:b0:475:f100:35ff with SMTP id
+ ffacd0b85a97d-47f62331b70mr2405793f8f.60.1784303261146; 
+ Fri, 17 Jul 2026 08:47:41 -0700 (PDT)
 Received: from arch ([212.233.37.141]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-47f63edda9bsm4553947f8f.31.2026.07.17.08.47.38
+ ffacd0b85a97d-47f63edcf8dsm5283845f8f.27.2026.07.17.08.47.40
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 17 Jul 2026 08:47:39 -0700 (PDT)
-To: Baruch Siach <baruch@tkos.co.il>
+ Fri, 17 Jul 2026 08:47:40 -0700 (PDT)
+To: Bernd Kuhls <bernd@kuhls.net>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri, 17 Jul 2026 17:47:37 +0200
-Message-ID: <20260717154737.192255-1-thomas.perale@mind.be>
+Date: Fri, 17 Jul 2026 17:47:40 +0200
+Message-ID: <20260717154740.192379-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.55.0
-In-Reply-To: <bb6119f10459ad2ecba91904dbb3bc122f381a5c.1783685047.git.baruch@tkos.co.il>
-References: <bb6119f10459ad2ecba91904dbb3bc122f381a5c.1783685047.git.baruch@tkos.co.il>
+In-Reply-To: <20260712113058.1579954-4-bernd@kuhls.net>
+References: <20260712113058.1579954-4-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1784303259; x=1784908059; darn=buildroot.org;
+ d=mind.be; s=google; t=1784303261; x=1784908061; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to:content-type;
- bh=mBHpEPpwlHdwJ7Q6c1TqqGsgKInilu0sYhX3so9iT60=;
- b=RQ8E70KPVeh5ZlY14+09ew8MAfvK2N2UVQjagGmSIWeNmUhlPFgh1UnQLifPSYz3Zb
- SCJvqeviuuOE5BtNs0oE6ktqWp6ngg7SHF0YgqmSK4gKTQpqyx69fV28roRd2onEP11l
- uIdC3O85czqMZtE11YBPgVVPMkA6lekbZ2Fg+DD2sCtCB4h/0tLwLCdsham/NAx5snFa
- 1dRHbjYN7ipmGjYfe9uNgseVzEj/tG59JnjekeJ3+AByXkaJrL0osCvqD/BkQHHCFYgp
- QaYmPzgHWHZNf9kLXtvawn1KyxIDy4iHkvdpqvSqsWKzPRrHpZazOByLSuv/P6cC69bp
- RWtQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=6MARHhTO7LTTAlMoeP1kmOM3ZzduXGvojDCP1WXx+Y0=;
+ b=eCfTLrgr/ipdjw2/4oHinCIChaD11LMxRyBm0B22yWlNKQKl4tmzMoB80ZWfSxVUNM
+ limAG7IzWwKULvujaSykQ3IE5TXgKr0u7dc1WVbMMB93Z9D0lReB79PUGrEBZfA3zyOA
+ Uv/X9W910y06iKoMpNh0TjMeLJcGDajAwbBzE+pelHvj3R/32RBO+nOYQAGaodrzxe/y
+ T8XkYIkDX+BgVY76/vXaNuFp2vK36ooFvYBGK1U3UBTxcoLANAzIDV5IfXeo185XYbML
+ v/Zdex65gw+brR1mLyVrdq6Ztg9Si03AMLyHoeOk36tCPEc7+46kJ+lldVlFUvz01eT3
+ 59pg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=RQ8E70KP
-Subject: Re: [Buildroot] [PATCH] package/socat: security bump to version
- 1.8.1.3
+ header.a=rsa-sha256 header.s=google header.b=eCfTLrgr
+Subject: Re: [Buildroot] [PATCH 4/4] package/x11r7/xlib_libXfont2: security
+ bump version to 2.0.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -131,49 +130,55 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Fixes CVE-2026-56123: SOCKS5 client buffer overflow. Only signed char
-> platforms are affected.
+> https://lists.x.org/archives/xorg-announce/2026-July/003715.html
+> https://lists.x.org/archives/xorg-announce/2026-July/003714.html
 > 
->   http://www.dest-unreach.org/socat/CHANGES
+> Fixes
+> - CVE-2026-56001: BitmapScaleBitmaps Integer Overflow Heap Buffer Overflow
+> - CVE-2026-56002: PCF Font Parsing Heap Buffer Overflow
+> - CVE-2026-56003: computeProps Property Buffer Heap Buffer Overflow
 > 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
 Applied to 2025.02.x & 2026.05.x. Thanks
 
 > ---
->  package/socat/socat.hash | 4 ++--
->  package/socat/socat.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+> Gitlab pipelines passed:
+> https://gitlab.com/bkuhls/buildroot/-/commits/ac5c6561894d41b86a43af13c4a5af16612c9195
+> https://gitlab.com/bkuhls/buildroot/-/commits/9c78a853c88fa85f7a31404b4ab324370cf049f6
 > 
-> diff --git a/package/socat/socat.hash b/package/socat/socat.hash
-> index 3a4eec60c1cb..2fc8e4085317 100644
-> --- a/package/socat/socat.hash
-> +++ b/package/socat/socat.hash
-> @@ -1,7 +1,7 @@
->  # From http://www.dest-unreach.org/socat/download.md5sum
-> -md5  5456f0f0c5d4505b68edcb10e23ef128  socat-1.8.1.1.tar.bz2
-> +md5  1a5b8ddff793847d80aa100d54b7cf76  socat-1.8.1.3.tar.bz2
->  # From http://www.dest-unreach.org/socat/download.sha256sum
-> -sha256  5ebc636b7f427053f98806696521653a614c7e06464910353cbf54e2327adc1b  socat-1.8.1.1.tar.bz2
-> +sha256  25bc6476292b2e614220989c77b0b6fca87bb2525d9747b31a6639b1fb602418  socat-1.8.1.3.tar.bz2
+>  package/x11r7/xlib_libXfont2/xlib_libXfont2.hash | 6 +++---
+>  package/x11r7/xlib_libXfont2/xlib_libXfont2.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/x11r7/xlib_libXfont2/xlib_libXfont2.hash b/package/x11r7/xlib_libXfont2/xlib_libXfont2.hash
+> index 4f50b2dbd2..86e972a0e8 100644
+> --- a/package/x11r7/xlib_libXfont2/xlib_libXfont2.hash
+> +++ b/package/x11r7/xlib_libXfont2/xlib_libXfont2.hash
+> @@ -1,5 +1,5 @@
+> -# From https://lists.x.org/archives/xorg-announce/2024-August/003523.html
+> -sha256  8b7b82fdeba48769b69433e8e3fbb984a5f6bf368b0d5f47abeec49de3e58efb  libXfont2-2.0.7.tar.xz
+> -sha512  f703127df5d5b1093c9b73e019153ed7799523573d52e61d344209f0acfd4df42e11be12bdd1880479c47c2b70de581a4f2ef74e199e9b1ac438f426593d56b0  libXfont2-2.0.7.tar.xz
+> +# From https://lists.x.org/archives/xorg-announce/2026-July/003715.html
+> +sha256  f556c0e1093a4e6911cc90bc4b106d201902ee187fd74af206ff162f7e6a24d5  libXfont2-2.0.8.tar.xz
+> +sha512  e14cc3fa03d7baa4554ee5754ab33f69ac1da3d509c686a5f705fde8cd07772be564d68cc18d9fd0beb5ed7b2f864fcd7f6bf4983f5c0db08a9c747d0e001531  libXfont2-2.0.8.tar.xz
 >  # Locally calculated
->  sha256  86e46422f9381b386bd2eb6606f9d6c3ff479f905660d0f318c571292ab304b8  README
->  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-> diff --git a/package/socat/socat.mk b/package/socat/socat.mk
-> index 3d40540599d7..311bdfda3abf 100644
-> --- a/package/socat/socat.mk
-> +++ b/package/socat/socat.mk
+>  sha256  3b1047f0d45584973866a40e3eedc74aea4c6ac636960d650ae05af603e6d1a8  COPYING
+> diff --git a/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk b/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk
+> index c95f6c6395..a881a4c55b 100644
+> --- a/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk
+> +++ b/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk
 > @@ -4,7 +4,7 @@
 >  #
 >  ################################################################################
 >  
-> -SOCAT_VERSION = 1.8.1.1
-> +SOCAT_VERSION = 1.8.1.3
->  SOCAT_SOURCE = socat-$(SOCAT_VERSION).tar.bz2
->  SOCAT_SITE = http://www.dest-unreach.org/socat/download
->  SOCAT_LICENSE = GPL-2.0 with OpenSSL exception
+> -XLIB_LIBXFONT2_VERSION = 2.0.7
+> +XLIB_LIBXFONT2_VERSION = 2.0.8
+>  XLIB_LIBXFONT2_SOURCE = libXfont2-$(XLIB_LIBXFONT2_VERSION).tar.xz
+>  XLIB_LIBXFONT2_SITE = https://xorg.freedesktop.org/archive/individual/lib
+>  XLIB_LIBXFONT2_LICENSE = MIT
 > -- 
-> 2.53.0
+> 2.47.3
 > 
 > _______________________________________________
 > buildroot mailing list
