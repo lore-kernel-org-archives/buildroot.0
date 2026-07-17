@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49B0FC4451C
-	for <buildroot@archiver.kernel.org>; Fri, 17 Jul 2026 15:44:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15A6AC44523
+	for <buildroot@archiver.kernel.org>; Fri, 17 Jul 2026 15:44:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 05C4C40A88;
-	Fri, 17 Jul 2026 15:44:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B626340A92;
+	Fri, 17 Jul 2026 15:44:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id r4S1MiZeXDjK; Fri, 17 Jul 2026 15:44:41 +0000 (UTC)
+ id 9s_TLlTiuwnC; Fri, 17 Jul 2026 15:44:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E2F4140A5B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 88E1940A89
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1784303081;
-	bh=UhaYjoCY5AeielxlTzhAAPAMyp/XWypXXQL7IP9dYFo=;
+	s=default; t=1784303082;
+	bh=UCfTOeK7Zmb06IH9JypvgwMU9iG8B4sg/ymnPMJ44lw=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=LykYJ94A2AxGebH3+KD8fx3z+joIzwk1d/RrCdhVmYIOTb1khWmVJSnWk3lN043kN
-	 uy9YvtmTgTk+6W7sP4khOoszoY2h4e/yhJxkqgZ0FPdx1o04Ubp1r5bbdoIfrNyiIB
-	 +x2V1rZCdZHSGqrOIMiEPCOdFUarO5LRnpZsn6ZzVK/YC5fy0G+vZrRK4p7VpgKNI4
-	 RMRKQtHrWcPWA9nzXstZ0bnfDkeRj+2NtSmyAbmGRDK+8E3glT12lqQJItp1YaS4h/
-	 w7+gLWI7wmjPn0MG61OaZG7fc3eXVQg3RmzwXLy/U8hjfCegDCaAfmVZH+/1n7g13n
-	 +g2D8C8lrAkmA==
+	b=DKho/97erzXPx46mW/zM8HDG+gqS6OsWHtbZfMJNjlJGbdJ+L+pONAcy94XUOWoOm
+	 ogr5Q2It0A05iGC6QmB6z2qLTEFpE/snLlEHbQVWk/gF9cuoFdI0Iby1ee/FojXBqD
+	 ta4KZz+7DKI4JL1RUanjyCIleIZuhYrvxgt39BI+r+31ibbrIAeZMf2TvuQuu4HKLe
+	 k8xRDBWItXHs7kJN3uqSDKwI57iugecHMep7ljWS979X3pajVUuOX6YvEbpI58JHL2
+	 //m//R4l3cjQHXeEQ03JPo/TqvfzHJC+dt+jvtctN1W7Q/Ex1kfKS7q/5u25jogANc
+	 xFksu98re5ERw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E2F4140A5B;
-	Fri, 17 Jul 2026 15:44:40 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id B6EC0435
- for <buildroot@buildroot.org>; Fri, 17 Jul 2026 15:44:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 88E1940A89;
+	Fri, 17 Jul 2026 15:44:42 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0703F1F6
+ for <buildroot@buildroot.org>; Fri, 17 Jul 2026 15:44:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9CD25409C4
+ by smtp2.osuosl.org (Postfix) with ESMTP id E232F40056
  for <buildroot@buildroot.org>; Fri, 17 Jul 2026 15:44:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8CoS0KGM6m-y for <buildroot@buildroot.org>;
- Fri, 17 Jul 2026 15:44:21 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uIGbS6aWvo0j for <buildroot@buildroot.org>;
+ Fri, 17 Jul 2026 15:44:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 35B01409D9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BC20740279
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 35B01409D9
- for <buildroot@buildroot.org>; Fri, 17 Jul 2026 15:44:20 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id BC20740279
+ for <buildroot@buildroot.org>; Fri, 17 Jul 2026 15:44:19 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 02D9488E51; Fri, 17 Jul 2026 15:43:44 +0000 (UTC)
+ id 7B29688E52; Fri, 17 Jul 2026 15:43:43 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 17 Jul 2026 11:14:34 +0200
+Date: Fri, 17 Jul 2026 10:52:10 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 0d7550c0dde165f8363a253abb600da35276af77
-X-Git-Newrev: 0703fc5606f96e5bd210f7c260ea7b61ea812c56
+X-Git-Oldrev: b115701c06ca7123d9bd37616bbeec5efc7174bf
+X-Git-Newrev: a734a5f13b8b1f2692af5aeb61664ca49401271a
 X-Patchwork-Hint: ignore
-Message-Id: <20260717154344.02D9488E51@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/stunnel: update
- download site
+Message-Id: <20260717154343.7B29688E52@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/dropbear:
+ security bump version to 2026.92
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,48 +77,57 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/0703fc5606f96e5bd210f7c260ea7b61ea812c56
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/a734a5f13b8b1f2692af5aeb61664ca49401271a
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-Fix the download site, which seems to be changed after
-a new release. Use the more permanent /archive.
+https://matt.ucc.asn.au/dropbear/CHANGES
 
-Fixes:
- - https://autobuild.buildroot.net/results/a1a/a1a88bea6fdf5ae28d813f0a12d08e504b2fad06/
- - https://autobuild.buildroot.net/results/b3d/b3d0588fbc02ede6d5f82fb5d2fefcf610a69299/
+- Security: server: Don't allow -B (accept blank password) with
+  -t (two factor auth). If run with -t and -B a user configured with a
+  blank password would be allowed to log in without pubkey auth.
+  https://github.com/mkj/dropbear/commit/23ec78285639edf068d86bb96f91cba755039740
+  Reported by nvidia
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+- Security: server: Fix parsing of long authorized_keys lines.
+  The remainder of a long line would be handled as the start of a new line.
+  In the case where external programs add semi-trusted public keys to
+  authorized_keys, a crafted key might bypass restrictions such as "command=".
+  https://github.com/mkj/dropbear/commit/8d8e1930b866eb44135ae393a793cbeb03b6b9d6
+  Reported by nvidia
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 9f7c484b4ab0190765dc81fb79083ae8e2be211b)
+(cherry picked from commit ce9ed75bbcc12dd8dc4dee2bdbaffe2f8bf240f8)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/stunnel/stunnel.hash | 2 +-
- package/stunnel/stunnel.mk   | 2 +-
+ package/dropbear/dropbear.hash | 2 +-
+ package/dropbear/dropbear.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/stunnel/stunnel.hash b/package/stunnel/stunnel.hash
-index 6bfbc6d0b2..82c11f537b 100644
---- a/package/stunnel/stunnel.hash
-+++ b/package/stunnel/stunnel.hash
-@@ -1,4 +1,4 @@
--# From https://www.stunnel.org/downloads/stunnel-5.71.tar.gz.sha256
-+# From https://www.stunnel.org/archive/5.x/stunnel-5.71.tar.gz.sha256
- sha256  f023aae837c2d32deb920831a5ee1081e11c78a5d57340f8e6f0829f031017f5  stunnel-5.71.tar.gz
- # Locally calculated
- sha256  c172514e95e387eb4c77cdfbb55b635bf96e2dfcb85d785d993f64c40c4f89c4  COPYING.md
-diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
-index 9e9cf35554..0ece61858b 100644
---- a/package/stunnel/stunnel.mk
-+++ b/package/stunnel/stunnel.mk
-@@ -6,7 +6,7 @@
+diff --git a/package/dropbear/dropbear.hash b/package/dropbear/dropbear.hash
+index 31ac153b89..9df81ea4b5 100644
+--- a/package/dropbear/dropbear.hash
++++ b/package/dropbear/dropbear.hash
+@@ -1,5 +1,5 @@
+ # From https://matt.ucc.asn.au/dropbear/releases/SHA256SUM.asc
+-sha256  defa924475abf6bc1e74abc00173e46bfdc804bd47caafa14f5a4ef0cc76da34  dropbear-2026.91.tar.bz2
++sha256  91dcb5234de8dea68dd82c55411c9fc986b457ab58372a780ee8a870419c2f7e  dropbear-2026.92.tar.bz2
  
- STUNNEL_VERSION_MAJOR = 5
- STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).71
--STUNNEL_SITE = http://www.usenix.org.uk/mirrors/stunnel/archive/$(STUNNEL_VERSION_MAJOR).x
-+STUNNEL_SITE = https://www.stunnel.org/archive/$(STUNNEL_VERSION_MAJOR).x
- STUNNEL_DEPENDENCIES = host-pkgconf openssl
- STUNNEL_CONF_OPTS = --with-ssl=$(STAGING_DIR)/usr --with-threads=fork \
- 	--disable-libwrap
+ # License file, locally computed
+ sha256  a99ce657d790b761c132ee7e0de18edb437ae6361e536d991c6a12f36e770445  LICENSE
+diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
+index a7de8432af..e7e6703057 100644
+--- a/package/dropbear/dropbear.mk
++++ b/package/dropbear/dropbear.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DROPBEAR_VERSION = 2026.91
++DROPBEAR_VERSION = 2026.92
+ DROPBEAR_SITE = https://matt.ucc.asn.au/dropbear/releases
+ DROPBEAR_SOURCE = dropbear-$(DROPBEAR_VERSION).tar.bz2
+ DROPBEAR_LICENSE = MIT, BSD-2-Clause, Public domain
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
