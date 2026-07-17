@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E7ECC4451C
-	for <buildroot@archiver.kernel.org>; Fri, 17 Jul 2026 15:44:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ABEEDC4451B
+	for <buildroot@archiver.kernel.org>; Fri, 17 Jul 2026 15:44:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CD4C240A8E;
-	Fri, 17 Jul 2026 15:44:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 45A5F40A4A;
+	Fri, 17 Jul 2026 15:44:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id khIYCHMqkk3y; Fri, 17 Jul 2026 15:44:46 +0000 (UTC)
+ id Um93GVD0uUv5; Fri, 17 Jul 2026 15:44:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D1A8440A8B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0C7AB40A8B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1784303085;
-	bh=joHLLfZmqDaMI02bfoTHi2pX4JQJL8ZSbBYKR0KnoaE=;
+	s=default; t=1784303087;
+	bh=wfzhozmkJsBD2MMh0nTyEzip/tA2jHxwh50QAy7uONw=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=dHnag/3QALNkiUvU2GV3XX2WkD5BXmQ9z9w44PEXymr9wOg6+q6Hi2xYOjb2el5cp
-	 m6ejRdQ9KKKsL2Aiv9gQkhHkiYnGk/4KueSQLJT7CBZfhY0l6ay62UbqYDZDIAjQ5k
-	 grLVy6uPqMhU4G7/PfJP6erEeHxV2b/uwAP3htwKnuFnBuN+SrYXoqg6pWb7XauCdo
-	 7w0VUjy5S4sYlB+TpneSwjSbcdzCDa07gNI2h7L7eqqgi+o2i3yOK987uhaxvfrrwo
-	 YZuVHXC/DiWDJbHTX4wp9zbDNbfSj2AEsH4dsmEl6UKqTBCMrtzB4M5rVqdARhKkpv
-	 ju5ePkGe3kGOg==
+	b=F9OcJDy2nrlPHnVjtm2BqvSZ7MKUq6qo4c7KmeiuEAlGLNgJXvMqXwzz4uzlPyB2p
+	 ovbNCKYJPVLGxqq0DecCtXzNRel9Rna3mm8pMfBKTaJSIfooxvMpNhsm1X0F0XtG1H
+	 Vjv5Mz4KvXjB4bhuzKtOuttzAu1x1/3frv+ZKDRS35d4kDCto6pd/GS2T8byPxkyk9
+	 FqY+ukcHKmSAH0rCOA8KX46TBYB6egrxbfI1jQ/7piLk+I3xYanJSjRgbHls0mZ4Ys
+	 exCnRzAyArec3IrDao5PaWEx9JztDwkx1ov/tmYuBXw3j4G6nWJ2E5TXSOxAnWck0m
+	 HGa5Xpnm+YfXg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D1A8440A8B;
-	Fri, 17 Jul 2026 15:44:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0C7AB40A8B;
+	Fri, 17 Jul 2026 15:44:47 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 49B621F6
+ by lists1.osuosl.org (Postfix) with ESMTP id 84A5A36E
  for <buildroot@buildroot.org>; Fri, 17 Jul 2026 15:44:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3B8F8409D9
+ by smtp4.osuosl.org (Postfix) with ESMTP id 82B04409BE
  for <buildroot@buildroot.org>; Fri, 17 Jul 2026 15:44:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NlB8Wxh0pAer for <buildroot@buildroot.org>;
- Fri, 17 Jul 2026 15:44:20 +0000 (UTC)
+ id PC68pud9QN5w for <buildroot@buildroot.org>;
+ Fri, 17 Jul 2026 15:44:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 01037409BE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DE4E0408F1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 01037409BE
- for <buildroot@buildroot.org>; Fri, 17 Jul 2026 15:44:20 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id DE4E0408F1
+ for <buildroot@buildroot.org>; Fri, 17 Jul 2026 15:44:19 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C237388E51; Fri, 17 Jul 2026 15:43:43 +0000 (UTC)
+ id 9DCD188E51; Fri, 17 Jul 2026 15:43:43 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 17 Jul 2026 11:06:59 +0200
+Date: Fri, 17 Jul 2026 11:03:06 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: b7e1513e66a4c7c679ec853a59e3661d4210ded0
-X-Git-Newrev: 62e534d8e4937930e7ac1eec29b8f3df0907c7dd
+X-Git-Oldrev: 6a54f8f044ee48bde782986558c505a15d41f7fc
+X-Git-Newrev: c336c3c7494fd1bfe33c29172de585a3ab0d4f3e
 X-Patchwork-Hint: ignore
-Message-Id: <20260717154343.C237388E51@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/x11r7/xwayland:
- security bump version to 24.1.13
+Message-Id: <20260717154343.9DCD188E51@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/samba4: fix build
+ on m68k
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,52 +77,73 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/62e534d8e4937930e7ac1eec29b8f3df0907c7dd
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/c336c3c7494fd1bfe33c29172de585a3ab0d4f3e
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-https://lists.x.org/archives/xorg-announce/2026-July/003717.html
-https://lists.x.org/archives/xorg-announce/2026-July/003716.html
+samba4 uses very big switch statements, which causes the build to fail
+on m68k, because the offsets there are only 16-bit.
 
-Fixes
--  CVE-2026-55999: glamor Font Atlas Heap Buffer Overflow
--  CVE-2026-56000: GLX contextTags Use-After-Free in CommonMakeCurrent()
+We fix that by using -mlong-jump-table-offsets on m68k to use 32-bit
+offsets for switch statements, but this is only available starting with
+gcc 7 [0] [1].
+
+Only one package selects samba4, mpd, but it already depends on gcc
+>= 12. As such, we do not need to propagate that new dependency.
+
+Fixes:
+https://autobuild.buildroot.net/results/b60/b606da691bb462879d4f9769928b5a40b9170837/
+
+[0] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=57583#c15
+[1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=57583#c16
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 0d01f6fcee4435651224066e36ac8ae8038ac463)
+(cherry picked from commit 053615b6a769826ff77dd0ccb1bef08a12943fdc)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/x11r7/xwayland/xwayland.hash | 6 +++---
- package/x11r7/xwayland/xwayland.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/samba4/Config.in | 5 +++++
+ package/samba4/samba4.mk | 5 +++++
+ 2 files changed, 10 insertions(+)
 
-diff --git a/package/x11r7/xwayland/xwayland.hash b/package/x11r7/xwayland/xwayland.hash
-index 2bf2d19020..c9b931b6e2 100644
---- a/package/x11r7/xwayland/xwayland.hash
-+++ b/package/x11r7/xwayland/xwayland.hash
-@@ -1,6 +1,6 @@
--# From https://lists.x.org/archives/xorg-announce/2026-June/003704.html
--sha256  6df02c511b92c1b9848734d9d1b03a4c24f8375ba3cada44e9684a21b5f78e21  xwayland-24.1.12.tar.xz
--sha512  b4ee41761c2caa7332573be07d9143b60015bb4a7910c90b6ae079dde0a1bf6b0b4773ff4e6fba48279cdee83b4de5eb4a19b9369b5753e4147b94fa2deece96  xwayland-24.1.12.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2026-July/003717.html
-+sha256  173aea3d6f79609164c04528e1c8e4c9b60fcd59391c3c9dad4667297d727fb6  xwayland-24.1.13.tar.xz
-+sha512  e06e58025b441892fdd17ac55fd5c7e137bffc941b76ad784dc008047c778c6ee2895fcc47b9e8c74b1d8372491e69c39933c4186aec4df55571614f8ba98e3c  xwayland-24.1.13.tar.xz
+diff --git a/package/samba4/Config.in b/package/samba4/Config.in
+index e1d3dd9bf7..59f040e96a 100644
+--- a/package/samba4/Config.in
++++ b/package/samba4/Config.in
+@@ -4,6 +4,10 @@ comment "samba4 needs a uClibc or glibc toolchain w/ wchar, dynamic library, NPT
+ 		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on BR2_USE_MMU
  
- # Locally calculated
- sha256  c9f90a6669109aad6c9a7c3b46cc2c574221a73b792afa419336816b49da5c11  COPYING
-diff --git a/package/x11r7/xwayland/xwayland.mk b/package/x11r7/xwayland/xwayland.mk
-index 1242ca5e55..9def78677a 100644
---- a/package/x11r7/xwayland/xwayland.mk
-+++ b/package/x11r7/xwayland/xwayland.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
++comment "samba4 needs a toolchain w/ gcc >= 7"
++	depends on BR2_m68k
++	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_7
++
+ config BR2_PACKAGE_SAMBA4
+ 	bool "samba4"
+ 	depends on BR2_USE_MMU # fork()
+@@ -12,6 +16,7 @@ config BR2_PACKAGE_SAMBA4
+ 	depends on !BR2_STATIC_LIBS # cmocka, python, gnutls
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_TOOLCHAIN_USES_MUSL
++	depends on !BR2_m68k || BR2_TOOLCHAIN_GCC_AT_LEAST_7 # m68k needs gcc >= 7.x
+ 	select BR2_PACKAGE_CMOCKA
+ 	select BR2_PACKAGE_E2FSPROGS
+ 	select BR2_PACKAGE_GNUTLS
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index e96e86b5f3..50ae8ba6af 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -32,6 +32,11 @@ SAMBA4_CONF_ENV = \
+ 	XSLTPROC=false \
+ 	WAF_NO_PREFORK=1
  
--XWAYLAND_VERSION = 24.1.12
-+XWAYLAND_VERSION = 24.1.13
- XWAYLAND_SOURCE = xwayland-$(XWAYLAND_VERSION).tar.xz
- XWAYLAND_SITE = https://xorg.freedesktop.org/archive/individual/xserver
- XWAYLAND_LICENSE = MIT
++# m68k needs 32-bit offsets in switch tables to build
++ifeq ($(BR2_m68k),y)
++SAMBA4_CFLAGS += -mlong-jump-table-offsets
++endif
++
+ SAMBA4_PYTHON = PYTHON="$(HOST_DIR)/bin/python3"
+ ifeq ($(BR2_PACKAGE_PYTHON3),y)
+ SAMBA4_PYTHON += PYTHON_CONFIG="$(STAGING_DIR)/usr/bin/python3-config"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
