@@ -1,117 +1,118 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B83EC44523
-	for <buildroot@archiver.kernel.org>; Fri, 17 Jul 2026 14:25:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A721C4451C
+	for <buildroot@archiver.kernel.org>; Fri, 17 Jul 2026 14:25:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9034D8110D;
-	Fri, 17 Jul 2026 14:25:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9ACEC6065E;
+	Fri, 17 Jul 2026 14:25:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BvzboJV-2dNd; Fri, 17 Jul 2026 14:25:38 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8LUK2znVXtG6; Fri, 17 Jul 2026 14:25:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ECE08810D8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A3A3560678
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1784298338;
-	bh=C36B0PUVC2qLYCFl9S2sGlgdwhL1LDoZt7P7WZ2unvU=;
+	s=default; t=1784298339;
+	bh=mj2p2eBkdi7cboFRlBiy+fwdsA0VoxLpqrU5DxsV9rg=;
 	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=JJgr++7tCpzr97ALjYyGc/FFRPOWxCIExV13atZoaD5GCvjTVmkUJJMXnWXIQBtjl
-	 sVjP4PM5C+ZedgFyoCH88PgHwV1K6iOLifDwyR8lBnxweS4ryXBFX0/AJfPy0QmutK
-	 w0RLHW2jc/nPiNbihfHSlU6PRj0Q6Ibg0m8JqNmPZQnz22Db9UgBe3oSLorhUtwnV2
-	 G9G0YS5R1r2hKq0H2cVs2PIgATPBbDycVyxVVp3GffNCs+VUR4o6MgYbrIVPbukta1
-	 C7wx6G345FJrTdvLPaPvjWOKVc60pvBXE5i0bbldQpOmrG9EGrG/OZ/najhq5njqzK
-	 CvZvcWbPKXbfg==
+	b=MA+E9xocfKKBMWCB4oWRB1Uy1HE/ERRDY2cX9zPVmvP+ma8ahXcXZkIKK5EVpiNqI
+	 3A83Md48CDHoWKe1p1HzuvDTo971qw+2lA/GGwX7gKy9wdh2QdnbaEdHVLAZw7wsuG
+	 +dGm2FQU1GPSggefaHpp/tgLbWXUWWlfCa6u2zV+OKz3hypdliwI1uuNdrBhSQQjb5
+	 YSuu+CWEVvnZ3WHwsnCvp+jJI2fuInxGyNDz/UuDQkI+G/dp7sS1bKrqKrlGnXoY1t
+	 hhBNMSU4rS4MidSV8+/9jtlXgGo0jECSipKAE4YdS5PS2TU+uzOptiZHB8RcPDOs+1
+	 eCU9c8BV3HQlA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ECE08810D8;
-	Fri, 17 Jul 2026 14:25:37 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 84EDB36E
- for <buildroot@buildroot.org>; Fri, 17 Jul 2026 14:25:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A3A3560678;
+	Fri, 17 Jul 2026 14:25:39 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 43230320
+ for <buildroot@buildroot.org>; Fri, 17 Jul 2026 14:25:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 76C3D810CA
- for <buildroot@buildroot.org>; Fri, 17 Jul 2026 14:25:36 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2953D40990
+ for <buildroot@buildroot.org>; Fri, 17 Jul 2026 14:25:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id e5B-16-bwKLn for <buildroot@buildroot.org>;
- Fri, 17 Jul 2026 14:25:35 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hw6YZuIn6XS0 for <buildroot@buildroot.org>;
+ Fri, 17 Jul 2026 14:25:37 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::135; helo=mail-lf1-x135.google.com;
+ client-ip=2a00:1450:4864:20::130; helo=mail-lf1-x130.google.com;
  envelope-from=troglobit@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 78D9980F2C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 78D9980F2C
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com
- [IPv6:2a00:1450:4864:20::135])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 78D9980F2C
- for <buildroot@buildroot.org>; Fri, 17 Jul 2026 14:25:35 +0000 (UTC)
-Received: by mail-lf1-x135.google.com with SMTP id
- 2adb3069b0e04-5aeb98460c6so5199844e87.2
- for <buildroot@buildroot.org>; Fri, 17 Jul 2026 07:25:35 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 156E740569
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 156E740569
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com
+ [IPv6:2a00:1450:4864:20::130])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 156E740569
+ for <buildroot@buildroot.org>; Fri, 17 Jul 2026 14:25:36 +0000 (UTC)
+Received: by mail-lf1-x130.google.com with SMTP id
+ 2adb3069b0e04-5b015532f7bso8010701e87.0
+ for <buildroot@buildroot.org>; Fri, 17 Jul 2026 07:25:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1784298333; x=1784903133;
+ d=1e100.net; s=20251104; t=1784298334; x=1784903134;
  h=content-transfer-encoding:organization:mime-version:references
  :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
  :content-type;
- bh=3XOoK5szkIbyzWQuK2E5XKM6oOB1yYxAO/8wZvrwayM=;
- b=RK8nI5VgksoXPWndOM7zYlcs/r9uYl9NO6+J2JeZ+kFl8ZJe4ECbgO/jc4b9fFpK1F
- 5pic1h+OiU6TyQUOIeDjqUK8uPC+JBFLFMhAkUPbPXGr7LpTcDrx3QmxDjjqBI96lFpj
- VYBmJXWUhtOEHFJm6aKFF5k6p5pQGj5lm+G010LkH1sG6GpByCgHrk5aqaW0/4S03AYC
- gSfKsa412Zk/1C6J2BhzfFuxCQvhrAGZCcKEEAvhi+0ynd/rXFQTc4aVVf0+gn0zAnT+
- d2SOgc3LkE+1DLKbWyuF+oY8+qkHxHoIGSPtDUV4CjGLp69n7JK/6b2VLp2FqPat+KA+
- OVTw==
-X-Gm-Message-State: AOJu0YwmegNkhwuIuqEPbM7/JVR/hR7QkJOoFIW9ZnmH0CmsGb7CNhHI
- Rdi880soIsHnarb1lyxyKTneNmXO8mU3AwIYaIV+HL3epctaCIA19++o9TYfmw==
-X-Gm-Gg: AfdE7cmbk4QK3d3p+kbuXWD1y+lS5m3Fcacdc1xp5S6FWtCN1Gd+R7a6257g3loTcRh
- QHlAej25dpJPePz1H1DzYu508wVdLCEeiggu81YyJuL0WqkVhw64DvJ5oVoiTVXQBuzgUf4j2zy
- XzgemYIUcR/Gg/EGMzTD/bQzS7qLglZqXLZw2x/LBaDKbKbMFLAYaw/x/HpAqgC5Bhc5/NYyytV
- 8yCdto4EZPJw93MR0HZdnqLSgHS3pf894BQhDwXbs/bleLMwjPKSJsT5H/jnC19eSuLd1oGEbVD
- uomAvPTL3B7m13fDMg9eTF+o4fUfdHC94U3RB1VpHV7uaRfmU/F2HVOi1qa+W8UA+3aLsL1UFlH
- gQ6AUoEgMlA2tYoqF27PmOEBouQtRVx2jNJHVCZOOI8IHtME5GBBz7yl+nJgn9/sXBG5Pl9wPmb
- ky9sNo0RCZy42LKTlUv9Ma0L78DSrUlIWWBy/auc2WVrarALS0eUw=
-X-Received: by 2002:a05:6512:3456:b0:5ae:ba27:ee5b with SMTP id
- 2adb3069b0e04-5b28f9b7f04mr362869e87.40.1784298332733; 
- Fri, 17 Jul 2026 07:25:32 -0700 (PDT)
+ bh=ZVOFrTEAZjdvibex1824OshGVx0pC36TdOVA5udi89o=;
+ b=V8RGwgV9jTNhPB3cvljJLOELKGq/PTXBUggUk0VCzg966tyPZ/WOVVl/gYfXOUzE28
+ 5O0DTUO4sOXXRiqYL/ZVwN1vG46oViDpL7cj3cYaZKnQA22NinOZYbIJOglrUnLnKr+a
+ dbR4VzGMaQ1kkq95tBWEQQ983GUw5slwhGHGn9XBdtG0KRgkFzu7q22rokEzvLuVGMy6
+ LJ7yTwfe/TwtOqck3HOM9GcV1w3A1COV6/RzuU8h18IHU3zkSx0Jcoo3/Se03yh2bYTH
+ IrrKTaiVWRBnfi13/GYVk/fF4/iBxUA0hAQ+UzFgQ/Ze+CCQ4/NtO9Zo2Rt0I9AaPCYA
+ PEmA==
+X-Gm-Message-State: AOJu0YxK68Oftph42KvEZGY5UoE9XVmYNVKG6cAwq3U/XgYG3buTCiW+
+ 8r8WCjoWnEJBoeJv+/YRHXz77no+JBNfKCcvhk0UX8chVFh3EgjYbpTgqs3cMw==
+X-Gm-Gg: AfdE7clPCuA9uOrpE/f5nXod/5Cu+DdFUMQFZE7UIDOQzu8hHQb2PmZXBKjTv7Dmt4E
+ lZ9yNY7aNUzY/TORhD9J50JDOxxhh4GGutCisoIQdy6Nqvc5YY/2NxGh9ccUWLZZN8jDybEydww
+ V7B1Rok3Pp2oKL81Z4XyBwJ83x1EZgfvhelnTIhURpn/qPErjUDrZp7Jmy7ZKX6W4zUklZvkRLg
+ 7f+uoX5cjwJ2/m2kanMwDh7VvUtznPHvHp/NRn+SuN5Vq2OQJvuVI0EyzxH1jE9Nvk77Ckor14/
+ dk9rlIaLEJLOoXucSKJUOK8FtGWcVn/O6ebFgW/DC5ndUHMuQT112pDM3GxOCbeNmUA2u5GTYKi
+ cvsk1saWiaNTTwQ84v8EuZrvkZq2RFniNVL39oUplOMQykkx4t3sm4LU0KTflOKAy/d9nv/wnwy
+ bnr8cQfbhOGWqQBbKlXCIzyBZmNg2lKboirOEqAtkP
+X-Received: by 2002:a05:6512:603:10b0:5b1:5871:fa60 with SMTP id
+ 2adb3069b0e04-5b28f8694efmr504750e87.21.1784298334252; 
+ Fri, 17 Jul 2026 07:25:34 -0700 (PDT)
 Received: from gimli.addiva.ad (h-158-174-22-6.NA.cust.bahnhof.se.
  [158.174.22.6]) by smtp.gmail.com with ESMTPSA id
- 2adb3069b0e04-5b291e0ea1dsm361762e87.43.2026.07.17.07.25.31
+ 2adb3069b0e04-5b291e0ea1dsm361762e87.43.2026.07.17.07.25.33
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 17 Jul 2026 07:25:32 -0700 (PDT)
+ Fri, 17 Jul 2026 07:25:33 -0700 (PDT)
 From: Joachim Wiberg <troglobit@gmail.com>
 To: buildroot@buildroot.org
 Cc: Joachim Wiberg <troglobit@gmail.com>
-Date: Fri, 17 Jul 2026 16:25:27 +0200
-Message-ID: <20260717142528.2709557-2-troglobit@gmail.com>
+Date: Fri, 17 Jul 2026 16:25:28 +0200
+Message-ID: <20260717142528.2709557-3-troglobit@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260717142528.2709557-1-troglobit@gmail.com>
 References: <20260717142528.2709557-1-troglobit@gmail.com>
 MIME-Version: 1.0
 Organization: Wires
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1784298333; x=1784903133; darn=buildroot.org;
+ d=gmail.com; s=20251104; t=1784298334; x=1784903134; darn=buildroot.org;
  h=content-transfer-encoding:organization:mime-version:references
  :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
  :date:message-id:reply-to:content-type;
- bh=3XOoK5szkIbyzWQuK2E5XKM6oOB1yYxAO/8wZvrwayM=;
- b=GeFBUFYQYSub11HKOBqmGUiBCzOf9h/AGb5nvThwMz4nrzJQR+KY9GjRWMolOT4d1S
- v1MhLcPaym4F0WUBH+lwpca2AG5j0p8PfZWjNGF5errfear5EjL73x+/g3lFzUyCg0WD
- 8TEmPU6N4kU2Jv8D5tItp9YP6mOacKJylqBqFgN6zk8lkr5HpIXK9/Pc/aLDEvr9dOs5
- HM82Ss7Hme4QGqnXvQkpSTw3Meg5V8qvwQR10LHSDlqKcSgxbsLseiFosypOJ9F9N6Nm
- A3sk8qkUKpsiFsdipN2NEwaIQj/aOjjDj0PYCYb+Qn0TCfClub3bgWrvmEZGcy6QYq5b
- Va2g==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=ZVOFrTEAZjdvibex1824OshGVx0pC36TdOVA5udi89o=;
+ b=fBfA0oX6fC5tKfwk2Ne4uxjyTILTMX7D4GHv53e4umzSVZYTJ8u1M+1CP8947b9zup
+ GnHkogVom0cQ+hiX0xJkVaXA0XsjQpMUjwHJKvI96Bf8oAkL7j+uwMZGzQHLd91PzqW+
+ 3Ltn7YMHnCHLnvLsY05V1TEQcVmCdJQVs8LDC3W9EyzdKH1S+P878WjPxYa+Ewa5Razy
+ hAl0ZS60kGDSeGF4COyEbnAsjtXpyi+4qOnjCwITsg6saF4FZ2M/6d3S1JkXGzaUY+sI
+ F0/zAQJ7jwjA9kvuN3mzYp8s0/TAZt06ufwXErOYgSNEfKVnHcfVsYogmEhIhusFyzsn
+ KhIQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20251104 header.b=GeFBUFYQ
-Subject: [Buildroot] [PATCH 2/3] package/mdnsd: install libmdnsd to staging/
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20251104 header.b=fBfA0oX6
+Subject: [Buildroot] [PATCH 3/3] support/testing: mdnsd: new runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -128,28 +129,74 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The mdnsd project has always been both a daemon and a library you can
-link to your own application.  With v1.0 a major bug (requiremnt on an
-internal header, config.h) has been removed, enabling installation of
-.a and .h files to staging.
+Boot an armv5 image running the mdnsd responder alongside the mquery
+client, then check that service discovery works: mquery browses for the
+bundled _http._tcp service and mdnsd, on the same host, answers over the
+loopback of the eth0 multicast group.
 
 Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
 ---
- package/mdnsd/mdnsd.mk | 1 +
- 1 file changed, 1 insertion(+)
+ DEVELOPERS                                  |  1 +
+ support/testing/tests/package/test_mdnsd.py | 38 +++++++++++++++++++++
+ 2 files changed, 39 insertions(+)
+ create mode 100644 support/testing/tests/package/test_mdnsd.py
 
-diff --git a/package/mdnsd/mdnsd.mk b/package/mdnsd/mdnsd.mk
-index c938890508..ca443f6211 100644
---- a/package/mdnsd/mdnsd.mk
-+++ b/package/mdnsd/mdnsd.mk
-@@ -8,6 +8,7 @@ MDNSD_VERSION = 1.1
- MDNSD_SITE = https://github.com/troglobit/mdnsd/releases/download/v$(MDNSD_VERSION)
- MDNSD_LICENSE = BSD-3-Clause
- MDNSD_LICENSE_FILES = LICENSE
-+MDNSD_INSTALL_STAGING = YES
- MDNSD_DEPENDENCIES = host-pkgconf
+diff --git a/DEVELOPERS b/DEVELOPERS
+index fdfab8b489..82300c4a18 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1664,6 +1664,7 @@ F:	package/ssdp-responder/
+ F:	package/sysklogd/
+ F:	package/uredir/
+ F:	package/watchdogd/
++F:	support/testing/tests/package/test_mdnsd.py
  
- ifeq ($(BR2_PACKAGE_MDNSD_MQUERY),y)
+ N:	Jochen Baltes <jochen.baltes@gmail.com>
+ F:	package/altera-stapl
+diff --git a/support/testing/tests/package/test_mdnsd.py b/support/testing/tests/package/test_mdnsd.py
+new file mode 100644
+index 0000000000..43057d4351
+--- /dev/null
++++ b/support/testing/tests/package/test_mdnsd.py
+@@ -0,0 +1,38 @@
++import os
++
++import infra.basetest
++
++
++class TestMdnsd(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++        """
++        BR2_PACKAGE_MDNSD=y
++        BR2_PACKAGE_MDNSD_MQUERY=y
++        BR2_PACKAGE_MDNSD_HTTP_SERVICE=y
++        BR2_SYSTEM_DHCP="eth0"
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def test_run(self):
++        img = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=["-initrd", img,
++                                    "-net", "nic,model=rtl8139",
++                                    "-net", "user"])
++        self.emulator.login()
++
++        # The responder is started at boot by /etc/init.d/S50mdnsd and
++        # advertises the bundled _http._tcp service from /etc/mdns.d/.
++        self.assertRunOk("pidof mdnsd")
++
++        # mdnsd only answers on multicast capable interfaces that are
++        # up, so wait for eth0 to get its DHCP address before querying.
++        cmd = "while ! ifconfig eth0 | grep -q 'inet addr'; do sleep 1; done"
++        self.assertRunOk(cmd, timeout=30)
++
++        # mquery sends a multicast query for the advertised service;
++        # output is one "+ NAME (IP)" line per instance
++        cmd = "mquery -T _http._tcp |grep -F buildroot._http._tcp.local"
++        self.assertRunOk(cmd, timeout=30)
 -- 
 2.43.0
 
