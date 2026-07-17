@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8BB20C4451B
-	for <buildroot@archiver.kernel.org>; Fri, 17 Jul 2026 15:44:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3B06C44515
+	for <buildroot@archiver.kernel.org>; Fri, 17 Jul 2026 15:44:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B337440A44;
-	Fri, 17 Jul 2026 15:44:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BA46A80F72;
+	Fri, 17 Jul 2026 15:44:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NoJkExgy8PVC; Fri, 17 Jul 2026 15:44:22 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1-mYpd5hF--Z; Fri, 17 Jul 2026 15:44:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AD13D409CF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C5FF480F93
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1784303062;
-	bh=zNrYeaglmm5zcUC2hMrc/+H2OOTSe+O3l4MQIQDyQ9Q=;
+	s=default; t=1784303069;
+	bh=M49eX6FCM+XqznbjFDmEP5rf9wLvZyHvqc15km1euKY=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=oEAKzBGVWmaRB9eIzCqkc2SeFER5FLYFJ2adfiZ004neN4/bB6358G98cz3cqk0ne
-	 hrDE2w07WbXzepPn7VBw3nGAZTUU+XNgbg62xF3uuvZr5e7oXbnriCmXMPbTqPE2w1
-	 b+9g/Eryq/gJ0n8Lfl4idUiGX48W8JQy0INcih92mZrQe+YbTHFPEBYcbtY9oLeuBo
-	 G5sw1xTPHHX0MpQ/k4ycwtEuqcDrG9Y5sWqxJPWyQRr6mXcBmNyFtOV7X6qsrshUxt
-	 jvbJP4Os3peXp5+IVk3JFku38D+Z2wQt+i0DG/5ikEnTaYx24NF1msl36uFIqy5FIq
-	 DRkAllu4R1cyA==
+	b=BzskIfbblG/DgTyG5nm94w1qgRCOu8EI5ZBmDak6dzbLyqzZuFrosG0vPbAr3yXtq
+	 pvvwdKLUmmPSfLrNuFMebDl8K/nYFshHRvfwsh+x5jWCmpjrjV+/VJAX+xIaUVDZlj
+	 1ZHFi+wMJIAEi5VLPkh0xDyd+cMWDCtW/mfHVP6gUD10GwidCljv7+o3QfZs2hZ8Jt
+	 53H2kSsdyv8BOv64h6DnVY2sqQDbZ47Z5RlZrMUCR95fY41cUx+2lTU57Zh4mTzErF
+	 dCIyF3IWLPirHj6avR/+KS8ZsmATsAZqP7+ycjInBYAXAHEF/QhhdN3p5n/q6o1eVN
+	 nCF81awXo5t0g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AD13D409CF;
-	Fri, 17 Jul 2026 15:44:22 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 4DBD01F6
- for <buildroot@buildroot.org>; Fri, 17 Jul 2026 15:44:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C5FF480F93;
+	Fri, 17 Jul 2026 15:44:29 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 018B2A58
+ for <buildroot@buildroot.org>; Fri, 17 Jul 2026 15:44:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 33CD7409CF
+ by smtp2.osuosl.org (Postfix) with ESMTP id DB22140291
  for <buildroot@buildroot.org>; Fri, 17 Jul 2026 15:44:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id m6ev0VBafdAn for <buildroot@buildroot.org>;
- Fri, 17 Jul 2026 15:44:19 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id j1a4WAQlnuDJ for <buildroot@buildroot.org>;
+ Fri, 17 Jul 2026 15:44:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DADFE40626
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 126E3402EB
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id DADFE40626
- for <buildroot@buildroot.org>; Fri, 17 Jul 2026 15:44:19 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 126E3402EB
+ for <buildroot@buildroot.org>; Fri, 17 Jul 2026 15:44:20 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A6F2288E52; Fri, 17 Jul 2026 15:43:43 +0000 (UTC)
+ id D37BA88E54; Fri, 17 Jul 2026 15:43:43 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 17 Jul 2026 11:03:37 +0200
+Date: Fri, 17 Jul 2026 11:08:39 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: c336c3c7494fd1bfe33c29172de585a3ab0d4f3e
-X-Git-Newrev: 0923a07dfd94e123e46a3b2d523703a5f0627288
+X-Git-Oldrev: e783c375a7eb23b23c80c7f556d7ec9e3d61f4ae
+X-Git-Newrev: ab8cf429b93a52299ed01297aed87fe2d5b33253
 X-Patchwork-Hint: ignore
-Message-Id: <20260717154343.A6F2288E52@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/screen: security
- bump to version 5.0.2
+Message-Id: <20260717154343.D37BA88E54@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x]
+ package/x11r7/xlib_libXfont2: security bump version to 2.0.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,87 +77,52 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/0923a07dfd94e123e46a3b2d523703a5f0627288
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/ab8cf429b93a52299ed01297aed87fe2d5b33253
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-Rebased patch 0001.
+https://lists.x.org/archives/xorg-announce/2026-July/003715.html
+https://lists.x.org/archives/xorg-announce/2026-July/003714.html
 
-No CVE entries are found but these commits are part of the bump:
-
-TOCTOU + chown-follows-symlink in socket directory creation:
-https://cgit.git.savannah.gnu.org/cgit/screen.git/commit/?h=v.5.0.2&id=3dea5ff20c58ad497062d094b6a9b80a7535a7db
-
-fix potential null pointer dereference:
-https://cgit.git.savannah.gnu.org/cgit/screen.git/commit/?h=v.5.0.2&id=ff9d98b8e39f33b07156995188ca55f3459f4d53
+Fixes
+- CVE-2026-56001: BitmapScaleBitmaps Integer Overflow Heap Buffer Overflow
+- CVE-2026-56002: PCF Font Parsing Heap Buffer Overflow
+- CVE-2026-56003: computeProps Property Buffer Heap Buffer Overflow
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
-(cherry picked from commit 4b4a8f0ffff5b83ac5d316c3677ec948a7295e64)
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit c6e304f3835b6989c828c13c83c9b03b68b82dab)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- .../0001-Do-not-create-backup-of-old-installed-binary.patch       | 8 +++++---
- package/screen/screen.hash                                        | 4 ++--
- package/screen/screen.mk                                          | 2 +-
- 3 files changed, 8 insertions(+), 6 deletions(-)
+ package/x11r7/xlib_libXfont2/xlib_libXfont2.hash | 6 +++---
+ package/x11r7/xlib_libXfont2/xlib_libXfont2.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/screen/0001-Do-not-create-backup-of-old-installed-binary.patch b/package/screen/0001-Do-not-create-backup-of-old-installed-binary.patch
-index 4a8a55dcec..36a8c9a2c2 100644
---- a/package/screen/0001-Do-not-create-backup-of-old-installed-binary.patch
-+++ b/package/screen/0001-Do-not-create-backup-of-old-installed-binary.patch
-@@ -11,6 +11,8 @@ Signed-off-by: Baruch Siach <baruch@tkos.co.il>
- [Julien: rebase on top of 4.9.1]
- [Julien: rebase on top of 5.0.0]
- Signed-off-by: Julien Olivain <ju.o@free.fr>
-+[Bernd: rebase on top of 5.0.2]
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
- ---
-  Makefile.in | 5 -----
-  1 file changed, 5 deletions(-)
-@@ -19,8 +21,8 @@ diff --git a/Makefile.in b/Makefile.in
- index 92f434a..860ecd7 100644
- --- a/Makefile.in
- +++ b/Makefile.in
--@@ -77,12 +77,8 @@ tests/test-%: tests/test-%.c %.o tests/mallocmock.o tests/macros.h tests/signatu
-- 	$(CC) $(CPPFLAGS) $(CFLAGS) $< -o $@ $*.o tests/mallocmock.o
-+@@ -85,12 +85,8 @@ tests/test-detach-cli: tests/integration-detach.c tests/macros.h screen
-+ 	$(CC) $(CPPFLAGS) $(CFLAGS) $< -o $@
-  
-  install_bin: screen installdirs
- -	-if [ -f $(DESTDIR)$(bindir)/$(SCREEN) ] && [ ! -f $(DESTDIR)$(bindir)/$(SCREEN).old ]; \
-@@ -32,7 +34,7 @@ index 92f434a..860ecd7 100644
-  	rm -f $(DESTDIR)$(bindir)/screen
-  	(cd $(DESTDIR)$(bindir) && ln -f -s $(SCREEN) screen)
-  	cp $(srcdir)/utf8encodings/?? $(DESTDIR)$(SCREENENCODINGS)
--@@ -107,7 +103,6 @@ installdirs:
-+@@ -115,7 +111,6 @@ installdirs:
-  uninstall:
-  	rm -f $(DESTDIR)$(bindir)/$(SCREEN)
-  	rm -f $(DESTDIR)$(bindir)/screen
-diff --git a/package/screen/screen.hash b/package/screen/screen.hash
-index 61bacd88ff..f030e45490 100644
---- a/package/screen/screen.hash
-+++ b/package/screen/screen.hash
+diff --git a/package/x11r7/xlib_libXfont2/xlib_libXfont2.hash b/package/x11r7/xlib_libXfont2/xlib_libXfont2.hash
+index 4f50b2dbd2..86e972a0e8 100644
+--- a/package/x11r7/xlib_libXfont2/xlib_libXfont2.hash
++++ b/package/x11r7/xlib_libXfont2/xlib_libXfont2.hash
 @@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://ftp.gnu.org/gnu/screen/screen-5.0.1.tar.gz.sig
--sha256  2dae36f4db379ffcd14b691596ba6ec18ac3a9e22bc47ac239789ab58409869d  screen-5.0.1.tar.gz
-+# https://ftp.gnu.org/gnu/screen/screen-5.0.2.tar.gz.sig
-+sha256  ca9a2c7e240919bc7ac12124593ae4529bb4eb5f7349d8857829b7e3f0b3b332  screen-5.0.2.tar.gz
+-# From https://lists.x.org/archives/xorg-announce/2024-August/003523.html
+-sha256  8b7b82fdeba48769b69433e8e3fbb984a5f6bf368b0d5f47abeec49de3e58efb  libXfont2-2.0.7.tar.xz
+-sha512  f703127df5d5b1093c9b73e019153ed7799523573d52e61d344209f0acfd4df42e11be12bdd1880479c47c2b70de581a4f2ef74e199e9b1ac438f426593d56b0  libXfont2-2.0.7.tar.xz
++# From https://lists.x.org/archives/xorg-announce/2026-July/003715.html
++sha256  f556c0e1093a4e6911cc90bc4b106d201902ee187fd74af206ff162f7e6a24d5  libXfont2-2.0.8.tar.xz
++sha512  e14cc3fa03d7baa4554ee5754ab33f69ac1da3d509c686a5f705fde8cd07772be564d68cc18d9fd0beb5ed7b2f864fcd7f6bf4983f5c0db08a9c747d0e001531  libXfont2-2.0.8.tar.xz
  # Locally calculated
- sha256  e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b  COPYING
-diff --git a/package/screen/screen.mk b/package/screen/screen.mk
-index c85abaf411..c279fed8bc 100644
---- a/package/screen/screen.mk
-+++ b/package/screen/screen.mk
+ sha256  3b1047f0d45584973866a40e3eedc74aea4c6ac636960d650ae05af603e6d1a8  COPYING
+diff --git a/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk b/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk
+index c95f6c6395..a881a4c55b 100644
+--- a/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk
++++ b/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SCREEN_VERSION = 5.0.1
-+SCREEN_VERSION = 5.0.2
- SCREEN_SITE = $(BR2_GNU_MIRROR)/screen
- SCREEN_LICENSE = GPL-3.0+
- SCREEN_LICENSE_FILES = COPYING
+-XLIB_LIBXFONT2_VERSION = 2.0.7
++XLIB_LIBXFONT2_VERSION = 2.0.8
+ XLIB_LIBXFONT2_SOURCE = libXfont2-$(XLIB_LIBXFONT2_VERSION).tar.xz
+ XLIB_LIBXFONT2_SITE = https://xorg.freedesktop.org/archive/individual/lib
+ XLIB_LIBXFONT2_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
