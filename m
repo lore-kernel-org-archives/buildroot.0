@@ -4,82 +4,77 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A95CC44528
-	for <buildroot@archiver.kernel.org>; Sat, 18 Jul 2026 08:58:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EFC4CC4451C
+	for <buildroot@archiver.kernel.org>; Sat, 18 Jul 2026 09:50:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F3852607CB;
-	Sat, 18 Jul 2026 08:58:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6E1F1607C3;
+	Sat, 18 Jul 2026 09:50:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UAig6GBFQgAB; Sat, 18 Jul 2026 08:58:13 +0000 (UTC)
+ id Z9D7NQ_jgvmQ; Sat, 18 Jul 2026 09:50:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C0E6B606E9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5F93A60796
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1784365093;
-	bh=hbqCnzY2fnL7Pc9agFqUNwBCuQQb1ontsvE619+j56Y=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=NDV+ySEWvb8qcalgxiKPYhsZkzoV8HhMC6CyiwMaof0BVoxtLkTMTGLtl2vzRIdRK
-	 JVkOlqcqg+hAERirA5NgpjgY1farRxp16qxSn4BldiC+FqR4H6nmJGB1+2CTwzx+vl
-	 SmwuGdDfF0BhLS94p3hvvwr4NSmgWWiQUFb1XQbhCLLwZwYfYkqQltnEedCSRIc7RX
-	 3i7/i1hVOYJltxksi1ixXCAYp26muN7h6iiBtitS3HY1MFDuFdBvdVsB/PhTnJdBZC
-	 2mmgZzKsblmYf8ut+zDl35JlgJ1Qsob9WoLtWh0MyoKYqLfYsiCMBVWBPUk2kgyKpb
-	 zfEQ+Zv62l4tg==
+	s=default; t=1784368257;
+	bh=oDSQdfBu3btrMxeIzNkB7hQUORa2zBYmgiqc+2807+A=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=mwdaUytsiFsgH2g+iujyVyDlOHnw9qXi5ysUZrWvCZ7m40B7IxaUY9L03v7urT85K
+	 dpUO2NA0yxlgDvuY5eFcSHs0WaACCRXdij5Xb+PFIgD44OW27HrhriNyGkU0h8vPru
+	 C1Bjrpf1ELxC1oFE89viIDI2gD+H62hwC5o46b2l6mQ1lUG4spGITLExY3si8jrkRP
+	 kxPHdSyRUG+TXZciTi304MbyfcFNLSIk51g2+iq/Ggeb6GPLX8HTJIaVdZU3fg7/jg
+	 kE3NfTnHO0DeCxcZSvTSJ8kTWeIRSanoowbHOMKXemAcs4ki/SNn+AxbDjJ/3PIbz7
+	 Wlle2lRNdkNAA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C0E6B606E9;
-	Sat, 18 Jul 2026 08:58:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5F93A60796;
+	Sat, 18 Jul 2026 09:50:57 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id EABA71F6
- for <buildroot@buildroot.org>; Sat, 18 Jul 2026 08:58:12 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id BC4D336E
+ for <buildroot@buildroot.org>; Sat, 18 Jul 2026 09:50:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CB60F40058
- for <buildroot@buildroot.org>; Sat, 18 Jul 2026 08:58:12 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9F3AA400D8
+ for <buildroot@buildroot.org>; Sat, 18 Jul 2026 09:50:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SatprUw9499R for <buildroot@buildroot.org>;
- Sat, 18 Jul 2026 08:58:11 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0D0CD40054
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0D0CD40054
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0D0CD40054
- for <buildroot@buildroot.org>; Sat, 18 Jul 2026 08:58:10 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p54a1b33e.dip0.t-ipconnect.de [84.161.179.62])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 50470A4C20D6
- for <buildroot@buildroot.org>; Sat, 18 Jul 2026 10:58:07 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:42534)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.4)
- (envelope-from <bernd@kuhls.net>) id 1wl0s3-0000000066M-1HwC
- for buildroot@buildroot.org; Sat, 18 Jul 2026 08:58:07 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+ id K6QQc6IBDvFW for <buildroot@buildroot.org>;
+ Sat, 18 Jul 2026 09:50:53 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5A7D440054
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5A7D440054
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5A7D440054
+ for <buildroot@buildroot.org>; Sat, 18 Jul 2026 09:50:52 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:1065:2100:52d9:65fe:2df3:c492])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id D96CC5FF88;
+ Sat, 18 Jul 2026 11:50:48 +0200 (CEST)
 To: buildroot@buildroot.org
-Date: Sat, 18 Jul 2026 10:58:06 +0200
-Message-ID: <20260718085806.1047751-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
+Cc: Julien Olivain <ju.o@free.fr>
+Date: Sat, 18 Jul 2026 11:50:42 +0200
+Message-ID: <20260718095042.230873-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.55.0
 MIME-Version: 1.0
-X-Spamd-Bar: +
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202605290044; t=1784365087;
- bh=QBrwnNWeuRGie8oIGFPz3+FtjibYb1+VAlG6vdwTRWA=;
- h=From:To:Subject:Date:From;
- b=XUETXQ5lxQ9l+FimOLNkyLeQKltfV225OSEV73oL5FFiYQ06/Em9zupV19vTlQhO/
- rWsuaT2HtUTZtPtKQUaYDO50wjbyCUQMC/VH9cvdETcLp9wQotIsrvuj+td/8DShS8
- p/F/QtppZ7Rz+X2TxRbjMzp4Hfw1Lb6mggYqcyMVQWbMrOmtPN3ILqTcH9qdWVkFMM
- 7iK0o3cWbS0+NgEW/Ooc+V4K7Pr2MX/d+Iag74B+bBDC0G77nhaI5Fo+dOMv1j8HAH
- ZZ7BkVD05Ef6DXbBN8rfmNtUKrOeLroplr2Bj21SofG8l6lhD7kQJ2esDl+kZW5owh
- KxlG6zhvUkwRQ==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1784368250;
+ bh=ev8lEfInk2D7meoH7y1aSEauIzqGLnkFIULBoCE2v5o=;
+ h=From:To:Cc:Subject:Date:From;
+ b=MgF818RWzFcQVtsWknsRAszgjvMhasNuAkwbZOAOcOg9V75sfPodVW+ulEuoDPNAF
+ hVykpCcFvxA6Iqw/0XNifIrVZKCv+2xaG1TawzQxxX8OXnrrbrgGf6xoUQcCu7cdfY
+ rxxDCkgDKmbLx1RNjg05m1M0d0DdvC906qLURIqbKXmvPWEu13Q/3uqMqAERiDK5hU
+ J3seCw89YYKAC78721KN2JPULc5vWPSz29S76D/V1Q1vX+5EIZNkv8dSqw8DLRYxkp
+ dXFe5bP7HdpIAhC10Ris96WDztVbYRVJxmZFLJKPWUNZ5k3N3QeR/TEhI2DBvZ7drx
+ ldEcE3WFxLMKw==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=XUETXQ5l
-Subject: [Buildroot] [PATCH 1/1] package/openssh: fix build for powerpc64le
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=MgF818RW
+Subject: [Buildroot] [PATCH 1/1] package/openblas: bump to version v0.3.34
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -91,52 +86,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes:
-https://autobuild.buildroot.net/results/40a/40a26d9831667233944e6aabf2388f02a8cf30ac/
-https://gitlab.com/buildroot.org/buildroot/-/work_items/79
+For change log since v0.3.33, see:
+https://github.com/OpenMathLib/OpenBLAS/releases/tag/v0.3.34
 
-packet.c: In function 'ssh_packet_log_type':
-packet.c:1219:1: sorry, unimplemented: argument 'used' is not supported
- for '-fzero-call-used-regs' on this target
-
-Upstream bug report: https://bugzilla.mindrot.org/show_bug.cgi?id=3673
-
-Upstream commit
-https://github.com/openssh/openssh-portable/commit/29cf521486bf97ab9de5b9b356f812107e0671bc
-which was first released with version 10.1 and was added to buildroot
-with commit b52b3fd59dc6c86ef51b6cad5b76017f90c83beb introduced cache
-variables to disable zero-call-used-regs when needed.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
-Gitlab pipelines passed:
-https://gitlab.com/bkuhls/buildroot/-/commits/3f6778e8438e1e6c172fdc60f1185aab8afb7443
+ package/openblas/openblas.hash | 6 +++---
+ package/openblas/openblas.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
- package/openssh/openssh.mk | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-index 2f3088defe..5575ba4f97 100644
---- a/package/openssh/openssh.mk
-+++ b/package/openssh/openssh.mk
-@@ -36,6 +36,10 @@ define OPENSSH_PERMISSIONS
- 	/var/empty d 755 root root - - - - -
- endef
+diff --git a/package/openblas/openblas.hash b/package/openblas/openblas.hash
+index 37685185b8..e4b14cda50 100644
+--- a/package/openblas/openblas.hash
++++ b/package/openblas/openblas.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/OpenMathLib/OpenBLAS/releases/tag/v0.3.33
+-md5  96c5cd9013013faefc294bc57830c77d  openblas-0.3.33.tar.gz
+-sha256  6761af1d9f5d353ab4f0b7497be2643313b36c8f31caec0144bfef198e71e6ab  openblas-0.3.33.tar.gz
++# From https://github.com/OpenMathLib/OpenBLAS/releases/tag/v0.3.34
++md5  ae9a0c2945f91b6f91747fd89a301d36  openblas-0.3.34.tar.gz
++sha256  cd7e129868320cc2d033afa920e31202dfe0b8066a5b66661900ccc0f197dfed  openblas-0.3.34.tar.gz
+ # Locally calculated
+ sha256  190b5a9c8d9723fe958ad33916bd7346d96fab3c5ea90832bb02d854f620fcff  LICENSE
+diff --git a/package/openblas/openblas.mk b/package/openblas/openblas.mk
+index 9a3bb42496..64e3b00691 100644
+--- a/package/openblas/openblas.mk
++++ b/package/openblas/openblas.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_powerpc64le),y)
-+OPENSSH_CONF_ENV += ossh_cv_cflag__fzero_call_used_regs_used=no
-+endif
-+
- ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_110934),y)
- OPENSSH_CONF_OPTS += --without-hardening
- endif
+-OPENBLAS_VERSION = 0.3.33
++OPENBLAS_VERSION = 0.3.34
+ OPENBLAS_SITE = https://github.com/OpenMathLib/OpenBLAS/releases/download/v$(OPENBLAS_VERSION)
+ OPENBLAS_LICENSE = BSD-3-Clause
+ OPENBLAS_LICENSE_FILES = LICENSE
 -- 
-2.47.3
+2.55.0
 
 _______________________________________________
 buildroot mailing list
