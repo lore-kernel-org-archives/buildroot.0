@@ -1,62 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A98F7C44523
-	for <buildroot@archiver.kernel.org>; Sun, 19 Jul 2026 11:34:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 771C5C44512
+	for <buildroot@archiver.kernel.org>; Sun, 19 Jul 2026 11:35:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 378F640553;
-	Sun, 19 Jul 2026 11:34:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2D8AE808C7;
+	Sun, 19 Jul 2026 11:35:05 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lYVzJaJqgHHg; Sun, 19 Jul 2026 11:35:04 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 44D9580906
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1784460904;
+	bh=OU0xk6IZ5t6PeLnBzp7S56gsaqq//zGqtsvtDDlT8to=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=ilueesBZCTbhbMheSaYjq7ovMbUj/aNOUl0fOzDgUdzBbuKGsRQGKjJJC1S+D8z0o
+	 kec57JIlcRf6Q4FTOTMmrufBKyg5zvwfyiBko5GfgxW+hFUj8syxsl0vvS4gaw9Coq
+	 sLQpgscU3Hm0wFnQ15L5mgSMM82CeBoLLPnDf3UvTkAZ07S2vu3USibbZg0CnE6vx/
+	 7nAOIskMRXz9P0C2YR0WwgjyT769yfE0jImgLaTKAi97P4Er3qvt3e9T2GpLX44kIh
+	 QnJQcwm16itYej0MwSAPVfo11bwnPxDeyZTfICi39Vmra7SkmH79EUOZkMqsBP4dYy
+	 XpkIzcnyfcz3w==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 44D9580906;
+	Sun, 19 Jul 2026 11:35:04 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 646561F6
+ for <buildroot@buildroot.org>; Sun, 19 Jul 2026 11:35:02 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 61F9540560
+ for <buildroot@buildroot.org>; Sun, 19 Jul 2026 11:35:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yc_481Y0S6jm; Sun, 19 Jul 2026 11:34:46 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3A96040560
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1784460886;
-	bh=grCFKPOxiBTfiC4NgcMFtYjRNf6isdqRwwi6w+eePis=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=pdQ3iPH6jZ+Z4EI+6zuvQwK06+FVrAnKirrFzltkeo1WKG3f0AWx1G2gRRp/enJYu
-	 qGgW6hjRxl1cwp4TjySDZVGMFEWzyYKhWKIK93cQqZXa9jVKE1GwUaTqSUnb98j4C/
-	 JMgII3Y2vNjpqOVI0DOpBwLf9l4G25WZCqmMk7YRIlCa9NJs6+kecozwM/gwmsR+j1
-	 4QqgyopWVTh6OQ9MBCX5XAabjz1TBWWA6tYMuBswfFp7MyGyQeGOFUEEY01+o8oPcc
-	 OskQOStRUjE/xSEYexivr3dJhQmsg2Z93PPVnq9Zfong3YVq+9GVr5+HTIrKzmMkXg
-	 2ZOfOOFSuz2rw==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3A96040560;
-	Sun, 19 Jul 2026 11:34:46 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id EBD651F6
- for <buildroot@buildroot.org>; Sun, 19 Jul 2026 11:34:42 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D18A44005D
- for <buildroot@buildroot.org>; Sun, 19 Jul 2026 11:34:42 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6GTBRfBwGZui for <buildroot@buildroot.org>;
- Sun, 19 Jul 2026 11:34:41 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8700A40058
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8700A40058
- for <buildroot@buildroot.org>; Sun, 19 Jul 2026 11:34:41 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 489FE88F82; Sun, 19 Jul 2026 11:34:04 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 19 Jul 2026 13:08:56 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ed51b4b691592a24b2650b24539400e7a1a099f8
-X-Git-Newrev: 6688a33296bd72d58a0ae5fb38910d1f3435859e
-X-Patchwork-Hint: ignore
-Message-Id: <20260719113404.489FE88F82@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/bitcoin: bump version to 31.1
+ id ZU4lcXH0S1Hx for <buildroot@buildroot.org>;
+ Sun, 19 Jul 2026 11:35:01 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6E4FE40553
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6E4FE40553
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6E4FE40553
+ for <buildroot@buildroot.org>; Sun, 19 Jul 2026 11:35:00 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id 05E9D13F8B9;
+ Sun, 19 Jul 2026 13:34:54 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 19 Jul 2026 13:34:54 +0200
+MIME-Version: 1.0
+Date: Sun, 19 Jul 2026 13:34:54 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org, Dick Olsson <hi@senzilla.io>, Fabio Urquiza
+ <fabiorush@gmail.com>
+In-Reply-To: <20260718065215.928877-1-bernd@kuhls.net>
+References: <20260718065215.928877-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.17
+Message-ID: <bc1bca259632eed8b37c4ed0c13416f4@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1784460898;
+ bh=pH+fvdO+IFKaZQEIXruYMiOccB/bG+KXDLsw9UCcv00=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=Ei9UC1qRXFXvquKogeBiLrqAJOAT8/A8lVHiVm3RbMRAhDY6UTBU98xhp1z4N+nb/
+ 7WfML2HfsHgJ5Q9G6l/0HHpk66H7zJf3dE2PqjLC5+58R6hM0U6ZfC50MqwOC+NUp0
+ Zr40pI+tbhFoa3uGtW5g5BCwHSDJ7VmME7MttoZmLyV2nP/IWRCI+8Tg7T0Wm2H/rw
+ c+nG486d8zkVmTYArbL+U16AIkUNELz9uj4o5A37dTc1r4hb9tnBN9dnipIJp1SnEF
+ plPXCf1r2FqDZpQWV1stHx4bF5ZVUMnBwa+QUvhnfegvakwgQFUuFqmyj8V9MkSlXr
+ y9skZ9KhRsfpQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=Ei9UC1qR
+Subject: Re: [Buildroot] [PATCH 1/3] package/bitcoin: Fix static link of
+ libevent
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,52 +97,35 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/6688a33296bd72d58a0ae5fb38910d1f3435859e
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 18/07/2026 08:52, Bernd Kuhls wrote:
+> Buildroot commit fabcd7c8cc44e7e03c68bfcd2b4e2d10331a93f6 bumped the
+> package from 28.0 to 30.0 which includes upstream commit
+> https://github.com/bitcoin/bitcoin/commit/b619bdc3303217f4415342fe60e586e18fa48308
+> that was first included in version 29.0 and changed the linking of
+> libevent libraries.
+> 
+> This causes build errors when linked statically due to the wrong order
+> of libraries. To fix the problem we add a patch to change the order of
+> the libevent libraries.
+> 
+> The patch was not sent upstream because libevent support was removed
+> from the master branch with upstream commit:
+> https://github.com/bitcoin/bitcoin/commit/35d2d0679782581cbbf05babc59f0f28858a9b72
+> 
+> Fixes:
+> https://autobuild.buildroot.org/results/80e05370b6542ba2f5d2908bad7f420f76dc6831/
+> 
+> The oldest build error of this kind dates back to Dec 2025:
+> https://autobuild.buildroot.net/results/6bb/6bbd822d55dfcf3862e8b713323e0f34f65990ee/
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-https://bitcoincore.org/en/releases/31.1/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/bitcoin/bitcoin.hash | 6 +++---
- package/bitcoin/bitcoin.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/bitcoin/bitcoin.hash b/package/bitcoin/bitcoin.hash
-index b1576d5e8a..3adfc7a5d0 100644
---- a/package/bitcoin/bitcoin.hash
-+++ b/package/bitcoin/bitcoin.hash
-@@ -1,7 +1,7 @@
--# Hash from: https://bitcoincore.org/bin/bitcoin-core-31.0/SHA256SUMS
-+# Hash from: https://bitcoincore.org/bin/bitcoin-core-31.1/SHA256SUMS
- # After checking pgp signature from:
--# https://bitcoincore.org/bin/bitcoin-core-31.0/SHA256SUMS.asc
--sha256  0ba0ef5eea3aefd96cc1774be274c3d594812cfac0988809d706738bb067b3e3  bitcoin-31.0.tar.gz
-+# https://bitcoincore.org/bin/bitcoin-core-31.1/SHA256SUMS.asc
-+sha256  50411d5b43c7e4c90099394759eb6c2add6e7c2dbe728840893d638b6fc6afc9  bitcoin-31.1.tar.gz
- 
- # Hash for license file
- sha256  b028769f3852a9368ab10bd754ff01ebb741f84a2fa658c9aff82a631bc6ecfc  COPYING
-diff --git a/package/bitcoin/bitcoin.mk b/package/bitcoin/bitcoin.mk
-index d7019f2aa9..857768eba8 100644
---- a/package/bitcoin/bitcoin.mk
-+++ b/package/bitcoin/bitcoin.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BITCOIN_VERSION = 31.0
-+BITCOIN_VERSION = 31.1
- BITCOIN_SITE = https://bitcoincore.org/bin/bitcoin-core-$(BITCOIN_VERSION)
- BITCOIN_LICENSE = MIT
- BITCOIN_LICENSE_FILES = COPYING
+Series applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
