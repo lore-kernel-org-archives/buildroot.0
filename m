@@ -4,90 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6B236C44512
-	for <buildroot@archiver.kernel.org>; Sun, 19 Jul 2026 12:53:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9C0CC44521
+	for <buildroot@archiver.kernel.org>; Sun, 19 Jul 2026 13:16:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2C94A6060A;
-	Sun, 19 Jul 2026 12:53:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6CF9E6062C;
+	Sun, 19 Jul 2026 13:16:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eroa7yQn8rJd; Sun, 19 Jul 2026 12:53:55 +0000 (UTC)
+ id RjpOAb7T2CMv; Sun, 19 Jul 2026 13:16:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 123126066F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 77DFA60633
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1784465635;
-	bh=f92VF1ltUk83AjoJt7RheNuD8wcoTlh6LRnwk7Le9aQ=;
-	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	s=default; t=1784466997;
+	bh=ooQuV2DSaTcRExa1RwYzzV4lMYGHdbc3ons6AvbtzwU=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=q4QWBANhiQT2KAneMUyPW81Hxd3upxwZohKl+sd/MLVkCE7rDNqgOBNzNc+sPGDk6
-	 x5Aqt6OX9cb4aTWXniFYhbO6tZg8u/ZaztfCvvT9XhM45Wj87T1XDsilVQvlwwT034
-	 HKJMSILk9qI1iirIdq4ZwqfRsPpnLIkQ2Uk81/6V4Bom4Gf+lT6TLF12/jAo838Xtu
-	 B7mjpnrO7ME2JyfnkpylAEuSDfhvryWNdpROP6GRL6W5XT4y47R8JMILBOtAVw8fea
-	 a8+Bz/JwPPBrS5Bf3UAnqsHM1SZ/dIlJdwpgmigqwD830FSAkFkgPIkpGdYQp5g8Xv
-	 2bT5smfcIgGCQ==
+	 From:Reply-To:From;
+	b=c537kI1i/b0GkzTBONhM1lsPYj+l5XoT6iWwc93YOaVFmmzv4QV0k0D3aMl39dJ/g
+	 2eMBl1aFDJydWEY71VfjlcZjTyJTVtwcAIR5W0aRjxximgtfG7MowjPfK7fROPrZsB
+	 M3jywujLvtSmSKRwQRRMqty5lDkWt2Jo5qUVt2e9KMXUovLhlcJ+tY7JvyGfMhcx+7
+	 8Xc2qxwTZJWKc4/bVtZT0zXogQKCirVB3cB1ydMZQ2zGCY7L3zDHq3OiUgxZhQl9YI
+	 fgPeTKE5G38SDTwhXZ+n1VLiU8JVP1wstjizkHjVnGQiWhmYZIORFrbKTcgheiA130
+	 HPkB0EOlxpPaw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 123126066F;
-	Sun, 19 Jul 2026 12:53:55 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 36FDD206
- for <buildroot@buildroot.org>; Sun, 19 Jul 2026 12:53:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 77DFA60633;
+	Sun, 19 Jul 2026 13:16:37 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id E0B9C206
+ for <buildroot@buildroot.org>; Sun, 19 Jul 2026 13:16:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1CA884008E
- for <buildroot@buildroot.org>; Sun, 19 Jul 2026 12:53:53 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id CA4E740557
+ for <buildroot@buildroot.org>; Sun, 19 Jul 2026 13:16:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eKPVJnVmTN7R for <buildroot@buildroot.org>;
- Sun, 19 Jul 2026 12:53:52 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 81DBE40060
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 81DBE40060
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 81DBE40060
- for <buildroot@buildroot.org>; Sun, 19 Jul 2026 12:53:51 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p54a1bf2b.dip0.t-ipconnect.de [84.161.191.43])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 40CE7A4C3CE1;
- Sun, 19 Jul 2026 14:53:35 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:60424)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.4)
- (envelope-from <bernd@kuhls.net>) id 1wlR1S-000000000fS-3Mqy;
- Sun, 19 Jul 2026 12:53:34 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
-To: buildroot@buildroot.org
-Cc: Adrian Perez de Castro <aperez@igalia.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Joseph Kogut <joseph.kogut@gmail.com>,
- Marcus Folkesson <marcus.folkesson@gmail.com>,
- Romain Naour <romain.naour@gmail.com>, Simon Dawson <spdawson@gmail.com>
-Date: Sun, 19 Jul 2026 14:53:34 +0200
-Message-ID: <20260719125334.1772882-2-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260719125334.1772882-1-bernd@kuhls.net>
-References: <20260719125334.1772882-1-bernd@kuhls.net>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZqJkHkvAZUek for <buildroot@buildroot.org>;
+ Sun, 19 Jul 2026 13:16:35 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A084940556
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A084940556
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A084940556
+ for <buildroot@buildroot.org>; Sun, 19 Jul 2026 13:16:34 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id D856678034D;
+ Sun, 19 Jul 2026 15:16:30 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 19 Jul 2026 15:16:30 +0200
 MIME-Version: 1.0
-X-Spamd-Bar: /
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202605290044; t=1784465615;
- bh=ybOJSypKKbZDOmT4q6q7mGN6KMmpKv39poLZ4WO2EJI=;
- h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=pE2IDBhd1NPP9S7bQLOhqsDqWCb/sPbn98ziaHt98S2Di0U5Vq15lkmc1RgxZMLsK
- k7EU2jJcaHAei/AZMqXULrP8mgvpHyQBjK5pfAWHUdPfRZe2UPrpZhq5BMwa5MEggG
- /KxFFotV69eNtZcxRrhmdORnxosCJ5cyjijO00OFdO4m7Hu7HmCGysG4RAh7zdztCj
- vZpnn1wKlxBizhYUlot3YSZbVHzKHEajDc2zk/gp+6/W188hDie1/49O/OpR1KkRSM
- 65zzdQyXo1WfymxenR1AcAROdaC2vIFTuBU6cdzZn8Mv5zOxik/WUvNJ4DHRR5yAL5
- PmXYflFV3zGmQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=pE2IDBhd
-Subject: [Buildroot] [PATCH 2/2] package/libepoxy: needs threads
+Date: Sun, 19 Jul 2026 15:16:30 +0200
+To: Andrea Ricchi <andrea.ricchi@amarulasolutions.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20260717093249.2183039-1-andrea.ricchi@amarulasolutions.com>
+References: <20260717093249.2183039-1-andrea.ricchi@amarulasolutions.com>
+User-Agent: Webmail Free/1.6.17
+Message-ID: <10790734da8d04317e5e8a78fe12030c@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1784466992;
+ bh=VVL1HjFWmr/tBQ1url8b1sMoJIuW+Vr/pN0sQtsBN9Q=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=FA6Y9LFrzdP6Iz6YQpdyhvXN6eFRGNelIzte4h14yKrcLBaCgf51rk6vVXr5b2ma1
+ ULeV3CCtCqhkbRip52tnhNZ5fa47XzTXC5tDZMtoCvFqtFOgrStYF2pceXPVQvx0QG
+ JMAXbRiBkBnhNu6x8RENxYiyKYDwI0DHgXmoW9dIxwVtg/PuAFG3APIt8Hg2/IMa9T
+ QvHXUJJuWWAMFUVTy3g6tob347gHK/WafB2j/4Pt1782B9PW1+jcMIJNGK02TSjzON
+ wHm64Lfip0IdPPn4uCd9dNKm5mI3o1NUMgojCNRk498nFWb/Nz5mGlUXFWtKAJdS02
+ YtynQUW5tt1/g==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=FA6Y9LFr
+Subject: Re: [Buildroot] [PATCH v2] package/libcppconnman: add new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -99,164 +92,106 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Buildroot commit cd2583ca0a993cb44e8822966f101e820ac2619e removed the
-dependencies to gl/egl which revealed that libepoxy needs a toolchain
-with threads:
+Hi Andrea,
 
-../src/dispatch_common.c:168:10: fatal error: pthread.h:
- No such file or directory
-  168 | #include <pthread.h>
+Thanks for the patch.
 
-Fixes:
-https://autobuild.buildroot.net/results/dc2/dc27a008af73c7676e4f54e4846d87f9d5aef98e/
+The package  introduces build failures for some toolchains. See:
+https://gitlab.com/jolivain/buildroot/-/pipelines/2688533526
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
-Gitlab pipelines passed:
-https://gitlab.com/bkuhls/buildroot/-/commits/434f04d604de12c7a4dcad4a605b0c5219d7319c
+You can reproduce locally with the command:
+utils/test-pkg -a -p libcppconnman
 
- package/libcamera-apps/Config.in | 2 +-
- package/libepoxy/Config.in       | 5 +++--
- package/libfm/Config.in          | 2 +-
- package/libgtk3/Config.in        | 2 +-
- package/libgtk4/Config.in        | 2 +-
- package/menu-cache/Config.in     | 2 +-
- package/pcmanfm/Config.in        | 2 +-
- package/wpebackend-fdo/Config.in | 2 +-
- package/xscreensaver/Config.in   | 2 +-
- 9 files changed, 11 insertions(+), 10 deletions(-)
+I have another comment, see below.
 
-diff --git a/package/libcamera-apps/Config.in b/package/libcamera-apps/Config.in
-index a7f37e3e52..3c3ac7eaf6 100644
---- a/package/libcamera-apps/Config.in
-+++ b/package/libcamera-apps/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_LIBCAMERA_APPS
- 	bool "libcamera-apps"
- 	depends on BR2_PACKAGE_LIBCAMERA_ARCH_SUPPORTS # libcamera
- 	depends on BR2_INSTALL_LIBSTDCPP # libcamera/boost
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libcamera/boost
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libcamera/boost, libepoxy
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_9 # libcamera
- 	depends on !BR2_STATIC_LIBS # gnutls/libcamera, libepoxy
- 	depends on BR2_USE_WCHAR # gnutls/libcamera/boost
-diff --git a/package/libepoxy/Config.in b/package/libepoxy/Config.in
-index 269b43be85..6ff0c6072f 100644
---- a/package/libepoxy/Config.in
-+++ b/package/libepoxy/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LIBEPOXY
- 	bool "libepoxy"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_STATIC_LIBS # dlfcn.h
- 	select BR2_PACKAGE_XUTIL_UTIL_MACROS
- 	help
-@@ -12,5 +13,5 @@ config BR2_PACKAGE_LIBEPOXY
- 
- 	  https://github.com/anholt/libepoxy
- 
--comment "libepoxy needs a toolchain w/ dynamic library"
--	depends on BR2_STATIC_LIBS
-+comment "libepoxy needs a toolchain w/ dynamic library, threads"
-+	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/libfm/Config.in b/package/libfm/Config.in
-index e4d6528db5..abb35ca3dd 100644
---- a/package/libfm/Config.in
-+++ b/package/libfm/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_LIBFM
- 	bool "libfm"
- 	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS # libgtk3
- 	depends on BR2_USE_WCHAR # libgtk3, libglib2
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libgtk3, libglib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libepoxy, libgtk3, libglib2
- 	depends on BR2_USE_MMU # libgtk3, libglib2
- 	depends on BR2_INSTALL_LIBSTDCPP # libgtk3
- 	depends on !BR2_STATIC_LIBS # libepoxy -> libgtk3
-diff --git a/package/libgtk3/Config.in b/package/libgtk3/Config.in
-index 7717afdac2..9715254ea8 100644
---- a/package/libgtk3/Config.in
-+++ b/package/libgtk3/Config.in
-@@ -17,7 +17,7 @@ config BR2_PACKAGE_LIBGTK3
- 	bool "libgtk3"
- 	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS # host-libgtk3 -> host-librsvg
- 	depends on BR2_USE_WCHAR # glib2
--	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2, libepoxy
- 	depends on BR2_USE_MMU # glib2
- 	depends on BR2_INSTALL_LIBSTDCPP # pango
- 	depends on !BR2_STATIC_LIBS # libepoxy
-diff --git a/package/libgtk4/Config.in b/package/libgtk4/Config.in
-index 958742ae43..c1f3928b8a 100644
---- a/package/libgtk4/Config.in
-+++ b/package/libgtk4/Config.in
-@@ -16,7 +16,7 @@ config BR2_PACKAGE_LIBGTK4
- 	bool "libgtk4"
- 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # librsvg
- 	depends on BR2_USE_WCHAR # glib2
--	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2, graphene
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2, graphene, libepoxy
- 	depends on BR2_USE_MMU # glib2
- 	depends on BR2_INSTALL_LIBSTDCPP # pango
- 	depends on !BR2_STATIC_LIBS # libepoxy
-diff --git a/package/menu-cache/Config.in b/package/menu-cache/Config.in
-index 3e7137c7a8..a84f807625 100644
---- a/package/menu-cache/Config.in
-+++ b/package/menu-cache/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_MENU_CACHE
- 	bool "menu-cache"
- 	depends on BR2_USE_WCHAR # libglib2
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libepoxy, libglib2
- 	depends on !BR2_STATIC_LIBS # libepoxy -> libfm
- 	depends on BR2_USE_MMU # libglib2
- 	select BR2_PACKAGE_LIBGLIB2
-diff --git a/package/pcmanfm/Config.in b/package/pcmanfm/Config.in
-index 7e411b22ac..5250176c1f 100644
---- a/package/pcmanfm/Config.in
-+++ b/package/pcmanfm/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_PCMANFM
- 	bool "pcmanfm"
- 	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS # libfm
- 	depends on BR2_USE_WCHAR # libfm
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libfm
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libepoxy, libfm
- 	depends on BR2_USE_MMU # libfm
- 	depends on BR2_INSTALL_LIBSTDCPP # libfm
- 	depends on !BR2_STATIC_LIBS # libepoxy -> libgtk3 -> libfm
-diff --git a/package/wpebackend-fdo/Config.in b/package/wpebackend-fdo/Config.in
-index 0e59b8df1a..5dfbf678b6 100644
---- a/package/wpebackend-fdo/Config.in
-+++ b/package/wpebackend-fdo/Config.in
-@@ -6,7 +6,7 @@ config BR2_PACKAGE_WPEBACKEND_FDO
- 	bool "wpebackend-fdo"
- 	depends on !BR2_STATIC_LIBS # libepoxy, wayland
- 	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland, libglib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libepoxy, libglib2, wayland
- 	depends on BR2_USE_WCHAR # libglib2
- 	depends on BR2_USE_MMU # libglib2
- 	depends on BR2_PACKAGE_HAS_LIBEGL
-diff --git a/package/xscreensaver/Config.in b/package/xscreensaver/Config.in
-index 80fb1550f3..5763f12601 100644
---- a/package/xscreensaver/Config.in
-+++ b/package/xscreensaver/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_XSCREENSAVER
- 	depends on BR2_PACKAGE_HAS_LIBGL # libglu
- 	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS # libgtk3
- 	depends on BR2_USE_WCHAR # libgtk3, libglib2
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libgtk3, libglib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libepoxy, libgtk3, libglib2
- 	depends on BR2_USE_MMU # libgtk3, libglib2
- 	depends on BR2_INSTALL_LIBSTDCPP # libgtk3
- 	depends on !BR2_STATIC_LIBS # libepoxy -> libgtk3
--- 
-2.47.3
+On 17/07/2026 11:32, Andrea Ricchi wrote:
+> libcppconnman is a C++ library that provides an easy-to-use API
+> to communicate with ConnMan over D-Bus using GDBus.
+> 
+> https://github.com/amarula/libcppconnman
+> 
+> Also add myself to DEVELOPERS for this package.
+> 
+> Signed-off-by: Andrea Ricchi <andrea.ricchi@amarulasolutions.com>
+> ---
+> Changes v1 -> v2:
+>   - add missing libcppconnman entry in package/Config.in
+>   - merge the DEVELOPERS addition into this patch
+> 
+>  DEVELOPERS                               |  1 +
+>  package/Config.in                        |  1 +
+>  package/libcppconnman/Config.in          | 26 ++++++++++++++++++++++++
+>  package/libcppconnman/libcppconnman.hash |  3 +++
+>  package/libcppconnman/libcppconnman.mk   | 24 ++++++++++++++++++++++
+>  5 files changed, 55 insertions(+)
+>  create mode 100644 package/libcppconnman/Config.in
+>  create mode 100644 package/libcppconnman/libcppconnman.hash
+>  create mode 100644 package/libcppconnman/libcppconnman.mk
+> 
+[...]
+> diff --git a/package/libcppconnman/Config.in 
+> b/package/libcppconnman/Config.in
+> new file mode 100644
+> index 0000000000..19dc0bbd2d
+> --- /dev/null
+> +++ b/package/libcppconnman/Config.in
+> @@ -0,0 +1,26 @@
+> +config BR2_PACKAGE_LIBCPPCONNMAN
+> +	bool "libcppconnman"
+> +	depends on BR2_INSTALL_LIBSTDCPP
+> +	depends on BR2_USE_WCHAR # libglib2
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+> +	depends on BR2_USE_MMU # libglib2
+> +	select BR2_PACKAGE_LIBGLIB2
+> +	help
+> +	  libcppconnman provide easy to use C++ API to communicate
+> +	  with ConnMan via the DBus using GDBus.
+> +
+> +	  https://amarula.github.io/libcppconnman/
+> +
+> +comment "libcppconnman needs a toolchain w/ C++, wchar, threads"
+> +	depends on BR2_USE_MMU
+> +	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+> +		!BR2_TOOLCHAIN_HAS_THREADS
+> +
+> +if BR2_PACKAGE_LIBCPPCONNMAN
+> +
+> +config BR2_PACKAGE_LIBCPPCONNMAN_EXAMPLE
+> +	bool "libcppconnman example"
 
+When configuring with examples, package build configuration fails with
+a missing readline library. You can reproduce with:
+
+cat >.config <<EOF
+BR2_aarch64=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_PACKAGE_LIBCPPCONNMAN=y
+BR2_PACKAGE_LIBCPPCONNMAN_EXAMPLE=y
+EOF
+make olddefconfig
+make libcppconnman
+
+Could you add this missing dependency (both in Config.in and in the .mk 
+file)
+please?
+
+> +	help
+> +	  Compile CLI example.
+> +
+> +endif
+
+Could you send an updated patch fixing those issues, please?
+
+Best regards,
+
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
