@@ -4,83 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9C0CC44521
-	for <buildroot@archiver.kernel.org>; Sun, 19 Jul 2026 13:16:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2D67C44521
+	for <buildroot@archiver.kernel.org>; Sun, 19 Jul 2026 13:29:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6CF9E6062C;
-	Sun, 19 Jul 2026 13:16:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B509B6062C;
+	Sun, 19 Jul 2026 13:29:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RjpOAb7T2CMv; Sun, 19 Jul 2026 13:16:37 +0000 (UTC)
+ id s1KF7DXJW2O7; Sun, 19 Jul 2026 13:29:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 77DFA60633
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9464460633
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1784466997;
-	bh=ooQuV2DSaTcRExa1RwYzzV4lMYGHdbc3ons6AvbtzwU=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=c537kI1i/b0GkzTBONhM1lsPYj+l5XoT6iWwc93YOaVFmmzv4QV0k0D3aMl39dJ/g
-	 2eMBl1aFDJydWEY71VfjlcZjTyJTVtwcAIR5W0aRjxximgtfG7MowjPfK7fROPrZsB
-	 M3jywujLvtSmSKRwQRRMqty5lDkWt2Jo5qUVt2e9KMXUovLhlcJ+tY7JvyGfMhcx+7
-	 8Xc2qxwTZJWKc4/bVtZT0zXogQKCirVB3cB1ydMZQ2zGCY7L3zDHq3OiUgxZhQl9YI
-	 fgPeTKE5G38SDTwhXZ+n1VLiU8JVP1wstjizkHjVnGQiWhmYZIORFrbKTcgheiA130
-	 HPkB0EOlxpPaw==
+	s=default; t=1784467745;
+	bh=GPwP1HRtppEtUIF2GEB54zP3tT7r1SAnevc1D+IptFM=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=n1XVnJE1VdZzGTxUHB5M4VV33a/0GakcA2dHzhc8d29o5C6N2d7YoJcmkM4R6epjf
+	 ZViZDQaiYka/GYhT/wkU8NG0YFpTtz5m0IcY2AEbuxoDzveqJljBn99MWbrwACLaNu
+	 h2fIm4RKS9VkDNZ/YKG/Z6Vmq87h1S38758JV5B2Z0ww7QuCaJjEU+XbYRqVUG00JD
+	 Vy+njkILG1oa3qc94S28mvLLwl0wg2j0AFvlj07IHgGk/4e8IT5JCxsJMwekPWAOdf
+	 A1rE2vDwYh4nFNI45qe8p5EkBBSgLJAaIQC4ihu94b6PkgkvSGgINqWEA04oL3V71z
+	 SVxDVZ5F+LxNA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 77DFA60633;
-	Sun, 19 Jul 2026 13:16:37 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id E0B9C206
- for <buildroot@buildroot.org>; Sun, 19 Jul 2026 13:16:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9464460633;
+	Sun, 19 Jul 2026 13:29:05 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 36D95206
+ for <buildroot@buildroot.org>; Sun, 19 Jul 2026 13:29:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CA4E740557
- for <buildroot@buildroot.org>; Sun, 19 Jul 2026 13:16:35 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 156D240060
+ for <buildroot@buildroot.org>; Sun, 19 Jul 2026 13:29:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZqJkHkvAZUek for <buildroot@buildroot.org>;
- Sun, 19 Jul 2026 13:16:35 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
- helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A084940556
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A084940556
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A084940556
- for <buildroot@buildroot.org>; Sun, 19 Jul 2026 13:16:34 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPA id D856678034D;
- Sun, 19 Jul 2026 15:16:30 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 19 Jul 2026 15:16:30 +0200
-MIME-Version: 1.0
-Date: Sun, 19 Jul 2026 15:16:30 +0200
-To: Andrea Ricchi <andrea.ricchi@amarulasolutions.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20260717093249.2183039-1-andrea.ricchi@amarulasolutions.com>
-References: <20260717093249.2183039-1-andrea.ricchi@amarulasolutions.com>
-User-Agent: Webmail Free/1.6.17
-Message-ID: <10790734da8d04317e5e8a78fe12030c@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1784466992;
- bh=VVL1HjFWmr/tBQ1url8b1sMoJIuW+Vr/pN0sQtsBN9Q=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=FA6Y9LFrzdP6Iz6YQpdyhvXN6eFRGNelIzte4h14yKrcLBaCgf51rk6vVXr5b2ma1
- ULeV3CCtCqhkbRip52tnhNZ5fa47XzTXC5tDZMtoCvFqtFOgrStYF2pceXPVQvx0QG
- JMAXbRiBkBnhNu6x8RENxYiyKYDwI0DHgXmoW9dIxwVtg/PuAFG3APIt8Hg2/IMa9T
- QvHXUJJuWWAMFUVTy3g6tob347gHK/WafB2j/4Pt1782B9PW1+jcMIJNGK02TSjzON
- wHm64Lfip0IdPPn4uCd9dNKm5mI3o1NUMgojCNRk498nFWb/Nz5mGlUXFWtKAJdS02
- YtynQUW5tt1/g==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=FA6Y9LFr
-Subject: Re: [Buildroot] [PATCH v2] package/libcppconnman: add new package
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hDrD2kYz7wzM for <buildroot@buildroot.org>;
+ Sun, 19 Jul 2026 13:29:02 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A4A3C40058
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id A4A3C40058
+ for <buildroot@buildroot.org>; Sun, 19 Jul 2026 13:29:02 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 735DF88F93; Sun, 19 Jul 2026 13:28:25 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 19 Jul 2026 15:27:47 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 6688a33296bd72d58a0ae5fb38910d1f3435859e
+X-Git-Newrev: 8419f0f0c747abe3acd90b0cffb21c2eb34ee623
+X-Patchwork-Hint: ignore
+Message-Id: <20260719132825.735DF88F93@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/pahole: fix build on modern
+ toolchains
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,104 +71,233 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Andrea,
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/8419f0f0c747abe3acd90b0cffb21c2eb34ee623
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Thanks for the patch.
+When building pahole using a modern GCC (e.g. when building
+host-pahole), discarded-qualifiers and unused-but-set-variable warnings
+are produced. In builds that don't set CMAKE_BUILD_TYPE=Release, -Werror
+gets set and causes a build failure.
 
-The package  introduces build failures for some toolchains. See:
-https://gitlab.com/jolivain/buildroot/-/pipelines/2688533526
+Fix this by backporting an unreleased upstream patch (for
+discarded-qualifiers) and adding another pending one for
+unused-but-set-variable (and, arguably, a correctness issue).
 
-You can reproduce locally with the command:
-utils/test-pkg -a -p libcppconnman
+Fixes: https://autobuild.buildroot.org/results/ba7/ba79fb9d08b2c6ec573b79fdbb6b4880bf603a57
 
-I have another comment, see below.
+Signed-off-by: Florian Larysch <fl@n621.de>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ ...ix-discarded-qualifiers-for-strchr-strstr.patch | 147 +++++++++++++++++++++
+ ...x-BTF-function-parameter-type-match-check.patch |  41 ++++++
+ 2 files changed, 188 insertions(+)
 
-On 17/07/2026 11:32, Andrea Ricchi wrote:
-> libcppconnman is a C++ library that provides an easy-to-use API
-> to communicate with ConnMan over D-Bus using GDBus.
-> 
-> https://github.com/amarula/libcppconnman
-> 
-> Also add myself to DEVELOPERS for this package.
-> 
-> Signed-off-by: Andrea Ricchi <andrea.ricchi@amarulasolutions.com>
-> ---
-> Changes v1 -> v2:
->   - add missing libcppconnman entry in package/Config.in
->   - merge the DEVELOPERS addition into this patch
-> 
->  DEVELOPERS                               |  1 +
->  package/Config.in                        |  1 +
->  package/libcppconnman/Config.in          | 26 ++++++++++++++++++++++++
->  package/libcppconnman/libcppconnman.hash |  3 +++
->  package/libcppconnman/libcppconnman.mk   | 24 ++++++++++++++++++++++
->  5 files changed, 55 insertions(+)
->  create mode 100644 package/libcppconnman/Config.in
->  create mode 100644 package/libcppconnman/libcppconnman.hash
->  create mode 100644 package/libcppconnman/libcppconnman.mk
-> 
-[...]
-> diff --git a/package/libcppconnman/Config.in 
-> b/package/libcppconnman/Config.in
-> new file mode 100644
-> index 0000000000..19dc0bbd2d
-> --- /dev/null
-> +++ b/package/libcppconnman/Config.in
-> @@ -0,0 +1,26 @@
-> +config BR2_PACKAGE_LIBCPPCONNMAN
-> +	bool "libcppconnman"
-> +	depends on BR2_INSTALL_LIBSTDCPP
-> +	depends on BR2_USE_WCHAR # libglib2
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
-> +	depends on BR2_USE_MMU # libglib2
-> +	select BR2_PACKAGE_LIBGLIB2
-> +	help
-> +	  libcppconnman provide easy to use C++ API to communicate
-> +	  with ConnMan via the DBus using GDBus.
-> +
-> +	  https://amarula.github.io/libcppconnman/
-> +
-> +comment "libcppconnman needs a toolchain w/ C++, wchar, threads"
-> +	depends on BR2_USE_MMU
-> +	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
-> +		!BR2_TOOLCHAIN_HAS_THREADS
-> +
-> +if BR2_PACKAGE_LIBCPPCONNMAN
-> +
-> +config BR2_PACKAGE_LIBCPPCONNMAN_EXAMPLE
-> +	bool "libcppconnman example"
-
-When configuring with examples, package build configuration fails with
-a missing readline library. You can reproduce with:
-
-cat >.config <<EOF
-BR2_aarch64=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_PACKAGE_LIBCPPCONNMAN=y
-BR2_PACKAGE_LIBCPPCONNMAN_EXAMPLE=y
-EOF
-make olddefconfig
-make libcppconnman
-
-Could you add this missing dependency (both in Config.in and in the .mk 
-file)
-please?
-
-> +	help
-> +	  Compile CLI example.
-> +
-> +endif
-
-Could you send an updated patch fixing those issues, please?
-
-Best regards,
-
-Julien.
+diff --git a/package/pahole/0001-pahole-Fix-discarded-qualifiers-for-strchr-strstr.patch b/package/pahole/0001-pahole-Fix-discarded-qualifiers-for-strchr-strstr.patch
+new file mode 100644
+index 0000000000..87a63cfdc9
+--- /dev/null
++++ b/package/pahole/0001-pahole-Fix-discarded-qualifiers-for-strchr-strstr.patch
+@@ -0,0 +1,147 @@
++From 5f5809cd50cc4d583a2fe3f4d556cb120760e229 Mon Sep 17 00:00:00 2001
++From: Damien Hourtoulle <damien.hourtoulle@gmail.com>
++Date: Wed, 11 Mar 2026 15:09:39 +0100
++Subject: [PATCH] pahole: Fix discarded-qualifiers for strchr/strstr.
++
++Glibc 2.43 added C23 const-preserving overloads :
++https://sourceware.org/glibc/wiki/Release/2.43.
++
++For the function prototype__new, fix local variable declaration to use
++the correct const char* type instead of char*, removing the need to
++discard the const qualifier.
++
++Also fix a pre-existing bug in type__find_type_enum: when iterating
++over a '+'-concatenated list of enum names, after advancing to the next
++segment the new separator was not nullified, causing "second+third" to
++be passed to cu__find_enumeration_by_name instead of "second".  Add a
++null check before writing to sep_mutable to avoid a null dereference
++when no further '+' is present.
++
++Signed-off-by: Damien Hourtoulle <damien.hourtoulle@gmail.com>
++Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
++Link: https://lore.kernel.org/dwarves/20260311140938.81459-2-d.hourtoulle@geoide.fr/
++
++Upstream: https://git.kernel.org/pub/scm/devel/pahole/pahole.git/commit/?id=ba31cfa08ffcfe6ff5757f325de5b03ca157cb78
++Signed-off-by: Florian Larysch <fl@n621.de>
++---
++ btf_encoder.c |  2 +-
++ pahole.c      | 35 ++++++++++++++++++-----------------
++ 2 files changed, 19 insertions(+), 18 deletions(-)
++
++diff --git a/btf_encoder.c b/btf_encoder.c
++index 03bc3c7..4a585f5 100644
++--- a/btf_encoder.c
+++++ b/btf_encoder.c
++@@ -1199,7 +1199,7 @@ static bool str_contains_non_fn_suffix(const char *str) {
++ 		".cold",
++ 		".part"
++ 	};
++-	char *suffix = strchr(str, '.');
+++	const char *suffix = strchr(str, '.');
++ 	int i;
++ 
++ 	if (!suffix)
++diff --git a/pahole.c b/pahole.c
++index ef01e58..8c827fc 100644
++--- a/pahole.c
+++++ b/pahole.c
++@@ -2482,7 +2482,7 @@ static int64_t type_instance__int_value(struct type_instance *instance, const ch
++ 	int byte_offset = 0;
++ 
++ 	if (!member) {
++-		char *sep = strchr(member_name_orig, '.');
+++		const char *sep = strchr(member_name_orig, '.');
++ 
++ 		if (!sep)
++ 			return -1;
++@@ -2495,8 +2495,8 @@ static int64_t type_instance__int_value(struct type_instance *instance, const ch
++ 		char *member_name = member_name_alloc;
++ 		struct type *type = instance->type;
++ 
++-		sep = member_name_alloc + (sep - member_name_orig);
++-		*sep = 0;
+++		char *sep_mutable = member_name_alloc + (sep - member_name_orig);  // sep mutable for the copy
+++		*sep_mutable = 0;
++ 
++ 		while (1) {
++ 			member = type__find_member_by_name(type, member_name);
++@@ -2509,9 +2509,9 @@ out_free_member_name:
++ 			type = tag__type(cu__type(cu, member->tag.type));
++ 			if (type == NULL)
++ 				goto out_free_member_name;
++-			member_name = sep + 1;
++-			sep = strchr(member_name, '.');
++-			if (!sep)
+++			member_name = sep_mutable + 1;
+++			sep_mutable = strchr(member_name, '.');
+++			if (!sep_mutable)
++ 				break;
++ 
++ 		}
++@@ -2949,7 +2949,7 @@ static struct prototype *prototype__new(const char *expression)
++ 
++ 	strcpy(prototype->name, expression);
++ 
++-	const char *name = prototype->name;
+++	char *name = prototype->name;
++ 
++ 	prototype->nr_args = 0;
++ 
++@@ -2963,10 +2963,9 @@ static struct prototype *prototype__new(const char *expression)
++ 	if (args_close == NULL)
++ 		goto out_no_closing_parens;
++ 
+++	*args_open++ = *args_close = '\0';
++ 	char *args = args_open;
++ 
++-	*args++ = *args_close = '\0';
++-
++ 	while (isspace(*args))
++ 		++args;
++ 
++@@ -3113,7 +3112,7 @@ static int type__find_type_enum(struct type *type, struct cu *cu, const char *ty
++ 		return type__add_type_enum(type, te, cu);
++ 
++ 	// Now look at a 'virtual enum', i.e. the concatenation of multiple enums
++-	char *sep = strchr(type_enum, '+');
+++	const char *sep = strchr(type_enum, '+');
++ 
++ 	if (!sep)
++ 		return -1;
++@@ -3125,13 +3124,13 @@ static int type__find_type_enum(struct type *type, struct cu *cu, const char *ty
++ 
++ 	int ret = -1;
++ 
++-	sep = type_enums + (sep - type_enum);
+++	char *sep_mutable = type_enums + (sep - type_enum);
+++	char *cur = type_enums;
++ 
++-	type_enum = type_enums;
++-	*sep = '\0';
+++	*sep_mutable = '\0';
++ 
++ 	while (1) {
++-		te = cu__find_enumeration_by_name(cu, type_enum, NULL);
+++		te = cu__find_enumeration_by_name(cu, cur, NULL);
++ 
++ 		if (!te)
++ 			goto out;
++@@ -3140,10 +3139,12 @@ static int type__find_type_enum(struct type *type, struct cu *cu, const char *ty
++ 		if (ret)
++ 			goto out;
++ 
++-		if (sep == NULL)
+++		if (sep_mutable == NULL)
++ 			break;
++-		type_enum = sep + 1;
++-		sep = strchr(type_enum, '+');
+++		cur = sep_mutable + 1;
+++		sep_mutable = strchr(cur, '+');
+++		if (sep_mutable)
+++			*sep_mutable = '\0';
++ 	}
++ 
++ 	ret = 0;
++-- 
++2.55.0
++
+diff --git a/package/pahole/0002-pahole-fix-BTF-function-parameter-type-match-check.patch b/package/pahole/0002-pahole-fix-BTF-function-parameter-type-match-check.patch
+new file mode 100644
+index 0000000000..0bea2a602f
+--- /dev/null
++++ b/package/pahole/0002-pahole-fix-BTF-function-parameter-type-match-check.patch
+@@ -0,0 +1,41 @@
++From f282f4e995becc55a8fa380781dc36e0ff0796d2 Mon Sep 17 00:00:00 2001
++From: Florian Larysch <fl@n621.de>
++Date: Tue, 14 Jul 2026 16:07:54 +0200
++Subject: [PATCH] pahole: fix BTF function parameter type match check
++
++The BTF_KIND_FUNC_PROTO arm in types__match() first checks whether two
++function types identified by t1/t2 have matching return types and then
++attempts to iterate over the function parameters (p1/p2) to check them
++for compatibility too.
++
++However, the loop just repeats the check on t1/t2 instead of p1/p2, so
++we just keep re-checking return type compatibility, ignoring possible
++mismatches of the actual parameter types.
++
++Fix this by actually comparing p1 and p2. This also resolves a
++unused-but-set-variable build-time warning.
++
++Upstream: https://lore.kernel.org/dwarves/20260714140858.17507-1-fl@n621.de/
++Signed-off-by: Florian Larysch <fl@n621.de>
++---
++ btf_encoder.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/btf_encoder.c b/btf_encoder.c
++index 4a585f5..4f9790e 100644
++--- a/btf_encoder.c
+++++ b/btf_encoder.c
++@@ -1109,8 +1109,8 @@ static bool types__match(struct btf_encoder *encoder,
++ 					  btf2, t2->type))
++ 				return false;
++ 			for (i = 0; i < vlen; i++, p1++, p2++) {
++-				if (!types__match(encoder, btf1, t1->type,
++-						  btf2, t2->type))
+++				if (!types__match(encoder, btf1, p1->type,
+++						  btf2, p2->type))
++ 					return false;
++ 			}
++ 			return true;
++-- 
++2.55.0
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
