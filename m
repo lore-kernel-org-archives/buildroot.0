@@ -4,59 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36A20C44512
-	for <buildroot@archiver.kernel.org>; Sun, 19 Jul 2026 19:28:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D956C44512
+	for <buildroot@archiver.kernel.org>; Sun, 19 Jul 2026 19:28:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DF6B960652;
-	Sun, 19 Jul 2026 19:28:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4B461606C0;
+	Sun, 19 Jul 2026 19:28:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mgU7UuLdGHAg; Sun, 19 Jul 2026 19:28:36 +0000 (UTC)
+ id 0R_l8vzYCLdJ; Sun, 19 Jul 2026 19:28:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E05056066F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 53C8C6069E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1784489316;
-	bh=ahUl5TV7YXQ+esBz1UIxfuarO9XR7Jw+QoGpniNyRQs=;
+	s=default; t=1784489318;
+	bh=DzrX2R1kVFa66SlHUer6jFwb0qHUdgiYJ/WfyMoncOA=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=KpV43wBdyhbigUUaIKG+oyTQIe/UyzxJx6P/t7t0CqgJDr3UxQejAIybWMkobxc6o
-	 iBsDWGDrVnii4xrR0/10WJOx2irvdJsmTP6YwKKcPcoSWiz0qjhWuwzKRdew/femgX
-	 2R3pL5KPFmQczlk9TXcaTnAbCJrjfRlnWLOyF5YHlOgUANMJFno5GpRbyAPH0u69Jn
-	 hSi1IPsdZOHso1X0cqHZBc2EUUXRtc9AdLQ0i4Uy9uN8mUjoCqX6KQgtR5D9CdE+U2
-	 MPyHeCncD4Ff6XkpOUwFl+7bh7tq00VIdQ1ZHkjLZjMW5jSRU9EP3Va9NDQTOCxu2g
-	 edmKVEQ3bL0bQ==
+	b=sluNWb/2DuV+uQkN0R226shmSpQTdQMNdTpXPqKVy3gtx+5EI9xzahRXfY9Jfo80/
+	 Jp9D81apgN34MAb694i1j4pIOnM87HxaNMqsjsJK6Xu06qClrSt9DkP9yAntcmrfPV
+	 XJL1gJJcxnVmXJIxo1GMoCozQp5yh9mU8sx2gRNSmCAVmHs1UGeyl5GqANKp57gI4B
+	 9Uozj0r8pz/u8cVn2dGYELFmAJPjG7lKt0gerdZj1kxZE2SVB+yMyKElfqXA8dHK/t
+	 peic+glsSexBPjR+yYhMBS0ouilUlLgI2rjv/hl9d0usFjD3cwXkqSqhfeIRqxEg8L
+	 fjMPRUBcC9fsg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E05056066F;
-	Sun, 19 Jul 2026 19:28:35 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id A68D31F6
- for <buildroot@buildroot.org>; Sun, 19 Jul 2026 19:28:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 53C8C6069E;
+	Sun, 19 Jul 2026 19:28:38 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id E009D1F6
+ for <buildroot@buildroot.org>; Sun, 19 Jul 2026 19:28:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9864840533
- for <buildroot@buildroot.org>; Sun, 19 Jul 2026 19:28:34 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D10696068A
+ for <buildroot@buildroot.org>; Sun, 19 Jul 2026 19:28:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qZDYcDigZBnm for <buildroot@buildroot.org>;
- Sun, 19 Jul 2026 19:28:33 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id psW_KADYrN7K for <buildroot@buildroot.org>;
+ Sun, 19 Jul 2026 19:28:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BEC8D4052E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8555C6066F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id BEC8D4052E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8555C6066F
  for <buildroot@buildroot.org>; Sun, 19 Jul 2026 19:28:33 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4817488FBD; Sun, 19 Jul 2026 19:27:56 +0000 (UTC)
+ id 3643388FB5; Sun, 19 Jul 2026 19:27:56 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Sun, 19 Jul 2026 15:31:39 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 32485f8bcc72cb099c99b7af75ec9d3b07585651
-X-Git-Newrev: a95039f8a3e2642277e76ab6e60b7e9cea03a27d
+X-Git-Oldrev: 01f0bb8d91cfe867a3e4e58bac2922562a8221d7
+X-Git-Newrev: 32485f8bcc72cb099c99b7af75ec9d3b07585651
 X-Patchwork-Hint: ignore
-Message-Id: <20260719192756.4817488FBD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/qoriq-fm-ucode: bump version to
+Message-Id: <20260719192756.3643388FB5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/qoriq-rcw: bump to version
  lf-6.18.20-2.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -77,7 +77,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/a95039f8a3e2642277e76ab6e60b7e9cea03a27d
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/32485f8bcc72cb099c99b7af75ec9d3b07585651
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
 No change.
@@ -85,32 +85,32 @@ No change.
 Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/qoriq-fm-ucode/qoriq-fm-ucode.hash | 2 +-
- package/qoriq-fm-ucode/qoriq-fm-ucode.mk   | 2 +-
+ package/qoriq-rcw/qoriq-rcw.hash | 2 +-
+ package/qoriq-rcw/qoriq-rcw.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/qoriq-fm-ucode/qoriq-fm-ucode.hash b/package/qoriq-fm-ucode/qoriq-fm-ucode.hash
-index 1f6bd01b64..9b4546dfc6 100644
---- a/package/qoriq-fm-ucode/qoriq-fm-ucode.hash
-+++ b/package/qoriq-fm-ucode/qoriq-fm-ucode.hash
+diff --git a/package/qoriq-rcw/qoriq-rcw.hash b/package/qoriq-rcw/qoriq-rcw.hash
+index 99dd860e02..6b9f591866 100644
+--- a/package/qoriq-rcw/qoriq-rcw.hash
++++ b/package/qoriq-rcw/qoriq-rcw.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256  a3ee2bd375c90de1249ff49e6185874583edd92aa2e2bfb4ccf25b7d8a563205  qoriq-fm-ucode-lf-6.12.34-2.1.0.tar.gz
-+sha256  771cee1fa5fc947af2ffe6e5ff565d76d0df32b9c2554252f24e67bac0f63040  qoriq-fm-ucode-lf-6.18.20-2.0.0.tar.gz
- sha256  7a223031d76339df0e4e5a94d193a270fb9963d42b577aa42fe130a4657f3e17  LICENSE
-diff --git a/package/qoriq-fm-ucode/qoriq-fm-ucode.mk b/package/qoriq-fm-ucode/qoriq-fm-ucode.mk
-index 3c197346ca..86d0679214 100644
---- a/package/qoriq-fm-ucode/qoriq-fm-ucode.mk
-+++ b/package/qoriq-fm-ucode/qoriq-fm-ucode.mk
+-sha256  5106d0e42a990b5474100cbc397d27f550bb226420664ac5a40b952706b680cd  qoriq-rcw-lf-6.12.34-2.1.0.tar.gz
++sha256  933333957ed6b12d2521c1ef85ff806c4bcd5c26ef473305bd58bcf5f2abaff7  qoriq-rcw-lf-6.18.20-2.0.0.tar.gz
+ sha256  68f4b15ecc085729419bc60ca6eeadca5af0237bbfec791e8a79da9c943d42e9  LICENSE
+diff --git a/package/qoriq-rcw/qoriq-rcw.mk b/package/qoriq-rcw/qoriq-rcw.mk
+index 1394766b92..05d6a4bf23 100644
+--- a/package/qoriq-rcw/qoriq-rcw.mk
++++ b/package/qoriq-rcw/qoriq-rcw.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--QORIQ_FM_UCODE_VERSION = lf-6.12.34-2.1.0
-+QORIQ_FM_UCODE_VERSION = lf-6.18.20-2.0.0
- QORIQ_FM_UCODE_SITE = $(call github,nxp-qoriq,qoriq-fm-ucode,$(QORIQ_FM_UCODE_VERSION))
- QORIQ_FM_UCODE_LICENSE = NXP Binary EULA
- QORIQ_FM_UCODE_LICENSE_FILES = LICENSE
+-QORIQ_RCW_VERSION = lf-6.12.34-2.1.0
++QORIQ_RCW_VERSION = lf-6.18.20-2.0.0
+ QORIQ_RCW_SITE = $(call github,nxp-qoriq,rcw,$(QORIQ_RCW_VERSION))
+ QORIQ_RCW_LICENSE = BSD-3-Clause
+ QORIQ_RCW_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
