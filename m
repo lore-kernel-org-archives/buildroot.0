@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96955C4450A
-	for <buildroot@archiver.kernel.org>; Sun, 19 Jul 2026 19:28:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B95DC4450A
+	for <buildroot@archiver.kernel.org>; Sun, 19 Jul 2026 19:28:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 223A260673;
-	Sun, 19 Jul 2026 19:28:34 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BzSU73P9M1P8; Sun, 19 Jul 2026 19:28:33 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DEC0B6062C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1784489312;
-	bh=WFV5ii3x5gYY/hAiVzUbQaail/eQf3fs54LkaN5ZNtQ=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=TsIWYG5wM+EP5EWrak8HJjc+n2v01ABa+cWKjOG46hwDGbfEYOKzvDfuKaxvKzNaS
-	 aDpoLoKX6aj5mtHVsSDKgJBN3ClNv2OxJT6Z5euAscVxCl3NJkFColj9RQdVLdXBIp
-	 Wc44qaGbl6MOw2wQu6pJ9d5meCipOhQ5WnSiTiTNZ2ZYTBCB55oO5IPWAqxMakj/tR
-	 0uTWWiQ61sULyXMaXr2unj+4lviGNjECNfkpvCszFaq+Q60+7gMUu8Dgtm4YgZFYVs
-	 Gw0O5Cw+KhtvkAXd/Uq6tr4qCVhvnYH36h3gxFDeIM1lQL/FN/bjGPNmmTxru0ZZc4
-	 vk4hhtZTFuZog==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DEC0B6062C;
-	Sun, 19 Jul 2026 19:28:32 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 9E5891F6
- for <buildroot@buildroot.org>; Sun, 19 Jul 2026 19:28:31 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8FE2640533
- for <buildroot@buildroot.org>; Sun, 19 Jul 2026 19:28:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 451E54052E;
+	Sun, 19 Jul 2026 19:28:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iFbk-IXbS3uX for <buildroot@buildroot.org>;
- Sun, 19 Jul 2026 19:28:30 +0000 (UTC)
+ id 6KChIq9WDmVQ; Sun, 19 Jul 2026 19:28:37 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 63FBA40533
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1784489317;
+	bh=y6uXrlrAq0oVCog9+xjYeTGZEBqVtfqYSIeXMoaeYhE=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=RuoeTitHyrCLH73zjcILdPMhFIQv3tW1PaaaWFnTQDfas0+m7hdO2eoGDXhYT29UB
+	 pbOHPLs8auk4FppwpGNhVxBD3OIdx4g/4/kAfppRg33HxMamd+E2H00NEPyVHje7bQ
+	 G/QCMKliVVSnjATf1o85B69HPVBoGRUo1TmbjU3QIXadEBBh5tnNqP5kwSAwmTK+ME
+	 s3v/B/gsRBhI1fYq29V3HgaHNVBbh3GwMi9f+ELvw9VLd0w/k6ZJoqa1XgNJWTit+S
+	 VNEyZfQQNYg5MN5T0/FNgODhW1GxPgt13iRjOp1esOw//oOUFogV+mkjsABk4FXi1Y
+	 4jpJqKVnNPbGg==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 63FBA40533;
+	Sun, 19 Jul 2026 19:28:37 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 63B43282
+ for <buildroot@buildroot.org>; Sun, 19 Jul 2026 19:28:35 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 55A8C40135
+ for <buildroot@buildroot.org>; Sun, 19 Jul 2026 19:28:35 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cPIBoFIduMxt for <buildroot@buildroot.org>;
+ Sun, 19 Jul 2026 19:28:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 86F434052E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 864494008E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 86F434052E
- for <buildroot@buildroot.org>; Sun, 19 Jul 2026 19:28:30 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 864494008E
+ for <buildroot@buildroot.org>; Sun, 19 Jul 2026 19:28:34 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3050D88FB1; Sun, 19 Jul 2026 19:27:53 +0000 (UTC)
+ id 3824388FB5; Sun, 19 Jul 2026 19:27:57 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 19 Jul 2026 15:31:39 +0200
+Date: Sun, 19 Jul 2026 16:49:16 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8419f0f0c747abe3acd90b0cffb21c2eb34ee623
-X-Git-Newrev: 01f0bb8d91cfe867a3e4e58bac2922562a8221d7
+X-Git-Oldrev: 078011efbb3b05cee9e30476bb84b82c8bbba428
+X-Git-Newrev: 3d3df8a28dc9b233d233a340f57940bd7803ee1a
 X-Patchwork-Hint: ignore
-Message-Id: <20260719192753.3050D88FB1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/fmlib: bump version to
- lf-6.18.20-2.0.0
+Message-Id: <20260719192757.3824388FB5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/qoriq-ddr-phy-binary: bump version
+ to lf-6.18.20-2.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,40 +77,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/01f0bb8d91cfe867a3e4e58bac2922562a8221d7
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/3d3df8a28dc9b233d233a340f57940bd7803ee1a
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-No change.
+Changelog:
+https://github.com/nxp-qoriq/ddr-phy-binary/compare/lf-6.12.34-2.1.0...lf-6.18.20-2.0.0
 
 Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
+[Julien: fix archive hash]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/fmlib/fmlib.hash | 2 +-
- package/fmlib/fmlib.mk   | 2 +-
+ package/qoriq-ddr-phy-binary/qoriq-ddr-phy-binary.hash | 2 +-
+ package/qoriq-ddr-phy-binary/qoriq-ddr-phy-binary.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/fmlib/fmlib.hash b/package/fmlib/fmlib.hash
-index 4f2b3d4d46..838c518e3a 100644
---- a/package/fmlib/fmlib.hash
-+++ b/package/fmlib/fmlib.hash
+diff --git a/package/qoriq-ddr-phy-binary/qoriq-ddr-phy-binary.hash b/package/qoriq-ddr-phy-binary/qoriq-ddr-phy-binary.hash
+index 6ae08a3152..94f9c999c5 100644
+--- a/package/qoriq-ddr-phy-binary/qoriq-ddr-phy-binary.hash
++++ b/package/qoriq-ddr-phy-binary/qoriq-ddr-phy-binary.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256  4e39b3a756d4b53ab58b9282ed55505e69c7a79d8e79d5c9eb953d931ce7cdf8  fmlib-lf-6.12.34-2.1.0.tar.gz
-+sha256  a260289e73e6d6220ac8ce87301509a0e0bbb58b71ebda8dd0edc5808735f22d  fmlib-lf-6.18.20-2.0.0.tar.gz
- sha256  5d7770fa9f70f0c6f0b4784bbca8401811259a4b1e03455dbd863ffd0d34d2ca  LICENSE
-diff --git a/package/fmlib/fmlib.mk b/package/fmlib/fmlib.mk
-index e5f4f3c820..9ccb0b891d 100644
---- a/package/fmlib/fmlib.mk
-+++ b/package/fmlib/fmlib.mk
+ # Locally calculated
+-sha256  d5a5a9b7f25295e9e41c8e7c18a1986d1b59ebe519113ed6b45ede51639da92f  qoriq-ddr-phy-binary-lf-6.12.34-2.1.0.tar.gz
++sha256  4faeb92a1c63d99cdc18994beddc5916f2ac5cd853466fbc2557693bc371bf2d  qoriq-ddr-phy-binary-lf-6.18.20-2.0.0.tar.gz
+ sha256  e7e5f4949f7ac9f9a5d4d68b8f835f3ddc93ad47b594a11de699d90b9175413f  NXP-Binary-EULA.txt
+diff --git a/package/qoriq-ddr-phy-binary/qoriq-ddr-phy-binary.mk b/package/qoriq-ddr-phy-binary/qoriq-ddr-phy-binary.mk
+index 04cedbbe00..3c39b36362 100644
+--- a/package/qoriq-ddr-phy-binary/qoriq-ddr-phy-binary.mk
++++ b/package/qoriq-ddr-phy-binary/qoriq-ddr-phy-binary.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FMLIB_VERSION = lf-6.12.34-2.1.0
-+FMLIB_VERSION = lf-6.18.20-2.0.0
- FMLIB_SITE = $(call github,nxp-qoriq,fmlib,$(FMLIB_VERSION))
- FMLIB_LICENSE = BSD-3-Clause
- FMLIB_LICENSE_FILES = LICENSE
+-QORIQ_DDR_PHY_BINARY_VERSION = lf-6.12.34-2.1.0
++QORIQ_DDR_PHY_BINARY_VERSION = lf-6.18.20-2.0.0
+ QORIQ_DDR_PHY_BINARY_SITE = $(call github,nxp-qoriq,ddr-phy-binary,$(QORIQ_DDR_PHY_BINARY_VERSION))
+ QORIQ_DDR_PHY_BINARY_LICENSE = NXP Binary EULA
+ QORIQ_DDR_PHY_BINARY_LICENSE_FILES = NXP-Binary-EULA.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
