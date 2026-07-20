@@ -1,131 +1,84 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2583C4451B
-	for <buildroot@archiver.kernel.org>; Mon, 20 Jul 2026 09:00:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5842EC44515
+	for <buildroot@archiver.kernel.org>; Mon, 20 Jul 2026 12:18:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 70A2A80B84;
-	Mon, 20 Jul 2026 09:00:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0707B60667;
+	Mon, 20 Jul 2026 12:18:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qCmNfnKuHWQ7; Mon, 20 Jul 2026 09:00:45 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id If8suSttGIFB; Mon, 20 Jul 2026 12:18:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4D0B880BAD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1A8FF6066B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1784538045;
-	bh=jrAcy9RK1LoTzv6PYKwwJVifCXWsRj1WP0VRp724ygc=;
-	h=References:In-Reply-To:From:Date:To:Cc:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=ft8IXTbzRCg8PfQvYUhCrcsvbyeNEhE8SYWDYnAnNDujzu9ZVcbtecuGPQaKBZSuS
-	 nbPocx5w1/CRHJLbpqOEeXpKHXRShQ8dRltW/q4ef6yAnc6gs+9AYtvBZ1TSRE6EMx
-	 8Rgszl8NWmCna5LdtWkY2Kpr4r36zARZzOGqmY4CMdFxd5QYENNu9LI79QX4XO31O9
-	 RbP1iWV/uhZjuX2laO1jC+wcQ/iUGLfZ94PcJDAKnF3HVNJxpw/SuLQbtiwC9RANuC
-	 6Iocz/ADdXz3HGWxdqtuzxVvKT0LtbZAD2vgZtx+cHPNQwuoMsy2XYxLk2xzfXpVFx
-	 m/eaHSBywJA9g==
+	s=default; t=1784549914;
+	bh=lWgtE8otu2Ma5MaPsn2S+ydKMf6fFtIWVgh66V3Q7fg=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=dfLZwt/CIDCQxGRQXOMJAsSj8yqrt2eNirXQfPwR+qTQm6EVOpyqPuPSY70r6av18
+	 n3ZBdvf9mMPTp1k1WPsd3rYRReHZrdBHjbntHS/K7QXNeSVHm9Z1P5cVijjqlIJuS/
+	 6zSv3PDoa8pV2ClWmry7QIfPYiK0iryTcWuI6V6e8Zn9rsM1u/QAbKOJHyrVCfwf4+
+	 yerJcwef1k4E616mT+uGcVNd+dlzj1CeXQ8n65iVEYoxd7VFSC9Cgq/EEgviObU/W/
+	 3JZmX9reue8xbOQ3f6Zls1GjsKJEjZJDZWEzRia0UqJtwxUJim+dvSmZjbnSdAPvRE
+	 MSO9UzVXdaaaA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4D0B880BAD;
-	Mon, 20 Jul 2026 09:00:45 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 019D3206
- for <buildroot@buildroot.org>; Mon, 20 Jul 2026 09:00:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1A8FF6066B;
+	Mon, 20 Jul 2026 12:18:34 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0CF94206
+ for <buildroot@buildroot.org>; Mon, 20 Jul 2026 12:18:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E78DD400AB
- for <buildroot@buildroot.org>; Mon, 20 Jul 2026 09:00:43 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E742960692
+ for <buildroot@buildroot.org>; Mon, 20 Jul 2026 12:18:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cU6X6fV0JNMP for <buildroot@buildroot.org>;
- Mon, 20 Jul 2026 09:00:42 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2001:4860:4864:20::35; helo=mail-oa1-x35.google.com;
- envelope-from=andrea.ricchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 8286A40025
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8286A40025
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com
- [IPv6:2001:4860:4864:20::35])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 8286A40025
- for <buildroot@buildroot.org>; Mon, 20 Jul 2026 09:00:42 +0000 (UTC)
-Received: by mail-oa1-x35.google.com with SMTP id
- 586e51a60fabf-44caeb973b3so6010569fac.1
- for <buildroot@buildroot.org>; Mon, 20 Jul 2026 02:00:42 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1784538041; cv=none;
- d=google.com; s=arc-20260327;
- b=kVsJX9jvvO7Nfke40AXpWKgnPiFda2cj4Z038Q+ROWl5Y099OHzL7K1YVv6lu7Fes5
- 8+ltknhiSeAJ3H8pYnnc1kIQRe17d7UaIwgoOrnLOMUolUtBt9XNVchjkgx916ijUkj2
- GSS9Qer6mZ21lXFdKexX3/jluGObTp50fjJ9YAZgKBakDbLZx5mtLHixwAMa25NwYP3Z
- 2CV0woicY8UgvKD2CxXtSMyvJbrF3aOsvnYE6qAzdoFI/d1mDoUVaeBqLb8BgMEusJxU
- qq7w9EINk8NTsgdGQDKk6B5EX4J5mzN1PoYf3V6mlORK3af05sEcbRxzOo0ZBpIWs5zj
- 6WLA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com;
- s=arc-20260327; 
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:dkim-signature;
- bh=0xkJKZFyinCUa0S8tJ2jvdHVugsubFgTb4kNY+krFbk=;
- fh=siEEGlK4OxgQsxxDJxK74FwhxxtTUd9xjx4ss01wdDI=;
- b=fJqNPVEPOVhPj7mRXZczoeCp29bq4GXRcMn71k/1rKdO74k+Otwub1Rwm3Ihhc3SyA
- qLLFO9spLOAyUOiphi3/7zRWyHQLHHLCcvq8G5N60e34tXI3ic5iMBojDhlie8WCNDqK
- EQIkqR6nTk5ZrtUitTiBMV8fJ1gUypoHFeQKEjmn6muXwL50fznq4SzS3TqTum1IvXU2
- hkZXwMUxPbhMfcMKW9Nw9mtP4K2Whqj9m2P7pSkrtsJuB3T3IIJNy13yuoxq2BAz/ZA6
- oz00bqNZLf01sKGSDqBm5OxCbTZ/b/J2DRbELVlurfzpQMZD64F2LuYXUcv3ZOMZF3gy
- wU0Q==; darn=buildroot.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1784538041; x=1785142841;
- h=content-type:cc:to:subject:message-id:date:from:in-reply-to
- :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to:content-type;
- bh=0xkJKZFyinCUa0S8tJ2jvdHVugsubFgTb4kNY+krFbk=;
- b=FawMKBauCS0UJ6gCKI7f8ZyA1p5/AvyLUMRWNOT0Gmxzl7HqA8cR4u2vnf0EWMHGfu
- XxbFgENKeapfiuhoL7o4eARXwi751CQ02HREe+YqJBHwjYK8vdKu09lnd/SMKQlU3/di
- tFcxvezddwExAg0H/LP64duyDOZ7rtaYt4te6CVcQE9ReDgeRcOt2iAljviNSrFNe0PE
- ORDVHGvlfufV3LGzo70fgzcOlmv5ZICpVjhcxr2dVWNUpintmooS0cgkL7TIuBWURz6e
- iWENIQY1+ZRiSr2vglKqwXyashdjBXKwTc1Esq9hF0nadr7UFRJ8FTxdldQc02LWNPZ0
- R10w==
-X-Gm-Message-State: AOJu0YyjlXCxbytuRBGnQKzSzHCQ2X76pM0Grv+hS61QJCVSrEhxnIP/
- YAo9kEhakGc1jfyaCS6Eha5uERdA6Xzoo/KPSPWhMdDEjoNrWT1eensLXrgJ0H7k/8p6GiVjxO+
- 5dNvWKV9I9C0hUz6wcQGs9kHGRGKEguqc57/BAKcL82r/Lp7UyoTUByQ=
-X-Gm-Gg: AfdE7ckPthL9mgccRGqeHmCqPzd19+PaggYovAjBGLVH6inzrGmy8gekML3wkb+OU6h
- rD10P7+HcANJloUR/pcBYBB5pAIzUIoQc5TgDi0VYDfakl0t8iRiM6zSttjZWooz+C/TwsrLaLf
- WupCz8R0uzR4be8NNzfH5ADCkf+KdciW3YilC2Uo8aQ9FavpYn9nrMnJ6w5qkDo9tpAvAXx7F7/
- TY2S8NoTNLj9D0OrW8Q9HyyDPOcqZGYi+oeA/PSNc5doSS9Y7mcXTMZfwMuFYhAh4Qq9rzbmGy2
- kW6CEqkGs6eDmfyYv9Rqekf2FkHoAcvi7gj4ea7ZuUOt3nl9imYobA24r9nlSn/ezkQQ5LwODyf
- zBQ==
-X-Received: by 2002:a05:6870:290:b0:448:558c:d850 with SMTP id
- 586e51a60fabf-456904bee0cmr5777733fac.43.1784538041065; Mon, 20 Jul 2026
- 02:00:41 -0700 (PDT)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xfztNgiy0Xs3 for <buildroot@buildroot.org>;
+ Mon, 20 Jul 2026 12:18:30 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.158.116;
+ helo=smtpcmd03116.aruba.it;
+ envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 9E7DE60667
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9E7DE60667
+Received: from smtpcmd03116.aruba.it (smtpcmd03116.aruba.it [62.149.158.116])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9E7DE60667
+ for <buildroot@buildroot.org>; Mon, 20 Jul 2026 12:18:28 +0000 (UTC)
+Received: from localhost.localdomain ([84.33.84.190])
+ by Aruba SMTP with ESMTPSA
+ id lmwzwYp7J5gYjlmx0wEvLO; Mon, 20 Jul 2026 14:18:26 +0200
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+To: buildroot@buildroot.org
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Mon, 20 Jul 2026 14:18:23 +0200
+Message-ID: <20260720121823.1512301-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-References: <20260717093249.2183039-1-andrea.ricchi@amarulasolutions.com>
- <10790734da8d04317e5e8a78fe12030c@free.fr>
-In-Reply-To: <10790734da8d04317e5e8a78fe12030c@free.fr>
-From: Andrea Ricchi <andrea.ricchi@amarulasolutions.com>
-Date: Mon, 20 Jul 2026 11:00:29 +0200
-X-Gm-Features: AUfX_my8AxbulWFtS2uD4uDJ9OXcW0P12gYhEe7P0SHNRnAXt2H_y2cGH2BaFi8
-Message-ID: <CABNF3=YJ4+mUh1tpnYcjk=J+uTRt8+2+izPNdRUL0WP4WbioWQ@mail.gmail.com>
-To: Julien Olivain <ju.o@free.fr>
-Cc: buildroot@buildroot.org
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1784538041; x=1785142841;
- darn=buildroot.org; 
- h=content-type:cc:to:subject:message-id:date:from:in-reply-to
- :references:mime-version:from:to:cc:subject:date:message-id:reply-to
- :content-type;
- bh=0xkJKZFyinCUa0S8tJ2jvdHVugsubFgTb4kNY+krFbk=;
- b=hYZnsILAOvFiDAciU4eP3vgPg9qJewR5fFIbwg9amxUUGACozTu62sF0yvYvZ+DgPG
- xXbvo4tXWjLJN/HOYatfkjanjXDpW0XBis9F0utgg2j+n5X/YVqk/qK5i0ioIpESlZcV
- qAdhZQoQa+trHaH0cItOEzn0lviYGKhMI8w9s=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-CMAE-Envelope: MS4xfJj7A+0eryzHPmJ2iOyTQLjgFgQWzIOH6fCOG2bE0SkfLd77BGLqR6JbdaYmuj7RL7W6Tm1BPIQ4M4pzDHsttBWZ6YKyKId/tMTwCwb4W6dc4LW7tymn
+ ErJYaHhuGSIbTKp1OmHNWMnzvMAvl3fK7v2jT2Lh1kJ7dYWgmieoq5cQqb4+l6/katcJ/BN0kCYvb8/rxyTgwG+4+XdoIVtOUrew22B8SQWOeKTDKi7zkXuZ
+ X3hJLa0WNhZIMcZcCN6LOZ9gIMuPxKkoFW82hEntofY=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1784549906; bh=YZGkvcgRjNiiTDpMXTPG79+XkIrcxivTbls0ievzqxw=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=Y+dUwi3+yfXqMRoVA6XWtRe9y4pl4jF9dKl+RWpWsfVo1OFO43878APuesdV2n/QM
+ elKmH8iUBF2hdOSD3n1NcuiNVNtGVJwH3GpM41P9JvKAGICLfxQIm8+wVA77uSieGT
+ 9IkWd3pKsxJoZau5JOZG3kE2jaWPCvg8HqXSruTMniU8SPckdhICANV8AVeLOST1FQ
+ KXLgtA1Ex7N/9AbfB7YLEkLck2gV+SySXUaGixRLpHkV4jDA0iyZBjNKSk77+dNeLm
+ zKWz0js3Ze9kGrVtDpFG+inty3z0/I0OPEpsGJm/IOjT1N2feHmE+Ii7y8Hbp7ICjU
+ YE/urMtA/R0Kg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=hYZnsILA
-Subject: Re: [Buildroot] [PATCH v2] package/libcppconnman: add new package
+ header.from=benettiengineering.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=Y+dUwi3+
+Subject: [Buildroot] [PATCH] package/dash: bump to version 0.5.13.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -137,290 +90,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============1980826562888432947=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1980826562888432947==
-Content-Type: multipart/alternative; boundary="00000000000006b23306570724c5"
+For change log, see:
+https://git.kernel.org/pub/scm/utils/dash/dash.git/log/?h=037bbdfd330017c368caf6242f977974123239b5
 
---00000000000006b23306570724c5
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ package/dash/dash.hash | 6 +++---
+ package/dash/dash.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Hi Julien,
-
-Thanks a lot for the review.
-
-I am currently fixing the issues reported, including the build failures and
-the missing readline dependency for the examples. I will send the v3 patch
-as soon as it is ready.
-
-Thanks,
-
-Andrea Ricchi
-Embedded Software Engineer
-M. +39 333 775 4973
-andrea.ricchi@amarulasolutions.com
-=E2=80=95=E2=80=95=E2=80=95=E2=80=95=E2=80=95=E2=80=95=E2=80=95=E2=80=95=E2=
-=80=95=E2=80=95=E2=80=95=E2=80=95=E2=80=95=E2=80=95=E2=80=95
-Amarula Solutions SRL
- Via Felice Cavallotti 25D, 41012 Carpi, MO, IT
-info@amarulasolutions.com
-www.amarulasolutions.com
-
-
-
-On Sun, Jul 19, 2026 at 3:16=E2=80=AFPM Julien Olivain <ju.o@free.fr> wrote=
-:
-
-> Hi Andrea,
->
-> Thanks for the patch.
->
-> The package  introduces build failures for some toolchains. See:
-> https://gitlab.com/jolivain/buildroot/-/pipelines/2688533526
->
-> You can reproduce locally with the command:
-> utils/test-pkg -a -p libcppconnman
->
-> I have another comment, see below.
->
-> On 17/07/2026 11:32, Andrea Ricchi wrote:
-> > libcppconnman is a C++ library that provides an easy-to-use API
-> > to communicate with ConnMan over D-Bus using GDBus.
-> >
-> > https://github.com/amarula/libcppconnman
-> >
-> > Also add myself to DEVELOPERS for this package.
-> >
-> > Signed-off-by: Andrea Ricchi <andrea.ricchi@amarulasolutions.com>
-> > ---
-> > Changes v1 -> v2:
-> >   - add missing libcppconnman entry in package/Config.in
-> >   - merge the DEVELOPERS addition into this patch
-> >
-> >  DEVELOPERS                               |  1 +
-> >  package/Config.in                        |  1 +
-> >  package/libcppconnman/Config.in          | 26 ++++++++++++++++++++++++
-> >  package/libcppconnman/libcppconnman.hash |  3 +++
-> >  package/libcppconnman/libcppconnman.mk   | 24 ++++++++++++++++++++++
-> >  5 files changed, 55 insertions(+)
-> >  create mode 100644 package/libcppconnman/Config.in
-> >  create mode 100644 package/libcppconnman/libcppconnman.hash
-> >  create mode 100644 package/libcppconnman/libcppconnman.mk
-> >
-> [...]
-> > diff --git a/package/libcppconnman/Config.in
-> > b/package/libcppconnman/Config.in
-> > new file mode 100644
-> > index 0000000000..19dc0bbd2d
-> > --- /dev/null
-> > +++ b/package/libcppconnman/Config.in
-> > @@ -0,0 +1,26 @@
-> > +config BR2_PACKAGE_LIBCPPCONNMAN
-> > +     bool "libcppconnman"
-> > +     depends on BR2_INSTALL_LIBSTDCPP
-> > +     depends on BR2_USE_WCHAR # libglib2
-> > +     depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
-> > +     depends on BR2_USE_MMU # libglib2
-> > +     select BR2_PACKAGE_LIBGLIB2
-> > +     help
-> > +       libcppconnman provide easy to use C++ API to communicate
-> > +       with ConnMan via the DBus using GDBus.
-> > +
-> > +       https://amarula.github.io/libcppconnman/
-> > +
-> > +comment "libcppconnman needs a toolchain w/ C++, wchar, threads"
-> > +     depends on BR2_USE_MMU
-> > +     depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
-> > +             !BR2_TOOLCHAIN_HAS_THREADS
-> > +
-> > +if BR2_PACKAGE_LIBCPPCONNMAN
-> > +
-> > +config BR2_PACKAGE_LIBCPPCONNMAN_EXAMPLE
-> > +     bool "libcppconnman example"
->
-> When configuring with examples, package build configuration fails with
-> a missing readline library. You can reproduce with:
->
-> cat >.config <<EOF
-> BR2_aarch64=3Dy
-> BR2_TOOLCHAIN_EXTERNAL=3Dy
-> BR2_PACKAGE_LIBCPPCONNMAN=3Dy
-> BR2_PACKAGE_LIBCPPCONNMAN_EXAMPLE=3Dy
-> EOF
-> make olddefconfig
-> make libcppconnman
->
-> Could you add this missing dependency (both in Config.in and in the .mk
-> file)
-> please?
->
-> > +     help
-> > +       Compile CLI example.
-> > +
-> > +endif
->
-> Could you send an updated patch fixing those issues, please?
->
-> Best regards,
->
-> Julien.
->
-
---00000000000006b23306570724c5
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Hi Julien,<br><br>Thanks a lot for the review.<br><br>I am=
- currently fixing the issues reported, including the build failures and the=
- missing readline dependency for the examples. I will send the v3 patch as =
-soon as it is ready.<br><br>Thanks,<br><div><div dir=3D"ltr" class=3D"gmail=
-_signature" data-smartmail=3D"gmail_signature"><div dir=3D"ltr"><p style=3D=
-"color:rgb(0,0,0);font-family:&quot;Times New Roman&quot;;font-size:medium;=
-margin-bottom:10px!important"><span style=3D"font-weight:700"><span style=
-=3D"font-size:14px">Andrea Ricchi</span></span><br><span style=3D"font-size=
-:12px">Embedded Software Engineer<br>M. +39 333 775 4973<br><a href=3D"mail=
-to:andrea.ricchi@amarulasolutions.com" target=3D"_blank">andrea.ricchi@amar=
-ulasolutions.com</a></span><br><span style=3D"font-size:12px;color:rgb(241,=
-194,50)">=E2=80=95=E2=80=95=E2=80=95=E2=80=95=E2=80=95=E2=80=95=E2=80=95=E2=
-=80=95=E2=80=95=E2=80=95=E2=80=95=E2=80=95=E2=80=95=E2=80=95=E2=80=95</span=
-><br><span style=3D"font-size:12px"><span style=3D"font-weight:700">Amarula=
- Solutions SRL</span><br>=C2=A0Via Felice Cavallotti 25D, 41012 Carpi, MO, =
-IT<br><a href=3D"mailto:info@amarulasolutions.com" target=3D"_blank">info@a=
-marulasolutions.com</a><br><a href=3D"http://www.amarulasolutions.com/" tar=
-get=3D"_blank">www.amarulasolutions.com</a></span><br></p><p></p></div></di=
-v></div><br></div><br><div class=3D"gmail_quote gmail_quote_container"><div=
- dir=3D"ltr" class=3D"gmail_attr">On Sun, Jul 19, 2026 at 3:16=E2=80=AFPM J=
-ulien Olivain &lt;<a href=3D"mailto:ju.o@free.fr">ju.o@free.fr</a>&gt; wrot=
-e:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0=
-.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">Hi Andrea,<br=
->
-<br>
-Thanks for the patch.<br>
-<br>
-The package=C2=A0 introduces build failures for some toolchains. See:<br>
-<a href=3D"https://gitlab.com/jolivain/buildroot/-/pipelines/2688533526" re=
-l=3D"noreferrer" target=3D"_blank">https://gitlab.com/jolivain/buildroot/-/=
-pipelines/2688533526</a><br>
-<br>
-You can reproduce locally with the command:<br>
-utils/test-pkg -a -p libcppconnman<br>
-<br>
-I have another comment, see below.<br>
-<br>
-On 17/07/2026 11:32, Andrea Ricchi wrote:<br>
-&gt; libcppconnman is a C++ library that provides an easy-to-use API<br>
-&gt; to communicate with ConnMan over D-Bus using GDBus.<br>
-&gt; <br>
-&gt; <a href=3D"https://github.com/amarula/libcppconnman" rel=3D"noreferrer=
-" target=3D"_blank">https://github.com/amarula/libcppconnman</a><br>
-&gt; <br>
-&gt; Also add myself to DEVELOPERS for this package.<br>
-&gt; <br>
-&gt; Signed-off-by: Andrea Ricchi &lt;<a href=3D"mailto:andrea.ricchi@amaru=
-lasolutions.com" target=3D"_blank">andrea.ricchi@amarulasolutions.com</a>&g=
-t;<br>
-&gt; ---<br>
-&gt; Changes v1 -&gt; v2:<br>
-&gt;=C2=A0 =C2=A0- add missing libcppconnman entry in package/Config.in<br>
-&gt;=C2=A0 =C2=A0- merge the DEVELOPERS addition into this patch<br>
-&gt; <br>
-&gt;=C2=A0 DEVELOPERS=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0|=C2=A0 1 +<br>
-&gt;=C2=A0 package/Config.in=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 |=C2=A0 1 +<br>
-&gt;=C2=A0 package/libcppconnman/Config.in=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 | 26 ++++++++++++++++++++++++<br>
-&gt;=C2=A0 package/libcppconnman/libcppconnman.hash |=C2=A0 3 +++<br>
-&gt;=C2=A0 package/libcppconnman/<a href=3D"http://libcppconnman.mk" rel=3D=
-"noreferrer" target=3D"_blank">libcppconnman.mk</a>=C2=A0 =C2=A0| 24 ++++++=
-++++++++++++++++<br>
-&gt;=C2=A0 5 files changed, 55 insertions(+)<br>
-&gt;=C2=A0 create mode 100644 package/libcppconnman/Config.in<br>
-&gt;=C2=A0 create mode 100644 package/libcppconnman/libcppconnman.hash<br>
-&gt;=C2=A0 create mode 100644 package/libcppconnman/<a href=3D"http://libcp=
-pconnman.mk" rel=3D"noreferrer" target=3D"_blank">libcppconnman.mk</a><br>
-&gt; <br>
-[...]<br>
-&gt; diff --git a/package/libcppconnman/Config.in <br>
-&gt; b/package/libcppconnman/Config.in<br>
-&gt; new file mode 100644<br>
-&gt; index 0000000000..19dc0bbd2d<br>
-&gt; --- /dev/null<br>
-&gt; +++ b/package/libcppconnman/Config.in<br>
-&gt; @@ -0,0 +1,26 @@<br>
-&gt; +config BR2_PACKAGE_LIBCPPCONNMAN<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0bool &quot;libcppconnman&quot;<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0depends on BR2_INSTALL_LIBSTDCPP<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0depends on BR2_USE_WCHAR # libglib2<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2<b=
-r>
-&gt; +=C2=A0 =C2=A0 =C2=A0depends on BR2_USE_MMU # libglib2<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_LIBGLIB2<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0help<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0libcppconnman provide easy to use C++ API =
-to communicate<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0with ConnMan via the DBus using GDBus.<br>
-&gt; +<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0<a href=3D"https://amarula.github.io/libcp=
-pconnman/" rel=3D"noreferrer" target=3D"_blank">https://amarula.github.io/l=
-ibcppconnman/</a><br>
-&gt; +<br>
-&gt; +comment &quot;libcppconnman needs a toolchain w/ C++, wchar, threads&=
-quot;<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0depends on BR2_USE_MMU<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCH=
-AR || \<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0!BR2_TOOLCHAIN_HAS_TH=
-READS<br>
-&gt; +<br>
-&gt; +if BR2_PACKAGE_LIBCPPCONNMAN<br>
-&gt; +<br>
-&gt; +config BR2_PACKAGE_LIBCPPCONNMAN_EXAMPLE<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0bool &quot;libcppconnman example&quot;<br>
-<br>
-When configuring with examples, package build configuration fails with<br>
-a missing readline library. You can reproduce with:<br>
-<br>
-cat &gt;.config &lt;&lt;EOF<br>
-BR2_aarch64=3Dy<br>
-BR2_TOOLCHAIN_EXTERNAL=3Dy<br>
-BR2_PACKAGE_LIBCPPCONNMAN=3Dy<br>
-BR2_PACKAGE_LIBCPPCONNMAN_EXAMPLE=3Dy<br>
-EOF<br>
-make olddefconfig<br>
-make libcppconnman<br>
-<br>
-Could you add this missing dependency (both in Config.in and in the .mk <br=
->
-file)<br>
-please?<br>
-<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0help<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0Compile CLI example.<br>
-&gt; +<br>
-&gt; +endif<br>
-<br>
-Could you send an updated patch fixing those issues, please?<br>
-<br>
-Best regards,<br>
-<br>
-Julien.<br>
-</blockquote></div>
-
---00000000000006b23306570724c5--
-
---===============1980826562888432947==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/dash/dash.hash b/package/dash/dash.hash
+index 3fcdb1a5da..8884b55079 100644
+--- a/package/dash/dash.hash
++++ b/package/dash/dash.hash
+@@ -1,5 +1,5 @@
+-# From http://gondor.apana.org.au/~herbert/dash/files/dash-0.5.13.4.tar.gz.sha512sum
+-sha512  383d0ea8316fea3ce523dc535173a94a22e58bfaec2dec3309d3496a864e5e67711965563db82e7e181f8d7b67a25033107b4c9453c3d6b3820c6586d1f99675  dash-0.5.13.4.tar.gz
++# From http://gondor.apana.org.au/~herbert/dash/files/dash-0.5.13.5.tar.gz.sha512sum
++sha512  ae326c110713a9da6b7afb977ca6fd931793b03011f0a7aa2c42e873f116ed09448deea9ef5ca4515fe3afe24e210e0aaa580f7de89934edda9cf31ee44c94dd  dash-0.5.13.5.tar.gz
+ # Locally calculated
+-sha256  d10dfd41cda59165560db39ca915c2c4a7636fff04281d8d2df77ad92c753e2b  dash-0.5.13.4.tar.gz
++sha256  40090101a2a491f13e901d3d48e90414f26634628b9bfff35ff540363c227a7d  dash-0.5.13.5.tar.gz
+ sha256  254a7894923ff62e69184a991dcbccae97edee58a1105e8efbe78caf10595d72  COPYING
+diff --git a/package/dash/dash.mk b/package/dash/dash.mk
+index 2b33433813..c2e168c44d 100644
+--- a/package/dash/dash.mk
++++ b/package/dash/dash.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DASH_VERSION = 0.5.13.4
++DASH_VERSION = 0.5.13.5
+ DASH_SITE = http://gondor.apana.org.au/~herbert/dash/files
+ DASH_LICENSE = BSD-3-Clause, GPL-2.0+ (mksignames.c)
+ DASH_LICENSE_FILES = COPYING
+-- 
+2.47.3
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1980826562888432947==--
