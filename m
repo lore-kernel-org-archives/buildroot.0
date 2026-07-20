@@ -1,63 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67575C44529
-	for <buildroot@archiver.kernel.org>; Mon, 20 Jul 2026 20:17:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF79BC44529
+	for <buildroot@archiver.kernel.org>; Mon, 20 Jul 2026 20:23:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8CC1B60740;
-	Mon, 20 Jul 2026 20:17:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8E317406CC;
+	Mon, 20 Jul 2026 20:23:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oy23jrVdzu9n; Mon, 20 Jul 2026 20:16:59 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TSJDsrISHGYE; Mon, 20 Jul 2026 20:23:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 626056072F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B723440531
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1784578619;
-	bh=EM9FSuBHuQw5cI86m3rGodVnI0SIh4WqlhzPRLs9f9Q=;
+	s=default; t=1784578981;
+	bh=iXt9WXNGe7AS+gTkx1h+gjVd3wK8Jr4+OqGGZ5Qb58o=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=CHr3+k90oRUreEKBkIyt5un8z2LbeE7PWAxc1NCD4DPNRRn76wiOS8mdEN6uXYhnb
-	 7Bs7733NRAJI4V8OjfYo+/TTZTRZ5V1LHycO8OCUe8X9J+TXlgq/AAdG5s6CKGtdNK
-	 cSe9dLgJ1WhASYXez47/PmvqzsvCie/Gc2q8v6EYDIWM7EVMYF5bELWsIVdQrzdm3G
-	 CPzHtMGMBfp28IeFUZuJ7AciAV6/72IX7E8b+VaelddQHdbLyOMKPKTr4oPxdb87pD
-	 CTdaL/hDsVLZqoHzbgMR4/FNizVgd5IwSy8GYprPtA3NQUs2bWhGs+RXcvMT+Ormr/
-	 zRwPGJcNDOh4w==
+	b=Q4SJUVXwtbrOlBM6QWVn2QdPJ6TuuoNE3+gqKs6AAX4Ju6shTqFwODvN5apSjPNQ2
+	 C6ZPjt5IoV+q/CS/ggT9SN2TNxl3ippFdvgfzDaPoVunUnSOh/1VHuSffUi2ofmxRd
+	 8PbrVdvR79q28vGfyXiKtkx/5c6e5hHPlYWEY3l+MqCHQUXKpO2YzE0deJGGG6ty7F
+	 BLwpuqh9H47yflMG59TAP1NiD/RQ4Xcre26bjVqpdf4a3Pn2rCrTLBO8nEZL1dHv25
+	 NljwmVdGWOQiKMEBP4BXBOD/Pua/IaGa8LFzn135C6P1S4ycxS0lTtGzGTTNFE0xWs
+	 cBRNqZjNQ5NFA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 626056072F;
-	Mon, 20 Jul 2026 20:16:59 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 06768786
- for <buildroot@buildroot.org>; Mon, 20 Jul 2026 20:16:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B723440531;
+	Mon, 20 Jul 2026 20:23:01 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6BB5D1142
+ for <buildroot@buildroot.org>; Mon, 20 Jul 2026 20:23:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EC12F80CB0
- for <buildroot@buildroot.org>; Mon, 20 Jul 2026 20:16:54 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5C9B240531
+ for <buildroot@buildroot.org>; Mon, 20 Jul 2026 20:23:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5s8ldZu-QvWp for <buildroot@buildroot.org>;
- Mon, 20 Jul 2026 20:16:54 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RPzjD23jFTr6 for <buildroot@buildroot.org>;
+ Mon, 20 Jul 2026 20:22:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 011F180CA2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E70F540524
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 011F180CA2
- for <buildroot@buildroot.org>; Mon, 20 Jul 2026 20:16:54 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E70F540524
+ for <buildroot@buildroot.org>; Mon, 20 Jul 2026 20:22:57 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3750F8907D; Mon, 20 Jul 2026 20:16:16 +0000 (UTC)
+ id 1340789066; Mon, 20 Jul 2026 20:22:20 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 20 Jul 2026 22:13:19 +0200
+Date: Mon, 20 Jul 2026 22:21:10 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: cbd7cb094f50b359563ef0948c1760cfa7a76f0d
-X-Git-Newrev: 0c2b14a8b5537b23ad5beda705427d4943ba72e3
+X-Git-Oldrev: f9687af626abefc7d7d7c81157dbf8997fd31005
+X-Git-Newrev: a44b18837dc54504f25139d7a3e571cb67cbc9c4
 X-Patchwork-Hint: ignore
-Message-Id: <20260720201616.3750F8907D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/dbus-broker: clarify license
- information
+Message-Id: <20260720202220.1340789066@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/openssh: fix build for powerpc64le
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,31 +76,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/0c2b14a8b5537b23ad5beda705427d4943ba72e3
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/a44b18837dc54504f25139d7a3e571cb67cbc9c4
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-All these bundled subprojects explicitly give "Apache-2.0 OR
-LGPL-2.1-or-later" in their README.md files.
+Fixes:
+https://autobuild.buildroot.net/results/40a/40a26d9831667233944e6aabf2388f02a8cf30ac/
+https://gitlab.com/buildroot.org/buildroot/-/work_items/79
 
-Signed-off-by: Fiona Klute (Othermo GmbH) <fiona.klute@gmx.de>
+packet.c: In function 'ssh_packet_log_type':
+packet.c:1219:1: sorry, unimplemented: argument 'used' is not supported
+ for '-fzero-call-used-regs' on this target
+
+Upstream bug report: https://bugzilla.mindrot.org/show_bug.cgi?id=3673
+
+Upstream commit
+https://github.com/openssh/openssh-portable/commit/29cf521486bf97ab9de5b9b356f812107e0671bc
+which was first released with version 10.1 and was added to buildroot
+with commit b52b3fd59dc6c86ef51b6cad5b76017f90c83beb introduced cache
+variables to disable zero-call-used-regs when needed.
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/dbus-broker/dbus-broker.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/openssh/openssh.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/dbus-broker/dbus-broker.mk b/package/dbus-broker/dbus-broker.mk
-index 7e029879f9..869eec462b 100644
---- a/package/dbus-broker/dbus-broker.mk
-+++ b/package/dbus-broker/dbus-broker.mk
-@@ -10,7 +10,7 @@ DBUS_BROKER_SITE = https://github.com/bus1/dbus-broker/releases/download/v$(DBUS
+diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+index 2f3088defe..5575ba4f97 100644
+--- a/package/openssh/openssh.mk
++++ b/package/openssh/openssh.mk
+@@ -36,6 +36,10 @@ define OPENSSH_PERMISSIONS
+ 	/var/empty d 755 root root - - - - -
+ endef
  
- DBUS_BROKER_LICENSE = \
- 	Apache-2.0, \
--	Apache-2.0 and/or LGPL-2.1+ (c-dvar, c-ini, c-list, c-rbtree, c-shquote, c-stdaux, c-utf8)
-+	Apache-2.0 or LGPL-2.1+ (bundled subprojects c-dvar, c-ini, c-list, c-rbtree, c-shquote, c-stdaux, c-utf8)
- # For the third-party code, the licensing legal-info is inconsistent between
- # the AUTHORS and README, so keep both
- DBUS_BROKER_LICENSE_FILES = \
++ifeq ($(BR2_powerpc64le),y)
++OPENSSH_CONF_ENV += ossh_cv_cflag__fzero_call_used_regs_used=no
++endif
++
+ ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_110934),y)
+ OPENSSH_CONF_OPTS += --without-hardening
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
