@@ -4,113 +4,113 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90C8FC4452A
-	for <buildroot@archiver.kernel.org>; Mon, 20 Jul 2026 15:02:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B179C4452C
+	for <buildroot@archiver.kernel.org>; Mon, 20 Jul 2026 15:02:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 66F2D80CD0;
-	Mon, 20 Jul 2026 15:02:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6503180CC8;
+	Mon, 20 Jul 2026 15:02:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BBGxYw2y7Usx; Mon, 20 Jul 2026 15:02:51 +0000 (UTC)
+ id fRAk9WXdrvim; Mon, 20 Jul 2026 15:02:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9701A80CD9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 278C480CBF
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1784559771;
-	bh=PEh0/OKUW2GstWqMFUpv2RF4vutG4Mx2wKNxBcc44nc=;
+	s=default; t=1784559773;
+	bh=DrGqJqtMHVp378PfpwjrBGUb+5CW7GcwX1r/tDwrPiw=;
 	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=YeC7g3I4y39NlEl3IfcAcoMas/sRVC9Wgn8o8bo6ndmqEi6mPLOsjRKMUoj1TOIwH
-	 jYSzkKC0A1VFLE4Dr3cS0GtVPTHVzFrlkqdqt+e0vjZFLLIpREzKWhfh3D7jYdY0L/
-	 58w+osFpoaZmyYsrhTqXj94aSrkT6FdofgUAitxCnks49FUXk+dX84CxSNYg1MDKWC
-	 ne/mYGxgqFSWOR1uABgcNC0HuXBgTdcojOWlrD/lKZ3gbpYZXl/0bK0N2jNlYjmTZM
-	 3c2JvByBuSSYdI4n+42+OusEVQfl/LDiiwoJlObaJr5qfWbrGVt63WoI1CsUsMq5c6
-	 2VHfaME8Grt/A==
+	b=gDamX+HqFrP9TV4ndvldV3jHTwTtKSlT2zyoFg8v+te0KxMsLivy5RqM8CuJWqMXA
+	 co1KWEc8QJSI5TsoGUX7lUpR0p0ZuI2jtC8GiZX1nfiL1tjZ0Xk5LVnl+uu0xOy/eE
+	 mQpFrUaO+fuy5f05/j5ozZ3UWgUSGoW+3w7Vg1WK1NcaaT0ZGjUx0kpCbx2a8qvddE
+	 a97zHm/sB/p6lvunvTkjjOINtciq3bB+ZYJYL992MS6ztr1ZjxvR7FMqLTRUJUYPbj
+	 snE8UROqx9FgM/3ozV2/C/9kSphND5fmRIAImB29ejnXWga2tkW5SjHgLhpyr0e5o4
+	 NRhxEjyHp6cZA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9701A80CD9;
-	Mon, 20 Jul 2026 15:02:50 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id AA3BF206
- for <buildroot@buildroot.org>; Mon, 20 Jul 2026 15:02:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 278C480CBF;
+	Mon, 20 Jul 2026 15:02:53 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 842071F6
+ for <buildroot@buildroot.org>; Mon, 20 Jul 2026 15:02:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9C48B80CC8
- for <buildroot@buildroot.org>; Mon, 20 Jul 2026 15:02:48 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 721A580CE9
+ for <buildroot@buildroot.org>; Mon, 20 Jul 2026 15:02:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id APL3Wim8FW0E for <buildroot@buildroot.org>;
- Mon, 20 Jul 2026 15:02:47 +0000 (UTC)
+ id 5ZjvzGO7zP0n for <buildroot@buildroot.org>;
+ Mon, 20 Jul 2026 15:02:49 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::435; helo=mail-wr1-x435.google.com;
+ client-ip=2a00:1450:4864:20::432; helo=mail-wr1-x432.google.com;
  envelope-from=francois.perrad.86@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5CFC780CB0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5CFC780CB0
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
- [IPv6:2a00:1450:4864:20::435])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5CFC780CB0
- for <buildroot@busybox.net>; Mon, 20 Jul 2026 15:02:47 +0000 (UTC)
-Received: by mail-wr1-x435.google.com with SMTP id
- ffacd0b85a97d-4758bd3731bso3163165f8f.0
- for <buildroot@busybox.net>; Mon, 20 Jul 2026 08:02:47 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 79F6680CC4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 79F6680CC4
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 79F6680CC4
+ for <buildroot@busybox.net>; Mon, 20 Jul 2026 15:02:48 +0000 (UTC)
+Received: by mail-wr1-x432.google.com with SMTP id
+ ffacd0b85a97d-472326ca506so7906130f8f.2
+ for <buildroot@busybox.net>; Mon, 20 Jul 2026 08:02:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1784559765; x=1785164565;
+ d=1e100.net; s=20251104; t=1784559766; x=1785164566;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=2xTsDvXo5w06yOrnkkZD/KfGs30DzrSVEiUQ05CWou4=;
- b=HGIsh/729d+VAZMSLqg9qTIfh8UIxCnQg93isUmczJvUb4HGDkCLVNtkBI8mWo49Oe
- X4bId1tG3xYhp9qrcaPe/Y9zlPQKPswfgEv6XGs89DaWZ8o0FDkHVY/Icp+gVMc1CZGH
- 21h7eOXvUdjr/1q5H25A3ztyfsYLYdd47tsez92/7XsqrN50AmWZ7May0GseV8lJsSY2
- /sJVPj1PFpazxdUCyeX77tRes99II6w+ott4+cEt3KbhIqnkIQrlvDT+A2Vy97kWXOyt
- Cj+sl+o63+ilJoxRsScZsxEFBkDax4/hlnzBoAWEK8XRfGYp4h2qKYjws229xt9TY5sB
- yoNA==
-X-Gm-Message-State: AOJu0YyaZGeGjR3q4twV+GkBqZf80tn7ZPUgjSICayx+2/49bTdxBiES
- GYskwSpOeZHNRors3orxm7KhNKWADAAleRpSVRdCcUBohjnLIOctiz5YzcWm7g==
-X-Gm-Gg: AR+sD10vN7TEjSuaaLls0G9dUy2FeTOXnvSGznLoa2NjJOUa5Q9T5UpAwB874T9qbqJ
- mGPpjZTJsDkwyNR8tPivx+xN4KN9HIdAD/pnie1CS6+znxdTSyqjl56NDEldpHYUoW8M2ceHxv6
- c3qxpLmCaINUu0IEniAI0BAkv1BPkCHDUWEwyEGWniR99mVUpEuvEJyDHl4l8sT25VZXz0eqTAw
- hy2Ea6QM2RDSfe4uPN3ZkT10rvv4ZyxgBONM/Ztdpt9GT1yZPOYeKMOHQceOeN9UZFYrU+1rk1w
- U0Lu/d1HLDIhYPSO3QkoksiLv4OOTFNPjz84RP7/X9a9ry/wjDDR612IF5zEpaaaXVNOk3K70eg
- Vv5F8pa/Fmsy8SvSdeXd9JNHvuA5VEqZSab9UZ0JFodlHpv/GvfZCyTJpORkMpGgGk8hM9UIYiR
- qNoTlk5Irxpen4R3Y1CC/Z6r+17z/e
-X-Received: by 2002:a05:6000:25f9:b0:474:da39:e5b3 with SMTP id
- ffacd0b85a97d-47f623ad9a9mr17432582f8f.2.1784559765176; 
- Mon, 20 Jul 2026 08:02:45 -0700 (PDT)
+ bh=h+KcB/PZFhWmSBLHQpXvDv7Z9QH0rLr+Y3mavZaB9R0=;
+ b=DOdFI6l5jZiuzKshXuUBBHFrNJe6Nu/6QZ1ZcGAVCuQcLglvXieMwQK8hHbsxx2o4m
+ NOKenwR2Uk9EdaioiPu4v2YiEhNhqnnGBZm8nQPWkFFoTnVsr5doWK3EelXLfbnTNYA1
+ jzJRP9RjOJ6zkR4kHFWtImbuBOwLQFk3O0YfERVhVnHXlokRj+0soxG6dhJLokMXNpv5
+ 5l4BNZcv45ao3W02oCAdt7p65CwtX9QDZ2vMJFNIHPbEup5GkZygpIbrc/MFql28Vcdr
+ AKGhO+KeqYMAZ5YJpF0px6YnYTEZKZt49ouLpUbC0Xxu9DquWdjkla1CJNJhfhXOq3c0
+ iUdw==
+X-Gm-Message-State: AOJu0Yxc7P8lpObaE2EOcxciA9Md3VBLMWEgn3gY1veYjZfg+TswDwfm
+ RSrK8zAscLiPfbK278wfJLtAfAh1t7OyQxWFFKB5j4kHWVBuE2WgXNJd90ioXQ==
+X-Gm-Gg: AfdE7cmtMh2ir46b/+94Ar5cXl1LyhfWhe+n+jHqZJ69tuPtFZJltqMKwmEQDTwU74T
+ ya7prkdYDbaluf7G9qzdQ8dJU5hhtcZB5Wi2YR57AJwKehZ0EF0JK7cFwZJz1D6ISL1eTc4dp6s
+ FYaXdzFOI2LeWCLriQ7bOIKlmPIGEgSeNCMjdcEbGPYeceUT2PUch3j7tYUdmHg4X/ugmTudlza
+ uYUrqGTtywqCbpyQSyHAcKjoYwhJz/kIu2omxA+hPdttIcvtSZohelfURAuOSMTLcEjtlTJgS7R
+ XrHJbEHnPCWNJvkhIFsU90VHl+Yhd8njt6VwRN+/dV1SR5mP3hzYqTmFU555n3zuGqSFpGLsFWP
+ 2RHbtoI2TDVRhoolP7e3Im0MZuVweUwV489n5W3LLE29W3yGlDLLqRgRap48L+d32Xm7Tu4Xm1e
+ dP3wJtf81H0JDqhXS3IGwHssT1Ks0+zU1hNjEN1qg=
+X-Received: by 2002:a05:600c:3b01:b0:495:4fd4:144b with SMTP id
+ 5b1f17b1804b1-4954fd419e8mr120659535e9.21.1784559766258; 
+ Mon, 20 Jul 2026 08:02:46 -0700 (PDT)
 Received: from vm-2404.. (132.187.66.37.rev.sfr.net. [37.66.187.132])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-47f63ee926dsm28681532f8f.35.2026.07.20.08.02.44
+ ffacd0b85a97d-47f63ee926dsm28681532f8f.35.2026.07.20.08.02.45
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 20 Jul 2026 08:02:44 -0700 (PDT)
+ Mon, 20 Jul 2026 08:02:45 -0700 (PDT)
 From: Francois Perrad <francois.perrad.86@gmail.com>
 X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
 To: buildroot@busybox.net
 Cc: Francois Perrad <francois.perrad@gadz.org>
-Date: Mon, 20 Jul 2026 17:02:30 +0200
-Message-ID: <20260720150236.243961-4-francois.perrad@gadz.org>
+Date: Mon, 20 Jul 2026 17:02:31 +0200
+Message-ID: <20260720150236.243961-5-francois.perrad@gadz.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260720150236.243961-1-francois.perrad@gadz.org>
 References: <20260720150236.243961-1-francois.perrad@gadz.org>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1784559765; x=1785164565; darn=busybox.net;
+ d=gmail.com; s=20251104; t=1784559766; x=1785164566; darn=busybox.net;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to:content-type;
- bh=2xTsDvXo5w06yOrnkkZD/KfGs30DzrSVEiUQ05CWou4=;
- b=mtilXU37CCTMVY8BuaLu4U4pixM+OWxXPXXkkzG3VveYl2uiLlHsJhFGKLsZVXOWpW
- vAnZVvzKIXm0daWeNxxLGcGEz9AQ/sKm6vG23iVE/LRsk0Vfy0ojeaoDSIB1m8XZip47
- 2BZP+mFcilSHyqd8h66VxOrDzU6ABFaRrIPqoOHiHmuPcYoREx/MqZfcrjN+7NPQC5Hd
- OernDIJ8Bou3Uhe4k7CmvgBPfakkaXmwopoK9JbjJfKeFyorDqm8JEVQB7uZdZGo8jn6
- +pV18WKfGcMOvbc3F7mA/EGg+j06kcodZ5eN6ZmO5n1eQaO49TFATnOb28U2H/zPTVSq
- p6Bg==
+ bh=h+KcB/PZFhWmSBLHQpXvDv7Z9QH0rLr+Y3mavZaB9R0=;
+ b=cFEORllaOwKQA8rLbQBYIY8xpA5YolOe/5wgih0GAfcfE6lZO8VWxOZ8pYg1e4ynsX
+ UJDeCOoRIxNHAj63XlIyQhnpgc82R8bcl5lLpY1nrjmtuKgrAjEkkaBMCPu/Ss65mc+L
+ FB2zVDHTMbdQKG4KfVlNMJyN1+W7Xd0aBCC2/f4cBZVFrvawSgCHppXcb56AwlV4ASAO
+ wUWZYpmNav11gDxZJ7Ltt/Gc0f3TWQYyfyFv+ihz9pCITjdtnjk/Rv2AfdAmKXrwGvvG
+ CA95o65YHhU1Rt4G3Tk1AtqnJD3dYBJOx2u+U80YQ5Zc20kzpE1iGjrjJ0J80OfaEVPm
+ oYSw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20251104 header.b=mtilXU37
-Subject: [Buildroot] [PATCH v2 3/8] package/harec: new host package
+ header.a=rsa-sha256 header.s=20251104 header.b=cFEORlla
+Subject: [Buildroot] [PATCH v2 4/8] package/hare: new host package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -127,67 +127,132 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-dependency for host-hare
-
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- DEVELOPERS               |  1 +
- package/harec/harec.hash |  3 +++
- package/harec/harec.mk   | 26 ++++++++++++++++++++++++++
- 3 files changed, 30 insertions(+)
- create mode 100644 package/harec/harec.hash
- create mode 100644 package/harec/harec.mk
+ DEVELOPERS                  |  2 +-
+ package/Config.in.host      |  1 +
+ package/hare/Config.in.host | 14 +++++++++
+ package/hare/hare.hash      |  3 ++
+ package/hare/hare.mk        | 57 +++++++++++++++++++++++++++++++++++++
+ 5 files changed, 76 insertions(+), 1 deletion(-)
+ create mode 100644 package/hare/Config.in.host
+ create mode 100644 package/hare/hare.hash
+ create mode 100644 package/hare/hare.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 442fe4e6a..0b99456a9 100644
+index 0b99456a9..89232ff71 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1176,6 +1176,7 @@ F:	package/copas/
+@@ -1176,7 +1176,7 @@ F:	package/copas/
  F:	package/coxpcall/
  F:	package/dado/
  F:	package/ficl/
-+F:	package/harec/
+-F:	package/harec/
++F:	package/hare*
  F:	package/janet/
  F:	package/qbe/
  F:	package/libtomcrypt/
-diff --git a/package/harec/harec.hash b/package/harec/harec.hash
+diff --git a/package/Config.in.host b/package/Config.in.host
+index df57cc0c1..595caf9e7 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -54,6 +54,7 @@ menu "Host utilities"
+ 	source "package/gobject-introspection/Config.in.host"
+ 	source "package/google-breakpad/Config.in.host"
+ 	source "package/gptfdisk/Config.in.host"
++	source "package/hare/Config.in.host"
+ 	source "package/imagemagick/Config.in.host"
+ 	source "package/imx-mkimage/Config.in.host"
+ 	source "package/imx-usb-loader/Config.in.host"
+diff --git a/package/hare/Config.in.host b/package/hare/Config.in.host
 new file mode 100644
-index 000000000..0c3679bfc
+index 000000000..a6c53b376
 --- /dev/null
-+++ b/package/harec/harec.hash
++++ b/package/hare/Config.in.host
+@@ -0,0 +1,14 @@
++
++config BR2_PACKAGE_HOST_HARE_TARGET_ARCH_SUPPORTS
++	bool
++	default y if BR2_aarch64
++	default y if BR2_RISCV_64
++	default y if BR2_x86_64
++
++config BR2_PACKAGE_HOST_HARE
++	bool "host hare"
++	depends on BR2_PACKAGE_HOST_HARE_TARGET_ARCH_SUPPORTS
++	help
++	  The Hare programming language
++
++	  https://harelang.org/
+diff --git a/package/hare/hare.hash b/package/hare/hare.hash
+new file mode 100644
+index 000000000..98aadd890
+--- /dev/null
++++ b/package/hare/hare.hash
 @@ -0,0 +1,3 @@
 +# Locally computed
-+sha256  5581bc16dcf22969c7d33b0f2a9535ba37d4cf1bb39dec252e98ff2781175629  0.26.0.tar.gz
-+sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
-diff --git a/package/harec/harec.mk b/package/harec/harec.mk
++sha256  f76704920a2f457be4d2d6290dc10dcfb7319c1d1990f2305491644383466905  0.26.0.1.tar.gz
++sha256  be782a711236b742d7231a4a9a15ca781013e61dead0d6908105fbc2cb38a317  COPYING
+diff --git a/package/hare/hare.mk b/package/hare/hare.mk
 new file mode 100644
-index 000000000..df1096680
+index 000000000..d408b03d6
 --- /dev/null
-+++ b/package/harec/harec.mk
-@@ -0,0 +1,26 @@
++++ b/package/hare/hare.mk
+@@ -0,0 +1,57 @@
 +################################################################################
 +#
-+# harec
++# hare
 +#
 +################################################################################
 +
-+HAREC_VERSION = 0.26.0
-+HAREC_SITE = https://git.sr.ht/~sircmpwn/harec/archive
-+HAREC_SOURCE = $(HAREC_VERSION).tar.gz
-+HAREC_LICENSE = GPL-3.0
-+HAREC_LICENSE_FILES = COPYING
++HARE_VERSION = 0.26.0.1
++HARE_SITE = https://git.sr.ht/~sircmpwn/hare/archive
++HARE_SOURCE = $(HARE_VERSION).tar.gz
++HARE_LICENSE = MPL-2.0
++HARE_LICENSE_FILES = COPYING
 +
-+define HOST_HAREC_CONFIGURE_CMDS
++HOST_HARE_DEPENDENCIES = host-harec host-qbe host-scdoc
++
++HOST_HARE_CONF_OPTS = \
++	ARCH=$(HOSTARCH) \
++	DESTDIR="$(HOST_DIR)" \
++	PREFIX=/usr \
++	HAREC="$(HOST_DIR)/usr/bin/harec" \
++	QBE="$(HOST_DIR)/usr/bin/qbe" \
++	SCDOC="$(HOST_DIR)/usr/bin/scdoc" \
++	HAREPATH="$(HOST_DIR)/usr/src/hare/stdlib"
++
++ifeq ($(BR2_aarch64),y)
++HOST_HARE_CONF_OPTS += \
++	AARCH64_AS=$(TARGET_AS) \
++	AARCH64_CC=$(TARGET_CC) \
++	AARCH64_LD=$(TARGET_LD)
++endif
++
++ifeq ($(BR2_RISCV_64),y)
++HOST_HARE_CONF_OPTS += \
++	RISCV64_AS=$(TARGET_AS) \
++	RISCV64_CC=$(TARGET_CC) \
++	RISCV64_LD=$(TARGET_LD)
++endif
++
++ifeq ($(BR2_x86_64),y)
++HOST_HARE_CONF_OPTS += \
++	X86_64_AS=$(TARGET_AS) \
++	X86_64_CC=$(TARGET_CC) \
++	X86_64_LD=$(TARGET_LD)
++endif
++
++define HOST_HARE_CONFIGURE_CMDS
 +	cp $(@D)/configs/linux.mk $(@D)/config.mk
 +endef
 +
-+define HOST_HAREC_BUILD_CMDS
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) ARCH=$(HOSTARCH) all
++define HOST_HARE_BUILD_CMDS
++	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_HARE_CONF_OPTS) all
 +endef
 +
-+define HOST_HAREC_INSTALL_CMDS
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) \
-+		PREFIX=/usr DESTDIR="$(HOST_DIR)" install
++define HOST_HARE_INSTALL_CMDS
++	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_HARE_CONF_OPTS) install
 +endef
 +
 +$(eval $(host-generic-package))
