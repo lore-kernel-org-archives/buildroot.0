@@ -1,117 +1,112 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35FE2C44515
-	for <buildroot@archiver.kernel.org>; Mon, 20 Jul 2026 13:33:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5CB2C4452A
+	for <buildroot@archiver.kernel.org>; Mon, 20 Jul 2026 15:02:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CC616606C5;
-	Mon, 20 Jul 2026 13:33:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6AC3F80CCB;
+	Mon, 20 Jul 2026 15:02:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id p1G4jxGZAqky; Mon, 20 Jul 2026 13:33:52 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NpElGAArJiJs; Mon, 20 Jul 2026 15:02:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8BB1B606B3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9A58180CB1
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1784554432;
-	bh=fQz7AkiyRYeM2Vjshc8etJwOOl3gOnvBTjk9v0shfH8=;
-	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 Cc:From;
-	b=b/gjlF0g/Mr1Ix36ihjsWVPLbZdeHbEWzmWzI5+1II8kriIljGoWMgjJIRKZieywo
-	 AA1vNcq8vciiqiVPNFi3pfdAA/61oZAJ6JXT7trdm1soQXc0deJFr0Ep2J7Lw4Jqbo
-	 9kir1Uc9gpC+XRVXoZ5ECnlRdcE7m1muX/+RHPjkvG8jP536HNwj5DMxdv89HIlsGj
-	 yIlOBclqY+ZFn5NdEeAL7bYXqXCwYlKrK3XzPA/ljA2NgmQIu6bGIdlxV+QS1ri6ME
-	 a3dZyWZAYptW3SoEdol0443RlsRg1O595T8RvE9zQvaTn32f5Z6+XIr5A4zff40w9E
-	 MxJ6WB5r3EX1w==
+	s=default; t=1784559767;
+	bh=wTM0prLcMGzQpN7N1sOZ2HZjC5scM2BdaWpBKX4LiNM=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=fI1asyCccgGgE1LGDf8p5kXIoMMaHfluCgyLEmjCZwDu+qTXkeXxOUTFrJsxO9G4I
+	 14w6XQujGgOQEZ7HFJ3pesKsIy8L6qZY57UQbmecGJjl/EVBgdTq2UJamybtbWIQ9B
+	 r/71NrlUHERIAlBGFj2AVwpYb55etEHL3plSYbvaE2xIT3lZBMYHu6gvhtTo6RWTzi
+	 e6yKmmrkRMRcftxnenQedyO8RH4FOdqYSyWyTlZgh+3lFz/vRtCXleVyhJbwFPABMr
+	 CPIanWIBSU70F4Vx5laxg4qmLr1/D4t6PsM+gSpCaObEwaXc8QbO/0H2y/CGqPDqkG
+	 9MeC5wqh45MFw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8BB1B606B3;
-	Mon, 20 Jul 2026 13:33:52 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id E0533282
- for <buildroot@buildroot.org>; Mon, 20 Jul 2026 13:33:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9A58180CB1;
+	Mon, 20 Jul 2026 15:02:47 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id E7E03206
+ for <buildroot@buildroot.org>; Mon, 20 Jul 2026 15:02:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C5C444011A
- for <buildroot@buildroot.org>; Mon, 20 Jul 2026 13:33:51 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D99FA80CB1
+ for <buildroot@buildroot.org>; Mon, 20 Jul 2026 15:02:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wPJMSgREAZlU for <buildroot@buildroot.org>;
- Mon, 20 Jul 2026 13:33:50 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TdQpPDdKw0aI for <buildroot@buildroot.org>;
+ Mon, 20 Jul 2026 15:02:45 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32b; helo=mail-wm1-x32b.google.com;
- envelope-from=flaviu.nistor@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 66A5A4005D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 66A5A4005D
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
- [IPv6:2a00:1450:4864:20::32b])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 66A5A4005D
- for <buildroot@buildroot.org>; Mon, 20 Jul 2026 13:33:50 +0000 (UTC)
-Received: by mail-wm1-x32b.google.com with SMTP id
- 5b1f17b1804b1-4955484387cso10159385e9.1
- for <buildroot@buildroot.org>; Mon, 20 Jul 2026 06:33:50 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::434; helo=mail-wr1-x434.google.com;
+ envelope-from=francois.perrad.86@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org AA24680CAF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AA24680CAF
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
+ [IPv6:2a00:1450:4864:20::434])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id AA24680CAF
+ for <buildroot@busybox.net>; Mon, 20 Jul 2026 15:02:44 +0000 (UTC)
+Received: by mail-wr1-x434.google.com with SMTP id
+ ffacd0b85a97d-472326ca506so7906070f8f.2
+ for <buildroot@busybox.net>; Mon, 20 Jul 2026 08:02:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1784554428; x=1785159228;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to:content-type;
- bh=YVqQDh3vnohSzvadGvwvvFtAkQgyPUN96pNssFd0T00=;
- b=M0iDBjvI2oELCfcx9RDYAalxHzD/69i/GZj+JwQveMpf0d5ldfZZU08TWaCGeWMdMv
- dRakPx4Ra4jxmR+LmuDmZtSw6YjtZVE27IrUjCzndrZJM3qzp4MHzpAuZuKZiHB8YpxK
- vOmYmUN4+k3l6wWoHXfvzKGhb4oAAbCV678pi1IOwbRm4WYrVSAOf9qsN6sYZX4yw/jO
- D1e0IzSNj8JBS1cQrB3di6in13jr0uv46B5IqR3nLkk1oWPGYYgJ9pV1Cc1Sq8aufxjB
- ZrgoRdVINGsaHVohobwad3IsEOBUsyvnuLl8R2Y0VDuYV5rW2gx4zk2mx3EN7bnen/2b
- X+XQ==
-X-Gm-Message-State: AOJu0YyI5r9WNE+yLzAXXU9f4K+7KoBs8MMU/2C2Mt1uGOIuFxnbmvTZ
- rqgjafLS6jsZuTqwFnLV+QbzAgVSwCfa6QXxnB/erBFLX5a2SWVccVjlcM9SwCG4KLM=
-X-Gm-Gg: AfdE7ckjv4e3YAFwKNFts0xHcyBgJ/f9xcktBMEITZ+ZDcQfmb6kt112ncXEDU/kLI2
- llDid1+beNH51yYSuMV0JCkpMn5bLhc/tGYgEAVvSM3TMPPD/mc0QrCkR2F9Yr88Az7shk+6lXy
- 5hXtY1HaaxG0kmdZeI7QJxi3x7ASKTjyWwtBUsHJw6r/iu5TuWWYVQ4X/RJrSUkgj12h4YWXNF2
- AYdPx6Gn8QHqB2LudR+d/d+dj1tnfvyLIxUZTO06KR6iMq1eSRWSr+i5YICt5Bt+oEACeGlIRKy
- O2k6c7lsVElaqt8k93zbhxUdkgjJmx61fCpP90bt5qn/+4tP5Xh/mKtI6i2eF4i78irGN81dqci
- g9tRsLVMwQ2IPywx8fpRxBrBTc/Ara/jMWUbWsVe0e7uXr7D5VVdFBlBd3gN+h/gmBUpfT2+wsX
- jKQ9DmKX58kQ6r9VTQ1PsKmbKLk/RssNIW+PJU9l/UDBK7X0O9zQ==
-X-Received: by 2002:a05:600c:6c85:b0:490:c032:ae92 with SMTP id
- 5b1f17b1804b1-4954a412f97mr109126465e9.33.1784554427828; 
- Mon, 20 Jul 2026 06:33:47 -0700 (PDT)
-Received: from flaviu-Aspire-E5-572G.. ([5.15.69.50])
+ d=1e100.net; s=20251104; t=1784559762; x=1785164562;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to:content-type;
+ bh=f6QPXkr4bBldSXM6rdQDCgdFJEWY3MUNE3HNncFnBoA=;
+ b=f/p5X8c4uG4h5hPxzH8w5Rn8ZtFibt+DShFcKus/fRgS3zIKs9krW+pt5830gl38sN
+ s9NrbkJnszkI2WQTdFMfIr83LbMfI80+ZMP3y0hmfpQnSuvpYUwJabGtT8K7tcYKCNUG
+ Lw2rm1r9rBZwV/zHdYfyzLaOBXOTV18CWfbXraqgl6k/CVmhXxwEY6Cx37611/VqmVf5
+ H3HigqFSSA6QORpi8OOGds8ZAtuAgKt7bafYsKLdLUlu0nwI/jEnGkuZ29bIert2Zu/e
+ IhtD7bMiDZ8/Y6LlV8TBrPocdMT9XYVUiltiz+ydkeAt45o/IIfGyIzldcCZnnLeqWVh
+ l0yQ==
+X-Gm-Message-State: AOJu0YzVSd7bPzdjM80MKbYiGbex+5Z/sC3J2ema4r6dnPXaB+hqZ8Rc
+ JBGJL5RrrohxFTdmzT/v2dH5s/ZF0cWtqDCIp4XKR8w8VFED4QMypHxvVsteew==
+X-Gm-Gg: AR+sD12niQfAGkv5u+NidhmGZ64WJj8sSV+UC223py8Oe+5kmWvsr2BH8H/jMZp0jXC
+ VbvViuYpQfTtxMfCjs7S3FfuIuGuxZHUMj3QaYjbHGatvMLV3lc3kSJBHLcFEt+gE5pdVlpPImv
+ KyZ20vetOWzRQBeBYS0ioGpEYiRKTVbfeA24/YcCXfJesZfmpxdYpvvARKkjENotCusI/ZDNRqk
+ OJWNP2r50P6gz2avDRJknQvXBQPb6t154C9cBc7GJLm31GKr5Hpco6bzQDSDDpA+wUCHMsezhkV
+ 6qh39YgAt7AgDwl4wySHBtFnpK6kLgRILn/BDNUA5xfvhRMns9TYkDdScVqmDEkk27mMz9eVM6a
+ JNf1oW2D6PmU7hZqfCPjKIQhYbe12Gx03l6CBIHRz2ABeCPwPNR1JXcZxexzEVRsGWYCq5hqPSW
+ VpAS+8MMESmk/ZMnx9da18vtY4vDzk7gAR1Hw0okU=
+X-Received: by 2002:a5d:5d86:0:b0:47f:70eb:f2a7 with SMTP id
+ ffacd0b85a97d-47f70ebf35emr8715519f8f.4.1784559762001; 
+ Mon, 20 Jul 2026 08:02:42 -0700 (PDT)
+Received: from vm-2404.. (132.187.66.37.rev.sfr.net. [37.66.187.132])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-49562709500sm51162025e9.14.2026.07.20.06.33.46
+ ffacd0b85a97d-47f63ee926dsm28681532f8f.35.2026.07.20.08.02.40
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 20 Jul 2026 06:33:47 -0700 (PDT)
-From: Flaviu Nistor <flaviu.nistor@gmail.com>
-To: buildroot@buildroot.org,
-	Julien Olivain <ju.o@free.fr>
-Date: Mon, 20 Jul 2026 16:33:43 +0300
-Message-ID: <20260720133343.10111-1-flaviu.nistor@gmail.com>
+ Mon, 20 Jul 2026 08:02:40 -0700 (PDT)
+From: Francois Perrad <francois.perrad.86@gmail.com>
+X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
+To: buildroot@busybox.net
+Cc: Francois Perrad <francois.perrad@gadz.org>
+Date: Mon, 20 Jul 2026 17:02:27 +0200
+Message-ID: <20260720150236.243961-1-francois.perrad@gadz.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <a97b4a7a76d63c6f7b0ebe23c3b43ca1@free.fr>
-References: <a97b4a7a76d63c6f7b0ebe23c3b43ca1@free.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1784554428; x=1785159228; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to:content-type;
- bh=YVqQDh3vnohSzvadGvwvvFtAkQgyPUN96pNssFd0T00=;
- b=jY24g1DO3Gnf6mIGyhGTuuNoyUCuejwusOVXZsQv/erMRYJYimc4IGndWVgT0vdDit
- 9L2ieZUWZw2LZ7urkO2iy8roSnrW7YhLpOMyW2U0y8bKGoMqTKVwXbkh7a+opqdz/W7m
- 1JMe/HAVZc145ZTUG58qoBxH3NsF4Ylvzcj7XieXP/eR8GvbtJKOQ2+5VEwiazq0MTEl
- Nff8CGln3S9Smie36pRJH8tZ527uQciM5nzNNJFozVzE9u4nHiMUxldFJ7n3rae8pAbm
- Ros2oo2r5Wk0LRqmTtwS/qW9ce5RuesuvshjDtFd40a/Fwp5DbIF8Se3bwHjR3eZ8Hwr
- NePg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=gmail.com; s=20251104; t=1784559762; x=1785164562; darn=busybox.net;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+ bh=f6QPXkr4bBldSXM6rdQDCgdFJEWY3MUNE3HNncFnBoA=;
+ b=ZyJUK0r/ZPnpQV7/AuljsSDWDcDqkxezc562adi9fo6w/RvDpen8TRjJhRWkefXGyX
+ 1fxGsqLK+JCt7/Mo8sRmsr5uADqGcQKabK0DIRIP7GjcS5wfUD4sCfcJQtUjx554MNtA
+ UsSin496viWPTcEaPa+fR7xAuP4LLiagawT5SkG5WQ57tgn3ecRXh0bojdl59N7fxySX
+ QW1Z5eBIJWjSq3sosr4YhlksKe+CCz3YTkHrrlYWIM1Kp+QcQmQ1nupb2pIvgHKVRm1Y
+ oK1dfkOFGg1y/AUJniOc4B+SCCZSIL7WarfmdA/nnbXY97c+f2nJaGlOevEQ/iTcR6yd
+ mkWQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20251104 header.b=jY24g1DO
-Subject: Re: [Buildroot] [PATCH v2] package/python-snappy: bump version to
- 0.7.2
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20251104 header.b=ZyJUK0r/
+Subject: [Buildroot] [PATCH v2 0/8] support Hare language
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -123,107 +118,93 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Julien
+Hare [1] is a system language which aims to be boring.
+Hare uses qbe [2] as backend which targets only aarch64, riscv64 and x86_64.
 
-On 18/07/2026 13:54, Julien Olivain wrote:
->Hi Flaviu,
->
->Thanks for the update.
->
->On 17/07/2026 08:19, Flaviu Nistor wrote:
->> Even if there is a 0.7.3 on Pypi, there is no 0.7.3 release
->> on the project homepage, hence the bump to 0.7.2.
->> Add also PYTHON_SNAPPY_SOURCE for correct package on Pypi.
->> 
->> Signed-off-by: Flaviu Nistor <flaviu.nistor@gmail.com>
->> ---
->> Changes in v2:
->> - Fix error indicated by Julien Olivain when running make 
->> python-snappy-legal-info.
->> - Link to v1: 
->> https://lore.kernel.org/all/20260409152520.5894-1-flaviu.nistor@gmail.com/
->> 
->>  package/python-snappy/python-snappy.hash | 4 ++--
->>  package/python-snappy/python-snappy.mk   | 5 +++--
->>  2 files changed, 5 insertions(+), 4 deletions(-)
->> 
->[...]
->> diff --git a/package/python-snappy/python-snappy.mk 
->> b/package/python-snappy/python-snappy.mk
->> index e80aa861df..b1bd8ca6ca 100644
->> --- a/package/python-snappy/python-snappy.mk
->> +++ b/package/python-snappy/python-snappy.mk
->> @@ -4,8 +4,9 @@
->>  #
->>  
->> ################################################################################
->> 
->> -PYTHON_SNAPPY_VERSION = 0.6.1
->> -PYTHON_SNAPPY_SITE = 
->> https://files.pythonhosted.org/packages/98/7a/44a24bad98335b2c72e4cadcdecf79f50197d1bab9f22f863a274f104b96
->> +PYTHON_SNAPPY_VERSION = 0.7.2
->
->When building with the commands:
->
->cat >.config <<EOF
->BR2_aarch64=y
->BR2_TOOLCHAIN_EXTERNAL=y
->BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
->BR2_PACKAGE_PYTHON3=y
->BR2_PACKAGE_PYTHON_SNAPPY=y
->EOF
->make olddefconfig
->make python-snappy
->
->The build fails with the error:
->
->ERROR Missing dependencies:
->         cramjam>=2.6.0
->
->It seems python-snappy was updated to switch from the snappy library
->to cramjam, since v0.7.0:
->https://github.com/intake/python-snappy/commit/277fb4a4b7e16b771f1ed1addde33feebd96c979
->
->Cramjam is currently not included in Buildroot. So, I believe you will
->need to add it, and update this python-snappy bump to reflect that
->library change.
->
->I also suggest you write a Buildroot runtime test to make sure
->everything works. For the test, you can use the simple sequence
->such as:
->https://github.com/intake/python-snappy/blob/0.7.2/README.rst?plain=1#L50-L51
->
->Could you send an updated patch series addressing those issues,
->please?
+Hare seems simple and lightweight, like Buildroot.
 
-First of all thanks a lot for the great support in guiding me and patience.
-For sure I will send a new patch series addressing the isseu, as soon as I have
-some time available. 
-On my side, running the commands you provided fails even at installing
-toolchain-external-bootlin (2025.08-1), where look like a link can't be created.
-I'll have to make this work also on my side.
+this serie adds:
+- the host-hare package and its 3 dependencies: host-qbe, host-scdoc & host-harec
+- pkg-hare.mk an infrastructure for building the Hare packages
+- hare-dbus as an example, with its 2 dependencies: hare-ev & hare-xml
 
->> +PYTHON_SNAPPY_SOURCE = python_snappy-$(PYTHON_SNAPPY_VERSION).tar.gz
->> +PYTHON_SNAPPY_SITE = 
->> https://files.pythonhosted.org/packages/cb/52/acd87583175fa930e4385f8a6164eb5909acd683c0e62ee01d41de8195a2
->>  PYTHON_SNAPPY_SETUP_TYPE = setuptools
->>  PYTHON_SNAPPY_LICENSE = BSD-3-Clause
->>  PYTHON_SNAPPY_LICENSE_FILES = LICENSE
->> --
->> 2.34.1
->
->Best regards,
->
->Julien.
+1. https://harelang.org
+2. https://c9x.me/compile/
 
-Best Regards,
-Flaviu
+changes rfc -> v2
+- package/hare: sort dependencies
+- package/hare: full refactor of config of cross toolchain
+- change title of commit "package/pkg-hare.mk: new infrastructure"
+- package/pkg-hare.mk: add comment about grep
+- remove package/hare-hello from this serie
+
+Francois Perrad (8):
+  package/qbe: new host package
+  package/scdoc: new host package
+  package/harec: new host package
+  package/hare: new host package
+  package/pkg-hare.mk: new infrastructure
+  package/hare-ev: new package
+  package/hare-xml: new package
+  package/hare-dbus: new package
+
+ DEVELOPERS                                |  4 +
+ docs/manual/adding-packages-hare.adoc     | 87 +++++++++++++++++++++
+ docs/manual/adding-packages.adoc          |  2 +
+ package/Config.in                         |  3 +
+ package/Config.in.host                    |  1 +
+ package/Makefile.in                       |  1 +
+ package/hare-dbus/0001-fix-Makefile.patch | 26 +++++++
+ package/hare-dbus/Config.in               | 10 +++
+ package/hare-dbus/hare-dbus.hash          |  3 +
+ package/hare-dbus/hare-dbus.mk            | 15 ++++
+ package/hare-ev/Config.in                 |  8 ++
+ package/hare-ev/hare-ev.hash              |  3 +
+ package/hare-ev/hare-ev.mk                | 14 ++++
+ package/hare-xml/Config.in                |  8 ++
+ package/hare-xml/hare-xml.hash            |  3 +
+ package/hare-xml/hare-xml.mk              | 14 ++++
+ package/hare/Config.in.host               | 14 ++++
+ package/hare/hare.hash                    |  3 +
+ package/hare/hare.mk                      | 57 ++++++++++++++
+ package/harec/harec.hash                  |  3 +
+ package/harec/harec.mk                    | 26 +++++++
+ package/pkg-hare.mk                       | 95 +++++++++++++++++++++++
+ package/qbe/qbe.hash                      |  5 ++
+ package/qbe/qbe.mk                        | 22 ++++++
+ package/scdoc/scdoc.hash                  |  3 +
+ package/scdoc/scdoc.mk                    | 22 ++++++
+ 26 files changed, 452 insertions(+)
+ create mode 100644 docs/manual/adding-packages-hare.adoc
+ create mode 100644 package/hare-dbus/0001-fix-Makefile.patch
+ create mode 100644 package/hare-dbus/Config.in
+ create mode 100644 package/hare-dbus/hare-dbus.hash
+ create mode 100644 package/hare-dbus/hare-dbus.mk
+ create mode 100644 package/hare-ev/Config.in
+ create mode 100644 package/hare-ev/hare-ev.hash
+ create mode 100644 package/hare-ev/hare-ev.mk
+ create mode 100644 package/hare-xml/Config.in
+ create mode 100644 package/hare-xml/hare-xml.hash
+ create mode 100644 package/hare-xml/hare-xml.mk
+ create mode 100644 package/hare/Config.in.host
+ create mode 100644 package/hare/hare.hash
+ create mode 100644 package/hare/hare.mk
+ create mode 100644 package/harec/harec.hash
+ create mode 100644 package/harec/harec.mk
+ create mode 100644 package/pkg-hare.mk
+ create mode 100644 package/qbe/qbe.hash
+ create mode 100644 package/qbe/qbe.mk
+ create mode 100644 package/scdoc/scdoc.hash
+ create mode 100644 package/scdoc/scdoc.mk
+
+-- 
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
