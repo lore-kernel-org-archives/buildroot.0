@@ -1,113 +1,119 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F5F2C4451C
-	for <buildroot@archiver.kernel.org>; Tue, 21 Jul 2026 07:33:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E74DDC4451C
+	for <buildroot@archiver.kernel.org>; Tue, 21 Jul 2026 09:06:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C4CA540856;
-	Tue, 21 Jul 2026 07:33:56 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UY9kzK3KaFzn; Tue, 21 Jul 2026 07:33:54 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D1F8140849
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1784619234;
-	bh=6YdlFZjGTG3U7m/qHBZdBVfU2e1QrM8w+oMvwM3XaoI=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=Yo1LonH988PMOmAck2+E9txPmXDS4Vb5PAbXKpdkJulMiLzr5DmDw6YjuYZyEKCDT
-	 3DbvNoNGbJh2paq8RF+VlSc0kA7W1+A71QcokvGiCUd6J3tthaqzCKvcubOQ3e4rJh
-	 Xh51lXY3+g3RmqeHqzsJeoED+3trHAh6hwKKTPyJ2lDo7I6Mz5RlMAWBPjv6QQENAJ
-	 Ubx6/5xMM8QyCyd3KPPW69WNSN/UI8LQ0y1aHYylB3Dkvwx7L5Rmlvqgh1nVggZ6l3
-	 wvyEqxq5J7MZeng3FEk7d06MHAt3ns1gc4zyE18L09p/zK0WLwOWwLoOkeLJOyCJvy
-	 eM+H24yUKuhbQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D1F8140849;
-	Tue, 21 Jul 2026 07:33:54 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 2DAE8109B
- for <buildroot@buildroot.org>; Tue, 21 Jul 2026 07:33:53 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1F7E080CCB
- for <buildroot@buildroot.org>; Tue, 21 Jul 2026 07:33:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E1B0680DFD;
+	Tue, 21 Jul 2026 09:06:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id h0hPTRyvGBaY for <buildroot@buildroot.org>;
- Tue, 21 Jul 2026 07:33:52 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42e; helo=mail-wr1-x42e.google.com;
- envelope-from=andrea.ricchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B7DAA80C68
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B7DAA80C68
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
- [IPv6:2a00:1450:4864:20::42e])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B7DAA80C68
- for <buildroot@buildroot.org>; Tue, 21 Jul 2026 07:33:51 +0000 (UTC)
-Received: by mail-wr1-x42e.google.com with SMTP id
- ffacd0b85a97d-47db714766aso2580622f8f.0
- for <buildroot@buildroot.org>; Tue, 21 Jul 2026 00:33:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1784619229; x=1785224029;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to:content-type;
- bh=c1U8duZnAnEsw17Hpij7Uu/DAj3d7e9yJpWaNlJ6Jvc=;
- b=DNC+564+S1zipg9iEZiTcOGX8TLdQrGp3ek77GFVxeB9gxmMHLrixer3/EjY5/5TAb
- UcNB/jkmZ2xB9oQiUKzdsyFkGkyln6Xq5kFvAXaFR825A7YN4xi7cCC0qkGZCqi3ZeP6
- 8MRdc3F6rgUEoOi/MrQqfE7RBGh3Y7jx7M1lV4Wx3H1mMKjJs5HoVk0sTPR3mv8FiSBv
- yLHhkbSQ3gmZ6KQ0WbV7v06KsvTPEEoWgKFiIqSMG4MEVZ5WVJZeGWOS1hj1eFj9qXcQ
- b8YMK1AulQS/57y3c3rvNwpxfvix7v47SdedGFQq+FFDEIbq9w6lQPyfL9s4pxZ11iNI
- kpQg==
-X-Gm-Message-State: AOJu0Yzt1KpaEWZwl7rCxWTot2S0SaeC55bRrRy/66v3dOmH1kUC8dbh
- MJr7oLsY1fApmqsLZuzykQWbar92ISnhZyex/awIBLU/YgUyVcINlMuwMUMJsWM+H5A+1y4OHkf
- VNLNLj+o=
-X-Gm-Gg: AR+sD123xDarsjc41L4M3jhHm3L7o+LQm6/sWOseNMrqRzb81jTtl9kagzzFo4xZAEd
- aiwykCgxAZ2z6ymwJ5WYbn7/ECuXKkMdXle8AhzlloHL9e+WynSce5+nblBZjQXE26OaUSbMjk6
- QtkJCjxgC7/lX9BiSdggVFsA7dYXSNaUaC1c2/+wBDxSzRtYBDJqc8Y7XD+MoM9lrzh1lFQN6p5
- kk7VDVxpgZlYG2/MBuJl9a7yg/F1CNoVulbmzeARy32x8LKUKIhNHALby0dLAt5ruCvTlpoB85R
- A36knvyh/iiWFCGO4twRW9CEgbwscDJwumYmTfKieAbFiCVuHEvhe0jWWr4PsLGUkxFPPTQU5hF
- +qabvehZiywBItvPWbmmAJ0pI/zdjB6jevZxrrAQnDGuOXXTvUevxHEKXb3Iv43WLGO7347GOI0
- yCKbC2rLYR4zmL9x22Wm31DT9vcN8tgNJpLNdFtPIXCn+yo//fCJEz+RHzazXQOOqTd0i2TJ2am
- NuSefa8ANrTu68NmBqtTS/+SVyl05SV5OpA9WutS7mF9qWyX0JH05ZGojgTqhC3U1Wme5420Tc3
- NSDljBvHnYgnMg==
-X-Received: by 2002:a05:6000:41e4:b0:47a:b6a0:b024 with SMTP id
- ffacd0b85a97d-47f5a419835mr27217469f8f.4.1784619229431; 
- Tue, 21 Jul 2026 00:33:49 -0700 (PDT)
-Received: from rcc-ThinkPad-P14s-Gen-5.homenet.telecomitalia.it
- ([95.236.1.245]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-47f63e65644sm35195274f8f.16.2026.07.21.00.33.48
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 21 Jul 2026 00:33:48 -0700 (PDT)
-From: Andrea Ricchi <andrea.ricchi@amarulasolutions.com>
+ id m_plh4tYGXNj; Tue, 21 Jul 2026 09:06:12 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A198D80D32
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1784624772;
+	bh=NyaaQ6AeJWj/Rr2FQKxgwyqYW/RxEHTDM12f+2mH8eU=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=bd7SbZmqB+bTRlaWLxXu8maXw3szYxT7zvyRUaxlJBcCSqX7SKfYhIalapB+jraj/
+	 HGXsBmAklM06OmY/PPVTRBs4+OVkAl31FSIZl0c5TcfciXSRz1eo8V0sVR8lVnRMMD
+	 8nRc7uOLm3wLf0qLeBjIL0lW4kzDecOPWMIb9srS7JvlH4VH9gsMvtWPYCT8WHdL3F
+	 6mFBizDSlRGF7+FnQH4/RhHClDBArQhdf7KGaQa92zA7Wa7PwDyaNJoTirrHwRke9T
+	 W3U3Mdhj7P8NJMw3cskMpaCVYgNWPbUZlopriHAQLOuTZnjXH7flE5msSgLkwNjsd6
+	 7H6ovVX9eARDA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id A198D80D32;
+	Tue, 21 Jul 2026 09:06:12 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6AEFA109C
+ for <buildroot@buildroot.org>; Tue, 21 Jul 2026 09:06:11 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5C2A1405CC
+ for <buildroot@buildroot.org>; Tue, 21 Jul 2026 09:06:11 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id k-J9_ZUUfM7N for <buildroot@buildroot.org>;
+ Tue, 21 Jul 2026 09:06:10 +0000 (UTC)
+X-Greylist: delayed 913 seconds by postgrey-1.37 at util1.osuosl.org;
+ Tue, 21 Jul 2026 09:06:09 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7300F40435
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7300F40435
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.221.237.242;
+ helo=send147.i.mail.ru; envelope-from=fido_max@inbox.ru; receiver=<UNKNOWN> 
+Received: from send147.i.mail.ru (send147.i.mail.ru [89.221.237.242])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7300F40435
+ for <buildroot@buildroot.org>; Tue, 21 Jul 2026 09:06:09 +0000 (UTC)
+Received: from [10.113.42.149] (port=56284 helo=send197.i.mail.ru)
+ by exim-fallback-7c89cdcb84-h4nwd with esmtp (envelope-from
+ <fido_max@inbox.ru>) id 1wm6Bh-00000000C1a-22NN
+ for buildroot@buildroot.org; Tue, 21 Jul 2026 11:50:53 +0300
+Received: by exim-smtp-77575cb4cb-cjf2j with esmtpa (envelope-from
+ <fido_max@inbox.ru>)
+ id 1wm6BU-000000008BT-0NLX; Tue, 21 Jul 2026 11:50:40 +0300
 To: buildroot@buildroot.org
-Cc: Andrea Ricchi <andrea.ricchi@amarulasolutions.com>
-Date: Tue, 21 Jul 2026 09:33:46 +0200
-Message-ID: <20260721073346.267538-1-andrea.ricchi@amarulasolutions.com>
+Cc: Maxim Kochetkov <fido_max@inbox.ru>
+Date: Tue, 21 Jul 2026 11:50:38 +0300
+Message-ID: <20260721085038.1157693-1-fido_max@inbox.ru>
 X-Mailer: git-send-email 2.53.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1784619229; x=1785224029;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
- bh=c1U8duZnAnEsw17Hpij7Uu/DAj3d7e9yJpWaNlJ6Jvc=;
- b=NtqS97jpWp4h3ATbc6U6qJzK6dOh1XVuhJvrnqSxw9kopmEUSzljfWFgbzz9yA3rJq
- U5YkzaRfBd5kxougRYWk1Df3/YYDAOOOPfNYzYVZz7VvH9dLLZE8DEz9cMqZcW1gLoJW
- Gu2sx7q8LTOWnXW2DmrKYl6lzFQJWswDRhXkE=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=NtqS97jp
-Subject: [Buildroot] [PATCH v4] package/libcppconnman: add new package
+X-Mailru-Src: smtp
+X-7564579A: B8F34718100C35BD
+X-77F55803: 4F1203BC0FB41BD9C2A6B03AB739174CEA3DADBADAAB58A75A055AC2D80DCDF700894C459B0CD1B998BB270691B2CF6CC7A4B249DE6549FDB36F2285596EE781BAE0B2616F9FA9D44DF7BC4678047644
+X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE72CF0C6E1803AE708EA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F7900637F88016AB904663428638F802B75D45FF914D58D5BE9E6BC1A93B80C6DEB9DEE97C6FB206A91F05B2A053661C8A07F4242E070BE324C7D3C4CFEFF25BE303A44EBB0A4F435E46E6718B35066C979671628AA50765F790063793270F7220657A0A389733CBF5DBD5E913377AFFFEAFD269176DF2183F8FC7C0B882963B8E9439758941B15DA834481FCF19DD082D7633A0EF3E4896CB9E6436389733CBF5DBD5E9D5E8D9A59859A8B603D88DA7F5FEDC25CC7F00164DA146DA6F5DAA56C3B73B237318B6A418E8EAB86D1867E19FE14079C09775C1D3CA48CF3D321E7403792E342EB15956EA79C166A417C69337E82CC275ECD9A6C639B01B78DA827A17800CE79E9721B410A3B6ED731C566533BA786AA5CC5B56E945C8DA
+X-C1DE0DAB: 0D63561A33F958A518014F8EE0AD74355002B1117B3ED6962A679E208DF2F72A886DC9BC01168B20823CB91A9FED034534781492E4B8EEADABF80F987DAEDACBC79554A2A72441328621D336A7BC284946AD531847A6065AED8438A78DFE0A9EBDAD6C7F3747799A
+X-C8649E89: 1C3962B70DF3F0AD73CAD6646DEDE191716CD42B3DD1D34C77DD89D51EBB774225B6776AC983F447FC0B9F89525902EE6F57B2FD27647F25E66C117BDB76D659CDF099A1F7D55AFF419D386CD78498F177AF23E965B7797E4D26E1D73027D718E4CFE954DF477D21B8341EE9D5BE9A0A1FAEA3C56B7704863803ABC8B3F03B814DFFA27BFD6F2AB08CD93680B12512CF4C41F94D744909CEE921556F0E976A29E6EC0772259F8F8F8815B87D7EC76CB9
+X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu53w8ahmwBjZKM/YPHZyZHvz5uv+WouB9+ObcCpyrx6l7KImUglyhkEat/+ysWwi0gdhEs0JGjl6ggRWTy1haxBpVdbIX1nthFXMZebaIdHP2ghjoIc/363UZI6Kf1ptIMVYrk7BQKFwEt1wnql82eKSN+iqSRFRanlg==
+X-Mailru-Sender: 689FA8AB762F7393520AF17B8A65FDE20BB0E8ED3E9BF802F66B9D3B0D0820790DC50F1EE2721D6590DE4A6105A3658D481B2AED7BCCC0A49AE3A01A4DD0D55C6C99E19F044156F45FEEDEB644C299C0ED14614B50AE0675
+X-Mras: Ok
+X-Mailru-Src: fallback
+X-7564579A: 78E4E2B564C1792B
+X-77F55803: 6242723A09DB00B4F59E3A2FC996838E9F1558C88480FFABBF34012245BAF265049FFFDB7839CE9E425DAA193FC560F4D14AE177F6F6318387134916F7F0264C5D7588800EF44D1AAE629EED70A6AC17
+X-7FA49CB5: 0D63561A33F958A5A4A8F6AE96B835AC5002B1117B3ED696D798CAE860A7E75F286CA238A3D8E3D802ED4CEA229C1FA827C277FBC8AE2E8B0F068EB0F7B02D21
+X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu53w8ahmwBjZKM/YPHZyZHvz5uv+WouB9+OYcBso8Zm+oliTz8oZwnDrFsY77LZRcHyw5ht0smWrfSeTW5FiI8avd9v29gUBslpEZ9wIMwqVP4jLQVQ+dVm7x9BpDHadBV9RMjI809PraZBwjlcyweVOj3VmZQh0A0eg==
+X-Mailru-MI: 20000000020000000000000800
+X-Mras: Ok
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; d=inbox.ru; 
+ s=mail4; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:Cc:
+ To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+ Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+ In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+ List-Post:List-Owner:List-Archive:X-Cloud-Ids;
+ bh=5QRZSD1k/688q2M/f2zQKFQ5BgmI0ICs/azNh7B6eP8=; t=1784624769; x=1784714769; 
+ b=DOvbujc/1gx58xAglY6BqqrqG+X47yuCr9rSwjJBBqCTWV6ugZXiRsXUayH8ALQJgpdkUE3s6Ml
+ Du0N1DtTnxFWGwagOFJ9x1pgYpguq2eUjFyuIDXLtB9ERWm6l/QcwwRz5eOT6TDu4mn6J+zcV/MCw
+ 398blgLsQTi2RdNLHxGhPQo4P0BBFGg2CAg9sgmb0/w9DrhmGfemX1F0rgAUBp8NlD778AthDiEEw
+ T0AUG86kgIiOaxPr8Zeu4hunPCA/vtbFljyIGiH4FGj+jN/bfHvX7XJ/ePylu46rgfT5bYOsqfi0u
+ 9xf1rxXl4uxPaQIaeb/6uyXyK4AzQmludddg==;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; d=inbox.ru; 
+ s=mail4; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:Cc:
+ To:From:From:Sender:Reply-To:To:Cc:Content-Type:Content-Transfer-Encoding:
+ Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+ Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+ List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive:
+ X-Cloud-Ids:Disposition-Notification-To;
+ bh=5QRZSD1k/688q2M/f2zQKFQ5BgmI0ICs/azNh7B6eP8=; t=1784623853; x=1784713853; 
+ b=u3nPQ7swtqNQGDDVNC5pOTRUnOY1hI9hd/NOsx0tzhLaUPJ5nm7EcYJ19yNshZhtrcrd40UvMgs
+ tlJ2v3jd+FtSE4sMNl0LALwrZvRGd9zOyBZNj8nW1T7ZIUdntaiPM3GWdwFUBpDrZJAuC26+xgs7l
+ HBQgqqm7fUBKJzzfReelWnQk2qI+PlkMCMxDvz4/EOjBEis8nUqCM5XUYGKJHBWD/EYASDzjkOYoo
+ fza3oD3Hp/z6JirYvEw3pCkEa/VUtKbaIS81cBIRoVGkv3P8hMbCxSQ1rfoYcDa6mSsWmIpftj0if
+ v3IZyI/sqQsT+eQ4TkyS89MnktR7ZmHHwibQ==;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=inbox.ru
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key, unprotected) header.d=inbox.ru header.i=@inbox.ru
+ header.a=rsa-sha256 header.s=mail4 header.b=DOvbujc/; 
+ dkim=pass (2048-bit key) header.d=inbox.ru header.i=@inbox.ru
+ header.a=rsa-sha256 header.s=mail4 header.b=u3nPQ7sw
+Subject: [Buildroot] [PATCH 1/1] package/protozero: bump version to 1.8.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -119,145 +125,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Maxim Kochetkov via buildroot <buildroot@buildroot.org>
+Reply-To: Maxim Kochetkov <fido_max@inbox.ru>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-libcppconnman is a C++ library that provides an easy-to-use API
-to communicate with ConnMan over D-Bus using GDBus.
+Release-notes: https://github.com/mapbox/protozero/releases/tag/v1.8.2
 
-https://github.com/amarula/libcppconnman
-
-Also add myself to DEVELOPERS for this package.
-
-Signed-off-by: Andrea Ricchi <andrea.ricchi@amarulasolutions.com>
+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
 ---
-Changes v3 -> v4:
-  - Config.in: add BR2_TOOLCHAIN_HAS_SYNC_1 dependency on the example option,
-    fixing the '__atomic_exchange_1' link failure of the connmanctl_dbus example
-    on sparc and microblaze reported by the CI (its std::atomic<bool> needs
-    libatomic on architectures without inline 1-byte atomics)
+ package/protozero/protozero.hash | 2 +-
+ package/protozero/protozero.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Changes v2 -> v3:
-  - Config.in: add BR2_TOOLCHAIN_GCC_AT_LEAST_10 dependency (C++20 / <ranges>),
-    fixing build failures on GCC < 10 toolchains reported by the autobuilders
-  - Config.in, libcppconnman.mk: select and depend on readline for the example,
-    fixing the missing readline library configure error when examples are enabled
-
-Changes v1 -> v2:
-  - add missing libcppconnman entry in package/Config.in
-  - merge the DEVELOPERS addition into this patch
-
- DEVELOPERS                               |  1 +
- package/Config.in                        |  1 +
- package/libcppconnman/Config.in          | 29 ++++++++++++++++++++++++
- package/libcppconnman/libcppconnman.hash |  3 +++
- package/libcppconnman/libcppconnman.mk   | 25 ++++++++++++++++++++
- 5 files changed, 59 insertions(+)
- create mode 100644 package/libcppconnman/Config.in
- create mode 100644 package/libcppconnman/libcppconnman.hash
- create mode 100644 package/libcppconnman/libcppconnman.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 42418d01a2..997fd6be74 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -186,6 +186,7 @@ F:	package/wine/
+diff --git a/package/protozero/protozero.hash b/package/protozero/protozero.hash
+index 917746af35..e67771c3ea 100644
+--- a/package/protozero/protozero.hash
++++ b/package/protozero/protozero.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  6c7a896f1dc08435e8cd4f3780ff688cd0bfce6890599b755f6f3cb36398dc25  protozero-1.8.1.tar.gz
++sha256  68d1df951b4d8397355c8fc9ffed40d9c06282a877fe847403feac6edcee3ef1  protozero-1.8.2.tar.gz
+ sha256  254c0e9f18d261bfc55ff277cf12e3c1ca25839d56af17fba65d142396021466  LICENSE.md
+ sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE.from_folly
+diff --git a/package/protozero/protozero.mk b/package/protozero/protozero.mk
+index c5c4285955..66bc0dea0c 100644
+--- a/package/protozero/protozero.mk
++++ b/package/protozero/protozero.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- N:	Andrea Ricchi <andrea.ricchi@amarulasolutions.com>
- F:	package/cutekeyboard/
-+F:	package/libcppconnman/
- 
- N:	Andreas Klinger <ak@it-klinger.de>
- F:	package/ply/
-diff --git a/package/Config.in b/package/Config.in
-index 015f635ad1..fc1e57d30d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2007,6 +2007,7 @@ menu "Networking"
- 	source "package/ibrdtn/Config.in"
- 	source "package/libcgicc/Config.in"
- 	source "package/libcoap/Config.in"
-+	source "package/libcppconnman/Config.in"
- 	source "package/libcpprestsdk/Config.in"
- 	source "package/libcurl/Config.in"
- 	source "package/libdnet/Config.in"
-diff --git a/package/libcppconnman/Config.in b/package/libcppconnman/Config.in
-new file mode 100644
-index 0000000000..9a51c8bd44
---- /dev/null
-+++ b/package/libcppconnman/Config.in
-@@ -0,0 +1,29 @@
-+config BR2_PACKAGE_LIBCPPCONNMAN
-+	bool "libcppconnman"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_10 # C++20
-+	depends on BR2_USE_WCHAR # libglib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
-+	depends on BR2_USE_MMU # libglib2
-+	select BR2_PACKAGE_LIBGLIB2
-+	help
-+	  libcppconnman provide easy to use C++ API to communicate
-+	  with ConnMan via the DBus using GDBus.
-+
-+	  https://amarula.github.io/libcppconnman/
-+
-+comment "libcppconnman needs a toolchain w/ C++20, wchar, threads"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
-+		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_10
-+
-+if BR2_PACKAGE_LIBCPPCONNMAN
-+
-+config BR2_PACKAGE_LIBCPPCONNMAN_EXAMPLE
-+	bool "libcppconnman example"
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_1 # std::atomic<bool>
-+	select BR2_PACKAGE_READLINE
-+	help
-+	  Compile CLI example.
-+
-+endif
-diff --git a/package/libcppconnman/libcppconnman.hash b/package/libcppconnman/libcppconnman.hash
-new file mode 100644
-index 0000000000..70960d4a17
---- /dev/null
-+++ b/package/libcppconnman/libcppconnman.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  5eb38232c3f9fcf2136c6508472841f6ee88d7155c384f4e6f2f3de1cd2fba62  libcppconnman-2.0.0.tar.gz
-+sha256  7ffe1954587c77dfba1cf8eb9b2ea743671fa6e63f9e7a2f258119d42e14eefe  LICENSE
-diff --git a/package/libcppconnman/libcppconnman.mk b/package/libcppconnman/libcppconnman.mk
-new file mode 100644
-index 0000000000..1b41db3a0c
---- /dev/null
-+++ b/package/libcppconnman/libcppconnman.mk
-@@ -0,0 +1,25 @@
-+################################################################################
-+#
-+# libcppconnman
-+#
-+################################################################################
-+
-+LIBCPPCONNMAN_VERSION = 2.0.0
-+LIBCPPCONNMAN_SITE = $(call github,amarula,libcppconnman,v$(LIBCPPCONNMAN_VERSION))
-+LIBCPPCONNMAN_LICENSE = LGPL-2.1-or-later
-+LIBCPPCONNMAN_LICENSE_FILES = LICENSE
-+
-+LIBCPPCONNMAN_INSTALL_STAGING = YES
-+
-+LIBCPPCONNMAN_DEPENDENCIES = host-pkgconf libglib2
-+
-+LIBCPPCONNMAN_CONF_OPTS = -DBUILD_CONNMAN=ON
-+
-+ifeq ($(BR2_PACKAGE_LIBCPPCONNMAN_EXAMPLE),y)
-+LIBCPPCONNMAN_DEPENDENCIES += readline
-+LIBCPPCONNMAN_CONF_OPTS += -DBUILD_EXAMPLES=ON
-+else
-+LIBCPPCONNMAN_CONF_OPTS += -DBUILD_EXAMPLES=OFF
-+endif
-+
-+$(eval $(cmake-package))
+-PROTOZERO_VERSION = 1.8.1
++PROTOZERO_VERSION = 1.8.2
+ PROTOZERO_SITE = $(call github,mapbox,protozero,v$(PROTOZERO_VERSION))
+ PROTOZERO_LICENSE = BSD-2-Clause, Apache-2.0
+ PROTOZERO_LICENSE_FILES = LICENSE.md LICENSE.from_folly
 -- 
 2.53.0
 
