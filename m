@@ -1,63 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6854CC4451C
-	for <buildroot@archiver.kernel.org>; Tue, 21 Jul 2026 20:03:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78893C4451C
+	for <buildroot@archiver.kernel.org>; Tue, 21 Jul 2026 20:03:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2AF8C80DD9;
-	Tue, 21 Jul 2026 20:03:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1FDC960611;
+	Tue, 21 Jul 2026 20:03:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ndaplCaPCiyA; Tue, 21 Jul 2026 20:03:28 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Oqxor6R0bUA7; Tue, 21 Jul 2026 20:03:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2F16580DEE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 382C560632
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1784664208;
-	bh=Glut7puFCuTKRk/h2SvtXZ4aJVVL8QG9g3XfmW3rzVE=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=eeASQ7PQppHvZo/aEDu1/+ww6XflagMnH1T/6cIqswMmc3Nt+5mxZsO23XQ8gf0g3
-	 a/7RGRiVCqz7geNucQMF1NfTCxDwgfSjkmG5FBpmv6b9UB0a0AcEeNiJ1foKfW4pb2
-	 a1HeqPQrMAteseMu3YwoaUxE8rNzgk1CXFB+UiOS05RBeJ1bklzXacSZ1dkkHu306w
-	 6SqkeZUQAZgqMogo1jzol+TZ0WMFinZOfwxwvN5noGZClts/3JvwwbwCAh3zPT0Des
-	 jXgsJ1NQ/52L7PvCHNvayvkpPUzVzgPI2p+pCXeN9x/DTvrS5bt17hFi41v9mMZdfx
-	 iypQNQKIbT3AA==
+	s=default; t=1784664234;
+	bh=bZLeECy32djETnP4ak+aqIDlbGBLpSJnM9CqjHf5hf4=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=PzsEHaZBxmsp4GX1zZAU0JPcrtR9v1IMtQeqmmMQkSGGwY58p+RTgty7PGyP6Wg8b
+	 M6h1/fu8SN2QMT32NMNsn9/Cs8tEMefSIaX8e004k6j3NVMok2sUAxD7XgzDoQ+g6m
+	 VvSuVdZfOlM23r1EbQjr+mgCL1HDXCeP/YfEpoDvQYGDTvT3Pq+Lk9gmlGcVRWywmP
+	 BUzgVDVhaQksQtjGjuVitrmx49Mo5XukCfab6KrNY57eLfIpei5Eam0hCPruBxd+it
+	 nL/tTYiHtveFtQdYuiA0giQVH+deE7S+Lei1XtMe9wr9Oq2lhB4Dlf1YdRpgFh3NEA
+	 I7ioUetJBNs4Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2F16580DEE;
-	Tue, 21 Jul 2026 20:03:28 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 1318642A
- for <buildroot@buildroot.org>; Tue, 21 Jul 2026 20:03:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 382C560632;
+	Tue, 21 Jul 2026 20:03:54 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1E2B042A
+ for <buildroot@buildroot.org>; Tue, 21 Jul 2026 20:03:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E32B2402F5
- for <buildroot@buildroot.org>; Tue, 21 Jul 2026 20:03:26 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0429E60632
+ for <buildroot@buildroot.org>; Tue, 21 Jul 2026 20:03:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0aY6mNEkAuet for <buildroot@buildroot.org>;
- Tue, 21 Jul 2026 20:03:26 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EFB1D40015
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id EFB1D40015
- for <buildroot@buildroot.org>; Tue, 21 Jul 2026 20:03:25 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 95DBD8913C; Tue, 21 Jul 2026 20:02:47 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 21 Jul 2026 21:56:10 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f939799014026257af6841bda3c594d64f094566
-X-Git-Newrev: 0c8bd5739c1d63550bc80f0b204f67ff8a2854c8
-X-Patchwork-Hint: ignore
-Message-Id: <20260721200247.95DBD8913C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/dropbear: security bump version to
- 2026.93
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OfftjtiPvXcp for <buildroot@buildroot.org>;
+ Tue, 21 Jul 2026 20:03:52 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B7A0660611
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B7A0660611
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B7A0660611
+ for <buildroot@buildroot.org>; Tue, 21 Jul 2026 20:03:51 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id DDB7313F86E;
+ Tue, 21 Jul 2026 22:03:47 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Tue, 21 Jul 2026 22:03:47 +0200
+MIME-Version: 1.0
+Date: Tue, 21 Jul 2026 22:03:47 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20260721175941.76461-1-bernd@kuhls.net>
+References: <20260721175941.76461-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.17
+Message-ID: <f8324719b27c37b9c7d2fd95d66ea0e4@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1784664229;
+ bh=8AGwXzgFGjnKDqb7pcFcv+VVmfjH5hep9sp+H2DFoqo=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=CxD1YKcs/xql6/7BHcIRuG1oJxrdPwAY72jzAplVLauNhbhWl2Ew82jM/p4857Hkp
+ CweL2xCxKCdyb6ocan2Fo9dUo2jAgHqFIwiVg/dS7iUQMn6KXUVgLgFxrjrm8zQHva
+ x7hTehMhUSlny038BtbrW/lFUSQ/LJmXiJ9f8XWsypd7mJ5Iepk8dlImE0V1U5B9Nr
+ tHj/yq1gnp/Sxt9spcbNhkASAo/rrmi9nSZNV9xPE/FxykyWwLv69IQVcRRWtOEwhr
+ 0ChDDPqz9tr1jelea2JDFIfhWO2Hv8+AJ9OdqlxaTBDLT1/csvd/4bT478TJeVi3PR
+ KLA0NDzfhOntg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=CxD1YKcs
+Subject: Re: [Buildroot] [PATCH 1/1] package/dropbear: security bump version
+ to 2026.93
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,119 +95,34 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8742153743052906494=="
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8742153743052906494==
-Content-Type: text/plain
+On 21/07/2026 19:59, Bernd Kuhls wrote:
+> https://matt.ucc.asn.au/dropbear/CHANGES
+> 
+> - Security: Fix a use-after-free in X11 forwarding that could possibly 
+> lead
+>   to memory corruption. This is vulnerable to authenticated users if 
+> X11
+>   forwarding is enabled. By default X11 forwarding is not built.
+>   In 2026.89 the server is running as the authenticated user for X11
+>   forwarding, in earlier versions it runs as root.
+>   This removes X11 "single connection" which has probably never been 
+> used.
+>   Reported by @peter-pe
+>   
+> https://github.com/mkj/dropbear/commit/882f83806d5e133037cd28e954a878984ef7b9c4
+> 
+> Added patch to fix build errors which would be introduced by this bump:
+> https://github.com/mkj/dropbear/commit/86baa66fc934bb55a911eacec28d93d86fb0e6f8
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/0c8bd5739c1d63550bc80f0b204f67ff8a2854c8
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
-
-https://matt.ucc.asn.au/dropbear/CHANGES
-
-- Security: Fix a use-after-free in X11 forwarding that could possibly lead
-  to memory corruption. This is vulnerable to authenticated users if X11
-  forwarding is enabled. By default X11 forwarding is not built.
-  In 2026.89 the server is running as the authenticated user for X11
-  forwarding, in earlier versions it runs as root.
-  This removes X11 "single connection" which has probably never been used.
-  Reported by @peter-pe
-  https://github.com/mkj/dropbear/commit/882f83806d5e133037cd28e954a878984ef7b9c4
-
-Added patch to fix build errors which would be introduced by this bump:
-https://github.com/mkj/dropbear/commit/86baa66fc934bb55a911eacec28d93d86fb0e6f8
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- .../0001-scp-fix-build-with-gcc-14.x.patch         | 40 ++++++++++++++++++++++
- package/dropbear/dropbear.hash                     |  2 +-
- package/dropbear/dropbear.mk                       |  2 +-
- 3 files changed, 42 insertions(+), 2 deletions(-)
-
-diff --git a/package/dropbear/0001-scp-fix-build-with-gcc-14.x.patch b/package/dropbear/0001-scp-fix-build-with-gcc-14.x.patch
-new file mode 100644
-index 0000000000..0c2b5cbdb5
---- /dev/null
-+++ b/package/dropbear/0001-scp-fix-build-with-gcc-14.x.patch
-@@ -0,0 +1,40 @@
-+From 0c67372257575f6ec59364aba5ca579c126b7678 Mon Sep 17 00:00:00 2001
-+From: Voxel <voxel@andreev.msk.ru>
-+Date: Tue, 21 Jul 2026 19:28:00 +0200
-+Subject: [PATCH] scp: fix build with gcc >= 14.x
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Fixes build errors seen with gcc 14.x:
-+
-+src/scp.c: In function ‘sink’:
-+src/scp.c:1214:32: error: implicit declaration of function ‘ascii_isdigit’
-+ [-Wimplicit-function-declaration]
-+
-+src/scp.c: In function ‘okname’:
-+src/scp.c:1501:22: error: implicit declaration of function ‘ascii_isalpha’
-+ [-Wimplicit-function-declaration]
-+
-+Upstream: https://github.com/mkj/dropbear/pull/474
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ src/scp.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/scp.c b/src/scp.c
-+index d7266fdd..633b4dba 100644
-+--- a/src/scp.c
-++++ b/src/scp.c
-+@@ -81,6 +81,7 @@
-+ #include "compat.h"
-+ #include "scpmisc.h"
-+ #include "progressmeter.h"
-++#include "dbutil.h"
-+ 
-+ void bwlimit(int);
-+ 
-+-- 
-+2.47.3
-+
-diff --git a/package/dropbear/dropbear.hash b/package/dropbear/dropbear.hash
-index 9df81ea4b5..2538132463 100644
---- a/package/dropbear/dropbear.hash
-+++ b/package/dropbear/dropbear.hash
-@@ -1,5 +1,5 @@
- # From https://matt.ucc.asn.au/dropbear/releases/SHA256SUM.asc
--sha256  91dcb5234de8dea68dd82c55411c9fc986b457ab58372a780ee8a870419c2f7e  dropbear-2026.92.tar.bz2
-+sha256  310a6087952897c182efbe16088fa0c4d07c467e850a22699472137278fabf09  dropbear-2026.93.tar.bz2
- 
- # License file, locally computed
- sha256  a99ce657d790b761c132ee7e0de18edb437ae6361e536d991c6a12f36e770445  LICENSE
-diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
-index e7e6703057..e595ebc10c 100644
---- a/package/dropbear/dropbear.mk
-+++ b/package/dropbear/dropbear.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DROPBEAR_VERSION = 2026.92
-+DROPBEAR_VERSION = 2026.93
- DROPBEAR_SITE = https://matt.ucc.asn.au/dropbear/releases
- DROPBEAR_SOURCE = dropbear-$(DROPBEAR_VERSION).tar.bz2
- DROPBEAR_LICENSE = MIT, BSD-2-Clause, Public domain
-
---===============8742153743052906494==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8742153743052906494==--
