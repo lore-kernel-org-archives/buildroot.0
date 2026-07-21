@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 572EBC4451C
-	for <buildroot@archiver.kernel.org>; Tue, 21 Jul 2026 20:19:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2FE46C4451C
+	for <buildroot@archiver.kernel.org>; Tue, 21 Jul 2026 20:21:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CDF3A6089B;
-	Tue, 21 Jul 2026 20:19:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E14D26089B;
+	Tue, 21 Jul 2026 20:21:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id be5nczmV1e5t; Tue, 21 Jul 2026 20:19:47 +0000 (UTC)
+ id lPaw7LUqQ5qS; Tue, 21 Jul 2026 20:21:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CD70C6089D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C613C60727
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1784665187;
-	bh=B6jrZUIaccSKcW77pVlyEHiUxOnHFyb0fCf6NfHt7O4=;
+	s=default; t=1784665289;
+	bh=BuccH/xzwLygIPqqIcawRrfTwJjUzf/IMp3YH8TGVFI=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=NBFLC1z+maFdmVent2lhXBk6MkXt8A19ggb7nL0RhPhhyVUNOJZrlMvBPXCGmnHca
-	 TPQCQ/pQ8gBzzU8i7eIV9Nu4u2coHnTyjHIp52Lu4c2f666gfiYLl6yc5lQlZSscRw
-	 TsBrageyfmL4/X8G1+heTwn8C7S2bO8p7Da1E/d9ekDCUemlYNVKmUSWQ2ClYqplzO
-	 wjU7spzKcfH2eTHYOZ/YofzwIUBehz4uRim91daKLAao+WB38Ie7Jv03Gw5Xr1X1F1
-	 R8/cIakqQlJh5+Wma83UTGKRjvHGyqK2DrIjVvEJg3JhdCek3uhDZ7s6LpZb5NZr+w
-	 pZKpnT/VfUSeQ==
+	b=MQJAdJIDa+TkqwR1CWPSHBFqxo+lHNTMJVlts9AoPHcpj+3dOF8ager8vBzxg8REX
+	 LhgMeTKbM6+ccHwh+6EsNqnarfplYIvyrjEIFv6M5cMgPcizIPi89mLHBxEkOjqAbC
+	 xEPwSHr/9J14NMZuv2kMGHzOJe4zJ+Ip2btOnz8ApC1ZrD0mlqB+9lc/MosFUlMuST
+	 QBzkafzhYA+6bZ/jOmDuztK5Nbtq8argh1McMBjAXQVja5M533TKgvZofFjvzxySlD
+	 CDy8fEx0D2MAFFQXj1mI2VEVUbnSCUPg5xVxnVNCHtE8FBEjmNjM7v6WmOtKAn9YvQ
+	 9OnmACmmj5H6g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CD70C6089D;
-	Tue, 21 Jul 2026 20:19:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C613C60727;
+	Tue, 21 Jul 2026 20:21:29 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id CFC3742A
- for <buildroot@buildroot.org>; Tue, 21 Jul 2026 20:19:46 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 8D89F9E5
+ for <buildroot@buildroot.org>; Tue, 21 Jul 2026 20:21:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C1A34402F5
- for <buildroot@buildroot.org>; Tue, 21 Jul 2026 20:19:46 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 73BD44004C
+ for <buildroot@buildroot.org>; Tue, 21 Jul 2026 20:21:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pSBvjIIIanrX for <buildroot@buildroot.org>;
- Tue, 21 Jul 2026 20:19:46 +0000 (UTC)
+ id tqEDqTVlW7Ux for <buildroot@buildroot.org>;
+ Tue, 21 Jul 2026 20:21:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 034D440015
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9A26640015
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 034D440015
- for <buildroot@buildroot.org>; Tue, 21 Jul 2026 20:19:46 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9A26640015
+ for <buildroot@buildroot.org>; Tue, 21 Jul 2026 20:21:26 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B36038913C; Tue, 21 Jul 2026 20:19:07 +0000 (UTC)
+ id 43D888913C; Tue, 21 Jul 2026 20:20:48 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 21 Jul 2026 22:14:12 +0200
+Date: Tue, 21 Jul 2026 22:19:57 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a33f4bd9044f49dc52bcdadb4aac54aad0b8acfa
-X-Git-Newrev: 4ea73bd6763daaff9c968fd8378e5a4e9d9b7cde
+X-Git-Oldrev: 4ea73bd6763daaff9c968fd8378e5a4e9d9b7cde
+X-Git-Newrev: 2547ad8dfeb9f6c19ab6113efe92a6d17a97ab9c
 X-Patchwork-Hint: ignore
-Message-Id: <20260721201907.B36038913C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/usbutils: update license
- information
+Message-Id: <20260721202048.43D888913C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/stm32h747_disco_sd: bump Linux to
+ 6.18.39 and U-Boot to 2026.07
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,55 +77,58 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/4ea73bd6763daaff9c968fd8378e5a4e9d9b7cde
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/2547ad8dfeb9f6c19ab6113efe92a6d17a97ab9c
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-According to the upstream changelog LGPL-2.1+, CC0-1.0, and MIT
-licenses were added with v018. Grouping is derived from individual
-SPDX-License-Identifier headers in the source files.
+The patch bumps the Linux kernel to version 6.18.39 and U-Boot to
+version 2026.07.
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usbutils.git/tree/NEWS?id=bd86478bb8d09abd0aba8ead781bc8f4609521e6#n159
-
-Signed-off-by: Fiona Klute (Othermo GmbH) <fiona.klute@gmx.de>
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/usbutils/usbutils.hash | 3 +++
- package/usbutils/usbutils.mk   | 9 +++++++--
- 2 files changed, 10 insertions(+), 2 deletions(-)
+ board/stmicroelectronics/stm32h747-disco/patches/linux/linux.hash | 2 +-
+ board/stmicroelectronics/stm32h747-disco/patches/uboot/uboot.hash | 2 +-
+ configs/stm32h747_disco_sd_defconfig                              | 4 ++--
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/usbutils/usbutils.hash b/package/usbutils/usbutils.hash
-index 3527d4e30d..e4fbe18070 100644
---- a/package/usbutils/usbutils.hash
-+++ b/package/usbutils/usbutils.hash
-@@ -1,5 +1,8 @@
- # From https://www.kernel.org/pub/linux/utils/usb/usbutils/sha256sums.asc
- sha256  659f40c440e31ba865c52c818a33d3ba6a97349e3353f8b1985179cb2aa71ec5  usbutils-019.tar.xz
+diff --git a/board/stmicroelectronics/stm32h747-disco/patches/linux/linux.hash b/board/stmicroelectronics/stm32h747-disco/patches/linux/linux.hash
+index 5ae723bc6f..0daaa94e97 100644
+--- a/board/stmicroelectronics/stm32h747-disco/patches/linux/linux.hash
++++ b/board/stmicroelectronics/stm32h747-disco/patches/linux/linux.hash
+@@ -1,2 +1,2 @@
  # Locally calculated
-+sha256  1f2fa2e0fac0e224fa84969d0e0b3e6801ecdfb7b9526a4664787e840ad705a2  LICENSES/CC0-1.0.txt
- sha256  91412672119c72352b76c1d48fa1a8b7cdc7f70be7929e468c8805db468e23e4  LICENSES/GPL-2.0-only.txt
- sha256  4631da83311d27f99078d0d102e31bd34a4fcbcc2dae2aa40f1454a5b48125dc  LICENSES/GPL-3.0-only.txt
-+sha256  efbaee946ac92a48b89eae36f655844042370d2f0e04eadea1e2998efae24ebd  LICENSES/LGPL-2.1-or-later.txt
-+sha256  323c587d0ccf10e376f8bf9a7f31fb4ca6078105194b42e0b1e0ee2bc9bde71f  LICENSES/MIT.txt
-diff --git a/package/usbutils/usbutils.mk b/package/usbutils/usbutils.mk
-index afeb7ded2a..4fbb358dfa 100644
---- a/package/usbutils/usbutils.mk
-+++ b/package/usbutils/usbutils.mk
-@@ -8,8 +8,13 @@ USBUTILS_VERSION = 019
- USBUTILS_SOURCE = usbutils-$(USBUTILS_VERSION).tar.xz
- USBUTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/usb/usbutils
- USBUTILS_DEPENDENCIES = host-pkgconf libudev libusb
--USBUTILS_LICENSE = GPL-2.0+ (utils) GPL-2.0 or GPL-3.0 (lsusb.py)
--USBUTILS_LICENSE_FILES = LICENSES/GPL-2.0-only.txt LICENSES/GPL-3.0-only.txt
-+USBUTILS_LICENSE = GPL-2.0+, GPL-2.0 (utils), LGPL-2.1+ (config/CI), GPL-2.0 or GPL-3.0 (lsusb.py), CC0-1.0, MIT (ccan)
-+USBUTILS_LICENSE_FILES = \
-+	LICENSES/CC0-1.0.txt \
-+	LICENSES/GPL-2.0-only.txt \
-+	LICENSES/GPL-3.0-only.txt \
-+	LICENSES/LGPL-2.1-or-later.txt \
-+	LICENSES/MIT.txt
- 
- ifeq ($(BR2_PACKAGE_LIBICONV),y)
- USBUTILS_DEPENDENCIES += libiconv
+-sha256  1c38214fb137bae85b82b82537b5987358621b915ab2a8e4f09e60697c19474f  linux-6.18.21.tar.xz
++sha256  a7a7e3d2ae9d95e74197223a8d4eb5f6be7aac21b6e6de27e9685d001c1f8cb0  linux-6.18.39.tar.xz
+diff --git a/board/stmicroelectronics/stm32h747-disco/patches/uboot/uboot.hash b/board/stmicroelectronics/stm32h747-disco/patches/uboot/uboot.hash
+index 36322a6a90..ff6e4ed2e2 100644
+--- a/board/stmicroelectronics/stm32h747-disco/patches/uboot/uboot.hash
++++ b/board/stmicroelectronics/stm32h747-disco/patches/uboot/uboot.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  ac7c04b8b7004923b00a4e5d6699c5df4d21233bac9fda690d8cfbc209fff2fd  u-boot-2026.04.tar.bz2
++sha256  78e8bfc382fe388f9b55aa1daf8c563522a037779b5d4c349d1415e381f1243e  u-boot-2026.07.tar.bz2
+diff --git a/configs/stm32h747_disco_sd_defconfig b/configs/stm32h747_disco_sd_defconfig
+index 0a95020e00..cd882aa5ac 100644
+--- a/configs/stm32h747_disco_sd_defconfig
++++ b/configs/stm32h747_disco_sd_defconfig
+@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/stmicroelectronics/stm32h747-disco/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.21"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.39"
+ BR2_LINUX_KERNEL_DEFCONFIG="stm32"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="$(LINUX_DIR)/arch/arm/configs/dram_0xd0000000.config board/stmicroelectronics/stm32h747-disco/linux-sd.fragment"
+ BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
+@@ -25,7 +25,7 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="32M"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2026.04"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2026.07"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32h747-disco"
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
