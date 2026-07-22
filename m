@@ -4,59 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2CB3C44536
-	for <buildroot@archiver.kernel.org>; Wed, 22 Jul 2026 19:45:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04736C4453A
+	for <buildroot@archiver.kernel.org>; Wed, 22 Jul 2026 19:46:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ADBE380FEF;
-	Wed, 22 Jul 2026 19:45:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C4D4080FEF;
+	Wed, 22 Jul 2026 19:46:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id INGMtdDY3CXk; Wed, 22 Jul 2026 19:45:49 +0000 (UTC)
+ id EFjnYUaL7__Z; Wed, 22 Jul 2026 19:46:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2DBDC80FAD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D612B80FFA
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1784749549;
-	bh=EklUW1oLF/heeaBrDEwE1MGvh6AmtRAvpHbeqhminSo=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=pBg90DxJ5ATne99vncdOBZqjDcd4LNmiWJMHMNoZo/xXJnI0rnFMmeajh5uLbwar0
-	 kDHRYtsrPq5BT65FCHTHHMCpY0zNeM/L60BK/9+3w2Nht3HRZNII/e0SdGZEJmsh/8
-	 j0ko1ZQvN7QBhlEGjxPWpkD8ZM1ShcxHtYw9yQMKEtwJh0TxNCoZ+mKTd8TbYe3Ct0
-	 IiIkcvb+hve7cSH+UW8/ML5D/SS1FVVZ5XXGDWO9NOd0MIg4h6DQbL5rY5XajwgrqS
-	 2O0YqgApntsgNey416GGLnba0Eww3kRKpCgbF2G/NWDQix2UTt49xxXa+4JUuYuZor
-	 QycF7JjNzbc7g==
+	s=default; t=1784749559;
+	bh=/4Ca5DSPG5AgFYvLQVsJ/onpVgYWuZ9V1vWjg2x5mko=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=p9SJoNvpYca4FjJJDXGxgH6MRgccBJQR1ikZM55JFlF+7r0enxPKnJ6OMe8pbVbBI
+	 KwmrJ5ygieOUxsRDCbJw+DrHzfqNcml9DB4SL1QqPciZmvB3wC7qTKXsMseWZfTeOa
+	 7IidCEpXlOKwmIOpVcZAA7STzo1G4OujQPxvjehgKosmR+bBkLeyVNGi2MjZUtMQw6
+	 udRqqG+DxIG3+ZrlsP79eY1hwKzwfDvnKiI/eH2lKd2VtbPbCM5k6QEwDdg9tMM8hs
+	 XoAZkdrDYRMzjCIpWBOYloYshqmGSWxRoJ1f3j31kxV7pX+Ztbn9e145xMSqTS/cit
+	 WrEZCAQPQSLpQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2DBDC80FAD;
-	Wed, 22 Jul 2026 19:45:49 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 26DF539E
- for <buildroot@buildroot.org>; Wed, 22 Jul 2026 19:45:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D612B80FFA;
+	Wed, 22 Jul 2026 19:45:59 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6C6B339E
+ for <buildroot@buildroot.org>; Wed, 22 Jul 2026 19:45:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 248EA60878
- for <buildroot@buildroot.org>; Wed, 22 Jul 2026 19:45:48 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5226A80FAD
+ for <buildroot@buildroot.org>; Wed, 22 Jul 2026 19:45:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9n_vNB-ySNvp for <buildroot@buildroot.org>;
- Wed, 22 Jul 2026 19:45:47 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7454860873
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7454860873
- for <buildroot@buildroot.org>; Wed, 22 Jul 2026 19:45:47 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9E7318A2DD; Wed, 22 Jul 2026 19:45:08 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 22 Jul 2026 21:35:54 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a424126096b5c909f1a7f99abf944e3df596aeed
-X-Git-Newrev: 86c478eac9c3cc76ed5dc2eb2974f4e395a1b765
-X-Patchwork-Hint: ignore
-Message-Id: <20260722194508.9E7318A2DD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/timescaledb: bump version to 2.28.3
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PLRcI94IT-92 for <buildroot@buildroot.org>;
+ Wed, 22 Jul 2026 19:45:57 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1DB0080FA9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1DB0080FA9
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1DB0080FA9
+ for <buildroot@buildroot.org>; Wed, 22 Jul 2026 19:45:57 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id 2FE5E19F57E;
+ Wed, 22 Jul 2026 21:45:54 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Wed, 22 Jul 2026 21:45:54 +0200
+MIME-Version: 1.0
+Date: Wed, 22 Jul 2026 21:45:54 +0200
+To: Maxim Kochetkov <fido_max@inbox.ru>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20260722063338.80807-1-fido_max@inbox.ru>
+References: <20260722063338.80807-1-fido_max@inbox.ru>
+User-Agent: Webmail Free/1.6.17
+Message-ID: <791ad451ed786fcd974f7d17062cceda@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1784749555;
+ bh=jGDYmTJxdO0vpAyRase3LkJwhilsZ5/mCLaIcN41PFs=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=Csst7wbepsPP1eq8PCC+9k7BGDsLMtg00dALjLYBu7tP6KiJf1Cxg0zb8tnt7iGzL
+ yd0yzya4aFrMgCGYn9KZpNA+dps6Yn7OARCzcoWZuMrLJgmtvd17Zql2V68wRyzgqj
+ s9cOQ8Bh0MtCqSIl6ckb16sD/ldEy6HMvIvZj4yj0kYvYiP3zg2lUQJkTgbBrj/Kzc
+ F3UxlocKIWN8PQ+3N388EvmWbUQssFQpX4Pgo30NyeHaVEpw/Mql3sTM/Jxxskgpui
+ h5bjJMamNafQrB2qJmk43Z7YJfFTh1Ye9uaASD0OxGV+XPPgnAGgBobnX4Uy6bnlV3
+ Ky13coOl/4haw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=Csst7wbe
+Subject: Re: [Buildroot] [PATCH 1/1] package/timescaledb: bump version to
+ 2.28.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,46 +95,18 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/86c478eac9c3cc76ed5dc2eb2974f4e395a1b765
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 22/07/2026 08:33, Maxim Kochetkov via buildroot wrote:
+> Changelog: 
+> https://github.com/timescale/timescaledb/blob/2.28.3/CHANGELOG.md
+> 
+> Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
 
-Changelog: https://github.com/timescale/timescaledb/blob/2.28.3/CHANGELOG.md
-
-Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/timescaledb/timescaledb.hash | 2 +-
- package/timescaledb/timescaledb.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/timescaledb/timescaledb.hash b/package/timescaledb/timescaledb.hash
-index fe733f323b..75f9b542de 100644
---- a/package/timescaledb/timescaledb.hash
-+++ b/package/timescaledb/timescaledb.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  f0a940720bb5b0b635dae4d8aeceb13e83b196b8aab8717876af0f45efa47ab6  timescaledb-2.27.1.tar.gz
-+sha256  c9f95c8865f71244cdd333076284377e83dad62f85679fbf1c94ba48a7d67334  timescaledb-2.28.3.tar.gz
- sha256  0378e0948feefd85f579319c74d6e2b671194037f550c7176ef26649d94c895b  LICENSE
-diff --git a/package/timescaledb/timescaledb.mk b/package/timescaledb/timescaledb.mk
-index bc38eb9279..9bbe502941 100644
---- a/package/timescaledb/timescaledb.mk
-+++ b/package/timescaledb/timescaledb.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TIMESCALEDB_VERSION = 2.27.1
-+TIMESCALEDB_VERSION = 2.28.3
- TIMESCALEDB_SITE = $(call github,timescale,timescaledb,$(TIMESCALEDB_VERSION))
- TIMESCALEDB_LICENSE = Apache-2.0
- TIMESCALEDB_LICENSE_FILES = LICENSE
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
