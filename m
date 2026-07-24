@@ -1,63 +1,120 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C632C53200
-	for <buildroot@archiver.kernel.org>; Fri, 24 Jul 2026 14:14:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8436C531C9
+	for <buildroot@archiver.kernel.org>; Fri, 24 Jul 2026 14:14:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1F42B60B88;
-	Fri, 24 Jul 2026 14:14:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9325F40B3C;
+	Fri, 24 Jul 2026 14:14:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7mzRCLQriWb2; Fri, 24 Jul 2026 14:13:58 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PNGsH-cuq2aE; Fri, 24 Jul 2026 14:14:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 64CC160B8D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 808A440B43
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1784902438;
-	bh=55BKptY3E3H3ulrEtV0Yf3gQ0GyF2NAyYYY8hFTzvjA=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Zn6waFTjNqNjF/I45iykOaO/6CqDZ8zFE3sMZGDwBRqqGwXMZkHlKcaYs3kJqSDB6
-	 U0Yjj7QSzNhWp29F9AHqmbiWGpOIEjN4YwE/jKXlB63QV2J9IfR4+R+j4eiC7Xpayz
-	 eN1vBxG9tGeuKhQWJ/TfeLTQOJUHzbfEiJhI4L+/lSn9AtF5AqHY7vLRD+nh+mF7w4
-	 ld09lDT+8NQWGhPdGzLGWwR+02Cx/Uz3OVSKrMxY/7u/jCHX/H/+wBzttUnV7kzewi
-	 9qZWbYV3wZ7P3DJ/31H3g6VrqwuZV/bLoUudBJt+16AtaE8+rx/EmtmOX59perYa+K
-	 X2Qb19iM3P1DQ==
+	s=default; t=1784902457;
+	bh=5zlUuHT2ecrhZfMVOeM8Ek88xvLRBtm3XC9FF0ZOdCE=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=Yh3/3vjvGkTIUvWvz5+6yR2Sv6vpQvnCBU4kFi/ss0Y5AGMoqHeFcCbNzhiT/rF0I
+	 ug/U5rxF4KzHpxR3Q/9Lz3hkgTxl2HkQei5rSX8QnvK+VQfgbfPLfXhGCmn7PS+mkp
+	 EcIXrC54kPgFSi026zs/af1YCGJ7umNYUOkgW2DjAAW4wcFuQ/d9WhrHiJQ4kY3CGi
+	 8OEaaRveZBwunDQ8bHjbaM7BTu072MEK2najgqNTT9fOA666OM3ytqkIIRquwCgNcP
+	 4PXcOKypErsoarcwvsbdDLDG/+bS6Ya9XBN4Tyd/jNOBut1nQTP454sIhCkxGlSOnW
+	 sD9f1ZWTEqjeg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 64CC160B8D;
-	Fri, 24 Jul 2026 14:13:58 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 3986F3B0
- for <buildroot@buildroot.org>; Fri, 24 Jul 2026 14:13:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 808A440B43;
+	Fri, 24 Jul 2026 14:14:17 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 023843B1
+ for <buildroot@buildroot.org>; Fri, 24 Jul 2026 14:14:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1FC7E60B7B
- for <buildroot@buildroot.org>; Fri, 24 Jul 2026 14:13:52 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id DD98A40152
+ for <buildroot@buildroot.org>; Fri, 24 Jul 2026 14:14:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9KnSZnGdxrLn for <buildroot@buildroot.org>;
- Fri, 24 Jul 2026 14:13:51 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 185BD60B83
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 185BD60B83
- for <buildroot@buildroot.org>; Fri, 24 Jul 2026 14:13:51 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 70DD68A50C; Fri, 24 Jul 2026 14:13:11 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 24 Jul 2026 16:01:10 +0200
-X-Git-Refname: refs/heads/2026.05.x
-X-Git-Oldrev: b55c4f1a5c6f0afcb5f936d0e60f463305dff365
-X-Git-Newrev: c69868315d55bd9ae3933ca5124f9f1fd0e6d4e4
-X-Patchwork-Hint: ignore
-Message-Id: <20260724141311.70DD68A50C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.05.x] package/pahole: fix build
- on modern toolchains
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sw5Dlj819lUy for <buildroot@buildroot.org>;
+ Fri, 24 Jul 2026 14:14:14 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::430; helo=mail-wr1-x430.google.com;
+ envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org A40CF400BD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A40CF400BD
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
+ [IPv6:2a00:1450:4864:20::430])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A40CF400BD
+ for <buildroot@buildroot.org>; Fri, 24 Jul 2026 14:14:13 +0000 (UTC)
+Received: by mail-wr1-x430.google.com with SMTP id
+ ffacd0b85a97d-47f752b3423so384919f8f.3
+ for <buildroot@buildroot.org>; Fri, 24 Jul 2026 07:14:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20251104; t=1784902451; x=1785507251;
+ h=content-transfer-encoding:content-type:mime-version:references
+ :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+ :content-type;
+ bh=pD64PWL3aQN9kPrYfi9tXY/3TJAIbtQ740ZL1kJOfoQ=;
+ b=J47XQ8c9dXuHZMj4jlukWYBPzsX9Fh+Eq1wQoCH3F8wPu2ZQ3ntis1H+ULj2BHPwnk
+ 4HliXvr+iGailxMjQ61/Zj8UtLdU2Lt30LdYxpZDvK25VHo1h1wyGEtnlHxM4fWMZf8O
+ bxnWxkCmvxJBVz2EPNr49GdVi+6I103P3kNWnnCJ00m8lAoo9Fm5qYsi0WunMZuO+KY4
+ gAoTCv/gua9I/IRaqiMIrMT6PskwRo4adhqMBeFlXDYW9MLf4U01JrBcbir0o5EdKufm
+ KNJSL+adRsiOJR4vUvz3ogP0I1EAfpnmZeFwhtfliXzPbPSdk4cvb9/m1ldIhzOQqQI5
+ vLTA==
+X-Forwarded-Encrypted: i=1;
+ AHgh+Rp5khHltO5E+HSALjlwTFUItUyw2VELGne1Op6XKa7BnN/CXsuclIUZSqFWfuFT2NbcbgYD64DPGdA=@buildroot.org
+X-Gm-Message-State: AOJu0YyVirxqkDfcyNai4Rr6kfuOnI8sQF12NHAfNGpNTl2b4GGSyH2g
+ rts/uJOJn3bMXOq1yMGInAfWQJE+XzPMrmJ3l2pNii/87EjIYW6glRg4jijHNQXV1bDRx14vf/Q
+ olReP
+X-Gm-Gg: AR+sD11FLq31OhZou/WWu44r5UkJsLaMU3svhLZoNEf6s1YpMI7mh2Uye78OdSGHoFL
+ QyW2DXXBI4cQZ30bZxEMhsTWjj4egz+IYtwsPWZ1krNdYefuwMFFTK1K5032DDCGlSX/CTu402p
+ pq2SXnpvyQvoVDkg2OUTDARU5nIRgsnaBbl3pD6bEXICtMOVXnR9Scqd4VMeG2D25tSjKE49gEE
+ 4s5BOSkV5v7vVCtzYYWGFhPNbFoU8skostQrIGf2biywJfaa8Mcxubw/jTW408QwkqBADdHDd7Z
+ BHravtTL2+6C2D2+RR9IZocjY7ncego2viqvvNxfwiNkEOPjYjYnZvzbYObCwMlVzoC3CpkdnoK
+ //ikTPCJLmj4d3MoXyOP1wYS00tZ54C7zMoXD4xkPkYvohTkO30sAmqGRhn1Ou01NTPuBeQ8Xcb
+ srRnB3tQ==
+X-Received: by 2002:a05:6000:603:b0:47f:81c6:5a38 with SMTP id
+ ffacd0b85a97d-47f8da66b09mr9978050f8f.18.1784902451178; 
+ Fri, 24 Jul 2026 07:14:11 -0700 (PDT)
+Received: from arch ([212.233.37.141]) by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-47f85c6ef25sm22772663f8f.36.2026.07.24.07.14.10
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 24 Jul 2026 07:14:10 -0700 (PDT)
+To: Florian Larysch <fl@n621.de>
+Cc: Thomas Perale <thomas.perale@mind.be>,
+	buildroot@buildroot.org
+Date: Fri, 24 Jul 2026 16:14:09 +0200
+Message-ID: <20260724141410.477344-1-thomas.perale@mind.be>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260714153242.20947-1-fl@n621.de>
+References: <20260714153242.20947-1-fl@n621.de>
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1784902451; x=1785507251; darn=buildroot.org;
+ h=content-transfer-encoding:content-type:mime-version:references
+ :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
+ :date:message-id:reply-to:content-type;
+ bh=pD64PWL3aQN9kPrYfi9tXY/3TJAIbtQ740ZL1kJOfoQ=;
+ b=RHBTyn2ljGcwRu9cfE+1i7Z06Z/oSI7kRLwYcVjvw7lgJULc9iJPcI/X3WMXNsoWGG
+ VJGpzzVchf8nFjmXP3ZBw0ER6SNHEb/rlM26YrF0h9OXAPhSeLpjFkM6yLWPomAu80S4
+ p1toIv6JlT8rgIYjlecrI9wNHIk05uko07GyXHGyhkHZwH0scZDEpwAWi78DHIKdJp4S
+ gES0DYASWsF+T400mrHydw36HsB2jAfHmJBK82kSnEtdr202/B0D/g/tcQd4soEkW30a
+ UbfJlePrxiyETWuPiR095bu03GcEn0LpVFw6tM3TvIPIrcZk/B8B+qRw0XGC21VnaoTo
+ ElCA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=RHBTyn2l
+Subject: Re: [Buildroot] [PATCH 2025.02.x 1/1] package/pahole: fix build on
+ modern toolchains
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,332 +128,148 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2862653405366645098=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2862653405366645098==
-Content-Type: text/plain
-
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/c69868315d55bd9ae3933ca5124f9f1fd0e6d4e4
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.05.x
-
-When building pahole using a modern GCC (e.g. when building
-host-pahole), discarded-qualifiers and unused-but-set-variable warnings
-are produced. In builds that don't set CMAKE_BUILD_TYPE=Release, -Werror
-gets set and causes a build failure.
-
-Fix this by backporting an unreleased upstream patch (for
-discarded-qualifiers) and adding another pending one for
-unused-but-set-variable (and, arguably, a correctness issue).
-
-Fixes: https://autobuild.buildroot.org/results/ba7/ba79fb9d08b2c6ec573b79fdbb6b4880bf603a57
-
-Signed-off-by: Florian Larysch <fl@n621.de>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 8419f0f0c747abe3acd90b0cffb21c2eb34ee623)
-[Thomas: backport to v1.28]
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
----
- ...ix-discarded-qualifiers-for-strchr-strstr.patch | 134 +++++++++++++++++++++
- ...x-BTF-function-parameter-type-match-check.patch |  41 +++++++
- ...ole-preserve-const-ness-of-bsearch-result.patch |  38 ++++++
- ...s-Fix-clang-warning-about-unused-variable.patch |  45 +++++++
- 4 files changed, 258 insertions(+)
-
-diff --git a/package/pahole/0001-pahole-Fix-discarded-qualifiers-for-strchr-strstr.patch b/package/pahole/0001-pahole-Fix-discarded-qualifiers-for-strchr-strstr.patch
-new file mode 100644
-index 0000000000..0ceea478a4
---- /dev/null
-+++ b/package/pahole/0001-pahole-Fix-discarded-qualifiers-for-strchr-strstr.patch
-@@ -0,0 +1,134 @@
-+From 5f5809cd50cc4d583a2fe3f4d556cb120760e229 Mon Sep 17 00:00:00 2001
-+From: Damien Hourtoulle <damien.hourtoulle@gmail.com>
-+Date: Wed, 11 Mar 2026 15:09:39 +0100
-+Subject: [PATCH] pahole: Fix discarded-qualifiers for strchr/strstr.
-+
-+Glibc 2.43 added C23 const-preserving overloads :
-+https://sourceware.org/glibc/wiki/Release/2.43.
-+
-+For the function prototype__new, fix local variable declaration to use
-+the correct const char* type instead of char*, removing the need to
-+discard the const qualifier.
-+
-+Also fix a pre-existing bug in type__find_type_enum: when iterating
-+over a '+'-concatenated list of enum names, after advancing to the next
-+segment the new separator was not nullified, causing "second+third" to
-+be passed to cu__find_enumeration_by_name instead of "second".  Add a
-+null check before writing to sep_mutable to avoid a null dereference
-+when no further '+' is present.
-+
-+Signed-off-by: Damien Hourtoulle <damien.hourtoulle@gmail.com>
-+Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-+Link: https://lore.kernel.org/dwarves/20260311140938.81459-2-d.hourtoulle@geoide.fr/
-+
-+Upstream: https://git.kernel.org/pub/scm/devel/pahole/pahole.git/commit/?id=ba31cfa08ffcfe6ff5757f325de5b03ca157cb78
-+Signed-off-by: Florian Larysch <fl@n621.de>
-+---
-+ btf_encoder.c |  2 +-
-+ pahole.c      | 35 ++++++++++++++++++-----------------
-+ 2 files changed, 19 insertions(+), 18 deletions(-)
-+
-+diff --git a/pahole.c b/pahole.c
-+index ef01e58..8c827fc 100644
-+--- a/pahole.c
-++++ b/pahole.c
-+@@ -2482,7 +2482,7 @@ static int64_t type_instance__int_value(struct type_instance *instance, const ch
-+ 	int byte_offset = 0;
-+ 
-+ 	if (!member) {
-+-		char *sep = strchr(member_name_orig, '.');
-++		const char *sep = strchr(member_name_orig, '.');
-+ 
-+ 		if (!sep)
-+ 			return -1;
-+@@ -2495,8 +2495,8 @@ static int64_t type_instance__int_value(struct type_instance *instance, const ch
-+ 		char *member_name = member_name_alloc;
-+ 		struct type *type = instance->type;
-+ 
-+-		sep = member_name_alloc + (sep - member_name_orig);
-+-		*sep = 0;
-++		char *sep_mutable = member_name_alloc + (sep - member_name_orig);  // sep mutable for the copy
-++		*sep_mutable = 0;
-+ 
-+ 		while (1) {
-+ 			member = type__find_member_by_name(type, member_name);
-+@@ -2509,9 +2509,9 @@ out_free_member_name:
-+ 			type = tag__type(cu__type(cu, member->tag.type));
-+ 			if (type == NULL)
-+ 				goto out_free_member_name;
-+-			member_name = sep + 1;
-+-			sep = strchr(member_name, '.');
-+-			if (!sep)
-++			member_name = sep_mutable + 1;
-++			sep_mutable = strchr(member_name, '.');
-++			if (!sep_mutable)
-+ 				break;
-+ 
-+ 		}
-+@@ -2949,7 +2949,7 @@ static struct prototype *prototype__new(const char *expression)
-+ 
-+ 	strcpy(prototype->name, expression);
-+ 
-+-	const char *name = prototype->name;
-++	char *name = prototype->name;
-+ 
-+ 	prototype->nr_args = 0;
-+ 
-+@@ -2963,10 +2963,9 @@ static struct prototype *prototype__new(const char *expression)
-+ 	if (args_close == NULL)
-+ 		goto out_no_closing_parens;
-+ 
-++	*args_open++ = *args_close = '\0';
-+ 	char *args = args_open;
-+ 
-+-	*args++ = *args_close = '\0';
-+-
-+ 	while (isspace(*args))
-+ 		++args;
-+ 
-+@@ -3113,7 +3112,7 @@ static int type__find_type_enum(struct type *type, struct cu *cu, const char *ty
-+ 		return type__add_type_enum(type, te, cu);
-+ 
-+ 	// Now look at a 'virtual enum', i.e. the concatenation of multiple enums
-+-	char *sep = strchr(type_enum, '+');
-++	const char *sep = strchr(type_enum, '+');
-+ 
-+ 	if (!sep)
-+ 		return -1;
-+@@ -3125,13 +3124,13 @@ static int type__find_type_enum(struct type *type, struct cu *cu, const char *ty
-+ 
-+ 	int ret = -1;
-+ 
-+-	sep = type_enums + (sep - type_enum);
-++	char *sep_mutable = type_enums + (sep - type_enum);
-++	char *cur = type_enums;
-+ 
-+-	type_enum = type_enums;
-+-	*sep = '\0';
-++	*sep_mutable = '\0';
-+ 
-+ 	while (1) {
-+-		te = cu__find_enumeration_by_name(cu, type_enum, NULL);
-++		te = cu__find_enumeration_by_name(cu, cur, NULL);
-+ 
-+ 		if (!te)
-+ 			goto out;
-+@@ -3140,10 +3139,12 @@ static int type__find_type_enum(struct type *type, struct cu *cu, const char *ty
-+ 		if (ret)
-+ 			goto out;
-+ 
-+-		if (sep == NULL)
-++		if (sep_mutable == NULL)
-+ 			break;
-+-		type_enum = sep + 1;
-+-		sep = strchr(type_enum, '+');
-++		cur = sep_mutable + 1;
-++		sep_mutable = strchr(cur, '+');
-++		if (sep_mutable)
-++			*sep_mutable = '\0';
-+ 	}
-+ 
-+ 	ret = 0;
-+-- 
-+2.55.0
-+
-diff --git a/package/pahole/0002-pahole-fix-BTF-function-parameter-type-match-check.patch b/package/pahole/0002-pahole-fix-BTF-function-parameter-type-match-check.patch
-new file mode 100644
-index 0000000000..0bea2a602f
---- /dev/null
-+++ b/package/pahole/0002-pahole-fix-BTF-function-parameter-type-match-check.patch
-@@ -0,0 +1,41 @@
-+From f282f4e995becc55a8fa380781dc36e0ff0796d2 Mon Sep 17 00:00:00 2001
-+From: Florian Larysch <fl@n621.de>
-+Date: Tue, 14 Jul 2026 16:07:54 +0200
-+Subject: [PATCH] pahole: fix BTF function parameter type match check
-+
-+The BTF_KIND_FUNC_PROTO arm in types__match() first checks whether two
-+function types identified by t1/t2 have matching return types and then
-+attempts to iterate over the function parameters (p1/p2) to check them
-+for compatibility too.
-+
-+However, the loop just repeats the check on t1/t2 instead of p1/p2, so
-+we just keep re-checking return type compatibility, ignoring possible
-+mismatches of the actual parameter types.
-+
-+Fix this by actually comparing p1 and p2. This also resolves a
-+unused-but-set-variable build-time warning.
-+
-+Upstream: https://lore.kernel.org/dwarves/20260714140858.17507-1-fl@n621.de/
-+Signed-off-by: Florian Larysch <fl@n621.de>
-+---
-+ btf_encoder.c | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/btf_encoder.c b/btf_encoder.c
-+index 4a585f5..4f9790e 100644
-+--- a/btf_encoder.c
-++++ b/btf_encoder.c
-+@@ -1109,8 +1109,8 @@ static bool types__match(struct btf_encoder *encoder,
-+ 					  btf2, t2->type))
-+ 				return false;
-+ 			for (i = 0; i < vlen; i++, p1++, p2++) {
-+-				if (!types__match(encoder, btf1, t1->type,
-+-						  btf2, t2->type))
-++				if (!types__match(encoder, btf1, p1->type,
-++						  btf2, p2->type))
-+ 					return false;
-+ 			}
-+ 			return true;
-+-- 
-+2.55.0
-+
-diff --git a/package/pahole/0003-pahole-preserve-const-ness-of-bsearch-result.patch b/package/pahole/0003-pahole-preserve-const-ness-of-bsearch-result.patch
-new file mode 100644
-index 0000000000..901bc91992
---- /dev/null
-+++ b/package/pahole/0003-pahole-preserve-const-ness-of-bsearch-result.patch
-@@ -0,0 +1,38 @@
-+From f510bf5d3f3e3405710311ceb4a3539267218bde Mon Sep 17 00:00:00 2001
-+From: Florian Larysch <larysch@fixme.gmbh>
-+Date: Tue, 14 Jul 2026 16:03:12 +0200
-+Subject: [PATCH] pahole: preserve const-ness of bsearch result
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Fixes:
-+
-+pahole/btf_encoder.c: In function ‘btf_encoder__tag_kfunc’:
-+pahole/btf_encoder.c:1526:16: error: assignment discards ‘const’ qualifier from pointer target type [-Werror=discarded-qualifiers]
-+ 1526 |         target = bsearch(&key, base, cnt, sizeof(key), btf_func_cmp);
-+      |                ^
-+
-+Upstream: N/A (implicitly fixed as part of a refactor in commit c567717
-+("btf_encoder: Refactor btf_encoder__tag_kfuncs()"), released in v1.30)
-+Signed-off-by: Florian Larysch <fl@n621.de>
-+---
-+ btf_encoder.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/btf_encoder.c b/btf_encoder.c
-+index c2df2bc..4118028 100644
-+--- a/btf_encoder.c
-++++ b/btf_encoder.c
-+@@ -1817,7 +1817,7 @@ static int btf_encoder__tag_kfunc(struct btf_encoder *encoder, struct gobuffer *
-+ {
-+ 	struct btf_func key = { .name = kfunc };
-+ 	struct btf *btf = encoder->btf;
-+-	struct btf_func *target;
-++	const struct btf_func *target;
-+ 	const void *base;
-+ 	unsigned int cnt;
-+ 	int err;
-+-- 
-+2.55.0
-+
-diff --git a/package/pahole/0004-dwarves-Fix-clang-warning-about-unused-variable.patch b/package/pahole/0004-dwarves-Fix-clang-warning-about-unused-variable.patch
-new file mode 100644
-index 0000000000..e4f16ad42e
---- /dev/null
-+++ b/package/pahole/0004-dwarves-Fix-clang-warning-about-unused-variable.patch
-@@ -0,0 +1,45 @@
-+From 06350d14776a77e16ea5064030fea63bbdd22f27 Mon Sep 17 00:00:00 2001
-+From: Alan Maguire <alan.maguire@oracle.com>
-+Date: Fri, 28 Feb 2025 12:24:29 +0000
-+Subject: [PATCH] dwarves: Fix clang warning about unused variable
-+
-+With dwarves CI, clang builds give a legit warning:
-+
-+/build/dwarves_fprintf.c:2102:9: error: variable 'printed' set but not used [-Werror,-Wunused-but-set-variable]
-+ 2102 |         size_t printed = fprintf(fp, "namespace %s {\n", namespace__name(space));
-+      |                ^
-+1 error generated.
-+
-+And in fact we accumulate values in printed but never use it
-+for the return value.  Add the printed count to the final fprintf().
-+
-+Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
-+Cc: Alexei Starovoitov <ast@kernel.org>
-+Cc: Andrii Nakryiko <andrii@kernel.org>
-+Cc: Yonghong Song <yonghong.song@linux.dev>
-+Cc: Daniel Borkmann <daniel@iogearbox.net>
-+Cc: Song Liu <song@kernel.org>
-+Cc: Eduard Zingerman <eddyz87@gmail.com>
-+Cc: Jiri Olsa <olsajiri@gmail.com>
-+Link: https://lore.kernel.org/dwarves/20250401092435.1619617-3-alan.maguire@oracle.com/
-+
-+Upstream: https://github.com/acmel/dwarves/commit/06350d14776a77e16ea5064030fea63bbdd22f27
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-+---
-+ dwarves_fprintf.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/dwarves_fprintf.c b/dwarves_fprintf.c
-+index c3e7f3c0..4407fd14 100644
-+--- a/dwarves_fprintf.c
-++++ b/dwarves_fprintf.c
-+@@ -2110,7 +2110,7 @@ static size_t namespace__fprintf(const struct tag *tag, const struct cu *cu,
-+ 		printed += fprintf(fp, "\n\n");
-+ 	}
-+ 
-+-	return fprintf(fp, "%.*s}", conf->indent, tabs);
-++	return printed + fprintf(fp, "%.*s}", conf->indent, tabs);
-+ }
-+ 
-+ size_t tag__fprintf(struct tag *tag, const struct cu *cu,
-
---===============2862653405366645098==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============2862653405366645098==--
+SW4gcmVwbHkgb2Y6Cj4gV2hlbiBidWlsZGluZyBwYWhvbGUgdXNpbmcgYSBtb2Rlcm4gR0NDIChl
+LmcuIHdoZW4gYnVpbGRpbmcKPiBob3N0LXBhaG9sZSksIGRpc2NhcmRlZC1xdWFsaWZpZXJzIHdh
+cm5pbmdzIGFyZSBwcm9kdWNlZC4gSW4gYnVpbGRzIHRoYXQKPiBkb24ndCBzZXQgQ01BS0VfQlVJ
+TERfVFlQRT1SZWxlYXNlLCAtV2Vycm9yIGdldHMgc2V0IGFuZCBjYXVzZXMgYSBidWlsZAo+IGZh
+aWx1cmUuCj4gCj4gRml4IHRoaXMgYnkgYmFja3BvcnRpbmcgdGhlIGFwcGxpY2FibGUgcGFydHMg
+b2YgYW4gdXBzdHJlYW0gcGF0Y2ggYW5kCj4gZml4aW5nIGEgcmVtYWluaW5nIGlzc3VlIHRoYXQg
+aW1wbGljaXRseSBnb3QgcmVmYWN0b3JlZCBhd2F5IHVwc3RyZWFtCj4gYWxyZWFkeS4KPiAKPiBT
+aWduZWQtb2ZmLWJ5OiBGbG9yaWFuIExhcnlzY2ggPGZsQG42MjEuZGU+CgpBcHBsaWVkIHRvIDIw
+MjUuMDIueC4gVGhhbmtzCgo+IC0tLQo+ICAuLi5zY2FyZGVkLXF1YWxpZmllcnMtZm9yLXN0cmNo
+ci1zdHJzdHIucGF0Y2ggfCAxMzQgKysrKysrKysrKysrKysrKysrCj4gIC4uLnJlc2VydmUtY29u
+c3QtbmVzcy1vZi1ic2VhcmNoLXJlc3VsdC5wYXRjaCB8ICAzOCArKysrKwo+ICAyIGZpbGVzIGNo
+YW5nZWQsIDE3MiBpbnNlcnRpb25zKCspCj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL3Bh
+aG9sZS8wMDAyLXBhaG9sZS1GaXgtZGlzY2FyZGVkLXF1YWxpZmllcnMtZm9yLXN0cmNoci1zdHJz
+dHIucGF0Y2gKPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvcGFob2xlLzAwMDMtcGFob2xl
+LXByZXNlcnZlLWNvbnN0LW5lc3Mtb2YtYnNlYXJjaC1yZXN1bHQucGF0Y2gKPiAKPiBkaWZmIC0t
+Z2l0IGEvcGFja2FnZS9wYWhvbGUvMDAwMi1wYWhvbGUtRml4LWRpc2NhcmRlZC1xdWFsaWZpZXJz
+LWZvci1zdHJjaHItc3Ryc3RyLnBhdGNoIGIvcGFja2FnZS9wYWhvbGUvMDAwMi1wYWhvbGUtRml4
+LWRpc2NhcmRlZC1xdWFsaWZpZXJzLWZvci1zdHJjaHItc3Ryc3RyLnBhdGNoCj4gbmV3IGZpbGUg
+bW9kZSAxMDA2NDQKPiBpbmRleCAwMDAwMDAwMDAwLi5mYzBiY2M0ZjdjCj4gLS0tIC9kZXYvbnVs
+bAo+ICsrKyBiL3BhY2thZ2UvcGFob2xlLzAwMDItcGFob2xlLUZpeC1kaXNjYXJkZWQtcXVhbGlm
+aWVycy1mb3Itc3RyY2hyLXN0cnN0ci5wYXRjaAo+IEBAIC0wLDAgKzEsMTM0IEBACj4gK0Zyb20g
+NWVlYjUzNGUwMjE4M2JjYWYyYjg2ZjcxZTBlOTZlZmEyZDJjZTNkMCBNb24gU2VwIDE3IDAwOjAw
+OjAwIDIwMDEKPiArRnJvbTogRGFtaWVuIEhvdXJ0b3VsbGUgPGRhbWllbi5ob3VydG91bGxlQGdt
+YWlsLmNvbT4KPiArRGF0ZTogV2VkLCAxMSBNYXIgMjAyNiAxNTowOTozOSArMDEwMAo+ICtTdWJq
+ZWN0OiBbUEFUQ0hdIHBhaG9sZTogRml4IGRpc2NhcmRlZC1xdWFsaWZpZXJzIGZvciBzdHJjaHIv
+c3Ryc3RyLgo+ICsKPiArR2xpYmMgMi40MyBhZGRlZCBDMjMgY29uc3QtcHJlc2VydmluZyBvdmVy
+bG9hZHMgOgo+ICtodHRwczovL3NvdXJjZXdhcmUub3JnL2dsaWJjL3dpa2kvUmVsZWFzZS8yLjQz
+Lgo+ICsKPiArRm9yIHRoZSBmdW5jdGlvbiBwcm90b3R5cGVfX25ldywgZml4IGxvY2FsIHZhcmlh
+YmxlIGRlY2xhcmF0aW9uIHRvIHVzZQo+ICt0aGUgY29ycmVjdCBjb25zdCBjaGFyKiB0eXBlIGlu
+c3RlYWQgb2YgY2hhciosIHJlbW92aW5nIHRoZSBuZWVkIHRvCj4gK2Rpc2NhcmQgdGhlIGNvbnN0
+IHF1YWxpZmllci4KPiArCj4gK0Fsc28gZml4IGEgcHJlLWV4aXN0aW5nIGJ1ZyBpbiB0eXBlX19m
+aW5kX3R5cGVfZW51bTogd2hlbiBpdGVyYXRpbmcKPiArb3ZlciBhICcrJy1jb25jYXRlbmF0ZWQg
+bGlzdCBvZiBlbnVtIG5hbWVzLCBhZnRlciBhZHZhbmNpbmcgdG8gdGhlIG5leHQKPiArc2VnbWVu
+dCB0aGUgbmV3IHNlcGFyYXRvciB3YXMgbm90IG51bGxpZmllZCwgY2F1c2luZyAic2Vjb25kK3Ro
+aXJkIiB0bwo+ICtiZSBwYXNzZWQgdG8gY3VfX2ZpbmRfZW51bWVyYXRpb25fYnlfbmFtZSBpbnN0
+ZWFkIG9mICJzZWNvbmQiLiAgQWRkIGEKPiArbnVsbCBjaGVjayBiZWZvcmUgd3JpdGluZyB0byBz
+ZXBfbXV0YWJsZSB0byBhdm9pZCBhIG51bGwgZGVyZWZlcmVuY2UKPiArd2hlbiBubyBmdXJ0aGVy
+ICcrJyBpcyBwcmVzZW50Lgo+ICsKPiArU2lnbmVkLW9mZi1ieTogRGFtaWVuIEhvdXJ0b3VsbGUg
+PGRhbWllbi5ob3VydG91bGxlQGdtYWlsLmNvbT4KPiArU2lnbmVkLW9mZi1ieTogQWxhbiBNYWd1
+aXJlIDxhbGFuLm1hZ3VpcmVAb3JhY2xlLmNvbT4KPiArTGluazogaHR0cHM6Ly9sb3JlLmtlcm5l
+bC5vcmcvZHdhcnZlcy8yMDI2MDMxMTE0MDkzOC44MTQ1OS0yLWQuaG91cnRvdWxsZUBnZW9pZGUu
+ZnIvCj4gKwo+ICtVcHN0cmVhbTogaHR0cHM6Ly9naXQua2VybmVsLm9yZy9wdWIvc2NtL2RldmVs
+L3BhaG9sZS9wYWhvbGUuZ2l0L2NvbW1pdC8/aWQ9YmEzMWNmYTA4ZmZjZmU2ZmY1NzU3ZjMyNWRl
+NWIwM2NhMTU3Y2I3OAo+ICtbRmxvcmlhbjogQmFja3BvcnQgb2YgdGhlIGFwcGxpY2FibGUgYml0
+cyB0byB2MS4yN10KPiArU2lnbmVkLW9mZi1ieTogRmxvcmlhbiBMYXJ5c2NoIDxmbEBuNjIxLmRl
+Pgo+ICstLS0KPiArIHBhaG9sZS5jIHwgMzUgKysrKysrKysrKysrKysrKysrLS0tLS0tLS0tLS0t
+LS0tLS0KPiArIDEgZmlsZSBjaGFuZ2VkLCAxOCBpbnNlcnRpb25zKCspLCAxNyBkZWxldGlvbnMo
+LSkKPiArCj4gK2RpZmYgLS1naXQgYS9wYWhvbGUuYyBiL3BhaG9sZS5jCj4gK2luZGV4IDk1NDQ5
+OGQuLjNkY2I1MjUgMTAwNjQ0Cj4gKy0tLSBhL3BhaG9sZS5jCj4gKysrKyBiL3BhaG9sZS5jCj4g
+K0BAIC0yNTA1LDcgKzI1MDUsNyBAQCBzdGF0aWMgaW50NjRfdCB0eXBlX2luc3RhbmNlX19pbnRf
+dmFsdWUoc3RydWN0IHR5cGVfaW5zdGFuY2UgKmluc3RhbmNlLCBjb25zdCBjaAo+ICsgCWludCBi
+eXRlX29mZnNldCA9IDA7Cj4gKyAKPiArIAlpZiAoIW1lbWJlcikgewo+ICstCQljaGFyICpzZXAg
+PSBzdHJjaHIobWVtYmVyX25hbWVfb3JpZywgJy4nKTsKPiArKwkJY29uc3QgY2hhciAqc2VwID0g
+c3RyY2hyKG1lbWJlcl9uYW1lX29yaWcsICcuJyk7Cj4gKyAKPiArIAkJaWYgKCFzZXApCj4gKyAJ
+CQlyZXR1cm4gLTE7Cj4gK0BAIC0yNTE4LDggKzI1MTgsOCBAQCBzdGF0aWMgaW50NjRfdCB0eXBl
+X2luc3RhbmNlX19pbnRfdmFsdWUoc3RydWN0IHR5cGVfaW5zdGFuY2UgKmluc3RhbmNlLCBjb25z
+dCBjaAo+ICsgCQljaGFyICptZW1iZXJfbmFtZSA9IG1lbWJlcl9uYW1lX2FsbG9jOwo+ICsgCQlz
+dHJ1Y3QgdHlwZSAqdHlwZSA9IGluc3RhbmNlLT50eXBlOwo+ICsgCj4gKy0JCXNlcCA9IG1lbWJl
+cl9uYW1lX2FsbG9jICsgKHNlcCAtIG1lbWJlcl9uYW1lX29yaWcpOwo+ICstCQkqc2VwID0gMDsK
+PiArKwkJY2hhciAqc2VwX211dGFibGUgPSBtZW1iZXJfbmFtZV9hbGxvYyArIChzZXAgLSBtZW1i
+ZXJfbmFtZV9vcmlnKTsgIC8vIHNlcCBtdXRhYmxlIGZvciB0aGUgY29weQo+ICsrCQkqc2VwX211
+dGFibGUgPSAwOwo+ICsgCj4gKyAJCXdoaWxlICgxKSB7Cj4gKyAJCQltZW1iZXIgPSB0eXBlX19m
+aW5kX21lbWJlcl9ieV9uYW1lKHR5cGUsIG1lbWJlcl9uYW1lKTsKPiArQEAgLTI1MzIsOSArMjUz
+Miw5IEBAIG91dF9mcmVlX21lbWJlcl9uYW1lOgo+ICsgCQkJdHlwZSA9IHRhZ19fdHlwZShjdV9f
+dHlwZShjdSwgbWVtYmVyLT50YWcudHlwZSkpOwo+ICsgCQkJaWYgKHR5cGUgPT0gTlVMTCkKPiAr
+IAkJCQlnb3RvIG91dF9mcmVlX21lbWJlcl9uYW1lOwo+ICstCQkJbWVtYmVyX25hbWUgPSBzZXAg
+KyAxOwo+ICstCQkJc2VwID0gc3RyY2hyKG1lbWJlcl9uYW1lLCAnLicpOwo+ICstCQkJaWYgKCFz
+ZXApCj4gKysJCQltZW1iZXJfbmFtZSA9IHNlcF9tdXRhYmxlICsgMTsKPiArKwkJCXNlcF9tdXRh
+YmxlID0gc3RyY2hyKG1lbWJlcl9uYW1lLCAnLicpOwo+ICsrCQkJaWYgKCFzZXBfbXV0YWJsZSkK
+PiArIAkJCQlicmVhazsKPiArIAo+ICsgCQl9Cj4gK0BAIC0yOTcyLDcgKzI5NzIsNyBAQCBzdGF0
+aWMgc3RydWN0IHByb3RvdHlwZSAqcHJvdG90eXBlX19uZXcoY29uc3QgY2hhciAqZXhwcmVzc2lv
+bikKPiArIAo+ICsgCXN0cmNweShwcm90b3R5cGUtPm5hbWUsIGV4cHJlc3Npb24pOwo+ICsgCj4g
+Ky0JY29uc3QgY2hhciAqbmFtZSA9IHByb3RvdHlwZS0+bmFtZTsKPiArKwljaGFyICpuYW1lID0g
+cHJvdG90eXBlLT5uYW1lOwo+ICsgCj4gKyAJcHJvdG90eXBlLT5ucl9hcmdzID0gMDsKPiArIAo+
+ICtAQCAtMjk4NiwxMCArMjk4Niw5IEBAIHN0YXRpYyBzdHJ1Y3QgcHJvdG90eXBlICpwcm90b3R5
+cGVfX25ldyhjb25zdCBjaGFyICpleHByZXNzaW9uKQo+ICsgCWlmIChhcmdzX2Nsb3NlID09IE5V
+TEwpCj4gKyAJCWdvdG8gb3V0X25vX2Nsb3NpbmdfcGFyZW5zOwo+ICsgCj4gKysJKmFyZ3Nfb3Bl
+bisrID0gKmFyZ3NfY2xvc2UgPSAnXDAnOwo+ICsgCWNoYXIgKmFyZ3MgPSBhcmdzX29wZW47Cj4g
+KyAKPiArLQkqYXJncysrID0gKmFyZ3NfY2xvc2UgPSAnXDAnOwo+ICstCj4gKyAJd2hpbGUgKGlz
+c3BhY2UoKmFyZ3MpKQo+ICsgCQkrK2FyZ3M7Cj4gKyAKPiArQEAgLTMxMzYsNyArMzEzNSw3IEBA
+IHN0YXRpYyBpbnQgdHlwZV9fZmluZF90eXBlX2VudW0oc3RydWN0IHR5cGUgKnR5cGUsIHN0cnVj
+dCBjdSAqY3UsIGNvbnN0IGNoYXIgKnR5Cj4gKyAJCXJldHVybiB0eXBlX19hZGRfdHlwZV9lbnVt
+KHR5cGUsIHRlLCBjdSk7Cj4gKyAKPiArIAkvLyBOb3cgbG9vayBhdCBhICd2aXJ0dWFsIGVudW0n
+LCBpLmUuIHRoZSBjb25jYXRlbmF0aW9uIG9mIG11bHRpcGxlIGVudW1zCj4gKy0JY2hhciAqc2Vw
+ID0gc3RyY2hyKHR5cGVfZW51bSwgJysnKTsKPiArKwljb25zdCBjaGFyICpzZXAgPSBzdHJjaHIo
+dHlwZV9lbnVtLCAnKycpOwo+ICsgCj4gKyAJaWYgKCFzZXApCj4gKyAJCXJldHVybiAtMTsKPiAr
+QEAgLTMxNDgsMTMgKzMxNDcsMTMgQEAgc3RhdGljIGludCB0eXBlX19maW5kX3R5cGVfZW51bShz
+dHJ1Y3QgdHlwZSAqdHlwZSwgc3RydWN0IGN1ICpjdSwgY29uc3QgY2hhciAqdHkKPiArIAo+ICsg
+CWludCByZXQgPSAtMTsKPiArIAo+ICstCXNlcCA9IHR5cGVfZW51bXMgKyAoc2VwIC0gdHlwZV9l
+bnVtKTsKPiArKwljaGFyICpzZXBfbXV0YWJsZSA9IHR5cGVfZW51bXMgKyAoc2VwIC0gdHlwZV9l
+bnVtKTsKPiArKwljaGFyICpjdXIgPSB0eXBlX2VudW1zOwo+ICsgCj4gKy0JdHlwZV9lbnVtID0g
+dHlwZV9lbnVtczsKPiArLQkqc2VwID0gJ1wwJzsKPiArKwkqc2VwX211dGFibGUgPSAnXDAnOwo+
+ICsgCj4gKyAJd2hpbGUgKDEpIHsKPiArLQkJdGUgPSBjdV9fZmluZF9lbnVtZXJhdGlvbl9ieV9u
+YW1lKGN1LCB0eXBlX2VudW0sIE5VTEwpOwo+ICsrCQl0ZSA9IGN1X19maW5kX2VudW1lcmF0aW9u
+X2J5X25hbWUoY3UsIGN1ciwgTlVMTCk7Cj4gKyAKPiArIAkJaWYgKCF0ZSkKPiArIAkJCWdvdG8g
+b3V0Owo+ICtAQCAtMzE2MywxMCArMzE2MiwxMiBAQCBzdGF0aWMgaW50IHR5cGVfX2ZpbmRfdHlw
+ZV9lbnVtKHN0cnVjdCB0eXBlICp0eXBlLCBzdHJ1Y3QgY3UgKmN1LCBjb25zdCBjaGFyICp0eQo+
+ICsgCQlpZiAocmV0KQo+ICsgCQkJZ290byBvdXQ7Cj4gKyAKPiArLQkJaWYgKHNlcCA9PSBOVUxM
+KQo+ICsrCQlpZiAoc2VwX211dGFibGUgPT0gTlVMTCkKPiArIAkJCWJyZWFrOwo+ICstCQl0eXBl
+X2VudW0gPSBzZXAgKyAxOwo+ICstCQlzZXAgPSBzdHJjaHIodHlwZV9lbnVtLCAnKycpOwo+ICsr
+CQljdXIgPSBzZXBfbXV0YWJsZSArIDE7Cj4gKysJCXNlcF9tdXRhYmxlID0gc3RyY2hyKGN1ciwg
+JysnKTsKPiArKwkJaWYgKHNlcF9tdXRhYmxlKQo+ICsrCQkJKnNlcF9tdXRhYmxlID0gJ1wwJzsK
+PiArIAl9Cj4gKyAKPiArIAlyZXQgPSAwOwo+ICstLSAKPiArMi41NS4wCj4gKwo+IGRpZmYgLS1n
+aXQgYS9wYWNrYWdlL3BhaG9sZS8wMDAzLXBhaG9sZS1wcmVzZXJ2ZS1jb25zdC1uZXNzLW9mLWJz
+ZWFyY2gtcmVzdWx0LnBhdGNoIGIvcGFja2FnZS9wYWhvbGUvMDAwMy1wYWhvbGUtcHJlc2VydmUt
+Y29uc3QtbmVzcy1vZi1ic2VhcmNoLXJlc3VsdC5wYXRjaAo+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0
+Cj4gaW5kZXggMDAwMDAwMDAwMC4uN2E0Y2RkZjVkMQo+IC0tLSAvZGV2L251bGwKPiArKysgYi9w
+YWNrYWdlL3BhaG9sZS8wMDAzLXBhaG9sZS1wcmVzZXJ2ZS1jb25zdC1uZXNzLW9mLWJzZWFyY2gt
+cmVzdWx0LnBhdGNoCj4gQEAgLTAsMCArMSwzOCBAQAo+ICtGcm9tIGY1MTBiZjVkM2YzZTM0MDU3
+MTAzMTFjZWI0YTM1MzkyNjcyMThiZGUgTW9uIFNlcCAxNyAwMDowMDowMCAyMDAxCj4gK0Zyb206
+IEZsb3JpYW4gTGFyeXNjaCA8bGFyeXNjaEBmaXhtZS5nbWJoPgo+ICtEYXRlOiBUdWUsIDE0IEp1
+bCAyMDI2IDE2OjAzOjEyICswMjAwCj4gK1N1YmplY3Q6IFtQQVRDSF0gcGFob2xlOiBwcmVzZXJ2
+ZSBjb25zdC1uZXNzIG9mIGJzZWFyY2ggcmVzdWx0Cj4gK01JTUUtVmVyc2lvbjogMS4wCj4gK0Nv
+bnRlbnQtVHlwZTogdGV4dC9wbGFpbjsgY2hhcnNldD1VVEYtOAo+ICtDb250ZW50LVRyYW5zZmVy
+LUVuY29kaW5nOiA4Yml0Cj4gKwo+ICtGaXhlczoKPiArCj4gK3BhaG9sZS9idGZfZW5jb2Rlci5j
+OiBJbiBmdW5jdGlvbiDigJhidGZfZW5jb2Rlcl9fdGFnX2tmdW5j4oCZOgo+ICtwYWhvbGUvYnRm
+X2VuY29kZXIuYzoxNTI2OjE2OiBlcnJvcjogYXNzaWdubWVudCBkaXNjYXJkcyDigJhjb25zdOKA
+mSBxdWFsaWZpZXIgZnJvbSBwb2ludGVyIHRhcmdldCB0eXBlIFstV2Vycm9yPWRpc2NhcmRlZC1x
+dWFsaWZpZXJzXQo+ICsgMTUyNiB8ICAgICAgICAgdGFyZ2V0ID0gYnNlYXJjaCgma2V5LCBiYXNl
+LCBjbnQsIHNpemVvZihrZXkpLCBidGZfZnVuY19jbXApOwo+ICsgICAgICB8ICAgICAgICAgICAg
+ICAgIF4KPiArCj4gK1Vwc3RyZWFtOiBOL0EgKGltcGxpY2l0bHkgZml4ZWQgYXMgcGFydCBvZiBh
+IHJlZmFjdG9yIGluIGNvbW1pdCBjNTY3NzE3Cj4gKygiYnRmX2VuY29kZXI6IFJlZmFjdG9yIGJ0
+Zl9lbmNvZGVyX190YWdfa2Z1bmNzKCkiKSwgcmVsZWFzZWQgaW4gdjEuMzApCj4gK1NpZ25lZC1v
+ZmYtYnk6IEZsb3JpYW4gTGFyeXNjaCA8ZmxAbjYyMS5kZT4KPiArLS0tCj4gKyBidGZfZW5jb2Rl
+ci5jIHwgMiArLQo+ICsgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9u
+KC0pCj4gKwo+ICtkaWZmIC0tZ2l0IGEvYnRmX2VuY29kZXIuYyBiL2J0Zl9lbmNvZGVyLmMKPiAr
+aW5kZXggYzJkZjJiYy4uNDExODAyOCAxMDA2NDQKPiArLS0tIGEvYnRmX2VuY29kZXIuYwo+ICsr
+KysgYi9idGZfZW5jb2Rlci5jCj4gK0BAIC0xNTE2LDcgKzE1MTYsNyBAQCBzdGF0aWMgaW50IGJ0
+Zl9lbmNvZGVyX190YWdfa2Z1bmMoc3RydWN0IGJ0Zl9lbmNvZGVyICplbmNvZGVyLCBzdHJ1Y3Qg
+Z29idWZmZXIgKgo+ICsgewo+ICsgCXN0cnVjdCBidGZfZnVuYyBrZXkgPSB7IC5uYW1lID0ga2Z1
+bmMgfTsKPiArIAlzdHJ1Y3QgYnRmICpidGYgPSBlbmNvZGVyLT5idGY7Cj4gKy0Jc3RydWN0IGJ0
+Zl9mdW5jICp0YXJnZXQ7Cj4gKysJY29uc3Qgc3RydWN0IGJ0Zl9mdW5jICp0YXJnZXQ7Cj4gKyAJ
+Y29uc3Qgdm9pZCAqYmFzZTsKPiArIAl1bnNpZ25lZCBpbnQgY250Owo+ICsgCWludCBlcnIgPSAt
+MTsKPiArLS0gCj4gKzIuNTUuMAo+ICsKPiAtLSAKPiAyLjU1LjAKPiAKPiBfX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGJ1aWxkcm9vdCBtYWlsaW5nIGxp
+c3QKPiBidWlsZHJvb3RAYnVpbGRyb290Lm9yZwo+IGh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9y
+Zy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdApfX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWls
+ZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1
+aWxkcm9vdAo=
