@@ -4,85 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C972C531C9
-	for <buildroot@archiver.kernel.org>; Fri, 24 Jul 2026 16:49:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58492C531C9
+	for <buildroot@archiver.kernel.org>; Fri, 24 Jul 2026 17:16:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BE85540B33;
-	Fri, 24 Jul 2026 16:49:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 68E5040642;
+	Fri, 24 Jul 2026 17:16:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AQPlOXnIw8rn; Fri, 24 Jul 2026 16:49:00 +0000 (UTC)
+ id 1rXcgHjUabNR; Fri, 24 Jul 2026 17:16:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D966D40B8D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8444F40ABA
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1784911739;
-	bh=ocrgyT8GY3SXfciIVWbV0Xv1KwyeKsDga76DNEP5Jkk=;
-	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=PIGTjEmKoODgaWZXK091lPUmX9EY8Dx/Rbgkd79YxVNpeVurongOo5Ooc4kwtrMZ8
-	 eGh/BcD8pOJtPw2DIeLUC1fPlbLH9hrgp2xhLblpWJUq8scsNEJs3pGSb96r+66EZM
-	 ntxerMeogRBiPVjQOs1CyAfdJWhIJKk54kTADvCbds7/mUt0yxAmuSh0Hb7R53Pxl1
-	 3W3BQ3gsUk3c06XpK6Gzeq7pbZEjrS3M+pwQbLHkfXbgNCXnFas6Mf3BvrqENzEGKk
-	 tjI8SxWHA63MlAgNGeQhf8i2w8VUb0wdl/HrorPmW0CW11zhK2HtF50mkE5O3K4CIp
-	 pbTMjMeKtMPOg==
+	s=default; t=1784913369;
+	bh=sYrZqXWLIEp9c3q9+KKmBmS/NMQ2+zOxE569POYa8YY=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=rXhYcfY5quCF/7FCrATmWTHx4jJFnRRH/d3yZrOFKRz3XFOkw2TfrxcxGoNY0RkyC
+	 wegeuCqVz6m2mC6bowEX7nZUgAZ8oVADHk7GZ0GUtb1PW5ZYr+8gqrmIGMjPYMumNv
+	 WSmNMtdbetwGxCEuyEDWIQbOfLer6JDcWQdEEcFIapjl+8J2gpVhAPFZdZqHVpz4hu
+	 dxwm1Yfb5FJvdiQa4Dn/5gK6xMEFkfIzmYQLmZK90xjEoJ5qVliDdODpRGCIcONcLi
+	 YhPy0X5UZXqSrTGGFAfMg6rDapT0RNGUWZkkDrBkKYumbA8NN5Z394XcQCNCR6Zg6P
+	 0z6EVYrcxyy2A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D966D40B8D;
-	Fri, 24 Jul 2026 16:48:59 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 59A70429
- for <buildroot@buildroot.org>; Fri, 24 Jul 2026 16:48:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8444F40ABA;
+	Fri, 24 Jul 2026 17:16:09 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9169142D
+ for <buildroot@buildroot.org>; Fri, 24 Jul 2026 17:16:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4B792400BD
- for <buildroot@buildroot.org>; Fri, 24 Jul 2026 16:48:58 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8327E8117B
+ for <buildroot@buildroot.org>; Fri, 24 Jul 2026 17:16:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cy4i0Vi7a5fy for <buildroot@buildroot.org>;
- Fri, 24 Jul 2026 16:48:57 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id g0PWmmR_xOYR for <buildroot@buildroot.org>;
+ Fri, 24 Jul 2026 17:16:07 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org BDC7840083
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BDC7840083
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C7B9B8116A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C7B9B8116A
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id BDC7840083
- for <buildroot@buildroot.org>; Fri, 24 Jul 2026 16:48:56 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C7B9B8116A
+ for <buildroot@buildroot.org>; Fri, 24 Jul 2026 17:16:06 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a00d2.dip0.t-ipconnect.de [91.58.0.210])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 49A4FA4C412A
- for <buildroot@buildroot.org>; Fri, 24 Jul 2026 18:48:30 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:36132)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id AA97EA4C40EF
+ for <buildroot@buildroot.org>; Fri, 24 Jul 2026 19:16:04 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:52638)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.5)
- (envelope-from <bernd@kuhls.net>) id 1wnJ4Y-000000007PN-1F8S
- for buildroot@buildroot.org; Fri, 24 Jul 2026 16:48:30 +0000
+ (envelope-from <bernd@kuhls.net>) id 1wnJVD-000000006t2-3Dx7
+ for buildroot@buildroot.org; Fri, 24 Jul 2026 17:16:03 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Fri, 24 Jul 2026 18:48:29 +0200
-Message-ID: <20260724164829.304335-3-bernd@kuhls.net>
+Date: Fri, 24 Jul 2026 19:16:03 +0200
+Message-ID: <20260724171603.316901-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260724164829.304335-1-bernd@kuhls.net>
-References: <20260724164829.304335-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202605290044; t=1784911710;
- bh=caowB3txnkDaOb+pfNzFErxME+hoM/aWOstccZYRxFg=;
- h=From:To:Subject:Date:In-Reply-To:From;
- b=EEnZCWKf8EZ0y4F+d5qsRjsOkJfFFk5dW5t0Rqn3hzIAYLSdgDIj5POJKPFm1WI2m
- snZQPqCd4+7S7w4ZYANPPIPAa+ASmPHC1DFHLLc4hy9pCQXfQUam4n8P0PCXrxabAh
- m04DFrVblsmpdX0SVDKcqzK75T5zP169BzZd6rKKopjWAnVGTlYXtjW5czxvthcxni
- 28G7mKqAtdmCPzjGrQhpbHvn+Mo9QfbhYoGdp4N+z0H8h4em/RfjbwtISxQWsqkeAx
- 0A5HOaxjUEWh0XPUGhyttgkdCNEnWs3Rm7Y55/3mxYCqtypCcnTeA8ZE/JZ9b3gm8d
- OvqUj/Ls9wbDw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ s=kas202605290044; t=1784913364;
+ bh=wsoINWOcjQHNOfkpQJJHb9F3Ji628z9VQ2ZiSaTGSDU=;
+ h=From:To:Subject:Date:From;
+ b=nSPHjSQvZUHMsbs6j/2vpN9P48UW3+yNODJzgX/Z5/lTzUm6pmWBJgeZb8KThDEFZ
+ cWeCE3dh7o1TY05YXOZMGA/I6EwCA5f5we3KjXSJ+I08yQAM7R8a16nai/htrrxdBJ
+ wLRy+kk4+2R7ZlkjWvytB9g0MuZADFtWfZMIVrrzdFIWqqUcViXqQ/lmjm+gmed6J+
+ UvFUoTehDSFntuP6S4HwnQRjaIpw0wOjOvWmSzzU+1RudfV+rTBq2qq4UezWvsrDvE
+ eSxig3SOoRJhhTMK7bbSTsdmvlS0W1NdXV7n9/2ndSMpNnrHtMXl+hxxhvNUk9P9nZ
+ hfsryq/NtLSEA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=EEnZCWKf
-Subject: [Buildroot] [PATCH 3/3] package/taglib: bump version to 2.3.1
+ header.s=kas202605290044 header.b=nSPHjSQv
+Subject: [Buildroot] [PATCH 1/1] package/dav1d: bump version to 1.5.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -99,43 +96,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/taglib/taglib/blob/v2.3.1/CHANGELOG.md
-https://mail.kde.org/pipermail/taglib-devel/2026-July/003124.html
+https://code.videolan.org/videolan/dav1d/-/blob/1.5.4/NEWS
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
-Series passed Gitlab pipelines:
-https://gitlab.com/bkuhls/buildroot/-/commits/f4105c8ea013305b24f934cd070256348afd336e
+Gitlab pipelines passed:
+https://gitlab.com/bkuhls/buildroot/-/commits/3643071f8cd1e3750c3fa180ebd911edb87a38c5
 
- package/taglib/taglib.hash | 4 ++--
- package/taglib/taglib.mk   | 2 +-
+ package/dav1d/dav1d.hash | 4 ++--
+ package/dav1d/dav1d.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/taglib/taglib.hash b/package/taglib/taglib.hash
-index b118f610ec..6c47694c28 100644
---- a/package/taglib/taglib.hash
-+++ b/package/taglib/taglib.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/taglib/taglib/releases/tag/v2.3
--sha256  7349f6fd942418bc7009ebe743eb7c9d055f02921ec56fa436ec25007c47fd38  taglib-2.3.tar.gz
-+# From https://github.com/taglib/taglib/releases/tag/v2.3.1
-+sha256  a19d90e6fd41d09a0281ec0fe762d51491d7a6ccffc923c4f7868c5e647ca230  taglib-2.3.1.tar.gz
- # Locally calculated
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
- sha256  53692a2ed6c6a2c6ec9b32dd0b820dfae91e0a1fcdf625ca9ed0bdf8705fcc4f  COPYING.MPL
-diff --git a/package/taglib/taglib.mk b/package/taglib/taglib.mk
-index 9a111a86c6..0a8f371371 100644
---- a/package/taglib/taglib.mk
-+++ b/package/taglib/taglib.mk
+diff --git a/package/dav1d/dav1d.hash b/package/dav1d/dav1d.hash
+index b6bae42e8f..8c1a989c16 100644
+--- a/package/dav1d/dav1d.hash
++++ b/package/dav1d/dav1d.hash
+@@ -1,4 +1,4 @@
+-# From https://download.videolan.org/pub/videolan/dav1d/1.5.3/dav1d-1.5.3.tar.xz.sha256
+-sha256  732010aa5ef461fa93355ed2c6c5fedb48ddc4b74e697eaabe8907eaeb943011  dav1d-1.5.3.tar.xz
++# From https://download.videolan.org/pub/videolan/dav1d/1.5.4/dav1d-1.5.4.tar.xz.sha256
++sha256  686616b7c69eb88d44459391ab25cac13b6647a3b288835c5784e71c1514a5c5  dav1d-1.5.4.tar.xz
+ # Locally computed
+ sha256  dd92c3c2247c5651606fc23a5e2d6a1ebc5ace9a3e49cbde0e12f05ad1cb1ee5  COPYING
+diff --git a/package/dav1d/dav1d.mk b/package/dav1d/dav1d.mk
+index 011ab2ddf0..6808d8a078 100644
+--- a/package/dav1d/dav1d.mk
++++ b/package/dav1d/dav1d.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TAGLIB_VERSION = 2.3
-+TAGLIB_VERSION = 2.3.1
- TAGLIB_SITE = https://taglib.org/releases
- TAGLIB_INSTALL_STAGING = YES
- TAGLIB_DEPENDENCIES = utfcpp
+-DAV1D_VERSION = 1.5.3
++DAV1D_VERSION = 1.5.4
+ DAV1D_SOURCE = dav1d-$(DAV1D_VERSION).tar.xz
+ DAV1D_SITE = https://download.videolan.org/pub/videolan/dav1d/$(DAV1D_VERSION)
+ DAV1D_LICENSE = BSD-2-Clause
 -- 
 2.47.3
 
