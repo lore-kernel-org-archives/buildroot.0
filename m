@@ -1,88 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5412C531C9
-	for <buildroot@archiver.kernel.org>; Sat, 25 Jul 2026 15:16:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BAF51C531C9
+	for <buildroot@archiver.kernel.org>; Sat, 25 Jul 2026 21:30:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6720340595;
-	Sat, 25 Jul 2026 15:16:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 32E3F60649;
+	Sat, 25 Jul 2026 21:30:09 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id W4Wjbza1aVHh; Sat, 25 Jul 2026 21:30:08 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 16D0C6064B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1785015008;
+	bh=09RVdLqt0gaJj3U1bBKa3uPDtM8QquLYQLD9DhonMGM=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=VQTd6IuMaoap7hq6nPbthJOvEF4v1KeGTZt3CQrjo0bTpdTIU8gciky4kH+OZEYHH
+	 XC9noPEEC5ESQWqys21GKhD62lKLtx3ro0YakI+lndlQDXb7DD0U1T1a8uUNJc/y8U
+	 WdGddwHdXfK7OnQrScuUY0kkArdE/nMhPfOHCQe2SYH8tG7gACFUpu3hP5D3XHWNdJ
+	 L+9wl2Boy9yqJWd5XwpfALHX6I8rg36Ni8St+nWtbF7F3DfmOB78+nYmzRah4Bf7/V
+	 EgZVhd4r0RJzPu/TflNzbsqfCdpC/moFqSqRFqNFkTaP5CRcXm1bquO0yZb6YnERdF
+	 ylB/UdrX6Wmlw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 16D0C6064B;
+	Sat, 25 Jul 2026 21:30:08 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5D383347
+ for <buildroot@buildroot.org>; Sat, 25 Jul 2026 21:30:06 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5B0A5406EF
+ for <buildroot@buildroot.org>; Sat, 25 Jul 2026 21:30:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id h7ZtkLIzLZCo; Sat, 25 Jul 2026 15:16:48 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 93F4B40793
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1784992608;
-	bh=uWblEgScBwkd0one+z9F0ipe1Cb1j7MW+tYynDkhD3w=;
-	h=Date:To:Cc:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=WG7bjeLrHG6W5FaTqUnPpFGXOncXLv2VDBOpbk+x9VWxJNnVNtV69S2RxMJzsqsDT
-	 neY98y09d8Gb+AKlmGBRjdSua9Uj5/KbB8nmOMSGiPKGeRSgD2FzhCzVfHgC/XzqSM
-	 d1KQBllnDlzMA3PFeZPzKQWpNiwFbkDkEKEFqCv2OxKUOdvRVUlhJqcpoQM/K32NLj
-	 OuHIr61IA16HrzlmHu4D/HTLTAofFPsFPvLLKmntfVUkwNgeVN2RxP8oDl7Bz17BzL
-	 coBeP8nHZJuxkYYytz5gdeXCEilVoZgvj0OxwsrsbfTm3ZKhqID7TiaLL73fpWH/S0
-	 qKeeUfxlZA8Iw==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 93F4B40793;
-	Sat, 25 Jul 2026 15:16:48 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id BE6CB977
- for <buildroot@buildroot.org>; Sat, 25 Jul 2026 15:16:46 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A3A5E80CA4
- for <buildroot@buildroot.org>; Sat, 25 Jul 2026 15:16:46 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Csx4E8we2mdK for <buildroot@buildroot.org>;
- Sat, 25 Jul 2026 15:16:45 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=147.173.1.68;
- helo=mailgw-out1.grenoble.cnrs.fr; envelope-from=bonet@grenoble.cnrs.fr;
+ id hiHDRc9GlhHs for <buildroot@buildroot.org>;
+ Sat, 25 Jul 2026 21:30:05 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0DE1580CA3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0DE1580CA3
-Received: from mailgw-out1.grenoble.cnrs.fr (mailgw-out1.grenoble.cnrs.fr
- [147.173.1.68])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0DE1580CA3
- for <buildroot@buildroot.org>; Sat, 25 Jul 2026 15:16:44 +0000 (UTC)
-Received: from [IPV6:2a01:e0a:12:eba0:66ff:fe4c:e46c:fa32] (unknown
- [IPv6:2a01:e0a:12:eba0:66ff:fe4c:e46c:fa32])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits))
- (No client certificate requested)
- by mailgw-out1.grenoble.cnrs.fr (Postfix) with ESMTPSA id 7C7E0C1387;
- Sat, 25 Jul 2026 17:11:10 +0200 (CEST)
-Message-ID: <499674f6-6f37-400f-95b6-bb690ab203c4@grenoble.cnrs.fr>
-Date: Sat, 25 Jul 2026 17:11:10 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US, fr
-To: Buildroot development <buildroot@buildroot.org>
-Cc: Biagio Montaruli <biagio.hkr@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=grenoble.cnrs.fr; 
- s=202106-grenoble.cnrs.fr; t=1784992270;
- bh=FFs6AYuqOsW1nSWeyWa5ysvbTWFP5YGNKsuyXA9Uh1Y=;
- h=Date:To:Cc:From:Subject:From;
- b=bho1brWG2CDN8WgqCQKXRJDJlCH0eexBMBAWp1RA/HUT5OIJkjEFpraEjEjIIQOXo
- obnBv+dqZiJj4FdVsP2PEELwT3QCHFRn3h03Vbw6nIxVneWFNK7BM9NT4gDxjjAJKR
- N+DJzKZyMuZpsL5WMYHc3k2NndGa5KqprW4PnDyP3npGzDNkd1d2ImuwcfCuVifUjZ
- OF8zUj5Kp0TRZDD/IUkCQX8ZEdAnZ2FtxYe0AV1miokqMjJZoiJ9Gtu3TbxynonH98
- G39RxBMPv9F/SQaUnfEvCxnXThr9WugztB0Cug144qmqgDk36v+5IUWdyjlUU788d4
- 6kogism0XRWsQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=grenoble.cnrs.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=grenoble.cnrs.fr header.i=@grenoble.cnrs.fr
- header.a=rsa-sha256 header.s=202106-grenoble.cnrs.fr header.b=bho1brWG
-Subject: [Buildroot] [PATCH 1/1] configs/acmesystems_acqua_a5_*: bump to
- Linux 6.18.40
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 49C99406EE
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 49C99406EE
+ for <buildroot@buildroot.org>; Sat, 25 Jul 2026 21:30:05 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id E77608A5F4; Sat, 25 Jul 2026 21:29:24 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 25 Jul 2026 23:25:15 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 19c1f93e1293414ace60ced20d5058b096268820
+X-Git-Newrev: 44a4d39ac493811e03898b6103478d73eb0ff7a6
+X-Patchwork-Hint: ignore
+Message-Id: <20260725212924.E77608A5F4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libosmium: bump version to 2.23.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,61 +68,100 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Edgar Bonet via buildroot <buildroot@buildroot.org>
-Reply-To: Edgar Bonet <bonet@grenoble.cnrs.fr>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Edgar Bonet <bonet@grenoble.cnrs.fr>
----
-Note: this is meant for the Buildroot master branch.
- * on 2025.02.x LTS, these defconfigs are based on the 6.12 LTS kernel
-   branch; I sent a separate patch for this branch
- * I don't know whether it is worth backporting to 2026.05.x
----
- board/acmesystems/acqua-a5/patches/linux/linux.hash | 2 +-
- configs/acmesystems_acqua_a5_256mb_defconfig        | 2 +-
- configs/acmesystems_acqua_a5_512mb_defconfig        | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/44a4d39ac493811e03898b6103478d73eb0ff7a6
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-diff --git a/board/acmesystems/acqua-a5/patches/linux/linux.hash b/board/acmesystems/acqua-a5/patches/linux/linux.hash
-index f83883b936..67e419e2f0 100644
---- a/board/acmesystems/acqua-a5/patches/linux/linux.hash
-+++ b/board/acmesystems/acqua-a5/patches/linux/linux.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  37f0c5d5c242c1d604e87d48f08795e861a5a85f725b4ca11d0a538f12ff8cff  linux-6.18.8.tar.xz
-+sha256  3712fc1ec839e4daac981176c8518912e8f452650aaedfe4381da4419613a431  linux-6.18.40.tar.xz
-diff --git a/configs/acmesystems_acqua_a5_256mb_defconfig b/configs/acmesystems_acqua_a5_256mb_defconfig
-index f2ab66631f..3eb805b530 100644
---- a/configs/acmesystems_acqua_a5_256mb_defconfig
-+++ b/configs/acmesystems_acqua_a5_256mb_defconfig
-@@ -11,7 +11,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/acmesystems/acqua-a5/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.8"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.40"
- BR2_LINUX_KERNEL_DEFCONFIG="sama5"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_CUSTOM_DTS_DIR="board/acmesystems/acqua-a5/dts"
-diff --git a/configs/acmesystems_acqua_a5_512mb_defconfig b/configs/acmesystems_acqua_a5_512mb_defconfig
-index 172eaef39f..0664a268b0 100644
---- a/configs/acmesystems_acqua_a5_512mb_defconfig
-+++ b/configs/acmesystems_acqua_a5_512mb_defconfig
-@@ -11,7 +11,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/acmesystems/acqua-a5/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.8"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.40"
- BR2_LINUX_KERNEL_DEFCONFIG="sama5"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_CUSTOM_DTS_DIR="board/acmesystems/acqua-a5/dts"
--- 
-2.43.0
+Changelog: https://github.com/osmcode/libosmium/blob/v2.23.1/CHANGELOG.md
+
+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ .../0001-Require-a-more-modern-CMake.patch         | 45 ----------------------
+ package/libosmium/libosmium.hash                   |  2 +-
+ package/libosmium/libosmium.mk                     |  2 +-
+ 3 files changed, 2 insertions(+), 47 deletions(-)
+
+diff --git a/package/libosmium/0001-Require-a-more-modern-CMake.patch b/package/libosmium/0001-Require-a-more-modern-CMake.patch
+deleted file mode 100644
+index 6c39e751fb..0000000000
+--- a/package/libosmium/0001-Require-a-more-modern-CMake.patch
++++ /dev/null
+@@ -1,45 +0,0 @@
+-From 7ab87418a0697ac9b7b5f005fbd64dcd99a01124 Mon Sep 17 00:00:00 2001
+-From: Jochen Topf <jochen@topf.org>
+-Date: Tue, 15 Jul 2025 17:19:57 +0200
+-Subject: [PATCH] Require a more modern CMake
+-
+-So it works with CMake 4
+-
+-See #391
+-
+-Upstream: https://github.com/osmcode/libosmium/commit/7ab87418a0697ac9b7b5f005fbd64dcd99a01124
+-
+-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+----
+- CMakeLists.txt | 11 ++---------
+- 1 file changed, 2 insertions(+), 9 deletions(-)
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index cfeffa8e..80f6bfe1 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -6,7 +6,7 @@
+- #
+- #-----------------------------------------------------------------------------
+- 
+--cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
+-+cmake_minimum_required(VERSION 3.10.0 FATAL_ERROR)
+- list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
+- 
+- 
+-@@ -36,14 +36,7 @@ set(CMAKE_CONFIGURATION_TYPES "Debug;Release;RelWithDebInfo;MinSizeRel;Dev;Cover
+- #
+- #-----------------------------------------------------------------------------
+- 
+--project(libosmium)
+--
+--set(LIBOSMIUM_VERSION_MAJOR 2)
+--set(LIBOSMIUM_VERSION_MINOR 22)
+--set(LIBOSMIUM_VERSION_PATCH 0)
+--
+--set(LIBOSMIUM_VERSION
+--    "${LIBOSMIUM_VERSION_MAJOR}.${LIBOSMIUM_VERSION_MINOR}.${LIBOSMIUM_VERSION_PATCH}")
+-+project(libosmium VERSION 2.22.0 LANGUAGES CXX C)
+- 
+- set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+- 
+diff --git a/package/libosmium/libosmium.hash b/package/libosmium/libosmium.hash
+index 9f09024f74..28cd63532f 100644
+--- a/package/libosmium/libosmium.hash
++++ b/package/libosmium/libosmium.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  8f74e3f6ba295baa7325ae5606e8f74ad9056f1d6ab4555c50bff6aa8246f366  libosmium-2.22.0.tar.gz
++sha256  eb47d8163396c73870dbf27819dcadda0c56f0191935c4f8659d1e61b261552f  libosmium-2.23.1.tar.gz
+ sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE
+diff --git a/package/libosmium/libosmium.mk b/package/libosmium/libosmium.mk
+index 5b73b3a128..c7736668f5 100644
+--- a/package/libosmium/libosmium.mk
++++ b/package/libosmium/libosmium.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBOSMIUM_VERSION = 2.22.0
++LIBOSMIUM_VERSION = 2.23.1
+ LIBOSMIUM_SITE = $(call github,osmcode,libosmium,v$(LIBOSMIUM_VERSION))
+ LIBOSMIUM_LICENSE = BSL-1.0
+ LIBOSMIUM_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
