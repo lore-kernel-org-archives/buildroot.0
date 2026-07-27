@@ -1,112 +1,95 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53C6FC531D0
-	for <buildroot@archiver.kernel.org>; Mon, 27 Jul 2026 06:51:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BE9BC531D0
+	for <buildroot@archiver.kernel.org>; Mon, 27 Jul 2026 07:39:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C1F5280C76;
-	Mon, 27 Jul 2026 06:51:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F2C8660651;
+	Mon, 27 Jul 2026 07:39:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XIz7t96Kphaw; Mon, 27 Jul 2026 06:51:17 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OYKKtOWIijys; Mon, 27 Jul 2026 07:39:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6487780B1E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DB1CA605F5
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1785135077;
-	bh=YwDjkYDlvrvykbNceBjc4trhx8uH6IOzWFQgC8L3xTw=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=oSwMmvwOndWZEETPZ9QbDG52ed6LVys+1nnjeW9pbulnH+FVTI9CmNUVT8elOVz8n
-	 koW053uDaS9/4ohdT5LM+frdpyC9SxW5NXsC6E1DB2DIFpH0+FuIRFW0ED0vSpA7JA
-	 lXp/wZ/ehafwrQQMFNx0itp8zESRbZMC4Y8svc2bKhzKXbJ80fXoyenxBAYUcuqspa
-	 WydiLB8y1YpV/7DiawYIPZuWBELGpP5V3SwiHkz2RkwTeyV6VtmSsoAT1X5ChJY5dl
-	 xmslOloHfITmFKtMqa/9ztVyh7MdtOsWq4MdqwR+cnAlbDFqS/kTP/cmX6wtUT0OSL
-	 zUH/QKE+AwF9w==
+	s=default; t=1785137992;
+	bh=2KTJE7ZFKpMnvsZ0nxTaxVV/i+FqNg0niBINf/vJJD4=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=Rvx8dxCR6vc1qDqfgVii01dN12AdS1XmXIU/9wakP/+TFuXmQCiGkg+iX5qH0L9uV
+	 HIWQqldWQoBD8gC+ZaURS80efWEpHP+kERFoJAdV6daTBARyHki7hUjyZQKiMFrKMd
+	 rcosHII0QeMDX4kfPNjsWXc62H/Ug7sfqET92DrlpHHa0zSeuuXrFm2jBrQEpzEJ0A
+	 e4pJj+pBk6cxL5XvIPpIfEErOSeD4j99CVyToNbCfTZOt8BoN1v3its/Paq+DPZx1v
+	 VdcGIdQaZAWm7luQvnBfglm5+flcMD3cKPooH6PZyYh+1SCMsGTXv7B+3x7qPA2LsS
+	 biD6j3nopPGzg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6487780B1E;
-	Mon, 27 Jul 2026 06:51:17 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id BEE68490
- for <buildroot@buildroot.org>; Mon, 27 Jul 2026 06:51:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DB1CA605F5;
+	Mon, 27 Jul 2026 07:39:52 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7BAA0350
+ for <buildroot@buildroot.org>; Mon, 27 Jul 2026 07:39:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9B0C180B1E
- for <buildroot@buildroot.org>; Mon, 27 Jul 2026 06:51:16 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6D6C440621
+ for <buildroot@buildroot.org>; Mon, 27 Jul 2026 07:39:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WQxp3ZRsDhYB for <buildroot@buildroot.org>;
- Mon, 27 Jul 2026 06:51:16 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32a; helo=mail-wm1-x32a.google.com;
- envelope-from=francois.perrad.86@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 69E8780A9B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 69E8780A9B
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
- [IPv6:2a00:1450:4864:20::32a])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 69E8780A9B
- for <buildroot@busybox.net>; Mon, 27 Jul 2026 06:51:15 +0000 (UTC)
-Received: by mail-wm1-x32a.google.com with SMTP id
- 5b1f17b1804b1-4956242332dso20643795e9.2
- for <buildroot@busybox.net>; Sun, 26 Jul 2026 23:51:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1785135073; x=1785739873;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to:content-type;
- bh=i92TLlYQMI+5m5MvYQQXgnjh+q0QvxQy/n5WwFCkr+M=;
- b=ogEfXQThPbDV9KKn4NHkHtbZBZR+jX2+BzG5zcOMv1XZmIHtXu4+havHUTo92K7T/e
- qPmZoO0FSnR9cevowYNFI1Mtso+OP5ChaVTUoDU2ZbW7Pzy9otwYkwEK5ErsOvMYOcEl
- YaXvmY9s98RplvKhNMPtDrZ0WxfTSHrvknpGq12LquQXbdbgQkeqqhx2fIumSwGiZJ9C
- HMrJhgaXHZDgYD04nESyrHOha0wvUHejP5a26n5TSlECtBZzZT5NlIcHKWXyUj+xE/WI
- c6gkz/ZMmCkVf2LiAKvKS5sIRcl1W6PI9h/uv+w0Yf0lTcIQHy08ZftEFIE+sPTNF6XD
- rAPQ==
-X-Gm-Message-State: AOJu0Yw7WRtfM7wngMRlgrz67soIVu5dUqbYJAq2jSOwwbFtS7dTcMoV
- xOXgDZt0ZX6UE/oygudDd23AYiqaerjLzv7WzYH6kRCNFMlfoHfznITIWpOSOA==
-X-Gm-Gg: AR+sD13Dy8WGo92bS1NzZ/0cIiqGi+RLkFl2DROF4R+Kpd79CNPMOmuf0gkNUHgNdbR
- TqA19pFwlcL5AtBoBXkEHpRu/PnLwvl7+tI2ih6tH+fnSYj1Hb8quvhadq6R6YFXeQq80iVqVnp
- hsqdw0dbvYMSJRLalHJRkBQtXWS5N5hAcW4oqutZcSOLFtJLXQOu8iCoFaUuXEG6KpxPcJpjBPc
- AE8BBBK/aL4B06jI97uvyFIuXVuS4LRewyGQ4lM8jHUoA5D1lqf0ox1Va6AVkyLq/CFG6D7dwKu
- KUxpD/V5jk58tO4dgjICCeKcbDfKiVHaW97iJvn4H8n7IiQ/vi0Zci3OiMi8kjH0HzzBXw5ZWPb
- lDvbDwDYqiiaLBuWuKrXGroVzsVVbA/OlTP0swNFxoJrCbKPfYoxsEW/TsCjXw1rmZgipMrFmpx
- dR3xCxZufFJOmuHoDXaxcLCzjRB3tOsHvRALM=
-X-Received: by 2002:a05:600c:1387:b0:495:5b4a:53b7 with SMTP id
- 5b1f17b1804b1-496bd695ff4mr47366125e9.19.1785135072869; 
- Sun, 26 Jul 2026 23:51:12 -0700 (PDT)
-Received: from vm-2404.. (132.187.66.37.rev.sfr.net. [37.66.187.132])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-496b4858e28sm221518295e9.2.2026.07.26.23.51.12
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 26 Jul 2026 23:51:12 -0700 (PDT)
-From: Francois Perrad <francois.perrad.86@gmail.com>
-To: buildroot@busybox.net
-Cc: Francois Perrad <francois.perrad.86@gmail.com>
-Date: Mon, 27 Jul 2026 08:51:07 +0200
-Message-ID: <20260727065108.409958-1-francois.perrad.86@gmail.com>
-X-Mailer: git-send-email 2.43.0
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AvcsB0MK7Kpz for <buildroot@buildroot.org>;
+ Mon, 27 Jul 2026 07:39:50 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.221.237.201;
+ helo=send106.i.mail.ru; envelope-from=fido_max@inbox.ru; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7D76F40613
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7D76F40613
+Received: from send106.i.mail.ru (send106.i.mail.ru [89.221.237.201])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7D76F40613
+ for <buildroot@buildroot.org>; Mon, 27 Jul 2026 07:39:48 +0000 (UTC)
+Received: by exim-smtp-6c76488b9f-rhmln with esmtpa (envelope-from
+ <fido_max@inbox.ru>)
+ id 1woFw8-0000000024R-1zn0; Mon, 27 Jul 2026 10:39:44 +0300
+To: buildroot@buildroot.org
+Cc: Maxim Kochetkov <fido_max@inbox.ru>
+Date: Mon, 27 Jul 2026 10:39:43 +0300
+Message-ID: <20260727073943.77167-1-fido_max@inbox.ru>
+X-Mailer: git-send-email 2.53.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1785135073; x=1785739873; darn=busybox.net;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
- bh=i92TLlYQMI+5m5MvYQQXgnjh+q0QvxQy/n5WwFCkr+M=;
- b=GHMAomcrEH0JyHXgMGIJDypm2Rno9vyOapW+e55MurGtY5X/qW+YQAktROlqjs5AZJ
- OjDBHek6LcAsGwV/DqYQBG5a+D4x2kGF8s5F3VDp4D/E6jezxUP+o7JWJW5Xc9tIBktu
- TBbFuf0EeabXHnSxwFh3nGsEzi3gEWyivS3mvUR46icScm7V73p8r1Ar5aFtxMl5sTfH
- svz5nO822f2WJqN9svKerunAMyGoDaQ+hpACLlycLVG1qt2anZMVItFAl0Qg9jglImyb
- 5cONyPMQq2i2UacktWeQsMry7xL6D6wkLOFK5RKqHbuLvNIuLdxuhLu59G+Dsh7g17z8
- Z71A==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailru-Src: smtp
+X-7564579A: 646B95376F6C166E
+X-77F55803: 4F1203BC0FB41BD93ED3C6BF6FFA701FF8A76E406820F599B2674E17FE637CF0182A05F538085040A3C219F611FBCB3D3DE06ABAFEAF6705797BA6EE28909BA2B5D9755D177B738125FF584C251F6817
+X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE7B7733D0215A2F71AEA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F7900637AC83A81C8FD4AD23D82A6BABE6F325AC2E85FA5F3EDFCBAA7353EFBB553375666E0AFCC7CBCEC7C741A4EF86EC714095D60F06051E32EFC90DFAB8F21A90F6A38EEF46B7454FC60B9742502CCDD46D0D1D471462564A2E19F6B57BC7E64490618DEB871D839B73339E8FC8737B5C2249FE5EE7C534F234F5CC7F00164DA146DAFE8445B8C89999729449624AB7ADAF37F6B57BC7E64490611E7FA7ABCAF51C92176DF2183F8FC7C086DB53B01D1D7C7B8941B15DA834481F9449624AB7ADAF372E808ACE2090B5E14AD6D5ED66289B5259CC434672EE63711DD303D21008E298D5E8D9A59859A8B6B372FE9A2E580EFC725E5C173C3A84C3335407143AA9223635872C767BF85DA2F004C90652538430E4A6367B16DE6309
+X-C1DE0DAB: 0D63561A33F958A525C0055343502F5D5002B1117B3ED69681E2218B153AA7074869453249F34FA4823CB91A9FED034534781492E4B8EEAD528DE7AA5F2BD788C79554A2A72441328621D336A7BC284946AD531847A6065A535571D14F44ED41
+X-C8649E89: 1C3962B70DF3F0AD73CAD6646DEDE191716CD42B3DD1D34C77DD89D51EBB774225B6776AC983F447FC0B9F89525902EE6F57B2FD27647F25E66C117BDB76D659A4C35BC2627C75BABA42348F49E10926B8537A29F416CD7C44380131B20F11D278C025F839D3E21BB8341EE9D5BE9A0AC95DBD425FFEABFC6A45A832DE7C6168D245463310BD45BB8CD93680B12512CF4C41F94D744909CEE921556F0E976A29E6EC0772259F8F8F8815B87D7EC76CB9
+X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu53w8ahmwBjZKM/YPHZyZHvz5uv+WouB9+ObcCpyrx6l7KImUglyhkEat/+ysWwi0gdhEs0JGjl6ggRWTy1haxBpVdbIX1nthFXMZebaIdHP2ghjoIc/363UZI6Kf1ptIMVYrk7BQKFwEtP9+WQQEIRI0e7kd3ZSWGjg==
+X-Mailru-Sender: 689FA8AB762F7393520AF17B8A65FDE2ACB15412850D887F97FA9D4D9454D66F2F7DC8A2BE5F1E5890DE4A6105A3658D481B2AED7BCCC0A49AE3A01A4DD0D55C6C99E19F044156F45FEEDEB644C299C0ED14614B50AE0675
+X-Mras: Ok
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; d=inbox.ru; 
+ s=mail4; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:Cc:
+ To:From:From:Sender:Reply-To:To:Cc:Content-Type:Content-Transfer-Encoding:
+ Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+ Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+ List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive:
+ X-Cloud-Ids:Disposition-Notification-To;
+ bh=RO5fqUdesyKavMPC5ZbqKLFCx4xw4YGvmSQ1nDqTMF8=; t=1785137989; x=1785227989; 
+ b=ZUiLxaM3gJKrTRd360ZQjhLX5m5NWkAlBGPUpGsbV9ez8LyWYB4v5EXEJgpeARnXoNHprZlghwT
+ 7OF1zRejLul3pIKqjIpums+h/hGOgQkjHyfSt9fPh4Rx4nQ8422CiXGzDrzpg9ZZf2SXgBWeL5v4G
+ t4yLJM4LnzhfuLYyWerse8WyaSJCu/2WEYEZEnPU/aIMPvYCQ/1EstWM3NtCZstovyCG3L3NR4IVv
+ Y39vWMW1EAsn0dCCZFo3A+QSIEQL7EIzr28oXevKu35Ul8E9PdNtRUVz2tnooxl3JCIzh3LXpoP5M
+ Lyy4DTciC3fGPrIaXbK4JmGa/y3I7bGPWMrA==;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=inbox.ru
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20251104 header.b=GHMAomcr
-Subject: [Buildroot] [PATCH] package/lua-lyaml: bump to version 6.2.9
+ unprotected) header.d=inbox.ru header.i=@inbox.ru header.a=rsa-sha256
+ header.s=mail4 header.b=ZUiLxaM3
+X-Mailman-Original-Authentication-Results: exim-smtp-6c76488b9f-rhmln;
+ auth=pass
+ smtp.auth=fido_max@inbox.ru smtp.mailfrom=fido_max@inbox.ru
+Subject: [Buildroot] [PATCH 1/1] package/osm2pgsql: bump version to 2.3.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -118,49 +101,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Maxim Kochetkov via buildroot <buildroot@buildroot.org>
+Reply-To: Maxim Kochetkov <fido_max@inbox.ru>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-diff LICENSE: update copyright years
-    -Copyright (C) 2013-2022 Gary V. Vaughan
-    +Copyright (C) 2013-2026 Gary V. Vaughan
+Release-notes, since 2.2.0:
+https://github.com/osm2pgsql-dev/osm2pgsql/releases/tag/2.3.0
+https://github.com/osm2pgsql-dev/osm2pgsql/releases/tag/2.3.1
 
-for changelog, see:
-https://github.com/gvvaughan/lyaml/releases
-
-Signed-off-by: Francois Perrad <francois.perrad.86@gmail.com>
+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
 ---
- package/lua-lyaml/lua-lyaml.hash | 4 ++--
- package/lua-lyaml/lua-lyaml.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/osm2pgsql/osm2pgsql.hash | 2 +-
+ package/osm2pgsql/osm2pgsql.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/lua-lyaml/lua-lyaml.hash b/package/lua-lyaml/lua-lyaml.hash
-index a8599bc3d..49c98d980 100644
---- a/package/lua-lyaml/lua-lyaml.hash
-+++ b/package/lua-lyaml/lua-lyaml.hash
+diff --git a/package/osm2pgsql/osm2pgsql.hash b/package/osm2pgsql/osm2pgsql.hash
+index 6c04d4e989..1e2a8f0c7f 100644
+--- a/package/osm2pgsql/osm2pgsql.hash
++++ b/package/osm2pgsql/osm2pgsql.hash
 @@ -1,3 +1,3 @@
- # locally computed
--sha256  c6169f516ff2a8da96d55aa3a087e718edf7bceb2f1cae2def4e65cd2b41ac2d  lua-lyaml-6.2.8.tar.gz
--sha256  796d267e51d61652c55694d21108e7352e98b1ed489ab7516acc07102157e08d  LICENSE
-+sha256  515e81d21903c1e428b017f2fe9dffa4e29ae9881b0d49ddbe6ba625e3164fe3  lua-lyaml-6.2.9.tar.gz
-+sha256  30847a6989db6d5aeee177099fbaa1aaba793a0e5359ab0dafe1582eefb5a028  LICENSE
-diff --git a/package/lua-lyaml/lua-lyaml.mk b/package/lua-lyaml/lua-lyaml.mk
-index 00a868ec2..965060dd6 100644
---- a/package/lua-lyaml/lua-lyaml.mk
-+++ b/package/lua-lyaml/lua-lyaml.mk
+ # Locally calculated
+-sha256  567dad078f8a66d6d706ac1876b5251b688109d16974909d89ce2056d6e9f258  osm2pgsql-2.2.0.tar.gz
++sha256  e90461bd78787fd5cf82f73ac4bc0cfccbc4f498f35dce59eb4d168a380d6ac0  osm2pgsql-2.3.1.tar.gz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/osm2pgsql/osm2pgsql.mk b/package/osm2pgsql/osm2pgsql.mk
+index 10e64e75a6..66d693bfcf 100644
+--- a/package/osm2pgsql/osm2pgsql.mk
++++ b/package/osm2pgsql/osm2pgsql.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LUA_LYAML_VERSION = 6.2.8
-+LUA_LYAML_VERSION = 6.2.9
- LUA_LYAML_NAME_UPSTREAM = lyaml
- LUA_LYAML_SITE = $(call github,gvvaughan,$(LUA_LYAML_NAME_UPSTREAM),v$(LUA_LYAML_VERSION))
- LUA_LYAML_LICENSE = MIT
+-OSM2PGSQL_VERSION = 2.2.0
++OSM2PGSQL_VERSION = 2.3.1
+ OSM2PGSQL_SITE = $(call github,osm2pgsql-dev,osm2pgsql,$(OSM2PGSQL_VERSION))
+ OSM2PGSQL_LICENSE = GPL-2.0+
+ OSM2PGSQL_LICENSE_FILES = COPYING
 -- 
-2.43.0
+2.53.0
 
 _______________________________________________
 buildroot mailing list
