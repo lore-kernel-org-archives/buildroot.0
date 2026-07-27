@@ -4,68 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E1F1C531C9
-	for <buildroot@archiver.kernel.org>; Sun, 26 Jul 2026 16:13:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 626C3C531D0
+	for <buildroot@archiver.kernel.org>; Mon, 27 Jul 2026 05:16:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 97429406D2;
-	Sun, 26 Jul 2026 16:13:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D06C040553;
+	Mon, 27 Jul 2026 05:16:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gONkpmOiqaY8; Sun, 26 Jul 2026 16:13:12 +0000 (UTC)
+ id sRvC2nHQP1XF; Mon, 27 Jul 2026 05:16:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 50EAE406CD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B9F7C403A1
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1785082392;
-	bh=h8E9oLXX0utXk8IW9SRhQVebvPHZ2Xs4+OkjYIVC71o=;
+	s=default; t=1785129373;
+	bh=MtUST3WucmTRfllfqoWztQCP1TydvUyJMuNmgLjEfyQ=;
 	h=To:From:Date:References:Subject:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From;
-	b=jHUdm5y3Zoyf+uAYLqmaZkWpBDB0YyL0gTnmXpPgLNRfNDI3CroJnSzkJ5dK5u2SC
-	 po7n4GzuEblJ2y3NyCuTeoHbcX4jLxJJdw45xv3ErBewkdpb3GBtz9Wkzcpdnak78A
-	 3/FCcKuBwnW7wZm3+tnkY72hm5BWt8+5i+htULb2jtjOkBtzIvOi9rGWtGXYu+J6u7
-	 +mTDSHt/YLvT0WKJ7I+xdnNn3At9GZyxt+H+RQTRYSYMqbcfwhcJzzFqO/Nwpxpr4T
-	 nt4p3O3bbD2ulfT4tuiuGEgpD5GjXaIcCvHhjT0TkIKueOeQFdKIsbJgazWXCYBo0l
-	 +kED+51VWm+xw==
+	b=Y/DZtUgZpA59x6fvPNV2/mOfBjkzY5h+yD2l0eGiBc2riMVPQczzte8R2DOjU0moG
+	 oEjJDuObt0Fq5V4vx3f818EXvYkxRDPwMOZW93oVkv4Xv23XxHCjJ8wwCUN4fUgAuf
+	 LZLDnSnPJiDS5UwDGFHGtTfqVHoLWTlexM9HxTI8V6rm0Gyt/fNPkPejYcox502CiK
+	 GCkbkzKBAA0cQlCdLgzN15oDRovJo6ll3bhUWIsNedJHguGoyH04oURKw+BU6/SFfW
+	 PZxeFw60XRhmuRMg5K30t76cHg0Y1sBxLMuNde9+vPy4No5DeMUz+x3L9WDSt+DU4H
+	 VCgiHXDZJBu6A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 50EAE406CD;
-	Sun, 26 Jul 2026 16:13:12 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 324B7357
- for <buildroot@buildroot.org>; Sun, 26 Jul 2026 16:13:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B9F7C403A1;
+	Mon, 27 Jul 2026 05:16:13 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3A8382E5
+ for <buildroot@buildroot.org>; Mon, 27 Jul 2026 05:16:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 10459400B4
- for <buildroot@buildroot.org>; Sun, 26 Jul 2026 16:13:11 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2BB5A40101
+ for <buildroot@buildroot.org>; Mon, 27 Jul 2026 05:16:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gYlVH32qesGh for <buildroot@buildroot.org>;
- Sun, 26 Jul 2026 16:13:10 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bi3tvD_C65jH for <buildroot@buildroot.org>;
+ Mon, 27 Jul 2026 05:16:11 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=116.202.254.214;
  helo=ciao.gmane.io; envelope-from=gclub-buildroot@m.gmane-mx.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E797440068
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E797440068
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 904F84059C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 904F84059C
 Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E797440068
- for <buildroot@uclibc.org>; Sun, 26 Jul 2026 16:13:09 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 904F84059C
+ for <buildroot@uclibc.org>; Mon, 27 Jul 2026 05:16:10 +0000 (UTC)
 Received: from list by ciao.gmane.io with local (Exim 4.92)
- (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1wo1TP-0003q8-2f
- for buildroot@uclibc.org; Sun, 26 Jul 2026 18:13:07 +0200
+ (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1woDh8-0002P5-RD
+ for buildroot@uclibc.org; Mon, 27 Jul 2026 07:16:06 +0200
 X-Injected-Via-Gmane: http://gmane.org/
 To: buildroot@uclibc.org
 From: Bernd Kuhls <bernd@kuhls.net>
-Date: Sun, 26 Jul 2026 18:12:34 +0200
-Message-ID: <pan$3e0d7$f791fb90$f70fbd44$216e8a96@ID-313208.user.individual.net>
-References: <20260503144908.2807535-1-bernd@kuhls.net>
- <20260503144908.2807535-4-bernd@kuhls.net>
- <410696ed-2c91-4d32-bebe-d437e0a187b3__36894.8651057266$1780145198$gmane$org@rnout.be>
+Date: Mon, 27 Jul 2026 07:15:41 +0200
+Message-ID: <pan$26558$6c1a5442$d5bbb276$a08eafbb@ID-313208.user.individual.net>
+References: <amaCxq1lFi8rsIyJ__7967.02165841765$1785105510$gmane$org@arcana.i.gnudd.com>
 Mime-Version: 1.0
 User-Agent: Pan/0.162 (Pokrosvk)
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=fail (p=none dis=none)
  header.from=kuhls.net
-Subject: Re: [Buildroot] [PATCH 4/4] package/gdb: hide version choice for
- 14.x for gcc/host-gcc >= 10
+Subject: Re: [Buildroot] [PATCH] package/jpeg-turbo: fix aarch64 build using
+ an upstream patch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,18 +80,16 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Am Sat, 30 May 2026 12:34:55 +0200 schrieb Arnout Vandecappelle via
-buildroot:
+Am Sun, 26 Jul 2026 23:57:26 +0200 schrieb Alessandro Rubini:
 
->   We don't want to keep on dragging this old stuff around. Just require
->   GCC 9
-> for gdb entirely. That allows us to drop all of those somewhat brittle
-> dependencies.
+> This patch is 3.2.0-8-g0da22762 in the original jpeg-turbo package,
+> where the committer claims they can't reproduce the problem. Buildroot
+> is currently using version 3.2.0 of the package.
 
-Hi Arnout,
+Hi Alessandro,
 
-done: https://patchwork.ozlabs.org/project/buildroot/patch/
-20260726160724.3628271-1-bernd@kuhls.net/
+duplicate of https://patchwork.ozlabs.org/project/buildroot/patch/
+20260726212249.155140-2-bernd@kuhls.net/
 
 Regards, Bernd
 
