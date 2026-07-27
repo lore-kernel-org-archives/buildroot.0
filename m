@@ -1,95 +1,121 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BE9BC531D0
-	for <buildroot@archiver.kernel.org>; Mon, 27 Jul 2026 07:39:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74E32C53219
+	for <buildroot@archiver.kernel.org>; Mon, 27 Jul 2026 09:49:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F2C8660651;
-	Mon, 27 Jul 2026 07:39:54 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OYKKtOWIijys; Mon, 27 Jul 2026 07:39:53 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DB1CA605F5
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1785137992;
-	bh=2KTJE7ZFKpMnvsZ0nxTaxVV/i+FqNg0niBINf/vJJD4=;
-	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=Rvx8dxCR6vc1qDqfgVii01dN12AdS1XmXIU/9wakP/+TFuXmQCiGkg+iX5qH0L9uV
-	 HIWQqldWQoBD8gC+ZaURS80efWEpHP+kERFoJAdV6daTBARyHki7hUjyZQKiMFrKMd
-	 rcosHII0QeMDX4kfPNjsWXc62H/Ug7sfqET92DrlpHHa0zSeuuXrFm2jBrQEpzEJ0A
-	 e4pJj+pBk6cxL5XvIPpIfEErOSeD4j99CVyToNbCfTZOt8BoN1v3its/Paq+DPZx1v
-	 VdcGIdQaZAWm7luQvnBfglm5+flcMD3cKPooH6PZyYh+1SCMsGTXv7B+3x7qPA2LsS
-	 biD6j3nopPGzg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DB1CA605F5;
-	Mon, 27 Jul 2026 07:39:52 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 7BAA0350
- for <buildroot@buildroot.org>; Mon, 27 Jul 2026 07:39:51 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6D6C440621
- for <buildroot@buildroot.org>; Mon, 27 Jul 2026 07:39:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3C1554048A;
+	Mon, 27 Jul 2026 09:49:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AvcsB0MK7Kpz for <buildroot@buildroot.org>;
- Mon, 27 Jul 2026 07:39:50 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.221.237.201;
- helo=send106.i.mail.ru; envelope-from=fido_max@inbox.ru; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7D76F40613
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7D76F40613
-Received: from send106.i.mail.ru (send106.i.mail.ru [89.221.237.201])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7D76F40613
- for <buildroot@buildroot.org>; Mon, 27 Jul 2026 07:39:48 +0000 (UTC)
-Received: by exim-smtp-6c76488b9f-rhmln with esmtpa (envelope-from
- <fido_max@inbox.ru>)
- id 1woFw8-0000000024R-1zn0; Mon, 27 Jul 2026 10:39:44 +0300
+ id 6AA7F1Y-soga; Mon, 27 Jul 2026 09:49:17 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6D7B1404A2
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1785145757;
+	bh=gZOhC0vQF8BqgmFGr61CFmnC7WaTopc5J3RSk7XlhR8=;
+	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=NmJwXkem8+O/NtZuz0tOpr7fQFQCOjxk3Yw1Nl79X3FMvnHqRyBgIGsUD0Cepy8pa
+	 U2T18IXhJUkdsw6JflJ59cT1CPm8cFlwl18+FQknuRVpb7VB1Fu29pV+60AoDaMEMF
+	 z8lGM9FdHf5HaPwqrFaZPFWL9FAOKej/Gez5sRmVVgi6pz4zsqh8+baOTI91OeDo+6
+	 zUgu/VzATbQR2EE4blYg3Q7MctB3/Skg/S3mS0TQkg1Yi07iEaQw9fI1g5/8BUv7km
+	 6cT++wX0njZ2Ai63y8x9RDKyYRtDewjl4CEXRZWhnkHYImcFDziHQa7dmbJDcbER/7
+	 eobPfhBpww6sA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6D7B1404A2;
+	Mon, 27 Jul 2026 09:49:17 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9862726C
+ for <buildroot@buildroot.org>; Mon, 27 Jul 2026 09:49:15 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8AA8580D7C
+ for <buildroot@buildroot.org>; Mon, 27 Jul 2026 09:49:15 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6ZEcEHik1aWQ for <buildroot@buildroot.org>;
+ Mon, 27 Jul 2026 09:49:15 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::632; helo=mail-ej1-x632.google.com;
+ envelope-from=adam.duskett@amarulasolutions.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org AC7C880D74
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AC7C880D74
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com
+ [IPv6:2a00:1450:4864:20::632])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id AC7C880D74
+ for <buildroot@buildroot.org>; Mon, 27 Jul 2026 09:49:14 +0000 (UTC)
+Received: by mail-ej1-x632.google.com with SMTP id
+ a640c23a62f3a-c15fc4707f5so18636666b.3
+ for <buildroot@buildroot.org>; Mon, 27 Jul 2026 02:49:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20251104; t=1785145752; x=1785750552;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to:content-type;
+ bh=f8MmmSg6AZhjwgDkQhb3i/aW5mrzxSMo318EbfKzkdQ=;
+ b=EpltuZIFDFFdaMSseX/JnVHc2x4ZtEEbO+YgudXzaIQiZpB9vIMqHxLyU9g7UNnkhn
+ zixV/D4urAoEv4EVUqHCCXawtNkVmemO9DNG5b292CFFDIQMGCN3qfEplUQzgOFqcOGs
+ aCdzSqRAHZc/UU3uRr37n4jLWTM7ey7qFCWCrkQsf+mgBtz0NAASktHWOlkeGxYkUD9Q
+ wu5pyMX4l1xD9l9T8d0UqwEA98zZmrwFDuJb3lF5uBIvqRJXP7V3004D+Xx77AQ0GwoH
+ pwFmCU9mSYNj9UkgMO0alKtrgaDkv9NYNfASMjWCs3V3Pb9IpC/lKi4AnAqCxF816Vh0
+ TYuw==
+X-Gm-Message-State: AOJu0Yz0BXnwAr8yUVmCdt/7xvrJAo2EAnHJFF/fk/1mZygcwKfq4Msa
+ 9V7UFinnR0cTSBU1pHJ1YINtmRcdtW87cfxzYoAGPFJW2pj/IoEam4ArpXkAURgYZPywBNfriVW
+ UgzMP
+X-Gm-Gg: AR+sD10FAlVl+nSsrSDyK2qBUfv7jAqN/BMlGA/oLtcUmdaYSWK2AOGYS+jHt0Zyl/+
+ HiAfkDn7x5mdFpQylSPQAh9E8JGo5cQQ9hxiN3usNYzISuzxYjZ+lyGaPPOJ4SImkc99av1XVDQ
+ Mm1/fXn56NqCuMnYmZz8/ZLqs4rkdRyLBnkvtaGYUxjpU60DQiJpGoB9CAE2BJ1LSQWo+VW2lzn
+ 7CLr3HwTwnv/paQd9iaZv9iMzUDy7pIP1LvoCAWJxbSaG3wPVbfj7696OCIp1wNyEfBAo5Qi4qM
+ zPgh5kGncysgUoLDWEih7TbGEZYF6rQMC2+8tjt3rKyek/PEJOx1q3OCgi7qe2r/eo+cBvCuyHR
+ C4ERieiRyzUear82xetUZcJ1bXpMsHnaDY7Ow6JEKb7nMCEskyobg/SrJBIZnEtnU+L9h8mdokJ
+ nR92Vzb+ZYPBfXu7sfwD21RF0M4H0UGEBP8Ok25oyZdKNlx6B5vbuJpbBrPTl2gc1CNNFQYwLkl
+ +H6kfd9E/JOUZI6kjhn83/Nq1MU7GPAUcZ75ImKQPTgQkqDiX1l6bEixNCJg1d0Y9Aq2xv8f6Bm
+ Wwdv1g==
+X-Received: by 2002:a17:906:f598:b0:c15:c651:f28f with SMTP id
+ a640c23a62f3a-c1f1f027239mr193134266b.3.1785145752417; 
+ Mon, 27 Jul 2026 02:49:12 -0700 (PDT)
+Received: from adam.amarulasolutions.com
+ (2001-1c00-8183-9900-f185-b195-5f14-b7f0.cable.dynamic.v6.ziggo.nl.
+ [2001:1c00:8183:9900:f185:b195:5f14:b7f0])
+ by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-c1c32c90b42sm617448566b.38.2026.07.27.02.49.11
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 27 Jul 2026 02:49:11 -0700 (PDT)
+From: Adam Duskett <adam.duskett@amarulasolutions.com>
 To: buildroot@buildroot.org
-Cc: Maxim Kochetkov <fido_max@inbox.ru>
-Date: Mon, 27 Jul 2026 10:39:43 +0300
-Message-ID: <20260727073943.77167-1-fido_max@inbox.ru>
-X-Mailer: git-send-email 2.53.0
+Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>,
+ Adam Duskett <adam.duskett@amarulasolutions.com>
+Date: Mon, 27 Jul 2026 11:49:06 +0200
+Message-ID: <20260727094909.1701843-2-adam.duskett@amarulasolutions.com>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260727094909.1701843-1-adam.duskett@amarulasolutions.com>
+References: <20260727094909.1701843-1-adam.duskett@amarulasolutions.com>
 MIME-Version: 1.0
-X-Mailru-Src: smtp
-X-7564579A: 646B95376F6C166E
-X-77F55803: 4F1203BC0FB41BD93ED3C6BF6FFA701FF8A76E406820F599B2674E17FE637CF0182A05F538085040A3C219F611FBCB3D3DE06ABAFEAF6705797BA6EE28909BA2B5D9755D177B738125FF584C251F6817
-X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE7B7733D0215A2F71AEA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F7900637AC83A81C8FD4AD23D82A6BABE6F325AC2E85FA5F3EDFCBAA7353EFBB553375666E0AFCC7CBCEC7C741A4EF86EC714095D60F06051E32EFC90DFAB8F21A90F6A38EEF46B7454FC60B9742502CCDD46D0D1D471462564A2E19F6B57BC7E64490618DEB871D839B73339E8FC8737B5C2249FE5EE7C534F234F5CC7F00164DA146DAFE8445B8C89999729449624AB7ADAF37F6B57BC7E64490611E7FA7ABCAF51C92176DF2183F8FC7C086DB53B01D1D7C7B8941B15DA834481F9449624AB7ADAF372E808ACE2090B5E14AD6D5ED66289B5259CC434672EE63711DD303D21008E298D5E8D9A59859A8B6B372FE9A2E580EFC725E5C173C3A84C3335407143AA9223635872C767BF85DA2F004C90652538430E4A6367B16DE6309
-X-C1DE0DAB: 0D63561A33F958A525C0055343502F5D5002B1117B3ED69681E2218B153AA7074869453249F34FA4823CB91A9FED034534781492E4B8EEAD528DE7AA5F2BD788C79554A2A72441328621D336A7BC284946AD531847A6065A535571D14F44ED41
-X-C8649E89: 1C3962B70DF3F0AD73CAD6646DEDE191716CD42B3DD1D34C77DD89D51EBB774225B6776AC983F447FC0B9F89525902EE6F57B2FD27647F25E66C117BDB76D659A4C35BC2627C75BABA42348F49E10926B8537A29F416CD7C44380131B20F11D278C025F839D3E21BB8341EE9D5BE9A0AC95DBD425FFEABFC6A45A832DE7C6168D245463310BD45BB8CD93680B12512CF4C41F94D744909CEE921556F0E976A29E6EC0772259F8F8F8815B87D7EC76CB9
-X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu53w8ahmwBjZKM/YPHZyZHvz5uv+WouB9+ObcCpyrx6l7KImUglyhkEat/+ysWwi0gdhEs0JGjl6ggRWTy1haxBpVdbIX1nthFXMZebaIdHP2ghjoIc/363UZI6Kf1ptIMVYrk7BQKFwEtP9+WQQEIRI0e7kd3ZSWGjg==
-X-Mailru-Sender: 689FA8AB762F7393520AF17B8A65FDE2ACB15412850D887F97FA9D4D9454D66F2F7DC8A2BE5F1E5890DE4A6105A3658D481B2AED7BCCC0A49AE3A01A4DD0D55C6C99E19F044156F45FEEDEB644C299C0ED14614B50AE0675
-X-Mras: Ok
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; d=inbox.ru; 
- s=mail4; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:Cc:
- To:From:From:Sender:Reply-To:To:Cc:Content-Type:Content-Transfer-Encoding:
- Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
- Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
- List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive:
- X-Cloud-Ids:Disposition-Notification-To;
- bh=RO5fqUdesyKavMPC5ZbqKLFCx4xw4YGvmSQ1nDqTMF8=; t=1785137989; x=1785227989; 
- b=ZUiLxaM3gJKrTRd360ZQjhLX5m5NWkAlBGPUpGsbV9ez8LyWYB4v5EXEJgpeARnXoNHprZlghwT
- 7OF1zRejLul3pIKqjIpums+h/hGOgQkjHyfSt9fPh4Rx4nQ8422CiXGzDrzpg9ZZf2SXgBWeL5v4G
- t4yLJM4LnzhfuLYyWerse8WyaSJCu/2WEYEZEnPU/aIMPvYCQ/1EstWM3NtCZstovyCG3L3NR4IVv
- Y39vWMW1EAsn0dCCZFo3A+QSIEQL7EIzr28oXevKu35Ul8E9PdNtRUVz2tnooxl3JCIzh3LXpoP5M
- Lyy4DTciC3fGPrIaXbK4JmGa/y3I7bGPWMrA==;
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=inbox.ru
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=inbox.ru header.i=@inbox.ru header.a=rsa-sha256
- header.s=mail4 header.b=ZUiLxaM3
-X-Mailman-Original-Authentication-Results: exim-smtp-6c76488b9f-rhmln;
- auth=pass
- smtp.auth=fido_max@inbox.ru smtp.mailfrom=fido_max@inbox.ru
-Subject: [Buildroot] [PATCH 1/1] package/osm2pgsql: bump version to 2.3.1
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amarulasolutions.com; s=google; t=1785145752; x=1785750552;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to:content-type;
+ bh=f8MmmSg6AZhjwgDkQhb3i/aW5mrzxSMo318EbfKzkdQ=;
+ b=DG1bgtFTcPPvpUXTh14BFaCoMSKDeu8yiiw/5xw+8MozNV/E/xlVcySZhclb4+kFGG
+ +d9B3tnAW+yhcU5Hf00Lmv9tKNKI+9jf0aWeE0Kd/FvNtflBmM4Psd5wVdle9R6u7/9V
+ OgrWAfbcHtK8RShDVaLeQTzYYOTHDIm26WQPg=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=amarulasolutions.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=DG1bgtFT
+Subject: [Buildroot] [PATCH 2/4] package/mender-connect: bump version to
+ 3.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -101,47 +127,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Maxim Kochetkov via buildroot <buildroot@buildroot.org>
-Reply-To: Maxim Kochetkov <fido_max@inbox.ru>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release-notes, since 2.2.0:
-https://github.com/osm2pgsql-dev/osm2pgsql/releases/tag/2.3.0
-https://github.com/osm2pgsql-dev/osm2pgsql/releases/tag/2.3.1
+  - Update License hash due to year change.
 
-Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 ---
- package/osm2pgsql/osm2pgsql.hash | 2 +-
- package/osm2pgsql/osm2pgsql.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/mender-connect/mender-connect.hash | 6 +++---
+ package/mender-connect/mender-connect.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/osm2pgsql/osm2pgsql.hash b/package/osm2pgsql/osm2pgsql.hash
-index 6c04d4e989..1e2a8f0c7f 100644
---- a/package/osm2pgsql/osm2pgsql.hash
-+++ b/package/osm2pgsql/osm2pgsql.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  567dad078f8a66d6d706ac1876b5251b688109d16974909d89ce2056d6e9f258  osm2pgsql-2.2.0.tar.gz
-+sha256  e90461bd78787fd5cf82f73ac4bc0cfccbc4f498f35dce59eb4d168a380d6ac0  osm2pgsql-2.3.1.tar.gz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/osm2pgsql/osm2pgsql.mk b/package/osm2pgsql/osm2pgsql.mk
-index 10e64e75a6..66d693bfcf 100644
---- a/package/osm2pgsql/osm2pgsql.mk
-+++ b/package/osm2pgsql/osm2pgsql.mk
+diff --git a/package/mender-connect/mender-connect.hash b/package/mender-connect/mender-connect.hash
+index 4b18a540cf..2872bb467c 100644
+--- a/package/mender-connect/mender-connect.hash
++++ b/package/mender-connect/mender-connect.hash
+@@ -1,13 +1,13 @@
+ # Locally computed:
+-sha256  c90a5f5e2d7ab4396e04d1914e2cbb2a16cb11c1d6e038b889ba7ff941f1e02a  mender-connect-2.3.0-go2.tar.gz
+-sha256  c57e1178f932015d7f08b4d76c4b18e4a55083a6fbc97629cd25ef426bf1db30  LIC_FILES_CHKSUM.sha256
++sha256  b04331f447b9d21c5962d5aef2670f1de861e3065522a1b298af0904a8ee6400  mender-connect-3.0.0-go2.tar.gz
++sha256  420fd444caf5a39bc2db0ae2202c71451a8ea3900011547bd0fb22678aaa4ef6  LIC_FILES_CHKSUM.sha256
+ 
+ # Vendor licenses
+ # Generated with sed '/^[A-Za-z0-9_]/s/^/sha256  /' LIC_FILES_CHKSUM.sha256
+ 
+ #
+ # Apache-2.0
+-sha256  d0f406b04e7901e6b4076bdf5fd20f9d7f04fc41681069fd8954413ac6295688  LICENSE
++sha256  d7e8fd4ad05371007d60285c309ba7a7ce3e61029b843f949fbb9ec79dc9eb47  LICENSE
+ sha256  a4e99d13c6cd0e4faf3867ae5c9815ff88cab3cefdefe0dc1ec9ac28b1152944  vendor/github.com/mendersoftware/go-lib-micro/LICENSE
+ #
+ # BSD-2-Clause
+diff --git a/package/mender-connect/mender-connect.mk b/package/mender-connect/mender-connect.mk
+index 9e6fb87ed5..98fdfe16df 100644
+--- a/package/mender-connect/mender-connect.mk
++++ b/package/mender-connect/mender-connect.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OSM2PGSQL_VERSION = 2.2.0
-+OSM2PGSQL_VERSION = 2.3.1
- OSM2PGSQL_SITE = $(call github,osm2pgsql-dev,osm2pgsql,$(OSM2PGSQL_VERSION))
- OSM2PGSQL_LICENSE = GPL-2.0+
- OSM2PGSQL_LICENSE_FILES = COPYING
+-MENDER_CONNECT_VERSION = 2.3.0
++MENDER_CONNECT_VERSION = 3.0.0
+ MENDER_CONNECT_SITE = $(call github,mendersoftware,mender-connect,$(MENDER_CONNECT_VERSION))
+ MENDER_CONNECT_LICENSE = Apache-2.0, BSD-2-Clause, BSD-3-Clause, ISC, MIT
+ 
 -- 
-2.53.0
+2.55.0
 
 _______________________________________________
 buildroot mailing list
