@@ -4,83 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BB04C53209
-	for <buildroot@archiver.kernel.org>; Mon, 27 Jul 2026 17:36:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D0FDC531D0
+	for <buildroot@archiver.kernel.org>; Mon, 27 Jul 2026 18:13:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A23EF60712;
-	Mon, 27 Jul 2026 17:36:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3B6BD6068A;
+	Mon, 27 Jul 2026 18:13:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gP9RBOb1YXK7; Mon, 27 Jul 2026 17:36:43 +0000 (UTC)
+ id X0rv3-R3o_xh; Mon, 27 Jul 2026 18:13:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 74BD06068A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 51FE16069B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1785173803;
-	bh=R1CW19IbQq8SxbQqUw9sSXkoQf9m9y2YepBmXFiH+mI=;
+	s=default; t=1785175996;
+	bh=XeUEy41Rg6ovQIJjNwuEndeUSeFyEwao0BmnMd3IE9A=;
 	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=aijY8TT4SpH+TA8PZPPvuop06cwEa5BTdK17842SYnBMGq2FY6ozSYnyUUtaErZd1
-	 5hHT+yq/7mipkFzsawqDnzX6OwC5/MlQ08McFlyT621VMdqZSGLWzPaQNPywpBA3XU
-	 dhvi42H1qv/V5plMiMi0QBAxHXdaZRQTbMpz9+5c5OwK9/mTBx8vcCESPY+VPOSCU/
-	 juI4rJ7u4MgSmbgZ5fiRA3sg1+KOsXvpEZKWusgzSf1KtxcxHm4ryZrxtoDYu5IUcD
-	 U19A3+XhKYWD8HaOj6TIH4prL/N+CezTzzsA7WzKk9DdzLFd7qyBLaqlfJhKDJWSU8
-	 fef2yudFWvmKQ==
+	b=V2pxIqZnlAH5bBmqHcbw0OP6w9abhNAygg5ciI05CVJ7R8BP7oAde37vAfbBz6Udu
+	 HadLTLWlIBQqmRalBopZkQXf5XLFcIXUfzcQ0vN7oIj+yq5CF1ZJfqtLxAH1VisYx8
+	 V4chaap7s69jCrtkHmZs1uUgCQu/WrbOEfC0QRNN+294Nnxp5dgWL3IY/H9X9OLNmJ
+	 Oi95pDXIIQADLgpQGia18twqcZSgeyQ/tFNIyrf6XAn1mx/8HlodxGHDhGyhcvyLih
+	 +M4iNEQLIFAeRcZsUuTf/SWg3IF6N1dzd0mVP6ao08QZYK6uG+R8RAFl8deqhvDSZM
+	 UWJW1wuDUPjvg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 74BD06068A;
-	Mon, 27 Jul 2026 17:36:43 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 85E124C4
- for <buildroot@buildroot.org>; Mon, 27 Jul 2026 17:36:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 51FE16069B;
+	Mon, 27 Jul 2026 18:13:16 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 96FE52E5
+ for <buildroot@buildroot.org>; Mon, 27 Jul 2026 18:13:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7776A80EC1
- for <buildroot@buildroot.org>; Mon, 27 Jul 2026 17:36:41 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 749476069B
+ for <buildroot@buildroot.org>; Mon, 27 Jul 2026 18:13:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xCfaZvKAX0cm for <buildroot@buildroot.org>;
- Mon, 27 Jul 2026 17:36:40 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VxM1YQ2Bqaop for <buildroot@buildroot.org>;
+ Mon, 27 Jul 2026 18:13:14 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8497280EBE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8497280EBE
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6F8BE6068A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F8BE6068A
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8497280EBE
- for <buildroot@buildroot.org>; Mon, 27 Jul 2026 17:36:38 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6F8BE6068A
+ for <buildroot@buildroot.org>; Mon, 27 Jul 2026 18:13:14 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a0445.dip0.t-ipconnect.de [91.58.4.69])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 96FC1A4C414D
- for <buildroot@buildroot.org>; Mon, 27 Jul 2026 19:36:35 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:34052)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 1FE5FA4C414D
+ for <buildroot@buildroot.org>; Mon, 27 Jul 2026 20:13:12 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:38860)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.5)
- (envelope-from <bernd@kuhls.net>) id 1woPFj-000000002tg-1MUy
- for buildroot@buildroot.org; Mon, 27 Jul 2026 17:36:35 +0000
+ (envelope-from <bernd@kuhls.net>) id 1woPpA-00000000533-0VcI
+ for buildroot@buildroot.org; Mon, 27 Jul 2026 18:13:11 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Mon, 27 Jul 2026 19:36:34 +0200
-Message-ID: <20260727173634.2763661-1-bernd@kuhls.net>
+Date: Mon, 27 Jul 2026 20:13:11 +0200
+Message-ID: <20260727181311.90940-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Spamd-Bar: --
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202605290044; t=1785173795;
- bh=PUdBiuxCi8J8h3Ej/E40zx/KwXKB68gBxpZPR0YK1wo=;
+ s=kas202605290044; t=1785175992;
+ bh=xZEd6dY/KYqbyne8IAUZA9Rv4QdVq/drf+d1oiIJrTQ=;
  h=From:To:Subject:Date:From;
- b=kY9AWDL0F84iVLh2yOSQq7gdqDNEABHtCcTB0B4bA0WfpO3vMEpi/vF+rvg7z347m
- yOFAMO8UWYVyQNP5/8Rf3u8bjJfYNyUOrSEeP1mBm+4Ed+UIhU3qxFBADk2Xajzv0X
- EiDYglXBzjRU6r7p6tE137E0vQLt7lhlrYgfxwzh+M95S3jA6+oeMhTrtR+HdnrFci
- 3Ucl5kMCCnHm+8C9Xm85oz6/AwjV45kE2dOPYMmxWdk7N66nt2M+dBTf+HyctL0dvy
- dKMeUoZSHivzLJZ0C88r3OrOYEybXRyso3LWwQ7hxJto6XLr/DswnWMrZ2Of6nfFdD
- bBXRYRPertQVQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=b/2LSWBHZ6oYuaszCrDNDl2QDUtkHQacnbXNJoNmta0U1t2w+E6NzkXWvjD46uews
+ exywHcIF6HcuqjtKwQ2AMnWB/iSb04LNGcLZOD9rqmvqWfQWK3o2ScZpWJqR7lgj4d
+ Loz0gOFE126tEZmTl1vSbH4VI8cdeTp9h9e/1T4Mi7qlLdhbOq/AX0ShxOSRR9q/EZ
+ 9cD9roJG7QyZrQpqZDH2yisJUKQvG2zJeLjwXOkOqDBLba+bpOgcMUmnlQJBRWIse3
+ G7jCdmjHatAiGco5LuRLZ8U09OzYIj7MPN7RpJ39sEoHYprbq4n4MEGixaIjlxm5/K
+ ko7IQweUFcH6g==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=kY9AWDL0
-Subject: [Buildroot] [PATCH 1/1] package/libdisplay-info: bump version to
- 0.4.0
+ header.s=kas202605290044 header.b=b/2LSWBH
+Subject: [Buildroot] [PATCH 1/1] package/pango: bump version to 1.58.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -97,89 +96,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://lore.freedesktop.org/wayland-devel/m8VW4lhPjVf_0WLHD9BxrcFL67zweO2GpHqTEWBsrK4SQzFV1iuVJ9I3I_hAASg9hNA5hWmQxxEFetyGsNOtM7Z5Cwefi66h-FzVKMGKkIs=@emersion.fr/T/#u
-
-Removed patch which is included in this release.
+https://download.gnome.org/sources/pango/1.57/pango-1.57.0.news
+https://download.gnome.org/sources/pango/1.57/pango-1.57.1.news
+https://download.gnome.org/sources/pango/1.58/pango-1.58.0.news
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
 Gitlab pipelines passed:
-https://gitlab.com/bkuhls/buildroot/-/tree/d8b4a0cd5abaa48b675befe113e9344d0ca46e5f
+https://gitlab.com/bkuhls/buildroot/-/commits/6a251f733c2b230add47df631540534a8e402454
 
- .../0001-cta-include-sys-types.h.patch        | 35 -------------------
- package/libdisplay-info/libdisplay-info.hash  |  7 ++--
- package/libdisplay-info/libdisplay-info.mk    |  2 +-
- 3 files changed, 4 insertions(+), 40 deletions(-)
- delete mode 100644 package/libdisplay-info/0001-cta-include-sys-types.h.patch
+ package/pango/pango.hash | 4 ++--
+ package/pango/pango.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libdisplay-info/0001-cta-include-sys-types.h.patch b/package/libdisplay-info/0001-cta-include-sys-types.h.patch
-deleted file mode 100644
-index 59049b0a94..0000000000
---- a/package/libdisplay-info/0001-cta-include-sys-types.h.patch
-+++ /dev/null
-@@ -1,35 +0,0 @@
--From e569a92539c96acd2a618729827c8fbf3659d803 Mon Sep 17 00:00:00 2001
--From: Bernd Kuhls <bernd@kuhls.net>
--Date: Tue, 7 Oct 2025 22:44:01 +0200
--Subject: [PATCH] cta: include sys/types.h
--
--Fixes build error with uClibc-based toolchain and gcc 15.2.0 found by
--Buildroot autobuilders[1]:
--
--../cta.c: In function 'parse_vendor_hdmi_block':
--../cta.c:168:15: error: unknown type name 'ssize_t'; did you mean 'size_t'?
--
--[1] https://autobuild.buildroot.org/results/2d72feabdd0c9e1c9aa89e6d683d5f5ae0bb942d/
--
--Upstream: https://gitlab.freedesktop.org/emersion/libdisplay-info/-/commit/84e8da3de9a89a95c4305abf6f578feae66dfa69
--
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-----
-- cta.c | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/cta.c b/cta.c
--index 12187cc..53edfca 100644
----- a/cta.c
--+++ b/cta.c
--@@ -4,6 +4,7 @@
-- #include <math.h>
-- #include <stdlib.h>
-- #include <string.h>
--+#include <sys/types.h>
-- 
-- #include "bits.h"
-- #include "cta.h"
---- 
--2.47.3
--
-diff --git a/package/libdisplay-info/libdisplay-info.hash b/package/libdisplay-info/libdisplay-info.hash
-index 8c6f077679..c748a92b65 100644
---- a/package/libdisplay-info/libdisplay-info.hash
-+++ b/package/libdisplay-info/libdisplay-info.hash
-@@ -1,6 +1,5 @@
--# From https://gitlab.freedesktop.org/emersion/libdisplay-info/-/releases/0.3.0/downloads/libdisplay-info-0.3.0.tar.xz.sha256sum
--sha256  6ae77cd937f9cf7d1321d35c116062c4911e8447010a6a713ac4286f7a9d5987  libdisplay-info-0.3.0.tar.xz
--# From https://lore.freedesktop.org/wayland-devel/47m6wyRq0q-sgX6zWXuZfexFdml2vTqsHKkdCBXBWywBql7gG9F9or9JsCm690MBXEmnnUEML0JnCIbUNma_a7tFKUPZ6bHPYa86b0gjYB0=@emersion.fr/
--sha512  3266633d75ccd345dda5a8aad75f310e55a77654b48f17a247b35e18060b6db1047a69083cd286b43ec893125a36c4c43659af8f74a04da3278eea9fdd91efe9  libdisplay-info-0.3.0.tar.xz
-+# From https://lore.freedesktop.org/wayland-devel/m8VW4lhPjVf_0WLHD9BxrcFL67zweO2GpHqTEWBsrK4SQzFV1iuVJ9I3I_hAASg9hNA5hWmQxxEFetyGsNOtM7Z5Cwefi66h-FzVKMGKkIs=@emersion.fr/T/#u
-+sha256  43b180baa143e2035654759d84e2b2f5ee77d5fe817c423838c7fe59c0d68459  libdisplay-info-0.4.0.tar.xz
-+sha512  3f237788b1b2c6154f81e7a905eae778e21fa1e94e6a2e025ad6ad4971146cf312e2e663aae46f4808a180c77e650d9ab627abee0e352c327dc7d6798887af24  libdisplay-info-0.4.0.tar.xz
+diff --git a/package/pango/pango.hash b/package/pango/pango.hash
+index 41aa793184..c5ca12c50b 100644
+--- a/package/pango/pango.hash
++++ b/package/pango/pango.hash
+@@ -1,5 +1,5 @@
+-# From https://download.gnome.org/sources/pango/1.56/pango-1.56.4.sha256sum
+-sha256  17065e2fcc5f5a5bdbffc884c956bfc7c451a96e8c4fb2f8ad837c6413cb5a01  pango-1.56.4.tar.xz
++# From https://download.gnome.org/sources/pango/1.58/pango-1.58.0.sha256sum
++sha256  bc5bad6213ad4886a47d1e80292fd850b64159b50db67917a43d9ea80ee2298a  pango-1.58.0.tar.xz
+ 
  # Locally computed
- sha256  15b396244e58830c5614b9394f4deccfe684970cd507f299383ab57ad339eedd  LICENSE
-diff --git a/package/libdisplay-info/libdisplay-info.mk b/package/libdisplay-info/libdisplay-info.mk
-index ea5cf1af2d..64ed5f2e5d 100644
---- a/package/libdisplay-info/libdisplay-info.mk
-+++ b/package/libdisplay-info/libdisplay-info.mk
-@@ -4,7 +4,7 @@
+ sha256  d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
+diff --git a/package/pango/pango.mk b/package/pango/pango.mk
+index 671705d0b3..69a68bc0ad 100644
+--- a/package/pango/pango.mk
++++ b/package/pango/pango.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--LIBDISPLAY_INFO_VERSION = 0.3.0
-+LIBDISPLAY_INFO_VERSION = 0.4.0
- LIBDISPLAY_INFO_SOURCE = libdisplay-info-$(LIBDISPLAY_INFO_VERSION).tar.xz
- LIBDISPLAY_INFO_SITE = https://gitlab.freedesktop.org/emersion/libdisplay-info/-/releases/$(LIBDISPLAY_INFO_VERSION)/downloads
- LIBDISPLAY_INFO_LICENSE = MIT
+-PANGO_VERSION_MAJOR = 1.56
+-PANGO_VERSION = $(PANGO_VERSION_MAJOR).4
++PANGO_VERSION_MAJOR = 1.58
++PANGO_VERSION = $(PANGO_VERSION_MAJOR).0
+ PANGO_SOURCE = pango-$(PANGO_VERSION).tar.xz
+ PANGO_SITE = https://download.gnome.org/sources/pango/$(PANGO_VERSION_MAJOR)
+ PANGO_INSTALL_STAGING = YES
 -- 
 2.47.3
 
