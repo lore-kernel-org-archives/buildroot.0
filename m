@@ -4,61 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B28BAC54F4C
-	for <buildroot@archiver.kernel.org>; Tue, 28 Jul 2026 14:01:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4263CC53219
+	for <buildroot@archiver.kernel.org>; Tue, 28 Jul 2026 14:01:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7E436608F8;
-	Tue, 28 Jul 2026 14:01:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 19B2B60907;
+	Tue, 28 Jul 2026 14:01:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eZClS6wwWC8N; Tue, 28 Jul 2026 14:01:37 +0000 (UTC)
+ id 95Qit_4qhfVd; Tue, 28 Jul 2026 14:01:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7B236608DD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5BCAB60A3E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1785247261;
-	bh=sX4AwwBfAk+GLRq7bDMKjWOoI6sjdeFW2ujk+5VO/Fw=;
+	s=default; t=1785247267;
+	bh=MpIbiwyruds8+God0bOn5sS8dHFbjFh5wiVZHpvfiZw=;
 	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=K2QFamR0KgjBrhPKKZa61nEOVCtCW0MBWP8c9H6T2ZrWxrxwzOB862s3EtPeYfqSt
-	 ozA4Yz4eIRQhWtQ0VoPvaFa8nxwGhghJDlIsnLEE486YW3IPDT1nzT0TIqkMDec1Rq
-	 OpOi01rLYpb5ZbdI+XTTuNIdBu3OEt6r70HnlNuhvHHPZv7X/LLJM+7ZovoAsw9h7T
-	 pnHLW4TEtAobt0GDD0eBnwqkAZimtFJGlhNMPX2GtEbYk4gAmF3aojrbJjnHgboLOB
-	 AXDRQ6FMwJ2yTTLaHTc/3PV6LuUDAEc+xoCGJShYYwf5wi9o7TvXeu+FAKD0DjK/pU
-	 9Y+upMNmivscQ==
+	b=qiWHgKioLs8s9Yq9YtTIwo/sievBwoWFRxZoMmp2mmszsH2AeGVi3Hg4nOqYWKNib
+	 K3WUe58fvVL0gmpnDnpvrs1MpkJBVsn0p6rjDh8pvu650EaFxJ/NpdwUIMnAHF2SuT
+	 48Q/WgfKSUfiErGe2i0rygdDumbV7LPJdoff+Tintxe2OeXP4avnYsjFOa1jiXEGFm
+	 XSb/GeR9Rq7Vds3woDGv8cSFCKX6h/VOuDdcUa0w8U9XdaVnwPG0gWNmx5hCr7KQD4
+	 bG09czxRZgrW36J4hFsOKVNcJIuO1BGTdwtc8nwoL6XWMcPnaEBroLoCL5EqBATUEQ
+	 bkDOM1JMwRoCw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7B236608DD;
-	Tue, 28 Jul 2026 14:01:01 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 5BFCB2E5
- for <buildroot@buildroot.org>; Tue, 28 Jul 2026 14:00:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5BCAB60A3E;
+	Tue, 28 Jul 2026 14:01:07 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5C40F788
+ for <buildroot@buildroot.org>; Tue, 28 Jul 2026 14:01:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4E1BE81259
- for <buildroot@buildroot.org>; Tue, 28 Jul 2026 14:00:59 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 426984058F
+ for <buildroot@buildroot.org>; Tue, 28 Jul 2026 14:01:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HLWPScoAL4P3 for <buildroot@buildroot.org>;
- Tue, 28 Jul 2026 14:00:58 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6IKIqdI9SR09 for <buildroot@buildroot.org>;
+ Tue, 28 Jul 2026 14:01:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 981F5813A6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 681D0409A8
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 981F5813A6
+ by smtp4.osuosl.org (Postfix) with ESMTP id 681D0409A8
  for <buildroot@buildroot.org>; Tue, 28 Jul 2026 14:00:58 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E671D8B410; Tue, 28 Jul 2026 14:00:16 +0000 (UTC)
+ id B46678B410; Tue, 28 Jul 2026 14:00:16 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 28 Jul 2026 15:59:16 +0200
+Date: Tue, 28 Jul 2026 15:56:55 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 766d3a6e87003bda9ae7ff3f92e17b7fdced82aa
-X-Git-Newrev: a0cadb45523f02cf987ef3a2b73343b601e59d22
+X-Git-Oldrev: 81f7c82740102f3d770f6320620450c6aa66a690
+X-Git-Newrev: 0946c924686a451053df1954bf95ab1e785fede3
 X-Patchwork-Hint: ignore
-Message-Id: <20260728140016.E671D8B410@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/p11-kit: explicitly enable or
- disable systemd units
+Message-Id: <20260728140016.B46678B410@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/tvheadend: bump version to git
+ c0cbd14550
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,68 +71,57 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8907602587181254552=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8907602587181254552==
-Content-Type: text/plain
-
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/a0cadb45523f02cf987ef3a2b73343b601e59d22
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/0946c924686a451053df1954bf95ab1e785fede3
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-The --with-systemd option controls only if systemd units are
-installed, so there is no build time dependency. Disable systemd
-unconditionally for the host package because Buildroot cannot and
-should not install systemd units on the host.
+Disable some new configure options which we do not support.
 
-Fixes host-p11-kit install error:
-
-install: reguläre Datei '/usr/lib/systemd/user/p11-kit-server.socket' kann nicht angelegt werden: Keine Berechtigung
-install: reguläre Datei '/usr/lib/systemd/user/p11-kit-server.service' kann nicht angelegt werden: Keine Berechtigung
-
-Signed-off-by: Fiona Klute (Othermo GmbH) <fiona.klute@gmx.de>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/p11-kit/p11-kit.mk | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ package/tvheadend/tvheadend.hash | 2 +-
+ package/tvheadend/tvheadend.mk   | 6 ++++--
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/p11-kit/p11-kit.mk b/package/p11-kit/p11-kit.mk
-index 4f4b76d543..60133223ce 100644
---- a/package/p11-kit/p11-kit.mk
-+++ b/package/p11-kit/p11-kit.mk
-@@ -44,13 +44,20 @@ P11_KIT_CONF_OPTS += \
- 	--without-libtasn1
- endif
+diff --git a/package/tvheadend/tvheadend.hash b/package/tvheadend/tvheadend.hash
+index 1062dd2c81..8b18bb247b 100644
+--- a/package/tvheadend/tvheadend.hash
++++ b/package/tvheadend/tvheadend.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  0ced1ea6ce8b78ac9bfc7e6e8cdc908a57840d25276b5248039661483faad705  tvheadend-37453bc3fe5f9e10f3428ebb1abdc613f8b07186.tar.gz
++sha256  f907bda7faf93fc95c3a705b70c6ce2a21f63ac824a610e39ab58075fca43356  tvheadend-c0cbd14550aa40b4f4eb32d1baea1e7a1ed89cf4.tar.gz
+ sha256  bd98338d78a253979b9b3040de83c8a6546de499c9a648b8d2d6dedb891c3605  LICENSE.md
+diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+index 73563acb8e..d74adcfe14 100644
+--- a/package/tvheadend/tvheadend.mk
++++ b/package/tvheadend/tvheadend.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_PACKAGE_SYSTEMD),y)
-+P11_KIT_CONF_OPTS += --with-systemd
-+else
-+P11_KIT_CONF_OPTS += --without-systemd
-+endif
-+
- HOST_P11_KIT_DEPENDENCIES = host-pkgconf
+-TVHEADEND_VERSION = 37453bc3fe5f9e10f3428ebb1abdc613f8b07186
++TVHEADEND_VERSION = c0cbd14550aa40b4f4eb32d1baea1e7a1ed89cf4
+ TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
+ TVHEADEND_LICENSE = GPL-3.0+
+ TVHEADEND_LICENSE_FILES = LICENSE.md
+@@ -18,7 +18,9 @@ TVHEADEND_DEPENDENCIES = \
+ TVHEADEND_CONF_OPTS = \
+ 	--disable-hdhomerun_client \
+ 	--disable-omx \
+-	--disable-pcre
++	--disable-pcloud_cache \
++	--disable-pcre \
++	--disable-vue_build
  
- HOST_P11_KIT_CONF_OPTS = \
- 	--without-libffi \
- 	--without-trust-paths \
- 	--disable-trust-module \
--	--without-libtasn1
-+	--without-libtasn1 \
-+	--without-systemd
- 
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
-
---===============8907602587181254552==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+ ifeq ($(BR2_PACKAGE_AVAHI),y)
+ TVHEADEND_DEPENDENCIES += avahi
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8907602587181254552==--
