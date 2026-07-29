@@ -1,88 +1,99 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2575C53200
-	for <buildroot@archiver.kernel.org>; Wed, 29 Jul 2026 19:13:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11C1CC53219
+	for <buildroot@archiver.kernel.org>; Wed, 29 Jul 2026 19:38:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 623864075F;
-	Wed, 29 Jul 2026 19:13:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3D33980F0D;
+	Wed, 29 Jul 2026 19:38:18 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id g5XAdXaiXmpg; Wed, 29 Jul 2026 19:38:16 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 19C4C80ED9
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1785353896;
+	bh=YXU4wffKNrYBwxoggFEKji/h50EX8Bau7lNn9yUAOas=;
+	h=Date:From:To:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=s93UhnJThOX8sZwltmAKeFrToBr5RE+wuhd/wq6B2yxC/PzhJe9LvcHPFiIGSmSoJ
+	 tkRc52lzM0dD9X9viHOt9CJZPRZk4fX6au3q7fKfq4jTy2DygQZMtxhj9TCi6Y0513
+	 Glr3c4XZd0BrkvIUz00cJjR8z2++tPBprAxL1M12MmDV2ZPje82/7G7Dc5zrJX62Hf
+	 p50PhDx7/KQ8ULCYj1d1fzApQY/KI1CJEfFRrR6OKFLUNZro8Zt36wyBIh+jr82fG/
+	 z+fj9YvE8GAP31FH4cxc/q+xX2sHwtVWGQOsvWIyHZMZ61b25gP8sZuqO86C20aruQ
+	 FX2tE0vGtK7cg==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 19C4C80ED9;
+	Wed, 29 Jul 2026 19:38:16 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 805C22CE
+ for <buildroot@buildroot.org>; Wed, 29 Jul 2026 19:38:15 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 65B2C40629
+ for <buildroot@buildroot.org>; Wed, 29 Jul 2026 19:38:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eH80NookqRzD; Wed, 29 Jul 2026 19:13:49 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2565B40336
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1785352429;
-	bh=OT11KN2iE66c1XfKIrkjFqSb29LjyZe0PAMJ+h+3cvw=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=EF09lh1oa+yAuJMK9QgNRVeaEyNZnVvsbKNYc1+YXySQn/XM3T39cPk+1HdZcxjw6
-	 wT/KMvzyYGozYjdXPUhH5xmE/SJv/+gVsqYhFpDw2OXv5rPdGTwY5+S8tSNPAjPvul
-	 PIDu2QoMrTuwzTy/cd4eml1W55dMJV4dbLXhtvTktJVkc4LPKkKX0o/OA2a3XZEbRQ
-	 qRfT0U5aFpNSl61bv+tr7PucPowHx8RfaKPlzYCM1vp+zPubzI1Q9n8ziMfC51J87A
-	 43kT/5fsGt/f8oHFC+mJ/1ki9Mmg7DlR/K9P++zAL4WDIU3S+9hmEtv4R/BvTCvpYC
-	 8c69cIccF9JtQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2565B40336;
-	Wed, 29 Jul 2026 19:13:49 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id B7E8027F
- for <buildroot@buildroot.org>; Wed, 29 Jul 2026 19:13:47 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B58C540149
- for <buildroot@buildroot.org>; Wed, 29 Jul 2026 19:13:47 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WPD3TBYLlGzd for <buildroot@buildroot.org>;
- Wed, 29 Jul 2026 19:13:47 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org CFB91400AF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CFB91400AF
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp2.osuosl.org (Postfix) with ESMTPS id CFB91400AF
- for <buildroot@buildroot.org>; Wed, 29 Jul 2026 19:13:46 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id F0CD35FFBA;
- Wed, 29 Jul 2026 21:13:43 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Wed, 29 Jul 2026 21:13:43 +0200
+ id PfoOYFZ6dAu5 for <buildroot@buildroot.org>;
+ Wed, 29 Jul 2026 19:38:14 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=199.212.143.9;
+ helo=cpanel10.indieserve.net; envelope-from=rpjday@crashcourse.ca;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9121640624
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9121640624
+Received: from cpanel10.indieserve.net (cpanel10.indieserve.net
+ [199.212.143.9])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9121640624
+ for <buildroot@buildroot.org>; Wed, 29 Jul 2026 19:38:14 +0000 (UTC)
+Received: from pool-174-115-41-146.cpe.net.cable.rogers.com
+ ([174.115.41.146]:38336 helo=sheena)
+ by cpanel10.indieserve.net with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+ (Exim 4.99.5) (envelope-from <rpjday@crashcourse.ca>)
+ id 1wpA6V-0000000Gmbq-0WsC for buildroot@buildroot.org;
+ Wed, 29 Jul 2026 15:38:11 -0400
+Date: Wed, 29 Jul 2026 15:37:04 -0400 (EDT)
+From: "Robert P. J. Day" <rpjday@crashcourse.ca>
+To: buildroot@buildroot.org
+Message-ID: <5477f9d2-e090-aa01-a74c-4ccabc787d01@crashcourse.ca>
 MIME-Version: 1.0
-Date: Wed, 29 Jul 2026 21:13:43 +0200
-To: yann.morin@orange.com
-Cc: buildroot@buildroot.org
-In-Reply-To: <908af995a945a17aeb8612058a0b67e97e13231b.1785315694.git.yann.morin@orange.com>
-References: <cover.1785315694.git.yann.morin@orange.com>
- <908af995a945a17aeb8612058a0b67e97e13231b.1785315694.git.yann.morin@orange.com>
-User-Agent: Webmail Free/1.6.17
-Message-ID: <71892bda8ddc1acae000ae300ef83ef5@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1785352425;
- bh=pfWw0urGqOrxeun+xLcTUqpqDrtJKeOPAJDEJdEU2r4=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=gUW4xqRzb1S4+eavrcMnAtfr93ZkolIOVwiNBnjXwpcOsaMvzW4ycPTPXDOXGGY1I
- g9T0gStyv3BCCCUM9/H4csEftCSXQWX0yBwK3eQeeElc1ANzjZG/vMvzVDkyEEbJx2
- gV7rFe5Pvv70Solh4HlX/7KEXY0CJ9W9DDSw1kYN3pbbSQWj/K88DoKexrk3UJnfeq
- w/xlAiIZYQ8N0bKuVhIdLh1zzdlQG6tfhxfVqTTxz/Qhnw47H9OmHU9hl+etuUeLOk
- TVZMbjytKo2I1JK8xCo/CeYZHoc8VUEblhVZb8QB2i6CJ+UN8h7U1Q0lYQa7SVzXab
- IVCtfIMAjgWdA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=gUW4xqRz
-Subject: Re: [Buildroot] [PATCH 1/2] package/docker-credential-gcr: bump to
- 2.1.32
+X-AntiAbuse: This header was added to track abuse,
+ please include it with any abuse report
+X-AntiAbuse: Primary Hostname - cpanel10.indieserve.net
+X-AntiAbuse: Original Domain - buildroot.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - crashcourse.ca
+X-Get-Message-Sender-Via: cpanel10.indieserve.net: authenticated_id:
+ rpjday+crashcourse.ca/only user confirmed/virtual account not confirmed
+X-Authenticated-Sender: cpanel10.indieserve.net: rpjday@crashcourse.ca
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; 
+ d=crashcourse.ca; s=default; h=Content-Type:MIME-Version:Message-ID:Subject:
+ To:From:Date:Sender:Reply-To:Cc:Content-Transfer-Encoding:Content-ID:
+ Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+ :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+ List-Subscribe:List-Post:List-Owner:List-Archive;
+ bh=GubE28CEFdHLFoAiav5nNN+v78MgedrJ7VDWf5GqNUk=; b=xBip8fbI5bdSBdmBtIU1bbkeuP
+ rkDwgQXP6JlJqjoOQ6TAfZRM4tdKwqXRlyp5+cWcFTBCz1tmSlDwfLFI4oWOdWEw878C38DRG3REM
+ bMbKzashlHjFj02iblju7PA5p5igk2M3bHIdlYKTXAWcexiyPSq/XMLXDkIAtd/5Pn9ZodL2BgEnw
+ hVptaG//tAe1taDRH5lQy74S0GSa/TmXOtLuDK3fC8+fuoprnKaTF7calK/AjN3Zqu4jFn3HKYGLN
+ rKji25Zj2/UTrg7JlyJbkBxJ/M5+8PwMhLe1DNHQTEzAZejeQTQTltVlx3gd6OJWhOEkoh45kRfZb
+ 9wSByH+g==;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=crashcourse.ca
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=crashcourse.ca header.i=@crashcourse.ca
+ header.a=rsa-sha256 header.s=default header.b=xBip8fbI
+Subject: [Buildroot] Error building "host-uboot-tools" for imx93frdm with
+ latest master
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,22 +105,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 29/07/2026 11:01, yann.morin@orange.com wrote:
-> From: "Yann E. MORIN" <yann.morin@orange.com>
-> 
-> Changelog: 
-> https://github.com/GoogleCloudPlatform/docker-credential-gcr/compare/v2.1.30...v2.1.32
-> 
-> Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
 
-Series applied to master, thanks.
+  After resetting my buildroot checkout, pulling master and once
+again:
+
+  $ make freescale_imx93frdm_defconfig
+
+it appears that that recent patch related to host-uboot-tools is not
+playing nicely with my build:
+
+$ make host-uboot-tools
+
+... snip ...
+
+>>> host-uboot-tools 2026.04 Building
+/usr/bin/make -j1  -C
+/home/rpjday/bootlin/buildroot/labs/buildroot-bbb-labs/buildroot/output/build/host-uboot-tools-2026.04
+HOSTCC="/usr/bin/gcc" HOSTCFLAGS="-O2
+-I/home/rpjday/bootlin/buildroot/labs/buildroot-bbb-labs/buildroot/output/host/include"
+HOSTLDFLAGS="-L/home/rpjday/bootlin/buildroot/labs/buildroot-bbb-labs/buildroot/output/host/lib
+-Wl,-rpath,/home/rpjday/bootlin/buildroot/labs/buildroot-bbb-labs/buildroot/output/host/lib"
+CONFIG_TOOLS_MKEFICAPSULE=y tools-only
+  HOSTCC  scripts/basic/fixdep
+  UPD     include/config/uboot.release
+  UPD     include/generated/version_autogenerated.h
+  UPD     include/generated/timestamp_autogenerated.h
+  COPY    tools/version.h
+  HOSTCC  tools/mkenvimage.o
+  HOSTCC  tools/os_support.o
+  WRAP    tools/generated/lib/crc32.c
+  HOSTCC  tools/generated/lib/crc32.o
+  HOSTLD  tools/mkenvimage
+  HOSTCC  tools/aisimage.o
+In file included from include/u-boot/sha1.h:17,
+                 from tools/imagetool.h:22,
+                 from tools/aisimage.c:7:
+include/linux/kconfig.h:4:10: fatal error: generated/autoconf.h: No
+such file or directory
+    4 | #include <generated/autoconf.h>
+      |          ^~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[3]: *** [scripts/Makefile.host:113: tools/aisimage.o] Error 1
+make[2]: *** [Makefile:2501: tools-only] Error 2
+make[1]: *** [package/pkg-generic.mk:273:
+/home/rpjday/bootlin/buildroot/labs/buildroot-bbb-labs/buildroot/output/build/host-uboot-tools-2026.04/.stamp_built]
+Error 2
+make: *** [Makefile:83: _all] Error 2
+
+
+
+rday
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
