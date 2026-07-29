@@ -1,107 +1,102 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87B7BC53200
-	for <buildroot@archiver.kernel.org>; Wed, 29 Jul 2026 09:01:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92A79C54F51
+	for <buildroot@archiver.kernel.org>; Wed, 29 Jul 2026 10:06:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 490EE40923;
-	Wed, 29 Jul 2026 09:01:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4977560AFD;
+	Wed, 29 Jul 2026 10:06:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id N3TiWQf3j4Ev; Wed, 29 Jul 2026 09:01:50 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Oa9zE2zwClyt; Wed, 29 Jul 2026 10:06:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6782B4089A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0DD6C6077F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1785315710;
-	bh=6iXZ4K76Zo8iGLMJOyUwkD3v/LlYG/Bgah9YmPX4M6c=;
-	h=From:To:CC:Date:In-Reply-To:References:Subject:List-Id:
+	s=default; t=1785319603;
+	bh=1Lf/Sk5LA8NU+YH9e9K5senb4gWQGMqkDWZTJbnuzVA=;
+	h=Date:From:To:cc:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=rj6CExbDPU0+iP40irQc2iOIW9W4XKC2vM3HDmTFM8drIe50aT28xMJr5Yb+MaoB0
-	 H9loIqJXR6qOqgT9aI8NKok4m7tQy8ayf3lbFTmyShU13TZ3VZvy+sfsTRXvGwM9BM
-	 jHZxXOoe6M2XgJ4kw4qTryLMJnX87cD0L/oC8CevRnafl630ul4xFBHU5pqdjq81FV
-	 ttQ+6SWS9ycXGhYGYvM6kNBQNug/MiibYHrKcHJdFBQGyalQceRiYpBkcGsQmePkuL
-	 Usqhz2k6U41R/m72amsXYgxFSbm53az1AfrLgORzelJ4eT/oXLXNmRm5STmterYtiA
-	 F7FRdoRDq6b0g==
+	b=SjbHX+h1/F38SKPY8d/Eo6oo8ZIQLvJYD84CTRWtwjJo1tI5fl3vNPuRn0v4uNiAi
+	 O2rQCmtzDOKb/VX/cRN/BrKw86IiE3v+TbKiUkIeM28Ge1yvCl/2D0QI5z02ZufD6X
+	 AuiRFpCchR6frG96lDbUdtxNR/jga2QUo+5wuSmrNtWK0lLUDAW8+HuddWvf4F6C6V
+	 awRKiHxn6zf7nWXbYWZ5R9ovKpzRZaZfGU5RGKyRtn3ueM61fcW2y0pxWJMT7JdX6c
+	 mR+L98LYPDILk2KOxeb1kNq6+/KmSuUP6Vi67Lwk2niXliv5Mqt4RMV+CJnAgwxWNq
+	 uv1OQb899oe3g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6782B4089A;
-	Wed, 29 Jul 2026 09:01:50 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 085D245B
- for <buildroot@buildroot.org>; Wed, 29 Jul 2026 09:01:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0DD6C6077F;
+	Wed, 29 Jul 2026 10:06:43 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5C19F350
+ for <buildroot@buildroot.org>; Wed, 29 Jul 2026 10:06:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E2E0F80FA9
- for <buildroot@buildroot.org>; Wed, 29 Jul 2026 09:01:47 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4E30F60ADD
+ for <buildroot@buildroot.org>; Wed, 29 Jul 2026 10:06:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jkU-Ry408tol for <buildroot@buildroot.org>;
- Wed, 29 Jul 2026 09:01:47 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.126.238;
- helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NSwZH7BZMk8L for <buildroot@buildroot.org>;
+ Wed, 29 Jul 2026 10:06:40 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=199.212.143.9;
+ helo=cpanel10.indieserve.net; envelope-from=rpjday@crashcourse.ca;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8988380FDD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8988380FDD
-Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.126.238])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8988380FDD
- for <buildroot@buildroot.org>; Wed, 29 Jul 2026 09:01:46 +0000 (UTC)
-X-CSE-ConnectionGUID: wCSvWtaTRXqrFrjafpgTIQ==
-X-CSE-MsgGUID: zQtXnR2fS82rsclRb6nrqA==
-Received: from unknown (HELO opfedv1rlp0g.nor.fr.ftgroup) ([x.x.x.x]) by
- smtp-out.orange.com with ESMTP/TLS/TLS_AES_256_GCM_SHA384;
- 29 Jul 2026 11:01:43 +0200
-Received: from unknown (HELO OPE16NORMBX506.corporate.adroot.infra.ftgroup)
- ([x.x.x.x]) by opfedv1rlp0g.nor.fr.ftgroup with
- ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2026 11:01:43 +0200
-Received: from yd-6wlzhs3 [x.x.x.x] by
- OPE16NORMBX506.corporate.adroot.infra.ftgroup
- [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.45;
- Wed, 29 Jul 2026 11:01:41 +0200
-Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
- Wed, 29 Jul 2026 11:01:41 +0200
-X-CSE-ConnectionGUID: bg9gv9kyTTuwVGJjoUNt7g==
-X-CSE-MsgGUID: SVTDq4AuR7aK7z7erWS7YA==
-X-IronPort-AV: E=Sophos;i="6.25,192,1779141600"; d="scan'208";a="455569317"
-X-Amp-Result: SKIPPED(no attachment in message)
-From: <yann.morin@orange.com>
-To: <buildroot@buildroot.org>
-CC: <yann.morin@orange.com>
-Date: Wed, 29 Jul 2026 11:01:39 +0200
-Message-ID: <a011c7746d80417cc4b282c03f595a13bd92f489.1785315694.git.yann.morin@orange.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1785315694.git.yann.morin@orange.com>
-References: <cover.1785315694.git.yann.morin@orange.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 16E9E606A0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 16E9E606A0
+Received: from cpanel10.indieserve.net (cpanel10.indieserve.net
+ [199.212.143.9])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 16E9E606A0
+ for <buildroot@buildroot.org>; Wed, 29 Jul 2026 10:06:39 +0000 (UTC)
+Received: from pool-174-114-114-5.cpe.net.cable.rogers.com
+ ([174.114.114.5]:33302 helo=sheena)
+ by cpanel10.indieserve.net with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+ (Exim 4.99.4) (envelope-from <rpjday@crashcourse.ca>)
+ id 1wp1BK-0000000Fb59-011e; Wed, 29 Jul 2026 06:06:37 -0400
+Date: Wed, 29 Jul 2026 06:05:27 -0400 (EDT)
+From: "Robert P. J. Day" <rpjday@crashcourse.ca>
+To: Julien Olivain <ju.o@free.fr>
+cc: buildroot@buildroot.org, Fabio Estevam <festevam@gmail.com>
+In-Reply-To: <20260726204437.3148734-1-ju.o@free.fr>
+Message-ID: <6a9c4d00-ef01-72a1-5e11-24341ffd8b1f@crashcourse.ca>
+References: <20260726204437.3148734-1-ju.o@free.fr>
 MIME-Version: 1.0
-X-Originating-IP: [10.115.26.53]
-X-ClientProxiedBy: OPE16NORMBX606.corporate.adroot.infra.ftgroup
- (10.115.27.30) To OPE16NORMBX506.corporate.adroot.infra.ftgroup
- (10.115.27.26)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
- t=1785315706; x=1816851706;
- h=from:to:cc:subject:date:message-id:in-reply-to:
- references:mime-version:content-transfer-encoding;
- bh=bI3zc1OvaoF7muiaYhFmUdXkTZX3932OuEJI6JxAeV4=;
- b=IU5r3y3qvKNceSmdqVjhrh2okOd7+Csa++6cghuBvJo7GWIO9hOBFYme
- Khdo878h9jm7NMdahonRG8aukqVaNM0j4Kuoh0OVG7ET6vclo1aNMmFTP
- RUGNJfB4COQrSsrR8Ttn2DZOUQYZ5VbrELLxWZQ02ex5Dd2LV273bW8iz
- 8kfPdCEccjMBq1iegKTIqALc1XhahtZyN/m3IrQbzS/OpvUbSM+2zw47i
- 45v8EC67Z5GzWq6lv1vKASrdrvOPR0fKicYu/i6VR+E/q4I24dTVrYVpn
- XEAtIfLMxz1o+6fNHirHr3AHI+o/n7S5ECcFusPZYYzqxv1SKaeBWoS+w
- w==;
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=orange.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=orange.com header.i=@orange.com
- header.a=rsa-sha256 header.s=orange002 header.b=IU5r3y3q
-Subject: [Buildroot] [PATCH 2/2] package/amazon-ecr-credential-helper: bump
- to 0.12.0
+X-AntiAbuse: This header was added to track abuse,
+ please include it with any abuse report
+X-AntiAbuse: Primary Hostname - cpanel10.indieserve.net
+X-AntiAbuse: Original Domain - buildroot.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - crashcourse.ca
+X-Get-Message-Sender-Via: cpanel10.indieserve.net: authenticated_id:
+ rpjday+crashcourse.ca/only user confirmed/virtual account not confirmed
+X-Authenticated-Sender: cpanel10.indieserve.net: rpjday@crashcourse.ca
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; 
+ d=crashcourse.ca; s=default; h=Content-Type:MIME-Version:References:
+ Message-ID:In-Reply-To:Subject:cc:To:From:Date:Sender:Reply-To:
+ Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+ Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+ List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+ bh=4M9I5ariYKPbPRrMfw0z7dWtjpX4BY+3YL1qmeOvOGA=; b=Zv77jPgVH6G/vatp1cFXFu7PIg
+ nmhTjy2NbyogZGJg3Rt5bBk5XLAeKvGlH0dEIX/Bk7e7T3UaiKw+0t9hVQa3c8W00L1gLf0zXz+HW
+ 7G6WqFHsye/7XFDzl59/gvhxNAUg08WwUs+3jD1lkhwM7RPiRjPrZSMiUMT3uOf9SyxzuEszhsdwM
+ I7wStBq5EKuCm89tbhQiJ1ZdykxEYjveMVH3GRB19V1QnuKMD8/65dRnTI2XIjWpSp411iWawcxOj
+ pQGyDQHxepSP/oO+GiLfjaO7SpKSij20hR0/1ZEueek56jp+utemA5sjOopTI+TrkcehmhQWB4bt2
+ pcxYOh9w==;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=crashcourse.ca
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=crashcourse.ca header.i=@crashcourse.ca
+ header.a=rsa-sha256 header.s=default header.b=Zv77jPgV
+Subject: Re: [Buildroot] [PATCH 1/1] configs/freescale_imx93frdm: bump
+ U-Boot, TF-A and Linux
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -118,53 +113,59 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: "Yann E. MORIN" <yann.morin@orange.com>
+On Sun, 26 Jul 2026, Julien Olivain wrote:
 
-Changelog: https://github.com/awslabs/amazon-ecr-credential-helper/blob/v0.12.0/CHANGELOG.md
+> Since Buildroot commit [1] "package/gcc: switch to GCC 15.x as the
+> default", compiling freescale_imx93frdm_defconfig fails in TF-A with
+> error:
+>
+>     include/drivers/nxp/trdc/imx_trdc.h:7: error: header guard 'IMX_TRDC_H' followed by '#define' of a different macro [-Werror=header-guard]
+>         7 | #ifndef IMX_TRDC_H
+>     include/drivers/nxp/trdc/imx_trdc.h:8: note: 'IMX_XRDC_H' is defined here; did you mean 'IMX_TRDC_H'?
+>         8 | #define IMX_XRDC_H
+>
+> The issue happen because this defconfig is using a Buildroot
+> (internal) toolchain which uses gcc version 15 by default.
+>
+> This issue was fixed upstream in [2], first included in TF-A v2.13.
+>
+> This commit updates U-Boot, TF-A and Linux to use the NXP
+> tag lf-6.18.20-2.0.0, which include this fixes.
+>
+> Note that, as described in the commit log of [3] which introduced
+> this defconfig, U-Boot and Linux were forks. Now the necessary
+> patches are included in the vendor BSP, this commit switches those
+> repos to use the vendor ones.
+>
+> While at it, this commit also switches the defconfig to use an
+> external glibc stable Bootlin toolchain, to follow recommendations
+> from [4]. Since an external toolchain is used, the linux-headers.hash
+> custom hash file is no longer needed and is also removed. At the
+> time of this commit, the Bootlin stable toolchain is a gcc 14.
+>
+> Also, due to the upstream uboot commit [5], this commit adds a uboot
+> config fragment to disable CONFIG_EFI_CAPSULE_AUTHENTICATE, to
+> remove the dependency on the command "cert-to-efi-sig-list", provided
+> the host efitools package, which is not yet in Buildroot.
+>
+> This commit was run tested on board 700-94611 Rev B1.
+>
+> [1] https://gitlab.com/buildroot.org/buildroot/-/commit/a75b8623f5515d99bec48f96586115953150558e
+> [2] https://git.trustedfirmware.org/plugins/gitiles/TF-A/trusted-firmware-a.git/+/2e9198d0e0cbe9546348dd0a71ff6c3d2061d4eb%5E%21/
+> [3] https://gitlab.com/buildroot.org/buildroot/-/commit/2e05f22ff862192a7e512d0db0486351bba94ae8
+> [4] https://elinux.org/Buildroot:DeveloperDaysELCE2024#Rules_for_defconfigs
+> [5] https://git.u-boot-project.org/u-boot/u-boot/-/commit/fd58c275f6ba524101ba0990e53f5a11ac390bd0
+>
+> Reported-by: Robert P. J. Day <rpjday@crashcourse.ca>
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
+> ---
 
-Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
----
- .../amazon-ecr-credential-helper.hash                           | 2 +-
- .../amazon-ecr-credential-helper.mk                             | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+  ... snip patch ...
 
-diff --git a/package/amazon-ecr-credential-helper/amazon-ecr-credential-helper.hash b/package/amazon-ecr-credential-helper/amazon-ecr-credential-helper.hash
-index 250ba6d4ff..04668d6478 100644
---- a/package/amazon-ecr-credential-helper/amazon-ecr-credential-helper.hash
-+++ b/package/amazon-ecr-credential-helper/amazon-ecr-credential-helper.hash
-@@ -1,3 +1,3 @@
- # Localy computed
--sha256  4114241888385d3794ca639f40bb7805f31eb295559950dd940aeeb6b74792f8  amazon-ecr-credential-helper-v0.10.1-git4-go2.tar.gz
-+sha256  dbb977df026de70fbe3389d9fc6756286859ca4a76a76ebb8c17108b0cec6752  amazon-ecr-credential-helper-v0.12.0-git4-go2.tar.gz
- sha256  ce65129252f145d6dd627bc354ccc28ba07c6cd27a8d278b7dcfde3ed6976a5a  LICENSE
-diff --git a/package/amazon-ecr-credential-helper/amazon-ecr-credential-helper.mk b/package/amazon-ecr-credential-helper/amazon-ecr-credential-helper.mk
-index 5ac416912c..570cc16b0c 100644
---- a/package/amazon-ecr-credential-helper/amazon-ecr-credential-helper.mk
-+++ b/package/amazon-ecr-credential-helper/amazon-ecr-credential-helper.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--AMAZON_ECR_CREDENTIAL_HELPER_VERSION = v0.10.1
-+AMAZON_ECR_CREDENTIAL_HELPER_VERSION = v0.12.0
- AMAZON_ECR_CREDENTIAL_HELPER_SITE = https://github.com/awslabs/amazon-ecr-credential-helper
- AMAZON_ECR_CREDENTIAL_HELPER_SITE_METHOD = git
- 
--- 
-2.34.1
+Is there an ETA on when this will be applied to master? Or am I
+supposed to fetch it from some other staging-type branch?
 
-____________________________________________________________________________________________________________
-Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
-
-This message and its attachments may contain confidential or privileged information that may be protected by law;
-they should not be distributed, used or copied without authorisation.
-If you have received this email in error, please notify the sender and delete this message and its attachments.
-As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-Thank you.
-
+rday
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
