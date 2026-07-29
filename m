@@ -1,102 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22FE0C53219
-	for <buildroot@archiver.kernel.org>; Wed, 29 Jul 2026 18:44:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D876EC53200
+	for <buildroot@archiver.kernel.org>; Wed, 29 Jul 2026 18:47:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DB62780DB8;
-	Wed, 29 Jul 2026 18:44:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9396E606EF;
+	Wed, 29 Jul 2026 18:47:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lxgvx70-vNhU; Wed, 29 Jul 2026 18:44:04 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Y2yK19Dw8cfp; Wed, 29 Jul 2026 18:46:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BF41F80DBC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 775896071B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1785350644;
-	bh=PgygHFQjYpxH6XfXlrUomuMJVuy5AlOHNafBLqqdc4E=;
-	h=Date:From:To:cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=Q9whyf2jFjn4s0tpWbiaTY6LLPdXrmyvDz7WHj00cpFjByhMq9J6WICU6/tj4l00y
-	 2qh4OQiASasVUO2eMFmHgCYL5MrOQJCdV/hxS+iQ57QiOzJ3NQGQNALgDftdcWzCEa
-	 idQ0donLtVgF/yKjeO2zifKk1qYHjXvysDZrd2rWQDF/gnlAAPL2txHihEeOhoiCPo
-	 dunTMmi+uUDH6LeJxMvuRMJJq4ZNBWgyIK3oi/UxgfM46tLrguDDlrTdeccIP8Z3Hg
-	 yOzwElYMLSifcCGpPfXqW3F6mZNxX+HPeme9DCrqZyjL/SLNrC7+uPP0MKQF3rylRy
-	 RyEfykzmVQv7g==
+	s=default; t=1785350819;
+	bh=ZPdWXRwfhUlpqOXM+DmK1JTCGwnFCB3Gg1sMBODkRbk=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=E4Y6BI9d6ErNBjd20UgTYCvh8/xDWIbyib7zxnG/bImI+m7/EMmI3ZOmWlyrEApOJ
+	 +9LVoVlm62GpGoUi1e8ILiT8cWOszNPvubOjG7xEDGh2YahNd2VUojjOedrpqLFsGO
+	 c1S+lVFpSX77Jop9+9wIf+enSYUn/JysamGwClIH74HWy8nIfr+7uoMUEG7iHfV+P3
+	 PtbpSE7+LWn6JOFaM6tLEwDx8d+ho2P4EStXTEXLf72Na+uNwwbKG1jCNBX9zMRWMF
+	 +RiWkQD+6vMgfiTQtwqF6hI5Kc+aanHV4Z0dXEQMJ1jjTTmeVz1tdX5OlYswzQgs/l
+	 hitb5D7Fs0qVg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BF41F80DBC;
-	Wed, 29 Jul 2026 18:44:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 775896071B;
+	Wed, 29 Jul 2026 18:46:59 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id BC02F27F
- for <buildroot@buildroot.org>; Wed, 29 Jul 2026 18:44:02 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 33C7127F
+ for <buildroot@buildroot.org>; Wed, 29 Jul 2026 18:46:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B96744065C
- for <buildroot@buildroot.org>; Wed, 29 Jul 2026 18:44:02 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 258CB4066F
+ for <buildroot@buildroot.org>; Wed, 29 Jul 2026 18:46:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mn0e39rCEvID for <buildroot@buildroot.org>;
- Wed, 29 Jul 2026 18:44:01 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=199.212.143.9;
- helo=cpanel10.indieserve.net; envelope-from=rpjday@crashcourse.ca;
+ id sUh_3FTiWYvm for <buildroot@buildroot.org>;
+ Wed, 29 Jul 2026 18:46:57 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 84CCF4047E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 84CCF4047E
-Received: from cpanel10.indieserve.net (cpanel10.indieserve.net
- [199.212.143.9])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 84CCF4047E
- for <buildroot@buildroot.org>; Wed, 29 Jul 2026 18:44:01 +0000 (UTC)
-Received: from pool-174-115-41-146.cpe.net.cable.rogers.com
- ([174.115.41.146]:42484 helo=sheena)
- by cpanel10.indieserve.net with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
- (Exim 4.99.5) (envelope-from <rpjday@crashcourse.ca>)
- id 1wp9Fz-0000000GfcT-2wgw; Wed, 29 Jul 2026 14:43:59 -0400
-Date: Wed, 29 Jul 2026 14:42:53 -0400 (EDT)
-From: "Robert P. J. Day" <rpjday@crashcourse.ca>
-To: Julien Olivain <ju.o@free.fr>
-cc: buildroot@buildroot.org, Fabio Estevam <festevam@gmail.com>
-In-Reply-To: <20260726204437.3148734-1-ju.o@free.fr>
-Message-ID: <f904afd9-e941-9f04-7a0b-b6de0c124d29@crashcourse.ca>
-References: <20260726204437.3148734-1-ju.o@free.fr>
-MIME-Version: 1.0
-X-AntiAbuse: This header was added to track abuse,
- please include it with any abuse report
-X-AntiAbuse: Primary Hostname - cpanel10.indieserve.net
-X-AntiAbuse: Original Domain - buildroot.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - crashcourse.ca
-X-Get-Message-Sender-Via: cpanel10.indieserve.net: authenticated_id:
- rpjday+crashcourse.ca/only user confirmed/virtual account not confirmed
-X-Authenticated-Sender: cpanel10.indieserve.net: rpjday@crashcourse.ca
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; 
- d=crashcourse.ca; s=default; h=Content-Type:MIME-Version:References:
- Message-ID:In-Reply-To:Subject:cc:To:From:Date:Sender:Reply-To:
- Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
- Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
- List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
- bh=+qsjjGyzAApw/CStsog2YojqaN9RCr8LS+TinuSbhIE=; b=iJwOmxTSia4j0BXyQEAAkupRv3
- 7n6exi5eAQ/idrci6zM5+ElOtvYmSeLyRsuoM1UNBEf9nZAAn7M67uWUqesNMcIoMRJXTFhHlwFwO
- Tk1WbRJEtDUSPMJRK017kfaJXWTn+KiaXp/P527F/Re/vfM7xAjNafcjxQ4jHqUc/z7SQEvPt+2OK
- AqFFQjHNPF84uuCxY8V39yvRUdvnUl56vcPNlg7yAlCxvAwHzwuu8RC35bVF62a1OdqBqRu+2zqxD
- uB2f3oFuigZ6y/OQBVawRZvjcOMirALGYTqQw7ofQWFaque82b1HEFfxsohzN656wUtWkJud3tPm+
- McybeFtQ==;
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=crashcourse.ca
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=crashcourse.ca header.i=@crashcourse.ca
- header.a=rsa-sha256 header.s=default header.b=iJwOmxTS
-Subject: Re: [Buildroot] [PATCH 1/1] configs/freescale_imx93frdm: bump
- U-Boot, TF-A and Linux
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E30BC40665
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id E30BC40665
+ for <buildroot@buildroot.org>; Wed, 29 Jul 2026 18:46:56 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 9C6D48B510; Wed, 29 Jul 2026 18:46:14 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 29 Jul 2026 20:38:07 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: df6f3ad43f6dc4a8e76fa4b27a2c85a0b981de79
+X-Git-Newrev: 928cc5dc5cb82e6f2cb43f853488309eb806ef89
+X-Patchwork-Hint: ignore
+Message-Id: <20260729184614.9C6D48B510@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/uboot-tools: fix host FIT
+ signature support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -108,187 +69,234 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, 26 Jul 2026, Julien Olivain wrote:
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/928cc5dc5cb82e6f2cb43f853488309eb806ef89
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-> Since Buildroot commit [1] "package/gcc: switch to GCC 15.x as the
-> default", compiling freescale_imx93frdm_defconfig fails in TF-A with
-> error:
->
->     include/drivers/nxp/trdc/imx_trdc.h:7: error: header guard 'IMX_TRDC_H' followed by '#define' of a different macro [-Werror=header-guard]
->         7 | #ifndef IMX_TRDC_H
->     include/drivers/nxp/trdc/imx_trdc.h:8: note: 'IMX_XRDC_H' is defined here; did you mean 'IMX_TRDC_H'?
->         8 | #define IMX_XRDC_H
->
-> The issue happen because this defconfig is using a Buildroot
-> (internal) toolchain which uses gcc version 15 by default.
->
-> This issue was fixed upstream in [2], first included in TF-A v2.13.
->
-> This commit updates U-Boot, TF-A and Linux to use the NXP
-> tag lf-6.18.20-2.0.0, which include this fixes.
->
-> Note that, as described in the commit log of [3] which introduced
-> this defconfig, U-Boot and Linux were forks. Now the necessary
-> patches are included in the vendor BSP, this commit switches those
-> repos to use the vendor ones.
->
-> While at it, this commit also switches the defconfig to use an
-> external glibc stable Bootlin toolchain, to follow recommendations
-> from [4]. Since an external toolchain is used, the linux-headers.hash
-> custom hash file is no longer needed and is also removed. At the
-> time of this commit, the Bootlin stable toolchain is a gcc 14.
->
-> Also, due to the upstream uboot commit [5], this commit adds a uboot
-> config fragment to disable CONFIG_EFI_CAPSULE_AUTHENTICATE, to
-> remove the dependency on the command "cert-to-efi-sig-list", provided
-> the host efitools package, which is not yet in Buildroot.
->
-> This commit was run tested on board 700-94611 Rev B1.
->
-> [1] https://gitlab.com/buildroot.org/buildroot/-/commit/a75b8623f5515d99bec48f96586115953150558e
-> [2] https://git.trustedfirmware.org/plugins/gitiles/TF-A/trusted-firmware-a.git/+/2e9198d0e0cbe9546348dd0a71ff6c3d2061d4eb%5E%21/
-> [3] https://gitlab.com/buildroot.org/buildroot/-/commit/2e05f22ff862192a7e512d0db0486351bba94ae8
-> [4] https://elinux.org/Buildroot:DeveloperDaysELCE2024#Rules_for_defconfigs
-> [5] https://git.u-boot-project.org/u-boot/u-boot/-/commit/fd58c275f6ba524101ba0990e53f5a11ac390bd0
->
-> Reported-by: Robert P. J. Day <rpjday@crashcourse.ca>
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
-> ---
->  .../arm-trusted-firmware/arm-trusted-firmware.hash    |  2 +-
->  .../patches/linux-headers/linux-headers.hash          |  1 -
->  board/freescale/imx93frdm/patches/linux/linux.hash    |  2 +-
->  board/freescale/imx93frdm/patches/uboot/uboot.hash    |  2 +-
->  board/freescale/imx93frdm/uboot.fragment              |  1 +
->  configs/freescale_imx93frdm_defconfig                 | 11 +++++++----
->  6 files changed, 11 insertions(+), 8 deletions(-)
->  delete mode 120000 board/freescale/imx93frdm/patches/linux-headers/linux-headers.hash
->  create mode 100644 board/freescale/imx93frdm/uboot.fragment
->
-> diff --git a/board/freescale/imx93frdm/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/freescale/imx93frdm/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-> index 7561385cb8..bf39f1e9c7 100644
-> --- a/board/freescale/imx93frdm/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-> +++ b/board/freescale/imx93frdm/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-> @@ -1,2 +1,2 @@
->  # Locally calculated
-> -sha256  8cfe0afc903ebbc03f27e4874aa9ce82be78843a8b42ed4c906871e7f311b510  imx-atf-lf-6.6.36-2.1.0.tar.gz
-> +sha256  d7813f4ad5431edb162d6be2775bc021f9007b9c6934e977330291168523a507  imx-atf-lf-6.18.20-2.0.0.tar.gz
-> diff --git a/board/freescale/imx93frdm/patches/linux-headers/linux-headers.hash b/board/freescale/imx93frdm/patches/linux-headers/linux-headers.hash
-> deleted file mode 120000
-> index 5808d92afe..0000000000
-> --- a/board/freescale/imx93frdm/patches/linux-headers/linux-headers.hash
-> +++ /dev/null
-> @@ -1 +0,0 @@
-> -../linux/linux.hash
-> \ No newline at end of file
-> diff --git a/board/freescale/imx93frdm/patches/linux/linux.hash b/board/freescale/imx93frdm/patches/linux/linux.hash
-> index 0da8c03384..222ec55328 100644
-> --- a/board/freescale/imx93frdm/patches/linux/linux.hash
-> +++ b/board/freescale/imx93frdm/patches/linux/linux.hash
-> @@ -1,2 +1,2 @@
->  # Locally calculated
-> -sha256  3244dc3c62c990d9de90e1c7193aa3099e0e74e720de5c9c13edfbfdd802f596  linux-imx-lf-6.6.36-2.1.0-imx93frdm.tar.gz
-> +sha256  a8f55764fd1418db8adfd2711c0abb7d5464a8ee1cbfd0f6878f1059ecfa1316  linux-imx-lf-6.18.20-2.0.0.tar.gz
-> diff --git a/board/freescale/imx93frdm/patches/uboot/uboot.hash b/board/freescale/imx93frdm/patches/uboot/uboot.hash
-> index e512c27f7d..01e860b59e 100644
-> --- a/board/freescale/imx93frdm/patches/uboot/uboot.hash
-> +++ b/board/freescale/imx93frdm/patches/uboot/uboot.hash
-> @@ -1,2 +1,2 @@
->  # Locally calculated
-> -sha256  bced4334363199d5465532d221d06dc3a5b49271067d74408019c825ed2ca715  uboot-imx-lf-6.6.36-2.1.0-imx93frdm.tar.gz
-> +sha256  96942f8c49736b7d40277891bf0a34cfdd0afb59390f79b65b2b33b3bbd19f61  uboot-imx-lf-6.18.20-2.0.0.tar.gz
-> diff --git a/board/freescale/imx93frdm/uboot.fragment b/board/freescale/imx93frdm/uboot.fragment
-> new file mode 100644
-> index 0000000000..201ab28290
-> --- /dev/null
-> +++ b/board/freescale/imx93frdm/uboot.fragment
-> @@ -0,0 +1 @@
-> +# CONFIG_EFI_CAPSULE_AUTHENTICATE is not set
-> diff --git a/configs/freescale_imx93frdm_defconfig b/configs/freescale_imx93frdm_defconfig
-> index 8e16762d8f..53875cc020 100644
-> --- a/configs/freescale_imx93frdm_defconfig
-> +++ b/configs/freescale_imx93frdm_defconfig
-> @@ -1,14 +1,16 @@
->  BR2_aarch64=y
->  BR2_cortex_a55=y
->  BR2_ARM_FPU_VFPV4D16=y
-> -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-> +BR2_TOOLCHAIN_EXTERNAL=y
-> +BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-> +BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
->  BR2_GLOBAL_PATCH_DIR="board/freescale/imx93frdm/patches"
->  BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
->  BR2_TARGET_GENERIC_GETTY_PORT="ttyLP0"
->  BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/imx9-bootloader-prepare.sh board/freescale/common/imx/post-image.sh"
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,jolivain,linux-imx,lf-6.6.36-2.1.0-imx93frdm)/linux-imx-lf-6.6.36-2.1.0-imx93frdm.tar.gz"
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,linux-imx,lf-6.18.20-2.0.0)/linux-imx-lf-6.18.20-2.0.0.tar.gz"
->  BR2_LINUX_KERNEL_DEFCONFIG="imx_v8"
->  BR2_LINUX_KERNEL_DTS_SUPPORT=y
->  BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx93-11x11-frdm"
-> @@ -22,14 +24,15 @@ BR2_TARGET_ROOTFS_EXT2_4=y
->  BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
->  BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
->  BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
-> -BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,imx-atf,lf-6.6.36-2.1.0)/imx-atf-lf-6.6.36-2.1.0.tar.gz"
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,imx-atf,lf-6.18.20-2.0.0)/imx-atf-lf-6.18.20-2.0.0.tar.gz"
->  BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx93"
->  BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
->  BR2_TARGET_UBOOT=y
->  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
->  BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-> -BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,jolivain,uboot-imx,lf-6.6.36-2.1.0-imx93frdm)/uboot-imx-lf-6.6.36-2.1.0-imx93frdm.tar.gz"
-> +BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,uboot-imx,lf-6.18.20-2.0.0)/uboot-imx-lf-6.18.20-2.0.0.tar.gz"
->  BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx93_11x11_frdm"
-> +BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/freescale/imx93frdm/uboot.fragment"
->  BR2_TARGET_UBOOT_NEEDS_DTC=y
->  BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
->  BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
-> --
-> 2.55.0
->
+U-Boot host tools use the tools configuration namespace when code calls
+CONFIG_IS_ENABLED(). With USE_HOSTCC, CONFIG_IS_ENABLED(FIT_SIGNATURE)
+resolves to CONFIG_TOOLS_FIT_SIGNATURE, while
+CONFIG_VAL(FIT_SIGNATURE_MAX_SIZE) resolves to
+CONFIG_TOOLS_FIT_SIGNATURE_MAX_SIZE.
 
-Looks good, here's the first part of the boot after applying the patch
-and configuring with "make freescale_imx93frdm_defconfig":
+The host-uboot-tools package only generates the old CONFIG_FIT_SIGNATURE
+define. This makes tools/Makefile include fit_check_sign, but the host code
+sees FIT signature support as disabled and the OpenSSL-backed signing and
+verification objects are omitted. As a result, mkimage accepts a signature
+node without writing its value or injecting a required public key.
+fit_check_sign then has no required key and reports success without
+checking the configuration signature.
 
+A FIT-support-only configuration never exercises this path, which is why
+the existing hash-only runtime test still passes.
 
-U-Boot SPL 2026.04 (Jul 29 2026 - 14:16:48 -0400)
-PMIC: PCA9451A
-PMIC: Over Drive Voltage Mode
-DDR: 3733MTS
-found DRAM 2CS_2GB DRAM matched
-M33 prepare ok
-Normal Boot
-Trying to boot from BOOTROM
-Boot Stage: Primary boot
-image offset 0x8000, pagesize 0x200, ivt offset 0x0
-Load image from 0x5b400 by ROM_API
-NOTICE:  TRDC init done
-NOTICE:  BL31: v2.14.1(release):custom
-NOTICE:  BL31: Built : 14:15:18, Jul 29 2026
+Generate the tools FIT signature options needed by the host code and pass
+CONFIG_TOOLS_LIBCRYPTO=y so the OpenSSL-backed signing, verification and
+cipher objects are selected. Keep CONFIG_FIT_SIGNATURE=y in the make
+options because U-Boot tools/Makefile still uses it to build
+fit_check_sign.
 
+Extend TestHostUbootTools to create an RSA-signed FIT, require a 256-byte
+configuration signature and a required public key, verify the FIT, corrupt
+the signature, and require verification to fail.
 
-U-Boot 2026.04 (Jul 29 2026 - 14:16:48 -0400)
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+[Julien: add comments in runtime test]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/uboot-tools/uboot-tools.mk                 |  7 ++-
+ support/testing/tests/package/test_uboot_tools.py  | 71 ++++++++++++++++++++++
+ .../testing/tests/package/test_uboot_tools/key.dts |  7 +++
+ .../tests/package/test_uboot_tools/signed.its      | 38 ++++++++++++
+ 4 files changed, 121 insertions(+), 2 deletions(-)
 
-Reset Status: POR
-
-CPU:   NXP i.MX93(52) Rev1.1 A55 at 1700 MHz
-CPU:   Industrial temperature grade (-40C to 105C) at 33C
-Model: NXP i.MX93 11X11 FRDM board
-DRAM:  2 GiB
-optee optee: OP-TEE api uid mismatch
-BOARD: V1.0(ADC2:686,ADC3:297)
-TCPC:  Vendor ID [0x1fc9], Product ID [0x5110], Addr [I2C2 0x52]
-SNK.Power3.0 on CC1
-
-... snip until login prompt ...
-
-Tested-by: Robert P. J. Day <rpjday@crashcourse.ca>
+diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
+index 6b5554da9b..ef8bcabbd9 100644
+--- a/package/uboot-tools/uboot-tools.mk
++++ b/package/uboot-tools/uboot-tools.mk
+@@ -126,7 +126,10 @@ define HOST_UBOOT_TOOLS_CONFIGURE_CMDS
+ 	mkdir -p $(@D)/include/generated
+ 	$(if $(BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT),$(UBOOT_TOOLS_ENABLE_HASH_ALGOS))
+ 	$(if $(BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT),echo '#define CONFIG_TOOLS_FIT_PRINT 1' >> $(@D)/include/generated/autoconf.h)
+-	echo $(if $(BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT),'#define CONFIG_FIT_SIGNATURE 1') >> $(@D)/include/generated/autoconf.h
++	$(if $(BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT),echo '#define CONFIG_TOOLS_IMAGE_PRE_LOAD 1' >> $(@D)/include/generated/autoconf.h)
++	$(if $(BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT),echo '#define CONFIG_TOOLS_RSASSA_PSS 1' >> $(@D)/include/generated/autoconf.h)
++	$(if $(BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT),echo '#define CONFIG_TOOLS_FIT_SIGNATURE 1' >> $(@D)/include/generated/autoconf.h)
++	$(if $(BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT),echo '#define CONFIG_TOOLS_FIT_SIGNATURE_MAX_SIZE 0x10000000' >> $(@D)/include/generated/autoconf.h)
+ 	mkdir -p $(@D)/include/asm
+ 	touch $(@D)/include/asm/linkage.h
+ endef
+@@ -142,7 +145,7 @@ HOST_UBOOT_TOOLS_DEPENDENCIES += host-dtc
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT),y)
+-HOST_UBOOT_TOOLS_MAKE_OPTS += CONFIG_FIT_SIGNATURE=y CONFIG_FIT_SIGNATURE_MAX_SIZE=0x10000000
++HOST_UBOOT_TOOLS_MAKE_OPTS += CONFIG_TOOLS_LIBCRYPTO=y CONFIG_FIT_SIGNATURE=y
+ HOST_UBOOT_TOOLS_DEPENDENCIES += host-openssl
+ define HOST_UBOOT_TOOLS_INSTALL_FIT_CHECK_SIGN
+ 	$(INSTALL) -m 0755 -D $(@D)/tools/fit_check_sign $(HOST_DIR)/bin/fit_check_sign
+diff --git a/support/testing/tests/package/test_uboot_tools.py b/support/testing/tests/package/test_uboot_tools.py
+index 5e5b44af30..8cff6fda21 100644
+--- a/support/testing/tests/package/test_uboot_tools.py
++++ b/support/testing/tests/package/test_uboot_tools.py
+@@ -1,11 +1,14 @@
+ import hashlib
+ import re
++import subprocess
+ import zlib
+ from pathlib import Path
+ 
+ import infra.basetest
+ 
+ EXAMPLE_ITS = Path(__file__).parent / "test_uboot_tools/example.its"
++KEY_DTS = Path(__file__).parent / "test_uboot_tools/key.dts"
++SIGNED_ITS = Path(__file__).parent / "test_uboot_tools/signed.its"
+ 
+ 
+ def get_hashes(output: str) -> dict[str, str]:
+@@ -72,6 +75,7 @@ class TestHostUbootTools(infra.basetest.BRHostPkgTest):
+         """
+         BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+         BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
++        BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT=y
+         """
+ 
+     def test_run(self):
+@@ -86,3 +90,70 @@ class TestHostUbootTools(infra.basetest.BRHostPkgTest):
+                 self.assertEqual(expected[h], reported[h])
+         # Python does not have built-in CRC16 support, just check it is present
+         self.assertIn("crc16-ccitt", reported)
++
++        # See U-Boot FIT Signature Verification documentation:
++        # https://source.denx.de/u-boot/u-boot/-/blob/v2026.07/doc/usage/fit/signature.rst
++        keydir = Path(self.builddir) / "keys"
++        keydir.mkdir(exist_ok=True)
++
++        # We generate a prublic/private key pair to sign the image.
++        cmd = [
++            "host/bin/openssl", "req", "-batch", "-new", "-x509", "-nodes",
++            "-newkey", "rsa:2048", "-keyout", str(keydir / "dev.key"),
++            "-out", str(keydir / "dev.crt"), "-subj", "/CN=Buildroot FIT test",
++        ]
++        infra.run_cmd_on_host(self.builddir, cmd)
++
++        # We compile the empty dtb that will be used to store the
++        # public key.
++        cmd = [
++            "host/bin/dtc", "-I", "dts", "-O", "dtb", "-p", "0x1000",
++            "-o", "test-key.dtb", str(KEY_DTS),
++        ]
++        infra.run_cmd_on_host(self.builddir, cmd)
++
++        # We sign the image and write the public key in our key
++        # storage dtb.
++        cmd = [
++            "host/bin/mkimage", "-f", str(SIGNED_ITS), "-k", str(keydir),
++            "-K", "test-key.dtb", "-r", "signed.fit",
++        ]
++        infra.run_cmd_on_host(self.builddir, cmd)
++
++        # We check there is a signature present in the FIT image.
++        cmd = [
++            "host/bin/fdtget", "-t", "bx", "signed.fit",
++            "/configurations/config-1/signature-1", "value",
++        ]
++        signature = infra.run_cmd_on_host(self.builddir, cmd).split()
++        self.assertEqual(len(signature), 256)
++
++        # We check the key is marked as required for the configuration.
++        cmd = [
++            "host/bin/fdtget", "-t", "s", "test-key.dtb",
++            "/signature/key-dev", "required",
++        ]
++        required = infra.run_cmd_on_host(self.builddir, cmd).strip()
++        self.assertEqual(required, "conf")
++
++        # We actually check the signature is valid.
++        cmd = [
++            "host/bin/fit_check_sign", "-f", "signed.fit",
++            "-k", "test-key.dtb",
++        ]
++        infra.run_cmd_on_host(self.builddir, cmd)
++
++        # We "corrupt" the signature, by setting it to zero.
++        cmd = [
++            "host/bin/fdtput", "-t", "bx", "signed.fit",
++            "/configurations/config-1/signature-1", "value", "00",
++        ]
++        infra.run_cmd_on_host(self.builddir, cmd)
++
++        # We check again the siganute, and expect a failure.
++        cmd = [
++            "host/bin/fit_check_sign", "-f", "signed.fit",
++            "-k", "test-key.dtb",
++        ]
++        with self.assertRaises(subprocess.CalledProcessError):
++            infra.run_cmd_on_host(self.builddir, cmd)
+diff --git a/support/testing/tests/package/test_uboot_tools/key.dts b/support/testing/tests/package/test_uboot_tools/key.dts
+new file mode 100644
+index 0000000000..c7a686c720
+--- /dev/null
++++ b/support/testing/tests/package/test_uboot_tools/key.dts
+@@ -0,0 +1,7 @@
++/dts-v1/;
++
++/* This empty dts will be used for storing the public key.
++ * The dtb is populated later by the "mkimage -K" command. */
++
++/ {
++};
+diff --git a/support/testing/tests/package/test_uboot_tools/signed.its b/support/testing/tests/package/test_uboot_tools/signed.its
+new file mode 100644
+index 0000000000..25128cbbda
+--- /dev/null
++++ b/support/testing/tests/package/test_uboot_tools/signed.its
+@@ -0,0 +1,38 @@
++/dts-v1/;
++
++/ {
++	description = "Signed test FIT";
++	#address-cells = <1>;
++
++	images {
++		kernel {
++			description = "This file, pretending to be a kernel";
++			data = /incbin/("example.its");
++			type = "kernel";
++			arch = "arm64";
++			os = "linux";
++			compression = "none";
++			load = <0x40400000>;
++			entry = <0x40400000>;
++
++			hash-1 {
++				algo = "sha256";
++			};
++		};
++	};
++
++	configurations {
++		default = "config-1";
++
++		config-1 {
++			description = "Signed test entry";
++			kernel = "kernel";
++
++			signature-1 {
++				algo = "sha256,rsa2048";
++				key-name-hint = "dev";
++				sign-images = "kernel";
++			};
++		};
++	};
++};
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
