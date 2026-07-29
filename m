@@ -1,112 +1,105 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7DC0DC54F51
-	for <buildroot@archiver.kernel.org>; Wed, 29 Jul 2026 08:06:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B379AC53200
+	for <buildroot@archiver.kernel.org>; Wed, 29 Jul 2026 09:01:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D6429409EB;
-	Wed, 29 Jul 2026 08:06:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6A94A60AD1;
+	Wed, 29 Jul 2026 09:01:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SHcDAMFnhmN8; Wed, 29 Jul 2026 08:06:29 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id l-gzxrLTK0JQ; Wed, 29 Jul 2026 09:01:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 36E9C4085A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B12BD6080F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1785312389;
-	bh=LaksIyEF++FMDw+EGDBoBsljQVMsYinNRNi+z6jxMGk=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	s=default; t=1785315704;
+	bh=ZROrKQe6jBhr2YpprfkVMvii8I9jQ8ZmlG1UOT/6aZs=;
+	h=From:To:CC:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=npZpuSt9zMcehr0KjnubOypvDZ4jxhvISQ7i8AgeKfsAweu0REJ0r8cpw7/WCdTcj
-	 rpf1Byj1BZYQcmyiG+KqLOpE7SOBejbc7nTGyKFCll7HcHHG/d33bV+gLH7Cv4eRR8
-	 6NcTbV5CIY6mGd/dvCoXMJ2mdaOQQ6EQtTYAoOhCHEq6aNMR1NGJz0NqaoHvUdAXm7
-	 EZGJyq4gzI3CjoK1g2tsYYQyf+hpNi5n2KFnExehjFKoDrWlNf1VAyLVjVHQHHgnyy
-	 U8nM7maKRVdlJp0P/ESP8CiE5Dr+RZrfAjSZpuxIzB9cdAw0lEAbrwkAv5lQurij18
-	 vQI0/UtyKGeZQ==
+	b=B9Wng07jbZ6+tHeYVIefs6q08MP95qHF2x/K8Pr2A5jhyswlXqIxe7mFcovp4z1tH
+	 /GAdYsc5/JH1gk+vpqXUh+7grCWvuyTmYUpN1Ho/Li2iBhgThgzcCR7E90AbGtNJTK
+	 Bu4ZsxCmfrX0NVhY6MjXO6LPd4GBIKJZtCXxF5e73fRPW/W4LASw37H8waTb6xGMhO
+	 ZPkx3FjyyI7mSCk/lTz007aIdy9dwk+hqelwdWQh5KWjcvyCipbRhXzYhqn+7cF0td
+	 yprhCAzziWkQjunZIKCS0K159BDaw52XA92ZiXUpXtjWZsazDEJjjo45g+fHuR4IvA
+	 x7W3fhcn6Udhw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 36E9C4085A;
-	Wed, 29 Jul 2026 08:06:29 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 462844BF
- for <buildroot@buildroot.org>; Wed, 29 Jul 2026 08:06:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B12BD6080F;
+	Wed, 29 Jul 2026 09:01:44 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id B393C3B0
+ for <buildroot@buildroot.org>; Wed, 29 Jul 2026 09:01:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1DE3281110
- for <buildroot@buildroot.org>; Wed, 29 Jul 2026 08:06:28 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A52DA4009C
+ for <buildroot@buildroot.org>; Wed, 29 Jul 2026 09:01:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 268cGYGt_HyA for <buildroot@buildroot.org>;
- Wed, 29 Jul 2026 08:06:26 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
- envelope-from=francois.perrad.86@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 694578112D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 694578112D
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
- [IPv6:2a00:1450:4864:20::333])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 694578112D
- for <buildroot@busybox.net>; Wed, 29 Jul 2026 08:06:26 +0000 (UTC)
-Received: by mail-wm1-x333.google.com with SMTP id
- 5b1f17b1804b1-4954dff6536so3826145e9.0
- for <buildroot@busybox.net>; Wed, 29 Jul 2026 01:06:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1785312384; x=1785917184;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to:content-type;
- bh=ZhfXOQBbOpDCvynAmUhIodZGtK2NZeobkb5uiMVfWeM=;
- b=f8YXewE5UzOtqsTi2Y9XY4SbovOrGfczuWyvlBHEChAbXxidB258+mU6VtYiN7ebYB
- NeQFaBt8ITsdJZysQL+eW/UbX5svZH6j8Ups+S7TjgkhGjEsduKizb8i4quOzWgXosXu
- b6Bpxr4d7jEvSUjNhHwchwN/KpbzgCIXLy2ffhfXDcFYCKUJCeOtbb3nvhrST6LMf0wC
- JPlNf/ubsDFn61RgC5evAwUCRLVJvV+SCey4MxwhSxlMixozIncFNIoDNlf9qlBoFKnD
- Plbkuhie3XV/W3HbYt9ou/qvHEBFkcaFurGqloY+A0uBa0XWL5wvbA7OvjRQHkauRNWz
- Nf6w==
-X-Gm-Message-State: AOJu0YytwSlBxnhhs1jfJ+RjCj52LJl2/0D2l44hjIaRKYaGSFtcmPq6
- gygBmc7jyu5sB9lzHJAJP4ndNg/IKnf5jn5OxXqiifRssrZOlg2TvvagVPjWQQ==
-X-Gm-Gg: AR+sD11LtTXMSi5zsFsuS2RG7ZBc8REw30orXPF7CDurTQVwvRb7Md10s+nb6EE0Zsn
- Pcwwd6faopBj1tv4VTbf5sTCjTYrFL47Dtir/B0G7lV27QZmiJbPmZU2yYBMacM2c0bhp2L9VKq
- eyf+6gNOWjuBlzRIyxwDh2aogRxvO44p9YxRcdHJkuC3lwy9ewW4+d1HWFNzDldnJanZBCwHOQk
- IIChnRyXp/CCdvmDsQzCgr+wRYtSOjhGbaU24Yh2RbjHr5j2fFe8Goi04qwm+vgw5B6BEioydYh
- KIyCbLVDozHFfOv1JLh8teT7PJXXUcf8bzMUzXUHbTMhLJXwfn5OpE2eSvnxtp1VvH3LtdGy4ah
- AKKKXm3Qws0qFxFih7Wkdw/F5GQEz0j71akLMxD1QgXyXpL1xviC3esXF2qdJrvAr4zA4djC7Qp
- sA/wIxMHU5WaEcF12g8+cox9GEHn18NSLGpgVUQw97eG9l8AYy8RD5/xDrtt2uUehV62LUsUgO2
- 03xrKgXTO9dMEWRs3c8nw==
-X-Received: by 2002:a05:600c:8b41:b0:495:734e:4825 with SMTP id
- 5b1f17b1804b1-496c653c11fmr64125235e9.16.1785312384106; 
- Wed, 29 Jul 2026 01:06:24 -0700 (PDT)
-Received: from vm-2404.. (132.187.66.37.rev.sfr.net. [37.66.187.132])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4976bd7bab1sm37054415e9.13.2026.07.29.01.06.23
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 29 Jul 2026 01:06:23 -0700 (PDT)
-From: Francois Perrad <francois.perrad.86@gmail.com>
-To: buildroot@busybox.net
-Cc: Francois Perrad <francois.perrad.86@gmail.com>
-Date: Wed, 29 Jul 2026 10:06:17 +0200
-Message-ID: <20260729080618.6192-1-francois.perrad.86@gmail.com>
-X-Mailer: git-send-email 2.43.0
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 79JF-ERRlEza for <buildroot@buildroot.org>;
+ Wed, 29 Jul 2026 09:01:42 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.126.239;
+ helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 353364004B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 353364004B
+Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.126.239])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 353364004B
+ for <buildroot@buildroot.org>; Wed, 29 Jul 2026 09:01:41 +0000 (UTC)
+X-CSE-ConnectionGUID: CTVlndQCRNibRup+sqLgzg==
+X-CSE-MsgGUID: ANTRgr7UQb2u5p2MrlzXIQ==
+Received: from unknown (HELO opfedv1rlp0h.nor.fr.ftgroup) ([x.x.x.x]) by
+ smtp-out.orange.com with ESMTP/TLS/TLS_AES_256_GCM_SHA384;
+ 29 Jul 2026 11:01:39 +0200
+Received: from unknown (HELO OPE16NORMBX506.corporate.adroot.infra.ftgroup)
+ ([x.x.x.x]) by opfedv1rlp0h.nor.fr.ftgroup with
+ ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2026 11:01:38 +0200
+Received: from yd-6wlzhs3 [x.x.x.x] by
+ OPE16NORMBX506.corporate.adroot.infra.ftgroup
+ [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.45;
+ Wed, 29 Jul 2026 11:01:37 +0200
+Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
+ Wed, 29 Jul 2026 11:01:36 +0200
+X-CSE-ConnectionGUID: zjrEeOnWT86Cq/88e/OcFQ==
+X-CSE-MsgGUID: g7k+5vifQvy2Efrcp14rmQ==
+X-IronPort-AV: E=Sophos;i="6.25,192,1779141600"; d="scan'208";a="455167469"
+X-Amp-Result: SKIPPED(no attachment in message)
+From: <yann.morin@orange.com>
+To: <buildroot@buildroot.org>
+CC: "Yann E . MORIN" <yann.morin@orange.com>
+Date: Wed, 29 Jul 2026 11:01:36 +0200
+Message-ID: <cover.1785315694.git.yann.morin@orange.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
+X-Patchwork-Hint: ignore
+X-Originating-IP: [10.115.26.51]
+X-ClientProxiedBy: OPE16NORMBX501.corporate.adroot.infra.ftgroup
+ (10.115.26.25) To OPE16NORMBX506.corporate.adroot.infra.ftgroup
+ (10.115.27.26)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1785312384; x=1785917184; darn=busybox.net;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
- bh=ZhfXOQBbOpDCvynAmUhIodZGtK2NZeobkb5uiMVfWeM=;
- b=Zds9wqe80cPNNXk3pO3kIRonKngjFaK2yI317wmFVSMPq3TTxnWdNqv3/FfyHZvntE
- YFgqRlWQZtCeptrvPCSFwGEm0iCPfMHGe0Nro+2qMyHKg/Ky4oxwYOe26GTeYKwUBKTg
- yexhcwXyUeksSWwXyAtVOzXGx/ER2hL4jaSJ1wr79BoTxsdgfUihOPhC7rUODRR0WC6a
- N9GmKH0+vuQlI23LCMcOyq45RJuw2S0C5VV72sb1XiizGvCNxsdNi2efNAZMHIsgKwBz
- r1Es+kBtl2tsBjD8Y/+dl1PkhFoN/i141/ehZ0+AUoDvo1ie3vAyFBS4THANxYzTQamB
- 2qqQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
+ t=1785315703; x=1816851703;
+ h=from:to:cc:subject:date:message-id:mime-version:
+ content-transfer-encoding;
+ bh=7y/WOY4rbCHhv9o/cNGO6ZZYlcVWsQe1QxB/d7ToaAA=;
+ b=GFNevw9j5gYPsKRB+J14ncPtAMUHa8ghzEmJ0WFT8q1ddD7/IKZrMn47
+ 6RG4nMDEaF7eWOR4wHEd878yQK2XaIQtc763c9togHbur3nNiSyQbJRKJ
+ 6TqlyiGWk67iH2Y4Nm3rQ/rhmH+aDNHLZfCB02iU+Ke85TPxlhnBrjMzQ
+ t2zacYuNuEXQUP699rvdBDZsUHid4+SNYlSQ41dVvdeouMWsJ3irxHg00
+ Ajj84mxNdXO+xYhfPw5BV8ILCo//cnGQt8G2hJg7U7yGBN+xQUqyEai+B
+ 8xVrpKT/UB+pFDML/vFeFyAfNbbzuUpBPxb8EYVfNwVDVYyVHBW0tS1ro
+ g==;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20251104 header.b=Zds9wqe8
-Subject: [Buildroot] [PATCH] package/lua-dkjson: bump to version 2.11
+ header.from=orange.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
+ header.s=orange002 header.b=GFNevw9j
+Subject: [Buildroot] [PATCH 0/2] package/lib{qmi,qrtr-glib}: bump versions
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -123,41 +116,61 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-see changes on https://dkolf.de/dkjson-lua/
+From: "Yann E. MORIN" <yann.morin@orange.com>
 
-Signed-off-by: Francois Perrad <francois.perrad.86@gmail.com>
----
- package/lua-dkjson/lua-dkjson.hash | 4 ++--
- package/lua-dkjson/lua-dkjson.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Hello All!
 
-diff --git a/package/lua-dkjson/lua-dkjson.hash b/package/lua-dkjson/lua-dkjson.hash
-index f2ca354b5..cafa8989e 100644
---- a/package/lua-dkjson/lua-dkjson.hash
-+++ b/package/lua-dkjson/lua-dkjson.hash
-@@ -1,5 +1,5 @@
- # computed by luarocks/buildroot
--sha256  41d6bd91e8ae0802f98b3685635dd03e14ad99ee3f3d6fa56d5ecc217623f60c  dkjson-2.10-1.src.rock
-+sha256  ddf3444076d3cf9a63dd797e56cbcf764e0d121de8456bc23a7d7acb4dcb1506  dkjson-2.11-1.src.rock
- 
- # locally computed
--sha256  5998e1e7bd6b53efff746d02aaedb9646ce9cf965ea54f1bc812b5e750222cfc  dkjson-2.10/readme.md
-+sha256  6932e5407e763eaaf4fc7fef07c28b4db0bc36433f14c0bd92d4a570a91c865f  dkjson-2.11/readme.md
-diff --git a/package/lua-dkjson/lua-dkjson.mk b/package/lua-dkjson/lua-dkjson.mk
-index f41edf511..0af7dda9a 100644
---- a/package/lua-dkjson/lua-dkjson.mk
-+++ b/package/lua-dkjson/lua-dkjson.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LUA_DKJSON_VERSION = 2.10-1
-+LUA_DKJSON_VERSION = 2.11-1
- LUA_DKJSON_NAME_UPSTREAM = dkjson
- LUA_DKJSON_LICENSE = MIT
- LUA_DKJSON_LICENSE_FILES = $(LUA_DKJSON_SUBDIR)/readme.md
--- 
-2.43.0
+This small two-patch series bumps the versions of the aforementioned
+packages.
+
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit df6f3ad43f6dc4a8e76fa4b27a2c85a0b981de79
+
+  package/lua-lyaml: bump to version 6.2.9 (2026-07-28 21:40:39 +0200)
+
+
+are available as patches in this mail series,
+
+for you to apply patches up to a011c7746d80417cc4b282c03f595a13bd92f489
+
+  package/amazon-ecr-credential-helper: bump to 0.12.0 (2026-07-29 10:58:55 +0200)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (2):
+      package/docker-credential-gcr: bump to 2.1.32
+      package/amazon-ecr-credential-helper: bump to 0.12.0
+
+ package/amazon-ecr-credential-helper/amazon-ecr-credential-helper.hash | 2 +-
+ package/amazon-ecr-credential-helper/amazon-ecr-credential-helper.mk   | 2 +-
+ package/docker-credential-gcr/docker-credential-gcr.hash               | 2 +-
+ package/docker-credential-gcr/docker-credential-gcr.mk                 | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
+
+--
+                                        ____________
+.-----------------.--------------------:       _    :------------------.
+|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
+|                 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
+| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
+| yann.morin (at) orange.com           |_="    ,--' | / \ HTML MAIL    |
+'--------------------------------------:______/_____:------------------'
+
+____________________________________________________________________________________________________________
+Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
+pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
+a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
+Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
+
+This message and its attachments may contain confidential or privileged information that may be protected by law;
+they should not be distributed, used or copied without authorisation.
+If you have received this email in error, please notify the sender and delete this message and its attachments.
+As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
+Thank you.
 
 _______________________________________________
 buildroot mailing list
