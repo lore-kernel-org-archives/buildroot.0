@@ -4,79 +4,79 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CBABEC55164
-	for <buildroot@archiver.kernel.org>; Thu, 30 Jul 2026 16:26:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4D84C55160
+	for <buildroot@archiver.kernel.org>; Thu, 30 Jul 2026 16:38:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7C30A402B2;
-	Thu, 30 Jul 2026 16:26:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 764EC40B7C;
+	Thu, 30 Jul 2026 16:38:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pZOU8-my9YOC; Thu, 30 Jul 2026 16:26:04 +0000 (UTC)
+ id ypD7xkOS2cMr; Thu, 30 Jul 2026 16:38:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8CFBA402F8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9027C40C3E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1785428764;
-	bh=H9Idt0+eUf8tpJD9o8YojpEf4gqk5ziuw7+AXJrSUZ8=;
-	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
+	s=default; t=1785429486;
+	bh=a6c9mrtYFFqCZ2+oZOlPdeeSUEBbC39oGu/hmOLbSIU=;
+	h=To:Date:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
 	 From;
-	b=K23wR9s48xEZHR0EwA3ylzPJL1bsUgr1Ic8/Yoy+f7JAwBR5BrJByAJOPXC4vLPNz
-	 Yyo+ytbBfEKeKWEz6mHkRt9vXAX84oK2qnZwUTMR5Gc6h4mejiAPnXY0a8koV0Wulm
-	 nf9VdGpdsLVkUgiqS0zL7NsKj3Qq76YIf+do7+K7VTWPyFTtxmg40GpQSGz2jhbWS+
-	 uS2gmiAhe3gehKA4rqxwjztpKOAgYe4WxBh/SMKU8+ZohhOUOffQOEAdGMGbOA913m
-	 vpqPPa4vMI1p+m7HRSIJ/+LpAaaX/BQYXrwQpxkBpWUVVhZfBm555wYfJnDsLIRKub
-	 h/WTAc8GsV3wQ==
+	b=ja1iwevDfLQ2coe/AE1jjDAAFRsgIS0iVsdtH5RZ/2WiUJd477C+M9cN6MTbQ+gLc
+	 pEVQsEnBntxbHKfW+pdCXX0AXHuts/JnOAwp6IfXT4+5xgGFSj73q3PYb7Ur1GQoOt
+	 EQ1EUy0kG3CuokTN63ebCzcnDbkBIfYvYDIJRSSAR+G3PLiBqbdaGdVAKypaT2AC29
+	 yygSLCr/B91fyfr0vap36hYTP1dY7GdV6SJFSu8rMey8aE3nWgeLVd8wiFf3BRtMVL
+	 8VhlNFANiqd1EubwQ/nphNoLSJrdA9IWwQfrF/t9+1AxGxeTkzd6pLVg+ep8wxzPk8
+	 CzQHCLYLY8PcA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8CFBA402F8;
-	Thu, 30 Jul 2026 16:26:04 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 34BBB352
- for <buildroot@buildroot.org>; Thu, 30 Jul 2026 16:26:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9027C40C3E;
+	Thu, 30 Jul 2026 16:38:06 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5A88C69
+ for <buildroot@buildroot.org>; Thu, 30 Jul 2026 16:38:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2642880F30
- for <buildroot@buildroot.org>; Thu, 30 Jul 2026 16:26:03 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6B53E40C40
+ for <buildroot@buildroot.org>; Thu, 30 Jul 2026 16:37:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hsCdwYD7hVc5 for <buildroot@buildroot.org>;
- Thu, 30 Jul 2026 16:26:02 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
- helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1275C80ED5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1275C80ED5
-Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1275C80ED5
- for <buildroot@buildroot.org>; Thu, 30 Jul 2026 16:26:00 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 7B1A6B977D96; Thu, 30 Jul 2026 18:25:53 +0200 (CEST)
-Message-ID: <2424f6f7-89d4-4e65-ab69-370a1eee29e1@rnout.be>
-Date: Thu, 30 Jul 2026 18:25:49 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: John Ernberg <john.ernberg@actia.se>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qWaGL2QIy6Su for <buildroot@buildroot.org>;
+ Thu, 30 Jul 2026 16:37:18 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.181.117.226;
+ helo=mail.actia.se; envelope-from=john.ernberg@actia.se; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0676B40B23
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0676B40B23
+Received: from mail.actia.se (mail.actia.se [212.181.117.226])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0676B40B23
+ for <buildroot@buildroot.org>; Thu, 30 Jul 2026 16:37:15 +0000 (UTC)
+Received: from S036ANL.actianordic.se (10.12.31.117) by S036ANL.actianordic.se
+ (10.12.31.117) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.61; Thu, 30 Jul
+ 2026 18:37:10 +0200
+Received: from S036ANL.actianordic.se ([fe80::e13e:1feb:4ea6:ec69]) by
+ S036ANL.actianordic.se ([fe80::e13e:1feb:4ea6:ec69%3]) with mapi id
+ 15.01.2507.061; Thu, 30 Jul 2026 18:37:10 +0200
+To: Arnout Vandecappelle <arnout@rnout.be>, "buildroot@buildroot.org"
+ <buildroot@buildroot.org>
+Thread-Topic: [Buildroot] Correct approach for supporting multiple SoCs with
+ otherwise same board?
+Thread-Index: AQHdEqAdLuqpbqLp5USFhR9RG3g2zbaGOWKAgAADKoA=
+Date: Thu, 30 Jul 2026 16:37:10 +0000
+Message-ID: <13bed764-3a89-4379-8d6e-c5c2d887e8f7@actia.se>
 References: <3c4de0c8-dcd8-444d-ad65-a023e782a346@actia.se>
-Content-Language: en-GB, fr-BE
-In-Reply-To: <3c4de0c8-dcd8-444d-ad65-a023e782a346@actia.se>
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rnout.be; s=dkim; 
- t=1785428754; h=from:subject:date:message-id:to:mime-version:content-type:
- content-transfer-encoding:content-language:in-reply-to:references;
- bh=FZSU+OhUD5Cpc7Og1ikXQToNORmUqBmvip382m7gf5g=;
- b=UNaweHIWc64mg4qNktX+cSrkACiT+mAV7GFIv97Ux+qHDXBJ1Iejp/qm1SJ5hBDj3xFJFU
- jzGFQmF6f9gZE8F3qpgyeCMgo3aUZ5T3Cyg//D8bBS0ehXTByxhSlR1ytyXIzBJmnGU6nB
- PwlD18pHxZjE7x6hYIhc3rnncINd/+9/9KvK60eMhVt+tNx90cCxGadZMeXcwIyYBRbTLy
- OYHeVVyZ9pHojbsZJVYE2ONB/UOCySXhhl0iTkTAwkOBScQYuNYcjR82w9i7aiuqxKlWS7
- vtgFRa+zmA8SpQcN+dKPrDufkycTbL9hllmIOl7/Xo8hbFTDUeTIHjky1fKUbg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ <2424f6f7-89d4-4e65-ab69-370a1eee29e1@rnout.be>
+In-Reply-To: <2424f6f7-89d4-4e65-ab69-370a1eee29e1@rnout.be>
+Accept-Language: en-US, sv-SE
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.12.12.63]
+x-esetresult: clean, is OK
+x-esetid: 37303A2955B14556677664
+Content-ID: <18019FF30D96C848BA1359FB7858E07F@actia.se>
+MIME-Version: 1.0
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
- header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
- header.s=dkim header.b=UNaweHIW
+ header.from=actia.se
 Subject: Re: [Buildroot] Correct approach for supporting multiple SoCs with
  otherwise same board?
 X-BeenThere: buildroot@buildroot.org
@@ -90,68 +90,66 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@rnout.be>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+From: John Ernberg via buildroot <buildroot@buildroot.org>
+Reply-To: John Ernberg <john.ernberg@actia.se>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-  Hi John,
-
-
-On 13/07/2026 10:17, John Ernberg via buildroot wrote:
-> Hi,
-> 
-> We have a board with a few different iMX8X series SoCs,
-> which we have worked around by having a custom imx-seco package that
-> installs the different AHAB containers we need.
-> 
-> Now we're introducing a new SoC onto this board that is not compatible
-> with the iMX8X. However, Linux and userspace will be the same for all
-> boards as they need to be interchangeable with each other.
-> 
-> The only things we need to generate differently now is the bootloader
-> and ATF.
-> 
-> The bootflow is bootloader -> ATF -> Linux
-> 
-> What is the correct way to handle this?
-> Should we separate the firmwares + bootloader + ATF configs from
-> the Linux + userspace build config?
-
-  Assuming you don't want to try to generate a single userspace image for both 
-boards, the best approach is to create a separate config for each board type. If 
-you want to make it explicit that it's mostly the same, you can split that 
-config into a "boot" part and a "userspace" part, where the same userspace part 
-is used for both. You simply add a Makefile or other script (to your external, I 
-presume) that concatenates them and then calls `make defconfig DEFCONFIG=...` 
-pointing to the generated file.
-
-  Note that there's also a script, support/kconfig/merge_config.sh. It checks 
-for conflicting options, but it's far from foolproof. `cat` mostly works as well.
-
-  The annoying part of a split config is that you can't easily change it with 
-menuconfig followed by savedefconfig. After the savedefconfig, you have to 
-extract the changed part. There is a script utils/diffconfig that can help, but 
-it's probably best to manually apply the changes to the original split 
-configurations.
-
-
-> Separation feels odd though as that means we need to let the
-> post-image.sh script we have for producing boot images (ATF + Linux +
-> DTBs)  wander into other build directories.
-  OK, this does sound like the idea is to reuse the same userspace image for 
-both. For me, it doesn't sound weird at all to look for images in other build 
-directories. For example, I typically have a separate config for generating a 
-custom toolchain that can be built as an external toolchain. I put all the build 
-directories in a fixed place under the external, so I can refer to the external 
-toolchain as $(BR2_EXTERNAL_..._PATH)/output/host/bin/gcc.
-
-  Regards,
-  Arnout
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgQXJub3V0LA0KDQpPbiA3LzMwLzI2IDY6MjUgUE0sIEFybm91dCBWYW5kZWNhcHBlbGxlIHdy
+b3RlOg0KPiAgwqBIaSBKb2huLA0KPiANCj4gDQo+IE9uIDEzLzA3LzIwMjYgMTA6MTcsIEpvaG4g
+RXJuYmVyZyB2aWEgYnVpbGRyb290IHdyb3RlOg0KPj4gSGksDQo+Pg0KPj4gV2UgaGF2ZSBhIGJv
+YXJkIHdpdGggYSBmZXcgZGlmZmVyZW50IGlNWDhYIHNlcmllcyBTb0NzLA0KPj4gd2hpY2ggd2Ug
+aGF2ZSB3b3JrZWQgYXJvdW5kIGJ5IGhhdmluZyBhIGN1c3RvbSBpbXgtc2VjbyBwYWNrYWdlIHRo
+YXQNCj4+IGluc3RhbGxzIHRoZSBkaWZmZXJlbnQgQUhBQiBjb250YWluZXJzIHdlIG5lZWQuDQo+
+Pg0KPj4gTm93IHdlJ3JlIGludHJvZHVjaW5nIGEgbmV3IFNvQyBvbnRvIHRoaXMgYm9hcmQgdGhh
+dCBpcyBub3QgY29tcGF0aWJsZQ0KPj4gd2l0aCB0aGUgaU1YOFguIEhvd2V2ZXIsIExpbnV4IGFu
+ZCB1c2Vyc3BhY2Ugd2lsbCBiZSB0aGUgc2FtZSBmb3IgYWxsDQo+PiBib2FyZHMgYXMgdGhleSBu
+ZWVkIHRvIGJlIGludGVyY2hhbmdlYWJsZSB3aXRoIGVhY2ggb3RoZXIuDQo+Pg0KPj4gVGhlIG9u
+bHkgdGhpbmdzIHdlIG5lZWQgdG8gZ2VuZXJhdGUgZGlmZmVyZW50bHkgbm93IGlzIHRoZSBib290
+bG9hZGVyDQo+PiBhbmQgQVRGLg0KPj4NCj4+IFRoZSBib290ZmxvdyBpcyBib290bG9hZGVyIC0+
+IEFURiAtPiBMaW51eA0KPj4NCj4+IFdoYXQgaXMgdGhlIGNvcnJlY3Qgd2F5IHRvIGhhbmRsZSB0
+aGlzPw0KPj4gU2hvdWxkIHdlIHNlcGFyYXRlIHRoZSBmaXJtd2FyZXMgKyBib290bG9hZGVyICsg
+QVRGIGNvbmZpZ3MgZnJvbQ0KPj4gdGhlIExpbnV4ICsgdXNlcnNwYWNlIGJ1aWxkIGNvbmZpZz8N
+Cj4gDQo+ICDCoEFzc3VtaW5nIHlvdSBkb24ndCB3YW50IHRvIHRyeSB0byBnZW5lcmF0ZSBhIHNp
+bmdsZSB1c2Vyc3BhY2UgaW1hZ2UgDQo+IGZvciBib3RoDQo+IGJvYXJkcywgdGhlIGJlc3QgYXBw
+cm9hY2ggaXMgdG8gY3JlYXRlIGEgc2VwYXJhdGUgY29uZmlnIGZvciBlYWNoIGJvYXJkIA0KPiB0
+eXBlLiBJZg0KPiB5b3Ugd2FudCB0byBtYWtlIGl0IGV4cGxpY2l0IHRoYXQgaXQncyBtb3N0bHkg
+dGhlIHNhbWUsIHlvdSBjYW4gc3BsaXQgdGhhdA0KPiBjb25maWcgaW50byBhICJib290IiBwYXJ0
+IGFuZCBhICJ1c2Vyc3BhY2UiIHBhcnQsIHdoZXJlIHRoZSBzYW1lIA0KPiB1c2Vyc3BhY2UgcGFy
+dA0KPiBpcyB1c2VkIGZvciBib3RoLiBZb3Ugc2ltcGx5IGFkZCBhIE1ha2VmaWxlIG9yIG90aGVy
+IHNjcmlwdCAodG8geW91ciANCj4gZXh0ZXJuYWwsIEkNCj4gcHJlc3VtZSkgdGhhdCBjb25jYXRl
+bmF0ZXMgdGhlbSBhbmQgdGhlbiBjYWxscyBgbWFrZSBkZWZjb25maWcgDQo+IERFRkNPTkZJRz0u
+Li5gDQo+IHBvaW50aW5nIHRvIHRoZSBnZW5lcmF0ZWQgZmlsZS4NCj4gDQo+ICDCoE5vdGUgdGhh
+dCB0aGVyZSdzIGFsc28gYSBzY3JpcHQsIHN1cHBvcnQva2NvbmZpZy9tZXJnZV9jb25maWcuc2gu
+IEl0IA0KPiBjaGVja3MNCj4gZm9yIGNvbmZsaWN0aW5nIG9wdGlvbnMsIGJ1dCBpdCdzIGZhciBm
+cm9tIGZvb2xwcm9vZi4gYGNhdGAgbW9zdGx5IHdvcmtzIA0KPiBhcyB3ZWxsLg0KPiANCj4gIMKg
+VGhlIGFubm95aW5nIHBhcnQgb2YgYSBzcGxpdCBjb25maWcgaXMgdGhhdCB5b3UgY2FuJ3QgZWFz
+aWx5IGNoYW5nZSBpdCANCj4gd2l0aA0KPiBtZW51Y29uZmlnIGZvbGxvd2VkIGJ5IHNhdmVkZWZj
+b25maWcuIEFmdGVyIHRoZSBzYXZlZGVmY29uZmlnLCB5b3UgaGF2ZSB0bw0KPiBleHRyYWN0IHRo
+ZSBjaGFuZ2VkIHBhcnQuIFRoZXJlIGlzIGEgc2NyaXB0IHV0aWxzL2RpZmZjb25maWcgdGhhdCBj
+YW4gDQo+IGhlbHAsIGJ1dA0KPiBpdCdzIHByb2JhYmx5IGJlc3QgdG8gbWFudWFsbHkgYXBwbHkg
+dGhlIGNoYW5nZXMgdG8gdGhlIG9yaWdpbmFsIHNwbGl0DQo+IGNvbmZpZ3VyYXRpb25zLg0KPiAN
+Cj4gDQo+PiBTZXBhcmF0aW9uIGZlZWxzIG9kZCB0aG91Z2ggYXMgdGhhdCBtZWFucyB3ZSBuZWVk
+IHRvIGxldCB0aGUNCj4+IHBvc3QtaW1hZ2Uuc2ggc2NyaXB0IHdlIGhhdmUgZm9yIHByb2R1Y2lu
+ZyBib290IGltYWdlcyAoQVRGICsgTGludXggKw0KPj4gRFRCcynCoCB3YW5kZXIgaW50byBvdGhl
+ciBidWlsZCBkaXJlY3Rvcmllcy4NCj4gIMKgT0ssIHRoaXMgZG9lcyBzb3VuZCBsaWtlIHRoZSBp
+ZGVhIGlzIHRvIHJldXNlIHRoZSBzYW1lIHVzZXJzcGFjZSBpbWFnZSANCj4gZm9yDQo+IGJvdGgu
+IEZvciBtZSwgaXQgZG9lc24ndCBzb3VuZCB3ZWlyZCBhdCBhbGwgdG8gbG9vayBmb3IgaW1hZ2Vz
+IGluIG90aGVyIA0KPiBidWlsZA0KPiBkaXJlY3Rvcmllcy4gRm9yIGV4YW1wbGUsIEkgdHlwaWNh
+bGx5IGhhdmUgYSBzZXBhcmF0ZSBjb25maWcgZm9yIA0KPiBnZW5lcmF0aW5nIGENCj4gY3VzdG9t
+IHRvb2xjaGFpbiB0aGF0IGNhbiBiZSBidWlsdCBhcyBhbiBleHRlcm5hbCB0b29sY2hhaW4uIEkg
+cHV0IGFsbCANCj4gdGhlIGJ1aWxkDQo+IGRpcmVjdG9yaWVzIGluIGEgZml4ZWQgcGxhY2UgdW5k
+ZXIgdGhlIGV4dGVybmFsLCBzbyBJIGNhbiByZWZlciB0byB0aGUgDQo+IGV4dGVybmFsDQo+IHRv
+b2xjaGFpbiBhcyAkKEJSMl9FWFRFUk5BTF8uLi5fUEFUSCkvb3V0cHV0L2hvc3QvYmluL2djYy4N
+Cg0KV2UnbGwgYmUgc2hhcmluZyBldmVyeXRoaW5nIGJ1dCB0aGUgYm9vdGxvYWRlciBhbmQgZGV2
+aWNlIHRyZWUuDQoNCklmIGl0J3MgdGhlIGV4cGVjdGVkIGFwcHJvYWNoIHRoZW4gSSB3aWxsIHNl
+dCBpdCB1cCB0aGlzIHdheS4NClNpbmNlIHdlJ3JlIHNoYXJpbmcgdGhlIHVzZXJzcGFjZSwga2Vy
+bmVsLCBhbmQgc28gb24sIGZ1bGx5LCBJJ20gDQp0aGlua2luZyBJIHNob3VsZCBqdXN0IGhhdmUg
+ZGVmY29uZmlncyBmb3IgZWFjaCBib290bG9hZGVyIGJ1aWxkIGFuZCANCmFub3RoZXIgZGVmY29u
+ZmlnIGZvciB0aGUgcmVzdCwgYW5kIGp1c3QgY29tYmluZSBldmVyeXRoaW5nIGluIHBvc3QuDQoN
+ClRoYW5rcyBmb3IgdGhlIGZlZWRiYWNrIQ0KDQpCZXN0IHJlZ2FyZHMgLy8gSm9obiBFcm5iZXJn
+Cl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9v
+dCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWls
+ZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
