@@ -1,116 +1,84 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7365BC55164
-	for <buildroot@archiver.kernel.org>; Thu, 30 Jul 2026 15:46:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F36B5C55162
+	for <buildroot@archiver.kernel.org>; Thu, 30 Jul 2026 16:13:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1B1A480F58;
-	Thu, 30 Jul 2026 15:46:46 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mPkvbx1U4Ipi; Thu, 30 Jul 2026 15:46:45 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 318A4810F8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1785426405;
-	bh=F6dqpV6yYLVdI1Bomy6f17PA0/B1lUvOoqlzsnDgVdQ=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=L0Tp0UWPaxJQxDb/jqxW2Q2xfY9nwzUTO0K6Xkz8oc4vLN45g4mtHVGjZpo7hMgsa
-	 BqyKQcvpWU8VCudCjXij4O6HjgWI7ytkbgdAHHW6wr9l1yFmrevx38HQovbiftKbs1
-	 2hDynH8FZGrUhv0ivgrwWElRBFuQ/zfE5oJGZos4T9oo45d3zF6Yqw71j+oynqJH9C
-	 +VFIyRIKlXtJzrattFzmfbDXh/E64jBtkCuWZHt4IaufoV+19CtcOKM0oM9Ms+YM6A
-	 OWsuRurlQ9O8sRzx8eQmYKNCyNDpgWT3kjycOwvyuf3E5LtRRGQDF8tJrqQ8FEhAIF
-	 uW0hdm5wYZJ2Q==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 318A4810F8;
-	Thu, 30 Jul 2026 15:46:45 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id CF60A2CE
- for <buildroot@buildroot.org>; Thu, 30 Jul 2026 15:46:43 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C128840BF8
- for <buildroot@buildroot.org>; Thu, 30 Jul 2026 15:46:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9295F40C26;
+	Thu, 30 Jul 2026 16:13:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mjUTJB6HpfAT for <buildroot@buildroot.org>;
- Thu, 30 Jul 2026 15:46:43 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32e; helo=mail-wm1-x32e.google.com;
- envelope-from=philippemontcho@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A508040B97
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A508040B97
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
- [IPv6:2a00:1450:4864:20::32e])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A508040B97
- for <buildroot@buildroot.org>; Thu, 30 Jul 2026 15:46:42 +0000 (UTC)
-Received: by mail-wm1-x32e.google.com with SMTP id
- 5b1f17b1804b1-49553515a8bso27469885e9.1
- for <buildroot@buildroot.org>; Thu, 30 Jul 2026 08:46:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1785426400; x=1786031200;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to:content-type;
- bh=OarriMSC42tkJkj8QAHTLsXxNyEFZfvpvknoMGjpP/Y=;
- b=T/1kh86ihBya2tkRC6FOCntJTr+Az6NpkfMybmm4lY8xd9dfTOzoTsnAnM3A2XHePy
- atoH9/QU+he99zZek8fBjzLNgA5gyGpURxl5uMPn2n80hydEEbS/VRTyPhTmfh2v00in
- xPYnHo/oUv6gV7SuKikVeJhkVsIXhoGoG+lrMiA1UlfovPqjgjZPdnkgsd0l5i28dOQr
- V/T4v5jUE58rIO+ZmcKY23IMt+TG6JRAl4cFImTCUCX6eaN8y4pm3E3rJ52faAsw99gs
- 1drSqLrSkui0M8TYJNyqhCadFReLAjeZjsfaPNQsdMKrK0eYJmU6U6BaTD2vvbIzHSXi
- YLfg==
-X-Gm-Message-State: AOJu0YzRm/rIqKsg6+d9ddZ0iFtRyjSHDd0hsgCDaY7kULu4fctqkM46
- 48WZpL/+PuES0WTj2ZKd5KSxovOfijbSQlmulJ0S4gr0At1BU9vOJ+PHZKYD8A==
-X-Gm-Gg: AR+sD10zuziyi+zI0IQ1MKrgCsCR9hpYMeKhcv27UjbJ8FB6qhWph5JtKDnWIGFiWcZ
- yyzL72fydJ8RrPV76afzLOLQl2XRzWl5EtPXqYpc0ZfA89RcuoX92MegscetTC06W8mOONsSkhc
- Expc//QgdkeefauXjqfBy+xXzFyQBpQZNXI0Msa2ria21K/4XAK3ASV/Stano5iTbWNapP6d3Cd
- HEbwrKtax7J8aL/Y6T1ClzpPSX8XHPpoNCByJN++CTdAoHvZ4yLrkrES4PS5sXwZW4nD6bM6jMv
- mWr5uwCG1PI3kwA6sueBxHfKERf+T0CHcftiTXgOZlB8OaewKMZ7FZaKzroPWoSks85tH8CjoIx
- d4cQMLoObP5CVp0FIy869Nl+r8xmSK4LFIerht4PxJX8QKzUXB2CIUWziyyoCSJd46WZbSpOi7Q
- vj/TD91fdx94RMPUfpyzt9DoSnW2nVM24OMiElvEQFtn0o4+1s93wRidw2LzVz/w6nl43xniAbm
- MzkM2XI5ZHxRvummgVI0SlWsjHg9mfHnlTrsFdLdClPAw5JMlAuW7czF7VMC3HgErxnR9gtR6tE
- 9pB3ZZxHfshuMsPYMF/ZzzLpxDIYiz5DqS2yAv5aB24=
-X-Received: by 2002:a05:600c:a49:b0:493:c845:bc20 with SMTP id
- 5b1f17b1804b1-49800e6ab7fmr45489985e9.4.1785426400480; 
- Thu, 30 Jul 2026 08:46:40 -0700 (PDT)
-Received: from Phil-Pictz.home
- (2a01cb0000b3fe00e5c6968d2096bcd0.ipv6.abo.wanadoo.fr.
- [2a01:cb00:b3:fe00:e5c6:968d:2096:bcd0])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4980120b64asm73602625e9.12.2026.07.30.08.46.39
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 30 Jul 2026 08:46:39 -0700 (PDT)
-From: Philippe MONTCHO <philippemontcho@gmail.com>
-To: buildroot@buildroot.org
-Cc: Philippe MONTCHO <philippemontcho@gmail.com>
-Date: Thu, 30 Jul 2026 17:46:31 +0200
-Message-ID: <20260730154631.41203-1-philippemontcho@gmail.com>
-X-Mailer: git-send-email 2.43.0
+ id 1fh4rPQr2x_x; Thu, 30 Jul 2026 16:13:23 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4BEF640645
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1785428003;
+	bh=8J/LrpXg6+MdqxsgpmDlho9/dr7FRX5x4Z+n8A3qGmo=;
+	h=Date:To:References:From:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=ODrdBfVe9/vwDb1Zb3Sv/XhBmTEcjSVZU/0DfwuysNLcIQ+RHa5jVMmK/6rmC+8Co
+	 /OiGRCErTUE6bi9rbhyOkPxzGsEEZF+Ny1oqrWdE8t3TJTegNDqj3RYZXYohfpDLZW
+	 hpBND/HXrdWcLAbNdbZPFSY8T5TbSixDsBLcd2CLbkWxHqi8Q/tXY6YlvkcfSemRdR
+	 DdSvDOSxQG2xW86VSoeApDI1e/5VIwR5x0slfbaHxGwMsvsu8KPaL3/12enNaVmkUV
+	 G65b9mZlcnHca9mA0nzeBTq023HPWI7ae1wo8Ts+N2VSYvGupLF7ov4J6b+2VcIU5o
+	 06ac0zCRN87UA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4BEF640645;
+	Thu, 30 Jul 2026 16:13:23 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7B8C32CE
+ for <buildroot@buildroot.org>; Thu, 30 Jul 2026 16:13:21 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 623EC60644
+ for <buildroot@buildroot.org>; Thu, 30 Jul 2026 16:13:21 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9RvkWWw3OVoN for <buildroot@buildroot.org>;
+ Thu, 30 Jul 2026 16:13:20 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=155.212.184.193;
+ helo=mail.rulkc.org; envelope-from=viper@landau.one; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3A9BA60602
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3A9BA60602
+Received: from mail.rulkc.org (mail.rulkc.org [155.212.184.193])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3A9BA60602
+ for <buildroot@buildroot.org>; Thu, 30 Jul 2026 16:13:16 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 62219100E2B
+ for <buildroot@buildroot.org>; Thu, 30 Jul 2026 19:13:13 +0300 (MSK)
+Message-ID: <efaaafcd-e259-4f40-8f46-3bd0aa2f02b3@landau.one>
+Date: Thu, 30 Jul 2026 19:13:11 +0300
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: buildroot@buildroot.org
+References: <20260729152659.3813837-1-viper@landau.one>
+Content-Language: en-US
+From: Konstantin Menyaev <viper@landau.one>
+In-Reply-To: <20260729152659.3813837-1-viper@landau.one>
+X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1785426400; x=1786031200; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
- bh=OarriMSC42tkJkj8QAHTLsXxNyEFZfvpvknoMGjpP/Y=;
- b=seSojgHUOyW2bm0l2Vwdr/YvU3Jggt5G2xn1UAq+0BnKwgwLb5gtbkJZfvGraR2kJf
- d0nGXPCOW67iZuGWmoSmZl+6h5xiUObgPBIW9sxuDRsVaMcjAciXmo6kOoT3w8bB6tV9
- f4pObPsWeOxWH3j6i7BnEcrERxF4KQLcZ1rua83knKWQfkolUQ9uaa3a14iZV1fuPBb5
- xSR4jOG38knqTD4iJhGhsefZWpmnpuL6XzJ2mzLVsykFBiJ7nJNr2OwBWfLdG1y88bd1
- buj7Pr/UxrKilvUx9t/m77XFTXYXhQ9B3MTbtFM8L9tA+OWVO+qa954/g68yzmAOXNSN
- CCpA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=landau.one; s=dkim; 
+ t=1785427993; h=from:subject:date:message-id:to:mime-version:content-type:
+ content-transfer-encoding:content-language:in-reply-to:references;
+ bh=aGXhM9MX1/dUUdJCcOwOGoMrGpWE3WrJv0XtykstwA4=;
+ b=TM4NNE7n500+DoNPVi6oRUyxhDEZBS+lbarnGQ3140mZg73yvTDsF9xmpar6lYZWwF+bEa
+ iBFnEz9+5jxnnFwGlYkS3KbhE7pgbtP/Ipc+FqpG4WkqpvfZd6iCjduIPec9tjMElTtfli
+ Mkt0AILFKAWlmy9yWa5wr2FLN6z5WQmCWDDgB6lxCYMG5549/YbKyOS8wU+mvi1Ke0yxMz
+ l8Je6h27s5NaDiVVqmySeW0hd7yk+Jrmjl2lxNdhfZY+LnuJWu9YgEC6FRVRfov2eBDC+I
+ SN+YlASwTbZBZigarw+FpB8qXHa4VBEEHixJ5d4JqgMl8tJXZl2/WkGwFK928w==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=landau.one
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20251104 header.b=seSojgHU
-Subject: [Buildroot] [PATCH 1/1] package/uboot-tools: bump version to 2026.07
+ unprotected) header.d=landau.one header.i=@landau.one header.a=rsa-sha256
+ header.s=dkim header.b=TM4NNE7n
+Subject: Re: [Buildroot] [PATCH 1/1] package/cpp-argparse: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -122,45 +90,87 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release:
-https://git.u-boot-project.org/u-boot/u-boot/-/releases/v2026.07
+On 7/29/26 18:26, viper@landau.one wrote:
+> From: Konstantin Menyaev <viper@landau.one>
+> 
+> A Modern C++ header-only library
+> for parsing command-line arguments.
+> 
+> https: //github.com/p-ranav/argparse
+> 
+> Signed-off-by: Konstantin Menyaev <viper@landau.one>
+> ---
+>   package/Config.in                    |  1 +
+>   package/cpp-argparse/Config.in       | 12 ++++++++++++
+>   package/cpp-argparse/cpp-argparse.mk | 16 ++++++++++++++++
+>   3 files changed, 29 insertions(+)
+>   create mode 100644 package/cpp-argparse/Config.in
+>   create mode 100644 package/cpp-argparse/cpp-argparse.mk
+> 
+> diff --git a/package/Config.in b/package/Config.in
+> index fc1e57d30d..cdf996fe24 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -170,6 +170,7 @@ menu "Development tools"
+>   	source "package/bustle/Config.in"
+>   	source "package/check/Config.in"
+>   	source "package/cmake/Config.in"
+> +	source "package/cpp-argparse/Config.in"
+>   	source "package/cppunit/Config.in"
+>   	source "package/cukinia/Config.in"
+>   	source "package/cunit/Config.in"
+> diff --git a/package/cpp-argparse/Config.in b/package/cpp-argparse/Config.in
+> new file mode 100644
+> index 0000000000..7ad91f7bbc
+> --- /dev/null
+> +++ b/package/cpp-argparse/Config.in
+> @@ -0,0 +1,12 @@
+> +config BR2_PACKAGE_CPP_ARGPARSE
+> +	bool "cpp-argparse"
+> +	depends on BR2_INSTALL_LIBSTDCPP
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7
+> +	help
+> +	  Argument Parser for Modern C++. A header-only library
+> +	  for parsing command-line arguments.
+> +
+> +	  https://github.com/p-ranav/argparse
+> +
+> +comment "cpp-argparse needs a toolchain w/ C++, GCC >= 7"
+> +	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_7
+> diff --git a/package/cpp-argparse/cpp-argparse.mk b/package/cpp-argparse/cpp-argparse.mk
+> new file mode 100644
+> index 0000000000..7978fd224c
+> --- /dev/null
+> +++ b/package/cpp-argparse/cpp-argparse.mk
+> @@ -0,0 +1,16 @@
+> +################################################################################
+> +#
+> +# cpp-argparse
+> +#
+> +################################################################################
+> +
+> +CPP_ARGPARSE_VERSION = v3.2
+> +CPP_ARGPARSE_SITE = $(call github,p-ranav,argparse,$(CPP_ARGPARSE_VERSION))
+> +CPP_ARGPARSE_LICENSE = MIT
+> +CPP_ARGPARSE_LICENSE_FILES = LICENSE
+> +CPP_ARGPARSE_INSTALL_STAGING = YES
+> +CPP_ARGPARSE_INSTALL_TARGET = NO
+> +
+> +CPP_ARGPARSE_CONF_OPTS = -DARGPARSE_BUILD_SAMPLES=OFF -DARGPARSE_BUILD_TESTS=OFF
+> +
+> +$(eval $(cmake-package))
 
-Signed-off-by: Philippe MONTCHO <philippemontcho@gmail.com>
----
- package/uboot-tools/uboot-tools.hash | 2 +-
- package/uboot-tools/uboot-tools.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Some notes...
 
-diff --git a/package/uboot-tools/uboot-tools.hash b/package/uboot-tools/uboot-tools.hash
-index 6916498256..e992835582 100644
---- a/package/uboot-tools/uboot-tools.hash
-+++ b/package/uboot-tools/uboot-tools.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  ac7c04b8b7004923b00a4e5d6699c5df4d21233bac9fda690d8cfbc209fff2fd  u-boot-2026.04.tar.bz2
-+sha256  78e8bfc382fe388f9b55aa1daf8c563522a037779b5d4c349d1415e381f1243e  u-boot-2026.07.tar.bz2
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  Licenses/gpl-2.0.txt
-diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
-index 6b5554da9b..23062beefe 100644
---- a/package/uboot-tools/uboot-tools.mk
-+++ b/package/uboot-tools/uboot-tools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--UBOOT_TOOLS_VERSION = 2026.04
-+UBOOT_TOOLS_VERSION = 2026.07
- UBOOT_TOOLS_SOURCE = u-boot-$(UBOOT_TOOLS_VERSION).tar.bz2
- UBOOT_TOOLS_SITE = https://ftp.denx.de/pub/u-boot
- UBOOT_TOOLS_LICENSE = GPL-2.0+
--- 
-2.43.0
-
+This package provides a lightweight command-line argument parser for C++ 
+applications. Buildroot already includes a similar package for Lua, but 
+no equivalent is currently available for C++. This is useful for custom 
+tools & helpers.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
