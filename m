@@ -1,118 +1,118 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6A98C5516F
-	for <buildroot@archiver.kernel.org>; Fri, 31 Jul 2026 12:05:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70261C54F54
+	for <buildroot@archiver.kernel.org>; Fri, 31 Jul 2026 12:05:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 953FE41024;
-	Fri, 31 Jul 2026 12:05:44 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BDbEdxwvcMia; Fri, 31 Jul 2026 12:05:43 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1349D41005
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1785499543;
-	bh=5VoXepkhwO2tuVnWblSKvzia4Y33jsh7UgFMFBhtGCM=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=m7TcuDr1Xdynwu08CuWppiHHuJgvxGT7OTyJtlf00aTU1OfSbRlOm+PIOmhpS9OkZ
-	 8jcKgUBxBd12f/VqYbQAVbnRzwVqrr8f48zPmZjSlt56VKJmRe1q+N0CFsVjjenHi/
-	 FWOLrs/pcIEOHRrIPEueooUIPj2O6Kh9acv9S76UC/hxmcVqEYBl/g0XA7oGeyYfKA
-	 FLJYl63hgDYNLMg/N0Hl+6ckKnzDao6R/2NypIE2GFUTcE0EBr+cR8Pc3JIiWkjrXL
-	 ZDegnKMj1RgZXNe7z5R76SCmyZcNxHugomcZIRKApjXzjAvnVYtylJSQrjX3kz0ePF
-	 F4L5OCeiqsXbA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1349D41005;
-	Fri, 31 Jul 2026 12:05:43 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 5634E27B
- for <buildroot@buildroot.org>; Fri, 31 Jul 2026 12:05:40 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3991B60B42
- for <buildroot@buildroot.org>; Fri, 31 Jul 2026 12:05:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 359EF60B55;
+	Fri, 31 Jul 2026 12:05:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rnUtbb53g-35 for <buildroot@buildroot.org>;
- Fri, 31 Jul 2026 12:05:39 +0000 (UTC)
+ id 0vz1Pr7jffw7; Fri, 31 Jul 2026 12:05:46 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 140B260B4A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1785499546;
+	bh=SwIW9WsJ3AO+D2tsQBgvXgTTCc6UsJAneK9H7YkTnZ4=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=H4aKASZZDtGNRN5C4+3p9RwQ69A8f9AosQIPz+pK/lCRIcL+WVDIzsVRgm5ISTcF9
+	 dAYPSsIhmCrHGxF0oq0PFeBKi5HDBSQsXLLeprShIFn/EnWKTnpGLkSNwiCqH30sNx
+	 y8ioAQ17u9b39iGgBsNvHM126GoyXJG4ty5Kgnp8EqyjPDpU0KOlAwwWj2yjXjDCsc
+	 QBIGLuWYsnbRxq9MjjjVh/zgXcxRJNhLLxnTJGMIfCn+QQCpfWDFpBEhqE4aPvyUkF
+	 trELixbcAwbioo0Y1+QwUxNjvD/upmPvteS2bwZDkiPWQFQkJVFLPmCiIoGxSUj47R
+	 /ooOmRvakgocA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 140B260B4A;
+	Fri, 31 Jul 2026 12:05:46 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3E92E27C
+ for <buildroot@buildroot.org>; Fri, 31 Jul 2026 12:05:42 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 24B7940467
+ for <buildroot@buildroot.org>; Fri, 31 Jul 2026 12:05:42 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id u4C2w-hnXz4G for <buildroot@buildroot.org>;
+ Fri, 31 Jul 2026 12:05:41 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42b; helo=mail-wr1-x42b.google.com;
+ client-ip=2a00:1450:4864:20::42d; helo=mail-wr1-x42d.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 42B7860B55
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 42B7860B55
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
- [IPv6:2a00:1450:4864:20::42b])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 42B7860B55
- for <buildroot@buildroot.org>; Fri, 31 Jul 2026 12:05:39 +0000 (UTC)
-Received: by mail-wr1-x42b.google.com with SMTP id
- ffacd0b85a97d-47f633e6058so915817f8f.0
- for <buildroot@buildroot.org>; Fri, 31 Jul 2026 05:05:38 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2402C40463
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2402C40463
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
+ [IPv6:2a00:1450:4864:20::42d])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2402C40463
+ for <buildroot@buildroot.org>; Fri, 31 Jul 2026 12:05:40 +0000 (UTC)
+Received: by mail-wr1-x42d.google.com with SMTP id
+ ffacd0b85a97d-47f904e80eeso816261f8f.1
+ for <buildroot@buildroot.org>; Fri, 31 Jul 2026 05:05:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1785499537; x=1786104337;
+ d=1e100.net; s=20251104; t=1785499539; x=1786104339;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=VcH0CiNpyS4K2pg4gIq4f3EW2XFaBGCNIR9Cjqq6X9I=;
- b=tSxA+QFTDgtAdtRza+dRHOUe7wtKiFpbMV0ioFDDMsp2T8dd1exix37SPMQowRQcy3
- 5ovk6MI//j6cuSyBgq/2WJrRASlDK3hAR2ThQgW2E2WEkr0tpsopO0ZzlpNP3Ew3IJWR
- 0sUBr1pxqyk4MuwEObq/5H4Ops0+7vgEDo/BV6eg6aTcINo5Fbq3rhoH1bZI3eSnal5H
- Y6yfn/uGNH4++8RyVKySPtzc3wzW1FN8pwqmbfo5/Yn7AKLqXs0TiENY8UkR4Z0C2mOx
- X25tc9EpjLNmQJfYv9UxqR1aeAl2234S880jO0aHCrMuMGgvDRzWYlkC2zVoN6ZOfj6+
- 70ag==
+ bh=hUQFpKsOPCg2JzcUkkutOWZ5jUapWY++mSGHO/usXtM=;
+ b=CoE/7dt1+ZQcDyERp0YxWv3KjAX0s68M+RQefC9M5/CixErwomdo52fn+2zVmYzRC5
+ kO22pjlGXOspVRuDL64Eoj7nQoKbtT4CdxK4slDhMXsKn15ZkY2Y0S3Wdvzanm9V71JQ
+ mxSn9U+C/WKyqMRad/OzLIBVeRaxTj2Svnoe0Paoy4cBDgRLZpGkMJyUVU6T+iphFmua
+ HACJuhCSgGPr1I+coHkamfx+Hza6ofYw2YKWK4ZKBVDDjqV7l8XSG+AudO9ssgTnKQLL
+ rRVr68j4Qzse7Xv9JTadMoRRxqUHuS8xFlt9FgsxmF3kVl5SR9o4QyBuboHYEmvspd33
+ jYQQ==
 X-Forwarded-Encrypted: i=1;
- AHgh+RpoWlhwVaEAk2LSAzfmBSfBN/v6NGYA4THCNqcuUma/Ld20JmX/WlYNdRhy5UUKqIjMd8YwtMfcQvI=@buildroot.org
-X-Gm-Message-State: AOJu0YxK4G01W9KqdSbCIgDmprCKYPK9vI2r3pyTJfElVAXBptg7YXgo
- FFqu/QUso9/DVOiiXb5uvKXgsykEezUrPTdcXTjEWbN2ps2AZbgv0cZy8vjc2Wp1UTA=
-X-Gm-Gg: AR+sD12p1B8Jm+IzmLVpjZ314O3m0myVK3jiwA005cakcDaR5L5OQr6XN2HbK7Pp6Uw
- bkFWUFbEU628erkIooGHrxk8zAinZT+4Of9tkejLRgbqCGkwFBVI8ymU/9+5w0aXCfHlwpPCGme
- sOr6oKnmAUs1C6OprIe0tVvLcsAR/L6hXmS+T2rGA/5NzBIqCUqTGPagwa59WTlfutOidp2yWqc
- dfspfb3d18CtPeF+KAgyoFD2T6VeBrFVAJ59Bmd7c5ilaro2w70c3IeDvckuI3s4VJVDlMmS49j
- SjpWtqddWcb1q/EoG1tcA8Eqwp9jwJXrb5JrCZWDL/PjZ9dCe6d5WF0BYSM59yuIXywvmFS0wZX
- pgjGLEbW8xJS/2Deb11Bftmj9VOfGn91xNcJZOVKYY0j0NcZ5RNo6n6dxOUqk8ZbkKrqvEEVcWF
- Nslni+ivfTLZeVKUyFz4MQ0/5uigclkbIkCiAdGGJdGP9LEXsJ03/+ZDvWSKwZNP1Ik8ktoC9Q4
- PTpYwuRLzTDYuiGiWZAenS2bA==
-X-Received: by 2002:a05:6000:29c2:b0:47f:bef8:d559 with SMTP id
- ffacd0b85a97d-47fd2b55dfbmr2758927f8f.45.1785499537107; 
- Fri, 31 Jul 2026 05:05:37 -0700 (PDT)
+ AHgh+Rpc45nZizovI/oqy5f1/txErUlGiisYzApuLukPZNk8frWT6qXknxTRNBVnbf1LExUEF6h0aReR/MM=@buildroot.org
+X-Gm-Message-State: AOJu0YwR9nNQh1PqGQMFLKzat0OUR/S4mUpmnf42kihveKuJG6z5jsOc
+ ner9xXFSFDBVRa8DenRL/sEmwq1LNf3F62NyErnLr32Py31HFI5CONOCJKJq/Y9l/bc=
+X-Gm-Gg: AR+sD12e1LBUomBZFxS+jX6ooZlFanSPVmcSJM7e13ut+TF0Z9eZ9Y/pH/EVpdsyVKo
+ VKx66WN+9IuoBWaOkAMrAuuxouqIAaVxCRyctO21TNMIb58QOJAmV5TaXHX3eIzUGsDdv9HwHyn
+ z23INLGDJ3Rjh6ZBqUXW3h3paHRm9/gHPqOzKrBlxR/2SQWQ4FJ4FAWtgv4GqCaiCwFZzMn1YTp
+ PqWnFJMrkYu9g9lsQpov7rR/d0Ag1uPBbh0CngoXLPhl3JFum+XaCCg1ppBRTi8bU3X2EQptQMO
+ /lbe6nqmiyrJhyPLwbl9oAo26U8KTXNVcoGJ/H2CM164SLJs8ta5Pi1kv+fWbJSG/prx7CKPNFg
+ V+RixAaVafwXLz0+EGBrKWOvPfkXNDZ0Rb5FDnJ7K7F9vXYgZIIckgP65VRNArIhrZ7gNzH0Jgd
+ i4dZVookLc/0HQ9LsiizygigwVvJMJGqKceB1gIi3BNDEjn/V9rPijqdwV3cHDm2LcyNb0nJfEp
+ T6sWr1+UvnfaDDXwti09vv6kCXV2+XwlfiSSg==
+X-Received: by 2002:a5d:5c89:0:b0:47f:97e9:fe60 with SMTP id
+ ffacd0b85a97d-47fd2adc8c6mr4200649f8f.15.1785499539017; 
+ Fri, 31 Jul 2026 05:05:39 -0700 (PDT)
 Received: from mindpad (213.219.161.200.adsl.dyn.edpnet.net. [213.219.161.200])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-47fd41e2abbsm4093523f8f.9.2026.07.31.05.05.36
+ ffacd0b85a97d-47fd4068fb7sm4678864f8f.0.2026.07.31.05.05.38
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 31 Jul 2026 05:05:36 -0700 (PDT)
+ Fri, 31 Jul 2026 05:05:38 -0700 (PDT)
 To: Fiona Klute <fiona.klute@gmx.de>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri, 31 Jul 2026 14:05:35 +0200
-Message-ID: <20260731120535.3796-1-thomas.perale@mind.be>
+Date: Fri, 31 Jul 2026 14:05:37 +0200
+Message-ID: <20260731120537.3846-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260722153224.624762-2-fiona.klute@gmx.de>
-References: <20260722153224.624762-2-fiona.klute@gmx.de>
+In-Reply-To: <20260722153224.624762-3-fiona.klute@gmx.de>
+References: <20260722153224.624762-3-fiona.klute@gmx.de>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1785499537; x=1786104337; darn=buildroot.org;
+ d=mind.be; s=google; t=1785499539; x=1786104339; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to:content-type;
- bh=VcH0CiNpyS4K2pg4gIq4f3EW2XFaBGCNIR9Cjqq6X9I=;
- b=hg3yOtG+6t3HUzXciiP6JPcLpy46aSqs6SBPld8AkPbSQPapNZcmbDtTtAYmiWVmND
- MtFf4aR8gep8Ab+RoVghCvBFBT4ihrj7R/r8PmHzQRORley1HYHSXH4WKSFuK5kcisHh
- KEYZWHZVv6ZkIGB0vYVrGzcrUJBveqNg1hcHtQiJ7vIwHLm4oZtKk1GlAcsNa0P3xBJ/
- fHQCcwPys3ha44uniSJUTGBVi1CHy8BTzXv4xUtFdevVmEixsp+GWNkfpPtSgylRrOcO
- 4vtHlCEMmuKVXy9RT8y4+oYeDwnsJ2oqi3zYP0rIr140tYUpVQAJYPjAwQzJvFEakhPB
- td1Q==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=hUQFpKsOPCg2JzcUkkutOWZ5jUapWY++mSGHO/usXtM=;
+ b=JCntoZ7HrxL67mInJnaK3e9d8AIKGasGMfCn089c/feL79uPDB2wQDFLuZkvGD6anp
+ wYoME0vZbSL1a3ZqUg1+xysUkUR3bX/EIq3JAKQlTKoMzV18iQAQtFbvyXz9majz4oPb
+ yv/XJ3GcX5YA8XiJFi8CFSYIpSKT1jkzqkd2mMAk7C8XLN/f8Bw8Ixtd5YW6n56GgHLl
+ ZLQoIIcAIRZ34sroXtJnk/GFFv6aWNaNjJlzjd5A8ps51OHWHb6i9S5x+kWe9ZWUJxPn
+ DjDDfm60d21KjZKv0UgaakTKxSH5zQpvNktG2PytnHvTICKmwyPHy2USKBVA25vlV8n/
+ 6xUA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=hg3yOtG+
-Subject: Re: [Buildroot] [PATCH 2/7] package/environment-setup: add license
+ header.a=rsa-sha256 header.s=google header.b=JCntoZ7H
+Subject: Re: [Buildroot] [PATCH 3/7] package/ifupdown-scripts: add license
  info
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -141,22 +141,22 @@ In reply of:
 Applied to 2025.02.x & 2026.05.x. Thanks
 
 > ---
->  package/environment-setup/environment-setup.mk | 2 ++
+>  package/ifupdown-scripts/ifupdown-scripts.mk | 2 ++
 >  1 file changed, 2 insertions(+)
 > 
-> diff --git a/package/environment-setup/environment-setup.mk b/package/environment-setup/environment-setup.mk
-> index 069ee25f9f..276d5caca8 100644
-> --- a/package/environment-setup/environment-setup.mk
-> +++ b/package/environment-setup/environment-setup.mk
+> diff --git a/package/ifupdown-scripts/ifupdown-scripts.mk b/package/ifupdown-scripts/ifupdown-scripts.mk
+> index 5ef032142c..d7d5244ffc 100644
+> --- a/package/ifupdown-scripts/ifupdown-scripts.mk
+> +++ b/package/ifupdown-scripts/ifupdown-scripts.mk
 > @@ -4,6 +4,8 @@
 >  #
 >  ################################################################################
 >  
-> +ENVIRONMENT_SETUP_LICENSE = GPL-2.0-or-later
+> +IFUPDOWN_SCRIPTS_LICENSE = GPL-2.0-or-later
 > +
->  ENVIRONMENT_SETUP_FILE = $(HOST_DIR)/environment-setup
->  
->  define HOST_ENVIRONMENT_SETUP_INSTALL_CMDS
+>  define IFUPDOWN_SCRIPTS_PREAMBLE
+>  	echo "# interface file auto-generated by buildroot" \
+>  		> $(TARGET_DIR)/etc/network/interfaces
 > -- 
 > 2.53.0
 > 
