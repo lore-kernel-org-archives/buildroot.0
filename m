@@ -4,117 +4,116 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BBE5EC5516F
-	for <buildroot@archiver.kernel.org>; Fri, 31 Jul 2026 12:22:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5EB78C5516D
+	for <buildroot@archiver.kernel.org>; Fri, 31 Jul 2026 12:22:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6F8B360B8C;
-	Fri, 31 Jul 2026 12:22:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2AFDB60B90;
+	Fri, 31 Jul 2026 12:22:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DobT-Mis8xkM; Fri, 31 Jul 2026 12:22:01 +0000 (UTC)
+ id Zmqfnu_QctJx; Fri, 31 Jul 2026 12:22:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8254960B8D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C964C60B7B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1785500521;
-	bh=60Ltgg7IixgW9xKfmgAah9hFyXDYw+iFpUkSe19qxeU=;
+	s=default; t=1785500528;
+	bh=an1g8sgzA9rZKZkx1txhCF9F/apBCVDZ4uD5gZXUKfw=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=L/6dyjQCB8D7X00BKFxWKXpUyY60h1eWad3m9bTZpvAWm3XY8y7mNJ+LZQmg3OieT
-	 LXPkqfUSkjtmKGbwVLfVIRN9uKJv2k+WGLrO9QOCBL/A+I+KVAjc50sWgTenaIM618
-	 v8p901QxXiMNTT24e92YOwMFsqYxqq79ePIJ556e7+Nna/9O1KCduOxyFkPxplgUl7
-	 1PT/+4uP87NVd0cf5cee8X5W00A5Mu1LIvFgbm17qSEin90rpj8JmImBSlsZuuTbkT
-	 oKtBvBgkkX2wl4h2FM5cwpj+oj3GWxVzyaCwBvjGv93SUTygreWp3A9VgQOU3aKYDb
-	 o2s22RRAjnPdA==
+	b=WVCmeX4qfHoLjcQk0SGs4FXkDo2DowweFENxnFtp/l8/iBwIsb8KGPevbWNa3QXi6
+	 7RG5DHZEoMKbaQrfzoqGWX8hmEnE9gZ+EwIjsl0nmrL5044/nUOALosBSSb2RMRjOH
+	 xeX049czU3HmLJ9wTKVFh78wLAdpX+ZIJcGXEDGRCx1IVR9IhXhY8XbectULpVQ6gd
+	 US9zLJDo+vQXpinKpbenxAQ+Vbt5MUeq/sF23QDin+9KuiAp2I1gZt+AoAUMwCFNoo
+	 OUCrwqdc3eWJU5aP3bl31gYjIg2ArYzX5PEbVjnVwbcakyAqPqzkxyWzanrjCrnr58
+	 B1Gz6XW/luaUw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8254960B8D;
-	Fri, 31 Jul 2026 12:22:01 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 9962E2E9
- for <buildroot@buildroot.org>; Fri, 31 Jul 2026 12:21:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C964C60B7B;
+	Fri, 31 Jul 2026 12:22:08 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3BA3F2E9
+ for <buildroot@buildroot.org>; Fri, 31 Jul 2026 12:22:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7FF2740463
- for <buildroot@buildroot.org>; Fri, 31 Jul 2026 12:21:57 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2117B8133B
+ for <buildroot@buildroot.org>; Fri, 31 Jul 2026 12:22:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id j7k9ASfcWx2B for <buildroot@buildroot.org>;
- Fri, 31 Jul 2026 12:21:56 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aAp9B0_fOZmq for <buildroot@buildroot.org>;
+ Fri, 31 Jul 2026 12:22:06 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::62a; helo=mail-ej1-x62a.google.com;
+ client-ip=2a00:1450:4864:20::435; helo=mail-wr1-x435.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5A93140470
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5A93140470
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com
- [IPv6:2a00:1450:4864:20::62a])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5A93140470
- for <buildroot@buildroot.org>; Fri, 31 Jul 2026 12:21:56 +0000 (UTC)
-Received: by mail-ej1-x62a.google.com with SMTP id
- a640c23a62f3a-c1712a04ddaso139834366b.2
- for <buildroot@buildroot.org>; Fri, 31 Jul 2026 05:21:56 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 01F2B81338
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 01F2B81338
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
+ [IPv6:2a00:1450:4864:20::435])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 01F2B81338
+ for <buildroot@buildroot.org>; Fri, 31 Jul 2026 12:22:05 +0000 (UTC)
+Received: by mail-wr1-x435.google.com with SMTP id
+ ffacd0b85a97d-47ddf7b09e5so1140391f8f.1
+ for <buildroot@buildroot.org>; Fri, 31 Jul 2026 05:22:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1785500514; x=1786105314;
+ d=1e100.net; s=20251104; t=1785500524; x=1786105324;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=jXamINCZ+O2xVJwLMkO5ln+WXtQOQx9KSwdXeYGHmmE=;
- b=WdiRf5yzvYG9JTYlN+rbf9tb/N4FckIZUzrs+oBtbITCcrW0/zh5RS9Nawx2VOfBZq
- Vzb2Om6doQjfU501mVCi27iqS96NUvf/EaKZjEcqXuNrTH4n1RzW04zilNFLoTfL+CMT
- smVb3nQgGh+ud0Qg+BoHtXoffV3+5W9/5Sxe2XW4YL1yc2+3T3UF3LT4enwyDK2jEQr/
- wOT2EwzePxOaprcmC44TGTJTrfdHLHUYLZ+EgDiDkUS7saAd4fn/9QyVGRzLovBrkQeJ
- fNGisXPtp4t6E2KUZtd9qHjpNDmi6mEUOEUYgcfs0Gs/TFe0UQ7Zfbl+hmBtHfScF2H+
- TYWw==
+ bh=twx4A/D0aqXUT12sQyDOe2CFeJEyFDqwnLwWYiX+2/Y=;
+ b=YSMpf/G2KpYdTPnCxFpzA5UM9Q1FFsZipN3atUhbs67/3fq+urq91JZ9jvdYuj267e
+ IQ2Z/t2aTc8W6So9kPoum+C8f14/zpwBaFKHwL1V5n/ZB6Cx2L1wnFrFZqRYvNDTCFKi
+ OEQMH2kw94vXIt3U83jOEgabkF9cUM00ArO65q26ANl7op2lL9gaBAOlQ8E5HBaX0qrD
+ ylhxGC4hbhxGq8TkwWQqEbOjW5Jir6SKO2yK9YotRFswPE/ecoXrIcY/zxvwRTlkGRRC
+ 0laYtp66CZ0BFh8KEJfB32txQII5/vnDLdPwiFsS1PVW+pXkJ7jxAWOPoNb9CfI7OSTy
+ csDQ==
 X-Forwarded-Encrypted: i=1;
- AHgh+RpogvJYXrkVSXCrZY8hdj0kCDKgySQEpQIvZMwEQtbtC62uh955EbQXRUxFKRs6qs7S8oiOvuEJJxc=@buildroot.org
-X-Gm-Message-State: AOJu0Yzjiok+X/9Az1TE//4bc7rFX9yoz3JDWlca9J0DpqP7E+Uh7AHP
- pjKcJfn5Wr5TDS2KzHgHi1FoH9SzvFWNbDrVMhyE7k0W6lwgBep4vmWpJQM2wl3ZTdZgLTLtwrt
- 70LTV
-X-Gm-Gg: AR+sD11CSbMteUmSAOTrGo7b8VvjaVqL/1l7ImRpb3LrUP63s1oEsGCugqYhPogPY49
- 6g2m4IoC1NVuzP7K/ET8/BS5ofGu67gFC2rOp2NQAa3+2D/jV0y55y2ZDiytUIm3VFPTFrWIZil
- m7NEfIEFgyZnnNjWrmA2yfZzptqLg9DHOnIzG4sQlzjv1gZ/J11cVYSpftGmxigYjkh+/cNZk4A
- n+jczRauG/4K79XBv71AjHhkno1yzB/GDXRDcpkJPdxdW3aIRBbVru9F+2/nnbh9rMYdc7soWfg
- ABOQyJHGc4T+JHVxUjsJ42SjixtJ10hW36tngAuQOJ+rVuzqPmOq6Bwnd1GMY/MiB1iscFN8wWH
- VQzSYsPwQKay8VzMPrW/miJctfVpJwRci00KaVSS/UEhr8fyVEEQCH8a1YqpytGGjxU+rA2xYmk
- EndlujVEcIRDe7P2N3bsqQZy15eMshcsUAmBUz5lvltccdwAhlL48WZ1yNnIy+S/+NjmdDD9w9g
- 82tvAlEXanzQiu+074qGg==
-X-Received: by 2002:a17:907:c18:b0:c1c:257e:4888 with SMTP id
- a640c23a62f3a-c1fd239fd0bmr116006066b.27.1785500514255; 
- Fri, 31 Jul 2026 05:21:54 -0700 (PDT)
+ AHgh+RrBj+UipVqqDKtI+XmRVMKsPPEmvX/jFL+EEmsMK4w5qlemhZicl8rERDGAiN2MFttmjWmbG+O+fyQ=@buildroot.org
+X-Gm-Message-State: AOJu0Ywr4c8gnNu2KFLysM8ddzeufZ1pV/nhC+kzXz8O5hD4kmQDVeZY
+ 8oUVx36xMbjWgLrPngzHmi4MJyD+wrOsQBVEbXgyTKw+wOQRcKyImPS0LRqDfrp0thw=
+X-Gm-Gg: AR+sD10swysiZxJhAJLRT6552M/gIvSFUsYo572OERnrd5bkSFdIi3aOvYHu10/4XPz
+ NTMO1dPi8kZLLHsJaT3IYFa2JsIj6qC6u3HQ2XfOI23VGPn9clMUOfw2FmP7V/NkiFQsHuvseku
+ brg+DBxkFC4e6v/OtZSRRzAlZ+li/KDhbXbGHsSy/+Fdrl0aRd+kGhpXVbCiFsRDYUHhw2SdZ49
+ 5f2naXaCgHtbQe5fMfxZwX+pvdip37Ftbs8EQpVB7VqrokCPEbH4KkWHXGJegjLFGViMWTja2QA
+ VCUec7W+yACFNUCE1iy+DaIrgrEcIfEwM/By8XWNVCFTi313t5+VdHm70uzddLyMFYT0McnfZSS
+ VlGPQaLNXNicM58iIXSJmvJwwuNv8lQl3yBmV9W7BYwndXpQS1KP4UYw+Ljw+Zo/YvCAHiYuKEB
+ +3yRku2FjrBC4s7SBBNynLUyUiK2ALG6qxmGWFOQOvVGEH+5T6WwP9X21PkpFMw4MfUbu4qqB+f
+ 3HRtbD3BaGF6k/sEWNdMA==
+X-Received: by 2002:a05:6000:220d:b0:47f:93a1:1126 with SMTP id
+ ffacd0b85a97d-47fd2b6b0cdmr4073501f8f.61.1785500523967; 
+ Fri, 31 Jul 2026 05:22:03 -0700 (PDT)
 Received: from arch (213.219.161.200.adsl.dyn.edpnet.net. [213.219.161.200])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-47fd41e2cf1sm4242285f8f.10.2026.07.31.05.21.53
+ ffacd0b85a97d-47fd41e2abbsm4244294f8f.9.2026.07.31.05.22.03
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 31 Jul 2026 05:21:53 -0700 (PDT)
-To: yann.morin@orange.com
+ Fri, 31 Jul 2026 05:22:03 -0700 (PDT)
+To: Bernd Kuhls <bernd@kuhls.net>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri, 31 Jul 2026 14:21:53 +0200
-Message-ID: <20260731122153.155578-1-thomas.perale@mind.be>
+Date: Fri, 31 Jul 2026 14:22:03 +0200
+Message-ID: <20260731122203.155707-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.55.0
-In-Reply-To: <23f5f721705e82a88212b4930d7876d4c1983ddf.1784867189.git.yann.morin@orange.com>
-References: <23f5f721705e82a88212b4930d7876d4c1983ddf.1784867189.git.yann.morin@orange.com>
+In-Reply-To: <20260723195710.1465177-1-bernd@kuhls.net>
+References: <20260723195710.1465177-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1785500514; x=1786105314; darn=buildroot.org;
+ d=mind.be; s=google; t=1785500524; x=1786105324; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to:content-type;
- bh=jXamINCZ+O2xVJwLMkO5ln+WXtQOQx9KSwdXeYGHmmE=;
- b=LArKRWIUCSFkjneyh1F0dPMj23aDwASbysp5K47KmsIXyiIr/pYD58ZfZPWH0ep6jm
- ESAUPYiPxKQZ5+RD25jdGXlUatvG+GiE0hRSmd+Hmnfe7Eskw8moB5d9WDEcfENN4JYn
- dXcjWVLLbkz9YMnEruoKkEKqNSWuAgG9Fz3yu14jBsAPBjlmwD8hutqxwBcYiXnaoZyT
- +mpulezjkdzbc0FRTyKNjg/NS83w23Ub9lSWXMiilCHSz8QUFZfjrI712EjCh0YOyUTS
- US+szVQZeorOJHi9yvHZwb/qbB/VXbtV/ySQ5kEk1A7f6SDDkAohkSV267Lgha6ybVQa
- J0rw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=twx4A/D0aqXUT12sQyDOe2CFeJEyFDqwnLwWYiX+2/Y=;
+ b=K/jX5WJWuk3Gf8vVVU0zmPU1lu/dihfyrxT3pU09l4WvDcb0KbiS6iixdR3g/eYUKW
+ T2rUWuYU5D+yUiiyk1V4yEdNzJ5DI1LPS3Ns2CC9q25fPjBvkaKO1AIQL8PRUxBSf/o3
+ 3zkj57pbnseUzqSJsHQvF+sb2MmTrRUqua9NvymqPUb4C0S+CMLD61JxPPNe3aIY4U1V
+ jt6SKhmlT81vNBulKJOeRQrRqlm+ZUlqHr4ivd7IFY1H6ry/M3XSbQ8bqKwAXFT+dIP2
+ ZhpOz3aEamc3QLZjFJVKqR+TjHOt5YjbPmii5b1/t8t8vua8p3L6rGNZsT8Wr1FdwEFz
+ zlhQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=LArKRWIU
-Subject: Re: [Buildroot] [PATCH] package/docker-credential-acr-env: needs
- NPTL
+ header.a=rsa-sha256 header.s=google header.b=K/jX5WJW
+Subject: Re: [Buildroot] [PATCH 1/1] package/bind: security bump version to
+ 9.20.26
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -134,55 +133,64 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> docker-credential-gcr calls pthread_getattr_np() which is only available
-> with NPTL; i.e. always available with glibc (where it originates from,
-> since 2.2.3), always available with musl (which has had it since 0.9.10
-> in 2013), and only available when uClibc has NPTL (since 1.0.0 in 2015).
+> https://downloads.isc.org/isc/bind9/9.20.26/doc/arm/html/notes.html#notes-for-bind-9-20-26
+> https://downloads.isc.org/isc/bind9/9.20.26/doc/arm/html/changelog.html
+> https://seclists.org/oss-sec/2026/q3/208
 > 
-> Fixes: https://autobuild.buildroot.org/results/525273d178d89ae8eef306d6ec662af368f20f73/
+> Fixes
 > 
-> Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+> CVE-2026-10723: Incorrect acceptance of NSEC3 records
+> CVE-2026-10822: Key Record using PRIVATEDNS algorithm may lead to unexpected exit
+> CVE-2026-11331: Potential wildcard CNAME RPZ policy bypass
+> CVE-2026-11605: Unnecessary validation of DNSSEC signed records
+> CVE-2026-11622: Potential memory usage beyond configured limits
+> CVE-2026-11721: Cache poisoning possible with label count discrepancy, RRSIG, and wildcards
+> CVE-2026-12617: Record ordering based unexpected exit with CNAME or DNAME
+> CVE-2026-13204: Unexpected exit in certain situations with NSEC and NSEC3 both present
+> CVE-2026-13321: DNSSEC Validation Bypass via Out-of-Zone NSEC Next Field
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Applied to 2026.05.x. Thanks
+Applied to 2025.02.x & 2026.05.x. Thanks
 
 > ---
->  package/docker-credential-acr-env/Config.in | 5 +++++
->  1 file changed, 5 insertions(+)
+> Gitlab pipelines
+> https://gitlab.com/bkuhls/buildroot/-/commits/78563f67d06099122f817ed8e1ea9c0794726c81
+> show the same 13 broken defconfigs compared to the git tree without this
+> bump:
+> https://gitlab.com/bkuhls/buildroot/-/commits/2d23bf7cc9ebc2e86374021b5f07013fa2d85429
+> No new build errors are introduced by this bump.
 > 
-> diff --git a/package/docker-credential-acr-env/Config.in b/package/docker-credential-acr-env/Config.in
-> index ddb101d52f..a4f7766fdd 100644
-> --- a/package/docker-credential-acr-env/Config.in
-> +++ b/package/docker-credential-acr-env/Config.in
-> @@ -1,6 +1,7 @@
->  config BR2_PACKAGE_DOCKER_CREDENTIAL_ACR_ENV
->  	bool "docker-credential-acr-env"
->  	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL  # pthread_*_np()
->  	help
->  	  The ACR docker credential helper is an alternative to the
->  	  existing file store based ACR helper [...] which relies
-> @@ -10,3 +11,7 @@ config BR2_PACKAGE_DOCKER_CREDENTIAL_ACR_ENV
->  	  to push to Azure Container Registry.
+>  package/bind/bind.hash | 4 ++--
+>  package/bind/bind.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/bind/bind.hash b/package/bind/bind.hash
+> index a1ff3c6101..eb39e4b057 100644
+> --- a/package/bind/bind.hash
+> +++ b/package/bind/bind.hash
+> @@ -1,4 +1,4 @@
+> -# Verified from https://ftp.isc.org/isc/bind9/9.20.24/bind-9.20.24.tar.xz.asc
+> +# Verified from https://ftp.isc.org/isc/bind9/9.20.26/bind-9.20.26.tar.xz.asc
+>  # with key D99CCEAF879747014F038D63182E23579462EFAA
+> -sha256  989fef1fc88ea59d04cd86f854dca5a4616a20a9968bcdde3c1a3668ab36be08  bind-9.20.24.tar.xz
+> +sha256  55248def0f870c4c46b3de72978ea972615131516663188a4564dca1d20bf350  bind-9.20.26.tar.xz
+>  sha256  9734825d67a3ac967b2c2f7c9a83c9e5db1c2474dbe9599157c3a4188749ebd4  COPYRIGHT
+> diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+> index 2b8156d0d0..172bbf79b5 100644
+> --- a/package/bind/bind.mk
+> +++ b/package/bind/bind.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
 >  
->  	  https://github.com/chrismellard/docker-credential-acr-env/
-> +
-> +comment "docker-credential-acr-env needs a toolcahin w/ NPTL"
-> +	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
-> +	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
+> -BIND_VERSION = 9.20.24
+> +BIND_VERSION = 9.20.26
+>  BIND_SOURCE= bind-$(BIND_VERSION).tar.xz
+>  BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+>  BIND_INSTALL_STAGING = YES
 > -- 
-> 2.34.1
-> 
-> ____________________________________________________________________________________________________________
-> Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-> pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-> a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-> Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
-> 
-> This message and its attachments may contain confidential or privileged information that may be protected by law;
-> they should not be distributed, used or copied without authorisation.
-> If you have received this email in error, please notify the sender and delete this message and its attachments.
-> As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-> Thank you.
+> 2.47.3
 > 
 > _______________________________________________
 > buildroot mailing list
