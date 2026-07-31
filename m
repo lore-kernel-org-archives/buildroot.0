@@ -1,118 +1,119 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0183DC55172
-	for <buildroot@archiver.kernel.org>; Fri, 31 Jul 2026 12:05:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29241C5516D
+	for <buildroot@archiver.kernel.org>; Fri, 31 Jul 2026 12:05:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AFD6B60B51;
-	Fri, 31 Jul 2026 12:05:38 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cqquDeHI5gWu; Fri, 31 Jul 2026 12:05:37 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2E23860B35
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1785499537;
-	bh=edXCAj5v9L0NrMkUczE/dUUU5KmNjKBIWzat7KaZ8BQ=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=ebgpXDDnvq0Zicvm8+8eKbIE8mJE9FM2cC7Lt+FhqFRwWvYVlQN0agNhI0DrF75cc
-	 zyW/HsSSxtqbM+DiNluTkuiAd5w0FCpBq44yc/JWbyuLYylR0fZjR4iWnzMSQlki9K
-	 El0xitd3BtI7GipUph5OY2cIWW+lgNj5XqkiyxNgTVjFzDebtl+wAp5Siur/NZcXy4
-	 E6NzCH5Y1Lz1M8Z23BN45XxCYPRIvXa4oljthrDlBKPAvqdhg4y4OAAhZVtuMJvUu/
-	 WtXAsKfBGdri8PQkXOzMQeZ3WzLtfz7aP6QIBrNCayA7L0njtFCjA86boR+E1uu8KE
-	 33Az5pgTFfn/w==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2E23860B35;
-	Fri, 31 Jul 2026 12:05:37 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id BDB5327B
- for <buildroot@buildroot.org>; Fri, 31 Jul 2026 12:05:35 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AE8B280FB8
- for <buildroot@buildroot.org>; Fri, 31 Jul 2026 12:05:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EACDF81340;
+	Fri, 31 Jul 2026 12:05:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id L7NjR71k1Pdd for <buildroot@buildroot.org>;
- Fri, 31 Jul 2026 12:05:35 +0000 (UTC)
+ id ByQEExpy3qVd; Fri, 31 Jul 2026 12:05:41 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 21A8C8133B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1785499541;
+	bh=d5iKesms298ypS/9X7rJlVhE2lEksg2r5v2Mqruuefc=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=W1frf46qTLPxQ+tvVZJnxFXbX7NvT580HBTSSp9aghK9UfwJttcTZGkRDyvbP2JQd
+	 7MikIgs3dhb0TrBLZotsd+t+ioSnjSUtZGbGjd8ZKu3glhwM3Zj16QLYf+wk7GZP5z
+	 QlqqgSm0koKfXyyjVz3etrkqSjtJvrNf+yuVNHB4kIAFLVUI6mX5tRLYzIC8PVZSPu
+	 EyB5wFjLnao7V04MnAcE3WwXPlSWXm+E9RhOhd8ckHwcECgJiwg0BR7JLidsd3OCb/
+	 otjPbkF5twGfS4hVlujeQGN8pxYEp3K0x9HJawWT81BBKSz4eX2LrKGYCnFSwyiJFO
+	 gj4zkk6rTP2HA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 21A8C8133B;
+	Fri, 31 Jul 2026 12:05:41 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1D36A27B
+ for <buildroot@buildroot.org>; Fri, 31 Jul 2026 12:05:39 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0F0038133B
+ for <buildroot@buildroot.org>; Fri, 31 Jul 2026 12:05:39 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Me-S5egl4JwF for <buildroot@buildroot.org>;
+ Fri, 31 Jul 2026 12:05:38 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42d; helo=mail-wr1-x42d.google.com;
+ client-ip=2a00:1450:4864:20::429; helo=mail-wr1-x429.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8E89E8131D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8E89E8131D
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
- [IPv6:2a00:1450:4864:20::42d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8E89E8131D
- for <buildroot@buildroot.org>; Fri, 31 Jul 2026 12:05:34 +0000 (UTC)
-Received: by mail-wr1-x42d.google.com with SMTP id
- ffacd0b85a97d-476a130c138so1104738f8f.0
- for <buildroot@buildroot.org>; Fri, 31 Jul 2026 05:05:34 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 21D348131D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 21D348131D
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 21D348131D
+ for <buildroot@buildroot.org>; Fri, 31 Jul 2026 12:05:38 +0000 (UTC)
+Received: by mail-wr1-x429.google.com with SMTP id
+ ffacd0b85a97d-4798bea72f9so645381f8f.1
+ for <buildroot@buildroot.org>; Fri, 31 Jul 2026 05:05:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1785499532; x=1786104332;
+ d=1e100.net; s=20251104; t=1785499536; x=1786104336;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=iNUZQkcOIZbACbt4I000mOemvZG8I/opFx96VWdai2o=;
- b=aOldS3R7msM006JJxpuVjGJLtfUWNenYiciWeP7ywtrfuJFTj1p39M6bfqLcfbeVgn
- rpk9zgQcwQlJAxHrv3LfMi9dHbhV9damT0h2Bt5o0Y4xtmx6VVVztnXJH1Gx9tVJq1QE
- kAT77TgqU0aSCVVC6xukWa92iHuvLN29tK/gL2x441Ken7VmXXFxxr3L3FGZPKJFDME+
- XzmhZl/ewc2OXy+IO9UJRdjAeJOtJGeHPnSzM34QXUNU/+RfNUfN2Z8jatjzv9bry2+A
- Xyg/rU0BLzWiNWFefU9tP0DaMJCYHctY73VCxlX9wEz4aZmcdVGed0sO2XUIc8jvnv66
- w40A==
+ bh=dH34JFz8ETBv6SyTln/mlVyeJBlUlZCkhkcZb3WoNAQ=;
+ b=MBKQDwP4KfIaOZyAOHOr63PO/gEBsVvtoPgy/EzS5038V0AfYJV604PVqIVGzUWgcI
+ hLB1bn0VzkTgfNAMTfaG46tCbAa8UFF7ocbQSpZ3ys2tTPRK9eqjqe54Svxx6hviXotU
+ vnArd96eQpwM7E+D4Z1RYldVpxPgzGA/NmkCyU0yd7qONaFNt5i5J47N2MP5cS0htt7T
+ aaJbi+XEQsjgjV0M2rzR3vadk+gYjOZV97U51n0a8/3+w5wT8C5g1NzT1R5ESNHmDTXX
+ Wwl4jD8fDTKbeGbeFGWtJzGWIDzHmkKr1R0zFMdVpHheVUUZyQV23ZRlpefAUI9ZajQu
+ /v6A==
 X-Forwarded-Encrypted: i=1;
- AHgh+Rr7Yo+/Y2aXUtinxvlndgs1QmlZutlGxTk9i5hYRgjTgXbgxAlqKHZLR35gpjs/TX4N/CMQkQ8fc2w=@buildroot.org
-X-Gm-Message-State: AOJu0YyyULdO8JbRcvvJlC0ufuESAnDUSOVakRsYpMsMEZbMr9kPFiG3
- 1Y1XrF2raFULyt5HMfOMicW+YhP276d8dPHxOU4hJOgKlmPnf5s4agoV+N0Mq8T21Eo=
-X-Gm-Gg: AR+sD13S3E9mewLe5Z8sLfC/j0zW/275WyIb1pae8akun+9+uWQUio3etBNsEU/QD8V
- Ir6D++7Zf8pXF0H5l0t7P0G4tcnlG+SfiaKycy6DrUsq0DjTpFn1kRVpCCKyxj1tieXkVlJoJi+
- MVSwaXl9etgs3kL2R+UshpNB/yg9VysVmTPwbLizEHM+7ubZuDCkJ1yyHNfZt69Zy0yolvP7VpK
- ylzOP1yOTRaODukbyvJzpwgBJrbp/YTZTWGfFoEsOLIvWXLWT12vXemzwn8HpBdyu+ahXA90T2u
- mbXDX2vtV+rVI69mVVCztLPEAAN1E8eO8rSCt3PF8jkhMNfE8cgLItMyZju/yfAs7Uvf68tQtOJ
- amxDXM+6dhKdWxNtzfmhuybdQ/X9I59gd8XYLYgazgbD4TkwYzMtKQaeIdPsbYalqR87qelC5WZ
- O4C/mu4hzxnUj4Xx6Bd1Zj9vWGlZU5VCQIMeXLyeg93W7gmFX34mmw9UfFKdxoviqr7E7w3Dubz
- KQipiU2ja2ZOvvKp8fkkP/KJw==
-X-Received: by 2002:a05:6000:430e:b0:47f:81a9:3f36 with SMTP id
- ffacd0b85a97d-47fd2acb833mr4021238f8f.18.1785499532079; 
- Fri, 31 Jul 2026 05:05:32 -0700 (PDT)
+ AHgh+RphrUklKBkkRTvpX6D6LNMrF7d0y5FES9XfcXabd56BXcajutzBdq6MHN+DlXaLy48suXWMASXDwFk=@buildroot.org
+X-Gm-Message-State: AOJu0YykH0Eevg2Xw/INDIOzCOaZvjOxZnMEYubz/ouXRb8LIfjGmd6L
+ RKQdBzpLFd4f3VupW2+GL8nqgZQx9C63RqQtnn8AjYdHuYdyrxAVhMCMXPx4MMCiwDtjZPoMOeL
+ Pi7jw
+X-Gm-Gg: AR+sD11ua9yC0uXWQO7kWSDJXiA81O3Ga3wQUUsTkjAFb2jlEkRC2MQfFsq44ZvMKao
+ a6ZdAwQLKIcY0/XEm4ITPq52uYBTNx8AbAIiYCD8P6gSxNDDKkmVtAbaJCbVuy63tGhuyaL1Gs7
+ yqfDkIjOJiQNDgli1e70oxlPNssu7K+exSBK9WzNb79TBaa9eJAh0KoUT6CLJI399olRuIsFcUb
+ YYOnahKPbBC/vctjAxZdOM03nJixs9hth7WDWbdJzwrRoORfeUdc5pODTXR+29oIfwKpYDz4r0Y
+ So2d6pJ0Fs00VBKU5MrXnpssMCnAgWSCEh7AZ6arqYsuYp78wnXUig7GrI5Ao/RPbtW547A3vyE
+ P3t/YuxzO69kCcs1hAY8eXLGxk9qxCVUawqBpDEFCzbvDmIxATQZPJNIS4KrgOjePbi41f5hVtp
+ veNATDzX+LiuvmoPCOBwS6FPkGdw6DX+arZBRKRxsHVtekHJPuZoOiHNU79cVg1FTscZmSMMy/0
+ QlH/xMGCRqgUr9yhjnGlLjypMQ=
+X-Received: by 2002:a05:6000:98b:b0:47f:80e5:b9b3 with SMTP id
+ ffacd0b85a97d-47fd2b42168mr4273128f8f.33.1785499534680; 
+ Fri, 31 Jul 2026 05:05:34 -0700 (PDT)
 Received: from mindpad (213.219.161.200.adsl.dyn.edpnet.net. [213.219.161.200])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-47fd456a6cbsm4057663f8f.23.2026.07.31.05.05.30
+ ffacd0b85a97d-47fd456a6d7sm4254884f8f.19.2026.07.31.05.05.33
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 31 Jul 2026 05:05:31 -0700 (PDT)
+ Fri, 31 Jul 2026 05:05:33 -0700 (PDT)
 To: Fiona Klute <fiona.klute@gmx.de>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri, 31 Jul 2026 14:05:29 +0200
-Message-ID: <20260731120529.3698-1-thomas.perale@mind.be>
+Date: Fri, 31 Jul 2026 14:05:32 +0200
+Message-ID: <20260731120532.3747-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260721160607.276174-1-fiona.klute@gmx.de>
-References: <20260721160607.276174-1-fiona.klute@gmx.de>
+In-Reply-To: <20260722153224.624762-7-fiona.klute@gmx.de>
+References: <20260722153224.624762-7-fiona.klute@gmx.de>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1785499532; x=1786104332; darn=buildroot.org;
+ d=mind.be; s=google; t=1785499536; x=1786104336; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to:content-type;
- bh=iNUZQkcOIZbACbt4I000mOemvZG8I/opFx96VWdai2o=;
- b=WkvJ6nJn7/MonmBeCbbLON9jDSaZNQ81Xp80gFGx0pOq5p82t8ahsdKnfx36OvGrjE
- 8D/HZmykBonFVLWFz1FfhilPbk5QIeY181rTwvKjw0DWbiFq2V4oHhkHnfXZM9OGOru2
- aQds5d1uF9J/4o/DN6YLZsjRxKLVwo98n4ptwSCdqiyWQsQMPRhK88upJQVSS1kQDvaT
- J5wlk7mDl6qEkMTPgE91gpGhp5VUuIhAM1tsVfpxJHq5TnWNuNVmpnDsnP23WFykLsZF
- 8J3M8GpBgrUg+J6ico8YGxMOlmzAbZiJq6LAlmyj0IY1Nu4kEfvd+SltPuXV9ABJsDUN
- 7pFg==
+ bh=dH34JFz8ETBv6SyTln/mlVyeJBlUlZCkhkcZb3WoNAQ=;
+ b=Bd6dn1djZ1C4MaqTToXFVlM3XnAVSuaYfwP/197OlxoGqeD+sSE2JRlC1W01cOa9aj
+ 3qC+0ICxoRkYNB/NFSGBVZ6+v9irP+ayb0JJr8/8KTczIhc2gUh3KiIHefZhPwK1uu5Y
+ W4BY+fr+GpYdTMToojBWFP0vnsYI7SnGeJadMoh59KdwY44NHbJmtiDHCe5SGi5xFJId
+ 3S9gdN8HYWcm3yghusAf4GvV1oMwfOSbUWmQ/01KMknEJECd3a9Eue9NNst9QVSeEgrY
+ eh4hpuRH80b6xSsMYQWeMu7UVb00Xe0cjLTk0v3KUPWJjlFpxIVs8fXNSEfZ+QUv+9dS
+ pfaw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=WkvJ6nJn
-Subject: Re: [Buildroot] [PATCH 1/1] package/usbutils: update license
+ header.a=rsa-sha256 header.s=google header.b=Bd6dn1dj
+Subject: Re: [Buildroot] [PATCH 7/7] package/binutils: fix license
  information
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -133,54 +134,44 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> According to the upstream changelog LGPL-2.1+, CC0-1.0, and MIT
-> licenses were added with v018. Grouping is derived from individual
-> SPDX-License-Identifier headers in the source files.
-> 
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usbutils.git/tree/NEWS?id=bd86478bb8d09abd0aba8ead781bc8f4609521e6#n159
+> A few headers outside libiberty use LGPL-2.1+, too, and other headers
+> and some scripts use GPL-2.0+.
 > 
 > Signed-off-by: Fiona Klute (Othermo GmbH) <fiona.klute@gmx.de>
 
 Applied to 2025.02.x & 2026.05.x. Thanks
 
 > ---
->  package/usbutils/usbutils.hash | 3 +++
->  package/usbutils/usbutils.mk   | 9 +++++++--
->  2 files changed, 10 insertions(+), 2 deletions(-)
+>  package/binutils/binutils.hash | 1 +
+>  package/binutils/binutils.mk   | 4 ++--
+>  2 files changed, 3 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/usbutils/usbutils.hash b/package/usbutils/usbutils.hash
-> index 3527d4e30d..e4fbe18070 100644
-> --- a/package/usbutils/usbutils.hash
-> +++ b/package/usbutils/usbutils.hash
-> @@ -1,5 +1,8 @@
->  # From https://www.kernel.org/pub/linux/utils/usb/usbutils/sha256sums.asc
->  sha256  659f40c440e31ba865c52c818a33d3ba6a97349e3353f8b1985179cb2aa71ec5  usbutils-019.tar.xz
->  # Locally calculated
-> +sha256  1f2fa2e0fac0e224fa84969d0e0b3e6801ecdfb7b9526a4664787e840ad705a2  LICENSES/CC0-1.0.txt
->  sha256  91412672119c72352b76c1d48fa1a8b7cdc7f70be7929e468c8805db468e23e4  LICENSES/GPL-2.0-only.txt
->  sha256  4631da83311d27f99078d0d102e31bd34a4fcbcc2dae2aa40f1454a5b48125dc  LICENSES/GPL-3.0-only.txt
-> +sha256  efbaee946ac92a48b89eae36f655844042370d2f0e04eadea1e2998efae24ebd  LICENSES/LGPL-2.1-or-later.txt
-> +sha256  323c587d0ccf10e376f8bf9a7f31fb4ca6078105194b42e0b1e0ee2bc9bde71f  LICENSES/MIT.txt
-> diff --git a/package/usbutils/usbutils.mk b/package/usbutils/usbutils.mk
-> index afeb7ded2a..4fbb358dfa 100644
-> --- a/package/usbutils/usbutils.mk
-> +++ b/package/usbutils/usbutils.mk
-> @@ -8,8 +8,13 @@ USBUTILS_VERSION = 019
->  USBUTILS_SOURCE = usbutils-$(USBUTILS_VERSION).tar.xz
->  USBUTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/usb/usbutils
->  USBUTILS_DEPENDENCIES = host-pkgconf libudev libusb
-> -USBUTILS_LICENSE = GPL-2.0+ (utils) GPL-2.0 or GPL-3.0 (lsusb.py)
-> -USBUTILS_LICENSE_FILES = LICENSES/GPL-2.0-only.txt LICENSES/GPL-3.0-only.txt
-> +USBUTILS_LICENSE = GPL-2.0+, GPL-2.0 (utils), LGPL-2.1+ (config/CI), GPL-2.0 or GPL-3.0 (lsusb.py), CC0-1.0, MIT (ccan)
-> +USBUTILS_LICENSE_FILES = \
-> +	LICENSES/CC0-1.0.txt \
-> +	LICENSES/GPL-2.0-only.txt \
-> +	LICENSES/GPL-3.0-only.txt \
-> +	LICENSES/LGPL-2.1-or-later.txt \
-> +	LICENSES/MIT.txt
+> diff --git a/package/binutils/binutils.hash b/package/binutils/binutils.hash
+> index 14fd65d4a9..9ba6689d46 100644
+> --- a/package/binutils/binutils.hash
+> +++ b/package/binutils/binutils.hash
+> @@ -7,5 +7,6 @@ sha512  a5c65e56e400ed3fb8906a995dbb93eb5bea54b16344244653d7f44ef29ceb60270da263
+>  sha512  46c336a16bde7b73dc4ceac0986887d47d542a1452e1936ef871b5e76afdb6cad4b18ccb4d93341358e7bb92c2ef74781e1fb72935d527d15251ac9f9daa8305  binutils-gdb-arc-2024.12-release.tar.gz
 >  
->  ifeq ($(BR2_PACKAGE_LIBICONV),y)
->  USBUTILS_DEPENDENCIES += libiconv
+>  # locally computed
+> +sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
+>  sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING3
+>  sha256  56bdea73b6145ef6ac5259b3da390b981d840c24cb03b8e1cbc678de7ecfa18d  COPYING.LIB
+> diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+> index f772c9cf9a..f39d24e986 100644
+> --- a/package/binutils/binutils.mk
+> +++ b/package/binutils/binutils.mk
+> @@ -27,8 +27,8 @@ BINUTILS_EXTRA_CONFIG_OPTIONS = $(call qstrip,$(BR2_BINUTILS_EXTRA_CONFIG_OPTION
+>  BINUTILS_INSTALL_STAGING = YES
+>  BINUTILS_DEPENDENCIES = zlib $(TARGET_NLS_DEPENDENCIES)
+>  BINUTILS_MAKE_OPTS = LIBS=$(TARGET_NLS_LIBS)
+> -BINUTILS_LICENSE = GPL-3.0+, libiberty LGPL-2.1+
+> -BINUTILS_LICENSE_FILES = COPYING3 COPYING.LIB
+> +BINUTILS_LICENSE = GPL-3.0+, GPL-2.0+, LGPL-2.1+
+> +BINUTILS_LICENSE_FILES = COPYING COPYING3 COPYING.LIB
+>  BINUTILS_CPE_ID_VENDOR = gnu
+>  
+>  # 0003-objdump-memleak.patch
 > -- 
 > 2.53.0
 > 
