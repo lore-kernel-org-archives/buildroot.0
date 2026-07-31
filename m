@@ -1,133 +1,131 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1DFE8C55173
-	for <buildroot@archiver.kernel.org>; Fri, 31 Jul 2026 21:04:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4FD4C55174
+	for <buildroot@archiver.kernel.org>; Fri, 31 Jul 2026 21:05:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ACA744119E;
-	Fri, 31 Jul 2026 21:04:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7D83A6062D;
+	Fri, 31 Jul 2026 21:05:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id W0RPLhbAo8Sm; Fri, 31 Jul 2026 21:04:22 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CF1Znmcw2O0j; Fri, 31 Jul 2026 21:05:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9581D411A4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 91ED560657
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1785531862;
-	bh=VQPyyWMKa69D4RG+5HUF50sW1ZwbR/EpYjaulmIG820=;
+	s=default; t=1785531903;
+	bh=U/WbTWmqbgQ+H7uS9jnfpWKqj1Ge2Z4wiYOtUbdiUNw=;
 	h=References:In-Reply-To:From:Date:To:Cc:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=VmekQAPqNvMzaVx00jOUbxnfgpv4zutXYrPbAekBeJPQLUKz7GYxKxZ65gmQVKP3N
-	 zfV2ER7fqENLMSk+pw3E7BYM7Refh6pU90O0yAhRZAbbOl5Gr1ybYJDnUjnj/nnkmH
-	 7GsFTrDNHL9RH0RKO4opWsDp4wrLtf+IAs7pYvaUmrBvJjUPZen9ndDh9RNqBtfaUd
-	 0CWiGuNTjytKSlsUtHsxLbyUjZQ7zwWoztsM/+tfJtkS9P+RIafBzQoBgiv0YC26Ut
-	 bQr0OsivR2NVN12wXm/UJEbpCUk4nz1Xv8a0fCj/v3ifMJEoPz+Pqy2E9XZNQ+YyVH
-	 yQnKDJgOPZzmw==
+	b=SrkSClr0Et9Drk8VGSm+gcVstjvBm2OKC4DAUYNA+lwwGzrguDnXX/kibRxyJuhQg
+	 G/36TRVkmnNc3fr9Cd+aBD8NFdzGAe1BmZbWmCpcmvymjaNdeJbzZPm9RGyOEa2VwC
+	 G7OR40ZBwoQo507DAe6QZ3QbtgPSLZYqCoPAvHEv1VZhdHJ2CuwwWPuGq7BmVveqjc
+	 ADLCdHDigQj9uIFc3UKIT6WckXwwSOpwRQPaLtRQ8V9W52sbnCF5F2ff4bNzyLS5DD
+	 KrGWT9LLXT8kVIM0dj+dYwt60ygIwD8sDrjvcjBbaFKf0Tdh6l1duqwR6yLHnMSzCl
+	 O9zBOhgCTzHtA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9581D411A4;
-	Fri, 31 Jul 2026 21:04:22 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id D995D3B6
- for <buildroot@buildroot.org>; Fri, 31 Jul 2026 21:04:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 91ED560657;
+	Fri, 31 Jul 2026 21:05:03 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8074B3B6
+ for <buildroot@buildroot.org>; Fri, 31 Jul 2026 21:05:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CB5AE400F5
- for <buildroot@buildroot.org>; Fri, 31 Jul 2026 21:04:20 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6ABBD60657
+ for <buildroot@buildroot.org>; Fri, 31 Jul 2026 21:05:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Sf_4rrw7glAU for <buildroot@buildroot.org>;
- Fri, 31 Jul 2026 21:04:19 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FwYslOCtzMkn for <buildroot@buildroot.org>;
+ Fri, 31 Jul 2026 21:05:00 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::c36; helo=mail-oo1-xc36.google.com;
+ client-ip=2607:f8b0:4864:20::22f; helo=mail-oi1-x22f.google.com;
  envelope-from=aford173@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org A53AD400E5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A53AD400E5
-Received: from mail-oo1-xc36.google.com (mail-oo1-xc36.google.com
- [IPv6:2607:f8b0:4864:20::c36])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A53AD400E5
- for <buildroot@buildroot.org>; Fri, 31 Jul 2026 21:04:19 +0000 (UTC)
-Received: by mail-oo1-xc36.google.com with SMTP id
- 006d021491bc7-6ab06473488so542967eaf.0
- for <buildroot@buildroot.org>; Fri, 31 Jul 2026 14:04:19 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785531858; cv=none;
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 8C5766062D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8C5766062D
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com
+ [IPv6:2607:f8b0:4864:20::22f])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8C5766062D
+ for <buildroot@buildroot.org>; Fri, 31 Jul 2026 21:05:00 +0000 (UTC)
+Received: by mail-oi1-x22f.google.com with SMTP id
+ 5614622812f47-497e6956acfso1091961b6e.1
+ for <buildroot@buildroot.org>; Fri, 31 Jul 2026 14:05:00 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1785531899; cv=none;
  d=google.com; s=arc-20260327;
- b=fDXHN1MohmHFryaFRHDYzTjOR/YeIGo1ghndeQUTAb4fKyN6A9ZtwSBroj5upYOiVr
- 5y3TAOTiR3Nja6XEUFkuwevTobUhNIJuYDLoeexPd/aD6ngNu5+Ww7QButp6DFgv9ubQ
- qcT4IMSJwCqJlHenL4ldOoLJfznhgTDnXrbRGhaMUJ5uFjI9ZZLs821P6a1yBI0otviP
- TjHzSS746bfSroKKocVosf3CpPrXcAZ3V8IXe41EETdyuUoXKdecxInCvQZ634/QU/i1
- 817rZ84cWOGGWO0lY74wgHO+iCEWr5C6Zo0VuR+3fg8u6fEWiCyEIYlPNgJCl/3upxYR
- dR5g==
+ b=HhLcPlXeMmEeSN76MKu8s2l009F+FvzJP0TMN6Qo0JsmGUMEW6fa2qqR8TPskXQ3aZ
+ TyRUh0QLYN9S5y4IgcICBnNJr6ZJ0qkc6pP0+iofpwTz7B89dulQc/CfECZ75O4MVM4Y
+ +Hw2l4Voeq0xGSesfzH5beliiMKiRq4AghekWadmojyiidXc5Q7O3iLFDSHvLzkGk6DH
+ 5GxC8jw21lCpP/Fxgh+8Y6aaTAGWhf0ZbKsXTr/COuSA0Bn6D54SBRlJXaWA+3ot7buq
+ 2jxYXbHPuptR4vZl62H5RRA6CKeIN+uay6TzRl8A8ZfvBhlHre3e9eIbEs7AtW46oTTc
+ fcSQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com;
  s=arc-20260327; 
  h=cc:to:subject:message-id:date:from:in-reply-to:references
  :mime-version:dkim-signature;
- bh=YLZOzM/88xQVSPjhSSNasY3AjcZIxPPK7CI4YOV27/s=;
- fh=TKxH/BlR6DDbLFFhfoVOJe1wwQrqEGfVXGor/pmNoFQ=;
- b=qjK7y3yk6czWCeBMw0aw5MId6DJrRVYKPIgdr2D4P8DUfHr9sbOGGS9n86lGowVv1O
- PGi2oAWa07ISON8zyaypLYVP+NNxJpyPnAgYxlvXjvgdePlZokZDK5/RAaDqOGyPGHRG
- /RR6XiJ68FtAKnhkKwPvnTqeegyEWqGzZ1lQkr4sj3cKmO85NCTKWHU5ruQIZQU2HZ+L
- 1y+z2ZB5q3jrHYWiyS0SPuwG3belKpRmDfJQWCxCONCKHWta1+w6aggWeX7vP4eUfBz1
- 2IeUw8aSC3sIaXeYWct3DTla1e8dKp0CptWaSbII3AQHCtAZuAEJALx0nBuTYEd+4Q1g
- C5xA==; darn=buildroot.org
+ bh=rw0IY4Tvwgvu4cKrIHmgi/tKpxUxkNrB1ZuA6KIpO1g=;
+ fh=MFfYaWyeXo/Z9GsQRr5zo5CyMKcVkmR0by3HEFPAyw0=;
+ b=ErFJ1fOZ74PcTJy/VyV7AHX/uofOBNK+aeA6jA6vJoyebpOJLkqHXqqt/KmEAe7DVB
+ mjLpP066bt5FWukbpt45CCvgKQ31ebwe6TMD+xgXFII/bTcuvWrWUjTAo0D6yNEcpB3n
+ iKDxAbgeXbFkiuAsiuXVB70RLSyflcbHd2TZxSvxpKPnEaw1KGJlHLIq7JOsnS2DkmxS
+ vu6FY07B6XgZk8R/elOe+7NZVKf+XQzEaza8oUVBeMvZdLiw8Jdabd+a37zbCsDIPoZm
+ y/DrtrpP2B9yR0yHEQEJ39YBPE4La8XQsc88oZs1gwXOTRvekjh6wCy/0snDuxb9PSeL
+ WYjQ==; darn=buildroot.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1785531858; x=1786136658;
+ d=1e100.net; s=20251104; t=1785531899; x=1786136699;
  h=content-type:cc:to:subject:message-id:date:from:in-reply-to
  :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to:content-type;
- bh=YLZOzM/88xQVSPjhSSNasY3AjcZIxPPK7CI4YOV27/s=;
- b=gbAxCk34qQSNU0whzY1xfC2tJ4H8yZ8hXLpLFHWEMuhfJ5+ZXeNyQ4EaY3PJCYMx+F
- JI32tslqTCV9NECOqRdgS/D/KR/FD4zwJmTs2Gj57KuOkNJFwpVKmI9BPXibNAVJ2fpi
- 2gBV+ze2Usx9xU2HJoDP/scTXWLxYN4eccRzG4meFjx5AUNDlZALUJS3DAAkQ1lKtlB6
- H1LJzDnaMmrS3VwPtNxJ6STgmo79GrxU6godGOMI1eorGlu3IoHb29LHYFIVkzIofefZ
- A1Lh94aSUg21joa0ex7WdeweKYQ8Rm+lAX2yCeFSA9CPnyWZ2ckaXjyyrQnOfN8P4ow8
- 4jGQ==
-X-Gm-Message-State: AOJu0Yy0OCSBbDJP9cK6qrlpXbnOiMgLSrK+bGWysK441kBbZW1xQjmQ
- PRgI96upcP+hiAlnZG43ZQvkVLm5pYCmLfdmlBFKMlWEACVal/xrP+WKxoM7e81wfy2gBDkRUf4
- vxG0x5sXeG83hnGevMqbf36uLH/ERLDEpP6mgHQQ=
-X-Gm-Gg: AR+sD11j+RayCTStxth7zl98Wu9RwtynhRvVyQYGlhgt+cEcwg+2qf2MZxdfQ+fL/vL
- BrbQbHS10k5t8/wcLF+MvQsT6LIiP+qMZLQN3Fypr/0DXKk0puiJVJekECPZOGns5yL4iQkr2+W
- bUD+TOYspZW5+4NVQspXtaPdix6l41Rg9eyHkpSQRaY8F2D/VGygpJ3kKX/rfIx9g/Fv5MCj1Ze
- T9uOPzD1Qomzx4QWRayOQu18uqZPUe7rSbx+QQ7N28qQp39oq4FXyEhslfbWgXfFJnZYAEEF0XC
- aRlngpGgmMNpZwPmr14feq51ClxUOAtWewBn2/sBJKpjAi/SwlXvtgQ=
-X-Received: by 2002:a05:6820:f015:b0:6ae:4842:34b8 with SMTP id
- 006d021491bc7-6ae484255f1mr636012eaf.32.1785531858390; Fri, 31 Jul 2026
- 14:04:18 -0700 (PDT)
+ bh=rw0IY4Tvwgvu4cKrIHmgi/tKpxUxkNrB1ZuA6KIpO1g=;
+ b=N5IKFIUax2EN++gyjgMR0+VnCenEGYMj0r9iQymHWNiI8TD/E0oOFERpOvgdkrox8q
+ xeO1V1gY+tzj28xAXFg4DdlmFBLZsYKVWY9IlGb2ZuAzL7FHAoHXivMGeEaz4zkAClp3
+ P9/VB/jBAet05qlhpZmLFm6U/sobSBNbkzzff3vOzeDccOLwydnJguW5HxKJjsqKqI5A
+ Y4L5sBJpmM6nztFadsHNDeRRKqFMjXh43uleXWPpibaIVMlZKPlLmUX/0aRI2IryZG3G
+ djngUROyEb9pZSpWSgesz0gMTIxv1SFBmrbUJGLdbMgNv7w3cNSfx/xN43mCzQd3rlNQ
+ tAQw==
+X-Gm-Message-State: AOJu0YxZJRX5lUmz/aOY86CLYKUjeU/htIHSawiy3Wvd7CP7+lZURZFh
+ NGQh5XmR8JxsSdTNenWJ8/Me0JiO1SA6vglFGvU8U76siwQgXMi7Lcylb3az6ok+nrjYjaTtqBf
+ IpQQbadarAAlrufj//XdgwoDJiwZTBBpL4zCEgmg=
+X-Gm-Gg: AR+sD10mrzo25Uwq5m+ZxJhfow5xGU6ElSgGPLguBmufL2VsFUxYtpOjxNLYyZZgi8x
+ c/fc4Kte2r4XAyd674mo4aWrynJsryhp+OJAtuOi2NXEwVWt+C2A2xush77sMJNy6J+apL2bBAz
+ WErTcTivuqZEz3rWSfzH//LlxELPkcqhAiJW0jlyDn++5u+qRADTd61uzWJHrc5HQBE+E+V3js2
+ AR3rbc2J/ZnDfdLqcVEBE+RH5lZ1ncCy7GRtJDDJiSqSIE0LRrf84MZ4+9/9VfmVGVPEOAezTeL
+ f2XTZrgPSJ4lpzavy+3vT7Gce9q5vbw11PHCSIhVNH7r
+X-Received: by 2002:a05:6808:1797:b0:495:f697:92d9 with SMTP id
+ 5614622812f47-4ae3188b02dmr5115714b6e.7.1785531899471; Fri, 31 Jul 2026
+ 14:04:59 -0700 (PDT)
 MIME-Version: 1.0
-References: <20260710133225.484041-1-aford173@gmail.com>
-In-Reply-To: <20260710133225.484041-1-aford173@gmail.com>
+References: <20260716133001.2147463-1-aford173@gmail.com>
+In-Reply-To: <20260716133001.2147463-1-aford173@gmail.com>
 From: Adam Ford <aford173@gmail.com>
-Date: Fri, 31 Jul 2026 16:04:07 -0500
-X-Gm-Features: AUfX_my8EEZRf8sRSWcMTw75S5auBM79TOA9FNA_fjLs1DtW0fdvdaR4lM4FFjg
-Message-ID: <CAHCN7xL4dgE=SPS5Y92eHi=q2MSk1gK4kotbsONTWeiPExaYbA@mail.gmail.com>
+Date: Fri, 31 Jul 2026 16:04:47 -0500
+X-Gm-Features: AUfX_mwa6cd2B6-hO1w_2lJnCidu8cofrduFzr2vyCbYD7Dd2IB-jTsqCQx4oYA
+Message-ID: <CAHCN7xJ-wBrivyVoGxHF8g07USrcbPjbN0MnYP7rupcEEEh1rg@mail.gmail.com>
 To: buildroot@buildroot.org
-Cc: Bernd Kuhls <bernd@kuhls.net>, Joseph Kogut <joseph.kogut@gmail.com>, 
- Romain Naour <romain.naour@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1785531858; x=1786136658; darn=buildroot.org;
+ d=gmail.com; s=20251104; t=1785531899; x=1786136699; darn=buildroot.org;
  h=content-type:cc:to:subject:message-id:date:from:in-reply-to
  :references:mime-version:from:to:cc:subject:date:message-id:reply-to
  :content-type;
- bh=YLZOzM/88xQVSPjhSSNasY3AjcZIxPPK7CI4YOV27/s=;
- b=nKbGZpljT9ToQwwzuQ9KO4PfL70Kf4dPgnhk+Bj9ekY/TMNc1XYV1wAtxzZe/T1fmY
- qSwOIF8G82n4DQFG2y4fIz5NJeRXAjF1MLu39OQIR8nxBYbYXKTozvhoLO8m+DYnFmqu
- JTbvfuKGTlfOl8bIYMXD6nrBdmaBGi89sMfymeEKWMXEG0zO+urou04EEAwV4FC4slWT
- 9JuLecg5gyCPksCHJykLzHgtrr9qGZ/PrsokkoSWGhl1Kg+z1LPEjqnN3Xl5CNjSA3xB
- r8Wbj3MbNsuu7gkRAAiehTCDl4dAZWKb4BSzQww+1U/nARJsjeC1tnB89jWSGBMLFlJO
- wfMg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=rw0IY4Tvwgvu4cKrIHmgi/tKpxUxkNrB1ZuA6KIpO1g=;
+ b=ZqoUvgeTaUSsVgyrsuX96QJoMyC97nQtXA0c7BuQVOeSbU1nOky1S1MFuMW8h2P3yx
+ b8E/eFlpFEdimvXojsLrKC1ZLWezcZvkKEi+W3CDm4mB/tofgnG1W90uHnskbrTa77QF
+ 8q6nCIqKhvdJBkENDC3WnOEHzLMXoNwawofz5SsGp2Rm2UOogwXYC4zub03sCJTzLLLs
+ 43imXu69387Z62dXrjgRv8rzwkdxZMuVaABZSTGK58obgYwKrJD1ERCDblonPS8zH7Gu
+ WE3oQfJOWobykISwrpU3l2IV9WcpKExsCEWRFakdpy1T8eQQQl+Y1PR1zezQwXfwEL2O
+ 1pdg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20251104 header.b=nKbGZplj
-Subject: Re: [Buildroot] [PATCH] package/mesa3d: add intel-virtio host
- native context config
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20251104 header.b=ZqoUvgeT
+Subject: Re: [Buildroot] [PATCH] package/libxml-parser-perl: add
+ host-libxcrypt dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -139,243 +137,112 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============8089078866546034587=="
+Content-Type: multipart/mixed; boundary="===============7727270951125185115=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8089078866546034587==
-Content-Type: multipart/alternative; boundary="0000000000002793dc0657ee8868"
+--===============7727270951125185115==
+Content-Type: multipart/alternative; boundary="0000000000009a6b340657ee8a15"
 
---0000000000002793dc0657ee8868
+--0000000000009a6b340657ee8a15
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jul 10, 2026 at 8:32=E2=80=AFAM Adam Ford <aford173@gmail.com> wrot=
+On Thu, Jul 16, 2026 at 8:30=E2=80=AFAM Adam Ford <aford173@gmail.com> wrot=
 e:
 
-> Add BR2_PACKAGE_MESA3D_HOST_NATIVE_CONTEXT_DRIVER_INTEL in the same
-> pattern as amdgpu-virtio. When enabled, -Dintel-virtio-experimental=3Dtru=
-e
-> defines HAVE_INTEL_VIRTIO so the guest-side Intel native context
-> (i915 and xe context types) is compiled in. This is the guest half
-> of the Intel vDRM GPU passthrough path, usable by the crocus/iris
-> (OpenGL) and ANV (Vulkan) drivers.
+> host-libxml-parser-perl compiles XS modules against the system perl
+> headers, which #include <crypt.h>. On build hosts without libcrypt-dev
+> installed, the build fails:
 >
-> Note that this is an experimental Mesa feature (the upstream meson
-> option is named intel-virtio-experimental) and is disabled by default.
+>     .../CORE/reentr.h:126:16: fatal error: crypt.h: No such file or
+> directory
+>
+> Declaring host-libxcrypt ensures crypt.h is present in the per-package
+> host sysroot before the build.
 >
 > Signed-off-by: Adam Ford <aford173@gmail.com>
 >
->
+
 Gentle nudge on this.
 
-adam
 
-
-> diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-> index e184039150..ad02b5e829 100644
-> --- a/package/mesa3d/Config.in
-> +++ b/package/mesa3d/Config.in
-> @@ -130,6 +130,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_CROCUS
->         bool "Gallium crocus driver"
->         depends on BR2_i386 || BR2_x86_64
->         select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
-> +       select BR2_PACKAGE_MESA3D_HOST_NATIVE_CONTEXT_SUPPORTED_DRIVER
->         help
->           Mesa driver for gen4-7 Intel GPUs.
 >
-> @@ -167,6 +168,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS
->         bool "Gallium iris driver"
->         depends on BR2_PACKAGE_MESA3D_LLVM
->         select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
-> +       select BR2_PACKAGE_MESA3D_HOST_NATIVE_CONTEXT_SUPPORTED_DRIVER
->         select BR2_PACKAGE_MESA3D_NEEDS_PRECOMP_COMPILER
->         select BR2_PACKAGE_MESA3D_RUSTICL_SUPPORTED_DRIVER
->         help
-> @@ -393,6 +395,7 @@ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL
->         depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # memfd.h
->         depends on BR2_TOOLCHAIN_USES_GLIBC # ifunc, static_assert
->         depends on BR2_PACKAGE_MESA3D_LLVM
-> +       select BR2_PACKAGE_MESA3D_HOST_NATIVE_CONTEXT_SUPPORTED_DRIVER
->         select BR2_PACKAGE_MESA3D_NEEDS_PRECOMP_COMPILER
->         select BR2_PACKAGE_MESA3D_VULKAN_DRIVER
->         help
-> @@ -459,6 +462,22 @@ config
-> BR2_PACKAGE_MESA3D_HOST_NATIVE_CONTEXT_DRIVER_FREEDRENO
->           Select this when running Mesa inside a virtual machine
->           with virtio-gpu host native context support.
->
-> +config BR2_PACKAGE_MESA3D_HOST_NATIVE_CONTEXT_DRIVER_INTEL
-> +       bool "intel-virtio"
-> +       depends on BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_CROCUS || \
-> +               BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS || \
-> +               BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL
-> +       help
-> +         Enable VirtIO support for Intel native contexts
-> +         used by the crocus/iris (OpenGL) and ANV (Vulkan)
-> +         drivers.
-> +
-> +         This is an experimental Mesa feature and is disabled
-> +         by default.
-> +
-> +         Select this when running Mesa inside a virtual machine
-> +         with virtio-gpu host native context support.
-> +
->  config BR2_PACKAGE_MESA3D_HOST_NATIVE_CONTEXT_SUPPORTED_DRIVER
->         bool
->
-> diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-> index 8e6c2ee5b8..87377b7ce4 100644
-> --- a/package/mesa3d/mesa3d.mk
-> +++ b/package/mesa3d/mesa3d.mk
-> @@ -164,6 +164,12 @@ else
->  MESA3D_CONF_OPTS +=3D -Damdgpu-virtio=3Dfalse
->  endif
->
-> +ifeq ($(BR2_PACKAGE_MESA3D_HOST_NATIVE_CONTEXT_DRIVER_INTEL),y)
-> +MESA3D_CONF_OPTS +=3D -Dintel-virtio-experimental=3Dtrue
-> +else
-> +MESA3D_CONF_OPTS +=3D -Dintel-virtio-experimental=3Dfalse
-> +endif
-> +
->  ifneq
-> ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_FREEDRENO)$(BR2_PACKAGE_MESA3D_VULKA=
-N_DRIVER_FREEDRENO),)
->  MESA3D_FREEDRENO_KMDS =3D msm
->  ifeq ($(BR2_PACKAGE_MESA3D_HOST_NATIVE_CONTEXT_DRIVER_FREEDRENO),y)
+> diff --git a/package/libxml-parser-perl/libxml-parser-perl.mk
+> b/package/libxml-parser-perl/libxml-parser-perl.mk
+> index 06bbd3b1ad..7cc60774bd 100644
+> --- a/package/libxml-parser-perl/libxml-parser-perl.mk
+> +++ b/package/libxml-parser-perl/libxml-parser-perl.mk
+> @@ -7,7 +7,7 @@
+>  LIBXML_PARSER_PERL_VERSION =3D 2.47
+>  LIBXML_PARSER_PERL_SOURCE =3D
+> XML-Parser-$(LIBXML_PARSER_PERL_VERSION).tar.gz
+>  LIBXML_PARSER_PERL_SITE =3D $(BR2_CPAN_MIRROR)/authors/id/T/TO/TODDR
+> -HOST_LIBXML_PARSER_PERL_DEPENDENCIES =3D host-expat
+> +HOST_LIBXML_PARSER_PERL_DEPENDENCIES =3D host-expat host-libxcrypt
+>  LIBXML_PARSER_PERL_LICENSE =3D Artistic or GPL-1.0+
+>  LIBXML_PARSER_PERL_LICENSE_FILES =3D README
+>  LIBXML_PARSER_PERL_RUN_PERL =3D `which perl`
 > --
 > 2.53.0
 >
 >
 
---0000000000002793dc0657ee8868
+--0000000000009a6b340657ee8a15
 Content-Type: text/html; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
 <div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote g=
-mail_quote_container"><div dir=3D"ltr" class=3D"gmail_attr">On Fri, Jul 10,=
- 2026 at 8:32=E2=80=AFAM Adam Ford &lt;<a href=3D"mailto:aford173@gmail.com=
+mail_quote_container"><div dir=3D"ltr" class=3D"gmail_attr">On Thu, Jul 16,=
+ 2026 at 8:30=E2=80=AFAM Adam Ford &lt;<a href=3D"mailto:aford173@gmail.com=
 ">aford173@gmail.com</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quo=
 te" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204=
-);padding-left:1ex">Add BR2_PACKAGE_MESA3D_HOST_NATIVE_CONTEXT_DRIVER_INTEL=
- in the same<br>
-pattern as amdgpu-virtio. When enabled, -Dintel-virtio-experimental=3Dtrue<=
-br>
-defines HAVE_INTEL_VIRTIO so the guest-side Intel native context<br>
-(i915 and xe context types) is compiled in. This is the guest half<br>
-of the Intel vDRM GPU passthrough path, usable by the crocus/iris<br>
-(OpenGL) and ANV (Vulkan) drivers.<br>
+);padding-left:1ex">host-libxml-parser-perl compiles XS modules against the=
+ system perl<br>
+headers, which #include &lt;crypt.h&gt;. On build hosts without libcrypt-de=
+v<br>
+installed, the build fails:<br>
 <br>
-Note that this is an experimental Mesa feature (the upstream meson<br>
-option is named intel-virtio-experimental) and is disabled by default.<br>
+=C2=A0 =C2=A0 .../CORE/reentr.h:126:16: fatal error: crypt.h: No such file =
+or directory<br>
+<br>
+Declaring host-libxcrypt ensures crypt.h is present in the per-package<br>
+host sysroot before the build.<br>
 <br>
 Signed-off-by: Adam Ford &lt;<a href=3D"mailto:aford173@gmail.com" target=
-=3D"_blank">aford173@gmail.com</a>&gt;<br>
-<br></blockquote><div><br></div><div>Gentle nudge on this.</div><div><br></=
-div><div>adam</div><div>=C2=A0</div><blockquote class=3D"gmail_quote" style=
-=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding=
--left:1ex">
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in<br>
-index e184039150..ad02b5e829 100644<br>
---- a/package/mesa3d/Config.in<br>
-+++ b/package/mesa3d/Config.in<br>
-@@ -130,6 +130,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_CROCUS<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 bool &quot;Gallium crocus driver&quot;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 depends on BR2_i386 || BR2_x86_64<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_MESA3D_HOST_NATIVE_CONTEXT_S=
-UPPORTED_DRIVER<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 help<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 Mesa driver for gen4-7 Intel GPUs.<br>
+=3D"_blank">aford173@gmail.com</a>&gt;<br></blockquote><div><br></div><div>=
+Gentle nudge on this.</div><div>=C2=A0</div><blockquote class=3D"gmail_quot=
+e" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204)=
+;padding-left:1ex">
 <br>
-@@ -167,6 +168,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 bool &quot;Gallium iris driver&quot;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 depends on BR2_PACKAGE_MESA3D_LLVM<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_MESA3D_HOST_NATIVE_CONTEXT_S=
-UPPORTED_DRIVER<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 select BR2_PACKAGE_MESA3D_NEEDS_PRECOMP_COMPILE=
-R<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 select BR2_PACKAGE_MESA3D_RUSTICL_SUPPORTED_DRI=
-VER<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 help<br>
-@@ -393,6 +395,7 @@ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 =
-# memfd.h<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 depends on BR2_TOOLCHAIN_USES_GLIBC # ifunc, st=
-atic_assert<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 depends on BR2_PACKAGE_MESA3D_LLVM<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_MESA3D_HOST_NATIVE_CONTEXT_S=
-UPPORTED_DRIVER<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 select BR2_PACKAGE_MESA3D_NEEDS_PRECOMP_COMPILE=
-R<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 select BR2_PACKAGE_MESA3D_VULKAN_DRIVER<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 help<br>
-@@ -459,6 +462,22 @@ config BR2_PACKAGE_MESA3D_HOST_NATIVE_CONTEXT_DRIVER_F=
-REEDRENO<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 Select this when running Mesa inside a v=
-irtual machine<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 with virtio-gpu host native context supp=
-ort.<br>
-<br>
-+config BR2_PACKAGE_MESA3D_HOST_NATIVE_CONTEXT_DRIVER_INTEL<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0bool &quot;intel-virtio&quot;<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0depends on BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_CR=
-OCUS || \<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0BR2_PACKAGE_MESA3D_=
-GALLIUM_DRIVER_IRIS || \<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0BR2_PACKAGE_MESA3D_=
-VULKAN_DRIVER_INTEL<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0help<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Enable VirtIO support for Intel native c=
-ontexts<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0used by the crocus/iris (OpenGL) and ANV=
- (Vulkan)<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0drivers.<br>
-+<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0This is an experimental Mesa feature and=
- is disabled<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0by default.<br>
-+<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Select this when running Mesa inside a v=
-irtual machine<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0with virtio-gpu host native context supp=
-ort.<br>
-+<br>
-=C2=A0config BR2_PACKAGE_MESA3D_HOST_NATIVE_CONTEXT_SUPPORTED_DRIVER<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 bool<br>
-<br>
-diff --git a/package/mesa3d/<a href=3D"http://mesa3d.mk" rel=3D"noreferrer"=
- target=3D"_blank">mesa3d.mk</a> b/package/mesa3d/<a href=3D"http://mesa3d.=
-mk" rel=3D"noreferrer" target=3D"_blank">mesa3d.mk</a><br>
-index 8e6c2ee5b8..87377b7ce4 100644<br>
---- a/package/mesa3d/<a href=3D"http://mesa3d.mk" rel=3D"noreferrer" target=
-=3D"_blank">mesa3d.mk</a><br>
-+++ b/package/mesa3d/<a href=3D"http://mesa3d.mk" rel=3D"noreferrer" target=
-=3D"_blank">mesa3d.mk</a><br>
-@@ -164,6 +164,12 @@ else<br>
-=C2=A0MESA3D_CONF_OPTS +=3D -Damdgpu-virtio=3Dfalse<br>
-=C2=A0endif<br>
-<br>
-+ifeq ($(BR2_PACKAGE_MESA3D_HOST_NATIVE_CONTEXT_DRIVER_INTEL),y)<br>
-+MESA3D_CONF_OPTS +=3D -Dintel-virtio-experimental=3Dtrue<br>
-+else<br>
-+MESA3D_CONF_OPTS +=3D -Dintel-virtio-experimental=3Dfalse<br>
-+endif<br>
-+<br>
-=C2=A0ifneq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_FREEDRENO)$(BR2_PACKAGE_ME=
-SA3D_VULKAN_DRIVER_FREEDRENO),)<br>
-=C2=A0MESA3D_FREEDRENO_KMDS =3D msm<br>
-=C2=A0ifeq ($(BR2_PACKAGE_MESA3D_HOST_NATIVE_CONTEXT_DRIVER_FREEDRENO),y)<b=
-r>
+diff --git a/package/libxml-parser-perl/<a href=3D"http://libxml-parser-per=
+l.mk" rel=3D"noreferrer" target=3D"_blank">libxml-parser-perl.mk</a> b/pack=
+age/libxml-parser-perl/<a href=3D"http://libxml-parser-perl.mk" rel=3D"nore=
+ferrer" target=3D"_blank">libxml-parser-perl.mk</a><br>
+index 06bbd3b1ad..7cc60774bd 100644<br>
+--- a/package/libxml-parser-perl/<a href=3D"http://libxml-parser-perl.mk" r=
+el=3D"noreferrer" target=3D"_blank">libxml-parser-perl.mk</a><br>
++++ b/package/libxml-parser-perl/<a href=3D"http://libxml-parser-perl.mk" r=
+el=3D"noreferrer" target=3D"_blank">libxml-parser-perl.mk</a><br>
+@@ -7,7 +7,7 @@<br>
+=C2=A0LIBXML_PARSER_PERL_VERSION =3D 2.47<br>
+=C2=A0LIBXML_PARSER_PERL_SOURCE =3D XML-Parser-$(LIBXML_PARSER_PERL_VERSION=
+).tar.gz<br>
+=C2=A0LIBXML_PARSER_PERL_SITE =3D $(BR2_CPAN_MIRROR)/authors/id/T/TO/TODDR<=
+br>
+-HOST_LIBXML_PARSER_PERL_DEPENDENCIES =3D host-expat<br>
++HOST_LIBXML_PARSER_PERL_DEPENDENCIES =3D host-expat host-libxcrypt<br>
+=C2=A0LIBXML_PARSER_PERL_LICENSE =3D Artistic or GPL-1.0+<br>
+=C2=A0LIBXML_PARSER_PERL_LICENSE_FILES =3D README<br>
+=C2=A0LIBXML_PARSER_PERL_RUN_PERL =3D `which perl`<br>
 -- <br>
 2.53.0<br>
 <br>
 </blockquote></div></div>
 
---0000000000002793dc0657ee8868--
+--0000000000009a6b340657ee8a15--
 
---===============8089078866546034587==
+--===============7727270951125185115==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -386,4 +253,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============8089078866546034587==--
+--===============7727270951125185115==--
