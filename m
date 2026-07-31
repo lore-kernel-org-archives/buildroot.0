@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0DE39C54F54
-	for <buildroot@archiver.kernel.org>; Fri, 31 Jul 2026 12:22:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D3A7C54F54
+	for <buildroot@archiver.kernel.org>; Fri, 31 Jul 2026 12:22:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D6EB160BA1;
-	Fri, 31 Jul 2026 12:22:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 33658410E5;
+	Fri, 31 Jul 2026 12:22:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tsU3E5_8KpQh; Fri, 31 Jul 2026 12:22:29 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xRH2hS-36Znu; Fri, 31 Jul 2026 12:22:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 18BE860B92
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 57C2A410F3
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1785500549;
-	bh=V/DkSzb0Gtbk3TVRiE6BxXKQGwuEB9Lh0BwRmGwkzxk=;
+	s=default; t=1785500551;
+	bh=nv/CscOE4VYP6HyXhn8FDQQVqUHYPqA1yD7KGK3+n3o=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=f0SmR6nIoqN4RwPlSiGwGK5rcq2/CWy+FXJ8L/CMKg0tda8qPtBj4RqjNuD4JDc+k
-	 uQPdNSlL1A6Pu2mBWlAlB2egO2qnae6FGOPtJxHgQJtBHEJF5fVQnfhkiXKC476jie
-	 TVW3Mdn5Oh02NnOC96bRfZIjO9SC+eW0Y5bDI4gRjoleGo7TKHh09f7sv1cz/z5mK1
-	 TpKQPpxyOL0aXgJSaWeZ5W4s6YRQAk0eWg9BBTFsW7M2O9D08qofDxxG8cLIgcu9nJ
-	 AuXFPea/3DzfHpwp9qIp6GTAjef9Uqsb3wMcJLKl/lwFFncR5gdUsa8sAP6q3FCed6
-	 wd/E/yovQkBiQ==
+	b=n75p43yb7jJyQErEBpSGGUcDGFWEpP2UxlDClda86AyJ8QtR2Q1RXbjYOtqW6nrMZ
+	 Hl1whV2aSoP4RwjpHcrFSN6O8ZLmf5wKBZfPfwylmBi4pqh+IZc2aHdZtfGO3x9Qkm
+	 sJxaCaeuzHLw1eBKI6Cc5aTfEmkiYKAKc4WgQP4DskJxPG0ma+LbTxogF4QLJYsNmA
+	 6Dfde4xT4nsTBm+BWY4fG1R33wzgjdvAswzEGOD/Qsp/ho4gLSJUUiEPr1C8DUNQHT
+	 ztRfZ/3J0u/N1lGokektm0sQy0iOd0eG1v0vNB//dD4KITpgPaYDZlzJJekXPD21Hk
+	 oaMWlrUbdsjfw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 18BE860B92;
-	Fri, 31 Jul 2026 12:22:29 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id B7D4B36E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 57C2A410F3;
+	Fri, 31 Jul 2026 12:22:31 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id CCBF3442
  for <buildroot@buildroot.org>; Fri, 31 Jul 2026 12:22:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AA07740470
+ by smtp4.osuosl.org (Postfix) with ESMTP id AB3F8410E5
  for <buildroot@buildroot.org>; Fri, 31 Jul 2026 12:22:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pwwtjXH9nYZ4 for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Bbu4aE9Gd4Nl for <buildroot@buildroot.org>;
  Fri, 31 Jul 2026 12:22:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D16A640463
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C86BA410F3
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id D16A640463
+ by smtp4.osuosl.org (Postfix) with ESMTP id C86BA410F3
  for <buildroot@buildroot.org>; Fri, 31 Jul 2026 12:22:26 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B0FA28873C; Fri, 31 Jul 2026 12:21:43 +0000 (UTC)
+ id A5FE28B737; Fri, 31 Jul 2026 12:21:43 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 31 Jul 2026 14:14:04 +0200
+Date: Fri, 31 Jul 2026 14:13:43 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 4ca56d54b7c9e3e6d8ff50e0db56c3e0f14a09d3
-X-Git-Newrev: f4dd8841eb1683c1b77eefaee4ff58271663067d
+X-Git-Oldrev: 8201c97c9507500b54bd6988347d8bbcadf2da45
+X-Git-Newrev: 4ca56d54b7c9e3e6d8ff50e0db56c3e0f14a09d3
 X-Patchwork-Hint: ignore
-Message-Id: <20260731122143.B0FA28873C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/libass: bump
- version to 0.17.4
+Message-Id: <20260731122143.A5FE28B737@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/bind: security
+ bump version to 9.20.26
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,42 +77,60 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/f4dd8841eb1683c1b77eefaee4ff58271663067d
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/4ca56d54b7c9e3e6d8ff50e0db56c3e0f14a09d3
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-Release notes: https://github.com/libass/libass/releases/tag/0.17.4
+https://downloads.isc.org/isc/bind9/9.20.26/doc/arm/html/notes.html#notes-for-bind-9-20-26
+https://downloads.isc.org/isc/bind9/9.20.26/doc/arm/html/changelog.html
+https://seclists.org/oss-sec/2026/q3/208
+
+Fixes
+
+CVE-2026-10723: Incorrect acceptance of NSEC3 records
+CVE-2026-10822: Key Record using PRIVATEDNS algorithm may lead to unexpected exit
+CVE-2026-11331: Potential wildcard CNAME RPZ policy bypass
+CVE-2026-11605: Unnecessary validation of DNSSEC signed records
+CVE-2026-11622: Potential memory usage beyond configured limits
+CVE-2026-11721: Cache poisoning possible with label count discrepancy, RRSIG, and wildcards
+CVE-2026-12617: Record ordering based unexpected exit with CNAME or DNAME
+CVE-2026-13204: Unexpected exit in certain situations with NSEC and NSEC3 both present
+CVE-2026-13321: DNSSEC Validation Bypass via Out-of-Zone NSEC Next Field
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+[Julien: update pgp key id in hash file comment]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 77684698264d32cf20c4953b60b1021ae87e2a26)
+(cherry picked from commit 8c96a8981f40689c352910372404216ab0d9482e)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/libass/libass.hash | 2 +-
- package/libass/libass.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/bind/bind.hash | 6 +++---
+ package/bind/bind.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libass/libass.hash b/package/libass/libass.hash
-index 2f6b554e3d..2f4f718813 100644
---- a/package/libass/libass.hash
-+++ b/package/libass/libass.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  eae425da50f0015c21f7b3a9c7262a910f0218af469e22e2931462fed3c50959  libass-0.17.3.tar.xz
-+sha256  78f1179b838d025e9c26e8fef33f8092f65611444ffa1bfc0cfac6a33511a05a  libass-0.17.4.tar.xz
- sha256  f7e30699d02798351e7f839e3d3bfeb29ce65e44efa7735c225464c4fd7dfe9c  COPYING
-diff --git a/package/libass/libass.mk b/package/libass/libass.mk
-index f198ee89f0..ff42c6d621 100644
---- a/package/libass/libass.mk
-+++ b/package/libass/libass.mk
+diff --git a/package/bind/bind.hash b/package/bind/bind.hash
+index a1ff3c6101..36ff7b2d0a 100644
+--- a/package/bind/bind.hash
++++ b/package/bind/bind.hash
+@@ -1,4 +1,4 @@
+-# Verified from https://ftp.isc.org/isc/bind9/9.20.24/bind-9.20.24.tar.xz.asc
+-# with key D99CCEAF879747014F038D63182E23579462EFAA
+-sha256  989fef1fc88ea59d04cd86f854dca5a4616a20a9968bcdde3c1a3668ab36be08  bind-9.20.24.tar.xz
++# Verified from https://ftp.isc.org/isc/bind9/9.20.26/bind-9.20.26.tar.xz.asc
++# with key 706B6C28620E76F91D11F7DF510A642A06C52CEC
++sha256  55248def0f870c4c46b3de72978ea972615131516663188a4564dca1d20bf350  bind-9.20.26.tar.xz
+ sha256  9734825d67a3ac967b2c2f7c9a83c9e5db1c2474dbe9599157c3a4188749ebd4  COPYRIGHT
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index 2b8156d0d0..172bbf79b5 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBASS_VERSION = 0.17.3
-+LIBASS_VERSION = 0.17.4
- LIBASS_SOURCE = libass-$(LIBASS_VERSION).tar.xz
- # Do not use the github helper here, the generated tarball is *NOT*
- # the same as the one uploaded by upstream for the release.
+-BIND_VERSION = 9.20.24
++BIND_VERSION = 9.20.26
+ BIND_SOURCE= bind-$(BIND_VERSION).tar.xz
+ BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ BIND_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
