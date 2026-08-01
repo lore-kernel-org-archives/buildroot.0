@@ -1,62 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E06DC55172
-	for <buildroot@archiver.kernel.org>; Sat,  1 Aug 2026 12:48:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28544C55173
+	for <buildroot@archiver.kernel.org>; Sat,  1 Aug 2026 12:48:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AEF5780E5D;
-	Sat,  1 Aug 2026 12:48:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 121C240830;
+	Sat,  1 Aug 2026 12:48:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id im6UwRNgD0_E; Sat,  1 Aug 2026 12:48:35 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XkaA3Rut4MKH; Sat,  1 Aug 2026 12:48:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C8E5780E4E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DD65740825
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1785588515;
-	bh=l8QCcbPCPVwlF/yGdX5VcWZcPLjb9FwTemiVl1e0mC0=;
+	s=default; t=1785588514;
+	bh=6NYqHIgDGEvYOALz6FO/aDCmkP76gXzmsZFv8QBDvSw=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=CVHdvjxBJfg91JdeqaCZLksL+5ERuzSyVmCjYnBm0subPuw+5qTJHkgVvsjbjbhqo
-	 6ID1k2YSBbxpwVRCzwSGkOP9CYbxiIqGWWYZU9s6pU863DRNev45gk1p2V8b5WnKE+
-	 rIh9EjBNNZN1UCEvTJAtHOU8Rd48OeDl2vm2A6nQ9FLapce6T48p63nQrxnrtUp1H3
-	 nmbU0tvx0JuapyfFVY8TddcEBkgk/BCdutsfM1p5F8HsIRy2ZAjGHe31ZOdanwphtt
-	 61NRkI3z5uzpFRxRs8BJSSV7sKDzCNVaN4u4t7XxiX9eEFecIVb6JypRANuyp4lE9e
-	 etnCVwCtCuCrA==
+	b=UCtLCbK6vk/zsscDNhgCcgEVNEZk+3GElmrw+SHgh5AyXRTn7Mf872VtKWwquSC/2
+	 s09P5LdB4zPglZYCLX2OQREjjJVrgAW9N6bsRS0FXKRsoxkEAFtWG6FTnMUuDcEG8s
+	 8j1bvugbUpeWU3N78cXMBiVouog2X4gCZyK8y5mpfP0wb6LeMfLtVXxjvVHc0dHTNS
+	 U+KBJZqSY9bmTdDEwfKvkIcVn9feFDVHqJRJa4Tb2qoiaq8PO0MnhIDwTISIfvHlhV
+	 DqnzadwRww2JxIakmIYjK6O3Z8lR1ZE3KMtDbVuPg33/4KWlQnpL8Yc1EArsJTmyl6
+	 k55ADgydoSIRg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C8E5780E4E;
-	Sat,  1 Aug 2026 12:48:35 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id D2263FE3
+	by smtp4.osuosl.org (Postfix) with ESMTP id DD65740825;
+	Sat,  1 Aug 2026 12:48:34 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id ADAECFE3
  for <buildroot@buildroot.org>; Sat,  1 Aug 2026 12:48:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B963F40802
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9FEA240868
  for <buildroot@buildroot.org>; Sat,  1 Aug 2026 12:48:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id z3QYvqKET72M for <buildroot@buildroot.org>;
+ id sbbrdYkfPIBh for <buildroot@buildroot.org>;
  Sat,  1 Aug 2026 12:48:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0D68A40830
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EA84440802
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0D68A40830
- for <buildroot@buildroot.org>; Sat,  1 Aug 2026 12:48:33 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id EA84440802
+ for <buildroot@buildroot.org>; Sat,  1 Aug 2026 12:48:32 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 67FED87057; Sat,  1 Aug 2026 12:47:49 +0000 (UTC)
+ id 5A06986FE2; Sat,  1 Aug 2026 12:47:49 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Sat, 1 Aug 2026 14:09:19 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 623ed7c8c7a01f493427164c98bcc731d035f45a
-X-Git-Newrev: af3e7a4b128688bc89d814cfa0f8c28ff2735510
+X-Git-Oldrev: 43e87a583f0761ec12860a3f9a68df7e9a9c0e04
+X-Git-Newrev: 623ed7c8c7a01f493427164c98bcc731d035f45a
 X-Patchwork-Hint: ignore
-Message-Id: <20260801124749.67FED87057@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/php: security bump version to 8.5.9
+Message-Id: <20260801124749.5A06986FE2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/php: remove CFLAGS for OPcache
+ extension
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,46 +77,54 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/af3e7a4b128688bc89d814cfa0f8c28ff2735510
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/623ed7c8c7a01f493427164c98bcc731d035f45a
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-https://www.php.net/ChangeLog-8.php#8.5.9
-https://news-web.php.net/php.announce/500
-https://github.com/php/php-src/blob/php-8.5.9/NEWS
+Buildroot commit aedf131da66d2f2ebce64788deab07be17ce33eb bumped the
+package to 8.5.0 which made opcache a mandatory dependency but kept the
+CFLAGS added in 2015 with buildroot commit
+e05476491720f96fcbeb926b4599d111efb598a6.
 
-Fixes CVE-2026-17544, CVE-2026-17543, CVE-2026-9672 & CVE-2026-7260.
+As it turns out we need to remove the CFLAGS to fix the build with the
+bootlin-aarch64-glibc-old defconfig as detected by the Gitlab pipelines:
+
+ext/opcache/shared_alloc_posix.o: In function `create_segments':
+shared_alloc_posix.c:(.text+0xcc): undefined reference to `shm_open'
+shared_alloc_posix.c:(.text+0x11c): undefined reference to `shm_unlink'
+shared_alloc_posix.c:(.text+0x19c): undefined reference to `shm_unlink'
+shared_alloc_posix.c:(.text+0x1b8): undefined reference to `shm_unlink'
+
+as they seem to disturb the detection of librt.
+
+It is unclear which upstream commits added since 2015 fixed the original
+problem so a backport to LTS branches is not advised.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/php/php.mk | 9 ---------
+ 1 file changed, 9 deletions(-)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index 3c18506359..c093ecdacd 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From https://www.php.net/downloads.php?source=Y
--sha256  58910198d19e873048fe87cdfe16bc790025417ede3d1651bfa1c4b533d573f2  php-8.5.8.tar.xz
-+sha256  0db7855f25bcd0ab1d592cdb35e284d6f6a5d2ae0f6f621122e364cc39b708f4  php-8.5.9.tar.xz
- 
- # License file
- sha256  b42e4df5e50e6ecda1047d503d6d91d71032d09ed1027ba1ef29eed26f890c5a  LICENSE
 diff --git a/package/php/php.mk b/package/php/php.mk
-index 0e9e68a5a9..05eb4b9092 100644
+index 56d66e40d7..0e9e68a5a9 100644
 --- a/package/php/php.mk
 +++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+@@ -78,15 +78,6 @@ PHP_CONFIG_SCRIPTS = php-config
+ PHP_CFLAGS = $(TARGET_CFLAGS)
+ PHP_CXXFLAGS = $(TARGET_CXXFLAGS)
  
--PHP_VERSION = 8.5.8
-+PHP_VERSION = 8.5.9
- PHP_SITE = https://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+-# The OPcache extension isn't cross-compile friendly
+-# Throw some defines here to avoid patching heavily
+-PHP_CFLAGS += \
+-	-DHAVE_SHM_IPC \
+-	-DHAVE_SHM_MMAP_ANON \
+-	-DHAVE_SHM_MMAP_ZERO \
+-	-DHAVE_SHM_MMAP_POSIX \
+-	-DHAVE_SHM_MMAP_FILE
+-
+ # We need to force dl "detection"
+ ifeq ($(BR2_STATIC_LIBS),)
+ PHP_CONF_ENV += ac_cv_func_dlopen=yes ac_cv_lib_dl_dlopen=yes
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
