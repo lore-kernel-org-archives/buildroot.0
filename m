@@ -1,62 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5175FC55172
-	for <buildroot@archiver.kernel.org>; Sat,  1 Aug 2026 14:18:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08582C55172
+	for <buildroot@archiver.kernel.org>; Sat,  1 Aug 2026 14:20:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DAA7D80A67;
-	Sat,  1 Aug 2026 14:18:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 960484073B;
+	Sat,  1 Aug 2026 14:20:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fu7fUWFZZ__8; Sat,  1 Aug 2026 14:18:07 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SxbqXZaIaKr3; Sat,  1 Aug 2026 14:20:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 799D880D64
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A931D407F7
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1785593887;
-	bh=ZsmnTOzWUbnhIRNo1fHwXN08KZujJkFSozA7ltePpug=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=ihjOCHdIPEnBNDuQyk7R7GhjlfSzb/3Qv349AP/nwF+hfjFRYZkoezw2NTwKEwFPE
-	 cxEP7G6VsKeicO9a5mi+qN2dP9jrpo+WGFxH5tZL/L0BusRU8v4iOb8FP4MurQpc1e
-	 VDBeSZD9/G9eUg7U7Ty+0HVB/+UMzgBOtcdDieN66CU7+Ap2ejwSo2bEsXNzWBwJlJ
-	 /SNQ5VWkmRvd6j8OWbQsxKWkRb1Q2eZo5NU+K4AwOTscaTK+wM+BH4sJXJztg1HHyy
-	 btyLwdsjbw8sqPZz/zB62OTn5IEkK3s0YT4ryWN+l09zSmwagIouZuhNnVCn3DgKu1
-	 /s1jYbVxi7wWQ==
+	s=default; t=1785594017;
+	bh=6C2RwScscdU+pWmiP3bIJD1G9VIy49s1fLntIfYhfVc=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=NDcgIT94uxCHe8QWZIK3H7qyIjBQw1jm2hIissV8h9/K1+1W3jLiJp6AaRAn9cdKt
+	 L/HPAsS7UM5Q5NsVmvBYLBXjlMxICj0qmEXj/lECZFb9l31rGSoSCbC2+mfOpG6/ZK
+	 Ml8v+5d0LwYHuVCviIJknqMQdQGgdaEYbxpEadTkcYREaOII/D5bR9O+7jxUNqeVTw
+	 4grZsh6AzcSbKvsAJioo8UjN5jqKZDNvEtmWbpJpCKzfR9W8nyzUIrbEU11XhBIM8l
+	 BA22vwuQWJH/DG9CGcvbKiyFX/TfxtJKA/mhy7/YweZmUmvpCNqO0N8ojPZCpS0Zf6
+	 zHwOYuNMtYZNw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 799D880D64;
-	Sat,  1 Aug 2026 14:18:07 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id E79F032E
- for <buildroot@buildroot.org>; Sat,  1 Aug 2026 14:18:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A931D407F7;
+	Sat,  1 Aug 2026 14:20:17 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id AD30A32E
+ for <buildroot@buildroot.org>; Sat,  1 Aug 2026 14:20:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D9A3D80D64
- for <buildroot@buildroot.org>; Sat,  1 Aug 2026 14:18:05 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 93D0C4006A
+ for <buildroot@buildroot.org>; Sat,  1 Aug 2026 14:20:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 04LK2DTi5yx6 for <buildroot@buildroot.org>;
- Sat,  1 Aug 2026 14:18:04 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2795780A67
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2795780A67
- for <buildroot@buildroot.org>; Sat,  1 Aug 2026 14:18:04 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 757668707D; Sat,  1 Aug 2026 14:17:20 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 1 Aug 2026 16:07:05 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: af3e7a4b128688bc89d814cfa0f8c28ff2735510
-X-Git-Newrev: 46b5c95647577febda3cc4556fc1e7eed017bce5
-X-Patchwork-Hint: ignore
-Message-Id: <20260801141720.757668707D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/xen: bump to 4.21.1
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xkBfF7Vcaj3k for <buildroot@buildroot.org>;
+ Sat,  1 Aug 2026 14:20:15 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org A36A940015
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A36A940015
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A36A940015
+ for <buildroot@buildroot.org>; Sat,  1 Aug 2026 14:20:15 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id 1A04E13F879;
+ Sat,  1 Aug 2026 16:20:03 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 01 Aug 2026 16:20:03 +0200
+MIME-Version: 1.0
+Date: Sat, 01 Aug 2026 16:20:03 +0200
+To: matt@thewebers.ws
+Cc: buildroot@buildroot.org, Alistair Francis <alistair@alistair23.me>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Matthew Weber
+ <mathew.l.weber3@boeing.com>, Neal Frager <neal.frager@amd.com>,
+ =?UTF-8?Q?Vincent_Stehl=C3=A9?= <vincent.stehle@arm.com>, Titouan Christophe
+ <titouan.christophe@mind.be>, John Ernberg <john.ernberg@actia.se>
+In-Reply-To: <20260703023758.3883041-1-matt@thewebers.ws>
+References: <20260703023758.3883041-1-matt@thewebers.ws>
+User-Agent: Webmail Free/1.6.17
+Message-ID: <4b5d6ed71948cdd2e9866a181d4a8886@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1785594013;
+ bh=1LFPQ9rQa8K7CpuWTMfb42Xw1gVIKrBxJ8W5rUttzZo=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=gbkPobvbXwwn5hLjETj52tmexiir0jJZMLOZiPBGzR4EZoM46BAW1K2t7LRexOvLK
+ X7AwJsFVg/REYnsA+/2qdUBqSvhtKWAzmDgfzLs/ObgVo7GQ0SuScL4E9A1Rf4HAH5
+ bXQeBWjflCwlLl+h7tgZfKkXQsykr5+Rsb87YVGRox5vHuqhgR9hgtPLNeOTK8m0Qv
+ PfT5Fhtli07dKW4XbqtO2df3aquzMvqRYgK/LnptuTa35wHWGzjLDo4OWr+Vpv4oYO
+ SdfYlGdDNROOqh9cKYY3wcqZyeG9dRDBaivwpppzE8w+0p7OIOb8418IEl2DZ+vsDw
+ J4pwdYKT5MiOg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=gbkPobvb
+Subject: Re: [Buildroot] [PATCH] package/xen: bump to 4.21.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,399 +98,66 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2031610060375298143=="
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2031610060375298143==
-Content-Type: text/plain
-
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/46b5c95647577febda3cc4556fc1e7eed017bce5
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
-
-Bump Xen from 4.19.5 to 4.21.1.
-
-Resolved in version bump:
-- 0002-Arm-platforms-fix-build-with-gcc15.patch
-  Upstream: https://xenbits.xen.org/gitweb/?p=xen.git;a=commitdiff;h=39f95089e2ba15c5438ce904c0cbbd8d79d3e6e7
-
-The git-checkout.sh fix for non-master branch checkout is now included:
-  https://xenbits.xenproject.org/gitweb/?p=xen.git;a=commitdiff;h=01fb23dd71006d87e874f310e9c50f31582f274e
-
-Remaining patches refreshed for updated context:
-- 0001-No-trace-backend.patch (Buildroot specific, cross-compile workaround)
-- 0002-Update-linker-flags.patch (Buildroot specific, cross-compile workaround)
-
-Starting with Xen 4.20, qemu-xen is no longer bundled in the release
-tarball. Add a new qemu-xen package that provides the qemu-xen source
-tree with required meson subprojects pre-populated. This avoids any
-network access during the build.
-
-New dependencies:
-- qemu-xen (provides qemu-xen source for tools build)
-- host-python-distlib (needed by QEMU's mkvenv)
-
-The qemu-xen package:
-- Fetches qemu-xen via git (without recursive submodules to avoid
-  massive ROM downloads)
-- Pre-populates required meson subprojects (keycodemapdb,
-  berkeley-softfloat-3, berkeley-testfloat-3) from gitlab archives
-- Applies packagefiles overlays (meson.build) for subprojects that
-  need them
-- Removes .wrap files for unused subprojects to prevent any network
-  access attempts during the build
-- Patches xen_native.h #error to #warning for cross-compile
-
-Tested with:
-    support/testing/run-tests \
-        -d dl -o output_folder \
-        tests.package.test_xen.TestXenAarch64
-    support/testing/run-tests \
-        -d dl -o output_folder \
-        tests.package.test_xen.TestXenArmv7
-
-Both aarch64 and arm32 runtime tests pass.
-
-Quick build defconfig used for iteration:
-    BR2_aarch64=y
-    BR2_TOOLCHAIN_EXTERNAL=y
-    BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-    BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
-    BR2_PACKAGE_XEN=y
-    BR2_PACKAGE_XEN_HYPERVISOR=y
-    BR2_PACKAGE_XEN_TOOLS=y
-    # BR2_TARGET_ROOTFS_TAR is not set
-
-Related prior attempts:
-  https://patchwork.ozlabs.org/project/buildroot/patch/20260211055138.719459-1-matthew.l.weber@gmail.com/
-  https://patchwork.ozlabs.org/project/buildroot/patch/20251007164756.893264-1-titouan.christophe@mind.be/
-
-Cc: Neal Frager <neal.frager@amd.com>
-Cc: Julien Olivain <ju.o@free.fr>
-Cc: Vincent Stehlé <vincent.stehle@arm.com>
-Cc: Titouan Christophe <titouan.christophe@mind.be>
-Cc: John Ernberg <john.ernberg@actia.se>
-Signed-off-by: Matthew Weber <mathew.l.weber3@boeing.com>
-[Julien:
- - update qemu-xen package url in Config.in
- - split XEN_DEPENDENCIES lines
- - add COPYING license hash in qemu-xen.hash
-]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/qemu-xen/Config.in                         |  9 ++++
- package/qemu-xen/qemu-xen.hash                     |  6 +++
- package/qemu-xen/qemu-xen.mk                       | 57 ++++++++++++++++++++++
- package/xen/0001-No-trace-backend.patch            |  2 +-
- .../0002-Arm-platforms-fix-build-with-gcc15.patch  | 46 -----------------
- ...-flags.patch => 0002-Update-linker-flags.patch} | 10 +++-
- package/xen/Config.in                              |  3 ++
- package/xen/xen.hash                               |  4 +-
- package/xen/xen.mk                                 | 32 ++++++++++--
- 9 files changed, 115 insertions(+), 54 deletions(-)
-
-diff --git a/package/qemu-xen/Config.in b/package/qemu-xen/Config.in
-new file mode 100644
-index 0000000000..944f334f41
---- /dev/null
-+++ b/package/qemu-xen/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_QEMU_XEN
-+	bool "qemu-xen"
-+	help
-+	  The qemu-xen source tree, a QEMU fork maintained by the Xen
-+	  project for use as the device model in Xen tool stacks.
-+	  Starting with Xen 4.20, this is no longer bundled in the Xen
-+	  release tarball.
-+
-+	  https://xenbits.xen.org/gitweb/?p=qemu-xen.git
-diff --git a/package/qemu-xen/qemu-xen.hash b/package/qemu-xen/qemu-xen.hash
-new file mode 100644
-index 0000000000..318dcd8a74
---- /dev/null
-+++ b/package/qemu-xen/qemu-xen.hash
-@@ -0,0 +1,6 @@
-+# Locally computed
-+sha256  631aae8cab7e9688256d705f63e203c9b8f30c6574239a7fdaea8ccb6cdd2551  qemu-xen-e064f42c80be6f6ff8c12dcb2a663bdf70f965f6-git4.tar.gz
-+sha256  d014b53382dbb17b8196ad12f50de7f20d0ef1b9f7d54b0be51a6cbb14209195  keycodemapdb-f5772a62ec52591ff6870b7e8ef32482371f22c6.tar.gz
-+sha256  faae889814ea6a292f7ca03d9b36e6c7e95bab2a64777804883cc822b8d48757  berkeley-softfloat-3-b64af41c3276f97f0e181920400ee056b9c88037.tar.gz
-+sha256  e7a09d51dc7e96cb8422c919c85fc3833d4f788567638c9162ef5cd7db59b1df  berkeley-testfloat-3-e7af9751d9f9fd3b47911f51a5cfd08af256a9ab.tar.gz
-+sha256  6f04ae8364d0079a192b14635f4b1da294ce18724c034c39a6a41d1b09df6100  COPYING
-diff --git a/package/qemu-xen/qemu-xen.mk b/package/qemu-xen/qemu-xen.mk
-new file mode 100644
-index 0000000000..8414fa75ae
---- /dev/null
-+++ b/package/qemu-xen/qemu-xen.mk
-@@ -0,0 +1,57 @@
-+################################################################################
-+#
-+# qemu-xen
-+#
-+################################################################################
-+
-+# We do NOT use GIT_SUBMODULES = YES because qemu-xen has massive ROM
-+# submodules (edk2, u-boot, etc.) that are not needed for the Xen tools
-+# cross-build. Instead, we pre-populate only the required meson
-+# subprojects and remove .wrap files for the rest to prevent any network
-+# access during the build.
-+
-+# Determined from Xen repo's hash for this repo @ XEN_VERSION
-+QEMU_XEN_VERSION = e064f42c80be6f6ff8c12dcb2a663bdf70f965f6
-+QEMU_XEN_SITE = https://xenbits.xen.org/git-http/qemu-xen.git
-+QEMU_XEN_SITE_METHOD = git
-+QEMU_XEN_LICENSE = GPL-2.0
-+QEMU_XEN_LICENSE_FILES = COPYING
-+QEMU_XEN_REDISTRIBUTE = NO
-+
-+# Required meson subprojects for the QEMU build
-+QEMU_XEN_KEYCODEMAPDB_VERSION = f5772a62ec52591ff6870b7e8ef32482371f22c6
-+QEMU_XEN_SOFTFLOAT3_VERSION = b64af41c3276f97f0e181920400ee056b9c88037
-+QEMU_XEN_TESTFLOAT3_VERSION = e7af9751d9f9fd3b47911f51a5cfd08af256a9ab
-+
-+QEMU_XEN_EXTRA_DOWNLOADS = \
-+	https://gitlab.com/qemu-project/keycodemapdb/-/archive/$(QEMU_XEN_KEYCODEMAPDB_VERSION)/keycodemapdb-$(QEMU_XEN_KEYCODEMAPDB_VERSION).tar.gz \
-+	https://gitlab.com/qemu-project/berkeley-softfloat-3/-/archive/$(QEMU_XEN_SOFTFLOAT3_VERSION)/berkeley-softfloat-3-$(QEMU_XEN_SOFTFLOAT3_VERSION).tar.gz \
-+	https://gitlab.com/qemu-project/berkeley-testfloat-3/-/archive/$(QEMU_XEN_TESTFLOAT3_VERSION)/berkeley-testfloat-3-$(QEMU_XEN_TESTFLOAT3_VERSION).tar.gz
-+
-+define QEMU_XEN_INSTALL_SUBPROJECTS
-+	rm -rf $(@D)/subprojects/keycodemapdb
-+	mkdir -p $(@D)/subprojects/keycodemapdb
-+	$(TAR) --strip-components=1 -C $(@D)/subprojects/keycodemapdb \
-+		-xf $(QEMU_XEN_DL_DIR)/keycodemapdb-$(QEMU_XEN_KEYCODEMAPDB_VERSION).tar.gz
-+	rm -rf $(@D)/subprojects/berkeley-softfloat-3
-+	mkdir -p $(@D)/subprojects/berkeley-softfloat-3
-+	$(TAR) --strip-components=1 -C $(@D)/subprojects/berkeley-softfloat-3 \
-+		-xf $(QEMU_XEN_DL_DIR)/berkeley-softfloat-3-$(QEMU_XEN_SOFTFLOAT3_VERSION).tar.gz
-+	cp -f $(@D)/subprojects/packagefiles/berkeley-softfloat-3/* \
-+		$(@D)/subprojects/berkeley-softfloat-3/
-+	rm -rf $(@D)/subprojects/berkeley-testfloat-3
-+	mkdir -p $(@D)/subprojects/berkeley-testfloat-3
-+	$(TAR) --strip-components=1 -C $(@D)/subprojects/berkeley-testfloat-3 \
-+		-xf $(QEMU_XEN_DL_DIR)/berkeley-testfloat-3-$(QEMU_XEN_TESTFLOAT3_VERSION).tar.gz
-+	cp -f $(@D)/subprojects/packagefiles/berkeley-testfloat-3/* \
-+		$(@D)/subprojects/berkeley-testfloat-3/
-+	# Remove .wrap files for subprojects we do NOT pre-provide to prevent
-+	# meson from attempting any network access during the build.
-+	rm -f $(@D)/subprojects/dtc.wrap
-+	rm -f $(@D)/subprojects/libblkio.wrap
-+	rm -f $(@D)/subprojects/libvfio-user.wrap
-+	rm -f $(@D)/subprojects/slirp.wrap
-+endef
-+QEMU_XEN_POST_EXTRACT_HOOKS += QEMU_XEN_INSTALL_SUBPROJECTS
-+
-+$(eval $(generic-package))
-diff --git a/package/xen/0001-No-trace-backend.patch b/package/xen/0001-No-trace-backend.patch
-index dd9924645e..5bd2e30b76 100644
---- a/package/xen/0001-No-trace-backend.patch
-+++ b/package/xen/0001-No-trace-backend.patch
-@@ -16,7 +16,7 @@ diff --git a/tools/Makefile b/tools/Makefile
- index 7d172117..a9a3196e 100644
- --- a/tools/Makefile
- +++ b/tools/Makefile
--@@ -217,13 +217,7 @@ subdir-all-qemu-xen-dir: qemu-xen-dir-find
-+@@ -162,13 +162,7 @@ subdir-all-qemu-xen-dir: qemu-xen-dir-find
-  	fi; \
-  	mkdir -p qemu-xen-build; \
-  	cd qemu-xen-build; \
-diff --git a/package/xen/0002-Arm-platforms-fix-build-with-gcc15.patch b/package/xen/0002-Arm-platforms-fix-build-with-gcc15.patch
-deleted file mode 100644
-index 1b48026276..0000000000
---- a/package/xen/0002-Arm-platforms-fix-build-with-gcc15.patch
-+++ /dev/null
-@@ -1,46 +0,0 @@
--From d12666d74dc742bb06c30b96d6b874a3e14c6b46 Mon Sep 17 00:00:00 2001
--From: Jan Beulich <jbeulich@suse.com>
--Date: Tue, 26 Aug 2025 08:41:18 +0200
--Subject: [PATCH] Arm/platforms: fix build with gcc15
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--For two of the headers gcc15 complains "header guard ... followed by
--'#define' of a different macro". Misra certainly wouldn't have liked
--this either, if these headers were covered by a scan.
--
--Signed-off-by: Jan Beulich <jbeulich@suse.com>
--Acked-by: Michal Orzel <michal.orzel@amd.com>
--Upstream: https://xenbits.xen.org/gitweb/?p=xen.git;a=commitdiff;h=39f95089e2ba15c5438ce904c0cbbd8d79d3e6e7
--Signed-off-by: Vincent Stehlé <vincent.stehle@arm.com>
-----
-- xen/arch/arm/include/asm/platforms/midway.h | 2 +-
-- xen/arch/arm/include/asm/platforms/omap5.h  | 2 +-
-- 2 files changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/xen/arch/arm/include/asm/platforms/midway.h b/xen/arch/arm/include/asm/platforms/midway.h
--index 099e435..6914393 100644
----- a/xen/arch/arm/include/asm/platforms/midway.h
--+++ b/xen/arch/arm/include/asm/platforms/midway.h
--@@ -1,5 +1,5 @@
-- #ifndef __ASM_ARM_PLATFORMS_MIDWAY_H
---#define __ASM_ASM_PLATFORMS_MIDWAY_H
--+#define __ASM_ARM_PLATFORMS_MIDWAY_H
-- 
-- /* addresses of SREG registers for resetting the SoC */
-- #define MW_SREG_PWR_REQ             0xfff3cf00
--diff --git a/xen/arch/arm/include/asm/platforms/omap5.h b/xen/arch/arm/include/asm/platforms/omap5.h
--index c559c84..8867b45 100644
----- a/xen/arch/arm/include/asm/platforms/omap5.h
--+++ b/xen/arch/arm/include/asm/platforms/omap5.h
--@@ -1,5 +1,5 @@
-- #ifndef __ASM_ARM_PLATFORMS_OMAP5_H
---#define __ASM_ASM_PLATFORMS_OMAP5_H
--+#define __ASM_ARM_PLATFORMS_OMAP5_H
-- 
-- #define REALTIME_COUNTER_BASE                   0x48243200
-- #define INCREMENTER_NUMERATOR_OFFSET            0x10
---- 
--2.53.0
--
-diff --git a/package/xen/0003-Update-linker-flags.patch b/package/xen/0002-Update-linker-flags.patch
-similarity index 86%
-rename from package/xen/0003-Update-linker-flags.patch
-rename to package/xen/0002-Update-linker-flags.patch
-index 7e91c6d2e5..ac02722781 100644
---- a/package/xen/0003-Update-linker-flags.patch
-+++ b/package/xen/0002-Update-linker-flags.patch
-@@ -6,10 +6,16 @@ MIME-Version: 1.0
- Content-Type: text/plain; charset=UTF-8
- Content-Transfer-Encoding: 8bit
- 
-+The -I$(XEN_ROOT)/tools/include added to QEMU's extra-cflags causes
-+__XEN_INTERFACE_VERSION__ to be defined before xen_native.h is included,
-+triggering an include-order assertion. Downgrade to a warning since the
-+version is consistent in cross-compile.
-+Ref: https://github.com/qemu/qemu/commit/e2abfe5ec6
-+
- Upstream: Buildroot specific. This is a temporary patch for an intermediate bump.
- Signed-off-by: Vincent Stehlé <vincent.stehle@arm.com>
- ---
-- tools/Makefile                             | 29 +++++++++++++++++++++-
-+ tools/Makefile                              | 29 ++++++++++++++++++++-
-  tools/qemu-xen/include/hw/xen/xen_native.h |  2 +-
-  2 files changed, 29 insertions(+), 2 deletions(-)
- 
-@@ -30,7 +36,7 @@ index a9a3196e..5d289651 100644
-  SUBDIRS-$(OCAML_TOOLS) += ocaml
-  
-  ifeq ($(CONFIG_RUMP),y)
--@@ -236,8 +240,31 @@ subdir-all-qemu-xen-dir: qemu-xen-dir-find
-+@@ -189,8 +193,31 @@ subdir-all-qemu-xen-dir: qemu-xen-dir-find
-  		-DXC_WANT_COMPAT_GNTTAB_API=1 \
-  		-DXC_WANT_COMPAT_MAP_FOREIGN_API=1 \
-  		-DXC_WANT_COMPAT_DEVICEMODEL_API=1 \
-diff --git a/package/xen/Config.in b/package/xen/Config.in
-index dc4d434810..d63a3f6002 100644
---- a/package/xen/Config.in
-+++ b/package/xen/Config.in
-@@ -37,6 +37,7 @@ config BR2_PACKAGE_XEN_TOOLS
- 	select BR2_PACKAGE_BASH # runtime (scripts)
- 	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS if BR2_PACKAGE_BUSYBOX # bash
- 	select BR2_PACKAGE_COREUTILS # runtime (stat)
-+	select BR2_PACKAGE_QEMU_XEN
- 	help
- 	  The Xen tools can be accessed by the xl command.
- 
-@@ -44,4 +45,6 @@ comment "xen tools need a toolchain w/ wchar, threads, dynamic library"
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
- 		BR2_STATIC_LIBS
- 
-+source "package/qemu-xen/Config.in"
-+
- endif
-diff --git a/package/xen/xen.hash b/package/xen/xen.hash
-index 035f876ee1..c41f0fda60 100644
---- a/package/xen/xen.hash
-+++ b/package/xen/xen.hash
-@@ -1,6 +1,6 @@
- # Locally computed after checking pgp signature from:
--# https://downloads.xenproject.org/release/xen/4.19.5/xen-4.19.5.tar.gz.sig
-+# https://downloads.xenproject.org/release/xen/4.21.1/xen-4.21.1.tar.gz.sig
- # with key 23E3222C145F4475FA8060A783FE14C957E82BD9
--sha256  8143ccc38982193142cc2e537a82d4e6b72d9053084372429e1d7ff0ed41ae2e  xen-4.19.5.tar.gz
-+sha256  e2a69289d6d13c0a71d4f3a39a597741c85c0282d9af1ec5dac495bdcb2872bb  xen-4.21.1.tar.gz
- sha256  9eeacf4e4f91bdbcd16b3282bb86779e3122da032953ebccad4fccdfcf4cb3ac  COPYING
- sha256  aeab99f147957cd25fe8cc008992d5e5426ea73fb7d429923b5428a1ef1a59ce  LICENSES/GPL-2.0
-diff --git a/package/xen/xen.mk b/package/xen/xen.mk
-index 5756dfc68c..75252d1123 100644
---- a/package/xen/xen.mk
-+++ b/package/xen/xen.mk
-@@ -4,14 +4,20 @@
- #
- ################################################################################
- 
--XEN_VERSION = 4.19.5
-+XEN_VERSION = 4.21.1
- XEN_SITE = https://downloads.xenproject.org/release/xen/$(XEN_VERSION)
- XEN_SELINUX_MODULES = systemd udev xen
- XEN_LICENSE = GPL-2.0
- XEN_LICENSE_FILES = COPYING LICENSES/GPL-2.0
- XEN_CPE_ID_VENDOR = xen
- XEN_CPE_ID_PREFIX = cpe:2.3:o
--XEN_DEPENDENCIES = host-acpica host-meson host-pkgconf host-python3
-+
-+XEN_DEPENDENCIES = \
-+	host-acpica \
-+	host-meson \
-+	host-pkgconf \
-+	host-python3 \
-+	host-python-distlib
- 
- # Calculate XEN_ARCH
- ifeq ($(ARCH),aarch64)
-@@ -26,6 +32,8 @@ XEN_CONF_OPTS = \
- 	--with-initddir=/etc/init.d \
- 	--disable-werror
- 
-+# Xen 4.20+ would normally fetch qemu-xen via git at build time; we
-+# pre-provide it via the qemu-xen package instead.
- XEN_CONF_ENV = PYTHON=$(HOST_DIR)/bin/python3
- XEN_MAKE_ENV = \
- 	XEN_TARGET_ARCH=$(XEN_ARCH) \
-@@ -46,7 +54,16 @@ endif
- 
- ifeq ($(BR2_PACKAGE_XEN_TOOLS),y)
- XEN_DEPENDENCIES += \
--	dtc libaio libglib2 ncurses openssl pixman slirp util-linux yajl
-+	dtc \
-+	libaio \
-+	libglib2 \
-+	ncurses \
-+	openssl \
-+	pixman \
-+	qemu-xen \
-+	slirp \
-+	util-linux \
-+	yajl
- ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
- XEN_DEPENDENCIES += argp-standalone
- endif
-@@ -54,6 +71,15 @@ XEN_INSTALL_TARGET_OPTS += DESTDIR=$(TARGET_DIR) install-tools
- XEN_MAKE_OPTS += dist-tools
- XEN_CONF_OPTS += --with-extra-qemuu-configure-args="--disable-sdl --disable-opengl"
- 
-+# Place the pre-downloaded qemu-xen source where the Xen build expects it.
-+# This prevents Xen from trying to git-clone qemu-xen during the build.
-+# Use cp -a (not symlink) so meson can write into subprojects/.
-+define XEN_INSTALL_QEMU_XEN_SRC
-+	rm -rf $(@D)/tools/qemu-xen
-+	cp -a $(QEMU_XEN_DIR) $(@D)/tools/qemu-xen
-+endef
-+XEN_POST_EXTRACT_HOOKS += XEN_INSTALL_QEMU_XEN_SRC
-+
- define XEN_INSTALL_INIT_SYSV
- 	mv $(TARGET_DIR)/etc/init.d/xencommons $(TARGET_DIR)/etc/init.d/S50xencommons
- 	mv $(TARGET_DIR)/etc/init.d/xen-watchdog $(TARGET_DIR)/etc/init.d/S50xen-watchdog
-
---===============2031610060375298143==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============2031610060375298143==--
+T24gMDMvMDcvMjAyNiAwNDozNywgbWF0dEB0aGV3ZWJlcnMud3Mgd3JvdGU6Cj4gRnJvbTogTWF0
+dGhldyBXZWJlciA8bWF0aGV3Lmwud2ViZXIzQGJvZWluZy5jb20+Cj4gCj4gQnVtcCBYZW4gZnJv
+bSA0LjE5LjUgdG8gNC4yMS4xLgo+IAo+IFJlc29sdmVkIGluIHZlcnNpb24gYnVtcDoKPiAtIDAw
+MDItQXJtLXBsYXRmb3Jtcy1maXgtYnVpbGQtd2l0aC1nY2MxNS5wYXRjaAo+ICAgVXBzdHJlYW06
+IAo+IGh0dHBzOi8veGVuYml0cy54ZW4ub3JnL2dpdHdlYi8/cD14ZW4uZ2l0O2E9Y29tbWl0ZGlm
+ZjtoPTM5Zjk1MDg5ZTJiYTE1YzU0MzhjZTkwNGMwY2JiZDhkNzlkM2U2ZTcKPiAKPiBUaGUgZ2l0
+LWNoZWNrb3V0LnNoIGZpeCBmb3Igbm9uLW1hc3RlciBicmFuY2ggY2hlY2tvdXQgaXMgbm93IGlu
+Y2x1ZGVkOgo+ICAgCj4gaHR0cHM6Ly94ZW5iaXRzLnhlbnByb2plY3Qub3JnL2dpdHdlYi8/cD14
+ZW4uZ2l0O2E9Y29tbWl0ZGlmZjtoPTAxZmIyM2RkNzEwMDZkODdlODc0ZjMxMGU5YzUwZjMxNTgy
+ZjI3NGUKPiAKPiBSZW1haW5pbmcgcGF0Y2hlcyByZWZyZXNoZWQgZm9yIHVwZGF0ZWQgY29udGV4
+dDoKPiAtIDAwMDEtTm8tdHJhY2UtYmFja2VuZC5wYXRjaCAoQnVpbGRyb290IHNwZWNpZmljLCBj
+cm9zcy1jb21waWxlIAo+IHdvcmthcm91bmQpCj4gLSAwMDAyLVVwZGF0ZS1saW5rZXItZmxhZ3Mu
+cGF0Y2ggKEJ1aWxkcm9vdCBzcGVjaWZpYywgY3Jvc3MtY29tcGlsZSAKPiB3b3JrYXJvdW5kKQo+
+IAo+IFN0YXJ0aW5nIHdpdGggWGVuIDQuMjAsIHFlbXUteGVuIGlzIG5vIGxvbmdlciBidW5kbGVk
+IGluIHRoZSByZWxlYXNlCj4gdGFyYmFsbC4gQWRkIGEgbmV3IHFlbXUteGVuIHBhY2thZ2UgdGhh
+dCBwcm92aWRlcyB0aGUgcWVtdS14ZW4gc291cmNlCj4gdHJlZSB3aXRoIHJlcXVpcmVkIG1lc29u
+IHN1YnByb2plY3RzIHByZS1wb3B1bGF0ZWQuIFRoaXMgYXZvaWRzIGFueQo+IG5ldHdvcmsgYWNj
+ZXNzIGR1cmluZyB0aGUgYnVpbGQuCj4gCj4gTmV3IGRlcGVuZGVuY2llczoKPiAtIHFlbXUteGVu
+IChwcm92aWRlcyBxZW11LXhlbiBzb3VyY2UgZm9yIHRvb2xzIGJ1aWxkKQo+IC0gaG9zdC1weXRo
+b24tZGlzdGxpYiAobmVlZGVkIGJ5IFFFTVUncyBta3ZlbnYpCj4gCj4gVGhlIHFlbXUteGVuIHBh
+Y2thZ2U6Cj4gLSBGZXRjaGVzIHFlbXUteGVuIHZpYSBnaXQgKHdpdGhvdXQgcmVjdXJzaXZlIHN1
+Ym1vZHVsZXMgdG8gYXZvaWQKPiAgIG1hc3NpdmUgUk9NIGRvd25sb2FkcykKPiAtIFByZS1wb3B1
+bGF0ZXMgcmVxdWlyZWQgbWVzb24gc3VicHJvamVjdHMgKGtleWNvZGVtYXBkYiwKPiAgIGJlcmtl
+bGV5LXNvZnRmbG9hdC0zLCBiZXJrZWxleS10ZXN0ZmxvYXQtMykgZnJvbSBnaXRsYWIgYXJjaGl2
+ZXMKPiAtIEFwcGxpZXMgcGFja2FnZWZpbGVzIG92ZXJsYXlzIChtZXNvbi5idWlsZCkgZm9yIHN1
+YnByb2plY3RzIHRoYXQKPiAgIG5lZWQgdGhlbQo+IC0gUmVtb3ZlcyAud3JhcCBmaWxlcyBmb3Ig
+dW51c2VkIHN1YnByb2plY3RzIHRvIHByZXZlbnQgYW55IG5ldHdvcmsKPiAgIGFjY2VzcyBhdHRl
+bXB0cyBkdXJpbmcgdGhlIGJ1aWxkCj4gLSBQYXRjaGVzIHhlbl9uYXRpdmUuaCAjZXJyb3IgdG8g
+I3dhcm5pbmcgZm9yIGNyb3NzLWNvbXBpbGUKPiAKPiBUZXN0ZWQgd2l0aDoKPiAgICAgc3VwcG9y
+dC90ZXN0aW5nL3J1bi10ZXN0cyBcCj4gICAgICAgICAtZCBkbCAtbyBvdXRwdXRfZm9sZGVyIFwK
+PiAgICAgICAgIHRlc3RzLnBhY2thZ2UudGVzdF94ZW4uVGVzdFhlbkFhcmNoNjQKPiAgICAgc3Vw
+cG9ydC90ZXN0aW5nL3J1bi10ZXN0cyBcCj4gICAgICAgICAtZCBkbCAtbyBvdXRwdXRfZm9sZGVy
+IFwKPiAgICAgICAgIHRlc3RzLnBhY2thZ2UudGVzdF94ZW4uVGVzdFhlbkFybXY3Cj4gCj4gQm90
+aCBhYXJjaDY0IGFuZCBhcm0zMiBydW50aW1lIHRlc3RzIHBhc3MuCj4gCj4gUXVpY2sgYnVpbGQg
+ZGVmY29uZmlnIHVzZWQgZm9yIGl0ZXJhdGlvbjoKPiAgICAgQlIyX2FhcmNoNjQ9eQo+ICAgICBC
+UjJfVE9PTENIQUlOX0VYVEVSTkFMPXkKPiAgICAgQlIyX1RPT0xDSEFJTl9FWFRFUk5BTF9CT09U
+TElOPXkKPiAgICAgQlIyX1RPT0xDSEFJTl9FWFRFUk5BTF9CT09UTElOX0FBUkNINjRfR0xJQkNf
+U1RBQkxFPXkKPiAgICAgQlIyX1BBQ0tBR0VfWEVOPXkKPiAgICAgQlIyX1BBQ0tBR0VfWEVOX0hZ
+UEVSVklTT1I9eQo+ICAgICBCUjJfUEFDS0FHRV9YRU5fVE9PTFM9eQo+ICAgICAjIEJSMl9UQVJH
+RVRfUk9PVEZTX1RBUiBpcyBub3Qgc2V0Cj4gCj4gUmVsYXRlZCBwcmlvciBhdHRlbXB0czoKPiAg
+IAo+IGh0dHBzOi8vcGF0Y2h3b3JrLm96bGFicy5vcmcvcHJvamVjdC9idWlsZHJvb3QvcGF0Y2gv
+MjAyNjAyMTEwNTUxMzguNzE5NDU5LTEtbWF0dGhldy5sLndlYmVyQGdtYWlsLmNvbS8KPiAgIAo+
+IGh0dHBzOi8vcGF0Y2h3b3JrLm96bGFicy5vcmcvcHJvamVjdC9idWlsZHJvb3QvcGF0Y2gvMjAy
+NTEwMDcxNjQ3NTYuODkzMjY0LTEtdGl0b3Vhbi5jaHJpc3RvcGhlQG1pbmQuYmUvCj4gCj4gQ2M6
+IE5lYWwgRnJhZ2VyIDxuZWFsLmZyYWdlckBhbWQuY29tPgo+IENjOiBKdWxpZW4gT2xpdmFpbiA8
+anUub0BmcmVlLmZyPgo+IENjOiBWaW5jZW50IFN0ZWhsw6kgPHZpbmNlbnQuc3RlaGxlQGFybS5j
+b20+Cj4gQ2M6IFRpdG91YW4gQ2hyaXN0b3BoZSA8dGl0b3Vhbi5jaHJpc3RvcGhlQG1pbmQuYmU+
+Cj4gQ2M6IEpvaG4gRXJuYmVyZyA8am9obi5lcm5iZXJnQGFjdGlhLnNlPgo+IFNpZ25lZC1vZmYt
+Ynk6IE1hdHRoZXcgV2ViZXIgPG1hdGhldy5sLndlYmVyM0Bib2VpbmcuY29tPgoKQXBwbGllZCB0
+byBtYXN0ZXIsIHRoYW5rcy4KCkZvciBpbmZvLCBJIGhhdmUgbWFkZSB0aGUgZm9sbG93aW5nIG1p
+bm9yIGNoYW5nZXM6Ci0gdXBkYXRlIHFlbXUteGVuIHBhY2thZ2UgdXJsIGluIENvbmZpZy5pbgot
+IHNwbGl0IFhFTl9ERVBFTkRFTkNJRVMgbGluZXMKLSBhZGQgQ09QWUlORyBsaWNlbnNlIGhhc2gg
+aW4gcWVtdS14ZW4uaGFzaAoKU2VlOgpodHRwczovL2dpdGxhYi5jb20vYnVpbGRyb290Lm9yZy9i
+dWlsZHJvb3QvLS9jb21taXQvNDZiNWM5NTY0NzU3N2ZlYmRhM2NjNDU1NmZjMWU3ZWVkMDE3YmNl
+NQoKQmVzdCByZWdhcmRzLAoKSnVsaWVuLgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJv
+b3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxk
+cm9vdAo=
