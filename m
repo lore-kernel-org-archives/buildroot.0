@@ -1,89 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B29BC55174
-	for <buildroot@archiver.kernel.org>; Sun,  2 Aug 2026 20:29:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A971FC55174
+	for <buildroot@archiver.kernel.org>; Sun,  2 Aug 2026 20:29:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F2305606BA;
-	Sun,  2 Aug 2026 20:29:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5CADD80880;
+	Sun,  2 Aug 2026 20:29:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SIl6RxtzL_Eg; Sun,  2 Aug 2026 20:29:09 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kswuDvk9qIYO; Sun,  2 Aug 2026 20:29:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 433A56068D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 438168083F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1785702549;
-	bh=P+FyGsJquRv6MQiG5OvKfrFtvyRaZNRbG82/OC05FEc=;
+	s=default; t=1785702580;
+	bh=WudW/bUoUz+2o4BbpSontyC8cdS+JWuDC6cyUkjmJqc=;
 	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=j2lBXNphQLsqHmr80x9hinGDnHQxDysxLbTQMunlRrxairh8An7EEOwaE51N8PjQo
-	 SY4DdyFEk48a/7e+CW5dHb46GJK+prNex6qHYhS8RrDpPCsSqI8V876ryEui+i82KV
-	 iiMtIxH1WfGYkYZ8jHIcUb5EJJRTzD44qJ7ZdPJRdl1qKxMye+PKsvganRQ9uSSTZS
-	 EwL5lkjZQcMdhIn/3PD/qZAo8K8mDc0N1SgZqOd6evR5Bm5YPXgiRP92zn9tlOM22T
-	 KqoOlN5l38pPwZkCHbry1V/wbL4zUq8G1EUzq3O5php5PHQLBHc84EaM9V9tigvS7f
-	 zk4ZofcQ8hqpQ==
+	b=clDgCYvZn096DlnUr+5tZfUlvf2//uW8dkA9JBW5TP1JEgxN7DksETevvEomNg1qD
+	 ExxL3b0hQAitA61R7RVQ4FE7H40a32urc5lxsOUEiDsuQTdFlObTQVzMP1NwGROb4k
+	 B/xWDBcerx7Z8RH2Ouk4Tmo0dJaw/Q/+EwwLSIVD62LVZcTR8S7WJznJmvXgYL5SPh
+	 Too4lNdEayFfG0xzwl3naZcOyveDQ5S83XUJe/ct1gQJxqduwiUTr+J6WA8JNq1AOJ
+	 tn5kSWGiY90iZx4p/mIsZUqGd4TSPl8d4ErDE4yvnd0/zRTfx/zd9ez7/uW1k85b7j
+	 0/Cu54EjgV3VA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 433A56068D;
-	Sun,  2 Aug 2026 20:29:09 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id D98D926C
- for <buildroot@buildroot.org>; Sun,  2 Aug 2026 20:29:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 438168083F;
+	Sun,  2 Aug 2026 20:29:40 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id C105D3A6
+ for <buildroot@buildroot.org>; Sun,  2 Aug 2026 20:29:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CB04240087
- for <buildroot@buildroot.org>; Sun,  2 Aug 2026 20:29:07 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B27C88083F
+ for <buildroot@buildroot.org>; Sun,  2 Aug 2026 20:29:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uCUDNUcQdotv for <buildroot@buildroot.org>;
- Sun,  2 Aug 2026 20:29:07 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org AC3AB40068
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AC3AB40068
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp2.osuosl.org (Postfix) with ESMTPS id AC3AB40068
- for <buildroot@buildroot.org>; Sun,  2 Aug 2026 20:29:06 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9N6BUvXD5gfO for <buildroot@buildroot.org>;
+ Sun,  2 Aug 2026 20:29:38 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B07B98083D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B07B98083D
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B07B98083D
+ for <buildroot@buildroot.org>; Sun,  2 Aug 2026 20:29:38 +0000 (UTC)
 Received: from webmail.free.fr (unknown [172.20.246.1])
  (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id D7D5519F54D;
- Sun,  2 Aug 2026 22:29:00 +0200 (CEST)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id 82EB6B0054E;
+ Sun,  2 Aug 2026 22:29:35 +0200 (CEST)
 Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
  via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 02 Aug 2026 22:29:00 +0200
+ with HTTP (HTTP/1.0 POST); Sun, 02 Aug 2026 22:29:35 +0200
 MIME-Version: 1.0
-Date: Sun, 02 Aug 2026 22:29:00 +0200
-To: Julien Olivain <ju.o@free.fr>
-Cc: buildroot@buildroot.org, Angelo Compagnucci
- <angelo.compagnucci@gmail.com>, James Hilliard <james.hilliard1@gmail.com>
-In-Reply-To: <20260726092711.212660-1-ju.o@free.fr>
-References: <20260726092711.212660-1-ju.o@free.fr>
+Date: Sun, 02 Aug 2026 22:29:35 +0200
+To: Romain Naour <romain.naour@smile.fr>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20260621165336.2426158-1-romain.naour@smile.fr>
+References: <20260621165336.2426158-1-romain.naour@smile.fr>
 User-Agent: Webmail Free/1.6.17
-Message-ID: <92d2c578bb98d9ea6aa2a8a3a1e9f778@free.fr>
+Message-ID: <2befcd39d4be0600b3ad013a73371a3e@free.fr>
 X-Sender: ju.o@free.fr
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1785702544;
- bh=7cZjMjquguz6iH6wXF1svwF2eIcZcyzt8Sifx81tbCo=;
+ d=free.fr; s=smtp-20201208; t=1785702576;
+ bh=3n8SG6lhhXZwVMGe5/aU/EcKtDnpDxxovoLuMO0EnCA=;
  h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=lXaQVJfU+3ORAwDHQMExkELnUAgMnVEVpAzd9+N5oD+Ow6Wl9abMVDUfyLm9EpS/H
- 36+Ah/byP4HRXW+eSvIDFqdqoTvgF+8dERzTMfQNUknBl9z+XdvZ51z9JjaO4PYJeA
- Jl7Zjbuw0hlc44ANkFUBXjG3bB61/kuymAMdVHYv0EzKkJM6Zjm35wz+g5LeJWu6ui
- WsXVIkdLbMUCQEngAOceE37QziDGQ+spjvU6WTfi+crznoOhjEuMq0H6RRYAG4owUW
- hv7r6Xy3mDeZHGnodaW2o+Fh2V9SL05RvmXsENd5d5QT3EgkmROhjKSbj9iIdqsUzd
- ufMrOZQdGP8Cw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=Pj+xbrydJE5+Fa/LZIH6abvLmkMOCat+E8cmmCHo+sdTityq2pNNCO+JjGZYlHYSK
+ eMnfgmrGkVAmJpAZJGhnAxKJyNH/VBoWicVqW0uTZDqtJIKzSOV2N/C3zQ7+iiGGOY
+ ZIJd393T8YPjrvbqdmNYgYt/uW9VNtFiWsUm54op8IqXm7I4oBASjgmS86eEANybBd
+ BYxxHCMs0HkXYblcm0NhIWAeiCkAeJMK/KTqlcPWD5/lUdjBcMZPtB9B5Tao8og9de
+ CNDk6UHxj1jnov32g3wylka0ZSHk+qi/W7F4dhe38J4k/L5d76nrqJJcp5mdC0D1k8
+ RzmkR7wjnJETw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=lXaQVJfU
-Subject: Re: [Buildroot] [PATCH 1/2] package/python-pydal: needs python xml
- module at runtime
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=Pj+xbryd
+Subject: Re: [Buildroot] [PATCH] support/testing: TestUsbIp: wait for the
+ keyboard be detected
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -102,13 +100,15 @@ Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 26/07/2026 11:27, Julien Olivain via buildroot wrote:
-> pyDAL is using xmlrpc at runtime. See:
-> https://github.com/web2py/pydal/blob/v20260313.1/pydal/_compat.py#L114
+On 21/06/2026 18:53, Romain Naour via buildroot wrote:
+> Running TestUsbIp may fail when checking if two QEMU USB Keyboards are
+> reported by lsusb. On fast host, the second QEMU USB keyboard may not
+> aleady detected when lsusb is executed. So wait a bit, to let the new
+> keyboard be detected.
 > 
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
+> Signed-off-by: Romain Naour <romain.naour@smile.fr>
 
-Series applied to master.
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
