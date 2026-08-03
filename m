@@ -1,153 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86419C55184
-	for <buildroot@archiver.kernel.org>; Mon,  3 Aug 2026 12:47:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BEAB2C55182
+	for <buildroot@archiver.kernel.org>; Mon,  3 Aug 2026 12:50:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2777A4065E;
-	Mon,  3 Aug 2026 12:47:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3375260750;
+	Mon,  3 Aug 2026 12:50:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MxQyMuuVd3yj; Mon,  3 Aug 2026 12:47:16 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id c4Zle7cfWju2; Mon,  3 Aug 2026 12:50:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EBD8D40652
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F8876072F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1785761236;
-	bh=CSun1b2M2BIiqErBrVBtxmcfSVgz7UXFJlWtqlq7S64=;
-	h=References:In-Reply-To:From:Date:To:Cc:Subject:List-Id:
+	s=default; t=1785761423;
+	bh=xy1Nml6815UgBWNMxYOcIhF4PLvr+hwpetEVUipBAMc=;
+	h=To:CC:Date:References:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=eRDxQ9OGB1JWQEb5cbIfOOWMtAz8jb6zVqcFmw8BZJtPvhVRKFuJHhl4nuZNCt6bN
-	 Ma+uYNimOFSOTB1MRieiWQ73UXl0W/MfLrXEYleEwqx5/IvBcEUUtslNGh7d8NfDNh
-	 oO3ONZwqCqkjpdTCwyyJC+4bV5qNpTw6tYSUI2rs20IiPSbItxBqcNB/ov2pnxX2Ht
-	 /NucQh3zk2x2eFKtNpLMoGUQ02uCnPLnwmgXaKc1XOrVI+1qGDCcM8UOCGPqXx0grH
-	 pzrbXGrch1+VA9A57IZhvOBJIsJXg+WkqU77JUmHUgWmPMtIukBxHnRSJjj5e03m6M
-	 /dC6H5/Mlq7Xg==
+	 From:Reply-To:From;
+	b=L20QdR5r5Xdh0vQtrupe9ZubMQZkAt3J9MtEEv6mbQuJzBV8quf/eyrXrSaNhlMQK
+	 2G6aqvct6ll8ut3aQHVdzu2Ckj+U1aJ6p7Vn5OL0oTCaP/osCgFnANvlXrPUY7a2C/
+	 td3cjC6ntK51QTevFzvTV6cViyzbWZ6zkj6trkv5PlqCGf804Te8Y7gvCSCz2ijjxs
+	 L89uWfhMPXSnwLURO6l+6Q8D2uAG+JfuB47LHPcDwxkQ6w3jUMJDVkPeO8VJ4FB+Wq
+	 mHYg0l4TIodkoAPEWjkfY1900N3HRESGJ7mTSKxyJ2zrpLxdeXjrzDq+vvW5jMxzni
+	 +ljntIkZDDyfg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EBD8D40652;
-	Mon,  3 Aug 2026 12:47:15 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id BE1D6218
- for <buildroot@buildroot.org>; Mon,  3 Aug 2026 12:47:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6F8876072F;
+	Mon,  3 Aug 2026 12:50:23 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 09AC4218
+ for <buildroot@buildroot.org>; Mon,  3 Aug 2026 12:50:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A3D134015C
- for <buildroot@buildroot.org>; Mon,  3 Aug 2026 12:47:13 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E3F016072F
+ for <buildroot@buildroot.org>; Mon,  3 Aug 2026 12:50:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Mafh4-mZKTLz for <buildroot@buildroot.org>;
- Mon,  3 Aug 2026 12:47:13 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::232; helo=mail-lj1-x232.google.com;
- envelope-from=matthew.l.weber@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C0792400A0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C0792400A0
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com
- [IPv6:2a00:1450:4864:20::232])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C0792400A0
- for <buildroot@buildroot.org>; Mon,  3 Aug 2026 12:47:12 +0000 (UTC)
-Received: by mail-lj1-x232.google.com with SMTP id
- 38308e7fff4ca-39f631dbce3so22300771fa.2
- for <buildroot@buildroot.org>; Mon, 03 Aug 2026 05:47:12 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785761230; cv=none;
- d=google.com; s=arc-20260327;
- b=O1eYhRbW7dXDqHZLfe5ZpA7ETAKHdhydlI17b6bey2yqVQB7tnPanB104onbtoV6tC
- 7RV/kQ70DyDjgqgjLY89YE15WnnbJAxfJsSwTbqEOR5TdtkabQ96JsNkva1+DIpaodVj
- PYj/bI+9IRwpLzeSaAmfu58wz3JTQLLF1507VOikIq4SHO1mX8mMnsW8ZpEBfKQ6p2DE
- pCEU7Xl3ajsKhoQuyf6x2HDtzd+oSB4rcRpBiWvKUsQYuVLjeO3Of0Db9jqBQvsL5wCS
- f8COllPKQCztov2dnv3Mp9wLSzCcREWX8zAspl3iqJbC9Fw507+BlDfQfLxDy03l9TWD
- nqmQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com;
- s=arc-20260327; 
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:dkim-signature;
- bh=QgY68xHKr10rXBqJ3TzK4Hnf+BYLtYu7rWwba7FaBQ4=;
- fh=X8TSX9MW4/Y8TnkTLFN1TouE2o1smZOxwoPUo2TcEiw=;
- b=qwa14vYetmiD0lWUL4iatgoRDPofkwT/GsO9688LgjSkKKDZhzgZfEKVPBboDttQ2N
- cIy/ZwQWjgCe+goTgrtbvlPbfJkrkI0K6oUDVvWwu1qvJ7W5CfOp6b8vPYA8aa28Wyqp
- zfvVJonoaAT+MLjvZ59EEbULDRpbkLGOnxeRMczSZSlKUvqO5Hr4l9af64ooztAHKc+a
- iU1nvrivwBKcKMjiyraP8UEQ+RZ+L0Z10DdwyuccGKdEMwaQCk+6i+BVI4UuhhLnDOQB
- M9S7jzJH4Osd5bfrMWQ0arc/EPiR2RFPAHtbGPbkO8J0SmO77ljoJ39xHEhX+DI97geS
- 1qOQ==; darn=buildroot.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1785761230; x=1786366030;
- h=content-transfer-encoding:content-type:cc:to:subject:message-id
- :date:from:in-reply-to:references:mime-version:x-gm-gg
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
- :content-type;
- bh=QgY68xHKr10rXBqJ3TzK4Hnf+BYLtYu7rWwba7FaBQ4=;
- b=aO0lOPEXduKOBbUJ73ctMk7Ff2RTLoFKmx7ZyjzIQ10cVuQd8ONNN5BAbcQZljqRWJ
- OMFCxu2FXNTJ+66BXPoE4p96he85ozEvf2Tv2KrIzSg6qWed8w6To65B8GAj8NikF+Lg
- Awx2vXajC6XeNQ7dUaGzNNPWRjlmINGsBo/oNGmkJFwPVoxeAOdWCRuvESs87K7RmCNH
- uaBbSSGf97io9tofbkVsfhvmQbtGjPnkfFdZdmKAQLzMPIbtMS8nfEoSXfFCwroaUjZM
- 7pjsDpFIGPmuIg839kDnwyCwKRoYjRPLpSvjdqqRg62jS5jYNaa0YOWPmm0UtN4es+XN
- Dk8A==
-X-Forwarded-Encrypted: i=1;
- AHgh+RpB0MLYag18xxGO4gPRiWZWsTERDHbFQ4yAEzlmvfeLg8FcaZ7N9VqFBjweibGg/YK834X++jzMP0M=@buildroot.org
-X-Gm-Message-State: AOJu0YzC9Ama/15/+L+qBGLfbsaL37G5fX1AOc0wXu334TzronfWcTm/
- +DkNdFOK/2IMRlvM4Yh4GmaRfyZhUcWmnvOgORB5UP4Y6UfUDaTh66lytP4lwyV1XIahbfRbqlM
- Kcmu0+sr93EMYjc5R3D+idAx/cr51oxg=
-X-Gm-Gg: AR+sD10vM9f2cQY2gN97wtRcATLaXh5g4Xe2H+F7ywW+i6On6WXuexVEtLTDtv/J5TF
- g450sdwbFixM6IYmAOhTCd8HN3CVKFFnquiujDJo/SLjygVJuwkuRuPUnLwtii/yCzUy1l0UyPe
- 8MkWnE/t3b6Pi9jyEzqlsTF+cJ+jSGSqBn6a4ffgsmClUoGQJKxNgCXK9e0z9ndeFi2rqPSn9z3
- IqiuWD8bWDcfUKg7BGioPf8qaSoQuA2AH6Pm9RhGZHDynoaCzwFy0EGxl2PJHRJ2zHtDxTVQvUI
- SfY7u/pg0Wh6/oGB5l9QQHZ3XR25B/ztDxRV1LV5WIDi0ET+VnrAjMw=
-X-Received: by 2002:a2e:9a16:0:b0:39b:ac8:4b41 with SMTP id
- 38308e7fff4ca-39f864202afmr20885431fa.32.1785761230091; Mon, 03 Aug 2026
- 05:47:10 -0700 (PDT)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uKk2Y7t9puTC for <buildroot@buildroot.org>;
+ Mon,  3 Aug 2026 12:50:21 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.181.117.226;
+ helo=mail.actia.se; envelope-from=john.ernberg@actia.se; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 0EAFD60703
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0EAFD60703
+Received: from mail.actia.se (mail.actia.se [212.181.117.226])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0EAFD60703
+ for <buildroot@buildroot.org>; Mon,  3 Aug 2026 12:50:20 +0000 (UTC)
+Received: from S036ANL.actianordic.se (10.12.31.117) by S036ANL.actianordic.se
+ (10.12.31.117) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.61; Mon, 3 Aug
+ 2026 14:50:16 +0200
+Received: from S036ANL.actianordic.se ([fe80::e13e:1feb:4ea6:ec69]) by
+ S036ANL.actianordic.se ([fe80::e13e:1feb:4ea6:ec69%3]) with mapi id
+ 15.01.2507.061; Mon, 3 Aug 2026 14:50:16 +0200
+To: Matthew Weber <matt@thewebers.ws>, "j@j-ernberg.se" <j@j-ernberg.se>
+CC: "buildroot@buildroot.org" <buildroot@buildroot.org>, Alistair Francis
+ <alistair@alistair23.me>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Neal Frager <neal.frager@amd.com>, Julien Olivain <ju.o@free.fr>,
+ =?utf-8?B?VmluY2VudCBTdGVobMOp?= <vincent.stehle@arm.com>, Titouan Christophe
+ <titouan.christophe@mind.be>, "Weber (US), Matthew L"
+ <matthew.l.weber3@boeing.com>
+Thread-Topic: [Buildroot] [PATCH] package/xen: bump to 4.21.1
+Thread-Index: AQHdCpUT1XJKgW7MOkCo4d/rYkioLrZk3eMAgCTLbwCAAq1AAA==
+Date: Mon, 3 Aug 2026 12:50:16 +0000
+Message-ID: <40f8623f-50e2-4dcd-8940-c492d420de4b@actia.se>
+References: <20260703023758.3883041-1-matt@thewebers.ws>
+ <CAAHg4Zg8g5sxprMwQnUYpnApD18k8SrqBhuBzfk=6qhEospE=w@mail.gmail.com>
+ <CAFt09wMb3eOkZruyPZJr-t9xjpxqCBOEOVga5y0kvuqykrFuoA@mail.gmail.com>
+In-Reply-To: <CAFt09wMb3eOkZruyPZJr-t9xjpxqCBOEOVga5y0kvuqykrFuoA@mail.gmail.com>
+Accept-Language: en-US, sv-SE
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.12.12.63]
+x-esetresult: clean, is OK
+x-esetid: 37303A2955B14556677264
+Content-ID: <0F3C1D7EA59BC54B8CCA58D1D5EEDED5@actia.se>
 MIME-Version: 1.0
-References: <20260611101734.1968785-1-neal.frager@amd.com>
- <b2810e66-cb1b-434f-8991-3bffe94a5d80@actia.se>
- <BL1PR12MB503266705EAD51DC752299B2F0182@BL1PR12MB5032.namprd12.prod.outlook.com>
- <BL1PR12MB5032FE2DD74892018E92A4DCF0D62@BL1PR12MB5032.namprd12.prod.outlook.com>
-In-Reply-To: <BL1PR12MB5032FE2DD74892018E92A4DCF0D62@BL1PR12MB5032.namprd12.prod.outlook.com>
-From: Matthew Weber <matthew.l.weber@gmail.com>
-Date: Mon, 3 Aug 2026 07:46:57 -0500
-X-Gm-Features: AUfX_mxb9Kg8tpf6NmoYva4_5T4OIvRBq46hW8iKtqp33MToiznIB1_omGjgMPE
-Message-ID: <CAFt09wOEYHUdtWHKvqcjLCrtyRhM0m=z9ZHx3h7uOo=eHuLvOg@mail.gmail.com>
-To: "Frager, Neal" <neal.frager@amd.com>
-Cc: John Ernberg <john.ernberg@actia.se>, 
- "buildroot@buildroot.org" <buildroot@buildroot.org>, 
- "matthew.l.weber3@boeing.com" <matthew.l.weber3@boeing.com>, 
- "alistair@alistair23.me" <alistair@alistair23.me>, "Stabellini,
- Stefano" <stefano.stabellini@amd.com>, 
- "Erkiaga Elorza, Ibai" <ibai.erkiaga-elorza@amd.com>, 
- "luca.ceresoli@bootlin.com" <luca.ceresoli@bootlin.com>, "Saleab,
- Micheal" <Micheal.Saleab@amd.com>, 
- "yann.morin@orange.com" <yann.morin@orange.com>, 
- "brandon.maier@collins.com" <brandon.maier@collins.com>, 
- "brian.j.wood2@boeing.com" <brian.j.wood2@boeing.com>,
- "ju.o@free.fr" <ju.o@free.fr>, 
- "thomas.petazzoni@bootlin.com" <thomas.petazzoni@bootlin.com>, 
- "romain.naour@smile.fr" <romain.naour@smile.fr>, "Simek,
- Michal" <michal.simek@amd.com>, 
- "romain.naour@gmail.com" <romain.naour@gmail.com>, "Hildebrand,
- Stewart" <Stewart.Hildebrand@amd.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1785761230; x=1786366030; darn=buildroot.org;
- h=content-transfer-encoding:content-type:cc:to:subject:message-id
- :date:from:in-reply-to:references:mime-version:from:to:cc:subject
- :date:message-id:reply-to:content-type;
- bh=QgY68xHKr10rXBqJ3TzK4Hnf+BYLtYu7rWwba7FaBQ4=;
- b=s/ALWc3sPlMRjXZW65Fb4ke39Zkb3AZVsc+4ou6hJSULnqHJVt1pssLJeGDbSgCf/B
- sQetu2E5j6R4WFvVaOvCCXpJjEvMPq0BhL2OzZUpT9iuhVyqG4ql3blwlp7DINt20Ta8
- 68SC5spDYQtzryVx0c5oxEpCDpVGaB/KkV4ofO0i7pg6Sr+s3iKm2odVDABo0nK1fnn3
- HB96hREWC+hTgK0yn93DYWo/EsAb48MJOXW3p3O9rmc4dopVe5GpXOxJccdU9ajFQX3V
- C3zBdkV/7aTJh5KvWBkicOpGesLO9v6y8lasrNZfuN9fZWVA+47sMNHCqIcXCGJr7rMr
- kzRg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20251104 header.b=s/ALWc3s
-Subject: Re: [Buildroot] [PATCH v1 1/3] package/xen: add custom version
- support
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=actia.se
+Subject: Re: [Buildroot] [PATCH] package/xen: bump to 4.21.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -159,18 +94,34 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: John Ernberg via buildroot <buildroot@buildroot.org>
+Reply-To: John Ernberg <john.ernberg@actia.se>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-TmVhbAoKT24gU3VuLCBBdWcgMiwgMjAyNiBhdCAxMTozN+KAr0FNIEZyYWdlciwgTmVhbCB2aWEg
-YnVpbGRyb290CjxidWlsZHJvb3RAYnVpbGRyb290Lm9yZz4gd3JvdGU6Cj4KCltzbmlwXQoKPgo+
-IEdpdmVuIHRoZXJlIGlzIG5vIGZ1bmN0aW9uYWwgY2hhbmdlIHRvIG15IHBhdGNoIHNlcmllcywg
-d291bGQgeW91IGxpa2UgbWUgdG8KPiBrZWVwIHlvdXIgUmV2aWV3ZWQtYnkgYW5kIFRlc3RlZC1i
-eSB0YWdzIGluIG15IHYyIHN1Ym1pc3Npb24gb3Igd291bGQgeW91IGxpa2UKPiB0byByZXZpZXcg
-YW5kIHRlc3QgYWdhaW4gZmlyc3Q/CgpZb3UgY2FuIGtlZXAgdGhlbSwgYnV0IGxldCBtZSBrbm93
-IGlmIGl0IGdvZXMgYmV5b25kIGEgcG9zaXRpb25pbmcgYXMgeW91IG5vdGVkIQoKTWF0dApfX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFp
-bGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290
-Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+Hi Matthew,
+
+On 8/1/26 9:57 PM, Matthew Weber wrote:
+>>
+>> I'm also not fully convinced the qemu-xen part is needed at all, Xen
+>> does support system qemu, and looking at the commits the Xen project
+>> did on top of the qemu version they picked here they are pretty much
+>> only required for *BSD.
+>> Have I overlooked something that would make a system qemu path inappropriate?
+> 
+> I mostly kept it separate after looking at the prior attempt at using
+> system qemu.  It felt like adding that dependency between system qemu
+> and xen could block updates to either package over time (e.g., if xen
+> hadn't moved that far forward or other corner case conditions between
+> upstream and Buildroot revs.)
+> 
+
+That makes sense to me. Thanks for the explanation.
+
+Best regards // John Ernberg
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
