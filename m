@@ -4,113 +4,95 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A6D1C55184
-	for <buildroot@archiver.kernel.org>; Mon,  3 Aug 2026 07:00:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50727C55175
+	for <buildroot@archiver.kernel.org>; Mon,  3 Aug 2026 07:30:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2AC0B60712;
-	Mon,  3 Aug 2026 07:00:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8D85F60720;
+	Mon,  3 Aug 2026 07:30:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id odD3teX0oVzI; Mon,  3 Aug 2026 07:00:05 +0000 (UTC)
+ id M_PzoMoxKwtd; Mon,  3 Aug 2026 07:30:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2A50560725
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 666BC60708
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1785740405;
-	bh=Jl1dJ/sif+koeUQ+ke28LUsp+wErPVM4GQCvOHbv6rI=;
-	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	s=default; t=1785742227;
+	bh=nAekWGJHaS/kP9DUoNuXKRGRCOy3RPdhqZezkyavsXY=;
+	h=To:CC:Date:References:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=YDLC3rhzvd7PwsgFtg57OcD3YnlPyBkxpl+uBNph2jOuRcRV7HwVvEdAvULBfp93K
-	 S8WTczvydm+jqyik725+8u5PnkP2iqyTqiqb0C6WFAA4LFLGpBVHjqbkWOUoZLsPcv
-	 McHwvJyYUVhwotdVyfGFVVcs0/f6hmprhcV1OWRmi2HreJXCpuosphMtQ9xnTebDyt
-	 FF7g0scUqksYyKWurFh5vkcz8MfFrp2tGvCiivQJcJ9xDLWl+hOkTTQOcJVf1DpTFV
-	 IfbvIp1XowbC4uX/aGHeiHk7gfTcXxxoiKkWBBcyajJO8zYQqlBhsqkJtOPyNxYTsQ
-	 LWCGpMCnkr+Sg==
+	 From:Reply-To:From;
+	b=OeFanBGqPiB7re1Ksd6Z+jn4yVPnpg7pIqt/UqdzPCzbXh2XYzTUVLYyDYLF4Epvn
+	 4Nphzx7RI3OBZI6eWpV/wQ4cHrQ1rglWl+q06yIy+Q5hdduxk9K1dzH98+RAkMPaoB
+	 IxSuz5DaVhGpI7LfAkKzZ5ONnXdcEsyyo/Ys70DBW5EIdzmqOQZWxUyq0+us6+I2q3
+	 4kUGrnv888kfF5YAKXYZIWzfF8s8lAmrMJ3ZU01skDdmHWQLsoO58zDqJBT8AmVfyv
+	 H7hMGJ7vz0bJgSHHHBPbH5/vQLXWOycs4Xj2e8TAlt4vW0AHrnMGIL/XYzh/mJnPsz
+	 BWpILLprH9WzA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2A50560725;
-	Mon,  3 Aug 2026 07:00:05 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id E788026C
- for <buildroot@buildroot.org>; Mon,  3 Aug 2026 06:59:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 666BC60708;
+	Mon,  3 Aug 2026 07:30:27 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id C1395218
+ for <buildroot@buildroot.org>; Mon,  3 Aug 2026 07:30:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D9D1C80C98
- for <buildroot@buildroot.org>; Mon,  3 Aug 2026 06:59:57 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B2C2380A98
+ for <buildroot@buildroot.org>; Mon,  3 Aug 2026 07:30:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4ezuDhaZCV_J for <buildroot@buildroot.org>;
- Mon,  3 Aug 2026 06:59:57 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
- envelope-from=francois.perrad.86@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org AEA0480C9A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AEA0480C9A
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
- [IPv6:2a00:1450:4864:20::333])
- by smtp1.osuosl.org (Postfix) with ESMTPS id AEA0480C9A
- for <buildroot@busybox.net>; Mon,  3 Aug 2026 06:59:56 +0000 (UTC)
-Received: by mail-wm1-x333.google.com with SMTP id
- 5b1f17b1804b1-496bb7cdf51so17338565e9.2
- for <buildroot@busybox.net>; Sun, 02 Aug 2026 23:59:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1785740395; x=1786345195;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to:content-type;
- bh=OcEbrham67O+YdzdaE8IiWMUcM+0oaHBrLCcKdqBgqo=;
- b=jWH0aqSg17hHv5IFuASLY0OBXiWK4quc3e/p4PqEiJEAyyomGKLFjj7zjtnI2vz8Xp
- 5MW5kXMFIuXaHo5h+sEp/zKerRD75LB5sshM7SnWz3MWAw1h6WaVgOjbP6h+RELFnG3n
- NeCgHSctbSUr23DT/25S4yz1edk50Mxerjp3BA9qd1C+I2djtOv77GOvQmQqIwR6Iqdl
- mB3RsUWHS5UYzycWmlXG1VAgcBN1JLL47Nvc430XzD1sPe/bHdURWBdcPrglYLPNx3JO
- tUgGpsw23WtljyijCN/3XG74uK1nOf/ke2ZVLn+hSUawEUsmLhnvZlR2AJEYgbtwpv6l
- d/Dw==
-X-Gm-Message-State: AOJu0Yws/WovBQREhDOrwRkbUMB720fnFwthUe1K4PKicKMjJWe4jryl
- 95ip0QZ3Gz6Wf/MtD3SharvNBrJoajJ5+b7aVTavOjb0YAyUQoHImlZjXnOCDQ==
-X-Gm-Gg: AR+sD12KFJ3bdd22FZQrkzETzn9VYpgYrZB9knPqHRT1UjvFv6zrTwjXddq2GoJCPmp
- oQ4F+fVnkQHRjQHsQ4RmiSLhb4ZkUJl6+DXZg0XFwNsy1v1hXhUe5WnhNFLtAEswXauPxCc4rkH
- A65+rrbP2OB2DVRq8Lxr5iEfEcy4JwzqJjCZso9SzmUXO3xzjje/osbx7MpquQXelKBZEwW5AAE
- N8pUK6339GNPBb+VXdWelholpfjkcT+/ceb/roKVyYQ7rSTJjkbxjKAdArpGacgtcoQBmGeBPzU
- tD6K/ia9oC8CJMraYexXdX/W14YXq0QAk3WTmQ0bQ8F93hQ5Mf5qvOBWZ1a4sgfZ8NHMpPj/TFX
- 8U0dXTNvDSIZtsEQWXEzZ9oxTgnMxP1L5IAVd+RIk5xJloAEpUosoinYlmkEi+joNpVCbn5OPd6
- D+PlEGYtFDfWMU7E7MHHCzl/5T9h59EuEi28YFdh2TVUKjBIuwgvFZGDLnx3atZzjgXFUyl79il
- XvOqtsk0cqVJt2cHTYQRmLmwnKMEYiA
-X-Received: by 2002:a05:600c:4453:b0:495:6274:56c2 with SMTP id
- 5b1f17b1804b1-4980c649c6emr179599305e9.2.1785740394436; 
- Sun, 02 Aug 2026 23:59:54 -0700 (PDT)
-Received: from vm-2404.. (132.187.66.37.rev.sfr.net. [37.66.187.132])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-49807b5b4a2sm234639805e9.1.2026.08.02.23.59.53
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 02 Aug 2026 23:59:54 -0700 (PDT)
-From: Francois Perrad <francois.perrad.86@gmail.com>
-To: buildroot@busybox.net
-Cc: Francois Perrad <francois.perrad.86@gmail.com>
-Date: Mon,  3 Aug 2026 08:59:39 +0200
-Message-ID: <20260803065940.224429-9-francois.perrad.86@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260803065940.224429-1-francois.perrad.86@gmail.com>
-References: <20260803065940.224429-1-francois.perrad.86@gmail.com>
+ id 2s2cit-NJq2e for <buildroot@buildroot.org>;
+ Mon,  3 Aug 2026 07:30:24 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.181.117.226;
+ helo=mail.actia.se; envelope-from=john.ernberg@actia.se; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org F18F980982
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F18F980982
+Received: from mail.actia.se (mail.actia.se [212.181.117.226])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id F18F980982
+ for <buildroot@buildroot.org>; Mon,  3 Aug 2026 07:30:22 +0000 (UTC)
+Received: from S036ANL.actianordic.se (10.12.31.117) by S036ANL.actianordic.se
+ (10.12.31.117) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.61; Mon, 3 Aug
+ 2026 09:30:16 +0200
+Received: from S036ANL.actianordic.se ([fe80::e13e:1feb:4ea6:ec69]) by
+ S036ANL.actianordic.se ([fe80::e13e:1feb:4ea6:ec69%3]) with mapi id
+ 15.01.2507.061; Mon, 3 Aug 2026 09:30:16 +0200
+To: "Frager, Neal" <neal.frager@amd.com>, "buildroot@buildroot.org"
+ <buildroot@buildroot.org>, "matthew.l.weber3@boeing.com"
+ <matthew.l.weber3@boeing.com>
+CC: "alistair@alistair23.me" <alistair@alistair23.me>, "Stabellini, Stefano"
+ <stefano.stabellini@amd.com>, "Erkiaga Elorza, Ibai"
+ <ibai.erkiaga-elorza@amd.com>, "luca.ceresoli@bootlin.com"
+ <luca.ceresoli@bootlin.com>, "Saleab, Micheal" <Micheal.Saleab@amd.com>,
+ "yann.morin@orange.com" <yann.morin@orange.com>, "brandon.maier@collins.com"
+ <brandon.maier@collins.com>, "brian.j.wood2@boeing.com"
+ <brian.j.wood2@boeing.com>, "ju.o@free.fr" <ju.o@free.fr>,
+ "thomas.petazzoni@bootlin.com" <thomas.petazzoni@bootlin.com>,
+ "romain.naour@smile.fr" <romain.naour@smile.fr>, "Simek, Michal"
+ <michal.simek@amd.com>, "romain.naour@gmail.com" <romain.naour@gmail.com>,
+ "Hildebrand, Stewart" <Stewart.Hildebrand@amd.com>
+Thread-Topic: [Buildroot] [PATCH v1 1/3] package/xen: add custom version
+ support
+Thread-Index: AQHc+YuXTzdLiwMkWUa9AkR/oxy/jbY6avKAgAAIK4CAULKuAIAA+XIA
+Date: Mon, 3 Aug 2026 07:30:16 +0000
+Message-ID: <abe25eb9-6ee7-4b47-891d-8816d256fa8e@actia.se>
+References: <20260611101734.1968785-1-neal.frager@amd.com>
+ <b2810e66-cb1b-434f-8991-3bffe94a5d80@actia.se>
+ <BL1PR12MB503266705EAD51DC752299B2F0182@BL1PR12MB5032.namprd12.prod.outlook.com>
+ <BL1PR12MB5032FE2DD74892018E92A4DCF0D62@BL1PR12MB5032.namprd12.prod.outlook.com>
+In-Reply-To: <BL1PR12MB5032FE2DD74892018E92A4DCF0D62@BL1PR12MB5032.namprd12.prod.outlook.com>
+Accept-Language: en-US, sv-SE
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.12.12.63]
+x-esetresult: clean, is OK
+x-esetid: 37303A2955B14556677260
+Content-ID: <A84843D267FD904E9161CBE571EA5088@actia.se>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1785740395; x=1786345195; darn=busybox.net;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to:content-type;
- bh=OcEbrham67O+YdzdaE8IiWMUcM+0oaHBrLCcKdqBgqo=;
- b=k45nWtWSM1KxFauFA2NVfOeJRg8E5pyPAkDA9JnbgS6DN0JtMgSQguxhR7PTB6HMOp
- YxPfTWAwmGzZiTBpEbC2W/S4eGoGNCb6lNHX55JaDvMXxvvaoWBXukcNl0i7XSMFEpUw
- qFoSZbe3VqbuJaHx7aVJ7AQ9Qh9p7IPlf/q7AWOMyGr1bvR8oRiq8Qw0jZFIygqUPubM
- FMARFHC2JZRA4WzoLWK1HOicZ6pLd6gNF/SpOtgXT/8tKv07PxG79Hr6a0obO2Bje3ME
- Hykpjs6az8AB3h/mvE3Fq24yOIrlU+wX7ss+iFrz8pvzHDGDt509MjKKsZfBHM/4rxb/
- SZhA==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20251104 header.b=k45nWtWS
-Subject: [Buildroot] [PATCH v4 8/8] package/hare-dbus: new package
+ dmarc=pass (p=reject dis=none)
+ header.from=actia.se
+Subject: Re: [Buildroot] [PATCH v1 1/3] package/xen: add custom version
+ support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -122,118 +104,143 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: John Ernberg via buildroot <buildroot@buildroot.org>
+Reply-To: John Ernberg <john.ernberg@actia.se>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Francois Perrad <francois.perrad.86@gmail.com>
----
- package/Config.in                         |  1 +
- package/hare-dbus/0001-fix-Makefile.patch | 27 +++++++++++++++++++++++
- package/hare-dbus/Config.in               | 10 +++++++++
- package/hare-dbus/hare-dbus.hash          |  3 +++
- package/hare-dbus/hare-dbus.mk            | 15 +++++++++++++
- 5 files changed, 56 insertions(+)
- create mode 100644 package/hare-dbus/0001-fix-Makefile.patch
- create mode 100644 package/hare-dbus/Config.in
- create mode 100644 package/hare-dbus/hare-dbus.hash
- create mode 100644 package/hare-dbus/hare-dbus.mk
+Hi Neal,
 
-diff --git a/package/Config.in b/package/Config.in
-index 1d0dac96c..aa8818ce7 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -511,6 +511,7 @@ endmenu
- 	source "package/gpsd/Config.in"
- 	source "package/gptfdisk/Config.in"
- 	source "package/gvfs/Config.in"
-+	source "package/hare-dbus/Config.in"
- 	source "package/hddtemp/Config.in"
- 	source "package/hdparm/Config.in"
- 	source "package/hwdata/Config.in"
-diff --git a/package/hare-dbus/0001-fix-Makefile.patch b/package/hare-dbus/0001-fix-Makefile.patch
-new file mode 100644
-index 000000000..0f106e27f
---- /dev/null
-+++ b/package/hare-dbus/0001-fix-Makefile.patch
-@@ -0,0 +1,27 @@
-+From 93abfa5970937253ae73bc8bcd9e243d890484a9 Mon Sep 17 00:00:00 2001
-+From: Francois Perrad <francois.perrad@gadz.org>
-+Date: Fri, 15 May 2026 11:56:39 +0200
-+Subject: [PATCH] fix Makefile
-+
-+Upstream: N/A specific for Buildroot build
-+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-+---
-+ Makefile | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/Makefile b/Makefile
-+index a738e6a..8c4fe78 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -18,7 +18,7 @@ dbus-introspector:
-+ dbus-scanner:
-+ 	$(HARE) build $(HAREFLAGS) cmd/dbus-scanner/
-+ 
-+-install: build
-++install:
-+ 	install -Dm755 dbus-introspector	${DESTDIR}${BINDIR}/dbus-introspector
-+ 	install -Dm755 dbus-scanner		${DESTDIR}${BINDIR}/dbus-scanner
-+ 	install -Dm644 dbus/protocol/*.ha -t	$(DESTDIR)$(THIRDPARTYDIR)/dbus/protocol
-+-- 
-+2.43.0
-+
-diff --git a/package/hare-dbus/Config.in b/package/hare-dbus/Config.in
-new file mode 100644
-index 000000000..63f332cbf
---- /dev/null
-+++ b/package/hare-dbus/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_HARE_DBUS
-+	bool "hare-dbus"
-+	depends on BR2_PACKAGE_HOST_HARE_TARGET_ARCH_SUPPORTS
-+	select BR2_PACKAGE_HOST_HARE
-+	select BR2_PACKAGE_HARE_EV
-+	select BR2_PACKAGE_HARE_XML
-+	help
-+	  D-Bus client implementation for Hare.
-+
-+	  https://git.sr.ht/~whynothugo/hare-dbus
-diff --git a/package/hare-dbus/hare-dbus.hash b/package/hare-dbus/hare-dbus.hash
-new file mode 100644
-index 000000000..e8abc40e4
---- /dev/null
-+++ b/package/hare-dbus/hare-dbus.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  67a3041126f7745e667d570904504a58475ca398acdd679b548d9e0e513092f8  hare-dbus-e9a89f8bc5ce783fa25f0eb67d7d8932db90bcc2-git4.tar.gz
-+sha256  7c77ea8fa77851b9ee52d715ec6a3c5f15604bdab5148dd13dbd1dd345752017  LICENCE
-diff --git a/package/hare-dbus/hare-dbus.mk b/package/hare-dbus/hare-dbus.mk
-new file mode 100644
-index 000000000..93d2a688f
---- /dev/null
-+++ b/package/hare-dbus/hare-dbus.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# hare-dbus
-+#
-+################################################################################
-+
-+HARE_DBUS_VERSION = e9a89f8bc5ce783fa25f0eb67d7d8932db90bcc2
-+HARE_DBUS_SITE_METHOD = git
-+HARE_DBUS_SITE = https://git.sr.ht/~whynothugo/hare-dbus
-+HARE_DBUS_LICENSE = MIT
-+HARE_DBUS_LICENSE_FILES = LICENCE
-+HARE_DBUS_INSTALL_STAGING = YES
-+HARE_DBUS_DEPENDENCIES = hare-ev hare-xml
-+
-+$(eval $(hare-package))
--- 
-2.43.0
+On 8/2/26 6:37 PM, Frager, Neal wrote:
+> AMD General
+> 
+> Hi John, Matt,
+> 
+>> Add the ability to configure specific Xen versions while leaving the default
+>> version unchanged to avoid breaking any builds already using Xen 4.19.5.
+>>
+>> Since the version can be configured, the 3 patches need to be moved to the
+>> 4.19.5 directory, so they are only applied when using this version.
+>>
+>> Signed-off-by: Neal Frager <neal.frager@amd.com>
+>> ---
+>>    .../{ => 4.19.5}/0001-No-trace-backend.patch  |  0
+>>    ...2-Arm-platforms-fix-build-with-gcc15.patch |  0
+>>    .../0003-Update-linker-flags.patch            |  0
+>>    package/xen/Config.in                         | 25 +++++++++++++++++++
+>>    package/xen/xen.mk                            |  6 +++--
+>>    5 files changed, 29 insertions(+), 2 deletions(-)
+>>    rename package/xen/{ => 4.19.5}/0001-No-trace-backend.patch (100%)
+>>    rename package/xen/{ => 4.19.5}/0002-Arm-platforms-fix-build-with-gcc15.patch (100%)
+>>    rename package/xen/{ => 4.19.5}/0003-Update-linker-flags.patch (100%)
+>>
+>> diff --git a/package/xen/0001-No-trace-backend.patch b/package/xen/4.19.5/0001-No-trace-backend.patch
+>> similarity index 100%
+>> rename from package/xen/0001-No-trace-backend.patch
+>> rename to package/xen/4.19.5/0001-No-trace-backend.patch
+>> diff --git a/package/xen/0002-Arm-platforms-fix-build-with-gcc15.patch b/package/xen/4.19.5/0002-Arm-platforms-fix-build-with-gcc15.patch
+>> similarity index 100%
+>> rename from package/xen/0002-Arm-platforms-fix-build-with-gcc15.patch
+>> rename to package/xen/4.19.5/0002-Arm-platforms-fix-build-with-gcc15.patch
+>> diff --git a/package/xen/0003-Update-linker-flags.patch b/package/xen/4.19.5/0003-Update-linker-flags.patch
+>> similarity index 100%
+>> rename from package/xen/0003-Update-linker-flags.patch
+>> rename to package/xen/4.19.5/0003-Update-linker-flags.patch
+>> diff --git a/package/xen/Config.in b/package/xen/Config.in
+>> index dc4d434810..bb44202824 100644
+>> --- a/package/xen/Config.in
+>> +++ b/package/xen/Config.in
+>> @@ -10,6 +10,31 @@ config BR2_PACKAGE_XEN
+>>
+>>    if BR2_PACKAGE_XEN
+>>
+>> +choice
+>> +       prompt "Xen Version"
+>> +       help
+>> +         Select the specific Xen version you want to use
+>> +
+>> +config BR2_PACKAGE_XEN_LATEST_VERSION
+>> +       bool "4.19.5"
+>> +
+>> +config BR2_PACKAGE_XEN_CUSTOM_VERSION
+>> +       bool "Custom version"
+>> +       help
+>> +         This option allows to use a specific official version
+>> +
+>> +endchoice
+>> +
+>> +config BR2_PACKAGE_XEN_CUSTOM_VERSION_VALUE
+>> +       string "Xen version"
+>> +       depends on BR2_PACKAGE_XEN_CUSTOM_VERSION
+>> +
+>> +config BR2_PACKAGE_XEN_VERSION
+>> +       string
+>> +       default "4.19.5"        if BR2_PACKAGE_XEN_LATEST_VERSION
+>> +       default BR2_PACKAGE_XEN_CUSTOM_VERSION_VALUE \
+>> +                               if BR2_PACKAGE_XEN_CUSTOM_VERSION
+>> +
+>>    config BR2_PACKAGE_XEN_HYPERVISOR
+>>           bool "Xen hypervisor"
+>>           help
+>> diff --git a/package/xen/xen.mk b/package/xen/xen.mk
+>> index 5756dfc68c..e354718021 100644
+>> --- a/package/xen/xen.mk
+>> +++ b/package/xen/xen.mk
+>> @@ -4,8 +4,7 @@
+>>    #
+>>    ################################################################################
+>>
+>> -XEN_VERSION = 4.19.5
+>> -XEN_SITE = https://downloads.xenproject.org/release/xen/$(XEN_VERSION)
+>> +XEN_VERSION = $(call qstrip,$(BR2_PACKAGE_XEN_VERSION))
+>>    XEN_SELINUX_MODULES = systemd udev xen
+>>    XEN_LICENSE = GPL-2.0
+>>    XEN_LICENSE_FILES = COPYING LICENSES/GPL-2.0
+>> @@ -13,6 +12,9 @@ XEN_CPE_ID_VENDOR = xen
+>>    XEN_CPE_ID_PREFIX = cpe:2.3:o
+>>    XEN_DEPENDENCIES = host-acpica host-meson host-pkgconf host-python3
+>>
+>> +# Handle stable official Xen versions
+>> +XEN_SITE = https://downloads.xenproject.org/release/xen/$(XEN_VERSION)
+>> +
+> 
+>> Moving this seems like it should be part of the next patch.
+> 
+>> But doesn't matter that much to me, so, with or without:
+> 
+>> Reviewed-by: John Ernberg <john.ernberg@actia.se>
+> 
+>> I see your point.  If someone finds something that really does require a
+>> change, I will include this change in a v2. Otherwise, I agree that it is not
+>> so important.
+> 
+>> To be honest, my original development had patches 1 and 2 squashed together
+>> because the second patch was the one I really wanted to test and verify. This
+>> move in the first patch is a remnant of my splitting the patch in two before
+>> submission.
+> 
+>>    # Calculate XEN_ARCH
+>>    ifeq ($(ARCH),aarch64)
+>>    XEN_ARCH = arm64
+>> --
+>> 2.25.1
+>>
+> 
+> I am going rebase this patch series tomorrow since a version bump was applied,
+> and these patches no longer apply cleanly to master.
+> 
+> The only thing I will change is moving the XEN_SITE line move from the first
+> patch to the second based on John's feedback.
+> 
+> Given there is no functional change to my patch series, would you like me to
+> keep your Reviewed-by and Tested-by tags in my v2 submission or would you like
+> to review and test again first?
+> You may keep my review tags unless you feel the rebase is so invasive I 
+should review it again.
 
+Best regards // John Ernberg
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
