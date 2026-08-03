@@ -1,116 +1,116 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D133C55162
-	for <buildroot@archiver.kernel.org>; Mon,  3 Aug 2026 06:59:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3EB84C5518F
+	for <buildroot@archiver.kernel.org>; Mon,  3 Aug 2026 07:00:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BAF49605AC;
-	Mon,  3 Aug 2026 06:59:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D8C9E405AB;
+	Mon,  3 Aug 2026 06:59:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hNu7e5CuW8D4; Mon,  3 Aug 2026 06:59:55 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4zBVVpCCqKFX; Mon,  3 Aug 2026 06:59:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D091460649
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C4F33405AC
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1785740395;
-	bh=QoiiM3FuynEZuhSzeQ4bALmifcuREab0VM1l1tF2cyI=;
+	s=default; t=1785740397;
+	bh=d0yxRBQtFacKa70aKbv1wQIKAYi7XBVZflFLsCb5XFU=;
 	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=GjUjIv1ucMAaE4I3GKYjQpcCVCBOVOZkCy69uALb1o5g+71q1MyjXf6ka2UpMPrwW
-	 AiBCdFb4wjqhrKt7GJI5OS9UtD/tSQWk5VpQHhtAvh5nVzEtSqXYEIFBsg09FS7Lu3
-	 QDAl25s7urxygRRxw1cJ3vZJITG1cPf+Fb3p0Xw6Ttd9QDKtYieJiOeQ+uge27G7Zj
-	 lmAZDwjeb270mWH8JdEIWawqlI0+tFZDNazBzMq4llQpyzO6Trc1Ez91QO4WI/grF3
-	 7xYFWGm//qiUz/hnpDfeakQLmrVsOM3MNtb5Gt04LBYlu2J6rn3ozanY6oTQzl50ZK
-	 bsAE/cz00Ajqw==
+	b=PCvVw0X7Jztaa/7t3t3rCe97q15tOOMVgeQQSgIHIpZ6xTBliNBvPD+Oua1ErCeu0
+	 zyNMM6il+FbNV1XB/t5B+QYxosOiDX/shs01Vq26KRqB2dLI4cV/vyTRFhwW/TjXsG
+	 JGL+M3QditNtiRJFkxavMxegQEGMx4tXcq1QMWiseazw/VLclMhNxV6cm7fkEJuI7z
+	 /1X7xKLmXG3/vNyK+3ySHPL1aBQhhB9VMqZ0MY0EJ/16AQUcGENBiW0PZZC17wAKm6
+	 DS6vQysd2UH7o1HeTv+3l+s6rx9jK+TSXowQcIKc7PVAax2YSk+32jt05ZA8RqimrF
+	 Uf+U/5IHiivfw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D091460649;
-	Mon,  3 Aug 2026 06:59:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C4F33405AC;
+	Mon,  3 Aug 2026 06:59:57 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 9C29036E
- for <buildroot@buildroot.org>; Mon,  3 Aug 2026 06:59:53 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id C410C26C
+ for <buildroot@buildroot.org>; Mon,  3 Aug 2026 06:59:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 821AF80C9A
- for <buildroot@buildroot.org>; Mon,  3 Aug 2026 06:59:53 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B5FCC80C9A
+ for <buildroot@buildroot.org>; Mon,  3 Aug 2026 06:59:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gDHLJc5CTOOy for <buildroot@buildroot.org>;
- Mon,  3 Aug 2026 06:59:52 +0000 (UTC)
+ id B4G5RJuIER5N for <buildroot@buildroot.org>;
+ Mon,  3 Aug 2026 06:59:53 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
+ client-ip=2a00:1450:4864:20::32e; helo=mail-wm1-x32e.google.com;
  envelope-from=francois.perrad.86@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8211080C98
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8211080C98
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
- [IPv6:2a00:1450:4864:20::333])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8211080C98
- for <buildroot@busybox.net>; Mon,  3 Aug 2026 06:59:52 +0000 (UTC)
-Received: by mail-wm1-x333.google.com with SMTP id
- 5b1f17b1804b1-4954a32cf1eso7129355e9.3
- for <buildroot@busybox.net>; Sun, 02 Aug 2026 23:59:52 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7616480C9D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7616480C9D
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
+ [IPv6:2a00:1450:4864:20::32e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7616480C9D
+ for <buildroot@busybox.net>; Mon,  3 Aug 2026 06:59:53 +0000 (UTC)
+Received: by mail-wm1-x32e.google.com with SMTP id
+ 5b1f17b1804b1-498028b3d5eso19283385e9.1
+ for <buildroot@busybox.net>; Sun, 02 Aug 2026 23:59:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1785740390; x=1786345190;
+ d=1e100.net; s=20251104; t=1785740391; x=1786345191;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=ps6DDiHRMqddWAblv3fWYb7MzIXsZ8gFk6A9/6FSuw4=;
- b=N8yPSGBfaOEku6t90ff3rfTJ6BAF7qXUPVwAUKcUpSCAqdpkp8/P2s6V5oKHSyiECB
- weXbB3BdMxV8+v1DfCPF4EOrf0rYRv59VrqHoHlCjbWYixxsCm7UPPc8c4zmywGT6n7Z
- orsehKQOdWUXlAuAe0xwdPRuWbF6jF8DmiP1tvvZ74m40aHJ74CivAxVhMv+1zXlUorX
- 7uvaPxSOnfLxifQwumwi+kg9/bHN4mFaj97zlrxDtzCzQAFhH/ivI3dj+APxBfiM0Pd+
- HfDT2i7OjsXbzRMPEloViCgd2+klmhD1pe/8jSzPzLPWvsnPFAv1327GuHwbV1lg55U2
- chjQ==
-X-Gm-Message-State: AOJu0Ywogid6HYHWchMlGolrYPxM6DmBakvx4DDYhqP3Sv5FyURXV0+j
- 0ZG7jIELhIBA4xcYY7Ozr884APXqWOtLw6Ie2LMrThFho1T/kg6u3RVKPgDt3Q==
-X-Gm-Gg: AR+sD13PbT8NETPBIqHmOqyRz/vbhgV2RlmVVL2t3P5F1ivU1w3eIAEy9Sc7QMm2QX+
- 24xbLQJT0rqLC+j6jNK2zLXYk+Lx+cIkzNq2Dya0uK7u3q+3MD6J31sUivs2rj/Ktr5/2rDZKd1
- 9xXo8Ub4Qs1gtqH0c1OHpivWLcJKY4t0CMneoivm9ZEWrhNLt4+X4Dn84EcT4NRfBTo+IY0vfXw
- 8K9kMChNdd/PP2QkOBqUL4tAiT9b2CuXyi8DSL5h20lV1tWg9GqabE3110NzXnWBJXXbNhGs0nw
- FdKwi+ac6HohEIL7wRCbxo5+a4sczuenbDEbtjgHFWOwoRFv8ujWPWo5A+uc+ElcBjP9q1+dBzN
- OqIiFMWywsYZynnX2Vh5W+0sW1tgp4PaC/rtOqeXQO0GnS/+2qQMTWi2wCLEn8sfn2fOJvBAH/B
- ARv20uB1FQ7Yu+xts2RriDBDsO8zSmeJYQEzWEn2/9exnQvF4BY/KeVrw2faz5C9JQtPSO4KVRE
- sQaqAchLdOu4y8PXmyJXw==
-X-Received: by 2002:a05:600d:6405:20b0:495:5e86:4e11 with SMTP id
- 5b1f17b1804b1-4980c672c9fmr140872925e9.12.1785740390304; 
- Sun, 02 Aug 2026 23:59:50 -0700 (PDT)
+ bh=Ce9F5z8mGf5R5ont12/7iHQZsSXsthEn1dHBTcu9jM4=;
+ b=kexJiD6MpRapPeVbN9rdhazM1ewpake+yTtrITWXnssxVEt9UgIrnGIC79awc2w162
+ hVmOMwVTHqpI/mk0WOx5n+OlgkgANy0asF77O4DVtOZNbDEg9kUoRtObKnKa2RvhJQu0
+ UUrJqlB4CH5MiCU5gbB1xi9AUjBDd2bk67QmZK03aI5QpuoIHiqVPsiaRE76+AYbhns+
+ HyrpX8nkKBsUU1CYrBxgUzGYBkRxna+FdeFH8msrnHiiaNJy/7ZenRny2oDA+IDqf+9c
+ utaUJNRnk+9Dc/DFhbaWEPq432Fs24TbVIAyWbPRXAlLreoVKLmN8VK+f5iotWEtRUbL
+ sNXQ==
+X-Gm-Message-State: AOJu0Yxkx3/52kmW6SaGm/tZLaud3jNJTjnoIuFssl5/vsZPfl1+9PXL
+ kCXvo5A3nQuZYU5+5+YQmq+Qqtuci5hmm7s0AYUr24WJ4vQwoewTigua9WuWaQ==
+X-Gm-Gg: AR+sD112cZ8YWGVv/vzreNat+hcscZRwdKNipy2+VQ/xD4H+k6OlE1K0iAhOKJyEj1l
+ HlL6f7e4UiPEACsVewgsq9jGcpkTnmPo8XBsTwVMcePHfqZxp4r3+V2oT4Ro3kR9RT860tFE5+S
+ DvH+kEpRiHVz9tKYxKR7DFw1e2RCyqz1FnWzZ8pPyW1ZWrwtFezNAAexc2MU0YgsgU5ic+3kQoY
+ F8j+m/4bTWcIKvhh21JYViV8AvT9X0eDue3eRSWvPG07brTS/MkuUZuO6VZPZeVx0D0Oz1gNOfn
+ jW1m5Xt1PjBjvK6YBbt8noL+/r/yEN/vaKxrxYuZCx5qOVWZ8zQqS2Jcz4JurPOziNjMkDtyKXR
+ CIYBSNzFwkMQg4uE1LqNJJba8Lr6rAXP1dkzNpUkUfG+lfzPOmqtdAyxbW6fPpuMKND27711zFc
+ OyAzb5j4oRzuG/8CG+j/faspDpdkAsXAeVIU676dWuZwfdGzaxNyBzOXVhW2P8pZ8SE2fhEY29D
+ N4m+jZR+7GZPuKgOB20FQ==
+X-Received: by 2002:a05:600c:c113:b0:495:4689:1e98 with SMTP id
+ 5b1f17b1804b1-4980c674e1dmr146779025e9.10.1785740391410; 
+ Sun, 02 Aug 2026 23:59:51 -0700 (PDT)
 Received: from vm-2404.. (132.187.66.37.rev.sfr.net. [37.66.187.132])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-49807b5b4a2sm234639805e9.1.2026.08.02.23.59.49
+ 5b1f17b1804b1-49807b5b4a2sm234639805e9.1.2026.08.02.23.59.50
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 02 Aug 2026 23:59:50 -0700 (PDT)
+ Sun, 02 Aug 2026 23:59:51 -0700 (PDT)
 From: Francois Perrad <francois.perrad.86@gmail.com>
 To: buildroot@busybox.net
 Cc: Francois Perrad <francois.perrad.86@gmail.com>
-Date: Mon,  3 Aug 2026 08:59:32 +0200
-Message-ID: <20260803065940.224429-2-francois.perrad.86@gmail.com>
+Date: Mon,  3 Aug 2026 08:59:34 +0200
+Message-ID: <20260803065940.224429-4-francois.perrad.86@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260803065940.224429-1-francois.perrad.86@gmail.com>
 References: <20260803065940.224429-1-francois.perrad.86@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1785740390; x=1786345190; darn=busybox.net;
+ d=gmail.com; s=20251104; t=1785740391; x=1786345191; darn=busybox.net;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to:content-type;
- bh=ps6DDiHRMqddWAblv3fWYb7MzIXsZ8gFk6A9/6FSuw4=;
- b=LNMAtezxsa+EVn/z+75wbELXtk6nqAPDbHYbeX2XfryE87t7Zo9HinwNWzn7tf9jQI
- jVzvZeHwM12HvbNZgOGhibUJngtC6jzFWpyJpkq8fjHjRGFRrgMfDiCbZI22k60AanDu
- esyzqY22yEg4W6UQAYDV99mgBSA4h6C5msdRjCLUF/hh1cCUMzryba99Tg3fWpuHt+ow
- iRg5DIUAVqCNFK/HBZURYZ6lT0nnKyvA1ceSWkenGth0xwqHoJZOgY46tMNfrjD5Y5cO
- N/PzYlWBA5NFE6+GU1Fp4ysxhV6rA11uOlwXhBQYj5ohbbNsMr1WeWr2aQyZqsdo4TBW
- Pc3Q==
+ bh=Ce9F5z8mGf5R5ont12/7iHQZsSXsthEn1dHBTcu9jM4=;
+ b=DysL2J43dOLJDRJIP6SQP1zM+3JY07uwTZMFNKZV/pGtmJjvNu7xvbGMiy8ahmzfCm
+ MVJ91zrvMPKanQAVj2KfhrlIedj+bkPaZN8j02VHNRit+H98cDw/WdsPAjBgLEiCcOcy
+ JHJpPGEDJN03PzyA47+hhGmvmDaElHh/E/wKVsNwEjr7oLetXZ6aKnlVMIKywLZcyieB
+ gn1M63IQXWDKwacQCgePU7Sw4Aob1xYnCrWYQo001NeIFP7vAp2dud8HucO+Cc61RM0f
+ 1tRZ4Hcs6aMULokQufZ5KtPh9Sy0xOBBw3RGaoylUsf8LjlozyzEpuFzJVYdFEZO42Ni
+ SVYA==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20251104 header.b=LNMAtezx
-Subject: [Buildroot] [PATCH v4 1/8] package/qbe: new host package
+ header.a=rsa-sha256 header.s=20251104 header.b=DysL2J43
+Subject: [Buildroot] [PATCH v4 3/8] package/harec:  new host package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -131,59 +131,61 @@ dependency for host-hare
 
 Signed-off-by: Francois Perrad <francois.perrad.86@gmail.com>
 ---
- DEVELOPERS           |  1 +
- package/qbe/qbe.hash |  5 +++++
- package/qbe/qbe.mk   | 22 ++++++++++++++++++++++
- 3 files changed, 28 insertions(+)
- create mode 100644 package/qbe/qbe.hash
- create mode 100644 package/qbe/qbe.mk
+ DEVELOPERS               |  1 +
+ package/harec/harec.hash |  3 +++
+ package/harec/harec.mk   | 26 ++++++++++++++++++++++++++
+ 3 files changed, 30 insertions(+)
+ create mode 100644 package/harec/harec.hash
+ create mode 100644 package/harec/harec.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 3530d515a..23c95db6f 100644
+index 442fe4e6a..0b99456a9 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1177,6 +1177,7 @@ F:	package/coxpcall/
+@@ -1176,6 +1176,7 @@ F:	package/copas/
+ F:	package/coxpcall/
  F:	package/dado/
  F:	package/ficl/
++F:	package/harec/
  F:	package/janet/
-+F:	package/qbe/
+ F:	package/qbe/
  F:	package/libtomcrypt/
- F:	package/libtommath/
- F:	package/linenoise/
-diff --git a/package/qbe/qbe.hash b/package/qbe/qbe.hash
+diff --git a/package/harec/harec.hash b/package/harec/harec.hash
 new file mode 100644
-index 000000000..2250c493a
+index 000000000..0c3679bfc
 --- /dev/null
-+++ b/package/qbe/qbe.hash
-@@ -0,0 +1,5 @@
-+# Hashes from: https://c9x.me/compile/releases.html
-+sha256  a6d50eb952525a234bf76ba151861f73b7a382ac952d985f2b9af1df5368225d  qbe-1.2.tar.xz
-+
++++ b/package/harec/harec.hash
+@@ -0,0 +1,3 @@
 +# Locally computed
-+sha256  2b026a9038be00b1102da922775ffea4857ea755f63694efc36dcbcbdebf23d6  LICENSE
-diff --git a/package/qbe/qbe.mk b/package/qbe/qbe.mk
++sha256  5581bc16dcf22969c7d33b0f2a9535ba37d4cf1bb39dec252e98ff2781175629  0.26.0.tar.gz
++sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
+diff --git a/package/harec/harec.mk b/package/harec/harec.mk
 new file mode 100644
-index 000000000..04391d739
+index 000000000..d439eb3f5
 --- /dev/null
-+++ b/package/qbe/qbe.mk
-@@ -0,0 +1,22 @@
++++ b/package/harec/harec.mk
+@@ -0,0 +1,26 @@
 +################################################################################
 +#
-+# qbe
++# harec
 +#
 +################################################################################
 +
-+QBE_VERSION = 1.2
-+QBE_SITE = https://c9x.me/compile/release
-+QBE_SOURCE = qbe-$(QBE_VERSION).tar.xz
-+QBE_LICENSE = MIT
-+QBE_LICENSE_FILES = LICENSE
++HAREC_VERSION = 0.26.0
++HAREC_SITE = https://git.sr.ht/~sircmpwn/harec/archive
++HAREC_SOURCE = $(HAREC_VERSION).tar.gz
++HAREC_LICENSE = GPL-3.0
++HAREC_LICENSE_FILES = COPYING
 +
-+define HOST_QBE_BUILD_CMDS
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
++define HOST_HAREC_CONFIGURE_CMDS
++	cp $(@D)/configs/linux.mk $(@D)/config.mk
 +endef
 +
-+define HOST_QBE_INSTALL_CMDS
++define HOST_HAREC_BUILD_CMDS
++	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) ARCH=$(HOSTARCH) all
++endef
++
++define HOST_HAREC_INSTALL_CMDS
 +	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) \
 +		PREFIX="$(HOST_DIR)" install
 +endef
