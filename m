@@ -4,59 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0840C55196
-	for <buildroot@archiver.kernel.org>; Mon,  3 Aug 2026 19:35:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1FCE3C55182
+	for <buildroot@archiver.kernel.org>; Mon,  3 Aug 2026 19:35:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D3C7E606FA;
-	Mon,  3 Aug 2026 19:35:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E60026071C;
+	Mon,  3 Aug 2026 19:35:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id o-Yd8PEzvmYx; Mon,  3 Aug 2026 19:35:35 +0000 (UTC)
+ id lbGtL3oyn4Ts; Mon,  3 Aug 2026 19:35:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B6BC860736
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 25676606D4
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1785785735;
-	bh=90RTjxxs+zix1LAsJ7r+DdG1x7XoCpyQvNqv5rZDwv0=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Vjykrl221BEvTwR7C3hv7G/spdPxzZZ7X7hTJ+wIYGCqN6iGdjx/q6lbhbvkNAybL
-	 Z1GLNPfDeWO/yGRoXNRLnNzWJTjzXKR1BN6BUPYHHlAKPgxFPlmnhgklsWQRKK1smM
-	 aRVBwIH5SNnyslJKbTKrq0rSau0H/uQFD7rH9tGayW6yDzG16kO2bIeuDXnfLec0Q5
-	 db7sqoz2voEHumZ0RYuJUjpTPzZcNSqvpdaphixk4zeKX8UwowGAlu9+IWK1Le7zl1
-	 tZDES2P1gDHNzr/0KUqEXWQEGOY0bHUj7ceDWXgdlCai8FDyD9bMc+bAykdc5kRUec
-	 Jx2vQzPitweWA==
+	s=default; t=1785785747;
+	bh=eT3EVlD34alZFlTAyngi/cyLJBNzoOg+C2bCaP4wA6A=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=swNLf5aucs2dWkiFtZtwtNb0e1Xng3hdxIRWOmk0M/6Lq0BzIYQ8Es5PcXx2bFE9y
+	 TPfBjY7J/crzd7FaYWkAcaHHke8fUDrXeD2e+WZBUu4GVbgynsgeMpGtOImHodsQHe
+	 iRiF8TxBXPtiOS9H093EyW9nD3ZABp0yo4Pz8XA0r8DNNZzN4wEWXPCQ7dEOMjkKUK
+	 MFvoxpnpTSXWBScD4Le+K2ayfhJ1wY1JS8uUBSizfvM5laswhUTNdko8lrRfd3nVo1
+	 5XrtK+h1KPo4YRcVmHj2dswJ9eH2KL4uLLslbYiPZ8iivgSlj+50qsiUVN4eV3RT7B
+	 Yb/RkO4DzniCg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B6BC860736;
-	Mon,  3 Aug 2026 19:35:35 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 020C2296
- for <buildroot@buildroot.org>; Mon,  3 Aug 2026 19:35:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 25676606D4;
+	Mon,  3 Aug 2026 19:35:47 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7FB7C2DE
+ for <buildroot@buildroot.org>; Mon,  3 Aug 2026 19:35:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F3B576069D
- for <buildroot@buildroot.org>; Mon,  3 Aug 2026 19:35:25 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 713AD80BAA
+ for <buildroot@buildroot.org>; Mon,  3 Aug 2026 19:35:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Qu239NZS-4jn for <buildroot@buildroot.org>;
- Mon,  3 Aug 2026 19:35:24 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 71736606AE
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 71736606AE
- for <buildroot@buildroot.org>; Mon,  3 Aug 2026 19:35:24 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BB5178B856; Mon,  3 Aug 2026 19:34:39 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 3 Aug 2026 21:15:59 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d5b1b7b1b63dcaf8c8b4fea164255567d821d19c
-X-Git-Newrev: 95cdea9bddf322b94970a61f129c4b75fed94c27
-X-Patchwork-Hint: ignore
-Message-Id: <20260803193439.BB5178B856@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/hare-dbus: new package
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eVsxZT8nSfBm for <buildroot@buildroot.org>;
+ Mon,  3 Aug 2026 19:35:44 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9FED080B5C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9FED080B5C
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9FED080B5C
+ for <buildroot@busybox.net>; Mon,  3 Aug 2026 19:35:44 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id 718EA2003C1;
+ Mon,  3 Aug 2026 21:35:41 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Mon, 03 Aug 2026 21:35:41 +0200
+MIME-Version: 1.0
+Date: Mon, 03 Aug 2026 21:35:41 +0200
+To: Francois Perrad <francois.perrad.86@gmail.com>
+Cc: buildroot@busybox.net
+In-Reply-To: <20260803065940.224429-2-francois.perrad.86@gmail.com>
+References: <20260803065940.224429-1-francois.perrad.86@gmail.com>
+ <20260803065940.224429-2-francois.perrad.86@gmail.com>
+User-Agent: Webmail Free/1.6.17
+Message-ID: <91dcb8c0a8c5986b685464dd02ac109b@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1785785742;
+ bh=FP3pk+4Yw/sFXE+kNkEjXoFCqNg38h11ileWBHWMlRU=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=HmUMLK1UEKJLiaK2JNrlbjsQrHhprsQXjRf/+2Szmhho2PHpMCfiLYimnmyE7TRnI
+ GX1MMaFh70dQDPJ2wksETuYjrTPFBNrZnNnwOzUwVCHI+xE8ERwbxR881h4dIAd7/h
+ +YTdUxTTnHw2Ux02cpPew4OA6Z7x1YcPFSy8AC9+LrtZpaRF1Pf9s9ugzF0nC8Fa6L
+ 2IYpwGT0dBUIOBrwBZTHT9JZLJlO3l1l+7eSuAQyerfG7kBofPfHS0+4ZxhAtST/9w
+ VXsZAOyLaVwDy7JCUA0AhOJyCGQAC6SZMy1GRqeREr8IP75I0o6QWdXzgNtVCj3rlF
+ 19TtC18A6Iadw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=HmUMLK1U
+Subject: Re: [Buildroot] [PATCH v4 1/8] package/qbe: new host package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,116 +95,17 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/95cdea9bddf322b94970a61f129c4b75fed94c27
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 03/08/2026 08:59, Francois Perrad wrote:
+> dependency for host-hare
+> 
+> Signed-off-by: Francois Perrad <francois.perrad.86@gmail.com>
 
-Signed-off-by: Francois Perrad <francois.perrad.86@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/Config.in                         |  1 +
- package/hare-dbus/0001-fix-Makefile.patch | 27 +++++++++++++++++++++++++++
- package/hare-dbus/Config.in               | 10 ++++++++++
- package/hare-dbus/hare-dbus.hash          |  3 +++
- package/hare-dbus/hare-dbus.mk            | 15 +++++++++++++++
- 5 files changed, 56 insertions(+)
-
-diff --git a/package/Config.in b/package/Config.in
-index 2a749f9415..67e88d3721 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -513,6 +513,7 @@ endmenu
- 	source "package/gpsd/Config.in"
- 	source "package/gptfdisk/Config.in"
- 	source "package/gvfs/Config.in"
-+	source "package/hare-dbus/Config.in"
- 	source "package/hddtemp/Config.in"
- 	source "package/hdparm/Config.in"
- 	source "package/hwdata/Config.in"
-diff --git a/package/hare-dbus/0001-fix-Makefile.patch b/package/hare-dbus/0001-fix-Makefile.patch
-new file mode 100644
-index 0000000000..0f106e27fd
---- /dev/null
-+++ b/package/hare-dbus/0001-fix-Makefile.patch
-@@ -0,0 +1,27 @@
-+From 93abfa5970937253ae73bc8bcd9e243d890484a9 Mon Sep 17 00:00:00 2001
-+From: Francois Perrad <francois.perrad@gadz.org>
-+Date: Fri, 15 May 2026 11:56:39 +0200
-+Subject: [PATCH] fix Makefile
-+
-+Upstream: N/A specific for Buildroot build
-+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-+---
-+ Makefile | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/Makefile b/Makefile
-+index a738e6a..8c4fe78 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -18,7 +18,7 @@ dbus-introspector:
-+ dbus-scanner:
-+ 	$(HARE) build $(HAREFLAGS) cmd/dbus-scanner/
-+ 
-+-install: build
-++install:
-+ 	install -Dm755 dbus-introspector	${DESTDIR}${BINDIR}/dbus-introspector
-+ 	install -Dm755 dbus-scanner		${DESTDIR}${BINDIR}/dbus-scanner
-+ 	install -Dm644 dbus/protocol/*.ha -t	$(DESTDIR)$(THIRDPARTYDIR)/dbus/protocol
-+-- 
-+2.43.0
-+
-diff --git a/package/hare-dbus/Config.in b/package/hare-dbus/Config.in
-new file mode 100644
-index 0000000000..63f332cbf8
---- /dev/null
-+++ b/package/hare-dbus/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_HARE_DBUS
-+	bool "hare-dbus"
-+	depends on BR2_PACKAGE_HOST_HARE_TARGET_ARCH_SUPPORTS
-+	select BR2_PACKAGE_HOST_HARE
-+	select BR2_PACKAGE_HARE_EV
-+	select BR2_PACKAGE_HARE_XML
-+	help
-+	  D-Bus client implementation for Hare.
-+
-+	  https://git.sr.ht/~whynothugo/hare-dbus
-diff --git a/package/hare-dbus/hare-dbus.hash b/package/hare-dbus/hare-dbus.hash
-new file mode 100644
-index 0000000000..e8abc40e43
---- /dev/null
-+++ b/package/hare-dbus/hare-dbus.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  67a3041126f7745e667d570904504a58475ca398acdd679b548d9e0e513092f8  hare-dbus-e9a89f8bc5ce783fa25f0eb67d7d8932db90bcc2-git4.tar.gz
-+sha256  7c77ea8fa77851b9ee52d715ec6a3c5f15604bdab5148dd13dbd1dd345752017  LICENCE
-diff --git a/package/hare-dbus/hare-dbus.mk b/package/hare-dbus/hare-dbus.mk
-new file mode 100644
-index 0000000000..93d2a688f4
---- /dev/null
-+++ b/package/hare-dbus/hare-dbus.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# hare-dbus
-+#
-+################################################################################
-+
-+HARE_DBUS_VERSION = e9a89f8bc5ce783fa25f0eb67d7d8932db90bcc2
-+HARE_DBUS_SITE_METHOD = git
-+HARE_DBUS_SITE = https://git.sr.ht/~whynothugo/hare-dbus
-+HARE_DBUS_LICENSE = MIT
-+HARE_DBUS_LICENSE_FILES = LICENCE
-+HARE_DBUS_INSTALL_STAGING = YES
-+HARE_DBUS_DEPENDENCIES = hare-ev hare-xml
-+
-+$(eval $(hare-package))
+Series applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
