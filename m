@@ -1,88 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25E48C55182
-	for <buildroot@archiver.kernel.org>; Mon,  3 Aug 2026 19:10:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D30ECC55182
+	for <buildroot@archiver.kernel.org>; Mon,  3 Aug 2026 19:35:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DBAB880C27;
-	Mon,  3 Aug 2026 19:10:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 724D440558;
+	Mon,  3 Aug 2026 19:35:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id G9mRO0N2lOeB; Mon,  3 Aug 2026 19:10:23 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CF3IhhmrbYba; Mon,  3 Aug 2026 19:35:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5244580BEA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 99F93405D3
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1785784223;
-	bh=jz9fcsFRaxONeRZ12bwk7ZbTFISBjXMj/QlqVK5Wz5A=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=UMI+gPhuLHpH4M3GGYhsYQ4MBQ4DRjoxuBBg9Sp04aJpHQJCJPlirFA1lhENqvU5d
-	 5NPDKR9+slYXx8QjwCD5cPbl4yqZkCBdLM1slegE1AwAY5JKh7nldMUa/4hUjxNGw0
-	 1WcuQySKV4kcQX9AqxsioHWUKkEeuZsupGBDDNcK0Db0V8J+dAW5eU8GkRVnjh2ak2
-	 CHHvTPd87pGNDjYRq8yjXdkUQEOySDNSr+Qjtbd6RnpsV/EllXfb4wLHLp9uuYyVgf
-	 fftjNgETU0PLX5Zl69n2p0Eev+pCNGr4t6+85HwFaYiMs0qFgbVjh7qIgNT6i1MY8l
-	 e+Y0oTTKSbmnA==
+	s=default; t=1785785726;
+	bh=b7wp55eWumLoCkzJhKWEE5bSE3na1Q8LT+t88R+Gt+Y=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=FpxINmy41ouEdf/6ReSFxgbrKgQeFYBqf6MJ+aqFkaKPnJuL8nscWY2yo7OhKSaLu
+	 Xi+Vk0r18iaDwuXup+lHLFVtU+pJ3rELnuSgrprYyL81X3ymG3Fi7KkQ5kLnzKgO/g
+	 Ekm3x5SiH767WKeYCVU/7DflV2G0Opgh08Ddbw+dXJurAR/yP+iuzlJTzqhK3Wt/FC
+	 xNWTMIq6e01H79EuyEABmbe9m7iu3zclXqf7yEpb8fMVd+3RPyxgKdF526XjwH8pxw
+	 a7dUy+iTWQLCWr8fccCfD5Ah5bbh5rk5g9QuweIfEo0cXS2h9k2qeq/qnL9NmXUcQC
+	 YOIJBv7zgKcAg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5244580BEA;
-	Mon,  3 Aug 2026 19:10:23 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 3FEA52CE
- for <buildroot@buildroot.org>; Mon,  3 Aug 2026 19:10:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 99F93405D3;
+	Mon,  3 Aug 2026 19:35:26 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1828E2DE
+ for <buildroot@buildroot.org>; Mon,  3 Aug 2026 19:35:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 25BD280C27
- for <buildroot@buildroot.org>; Mon,  3 Aug 2026 19:10:21 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id F1B1580BAA
+ for <buildroot@buildroot.org>; Mon,  3 Aug 2026 19:35:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id A41M1dKdCzFN for <buildroot@buildroot.org>;
- Mon,  3 Aug 2026 19:10:20 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org EAAF480C04
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EAAF480C04
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp1.osuosl.org (Postfix) with ESMTPS id EAAF480C04
- for <buildroot@busybox.net>; Mon,  3 Aug 2026 19:10:19 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id 826845FFAF;
- Mon,  3 Aug 2026 21:10:16 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Mon, 03 Aug 2026 21:10:16 +0200
-MIME-Version: 1.0
-Date: Mon, 03 Aug 2026 21:10:16 +0200
-To: Francois Perrad <francois.perrad.86@gmail.com>
-Cc: buildroot@busybox.net
-In-Reply-To: <20260803081917.391134-1-francois.perrad.86@gmail.com>
-References: <20260803081917.391134-1-francois.perrad.86@gmail.com>
-User-Agent: Webmail Free/1.6.17
-Message-ID: <f314781160b64ae3d00af1aff35c5834@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1785784217;
- bh=J7Kq8SPICHwanHHo5+20UuKKu2D8gtZF51tBEsl8A80=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=QuR3MtpbgCwE1E+Vo3HPZSUd7pmtuQB6OykCVUCbHsPAQUsnLURjpw7WC3p3yYjfr
- E52wEfLxaGMgiTEDTXeX+ODGlXdEESUwxZ98tViprBk1i2Jo6F83o4cp+d4Z8h8s7d
- HfT1NR+k6R5mcXTA1owCY79I6ify7/AMN8hXrzyY59lV9Uf1N+1M+6/2Sg70VfoGVH
- uT+S3kiHb0KjZf6uKZSiqFDv1i7DKF9vTz1CntGpgZKGV4FVFEAPCAByeoi9ArgmL1
- PMguKMbGD/jPuVwqcYRJyo6OkpsqlmrrIUnmzgJ8a4QXW47qAbP3cB0+6T6zUCL88V
- CREKuZXYSzQqw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=QuR3Mtpb
-Subject: Re: [Buildroot] [PATCH] package/perl: security bump to version
- 5.42.3
+ id 9Ilf93dt5s0l for <buildroot@buildroot.org>;
+ Mon,  3 Aug 2026 19:35:24 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2C4D180B5C
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2C4D180B5C
+ for <buildroot@buildroot.org>; Mon,  3 Aug 2026 19:35:24 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 73C908B856; Mon,  3 Aug 2026 19:34:39 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 3 Aug 2026 21:15:59 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: e3ff7a6f0204a2ec92a0666485c9f4f5d0d066bf
+X-Git-Newrev: ce991648466d4de2704ea02286a01f9d5aed4f64
+X-Patchwork-Hint: ignore
+Message-Id: <20260803193439.73C908B856@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/qbe: new host package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,22 +70,76 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 03/08/2026 10:19, Francois Perrad wrote:
-> fix CVE-2026-8376 - Buffer overflow in Perl_study_chunk
-> fix CVE-2026-57432 - Buffer overflow in S_measure_struct
-> fix CVE-2026-13221 - Regex trie 16-bit field overflow
-> 
-> For release notes, see:
-> https://perldoc.perl.org/5.42.3/perl5423delta
-> 
-> Signed-off-by: Francois Perrad <francois.perrad.86@gmail.com>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/ce991648466d4de2704ea02286a01f9d5aed4f64
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Applied to master, thanks.
+dependency for host-hare
+
+Signed-off-by: Francois Perrad <francois.perrad.86@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ DEVELOPERS           |  1 +
+ package/qbe/qbe.hash |  5 +++++
+ package/qbe/qbe.mk   | 22 ++++++++++++++++++++++
+ 3 files changed, 28 insertions(+)
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index d78e08bdb4..f2d999bbd8 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1186,6 +1186,7 @@ F:	package/coxpcall/
+ F:	package/dado/
+ F:	package/ficl/
+ F:	package/janet/
++F:	package/qbe/
+ F:	package/libtomcrypt/
+ F:	package/libtommath/
+ F:	package/linenoise/
+diff --git a/package/qbe/qbe.hash b/package/qbe/qbe.hash
+new file mode 100644
+index 0000000000..2250c493af
+--- /dev/null
++++ b/package/qbe/qbe.hash
+@@ -0,0 +1,5 @@
++# Hashes from: https://c9x.me/compile/releases.html
++sha256  a6d50eb952525a234bf76ba151861f73b7a382ac952d985f2b9af1df5368225d  qbe-1.2.tar.xz
++
++# Locally computed
++sha256  2b026a9038be00b1102da922775ffea4857ea755f63694efc36dcbcbdebf23d6  LICENSE
+diff --git a/package/qbe/qbe.mk b/package/qbe/qbe.mk
+new file mode 100644
+index 0000000000..04391d739b
+--- /dev/null
++++ b/package/qbe/qbe.mk
+@@ -0,0 +1,22 @@
++################################################################################
++#
++# qbe
++#
++################################################################################
++
++QBE_VERSION = 1.2
++QBE_SITE = https://c9x.me/compile/release
++QBE_SOURCE = qbe-$(QBE_VERSION).tar.xz
++QBE_LICENSE = MIT
++QBE_LICENSE_FILES = LICENSE
++
++define HOST_QBE_BUILD_CMDS
++	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
++endef
++
++define HOST_QBE_INSTALL_CMDS
++	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) \
++		PREFIX="$(HOST_DIR)" install
++endef
++
++$(eval $(host-generic-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
