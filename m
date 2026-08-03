@@ -4,59 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C798C55182
-	for <buildroot@archiver.kernel.org>; Mon,  3 Aug 2026 20:38:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C387BC55182
+	for <buildroot@archiver.kernel.org>; Mon,  3 Aug 2026 20:40:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D172540648;
-	Mon,  3 Aug 2026 20:38:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8A5C340650;
+	Mon,  3 Aug 2026 20:40:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Grs_PszVfeJu; Mon,  3 Aug 2026 20:38:51 +0000 (UTC)
+ id RFCm7UMlqgEv; Mon,  3 Aug 2026 20:39:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4F7AE40612
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7859640612
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1785789531;
-	bh=Ko/yQrDCpXwN0zkQTfnpy9Di5ZwkKQPxqLz0Id/rDXI=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=geNB4BhMJjRVN6r+G5p3T08Pz1wLbK6SkvMVhICsi2e/RRgajW7qp5IRPjQJ2n+pc
-	 VOFzyvORTgaam7rQGIo44bEqImivGCRtnmDLnHDYuqfhx3MPZi1xmrHZe44txSmxMM
-	 8/RyTZtN9/fL160aRte44N+PcH7/kc8kqZrQc130/RftfVF5QCY7/cO36swuuDRUJm
-	 pd9uSFFQOEVnQMamulVEL+x404SF00vHBqIrtwGH2wnlbfiXsTQdlmlLmQFfRN0gWU
-	 +3V2puNyC/x/PTQiTf4B/Nmaekrp8XbBNXfZXbmKjippysJrgrdRmerSk1TBAyXta8
-	 nyX2clkuOOjuQ==
+	s=default; t=1785789599;
+	bh=gJlxJtrXY9PVvyvXW6g0Z638Vy/XMtCoYhW2tWj8jMg=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=ZJxXKXnBPB9C0nmPXGp2y9R2mHujI7m74a1shaayc43/vAOahAmN7OFewyCwSa+Wx
+	 ry3dbU7Ec254zGy5TGNK1oxpwCvEGGWVNq9HglkApVBTrYRyaCt9fByRgUsHb2PsO8
+	 HK6N+5ILOVCqFZSIgpWGq3mOuir64f/nEFa55Q70DLCegMsZdur6xeoG8cw38+IWGA
+	 zkezI/Wl2YutkRzqnJHXajqjZIBaT7RDHU2yaMaXSDr2xbkU9H2yeqg8VMd2mo3QRW
+	 GUB8s9VghHSG7vzEaKc3PLmm5tjHTKb5dGrT6mMdGbh2egbXxfegLUDac9DyHyIrZe
+	 +bQ6sba9aosIg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4F7AE40612;
-	Mon,  3 Aug 2026 20:38:51 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id B72EC194
- for <buildroot@buildroot.org>; Mon,  3 Aug 2026 20:38:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7859640612;
+	Mon,  3 Aug 2026 20:39:59 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7C83528F
+ for <buildroot@buildroot.org>; Mon,  3 Aug 2026 20:39:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A01D360648
- for <buildroot@buildroot.org>; Mon,  3 Aug 2026 20:38:49 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6282A60648
+ for <buildroot@buildroot.org>; Mon,  3 Aug 2026 20:39:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hr7B7Ye1evIU for <buildroot@buildroot.org>;
- Mon,  3 Aug 2026 20:38:48 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BDB906061D
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id BDB906061D
- for <buildroot@buildroot.org>; Mon,  3 Aug 2026 20:38:48 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 08B148B860; Mon,  3 Aug 2026 20:38:04 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 3 Aug 2026 22:37:16 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 95cdea9bddf322b94970a61f129c4b75fed94c27
-X-Git-Newrev: fef9cad1fe84b4366e705adb03470e12199ffd25
-X-Patchwork-Hint: ignore
-Message-Id: <20260803203804.08B148B860@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libxmlsec1: bump version to 1.3.12
+ id t8JXoOQXMlf4 for <buildroot@buildroot.org>;
+ Mon,  3 Aug 2026 20:39:56 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4F2D16061D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4F2D16061D
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4F2D16061D
+ for <buildroot@buildroot.org>; Mon,  3 Aug 2026 20:39:55 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id 74A5FB00573;
+ Mon,  3 Aug 2026 22:39:50 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Mon, 03 Aug 2026 22:39:50 +0200
+MIME-Version: 1.0
+Date: Mon, 03 Aug 2026 22:39:50 +0200
+To: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+Cc: buildroot@buildroot.org, Thomas Petazzoni
+ <thomas.petazzoni@bootlin.com>, Bernd Kuhls <bernd@kuhls.net>
+In-Reply-To: <20260803-libxmslxec-bump-v2-1-7b668ecb24e8@bootlin.com>
+References: <20260803-libxmslxec-bump-v2-1-7b668ecb24e8@bootlin.com>
+User-Agent: Webmail Free/1.6.17
+Message-ID: <28c0e5601fb35857e0a47cd748be2325@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1785789593;
+ bh=0zkJmCmX1ljadGroldmsF1PYHHgtxIsIeC9Pbxciem0=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=QNBzBRD3c80HKneWzWXdJm1aVq3sP/aO2vJ5RxBj559cT7uw39jnvLBrUKJkXawoJ
+ oLxxYUYMQRMiAB0PDFRj03aNeaw2905s0097vadMw2V00RxmJeopCPvzhEddUlGbAi
+ AwU/FtB45daqHQDLrV5UNTZKbWIVwex+Q/gSPdoDA/vQhKOD2HIkt3+oe6r3PRvr7C
+ cB9ijG+mptHALBS/FdxFOLZq9YxzoRtCKdxJR4CqiqFMuisDX7PLWtiiYo9jWUTy9Q
+ ke4OhMSoMS9Av9E4HX5MmpbNkbg1KFZfyEPj9KS+EHTou15VmDKn4TXkZZS1vq+vn5
+ 2+n73lP4TpI1g==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=QNBzBRD3
+Subject: Re: [Buildroot] [PATCH v2] package/libxmlsec1: bump version to
+ 1.3.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,135 +97,49 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4181848876973161948=="
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4181848876973161948==
-Content-Type: text/plain
-
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/fef9cad1fe84b4366e705adb03470e12199ffd25
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
-
-Update libxmlsec from 1.3.9 to 1.3.12. The package then needs a few
-adjustments:
-- there are undefined references to xmlDebugDumpDocument ([1]):
-
-  unit_tests/transform_helpers_unit_tests.c:291:9: error: implicit
-  declaration of function ‘xmlDebugDumpDocument’
-  [-Wimplicit-function-declaration]
-
-This is due to xmlsec1 unit tests being built systematically, and
-depending on libxml2 being built with --with-debug, so patch
-apps/Makefile.am accordingly at build time to disable unit tests build.
-
-- the build can fail with older GCC versions due to an unimplemented
-  parameter ([2]):
-
-  aarch64-linux-gcc.br_real: error: unrecognized command line option \
-  ‘-Wformat-overflow=2’; did you mean ‘-Wstrict-overflow=’?
-
-This format-overflow parameter has been implemented in GCC 7, so make
-the package depend on GCC >= 7. Another solution could have been to
-pass --disable-pedantic to the package's configure, but that sounds a
-bit strong just to disable a parameter that has been exisiting for
-almost 10 years.
-
-- the build can fail on missing atomics ([3]):
-
-  [...]/bootlin-m68k-5208-uclibc/host/opt/ext-toolchain/m68k-buildroot-uclinux-uclibc/bin/ld.real:
-  [...]/bootlin-m68k-5208-uclibc/host/bin/../m68k-buildroot-uclinux-uclibc/sysroot/usr/lib/libcrypto.a(libcrypto-lib-threads_pthread.o):
-  in function `CRYPTO_atomic_store': threads_pthread.c:(.text+0xcd2):
-  undefined reference to `__atomic_is_lock_free'
-
-So make the package depend on libatomic.
-
-This commit updates the license hash, after a year update in [4].
-
-[1] https://gitlab.com/jolivain/buildroot/-/pipelines/2527527034
-[2] https://gitlab.com/jolivain/buildroot/-/jobs/14449681615
-[3] https://gitlab.com/jolivain/buildroot/-/jobs/14449681621
-[4] https://github.com/lsh123/xmlsec/commit/2e557ee8a0b895f03be2f0295cb99e4035b3b53e
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Co-Developed-by: Alexis Lothoré <alexis.lothore@bootlin.com>
-Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
-[Julien: update license hash]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/libxmlsec1/Config.in       |  5 +++++
- package/libxmlsec1/libxmlsec1.hash |  4 ++--
- package/libxmlsec1/libxmlsec1.mk   | 10 +++++++++-
- 3 files changed, 16 insertions(+), 3 deletions(-)
-
-diff --git a/package/libxmlsec1/Config.in b/package/libxmlsec1/Config.in
-index 4a686853ae..782e6ced7c 100644
---- a/package/libxmlsec1/Config.in
-+++ b/package/libxmlsec1/Config.in
-@@ -1,5 +1,7 @@
- config BR2_PACKAGE_LIBXMLSEC1
- 	bool "libxmlsec1"
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 #-Wformat-overflow
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_LIBXML2
- 	help
-@@ -10,3 +12,6 @@ config BR2_PACKAGE_LIBXMLSEC1
- 
- 	  https://www.aleksey.com/xmlsec/
- 	  https://github.com/lsh123/xmlsec
-+
-+comment "libxmlsec1 needs a toolchain w/ gcc >= 7"
-+	depends on  !BR2_TOOLCHAIN_GCC_AT_LEAST_7 || !BR2_TOOLCHAIN_HAS_ATOMIC
-diff --git a/package/libxmlsec1/libxmlsec1.hash b/package/libxmlsec1/libxmlsec1.hash
-index 9e0e67e732..d9cb16a1c2 100644
---- a/package/libxmlsec1/libxmlsec1.hash
-+++ b/package/libxmlsec1/libxmlsec1.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  a631c8cd7a6b86e6adb9f5b935d45a9cf9768b3cb090d461e8eb9d043cf9b62f  xmlsec1-1.3.9.tar.gz
--sha256  d5e9388534256360c6a009d4f19ab2b8d6ec0aa7ff32a51e22d899ed7beb5c48  Copyright
-+sha256  24045199af12d93fe5fdbbbf7e386e823e4842071e9432e2b90ac108b889a923  xmlsec1-1.3.12.tar.gz
-+sha256  a6d217151f3d423e06639c075bad8e442ea1936828d3a660105122ef78ecd96d  Copyright
-diff --git a/package/libxmlsec1/libxmlsec1.mk b/package/libxmlsec1/libxmlsec1.mk
-index 29222bc16f..88f0ae9fd9 100644
---- a/package/libxmlsec1/libxmlsec1.mk
-+++ b/package/libxmlsec1/libxmlsec1.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBXMLSEC1_VERSION = 1.3.9
-+LIBXMLSEC1_VERSION = 1.3.12
- LIBXMLSEC1_SOURCE = xmlsec1-$(LIBXMLSEC1_VERSION).tar.gz
- LIBXMLSEC1_SITE = https://github.com/lsh123/xmlsec/releases/download/$(LIBXMLSEC1_VERSION)
- LIBXMLSEC1_LICENSE = MIT
-@@ -22,6 +22,14 @@ LIBXMLSEC1_CONF_OPTS = \
- 	--without-nss \
- 	--disable-des
- 
-+# xmlsec_unit_tests needs xmlDebugDumpDocument() from libxml2 which is not
-+# present in buildroot because libxml2 is build with -without-debug
-+define LIBXMLSEC1_DISABLE_UNIT_TESTS
-+	$(SED) 's/noinst_PROGRAMS = xmlsec_unit_tests/noinst_PROGRAMS =/' \
-+		$(@D)/apps/Makefile.am
-+endef
-+LIBXMLSEC1_POST_PATCH_HOOKS += LIBXMLSEC1_DISABLE_UNIT_TESTS
-+
- HOST_LIBXMLSEC1_CONF_OPTS = \
- 	--enable-crypto-dl=no \
- 	--with-openssl \
-
---===============4181848876973161948==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4181848876973161948==--
+T24gMDMvMDgvMjAyNiAxNjoxNiwgQWxleGlzIExvdGhvcsOpIHZpYSBidWlsZHJvb3Qgd3JvdGU6
+Cj4gVXBkYXRlIGxpYnhtbHNlYyBmcm9tIDEuMy45IHRvIDEuMy4xMi4gVGhlIHBhY2thZ2UgdGhl
+biBuZWVkcyBhIGZldwo+IGFkanVzdG1lbnRzOgo+IC0gdGhlcmUgYXJlIHVuZGVmaW5lZCByZWZl
+cmVuY2VzIHRvIHhtbERlYnVnRHVtcERvY3VtZW50IChbMV0pOgo+IAo+ICAgdW5pdF90ZXN0cy90
+cmFuc2Zvcm1faGVscGVyc191bml0X3Rlc3RzLmM6MjkxOjk6IGVycm9yOiBpbXBsaWNpdAo+ICAg
+ZGVjbGFyYXRpb24gb2YgZnVuY3Rpb24g4oCYeG1sRGVidWdEdW1wRG9jdW1lbnTigJkKPiAgIFst
+V2ltcGxpY2l0LWZ1bmN0aW9uLWRlY2xhcmF0aW9uXQo+IAo+IFRoaXMgaXMgZHVlIHRvIHhtbHNl
+YzEgdW5pdCB0ZXN0cyBiZWluZyBidWlsdCBzeXN0ZW1hdGljYWxseSwgYW5kCj4gZGVwZW5kaW5n
+IG9uIGxpYnhtbDIgYmVpbmcgYnVpbHQgd2l0aCAtLXdpdGgtZGVidWcsIHNvIHBhdGNoCj4gYXBw
+cy9NYWtlZmlsZS5hbSBhY2NvcmRpbmdseSBhdCBidWlsZCB0aW1lIHRvIGRpc2FibGUgdW5pdCB0
+ZXN0cyBidWlsZC4KPiAKPiAtIHRoZSBidWlsZCBjYW4gZmFpbCB3aXRoIG9sZGVyIEdDQyB2ZXJz
+aW9ucyBkdWUgdG8gYW4gdW5pbXBsZW1lbnRlZAo+ICAgcGFyYW1ldGVyIChbMl0pOgo+IAo+ICAg
+YWFyY2g2NC1saW51eC1nY2MuYnJfcmVhbDogZXJyb3I6IHVucmVjb2duaXplZCBjb21tYW5kIGxp
+bmUgb3B0aW9uIFwKPiAgIOKAmC1XZm9ybWF0LW92ZXJmbG93PTLigJk7IGRpZCB5b3UgbWVhbiDi
+gJgtV3N0cmljdC1vdmVyZmxvdz3igJk/Cj4gCj4gVGhpcyBmb3JtYXQtb3ZlcmZsb3cgcGFyYW1l
+dGVyIGhhcyBiZWVuIGltcGxlbWVudGVkIGluIEdDQyA3LCBzbyBtYWtlCj4gdGhlIHBhY2thZ2Ug
+ZGVwZW5kIG9uIEdDQyA+PSA3LiBBbm90aGVyIHNvbHV0aW9uIGNvdWxkIGhhdmUgYmVlbiB0bwo+
+IHBhc3MgLS1kaXNhYmxlLXBlZGFudGljIHRvIHRoZSBwYWNrYWdlJ3MgY29uZmlndXJlLCBidXQg
+dGhhdCBzb3VuZHMgYQo+IGJpdCBzdHJvbmcganVzdCB0byBkaXNhYmxlIGEgcGFyYW1ldGVyIHRo
+YXQgaGFzIGJlZW4gZXhpc2l0aW5nIGZvcgo+IGFsbW9zdCAxMCB5ZWFycy4KPiAKPiAtIHRoZSBi
+dWlsZCBjYW4gZmFpbCBvbiBtaXNzaW5nIGF0b21pY3MgKFszXSk6Cj4gCj4gICAKPiBbLi4uXS9i
+b290bGluLW02OGstNTIwOC11Y2xpYmMvaG9zdC9vcHQvZXh0LXRvb2xjaGFpbi9tNjhrLWJ1aWxk
+cm9vdC11Y2xpbnV4LXVjbGliYy9iaW4vbGQucmVhbDoKPiAgIAo+IFsuLi5dL2Jvb3RsaW4tbTY4
+ay01MjA4LXVjbGliYy9ob3N0L2Jpbi8uLi9tNjhrLWJ1aWxkcm9vdC11Y2xpbnV4LXVjbGliYy9z
+eXNyb290L3Vzci9saWIvbGliY3J5cHRvLmEobGliY3J5cHRvLWxpYi10aHJlYWRzX3B0aHJlYWQu
+byk6Cj4gICBpbiBmdW5jdGlvbiBgQ1JZUFRPX2F0b21pY19zdG9yZSc6IHRocmVhZHNfcHRocmVh
+ZC5jOigudGV4dCsweGNkMik6Cj4gICB1bmRlZmluZWQgcmVmZXJlbmNlIHRvIGBfX2F0b21pY19p
+c19sb2NrX2ZyZWUnCj4gCj4gU28gbWFrZSB0aGUgcGFja2FnZSBkZXBlbmQgb24gbGliYXRvbWlj
+Cj4gCj4gWzFdIGh0dHBzOi8vZ2l0bGFiLmNvbS9qb2xpdmFpbi9idWlsZHJvb3QvLS9waXBlbGlu
+ZXMvMjUyNzUyNzAzNAo+IFsyXSBodHRwczovL2dpdGxhYi5jb20vam9saXZhaW4vYnVpbGRyb290
+Ly0vam9icy8xNDQ0OTY4MTYxNQo+IFszXSBodHRwczovL2dpdGxhYi5jb20vam9saXZhaW4vYnVp
+bGRyb290Ly0vam9icy8xNDQ0OTY4MTYyMQo+IAo+IFNpZ25lZC1vZmYtYnk6IEJlcm5kIEt1aGxz
+IDxiZXJuZEBrdWhscy5uZXQ+Cj4gQ28tRGV2ZWxvcGVkLWJ5OiBBbGV4aXMgTG90aG9yw6kgPGFs
+ZXhpcy5sb3Rob3JlQGJvb3RsaW4uY29tPgo+IFNpZ25lZC1vZmYtYnk6IEFsZXhpcyBMb3Rob3LD
+qSA8YWxleGlzLmxvdGhvcmVAYm9vdGxpbi5jb20+CgpBcHBsaWVkIHRvIG1hc3Rlci4gRm9yIGlu
+Zm8sIEkgZml4ZWQgdGhlIGxpY2Vuc2UgaGFzaC4gU2VlOgpodHRwczovL2dpdGxhYi5jb20vYnVp
+bGRyb290Lm9yZy9idWlsZHJvb3QvLS9jb21taXQvZmVmOWNhZDFmZTg0YjQzNjZlNzA1YWRiMDM0
+NzBlMTIxOTlmZmQyNQoKQmVzdCByZWdhcmRzLAoKSnVsaWVuLgpfX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxk
+cm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xp
+c3RpbmZvL2J1aWxkcm9vdAo=
