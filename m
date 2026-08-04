@@ -4,59 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DFE0CC55822
-	for <buildroot@archiver.kernel.org>; Tue,  4 Aug 2026 19:15:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0387C55ABA
+	for <buildroot@archiver.kernel.org>; Tue,  4 Aug 2026 19:15:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 81B3B4072E;
-	Tue,  4 Aug 2026 19:15:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AA6F9406DF;
+	Tue,  4 Aug 2026 19:15:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RjOKbIfFr5qs; Tue,  4 Aug 2026 19:15:43 +0000 (UTC)
+ id GCFFI_bbGaQR; Tue,  4 Aug 2026 19:15:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5E00140722
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4E57A40741
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1785870943;
-	bh=+/F4XVEbVk4aH/O14JSfkaUFF3LpwIPFaDNxK3L8OCs=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=UdvS0CQjp6mzhe6esxHuFHIcY2iSjtxFiNp2Cucw6Xvw3+XsdknW8d9YkmeTCBEJ9
-	 dWmVqCx14eBsI5nfrXsSoIFsThN96HfTWRbN2ofSa+bZk04ZWhnSeICPxKJqgw5LEh
-	 GBsccM7frww1iZFcBvnOVsJzEr0AtkatJOZM+aowCua+Rh5sOcxhH7yS3cxHtD4tHR
-	 YNDa+8ZLeSv6fm7IJtFhHmHyb7EiG13GHNyVrPworerQHW0IvAqU9hqmNuWOKkkRlo
-	 SorRLGSnxUDniAsDUYUP8dQ0cA7Pa4JprpCjghclUdw/R3o3C5dIg6LMCM58ksPGf4
-	 /sNl0GkWDeS2A==
+	s=default; t=1785870951;
+	bh=EF434Pc7M6uLW0dwQbaia+VVBqdf4whGBIAUiZFtEQI=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=p+B49ngrB/vg0pZ1ALQg1ewOdAe6ZG4I+fQjcShwYk50Y44DANoxO6O8+s/myoNwa
+	 yZSD0F3LkZopTBMtlwZAVWf9SScilwa+OypGBwjMreaIB8TTf5EbumfGIule70Qp5K
+	 ddZXT7Lqt6ux8Tr+T2P7i8bvn5p73jgpdDw4AfW8vd5sqTbY2P8Gr9edezKPNmqrRt
+	 zYhtaA8At+imhdjCi59+BlCR7moEehNK1CcqT3HDDe3W2iADbBx/FwtNxi2aktOAdE
+	 Lir+1Yv1gie4mi7WRkMSyKl98g+lnOclQJSMThUW8ZNEHExdb81OCKbflWCBcj8XTB
+	 i1NN8nZv5ERAw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5E00140722;
-	Tue,  4 Aug 2026 19:15:43 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id CA49B218
- for <buildroot@buildroot.org>; Tue,  4 Aug 2026 19:15:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4E57A40741;
+	Tue,  4 Aug 2026 19:15:51 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id BE18A2BF
+ for <buildroot@buildroot.org>; Tue,  4 Aug 2026 19:15:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BCBE980C59
- for <buildroot@buildroot.org>; Tue,  4 Aug 2026 19:15:41 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B09666077B
+ for <buildroot@buildroot.org>; Tue,  4 Aug 2026 19:15:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WVn-jle0nohL for <buildroot@buildroot.org>;
- Tue,  4 Aug 2026 19:15:34 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A197980A78
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id A197980A78
- for <buildroot@buildroot.org>; Tue,  4 Aug 2026 19:15:34 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3DD208C55A; Tue,  4 Aug 2026 19:14:49 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 4 Aug 2026 21:14:26 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d80d38a551ca6c8a027d541d47abe440639c4976
-X-Git-Newrev: ed980191ebc1fbc8bba3aee4e003104b1c22e0ba
-X-Patchwork-Hint: ignore
-Message-Id: <20260804191449.3DD208C55A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] docs/manual: fix indentation in pkg-hare
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id L-dF__Q-fFCg for <buildroot@buildroot.org>;
+ Tue,  4 Aug 2026 19:15:49 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 8052F60634
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8052F60634
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8052F60634
+ for <buildroot@buildroot.org>; Tue,  4 Aug 2026 19:15:48 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id AB640B00565;
+ Tue,  4 Aug 2026 21:15:43 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Tue, 04 Aug 2026 21:15:43 +0200
+MIME-Version: 1.0
+Date: Tue, 04 Aug 2026 21:15:43 +0200
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: buildroot@buildroot.org, Francois Perrad <francois.perrad.86@gmail.com>
+In-Reply-To: <20260804184256.361490-1-yann.morin.1998@free.fr>
+References: <20260804184256.361490-1-yann.morin.1998@free.fr>
+User-Agent: Webmail Free/1.6.17
+Message-ID: <3b08ab1e580f128f5f18b721c1dac521@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1785870945;
+ bh=eZ7/Xf0yC8XNue1PM3rPRXzPyn20hiAL1fV0u+Gx7Ps=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=esMtq/VNz7Dj70oc5fxDrW6H+wnQqfraBE6Zdfa7EGj2ilnaLTshjZHKqHooDe7iO
+ 9EHIUL0bc1aXcXFhTVsKrxMcdm0Pbk8WJyJswX2vEVHC6+qOvY8dasPC0Up71jXuvM
+ WXX7a3V5EWiP5s5LNvVVbc2f+cewaPo2qA98ydstVRqm/cN4aZGgL3pP5562avpK4J
+ sPeC55Hw5fkj/DYNX1S0oKlaPltkNJuJ23c3uDWTxvASo075VcV8biZGrKPKD/B7YM
+ xG2c/b4KYGIQmBVYbSc8Bndz7PkJs7wiYpU4UkNWYtet0aCnBQaVbP1rtqSvBI0pUh
+ qIbvdPawlCj2g==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=esMtq/VN
+Subject: Re: [Buildroot] [PATCH] docs/manual: fix indentation in pkg-hare
  example
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -71,37 +96,18 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/ed980191ebc1fbc8bba3aee4e003104b1c22e0ba
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 04/08/2026 20:42, Yann E. MORIN via buildroot wrote:
+> Fixes: 44d38432343e (package/pkg-hare.mk: new infrastructure)
+> 
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> Cc: Francois Perrad <francois.perrad.86@gmail.com>
 
-Fixes: 44d38432343e (package/pkg-hare.mk: new infrastructure)
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Francois Perrad <francois.perrad.86@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- docs/manual/adding-packages-hare.adoc | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/docs/manual/adding-packages-hare.adoc b/docs/manual/adding-packages-hare.adoc
-index b52d953b2e..e61d524acb 100644
---- a/docs/manual/adding-packages-hare.adoc
-+++ b/docs/manual/adding-packages-hare.adoc
-@@ -13,7 +13,7 @@ The +Config.in+ file of Hare-based package 'hare-foo' should contain:
- 01: config BR2_PACKAGE_HARE_FOO
- 02: 	bool "hare-foo"
- 03: 	depends on BR2_PACKAGE_HOST_HARE_TARGET_ARCH_SUPPORTS
--04:	select BR2_PACKAGE_HOST_HARE
-+04: 	select BR2_PACKAGE_HOST_HARE
- 05: 	help
- 06: 	  This is a comment that explains what foo is.
- 07:
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
