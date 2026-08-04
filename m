@@ -4,83 +4,81 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5CBA6C55822
-	for <buildroot@archiver.kernel.org>; Tue,  4 Aug 2026 16:51:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8AC91C55184
+	for <buildroot@archiver.kernel.org>; Tue,  4 Aug 2026 18:43:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9704960776;
-	Tue,  4 Aug 2026 16:51:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 43C0B605B7;
+	Tue,  4 Aug 2026 18:43:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rm-tn0o-_OdS; Tue,  4 Aug 2026 16:51:47 +0000 (UTC)
+ id XUlg9Mo6HY97; Tue,  4 Aug 2026 18:43:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8732D6060B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6A27560600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1785862307;
-	bh=kMMuqw6lurFeysYA+qn/zPcPFmPZC0f4Po+DuLQDvqg=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=dSnRzGkx6d56/myFcCj1jcV6kinOj0sm0UTNx2awiTWOJoEkztZCY6xGUaopOmmW7
-	 RD6kRglw/Op1dwuF3TpbuhEv7Fu63u6b3Rvax68O2HYcN2QSyPB8mjc4zn9lDSCxoc
-	 5Wzv5A6Ns3KpzXc8jpl+GmwmDigBaYIQfqVg2v5sJ9B5t046QswdjHS03Xrbrb+BE3
-	 vZESS50Wo1gUEYN8FLjS3vaBwuGlBsA9FK098cnLhl2ajpAvtGKRDWheEND3GiGpb0
-	 d3e6inv3NAUF3Z21AiSpr/3D4DJqStzPEwZBljDlbe64KRk2h/cScx8G3D/MXXxhy+
-	 6guZOcOIhZPRg==
+	s=default; t=1785868992;
+	bh=rLfCzHjOLkSNRpccib0cje7CX3V2fILXiXSOX4FvgfA=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=WFyq2oGg59mHR34NdRUxYFnCfQwRqfBDHJYnbuIMGAyAvFq9Jrh4O3G5riejgBi1P
+	 JWKR43EHkDr0wqlNHqAwWWgx4hHEwB1d7iOH33r6Cv/NV2CoK4rgux59u4EYEpfQ1H
+	 wcQ0lDSKbTu6lvn0su9gXUkwHZQ2pei7lvIwlcsjem4FktooLX2M6A3TxycJTnxSdd
+	 diIjkCXW6vPDzokHY/cjwvM0VZMjbjadV+CoOPT5NlmG6frxp/82fBDFvBZx8oDqQU
+	 2kNKW9kITar3zBlSWtt8qFJXt4fdsdgPrAOhhK2UHqG+dJ9PpWdKgJyBw2PIUN/2se
+	 KmKTd2fIFwbfQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8732D6060B;
-	Tue,  4 Aug 2026 16:51:47 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 3329C2AA
- for <buildroot@buildroot.org>; Tue,  4 Aug 2026 16:51:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6A27560600;
+	Tue,  4 Aug 2026 18:43:12 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id C53C4288
+ for <buildroot@buildroot.org>; Tue,  4 Aug 2026 18:43:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 195FE40089
- for <buildroot@buildroot.org>; Tue,  4 Aug 2026 16:51:46 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B9DF060600
+ for <buildroot@buildroot.org>; Tue,  4 Aug 2026 18:43:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eM0bhz1N3N7E for <buildroot@buildroot.org>;
- Tue,  4 Aug 2026 16:51:44 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B014940064
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B014940064
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B014940064
- for <buildroot@buildroot.org>; Tue,  4 Aug 2026 16:51:44 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id 7A2AC200435;
- Tue,  4 Aug 2026 18:51:40 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Tue, 04 Aug 2026 18:51:40 +0200
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id z6RkunSLUjSv for <buildroot@buildroot.org>;
+ Tue,  4 Aug 2026 18:43:10 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
+ helo=smtp4-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org DA518605B7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DA518605B7
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id DA518605B7
+ for <buildroot@buildroot.org>; Tue,  4 Aug 2026 18:43:09 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:93aa:5000:c0e7:5e2f:eef4:db82])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPSA id 5941219F57B;
+ Tue,  4 Aug 2026 20:43:04 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Tue, 04 Aug 2026 20:42:56 +0200
+To: buildroot@buildroot.org
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Francois Perrad <francois.perrad.86@gmail.com>
+Date: Tue,  4 Aug 2026 20:42:56 +0200
+Message-ID: <20260804184256.361490-1-yann.morin.1998@free.fr>
+X-Mailer: git-send-email 2.55.0
 MIME-Version: 1.0
-Date: Tue, 04 Aug 2026 18:51:40 +0200
-To: Ye He <ye.he@amlogic.com>
-Cc: buildroot@buildroot.org, Eric Le Bihan <eric.le.bihan.dev@free.fr>
-In-Reply-To: <20251224021947.2350743-1-ye.he@amlogic.com>
-References: <20251224021947.2350743-1-ye.he@amlogic.com>
-User-Agent: Webmail Free/1.6.17
-Message-ID: <562154be8967a992133865e130b9d4c0@free.fr>
-X-Sender: ju.o@free.fr
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1785862302;
- bh=YYxEvuTjW2SDb0b33NVZYwnwalFCsxSRUG3k9j3sirM=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=VXJCykcjYKNzODI+9UU2a9eS5/kOoQb0Nl6cNiC98PjJLKlZSQf2YZKiVugVLzJCa
- k+xBJr3TDW+xPbJpPoE/ptxNDOlazEAUMyL0XxpEPtPpr6Em5AJDx3/nBAxGL9fZ/C
- JXJH/WIExDxRZyapGgXQIe5rzphAqizlru0RbPBsTVwa9N94Yn6vhCyt9SZEamxmmM
- flxf7LCxwlQPWBoXX+r55yT80wGRt7w/AAV/FAlAJEDe2mBdVkg1WvnCBkuwsHnwky
- aqlMt28j57T19SJZ0XA8r88NNddcYdCR8l1rVzlqg579VwzkvywqxSLqjiane0G0LM
- aimuEuAiqBT5w==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=free.fr; s=smtp-20201208; t=1785868987;
+ bh=NZ+u6NuL9fKDaI0B9KVSddqhAfoX5zqO0glDkmaQ2iY=;
+ h=From:To:Cc:Subject:Date:From;
+ b=cW33ELM8fEeyYbqlY1Z79datB42fAn9adjkf4TT+OP3VO/OACsbtpp2ssHXo9pL1V
+ Jf+RYPRGaqZn6q+2lm2slceLhR3qKKcaS5mr8ykT6Q6o0e6XSWI7hYMsW3auYbA+vp
+ GMYr3+BPjzjxYmegOocodSs++t8Kn88SZbVoRONk8cV2fw6KxV7lozR+VE+YeFVYMV
+ XsFiHNxIiiES7svvYi55QShvRFyVlBrw2dWeiXOq+J4W1E70sgDuTEzOCXsrKjjctT
+ ThzNmL8LCm5c5a0MfeZ+B07YB1CBpPyDMaDLjTyLRgFYyovRFLOuAHfFIpRyBjd1ci
+ Xq+B8p0fPXr+w==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=VXJCykcj
-Subject: Re: [Buildroot] [PATCH] package/liblc3: new package
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=cW33ELM8
+Subject: [Buildroot] [PATCH] docs/manual: fix indentation in pkg-hare example
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -92,28 +90,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+From: "Yann E. MORIN via buildroot" <buildroot@buildroot.org>
+Reply-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Ye He,
+Fixes: 44d38432343e (package/pkg-hare.mk: new infrastructure)
 
-Thanks for the patch.
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Francois Perrad <francois.perrad.86@gmail.com>
+---
+ docs/manual/adding-packages-hare.adoc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On 24/12/2025 03:19, Ye He via buildroot wrote:
-> Signed-off-by: Ye He <ye.he@amlogic.com>
+diff --git a/docs/manual/adding-packages-hare.adoc b/docs/manual/adding-packages-hare.adoc
+index b52d953b2e..e61d524acb 100644
+--- a/docs/manual/adding-packages-hare.adoc
++++ b/docs/manual/adding-packages-hare.adoc
+@@ -13,7 +13,7 @@ The +Config.in+ file of Hare-based package 'hare-foo' should contain:
+ 01: config BR2_PACKAGE_HARE_FOO
+ 02: 	bool "hare-foo"
+ 03: 	depends on BR2_PACKAGE_HOST_HARE_TARGET_ARCH_SUPPORTS
+-04:	select BR2_PACKAGE_HOST_HARE
++04: 	select BR2_PACKAGE_HOST_HARE
+ 05: 	help
+ 06: 	  This is a comment that explains what foo is.
+ 07:
+-- 
+2.55.0
 
-For your info, I merged another patch that is introducing
-the same package. Your submission had some minor issues
-that were not present in the other patch. See:
-https://gitlab.com/buildroot.org/buildroot/-/commit/d046fd08833f91a1ed3bdfdb6394dc3b70fd92b0
-
-Best regards,
-
-Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
