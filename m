@@ -4,60 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B29CDC55822
-	for <buildroot@archiver.kernel.org>; Tue,  4 Aug 2026 20:29:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6E4AC55ABA
+	for <buildroot@archiver.kernel.org>; Tue,  4 Aug 2026 20:30:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6DA51405D0;
-	Tue,  4 Aug 2026 20:29:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5DC8C4075C;
+	Tue,  4 Aug 2026 20:30:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RkHR60Zvuj0W; Tue,  4 Aug 2026 20:29:20 +0000 (UTC)
+ id 6zGHVh-RFayG; Tue,  4 Aug 2026 20:30:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 24A6640608
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 37CC24060A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1785875360;
-	bh=ZW0Pkid37kGXYl54DJCUD8i3QSsyrzlF7uJwpYVYqQI=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=C3SAhtBnWxXpA85V1QvL4csYMQm9QmpvmB+tn4ut/ZmMT99wdV9tmipGmCZplkT0U
-	 bD9A5MlgUlD8WIRbxDiw/kiBTCmIAkZS4cwSXWRmgoGHecSWL5QTmnxLTWulT0Eaw+
-	 z2WbxE8B5Y9Hj5kD4boNk1T0Gn/1FGwHzWrZEH8EDCGVom1Ene0VoznHmL8LrvCp+W
-	 3ZsPNqCp5C4X1KfdJZ5fM65lkZh3waxKuGWzd86f3rVYYfDOgSio4JHqpR3zTNbS1p
-	 Pm1l5+sYsu7BDgH1To3kqQve3riOWyy5N3WmkCCqndEajq0F/PEaT+YW2MlXdMqeBA
-	 X1oTAfto/h5ig==
+	s=default; t=1785875433;
+	bh=BL3ty/9fifUFHg3j14RTdR56wzL5O15oNGdcISZXkKg=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=U2A1k1PVFqTgJPCK3WjKK4U4/VY54M27C/U4MLGe4DrHczFUjKnJ0zMMc/PjG/nh/
+	 GG0/ic1UDuVeULNpvU7T1+icvQnuEAc2pUW+oe2lAICDrJLNoWfHDKvaT3pqWRkNzm
+	 9RX4LmOG2iCjeSFqBRXu7ioANVRawoI/tz59qHe8EHQFXvbNCI8hqsIYwooZ9DT25i
+	 ug53ADhFkO8/4wMLNRXDHWgLgsr27Oi7TfQmn2hHDJm7bFsjFDQo1iO9ChRYWsnJow
+	 RbFCt0Kkw+S1m4xUeAWj/ebWvNrLhh8dKAnJ3CajjQNqvL6+qu/wqshZDawN0mKwyO
+	 c68cTFayQ2Ksw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 24A6640608;
-	Tue,  4 Aug 2026 20:29:20 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id A1B58288
- for <buildroot@buildroot.org>; Tue,  4 Aug 2026 20:29:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 37CC24060A;
+	Tue,  4 Aug 2026 20:30:33 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id BF4FD288
+ for <buildroot@buildroot.org>; Tue,  4 Aug 2026 20:30:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 93CAC40608
- for <buildroot@buildroot.org>; Tue,  4 Aug 2026 20:29:18 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A569860787
+ for <buildroot@buildroot.org>; Tue,  4 Aug 2026 20:30:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gxj1dumnZtqw for <buildroot@buildroot.org>;
- Tue,  4 Aug 2026 20:29:17 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A0938405D0
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A0938405D0
- for <buildroot@buildroot.org>; Tue,  4 Aug 2026 20:29:17 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6080A8C592; Tue,  4 Aug 2026 20:28:32 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 4 Aug 2026 22:16:09 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c8bf258e5bcc268eaab6fa9731a230b20fabd9aa
-X-Git-Newrev: 35d3927e85645d0dbfe608bd5954bfa6704200e8
-X-Patchwork-Hint: ignore
-Message-Id: <20260804202832.6080A8C592@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/uclibc: fix for noMMU targets
- using FLAT binaries
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ehQl0cf5bui6 for <buildroot@buildroot.org>;
+ Tue,  4 Aug 2026 20:30:31 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 04C8660600
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 04C8660600
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 04C8660600
+ for <buildroot@buildroot.org>; Tue,  4 Aug 2026 20:30:30 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id 9454F13F879;
+ Tue,  4 Aug 2026 22:30:27 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Tue, 04 Aug 2026 22:30:27 +0200
+MIME-Version: 1.0
+Date: Tue, 04 Aug 2026 22:30:27 +0200
+To: Waldemar Brodkorb <wbx@openadk.org>
+Cc: buildroot@buildroot.org
+In-Reply-To: <ai6stJaA2hWFBHDW@waldemar-brodkorb.de>
+References: <ai6stJaA2hWFBHDW@waldemar-brodkorb.de>
+User-Agent: Webmail Free/1.6.17
+Message-ID: <0101c3458fbf1dcc8df600e6c1718bb8@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1785875428;
+ bh=tbSLCMtJapxKpmMv+2P1UXnjukhQdMveHEiQH6ul2uw=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=arDLQe2vtGvlRWuEUJjjkVx0+18NnZTnrm8olUbrJ9zdZK5R2kr53jXdBfY+mnant
+ /dl88sqKDgq7AssQ/NY+fBJ09AMWIfQBB8iewgXN/Lw7ZiOcSuUeTYW/ra4iSxY5D/
+ NrfqWl+y8H0YeRJpd/L03DsLYQ4zhio0CRbwBTPvs2QI/A39Fb8ha8atCygNyyJu3r
+ GgoUqVAz+GZHpAqsox2XQsDLC3TJZye+iFo9ccpCjk1Jc6pmmbXb5xSdOmuY5I3gEs
+ TT7smFYPXWiFmhZz07SAH7QsyAR8jLY4nP7EtLCkgUK4ADWam+VeNyjpw1V87hvvDW
+ Xm30nEP1f5p8Q==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=arDLQe2v
+Subject: Re: [Buildroot] [PATCH] package/uclibc: fix for noMMU targets using
+ FLAT binaries
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,196 +95,15 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/35d3927e85645d0dbfe608bd5954bfa6704200e8
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 14/06/2026 15:29, Waldemar Brodkorb wrote:
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- ...store-PAGE_SHIFT-fallback-for-binfmt_flat.patch | 169 +++++++++++++++++++++
- 1 file changed, 169 insertions(+)
-
-diff --git a/package/uclibc/0001-pagesize-restore-PAGE_SHIFT-fallback-for-binfmt_flat.patch b/package/uclibc/0001-pagesize-restore-PAGE_SHIFT-fallback-for-binfmt_flat.patch
-new file mode 100644
-index 0000000000..fdfd286042
---- /dev/null
-+++ b/package/uclibc/0001-pagesize-restore-PAGE_SHIFT-fallback-for-binfmt_flat.patch
-@@ -0,0 +1,169 @@
-+From 7730f0d05a51cd89a7123bd696e4638c3c035d7b Mon Sep 17 00:00:00 2001
-+From: Ramin Moussavi <ramin.moussavi@yacoub.de>
-+Date: Fri, 29 May 2026 19:47:34 +0200
-+Subject: [PATCH] pagesize: restore PAGE_SHIFT fallback for binfmt_flat (no
-+ auxv)
-+
-+binfmt_flat builds the initial process stack from only argc/argv/envp;
-+it does not place an auxiliary vector. Commit 487af1498 ("drop
-+__pagesize, make _dl_pagesize the single source of truth") assumed
-+AT_PAGESZ is always supplied by the kernel and changed the _dl_pagesize
-+fallback from PAGE_SIZE to 0. On noMMU/FLAT targets that leaves
-+_dl_pagesize == 0, so every mmap-based malloc rounds its length to 0,
-+mmap() fails with EINVAL and the first allocation aborts -- busybox dies
-+with "init: out of memory" before it can run anything.
-+
-+Restore the fallback that arc/nds32 bits/uClibc_page.h have always
-+documented ("_dl_pagesize = auxvt[AT_PAGESZ].a_un.a_val ? : PAGE_SIZE"),
-+expressed as (1UL << PAGE_SHIFT) so it keeps working now that PAGE_SIZE
-+is no longer defined in <bits/uClibc_page.h>:
-+
-+  - Seed _dl_pagesize with (1UL << PAGE_SHIFT) at its definition in the
-+    two translation units that own the symbol: the dynamic linker
-+    (ldso.c, used by ld.so) and the static-libc support (dl-support.c).
-+  - Override it from AT_PAGESZ only when that entry is actually present
-+    (a_type == AT_PAGESZ) and non-zero, instead of unconditionally
-+    resetting it to 0.
-+
-+libdl.c (!SHARED) previously also defined _dl_pagesize. That was
-+harmless while dl-support.c's definition was tentative (the two merged),
-+but giving both a non-zero initializer makes them two strong .data
-+definitions, which collide as "multiple definition of `_dl_pagesize'"
-+when a static link pulls both objects out of libc.a (e.g. NPTL builds
-+that drag in libdl). Drop the redundant libdl.c definition: dl-support.c
-+is always co-linked from libc.a and provides the symbol.
-+
-+For FLAT, skip the aux-vector scan in __uClibc_main() altogether: there
-+is nothing valid past the envp NULL, so _dl_aux_init() is not called and
-+_dl_auxv_start stays NULL. Guard getauxval()'s slow-path loop against
-+that NULL so a lookup of an uncached (>= AUX_MAX_AT_ID) tag returns
-+ENOENT instead of dereferencing NULL.
-+
-+Verified on riscv32 noMMU/FLAT (gcc 15.2.0, linux 6.18.33): busybox
-+boots as init and the testsuite runs (was "init: out of memory"
-+before). Dynamic + NPTL links are unaffected -- x86_64 NPTL static
-+busybox links cleanly and ld-uClibc loads the testsuite.
-+
-+Upstream: https://gogs.waldemar-brodkorb.de/oss/uclibc-ng/commit/7730f0d05a51cd89a7123bd696e4638c3c035d7b
-+Signed-off-by: Ramin Moussavi <ramin.moussavi@yacoub.de>
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-+---
-+ ldso/ldso/ldso.c                    | 7 ++++---
-+ ldso/libdl/libdl.c                  | 2 +-
-+ libc/misc/auxvt/getauxval.c         | 3 ++-
-+ libc/misc/elf/dl-support.c          | 7 ++++---
-+ libc/misc/internals/__uClibc_main.c | 7 +++++--
-+ 5 files changed, 16 insertions(+), 10 deletions(-)
-+
-+diff --git a/ldso/ldso/ldso.c b/ldso/ldso/ldso.c
-+index 9c00e4a61..55f7d7e45 100755
-+--- a/ldso/ldso/ldso.c
-++++ b/ldso/ldso/ldso.c
-+@@ -52,7 +52,7 @@ char *_dl_library_path         = NULL;	/* Where we look for libraries */
-+ char *_dl_preload              = NULL;	/* Things to be loaded before the libs */
-+ #endif
-+ int _dl_errno                  = 0;	/* We can't use the real errno in ldso */
-+-size_t _dl_pagesize            = 0;	/* Store the page size for use later */
-++size_t _dl_pagesize            = (1UL << PAGE_SHIFT);	/* fallback; overridden from AT_PAGESZ if present */
-+ struct r_debug *_dl_debug_addr = NULL;	/* Used to communicate with the gdb debugger */
-+ void *(*_dl_malloc_function) (size_t size) = NULL;
-+ void (*_dl_free_function) (void *p) = NULL;
-+@@ -460,8 +460,9 @@ void *_dl_get_ready_to_run(struct elf_resolve *tpnt, DL_LOADADDR_TYPE load_addr,
-+ 
-+ 	_dl_memset(app_tpnt, 0, sizeof(*app_tpnt));
-+ 
-+-	/* Store the page size for later use */
-+-	_dl_pagesize = (_dl_auxvt[AT_PAGESZ].a_un.a_val) ? (size_t) _dl_auxvt[AT_PAGESZ].a_un.a_val : 0;
-++	/* Override the fallback only if AT_PAGESZ is present and non-zero */
-++	if (_dl_auxvt[AT_PAGESZ].a_type == AT_PAGESZ && _dl_auxvt[AT_PAGESZ].a_un.a_val)
-++		_dl_pagesize = (size_t) _dl_auxvt[AT_PAGESZ].a_un.a_val;
-+ 	/* Make it so _dl_malloc can use the page of memory we have already
-+ 	 * allocated.  We shouldn't need to grab any more memory.  This must
-+ 	 * be first since things like _dl_dprintf() use _dl_malloc()...
-+diff --git a/ldso/libdl/libdl.c b/ldso/libdl/libdl.c
-+index b78d6d9a3..f28801d7b 100644
-+--- a/ldso/libdl/libdl.c
-++++ b/ldso/libdl/libdl.c
-+@@ -109,7 +109,7 @@ void (*_dl_free_function) (void *p);
-+ char *_dl_library_path         = NULL;         /* Where we look for libraries */
-+ #endif
-+ int _dl_errno                  = 0;         /* We can't use the real errno in ldso */
-+-size_t _dl_pagesize            = 0; /* Store the page size for use later */
-++/* _dl_pagesize is provided by dl-support.c (always co-linked from libc.a) */
-+ /* This global variable is also to communicate with debuggers such as gdb. */
-+ struct r_debug *_dl_debug_addr = NULL;
-+ 
-+diff --git a/libc/misc/auxvt/getauxval.c b/libc/misc/auxvt/getauxval.c
-+index 7610b7e5c..4af637071 100755
-+--- a/libc/misc/auxvt/getauxval.c
-++++ b/libc/misc/auxvt/getauxval.c
-+@@ -33,7 +33,8 @@ unsigned long int __getauxval (unsigned long int __type)
-+ 	}
-+ 
-+ 	// Otherwise we have to iterate the auxiliary vector.
-+-	for (ElfW(auxv_t) *entry = _dl_auxv_start; entry->a_type != AT_NULL; entry++)
-++	// _dl_auxv_start is NULL when there is no aux vector (e.g. FLAT).
-++	for (ElfW(auxv_t) *entry = _dl_auxv_start; entry && entry->a_type != AT_NULL; entry++)
-+ 		if (entry->a_type == __type)
-+ 			return entry->a_un.a_val;
-+ 
-+diff --git a/libc/misc/elf/dl-support.c b/libc/misc/elf/dl-support.c
-+index 738f0ed3a..7ad57c090 100644
-+--- a/libc/misc/elf/dl-support.c
-++++ b/libc/misc/elf/dl-support.c
-+@@ -30,7 +30,7 @@ void (*_dl_init_static_tls) (struct link_map *) = &_dl_nothread_init_static_tls;
-+ 
-+ ElfW(Phdr) *_dl_phdr;
-+ size_t _dl_phnum;
-+-size_t _dl_pagesize;
-++size_t _dl_pagesize = (1UL << PAGE_SHIFT);	/* fallback; overridden from AT_PAGESZ if present */
-+ 
-+ ElfW(auxv_t) _dl_auxvt[AUX_MAX_AT_ID];
-+ ElfW(auxv_t) *_dl_auxv_start;
-+@@ -52,8 +52,9 @@ void internal_function _dl_aux_init (ElfW(auxv_t) *av)
-+    /* Get the number of program headers from the aux vect */
-+    _dl_phnum = (size_t) _dl_auxvt[AT_PHNUM].a_un.a_val;
-+ 
-+-   /* Get the pagesize from the aux vect */
-+-   _dl_pagesize = (_dl_auxvt[AT_PAGESZ].a_un.a_val) ? (size_t) _dl_auxvt[AT_PAGESZ].a_un.a_val : 0;
-++   /* Override the fallback only if AT_PAGESZ is present and non-zero */
-++   if (_dl_auxvt[AT_PAGESZ].a_type == AT_PAGESZ && _dl_auxvt[AT_PAGESZ].a_un.a_val)
-++      _dl_pagesize = (size_t) _dl_auxvt[AT_PAGESZ].a_un.a_val;
-+ }
-+ 
-+ #if defined(USE_TLS) && USE_TLS
-+diff --git a/libc/misc/internals/__uClibc_main.c b/libc/misc/internals/__uClibc_main.c
-+index 35cb73fcc..549606505 100644
-+--- a/libc/misc/internals/__uClibc_main.c
-++++ b/libc/misc/internals/__uClibc_main.c
-+@@ -369,7 +369,7 @@ void __uClibc_main(int (*main)(int, char **, char **), int argc,
-+ 		    char **argv, void (*app_init)(void), void (*app_fini)(void),
-+ 		    void (*rtld_fini)(void), void *stack_end attribute_unused)
-+ {
-+-#ifndef SHARED
-++#if !defined(SHARED) && !defined(__UCLIBC_FORMAT_FLAT__)
-+     unsigned long *aux_dat;
-+ #endif
-+ 
-+@@ -395,7 +395,9 @@ void __uClibc_main(int (*main)(int, char **, char **), int argc,
-+     }
-+ 
-+ #ifndef SHARED
-+-    /* Pull stuff from the ELF header when possible */
-++# ifndef __UCLIBC_FORMAT_FLAT__
-++    /* Pull stuff from the ELF header when possible. binfmt_flat passes no
-++       aux vector, so skip this for FLAT. */
-+     aux_dat = (unsigned long*)__environ;
-+     while (*aux_dat) {
-+ 	aux_dat++;
-+@@ -404,6 +406,7 @@ void __uClibc_main(int (*main)(int, char **, char **), int argc,
-+     /* Get the program headers (_dl_phdr) from the aux vector
-+        It will be used into __libc_setup_tls. */
-+     _dl_aux_init ((ElfW(auxv_t) *)aux_dat);
-++# endif
-+ #endif
-+ 
-+     /* We need to initialize uClibc.  If we are dynamically linked this
-+-- 
-+2.47.3
-+
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
