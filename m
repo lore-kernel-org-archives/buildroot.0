@@ -4,64 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B94E4C55822
-	for <buildroot@archiver.kernel.org>; Tue,  4 Aug 2026 12:49:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B90BC55838
+	for <buildroot@archiver.kernel.org>; Tue,  4 Aug 2026 12:55:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 68AC36074D;
-	Tue,  4 Aug 2026 12:49:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0B27C605E3;
+	Tue,  4 Aug 2026 12:55:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id j4H-DXw6a6DL; Tue,  4 Aug 2026 12:49:37 +0000 (UTC)
+ id SqPYW3TWUNvl; Tue,  4 Aug 2026 12:55:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 88EC4605FA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 19365605FA
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1785847777;
-	bh=DfI01qGqlCd11eN+DJLRP95NC7QvlQ/Yy5zhtYmPV4Y=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=XNfIoZY/X0a/oZd9xEYiVYZb4rKUI96AE1cjpXcyzkEAxtLopUGKubHrtodXuyxWX
-	 P+xjcElleTw3B3wZfaT+xiGiFZ/qo35zTJ3xXTe9bUE2GozgeOwBFmigkRoGNFRtZw
-	 GUgR5rwdmdI4dF2NI2NmfuD7gAPXnsXwSoGLpb7aCC08BZf22W09VrldU5H/qAQKwT
-	 JNA08SeBTTcnycDIpdY2Mh5d+kfNsnHqaoTVZnaBO2ZY2aqqsCZACl6fI2dqEbq6wr
-	 U76iiNrfCw/mS608ZJsYowohnUvXctgWKPvDfppvsQO/ZKCj43bMQATONFE9y8zuRN
-	 StQvgL7pe238g==
+	s=default; t=1785848122;
+	bh=/KeaKFQmpswUDtr9o4fE0FJfN4I97o7FTupLK8gSVyg=;
+	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	 From;
+	b=GkANfCwVzQGVvKhfK79JO2cn0dpxvoLI2RBOp5L74wO/dDaY2gBq4wysadrGg2zFg
+	 7nF1ibmnE/qwDcWU7t6/RfvkOk+r2v5mcV8kVVs64aUIq96lVQqkiJgb7nqk+jQDQg
+	 tTkCaCeSIdeSqWOlrA0ZFWvMD4o8EOAjx4pZu4VuxuB7oYp7N/uu891GOF2sHu00Wx
+	 rZ+98nSoWUjJfDAQVsTQ/P+V3WCGWcdjGJ9H1gBD+GLGCdTmhe8B8Q5d6MzMMI1e3A
+	 olYm6s7Ebfw1wlT6AAAgRIZ7z1wpKakQYVrMkhQ1MOP4hvIYgWU5wDSKMjaLVmnkon
+	 2jP4wmU5oz7Tw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 88EC4605FA;
-	Tue,  4 Aug 2026 12:49:37 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0118326C
- for <buildroot@buildroot.org>; Tue,  4 Aug 2026 12:49:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 19365605FA;
+	Tue,  4 Aug 2026 12:55:22 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 24A832AA
+ for <buildroot@buildroot.org>; Tue,  4 Aug 2026 12:55:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DB514406E6
- for <buildroot@buildroot.org>; Tue,  4 Aug 2026 12:49:35 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0B56680AE3
+ for <buildroot@buildroot.org>; Tue,  4 Aug 2026 12:55:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dxMBu2kpqHM5 for <buildroot@buildroot.org>;
- Tue,  4 Aug 2026 12:49:35 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9yMicp6b1BxT for <buildroot@buildroot.org>;
+ Tue,  4 Aug 2026 12:55:19 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.22;
  helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A6F77406E2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A6F77406E2
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 80ED180AA3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 80ED180AA3
 Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A6F77406E2
- for <buildroot@buildroot.org>; Tue,  4 Aug 2026 12:49:33 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 80ED180AA3
+ for <buildroot@buildroot.org>; Tue,  4 Aug 2026 12:55:18 +0000 (UTC)
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from client.hidden.invalid by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mnpnm-1xFqpX0EMk-00bFZD; Tue, 04
- Aug 2026 14:49:29 +0200
-Message-ID: <039a4a84-fed9-4c9a-a622-1d31d2697ab4@gmx.de>
-Date: Tue, 4 Aug 2026 14:49:28 +0200
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1N8GMq-1wvPds0EqW-00uR41; Tue, 04
+ Aug 2026 14:55:16 +0200
+Message-ID: <7735e0e3-c2ff-4ee4-b554-f00341bfa3e0@gmx.de>
+Date: Tue, 4 Aug 2026 14:55:15 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Jean-Michel Hautbois <jeanmichel.hautbois@yoseli.org>,
- buildroot@buildroot.org
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Adrian Perez de Castro <aperez@igalia.com>
-References: <20260604051221.317172-1-jeanmichel.hautbois@yoseli.org>
- <20260607085844.1334630-1-jeanmichel.hautbois@yoseli.org>
+To: Alsey Coleman Miller <alseycmiller@gmail.com>, buildroot@buildroot.org,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20260804104730.433500-1-alseycmiller@gmail.com>
 Content-Language: en-US, de-DE-1901, de-DE
 Autocrypt: addr=fiona.klute@gmx.de; keydata=
  xsFNBFrLsicBEADA7Px5KipL9zM7AVkZ6/U4QaWQyxhqim6MX88TxZ6KnqFiTSmevecEWbls
@@ -106,120 +103,121 @@ Autocrypt: addr=fiona.klute@gmx.de; keydata=
  bCn+vBDsJwD9Hcht1eVRxnIq745SQ0naL48Q3HGpKdXZpJoBQZ8bSAFhRSb3m+P4PE272rLY
  6FCkqS+UeX7RBpPkkIDoL7WS9HdvDHuQ751D56WkTnIpoF+sgW6tOEcfgFrYf3rVvh6G3B8S
  FPSOJuHYnwzMFrDNxQQKb0uS/j1s2dnlS55MouCvd5pShM5iRFzE7k3CMeS4NkhFim0=
-In-Reply-To: <20260607085844.1334630-1-jeanmichel.hautbois@yoseli.org>
-X-Provags-ID: V03:K1:Y+j7/7dTK//QuACcpdJPo/m25az+C/5bBmwy41xuLgWndkt0sYY
- DMs++OaaEpD7XOxeZ45DFzuJIWsxYaHdektcDojkALMonic7GLKavccpzZBxY7hZPKDd5Oi
- SQw/dkzYUKJT71o3h75XuW6gdY4mVltff1pv4MLWzsskNUdv8S5tmUFYEfkaWEKl0t23moO
- RlACDI/9eh9jCzCUhhhFg==
-UI-OutboundReport: notjunk:1;M01:P0:qo9pN/S1wfo=;cxoKGnB2qnMgBRhT+dhV5ykIndg
- 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
+In-Reply-To: <20260804104730.433500-1-alseycmiller@gmail.com>
+X-Provags-ID: V03:K1:RvtanCCFpPQqEyIBBs7OVFBPNrMmbCkVeQrTnmnns6WJ+YJf6e4
+ qsg0xBIasUI6B4Bsz5ZQThkSus1R99FzaMNudMTUSnoCOtx+9ez33VPvNwAPz265bWS0pA2
+ 08lZmnVh30gbs2zGW9KQo3oVNlqbTCphGsmI6FLx1aNekfBttbOGZbVT4MYuX5zH3YI7eIe
+ u2yiwkM7C+ecjBwNyeFVQ==
+UI-OutboundReport: notjunk:1;M01:P0:u8d58ptsvoc=;98NeumUemuYmsTyU7/MnH2cZaVg
+ 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
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmx.de; 
- s=s31663417; t=1785847769; x=1786452569; i=fiona.klute@gmx.de;
- bh=dAN+/Y6xKOeJ+xrMN2K7jxwJ1jUAdEe9Z+9lz3Peydw=;
- h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+ s=s31663417; t=1785848116; x=1786452916; i=fiona.klute@gmx.de;
+ bh=la+8irLJnlOiUiM7j3AY+2wV53basSODQFH5GrQbeA0=;
+ h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:
  References:From:In-Reply-To:Content-Type:
  Content-Transfer-Encoding:cc:content-transfer-encoding:
  content-type:date:from:message-id:mime-version:reply-to:subject:
  to;
- b=KhHAs/mx8RFu3v/ElBD9plB5E3CUboEkE3lWDE0QPTDENlF8FObBufciAuDFlcvH
- 4JgawQXQzn6y7L80kp93QnjWslCvTHxOfi9I5Z3vLKmfUsz45xLI9D/xMHCCjmaHX
- 5jiStQFQMyadtFELKwKp2m2+7rmDg/BMfbUN9Q59YE2WPRTeskOErjkiQQpgLkVl7
- yPqVS9q0FPCZD/sVbLcKOT97CZ3HVOjIgq4s2dCwjZRSymve7UQY3wZwPXG1juREY
- JxcYapUSARconCGvyUXcYtO4/XETUTcxWgmdWMIB7Fwm2Gi9qo/XGjKRZAs7g8zJ8
- 9f1lMzPVD+2qk6X9yw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=S+I720F/MqTVY3IacBsa/RARd9K0eo6zNDllayZPkCEUvT/w3fSWbzQvN+Qg/baa
+ /Jp2kQKAgkzw75vr3vvZVhimwzjulLKKKjOXdZvczJJmo91U23ONpGv5VaV9NV7wV
+ e59h1K/OcypMj4KpUVwf8LuO1KyqzM7Lm3Hc6UQzkMBZGxr/MHD8tv7nFUDQZMzqk
+ JaLYFGExQkSB3L9pdz3VueuFUVjTZ9eh9RpViRPozHaPU/nG7b1har4leO7OZf2gQ
+ LOT52kzFDSzeKMTnSsaGr1KVABublMxQ/nyulIQ95aobOoXg2JZudoqzkBr10RU+o
+ aL8nHZtN4H+3Qa9m8Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=gmx.de
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de
- header.a=rsa-sha256 header.s=s31663417 header.b=KhHAs/mx
-Subject: Re: [Buildroot] [PATCH v2] package/libglib2: disable sysprof for
- the host build
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
+ header.s=s31663417 header.b=S+I720F/
+Subject: Re: [Buildroot] [PATCH 1/1] package/libgtk4: enable introspection
+ when gobject-introspection is enabled
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -238,52 +236,78 @@ Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Am 07.06.26 um 10:58 schrieb Jean-Michel Hautbois:
-> Whether the host libglib2 picks up sysprof support depends on whether
-> libsysprof-capture happens to be installed on the build machine, which
-> makes the host build depend on the host environment. Disable sysprof
-> explicitly for the host build so the result is deterministic.
+Am 04.08.26 um 12:47 schrieb Alsey Coleman Miller:
+> libgtk4 passes -Dintrospection=disabled unconditionally, so Gtk-4.0.gir is
+> never installed. webkitgtk depends on gobject-introspection and generates
+> WebKit-6.0.gir, which includes Gtk-4.0.gir, so building both fails:
 > 
-> Keep sysprof enabled for the target build: it is useful to profile and
-> measure the performance of applications running on the target.
+>    FAILED: WebKit-6.0.gir
+>    Couldn't find include 'Gtk-4.0.gir' (search path:
+>    '['.../usr/share/gir-1.0', ...]')
 > 
-> Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@yoseli.org>
+> Tie the option to BR2_PACKAGE_GOBJECT_INTROSPECTION and add the dependency,
+> the way package/libgtk3 already does. Systems without introspection keep the
+> previous behaviour.
+> 
+> Signed-off-by: Alsey Coleman Miller <alseycmiller@gmail.com>
 
-Applied to master, thank you. I've modified the patch to make the same 
-change in package/libglib2/libglib2-bootstrap/libglib2-bootstrap.mk.
+Applied to master, thank you!
 
-Ideally we should explicitly set the sysprof option for the target 
-build, too, rather than letting autodetection do its thing. I see that 
-package/sysprof depends on libglib2 though, so there might be a 
-dependency loop. Maybe you or Adrian could look into that?
+@Fabrice, while testing this patch with utils/test-pkg I noticed 
+package/librsvg (pulled in as dependency of libgtk4) fails to build 
+using bootlin-x86-64-musl toolchain with introspection enabled. Maybe 
+you could look into that?
+
+Command:
+./utils/test-pkg -T bootlin-x86-64-musl -c libgtk4.config
+
+libgtk4.config:
+BR2_PACKAGE_PYTHON3=y
+BR2_PACKAGE_GOBJECT_INTROSPECTION=y
+BR2_PACKAGE_MESA3D=y
+BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SOFTPIPE=y
+BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+BR2_PACKAGE_LIBGLVND=y
+BR2_PACKAGE_LIBGLVND_DISPATCH_EGL=y
+BR2_PACKAGE_LIBGTK4=y
+
+Error:
+   CCLD     rsvg-convert
+   GISCAN   Rsvg-2.0.gir
+/home/fiona/br-test-pkg/bootlin-x86-64-musl/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-musl/14.3.0/../../../../x86_64-buildroot-linux-musl/bin/ld: 
+./.libs/librsvg-2.so: undefined reference to `open64'
+collect2: error: ld returned 1 exit status
 
 Best regards,
 Fiona
 
 > ---
-> Changes since v1:
->   - Disable sysprof only for the host build (HOST_LIBGLIB2_CONF_OPTS)
->     instead of disabling it globally, keeping it available on the
->     target, as suggested by Adrian Perez de Castro.
->   - Reword the commit message accordingly.
+>   package/libgtk4/libgtk4.mk | 8 +++++++-
+>   1 file changed, 7 insertions(+), 1 deletion(-)
 > 
->   package/libglib2/libglib2.mk | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-> index cae8a85a28..ae4b653a15 100644
-> --- a/package/libglib2/libglib2.mk
-> +++ b/package/libglib2/libglib2.mk
-> @@ -30,7 +30,8 @@ HOST_LIBGLIB2_CONF_OPTS = \
->   	-Dsystemtap=false \
->   	-Dxattr=false \
->   	-Dtests=false \
-> -	-Doss_fuzz=disabled
-> +	-Doss_fuzz=disabled \
-> +	-Dsysprof=disabled
+> diff --git a/package/libgtk4/libgtk4.mk b/package/libgtk4/libgtk4.mk
+> index 0d86835609..9a5ed651a8 100644
+> --- a/package/libgtk4/libgtk4.mk
+> +++ b/package/libgtk4/libgtk4.mk
+> @@ -34,11 +34,17 @@ LIBGTK4_CONF_OPTS = \
+>   	-Dsysprof=disabled \
+>   	-Dtracker=disabled \
+>   	-Dcolord=disabled \
+> -	-Dintrospection=disabled \
+>   	-Ddocumentation=false \
+>   	-Dscreenshots=false \
+>   	-Dman-pages=false
 >   
->   LIBGLIB2_DEPENDENCIES = \
->   	host-pkgconf host-libglib2 \
+> +ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
+> +LIBGTK4_CONF_OPTS += -Dintrospection=enabled
+> +LIBGTK4_DEPENDENCIES += gobject-introspection
+> +else
+> +LIBGTK4_CONF_OPTS += -Dintrospection=disabled
+> +endif
+> +
+>   ifeq ($(BR2_PACKAGE_LIBGTK4_X11),y)
+>   LIBGTK4_DEPENDENCIES += xlib_libXcursor xlib_libXi xlib_libXinerama
+>   LIBGTK4_CONF_OPTS += -Dx11-backend=true
 
 _______________________________________________
 buildroot mailing list
