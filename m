@@ -1,117 +1,121 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10ABCC55174
-	for <buildroot@archiver.kernel.org>; Wed,  5 Aug 2026 12:43:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0BCCAC55174
+	for <buildroot@archiver.kernel.org>; Wed,  5 Aug 2026 12:43:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6259D80A96;
-	Wed,  5 Aug 2026 12:43:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 32411607C5;
+	Wed,  5 Aug 2026 12:43:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zZ2EHRcbpk4f; Wed,  5 Aug 2026 12:43:08 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5xR_oXD0PcP3; Wed,  5 Aug 2026 12:43:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7871580BEC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 70477605D9
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1785933788;
-	bh=nCbegtNMD0ZXNWIiE4A7gkm6CuYzmq+aW0Qozal3meY=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=GEClpE3aaGo/k8Us1tL/GMxAzAMvLWHPEmEr5XXz/CaOuPgU63BH3Ww7AkCl25leI
-	 oAeyLisLd5qiFX5Q/i+SDunOWJ6axNcjCjTVNbyA+qPIIoxC0VChp4cR6/b7zv1c5h
-	 OFleLz8HWLVoBsFt6zX3iCxE0CObhVVLKjE1jqvlMUCQOMD/VqgIyH7XJSJI+bKvgk
-	 8gER+t6ItXkn69JTjopQmL4CBvBWlyKfGdvIHd8Ovx/kY+TtIiG9sW+8iKKVTML24c
-	 gynGS3JcRvD4cNv7y4U1lw9TB/m8BJt58uMPgkbbhsldyRcrRXI24ddGqpmN+R36EG
-	 WEm/R5N+D+lPQ==
+	s=default; t=1785933790;
+	bh=rA55TMpoSNjyzzZ5Bql6vTTlvaGrGwq6Zkp+AooDq/E=;
+	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=K3vW72kE9wOvEnw7ocivJ13qgQmW43SaZwFLUHwWZTYcqWoND6+f4yKOWMPLpXYYY
+	 JvxI/gyXxr4YdoZxTnVu4eotEMu2e3egG700OnkeI8ye42JldUqmSlNlF3xf3HRs3H
+	 0eBqqQWps0+AIAiqkkjgACeC02PwHWZpzdoVUyXN1BQgHACAsKbOiaNl1KmidQ3fkd
+	 vCVm+7jeXClBOV7Wdhfeqj3ddaD6UnEhNuS+0y+oJYyOBWNzjs9GF2LrHPb1F/R71x
+	 OXnqUh5aoBmiC6uZjep6HLq24Cg3QT8qBpu0LXjHyZC7rEp6VK1N39n6WAA57V233D
+	 V2KubWP2v/YhQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7871580BEC;
-	Wed,  5 Aug 2026 12:43:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 70477605D9;
+	Wed,  5 Aug 2026 12:43:10 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 9AE61218
- for <buildroot@buildroot.org>; Wed,  5 Aug 2026 12:43:07 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 649FD218
+ for <buildroot@buildroot.org>; Wed,  5 Aug 2026 12:43:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8CD7D40606
- for <buildroot@buildroot.org>; Wed,  5 Aug 2026 12:43:07 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 56B25404C8
+ for <buildroot@buildroot.org>; Wed,  5 Aug 2026 12:43:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MTtHjxJEZG8X for <buildroot@buildroot.org>;
+ id mFLM2M_0tNZi for <buildroot@buildroot.org>;
  Wed,  5 Aug 2026 12:43:07 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::332; helo=mail-wm1-x332.google.com;
+ client-ip=2a00:1450:4864:20::32d; helo=mail-wm1-x32d.google.com;
  envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 684D3404C8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 684D3404C8
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
- [IPv6:2a00:1450:4864:20::332])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 684D3404C8
- for <buildroot@buildroot.org>; Wed,  5 Aug 2026 12:43:06 +0000 (UTC)
-Received: by mail-wm1-x332.google.com with SMTP id
- 5b1f17b1804b1-4954aff6088so9766335e9.3
- for <buildroot@buildroot.org>; Wed, 05 Aug 2026 05:43:06 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 68D2C4056C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 68D2C4056C
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 68D2C4056C
+ for <buildroot@buildroot.org>; Wed,  5 Aug 2026 12:43:07 +0000 (UTC)
+Received: by mail-wm1-x32d.google.com with SMTP id
+ 5b1f17b1804b1-495590dde14so9846015e9.0
+ for <buildroot@buildroot.org>; Wed, 05 Aug 2026 05:43:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1785933784; x=1786538584;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to:content-type;
- bh=0VVEioqLFvxpFhVphLWnKAPqD0p8H30cYVYbcwVGgvg=;
- b=oUv9bw2qkwKIjGbtqNiMdJFyd5XkOxRC473T2kHD1q9nlIG44eTX5JLXjv147cRRvF
- DOWUsDNuW0MTmK2ZmH/aVtmcoodj16kTbI0H7fOTWT/VgZJoQsCFtPzWQWdCsn0XzNqs
- xue3+chrJg8M5S9yeOWB2EKmbxBT05PXJmJJwvk0TOVSvEgJgecIOPdI/nC2JW7r8FwK
- fOcHGK23iwEQuJl+Qw3SmVqGHGc+lPjsavUERNBA+9dl0Bkw1XQ2xwrUxUUarFYX/OjT
- SKt/aw6JZICtvaeNQkF1tuSorJwx+GarcB0PTf6pF7m0lOdUK2txsfCMB/IgoiRYeKT2
- 0vuw==
-X-Gm-Message-State: AOJu0YyVv3NbjI4JsEqKtYEKxXjNCYkA8a9EZkyHVxXA/9ZS1Is7a0EL
- glLHH6gGK99KddxmeZNuBdLgqoZ11KKcU2h4owjXA4fV5GFb88+KlLA6BC2XtSS0jclkJd5OkO3
- mWMqj
-X-Gm-Gg: AR+sD12egAgyHAAK4fq9TcREvGUdLS39Z+RAKVNQ8d7OzNSiudLXIC677Ex3gDKtx8G
- quiG0YBTN6Zgae/jKnBvUSKHu0Wj1SAL4EjNQVFWEZjcm3T+jsfqZmZXg+i9TtcdXUS11d7xM/L
- UwF/UTzjPELdY6s9Hbb5hogSKt0qrkWwU2H2tpUTh6o8WVlNrZ3/2Uk81ENiblhizKHqBm9ebcT
- aLyEPW2Aj56h3iXMHcznnTYLGGJHv6tTpv6BmTp4qScHytp+C2Jv7f2W8QdFk5uI3Tmr6bN5ADn
- M/ibbvA4w5sTnC7M/FIqVQWRXO4DDoUvUQfx2ccoKbfZPxuEptz8c6Q7Oyb+BLhFjVE7lvtJAqs
- k81dL2oWuJf/W/7+E0yaPpZcPzxZWsNjN3qRpZbodQdqu1VDwkqD5spTledE4RWy0mGr73b3Dox
- 0etUu/5ZVg7wjixJSBPnZFUKL7zQCVYuqSR7HRtJ/QsrVLHLsK7T3765PD2jtQk4lSxKEJwdvzx
- MbdOja4ZaXD48HtHGouMriFxCeWGxDNVD2Buf0fqE8gFoAQMaTBeplseeNvv6hkymysBChQelXo
- SEyWSwnzCBz7/PsS6QH5u5GRRdy+gzPTdWdWkNLQtt7BhFUaJKoFEOdBl5Y=
-X-Received: by 2002:a05:600c:1c25:b0:499:4e47:eaf2 with SMTP id
- 5b1f17b1804b1-4994e79dbf0mr87063865e9.6.1785933784217; 
- Wed, 05 Aug 2026 05:43:04 -0700 (PDT)
+ d=1e100.net; s=20251104; t=1785933785; x=1786538585;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to:content-type;
+ bh=uMWP7InTQVpVe2EfZm7GZSq8nSmSUbcuVyIVKqcWVz4=;
+ b=MAsACA/NVPrBd7fQcgCGDgwfPBtKZ0OSY+jNwGimGggYVRjuYz1/gbdbYNrgIEHRiI
+ dGPyLkmsj/PQam6IwDhKc3LXJYu706d173G3NfMm8pDnv9JtPTEHNpcKp1OPkft5KVI/
+ d+1Dn494+hcfFNa9xt9kBb1RZj9qO0SjcLeMtcQNaCzQZmM4oBSl/g1CY/tymoI1SAQ1
+ aNPIKZ4zhvCoIlw1hAgH2HMhhud1HLxdp7cdHL0Ypi4HJdfJtgLIPYzLqY3tAYUfIBkJ
+ FT05wpdXLPDuzFdNjsYFKa9Wj3E/StQQvd78b+BdYTyeeRU13qf7P3NqkepBWJjkN+0a
+ 1eFg==
+X-Gm-Message-State: AOJu0Yz55rQu4HMe/x11G42oKNYOOABUpWUMYxuqQ3l1aJikTBTBdp8q
+ nVE/UvCrcdzIVZ4gYQhwJ+CRcHJ7YPBrrUzVJm+0QBEQ8tBrE1F3Ge/FDatb1+eM2TpYxz47bHL
+ 1lXqS
+X-Gm-Gg: AR+sD12utF3ierxJiinR5jNaDoeou3PXOVmeHm688FxZ8ufxd2UtsynxujDwQYqLC0h
+ 2JfJu5UoqL4P5EjlxbKgaS7cW7kk/P4vz5VzHDq5VgErXdAyn7tx6QOknKkNv19fibXfnj7BxmE
+ 9q4cfptYtbVTkwqqnbnWlT81AZb7D4DXnj5AYGlxEm8FEwr3kpvwcP/VDILYG92kQZmlSH+LFr6
+ jsO9Ib+ssD8AKftGM7PBZ60dqh3AMT27erxc2mGFYvRO3jfLUrnNRfjnxa9XjJJePrA2I9RwEYv
+ Qof6H3MCdTyBPwA3bjEJvZ6L3diO/+lfOEeN1EYb/I2PVLElkwjcTck5WGciwIEuPVqMEtjtcJW
+ sy0SzGh8USYP+TZpHT6kax8dpxxcAQnkeISbN1ylo8wB7CXyie++qpbB5foLJCnb7UEkym6cSde
+ WOMpTMDnKpSzNyUjinGfrMocl//+V9GXwcxrPTcMgOHNSyB3kgbFf+QMs/yL2W3LW9VJy4+sycq
+ aqzLgoNIROE3ktKqoxRprOuOMjhZx2hksylKk8/7JJj7zKqDk7/47uINrzBsk6nN1E+yOpXHJCx
+ 0cg7EUTgSW2/5UC+Ni4OHnu9b8Fxg2rj9uzhUXGwBasi2guQsaViHQgUNIk=
+X-Received: by 2002:a05:600c:474a:b0:496:c361:fb96 with SMTP id
+ 5b1f17b1804b1-4994e6db5aemr74734315e9.0.1785933785204; 
+ Wed, 05 Aug 2026 05:43:05 -0700 (PDT)
 Received: from dario-ThinkPad-P14s-Gen-5.amarulasolutions.com
  (host-79-17-119-233.retail.telecomitalia.it. [79.17.119.233])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4994e5192c5sm59685985e9.1.2026.08.05.05.43.02
+ 5b1f17b1804b1-4994e5192c5sm59685985e9.1.2026.08.05.05.43.04
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 05 Aug 2026 05:43:03 -0700 (PDT)
+ Wed, 05 Aug 2026 05:43:04 -0700 (PDT)
 From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
 Cc: Christophe Priouzeau <christophe.priouzeau@foss.st.com>,
  Dario Binacchi <dario.binacchi@amarulasolutions.com>,
  linux-amarula@amarulasolutions.com
-Date: Wed,  5 Aug 2026 14:42:58 +0200
-Message-ID: <20260805124300.1485387-1-dario.binacchi@amarulasolutions.com>
+Date: Wed,  5 Aug 2026 14:42:59 +0200
+Message-ID: <20260805124300.1485387-2-dario.binacchi@amarulasolutions.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260805124300.1485387-1-dario.binacchi@amarulasolutions.com>
+References: <20260805124300.1485387-1-dario.binacchi@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1785933784; x=1786538584;
+ d=amarulasolutions.com; s=google; t=1785933785; x=1786538585;
  darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
- bh=0VVEioqLFvxpFhVphLWnKAPqD0p8H30cYVYbcwVGgvg=;
- b=aSaQDHA37QZlx25xESF2ZNeE3qjX3udwD3DDvdgPdse9V9c+L1Tl5fwzkW98glnLSw
- 4JPTbhz4W1wQblrAA8luwD85pk6WsuFoRmJYF8+d9e/fHz1fuqGhBPIutPGQHQmAVWmw
- q7hqtegCB42OwbioN0Q/gaHHkJSmbpfmKUTfk=
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to:content-type;
+ bh=uMWP7InTQVpVe2EfZm7GZSq8nSmSUbcuVyIVKqcWVz4=;
+ b=ZE8iiRV+VoA7/tj9LJF8k8/BcmfW5D+rHjLto0ekfegmn2P/bcPdCdPejYYYRgc/iu
+ DkM8aRIrFrKOuxOJ96GTAfgEZ639HEQsm1hEtWcfRfOFAlNmIBpxALXKQ1JspwKEt3X3
+ xikfPdui0F9KIdec2kR5GIP8oCu/p9FF+zXHI=
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=amarulasolutions.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=aSaQDHA3
-Subject: [Buildroot] [PATCH 1/3] Revert "configs/stm32f769_disco_sd: fix
- boot failure after uClibc bump"
+ dkim=pass (1024-bit key) header.d=amarulasolutions.com
+ header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
+ header.b=ZE8iiRV+
+Subject: [Buildroot] [PATCH 2/3] Revert "configs/stm32f469_disco_{sd,
+ xip}: fix boot failure after uClibc bump"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -128,7 +132,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This reverts commit dd67de1bd3374a75ab1845ef29e3ad3c3bed2aac.
+This reverts commit 832ff692ab26e7ab10d86625f13ac9beda7461a2.
 
 The MALLOC_SIMPLE workaround is no longer needed: the root cause, a
 zero _dl_pagesize on noMMU/FLAT targets, is fixed by commit
@@ -137,31 +141,34 @@ binaries").
 
 Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 ---
- board/stmicroelectronics/stm32f769-disco/uclibc-fragment.config | 2 --
- configs/stm32f769_disco_sd_defconfig                            | 1 -
- 2 files changed, 3 deletions(-)
- delete mode 100644 board/stmicroelectronics/stm32f769-disco/uclibc-fragment.config
+ configs/stm32f469_disco_sd_defconfig  | 1 -
+ configs/stm32f469_disco_xip_defconfig | 1 -
+ 2 files changed, 2 deletions(-)
 
-diff --git a/board/stmicroelectronics/stm32f769-disco/uclibc-fragment.config b/board/stmicroelectronics/stm32f769-disco/uclibc-fragment.config
-deleted file mode 100644
-index fb8fa9ee01c3..000000000000
---- a/board/stmicroelectronics/stm32f769-disco/uclibc-fragment.config
-+++ /dev/null
-@@ -1,2 +0,0 @@
--# MALLOC is not set
--MALLOC_SIMPLE=y
-diff --git a/configs/stm32f769_disco_sd_defconfig b/configs/stm32f769_disco_sd_defconfig
-index 602d3e8018ae..a025bd780270 100644
---- a/configs/stm32f769_disco_sd_defconfig
-+++ b/configs/stm32f769_disco_sd_defconfig
+diff --git a/configs/stm32f469_disco_sd_defconfig b/configs/stm32f469_disco_sd_defconfig
+index c9c385e0711e..70a214a10825 100644
+--- a/configs/stm32f469_disco_sd_defconfig
++++ b/configs/stm32f469_disco_sd_defconfig
 @@ -1,7 +1,6 @@
  BR2_arm=y
- BR2_cortex_m7=y
+ BR2_cortex_m4=y
  BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
--BR2_UCLIBC_CONFIG_FRAGMENT_FILES="board/stmicroelectronics/stm32f769-disco/uclibc-fragment.config"
- BR2_GLOBAL_PATCH_DIR="board/stmicroelectronics/stm32f769-disco/patches"
+-BR2_UCLIBC_CONFIG_FRAGMENT_FILES="board/stmicroelectronics/common/stm32f4xx/uclibc-fragment.config"
+ BR2_GLOBAL_PATCH_DIR="board/stmicroelectronics/stm32f469-disco/patches"
  BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/stmicroelectronics/stm32f769-disco/post-build.sh"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/stmicroelectronics/common/stm32f4xx/stm32-post-build.sh board/stmicroelectronics/stm32f469-disco/post-build.sh"
+diff --git a/configs/stm32f469_disco_xip_defconfig b/configs/stm32f469_disco_xip_defconfig
+index 1d113da08ccd..578cecadbe50 100644
+--- a/configs/stm32f469_disco_xip_defconfig
++++ b/configs/stm32f469_disco_xip_defconfig
+@@ -1,7 +1,6 @@
+ BR2_arm=y
+ BR2_cortex_m4=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
+-BR2_UCLIBC_CONFIG_FRAGMENT_FILES="board/stmicroelectronics/common/stm32f4xx/uclibc-fragment.config"
+ # BR2_UCLIBC_INSTALL_UTILS is not set
+ BR2_ENABLE_LTO=y
+ BR2_GLOBAL_PATCH_DIR="board/stmicroelectronics/stm32f469-disco/patches"
 -- 
 2.43.0
 
