@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B5BCC5AC67
-	for <buildroot@archiver.kernel.org>; Thu,  6 Aug 2026 22:02:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D086C56208
+	for <buildroot@archiver.kernel.org>; Thu,  6 Aug 2026 22:02:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 04252408D1;
+	by smtp1.osuosl.org (Postfix) with ESMTP id C3B0480DE9;
 	Thu,  6 Aug 2026 22:02:20 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9PGCcY_V7xvT; Thu,  6 Aug 2026 22:02:18 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BD186408CC
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786053738;
-	bh=xFn4/ne9IrOQcES5HdxbxSLxtWw9P6qNphF0RrDJctY=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=pJjIfopwYlY6x6L5dE+6Z2nRfENf2EYf5Xwytp8tyjy53GFA64/uAqmcEBNCLWGYE
-	 lW3jKbzQYwUoqutXPK+UOS9suhHc73kAf8EfdAGAD112YNF4Y2aXAAIjuQ6MPP+tOz
-	 O/SAGoa0HjlRT8Nb4qt6rHgxgVXIOtHcCU6l62CmXG6AQ7rCqfZiHOCggIowEtBhUA
-	 bOebkEuW0bmGnQzN/ytpFyAyya21EzzjOuG8oFGfl/G0Z9a4sRbAJBMHei50ofnkXE
-	 HjujfbiYLw6E9pv4C6E1jSz/lJXTFwW9uxAUnkQ0sCIkSNlhAVuKrrKjWI0YmkK2Xb
-	 qCD3uxjVSCcXA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BD186408CC;
-	Thu,  6 Aug 2026 22:02:18 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id A690C392
- for <buildroot@buildroot.org>; Thu,  6 Aug 2026 22:02:17 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9865380DB4
- for <buildroot@buildroot.org>; Thu,  6 Aug 2026 22:02:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SZo16KhH1ZDn for <buildroot@buildroot.org>;
- Thu,  6 Aug 2026 22:02:16 +0000 (UTC)
+ id BEnQHXJUlfaN; Thu,  6 Aug 2026 22:02:19 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C048380F42
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1786053739;
+	bh=7bIMyRJo5sN7OP2BjiN6v2qHAOpA6J8h1IsvuL/vJ4o=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=fhqbsgpowaMQS8dUvgy3y+gl41wlMTFVjGsFYn1fMsOE5TdESXFgtS5sqw87nC1Pa
+	 EAPxWYITn19fNAxO3j3fICCP0If/eab4FKiGW39Fo5DHExhOsZRWTwneFGeGOwKnmz
+	 XQzw8HLtt5HUGs/P5M/4vYmWQLVtpdsdvpmU94IfVxjG/xo8QNtuYsmj+Spe1jZhBL
+	 o4DYCh4gBhMAG8H/VLTIrgZfr1Dhm24ZHdDCDtqMPQeymyOqgQwAsHe0mEF4SyHtbo
+	 aH6dmDW9w8BA3baT1MrdcTk3QqyAOZWYZ08/YjvEQ811nF+K/EjTpGJfpBqCzG1lOt
+	 mE6C/d4d6IsRg==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id C048380F42;
+	Thu,  6 Aug 2026 22:02:19 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id B48D3522
+ for <buildroot@buildroot.org>; Thu,  6 Aug 2026 22:02:17 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id B19A5408CC
+ for <buildroot@buildroot.org>; Thu,  6 Aug 2026 22:02:17 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Erc_qERWWr4c for <buildroot@buildroot.org>;
+ Thu,  6 Aug 2026 22:02:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 10F1D80DFD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D1A96408C3
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 10F1D80DFD
- for <buildroot@buildroot.org>; Thu,  6 Aug 2026 22:02:16 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D1A96408C3
+ for <buildroot@buildroot.org>; Thu,  6 Aug 2026 22:02:15 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C5D918CA21; Thu,  6 Aug 2026 22:01:29 +0000 (UTC)
+ id 91A7F8CA1F; Thu,  6 Aug 2026 22:01:29 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 6 Aug 2026 23:44:24 +0200
+Date: Thu, 6 Aug 2026 23:20:15 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8f103c70deb23faa4df537fee1cab0ae1e0c1bdb
-X-Git-Newrev: 2f5eb8f8f3d150c018423a27fb17bdf8d0b46311
+X-Git-Oldrev: 8583d8b2b452bab02acbd39ac2b0f40889bd99dc
+X-Git-Newrev: 209117f1dd8a833c8a588c6fdffcff30abb1eaf3
 X-Patchwork-Hint: ignore
-Message-Id: <20260806220129.C5D918CA21@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] Revert "configs/stm32f429_disco_xip: fix
- boot failure after uClibc bump"
+Message-Id: <20260806220129.91A7F8CA1F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/apr-util: security bump to version
+ 1.6.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,43 +77,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/2f5eb8f8f3d150c018423a27fb17bdf8d0b46311
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/209117f1dd8a833c8a588c6fdffcff30abb1eaf3
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-This reverts commit 72f7aa47e73e9a93dbfa3e4128c0d8e7932edb50.
+https://archive.apache.org/dist/apr/Announcement-aprutil-1.x.html
+https://archive.apache.org/dist/apr/CHANGES-APR-UTIL-1.6
 
-The MALLOC_SIMPLE workaround is no longer needed: the root cause, a
-zero _dl_pagesize on noMMU/FLAT targets, is fixed by commit
-35d3927e8564 ("package/uclibc: fix for noMMU targets using FLAT
-binaries").
+Fixes CVE-2025-49506, CVE-2026-32327, CVE-2026-34191, CVE-2026-34501 &
+CVE-2026-34502.
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
 ---
- board/stmicroelectronics/common/stm32f4xx/uclibc-fragment.config | 2 --
- configs/stm32f429_disco_xip_defconfig                            | 1 -
- 2 files changed, 3 deletions(-)
+ package/apr-util/apr-util.hash | 4 ++--
+ package/apr-util/apr-util.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/board/stmicroelectronics/common/stm32f4xx/uclibc-fragment.config b/board/stmicroelectronics/common/stm32f4xx/uclibc-fragment.config
-deleted file mode 100644
-index fb8fa9ee01..0000000000
---- a/board/stmicroelectronics/common/stm32f4xx/uclibc-fragment.config
-+++ /dev/null
-@@ -1,2 +0,0 @@
--# MALLOC is not set
--MALLOC_SIMPLE=y
-diff --git a/configs/stm32f429_disco_xip_defconfig b/configs/stm32f429_disco_xip_defconfig
-index 0c472a328b..40577a21a5 100644
---- a/configs/stm32f429_disco_xip_defconfig
-+++ b/configs/stm32f429_disco_xip_defconfig
-@@ -1,7 +1,6 @@
- BR2_arm=y
- BR2_cortex_m4=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
--BR2_UCLIBC_CONFIG_FRAGMENT_FILES="board/stmicroelectronics/common/stm32f4xx/uclibc-fragment.config"
- # BR2_UCLIBC_INSTALL_UTILS is not set
- BR2_ENABLE_LTO=y
- BR2_GLOBAL_PATCH_DIR="board/stmicroelectronics/stm32f429-disco/patches"
+diff --git a/package/apr-util/apr-util.hash b/package/apr-util/apr-util.hash
+index 7e2793cd77..b8fff95de6 100644
+--- a/package/apr-util/apr-util.hash
++++ b/package/apr-util/apr-util.hash
+@@ -1,4 +1,4 @@
+-# From http://www.apache.org/dist/apr/apr-util-1.6.3.tar.bz2.sha256
+-sha256  a41076e3710746326c3945042994ad9a4fcac0ce0277dd8fea076fec3c9772b5  apr-util-1.6.3.tar.bz2
++# From https://archive.apache.org/dist/apr/apr-util-1.6.4.tar.bz2.sha256
++sha256  3e2ae08f40efa0c3701e54a954cefa08242de22a69f91a8ae44fc1e624ba309b  apr-util-1.6.4.tar.bz2
+ # Locally calculated
+ sha256  ef5609d18601645ad6fe22c6c122094be40e976725c1d0490778abacc836e7a2  LICENSE
+diff --git a/package/apr-util/apr-util.mk b/package/apr-util/apr-util.mk
+index 477db1c593..c11957bc56 100644
+--- a/package/apr-util/apr-util.mk
++++ b/package/apr-util/apr-util.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-APR_UTIL_VERSION = 1.6.3
++APR_UTIL_VERSION = 1.6.4
+ APR_UTIL_SOURCE = apr-util-$(APR_UTIL_VERSION).tar.bz2
+ APR_UTIL_SITE = https://archive.apache.org/dist/apr
+ APR_UTIL_LICENSE = Apache-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
