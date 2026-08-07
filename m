@@ -1,123 +1,121 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33A7AC5AC7A
-	for <buildroot@archiver.kernel.org>; Fri,  7 Aug 2026 11:49:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25457C5AC7C
+	for <buildroot@archiver.kernel.org>; Fri,  7 Aug 2026 11:50:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E60D5811A1;
-	Fri,  7 Aug 2026 11:49:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E216360A67;
+	Fri,  7 Aug 2026 11:50:16 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id R7qGKEHBFoyu; Fri,  7 Aug 2026 11:50:14 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3B29A60A66
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1786103414;
+	bh=OKeP7eCrDp29IJGENCT8N/HG40n/Uz8MoHbqtHKiZCk=;
+	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	 From;
+	b=rERuq76sBXYwZc2T+fBNgfHmybmhIRqOLQu7q5eM030HCAUpan22unYZAq3JWvwR2
+	 0N+NnyLD9S9v+PhowoS2CMZtqE9ea4qh4T8xOGgZqvzoBODq7dm6pkFwi6rB57JZeY
+	 IgsczH/FZqDatpFKUWDQfY7tgr+aCXMUXMI1bNUtMG6Vb4+zlCUIpIc0aeIWUSq9fc
+	 dCC/goXZgi1WXyA1EWhHef/urdlamv98e9eytXzyv7Ddi2A1y0ZZ0Q0udoBjuHQg4s
+	 LPeRJZSBzjgW5qF1riitIF9aP8OYH5kQJ0NAyLqXubOKcHU3erk5k/qwezYkGMEmRc
+	 nymaK2yORwBWA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3B29A60A66;
+	Fri,  7 Aug 2026 11:50:14 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id DA7BF282
+ for <buildroot@buildroot.org>; Fri,  7 Aug 2026 11:50:12 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id CCC2C8115B
+ for <buildroot@buildroot.org>; Fri,  7 Aug 2026 11:50:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ROAe_DR5MS1Q; Fri,  7 Aug 2026 11:49:26 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0F1B88115A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786103366;
-	bh=q0fyeiDMZQaTvj4XbaNu4UXmpS/ZVspgdKt0TGfPUTU=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=hrjWBQZtbgh6nmG2cRlDxvW3F0g0zgIuLemqVNziFq8or0YGsyyL2NutzO72vvXws
-	 RI1ErfKNnEhP0wsGcMc2mOsmSWUZFpPJcNCRaeMtrvy5t9EmuooVil9/tEqIsyS9Ha
-	 IQc5Kuma+sBw2kN48grZ3YyrbqktYiO9AlDd113qT1O8zJarBqtgbP5/xRq3Hf12rI
-	 0dCGOpmn/aZemwIqbUJdyiQNVLpbG8cUV6fEnbfLxrrCtTUd0WvPOoGEivc48LM8Ju
-	 gW3sbnPZZCn0wLbyl1SPHPfLL/3GYMrYfOFAbKwWexdTj+px3HTZvRxqIU/CDZiQJ1
-	 b+xfEMvlVbRwA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0F1B88115A;
-	Fri,  7 Aug 2026 11:49:26 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 683DB218
- for <buildroot@buildroot.org>; Fri,  7 Aug 2026 11:49:24 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4EB2C40105
- for <buildroot@buildroot.org>; Fri,  7 Aug 2026 11:49:24 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id u8LvesiEUsvA for <buildroot@buildroot.org>;
- Fri,  7 Aug 2026 11:49:23 +0000 (UTC)
+ id eVMoqxNSYkWs for <buildroot@buildroot.org>;
+ Fri,  7 Aug 2026 11:50:12 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
+ client-ip=2a00:1450:4864:20::434; helo=mail-wr1-x434.google.com;
  envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6C85840092
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6C85840092
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
- [IPv6:2a00:1450:4864:20::333])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6C85840092
- for <buildroot@buildroot.org>; Fri,  7 Aug 2026 11:49:23 +0000 (UTC)
-Received: by mail-wm1-x333.google.com with SMTP id
- 5b1f17b1804b1-4954a32cf1eso16784505e9.3
- for <buildroot@buildroot.org>; Fri, 07 Aug 2026 04:49:23 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org F25F281105
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F25F281105
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
+ [IPv6:2a00:1450:4864:20::434])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id F25F281105
+ for <buildroot@buildroot.org>; Fri,  7 Aug 2026 11:50:11 +0000 (UTC)
+Received: by mail-wr1-x434.google.com with SMTP id
+ ffacd0b85a97d-47f59f25ec4so1387048f8f.2
+ for <buildroot@buildroot.org>; Fri, 07 Aug 2026 04:50:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1786103361; x=1786708161;
+ d=1e100.net; s=20251104; t=1786103410; x=1786708210;
  h=content-transfer-encoding:content-type:in-reply-to:from
- :content-language:references:cc:to:subject:user-agent:mime-version
- :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :content-language:references:to:subject:user-agent:mime-version:date
+ :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to:content-type;
- bh=BlZVz1M0/15P1hDw4sWPifRbeNGnUB3FnbwmCLqes+Y=;
- b=aSm9YojmSXfmodnsX84iiw0NOS8Ri2y7GYJANLQoUqzp19UnyK+tAzldDcuJ6Zln3W
- JdgKrgw3A8uj/uGHUBLAblYgMpi8HipZAJcgjb6399nebeMomlaLdTn4Jg+ESYsNX5VU
- ADHja4TzCFmPBE9PCOHYup4c7SFqgQNdztAe/6jhVov6MjQFYVxhV9ybF9VnNTEI+3i5
- CQqW6CE2XsYrDLxO9RQ+KFC+2i2Nb+kDQHEGpsS5RHBxLpQq2h4GjpKzWjZaGUjWnIz1
- E8Atwg1LGmo0o9dLxvKYUxjAtLKcEeN2Vp4jbYa6iUR9aCunNLXYo7u3ynwG0ZXs6tr1
- 6wwg==
+ bh=oY7eYFjCiJOXqYHQ5zYfSF98QXHWo9ier8mxs90FH+M=;
+ b=QDTDSVyEuYmFqnPsm1SgdnZSzsyNc1f5I84GHaNdVp46aNRiQhTF3MwHUFVjnJCrVj
+ vqCMcP3wYq3RTBGqbeo2n6h4YqTrT5Sk8bSQQ3VQjoQE6PElTx/G256jJhQ3lSJPTFjL
+ 7rlpRfG5W3zs6Ic/91KPe38Oo2IS8AMmJ9iLbBsQj4LMAlrL58qsYPxjENk/z7QZjeMa
+ wZjO6jS5j3iC1pFHgWtdTgvttnAsfMhoaYzW42gsL9rkN1IrTT1LnRFMY0k7V6x2O+Jq
+ A2wPvfaRhwdmprPD/AxhCFcoRU9RnA9GI6DSzMjZ1P2+8t9EoquSst6nBghuT2/TJOKa
+ gjog==
 X-Forwarded-Encrypted: i=1;
- AHgh+RqNec9BWSOHTfDvugjny93FrWqR3g8+r3b6gAaGENh4ENs3lOZWEy62EfXRACaUuK1ZeiPVJLHC4mA=@buildroot.org
-X-Gm-Message-State: AOJu0Yw6G6LU6A2YykI6m5tUYXY71N3pLU32Dx9nm+JFAVxQYcZiUpg1
- pNZ6V+I52wo/L2r1pCF9IkHJ+sTOjK/NWMigvlF+/bC2KVW5DsOpUffwqkOB6JF//aU=
-X-Gm-Gg: AR+sD12FMNOg6qidWyzOTZkn79CKeOiHqz7bsnibSBrYKGtBVU/y6GBy+XwZZBrQ6tP
- SPh8VFXGudOxZGRo+ZgI3R1leCC3jCmwiYg/oOxCY2a1ojHJ7vtnEkEPWSFqWtGbWZecY1k+6Rp
- sQ08jmd1ulEhUFmumGy+ThlVFZ7XGfaqUxLcEVV+O1RonJoUoHvNFKPLPt4Tg2Zko9QJ/OWqz1/
- hGS80Ealb5NPRjxjZkNrJ2VUhKLodjflu+Om/cYKWFD2ik5Q+COufwjM2jVzMgLEHN8AAhsMeKX
- smYteVYRfghSwacK1yu69hwK5U8j+7z/V8QRWXgsbfHzZvEhnUhfWea4T9qfoq/PHhX46mM6HiR
- 6vnj8CU3zfjP1FFb6ZIiS+OhDjWmBdHxxUoxr5lE0OVaeac2VqEK82Xgim13Qy8jmSaABbLtEKG
- iDYoGyLbLVPZYIE7hipb2UcB22XcjutzLRLGsgiF91KHgbE8odnSL/ksz2MqWj0jpSGcPdQP1r2
- OGl30zv6ihKEypOD8AIFNTge3WafPYPBLm6O/wZ9DBj8DSN
-X-Received: by 2002:a05:6000:43d6:20b0:47f:b452:49f1 with SMTP id
- ffacd0b85a97d-47fec502d3emr31866322f8f.2.1786103361259; 
- Fri, 07 Aug 2026 04:49:21 -0700 (PDT)
+ AHgh+RpDzHtnbN85L6wAycY66vECjMGRwjy7ZFfpsEKx7JGwai2Fb5sBsPryRXi5+Gd+jJysskiCsAet0B8=@buildroot.org
+X-Gm-Message-State: AOJu0Yy8TpvBZ1su9DQYtukq72rE1YCVpo1CdnrDazwp3xMPZ4fGIe1Q
+ z8Jq7DgzzHQQ4ir9sJAyuDU3WNAZDLBRHUIG21eb+f+47piDwNeqnubMvRCwueGCKr3sXkS8n7Y
+ Otj2j
+X-Gm-Gg: AR+sD13KZiGCFDzRP5bhrUa9iBRn73f/16TGjUCFQqi2eZj2MBna29VlgCigdrqDEj6
+ +6eu7dZdA220lVEerUPUNnzI5V0Eh8GKBlyFF84Koo6uidGBR9lwDgfpy5y/g0fFAbYbI6e+gHm
+ MoKm8JDhlv8atfr2Sw9Z58Hltyj5/tl6D7+o9RcioqeAaM+o88gfuHoLVOQdMhXuouB94lZdx4K
+ ewlHKEm6ksZmiRgLMdlCj2OlhOA1LJ8J/JobnBOGKm2cjrUqu2OepUjUSrzjqQFr7++AXXfyxmr
+ RllrmQktvZESe/MotIeyararnVhK2oOWdZDOPGjHjiIFPfGF/Ba2PqfoV4WwMSJBuyWDCmVofEN
+ Ob5NsW+fiPG002UydfmA7mILI+GowMPkXjB8Kj6ZzfU3wgJrowueLewBcOYi5tIt8iQL7B4Y+Sj
+ ATlpX43iJgwotiHsyG8EKTGeOrm32V6eq/wSPs4t0StxbKjFf/rLUatdZIVrHZ8infRIZQn1ID2
+ P/NN6CiZYk1t57ehMeo0wGIaDK2Gkiz2RHuznCcB1O7ZJFVX0NYIqFVA30=
+X-Received: by 2002:a05:6000:2798:b0:47f:6981:a043 with SMTP id
+ ffacd0b85a97d-47ffd982040mr9659595f8f.26.1786103409779; 
+ Fri, 07 Aug 2026 04:50:09 -0700 (PDT)
 Received: from ?IPV6:2a02:a03f:63ab:dc01:1291:d1ff:fe92:3b5a?
  ([2a02:a03f:63ab:dc01:1291:d1ff:fe92:3b5a])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-4800220ab11sm5423072f8f.35.2026.08.07.04.49.20
+ ffacd0b85a97d-480021e902dsm5060048f8f.21.2026.08.07.04.50.09
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Fri, 07 Aug 2026 04:49:21 -0700 (PDT)
-Message-ID: <c8d0ffd2-cee7-4458-a4bf-71954984bb11@mind.be>
-Date: Fri, 7 Aug 2026 13:49:20 +0200
+ Fri, 07 Aug 2026 04:50:09 -0700 (PDT)
+Message-ID: <a570d6e9-05d0-416f-8718-ced470b769ca@mind.be>
+Date: Fri, 7 Aug 2026 13:50:09 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- buildroot@buildroot.org
-Cc: Julien Olivain <ju.o@free.fr>, linux-amarula@amarulasolutions.com
-References: <20260730200118.3547779-1-dario.binacchi@amarulasolutions.com>
- <20260730200118.3547779-3-dario.binacchi@amarulasolutions.com>
+To: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
+References: <20260730183524.1145030-1-bernd@kuhls.net>
 Content-Language: en-US
-In-Reply-To: <20260730200118.3547779-3-dario.binacchi@amarulasolutions.com>
+In-Reply-To: <20260730183524.1145030-1-bernd@kuhls.net>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1786103361; x=1786708161; darn=buildroot.org;
+ d=mind.be; s=google; t=1786103410; x=1786708210; darn=buildroot.org;
  h=content-transfer-encoding:content-type:in-reply-to:from
- :content-language:references:cc:to:subject:user-agent:mime-version
- :date:message-id:from:to:cc:subject:date:message-id:reply-to
- :content-type;
- bh=BlZVz1M0/15P1hDw4sWPifRbeNGnUB3FnbwmCLqes+Y=;
- b=MA2hUNnHNV2553BLArfHQKV4hr6zuxwLVFpLDnyBXlEQGXrsItOkUeVEAOR1zyPpJg
- pEVsmRZpaCwm+5GViuqPG4Z0znsaLr4YoBM4BoOMAPK5lAqMMRTqwzdQ8YyxzOwC5AYk
- IgXI9KYqXLMfH9Hjr6ZVrgKoWk9+eG8P3P04brG06KtJCeVESoiSuhRMXSDWBhogS2rc
- NWN9lIMnjw0VTrqz1QOwMFfJJn50Q0oKxisFxTQPBXrcGXNEDUr0FHc7PMpcQbYt6iI9
- EjLQaVsTAGjFdC9wpljEG5YICXilZpSvIzlQxRSN4qT1+FKoor/NzNnGu8SxWN2S1rgj
- qbyg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ :content-language:references:to:subject:user-agent:mime-version:date
+ :message-id:from:to:cc:subject:date:message-id:reply-to:content-type;
+ bh=oY7eYFjCiJOXqYHQ5zYfSF98QXHWo9ier8mxs90FH+M=;
+ b=grOE10wlPDtnNq+dY4xEPU4AXAXxyJ3k7zEqPDPa/bZoloPyIguVIFZ2rShG1av2Ki
+ KHJChSPflbNeuL5HtZpu0wq1qQ4X+0XPR//khbTf8A0DIo6I8Uwonu8hE0LAWHDfjWTM
+ Wbkg9vUaIWUW7aJ/GgZG1+uKzdAWCGfi51Za8QO3bBRl4BasIDKKoFvw7jQQtNROMi1u
+ 3x201gqm2+V6gan5PGdvqCDofkwqypG9kmvXy1ttAt6+1fIhTl0WfXjmXaSGzWJK2HGa
+ KmhZPs/BtRyx7AW1AznBxfm/cdPKl2p+czGI9ixzP/R0rdKiuwGevx4pPz3R8g6kQOko
+ QClw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=MA2hUNnH
-Subject: Re: [Buildroot] [PATCH 2/3] package/armadillo: needs gcc >= 8
+ header.a=rsa-sha256 header.s=google header.b=grOE10wl
+Subject: Re: [Buildroot] [PATCH 1/2] package/php: remove CFLAGS for OPcache
+ extension
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -136,21 +134,27 @@ Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 30/07/26 22:01, Dario Binacchi wrote:
-> Upstream bumped the minimum required gcc version from 6.1 to 8.1 in
-> commit 84ec3ddf9fd3 ("bump minimum gcc version to 8.1"), so the build
-> now fails with "Compiler too old; need at least gcc 8.1" on older
-> toolchains.
+On 30/07/26 20:35, Bernd Kuhls wrote:
+> Buildroot commit aedf131da66d2f2ebce64788deab07be17ce33eb bumped the
+> package to 8.5.0 which made opcache a mandatory dependency but kept the
+> CFLAGS added in 2015 with buildroot commit
+> e05476491720f96fcbeb926b4599d111efb598a6.
 >
-> There is no gcc 8.0.x release (the 8.x series starts at 8.1.0), so
-> BR2_TOOLCHAIN_GCC_AT_LEAST_8 is enough to express this dependency.
+> As it turns out we need to remove the CFLAGS to fix the build with the
+> bootlin-aarch64-glibc-old defconfig as detected by the Gitlab pipelines:
 >
-> While at it, add the gcc version to the openblas-arch comment, which
-> only checked for C++ support and would therefore stay hidden on
-> toolchains that are too old.
+> ext/opcache/shared_alloc_posix.o: In function `create_segments':
+> shared_alloc_posix.c:(.text+0xcc): undefined reference to `shm_open'
+> shared_alloc_posix.c:(.text+0x11c): undefined reference to `shm_unlink'
+> shared_alloc_posix.c:(.text+0x19c): undefined reference to `shm_unlink'
+> shared_alloc_posix.c:(.text+0x1b8): undefined reference to `shm_unlink'
 >
-> Fixes: 597d5d10ec77 ("package/armadillo: bump to version 15.0.1")
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> as they seem to disturb the detection of librt.
+>
+> It is unclear which upstream commits added since 2015 fixed the original
+> problem so a backport to LTS branches is not advised.
+>
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
 Applied to 2026.05.x, thanks
 
