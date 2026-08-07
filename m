@@ -4,117 +4,117 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13CF4C5AC7C
-	for <buildroot@archiver.kernel.org>; Fri,  7 Aug 2026 11:54:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35E93C5AC7C
+	for <buildroot@archiver.kernel.org>; Fri,  7 Aug 2026 11:55:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2422460A64;
-	Fri,  7 Aug 2026 11:54:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EE19160A6E;
+	Fri,  7 Aug 2026 11:55:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ojdK3YtThe4P; Fri,  7 Aug 2026 11:54:29 +0000 (UTC)
+ id 7_HDEBzPJCwv; Fri,  7 Aug 2026 11:55:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3D8B860A3E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3518B60A3E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786103669;
-	bh=YbRo8TbhGLyr1VGdin63gn3vniFbkUL+svbZKtEpHOU=;
+	s=default; t=1786103702;
+	bh=JrD1jDB2h0iDiVbB0M+JaYRycGZ3MOYxRrTO1PJsgq0=;
 	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
 	 From;
-	b=pf5G3DjgC6xjpZCU99FxAOpLrUZ24/3kfcU4EjrllmVBVRcgB1PVheqMl9xmbN0qe
-	 nDy8Lu1J8VKXD4/r/4KcPZKVHzGXXkRhjdkil9ww379bBJzaudKZqdYlKuk7jfugps
-	 BMCL2ysMCRvQE+BJXWL7T8D0LIQfGI2OvvMlpiywr0OJ49InkVKuoXWXplYsXiEZ5F
-	 +Ksl8mzq43nGJxF7/OCXxMr0QPP59gA0ksHisggvEsj5Qb0co3p4T5218PEN0EIOM2
-	 DEh+Qk7EocjYnWquxcaKGaufSagl4EwhyhG74mnSPviPUjOI1BujDyqGhTFGkBbO8P
-	 tyM7kVSN/xVXQ==
+	b=V7by9+UgWbowY2DzZArFQZzvZbP7PROdSNQeFoNH5zBmVLPk9dZYJY0U7eDo7BqQn
+	 M++b/UR1GwawCVOSIVcwsCLFqud/bamRlcrXT8GBbKeXlhgmtSEyCb3JSbC20WoLW0
+	 KChWJ1USWr5XDMbE2njghmah19xLWkNqhKgZF8z28e5eVUaWYUwCTCKKhBZmPpZhfr
+	 /tEd8dmS7j553eIap5HZzVpUOWj6CjTXTZ4MCFrMbfWmfDmMk/dIgfKMRpv60uU3KL
+	 no8cQwNTkQBpy/ns8KK7iVs0CxcHu+xrPWByA4AnQAY2miVdma88kfso/XZ03VfszY
+	 KthCpK76EzTJw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3D8B860A3E;
-	Fri,  7 Aug 2026 11:54:29 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 24899D3
- for <buildroot@buildroot.org>; Fri,  7 Aug 2026 11:54:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3518B60A3E;
+	Fri,  7 Aug 2026 11:55:02 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 86A3210E
+ for <buildroot@buildroot.org>; Fri,  7 Aug 2026 11:55:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 21BD58116D
- for <buildroot@buildroot.org>; Fri,  7 Aug 2026 11:54:28 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7879140105
+ for <buildroot@buildroot.org>; Fri,  7 Aug 2026 11:55:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3uYyFgHbrg8B for <buildroot@buildroot.org>;
- Fri,  7 Aug 2026 11:54:27 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id amI8HQlM-_u8 for <buildroot@buildroot.org>;
+ Fri,  7 Aug 2026 11:54:59 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42f; helo=mail-wr1-x42f.google.com;
+ client-ip=2a00:1450:4864:20::32a; helo=mail-wm1-x32a.google.com;
  envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 20EF3811A1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 20EF3811A1
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
- [IPv6:2a00:1450:4864:20::42f])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 20EF3811A1
- for <buildroot@busybox.net>; Fri,  7 Aug 2026 11:54:26 +0000 (UTC)
-Received: by mail-wr1-x42f.google.com with SMTP id
- ffacd0b85a97d-47f3b39f2a1so2535165f8f.2
- for <buildroot@busybox.net>; Fri, 07 Aug 2026 04:54:26 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 635BE40092
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 635BE40092
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
+ [IPv6:2a00:1450:4864:20::32a])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 635BE40092
+ for <buildroot@buildroot.org>; Fri,  7 Aug 2026 11:54:59 +0000 (UTC)
+Received: by mail-wm1-x32a.google.com with SMTP id
+ 5b1f17b1804b1-4954df200ddso23125945e9.0
+ for <buildroot@buildroot.org>; Fri, 07 Aug 2026 04:54:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1786103665; x=1786708465;
+ d=1e100.net; s=20251104; t=1786103697; x=1786708497;
  h=content-transfer-encoding:content-type:in-reply-to:from
  :content-language:references:to:subject:user-agent:mime-version:date
  :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to:content-type;
- bh=xTMfj70Fc91IbXHMccYAKJE84wViMTuiFBtPC2njnhU=;
- b=AMYVk85s+lhi5on8PyNMA74X3pc+iJH6dAyvtfTv4NrC8na7rytdqTXEyczCpYe8PI
- GV54UDgVnlrqaJkjH1Yo6DqCT//UYp2GZODvUeo3K0mvb4R/rcxcbTV2IO/PMLMBhNM5
- z29HPKPqRLUWK12a5peA4lrh0mxpXd3w/vo0sRrQL3aBmRJeNWtWFkMfJbBp7WgglmR3
- iTjZXhCXnNbN6KEPngg20X71TGSkbOaj7uhHUFmHhNkGzEjE/9cFo9Az5GUagL+acZhp
- Gqk545iC44ttJ0PXhrU8iZ2oKwEm+2uSk/DkizFf8r4xc+Nlq+FJmeOWqCSi9Y2LsLcc
- pBxw==
+ bh=9n1YNnJMK/vYxCdwm71Fk1QMReFfwuJXW4BRXXksHJQ=;
+ b=ApMCry+08ry7gLn9JQpXNRcBrRoEXQX1MHKti3gIK82/dgRCEm6LwUFlCnvBRy4ve7
+ 3YD9oaytLd/u/Cnz5CdkcQLcq0Tr5Q9+MJTpD5tr84cah4LXUeI/lUyOb/fNgdLpAu8G
+ ztWdzUmLdHYMOMcfIr7WuAXCD2g/jkjv/d20RoNYw0B8sj4j/fDtgvBhLpLD/vm8QKi+
+ JV502zJgLp4Uk9ub0gW70dltPB6dAD8NpGn4PGF6qL7zLAvWwe60zSxeb8Nb4EUJqNjX
+ kkIckSPDWtsnz5hZWB+xFLu/DMh5a41387Fy73lmXvo2sS/B369Iu28PqQPymIiqIcz8
+ 6FuQ==
 X-Forwarded-Encrypted: i=1;
- AHgh+RrXG1HwRgXX9Fpb1nmKpugs0RZnN8M63mv4cm0cmYk4QbcvJVaaDW9hSWf2PSFonUUaoFchwkb+37M=@busybox.net
-X-Gm-Message-State: AOJu0YxwVovgO0kmfVbdo508N8TS5Z3JktJc3ftEdELCs8ZyYgcxnjSy
- 1Rg1I2A1RYl0c0lZxZFGQ2aIQTnrfZ0wGvs0mDM1tjgMkMesoKGAPgPUeIQyox3C0xU=
-X-Gm-Gg: AR+sD13c0VGrzLlZEW5Wcfc9Fm8/pz52/wwizv6ryoB+K6kbnL9p+yAJVHj5C9qMI4S
- 7N2Kn1YU7Cyv8IWs9CBqde7EDZiXYOmiJgdiaBhLfSjZkufA/DmKw8q6yVfSltmPAmGYP8QwhoU
- MU9r0Ujsj1rBI3nR5RXLqfq09GqCoKCiD33G+yH1x0qzzbS+zh0rgR9/WHCWiVvZn9uBtNwjsMO
- wfgF5UfmPRW4K7t6npk5eJwtqBCohBmRnxuJPH+8JgoKcCDIGiFrqCP4xErP2wFVttDU/WHACIB
- mGtHSU42kQ9iWUP4mGZMp4g5Rts134/XM7F4tP2H5Gb6QIaDJjt11tNUQNyV6WwpRcWqn9XazAU
- Cu2gPZ6wGXT0wsCr8dgxmTkji4aen5A5upSkii4Vca+7V2eWsv0GZ5xsJJ4/1dHY0oFOnczsE8g
- PYBNislTtJ6oMi/Mq0DTDyuznGjQ02lZZm1LENJ+4S+Jm2vtYEhvEXY0RIrU4wouKYIUkeJMXmk
- l6PV2n/2Lc/d7EVU5f1FAbZEDNEbNqjuNXsAQEAOR1Bui1w
-X-Received: by 2002:a5d:62c5:0:b0:47f:8fb6:c32f with SMTP id
- ffacd0b85a97d-47fec52a71cmr26994012f8f.24.1786103665054; 
- Fri, 07 Aug 2026 04:54:25 -0700 (PDT)
+ AHgh+Rquf4jn1FaI9e7u2Q/rqucS+8LvC7VcG0LPzIYnmTLjLK1EBJJWwiE/fW9D11rXPo9iCD7N0vM8eZY=@buildroot.org
+X-Gm-Message-State: AOJu0Yxhv71wJLGbkUy5mRYoOXEmIVp9qhpLG7yURvnonlOK67YusrN3
+ OYdm9OnT6/6fnEKIMz/DEBolDA37Md6xrdWakzWJtFj5w5xmey7gJa4zPg8KaFpmgZM=
+X-Gm-Gg: AR+sD13e1yKYgjqc6C4Jkz4kmKx31Nup3bexQBGwGhOAdujzhyZNlhgVh8+CRuUkuHA
+ G/YbMCFlo14N4A0JXhdzCW14mVN1GsOmhFLi1+aJ/enJau3So63OuMXTOt5AQtmxF2M/fa3JryW
+ 0iTIt86ddPYotSS7aWLD3eGVLLxQfIJkfnTpdbhx/IJTe7hfP5DtCpqYdpDPlWJFZhQIg8w60ms
+ XKSh/Mz/Apc0myyw4TZWlNuYOWAWArjHL5LeJ9tXhL6Lsu4mgYv3nS6njWpOX1p9kKrdtsn9iY2
+ MvZzmw5EjXvyS8ONOkKo9Exf222uBZW3HoUb0zVE54TKH0cU8Lk8JERu3eJDerzxxbszvG5jmhE
+ zopTgHuugLmbNDHjsQ0DLX+u2hI8pO+51PAicmj6/L7+BRX8d3j5oNIyLWKmn5Zq2G0FgENSvg6
+ 6U/xGKRryrYwTtmBqvwnPYR/TomvBiolwB98CICzh3v2eo11t+eFB2pjTNJj7pVSbTKSlujjEC3
+ FFLKoB6C8NrOq/dwnUe93Vy/T86Qp4IjWJeiiC9AbnPL4NF
+X-Received: by 2002:a05:600c:1d23:b0:499:516b:83d5 with SMTP id
+ 5b1f17b1804b1-499516b83d9mr201984435e9.11.1786103697505; 
+ Fri, 07 Aug 2026 04:54:57 -0700 (PDT)
 Received: from ?IPV6:2a02:a03f:63ab:dc01:1291:d1ff:fe92:3b5a?
  ([2a02:a03f:63ab:dc01:1291:d1ff:fe92:3b5a])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-480021501bcsm5165881f8f.9.2026.08.07.04.54.24
+ ffacd0b85a97d-48002145589sm5580056f8f.1.2026.08.07.04.54.57
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Fri, 07 Aug 2026 04:54:24 -0700 (PDT)
-Message-ID: <2cce28c3-f4d4-4ee5-86bf-9355bbb126c3@mind.be>
-Date: Fri, 7 Aug 2026 13:54:24 +0200
+ Fri, 07 Aug 2026 04:54:57 -0700 (PDT)
+Message-ID: <da6bcfc9-e07d-4867-9a03-8dd8f397f126@mind.be>
+Date: Fri, 7 Aug 2026 13:54:56 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Francois Perrad <francois.perrad.86@gmail.com>, buildroot@busybox.net
-References: <20260803081951.391172-1-francois.perrad.86@gmail.com>
+To: Romain Naour <romain.naour@smile.fr>, buildroot@buildroot.org
+References: <20260621165336.2426158-1-romain.naour@smile.fr>
 Content-Language: en-US
-In-Reply-To: <20260803081951.391172-1-francois.perrad.86@gmail.com>
+In-Reply-To: <20260621165336.2426158-1-romain.naour@smile.fr>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1786103665; x=1786708465; darn=busybox.net;
+ d=mind.be; s=google; t=1786103697; x=1786708497; darn=buildroot.org;
  h=content-transfer-encoding:content-type:in-reply-to:from
  :content-language:references:to:subject:user-agent:mime-version:date
  :message-id:from:to:cc:subject:date:message-id:reply-to:content-type;
- bh=xTMfj70Fc91IbXHMccYAKJE84wViMTuiFBtPC2njnhU=;
- b=KPsaBN34fEuOHEkuzJsCKnglJhkupdw6F/fjrv0l6AjlBOeYAt7mlJI9L15UfKY5cE
- WlTRZ7IVzOp8BrwXbBkxJFTmjO2W5vg6BF5HI1BuFhZQpGioQKtHyrHB89aIfMjao1Dp
- ygly7Ua1DefbLk+jsXzkWa0xVEvlPoG7mrrFri9+GEnj2Uavv/sw8cZY0k3H/BRvSRbw
- I0VJGUgkJ/X/lzL2cu13/OcOJtKEgtlVO8ZTAUq2ICw6QhVgjIjw/yPb72/Lycr0oJ2Y
- SeM7TtD81RQv6GqlaYj2H+o7imFfE1pBGt2g0PHQn4gX2Gcov3zChs+6fezKFFPaa4ng
- PryQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=9n1YNnJMK/vYxCdwm71Fk1QMReFfwuJXW4BRXXksHJQ=;
+ b=DGOGLvZle1Xfh5GAPVrwn3y5CVulWjqwJ9kQG2xHBaRvQBulkTLiLCdutB5nrwNN1t
+ Ldw/Xgt0RfYlH6j3G56OOW75hvfxRqH/Q/S/pabDIGWcaQCr6aIP07a0MlCmITAKGu59
+ hhv4kzYmPeSi2RWXoJlylLU816aSuEAdNz+oON3Mo1g3EXzKWOhTfyI/ojb7f9C67GDq
+ rZjHK3dQHSETOH/cvOI7vQ7pD+L+6i6WMTFYvQuTNWn3S78oziMkj2Xm3HHNNIw77Tuy
+ XPgoaQbs54MfZvD8aNO4kwY6KiZngFEW5dfsURqRolOGYVSB7VtMadFHu49fyAx4JinR
+ Aoew==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=KPsaBN34
-Subject: Re: [Buildroot] [PATCH for 2025.02.x] package/perl: security bump
- to version 5.40.5
+ header.a=rsa-sha256 header.s=google header.b=DGOGLvZl
+Subject: Re: [Buildroot] [PATCH] support/testing: TestUsbIp: wait for the
+ keyboard be detected
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -133,16 +133,14 @@ Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 3/08/26 10:19, Francois Perrad wrote:
-> fix CVE-2026-8376 - Buffer overflow in Perl_study_chunk
-> fix CVE-2026-57432 - Buffer overflow in S_measure_struct
-> fix CVE-2026-13221 - Regex trie 16-bit field overflow
+On 21/06/26 18:53, Romain Naour via buildroot wrote:
+> Running TestUsbIp may fail when checking if two QEMU USB Keyboards are
+> reported by lsusb. On fast host, the second QEMU USB keyboard may not
+> aleady detected when lsusb is executed. So wait a bit, to let the new
+> keyboard be detected.
 >
-> For release notes, see:
-> https://perldoc.perl.org/5.40.5/perl5405delta
->
-> Signed-off-by: Francois Perrad <francois.perrad.86@gmail.com>
-Applied to 2025.02.x, thanks
+> Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Applied to 2026.05.x, thanks
 
 _______________________________________________
 buildroot mailing list
