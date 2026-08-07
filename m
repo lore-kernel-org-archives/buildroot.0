@@ -1,63 +1,123 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B4BAC5AC7A
-	for <buildroot@archiver.kernel.org>; Fri,  7 Aug 2026 09:35:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9AE2C5AC7A
+	for <buildroot@archiver.kernel.org>; Fri,  7 Aug 2026 11:12:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0FE9C8111C;
-	Fri,  7 Aug 2026 09:35:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4FA5460A48;
+	Fri,  7 Aug 2026 11:12:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0COO7v7JWJKc; Fri,  7 Aug 2026 09:35:56 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZbBT5JP72W1w; Fri,  7 Aug 2026 11:12:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3518481283
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3E74860A41
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786095356;
-	bh=tCI8F0v2hxN8CsQkLXQrkgfAlywNnSDZWfswXJ6/AnM=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=TbK5uTiUgsTWkm7Q8lBQF+0sM1+xWLUdYEtDrcTDGtpsvnB3Mq9ZSwPEPv4FJabgN
-	 Qg/hPVRtkQkOvVfBp+LyZp0t6CdHXVjet2jXuDzYwcxdMGiwDTJZQuI1+1u7EesI/J
-	 l+/CJJEJcyU4uyaIM6zQF5C1BNGpqKSoNrlYQQhZLMQpayorBScdkrUGu0iY7KuRSb
-	 7JI7qKYDD+JUo2MyeUyeGChgHxUqzGERt97O+Pl7vdkqQzzUuUem0Igoi1kDWuj7Us
-	 75dX0EReSAdUjf5aH/hx04nKRfu3pohYAEbQjyaJjopjfdsXExyQkFKXWj6TumrBVA
-	 vSeDhcLGsIT9A==
+	s=default; t=1786101139;
+	bh=Nv7zECdWVNC0bw3+HEW9vxodgVsFL3pjkpCz/2anc1w=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=AoxnKGz34864on5TQ0pMqW+7DOWzcZo4J7MawScT8B7Hb0bZrO1PYiiH9dOQ17IBW
+	 kiSZbP8Egv6d+AdtNjiAoZmlOZYsQWnRPmaZK11fSEahYk5Tg3cNGkfJfc03uv3WPD
+	 +BRZ46CN35kQc8ByB3LKIdnugU1zWQidv+KUkCHQL4wdzObaXfXXpb0K7gkT5mSRZs
+	 DARDTm2yi9NKl/xfK+cgMfPGnwsnSgT0l3akTMkB0LHY3VMMYSNGbq45IOEb0thYIQ
+	 WX69XnNhq5koe5igSCX1ZhJENp0SHVkv5TCZ8hil8tJI7p4eqm4CcnV0t30PUmOE5z
+	 E4xAwS8gFBv7g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3518481283;
-	Fri,  7 Aug 2026 09:35:56 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id C59E0397
- for <buildroot@buildroot.org>; Fri,  7 Aug 2026 09:35:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3E74860A41;
+	Fri,  7 Aug 2026 11:12:19 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 79A25218
+ for <buildroot@buildroot.org>; Fri,  7 Aug 2026 11:12:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B7EEE409FC
- for <buildroot@buildroot.org>; Fri,  7 Aug 2026 09:35:31 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5F44C60A3A
+ for <buildroot@buildroot.org>; Fri,  7 Aug 2026 11:12:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qFcxWYTMWOj0 for <buildroot@buildroot.org>;
- Fri,  7 Aug 2026 09:35:29 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0BCED40A22
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0BCED40A22
- for <buildroot@buildroot.org>; Fri,  7 Aug 2026 09:35:29 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 95A308CA3F; Fri,  7 Aug 2026 09:34:42 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 7 Aug 2026 11:12:42 +0200
-X-Git-Refname: refs/heads/2026.05.x
-X-Git-Oldrev: faaa3a4b31754ba0b65e7769b0fdb0cceb1a135f
-X-Git-Newrev: 156a50683a8cf4dfeb159cd31273d8bdc04f3e8a
-X-Patchwork-Hint: ignore
-Message-Id: <20260807093442.95A308CA3F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.05.x] package/argparse: remove
- package
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id y6yKrS-5p3iS for <buildroot@buildroot.org>;
+ Fri,  7 Aug 2026 11:12:17 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::430; helo=mail-wr1-x430.google.com;
+ envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A305F60909
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A305F60909
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
+ [IPv6:2a00:1450:4864:20::430])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A305F60909
+ for <buildroot@buildroot.org>; Fri,  7 Aug 2026 11:12:15 +0000 (UTC)
+Received: by mail-wr1-x430.google.com with SMTP id
+ ffacd0b85a97d-47f633e6058so2743045f8f.0
+ for <buildroot@buildroot.org>; Fri, 07 Aug 2026 04:12:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20251104; t=1786101134; x=1786705934;
+ h=content-transfer-encoding:content-type:in-reply-to:from
+ :content-language:references:cc:to:subject:user-agent:mime-version
+ :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to:content-type;
+ bh=FZ9ev+4vLCKgGstkOegbk2HNwN3Qe4CTD4V5R4hNWfE=;
+ b=rMeTzdFP/PVHFwNEFsYDW1Neh5sGjlwLRXYzG3bqxhHXCqGEflebOuSY8DUKk5zBjH
+ kARbsaakQ8c7deieHlHWdM8NUtO2fNpxrDcjyc+OEVO5DdUvyi/rQi3h37Xf8gYPWmC0
+ NGv+EioVeg0mFgtKX6KBXo3O1GAHfZE6cep7x65W4OyaHpP+Cua+vzLbp2HPXoT4Q0x9
+ 2QyCj1g2L3apjQzX1cCj8vc6O90Z25ZMHk76D9an7nJTrsu1J7FcrqufbPiFg0LERjFH
+ /H/LWBtqPrDRx0gIZ1zo6A6MF0thP+8eAwum99FKc2V67AiQYN0HBQqFnZ8AUz4vJvd0
+ DQvA==
+X-Forwarded-Encrypted: i=1;
+ AHgh+RqQ4TqRjpRNyt0UFOPzHapIBvTwwxp2JvKE82vcOJf/E/6y2rxNvQZ91LQ3QSkj03yV0Tds028tBv0=@buildroot.org
+X-Gm-Message-State: AOJu0YyTIqAH/X0IRWRr4RYddmzhHDD/UqGnT5e7/PQUKZGSnFhQGCoV
+ xAwdiVyQ8IS4GFEpHSHAyIxPbyO/faOBTkHugOFObNdGHowg9v8lao/szHymDQqstkBKloTQdv2
+ hR47A
+X-Gm-Gg: AR+sD121nza+hq1wG7Wjjqe+8YWuoqy9SUlC0MCIR/Ic4cuYPK2fbu7i4ZCeWF94b7n
+ Crs4pC9UGgN+YJ3w+dXcd21L2qOPi9hvnjVh4qXXZdR7P+GYDDORrwIaZCOUCrp48UpiykWkKoz
+ 05hBePQ/sG88zf8Oee64AnBzuJb7a3cQTa9uYles/VZPV46nkaNC1sa2Yq1FLbFMDXh5mzaB9U7
+ Mblg8V5z8E+n9DkIcFXD+mxFM/YR3Wi0wVvjUlkkuO/TZlLEPbdUNrBdFi8NxVC8sSBbRrMAib7
+ SLpLjzNlPDyZIatsLQQ7bKbVsWEjF3SaIaInMl/SCRjcslIp2nWGX2Qwa9mzs5d1atc3juuJUZ0
+ /I8K/Mu/YNR3MxQ6tJprKBYwZ4sCm44+o5bvbARqNkrIRsNRpgqtUPGtyqJpCEMSNmShJiWmFtn
+ X/NMzW4aFbTmkCDJlcS4deOMtZWH5x3SB+ipAzbXQHdiv+2XS+AdutiySgz0rt+l0v6lY8tvrBS
+ k+hk8L3MHzHxYC+rBHqL6xZQlhycgloSOZT/C0DTGkyyyCWlg==
+X-Received: by 2002:a05:6000:4029:b0:47f:4fa9:ae42 with SMTP id
+ ffacd0b85a97d-47fec5151d7mr34917918f8f.11.1786101133602; 
+ Fri, 07 Aug 2026 04:12:13 -0700 (PDT)
+Received: from ?IPV6:2a02:a03f:63ab:dc01:1291:d1ff:fe92:3b5a?
+ ([2a02:a03f:63ab:dc01:1291:d1ff:fe92:3b5a])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-480021fd392sm4736077f8f.31.2026.08.07.04.12.12
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Fri, 07 Aug 2026 04:12:13 -0700 (PDT)
+Message-ID: <a9f1deba-024b-4249-a74f-364a7c797c3c@mind.be>
+Date: Fri, 7 Aug 2026 13:12:12 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: yegorslists@googlemail.com, buildroot@buildroot.org
+Cc: Bernd Kuhls <bernd@kuhls.net>, Will Newton <will.newton@gmail.com>
+References: <20260711112039.2805693-1-yegorslists@googlemail.com>
+Content-Language: en-US
+In-Reply-To: <20260711112039.2805693-1-yegorslists@googlemail.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1786101134; x=1786705934; darn=buildroot.org;
+ h=content-transfer-encoding:content-type:in-reply-to:from
+ :content-language:references:cc:to:subject:user-agent:mime-version
+ :date:message-id:from:to:cc:subject:date:message-id:reply-to
+ :content-type;
+ bh=FZ9ev+4vLCKgGstkOegbk2HNwN3Qe4CTD4V5R4hNWfE=;
+ b=Tuy2spibK0Zgcoe6w+xwulwrfQOteGFxDwJAJw2Sxn+FjsxuGasta3DSJrLhQ9Zp8s
+ NyldG5/N1YrRNY2Ovj4Dqi/u7xCObRCmwcFocrf8t1a1r7vKkQAY4rElq25CgyKQEPGC
+ 9QXD+VklKoMbgDnfYmurQHWyXU5RAkrzLVAa2GslcRS93tEqU9lnissCt3Txz65Z89qt
+ RacDJ6qoTTgK/lOi5RiMp9061mYPpSGAJHJbPx7TNG4ZP/mE69GacRExwOuRTpokCdE6
+ I+J9eU3AP/pkgurBlLsP6zSOrKGGu9JHurcZDNFWyAorAjah4HzNdGO7PFMlW1LeVdz5
+ kVpg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=Tuy2spib
+Subject: Re: [Buildroot] [PATCH] package/libmicrohttpd: bump to version 1.0.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,128 +131,27 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Titouan Christophe via buildroot <buildroot@buildroot.org>
 Reply-To: Titouan Christophe <titouan.christophe@mind.be>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/156a50683a8cf4dfeb159cd31273d8bdc04f3e8a
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.05.x
 
-Duplicate of lua-argparse.
 
-Note: the argparse package was introduced in Buildroot commit [1].
-lua-argparse was introduced in [2]. For consistency with other Lua
-packages which has the "lua-" prefix, this commit removes the package
-without the prefix.
+On 11/07/26 13:20, yegorslists--- via buildroot wrote:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
+>
+> Changelog since 1.0.5:
+>
+> Fix various minor issues, like theoretical
+> integer overflows for extreme inputs or NULL
+> dereferences if the application passes NULL
+> where it should not.
+>
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-[1] https://gitlab.com/buildroot.org/buildroot/-/commit/169d1632d59bc0ddf32e5e5b538c8f5099467064
-[2] https://gitlab.com/buildroot.org/buildroot/-/commit/e70abe9716109068b7c9176dced5396719f64c24
+Applied to 2025.02.x and 2026.05.x, thanks
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 59f9c25d705aaadeb36db42320ff25b04ddbaf22)
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
----
- Config.in.legacy               |  9 +++++++++
- DEVELOPERS                     |  2 +-
- package/Config.in              |  1 -
- package/argparse/Config.in     | 10 ----------
- package/argparse/argparse.hash |  3 ---
- package/argparse/argparse.mk   | 11 -----------
- 6 files changed, 10 insertions(+), 26 deletions(-)
-
-diff --git a/Config.in.legacy b/Config.in.legacy
-index a36e331593..96fab167ef 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -144,6 +144,15 @@ endif
- 
- ###############################################################################
- 
-+comment "Legacy options removed in 2026.05.2"
-+
-+config BR2_PACKAGE_ARGPARSE
-+	bool "argparse has been removed"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_LUA_ARGPARSE
-+	help
-+	  Package argparse duplicates the package lua-argparse.
-+
- comment "Legacy options removed in 2026.05"
- 
- config BR2_PACKAGE_PTPD2
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 90fb5968eb..d0484cd84d 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2238,10 +2238,10 @@ F:	board/orangepi/orangepi-zero3/
- F:	configs/grinn_*
- F:	configs/orangepi_zero_plus_defconfig
- F:	configs/orangepi_zero3_defconfig
--F:	package/argparse/
- F:	package/dt-utils/
- F:	package/easydbus/
- F:	package/gitlab-runner/
-+F:	package/lua-argparse/
- F:	package/lua-flu/
- F:	package/lua-stdlib/
- F:	package/luaossl/
-diff --git a/package/Config.in b/package/Config.in
-index 630662477b..31e958bcdc 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -699,7 +699,6 @@ menu "Lua libraries/modules"
- # upstream package is "luafoo", call it "luafoo" in Buildroot; if the upstream
- # package is "foo", call it "lua-foo". Many packages currently don't follow
- # this convention, but that's historical accident.
--	source "package/argparse/Config.in"
- 	source "package/cgilua/Config.in"
- 	source "package/copas/Config.in"
- 	source "package/coxpcall/Config.in"
-diff --git a/package/argparse/Config.in b/package/argparse/Config.in
-deleted file mode 100644
-index d02b191254..0000000000
---- a/package/argparse/Config.in
-+++ /dev/null
-@@ -1,10 +0,0 @@
--config BR2_PACKAGE_ARGPARSE
--	bool "argparse"
--	help
--	  Argparse is a feature-rich command line parser for Lua
--	  inspired by argparse for Python. Argparse supports
--	  positional arguments, options, flags, optional arguments,
--	  subcommands and more. Argparse automatically generates
--	  usage, help and error messages.
--
--	  https://github.com/luarocks/argparse
-diff --git a/package/argparse/argparse.hash b/package/argparse/argparse.hash
-deleted file mode 100644
-index c573ba5796..0000000000
---- a/package/argparse/argparse.hash
-+++ /dev/null
-@@ -1,3 +0,0 @@
--# computed by luarocks/buildroot
--sha256  ea30d0643586a20aeb6349ca8cb7db63aefc21d9aa007c7b7168a7c564817879  argparse-0.7.1-1.src.rock
--sha256  9a918f21485b2a4529c901491d9101392f03586d65ad5b024a4445ebc1dc37b4  argparse-0.7.1/LICENSE
-diff --git a/package/argparse/argparse.mk b/package/argparse/argparse.mk
-deleted file mode 100644
-index d719e67d83..0000000000
---- a/package/argparse/argparse.mk
-+++ /dev/null
-@@ -1,11 +0,0 @@
--################################################################################
--#
--# argparse
--#
--################################################################################
--
--ARGPARSE_VERSION = 0.7.1-1
--ARGPARSE_LICENSE = MIT
--ARGPARSE_LICENSE_FILES = $(ARGPARSE_SUBDIR)/LICENSE
--
--$(eval $(luarocks-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
