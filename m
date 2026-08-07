@@ -1,120 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E16CC5AC7C
-	for <buildroot@archiver.kernel.org>; Fri,  7 Aug 2026 12:55:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E332AC5AC7A
+	for <buildroot@archiver.kernel.org>; Fri,  7 Aug 2026 17:26:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E9B1940ACD;
-	Fri,  7 Aug 2026 12:55:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5A9A760614;
+	Fri,  7 Aug 2026 17:26:33 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JJSjQtlQZ6LA; Fri,  7 Aug 2026 17:26:32 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 632C3605CE
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1786123592;
+	bh=ssFekF8IfnMoOJWP1KlWhj63hf3zHDGOcJ3yk5uJJkA=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=ZTocLbR8rKeGVq3FZ4RT9o0N1o4kLQ0vS2vKGDE+6ljSVdMpMU6Sd44TylpQxkUk+
+	 nTfthHKHicncVq0s1RsMLyBC5qQW25FdoLXhRXR8EO6QSRY6xJ2jOLRnAmA9yc67VX
+	 v55v+99EEwq0fROYHvWtOaXiFU+WMTRWMm9cptO+xPP1h74T4+/FEoeW2stQ0I9gQf
+	 RGRiuB2IlOnyAAtNj6WXxh149qh7zjNyesRS8XQf+qOZCuH1Ip2iaXWlaXUpOpbOLC
+	 coBnbqB3AkwxjQjJ7JyWhmW/ZvRyR5CtRNJw3AY7YvDN5iZXE9lFVEOZ9t6I5RZuRZ
+	 IOrIomoADU+5g==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 632C3605CE;
+	Fri,  7 Aug 2026 17:26:32 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3A037D3
+ for <buildroot@buildroot.org>; Fri,  7 Aug 2026 17:26:31 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2C0A7401DD
+ for <buildroot@buildroot.org>; Fri,  7 Aug 2026 17:26:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 81GuvHEI00Zb; Fri,  7 Aug 2026 12:55:33 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 28C1E40AC6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786107333;
-	bh=vrWwLmtcEiAZbFZyjoAJ900ORRY9YIZCjpCMMAL62Ag=;
-	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=sySKeTfyytbgNwRxOm/X277FzTSDCQMxdI64Q0SifZWyoJvdez8N7c5RE+ZKcC/Y1
-	 zcRygxlAx6n7cQLqvGtAtAb552MZRNkRtnpU7DrgCgOrgm/r5pKejph3IS5qDn6umx
-	 eyD5DW5cNwcO/7UCwzfHL353jUZgyJct9qLxhBJm05Hs1PqOknBJX/ehB+Y045mBAw
-	 Xl6CzfEmyCvqwJ7TLbkLLKqjti3EI5Q/Nz4ti755q8eghiK0+Xk0ACtSIqyTmOAvx7
-	 5bvXfzAiW2of+q9awqkDklH3o+624hQgZCL4jwqaJRB3f5ZDQt4sAr72s0IIwxM7oP
-	 FswYewq2nmvdA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 28C1E40AC6;
-	Fri,  7 Aug 2026 12:55:33 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 255A5392
- for <buildroot@buildroot.org>; Fri,  7 Aug 2026 12:55:24 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 17FC140270
- for <buildroot@buildroot.org>; Fri,  7 Aug 2026 12:55:24 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IYhJhQoXYMQj for <buildroot@buildroot.org>;
- Fri,  7 Aug 2026 12:55:23 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::62a; helo=mail-ej1-x62a.google.com;
- envelope-from=adam.duskett@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org F03FB400FE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F03FB400FE
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com
- [IPv6:2a00:1450:4864:20::62a])
- by smtp2.osuosl.org (Postfix) with ESMTPS id F03FB400FE
- for <buildroot@buildroot.org>; Fri,  7 Aug 2026 12:55:22 +0000 (UTC)
-Received: by mail-ej1-x62a.google.com with SMTP id
- a640c23a62f3a-c1676497000so35465066b.3
- for <buildroot@buildroot.org>; Fri, 07 Aug 2026 05:55:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1786107321; x=1786712121;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to:content-type;
- bh=UVQvaHWAvsv62X23ELw9Nt0lKiXfyHFCt1tdwu9F0Wc=;
- b=lsNA+TK4tMw1VgpsNcSSGl0WRL2ViEihEwMlJ5tcrSGP7aZNc8m+NEbgRxn+vlu6qK
- K0D1NNu+xcuXSXR6HHZ6aU0j85rbSeLxgenQ+l+M/hD1+JOD+S46PS4TyZtCW5OS7L2D
- kvgQMlakfzsfpmqO79B6/LjhHLfykoZ/PMIzZPMNR1nHtaMP7iLYZSFiWdbVkZdZlvnw
- 26FiQ4AwJz3ccFbzXcKMr85nq+tGAhLb3SXa9aO87Hx0dwoPFkzHo7W7U2AdAWQTEb2c
- FtIMSIOJKq6bIzFkL7tpoOXy8qsDy9Ek8NSNyf6vSryo+l4cy8+kXWFtUQZbRlQC3C5l
- VUUw==
-X-Gm-Message-State: AOJu0YwwhOx4oqFCaHu8Tt5UmaGink6n/gT9u73dMdrnzZ5qVF1s2FKd
- 4z3SuGG0fB84szdAJY+Ii4nqr9y1+nnC5Mxbzzj1U8gUlTZSixfJBdhNfWZVqFNKoenpYnCwItw
- +WGdKff8=
-X-Gm-Gg: AR+sD13g6hw9dbBIkw+YFdUmRm1kjiAMN+BVQ9otZ1TBWDlRKJRDuCorPka33DYt9Uk
- 1UkKhwsf5WK1Gg9Ke/KWfVqRVflLR8egqJ1lVRWkblhqmRoclgFX/+03z3zXYGjuHfoAin+G4+s
- Z9QS3JCDAr/6XxIz/6/TANqPYS7vaU1L17/l+MP2WXVS0vG3c3wzSq1DI/MGzoj1QHObJRwyNgG
- 3gQh+03whla3LdSRrqNdek5LvlnKbyIXNkoxs0V7H1MlhM/eVXmNyGGQ6m6pULv5hP9Tn47XOpY
- 1RAblJUhFB/xAt7B3mgBZsCQF0IkymVtG9lfsPGVP6h3JpP06tHTUVNwOFGuNp0gCVX+ErNg4sa
- 5u24b2S00k4L1rfZPlbXREwawjBG3eoyS2yjajzMjQKmzhAJSdEjw2u6QlSM11CWddlewfeJf0/
- z7jLsKiIUtZW3+lXZtQjQUpEiskFL28i9re2+wHanUCM47ce/I6uDQsGevE9xPYEubmXCcGkvTU
- atNweks3aGVmGWYqefKDeZOupPTin3TdEqgDOlEAC4M4wYvvYOrXxA62ulRFgvf/V5FuM10RgXT
- MDpPeSvI5Mrvzshz3H6e/dN5Wq3AWY91b/WJ4DGYIdoeldLS/HZkvkLQCnBbCHXg
-X-Received: by 2002:a17:907:e008:20b0:c20:7897:bc67 with SMTP id
- a640c23a62f3a-c207897f8f8mr113371066b.3.1786107320956; 
- Fri, 07 Aug 2026 05:55:20 -0700 (PDT)
-Received: from adam.amarulasolutions.com
- (2001-1c00-8183-9900-f185-b195-5f14-b7f0.cable.dynamic.v6.ziggo.nl.
- [2001:1c00:8183:9900:f185:b195:5f14:b7f0])
- by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-c2080a29a8fsm49539866b.4.2026.08.07.05.55.20
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 07 Aug 2026 05:55:20 -0700 (PDT)
-From: Adam Duskett <adam.duskett@amarulasolutions.com>
-To: buildroot@buildroot.org
-Cc: Adam Duskett <adam.duskett@amarulasolutions.com>
-Date: Fri,  7 Aug 2026 14:55:10 +0200
-Message-ID: <20260807125510.1285300-11-adam.duskett@amarulasolutions.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260807125510.1285300-1-adam.duskett@amarulasolutions.com>
-References: <20260807125510.1285300-1-adam.duskett@amarulasolutions.com>
+ id a7hblT4ZRcwz for <buildroot@buildroot.org>;
+ Fri,  7 Aug 2026 17:26:30 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A022540020
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A022540020
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A022540020
+ for <buildroot@buildroot.org>; Fri,  7 Aug 2026 17:26:29 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id 681A8780505;
+ Fri,  7 Aug 2026 19:26:23 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Fri, 07 Aug 2026 19:26:23 +0200
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1786107321; x=1786712121;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to:content-type;
- bh=UVQvaHWAvsv62X23ELw9Nt0lKiXfyHFCt1tdwu9F0Wc=;
- b=EFroBaDRdohHQgurT65xqGLfAmh4tobysMIttVRT49Z9PnND+2TuJuC4WdPNEwxDZH
- Heu0Mf1r7LxWNwFvCOaLeMmPuvWtvCxsp3WjrUIsJunqDM/QG+nhyRVIHU19nAk7Yu+X
- lehdpEpho6BpP+DNOQxQarTanVzGOeTYnHcvU=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key) header.d=amarulasolutions.com
- header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=EFroBaDR
-Subject: [Buildroot] [PATCH 11/11] test_mender/post-build.sh: use
- /etc/mender/device_type
+Date: Fri, 07 Aug 2026 19:26:23 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org, Joseph Kogut <joseph.kogut@gmail.com>, Romain
+ Naour <romain.naour@gmail.com>
+In-Reply-To: <20260806163311.1312780-1-bernd@kuhls.net>
+References: <20260806163311.1312780-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.17
+Message-ID: <0ed28a75f8a7d29466f6d051cc4c794a@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1786123586;
+ bh=lxczK72TElg4ObqiumX2svfnlLHbjhKv5lvLn/bKkSQ=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=nGXTDhCZsx5g1axhpPnyHKxQX8F4xvbJjcbhLjLrOFL5DWQv9Lrnsiwvb/Nls2/qn
+ 6DPOZyQ3iDgBY9TJlWoszhbzYTPO9gpC9zLF6MW7inA/w35Wz5sLAJT2hJKdeyfXNn
+ T0l5AknYRInmHP+c6KbH2CxVWW3qKUHli4fe8vcOTqmRfV+mFslxArNy1RAFL3MGjR
+ yufIXCp4wcWCTNbHe4P8GbjUTJsUdH70MYI3ywvzkwKmgE7VrN98f/kDmW/VtI7vwE
+ VdHjDzITAGJxNqEZ57Onacen3gMmwjjAcdTOtZh9bN59+MG3hCaSKbdy6mzUaX8gk8
+ /FizH/7E8GZnQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=nGXTDhCZ
+Subject: Re: [Buildroot] [PATCH 1/1] package/{mesa3d,
+ mesa3d-headers}: bump version to 26.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -126,56 +95,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-To keep parody with board/mender/x86_64/overlay/etc/mender/mender.conf,
-change /var/lib/mender/device_type to /etc/mender/device_type and
-add a /etc/mender/mender.conf file.
+On 06/08/2026 18:33, Bernd Kuhls wrote:
+> https://lists.freedesktop.org/archives/mesa-announce/2026-August/000863.html
 
-Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
----
- .../testing/tests/package/test_mender/post-build.sh   |  3 +--
- .../test_mender/rootfs-overlay/etc/mender/mender.conf | 11 +++++++++++
- 2 files changed, 12 insertions(+), 2 deletions(-)
- create mode 100644 support/testing/tests/package/test_mender/rootfs-overlay/etc/mender/mender.conf
+The user QwertyChouskie[m] recently reported on the Buildroot
+IRC channel:
+"""
+Just a heads up, when updating to Mesa 26.2, libclc is no longer
+required for anything except rusticl, though mesa's clc stuff
+(host clc to be specific) is still required.  Also, libclc itself
+should be compiled from Mesa's fork that includes critical fixes
+for OpenCL that the upstream LLVM project apparently won't merge
+due to their EOL policy, see
+https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/43020
+for details.
+"""
 
-diff --git a/support/testing/tests/package/test_mender/post-build.sh b/support/testing/tests/package/test_mender/post-build.sh
-index db075628e0..f27b0f9417 100755
---- a/support/testing/tests/package/test_mender/post-build.sh
-+++ b/support/testing/tests/package/test_mender/post-build.sh
-@@ -21,8 +21,7 @@ generate_mender_bootstrap_artifact() {
- function mender_fixup() {
-   rm -rf "${TARGET_DIR}"/var/lib/mender
-   mkdir -p "${TARGET_DIR}"/var/lib/mender
--  echo "device_type=${COMPATIBLE_TYPE}" > "${TARGET_DIR}"/var/lib/mender/device_type
--
-+  echo "device_type=${COMPATIBLE_TYPE}" > "${TARGET_DIR}"/etc/mender/device_type
- }
- 
- mender_fixup
-diff --git a/support/testing/tests/package/test_mender/rootfs-overlay/etc/mender/mender.conf b/support/testing/tests/package/test_mender/rootfs-overlay/etc/mender/mender.conf
-new file mode 100644
-index 0000000000..5f423fb2cb
---- /dev/null
-+++ b/support/testing/tests/package/test_mender/rootfs-overlay/etc/mender/mender.conf
-@@ -0,0 +1,11 @@
-+{
-+  "InventoryPollIntervalSeconds": 1800,
-+  "UpdatePollIntervalSeconds": 1800,
-+  "RetryPollIntervalSeconds": 300,
-+  "RootfsPartA": "/dev/vda2",
-+  "RootfsPartB": "/dev/vda3",
-+  "ServerCertificate": "/etc/mender/server.crt",
-+  "ServerURL": "https://docker.mender.io",
-+  "TenantToken": "dummy",
-+  "DeviceTypeFile": "/etc/mender/device_type"
-+}
--- 
-2.55.0
+It is also mentioned in the release note.
+I am surprise this patch is not changing anything on that area.
 
+Could you recheck those libclc dependencies?
+Could you also check if a new mesa-libclc package is needed?
+
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+
+Best regards,
+
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
