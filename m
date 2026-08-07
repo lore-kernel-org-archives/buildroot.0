@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AAA24C5AC80
-	for <buildroot@archiver.kernel.org>; Fri,  7 Aug 2026 09:35:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8098AC5ACA8
+	for <buildroot@archiver.kernel.org>; Fri,  7 Aug 2026 09:35:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7647E40A2E;
-	Fri,  7 Aug 2026 09:35:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4512A80E51;
+	Fri,  7 Aug 2026 09:35:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YgGkUSdasV2Y; Fri,  7 Aug 2026 09:35:39 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rh6hz36SuzPF; Fri,  7 Aug 2026 09:35:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 608D640A48
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6749880E00
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786095339;
-	bh=UQLv3/cHS5knM+gZbjViEalKAf9Caf89j5wVqgEhU9k=;
+	s=default; t=1786095340;
+	bh=qIwPwOh/htbBRFlDamf8AZ65YGFtgw6bbyHTb9whUD4=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=aL/duRpaF9YgYg9+/ZOJ0h9rDLJXGaw7+Vo86eTzPQpK9bum/XmQ0Gmx3qbNNDgKD
-	 X3SJr7RvfHIM7kwQiyCdpq8avTJF0A8xbQvnlIMwk8K2qNnqM272Fb7iLxfIf+J9jc
-	 4AFZ3avKmExNHzWCVSZ6ICbUcXwg0vQQEr5c9CbCqCqnRe8X2DjdKWqy8ro1EBrMNp
-	 uWpiE6+BmfsnQL2K3LB9Gy9QFFr2QdrRCVfNjwN2wTdejns8umI/6UDtbTgdErxCtm
-	 EvsQdM+Mi012FlXPsihJrC5JJtHiO0bGhDw3V6H3EAs91ay20X+Ntm15MUunOnSIam
-	 0kMOjQiWDum5w==
+	b=brhnff0p5bVyfIow5+RCrAiO5CZFHsZ3je9a7x0Dx+na1+sxC+AVZd8S3i6M482HU
+	 PNR5+xOONkDxWWpQeo430RBHIS6hxMT8aTKiMnUf/pYCKn2rvgcDGHpCc61yjil/ST
+	 G6Q0/HiqQlfF5F+PlflNTy+nyDVfxG4MfiBR4FXnJ98Xevw6paY9rXqVrTwR3s/dci
+	 8itySAnVPMgKgpbyZPEGhjenItfho3kMMNnqLfrn+9R8TcO++Po9dC6XJk7K4RzNjg
+	 YWcfLOi0r3YAbj6K3Z+Qu8ifT3xpoLIx2Osb9dP19jVQukUY4z8cR/UkDZx6S9wjZQ
+	 bDA+dI8GCzk0Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 608D640A48;
-	Fri,  7 Aug 2026 09:35:39 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id B231C282
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6749880E00;
+	Fri,  7 Aug 2026 09:35:40 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id C530C397
  for <buildroot@buildroot.org>; Fri,  7 Aug 2026 09:35:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9793D4019B
+ by smtp1.osuosl.org (Postfix) with ESMTP id AC49080827
  for <buildroot@buildroot.org>; Fri,  7 Aug 2026 09:35:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NvNxLg28iHGT for <buildroot@buildroot.org>;
- Fri,  7 Aug 2026 09:35:28 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eFOsRnyn3qcz for <buildroot@buildroot.org>;
+ Fri,  7 Aug 2026 09:35:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 94F6A4025E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 829F080664
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 94F6A4025E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 829F080664
  for <buildroot@buildroot.org>; Fri,  7 Aug 2026 09:35:28 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1DF968CA43; Fri,  7 Aug 2026 09:34:42 +0000 (UTC)
+ id 0A4248CA3F; Fri,  7 Aug 2026 09:34:42 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Fri, 7 Aug 2026 11:12:42 +0200
 X-Git-Refname: refs/heads/2026.05.x
-X-Git-Oldrev: c39801d4efa0f51938ac3893bb2d48d3c10d3c69
-X-Git-Newrev: 6b2a9d3d195829c6b9f76896ce1c1fd9738fe698
+X-Git-Oldrev: fd9dea7f80d57e842649d42a9cd61cfa0ea98a46
+X-Git-Newrev: 5937858c88164c3cfb5dd6ae68d152e081280422
 X-Patchwork-Hint: ignore
-Message-Id: <20260807093442.1DF968CA43@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.05.x] package/uboot-tools: fix
- host FIT signature support
+Message-Id: <20260807093442.0A4248CA3F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.05.x] package/samba4: bump
+ version to 4.24.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,228 +77,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/6b2a9d3d195829c6b9f76896ce1c1fd9738fe698
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/5937858c88164c3cfb5dd6ae68d152e081280422
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.05.x
 
-U-Boot host tools use the tools configuration namespace when code calls
-CONFIG_IS_ENABLED(). With USE_HOSTCC, CONFIG_IS_ENABLED(FIT_SIGNATURE)
-resolves to CONFIG_TOOLS_FIT_SIGNATURE, while
-CONFIG_VAL(FIT_SIGNATURE_MAX_SIZE) resolves to
-CONFIG_TOOLS_FIT_SIGNATURE_MAX_SIZE.
+https://www.samba.org/samba/history/samba-4.24.4.html
 
-The host-uboot-tools package only generates the old CONFIG_FIT_SIGNATURE
-define. This makes tools/Makefile include fit_check_sign, but the host code
-sees FIT signature support as disabled and the OpenSSL-backed signing and
-verification objects are omitted. As a result, mkimage accepts a signature
-node without writing its value or injecting a required public key.
-fit_check_sign then has no required key and reports success without
-checking the configuration signature.
-
-A FIT-support-only configuration never exercises this path, which is why
-the existing hash-only runtime test still passes.
-
-Generate the tools FIT signature options needed by the host code and pass
-CONFIG_TOOLS_LIBCRYPTO=y so the OpenSSL-backed signing, verification and
-cipher objects are selected. Keep CONFIG_FIT_SIGNATURE=y in the make
-options because U-Boot tools/Makefile still uses it to build
-fit_check_sign.
-
-Extend TestHostUbootTools to create an RSA-signed FIT, require a 256-byte
-configuration signature and a required public key, verify the FIT, corrupt
-the signature, and require verification to fail.
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-[Julien: add comments in runtime test]
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 928cc5dc5cb82e6f2cb43f853488309eb806ef89)
+(cherry picked from commit f42ee2bef29857aabb787761ac6ee10eb2175fcc)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- package/uboot-tools/uboot-tools.mk                 |  7 ++-
- support/testing/tests/package/test_uboot_tools.py  | 71 ++++++++++++++++++++++
- .../testing/tests/package/test_uboot_tools/key.dts |  7 +++
- .../tests/package/test_uboot_tools/signed.its      | 38 ++++++++++++
- 4 files changed, 121 insertions(+), 2 deletions(-)
+ package/samba4/samba4.hash | 4 ++--
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
-index 6b5554da9b..ef8bcabbd9 100644
---- a/package/uboot-tools/uboot-tools.mk
-+++ b/package/uboot-tools/uboot-tools.mk
-@@ -126,7 +126,10 @@ define HOST_UBOOT_TOOLS_CONFIGURE_CMDS
- 	mkdir -p $(@D)/include/generated
- 	$(if $(BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT),$(UBOOT_TOOLS_ENABLE_HASH_ALGOS))
- 	$(if $(BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT),echo '#define CONFIG_TOOLS_FIT_PRINT 1' >> $(@D)/include/generated/autoconf.h)
--	echo $(if $(BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT),'#define CONFIG_FIT_SIGNATURE 1') >> $(@D)/include/generated/autoconf.h
-+	$(if $(BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT),echo '#define CONFIG_TOOLS_IMAGE_PRE_LOAD 1' >> $(@D)/include/generated/autoconf.h)
-+	$(if $(BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT),echo '#define CONFIG_TOOLS_RSASSA_PSS 1' >> $(@D)/include/generated/autoconf.h)
-+	$(if $(BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT),echo '#define CONFIG_TOOLS_FIT_SIGNATURE 1' >> $(@D)/include/generated/autoconf.h)
-+	$(if $(BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT),echo '#define CONFIG_TOOLS_FIT_SIGNATURE_MAX_SIZE 0x10000000' >> $(@D)/include/generated/autoconf.h)
- 	mkdir -p $(@D)/include/asm
- 	touch $(@D)/include/asm/linkage.h
- endef
-@@ -142,7 +145,7 @@ HOST_UBOOT_TOOLS_DEPENDENCIES += host-dtc
- endif
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index 83e77f039b..7c44ed747a 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://download.samba.org/pub/samba/stable/samba-4.24.3.tar.asc
+-sha256  4a5e0ed1ea192b798c873d9957c50a5767c10c2767cccb00d56ecc427e94f8e9  samba-4.24.3.tar.gz
++# https://download.samba.org/pub/samba/stable/samba-4.24.4.tar.asc
++sha256  df2c51ab4361ec626ab9988e5946efcca8465bc7afae834291d5558468265ff8  samba-4.24.4.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 006fbff6c5..d481f9d417 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT),y)
--HOST_UBOOT_TOOLS_MAKE_OPTS += CONFIG_FIT_SIGNATURE=y CONFIG_FIT_SIGNATURE_MAX_SIZE=0x10000000
-+HOST_UBOOT_TOOLS_MAKE_OPTS += CONFIG_TOOLS_LIBCRYPTO=y CONFIG_FIT_SIGNATURE=y
- HOST_UBOOT_TOOLS_DEPENDENCIES += host-openssl
- define HOST_UBOOT_TOOLS_INSTALL_FIT_CHECK_SIGN
- 	$(INSTALL) -m 0755 -D $(@D)/tools/fit_check_sign $(HOST_DIR)/bin/fit_check_sign
-diff --git a/support/testing/tests/package/test_uboot_tools.py b/support/testing/tests/package/test_uboot_tools.py
-index 5e5b44af30..8cff6fda21 100644
---- a/support/testing/tests/package/test_uboot_tools.py
-+++ b/support/testing/tests/package/test_uboot_tools.py
-@@ -1,11 +1,14 @@
- import hashlib
- import re
-+import subprocess
- import zlib
- from pathlib import Path
- 
- import infra.basetest
- 
- EXAMPLE_ITS = Path(__file__).parent / "test_uboot_tools/example.its"
-+KEY_DTS = Path(__file__).parent / "test_uboot_tools/key.dts"
-+SIGNED_ITS = Path(__file__).parent / "test_uboot_tools/signed.its"
- 
- 
- def get_hashes(output: str) -> dict[str, str]:
-@@ -72,6 +75,7 @@ class TestHostUbootTools(infra.basetest.BRHostPkgTest):
-         """
-         BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-         BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
-+        BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT=y
-         """
- 
-     def test_run(self):
-@@ -86,3 +90,70 @@ class TestHostUbootTools(infra.basetest.BRHostPkgTest):
-                 self.assertEqual(expected[h], reported[h])
-         # Python does not have built-in CRC16 support, just check it is present
-         self.assertIn("crc16-ccitt", reported)
-+
-+        # See U-Boot FIT Signature Verification documentation:
-+        # https://source.denx.de/u-boot/u-boot/-/blob/v2026.07/doc/usage/fit/signature.rst
-+        keydir = Path(self.builddir) / "keys"
-+        keydir.mkdir(exist_ok=True)
-+
-+        # We generate a prublic/private key pair to sign the image.
-+        cmd = [
-+            "host/bin/openssl", "req", "-batch", "-new", "-x509", "-nodes",
-+            "-newkey", "rsa:2048", "-keyout", str(keydir / "dev.key"),
-+            "-out", str(keydir / "dev.crt"), "-subj", "/CN=Buildroot FIT test",
-+        ]
-+        infra.run_cmd_on_host(self.builddir, cmd)
-+
-+        # We compile the empty dtb that will be used to store the
-+        # public key.
-+        cmd = [
-+            "host/bin/dtc", "-I", "dts", "-O", "dtb", "-p", "0x1000",
-+            "-o", "test-key.dtb", str(KEY_DTS),
-+        ]
-+        infra.run_cmd_on_host(self.builddir, cmd)
-+
-+        # We sign the image and write the public key in our key
-+        # storage dtb.
-+        cmd = [
-+            "host/bin/mkimage", "-f", str(SIGNED_ITS), "-k", str(keydir),
-+            "-K", "test-key.dtb", "-r", "signed.fit",
-+        ]
-+        infra.run_cmd_on_host(self.builddir, cmd)
-+
-+        # We check there is a signature present in the FIT image.
-+        cmd = [
-+            "host/bin/fdtget", "-t", "bx", "signed.fit",
-+            "/configurations/config-1/signature-1", "value",
-+        ]
-+        signature = infra.run_cmd_on_host(self.builddir, cmd).split()
-+        self.assertEqual(len(signature), 256)
-+
-+        # We check the key is marked as required for the configuration.
-+        cmd = [
-+            "host/bin/fdtget", "-t", "s", "test-key.dtb",
-+            "/signature/key-dev", "required",
-+        ]
-+        required = infra.run_cmd_on_host(self.builddir, cmd).strip()
-+        self.assertEqual(required, "conf")
-+
-+        # We actually check the signature is valid.
-+        cmd = [
-+            "host/bin/fit_check_sign", "-f", "signed.fit",
-+            "-k", "test-key.dtb",
-+        ]
-+        infra.run_cmd_on_host(self.builddir, cmd)
-+
-+        # We "corrupt" the signature, by setting it to zero.
-+        cmd = [
-+            "host/bin/fdtput", "-t", "bx", "signed.fit",
-+            "/configurations/config-1/signature-1", "value", "00",
-+        ]
-+        infra.run_cmd_on_host(self.builddir, cmd)
-+
-+        # We check again the siganute, and expect a failure.
-+        cmd = [
-+            "host/bin/fit_check_sign", "-f", "signed.fit",
-+            "-k", "test-key.dtb",
-+        ]
-+        with self.assertRaises(subprocess.CalledProcessError):
-+            infra.run_cmd_on_host(self.builddir, cmd)
-diff --git a/support/testing/tests/package/test_uboot_tools/key.dts b/support/testing/tests/package/test_uboot_tools/key.dts
-new file mode 100644
-index 0000000000..c7a686c720
---- /dev/null
-+++ b/support/testing/tests/package/test_uboot_tools/key.dts
-@@ -0,0 +1,7 @@
-+/dts-v1/;
-+
-+/* This empty dts will be used for storing the public key.
-+ * The dtb is populated later by the "mkimage -K" command. */
-+
-+/ {
-+};
-diff --git a/support/testing/tests/package/test_uboot_tools/signed.its b/support/testing/tests/package/test_uboot_tools/signed.its
-new file mode 100644
-index 0000000000..25128cbbda
---- /dev/null
-+++ b/support/testing/tests/package/test_uboot_tools/signed.its
-@@ -0,0 +1,38 @@
-+/dts-v1/;
-+
-+/ {
-+	description = "Signed test FIT";
-+	#address-cells = <1>;
-+
-+	images {
-+		kernel {
-+			description = "This file, pretending to be a kernel";
-+			data = /incbin/("example.its");
-+			type = "kernel";
-+			arch = "arm64";
-+			os = "linux";
-+			compression = "none";
-+			load = <0x40400000>;
-+			entry = <0x40400000>;
-+
-+			hash-1 {
-+				algo = "sha256";
-+			};
-+		};
-+	};
-+
-+	configurations {
-+		default = "config-1";
-+
-+		config-1 {
-+			description = "Signed test entry";
-+			kernel = "kernel";
-+
-+			signature-1 {
-+				algo = "sha256,rsa2048";
-+				key-name-hint = "dev";
-+				sign-images = "kernel";
-+			};
-+		};
-+	};
-+};
+-SAMBA4_VERSION = 4.24.3
++SAMBA4_VERSION = 4.24.4
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
