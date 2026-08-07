@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EDE71C5AC7C
-	for <buildroot@archiver.kernel.org>; Fri,  7 Aug 2026 09:35:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5D45C5AC9E
+	for <buildroot@archiver.kernel.org>; Fri,  7 Aug 2026 09:35:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C4FA540A5C;
-	Fri,  7 Aug 2026 09:35:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6FBD2608F0;
+	Fri,  7 Aug 2026 09:35:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zRL5rlMTJDhV; Fri,  7 Aug 2026 09:35:42 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fLBqMlogr2af; Fri,  7 Aug 2026 09:35:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A280840A4A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A68E9608F7
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786095342;
-	bh=KG4ZKwmFC9F5RAsXIggML42JGcg4fFcp8tdiT+XmJ1M=;
+	s=default; t=1786095344;
+	bh=p6xUNhkAqqbnhtqI3hpugLXb3IWQiNeEa3ZVXczoZ6o=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=IyCXx6T3y+bNgKYWHOCz1zh3UL96Z7S/6AfJ94pjHJRPc0KfiKmGi8/DqvkGd6FyW
-	 v8ztyp9kuxL6dAgSrNzE1vi61NktyvH3nqcSc8rpAgWng3ESMhGz1jQsxx+byL2Ztr
-	 sSMsPhfUMJgBf1n8251cjm+fzQxmPLFOQzmQW2TO8U8JLBVPOtZf/8DLj0I5IWRMkt
-	 2kKOEoC7D/74fYbH2dGzDUo6VKx080fYpt0H+o2sXaXYQAGrKFvVb04A0NTKxzBClZ
-	 CcTIP9Ex3iwPpTZpmQBujHhGTXEB9I6Sb+IE/Hs8WYQNM3cbFTPo8MGjkwN1C7z/Om
-	 8r5LcYAreybPg==
+	b=MTQZuaoF5+juXJfII6DSnuaao8ef8yutme2lUDQ82FmP9sseVHh4u2q/RQfjvpxSd
+	 BahgoTW7J/JR/iDgjw7kSGtSQcEDfiNgGJqel0bVe8QTydOMA4jAIDbTrC69w0AaHG
+	 ml44AuNaEiW56WH8EUYjs9//mFyLIOPMKF63ppFTRl6vpKYOIuulk1gabFRW3ZaG+L
+	 cVn6lj4aC/+LZHwqHMklHXZOFXjcoO9TkhBHDuRgkmxgjDRHpwksrxoPWxdyynWXpP
+	 u3W4ngne90QYUExQfMh/r9/DGtGV2LVkMXumZoF0PwMStamU+sXhPiyUHp/1oJqcGe
+	 hFBbxqUFUftHA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A280840A4A;
-	Fri,  7 Aug 2026 09:35:42 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id E6AD1282
- for <buildroot@buildroot.org>; Fri,  7 Aug 2026 09:35:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A68E9608F7;
+	Fri,  7 Aug 2026 09:35:44 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 132E7D3
+ for <buildroot@buildroot.org>; Fri,  7 Aug 2026 09:35:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D92624019B
- for <buildroot@buildroot.org>; Fri,  7 Aug 2026 09:35:29 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 058B14019B
+ for <buildroot@buildroot.org>; Fri,  7 Aug 2026 09:35:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Zqeq_pmNLxsY for <buildroot@buildroot.org>;
+ id Fbpx9cxj7OoN for <buildroot@buildroot.org>;
  Fri,  7 Aug 2026 09:35:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CE06E403D8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3A56440064
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id CE06E403D8
- for <buildroot@buildroot.org>; Fri,  7 Aug 2026 09:35:28 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3A56440064
+ for <buildroot@buildroot.org>; Fri,  7 Aug 2026 09:35:29 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 63C398CA42; Fri,  7 Aug 2026 09:34:42 +0000 (UTC)
+ id C41B98CA42; Fri,  7 Aug 2026 09:34:42 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Fri, 7 Aug 2026 11:12:42 +0200
 X-Git-Refname: refs/heads/2026.05.x
-X-Git-Oldrev: aae95fb47dadcb4c121be22a8d7998748cf3f49a
-X-Git-Newrev: 66e1be310b3a6638e4625dd507f8fe9b05b99e5f
+X-Git-Oldrev: 772bf9f87356d2619e66c97936cc60e8bae18de3
+X-Git-Newrev: fde8ba3df7cd3af9d55d1a9fcfeb9a3b0adb39a4
 X-Patchwork-Hint: ignore
-Message-Id: <20260807093442.63C398CA42@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.05.x] package/openblas: fix
- build on mips64 n32
+Message-Id: <20260807093442.C41B98CA42@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.05.x] package/network-manager:
+ drop initrd-related services when unneeded
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,43 +77,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/66e1be310b3a6638e4625dd507f8fe9b05b99e5f
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/fde8ba3df7cd3af9d55d1a9fcfeb9a3b0adb39a4
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.05.x
 
-BR2_ARCH_IS_64 is set for mips64/mips64el even when the n32 ABI is
-used, so openblas was built with BINARY=64. Its build system then
-passes -mabi=64, which conflicts with the n32 sysroot:
+Since NetworkManager 1.54, packaged since commit 24827ae398db
+(package/network-manager: bump to 1.56.0), new services related to
+running in an initrd are now installed, which prevents proper startup,
+with systemd reporting that two units declare the same BusName.
 
-  gnu/stubs.h:35:11: fatal error: gnu/stubs-n64_hard.h: No such file
-  or directory
+When systemd is configured without initrd support, drop the
+NetworkManager initrd-related services.
 
-For openblas, BINARY refers to the pointer size rather than to the
-architecture, and n32 uses 32-bit pointers, so BINARY=32 is correct
-there.
+Fixes: 24827ae398db
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit fd685fc8c2c061641e94bff8f5db76d49be6a18b)
+Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+Cc: Fiona Klute <fiona.klute@gmx.de>
+Cc: Marcus Hoffmann <buildroot@bubu1.eu>
+Acked-by: TIAN Yuanhao <tianyuanhao3@163.com>
+Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
+(cherry picked from commit 32bdc4710a483c3ea7b0d5a805b2a857f9a11872)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- package/openblas/openblas.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/network-manager/network-manager.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/openblas/openblas.mk b/package/openblas/openblas.mk
-index 9a3bb42496..a5bf68f699 100644
---- a/package/openblas/openblas.mk
-+++ b/package/openblas/openblas.mk
-@@ -49,7 +49,9 @@ ifeq ($(BR2_STATIC_LIBS),y)
- OPENBLAS_MAKE_OPTS += NO_SHARED=1
- endif
- 
--ifeq ($(BR2_ARCH_IS_64),y)
-+# mips64 n32 is a 64-bit architecture, but with 32-bit pointers, so
-+# openblas must be built with BINARY=32
-+ifeq ($(BR2_ARCH_IS_64)$(BR2_MIPS_NABI32),y)
- OPENBLAS_MAKE_OPTS += BINARY=64
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index 301c1ad43e..bf4f29c3cc 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -151,6 +151,12 @@ NETWORK_MANAGER_CONF_OPTS += \
+ 	-Dconfig_logging_backend_default=journal \
+ 	-Dsession_tracking=systemd \
+ 	-Dsuspend_resume=systemd
++ifneq ($(BR2_PACKAGE_SYSTEMD_INITRD),y)
++define NETWORK_MANAGER_CLEAN_INITRD
++	rm -f $(TARGET_DIR)/usr/lib/systemd/system/NetworkManager-*initrd.service
++endef
++NETWORK_MANAGER_POST_INSTALL_TARGET_HOOKS += NETWORK_MANAGER_CLEAN_INITRD
++endif
  else
- OPENBLAS_MAKE_OPTS += BINARY=32
+ NETWORK_MANAGER_CONF_OPTS += \
+ 	-Dsystemd_journal=false \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
