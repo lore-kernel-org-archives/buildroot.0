@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56080C5AC80
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8211DC5AC7A
 	for <buildroot@archiver.kernel.org>; Fri,  7 Aug 2026 09:33:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0892381219;
-	Fri,  7 Aug 2026 09:33:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3F418409F9;
+	Fri,  7 Aug 2026 09:33:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jtljDCEc8Lrz; Fri,  7 Aug 2026 09:33:53 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oI3kLS9BMZhN; Fri,  7 Aug 2026 09:33:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 21FFA811F0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 42D5840A13
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786095233;
-	bh=mlHG15w7sy3ZCfsUtDpMabW8fpWGvT6+huqTcjVfZB8=;
+	s=default; t=1786095236;
+	bh=ZMGdiCoL0seIRa5pmknw9Afyd6N/e9nQh4fgwdNtoWQ=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=RB5MDi/VcBhgQ4JsZJ9ikv0Wi+6G6fZBGS4dr7FHjcxy6MxWviOu8m28TYJGy4o/E
-	 9+GsmGQuogXQ6GlNmAmoc7EgO/fjSPy5eQAkISPEAjDepMvxyFlK5dXpPhdgp8StGy
-	 YJdL6ZtyiA/XN7QTIlthQox0IHZd76lEC7Vt/LEP73CtS4beVJARhUjFVhDmk3VIe7
-	 FchQQQ7eM6xF/OcL03wKd/DA4MkVj+Nak35Eld8NSKhOffrnRtrTmNjBESE7ESdOTt
-	 BHlWetaqGUAgKvSUOWF2WNuxNRWhc6YSyciy5U7rADM8vpXwC9r60QPtqEa2Fj+4dD
-	 MVg5fdK6CXV8g==
+	b=h4NkLW9+/q9oCUuB0dlElEviZi7KNoA5WvnP/8eC8yNyJfTeOmGU7TiTAFoWw7dCP
+	 l0sAD4oKnO++cpjoZzd0/6b4oym1qxH1JBa6W5Ggcp/i5VYHJu+Tv8fu7mWzkICPxM
+	 IGB7YsghDq1/5W0lELDyNIVXygPfI1mqvRZbYUXTODGSjNVpMioXZhFkr3/UUPo3Vy
+	 zs3PnxEKwLUc0sTk+auMWjicodRT8iIUEP/tZ+xOAVnLYpuulh3qeS6O5mOEnsxpbf
+	 0Vj0ftdAipY3rGX8DWXO3k0VsZpQmGHJk/DYEnAL4G2KqyK2fb6PhVO2SR0cjWuTp7
+	 b9ih30Nxshagw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 21FFA811F0;
-	Fri,  7 Aug 2026 09:33:53 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0A46B1390
+	by smtp4.osuosl.org (Postfix) with ESMTP id 42D5840A13;
+	Fri,  7 Aug 2026 09:33:56 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 23D46397
  for <buildroot@buildroot.org>; Fri,  7 Aug 2026 09:33:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E31D5811FD
- for <buildroot@buildroot.org>; Fri,  7 Aug 2026 09:33:46 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0A501409F9
+ for <buildroot@buildroot.org>; Fri,  7 Aug 2026 09:33:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id h6uFjll_XglC for <buildroot@buildroot.org>;
- Fri,  7 Aug 2026 09:33:46 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tGd3wyf2a_Mh for <buildroot@buildroot.org>;
+ Fri,  7 Aug 2026 09:33:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DE413811FE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D9D06409FB
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id DE413811FE
+ by smtp4.osuosl.org (Postfix) with ESMTP id D9D06409FB
  for <buildroot@buildroot.org>; Fri,  7 Aug 2026 09:33:45 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 743698CA3F; Fri,  7 Aug 2026 09:32:59 +0000 (UTC)
+ id 62FD68CA40; Fri,  7 Aug 2026 09:32:59 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 7 Aug 2026 11:08:34 +0200
+Date: Fri, 7 Aug 2026 11:08:02 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 18c3f6d8950de68b4084b6d508acec0240b3bbfe
-X-Git-Newrev: d0d21e16cbe8f3e868226edce4e25d31322cb50b
+X-Git-Oldrev: a6506ec5a39e0a7b254c3795f2e63d2f7384ef02
+X-Git-Newrev: af97fbb9ca5c8e1eaef4ef182836c2b61774ee00
 X-Patchwork-Hint: ignore
-Message-Id: <20260807093259.743698CA3F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/openblas: fix
- build on mips64 n32
+Message-Id: <20260807093259.62FD68CA40@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/samba4: security
+ bump to v4.22.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,43 +77,97 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d0d21e16cbe8f3e868226edce4e25d31322cb50b
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/af97fbb9ca5c8e1eaef4ef182836c2b61774ee00
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-BR2_ARCH_IS_64 is set for mips64/mips64el even when the n32 ABI is
-used, so openblas was built with BINARY=64. Its build system then
-passes -mabi=64, which conflicts with the n32 sysroot:
+See the release notes: https://www.samba.org/samba/history/samba-4.22.11.html
 
-  gnu/stubs.h:35:11: fatal error: gnu/stubs-n64_hard.h: No such file
-  or directory
+This is a security release in order to address the following defects:
+o CVE-2026-6949:   TSIG packet with name compression can crash DNS
 
-For openblas, BINARY refers to the pointer size rather than to the
-architecture, and n32 uses 32-bit pointers, so BINARY=32 is correct
-there.
+                   Incorrect size calculations when a TSIG record contains
+                   compressed names can lead to a large out-of-bounds write
+                   causing the server to crash.
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit fd685fc8c2c061641e94bff8f5db76d49be6a18b)
+                   https://www.samba.org/samba/security/CVE-2026-6949.html
+
+o CVE-2026-58216:  An authenticated user could possibly crash a KDC process
+
+                   A kpasswd packet that contains malformed ASN.1 might cause
+                   the server to access 6 bytes of unallocated memory. This
+                   memory is not exposed to the user, but in some
+                   circumstances the server could crash.
+
+                   https://www.samba.org/samba/security/CVE-2026-58216.html
+
+o CVE-2026-58218:  DNS signing DoS via TKEY name cache exhaustion
+
+                   An unauthenticated user can repeatedly register names TKEY
+                   names, which floods a cache causing legitimate TKEYs to be
+                   expunged. This can practically block the use DNS TSIG
+                   signing.
+
+                   https://www.samba.org/samba/security/CVE-2026-58218.html
+
+o CVE-2026-58221:  Samba AD authenticated LDAP access domain takeover
+
+                   Samba AD low-privilege authenticated LDAP access allows
+                   modifications to internal LDB special DNs, which permits a
+                   domain takeover.
+
+                   https://www.samba.org/samba/security/CVE-2026-58221.html
+
+o CVE-2026-58222:  Samba AD LDAP Compare filter injection and trusted-request
+                   confusion disclose protected attributes
+
+                   An ordinary authenticated domain user can bypass access
+                   checks and query confidential Active Directory attributes
+                   (such as KDS root keys) via LDAP Compare requests. Due to a
+                   filter injection flaw and trusted execution context, the
+                   LDAP Compare operation can be turned into a
+                   protected-attribute disclosure oracle.
+
+                   https://www.samba.org/samba/security/CVE-2026-58222.html
+
+o CVE-2026-58224   The CTDB protocol has bounds checking issues
+
+                   CTDB fails to do integrity checking of received packets.
+                   This includes failure to check field lengths against packet
+                   lengths when unmarshalling packets.
+
+                   https://www.samba.org/samba/security/CVE-2026-58224.html
+
+(alternative to commit b5e6133eabd3371f999f26215ac70406530eb0d9)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- package/openblas/openblas.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/samba4/samba4.hash | 4 ++--
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/openblas/openblas.mk b/package/openblas/openblas.mk
-index edab26493d..7ac712719f 100644
---- a/package/openblas/openblas.mk
-+++ b/package/openblas/openblas.mk
-@@ -49,7 +49,9 @@ ifeq ($(BR2_STATIC_LIBS),y)
- OPENBLAS_MAKE_OPTS += NO_SHARED=1
- endif
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index 1875343d11..ad60feaa2a 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://download.samba.org/pub/samba/stable/samba-4.22.10.tar.asc
+-sha256  e601437cde4845a42e7818379cd0ad5fc4fa518a7cf5284cc0a2657e79b30c34  samba-4.22.10.tar.gz
++# https://download.samba.org/pub/samba/stable/samba-4.22.11.tar.asc
++sha256  d569b298a81cc212a39e9d1813bc4ca5c71ac93c4ceb2eec03db178096958d00  samba-4.22.11.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 50ae8ba6af..3cbcbd0dd1 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--ifeq ($(BR2_ARCH_IS_64),y)
-+# mips64 n32 is a 64-bit architecture, but with 32-bit pointers, so
-+# openblas must be built with BINARY=32
-+ifeq ($(BR2_ARCH_IS_64)$(BR2_MIPS_NABI32),y)
- OPENBLAS_MAKE_OPTS += BINARY=64
- else
- OPENBLAS_MAKE_OPTS += BINARY=32
+-SAMBA4_VERSION = 4.22.10
++SAMBA4_VERSION = 4.22.11
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
