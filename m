@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0EE60C5AC80
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E0DBC5AC7C
 	for <buildroot@archiver.kernel.org>; Fri,  7 Aug 2026 09:35:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C84A2608E7;
+	by smtp4.osuosl.org (Postfix) with ESMTP id E64FE40A03;
 	Fri,  7 Aug 2026 09:35:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xab2tnrikZAV; Fri,  7 Aug 2026 09:35:35 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id N_3Z47XZnZBF; Fri,  7 Aug 2026 09:35:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E5508608DF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0214540A28
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786095335;
-	bh=4XoQh4scLWYsBZM+LOK0/WbUBUaRoRvuskiWtB3QarQ=;
+	s=default; t=1786095336;
+	bh=8XRdLu0UfQ5KaXmKFv+D4GvxztUc3gr227A1g65jArI=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=ZBCCG/kGwADHphwI7pS7Ve+nfCh7Xb3STPZFI/ZpczI6+/hdqUfAg2evoCvKFGdDD
-	 2SNv1vMYjoibJAAcyoPpeqC9oEsYr2YvrSQWJH+J90lZ2jOvt1e7gqGMG5Zwki60+G
-	 VNzmi5oVium9dl9iWG3ti+WRGEp8p566i5WYmCKeGBSh3qANazmoR9au07R+OayOfN
-	 eeAk1ST4T9h6Fi4fJJCHiakXrnibeRTEnLo11nv0EQkIND3cEJR27J92/Hnvpls4Yk
-	 tvnnxgomVHeb4xTI0LAjPmlTwohjBPK9dmtaErDqdvgbfKaBuTY18lUDi9fM5mR1WI
-	 B6qvsBuT78CXg==
+	b=e+KfL6bh9Y9J9bu8yL5JbasJkVRfraiKrn4KbWV6G06OaQ40woVRIrugLNB3GYPv1
+	 JAw74e7JScT+fuK3UUXOq9G7FUaEVyNSl34qHR7ZXbcaByOVe1mreo+UWH/sTDso0e
+	 ry+LJzcLfEeSbgkUEo3KFoXMCPJGNOx+5uI54rmO4SaUaAdShwoX6n7n2idSi0h+I/
+	 21V/LLzQqbI/PGGKjSAcHH88j7iYGafINMO62xYSxCOJg7u5LF0d+JiA0g0703KHVI
+	 rEXDTc+qJv4H9K71ZaQL2f6vunHn1tDt9aY+BFfkN2OPN58kYiWNVRg6G9dMd1MMaf
+	 2nqbUgsfW9vkQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E5508608DF;
-	Fri,  7 Aug 2026 09:35:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0214540A28;
+	Fri,  7 Aug 2026 09:35:36 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 604F01390
+ by lists1.osuosl.org (Postfix) with ESMTP id 78D9D397
  for <buildroot@buildroot.org>; Fri,  7 Aug 2026 09:35:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3FA03409FB
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5E95A40A07
  for <buildroot@buildroot.org>; Fri,  7 Aug 2026 09:35:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GqjG3RiwbILh for <buildroot@buildroot.org>;
+ id HAuWwwQHoAKm for <buildroot@buildroot.org>;
  Fri,  7 Aug 2026 09:35:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9194B40A07
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8CFED40A03
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9194B40A07
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8CFED40A03
  for <buildroot@buildroot.org>; Fri,  7 Aug 2026 09:35:28 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 275468CA40; Fri,  7 Aug 2026 09:34:42 +0000 (UTC)
+ id 140D98CA44; Fri,  7 Aug 2026 09:34:42 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Fri, 7 Aug 2026 11:12:42 +0200
 X-Git-Refname: refs/heads/2026.05.x
-X-Git-Oldrev: 6b2a9d3d195829c6b9f76896ce1c1fd9738fe698
-X-Git-Newrev: bee32c9979320ae33c0882880bdfcd1290daff04
+X-Git-Oldrev: 5937858c88164c3cfb5dd6ae68d152e081280422
+X-Git-Newrev: c39801d4efa0f51938ac3893bb2d48d3c10d3c69
 X-Patchwork-Hint: ignore
-Message-Id: <20260807093442.275468CA40@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.05.x] package/uboot-tools: fix
- host build without FIT support
+Message-Id: <20260807093442.140D98CA44@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.05.x] package/samba4: security
+ bump version to 4.24.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,55 +77,106 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/bee32c9979320ae33c0882880bdfcd1290daff04
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/c39801d4efa0f51938ac3893bb2d48d3c10d3c69
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.05.x
 
-Commit [1] "package/uboot-tools: fix host FIT signature support"
-slightly changed the logic in which the file
-$(@D)/include/generated/autoconf.h is created.
+https://www.samba.org/samba/history/samba-4.24.5.html
 
-When there is no Kconfig sub-option selected, the file is no longer
-created and the build fails with error:
+This is a security release in order to address the following defects:
 
-    include/linux/kconfig.h:4:10: fatal error: generated/autoconf.h: No such file or directory
+o CVE-2026-6949:
+  TSIG packet with name compression can crash DNS
 
-The issue can be reproduced with the with the simple commands:
+   Incorrect size calculations when a TSIG record contains
+   compressed names can lead to a large out-of-bounds write
+   causing the server to crash.
 
-    cat >.config <<EOF
-    BR2_aarch64=y
-    BR2_TOOLCHAIN_EXTERNAL=y
-    BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-    EOF
-    make olddefconfig
-    make host-uboot-tools
+   https://www.samba.org/samba/security/CVE-2026-6949.html
 
-This commit fixes the issue by simply adding a touch of the file
-at the beginning to make sure it will always exist.
+o CVE-2026-58216:
+  An authenticated user could possibly crash a KDC process
 
-[1] https://gitlab.com/buildroot.org/buildroot/-/commit/928cc5dc5cb82e6f2cb43f853488309eb806ef89
+   A kpasswd packet that contains malformed ASN.1 might cause
+   the server to access 6 bytes of unallocated memory. This
+   memory is not exposed to the user, but in some
+   circumstances the server could crash.
 
-Cc: James Hilliard <james.hilliard1@gmail.com>
-Reported-by: Robert P. J. Day <rpjday@crashcourse.ca>
-Tested-by: Robert P. J. Day <rpjday@crashcourse.ca>
+   https://www.samba.org/samba/security/CVE-2026-58216.html
+
+o CVE-2026-58218:
+  DNS signing DoS via TKEY name cache exhaustion
+
+   An unauthenticated user can repeatedly register names TKEY
+   names, which floods a cache causing legitimate TKEYs to be
+   expunged. This can practically block the use DNS TSIG
+   signing.
+
+   https://www.samba.org/samba/security/CVE-2026-58218.html
+
+o CVE-2026-58221:
+  Samba AD authenticated LDAP access domain takeover
+
+   Samba AD low-privilege authenticated LDAP access allows
+   modifications to internal LDB special DNs, which permits a
+   domain takeover.
+
+   https://www.samba.org/samba/security/CVE-2026-58221.html
+
+o CVE-2026-58222:
+  Samba AD LDAP Compare filter injection and trusted-request
+   confusion disclose protected attributes
+
+   An ordinary authenticated domain user can bypass access
+   checks and query confidential Active Directory attributes
+   (such as KDS root keys) via LDAP Compare requests. Due to a
+   filter injection flaw and trusted execution context, the
+   LDAP Compare operation can be turned into a
+   protected-attribute disclosure oracle.
+
+   https://www.samba.org/samba/security/CVE-2026-58222.html
+
+o CVE-2026-58224:
+  The CTDB protocol has bounds checking issues
+
+   CTDB fails to do integrity checking of received packets.
+   This includes failure to check field lengths against packet
+   lengths when unmarshalling packets.
+
+   https://www.samba.org/samba/security/CVE-2026-58224.html
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 9f17ac02b8561ca7adeb7911e4939b2ac9ad6320)
+(cherry picked from commit b5e6133eabd3371f999f26215ac70406530eb0d9)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- package/uboot-tools/uboot-tools.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/samba4/samba4.hash | 4 ++--
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
-index ef8bcabbd9..8a2877333c 100644
---- a/package/uboot-tools/uboot-tools.mk
-+++ b/package/uboot-tools/uboot-tools.mk
-@@ -124,6 +124,7 @@ define HOST_UBOOT_TOOLS_CONFIGURE_CMDS
- 	echo "#include <linux/kconfig.h>" > $(@D)/include/config.h
- 	touch $(@D)/include/config/auto.conf
- 	mkdir -p $(@D)/include/generated
-+	touch $(@D)/include/generated/autoconf.h
- 	$(if $(BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT),$(UBOOT_TOOLS_ENABLE_HASH_ALGOS))
- 	$(if $(BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT),echo '#define CONFIG_TOOLS_FIT_PRINT 1' >> $(@D)/include/generated/autoconf.h)
- 	$(if $(BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT),echo '#define CONFIG_TOOLS_IMAGE_PRE_LOAD 1' >> $(@D)/include/generated/autoconf.h)
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index 7c44ed747a..3931e55669 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://download.samba.org/pub/samba/stable/samba-4.24.4.tar.asc
+-sha256  df2c51ab4361ec626ab9988e5946efcca8465bc7afae834291d5558468265ff8  samba-4.24.4.tar.gz
++# https://download.samba.org/pub/samba/stable/samba-4.24.5.tar.asc
++sha256  6d5d7ee82f5ce9da4135086c9b184e47a58b4b023565f58abbb1f8c8a922306b  samba-4.24.5.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index d481f9d417..79551e1ee4 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SAMBA4_VERSION = 4.24.4
++SAMBA4_VERSION = 4.24.5
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
