@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB6CEC5AC9E
-	for <buildroot@archiver.kernel.org>; Fri,  7 Aug 2026 09:34:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61525C5AC80
+	for <buildroot@archiver.kernel.org>; Fri,  7 Aug 2026 09:34:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 21EB281249;
-	Fri,  7 Aug 2026 09:34:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 108CA8121F;
+	Fri,  7 Aug 2026 09:34:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id z93sisFoGz6y; Fri,  7 Aug 2026 09:34:02 +0000 (UTC)
+ id nGY2iApEhjd9; Fri,  7 Aug 2026 09:34:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1F6258123F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ED4D58123F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786095242;
-	bh=QA5gS/jvEUJJD4awpZrTBE0e8mf4lkTcGhAyEpP5jdE=;
+	s=default; t=1786095244;
+	bh=l5XmbxXQsdFGFVaz9e8Y6oRq2HYFImqQKEeTy9yzzbk=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=ZaZ8pAjiK2oV50eZIc8lJazWOi0GuBcd1FYR3swuIp7mCAYV1G99Ar7W/WvZNMuwo
-	 98TXO+jENxNYL9NM69IEr15sy4HS6xtvlyCpVC1T8NIVfenl5om5QPOpVr9qhPEC9Z
-	 WidNkkYRdFDYM8CEtoPFhNKNIEpR9S+bcJzKBCn9rAtnL9bV4wBOerjvHhhqhs1PiI
-	 zCENo46QWTmmqFUuby53vayrJCkJNcCoSRtt4d4F9LlReGzhl9ReBNJBBGk8sp1H9R
-	 rPkdnj8bXU5YN1mWK1ny90feYGsSI7hLnbPoWQLYvpYm1lKko6ILEX6XVpFyP80ld3
-	 Jg+RSQjlTjxLg==
+	b=ljh/O2FAZrIWgwgQubE8FyRjeZkjjAYbSk0dTIwIN4ismTkCk5wTKxoH4/YAK2zYF
+	 /7VTrBFPUY/bGEW2RlGyGU6NFcJ3VSZTpMENeUDmcKuThFgygUhLqHrD6u8Zti1MRC
+	 zdlIijelUmyJsbPrxJJ7jhZ9+c2qt6PH/TxMajcWTlrwp+j8k2VleSkF14/J3X+4Bh
+	 fEtRgA4BDYfZL07d6QKDnOfiXHyAJHlGrqh8t1AxKKCxzIyW7fbo6N/xfdacltKh3v
+	 egkkgVnLbj+s87Q5YCgLiEL3ziOFD92BitouuwlrPmB5iAPL3NC8x0fiv1yEKbBJ4F
+	 fxtKNV3DytOXw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1F6258123F;
-	Fri,  7 Aug 2026 09:34:02 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id AFF23704
+	by smtp1.osuosl.org (Postfix) with ESMTP id ED4D58123F;
+	Fri,  7 Aug 2026 09:34:03 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id DA454282
  for <buildroot@buildroot.org>; Fri,  7 Aug 2026 09:33:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A1F61409F9
+ by smtp1.osuosl.org (Postfix) with ESMTP id BF210811FD
  for <buildroot@buildroot.org>; Fri,  7 Aug 2026 09:33:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id f1S8YnfkONob for <buildroot@buildroot.org>;
- Fri,  7 Aug 2026 09:33:46 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id MBJLIYZdYjzw for <buildroot@buildroot.org>;
+ Fri,  7 Aug 2026 09:33:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2CEE340A03
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C6491811F0
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2CEE340A03
- for <buildroot@buildroot.org>; Fri,  7 Aug 2026 09:33:46 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C6491811F0
+ for <buildroot@buildroot.org>; Fri,  7 Aug 2026 09:33:45 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B6FA78CA40; Fri,  7 Aug 2026 09:32:59 +0000 (UTC)
+ id 4E5AC8CA44; Fri,  7 Aug 2026 09:32:59 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 7 Aug 2026 11:08:56 +0200
+Date: Fri, 7 Aug 2026 11:08:00 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: ac53be9a4d67e84c7fbcf4c2ed867a8129fafa6c
-X-Git-Newrev: e3ee4c8e84c8c362576866ed19951dea6f1d7861
+X-Git-Oldrev: 372ec7417e2a96679c27d8a2c9c76036d6a33991
+X-Git-Newrev: 1f872daa313e3a9f8d3f1b25f21f5b23585ac3c6
 X-Patchwork-Hint: ignore
-Message-Id: <20260807093259.B6FA78CA40@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/perl: security
- bump to version 5.40.5
+Message-Id: <20260807093259.4E5AC8CA44@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/libmicrohttpd:
+ bump to version 1.0.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,62 +77,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/e3ee4c8e84c8c362576866ed19951dea6f1d7861
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/1f872daa313e3a9f8d3f1b25f21f5b23585ac3c6
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-fix CVE-2026-8376 - Buffer overflow in Perl_study_chunk
-fix CVE-2026-57432 - Buffer overflow in S_measure_struct
-fix CVE-2026-13221 - Regex trie 16-bit field overflow
+Changelog since 1.0.6:
 
-For release notes, see:
-https://perldoc.perl.org/5.40.5/perl5405delta
+This is a bugfix release, fixing modest security vulnerabilities
+discovered by A. Ramos.
 
-Signed-off-by: Francois Perrad <francois.perrad.86@gmail.com>
-(alternative to commit e3ff7a6f0204a2ec92a0666485c9f4f5d0d066bf)
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 81f7c82740102f3d770f6320620450c6aa66a690)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- package/perl/perl.hash | 8 ++++----
- package/perl/perl.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/libmicrohttpd/libmicrohttpd.hash | 2 +-
+ package/libmicrohttpd/libmicrohttpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/perl/perl.hash b/package/perl/perl.hash
-index 2fe7b5c210..7b5e0d0013 100644
---- a/package/perl/perl.hash
-+++ b/package/perl/perl.hash
-@@ -1,7 +1,7 @@
--# Hashes from: https://www.cpan.org/src/5.0/perl-5.40.4.tar.xz.{md5,sha1,sha256}.txt
--md5  2e83cf578d5044444eb9e445f58cf36f  perl-5.40.4.tar.xz
--sha1  85790a2f35446a9dca6749a563117a36bf381a2e  perl-5.40.4.tar.xz
--sha256  eb0b1116b84ded552f686c9ee40c83000d8388c454f54197ca1d3a3b17246bd3  perl-5.40.4.tar.xz
-+# Hashes from: https://www.cpan.org/src/5.0/perl-5.40.5.tar.xz.{md5,sha1,sha256}.txt
-+md5  980490b3ff28a22631436d29bca365bc  perl-5.40.5.tar.xz
-+sha1  6a6fbf5e474db635670b02c59841a5280669392f  perl-5.40.5.tar.xz
-+sha256  1fe6f825b487d26c35aa51a35f52fe494d4cfc77b8051f8b1ee3391bf0289bc6  perl-5.40.5.tar.xz
+diff --git a/package/libmicrohttpd/libmicrohttpd.hash b/package/libmicrohttpd/libmicrohttpd.hash
+index 90b598f9a5..d342eddc9e 100644
+--- a/package/libmicrohttpd/libmicrohttpd.hash
++++ b/package/libmicrohttpd/libmicrohttpd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  bb5cfcadfc52dbd5eb512d6e2995e0361351c33e97a87aba426d3a4a7ba6cf70  libmicrohttpd-1.0.6.tar.gz
++sha256  827250db649546cdb04bea01f5f0560f0edffde9130e256387d1f977242eaf98  libmicrohttpd-1.0.7.tar.gz
+ sha256  7399547209438c93f9b90297954698773d4846cea44cde5ca982c84c45952a3b  COPYING
+diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
+index 6e7c79ee88..605291c046 100644
+--- a/package/libmicrohttpd/libmicrohttpd.mk
++++ b/package/libmicrohttpd/libmicrohttpd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # Hash from: https://github.com/arsv/perl-cross/releases/download/1.6.4/perl-cross-1.6.4.hash
- sha256  b6202173b0a8a43fb312867d85a8cd33527f3f234b1b6e591cdaa9895c9920c7  perl-cross-1.6.4.tar.gz
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index 41bb8d5dc1..8dbf0957de 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -6,7 +6,7 @@
- 
- # When updating the version here, also update utils/scancpan
- PERL_VERSION_MAJOR = 40
--PERL_VERSION = 5.$(PERL_VERSION_MAJOR).4
-+PERL_VERSION = 5.$(PERL_VERSION_MAJOR).5
- PERL_SITE = https://www.cpan.org/src/5.0
- PERL_SOURCE = perl-$(PERL_VERSION).tar.xz
- PERL_LICENSE = Artistic or GPL-1.0+
-@@ -28,7 +28,7 @@ PERL_EXTRA_DOWNLOADS = $(PERL_CROSS_SITE)/$(PERL_CROSS_SOURCE)
- define PERL_CROSS_EXTRACT
- 	$(call suitable-extractor,$(PERL_CROSS_SOURCE)) $(PERL_DL_DIR)/$(PERL_CROSS_SOURCE) | \
- 	$(TAR) --strip-components=1 -C $(@D) $(TAR_OPTIONS) -
--	mv $(@D)/cnf/diffs/perl5-5.40.3 $(@D)/cnf/diffs/perl5-5.40.4
-+	mv $(@D)/cnf/diffs/perl5-5.40.3 $(@D)/cnf/diffs/perl5-5.40.5
- endef
- PERL_POST_EXTRACT_HOOKS += PERL_CROSS_EXTRACT
- 
+-LIBMICROHTTPD_VERSION = 1.0.6
++LIBMICROHTTPD_VERSION = 1.0.7
+ LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
+ LIBMICROHTTPD_LICENSE_FILES = COPYING
+ LIBMICROHTTPD_CPE_ID_VENDOR = gnu
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
