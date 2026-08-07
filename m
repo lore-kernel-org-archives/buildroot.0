@@ -1,120 +1,118 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35E93C5AC7C
-	for <buildroot@archiver.kernel.org>; Fri,  7 Aug 2026 11:55:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6580FC5AC80
+	for <buildroot@archiver.kernel.org>; Fri,  7 Aug 2026 11:55:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EE19160A6E;
-	Fri,  7 Aug 2026 11:55:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 33A6380D8F;
+	Fri,  7 Aug 2026 11:55:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7_HDEBzPJCwv; Fri,  7 Aug 2026 11:55:02 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8ju8A2W4U20y; Fri,  7 Aug 2026 11:55:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3518B60A3E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4C07E80DA5
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786103702;
-	bh=JrD1jDB2h0iDiVbB0M+JaYRycGZ3MOYxRrTO1PJsgq0=;
-	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 From;
-	b=V7by9+UgWbowY2DzZArFQZzvZbP7PROdSNQeFoNH5zBmVLPk9dZYJY0U7eDo7BqQn
-	 M++b/UR1GwawCVOSIVcwsCLFqud/bamRlcrXT8GBbKeXlhgmtSEyCb3JSbC20WoLW0
-	 KChWJ1USWr5XDMbE2njghmah19xLWkNqhKgZF8z28e5eVUaWYUwCTCKKhBZmPpZhfr
-	 /tEd8dmS7j553eIap5HZzVpUOWj6CjTXTZ4MCFrMbfWmfDmMk/dIgfKMRpv60uU3KL
-	 no8cQwNTkQBpy/ns8KK7iVs0CxcHu+xrPWByA4AnQAY2miVdma88kfso/XZ03VfszY
-	 KthCpK76EzTJw==
+	s=default; t=1786103739;
+	bh=DNjqUspAKKHBRsJgZzb6KVlOm2D/F5X4RCnJ+YT+MM4=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=ph49WSIvfS7yx3+kaI/i6Sf4xNxa8eEIRjzitULW00G7JrQxMV9JUWQFlaplPaODl
+	 oPGmqIFdSfgB3Ez1chJqGtuQCqSwlTD6IGjKExHF8ayCBLe2RiV/BRKSgTaY4IwjsX
+	 kkDLUq5EN1v4BVj7XmtOm1F5aA7Kp7O+NXeOMVH9aCVRoB0J/Hrf1V1cTEvSBCz2+u
+	 dtGg/QVmICjz5eTdaCcl5E/JbUQdg8UgHMVs8rPdRLe62bY84ekBHjp+l+/z9LVhiu
+	 BOHW65nlsDGkw5MC31QwqZK7cHrGk6OzXDvKYKXryJtkCg5xcV1F/EwmSckvP9P6H5
+	 b2BMgYycF582g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3518B60A3E;
-	Fri,  7 Aug 2026 11:55:02 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 86A3210E
- for <buildroot@buildroot.org>; Fri,  7 Aug 2026 11:55:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4C07E80DA5;
+	Fri,  7 Aug 2026 11:55:39 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8030B10E
+ for <buildroot@buildroot.org>; Fri,  7 Aug 2026 11:55:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7879140105
- for <buildroot@buildroot.org>; Fri,  7 Aug 2026 11:55:00 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 71C0F40A6F
+ for <buildroot@buildroot.org>; Fri,  7 Aug 2026 11:55:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id amI8HQlM-_u8 for <buildroot@buildroot.org>;
- Fri,  7 Aug 2026 11:54:59 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XeliPXyy1QA9 for <buildroot@buildroot.org>;
+ Fri,  7 Aug 2026 11:55:36 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32a; helo=mail-wm1-x32a.google.com;
- envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 635BE40092
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 635BE40092
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
- [IPv6:2a00:1450:4864:20::32a])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 635BE40092
- for <buildroot@buildroot.org>; Fri,  7 Aug 2026 11:54:59 +0000 (UTC)
-Received: by mail-wm1-x32a.google.com with SMTP id
- 5b1f17b1804b1-4954df200ddso23125945e9.0
- for <buildroot@buildroot.org>; Fri, 07 Aug 2026 04:54:59 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::331; helo=mail-wm1-x331.google.com;
+ envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8110040A6E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8110040A6E
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
+ [IPv6:2a00:1450:4864:20::331])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8110040A6E
+ for <buildroot@buildroot.org>; Fri,  7 Aug 2026 11:55:36 +0000 (UTC)
+Received: by mail-wm1-x331.google.com with SMTP id
+ 5b1f17b1804b1-490cf322ed0so27007735e9.1
+ for <buildroot@buildroot.org>; Fri, 07 Aug 2026 04:55:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1786103697; x=1786708497;
- h=content-transfer-encoding:content-type:in-reply-to:from
- :content-language:references:to:subject:user-agent:mime-version:date
- :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to:content-type;
- bh=9n1YNnJMK/vYxCdwm71Fk1QMReFfwuJXW4BRXXksHJQ=;
- b=ApMCry+08ry7gLn9JQpXNRcBrRoEXQX1MHKti3gIK82/dgRCEm6LwUFlCnvBRy4ve7
- 3YD9oaytLd/u/Cnz5CdkcQLcq0Tr5Q9+MJTpD5tr84cah4LXUeI/lUyOb/fNgdLpAu8G
- ztWdzUmLdHYMOMcfIr7WuAXCD2g/jkjv/d20RoNYw0B8sj4j/fDtgvBhLpLD/vm8QKi+
- JV502zJgLp4Uk9ub0gW70dltPB6dAD8NpGn4PGF6qL7zLAvWwe60zSxeb8Nb4EUJqNjX
- kkIckSPDWtsnz5hZWB+xFLu/DMh5a41387Fy73lmXvo2sS/B369Iu28PqQPymIiqIcz8
- 6FuQ==
+ d=1e100.net; s=20251104; t=1786103734; x=1786708534;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to:content-type;
+ bh=hsaoRu1xHgHPyoRwqyH8VPIQ3p8l2Y+pDS+unCm6yr0=;
+ b=AXkDMp/KJgUc65Q4Cl0u/vMdGPaadondvjxC3ajQTt1olGxgTQZugPlr48JSJmCfVX
+ KFkLzIO/xXk3130ckWkg8uj2Wf1NTFk/OwnWXwGLq2axouetZDZe/iASJDhWlwqzsfdg
+ J2Z+0Sh2g277TBDp+/JD7sm/KGNeUm1y5h7l1Xx/sWncmYv5rRWTIFQgj2vhjOimmt9e
+ 1lLS/FgmBaCx9mVBqE+9l1Pgg2ObWGeKgICa6IcC5p51VQZhN4MDqAAiAxBQ8lLMNDpR
+ tjRBRdlDmNIbGHQQ/gqhV68I4v89Oa4m4m/JiFfm2mhQBKrI2PkvVieU2YDz+5vW41q4
+ 7Haw==
 X-Forwarded-Encrypted: i=1;
- AHgh+Rquf4jn1FaI9e7u2Q/rqucS+8LvC7VcG0LPzIYnmTLjLK1EBJJWwiE/fW9D11rXPo9iCD7N0vM8eZY=@buildroot.org
-X-Gm-Message-State: AOJu0Yxhv71wJLGbkUy5mRYoOXEmIVp9qhpLG7yURvnonlOK67YusrN3
- OYdm9OnT6/6fnEKIMz/DEBolDA37Md6xrdWakzWJtFj5w5xmey7gJa4zPg8KaFpmgZM=
-X-Gm-Gg: AR+sD13e1yKYgjqc6C4Jkz4kmKx31Nup3bexQBGwGhOAdujzhyZNlhgVh8+CRuUkuHA
- G/YbMCFlo14N4A0JXhdzCW14mVN1GsOmhFLi1+aJ/enJau3So63OuMXTOt5AQtmxF2M/fa3JryW
- 0iTIt86ddPYotSS7aWLD3eGVLLxQfIJkfnTpdbhx/IJTe7hfP5DtCpqYdpDPlWJFZhQIg8w60ms
- XKSh/Mz/Apc0myyw4TZWlNuYOWAWArjHL5LeJ9tXhL6Lsu4mgYv3nS6njWpOX1p9kKrdtsn9iY2
- MvZzmw5EjXvyS8ONOkKo9Exf222uBZW3HoUb0zVE54TKH0cU8Lk8JERu3eJDerzxxbszvG5jmhE
- zopTgHuugLmbNDHjsQ0DLX+u2hI8pO+51PAicmj6/L7+BRX8d3j5oNIyLWKmn5Zq2G0FgENSvg6
- 6U/xGKRryrYwTtmBqvwnPYR/TomvBiolwB98CICzh3v2eo11t+eFB2pjTNJj7pVSbTKSlujjEC3
- FFLKoB6C8NrOq/dwnUe93Vy/T86Qp4IjWJeiiC9AbnPL4NF
-X-Received: by 2002:a05:600c:1d23:b0:499:516b:83d5 with SMTP id
- 5b1f17b1804b1-499516b83d9mr201984435e9.11.1786103697505; 
- Fri, 07 Aug 2026 04:54:57 -0700 (PDT)
-Received: from ?IPV6:2a02:a03f:63ab:dc01:1291:d1ff:fe92:3b5a?
- ([2a02:a03f:63ab:dc01:1291:d1ff:fe92:3b5a])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-48002145589sm5580056f8f.1.2026.08.07.04.54.57
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Fri, 07 Aug 2026 04:54:57 -0700 (PDT)
-Message-ID: <da6bcfc9-e07d-4867-9a03-8dd8f397f126@mind.be>
-Date: Fri, 7 Aug 2026 13:54:56 +0200
+ AHgh+RpEBeuMz0d6m82tJrk5uTASPouC9tO/2t0cMcVZinhlxG6zDUobGPbytIN8wjJK6wY1FeSBjNs2sF4=@buildroot.org
+X-Gm-Message-State: AOJu0Yx4TfkvJiuX/MrcTEOkSXgUvZZ1fF3035cpf+J7eMgmCETno+Cp
+ 1Ah1wKIjZhIxOBDqKHxk6+4u9sCuLE6MTKMzMH0yb5WmcuRgwaydH+FDvSxXuvu61hw=
+X-Gm-Gg: AR+sD105tsMid46SZrlC7smMIcZSQ7awzGbgb4yjfJz/5s+J2wttYKjoO4D8Lz325F8
+ yfZxelQZR4DgpcdsfjW+HABMFAongrA3J9miNPm4prgFuGloYAbi3QET4BIZ18xi8ET08H3vAH2
+ Ycj02VGeP9CoCncRrqSKOBrsaEH2WG0LaouANFnBni4vDQBkXQpfPsYSvyALF20/lqCZCRERIwt
+ iXj7O6w9VjLjV/5e1UgZ5OCfLN7Df3Jl9suGOjYF4YwCXC1DuVkaqIV5b9xfnE0NYP3inZPVUvI
+ HG23TwJd5W96afg9hKdAKx5yKf2w/Ex9N/fVZP+hUZQfevOdIa9SQ8cp1Tt/M/+8iGj6hW3rl3z
+ GQq4HkYcjZ8lyNVdZEJuLJwmGPoKl78rn3PO3uzxbAnzbUX4iPKaYd+Q7wLVyW6bcE/BI0x+WUB
+ 69+VDykOUcFdEspBNAMMuF420C9sao1NmS/VAAk0TZxozlsprlsyJPHw==
+X-Received: by 2002:a05:600d:8492:b0:494:6baa:ccef with SMTP id
+ 5b1f17b1804b1-4994e7baa73mr214370085e9.11.1786103734418; 
+ Fri, 07 Aug 2026 04:55:34 -0700 (PDT)
+Received: from arch ([213.211.149.70]) by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-4800220a6d9sm5733772f8f.34.2026.08.07.04.55.33
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 07 Aug 2026 04:55:34 -0700 (PDT)
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Thomas Perale <thomas.perale@mind.be>,
+ Alexis =?utf-8?Q?Lothor=C3=A9?= <alexis.lothore@bootlin.com>,
+ buildroot@buildroot.org,
+ Nicolas Carrier <nicolas.carrier@nav-timing.safrangroup.com>
+Date: Fri,  7 Aug 2026 13:55:33 +0200
+Message-ID: <20260807115533.97671-1-thomas.perale@mind.be>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <anWV0uzil1jp4BNN@windsurf>
+References: <anWV0uzil1jp4BNN@windsurf>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Romain Naour <romain.naour@smile.fr>, buildroot@buildroot.org
-References: <20260621165336.2426158-1-romain.naour@smile.fr>
-Content-Language: en-US
-In-Reply-To: <20260621165336.2426158-1-romain.naour@smile.fr>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1786103697; x=1786708497; darn=buildroot.org;
- h=content-transfer-encoding:content-type:in-reply-to:from
- :content-language:references:to:subject:user-agent:mime-version:date
- :message-id:from:to:cc:subject:date:message-id:reply-to:content-type;
- bh=9n1YNnJMK/vYxCdwm71Fk1QMReFfwuJXW4BRXXksHJQ=;
- b=DGOGLvZle1Xfh5GAPVrwn3y5CVulWjqwJ9kQG2xHBaRvQBulkTLiLCdutB5nrwNN1t
- Ldw/Xgt0RfYlH6j3G56OOW75hvfxRqH/Q/S/pabDIGWcaQCr6aIP07a0MlCmITAKGu59
- hhv4kzYmPeSi2RWXoJlylLU816aSuEAdNz+oON3Mo1g3EXzKWOhTfyI/ojb7f9C67GDq
- rZjHK3dQHSETOH/cvOI7vQ7pD+L+6i6WMTFYvQuTNWn3S78oziMkj2Xm3HHNNIw77Tuy
- XPgoaQbs54MfZvD8aNO4kwY6KiZngFEW5dfsURqRolOGYVSB7VtMadFHu49fyAx4JinR
- Aoew==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=mind.be; s=google; t=1786103734; x=1786708534; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to:content-type;
+ bh=hsaoRu1xHgHPyoRwqyH8VPIQ3p8l2Y+pDS+unCm6yr0=;
+ b=MWwPypE97SiGOnq+OmJZYeUDVVyOYvzybgnp8brmnOQZ+FHuMoZ8IZ8tW5hU+f/GE7
+ xxUQbVuI9ZCeTsWC7NjPE+P1rlcJpk0lXgGUcsKoys5+asQ/ObWjg8smDQfvcS7R7PzD
+ yBX5382CUyRQni3dW8ZUNsbgnU5I8hpGWfqsIOR4zkhb1nA9oZv9tAEzYNgHdvJFRoTr
+ NU+ApU5zv7fcWop9xkejMd+7tnCfb2awhE+kDZ95RPzgCMGvkCu2PgfCHs+epBiEm1Le
+ vq8v3liPXjX8aiw/lAdNaytmeo8vQALEh1gl8yR8uejFtsnEDec1Fe2XNCqYgz8YSAMC
+ UypA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=DGOGLvZl
-Subject: Re: [Buildroot] [PATCH] support/testing: TestUsbIp: wait for the
- keyboard be detected
+ header.a=rsa-sha256 header.s=google header.b=MWwPypE9
+Subject: Re: [Buildroot] [PATCH 2/2] package/sass: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -126,22 +124,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Titouan Christophe via buildroot <buildroot@buildroot.org>
-Reply-To: Titouan Christophe <titouan.christophe@mind.be>
+From: Thomas Perale via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Perale <thomas.perale@mind.be>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 21/06/26 18:53, Romain Naour via buildroot wrote:
-> Running TestUsbIp may fail when checking if two QEMU USB Keyboards are
-> reported by lsusb. On fast host, the second QEMU USB keyboard may not
-> aleady detected when lsusb is executed. So wait a bit, to let the new
-> keyboard be detected.
->
-> Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Applied to 2026.05.x, thanks
+Hi Thomas, Alexis,
 
+> I am not super clear on what sass exactly does/is. But some time ago,
+> we dropped all JS libraries from Buildroot:
+> 
+>   https://lore.kernel.org/buildroot/20250829103340.158873-1-thomas.perale@mind.be/
+> 
+> But sass doesn't seem to be one of those static JS libraries I guess
+> because it installs some executable host tool?
+
+If I remember correctly node-sass is build using node-gyp so I can make sense
+to have it in Buildroot because the node-sass version is closely related to the
+node version present in Buildroot.
+
+The question is how do you plan to use 'node-sass' once you have the executable.
+Correct me if I'm wrong but I guess the goal here is to use it in another
+Buildroot package that represent a "webapp" and you run 'node-sass'
+in the build step of that package and then place the generate css in the
+correct location ?
+
+The correct way handle this (and minification) would probably be to use a
+dedicated JavaScript bundler and configure it to use node-sass and setup
+minification. This would probably yield smaller bundles and help handle
+versioning correctly for your webapp.
+This was also the thinking in dropping the JS libraries from Buildroot.
+
+If you have a `package.json` for the webapp with the node-sass dependency. Can
+you `npm install` the webapp dependencies using the buildroot 'npm'
+host-package without errors ? If that's the case I would say that it is
+probably a better solution.
+
+Best regards,
+PERALE Thomas
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
