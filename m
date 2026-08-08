@@ -1,89 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6DE37C55174
-	for <buildroot@archiver.kernel.org>; Sat,  8 Aug 2026 09:26:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA0A9C55174
+	for <buildroot@archiver.kernel.org>; Sat,  8 Aug 2026 09:40:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1447180F7B;
-	Sat,  8 Aug 2026 09:26:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7411460699;
+	Sat,  8 Aug 2026 09:40:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mQQYSWIjTPK9; Sat,  8 Aug 2026 09:26:13 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 90FXS5ddWV4u; Sat,  8 Aug 2026 09:40:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3BF3480F6E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5EA4C605F4
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786181173;
-	bh=ayQ5ys7JvGZjlvBfi1iD7QLjo1pyMtFpj8qk3XO0dZs=;
+	s=default; t=1786182054;
+	bh=Kg4QSzoDIR0tQbKH3Ce9i7GFNe5oPOoEPOzb+CG91DU=;
 	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=aAdARliUGcNfxrEdtb5jdEYwqu6+6Sg7/RyAOdfP3ZmglM/XPeQaePysg8udDVju2
-	 SRUTEQ+rW1Otbu6PsLZepaw8SqX4o9goDzJHmp9ytR+HGDB/V1D74o2MWh4dQ/OCnY
-	 MctuViTBWS7oCCcp6JlFeIcgIgjA73ex8K+4xh+1/vbU+kzBFfP3vjfM/5nKYCZ1JZ
-	 8FFW2YyZz+LKJrUbHyVzQkeuLZuTPPfTnbnsuYP3BgPIc5Si6iveRdZhudvevUagVl
-	 /31QUhDaQ5lM9G/dkaFCivgtq6jRGiWLTS02DB2Rw6SGqhyZXSnWSJWH2w6+mX5qLJ
-	 30TkFyv2TwOdA==
+	b=UCV5KV9IP/f2YkykN15znKoFLVFDrIVs+1ZaBqD45JLxyI4G0AzdFArNDc5k/Hw4Q
+	 i+imgAXOitTTpTvVlJSWghMHMzbmSPO7214kSX9T9bEYj0JYtVapUaX3XLaeUE0LAC
+	 ZeCGLicSgohh6GOXZOsOW3Fm/w9UHSc16AANeKrdB6V9DweRd70pcaGBMRPWWgWX17
+	 FU6OoO0gItsVAVuJnozurUiykN8otptVlyTtKuINTHCPwgMHN0CwRJDXrRdeHbfQnf
+	 /QuhXiufyeg2CCIG4vV3AwsaNREHRXpc/sY2USbU5GKXibU4ZtqDeW9CRxlAAYiSv1
+	 Tv+f0L4lfY89A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3BF3480F6E;
-	Sat,  8 Aug 2026 09:26:13 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 356132B6
- for <buildroot@buildroot.org>; Sat,  8 Aug 2026 09:26:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5EA4C605F4;
+	Sat,  8 Aug 2026 09:40:54 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8505B144
+ for <buildroot@buildroot.org>; Sat,  8 Aug 2026 09:40:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2757140755
- for <buildroot@buildroot.org>; Sat,  8 Aug 2026 09:26:12 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 767D280898
+ for <buildroot@buildroot.org>; Sat,  8 Aug 2026 09:40:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WCLt3pfGQh3I for <buildroot@buildroot.org>;
- Sat,  8 Aug 2026 09:26:11 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 103FA40753
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 103FA40753
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 103FA40753
- for <buildroot@buildroot.org>; Sat,  8 Aug 2026 09:26:10 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fZvtAMKLgq-D for <buildroot@buildroot.org>;
+ Sat,  8 Aug 2026 09:40:52 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 63CBB80897
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 63CBB80897
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 63CBB80897
+ for <buildroot@buildroot.org>; Sat,  8 Aug 2026 09:40:52 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
  (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id 8A92E13F8A2;
- Sat,  8 Aug 2026 11:26:03 +0200 (CEST)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id 7783A2003CA;
+ Sat,  8 Aug 2026 11:40:46 +0200 (CEST)
 Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
  via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 08 Aug 2026 11:26:03 +0200
+ with HTTP (HTTP/1.0 POST); Sat, 08 Aug 2026 11:40:46 +0200
 MIME-Version: 1.0
-Date: Sat, 08 Aug 2026 11:26:03 +0200
+Date: Sat, 08 Aug 2026 11:40:46 +0200
 To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org, Giulio Benetti
- <giulio.benetti@benettiengineering.com>, Romain Naour
- <romain.naour@gmail.com>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-In-Reply-To: <20260808082357.69525-1-bernd@kuhls.net>
-References: <20260808082357.69525-1-bernd@kuhls.net>
+Cc: buildroot@buildroot.org, Romain Naour <romain.naour@gmail.com>, Thomas
+ Petazzoni <thomas.petazzoni@bootlin.com>
+In-Reply-To: <20260808082554.69837-1-bernd@kuhls.net>
+References: <20260808082554.69837-1-bernd@kuhls.net>
 User-Agent: Webmail Free/1.6.17
-Message-ID: <dad6d6576183acf9b7aeac640bc172f3@free.fr>
+Message-ID: <8ead91b74516f224155908b866405a95@free.fr>
 X-Sender: ju.o@free.fr
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1786181168;
- bh=mwZX8ZAUZeST7aq43OZDe2ykmXG+nSw+/6u0MqhA45w=;
+ d=free.fr; s=smtp-20201208; t=1786182049;
+ bh=aFKqZqWVFWR6cK6M+A7oF71YofVGVdvMWCSgEd/kEn4=;
  h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=fwqPabn2VTSwSeQF+JU8g1YDo+kvWJyJmDaxvsOiTlOsI9e5mywcODVtu8CPEIcOm
- 7JL5ykthUx2vVS2nxyGjns36OvCffEIyf99ecwDhqoBltVgnQkmWlHzVcZswhv9ksU
- Fc8nhcOKH7UaS/5lB3CYz0oPc9OTP8Wi0TuYCUOuWIqbAch+OMObUpY31Htegt3T9B
- 7IzeIxx+erRyuERw64ytFNMBsOxXPt9zn1YFQ/kz5nirE1dVfJUfx5X78maSu6jtYG
- 6dm/PAvJDW5TfMjXARuFLnVFYxXAgrqbQBv0H9c5uksQqsTXtYMTJaeSQ0sEseICuu
- wJ3I6M1xpiX4w==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=dUvd8MggIX1GYUIJjXMA3PXuDXpaSU9xtaa3Jh0tFWPrimXF3DS6cwl/tKFSbY58s
+ Zx6cHqbgklg8fYZTMy/zHXDusNtIae7fWRcQynT1CSARAdHCf/15RLypSHQgWJsLyp
+ dUV7jSM+GGioaCtJHGKjGqtmNLTWl13VJZDzf5MZq+h8xf6y5n7uvzjxLqtlxrJoWs
+ 4Nb9a5pqPZGMHgOzPQNxetZ8njjGKCjsEVzxuG6x3ft8W4ZBVtg7izM2iGYK0pZUh5
+ mE20gy10CoNimyI67lbIFkFWnW0tS2cOmzG371vfWDl+uEpEANUuIaPY2I0yKtqeHx
+ pNJAiXr5QioZQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=fwqPabn2
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/gcc: bump 16.x series to
- 16.2.0
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=dUvd8Mgg
+Subject: Re: [Buildroot] [PATCH 1/2] package/{glibc,
+ localedef}: move to Github mirror repo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -102,22 +101,38 @@ Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 08/08/2026 10:23, Bernd Kuhls wrote:
-> https://gcc.gnu.org/pipermail/gcc-announce/2026/000193.html
-> 
-> GCC 16.2 is a bug-fix release from the GCC 16 branch
-> containing important fixes for regressions and serious bugs in
-> GCC 16.1 with more than 102 bugs fixed since the previous release.
-> 
-> For the list of bugs fixed in this version, see:
-> https://gcc.gnu.org/gcc-16/changes.html#16.2
-> 
-> Removed patch 0003 which was backported from the gcc-16 branch and is
-> included in this release.
+Hi Bernd,
+
+Thanks for the patch.
+
+On 08/08/2026 10:25, Bernd Kuhls wrote:
+> Downloading from sourceware.org/git/glibc.git causes many 429 errors
+> these days so we switch to a maintained Github mirror repo.
+
+Any specific reason why you picked this Github mirror,
+while upstream points to a Gitlab one?
+
+See:
+https://sourceware.org/glibc/wiki/GlibcGit#Fetching_The_Repository
+which links to:
+https://gitlab.com/gnutools/glibc
+
+If not, I'd prefer we simply follow the upstream recommendations.
+
+> Fixes:
+> https://autobuild.buildroot.net/results/09e/09e760063607b1cbf4ef687bf9bbe17b12d648b2/
+> https://autobuild.buildroot.net/results/22a/22afc952e0c05648d538d13ea593e5ad8c4c03c7/
+> https://autobuild.buildroot.net/results/281/28159f29e38b0475ae33fe73a9cab04ea3a8835f/
+> https://autobuild.buildroot.net/results/961/9616d46c46bd2a10a6e719d76ed6e1d8e3b3d0d2/
+> https://autobuild.buildroot.net/results/fd4/fd48fb96639871889fb2238dba360d1740d7962c/
+> https://autobuild.buildroot.net/results/91a/91a0b7ccad116911f84281b4cbcb080309ad952e/
+> https://autobuild.buildroot.net/results/17f/17ff61f0eac946b3c027a540147b2573e224dcdb/
 > 
 > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Applied to master, thanks.
+Best regards,
+
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
