@@ -4,59 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F60DC5AC67
-	for <buildroot@archiver.kernel.org>; Sat,  8 Aug 2026 17:51:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79A75C5AC67
+	for <buildroot@archiver.kernel.org>; Sat,  8 Aug 2026 17:51:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 676236060A;
-	Sat,  8 Aug 2026 17:51:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 43D1760664;
+	Sat,  8 Aug 2026 17:51:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id alqiG4nbTOzJ; Sat,  8 Aug 2026 17:51:29 +0000 (UTC)
+ id mi2KwNK2G_Lf; Sat,  8 Aug 2026 17:51:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8179F60621
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 728616063E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786211489;
-	bh=ad81lhxIR3vRbhv9By5/0a4q+obvzNt1iFdVUEfDvCk=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=B8VAoR0XgRDUKWoUXeUwpIr2F8FD5nTpKLZDqZQc3yPnq5+YyA7RFwMQYiX35lr2/
-	 GEgBxP0XGzk/b0hJ/ABXAKjSHUszB4eqcrBxPuZaKwgUbfGe9c6CLyAMfJqPb2JUnn
-	 IWONsE6h4zFm4veMOIQjQNTqPqwOvyOoul9XrfZKUdq6qOOu+gTXCZval0pEJMsOY8
-	 SD5gIeAU7Zw4JKvoqd7PapG+XW0so3dQp97b4lO98KYacIrJ2WvQkkqvVA6UzP3m96
-	 GKqoD+FlUzHQ7L0rxTHsl/INhiY4lImimPf4JxVXzJ5j9bDm93LQivaN7gtyPEmHZf
-	 qIOZ3kthlxX2g==
+	s=default; t=1786211512;
+	bh=kOKyNN19yOxaK+AtnaZ7Md7aTrkf44gLnrCPYv3ZG7U=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=hMG6ZXSvmVWLqIoAnmnNWJWAh9cNOZkQR1++NLfj/xwFKw801H2IdVCPLtNpGVQaq
+	 ZAA/kJgq85MN9lrYYxdf082aiI7MWld/8dI36iMmoPL+9fjsPjHANFPlLtVwWKTVb7
+	 D08cZDxtvjcazMYBt12SxADd1DC0XM6ufD2Eign6sHL91SMjePKrmr3mo7Hg2tn9IY
+	 Y0LpIHK7yN9/JaUCeW9vndpCMbkC+B7pFCY1gVuZ+vYJ2sNhKanLRkOtW6vRmb3cCE
+	 bFV6Z8thEFdPQtygzIbpDPjmVFczTozUJHy/aNWx/NIIcABz7JO/1UnrvHG89j2N6Z
+	 vU5B8zLkqlHog==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8179F60621;
-	Sat,  8 Aug 2026 17:51:29 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id DFA5A1AF
- for <buildroot@buildroot.org>; Sat,  8 Aug 2026 17:51:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 728616063E;
+	Sat,  8 Aug 2026 17:51:52 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id E7F8A1AF
+ for <buildroot@buildroot.org>; Sat,  8 Aug 2026 17:51:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D19AF60621
- for <buildroot@buildroot.org>; Sat,  8 Aug 2026 17:51:28 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id DA64A808C9
+ for <buildroot@buildroot.org>; Sat,  8 Aug 2026 17:51:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id unTwo16pD7dt for <buildroot@buildroot.org>;
- Sat,  8 Aug 2026 17:51:27 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id mjbdUIQq0yrC for <buildroot@buildroot.org>;
+ Sat,  8 Aug 2026 17:51:50 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
+ helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BCFD26060A
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id BCFD26060A
- for <buildroot@buildroot.org>; Sat,  8 Aug 2026 17:51:27 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 94D278CA9B; Sat,  8 Aug 2026 17:50:40 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 8 Aug 2026 19:51:00 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7343017dcd4debb020b079d74a1c94f552058961
-X-Git-Newrev: 7241fb2db05ec5e6f584a3965aed483ac2d673e0
-X-Patchwork-Hint: ignore
-Message-Id: <20260808175040.94D278CA9B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/stunnel: fix STUNNEL_CONF_ENV
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C4323808C0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C4323808C0
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C4323808C0
+ for <buildroot@buildroot.org>; Sat,  8 Aug 2026 17:51:49 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-02.galae.net (Postfix) with ESMTPS id DF92B1A14DD
+ for <buildroot@buildroot.org>; Sat,  8 Aug 2026 17:51:46 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id AA9946045E;
+ Sat,  8 Aug 2026 17:51:46 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 0C81911C4860A; 
+ Sat,  8 Aug 2026 19:51:40 +0200 (CEST)
+Date: Sat, 8 Aug 2026 19:51:37 +0200
+To: Waldemar Brodkorb <wbx@openadk.org>
+Cc: buildroot@buildroot.org, Pierre-Jean Texier <texier.pj2@gmail.com>
+Message-ID: <andsnYUPpgmNKika@windsurf>
+References: <akqKLbhp-5ANsPNj@waldemar-brodkorb.de>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <akqKLbhp-5ANsPNj@waldemar-brodkorb.de>
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=dkim; 
+ t=1786211502; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ in-reply-to:references; bh=x6VpjbutwbMxD91m7WsB9j/IR9JAyAQixdr572fiHV4=;
+ b=VogHk93cGNE2T6QDnL/6yzjA2PvOkI76aTKOSahQoZ7EMJza3th7Zsbra3RcIKypGw49RY
+ KHNlDZNOOb65pf90NcheOsUDnRi3NGkZhOlbAYXoK56TplTBJ3ycTFCuTr5UgRXHKUFAhv
+ DSO2Lp14Rfv1c/xWT7k6BMX0ny4r9PzEwkqP/FXWIH6YbXMz7jtKp66z9uaTkhxBnhtkGB
+ KOtzFYwUzhKjsVa/MsKo+uIPnaFnNLQsAanfKiq47Yry4UZLc3c4P9RReb/FjidfiqbuyB
+ SPGdbnFMvmoVSpFljGx9GuN8EpG6pdTX4zc3LP3J4/yb1b+YXXQdxqjCFfz+9w==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=dkim header.b=VogHk93c
+Subject: Re: [Buildroot] [PATCH] package/stunnel: fix STUNNEL_CONF_ENV
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,43 +97,30 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/7241fb2db05ec5e6f584a3965aed483ac2d673e0
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On Sun, Jul 05, 2026 at 06:45:33PM +0200, Waldemar Brodkorb wrote:
+> In commit 45d056e7bf69aca4a036aba83e2573301996e9e0 stunnel got an
+> update to 5.78, but missed a change in configure.ac/configure.
+> 
+> Update STUNNEL_CONF_ENV accordingely.
+> 
+> Fixes:
+>  - https://autobuild.buildroot.net/results/69b/69b87d600ef9fa1d4eb8f65a7282c53808faf362/
+>  - https://autobuild.buildroot.net/results/b87/b87040d5264befa18da213d460f28a214410386b/
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 
-In commit 45d056e7bf69aca4a036aba83e2573301996e9e0 stunnel got an
-update to 5.78, but missed a change in configure.ac/configure.
+Applied to master, thanks!
 
-Update STUNNEL_CONF_ENV accordingely.
-
-Fixes:
- - https://autobuild.buildroot.net/results/69b/69b87d600ef9fa1d4eb8f65a7282c53808faf362/
- - https://autobuild.buildroot.net/results/b87/b87040d5264befa18da213d460f28a214410386b/
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/stunnel/stunnel.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
-index adae204148..ef93dc6073 100644
---- a/package/stunnel/stunnel.mk
-+++ b/package/stunnel/stunnel.mk
-@@ -10,7 +10,7 @@ STUNNEL_DEPENDENCIES = host-pkgconf openssl
- STUNNEL_CONF_OPTS = --with-ssl=$(STAGING_DIR)/usr --with-threads=fork \
- 	--disable-libwrap
- STUNNEL_CONF_ENV = \
--	ax_cv_check_cflags___fstack_protector=$(if $(BR2_TOOLCHAIN_HAS_SSP),yes,no) \
-+	ax_cv_check_cflags___fstack_protector_strong=$(if $(BR2_TOOLCHAIN_HAS_SSP),yes,no) \
- 	LIBS=`$(PKG_CONFIG_HOST_BINARY) --libs openssl`
- STUNNEL_LICENSE = GPL-2.0+
- STUNNEL_LICENSE_FILES = COPYING.md COPYRIGHT.md
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
