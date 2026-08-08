@@ -1,63 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2D55C5AC67
-	for <buildroot@archiver.kernel.org>; Sat,  8 Aug 2026 18:28:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33B3CC5AC67
+	for <buildroot@archiver.kernel.org>; Sat,  8 Aug 2026 18:28:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 761C5404F6;
-	Sat,  8 Aug 2026 18:28:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C2FC580E54;
+	Sat,  8 Aug 2026 18:28:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eZ_AJ-tLVt3b; Sat,  8 Aug 2026 18:28:11 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id n8zvYFuPG-Jl; Sat,  8 Aug 2026 18:28:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9BEEF40505
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8A1C980DF7
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786213691;
-	bh=VmHx5krX7BZ+zWrvNaBveH0wTzq2eXsE/xNyieZM2yY=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=OKLMMOp+NE1pbdy6j6novh0a60CKjr0vZIn0hATNUndrRCdeA+fncPI5MxAN1lrGf
-	 NRGlO3C23EEjPL8cAE99/F66Afj/Bc/3cKteES54yXymIvdhgAU4lzppogLCH5Yugm
-	 Olm46BPwkqImbroysTmEjxqky5KozQl5ep7fnMs4bha7O9pmPyZ4+krBQSIxc+AtYP
-	 PVPNNPrbYwr8nQgPxldhgcBrUuVeAv5MhxElrx+qGxNOVeZNwX0ELBYumZIYk90dK6
-	 2t2v7wdlucqvdP1YlbxWmVdUuOYaqLTWx52K5l8OKPyIwGBbcJQBmS07UZKmjubQZf
-	 z5Mibr58o4NTA==
+	s=default; t=1786213712;
+	bh=qb5xgvBNl67NqtKXkeiNvhFWArZMG0eV+gf+L9GjAzo=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=YcSHkV8bTTpeeUS3aAqLhumg6iVHw9vDo2ERjVRMjbVnsEdPkHbSPOOMMdom2nfOP
+	 oWGOM+ZWW9YOfXofphGyZX/nJbUnviGq8NxQd+irzJPvj6syCxZvS3edFlg0zKIZV+
+	 EJmIH3oiqpT2Rl+rVOBq8nY21riMXSw2n+IG+Kzd/kJAiEn2TIKHABpM6bmC1N6vf4
+	 ru9g/bhXlmG5uphR+Lif4Cw2InP9ZQkW269KwnKbxyqT2+bJfbXmv+dSUoYR5Nsawa
+	 KQ/86i8/IFvDdbjkCsuhKF/6c228TTa3QvHKv4YEjTCLjsMZ4XlLqNekwxnTtFbwMx
+	 b2+spRkyUxDOg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9BEEF40505;
-	Sat,  8 Aug 2026 18:28:11 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1783C282
- for <buildroot@buildroot.org>; Sat,  8 Aug 2026 18:28:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8A1C980DF7;
+	Sat,  8 Aug 2026 18:28:32 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id D417C144
+ for <buildroot@buildroot.org>; Sat,  8 Aug 2026 18:28:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 09DA940505
- for <buildroot@buildroot.org>; Sat,  8 Aug 2026 18:28:10 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id BA28180DF7
+ for <buildroot@buildroot.org>; Sat,  8 Aug 2026 18:28:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id j6KVW-OGW6wT for <buildroot@buildroot.org>;
- Sat,  8 Aug 2026 18:28:09 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZHjevIQ-Czhz for <buildroot@buildroot.org>;
+ Sat,  8 Aug 2026 18:28:30 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
+ helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2D259404F6
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2D259404F6
- for <buildroot@buildroot.org>; Sat,  8 Aug 2026 18:28:09 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 00A518CAA5; Sat,  8 Aug 2026 18:27:21 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 8 Aug 2026 20:27:07 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: cf95721d0049e994068ab971f4bd62a465dfe041
-X-Git-Newrev: 8af01adda19b0d410072d7494b52448e9296f03d
-X-Patchwork-Hint: ignore
-Message-Id: <20260808182722.00A518CAA5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/memcached: security bump version
- to 1.6.43
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org F19D880DF6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F19D880DF6
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id F19D880DF6
+ for <buildroot@buildroot.org>; Sat,  8 Aug 2026 18:28:29 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-02.galae.net (Postfix) with ESMTPS id 0E72D1A14E9
+ for <buildroot@buildroot.org>; Sat,  8 Aug 2026 18:28:26 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id C1F176045E;
+ Sat,  8 Aug 2026 18:28:25 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id DDBB311C48626; 
+ Sat,  8 Aug 2026 20:28:20 +0200 (CEST)
+Date: Sat, 8 Aug 2026 20:28:20 +0200
+To: Franciszek Stachura <fbstachura@gmail.com>
+Cc: buildroot@buildroot.org
+Message-ID: <and1OD4OXp43npIg@windsurf>
+References: <20260704133118.1245367-2-fbstachura@gmail.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20260704133118.1245367-2-fbstachura@gmail.com>
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=dkim; 
+ t=1786213701; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ in-reply-to:references; bh=Axg0BJknT5L22VGJwP/jirrb853Cpcv0xmxRC97xpx0=;
+ b=J9tRWWAeUkwcYC96ZJ81UMFlCwsdkwVHDKtcXadxaNSNMzP0TifsJbtGumMEdjC3Jc1+M1
+ x7WHORqNIITrRXW169z1hC6NOxPxea/qB3KdnIZFif546VMQJKSlBNYm9jWb0B1hF9OGwz
+ 0Uty4HZfNfnkcMMnffhjmkjY0X2hSnVCJesHTOXVzQ+UFwqBAHglMhNf2ks6qHR3zhQv5T
+ TmAZqdkQ/DsZpAWpAVMbt3vXnPQz24T/fHuAI2H7cqsvgh2K/gjkWIK3YdJvC1szj1i/x1
+ YwVtUdhUlhAX42BqZJv9VsSnr6nlodbS++BjMD47x2Tkd0utcih+Pnglx4Krew==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
+ header.a=rsa-sha256 header.s=dkim header.b=J9tRWWAe
+Subject: Re: [Buildroot] [PATCH] package/memcached: security bump version to
+ 1.6.43
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,52 +97,24 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/8af01adda19b0d410072d7494b52448e9296f03d
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On Sat, Jul 04, 2026 at 03:31:19PM +0200, Franciszek Stachura wrote:
+> https://github.com/memcached/memcached/wiki/ReleaseNotes1643
+> > More likely critical security fixes and less critical bugfixes.
+> 
+> Signed-off-by: Franciszek Stachura <fbstachura@gmail.com>
 
-https://github.com/memcached/memcached/wiki/ReleaseNotes1643
-> More likely critical security fixes and less critical bugfixes.
+Thanks applied to master!
 
-Signed-off-by: Franciszek Stachura <fbstachura@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/memcached/memcached.hash | 7 +++----
- package/memcached/memcached.mk   | 2 +-
- 2 files changed, 4 insertions(+), 5 deletions(-)
-
-diff --git a/package/memcached/memcached.hash b/package/memcached/memcached.hash
-index f241723111..93480d338c 100644
---- a/package/memcached/memcached.hash
-+++ b/package/memcached/memcached.hash
-@@ -1,6 +1,5 @@
--# From http://www.memcached.org/files/memcached-1.6.42.tar.gz.sha1
--sha1  de453f58745238c70091fe243549c406aabdc3c5  memcached-1.6.42.tar.gz
--
-+# From http://www.memcached.org/files/memcached-1.6.43.tar.gz.sha1
-+sha1  37307d13528f355fb282bc8841ca033272e44ac9  memcached-1.6.43.tar.gz
- # Locally computed
--sha256  50f08b879d4f9d36dea9d905e9eaade15c708e38db7e9a73fc21dc8b45395de7  memcached-1.6.42.tar.gz
-+sha256  8042ee26e004efa0db41ca4a7c713f759c3280c2f8bee438579f13de1e509435  memcached-1.6.43.tar.gz
- sha256  bc887c4ad8051fe690ace9528fe37a2e0bb362e6d963331d82e845ca9b585a0c  COPYING
-diff --git a/package/memcached/memcached.mk b/package/memcached/memcached.mk
-index a164e82a51..e297ca17ff 100644
---- a/package/memcached/memcached.mk
-+++ b/package/memcached/memcached.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MEMCACHED_VERSION = 1.6.42
-+MEMCACHED_VERSION = 1.6.43
- MEMCACHED_SITE = http://www.memcached.org/files
- MEMCACHED_DEPENDENCIES = libevent
- MEMCACHED_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
