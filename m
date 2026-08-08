@@ -4,85 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA0A9C55174
-	for <buildroot@archiver.kernel.org>; Sat,  8 Aug 2026 09:40:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9339C5AD2B
+	for <buildroot@archiver.kernel.org>; Sat,  8 Aug 2026 10:14:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7411460699;
-	Sat,  8 Aug 2026 09:40:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3A5E3606BB;
+	Sat,  8 Aug 2026 10:14:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 90FXS5ddWV4u; Sat,  8 Aug 2026 09:40:54 +0000 (UTC)
+ id 5e-titfrsTIe; Sat,  8 Aug 2026 10:14:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5EA4C605F4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 83AD460686
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786182054;
-	bh=Kg4QSzoDIR0tQbKH3Ce9i7GFNe5oPOoEPOzb+CG91DU=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=UCV5KV9IP/f2YkykN15znKoFLVFDrIVs+1ZaBqD45JLxyI4G0AzdFArNDc5k/Hw4Q
-	 i+imgAXOitTTpTvVlJSWghMHMzbmSPO7214kSX9T9bEYj0JYtVapUaX3XLaeUE0LAC
-	 ZeCGLicSgohh6GOXZOsOW3Fm/w9UHSc16AANeKrdB6V9DweRd70pcaGBMRPWWgWX17
-	 FU6OoO0gItsVAVuJnozurUiykN8otptVlyTtKuINTHCPwgMHN0CwRJDXrRdeHbfQnf
-	 /QuhXiufyeg2CCIG4vV3AwsaNREHRXpc/sY2USbU5GKXibU4ZtqDeW9CRxlAAYiSv1
-	 Tv+f0L4lfY89A==
+	s=default; t=1786184043;
+	bh=iWaBrVk7bz5NSpKejsU9vesksUWJUPcGgwrO3wTiJnc=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
+	b=iL68yQYVJISyCLh8S89YXJzIMRhykqz3t5qyBq8RiWqL3GT7qZny9qq/nkvnWDEhv
+	 T4a5OJrooKFXguwJ16Ohgd9nkaBOYHLvlaCNkrIwnkWmz4ZNKEfTySPu+QOOp5WLch
+	 dNRTHDKN6NzekgwKqvY3idrl+K/Ex0SYHzClSFpABPKiHdG7a6Di8trQHvz2dTZW4h
+	 pnORI6Q/MyhnoyHBq37lPmfcjgnyVNoi5IKQm7ukPnMwJFAaKzYsofLiQ7haUVD1Gb
+	 aW5P09lnYfSSN+vX9fIDwZieDIyD4zwL3KbfR/aSmw2rnQGRA+imtmQLDn6kdj29FH
+	 tCBPP2m3ovPmg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5EA4C605F4;
-	Sat,  8 Aug 2026 09:40:54 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 8505B144
- for <buildroot@buildroot.org>; Sat,  8 Aug 2026 09:40:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 83AD460686;
+	Sat,  8 Aug 2026 10:14:03 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 478F4198
+ for <buildroot@buildroot.org>; Sat,  8 Aug 2026 10:14:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 767D280898
- for <buildroot@buildroot.org>; Sat,  8 Aug 2026 09:40:53 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 393BA6067D
+ for <buildroot@buildroot.org>; Sat,  8 Aug 2026 10:14:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fZvtAMKLgq-D for <buildroot@buildroot.org>;
- Sat,  8 Aug 2026 09:40:52 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 63CBB80897
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 63CBB80897
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 63CBB80897
- for <buildroot@buildroot.org>; Sat,  8 Aug 2026 09:40:52 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id 7783A2003CA;
- Sat,  8 Aug 2026 11:40:46 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 08 Aug 2026 11:40:46 +0200
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id g3h_6v1Qf7P5 for <buildroot@buildroot.org>;
+ Sat,  8 Aug 2026 10:14:01 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
+ helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5AE1060649
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5AE1060649
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5AE1060649
+ for <buildroot@buildroot.org>; Sat,  8 Aug 2026 10:14:00 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-03.galae.net (Postfix) with ESMTPS id 2573D4E41158;
+ Sat,  8 Aug 2026 10:13:58 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id CCDD86045E;
+ Sat,  8 Aug 2026 10:13:57 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 313DE11C483B3; 
+ Sat,  8 Aug 2026 12:13:50 +0200 (CEST)
+To: buildroot@buildroot.org
+Date: Sat,  8 Aug 2026 12:13:46 +0200
+Message-ID: <20260808101348.924397-1-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.55.0
 MIME-Version: 1.0
-Date: Sat, 08 Aug 2026 11:40:46 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org, Romain Naour <romain.naour@gmail.com>, Thomas
- Petazzoni <thomas.petazzoni@bootlin.com>
-In-Reply-To: <20260808082554.69837-1-bernd@kuhls.net>
-References: <20260808082554.69837-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.17
-Message-ID: <8ead91b74516f224155908b866405a95@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1786182049;
- bh=aFKqZqWVFWR6cK6M+A7oF71YofVGVdvMWCSgEd/kEn4=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=dUvd8MggIX1GYUIJjXMA3PXuDXpaSU9xtaa3Jh0tFWPrimXF3DS6cwl/tKFSbY58s
- Zx6cHqbgklg8fYZTMy/zHXDusNtIae7fWRcQynT1CSARAdHCf/15RLypSHQgWJsLyp
- dUV7jSM+GGioaCtJHGKjGqtmNLTWl13VJZDzf5MZq+h8xf6y5n7uvzjxLqtlxrJoWs
- 4Nb9a5pqPZGMHgOzPQNxetZ8njjGKCjsEVzxuG6x3ft8W4ZBVtg7izM2iGYK0pZUh5
- mE20gy10CoNimyI67lbIFkFWnW0tS2cOmzG371vfWDl+uEpEANUuIaPY2I0yKtqeHx
- pNJAiXr5QioZQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=dUvd8Mgg
-Subject: Re: [Buildroot] [PATCH 1/2] package/{glibc,
- localedef}: move to Github mirror repo
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=dkim; 
+ t=1786184033; h=from:subject:date:message-id:to:cc:mime-version:
+ content-transfer-encoding; bh=SeVmq2fm0qCu8ZIfDOl454uZGk5MZYzHwXXEpzidHCw=;
+ b=TpCXuMmNIT4iWeZ7cK6dDTm6JRzeYxAzbu9vihqrAxdNntJvxyYOYxgFAITAHS7ImSF53/
+ Uh8fJeigxb8rDLpR7UHdKovmUa+/Gy3kAIHZJlKdmGYbO6e1QQqLBVOIkvuls6XDPMVwvJ
+ +rotnW6/TCtNqj3hU9ir9S6KEhgqjebN0/hpcv+aIOqBRRPT0wERYlrCoIrRL4tMv6rYp3
+ 42SyarhOHYZPWIECA1oc2DH01xPAni/iskoTRu9Gubf9TTSSJzG3OHBljeVvVHORsmDMyD
+ /tRh9/jtvo//VNzLK/haJg1gFWDEkka/CltvgT3NGghGj2K1tK5WCs3/1FLBLA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=dkim header.b=TpCXuMmN
+Subject: [Buildroot] [PATCH 1/2] package/python-pyudev: depend on libudev
+ instead of udev
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,45 +92,65 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Bernd,
+Commit 3f24135c56f6aa8f0524307b7339512fecfa6f92 ("package/libinput:
+only needs libudev, not udev daemon") changed libinput to depend on
+libudev instead of udev.
 
-Thanks for the patch.
+However, BR2_PACKAGE_LIBINPUT_PYTHON_TOOLS selects
+BR2_PACKAGE_PYTHON_PYUDEV, which depends on udev, causing a broken
+dependency chain:
 
-On 08/08/2026 10:25, Bernd Kuhls wrote:
-> Downloading from sourceware.org/git/glibc.git causes many 429 errors
-> these days so we switch to a maintained Github mirror repo.
+WARNING: unmet direct dependencies detected for BR2_PACKAGE_PYTHON_PYUDEV
+  Depends on [n]: BR2_PACKAGE_PYTHON3 [=y] && BR2_PACKAGE_HAS_UDEV [=n]
+  Selected by [y]:
+  - BR2_PACKAGE_LIBINPUT_PYTHON_TOOLS [=y] && BR2_PACKAGE_LIBINPUT [=y] && BR2_PACKAGE_PYTHON3 [=y]
 
-Any specific reason why you picked this Github mirror,
-while upstream points to a Gitlab one?
+Turns out that after experimenting, the majority of the pyudev
+functionality works fine with just libudev. Only pyudev.udev_version()
+has been detected as not working as it calls into udevadm. But the
+actual features to enumerate devices and get their characteristics
+just fine.
 
-See:
-https://sourceware.org/glibc/wiki/GlibcGit#Fetching_The_Repository
-which links to:
-https://gitlab.com/gnutools/glibc
+So, to fix the issue, we change the dependency of python-pyudev to
+just libudev instead of udev.
 
-If not, I'd prefer we simply follow the upstream recommendations.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-pyudev/Config.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-> Fixes:
-> https://autobuild.buildroot.net/results/09e/09e760063607b1cbf4ef687bf9bbe17b12d648b2/
-> https://autobuild.buildroot.net/results/22a/22afc952e0c05648d538d13ea593e5ad8c4c03c7/
-> https://autobuild.buildroot.net/results/281/28159f29e38b0475ae33fe73a9cab04ea3a8835f/
-> https://autobuild.buildroot.net/results/961/9616d46c46bd2a10a6e719d76ed6e1d8e3b3d0d2/
-> https://autobuild.buildroot.net/results/fd4/fd48fb96639871889fb2238dba360d1740d7962c/
-> https://autobuild.buildroot.net/results/91a/91a0b7ccad116911f84281b4cbcb080309ad952e/
-> https://autobuild.buildroot.net/results/17f/17ff61f0eac946b3c027a540147b2573e224dcdb/
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+diff --git a/package/python-pyudev/Config.in b/package/python-pyudev/Config.in
+index aa98c2cc61..1e61228a34 100644
+--- a/package/python-pyudev/Config.in
++++ b/package/python-pyudev/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_PYTHON_PYUDEV
+ 	bool "python-pyudev"
+-	depends on BR2_PACKAGE_HAS_UDEV
++	depends on BR2_PACKAGE_HAS_LIBUDEV
+ 	select BR2_PACKAGE_PYTHON3_ZLIB # runtime
+ 	help
+ 	  pyudev is a LGPL licenced, pure Python 2/3 binding to
+@@ -9,5 +9,5 @@ config BR2_PACKAGE_PYTHON_PYUDEV
+ 
+ 	  https://github.com/pyudev/pyudev
+ 
+-comment "python-pyudev needs udev /dev management"
+-	depends on !BR2_PACKAGE_HAS_UDEV
++comment "python-pyudev needs libudev"
++	depends on !BR2_PACKAGE_HAS_LIBUDEV
+-- 
+2.55.0
 
-Best regards,
-
-Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
