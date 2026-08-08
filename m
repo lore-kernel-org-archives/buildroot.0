@@ -4,82 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 864C7C55174
-	for <buildroot@archiver.kernel.org>; Sat,  8 Aug 2026 16:27:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50F94C55174
+	for <buildroot@archiver.kernel.org>; Sat,  8 Aug 2026 17:12:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4B24880E8B;
-	Sat,  8 Aug 2026 16:27:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2889980EA1;
+	Sat,  8 Aug 2026 17:12:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id d_lfPqMlORW8; Sat,  8 Aug 2026 16:27:28 +0000 (UTC)
+ id OiNXkpc1ff4p; Sat,  8 Aug 2026 17:12:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5A52180E91
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ACA1580E93
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786206448;
-	bh=nKQv/YqGj4J1V0IvwkchyR/m8FBM0u3FVLnstcAEnmU=;
+	s=default; t=1786209132;
+	bh=jPkLwy+n+dzYL97/2Qxm+IJHX/0rn8jsKpM3UcvIe40=;
 	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=IpBAYCm33YWCL1p7M66KpXte3Z+dmEs+W2iAddJWpEsQB44mjCX/IMJMkUyVvjv3f
-	 Y2yQ9cQ1UEJUXrWlmCjwRSHV4FMHsOtuHcNfy2GiXh436sSu15m5f0M5Qw6VDDDmNy
-	 mdi6lAbhXm6JjORAmY/g2wkaTVrfpY8V0qyirFZ9SyJebQNLmqrAISlHw5c6uoXZ0u
-	 aQ25H6Ixqqc4b7iqKtb8a3xcpEnZIkKhX9p94T1Ds1O4eF7dWsCXU7TcQRMQvCD18W
-	 3zV/V8KjfTKoxwH/BFCB+BYA/xAinplhq5Z+zxqqvKjTfPAIi1YwVdAOUwoqIpLX+a
-	 nXtXxeSUw9y2g==
+	b=JZEigeU+i4Dr9C0+TbupFzFeMXMQdNw/9N+FxU1ynJn5+foEdULJJEleU6Q6SoJv2
+	 aRXc4VKwK2/uGFjJHvrkjVjuKexvgQtBkKK0xVo2xtdayZEjXygd3WkOVvEm3CFcZJ
+	 1U2wCR6s0pBbL4/0sexVhjNRUaAxCGc5KBEWv6a5HnLF0iTXQt9lEmyeEuRmkWFuxT
+	 iw1VkgJ7o8lg0JofekfldjHbncdlC4GRdIXQGfSdAuO8c6in5McMLYeW8A7yt3wvcZ
+	 cTRiwLy30gko10rjUkK+EwRdP6HR/SeX2oZ8YYr/t7lWfbQKIJU+Y5zYI4UWfe9Pcz
+	 GggZK9E3G/hig==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5A52180E91;
-	Sat,  8 Aug 2026 16:27:28 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id AAE03282
- for <buildroot@buildroot.org>; Sat,  8 Aug 2026 16:27:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id ACA1580E93;
+	Sat,  8 Aug 2026 17:12:12 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9ECC31AF
+ for <buildroot@buildroot.org>; Sat,  8 Aug 2026 17:12:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 91804400D3
- for <buildroot@buildroot.org>; Sat,  8 Aug 2026 16:27:26 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 90BF56064B
+ for <buildroot@buildroot.org>; Sat,  8 Aug 2026 17:12:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VLAn7bJgh7ZP for <buildroot@buildroot.org>;
- Sat,  8 Aug 2026 16:27:26 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
- helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XaGMJ5xOr9vh for <buildroot@buildroot.org>;
+ Sat,  8 Aug 2026 17:12:10 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
+ helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org CF5E94008F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CF5E94008F
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
- by smtp2.osuosl.org (Postfix) with ESMTPS id CF5E94008F
- for <buildroot@buildroot.org>; Sat,  8 Aug 2026 16:27:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 60B29605F9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 60B29605F9
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 60B29605F9
+ for <buildroot@buildroot.org>; Sat,  8 Aug 2026 17:12:09 +0000 (UTC)
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-03.galae.net (Postfix) with ESMTPS id C20384E41162
- for <buildroot@buildroot.org>; Sat,  8 Aug 2026 16:27:22 +0000 (UTC)
+ by smtpout-02.galae.net (Postfix) with ESMTPS id 94D651A14CF
+ for <buildroot@buildroot.org>; Sat,  8 Aug 2026 17:12:07 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 8E2D06045E
- for <buildroot@buildroot.org>; Sat,  8 Aug 2026 16:27:22 +0000 (UTC)
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 69D2D6045E
+ for <buildroot@buildroot.org>; Sat,  8 Aug 2026 17:12:07 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id C3A7311C4859D; 
- Sat,  8 Aug 2026 18:27:17 +0200 (CEST)
-To: buildroot@buildroot.org
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat,  8 Aug 2026 18:27:15 +0200
-Message-ID: <20260808162715.1331483-1-thomas.petazzoni@bootlin.com>
+ with ESMTPSA id 6B0AE11C485DB; 
+ Sat,  8 Aug 2026 19:12:00 +0200 (CEST)
+To: Buildroot List <buildroot@buildroot.org>
+Cc: Romain Gantois <romain.gantois@bootlin.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat,  8 Aug 2026 19:11:55 +0200
+Message-ID: <20260808171156.1421460-1-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.55.0
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=bootlin.com; s=dkim; 
- t=1786206438; h=from:subject:date:message-id:to:cc:mime-version:
- content-transfer-encoding; bh=JUnIaSMHJkraU5YTH97gEc4daHjdJpTbV5U6wuGI4Yw=;
- b=j4Hr1s/bF513iZTboW+YyHT8MIQ2AkhpWc9B7sQu5yghjSCiMc648TugaTOeGhLx02eMkh
- Bznn4y7oVbZ7N9XxB5g5q+9s41xWvml6ZaixHBIJJL/moWLJlZwO0+nuKwsokw8zzd65Ws
- LJQlzT0h3s6s5IndHgfW1rHpkdCNnuA2NDPx+Ot3knVx8InTknMiYJDkQmig/xAN6sPt+v
- /+4XYznvrZadsYI5AdMvkdw6GFKfJSOPNoEhTglxXloGk+ESunJCBZdKgCNrN5VDB7//Kq
- tD1o3BD9xbY+b0fUwivcfd0zq7jVf4rbzaG8Uf8NM+qXsFrY3ejlGu/mp4Ylgg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ t=1786209122; h=from:subject:date:message-id:to:cc:mime-version:
+ content-transfer-encoding; bh=ZA4roI2uM2Ze+xSCXrYoxqiJ2VTMLp0yEk/cK/Aav7Y=;
+ b=LmLs8ncK8UO+0TdXv+hIcc8qNGH7xa7SJrIdqMCfelUxhmLmWEJeb4jFKzEQPtANw6Bpi2
+ RRxOONv+opMhrRvg4OVpGxmwWtzJ+oZNtWyM6+xqJeCWxzrnYRedPGB/fncC0EDN29NjBN
+ qlkmejgL4Sxt9RtvwWsrccdMdijWsFRL/kyG01AdIuxIJHY5gsLVCxxbzLjgjMyL5CD/H0
+ r/CdiG4N5s62NrTmRFzuJSypZhj3t/OrgmyliJQJaBDTbZ0Cx6DxMQXELj2wySAmWL9xP3
+ C9mZ6pgelF9YRyBfsIZ0kT5lvctzHgnPc4cGQKTqlTeBHDwR16i4d1GhXZuU4g==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
- header.a=rsa-sha256 header.s=dkim header.b=j4Hr1s/b
-Subject: [Buildroot] [PATCH] package/genext2fs: bump version to 1.6.2
+ header.a=rsa-sha256 header.s=dkim header.b=LmLs8ncK
+Subject: [Buildroot] [PATCH] package/snagboot: bump to version 2.6.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -98,73 +99,135 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Upstream doesn't provide any useful changelog, but the number of
-1.5.0..1.6.2 commits is reasonable:
+Changelog 2.5..2.6:
 
-bfc28c7 Define {MAX_,}RESERVED_BLOCKS as floats
-5b93731 Recover automatic block number calculation
-d6e659d Correct message for minimum block count
-1b2a30e Correct also commented code to take into account reserved blocks
-944a4fd Indirect blocks must be taken into account for stats
-3e2fce1 Restore (MAX_)RESERVED_BLOCKS to integer division
-b571221 Add missing newlines on error messages.
-cd4ff51 don't call ftruncate() on stdout
-6909cde Enable system locale - change from the standard (C) to system locale.
-9651f5d Fix alignment issues for strict architectures
-4a99c22 Hardcode length of hardcoded char array instead of sizeof(long)
-1f38ba4 Add ordered directory traversal
-84c2d01 Add ordered directory traversal test
-467ebe5 Fix formatting of man page references
-810c12e Fix auto-block calculation from PR #5 merge
-28988bd Skip device table entry when parent path is not a directory (from PR #33)
-45191ab Fix ordered directory traversal from PR #34 merge
-b615521 configure.ac: teach autoreconf to detect and install macros in m4
-81028ca configure.ac: upgrade ancient snprintf macro to modern autoconf-archive edition
-67661a1 Fix EXTRA_DIST: reference new ax_func_snprintf.m4 instead of deleted ac_func_snprintf.m4
-907737e Remove incorrect address
-4c4343d Add licensing information
-cb5f584 Add license information
-a60ccd9 Use strrchr to split path:dest so host paths may contain colons (fixes #23)
-44ff03d Implement sparse_super feature with superblock/GDT backups (fixes #29)
-8b8f2d1 Add extended attributes (xattr) support (fixes #9)
-d0a9274 Optimize block/inode allocation for large filesystems (fixes #31)
-b69c34e Fix -d dir:/path destination: restore colon after stats pass, auto-create intermediate dirs
-2c38700 Add 9 functional tests for previously untested features
-3d3bcb6 remove useless NEWS file
-03dee74 Bump version to 1.6.0 (fixes #28)
-c8f41b9 Make xattr copying opt-in with -X/--xattrs flag (fixes #40)
-3324695 Bump version to 1.6.1
-4e5d8ae Update README: add -X/--xattrs, SOURCE_DATE_EPOCH, and missing device table types
-bf5b1a0 Bump version to 1.6.2
+treewide:
+Migrate documentation to readthedocs
+Emit more specific error messages for USB permission-based access issues
+Add unit tests
+
+snagflash:
+Support compressed input files, e.g. *.wic.bz2
+Refactor fastboot-uboot logic to factor out common code and improve logging
+Automatically detect when oem_run isn't supported by U-Boot, and fallback to ucmd
+
+snagrecover:
+Support Renesas RZ/N1 platforms
+Support SoC model aliases, and add i.MX8MP alias
+Handle relative path prefixes with the -F syntax
+
+Changelog 2.6..2.6.1:
+
+snagrecover:
+Correct i.MX93 ROM code recovery which doesn't support control endpoint HID commands
+Add multi-board support to AM335x recovery setup script
+Add i.MX7Solo support
+
+treewide:
+Fix broken links in documentation
+Drop Python 3.9 support
+Add CI for Python 3.14
+
+One packaging-related change is that Snagboot would now
+unconditionally import the bzip2, gzip and lzma Python modules, which
+are not necessarily available. Since these are only needed when
+compressed images are provided as input, we submitted a patch upstream
+to make those imports only when compressed files are provided as
+input, relaxing those dependencies.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/genext2fs/genext2fs.hash | 2 +-
- package/genext2fs/genext2fs.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...utils.py-import-compression-modules-.patch | 57 +++++++++++++++++++
+ package/snagboot/snagboot.hash                |  2 +-
+ package/snagboot/snagboot.mk                  |  2 +-
+ 3 files changed, 59 insertions(+), 2 deletions(-)
+ create mode 100644 package/snagboot/0001-src-snagrecover-utils.py-import-compression-modules-.patch
 
-diff --git a/package/genext2fs/genext2fs.hash b/package/genext2fs/genext2fs.hash
-index 20bb1c641b..75e40f0caf 100644
---- a/package/genext2fs/genext2fs.hash
-+++ b/package/genext2fs/genext2fs.hash
+diff --git a/package/snagboot/0001-src-snagrecover-utils.py-import-compression-modules-.patch b/package/snagboot/0001-src-snagrecover-utils.py-import-compression-modules-.patch
+new file mode 100644
+index 0000000000..ea92c0caa2
+--- /dev/null
++++ b/package/snagboot/0001-src-snagrecover-utils.py-import-compression-modules-.patch
+@@ -0,0 +1,57 @@
++From fa60aaf200eb1e6d31124ac3e7631e9e5458d145 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Sat, 8 Aug 2026 19:03:52 +0200
++Subject: [PATCH] src/snagrecover/utils.py: import compression modules when
++ needed
++
++Commit 4f98bdec5ebeb13d9f851f848c3bd0086ef31eeb ("snagflash: Support
++on-the-fly decompression of input files") has added unconditional
++imports of lzma, bz2 and gzip Python modules, even if compressed input
++files are not used.
++
++Switch to dynamic imports where these modules are only imported
++on-demand. This allows to relax the need to have support for those
++modules in Python, which can be helpful in environments such as
++Buildroot where dependencies are kept to a minimum.
++
++Upstream: https://github.com/bootlin/snagboot/pull/95
++[Thomas: upstream version is different as upstream master branch also
++supports zstd compression, which wasn't supported as of v2.6.1 of
++snagboot]
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ src/snagrecover/utils.py | 7 ++++---
++ 1 file changed, 4 insertions(+), 3 deletions(-)
++
++diff --git a/src/snagrecover/utils.py b/src/snagrecover/utils.py
++index 8d240f6..dfe7d23 100644
++--- a/src/snagrecover/utils.py
+++++ b/src/snagrecover/utils.py
++@@ -16,9 +16,7 @@ from snagrecover.usb import SnagbootUSBContext
++ import yaml
++ import importlib.resources
++ 
++-import lzma
++-import bz2
++-import gzip
+++from math import ceil
++ 
++ USB_RETRIES = 9
++ USB_INTERVAL = 1
++@@ -47,10 +45,13 @@ def open_compressed_file(path: str, mode):
++ 	comp = get_compression_method(path)
++ 
++ 	if comp == "xz":
+++		import lzma
++ 		file = lzma.open(path, mode)
++ 	elif comp == "bz2":
+++		import bz2
++ 		file = bz2.open(path, mode)
++ 	elif comp == "gz":
+++		import gzip
++ 		file = gzip.open(path, mode)
++ 	else:
++ 		return open(path, mode)
++-- 
++2.55.0
++
+diff --git a/package/snagboot/snagboot.hash b/package/snagboot/snagboot.hash
+index 6fff4c94c1..09d765d9f5 100644
+--- a/package/snagboot/snagboot.hash
++++ b/package/snagboot/snagboot.hash
 @@ -1,3 +1,3 @@
- # Locally computed:
--sha256  d3861e4fe89131bd21fbd25cf0b683b727b5c030c4c336fadcd738ada830aab0  genext2fs-1.5.0.tar.gz
-+sha256  b8aba9af48e664fa60134af696a57b3bb4ebd2b2878533d7611734e90b883ecc  genext2fs-1.6.2.tar.gz
- sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-diff --git a/package/genext2fs/genext2fs.mk b/package/genext2fs/genext2fs.mk
-index adfa412e66..c2c7abbaf5 100644
---- a/package/genext2fs/genext2fs.mk
-+++ b/package/genext2fs/genext2fs.mk
+ # Locally calculated
+-sha256  03b3793feb9d926f5cb4f1c89f7a22075247fe91942c7be13065b6b62029376e  snagboot-2.5.tar.gz
++sha256  0b94184d9668c46cc2cf11002772ddb2fe06542f4f96cc6884342b5561d84b8d  snagboot-2.6.1.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
+diff --git a/package/snagboot/snagboot.mk b/package/snagboot/snagboot.mk
+index 64b8b6fcc9..b3f699e988 100644
+--- a/package/snagboot/snagboot.mk
++++ b/package/snagboot/snagboot.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GENEXT2FS_VERSION = 1.5.0
-+GENEXT2FS_VERSION = 1.6.2
- GENEXT2FS_SITE = $(call github,bestouff,genext2fs,v$(GENEXT2FS_VERSION))
- GENEXT2FS_LICENSE = GPL-2.0
- GENEXT2FS_LICENSE_FILES = COPYING
+-SNAGBOOT_VERSION = 2.5
++SNAGBOOT_VERSION = 2.6.1
+ SNAGBOOT_SITE = $(call github,bootlin,snagboot,v$(SNAGBOOT_VERSION))
+ SNAGBOOT_LICENSE = GPL-2.0
+ SNAGBOOT_LICENSE_FILES = LICENSE
 -- 
 2.55.0
 
