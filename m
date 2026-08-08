@@ -1,75 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B72B7C55174
-	for <buildroot@archiver.kernel.org>; Sat,  8 Aug 2026 12:52:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0805BC55174
+	for <buildroot@archiver.kernel.org>; Sat,  8 Aug 2026 13:00:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 55C124063E;
-	Sat,  8 Aug 2026 12:52:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A261260656;
+	Sat,  8 Aug 2026 13:00:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iqUsvH9Fhz3d; Sat,  8 Aug 2026 12:52:35 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZrWLP-1wrKvK; Sat,  8 Aug 2026 13:00:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9F9B84062F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 64E7B60672
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786193555;
-	bh=Yh+OLKj32gdOykBU6gN1BErr/jXw7cBdVmEXgjbRlKU=;
-	h=Date:From:To:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=LM0L70ZjxdB1Ld+i1Byi5UUxaLf0+PVshMey3D0zvk7ETWdEU9Mml9ifZl4fcpx9o
-	 MaeebeBThQpRyWrPsdsdMCAM1XHp37+JGcD5ZwlIf4efV8sfANCyONXo3fTD9zdXTr
-	 WruHovQn1Lu342n7umrdQeirH7hFKBk4gmTIFdmgKRlVmP2XLcvSrLDznC4BK+Rc3w
-	 2l2M/Rlnsg+NL0eBbYTdpN4fjdlhEXjWJzIH6MtNznLLRkCS9448miCzShK5JoYXxX
-	 kT8PZchzfGN/Y65pfMqypEyGXXYFl+c8Q0WvRNui/BC5zTx6UatMJEf7+fBD3GqCl9
-	 7bcMztkRVqawg==
+	s=default; t=1786194019;
+	bh=L0GgDxO7DNfB6JICvNQMKNuy8cjWrLkMkJGM9oKq2Y8=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=P3HWefXPPBnuoRg4Marx/TZisZuWUbMV15B47gmuPe1QWKjUUj8UQJQ2fjz2f1OQd
+	 sJXsYJhzOdUsIKSv9Y31iWuPdCJvlpkEcipiJdpA7aE7aPiVb6Pzrx6thn3oSs2OxK
+	 zjM90kOYgN5OKxz9STpe25ZwaXQqJK0k4X/+qy9b/sMNjx8oRp0Wn7dasdORgKNDhz
+	 EpJe8JXdpIoCIWB1nBWS/dKRCQ+Khz+VGijDT7npVgvnyqqDIEnQKlLW7wuQVvCwTW
+	 iHI9ZSjobJH0C84Cx7YXZbyItrVNTVyN+Z3XALeMOYRWF4D5hmswzd7LCB4PJAUmJz
+	 Nsth74VkMIwHg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9F9B84062F;
-	Sat,  8 Aug 2026 12:52:35 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 89A7E144
- for <buildroot@buildroot.org>; Sat,  8 Aug 2026 12:52:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 64E7B60672;
+	Sat,  8 Aug 2026 13:00:19 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6E1CB2B6
+ for <buildroot@buildroot.org>; Sat,  8 Aug 2026 13:00:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6F35E4061D
- for <buildroot@buildroot.org>; Sat,  8 Aug 2026 12:52:33 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 605EF400A9
+ for <buildroot@buildroot.org>; Sat,  8 Aug 2026 13:00:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NjMTA7yT5t2H for <buildroot@buildroot.org>;
- Sat,  8 Aug 2026 12:52:32 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.238.66.15;
- helo=helium.openadk.org; envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E22114062F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E22114062F
-Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E22114062F
- for <buildroot@buildroot.org>; Sat,  8 Aug 2026 12:52:31 +0000 (UTC)
-Received: by helium.openadk.org (Postfix, from userid 1000)
- id A2B7A31E0D33; Sat, 08 Aug 2026 14:52:29 +0200 (CEST)
-Date: Sat, 8 Aug 2026 14:52:29 +0200
-From: Waldemar Brodkorb <wbx@openadk.org>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id yQMtPUCrmkTi for <buildroot@buildroot.org>;
+ Sat,  8 Aug 2026 13:00:16 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
+ helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0660C4004B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0660C4004B
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0660C4004B
+ for <buildroot@buildroot.org>; Sat,  8 Aug 2026 13:00:15 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-03.galae.net (Postfix) with ESMTPS id 818CE4E4115C
+ for <buildroot@buildroot.org>; Sat,  8 Aug 2026 13:00:12 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 48EC76045E
+ for <buildroot@buildroot.org>; Sat,  8 Aug 2026 13:00:12 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 783A911C484A4; 
+ Sat,  8 Aug 2026 15:00:06 +0200 (CEST)
 To: buildroot@buildroot.org
-Message-ID: <ancmjQOp42gd7zkv@waldemar-brodkorb.de>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat,  8 Aug 2026 15:00:03 +0200
+Message-ID: <20260808130004.1231694-1-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.55.0
 MIME-Version: 1.0
-Content-Disposition: inline
-X-Operating-System: Linux 6.12.96+deb13-amd64 x86_64
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=openadk.org; s=2022; 
- t=1786193549; bh=IlzY04qL6T5VbRLUx3gef/a23X0MIDM6U/Esr3R+8Pk=;
- h=Date:From:To:Subject:From;
- b=erqzAOz5iUSsgbywQcttlb5Z5lhYSYuX8Yt81Rd9X8A3Z2ULZCRqYA4YzV0jk1fsH
- 2YDpduRGbwXI/1bnZoK6lNjwwRkztN0DV7relKnIcvWcTyx2BKSVI7OXWYxRUU4fym
- 0KnmTwcBL00eRvxGrt2gBi+BulXbWrQ1yRllSLsN/xkzA4eCABzZVPhaCMnJwurRq5
- qSsmF+Q7PZr38WwwsVbK6NwWwzHI9aYoPxXE32ytNK9nejzLfwcLbpD+2NVP3tsYXA
- rPqBQnhowt/TC9RegCIkk283niV31WTbKDHFzs/qFuhWF6g4Dz9cWPrym1DCVfh+LF
- K49As7Ivo7azg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=openadk.org
-Subject: [Buildroot] [PATCH] package/uclibc: bump to 1.0.59
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=dkim; 
+ t=1786194007; h=from:subject:date:message-id:to:cc:mime-version:
+ content-transfer-encoding; bh=Rul9h27dNZOx2xSz37WusCxwTkJRwg8hBHuoKHEIRx0=;
+ b=GA8dwqu3+G1BNcOi76CD2lnvRl6hnc1x5RwX8Tfuz8xr/bSQCyOR5EGzKJxphCm3ZzKP/N
+ mUkh/bLv3XmYRtrXcXsZ7ehyLn1GuvRgTtxMkjJGYFr3kA1Qe1KYnizDl49S8f22jDlIIF
+ lq8DFhfBk+wRQ4h1a7kE6UDM/zL7x+xB490/yYtEJRXYUgexp21ft62J3sZ4xRsyF2BaDE
+ bgyLLZsdiEj2ydmPsojIJolWo4/ZA3FMDGz2VdOxuFDAHzjNliF+U5Bst86JVLB74uOpfi
+ BBAwdFFrJUwRW4scH4SQ0940vnZ4hbMw6FLNpmk0vL48HUEccMm50OuHOZXgkA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=dkim header.b=GA8dwqu3
+Subject: [Buildroot] [PATCH] boot/grub2: fix build issue since 2.14 version
+ bump
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,287 +93,189 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changes made in this release:
+Since the bump of grub2 to version 2.14, the build fails on some
+configurations with:
 
-Ben Wolsieffer (1):
-      nptl: fix getting main stack size on no-MMU
+/home/autobuild/autobuild/instance-8/output-1/host/bin/grub-mkimage: error: `/home/autobuild/autobuild/instance-8/output-1/build/grub2-2.14/build-i386-pc/grub-core//kernel.img' is miscompiled: its start address is 0x9074 instead of 0x9000: ld.gold bug?.
 
-Max Filippov (4):
-      stdio: fix %a formatting of inf and nan
-      stdio: fix radix point output for %a
-      stdio: output sign with NaNs
-      stdio: restrict first digit of %a output to 0 or 1
+We are not the only ones affected: OpenEmbedded has the issue as well,
+addressed in commit
+https://github.com/openembedded/openembedded-core/commit/66aefeca482e2985fef5b936ff611ba8b7f81b85,
+and this commit points that libreboot and Gentoo have also adopted the
+same temporary fix: revert two upstream commits.
 
-Ramin Moussavi (19):
-      libintl.h: route stubs through format_arg inlines; fix gettext_noop
-      build: scope .NOTPARALLEL to locale targets only, restore parallel build
-      limits.h: define PAGE_SIZE/PAGESIZE like musl, fixing the gdb build
-      wait4: fall back to waitid(2) at runtime when wait4 returns ENOSYS
-      pagesize: restore PAGE_SHIFT fallback for binfmt_flat (no auxv)
-      buildsys: build locale headers in-tree, not via a recursive sub-make
-      extra/locale: skip locales the build host cannot provide
-      csky: fix struct semid_ds layout for TIME64
-      csky: make __kernel_uid_t/__kernel_gid_t 32-bit
-      hppa: fix inotify/signalfd/timerfd flag values
-      hppa: do not set IPC_64 for the SysV IPC *ctl commands
-      x86: fix struct semid_ds layout for TIME64
-      i386: add CFI to __libc_i386_syscall6 for cancellation unwinding
-      i386: do not set IPC_64 for the SysV IPC *ctl commands on 5.1+ kernels
-      buildsys: terminate .eh_frame in shared objects
-      m68k: make the __jmp_buf layout match what setjmp.S actually saves
-      inet: use the direct accept4 syscall when __NR_accept is missing
-      m68k: implement atomic operations with the CAS instruction
-      libc: fix struct shmid_ds layout for TIME64
+So to fix the issue in Buildroot, we take the same approach. It is
+temporary, and there is an upstream patch series under discussion to
+really fix the problem. But as this series has 9 patches still under
+discussion, we take the simpler approach of reverting two simpler
+patches for the time being.
 
-Waldemar Brodkorb (10):
-      netinet/in.h: sync with glibc
-      bits/fcntl-linux.h: sync with glibc
-      add copy_file_range syscall wrapper
-      sys/fanotify.h: drop include to fix c-sky compilation
-      adjtimex: fix for architectures lacking __NR_clock_adjtime, f.e. frv
-      sys/user.h: restore required macros
-      netinet/tcp.h: sync with glibc
-      loongarch: add basic static only support
-      riscv: setcontext: fix linking error
-      bump version for 1.0.59 release
-
-ramin (16):
-      ldso: harden _dl_tls_get_addr_soft against an unusable DTV
-      microblaze: implement atomic operations with lwx/swx
-      ldso: microblaze: add missing addend to R_MICROBLAZE_TLSDTPREL32
-      ldso: make the _dl_tls_get_addr_soft DTV check microblaze-specific
-      microblaze: fix struct semid_ds layout for TIME64
-      m68k: fix struct semid_ds layout for TIME64
-      mips: fix fallocate() 64-bit argument passing on n32
-      mips: fix mmap64() for large offsets on n32
-      mips: fix setjmp() on n32/n64 (.cpreturn, not .cprestore)
-      mips: always set IPC_64 for the SysV IPC *ctl commands
-      libc: fix struct msqid_ds layout for TIME64 on all common-header arches
-      linuxthreads: fix SIGSEGV in MIPS cancellable wrappers (waitpid, nanosleep)
-      ldso: serialize dl_iterate_phdr to fix concurrent unwind hang on SMP
-      nptl: cancel the current thread directly instead of via SIGCANCEL
-      mips: only n32/n64 always need IPC_64, not o32
-      m68k: use the kernel cmpxchg helper for atomics on ColdFire
-
-Patch 0001 is applied upstream and is removed here.
+host-pkgconf is needed as an additional dependency because
+configure.ac using m4 macros provided by host-pkgconf.
 
 Fixes:
-  - https://autobuild.buildroot.net/results/2bd/2bd73b0060cad4f44649ffe4ea60c4775160d86e
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+  https://autobuild.buildroot.net/results/89b/89b907278cada3d7ca1fee2d08d66921ffb4d7cc/build-end.log
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...-PAGE_SHIFT-fallback-for-binfmt_flat.patch | 169 ------------------
- package/uclibc/uclibc.hash                    |   4 +-
- package/uclibc/uclibc.mk                      |   2 +-
- 3 files changed, 3 insertions(+), 172 deletions(-)
- delete mode 100644 package/uclibc/0001-pagesize-restore-PAGE_SHIFT-fallback-for-binfmt_flat.patch
+ ...-Check-linker-for-image-base-support.patch | 75 +++++++++++++++++++
+ ...-Print-a-more-helpful-error-if-autoc.patch | 36 +++++++++
+ boot/grub2/grub2.mk                           |  7 ++
+ 3 files changed, 118 insertions(+)
+ create mode 100644 boot/grub2/0001-Revert-configure-Check-linker-for-image-base-support.patch
+ create mode 100644 boot/grub2/0002-Revert-configure-Print-a-more-helpful-error-if-autoc.patch
 
-diff --git a/package/uclibc/0001-pagesize-restore-PAGE_SHIFT-fallback-for-binfmt_flat.patch b/package/uclibc/0001-pagesize-restore-PAGE_SHIFT-fallback-for-binfmt_flat.patch
-deleted file mode 100644
-index fdfd286042..0000000000
---- a/package/uclibc/0001-pagesize-restore-PAGE_SHIFT-fallback-for-binfmt_flat.patch
-+++ /dev/null
-@@ -1,169 +0,0 @@
--From 7730f0d05a51cd89a7123bd696e4638c3c035d7b Mon Sep 17 00:00:00 2001
--From: Ramin Moussavi <ramin.moussavi@yacoub.de>
--Date: Fri, 29 May 2026 19:47:34 +0200
--Subject: [PATCH] pagesize: restore PAGE_SHIFT fallback for binfmt_flat (no
-- auxv)
--
--binfmt_flat builds the initial process stack from only argc/argv/envp;
--it does not place an auxiliary vector. Commit 487af1498 ("drop
--__pagesize, make _dl_pagesize the single source of truth") assumed
--AT_PAGESZ is always supplied by the kernel and changed the _dl_pagesize
--fallback from PAGE_SIZE to 0. On noMMU/FLAT targets that leaves
--_dl_pagesize == 0, so every mmap-based malloc rounds its length to 0,
--mmap() fails with EINVAL and the first allocation aborts -- busybox dies
--with "init: out of memory" before it can run anything.
--
--Restore the fallback that arc/nds32 bits/uClibc_page.h have always
--documented ("_dl_pagesize = auxvt[AT_PAGESZ].a_un.a_val ? : PAGE_SIZE"),
--expressed as (1UL << PAGE_SHIFT) so it keeps working now that PAGE_SIZE
--is no longer defined in <bits/uClibc_page.h>:
--
--  - Seed _dl_pagesize with (1UL << PAGE_SHIFT) at its definition in the
--    two translation units that own the symbol: the dynamic linker
--    (ldso.c, used by ld.so) and the static-libc support (dl-support.c).
--  - Override it from AT_PAGESZ only when that entry is actually present
--    (a_type == AT_PAGESZ) and non-zero, instead of unconditionally
--    resetting it to 0.
--
--libdl.c (!SHARED) previously also defined _dl_pagesize. That was
--harmless while dl-support.c's definition was tentative (the two merged),
--but giving both a non-zero initializer makes them two strong .data
--definitions, which collide as "multiple definition of `_dl_pagesize'"
--when a static link pulls both objects out of libc.a (e.g. NPTL builds
--that drag in libdl). Drop the redundant libdl.c definition: dl-support.c
--is always co-linked from libc.a and provides the symbol.
--
--For FLAT, skip the aux-vector scan in __uClibc_main() altogether: there
--is nothing valid past the envp NULL, so _dl_aux_init() is not called and
--_dl_auxv_start stays NULL. Guard getauxval()'s slow-path loop against
--that NULL so a lookup of an uncached (>= AUX_MAX_AT_ID) tag returns
--ENOENT instead of dereferencing NULL.
--
--Verified on riscv32 noMMU/FLAT (gcc 15.2.0, linux 6.18.33): busybox
--boots as init and the testsuite runs (was "init: out of memory"
--before). Dynamic + NPTL links are unaffected -- x86_64 NPTL static
--busybox links cleanly and ld-uClibc loads the testsuite.
--
--Upstream: https://gogs.waldemar-brodkorb.de/oss/uclibc-ng/commit/7730f0d05a51cd89a7123bd696e4638c3c035d7b
--Signed-off-by: Ramin Moussavi <ramin.moussavi@yacoub.de>
--Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-----
-- ldso/ldso/ldso.c                    | 7 ++++---
-- ldso/libdl/libdl.c                  | 2 +-
-- libc/misc/auxvt/getauxval.c         | 3 ++-
-- libc/misc/elf/dl-support.c          | 7 ++++---
-- libc/misc/internals/__uClibc_main.c | 7 +++++--
-- 5 files changed, 16 insertions(+), 10 deletions(-)
--
--diff --git a/ldso/ldso/ldso.c b/ldso/ldso/ldso.c
--index 9c00e4a61..55f7d7e45 100755
----- a/ldso/ldso/ldso.c
--+++ b/ldso/ldso/ldso.c
--@@ -52,7 +52,7 @@ char *_dl_library_path         = NULL;	/* Where we look for libraries */
-- char *_dl_preload              = NULL;	/* Things to be loaded before the libs */
-- #endif
-- int _dl_errno                  = 0;	/* We can't use the real errno in ldso */
---size_t _dl_pagesize            = 0;	/* Store the page size for use later */
--+size_t _dl_pagesize            = (1UL << PAGE_SHIFT);	/* fallback; overridden from AT_PAGESZ if present */
-- struct r_debug *_dl_debug_addr = NULL;	/* Used to communicate with the gdb debugger */
-- void *(*_dl_malloc_function) (size_t size) = NULL;
-- void (*_dl_free_function) (void *p) = NULL;
--@@ -460,8 +460,9 @@ void *_dl_get_ready_to_run(struct elf_resolve *tpnt, DL_LOADADDR_TYPE load_addr,
-- 
-- 	_dl_memset(app_tpnt, 0, sizeof(*app_tpnt));
-- 
---	/* Store the page size for later use */
---	_dl_pagesize = (_dl_auxvt[AT_PAGESZ].a_un.a_val) ? (size_t) _dl_auxvt[AT_PAGESZ].a_un.a_val : 0;
--+	/* Override the fallback only if AT_PAGESZ is present and non-zero */
--+	if (_dl_auxvt[AT_PAGESZ].a_type == AT_PAGESZ && _dl_auxvt[AT_PAGESZ].a_un.a_val)
--+		_dl_pagesize = (size_t) _dl_auxvt[AT_PAGESZ].a_un.a_val;
-- 	/* Make it so _dl_malloc can use the page of memory we have already
-- 	 * allocated.  We shouldn't need to grab any more memory.  This must
-- 	 * be first since things like _dl_dprintf() use _dl_malloc()...
--diff --git a/ldso/libdl/libdl.c b/ldso/libdl/libdl.c
--index b78d6d9a3..f28801d7b 100644
----- a/ldso/libdl/libdl.c
--+++ b/ldso/libdl/libdl.c
--@@ -109,7 +109,7 @@ void (*_dl_free_function) (void *p);
-- char *_dl_library_path         = NULL;         /* Where we look for libraries */
-- #endif
-- int _dl_errno                  = 0;         /* We can't use the real errno in ldso */
---size_t _dl_pagesize            = 0; /* Store the page size for use later */
--+/* _dl_pagesize is provided by dl-support.c (always co-linked from libc.a) */
-- /* This global variable is also to communicate with debuggers such as gdb. */
-- struct r_debug *_dl_debug_addr = NULL;
-- 
--diff --git a/libc/misc/auxvt/getauxval.c b/libc/misc/auxvt/getauxval.c
--index 7610b7e5c..4af637071 100755
----- a/libc/misc/auxvt/getauxval.c
--+++ b/libc/misc/auxvt/getauxval.c
--@@ -33,7 +33,8 @@ unsigned long int __getauxval (unsigned long int __type)
-- 	}
-- 
-- 	// Otherwise we have to iterate the auxiliary vector.
---	for (ElfW(auxv_t) *entry = _dl_auxv_start; entry->a_type != AT_NULL; entry++)
--+	// _dl_auxv_start is NULL when there is no aux vector (e.g. FLAT).
--+	for (ElfW(auxv_t) *entry = _dl_auxv_start; entry && entry->a_type != AT_NULL; entry++)
-- 		if (entry->a_type == __type)
-- 			return entry->a_un.a_val;
-- 
--diff --git a/libc/misc/elf/dl-support.c b/libc/misc/elf/dl-support.c
--index 738f0ed3a..7ad57c090 100644
----- a/libc/misc/elf/dl-support.c
--+++ b/libc/misc/elf/dl-support.c
--@@ -30,7 +30,7 @@ void (*_dl_init_static_tls) (struct link_map *) = &_dl_nothread_init_static_tls;
-- 
-- ElfW(Phdr) *_dl_phdr;
-- size_t _dl_phnum;
---size_t _dl_pagesize;
--+size_t _dl_pagesize = (1UL << PAGE_SHIFT);	/* fallback; overridden from AT_PAGESZ if present */
-- 
-- ElfW(auxv_t) _dl_auxvt[AUX_MAX_AT_ID];
-- ElfW(auxv_t) *_dl_auxv_start;
--@@ -52,8 +52,9 @@ void internal_function _dl_aux_init (ElfW(auxv_t) *av)
--    /* Get the number of program headers from the aux vect */
--    _dl_phnum = (size_t) _dl_auxvt[AT_PHNUM].a_un.a_val;
-- 
---   /* Get the pagesize from the aux vect */
---   _dl_pagesize = (_dl_auxvt[AT_PAGESZ].a_un.a_val) ? (size_t) _dl_auxvt[AT_PAGESZ].a_un.a_val : 0;
--+   /* Override the fallback only if AT_PAGESZ is present and non-zero */
--+   if (_dl_auxvt[AT_PAGESZ].a_type == AT_PAGESZ && _dl_auxvt[AT_PAGESZ].a_un.a_val)
--+      _dl_pagesize = (size_t) _dl_auxvt[AT_PAGESZ].a_un.a_val;
-- }
-- 
-- #if defined(USE_TLS) && USE_TLS
--diff --git a/libc/misc/internals/__uClibc_main.c b/libc/misc/internals/__uClibc_main.c
--index 35cb73fcc..549606505 100644
----- a/libc/misc/internals/__uClibc_main.c
--+++ b/libc/misc/internals/__uClibc_main.c
--@@ -369,7 +369,7 @@ void __uClibc_main(int (*main)(int, char **, char **), int argc,
-- 		    char **argv, void (*app_init)(void), void (*app_fini)(void),
-- 		    void (*rtld_fini)(void), void *stack_end attribute_unused)
-- {
---#ifndef SHARED
--+#if !defined(SHARED) && !defined(__UCLIBC_FORMAT_FLAT__)
--     unsigned long *aux_dat;
-- #endif
-- 
--@@ -395,7 +395,9 @@ void __uClibc_main(int (*main)(int, char **, char **), int argc,
--     }
-- 
-- #ifndef SHARED
---    /* Pull stuff from the ELF header when possible */
--+# ifndef __UCLIBC_FORMAT_FLAT__
--+    /* Pull stuff from the ELF header when possible. binfmt_flat passes no
--+       aux vector, so skip this for FLAT. */
--     aux_dat = (unsigned long*)__environ;
--     while (*aux_dat) {
-- 	aux_dat++;
--@@ -404,6 +406,7 @@ void __uClibc_main(int (*main)(int, char **, char **), int argc,
--     /* Get the program headers (_dl_phdr) from the aux vector
--        It will be used into __libc_setup_tls. */
--     _dl_aux_init ((ElfW(auxv_t) *)aux_dat);
--+# endif
-- #endif
-- 
--     /* We need to initialize uClibc.  If we are dynamically linked this
---- 
--2.47.3
--
-diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
-index 4c2a579ddf..4e5fd587e2 100644
---- a/package/uclibc/uclibc.hash
-+++ b/package/uclibc/uclibc.hash
-@@ -1,4 +1,4 @@
--# From https://downloads.uclibc-ng.org/releases/1.0.58/uClibc-ng-1.0.58.tar.xz.sha256
--sha256  9e8100a442f7079b9728ca286e3035f67df0578606166ea2d1ef865a4a12ddb9  uClibc-ng-1.0.58.tar.xz
-+# From https://downloads.uclibc-ng.org/releases/1.0.59/uClibc-ng-1.0.59.tar.xz.sha256
-+sha256  86c6f15971bfb14156850f2e36906dac5a69df7b3e688216d1aea09d2db54174  uClibc-ng-1.0.59.tar.xz
- # Locally calculated
- sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING.LIB
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index 6f3668715b..0cee106014 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/boot/grub2/0001-Revert-configure-Check-linker-for-image-base-support.patch b/boot/grub2/0001-Revert-configure-Check-linker-for-image-base-support.patch
+new file mode 100644
+index 0000000000..edfaea2de8
+--- /dev/null
++++ b/boot/grub2/0001-Revert-configure-Check-linker-for-image-base-support.patch
+@@ -0,0 +1,75 @@
++From 3a9d2dd2f5fb07b75a74c307d61b9b9fc5d20a62 Mon Sep 17 00:00:00 2001
++From: Yi Zhao <yi.zhao@windriver.com>
++Date: Fri, 27 Feb 2026 11:46:54 +0800
++Subject: [PATCH] Revert "configure: Check linker for --image-base support"
++
++This reverts commit 1a5417f39a0ccefcdd5440f2a67f84d2d2e26960.
++
++Signed-off-by: Yi Zhao <yi.zhao@windriver.com>
++Upstream: temporary revert, until upstream fixes the issue, see
++discussion at
++https://lists.gnu.org/archive/html/grub-devel/2026-02/msg00039.html
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ acinclude.m4 |  5 -----
++ configure.ac | 14 ++------------
++ 2 files changed, 2 insertions(+), 17 deletions(-)
++
++diff --git a/acinclude.m4 b/acinclude.m4
++index 70c1912f8..fa7840f09 100644
++--- a/acinclude.m4
+++++ b/acinclude.m4
++@@ -79,11 +79,6 @@ AC_DEFUN([grub_PROG_OBJCOPY_ABSOLUTE],
++ [AC_MSG_CHECKING([whether ${TARGET_OBJCOPY} works for absolute addresses])
++ AC_CACHE_VAL(grub_cv_prog_objcopy_absolute,
++ [cat > conftest.c <<\EOF
++-asm (
++-    ".globl start, _start, __start\n"
++-    ".ifdef cmain; .set start = _start = __start = cmain\n.endif\n"
++-    ".ifdef _cmain; .set start = _start = __start = _cmain\n.endif\n"
++-);
++ void cmain (void);
++ void
++ cmain (void)
++diff --git a/configure.ac b/configure.ac
++index d8ca1b7c1..041cfbab4 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -1461,6 +1461,7 @@ elif test x$grub_cv_target_cc_link_format = x-mi386pe || test x$grub_cv_target_c
++   TARGET_IMG_LDSCRIPT='$(top_srcdir)'"/conf/i386-cygwin-img-ld.sc"
++   TARGET_IMG_LDFLAGS="-Wl,-T${TARGET_IMG_LDSCRIPT}"
++   TARGET_IMG_LDFLAGS_AC="-Wl,-T${srcdir}/conf/i386-cygwin-img-ld.sc"
+++  TARGET_IMG_BASE_LDOPT="-Wl,-Ttext"
++   TARGET_IMG_CFLAGS=
++ else
++   TARGET_APPLE_LINKER=0
++@@ -1468,6 +1469,7 @@ else
++   TARGET_IMG_LDSCRIPT=
++   TARGET_IMG_LDFLAGS='-Wl,-N'
++   TARGET_IMG_LDFLAGS_AC='-Wl,-N'
+++  TARGET_IMG_BASE_LDOPT="-Wl,-Ttext"
++   TARGET_IMG_CFLAGS=
++ fi
++ 
++@@ -1798,18 +1800,6 @@ grub_PROG_TARGET_CC
++ m4_ifndef([AX_CHECK_LINK_FLAG], [m4_fatal([autoconf-archive is missing. You must install it to generate the configure script.])])
++ 
++ if test "x$TARGET_APPLE_LINKER" != x1 ; then
++-AX_CHECK_LINK_FLAG([-Wl,--image-base,0x400000],
++-    [TARGET_IMG_BASE_LDOPT="-Wl,--image-base"],
++-    [TARGET_IMG_BASE_LDOPT="-Wl,-Ttext"],
++-    [],
++-    [AC_LANG_SOURCE([
++-asm (".globl start; start:");
++-asm (".globl _start; _start:");
++-asm (".globl __start; __start:");
++-void __main (void);
++-void __main (void) {}
++-int main (void);
++-    ])])
++ grub_PROG_OBJCOPY_ABSOLUTE
++ fi
++ grub_PROG_LD_BUILD_ID_NONE
++-- 
++2.43.0
++
+diff --git a/boot/grub2/0002-Revert-configure-Print-a-more-helpful-error-if-autoc.patch b/boot/grub2/0002-Revert-configure-Print-a-more-helpful-error-if-autoc.patch
+new file mode 100644
+index 0000000000..8e38bb9d3f
+--- /dev/null
++++ b/boot/grub2/0002-Revert-configure-Print-a-more-helpful-error-if-autoc.patch
+@@ -0,0 +1,36 @@
++From d0f516385dc73e8dd92b78ce08c1df100434fe67 Mon Sep 17 00:00:00 2001
++From: Yi Zhao <yi.zhao@windriver.com>
++Date: Fri, 27 Feb 2026 13:58:44 +0800
++Subject: [PATCH] Revert "configure: Print a more helpful error if
++ autoconf-archive is not installed"
++
++This reverts commit ac042f3f58d33ce9cd5ff61750f06da1a1d7b0eb.
++
++Signed-off-by: Yi Zhao <yi.zhao@windriver.com>
++Upstream: temporary revert, until upstream fixes the issue, see
++discussion at
++https://lists.gnu.org/archive/html/grub-devel/2026-02/msg00039.html
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ configure.ac | 5 -----
++ 1 file changed, 5 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index 041cfbab4..209c0fb11 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -1794,11 +1794,6 @@ LIBS=""
++ # Defined in acinclude.m4.
++ grub_ASM_USCORE
++ grub_PROG_TARGET_CC
++-
++-# The error message produced by autoconf if autoconf-archive is not installed is
++-# quite misleading and not very helpful. So, try point people in the right direction.
++-m4_ifndef([AX_CHECK_LINK_FLAG], [m4_fatal([autoconf-archive is missing. You must install it to generate the configure script.])])
++-
++ if test "x$TARGET_APPLE_LINKER" != x1 ; then
++ grub_PROG_OBJCOPY_ABSOLUTE
++ fi
++-- 
++2.43.0
++
+diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
+index b3614a7da6..85b3925c1e 100644
+--- a/boot/grub2/grub2.mk
++++ b/boot/grub2/grub2.mk
+@@ -15,6 +15,13 @@ HOST_GRUB2_DEPENDENCIES = host-bison host-flex host-gawk \
+ 	$(BR2_PYTHON3_HOST_DEPENDENCY)
+ GRUB2_INSTALL_IMAGES = YES
  
--UCLIBC_VERSION = 1.0.58
-+UCLIBC_VERSION = 1.0.59
- UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
- UCLIBC_SITE = https://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
- UCLIBC_LICENSE = LGPL-2.1+
++# 0001-Revert-configure-Check-linker-for-image-base-support.patch
++# 0002-Revert-configure-Print-a-more-helpful-error-if-autoc.patch
++GRUB2_AUTORECONF = YES
++GRUB2_DEPENDENCIES += host-pkgconf
++HOST_GRUB2_AUTORECONF = YES
++HOST_GRUB2_DEPENDENCIES += host-pkgconf
++
+ ifeq ($(BR2_TARGET_GRUB2_INSTALL_TOOLS),y)
+ GRUB2_INSTALL_TARGET = YES
+ else
 -- 
-2.47.3
+2.55.0
 
 _______________________________________________
 buildroot mailing list
