@@ -4,85 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D48BEC5AC67
-	for <buildroot@archiver.kernel.org>; Sat,  8 Aug 2026 16:05:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D4ABC5AC67
+	for <buildroot@archiver.kernel.org>; Sat,  8 Aug 2026 16:07:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E9DFF606A5;
-	Sat,  8 Aug 2026 16:05:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E3C8F60667;
+	Sat,  8 Aug 2026 16:07:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NBqL9OIn3zc5; Sat,  8 Aug 2026 16:05:15 +0000 (UTC)
+ id 7eKoofhpC9ML; Sat,  8 Aug 2026 16:07:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BB1AC6068F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E06D56067D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786205115;
-	bh=5fSdawTj5Ntn2ARhMIm/TEkIIKRQ0JqHunw9eHjCGXA=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=Cwn9hbgx53wJPhJpI1mxYOC4FU5YHrsYT7I0YA2EJXNohAM47/RmvYEXu6i9xPp5+
-	 UEcpu4gF6LMykT6DiJl0UdDc0r9cv/GSH8txaYTVfc7PvjVQyT9o5FtpskA5Jf9wJq
-	 QTIPmMbjzJrqDyPuRORRYS+bfyPmJRx5Q6Dut+LGjX2dZClSWcHKoO/ZnUIDy3VRUw
-	 oJlxhHdfr+LqIZ0aIBQ7WxIbRLFQWR0Mu9ccAsUUKrPrbZGJD51idxs0+Ly2LdCtpg
-	 p0VVuaI/lsL2YVYjlI0myKl+42jsToEtnOX2YnU98qtoJhn/O0p0Cos2qPwc5eT+Sk
-	 jWofUw5m4Wrvg==
+	s=default; t=1786205232;
+	bh=LhQdKgHLt29wJ8qg9c/7f/sN/zef7qn+LaNUHHEooc0=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=HYizO/tMNeRiCpjsrk8+1LprdG3DeXKSLZpzgJ+DcJERbsPc0fErRDZW2KLtBPTvB
+	 BpLKDPR2H6ssz2siBEW4DBh2uTTmPBkLIJq/tSJPPFDN6aoEmiKZJWEk5Wse7/mGq7
+	 BQ/p1uUEcM6Gd/iVZSuKNJJhsOQzyGLjl5aMwxzCYpxgFx2H/9mzRb3aEo94EglY/B
+	 wmVukl562AS9ppy5olGvHpciIe3smMcjGN/NKBPHT5Mg70YsdtI2eQ+sSFjCjFgPV4
+	 1DjhZDN/9T66nVArmKNdhG92q6VCXO0o+ZGIqtrMbGcleNrNqHxBmZSsM3XG5rN2+e
+	 2/ZbP4B0cONBw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BB1AC6068F;
-	Sat,  8 Aug 2026 16:05:15 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 1517D3C1
- for <buildroot@buildroot.org>; Sat,  8 Aug 2026 16:05:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E06D56067D;
+	Sat,  8 Aug 2026 16:07:11 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id A0409296
+ for <buildroot@buildroot.org>; Sat,  8 Aug 2026 16:07:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EF4F46067D
- for <buildroot@buildroot.org>; Sat,  8 Aug 2026 16:05:13 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 922204061A
+ for <buildroot@buildroot.org>; Sat,  8 Aug 2026 16:07:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LOYJUsz--E5Q for <buildroot@buildroot.org>;
- Sat,  8 Aug 2026 16:05:13 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D90BB60667
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D90BB60667
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D90BB60667
- for <buildroot@buildroot.org>; Sat,  8 Aug 2026 16:05:12 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id 8996719F5BE;
- Sat,  8 Aug 2026 18:05:09 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 08 Aug 2026 18:05:09 +0200
-MIME-Version: 1.0
-Date: Sat, 08 Aug 2026 18:05:09 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20260806164033.1428655-1-bernd@kuhls.net>
-References: <20260806164033.1428655-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.17
-Message-ID: <63c38aa78ebfe0778aab0ddc6e8de492@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1786205110;
- bh=LwLjHYVoGM2FCeiO5VaLlJ6s93rWE8IUPqZvIxSff7I=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=OMdpx6N6EE61xFszzAFCKaMx4jX/kOSGQ6rZ9XaZbwWENxQaSS+I5vyDy3DpXxZgn
- s36AmfLhxrxa7btSjzRU+0LL2q6fQzyZ4wFPl7Qxyksn+Y54bFgQ+S75YLoSxtVli9
- k2lk3p7XPdF+PbJNal4FWhit3UpSF9XQp+p3/MJATWYo06+seZHdppSgDbKcafXBIN
- 3//pZf0l0XIU5D42RSNx24lZaWFI38JvziYzhdLnimm861wzDxj+rDRPd4+oek7A4S
- 2SD6r2pSgQjt/Wr+YOrZhyYxyrQQSj/GzczK8pvSHCh++f+C32LAVSCjnBnE4VVc1l
- pu8DXttzh+BWg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=OMdpx6N6
-Subject: Re: [Buildroot] [PATCH 1/1] package/libudev-zero: bump version to
- 1.0.5
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id a5DFbvICDUG3 for <buildroot@buildroot.org>;
+ Sat,  8 Aug 2026 16:07:09 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AF93B4060F
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id AF93B4060F
+ for <buildroot@buildroot.org>; Sat,  8 Aug 2026 16:07:09 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 8C35C8CA4E; Sat,  8 Aug 2026 16:06:22 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 8 Aug 2026 18:05:31 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 55fb101003c1922b1f63f4e0463d56484e3b8410
+X-Git-Newrev: 7343017dcd4debb020b079d74a1c94f552058961
+X-Patchwork-Hint: ignore
+Message-Id: <20260808160622.8C35C8CA4E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/sexpect: bump to version 2.4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,17 +70,47 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 06/08/2026 18:40, Bernd Kuhls wrote:
-> https://github.com/illiliti/libudev-zero/releases/tag/1.0.5
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/7343017dcd4debb020b079d74a1c94f552058961
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Applied to master, thanks.
+Changes:
+https://github.com/clarkwang/sexpect/compare/v2.3.15...v2.4.0
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/sexpect/sexpect.hash | 2 +-
+ package/sexpect/sexpect.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/sexpect/sexpect.hash b/package/sexpect/sexpect.hash
+index ce1232de82..3c8f2b2265 100644
+--- a/package/sexpect/sexpect.hash
++++ b/package/sexpect/sexpect.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  44f5711aa99f3ccf9c4b0edfcd9a7d25fa64b442574624ce451713d1532c1a7e  sexpect-2.3.15.tar.gz
++sha256  8f7a989ecf67f4ff6eb167d29a8e2e54db85143ebf3e8f904ea16ee5576a4b0d  sexpect-2.4.0.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE
+diff --git a/package/sexpect/sexpect.mk b/package/sexpect/sexpect.mk
+index bbc84c1ca6..0ca4d39bec 100644
+--- a/package/sexpect/sexpect.mk
++++ b/package/sexpect/sexpect.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SEXPECT_VERSION = 2.3.15
++SEXPECT_VERSION = 2.4.0
+ SEXPECT_SITE = $(call github,clarkwang,sexpect,v$(SEXPECT_VERSION))
+ SEXPECT_LICENSE = GPL-3.0
+ SEXPECT_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
