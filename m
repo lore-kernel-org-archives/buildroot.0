@@ -4,83 +4,89 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 706DEC5AC67
-	for <buildroot@archiver.kernel.org>; Sat,  8 Aug 2026 15:07:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7DBC2C55174
+	for <buildroot@archiver.kernel.org>; Sat,  8 Aug 2026 15:28:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 33F136068F;
-	Sat,  8 Aug 2026 15:07:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3941B606A2;
+	Sat,  8 Aug 2026 15:28:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id i3WNbiuc6al8; Sat,  8 Aug 2026 15:06:59 +0000 (UTC)
+ id i9N2D4pQk__9; Sat,  8 Aug 2026 15:28:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5C1076062A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2746C6067D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786201619;
-	bh=6NE1RLyI/mFHIxHIMriVL8OVpiI/DFZlbz/DdPNOZv4=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	s=default; t=1786202889;
+	bh=WMv9aJGPUZLGTfyhyR8rB+hrbKleU6922NPq+OI2gko=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=ON1x0PZXd44wSA5g5AExvH2q4kGRMtKxR12nn4roh8l7yS3TWW+a1iINTD6pQnPim
-	 0ParFQJ1KrqijWwVJSlqaGEW065SAJCRffR3aAEwIzaLR5d1MKgAr42eLDoXJV55+X
-	 Vw6T+ecNSc0IAWPTIS1gcDC/AMU7OBdYCDKSh18/auScD+ALskMqGXK8xGH7XqQOc6
-	 6wW/s4lvQF0sM59hNXPGjikX5KxrM0k6nKbn97IdzvLorCMIS2R93C4gQ/6OPAiwXS
-	 obJYOA83hxsrjMMP45if8X/Nlrz76f4USKCUn6yAKWJ7bAdz00ydS+pBFlLiyhee1c
-	 Kg6NiAxKxzQHw==
+	b=GMwSf16pEn+yGhuoqIIm7+O8hEww+DMcMWWUbLXo6Dz6mAlu2pxVOeZganjW7kjzr
+	 r1TuZV1o1qK5cQbW8JqfnTg8oCdUpCe+J/qja/Zi85AiaAwqoCsUYlObLA+htCw3Y6
+	 0OlHqq+ayhJOFAaBqmJzuzPbvi/KVLEBAdikPICZYVezkcExqywDmiE+Ny3hQBR5TC
+	 aSe4M9TyEqj+cd223+ss7PEp5CpTjFX/GJmZu/JghCG1bBRH69y0wX50Cu3vWwC7et
+	 WiEmNvSLhays9rR5+BTyZS1eqyWh2+mFgV5CZ3qHILGzoOq/7ByswtA91wB2VvPelz
+	 SbdKdS5l+4shA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5C1076062A;
-	Sat,  8 Aug 2026 15:06:59 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id BCDB8144
- for <buildroot@buildroot.org>; Sat,  8 Aug 2026 15:06:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2746C6067D;
+	Sat,  8 Aug 2026 15:28:09 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 09106282
+ for <buildroot@buildroot.org>; Sat,  8 Aug 2026 15:28:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AED63405D0
- for <buildroot@buildroot.org>; Sat,  8 Aug 2026 15:06:57 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E37044013B
+ for <buildroot@buildroot.org>; Sat,  8 Aug 2026 15:28:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4KWYQ_iuBB81 for <buildroot@buildroot.org>;
- Sat,  8 Aug 2026 15:06:56 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org AF1B2405D2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AF1B2405D2
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp4.osuosl.org (Postfix) with ESMTPS id AF1B2405D2
- for <buildroot@buildroot.org>; Sat,  8 Aug 2026 15:06:55 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id 4B55119F732;
- Sat,  8 Aug 2026 17:06:52 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 08 Aug 2026 17:06:52 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HXZjaSH0JYdg for <buildroot@buildroot.org>;
+ Sat,  8 Aug 2026 15:28:07 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
+ helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C54CB40137
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C54CB40137
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C54CB40137
+ for <buildroot@buildroot.org>; Sat,  8 Aug 2026 15:28:06 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-02.galae.net (Postfix) with ESMTPS id CB39B1A14EB;
+ Sat,  8 Aug 2026 15:28:04 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id A07F76045E;
+ Sat,  8 Aug 2026 15:28:04 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 76E2A11C4855E; 
+ Sat,  8 Aug 2026 17:28:03 +0200 (CEST)
+To: buildroot@buildroot.org
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ ARC Maintainers <arc-buildroot@synopsys.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Romain Naour <romain.naour@gmail.com>
+Date: Sat,  8 Aug 2026 17:27:48 +0200
+Message-ID: <20260808152753.1278414-2-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260808152753.1278414-1-thomas.petazzoni@bootlin.com>
+References: <20260808152753.1278414-1-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Date: Sat, 08 Aug 2026 17:06:52 +0200
-To: Waldemar Brodkorb <wbx@openadk.org>
-Cc: buildroot@buildroot.org
-In-Reply-To: <ancmjQOp42gd7zkv@waldemar-brodkorb.de>
-References: <ancmjQOp42gd7zkv@waldemar-brodkorb.de>
-User-Agent: Webmail Free/1.6.17
-Message-ID: <c38d5f060d3ca461c9e1bb38e970d328@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1786201613;
- bh=dYifTQK6t7PaT9ut9Uzwqz0pL6XqOMHE3YPVCCZrZD8=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=tgCSk6gzAy6TC4LxuV6LdTL3itL1LsY150Qi1hzCtzhtVn7KPQaEfkJtkAsfKQk5r
- VoTAUNK1R3TSUW9YkjFqqUTnceSRZh2cIcxLugWuYmN9UPwn66nmpiwXFAOf9Jq+X1
- CqtlUWStU9q3UVnRr0wKWdf8ujfEGrX0mjEa0CrVNtF3hiv6TS5zE5NWUPLly4bBG2
- iyqhcQAoX9MKqfL1XMxSC7Xch+ok1tdg4XIbi3+CtRRFQzvili+rJVvFAyMYiDtJO7
- /dY4lKcinSrfky/EnEeFaPiL9/6IK419vlzcyji5+kmBvuESl2MqGlVLD3bKZrSEo7
- 2FYjlSC1KupLA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=tgCSk6gz
-Subject: Re: [Buildroot] [PATCH] package/uclibc: bump to 1.0.59
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=dkim; 
+ t=1786202884; h=from:subject:date:message-id:to:cc:mime-version:
+ content-transfer-encoding:in-reply-to:references;
+ bh=SdPp0Z4bZ65QX3geylwdEirNausWjSkeKip8EPnJkRo=;
+ b=gWPJ9R2bWJZQ0k316DZ0nmMkGSk7xHYPICxGWSdFwssJgTzG+NHXyIdOvSpGGuQxgslr7t
+ YIjELF39e6DxgNHLcpmxCpHvIDL/PBtNAclHFOEy0eS/nFZXEabupqc845V7WpB5SHTCs0
+ M8kcv3E6x4PyVK/gpW6iSxuUiz2eZBkB/t1NTFACURiZqKwuxyBFtovKbRpRnbUTJWXmN+
+ g6HbCQHDtpXkhuDwnfQF0AEof+oeGJJccGSBqqhdb3LXJK2YV7gmYc3jjRC/TExVxEyh35
+ gmSA+nhtTP6gY+VoC/BrdUGK3+vjA1lDAqC+4cmjN56K16woTTPJ9gEmDwA4+Q==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
+ header.a=rsa-sha256 header.s=dkim header.b=gWPJ9R2b
+Subject: [Buildroot] [PATCH 2/5] package/gcc: drop ARC-specific version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -92,97 +98,146 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 08/08/2026 14:52, Waldemar Brodkorb wrote:
-> Changes made in this release:
-> 
-> Ben Wolsieffer (1):
->       nptl: fix getting main stack size on no-MMU
-> 
-> Max Filippov (4):
->       stdio: fix %a formatting of inf and nan
->       stdio: fix radix point output for %a
->       stdio: output sign with NaNs
->       stdio: restrict first digit of %a output to 0 or 1
-> 
-> Ramin Moussavi (19):
->       libintl.h: route stubs through format_arg inlines; fix 
-> gettext_noop
->       build: scope .NOTPARALLEL to locale targets only, restore 
-> parallel build
->       limits.h: define PAGE_SIZE/PAGESIZE like musl, fixing the gdb 
-> build
->       wait4: fall back to waitid(2) at runtime when wait4 returns 
-> ENOSYS
->       pagesize: restore PAGE_SHIFT fallback for binfmt_flat (no auxv)
->       buildsys: build locale headers in-tree, not via a recursive 
-> sub-make
->       extra/locale: skip locales the build host cannot provide
->       csky: fix struct semid_ds layout for TIME64
->       csky: make __kernel_uid_t/__kernel_gid_t 32-bit
->       hppa: fix inotify/signalfd/timerfd flag values
->       hppa: do not set IPC_64 for the SysV IPC *ctl commands
->       x86: fix struct semid_ds layout for TIME64
->       i386: add CFI to __libc_i386_syscall6 for cancellation unwinding
->       i386: do not set IPC_64 for the SysV IPC *ctl commands on 5.1+ 
-> kernels
->       buildsys: terminate .eh_frame in shared objects
->       m68k: make the __jmp_buf layout match what setjmp.S actually 
-> saves
->       inet: use the direct accept4 syscall when __NR_accept is missing
->       m68k: implement atomic operations with the CAS instruction
->       libc: fix struct shmid_ds layout for TIME64
-> 
-> Waldemar Brodkorb (10):
->       netinet/in.h: sync with glibc
->       bits/fcntl-linux.h: sync with glibc
->       add copy_file_range syscall wrapper
->       sys/fanotify.h: drop include to fix c-sky compilation
->       adjtimex: fix for architectures lacking __NR_clock_adjtime, f.e. 
-> frv
->       sys/user.h: restore required macros
->       netinet/tcp.h: sync with glibc
->       loongarch: add basic static only support
->       riscv: setcontext: fix linking error
->       bump version for 1.0.59 release
-> 
-> ramin (16):
->       ldso: harden _dl_tls_get_addr_soft against an unusable DTV
->       microblaze: implement atomic operations with lwx/swx
->       ldso: microblaze: add missing addend to R_MICROBLAZE_TLSDTPREL32
->       ldso: make the _dl_tls_get_addr_soft DTV check 
-> microblaze-specific
->       microblaze: fix struct semid_ds layout for TIME64
->       m68k: fix struct semid_ds layout for TIME64
->       mips: fix fallocate() 64-bit argument passing on n32
->       mips: fix mmap64() for large offsets on n32
->       mips: fix setjmp() on n32/n64 (.cpreturn, not .cprestore)
->       mips: always set IPC_64 for the SysV IPC *ctl commands
->       libc: fix struct msqid_ds layout for TIME64 on all common-header 
-> arches
->       linuxthreads: fix SIGSEGV in MIPS cancellable wrappers (waitpid, 
-> nanosleep)
->       ldso: serialize dl_iterate_phdr to fix concurrent unwind hang on 
-> SMP
->       nptl: cancel the current thread directly instead of via SIGCANCEL
->       mips: only n32/n64 always need IPC_64, not o32
->       m68k: use the kernel cmpxchg helper for atomics on ColdFire
-> 
-> Patch 0001 is applied upstream and is removed here.
-> 
-> Fixes:
->   - 
-> https://autobuild.buildroot.net/results/2bd/2bd73b0060cad4f44649ffe4ea60c4775160d86e
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+A warning was sent to Synopsys ARC people in December 2025 that the
+ARC support in Buildroot was poorly maintained and in particular the
+ARC-pspecific toolchain components. Despite a reply that some effort
+would be made [1], no contributions were actually done. Also, Alexey
+Brodkin is no longer at Synopsys. Time to remove Synopsys ARC specific
+toolchain and toolchain components.
 
-Applied to master, thanks.
+This commit removes the ARC-specific gcc version.
+
+[1] https://lore.kernel.org/buildroot/SJ2PR12MB818487232470DA4456967C73A1A3A@SJ2PR12MB8184.namprd12.prod.outlook.com/
+
+Fixes:
+
+  https://autobuild.buildroot.org/results/9f2d41d503916d11f3e23b64fe0656ce9ee7f778/
+
+Cc: ARC Maintainers <arc-buildroot@synopsys.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ Config.in.legacy             | 9 +++++++--
+ package/gcc/Config.in.host   | 9 ---------
+ package/gcc/gcc.hash         | 2 --
+ package/gcc/gcc.mk           | 6 ------
+ package/harfbuzz/harfbuzz.mk | 4 ----
+ 5 files changed, 7 insertions(+), 23 deletions(-)
+
+diff --git a/Config.in.legacy b/Config.in.legacy
+index da69682f93..2c8a0f1a04 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,13 @@ endif
+ 
+ comment "Legacy options removed in 2026.08"
+ 
++config BR2_GCC_VERSION_ARC
++	bool "ARC-specific gcc version removed"
++	select BR2_LEGACY
++	help
++	  Support for the ARC-specific gcc version was removed, as it
++	  was no longer maintained in Buildroot.
++
+ config BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC
+ 	bool "Synopsys ARC toolchain removed"
+ 	select BR2_LEGACY
+@@ -6269,8 +6276,6 @@ config BR2_GCC_VERSION_4_8_ARC
+ 	help
+ 	  The option that selects the gcc version for the ARC
+ 	  architecture has been renamed to BR2_GCC_VERSION_ARC.
+-# Note: BR2_GCC_VERSION_4_8_ARC is still referenced from
+-# package/gcc/Config.in.host
+ 
+ config BR2_KERNEL_HEADERS_4_0
+ 	bool "kernel headers version 4.0.x are no longer supported"
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index d8b89d942c..68da9aae73 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -2,19 +2,11 @@ comment "GCC Options"
+ 
+ choice
+ 	prompt "GCC compiler Version"
+-	default BR2_GCC_VERSION_ARC if BR2_GCC_VERSION_4_8_ARC # legacy
+-	default BR2_GCC_VERSION_ARC if BR2_arc
+ 	default BR2_GCC_VERSION_POWERPC_SPE if BR2_POWERPC_CPU_HAS_SPE
+ 	default BR2_GCC_VERSION_15_X
+ 	help
+ 	  Select the version of gcc you wish to use.
+ 
+-config BR2_GCC_VERSION_ARC
+-	bool "gcc arc (14.2)"
+-	# Only supported architecture
+-	depends on BR2_arc
+-	select BR2_TOOLCHAIN_GCC_AT_LEAST_14
+-
+ config BR2_GCC_VERSION_POWERPC_SPE
+ 	bool "gcc powerpc spe"
+ 	# powerpc spe support has been deprecated since gcc 8.x.
+@@ -71,7 +63,6 @@ config BR2_GCC_VERSION
+ 	default "14.4.0"    if BR2_GCC_VERSION_14_X
+ 	default "15.3.0"    if BR2_GCC_VERSION_15_X
+ 	default "16.2.0"    if BR2_GCC_VERSION_16_X
+-	default "arc-2024.12-release" if BR2_GCC_VERSION_ARC
+ 
+ config BR2_EXTRA_GCC_CONFIG_OPTIONS
+ 	string "Additional gcc options"
+diff --git a/package/gcc/gcc.hash b/package/gcc/gcc.hash
+index a1230d758e..49f87e25bb 100644
+--- a/package/gcc/gcc.hash
++++ b/package/gcc/gcc.hash
+@@ -7,8 +7,6 @@ sha512  0de9e296153b52c021b1c7e63c9c62151d7a0ac03f23ce6e9f772c1b0eb783f6acdd81cc
+ # From https://gcc.gnu.org/pub/gcc/releases/gcc-16.2.0/sha512.sum
+ sha512  c51c30ca7422d0cbecf504b2e0f33c3aca31e0f90a76b65217f465163fa6fa17b3f5de39e145c47e5bab90ac0ce7fff3b03c8d553ae36e01faaea5a50f8648d1  gcc-16.2.0.tar.xz
+ 
+-# Locally calculated (fetched from Github)
+-sha512  7f08ae335d9112be65e92c3744c095d8fa265994b8282274948f99fe37409531e627e6dadfb77b138a82fa09d012c56d8c075b482a5a5186814a57f9db63c29e  gcc-arc-2024.12-release.tar.gz
+ # Locally calculated (fetched from Github)
+ sha512  2de7cf47333a4092b02d3bb98f4206f14966f1d139a724d09cf3b22f8a43ae0c704f33e6477d6367a03c29b265480dc900169e9d417006c5d46f0ae446b8c6f1  gcc-or1k-musl-5.4.0-20170218.tar.gz
+ 
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index ea96286c32..9109777bd7 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -9,14 +9,8 @@
+ #
+ 
+ GCC_VERSION = $(call qstrip,$(BR2_GCC_VERSION))
+-
+-ifeq ($(BR2_GCC_VERSION_ARC),y)
+-GCC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,gcc,$(GCC_VERSION))
+-GCC_SOURCE = gcc-$(GCC_VERSION).tar.gz
+-else
+ GCC_SITE = $(BR2_GNU_MIRROR:/=)/gcc/gcc-$(GCC_VERSION)
+ GCC_SOURCE = gcc-$(GCC_VERSION).tar.xz
+-endif
+ 
+ HOST_GCC_LICENSE = GPL-2.0, GPL-3.0, LGPL-2.1, LGPL-3.0
+ HOST_GCC_LICENSE_FILES = COPYING COPYING3 COPYING.LIB COPYING3.LIB
+diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
+index 77d96febf3..d87d2c41bf 100644
+--- a/package/harfbuzz/harfbuzz.mk
++++ b/package/harfbuzz/harfbuzz.mk
+@@ -94,9 +94,5 @@ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),)
+ HARFBUZZ_CXXFLAGS += $(TARGET_CXXFLAGS) -DHB_NO_MT
+ endif
+ 
+-ifeq ($(BR2_GCC_VERSION_ARC),y)
+-HARFBUZZ_CXXFLAGS += -O0
+-endif
+-
+ $(eval $(meson-package))
+ $(eval $(host-meson-package))
+-- 
+2.55.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
