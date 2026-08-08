@@ -1,63 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45678C5AC67
-	for <buildroot@archiver.kernel.org>; Sat,  8 Aug 2026 18:26:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31DEBC5AC67
+	for <buildroot@archiver.kernel.org>; Sat,  8 Aug 2026 18:26:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3208C4054B;
-	Sat,  8 Aug 2026 18:26:09 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FUXUarpv5pmb; Sat,  8 Aug 2026 18:26:07 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 118C7404F4
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786213567;
-	bh=hv+CZiPykg1pOBEaCS46savKfva088kV8HrPbylOs4c=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=DwJM2vYi9JB6q59B8MJ9RY7FS53QT0JMBw2bNV2TZoKInqP6q9X/sM8XBV8AsOZL6
-	 0ms4a/CcmVEeYnjVndnHBPLSR5w94FQ8gNEI6Nj7xC5/JRanjcWcD13zmIzySUteyz
-	 CHawn+cNn/SES7UAp+yruFryThYtG+J5R5BxLMHGqkQ6780Vkh1HkYLp0046wN6HwO
-	 G5CM4xgn4tbVvj7/C6kn+KPclbAzbx0nHQoWAVHYN0lVyQ1HCqBaEnvSCrGjrO/Hwf
-	 WkZXDnlam6HvvsJsRWaRZPR3EGZfPOizXHRYQeMeo8wUtS3WmO8NJbH9qr1cTLDFXP
-	 Zd6W9j/STlNmQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 118C7404F4;
-	Sat,  8 Aug 2026 18:26:07 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 1BC241AF
- for <buildroot@buildroot.org>; Sat,  8 Aug 2026 18:26:06 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 01DA680DD1
- for <buildroot@buildroot.org>; Sat,  8 Aug 2026 18:26:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E839380DF6;
+	Sat,  8 Aug 2026 18:26:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fagZRTF0HTmu for <buildroot@buildroot.org>;
- Sat,  8 Aug 2026 18:26:05 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id taKNEalJWKyc; Sat,  8 Aug 2026 18:26:33 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0B47280DF7
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1786213593;
+	bh=X2v+QHoTNDlvBJyffb25wMeyz6adVkrredsCrKIFZo0=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=Pk4iUwIXXE6IbydefKacRSVZGzuUhgxdZVysUtpUY7S/FeX0Seek1YtcfAE60QatG
+	 Alsridvs+9/aXUbp1fPSMD9SkCFC1ft5kwzGmLSc0uvMIhRu4vX/f8THInl6nZ1uEr
+	 bYonKJ0wb9+xVhJhMHjVhvyGRD4+4eoeG3614iBGjySyhuf0bT4/U4mMYHkkPyecSO
+	 JAPotBIWQfP48PzJcS1ceQhLDtRFRoPO2qrrzg2a762Ak43SzOLj7pv8c59DKh2r/S
+	 NmAq5oGjubK5u0DLmrG8gcp6ys8WT9Pj36rBu5PpU2IKPogWcKcafj+gePBzcT2Lsp
+	 VD5JvqsHY6dNg==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0B47280DF7;
+	Sat,  8 Aug 2026 18:26:33 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id CA750296
+ for <buildroot@buildroot.org>; Sat,  8 Aug 2026 18:26:31 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id B077960631
+ for <buildroot@buildroot.org>; Sat,  8 Aug 2026 18:26:31 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HmCcpW3UbAdH for <buildroot@buildroot.org>;
+ Sat,  8 Aug 2026 18:26:31 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
+ helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 34B7680DCF
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 34B7680DCF
- for <buildroot@buildroot.org>; Sat,  8 Aug 2026 18:26:05 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 096288CAA6; Sat,  8 Aug 2026 18:25:18 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 8 Aug 2026 19:52:58 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7241fb2db05ec5e6f584a3965aed483ac2d673e0
-X-Git-Newrev: cf95721d0049e994068ab971f4bd62a465dfe041
-X-Patchwork-Hint: ignore
-Message-Id: <20260808182518.096288CAA6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libva-intel-driver: bump version
- to 2.4.5
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D4A0860625
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D4A0860625
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D4A0860625
+ for <buildroot@buildroot.org>; Sat,  8 Aug 2026 18:26:30 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-03.galae.net (Postfix) with ESMTPS id E2D774E41167;
+ Sat,  8 Aug 2026 18:26:27 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id A29F86045E;
+ Sat,  8 Aug 2026 18:26:27 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 842F611C4861F; 
+ Sat,  8 Aug 2026 20:26:22 +0200 (CEST)
+Date: Sat, 8 Aug 2026 20:26:21 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org, Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Message-ID: <and0wgX3tpnbQGBD@windsurf>
+References: <20260705182016.3258983-1-bernd@kuhls.net>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20260705182016.3258983-1-bernd@kuhls.net>
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=dkim; 
+ t=1786213583; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ in-reply-to:references; bh=O/BQfmj5pYloq67lQiW7vqUVYPQAbpDZnGb3oYAmQLk=;
+ b=Ihod3eSAIq2nBAqClUq5A7stOCbwOHh6slphPvqh8RgXKk/MKinHULK5/HaVg3CB5ddtiF
+ 1Hk7BdojOjF6Potv1UmfKu0W1gXkqYS43neCMbu8yhrJJ8WzsQehlVw4YmmlWMYrRFHB1u
+ wS4TVrI2hlZ31TFLXlsShgMuclCI8IjOmUzgjKRLaDbjIvhY/RZuXQgz2noS83XQ4G2foY
+ 91tsZVUpkR1bBCtM38achQe2MbPoS0fTbj0G/vKsT38nApzL0KeQMi9xLpSeunxuWLpgi3
+ Hd2WMsAci5tg8rpYhJTiTC2ZxAPGauv0FWZuirii4OhGhRDhcqDq74zrVBM0DA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
+ header.a=rsa-sha256 header.s=dkim header.b=Ihod3eSA
+Subject: Re: [Buildroot] [PATCH 1/1] package/libva-intel-driver: bump
+ version to 2.4.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,105 +97,39 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/cf95721d0049e994068ab971f4bd62a465dfe041
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On Sun, Jul 05, 2026 at 08:20:16PM +0200, Bernd Kuhls wrote:
+> https://github.com/irql-notlessorequal/intel-vaapi-driver/blob/2.4.5/NEWS
+> 
+> This bump follows
+> https://github.com/LibreELEC/LibreELEC.tv/commit/39d2ff612fce9bb57c43ac767df15052a896e9ed
+> 
+> "Intel archived intel/intel-vaapi-driver at 2.4.1 and advises forking.
+>  irql-notlessorequal/intel-vaapi-driver is the active continuation (119
+>  commits ahead, tagged releases, Chromium fixes), so track it at 2.4.5.
+>  [...]
+>  The fork renamed the wayland meson option, so switch with_wayland to
+>  with_wayland_drm in all DISPLAYSERVER branches. Also drop the dead
+>  01.org PKG_SITE."
+> 
+> Updated license file and hash due to upstream commit:
+> https://github.com/irql-notlessorequal/intel-vaapi-driver/commit/7343767d87926d519f528db88ba1edfb153d8289
+> 
+> Also switch build system to meson.
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-https://github.com/irql-notlessorequal/intel-vaapi-driver/blob/2.4.5/NEWS
+Applied to master, thanks!
 
-This bump follows
-https://github.com/LibreELEC/LibreELEC.tv/commit/39d2ff612fce9bb57c43ac767df15052a896e9ed
-
-"Intel archived intel/intel-vaapi-driver at 2.4.1 and advises forking.
- irql-notlessorequal/intel-vaapi-driver is the active continuation (119
- commits ahead, tagged releases, Chromium fixes), so track it at 2.4.5.
- [...]
- The fork renamed the wayland meson option, so switch with_wayland to
- with_wayland_drm in all DISPLAYSERVER branches. Also drop the dead
- 01.org PKG_SITE."
-
-Updated license file and hash due to upstream commit:
-https://github.com/irql-notlessorequal/intel-vaapi-driver/commit/7343767d87926d519f528db88ba1edfb153d8289
-
-Also switch build system to meson.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libva-intel-driver/Config.in               |  2 +-
- package/libva-intel-driver/libva-intel-driver.hash |  6 ++----
- package/libva-intel-driver/libva-intel-driver.mk   | 18 ++++++++----------
- 3 files changed, 11 insertions(+), 15 deletions(-)
-
-diff --git a/package/libva-intel-driver/Config.in b/package/libva-intel-driver/Config.in
-index 53c5b366c3..a71a5a6b9a 100644
---- a/package/libva-intel-driver/Config.in
-+++ b/package/libva-intel-driver/Config.in
-@@ -12,7 +12,7 @@ config BR2_PACKAGE_LIBVA_INTEL_DRIVER
- 	help
- 	  VA-API back-end driver for Intel graphics chips
- 
--	  https://01.org/vaapi
-+	  https://github.com/irql-notlessorequal/intel-vaapi-driver
- 
- comment "libva intel driver needs a toolchain w/ threads, dynamic library"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-diff --git a/package/libva-intel-driver/libva-intel-driver.hash b/package/libva-intel-driver/libva-intel-driver.hash
-index 4bf827748f..459a8b80e2 100644
---- a/package/libva-intel-driver/libva-intel-driver.hash
-+++ b/package/libva-intel-driver/libva-intel-driver.hash
-@@ -1,5 +1,3 @@
--# From https://github.com/intel/intel-vaapi-driver/releases
--sha1  c998e06f13238c6419bb38ede9a13e453312737b  intel-vaapi-driver-2.4.1.tar.bz2
- # Locally computed
--sha256  0081fce08eb3a83f7d99c3b853c8fdfa0af437b8f5b0fb7c66faeb83bcbe0c19  intel-vaapi-driver-2.4.1.tar.bz2
--sha256  c86a782ee845b52472dae9b9d79fb915d333628ac0efe49cdce63644814931de  COPYING
-+sha256  f89f77bc46ec6f46392c1b90b9bf34d09f908bf33c9d16d385897b1fe282bacc  libva-intel-driver-2.4.5.tar.gz
-+sha256  b3a55fe5734da7831d7b359e52f8f7026e05216d58479981407c184afb8b24f9  LICENSE
-diff --git a/package/libva-intel-driver/libva-intel-driver.mk b/package/libva-intel-driver/libva-intel-driver.mk
-index ad801dc957..1c23bf69f9 100644
---- a/package/libva-intel-driver/libva-intel-driver.mk
-+++ b/package/libva-intel-driver/libva-intel-driver.mk
-@@ -4,26 +4,24 @@
- #
- ################################################################################
- 
--LIBVA_INTEL_DRIVER_VERSION = 2.4.1
--LIBVA_INTEL_DRIVER_SOURCE = intel-vaapi-driver-$(LIBVA_INTEL_DRIVER_VERSION).tar.bz2
--LIBVA_INTEL_DRIVER_SITE = \
--	https://github.com/intel/intel-vaapi-driver/releases/download/$(LIBVA_INTEL_DRIVER_VERSION)
-+LIBVA_INTEL_DRIVER_VERSION = 2.4.5
-+LIBVA_INTEL_DRIVER_SITE = $(call github,irql-notlessorequal,intel-vaapi-driver,$(LIBVA_INTEL_DRIVER_VERSION))
- LIBVA_INTEL_DRIVER_LICENSE = MIT
--LIBVA_INTEL_DRIVER_LICENSE_FILES = COPYING
-+LIBVA_INTEL_DRIVER_LICENSE_FILES = LICENSE
- LIBVA_INTEL_DRIVER_DEPENDENCIES = host-pkgconf libdrm libva
- 
- ifeq ($(BR2_PACKAGE_XORG7),y)
- LIBVA_INTEL_DRIVER_DEPENDENCIES += xlib_libX11 xlib_libXext xlib_libXfixes
--LIBVA_INTEL_DRIVER_CONF_OPTS += --enable-x11
-+LIBVA_INTEL_DRIVER_CONF_OPTS += -Dwith_x11=yes
- else
--LIBVA_INTEL_DRIVER_CONF_OPTS += --disable-x11
-+LIBVA_INTEL_DRIVER_CONF_OPTS += -Dwith_x11=no
- endif
- 
- ifeq ($(BR2_PACKAGE_WAYLAND),y)
- LIBVA_INTEL_DRIVER_DEPENDENCIES += wayland
--LIBVA_INTEL_DRIVER_CONF_OPTS += --enable-wayland
-+LIBVA_INTEL_DRIVER_CONF_OPTS += -Dwith_wayland_drm=yes
- else
--LIBVA_INTEL_DRIVER_CONF_OPTS += --disable-wayland
-+LIBVA_INTEL_DRIVER_CONF_OPTS += -Dwith_wayland_drm=no
- endif
- 
--$(eval $(autotools-package))
-+$(eval $(meson-package))
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
