@@ -4,84 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0805BC55174
-	for <buildroot@archiver.kernel.org>; Sat,  8 Aug 2026 13:00:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40707C5AC67
+	for <buildroot@archiver.kernel.org>; Sat,  8 Aug 2026 13:46:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A261260656;
-	Sat,  8 Aug 2026 13:00:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DC6D960600;
+	Sat,  8 Aug 2026 13:45:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZrWLP-1wrKvK; Sat,  8 Aug 2026 13:00:19 +0000 (UTC)
+ id WmULdJ6gJDbq; Sat,  8 Aug 2026 13:45:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 64E7B60672
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0A3D86065E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786194019;
-	bh=L0GgDxO7DNfB6JICvNQMKNuy8cjWrLkMkJGM9oKq2Y8=;
-	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=P3HWefXPPBnuoRg4Marx/TZisZuWUbMV15B47gmuPe1QWKjUUj8UQJQ2fjz2f1OQd
-	 sJXsYJhzOdUsIKSv9Y31iWuPdCJvlpkEcipiJdpA7aE7aPiVb6Pzrx6thn3oSs2OxK
-	 zjM90kOYgN5OKxz9STpe25ZwaXQqJK0k4X/+qy9b/sMNjx8oRp0Wn7dasdORgKNDhz
-	 EpJe8JXdpIoCIWB1nBWS/dKRCQ+Khz+VGijDT7npVgvnyqqDIEnQKlLW7wuQVvCwTW
-	 iHI9ZSjobJH0C84Cx7YXZbyItrVNTVyN+Z3XALeMOYRWF4D5hmswzd7LCB4PJAUmJz
-	 Nsth74VkMIwHg==
+	s=default; t=1786196759;
+	bh=X0K88JEOS5+xBc03Yak9baaLDQFhWMbhwh6joNG1RCg=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=oIRrx1qwTeMIF6sDt/ECHxleFIxkXWALLfmff8vkIWJx/scUl3qGcU1ddIuwwDULc
+	 5CzvNXhzeZXQ22c6GIbV1tLe2Nug/e1xRc+P1abEelskkyo04hkZkOx/OH7Ai/YFph
+	 CpLZQbeXs3dCOMqQTT4xcmxeWMlm4qVfnQOUCFTauxr9aUFY3eHfkioJGSwBVMdVJ/
+	 ulRasaP1CXfLwgfojrxSKDywPMlmWovfmZzytJ1QwhCAtXja9jwsulbJ06MdDWzsqg
+	 5uwqAaYZ0hukXOsSBxw8G2P74w2df/BrjRaa+gqhq8vEFmyfebSm+WH+shy9jfdinx
+	 Dgw12o5M2kNpQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 64E7B60672;
-	Sat,  8 Aug 2026 13:00:19 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 6E1CB2B6
- for <buildroot@buildroot.org>; Sat,  8 Aug 2026 13:00:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0A3D86065E;
+	Sat,  8 Aug 2026 13:45:59 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id BE94E3A9
+ for <buildroot@buildroot.org>; Sat,  8 Aug 2026 13:45:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 605EF400A9
- for <buildroot@buildroot.org>; Sat,  8 Aug 2026 13:00:17 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B09F280DD1
+ for <buildroot@buildroot.org>; Sat,  8 Aug 2026 13:45:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yQMtPUCrmkTi for <buildroot@buildroot.org>;
- Sat,  8 Aug 2026 13:00:16 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
- helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JgaoH03Kzc3t for <buildroot@buildroot.org>;
+ Sat,  8 Aug 2026 13:45:56 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0660C4004B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0660C4004B
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0660C4004B
- for <buildroot@buildroot.org>; Sat,  8 Aug 2026 13:00:15 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-03.galae.net (Postfix) with ESMTPS id 818CE4E4115C
- for <buildroot@buildroot.org>; Sat,  8 Aug 2026 13:00:12 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 48EC76045E
- for <buildroot@buildroot.org>; Sat,  8 Aug 2026 13:00:12 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 783A911C484A4; 
- Sat,  8 Aug 2026 15:00:06 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EA23D80DD0
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id EA23D80DD0
+ for <buildroot@buildroot.org>; Sat,  8 Aug 2026 13:45:55 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id D6CA38CA06; Sat,  8 Aug 2026 13:45:08 +0000 (UTC)
 To: buildroot@buildroot.org
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat,  8 Aug 2026 15:00:03 +0200
-Message-ID: <20260808130004.1231694-1-thomas.petazzoni@bootlin.com>
-X-Mailer: git-send-email 2.55.0
-MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=dkim; 
- t=1786194007; h=from:subject:date:message-id:to:cc:mime-version:
- content-transfer-encoding; bh=Rul9h27dNZOx2xSz37WusCxwTkJRwg8hBHuoKHEIRx0=;
- b=GA8dwqu3+G1BNcOi76CD2lnvRl6hnc1x5RwX8Tfuz8xr/bSQCyOR5EGzKJxphCm3ZzKP/N
- mUkh/bLv3XmYRtrXcXsZ7ehyLn1GuvRgTtxMkjJGYFr3kA1Qe1KYnizDl49S8f22jDlIIF
- lq8DFhfBk+wRQ4h1a7kE6UDM/zL7x+xB490/yYtEJRXYUgexp21ft62J3sZ4xRsyF2BaDE
- bgyLLZsdiEj2ydmPsojIJolWo4/ZA3FMDGz2VdOxuFDAHzjNliF+U5Bst86JVLB74uOpfi
- BBAwdFFrJUwRW4scH4SQ0940vnZ4hbMw6FLNpmk0vL48HUEccMm50OuHOZXgkA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=GA8dwqu3
-Subject: [Buildroot] [PATCH] boot/grub2: fix build issue since 2.14 version
- bump
+Date: Sat, 8 Aug 2026 14:43:15 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: a4d4c7527a28cd2efdb178735b90037c319818d9
+X-Git-Newrev: 45b24c43a0ea7122a222f659b27ef2e0baadb4c7
+X-Patchwork-Hint: ignore
+Message-Id: <20260808134508.D6CA38CA06@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/glibc: fix license information
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,190 +68,68 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Since the bump of grub2 to version 2.14, the build fails on some
-configurations with:
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/45b24c43a0ea7122a222f659b27ef2e0baadb4c7
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-/home/autobuild/autobuild/instance-8/output-1/host/bin/grub-mkimage: error: `/home/autobuild/autobuild/instance-8/output-1/build/grub2-2.14/build-i386-pc/grub-core//kernel.img' is miscompiled: its start address is 0x9074 instead of 0x9000: ld.gold bug?.
+The COPYINGv3 license file was added with upstream commit
+e067e53080386e93dcf8b07e25fb6656f2c8941e, it applies to scripts used
+during build.
 
-We are not the only ones affected: OpenEmbedded has the issue as well,
-addressed in commit
-https://github.com/openembedded/openembedded-core/commit/66aefeca482e2985fef5b936ff611ba8b7f81b85,
-and this commit points that libreboot and Gentoo have also adopted the
-same temporary fix: revert two upstream commits.
+LGPL-3.0+ applies to sysdeps/htl/raise.c, which is used for the Hurd
+platform. Buildroot builds only Linux, so the file should not be
+compiled, but it is part of the downloaded (and possibly shared, if
+"make legal-info" is used) archive. The same applies to the manual.
 
-So to fix the issue in Buildroot, we take the same approach. It is
-temporary, and there is an upstream patch series under discussion to
-really fix the problem. But as this series has 9 patches still under
-discussion, we take the simpler approach of reverting two simpler
-patches for the time being.
+Checked against the copyright file of the Debian "libc6" package (as
+of 2.42-17 and 2.43-2), note that Debian excludes the manual.
 
-host-pkgconf is needed as an additional dependency because
-configure.ac using m4 macros provided by host-pkgconf.
-
-Fixes:
-
-  https://autobuild.buildroot.net/results/89b/89b907278cada3d7ca1fee2d08d66921ffb4d7cc/build-end.log
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Fiona Klute (Othermo GmbH) <fiona.klute@gmx.de>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...-Check-linker-for-image-base-support.patch | 75 +++++++++++++++++++
- ...-Print-a-more-helpful-error-if-autoc.patch | 36 +++++++++
- boot/grub2/grub2.mk                           |  7 ++
- 3 files changed, 118 insertions(+)
- create mode 100644 boot/grub2/0001-Revert-configure-Check-linker-for-image-base-support.patch
- create mode 100644 boot/grub2/0002-Revert-configure-Print-a-more-helpful-error-if-autoc.patch
+ package/glibc/glibc.hash |  2 ++
+ package/glibc/glibc.mk   | 10 ++++++++--
+ 2 files changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/boot/grub2/0001-Revert-configure-Check-linker-for-image-base-support.patch b/boot/grub2/0001-Revert-configure-Check-linker-for-image-base-support.patch
-new file mode 100644
-index 0000000000..edfaea2de8
---- /dev/null
-+++ b/boot/grub2/0001-Revert-configure-Check-linker-for-image-base-support.patch
-@@ -0,0 +1,75 @@
-+From 3a9d2dd2f5fb07b75a74c307d61b9b9fc5d20a62 Mon Sep 17 00:00:00 2001
-+From: Yi Zhao <yi.zhao@windriver.com>
-+Date: Fri, 27 Feb 2026 11:46:54 +0800
-+Subject: [PATCH] Revert "configure: Check linker for --image-base support"
-+
-+This reverts commit 1a5417f39a0ccefcdd5440f2a67f84d2d2e26960.
-+
-+Signed-off-by: Yi Zhao <yi.zhao@windriver.com>
-+Upstream: temporary revert, until upstream fixes the issue, see
-+discussion at
-+https://lists.gnu.org/archive/html/grub-devel/2026-02/msg00039.html
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ acinclude.m4 |  5 -----
-+ configure.ac | 14 ++------------
-+ 2 files changed, 2 insertions(+), 17 deletions(-)
-+
-+diff --git a/acinclude.m4 b/acinclude.m4
-+index 70c1912f8..fa7840f09 100644
-+--- a/acinclude.m4
-++++ b/acinclude.m4
-+@@ -79,11 +79,6 @@ AC_DEFUN([grub_PROG_OBJCOPY_ABSOLUTE],
-+ [AC_MSG_CHECKING([whether ${TARGET_OBJCOPY} works for absolute addresses])
-+ AC_CACHE_VAL(grub_cv_prog_objcopy_absolute,
-+ [cat > conftest.c <<\EOF
-+-asm (
-+-    ".globl start, _start, __start\n"
-+-    ".ifdef cmain; .set start = _start = __start = cmain\n.endif\n"
-+-    ".ifdef _cmain; .set start = _start = __start = _cmain\n.endif\n"
-+-);
-+ void cmain (void);
-+ void
-+ cmain (void)
-+diff --git a/configure.ac b/configure.ac
-+index d8ca1b7c1..041cfbab4 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -1461,6 +1461,7 @@ elif test x$grub_cv_target_cc_link_format = x-mi386pe || test x$grub_cv_target_c
-+   TARGET_IMG_LDSCRIPT='$(top_srcdir)'"/conf/i386-cygwin-img-ld.sc"
-+   TARGET_IMG_LDFLAGS="-Wl,-T${TARGET_IMG_LDSCRIPT}"
-+   TARGET_IMG_LDFLAGS_AC="-Wl,-T${srcdir}/conf/i386-cygwin-img-ld.sc"
-++  TARGET_IMG_BASE_LDOPT="-Wl,-Ttext"
-+   TARGET_IMG_CFLAGS=
-+ else
-+   TARGET_APPLE_LINKER=0
-+@@ -1468,6 +1469,7 @@ else
-+   TARGET_IMG_LDSCRIPT=
-+   TARGET_IMG_LDFLAGS='-Wl,-N'
-+   TARGET_IMG_LDFLAGS_AC='-Wl,-N'
-++  TARGET_IMG_BASE_LDOPT="-Wl,-Ttext"
-+   TARGET_IMG_CFLAGS=
-+ fi
-+ 
-+@@ -1798,18 +1800,6 @@ grub_PROG_TARGET_CC
-+ m4_ifndef([AX_CHECK_LINK_FLAG], [m4_fatal([autoconf-archive is missing. You must install it to generate the configure script.])])
-+ 
-+ if test "x$TARGET_APPLE_LINKER" != x1 ; then
-+-AX_CHECK_LINK_FLAG([-Wl,--image-base,0x400000],
-+-    [TARGET_IMG_BASE_LDOPT="-Wl,--image-base"],
-+-    [TARGET_IMG_BASE_LDOPT="-Wl,-Ttext"],
-+-    [],
-+-    [AC_LANG_SOURCE([
-+-asm (".globl start; start:");
-+-asm (".globl _start; _start:");
-+-asm (".globl __start; __start:");
-+-void __main (void);
-+-void __main (void) {}
-+-int main (void);
-+-    ])])
-+ grub_PROG_OBJCOPY_ABSOLUTE
-+ fi
-+ grub_PROG_LD_BUILD_ID_NONE
-+-- 
-+2.43.0
-+
-diff --git a/boot/grub2/0002-Revert-configure-Print-a-more-helpful-error-if-autoc.patch b/boot/grub2/0002-Revert-configure-Print-a-more-helpful-error-if-autoc.patch
-new file mode 100644
-index 0000000000..8e38bb9d3f
---- /dev/null
-+++ b/boot/grub2/0002-Revert-configure-Print-a-more-helpful-error-if-autoc.patch
-@@ -0,0 +1,36 @@
-+From d0f516385dc73e8dd92b78ce08c1df100434fe67 Mon Sep 17 00:00:00 2001
-+From: Yi Zhao <yi.zhao@windriver.com>
-+Date: Fri, 27 Feb 2026 13:58:44 +0800
-+Subject: [PATCH] Revert "configure: Print a more helpful error if
-+ autoconf-archive is not installed"
-+
-+This reverts commit ac042f3f58d33ce9cd5ff61750f06da1a1d7b0eb.
-+
-+Signed-off-by: Yi Zhao <yi.zhao@windriver.com>
-+Upstream: temporary revert, until upstream fixes the issue, see
-+discussion at
-+https://lists.gnu.org/archive/html/grub-devel/2026-02/msg00039.html
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ configure.ac | 5 -----
-+ 1 file changed, 5 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 041cfbab4..209c0fb11 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -1794,11 +1794,6 @@ LIBS=""
-+ # Defined in acinclude.m4.
-+ grub_ASM_USCORE
-+ grub_PROG_TARGET_CC
-+-
-+-# The error message produced by autoconf if autoconf-archive is not installed is
-+-# quite misleading and not very helpful. So, try point people in the right direction.
-+-m4_ifndef([AX_CHECK_LINK_FLAG], [m4_fatal([autoconf-archive is missing. You must install it to generate the configure script.])])
-+-
-+ if test "x$TARGET_APPLE_LINKER" != x1 ; then
-+ grub_PROG_OBJCOPY_ABSOLUTE
-+ fi
-+-- 
-+2.43.0
-+
-diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
-index b3614a7da6..85b3925c1e 100644
---- a/boot/grub2/grub2.mk
-+++ b/boot/grub2/grub2.mk
-@@ -15,6 +15,13 @@ HOST_GRUB2_DEPENDENCIES = host-bison host-flex host-gawk \
- 	$(BR2_PYTHON3_HOST_DEPENDENCY)
- GRUB2_INSTALL_IMAGES = YES
+diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
+index 750d328287..c6eadd5334 100644
+--- a/package/glibc/glibc.hash
++++ b/package/glibc/glibc.hash
+@@ -4,4 +4,6 @@ sha256  a818ca8450ef1e19a2413b2c9a2882f381f05be07b31e9b38085b6ba193d0af2  glibc-
+ # Hashes for license files
+ sha256  edaef632cbb643e4e7a221717a6c441a4c1a7c918e6e4d56debc3d8739b233f6  COPYINGv2
+ sha256  20e50fe7aae3e56378ebf0417d9de904f55a0e61e4df315333e632a4d3555d95  COPYING.LESSERv2
++sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYINGv3
+ sha256  b22a69aa3f80a5201818c66cb0df0f25f9fa13cf5861b0093a058dbd12d50dce  LICENSES
++sha256  297ad42928811894f3abc955526431b1e7856e6766eecb7de2a5a0aa2915e5cf  manual/fdl-1.3.texi
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index 7f12e7ffd0..726cfaa6c5 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -11,8 +11,14 @@ GLIBC_VERSION = 2.44-23-g11ac3d78fc5e4f7f2846002e099f773ad8ff82fc
+ GLIBC_SITE = https://gitlab.com/gnutools/glibc.git
+ GLIBC_SITE_METHOD = git
  
-+# 0001-Revert-configure-Check-linker-for-image-base-support.patch
-+# 0002-Revert-configure-Print-a-more-helpful-error-if-autoc.patch
-+GRUB2_AUTORECONF = YES
-+GRUB2_DEPENDENCIES += host-pkgconf
-+HOST_GRUB2_AUTORECONF = YES
-+HOST_GRUB2_DEPENDENCIES += host-pkgconf
-+
- ifeq ($(BR2_TARGET_GRUB2_INSTALL_TOOLS),y)
- GRUB2_INSTALL_TARGET = YES
- else
--- 
-2.55.0
-
+-GLIBC_LICENSE = GPL-2.0+ (programs), LGPL-2.1+, BSD-3-Clause, MIT (library)
+-GLIBC_LICENSE_FILES = COPYINGv2 COPYING.LESSERv2 LICENSES
++GLIBC_LICENSE = \
++	GPL-2.0+ (programs), \
++	LGPL-2.1+, BSD-2-Clause, BSD-3-Clause, BSL-1.0, FSFAP, ISC, other permissive licenses, public domain (library), \
++	LGPL-3.0+ (sysdeps/htl/raise.c, for Hurd only), \
++	GPL-3.0+ (scripts/move-if-change), \
++	GPL-3.0+ WITH Texinfo-exception (manual/texinfo.tex), \
++	GFDL-1.3-or-later (manual)
++GLIBC_LICENSE_FILES = COPYINGv2 COPYING.LESSERv2 COPYINGv3 LICENSES manual/fdl-1.3.texi
+ GLIBC_CPE_ID_VENDOR = gnu
+ 
+ # Extract the base version (e.g. 2.38) from GLIBC_VERSION in order to
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
