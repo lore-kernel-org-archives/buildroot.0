@@ -1,86 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5B17C5AC80
-	for <buildroot@archiver.kernel.org>; Sun,  9 Aug 2026 09:55:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90CA9C5AD4E
+	for <buildroot@archiver.kernel.org>; Sun,  9 Aug 2026 10:19:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8220560616;
-	Sun,  9 Aug 2026 09:55:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1133F40396;
+	Sun,  9 Aug 2026 10:19:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gb0ElryqgwPu; Sun,  9 Aug 2026 09:55:11 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sMCKIXe-VE9a; Sun,  9 Aug 2026 10:19:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AC9F360644
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E047F40540
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786269311;
-	bh=xcuGFqWOfmcOzp7ISbvyj8mvU1Zz9x6/U6C6uRTOK6w=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=PjWtJYoYMT9w6haW18E12ItOv7EGRbn0eaxkKy/c3lttbgQP82g/MKEDMm/rRd0+w
-	 pdSLvitYKolgqINxwU0pOKAkG6x4AGZMYsQpzZjHSATQ4SOy2gZ/LiocWpkE9FXRGi
-	 xf39thhOKxJ2IV1KJEFj4RCoBR/k+w3IgY982MHKYTgolWJc2aYhUbzF7ZGcXGndKk
-	 RhR3E4oaaz2FXh3UxXrkzNu95/xvC0UejyxO1LZMhJbhAJYxylGVeUE3Cdn24Hqfhp
-	 xTT4eYIBiJr/0BsY/GUCCoqY099zM81DMaOm6oWedThRs+/8g1AM8S6Bm8/yTAi14Q
-	 wVAyuQ5p7X3ww==
+	s=default; t=1786270768;
+	bh=1RDYs0QnIux6qrVtFodFY+cETyDFhUvUaPoT8XqC2HM=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=HqX7BgMqEcXSGjINU7QnUxayXSGCUMuqcLsiGUvmNgLGZkHRkiOI/QY4zJlvI8Vjz
+	 2640DccTj9F1OFTTcrj5dH7eL2628yr3byNG3YD9t6E5Fv4fiZZnAiX+BiLw0n3Zi5
+	 bNFPxDPjbGK9vtOBYHiNovQ9nIwtKeIq0L/cDDkxYn63lziOEKu23xoga79h8bX8Jr
+	 MVMtck6xC8Qd9jap5MjBWdbJeZ+SCCzQBdxd0++E2BeO0hu4tVEvyIhcGsXgYqbwIt
+	 brB4Is73dSCdudzcoZ80KYJ2YpaUoM9wWCp52/RcMgF9/+fGK2KXULem3ifCKtUKtc
+	 1H99VnChH3NfA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AC9F360644;
-	Sun,  9 Aug 2026 09:55:11 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id E86BD282
- for <buildroot@buildroot.org>; Sun,  9 Aug 2026 09:55:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E047F40540;
+	Sun,  9 Aug 2026 10:19:27 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2206210E
+ for <buildroot@buildroot.org>; Sun,  9 Aug 2026 10:19:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E298F400D1
- for <buildroot@buildroot.org>; Sun,  9 Aug 2026 09:55:10 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0863C40396
+ for <buildroot@buildroot.org>; Sun,  9 Aug 2026 10:19:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RCaqGGwuwdXM for <buildroot@buildroot.org>;
- Sun,  9 Aug 2026 09:55:10 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 39C3E400CC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 39C3E400CC
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 39C3E400CC
- for <buildroot@buildroot.org>; Sun,  9 Aug 2026 09:55:08 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a0bda.dip0.t-ipconnect.de [91.58.11.218])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 34F62A4C2D5C
- for <buildroot@buildroot.org>; Sun,  9 Aug 2026 11:55:06 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:35758)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.5)
- (envelope-from <bernd@kuhls.net>) id 1wt0FG-000000006iU-0PP1
- for buildroot@buildroot.org; Sun, 09 Aug 2026 09:55:05 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id mPyVds5rWkoW for <buildroot@buildroot.org>;
+ Sun,  9 Aug 2026 10:19:25 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5B37340387
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5B37340387
+ for <buildroot@buildroot.org>; Sun,  9 Aug 2026 10:19:25 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id D61EF8D206; Sun,  9 Aug 2026 10:18:37 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun,  9 Aug 2026 11:55:05 +0200
-Message-ID: <20260809095505.508811-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
-MIME-Version: 1.0
-X-Spamd-Bar: +
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202605290044; t=1786269306;
- bh=pIkYjTRazULmO0LHzNfNATIiEwxGcz404QaiYt4oRkg=;
- h=From:To:Subject:Date:From;
- b=TyUJfxPdzacdZUtZvE3yb/GdZNF7AUzce8Idq3w5L0QYTaxNfgQBQ5wxdhiTLTR0Y
- gnVy6JrDEV0iMVP+6ZJI4NPBXhmX/j3OOetOKR/oDAO9xhX3PS6f6xs6KrSmGeB68r
- Hmjf0+q/q/ersGo/IciXJ/95kHvkDJMrovS4AAPR1q5RBfstkkvfRxeU1520vSE3DN
- f22ZVuFI7ksuc8FQAlAiRvBltELG0y1Y5imnKgW61xPLq4bUWTXzaC8j5zsBf+zGNi
- 5ocQwlzdCX9eLcEV7lPYOy6kcCA9ukOLzzQxDROdwsgnFltrng1+JQ3+OU+R0ulVfN
- 1atTXX3EGP73A==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=TyUJfxPd
-Subject: [Buildroot] [PATCH 1/1] package/libssh: needs libopenssl for
- openssl crypto Backend
+Date: Sun, 9 Aug 2026 11:17:09 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 53c29cf0466a1cb73739af2acdce61024df9650c
+X-Git-Newrev: d90bbf81f86acef07037ad59ed78e2809222e1d3
+X-Patchwork-Hint: ignore
+Message-Id: <20260809101837.D61EF8D206@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/easydbus: bump to version 0.2.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -92,45 +68,74 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Buildroot commit 62103be918e7a155749b1b3b680a9e4ecba6af87 added
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d90bbf81f86acef07037ad59ed78e2809222e1d3
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-  select BR2_PACKAGE_LIBOPENSSL_ENGINES
+0.2.1 builds against Lua 5.4 (previously excluded), so drop the
+!BR2_PACKAGE_LUA_5_4 dependency and the corresponding wording in
+the comment.
 
-without enforcing its dependency on BR2_PACKAGE_LIBOPENSSL causing a
-warning seen with
-https://autobuild.buildroot.net/results/117/117b3b38098df075d96167863d9f6b933a97eb64/defconfig
+Changelog:
+https://github.com/mniestroj/easydbus/blob/master/CHANGELOG.md#021---2026-06-05
 
-WARNING: unmet direct dependencies detected for BR2_PACKAGE_LIBOPENSSL_ENGINES
-  Depends on [n]: <choice> && BR2_PACKAGE_LIBOPENSSL [=n]
-  Selected by [y]:
-  - BR2_PACKAGE_LIBSSH_OPENSSL [=y] && <choice> && BR2_PACKAGE_OPENSSL [=y]
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/libssh/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/easydbus/Config.in     | 5 ++---
+ package/easydbus/easydbus.hash | 2 +-
+ package/easydbus/easydbus.mk   | 2 +-
+ 3 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/package/libssh/Config.in b/package/libssh/Config.in
-index eaec754414..9aa2bfaf86 100644
---- a/package/libssh/Config.in
-+++ b/package/libssh/Config.in
-@@ -35,7 +35,7 @@ config BR2_PACKAGE_LIBSSH_LIBGCRYPT
+diff --git a/package/easydbus/Config.in b/package/easydbus/Config.in
+index 5f2f3a22be..1fe8689ccd 100644
+--- a/package/easydbus/Config.in
++++ b/package/easydbus/Config.in
+@@ -3,13 +3,12 @@ config BR2_PACKAGE_EASYDBUS
+ 	depends on BR2_USE_WCHAR # libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+ 	depends on BR2_USE_MMU # libglib2
+-	depends on !BR2_PACKAGE_LUA_5_4
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	help
+ 	  Easy to use DBus library for Lua.
  
- config BR2_PACKAGE_LIBSSH_OPENSSL
- 	bool "openssl"
--	depends on BR2_PACKAGE_OPENSSL
-+	depends on BR2_PACKAGE_LIBOPENSSL
- 	select BR2_PACKAGE_LIBOPENSSL_ENGINES
+ 	  https://github.com/mniestroj/easydbus
  
- endchoice
--- 
-2.47.3
-
+-comment "easydbus needs a toolchain w/ wchar, threads, Lua <= 5.3"
++comment "easydbus needs a toolchain w/ wchar, threads"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_PACKAGE_LUA_5_4
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/easydbus/easydbus.hash b/package/easydbus/easydbus.hash
+index 08a4f038d7..f83e1eb253 100644
+--- a/package/easydbus/easydbus.hash
++++ b/package/easydbus/easydbus.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  8cec24bff40f056d4874ed9d6fb73c9f1efbc5eff14528e1b49f1a162b197f26  easydbus-0.1.0.tar.gz
++sha256  d0f018f45b682e85108c10b5d1fa7bdcd1a81188bea43aa6c9c725c779f66aec  easydbus-0.2.1.tar.gz
+ sha256  dec3b3103cd6889045da86fc7da22bd25545966e5bd7c214791b922dec19588b  LICENSE
+diff --git a/package/easydbus/easydbus.mk b/package/easydbus/easydbus.mk
+index 57d0c22392..d35da45580 100644
+--- a/package/easydbus/easydbus.mk
++++ b/package/easydbus/easydbus.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-EASYDBUS_VERSION = 0.1.0
++EASYDBUS_VERSION = 0.2.1
+ EASYDBUS_SITE = $(call github,mniestroj,easydbus,v$(EASYDBUS_VERSION))
+ EASYDBUS_DEPENDENCIES = luainterpreter libglib2
+ EASYDBUS_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
