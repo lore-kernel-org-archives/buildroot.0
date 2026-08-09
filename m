@@ -4,83 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2E67C5AC80
-	for <buildroot@archiver.kernel.org>; Sun,  9 Aug 2026 15:07:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4469FC5AC80
+	for <buildroot@archiver.kernel.org>; Sun,  9 Aug 2026 15:22:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 88FEE80CBA;
-	Sun,  9 Aug 2026 15:07:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A2EBE80CED;
+	Sun,  9 Aug 2026 15:22:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id v3zphw17gYed; Sun,  9 Aug 2026 15:07:47 +0000 (UTC)
+ id egIvQ_eAxHSa; Sun,  9 Aug 2026 15:22:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AF74E80CC5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5E28180CE8
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786288067;
-	bh=QaACazopL7OA4Lo1aG01V1PacLjAd3aPxQ+K44iYef8=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=p2QNvlXCWU46zK7Z7uFzJl6grncELmwr36YF95SYNEE9jaZg1wCejTQ0+y1gaKcjW
-	 rJOUKb1HE33fp7BTWwGkH3vE2b7OkPJ3G71+jQBHzC97pqeVcJ9N5RFim9EfgT6Dtw
-	 ySVMXF+lT/BgFRAIBPqtxGPEKRnGE/vbF57TrppNU4WjzDIz6w2TQfg8WqvDe4wHAa
-	 rZghpHqHjtMEzTKkyU+Bt+FWJ4zCYWN8TSdiMHE4AhSGZtgvgdOX8uqsI0I+Hxo6W8
-	 b8SUVepwUh1/vlgbKm/0OrjwFT4vbK2D/GNSNV/en+pvSeJl+PNHyRXfpGxBuQfu9z
-	 lhjZ0v3vGLeYA==
+	s=default; t=1786288960;
+	bh=7Jjn5trlN48taUJP4B8GEetQXnLI+e9tHK99+C2tzrs=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=c5I4dvMKg6nZHZfjnUH8YCc1NP3PVXSUgbN55Y/79YOCpMcI3XzdS3j2CXl4Hqibp
+	 QB0VXEsnxLE6Q6JSlTOn8dxIJsz2QLerutdiRiDXTrtzCT6mt0mE0cMneUyHoKO+Nk
+	 Aj3QwkqMsv4darBrHexC/jHD/ol4DXwmHIgalhDqpLJQ92Dvbv8lZNHt3utFsZh8iq
+	 CRA90jVik2CWtEv48zX5Ro1eXPX7thrAaUFJpFHzhV/yOyV0B+VA9GJIhwslWpsGMI
+	 Hph5I2SktSLU2+6mAT+M3kwQNNfmOET5y5ndnjzHsvfFnSR37AJ3Wk+NGnVvmX17zB
+	 vmnpu1FRPQZGQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AF74E80CC5;
-	Sun,  9 Aug 2026 15:07:47 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 5AFA1296
- for <buildroot@buildroot.org>; Sun,  9 Aug 2026 15:07:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5E28180CE8;
+	Sun,  9 Aug 2026 15:22:40 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5D998296
+ for <buildroot@buildroot.org>; Sun,  9 Aug 2026 15:22:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 40E6440539
- for <buildroot@buildroot.org>; Sun,  9 Aug 2026 15:07:46 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5B37D80CEB
+ for <buildroot@buildroot.org>; Sun,  9 Aug 2026 15:22:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ahIH3ZDblRxs for <buildroot@buildroot.org>;
- Sun,  9 Aug 2026 15:07:45 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 51FC740536
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 51FC740536
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 51FC740536
- for <buildroot@buildroot.org>; Sun,  9 Aug 2026 15:07:45 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id 13E8513F88F;
- Sun,  9 Aug 2026 17:07:41 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 09 Aug 2026 17:07:41 +0200
-MIME-Version: 1.0
-Date: Sun, 09 Aug 2026 17:07:41 +0200
-To: Waldemar Brodkorb <wbx@openadk.org>
-Cc: buildroot@buildroot.org
-In-Reply-To: <anh65LhHJZT8yMcO@waldemar-brodkorb.de>
-References: <anh65LhHJZT8yMcO@waldemar-brodkorb.de>
-User-Agent: Webmail Free/1.6.17
-Message-ID: <115ebd6e5628c418d4561a364138f767@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1786288063;
- bh=VWEaqnhjNAK9vZcn08aPQPSrEO8SH5xTKFKeK9BHREU=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=GOWvE28t53bvQRLRqp7QDVN+XZ5kJztlGEIz3gJ+0/oN+gJDCwgabR71KnFvLp5p+
- l94H1U+ON25eezPRpiOK4/wEhhhRm4qsvqSr8iOqLJOQeTWDCAvRIV+tdp5SMl6fzb
- k3iPyyiBlyC3fAoI4LcVEt4NMXqS5JJs5QfdY/U3RqQnhpqfPheua5+UM/Sx1G3WYh
- ZBJlFEHQ+6IbAeRodPI9E+K9vncvFo4x5aqRuKq/jQJ7/MEF2gLHbpHqXqB1NVRCK7
- mIsxKpJENKI6Yi1Ht35tBU3Ztgaj4gtTxn4Uyg7A2UDk9D2Q949gLuxnqXQD99lhoX
- O1vK9uaZG2F/A==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=GOWvE28t
-Subject: Re: [Buildroot] [PATCH] package/stunnel: security bump to 5.80
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id i0-KDNRlAl3B for <buildroot@buildroot.org>;
+ Sun,  9 Aug 2026 15:22:38 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8FBD380CE8
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8FBD380CE8
+ for <buildroot@buildroot.org>; Sun,  9 Aug 2026 15:22:38 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id F004F8D240; Sun,  9 Aug 2026 15:21:50 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 9 Aug 2026 17:10:35 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 8b6eea299b3e519a6dac908e5ceed49cc43c4698
+X-Git-Newrev: 54f66d88295cbbd09d51139f8c2a2c80ca03fb26
+X-Patchwork-Hint: ignore
+Message-Id: <20260809152150.F004F8D240@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/syslog-ng: needs libopenssl,
+ not libressl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,31 +71,57 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 09/08/2026 15:04, Waldemar Brodkorb wrote:
-> Fixes following CVE's:
-> 
-> CVE-2026-70368: Fixed an out-of-bounds memory
-> access triggered by logging attacker-controlled protocol messages 
-> longer
-> than 1,024 bytes (thanks to AISLE Research and Clemens Lang).
-> 
-> CVE-2026-70367: Fixed a SOCKS server mode bypass of the localhost
-> destination filter using alternate local-address encodings and
-> interface-scoped IPv6 destinations (thanks to AISLE Research and 
-> Clemens
-> Lang).
-> 
-> Complete Changelog is here:
-> https://www.stunnel.org/NEWS.html
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/54f66d88295cbbd09d51139f8c2a2c80ca03fb26
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Applied to master, thanks.
+Buildroot commit 51ab6d2290f169f4bb96b8dbbab2d8fb4656766d bumped the
+package from version 4.8.3 to 4.11.0. Upstream commit
+https://github.com/syslog-ng/syslog-ng/commit/dbe9fb306929168172062a6bc985eb7e38201dab
+added the usage of OpenSSL BIO_ functions in version 4.9.0 causing
+build errors with LibreSSL:
+
+lib/transport/transport-tls.c: In function 'BIO_s_transport':
+lib/transport/transport-tls.c:125:3: error: implicit declaration of
+ function 'BIO_meth_set_write_ex'; did you mean 'BIO_meth_set_write'?
+ [-Wimplicit-function-declaration]
+  125 |   BIO_meth_set_write_ex(meth, _BIO_transport_write);
+
+lib/transport/transport-tls.c:126:3: error: implicit declaration of
+ function 'BIO_meth_set_read_ex'; did you mean 'BIO_meth_set_read'?
+ [-Wimplicit-function-declaration]
+  126 |   BIO_meth_set_read_ex(meth, _BIO_transport_read);
+
+because LibreSSL does not provide these functions.
+
+Fixes:
+https://autobuild.buildroot.net/results/117/117b3b38098df075d96167863d9f6b933a97eb64/
+https://autobuild.buildroot.net/results/a39/a39ecc88a9342005b75660ee0ac60a1025fa6fc2/
+https://autobuild.buildroot.net/results/6b3/6b3eb910ccdb67827f0c12cea0e3a63c5e6b68af/
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/syslog-ng/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/syslog-ng/Config.in b/package/syslog-ng/Config.in
+index 1302e6ac46..0bdf0dcd27 100644
+--- a/package/syslog-ng/Config.in
++++ b/package/syslog-ng/Config.in
+@@ -9,6 +9,7 @@ config BR2_PACKAGE_SYSLOG_NG
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_PCRE2
+ 	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
+ 	help
+ 	  syslog-ng is an enhanced log daemon, supporting a wide range
+ 	  of input and output methods: syslog, unstructured text,
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
