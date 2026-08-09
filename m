@@ -4,59 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9BF87C5AE49
-	for <buildroot@archiver.kernel.org>; Sun,  9 Aug 2026 14:58:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02EA7C5AD4E
+	for <buildroot@archiver.kernel.org>; Sun,  9 Aug 2026 15:00:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3A9C8606D6;
-	Sun,  9 Aug 2026 14:58:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BCB3F60693;
+	Sun,  9 Aug 2026 15:00:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uCZYQxsMM7EO; Sun,  9 Aug 2026 14:58:55 +0000 (UTC)
+ id eNUHbLzqp5y4; Sun,  9 Aug 2026 15:00:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AB5B96066D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3682660603
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786287534;
-	bh=kbq2UzNXR400CaNRaCeyDE3X6TytMmeGqAidzt78+VA=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=r6G2hLX0ft7gpiKbxldaOiDLaHsasjyNQ7vIe5NQ6h/O6aLV0OZUdAX0o0WsAf5P1
-	 pHxO/qqlqpi6O7oHp4eHbNewExSnEEhjKgm+ctFPgM3LR+qDX64UJsGBWXCFwZrhTv
-	 vLb8TXtRbDJOSsRNy/xyQAeN5Tyt7AJZ2hEY1gORwXkPG36OR26rrX3hf10q7McHd+
-	 n9SRLBz+pXFmkjH+JfKr81PG1j+fuEw6nasVnqGVzoa/QKgJY3/GDDLmwMuAz53U5B
-	 o3ErEfMI+kkxQPtEauVE55rSeoGxIcH44nqlRS8PmmWntQAYZJRkUVMfhQMCXQhfzE
-	 m3iOqMfw0uwxA==
+	s=default; t=1786287635;
+	bh=6n/NwI1Lk11ErSQ0rsfv1fT2fsJi70YAHzlHrrWmx98=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=X542YCPhZj5qu/g3rz6vVKlnQNsWa780fJ2HgWhvWZJN8WcxH0MCzYHgDVCWfoWCi
+	 llZBxwXKVSdp/EonQAfelzMqs2/fdQwgXGZnXcucu/BBYOh9k7DW7gQgqB2N/gyBV+
+	 EUz8+cNE4SqdkR5ZD9cCHuG7lnAXx3+4m5V5PjHysRwIN5Xzw/oHWGGOlG8SDsznvU
+	 8tPy2uujpLnd6tuzkXtgJHjkh4aCO8AtgJwOOAJaCrOwtOL0E8Y1tXicNcXbGLHD79
+	 3h/HnHt0374Cq/uvgSZmDPgfRwgTe8Van/hwOSSun7t/Wo6DimFOrgpM9mz0lCxjrv
+	 qN3mcwgtcw0Vw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AB5B96066D;
-	Sun,  9 Aug 2026 14:58:54 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 52EDF28A
- for <buildroot@buildroot.org>; Sun,  9 Aug 2026 14:58:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3682660603;
+	Sun,  9 Aug 2026 15:00:35 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0AABD28A
+ for <buildroot@buildroot.org>; Sun,  9 Aug 2026 15:00:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 38F3D40531
- for <buildroot@buildroot.org>; Sun,  9 Aug 2026 14:58:51 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E4FD560603
+ for <buildroot@buildroot.org>; Sun,  9 Aug 2026 15:00:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kyL8UkXf3Fse for <buildroot@buildroot.org>;
- Sun,  9 Aug 2026 14:58:50 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 802F94051D
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 802F94051D
- for <buildroot@buildroot.org>; Sun,  9 Aug 2026 14:58:50 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EE2B88D231; Sun,  9 Aug 2026 14:58:02 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 9 Aug 2026 16:44:06 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f62a95d1d79212391719bff106a5be04781f5d38
-X-Git-Newrev: baa86d079d7afa6bce8ff213fb992900b8c27c71
-X-Patchwork-Hint: ignore
-Message-Id: <20260809145802.EE2B88D231@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/sdl3_ttf: new package
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nI4EHjY6Glxa for <buildroot@buildroot.org>;
+ Sun,  9 Aug 2026 15:00:33 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::15;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org F027E605E6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F027E605E6
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id F027E605E6
+ for <buildroot@buildroot.org>; Sun,  9 Aug 2026 15:00:32 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id A9DF2780368;
+ Sun,  9 Aug 2026 17:00:28 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 09 Aug 2026 17:00:28 +0200
+MIME-Version: 1.0
+Date: Sun, 09 Aug 2026 17:00:28 +0200
+To: Michael Fischer <mf@go-sys.de>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20260714115205.29838-1-mf@go-sys.de>
+References: <20260714115205.29838-1-mf@go-sys.de>
+User-Agent: Webmail Free/1.6.17
+Message-ID: <c61de76e5eb3dcc9d0d2f7dbada8ef5c@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1786287629;
+ bh=2SJ6ibBQQ2Z6KcnAUkNXtS4pMk035YIikufkWWr+N6I=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=VPHOKd3K2giesDm+RkI7f9ZuT4iuvgk+mxKuTg9A0jewVhxLqJ955TUbXSQ+GIPYX
+ 6u1+rOeYa1guvUgI3g8TK9MkBgJxABajFrv0supI49myF2e0qmYbAjXBB8ABxFJBkD
+ +fZBTFAWQX7Le+E1mLl3FGgKJkoeUIjRrivkIzi0LccKTuSL/x940qzehxAku1aviQ
+ 1aEppm0YhZ1AD/u3HeUo2deX03CUGab5m0oLHCAB71DX+SqgLyMDLW2LAeW86jwDIx
+ PugREFlJtRnVl46uDvvcGdKU+kD4zqHZje2UyJfnjQjRFmnN7QYmtv1+7GwA5JyZEd
+ XYRJ87i5j7doQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=VPHOKd3K
+Subject: Re: [Buildroot] [PATCH 1/4] package/sdl3: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,109 +95,30 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/baa86d079d7afa6bce8ff213fb992900b8c27c71
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 14/07/2026 13:52, Michael Fischer wrote:
+> Simple DirectMedia Layer 3 is a library that allows programs
+> portable low level access to a video framebuffer, audio output,
+> mouse, and keyboard. It is not compatible with SDL2.
+> 
+> https://www.libsdl.org/
+> https://wiki.libsdl.org/SDL3/README-migration
+> 
+> Signed-off-by: Michael Fischer <mf@go-sys.de>
 
-SDL3_ttf is a TrueType font rendering library for SDL3, based on
-freetype, with optional harfbuzz support.
+Series applied to master, thanks.
 
-https://github.com/libsdl-org/SDL_ttf
+For info, I added unconditional dependencies to toolchains
+with wchar and threads. For the details, see:
+https://gitlab.com/buildroot.org/buildroot/-/commit/2dd13e328f118363165b47258429604a5ffd3b41
 
-Signed-off-by: Michael Fischer <mf@go-sys.de>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- DEVELOPERS                     |  1 +
- package/Config.in              |  1 +
- package/sdl3_ttf/Config.in     |  9 +++++++++
- package/sdl3_ttf/sdl3_ttf.hash |  3 +++
- package/sdl3_ttf/sdl3_ttf.mk   | 25 +++++++++++++++++++++++++
- 5 files changed, 39 insertions(+)
+Best regards,
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index d3451beb99..b7749df319 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2429,6 +2429,7 @@ F:	package/sdl2/
- F:	package/sdl3/
- F:	package/sdl3_gfx/
- F:	package/sdl3_image/
-+F:	package/sdl3_ttf/
- 
- N:	Michael Nosthoff <buildroot@heine.tech>
- F:	package/boost/
-diff --git a/package/Config.in b/package/Config.in
-index a3276ede1d..e4deb5f00e 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -367,6 +367,7 @@ comment "Graphic libraries"
- 	source "package/sdl3/Config.in"
- 	source "package/sdl3_gfx/Config.in"
- 	source "package/sdl3_image/Config.in"
-+	source "package/sdl3_ttf/Config.in"
- 	source "package/spirv-headers/Config.in"
- 	source "package/tk/Config.in"
- 	source "package/virglrenderer/Config.in"
-diff --git a/package/sdl3_ttf/Config.in b/package/sdl3_ttf/Config.in
-new file mode 100644
-index 0000000000..d1c6c2efd0
---- /dev/null
-+++ b/package/sdl3_ttf/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_SDL3_TTF
-+	bool "sdl3_ttf"
-+	depends on BR2_PACKAGE_SDL3
-+	select BR2_PACKAGE_FREETYPE
-+	help
-+	  SDL3_ttf is a sample TrueType font library. It allows you to
-+	  use TrueType fonts in your SDL3 applications.
-+
-+	  http://www.libsdl.org/projects/SDL_ttf/
-diff --git a/package/sdl3_ttf/sdl3_ttf.hash b/package/sdl3_ttf/sdl3_ttf.hash
-new file mode 100644
-index 0000000000..a959f011ce
---- /dev/null
-+++ b/package/sdl3_ttf/sdl3_ttf.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  63547d58d0185c833213885b635a2c0548201cc8f301e6587c0be1a67e1e045d  SDL3_ttf-3.2.2.tar.gz
-+sha256  7826eca0a0f7e591f38dd844e207a200aac81a59b20d8a30c3af8c6282af13e6  LICENSE.txt
-diff --git a/package/sdl3_ttf/sdl3_ttf.mk b/package/sdl3_ttf/sdl3_ttf.mk
-new file mode 100644
-index 0000000000..12441e243e
---- /dev/null
-+++ b/package/sdl3_ttf/sdl3_ttf.mk
-@@ -0,0 +1,25 @@
-+################################################################################
-+#
-+# sdl3_ttf
-+#
-+################################################################################
-+
-+SDL3_TTF_VERSION = 3.2.2
-+SDL3_TTF_SOURCE = SDL3_ttf-$(SDL3_TTF_VERSION).tar.gz
-+SDL3_TTF_SITE = https://www.libsdl.org/projects/SDL_ttf/release
-+SDL3_TTF_LICENSE = Zlib
-+SDL3_TTF_LICENSE_FILES = LICENSE.txt
-+SDL3_TTF_INSTALL_STAGING = YES
-+
-+SDL3_TTF_DEPENDENCIES = sdl3 freetype host-pkgconf
-+
-+SDL3_TTF_CONF_OPTS = \
-+	-DSDLTTF_VENDORED=OFF \
-+	-DSDLTTF_HARFBUZZ=OFF
-+
-+ifeq ($(BR2_PACKAGE_HARFBUZZ),y)
-+SDL3_TTF_DEPENDENCIES += harfbuzz
-+SDL3_TTF_CONF_OPTS += -DSDLTTF_HARFBUZZ=ON
-+endif
-+
-+$(eval $(cmake-package))
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
