@@ -4,87 +4,88 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64CEEC5AD4E
-	for <buildroot@archiver.kernel.org>; Sun,  9 Aug 2026 20:28:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3F27C5AD4E
+	for <buildroot@archiver.kernel.org>; Sun,  9 Aug 2026 20:29:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 100326061E;
-	Sun,  9 Aug 2026 20:28:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 91A676063F;
+	Sun,  9 Aug 2026 20:29:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id m7Qor3NxYX_A; Sun,  9 Aug 2026 20:28:44 +0000 (UTC)
+ id MKEPa5hERSfC; Sun,  9 Aug 2026 20:29:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3E9C460603
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 352826061C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786307324;
-	bh=hctpWlgKccL7nV6Ec+v4HasvTTNLNlIKG+iCYgwj8Ws=;
+	s=default; t=1786307356;
+	bh=PzdYpooTR08A/Ykruvg0UIondzh/opwDH7jKeBcG9CM=;
 	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=TPtbE/kfambUEl3XLDyIgp34WxLMSkvs/JUDl2wLo6GB3z14SfiFywCcInJGDOs5q
-	 GcgtQtUuCcfXOHoUhZzPI2nO0gG29/3olfHJ6aSZCgYyOJP9SrKQID8J+JZeFxkxuG
-	 J5UgZJhndZB9nC+hyO0WBuR82iU4RXFTCPC2aZlMT83UbLs6ta4sclWLkCGyhBc2/f
-	 CgzolidQg36qbLOGeiWpfgDS5tBCLRgDNyyt1h6llWVyRFk0cCG6/ZUxQhWCevKxnV
-	 ansaj80PmWMIje0DFgV+c1IbLUGZdEsXX1iPSu4QBwfaswptH7c8NtFzU8n9HNq5Wp
-	 jeGXrGoO0uL2A==
+	b=lwEwtUgcxoBSZMaJRHbA6i/e/DJedRNDMSslb76Hg6fleI/tllaDmRNhXIujc7ZA2
+	 QP/k/0t/O1Rf5Hx5hoXXA6zaylM9JlsvwcqYgR/xemgDdagWw1d2quljWfuc0Nz9Rk
+	 X6O8DC1C9BmVdHkTIgM+/PiyXtAgV6HDLlSQVnndVLld9Upu4UmBE9d0cGESvvgpR4
+	 gURpKJg+fPu3wvt+57cf7eSxuz5v2wlXH3Lilh/5kXkc1kZAYHLiF7na5vWDbyZvhF
+	 Di2HWJ1FKNAOy9uWgRb1gEgVjBXEsvYOVZMhp0RvUx0+/W4mCg+SO85qxlVJXf1YEJ
+	 pyDJ2hn/k3FtA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3E9C460603;
-	Sun,  9 Aug 2026 20:28:44 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 4330D259
- for <buildroot@buildroot.org>; Sun,  9 Aug 2026 20:28:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 352826061C;
+	Sun,  9 Aug 2026 20:29:16 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id DC23040A
+ for <buildroot@buildroot.org>; Sun,  9 Aug 2026 20:29:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 28E63404EF
- for <buildroot@buildroot.org>; Sun,  9 Aug 2026 20:28:43 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C22CF80C64
+ for <buildroot@buildroot.org>; Sun,  9 Aug 2026 20:29:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ocq1QGtmSYCy for <buildroot@buildroot.org>;
- Sun,  9 Aug 2026 20:28:42 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id q6mJhovBlh2T for <buildroot@buildroot.org>;
+ Sun,  9 Aug 2026 20:29:14 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
  helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1B52C404C1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1B52C404C1
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org ACD9380C66
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ACD9380C66
 Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1B52C404C1
- for <buildroot@buildroot.org>; Sun,  9 Aug 2026 20:28:41 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id ACD9380C66
+ for <buildroot@buildroot.org>; Sun,  9 Aug 2026 20:29:13 +0000 (UTC)
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-02.galae.net (Postfix) with ESMTPS id CB3241A150E;
- Sun,  9 Aug 2026 20:28:38 +0000 (UTC)
+ by smtpout-02.galae.net (Postfix) with ESMTPS id 9857B1A1487
+ for <buildroot@buildroot.org>; Sun,  9 Aug 2026 20:29:11 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 912576033B;
- Sun,  9 Aug 2026 20:28:38 +0000 (UTC)
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 6DB2C6033B;
+ Sun,  9 Aug 2026 20:29:11 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 7022111C494E7; 
- Sun,  9 Aug 2026 22:28:33 +0200 (CEST)
-Date: Sun, 9 Aug 2026 22:28:32 +0200
+ with ESMTPSA id 4D30B11C494E9; 
+ Sun,  9 Aug 2026 22:29:06 +0200 (CEST)
+Date: Sun, 9 Aug 2026 22:29:05 +0200
 To: Alsey Coleman Miller <alseycmiller@gmail.com>
 Cc: buildroot@buildroot.org, =?utf-8?B?QW5kcsOp?= Zwing <nerv@dawncrow.de>
-Message-ID: <anjixKjxRvjrCYok@windsurf>
+Message-ID: <anji-UrwHCkDrzFm@windsurf>
 References: <20260809201403.3855903-1-alseycmiller@gmail.com>
+ <20260809201403.3855903-2-alseycmiller@gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20260809201403.3855903-1-alseycmiller@gmail.com>
+In-Reply-To: <20260809201403.3855903-2-alseycmiller@gmail.com>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=bootlin.com; s=dkim; 
- t=1786307314; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- in-reply-to:references; bh=ntsp8JFzUiKvGFFqpxBKzOTNM5uEfvWYz+g+Ewc+5Qc=;
- b=y2iiUmHjIUGAvDyaNsYTlVjLBWwKkTES9Wn8vl/WXbnZL1p9FggKk2O7iK1nSZNdkGx1F5
- /gcM/IaLJejUgTDi/O5ylha4053tzf30f0iVSvAr122zlAGefYaKr1cHeqEQaWJM/FUWdm
- eXcULXU6pF3IK3Zm1nR5vFjhbAttH8qfgwQC1FGuDFTLsTKLJyP6HAfr7mwP7hsb2t8Dty
- po1qQ8t+Rv9axCYphiD2pRJyG4ioOgvJ8+WZG1mUM6cwx7k2X/hI65Fo0SA2lGQGtFB42t
- zO9+cDQRGuYAb9JUU6+CgPskGfIUUsZc3fSYn6c65NQJxZhZM7inxCKqTXnUHg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ t=1786307347; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ in-reply-to:references; bh=Gb925liWjupoLNkRr9kg3tUT8qzyHdjfUe8codnIRIs=;
+ b=a5dKeb1S8BezV1Bq+pc9tGwUuX8sn2JqXOwcE9GXVWimJn72KeKFM1VQZyjcktGEswVW4c
+ RfwmH50BwcPSMraZRYj2GBmbqlPCYPhU5g06I1vVj2ZrIFv8vLVXzXgCQQ8sCeeuNaC7mi
+ xAk4+2Ipg7nP1eZr2lXplWPV8lR5GnuSLe0SNRp/Z1uZe9slGHU4VSYk2lVdtQqOuovUnl
+ 5ns6feDhtAqyGwUFflzNum5Y/UI3kDahdO82FRJ344cYG7FGflymdm3XiLAH8DOxaZTF4a
+ jWJXhPxR66fuYf0/0IjDlS99nDmiYrWzvqsYG3zBfjg5EC9v7SPcIL69WE/oVA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=y2iiUmHj
-Subject: Re: [Buildroot] [PATCH v2 1/2] package/libxkbcommon: build
- libxkbregistry when libxml2 is available
+ header.s=dkim header.b=a5dKeb1S
+Subject: Re: [Buildroot] [PATCH v2 2/2] package/wine: select libxkbcommon
+ and libxml2 for the Wayland driver
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -103,57 +104,27 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, Aug 09, 2026 at 04:14:02PM -0400, Alsey Coleman Miller wrote:
-> libxkbregistry is the keyboard layout catalogue half of the library. It
-> parses the XML layout registry and so needs libxml2, which is presumably
-> why it was disabled unconditionally rather than wired to a dependency.
+Hello,
+
+On Sun, Aug 09, 2026 at 04:14:03PM -0400, Alsey Coleman Miller wrote:
+> wine.mk passes --with-wayland whenever BR2_PACKAGE_WAYLAND is enabled,
+> but nothing guarantees the rest of what wine's Wayland test needs is in
+> the configuration. That test is:
 > 
-> wine needs it. Its configure.ac requires XKBREGISTRY_LIBS alongside
-> wayland-client, wayland-scanner, xkbcommon and linux/input.h before it
-> will build the Wayland driver, and wine.mk passes --with-wayland for any
-> build with BR2_PACKAGE_WAYLAND - which turns that notice into a hard
-> error:
+>   WINE_NOTICE_WITH(wayland, [test -z "$WAYLAND_CLIENT_LIBS" \
+>     -o -z "$WAYLAND_SCANNER" -o -z "$XKBCOMMON_LIBS" \
+>     -o -z "$XKBREGISTRY_LIBS" -o "$ac_cv_header_linux_input_h" = "no"], ...)
 > 
->   checking for wayland-client.h... yes
->   checking for wl_display_connect in -lwayland-client... yes
->   checking for wayland-scanner... .../host/bin/wayland-scanner
->   checking for xkb_context_new in -lxkbcommon... yes
->   checking for wayland-egl.h... yes
->   checking for wl_egl_window_create in -lwayland-egl... yes
->   configure: error: Wayland development files not found, the Wayland
->     driver won't be supported.
->   This is an error since --with-wayland was requested.
+> and because --with-wayland is passed explicitly, WINE_NOTICE_WITH turns
+> into AC_MSG_ERROR rather than a notice.
 > 
-> Every other term of that test passes; only XKBREGISTRY_LIBS is empty, so
-> wine and wayland together could not be built on any architecture.
+> So wine needs libxkbcommon, and it needs the libxkbregistry part of it,
+> which is only built when libxml2 is available. Select both when Wayland
+> support is enabled, and add libxkbcommon to the build dependencies.
 > 
-> Gated on BR2_PACKAGE_LIBXML2 rather than turned on outright, because
-> meson.build takes dependency('libxml-2.0') unconditionally once
-> enable-xkbregistry is set, so a target without libxml2 would fail to
-> configure.
-> 
-> Regarding since when this is broken, three pieces had to come together:
-> 
->  - libxkbcommon has passed -Denable-xkbregistry=false since commit
->    1791bc30a5 ("package/libxkbcommon: bump version to 1.0.1", Sep 2020),
->    i.e. Buildroot 2020.11. libxkbregistry has therefore never been built
->    in Buildroot.
-> 
->  - wine's configure gained the XKBREGISTRY_LIBS term in its Wayland
->    test in wine 9.0, with upstream commit d64ea8e4a6c9
->    ("winewayland.drv: Enumerate Xkb layouts and create matching HKL.",
->    Nov 2023).
-> 
->  - wine.mk started passing --with-wayland in commit 7cb49e7712
->    ("package/wine: bump to version 9.19", Oct 2024), which is what turns
->    the missing XKBREGISTRY_LIBS from a notice into a hard error.
-> 
-> The breakage therefore dates from Buildroot 2024.11, and every branch
-> since is affected, including the LTS one: 2025.02.x carries wine 10.0,
-> whose configure has the XKBREGISTRY_LIBS check, together with
-> libxkbcommon 1.9.2 built with -Denable-xkbregistry=false, and its wine.mk
-> passes --with-wayland. 2025.05.x and 2025.08.x are in the same state.
-> A backport to 2025.02.x is thus needed.
+> Note that libxml2 is not a direct dependency of wine, it only has to be
+> in the configuration so that libxkbcommon builds libxkbregistry; the
+> build ordering is handled by libxkbcommon's own dependency on libxml2.
 > 
 > Signed-off-by: Alsey Coleman Miller <alseycmiller@gmail.com>
 
