@@ -4,86 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24849C5AD4E
-	for <buildroot@archiver.kernel.org>; Sun,  9 Aug 2026 10:31:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB700C5AC80
+	for <buildroot@archiver.kernel.org>; Sun,  9 Aug 2026 10:36:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 64AF640540;
-	Sun,  9 Aug 2026 10:31:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 637D340542;
+	Sun,  9 Aug 2026 10:36:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PnzYDloTCu7y; Sun,  9 Aug 2026 10:31:20 +0000 (UTC)
+ id Bqkwn-iiOphn; Sun,  9 Aug 2026 10:36:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1098140208
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4F7CB403B1
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786271480;
-	bh=AfLrjiifhBzb1T+w3WKv8i1UkDaagKp/uZQJWjPRL6s=;
-	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=hkdlmhgTw74J/1NsZkY20+Im+AdtVhk2q/B7D/XFYw9lVqpPYNc22EyoCGupa7XnE
-	 H9Yk7eOT2mVIv6SX2E/izJlWeB3HfJ6b6vF60H07hjIf9lIQ6SzjEbBJnubD8tSeNp
-	 03pVJ0mA7WFqcinswK6cOdMuTGmGLY/QJaqXg3TmTIvKqcQaCWXj1RoPFMPZy3+6oA
-	 V7PBByM+LDIaUg9N+3ZqAereztNQHhh4uUmG+hgbVSNtfeZKIVVJiRsVPbYJZ1W3S3
-	 NJLimq7eaEmj1dj/SBm92L0hC+KrMtt8foWPlcz7rZ0ggNbOzjZwW8RzqxdokEDM80
-	 MRZNuNIShBLjw==
+	s=default; t=1786271772;
+	bh=xdcdZe7fgCDaeeWg67scB5Bd0yPv+KX9D7fHJthq/yI=;
+	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=D18mOauuFYT/Jet/XGoK/K/7asdkCWgaz+bMacC00RmQwesCN0KJyA+PuwiXrIokg
+	 bqnWcK+MbZCslpLawB+hmr+cm7qw+NPqpoJcz1MyltlcawLNrN3hqNxKa+FueF36ej
+	 vhAUYYbl621z3LUWswWo3qy0mB0BwB8sLM79oAlSF4NSHg5+McLdaMzXlOfU3YntIJ
+	 Az8TKOnhnwH82fT4C0FIryQF8vOGqeXgxPYDryMZqgq/CtvzyYJs7Fj4WmKREaA6iR
+	 4vGJ0diAWzJMY9iJxUBH9JEdHNYxuqkHX9MKoE2YgwF8t1rJ0aiAq+zRo1XEh3hHn9
+	 ZATHoH1FZIi1w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1098140208;
-	Sun,  9 Aug 2026 10:31:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4F7CB403B1;
+	Sun,  9 Aug 2026 10:36:12 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id CE9EE28A
- for <buildroot@buildroot.org>; Sun,  9 Aug 2026 10:31:17 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 2ED8B198
+ for <buildroot@buildroot.org>; Sun,  9 Aug 2026 10:36:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B50CF60602
- for <buildroot@buildroot.org>; Sun,  9 Aug 2026 10:31:17 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1DA7A60655
+ for <buildroot@buildroot.org>; Sun,  9 Aug 2026 10:36:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id v8HuOP9u2Pkq for <buildroot@buildroot.org>;
- Sun,  9 Aug 2026 10:31:17 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
- helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E94B6605D8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E94B6605D8
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E94B6605D8
- for <buildroot@buildroot.org>; Sun,  9 Aug 2026 10:31:16 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-03.galae.net (Postfix) with ESMTPS id 78F0B4E41176;
- Sun,  9 Aug 2026 10:31:13 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 46D1A6033B;
- Sun,  9 Aug 2026 10:31:13 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 47D6E11C489DC; 
- Sun,  9 Aug 2026 12:31:08 +0200 (CEST)
+ id OB1MT1RItvbp for <buildroot@buildroot.org>;
+ Sun,  9 Aug 2026 10:36:09 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 9D99960602
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9D99960602
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9D99960602
+ for <buildroot@buildroot.org>; Sun,  9 Aug 2026 10:36:08 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p5b3a0bda.dip0.t-ipconnect.de [91.58.11.218])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 37156A4C499F;
+ Sun,  9 Aug 2026 12:36:06 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:40046)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99.5)
+ (envelope-from <bernd@kuhls.net>) id 1wt0sw-000000005Yy-0JvB;
+ Sun, 09 Aug 2026 10:36:05 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Cc: Julien Olivain <ju.o@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- =?UTF-8?q?Alexis=20Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-Date: Sun,  9 Aug 2026 12:31:00 +0200
-Message-ID: <20260809103101.311957-1-thomas.petazzoni@bootlin.com>
-X-Mailer: git-send-email 2.55.0
+Cc: Chris Packham <judge.packham@gmail.com>
+Date: Sun,  9 Aug 2026 12:36:05 +0200
+Message-ID: <20260809103605.907605-2-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260809103605.907605-1-bernd@kuhls.net>
+References: <20260809103605.907605-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
+X-Spamd-Bar: -
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=dkim; 
- t=1786271468; h=from:subject:date:message-id:to:cc:mime-version:
- content-transfer-encoding; bh=0MQph4KbSruFdUh8LGJrUi2sgf6UIpcUfonpMqBSI9w=;
- b=WP7NJWSQYqDkwfV/f/jgBLn5nl8kP6Rb0BeyG0KjB65ajKvvJVJ4pcBzwzSipo0+latjfb
- wk3sLTuo6P5TjpfWYKNZokllHRdIt2TtTg6+LtdGL4+adulg1oXhOI0PTkwu+DBHvT0SN4
- Yvj94NuMnKt+TmbX4rk0rJgrvdqG8Ndx83ULlCq2bDH4uCXuATGqyHLfRPreeVbH6z9vV2
- nbxzrUzjnOy9Uzyffo9upg+YOko2GAbNvSQxikd/A8XtCDGlqWYNuGppO7LlLkgGbsvO+M
- 6kkBmqXMuJXlHoGW0y6dQQ0evNusYejJwaBLwy1AbSGws6ehQGEdPCqX2LmCfg==
+ d=kuhls.net; 
+ s=kas202605290044; t=1786271766;
+ bh=d16i7RhdtiurOo12//o3ap0qgzZdru/x22GhH0mkDEA=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:From;
+ b=hmEX7zFK5Pyo1YXSs89m/rw4ZvOIZag0dURjHBdViymkiEQldT25LOClCnx1le/wu
+ +nT5g9wwD0/MbTqomj1w0Sp62DTgWq2xp+9sMuAB2RAGe82RWQvKAcuCAbG4Tn0gwN
+ n1pZ5G/rlIk8bPw6odljmYDNX/azNU+b6BMdUSnCUa3campaHJijCIWCS3ksWpKI52
+ noiWezN3B83rtdVsvBeTXuZCLyuK+tkYEDkI8aRPEKE3wCL/O1kZLe+nRH1JU078hU
+ Ztgl3qJWKDnqa3EyhZFkjpXdL+yIkbXq1UwmpwoihnrrhvjBmRUAVcXJiPYNfXeJwe
+ R8SRmFGT8aZ5w==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=WP7NJWSQ
-Subject: [Buildroot] [PATCH] package/libxmlsec1: fix Config.in comment
- dependencies
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202605290044 header.b=hmEX7zFK
+Subject: [Buildroot] [PATCH 2/2] package/syslog-ng: security bump version to
+ 4.12.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,48 +96,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Commit fef9cad1fe84b4366e705adb03470e12199ffd25 ("package/libxmlsec1:
-bump version to 1.3.12") has introduced a gcc 7.x and atomic
-dependency, but the Config.in comment dependencies are not correct:
+https://github.com/syslog-ng/syslog-ng/blob/syslog-ng-4.12.0/NEWS.md
 
-+comment "libxmlsec1 needs a toolchain w/ gcc >= 7"
-+       depends on  !BR2_TOOLCHAIN_GCC_AT_LEAST_7 || !BR2_TOOLCHAIN_HAS_ATOMIC
+Fixes CVE-2026-39879.
 
-Indeed, we treat BR2_TOOLCHAIN_HAS_ATOMIC like an architecture
-dependency in Buildroot, so it should be:
-
-+comment "libxmlsec1 needs a toolchain w/ gcc >= 7"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC
-+       depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_7
-
-so that the comment does NOT show up when BR2_TOOLCHAIN_HAS_ATOMIC is
-false.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/libxmlsec1/Config.in | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Gitlab pipelines passed:
+https://gitlab.com/bkuhls/buildroot/-/commits/243681251be3b0fb45a332cd2d27bff7769bf73e
 
-diff --git a/package/libxmlsec1/Config.in b/package/libxmlsec1/Config.in
-index 782e6ced7c..9270447510 100644
---- a/package/libxmlsec1/Config.in
-+++ b/package/libxmlsec1/Config.in
-@@ -14,4 +14,5 @@ config BR2_PACKAGE_LIBXMLSEC1
- 	  https://github.com/lsh123/xmlsec
+ package/syslog-ng/syslog-ng.conf | 2 +-
+ package/syslog-ng/syslog-ng.hash | 4 ++--
+ package/syslog-ng/syslog-ng.mk   | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/syslog-ng/syslog-ng.conf b/package/syslog-ng/syslog-ng.conf
+index c4b0cbe54a..ae6f190c92 100644
+--- a/package/syslog-ng/syslog-ng.conf
++++ b/package/syslog-ng/syslog-ng.conf
+@@ -1,4 +1,4 @@
+-@version: 4.11
++@version: 4.12
  
- comment "libxmlsec1 needs a toolchain w/ gcc >= 7"
--	depends on  !BR2_TOOLCHAIN_GCC_AT_LEAST_7 || !BR2_TOOLCHAIN_HAS_ATOMIC
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC
-+	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_7
+ source s_sys {
+ 	file("/proc/kmsg" program_override("kernel"));
+diff --git a/package/syslog-ng/syslog-ng.hash b/package/syslog-ng/syslog-ng.hash
+index a276e85385..95621bde26 100644
+--- a/package/syslog-ng/syslog-ng.hash
++++ b/package/syslog-ng/syslog-ng.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/syslog-ng/syslog-ng/releases/tag/syslog-ng-4.11.0
+-sha256  37ea0d4588533316de122df4e1b249867b0a0575f646c7478d0cc4d747462943  syslog-ng-4.11.0.tar.gz
++# From https://github.com/syslog-ng/syslog-ng/releases/tag/syslog-ng-4.12.0
++sha256  03a03d19ac203dca53c7ec79a7005c8a850665a95ff4cd0f1e7bb4c497c64d46  syslog-ng-4.12.0.tar.gz
+ # Locally computed
+ sha256  d7d51f8d0f6ee9757a371080e7f5fa19ac73afbef14db6e981705cf1ec813d6b  COPYING
+ sha256  ce3324c9f22299cfc7c281e5a6ab40fbe9c2ea1a67cee87226cb8cd39db1e1d2  GPL.txt
+diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
+index 2faf2cebe5..12c305b9cd 100644
+--- a/package/syslog-ng/syslog-ng.mk
++++ b/package/syslog-ng/syslog-ng.mk
+@@ -6,7 +6,7 @@
+ 
+ # When updating the version, please check at runtime if the version in
+ # syslog-ng.conf header needs to be updated
+-SYSLOG_NG_VERSION = 4.11.0
++SYSLOG_NG_VERSION = 4.12.0
+ SYSLOG_NG_SITE = https://github.com/balabit/syslog-ng/releases/download/syslog-ng-$(SYSLOG_NG_VERSION)
+ SYSLOG_NG_LICENSE = LGPL-2.1+ (syslog-ng core), GPL-2.0+ (modules)
+ SYSLOG_NG_LICENSE_FILES = COPYING GPL.txt LGPL.txt
 -- 
-2.55.0
+2.47.3
 
 _______________________________________________
 buildroot mailing list
