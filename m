@@ -1,87 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C825C5AD4E
-	for <buildroot@archiver.kernel.org>; Sun,  9 Aug 2026 15:23:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 178E1C5AC80
+	for <buildroot@archiver.kernel.org>; Sun,  9 Aug 2026 15:34:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EE8B160677;
-	Sun,  9 Aug 2026 15:23:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CD7F74051D;
+	Sun,  9 Aug 2026 15:34:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ddgf0HY1aUjW; Sun,  9 Aug 2026 15:23:04 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oiIz95VjPw4s; Sun,  9 Aug 2026 15:34:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6552460603
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D526640539
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786288984;
-	bh=GftytHs9c4Ysew+JSE1S2/lu73He1rhaRZscpmTOlS8=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=nMqiFQE/pUJZtiPd4gyTpEHTKEWFC2lBaD06S37vyh0Mk5h/jvESfpNWikQKb2WqB
-	 OxNd3BEC68UFOZTrQjpYm64sTFn+xlZvqD7UNhkztGl9MpSSKmOfA3H+jLd426tQ9Y
-	 2DqtBjuJ0Cmq6AtDBDMG1BfI6/Ir6SDaRz9lfPHwdCM1Q9NRQ8NML02HQTMvJByzmd
-	 HQLq82WOSDb5u+EzVHo/npJldh5HxqCMfYW0VgP9RhPpwhoYSgV2CEtONDc86N4hK9
-	 8E13L+H+QL32jyiMTwm3NWwEeVmJPUR0qaDUsmdkfO3KNRbvpie8SY5obxqpbvcizy
-	 6G3BmU7LLPqKQ==
+	s=default; t=1786289688;
+	bh=Hs+ljkuSzlkg78n+Q7feVpewfzH23xRHk8YRpp30t4U=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=ABuHh+Dt+0kW/MrGTz+v7HQXkZLnO8sZ3AKd5u2xwOIt+/w1pnm+bDRCP3OM9HlFD
+	 SoJxidf/E2JBxFzEjne9ua066sakNS0VkxV2oTcqnTj+Cef6Xnfj4LBBtF+tlBYV1J
+	 cKfIJkOlsi1W7aN2goaJSOjTGAJVWOixPxZOkK7x3oPVJNU0sCGSuVTldprcWaztLZ
+	 0i8wA+uNXMIJQV/s7btt9z2KL0DfLoCInr9H8Vrzwy73HWmHty9DHqPmnwvMDJN5dp
+	 QQiiFKtjnf8w2fZqaYan8n1cClUfss5YryFqGaEKPM1BZFyowMtnI2onQG66Abz1FM
+	 BrX1w5N3pnWOA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6552460603;
-	Sun,  9 Aug 2026 15:23:04 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0762D198
- for <buildroot@buildroot.org>; Sun,  9 Aug 2026 15:23:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D526640539;
+	Sun,  9 Aug 2026 15:34:48 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0396228A
+ for <buildroot@buildroot.org>; Sun,  9 Aug 2026 15:34:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EDF9D80CE8
- for <buildroot@buildroot.org>; Sun,  9 Aug 2026 15:23:03 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id DDCC640539
+ for <buildroot@buildroot.org>; Sun,  9 Aug 2026 15:34:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uitR6kqQI2P2 for <buildroot@buildroot.org>;
- Sun,  9 Aug 2026 15:23:03 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E51A380CEC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E51A380CEC
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E51A380CEC
- for <buildroot@buildroot.org>; Sun,  9 Aug 2026 15:23:02 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id D00E113F86E;
- Sun,  9 Aug 2026 17:22:58 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 09 Aug 2026 17:22:58 +0200
-MIME-Version: 1.0
-Date: Sun, 09 Aug 2026 17:22:58 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org, Chris Packham <judge.packham@gmail.com>
-In-Reply-To: <20260809103605.907605-1-bernd@kuhls.net>
-References: <20260809103605.907605-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.17
-Message-ID: <5625fee46b1010a817ad79e7f8634aae@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1786288981;
- bh=QLURxWY8m3KNHyrNlvKbZ621KEl+bEB1ycFnYKgXPkY=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=GhbS8ijkmK6RG0AF7idC2hI/7ARNXXUHNK4UurOiI49fL0FgRP1y79DOmlzkjOOlm
- JPtO/V4xA4x6RPGmJF3kb2Vb0D2P7fXnbXr8l461w9Urk3Uc621KrUBg12CcmKrItJ
- dW1SMvywyCpSVlydyVodQV3yFgZdVgOZf/Wy8VGNcQDU2gomjNFdiZBCuhkR6+SBH2
- Ha6SNNAElyGahR+MgQnRJiOPFhmFM94vqHeEUiY8WLPeVS9LBDJVN9F0J9t/kg3mFT
- ickPcQ8M6m4453zhk2KRdjRgTDjJ058xIzM7l9ncIDPa8/LGajkDhpd9WB604kaiDO
- jiuZxo2tsTa8g==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=GhbS8ijk
-Subject: Re: [Buildroot] [PATCH 1/2] package/syslog-ng: needs libopenssl,
- not libressl
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nTgr2atsaAm6 for <buildroot@buildroot.org>;
+ Sun,  9 Aug 2026 15:34:46 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 212A74051D
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 212A74051D
+ for <buildroot@buildroot.org>; Sun,  9 Aug 2026 15:34:46 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 7FAAA8D245; Sun,  9 Aug 2026 15:33:58 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 9 Aug 2026 17:30:46 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 732a933e348440dee758c6fe90b384c8e3f7b052
+X-Git-Newrev: fa32b20b10a5e1b69e7ee99f54ac9145f846d625
+X-Patchwork-Hint: ignore
+Message-Id: <20260809153358.7FAAA8D245@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/uboot-tools: select p11-kit when
+ building target mkeficapsule
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,39 +71,79 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 09/08/2026 12:36, Bernd Kuhls wrote:
-> Buildroot commit 51ab6d2290f169f4bb96b8dbbab2d8fb4656766d bumped the
-> package from version 4.8.3 to 4.11.0. Upstream commit
-> https://github.com/syslog-ng/syslog-ng/commit/dbe9fb306929168172062a6bc985eb7e38201dab
-> added the usage of OpenSSL BIO_ functions in version 4.9.0 causing
-> build errors with LibreSSL:
-> 
-> lib/transport/transport-tls.c: In function 'BIO_s_transport':
-> lib/transport/transport-tls.c:125:3: error: implicit declaration of
->  function 'BIO_meth_set_write_ex'; did you mean 'BIO_meth_set_write'?
->  [-Wimplicit-function-declaration]
->   125 |   BIO_meth_set_write_ex(meth, _BIO_transport_write);
-> 
-> lib/transport/transport-tls.c:126:3: error: implicit declaration of
->  function 'BIO_meth_set_read_ex'; did you mean 'BIO_meth_set_read'?
->  [-Wimplicit-function-declaration]
->   126 |   BIO_meth_set_read_ex(meth, _BIO_transport_read);
-> 
-> because LibreSSL does not provide these functions.
-> 
-> Fixes:
-> https://autobuild.buildroot.net/results/117/117b3b38098df075d96167863d9f6b933a97eb64/
-> https://autobuild.buildroot.net/results/a39/a39ecc88a9342005b75660ee0ac60a1025fa6fc2/
-> https://autobuild.buildroot.net/results/6b3/6b3eb910ccdb67827f0c12cea0e3a63c5e6b68af/
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/fa32b20b10a5e1b69e7ee99f54ac9145f846d625
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Series applied to master, thanks.
+Since upstream commit 0c716a157be460006a4b762625de329b5e36dbf9 (first
+release: v2026.07) mkeficapsule supports PKCS#11 keys, and in turn
+requires GnuTLS with PKCS#11 support.
+
+Without it, building mkeficapsule for the target fails:
+
+  HOSTLD  tools/mkeficapsule
+/home/fiona/br-test-pkg/bootlin-armv5-uclibc/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/14.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: tools/mkeficapsule.o: in function `main':
+mkeficapsule.c:(.text.startup+0x530): undefined reference to `gnutls_pkcs11_init'
+/home/fiona/br-test-pkg/bootlin-armv5-uclibc/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/14.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: mkeficapsule.c:(.text.startup+0x544): undefined reference to `gnutls_pkcs11_add_provider'
+/home/fiona/br-test-pkg/bootlin-armv5-uclibc/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/14.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: mkeficapsule.c:(.text.startup+0x5fc): undefined reference to `gnutls_pkcs11_obj_list_import_url4'
+/home/fiona/br-test-pkg/bootlin-armv5-uclibc/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/14.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: mkeficapsule.c:(.text.startup+0x620): undefined reference to `gnutls_x509_crt_import_pkcs11'
+/home/fiona/br-test-pkg/bootlin-armv5-uclibc/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/14.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: mkeficapsule.c:(.text.startup+0x1334): undefined reference to `gnutls_pkcs11_deinit'
+collect2: error: ld returned 1 exit status
+
+The error can be reproduced using "utils/test-pkg -c" with the
+following config:
+
+BR2_PACKAGE_UBOOT_TOOLS=y
+BR2_PACKAGE_UBOOT_TOOLS_MKEFICAPSULE=y
+
+For host-uboot-tools this was solved in Buildroot commit
+6597563da7bb359eac57c8fb70e4efc3d6ef4c02 "package/gnutls: add host
+support for pkcs11" by unconditionally enabling PKCS#11 support for
+host-gnutls. For the target a more fine-grained approach is desirable,
+so instead select BR2_PACKAGE_P11_KIT if
+BR2_PACKAGE_UBOOT_TOOLS_MKEFICAPSULE=y and propagate dependencies.
+
+Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/uboot-tools/Config.in | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
+
+diff --git a/package/uboot-tools/Config.in b/package/uboot-tools/Config.in
+index da6cd65252..b7fd6ff17d 100644
+--- a/package/uboot-tools/Config.in
++++ b/package/uboot-tools/Config.in
+@@ -68,17 +68,22 @@ config BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE
+ 
+ config BR2_PACKAGE_UBOOT_TOOLS_MKEFICAPSULE
+ 	bool "mkeficapsule"
+-	depends on !BR2_STATIC_LIBS # gnutls
++	depends on !BR2_STATIC_LIBS # gnutls, p11-kit
++	depends on BR2_TOOLCHAIN_HAS_THREADS # p11-kit
++	depends on BR2_USE_MMU # p11-kit
+ 	depends on BR2_USE_WCHAR # gnutls
+ 	select BR2_PACKAGE_GNUTLS
++	select BR2_PACKAGE_P11_KIT
+ 	help
+ 	  Install the mkeficapsule tool on the target system
+ 
+ 	  The mkeficapsule tool from Das U-Boot bootloader, which allows
+ 	  generation of UEFI capsule binaries.
+ 
+-comment "mkeficapsule support needs a toolchain w/ wchar, dynamic library"
+-	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS
++comment "mkeficapsule support needs a toolchain w/ wchar, threads, dynamic library"
++	depends on BR2_USE_MMU
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS \
++		|| BR2_STATIC_LIBS
+ 
+ config BR2_PACKAGE_UBOOT_TOOLS_MKENVIMAGE
+ 	bool "mkenvimage"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
