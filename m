@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4469FC5AC80
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 81CEAC5AD4E
 	for <buildroot@archiver.kernel.org>; Sun,  9 Aug 2026 15:22:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A2EBE80CED;
-	Sun,  9 Aug 2026 15:22:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DD8314054E;
+	Sun,  9 Aug 2026 15:22:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id egIvQ_eAxHSa; Sun,  9 Aug 2026 15:22:40 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oAhPHoaCFm4W; Sun,  9 Aug 2026 15:22:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5E28180CE8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 66FFC40539
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786288960;
-	bh=7Jjn5trlN48taUJP4B8GEetQXnLI+e9tHK99+C2tzrs=;
+	s=default; t=1786288962;
+	bh=iHQtE8l2GpPkHCnrpw6sUOWqk78IYQp/zeJBU8MFhjc=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=c5I4dvMKg6nZHZfjnUH8YCc1NP3PVXSUgbN55Y/79YOCpMcI3XzdS3j2CXl4Hqibp
-	 QB0VXEsnxLE6Q6JSlTOn8dxIJsz2QLerutdiRiDXTrtzCT6mt0mE0cMneUyHoKO+Nk
-	 Aj3QwkqMsv4darBrHexC/jHD/ol4DXwmHIgalhDqpLJQ92Dvbv8lZNHt3utFsZh8iq
-	 CRA90jVik2CWtEv48zX5Ro1eXPX7thrAaUFJpFHzhV/yOyV0B+VA9GJIhwslWpsGMI
-	 Hph5I2SktSLU2+6mAT+M3kwQNNfmOET5y5ndnjzHsvfFnSR37AJ3Wk+NGnVvmX17zB
-	 vmnpu1FRPQZGQ==
+	b=Mo8FkuYS3BggwsDPA011WQCXWdxMElOqbNN/R8m3eQmssjI37PkhFT1A77Zkhpd4h
+	 trV5eQVpESscAxBAI5hpqThKrprtxrc1eoSPUlIpk21+SCbKkk9RK6ovc6C5Ey2jxk
+	 9YHQ8H9+uEqHhZixtffpkd7dfHIMJ+hLlFmaVWYCbn53zGoFywIL0ehCn6fUN0WcqD
+	 MREBopAMmCUMbm+UxDsvdhMfXzYcbIPABY3NUGcp+6nSrTsSnHK9ZwwOVTSvkDVIoE
+	 A2syGFmKEUrNiX7qYWs0e4JBMyDOxkgZvuiAxaAibJPGtVPAVtXFjhlhTlbgHgcefi
+	 gg205eE2Pjmmg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5E28180CE8;
-	Sun,  9 Aug 2026 15:22:40 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 5D998296
+	by smtp4.osuosl.org (Postfix) with ESMTP id 66FFC40539;
+	Sun,  9 Aug 2026 15:22:42 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id DD995198
  for <buildroot@buildroot.org>; Sun,  9 Aug 2026 15:22:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5B37D80CEB
+ by smtp3.osuosl.org (Postfix) with ESMTP id CF8096062B
  for <buildroot@buildroot.org>; Sun,  9 Aug 2026 15:22:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id i0-KDNRlAl3B for <buildroot@buildroot.org>;
- Sun,  9 Aug 2026 15:22:38 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RywMcLN-43oR for <buildroot@buildroot.org>;
+ Sun,  9 Aug 2026 15:22:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8FBD380CE8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 95ED9605FF
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8FBD380CE8
+ by smtp3.osuosl.org (Postfix) with ESMTP id 95ED9605FF
  for <buildroot@buildroot.org>; Sun,  9 Aug 2026 15:22:38 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F004F8D240; Sun,  9 Aug 2026 15:21:50 +0000 (UTC)
+ id 043A08D243; Sun,  9 Aug 2026 15:21:51 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Sun, 9 Aug 2026 17:10:35 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8b6eea299b3e519a6dac908e5ceed49cc43c4698
-X-Git-Newrev: 54f66d88295cbbd09d51139f8c2a2c80ca03fb26
+X-Git-Oldrev: 54f66d88295cbbd09d51139f8c2a2c80ca03fb26
+X-Git-Newrev: 732a933e348440dee758c6fe90b384c8e3f7b052
 X-Patchwork-Hint: ignore
-Message-Id: <20260809152150.F004F8D240@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/syslog-ng: needs libopenssl,
- not libressl
+Message-Id: <20260809152151.043A08D243@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/syslog-ng: security bump version
+ to 4.12.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,51 +77,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/54f66d88295cbbd09d51139f8c2a2c80ca03fb26
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/732a933e348440dee758c6fe90b384c8e3f7b052
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Buildroot commit 51ab6d2290f169f4bb96b8dbbab2d8fb4656766d bumped the
-package from version 4.8.3 to 4.11.0. Upstream commit
-https://github.com/syslog-ng/syslog-ng/commit/dbe9fb306929168172062a6bc985eb7e38201dab
-added the usage of OpenSSL BIO_ functions in version 4.9.0 causing
-build errors with LibreSSL:
+https://github.com/syslog-ng/syslog-ng/blob/syslog-ng-4.12.0/NEWS.md
 
-lib/transport/transport-tls.c: In function 'BIO_s_transport':
-lib/transport/transport-tls.c:125:3: error: implicit declaration of
- function 'BIO_meth_set_write_ex'; did you mean 'BIO_meth_set_write'?
- [-Wimplicit-function-declaration]
-  125 |   BIO_meth_set_write_ex(meth, _BIO_transport_write);
-
-lib/transport/transport-tls.c:126:3: error: implicit declaration of
- function 'BIO_meth_set_read_ex'; did you mean 'BIO_meth_set_read'?
- [-Wimplicit-function-declaration]
-  126 |   BIO_meth_set_read_ex(meth, _BIO_transport_read);
-
-because LibreSSL does not provide these functions.
-
-Fixes:
-https://autobuild.buildroot.net/results/117/117b3b38098df075d96167863d9f6b933a97eb64/
-https://autobuild.buildroot.net/results/a39/a39ecc88a9342005b75660ee0ac60a1025fa6fc2/
-https://autobuild.buildroot.net/results/6b3/6b3eb910ccdb67827f0c12cea0e3a63c5e6b68af/
+Fixes CVE-2026-39879.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/syslog-ng/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/syslog-ng/syslog-ng.conf | 2 +-
+ package/syslog-ng/syslog-ng.hash | 4 ++--
+ package/syslog-ng/syslog-ng.mk   | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/syslog-ng/Config.in b/package/syslog-ng/Config.in
-index 1302e6ac46..0bdf0dcd27 100644
---- a/package/syslog-ng/Config.in
-+++ b/package/syslog-ng/Config.in
-@@ -9,6 +9,7 @@ config BR2_PACKAGE_SYSLOG_NG
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_PCRE2
- 	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
- 	help
- 	  syslog-ng is an enhanced log daemon, supporting a wide range
- 	  of input and output methods: syslog, unstructured text,
+diff --git a/package/syslog-ng/syslog-ng.conf b/package/syslog-ng/syslog-ng.conf
+index c4b0cbe54a..ae6f190c92 100644
+--- a/package/syslog-ng/syslog-ng.conf
++++ b/package/syslog-ng/syslog-ng.conf
+@@ -1,4 +1,4 @@
+-@version: 4.11
++@version: 4.12
+ 
+ source s_sys {
+ 	file("/proc/kmsg" program_override("kernel"));
+diff --git a/package/syslog-ng/syslog-ng.hash b/package/syslog-ng/syslog-ng.hash
+index a276e85385..95621bde26 100644
+--- a/package/syslog-ng/syslog-ng.hash
++++ b/package/syslog-ng/syslog-ng.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/syslog-ng/syslog-ng/releases/tag/syslog-ng-4.11.0
+-sha256  37ea0d4588533316de122df4e1b249867b0a0575f646c7478d0cc4d747462943  syslog-ng-4.11.0.tar.gz
++# From https://github.com/syslog-ng/syslog-ng/releases/tag/syslog-ng-4.12.0
++sha256  03a03d19ac203dca53c7ec79a7005c8a850665a95ff4cd0f1e7bb4c497c64d46  syslog-ng-4.12.0.tar.gz
+ # Locally computed
+ sha256  d7d51f8d0f6ee9757a371080e7f5fa19ac73afbef14db6e981705cf1ec813d6b  COPYING
+ sha256  ce3324c9f22299cfc7c281e5a6ab40fbe9c2ea1a67cee87226cb8cd39db1e1d2  GPL.txt
+diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
+index 2faf2cebe5..12c305b9cd 100644
+--- a/package/syslog-ng/syslog-ng.mk
++++ b/package/syslog-ng/syslog-ng.mk
+@@ -6,7 +6,7 @@
+ 
+ # When updating the version, please check at runtime if the version in
+ # syslog-ng.conf header needs to be updated
+-SYSLOG_NG_VERSION = 4.11.0
++SYSLOG_NG_VERSION = 4.12.0
+ SYSLOG_NG_SITE = https://github.com/balabit/syslog-ng/releases/download/syslog-ng-$(SYSLOG_NG_VERSION)
+ SYSLOG_NG_LICENSE = LGPL-2.1+ (syslog-ng core), GPL-2.0+ (modules)
+ SYSLOG_NG_LICENSE_FILES = COPYING GPL.txt LGPL.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
