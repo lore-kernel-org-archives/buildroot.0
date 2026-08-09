@@ -1,88 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7284CC5AC80
-	for <buildroot@archiver.kernel.org>; Sun,  9 Aug 2026 08:16:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7B01C5AC80
+	for <buildroot@archiver.kernel.org>; Sun,  9 Aug 2026 08:26:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CF0A160678;
-	Sun,  9 Aug 2026 08:16:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 32D4080E04;
+	Sun,  9 Aug 2026 08:26:36 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Qi0P6Os3eTum; Sun,  9 Aug 2026 08:26:35 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 29B9080DE5
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1786263995;
+	bh=vVvCSaFXAi+A09PO/N9NlIzpJd2UgpGoi3M/OEZOHG0=;
+	h=Date:To:Cc:References:From:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=eOHSvh7x6S0DVEXXLVA1k01YNmDpG7fqq+l2GaglM7hifIDU4j6bbfMYWCKCXgegy
+	 nnRZbZ/BZZ7503LGbphL+GQiPEQgGKxv/1kBlj6STPKeLU3zUqYqFXtkRzhRX+d62p
+	 o5GgVXskfrVARb3uqYaoJclLAk009gotNNo5KE7B/08deqAQAYxgS8wBr3M0Rd0nxM
+	 ujFxeVNzxk0EJtn8QnDeoiDQXeyBXOVvY4B4GslqyAbfbntLpduHTUdZ4/6lqX8Ysk
+	 j7rcGg7dN55nUIzKbNH6/3PWklWnE/RlFMGZID4nIznLCdob23eeR42TCucJiSEQJ2
+	 lMgAP7hMiV0ag==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 29B9080DE5;
+	Sun,  9 Aug 2026 08:26:35 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id C144E10E
+ for <buildroot@buildroot.org>; Sun,  9 Aug 2026 08:26:33 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id A36A360635
+ for <buildroot@buildroot.org>; Sun,  9 Aug 2026 08:26:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ITqYDHPq2AQs; Sun,  9 Aug 2026 08:16:17 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9E3D86060A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786263377;
-	bh=5JFUk1Z3mGA6Se65y08EQKZHgSbt/K5nSGmv9oKyla0=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=m7gHX7NYjkLRvlG+2wHGEPBmhzVmC2iCvOXWMSZd/Ury1OdtSKHertMgnVssh9Xyp
-	 TizzJHDwYKLhfZFAqDatPydCCUS7h3Nf3VMdecj7EoJsvkLmdZcFzs61fWXGhMHsXg
-	 SuH0W8205U0WbcVs5+wbgIO1JIQD1vkHkFAprRQT+2RsAy7r1wYmg4oOY7vfG2rnuC
-	 JzKTh95sJwYnodY8JKpcyADQp0/P9AyaGSnGr+jne2F9W1Id3jN5zSJzzNI1Gwt8Pc
-	 VxKdbq863YVB1agsbH/F11Bf4KfbzUrronJfYHI7Jxiz9PpU99EhIWA2C2c/WOL5Vc
-	 80uVxgNQlFq+g==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9E3D86060A;
-	Sun,  9 Aug 2026 08:16:17 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 413C710E
- for <buildroot@buildroot.org>; Sun,  9 Aug 2026 08:16:16 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3EDB140527
- for <buildroot@buildroot.org>; Sun,  9 Aug 2026 08:16:16 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id W-q3eHvFrRcE for <buildroot@buildroot.org>;
- Sun,  9 Aug 2026 08:16:15 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7F7D340514
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7F7D340514
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7F7D340514
- for <buildroot@buildroot.org>; Sun,  9 Aug 2026 08:16:13 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a0bda.dip0.t-ipconnect.de [91.58.11.218])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 65722A4C2D5C;
- Sun,  9 Aug 2026 10:16:10 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:32930)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.5)
- (envelope-from <bernd@kuhls.net>) id 1wsyhW-0000000068v-16jI;
- Sun, 09 Aug 2026 08:16:10 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
-To: buildroot@buildroot.org
-Cc: Joseph Kogut <joseph.kogut@gmail.com>,
- Romain Naour <romain.naour@gmail.com>
-Date: Sun,  9 Aug 2026 10:16:09 +0200
-Message-ID: <20260809081610.497596-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
+ id X8jqNeBvhft4 for <buildroot@buildroot.org>;
+ Sun,  9 Aug 2026 08:26:32 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=155.212.184.193;
+ helo=mail.rulkc.org; envelope-from=viper@landau.one; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A2406605F8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A2406605F8
+Received: from mail.rulkc.org (mail.rulkc.org [155.212.184.193])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A2406605F8
+ for <buildroot@buildroot.org>; Sun,  9 Aug 2026 08:26:28 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 81C25100385; Sun,  9 Aug 2026 11:26:24 +0300 (MSK)
+Message-ID: <946cece6-2a40-409b-86e1-44102d4a6138@landau.one>
+Date: Sun, 9 Aug 2026 11:26:22 +0300
 MIME-Version: 1.0
-X-Spamd-Bar: /
+User-Agent: Mozilla Thunderbird
+To: buildroot@buildroot.org
+Cc: rulkc@linuxtesting.org
+References: <20260801222945.1612760-1-viper@landau.one>
+Content-Language: en-US
+From: Konstantin Menyaev <viper@landau.one>
+In-Reply-To: <20260801222945.1612760-1-viper@landau.one>
+X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202605290044; t=1786263370;
- bh=xvmzKuL82y1q4xzG1HoyPTwycWhbrOYOxaOZEpZJ0eg=;
- h=From:To:Cc:Subject:Date:From;
- b=dBsL68ZpLDwmh/rl2zqFASey6J6ttrYgPkEYKxJVWk0NUePtT5TSSbyTiQRpybQGy
- zMKtg0Votlgl+u3LtuYT0Tt/xsrcWymLzbzHu1FBvo69o77oLh8Q6eXXvzsMOdpqMI
- pyYoX6tTwrTPogzqE2z6ClcXXfVCvicUv9+Po3l7+Y6/J7IkYgiiLqtwC7QWz97AWl
- XElLJUGVFc7ZrrfutuelDZlDjShZNsi8z6l9M4CaqmX7MsQiTjKNWGX6yMWL/VxNdP
- Ba2ZMMps71NLp6FWCt1DHwhtHomk34LgWKj05b+3CA0TVLZNRI4YSmYNaAk+ZP9+rU
- JpRI3JouH2T+g==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=landau.one; s=dkim; 
+ t=1786263984; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ content-transfer-encoding:content-language:in-reply-to:references;
+ bh=W+5vhYBXKqTfzql3W07nQ+yHvhbQoUHnQWfBgNtBhIU=;
+ b=dE+pl+zshSO53wjHqPSPGOC8sje9nqjyTNZmcM8xo9V3YIe/5v/Hz2fw0tRx6F+OCiXtoI
+ Kl+eEzjthvGELhRz0Uy4Wg5oGOEwdcjFEDThOJucLaRNZ0rjgXfyLKjKcHWis64PYv5oZq
+ qFuCqeUrH6h9QI30Oa4AGbg6Jax65z9Fn43CzBBV5GPA3pIiWdPjch8UtrW4bYOFbnbn/i
+ ZbCqc5gm5NtqlS2HbmfCNnwO0+0ZENgEDhwMnLJFhzc+gCvCD3i6TJpaeS4u1hdjxJmcYI
+ 55zQn+R9oYycKlymWGDkRrFw5iywgHxsVnQc3FORiGnxjwpU6GexcHBu9gdt8Q==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=landau.one
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=dBsL68Zp
-Subject: [Buildroot] [PATCH 1/1] package/mesa3d: i915 Gallium driver needs
- llvm
+ unprotected) header.d=landau.one header.i=@landau.one header.a=rsa-sha256
+ header.s=dkim header.b=dE+pl+zs
+Subject: Re: [Buildroot] [PATCH 1/1] package/mtd: build with -fPIC when
+ shared libraries are enabled
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,60 +91,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Buildroot commit 3e296a151195f9d32dbfd62d6c75d08b822be6dd bumped the
-package to 25.3.0 which includes upstream commit
-https://gitlab.freedesktop.org/mesa/mesa/-/commit/b8b38d38b1c14b60de0324ac2f98ff7f1f4cc3c5
-that enforces llvm for the i915 gallium driver causing configure errors
-in buildroot:
+On 8/2/26 01:29, viper@landau.one wrote:
+> From: Konstantin Menyaev <viper@landau.one>
+> 
+> Historically, mtd-utils only provided static libraries, so they are
+> built without -fPIC.
+> 
+> This becomes an issue for configs with shared libraries,
+> where apps may need to link libmtd.a or libubi.a
+> into shared objects, resulting in relocation errors.
+> 
+> Build the MTD package with -fPIC when shared libraries are enabled,
+> while keeping static-only builds unchanged.
+> 
+> Signed-off-by: Konstantin Menyaev <viper@landau.one>
+> ---
+>   package/mtd/mtd.mk | 7 ++++++-
+>   1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
+> index 2a625fccce..d67770d5ba 100644
+> --- a/package/mtd/mtd.mk
+> +++ b/package/mtd/mtd.mk
+> @@ -14,8 +14,13 @@ MTD_CPE_ID_PRODUCT = mtd-utils
+>   MTD_INSTALL_STAGING = YES
+>   MTD_DEPENDENCIES = host-pkgconf
+>   
+> +MTD_CFLAGS = $(TARGET_CFLAGS)
+>   MTD_LDFLAGS = $(TARGET_LDFLAGS)
+>   
+> +ifeq ($(BR2_SHARED_LIBS)$(BR2_STATIC_SHARED_LIBS),y)
+> +MTD_CFLAGS += -fPIC
+> +endif
+> +
+>   ifeq ($(BR2_PACKAGE_LIBEXECINFO),y)
+>   MTD_DEPENDENCIES += libexecinfo
+>   MTD_LDFLAGS += -lexecinfo
+> @@ -35,7 +40,7 @@ else
+>   MTD_CONF_OPTS += --without-zlib
+>   endif
+>   
+> -MTD_CONF_ENV += LDFLAGS="$(MTD_LDFLAGS)"
+> +MTD_CONF_ENV += CFLAGS="$(MTD_CFLAGS)" LDFLAGS="$(MTD_LDFLAGS)"
+>   
+>   ifeq ($(BR2_PACKAGE_MTD_JFFS_UTILS),y)
+>   MTD_CONF_OPTS += --with-jffs
 
-../output-1/build/mesa3d-26.1.6/meson.build:241:3: ERROR: Feature llvm
-cannot be disabled: i915 Gallium driver requires LLVM for vertex shaders
-
-Please note that
-https://gitlab.freedesktop.org/mesa/mesa/-/commit/4235c39a9a8378f1e2dc0899dd4c3c941f27b887
-later removed the llvm dependency for the r300 driver introduced by the
-commit mentioned above so we only need to add the dependency to the i915
-driver.
-The configure option draw-use-llvm is disabled by default when llvm is
-not available:
-https://gitlab.freedesktop.org/mesa/mesa/-/commit/37c7d19e46a4863c120186a99ac0344c2dd31260
-
-Fixes:
-https://autobuild.buildroot.org/results/acd9039901cf4168e6318c62252ddae6ea0ec93d/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
- package/mesa3d/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index e184039150..b78b6267d0 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -158,11 +158,15 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_FREEDRENO
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_I915
- 	bool "Gallium i915 driver"
- 	depends on BR2_i386 || BR2_x86_64
-+	depends on BR2_PACKAGE_MESA3D_LLVM
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- 	select BR2_PACKAGE_LIBDRM_INTEL
- 	help
- 	  Support for i915-based Intel GPUs.
- 
-+comment "i915 driver needs llvm"
-+	depends on !BR2_PACKAGE_MESA3D_LLVM
-+
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS
- 	bool "Gallium iris driver"
- 	depends on BR2_PACKAGE_MESA3D_LLVM
--- 
-2.47.3
-
+kindly ping
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
