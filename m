@@ -4,88 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63D1EC5AD55
-	for <buildroot@archiver.kernel.org>; Sun,  9 Aug 2026 20:46:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9AD39C5AD55
+	for <buildroot@archiver.kernel.org>; Sun,  9 Aug 2026 20:46:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2F40E605C9;
-	Sun,  9 Aug 2026 20:46:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6FFE96064B;
+	Sun,  9 Aug 2026 20:46:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oRO6Oob7MRwV; Sun,  9 Aug 2026 20:46:10 +0000 (UTC)
+ id ny7O0hslso_1; Sun,  9 Aug 2026 20:46:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 71647605E6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 66B686061C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786308370;
-	bh=O7ZTz9WlPc7ra/mTZJVOHHDqqnvGkr58cGbqdHAlFTs=;
+	s=default; t=1786308398;
+	bh=rM276CQqDq6JUeOcWXz/zzkMMtO62Tht2tbA0bFMUXo=;
 	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=HfeiDh52P1DFMJNk99K0Fz0uzykZFkiYfYNOF11hVDRoO/Br/1YjyeVU31Uuqc9PV
-	 NrjkADbENorHuLwb4N4Hr0ijwneqm+ipmum+Kt2lKQyXauJG2MLSQFCWt3WK/Qijoe
-	 n/fey8xxDxoptIJWmO5m+Rz7k09a/86U0VlIZOOHG/jLZvrJpu4vi/IhOIV7Z4rkP/
-	 J6Sv6+LpIIy0noY9rXVOwuhlTBGAKhUhO6jZz7xujC3o+Jkhwe/mbJRN2IAp4z/QjO
-	 Wv1E4d8iq6DIF1KEIytY/bkf5fFqdGnAuu8vdHD/148k6s/RiKNvDbT+NvexPA1DcB
-	 Df3igMdKni1Ew==
+	b=G4PoQcU7ba3PcKikF8QJBAaIcyuVCvil5ZpNBJyuvE8zbqpbtAkMYP4m/Bxfy/Cw2
+	 vRnq8RH+PnOtHK1moOpIg9NOfuzieq4FV/wZVJ24477mPYC2JLmfEdSy6Z1x8aszs5
+	 dDQb6VjCXtyUQXfaNJXMp1j10JiobhwiJF2t9wsx/i2NM6UrDpiCdbTQhD9ie+Fwv5
+	 fJ3wQy4DY3IvHBy+5A7iyllhA9Dnr89aIhVu+4FqxBYm7c6kmO1I0v7ePcyQYBZeLW
+	 qE0hKeZTGe5/HrYgH7TNuoor1rBbqtKYVlEjkvwEPnXThHN2sfEFzFf2zBtOMcWNBV
+	 urbxbt2lZchtw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 71647605E6;
-	Sun,  9 Aug 2026 20:46:10 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id DAC5F282
- for <buildroot@buildroot.org>; Sun,  9 Aug 2026 20:46:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 66B686061C;
+	Sun,  9 Aug 2026 20:46:38 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5749A282
+ for <buildroot@buildroot.org>; Sun,  9 Aug 2026 20:46:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D89614006E
- for <buildroot@buildroot.org>; Sun,  9 Aug 2026 20:46:08 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 48EFC80C66
+ for <buildroot@buildroot.org>; Sun,  9 Aug 2026 20:46:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gUAjCSV_7zyD for <buildroot@buildroot.org>;
- Sun,  9 Aug 2026 20:46:08 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jDXjqqiEwm5G for <buildroot@buildroot.org>;
+ Sun,  9 Aug 2026 20:46:36 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
  helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0D4834004B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0D4834004B
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3CDDE80C55
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3CDDE80C55
 Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0D4834004B
- for <buildroot@buildroot.org>; Sun,  9 Aug 2026 20:46:07 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3CDDE80C55
+ for <buildroot@buildroot.org>; Sun,  9 Aug 2026 20:46:36 +0000 (UTC)
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-02.galae.net (Postfix) with ESMTPS id 0FD0C1A1504;
- Sun,  9 Aug 2026 20:46:05 +0000 (UTC)
+ by smtpout-02.galae.net (Postfix) with ESMTPS id 8AFC01A1504;
+ Sun,  9 Aug 2026 20:46:34 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id C74AE6033B;
- Sun,  9 Aug 2026 20:46:04 +0000 (UTC)
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 5A1D86033B;
+ Sun,  9 Aug 2026 20:46:34 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 049A911C4955E; 
- Sun,  9 Aug 2026 22:45:59 +0200 (CEST)
-Date: Sun, 9 Aug 2026 22:45:59 +0200
+ with ESMTPSA id B9C9A11C4955F; 
+ Sun,  9 Aug 2026 22:46:29 +0200 (CEST)
+Date: Sun, 9 Aug 2026 22:46:28 +0200
 To: Adam Duskett <adam.duskett@amarulasolutions.com>
 Cc: buildroot@buildroot.org
-Message-ID: <anjm8rL5fUlUSu00@windsurf>
+Message-ID: <anjnEO13vWbMUlyI@windsurf>
 References: <20260807125510.1285300-1-adam.duskett@amarulasolutions.com>
- <20260807125510.1285300-2-adam.duskett@amarulasolutions.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20260807125510.1285300-2-adam.duskett@amarulasolutions.com>
+In-Reply-To: <20260807125510.1285300-1-adam.duskett@amarulasolutions.com>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=bootlin.com; s=dkim; 
- t=1786308360; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- in-reply-to:references; bh=KT7WA4jqoOqL+ztqrAYJh8LNf5h7PickVblY/mBfuHM=;
- b=LImBOGzC7htVseLAA651twnwzf3R79GKFSbeD6W/7mB0i3pH3bp+EAWnbE9hSpqGBq6B4R
- 2SRta6fj3HFl2MrYT4ndsR6q1SNZbo9IOG9dVaA2GN3ribV4GCbb5K/EfoX33Df19JNq8b
- f3rNmIeU2Gc8FzumqSzMsGeA9lQicHMrVG1BAwfuLlQoxpYMxfJXHxR/MxwDvga0PDOl6c
- 8BchPMTE7B+F8V4lNvZnXdsPkcpjGdCShLrq2BvszW2qWUnkrut7CFDrBAO99wWClSaCyg
- U0uLU/8f9z3B/Fj4kBCkHHuG9E8lMBI/xnMvyxMjmELVgDxnZazNvixth+5gnw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ t=1786308390; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ in-reply-to:references; bh=HitfxCjqI1urOIz4T1+cj4o4N+qO2YKbH/g/4BIpo14=;
+ b=FmBCvLg1vMT5Yhq5SBXWOSb6UgjLo/k40BTCDMgyjiG1J7rExrXqTR/HeReL7pntpg2nFQ
+ 5MM/SekgSqP64kDrxfyAGRMf/mvOR7wwTbzH3kgxS2i70TMcvX59w5q6G85g5G4sK9gDUr
+ mlHTz9NEA3aLze8tFb3SGYJrGufy4OX/EHmVMy1rEpXXQt7OXioCocMS5L19aXa3Ot2Qr0
+ Ak6u8+KCaDN76vnYbKXfCp+X5O/n8rCLw1EUXYGiQnCg1oPoEq0G27m7nVprSNT3CSrA9i
+ lSzzqfY0VFkxWYkSiPRXbvxMesQroXQ40vZKlbeTZrnEpjkSN349xw+NS8mhag==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=LImBOGzC
-Subject: Re: [Buildroot] [PATCH 02/11] package/mender-update-modules: fix
- license hash
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
+ header.a=rsa-sha256 header.s=dkim header.b=FmBCvLg1
+Subject: Re: [Buildroot] [PATCH 01/11] package/mender-grubenv: add busybox
+ fancy sync fixup
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -104,17 +102,15 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Adam,
-
-On Fri, Aug 07, 2026 at 02:55:01PM +0200, Adam Duskett wrote:
-> Fixes:
-> https://autobuild.buildroot.net/results/5afb0ab3362cb67014f470dd976449b756224566/
+On Fri, Aug 07, 2026 at 02:55:00PM +0200, Adam Duskett wrote:
+> This prevents multiple `sync: ignoring all arguments` warnings
+> when the `grub-mender-grubenv-set` script is called when a
+> system that uses busybox sync installs a mender update.
 > 
 > Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 
-Thanks for the patch. Which commit/version bump introduced this issue?
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-Thomas
 -- 
 Thomas Petazzoni, co-owner and CEO, Bootlin
 Embedded Linux and Kernel engineering and training
