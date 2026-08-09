@@ -1,136 +1,120 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14886C5AD4E
-	for <buildroot@archiver.kernel.org>; Sun,  9 Aug 2026 17:44:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21408C5AD4E
+	for <buildroot@archiver.kernel.org>; Sun,  9 Aug 2026 17:57:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1746E80D3C;
-	Sun,  9 Aug 2026 17:44:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BEF206066D;
+	Sun,  9 Aug 2026 17:57:35 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Sl8A-mQ7VTE6; Sun,  9 Aug 2026 17:57:34 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AB38660600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1786298254;
+	bh=jaiw6LBbvbAgJviswUth0ZcP+ruCi6x+4l6kDtQ+008=;
+	h=From:Date:In-Reply-To:Cc:To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=lQ2nTYcHgMBoC8e4MtoRhuXGoXawtkXHuuE6ZascflgAYpxzs2rQdDcWGKqwTACuB
+	 kh6X4+LIY6WMdqTHlnsJXvFRXgrD7N8lj8Di4cLFtsltjYCHY/hyTlIA5TNY6/O/+P
+	 AIuUVzdQGP6lC9iNwgzCB0llAljxjsuThzh3m32yY23AJBwKzIxvrLeTwd/uouKx74
+	 DIN1yS89bwouHipn1mV/OBhjeJT5aHD/jIuXkAO9EO1YTUNQbCCh7U12he2b4vyfWZ
+	 +2TF1cONmkSOmXM35wNuScH7+CHE68hxTntAz3VwIzHhB7VjYib1+iIo8cRySQHYE+
+	 I9q+mfQPmZoyQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id AB38660600;
+	Sun,  9 Aug 2026 17:57:34 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 97D7A40A
+ for <buildroot@buildroot.org>; Sun,  9 Aug 2026 17:57:33 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7DF9A80D00
+ for <buildroot@buildroot.org>; Sun,  9 Aug 2026 17:57:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZyMd6UO4YLwc; Sun,  9 Aug 2026 17:44:49 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 096B680CC3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786297489;
-	bh=HYUBxALlS8bd8xfUO+iCaTsIRNw+XFby0HEwuV53z0k=;
-	h=References:In-Reply-To:From:Date:To:Cc:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=YgC75gPznt1yd6nyThoHDQvSFzKmRUVAKc0CWuz+5lPtT33exv0CijOfQ53SWfHsz
-	 d42bhM8BLIat4WoYGeJNO7BlsUE770dS3zm/3JyoLuQYriOvOTT6MsX14A1EcUYCSG
-	 u9Du9wMw0/d5oJ4JMroPyqdlW9rrRGqW8bUKQrkLl/2eMGfmvOizN7yxxEfbnP80JP
-	 c6EGLrUZr7igasWyGVyiL7+RPTVikInwlcxkXWeNjTU2Kr24etPZiYI4cTatDnkMq9
-	 O91f3A+rSbVFk5lZYH83xZI9rFX3vbFrLM/RwvFXJkODqkHBDTJLKeK3XGc3G+gqH+
-	 1wuio13de9BLw==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 096B680CC3;
-	Sun,  9 Aug 2026 17:44:49 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 8A80C40A
- for <buildroot@buildroot.org>; Sun,  9 Aug 2026 17:44:47 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 70CEB4004B
- for <buildroot@buildroot.org>; Sun,  9 Aug 2026 17:44:47 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QKkHd9zticz6 for <buildroot@buildroot.org>;
- Sun,  9 Aug 2026 17:44:45 +0000 (UTC)
-Received-SPF: None (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::102b; helo=mail-pj1-x102b.google.com;
- envelope-from=j@j-ernberg.se; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 92C6340026
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 92C6340026
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com
- [IPv6:2607:f8b0:4864:20::102b])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 92C6340026
- for <buildroot@buildroot.org>; Sun,  9 Aug 2026 17:44:43 +0000 (UTC)
-Received: by mail-pj1-x102b.google.com with SMTP id
- 98e67ed59e1d1-38dfe910e9dso1117403a91.3
- for <buildroot@buildroot.org>; Sun, 09 Aug 2026 10:44:43 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1786297483; cv=none;
- d=google.com; s=arc-20260327;
- b=d3IB9arqYfJl1xqu9Bq04QLFQTtULYoNFSVGU7FdFHEaM8JzTotXhhjjjoFl4qgYso
- eOV1Qc3hTQb0+xQQEpEZ4Y5vEN1ynnpEQrpA1jJEUpGgtgZbVP8vsZUV1tJVeDuLrLuO
- PggvFVksavYTJL6Ir+v1rK4ocet3vEJYZm3kIHuwx7fnZOXWxlhD8nUHUBsG8iAVKvoE
- vWygxiU4FthsGlk8N9QH7eVs+EgB9Pq8RyiprM7bwChAG83LBFdCq3rF1Hn+TdTIhzke
- HBRA+tCL5IO3aphfJlrcweFLJ+wDEpeod/1RvrQ/11XEaVU7JGN7VgPCsBoGWPb24ONz
- kA1g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com;
- s=arc-20260327; 
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:dkim-signature;
- bh=8hGCDf2PsBdnrktZI+yyT7bwtWQWfqNLW0L7YrDrfxg=;
- fh=GJIYKAxGu+j1ubKhbaDgs0nkVYK43SKlCYTnngGfoDs=;
- b=IGEQVuGPFy++oty7JdpedVa9B48l66UDOYaOEj+B35fYdTNBUyu8WJkzSvy5beV8OE
- RLh8AkqHnsqWyFnN24NRPoYsWlpJW/cNNxHkLI8hHrSEWNJYiiMx7wnH01Ww3i7KlxXG
- OrX1k7T0YL3kO5bUxeHVZW7RT6Ula4g+fF/RwQpBkxkWdp7Mo1N6GCMYb3BQxZtpo7PS
- xbPc4pW+cOeehgwAO9rmB/C/dLcV5U08618ECzqRJ/GwviiH0mHTPkJuEjATBkY3jyfB
- WSVpGsUhyiAhpuvrM+P7VPW1lYNOTi3AbOIeiR15c8OzJRV9fgxwfXaAhxfDp16R0d4A
- ffRA==; darn=buildroot.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+ id FMV8jChcl_UV for <buildroot@buildroot.org>;
+ Sun,  9 Aug 2026 17:57:32 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::72c; helo=mail-qk1-x72c.google.com;
+ envelope-from=alseycmiller@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2560580CED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2560580CED
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com
+ [IPv6:2607:f8b0:4864:20::72c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2560580CED
+ for <buildroot@buildroot.org>; Sun,  9 Aug 2026 17:57:31 +0000 (UTC)
+Received: by mail-qk1-x72c.google.com with SMTP id
+ af79cd13be357-92e57a753f9so90814685a.2
+ for <buildroot@buildroot.org>; Sun, 09 Aug 2026 10:57:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1786297483; x=1786902283;
- h=content-transfer-encoding:content-type:cc:to:subject:message-id
- :date:from:in-reply-to:references:mime-version:x-gm-gg
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
- :content-type;
- bh=8hGCDf2PsBdnrktZI+yyT7bwtWQWfqNLW0L7YrDrfxg=;
- b=NbKuyOrR8kqdLGYvoIQxvf6+ZRBqVbHr724021Hbwk4D6HL/4mUJOXJJzZqjkOsyzE
- oU5vDK2J3NQxyH7AQY356TTDYqVyEeBestzxsarU0yE3iRWZUBxtXOUp8tdlFJtVM+Wq
- R/FiRQRFCztrRNmCSfLjP1PhBWjYifr+gSaguwd1Ug9NIZYg/Zn7OkUOm151MauwzznV
- /pP6jX4kqnhZxxW5vvdAxko/SU9jMo9J5E0tS9d4Y2moDLISUUN20rx7hYhAnwUJVOSw
- 2Wd/xPcCv929vsVyHTyWUhBngh2Rglkbd7pCFYrKtE40U4GGxUdPeyhcGCoje/koGqrQ
- dKdw==
-X-Gm-Message-State: AOJu0YyeAn1sn27cpeMG8OCMg/B/RbfzOEL9rW8/6E/MiOzep3g+fvYF
- lVwNoVQ13W3FFP0qtvh3D1pT0PvgjuuyaYNqBWQlvDueVpqKIOXAhQpRfiVB+KiUNz/ZAJ7LPHG
- 3u9RBmFJSUxYSw9Fj62towMsPJ0wJT2Q6pE2i1VoPBg==
-X-Gm-Gg: AR+sD115RTrcEYQ6dy1jWwiB48ZvMXQ2YNSQiP2U0uTfD8IpslmAw7vFusKTmzDXaVI
- 6YavWYYGHQFZh8VQ2hHPJ/dQjLS5mHFq+1dceLpYqCR2fPi/42MvQGsrgVafmF0V0HoBQSGnSGk
- x0u6CssU+RrDcspXIAwBd40viWNjvoGKcrg88wc1xtTvT/0cTWhL4SqHn6hs1i1+4u40qFuu7UT
- q9cFLK6p/JBYzTWZZaaBRwNHMQJlIvmzWdCJgxG8Zyw3ZyBCVdieomQk9Vxhovb0KOy+WDmKZxg
- Vq7/MQp7wECpjXvBBPccNFe9bezTpjREVAjIM7h0OJvtKspSa8Ata56FJ+WYcHE1/fbr/dfh3L7
- bwjaQJp2Tj32VCopQNAhEK+9kGgikAaGtr6sELvQtGg==
-X-Received: by 2002:a17:90a:da83:b0:38e:500:3975 with SMTP id
- 98e67ed59e1d1-3903c5d82a3mr36038648a91.18.1786297483272; Sun, 09 Aug 2026
- 10:44:43 -0700 (PDT)
-MIME-Version: 1.0
-References: <20260803140815.617446-1-aford173@gmail.com>
-In-Reply-To: <20260803140815.617446-1-aford173@gmail.com>
-From: John Ernberg <j@j-ernberg.se>
-Date: Sun, 9 Aug 2026 19:44:32 +0200
-X-Gm-Features: AUfX_mx2JLGDAJ-7xBIhFRSqRuwfn_ghQ_Uj88l1NZmxoaSJ2sxUqslFVF3nMwA
-Message-ID: <CAAHg4ZjzukzO4RMSkgjkzORsV5zS05mjq-En03ny8mpxUbsgeQ@mail.gmail.com>
-To: Adam Ford <aford173@gmail.com>
-Cc: buildroot@buildroot.org, Raphael Pavlidis <raphael.pavlidis@gmail.com>
+ d=1e100.net; s=20251104; t=1786298251; x=1786903051;
+ h=references:to:cc:in-reply-to:date:subject:mime-version:content-type
+ :message-id:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to:content-type;
+ bh=Ci8x+3vkQYa0CqpKduti4P4RpNosWQ6PizOw6B/JsT8=;
+ b=I/zApS+wzli9KuB5jjaW7M6fDUtXPfncoHftH0liNgSWHFdwteDlc5L0fVedcmclub
+ smK6h33ty8xuGw6E1cZugX00b2tYIJbQl+kwgBFxG21ymyg0x1rohdWWLDCSEe1IO60u
+ isCziXRW5BYGxGi6eKQz40wkY2b5FY4Gn3Mn1NIy63KzGCuSXSIY2NL+sehaV/viMx9e
+ zz2Gy6KBoWUl97PMLfEvv6TkhjmE7O3ZEWxkoT1Cboeno9xn4waGMWbZfmOI3UEjln+u
+ 9Umn0Twty6Qn5I1Q/Q0VwhwTVp7dTjEsN2sfYEzJCdKhU8wjcX3HSqdEbkuSwDoFizsj
+ 0RVw==
+X-Gm-Message-State: AOJu0YyJNWfNpMQv3FLaoJX2nj8DPkOPI8jVavP0HLiuCYep2nmOY5Zw
+ ua1/2ApjINdu1e++e0ZfaZtBJlMZd5o7p+1mVygOCnFUJjIhQya87UkY
+X-Gm-Gg: AR+sD12mUNp3FZVVmJSfmRQ4zc/VJSE+NXKqH9ZBieRBTukb4upqL7AEQ9sHNK4bTq/
+ en7do/QY7CRgdY3olX80EpsMBNak3B72aZOX9jU0RCEovbfL3In0PnqZ39KytUjXQ6nZZfGYO4x
+ 18xFnenrUGZ1/1ynM9GzO9HuaJ1Z8JqdvoxT7R9ZoS4/v8e3qLwyCs3fUnyBWP4xSdi4gr5Vs8T
+ m485JWTUjbghvzdV4bQ7PSIZaQyb2bGdfLNOf0X22p6f+oIVJKBcjHZq5sWiKo0ZwSLjvt/uXxJ
+ dFJvm9GICZqlAOsWgySGWZEof92hVusv2UMRd4q8QM/sL7/nFBNzlvYBdsK2aFWsNPAXnOlB8zP
+ +b60BWb9i/E9mJOTDBAAFtrDLTnQdT261kELSyiB+vUJftVswh6yEHHaEN6IXumEi5Dvm1Be9Uo
+ AGw4KdEx0EoAVZAxkWUG7oSmpxBLAHqn/g39s7k9znc5AQoh9LAsyRGUg3MfT+zl1O4IZCj+7w4
+ h1LLGBJuxX3
+X-Received: by 2002:a05:620a:a10f:b0:92e:bd39:9993 with SMTP id
+ af79cd13be357-936491af165mr3361138585a.31.1786298250539; 
+ Sun, 09 Aug 2026 10:57:30 -0700 (PDT)
+Received: from smtpclient.apple ([67.21.186.162])
+ by smtp.gmail.com with ESMTPSA id
+ af79cd13be357-9366e03aac7sm614442285a.10.2026.08.09.10.57.28
+ (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+ Sun, 09 Aug 2026 10:57:29 -0700 (PDT)
+From: Alsey Miller <alseycmiller@gmail.com>
+X-Google-Original-From: Alsey Miller <Alseycmiller@gmail.com>
+Message-Id: <85954D5C-F875-4074-A24D-182D3301E905@gmail.com>
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3864.600.51.1.1\))
+Date: Sun, 9 Aug 2026 13:57:18 -0400
+In-Reply-To: <anXQGyU9dHYRMR0I@windsurf>
+Cc: buildroot@buildroot.org
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20260807002109.2479876-1-alseycmiller@gmail.com>
+ <anXQGyU9dHYRMR0I@windsurf>
+X-Mailer: Apple Mail (2.3864.600.51.1.1)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=j-ernberg-se.20251104.gappssmtp.com; s=20251104; t=1786297483; x=1786902283;
- darn=buildroot.org; 
- h=content-transfer-encoding:content-type:cc:to:subject:message-id
- :date:from:in-reply-to:references:mime-version:from:to:cc:subject
- :date:message-id:reply-to:content-type;
- bh=8hGCDf2PsBdnrktZI+yyT7bwtWQWfqNLW0L7YrDrfxg=;
- b=EqTPf3kZ8JJrVu9qINotAdK8ATq9B6NguoHm6mHD5j5Fo38BilsmbR1WmqFAWZf+Gl
- I0n9zFY0Ds00x99OGFfRAMq9AaQJBSui/R+grUcXjiZJN+NlOJRCzwuwxvZDDuIixUo6
- 2L/BG1QYhsCGJ4W4aI3WlcuBpAQV84OBHKzuUmygoyIvFZgfX+rdFEthgsUYHrcEMmgx
- RF283/kQkKdDe3TOnQx7+9P50FAVJ0vruIq1kw65iTPd81hzzU3MFw+q8iC5lCfyl6Jd
- FRmFKelrjxpdMU/j6TUT3Iufx7GCAC84rRV7EAAULVLcLW2VL3QbWm/Q62vPvRmvz9mj
- h2cg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=j-ernberg.se
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=gmail.com; s=20251104; t=1786298251; x=1786903051; darn=buildroot.org;
+ h=references:to:cc:in-reply-to:date:subject:mime-version:content-type
+ :message-id:from:from:to:cc:subject:date:message-id:reply-to
+ :content-type;
+ bh=Ci8x+3vkQYa0CqpKduti4P4RpNosWQ6PizOw6B/JsT8=;
+ b=PoAEJuefCmV2J8O7WR7L2/URuQTnrcQR6fpOp/+Mk2jOBo7uuEvsgVKWLJO47zPQzM
+ YjaoU4/kvkpQwExihlsM7jO9RoyFkSwXMfgHMevzxTG8g/twpk+89ld2Q3DThReV8fPa
+ RWzy1ZbGe26L8v4wi8qxc5f0XnDXlmngCuHQ06hbMEfYyyvZra2siT1H6K23Tn6Ng6k+
+ OsBqI6SOTWnScnNCzBGPSeVOXwUZmECLg9cUL44tCnNAKLcyOYx4Qs+oLBRyIY6MCwOG
+ HUMCPP3rJ16RSLdIqd8qmlM146x/dUTu7z5TktC7dFMPpFbyEaNCfujJuz6rEzwYIL5i
+ EFWw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=j-ernberg-se.20251104.gappssmtp.com
- header.i=@j-ernberg-se.20251104.gappssmtp.com header.a=rsa-sha256
- header.s=20251104 header.b=EqTPf3kZ
-Subject: Re: [Buildroot] [PATCH V2] package/x11r7/xwayland: fix glamor DRI
- ordering dependency on mesa3d
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20251104 header.b=PoAEJuef
+Subject: Re: [Buildroot] [PATCH] package/libxkbcommon: build libxkbregistry
+ when libxml2 is available
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -142,38 +126,465 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============0052257132487933798=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgQWRhbSwKCkFwb2xvZ2llcyBmb3IgdGhlIGRlbGF5LgoKT24gTW9uLCBBdWcgMywgMjAyNiBh
-dCA0OjA44oCvUE0gQWRhbSBGb3JkIDxhZm9yZDE3M0BnbWFpbC5jb20+IHdyb3RlOgo+Cj4gWHdh
-eWxhbmQncyBnbGFtb3Igc3VwcG9ydCBlbmFibGVzIGEgRFJJIGNvbmZpZ3VyZSBjaGVjayB0aGF0
-IGxvb2tzIGZvcgo+IE1lc2EncyBkcmkucGMgaW4gc3RhZ2luZy4gV2l0aG91dCBhbiBleHBsaWNp
-dCBvcmRlcmluZyBkZXBlbmRlbmN5LCBhCj4gaGlnaGx5IHBhcmFsbGVsIGJ1aWxkIGNhbiBydW4g
-WHdheWxhbmQncyBjb25maWd1cmUgYmVmb3JlIG1lc2EzZCBpcwo+IGluc3RhbGxlZCwgZmFpbGlu
-ZyB3aXRoOgo+Cj4gICAgIEVSUk9SOiBEZXBlbmRlbmN5ICJkcmkiIG5vdCBmb3VuZAo+Cj4gU2lu
-Y2UgbWVzYTNkIGlzIHdoYXQgcHJvdmlkZXMgdGhlIERSSS9FR0wvR0JNIGJpdHMgZ2xhbW9yIHJl
-bGllcyBvbiwgZm9sZAo+IGl0IGludG8gdGhlIGdsYW1vciBjb25kaXRpb246IG9ubHkgZW5hYmxl
-IC1EZ2xhbW9yPXRydWUgYW5kIGFkZCBpdCB0byB0aGUKPiBkZXBlbmRlbmNpZXMgYWxvbmdzaWRl
-IGxpYmVwb3h5Lgo+Cj4gU2lnbmVkLW9mZi1ieTogQWRhbSBGb3JkIDxhZm9yZDE3M0BnbWFpbC5j
-b20+Cj4KPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS94MTFyNy94d2F5bGFuZC94d2F5bGFuZC5tayBi
-L3BhY2thZ2UveDExcjcveHdheWxhbmQveHdheWxhbmQubWsKPiBpbmRleCAwMmEyMWI5NmMxLi4z
-YmQ4N2E0NTUyIDEwMDY0NAo+IC0tLSBhL3BhY2thZ2UveDExcjcveHdheWxhbmQveHdheWxhbmQu
-bWsKPiArKysgYi9wYWNrYWdlL3gxMXI3L3h3YXlsYW5kL3h3YXlsYW5kLm1rCj4gQEAgLTMyLDcg
-KzMyLDcgQEAgWFdBWUxBTkRfQ09ORl9PUFRTID0gXAo+Cj4gIGlmZXEgKCQoQlIyX1BBQ0tBR0Vf
-SEFTX0xJQkVHTCkkKEJSMl9QQUNLQUdFX0xJQkVQT1hZKSx5eSkKPiAgWFdBWUxBTkRfQ09ORl9P
-UFRTICs9IC1EZ2xhbW9yPXRydWUKPiAtWFdBWUxBTkRfREVQRU5ERU5DSUVTICs9IGxpYmVwb3h5
-Cj4gK1hXQVlMQU5EX0RFUEVOREVOQ0lFUyArPSBsaWJlcG94eSBtZXNhM2QKPiAgZWxzZQo+ICBY
-V0FZTEFORF9DT05GX09QVFMgKz0gLURnbGFtb3I9ZmFsc2UKPiAgZW5kaWYKPiAtLQo+IDIuNTMu
-MAo+CgpkcmkgaXMgbmVlZGVkIGJ5IGdseCwgbm90IGdsYW1vciwgd2hlbiBjaGVja2luZyB0aGUg
-Y29kZS4gRGlkIHlvdSB0ZXN0CmJ1aWxkIHRoaXM/CgooaXQncyBlYXNpZXIgdG8gcmVwcm9kdWNl
-IHdpdGggYSBwZXItcGFja2FnZSBidWlsZCB3aGVyZSB0aGlzIGJlY29tZXMKYSBwZXJzaXN0ZW50
-IGZhaWx1cmUgcmF0aGVyIHRoYW4gcmFuZG9tKQoKSXQgc2hvdWxkIGdvIHRvIHRoZSBMSUJHTCBj
-aGVjayByYXRoZXIgdGhhbiB0aGUgTElCKkUqR0wgY2hlY2suIEJ1dCBhcwpJIG1lbnRpb25lZCBv
-biB2MSwgeW91IHByb2JhYmx5IG5lZWQgdG8gY2hlY2sgaG93IHRoaXMgd29ya3Mgd2hlbgpudmlk
-aWEtZHJpdmVyIGlzIHRoZSBMSUJHTCBwcm92aWRlci4KCkJlc3QgcmVnYXJkcyAvLyBKb2huIEVy
-bmJlcmcKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVp
-bGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3Rz
-LmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+
+--===============0052257132487933798==
+Content-Type: multipart/alternative;
+	boundary="Apple-Mail=_19BC22B5-E1D4-49C7-8EAC-2378BF99EE43"
+
+
+--Apple-Mail=_19BC22B5-E1D4-49C7-8EAC-2378BF99EE43
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain;
+	charset=utf-8
+
+Hi Thomas,
+
+Thanks for the review.
+
+> Shouldn't this be associated with a change in the wine package to =
+select BR2_PACKAGE_LIBXML2 when wayland support is enabled?
+
+Yes =E2=80=94 and it turns out wine needs a bit more than that: wine.mk =
+has no dependency on libxkbcommon at all, so wine + wayland without =
+libxkbcommon fails on the XKBCOMMON_LIBS term of the very same configure =
+test. v2 adds a second patch that selects both BR2_PACKAGE_LIBXKBCOMMON =
+and BR2_PACKAGE_LIBXML2 when BR2_PACKAGE_WAYLAND is enabled, and adds =
+libxkbcommon to WINE_DEPENDENCIES. libxml2 is only selected, not added =
+to WINE_DEPENDENCIES, since wine does not link against it =E2=80=94 it =
+only has to be in the configuration so libxkbcommon builds =
+libxkbregistry.
+
+> We would need your commit log to be extended to indicate since when =
+this problem exists.
+
+Done in v2. Short version: libxkbcommon has passed =
+-Denable-xkbregistry=3Dfalse since 1791bc30a5 (1.0.1, Buildroot =
+2020.11), wine's configure gained the XKBREGISTRY_LIBS term in its =
+Wayland test in wine 9.0 (upstream d64ea8e4a6c9, Nov 2023), and wine.mk =
+started passing --with-wayland in 7cb49e7712 ("package/wine: bump to =
+version 9.19", Oct 2024) =E2=80=94 which is what turns the notice into a =
+hard error.
+
+So the breakage dates from 2024.11. 2025.02.x is affected: it has wine =
+10.0 (XKBREGISTRY_LIBS check present), --with-wayland in wine.mk, and =
+libxkbcommon 1.9.2 with xkbregistry disabled. 2025.05.x and 2025.08.x =
+are in the same state. A backport to 2025.02.x is needed.
+
+Best regards,
+Alsey Coleman Miller IV
+
+> On Aug 7, 2026, at 8:33=E2=80=AFAM, Thomas Petazzoni =
+<thomas.petazzoni@bootlin.com> wrote:
+>=20
+> Hello Alsey,
+>=20
+> On Thu, Aug 06, 2026 at 08:21:09PM -0400, Alsey Coleman Miller wrote:
+>> libxkbregistry is the keyboard layout catalogue half of the library. =
+It
+>> parses the XML layout registry and so needs libxml2, which is =
+presumably
+>> why it was disabled unconditionally rather than wired to a =
+dependency.
+>>=20
+>> wine needs it. Its configure.ac requires XKBREGISTRY_LIBS alongside
+>> wayland-client, wayland-scanner, xkbcommon and linux/input.h before =
+it
+>> will build the Wayland driver, and wine.mk passes --with-wayland for =
+any
+>> build with BR2_PACKAGE_WAYLAND - which turns that notice into a hard
+>> error:
+>>=20
+>>  checking for wayland-client.h... yes
+>>  checking for wl_display_connect in -lwayland-client... yes
+>>  checking for wayland-scanner... .../host/bin/wayland-scanner
+>>  checking for xkb_context_new in -lxkbcommon... yes
+>>  checking for wayland-egl.h... yes
+>>  checking for wl_egl_window_create in -lwayland-egl... yes
+>>  configure: error: Wayland development files not found, the Wayland
+>>    driver won't be supported.
+>>  This is an error since --with-wayland was requested.
+>>=20
+>> Every other term of that test passes; only XKBREGISTRY_LIBS is empty, =
+so
+>> wine and wayland together could not be built on any architecture.
+>>=20
+>> Gated on BR2_PACKAGE_LIBXML2 rather than turned on outright, because
+>> meson.build takes dependency('libxml-2.0') unconditionally once
+>> enable-xkbregistry is set, so a target without libxml2 would fail to
+>> configure.
+>>=20
+>> Signed-off-by: Alsey Coleman Miller <alseycmiller@gmail.com>
+>=20
+> The patch obviously looks good and relevant. However, I have two
+> comments:
+>=20
+> - Shouldn't this be associated with a change in the wine package to
+>  select BR2_PACKAGE_LIBXML2 when wayland support is enabled?
+>=20
+> - We would need your commit log to be extended to indicate since when
+>  this problem exists. Indeed, since your change is a fix, we will
+>  have to figure out whether we need to backport it to our LTS branch
+>  2025.02.x. And for that, we need to understand if 2025.02.x is
+>  affected by the problem or not.
+>=20
+> Thanks a lot in advance for your feedback!
+>=20
+> Best regards,
+>=20
+> Thomas
+> --=20
+> Thomas Petazzoni, co-owner and CEO, Bootlin
+> Embedded Linux and Kernel engineering and training
+> https://bootlin.com <https://bootlin.com/>
+
+--Apple-Mail=_19BC22B5-E1D4-49C7-8EAC-2378BF99EE43
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/html;
+	charset=utf-8
+
+<html aria-label=3D"message body"><head><meta http-equiv=3D"content-type" =
+content=3D"text/html; charset=3Dutf-8"></head><body =
+style=3D"overflow-wrap: break-word; -webkit-nbsp-mode: space; =
+line-break: after-white-space;"><div>Hi =
+Thomas,</div><div><br></div><div>Thanks for the =
+review.</div><div><br></div><div>&gt; Shouldn't this be associated with =
+a change in the wine package to select BR2_PACKAGE_LIBXML2 when wayland =
+support is enabled?</div><div><br></div><div>Yes =E2=80=94 and it turns =
+out wine needs a bit more than that: wine.mk has no dependency on =
+libxkbcommon at all, so wine + wayland without libxkbcommon fails on the =
+XKBCOMMON_LIBS term of the very same configure test. v2 adds a second =
+patch that selects both BR2_PACKAGE_LIBXKBCOMMON and BR2_PACKAGE_LIBXML2 =
+when BR2_PACKAGE_WAYLAND is enabled, and adds libxkbcommon to =
+WINE_DEPENDENCIES. libxml2 is only selected, not added to =
+WINE_DEPENDENCIES, since wine does not link against it =E2=80=94 it only =
+has to be in the configuration so libxkbcommon builds =
+libxkbregistry.</div><div><br></div><div>&gt; We would need your commit =
+log to be extended to indicate since when this problem =
+exists.</div><div><br></div><div>Done in v2. Short version: libxkbcommon =
+has passed -Denable-xkbregistry=3Dfalse since 1791bc30a5 (1.0.1, =
+Buildroot 2020.11), wine's configure gained the XKBREGISTRY_LIBS term in =
+its Wayland test in wine 9.0 (upstream d64ea8e4a6c9, Nov 2023), and =
+wine.mk started passing --with-wayland in 7cb49e7712 ("package/wine: =
+bump to version 9.19", Oct 2024) =E2=80=94 which is what turns the =
+notice into a hard error.</div><div><br></div><div>So the breakage dates =
+from 2024.11. 2025.02.x is affected: it has wine 10.0 (XKBREGISTRY_LIBS =
+check present), --with-wayland in wine.mk, and libxkbcommon 1.9.2 with =
+xkbregistry disabled. 2025.05.x and 2025.08.x are in the same state. A =
+backport to 2025.02.x is needed.</div><div><br></div><div>Best =
+regards,</div><div>Alsey Coleman Miller IV</div><div><br><blockquote =
+type=3D"cite"><div>On Aug 7, 2026, at 8:33=E2=80=AFAM, Thomas Petazzoni =
+&lt;thomas.petazzoni@bootlin.com&gt; wrote:</div><br =
+class=3D"Apple-interchange-newline"><div><meta charset=3D"UTF-8"><span =
+style=3D"caret-color: rgb(0, 0, 0); font-family: Helvetica; font-size: =
+12px; font-style: normal; font-variant-caps: normal; font-weight: 400; =
+letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; =
+text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; =
+-webkit-text-stroke-width: 0px; text-decoration: none; float: none; =
+display: inline !important;">Hello Alsey,</span><br style=3D"caret-color: =
+rgb(0, 0, 0); font-family: Helvetica; font-size: 12px; font-style: =
+normal; font-variant-caps: normal; font-weight: 400; letter-spacing: =
+normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: =
+none; white-space: normal; widows: 2; word-spacing: 0px; =
+-webkit-text-stroke-width: 0px; text-decoration-line: none; =
+text-decoration-thickness: auto; text-decoration-style: solid;"><br =
+style=3D"caret-color: rgb(0, 0, 0); font-family: Helvetica; font-size: =
+12px; font-style: normal; font-variant-caps: normal; font-weight: 400; =
+letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; =
+text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; =
+-webkit-text-stroke-width: 0px; text-decoration-line: none; =
+text-decoration-thickness: auto; text-decoration-style: solid;"><span =
+style=3D"caret-color: rgb(0, 0, 0); font-family: Helvetica; font-size: =
+12px; font-style: normal; font-variant-caps: normal; font-weight: 400; =
+letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; =
+text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; =
+-webkit-text-stroke-width: 0px; text-decoration: none; float: none; =
+display: inline !important;">On Thu, Aug 06, 2026 at 08:21:09PM -0400, =
+Alsey Coleman Miller wrote:</span><br style=3D"caret-color: rgb(0, 0, =
+0); font-family: Helvetica; font-size: 12px; font-style: normal; =
+font-variant-caps: normal; font-weight: 400; letter-spacing: normal; =
+orphans: 2; text-align: start; text-indent: 0px; text-transform: none; =
+white-space: normal; widows: 2; word-spacing: 0px; =
+-webkit-text-stroke-width: 0px; text-decoration-line: none; =
+text-decoration-thickness: auto; text-decoration-style: =
+solid;"><blockquote type=3D"cite" style=3D"font-family: Helvetica; =
+font-size: 12px; font-style: normal; font-variant-caps: normal; =
+font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; =
+text-indent: 0px; text-transform: none; white-space: normal; widows: 2; =
+word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-line: =
+none; text-decoration-thickness: auto; text-decoration-style: =
+solid;">libxkbregistry is the keyboard layout catalogue half of the =
+library. It<br>parses the XML layout registry and so needs libxml2, =
+which is presumably<br>why it was disabled unconditionally rather than =
+wired to a dependency.<br><br>wine needs it. Its configure.ac requires =
+XKBREGISTRY_LIBS alongside<br>wayland-client, wayland-scanner, xkbcommon =
+and linux/input.h before it<br>will build the Wayland driver, and =
+wine.mk passes --with-wayland for any<br>build with BR2_PACKAGE_WAYLAND =
+- which turns that notice into a hard<br>error:<br><br>&nbsp;checking =
+for wayland-client.h... yes<br>&nbsp;checking for wl_display_connect in =
+-lwayland-client... yes<br>&nbsp;checking for wayland-scanner... =
+.../host/bin/wayland-scanner<br>&nbsp;checking for xkb_context_new in =
+-lxkbcommon... yes<br>&nbsp;checking for wayland-egl.h... =
+yes<br>&nbsp;checking for wl_egl_window_create in -lwayland-egl... =
+yes<br>&nbsp;configure: error: Wayland development files not found, the =
+Wayland<br>&nbsp;&nbsp;&nbsp;driver won't be supported.<br>&nbsp;This is =
+an error since --with-wayland was requested.<br><br>Every other term of =
+that test passes; only XKBREGISTRY_LIBS is empty, so<br>wine and wayland =
+together could not be built on any architecture.<br><br>Gated on =
+BR2_PACKAGE_LIBXML2 rather than turned on outright, =
+because<br>meson.build takes dependency('libxml-2.0') unconditionally =
+once<br>enable-xkbregistry is set, so a target without libxml2 would =
+fail to<br>configure.<br><br>Signed-off-by: Alsey Coleman Miller =
+&lt;alseycmiller@gmail.com&gt;<br></blockquote><br style=3D"caret-color: =
+rgb(0, 0, 0); font-family: Helvetica; font-size: 12px; font-style: =
+normal; font-variant-caps: normal; font-weight: 400; letter-spacing: =
+normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: =
+none; white-space: normal; widows: 2; word-spacing: 0px; =
+-webkit-text-stroke-width: 0px; text-decoration-line: none; =
+text-decoration-thickness: auto; text-decoration-style: solid;"><span =
+style=3D"caret-color: rgb(0, 0, 0); font-family: Helvetica; font-size: =
+12px; font-style: normal; font-variant-caps: normal; font-weight: 400; =
+letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; =
+text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; =
+-webkit-text-stroke-width: 0px; text-decoration: none; float: none; =
+display: inline !important;">The patch obviously looks good and =
+relevant. However, I have two</span><br style=3D"caret-color: rgb(0, 0, =
+0); font-family: Helvetica; font-size: 12px; font-style: normal; =
+font-variant-caps: normal; font-weight: 400; letter-spacing: normal; =
+orphans: 2; text-align: start; text-indent: 0px; text-transform: none; =
+white-space: normal; widows: 2; word-spacing: 0px; =
+-webkit-text-stroke-width: 0px; text-decoration-line: none; =
+text-decoration-thickness: auto; text-decoration-style: solid;"><span =
+style=3D"caret-color: rgb(0, 0, 0); font-family: Helvetica; font-size: =
+12px; font-style: normal; font-variant-caps: normal; font-weight: 400; =
+letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; =
+text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; =
+-webkit-text-stroke-width: 0px; text-decoration: none; float: none; =
+display: inline !important;">comments:</span><br style=3D"caret-color: =
+rgb(0, 0, 0); font-family: Helvetica; font-size: 12px; font-style: =
+normal; font-variant-caps: normal; font-weight: 400; letter-spacing: =
+normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: =
+none; white-space: normal; widows: 2; word-spacing: 0px; =
+-webkit-text-stroke-width: 0px; text-decoration-line: none; =
+text-decoration-thickness: auto; text-decoration-style: solid;"><br =
+style=3D"caret-color: rgb(0, 0, 0); font-family: Helvetica; font-size: =
+12px; font-style: normal; font-variant-caps: normal; font-weight: 400; =
+letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; =
+text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; =
+-webkit-text-stroke-width: 0px; text-decoration-line: none; =
+text-decoration-thickness: auto; text-decoration-style: solid;"><span =
+style=3D"caret-color: rgb(0, 0, 0); font-family: Helvetica; font-size: =
+12px; font-style: normal; font-variant-caps: normal; font-weight: 400; =
+letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; =
+text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; =
+-webkit-text-stroke-width: 0px; text-decoration: none; float: none; =
+display: inline !important;">- Shouldn't this be associated with a =
+change in the wine package to</span><br style=3D"caret-color: rgb(0, 0, =
+0); font-family: Helvetica; font-size: 12px; font-style: normal; =
+font-variant-caps: normal; font-weight: 400; letter-spacing: normal; =
+orphans: 2; text-align: start; text-indent: 0px; text-transform: none; =
+white-space: normal; widows: 2; word-spacing: 0px; =
+-webkit-text-stroke-width: 0px; text-decoration-line: none; =
+text-decoration-thickness: auto; text-decoration-style: solid;"><span =
+style=3D"caret-color: rgb(0, 0, 0); font-family: Helvetica; font-size: =
+12px; font-style: normal; font-variant-caps: normal; font-weight: 400; =
+letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; =
+text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; =
+-webkit-text-stroke-width: 0px; text-decoration: none; float: none; =
+display: inline !important;">&nbsp;select BR2_PACKAGE_LIBXML2 when =
+wayland support is enabled?</span><br style=3D"caret-color: rgb(0, 0, =
+0); font-family: Helvetica; font-size: 12px; font-style: normal; =
+font-variant-caps: normal; font-weight: 400; letter-spacing: normal; =
+orphans: 2; text-align: start; text-indent: 0px; text-transform: none; =
+white-space: normal; widows: 2; word-spacing: 0px; =
+-webkit-text-stroke-width: 0px; text-decoration-line: none; =
+text-decoration-thickness: auto; text-decoration-style: solid;"><br =
+style=3D"caret-color: rgb(0, 0, 0); font-family: Helvetica; font-size: =
+12px; font-style: normal; font-variant-caps: normal; font-weight: 400; =
+letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; =
+text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; =
+-webkit-text-stroke-width: 0px; text-decoration-line: none; =
+text-decoration-thickness: auto; text-decoration-style: solid;"><span =
+style=3D"caret-color: rgb(0, 0, 0); font-family: Helvetica; font-size: =
+12px; font-style: normal; font-variant-caps: normal; font-weight: 400; =
+letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; =
+text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; =
+-webkit-text-stroke-width: 0px; text-decoration: none; float: none; =
+display: inline !important;">- We would need your commit log to be =
+extended to indicate since when</span><br style=3D"caret-color: rgb(0, =
+0, 0); font-family: Helvetica; font-size: 12px; font-style: normal; =
+font-variant-caps: normal; font-weight: 400; letter-spacing: normal; =
+orphans: 2; text-align: start; text-indent: 0px; text-transform: none; =
+white-space: normal; widows: 2; word-spacing: 0px; =
+-webkit-text-stroke-width: 0px; text-decoration-line: none; =
+text-decoration-thickness: auto; text-decoration-style: solid;"><span =
+style=3D"caret-color: rgb(0, 0, 0); font-family: Helvetica; font-size: =
+12px; font-style: normal; font-variant-caps: normal; font-weight: 400; =
+letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; =
+text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; =
+-webkit-text-stroke-width: 0px; text-decoration: none; float: none; =
+display: inline !important;">&nbsp;this problem exists. Indeed, since =
+your change is a fix, we will</span><br style=3D"caret-color: rgb(0, 0, =
+0); font-family: Helvetica; font-size: 12px; font-style: normal; =
+font-variant-caps: normal; font-weight: 400; letter-spacing: normal; =
+orphans: 2; text-align: start; text-indent: 0px; text-transform: none; =
+white-space: normal; widows: 2; word-spacing: 0px; =
+-webkit-text-stroke-width: 0px; text-decoration-line: none; =
+text-decoration-thickness: auto; text-decoration-style: solid;"><span =
+style=3D"caret-color: rgb(0, 0, 0); font-family: Helvetica; font-size: =
+12px; font-style: normal; font-variant-caps: normal; font-weight: 400; =
+letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; =
+text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; =
+-webkit-text-stroke-width: 0px; text-decoration: none; float: none; =
+display: inline !important;">&nbsp;have to figure out whether we need to =
+backport it to our LTS branch</span><br style=3D"caret-color: rgb(0, 0, =
+0); font-family: Helvetica; font-size: 12px; font-style: normal; =
+font-variant-caps: normal; font-weight: 400; letter-spacing: normal; =
+orphans: 2; text-align: start; text-indent: 0px; text-transform: none; =
+white-space: normal; widows: 2; word-spacing: 0px; =
+-webkit-text-stroke-width: 0px; text-decoration-line: none; =
+text-decoration-thickness: auto; text-decoration-style: solid;"><span =
+style=3D"caret-color: rgb(0, 0, 0); font-family: Helvetica; font-size: =
+12px; font-style: normal; font-variant-caps: normal; font-weight: 400; =
+letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; =
+text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; =
+-webkit-text-stroke-width: 0px; text-decoration: none; float: none; =
+display: inline !important;">&nbsp;2025.02.x. And for that, we need to =
+understand if 2025.02.x is</span><br style=3D"caret-color: rgb(0, 0, 0); =
+font-family: Helvetica; font-size: 12px; font-style: normal; =
+font-variant-caps: normal; font-weight: 400; letter-spacing: normal; =
+orphans: 2; text-align: start; text-indent: 0px; text-transform: none; =
+white-space: normal; widows: 2; word-spacing: 0px; =
+-webkit-text-stroke-width: 0px; text-decoration-line: none; =
+text-decoration-thickness: auto; text-decoration-style: solid;"><span =
+style=3D"caret-color: rgb(0, 0, 0); font-family: Helvetica; font-size: =
+12px; font-style: normal; font-variant-caps: normal; font-weight: 400; =
+letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; =
+text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; =
+-webkit-text-stroke-width: 0px; text-decoration: none; float: none; =
+display: inline !important;">&nbsp;affected by the problem or =
+not.</span><br style=3D"caret-color: rgb(0, 0, 0); font-family: =
+Helvetica; font-size: 12px; font-style: normal; font-variant-caps: =
+normal; font-weight: 400; letter-spacing: normal; orphans: 2; =
+text-align: start; text-indent: 0px; text-transform: none; white-space: =
+normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; =
+text-decoration-line: none; text-decoration-thickness: auto; =
+text-decoration-style: solid;"><br style=3D"caret-color: rgb(0, 0, 0); =
+font-family: Helvetica; font-size: 12px; font-style: normal; =
+font-variant-caps: normal; font-weight: 400; letter-spacing: normal; =
+orphans: 2; text-align: start; text-indent: 0px; text-transform: none; =
+white-space: normal; widows: 2; word-spacing: 0px; =
+-webkit-text-stroke-width: 0px; text-decoration-line: none; =
+text-decoration-thickness: auto; text-decoration-style: solid;"><span =
+style=3D"caret-color: rgb(0, 0, 0); font-family: Helvetica; font-size: =
+12px; font-style: normal; font-variant-caps: normal; font-weight: 400; =
+letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; =
+text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; =
+-webkit-text-stroke-width: 0px; text-decoration: none; float: none; =
+display: inline !important;">Thanks a lot in advance for your =
+feedback!</span><br style=3D"caret-color: rgb(0, 0, 0); font-family: =
+Helvetica; font-size: 12px; font-style: normal; font-variant-caps: =
+normal; font-weight: 400; letter-spacing: normal; orphans: 2; =
+text-align: start; text-indent: 0px; text-transform: none; white-space: =
+normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; =
+text-decoration-line: none; text-decoration-thickness: auto; =
+text-decoration-style: solid;"><br style=3D"caret-color: rgb(0, 0, 0); =
+font-family: Helvetica; font-size: 12px; font-style: normal; =
+font-variant-caps: normal; font-weight: 400; letter-spacing: normal; =
+orphans: 2; text-align: start; text-indent: 0px; text-transform: none; =
+white-space: normal; widows: 2; word-spacing: 0px; =
+-webkit-text-stroke-width: 0px; text-decoration-line: none; =
+text-decoration-thickness: auto; text-decoration-style: solid;"><span =
+style=3D"caret-color: rgb(0, 0, 0); font-family: Helvetica; font-size: =
+12px; font-style: normal; font-variant-caps: normal; font-weight: 400; =
+letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; =
+text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; =
+-webkit-text-stroke-width: 0px; text-decoration: none; float: none; =
+display: inline !important;">Best regards,</span><br style=3D"caret-color:=
+ rgb(0, 0, 0); font-family: Helvetica; font-size: 12px; font-style: =
+normal; font-variant-caps: normal; font-weight: 400; letter-spacing: =
+normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: =
+none; white-space: normal; widows: 2; word-spacing: 0px; =
+-webkit-text-stroke-width: 0px; text-decoration-line: none; =
+text-decoration-thickness: auto; text-decoration-style: solid;"><br =
+style=3D"caret-color: rgb(0, 0, 0); font-family: Helvetica; font-size: =
+12px; font-style: normal; font-variant-caps: normal; font-weight: 400; =
+letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; =
+text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; =
+-webkit-text-stroke-width: 0px; text-decoration-line: none; =
+text-decoration-thickness: auto; text-decoration-style: solid;"><span =
+style=3D"caret-color: rgb(0, 0, 0); font-family: Helvetica; font-size: =
+12px; font-style: normal; font-variant-caps: normal; font-weight: 400; =
+letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; =
+text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; =
+-webkit-text-stroke-width: 0px; text-decoration: none; float: none; =
+display: inline !important;">Thomas</span><br style=3D"caret-color: =
+rgb(0, 0, 0); font-family: Helvetica; font-size: 12px; font-style: =
+normal; font-variant-caps: normal; font-weight: 400; letter-spacing: =
+normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: =
+none; white-space: normal; widows: 2; word-spacing: 0px; =
+-webkit-text-stroke-width: 0px; text-decoration-line: none; =
+text-decoration-thickness: auto; text-decoration-style: solid;"><span =
+style=3D"caret-color: rgb(0, 0, 0); font-family: Helvetica; font-size: =
+12px; font-style: normal; font-variant-caps: normal; font-weight: 400; =
+letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; =
+text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; =
+-webkit-text-stroke-width: 0px; text-decoration: none; float: none; =
+display: inline !important;">--<span =
+class=3D"Apple-converted-space">&nbsp;</span></span><br =
+style=3D"caret-color: rgb(0, 0, 0); font-family: Helvetica; font-size: =
+12px; font-style: normal; font-variant-caps: normal; font-weight: 400; =
+letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; =
+text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; =
+-webkit-text-stroke-width: 0px; text-decoration-line: none; =
+text-decoration-thickness: auto; text-decoration-style: solid;"><span =
+style=3D"caret-color: rgb(0, 0, 0); font-family: Helvetica; font-size: =
+12px; font-style: normal; font-variant-caps: normal; font-weight: 400; =
+letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; =
+text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; =
+-webkit-text-stroke-width: 0px; text-decoration: none; float: none; =
+display: inline !important;">Thomas Petazzoni, co-owner and CEO, =
+Bootlin</span><br style=3D"caret-color: rgb(0, 0, 0); font-family: =
+Helvetica; font-size: 12px; font-style: normal; font-variant-caps: =
+normal; font-weight: 400; letter-spacing: normal; orphans: 2; =
+text-align: start; text-indent: 0px; text-transform: none; white-space: =
+normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; =
+text-decoration-line: none; text-decoration-thickness: auto; =
+text-decoration-style: solid;"><span style=3D"caret-color: rgb(0, 0, 0); =
+font-family: Helvetica; font-size: 12px; font-style: normal; =
+font-variant-caps: normal; font-weight: 400; letter-spacing: normal; =
+orphans: 2; text-align: start; text-indent: 0px; text-transform: none; =
+white-space: normal; widows: 2; word-spacing: 0px; =
+-webkit-text-stroke-width: 0px; text-decoration: none; float: none; =
+display: inline !important;">Embedded Linux and Kernel engineering and =
+training</span><br style=3D"caret-color: rgb(0, 0, 0); font-family: =
+Helvetica; font-size: 12px; font-style: normal; font-variant-caps: =
+normal; font-weight: 400; letter-spacing: normal; orphans: 2; =
+text-align: start; text-indent: 0px; text-transform: none; white-space: =
+normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; =
+text-decoration-line: none; text-decoration-thickness: auto; =
+text-decoration-style: solid;"><a href=3D"https://bootlin.com/" =
+style=3D"font-family: Helvetica; font-size: 12px; font-style: normal; =
+font-variant-caps: normal; font-weight: 400; letter-spacing: normal; =
+orphans: 2; text-align: start; text-indent: 0px; text-transform: none; =
+white-space: normal; widows: 2; word-spacing: 0px; =
+-webkit-text-stroke-width: =
+0px;">https://bootlin.com</a></div></blockquote></div><br></body></html>=
+
+--Apple-Mail=_19BC22B5-E1D4-49C7-8EAC-2378BF99EE43--
+
+--===============0052257132487933798==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0052257132487933798==--
