@@ -1,91 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24FD1C5AD7B
-	for <buildroot@archiver.kernel.org>; Mon, 10 Aug 2026 19:15:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AACD5C5B567
+	for <buildroot@archiver.kernel.org>; Mon, 10 Aug 2026 19:23:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3B62D60759;
-	Mon, 10 Aug 2026 19:15:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 72D2980BDB;
+	Mon, 10 Aug 2026 19:23:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JJqaJIqLM7CP; Mon, 10 Aug 2026 19:15:03 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lyIJVNP-w8Qt; Mon, 10 Aug 2026 19:23:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7757E6073A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8ABDC80F0D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786389303;
-	bh=xkYGSYSUkgc47issW9EGJ0kRKmhOSnD+x8G+1B3VvjY=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=GDFr4wWAu5Ot3yt/e1edABLCL/BlrCeJajTfBJLs8z0jcVUiY77e072dsIU9mbuF6
-	 MTidVp5YFUfDyFz9mSubz80IBpuzFI97bKVgfRw8kjxtI32MXJIXNhN50493MenWCX
-	 eJG5CzHFzxziVCGwvwWTPp+6AJRNCaGBB84JHulbmYx221ugBVq4TywMGMiyIxpeym
-	 18/csZMnUch0C8nDs+ABTixyjZcBfQN4YY8VKHSoIBATKxcIEgscYvJi80VkmtaeEf
-	 hWHSeqtA7D34+NXKfb8X5aQM2111o62QkTlDi3xQgoT1DwiUE9l74Aux2DYjWov7uO
-	 vbekv7x6O/CMg==
+	s=default; t=1786389805;
+	bh=8wpYdqMllPkPXoPRHnMg5/SgIC38jAxEG6016z2sc2s=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=SI4qU1lXWixwlvb/4Mc07OhGIuP3kiJ3nPNMi+W6iuV/DxUpcIAdMvkeRGpQ08tzo
+	 FCGLDI0+CyiM+OkKVIMSnSRW3nEZiZ1V7bLaiN5iiKZMmlg1IZgHy6dSb1BunwbfP9
+	 zISpXFdRJVyROYPsccVmR5fv7+c0V+oIbxONec/8JBkWeuIVTbJGjNoNr9UmQf5/i1
+	 iVTP4+laFCbz1QxrTHTa+yL9993yDk2SXZVEiZOe3IPzFFMXTEfOdsdSD4R0jP1B09
+	 615UAAN8MDTl5KHY4+7xkWbJ7Y/2UQPCUS4as5rOWEpF6LRiaB5HOVq3GbpTUkZMyP
+	 U8fRDwiNyL91w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7757E6073A;
-	Mon, 10 Aug 2026 19:15:03 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1898024E
- for <buildroot@buildroot.org>; Mon, 10 Aug 2026 19:15:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8ABDC80F0D;
+	Mon, 10 Aug 2026 19:23:25 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2909910E
+ for <buildroot@buildroot.org>; Mon, 10 Aug 2026 19:23:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CFFF640670
- for <buildroot@buildroot.org>; Mon, 10 Aug 2026 19:15:01 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1B2F34019A
+ for <buildroot@buildroot.org>; Mon, 10 Aug 2026 19:23:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9AzYiQH-guBe for <buildroot@buildroot.org>;
- Mon, 10 Aug 2026 19:15:01 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org AA70D4066D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AA70D4066D
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp4.osuosl.org (Postfix) with ESMTPS id AA70D4066D
- for <buildroot@buildroot.org>; Mon, 10 Aug 2026 19:15:00 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id 4CBB219F5A5;
- Mon, 10 Aug 2026 21:14:49 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Mon, 10 Aug 2026 21:14:49 +0200
-MIME-Version: 1.0
-Date: Mon, 10 Aug 2026 21:14:49 +0200
-To: Neal Frager <neal.frager@amd.com>
-Cc: buildroot@buildroot.org, ibai.erkiaga-elorza@amd.com,
- luca.ceresoli@bootlin.com, brandon.maier@collins.com,
- thomas.petazzoni@bootlin.com, romain.naour@smile.fr, michal.simek@amd.com,
- romain.naour@gmail.com
-In-Reply-To: <20260810051223.4149414-1-neal.frager@amd.com>
-References: <20260810051223.4149414-1-neal.frager@amd.com>
-User-Agent: Webmail Free/1.6.17
-Message-ID: <280ad54aa88d18ce3424bbf6a3c1b4cd@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1786389298;
- bh=tNGAacwR00F/txab/CCql6y8pzrvyactU53W9CGti3g=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=Qfq/awjUqIedZqRmdKeQY/oRIAE+brds+Dptz1VL4e/FWFC6C29esa4jeloQNDVAE
- FGq3RKIPBdvfiHyvjZ8wb71XK3ko1ESYOQxxsmrTJj0jgwG7cCpI7bStfme2YdADOz
- bGMRj7A2lp0SDaUAkkbSO/42VdVdB2FE/7Isxpz7f/GkI0rsmipWTYL5D9o40gCWhB
- 6JT78haLGvIDizypjix1FX1qNvTC5xGw1uOOW3HEShVufodrI3eqVWmGfsNA9L3I4F
- wUIZCV+hr7KRwbYMmUOV99I9VLBjNb/RP+sX2BzYeUwkD8tkixEsjkZBcdSokDazKZ
- Y2Lw4ea1s9CEA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=Qfq/awjU
-Subject: Re: [Buildroot] [PATCH v1 1/1] package/gcc-bare-metal: bump to gcc
- 16.2.0
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vSbYTlL91XCd for <buildroot@buildroot.org>;
+ Mon, 10 Aug 2026 19:23:23 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 682C240175
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 682C240175
+ for <buildroot@buildroot.org>; Mon, 10 Aug 2026 19:23:23 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 139DB8D313; Mon, 10 Aug 2026 19:22:35 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 10 Aug 2026 21:15:56 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 0d372ec29a7d527237b4e638aeb6d3ff42f0bc5a
+X-Git-Newrev: b4532b924aa3822d748f8977faf39605259dda9d
+X-Patchwork-Hint: ignore
+Message-Id: <20260810192235.139DB8D313@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/qbee-agent: bump version to 2026.27
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -99,25 +70,62 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============8528900969445214557=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 10/08/2026 07:12, Neal Frager via buildroot wrote:
-> https://gcc.gnu.org/pipermail/gcc-announce/2026/000193.html
-> 
-> GCC 16.2 is a bug-fix release from the GCC 16 branch
-> containing important fixes for regressions and serious bugs in
-> GCC 16.1 with more than 102 bugs fixed since the previous release.
-> 
-> For the list of bugs fixed in this version, see:
-> https://gcc.gnu.org/gcc-16/changes.html#16.2
-> 
-> Signed-off-by: Neal Frager <neal.frager@amd.com>
+--===============8528900969445214557==
+Content-Type: text/plain
 
-Applied to master, thanks.
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/b4532b924aa3822d748f8977faf39605259dda9d
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+
+Signed-off-by: Jon Henrik Bjørnstad <jonhenrik@qbee.io>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/qbee-agent/qbee-agent.hash | 2 +-
+ package/qbee-agent/qbee-agent.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/qbee-agent/qbee-agent.hash b/package/qbee-agent/qbee-agent.hash
+index 2f7da1434f..02109f274a 100644
+--- a/package/qbee-agent/qbee-agent.hash
++++ b/package/qbee-agent/qbee-agent.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  de72c9754f46d63c3d6dd286e4fa967c4b592c2679b172ff8ce9e7e6ae13a4d4  qbee-agent-2026.19-go2.tar.gz
++sha256  ade55d580115cb1c81b0e35766cbba2b3718f45e9b4262dd795f5c964bb2ca2b  qbee-agent-2026.27-go2.tar.gz
+ sha256  02d07d96be99eb042b01ba650079a440ce26a78c5e0e1e8060c33a8c9e200404  LICENSE
+diff --git a/package/qbee-agent/qbee-agent.mk b/package/qbee-agent/qbee-agent.mk
+index ccbf7cab40..93c6f501a4 100644
+--- a/package/qbee-agent/qbee-agent.mk
++++ b/package/qbee-agent/qbee-agent.mk
+@@ -5,12 +5,12 @@
+ ################################################################################
+ 
+ # keep QBEE_AGENT_COMMIT_ID in sync when updating
+-QBEE_AGENT_VERSION = 2026.19
++QBEE_AGENT_VERSION = 2026.27
+ QBEE_AGENT_SITE = $(call github,qbee-io,qbee-agent,$(QBEE_AGENT_VERSION))
+ QBEE_AGENT_LICENSE = Apache-2.0
+ QBEE_AGENT_LICENSE_FILES = LICENSE
+ 
+-QBEE_AGENT_COMMIT_ID = 99a0b5a56bb0ae2d7dec29abcf25d29be16f2c36
++QBEE_AGENT_COMMIT_ID = 6710abd49906d00ba6c4e446f6436faab14fb5d9
+ 
+ QBEE_AGENT_GOMOD = go.qbee.io/agent
+ 
+
+--===============8528900969445214557==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8528900969445214557==--
