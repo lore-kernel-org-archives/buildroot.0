@@ -4,113 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6229C5B567
-	for <buildroot@archiver.kernel.org>; Mon, 10 Aug 2026 18:14:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17CE7C5AD7B
+	for <buildroot@archiver.kernel.org>; Mon, 10 Aug 2026 18:32:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BF33640696;
-	Mon, 10 Aug 2026 18:14:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D854440692;
+	Mon, 10 Aug 2026 18:32:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DPlYiPXAlcHv; Mon, 10 Aug 2026 18:14:32 +0000 (UTC)
+ id 7kMXO4a2Wwyv; Mon, 10 Aug 2026 18:32:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2470D40685
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A0B2A40688
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786385672;
-	bh=sAPyRV0qC8KvNVGVLNDje3/66c0PYn5T1unud3wLlQg=;
-	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	s=default; t=1786386722;
+	bh=y37MGeFiiV1ngeaOVhEXXJQ3vT1AAiW7DRRxXu76R0I=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=oYXKHwTdQSMx17efASJcegV1QChguMwilTxT7jT9L8JFlMemg6Ye3ca7zfOmlA/g1
-	 apUqtMrBnVmKhM1ieAMcI64QuGurTLu0nUVQe/5bW7SmlS8ui4zVUSA8Fuhw16TaKc
-	 snKdvISPyYS3kUWtzS3u1YzyT4efgkpK+GwslX1tVUtd+BsxgNzfUDRgzHCzgPsj4V
-	 hf2CjlIHClakzgnXgtLK03qdDk/BWUSmjy6IatXptXZq2O/Sy0UNMP9+PKHd4/oFYr
-	 WiWhmvRLpa20UKkeC7Q6aude5fvyC1qEWJYdmluztddH754N1HIkgyb/qVsEDrL+uc
-	 2BTk00BcMw1pw==
+	 From:Reply-To:From;
+	b=WIERb6Va29CNjc2Sy+OwiGNJAJqVUufvjE1Cz+/p8m4u9YL+fUmbcuJ5kkmMrciQx
+	 gXEf4vhyFAeHXFdF4K7TqfJ5gRdHwSlV2Qs2q61PSVY0vj1LOtZos/5ybzLMjHc7TF
+	 Sv9AaMpq00Na+AOWCVhlJI7ntJLzNd+DV7+e0ZghHdE13W9zx1EkmxIRkkOJjyAN2n
+	 M2vSUIc1CY7rs9RIb6rXuytlC3PhhuMguVnaVqkcUW1fVz6yr72/wi5t5vV+YbBY1h
+	 s05fnRk8LWSw9+6wedGceErAkgnSx8OAbMiqYbmJnOhpZYA5e0je2/zuXVjZz1SJhR
+	 YBM9UsI2S+R7Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2470D40685;
-	Mon, 10 Aug 2026 18:14:32 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id B937810E
- for <buildroot@buildroot.org>; Mon, 10 Aug 2026 18:14:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A0B2A40688;
+	Mon, 10 Aug 2026 18:32:02 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 07253218
+ for <buildroot@buildroot.org>; Mon, 10 Aug 2026 18:32:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A2CE660748
- for <buildroot@buildroot.org>; Mon, 10 Aug 2026 18:14:30 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0501480EFE
+ for <buildroot@buildroot.org>; Mon, 10 Aug 2026 18:32:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GqFxB5v2NFBg for <buildroot@buildroot.org>;
- Mon, 10 Aug 2026 18:14:30 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::533; helo=mail-pg1-x533.google.com;
- envelope-from=chakrabortyshubham66@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org CF03660746
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CF03660746
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com
- [IPv6:2607:f8b0:4864:20::533])
- by smtp3.osuosl.org (Postfix) with ESMTPS id CF03660746
- for <buildroot@buildroot.org>; Mon, 10 Aug 2026 18:14:29 +0000 (UTC)
-Received: by mail-pg1-x533.google.com with SMTP id
- 41be03b00d2f7-c998fd549a8so1646729a12.2
- for <buildroot@buildroot.org>; Mon, 10 Aug 2026 11:14:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1786385669; x=1786990469;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to:content-type;
- bh=5Bwgz8k/DNRwMcIyQBctzRChzOaKQKA4qs6Rm80VIFY=;
- b=P8sYXKc4V8jrRQyAwGL+khsIUMzRy8wtiap9OZREbTIxWY1hgbz6wLUpM5CKfE7mz+
- CMjqhxRI4OkuXeuYXV3FDjOwS1v0/lZISJjNb7RaP9oYS7vsOIs8HH2oZEL8wuzGNuQ1
- I9jHrhl/Oldu2Ck2WvUabL01HgLdsma6Rl1Ma/rLzOmC9N3mwQYckaWzHl0yJNhVAk6o
- 9QZVpTRPRPLafST5pNKod+bfOPTh4asj4n3ADBFp9YnlWW7XqdZmx+AxB4xpLeeRZ34x
- osvISNWyyPPJoYBwwqluNS7VQUQV6tntBIiX86cdiEoGQeWzJTIfwnegu5+H52SLcZK8
- j9gw==
-X-Gm-Message-State: AOJu0Yxua0mQ89mHcDp4S2PzFxDikIzSmNl7wPaijJ7U3mrHNhn+GxRf
- Ko6JKKDr54j9UvUUpMDSJ/sGl9vJgkVZkobPF3UnCDO4Veu5PaaEOiYIFihxO3KH
-X-Gm-Gg: AR+sD10dh67P4yn0/M5ni83zrtbqiN6f5ewYNmShv2SjMoLSVhqYy/M9feexVtAEtGF
- g2pKD+t8ArNSCL0n4WI9Se4FA/GmX+E9UuJ2oquSDyHY8yBgmOm8mDyvAnacIVBiSrfc49kXPuk
- nNQ4KKHD43tKbL4ZuxaY5KIoPwd+IfXqmQ3wqY52588qlW5Ikb9NYMil6i2+DJsQicv0v38U/h1
- QYBgcqj4qIf26/vTxPEa/TwI+/OHtwK2/ahZPXseLU3hHEltBBuek19WvPKkjK0g2L+dyc+lXnL
- J5O9HZ6q9eksknvDmALyTu1uWzSBhitVuJNIhy/Nm6nRVb/92OkDpCEdRVExpAnFFZj4NkwPud0
- 2g4vjduZa5NG2YZgae/npUPXO1iEbqdti8LKTvcV5h6ZF7jXBTXbbOGOEo6fBW2ccaZXOw3gLck
- lARVrAbaaTW+9WamneeqrN/NDfoQqjl3dqpk74GYnXzLiygG6Svf3aIaWrY5sEegAnLeWE4Q==
-X-Received: by 2002:a05:6a20:6f90:b0:3c3:994f:b4f5 with SMTP id
- adf61e73a8af0-3cc1a38ad10mr4381568637.28.1786385668977; 
- Mon, 10 Aug 2026 11:14:28 -0700 (PDT)
-Received: from fedora ([2409:40e5:1164:f0da:ce1b:8575:cc78:84c8])
- by smtp.gmail.com with ESMTPSA id
- a92af1059eb24-1410199cf49sm37632733c88.3.2026.08.10.11.14.26
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 10 Aug 2026 11:14:28 -0700 (PDT)
-From: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-To: buildroot@buildroot.org
-Cc: Shubham Chakraborty <chakrabortyshubham66@gmail.com>,
- "Ernesto L. Williams Jr" <realcontrols@gmail.com>
-Date: Mon, 10 Aug 2026 23:44:21 +0530
-Message-ID: <20260810181422.10955-1-chakrabortyshubham66@gmail.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260220115115.231929-1-chakrabortyshubham66@gmail.com>
-References: <20260220115115.231929-1-chakrabortyshubham66@gmail.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wRQtb8Im0H_j for <buildroot@buildroot.org>;
+ Mon, 10 Aug 2026 18:32:00 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C103980EFD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C103980EFD
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C103980EFD
+ for <buildroot@buildroot.org>; Mon, 10 Aug 2026 18:31:59 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id D32802003CA;
+ Mon, 10 Aug 2026 20:31:53 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Mon, 10 Aug 2026 20:31:53 +0200
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1786385669; x=1786990469; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to:content-type;
- bh=5Bwgz8k/DNRwMcIyQBctzRChzOaKQKA4qs6Rm80VIFY=;
- b=g5GeTW6TJ9o7AQG8TcWhz2uHtNxEvmEiZzTFXgCyjPK8RIk8YuSKTVpVvh/yckFnbw
- 12lxIEuvB4SRuTSvV2aCrc/6AXZK3AUdR7WHmSq6EhRM8rTjxSZ3NvF4za3b/uYTOZNY
- NduXCAqTVE5j76wOd+/GeWg7Lx4+CrDGeYOUWr+5Qnh+7ToRh1RpFE6yZpX924D9ACY4
- cgnGoK7hy62wQasEOv3e6kw7oanHu3FSZkp15BTMATJJypTrHYjuHJILGsVYj/FAU+X0
- ylckwSrHqBVxmpGn5ijGWZbbMdkKSh9iYT+QN8jR/6OTV7OPXoG2fL31WmpVpjv+Z+O6
- djrQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20251104 header.b=g5GeTW6T
-Subject: [Buildroot] [PATCH v2] package/szip: fix build with GCC 15
+Date: Mon, 10 Aug 2026 20:31:53 +0200
+To: Titouan Christophe <titouan.christophe@mind.be>
+Cc: buildroot@buildroot.org, Angelo Compagnucci
+ <angelo.compagnucci@gmail.com>, James Hilliard <james.hilliard1@gmail.com>
+In-Reply-To: <a8a63d9b-fdc3-4e44-aeed-846d1406af93@mind.be>
+References: <20260726092711.212660-1-ju.o@free.fr>
+ <a8a63d9b-fdc3-4e44-aeed-846d1406af93@mind.be>
+User-Agent: Webmail Free/1.6.17
+Message-ID: <6e608820fd7573c7acfe09e92deda3e6@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1786386717;
+ bh=UYaSxqg9fFIkv/uuhH951lNlr8UF5/TELEDxplhUbmI=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=krDxHE0G+IBUnsxpGG8IZkJbnScKc3qyGwHyUok7nmuqZplNnXuD9zSzuGBsSupLu
+ sXO8rp3+wufznJfNnH5nIm1Ga+fM8Z6Pi8xPS4KBQy8thMz8aPOJYlkKgiDFYQgpOP
+ IBjOLq8Mx0PlFWiPlncmdz+0z3fHa3ptWKC5dxa65Wx08qdKGebeUFNb9HhoE8GztE
+ MYLGj93XdauRQXilXdQdHNX37LV8YVYGTkWnBk56tQQvyJrixNZKEdgnZAyTFXR55S
+ 4gSQQosSYqICoffs8dgCpsasHyvMhn8fGBIr72f6tJ77DBGER1OxltADwIxiMr1QD4
+ IXU9JrNptDqfg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=krDxHE0G
+Subject: Re: [Buildroot] [PATCH 1/2] package/python-pydal: needs python xml
+ module at runtime
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -122,54 +96,33 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-GCC 15 defaults to C23, which no longer supports K&R-style empty
-parameter list declarations used in szip. To avoid carrying intrusive
-patches that rewrite legacy K&R-style declarations, pass -std=gnu89
-to CFLAGS to restore the older compiler behavior.
+Hi Titouan,
 
-This fixes identical build failures across multiple toolchain configurations,
-including both static and dynamic builds across all libc implementations
-(musl, glibc, uClibc).
+On 07/08/2026 13:53, Titouan Christophe wrote:
+> On 26/07/26 11:27, Julien Olivain via buildroot wrote:
+>> pyDAL is using xmlrpc at runtime. See:
+>> https://github.com/web2py/pydal/blob/v20260313.1/pydal/_compat.py#L114
+>> 
+>> Signed-off-by: Julien Olivain <ju.o@free.fr>
+> 
+> Applied to 2025.02.x and 2026.05.x, thanks
 
-Fixes:
- - http://autobuild.buildroot.net/results/63f/63f9317b194fd20118c9107c6ac0531bbc990023
- - http://autobuild.buildroot.net/results/257/25798dd0612a2fefaf6ab2865964b87604831e31
- - http://autobuild.buildroot.net/results/88f/88f7df044908fdad5b629303c7e8c324754336ff
+I saw you included other new runtime tests in maintenance branches,
+but you skipped the pydal one:
+https://gitlab.com/buildroot.org/buildroot/-/commit/67d6e6602fec095084f64560050cb1195dff7765
 
-Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
----
-Changes v1 -> v2:
-  - Dropped intrusive C source patches and instead fixed the issue
-    by appending -std=gnu89 to CFLAGS (Thomas).
-  - Explicitly verified and noted that this fixes the GCC 15 K&R C issues
-    across multiple toolchains (both static and dynamic across musl, glibc, uClibc).
-  - Added Fixes tags pointing to multiple autobuilder failures.
-  - Successfully tested across 32 toolchains using test-pkg.
+Is there a specific reason, or did you just missed it?
 
- package/szip/szip.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+Best regards,
 
-diff --git a/package/szip/szip.mk b/package/szip/szip.mk
-index 869fc9c358..8b18196841 100644
---- a/package/szip/szip.mk
-+++ b/package/szip/szip.mk
-@@ -10,4 +10,8 @@ SZIP_LICENSE = szip license
- SZIP_LICENSE_FILES = COPYING
- SZIP_INSTALL_STAGING = YES
- 
-+# GCC 15 defaults to C23 which no longer allows K&R style function
-+# declarations, so force it to use gnu89 standard.
-+SZIP_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -std=gnu89"
-+
- $(eval $(autotools-package))
--- 
-2.55.0
-
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
