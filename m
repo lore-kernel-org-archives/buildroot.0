@@ -4,106 +4,105 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F815C5B56A
-	for <buildroot@archiver.kernel.org>; Mon, 10 Aug 2026 13:27:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 374F8C5AE49
+	for <buildroot@archiver.kernel.org>; Mon, 10 Aug 2026 13:27:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 17DCA80DC7;
-	Mon, 10 Aug 2026 13:27:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A866D80D63;
+	Mon, 10 Aug 2026 13:27:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FDpG-aR92ipS; Mon, 10 Aug 2026 13:27:43 +0000 (UTC)
+ id Vbw6taFKjTNQ; Mon, 10 Aug 2026 13:27:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2E43380D77
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 27B7580D77
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786368463;
-	bh=4O2sopk8iXOoP7QnYf/KBQOmsFP8bIIUiNyUb67Ertc=;
+	s=default; t=1786368464;
+	bh=127gLJcxDBYlhBnNBYc6fC0Z88UV82OD0jlY+xbbP1Q=;
 	h=From:To:CC:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=aAckJFDZqqAf4fl3sNyqrSy7WVDjqE2Nom/chELyQujUdLY4t0a3HU4U+xwwJwJbN
-	 5sg4zp6wD21TyZhxv1RCI0Q0TFBlZ4QVnD7TwYrR2P1KYGgt6nN8j2wKAy+3MGrHx0
-	 2JnAG9qk0Ruo779kqehX94XfDgmL7rIKsU5hwuMTdtSo5W/+nSJY2i07w8dvUNL1Ep
-	 Bv0jZRQv/b6IIu63xzLV+AmaxhDkwaF4TJ2G66tHnh+MTaFdxWmWrOwj12JmoySgQy
-	 D3WwHW65qnL8XTuhChtb/8CIFOxwDm3GLsYy7RVrnbju/BeMzmqG/NZQnQsZYC7n4d
-	 qbdLggeYOYpPw==
+	b=O2szpLK7w5aynz/avwhxqD/wHy0+LAqIK70xF5XknxRCyxQtKO25VOVOpwwDXBUex
+	 hsGzVY88P3r6QPTxCYbT46GiAmi5MXkLUVay9T4Ml1Xiedpm5IcGloEAFcptnFMO5R
+	 7DfOCmmNKrLOLm0DkRID78G82M66jX87UsQDQxWFbCDYuggcsT+wLAngjgv+4LMjF0
+	 pV+1LYu5gwq3FTcSzlEETWQwNEuxriZwhfJjVYdQ1JjFpzCW0uDzMGy5D1VS6JXhi4
+	 lRuq77wdsP0GiBeqXksQj5bab716/E/vUznRFxCxuKZ+yKGASwUiLvBPJPvRw7eahm
+	 ZLPBLc5nDnedQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2E43380D77;
-	Mon, 10 Aug 2026 13:27:43 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id A5FE5218
- for <buildroot@buildroot.org>; Mon, 10 Aug 2026 13:27:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 27B7580D77;
+	Mon, 10 Aug 2026 13:27:44 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 06AF110E
+ for <buildroot@buildroot.org>; Mon, 10 Aug 2026 13:27:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8C76360706
- for <buildroot@buildroot.org>; Mon, 10 Aug 2026 13:27:40 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E14AE6070F
+ for <buildroot@buildroot.org>; Mon, 10 Aug 2026 13:27:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QIvufpjejTwd for <buildroot@buildroot.org>;
- Mon, 10 Aug 2026 13:27:40 +0000 (UTC)
+ id gHLvYg793LLN for <buildroot@buildroot.org>;
+ Mon, 10 Aug 2026 13:27:41 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.126.239;
  helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6D084605D5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6D084605D5
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6AC7D60705
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6AC7D60705
 Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.126.239])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6D084605D5
- for <buildroot@buildroot.org>; Mon, 10 Aug 2026 13:27:39 +0000 (UTC)
-X-CSE-ConnectionGUID: rE0OCgTPQRKFp06RKrf19w==
-X-CSE-MsgGUID: zo0/6h6ISaWtlHSg0DOf6w==
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6AC7D60705
+ for <buildroot@buildroot.org>; Mon, 10 Aug 2026 13:27:40 +0000 (UTC)
+X-CSE-ConnectionGUID: GXGAy4n+QLKeva1lv8YqNw==
+X-CSE-MsgGUID: Dl8scj3QRwe91E1nNYoOmw==
 Received: from unknown (HELO opfedv1rlp0d.nor.fr.ftgroup) ([x.x.x.x]) by
  smtp-out.orange.com with ESMTP/TLS/TLS_AES_256_GCM_SHA384;
- 10 Aug 2026 15:27:36 +0200
+ 10 Aug 2026 15:27:38 +0200
 Received: from unknown (HELO OPE16NORMBX506.corporate.adroot.infra.ftgroup)
  ([x.x.x.x]) by opfedv1rlp0d.nor.fr.ftgroup with
- ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2026 15:27:36 +0200
+ ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2026 15:27:38 +0200
 Received: from yd-6wlzhs3 [x.x.x.x] by
  OPE16NORMBX506.corporate.adroot.infra.ftgroup
  [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.45;
- Mon, 10 Aug 2026 15:27:35 +0200
+ Mon, 10 Aug 2026 15:27:36 +0200
 Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
- Mon, 10 Aug 2026 15:27:34 +0200
-X-CSE-ConnectionGUID: SKSwJrZjRwuqiVwhEEnM0g==
-X-CSE-MsgGUID: UrGjmgbXSmGRvDQnrOqcog==
-X-IronPort-AV: E=Sophos;i="6.25,215,1779141600"; d="scan'208";a="463495170"
+ Mon, 10 Aug 2026 15:27:36 +0200
+X-CSE-ConnectionGUID: LF5BaGoCQbiJn2plxPXcEg==
+X-CSE-MsgGUID: 1g35UO8WQGyZtOphurh2Hw==
+X-IronPort-AV: E=Sophos;i="6.25,215,1779141600"; d="scan'208";a="463495174"
 X-Amp-Result: SKIPPED(no attachment in message)
 From: <yann.morin@orange.com>
 To: <buildroot@buildroot.org>
 CC: <yann.morin@orange.com>, Michael Klein <m.klein@mvz-labor-lb.de>, Vincent
  Fazio <vfazio@xes-inc.com>
-Date: Mon, 10 Aug 2026 15:27:33 +0200
-Message-ID: <1c264f491bca97b6a782caf58145b26014d09f9d.1786368449.git.yann.morin@orange.com>
+Date: Mon, 10 Aug 2026 15:27:34 +0200
+Message-ID: <c45315df9f1084fe0f6f932e1523cfa9c4e6d992.1786368449.git.yann.morin@orange.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1786368449.git.yann.morin@orange.com>
 References: <cover.1786368449.git.yann.morin@orange.com>
 MIME-Version: 1.0
 X-Originating-IP: [10.115.26.53]
-X-ClientProxiedBy: OPE16NORMBX603.corporate.adroot.infra.ftgroup
- (10.115.26.31) To OPE16NORMBX506.corporate.adroot.infra.ftgroup
+X-ClientProxiedBy: OPE16NORMBX503.corporate.adroot.infra.ftgroup
+ (10.115.26.27) To OPE16NORMBX506.corporate.adroot.infra.ftgroup
  (10.115.27.26)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
- t=1786368459; x=1817904459;
+ t=1786368460; x=1817904460;
  h=from:to:cc:subject:date:message-id:in-reply-to:
  references:mime-version:content-transfer-encoding;
- bh=MXlEJ71EhuMXdDlR6FMflv9XUxY0yxOb0VmauFnqn0c=;
- b=LTGfkDVy57zYNbozhVyU6vuQvVpIo3aV7fbAsDIP7uybtCGn7VTXdxgs
- OSgh285Iy7qz46Ij0Rm8yQZxuTRBgjj0BhWpT5YgF4sIKii+SBmcSgqb7
- 4gAYkHicRNbsqdJjxNpGzBTB6getKVnpAW+oKGWHuGLmnT4+7fClu6CVI
- zXi0ZXFUv/O4/IgytWBKS1KmiSJOmNuN4zZBhKSYL9srcpCkRE0HwZSJd
- /VgGKQV4KgtuYKr2itDws3/DGzxKn9Y1srvhWissJUeIgbEbxekN4gSv9
- 1mXM8V4Z7LThYWBDe1w+y1B7fYQIkgo3Wq4tMi+1yIYhRA3Nhxldhfarj
- g==;
+ bh=28OfV5C7tp/zBzYb5FVJIzokyCcaP3MJt5Jj/aOl114=;
+ b=ZlSRcsjvuuBGrTzNBm1tnCFMYMyY3TKQSePBgq153iMukMthpvrNhRLV
+ wPwhrIR8DV/usc2yw3+DZU+Fo3/2Ln2UM50NWcg9Y1/THZIh72VXucvQO
+ e+5IYm2nXtqRSs6jT2TTF5fX7RFPuI9IhjLkJR4RCA4FB3cGE8g9LpPAu
+ z3ednyF3ntJ2GtFk4vZLxyW5cCoTPCpsp5zE36DADnHYVdi5o51fQUCrI
+ AaaV39zsea7lArNvihvPW9wHpRINebHcCAZV5npho2FjTtA3HYwgZte6v
+ s2ScvhuoBfYf0lUjde/mIZ2wDjQ7nUD4Xn17DF5Sfkl8Ml3EsdNb3BpSn
+ A==;
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=orange.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
- header.s=orange002 header.b=LTGfkDVy
-Subject: [Buildroot] [PATCH 1/2] support/scripts/size-stats: prepare for
- more .py associated files
+ dkim=pass (2048-bit key) header.d=orange.com header.i=@orange.com
+ header.a=rsa-sha256 header.s=orange002 header.b=ZlSRcsjv
+Subject: [Buildroot] [PATCH 2/2] support/scripts/size-stats: properly assign
+ pre-compiled .pyc files
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -122,52 +121,60 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: "Yann E. MORIN" <yann.morin@orange.com>
 
+Since commit 3fed42456693 (package/python3: use the provided pyc
+compiler), we abide by the PEP 3147 guidelines on where the pyc files
+are located. In practice, this means that, for a .py file /foo/bar.py,
+the corresponding .pyc file will be /foo/__pycache__/bar.pythonX.Y.pyc
+(where X.Y is the current major.minor python version, e.g. 3.14).
+
+Add support for this layout in the size-stats scrip, which so far only
+supported the legacy, pre-PEP 3147 layout of having the .pyc next to the
+.py.
+
+When we associate files to a package, we only have the original name,
+and we must construct the associated filenames. For the .pyc, this would
+require that the version of python be passed to the size-stats script,
+but this is not so nice. Instead, just scan the pycache directory to
+find the corresponding files. This is not much nicer either, but at
+least the wart, if bigger, is in a single place that would be easy to
+chop out or rework if need be (e.g. if we need to add support for more
+similarly target-finalize-generated files in the future)...
+
 Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
 Cc: Michael Klein <m.klein@mvz-labor-lb.de>
 Cc: Vincent Fazio <vfazio@xes-inc.com>
 ---
- support/scripts/size-stats | 21 ++++++++++++++++++---
- 1 file changed, 18 insertions(+), 3 deletions(-)
+ support/scripts/size-stats | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
 diff --git a/support/scripts/size-stats b/support/scripts/size-stats
-index 79c0dc571e..fdcaeaa546 100755
+index fdcaeaa546..9a0aafbf2e 100755
 --- a/support/scripts/size-stats
 +++ b/support/scripts/size-stats
-@@ -54,9 +54,8 @@ class Config:
- # pkg: package to which the file belongs
- #
- def add_file(filesdict, relpath, abspath, pkg):
--    if relpath.endswith(".py"):
--        # also check for compiled .pyc file
--        add_file(filesdict, relpath + "c", abspath + "c", pkg)
-+    for relpath2, abspath2 in get_associated_files(relpath, abspath):
-+        add_file(filesdict, relpath2, abspath2, pkg)
-     if not os.path.exists(abspath):
-         return
-     if os.path.islink(abspath):
-@@ -65,6 +64,22 @@ def add_file(filesdict, relpath, abspath, pkg):
-     filesdict[relpath] = (pkg, sz)
+@@ -77,7 +77,23 @@ def add_file(filesdict, relpath, abspath, pkg):
+ def get_associated_files(relpath, abspath):
+     # also check for compiled .pyc file
+     if relpath.endswith(".py"):
++        # Legacy .pyc next to .py
+         yield (relpath + "c", abspath + "c")
++        # PEP 3147 layout
++        basename = os.path.basename(abspath).rsplit(".", 1)[0]
++        reldir = os.path.join(os.path.dirname(relpath), "__pycache__")
++        absdir = os.path.join(os.path.dirname(abspath), "__pycache__")
++        try:
++            for fname in (
++                fn
++                for fn in os.listdir(absdir)
++                if fn.endswith(".pyc")
++                and fn.rsplit(".", 2)[0] == basename
++            ):
++                yield (os.path.join(reldir, fname), os.path.join(absdir, fname))
++        except FileNotFoundError:
++            # No precompiled .pyc files
++            pass
  
  
-+#
-+# Returns an iterator over the files associated with the given one
-+# as a 2-tuple of (relpath, abspath).
-+#
-+# Supported files:
-+#  *.py => yields the list of corresponding pre-compiled .pyc files
-+#
-+# relpath: relative path of the file
-+# fullpath: absolute path to the file
-+#
-+def get_associated_files(relpath, abspath):
-+    # also check for compiled .pyc file
-+    if relpath.endswith(".py"):
-+        yield (relpath + "c", abspath + "c")
-+
-+
  #
- # This function returns a dict where each key is the path of a file in
- # the root filesystem, and the value is a tuple containing two
 -- 
 2.43.0
 
