@@ -4,90 +4,104 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5AD8C5AD55
-	for <buildroot@archiver.kernel.org>; Mon, 10 Aug 2026 12:32:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4706AC5AD55
+	for <buildroot@archiver.kernel.org>; Mon, 10 Aug 2026 13:27:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 712C060707;
-	Mon, 10 Aug 2026 12:32:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3E08260715;
+	Mon, 10 Aug 2026 13:27:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Pi2ArAW2801B; Mon, 10 Aug 2026 12:32:40 +0000 (UTC)
+ id mv-ON-c-GZrW; Mon, 10 Aug 2026 13:27:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4FDBA606EB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3B1BC60706
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786365160;
-	bh=aLONlUZUxJ0GP+IKGKR17t9bLlijypv3MHFkaliaRTA=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=ILizJrmzOAvk+inOuIwD9V1U+MrinqP5WT7kQADE688VohCNQ6qxhL+0ymOMihuxu
-	 D1oWF8tLeGYwc3Sf5x2QtNB80ln8fqAwpm0GJXoPeFz6PCQFiH7q7XivSTbmpRU31U
-	 lZVeBsrrqSLO3r9nvMH5wJAo7IiXseP7LE7kGzkAPeQ0lcCwTq72P2iU0Hy8T3y91d
-	 12Kuw/R3JpXzw+15v2pG1RCBpJGoYU8qNk9TgHcMH90eNiQP3ZNfI28yTKt+dxD/gm
-	 j4o9gMr0dozpSqGu12o6BYvUJN5+MrwxMGjckOGmKvLFPO57LOiiGxxUS4BB5+JhWf
-	 INR4ZsaMwiE8Q==
+	s=default; t=1786368461;
+	bh=4Y52WcaEbWEMR03j97W3xy2YYXPalK93j192dkMAhEw=;
+	h=From:To:CC:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=qmKmKXlD5k4goHLGzqsxchzB1T25cB59EDguyGjyOWaP5qbmPdH8VDP8Hm3e/x8QC
+	 P1Q9cmmvj9HlakbGQ0tlCMe9H9SxXLmTR4we+Of7FcLk4S/bGAzm0lDjLCe2m57Vu5
+	 EPLl1eKDPJzak4mFmjG+6NibJnIiBzFHu9c/0NcrveaPtd81ZJ4zAcpeMekEGiegDt
+	 9M3ACQ23MTngVIBVHUgKvV+7csJfn129m0i+8Em7qOn1Z+YkW0PFiJNA/lc7/giOys
+	 Acai8qvhHxpbG9gn8oH75q9T8FFCYM6t48jpS4iuKqSamhQ41zO8PVYYdOJUE+0YQl
+	 zwnnqJreLpqSA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4FDBA606EB;
-	Mon, 10 Aug 2026 12:32:40 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 54A4A198
- for <buildroot@buildroot.org>; Mon, 10 Aug 2026 12:32:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3B1BC60706;
+	Mon, 10 Aug 2026 13:27:41 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id C2A6B218
+ for <buildroot@buildroot.org>; Mon, 10 Aug 2026 13:27:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3B125405DE
- for <buildroot@buildroot.org>; Mon, 10 Aug 2026 12:32:39 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id ABCA34054F
+ for <buildroot@buildroot.org>; Mon, 10 Aug 2026 13:27:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6ARXOlBCcrOV for <buildroot@buildroot.org>;
- Mon, 10 Aug 2026 12:32:38 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
- helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id SB19DbQGopsQ for <buildroot@buildroot.org>;
+ Mon, 10 Aug 2026 13:27:38 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.126.236;
+ helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 179F7405D7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 179F7405D7
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 179F7405D7
- for <buildroot@buildroot.org>; Mon, 10 Aug 2026 12:32:37 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-02.galae.net (Postfix) with ESMTPS id CFE391A152A
- for <buildroot@buildroot.org>; Mon, 10 Aug 2026 12:32:35 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id A3D7E6033B;
- Mon, 10 Aug 2026 12:32:35 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 6799B11C4A4E2; 
- Mon, 10 Aug 2026 14:32:30 +0200 (CEST)
-Date: Mon, 10 Aug 2026 14:32:29 +0200
-To: Alexis =?utf-8?Q?Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-Cc: buildroot@buildroot.org, 
- Nicolas Carrier <nicolas.carrier@nav-timing.safrangroup.com>
-Message-ID: <anmxxqb2-h3Fy_f-@windsurf>
-References: <20260806-host_tools-v1-0-19c63ecc3b10@bootlin.com>
- <20260806-host_tools-v1-2-19c63ecc3b10@bootlin.com>
- <anWV0uzil1jp4BNN@windsurf>
- <DKL5OZPSP69X.2WIL567PI8DXH@bootlin.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 3652D40435
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3652D40435
+Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.126.236])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3652D40435
+ for <buildroot@buildroot.org>; Mon, 10 Aug 2026 13:27:37 +0000 (UTC)
+X-CSE-ConnectionGUID: bUTaBgdlQ+yoGoEKaq2BwQ==
+X-CSE-MsgGUID: ziYhVBc3RAeygH0LfW8Kog==
+Received: from unknown (HELO opfedv1rlp0a.nor.fr.ftgroup) ([x.x.x.x]) by
+ smtp-out.orange.com with ESMTP/TLS/TLS_AES_256_GCM_SHA384;
+ 10 Aug 2026 15:27:34 +0200
+Received: from unknown (HELO OPE16NORMBX506.corporate.adroot.infra.ftgroup)
+ ([x.x.x.x]) by opfedv1rlp0a.nor.fr.ftgroup with
+ ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2026 15:27:33 +0200
+Received: from yd-6wlzhs3 [x.x.x.x] by
+ OPE16NORMBX506.corporate.adroot.infra.ftgroup
+ [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.45;
+ Mon, 10 Aug 2026 15:27:32 +0200
+Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
+ Mon, 10 Aug 2026 15:27:31 +0200
+X-CSE-ConnectionGUID: dnSVRfDtR2qpjEWXOGy/nA==
+X-CSE-MsgGUID: k658lbn7TDuodosUWT8qbA==
+X-IronPort-AV: E=Sophos;i="6.25,215,1779141600"; d="scan'208";a="460867393"
+X-Amp-Result: SKIPPED(no attachment in message)
+From: <yann.morin@orange.com>
+To: <buildroot@buildroot.org>
+CC: Michael Klein <m.klein@mvz-labor-lb.de>, Vincent Fazio
+ <vfazio@xes-inc.com>, "Yann E . MORIN" <yann.morin@orange.com>
+Date: Mon, 10 Aug 2026 15:27:31 +0200
+Message-ID: <cover.1786368449.git.yann.morin@orange.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <DKL5OZPSP69X.2WIL567PI8DXH@bootlin.com>
-X-Last-TLS-Session-Version: TLSv1.3
+X-Patchwork-Hint: ignore
+X-Originating-IP: [10.115.26.53]
+X-ClientProxiedBy: OPE16NORMBX606.corporate.adroot.infra.ftgroup
+ (10.115.27.30) To OPE16NORMBX506.corporate.adroot.infra.ftgroup
+ (10.115.27.26)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=dkim; 
- t=1786365151; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding:in-reply-to:references;
- bh=Xe1PNYfruMJODY+poFMEevJOQHH4tDCYOCjhnx8vr90=;
- b=T+CNL8XhRI1fHpvMG00UtYtjun1w8OErNCU72eV8aSDWbAxWYhnTFb/sKCylOLz9abE3fU
- iOWVa37/+/lXKZR85/ydZX7OVJM6dhMPAL99s4GYJtWgO9UTSmTS+6aEHPsEw1BoFxxh2M
- aq9BJNINTOHYIdzOGpPhR2CGv10GfD62msk1Gu5TEdt97cAE1TXIh/ES700k2EkqBGOv/L
- Y729FsQBq5heaOxEsnWyRwx2iZxmaMjEFHaemVZc63NxbQW08uFvc3/MJ7enXhpgIEDryf
- zOJ91dndHfP7cqeTAiNR5f1Y3KbSaPn5YZGtIgGSQGUlcJ7vmaT9WHYXQvUIcQ==
+ d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
+ t=1786368458; x=1817904458;
+ h=from:to:cc:subject:date:message-id:mime-version:
+ content-transfer-encoding;
+ bh=Z88pxxD4IlcAGf3Ci/Q0fmSvVWExjqWEaNnGcM5KARY=;
+ b=DsHi/dvwCZW39Am+Y1WIm50R94FX6XmGsUBWM6tsgDyVNpwQHnI0oIVx
+ q+KW1yainXH+CluDP8Q5Kq12g/DZe5TjW587IoEREJbMIeOxE0i55w35H
+ RkwbqE0oHkVJSEMACGUziASV8LPmjPleqsPSMBKF2zw+oMkqafvyybRUH
+ /TjVIkwKnPH2Xa9hTCvssC2Qo76ATY/ZUhTOmyyPiYEHMTr3OzmzqXZfE
+ iymVKBDYba1vsdSmpc7Wwda2tVfX5b5C+vNGHNQD8rGFNJwuaNcSSAj2L
+ AwKtNU8wwTnXFzodmaoGnEghhP4lUydAZutfzRSEVNyV616ph0doUiKGP
+ g==;
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
+ dmarc=pass (p=none dis=none)
+ header.from=orange.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
- header.a=rsa-sha256 header.s=dkim header.b=T+CNL8Xh
-Subject: Re: [Buildroot] [PATCH 2/2] package/sass: new package
+ dkim=pass (2048-bit key,
+ unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
+ header.s=orange002 header.b=DsHi/dvw
+Subject: [Buildroot] [PATCH 0/2] support/size-stats: actually handle .pyc
+ files
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -99,72 +113,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+From: "Yann E. MORIN" <yann.morin@orange.com>
 
-On Mon, Aug 10, 2026 at 11:29:01AM +0200, Alexis Lothor=E9 wrote:
+Hello All!
 
-> Yes, this `npm install` downloads 3 dependencies for this sass tool.
-> I understand that it is not ideal (having some download in the build
-> step), but proposed it anyway, as it was a potential "known issue" in
-> Arnout's proposal ([1]). But if this is finally a no-go, thinking a bit
-> more about it, I see two main options:
-> - find a way to vendor the dependencies (may be as simple as setting a
->   post download hook which performs the npm install ?)
+This small two-patch series properly associates .pyc files to the
+corresponding package.
 
-This is what Arnout was proposing. However, a post download hook
-doesn't work because it's too late: the tarball has already been
-created, while we want the dependencies to be *part* of the tarball,
-i.e we want the vendoring (collecting the dependencies) to happen
-prior to the tarball being created and added to $(DL_DIR).
 
-Instead, you should have a look at how it works for the cargo and
-golang infrastructures.
+Regards,
+Yann E. MORIN.
 
-We have this concept of <pkg>_DOWNLOAD_POST_PROCESS (which is NOT the
-same as <pkg>_POST_DOWNLOAD_HOOKS!).
 
-package/pkg-cargo.mk does:
+The following changes since commit 4cc29326c91877a385eeb288378c1099ea240ee9
 
-$(2)_DOWNLOAD_POST_PROCESS =3D cargo
+  Merge branch 'nyma/misc-fixes' into orange-master (2026-07-01 08:13:38 +0200)
 
-which causes support/download/cargo-post-process to be called in the
-middle of the download step.
 
-What it does is basically:
+are available as patches in this mail series,
 
-1. Unpack the tarball that was downloaded
-2. Run "cargo vendor" to download the dependencies
-3. Repack the tarball
+for you to apply patches up to c45315df9f1084fe0f6f932e1523cfa9c4e6d992
 
-support/download/go-post-process works in a similar manner, but runs
-"go mod vendor" to download the dependencies.
+  support/scripts/size-stats: properly assign pre-compiled .pyc files (2026-08-10 15:24:11 +0200)
 
-If you can identify the right incantation to ask npm to download the
-dependencies so that we can implement something like this, then it
-would be great.
 
-> - this sass package is a node wrapper around the official project
->   dart-sass ([2]). I did not take a look at all at how to build and run
->   it (I am pretty ignorant in Dart), but I can take a look. I am not
->   sure how capable Buildroot is about building Dart projects (I see some
->   flutter-sdk-bin package, I am not sure how re-usable it could be to
->   build some randome dart projects)
+----------------------------------------------------------------
+Yann E. MORIN (2):
+      support/scripts/size-stats: prepare for more .py associated files
+      support/scripts/size-stats: properly assign pre-compiled .pyc files
 
-I have also no idea :-)
+ support/scripts/size-stats | 37 ++++++++++++++++++++++++++++++++++---
+ 1 file changed, 34 insertions(+), 3 deletions(-)
 
-Thomas
--- =
+-- 
+                                        ____________
+.-----------------.--------------------:       _    :------------------.
+|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
+|                 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
+| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
+| yann.morin (at) orange.com           |_="    ,--' | / \ HTML MAIL    |
+'--------------------------------------:______/_____:------------------'
 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+____________________________________________________________________________________________________________
+Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
+pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
+a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
+Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
+
+This message and its attachments may contain confidential or privileged information that may be protected by law;
+they should not be distributed, used or copied without authorisation.
+If you have received this email in error, please notify the sender and delete this message and its attachments.
+As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
+Thank you.
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
