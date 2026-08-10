@@ -1,142 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 402BCC5AC82
-	for <buildroot@archiver.kernel.org>; Mon, 10 Aug 2026 05:12:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 042E0C5AD4E
+	for <buildroot@archiver.kernel.org>; Mon, 10 Aug 2026 07:02:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3407880C7A;
-	Mon, 10 Aug 2026 05:12:41 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id je9KbM6cJBlV; Mon, 10 Aug 2026 05:12:39 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1811680C72
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786338759;
-	bh=TVj4BAhcorY8PPdBdhaFgo+Efyt+m0wfYXNvKYIQRcQ=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
-	b=Qm64ESHINwipIHIQrWH9iB0001/Hrgv1Fo2Bbpd1IE6Zmtex7SgzU4YlZmyKAKCzs
-	 RgLISeRJRTx8x+SmOfaYYBNlEMJAN/ZVqjDgYHj8uha1pR44bn6CykpWum0MWd9+8T
-	 Yl6bmcl1iXOp9gSov2nIzK8vbUqigpfqCYnUdty7goxwXuubCh/0u0JBc3etZ+psnh
-	 Uxc9sLt7e4ihodTWwakUci2uvMnzea/yxriR4WUANEitaty63ITndyzmRhev2fVz63
-	 dpkkMpV8hGj7BMOM2aeKa3ywud9K78SAvi+AuaHOc15TefQK4U6pGXHg1Oa94k8xjv
-	 7QrKz1RihrCqg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1811680C72;
-	Mon, 10 Aug 2026 05:12:39 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id E8B0840A
- for <buildroot@buildroot.org>; Mon, 10 Aug 2026 05:12:36 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CEFAA60617
- for <buildroot@buildroot.org>; Mon, 10 Aug 2026 05:12:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A5E426063E;
+	Mon, 10 Aug 2026 07:02:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cEUa_80I4lec for <buildroot@buildroot.org>;
- Mon, 10 Aug 2026 05:12:36 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f403:c111::9;
- helo=dm5pr21cu001.outbound.protection.outlook.com;
- envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B00646060E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B00646060E
-Received: from DM5PR21CU001.outbound.protection.outlook.com
- (mail-centralusazlp170110009.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:c111::9])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B00646060E
- for <buildroot@buildroot.org>; Mon, 10 Aug 2026 05:12:34 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=AbHwP8SkA3CWQ6E7/ib77WI+haoK+ZGheU5cz7vMqaHakYuFmgd3X09DlZIxV5fZy3ZFI54HrzDY4sPhwMvTJVWpFAPGsK/uCDfNcnVyeswW2Lb84lCayuw3gu+/d8yxpdbqxmxX6oNFphu24wgPfwxng/goM5cfxHd/plS4yW5Ezi1la54gBFGAb8GCZ32Jw7EnPLIwtGyDUcRLy/PA9PRyIZab8c52EZp5aUa4ZsyjCIzzfZc4bjG6a+e7mrFUN+1KaB4bTHeCK/6murAx+9c/G37HdzTY/k8W4+fwLdhnpUA0nvYcprwBiMqsmPzvSbGnBVCt/lToFCaq3s5/vw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=t8PdANauFktk2b6p786c1kZ1ISX1M7ihDiGZbLJm1GE=;
- b=aftsC/M5hf6F9qH2fjAPvd3/xubBcClh/37ARsxgTFbL/jPfd71Lrv2uZZo15W4sBTicMiC5xDCwfga5MHOeUFejBKn4zLP5fkBRLsJ+ekPeG+WuuxvpPG7lJGxdYiCpv/O6Wq1BzGQiixJ3Hdz21tp5tETgyA1sg1Tg2jO5Q4PpvQgCamyBr82CM5CWq9uX+Jz0x1mAjHvZrMum/qyXM/lFAfltERo5b3IsZS0Cr1lO6PjSPAbFHvalSDRYnxDK7w2oqh/JKmwq+hA4VWAqzd/SguBL5vcXwIdfaHfayW/9Q2CPfsWL9m3qTlDZipQ+s7t4/n7pXwE5utaRQHRqzw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none (0)
-Received: from BY3PR04CA0028.namprd04.prod.outlook.com (2603:10b6:a03:217::33)
- by SJ2PR12MB7992.namprd12.prod.outlook.com (2603:10b6:a03:4c3::9)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.292.25; Mon, 10 Aug
- 2026 05:12:29 +0000
-Received: from SJ1PEPF000023D7.namprd21.prod.outlook.com
- (2603:10b6:a03:217:cafe::8a) by BY3PR04CA0028.outlook.office365.com
- (2603:10b6:a03:217::33) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.292.25 via Frontend Transport; Mon,
- 10 Aug 2026 05:12:29 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=satlexmb07.amd.com; pr=C
-Received: from satlexmb07.amd.com (165.204.84.17) by
- SJ1PEPF000023D7.mail.protection.outlook.com (10.167.244.72) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.339.0 via Frontend Transport; Mon, 10 Aug 2026 05:12:28 +0000
-Received: from satlexmb10.amd.com (10.181.42.219) by satlexmb07.amd.com
- (10.181.42.216) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.45; Mon, 10 Aug
- 2026 00:12:27 -0500
-Received: from satlexmb07.amd.com (10.181.42.216) by satlexmb10.amd.com
- (10.181.42.219) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.45; Mon, 10 Aug
- 2026 00:12:27 -0500
-Received: from xirengwts12.xilinx.com (10.180.168.240) by satlexmb07.amd.com
- (10.181.42.216) with Microsoft SMTP Server id 15.2.2562.45 via Frontend
- Transport; Mon, 10 Aug 2026 00:12:26 -0500
-To: <buildroot@buildroot.org>
-Date: Mon, 10 Aug 2026 06:12:23 +0100
-Message-ID: <20260810051223.4149414-1-neal.frager@amd.com>
-X-Mailer: git-send-email 2.43.0
+ id CaMi_lwZKEpD; Mon, 10 Aug 2026 07:02:22 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4806360632
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1786345342;
+	bh=wsPDBjgNa9Bv/VZn5UwDEckmJO9hicQWI1ftZvlW//o=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=axyWcLc8DQJvE4dNnIpf07SCi/mkDzEYwJDiEdRvvdPP9ifd+c3axyf/3Ww1kLjk/
+	 B+d8sYWXSLV+6VXhk0znmGcvGVRLtiEkpCDi81oayrNUP1DmahA4iyIGp2KA4/RUD+
+	 szCOcrSNL/mL/vr6IOAXG3duGJPNKqG4GEU/Gw1YqRNI5CpIYoYYZq5nEWI8hwcRV4
+	 /e5xLPPDaVPTxkp88HgEBQcN8lgPkZ2QHOo8Eoe9J5obeMIPbo6SHvEUVwKkTgk2HU
+	 ZgIA6etGI9H9qEUXIoSlA1uHtuVyVC3Gs7SpdqtLhZH/v84wjS01VSvBWx1RRyLi41
+	 rJScQbvQi7EWg==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4806360632;
+	Mon, 10 Aug 2026 07:02:22 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id C082923F
+ for <buildroot@buildroot.org>; Mon, 10 Aug 2026 07:02:20 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id B2A9160632
+ for <buildroot@buildroot.org>; Mon, 10 Aug 2026 07:02:20 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JjexkbYmwalJ for <buildroot@buildroot.org>;
+ Mon, 10 Aug 2026 07:02:20 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3787760628
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3787760628
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3787760628
+ for <buildroot@buildroot.org>; Mon, 10 Aug 2026 07:02:17 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p4fd6c005.dip0.t-ipconnect.de [79.214.192.5])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id C6916A4C4704
+ for <buildroot@buildroot.org>; Mon, 10 Aug 2026 09:02:14 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:43476)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99.5)
+ (envelope-from <bernd@kuhls.net>) id 1wtK1W-000000006uB-1lPF
+ for buildroot@buildroot.org; Mon, 10 Aug 2026 07:02:14 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Date: Mon, 10 Aug 2026 09:02:14 +0200
+Message-ID: <20260810070214.3484125-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ1PEPF000023D7:EE_|SJ2PR12MB7992:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6f41c339-f8f7-4605-50c0-08def69df916
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
- ARA:13230040|82310400026|23010399003|36860700016|1800799024|376014|11063799006|56012099006|10067099003|13003099007|18002099003|41080700001;
-X-Microsoft-Antispam-Message-Info: UFW0rfPFFMmjhd8Y+LxWgnSupV0u+wJ2CprhhU6WE+S7aqn1DyGmTLlDxiWhpeTQrFMoHOuxfrjAQlNE1T9MZrQMCP1PNN9KtUy8UMfE89yKxFZUR17PddlBmE9B94D7jEUiYkOCDNvJN3iVB45FS7wTAMiyKusXee4EEWYALysEH4KGNKSjoyIO4y8jzg7I+L4X0a7/gyRes2JuWqmxKIpAK5utyxa1o/MeS6HUyuaYJ1AI9OTmKYC9o+Ae8oobwaAjgFiap2qS5juVyEH9oo+6+Ib2g4DeC2BgeuKzmLT2dMVlT7HXHcQz3AcRSLKkELMAAqrbQzBhbUSPF1T5cr7mwf09ScvaEKXM5EOz9U475IUy8f+7Vu5r9cnbNwq5exXChQJ0ZgXN+7t+GLzGTSW+Zk43g1d9S3M+Y6tkyL9okqnk5PmENB1n2Uk9ri1yp1iqmH1qzzI+BgppPA7jNoDWvJjx76onI1sUUj/RGlbLnWoyvSt0Ec5zjC2qubhT8uWf5lBD1QC1RTXVYuy8b+awWQdONA35xQWrgLSw2+X9dpQ99GnunNfTcxTiCl4QvaFsYmTU/oDlx8PUuR4n/Yh1Zzt/4+CQCN/6zW4SV5IGmz2FLfJh36mzItmxGxlpaL5+YVNKw1VTBfZpgety9ARoVMuRCNdZ0eaBN5yhcgCS/c7QUk/sI0EpT+6R41BV7VxUw6iEX7GtMBOlHHxAMQ4MxuC0sapk3fiF25cMDgHjpwYSZMc1wvJH5p81D+w3Vge9P+VxJYzt+NmhgW31UQ==
-X-Forefront-Antispam-Report: CIP:165.204.84.17; CTRY:US; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:satlexmb07.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
- SFS:(13230040)(82310400026)(23010399003)(36860700016)(1800799024)(376014)(11063799006)(56012099006)(10067099003)(13003099007)(18002099003)(41080700001);
- DIR:OUT; SFP:1101; 
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: kG35GBQYsLrGzxLOzAq84oVijytFLHoVhucO4ZaRkYrhaNASECz9D14d9PISH4Ni2fNfrJhWIcK+ZDjOokFeMzyoW7bRegDsfTmfy/YLWVK3uCC9yIU90RhzjosKkbvYUNQ00yiJqZtGnKPsJCLnavvu6gqRPJyN+EJw/I8wsCsZDReD+8tgDf/7ns0Ss+4MN6U4BvCgCbGydgplorMyfCm9oht3uCMcRcdTNv+BqRM47rF9aRysmOZhlYoa6mSNOYJ5+dTGGBEiEGXlxY/ZIYgYCJh2bsl+4vLOe3mhn2uKuuziLQfEsR6ax0T0DRENDRAEen1jtpkB6b89/PkqpU+XIa7a1eQnbfpstxO9oh9K5MOzhPuUKF7paEMCBUnFsfX+3sbVGHI4P311pI3ZiKg4WTqSDL4hhmaZh8TtYaO4NT3mqfemKlOIKNE192tk
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Aug 2026 05:12:28.1386 (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6f41c339-f8f7-4605-50c0-08def69df916
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d; Ip=[165.204.84.17];
- Helo=[satlexmb07.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: SJ1PEPF000023D7.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB7992
+X-Spamd-Bar: /
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amd.com; s=selector1; 
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=t8PdANauFktk2b6p786c1kZ1ISX1M7ihDiGZbLJm1GE=;
- b=jDJByCPQDmimXhlYdwML+YwCqDv2mXVkrEmP3h/LasC/jtV+wU1KPHZmtXe+3E5bnojEO68BDswKy58Csdyk5oKzXlThnFfHbROanjV7l0kciGSU+XMgvjrJXaZW/9a+eWhyZkrqPGbKcL67SVbjdlG3I0OzAbHMRba5TqXAmVw=
+ d=kuhls.net; 
+ s=kas202605290044; t=1786345334;
+ bh=fGqb8SqJFkjXHcGb9eRQyVvqr/3ZBO68JnxOaWoKL7E=;
+ h=From:To:Subject:Date:From;
+ b=eiS8v9B6I9tfwNwKB0oYGV3UUXDIKEyH6dYDaugwPtksj8TxhCJ2KKoi/6nn/HPbv
+ 2v2nSARsqKfDhHqgQvDte5CPXlYlNPEYDxdq5zg4wwaxcHYV9GpaXU2H20d4lHB7zD
+ FJX//mKYqJSGkapgS9AEfo7jLeQfWZyo3E4GyVvelwVYG6wfGdNteMs8EEM8V3myHl
+ 97znd7yA0Jm3BXG1vFoe3qsFrz8rnioge1sqwQuIpb537wFsZ+nala0/HvCAc2aTup
+ yyOlqSjpZ7pArE2YcMSexblBcZ9nfmcO4Keaj9vPgV4TNdHPsnENMfpy/wf4WOChkM
+ p/KfyrUd5atdw==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=amd.com
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=jDJByCPQ
-Subject: [Buildroot] [PATCH v1 1/1] package/gcc-bare-metal: bump to gcc
- 16.2.0
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202605290044 header.b=eiS8v9B6
+Subject: [Buildroot] [PATCH 1/1] {linux, linux-headers}: bump 6.12.x, 6.6.x,
+ 7.1.x, 6.18.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -148,59 +92,117 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Neal Frager via buildroot <buildroot@buildroot.org>
-Reply-To: Neal Frager <neal.frager@amd.com>
-Cc: ibai.erkiaga-elorza@amd.com, luca.ceresoli@bootlin.com,
- Neal Frager <neal.frager@amd.com>, brandon.maier@collins.com, ju.o@free.fr,
- thomas.petazzoni@bootlin.com, romain.naour@smile.fr, michal.simek@amd.com,
- romain.naour@gmail.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://gcc.gnu.org/pipermail/gcc-announce/2026/000193.html
+Update the latest kernel releases to:
+ - 6.12.102 -> 6.12.103
+ - 6.6.150 -> 6.6.151
+ - 7.1.7 -> 7.1.8
+ - 6.18.43 -> 6.18.44
 
-GCC 16.2 is a bug-fix release from the GCC 16 branch
-containing important fixes for regressions and serious bugs in
-GCC 16.1 with more than 102 bugs fixed since the previous release.
-
-For the list of bugs fixed in this version, see:
-https://gcc.gnu.org/gcc-16/changes.html#16.2
-
-Signed-off-by: Neal Frager <neal.frager@amd.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/gcc-bare-metal/gcc-bare-metal.hash | 4 ++--
- package/gcc-bare-metal/gcc-bare-metal.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ linux/{7.1.7 => 7.1.8}                       | 0
+ linux/Config.in                              | 2 +-
+ linux/before-6.17/linux.hash                 | 4 ++--
+ linux/from-6.17/linux.hash                   | 4 ++--
+ package/linux-headers/{6.12.102 => 6.12.103} | 0
+ package/linux-headers/{6.18.43 => 6.18.44}   | 0
+ package/linux-headers/{6.6.150 => 6.6.151}   | 0
+ package/linux-headers/{7.1.7 => 7.1.8}       | 0
+ package/linux-headers/Config.in.host         | 8 ++++----
+ 9 files changed, 9 insertions(+), 9 deletions(-)
+ rename linux/{7.1.7 => 7.1.8} (100%)
+ rename package/linux-headers/{6.12.102 => 6.12.103} (100%)
+ rename package/linux-headers/{6.18.43 => 6.18.44} (100%)
+ rename package/linux-headers/{6.6.150 => 6.6.151} (100%)
+ rename package/linux-headers/{7.1.7 => 7.1.8} (100%)
 
-diff --git a/package/gcc-bare-metal/gcc-bare-metal.hash b/package/gcc-bare-metal/gcc-bare-metal.hash
-index 216c383a02..1e1003eec9 100644
---- a/package/gcc-bare-metal/gcc-bare-metal.hash
-+++ b/package/gcc-bare-metal/gcc-bare-metal.hash
-@@ -1,5 +1,5 @@
--# From https://gcc.gnu.org/pub/gcc/releases/gcc-16.1.0/sha512.sum
--sha512  b3454958891ab47e1e5b6cb9396c0ad3b04f32fe2a7bf1153a143f21013fdb6b295ca94c98964698a688e4c1d7555ffd8ffbc20187507cce6b1c32cbcc09897a  gcc-16.1.0.tar.xz
-+# From https://gcc.gnu.org/pub/gcc/releases/gcc-16.2.0/sha512.sum
-+sha512  c51c30ca7422d0cbecf504b2e0f33c3aca31e0f90a76b65217f465163fa6fa17b3f5de39e145c47e5bab90ac0ce7fff3b03c8d553ae36e01faaea5a50f8648d1  gcc-16.2.0.tar.xz
+diff --git a/linux/7.1.7 b/linux/7.1.8
+similarity index 100%
+rename from linux/7.1.7
+rename to linux/7.1.8
+diff --git a/linux/Config.in b/linux/Config.in
+index 5dd0e9393e..2c6b94aed2 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -143,7 +143,7 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_GIT_SUBMODULES
  
- # Locally calculated
- sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
-diff --git a/package/gcc-bare-metal/gcc-bare-metal.mk b/package/gcc-bare-metal/gcc-bare-metal.mk
-index d4f011c2fa..4ec154bb53 100644
---- a/package/gcc-bare-metal/gcc-bare-metal.mk
-+++ b/package/gcc-bare-metal/gcc-bare-metal.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "7.1.7" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "7.1.8" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "5.10.254-cip72" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "5.10.254-cip72-rt32" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/before-6.17/linux.hash b/linux/before-6.17/linux.hash
+index 7102a69377..c1e447e255 100644
+--- a/linux/before-6.17/linux.hash
++++ b/linux/before-6.17/linux.hash
+@@ -1,6 +1,6 @@
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  694bb5f49371323ab9c2b7040bd358ed81bffbe80b372d76507045828f655803  linux-6.12.102.tar.xz
+-sha256  6eb823269151936c0af9e050678ed5c70ca515d6b20a09af741852b02d228979  linux-6.6.150.tar.xz
++sha256  f143aaade8877ba5616e788b4482576db28481bcf557ef537f4fcc3938fc3176  linux-6.12.103.tar.xz
++sha256  de01e5ae73412b70bceb41a6f97da6d0f29b6536f1f00f8b6a6fd40c729969f7  linux-6.6.151.tar.xz
+ sha256  f38416bb6e8024a21ae868c7f29cd15293a73755e3484c7f2f4adea5b03c1f85  linux-6.1.182.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+ sha256  d57f279da0813fa6d69fb2e59cf9a364be4faa1cd18cb76b0b64c074fd23b7a7  linux-5.15.215.tar.xz
+diff --git a/linux/from-6.17/linux.hash b/linux/from-6.17/linux.hash
+index f527761764..bb9750191d 100644
+--- a/linux/from-6.17/linux.hash
++++ b/linux/from-6.17/linux.hash
+@@ -1,8 +1,8 @@
+ # From https://www.kernel.org/pub/linux/kernel/v7.x/sha256sums.asc
+-sha256  ca8f2a6884a4d62043e9ab93ac1ab15efc2b6630fe8f768b2ef2ffdf4b5e26df  linux-7.1.7.tar.xz
++sha256  ff01dcb449279d5b4cfccdb01fee639cf5ff1803f1749a77844dd33915422c49  linux-7.1.8.tar.xz
  
--GCC_BARE_METAL_VERSION = 16.1.0
-+GCC_BARE_METAL_VERSION = 16.2.0
- GCC_BARE_METAL_SITE = $(BR2_GNU_MIRROR)/gcc/gcc-$(GCC_BARE_METAL_VERSION)
- GCC_BARE_METAL_SOURCE = gcc-$(GCC_BARE_METAL_VERSION).tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  a1aeb926c7c4a1564368200b1082e45bb958007682d804aff88abbc3a7a47b5d  linux-6.18.43.tar.xz
++sha256  0f72d938f06828e82c90405174fe572287db7bfe089e2fc46572a99a7f240d43  linux-6.18.44.tar.xz
  
+ # Licenses hashes
+ sha256  fb5a425bd3b3cd6071a3a9aff9909a859e7c1158d54d32e07658398cd67eb6a0  COPYING
+diff --git a/package/linux-headers/6.12.102 b/package/linux-headers/6.12.103
+similarity index 100%
+rename from package/linux-headers/6.12.102
+rename to package/linux-headers/6.12.103
+diff --git a/package/linux-headers/6.18.43 b/package/linux-headers/6.18.44
+similarity index 100%
+rename from package/linux-headers/6.18.43
+rename to package/linux-headers/6.18.44
+diff --git a/package/linux-headers/6.6.150 b/package/linux-headers/6.6.151
+similarity index 100%
+rename from package/linux-headers/6.6.150
+rename to package/linux-headers/6.6.151
+diff --git a/package/linux-headers/7.1.7 b/package/linux-headers/7.1.8
+similarity index 100%
+rename from package/linux-headers/7.1.7
+rename to package/linux-headers/7.1.8
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 4fa0bc80f9..ad1a5bd70c 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -475,10 +475,10 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "5.10.264"	if BR2_KERNEL_HEADERS_5_10
+ 	default "5.15.215"	if BR2_KERNEL_HEADERS_5_15
+ 	default "6.1.182"	if BR2_KERNEL_HEADERS_6_1
+-	default "6.6.150"	if BR2_KERNEL_HEADERS_6_6
+-	default "6.12.102"	if BR2_KERNEL_HEADERS_6_12
+-	default "6.18.43"	if BR2_KERNEL_HEADERS_6_18
+-	default "7.1.7"		if BR2_KERNEL_HEADERS_7_1
++	default "6.6.151"	if BR2_KERNEL_HEADERS_6_6
++	default "6.12.103"	if BR2_KERNEL_HEADERS_6_12
++	default "6.18.44"	if BR2_KERNEL_HEADERS_6_18
++	default "7.1.8"		if BR2_KERNEL_HEADERS_7_1
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
 -- 
-2.43.0
+2.47.3
 
 _______________________________________________
 buildroot mailing list
