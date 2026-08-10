@@ -4,134 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE20BC5AC82
-	for <buildroot@archiver.kernel.org>; Mon, 10 Aug 2026 08:31:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83ED5C5AD4E
+	for <buildroot@archiver.kernel.org>; Mon, 10 Aug 2026 08:45:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9ED784051C;
-	Mon, 10 Aug 2026 08:31:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 316234054F;
+	Mon, 10 Aug 2026 08:45:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id q-H4k-K70Vql; Mon, 10 Aug 2026 08:31:01 +0000 (UTC)
+ id NRs8XA_m_bOE; Mon, 10 Aug 2026 08:45:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6963540522
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 62D7C40562
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786350661;
-	bh=L5qMnlhcQ7yH5c9ULHBhVwK9uPKzaIS1bT7K1/OXee0=;
-	h=References:In-Reply-To:From:Date:To:Cc:Subject:List-Id:
+	s=default; t=1786351500;
+	bh=JwKoWpKgjXiedfsRKjIEEnqFcSiNRHkom+qaSdC8JVI=;
+	h=Date:Cc:To:References:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=tBUZdMBYwYufBiIvTxFF9luunMDyyVr/sVm5QeAmPf2K2XUcBKbUr+RnarVZrMnRg
-	 gw7XS6+1WXwn7OT+h/SxVRFqL8+drCmMAswKvLMIl6BZhxguY+xXc/4oy66OueNkDK
-	 ulQRrz5RLgUiRf5wSefJwqPsjbmjqyW+LMZbniDkYCD+Y+RaTPCqt69BUqZE4D/ycM
-	 dK/J7mrySmASpLWVcuVQiOcNxw85aF03KGZ1Myr9BksTMojLWLDHVWGWFd1cMiEz1d
-	 MAyqqLMRAdgPSrYzOl8HhgX2teeuTrg14GiE7ZGEPEc6aPR1Nip0ZPJim8Ezan1oVn
-	 /jXf6cBjkmcHA==
+	 From:Reply-To:From;
+	b=IezEx2WXovIlXpabToBTKc2S6X+F36973krNQRAcpxaRO7pJTVCCCJ3Pb024gODJq
+	 U9YrxkkK/IMrenZGbVjduoWsmnnI/pfWIe4HjSM6zNtQEwe6dqnbtw8bsLN/Hdt3fC
+	 PtmwQOaiLYr6/ANK3zyOt49fVCGVRkC/7F4iQa7cbhvaPIfn3jqS6mVtAtisoaPIeA
+	 xwOptnVYJkTaMFd2gvU9+hD8sBoe32NaQfW5DgFwmDH4QfyL2buLA6BezWf4tvvuuy
+	 j03MFBFOW99gY3O4pfIOTyeyOBHDR8x0/H2JPfeWtrZkOZO5nbTGKnbRe8ld2Y9fnk
+	 Hv4afrTnadAhg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6963540522;
-	Mon, 10 Aug 2026 08:31:01 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 6C60023F
- for <buildroot@buildroot.org>; Mon, 10 Aug 2026 08:31:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 62D7C40562;
+	Mon, 10 Aug 2026 08:45:00 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8D158282
+ for <buildroot@buildroot.org>; Mon, 10 Aug 2026 08:44:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5107640522
- for <buildroot@buildroot.org>; Mon, 10 Aug 2026 08:31:00 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7360E80C8B
+ for <buildroot@buildroot.org>; Mon, 10 Aug 2026 08:44:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JUwfA_rm32B0 for <buildroot@buildroot.org>;
- Mon, 10 Aug 2026 08:30:59 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2001:4860:4864:20::2e; helo=mail-oa1-x2e.google.com;
- envelope-from=philippemontcho@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 509204051D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 509204051D
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com
- [IPv6:2001:4860:4864:20::2e])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 509204051D
- for <buildroot@buildroot.org>; Mon, 10 Aug 2026 08:30:59 +0000 (UTC)
-Received: by mail-oa1-x2e.google.com with SMTP id
- 586e51a60fabf-4569e871502so321730fac.1
- for <buildroot@buildroot.org>; Mon, 10 Aug 2026 01:30:59 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1786350658; cv=none;
- d=google.com; s=arc-20260327;
- b=YXN0HdSKf+rNpBur+/KGgNis2GvxCY8SZ4xoefj5M20pucmFaqq0pU9GWEk8D3JDTy
- F682377BYhydNT17/JcWllTVS7qaGSuyLTZ4QOLJ+pnZTy5l09DRmSUvz43pfzUOU9Up
- bSfC0Ik3GtP+NYIygLXpCYePPN5yEGFK3LDwROjsveIso0eNYGvAQZo7u+NdPL7gxHLK
- aoWSHxj60d+UQMKsYMbHYI1349LOfqNMOH6MgVrBBk6U7RyFm9SdGnByMQS7Y8dto0eV
- u/STwAckrBxu2kwBRR73R2hpU5OJ3yw6NEWzngHSaUGQ7r5m8ALZW5VbkfL+ra5iaMcC
- 8n7g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com;
- s=arc-20260327; 
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:dkim-signature;
- bh=m6Z9QT4baR9nTFcSUbADewD/bQ6AK5OBb7xMRswiXsM=;
- fh=SZO4cigf61EkGPvD6DJKoM9LqLOMR56M+LsYh+L0F/w=;
- b=c4sU0JvO4OymrGi4u16A7fvCOdLjCOOgBgw1DHIvhWmxSLrwE91Aw5J2FVH31ew7ll
- WOv8ZhUWh1OGMrJvUoGNS7nKAIGqHuLU0WEmNQ26GDUcRt+OZxCz/G1e1h8W1W3hZljB
- AK7XLTlw+Z3YPBa69AeRdnsdXq+/7xr6p50dsKFnXNU7hKrLiIJgUaF9dSclO35Naf1f
- Z2UbNqqZiVIOH/LrP0a9rHwFtUbB4rU52ahQHfGs+Hbz6Ljj/GlKc+UjPfsAlmbA2Mcu
- y9JPWFewE9G2H9hCFcS3xwjMG9J5kjYO7cj9K8vC0OW9MLpQIujJLKdw96KnzwCT5MZY
- kchQ==; darn=buildroot.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1786350658; x=1786955458;
- h=content-type:cc:to:subject:message-id:date:from:in-reply-to
- :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to:content-type;
- bh=m6Z9QT4baR9nTFcSUbADewD/bQ6AK5OBb7xMRswiXsM=;
- b=KGE1Ip5ylmXOTs9b4fvZyjyqyp4x09hwF1Rvru8a+CgYWLGWxCbRBD2wlbhGMeLJUc
- b0TWrt0UBIJpxdTIP2iYUKh7rxoMvHQnYpWHZIVw1Y6C/HeeHVackkBBmslc5YNscCPG
- 3RTYk64Bp6lpB2QGKEgtF+LWg6knWfMMAXQtMwRThO6McGVjWcPjnob5YNDc9P0+zIdo
- LYT+gwEuflLQb2as5ps+DnIse+KNNnt078am048X9qJkmHTDYTzdoosgqWq2LVRYm2NS
- vVCEiJPAVpRS/U8QNmB0aBJHQRTkmYzYCUMiUzZC4rZPquuC0XbanEa2zQmVVxbu/QGG
- 4b/Q==
-X-Forwarded-Encrypted: i=1;
- AHgh+Rrx0gXwGzg5IZcRXshzNOSqUWZ7jv6R47lJEJ92D34cxgVahhRLEE6pU8tEnAHMZFmTjHFikbHH0aA=@buildroot.org
-X-Gm-Message-State: AOJu0YxbxdtI+y+jr1k1msZB9GUdXWKCLfi1JiW70FAwI11yGYYiLOg+
- 2BDvnpAiaFvQ63ETVWxELdaXGoVsAzKBTeRkjTy88wuIAXpSBMzvlLx5HxEgAVIxk8yVAXjzemN
- 1car0lwk/t3mW5AuGDsECIrF5fYiNI8A=
-X-Gm-Gg: AR+sD118y3gVjXP/pJuhNSr1mFjTtRfiiR4JNyKtXITHlqutXlQbXEkoWiEe4uxxt6O
- uU+pkT4js3E8GDVtNKRVaTtd+ipXbE+UCyb76xXPeV623HdpdiIczIva0SGp0ADT6mR5G2BXsam
- zFZzNyMOHeQyaxHrft8KvZjEgpNq+Cb30L1+XlwV/4rHzqXY7BHafMXPw/UrWH9b839TTnFunWw
- Y2WByCLKOm7GWS67SY3R5xiQASBABBhNvbioSiqwMS/V3en877vGtSewn20uDKdecY+K/Bywz8R
- UPGmTOeJAAfa3QrSgbd/vhW63et3xNJEZ+FqOM67sY+SZveUFHOddtax4NI3KvEQvDaqTG3ASQN
- e0MY1/buZAz4fP1hw7Fc9gaQ/Cl8jQRIRVOfOL1fzYor7p9730C0/Nr5e
-X-Received: by 2002:a05:6808:13d6:b0:4a0:97bc:53a6 with SMTP id
- 5614622812f47-4afadf11123mr22825674b6e.7.1786350658045; Mon, 10 Aug 2026
- 01:30:58 -0700 (PDT)
-MIME-Version: 1.0
-References: <20260805141803.1647733-1-philippemontcho@gmail.com>
- <0c800033-96f8-4e1b-9a80-2c6472512ded@gmx.de>
- <63f6f888cc951c77cca6a3be6cf2da00@free.fr>
-In-Reply-To: <63f6f888cc951c77cca6a3be6cf2da00@free.fr>
-From: Philippe MONTCHO <philippemontcho@gmail.com>
-Date: Mon, 10 Aug 2026 10:30:50 +0200
-X-Gm-Features: AUfX_mxkJQxdFWU5Y47I9pjzXmm6ahmmL28gdnO08yAn69H-BCpCTlK1pzrkjFc
-Message-ID: <CAB86sFGGhsEjCC_myRPZ2pz1Nb5tqaro==jTX-WhEJunYGtipA@mail.gmail.com>
-To: Julien Olivain <ju.o@free.fr>
-Cc: Fiona Klute <fiona.klute@gmx.de>, buildroot@buildroot.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6vYub0vSuWED for <buildroot@buildroot.org>;
+ Mon, 10 Aug 2026 08:44:58 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
+ helo=smtpout-02.galae.net; envelope-from=alexis.lothore@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7725D80C85
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7725D80C85
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7725D80C85
+ for <buildroot@buildroot.org>; Mon, 10 Aug 2026 08:44:57 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-02.galae.net (Postfix) with ESMTPS id 4932E1A1515;
+ Mon, 10 Aug 2026 08:44:55 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 163496033B;
+ Mon, 10 Aug 2026 08:44:55 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 0E1C811C49EFF; 
+ Mon, 10 Aug 2026 10:44:49 +0200 (CEST)
+Mime-Version: 1.0
+Date: Mon, 10 Aug 2026 10:44:49 +0200
+Message-Id: <DKL4R5768V4T.188YQE4W2AGL9@bootlin.com>
+Cc: <buildroot@buildroot.org>, "Nicolas Carrier"
+ <nicolas.carrier@nav-timing.safrangroup.com>
+To: "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>,
+ =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260806-host_tools-v1-0-19c63ecc3b10@bootlin.com>
+ <20260806-host_tools-v1-1-19c63ecc3b10@bootlin.com>
+ <anWMFshKM90_1I-z@windsurf>
+In-Reply-To: <anWMFshKM90_1I-z@windsurf>
+X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1786350658; x=1786955458; darn=buildroot.org;
- h=content-type:cc:to:subject:message-id:date:from:in-reply-to
- :references:mime-version:from:to:cc:subject:date:message-id:reply-to
- :content-type;
- bh=m6Z9QT4baR9nTFcSUbADewD/bQ6AK5OBb7xMRswiXsM=;
- b=dGYs+Gvwfivd3LSPmATaRNuOnVOmB0sYpGrX4/dpnawQ6wwGWunvm6kUCvo/X+P71P
- 0hVwjR4IuEcfWwmyZ0jQDTDX0d9tvthUfyWe0KEJcwNb3unBeWCcCBTjU2DkeAdlpuyd
- Vt6Gm94ztFoYEiRMHrjW5WukPfgQqZ7rrppR4XgoYINhgF5ctLU9W7pk17+vQvmbc7iN
- 31QrvR2LqSDzui7t3bfIapc3Iqfy6qIX2BBqDSVguHvTXgkf4DUSc+StGUihz5/13KnZ
- 9BJeSf3zMoz35RrnVNXaOsrIVkkKrzIgSxynN8z1Z+DNcgFT1rSdUoYg7atRXzDaXyRq
- c6sQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20251104 header.b=dGYs+Gvw
-Subject: Re: [Buildroot] [PATCH 1/1] package/dtc: bump version to 1.8.1 and
- switch to meson build
+ d=bootlin.com; s=dkim; 
+ t=1786351490; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ content-transfer-encoding:in-reply-to:references;
+ bh=UrRLONH9KXGjO1B9GMKb9p2D+TIzY18HJh1GGwhbjJA=;
+ b=VhjeO/vqN8cidKQ6I39Dx12vGb0tgCtsL3/sRfQZZaUnPR7MUmDV8ZmL47adttYIM3Eki+
+ ADvAwp0iXAfcC6jx/5GKnIwkW8AaOEsr5SSnX+d4BdQrEV+m5+TLVORZneCpYszEEOeafA
+ HBo2+GxhHPdS+iiOtcnPjzMnJP8TSm10K4SwUS72GzkV2yETyRW5PZeDbL4Rb6l7WJgTwV
+ JaaSg8BAPtoSY+at+l1rd22hRsZ4nwfWFZanQFVPIrUwX+r3naN5p4fh7P68d5KQzXNJ9F
+ vTwvcyaEhiIT+sXzk6D++Q9JHfz0mfIFUknON7ovDXDBpUvG6JlEF4Q2kWD6Qg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
+ header.a=rsa-sha256 header.s=dkim header.b=VhjeO/vq
+Subject: Re: [Buildroot] [PATCH 1/2] package/uglifyjs: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -143,155 +99,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============6828583612329630597=="
+From: =?utf-8?q?Alexis_Lothor=C3=A9_via_buildroot?= <buildroot@buildroot.org>
+Reply-To: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6828583612329630597==
-Content-Type: multipart/alternative; boundary="0000000000006ac9cb0658ad2c68"
-
---0000000000006ac9cb0658ad2c68
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-Hi Julien,
-Hi Fiona,
-
-Thanks for your comments and explanations.
-I will address the various points in the v2 of the patch.
-
-Best regards,
-
-Philippe.
-
-
-Le sam. 8 ao=C3=BBt 2026 =C3=A0 09:14, Julien Olivain <ju.o@free.fr> a =C3=
-=A9crit :
-
-> Hi Fiona,
->
-> On 07/08/2026 22:02, Fiona Klute wrote:
-> > Hi Philippe,
-> >
-> > I mostly agree with Julien's comments, but two additional points below.
-> >
-> > Am 05.08.26 um 16:17 schrieb Philippe MONTCHO:
-> >> Release note:
-> >> https://github.com/dgibson/dtc/releases/tag/v1.8.1
-> >
-> > The primary repository is clearly the one on git.kernel.org (the manual
-> > doesn't even mention the Github one), so please link there instead
-> > [1,2]. Also it's probably the more stable source. ;-)
->
-> I would have accepted this Github URL because it is mentioned in
-> CONTRIBUTING.md:
->
-> https://git.kernel.org/pub/scm/utils/dtc/dtc.git/tree/CONTRIBUTING.md?h=
-=3Dv1.8.1#n9
-> and libfdt/sbom.cdx.json:
->
-> https://git.kernel.org/pub/scm/utils/dtc/dtc.git/tree/libfdt/sbom.cdx.jso=
-n?h=3Dv1.8.1#n39
->
-> It seems the project is using both, so I'm fine with one or the other.
->
-> [...]
-> > [1] https://git.kernel.org/pub/scm/utils/dtc/dtc.git/tag/?h=3Dv1.8.0
-> > [2] https://git.kernel.org/pub/scm/utils/dtc/dtc.git/tag/?h=3Dv1.8.1
-> > [3]
-> >
-> https://git.kernel.org/pub/scm/utils/dtc/dtc.git/commit/README.license?h=
-=3Dv1.8.1&id=3D205fbef17b7b2f410e34ac79aa1559a8d492b66c
->
-> Best regards,
->
-> Julien.
->
-
---0000000000006ac9cb0658ad2c68
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div><br clear=3D"all"></div><div><div dir=3D"ltr" class=
-=3D"gmail_signature" data-smartmail=3D"gmail_signature"><div>Hi Julien,</di=
-v><div>Hi Fiona,</div><div><span style=3D"background-color:transparent"><br=
-></span></div><div><span style=3D"background-color:transparent">Thanks for =
-your comments and explanations.</span></div><div><span style=3D"background-=
-color:transparent">I will address the various points in the v2 of the patch=
-.</span></div><div><span style=3D"background-color:transparent"><br></span>=
-</div><div><span style=3D"background-color:transparent">Best regards,</span=
-></div><div><span style=3D"background-color:transparent"><br></span></div><=
-div><span style=3D"background-color:transparent">Philippe.</span></div></di=
-v></div><br></div><br><div class=3D"gmail_quote gmail_quote_container"><div=
- dir=3D"ltr" class=3D"gmail_attr">Le=C2=A0sam. 8 ao=C3=BBt 2026 =C3=A0=C2=
-=A009:14, Julien Olivain &lt;<a href=3D"mailto:ju.o@free.fr">ju.o@free.fr</=
-a>&gt; a =C3=A9crit=C2=A0:<br></div><blockquote class=3D"gmail_quote" style=
-=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding=
--left:1ex">Hi Fiona,<br>
-<br>
-On 07/08/2026 22:02, Fiona Klute wrote:<br>
-&gt; Hi Philippe,<br>
-&gt; <br>
-&gt; I mostly agree with Julien&#39;s comments, but two additional points b=
-elow.<br>
-&gt; <br>
-&gt; Am 05.08.26 um 16:17 schrieb Philippe MONTCHO:<br>
-&gt;&gt; Release note:<br>
-&gt;&gt; <a href=3D"https://github.com/dgibson/dtc/releases/tag/v1.8.1" rel=
-=3D"noreferrer" target=3D"_blank">https://github.com/dgibson/dtc/releases/t=
-ag/v1.8.1</a><br>
-&gt; <br>
-&gt; The primary repository is clearly the one on <a href=3D"http://git.ker=
-nel.org" rel=3D"noreferrer" target=3D"_blank">git.kernel.org</a> (the manua=
-l <br>
-&gt; doesn&#39;t even mention the Github one), so please link there instead=
- <br>
-&gt; [1,2]. Also it&#39;s probably the more stable source. ;-)<br>
-<br>
-I would have accepted this Github URL because it is mentioned in <br>
-CONTRIBUTING.md:<br>
-<a href=3D"https://git.kernel.org/pub/scm/utils/dtc/dtc.git/tree/CONTRIBUTI=
-NG.md?h=3Dv1.8.1#n9" rel=3D"noreferrer" target=3D"_blank">https://git.kerne=
-l.org/pub/scm/utils/dtc/dtc.git/tree/CONTRIBUTING.md?h=3Dv1.8.1#n9</a><br>
-and libfdt/sbom.cdx.json:<br>
-<a href=3D"https://git.kernel.org/pub/scm/utils/dtc/dtc.git/tree/libfdt/sbo=
-m.cdx.json?h=3Dv1.8.1#n39" rel=3D"noreferrer" target=3D"_blank">https://git=
-.kernel.org/pub/scm/utils/dtc/dtc.git/tree/libfdt/sbom.cdx.json?h=3Dv1.8.1#=
-n39</a><br>
-<br>
-It seems the project is using both, so I&#39;m fine with one or the other.<=
-br>
-<br>
-[...]<br>
-&gt; [1] <a href=3D"https://git.kernel.org/pub/scm/utils/dtc/dtc.git/tag/?h=
-=3Dv1.8.0" rel=3D"noreferrer" target=3D"_blank">https://git.kernel.org/pub/=
-scm/utils/dtc/dtc.git/tag/?h=3Dv1.8.0</a><br>
-&gt; [2] <a href=3D"https://git.kernel.org/pub/scm/utils/dtc/dtc.git/tag/?h=
-=3Dv1.8.1" rel=3D"noreferrer" target=3D"_blank">https://git.kernel.org/pub/=
-scm/utils/dtc/dtc.git/tag/?h=3Dv1.8.1</a><br>
-&gt; [3] <br>
-&gt; <a href=3D"https://git.kernel.org/pub/scm/utils/dtc/dtc.git/commit/REA=
-DME.license?h=3Dv1.8.1&amp;id=3D205fbef17b7b2f410e34ac79aa1559a8d492b66c" r=
-el=3D"noreferrer" target=3D"_blank">https://git.kernel.org/pub/scm/utils/dt=
-c/dtc.git/commit/README.license?h=3Dv1.8.1&amp;id=3D205fbef17b7b2f410e34ac7=
-9aa1559a8d492b66c</a><br>
-<br>
-Best regards,<br>
-<br>
-Julien.<br>
-</blockquote></div>
-
---0000000000006ac9cb0658ad2c68--
-
---===============6828583612329630597==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============6828583612329630597==--
+SGkgVGhvbWFzLAoKT24gRnJpIEF1ZyA3LCAyMDI2IGF0IDk6NDQgQU0gQ0VTVCwgVGhvbWFzIFBl
+dGF6em9uaSB3cm90ZToKPiBIZWxsbyBBbGV4aXMsCj4KPiBPbiBUaHUsIEF1ZyAwNiwgMjAyNiBh
+dCAxMToyNDoyMlBNICswMjAwLCBBbGV4aXMgTG90aG9yw6kgd3JvdGU6Cj4+IHVnbGlmeWpzIGlz
+IGEgSmF2YVNjcmlwdCBwYXJzZXIsIG1pbmlmaWVyLCBjb21wcmVzc29yIGFuZCBiZWF1dGlmaWVy
+Cj4+IHRvb2xraXQuCj4+IAo+PiBodHRwczovL2dpdGh1Yi5jb20vbWlzaG9vL1VnbGlmeUpTCj4+
+IAo+PiBTaWduZWQtb2ZmLWJ5OiBBbGV4aXMgTG90aG9yw6kgPGFsZXhpcy5sb3Rob3JlQGJvb3Rs
+aW4uY29tPgo+Cj4gVGhhbmtzIGZvciB0aGUgcGF0Y2guIE92ZXJhbGwgbG9va3MgZ29vZC4gT25l
+IG9yIHR3byBzdWdnZXN0aW9ucyBiZWxvdy4KPgo+PiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+PiBp
+bmRleCAwMDAwMDAwMDAwMDAuLjkyMWQ0ZGZmZWU4ZQo+PiAtLS0gL2Rldi9udWxsCj4+ICsrKyBi
+L3BhY2thZ2UvdWdsaWZ5anMvdWdsaWZ5anMubWsKPj4gQEAgLTAsMCArMSwyMyBAQAo+PiArIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMKPj4gKyMKPj4gKyMgdWdsaWZ5anMKPj4gKyMKPj4gKyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjCj4+ICsKPj4gK1VHTElGWUpTX1ZFUlNJT04gPSAzLjE5LjMKPj4g
+K1VHTElGWUpTX1NJVEUgPSAkKGNhbGwgZ2l0aHViLG1pc2hvbyxVZ2xpZnlKUyx2JChVR0xJRllK
+U19WRVJTSU9OKSkKPj4gK1VHTElGWUpTX0xJQ0VOU0UgPSBCU0QtMi1DbGF1c2UKPj4gK1VHTElG
+WUpTX0xJQ0VOU0VfRklMRVMgPSBMSUNFTlNFCj4+ICtIT1NUX1VHTElGWUpTX0RFUEVOREVOQ0lF
+UyA9IGhvc3Qtbm9kZWpzCj4+ICsKPj4gK2RlZmluZSBIT1NUX1VHTElGWUpTX0lOU1RBTExfQ01E
+Uwo+PiArCSQoSU5TVEFMTCkgLW0gMDc1NSAtZCAkKEhPU1RfRElSKS9saWIvbm9kZV9tb2R1bGVz
+L3VnbGlmeS1qcwo+PiArCXJzeW5jIC1hICQoQEQpL2JpbiAkKEhPU1RfRElSKS9saWIvbm9kZV9t
+b2R1bGVzL3VnbGlmeS1qcy8KPj4gKwlyc3luYyAtYSAkKEBEKS9saWIgJChIT1NUX0RJUikvbGli
+L25vZGVfbW9kdWxlcy91Z2xpZnktanMvCj4+ICsJcnN5bmMgLWEgJChARCkvdG9vbHMgJChIT1NU
+X0RJUikvbGliL25vZGVfbW9kdWxlcy91Z2xpZnktanMvCj4KPiBXZSBtb3JlIGNvbW1vbmx5IHVz
+ZSAiY3AgLWRwZnIiIGZvciB0aGlzIGtpbmQgb2Ygc2l0dWF0aW9uLCBhbmQgeW91Cj4gY291bGQg
+YWxzbyB1c2UgYSBsb29wPwo+Cj4+ICsJJChJTlNUQUxMKSAtbSAwNzU1ICQoQEQpL3BhY2thZ2Uu
+anNvbiAkKEhPU1RfRElSKS9saWIvbm9kZV9tb2R1bGVzL3VnbGlmeS1qcy8KPgo+IFNvbWV0aGlu
+ZyBsaWtlOgo+Cj4gCSQoZm9yZWFjaCBwLGJpbiBsaWIgdG9vbHMgcGFja2FnZS5qc29uLFwKPiAJ
+CWNwIC1kcGZyICQoQEQpLyQocCkgJChIT1NUX0RJUikvbGliL25vZGVfbW9kdWxlcy91Z2xpZnkt
+anMvCj4gCSkKPgoKSW5kZWVkLCBpdCBsb29rcyBiZXR0ZXIgd2l0aCB0aGUgbG9vcCwgSSdsbCB1
+cGRhdGUgYWNjb3JkaW5nbHkuCgo+PiArCWxuIC1zZiAuLi9saWIvbm9kZV9tb2R1bGVzL3VnbGlm
+eS1qcy9iaW4vdWdsaWZ5anMgJChIT1NUX0RJUikvYmluL3VnbGlmeWpzCj4+ICsKPgo+IERyb3Ag
+dGhpcyBlbXB0eSBuZXcgbGluZS4KPgo+PiArZW5kZWYKPj4gKwo+PiArJChldmFsICQoaG9zdC1n
+ZW5lcmljLXBhY2thZ2UpKQo+PiBkaWZmIC0tZ2l0IGEvc3VwcG9ydC90ZXN0aW5nL3Rlc3RzL3Bh
+Y2thZ2UvdGVzdF91Z2xpZnlqcy5weSBiL3N1cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNrYWdlL3Rl
+c3RfdWdsaWZ5anMucHkKPj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPj4gaW5kZXggMDAwMDAwMDAw
+MDAwLi42NjZhNWZiNDZmZjEKPj4gLS0tIC9kZXYvbnVsbAo+PiArKysgYi9zdXBwb3J0L3Rlc3Rp
+bmcvdGVzdHMvcGFja2FnZS90ZXN0X3VnbGlmeWpzLnB5Cj4KPiBGb3Jnb3QgYWJvdXQgY29tbWVu
+dGluZyBvbiB0aGlzIG9uIHRoZSBERVZFTE9QRVJTIGZpbGU6IHBsZWFzZSBhZGQKPiB0aGlzIGZp
+bGUgdG8gdGhlIERFVkVMT1BFUlMgZmlsZSBhcyB3ZWxsLCB1bmRlciB5b3VyIG5hbWUuIFRoaXMg
+d2F5IGlmCj4gdGhpcyB0ZXN0IGZhaWxzIGluIG91ciBDSSwgeW91J2xsIGdldCBub3RpZmllZC4K
+CkFoLHRydWUsIEkndmUgbGlrZWx5IG1pc3NlZCB0ZXN0cyBmcm9tIHNvbWUgb3RoZXIgcGFja2Fn
+ZXMgdGhlbiwgSSdsbAp1cGRhdGUgaGVyZSBhbmQgc2VuZCBhIHNlcGFyYXRlIHBhdGNoIGZvciBl
+eGlzdGluZyBwYWNrYWdlcy4KCkFsZXhpcwoKPiBUaGFua3MhCj4KPiBUaG9tYXMKCgoKCi0tIApB
+bGV4aXMgTG90aG9yw6ksIEJvb3RsaW4KRW1iZWRkZWQgTGludXggYW5kIEtlcm5lbCBlbmdpbmVl
+cmluZwpodHRwczovL2Jvb3RsaW4uY29tCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJv
+b3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxk
+cm9vdAo=
