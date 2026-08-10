@@ -1,86 +1,117 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39829C5B56C
-	for <buildroot@archiver.kernel.org>; Mon, 10 Aug 2026 15:42:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60D82C5AD55
+	for <buildroot@archiver.kernel.org>; Mon, 10 Aug 2026 15:50:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A253C6072A;
-	Mon, 10 Aug 2026 15:42:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CFD4340642;
+	Mon, 10 Aug 2026 15:50:22 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kdnc4EUS60c3; Mon, 10 Aug 2026 15:50:21 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 025A340624
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1786377021;
+	bh=5NvA6kIDKD6cbRn1Yk/RdIptUQrga8PW8JNwAauDnNU=;
+	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=L1MIUh5KRDQeqtM5RwnVcC7SEmnT4HbyWppZ7YTwTOa8H58lq2gOq5qZ/mnyvJ0hT
+	 1eXoVVvhipEqEcMjHQ1g9HkjNX4WWwBXgacninQg7Z5zumQBxIez9wWggYFr9YutEg
+	 weqhDAlN+sz3fFasvMR7xMICVAAecydnd6SSEoD6wThh7jepv3sV5SnSpIYetSQigu
+	 T65SLBmHYdZe10xsT3ZnG8+Tk1b3wf221sUdqrEr1C2qYOoR66dVDTJ4RzvRkYvoPX
+	 WVAJNEPfJXrJbFYFz15AiCS7UwIjtY2kTdO8dqMWpxx2HdCoskdXjM2iM086rJcAXf
+	 NYj1P7JFHW2SQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 025A340624;
+	Mon, 10 Aug 2026 15:50:21 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9C198296
+ for <buildroot@buildroot.org>; Mon, 10 Aug 2026 15:50:19 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 82AE960728
+ for <buildroot@buildroot.org>; Mon, 10 Aug 2026 15:50:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RicRS72Etmdt; Mon, 10 Aug 2026 15:42:16 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7AE2C60724
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786376536;
-	bh=UZuA8I5zSBaB3gNhGVscUWDRqbu2EMD4H0Aw6GJAmlg=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=ZDmxJTopb4rMGmoLGvpKd6ESEXgGoM+F4iwbYMdVuQs8AVXi7a1OpFyA/eKJO8ky4
-	 /u41pbfED0gx4M5SxsFM/JeunEHEOHuh4ZQaTnW+MTIQV+SeIZo4BcY3yt62mAK/W4
-	 vkva2eYZfMP8qrcxxClTSmHFl9kd9wd5PNtDETUJT2D47wznLiOGAzAso8/RK74CeO
-	 DRUP93I9aXNCs1aZIAKkUYWF87LvWiblGjjSEVO1IFLAQUsVvVTL9BpylDVlT3xyqG
-	 vAQoKpPjzanEORKb3a1JU/QAUC9kDkZKuENukokvzkaQCtO6JyX/t88018x7KW+R1D
-	 dWEUSTveXNDCg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7AE2C60724;
-	Mon, 10 Aug 2026 15:42:16 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with UTF8SMTP id B544323F
- for <buildroot@buildroot.org>; Mon, 10 Aug 2026 15:42:15 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with UTF8SMTP id A7C7340154
- for <buildroot@buildroot.org>; Mon, 10 Aug 2026 15:42:15 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024)
- with UTF8SMTP id s56PiqtICZdP for <buildroot@buildroot.org>;
- Mon, 10 Aug 2026 15:42:14 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=172.234.252.31;
- helo=sea.source.kernel.org; envelope-from=jarkko@kernel.org;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B38F140153
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B38F140153
-Received: from sea.source.kernel.org (sea.source.kernel.org [172.234.252.31])
- by smtp2.osuosl.org (Postfix) with UTF8SMTPS id B38F140153
- for <buildroot@buildroot.org>; Mon, 10 Aug 2026 15:42:14 +0000 (UTC)
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
- by sea.source.kernel.org (Postfix) with UTF8SMTP id C5683400D4;
- Mon, 10 Aug 2026 15:42:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 216C91F000E9;
- Mon, 10 Aug 2026 15:42:12 +0000 (UTC)
-Date: Mon, 10 Aug 2026 18:42:10 +0300
-To: Fiona Klute <fiona.klute@gmx.de>
-Cc: buildroot@buildroot.org
-Message-ID: <annxUmPe5G8WQgGy@kernel.org>
-References: <20260611105434.3164134-1-jarkko@kernel.org>
- <72898e54-5d9d-4b31-bd9a-66136f21ea52@gmx.de>
+ id kW8PtkFQTTad for <buildroot@buildroot.org>;
+ Mon, 10 Aug 2026 15:50:18 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::529; helo=mail-pg1-x529.google.com;
+ envelope-from=chakrabortyshubham66@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 9C9F060727
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9C9F060727
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com
+ [IPv6:2607:f8b0:4864:20::529])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9C9F060727
+ for <buildroot@buildroot.org>; Mon, 10 Aug 2026 15:50:18 +0000 (UTC)
+Received: by mail-pg1-x529.google.com with SMTP id
+ 41be03b00d2f7-c9d1fff21edso1488490a12.1
+ for <buildroot@buildroot.org>; Mon, 10 Aug 2026 08:50:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20251104; t=1786377018; x=1786981818;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to:content-type;
+ bh=5sS2BcKY2kaAVqPcLLAyw8Rr2mlgExersJ+RoWovuQU=;
+ b=Mf2BKga/ihj4S29/0sD8Ci0bpCk9FhSY15bBTHXU4XnMCXvWK5Ng9Oy8KFVIp/yHTB
+ H7UhKP/Jyx6BvPcZJg3czuNsI2Lvl60lXe3ifGPcpdQ+/LQLhC8iE0Q7bH1NHiCl0jM/
+ v2Rnz/CcuiLGVvOzuoLdWsnnWIT7ox/t62YEtQsaiqrXEpe2+lkwOqNLPmH96kCuC2EY
+ wTTHWF6j+XTDHZ/Un1dcWBvjis2MBZY7rXUsX8Cd4HG8dQYvHRrPFyAlCUvx4XMv+Wax
+ 24fdeP1C8AuDhsxmZkVcj8g9OKNCFPG/1j3wYYaQOHtDM9R9eoZj+VrrsnLGCT+9FaiJ
+ FEbA==
+X-Gm-Message-State: AOJu0Yw79Bg94K1ln3mnpCcI3vKjkMkJ0p7NGNSmYMVnc3QEkwy2c632
+ b4mbNla0spR7URNqA27Z8TDEuXeyvIUSLJP7Z93GjpueGMVOztPLtSZ0H9PdJE9w
+X-Gm-Gg: AR+sD13N+jfYCKvbF3XG6MIqnSTr3egIHQzV0Bkl66tBZJ5+haBZkMORXeq1T5tkjwB
+ NpH9apOLIR3JgajrbjAoXcn4OxkJgO0nRSLrnVu8U/9Y8lz8XlEFgKc1Z7K2Nz/QErdjaqyEtl/
+ Rqpjgv6rjrJTwTVT6bXGjLZPi22xk8AS5hGR2Z+9tMm/8XOE5jOnXwhyVJ5iBx+BaY1ugmf1in8
+ Yl/+uqYqtpo6SKVrSIHsp7zNMJFZw0z3IdCM863isOTF3/x5AJGsCi8AzHJheMC1T/B+Wr0LcNY
+ a/mxgI5frngNDvRXJzWfQDO8vPJRWlEtL9l1i6a8zj/avB2mO43O3CHPLVfQfyM/E1BMNCr+uBu
+ oElPqoXaC2isuvOfAw3YykT+HJlnCcdZ72JPu464YPJ9W1SVRZBDBpWux73RmpFuo7ipYFqS6x3
+ JvnTxxWxUJBGuX7Jw5PzAtOAv2XHayH0PBQ6KbdNEpayVwnqjkF3pHOVNbHIbwavUoLwj3tg==
+X-Received: by 2002:a05:6a20:1441:b0:3b3:1c7b:ffb with SMTP id
+ adf61e73a8af0-3cb85f4e1b0mr55739876637.34.1786377017587; 
+ Mon, 10 Aug 2026 08:50:17 -0700 (PDT)
+Received: from fedora ([2409:40e5:1164:f0da:ce1b:8575:cc78:84c8])
+ by smtp.gmail.com with ESMTPSA id
+ 5a478bee46e88-315bec29672sm45064947eec.29.2026.08.10.08.50.15
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 10 Aug 2026 08:50:17 -0700 (PDT)
+From: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+To: buildroot@buildroot.org
+Cc: Shubham Chakraborty <chakrabortyshubham66@gmail.com>,
+ Bagas Sanjaya <bagasdotme@gmail.com>,
+ Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Mon, 10 Aug 2026 21:19:58 +0530
+Message-ID: <20260810155000.3774763-1-chakrabortyshubham66@gmail.com>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260514164448.92054-1-chakrabortyshubham66@gmail.com>
+References: <20260514164448.92054-1-chakrabortyshubham66@gmail.com>
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <72898e54-5d9d-4b31-bd9a-66136f21ea52@gmx.de>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kernel.org; s=k20260515; t=1786376533;
- bh=/o2+RNpWaqqSY/930nO03QUrZ+hfO32o9YtKQWG6D5I=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To;
- b=CQNSu1pPQmEqHmmsPwau/yvBo6PN5FOSdb3vI6HhAEuICuhvulHYCWyZsOGohRpoS
- WMvV0yOxl0GhkUz6M8i6cjM4Eb7x7j5Yn4+zKx8ExWTyW4N58jQXaDiDhyk0jh/oWw
- iePh6AdXW6GhC0SdqeTELhor2oIYErRYVvoEi09XWko0HBeP3MF/MKLOQuC4BmhFDx
- nzjqfAxFjUR//qKLPiFFkfX8oucWP5UxSyikuXho2j2jbaCq0UGJYK/lSFuNagdMK/
- nKM9QNId3sBCYL5QL5JrHFqqQld2O9i906ezBe1kQ7qXZxYR8DJdXdXRzgGA42xWs+
- 3BnOm7rX0OHuA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=kernel.org
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256
- header.s=k20260515 header.b=CQNSu1pP
-Subject: Re: [Buildroot] [PATCH] package/tpm2sh: new package tpm2sh 0.17.2
+ d=gmail.com; s=20251104; t=1786377018; x=1786981818; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to:content-type;
+ bh=5sS2BcKY2kaAVqPcLLAyw8Rr2mlgExersJ+RoWovuQU=;
+ b=KSrtjqMQZj7FdSA3DXj3SC+fLg3vUzEo6u71D9ng+DGqu/3ftbHCDHl+PDZ1T/nerU
+ 4CqAbDpA+xhtTeBSaRzhLLv/JoCuen4gWv4Hhfp1jfLUHNi8CghHcrPeeysYoTfVNeAB
+ 5bsMjE1HoIGw2jq++M0fK6/g9AQOkeC/R91FTp66vWN7Pbm4LUUtJo/kPeU7TXJaaYu8
+ NJj5tcQ+cEMdzkzpM9jsInMy9BNtaUekYOMeLe7HP3EkhfHqI5yJs5u7zVmgvGjWn6sF
+ 3HIAP719uDthT+8fhV9Ovc3pavIiKE8PfQqlZyPHORd3nAAl7TSxtXo8xHUzyjqE4cLT
+ 7y3w==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20251104 header.b=KSrtjqMQ
+Subject: [Buildroot] [PATCH v2] package/git: switch to meson build system
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -92,95 +123,161 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Jarkko Sakkinen via buildroot <buildroot@buildroot.org>
-Reply-To: Jarkko Sakkinen <jarkko@kernel.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gVGh1LCBBdWcgMDYsIDIwMjYgYXQgMTA6NDI6MDdQTSArMDIwMCwgRmlvbmEgS2x1dGUgd3Jv
-dGU6Cj4gSGkgSmFya2tvIQo+IAo+IEFtIDExLjA2LjI2IHVtIDEyOjU0IHNjaHJpZWIgSmFya2tv
-IFNha2tpbmVuIHZpYSBidWlsZHJvb3Q6Cj4gPiB0cG0yc2ggaXMgYSBUUE0gMi4wIGNvbW1hbmQt
-bGluZSBzaGVsbCBhbmQgdHJvdWJsZXNob290aW5nIHRvb2wgZm9yIExpbnV4Cj4gPiB3aXRoIGxv
-dyBkZXBlbmRlbmNpZXMuIEl0IGNvbW11bmljYXRlcyBkaXJlY3RseSB3aXRoIC9kZXYvdHBte3Jt
-fTAuIEl0Cj4gPiBpcyBtb3N0IHVzZWZ1bCBpbiBrZXJuZWwgdGVzdGluZy4KPiA+IAo+ID4gQW1v
-bmcgb3RoZXIgdGhpbmdzIGl0IGNhbiBiZSB1c2VkIHRvIHF1ZXJ5IGFuZCBtYW5pcHVsYXRlIHRo
-ZSBjaGlwCj4gPiBtZW1vcnk6Cj4gPiAKPiA+IH4gbWFpbgo+ID4g4p2vIHRwbTJzaCBtZW1vcnkK
-PiA+IEhBTkRMRSAgICAgQ0xBU1MgICAgICBERVRBSUxTCj4gPiAwMWMwMDAwMiAgIG52LWluZGV4
-ICAgcnNhLTIwNDg6c2hhMjU2Cj4gPiAwMWMwMDAwYSAgIG52LWluZGV4ICAgZWNjLW5pc3QtcDI1
-NjpzaGEyNTYKPiA+IAo+ID4gfiBtYWluCj4gPiDina8gdHBtMnNoIG1lbW9yeSAwMWMwMDAwYQo+
-ID4gLS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCj4gPiBbQ0VOU09SRURdCj4gPiAtLS0tLUVO
-RCBDRVJUSUZJQ0FURS0tLS0tCj4gPiAKPiA+IEFuZCBhbGwgdGhpcyBtYWtlcyBpdCBhbHNvIHNv
-cnQgb2YgdXNlZnVsIGVtYmVkZGVkIGRlYnVnZ2luZyB0b29sIHRvby4KPiA+IAo+ID4gU2lnbmVk
-LW9mZi1ieTogSmFya2tvIFNha2tpbmVuIDxqYXJra29Aa2VybmVsLm9yZz4KPiA+IC0tLQo+ID4g
-U29ycnkgaWYgSSBtaXNzZWQgc29tZSBkZXRhaWwuIFRyaWVkIHRvIGNoZWNrIGJ1dCB0aGlzIGlz
-IG15IGZpcnN0IFJ1c3QKPiA+IHBhY2thZ2UgZm9yIEJSMiBzbyBhbnl0aGluZyBpcyBwb3NzaWJs
-ZS4KPiAKPiBMb29rcyBtb3N0bHkgZ29vZCwgdGhyZWUgY29tbWVudHMgYmVsb3cuIEFsc28sIHdo
-ZW4gYWRkaW5nIGEgbmV3IHBhY2thZ2UsCj4gcGxlYXNlIGFkZCB5b3Vyc2VsZiB0byBERVZFTE9Q
-RVJTIGZvciB0aGF0IHBhY2thZ2UuIDotKQo+IAo+ID4gICBwYWNrYWdlL0NvbmZpZy5pbiAgICAg
-ICAgICB8ICAxICsKPiA+ICAgcGFja2FnZS90cG0yc2gvQ29uZmlnLmluICAgfCAxOCArKysrKysr
-KysrKysrKysrKysKPiA+ICAgcGFja2FnZS90cG0yc2gvdHBtMnNoLmhhc2ggfCAgMiArKwo+ID4g
-ICBwYWNrYWdlL3RwbTJzaC90cG0yc2gubWsgICB8IDE0ICsrKysrKysrKysrKysrCj4gPiAgIDQg
-ZmlsZXMgY2hhbmdlZCwgMzUgaW5zZXJ0aW9ucygrKQo+ID4gICBjcmVhdGUgbW9kZSAxMDA2NDQg
-cGFja2FnZS90cG0yc2gvQ29uZmlnLmluCj4gPiAgIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdl
-L3RwbTJzaC90cG0yc2guaGFzaAo+ID4gICBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS90cG0y
-c2gvdHBtMnNoLm1rCj4gPiAKPiA+IGRpZmYgLS1naXQgYS9wYWNrYWdlL0NvbmZpZy5pbiBiL3Bh
-Y2thZ2UvQ29uZmlnLmluCj4gPiBpbmRleCA2MzA2NjI0NzdiLi4wNWI1MDYwNjUxIDEwMDY0NAo+
-ID4gLS0tIGEvcGFja2FnZS9Db25maWcuaW4KPiA+ICsrKyBiL3BhY2thZ2UvQ29uZmlnLmluCj4g
-PiBAQCAtMjg4OCw2ICsyODg4LDcgQEAgbWVudSAiU3lzdGVtIHRvb2xzIgo+ID4gICAJc291cmNl
-ICJwYWNrYWdlL3RwbS10b29scy9Db25maWcuaW4iCj4gPiAgIAlzb3VyY2UgInBhY2thZ2UvdHBt
-Mi1hYnJtZC9Db25maWcuaW4iCj4gPiAgIAlzb3VyY2UgInBhY2thZ2UvdHBtMi10b29scy9Db25m
-aWcuaW4iCj4gPiArCXNvdXJjZSAicGFja2FnZS90cG0yc2gvQ29uZmlnLmluIgo+IAo+IFRoaXMg
-c2hvdWxkIGdvIGFmdGVyIHBhY2thZ2UvdHBtMi10b3RwIHRvIGtlZXAgdGhlIGFscGhhYmV0aWNh
-bCBvcmRlcmluZy4KPiAKPiA+ICAgCXNvdXJjZSAicGFja2FnZS90cG0yLXRvdHAvQ29uZmlnLmlu
-Igo+ID4gICAJc291cmNlICJwYWNrYWdlL3VnZXR0eS9Db25maWcuaW4iCj4gPiAgIAlzb3VyY2Ug
-InBhY2thZ2UvdW5zY2QvQ29uZmlnLmluIgo+ID4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvdHBtMnNo
-L0NvbmZpZy5pbiBiL3BhY2thZ2UvdHBtMnNoL0NvbmZpZy5pbgo+ID4gbmV3IGZpbGUgbW9kZSAx
-MDA2NDQKPiA+IGluZGV4IDAwMDAwMDAwMDAuLjUyNjhkMGRmNmUKPiA+IC0tLSAvZGV2L251bGwK
-PiA+ICsrKyBiL3BhY2thZ2UvdHBtMnNoL0NvbmZpZy5pbgo+ID4gQEAgLTAsMCArMSwxOCBAQAo+
-ID4gK2NvbmZpZyBCUjJfUEFDS0FHRV9UUE0yU0gKPiA+ICsJYm9vbCAidHBtMnNoIgo+ID4gKwlk
-ZXBlbmRzIG9uIEJSMl9QQUNLQUdFX0hPU1RfUlVTVENfVEFSR0VUX0FSQ0hfU1VQUE9SVFMKPiA+
-ICsJc2VsZWN0IEJSMl9QQUNLQUdFX0hPU1RfUlVTVEMKPiA+ICsJc2VsZWN0IEJSMl9QQUNLQUdF
-X0hPU1RfUEtHQ09ORgo+ID4gKwlzZWxlY3QgQlIyX1BBQ0tBR0VfT1BFTlNTTAo+ID4gKwlzZWxl
-Y3QgQlIyX1BBQ0tBR0VfT1BFTlNTTF9GT1JDRV9MSUJPUEVOU1NMCj4gPiArCXNlbGVjdCBCUjJf
-UEFDS0FHRV9MSUJPUEVOU1NMCj4gPiArCWhlbHAKPiA+ICsJICBUUE0gMi4wIGNvbW1hbmQtbGlu
-ZSBpbnRlcmZhY2UuCj4gPiArCj4gPiArCSAgdHBtMnNoIGlzIGEgY29tbWFuZC1saW5lIGludGVy
-ZmFjZSBmb3IgaW50ZXJhY3Rpbmcgd2l0aCBUUE0gMi4wIGNoaXBzCj4gPiArCSAgZGlyZWN0bHkg
-dGhyb3VnaCAvZGV2L3RwbTAgb3IgL2Rldi90cG1ybTAuCj4gPiArCj4gPiArCSAgaHR0cHM6Ly9n
-aXRsYWIuY29tL3RwbS1wcm90b2NvbC90cG0yc2gKPiA+ICsKPiA+ICtjb21tZW50ICJ0cG0yc2gg
-bmVlZHMgYSB0b29sY2hhaW4gd2l0aCBSdXN0IHN1cHBvcnQiCj4gPiArCWRlcGVuZHMgb24gIUJS
-Ml9QQUNLQUdFX0hPU1RfUlVTVENfVEFSR0VUX0FSQ0hfU1VQUE9SVFMKPiA+IGRpZmYgLS1naXQg
-YS9wYWNrYWdlL3RwbTJzaC90cG0yc2guaGFzaCBiL3BhY2thZ2UvdHBtMnNoL3RwbTJzaC5oYXNo
-Cj4gPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+ID4gaW5kZXggMDAwMDAwMDAwMC4uNTY3YTc3NTFm
-OQo+ID4gLS0tIC9kZXYvbnVsbAo+ID4gKysrIGIvcGFja2FnZS90cG0yc2gvdHBtMnNoLmhhc2gK
-PiA+IEBAIC0wLDAgKzEsMiBAQAo+ID4gK3NoYTI1NiAgOTBiNTU3YjZkNmE2YThmOGUyYmY5NDZl
-ZGY1ZGIxOGNkMzNiMDkyNDVjMTFkMzhlODU0M2ZmMGY0ODZmNmE0MCAgdHBtMnNoLTAuMTcuMi1n
-aXQ0LWNhcmdvNS50YXIuZ3oKPiAKPiBUd28gZGF5cyBhZnRlciB5b3Ugc2VudCB0aGlzIHBhdGNo
-LCBSdXN0IHdhcyB1cGRhdGVkIHRvIDEuOTcuMCAoY29tbWl0Cj4gZThjOGJkOWJjNTZhODI3ZGI5
-MGMzYmIyZTcxZTQ2MTNhNWEyYzczMCkgc3dpdGNoaW5nIHRvIGNhcmdvNiBmb3JtYXQsIHNvCj4g
-eW91J2xsIG5lZWQgdG8gdXBkYXRlIGZvciB0aGF0Lgo+IAo+ID4gK3NoYTI1NiAgMzk3MmRjOTc0
-NGY2NDk5ZjBmOWIyZGJmNzY2OTZmMmFlN2FkOGFmOWIyM2RkZTY2ZDZhZjg2YzlkZmIzNjk4NiAg
-TElDRU5TRQo+ID4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvdHBtMnNoL3RwbTJzaC5tayBiL3BhY2th
-Z2UvdHBtMnNoL3RwbTJzaC5tawo+ID4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPiA+IGluZGV4IDAw
-MDAwMDAwMDAuLjU3M2ViODhhZDUKPiA+IC0tLSAvZGV2L251bGwKPiA+ICsrKyBiL3BhY2thZ2Uv
-dHBtMnNoL3RwbTJzaC5tawo+ID4gQEAgLTAsMCArMSwxNCBAQAo+ID4gKyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjCj4gPiArIwo+ID4gKyMgdHBtMnNoCj4gPiArIwo+ID4gKyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjCj4gPiArCj4gPiArVFBNMlNIX1ZFUlNJT04gPSAwLjE3LjIKPiAKPiBJIHNlZSB5
-b3UndmUgcmVsZWFzZWQgYW4gMS4wLjAgc2luY2Ugc2VuZGluZyB0aGlzIHBhdGNoLCBJIHN1cHBv
-c2UgdXBkYXRpbmcKPiB3aGlsZSBmaXhpbmcgdGhlIG90aGVyIGlzc3VlcyB3b3VsZCBtYWtlIHNl
-bnNlPwoKWWVzLCBpdCBkb2VzLiBUaGFua3MgZm9yIHRoZSByZXZpZXcuIEl0IHdpbGwgdGFrZSBz
-b21lIHRpbWUgYnV0IEknbGwKZml4IHRoZSBpc3N1ZXMsIHVwZ3JhZGUgdG8gMS4wIGFuZCBwdXQg
-dGhpcyB0byBzaGFwZS4KCldoeSB0aGlzIGlzIHVzZWZ1bCBpbiBnZW5lcmFsIGZvciBCdWlsZHJv
-b3QgaXMgdGhhdCBpbiBnZW5lcmFsIGZvciBhbnkKcGVhY2Ugb2YgaGFyZHdhcmUsICJzdGFja2xl
-c3MiIHRlc3RpbmcgdG9vbCBpcyB1c2VmdWwgOi0pCgo+IAo+IEJlc3QgcmVnYXJkcywKPiBGaW9u
-YQo+IAo+ID4gK1RQTTJTSF9TSVRFID0gaHR0cHM6Ly9naXRsYWIuY29tL3RwbS1wcm90b2NvbC90
-cG0yc2gKPiA+ICtUUE0yU0hfU0lURV9NRVRIT0QgPSBnaXQKPiA+ICtUUE0yU0hfTElDRU5TRSA9
-IEdQTC0zLjAtb3ItbGF0ZXIKPiA+ICtUUE0yU0hfTElDRU5TRV9GSUxFUyA9IExJQ0VOU0UKPiA+
-ICtUUE0yU0hfREVQRU5ERU5DSUVTID0gaG9zdC1wa2djb25mIG9wZW5zc2wKPiA+ICsKPiA+ICsk
-KGV2YWwgJChjYXJnby1wYWNrYWdlKSkKPiAKCkJSLCBKYXJra28KX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWls
-ZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9s
-aXN0aW5mby9idWlsZHJvb3QK
+Switching from autotools-package to meson-package fixes build
+failures on older glibc toolchains (such as glibc 2.24 without
+<sys/random.h>) because Meson checks both symbol and header presence
+via compiler.has_header_symbol('sys/random.h', 'getrandom'), avoiding an
+unconditional #include <sys/random.h>.
+
+Also add BR2_TOOLCHAIN_HAS_THREADS dependency to package/git/Config.in
+because on toolchains without thread support, compilation fails with
+'fatal error: pthread.h: No such file or directory' in thread-utils.h
+and linking fails with 'cannot find -lpthread'.
+
+Tested with:
+  utils/test-pkg -a -p git
+
+Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+---
+Changes v1 -> v2:
+  - Convert build infrastructure from autotools-package to meson-package
+    instead of carrying custom C patch (Arnout Vandecappelle).
+  - Add BR2_TOOLCHAIN_HAS_THREADS dependency to package/git/Config.in.
+
+ package/git/Config.in |  5 ++++
+ package/git/git.mk    | 57 +++++++++++++++++++------------------------
+ 2 files changed, 30 insertions(+), 32 deletions(-)
+
+diff --git a/package/git/Config.in b/package/git/Config.in
+index d53921d7d5..e8bc2a76c7 100644
+--- a/package/git/Config.in
++++ b/package/git/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_GIT
+ 	bool "git"
+ 	depends on BR2_USE_MMU # uses fork()
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_ZLIB
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	help
+@@ -9,3 +10,7 @@ config BR2_PACKAGE_GIT
+ 	  projects.
+ 
+ 	  http://git-scm.com
++
++comment "git needs a toolchain w/ threads"
++	depends on BR2_USE_MMU
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/git/git.mk b/package/git/git.mk
+index 10ef081223..321e168589 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
+@@ -13,71 +13,64 @@ GIT_CPE_ID_VENDOR = git-scm
+ GIT_SELINUX_MODULES = apache git xdg
+ GIT_DEPENDENCIES = zlib $(TARGET_NLS_DEPENDENCIES)
+ 
++GIT_CONF_OPTS = \
++	-Dperl=disabled \
++	-Dpython=disabled \
++	-Dgitweb=disabled \
++	-Dtests=false
++
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+-GIT_DEPENDENCIES += host-pkgconf openssl
+-GIT_CONF_OPTS += --with-openssl
+-GIT_MAKE_OPTS += LIB_4_CRYPTO="`$(PKG_CONFIG_HOST_BINARY) --libs libssl libcrypto`"
++GIT_DEPENDENCIES += openssl
++GIT_CONF_OPTS += -Dhttps_backend=openssl
+ else
+-GIT_CONF_OPTS += --without-openssl
++GIT_CONF_OPTS += -Dhttps_backend=none
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_PCRE2),y)
+ GIT_DEPENDENCIES += pcre2
+-GIT_CONF_OPTS += --with-libpcre2
++GIT_CONF_OPTS += -Dpcre2=enabled
+ else
+-GIT_CONF_OPTS += --without-libpcre2
++GIT_CONF_OPTS += -Dpcre2=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBCURL),y)
+ GIT_DEPENDENCIES += libcurl
+-GIT_CONF_OPTS += --with-curl
+-GIT_CONF_ENV += \
+-	ac_cv_prog_CURL_CONFIG=$(STAGING_DIR)/usr/bin/$(LIBCURL_CONFIG_SCRIPTS)
++GIT_CONF_OPTS += -Dcurl=enabled
+ else
+-GIT_CONF_OPTS += --without-curl
++GIT_CONF_OPTS += -Dcurl=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_EXPAT),y)
+ GIT_DEPENDENCIES += expat
+-GIT_CONF_OPTS += --with-expat
++GIT_CONF_OPTS += -Dexpat=enabled
+ else
+-GIT_CONF_OPTS += --without-expat
++GIT_CONF_OPTS += -Dexpat=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBICONV),y)
+ GIT_DEPENDENCIES += libiconv
+-GIT_CONF_ENV_LIBS += -liconv
+-GIT_CONF_OPTS += --with-iconv=$(STAGING_DIR)/usr
+-GIT_CONF_ENV += ac_cv_iconv_omits_bom=no
++GIT_CONF_OPTS += -Diconv=enabled
+ else
+-GIT_CONF_OPTS += --without-iconv
++GIT_CONF_OPTS += -Diconv=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_TCL),y)
+ GIT_DEPENDENCIES += tcl
+-GIT_CONF_OPTS += --with-tcltk
++GIT_CONF_OPTS += -Dgitk=enabled -Dgit_gui=enabled
+ else
+-GIT_CONF_OPTS += --without-tcltk
++GIT_CONF_OPTS += -Dgitk=disabled -Dgit_gui=disabled
+ endif
+ 
+-ifeq ($(BR2_SYSTEM_ENABLE_NLS),)
+-GIT_MAKE_OPTS += NO_GETTEXT=1
++ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
++GIT_CONF_OPTS += -Dgettext=enabled
++else
++GIT_CONF_OPTS += -Dgettext=disabled
+ endif
+ 
+-GIT_CFLAGS = $(TARGET_CFLAGS)
+-
+ ifneq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),)
+ GIT_CFLAGS += -O0
+ endif
+ 
+-GIT_CONF_OPTS += CFLAGS="$(GIT_CFLAGS)"
+-
+-GIT_INSTALL_TARGET_OPTS = $(GIT_MAKE_OPTS) DESTDIR=$(TARGET_DIR) install
+-
+-# assume yes for these tests, configure will bail out otherwise
+-# saying error: cannot run test program while cross compiling
+-GIT_CONF_ENV += \
+-	ac_cv_fread_reads_directories=yes \
+-	ac_cv_snprintf_returns_bogus=yes LIBS='$(GIT_CONF_ENV_LIBS)'
++GIT_CONF_OPTS += -Dc_args="$(TARGET_CFLAGS) $(GIT_CFLAGS)"
+ 
+-$(eval $(autotools-package))
++$(eval $(meson-package))
+-- 
+2.55.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
