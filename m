@@ -1,115 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EFD60C5AC82
-	for <buildroot@archiver.kernel.org>; Mon, 10 Aug 2026 11:32:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 013D2C5AC82
+	for <buildroot@archiver.kernel.org>; Mon, 10 Aug 2026 12:25:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 75D8E606EB;
-	Mon, 10 Aug 2026 11:32:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7D26C80626;
+	Mon, 10 Aug 2026 12:25:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1Qs6AvJMyyJ9; Mon, 10 Aug 2026 11:32:04 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id g0M1w1AzKGtb; Mon, 10 Aug 2026 12:25:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5E5866065D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9113980DC4
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786361524;
-	bh=A+SBbI26bOwlV97Y3C2iOmciH3moCd9fc9tS7OexKno=;
-	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	s=default; t=1786364720;
+	bh=0I0qR+GXFfCerApQSO8YJmd8CHcsbCRa1lYEjhRWxuk=;
+	h=Date:Cc:To:References:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=ER76Eb6ilUJ7AlOsZX2butT2b7tlXBQMvZfhXlgexbef22UqfkQJ+OvDVEC9+668O
-	 PFrSyHh+4uCU13Ug/ChasCy6ypsickHxJauCkTaey+OF1Xyhyuq91UynO3sRcTCErM
-	 D0+qEonhsAzaYB+7xXeHAnDa+g+HhxHFEGJrFT+GX5Kx0hjYhk9KNPnADPjWenDtph
-	 vtWQoU+9YKGInCspjwcflnL5jLpzor9FzXxSu5h737sw7nCTsnpuvqV9rJy9TZNa5n
-	 WSlTnfLpu48R/0GuxjWQxCAjubQHCyHRbjYXCzytQ/Th0sEYmd7dTJ2Fh0lSVBD3Bf
-	 HSgeBaOvctpDg==
+	 From:Reply-To:From;
+	b=P4r+bFVdNbvSWFxXXJM+m3I4VvHTKalnrhf07Dn+vIDnligZcueN+z9fiTze+Dahi
+	 FBy9V6eODAaPwACiWouKYqG6FuGAFilGfBKLq3FpdHmeyUuywQTYYIx+W2vUbQH/Qg
+	 iG6NQ1uI7LVdLQCctkSHR5eM6Ee54GnEd2BdmU9weFkSn1W/kC38uLpHaLnCDN0Zh8
+	 6CKLJ+yGoG1+vcVznHnjankV7jK6Mzb/ZsgSTpWWEO+5Heed8x3clofljMPyz0P3ZQ
+	 +hscQGaU1vAijrH0YfLpYN9k2s+/1lejS8nZkJ+gLk5PtmFj4D7NkaRlWqP9dgyi5B
+	 db8dnfTXBuB9A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5E5866065D;
-	Mon, 10 Aug 2026 11:32:04 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 9975228A
- for <buildroot@buildroot.org>; Mon, 10 Aug 2026 11:32:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9113980DC4;
+	Mon, 10 Aug 2026 12:25:20 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0165F10E
+ for <buildroot@buildroot.org>; Mon, 10 Aug 2026 12:25:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7FC8E40127
- for <buildroot@buildroot.org>; Mon, 10 Aug 2026 11:32:02 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id DBCA8405BA
+ for <buildroot@buildroot.org>; Mon, 10 Aug 2026 12:25:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KRpdzFMw9adn for <buildroot@buildroot.org>;
- Mon, 10 Aug 2026 11:32:01 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::42a; helo=mail-pf1-x42a.google.com;
- envelope-from=chakrabortyshubham66@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 8A2CA40106
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8A2CA40106
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com
- [IPv6:2607:f8b0:4864:20::42a])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 8A2CA40106
- for <buildroot@buildroot.org>; Mon, 10 Aug 2026 11:32:01 +0000 (UTC)
-Received: by mail-pf1-x42a.google.com with SMTP id
- d2e1a72fcca58-84e27035206so164854b3a.3
- for <buildroot@buildroot.org>; Mon, 10 Aug 2026 04:32:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1786361521; x=1786966321;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to:content-type;
- bh=0zu8B1wip6UUS17GjcaF2G1PHWtuTijBNsvGj3WXG4M=;
- b=sYtDnGMagAkJl2lGFua5VBHN2YIx1wFKwS9vQQKEFFPecAwAU8BzDIiY2QPw2X9lLb
- a2LdysqUKS4l2aWz7za03zejx91W1OzDROn4UYwlv7wWSh5fRdRn5IAjoPYdqz+7w6vM
- gdmgXuFM3SUg/cmAxFoghDMwQMDxTsqM11z6ZV92zBOTQ8oOf42gbL7WDtvDKNE0kWS5
- Kq5ADaxdqlwujgQjhe9Fw054xKP2+BP/dDdnTQw2Mfubd19x8J/w9lk0nWm9qp/5NS5b
- tZjjbAjI2weszEbiIsZPX/JHRfBik9fUYzsMDcYQphoFcyV3T0pMnup+iTQTibtEHFC9
- GoLg==
-X-Gm-Message-State: AOJu0YytYTDhDpu0Z2mEPEZaJYHwEQ2zAzFLyZsmH/RLejluWtzruZhx
- jVl9Z4u+8yL/J6B9uwMW/MKXxgJEHyTt6W74Q8Dh6ON+AkyD/OcdRlDoBOdWJLCe
-X-Gm-Gg: AR+sD10mo2IPIEVmC0ex3FzMdcTEc8vLjwoZXixs7HU/AnPylryOfuxTzxNkLcuV0tE
- foO436bwIauKylt+w7CWP6dLWcXkgJAnuCaY0ErC9K5+OjgLa6DhEBkKFty6KjX+VSE81/T3T+/
- sbeTx85dD2Kjf8+zgQKRAResJ0X6BJELpTLXJZWfq8HTAC+N8Q47UFDfXm9Y9JfTJmV3kCTNqr5
- V3EwoQb7iOuC+BCvkfguqdgn2HULbYGqTM7H6V7q3drtUrkXSYxUIS/pBarwszmCrY5lmAGOMdU
- NVXDCwAXtKi71PEUAQO4FwjU0KPsYwIkmlW8cShNm6zcL08M4HAfiWRVlXxv9b4egu7cGXAVZtw
- O7jCzbwV9pv8zSbj96Yruh9ZAhlJjS2vwFfR3MRRqMwJrhnzbU9s1wbrGshS/QSxOGig7oSZkOG
- Tcxo41G0r+sYLiJDXH5HrlDGE3NpnrWX6yrLTRhLb1jWNtcoOeVItVeEc4IjOIydCC7Gxkhg==
-X-Received: by 2002:a05:6a00:450e:b0:848:411f:3969 with SMTP id
- d2e1a72fcca58-84f9c96c01emr779528b3a.20.1786361520554; 
- Mon, 10 Aug 2026 04:32:00 -0700 (PDT)
-Received: from fedora ([2409:40e5:1164:f0da:ce1b:8575:cc78:84c8])
- by smtp.gmail.com with ESMTPSA id
- 41be03b00d2f7-cbe8f38882fsm3863211a12.31.2026.08.10.04.31.58
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 10 Aug 2026 04:31:59 -0700 (PDT)
-From: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-To: buildroot@buildroot.org
-Cc: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-Date: Mon, 10 Aug 2026 17:01:52 +0530
-Message-ID: <20260810113154.1955756-1-chakrabortyshubham66@gmail.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260503081204.963653-1-chakrabortyshubham66@gmail.com>
-References: <20260503081204.963653-1-chakrabortyshubham66@gmail.com>
-MIME-Version: 1.0
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4yjZlD92P_Tw for <buildroot@buildroot.org>;
+ Mon, 10 Aug 2026 12:25:19 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
+ helo=smtpout-02.galae.net; envelope-from=alexis.lothore@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E2830405DC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E2830405DC
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E2830405DC
+ for <buildroot@buildroot.org>; Mon, 10 Aug 2026 12:25:18 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-02.galae.net (Postfix) with ESMTPS id A995E1A1537;
+ Mon, 10 Aug 2026 12:25:15 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 6FFC36033B;
+ Mon, 10 Aug 2026 12:25:15 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 2538F11C4A497; 
+ Mon, 10 Aug 2026 14:25:09 +0200 (CEST)
+Mime-Version: 1.0
+Date: Mon, 10 Aug 2026 14:25:09 +0200
+Message-Id: <DKL9FUAMHEBJ.2DHVLMRHLWOGZ@bootlin.com>
+Cc: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>,
+ <buildroot@buildroot.org>, "Nicolas Carrier"
+ <nicolas.carrier@nav-timing.safrangroup.com>
+To: "Thomas Perale" <thomas.perale@mind.be>, "Thomas Petazzoni"
+ <thomas.petazzoni@bootlin.com>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <anWV0uzil1jp4BNN@windsurf>
+ <20260807115533.97671-1-thomas.perale@mind.be>
+In-Reply-To: <20260807115533.97671-1-thomas.perale@mind.be>
+X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1786361521; x=1786966321; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to:content-type;
- bh=0zu8B1wip6UUS17GjcaF2G1PHWtuTijBNsvGj3WXG4M=;
- b=GuiYmjgp2h+fLkcQ+Fi4R9gN0Y7sks4/IpR26tBxzm8FrsLUS/xMbWLAQFm7WHBD40
- 16zp2YZFSOdi7pZJGe1qWuhW+g1fYCBd4VkcKkDDib0fY+AlpmkB+zmfSp/jvU6SFT1e
- xm5qegca+LfQ0VOI2sBOKpPaOtmYRDY0XyCpKfYGkRn/x26zGFuJmvmP007E37Ian6Oi
- O7MZ+TDAw0KMUchLpDOZ8lnvX+36mcWxcjipuDxM6QyYkGg4LHn3iIwVR8sQ1+e++gdO
- +ToMRGBpLhvPz4m68HjL1VW9jsNnupO9sNUtQkwK+KCXG6SpCg33CuVERz/PWghCmgvQ
- /SIA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20251104 header.b=GuiYmjgp
-Subject: [Buildroot] [PATCH v2] package/tcl: bump to version 9.0.3
+ d=bootlin.com; s=dkim; 
+ t=1786364711; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ content-transfer-encoding:in-reply-to:references;
+ bh=XsxU9uh2v3LmgVDf0ix+8TwYSFV63W1CyHS49o8d9zo=;
+ b=ZISgOk9ohUxVRclbVK84i3KAywY1H/lj22TWUz1BnqGAuxMFqBKKqL5ewbVHF5RXAGBcZf
+ bJKchYH0BC9+6Ag/j4O8YWrrwvDvpV7HvzXPJzfX81oJeCjH+XSGpzTMax5B8NwEJb1Jz0
+ 6aiHDc3O/7JjrYRlbDgFdB7dtIwTGoY39p5nR1KE2E4bYt+Gfblw+vaSoBOGAxj/S0+LGC
+ hUr9Q338fxFAOS/oxZmNBf6T7Q4qsujL1QW98wyC8zDdluCPT6xwkB9gP5vgJEILKoDN4J
+ rzkXri5ZGc19qyQnxj1P5RJU9J6ZDxcbnYFfAiv+1excXz1birt2CAZ0g8kMng==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=dkim header.b=ZISgOk9o
+Subject: Re: [Buildroot] [PATCH 2/2] package/sass: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -121,118 +100,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: =?utf-8?q?Alexis_Lothor=C3=A9_via_buildroot?= <buildroot@buildroot.org>
+Reply-To: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Bump the version of tcl to 9.0.3. This is a major version upgrade
-from 8.6 to 9.0 series.
-
-Notable changes in Tcl 9.0 include:
- - 64-bit Capacity: Data values larger than 2Gb
- - Unicode and Encodings: full codepoint range, added encodings,
-   encoding profiles to govern I/O, and more.
- - Zip Filesystems: mount zipfiles as filesystems
- - Attached Archives: enable starkit-style deployment of apps,
-   with support data in filesystem archives attached to executable
-   or libraries. Build tclsh and wish this way.
- - New Notifiers: The central event handling engine in Tcl is now
-   constructed on top of the system calls epoll or kqueue when they
-   are available. The select based implementation also remains for
-   platforms where they are not.
-
-Build / Cross-compilation fixes for Tcl 9.0 ZipFS:
- - In Tcl 9.0, Zip virtual filesystems (ZipFS) are built into the core
-   package and bundled packages (itcl, thread). Generating these zip
-   archives during cross-compilation requires running a native tclsh.
- - Add host-tcl to TCL_DEPENDENCIES and add a HOST_TCL_SYMLINK_TCLSH
-   hook so $(HOST_DIR)/bin/tclsh is available.
- - Pass TCLSH and TCLSH_PROG explicitly in TCL_MAKE_OPTS pointing to
-   $(HOST_DIR)/bin/tclsh$(TCL_VERSION_MAJOR) to ensure sub-Makefiles
-   use the native host interpreter without inheriting target
-   LD_LIBRARY_PATH settings.
-
-Note on bundled packages:
-Unlike v1, we do not remove the bundled itcl (Incr Tcl) and thread
-packages. These packages were already present in 8.6 and built by
-default. Removing them in Tcl 9.0 would break compatibility for existing
-runtime scripts relying on them (Buildroot has no standalone packages for
-them).
-
-More Details & Changelogs:
- - https://www.tcl-lang.org/software/tcltk/9.0.html
-
-Tested using:
- utils/test-pkg -a -c /tmp/tcl.config -p tcl
- (Result: 32 builds, 4 skipped, 0 build failed)
-
-Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
----
-Changes v1 -> v2:
-  - Reverted removal of bundled 'itcl' and 'thread' packages to prevent
-    breaking runtime scripts relying on them.
-  - Rewrote commit message highlights to accurately match official Tcl 9.0
-    release notes at https://www.tcl-lang.org/software/tcltk/9.0.html.
-  - Added explicit note on bundled packages rationale in commit body.
-  - Added host-tcl dependency and host tclsh symlink to fix ZipFS build
-    failures during cross-compilation.
-  - Overrode TCLSH and TCLSH_PROG in TCL_MAKE_OPTS to prevent
-    LD_LIBRARY_PATH pollution during cross-compilation.
-  - Ran full 32-toolchain test matrix via test-pkg -a (28 builds OK, 4 skipped, 0 failed).
----
- package/tcl/tcl.hash |  2 +-
- package/tcl/tcl.mk   | 14 ++++++++++++--
- 2 files changed, 13 insertions(+), 3 deletions(-)
-
-diff --git a/package/tcl/tcl.hash b/package/tcl/tcl.hash
-index d67a7c4e74..b5f401e83d 100644
---- a/package/tcl/tcl.hash
-+++ b/package/tcl/tcl.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  861e159753f2e2fbd6ec1484103715b0be56be3357522b858d3cbb5f893ffef1  tcl8.6.15-src.tar.gz
-+sha256  2537ba0c86112c8c953f7c09d33f134dd45c0fb3a71f2d7f7691fd301d2c33a6  tcl9.0.3-src.tar.gz
- sha256  c0a69a2bfd757361ec7e6143973b103c90409316b49e9c88db26ad6388e79f16  license.terms
-diff --git a/package/tcl/tcl.mk b/package/tcl/tcl.mk
-index 0cd242a2e9..9f50985263 100644
---- a/package/tcl/tcl.mk
-+++ b/package/tcl/tcl.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--TCL_VERSION_MAJOR = 8.6
--TCL_VERSION = $(TCL_VERSION_MAJOR).15
-+TCL_VERSION_MAJOR = 9.0
-+TCL_VERSION = $(TCL_VERSION_MAJOR).3
- TCL_SOURCE = tcl$(TCL_VERSION)-src.tar.gz
- TCL_SITE = http://downloads.sourceforge.net/project/tcl/Tcl/$(TCL_VERSION)
- TCL_LICENSE = TCL
-@@ -73,9 +73,19 @@ define TCL_REMOVE_EXTRA
- endef
- TCL_POST_INSTALL_TARGET_HOOKS += TCL_REMOVE_EXTRA
- 
-+define HOST_TCL_SYMLINK_TCLSH
-+	ln -sf tclsh$(TCL_VERSION_MAJOR) $(HOST_DIR)/bin/tclsh
-+endef
-+HOST_TCL_POST_INSTALL_HOOKS += HOST_TCL_SYMLINK_TCLSH
-+
-+TCL_MAKE_OPTS = \
-+	TCLSH="$(HOST_DIR)/bin/tclsh$(TCL_VERSION_MAJOR)" \
-+	TCLSH_PROG="$(HOST_DIR)/bin/tclsh$(TCL_VERSION_MAJOR)"
-+
- TCL_DEPENDENCIES = $(if $(BR2_PACKAGE_SQLITE),sqlite) \
- 	$(if $(BR2_PACKAGE_MARIADB),mariadb) \
- 	$(if $(BR2_PACKAGE_POSTGRESQL),postgresql) \
-+	host-tcl \
- 	zlib
- 
- $(eval $(autotools-package))
--- 
-2.55.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+T24gRnJpIEF1ZyA3LCAyMDI2IGF0IDE6NTUgUE0gQ0VTVCwgVGhvbWFzIFBlcmFsZSB3cm90ZToK
+PiBIaSBUaG9tYXMsIEFsZXhpcywKPgo+PiBJIGFtIG5vdCBzdXBlciBjbGVhciBvbiB3aGF0IHNh
+c3MgZXhhY3RseSBkb2VzL2lzLiBCdXQgc29tZSB0aW1lIGFnbywKPj4gd2UgZHJvcHBlZCBhbGwg
+SlMgbGlicmFyaWVzIGZyb20gQnVpbGRyb290Ogo+PiAKPj4gICBodHRwczovL2xvcmUua2VybmVs
+Lm9yZy9idWlsZHJvb3QvMjAyNTA4MjkxMDMzNDAuMTU4ODczLTEtdGhvbWFzLnBlcmFsZUBtaW5k
+LmJlLwo+PiAKPj4gQnV0IHNhc3MgZG9lc24ndCBzZWVtIHRvIGJlIG9uZSBvZiB0aG9zZSBzdGF0
+aWMgSlMgbGlicmFyaWVzIEkgZ3Vlc3MKPj4gYmVjYXVzZSBpdCBpbnN0YWxscyBzb21lIGV4ZWN1
+dGFibGUgaG9zdCB0b29sPwo+Cj4gSWYgSSByZW1lbWJlciBjb3JyZWN0bHkgbm9kZS1zYXNzIGlz
+IGJ1aWxkIHVzaW5nIG5vZGUtZ3lwIHNvIEkgY2FuIG1ha2Ugc2Vuc2UKPiB0byBoYXZlIGl0IGlu
+IEJ1aWxkcm9vdCBiZWNhdXNlIHRoZSBub2RlLXNhc3MgdmVyc2lvbiBpcyBjbG9zZWx5IHJlbGF0
+ZWQgdG8gdGhlCj4gbm9kZSB2ZXJzaW9uIHByZXNlbnQgaW4gQnVpbGRyb290LgoKSnVzdCB0byBt
+YWtlIHN1cmUgd2UgYXJlIHRhbGtpbmcgYWJvdXQgdGhlIHNhbWUgdGhpbmcsIHRoaXMgcGFja2Fn
+ZSBpcwpub3QgaW50cm9kdWNpbmcgbm9kZS1zYXNzIChbMV0pLCB3aGljaCBpcyBkZXByZWNhdGVk
+LCBidXQgc2FzcyAoWzJdKQoKPiBUaGUgcXVlc3Rpb24gaXMgaG93IGRvIHlvdSBwbGFuIHRvIHVz
+ZSAnbm9kZS1zYXNzJyBvbmNlIHlvdSBoYXZlIHRoZSBleGVjdXRhYmxlLgo+IENvcnJlY3QgbWUg
+aWYgSSdtIHdyb25nIGJ1dCBJIGd1ZXNzIHRoZSBnb2FsIGhlcmUgaXMgdG8gdXNlIGl0IGluIGFu
+b3RoZXIKPiBCdWlsZHJvb3QgcGFja2FnZSB0aGF0IHJlcHJlc2VudCBhICJ3ZWJhcHAiIGFuZCB5
+b3UgcnVuICdub2RlLXNhc3MnCj4gaW4gdGhlIGJ1aWxkIHN0ZXAgb2YgdGhhdCBwYWNrYWdlIGFu
+ZCB0aGVuIHBsYWNlIHRoZSBnZW5lcmF0ZSBjc3MgaW4gdGhlCj4gY29ycmVjdCBsb2NhdGlvbiA/
+CgpDb3JyZWN0LiBUbyBiZSBleGFjdCwgc2FzcyBpcyBub3QgY3VycmVudGx5IGNhbGxlZCBkaXJl
+Y3RseSBieSB0aGUKY3VzdG9tIGJ1aWxkcm9vdCBwYWNrYWdlIGZvciAid2ViYXBwIi4gIndlYmFw
+cCIgaXMgYSBwaHAgcHJvamVjdCwgdXNpbmcKY29tcG9zZXIgdG8gaW5zdGFsbCBhbmQgcnVuICJt
+aW5pLWFzc2V0IiAoWzNdKSB3aGljaCBpcyBhIGJ1bmRsZXIKZGVwZW5kaW5nIG9uIHVnbGlmeSBh
+bmQgc2FzcyBiaW5hcmllcyBiZWluZyBwcmVzZW50IG9uIGhvc3QuCgo+IFRoZSBjb3JyZWN0IHdh
+eSBoYW5kbGUgdGhpcyAoYW5kIG1pbmlmaWNhdGlvbikgd291bGQgcHJvYmFibHkgYmUgdG8gdXNl
+IGEKPiBkZWRpY2F0ZWQgSmF2YVNjcmlwdCBidW5kbGVyIGFuZCBjb25maWd1cmUgaXQgdG8gdXNl
+IG5vZGUtc2FzcyBhbmQgc2V0dXAKPiBtaW5pZmljYXRpb24uIFRoaXMgd291bGQgcHJvYmFibHkg
+eWllbGQgc21hbGxlciBidW5kbGVzIGFuZCBoZWxwIGhhbmRsZQo+IHZlcnNpb25pbmcgY29ycmVj
+dGx5IGZvciB5b3VyIHdlYmFwcC4KPiBUaGlzIHdhcyBhbHNvIHRoZSB0aGlua2luZyBpbiBkcm9w
+cGluZyB0aGUgSlMgbGlicmFyaWVzIGZyb20gQnVpbGRyb290Lgo+Cj4gSWYgeW91IGhhdmUgYSBg
+cGFja2FnZS5qc29uYCBmb3IgdGhlIHdlYmFwcCB3aXRoIHRoZSBub2RlLXNhc3MgZGVwZW5kZW5j
+eS4gQ2FuCj4geW91IGBucG0gaW5zdGFsbGAgdGhlIHdlYmFwcCBkZXBlbmRlbmNpZXMgdXNpbmcg
+dGhlIGJ1aWxkcm9vdCAnbnBtJwo+IGhvc3QtcGFja2FnZSB3aXRob3V0IGVycm9ycyA/IElmIHRo
+YXQncyB0aGUgY2FzZSBJIHdvdWxkIHNheSB0aGF0IGl0IGlzCj4gcHJvYmFibHkgYSBiZXR0ZXIg
+c29sdXRpb24uCgpTbyBpbiB0aGlzIGNhc2UgSSd2ZSBnb3Qgbm8gcGFja2FnZS5qc29uLCBJIG9u
+bHkgaGF2ZSBhIGNvbXBvc2VyLmpzb24KcmVxdWlyaW5nIG1pbmlfYXNzZXQsIGFuZCBtaW5pX2Fz
+c2V0IGRvZXMgbm90IGF1dG9tYXRpY2FsbHkgcHVsbCB0aG9zZQpkZXBlbmRlbmNpZXMuIE1pbmkt
+YXNzZXQgaXMgY29uZmlndXJlZCB0aHJvdWdoIGEgLmluaSBmaWxlLCBpbiB3aGljaCB3ZQpjYW4g
+dXNlIGRpZmZlcmVudCAiZmlsdGVycyIgKGVnOiBTYXNzKSwgYW5kIGVhY2ggZmlsdGVyIGhhcyBk
+aWZmZXJlbnQKcmVxdWlyZW1lbnRzLCBidXQgaXQgaXMgdXAgdG8gdGhlIHVzZXIgdG8gYnJpbmcg
+dGhvc2UgZGVwZW5kZW5jaWVzIG9uCmhvc3QuIE9uZSB0aGluZyB0aGF0IEkgY2FuIGNoZWNrIGhv
+d2V2ZXIsIGNsb3NlIHRvIHlvdXIgc3VnZ2VzdGlvbiwgaXMKd2hldGhlciB0aGVyZSBpcyBhIGRp
+ZmZlcmVudCBDU1MgImZpbHRlciIgdGhhdCBjb3VsZCBiZSBicm91Z2h0CmF1dG9tYXRpY2FsbHkg
+YnkgY29tcG9zZXIgYW5kIHRoYXQgZ2VuZXJhdGVzIHNvbWV0aGluZyBjbG9zZSB0byB3aGF0CiJ3
+ZWJhcHAiIGlzIGN1cnJlbnRseSBvdXRwdXR0aW5nLgoKQWxleGlzCgo+Cj4gQmVzdCByZWdhcmRz
+LAo+IFBFUkFMRSBUaG9tYXMKClsxXSBodHRwczovL3d3dy5ucG1qcy5jb20vcGFja2FnZS9ub2Rl
+LXNhc3MKWzJdIGh0dHBzOi8vd3d3Lm5wbWpzLmNvbS9wYWNrYWdlL3Nhc3MKWzNdIGh0dHBzOi8v
+Z2l0aHViLmNvbS9tYXJrc3RvcnkvbWluaS1hc3NldAoKCgoKLS0gCkFsZXhpcyBMb3Rob3LDqSwg
+Qm9vdGxpbgpFbWJlZGRlZCBMaW51eCBhbmQgS2VybmVsIGVuZ2luZWVyaW5nCmh0dHBzOi8vYm9v
+dGxpbi5jb20KCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+CmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9s
+aXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
