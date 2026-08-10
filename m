@@ -1,90 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17CE7C5AD7B
-	for <buildroot@archiver.kernel.org>; Mon, 10 Aug 2026 18:32:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 655C1C5AD7B
+	for <buildroot@archiver.kernel.org>; Mon, 10 Aug 2026 18:39:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D854440692;
-	Mon, 10 Aug 2026 18:32:04 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7kMXO4a2Wwyv; Mon, 10 Aug 2026 18:32:02 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A0B2A40688
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786386722;
-	bh=y37MGeFiiV1ngeaOVhEXXJQ3vT1AAiW7DRRxXu76R0I=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=WIERb6Va29CNjc2Sy+OwiGNJAJqVUufvjE1Cz+/p8m4u9YL+fUmbcuJ5kkmMrciQx
-	 gXEf4vhyFAeHXFdF4K7TqfJ5gRdHwSlV2Qs2q61PSVY0vj1LOtZos/5ybzLMjHc7TF
-	 Sv9AaMpq00Na+AOWCVhlJI7ntJLzNd+DV7+e0ZghHdE13W9zx1EkmxIRkkOJjyAN2n
-	 M2vSUIc1CY7rs9RIb6rXuytlC3PhhuMguVnaVqkcUW1fVz6yr72/wi5t5vV+YbBY1h
-	 s05fnRk8LWSw9+6wedGceErAkgnSx8OAbMiqYbmJnOhpZYA5e0je2/zuXVjZz1SJhR
-	 YBM9UsI2S+R7Q==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A0B2A40688;
-	Mon, 10 Aug 2026 18:32:02 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 07253218
- for <buildroot@buildroot.org>; Mon, 10 Aug 2026 18:32:01 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0501480EFE
- for <buildroot@buildroot.org>; Mon, 10 Aug 2026 18:32:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F3C9F80EFE;
+	Mon, 10 Aug 2026 18:39:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wRQtb8Im0H_j for <buildroot@buildroot.org>;
- Mon, 10 Aug 2026 18:32:00 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C103980EFD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C103980EFD
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C103980EFD
- for <buildroot@buildroot.org>; Mon, 10 Aug 2026 18:31:59 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id D32802003CA;
- Mon, 10 Aug 2026 20:31:53 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Mon, 10 Aug 2026 20:31:53 +0200
-MIME-Version: 1.0
-Date: Mon, 10 Aug 2026 20:31:53 +0200
-To: Titouan Christophe <titouan.christophe@mind.be>
-Cc: buildroot@buildroot.org, Angelo Compagnucci
- <angelo.compagnucci@gmail.com>, James Hilliard <james.hilliard1@gmail.com>
-In-Reply-To: <a8a63d9b-fdc3-4e44-aeed-846d1406af93@mind.be>
-References: <20260726092711.212660-1-ju.o@free.fr>
- <a8a63d9b-fdc3-4e44-aeed-846d1406af93@mind.be>
-User-Agent: Webmail Free/1.6.17
-Message-ID: <6e608820fd7573c7acfe09e92deda3e6@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1786386717;
- bh=UYaSxqg9fFIkv/uuhH951lNlr8UF5/TELEDxplhUbmI=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=krDxHE0G+IBUnsxpGG8IZkJbnScKc3qyGwHyUok7nmuqZplNnXuD9zSzuGBsSupLu
- sXO8rp3+wufznJfNnH5nIm1Ga+fM8Z6Pi8xPS4KBQy8thMz8aPOJYlkKgiDFYQgpOP
- IBjOLq8Mx0PlFWiPlncmdz+0z3fHa3ptWKC5dxa65Wx08qdKGebeUFNb9HhoE8GztE
- MYLGj93XdauRQXilXdQdHNX37LV8YVYGTkWnBk56tQQvyJrixNZKEdgnZAyTFXR55S
- 4gSQQosSYqICoffs8dgCpsasHyvMhn8fGBIr72f6tJ77DBGER1OxltADwIxiMr1QD4
- IXU9JrNptDqfg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=krDxHE0G
-Subject: Re: [Buildroot] [PATCH 1/2] package/python-pydal: needs python xml
- module at runtime
+ id QnuXDu2Dy8xB; Mon, 10 Aug 2026 18:39:57 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1CA5F80F05
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1786387197;
+	bh=0X3JVsJsAhDx/n5z4X/v60yd6CB9KLqVoqpMWQjh/pE=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=rM5PJzFtLcfOETBJxdI1qhh/ofDCO+IshKQlvuZPv48Z54TZjuUGa/1jEszX2uN+0
+	 MAj69ulqfVHYhhD4jgf++q/vJu+CBQK4smbgN70yni/46/YMWyIvnrVipbA0fq7+cl
+	 gKQU8LDcxV7uEt8J0ICLOzvW6JnPkmEhfYc/7ixsJWE4De4+TClDRLZnimNgkd+/s8
+	 XMPIqsqmk/57RZ+vpma1YYf3x8i/DF0jji9ihzLUkW3cYbnT+6ZcjQAGNzTtQmvrUy
+	 lY94bE84rbCAR+wG5Rpc5O8FINis1h0GEEnfBZ9FQb4QZR2v+nZdemJWMPX3hzJDzH
+	 9fvD00E0Gk63A==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1CA5F80F05;
+	Mon, 10 Aug 2026 18:39:57 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6F657218
+ for <buildroot@buildroot.org>; Mon, 10 Aug 2026 18:39:55 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5589F40688
+ for <buildroot@buildroot.org>; Mon, 10 Aug 2026 18:39:55 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id buSidbF0IS6L for <buildroot@buildroot.org>;
+ Mon, 10 Aug 2026 18:39:54 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6804D40684
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6804D40684
+ for <buildroot@buildroot.org>; Mon, 10 Aug 2026 18:39:54 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 400AB8D30E; Mon, 10 Aug 2026 18:39:06 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 10 Aug 2026 20:38:12 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: d705d20506c2a30992810002c63a513982820ad0
+X-Git-Newrev: 3c2d207f8c65d025d12e40d786f5208933684f44
+X-Patchwork-Hint: ignore
+Message-Id: <20260810183906.400AB8D30E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libgit2: security bump version to
+ 1.9.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -98,31 +71,59 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Titouan,
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/3c2d207f8c65d025d12e40d786f5208933684f44
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-On 07/08/2026 13:53, Titouan Christophe wrote:
-> On 26/07/26 11:27, Julien Olivain via buildroot wrote:
->> pyDAL is using xmlrpc at runtime. See:
->> https://github.com/web2py/pydal/blob/v20260313.1/pydal/_compat.py#L114
->> 
->> Signed-off-by: Julien Olivain <ju.o@free.fr>
-> 
-> Applied to 2025.02.x and 2026.05.x, thanks
+v1.9.5 fixes CVE-2026-53586, CVE-2026-53587, CVE-2026-53585,
+CVE-2026-53584, CVE-2026-53583.  v1.9.6 fixes other non-security issues.
 
-I saw you included other new runtime tests in maintenance branches,
-but you skipped the pydal one:
-https://gitlab.com/buildroot.org/buildroot/-/commit/67d6e6602fec095084f64560050cb1195dff7765
+Release notes:
+https://github.com/libgit2/libgit2/releases/tag/v1.9.5
+https://github.com/libgit2/libgit2/releases/tag/v1.9.6
 
-Is there a specific reason, or did you just missed it?
+v1.9.5 also replaces a bundled vulnerable libpcre with libpcre2 and
+updated the PCRE license in COPYING as a result.  This is mostly useful
+on Windows; On POSIX systems, libgit2 can use regcomp() and Buildroot
+already asks for it. See:
+https://github.com/libgit2/libgit2/commit/3a9102dae9aef333791bf03ba1a00d2cc78ecfc2
 
-Best regards,
+Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+[Julien: add link to license update upstream commit]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/libgit2/libgit2.hash | 4 ++--
+ package/libgit2/libgit2.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Julien.
+diff --git a/package/libgit2/libgit2.hash b/package/libgit2/libgit2.hash
+index f30f0c528c..38486c4e4d 100644
+--- a/package/libgit2/libgit2.hash
++++ b/package/libgit2/libgit2.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  824b73bd13647800fe4b566a1008ae77fea0e3e3424edab632fcfd8c0b14ba8b  libgit2-1.9.4.tar.gz
+-sha256  e3712465634e97cfd850822a4eb5ac7d2f8a10f753189366d5a2060046f28288  COPYING
++sha256  a88a42a4ea9bdab7aa8686eead3bf7d9c6dd74529caca16ab22eaa92433d31d9  libgit2-1.9.6.tar.gz
++sha256  e0938121c0554985fe17196ac38fc590d149268e9c46e0c0e7a2eae1354fae71  COPYING
+diff --git a/package/libgit2/libgit2.mk b/package/libgit2/libgit2.mk
+index 5f18be9550..b4d9984540 100644
+--- a/package/libgit2/libgit2.mk
++++ b/package/libgit2/libgit2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBGIT2_VERSION = 1.9.4
++LIBGIT2_VERSION = 1.9.6
+ LIBGIT2_SITE = $(call github,libgit2,libgit2,v$(LIBGIT2_VERSION))
+ LIBGIT2_LICENSE = \
+ 	GPL-2.0 with linking exception, \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
