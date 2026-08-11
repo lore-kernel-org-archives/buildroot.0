@@ -4,110 +4,108 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6F4FC5AC67
-	for <buildroot@archiver.kernel.org>; Tue, 11 Aug 2026 12:05:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39014C5B56A
+	for <buildroot@archiver.kernel.org>; Tue, 11 Aug 2026 12:26:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7EDCC607BD;
-	Tue, 11 Aug 2026 12:05:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DAED7605D8;
+	Tue, 11 Aug 2026 12:26:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5xHA4AqSiT00; Tue, 11 Aug 2026 12:05:38 +0000 (UTC)
+ id Af6RErT5RdAf; Tue, 11 Aug 2026 12:26:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5232D6065A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0884F605E6
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786449938;
-	bh=xzgHLy3/BEGQrPv2pFQ+WxlAX5MjsTqfyiv5B1nUoYg=;
+	s=default; t=1786451209;
+	bh=wTV7vtPNy9sixln3/hlhOehdFswsXxsNoAuJInxsTnU=;
 	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=hXFXSci++GNEAV0Fk4zo6mzOsb7R/LJpgHUEt0txbdcrz63EKKv+R2MtbR5eX219z
-	 6SiRpn0jUJU970XqeSQvY7FPpeUOLlLU5K0iot6D4XAuVtZ69E9BEW7GtNbvNFzNSs
-	 PBw8xkaugbBh9ilLvxHyN8xpTJ1c0slDJANFxDTQ5/+fMUlr2ugbmo5ny1hu9sSYrx
-	 rvTk/U62RPsgRiWktyDNP8ZIlxn2CNl+NHweE2RL01/vMkoHtlX2vaV2RhV54nZvkj
-	 ymweQRJ5CxgeIM6SnBLqXBPv/agtbec5HDqFjrRMM81uA9PhNFwAfaZJASwLKFa7qa
-	 S0cY0GqwKdiKA==
+	b=ftxqBdcws5WPcoWuBAXmTzCeHRnPlTEHlzi4HBc2C3tmrc//XICq1eBMIImkF+d7f
+	 kJID8A+If58N/D18AKbi0QRfNlRh/1qLq5DRxGJurYahiNEcobbBN9cmGVY2/48Geg
+	 EsvGFb8P75DbDl/K4HLa8WivH12bWxMhxsr33IUB1ZtF3rJIvAIZmio12zJfT0SQmP
+	 5MkVXPfw+MrtMaYzeMU0nFcQDFWVWqW2KOmx02L26fvCgUgfKoXgh9w/VjgywZWaTc
+	 HltZ/hD1EV5M3FOaQRrMdVsFp+j1iRAgU5luJKbyAxylwwhojyaI+IKiJcK7HLvCcl
+	 IqIpMqAYuaxCA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5232D6065A;
-	Tue, 11 Aug 2026 12:05:38 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id B3CFE4E0
- for <buildroot@buildroot.org>; Tue, 11 Aug 2026 12:05:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0884F605E6;
+	Tue, 11 Aug 2026 12:26:49 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id CAD0C40A
+ for <buildroot@buildroot.org>; Tue, 11 Aug 2026 12:26:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A67716065A
- for <buildroot@buildroot.org>; Tue, 11 Aug 2026 12:05:34 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id C8E1B40100
+ for <buildroot@buildroot.org>; Tue, 11 Aug 2026 12:26:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XZUthnKWmSBM for <buildroot@buildroot.org>;
- Tue, 11 Aug 2026 12:05:34 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Kaci2bP0Kqq1 for <buildroot@buildroot.org>;
+ Tue, 11 Aug 2026 12:26:46 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
+ client-ip=2a00:1450:4864:20::332; helo=mail-wm1-x332.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6A346605FD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6A346605FD
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
- [IPv6:2a00:1450:4864:20::336])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6A346605FD
- for <buildroot@buildroot.org>; Tue, 11 Aug 2026 12:05:33 +0000 (UTC)
-Received: by mail-wm1-x336.google.com with SMTP id
- 5b1f17b1804b1-498028b3d5eso33907355e9.1
- for <buildroot@buildroot.org>; Tue, 11 Aug 2026 05:05:32 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4BAD340063
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4BAD340063
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
+ [IPv6:2a00:1450:4864:20::332])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4BAD340063
+ for <buildroot@buildroot.org>; Tue, 11 Aug 2026 12:26:45 +0000 (UTC)
+Received: by mail-wm1-x332.google.com with SMTP id
+ 5b1f17b1804b1-4954a2e73a9so18323465e9.3
+ for <buildroot@buildroot.org>; Tue, 11 Aug 2026 05:26:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1786449931; x=1787054731;
+ d=1e100.net; s=20251104; t=1786451204; x=1787056004;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to:content-type;
- bh=K+wFQfRi2k1f2cZSeQvSF/ta6kwHU96iNneWve6FL/I=;
- b=WjYvFleadyiBXF66Bk1L3F/mGLmYR5ALr+4HwEZhmXZbmVjqgc/lWZHWP5OPFe+Rca
- YAqPm9lAbvJWfv7tzK6zgy4mdDaCL1hCOcIXEKlwCg4O8NwnTO51ZJ1BxN0AdM4j8LC8
- +qtEw81VKbXN+PCK/W0rbNxb5RegaVd7cnpBTX9qA1Bw949nCTXHajltaAAH3SsxcEXN
- cSrpbaRhnoQLJTtOTKMC7vb+xfd42hRgji5samEVcyZoXQUW2rbBgT7C353XQI2x0/o/
- XVmxOUQgjp54Dc/jp4kHrsubEW2O+WQ/OAcPfdhWV0fnxZ1J7lG/e+ygIj/U24/CgU8B
- x24w==
-X-Gm-Message-State: AOJu0YyjFGNf+xSSdsEuKDKZ5Lg1OOUujjrCUmuD6j4z7FWM73SRoSLm
- tAT7HWVt3N47IyDEGnAkS3f6N3vcB5Xup6wg9rAV0pNndc6p1+C7qzEHeSzKktM+OAhQB3ZDAuJ
- d9iVx
-X-Gm-Gg: AR+sD13hF3z58/ThYU1sNL8i63sdMzh81E89ZFBuFEAM5vpeGI3fmtB4Bzo3uN3uQJT
- gRnINsBpt69R7YyStrmWMTzs3ElVJlJJCbBwNxcyyfSaug8MnO+3ELbEkKA0AA5Ro6m1D2bjcst
- 84nt0vsqkSf/GVS76nIibPSB5rzREoMzQ36o4QuaCZI9jknVQ/PRJNIYkEQLj9AswjEh5QWX82X
- w5wG/DmRXY19YBKbf2G3VEf2PNhu9CQavmfUlN6XtuSn/Gt29kSKEyKUutgnnlHxb64EC5+a48F
- DHm0Hmrj94xKl8KeZidvhK5nh3O8oYVIvzcj9A81OCxbwR5WE8J02fv4WcNPiknR/MHFfs7rOR1
- DIX8nqTKtdErzn3njStou9+N/oJHMhEsk9c77hqxT1U+itfTnZOjMwz8epZwcgYWu4rJMXGCDaB
- NogIekgqssgmP5YEYA+QkUETUPFxbwCHl/qnGVymU2ufeKyVdtZzp5JA==
-X-Received: by 2002:a05:600c:3e8e:b0:496:bbce:f3 with SMTP id
- 5b1f17b1804b1-499784398b3mr55763895e9.6.1786449931086; 
- Tue, 11 Aug 2026 05:05:31 -0700 (PDT)
+ bh=YFbe44M/cssZhjCeBX2L7vAat6tqomVti9jcCaqJL60=;
+ b=g9Dx925o4tbLZOpnodAtzwzw3N90UTDlVBXBKMFuZbhsF2xmh5k2b+XMKnlw8pq8Tw
+ PePQFsXwCnhqQLbu2SE+dfGF3cH118+nCaShiMOF31E+/jGDMUcYv1vrhy5OMKlLd42o
+ egRswLHU3eMVNqVSrQj6arKgYkQ8HaWtB262uP1YNSSydzl94/iAAmbpwUhViPpJpqxB
+ IFY53AZG/tvQbVY/yX/l6OtJQu/dihUmZEQHn9r/aIgNCJDBp6EQD8OxsCgFJVz2mDmk
+ 8wvMZH1j+SOpoMTv0LLGLbKaowlZQSUqPEaLHWjKnYqWnsCNfU42Qyp4JSxseN8ejOcC
+ 5zMA==
+X-Gm-Message-State: AOJu0Yx9v6F27W4Pfd9Wb+tD70pXpgkgGth3Fm83pZzrDld7gzuvYU7F
+ xV2F4+qXQGHgAizCIAKRV03Usd5xKZlyPdOmkxRkXgzo6FfiHEEVvxX0HQxYZcM2mU6j/F/Gjn7
+ fRCME
+X-Gm-Gg: AR+sD13vSuSrmF7RIExIC+d66b7WmBsW5wLfJ/ziXVMSI5ZZdEw27AlnqrPfbzjIfzs
+ gv9j9vlrplfjdqLEPfxmSp7hlrrHS3qeaER9VPBttd4ZwhMgMWj4yH/DWkf1Eu8c7L8wzgJvyVf
+ sD9Dq2bS8Xe8diX3DdNy1Q6j+VgG1tln+6oMyv4TUVcl32x5zw61uPYn4oZbQmDOYooSkI/HBbY
+ YyAUX2z07h10XKYalLE4cnCagfiMDm+n+qy+WX8iSReCtj2UCCiXBaNKn0JGaggqSqePoO8nAX+
+ ZJSxXIvVGjHW9tL3R9Radj5plCd5ETFgWM4MmHq+9Uhi24rM3Ku7rN9HkXs9GOKSPMcZ15dhT/P
+ cKL/8pqXjEfE3rgqpxRglidSpeqGWlrkmVXUxAAmEzi72MpUrD57LwSJn3O6myCbGRsoXjci7PX
+ GgLMy2zrmlGHkiU4aIePUHoos6AKkcuHLfUbauV3Uo3/0qOU5GjH89CARPjWJzxvl3
+X-Received: by 2002:a05:600c:4695:b0:496:c1f3:e8fb with SMTP id
+ 5b1f17b1804b1-4997844bf06mr49229725e9.8.1786451203699; 
+ Tue, 11 Aug 2026 05:26:43 -0700 (PDT)
 Received: from arch ([213.211.149.70]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-499740c5e0esm57011745e9.6.2026.08.11.05.05.30
+ 5b1f17b1804b1-499740dbb03sm66223695e9.8.2026.08.11.05.26.43
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 11 Aug 2026 05:05:30 -0700 (PDT)
+ Tue, 11 Aug 2026 05:26:43 -0700 (PDT)
 To: buildroot@buildroot.org
-Cc: Fiona Klute <fiona.klute@gmx.de>,
-	Edgar Bonet <bonet@grenoble.cnrs.fr>
-Date: Tue, 11 Aug 2026 14:05:29 +0200
-Message-ID: <20260811120530.130487-1-thomas.perale@mind.be>
+Cc: Quentin Schulz <quentin.schulz@cherry.de>
+Date: Tue, 11 Aug 2026 14:26:42 +0200
+Message-ID: <20260811122642.142680-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.55.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1786449931; x=1787054731; darn=buildroot.org;
+ d=mind.be; s=google; t=1786451204; x=1787056004; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
- bh=K+wFQfRi2k1f2cZSeQvSF/ta6kwHU96iNneWve6FL/I=;
- b=SZnILw3wGvyTzFcEo51f/rqjvV1hgUw72Y2h9Os+3JggDJFHujbDFvWsFyN73UoHzh
- qCL03bfIoZNfnY3mYIukTNlZXgTq61fkP3CjZEwr3LAVt8VrSd7AthlFNJ8nIl9clN1y
- f+Aef5JsCZiFkwunV1uXzG5EG7lNxdXui8YkAgw8ZxOUYIxKd5BZYPVNJMhoGJwo55P5
- j3ba/CK4Kb6CQYraW0xaBDBSG84yUx/n3YrQXhCNp497hMqJZJm0NdqvaLJfY/GNvJ/h
- XLp3xGty5zIOd/GkxnWuZlP7nnVqRfwIuW8z2PhZ9EyKSV+a/VXU0xJIHb96JEA5gzWU
- vdcA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=YFbe44M/cssZhjCeBX2L7vAat6tqomVti9jcCaqJL60=;
+ b=KCbTzSXdSCTvim1DPPOM7md3/H1BKNOFfHNV+QZv2kr+daVCOyFblQwg5O+FxY44XO
+ SMjD0D4BP+DccOLkgAOUN6CNwq3hLOAVMdzc0+5JXLr81boZvLSOJ+IKl68gXDb8doQd
+ /v2IdMP9cK4a6EcjegccVKsPLDCrmAERsrbnJtIT1jX3mKQj3E4JhT4dtaedZ7OW+Y2o
+ 9jrzURMPJOkZP+zsweJAnTxvKBkQ8s3DJpYkBQUpzCxYomPYuVqoE1b+soF+C93K02MN
+ uxDxbsK/R65V0f2moqlGGmVmZg4D/+gidWYGDkohrolCgkvnKtIY05lafybR9qT+J+OC
+ YSzg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=SZnILw3w
-Subject: [Buildroot] [PATCH v3] docs/manual: update 'releases' to reflect
- LTS changes
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=KCbTzSXd
+Subject: [Buildroot] [PATCH v2] docs/website: link LTS tooling documentation
+ and staging branch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -126,54 +124,66 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-With the release of 2025.02, LTS releases are now made every two years
-with a 3-year support.
+Users asked where the notes are available and if the information are
+publicly available.
 
-This reflect the table showed at https://lts.buildroot.org/#releases.
+Those changes clearly explain the location and convention of the staging
+branches and also link to more documentation on how to read the
+annotations.
 
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
-v1 --> v2: Took the suggestion from https://lore.kernel.org/r/<a00e615b-c2b2-42d9-b525-8852fc0d74a4@grenoble.cnrs.fr>
-v2 --> v3: Took the suggestion from https://lore.kernel.org/r/<393511ee-1b43-4e3c-bc64-e71c1d900c0a@gmx.de> . All the releases are stable and divided in two categories: LTS & non-LTS. Also updated the lts website page to reflect those changes.
+v1 -> v2: took into account review from https://lore.kernel.org/r/<f6b4e9a2-8ee5-4799-960f-36dbf5710da6@cherry.de>
 ---
- docs/manual/release-engineering.adoc | 22 ++++++++++++----------
- 1 file changed, 12 insertions(+), 10 deletions(-)
+ docs/website/lts.html | 29 +++++++++++++++++++----------
+ 1 file changed, 19 insertions(+), 10 deletions(-)
 
-diff --git a/docs/manual/release-engineering.adoc b/docs/manual/release-engineering.adoc
-index 0cf38183f9..cbd310d682 100644
---- a/docs/manual/release-engineering.adoc
-+++ b/docs/manual/release-engineering.adoc
-@@ -5,19 +5,21 @@
- == Release Engineering
- === Releases
+diff --git a/docs/website/lts.html b/docs/website/lts.html
+index 3bfd2a4374..7513acc885 100644
+--- a/docs/website/lts.html
++++ b/docs/website/lts.html
+@@ -166,10 +166,6 @@
+     <br/>
+     <br/>
  
--The Buildroot project makes quarterly releases with monthly bugfix
--releases.  The first release of each year is a long term support
--release, LTS.
-+The Buildroot project makes quarterly stable releases with monthly bugfix
-+releases. Starting with 2025.02, the first release of every odd-numbered year
-+is a long-term support (LTS) release supported for three years.
- 
-- - Quarterly releases: 2020.02, 2020.05, 2020.08, and 2020.11
-- - Bugfix releases: 2020.02.1, 2020.02.2, ...
-- - LTS releases: 2020.02, 2021.02, ...
-+ - LTS releases: 2025.02, 2027.02, 2029.02 ...
-+ - Non-LTS releases: 2025.05, 2025.08, 2025.11, 2026.02, ...
-+ - Bugfix releases: 2025.02.1, 2025.02.2, ...
- 
--Releases are supported until the first bugfix release of the next
--release, e.g., 2020.05.x is EOL when 2020.08.1 is released.
-+LTS releases are supported for three years, with a one-year overlap with the
-+next LTS release, e.g., 2025.02.x is EOL when 2028.02 is released.
- 
--LTS releases are supported until the first bugfix release of the next
--LTS, e.g., 2020.02.x is supported until 2021.02.1 is released.
-+Non-LTS releases are supported until the next release, e.g., 2025.05.x is EOL
-+when 2025.08 is released.
+-    <p>
+-    More details about the LTS workflow at <a href="https://gitlab.com/buildroot.org/buildroot-lts-tools">buildroot.org/buildroot-lts-tools</a>.
+-    </p>
+-
+     <div id="organization" class="br-lts-section-header">
+         <div class="br-lts-bg-grid"></div>
+         <div class="br-lts-title-box">How we work</div>
+@@ -181,12 +177,25 @@
+     analyze based on the previous week's commits to the master branch. The
+     commits are then annotated to define a list of candidates for the LTS
+     branches.
+-    <br><br>
+-    On Thursday, the candidates are cherry-picked to a staging branch to be
+-    reviewed by the other maintainers. On Thursday evening the branch is
+-    synced with upstream and contributors are notified. Feedback from
+-    users, sponsors and autobuilders are then collected and vulnerability
+-    analyses updated.
++    </p>
 +
-+See the table at https://lts.buildroot.org/#releases[lts.buildroot.org].
- 
- === Development
++    <p>
++    On Thursday, the candidates are cherry-picked to a staging branch hosted on
++    <a href="https://gitlab.com/essensium-mind/buildroot/">gitlab.com/essensium-mind/buildroot</a>.
++    Every maintained branch has a staging branch, with the <code>.x</code>
++    suffix replaced by <code>.pre</code>. The staging branch allows other
++    maintainers to review the changes before they are pushed upstream.
++    </p>
++
++    <p>
++    On Thursday evening, the branch is synced with upstream and contributors
++    are notified. Feedbacks from users, sponsors and autobuilders are then
++    collected and vulnerability analyses updated.
++    </p>
++
++    <p>
++    For more information about the development workflow, see the
++    <a href="https://gitlab.com/buildroot.org/buildroot-lts-tools/-/blob/main/tools/README.md">documentation</a>.
+     </p>
+     <br/>
  
 -- 
 2.55.0
