@@ -4,109 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74722C5CFCF
-	for <buildroot@archiver.kernel.org>; Tue, 11 Aug 2026 11:35:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6008C5CFCF
+	for <buildroot@archiver.kernel.org>; Tue, 11 Aug 2026 11:42:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 074B581004;
-	Tue, 11 Aug 2026 11:35:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5F21180F97;
+	Tue, 11 Aug 2026 11:42:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kA51p4dqGlLl; Tue, 11 Aug 2026 11:35:08 +0000 (UTC)
+ id Bw0c6YiCV2k7; Tue, 11 Aug 2026 11:42:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B5E0280FEF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A3CA280F9F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786448108;
-	bh=Ze5BQJBipKwvNwvaH+7tC2tS4Flr/0e+Cx2h1iEb0Y4=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=I7uSHamwUFQdEbdTTDKzNpzeqXcbeBCQLVdbja5WllehxmgMzpR2js9S2rXA1seZF
-	 KuTN0x4C2FOCfM7pxG5T1o9Xy/tyUKHIXFIutIFaVufns+7L/BSJtaVIssh14zYvls
-	 T1q4L9DWTYdgay5g+LUX4FK8jADMLYa1L+wiS4GvalUDxuoQG+rIA3DvRhoT6ZqwPH
-	 jFs5nLhkJxlWxyYpLImrhanVNL/T9DInbGxg4FsltAuBrkrWzv2p0pKzCCV4b26o8e
-	 GldHlW6RYhpHm6oiMmBO9lJNZM/ZCvNUFbuVvAtIoUmKy/meWCjeM5o2MBUZkzaHeE
-	 Y9A889iqeaYeg==
+	s=default; t=1786448570;
+	bh=HI4uUun78+K/R/XMyep4oCNKsjn4Ws8fqhHn82ydGaM=;
+	h=Date:To:Cc:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=d3FBYoHJ7fTCKXEh5PJE9FdzKZTAvanpws//9c3W2B2hcUiSDSibXFTv/xbOCCv6D
+	 uptc1cn2UjqqiI1UY+zt776/eJ6ttYeBv1YZsO9DSKSP/OHHIrFab2s1i5RmuFb+12
+	 BrayjqiDx6V9Hq3XGxZtc3UP0BZIteusQHxX7o1LfBdHnSxhaSRSXgtdjCe/6vViO0
+	 S5V6pUxMRfqONW71bQyT01Ou8ZhEqrOXWQ1/XXEWXc3uwTLqD8FwH6xrVT2GEbfkdg
+	 JEd3ZTTD2gpdrVlwKatYyQb+NgNSNCViiZXP04awafpDBaA/IBv3oudzh9Wd5mnC9K
+	 H3Rk6U8n7jKXg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B5E0280FEF;
-	Tue, 11 Aug 2026 11:35:08 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 2D5FD259
- for <buildroot@buildroot.org>; Tue, 11 Aug 2026 11:35:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A3CA280F9F;
+	Tue, 11 Aug 2026 11:42:50 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id AE9E0345
+ for <buildroot@buildroot.org>; Tue, 11 Aug 2026 11:42:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1FA90400C1
- for <buildroot@buildroot.org>; Tue, 11 Aug 2026 11:35:07 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 94CFA606AE
+ for <buildroot@buildroot.org>; Tue, 11 Aug 2026 11:42:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UTXwl5ntQds3 for <buildroot@buildroot.org>;
- Tue, 11 Aug 2026 11:35:06 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::330; helo=mail-wm1-x330.google.com;
- envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1C5E340063
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1C5E340063
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
- [IPv6:2a00:1450:4864:20::330])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1C5E340063
- for <buildroot@buildroot.org>; Tue, 11 Aug 2026 11:35:05 +0000 (UTC)
-Received: by mail-wm1-x330.google.com with SMTP id
- 5b1f17b1804b1-490cf322ed0so23024595e9.1
- for <buildroot@buildroot.org>; Tue, 11 Aug 2026 04:35:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1786448103; x=1787052903;
- h=content-transfer-encoding:mime-version:message-id:date:subject:to
- :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to:content-type;
- bh=yA/z8E1AZGZs4OGs9DeGOV9rVn+Xd6RJjo/8nFXIpE0=;
- b=ZylN/N6fJlx/oFlb9p5LoFmfMqWAho5oI+bCFVw0FGoV8HMcEK/1V4e4y0NviC9TRK
- Z52X140kl0FYdFIeTaunYxmSa+NaQgshdcbaoVtmb1EJ+UJ8GzC54Y3IYg469OXB01jv
- bb/iqHUyVjjev1dLDAG0erJOAuchl7nxW4nh/hfsoLKm4YyW6SK9/aI3EGF51g4jiYVP
- ONUvFruOq8NtH945TjvyW8UTOpYQifYvDHy9eRriiuxpk6aL2/b0EkjRS+sVJbUG19nO
- RQSVBNeLg3X5Vx9BCgQ3dq5AcD9m1+vOto3OBN0Y73hjWLtB+3G55XNZJjgopfBorfOt
- ylNg==
-X-Gm-Message-State: AOJu0Yy6t5P5EzKEf4bby2kchof8JCVSdmCWzVQRB9JaxslZholUxgz8
- ySwCkTpEzfS0gJhOP88+eoh7yh9BIlGueRP3bl3Ldc1/DB83eYQUvuRnC64iuNgyUGhwEuuNqxh
- YVNiO
-X-Gm-Gg: AR+sD120WFOdCkC8jANQ114HYyj2+5o3HRMXws3RZCUGJjnc9UIFPY/oSahNr6sOD45
- gxDzHxqVG7skHAmbvFFBWYWeL/8r+UjFSYPaVcg4k7gut6EIDAWPhQB7ftghcjAMGpFDe5JJNaz
- hYbZdXqTAX+jd56D0YpFMpniRWriUXAiioGeIpGlkUI6v/WVGxzMMbiYu/3vR2OdF9FxN3kDXFj
- MGmSbwL58P/2lWbLL+qnl298r77VGHnSLy9VT7SB/CsnhnQtEyFOS7ghcDw5B8yj14tsiHE1oaL
- xgbRp/C/McCw90Z+OscFHRZddhulPiPhEwdrIv1fP7bDGTF3ZwideLFKbG8Nd3GOJTNxoXHRi0h
- fYCbTPPTEn3Z0GajHdMyhcFQaciPgAOh6boMKU7Yw4WkeOPF+2Y4DnAfclc67uDmmOk3+A70WjT
- sM5fgTZ57KHQvbKKcXgovwaXRoRA5CZGdSedk3gJEzi8U8L5uu4XzuTw==
-X-Received: by 2002:a05:600c:34d3:b0:499:6eac:36d2 with SMTP id
- 5b1f17b1804b1-4997846d9c5mr45866075e9.17.1786448103280; 
- Tue, 11 Aug 2026 04:35:03 -0700 (PDT)
-Received: from arch ([213.211.149.70]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-499788f11b8sm43981595e9.10.2026.08.11.04.35.02
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 11 Aug 2026 04:35:02 -0700 (PDT)
-To: buildroot@buildroot.org
-Date: Tue, 11 Aug 2026 13:35:01 +0200
-Message-ID: <20260811113502.106639-1-thomas.perale@mind.be>
-X-Mailer: git-send-email 2.55.0
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id d73rGrc4BqXs for <buildroot@buildroot.org>;
+ Tue, 11 Aug 2026 11:42:48 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
+ helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A63066063A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A63066063A
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A63066063A
+ for <buildroot@buildroot.org>; Tue, 11 Aug 2026 11:42:47 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-03.galae.net (Postfix) with ESMTPS id 792574E4119A;
+ Tue, 11 Aug 2026 11:42:45 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 4BF926033C;
+ Tue, 11 Aug 2026 11:42:45 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 6B3E011C4842C; 
+ Tue, 11 Aug 2026 13:42:39 +0200 (CEST)
+Date: Tue, 11 Aug 2026 13:42:39 +0200
+To: Alexander Egorenkov <egorenar@linux.ibm.com>
+Cc: buildroot@buildroot.org
+Message-ID: <ansJ5dXXblvYeMLB@windsurf>
 MIME-Version: 1.0
+Content-Disposition: inline
+X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1786448103; x=1787052903; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:to
- :from:from:to:cc:subject:date:message-id:reply-to:content-type;
- bh=yA/z8E1AZGZs4OGs9DeGOV9rVn+Xd6RJjo/8nFXIpE0=;
- b=esiYn/CPALNSCV+ivq1wjTUXw+Ye6jzhS0KzRni11cqzCE+mwYkuUpU9Y31wPWdGIU
- AT3UpjfmJ8lR3b5pFBV+1NDnZ3hKHh9TD+AHEqJactSfNBB5Lgw1BPXAK+mCVVzpKs+P
- dAIdtD5yOAfJeaXnxDBm7GpjtwfVMMgpxN7GgFuhRTixrJvw0ryn/X59/hPnDV1ZKKUs
- B5+C3jzCKh+VePy3LskYtuTAA9TnBEqhBbvyLnDjVpXisIefDfBSecJhavt/ULwXnkkx
- sAhBBppaGwkchMiV3qNFJlAlZxwrXs5C9haxRSoX3p3SbEXXxFVo5LB4QKtijo16gM1C
- NTnw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=bootlin.com; s=dkim; 
+ t=1786448560; h=from:subject:date:message-id:to:cc:mime-version:content-type; 
+ bh=A3K8a4C14ULeof1TKqu8+NdiMEpJNNdetcOxGG6Ce78=;
+ b=gTiRVFeeNeJi9DDixtE1KekC9IeySDPdG//cUIsJ3op0LdCqGbIkzWtqCQXixcAwOzyPZ6
+ XxgdntvYDEOc0yyfQkPqD3xAIAX6/3LxNNCSBGSxYopgZZAPRsWCp5HusL39D4N8jeG+wf
+ v/kRui5YUmefnbdhppZkWQ5R+rz7ezmegd1Kdl/vZ8GRJbJspACqP8n9tLpRlN1yaLo98J
+ YN/BVlL9JaYNuhMKWBCFlWSveulwZPPBcYPulk6sOBwUm3C0MYfGnI+b3wswo3tEhP1xnW
+ DPdJ7zoy4CytarP3yuWeRGj6L4Z7/u/fgGRhJ3vAtxDJgLRO/xueUUOPYTE/eA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=esiYn/CP
-Subject: [Buildroot] [PATCH RESEND 1/2] package/busybox: re-introduce
- IGNORE_CVES for CVE-2023-42366
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=dkim header.b=gTiRVFee
+Subject: [Buildroot] S390 Buildroot/gcc build issue
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -118,54 +92,72 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Perale via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Perale <thomas.perale@mind.be>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The patch `0008-awk.c-fix-CVE-2023-42366-bug-15874.patch` was introduced
-in [1]. The IGNORE_CVES entry was removed while the patch is still
-present in [2].
+Alexander,
 
-Re-introduce this IGNORE_CVES entry.
+I am contacting you regarding a build issue I'm seeing with the S390
+architecture in Buildroot.
 
-[1] 75c594d446 package/busybox: fix pending CVEs
-[2] f88537c46b package/busybox: drop stale IGNORE_CVES entries
+With the following defconfig:
 
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
----
-Hi,
+BR2_s390x=y
+BR2_KERNEL_HEADERS_6_12=y
+BR2_PACKAGE_GLIBC_KERNEL_COMPAT=y
+BR2_BINUTILS_VERSION_2_46_X=y
+BR2_BINUTILS_GPROFNG=y
+BR2_GCC_VERSION_16_X=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_TOOLCHAIN_BUILDROOT_FORTRAN=y
+BR2_GCC_ENABLE_OPENMP=y
+BR2_PACKAGE_HOST_GDB=y
+BR2_PACKAGE_HOST_GDB_TUI=y
+BR2_PACKAGE_HOST_GDB_PYTHON3=y
+BR2_GDB_VERSION_17=y
+BR2_GNU_MIRROR="https://mirrors.kernel.org/gnu/"
+BR2_PACKAGE_GDB=y
 
-I'm resending, because I'm waiting for this series to apply to fix the
-busybox CVEs on the LTS branch.
+gcc 16.2.0 fails to build with:
 
-The same patch is applied in debian and yocto busybox 1.38.
+../../../libgcc/config/s390/_dpd_sd_to_hf.c:27:25: error: decimal floating-point not supported for this target
+   27 | HFtype __dpd_truncsdhf (_Decimal32);
+      |                         ^~~~~~~~~~
+../../../libgcc/config/s390/_dpd_sd_to_hf.c:31:16: error: decimal floating-point not supported for this target
+   31 | force_convert (_Decimal32 x)
+      |                ^~~~~~~~~~
+../../../libgcc/config/s390/_dpd_hf_to_td.c:34:1: error: decimal floating-point not supported for this target
+   34 | _Decimal128
+      | ^~~~~~~~~~~
+../../../libgcc/config/s390/_dpd_sd_to_hf.c:35:18: error: decimal floating-point not supported for this target
+   35 | __dpd_truncsdhf (_Decimal32 x)
+      |                  ^~~~~~~~~~
 
-PERALE Thomas
----
- package/busybox/busybox.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+I haven't checked whether this is new with gcc 16.x or not, and I'm
+not familiar with floating point support on S390.
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 32a765c6a4..c938782590 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -15,6 +15,10 @@ BUSYBOX_CPE_ID_VENDOR = busybox
- # 0004-nslookup-sanitize-all-printed-strings-with-printable.patch
- BUSYBOX_IGNORE_CVES += CVE-2022-28391
- 
-+# This is not stale, NVD entry mentions up to version 1.36.1.
-+# 0008-awk.c-fix-CVE-2023-42366-bug-15874.patch
-+BUSYBOX_IGNORE_CVES += CVE-2023-42366
-+
- # 0010-testsuite-tar-tests-fix-test-after-cve-2025-46394.patch
- BUSYBOX_IGNORE_CVES += CVE-2025-46394
- 
+Are you familiar with this issue?
+
+I see the same issue with gcc 16.1.0 in the autobuilders:
+
+  https://autobuild.buildroot.net/results/f88/f88565af0f653df831a7fa43d2507d167fdb9d36/build-end.log
+
+But I don't seem to see any issue with gcc 15.x, so my guess is that
+this is a new issue with gcc 16.x.
+
+Any idea?
+
+Thanks a lot!
+
+Thomas
 -- 
-2.55.0
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
