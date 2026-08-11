@@ -4,59 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20516C5AC67
-	for <buildroot@archiver.kernel.org>; Tue, 11 Aug 2026 20:03:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89D4AC5B56A
+	for <buildroot@archiver.kernel.org>; Tue, 11 Aug 2026 20:04:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 93BF260850;
-	Tue, 11 Aug 2026 20:03:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4EFC060786;
+	Tue, 11 Aug 2026 20:04:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gcu8bGra01o8; Tue, 11 Aug 2026 20:03:47 +0000 (UTC)
+ id Sam5dJnen5Dk; Tue, 11 Aug 2026 20:04:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9476F60752
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B715360711
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786478626;
-	bh=OlS3YWBpySp2BHLXnUtCGVqSFWmrb2TN1Av+pPk1Q/s=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=gArmeq1wF7k7xoC3uraekCijy/A7Yp/Jk3D5SDPqNDzLEjYg0c1t58XQoSgC+SRdN
-	 z0GfTWb/A9lZaI7x4Lpb4WbccmXva+vQrCUCnRyggieR1v4B+WRSWq9+jm0M6WQBl6
-	 DyRt72dAhRpAv/xCnsl8pHG9y0S2wYnaieEIOhwPCgb+yaw4LHdCCX6J3jzCBktZw1
-	 7ym7G5osjFhfCdJt3+UT0/yRAQXOa00h4xX8u+NXkHm1OJRTT/+/QAP8/Uf3ZsjLTN
-	 8W0ScSqgtjWIPihUAg+pmFuWSanV0vbEKukPYxfEF9b7DWvlIVBEkkYz5W0cDFt4na
-	 TvOlXyrfDdMVw==
+	s=default; t=1786478684;
+	bh=5IfQE4OpWwSZ8lMmU19t56wVqAnkedLqwCjDr8BSPqI=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=eGZEsYQDnOXx1HRPCei8l67F9Nrnena3GuAVTe+dXRxQFHeU6AzSbkiMuISr23C49
+	 XvzHGd1Q7Dr4Z0Uv6+OSGEuXF7iiDI76J1vBLHaf5rR8jEZfj99gdUMd/IFrRCg+Bz
+	 2ltazhZUXgE8ipND2wkCK4vZPd4W53e7Z8YX/997sUqLnTP5LT2WXZWr8EScTbwRFU
+	 WEZbzzRUt2MEAqnCUP9pttky04kEfj4BgshW37v/P7sObcrdcqnOhSkTfJQzPI0qF/
+	 MxLzPi6luQygufTGrDEV/0sxykixmqu6qwuduz1L/W8GgDXMjYnc3Q5wyyaHe6J2Dz
+	 d2yPyBqnpKTfA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9476F60752;
-	Tue, 11 Aug 2026 20:03:46 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 5FDBF72E
- for <buildroot@buildroot.org>; Tue, 11 Aug 2026 20:03:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B715360711;
+	Tue, 11 Aug 2026 20:04:44 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 62EC049B
+ for <buildroot@buildroot.org>; Tue, 11 Aug 2026 20:04:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 45FB540015
- for <buildroot@buildroot.org>; Tue, 11 Aug 2026 20:03:44 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5498640638
+ for <buildroot@buildroot.org>; Tue, 11 Aug 2026 20:04:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uRaGvXcooCtj for <buildroot@buildroot.org>;
- Tue, 11 Aug 2026 20:03:43 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7484E400C4
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7484E400C4
- for <buildroot@buildroot.org>; Tue, 11 Aug 2026 20:03:43 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CCF578D3E3; Tue, 11 Aug 2026 20:02:54 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 11 Aug 2026 21:50:09 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 092abbe0352d62af8c17167e4f48e76aeea7ce99
-X-Git-Newrev: 0e94f8d4de7b5421d5c0d21e22122a444c632770
-X-Patchwork-Hint: ignore
-Message-Id: <20260811200254.CCF578D3E3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/busybox: patch CVE-2024-58251
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aAodgy8WFAFj for <buildroot@buildroot.org>;
+ Tue, 11 Aug 2026 20:04:42 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8BB9E40637
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8BB9E40637
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8BB9E40637
+ for <buildroot@buildroot.org>; Tue, 11 Aug 2026 20:04:41 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id EEF3119F54D;
+ Tue, 11 Aug 2026 22:04:38 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Tue, 11 Aug 2026 22:04:38 +0200
+MIME-Version: 1.0
+Date: Tue, 11 Aug 2026 22:04:38 +0200
+To: Thomas Perale <thomas.perale@mind.be>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20260811113502.106639-1-thomas.perale@mind.be>
+References: <20260811113502.106639-1-thomas.perale@mind.be>
+User-Agent: Webmail Free/1.6.17
+Message-ID: <f6f2f2908e4ae1a9e1461901ddcf1424@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1786478680;
+ bh=Nwtgm7TQKB+e/XHex784eimDxSouH/nfUPkMlVLzCuk=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=U1ow/bd1RwghU6ckUBXc5VOqa5S6KE3ZWnvzPPxPCEd3N5kJclAYJEhe5lSlOOdwp
+ q8enzYrEo94RFeUchfX7aun0kWIDS9OtHEYZfam6yO04Fobaw2rsrh9anULGT1ESJp
+ GZ8N31fhgKaUZ6ZJjgEnk1p2LU4viER+oHy2ryAfyBZv1R/3dvErbJoTgt65Bu96M2
+ Fx3Dd2yrEeRxwdD28BHegIzcjli7Rd1fYlJjjAVgdySAm9TOxIurHvNXALkLnB31ew
+ ynfA6qd8P7I7pxavypSrWt3eHiWNNuBp4oqU3k+GASUE4L+vvedncvz6KJBH6cfIVq
+ V0giqSz+ZQT+Q==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=U1ow/bd1
+Subject: Re: [Buildroot] [PATCH RESEND 1/2] package/busybox: re-introduce
+ IGNORE_CVES for CVE-2023-42366
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,113 +95,25 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/0e94f8d4de7b5421d5c0d21e22122a444c632770
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 11/08/2026 13:35, Thomas Perale via buildroot wrote:
+> The patch `0008-awk.c-fix-CVE-2023-42366-bug-15874.patch` was 
+> introduced
+> in [1]. The IGNORE_CVES entry was removed while the patch is still
+> present in [2].
+> 
+> Re-introduce this IGNORE_CVES entry.
+> 
+> [1] 75c594d446 package/busybox: fix pending CVEs
+> [2] f88537c46b package/busybox: drop stale IGNORE_CVES entries
+> 
+> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 
-Based on the work of the Debian community, this patch fixes the
-following vulnerability:
-
-This CVE hasn't been addressed upstream and the bugs discussion is 404
-[1]. But the same patch is applied on Busybox v1.38 in Yocto & Debian.
-
-- CVE-2024-58251:
-    In netstat in BusyBox through 1.37.0, local users can launch of
-    network application with an argv[0] containing an ANSI terminal escape
-    sequence, leading to a denial of service (terminal locked up) when
-    netstat is used by a victim.
-
-For more information, see:
-  - https://salsa.debian.org/installer-team/busybox/-/blob/master/debian/patches/netstat-sanitize-argv0-for-p-CVE-2024-58251.patch
-  - https://www.cve.org/CVERecord?id=CVE-2024-58251
-
-This patch is still applied on Debian & Yocto as of busybox version
-1.38.
-
-[1] https://bugs.busybox.net/show_bug.cgi?id=15922
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- ...tstat-sanitize-argv0-for-p-CVE-2024-58251.patch | 50 ++++++++++++++++++++++
- package/busybox/busybox.mk                         |  3 ++
- 2 files changed, 53 insertions(+)
-
-diff --git a/package/busybox/0012-netstat-sanitize-argv0-for-p-CVE-2024-58251.patch b/package/busybox/0012-netstat-sanitize-argv0-for-p-CVE-2024-58251.patch
-new file mode 100644
-index 0000000000..5891424c00
---- /dev/null
-+++ b/package/busybox/0012-netstat-sanitize-argv0-for-p-CVE-2024-58251.patch
-@@ -0,0 +1,50 @@
-+From: Valery Ushakov <valery.ushakov@bell-sw.com>
-+Date: Thu, 21 Aug 2025 12:31:53 +0000
-+Subject: netstat: CVE-2024-58251 - sanitize argv0 for -p
-+Bug-Debian: https://bugs.debian.org/1104009
-+
-+Signed-off-by: Valery Ushakov <valery.ushakov@bell-sw.com>
-+Upstream: https://salsa.debian.org/installer-team/busybox/-/blob/master/debian/patches/netstat-sanitize-argv0-for-p-CVE-2024-58251.patch
-+CVE: CVE-2024-58251
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-+---
-+ networking/netstat.c | 7 ++++++-
-+ 1 file changed, 6 insertions(+), 1 deletion(-)
-+
-+diff --git a/networking/netstat.c b/networking/netstat.c
-+index 807800a62..d979f6079 100644
-+--- a/networking/netstat.c
-++++ b/networking/netstat.c
-+@@ -41,6 +41,7 @@
-+ 
-+ #include "libbb.h"
-+ #include "inet_common.h"
-++#include "unicode.h"
-+ 
-+ //usage:#define netstat_trivial_usage
-+ //usage:       "[-"IF_ROUTE("r")"al] [-tuwx] [-en"IF_FEATURE_NETSTAT_WIDE("W")IF_FEATURE_NETSTAT_PRG("p")"]"
-+@@ -314,9 +315,12 @@ static int FAST_FUNC dir_act(struct recursive_state *state,
-+ 		return FALSE;
-+ 	cmdline_buf[n] = '\0';
-+ 
-++	/* don't write process-controlled argv[0] to the user's terminal as-is */
-++	const char *argv0base = printable_string(bb_basename(cmdline_buf));
-++
-+ 	/* go through all files in /proc/PID/fd and check whether they are sockets */
-+ 	strcpy(proc_pid_fname + len - (sizeof("cmdline")-1), "fd");
-+-	pid_slash_progname = concat_path_file(pid, bb_basename(cmdline_buf)); /* "PID/argv0" */
-++	pid_slash_progname = concat_path_file(pid, argv0base); /* "PID/argv0" */
-+ 	n = recursive_action(proc_pid_fname,
-+ 			ACTION_RECURSE | ACTION_QUIET,
-+ 			add_to_prg_cache_if_socket,
-+@@ -686,6 +690,7 @@ int netstat_main(int argc UNUSED_PARAM, char **argv)
-+ 	unsigned opt;
-+ 
-+ 	INIT_G();
-++	init_unicode();
-+ 
-+ 	/* Option string must match NETSTAT_xxx constants */
-+ 	opt = getopt32(argv, NETSTAT_OPTS);
-+-- 
-+2.34.1
-+
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 681624f6dd..855d553360 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -19,6 +19,9 @@ BUSYBOX_IGNORE_CVES += CVE-2022-28391
- # 0007-awk.c-fix-CVE-2023-42366-bug-15874.patch
- BUSYBOX_IGNORE_CVES += CVE-2023-42366
- 
-+# 0012-netstat-sanitize-argv0-for-p-CVE-2024-58251.patch
-+BUSYBOX_IGNORE_CVES += CVE-2024-58251
-+
- # 0010-testsuite-tar-tests-fix-test-after-cve-2025-46394.patch
- BUSYBOX_IGNORE_CVES += CVE-2025-46394
- 
+Series applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
