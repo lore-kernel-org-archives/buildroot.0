@@ -4,119 +4,111 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 045B4C5CFDB
-	for <buildroot@archiver.kernel.org>; Wed, 12 Aug 2026 08:50:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95A01C5CFDB
+	for <buildroot@archiver.kernel.org>; Wed, 12 Aug 2026 08:54:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7E1AA40846;
-	Wed, 12 Aug 2026 08:50:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0B7F040848;
+	Wed, 12 Aug 2026 08:54:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Idcf1tsa9Sx6; Wed, 12 Aug 2026 08:50:12 +0000 (UTC)
+ id 6HtRJR4NJUz4; Wed, 12 Aug 2026 08:54:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5F9A840842
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D4BD24084E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786524612;
-	bh=DHSsnVtYlDNgN1OEJAzl0Ls9JwAzdDg7V5X7O67kig4=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=Ve4AWulIG5Nwiyg0S8tRKvKMJ1nq9jC8yCOt15gieKadkEvEsib7Rhr6RYmq5+yoE
-	 rBTF22mzGegdwliq+qVqR3tCeaUZH3xx56aIAIsX6fOwZSn01CUm70dXdZZcuv32xG
-	 +X1uLEsu7nCoG6HVl86R4bOWKT/bk6yPUl2sDPj+yo/t9LjSxHLVKpaebGU5QEQQ+V
-	 QHNZjSd27Hmd6WXNJ0MagojTi3l+QTkVLtAiRIiahjDB445iaAXOwx/Sp843Ty5X4H
-	 zxidGbKlhSPdWIrR80m/5yBd6qC1D6r4KR0UN7jp9Pf74u9VmxNzOCNRrlYix7KbF5
-	 ivZbThb4enx2g==
+	s=default; t=1786524840;
+	bh=kaeCl+NuYShAipQHbjNuXYvt99eZAolVBi0fFZ+5Jms=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=fcbE3PvcE8L1Z89KochsR1qokvEZa8vrH9Ma+ySj6Oh8RboqmFs8TZlAgTe8rJCv/
+	 Rf5UeZm97skcP88nPTgmg6cErzPGzZXrcQli2lsBw1eNjqz2ElJvC64K/72/kTIOPA
+	 DI2SCTdgEufBcRGE+LIRO7ceev9RQ+qcULvZUux6zom4madwB+sdgDEG0VzsZoAdsE
+	 57/WVlWf/2zRphNK3XrozQwWIN06FNG4vB9p22lZ/e9TL51nhTZg+9c9dV0N4+ejPa
+	 oHGIxieJ+J3CYjDtMwT+10OVnm43Rpz557NFoeQf2ekzDQC7jvtPst/gEroYfc3QK9
+	 DRkgnCOOcKmTw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5F9A840842;
-	Wed, 12 Aug 2026 08:50:12 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 98AA5EC
- for <buildroot@buildroot.org>; Wed, 12 Aug 2026 08:50:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D4BD24084E;
+	Wed, 12 Aug 2026 08:54:00 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id D26AAEC
+ for <buildroot@buildroot.org>; Wed, 12 Aug 2026 08:53:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8A7E5607E2
- for <buildroot@buildroot.org>; Wed, 12 Aug 2026 08:50:10 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id C433D40109
+ for <buildroot@buildroot.org>; Wed, 12 Aug 2026 08:53:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vVxWF7jK_xsP for <buildroot@buildroot.org>;
- Wed, 12 Aug 2026 08:50:09 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kEDecHGxy4I0 for <buildroot@buildroot.org>;
+ Wed, 12 Aug 2026 08:53:59 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
  client-ip=2a00:1450:4864:20::42a; helo=mail-wr1-x42a.google.com;
- envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 344DD60769
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 344DD60769
+ envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 194E74007E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 194E74007E
 Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
  [IPv6:2a00:1450:4864:20::42a])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 344DD60769
- for <buildroot@buildroot.org>; Wed, 12 Aug 2026 08:50:08 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 194E74007E
+ for <buildroot@buildroot.org>; Wed, 12 Aug 2026 08:53:57 +0000 (UTC)
 Received: by mail-wr1-x42a.google.com with SMTP id
- ffacd0b85a97d-47f7872abb6so303845f8f.3
- for <buildroot@buildroot.org>; Wed, 12 Aug 2026 01:50:08 -0700 (PDT)
+ ffacd0b85a97d-47fde295992so528660f8f.0
+ for <buildroot@buildroot.org>; Wed, 12 Aug 2026 01:53:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1786524607; x=1787129407;
- h=content-transfer-encoding:content-type:in-reply-to:content-language
- :from:references:cc:to:subject:user-agent:mime-version:date
- :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ d=1e100.net; s=20251104; t=1786524835; x=1787129635;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to:content-type;
- bh=N8QgY7zFIuGeAJyNIqFF4qSArqE3I+obGZHxl1EbJKQ=;
- b=X4SezNHV6QxHeyp1TfETCxq8iG5nCtphcHhgb/ST7zDryI1xGoT1mxohuNv0nJ38bE
- AdIlN7sdfXNmMu/NJUxPE+veQvsFOrz4onuEr1TsAaB8APatX173GjP0M/j5xeCq4uU0
- zdkxDmtzrSr8+NdMc4aYEeDKcgxFa7yCbA6xDfNc1NCx8dz3JZsKsjfh0es+xq+lmEsw
- SQ4ztV9KKMqG/WfQZB3rsgAfHaE8T+KS9EI7SX6dUqoO99RDy0d+tgy/0M9y5ggOUMtD
- S533GhxFsmu6qG8JMqVrAsLYcq/u5cNhX4waHeW27h9OEn92PCMvE2b/4N6pua8CVAtJ
- KbIA==
-X-Forwarded-Encrypted: i=1;
- AHgh+Rps7fR/xl7vuec/fP7vThhCeKTmAOiz4720BqQXlqliAqzB2IinG8xF8wrrfxIDMyEKc97cR2CkbRg=@buildroot.org
-X-Gm-Message-State: AOJu0YyXjksKgehdGW+GyPqqf6yqaQEZaCkIw4JvaWgkc+fUzV54iT5a
- wPx16RB0aEyhWB7fIuWCqTtF1Is8kbGpTc9tUo6Fld/7yFRUKovYG7vQBpqmje8rGNc=
-X-Gm-Gg: AR+sD12juL4D/Af8JTiQZH+vb3tXZFIxGzayNZOAJ2q4IT7dbPyvtfc5XlF/waySUXc
- rmaMBskxAVjGs080boB8NnC79XC+Q1uXjJRIYWC5iPVhfltMbsWVeSf7ruuaPjJixOlCwnu8t+t
- 3vglwHxeBcFxxl5LbwT9J1MqKAGqYJektvxpW2O6w51qSeC3AJTBcriYtT5hWik+AQIozgRAp0G
- GHhs2FSXTiaMFX+U7MmK7VJct+9beBnH718ERkRz3wJcAfIQGV2zGHmaq6p5UHwNqwwX7mgcHgJ
- MxZslQE3ObBjtR/CiXoPeyr2Yw9riU1YKqL8O/BZzXK+DP05P0B1rDunBgGYCkiv1U8o2d0UPgh
- rKBpDSrlHfe79Fi7stHuPaBpHrNLZmDcq+p6I/lAZ6NsAobsuCNoENx45Hk9FBo3eCTLwQsbPsE
- 7ZpzehcNqp9VGXQ/OOqZg8sEBf05uoQQvx/FZips5+5XVEA8JW687aj4bN2h1Zwu2g0ZdkBLzFv
- /38bQoeixHfakykLSMfPVnExAYjLuR5O4Kc5UKhVnX/ubcQlLSV9bke3sWGWho=
-X-Received: by 2002:adf:e198:0:b0:47f:f4a9:ff34 with SMTP id
- ffacd0b85a97d-48152c94581mr4213525f8f.30.1786524606776; 
- Wed, 12 Aug 2026 01:50:06 -0700 (PDT)
-Received: from [10.5.90.78]
- (static-css-ccs-204145.business.bouyguestelecom.com. [176.157.204.145])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-48150d4e675sm5821314f8f.23.2026.08.12.01.50.06
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 12 Aug 2026 01:50:06 -0700 (PDT)
-Message-ID: <70c7d941-5737-467c-8def-d97c44d9d36f@smile.fr>
-Date: Wed, 12 Aug 2026 10:50:05 +0200
+ bh=w+M4ia8SV+h6xSF+4bh4OJiqEVRy8XokxPFqQDK9qnk=;
+ b=fh3b9MMKdQ5JDAzY5v9E/9NAMq88xcbd/YHgngc8YrTiukBUbD9+uHNvWK3OKcCV3K
+ LnvkNPRnQGMvs6boOaIy/9wTc+BemkV2BEcd0SZyLoZk37skoR5GGe10Gq630+YhsIq4
+ NjFgPbeC3OWBaZ4M115RTX7mvfOY6X545lnli14MThffznG6umeDXbMcDuVTszF/mzLm
+ DfFs+qdfpkBhzcw55/HLqpQ19P+IgNSdagHaMWTr2WQCZyqnyBHtKnx6D/UElOBn/PxB
+ BlF3lhC3X0QksIdYYDPUccfwPaSBbvB1b/gfIgy7roDdQlOcf5QQTASxH4Pupc3qtOgt
+ CgmQ==
+X-Gm-Message-State: AOJu0YwZhICc3D76y6HsiGI4OorMtznOrmi3qM0lpbmA8AVneTaoebT1
+ zGM1rosdwlS0rv1ibiOXvqhQqhYlmJQ0KeEUAqO5GRh+9Ohr3K3P5lfBlHAbsQ2WemAdmXI1GV7
+ xTTfc
+X-Gm-Gg: AR+sD13Bf70zw1aAwy4xrPoUZe/OMpQo6QXtxmNjNAO36n0eBMtCw4AAlBe6Q1EvcNd
+ fokoYZFWAl2XHeVAMzNCaJ1/B/2jpNNw0pOX/2nS8fPhG4B3qGkt6GbrWN0BVuMWVPc2m0iXVuX
+ e7+nshfZdRoWCOknf5wFd4tu2OhUOVRDReQiyBvm0jHPstEz+SVCQeWtHJB8xQimWzcBZSUz8RM
+ 5HnOyubcw742lmkPypxOmGKEkAGBGHEbmZTmA72KRSvNRMmfdejWwJICZCgW5FOa/EwVvv89W42
+ KYxY2mScHSe01dPunfIf3+6VwWJnblSQ29MywSZaySdE06sJbSkKxbdhVrcj/XnFhuem/60ymil
+ ObfcQ9GCe5nnKbqwehu8Z08XgW7GOR5FWT6FdsZyCSOUKk+eU9tT7Hm8r9Gc7w3OmQvbhcCpG2l
+ xg39T0+BERJWidocL3wmCMc45oY9XjPasvxY/C1EpWCc0hPvRgRMUaubG8tdtFaPce3DQCtapdu
+ 8vUT9d/JFxI/HoXxSxwmy462Xshtu3O0Is5QZF3xWSSwBewTl9V
+X-Received: by 2002:a05:6000:29cd:b0:47f:ec53:1d2d with SMTP id
+ ffacd0b85a97d-4814fedcd8fmr6432517f8f.7.1786524835478; 
+ Wed, 12 Aug 2026 01:53:55 -0700 (PDT)
+Received: from dragon.home (154.186-200-80.adsl-dyn.isp.belgacom.be.
+ [80.200.186.154]) by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-48150d4e260sm5575158f8f.17.2026.08.12.01.53.55
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 12 Aug 2026 01:53:55 -0700 (PDT)
+To: buildroot@buildroot.org
+Cc: Daniel Price <daniel.price@gmail.com>,
+	ju.o@free.fr
+Date: Wed, 12 Aug 2026 10:53:53 +0200
+Message-ID: <20260812085353.419485-1-titouan.christophe@mind.be>
+X-Mailer: git-send-email 2.55.0
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: =?UTF-8?Q?Rapha=C3=ABl_Gallais-Pou?= <rgallaispou@gmail.com>,
- buildroot@buildroot.org
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20260527-master-v1-1-0d975f3b3f0d@gmail.com>
- <cbfb9495-35d2-447e-a9e1-22c834d07dc5@smile.fr>
- <009fc076-444a-4da5-ad0b-c8d71ac99bac@gmail.com>
-Content-Language: en-US
-In-Reply-To: <009fc076-444a-4da5-ad0b-c8d71ac99bac@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1786524607; x=1787129407; darn=buildroot.org;
- h=content-transfer-encoding:content-type:in-reply-to:content-language
- :from:references:cc:to:subject:user-agent:mime-version:date
- :message-id:from:to:cc:subject:date:message-id:reply-to:content-type;
- bh=N8QgY7zFIuGeAJyNIqFF4qSArqE3I+obGZHxl1EbJKQ=;
- b=Ic8cZfp4tqcmyWxrEjDUKJULJykGgl7E7vNxpmwgBQ/rcEVV96UkYX7Z7HAaVxXXKa
- auyolDUdf8vLJF19wludCTMCjfEB4Jl26fFQ5zrJLdVTZq0+O8z2Ol4LtaMVU03v9elD
- Ee4szaat1cbggBsldBGkMhIleY1p65GcTem8k=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
- header.s=google header.b=Ic8cZfp4
-Subject: Re: [Buildroot] [PATCH] package/libxkbcommon: provide xkbregistry
- when libxml2 is enabled
+ d=mind.be; s=google; t=1786524835; x=1787129635; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+ bh=w+M4ia8SV+h6xSF+4bh4OJiqEVRy8XokxPFqQDK9qnk=;
+ b=gsme3v16ss0apqRJnLgb7FsetyPSIxahMN3mnha7tQdbXeYv8V2vfvTP2YjaqxfClO
+ It16NbIfqQHqONp8xTzBXa5GMYmPwqBSjzylgNXOpWfs0toKpOCMbxT9R4hhsTXfNjMX
+ UZwFYzbmRHHVg7VYf8aeO3D+6EswNthlbeH30Zw6UGkA0zVU/3HSXxEgwBzpMH8wfbrN
+ hffr3FhdZU3xToJO82Swq6cDThaphgmGRWoO+rlLCxul0qu2GPhXj2aBaKsRDi93QCxp
+ Y69mtXHgClUGgx0e8lADCDZvswbXlNkTGtto4AurhrnBWOoLuYbTDvLYHCidJFgfEwiw
+ WlyA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=gsme3v16
+Subject: [Buildroot] [PATCH v2] package/redis: bump to v8.10.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -128,78 +120,85 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Romain Naour via buildroot <buildroot@buildroot.org>
-Reply-To: Romain Naour <romain.naour@smile.fr>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Titouan Christophe via buildroot <buildroot@buildroot.org>
+Reply-To: Titouan Christophe <titouan.christophe@mind.be>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gUmFwaGHDq2wsIEFsbCwKCkxlIDA2LzA3LzIwMjYgw6AgMTc6MzQsIFJhcGhhw6tsIEdh
-bGxhaXMtUG91IGEgw6ljcml0wqA6Cj4gCj4gCj4gT24gNi8yNC8yNiAxNzo1MSwgUm9tYWluIE5h
-b3VyIHdyb3RlOgo+PiBIZWxsbyBSYXBoYcOrbCwKPiAKPiBIaSwKPiAKPj4KPj4gTGUgMjcvMDUv
-MjAyNiDDoCAyMTo1MywgUmFwaGHDq2wgR2FsbGFpcy1Qb3UgYSDDqWNyaXTCoDoKPj4+IHhrYnJl
-Z2lzdHJ5IGlzIGRpc2FibGVkIGJ5IGRlZmF1bHQuwqAgWWV0LCBpdCBvbmx5IG5lZWRzIGxpYnht
-bDIgdG8gYmUKPj4+IGJ1aWx0LCB3aGljaCBpcyBhbHJlYWR5IHN1cHBvcnRlZC4KPj4+Cj4+PiBB
-ZGQgdGhlIGNvbXBpbGUgZmxhZ3MgdG8gYnVpbGQgeGticmVnaXN0cnkgd2hlbiBwb3NzaWJsZS4K
-Pj4+Cj4+PiBTaWduZWQtb2ZmLWJ5OiBSYXBoYcOrbCBHYWxsYWlzLVBvdSA8cmdhbGxhaXNwb3VA
-Z21haWwuY29tPgo+Pj4gLS0tCj4+PiDCoCBwYWNrYWdlL2xpYnhrYmNvbW1vbi9saWJ4a2Jjb21t
-b24ubWsgfCAxMCArKysrKysrKy0tCj4+PiDCoCAxIGZpbGUgY2hhbmdlZCwgOCBpbnNlcnRpb25z
-KCspLCAyIGRlbGV0aW9ucygtKQo+Pj4KPj4+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2xpYnhrYmNv
-bW1vbi9saWJ4a2Jjb21tb24ubWsgYi9wYWNrYWdlL2xpYnhrYmNvbW1vbi8KPj4+IGxpYnhrYmNv
-bW1vbi5tawo+Pj4gaW5kZXggMjFhMmI5MzdlZjAyLi45ODE1NDM2OWI0MTkgMTAwNjQ0Cj4+PiAt
-LS0gYS9wYWNrYWdlL2xpYnhrYmNvbW1vbi9saWJ4a2Jjb21tb24ubWsKPj4+ICsrKyBiL3BhY2th
-Z2UvbGlieGtiY29tbW9uL2xpYnhrYmNvbW1vbi5tawo+Pj4gQEAgLTEyLDggKzEyLDcgQEAgTElC
-WEtCQ09NTU9OX0NQRV9JRF9WRU5ET1IgPSB4a2Jjb21tb24KPj4+IMKgIExJQlhLQkNPTU1PTl9J
-TlNUQUxMX1NUQUdJTkcgPSBZRVMKPj4+IMKgIExJQlhLQkNPTU1PTl9ERVBFTkRFTkNJRVMgPSBo
-b3N0LWJpc29uIGhvc3QtZmxleAo+Pj4gwqAgTElCWEtCQ09NTU9OX0NPTkZfT1BUUyA9IFwKPj4+
-IC3CoMKgwqAgLURlbmFibGUtZG9jcz1mYWxzZSBcCj4+PiAtwqDCoMKgIC1EZW5hYmxlLXhrYnJl
-Z2lzdHJ5PWZhbHNlCj4+Cj4+IHhrYnJlZ2lzdHJ5IGhhcyBiZWVuIGRpc2FibGVkIG9uIHB1cnBv
-c2Ugd2hlbiBsaWJ4a2Jjb21tb24gaGFzIGJlZW4gdXBkYXRlZCB0bwo+PiAxLjAuMSBbMV0uCj4g
-Cj4gSW5kZWVkIEkgaGF2ZW4ndCBzZWUgdGhpcy4KPiAKPj4KPj4gSXQgc2VlbXMgdG8gcmVxdWly
-ZXMgeGtleWJvYXJkLWNvbmZpZyBhdCBydW50aW1lIFsyXSwgY2FuIHlvdSB2ZXJpZnk/Cj4gCj4g
-WWVzOiBsaWJ4a2Jjb21tb24gZG9lcyBub3QgcHJvdmlkZSBkYXRhc2V0LCB3aGljaCBpcyB3aGF0
-IHhrZXlib2FyZC1jb25maWcgaXMuCj4gRnJvbSBbMl06Cj4gSXQgaXMgW3ByZWZlcnJlZF0gdGhh
-dCBsaWJ4a2JyZWdpc3RyeSBiZSBzcGxpdCBpbnRvIGEgc2VwYXJhdGUgcGFja2FnZXMgYXMgbW9z
-dAo+IGNsaWVudHMgdGhhdCByZXF1aXJlIGxpYnhrYmNvbW1vbiBkbyBub3QgcmVxdWlyZSBsaWJ4
-a2JyZWdpc3RyeSBhbmQgY2xpZW50cwo+IHJlcXVpcmluZyBsaWJ4a2JyZWdpc3RyeSBtYXkgbm90
-IG5lZWQgbGlieGtiY29tbW9uLgo+IAo+IERvZXMgdGhhdCBtZWFuIHRoYXQgYSBsaWJ4a2JyZWdp
-c3RyeSBwYWNrYWdlIG5lZWRzIHRvIGJlIGNyZWF0ZWQgc2luY2UgaXQgaXMKPiBpbmRlcGVuZGFu
-dCBmcm9tIGxpYnhrYmNvbW1vbiA/CgpJIGRvbid0IHRoaW5rIHNvLCBJJ20gZmluZSBlbmFibGlu
-ZyB4a2JyZWdpc3RyeSB3aGVuIHRoZSBvcHRpb25hbCBsaWJ4bWwyCmRlcGVuZGVuY3kgaXMgYXZh
-aWxhYmxlLCBqdXN0IHRha2UgY2FyZSBvZiBydW50aW1lIGRlcGVuZGVuY2llcy4gTWF5YmUgY29u
-c2lkZXIKYWRkaW5nIGEgbmV3IHN1YiBvcHRpb24gZm9yIHBhY2thZ2VzIHRoYXQgbmVlZCBleHBs
-aWNpdGx5IGxpYnhrYnJlZ2lzdHJ5LgoKbGlieGticmVnaXN0cnkgaXMgcGFja2FnZWQgYnkgbGli
-eGtiY29tbW9uIHBhY2thZ2UgaW4gRmVkb3JhIGFuZCBZb2N0bywgdGhlcmUgaXMKbm8gc2VwYXJh
-dGUgcGFja2FnZSBmb3IgaXQgWzFdWzJdLgoKTm90ZTogWW9jdG8gYWRkIHhrZXlib2FyZC1jb25m
-aWcgcnVudGltZSBkZXBlbmRlbmN5IHRvIGxpYnhrYmNvbW1vbiB3aXRoIHgxMQpzdXBwb3J0LCBu
-b3QgeGticmVnaXN0cnkgaXRzZWxmLgoKUGxlYXNlLCBzZW5kIGFuIHVwZGF0ZWQgcGF0Y2guCgpb
-MV0gaHR0cHM6Ly9zcmMuZmVkb3JhcHJvamVjdC5vcmcvcnBtcy9saWJ4a2Jjb21tb24vYmxvYi9m
-NDUvZi9saWJ4a2Jjb21tb24uc3BlYyNfMTgKClsyXQpodHRwczovL2dpdGh1Yi5jb20vb3BlbmVt
-YmVkZGVkL29wZW5lbWJlZGRlZC1jb3JlL2Jsb2IvNWQxYWE1YzgwNmMwNjFhMjk5NGY0ZGVjYjU5
-MDE2NjEwZjA5MzIxMy9tZXRhL3JlY2lwZXMtZ3JhcGhpY3MveG9yZy1saWIvbGlieGtiY29tbW9u
-XzEuMTMuMS5iYiNMMjEKCkJlc3QgcmVnYXJkcywKUm9tYWluCgo+IAo+IEJlc3QgcmVnYXJkcywK
-PiBSYXBoYcOrbAo+IAo+Pgo+PiBbMV0KPj4gaHR0cHM6Ly9naXRsYWIuY29tL2J1aWxkcm9vdC5v
-cmcvYnVpbGRyb290Ly0vCj4+IGNvbW1pdC8xNzkxYmMzMGE1YjE5YmI1MjM2NjM3NWQwM2U2NjM0
-ODI0MmZmMjVhCj4+Cj4+IFsyXQo+PiBodHRwczovL2dpdGh1Yi5jb20veGtiY29tbW9uL2xpYnhr
-YmNvbW1vbi8KPj4gYmxvYi8yYzI5NWIxMGFhODdlOWJkOGMxMTk1NGFkY2Y3ZTkyYjAzMWI5MmY5
-L1BBQ0tBR0lORyNMNjEKPj4KPj4gQmVzdCByZWdhcmRzLAo+PiBSb21haW4KPj4KPj4+ICvCoMKg
-wqAgLURlbmFibGUtZG9jcz1mYWxzZQo+Pj4gwqAgwqAgaWZlcSAoJChCUjJfUEFDS0FHRV9YT1JH
-NykseSkKPj4+IMKgIExJQlhLQkNPTU1PTl9DT05GX09QVFMgKz0gLURlbmFibGUteDExPXRydWUK
-Pj4+IEBAIC0yMiw2ICsyMSwxMyBAQCBlbHNlCj4+PiDCoCBMSUJYS0JDT01NT05fQ09ORl9PUFRT
-ICs9IC1EZW5hYmxlLXgxMT1mYWxzZQo+Pj4gwqAgZW5kaWYKPj4+IMKgICtpZmVxICgkKEJSMl9Q
-QUNLQUdFX0xJQlhNTDIpLHkpCj4+PiArTElCWEtCQ09NTU9OX0NPTkZfT1BUUyArPSAtRGVuYWJs
-ZS14a2JyZWdpc3RyeT10cnVlCj4+PiArTElCWEtCQ09NTU9OX0RFUEVOREVOQ0lFUyArPSBsaWJ4
-bWwyCj4+PiArZWxzZQo+Pj4gK0xJQlhLQkNPTU1PTl9DT05GX09QVFMgKz0gLURlbmFibGUteGti
-cmVnaXN0cnk9ZmFsc2UKPj4+ICtlbmRpZgo+Pj4gKwo+Pj4gwqAgaWZlcSAoJChCUjJfUEFDS0FH
-RV9MSUJYS0JDT01NT05fVE9PTFMpLHkpCj4+PiDCoCBMSUJYS0JDT01NT05fQ09ORl9PUFRTICs9
-IC1EZW5hYmxlLXRvb2xzPXRydWUKPj4+IMKgIGVsc2UKPj4+Cj4+PiAtLS0KPj4+IGJhc2UtY29t
-bWl0OiAwOGYzNzU3YjBmMjEzM2IwZWQ1MGUxZWYzZDdhNWExZDljODBkZTFjCj4+PiBjaGFuZ2Ut
-aWQ6IDIwMjYwNTI3LW1hc3Rlci0yZTUyOTlhYWE4Y2EKPj4+Cj4+PiBCZXN0IHJlZ2FyZHMsCj4+
-PiAtLSAKPj4+IFJhcGhhw6tsIEdhbGxhaXMtUG91IDxyZ2FsbGFpc3BvdUBnbWFpbC5jb20+Cj4+
-Pgo+Pj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPj4+
-IGJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKPj4+IGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCj4+PiBo
-dHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QKPj4K
-PiAKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxk
-cm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5i
-dWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+Redis 8.10 is a new feature release, see the changes:
+https://github.com/redis/redis/blob/8.10.0/00-RELEASENOTES
+
+Since upstream commit 4dd58caa7cc23225b01f31e7bd9a1ed0af7e49ad [1],
+Redis must now be built with `make build redis` to avoid building extra
+modules, which are distributed within the source code archive since 8.10.0
+
+Moreover, because the default upstream configuration now includes those
+modules, attempting to launch redis-server with this would fail, because
+it cannot load the missing modules. Therefore, we use the provided
+`make sync-redis-conf` to regenerate a full redis configuration that
+take the absence of modules into account, and we install that config
+file instead of the default one.
+
+[1] https://github.com/redis/redis/commit/4dd58caa7cc23225b01f31e7bd9a1ed0af7e49ad
+
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+---
+Changes v1->v2:
+- Regenerate config file before installing to the target.
+  Thank you Julien Olivain for reporting the issue
+---
+ package/redis/redis.hash | 2 +-
+ package/redis/redis.mk   | 8 +++++---
+ 2 files changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/package/redis/redis.hash b/package/redis/redis.hash
+index e6ba97290b..db03ded5e4 100644
+--- a/package/redis/redis.hash
++++ b/package/redis/redis.hash
+@@ -1,5 +1,5 @@
+ # From https://github.com/redis/redis-hashes/blob/master/README
+-sha256  1d1e423c9c808de3cb01dd3300d2b8d305b7691382e31a847ec17b66d3157477  redis-8.8.1.tar.gz
++sha256  f1baa4b28befd417aa6577ebeedde9e9fc7814cfcc299b2a6d2fd99ef7420a6c  redis-8.10.0.tar.gz
+ 
+ # Locally calculated
+ sha256  4a0e416b9537688f30dfe69ddaceb2ca64d96b7df02a0a6760d376890ddc4e40  LICENSE.txt
+diff --git a/package/redis/redis.mk b/package/redis/redis.mk
+index 0105f2b77c..13cc7b687a 100644
+--- a/package/redis/redis.mk
++++ b/package/redis/redis.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-REDIS_VERSION = 8.8.1
++REDIS_VERSION = 8.10.0
+ REDIS_SITE = https://download.redis.io/releases
+ REDIS_LICENSE = \
+ 	AGPL-3.0 or SSPL-1.0 or RSAL-2.0 (core); \
+@@ -49,13 +49,15 @@ REDIS_BUILDOPTS += BUILD_TLS=no
+ endif
+ 
+ define REDIS_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) $(REDIS_BUILDOPTS) -C $(@D)
++	$(TARGET_MAKE_ENV) $(MAKE) $(REDIS_BUILDOPTS) -C $(@D) build redis
+ endef
+ 
+ define REDIS_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) $(REDIS_BUILDOPTS) -C $(@D) \
+ 		LDCONFIG=true install
+-	$(INSTALL) -D -m 0644 $(@D)/redis.conf \
++	$(TARGET_MAKE_ENV) $(MAKE) $(REDIS_BUILDOPTS) -C $(@D) \
++		sync-redis-conf
++	$(INSTALL) -D -m 0644 $(@D)/redis-full.conf \
+ 		$(TARGET_DIR)/etc/redis.conf
+ endef
+ 
+-- 
+2.55.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
