@@ -4,111 +4,135 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95A01C5CFDB
-	for <buildroot@archiver.kernel.org>; Wed, 12 Aug 2026 08:54:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 392D9C5B56A
+	for <buildroot@archiver.kernel.org>; Wed, 12 Aug 2026 09:11:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0B7F040848;
-	Wed, 12 Aug 2026 08:54:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D2AD0402DF;
+	Wed, 12 Aug 2026 09:11:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6HtRJR4NJUz4; Wed, 12 Aug 2026 08:54:01 +0000 (UTC)
+ id 0wlfS4fHoM08; Wed, 12 Aug 2026 09:11:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D4BD24084E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EEC14402ED
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786524840;
-	bh=kaeCl+NuYShAipQHbjNuXYvt99eZAolVBi0fFZ+5Jms=;
-	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=fcbE3PvcE8L1Z89KochsR1qokvEZa8vrH9Ma+ySj6Oh8RboqmFs8TZlAgTe8rJCv/
-	 Rf5UeZm97skcP88nPTgmg6cErzPGzZXrcQli2lsBw1eNjqz2ElJvC64K/72/kTIOPA
-	 DI2SCTdgEufBcRGE+LIRO7ceev9RQ+qcULvZUux6zom4madwB+sdgDEG0VzsZoAdsE
-	 57/WVlWf/2zRphNK3XrozQwWIN06FNG4vB9p22lZ/e9TL51nhTZg+9c9dV0N4+ejPa
-	 oHGIxieJ+J3CYjDtMwT+10OVnm43Rpz557NFoeQf2ekzDQC7jvtPst/gEroYfc3QK9
-	 DRkgnCOOcKmTw==
+	s=default; t=1786525885;
+	bh=Qn8nEqc3ODwKFIHx4+6YjJgO/uGOgznR7W9SMi6+S1E=;
+	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=jrHmdVOsCqOK4im7S9/94ni6zgSviz+oLM4KMh+uf5BWED5q/oWLUgoIilux/UiaF
+	 5SJx4EERw1AivkZ2QJBILT+AJoXRYhg/FEW8VAVn4LQipv+VlOGJucCWIwSZMj7qWl
+	 v4Wfedy/PZ6hgtrZYvkO0HHlRFh4hYMFvQmLAA1liJgYQOmoTm6MO7VoQzP1AxJGn5
+	 tnR+F7Lej7VEyU5n4HRyldjVDA8yEkvxe12xc9TkhBR8j7/aSSWKLU6Qi1QDSmXBmK
+	 +ElqWwmMVO7C0m0hsABzfC8iVEfkqxk/cW+KtSSvMMFXACStqj72E0SV2IZFjTy9iZ
+	 dn8qlyeHrQ4ww==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D4BD24084E;
-	Wed, 12 Aug 2026 08:54:00 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id D26AAEC
- for <buildroot@buildroot.org>; Wed, 12 Aug 2026 08:53:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EEC14402ED;
+	Wed, 12 Aug 2026 09:11:24 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id E4705282
+ for <buildroot@buildroot.org>; Wed, 12 Aug 2026 09:11:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C433D40109
- for <buildroot@buildroot.org>; Wed, 12 Aug 2026 08:53:59 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id CAC9B811E5
+ for <buildroot@buildroot.org>; Wed, 12 Aug 2026 09:11:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kEDecHGxy4I0 for <buildroot@buildroot.org>;
- Wed, 12 Aug 2026 08:53:59 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42a; helo=mail-wr1-x42a.google.com;
- envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 194E74007E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 194E74007E
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
- [IPv6:2a00:1450:4864:20::42a])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 194E74007E
- for <buildroot@buildroot.org>; Wed, 12 Aug 2026 08:53:57 +0000 (UTC)
-Received: by mail-wr1-x42a.google.com with SMTP id
- ffacd0b85a97d-47fde295992so528660f8f.0
- for <buildroot@buildroot.org>; Wed, 12 Aug 2026 01:53:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1786524835; x=1787129635;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to:content-type;
- bh=w+M4ia8SV+h6xSF+4bh4OJiqEVRy8XokxPFqQDK9qnk=;
- b=fh3b9MMKdQ5JDAzY5v9E/9NAMq88xcbd/YHgngc8YrTiukBUbD9+uHNvWK3OKcCV3K
- LnvkNPRnQGMvs6boOaIy/9wTc+BemkV2BEcd0SZyLoZk37skoR5GGe10Gq630+YhsIq4
- NjFgPbeC3OWBaZ4M115RTX7mvfOY6X545lnli14MThffznG6umeDXbMcDuVTszF/mzLm
- DfFs+qdfpkBhzcw55/HLqpQ19P+IgNSdagHaMWTr2WQCZyqnyBHtKnx6D/UElOBn/PxB
- BlF3lhC3X0QksIdYYDPUccfwPaSBbvB1b/gfIgy7roDdQlOcf5QQTASxH4Pupc3qtOgt
- CgmQ==
-X-Gm-Message-State: AOJu0YwZhICc3D76y6HsiGI4OorMtznOrmi3qM0lpbmA8AVneTaoebT1
- zGM1rosdwlS0rv1ibiOXvqhQqhYlmJQ0KeEUAqO5GRh+9Ohr3K3P5lfBlHAbsQ2WemAdmXI1GV7
- xTTfc
-X-Gm-Gg: AR+sD13Bf70zw1aAwy4xrPoUZe/OMpQo6QXtxmNjNAO36n0eBMtCw4AAlBe6Q1EvcNd
- fokoYZFWAl2XHeVAMzNCaJ1/B/2jpNNw0pOX/2nS8fPhG4B3qGkt6GbrWN0BVuMWVPc2m0iXVuX
- e7+nshfZdRoWCOknf5wFd4tu2OhUOVRDReQiyBvm0jHPstEz+SVCQeWtHJB8xQimWzcBZSUz8RM
- 5HnOyubcw742lmkPypxOmGKEkAGBGHEbmZTmA72KRSvNRMmfdejWwJICZCgW5FOa/EwVvv89W42
- KYxY2mScHSe01dPunfIf3+6VwWJnblSQ29MywSZaySdE06sJbSkKxbdhVrcj/XnFhuem/60ymil
- ObfcQ9GCe5nnKbqwehu8Z08XgW7GOR5FWT6FdsZyCSOUKk+eU9tT7Hm8r9Gc7w3OmQvbhcCpG2l
- xg39T0+BERJWidocL3wmCMc45oY9XjPasvxY/C1EpWCc0hPvRgRMUaubG8tdtFaPce3DQCtapdu
- 8vUT9d/JFxI/HoXxSxwmy462Xshtu3O0Is5QZF3xWSSwBewTl9V
-X-Received: by 2002:a05:6000:29cd:b0:47f:ec53:1d2d with SMTP id
- ffacd0b85a97d-4814fedcd8fmr6432517f8f.7.1786524835478; 
- Wed, 12 Aug 2026 01:53:55 -0700 (PDT)
-Received: from dragon.home (154.186-200-80.adsl-dyn.isp.belgacom.be.
- [80.200.186.154]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-48150d4e260sm5575158f8f.17.2026.08.12.01.53.55
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 12 Aug 2026 01:53:55 -0700 (PDT)
-To: buildroot@buildroot.org
-Cc: Daniel Price <daniel.price@gmail.com>,
-	ju.o@free.fr
-Date: Wed, 12 Aug 2026 10:53:53 +0200
-Message-ID: <20260812085353.419485-1-titouan.christophe@mind.be>
-X-Mailer: git-send-email 2.55.0
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fWLgWggrgwqg for <buildroot@buildroot.org>;
+ Wed, 12 Aug 2026 09:11:23 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=148.163.156.1;
+ helo=mx0a-001b2d01.pphosted.com; envelope-from=egorenar@linux.ibm.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org CE325811E4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CE325811E4
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com
+ [148.163.156.1])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id CE325811E4
+ for <buildroot@buildroot.org>; Wed, 12 Aug 2026 09:11:22 +0000 (UTC)
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+ by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id
+ 67C62oBK2632035; Wed, 12 Aug 2026 09:11:14 GMT
+Received: from ppma12.dal12v.mail.ibm.com
+ (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+ by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4fwvq9hn48-1
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+ Wed, 12 Aug 2026 09:11:13 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+ by ppma12.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 67C8uLto026217;
+ Wed, 12 Aug 2026 09:11:12 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+ by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4fxesq5gb0-1
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+ Wed, 12 Aug 2026 09:11:12 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com
+ [10.20.54.100])
+ by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id
+ 67C9BBaT39125372
+ (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+ Wed, 12 Aug 2026 09:11:11 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+ by IMSVA (Postfix) with ESMTP id ECBD72004E;
+ Wed, 12 Aug 2026 09:11:10 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+ by IMSVA (Postfix) with ESMTP id DBDEC2004D;
+ Wed, 12 Aug 2026 09:11:10 +0000 (GMT)
+Received: from localhost (unknown [9.224.74.101])
+ by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
+ Wed, 12 Aug 2026 09:11:10 +0000 (GMT)
+From: Alexander Egorenkov <egorenar@linux.ibm.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <ansJ5dXXblvYeMLB@windsurf>
+References: <ansJ5dXXblvYeMLB@windsurf>
+Date: Wed, 12 Aug 2026 11:11:10 +0200
+Message-ID: <87h5kzya8h.fsf@li-0ccc18cc-2c67-11b2-a85c-a193851e4c5d.ibm.com>
 MIME-Version: 1.0
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: i7I76Zg9HOfUcyFrn7pu1AzOw1QD9CZa
+X-Authority-Analysis: v=2.4 cv=PbDPQChd c=1 sm=1 tr=0 ts=6a7c38b1 cx=c_pps
+ a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
+ a=Sv0fKeRqtYgA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
+ a=iQ6ETzBq9ecOQQE5vZCe:22 a=VwQbUJbxAAAA:8 a=BoJB4dgYAAAA:8 a=P-IC7800AAAA:8
+ a=JAzQ7B-7aLCJq0t-SBAA:9 a=zGR_d48pMUbmtCY1HACo:22 a=d3PnA9EDa4IxuAV0gXij:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwODEyMDA3MiBTYWx0ZWRfX4PSqSUL4keXz
+ w2/a1qqWhlbO/8aJKfbkoJs4GHTjPdfGDD7PjA5gEmXr5EUVcgriY0my69uxMeYLRglho0aiCh+
+ I9Voq122bMn9pCGdSwRKVfShoeHeppudb3dj+9dnfyvIi6pwqNj49dHNmtxKGcBW1Srl8medyWo
+ tDjCOEPcroQFd8448hStoHfsrLLqgOjpnBD+bgx2qRZ1Hddp9TzzsAng1OK424GNsbaGkFxITII
+ wCJAU5zUHh4Womue2eZMopq6OEjj8FuN42Gnlm+Leq78voGI15rQuD/eFyOGav5aGNaXZUXrDWK
+ 34QSXq1jgpv0H7S4AZ1AGWT+kimCe7OXZ6WwxwPOqb6mAqwudBhDlYJmauLYR3VMg2/pB/Rf0O1
+ 1HtJNWZYaY2qWnHYIYelvKTfxqjJua9Wr19mPUWNMYM1Vr495R8ZWIKiVM4WjrOpL28+fd7wkqC
+ or1bH1wqLYLUWYFRlIQ==
+X-Proofpoint-ORIG-GUID: i7I76Zg9HOfUcyFrn7pu1AzOw1QD9CZa
+X-Proofpoint-Spam-Info: AW1haW4tMjYwODEyMDA3MiBTYWx0ZWRfX7ZFruqSHuWS4
+ Lw8ifPHPLS/3WdT3eTw19Wj6M0BsoqQGZvcKNduuU9/xzqnIKWqXCpiov0TSMDfaGU1o8KNC08v
+ bDoaoB+PajmJbYN08N8669CPtZ+RTLk=
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-08-12_02,2026-08-10_03,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ spamscore=0 bulkscore=0 impostorscore=0 malwarescore=0 adultscore=0
+ clxscore=1011 priorityscore=1501 suspectscore=0 phishscore=0
+ lowpriorityscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2606150000
+ definitions=main-2608120072
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1786524835; x=1787129635; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
- bh=w+M4ia8SV+h6xSF+4bh4OJiqEVRy8XokxPFqQDK9qnk=;
- b=gsme3v16ss0apqRJnLgb7FsetyPSIxahMN3mnha7tQdbXeYv8V2vfvTP2YjaqxfClO
- It16NbIfqQHqONp8xTzBXa5GMYmPwqBSjzylgNXOpWfs0toKpOCMbxT9R4hhsTXfNjMX
- UZwFYzbmRHHVg7VYf8aeO3D+6EswNthlbeH30Zw6UGkA0zVU/3HSXxEgwBzpMH8wfbrN
- hffr3FhdZU3xToJO82Swq6cDThaphgmGRWoO+rlLCxul0qu2GPhXj2aBaKsRDi93QCxp
- Y69mtXHgClUGgx0e8lADCDZvswbXlNkTGtto4AurhrnBWOoLuYbTDvLYHCidJFgfEwiw
- WlyA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=gsme3v16
-Subject: [Buildroot] [PATCH v2] package/redis: bump to v8.10.0
+ d=ibm.com; h=cc
+ :content-type:date:from:in-reply-to:message-id:mime-version
+ :references:subject:to; s=pp1; bh=AkSQkvOP1hxMhPzn8E8186iFyY2F0X
+ BBKSZaysGzv6E=; b=BazXmlhR4/H/1/ht1mBY7Tf7SjANM5yrtWKS58OfAOFA4o
+ xgoDZHGJTyu9GNBt/vMB1xVr6Z6EITjCW327RRxB7Pi1isK1U9VaV+PUIzFH7T2p
+ mrBVSQbyHCvoWeeYajkMFpxlsatH6fe45zNkKsXWploZSPvgG5LR7OIuXNbJaS5G
+ AJO25PBtUCFfLwc2YSgvdoWeN8DTBbEIh4PCDCk4i4Mvquktj+NVwgUaqZOkLJCF
+ QsbOSFoV3SulIygW4gd7/kEgJlTqbluoAyN7R6ILrbbJKynm8gAz5KlxzYFaBek3
+ PAuw4BkGuZrf4Je5vDhY+RKZzZOs9fE5mvrpJC6g==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=linux.ibm.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com
+ header.a=rsa-sha256 header.s=pp1 header.b=BazXmlhR
+Subject: Re: [Buildroot] S390 Buildroot/gcc build issue
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -120,84 +144,96 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Titouan Christophe via buildroot <buildroot@buildroot.org>
-Reply-To: Titouan Christophe <titouan.christophe@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Redis 8.10 is a new feature release, see the changes:
-https://github.com/redis/redis/blob/8.10.0/00-RELEASENOTES
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-Since upstream commit 4dd58caa7cc23225b01f31e7bd9a1ed0af7e49ad [1],
-Redis must now be built with `make build redis` to avoid building extra
-modules, which are distributed within the source code archive since 8.10.0
+> Alexander,
+>
+> I am contacting you regarding a build issue I'm seeing with the S390
+> architecture in Buildroot.
+>
+> With the following defconfig:
+>
+> BR2_s390x=y
+> BR2_KERNEL_HEADERS_6_12=y
+> BR2_PACKAGE_GLIBC_KERNEL_COMPAT=y
+> BR2_BINUTILS_VERSION_2_46_X=y
+> BR2_BINUTILS_GPROFNG=y
+> BR2_GCC_VERSION_16_X=y
+> BR2_TOOLCHAIN_BUILDROOT_CXX=y
+> BR2_TOOLCHAIN_BUILDROOT_FORTRAN=y
+> BR2_GCC_ENABLE_OPENMP=y
+> BR2_PACKAGE_HOST_GDB=y
+> BR2_PACKAGE_HOST_GDB_TUI=y
+> BR2_PACKAGE_HOST_GDB_PYTHON3=y
+> BR2_GDB_VERSION_17=y
+> BR2_GNU_MIRROR="https://mirrors.kernel.org/gnu/"
+> BR2_PACKAGE_GDB=y
+>
+> gcc 16.2.0 fails to build with:
+>
+> ../../../libgcc/config/s390/_dpd_sd_to_hf.c:27:25: error: decimal floating-point not supported for this target
+>    27 | HFtype __dpd_truncsdhf (_Decimal32);
+>       |                         ^~~~~~~~~~
+> ../../../libgcc/config/s390/_dpd_sd_to_hf.c:31:16: error: decimal floating-point not supported for this target
+>    31 | force_convert (_Decimal32 x)
+>       |                ^~~~~~~~~~
+> ../../../libgcc/config/s390/_dpd_hf_to_td.c:34:1: error: decimal floating-point not supported for this target
+>    34 | _Decimal128
+>       | ^~~~~~~~~~~
+> ../../../libgcc/config/s390/_dpd_sd_to_hf.c:35:18: error: decimal floating-point not supported for this target
+>    35 | __dpd_truncsdhf (_Decimal32 x)
+>       |                  ^~~~~~~~~~
+>
+> I haven't checked whether this is new with gcc 16.x or not, and I'm
+> not familiar with floating point support on S390.
+>
+> Are you familiar with this issue?
+>
+> I see the same issue with gcc 16.1.0 in the autobuilders:
+>
+>   https://autobuild.buildroot.net/results/f88/f88565af0f653df831a7fa43d2507d167fdb9d36/build-end.log
+>
+> But I don't seem to see any issue with gcc 15.x, so my guess is that
+> this is a new issue with gcc 16.x.
+>
 
-Moreover, because the default upstream configuration now includes those
-modules, attempting to launch redis-server with this would fail, because
-it cannot load the missing modules. Therefore, we use the provided
-`make sync-redis-conf` to regenerate a full redis configuration that
-take the absence of modules into account, and we install that config
-file instead of the default one.
+Hi,
 
-[1] https://github.com/redis/redis/commit/4dd58caa7cc23225b01f31e7bd9a1ed0af7e49ad
+the types _Decimal* require for the host compiler to be built with
+--enable-decimal-float.
 
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
----
-Changes v1->v2:
-- Regenerate config file before installing to the target.
-  Thank you Julien Olivain for reporting the issue
----
- package/redis/redis.hash | 2 +-
- package/redis/redis.mk   | 8 +++++---
- 2 files changed, 6 insertions(+), 4 deletions(-)
+package/gcc/gcc.mk:
+-------------------
 
-diff --git a/package/redis/redis.hash b/package/redis/redis.hash
-index e6ba97290b..db03ded5e4 100644
---- a/package/redis/redis.hash
-+++ b/package/redis/redis.hash
-@@ -1,5 +1,5 @@
- # From https://github.com/redis/redis-hashes/blob/master/README
--sha256  1d1e423c9c808de3cb01dd3300d2b8d305b7691382e31a847ec17b66d3157477  redis-8.8.1.tar.gz
-+sha256  f1baa4b28befd417aa6577ebeedde9e9fc7814cfcc299b2a6d2fd99ef7420a6c  redis-8.10.0.tar.gz
- 
- # Locally calculated
- sha256  4a0e416b9537688f30dfe69ddaceb2ca64d96b7df02a0a6760d376890ddc4e40  LICENSE.txt
-diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-index 0105f2b77c..13cc7b687a 100644
---- a/package/redis/redis.mk
-+++ b/package/redis/redis.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--REDIS_VERSION = 8.8.1
-+REDIS_VERSION = 8.10.0
- REDIS_SITE = https://download.redis.io/releases
- REDIS_LICENSE = \
- 	AGPL-3.0 or SSPL-1.0 or RSAL-2.0 (core); \
-@@ -49,13 +49,15 @@ REDIS_BUILDOPTS += BUILD_TLS=no
- endif
- 
- define REDIS_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) $(REDIS_BUILDOPTS) -C $(@D)
-+	$(TARGET_MAKE_ENV) $(MAKE) $(REDIS_BUILDOPTS) -C $(@D) build redis
- endef
- 
- define REDIS_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) $(REDIS_BUILDOPTS) -C $(@D) \
- 		LDCONFIG=true install
--	$(INSTALL) -D -m 0644 $(@D)/redis.conf \
-+	$(TARGET_MAKE_ENV) $(MAKE) $(REDIS_BUILDOPTS) -C $(@D) \
-+		sync-redis-conf
-+	$(INSTALL) -D -m 0644 $(@D)/redis-full.conf \
- 		$(TARGET_DIR)/etc/redis.conf
- endef
- 
--- 
-2.55.0
+HOST_GCC_COMMON_CONF_OPTS = \
+	--target=$(GNU_TARGET_NAME) \
+	--with-sysroot=$(STAGING_DIR) \
+	--enable-__cxa_atexit \
+	--with-gnu-ld \
+	--disable-libssp \
+	--disable-multilib \
+	--disable-decimal-float                 <----- !!!
 
+
+Can we turn --disable-decimal-float into --enable-decimal-float on
+s390x arch ? It fixed the problem for me.
+
+package/gcc/gcc.mk:
+-------------------
+
+ifeq ($(BR2_s390x),y)
+HOST_GCC_COMMON_CONF_OPTS += \
+	--with-long-double-128 \
+	--enable-decimal-float                 <----- !!!
+endif
+
+Regards
+Alex
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
