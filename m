@@ -1,86 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B859CC5CFDB
-	for <buildroot@archiver.kernel.org>; Wed, 12 Aug 2026 21:32:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6EE8C5CFDB
+	for <buildroot@archiver.kernel.org>; Wed, 12 Aug 2026 21:33:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6AD6380EEC;
-	Wed, 12 Aug 2026 21:32:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BFB8E40903;
+	Wed, 12 Aug 2026 21:33:07 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cN7gNE6LAdQK; Wed, 12 Aug 2026 21:33:04 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5F100408E4
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1786570384;
+	bh=mfaEU8tyMQOXFIxwh9oULpUeNf+NvK2KUDQg68bOdh0=;
+	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=Y3gONjcheHnpuFhAh5BsC6XuhKhAAx0BLmkuN/Tbrb8EOEY1I57PG1hw+4kzg6G69
+	 m+O3Osv5s/cQSitKDbwwH1BdHuzIhKMsoiV7sOvcTGu8E85BnBpwU3vOlwR57IL7Uf
+	 cAGofXLTQQWLFxIse4LKyOx210kwo/l0ICGLdQnDaHhubbIm8alI+l95a5wOoNq361
+	 i1UHFDleVgimOv1Pt5HRyMqI+zXdSjyrnEUlb2G1AXTnLK3+M3czwXYLz5cg23VFfV
+	 YIkpxl9EPO2UHFqX5wxqBKeCvC66EglLQArYcEoTR7eCfOayNdPPk55XmuOLpCb3ND
+	 4c+P6CYsdtkLg==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5F100408E4;
+	Wed, 12 Aug 2026 21:33:04 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8626E1AF
+ for <buildroot@buildroot.org>; Wed, 12 Aug 2026 21:33:02 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6C9B980FBA
+ for <buildroot@buildroot.org>; Wed, 12 Aug 2026 21:33:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sZyy7xUD3R1d; Wed, 12 Aug 2026 21:32:52 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5D87580F29
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786570372;
-	bh=VT4uFaUVxQ4IdTw+HPZIURkbMuR2oNTA20ly2T0uQPE=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=OT78Qo1vD+TKFlu8dFif41bgLNANALe3VPrzAmcGrTM2yHvLkIu34b2dmhE6V+sG2
-	 cWcMgNgp5F3E6dvgEV9A2Wne8cwWUv9JrgD60N63p4D3ZwPq4IEfMuh6tQir8uCnM3
-	 L7nal3GbOK45CMV3xu6ojtZF9VQ8nNcwNa/ItOXwbcOSV7z90PMlYbFv7wnVKna/qr
-	 svunBzXEEhu+V+QQgwHKetcwxT/YYfGXPQlZqTrEGO4x4/fXcJ9U2LS9LsStQvlypQ
-	 0MbNxNJpvKo11wwK3pZ4RfGpo/rWrs97tcs/qXwN+dM0YVY5xW9/PeoUp5xwxd9mww
-	 VZWkZ2XiAeIOQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5D87580F29;
-	Wed, 12 Aug 2026 21:32:52 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id C73661B8
- for <buildroot@buildroot.org>; Wed, 12 Aug 2026 21:32:50 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id ACE92607F0
- for <buildroot@buildroot.org>; Wed, 12 Aug 2026 21:32:50 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id S0IF72JVdLui for <buildroot@buildroot.org>;
- Wed, 12 Aug 2026 21:32:49 +0000 (UTC)
+ id Z1kiwxubYUzZ for <buildroot@buildroot.org>;
+ Wed, 12 Aug 2026 21:33:01 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 56C5C607E2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 56C5C607E2
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4F92380F29
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4F92380F29
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 56C5C607E2
- for <buildroot@buildroot.org>; Wed, 12 Aug 2026 21:32:49 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4F92380F29
+ for <buildroot@buildroot.org>; Wed, 12 Aug 2026 21:33:01 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a0529.dip0.t-ipconnect.de [91.58.5.41])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 14EF8A4C1D7C;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 485BBA4C4BFC;
  Wed, 12 Aug 2026 23:32:34 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:59882)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.5)
- (envelope-from <bernd@kuhls.net>) id 1wuGYr-00000000424-2Gvl;
- Wed, 12 Aug 2026 21:32:33 +0000
+ (envelope-from <bernd@kuhls.net>) id 1wuGYr-00000000424-3FxJ;
+ Wed, 12 Aug 2026 21:32:34 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
 Cc: Steve Kenton <skenton@ou.edu>
-Date: Wed, 12 Aug 2026 23:32:30 +0200
-Message-ID: <20260812213233.4141296-1-bernd@kuhls.net>
+Date: Wed, 12 Aug 2026 23:32:32 +0200
+Message-ID: <20260812213233.4141296-3-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260812213233.4141296-1-bernd@kuhls.net>
+References: <20260812213233.4141296-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: +
+X-Spamd-Bar: -
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202605290044; t=1786570354;
- bh=FyLGPCZz+7RZVQ6pQ7/uyIniQLA59lL8R1g4rsok+78=;
- h=From:To:Cc:Subject:Date:From;
- b=Y5LcARsdTduoLnGNX0XztItcBgWv3Tx6uqS5h9liTAM8/TYhJAwimcpwO1tl8Bcsa
- ygGPwFh5MnDQBTXpaNeMfx/0fJvsukbmaW1VFz1hePrFVdcZfVYDMtCpHPo36RyR5Y
- Si9CSOiJT9srNjjbhTbQs0FVoh1Jr+uR1+NY4/ox/VVckj14HhZQGyLt+VWJBk5u+P
- 3jo1ShEv7u2xtJt1GzDQJMRAPcgwC0LID+/QQXMLLxdfDkSek9bFyohDRGVpwO8auC
- Jgh8iYp5Ps/aHp7TYYBKz6eQfJ2ydfY9pRUdtXJgTIC6xoJ1xUeWkt9CTKSj2tKGWk
- Q5ilww6xAJ2xw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=cBkVgLXb3hOJkYWGeMEy9mWR5xCizrfhMU/FNvox89Y=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:From;
+ b=RLUVFXfUtmRiI81THQ4VLSEIYfAJqyVCwOve9e79Y43uxtr5fiEsCSTvD4EHmuX5+
+ fzsevDplkpwdcPgRvArJhTu0Zx1VDpH8nYpd7iiqMazaR7sexCY1pIEWB6rHt5buTF
+ SOpmvJPGWI5ZJmYTsYxK/LlM+UKFt18/V8OPo4dnxAoVw7MljmWwbCKJpiTlfjAIeV
+ ZZSjG9s8yZB17WS1MrQWtsijZMiRl13HFNk0ouQQmG7y+M2oSD3Uv2zqTfJ40aMoBC
+ d1mGCfGTRalMNsE1ixiHryaCakgeY3kAQ4JnVeLk33ZGYqHYosr44C7kb2yKtR9Vwf
+ ZDNLGKCLohIPw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=Y5LcARsd
-Subject: [Buildroot] [PATCH 1/3] package/libdvdcss: needs gcc >= 8
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202605290044 header.b=RLUVFXfU
+Subject: [Buildroot] [PATCH 3/3] package/libdvdread: bump version to 7.1.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -97,120 +99,97 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Buildroot commit cd3a2f0ff35346ad5fd6a9867113260addccf127 switched the
-build system to meson which depends on c17:
-https://code.videolan.org/videolan/libdvdcss/-/commit/9f16597859120b96006415c084039f63efc84b83#line_0cc1139e3_A5
+https://code.videolan.org/videolan/libdvdread/blob/7.1.1/NEWS
 
-Add the necessary dependency and propagate to reverse dependencies to
-fix a build error caught by the Gitlab pipelines:
+Removed sha1 hash, the sha256 hash is sufficient.
 
-br-test-pkg/bootlin-aarch64-glibc-old/build/libdvdcss-1.5.0/meson.build:1:0:
- ERROR: None of values ['c17'] are supported by the C compiler. Possible
- values for option "c_std" are ['none', 'c89', 'c99', 'c11', 'gnu89',
- 'gnu99', 'gnu11']
+Added patch to fix build error which would be introduced by this bump
+that was seen with br-arm-full-static defconfig by the Gitlab pipelines.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
 Gitlab pipelines passed:
-https://gitlab.com/bkuhls/buildroot/-/commits/b4f4db5ed78a4121de247715bfb0c4c7d1ca5808
+https://gitlab.com/bkuhls/buildroot/-/commits/2dc576af9407fd4c97dc0cebae5bcb7457b19969
 
- package/dvdauthor/Config.in                    | 4 ++++
- package/gstreamer1/gst1-plugins-ugly/Config.in | 4 ++++
- package/libdvdcss/Config.in                    | 4 ++++
- package/libdvdnav/Config.in                    | 6 ++++--
- package/libdvdread/Config.in                   | 4 ++++
- 5 files changed, 20 insertions(+), 2 deletions(-)
+ ...d-compilation-problems-with-PATH_MAX.patch | 40 +++++++++++++++++++
+ package/libdvdread/libdvdread.hash            |  6 +--
+ package/libdvdread/libdvdread.mk              |  2 +-
+ 3 files changed, 43 insertions(+), 5 deletions(-)
+ create mode 100644 package/libdvdread/0001-Fixed-compilation-problems-with-PATH_MAX.patch
 
-diff --git a/package/dvdauthor/Config.in b/package/dvdauthor/Config.in
-index 9ba5411d6b..23477e91e0 100644
---- a/package/dvdauthor/Config.in
-+++ b/package/dvdauthor/Config.in
-@@ -17,9 +17,13 @@ if BR2_PACKAGE_DVDAUTHOR
- 
- config BR2_PACKAGE_DVDAUTHOR_DVDUNAUTHOR
- 	bool "dvdunauthor"
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # libdvdcss -> libdvdread
- 	select BR2_PACKAGE_LIBDVDREAD
- 	help
- 	  This option enables the dvdunauthor program, which requires
- 	  libdvdread.
- 
-+comment "dvdunauthor needs a toolchain w/ gcc >= 8"
-+	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_8
+diff --git a/package/libdvdread/0001-Fixed-compilation-problems-with-PATH_MAX.patch b/package/libdvdread/0001-Fixed-compilation-problems-with-PATH_MAX.patch
+new file mode 100644
+index 0000000000..c161f8a8f1
+--- /dev/null
++++ b/package/libdvdread/0001-Fixed-compilation-problems-with-PATH_MAX.patch
+@@ -0,0 +1,40 @@
++From 37915b22749ad6f696f555d35bae23a2f6b7a6a9 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd@kuhls.net>
++Date: Wed, 12 Aug 2026 22:40:26 +0200
++Subject: [PATCH] Fixed compilation problems with PATH_MAX
 +
- endif
-diff --git a/package/gstreamer1/gst1-plugins-ugly/Config.in b/package/gstreamer1/gst1-plugins-ugly/Config.in
-index 54766ffa8c..aff495c1ac 100644
---- a/package/gstreamer1/gst1-plugins-ugly/Config.in
-+++ b/package/gstreamer1/gst1-plugins-ugly/Config.in
-@@ -35,10 +35,14 @@ comment "plugins with external dependencies (there may be more available)"
- 
- config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_DVDREAD
- 	bool "dvdread"
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # libdvdcss -> libdvdread
- 	select BR2_PACKAGE_LIBDVDREAD
- 	help
- 	  Access a DVD with dvdread
- 
-+comment "dvdread needs a toolchain w/ gcc >= 8"
-+	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_8
++../src/dvd_reader.c: In function 'dir_has_file':
++../src/dvd_reader.c:393:14: error: 'PATH_MAX' undeclared (first use in this function)
++  393 |   char path[ PATH_MAX + 1 ];
 +
- config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_MPEG2DEC
- 	bool "mpeg2dec"
- 	select BR2_PACKAGE_LIBMPEG2
-diff --git a/package/libdvdcss/Config.in b/package/libdvdcss/Config.in
-index a8c3b84cf5..8e6f6ea984 100644
---- a/package/libdvdcss/Config.in
-+++ b/package/libdvdcss/Config.in
-@@ -1,7 +1,11 @@
- config BR2_PACKAGE_LIBDVDCSS
- 	bool "libdvdcss"
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # std=c17
- 	help
- 	  libdvdcss is a simple library designed for accessing DVDs like
- 	  a block device without having to bother about the decryption.
- 
- 	  http://www.videolan.org/developers/libdvdcss.html
++The build error was introduced by
++https://code.videolan.org/videolan/libdvdread/-/commit/da7d7ed4e8fe08c0af310925995b2f4742f7eabf
 +
-+comment "libdvdcss needs a toolchain w/ gcc >= 8"
-+	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_8
-diff --git a/package/libdvdnav/Config.in b/package/libdvdnav/Config.in
-index 77cba5f135..8276e466db 100644
---- a/package/libdvdnav/Config.in
-+++ b/package/libdvdnav/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LIBDVDNAV
- 	bool "libdvdnav"
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # libdvdcss -> libdvdread
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_LIBDVDREAD
- 	help
-@@ -9,5 +10,6 @@ config BR2_PACKAGE_LIBDVDNAV
- 
- 	  https://www.videolan.org/developers/libdvdnav.html
- 
--comment "libdvdnav needs a toolchain w/ threads"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+comment "libdvdnav needs a toolchain w/ threads, gcc >= 8"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_8
-diff --git a/package/libdvdread/Config.in b/package/libdvdread/Config.in
-index 3579054158..efa86a4e38 100644
---- a/package/libdvdread/Config.in
-+++ b/package/libdvdread/Config.in
-@@ -1,8 +1,12 @@
- config BR2_PACKAGE_LIBDVDREAD
- 	bool "libdvdread"
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # libdvdcss
- 	select BR2_PACKAGE_LIBDVDCSS
- 	help
- 	  libdvdread provides a simple foundation for reading
- 	  DVD-Video images.
- 
- 	  https://www.videolan.org/developers/libdvdnav.html
++and was found using the buildroot Gitlab pipelines with gcc 9.3.0.
 +
-+comment "libdvdread needs a toolchain w/ gcc >= 8"
-+	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_8
++Upstream: https://code.videolan.org/videolan/libdvdread/-/merge_requests/142
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ src/dvd_reader.c | 5 +++++
++ 1 file changed, 5 insertions(+)
++
++diff --git a/src/dvd_reader.c b/src/dvd_reader.c
++index ceef4ee..2a70958 100644
++--- a/src/dvd_reader.c
+++++ b/src/dvd_reader.c
++@@ -29,6 +29,11 @@
++ #include <limits.h>         /* PATH_MAX */
++ #include <ctype.h>          /* isalpha */
++ 
+++#include <config.h>
+++#ifdef HAVE_SYS_PARAM_H
+++#   include <sys/param.h>   /* PATH_MAX */
+++#endif
+++
++ #if defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__NetBSD__) || defined(__bsdi__) || defined(__APPLE__)
++ # define SYS_BSD 1
++ #endif
++-- 
++2.47.3
++
+diff --git a/package/libdvdread/libdvdread.hash b/package/libdvdread/libdvdread.hash
+index 5fb51ff47c..4a669fbcc5 100644
+--- a/package/libdvdread/libdvdread.hash
++++ b/package/libdvdread/libdvdread.hash
+@@ -1,7 +1,5 @@
+-# From https://download.videolan.org/pub/videolan/libdvdread/7.0.1/libdvdread-7.0.1.tar.xz.sha1
+-sha1  aaba59e0e04fa12704fab4230344549d8ae4b2e3  libdvdread-7.0.1.tar.xz
+-# From https://download.videolan.org/pub/videolan/libdvdread/7.0.1/libdvdread-7.0.1.tar.xz.sha256
+-sha256  2e3e04a305c15c3963aa03ae1b9a83c1d239880003fcf3dde986d3943355d407  libdvdread-7.0.1.tar.xz
++# From https://download.videolan.org/pub/videolan/libdvdread/7.1.1/libdvdread-7.1.1.tar.xz.sha256
++sha256  a0d47876548bec806774bbf8dbf20bb19ba139464383156b32eb8e59915b90a9  libdvdread-7.1.1.tar.xz
+ 
+ # Hash for license file:
+ sha256  d6cb0e9e560f51085556949a84af12b79a00f10ab8b66c752537faf7cd665572  COPYING
+diff --git a/package/libdvdread/libdvdread.mk b/package/libdvdread/libdvdread.mk
+index cc515606b2..b6a34ad173 100644
+--- a/package/libdvdread/libdvdread.mk
++++ b/package/libdvdread/libdvdread.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBDVDREAD_VERSION = 7.0.1
++LIBDVDREAD_VERSION = 7.1.1
+ LIBDVDREAD_SOURCE = libdvdread-$(LIBDVDREAD_VERSION).tar.xz
+ LIBDVDREAD_SITE = https://download.videolan.org/pub/videolan/libdvdread/$(LIBDVDREAD_VERSION)
+ LIBDVDREAD_INSTALL_STAGING = YES
 -- 
 2.47.3
 
