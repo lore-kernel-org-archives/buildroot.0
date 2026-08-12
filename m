@@ -1,139 +1,111 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18D44C5AD5A
-	for <buildroot@archiver.kernel.org>; Wed, 12 Aug 2026 09:32:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79423C5AD5A
+	for <buildroot@archiver.kernel.org>; Wed, 12 Aug 2026 11:33:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C5C3C608B3;
-	Wed, 12 Aug 2026 09:32:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7EA6A811C9;
+	Wed, 12 Aug 2026 11:33:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id F90EggiH3vmS; Wed, 12 Aug 2026 09:32:55 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4gtzc9pmAt2u; Wed, 12 Aug 2026 11:33:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 02D83608AD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D1511811B5
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786527175;
-	bh=Sd4DUI1jTGlcfBwA0uez2ZMMQvQHzz6kGyhuFBES1VU=;
-	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=TgIcMbPCnok4i8obZmqCuZlya+wgZSvajCDolWHirsIjqHxMm9onOfsDMu8sGBHAH
-	 uGQ3lNkVO3u5iv46wStOmz5ZeLPXcxrROrOi0tBhEFYSjzIxXCuBuFZcrPYn9AcW3C
-	 hukoXJJ/BWmHkd2yGH3T/VDYrWyLZLfmZDzgiBH6WF2GPwYNtmhO2pGBFF10+Fvbd5
-	 zydflpwKwXpetxWQbSLmSLTHfqktRmSK8ufTktFP5l5OIOchhUNRBluUgTIk+oeKnB
-	 DZWhadwu3vxwg5XfLVS0nUMTx631w7AobprGvKYWu9AWYr695qyY2ucRyo10WcTn3c
-	 m2TGsaXvudlXA==
+	s=default; t=1786534397;
+	bh=JQnom5h8mYV2xm4F1DFK5o5AV6/BwLzdHi4YuVACPCY=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:Cc:From;
+	b=S3KQqFLvoLe7e+k54n/SGFWrXYyWNgATQPeqBEPE7LQBqW2AOaFbtmrjTh91Hl2ii
+	 lAoqVM2wIqQ9EW6ihi3iToprC0p7nIRiuNikS7/GjNXUJT+aL9MKdofQKvgQGLDxH8
+	 NGBaoeqbboiQIIMlI4wkxzIklVhYzkCjyts5zPn5qGNkcRfKHYoNxaUdSfbzEYwOGD
+	 EDj1SaxTnaEiGSimNRB1nOTCT+f9YrtYWWMu1Cgl/hfblaq1EBegEqx0fugFHNuVQt
+	 nG/P97trxQpIfTSm86srFAewiRvuxVP50z0l3N8jHj1txFCn1ujH4hd0A4iu67xyIp
+	 NYBm/0E4ij60Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 02D83608AD;
-	Wed, 12 Aug 2026 09:32:55 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 0825149B
- for <buildroot@buildroot.org>; Wed, 12 Aug 2026 09:32:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D1511811B5;
+	Wed, 12 Aug 2026 11:33:17 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 39CA91F41
+ for <buildroot@buildroot.org>; Wed, 12 Aug 2026 11:33:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E484D608AD
- for <buildroot@buildroot.org>; Wed, 12 Aug 2026 09:32:53 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2B3A940856
+ for <buildroot@buildroot.org>; Wed, 12 Aug 2026 11:33:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 59S88FZdGOp8 for <buildroot@buildroot.org>;
- Wed, 12 Aug 2026 09:32:53 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=148.163.158.5;
- helo=mx0b-001b2d01.pphosted.com; envelope-from=egorenar@linux.ibm.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org BF211608A7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BF211608A7
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com
- [148.163.158.5])
- by smtp3.osuosl.org (Postfix) with ESMTPS id BF211608A7
- for <buildroot@buildroot.org>; Wed, 12 Aug 2026 09:32:52 +0000 (UTC)
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
- by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id
- 67C634XQ2708446; Wed, 12 Aug 2026 09:32:44 GMT
-Received: from ppma23.wdc07v.mail.ibm.com
- (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
- by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4fwvnw8yn9-1
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
- Wed, 12 Aug 2026 09:32:44 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
- by ppma23.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 67C9QPHg002577;
- Wed, 12 Aug 2026 09:32:43 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
- by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4fxg9h5av1-1
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
- Wed, 12 Aug 2026 09:32:43 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com
- [10.20.54.104])
- by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id
- 67C9WgAH30605682
- (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
- Wed, 12 Aug 2026 09:32:42 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
- by IMSVA (Postfix) with ESMTP id 436942004B;
- Wed, 12 Aug 2026 09:32:42 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
- by IMSVA (Postfix) with ESMTP id 3334E20043;
- Wed, 12 Aug 2026 09:32:42 +0000 (GMT)
-Received: from localhost (unknown [9.224.74.101])
- by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
- Wed, 12 Aug 2026 09:32:42 +0000 (GMT)
-From: Alexander Egorenkov <egorenar@linux.ibm.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <anw8fVxA-RNGqSl1@windsurf>
-References: <ansJ5dXXblvYeMLB@windsurf>
- <87h5kzya8h.fsf@li-0ccc18cc-2c67-11b2-a85c-a193851e4c5d.ibm.com>
- <anw8fVxA-RNGqSl1@windsurf>
-Date: Wed, 12 Aug 2026 11:32:42 +0200
-Message-ID: <87ecg3y98l.fsf@li-0ccc18cc-2c67-11b2-a85c-a193851e4c5d.ibm.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4BaPJKd0oJym for <buildroot@buildroot.org>;
+ Wed, 12 Aug 2026 11:33:15 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::42c; helo=mail-wr1-x42c.google.com;
+ envelope-from=mattianarducci1@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 02BAF407A2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 02BAF407A2
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
+ [IPv6:2a00:1450:4864:20::42c])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 02BAF407A2
+ for <buildroot@buildroot.org>; Wed, 12 Aug 2026 11:33:14 +0000 (UTC)
+Received: by mail-wr1-x42c.google.com with SMTP id
+ ffacd0b85a97d-47fe2d179e2so452598f8f.1
+ for <buildroot@buildroot.org>; Wed, 12 Aug 2026 04:33:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20251104; t=1786534393; x=1787139193;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to:content-type;
+ bh=RIwgvUfcwe2Q2gIn4Reh3M5JHxg9gVGH0JjwQDAeEPQ=;
+ b=CJqqJNds4DilfBwLXiLxLFqIyskDJsgZJ8tpvOvMcB6qY73KfvXo578MNTxVXqrSbF
+ dCyoxQNTFgbX3ayJD41CAYKcUtHpNLdkv0tl8+9u0NBfV+mTkp43NMeAFRffajxSTTjl
+ Vp7tpfW8S1/TQ09vnkVifHy1jimzXiK3FwzBnhSmJMwE4HVq/PufXWXMkfONw0i8k7iv
+ ikwng5QtdWBNgTbb4Puity/NSfBPbaIwfzr54E8ytDbr5tKtkoeKXFM7vJ+px43zHbqr
+ xbiK/w1pEFWGIAuDI8s+9FPOzT70GfpbicbSP7YPJqej1uUFvO8xlW9lcufNXjmeCfD5
+ 03Ew==
+X-Gm-Message-State: AOJu0YxED0ZolyfXyL8dABz5hsny/sK2MYgG86LYGIWi6HUYaJ1zscHC
+ Jpj+R+NzquZEM6T34vOQGoR7f/09OOgN5JIg4oQPMUl772HcZBhgbGveZfMD1Knll5A=
+X-Gm-Gg: AR+sD10OMmIVlGb6+sMn4pXrmK09LcU/dZNkHBQcoGfItSLyDH4ttGIJzvfscgZ3tl/
+ bXM9Ci6aEXobIKPZnsQbi+tcZJP6RgfCDB6qKvYq6Brgvo34iJCwCZs8BvZjo5yF9dPuVAnPF3q
+ AfcPTb15gxDCLcSK8IBVzN6hgnI4T2qLnNMg+m60KsYQnAjOlOnB00nfMEx+E6CGiAVkf7B0W8o
+ 3iPYKanWutVedU7331nQk7bsqNpkWNZEx2K6rhyNWYy/RHEi5meX4e2XeDjB/1GlnKbU3PcH1cB
+ JFFxEjzhQd8e88VQFJsAlWzW09u1OFPLFHsFG78NzoSPIu7gkVAhWfnFTEKdknsTsiBjGmI2eGd
+ CRmzi+8icZTPADhX9j+6WFiRrEQcipmO0LyEL5y1fqTdfUxgLtGAYEAWFOJ7+W0kXGNdBHpSbXO
+ iBks9KwjvsqBEyB1RkbAWVnriH4ymEPvWwS6r8paRm9DOjasCAf+XxCprbgkKUj3LlHg==
+X-Received: by 2002:a05:6000:18a9:b0:47f:8ce7:8684 with SMTP id
+ ffacd0b85a97d-481528bfcb3mr6113259f8f.6.1786534392337; 
+ Wed, 12 Aug 2026 04:33:12 -0700 (PDT)
+Received: from localhost ([37.101.131.182]) by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-48150d4c10asm6625240f8f.20.2026.08.12.04.33.11
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 12 Aug 2026 04:33:12 -0700 (PDT)
+From: Mattia Narducci <mattianarducci1@gmail.com>
+To: buildroot@buildroot.org
+Date: Wed, 12 Aug 2026 13:33:04 +0200
+Message-ID: <20260812113306.353838-1-mattianarducci1@gmail.com>
+X-Mailer: git-send-email 2.55.0
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Authority-Analysis: v=2.4 cv=RsP16imK c=1 sm=1 tr=0 ts=6a7c3dbc cx=c_pps
- a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
- a=Sv0fKeRqtYgA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
- a=RzCfie-kr_QcCd8fBx8p:22 a=P-IC7800AAAA:8 a=Qcr0OICp5OepfDK_FJYA:9
- a=d3PnA9EDa4IxuAV0gXij:22
-X-Proofpoint-GUID: Y4pNUJMfv1mbB5FvbAnxiova42J1Ez0i
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwODEyMDA3NiBTYWx0ZWRfX87JRr6QHv/FY
- 2JBUNC0oD5T9mVYQzwOc/oOnpOxCOPrus5W0FwVTIdHjLWXTdVtb9aG8pv0fbPpFPNGcvPC3iQR
- gMl1sZaw1axrwAdWmVrZLvqO47/0Ihn69WdpsaQdM8BT4U+IhwfCV4QtadimdiISCCv9euCTrJ4
- 2j9wtgVNgw4i8a/k/7ItZD9oRwBgYDyKOOkhhxYqzDTuoZV1i+V6DNm6kIBryuSa9qhaAYMA1SL
- kgxCkcS+E81LeYSFBYSviVURN7RMLJHZNtC9K17wbsJlmjo08+6VxinSk1aChLweJ/YbFyQFnZP
- qv2JYsoizigLKoIteQs6UnXQupgGbO3lAenvNLGQLusy0YyyJ8dBBvLF02f0f/mxUmfWE9PYtbS
- Ju3eKBahJH93fJt4IO6O0dBO0Y4rj2cbzpE5doJTq2bHI3NVmmekdvkHByD2Y1jkcklT+umDJ4A
- OW/WU/aF5utrB7n5gsg==
-X-Proofpoint-ORIG-GUID: Y4pNUJMfv1mbB5FvbAnxiova42J1Ez0i
-X-Proofpoint-Spam-Info: AW1haW4tMjYwODEyMDA3NiBTYWx0ZWRfX7h6j+7uCvQXN
- y80zseXLDKnG8/dADVjO0Y2NrkVMLWOLPxLd6kRVXxwKHNekoY4x07CMAeBekwW+ITqEu6mpoXY
- M6jsjRyOQrdzxpYjapqiXmBPm6HdAyw=
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-08-12_02,2026-08-10_03,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- spamscore=0 impostorscore=0 suspectscore=0 clxscore=1015 malwarescore=0
- phishscore=0 adultscore=0 lowpriorityscore=0 priorityscore=1501 bulkscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2608120076
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=ibm.com; h=cc
- :content-type:date:from:in-reply-to:message-id:mime-version
- :references:subject:to; s=pp1; bh=xsqodur3EFbv/GurYGTTfV0TQ1LFir
- UadITTG67HRuw=; b=YMJzNvCzH9eLxgOBXG0/uxpwkRYWI9aS1Yp7D2mrTbABK6
- 04LcQmDb53Lut5FmMI8J2VhjyzTwirc/a3ygmndbMyv1GwMWKHMbP4t8M0+AgZO6
- 4iQnNp/J5DJ1yfw2Nh2ajEXJeCx1pkzhmLoJc4D6SPmI4P33szUQaTafFNJE2F4y
- 02wiJfidBpbXyCbsdZos7cpTSJOkdhNHvzzF41KbeTSOZ3XeMD1LLIRsKT1GmxO3
- zu379wWj2qm3cfAqYfLUSG5/jK1nr5qOc3w6yQ6QPihWbbm9G3y5G/g1dELFNDCH
- Kre9sCEPe3JrLN8vNIZBiV/AdpAkUHppnbCJtArg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=linux.ibm.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com
- header.a=rsa-sha256 header.s=pp1 header.b=YMJzNvCz
-Subject: Re: [Buildroot] S390 Buildroot/gcc build issue
+ d=gmail.com; s=20251104; t=1786534393; x=1787139193; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:from:to:cc:subject:date:message-id:reply-to
+ :content-type;
+ bh=RIwgvUfcwe2Q2gIn4Reh3M5JHxg9gVGH0JjwQDAeEPQ=;
+ b=E4y1NXCwrvQUiTKyumOhdl7At09Qlt9sb8KRBG00nadMaOAfZGTa0g1j+OGUS7yJ6z
+ 2z03maoVtWTzpP1rwscY8lyH+WeqYiJtvojTh1YoePkj5rvu+Mskj2WlC10RSYrTgq5q
+ /IsvLuNeB9RMcL0CRIM28x9bvktixB6yCo2S8PGDuLNC9ln3Ybn8qPn5iIbF2udsW8ni
+ cdgqdghKbcA51vWig3yo1fVtGKJLqQbrTq6aMGH9jcWxiN+Bp2lgduVEj6pXVogmZZ53
+ r2EbC3kynjoj7+Y5lnAPbD4gejFr/FU2rLgQxi4LmnK5w0x1AHftuzmydHJd+BS/ePTl
+ jFjw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20251104 header.b=E4y1NXCw
+Subject: [Buildroot] [PATCH] package/ser2net: backport security patch for
+ GHSA-cgh5-39mg-vhfr
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -145,47 +117,121 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Francisco Gonzalez <gzmorell@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+- GHSA-cgh5-39mg-vhfr: Path traversal in authentication via unsanitized
+  username allows auth bypass
+  https://github.com/cminyard/ser2net/security/advisories/GHSA-cgh5-39mg-vhfr
+  No CVE ID yet.
 
-> Hello,
->
-> On Wed, Aug 12, 2026 at 11:11:10AM +0200, Alexander Egorenkov wrote:
->
->> the types _Decimal* require for the host compiler to be built with
->> --enable-decimal-float.
->
-> What do you call the "host compiler" in this context?
->
-> Are you talking about the native gcc compiler available on the host,
-> or the cross-compiler built by Buildroot?
->
+Signed-off-by: Mattia Narducci <mattianarducci1@gmail.com>
+---
+ ...0001-Fix-authorization-path-handling.patch | 89 +++++++++++++++++++
+ 1 file changed, 89 insertions(+)
+ create mode 100644 package/ser2net/0001-Fix-authorization-path-handling.patch
 
-A cross-compiler built by Buildroot.
+diff --git a/package/ser2net/0001-Fix-authorization-path-handling.patch b/package/ser2net/0001-Fix-authorization-path-handling.patch
+new file mode 100644
+index 0000000000..a90130844f
+--- /dev/null
++++ b/package/ser2net/0001-Fix-authorization-path-handling.patch
+@@ -0,0 +1,89 @@
++From fa6c2a8840cbc8d7622e46ce12ba15ecc0fb51b7 Mon Sep 17 00:00:00 2001
++From: Corey Minyard <corey@minyard.net>
++Date: Thu, 23 Jul 2026 10:51:25 -0500
++Subject: [PATCH] Fix authorization path handling
++
++The username is received from the remote end and thus untrusted.  Make
++sure it doesn't have any characters that can cause it to escape the
++directory it is supposed to be in when constructing a path.
++
++Reported-by: TristanInSec
++Signed-off-by: Corey Minyard <corey@minyard.net>
++
++Upstream: https://github.com/cminyard/ser2net/commit/fa6c2a8840cbc8d7622e46ce12ba15ecc0fb51b7
++
++Signed-off-by: Mattia Narducci <mattianarducci1@gmail.com>
++---
++ auth.c | 42 ++++++++++++++++++++++++++++++++++++++----
++ 1 file changed, 38 insertions(+), 4 deletions(-)
++
++diff --git a/auth.c b/auth.c
++index 95c80b4..53c3186 100644
++--- a/auth.c
+++++ b/auth.c
++@@ -185,6 +185,40 @@ handle_auth_begin(struct gensio *net, const char *authdir, const char *pamauth,
++     return GE_NOTSUP;
++ }
++ 
+++/*
+++ * Construct a secure authorization path.
+++ *
+++ * filename must be at least MAX_PATH.
+++ *
+++ * "username" is untrusted, the rest of the data is trusted.
+++ */
+++static bool
+++construct_auth_path(char *filename, const char *authdir, const char *username,
+++		    const char *format, ...)
+++{
+++    size_t baselen;
+++    va_list ap;
+++
+++    /*
+++     * '/', '.', and '\' are all parts of things that can modify the base
+++     * path.  Don't allow them in usernames.
+++     */
+++    if (strchr(username, '.') || strchr(username, '/')
+++		|| strchr(username, '\\'))
+++	return false;
+++
+++    /* Get a good base path ending in / */
+++    baselen = snprintf(filename, PATH_MAX, "%s/%s/",
+++		       authdir, username);
+++
+++    /* Now append the rest of the path. */
+++    va_start(ap, format);
+++    vsnprintf(filename + baselen, PATH_MAX - baselen, format, ap);
+++    va_end(ap);
+++
+++    return true;
+++}
+++
++ static int
++ handle_precert(struct gensio *net, const char *authdir)
++ {
++@@ -228,8 +262,8 @@ handle_precert(struct gensio *net, const char *authdir)
++ 	}
++     }
++ 
++-    snprintf(filename, sizeof(filename), "%s/%s/allowed_certs/",
++-	     authdir, s);
+++    if (!construct_auth_path(filename, authdir, s, "allowed_certs/"))
+++	return GE_AUTHREJECT;
++     err = gensio_control(net, 0, false, GENSIO_CONTROL_CERT_AUTH,
++ 			 filename, &len);
++     if (err && err != GE_CERTNOTFOUND) {
++@@ -258,8 +292,8 @@ handle_password(struct gensio *net, const char *authdir, const char *password)
++ 	return GE_AUTHREJECT;
++     }
++ 
++-    snprintf(filename, sizeof(filename), "%s/%s/password",
++-	     authdir, username);
+++    if (!construct_auth_path(filename, authdir, username, "password"))
+++	return GE_AUTHREJECT;
++     pwfile = fopen(filename, "r");
++     if (!pwfile) {
++ 	syslog(LOG_ERR, "Can't open password file %s: %s", filename,
++-- 
++2.55.0
++
+-- 
+2.55.0
 
-
-> and for S390, it gets overridden.
->
-> See: it's the same variable that gets appended, so at the end we have:
->
-> HOST_GCC_COMMON_CONF_OPTS = \
-> 	[...]
-> 	--disable-decimal-float \
-> 	[...]
-> 	--enable-decimal-float
->
-> So on S390, the cross-compiler is built with --enable-decimal-float.
-
-Sorry for not being clear here, this was added by me for testing ;-)
-I this change is okay, then i'll send a patch.
-Not sure here, do we need to deal with Gcc 15 conditionally here ?
-
-Regards
-Alex
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
