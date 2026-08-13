@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A79B3C5DF69
-	for <buildroot@archiver.kernel.org>; Fri, 14 Aug 2026 13:19:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8920C5CFDB
+	for <buildroot@archiver.kernel.org>; Fri, 14 Aug 2026 13:19:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4B2236068A;
-	Fri, 14 Aug 2026 13:19:50 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eID1rwOCah8b; Fri, 14 Aug 2026 13:19:49 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 73544607BD
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786713589;
-	bh=WQkBqEamjMPucSG2ykyNOS3CLT+rH0VoK4mLpxsL00U=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=hP3vSf8fUBtYPSlgp4onvgLFAchXNi+OiUeD6gyk6MeSIiTV2WBmu30bP9tfmgw7+
-	 wXr2WAkNpEqCpEKIqPMR7nRv9RKg2V570PNmFUUh8Fh01p44E8Jq86UhTlwQK6upxP
-	 KIpSgsX0MvCn1i0mkzIHJzt7zWEncAekTQh9hAu4dltX8HlLM2VbePAgLLd5jjXNr3
-	 oHtAyE60ogzjnTuea148ZnFvftsYELVW6Wnps6pPPE2PxhQhm6DB96xmAP8aX7KCMK
-	 w2jHYKYW3kRK1ydhLtlIcCL/jZNX3lMzaKhPtL/rkbuQfbT06B6OY8cgi5IsIoBNjZ
-	 vZ6QBK5oXjrmg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 73544607BD;
-	Fri, 14 Aug 2026 13:19:49 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 9A15F139C
- for <buildroot@buildroot.org>; Fri, 14 Aug 2026 13:19:46 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 89B71409DB
- for <buildroot@buildroot.org>; Fri, 14 Aug 2026 13:19:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7C6C040C27;
+	Fri, 14 Aug 2026 13:19:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7HvDDQxKbjPQ for <buildroot@buildroot.org>;
+ id A09CJSCbFtW2; Fri, 14 Aug 2026 13:19:50 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6CAA640C52
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1786713590;
+	bh=RhJslJLkM/vMYwCxmpGu5VxucruoCGt1sQ1Eowp0QrY=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=SARiDk6z3xvI1nERvUgvQZwxDZJdKPpVLlvjTsNlsNbXZcwvl2pq7DOcFQxhSofs8
+	 lcXOxaBAPcVS9ljYkE06Kunw0DF8/lr/pAI8xxV7YX6vu9EWuhK1vPDTVGQFWdGV24
+	 2t/aXVofcEETdBVnJOPtCItW6e0nSbNlCZ8btTGMd/hmmtv3mY6ecLy8Sq8vYYCRYz
+	 lVO7HJnPvEo/8FR4kSuL4nfMPlX7yDlf3pG4/76MuLYpS6jqqTmm0h253ZVIKAczjV
+	 ZRnO8ci/QoWIkRMCuVpJvxn5nlN8jsyeTq8jhCjWZtjLd1UACKCMuQtvVgLYDl7/H3
+	 NJfE4H0LdGFMg==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6CAA640C52;
+	Fri, 14 Aug 2026 13:19:50 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9F9D533B
+ for <buildroot@buildroot.org>; Fri, 14 Aug 2026 13:19:46 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9131B81117
+ for <buildroot@buildroot.org>; Fri, 14 Aug 2026 13:19:46 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qI4RBIO4-nHy for <buildroot@buildroot.org>;
  Fri, 14 Aug 2026 13:19:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8FA2F40C27
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ACF1280E2B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8FA2F40C27
+ by smtp1.osuosl.org (Postfix) with ESMTP id ACF1280E2B
  for <buildroot@buildroot.org>; Fri, 14 Aug 2026 13:19:45 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 867E48D667; Fri, 14 Aug 2026 13:18:55 +0000 (UTC)
+ id B16728D667; Fri, 14 Aug 2026 13:18:55 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 13 Aug 2026 09:47:42 +0200
+Date: Thu, 13 Aug 2026 10:22:02 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 76d002604f4c62bdb79dab1b773cfb68ad887d18
-X-Git-Newrev: 0273dfc77a6528c5d891d1278926ace01af63e0b
+X-Git-Oldrev: 114e539bdc5d06e0ce2f3c38cab5195164abd58e
+X-Git-Newrev: 19c2229f1dc45a789e7b0b0c8a26f1d8f0822d3d
 X-Patchwork-Hint: ignore
-Message-Id: <20260814131855.867E48D667@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/mini-snmpd: add
- sysv init script
+Message-Id: <20260814131855.B16728D667@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/ts4900-fpga:
+ remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,105 +77,108 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/0273dfc77a6528c5d891d1278926ace01af63e0b
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/19c2229f1dc45a789e7b0b0c8a26f1d8f0822d3d
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-A start script has been missing since the package was added, so the
-daemon was not started automatically on sysv/busybox systems.
+The ts4900 defconfig was removed, this package is no longer used.
 
-This also fixes a regression in systemd builds introduced in fccdc6bd,
-when the package switched from local unit file to upstream.
-
-Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 54485e075d86a468f213d0ffcd339edc338df1dc)
+(cherry picked from commit 47b558b11134c66d58482acafe4b7f4e23d65219)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- package/mini-snmpd/S60mini-snmpd | 52 ++++++++++++++++++++++++++++++++++++++++
- package/mini-snmpd/mini-snmpd    |  2 +-
- package/mini-snmpd/mini-snmpd.mk |  5 ++++
- 3 files changed, 58 insertions(+), 1 deletion(-)
+ Config.in.legacy                     |  7 +++++++
+ package/Config.in                    |  1 -
+ package/ts4900-fpga/Config.in        | 11 -----------
+ package/ts4900-fpga/ts4900-fpga.hash |  5 -----
+ package/ts4900-fpga/ts4900-fpga.mk   | 21 ---------------------
+ 5 files changed, 7 insertions(+), 38 deletions(-)
 
-diff --git a/package/mini-snmpd/S60mini-snmpd b/package/mini-snmpd/S60mini-snmpd
-new file mode 100644
-index 0000000000..e7c61d7a85
---- /dev/null
-+++ b/package/mini-snmpd/S60mini-snmpd
-@@ -0,0 +1,52 @@
-+#!/bin/sh
-+
-+DAEMON="mini-snmpd"
-+PIDFILE="/var/run/$DAEMON.pid"
-+
-+DAEMON_OPTS=""
-+
-+# shellcheck source=/dev/null
-+[ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
-+
-+start() {
-+	printf 'Starting %s: ' "$DAEMON"
-+	# shellcheck disable=SC2086 # we need the word splitting
-+	start-stop-daemon --start --quiet --pidfile "$PIDFILE" \
-+		--exec "/usr/sbin/$DAEMON" -- $DAEMON_OPTS
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	return "$status"
-+}
-+
-+stop() {
-+	printf 'Stopping %s: ' "$DAEMON"
-+	start-stop-daemon --stop --quiet --pidfile "$PIDFILE" \
-+		--exec "/usr/sbin/$DAEMON"
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	return "$status"
-+}
-+
-+restart() {
-+	stop
-+	start
-+}
-+
-+case "$1" in
-+	start|stop|restart)
-+		"$1";;
-+	reload)
-+		# Restart, since there is no true "reload" feature.
-+		restart;;
-+	*)
-+		echo "Usage: $0 {start|stop|restart|reload}"
-+		exit 1
-+esac
-diff --git a/package/mini-snmpd/mini-snmpd b/package/mini-snmpd/mini-snmpd
-index 0ca9901d58..371f57f15f 100644
---- a/package/mini-snmpd/mini-snmpd
-+++ b/package/mini-snmpd/mini-snmpd
-@@ -1,2 +1,2 @@
- # Require client authentication, thus SNMP version 2c
--EXTRA_PARAMS=-a
-+DAEMON_OPTS="-a -c public -s"
-diff --git a/package/mini-snmpd/mini-snmpd.mk b/package/mini-snmpd/mini-snmpd.mk
-index 1f6e5c1919..40a7d2f15a 100644
---- a/package/mini-snmpd/mini-snmpd.mk
-+++ b/package/mini-snmpd/mini-snmpd.mk
-@@ -20,4 +20,9 @@ endef
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 5512bf1ec3..1b9bae78bb 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,13 @@ endif
  
- MINI_SNMPD_POST_INSTALL_TARGET_HOOKS += MINI_SNMPD_INSTALL_ETC_DEFAULT
+ comment "Legacy options removed in 2025.02.17"
  
-+define MINI_SNMPD_INSTALL_INIT_SYSV
-+	$(INSTALL) -D -m 0755 package/mini-snmpd/S60mini-snmpd \
-+		$(TARGET_DIR)/etc/init.d/S60mini-snmpd
-+endef
++config BR2_PACKAGE_TS4900_FPGA
++	bool "ts4900-fpga removed"
++	select BR2_LEGACY
++	help
++	  The ts4900 defconfig was removed, so ts4900-fpga package
++	  has been dropped.
 +
- $(eval $(autotools-package))
+ config BR2_PACKAGE_ARGPARSE
+ 	bool "argparse has been removed"
+ 	select BR2_LEGACY
+diff --git a/package/Config.in b/package/Config.in
+index f9ee0dca89..7fc9da2a6e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -449,7 +449,6 @@ menu "Firmware"
+ 	source "package/rcw-smarc-sal28/Config.in"
+ 	source "package/rpi-firmware/Config.in"
+ 	source "package/sunxi-boards/Config.in"
+-	source "package/ts4900-fpga/Config.in"
+ 	source "package/ux500-firmware/Config.in"
+ 	source "package/wilc-firmware/Config.in"
+ 	source "package/wilink-bt-firmware/Config.in"
+diff --git a/package/ts4900-fpga/Config.in b/package/ts4900-fpga/Config.in
+deleted file mode 100644
+index 9f704fbc8c..0000000000
+--- a/package/ts4900-fpga/Config.in
++++ /dev/null
+@@ -1,11 +0,0 @@
+-config BR2_PACKAGE_TS4900_FPGA
+-	bool "ts4900-fpga"
+-	depends on BR2_arm
+-	help
+-	  TS-4900's FPGA implements clocks, UART MUX, and GPIOs. One
+-	  of these GPIOs is used to enable the wifi module.
+-
+-	  It is loaded by U-Boot during the boot sequence, the default
+-	  U-boot script expects to find it in the /boot folder.
+-
+-	  https://docs.embeddedts.com/TS-4900#FPGA_Changelog
+diff --git a/package/ts4900-fpga/ts4900-fpga.hash b/package/ts4900-fpga/ts4900-fpga.hash
+deleted file mode 100644
+index 1d3c62bfd1..0000000000
+--- a/package/ts4900-fpga/ts4900-fpga.hash
++++ /dev/null
+@@ -1,5 +0,0 @@
+-# From https://files.embeddedts.com/ts-socket-macrocontrollers/ts-4900-linux/fpga//ts4900-fpga-20170510.bin.md5
+-md5  86c7c3d7fb9c607af1ef55e1222b4416  ts4900-fpga-20170510.bin
+-
+-# Locally calculated
+-sha256  f15edd6813ee5e93e7f380d85df2dc31e764ebca465093fb9006d56ee15b476b  ts4900-fpga-20170510.bin
+diff --git a/package/ts4900-fpga/ts4900-fpga.mk b/package/ts4900-fpga/ts4900-fpga.mk
+deleted file mode 100644
+index 73e7a28e31..0000000000
+--- a/package/ts4900-fpga/ts4900-fpga.mk
++++ /dev/null
+@@ -1,21 +0,0 @@
+-################################################################################
+-#
+-# ts4900-fpga
+-#
+-################################################################################
+-
+-TS4900_FPGA_VERSION = 20170510
+-TS4900_FPGA_SOURCE = ts4900-fpga-$(TS4900_FPGA_VERSION).bin
+-TS4900_FPGA_SITE = https://files.embeddedts.com/ts-socket-macrocontrollers/ts-4900-linux/fpga
+-# No license file provided, Yocto recipe from the vendor claims MIT.
+-# https://github.com/embeddedTS/meta-ts/blob/f31860f1204b64f765a5380d3b93a2cf18234f90/recipes-extras/ts4900-fpga/ts4900-fpga.bb#L6
+-
+-define TS4900_FPGA_EXTRACT_CMDS
+-	cp $(TS4900_FPGA_DL_DIR)/$(TS4900_FPGA_SOURCE) $(@D)
+-endef
+-
+-define TS4900_FPGA_INSTALL_TARGET_CMDS
+-	$(INSTALL) -m 0644 -D $(@D)/$(TS4900_FPGA_SOURCE) $(TARGET_DIR)/boot/ts4900-fpga.bin
+-endef
+-
+-$(eval $(generic-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
