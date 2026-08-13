@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1707C5B572
-	for <buildroot@archiver.kernel.org>; Fri, 14 Aug 2026 13:21:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2D44C5DF69
+	for <buildroot@archiver.kernel.org>; Fri, 14 Aug 2026 13:21:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9B87840CFD;
-	Fri, 14 Aug 2026 13:21:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7D4B8812E1;
+	Fri, 14 Aug 2026 13:21:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZJLxfqkbKDTM; Fri, 14 Aug 2026 13:21:47 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iALXYwxNWFuT; Fri, 14 Aug 2026 13:21:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0B0F040D85
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6993D8140A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786713707;
-	bh=EdxrMjnxjBwkEkxeD2vs3XC0vgymLLqXspuXz/ddWww=;
+	s=default; t=1786713708;
+	bh=AhggWkR5p3aKLyHBJILD2QYHBdIxef/1yHc/syj8u5k=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=ZmYhIMki5ZQrGewh2ijcOOTvFj09GMd6Shas6cdFb2lkFcBqz0w/U6DXd3uuHDoga
-	 JECMHKHIBZH9JXNXUxMGcQxPnC/bGXDxrTYIlHbl78SJC8U5FazB1WQSJUXrmiEFgm
-	 4Yst1LyP/oGGH89pAluFuPb0ephdcGUlOHsCImZboIJYuITtnvXjHulbgh/N+6Q8bn
-	 MbMrtLjo/woEGQGQzgymrFnjushhm/s8bJH299vSh55I4frBVLhsuCsqHY7s/2N7fn
-	 p+6Lbkt1FcuakvVrOkrJN7lYcy97iDgptRJwk+ta7x/MlCOzjyt9A1UN7BM1DKTNJE
-	 /nF8NGL0ZoWMA==
+	b=DZnwCEZUgtvjgewfDSOlXpSoQZLTCOXFDkk5rrWoj7reS7muTtK//wTDb2hwXOu9w
+	 kYPK7QEDS6k3gFCLmXj7vWKv6SuEkacD183Ze84KX99daMANb43R2fRYexTRWTEJv2
+	 5xZZCwr2i03HB7G3e4QHny0crDDvgDmAsyWwMJJV2GrJLBbgnSP3cn3v6ziAEijvZy
+	 1eUcB+Vt6w5ir6t4/9bRrxq7reHlP4j5xRkULAu9pYithkAtTdibusPQIQnzA423RI
+	 HWrGkYyKZBjBZ0q7rqIpu3VMNvHbDJdrRfUih9K7gQJ9N5/S+xf5pXcdeXTpQm/O/N
+	 OVpXIHOfLCqDg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0B0F040D85;
-	Fri, 14 Aug 2026 13:21:47 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id F3FF733B
- for <buildroot@buildroot.org>; Fri, 14 Aug 2026 13:21:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6993D8140A;
+	Fri, 14 Aug 2026 13:21:48 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 247AD23F
+ for <buildroot@buildroot.org>; Fri, 14 Aug 2026 13:21:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E26C860803
- for <buildroot@buildroot.org>; Fri, 14 Aug 2026 13:21:26 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 16B0280E3E
+ for <buildroot@buildroot.org>; Fri, 14 Aug 2026 13:21:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dYBvrg0xeE8G for <buildroot@buildroot.org>;
- Fri, 14 Aug 2026 13:21:26 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AvAqBPMETnXy for <buildroot@buildroot.org>;
+ Fri, 14 Aug 2026 13:21:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 598A0608B0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 94B8680E48
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 598A0608B0
+ by smtp1.osuosl.org (Postfix) with ESMTP id 94B8680E48
  for <buildroot@buildroot.org>; Fri, 14 Aug 2026 13:21:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 59E078D665; Fri, 14 Aug 2026 13:20:35 +0000 (UTC)
+ id 991168D66C; Fri, 14 Aug 2026 13:20:35 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Thu, 13 Aug 2026 16:03:39 +0200
 X-Git-Refname: refs/heads/2026.05.x
-X-Git-Oldrev: 924b69122d3a14304c1fdf45109d9df0778fb718
-X-Git-Newrev: 2f7d1fa84226d798883954950a3390e3a4171bbc
+X-Git-Oldrev: 00c1e5b98c2a24639eb7251c247e9f8941fc5dcf
+X-Git-Newrev: 206e41be023eb02a4796ab213ffd3087bcc2e14c
 X-Patchwork-Hint: ignore
-Message-Id: <20260814132035.59E078D665@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.05.x]
- docs/manual/contribute.adoc: mention license file changes in commit message
+Message-Id: <20260814132035.991168D66C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.05.x] package/gcc: 15.3.0: add
+ GCC patch to fix mips/glibc build issue
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,56 +77,126 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/2f7d1fa84226d798883954950a3390e3a4171bbc
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/206e41be023eb02a4796ab213ffd3087bcc2e14c
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.05.x
 
-It has been good practice for a while to describe the kind of change
-in the commit message of any patch that changes license file
-hashes. This is important so any substantial changes don't go
-unnoticed. However it wasn't explicitly stated in the manual, fix
-that.
+Fixes a build error with glibc:
 
-Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit ef655b53dd5c3fa52b133e09b7d5b7ec1aea12e6)
+programs/locfile.c: In function 'align_locale_data':
+programs/locfile.c:584:1: internal compiler error:
+ in mips_load_store_insns, at config/mips/mips.cc:3137
+
+by backporting an upstream fix which is already included in gcc 16.1.
+
+The build error does not occur with gcc 14.x.
+
+Fixes:
+https://autobuild.buildroot.org/results/b925a444bb3ef03354224ac643b0b3160c4c5e8a/
+
+The oldest recorded build error dates back to July 2025:
+https://autobuild.buildroot.net/results/cb1/cb156fb938de26dd5dfe7fc48a1e061efa0284c7/
+
+so a backport to LTS branches should be considered.
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 11bf0dc202c46c0cc3b9a5357b28fb649a886362)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- docs/manual/contribute.adoc | 22 ++++++++++++----------
- 1 file changed, 12 insertions(+), 10 deletions(-)
+ ...mization-123833-Use-of-insn-attributes-in.patch | 85 ++++++++++++++++++++++
+ 1 file changed, 85 insertions(+)
 
-diff --git a/docs/manual/contribute.adoc b/docs/manual/contribute.adoc
-index f22164991f..310fe80585 100644
---- a/docs/manual/contribute.adoc
-+++ b/docs/manual/contribute.adoc
-@@ -283,16 +283,18 @@ the commit message body.
- When you bump a package to a new version, you should also submit a
- separate patch for each package. Don't forget to update the +.hash+
- file, or add it if it doesn't exist yet. Also don't forget to check if
--the +_LICENSE+ and +_LICENSE_FILES+ are still valid. The summary line
--should be something like +<packagename>: bump to version <new
--version>+. If the new version only contains security updates compared
--to the existing one, the summary should be +<packagename>: security
--bump to version <new version>+ and the commit message body should show
--the CVE numbers that are fixed. If some package patches can be removed
--in the new version, it should be explained explicitly why they can be
--removed, preferably with the upstream commit ID. Also any other
--required changes should be explained explicitly, like configure
--options that no longer exist or are no longer needed.
-+the +_LICENSE+ and +_LICENSE_FILES+ are still valid. If the hash of a
-+license file changed, please include a note in the commit message
-+about what changed, ideally with a link to the upstream commit. The
-+summary line should be something like +<packagename>: bump to version
-+<new version>+. If the new version only contains security updates
-+compared to the existing one, the summary should be +<packagename>:
-+security bump to version <new version>+ and the commit message body
-+should show the CVE numbers that are fixed. If some package patches
-+can be removed in the new version, it should be explained explicitly
-+why they can be removed, preferably with the upstream commit ID. Also
-+any other required changes should be explained explicitly, like
-+configure options that no longer exist or are no longer needed.
- 
- If you are interested in getting notified of build failures and of
- further changes in the packages you added or modified, please add
+diff --git a/package/gcc/15.3.0/0003-PR-rtl-optimization-123833-Use-of-insn-attributes-in.patch b/package/gcc/15.3.0/0003-PR-rtl-optimization-123833-Use-of-insn-attributes-in.patch
+new file mode 100644
+index 0000000000..81b43a5757
+--- /dev/null
++++ b/package/gcc/15.3.0/0003-PR-rtl-optimization-123833-Use-of-insn-attributes-in.patch
+@@ -0,0 +1,85 @@
++From 654c733fa3f10531f3fd6b6d89e39f28c0075bd6 Mon Sep 17 00:00:00 2001
++From: Roger Sayle <roger@nextmovesoftware.com>
++Date: Sat, 7 Feb 2026 07:50:41 +0000
++Subject: [PATCH] PR rtl-optimization/123833: Use of insn attributes in
++ insn_costs corrupts recog_data.
++
++Thanks again to Jeff Law and Andrew Pinski.  Here's a revised patch that
++addresses the true underlying cause of PR 128333.  recog.cc's cancel_changes
++was not correctly updating the recog_data cache, which leads to strange
++(incorrect) behavior in fwprop and ifcvt.
++
++2026-02-07  Roger Sayle  <roger@nextmovesoftware.com>
++	    Andrew Pinski  <andrew.pinski@oss.qualcomm.com>
++	    Jeff Law  <jeffrey.law@oss.qualcomm.com>
++
++gcc/ChangeLog
++	PR rtl-optimization/123833
++	* recog.cc (cancel_changes): Update the recog_data cache if it
++	holds the instruction being changed.
++
++gcc/testsuite
++	PR rtl-optimization/123833
++	* gcc.target/mips/pr123833.c: New test case.
++
++Upstream: https://gcc.gnu.org/cgit/gcc/commit/?id=654c733fa3f10531f3fd6b6d89e39f28c0075bd6
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ gcc/recog.cc                             |  6 +++++-
++ gcc/testsuite/gcc.target/mips/pr123833.c | 26 ++++++++++++++++++++++++
++ 2 files changed, 31 insertions(+), 1 deletion(-)
++ create mode 100644 gcc/testsuite/gcc.target/mips/pr123833.c
++
++diff --git a/gcc/recog.cc b/gcc/recog.cc
++index 48f6b45ec6d..f37e548d6ab 100644
++--- a/gcc/recog.cc
+++++ b/gcc/recog.cc
++@@ -608,7 +608,11 @@ cancel_changes (int num)
++       else
++ 	*changes[i].loc = changes[i].old;
++       if (changes[i].object && !MEM_P (changes[i].object))
++-	INSN_CODE (changes[i].object) = changes[i].old_code;
+++	{
+++	  INSN_CODE (changes[i].object) = changes[i].old_code;
+++	  if (recog_data.insn == changes[i].object)
+++	    recog_data.insn = nullptr;
+++	}
++     }
++   num_changes = num;
++ }
++diff --git a/gcc/testsuite/gcc.target/mips/pr123833.c b/gcc/testsuite/gcc.target/mips/pr123833.c
++new file mode 100644
++index 00000000000..4d0c9e8eaec
++--- /dev/null
+++++ b/gcc/testsuite/gcc.target/mips/pr123833.c
++@@ -0,0 +1,26 @@
+++/* { dg-do compile } */
+++/* { dg-options "-O1 -mabi=64 -mhard-float" } */
+++
+++typedef short int16_t;
+++typedef signed char int8_t;
+++typedef long long int64_t;
+++typedef unsigned char uint8_t;
+++typedef unsigned long long uint64_t;
+++
+++#define BS_VEC(type, num) type __attribute__((vector_size(num * sizeof(type))))
+++BS_VEC(int8_t, 2) backsmith_pure_0(int64_t);
+++uint64_t backsmith_pure_4(int16_t BS_ARG_0)
+++{
+++    BS_VEC(int16_t, 16)
+++    BS_VAR_0 = __builtin_convertvector(
+++        __builtin_shufflevector(backsmith_pure_0(0), backsmith_pure_0(0), 0, 2,
+++                                2, 3, 2, 1, 2, 3, 0, 2, 0, 0, 2, 2, 0, 1),
+++        BS_VEC(int16_t, 16));
+++    for (;;)
+++    {
+++        if (__builtin_ctzg((uint8_t)BS_VAR_0[3], BS_ARG_0))
+++            for (;;);
+++        return 0;
+++    }
+++}
+++
++-- 
++2.47.3
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
