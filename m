@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D29F5C5CFDB
-	for <buildroot@archiver.kernel.org>; Fri, 14 Aug 2026 13:20:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3CD0C5DF6A
+	for <buildroot@archiver.kernel.org>; Fri, 14 Aug 2026 13:20:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 977B840D06;
-	Fri, 14 Aug 2026 13:20:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 991E640C85;
+	Fri, 14 Aug 2026 13:20:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id v0BSjRC3k-lH; Fri, 14 Aug 2026 13:20:07 +0000 (UTC)
+ id ZJG4IOOMNia2; Fri, 14 Aug 2026 13:20:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 86DFB40CEC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A4B2540CEC
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786713607;
-	bh=Crgb/3MATzm3T9L0K+VVZSt/ruDuTnjK8HP8D1oRmmA=;
+	s=default; t=1786713610;
+	bh=dNkRgtWAtHJCBA4RIg03/sAYgZdnI+bzMB7HFKKvzHo=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=lMLwzJJN8XzbX6b/0VpotN+ctSQwm3CJo0wHqFgnpSiwiu5+74wzOhD4NyNmcv7yF
-	 fiY9yW5d8pVPWgahtTv65OQl37Khxp/BH1/Ll+Fa6aAGlJ+0m0KXSKeQkfc3tAE3Bx
-	 tb7+CZoKHIfROfDokNnZUS+noSrAFMj7R7yABj2/JET2+Ai3Md2byPzis8T6co9UEu
-	 eomINDgdgl3l9cn88YMOqbsJHhZLiXXdIdrV9gdAfutzkMfKPfr/9o3T3/8h+/KMHE
-	 zcv6zdvlsD0Ybs5qeJbEILZVS5f13jptRfiLvHf0rk2ijXOMMN3X1wpXOAc0BhZjEu
-	 zFc02ewNZ9ing==
+	b=JujB+fsBNco7PBSJ4hqKldR/qmvLkYJ5qDuOYiFBDvsWVjX+rBT3on3meDigl/nvC
+	 s42rR1lae5+NpH0VMPLGBiiEYV0uBSy/DrSdJXWM3FVJ4I23tSHppfRsrF3ZVBdlfa
+	 kPBoC+kl9awzr4DkgqL+4EyyrL3+t2h1GT46o5NVCZKqY90uGC0uWeFQOiKGWuevBI
+	 xb7jWCIeSX3In2GpgtL0dqvFeYOx8DGfPCXmXVrJcPBPlnk49F/Fjc1amgOtG1DHjD
+	 DpUrLcZPRVzb7zaNJ4kLVGDwzXW3YmncnRe/Nh1CWvCeYXPzMwtDC/KBYt2SC1/Jye
+	 LrrdQcjSE4maA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 86DFB40CEC;
-	Fri, 14 Aug 2026 13:20:07 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 9522323F
+	by smtp4.osuosl.org (Postfix) with ESMTP id A4B2540CEC;
+	Fri, 14 Aug 2026 13:20:10 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id BAE2E33B
  for <buildroot@buildroot.org>; Fri, 14 Aug 2026 13:19:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7B0FD40C39
+ by smtp2.osuosl.org (Postfix) with ESMTP id AA33D403B4
  for <buildroot@buildroot.org>; Fri, 14 Aug 2026 13:19:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vAH24BnKL10C for <buildroot@buildroot.org>;
- Fri, 14 Aug 2026 13:19:46 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FdvhCJ_Ug2O9 for <buildroot@buildroot.org>;
+ Fri, 14 Aug 2026 13:19:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AAEA7409DB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 66349400E3
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id AAEA7409DB
- for <buildroot@buildroot.org>; Fri, 14 Aug 2026 13:19:46 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 66349400E3
+ for <buildroot@buildroot.org>; Fri, 14 Aug 2026 13:19:45 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AF9338D66A; Fri, 14 Aug 2026 13:18:56 +0000 (UTC)
+ id 5921A8D667; Fri, 14 Aug 2026 13:18:55 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 14 Aug 2026 14:44:18 +0200
+Date: Thu, 13 Aug 2026 08:55:32 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 4cc800effef9297f90c8bd845c7777cd99789157
-X-Git-Newrev: 62afdce87f394548dbc5d12c96360a16d6e0e1ae
+X-Git-Oldrev: e3ee4c8e84c8c362576866ed19951dea6f1d7861
+X-Git-Newrev: ac21aecdc18863e3586f0fb8c5f58b92f8ab21d0
 X-Patchwork-Hint: ignore
-Message-Id: <20260814131856.AF9338D66A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/libgcrypt:
- upstream patch for CVE-2026-41989
+Message-Id: <20260814131855.5921A8D667@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] {linux,
+ linux-headers}: bump 5.{10, 15}, 6.{1, 6, 12} series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,88 +77,77 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/62afdce87f394548dbc5d12c96360a16d6e0e1ae
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/ac21aecdc18863e3586f0fb8c5f58b92f8ab21d0
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-This commit patches the following vulnerability:
+Update the latest kernel releases:
+    - 5.10.262 -> 5.10.264
+    - 5.15.213 -> 5.15.215
+    - 6.1.180 -> 6.1.182
+    - 6.6.148 -> 6.6.151
+    - 6.12.101 -> 6.12.103
 
-- CVE-2026-41989:
-    Libgcrypt before 1.12.2 sometimes allows a heap-based buffer overflow
-    and denial of service via crafted ECDH ciphertext to gcry_pk_decrypt.
-    https://www.cve.org/CVERecord?id=CVE-2026-41989
-
-This has already been addressed on the master branch by the package bump
-[1].
-
-[1] 93f486ac56 package/libgcrypt: bump version to 1.12.2
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- package/libgcrypt/0002-CVE-2026-41989.patch | 40 +++++++++++++++++++++++++++++
- package/libgcrypt/libgcrypt.mk              |  3 +++
- 2 files changed, 43 insertions(+)
+ linux/Config.in                      |  2 +-
+ linux/linux.hash                     | 10 +++++-----
+ package/linux-headers/Config.in.host | 10 +++++-----
+ 3 files changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/package/libgcrypt/0002-CVE-2026-41989.patch b/package/libgcrypt/0002-CVE-2026-41989.patch
-new file mode 100644
-index 0000000000..b93247ecdb
---- /dev/null
-+++ b/package/libgcrypt/0002-CVE-2026-41989.patch
-@@ -0,0 +1,40 @@
-+From 2d3d732c9bf87cc10729f69678dd9e6862f99fa3 Mon Sep 17 00:00:00 2001
-+From: NIIBE Yutaka <gniibe@fsij.org>
-+Date: Fri, 10 Apr 2026 16:58:57 +0900
-+Subject: [PATCH] cipher:ecc: Fix decoding a point on Montgomery curve.
-+
-+* cipher/ecc-misc.c (_gcry_ecc_mont_decodepoint): Fix the padding
-+mistake and add updating RAWMPILEN.
-+
-+CVE: CVE-2026-41989
-+Upstream: https://github.com/gpg/libgcrypt/commit/2d3d732c9bf87cc10729f69678dd9e6862f99fa3
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-+--
-+
-+Reported by Calif.io in collaboration with Claude and Anthropic
-+Research.
-+
-+GnuPG-bug-id: 8211
-+Fixes-commit: bbe15758c893dbf546416c1a6bccdad1ab000ad7
-+Suggested-by: Bronson Yen <bronson@calif.io>
-+Signed-off-by: NIIBE Yutaka <gniibe@fsij.org>
-+---
-+ cipher/ecc-misc.c | 5 ++++-
-+ 1 file changed, 4 insertions(+), 1 deletion(-)
-+
-+diff --git a/cipher/ecc-misc.c b/cipher/ecc-misc.c
-+index 615b0df2d..ab3799dcb 100644
-+--- a/cipher/ecc-misc.c
-++++ b/cipher/ecc-misc.c
-+@@ -438,7 +438,10 @@ _gcry_ecc_mont_decodepoint (gcry_mpi_t pk, mpi_ec_t ec, mpi_point_t result)
-+         *--p = *buf++;
-+ 
-+       if (rawmpilen < nbytes)
-+-        memset (rawmpi + nbytes - rawmpilen, 0, nbytes - rawmpilen);
-++        {
-++          memset (rawmpi + rawmpilen, 0, nbytes - rawmpilen);
-++          rawmpilen = nbytes;
-++        }
-+     }
-+   else
-+     {
-diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
-index 5f56e40ac2..babce3c264 100644
---- a/package/libgcrypt/libgcrypt.mk
-+++ b/package/libgcrypt/libgcrypt.mk
-@@ -14,6 +14,9 @@ LIBGCRYPT_DEPENDENCIES = libgpg-error
- LIBGCRYPT_CONFIG_SCRIPTS = libgcrypt-config
- LIBGCRYPT_CPE_ID_VENDOR = gnupg
+diff --git a/linux/Config.in b/linux/Config.in
+index d8b708fae0..be15702bde 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -139,7 +139,7 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_GIT_SUBMODULES
  
-+# 0002-CVE-2026-41989.patch
-+LIBGCRYPT_IGNORE_CVES += CVE-2026-41989
-+
- # Patching configure.ac and Makefile.am in 0001
- LIBGCRYPT_AUTORECONF = YES
- LIBGCRYPT_CONF_ENV += GPGRT_CONFIG=$(STAGING_DIR)/usr/bin/gpgrt-config
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "6.12.101" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "6.12.103" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "5.10.246-cip66" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "5.10.246-cip66-rt29" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index da272380bd..5a4765f6bc 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,10 +1,10 @@
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  0d21cd11933f49f7151b7c9dbb8cc3fddc8c8abe506434b850feecf41fc28a76  linux-6.12.101.tar.xz
+-sha256  b674994b5760eb1c493711cfdc3aefb97583dfe04bb7977b4c8e7aae0710f75e  linux-6.6.148.tar.xz
+-sha256  4f0e601759b55cfc4d0bf4990859b93bc74fb915cde532284f0765b77ca0f86a  linux-6.1.180.tar.xz
++sha256  f143aaade8877ba5616e788b4482576db28481bcf557ef537f4fcc3938fc3176  linux-6.12.103.tar.xz
++sha256  de01e5ae73412b70bceb41a6f97da6d0f29b6536f1f00f8b6a6fd40c729969f7  linux-6.6.151.tar.xz
++sha256  f38416bb6e8024a21ae868c7f29cd15293a73755e3484c7f2f4adea5b03c1f85  linux-6.1.182.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256  c4721b4b8535f3e418ee579c70645fbfd5ddfba4943c31b919e8c9522371e1d8  linux-5.15.213.tar.xz
+-sha256  fae7da8a9b97e5386f0a3dc3c5c8a88be17fcf2d0792a58a5a0c5b4f5775b483  linux-5.10.262.tar.xz
++sha256  d57f279da0813fa6d69fb2e59cf9a364be4faa1cd18cb76b0b64c074fd23b7a7  linux-5.15.215.tar.xz
++sha256  f27552ec32783512c81918c3b8f155fed8dbaf8a90a5a20afdc01aac715b489e  linux-5.10.264.tar.xz
+ sha256  ae6a3207f12aa4d6cfb0fa793ec9da4a6fcdfdcb57d869d63d6b77e3a8c1423d  linux-5.4.302.tar.xz
+ # Locally computed
+ sha256  93408e0c5d70ff0ab63dcf9edec6fda2b8524281d611a88e56590436bda43914  linux-cip-5.10.246-cip66.tar.gz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 5e163fb20e..42c961e15c 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -429,11 +429,11 @@ endchoice
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "5.4.302"	if BR2_KERNEL_HEADERS_5_4
+-	default "5.10.262"	if BR2_KERNEL_HEADERS_5_10
+-	default "5.15.213"	if BR2_KERNEL_HEADERS_5_15
+-	default "6.1.180"	if BR2_KERNEL_HEADERS_6_1
+-	default "6.6.148"	if BR2_KERNEL_HEADERS_6_6
+-	default "6.12.101"	if BR2_KERNEL_HEADERS_6_12
++	default "5.10.264"	if BR2_KERNEL_HEADERS_5_10
++	default "5.15.215"	if BR2_KERNEL_HEADERS_5_15
++	default "6.1.182"	if BR2_KERNEL_HEADERS_6_1
++	default "6.6.151"	if BR2_KERNEL_HEADERS_6_6
++	default "6.12.103"	if BR2_KERNEL_HEADERS_6_12
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
