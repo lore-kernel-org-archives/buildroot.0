@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE953C5DF69
-	for <buildroot@archiver.kernel.org>; Fri, 14 Aug 2026 13:21:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B05A0C5B572
+	for <buildroot@archiver.kernel.org>; Fri, 14 Aug 2026 13:21:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AA60740D92;
-	Fri, 14 Aug 2026 13:21:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7F1F381464;
+	Fri, 14 Aug 2026 13:21:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id k5Po57xJzIfi; Fri, 14 Aug 2026 13:21:50 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7k8iXUcS04cH; Fri, 14 Aug 2026 13:21:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 78A4640D88
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 82B4881465
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786713710;
-	bh=/0zvyp5tWZmCXiP9m99ENRKKfwpdqH/0okizoUM/Cj8=;
+	s=default; t=1786713711;
+	bh=SSCbgUxZk9quZ6sgjHc96aCFpjyxElD9PKCb6N7PsJc=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=WIQJv7+0hcHyjvlP8vx0B1wdgQ+6miobd5c2dMtvKbWLUh/zrjWIkSrCSxuBnTdQK
-	 aLxHIwB3UsrE78TDB0wG/RIK9Ha5VXTh0Dp8mhjW4Uqp/x2NMHEoPAqHwVUeXA9kk9
-	 g3rAeYcezJGShouZ2dG0GKG2xy9UQ/5QcqWTCBUcpRVMXdHcMwQqajzqi3vETweRTu
-	 ev+o64HQhFi4TSWyAh8kP/5MZeYdQQNbUYUribTgBKMGjSKTTsIO+twZeKE9uRGme+
-	 3HmHPM59lJdaRVCUdYTrTGhD6o/Z7HA/82EOr3fcJ8iA5ceOFRr+ofPmNhFa2OVGZn
-	 6v1McVyp9OQdg==
+	b=qWVNenBLLmt44PJNW6t7nSwYv0ZJyKpOTUDNhuIKNMRqiM9iGoChJMnjCdEegBlmd
+	 ygBug+1YKQRfU2vSiR7FB9/XtQ+pMm3f2HKkIKTHXWVcdhP22aA6Rlt+LN6VL0NV69
+	 0MRWskww57d2jd/YzZ5XA6CDEOFwJv7pRJzwW5HT2ijw7VVsjK5AHlmQUEMGWp/EOE
+	 Y4Ce1ZnvPAA48OwJAiKb10acMlZhcIMjb7ngkj2I7PTWn9Sa73qVSp2KliZA+ydFQg
+	 uWm9dmv1wWquSVLRShG+OSGoc3XFOd94HPAtNmXYt6KDQa+kXhscqPtO0Kg+tK99OY
+	 CFvgAXb4BPPkA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 78A4640D88;
-	Fri, 14 Aug 2026 13:21:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 82B4881465;
+	Fri, 14 Aug 2026 13:21:51 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 7DAE823F
+ by lists1.osuosl.org (Postfix) with ESMTP id A0B2723F
  for <buildroot@buildroot.org>; Fri, 14 Aug 2026 13:21:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6400B6082D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 92BCF6082D
  for <buildroot@buildroot.org>; Fri, 14 Aug 2026 13:21:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3F9Els5q75JN for <buildroot@buildroot.org>;
+ id IdUeJQqZjJtH for <buildroot@buildroot.org>;
  Fri, 14 Aug 2026 13:21:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C5CE16088B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B7FCA60873
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C5CE16088B
+ by smtp3.osuosl.org (Postfix) with ESMTP id B7FCA60873
  for <buildroot@buildroot.org>; Fri, 14 Aug 2026 13:21:24 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CA1DE8D66C; Fri, 14 Aug 2026 13:20:34 +0000 (UTC)
+ id B5BEA8D64C; Fri, 14 Aug 2026 13:20:34 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Thu, 13 Aug 2026 16:03:39 +0200
 X-Git-Refname: refs/heads/2026.05.x
-X-Git-Oldrev: ee606bf57e82c208a71141c93fcb38102227f76d
-X-Git-Newrev: 9b8cd545acbced709488a0922a095dbe73ac3401
+X-Git-Oldrev: 2ddf3b8ca9f63a58aaecfe3896b2ea0f78f81094
+X-Git-Newrev: 20f3d1df46d62f651b1335db22be76fd273b5859
 X-Patchwork-Hint: ignore
-Message-Id: <20260814132034.CA1DE8D66C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.05.x] package/uclibc: fix for
- noMMU targets using FLAT binaries
+Message-Id: <20260814132034.B5BEA8D64C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.05.x]
+ configs/acmesystems_aria_g25_{128mb, 256mb}_defconfig: remove defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,192 +77,218 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/9b8cd545acbced709488a0922a095dbe73ac3401
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/20f3d1df46d62f651b1335db22be76fd273b5859
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.05.x
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+This configuration for the acmesystems aria g25 were added back in July
+2015 (commit 2e52be798276fe0c28949f4a16fce0ca20e52153), and has not
+been updated in any significant way since 2019 (the last major kernel
+update [1]).
+
+This defconfig still use a 4.19 kernel that is no longer maintained.
+
+Remove its support.
+
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/14728913801 (acmesystems_aria_g25_256mb_defconfig)
+https://gitlab.com/buildroot.org/buildroot/-/jobs/14728913800 (acmesystems_aria_g25_128mb_defconfig)
+
+[1] ab10b5b3ee6aa1e19aa6264153eeed9054d4c2e7
+
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 35d3927e85645d0dbfe608bd5954bfa6704200e8)
+(cherry picked from commit 41806d5ed5e11cba57c714167ddeb55cc6eb6891)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- ...store-PAGE_SHIFT-fallback-for-binfmt_flat.patch | 169 +++++++++++++++++++++
- 1 file changed, 169 insertions(+)
+ board/acmesystems/aria-g25/genimage.cfg            | 36 ------------------
+ .../patches/at91bootstrap3/at91bootstrap3.hash     |  2 -
+ .../patches/linux-headers/linux-headers.hash       |  1 -
+ .../acmesystems/aria-g25/patches/linux/linux.hash  |  2 -
+ board/acmesystems/aria-g25/readme.txt              | 44 ----------------------
+ configs/acmesystems_aria_g25_128mb_defconfig       | 26 -------------
+ configs/acmesystems_aria_g25_256mb_defconfig       | 26 -------------
+ 7 files changed, 137 deletions(-)
 
-diff --git a/package/uclibc/0001-pagesize-restore-PAGE_SHIFT-fallback-for-binfmt_flat.patch b/package/uclibc/0001-pagesize-restore-PAGE_SHIFT-fallback-for-binfmt_flat.patch
-new file mode 100644
-index 0000000000..fdfd286042
---- /dev/null
-+++ b/package/uclibc/0001-pagesize-restore-PAGE_SHIFT-fallback-for-binfmt_flat.patch
-@@ -0,0 +1,169 @@
-+From 7730f0d05a51cd89a7123bd696e4638c3c035d7b Mon Sep 17 00:00:00 2001
-+From: Ramin Moussavi <ramin.moussavi@yacoub.de>
-+Date: Fri, 29 May 2026 19:47:34 +0200
-+Subject: [PATCH] pagesize: restore PAGE_SHIFT fallback for binfmt_flat (no
-+ auxv)
-+
-+binfmt_flat builds the initial process stack from only argc/argv/envp;
-+it does not place an auxiliary vector. Commit 487af1498 ("drop
-+__pagesize, make _dl_pagesize the single source of truth") assumed
-+AT_PAGESZ is always supplied by the kernel and changed the _dl_pagesize
-+fallback from PAGE_SIZE to 0. On noMMU/FLAT targets that leaves
-+_dl_pagesize == 0, so every mmap-based malloc rounds its length to 0,
-+mmap() fails with EINVAL and the first allocation aborts -- busybox dies
-+with "init: out of memory" before it can run anything.
-+
-+Restore the fallback that arc/nds32 bits/uClibc_page.h have always
-+documented ("_dl_pagesize = auxvt[AT_PAGESZ].a_un.a_val ? : PAGE_SIZE"),
-+expressed as (1UL << PAGE_SHIFT) so it keeps working now that PAGE_SIZE
-+is no longer defined in <bits/uClibc_page.h>:
-+
-+  - Seed _dl_pagesize with (1UL << PAGE_SHIFT) at its definition in the
-+    two translation units that own the symbol: the dynamic linker
-+    (ldso.c, used by ld.so) and the static-libc support (dl-support.c).
-+  - Override it from AT_PAGESZ only when that entry is actually present
-+    (a_type == AT_PAGESZ) and non-zero, instead of unconditionally
-+    resetting it to 0.
-+
-+libdl.c (!SHARED) previously also defined _dl_pagesize. That was
-+harmless while dl-support.c's definition was tentative (the two merged),
-+but giving both a non-zero initializer makes them two strong .data
-+definitions, which collide as "multiple definition of `_dl_pagesize'"
-+when a static link pulls both objects out of libc.a (e.g. NPTL builds
-+that drag in libdl). Drop the redundant libdl.c definition: dl-support.c
-+is always co-linked from libc.a and provides the symbol.
-+
-+For FLAT, skip the aux-vector scan in __uClibc_main() altogether: there
-+is nothing valid past the envp NULL, so _dl_aux_init() is not called and
-+_dl_auxv_start stays NULL. Guard getauxval()'s slow-path loop against
-+that NULL so a lookup of an uncached (>= AUX_MAX_AT_ID) tag returns
-+ENOENT instead of dereferencing NULL.
-+
-+Verified on riscv32 noMMU/FLAT (gcc 15.2.0, linux 6.18.33): busybox
-+boots as init and the testsuite runs (was "init: out of memory"
-+before). Dynamic + NPTL links are unaffected -- x86_64 NPTL static
-+busybox links cleanly and ld-uClibc loads the testsuite.
-+
-+Upstream: https://gogs.waldemar-brodkorb.de/oss/uclibc-ng/commit/7730f0d05a51cd89a7123bd696e4638c3c035d7b
-+Signed-off-by: Ramin Moussavi <ramin.moussavi@yacoub.de>
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-+---
-+ ldso/ldso/ldso.c                    | 7 ++++---
-+ ldso/libdl/libdl.c                  | 2 +-
-+ libc/misc/auxvt/getauxval.c         | 3 ++-
-+ libc/misc/elf/dl-support.c          | 7 ++++---
-+ libc/misc/internals/__uClibc_main.c | 7 +++++--
-+ 5 files changed, 16 insertions(+), 10 deletions(-)
-+
-+diff --git a/ldso/ldso/ldso.c b/ldso/ldso/ldso.c
-+index 9c00e4a61..55f7d7e45 100755
-+--- a/ldso/ldso/ldso.c
-++++ b/ldso/ldso/ldso.c
-+@@ -52,7 +52,7 @@ char *_dl_library_path         = NULL;	/* Where we look for libraries */
-+ char *_dl_preload              = NULL;	/* Things to be loaded before the libs */
-+ #endif
-+ int _dl_errno                  = 0;	/* We can't use the real errno in ldso */
-+-size_t _dl_pagesize            = 0;	/* Store the page size for use later */
-++size_t _dl_pagesize            = (1UL << PAGE_SHIFT);	/* fallback; overridden from AT_PAGESZ if present */
-+ struct r_debug *_dl_debug_addr = NULL;	/* Used to communicate with the gdb debugger */
-+ void *(*_dl_malloc_function) (size_t size) = NULL;
-+ void (*_dl_free_function) (void *p) = NULL;
-+@@ -460,8 +460,9 @@ void *_dl_get_ready_to_run(struct elf_resolve *tpnt, DL_LOADADDR_TYPE load_addr,
-+ 
-+ 	_dl_memset(app_tpnt, 0, sizeof(*app_tpnt));
-+ 
-+-	/* Store the page size for later use */
-+-	_dl_pagesize = (_dl_auxvt[AT_PAGESZ].a_un.a_val) ? (size_t) _dl_auxvt[AT_PAGESZ].a_un.a_val : 0;
-++	/* Override the fallback only if AT_PAGESZ is present and non-zero */
-++	if (_dl_auxvt[AT_PAGESZ].a_type == AT_PAGESZ && _dl_auxvt[AT_PAGESZ].a_un.a_val)
-++		_dl_pagesize = (size_t) _dl_auxvt[AT_PAGESZ].a_un.a_val;
-+ 	/* Make it so _dl_malloc can use the page of memory we have already
-+ 	 * allocated.  We shouldn't need to grab any more memory.  This must
-+ 	 * be first since things like _dl_dprintf() use _dl_malloc()...
-+diff --git a/ldso/libdl/libdl.c b/ldso/libdl/libdl.c
-+index b78d6d9a3..f28801d7b 100644
-+--- a/ldso/libdl/libdl.c
-++++ b/ldso/libdl/libdl.c
-+@@ -109,7 +109,7 @@ void (*_dl_free_function) (void *p);
-+ char *_dl_library_path         = NULL;         /* Where we look for libraries */
-+ #endif
-+ int _dl_errno                  = 0;         /* We can't use the real errno in ldso */
-+-size_t _dl_pagesize            = 0; /* Store the page size for use later */
-++/* _dl_pagesize is provided by dl-support.c (always co-linked from libc.a) */
-+ /* This global variable is also to communicate with debuggers such as gdb. */
-+ struct r_debug *_dl_debug_addr = NULL;
-+ 
-+diff --git a/libc/misc/auxvt/getauxval.c b/libc/misc/auxvt/getauxval.c
-+index 7610b7e5c..4af637071 100755
-+--- a/libc/misc/auxvt/getauxval.c
-++++ b/libc/misc/auxvt/getauxval.c
-+@@ -33,7 +33,8 @@ unsigned long int __getauxval (unsigned long int __type)
-+ 	}
-+ 
-+ 	// Otherwise we have to iterate the auxiliary vector.
-+-	for (ElfW(auxv_t) *entry = _dl_auxv_start; entry->a_type != AT_NULL; entry++)
-++	// _dl_auxv_start is NULL when there is no aux vector (e.g. FLAT).
-++	for (ElfW(auxv_t) *entry = _dl_auxv_start; entry && entry->a_type != AT_NULL; entry++)
-+ 		if (entry->a_type == __type)
-+ 			return entry->a_un.a_val;
-+ 
-+diff --git a/libc/misc/elf/dl-support.c b/libc/misc/elf/dl-support.c
-+index 738f0ed3a..7ad57c090 100644
-+--- a/libc/misc/elf/dl-support.c
-++++ b/libc/misc/elf/dl-support.c
-+@@ -30,7 +30,7 @@ void (*_dl_init_static_tls) (struct link_map *) = &_dl_nothread_init_static_tls;
-+ 
-+ ElfW(Phdr) *_dl_phdr;
-+ size_t _dl_phnum;
-+-size_t _dl_pagesize;
-++size_t _dl_pagesize = (1UL << PAGE_SHIFT);	/* fallback; overridden from AT_PAGESZ if present */
-+ 
-+ ElfW(auxv_t) _dl_auxvt[AUX_MAX_AT_ID];
-+ ElfW(auxv_t) *_dl_auxv_start;
-+@@ -52,8 +52,9 @@ void internal_function _dl_aux_init (ElfW(auxv_t) *av)
-+    /* Get the number of program headers from the aux vect */
-+    _dl_phnum = (size_t) _dl_auxvt[AT_PHNUM].a_un.a_val;
-+ 
-+-   /* Get the pagesize from the aux vect */
-+-   _dl_pagesize = (_dl_auxvt[AT_PAGESZ].a_un.a_val) ? (size_t) _dl_auxvt[AT_PAGESZ].a_un.a_val : 0;
-++   /* Override the fallback only if AT_PAGESZ is present and non-zero */
-++   if (_dl_auxvt[AT_PAGESZ].a_type == AT_PAGESZ && _dl_auxvt[AT_PAGESZ].a_un.a_val)
-++      _dl_pagesize = (size_t) _dl_auxvt[AT_PAGESZ].a_un.a_val;
-+ }
-+ 
-+ #if defined(USE_TLS) && USE_TLS
-+diff --git a/libc/misc/internals/__uClibc_main.c b/libc/misc/internals/__uClibc_main.c
-+index 35cb73fcc..549606505 100644
-+--- a/libc/misc/internals/__uClibc_main.c
-++++ b/libc/misc/internals/__uClibc_main.c
-+@@ -369,7 +369,7 @@ void __uClibc_main(int (*main)(int, char **, char **), int argc,
-+ 		    char **argv, void (*app_init)(void), void (*app_fini)(void),
-+ 		    void (*rtld_fini)(void), void *stack_end attribute_unused)
-+ {
-+-#ifndef SHARED
-++#if !defined(SHARED) && !defined(__UCLIBC_FORMAT_FLAT__)
-+     unsigned long *aux_dat;
-+ #endif
-+ 
-+@@ -395,7 +395,9 @@ void __uClibc_main(int (*main)(int, char **, char **), int argc,
-+     }
-+ 
-+ #ifndef SHARED
-+-    /* Pull stuff from the ELF header when possible */
-++# ifndef __UCLIBC_FORMAT_FLAT__
-++    /* Pull stuff from the ELF header when possible. binfmt_flat passes no
-++       aux vector, so skip this for FLAT. */
-+     aux_dat = (unsigned long*)__environ;
-+     while (*aux_dat) {
-+ 	aux_dat++;
-+@@ -404,6 +406,7 @@ void __uClibc_main(int (*main)(int, char **, char **), int argc,
-+     /* Get the program headers (_dl_phdr) from the aux vector
-+        It will be used into __libc_setup_tls. */
-+     _dl_aux_init ((ElfW(auxv_t) *)aux_dat);
-++# endif
-+ #endif
-+ 
-+     /* We need to initialize uClibc.  If we are dynamically linked this
-+-- 
-+2.47.3
-+
+diff --git a/board/acmesystems/aria-g25/genimage.cfg b/board/acmesystems/aria-g25/genimage.cfg
+deleted file mode 100644
+index 29dc697153..0000000000
+--- a/board/acmesystems/aria-g25/genimage.cfg
++++ /dev/null
+@@ -1,36 +0,0 @@
+-# Minimal SD card image for the Acmesystems Aria G25
+-
+-image boot.vfat {
+-	vfat {
+-		file zImage {
+-			image = "zImage"
+-		}
+-
+-		file at91-ariag25.dtb {
+-			image = "at91-ariag25.dtb"
+-		}
+-
+-		file boot.bin {
+-			image = "at91sam9x5_aria-sdcardboot-linux-zimage-dt-3.10.3.bin"
+-		}
+-	}
+-
+-	size = 16M
+-}
+-
+-image sdcard.img {
+-	hdimage {
+-	}
+-
+-	partition boot {
+-		partition-type = 0xC
+-		bootable = "true"
+-		image = "boot.vfat"
+-	}
+-
+-	partition rootfs {
+-		partition-type = 0x83
+-		image = "rootfs.ext4"
+-		size = 512M
+-	}
+-}
+diff --git a/board/acmesystems/aria-g25/patches/at91bootstrap3/at91bootstrap3.hash b/board/acmesystems/aria-g25/patches/at91bootstrap3/at91bootstrap3.hash
+deleted file mode 100644
+index 6edf3d3345..0000000000
+--- a/board/acmesystems/aria-g25/patches/at91bootstrap3/at91bootstrap3.hash
++++ /dev/null
+@@ -1,2 +0,0 @@
+-# Locally calculated
+-sha256  5ea2a8fed1ba0024229c6f6d77176679e1b24791bdbce8e285634013d4a93551  at91bootstrap3-v3.10.3-git4.tar.gz
+diff --git a/board/acmesystems/aria-g25/patches/linux-headers/linux-headers.hash b/board/acmesystems/aria-g25/patches/linux-headers/linux-headers.hash
+deleted file mode 120000
+index 5808d92afe..0000000000
+--- a/board/acmesystems/aria-g25/patches/linux-headers/linux-headers.hash
++++ /dev/null
+@@ -1 +0,0 @@
+-../linux/linux.hash
+\ No newline at end of file
+diff --git a/board/acmesystems/aria-g25/patches/linux/linux.hash b/board/acmesystems/aria-g25/patches/linux/linux.hash
+deleted file mode 100644
+index 81824a41ee..0000000000
+--- a/board/acmesystems/aria-g25/patches/linux/linux.hash
++++ /dev/null
+@@ -1,2 +0,0 @@
+-# Locally calculated
+-sha256  6c5e4d3c87feadbfdb9f7d2e46f3f120b00286ba380491c5956708e0b94232c8  linux-4.19.315.tar.xz
+diff --git a/board/acmesystems/aria-g25/readme.txt b/board/acmesystems/aria-g25/readme.txt
+deleted file mode 100644
+index cb9e9abf77..0000000000
+--- a/board/acmesystems/aria-g25/readme.txt
++++ /dev/null
+@@ -1,44 +0,0 @@
+-Acme Systems Aria G25
+-
+-Build instructions
+-==================
+-
+-To build an image for the Aria G25 choose the configuration
+-corresponding to the Aria variant.
+-
+-For 128MB RAM variant type:
+-
+-$ make acmesystems_aria_g25_128mb_defconfig
+-
+-else for 256MB RAM variant type:
+-
+-$ make acmesystems_aria_g25_256mb_defconfig
+-
+-To customize the configuration choosed type:
+-
+-$ make menuconfig
+-
+-When you are ready to start building Buildroot type:
+-
+-$ make
+-
+-How to write the microSD card
+-=============================
+-
+-Once the build process is finished you will have an image called
+-"sdcard.img" in the output/images/ directory.
+-
+-Write the bootable SD card image "sdcard.img" onto an SD card with
+-"dd" command:
+-
+-  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
+-
+-Assuming your Aria G25 baseboard has a MicroSD socket, for example
+-with the Terra baseboard, insert the microSD card into the baseboard
+-slot and power it.
+-
+-To get the kernel log messages you can use a DPI cable
+-(http://www.acmesystems.it/DPI)
+-
+-You can find additional informations, tutorials and a very
+-comprehensive documentation on http://www.acmesystems.it/aria.
+diff --git a/configs/acmesystems_aria_g25_128mb_defconfig b/configs/acmesystems_aria_g25_128mb_defconfig
+deleted file mode 100644
+index 0aff8f92e0..0000000000
+--- a/configs/acmesystems_aria_g25_128mb_defconfig
++++ /dev/null
+@@ -1,26 +0,0 @@
+-BR2_arm=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+-BR2_GLOBAL_PATCH_DIR="board/acmesystems/aria-g25/patches"
+-BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+-BR2_TARGET_GENERIC_ISSUE="Welcome to Aria-G25 Buildroot"
+-BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+-BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200=y
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/acmesystems/aria-g25/genimage.cfg"
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.315"
+-BR2_LINUX_KERNEL_DEFCONFIG="at91_dt"
+-BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-ariag25"
+-BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+-BR2_TARGET_ROOTFS_EXT2=y
+-BR2_TARGET_ROOTFS_EXT2_4=y
+-BR2_TARGET_AT91BOOTSTRAP3=y
+-BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
+-BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
+-BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.10.3"
+-BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="aria-128m"
+-BR2_PACKAGE_HOST_DOSFSTOOLS=y
+-BR2_PACKAGE_HOST_GENIMAGE=y
+-BR2_PACKAGE_HOST_MTOOLS=y
+diff --git a/configs/acmesystems_aria_g25_256mb_defconfig b/configs/acmesystems_aria_g25_256mb_defconfig
+deleted file mode 100644
+index e75ca9cf34..0000000000
+--- a/configs/acmesystems_aria_g25_256mb_defconfig
++++ /dev/null
+@@ -1,26 +0,0 @@
+-BR2_arm=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+-BR2_GLOBAL_PATCH_DIR="board/acmesystems/aria-g25/patches"
+-BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+-BR2_TARGET_GENERIC_ISSUE="Welcome to Aria-G25 Buildroot"
+-BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+-BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200=y
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/acmesystems/aria-g25/genimage.cfg"
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.315"
+-BR2_LINUX_KERNEL_DEFCONFIG="at91_dt"
+-BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-ariag25"
+-BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+-BR2_TARGET_ROOTFS_EXT2=y
+-BR2_TARGET_ROOTFS_EXT2_4=y
+-BR2_TARGET_AT91BOOTSTRAP3=y
+-BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
+-BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
+-BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.10.3"
+-BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="aria-256m"
+-BR2_PACKAGE_HOST_DOSFSTOOLS=y
+-BR2_PACKAGE_HOST_GENIMAGE=y
+-BR2_PACKAGE_HOST_MTOOLS=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
