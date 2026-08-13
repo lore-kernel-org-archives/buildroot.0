@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61A27C5CFDB
-	for <buildroot@archiver.kernel.org>; Fri, 14 Aug 2026 13:21:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91F0AC5DF69
+	for <buildroot@archiver.kernel.org>; Fri, 14 Aug 2026 13:21:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 21C5360A6D;
-	Fri, 14 Aug 2026 13:21:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5D43D40CBF;
+	Fri, 14 Aug 2026 13:21:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Dhp2iwWvNvuc; Fri, 14 Aug 2026 13:21:36 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5rfecypPOgCg; Fri, 14 Aug 2026 13:21:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2A01860AA5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 66A2640CBB
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786713696;
-	bh=3Z4BsRomxx8P56BHPIz9ERlWqrnb7mkDTQrArkcDReU=;
+	s=default; t=1786713697;
+	bh=z3S5A00zm8I65RvKkGZajMtDcGAEEPkjN+AEugIDCWs=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=d35+VLJ9rfnijKbaZPZjEhoQRMCMGIJ6SRcOvtdz0CWOlBBhVDq6VXSiDc06++7Z5
-	 AbOs7snWgI1PquYFDolJDPWjGoH/xcgS4cKM/9DQm5NeObul3yRDrbFeel7VnW0feS
-	 tDqNjVYAjI5I+8HyouvE7a9JE8RjYubEgOqc2V4FC9ibwFKBJ8/XHoVGiNs8MEU5dE
-	 WBi1zBPw30NgF82c8Kuu1dG9/oRo0v4qNG1VM55Z9Fubpa/Akac3uLanLVMNrX3JhE
-	 fwm5NgTyKLtLZWEbsMlIcL/ZlXxg5qfgBb972+iXkLu9wMk1smbuISRW/ma/wUvT2d
-	 l2tlnA8/sfGrw==
+	b=Qjma+LWSAo/TfL9MyovL2K/b5tke2X1tVjjA8cKLXrKdz4Ch24R1ugkeqyR04serK
+	 4zz1UQj0HgpHbEu2ws88AyK8yI4s2REQ6l+pmQzN/b7WJgTQiMPIfKoVeOMy1jycti
+	 vGqFAODCevm2X3bBW2cQa3jeO7oH4sxEqJVBp3zqRAQYweaMWE2MC/PlwDVNYJX4DB
+	 r0xQlNOuFJi53dxAkaNZidHzJxjwsvaGILZKYRmkVVUc9XEhb0qPSeU1BK+876NXhN
+	 pzrw1OUCINYn8Gy8JIVCrPHzcocYW9pMCSDpcZZX5LFe3W31R0yn4IJaquJNHsspRE
+	 aDOsp0SJpkLag==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2A01860AA5;
-	Fri, 14 Aug 2026 13:21:36 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 22572139D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 66A2640CBB;
+	Fri, 14 Aug 2026 13:21:37 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 222F8139B
  for <buildroot@buildroot.org>; Fri, 14 Aug 2026 13:21:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0CE984011F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0B4FA40316
  for <buildroot@buildroot.org>; Fri, 14 Aug 2026 13:21:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JmitJSfZ_kGZ for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ah7JEPbGRPWc for <buildroot@buildroot.org>;
  Fri, 14 Aug 2026 13:21:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 50845400E3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3E25A402FB
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 50845400E3
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3E25A402FB
  for <buildroot@buildroot.org>; Fri, 14 Aug 2026 13:21:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 481BD8D66F; Fri, 14 Aug 2026 13:20:35 +0000 (UTC)
+ id 366A68D665; Fri, 14 Aug 2026 13:20:35 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Thu, 13 Aug 2026 16:03:39 +0200
 X-Git-Refname: refs/heads/2026.05.x
-X-Git-Oldrev: ac7852ed489824251293d4eb3916b517389d403a
-X-Git-Newrev: 8809bcb3beb48174e443828738d20632773e8489
+X-Git-Oldrev: 3eed5b8f927a427f993b453e5b1a4470b9f32a89
+X-Git-Newrev: f60e785b4c5e9ab2ccad792cba75fd9341dabb33
 X-Patchwork-Hint: ignore
-Message-Id: <20260814132035.481BD8D66F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.05.x] package/glibc: fix
- license information
+Message-Id: <20260814132035.366A68D665@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.05.x] package/{glibc,
+ localedef}: move to Gitlab mirror repo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,62 +77,57 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/8809bcb3beb48174e443828738d20632773e8489
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/f60e785b4c5e9ab2ccad792cba75fd9341dabb33
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.05.x
 
-The COPYINGv3 license file was added with upstream commit
-e067e53080386e93dcf8b07e25fb6656f2c8941e, it applies to scripts used
-during build.
+Downloading from sourceware.org/git/glibc.git causes many 429 errors
+these days so we switch to the upstream Gitlab mirror:
+https://sourceware.org/glibc/wiki/GlibcGit#Fetching_The_Repository
 
-LGPL-3.0+ applies to sysdeps/htl/raise.c, which is used for the Hurd
-platform. Buildroot builds only Linux, so the file should not be
-compiled, but it is part of the downloaded (and possibly shared, if
-"make legal-info" is used) archive. The same applies to the manual.
+Fixes:
+https://autobuild.buildroot.net/results/09e/09e760063607b1cbf4ef687bf9bbe17b12d648b2/
+https://autobuild.buildroot.net/results/22a/22afc952e0c05648d538d13ea593e5ad8c4c03c7/
+https://autobuild.buildroot.net/results/281/28159f29e38b0475ae33fe73a9cab04ea3a8835f/
+https://autobuild.buildroot.net/results/961/9616d46c46bd2a10a6e719d76ed6e1d8e3b3d0d2/
+https://autobuild.buildroot.net/results/fd4/fd48fb96639871889fb2238dba360d1740d7962c/
+https://autobuild.buildroot.net/results/91a/91a0b7ccad116911f84281b4cbcb080309ad952e/
+https://autobuild.buildroot.net/results/17f/17ff61f0eac946b3c027a540147b2573e224dcdb/
 
-Checked against the copyright file of the Debian "libc6" package (as
-of 2.42-17 and 2.43-2), note that Debian excludes the manual.
-
-Signed-off-by: Fiona Klute (Othermo GmbH) <fiona.klute@gmx.de>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 45b24c43a0ea7122a222f659b27ef2e0baadb4c7)
+(cherry picked from commit 1e9de8815f7e8cd5785df97819157e05b28cc560)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- package/glibc/glibc.hash |  2 ++
- package/glibc/glibc.mk   | 10 ++++++++--
- 2 files changed, 10 insertions(+), 2 deletions(-)
+ package/glibc/glibc.mk         | 2 +-
+ package/localedef/localedef.mk | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
-index d9aaceea30..237b56ee48 100644
---- a/package/glibc/glibc.hash
-+++ b/package/glibc/glibc.hash
-@@ -4,4 +4,6 @@ sha256  6c6ec86c66f0484c6916e849e20433ebc67869649c72a772cdf1bb6ca408d516  glibc-
- # Hashes for license files
- sha256  edaef632cbb643e4e7a221717a6c441a4c1a7c918e6e4d56debc3d8739b233f6  COPYINGv2
- sha256  20e50fe7aae3e56378ebf0417d9de904f55a0e61e4df315333e632a4d3555d95  COPYING.LESSERv2
-+sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYINGv3
- sha256  b22a69aa3f80a5201818c66cb0df0f25f9fa13cf5861b0093a058dbd12d50dce  LICENSES
-+sha256  297ad42928811894f3abc955526431b1e7856e6766eecb7de2a5a0aa2915e5cf  manual/fdl-1.3.texi
 diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index 375429cfd4..29b0639cb1 100644
+index 5aa2ef5f99..797df314e9 100644
 --- a/package/glibc/glibc.mk
 +++ b/package/glibc/glibc.mk
-@@ -11,8 +11,14 @@ GLIBC_VERSION = 2.43-49-g8017bcfc4d9bd16083cb7f3d8eda7d07b4593b09
- GLIBC_SITE = https://gitlab.com/gnutools/glibc.git
+@@ -8,7 +8,7 @@
+ #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
+ # When updating the version, please also update localedef
+ GLIBC_VERSION = 2.43-45-gdae425b554207f7c4599c7fac707ad4c08545674
+-GLIBC_SITE = https://sourceware.org/git/glibc.git
++GLIBC_SITE = https://gitlab.com/gnutools/glibc.git
  GLIBC_SITE_METHOD = git
  
--GLIBC_LICENSE = GPL-2.0+ (programs), LGPL-2.1+, BSD-3-Clause, MIT (library)
--GLIBC_LICENSE_FILES = COPYINGv2 COPYING.LESSERv2 LICENSES
-+GLIBC_LICENSE = \
-+	GPL-2.0+ (programs), \
-+	LGPL-2.1+, BSD-2-Clause, BSD-3-Clause, BSL-1.0, FSFAP, ISC, other permissive licenses, public domain (library), \
-+	LGPL-3.0+ (sysdeps/htl/raise.c, for Hurd only), \
-+	GPL-3.0+ (scripts/move-if-change), \
-+	GPL-3.0+ WITH Texinfo-exception (manual/texinfo.tex), \
-+	GFDL-1.3-or-later (manual)
-+GLIBC_LICENSE_FILES = COPYINGv2 COPYING.LESSERv2 COPYINGv3 LICENSES manual/fdl-1.3.texi
- GLIBC_CPE_ID_VENDOR = gnu
+ GLIBC_LICENSE = GPL-2.0+ (programs), LGPL-2.1+, BSD-3-Clause, MIT (library)
+diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
+index 732ed6d4ad..8eff7f136d 100644
+--- a/package/localedef/localedef.mk
++++ b/package/localedef/localedef.mk
+@@ -9,7 +9,7 @@
+ #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
+ LOCALEDEF_VERSION = 2.43-45-gdae425b554207f7c4599c7fac707ad4c08545674
+ LOCALEDEF_SOURCE = glibc-$(LOCALEDEF_VERSION)$(BR_FMT_VERSION_git).tar.gz
+-LOCALEDEF_SITE = https://sourceware.org/git/glibc.git
++LOCALEDEF_SITE = https://gitlab.com/gnutools/glibc.git
+ LOCALEDEF_SITE_METHOD = git
+ HOST_LOCALEDEF_DL_SUBDIR = glibc
  
- # Extract the base version (e.g. 2.38) from GLIBC_VERSION in order to
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
