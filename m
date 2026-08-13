@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ACE1EC5CFDB
-	for <buildroot@archiver.kernel.org>; Fri, 14 Aug 2026 13:21:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF1AEC5DF69
+	for <buildroot@archiver.kernel.org>; Fri, 14 Aug 2026 13:21:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7911460A6F;
-	Fri, 14 Aug 2026 13:21:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A8D7540DA7;
+	Fri, 14 Aug 2026 13:21:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eSf0RXPAIy0X; Fri, 14 Aug 2026 13:21:53 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Cvd7iurrz-mK; Fri, 14 Aug 2026 13:21:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A9B5860A7C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AC03C40D55
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786713713;
-	bh=gfWGGWid82kzu/9JHNMv5pBKZSwOFUw3DWGdOaLDol4=;
+	s=default; t=1786713714;
+	bh=4IqJ5JtJDzJ5FGgarKBS4TwBDPiPbdeczxTAD5pip6s=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=e2WLAX8pFo/HdYDfUKwwb5a+z0XLhi+81lQ2cR0yU8Uf3jLtBgc4+6vzo+jyOZwWU
-	 XTus8V9l1gyTNKU0iNcLCtPaLy3+JWl2+NW9EHrgYTvsy01LICwSp8i9TKx8uT8i58
-	 Net2rR6vok/slXrgZQDF9cVQ8FN9psI/BzsmYPQY8dcHGhJzx2oe+Q/Et5MldJXHwQ
-	 tiy1Wps6ozC1bBO2jFFIauyflqjNt+ncNh02nLluwtKroVgL+FRfBE0qTxFyFlYDYd
-	 wyFjn3+0R7k213M7GWIvBavLwk0ccZWuc5n0zXqfrn7mt6rlLAsSAAhlLgIzPdb2FX
-	 Z0wsLTfcdLUzQ==
+	b=OI6VdyFPcITfl+j2DVgrCgCUUjkXaMMG7iivmBszKvXblTLbo1TSMfQBebCofl1kj
+	 PFfJV1NswN8NA9v8KD8XEc9/KsdOhAQgpyO9i0t/wN+Avj22R5Qfi7W678WIIrIZwj
+	 bJy/5VnC3k2B9GPLoIY3BZe4CVWz4ox9Mf9BCnVfsmDlME+cZIuBYM6vxoUdQs/qj4
+	 +8TL0JIOZVxcY+I7eiH8fr1vTEevjWryqmM7jAPpvbEccyplT8r4SXj53I1bfabQEy
+	 vKapA4VhPoMpxzFlznhF1bkma4qvdMOquc2sZFbddDMfoEDFrz9H2+DM7HVD0MEppA
+	 6i9H0Zdo6EkXA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A9B5860A7C;
-	Fri, 14 Aug 2026 13:21:53 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 09938139B
+	by smtp4.osuosl.org (Postfix) with ESMTP id AC03C40D55;
+	Fri, 14 Aug 2026 13:21:54 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0B32E139C
  for <buildroot@buildroot.org>; Fri, 14 Aug 2026 13:21:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 070F26082D
- for <buildroot@buildroot.org>; Fri, 14 Aug 2026 13:21:28 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E585D80E3E
+ for <buildroot@buildroot.org>; Fri, 14 Aug 2026 13:21:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QNU2AGq-I2O9 for <buildroot@buildroot.org>;
- Fri, 14 Aug 2026 13:21:26 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id z3f72SRNGEZX for <buildroot@buildroot.org>;
+ Fri, 14 Aug 2026 13:21:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A53CE608EE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D9832811E9
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A53CE608EE
- for <buildroot@buildroot.org>; Fri, 14 Aug 2026 13:21:25 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D9832811E9
+ for <buildroot@buildroot.org>; Fri, 14 Aug 2026 13:21:24 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A97718D665; Fri, 14 Aug 2026 13:20:35 +0000 (UTC)
+ id DDCF18D665; Fri, 14 Aug 2026 13:20:34 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Thu, 13 Aug 2026 16:03:39 +0200
 X-Git-Refname: refs/heads/2026.05.x
-X-Git-Oldrev: 98046cbf1dab6683be8b4c38019d02b528f40d13
-X-Git-Newrev: 589028df3b73384220114b28603bf7361ab16c10
+X-Git-Oldrev: 4e69061c7a8e9930cfa39ee1c3aa5c668f44e76e
+X-Git-Newrev: e2a7b2b2fe3a7a533503e0753a82ead6b88fd8cd
 X-Patchwork-Hint: ignore
-Message-Id: <20260814132035.A97718D665@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.05.x] package/stunnel: security
- bump to 5.80
+Message-Id: <20260814132034.DDCF18D665@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.05.x] package/apr-util:
+ security bump to version 1.6.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,57 +77,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/589028df3b73384220114b28603bf7361ab16c10
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/e2a7b2b2fe3a7a533503e0753a82ead6b88fd8cd
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.05.x
 
-Fixes following CVE's:
+https://archive.apache.org/dist/apr/Announcement-aprutil-1.x.html
+https://archive.apache.org/dist/apr/CHANGES-APR-UTIL-1.6
 
-CVE-2026-70368: Fixed an out-of-bounds memory
-access triggered by logging attacker-controlled protocol messages longer
-than 1,024 bytes (thanks to AISLE Research and Clemens Lang).
+Fixes CVE-2025-49506, CVE-2026-32327, CVE-2026-34191, CVE-2026-34501 &
+CVE-2026-34502.
 
-CVE-2026-70367: Fixed a SOCKS server mode bypass of the localhost
-destination filter using alternate local-address encodings and
-interface-scoped IPv6 destinations (thanks to AISLE Research and Clemens
-Lang).
-
-Complete Changelog is here:
-https://www.stunnel.org/NEWS.html
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 8b6eea299b3e519a6dac908e5ceed49cc43c4698)
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
+(cherry picked from commit 209117f1dd8a833c8a588c6fdffcff30abb1eaf3)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- package/stunnel/stunnel.hash | 4 ++--
- package/stunnel/stunnel.mk   | 2 +-
+ package/apr-util/apr-util.hash | 4 ++--
+ package/apr-util/apr-util.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/stunnel/stunnel.hash b/package/stunnel/stunnel.hash
-index 572f226861..f966e19f05 100644
---- a/package/stunnel/stunnel.hash
-+++ b/package/stunnel/stunnel.hash
-@@ -1,5 +1,5 @@
--# From https://www.stunnel.org/archive/5.x/stunnel-5.78.tar.gz.sha256
--sha256  8727e53bb8b7528f850327a2a149158422c02183bc120d1d733cc65b1e2c349d  stunnel-5.78.tar.gz
-+# From https://www.stunnel.org/archive/5.x/stunnel-5.80.tar.gz.sha256
-+sha256  6d0841d48de07cbbaf4a055919065bf7bb5ebc63cc15c97a2c76caa2bf285513  stunnel-5.80.tar.gz
+diff --git a/package/apr-util/apr-util.hash b/package/apr-util/apr-util.hash
+index 7e2793cd77..b8fff95de6 100644
+--- a/package/apr-util/apr-util.hash
++++ b/package/apr-util/apr-util.hash
+@@ -1,4 +1,4 @@
+-# From http://www.apache.org/dist/apr/apr-util-1.6.3.tar.bz2.sha256
+-sha256  a41076e3710746326c3945042994ad9a4fcac0ce0277dd8fea076fec3c9772b5  apr-util-1.6.3.tar.bz2
++# From https://archive.apache.org/dist/apr/apr-util-1.6.4.tar.bz2.sha256
++sha256  3e2ae08f40efa0c3701e54a954cefa08242de22a69f91a8ae44fc1e624ba309b  apr-util-1.6.4.tar.bz2
  # Locally calculated
- sha256  716f18b10eac3f1875ea2205418dd1b0084bd210bd17d615df6b180cfc4d65b6  COPYING.md
- sha256  62f171d4d8b6726df61f18a6bbc0a70f79c4bc2134d837d35c81fc6289a2d84d  COPYRIGHT.md
-diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
-index adae204148..7001340a8f 100644
---- a/package/stunnel/stunnel.mk
-+++ b/package/stunnel/stunnel.mk
+ sha256  ef5609d18601645ad6fe22c6c122094be40e976725c1d0490778abacc836e7a2  LICENSE
+diff --git a/package/apr-util/apr-util.mk b/package/apr-util/apr-util.mk
+index 477db1c593..c11957bc56 100644
+--- a/package/apr-util/apr-util.mk
++++ b/package/apr-util/apr-util.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--STUNNEL_VERSION = 5.78
-+STUNNEL_VERSION = 5.80
- STUNNEL_SITE = https://www.stunnel.org/archive/5.x
- STUNNEL_DEPENDENCIES = host-pkgconf openssl
- STUNNEL_CONF_OPTS = --with-ssl=$(STAGING_DIR)/usr --with-threads=fork \
+-APR_UTIL_VERSION = 1.6.3
++APR_UTIL_VERSION = 1.6.4
+ APR_UTIL_SOURCE = apr-util-$(APR_UTIL_VERSION).tar.bz2
+ APR_UTIL_SITE = https://archive.apache.org/dist/apr
+ APR_UTIL_LICENSE = Apache-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
