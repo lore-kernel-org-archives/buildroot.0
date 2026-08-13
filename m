@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2D44C5DF69
-	for <buildroot@archiver.kernel.org>; Fri, 14 Aug 2026 13:21:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4170C5CFDB
+	for <buildroot@archiver.kernel.org>; Fri, 14 Aug 2026 13:21:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7D4B8812E1;
-	Fri, 14 Aug 2026 13:21:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6F56760E00;
+	Fri, 14 Aug 2026 13:21:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iALXYwxNWFuT; Fri, 14 Aug 2026 13:21:48 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OGp9Bj0lCmBY; Fri, 14 Aug 2026 13:21:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6993D8140A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 79B1660E02
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786713708;
-	bh=AhggWkR5p3aKLyHBJILD2QYHBdIxef/1yHc/syj8u5k=;
+	s=default; t=1786713709;
+	bh=/5WwkVcC7Nup+4yn0FEf3+pYaXxi1jj9/aMncA8OUdw=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=DZnwCEZUgtvjgewfDSOlXpSoQZLTCOXFDkk5rrWoj7reS7muTtK//wTDb2hwXOu9w
-	 kYPK7QEDS6k3gFCLmXj7vWKv6SuEkacD183Ze84KX99daMANb43R2fRYexTRWTEJv2
-	 5xZZCwr2i03HB7G3e4QHny0crDDvgDmAsyWwMJJV2GrJLBbgnSP3cn3v6ziAEijvZy
-	 1eUcB+Vt6w5ir6t4/9bRrxq7reHlP4j5xRkULAu9pYithkAtTdibusPQIQnzA423RI
-	 HWrGkYyKZBjBZ0q7rqIpu3VMNvHbDJdrRfUih9K7gQJ9N5/S+xf5pXcdeXTpQm/O/N
-	 OVpXIHOfLCqDg==
+	b=eCL9V2B9MKMrgORnIOmAHCUG6/dZdJA6/MRd++ioCQIQVDfpsMvSeVMtuhNeezygd
+	 A1cKheYeo9odUCH3xK36GSnzBrm2IOno0fTGA7xDnpMuB4EHQXsayk+k58aSO1HCIb
+	 P989RAj4zLIcAx+8E4glnyXx0CBylpciyPzrs5Pg1VjWH0Bpx6cakA9TJZTF117Fos
+	 SVN/VNxgmZnYQEr4YlhcWNmxxRzjRfphwu8V6qFpNKFIagFpw8+gAtYC2xb1sSE+Fq
+	 W3Ayers7/rgl1xW63HO3B1GiHn9SRq0E3A5ZXmQw93wBHk8GOk2DKPSboOiQ9SCJFx
+	 ypwE4xsvAemOA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6993D8140A;
-	Fri, 14 Aug 2026 13:21:48 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 247AD23F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 79B1660E02;
+	Fri, 14 Aug 2026 13:21:49 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3411D33B
  for <buildroot@buildroot.org>; Fri, 14 Aug 2026 13:21:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 16B0280E3E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 253BA6080C
  for <buildroot@buildroot.org>; Fri, 14 Aug 2026 13:21:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AvAqBPMETnXy for <buildroot@buildroot.org>;
- Fri, 14 Aug 2026 13:21:25 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id BhQtaB3uutm6 for <buildroot@buildroot.org>;
+ Fri, 14 Aug 2026 13:21:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 94B8680E48
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 68A3B608BB
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 94B8680E48
+ by smtp3.osuosl.org (Postfix) with ESMTP id 68A3B608BB
  for <buildroot@buildroot.org>; Fri, 14 Aug 2026 13:21:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 991168D66C; Fri, 14 Aug 2026 13:20:35 +0000 (UTC)
+ id 6CE368D64C; Fri, 14 Aug 2026 13:20:35 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Thu, 13 Aug 2026 16:03:39 +0200
 X-Git-Refname: refs/heads/2026.05.x
-X-Git-Oldrev: 00c1e5b98c2a24639eb7251c247e9f8941fc5dcf
-X-Git-Newrev: 206e41be023eb02a4796ab213ffd3087bcc2e14c
+X-Git-Oldrev: edcb5aa58a930e855da4f4a8c2657bb01e3f1bef
+X-Git-Newrev: 87f64a9f70be7ff642e9af808be54f309d7c4a7c
 X-Patchwork-Hint: ignore
-Message-Id: <20260814132035.991168D66C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.05.x] package/gcc: 15.3.0: add
- GCC patch to fix mips/glibc build issue
+Message-Id: <20260814132035.6CE368D64C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.05.x] package/uclibc: bump to
+ 1.0.58
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -72,132 +72,103 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Titouan Christophe via buildroot <buildroot@buildroot.org>
 Reply-To: Titouan Christophe <titouan.christophe@mind.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0898600306423930621=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/206e41be023eb02a4796ab213ffd3087bcc2e14c
+--===============0898600306423930621==
+Content-Type: text/plain
+
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/87f64a9f70be7ff642e9af808be54f309d7c4a7c
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.05.x
 
-Fixes a build error with glibc:
+New release with following changes:
 
-programs/locfile.c: In function 'align_locale_data':
-programs/locfile.c:584:1: internal compiler error:
- in mips_load_store_insns, at config/mips/mips.cc:3137
+Adam Lackorzynski (1):
+      termios.h: Add IBSHIFT
 
-by backporting an upstream fix which is already included in gcc 16.1.
+Charles Mirabile (11):
+      riscv: add defconfigs
+      riscv: add support for static pie binaries
+      riscv: add support for ucontext functions
+      pipe: directly invoke pipe2 from kernel when !UCLIBC_LINUX_SPECIFIC
+      Fix {g,s}ettimeofday when !UCLIBC_HAS_REALTIME
+      Fix build with static-pie but without nptl threads
+      do not remove bits/uClibc_ctype.h when !UCLIBC_HAS_CTYPE_TABLES
+      getopt-susv3: remove call to gettext `_` macro
+      readdir{,_r}: remove loop to skip files with d_ino == 0
+      spawn: allow file actions on no-mmu targets
+      getopt-susv3: add support for reseting the scan by setting optind to zero
 
-The build error does not occur with gcc 14.x.
+Marcus Haehnel (1):
+      aarch64/fpu_control.h: Don't use gcc-internal types
 
-Fixes:
-https://autobuild.buildroot.org/results/b925a444bb3ef03354224ac643b0b3160c4c5e8a/
+Jan Klötzke (1):
+      elf/dl-support.c: remove unnecessary memset
 
-The oldest recorded build error dates back to July 2025:
-https://autobuild.buildroot.net/results/cb1/cb156fb938de26dd5dfe7fc48a1e061efa0284c7/
+Ramin Moussavi (9):
+      libsanitizer: arm/ucontext: fix VFP save/restore to use uc_regspace area
+      libsanitizer: arm/ucontext.h: add glibc-style REG_R0..REG_R15 aliases
+      libsanitizer: link.h/dl-iterate-phdr: expose dl_phdr_info TLS fields
+      libsanitizer: ldso: track _dl_load_adds/_dl_load_subs counters
+      libsanitizer: ldso: implement _dl_tls_get_addr_soft for dl_phdr_info::dlpi_tls_data
+      libsanitizer: drop __pagesize, make _dl_pagesize the single source of truth
+      libsanitizer: sys/user.h: remove obsolete BFD trad-core NBPG/UPAGES defines
+      libsanitizer: features.h: hard-wire _FILE_OFFSET_BITS=64 to match library's 64-bit off_t/ino_t
+      libsanitizer: fts.h: drop the bogus _FILE_OFFSET_BITS==64 #error
 
-so a backport to LTS branches should be considered.
+Waldemar Brodkorb (7):
+      bits/statx.h: add some missing defines
+      bits/statx.h: sync struct with glibc
+      sys/fanotify.h: sync with musl
+      libiconv: fix typedef of iconv_t
+      misc: add unicode character functions (c11)
+      netinet/tcp.h: sync with glibc
+      bump version for 1.0.58 release
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 11bf0dc202c46c0cc3b9a5357b28fb649a886362)
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit c7fef3704c704e6337b4f8f6ff467c6c70991443)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- ...mization-123833-Use-of-insn-attributes-in.patch | 85 ++++++++++++++++++++++
- 1 file changed, 85 insertions(+)
+ package/uclibc/uclibc.hash | 4 ++--
+ package/uclibc/uclibc.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gcc/15.3.0/0003-PR-rtl-optimization-123833-Use-of-insn-attributes-in.patch b/package/gcc/15.3.0/0003-PR-rtl-optimization-123833-Use-of-insn-attributes-in.patch
-new file mode 100644
-index 0000000000..81b43a5757
---- /dev/null
-+++ b/package/gcc/15.3.0/0003-PR-rtl-optimization-123833-Use-of-insn-attributes-in.patch
-@@ -0,0 +1,85 @@
-+From 654c733fa3f10531f3fd6b6d89e39f28c0075bd6 Mon Sep 17 00:00:00 2001
-+From: Roger Sayle <roger@nextmovesoftware.com>
-+Date: Sat, 7 Feb 2026 07:50:41 +0000
-+Subject: [PATCH] PR rtl-optimization/123833: Use of insn attributes in
-+ insn_costs corrupts recog_data.
-+
-+Thanks again to Jeff Law and Andrew Pinski.  Here's a revised patch that
-+addresses the true underlying cause of PR 128333.  recog.cc's cancel_changes
-+was not correctly updating the recog_data cache, which leads to strange
-+(incorrect) behavior in fwprop and ifcvt.
-+
-+2026-02-07  Roger Sayle  <roger@nextmovesoftware.com>
-+	    Andrew Pinski  <andrew.pinski@oss.qualcomm.com>
-+	    Jeff Law  <jeffrey.law@oss.qualcomm.com>
-+
-+gcc/ChangeLog
-+	PR rtl-optimization/123833
-+	* recog.cc (cancel_changes): Update the recog_data cache if it
-+	holds the instruction being changed.
-+
-+gcc/testsuite
-+	PR rtl-optimization/123833
-+	* gcc.target/mips/pr123833.c: New test case.
-+
-+Upstream: https://gcc.gnu.org/cgit/gcc/commit/?id=654c733fa3f10531f3fd6b6d89e39f28c0075bd6
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ gcc/recog.cc                             |  6 +++++-
-+ gcc/testsuite/gcc.target/mips/pr123833.c | 26 ++++++++++++++++++++++++
-+ 2 files changed, 31 insertions(+), 1 deletion(-)
-+ create mode 100644 gcc/testsuite/gcc.target/mips/pr123833.c
-+
-+diff --git a/gcc/recog.cc b/gcc/recog.cc
-+index 48f6b45ec6d..f37e548d6ab 100644
-+--- a/gcc/recog.cc
-++++ b/gcc/recog.cc
-+@@ -608,7 +608,11 @@ cancel_changes (int num)
-+       else
-+ 	*changes[i].loc = changes[i].old;
-+       if (changes[i].object && !MEM_P (changes[i].object))
-+-	INSN_CODE (changes[i].object) = changes[i].old_code;
-++	{
-++	  INSN_CODE (changes[i].object) = changes[i].old_code;
-++	  if (recog_data.insn == changes[i].object)
-++	    recog_data.insn = nullptr;
-++	}
-+     }
-+   num_changes = num;
-+ }
-+diff --git a/gcc/testsuite/gcc.target/mips/pr123833.c b/gcc/testsuite/gcc.target/mips/pr123833.c
-+new file mode 100644
-+index 00000000000..4d0c9e8eaec
-+--- /dev/null
-++++ b/gcc/testsuite/gcc.target/mips/pr123833.c
-+@@ -0,0 +1,26 @@
-++/* { dg-do compile } */
-++/* { dg-options "-O1 -mabi=64 -mhard-float" } */
-++
-++typedef short int16_t;
-++typedef signed char int8_t;
-++typedef long long int64_t;
-++typedef unsigned char uint8_t;
-++typedef unsigned long long uint64_t;
-++
-++#define BS_VEC(type, num) type __attribute__((vector_size(num * sizeof(type))))
-++BS_VEC(int8_t, 2) backsmith_pure_0(int64_t);
-++uint64_t backsmith_pure_4(int16_t BS_ARG_0)
-++{
-++    BS_VEC(int16_t, 16)
-++    BS_VAR_0 = __builtin_convertvector(
-++        __builtin_shufflevector(backsmith_pure_0(0), backsmith_pure_0(0), 0, 2,
-++                                2, 3, 2, 1, 2, 3, 0, 2, 0, 0, 2, 2, 0, 1),
-++        BS_VEC(int16_t, 16));
-++    for (;;)
-++    {
-++        if (__builtin_ctzg((uint8_t)BS_VAR_0[3], BS_ARG_0))
-++            for (;;);
-++        return 0;
-++    }
-++}
-++
-+-- 
-+2.47.3
-+
+diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
+index e0dba1b6b4..4c2a579ddf 100644
+--- a/package/uclibc/uclibc.hash
++++ b/package/uclibc/uclibc.hash
+@@ -1,4 +1,4 @@
+-# From https://downloads.uclibc-ng.org/releases/1.0.57/uClibc-ng-1.0.57.tar.xz.sha256
+-sha256  8bc734b584e23ff6ae3d0ebb4c0fb1d1d814c58c82822b93130d436afa7ace8b  uClibc-ng-1.0.57.tar.xz
++# From https://downloads.uclibc-ng.org/releases/1.0.58/uClibc-ng-1.0.58.tar.xz.sha256
++sha256  9e8100a442f7079b9728ca286e3035f67df0578606166ea2d1ef865a4a12ddb9  uClibc-ng-1.0.58.tar.xz
+ # Locally calculated
+ sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING.LIB
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index 0c91a176fa..6f3668715b 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UCLIBC_VERSION = 1.0.57
++UCLIBC_VERSION = 1.0.58
+ UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
+ UCLIBC_SITE = https://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
+ UCLIBC_LICENSE = LGPL-2.1+
+
+--===============0898600306423930621==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0898600306423930621==--
