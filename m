@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4602C5CFDB
-	for <buildroot@archiver.kernel.org>; Fri, 14 Aug 2026 13:21:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45090C5DF69
+	for <buildroot@archiver.kernel.org>; Fri, 14 Aug 2026 13:21:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7246C40D3E;
-	Fri, 14 Aug 2026 13:21:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 122C381403;
+	Fri, 14 Aug 2026 13:21:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6eXZf2swOf2M; Fri, 14 Aug 2026 13:21:44 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id IlVjDiejKe0H; Fri, 14 Aug 2026 13:21:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D6A5D40C93
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E790381404
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786713703;
-	bh=jF9wB8AkjeoqcFqbASvyx3TJV1YEEXm2/tochbAkt+w=;
+	s=default; t=1786713705;
+	bh=DzIsb8VyLPSglHvqL2kdZQFv8r/jr+L5bKJN9UcGeN8=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=mBu9auA/1aT2QqkKfsgq5Fk0ag2VmRxTr7Rkjx4wg1G8kKPid6sFugRu7vhOIeEuW
-	 cA5p788MnWggexCbL/wKCOTHjeD0hiyHkrIfR0gdjr08eMUc2jxh1w/JfxS0e8xx/m
-	 8nKSGnA4p7mqxTjI3VixMiIYawBFDhZv6eDQ16hBm7NhrBMp0iCLo/9x+5u3N32tfR
-	 P4mRJghDJD5ZfQLtjocnObaHeLOXf8WEP2scMtzlmJuDYFBFg6dI/YcHBJT/RhTY6B
-	 Ge2eSVTx6DYiiITzjSdQ0dN2c5xm4syuoBzCBtHCrWlxboQDmGAEbmaFHmSgWkYiyL
-	 nWD8TzBTH5/jQ==
+	b=DrYsfp2uL2DPWerZpXE/g6ZQOp35fPSDKub12OTaeovGLIFZ/5k9NfQB41OHxd1P0
+	 PjQynZDBRQjdtrVrAJApqUm3rGwRvzYXd95bJncRo5IrVaEu/CD/SDbl1LwEvAgklI
+	 8vRHIP7fs5ckVaCGBWA2J3p+CVN9GFL+zRQAppbk2auzxz5qiMlckR32hgVxOlspFH
+	 Ivq3KwGqKyoCI2M8eD55OD+GnOR3+5rPZfpiMu9fKDxdFF4+pwZARIQNQlAnEcq8A9
+	 rCUoZgJP8P3tCOo6Zp0uGndKCoKbWgh/74Cn2YlEHq6i9xUokkyfpskJ7QxGxqNBBw
+	 S8HR7G2M5YK6w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D6A5D40C93;
-	Fri, 14 Aug 2026 13:21:43 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 8DD8B139E
+	by smtp1.osuosl.org (Postfix) with ESMTP id E790381404;
+	Fri, 14 Aug 2026 13:21:44 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 759D933B
  for <buildroot@buildroot.org>; Fri, 14 Aug 2026 13:21:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 804E2400E3
+ by smtp3.osuosl.org (Postfix) with ESMTP id 66D7460689
  for <buildroot@buildroot.org>; Fri, 14 Aug 2026 13:21:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id l2_dOOXIBZHv for <buildroot@buildroot.org>;
- Fri, 14 Aug 2026 13:21:24 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id d1SvCXktYOMk for <buildroot@buildroot.org>;
+ Fri, 14 Aug 2026 13:21:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2745D4002B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A5C9A60837
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2745D4002B
+ by smtp3.osuosl.org (Postfix) with ESMTP id A5C9A60837
  for <buildroot@buildroot.org>; Fri, 14 Aug 2026 13:21:24 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2AC308D66A; Fri, 14 Aug 2026 13:20:34 +0000 (UTC)
+ id AA0DB8D66C; Fri, 14 Aug 2026 13:20:34 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 13 Aug 2026 08:56:36 +0200
+Date: Thu, 13 Aug 2026 16:03:39 +0200
 X-Git-Refname: refs/heads/2026.05.x
-X-Git-Oldrev: fde8ba3df7cd3af9d55d1a9fcfeb9a3b0adb39a4
-X-Git-Newrev: 4279f3abedcce9ea89f0bad84be9f27ebcd1223a
+X-Git-Oldrev: d1fc34482a9ae9036c1dbe5a99082bd54917419f
+X-Git-Newrev: 2ddf3b8ca9f63a58aaecfe3896b2ea0f78f81094
 X-Patchwork-Hint: ignore
-Message-Id: <20260814132034.2AC308D66A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.05.x] {linux,
- linux-headers}: bump 5.{10, 15}, 6.{1, 6, 12, 18} series
+Message-Id: <20260814132034.AA0DB8D66C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.05.x] configs/ts5500_defconfig:
+ remove defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,110 +77,271 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/4279f3abedcce9ea89f0bad84be9f27ebcd1223a
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/2ddf3b8ca9f63a58aaecfe3896b2ea0f78f81094
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.05.x
 
-Update the latest kernel releases:
-    - 5.10.262 -> 5.10.264
-    - 5.15.213 -> 5.15.215
-    - 6.1.180 -> 6.1.182
-    - 6.6.148 -> 6.6.151
-    - 6.12.101 -> 6.12.103
-    - 6.18.42 -> 6.18.44
+This configuration for the TS-5400 was added back in September
+2014 (commit 483e3bef47b3f024e4181403b3665702101c03e1), got some update
+in 2018 (commit 6461d76992ec2ceffabd7a5ccb59bb707ea2cb0a) and has not
+been updated in any significant way since then.
 
+This defconfig still use a 4.14 kernel that is no longer maintained.
+
+Remove its support.
+
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/14728914087 (ts5500_defconfig)
+
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Cc: Vivien Didelot <vivien.didelot@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit b1ce687923a12bd7d92e7a1e671ae036676f3478)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- linux/before-6.17/linux.hash                 | 10 +++++-----
- linux/from-6.17/linux.hash                   |  2 +-
- package/linux-headers/{5.10.262 => 5.10.264} |  0
- package/linux-headers/{5.15.213 => 5.15.215} |  0
- package/linux-headers/{6.1.180 => 6.1.182}   |  0
- package/linux-headers/{6.12.101 => 6.12.103} |  0
- package/linux-headers/{6.18.42 => 6.18.44}   |  0
- package/linux-headers/{6.6.148 => 6.6.151}   |  0
- package/linux-headers/Config.in.host         | 12 ++++++------
- 9 files changed, 12 insertions(+), 12 deletions(-)
+ .checkpackageignore                                |   1 -
+ DEVELOPERS                                         |   4 -
+ .../ts5500/fs-overlay/boot/syslinux/syslinux.cfg   |   9 --
+ board/technologic/ts5500/linux-4.14.config         | 111 ---------------------
+ board/technologic/ts5500/readme.txt                |  52 ----------
+ configs/ts5500_defconfig                           |  13 ---
+ 6 files changed, 190 deletions(-)
 
-diff --git a/linux/before-6.17/linux.hash b/linux/before-6.17/linux.hash
-index 779def28d0..c1e447e255 100644
---- a/linux/before-6.17/linux.hash
-+++ b/linux/before-6.17/linux.hash
-@@ -1,10 +1,10 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  0d21cd11933f49f7151b7c9dbb8cc3fddc8c8abe506434b850feecf41fc28a76  linux-6.12.101.tar.xz
--sha256  b674994b5760eb1c493711cfdc3aefb97583dfe04bb7977b4c8e7aae0710f75e  linux-6.6.148.tar.xz
--sha256  4f0e601759b55cfc4d0bf4990859b93bc74fb915cde532284f0765b77ca0f86a  linux-6.1.180.tar.xz
-+sha256  f143aaade8877ba5616e788b4482576db28481bcf557ef537f4fcc3938fc3176  linux-6.12.103.tar.xz
-+sha256  de01e5ae73412b70bceb41a6f97da6d0f29b6536f1f00f8b6a6fd40c729969f7  linux-6.6.151.tar.xz
-+sha256  f38416bb6e8024a21ae868c7f29cd15293a73755e3484c7f2f4adea5b03c1f85  linux-6.1.182.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256  c4721b4b8535f3e418ee579c70645fbfd5ddfba4943c31b919e8c9522371e1d8  linux-5.15.213.tar.xz
--sha256  fae7da8a9b97e5386f0a3dc3c5c8a88be17fcf2d0792a58a5a0c5b4f5775b483  linux-5.10.262.tar.xz
-+sha256  d57f279da0813fa6d69fb2e59cf9a364be4faa1cd18cb76b0b64c074fd23b7a7  linux-5.15.215.tar.xz
-+sha256  f27552ec32783512c81918c3b8f155fed8dbaf8a90a5a20afdc01aac715b489e  linux-5.10.264.tar.xz
- # Locally computed
- sha256  bd5db7fe3b0475cce4fc72db7a7f7df1c22b970aabe5ebff6ddd48098973bdf2  linux-cip-5.10.254-cip72.tar.gz
- sha256  97d7d5139900c10ff7435779be4857dda531e7cf6abba52c12a5f39aae195411  linux-cip-5.10.254-cip72-rt32.tar.gz
-diff --git a/linux/from-6.17/linux.hash b/linux/from-6.17/linux.hash
-index e29ffb04e2..c93eb3a376 100644
---- a/linux/from-6.17/linux.hash
-+++ b/linux/from-6.17/linux.hash
-@@ -2,7 +2,7 @@
- sha256  de9999b784d2293f00d39c62d8f92a08ab8a54bc4e80ffd250a0c09cb07a0f98  linux-7.0.14.tar.xz
+diff --git a/.checkpackageignore b/.checkpackageignore
+index e79e81048e..9cc441a5ed 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -150,7 +150,6 @@ configs/solidrun_clearfog_gt_8k_defconfig lib_defconfig.ForceCheckHash
+ configs/solidrun_macchiatobin_defconfig lib_defconfig.ForceCheckHash
+ configs/stm32mp157c_odyssey_defconfig lib_defconfig.ForceCheckHash
+ configs/terasic_de10nano_cyclone5_defconfig lib_defconfig.ForceCheckHash
+-configs/ts5500_defconfig lib_defconfig.ForceCheckHash
+ configs/uevm5432_defconfig lib_defconfig.ForceCheckHash
+ configs/visionfive_defconfig lib_defconfig.ForceCheckHash
+ configs/wandboard_defconfig lib_defconfig.ForceCheckHash
+diff --git a/DEVELOPERS b/DEVELOPERS
+index b32229d6d9..89fb3fceeb 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -3389,10 +3389,6 @@ F:	support/testing/tests/package/test_zerofree.py
+ N:	Vinicius Tinti <viniciustinti@gmail.com>
+ F:	package/python-thrift/
  
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  35a8ef5e8fb44467e56a42b40c23c4c10a61d1e95ff8d738f285230e8bed63e7  linux-6.18.42.tar.xz
-+sha256  0f72d938f06828e82c90405174fe572287db7bfe089e2fc46572a99a7f240d43  linux-6.18.44.tar.xz
- 
- # Licenses hashes
- sha256  fb5a425bd3b3cd6071a3a9aff9909a859e7c1158d54d32e07658398cd67eb6a0  COPYING
-diff --git a/package/linux-headers/5.10.262 b/package/linux-headers/5.10.264
-similarity index 100%
-rename from package/linux-headers/5.10.262
-rename to package/linux-headers/5.10.264
-diff --git a/package/linux-headers/5.15.213 b/package/linux-headers/5.15.215
-similarity index 100%
-rename from package/linux-headers/5.15.213
-rename to package/linux-headers/5.15.215
-diff --git a/package/linux-headers/6.1.180 b/package/linux-headers/6.1.182
-similarity index 100%
-rename from package/linux-headers/6.1.180
-rename to package/linux-headers/6.1.182
-diff --git a/package/linux-headers/6.12.101 b/package/linux-headers/6.12.103
-similarity index 100%
-rename from package/linux-headers/6.12.101
-rename to package/linux-headers/6.12.103
-diff --git a/package/linux-headers/6.18.42 b/package/linux-headers/6.18.44
-similarity index 100%
-rename from package/linux-headers/6.18.42
-rename to package/linux-headers/6.18.44
-diff --git a/package/linux-headers/6.6.148 b/package/linux-headers/6.6.151
-similarity index 100%
-rename from package/linux-headers/6.6.148
-rename to package/linux-headers/6.6.151
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 7599a7ad93..533812d3c9 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -468,12 +468,12 @@ endchoice
- 
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "5.10.262"	if BR2_KERNEL_HEADERS_5_10
--	default "5.15.213"	if BR2_KERNEL_HEADERS_5_15
--	default "6.1.180"	if BR2_KERNEL_HEADERS_6_1
--	default "6.6.148"	if BR2_KERNEL_HEADERS_6_6
--	default "6.12.101"	if BR2_KERNEL_HEADERS_6_12
--	default "6.18.42"	if BR2_KERNEL_HEADERS_6_18
-+	default "5.10.264"	if BR2_KERNEL_HEADERS_5_10
-+	default "5.15.215"	if BR2_KERNEL_HEADERS_5_15
-+	default "6.1.182"	if BR2_KERNEL_HEADERS_6_1
-+	default "6.6.151"	if BR2_KERNEL_HEADERS_6_6
-+	default "6.12.103"	if BR2_KERNEL_HEADERS_6_12
-+	default "6.18.44"	if BR2_KERNEL_HEADERS_6_18
- 	default "7.0.14"	if BR2_KERNEL_HEADERS_7_0
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+-N:	Vivien Didelot <vivien.didelot@gmail.com>
+-F:	board/technologic/ts5500/
+-F:	configs/ts5500_defconfig
+-
+ N:	Vladimir Oltean <olteanv@gmail.com>
+ F:	package/qoriq-ddr-phy-binary/
+ F:	package/qoriq-firmware-inphi/
+diff --git a/board/technologic/ts5500/fs-overlay/boot/syslinux/syslinux.cfg b/board/technologic/ts5500/fs-overlay/boot/syslinux/syslinux.cfg
+deleted file mode 100644
+index 64f8187733..0000000000
+--- a/board/technologic/ts5500/fs-overlay/boot/syslinux/syslinux.cfg
++++ /dev/null
+@@ -1,9 +0,0 @@
+-SERIAL 1 115200
+-CONSOLE 0
+-
+-DEFAULT linux
+-
+-LABEL linux
+-  SAY Now booting the kernel from SYSLINUX...
+-  LINUX /boot/bzImage
+-  APPEND console=ttyS1,115200n8 root=/dev/sda1 rootfstype=ext4 rw
+diff --git a/board/technologic/ts5500/linux-4.14.config b/board/technologic/ts5500/linux-4.14.config
+deleted file mode 100644
+index eb81596e25..0000000000
+--- a/board/technologic/ts5500/linux-4.14.config
++++ /dev/null
+@@ -1,111 +0,0 @@
+-# CONFIG_CROSS_MEMORY_ATTACH is not set
+-CONFIG_PARTITION_ADVANCED=y
+-# CONFIG_X86_EXTENDED_PLATFORM is not set
+-CONFIG_MELAN=y
+-CONFIG_X86_GENERIC=y
+-CONFIG_X86_REBOOTFIXUPS=y
+-CONFIG_NOHIGHMEM=y
+-# CONFIG_COMPACTION is not set
+-# CONFIG_BOUNCE is not set
+-# CONFIG_RELOCATABLE is not set
+-# CONFIG_SUSPEND is not set
+-# CONFIG_ACPI is not set
+-CONFIG_CPU_IDLE=y
+-CONFIG_TS5500=y
+-CONFIG_NET=y
+-CONFIG_PACKET=y
+-CONFIG_UNIX=y
+-CONFIG_INET=y
+-# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
+-# CONFIG_INET_XFRM_MODE_TUNNEL is not set
+-# CONFIG_INET_XFRM_MODE_BEET is not set
+-# CONFIG_INET_DIAG is not set
+-# CONFIG_IPV6 is not set
+-# CONFIG_WIRELESS is not set
+-CONFIG_DEVTMPFS=y
+-CONFIG_DEVTMPFS_MOUNT=y
+-# CONFIG_BLK_DEV is not set
+-CONFIG_BLK_DEV_SD=y
+-# CONFIG_SCSI_LOWLEVEL is not set
+-CONFIG_ATA=y
+-# CONFIG_ATA_VERBOSE_ERROR is not set
+-# CONFIG_SATA_PMP is not set
+-CONFIG_ATA_GENERIC=y
+-CONFIG_PATA_LEGACY=y
+-CONFIG_NETDEVICES=y
+-# CONFIG_NET_CORE is not set
+-# CONFIG_NET_VENDOR_3COM is not set
+-# CONFIG_NET_VENDOR_ADAPTEC is not set
+-# CONFIG_NET_VENDOR_ALTEON is not set
+-# CONFIG_NET_VENDOR_AMD is not set
+-# CONFIG_NET_VENDOR_ARC is not set
+-# CONFIG_NET_VENDOR_ATHEROS is not set
+-# CONFIG_NET_VENDOR_BROADCOM is not set
+-# CONFIG_NET_VENDOR_BROCADE is not set
+-# CONFIG_NET_VENDOR_CHELSIO is not set
+-# CONFIG_NET_VENDOR_CISCO is not set
+-CONFIG_NET_TULIP=y
+-CONFIG_DM9102=y
+-# CONFIG_NET_VENDOR_DLINK is not set
+-# CONFIG_NET_VENDOR_EMULEX is not set
+-# CONFIG_NET_VENDOR_EXAR is not set
+-# CONFIG_NET_VENDOR_HP is not set
+-# CONFIG_NET_VENDOR_INTEL is not set
+-# CONFIG_NET_VENDOR_MARVELL is not set
+-# CONFIG_NET_VENDOR_MELLANOX is not set
+-# CONFIG_NET_VENDOR_MICREL is not set
+-# CONFIG_NET_VENDOR_MYRI is not set
+-# CONFIG_NET_VENDOR_NATSEMI is not set
+-# CONFIG_NET_VENDOR_NVIDIA is not set
+-# CONFIG_NET_VENDOR_OKI is not set
+-# CONFIG_NET_PACKET_ENGINE is not set
+-# CONFIG_NET_VENDOR_QLOGIC is not set
+-# CONFIG_NET_VENDOR_REALTEK is not set
+-# CONFIG_NET_VENDOR_RDC is not set
+-# CONFIG_NET_VENDOR_SEEQ is not set
+-# CONFIG_NET_VENDOR_SILAN is not set
+-# CONFIG_NET_VENDOR_SIS is not set
+-# CONFIG_NET_VENDOR_SMSC is not set
+-# CONFIG_NET_VENDOR_STMICRO is not set
+-# CONFIG_NET_VENDOR_SUN is not set
+-# CONFIG_NET_VENDOR_TEHUTI is not set
+-# CONFIG_NET_VENDOR_TI is not set
+-# CONFIG_NET_VENDOR_VIA is not set
+-# CONFIG_NET_VENDOR_WIZNET is not set
+-CONFIG_PHYLIB=y
+-CONFIG_DAVICOM_PHY=y
+-# CONFIG_WLAN is not set
+-# CONFIG_INPUT_KEYBOARD is not set
+-# CONFIG_INPUT_MOUSE is not set
+-# CONFIG_SERIO is not set
+-CONFIG_SERIAL_8250=y
+-# CONFIG_SERIAL_8250_DEPRECATED_OPTIONS is not set
+-CONFIG_SERIAL_8250_CONSOLE=y
+-# CONFIG_HW_RANDOM is not set
+-CONFIG_GPIOLIB=y
+-CONFIG_GPIO_TS5500=y
+-CONFIG_SENSORS_MAX197=y
+-CONFIG_WATCHDOG=y
+-CONFIG_SC520_WDT=y
+-CONFIG_USB=y
+-CONFIG_USB_OHCI_HCD=y
+-CONFIG_USB_SERIAL=y
+-CONFIG_USB_SERIAL_FTDI_SIO=y
+-CONFIG_USB_SERIAL_PL2303=y
+-# CONFIG_X86_PLATFORM_DEVICES is not set
+-# CONFIG_IOMMU_SUPPORT is not set
+-# CONFIG_DMIID is not set
+-CONFIG_EXT4_FS=y
+-# CONFIG_DNOTIFY is not set
+-# CONFIG_INOTIFY_USER is not set
+-CONFIG_VFAT_FS=y
+-CONFIG_TMPFS=y
+-# CONFIG_MISC_FILESYSTEMS is not set
+-# CONFIG_NETWORK_FILESYSTEMS is not set
+-CONFIG_NLS_CODEPAGE_437=y
+-CONFIG_NLS_CODEPAGE_850=y
+-CONFIG_NLS_ISO8859_1=y
+-CONFIG_NLS_ISO8859_15=y
+-CONFIG_NLS_UTF8=y
+-# CONFIG_VIRTUALIZATION is not set
+-CONFIG_XZ_DEC=y
+diff --git a/board/technologic/ts5500/readme.txt b/board/technologic/ts5500/readme.txt
+deleted file mode 100644
+index 1fe384faae..0000000000
+--- a/board/technologic/ts5500/readme.txt
++++ /dev/null
+@@ -1,52 +0,0 @@
+-Technologic Systems TS-5x00 SBCs
+-================================
+-
+-This document explains how to set up a basic Buildroot system for the
+-Technologic Systems TS-5x00 serie of x86-based Single Board Computers.
+-
+-TS-5x00 Single Board Computers are based on the AMD Elan520 processor. For more
+-information please have a look at https://docs.embeddedTS.com/Documentation_Home#AMD
+-
+-The kernel configuration works for any AMD Elan520-based SBCs, but the support
+-is enhanced for the TS-5500 and TS-5400 models (on-board devices registration
+-and additional sysfs attributes under /sys/devices/platform/).
+-
+-To build the default configuration you only have to:
+-
+-    $ make ts5500_defconfig
+-    $ make
+-
+-You will need a Compact Flash card of sufficient size and the first or only
+-partition configured as Linux type, with the bootable flag.
+-
+-You can transfer the system on the partition then optionally resize it with:
+-
+-    # dd if=output/images/rootfs.ext4 of=/dev/sdX1
+-    # resize2fs /dev/sdX1
+-
+-Or you can just extract the root filesystem to the partition with:
+-
+-    # mount /dev/sdX1 /mnt
+-    # tar -pxf output/images/rootfs.tar -C /mnt
+-    # umount /mnt
+-
+-To install the bootloader, you will need to copy the MBR:
+-
+-    # cat output/images/syslinux/mbr.bin > /dev/sdX
+-
+-Then install SYSLINUX in the mounted partition:
+-
+-    # mount /dev/sdX1 /mnt
+-    # output/host/sbin/extlinux --install /mnt/boot/syslinux
+-    # umount /mnt
+-
+-IMPORTANT: In order for the board to boot the Compact Flash with a recent
+-config, the BIOS must use Logical Block Addressing (LBA). You can do it by
+-choosing "Ide 0: AUTOCONFIG, LBA" under "IDE DRIVE GEOMETRY" in the "Basic CMOS
+-Configuration" screen. Also, don't forget to set the 'active' (or 'bootable')
+-flag on partition 1. For details about the CMOS setup, please see:
+-https://docs.embeddedts.com/TS-5500#System_BIOS_Setup_Screens
+-
+-Connect a terminal program to the rs232 connector marked "COM2"
+-with baudrate set to 115200, insert the Compact Flash card into the socket,
+-power up the board, and enjoy.
+diff --git a/configs/ts5500_defconfig b/configs/ts5500_defconfig
+deleted file mode 100644
+index 62d80839b7..0000000000
+--- a/configs/ts5500_defconfig
++++ /dev/null
+@@ -1,13 +0,0 @@
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
+-BR2_TARGET_GENERIC_GETTY_PORT="ttyS1"
+-BR2_ROOTFS_OVERLAY="board/technologic/ts5500/fs-overlay"
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14"
+-BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/technologic/ts5500/linux-4.14.config"
+-BR2_LINUX_KERNEL_INSTALL_TARGET=y
+-BR2_TARGET_ROOTFS_EXT2=y
+-BR2_TARGET_ROOTFS_EXT2_4=y
+-BR2_TARGET_SYSLINUX=y
+-BR2_TARGET_SYSLINUX_MBR=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
