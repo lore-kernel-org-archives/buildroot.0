@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B83A7C5B572
-	for <buildroot@archiver.kernel.org>; Fri, 14 Aug 2026 13:21:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5AB74C5CFDB
+	for <buildroot@archiver.kernel.org>; Fri, 14 Aug 2026 13:21:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7CE5A60ABE;
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2FEBB40C39;
+	Fri, 14 Aug 2026 13:21:42 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jz5RNwfH5jyV; Fri, 14 Aug 2026 13:21:40 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 968D740CFD
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1786713700;
+	bh=nAtuBOSKvPfuF5XtOV5/+5Qqygypsv9oPd3DO7tkwA4=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=Y7B5eBuaFhT0ZGis+Ee2j/y83wRgjHVZfJU6pW9IMxfzgN1fNLcX5WzDQ8j3/lV9m
+	 ZfKMpj12BGA8Uh01pAwxkgE6Lo13Kawq83mgTXS2FJhgmjWAjLYpiUFGHJVmJ/2+r1
+	 J29ee5jduw9f2Kyenqc4+xVL4HgQQSw163nGK2/CipHvCOCBcCuQdnJya7eZZeIcjX
+	 EOfCDwSsrRAVC2rlceX2ZO0fykztG7tOF2A9MZvi/k/bbZGii3/20dzBhHffCEc0vY
+	 IJOmUiENDG7Bbd3+o+YsLfzXDLVls6qm/2eNfF0BIiFblWHPAxK7vj8ARjyupb2x/9
+	 gFDxFJiYtkNog==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 968D740CFD;
 	Fri, 14 Aug 2026 13:21:40 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4132B139C
+ for <buildroot@buildroot.org>; Fri, 14 Aug 2026 13:21:26 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 301286080C
+ for <buildroot@buildroot.org>; Fri, 14 Aug 2026 13:21:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iFeSCZOjkceo; Fri, 14 Aug 2026 13:21:39 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F21560A6A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786713699;
-	bh=NQG88ik0BYMAwjurXuQvoio73Jy9dVq70Wrfa/JSpHk=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Ma854E9Gl0hEnEh+UW0gHE1VBVmFMEKnUSWZDX6ien9vpGXwCWo4z6t1Q4jbXw9Gb
-	 0LeehF00blaILt/A+gmaj16qUL1WJ9g6gRXBgHHJzWV0AC2lN3rmCw8lHyF5e7V/yf
-	 AhUvpsJrRz8qkyOvlqukEbPyJ2mIYUBcbaUmWc9ZApLZ4hMXRxFgDbpG1pTBWdAFhJ
-	 hCo7L+p6bRVQG6rz44pBIanBBzK+UrfWvPRlKNi0Vs1HG4JFmmy86oPscJCGdk+aii
-	 sgEg0aeZs7bYeLBpZ8yMnac9dsUKEcxmDuj5z+JAHwOW0B/HYkgxpgdtVaLQJGgs5m
-	 nWUwBL2jlVP2A==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6F21560A6A;
-	Fri, 14 Aug 2026 13:21:39 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 3EE7033B
- for <buildroot@buildroot.org>; Fri, 14 Aug 2026 13:21:26 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2254C8124A
- for <buildroot@buildroot.org>; Fri, 14 Aug 2026 13:21:26 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1_U2S3os7qbh for <buildroot@buildroot.org>;
- Fri, 14 Aug 2026 13:21:25 +0000 (UTC)
+ id zEQFzQITCzvC for <buildroot@buildroot.org>;
+ Fri, 14 Aug 2026 13:21:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5DE6C8123C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4120460689
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5DE6C8123C
- for <buildroot@buildroot.org>; Fri, 14 Aug 2026 13:21:25 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4120460689
+ for <buildroot@buildroot.org>; Fri, 14 Aug 2026 13:21:24 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 624708D671; Fri, 14 Aug 2026 13:20:35 +0000 (UTC)
+ id 438458D66A; Fri, 14 Aug 2026 13:20:34 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 13 Aug 2026 16:03:39 +0200
+Date: Thu, 13 Aug 2026 09:27:39 +0200
 X-Git-Refname: refs/heads/2026.05.x
-X-Git-Oldrev: 2f7d1fa84226d798883954950a3390e3a4171bbc
-X-Git-Newrev: edcb5aa58a930e855da4f4a8c2657bb01e3f1bef
+X-Git-Oldrev: d3e0161b9afb6a4eee18a55085502b1eaf294897
+X-Git-Newrev: 6bedcf009bef50999de90e360caef1e03659cded
 X-Patchwork-Hint: ignore
-Message-Id: <20260814132035.624708D671@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.05.x] package/clamav: security
- bump version to 1.5.4
+Message-Id: <20260814132034.438458D66A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.05.x] package/libglib2: disable
+ sysprof for the host build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,47 +77,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/edcb5aa58a930e855da4f4a8c2657bb01e3f1bef
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/6bedcf009bef50999de90e360caef1e03659cded
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.05.x
 
-https://blog.clamav.net/2026/08/clamav-154-and-146-security-patch.html
+Whether the host libglib2 picks up sysprof support depends on whether
+libsysprof-capture happens to be installed on the build machine, which
+makes the host build depend on the host environment. Disable sysprof
+explicitly for the host build so the result is deterministic.
 
-Fixes CVE-2025-8088, CVE-2026-20337, CVE-2026-20338, CVE-2026-20339,
-CVE-2026-20345, CVE-2026-20346, CVE-2026-20347 & CVE-2026-20348.
+Keep sysprof enabled for the target build: it is useful to profile and
+measure the performance of applications running on the target.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 6fe61bd9650bd2a3474b2d5c04568200ad518a28)
+Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@yoseli.org>
+[Fiona: also apply to package/libglib2/libglib2-bootstrap]
+Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
+(cherry picked from commit c92dc611e51b9fea493998676f99c0d55e39967e)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- package/clamav/clamav.hash | 2 +-
- package/clamav/clamav.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libglib2/libglib2-bootstrap/libglib2-bootstrap.mk | 3 ++-
+ package/libglib2/libglib2.mk                              | 3 ++-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/clamav/clamav.hash b/package/clamav/clamav.hash
-index be5a2ec5c7..2daa66494f 100644
---- a/package/clamav/clamav.hash
-+++ b/package/clamav/clamav.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  89af57a45bbf13de4dc91ed7f20b435388c88428eb7dc30639a02b2f0fc2dad1  clamav-1.5.3.tar.gz
-+sha256  1af1117a228f1b5bc7fa91a0dabc37848a99e7d25188e9be8043332ce721dfd3  clamav-1.5.4.tar.gz
- sha256  0c4fd2fa9733fc9122503797648710851e4ee6d9e4969dd33fcbd8c63cd2f584  COPYING.txt
- sha256  d72a145c90918184a05ef65a04c9e6f7466faa59bc1b82c8f6a8ddc7ddcb9bed  COPYING/COPYING.bzip2
- sha256  dfb818a0d41411c6fb1c193c68b73018ceadd1994bda41ad541cbff292894bc6  COPYING/COPYING.file
-diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
-index 9467174e93..1777366fef 100644
---- a/package/clamav/clamav.mk
-+++ b/package/clamav/clamav.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libglib2/libglib2-bootstrap/libglib2-bootstrap.mk b/package/libglib2/libglib2-bootstrap/libglib2-bootstrap.mk
+index 665f320684..1e512fd7ed 100644
+--- a/package/libglib2/libglib2-bootstrap/libglib2-bootstrap.mk
++++ b/package/libglib2/libglib2-bootstrap/libglib2-bootstrap.mk
+@@ -72,7 +72,8 @@ HOST_LIBGLIB2_BOOTSTRAP_CONF_OPTS = \
+ 	-Dsystemtap=false \
+ 	-Dxattr=false \
+ 	-Dtests=false \
+-	-Doss_fuzz=disabled
++	-Doss_fuzz=disabled \
++	-Dsysprof=disabled
  
--CLAMAV_VERSION = 1.5.3
-+CLAMAV_VERSION = 1.5.4
- CLAMAV_SITE = https://www.clamav.net/downloads/production
- CLAMAV_LICENSE = GPL-2.0
- CLAMAV_LICENSE_FILES = \
+ $(eval $(meson-package))
+ $(eval $(host-meson-package))
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index cae8a85a28..ae4b653a15 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -30,7 +30,8 @@ HOST_LIBGLIB2_CONF_OPTS = \
+ 	-Dsystemtap=false \
+ 	-Dxattr=false \
+ 	-Dtests=false \
+-	-Doss_fuzz=disabled
++	-Doss_fuzz=disabled \
++	-Dsysprof=disabled
+ 
+ LIBGLIB2_DEPENDENCIES = \
+ 	host-pkgconf host-libglib2 \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
