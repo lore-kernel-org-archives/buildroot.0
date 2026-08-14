@@ -4,99 +4,99 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BBEE4C5CFC1
-	for <buildroot@archiver.kernel.org>; Fri, 14 Aug 2026 14:11:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8C8CC5DF6A
+	for <buildroot@archiver.kernel.org>; Fri, 14 Aug 2026 14:11:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8582C40E31;
-	Fri, 14 Aug 2026 14:11:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7450840613;
+	Fri, 14 Aug 2026 14:11:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dynr7T2KKzMw; Fri, 14 Aug 2026 14:11:13 +0000 (UTC)
+ id TCVkiJb8rTee; Fri, 14 Aug 2026 14:11:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A979240E44
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A488A40621
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786716673;
-	bh=5v4puhoMKa3Nai6g70L0Qfi+fVRFghldNxWd1VGnBK8=;
+	s=default; t=1786716690;
+	bh=Vh9lQ2go31eT1zGSmmPCOJT5b9VBcS+X3QjmehOUb6c=;
 	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
 	 From;
-	b=ihfE5dEfjSCc/dXcndF3NFmNga5Zo2G7lnKwcA5rQTZ9V30+XxvhAS7JPMPSs5Xzg
-	 nV/Qz2pDymbnZgtP+hmtHcEtaZA8aFfbfnTaoMEoNMPFlY4fUNQ0U6klz6G5GkVToX
-	 54QUc7ezyd0IYtaual0Mpk8Zzf///bSZZYFWP3SEbg8BfYTnSgOwgBJYEU7oUNQhBC
-	 qO7o5BrPq69M64FpeacFHA/ff5iBRD9yL+41408pgxUhmI0FCg2xAnNP4j5kwY5UP6
-	 ui6TkYIt5sWTNDOvi/L4YarikbOX0uem/cBFePxj54lb45PnRB+mVc2ZHf+ydRJmgE
-	 VqooFl7ZYHZrQ==
+	b=Ra6HdbVL61EF5dYAUNFEQoqlAuTIguyHejgD6B7s4gCX7A/TYyWvOIWqvP/NyXT9Y
+	 gTKU3QZjijGdlCtpdB1uxj/4UyWKcU1SNIm3DYoKRpcpdEyDCjrhwOZlLmTZ0OnmnX
+	 P+SvTNHk2Tx+W7kLibLqWQtIUrSTiUO4+AL5q9whHGr2+AnFES8EicRh2l9FF9MDW+
+	 KG8/qKYQsQocksMG7gsa9z14s79H26Z6DDODhTVrX9cJiVS9YmufQWjJOhofxfeRdm
+	 4IsNuBgiHkZeajpGcPbhW+hVpOQN9crbpWUJ6vaGtNScorOEPBGZhWtl1purA/PbrA
+	 t0WjTbF4pvS2A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A979240E44;
-	Fri, 14 Aug 2026 14:11:13 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 7C2F023F
- for <buildroot@buildroot.org>; Fri, 14 Aug 2026 14:11:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A488A40621;
+	Fri, 14 Aug 2026 14:11:30 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 703A63DF
+ for <buildroot@buildroot.org>; Fri, 14 Aug 2026 14:11:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6270F400A4
- for <buildroot@buildroot.org>; Fri, 14 Aug 2026 14:11:12 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 56AFD405F5
+ for <buildroot@buildroot.org>; Fri, 14 Aug 2026 14:11:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jNtkIlLo5DIq for <buildroot@buildroot.org>;
- Fri, 14 Aug 2026 14:11:11 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KpWTVblgFSKC for <buildroot@buildroot.org>;
+ Fri, 14 Aug 2026 14:11:28 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32a; helo=mail-wm1-x32a.google.com;
+ client-ip=2a00:1450:4864:20::42a; helo=mail-wr1-x42a.google.com;
  envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 611B34011F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 611B34011F
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
- [IPv6:2a00:1450:4864:20::32a])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 611B34011F
- for <buildroot@buildroot.org>; Fri, 14 Aug 2026 14:11:11 +0000 (UTC)
-Received: by mail-wm1-x32a.google.com with SMTP id
- 5b1f17b1804b1-4954d29264cso5639655e9.2
- for <buildroot@buildroot.org>; Fri, 14 Aug 2026 07:11:11 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5A7D640506
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5A7D640506
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
+ [IPv6:2a00:1450:4864:20::42a])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5A7D640506
+ for <buildroot@buildroot.org>; Fri, 14 Aug 2026 14:11:28 +0000 (UTC)
+Received: by mail-wr1-x42a.google.com with SMTP id
+ ffacd0b85a97d-4798bea72f9so673391f8f.1
+ for <buildroot@buildroot.org>; Fri, 14 Aug 2026 07:11:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1786716669; x=1787321469;
+ d=1e100.net; s=20251104; t=1786716686; x=1787321486;
  h=content-transfer-encoding:content-type:in-reply-to:from
  :content-language:references:to:subject:user-agent:mime-version:date
  :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to:content-type;
- bh=j+y4CLNumsxFhe5G2t5gekB7AGiZ531X2iGxPBdSvg4=;
- b=POuh+WYTP9kp4MP/EMDpIqHQrq9waGmivqKuW5wjyQEpIGc3cwL/1aotrvBIBwm3Hp
- VLD+ob8bCLGR83mvNoL9i5BKZV6aB+5lfHRmhPHdN5TXcHyzWs+7HcPERs4FQukb2YaZ
- VSuPazKAXJmaSDq27E3fTqIcSKOvJK8hBXq+erKGsU7C84q7qm5NrZja75rYzA3T85Mv
- STyc6DkoMKcG9DP+EvwtjZ1XFYA8PU+k8D6hZy6jwXafgwCPmcB4X0GVg69XJb0vg7wb
- jxrl8lSZeNQJzi27Fs08124WvZmmVNfxDoEDycp57pJJ5tAxHwXjKvpt3ZZPyKHyPGYm
- 00+g==
+ bh=xFIC6QUKNV7jFj5bIy4RIUhMONVJPNqzbdAqnhBjjH4=;
+ b=kgBUiGe8ESdh8G4joVczRUto523hHk7IgCTG0V+QSTb8ZDI6pXhoxaG4uHLA/buSJN
+ Hib32ahWGemtIsm1Qjjb/RTfaDqZ8ghyayZ68l4kmp6+B1pLl5zDlun5J5y/uylqL9cO
+ Wmc0h6AHVbtdyHQ20gWQWu14Ued28rtsBJsuWEX3TVqJzNY0oQjv0OXsDsJAJKF4zH2H
+ xQ8oGMEyv0fet+ORehJom86gqkO3X9/qmroijWGPVsP599QxBPx0SBthmpHHm/pCSGsy
+ +zP7OGqcVPqSwQRM+r7TU7JAhE1tbTzuTtJSf/1Z0f4lk2EjenV+9IPD32nDHdMPmkfm
+ 2ENQ==
 X-Forwarded-Encrypted: i=1;
- AHgh+Rod+FS6FY0dtW7ZJBJVgtjgDC0vZpin8/AXcqGbKGO1B2AbdLzus9xnqoQcdOtqcuM0HI4xE+wCDSQ=@buildroot.org
-X-Gm-Message-State: AOJu0YxsR13xMPzKr87/G5qwfUW62/25Hr+vhmDNqezDmCM0oDQQkoZV
- 3C/2FZjum0gtbkkgYITlPPmF01BBPgaEnf4qNgnO2VJ4+WC1qPZyEY4KAsAEc6hQSJc=
-X-Gm-Gg: AR+sD119Np98oWiTt1C5gX1nkhNGe81gS0WmxX3yM9owy1zX43XbnfZFgqT+0hZQtUe
- YTCqK7kb3xc8ZXfjYaoCINKrkb3q7WuLp6F9wVMOwNaSP2uaSINdmnEgrrwTMgOtLpy1WRsoc+D
- 6yHDqiAChAKeRspjulJJ+v4rxL1lJKIWLqd/LoIUTz9k9Zm//fXGU7j0wbOEoYa1Eue3JlWnG12
- vxfmLr2sT9q/1jED2RxoLg0RL7/8QhXZTz8AznegwUM/yzxhmznSebTUanhY50YbIa8KjbpMFcI
- IgKasEhbl1zVG6G5Zeb9OrRLX+HOvf51hkMTDkhEHnoE74+HRRGcQ+a4xzFJXyzBwePkJyXmRxX
- FjuCXBLM2KvuH5ChPLyO149iaFSegzOmL5k4YVNLdl1ExgrSfHmnSfj4y47Y1u4M2lUKn2M5V8N
- 9gt1XEEeRNsJRzmK9LSF0JZ/KFdc8nFoMV3fWB7RCJz5ePrtnJEnCFEIwish78yrNIPv4WV9jaj
- AgXdLU1w5QHxu3rIV1BzJDTTiG6AFaHXzdP1z2F1d4Ruzhk
-X-Received: by 2002:a05:600c:4e14:b0:499:7e2b:8e5 with SMTP id
- 5b1f17b1804b1-4998793ffe7mr91871185e9.5.1786716669356; 
- Fri, 14 Aug 2026 07:11:09 -0700 (PDT)
+ AHgh+Rr1muAsmcvvoB60Mkdf5VXUCkfOFri6mMFe452kJju6ZCj3irXGE1ivmEScFPega4r6/pG4gwbF/sY=@buildroot.org
+X-Gm-Message-State: AOJu0YwtwUoz9l3bxrt4EbADg+6JAjDV9pLvWZFuk1IwvAmlZyfRRV5m
+ qguXqNsZOsysrcLbdzjZjSJoJDgyDtX02GI6Xt3qoLh3RqLhTzzozzMIOe3+80Trd3A=
+X-Gm-Gg: AR+sD127xVmt0ZYJvVtMKsObUSFB5huwm6n0Q0AbTrpvicjh3JXUDYRcHJX8Tk24krz
+ ybz0ORqaVKeJMOLbMPkR2LfvTFHCWirdZ26yAp9cgVkNNqsStIL/ZMsDrmxNdnMqsBqVsv22HWF
+ zbaf1CWMFP/xTsQSjZf2utEluGbz9Ygsg1MXMTGVIQ9fNuAMV8Be7LnjjG9PlqqaitPXgXgOSR1
+ 7+q67/U//amJF41SjCjbTiVFEykWHd6qW3gFpZ72pi3N55ylTn0nYHGmrl5KcOolXFZEeyxt5bU
+ G/ro6fe7y3m9rbHMbhQRnGm5eK255ySUgU0R2A1Dw2atR5uKYornkq+ljNpsKmODLyDEcyjH8pZ
+ zn4qSnUZPgi40MHb9b7t/m6dSo0jqQXvPYI35cu+2DldZ4F52pKdy5aOLTSU8uYBeM8qxz9JcFX
+ zuzyhZSWKtzueGPlOH20yIJpiDKMvAWQw4wasIUpSkyd1LAaLFVxuaOXM2SGqWt2xVPZY3X6pYJ
+ 80J0svKurEziAyCAeZdx9PxcEUN2BtjbCO9rnzikElJ6/ar
+X-Received: by 2002:a5d:5e13:0:b0:482:93ec:b3ab with SMTP id
+ ffacd0b85a97d-48293ecb697mr512178f8f.21.1786716686312; 
+ Fri, 14 Aug 2026 07:11:26 -0700 (PDT)
 Received: from ?IPV6:2a02:a03f:63ab:dc01:1291:d1ff:fe92:3b5a?
  ([2a02:a03f:63ab:dc01:1291:d1ff:fe92:3b5a])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-4815f2c46besm8344046f8f.31.2026.08.14.07.11.08
+ ffacd0b85a97d-4815f2b1a91sm8048278f8f.21.2026.08.14.07.11.25
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Fri, 14 Aug 2026 07:11:09 -0700 (PDT)
-Message-ID: <1796ef6c-e030-44b1-a22e-36efba7ecede@mind.be>
-Date: Fri, 14 Aug 2026 16:11:08 +0200
+ Fri, 14 Aug 2026 07:11:25 -0700 (PDT)
+Message-ID: <dc0815ee-04af-4c8f-b0c6-b31bb26ede38@mind.be>
+Date: Fri, 14 Aug 2026 16:11:25 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 To: Romain Naour <romain.naour@smile.fr>, buildroot@buildroot.org
 References: <20260606225120.409046-1-romain.naour@smile.fr>
- <20260606225120.409046-5-romain.naour@smile.fr>
+ <20260606225120.409046-6-romain.naour@smile.fr>
 Content-Language: en-US
-In-Reply-To: <20260606225120.409046-5-romain.naour@smile.fr>
-Subject: Re: [Buildroot] [PATCH 5/7] configs/acmesystems_aria_g25_{128mb,
+In-Reply-To: <20260606225120.409046-6-romain.naour@smile.fr>
+Subject: Re: [Buildroot] [PATCH 6/7] configs/acmesystems_arietta_g25_{128mb,
  256mb}_defconfig: remove defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -117,24 +117,25 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 On 7/06/26 00:51, Romain Naour via buildroot wrote:
-> This configuration for the acmesystems aria g25 were added back in July
-> 2015 (commit 2e52be798276fe0c28949f4a16fce0ca20e52153), and has not
-> been updated in any significant way since 2019 (the last major kernel
-> update [1]).
+> This configuration for the acmesystems arietta g25 were added back in
+> February 2016 (commit e173aeece51852d652c557546d9944ee42c91e4f), and has
+> not been updated in any significant way since 2019 (the last major
+> kernel update [1]).
 >
 > This defconfig still use a 4.19 kernel that is no longer maintained.
 >
 > Remove its support.
 >
 > Fixes:
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/14728913801 (acmesystems_aria_g25_256mb_defconfig)
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/14728913800 (acmesystems_aria_g25_128mb_defconfig)
+> https://gitlab.com/buildroot.org/buildroot/-/jobs/14728913803 (acmesystems_arietta_g25_256mb_defconfig)
+> https://gitlab.com/buildroot.org/buildroot/-/jobs/14728913802 (acmesystems_arietta_g25_128mb_defconfig)
 >
-> [1] ab10b5b3ee6aa1e19aa6264153eeed9054d4c2e7
+> [1] 42ea31c114f32a100923e51cb2b6b6d67c38ca3f
 >
 > Signed-off-by: Romain Naour <romain.naour@smile.fr>
 
 Applied to 2025.02.x and 2026.05.x, thanks !
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
