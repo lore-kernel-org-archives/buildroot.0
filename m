@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B8D8C5CFDB
-	for <buildroot@archiver.kernel.org>; Fri, 14 Aug 2026 13:20:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 148EEC5DF69
+	for <buildroot@archiver.kernel.org>; Fri, 14 Aug 2026 13:20:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 24D3940C3D;
-	Fri, 14 Aug 2026 13:20:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D5097812BA;
+	Fri, 14 Aug 2026 13:20:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sySn0E-oOMJM; Fri, 14 Aug 2026 13:19:57 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id MKgo3Rh8UQKk; Fri, 14 Aug 2026 13:20:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 98A6740CBB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0B3FF812C9
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786713597;
-	bh=vdeBZ70h5U9e0E4ceBcNT5QM91vmo57V1pvMaUpxP7U=;
+	s=default; t=1786713602;
+	bh=oAc3XB5G3mHV7K8f60/ZfAblq1iTbg019h5PoEPSzCw=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=E5PfHiThT42texkTzxJGC/iDptS67vcaI+iVgSK2BVlD8ftztKEjszUzXXdSanBcE
-	 24Izv9Hr4UNAPxADIvSYjCywkXOCfKb4/H+AwAYPS4psgrnnOKq40ywBfK3bPKUUnL
-	 NmaHLDGEFM9M5iVK9gRy4dQfzoiolZr1udKug2XT96RgNAkLkbz35y7GBxzQCNMB2v
-	 QHBPPdQJiYVgGLkRIOL+91rzYDtE7zHuchoUkVqEIDScY48Dy4ejncFpTGiTpIFsDM
-	 gpogC+pJX03GpJDchD9mTgkKOvqqCvfneXqcPkAGb+7Ymek7RiGgHDFC0twBwZqaQE
-	 pcUhJNkNbX/lA==
+	b=PHShHpuCMUKI5N5kbYivc5Rd6xUdMBxi2kItuI/rAmz0K6eWLJjO99HliclxXDy3+
+	 mJAZkisanTXUNxpCCtuVEepwdycKmgpSpGMIPbjWTg3hMwLEjvXZD+WnBI2z7tR/uM
+	 IqW/6rt/YxC/8WaP3LQIssCcqAGEI8pbKP3DlngGDUxybSUQlwPOODL9PQO6mEuRs6
+	 DcrYLOWc9+/QOg4k1qIdq2arzPjPmxac1qzKDiNU5T17ROMJb0BiQSOcNT1h5DSASK
+	 Oe3hDW3kKYK7HH67VLKxIw+jo2BF1EJq5MiPHp+kFT9wjtyCJvYQ+GA4j2e0UFjVuX
+	 QQM4GCNa2/xEA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 98A6740CBB;
-	Fri, 14 Aug 2026 13:19:57 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id EE27E139C
- for <buildroot@buildroot.org>; Fri, 14 Aug 2026 13:19:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0B3FF812C9;
+	Fri, 14 Aug 2026 13:20:02 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 426B5139C
+ for <buildroot@buildroot.org>; Fri, 14 Aug 2026 13:19:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E079D607BD
- for <buildroot@buildroot.org>; Fri, 14 Aug 2026 13:19:46 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2908380E3E
+ for <buildroot@buildroot.org>; Fri, 14 Aug 2026 13:19:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xvCumjxCXXiA for <buildroot@buildroot.org>;
- Fri, 14 Aug 2026 13:19:45 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CDJmWa2-zqlr for <buildroot@buildroot.org>;
+ Fri, 14 Aug 2026 13:19:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C0C6B607CD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2AF6180E61
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C0C6B607CD
- for <buildroot@buildroot.org>; Fri, 14 Aug 2026 13:19:45 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2AF6180E61
+ for <buildroot@buildroot.org>; Fri, 14 Aug 2026 13:19:46 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C50698D66B; Fri, 14 Aug 2026 13:18:55 +0000 (UTC)
+ id 2F66B8D667; Fri, 14 Aug 2026 13:18:56 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 13 Aug 2026 10:27:32 +0200
+Date: Fri, 14 Aug 2026 14:42:02 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 5a65023d3871c53916b737dd3230e5c87e1928cc
-X-Git-Newrev: 5b64eb831dd80a95791bed47e7ad5e6b2c9da853
+X-Git-Oldrev: 0565093a1a9ec25a9cc1e0b37f41046a9086c96e
+X-Git-Newrev: 1665cca3d7ecd4008410fb83130ec79ec0e43077
 X-Patchwork-Hint: ignore
-Message-Id: <20260814131855.C50698D66B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x]
- configs/acmesystems_aria_g25_{128mb, 256mb}_defconfig: remove defconfig
+Message-Id: <20260814131856.2F66B8D667@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/botan: cleanup
+ boost dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,218 +77,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/5b64eb831dd80a95791bed47e7ad5e6b2c9da853
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/1665cca3d7ecd4008410fb83130ec79ec0e43077
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-This configuration for the acmesystems aria g25 were added back in July
-2015 (commit 2e52be798276fe0c28949f4a16fce0ca20e52153), and has not
-been updated in any significant way since 2019 (the last major kernel
-update [1]).
+- botan dropped the usage of Boost.Filesystem in 2.10.0 [0]
+- botan never actively searched for Boost.System, as it is header-only
+  the dependecy can be dropped too
 
-This defconfig still use a 4.19 kernel that is no longer maintained.
+The only part of boost botan currently uses is asio. So use --with-boost option
+when boost is selected.
 
-Remove its support.
+[0] https://github.com/randombit/botan/commit/aff8cc8a7a5e22e3fedeae7ca82b63d4744ac82c
 
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/14728913801 (acmesystems_aria_g25_256mb_defconfig)
-https://gitlab.com/buildroot.org/buildroot/-/jobs/14728913800 (acmesystems_aria_g25_128mb_defconfig)
-
-[1] ab10b5b3ee6aa1e19aa6264153eeed9054d4c2e7
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 41806d5ed5e11cba57c714167ddeb55cc6eb6891)
+(cherry picked from commit 8ff577bb35d7f15a924298ae56cb46f694a22ef1)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- board/acmesystems/aria-g25/genimage.cfg            | 36 ------------------
- .../patches/at91bootstrap3/at91bootstrap3.hash     |  2 -
- .../patches/linux-headers/linux-headers.hash       |  1 -
- .../acmesystems/aria-g25/patches/linux/linux.hash  |  2 -
- board/acmesystems/aria-g25/readme.txt              | 44 ----------------------
- configs/acmesystems_aria_g25_128mb_defconfig       | 26 -------------
- configs/acmesystems_aria_g25_256mb_defconfig       | 26 -------------
- 7 files changed, 137 deletions(-)
+ package/botan/Config.in | 2 --
+ package/botan/botan.mk  | 2 +-
+ 2 files changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/board/acmesystems/aria-g25/genimage.cfg b/board/acmesystems/aria-g25/genimage.cfg
-deleted file mode 100644
-index 29dc697153..0000000000
---- a/board/acmesystems/aria-g25/genimage.cfg
-+++ /dev/null
-@@ -1,36 +0,0 @@
--# Minimal SD card image for the Acmesystems Aria G25
--
--image boot.vfat {
--	vfat {
--		file zImage {
--			image = "zImage"
--		}
--
--		file at91-ariag25.dtb {
--			image = "at91-ariag25.dtb"
--		}
--
--		file boot.bin {
--			image = "at91sam9x5_aria-sdcardboot-linux-zimage-dt-3.10.3.bin"
--		}
--	}
--
--	size = 16M
--}
--
--image sdcard.img {
--	hdimage {
--	}
--
--	partition boot {
--		partition-type = 0xC
--		bootable = "true"
--		image = "boot.vfat"
--	}
--
--	partition rootfs {
--		partition-type = 0x83
--		image = "rootfs.ext4"
--		size = 512M
--	}
--}
-diff --git a/board/acmesystems/aria-g25/patches/at91bootstrap3/at91bootstrap3.hash b/board/acmesystems/aria-g25/patches/at91bootstrap3/at91bootstrap3.hash
-deleted file mode 100644
-index 6edf3d3345..0000000000
---- a/board/acmesystems/aria-g25/patches/at91bootstrap3/at91bootstrap3.hash
-+++ /dev/null
-@@ -1,2 +0,0 @@
--# Locally calculated
--sha256  5ea2a8fed1ba0024229c6f6d77176679e1b24791bdbce8e285634013d4a93551  at91bootstrap3-v3.10.3-git4.tar.gz
-diff --git a/board/acmesystems/aria-g25/patches/linux-headers/linux-headers.hash b/board/acmesystems/aria-g25/patches/linux-headers/linux-headers.hash
-deleted file mode 120000
-index 5808d92afe..0000000000
---- a/board/acmesystems/aria-g25/patches/linux-headers/linux-headers.hash
-+++ /dev/null
-@@ -1 +0,0 @@
--../linux/linux.hash
-\ No newline at end of file
-diff --git a/board/acmesystems/aria-g25/patches/linux/linux.hash b/board/acmesystems/aria-g25/patches/linux/linux.hash
-deleted file mode 100644
-index 81824a41ee..0000000000
---- a/board/acmesystems/aria-g25/patches/linux/linux.hash
-+++ /dev/null
-@@ -1,2 +0,0 @@
--# Locally calculated
--sha256  6c5e4d3c87feadbfdb9f7d2e46f3f120b00286ba380491c5956708e0b94232c8  linux-4.19.315.tar.xz
-diff --git a/board/acmesystems/aria-g25/readme.txt b/board/acmesystems/aria-g25/readme.txt
-deleted file mode 100644
-index cb9e9abf77..0000000000
---- a/board/acmesystems/aria-g25/readme.txt
-+++ /dev/null
-@@ -1,44 +0,0 @@
--Acme Systems Aria G25
--
--Build instructions
--==================
--
--To build an image for the Aria G25 choose the configuration
--corresponding to the Aria variant.
--
--For 128MB RAM variant type:
--
--$ make acmesystems_aria_g25_128mb_defconfig
--
--else for 256MB RAM variant type:
--
--$ make acmesystems_aria_g25_256mb_defconfig
--
--To customize the configuration choosed type:
--
--$ make menuconfig
--
--When you are ready to start building Buildroot type:
--
--$ make
--
--How to write the microSD card
--=============================
--
--Once the build process is finished you will have an image called
--"sdcard.img" in the output/images/ directory.
--
--Write the bootable SD card image "sdcard.img" onto an SD card with
--"dd" command:
--
--  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
--
--Assuming your Aria G25 baseboard has a MicroSD socket, for example
--with the Terra baseboard, insert the microSD card into the baseboard
--slot and power it.
--
--To get the kernel log messages you can use a DPI cable
--(http://www.acmesystems.it/DPI)
--
--You can find additional informations, tutorials and a very
--comprehensive documentation on http://www.acmesystems.it/aria.
-diff --git a/configs/acmesystems_aria_g25_128mb_defconfig b/configs/acmesystems_aria_g25_128mb_defconfig
-deleted file mode 100644
-index 0aff8f92e0..0000000000
---- a/configs/acmesystems_aria_g25_128mb_defconfig
-+++ /dev/null
-@@ -1,26 +0,0 @@
--BR2_arm=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
--BR2_GLOBAL_PATCH_DIR="board/acmesystems/aria-g25/patches"
--BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
--BR2_TARGET_GENERIC_ISSUE="Welcome to Aria-G25 Buildroot"
--BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
--BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200=y
--BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
--BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/acmesystems/aria-g25/genimage.cfg"
--BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.315"
--BR2_LINUX_KERNEL_DEFCONFIG="at91_dt"
--BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-ariag25"
--BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
--BR2_TARGET_ROOTFS_EXT2=y
--BR2_TARGET_ROOTFS_EXT2_4=y
--BR2_TARGET_AT91BOOTSTRAP3=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.10.3"
--BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="aria-128m"
--BR2_PACKAGE_HOST_DOSFSTOOLS=y
--BR2_PACKAGE_HOST_GENIMAGE=y
--BR2_PACKAGE_HOST_MTOOLS=y
-diff --git a/configs/acmesystems_aria_g25_256mb_defconfig b/configs/acmesystems_aria_g25_256mb_defconfig
-deleted file mode 100644
-index e75ca9cf34..0000000000
---- a/configs/acmesystems_aria_g25_256mb_defconfig
-+++ /dev/null
-@@ -1,26 +0,0 @@
--BR2_arm=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
--BR2_GLOBAL_PATCH_DIR="board/acmesystems/aria-g25/patches"
--BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
--BR2_TARGET_GENERIC_ISSUE="Welcome to Aria-G25 Buildroot"
--BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
--BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200=y
--BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
--BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/acmesystems/aria-g25/genimage.cfg"
--BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.315"
--BR2_LINUX_KERNEL_DEFCONFIG="at91_dt"
--BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-ariag25"
--BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
--BR2_TARGET_ROOTFS_EXT2=y
--BR2_TARGET_ROOTFS_EXT2_4=y
--BR2_TARGET_AT91BOOTSTRAP3=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.10.3"
--BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="aria-256m"
--BR2_PACKAGE_HOST_DOSFSTOOLS=y
--BR2_PACKAGE_HOST_GENIMAGE=y
--BR2_PACKAGE_HOST_MTOOLS=y
+diff --git a/package/botan/Config.in b/package/botan/Config.in
+index 305cc2fe8c..6ac6341f71 100644
+--- a/package/botan/Config.in
++++ b/package/botan/Config.in
+@@ -17,8 +17,6 @@ config BR2_PACKAGE_BOTAN
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_11 # C++20
+ 	depends on BR2_PACKAGE_BOTAN_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_PACKAGE_BOOST_FILESYSTEM if BR2_PACKAGE_BOOST && BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
+-	select BR2_PACKAGE_BOOST_SYSTEM if BR2_PACKAGE_BOOST && BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
+ 	help
+ 	  Botan is a crypto library for C++
+ 
+diff --git a/package/botan/botan.mk b/package/botan/botan.mk
+index 38948f0184..115cce6765 100644
+--- a/package/botan/botan.mk
++++ b/package/botan/botan.mk
+@@ -61,7 +61,7 @@ ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
+ BOTAN_CONF_OPTS += --without-os-feature=explicit_bzero,getauxval,getentropy
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_BOOST_FILESYSTEM)$(BR2_PACKAGE_BOOST_SYSTEM),yy)
++ifeq ($(BR2_PACKAGE_BOOST),y)
+ BOTAN_DEPENDENCIES += boost
+ BOTAN_CONF_OPTS += --with-boost
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
