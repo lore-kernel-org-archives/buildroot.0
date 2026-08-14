@@ -4,101 +4,101 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29606C5CFCF
-	for <buildroot@archiver.kernel.org>; Fri, 14 Aug 2026 14:16:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CADBBC5CFCF
+	for <buildroot@archiver.kernel.org>; Fri, 14 Aug 2026 14:17:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DD92D40D88;
-	Fri, 14 Aug 2026 14:16:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9748E40EA0;
+	Fri, 14 Aug 2026 14:17:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QgnHene5MYb5; Fri, 14 Aug 2026 14:16:28 +0000 (UTC)
+ id 7fzTroFBT4ER; Fri, 14 Aug 2026 14:17:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D382E407AD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C727F40EA1
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786716987;
-	bh=nB2zoJjgAiLZkyEfjX/AaqxV6UwadsryYvuZsfSIzhc=;
+	s=default; t=1786717033;
+	bh=Wso5/aUTpe2k66DY5n5RXfSBFviBOlV9yEwzunbCJ1g=;
 	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=EppVLLITicsWnhw8t/ma+lLvHmdoCiaVRvBxCWay2vTuRm1MvcXT5/kAvSULMtG2H
-	 pMUuGK8HroSVbBHzf0hWVD87TLgqiCa15nwOhMXQK0z6hiwknjMr2WD461lohf1c+C
-	 BfzUA6zqzCE3Qk7CBKtRUMsj8f/VW53aOOvoCjj7OvSXqSfLc80eHsxUoVs5dWO5zN
-	 F1M4Fc+R583f3zQJHzfKMhZpLlOZFRMfU1QYcqVmvuh8wuF+ckfMdM4rWFrCDWWBDQ
-	 AQDiXaRmNdqIBTgrayzA5cjSqyk+Ir8ygXhrAsfGpCyEyLRLTubFutbk6p7sYd7yv6
-	 kKQT2E0ZxOJSQ==
+	b=MZUJck/c3s/USBqmWgdwQngFiuxqBVt/DPqk9ecGrEWR+xKwb2rhIva3OlvyelXwc
+	 3t5y0eqjN+rdswZAHm+pgayu1u0r7zTpFNnvIaYUvefHE4SYgteiB3J9ju/T4tSvAR
+	 X09Vh0s8Y1me24fgm900fH7pu4uv3L8jxCfE8hMDyZmpjI41CaXdaGZHa65hR6WQjg
+	 Sw0PeDN+Jt/PCjsM7Bem6b3pOCyPfoCaR5Sr7XQmibJas0OV9B7lcVy1dw+glwlZ4S
+	 sP053cbJKasRvLuShtiHqFQeZV/jQ//MaAGvyzDx9F4GXqR8X/S+OHvXgztY3CKzC+
+	 iPGJV6XXTxEEA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D382E407AD;
-	Fri, 14 Aug 2026 14:16:27 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 6115F3DF
- for <buildroot@buildroot.org>; Fri, 14 Aug 2026 14:16:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C727F40EA1;
+	Fri, 14 Aug 2026 14:17:13 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id B8C0723F
+ for <buildroot@buildroot.org>; Fri, 14 Aug 2026 14:17:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 52904812F4
- for <buildroot@buildroot.org>; Fri, 14 Aug 2026 14:16:26 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id AA585813E7
+ for <buildroot@buildroot.org>; Fri, 14 Aug 2026 14:17:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BBn_G8HOQo5x for <buildroot@buildroot.org>;
- Fri, 14 Aug 2026 14:16:25 +0000 (UTC)
+ id TSFCzo9tYM_K for <buildroot@buildroot.org>;
+ Fri, 14 Aug 2026 14:17:12 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42a; helo=mail-wr1-x42a.google.com;
+ client-ip=2a00:1450:4864:20::432; helo=mail-wr1-x432.google.com;
  envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4C3D4811B6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4C3D4811B6
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
- [IPv6:2a00:1450:4864:20::42a])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4C3D4811B6
- for <buildroot@buildroot.org>; Fri, 14 Aug 2026 14:16:25 +0000 (UTC)
-Received: by mail-wr1-x42a.google.com with SMTP id
- ffacd0b85a97d-47db714766aso1309559f8f.0
- for <buildroot@buildroot.org>; Fri, 14 Aug 2026 07:16:25 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org F3215811B6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F3215811B6
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id F3215811B6
+ for <buildroot@buildroot.org>; Fri, 14 Aug 2026 14:17:11 +0000 (UTC)
+Received: by mail-wr1-x432.google.com with SMTP id
+ ffacd0b85a97d-47f59f25ec4so428883f8f.2
+ for <buildroot@buildroot.org>; Fri, 14 Aug 2026 07:17:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1786716983; x=1787321783;
+ d=1e100.net; s=20251104; t=1786717030; x=1787321830;
  h=content-transfer-encoding:content-type:in-reply-to:from
  :content-language:references:cc:to:subject:user-agent:mime-version
  :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to:content-type;
- bh=ZXE7d7rcmZlrh/F1CjS4+tVT4uF9ASScFxOmemlJn7M=;
- b=Oe0W3q6RPZi+ChRQm8au91c1BQZxXEzjojulqMFRXkxbTwNj6NTcAUaliJdI+8IbL/
- M84Og1Shuv/ocIHdDpXtYDqnKHTFQ+O9q9KXO20O5XuVIWPy+CdXCxYR/u27lJ/fjneR
- UpgTl2vJ5WLZ2zI42TPqE4QqK1H1pmIxOBWXgqonTZXtFaST9buWYmoWgzQ/ketatp0r
- G6jEsnfF21JC1YiYIkFtMo++0Hw/aEuijmHV0MHS+H8+JxDPebpv1dnEQxbkfR+L9t5S
- WJjE9UnC1U0AjKDSoLW3/5CWQfl5U0/eQp182hozlM9lSrRZXNZZrKfDcGic2G3BdkQd
- G5AQ==
+ bh=dVkD8yIldfemO4DtGF8lhstMz1II6bYvpCjJ1OGMR9s=;
+ b=tVv0opiC6Qt+o/KP4WjcNCAinh3cPL1mbd8EiiPRZp36yARet7OGCHaHHf3eh/xSAc
+ p+aOrjidR9tlo3wk5ar6A/uD64njFhezegQ9KcJxxZCeztVscEOR2W3Wnl/wrEjt1qtE
+ Bwn2Zrin6PKIi3Xz+wv6STC3sEGWrsy3mluEBpSRhuYaBtdVsL8RZEal8X9n/iW7EUeV
+ gawHGvVEOVxjZbE/IV2q6duzPYVIAI2CJZUthsT/nmpeseET9ntJ5CMH1HoFvf7wI8n8
+ MpXbU4lKycRaKd2guIZAys9FJwJhYqMyyd03u/0ytN0vqKuye2G6t3YcxHuCB4D4I5+M
+ 5wpQ==
 X-Forwarded-Encrypted: i=1;
- AHgh+RqIakDs/isLeQJ8mMgZKImRRlTGACTOM6J7pFiyHINpS2s370mKVkl2o1STs8SuidZl3YYFlvQebXE=@buildroot.org
-X-Gm-Message-State: AOJu0Yyt6ONsl8l1CUA8LISb41Yewgesyk86ShhvdQDEqWNzxcqhEzQA
- JyorveM5Io95JcZtBalEwwl8YpbgZdNKVRPMA5bPgDs2JHDKORjt9/zLJ4Yd3XaxX0k=
-X-Gm-Gg: AR+sD10WIMfQAo3IMw9P8gJeYKwpJpy34prpEUBDexyRgcRzN4axsGxzci2m0DBdfu/
- dyxVE+tjfvD80iPWRrBUW951v6N1rNYOtoYnGNVGdhYzg/BUQkkqvaRWzzpSzBq9KSLQKN8N+/g
- 4TdCEUMLdNf1ahM2rvrEHNRx22KAZHxWFbHbTOYl649rsywlp73UBxrxG40Ee6yPsN5mQnLoZ7a
- o6f2tHiotiRQt4MAyTNINaS5PQZXZX7wsrYTZPI/A+w/alOQc7k+syML4ecAQBnJE28R/8Wfaoy
- 8kO7+NdoFAgoRd4RXAAllST8B3nwdfJzhvjdD67tfVCbooLecptcDwR0kVxkEz0ew1IQWjnSTN5
- IV1TP6/nZo/RMyl9hFklc3myIUVLICeCRcbNz8Lmh0zDIXN/GuZnumYd1N5WjPCW7pV55aqLd4j
- 303vfSx3t4ZVGCguBjaJUxq3PCRbqsytpQSCERZ5hTz4FwmiZAQdH0GL8qtUqfHqNySXrpuqieS
- QkhK44E7tlwdOUoBri1DH4BU8wjpOBjieuJEBZerSTex+u1
-X-Received: by 2002:a05:600c:3e10:b0:495:5d6d:9cc1 with SMTP id
- 5b1f17b1804b1-4998bd6f986mr10671155e9.0.1786716983251; 
- Fri, 14 Aug 2026 07:16:23 -0700 (PDT)
+ AHgh+Rq+G2q/ACyRSDKOFHi93bEYci3CD8C++VVUiBuF506rl63u3AHPvE10ffFsrn+tHx41Pemx6XPWeWU=@buildroot.org
+X-Gm-Message-State: AOJu0YwCbIS6Fdkbf82PTzq/mV+AeQVVIcK/+oxL1npH1xvuWA4/K6di
+ jES/JUGbkKDmRIn5C9iQvzGZtu5QlOd6+WS/6eBBRERODI/IOvfvFjMeh540OZdkwSA=
+X-Gm-Gg: AR+sD11pZA4oekGFBffxaNfpkyBhS/7LMktTMCiWgac28dFTcvrJpaTEaW4em8VuDSz
+ TogcKDKqcxjDPJwS1eVCFb9w1ycKjnLgPuGLT6qXblwS9unUun5tsBgmeM8VBZaFpBE9OPdfLFf
+ 5ESGDXAjZ1XjafVzqlHKxGm6GLlEn+onLuxqt2FqBYlpPnSsTfzX0cWCA+ve9uQusaxvZ8Osxe8
+ 8hEDfVcCPUy68TQsnUhg+veClOGtvDNwQbogAqA1rGSXkXwpDmnzs4e5mjGblMi7c0KeplU2Cak
+ nITSR/l8x1O/Jfjh3ZC2pJWib7e1Q+tzW2PtLcTbmTa/A65Yz0Yt+2EXXIQ0ys9yCY99RtUJ34z
+ SYFBx8StIYEAxoH5d+nviIrUeCEY9tSrRgFJkY2eSYvLpX1aRABHcyobLdZYSKBJXlFcYICvOyW
+ HJwx89GCztGjLnU9LQPF6vG/WU7XAEZRGtLKG062M9tHpTOUvvsAfqBzc9oHeSTta9fYrqXG/yg
+ mFSQZckqa2yYZu0mUNyUGuRon04q3z4SE0bZUwBGWgs3u1GqnYKY1ZuzO8=
+X-Received: by 2002:a5d:63d0:0:b0:47f:673c:42cc with SMTP id
+ ffacd0b85a97d-481607833d9mr6364178f8f.27.1786717029617; 
+ Fri, 14 Aug 2026 07:17:09 -0700 (PDT)
 Received: from ?IPV6:2a02:a03f:63ab:dc01:1291:d1ff:fe92:3b5a?
  ([2a02:a03f:63ab:dc01:1291:d1ff:fe92:3b5a])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-499899753ccsm36728215e9.0.2026.08.14.07.16.22
+ ffacd0b85a97d-4815f2c1307sm8803166f8f.27.2026.08.14.07.17.09
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Fri, 14 Aug 2026 07:16:23 -0700 (PDT)
-Message-ID: <83d9c984-8a69-4a9f-bfee-94a1ec5433f2@mind.be>
-Date: Fri, 14 Aug 2026 16:16:22 +0200
+ Fri, 14 Aug 2026 07:17:09 -0700 (PDT)
+Message-ID: <e21133dd-fd17-42d7-9bd3-50739e704450@mind.be>
+Date: Fri, 14 Aug 2026 16:17:08 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
+To: Fiona Klute <fiona.klute@gmx.de>, buildroot@buildroot.org
 Cc: Romain Naour <romain.naour@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20260808103632.3547378-1-bernd@kuhls.net>
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+References: <20260730144541.1079191-1-fiona.klute@gmx.de>
 Content-Language: en-US
-In-Reply-To: <20260808103632.3547378-1-bernd@kuhls.net>
-Subject: Re: [Buildroot] [PATCH v2 1/2] package/{glibc,
- localedef}: move to Gitlab mirror repo
+In-Reply-To: <20260730144541.1079191-1-fiona.klute@gmx.de>
+Subject: Re: [Buildroot] [PATCH 1/2] package/glibc: fix license information
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -117,23 +117,24 @@ Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 8/08/26 12:36, Bernd Kuhls wrote:
-> Downloading from sourceware.org/git/glibc.git causes many 429 errors
-> these days so we switch to the upstream Gitlab mirror:
-> https://sourceware.org/glibc/wiki/GlibcGit#Fetching_The_Repository
+On 30/07/26 16:45, Fiona Klute via buildroot wrote:
+> From: "Fiona Klute (Othermo GmbH)" <fiona.klute@gmx.de>
 >
-> Fixes:
-> https://autobuild.buildroot.net/results/09e/09e760063607b1cbf4ef687bf9bbe17b12d648b2/
-> https://autobuild.buildroot.net/results/22a/22afc952e0c05648d538d13ea593e5ad8c4c03c7/
-> https://autobuild.buildroot.net/results/281/28159f29e38b0475ae33fe73a9cab04ea3a8835f/
-> https://autobuild.buildroot.net/results/961/9616d46c46bd2a10a6e719d76ed6e1d8e3b3d0d2/
-> https://autobuild.buildroot.net/results/fd4/fd48fb96639871889fb2238dba360d1740d7962c/
-> https://autobuild.buildroot.net/results/91a/91a0b7ccad116911f84281b4cbcb080309ad952e/
-> https://autobuild.buildroot.net/results/17f/17ff61f0eac946b3c027a540147b2573e224dcdb/
+> The COPYINGv3 license file was added with upstream commit
+> e067e53080386e93dcf8b07e25fb6656f2c8941e, it applies to scripts used
+> during build.
 >
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> LGPL-3.0+ applies to sysdeps/htl/raise.c, which is used for the Hurd
+> platform. Buildroot builds only Linux, so the file should not be
+> compiled, but it is part of the downloaded (and possibly shared, if
+> "make legal-info" is used) archive. The same applies to the manual.
+>
+> Checked against the copyright file of the Debian "libc6" package (as
+> of 2.42-17 and 2.43-2), note that Debian excludes the manual.
+>
+> Signed-off-by: Fiona Klute (Othermo GmbH) <fiona.klute@gmx.de>
 
-Applied to 2025.02.x and 2026.05.x, thanks !
+Applied to 2026.05.x, thanks !
 
 _______________________________________________
 buildroot mailing list
