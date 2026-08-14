@@ -1,125 +1,151 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EDAABC5B572
-	for <buildroot@archiver.kernel.org>; Fri, 14 Aug 2026 13:15:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D947EC5CFDB
+	for <buildroot@archiver.kernel.org>; Fri, 14 Aug 2026 13:16:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 44D0180DF1;
-	Fri, 14 Aug 2026 13:15:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 88028607DD;
+	Fri, 14 Aug 2026 13:16:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id we_dmS1w3Q-U; Fri, 14 Aug 2026 13:15:00 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vwR-auqAsE0v; Fri, 14 Aug 2026 13:16:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7C63C80BD3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2A326606EC
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786713300;
-	bh=N6Abc2qnLAsows0BtWu60UI0AHqsMfb6xJAgYLa4ZZs=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
-	b=BhRsfMbJcY/+cF8NQp/Np+61gJeLf5VFoaMh0CtoQlRbCssI1nqpGGTwOTv0Ris8y
-	 ZUIvIXm/xQSTQUh3hPnIyta2SCH7Dpps7Nvx1OmrjBxy+mE47Is5gXMsuRReXazJQW
-	 CM5xpMGpgyPNeMMWg/MzafffEk+2AckyIJTtfVogecVHHiDQZe8HCNubd9HXDe5Qdv
-	 DDtnuTSn4L3SRe4e3NY8uKsM67ggutor4m/rJo4i2GSZp29JJi5q+fZhEK/fHfWmTD
-	 KbFTpTaGByA5yOU+nalFcraLC/VKaUCPcrlj0o7ZeJ4rvHcAzB2+B9zbQGW0LBDILc
-	 Y70MRRBZ5tdsg==
+	s=default; t=1786713409;
+	bh=gtx2UdW7a/1fhtL3pJXi+8B40+m59ZBsN7jp3wpIj24=;
+	h=To:Date:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
+	 From;
+	b=Ua9NL6rf92Hg9EqzAoEorqOH620k2iBXdBhLpdgrz+Ac3thEYPjcapIM2NqoA6q63
+	 p/92yCeNCfcMZ1Kom+sWFl0VBsE9MgE512PJv9a+OE9Wf3ikfrQ6htmUeM2yOjmx4r
+	 xTGu8PfNHf1EacdW7yQH4yBthNHWmnaOeua1Ml0Gw3CPSdEDR/AuuJlovkDxaTGsrJ
+	 r9xW/Ann5sBWARICrC/+3B8AQUn805kt1yxiM7jRKBwiM1/NYIN/Upp/5dKApMVV9A
+	 rk5JmhssSYpHZ9xVlYBm3PEIxNm4nPTIrRA0NYmeQ0YUrI0vgaeXz7R/hA9y3UYCJL
+	 tGsAc44XnzMXQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7C63C80BD3;
-	Fri, 14 Aug 2026 13:15:00 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 756441B8
- for <buildroot@buildroot.org>; Fri, 14 Aug 2026 13:14:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2A326606EC;
+	Fri, 14 Aug 2026 13:16:49 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3F9E923F
+ for <buildroot@buildroot.org>; Fri, 14 Aug 2026 13:16:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6775580BD3
- for <buildroot@buildroot.org>; Fri, 14 Aug 2026 13:14:58 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3D570606EC
+ for <buildroot@buildroot.org>; Fri, 14 Aug 2026 13:16:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QO_HWE5WjRUS for <buildroot@buildroot.org>;
- Fri, 14 Aug 2026 13:14:57 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nFsNlMV4U4hS for <buildroot@buildroot.org>;
+ Fri, 14 Aug 2026 13:16:47 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f403:c001::2;
- helo=sj2pr03cu001.outbound.protection.outlook.com;
+ client-ip=2a01:111:f403:c107::3;
+ helo=ph0pr06cu001.outbound.protection.outlook.com;
  envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4EAAD80ACC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4EAAD80ACC
-Received: from SJ2PR03CU001.outbound.protection.outlook.com
- (mail-westusazlp170120002.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:c001::2])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4EAAD80ACC
- for <buildroot@buildroot.org>; Fri, 14 Aug 2026 13:14:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4520560602
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4520560602
+Received: from PH0PR06CU001.outbound.protection.outlook.com
+ (mail-westus3azlp170110003.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:c107::3])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4520560602
+ for <buildroot@buildroot.org>; Fri, 14 Aug 2026 13:16:46 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=f6GL31PSyAav+hUep0iBkMgj2vbVGgAWyrkK74O8yD2cAdJpMKY560NmxdMuctDbNG8rW5BaVjLyzLfdLbmpzcFV2LC0NEvfZBZ2VpE5ozOGLFLPp8AfpZnv+qPTuIpBc8mYokXpzD5NlsWg978Eh7nEQnPkGZmNKCjOWimzF+EaW7MjcAjhcFeWc54UlTRGkxZi/Wr1u97JzDkJAz+JJkqzNqbS8uH14AfRULnzR7xW2E0vHQlGkxslx4mS8FHVZ3DYkWfu2tzU2W0bn5JXcd3hghLpE4EaLzHKzLzY+RtbNPd+GfDn3gYKahTircazDiGOqESSmoq/MAtQF4qI4Q==
+ b=dAT88qpko8LIi1KRmAOonG2fsEQ5AVgWyKz5tBYl7u5VUXrNYtNiShvmfkcf6QUuHqN1H5oxIWwCrGHEmmNzH+TTD8yJ6blUsNJrU1sbKk4gCEbWerJZVQIgSxbWhMWH5oUULskcwJZkCNmLiqFJv1QDLW3rUUks17LuMY5ubF0azbNY6pJEnmQoG914CMDJc1o7svqJ9nqQas7ClQDYxNV6nXjgGgWPVk1NYUxAHQsYgpbzjkvN1p2t4/opL8qK6tNui4Yf1UP5X5Dt3AfMJ0y0zkjI/po/LRwwdlpesZQw06pJrGsh5W8cU+ylzCvvymdAilalaOFXWBtSTqSZng==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4QIzS97me/eSiaYHE3bsgLkCrPXuc2WkuwSjelqpyu4=;
- b=E/kPgFNVHDgC5ue/vSK8py30Ej/HWvnUhVTJHoBptQW1aKVnOYcHj+aXTtc+DhEHUjVEj3yhiALr3/9qlnptqP2LQSgMD59OwYYYAp8WHmAaB3OGSFYfT/tRSgaCaur6q/rB4DXmmo8jKXCx4FPRK1B37Wz/TxslKnpoomXcC8s+vf7wYiP2tnLo8+vP8ZV6gzqUdEi3VOc+Rve8bH3n2zqt5AkoDvacNvCaVQSFTlUPh4oayV8e5GyqEJq4+1Fs3fEbqok6YMoQ/JvAQ0+KL5SsSsZyw/7lavG47L0htE1grTn3m0vVzOW+r6k3k6NF1QoQiW8NdYhH9bsDNm+sXA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none (0)
-Received: from SJ0PR03CA0295.namprd03.prod.outlook.com (2603:10b6:a03:39e::30)
- by SN7PR12MB6713.namprd12.prod.outlook.com (2603:10b6:806:273::8)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.315.13; Fri, 14 Aug
- 2026 13:14:52 +0000
-Received: from SJ1PEPF000023CB.namprd02.prod.outlook.com
- (2603:10b6:a03:39e:cafe::a) by SJ0PR03CA0295.outlook.office365.com
- (2603:10b6:a03:39e::30) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.315.16 via Frontend Transport; Fri,
- 14 Aug 2026 13:14:52 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=satlexmb07.amd.com; pr=C
-Received: from satlexmb07.amd.com (165.204.84.17) by
- SJ1PEPF000023CB.mail.protection.outlook.com (10.167.244.5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.339.3 via Frontend Transport; Fri, 14 Aug 2026 13:14:50 +0000
-Received: from satlexmb07.amd.com (10.181.42.216) by satlexmb07.amd.com
- (10.181.42.216) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.45; Fri, 14 Aug
- 2026 08:14:50 -0500
-Received: from xirengwts12.xilinx.com (10.180.168.240) by satlexmb07.amd.com
- (10.181.42.216) with Microsoft SMTP Server id 15.2.2562.45 via Frontend
- Transport; Fri, 14 Aug 2026 08:14:48 -0500
-To: <buildroot@buildroot.org>
-Date: Fri, 14 Aug 2026 14:14:46 +0100
-Message-ID: <20260814131446.2547523-1-neal.frager@amd.com>
-X-Mailer: git-send-email 2.43.0
-MIME-Version: 1.0
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ1PEPF000023CB:EE_|SN7PR12MB6713:EE_
-X-MS-Office365-Filtering-Correlation-Id: 10c9e20b-39f0-48c3-fb1d-08defa0605ec
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
- ARA:13230040|1800799024|36860700016|82310400026|23010399003|376014|10067099003|13003099007|3023799007|11063799006|56012099006|18002099003|41080700001;
-X-Microsoft-Antispam-Message-Info: syc61Tml+8CiAkQ5H8QGAkqVbrME7XZqAMQyWyPsxMuL3WwF8snnw8Zmi0xwgdKxDXGVkFr4cZ4EXe7IENXNEikP0AD2bX6vgss2POZ/jtQyjXvQYwzO7FZE8qt4vSaBDzcnlMZVhGf8PxTTEgXATkyQGF563SflCbwpVazOp+z97+T6nzJRTHQL/TGJHRKQE9JNn3DVQjBodC6FePooRxzv96U53+azqOSj3vZfe36i8NBz/F0qS7/tKcmqx8VEfzEIwKErG0gn1f+6/lT0wwDhBa5QV3cVsdqepr3sbA6rs7/VFPoaCFS37ZKqiHG4xWNQAUmz3N0HfCuRqx5RjKhWHfCGYcoF9lCY7GCHnA3/vUx9qSYKFXWzf2i63Ki85aW1hukU06AqbLBbAVpxuxoC5ST6gMIyc4NUf1SrwNoTkjFkfNqU+pKZf4h4qVg9vsDvNFZmVSh59eDpZq1T7htGPf3JexM3rWumaITjugdKxid/xTN2ps7j0ltNIVDqw+WdILwSZlL1b0CSauRn7IdZU/hZn0Hu5z0UdVpAUwQyxNcdrOQekfRCcBZVPucvUlLsrFR6cVCTTELUCtXlzosxDCwV9/jnOZCPqc+GdUbUMngY+L+JE/FcyPJDn91fKAJ39Y45FXah7nvI8VsrDmvpDETofA7mAV18P6NRnjuy8RL98QxhXjlP+j+KEM8H9BTvnhZuGrDYhN9ft4ME++lqFAqbjWIXiMw6nPOMadrxUIu8fzSFUriCV4/+eJy23qNPPu7NX3Zib8Wm9OxTSw==
-X-Forefront-Antispam-Report: CIP:165.204.84.17; CTRY:US; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:satlexmb07.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
- SFS:(13230040)(1800799024)(36860700016)(82310400026)(23010399003)(376014)(10067099003)(13003099007)(3023799007)(11063799006)(56012099006)(18002099003)(41080700001);
+ bh=NhVtoRozrMwx1MUp7jY1DtA9ipatnaP6BVqB/c0zCp8=;
+ b=lcQeJQijMwp2ZyMWy43KCIwg/w4mn4vBZ2RLBAALEyCSZbX20OLQ3JhZ4I6yBdjvsdpJcHVDLNTQEXIRdBPXsvdskESgQjjBSNBP7iGvA8sEYYa30IYHA1I36VLKN+/Pn5/tOkwcKaP0iVGlGmrEg7+a6ZP1o7ae2rhQoOkMVLC2I8bUay7B+cE64qwrbWvw6t7SLD1RYnP73fZkvNOCqeYXf5K/a7kKM/bCPiEnhNgwAunYkAosA5YBBydudGgP++eeepfpxlkNwH165xejMJ7sRfrjnpWuHTPKJgdVemRiDmKYsylBYjf0ziszw8Aw0t8fY5iXuYvfiqCPnwfNpA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+Received: from BL1PR12MB5032.namprd12.prod.outlook.com (2603:10b6:208:30a::12)
+ by IA0PPF8CAB220A1.namprd12.prod.outlook.com
+ (2603:10b6:20f:fc04::bd9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.315.16; Fri, 14 Aug
+ 2026 13:16:38 +0000
+Received: from BL1PR12MB5032.namprd12.prod.outlook.com
+ ([fe80::3c13:eeb6:d9ef:c95d]) by BL1PR12MB5032.namprd12.prod.outlook.com
+ ([fe80::3c13:eeb6:d9ef:c95d%6]) with mapi id 15.21.0315.014; Fri, 14 Aug 2026
+ 13:16:38 +0000
+To: "buildroot@buildroot.org" <buildroot@buildroot.org>,
+ "romain.naour@smile.fr" <romain.naour@smile.fr>, "romain.naour@gmail.com"
+ <romain.naour@gmail.com>
+Thread-Topic: [PATCH v1 1/1] board/qemu/microblazeel-mmu: fix run command for
+ qemu 11.0.0
+Thread-Index: AQHdK7tjPTpMeE0LJU2SajZjpDnEyLadW+rggAAqlSA=
+Date: Fri, 14 Aug 2026 13:16:38 +0000
+Message-ID: <BL1PR12MB50320D692F9913FF888C36A7F0DA2@BL1PR12MB5032.namprd12.prod.outlook.com>
+References: <20260814070557.245945-1-neal.frager@amd.com>
+ <BL1PR12MB5032DF56C47A91F9916F47A6F0DA2@BL1PR12MB5032.namprd12.prod.outlook.com>
+In-Reply-To: <BL1PR12MB5032DF56C47A91F9916F47A6F0DA2@BL1PR12MB5032.namprd12.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_198e8dea-a4f3-4850-b16a-fd6d2b1302b4_Enabled=True;
+ MSIP_Label_198e8dea-a4f3-4850-b16a-fd6d2b1302b4_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
+ MSIP_Label_198e8dea-a4f3-4850-b16a-fd6d2b1302b4_SetDate=2026-08-14T10:43:06.0000000Z;
+ MSIP_Label_198e8dea-a4f3-4850-b16a-fd6d2b1302b4_Name=AMD General
+ v26; MSIP_Label_198e8dea-a4f3-4850-b16a-fd6d2b1302b4_ContentBits=3;
+ MSIP_Label_198e8dea-a4f3-4850-b16a-fd6d2b1302b4_Method=Standard
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BL1PR12MB5032:EE_|IA0PPF8CAB220A1:EE_
+x-ms-office365-filtering-correlation-id: c3d8eed4-f170-4c6e-be97-08defa0645ec
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+ ARA:13230040|376014|1800799024|23010399003|366016|56012099006|10067099003|3023799007|22082099003|18002099003|4143699003|11063799006|38070700021|41080700001;
+x-microsoft-antispam-message-info: ZEROQNrBAjxsv0T6fZMuNawxLCYeJ9EGuhPnrssbbY+xe99LWgJ0cRUMhiwNEtViFIarvZ/CGD6m1+X1meOtjL8HetPaS9I09xJguy1q1zU9moOgzG7VhhC32QgsD6xKB1nivtJLoxAiGeQ2ZXqOIVPyc4AxWkobjGINVj0gqQGmKF+MfPstciatf1Zt354EuXxrJA5eTjd+kZ2TfXnxzfRXp8xxEmig4rOkE2v3Eg8axXu3w7bF7jq0YThkAdw0NsLjEyN05zSCqEyieSNjSXMalbnTF3l00OZYOG4gPqHZuA/aSK21qhp7VyUbLQtvsfcqXUPNiLHad9GuVT12QzkIyA7UhPfPEFPBwhBsUWQJ017bBiIhoZssYJlmc5CSgkxbiX/BRIeW392jEk1SchzzQI+kUCKiEZ9+Db97MgAgXS9F7U01OIA7IciVpoBLvQsX4HmZ+eGpSn/cYKRAsFleHEbyk3JRe61bWqaCkCutFMSzenNFS/n4akTKVJlKgjkgwPQPnjc6XdI1I8IxhWjh5Am7c48VbPgT/OuxqowNQ0idtQ8PHfV/IgYkzaZpmrQWtFdKUakB5g0k7IaM3LeXUCk9rOXanHxZ4i2ju3EGQOz23SoZ/H4uxofEQEQfVVe2wkmKMShkGSHhnMZ8DLz2JJaAw9wJuWeSyiYDOJFolR32yxeYQyphXXZUhZ7g3JWigrQmyON2SSNQLtTgA6xDQVyiIHwHPn4OjXVxOvKid4uuUaOiq5A57+G1yYer
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:BL1PR12MB5032.namprd12.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(13230040)(376014)(1800799024)(23010399003)(366016)(56012099006)(10067099003)(3023799007)(22082099003)(18002099003)(4143699003)(11063799006)(38070700021)(41080700001);
  DIR:OUT; SFP:1101; 
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: +K0ZdlJrnFipWAnoFy6aw4EsgoXfSjVjfuGkwxuc7w96pNtFPGhvIJ/aOaVCpFct5aA7RnDsJjuN1yMO0HsvNru2p5NlwXIuYgPBcHcXbOqxMgT+cbGaFwl8V552LqH0yfMep/bMyWEE3o9IhFKldgGUWlSUD2DJcC6GGTh9kU8PMy+TYqMCZ5dcrswxb8IH81PoeXQgizydF9q4wPMonHx3i3mADsvBexEdpdO4LoEDNZAkNSBE//3+7ax7dp79xi+avxSBPg3igYTzRGMSX7qp9tdx9ws8hcUQn9/gWGtYEK75RpWJ9ynFDysk3C3+cW6qiumVkEeInqw15zDwtcv5PBWz3vzkuo06FsoANfKv3gHxv04j/CsX+ahpw07dc6NAI0/Oir/C1mrat1cGQ5peIJdsshooQQe1roT6UAPS+xpKbUUrhgNv+D/Hh4g9
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?lU4B8MKw8tzBpllLifofJ0CFpiyQwexRytIi1OwI4x+T1u6TxyrhSV5T11Bp?=
+ =?us-ascii?Q?RhQMbSuvfOARURZVVJfX8pxudtKo7lnufVwynE6ni5x+GQyfvwgsDhlSo3XY?=
+ =?us-ascii?Q?qJx53YJe/qvwuxadndhbFhqgQbU7RruG8KHh5e3rRfTtL/37AsOf3vq8I1Nv?=
+ =?us-ascii?Q?OHBO6ReSRWqjQ8Y4caC2YvGV5XdLqI+VkQNs5lxqgsi+QtDbQ/E0em+JUklm?=
+ =?us-ascii?Q?/STQAWBwyRNmItk+XbJ9hQYfXO2XCaQ6eGffjRdm7r2RwBkNNYH+3oTcoHQN?=
+ =?us-ascii?Q?fiko8x3ohJG1vyAJ3tOI/8GzJ0vdy5lOTTo8ad8tYBr4heRMJpvGRO64/ie7?=
+ =?us-ascii?Q?snc92wm0R4KJs9g9KJzQyXo/i3DQkL/JRh0fd/DtXVI0OrQuWB+3zBaIG6hO?=
+ =?us-ascii?Q?kj4+6pdgGHZE+/YUoly1qg/tsACAA4W6BbaCUuVKs18rIRBKU/85MHdOAPJs?=
+ =?us-ascii?Q?2C1eOGE+lLnP2biMJ43a5ZOEWJ4jNfBAM/2HvwKxdqUWCr+cDp5T4hPgszxQ?=
+ =?us-ascii?Q?ALJHhFdZgNCVUecdjoE3qDV2N2L2eur5msjKdmHVfKaPQwXq2nTp9W3xKRhk?=
+ =?us-ascii?Q?q1boJVeMAgbDKdVI0YTqZsuZ7k1rP3zmerJydvGY2/5/bmK4Ib/mOM8L7qfF?=
+ =?us-ascii?Q?pOurB6yQbfM8IlzfQtf/Ugw6ulz+yDbkneG/3P0CaCb3YWNtp0q4cxtZRFxs?=
+ =?us-ascii?Q?tnax4sVtn0itJMyBoolISDE1KYm3IqqFtjLkQ5d6U6dRnuW6U5UP1fLzu/xu?=
+ =?us-ascii?Q?nGhBRmJ5SPTmHHDN3yc/VWlGJeU6YHoPaq5oKhjYW5hy/uyS9XwshngGt1ru?=
+ =?us-ascii?Q?24qC3CTsK9hed0HZaqGdUtJD4Z3lfGV4cTNe2Qnzi4hznSp0Xxp2aYaEkY8m?=
+ =?us-ascii?Q?kc+T/8LDAxxVqN/vvzjEsKUx0d9Dm2372DvJTl4YX6xDwIRf6T7nhJeqWo2L?=
+ =?us-ascii?Q?nYzKOBFDfhVk/3J1UbZuCJju7LwEaQ1mXDcHAPIe95NS4qPwlcworZHs7OMy?=
+ =?us-ascii?Q?0VLLNQGUPEgqsUuE1ZL6hvKJ+8M6crl6fD9wF3u8bobsTxmJenu1GS6DABnR?=
+ =?us-ascii?Q?C5LycdUV7qMpKuGLVFGXORvkvXlJwg6BjrUJevDk83+16s2R64sfZiIJFzke?=
+ =?us-ascii?Q?H048vhVivKmbh1vvFXaVDj70SGtzrPmOEUWolzxTjWOFnliW7F2bvwGvDA1O?=
+ =?us-ascii?Q?BD7fAX0XKjVdGtiVYfvpBD6Rqu4624vdgkxGpATgiT5Z0a48nscCxu5fEFO+?=
+ =?us-ascii?Q?JdK4dvFNPCRL8CN7zQQx8MjEVUVmUv6S2wEDMrgDXsNcgtwx6b8VaiHyiv7x?=
+ =?us-ascii?Q?SqNFuk1yTy0FPhr9LVuciCrDYzR6jJanHwboJzMdJc/3xVxbWELfF+PByF+Y?=
+ =?us-ascii?Q?K4l1zqgvBhHw/c+3MGWoCAw1TTogHqIotgfuMDJFwWWHvE5YPvA+gXZq1zYs?=
+ =?us-ascii?Q?SJKsMxRvqe3pxdUJ68Bd3DYQN8hOY4i12Y0U0t8IgwndUdJTXox7lW8wyfcM?=
+ =?us-ascii?Q?vb83PO+y+IcpixovKMh/SpLRZg4Dsyc6Veqcn6ju2b8Bju1o0g3W2o2H//BC?=
+ =?us-ascii?Q?T4ZtDT0jp6EsawBNQJasfV3/KhJ2MbIq8d2boy0b8MlQ8DBRPQ9Gay0oTVRj?=
+ =?us-ascii?Q?HLm37EuQaoAVhTHXBuebIMGFeXIctvMuJsF5u1cEudNa0x6Fc8J4gt8pPotG?=
+ =?us-ascii?Q?KSfD29Qn0Ub5u28pxrE/j5f2rRv3H3N4GQyZZGlsnwMuvaL/?=
+MIME-Version: 1.0
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Aug 2026 13:14:50.8091 (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 10c9e20b-39f0-48c3-fb1d-08defa0605ec
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d; Ip=[165.204.84.17];
- Helo=[satlexmb07.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: SJ1PEPF000023CB.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB6713
-Subject: [Buildroot] [PATCH v2 1/1] board/qemu/microblazeel-mmu: fix run
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5032.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c3d8eed4-f170-4c6e-be97-08defa0645ec
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Aug 2026 13:16:38.2768 (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 5zo4+p2WR6R6MpsqrRI6834AVieaJrqbcrimSeK2AQhCHDBQXiaIWkrlb0UZDro9
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PPF8CAB220A1
+Subject: Re: [Buildroot] [PATCH v1 1/1] board/qemu/microblazeel-mmu: fix run
  command for qemu 11.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -132,51 +158,74 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Neal Frager via buildroot <buildroot@buildroot.org>
-Reply-To: Neal Frager <neal.frager@amd.com>
-Cc: Neal Frager <neal.frager@amd.com>, joseph@anodize.com,
- thesamprice@gmail.com, ju.o@free.fr, thomas.petazzoni@bootlin.com,
- romain.naour@smile.fr, michal.simek@amd.com, romain.naour@gmail.com
+From: "Frager, Neal via buildroot" <buildroot@buildroot.org>
+Reply-To: "Frager, Neal" <neal.frager@amd.com>
+Cc: "joseph@anodize.com" <joseph@anodize.com>,
+ Sam Price <thesamprice@gmail.com>, "ju.o@free.fr" <ju.o@free.fr>,
+ "thomas.petazzoni@bootlin.com" <thomas.petazzoni@bootlin.com>, "Simek,
+ Michal" <michal.simek@amd.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-With qemu version 11.0.0, support for microblazeel has been folded into the
-microblaze target. This means that the run command for microblazeel-mmu needs
-to be changed to reflect this.
+AMD General
 
-See the notes in the qemu bump commit to 11.0.0 for more details:
-https://github.com/buildroot/buildroot/commit/9a5369effd22011b52b82c91f702bacde690c41a
+Hi everyone,
 
-Run command for qemu versions prior to 11.0.0:
-qemu-system-microblazeel -M petalogix-s3adsp1800 -kernel output/images/linux.bin -serial stdio
+> With qemu version 11.0.0, support for microblazeel has been folded into the
+> microblaze target. This means that the run command for microblazeel-mmu needs
+> to be changed to reflect this.
 
-New run command since qemu version 11.0.0:
-qemu-system-microblaze -M petalogix-s3adsp1800 -kernel output/images/linux.bin -serial stdio
+> See the notes in the qemu bump commit to 11.0.0 for more details:
+> https://github.com/buildroot/buildroot/commit/9a5369effd22011b52b82c91f702bacde690c41a
 
-Signed-off-by: Neal Frager <neal.frager@amd.com>
----
-V1->V2:
-- added missing endianness=little parameter
----
- board/qemu/microblazeel-mmu/readme.txt | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> Run command for qemu versions prior to 11.0.0:
+> qemu-system-microblazeel -M petalogix-s3adsp1800 -kernel output/images/linux.bin -serial stdio
 
-diff --git a/board/qemu/microblazeel-mmu/readme.txt b/board/qemu/microblazeel-mmu/readme.txt
-index 20fa0072ed..4d1e660650 100644
---- a/board/qemu/microblazeel-mmu/readme.txt
-+++ b/board/qemu/microblazeel-mmu/readme.txt
-@@ -1,5 +1,5 @@
- Run the emulation with:
- 
-- qemu-system-microblazeel -M petalogix-s3adsp1800 -kernel output/images/linux.bin -serial stdio # qemu_microblazeel_mmu_defconfig
-+ qemu-system-microblaze -M petalogix-s3adsp1800,endianness=little -kernel output/images/linux.bin -serial stdio # qemu_microblazeel_mmu_defconfig
- 
- The login prompt will appear in the terminal that started Qemu.
--- 
-2.43.0
+> New run command since qemu version 11.0.0:
+> qemu-system-microblaze -M petalogix-s3adsp1800 -kernel output/images/linux.bin -serial stdio
 
+> Signed-off-by: Neal Frager <neal.frager@amd.com>
+> ---
+> board/qemu/microblazeel-mmu/readme.txt | 2 +-
+> 1 file changed, 1 insertion(+), 1 deletion(-)
+
+> diff --git a/board/qemu/microblazeel-mmu/readme.txt b/board/qemu/microblazeel-mmu/readme.txt
+> index 20fa0072ed..a9f832e91e 100644
+> --- a/board/qemu/microblazeel-mmu/readme.txt
+> +++ b/board/qemu/microblazeel-mmu/readme.txt
+> @@ -1,5 +1,5 @@
+> Run the emulation with:
+
+> - qemu-system-microblazeel -M petalogix-s3adsp1800 -kernel output/images/linux.bin -serial stdio # qemu_microblazeel_mmu_defconfig
+> + qemu-system-microblaze -M petalogix-s3adsp1800 -kernel output/images/linux.bin -serial stdio # qemu_microblazeel_mmu_defconfig
+
+> The login prompt will appear in the terminal that started Qemu.
+> --
+> 2.43.0
+
+> Unfortunately, the qemu_microblazeel_mmu_defconfig seems to be completely
+> broken since the qemu 11.0.0 version bump.
+
+> While the qemu release notes claim that qemu-system-microblaze supports
+> both endian types, it does not seem to start properly when I build for little
+> endian.
+
+> For me, it hangs here:
+
+> $ output/images/start-qemu.sh
+> VNC server running on 127.0.0.1:5900
+
+> Running the same build with the qemu_microblazebe_mmu_defconfig works fine.
+
+I figured it out.  I was missing 'endianness=little'.
+
+I have fixed this with a v2 submission which works.
+
+Best regards,
+Neal Frager
+AMD
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
