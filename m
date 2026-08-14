@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57A59C5B572
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21DA9C5DF6A
 	for <buildroot@archiver.kernel.org>; Fri, 14 Aug 2026 13:20:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 23C6260B1F;
-	Fri, 14 Aug 2026 13:20:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E4CF040C9A;
+	Fri, 14 Aug 2026 13:20:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rxyTTbsp17oZ; Fri, 14 Aug 2026 13:20:23 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lUuXTklb84Sn; Fri, 14 Aug 2026 13:20:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2048E60A9C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 056AB40D56
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786713623;
-	bh=QH/7JDM8CKvzULDic4AbPc3GZzAAcmJii+hT1x4DMM8=;
+	s=default; t=1786713624;
+	bh=XYw34S1KLDXLkNXeOjV30FDfM3uoIbkjws+rPA3oPLU=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=q8r+WkjnndFvugXVug2rZ0XsCt5WbIQMtuu7utaF0PEHXOK1XtKyd1az1GD6jeHQ6
-	 OvZfm2W6MOo5swOFQECwtQbAaJ04eZneleDuTIakjQmUjTivpibxvBQ9T4d6Boie9A
-	 vIUwSb2jponNbCOFDlbzpQ5B9T9ZPGj6BVQZyYZp/pmqo7642MDhayV4Bccbzuxf2E
-	 QcsN3zS8yLJduxb+N5fD06yXLwHcnbt7tJUSBcoFgiQQF/Aqe7fS9kAPAFc3wH76Gv
-	 9UwhHgZgDzKmei6yixnAQ2NPVL0COZf8GeyyJgodJt/bActOufwfewWbzCN4nBDvu5
-	 0mDfIRYYbZnMQ==
+	b=DTzWUTq9DEpZwzogtShz6SgOzQ0dA3PbhvJGaCPsrkoclokkKil2xMHFEJ/4/GJvN
+	 aDTrjWp3Sa7RWVG1JMv9vyb2IR5gotHI3/SPQNpDzAxasbKpjKjIb0FcdX1g7ilT+2
+	 HSxtDL0ZpIgAOw3nSTo9jD73W15iA1KvKQzMqvAEWbvGvpUa6GhTBxNsFeI7zOgm6D
+	 /J20X1OUPM4SW3e4+K7OY6alTnqjYEYEsmMWhZVnJb5Jqh+Gt5GVT9AocnNO02HJm3
+	 +7bZIha8xIdBWjpz6d/oenaNjwyYAseQKX62sy+0c0uzIopsjaJHRrrs7lw2aWLwtr
+	 jKUJZ5i8dEj4Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2048E60A9C;
-	Fri, 14 Aug 2026 13:20:23 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id CEEB133B
- for <buildroot@buildroot.org>; Fri, 14 Aug 2026 13:19:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 056AB40D56;
+	Fri, 14 Aug 2026 13:20:24 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5CD3623F
+ for <buildroot@buildroot.org>; Fri, 14 Aug 2026 13:19:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C16C66068A
- for <buildroot@buildroot.org>; Fri, 14 Aug 2026 13:19:48 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 409C340C2D
+ for <buildroot@buildroot.org>; Fri, 14 Aug 2026 13:19:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9lsNRBRtvWjX for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7xslnCasPjzv for <buildroot@buildroot.org>;
  Fri, 14 Aug 2026 13:19:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 06DD1607EC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6B45C40C3D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 06DD1607EC
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6B45C40C3D
  for <buildroot@buildroot.org>; Fri, 14 Aug 2026 13:19:46 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0B4CF8D66B; Fri, 14 Aug 2026 13:18:56 +0000 (UTC)
+ id 6FD848D66B; Fri, 14 Aug 2026 13:18:56 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 14 Aug 2026 14:42:01 +0200
+Date: Fri, 14 Aug 2026 14:44:18 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 01761504ea9de3d1c24063d52ef68e28bb3665b7
-X-Git-Newrev: 3a1681c01edb26dc563b8453dfba5cb12698342d
+X-Git-Oldrev: fcb6a725efc57141d4adfcb87cf5d3a6c9a44087
+X-Git-Newrev: 6edbad38613aa257f9298043afa3165c75350c95
 X-Patchwork-Hint: ignore
-Message-Id: <20260814131856.0B4CF8D66B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/{glibc,
- localedef}: move to Gitlab mirror repo
+Message-Id: <20260814131856.6FD848D66B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/syslog-ng: needs
+ libopenssl, not libressl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,57 +77,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/3a1681c01edb26dc563b8453dfba5cb12698342d
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/6edbad38613aa257f9298043afa3165c75350c95
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-Downloading from sourceware.org/git/glibc.git causes many 429 errors
-these days so we switch to the upstream Gitlab mirror:
-https://sourceware.org/glibc/wiki/GlibcGit#Fetching_The_Repository
+Buildroot commit 51ab6d2290f169f4bb96b8dbbab2d8fb4656766d bumped the
+package from version 4.8.3 to 4.11.0. Upstream commit
+https://github.com/syslog-ng/syslog-ng/commit/dbe9fb306929168172062a6bc985eb7e38201dab
+added the usage of OpenSSL BIO_ functions in version 4.9.0 causing
+build errors with LibreSSL:
+
+lib/transport/transport-tls.c: In function 'BIO_s_transport':
+lib/transport/transport-tls.c:125:3: error: implicit declaration of
+ function 'BIO_meth_set_write_ex'; did you mean 'BIO_meth_set_write'?
+ [-Wimplicit-function-declaration]
+  125 |   BIO_meth_set_write_ex(meth, _BIO_transport_write);
+
+lib/transport/transport-tls.c:126:3: error: implicit declaration of
+ function 'BIO_meth_set_read_ex'; did you mean 'BIO_meth_set_read'?
+ [-Wimplicit-function-declaration]
+  126 |   BIO_meth_set_read_ex(meth, _BIO_transport_read);
+
+because LibreSSL does not provide these functions.
 
 Fixes:
-https://autobuild.buildroot.net/results/09e/09e760063607b1cbf4ef687bf9bbe17b12d648b2/
-https://autobuild.buildroot.net/results/22a/22afc952e0c05648d538d13ea593e5ad8c4c03c7/
-https://autobuild.buildroot.net/results/281/28159f29e38b0475ae33fe73a9cab04ea3a8835f/
-https://autobuild.buildroot.net/results/961/9616d46c46bd2a10a6e719d76ed6e1d8e3b3d0d2/
-https://autobuild.buildroot.net/results/fd4/fd48fb96639871889fb2238dba360d1740d7962c/
-https://autobuild.buildroot.net/results/91a/91a0b7ccad116911f84281b4cbcb080309ad952e/
-https://autobuild.buildroot.net/results/17f/17ff61f0eac946b3c027a540147b2573e224dcdb/
+https://autobuild.buildroot.net/results/117/117b3b38098df075d96167863d9f6b933a97eb64/
+https://autobuild.buildroot.net/results/a39/a39ecc88a9342005b75660ee0ac60a1025fa6fc2/
+https://autobuild.buildroot.net/results/6b3/6b3eb910ccdb67827f0c12cea0e3a63c5e6b68af/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 1e9de8815f7e8cd5785df97819157e05b28cc560)
+(cherry picked from commit 54f66d88295cbbd09d51139f8c2a2c80ca03fb26)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- package/glibc/glibc.mk         | 2 +-
- package/localedef/localedef.mk | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/syslog-ng/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index 8121968e02..7c64fea4a2 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -8,7 +8,7 @@
- #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
- # When updating the version, please also update localedef
- GLIBC_VERSION = 2.41-143-gfc7a48bc9e999c0f9a1f9fa1b209eac1d6a93363
--GLIBC_SITE = https://sourceware.org/git/glibc.git
-+GLIBC_SITE = https://gitlab.com/gnutools/glibc.git
- GLIBC_SITE_METHOD = git
- 
- GLIBC_LICENSE = GPL-2.0+ (programs), LGPL-2.1+, BSD-3-Clause, MIT (library)
-diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
-index 7b16932125..d1beb4dafc 100644
---- a/package/localedef/localedef.mk
-+++ b/package/localedef/localedef.mk
-@@ -9,7 +9,7 @@
- #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
- LOCALEDEF_VERSION = 2.41-143-gfc7a48bc9e999c0f9a1f9fa1b209eac1d6a93363
- LOCALEDEF_SOURCE = glibc-$(LOCALEDEF_VERSION)$(BR_FMT_VERSION_git).tar.gz
--LOCALEDEF_SITE = https://sourceware.org/git/glibc.git
-+LOCALEDEF_SITE = https://gitlab.com/gnutools/glibc.git
- LOCALEDEF_SITE_METHOD = git
- HOST_LOCALEDEF_DL_SUBDIR = glibc
- 
+diff --git a/package/syslog-ng/Config.in b/package/syslog-ng/Config.in
+index 1302e6ac46..0bdf0dcd27 100644
+--- a/package/syslog-ng/Config.in
++++ b/package/syslog-ng/Config.in
+@@ -9,6 +9,7 @@ config BR2_PACKAGE_SYSLOG_NG
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_PCRE2
+ 	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
+ 	help
+ 	  syslog-ng is an enhanced log daemon, supporting a wide range
+ 	  of input and output methods: syslog, unstructured text,
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
