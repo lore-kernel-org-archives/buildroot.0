@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B74A6C5DF6A
-	for <buildroot@archiver.kernel.org>; Fri, 14 Aug 2026 13:21:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D431BC5DF69
+	for <buildroot@archiver.kernel.org>; Fri, 14 Aug 2026 13:21:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 81FBB812FD;
-	Fri, 14 Aug 2026 13:21:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id ABA4B60655;
+	Fri, 14 Aug 2026 13:21:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id e36KKPwcqnzV; Fri, 14 Aug 2026 13:21:41 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Whfv4hdH1WX0; Fri, 14 Aug 2026 13:21:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A2E0E813CB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B5A6E60673
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786713701;
-	bh=jtfeAB6p/amw1rXua5HMHCPlfh2UA6w29heqK5vWpAA=;
+	s=default; t=1786713702;
+	bh=zsSawxzDQ0Qb3mPY9fuWqvkXO55leICdastUZkb6tJo=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=cFYGh6uV0qSBbYgle08o2MuKcAR3e4rB4GHWuUuqmvQkEk7MEPgpIPF0FpEEzMFvJ
-	 3iut8jRrqyOP91IWFk9lb2ugpaq51ytDYXjk1l6xVlHQiGdLxeBOt24dD/ymZzvxGX
-	 d5zM8CmwhOjEBTVQJWjpmjMyLv/WthhBA/lAqy2P66wAM5+AsIPXRxMGwAt+vcXPry
-	 xTsK+DlvgC6OTiIsU04b92QfaMgG160donnD2Sv8qfnooMzqYjhmBRqL8WPU3U9mYR
-	 bziUJJaKyblb1wD8T4bdhupUGOVb1AYWVdb2vaG454kaDrqay9jiEQQCWxTLZsmIOl
-	 Ib9WCbj3l3atA==
+	b=iMLohk7/saspOn3S17CT6wXTsHyiVK8Fk6HIjceISkjus5U34WLH+DWXWQl4BrZzR
+	 bcm1GPsmi2neQbHrweNJ8RZ35raKhd5XWKT0T03ycKpSQkHaN+YNeWiea3zU73/7K4
+	 TdjITvoL6ypL83vAvrGSBsAYJXeBU5R3/UU8q7Y8T9NmnEO18/GWFCHMPnBdodrZkZ
+	 aeTe0HIqwf7UUWT7rSTaTrWhUBeHnn0T2iYD24tpsYDmPO2upoZgEYwk489kxFuswT
+	 cmqSvOQ9gUQheqbGjXBQc3C4akL5ELU9pk7nWIZg5LRI7Lom7eGPNxx76ALVdG9tJx
+	 Ed1WDvudP5EIg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A2E0E813CB;
-	Fri, 14 Aug 2026 13:21:41 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 5820123F
+	by smtp3.osuosl.org (Postfix) with ESMTP id B5A6E60673;
+	Fri, 14 Aug 2026 13:21:42 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 85548139D
  for <buildroot@buildroot.org>; Fri, 14 Aug 2026 13:21:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 365708123C
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6BE1A80E3E
  for <buildroot@buildroot.org>; Fri, 14 Aug 2026 13:21:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id n4QlIb_UgOMH for <buildroot@buildroot.org>;
+ id UjupHOIu1l-X for <buildroot@buildroot.org>;
  Fri, 14 Aug 2026 13:21:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7A3A180E3E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ACB408128A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7A3A180E3E
+ by smtp1.osuosl.org (Postfix) with ESMTP id ACB408128A
  for <buildroot@buildroot.org>; Fri, 14 Aug 2026 13:21:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7E8C48D66C; Fri, 14 Aug 2026 13:20:35 +0000 (UTC)
+ id B11808D66C; Fri, 14 Aug 2026 13:20:35 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 13 Aug 2026 16:03:39 +0200
+Date: Fri, 14 Aug 2026 14:44:48 +0200
 X-Git-Refname: refs/heads/2026.05.x
-X-Git-Oldrev: d2bdd24d249a9911f6474760ef00b748482ffbc5
-X-Git-Newrev: 032b8416a424d670d79f26a8f66d80a9fae3484c
+X-Git-Oldrev: 589028df3b73384220114b28603bf7361ab16c10
+X-Git-Newrev: 69ce103003faa9dfa838aeedf9b9b5734c5e5983
 X-Patchwork-Hint: ignore
-Message-Id: <20260814132035.7E8C48D66C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.05.x] package/botan: cleanup
- boost dependencies
+Message-Id: <20260814132035.B11808D66C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.05.x] package/syslog-ng: needs
+ libopenssl, not libressl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,53 +77,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/032b8416a424d670d79f26a8f66d80a9fae3484c
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/69ce103003faa9dfa838aeedf9b9b5734c5e5983
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.05.x
 
-- botan dropped the usage of Boost.Filesystem in 2.10.0 [0]
-- botan never actively searched for Boost.System, as it is header-only
-  the dependecy can be dropped too
+Buildroot commit 51ab6d2290f169f4bb96b8dbbab2d8fb4656766d bumped the
+package from version 4.8.3 to 4.11.0. Upstream commit
+https://github.com/syslog-ng/syslog-ng/commit/dbe9fb306929168172062a6bc985eb7e38201dab
+added the usage of OpenSSL BIO_ functions in version 4.9.0 causing
+build errors with LibreSSL:
 
-The only part of boost botan currently uses is asio. So use --with-boost option
-when boost is selected.
+lib/transport/transport-tls.c: In function 'BIO_s_transport':
+lib/transport/transport-tls.c:125:3: error: implicit declaration of
+ function 'BIO_meth_set_write_ex'; did you mean 'BIO_meth_set_write'?
+ [-Wimplicit-function-declaration]
+  125 |   BIO_meth_set_write_ex(meth, _BIO_transport_write);
 
-[0] https://github.com/randombit/botan/commit/aff8cc8a7a5e22e3fedeae7ca82b63d4744ac82c
+lib/transport/transport-tls.c:126:3: error: implicit declaration of
+ function 'BIO_meth_set_read_ex'; did you mean 'BIO_meth_set_read'?
+ [-Wimplicit-function-declaration]
+  126 |   BIO_meth_set_read_ex(meth, _BIO_transport_read);
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+because LibreSSL does not provide these functions.
+
+Fixes:
+https://autobuild.buildroot.net/results/117/117b3b38098df075d96167863d9f6b933a97eb64/
+https://autobuild.buildroot.net/results/a39/a39ecc88a9342005b75660ee0ac60a1025fa6fc2/
+https://autobuild.buildroot.net/results/6b3/6b3eb910ccdb67827f0c12cea0e3a63c5e6b68af/
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 8ff577bb35d7f15a924298ae56cb46f694a22ef1)
+(cherry picked from commit 54f66d88295cbbd09d51139f8c2a2c80ca03fb26)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- package/botan/Config.in | 2 --
- package/botan/botan.mk  | 2 +-
- 2 files changed, 1 insertion(+), 3 deletions(-)
+ package/syslog-ng/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/botan/Config.in b/package/botan/Config.in
-index 305cc2fe8c..6ac6341f71 100644
---- a/package/botan/Config.in
-+++ b/package/botan/Config.in
-@@ -17,8 +17,6 @@ config BR2_PACKAGE_BOTAN
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_11 # C++20
- 	depends on BR2_PACKAGE_BOTAN_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	select BR2_PACKAGE_BOOST_FILESYSTEM if BR2_PACKAGE_BOOST && BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
--	select BR2_PACKAGE_BOOST_SYSTEM if BR2_PACKAGE_BOOST && BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
+diff --git a/package/syslog-ng/Config.in b/package/syslog-ng/Config.in
+index 1302e6ac46..0bdf0dcd27 100644
+--- a/package/syslog-ng/Config.in
++++ b/package/syslog-ng/Config.in
+@@ -9,6 +9,7 @@ config BR2_PACKAGE_SYSLOG_NG
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_PCRE2
+ 	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
  	help
- 	  Botan is a crypto library for C++
- 
-diff --git a/package/botan/botan.mk b/package/botan/botan.mk
-index 38948f0184..115cce6765 100644
---- a/package/botan/botan.mk
-+++ b/package/botan/botan.mk
-@@ -61,7 +61,7 @@ ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
- BOTAN_CONF_OPTS += --without-os-feature=explicit_bzero,getauxval,getentropy
- endif
- 
--ifeq ($(BR2_PACKAGE_BOOST_FILESYSTEM)$(BR2_PACKAGE_BOOST_SYSTEM),yy)
-+ifeq ($(BR2_PACKAGE_BOOST),y)
- BOTAN_DEPENDENCIES += boost
- BOTAN_CONF_OPTS += --with-boost
- endif
+ 	  syslog-ng is an enhanced log daemon, supporting a wide range
+ 	  of input and output methods: syslog, unstructured text,
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
