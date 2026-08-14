@@ -4,99 +4,100 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29717C5CFC1
-	for <buildroot@archiver.kernel.org>; Fri, 14 Aug 2026 14:09:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08E68C5CFC1
+	for <buildroot@archiver.kernel.org>; Fri, 14 Aug 2026 14:10:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E53CD40E3A;
-	Fri, 14 Aug 2026 14:09:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C87B640E43;
+	Fri, 14 Aug 2026 14:10:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8PTtFmmgugut; Fri, 14 Aug 2026 14:09:47 +0000 (UTC)
+ id m-J8PF_Dov21; Fri, 14 Aug 2026 14:10:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AF58140E07
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B419C40E30
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786716587;
-	bh=XIcAkx1FTV1EoSsdKgd6QtgJ/AzXT8+O63gmn000rYk=;
+	s=default; t=1786716613;
+	bh=/y0urv8ur6N091u8E9HQVnw5XT57sMiHcdftC1oqPuY=;
 	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
 	 From;
-	b=QUDYJvDsjpTsPuVGIsC/tcegyWUqVjM8THONF5P8TYKq7BPlfUV13fzQKP43PWzhf
-	 4vh0jUyuWhmA4q8i0WRbCgVBcX5AGff/XlWBpHeUPG6SH50rCxPSOh+esNzYV9wOA+
-	 eKi0F3olBeXlFKYc08gfgtEtQjdaQ9uwk5MpZk5NP/aEeB+wRAkvVm0V1Xk2LLolsn
-	 OWoNoGjmtiezbQsi6uekaTjngDroZL2jdnoVRsdlYzVtC19YcpwJQ9itSGkTHP2TM6
-	 ngKdD5qflgH/fOd3VphI83CvjNT0lDJ6gKbMNJq+KE7BwmXJdcUMo6P6IYBs72lNB9
-	 MdpuWnDGtIVtg==
+	b=pemOXs3F/UHtx6kLfJJVBRkV8+KFAYIKnXPEJgEApFPMIZYCMTl8zTZ6dz60SZ91/
+	 5IEDhznyDKTC0W7LnmgG3aWcc06lHyVooKSIf6HtZ1XqCZrlGsUSQZ+GowEdU+Untn
+	 o3Llo7lvcRB2e/JuCnu19E9ppHRWn1Jav96+CTSq/uJna61lsqc15yI957KE/1MqkX
+	 yxZsS5jFfHxUV7NoNIQTD8aQe4MH7X4Z3V/GaqzNlbToiUm7N7vw3X6AhUdX/BM3KN
+	 lCN2elXIOVa8knNwEoxjFXjsIynKi3Ght+N3uve8vaBGoyb8/YxXpZ9hRIoIGvxQ51
+	 2A+vk+Zhd6z/w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AF58140E07;
-	Fri, 14 Aug 2026 14:09:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B419C40E30;
+	Fri, 14 Aug 2026 14:10:13 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 7FCD73DF
- for <buildroot@buildroot.org>; Fri, 14 Aug 2026 14:09:46 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 2110D23F
+ for <buildroot@buildroot.org>; Fri, 14 Aug 2026 14:10:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7170C40DF9
- for <buildroot@buildroot.org>; Fri, 14 Aug 2026 14:09:46 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0E88640E30
+ for <buildroot@buildroot.org>; Fri, 14 Aug 2026 14:10:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fDB_PMFxItS0 for <buildroot@buildroot.org>;
- Fri, 14 Aug 2026 14:09:45 +0000 (UTC)
+ id YXPp3I0af20c for <buildroot@buildroot.org>;
+ Fri, 14 Aug 2026 14:10:12 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::332; helo=mail-wm1-x332.google.com;
+ client-ip=2a00:1450:4864:20::436; helo=mail-wr1-x436.google.com;
  envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4D00440E07
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4D00440E07
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
- [IPv6:2a00:1450:4864:20::332])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4D00440E07
- for <buildroot@buildroot.org>; Fri, 14 Aug 2026 14:09:45 +0000 (UTC)
-Received: by mail-wm1-x332.google.com with SMTP id
- 5b1f17b1804b1-4954a32cf1eso5698105e9.3
- for <buildroot@buildroot.org>; Fri, 14 Aug 2026 07:09:44 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0C82C40E18
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0C82C40E18
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
+ [IPv6:2a00:1450:4864:20::436])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0C82C40E18
+ for <buildroot@buildroot.org>; Fri, 14 Aug 2026 14:10:11 +0000 (UTC)
+Received: by mail-wr1-x436.google.com with SMTP id
+ ffacd0b85a97d-47f703a9e5dso523101f8f.0
+ for <buildroot@buildroot.org>; Fri, 14 Aug 2026 07:10:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1786716583; x=1787321383;
+ d=1e100.net; s=20251104; t=1786716610; x=1787321410;
  h=content-transfer-encoding:content-type:in-reply-to:from
  :content-language:references:to:subject:user-agent:mime-version:date
  :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to:content-type;
- bh=Ycb2Qcp/XrbwLl+f6rTekSSB6nZ+HNum5MjVriFCY7s=;
- b=JS6FM702fhk9Bpe+Rq4rnryKCusZyIENpFs0gJ+DaKJuC6nJzWZnJTaUrltwbjC+Si
- mlpjajnQjYNVOPAxMgh8w5DE3ps5isyeJf4jtkU1ez2jbkng7ubxHKjTMaIrIpgwNnfY
- YzZQY2BNgSGTd0gI1TC5MAE+jKNo9I1LvcZ2wUsvUkwX2w8UgDqGavie/xF6/dL86zUH
- qEbR7qiOMAICsIcUSOdIfg1CX4ZrHNLrB4HSGiyBSsIlN1gJctE/489tQiO69w6utyyz
- eCkOnHGTrNbVbQFaU992nqVvUoZsusrjDPCt1vXsFWUX5jCT7qlLZTylA5PTlMmw3jKC
- x74A==
+ bh=2K5At7fprPT4jDsFrIMNWfmSSPrjIoeZgrQqLHV3c5Q=;
+ b=U0NCEtoSrzjE5tD8wPlHTwRfx4XSTFMvkSQQ4E3vgLDx3W339q7hbY7MmYBidOcaxh
+ 7y3QKdvNc9m9sO/oT247cP/6M95kU60LQixyV3UdbnmDkaXxmLlbXqFHP9QQkrV9KIHO
+ hv3PiFa0whvU+QO+8MR2pRtY3ZWsNsDcIoZnKIYJizkCG+VeZLDBJ98dBExroDqh0QSP
+ qS7+s8rSMUgxE+fhqz39/nfqCD+tmrwTHQ16UVjm6MYNPmCWaCzgNC163XvBt7q1fzsW
+ g9P3XH5FJRC51XSWrFtqGipde+7zemYhhqaTfRfQhBKZt235fimuraefRorAGWrwD1sg
+ U98A==
 X-Forwarded-Encrypted: i=1;
- AHgh+Roquv1EGP52DuB1xVmQko+33sId7bZEgp3Ycl6UAz+rDb+c2eP/58vVzdD6uZ/l8ORU4PLwef4nqOU=@buildroot.org
-X-Gm-Message-State: AOJu0YxAwRdNCqQpJ5YkORjJ2vMRuXpSZE00N1QG1noadasGuGD7D5bZ
- irj/mKvA5W+RB037sjRLvjX9+wBXcNWyDcC5qCz4PgGpjYMI8ZwNpYwTP2ij2eOxhhs=
-X-Gm-Gg: AR+sD12mqGIrvnXDj5KLHaUOk6XWLHL9QrouJQOXpFIKB+8EZwEDYjSZXyVJD62ot3R
- Ej6BEyYp54lAQyO6ZIhak99Zk5CYBXh5g8mKkljbsN/9TQQQq+V8DpsLJk/nuhDImPoD2OIH+5P
- hn3qt2PBHGpnE9THRFiq6YImXS4/IRvO9FwNa5nJodGZzXJgCERCIaiiMl+SigtDdm1F7wPrU6y
- 47YtIyvwTqZUa0I44Qca0EGVtkAAvKgzNwQtxiAmZO9/Pv6Q/5sVVEEBtG0fD+U4A1RiMQgrwGq
- 7SMHhQ1E9ID91PW4WoQJbfrWoJsi7xNVDP6LFVw/4mibJNFrGVCMClU16aulVLAw7jhjXdVaXIw
- cVpdBkOLD1YO/5pdQSK1FGDdUGxpXxh0bod3/8v5uKiUbUAZMkBgROHsxi5oSxmLxoER/TLk3FA
- HqKML1wzBDh4z8+HG24u1z3+qz/thuNdoIqefIHoPJxz9aSTV3ooSXAzvLlpbi4zwixjGJHUeoY
- 1+meH0uXwv9R+hj8CP6ZXxqo7qxEqt86xfE5u9ijJCNWRUl
-X-Received: by 2002:a05:600c:628c:b0:499:87f3:a2a3 with SMTP id
- 5b1f17b1804b1-49987f3a33emr98118515e9.15.1786716582646; 
- Fri, 14 Aug 2026 07:09:42 -0700 (PDT)
+ AHgh+Rr37VACDZn+P6qPLJhzSBCtgmu/9+ANipjGPC9Jdhp8Fir7QrH2y4qmIHfYFo9/l+beWWvqVnGDTok=@buildroot.org
+X-Gm-Message-State: AOJu0YxYzW8LEt0tAdm7m5eQ4tCgPpYIogMfTTIo0mn19o/rvm9xO3yg
+ 3MENO0xWIzehbRbRbejYf/r0FUEL945ef38lXQeiRP2GjAHRfc/jYdy1S5UZviDJkxY=
+X-Gm-Gg: AR+sD11G8X/kMD3H2kLU5/uLS/uH29QenrThC3z2D8Clz5JGNwYiaVglnFHQ2WndFoF
+ DJah45xYaGYUj2b/HGZwgoc8K2MJy0STaGG1wbs2foNoR0FNK5blKd6T32PIf5vfm5cg/lCszRZ
+ 0pWuc+FuSlCiP3oyp7ON8kaM1xvsICmXfuk32CH3xNOBE7ROEY1gfSaMWoBWuR8X4/YLbmjBsL5
+ TG3E/0UfCb9PPhorNNOzWgad70JNUwxuLL9ojuYUbPoB7UcptlHum5+qn9y5XG+B5xNhiOthjIP
+ fDnroqwAgAXptPkcvRJ6no0LP2XcRHtSpTE5OXioiBCTTArURJlChtXwP7pjy7JlwvKGn/f+4xb
+ oayRcle+VrmCdGoqVYLaeRN/x6OnN8kKPzoSQfIFUE/RDFLzACPPeqqJpe13N4dJJnNSGQ1JSxG
+ Zo9WWy03kj9L5aJ5skqOnvIwjkWmU+gU3pKS+88X4LTyzhxC1kdpRp0HZK/wGDPw/fAvRH+upvR
+ EmnaVAzJQd8naueKXvSgBBEpCyM7W+diW5qnKW9F+4snf4Ztdsm3jTJS1c=
+X-Received: by 2002:a05:6000:2088:b0:481:5bd6:82ca with SMTP id
+ ffacd0b85a97d-4816071d01amr9590413f8f.4.1786716609749; 
+ Fri, 14 Aug 2026 07:10:09 -0700 (PDT)
 Received: from ?IPV6:2a02:a03f:63ab:dc01:1291:d1ff:fe92:3b5a?
  ([2a02:a03f:63ab:dc01:1291:d1ff:fe92:3b5a])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-4815f2b1a91sm8038567f8f.21.2026.08.14.07.09.42
+ ffacd0b85a97d-4815f21a068sm8448239f8f.12.2026.08.14.07.10.09
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Fri, 14 Aug 2026 07:09:42 -0700 (PDT)
-Message-ID: <d01ab35a-7f79-4f2c-ab6e-bc2efdc4b794@mind.be>
-Date: Fri, 14 Aug 2026 16:09:41 +0200
+ Fri, 14 Aug 2026 07:10:09 -0700 (PDT)
+Message-ID: <5d2880c5-aa58-418e-be99-fd78400568d0@mind.be>
+Date: Fri, 14 Aug 2026 16:10:09 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 To: Romain Naour <romain.naour@smile.fr>, buildroot@buildroot.org
 References: <20260606225120.409046-1-romain.naour@smile.fr>
+ <20260606225120.409046-2-romain.naour@smile.fr>
 Content-Language: en-US
-In-Reply-To: <20260606225120.409046-1-romain.naour@smile.fr>
-Subject: Re: [Buildroot] [PATCH 1/7] configs/s6lx9_microboard_defconfig:
- remove defconfig
+In-Reply-To: <20260606225120.409046-2-romain.naour@smile.fr>
+Subject: Re: [Buildroot] [PATCH 2/7] configs/ts4900_defconfig: remove
+ defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -115,18 +116,19 @@ Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+
+
 On 7/06/26 00:51, Romain Naour via buildroot wrote:
-> This configuration for the s6lx9 microboard was added back in March 2012
-> (commit 49084a198247575650c155b6f5f147fb034becc5), and has not been
-> updated in any significant way since then.
+> This configuration for the TS-4900 was added back in September
+> 2016 (commit 3138ab3fee7b0251e3cb3fba9a373bd3cf9d6424), and has not
+> been updated in any significant way since then.
 >
-> This defconfig still use a 4.4.7 (no longer maintained) and out of tree
-> devicetree (lx9_mmu.dts).
+> This defconfig still use a 4.12 kernel that is no longer maintained.
 >
 > Remove its support.
 >
 > Fixes:
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/14728914045 (s6lx9_microboard_defconfig)
+> https://gitlab.com/buildroot.org/buildroot/-/jobs/14728914086 (ts4900_defconfig)
 >
 > Signed-off-by: Romain Naour <romain.naour@smile.fr>
 
