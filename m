@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2A68C5CFDB
-	for <buildroot@archiver.kernel.org>; Fri, 14 Aug 2026 13:20:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5BC40C5DF6A
+	for <buildroot@archiver.kernel.org>; Fri, 14 Aug 2026 13:20:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EEC1440CE7;
-	Fri, 14 Aug 2026 13:20:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3177E608EB;
+	Fri, 14 Aug 2026 13:20:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7h1pdHayPDhQ; Fri, 14 Aug 2026 13:20:01 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DFuPjLgYdSpj; Fri, 14 Aug 2026 13:20:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CBF6B40CBD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 21A7F60834
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786713600;
-	bh=rwEQ2+LxV1bIXrjnRhrlEOVt4gGNwH7v4/3U5Bbi1Ug=;
+	s=default; t=1786713603;
+	bh=dpYH6bEGF5QS/gGd+nPvw31Lta1n1/WjEl/OEhWsiAI=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Af3QOUzr79uHgi0WDx/j4YsA02l0xqObIc806cX44NvZ/e7jcOyeWGBgju9GwgQPH
-	 m2p9N9V+VcsB6VW5ieXZhQn79CMu+a2kG7pAuZ+rMkPfhW8UvTSSQWx42cF7eUs/q/
-	 Cs97J0UY7eIWXyvKyJVK6bq6kZ3AaXSN3qBPp4bBtrP894n2+aMO9Ag9WPnkP5Ta0m
-	 3Jk5rMHGb7H7uYdUY+jb6epYQp3j0HId2AC3W3U0derL/FjiPpZrzLQD/76KyjZ/Xz
-	 7goJWdqBABh45IqfoiRC3OZ7tTAdIfiR/eugR/e7gYUCwpDemm6jvEtpQ1xFOMOsAD
-	 nZvYsGuPEnV5g==
+	b=BLnOHeAsz8lZ3AjUsa4JfrFTclwGr4Sv1n8REqyr7i/EFvhic4oWifaa6GhBnPGI9
+	 pA4Brh318EEkck2p1GcrTvYOlgqMyx1nw1opnEqzlebq8MKoDyvIDW2nqa5PgDDXrq
+	 Vwnc9T+bwdc83hVBbPH6tZ9BMrxW7eVFh9KMNrbXBLl1uhO3PpJOQWLpHSemQEMRi1
+	 Fq8acRrp5piWC4KckFyoUZmoC5fXhHwbYE8c30mxQrRcNrhO/LpIAzXKTWF/4H836x
+	 J/nbcW0TVVbPP3NcnlFFlflyXwu8fwtPrbPQ2wxquul29M+oDxKYrTVxVC2VfzC61/
+	 JeyiliIzvmTDw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CBF6B40CBD;
-	Fri, 14 Aug 2026 13:20:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 21A7F60834;
+	Fri, 14 Aug 2026 13:20:03 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 3C5E633B
+ by lists1.osuosl.org (Postfix) with ESMTP id 5700933B
  for <buildroot@buildroot.org>; Fri, 14 Aug 2026 13:19:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2E13D40C34
+ by smtp4.osuosl.org (Postfix) with ESMTP id 487CD40C34
  for <buildroot@buildroot.org>; Fri, 14 Aug 2026 13:19:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YmBK3SHUp7Qs for <buildroot@buildroot.org>;
+ id uB3z5SsXbQav for <buildroot@buildroot.org>;
  Fri, 14 Aug 2026 13:19:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1815740C38
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 34EA240C39
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1815740C38
+ by smtp4.osuosl.org (Postfix) with ESMTP id 34EA240C39
  for <buildroot@buildroot.org>; Fri, 14 Aug 2026 13:19:46 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1CBAF8D66A; Fri, 14 Aug 2026 13:18:56 +0000 (UTC)
+ id 3987E8D66A; Fri, 14 Aug 2026 13:18:56 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 14 Aug 2026 14:42:01 +0200
+Date: Fri, 14 Aug 2026 14:42:02 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: b8230dfa8a20482fc7014359036d7c591dfc48fe
-X-Git-Newrev: c42c90ef48eed438c9dcbbf6135f61e35c582d8d
+X-Git-Oldrev: 1665cca3d7ecd4008410fb83130ec79ec0e43077
+X-Git-Newrev: 2ee35358da30557607a002f9c7afc2534028e427
 X-Patchwork-Hint: ignore
-Message-Id: <20260814131856.1CBAF8D66A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/uclibc: bump to
- 1.0.58
+Message-Id: <20260814131856.3987E8D66A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/botan: security
+ bump to version 3.11.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -72,103 +72,169 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Titouan Christophe via buildroot <buildroot@buildroot.org>
 Reply-To: Titouan Christophe <titouan.christophe@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4051198517644590718=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4051198517644590718==
-Content-Type: text/plain
-
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/c42c90ef48eed438c9dcbbf6135f61e35c582d8d
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/2ee35358da30557607a002f9c7afc2534028e427
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-New release with following changes:
+- Update BOTAN_VERSION to 3.11.1
+- Remove 0001-Add-more-value-barriers-to-avoid-compiler-induced-side-channels.patch
+  as it is already integrated upstream in this version.
 
-Adam Lackorzynski (1):
-      termios.h: Add IBSHIFT
+Fixed in 3.11.1:
+- CVE-2026-34580: Resolve certificate verification bypass bug introduced
+  in 3.11.0 (GH #5500)
+- CVE-2026-34582: Resolve TLS 1.3 client authentication bypass (GH #5599)
 
-Charles Mirabile (11):
-      riscv: add defconfigs
-      riscv: add support for static pie binaries
-      riscv: add support for ucontext functions
-      pipe: directly invoke pipe2 from kernel when !UCLIBC_LINUX_SPECIFIC
-      Fix {g,s}ettimeofday when !UCLIBC_HAS_REALTIME
-      Fix build with static-pie but without nptl threads
-      do not remove bits/uClibc_ctype.h when !UCLIBC_HAS_CTYPE_TABLES
-      getopt-susv3: remove call to gettext `_` macro
-      readdir{,_r}: remove loop to skip files with d_ino == 0
-      spawn: allow file actions on no-mmu targets
-      getopt-susv3: add support for reseting the scan by setting optind to zero
+Fixed in 3.11.0:
+- CVE-2026-32877: Fix a heap over-read during SM2 decryption (GH #5450)
+- CVE-2026-32883: Fix an OCSP response forgery vulnerability (GH #5449)
+- CVE-2026-32884: Fix a name constraints bypass for DNS names (GH #5448)
 
-Marcus Haehnel (1):
-      aarch64/fpu_control.h: Don't use gcc-internal types
+- Remove the --disable-altivec configuration option as it has been removed
+  from the Botan build system in version 3.x
+- Optimize the --disable-neon logic using the yx pattern.
+  In Botan 3.x, the --disable-neon flag is specifically targeted at the
+  arm32 architecture. Furthermore, Buildroot's BR2_ARM_CPU_HAS_NEON
+  variable is only defined for 32-bit ARM, which previously caused a
+  false-positive --disable-neon flag to be passed on AArch64 builds
+- Update license.txt hash in botan.hash due to the copyright year update
+  to 2026
 
-Jan Klötzke (1):
-      elf/dl-support.c: remove unnecessary memset
+https://botan.randombit.net/news.html#version-3-11-1-2026-03-31
 
-Ramin Moussavi (9):
-      libsanitizer: arm/ucontext: fix VFP save/restore to use uc_regspace area
-      libsanitizer: arm/ucontext.h: add glibc-style REG_R0..REG_R15 aliases
-      libsanitizer: link.h/dl-iterate-phdr: expose dl_phdr_info TLS fields
-      libsanitizer: ldso: track _dl_load_adds/_dl_load_subs counters
-      libsanitizer: ldso: implement _dl_tls_get_addr_soft for dl_phdr_info::dlpi_tls_data
-      libsanitizer: drop __pagesize, make _dl_pagesize the single source of truth
-      libsanitizer: sys/user.h: remove obsolete BFD trad-core NBPG/UPAGES defines
-      libsanitizer: features.h: hard-wire _FILE_OFFSET_BITS=64 to match library's 64-bit off_t/ino_t
-      libsanitizer: fts.h: drop the bogus _FILE_OFFSET_BITS==64 #error
-
-Waldemar Brodkorb (7):
-      bits/statx.h: add some missing defines
-      bits/statx.h: sync struct with glibc
-      sys/fanotify.h: sync with musl
-      libiconv: fix typedef of iconv_t
-      misc: add unicode character functions (c11)
-      netinet/tcp.h: sync with glibc
-      bump version for 1.0.58 release
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+[Julien: fix CVE numbers in commit log]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit c7fef3704c704e6337b4f8f6ff467c6c70991443)
+(cherry picked from commit 402c94c2d70d617783a2cd9bb2c90556008b79ba)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- package/uclibc/uclibc.hash | 4 ++--
- package/uclibc/uclibc.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...s-to-avoid-compiler-induced-side-channels.patch | 65 ----------------------
+ package/botan/botan.hash                           |  4 +-
+ package/botan/botan.mk                             | 11 +---
+ 3 files changed, 4 insertions(+), 76 deletions(-)
 
-diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
-index e0dba1b6b4..4c2a579ddf 100644
---- a/package/uclibc/uclibc.hash
-+++ b/package/uclibc/uclibc.hash
+diff --git a/package/botan/0001-Add-more-value-barriers-to-avoid-compiler-induced-side-channels.patch b/package/botan/0001-Add-more-value-barriers-to-avoid-compiler-induced-side-channels.patch
+deleted file mode 100644
+index 22f64be1b9..0000000000
+--- a/package/botan/0001-Add-more-value-barriers-to-avoid-compiler-induced-side-channels.patch
++++ /dev/null
+@@ -1,65 +0,0 @@
+-From 53b0cfde580e86b03d0d27a488b6c134f662e957 Mon Sep 17 00:00:00 2001
+-From: Jack Lloyd <jack@randombit.net>
+-Date: Sat, 19 Oct 2024 07:43:18 -0400
+-Subject: [PATCH] Add more value barriers to avoid compiler induced side
+- channels
+-
+-The paper https://arxiv.org/pdf/2410.13489 claims that on specific
+-architectures Clang and GCC may introduce jumps here. The donna128
+-issues only affect 32-bit processors, which explains why we would not
+-see it in the x86-64 valgrind runs.
+-
+-The GHASH leak would seem to be generic but the authors only observed
+-it on RISC-V.
+-
+-CVE: CVE-2024-50382
+-CVE: CVE-2024-50383
+-Upstream: https://github.com/randombit/botan/commit/53b0cfde580e86b03d0d27a488b6c134f662e957
+-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+----
+- src/lib/utils/donna128.h      | 5 +++--
+- src/lib/utils/ghash/ghash.cpp | 2 +-
+- 2 files changed, 4 insertions(+), 3 deletions(-)
+-
+-diff --git a/src/lib/utils/donna128.h b/src/lib/utils/donna128.h
+-index 8212bd349e0..7adf54546df 100644
+---- a/src/lib/utils/donna128.h
+-+++ b/src/lib/utils/donna128.h
+-@@ -8,6 +8,7 @@
+- #ifndef BOTAN_CURVE25519_DONNA128_H_
+- #define BOTAN_CURVE25519_DONNA128_H_
+- 
+-+#include <botan/internal/ct_utils.h>
+- #include <botan/internal/mul128.h>
+- #include <type_traits>
+- 
+-@@ -73,14 +74,14 @@ class donna128 final {
+-          l += x.l;
+-          h += x.h;
+- 
+--         const uint64_t carry = (l < x.l);
+-+         const uint64_t carry = CT::Mask<uint64_t>::is_lt(l, x.l).if_set_return(1);
+-          h += carry;
+-          return *this;
+-       }
+- 
+-       constexpr donna128& operator+=(uint64_t x) {
+-          l += x;
+--         const uint64_t carry = (l < x);
+-+         const uint64_t carry = CT::Mask<uint64_t>::is_lt(l, x).if_set_return(1);
+-          h += carry;
+-          return *this;
+-       }
+-diff --git a/src/lib/utils/ghash/ghash.cpp b/src/lib/utils/ghash/ghash.cpp
+-index 8c3b1ed6c2a..61b28590002 100644
+---- a/src/lib/utils/ghash/ghash.cpp
+-+++ b/src/lib/utils/ghash/ghash.cpp
+-@@ -131,7 +131,7 @@ void GHASH::key_schedule(std::span<const uint8_t> key) {
+-          m_HM[4 * j + 2 * i + 1] = H1;
+- 
+-          // GCM's bit ops are reversed so we carry out of the bottom
+--         const uint64_t carry = R * (H1 & 1);
+-+         const uint64_t carry = CT::Mask<uint64_t>::expand(H1 & 1).if_set_return(R);
+-          H1 = (H1 >> 1) | (H0 << 63);
+-          H0 = (H0 >> 1) ^ carry;
+-       }
+diff --git a/package/botan/botan.hash b/package/botan/botan.hash
+index d948271900..6b391c06a3 100644
+--- a/package/botan/botan.hash
++++ b/package/botan/botan.hash
 @@ -1,4 +1,4 @@
--# From https://downloads.uclibc-ng.org/releases/1.0.57/uClibc-ng-1.0.57.tar.xz.sha256
--sha256  8bc734b584e23ff6ae3d0ebb4c0fb1d1d814c58c82822b93130d436afa7ace8b  uClibc-ng-1.0.57.tar.xz
-+# From https://downloads.uclibc-ng.org/releases/1.0.58/uClibc-ng-1.0.58.tar.xz.sha256
-+sha256  9e8100a442f7079b9728ca286e3035f67df0578606166ea2d1ef865a4a12ddb9  uClibc-ng-1.0.58.tar.xz
- # Locally calculated
- sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING.LIB
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index 0c91a176fa..6f3668715b 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -4,7 +4,7 @@
+ # From https://botan.randombit.net/releases/sha256sums.txt
+-sha256  67e8dae1ca2468d90de4e601c87d5f31ff492b38e8ab8bcbd02ddf7104ed8a9f  Botan-3.5.0.tar.xz
++sha256  c1cd7152519f4188591fa4f6ddeb116bc1004491f5f3c58aa99b00582eb8a137  Botan-3.11.1.tar.xz
+ # Locally computed
+-sha256  db9168bdccaaea26557094436652577cc9bf43164e8be078d88aef1342fe4fb6  license.txt
++sha256  758ea6b4a65d5611bf79c24920f92473ef44bdde0b3b97fa578470a0ffc34f14  license.txt
+diff --git a/package/botan/botan.mk b/package/botan/botan.mk
+index 115cce6765..fcaf3aa28e 100644
+--- a/package/botan/botan.mk
++++ b/package/botan/botan.mk
+@@ -4,16 +4,13 @@
  #
  ################################################################################
  
--UCLIBC_VERSION = 1.0.57
-+UCLIBC_VERSION = 1.0.58
- UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
- UCLIBC_SITE = https://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
- UCLIBC_LICENSE = LGPL-2.1+
-
---===============4051198517644590718==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-BOTAN_VERSION = 3.5.0
++BOTAN_VERSION = 3.11.1
+ BOTAN_SOURCE = Botan-$(BOTAN_VERSION).tar.xz
+ BOTAN_SITE = http://botan.randombit.net/releases
+ BOTAN_LICENSE = BSD-2-Clause
+ BOTAN_LICENSE_FILES = license.txt
+ BOTAN_CPE_ID_VALID = YES
+ 
+-# 0001-Add-more-value-barriers-to-avoid-compiler-induced-side-channels.patch
+-BOTAN_IGNORE_CVES += CVE-2024-50382 CVE-2024-50383
+-
+ BOTAN_INSTALL_STAGING = YES
+ 
+ BOTAN_DEPENDENCIES = host-python3
+@@ -91,11 +88,7 @@ BOTAN_DEPENDENCIES += zlib
+ BOTAN_CONF_OPTS += --with-zlib
+ endif
+ 
+-ifeq ($(BR2_POWERPC_CPU_HAS_ALTIVEC),)
+-BOTAN_CONF_OPTS += --disable-altivec
+-endif
+-
+-ifeq ($(BR2_ARM_CPU_HAS_NEON),)
++ifeq ($(BR2_arm)x$(BR2_ARM_CPU_HAS_NEON),yx)
+ BOTAN_CONF_OPTS += --disable-neon
+ endif
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4051198517644590718==--
