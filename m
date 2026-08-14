@@ -4,110 +4,152 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D518AC5B572
-	for <buildroot@archiver.kernel.org>; Fri, 14 Aug 2026 19:01:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5F6EC5CFCF
+	for <buildroot@archiver.kernel.org>; Fri, 14 Aug 2026 19:59:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3989360A7C;
-	Fri, 14 Aug 2026 19:01:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3A04560738;
+	Fri, 14 Aug 2026 19:59:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id egtIhlH4nHJs; Fri, 14 Aug 2026 19:01:27 +0000 (UTC)
+ id wUAWFSGY3SRB; Fri, 14 Aug 2026 19:59:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 19C3D608AE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7AB6360683
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786734087;
-	bh=udBjnCfV+IFY+0q6CxVchdzW8FRWHzLIgWAFxSkf5IQ=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=ewFXS9ZrwKc7+xpCwHggs0tnRFVUAHFSynFNRkbvK2B/SjUy2oL+t0gtt7sm73VG5
-	 BKV7vz/E6dVkEu+am2DuLMt/fqZzdVF2vGmxNX2R/tAgyzecUKTMwsxCJQHyruEfZZ
-	 ps3KRNYtQrq3fVC/ZiTMwSMwOepRjwpE6ISAskZiCcKuQYkhzWA72OdQOEs0KWZIST
-	 EHQaIXzLD07h3ZMLXkHwbQGim4NBMND8+kUHnSkiBKQ2XJbxL6FSRUHF7lyOQ0+UFI
-	 zRi0PYJg8UD2kSOZQIzGRqFsoJtfW/76Shrcd6+QcJPS7s+QXjfzt41WGkfto+BTMF
-	 8iuCmRGoz7ofg==
+	s=default; t=1786737551;
+	bh=TQj+STusr9vkUm5DDac3V1uWf07l54rihptorOzuVO8=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=RX7oJZRzrSEybZhZQmHCsViaJgkdeWGZt0CJC7+m8t7zGh+y4hpYv2QKxLq7FH8YL
+	 Zd8AiocWxyP2tMPS6I7AFdm9xA8kYRhmOdZAk8lleW4V/HQE8mUXo2+K19T4v/PKkA
+	 2yXolH9swS88P8UGXlcSy4kLAorfnsk/jRjFcksLsLT1xumg9kUqcP6SC05hzmr7gI
+	 eiGiUxX6UTFssbPKgrl9xCr4af8B0eKJ0p1m4rkbTIQ9A0ZKljBpo1Y6Okw8ADkpbA
+	 pAuhMXoc9IBTUw0HrL2TCDF3uvXsZguIW8Udf8YhgOhfMgYWb6/zUCuQvX1wxkMFIb
+	 hJFo7Q7D4ZWhw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 19C3D608AE;
-	Fri, 14 Aug 2026 19:01:27 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 146DD3A0
- for <buildroot@buildroot.org>; Fri, 14 Aug 2026 19:01:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7AB6360683;
+	Fri, 14 Aug 2026 19:59:11 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id C854423F
+ for <buildroot@buildroot.org>; Fri, 14 Aug 2026 19:59:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F208660823
- for <buildroot@buildroot.org>; Fri, 14 Aug 2026 19:01:25 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id AE69480BA4
+ for <buildroot@buildroot.org>; Fri, 14 Aug 2026 19:59:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id P-YEHiR5hVAi for <buildroot@buildroot.org>;
- Fri, 14 Aug 2026 19:01:25 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42a; helo=mail-wr1-x42a.google.com;
- envelope-from=fbstachura@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org DE402606FD
-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none) header.from=gmail.com
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DE402606FD
-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20251104 header.b=VibD4/UL
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
- [IPv6:2a00:1450:4864:20::42a])
- by smtp3.osuosl.org (Postfix) with ESMTPS id DE402606FD
- for <buildroot@buildroot.org>; Fri, 14 Aug 2026 19:01:24 +0000 (UTC)
-Received: by mail-wr1-x42a.google.com with SMTP id
- ffacd0b85a97d-47de0093c42so1177531f8f.3
- for <buildroot@buildroot.org>; Fri, 14 Aug 2026 12:01:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1786734083; x=1787338883; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
- bh=Iy1sgnWfijIG4MjhhPiHAItL6XANVzYZG2fwTb8W42Y=;
- b=VibD4/UL+3J+yWg3jqM/UZRqvQyfcfMVXtwlyrtc5io3VEfl/u1wclIl4wsmq3LIN0
- 8Xw50P+AyZzfMOQFxlxXu8o4frV72KvcgPk9p+Ra1i0WlbXonu1Cw+vpaiFELwFkZRig
- zhLzzl50vRkraGVlao2sn0X9K6PRJF6lP44YN+i6LeUjXt+htW15VrFyC0wbVbo23V7/
- idCmaqsHGaqiaiotPjhGI2vWuc0YpXcWHBVNVcJtuWDVLuCHve2AmOU/UO0v2QzqMxQv
- UaxN5gSQSsi89MEz/nCppsisC/5b4QeFBl5r4UdxkoiVPmeGsmoFuof4F7ePLgE6O4yJ
- ZQgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1786734083; x=1787338883;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to:content-type;
- bh=Iy1sgnWfijIG4MjhhPiHAItL6XANVzYZG2fwTb8W42Y=;
- b=dcc1M5ldRwEYSjF1LSLU8y0ZCia6Ptqdf4Q4eNiTDW+4AwUkIEX79F47ceNVQ2JvIV
- GrtfARID8xBBEMupxdDa73hU746BjuqOHRi3IhM8olU1FYkrEYxgK2nLdftculWXiCHr
- +xNeK/0YVg3nDASmIfpNSZieYey4fcLBrkPmo87i0nWjg7OOI7SkJl4Hoc8qyhxeuEEz
- kbnstVac94LUYFgd369oISWomnGzhnuXmjAXTdBIGFjxm7+d2e7u9NaHx+H6zAUV7Kae
- WubDVousdRejhfumODNoADWzK4eIBj5NrqYTu/tY8vAjt41jLRcdBfhHrUDo3Rz3qclP
- D0NA==
-X-Gm-Message-State: AOJu0YylkggMxdiSiQuhd7z8wm1y/emL747cRGB3h1Wo0PcJMI+7cFKH
- VH7dci9W5VK2KLySUIY5wuN1/5fHvvxGz3uew45d/YuAC9we8u+340DB/5RoIw==
-X-Gm-Gg: AR+sD136HpBVqmDBYG01g+xi0QrAJkqixoyrdEPs4qoWuTtKGGbR9Q7rIxXopa3drVS
- 6IQmh62r8onsBUAMIWPeW/WnlkYl7Zw3dnzxje4TltbPNrcSYfrWcYcqiYd7BUiCMG5sUrePFBW
- B8eXw3z1Rd5ppd+feDOKuJun8X9mAuX/GqSZEjMwPsSiyGcFGLu/gGIcYagUH7WBeg1q9OlaBs9
- 9C0MpoZDciem38sO32ADbnPA/Tg9Pa8CvmWUPYz6g3aioRAlj+rfItbz+j4jTPYiU3GhsQzh0/F
- 6wtIVTv2I7yfFhoo4t56UIQpIH83Kvll/JsfzS1H7RdMhCSqZe68D7Gi00ABa0hmYmOHPhr+sQk
- eoWMWuE4K/g4ybF/r7KcVlUOe+Pg/jULMxU2neVvG1MXNKJ+3kvkD0Pnx0U+bRlyO2HzrZmRaFQ
- VMHvpki6NJ2hgZeGjuiTkXwVqPgjHwJABOnrbhHrReDzBgQeUPGTQ2mHjVO94bepqn8mgRxuz5f
- 0stH22Y7QVUD6BhPFhZizpXsWToNIXUnpMzbvUSJuiHLtC4+yfYGgYnNjVvwtV+LJXWk5z8gmhW
- BZhCR33mZ1lQyCcxAzqomYyxOfg=
-X-Received: by 2002:a05:6000:2089:b0:47f:8b24:ef01 with SMTP id
- ffacd0b85a97d-4816070be29mr12157597f8f.1.1786734082585; 
- Fri, 14 Aug 2026 12:01:22 -0700 (PDT)
-Received: from trial.home (aki181.neoplus.adsl.tpnet.pl. [83.26.12.181])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-4815f21a31dsm10913156f8f.9.2026.08.14.12.01.20
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 14 Aug 2026 12:01:21 -0700 (PDT)
-From: Franciszek Stachura <fbstachura@gmail.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Ihl18LgYqimt for <buildroot@buildroot.org>;
+ Fri, 14 Aug 2026 19:59:10 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.20;
+ helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 59817811D2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 59817811D2
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 59817811D2
+ for <buildroot@buildroot.org>; Fri, 14 Aug 2026 19:59:07 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from client.hidden.invalid by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MDhlf-1wkD5r2xkd-008T39; Fri, 14
+ Aug 2026 21:59:04 +0200
 To: buildroot@buildroot.org
-Cc: Franciszek Stachura <fbstachura@gmail.com>
-Date: Fri, 14 Aug 2026 21:00:52 +0200
-Message-ID: <20260814190051.2970501-2-fbstachura@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Joseph Kogut <joseph.kogut@gmail.com>,
+ Nathaniel Roach <nroach44@gmail.com>,
+ Thomas Devoogdt <thomas@devoogdt.com>, Fiona Klute <fiona.klute@gmx.de>
+Date: Fri, 14 Aug 2026 21:58:46 +0200
+Message-ID: <20260814195856.3295644-1-fiona.klute@gmx.de>
 X-Mailer: git-send-email 2.55.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/memcached: security bump version to
- 1.6.45
+X-Provags-ID: V03:K1:s/qnhx0vV6KdOUFEN3V/H+qdS5G78HSn7D4oMZXyTUrMYD0GLVv
+ WAegGeuS1ZFfEb2zHdy3T74ADMG7BKpU+AYRyGS5Pak/dqhuJWW2MUSCm/jg9MMu2I3vm5h
+ XCa7o4JB4Xl5eQeywuRelIQfGPUpTcPK+PV7GQbrmZLKDnKGyOC9/BoSftvjVKxcMWVPbv5
+ qon0R2BtbfFVIt/qrmQaw==
+UI-OutboundReport: notjunk:1;M01:P0:32ejqWJ+bJo=;I9JwGjOVVIeuPW/r4izwYHrXgOr
+ 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
+ m/YV6+AQYl53IxCg==
+Subject: [Buildroot] [PATCH 00/10] Replace all wiki.gnome.org URLs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -119,60 +161,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Fiona Klute via buildroot <buildroot@buildroot.org>
+Reply-To: Fiona Klute <fiona.klute@gmx.de>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/memcached/memcached/wiki/ReleaseNotes1644
-> Hot on the heels of the last security release is...
-> another security release
+wiki.gnome.org has a big deprecation warning saying "All information
+on this site is out of date and should not be used." I got annoyed
+some package descriptions still had such links, so this series
+replaces them: mostly with Gitlab links, in two cases with listed
+project websites.
 
-https://github.com/memcached/memcached/wiki/ReleaseNotes1645
-> So this is a lot of crash and security bugs.
+Side note: package/gstreamer1/gstd is the last package using
+package/libsoup (as opposed to package/libsoup3), if that would be
+updated we could get rid of package/libsoup.
 
-Signed-off-by: Franciszek Stachura <fbstachura@gmail.com>
----
-I'm wondering, are packages in Buildroot master supposed to be
-bleeding-edge? The maintainer also left this in the release notes:
+Best regards,
+Fiona
 
-> If you decide to deploy this please be cautious; use a canary server
-> and let it bake, just in case.
+Fiona Klute (10):
+  package/at-spi2-core: update project URL
+  package/gvfs: update project URL
+  package/libgee: update project URL
+  package/libgudev: update project URL
+  package/libpeas: update project URL
+  package/libsecret: update project URL
+  package/libsoup: update project URL
+  package/libsoup3: update project URL
+  package/cantarell: update project URL
+  package/rygel: update project URL
 
-That said, 1.6.45 was released a month ago and I don't see any critical
-bugs reported in Github issues. (there are two AI-generated reports, one
-is not considered a security issue, the POC of the other does not work).
----
- package/memcached/memcached.hash | 6 +++---
- package/memcached/memcached.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/at-spi2-core/Config.in | 2 +-
+ package/cantarell/Config.in    | 2 +-
+ package/gvfs/Config.in         | 2 +-
+ package/libgee/Config.in       | 2 +-
+ package/libgudev/Config.in     | 2 +-
+ package/libpeas/Config.in      | 2 +-
+ package/libsecret/Config.in    | 2 +-
+ package/libsoup/Config.in      | 2 +-
+ package/libsoup3/Config.in     | 2 +-
+ package/rygel/Config.in        | 2 +-
+ 10 files changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/package/memcached/memcached.hash b/package/memcached/memcached.hash
-index 93480d338c..6a3de856e9 100644
---- a/package/memcached/memcached.hash
-+++ b/package/memcached/memcached.hash
-@@ -1,5 +1,5 @@
--# From http://www.memcached.org/files/memcached-1.6.43.tar.gz.sha1
--sha1  37307d13528f355fb282bc8841ca033272e44ac9  memcached-1.6.43.tar.gz
-+# From http://www.memcached.org/files/memcached-1.6.45.tar.gz.sha1
-+sha1  45038980ea7045a548b9b5b5125ef7116312a768  memcached-1.6.45.tar.gz
- # Locally computed
--sha256  8042ee26e004efa0db41ca4a7c713f759c3280c2f8bee438579f13de1e509435  memcached-1.6.43.tar.gz
-+sha256  d362c64e6d8d5287153501eabf7c85b4a761432fbf53f5d7b085d0bb1653c1dd  memcached-1.6.45.tar.gz
- sha256  bc887c4ad8051fe690ace9528fe37a2e0bb362e6d963331d82e845ca9b585a0c  COPYING
-diff --git a/package/memcached/memcached.mk b/package/memcached/memcached.mk
-index e297ca17ff..f86bd56006 100644
---- a/package/memcached/memcached.mk
-+++ b/package/memcached/memcached.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MEMCACHED_VERSION = 1.6.43
-+MEMCACHED_VERSION = 1.6.45
- MEMCACHED_SITE = http://www.memcached.org/files
- MEMCACHED_DEPENDENCIES = libevent
- MEMCACHED_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
 -- 
 2.55.0
 
