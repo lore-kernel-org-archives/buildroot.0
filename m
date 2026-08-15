@@ -1,62 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8FD01C5CFC1
-	for <buildroot@archiver.kernel.org>; Sat, 15 Aug 2026 22:02:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45DF8C5DF67
+	for <buildroot@archiver.kernel.org>; Sat, 15 Aug 2026 22:03:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 434AD80E92;
-	Sat, 15 Aug 2026 22:02:08 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tGCw35B2OccE; Sat, 15 Aug 2026 22:02:05 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9087780E4E
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786831325;
-	bh=FfiCkexZd6yEwNgJd875EXywnyDsKTpOxeCL/nYDPu4=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=jzhL56o7frW3JaVjChuvLqeKV05TtvEVcU0D5aD+Fk+v/NColaEdczX9B9YRtGIMZ
-	 PTq0LABN5LMMhTVjxUfyi9Y+H2OGgnZoz/wdxfZuytNeTl5p6RQNjyNsBQnjMydiLx
-	 luIJY5/vpG+sZHVcfUlRMs1Sf72ranjH2VJcFzP3NVky+9psjn/kwylRk2jV4Nv7ej
-	 xYeAskPKyIs1jiGvVCsggpQXjD8u9VYRHTbVGTTsme4UyTvCqDdhvT29HNoP6ld9Dc
-	 QSzL+SPKeqjyhXkAH5pf0f675Fknd7gqQai8k3Ynq+gk9ztIoksz7udmHrbmPmoLAP
-	 8bZgBpjGAXnDg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9087780E4E;
-	Sat, 15 Aug 2026 22:02:05 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id A40A9336
- for <buildroot@buildroot.org>; Sat, 15 Aug 2026 22:02:04 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A1BBF407B0
- for <buildroot@buildroot.org>; Sat, 15 Aug 2026 22:02:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1B1C1407DA;
+	Sat, 15 Aug 2026 22:03:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 69ffoWbqV9iW for <buildroot@buildroot.org>;
- Sat, 15 Aug 2026 22:02:03 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 11DE4407AF
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 11DE4407AF
- for <buildroot@buildroot.org>; Sat, 15 Aug 2026 22:02:03 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3F7EE8D9BE; Sat, 15 Aug 2026 22:01:12 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 15 Aug 2026 23:38:27 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: cd9f9b47d7c00ae404d8d0eee47ddd6ce58143eb
-X-Git-Newrev: 1d132d04fc0ecac014be003b7e1662c47672328b
-X-Patchwork-Hint: ignore
-Message-Id: <20260815220112.3F7EE8D9BE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libgpiod2: bump to version 2.3.1
+ id b1jdpAEdrfWT; Sat, 15 Aug 2026 22:03:42 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4BD65407B3
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1786831422;
+	bh=q98u3bfJ4LVRAgiI+TgG87s7175o7yxvzVHL6UhnFs0=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=nOr9Iq7PMdGR49ZrBUu4mY4ZNpHERv2+jBKOLtqs83j4/EpJYRLUgnPN9ZNfmnOmd
+	 af0+TWKSB/t+3HHFEMVL3qXtM1Qkvkv8reKZB/oH/bds9NYwj2uyOv5BhB8jSs9EGL
+	 76/t5/pYKiu1YnG6WNXnQS0sWkFX0YACAkrGmM63bG65c4nBbv980+Qf9xi4GnECuv
+	 pDgOoJM2ntrWFL0HSTTCfBthKuWyik4189WrwJegeX41p6YhpZEUeW73wO2BOATtWj
+	 YiwZG45taB4oYdbM/IleRfWyMdM4IV9zk1tYg/u+DuIU9zGeZNxzv+wPjEtjNjJofT
+	 TS+XAlhs4Xy7Q==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4BD65407B3;
+	Sat, 15 Aug 2026 22:03:42 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1C51623F
+ for <buildroot@buildroot.org>; Sat, 15 Aug 2026 22:03:41 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0276C407B3
+ for <buildroot@buildroot.org>; Sat, 15 Aug 2026 22:03:41 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1YcVNq7Yqscc for <buildroot@buildroot.org>;
+ Sat, 15 Aug 2026 22:03:40 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org F36FF407B0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F36FF407B0
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id F36FF407B0
+ for <buildroot@buildroot.org>; Sat, 15 Aug 2026 22:03:39 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id 326972003BE;
+ Sun, 16 Aug 2026 00:03:33 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 16 Aug 2026 00:03:33 +0200
+MIME-Version: 1.0
+Date: Sun, 16 Aug 2026 00:03:33 +0200
+To: Michael Nosthoff <buildroot@heine.tech>
+Cc: buildroot@buildroot.org, Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ Boerge Struempfel <boerge.struempfel@gmail.com>
+In-Reply-To: <20260722094344.153516-1-buildroot@heine.tech>
+References: <20260722094344.153516-1-buildroot@heine.tech>
+User-Agent: Webmail Free/1.6.17
+Message-ID: <8738f01d9765835bba311f0c8310e382@free.fr>
+X-Sender: ju.o@free.fr
+Subject: Re: [Buildroot] [PATCH] package/libgpiod2: bump to version 2.3.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,130 +79,27 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/1d132d04fc0ecac014be003b7e1662c47672328b
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 22/07/2026 11:43, Michael Nosthoff via buildroot wrote:
+> - buildsystem changed from autotools to meson
+> - add option to install dbus-server and client
+> 
+> changelog:
+> https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/tree/NEWS?h=v2.3.1
+> 
+> Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 
-- buildsystem changed from autotools to meson
-- add option to install dbus-server and client
+Applied to master, thanks. For info, I rewrote the Config.in dbus
+option to propagate the libgudev dependencies. See:
+https://gitlab.com/buildroot.org/buildroot/-/commit/1d132d04fc0ecac014be003b7e1662c47672328b
 
-changelog:
-https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/tree/NEWS?h=v2.3.1
+Best regards,
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
-[Julien:
- - propagate libgudev dependencies on dbus option
- - add Config.in comments for dbus option
-]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/libgpiod2/Config.in      | 18 ++++++++++++++++++
- package/libgpiod2/libgpiod2.hash |  2 +-
- package/libgpiod2/libgpiod2.mk   | 29 ++++++++++++++++++-----------
- 3 files changed, 37 insertions(+), 12 deletions(-)
-
-diff --git a/package/libgpiod2/Config.in b/package/libgpiod2/Config.in
-index 5a13bfc344..d65cd4a494 100644
---- a/package/libgpiod2/Config.in
-+++ b/package/libgpiod2/Config.in
-@@ -16,6 +16,24 @@ config BR2_PACKAGE_LIBGPIOD2
- 
- if BR2_PACKAGE_LIBGPIOD2
- 
-+config BR2_PACKAGE_LIBGPIOD2_DBUS
-+	bool "install dbus-server and client"
-+	depends on BR2_PACKAGE_HAS_UDEV # libgudev
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libgudev
-+	depends on BR2_USE_MMU # libgudev
-+	depends on BR2_USE_WCHAR # libgudev
-+	select BR2_PACKAGE_LIBGUDEV
-+	help
-+	  Include dbus-server and client for managing GPIOs.
-+
-+comment "libgpiod2 dbus needs udev /dev management"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_PACKAGE_HAS_UDEV
-+
-+comment "libgpiod2 dbus needs a toolchain w/ threads, wchar"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
-+
- config BR2_PACKAGE_LIBGPIOD2_TOOLS
- 	bool "install tools"
- 	help
-diff --git a/package/libgpiod2/libgpiod2.hash b/package/libgpiod2/libgpiod2.hash
-index a12752261a..48f7c77855 100644
---- a/package/libgpiod2/libgpiod2.hash
-+++ b/package/libgpiod2/libgpiod2.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/software/libs/libgpiod/sha256sums.asc
--sha256  13207176b0eb9b3e0f02552d5f49f5a6a449343ce47416158bb484d9d3019592  libgpiod-2.2.4.tar.xz
-+sha256  e3a358a90a9204ff16f92b6f4028ed91460b1926f10589eb54b3566484650a30  libgpiod-2.3.1.tar.xz
- # Hash for license file
- sha256  f646ad5159efb51c1130a4b43c31f0759750b1e254d2acf510f368ee2e2085c3  COPYING
-diff --git a/package/libgpiod2/libgpiod2.mk b/package/libgpiod2/libgpiod2.mk
-index d83fdbd94a..d74c98684c 100644
---- a/package/libgpiod2/libgpiod2.mk
-+++ b/package/libgpiod2/libgpiod2.mk
-@@ -6,7 +6,7 @@
- 
- # Be careful when bumping versions.
- # Dependency on kernel header versions may change.
--LIBGPIOD2_VERSION = 2.2.4
-+LIBGPIOD2_VERSION = 2.3.1
- LIBGPIOD2_SOURCE = libgpiod-$(LIBGPIOD2_VERSION).tar.xz
- LIBGPIOD2_SITE = https://www.kernel.org/pub/software/libs/libgpiod
- LIBGPIOD2_LICENSE = LGPL-2.1+
-@@ -14,27 +14,34 @@ LIBGPIOD2_LICENSE_FILES = COPYING
- LIBGPIOD2_INSTALL_STAGING = YES
- LIBGPIOD2_DEPENDENCIES = host-pkgconf
- LIBGPIOD2_CONF_OPTS = \
--	--disable-bindings-python \
--	--disable-examples \
--	--disable-tests
-+	-Dbindings-python=disabled \
-+	-Dexamples=disabled \
-+	-Dtests=disabled
-+
-+ifeq ($(BR2_PACKAGE_LIBGPIOD2_DBUS),y)
-+LIBGPIOD2_CONF_OPTS += -Ddbus=enabled
-+LIBGPIOD2_DEPENDENCIES += libgudev
-+else
-+LIBGPIOD2_CONF_OPTS += -Ddbus=disabled
-+endif
- 
- ifeq ($(BR2_PACKAGE_LIBGPIOD2_TOOLS),y)
--LIBGPIOD2_CONF_OPTS += --enable-tools
-+LIBGPIOD2_CONF_OPTS += -Dtools=enabled
- else
--LIBGPIOD2_CONF_OPTS += --disable-tools
-+LIBGPIOD2_CONF_OPTS += -Dtools=disabled
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBEDIT),y)
- LIBGPIOD2_DEPENDENCIES += libedit
--LIBGPIOD2_CONF_OPTS += --enable-gpioset-interactive
-+LIBGPIOD2_CONF_OPTS += -Dgpioset-interactive=enabled
- else
--LIBGPIOD2_CONF_OPTS += --disable-gpioset-interactive
-+LIBGPIOD2_CONF_OPTS += -Dgpioset-interactive=disabled
- endif
- 
- ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
--LIBGPIOD2_CONF_OPTS += --enable-bindings-cxx
-+LIBGPIOD2_CONF_OPTS += -Dbindings-cxx=enabled
- else
--LIBGPIOD2_CONF_OPTS += --disable-bindings-cxx
-+LIBGPIOD2_CONF_OPTS += -Dbindings-cxx=disabled
- endif
- 
--$(eval $(autotools-package))
-+$(eval $(meson-package))
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
