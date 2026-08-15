@@ -4,67 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 635ABC5CFC1
-	for <buildroot@archiver.kernel.org>; Sat, 15 Aug 2026 10:03:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CDEF0C5CFC1
+	for <buildroot@archiver.kernel.org>; Sat, 15 Aug 2026 10:34:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0E9F2812E3;
-	Sat, 15 Aug 2026 10:03:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 742A380FF2;
+	Sat, 15 Aug 2026 10:34:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KQWFIovNCZ8F; Sat, 15 Aug 2026 10:03:21 +0000 (UTC)
+ id ylwe8RUZGEMj; Sat, 15 Aug 2026 10:34:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 15C938126A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9514181102
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786788201;
-	bh=EvMz/AgVa3egrK+4aR2Uetb3v+bEcj3XoU6CbwAx0LQ=;
-	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=meVyhoBkIPzmfKXnrtgLoJUf+NQQlZrYNLdocwUHu4JEpaz9QM5I0f6qfZIpqDoar
-	 C54pTVuIvfCTXK0XQlG8UrHXrmzISUkagd/MWlkHedo8skHlM/6jJvFUoPsagqthw5
-	 KVMUvuENY7XVpf2s3ovjjDSDkltWct23gmQOJgFY3Li5e12Bp+M9D1eXb3GYTBCwct
-	 GY8XvXNG9IpEqXIBD5aa5gFl2q3TD/H90RAvxtuariwvuvIVa6r4APbteBqni6SNaI
-	 u1g60zrIZFmz5KYC+qorPveQSukSYMVuxQol57zyOjEuzCiUUp6BR9jEVlnY6EYG/0
-	 AyuuE1TT7nffg==
+	s=default; t=1786790064;
+	bh=qs/vK0l8u+k936RaK9TXxeH1UyMF9sacPpCEBTWBT+0=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=CgnFdS5H1kURbop/UVmCm+SKNDqpyFlkDr9zm53l+YA/DC33P+2SoLJD6uDkcDoqe
+	 mBF/ErFaHC/VKoo+4/DyUx6E5KyoFYYtB6PyiQUzQCZaLVsx0IAML2QzIRxnXsV4Hm
+	 +azFXjmFc8/QAOHj2K+klRNhqLp77sCp9fCZve1MPLM59y+aWZIymcZnPf7lLYd6HC
+	 dZasrUleizwxFmKZ2Rv//l8ofgFst0htoV3+5jGDdHS0SfvZVpktBgcPwy2GFdtwrR
+	 6aVsrXYrvcQ0cP0L0rqnJJVHApOCiHKCk83794xmAV8oVPGvSmVddn5TKwXcHGO5a6
+	 qjAaowNGqA+1A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 15C938126A;
-	Sat, 15 Aug 2026 10:03:21 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 816F333B
- for <buildroot@buildroot.org>; Sat, 15 Aug 2026 10:03:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9514181102;
+	Sat, 15 Aug 2026 10:34:24 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 52E9D361
+ for <buildroot@buildroot.org>; Sat, 15 Aug 2026 10:34:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5EC1C8126A
- for <buildroot@buildroot.org>; Sat, 15 Aug 2026 10:03:20 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3914F60677
+ for <buildroot@buildroot.org>; Sat, 15 Aug 2026 10:34:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Jb9R9XEoHN4p for <buildroot@buildroot.org>;
- Sat, 15 Aug 2026 10:03:19 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
- helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RuyIMEALn87p for <buildroot@buildroot.org>;
+ Sat, 15 Aug 2026 10:34:22 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6570980F2F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6570980F2F
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6570980F2F
- for <buildroot@buildroot.org>; Sat, 15 Aug 2026 10:03:18 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-02.galae.net (Postfix) with ESMTPS id 0D6FB1A1660
- for <buildroot@buildroot.org>; Sat, 15 Aug 2026 10:03:16 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id BD295604AA
- for <buildroot@buildroot.org>; Sat, 15 Aug 2026 10:03:15 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id C9FFF11C4F4A4; 
- Sat, 15 Aug 2026 12:03:08 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8BEF16065E
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8BEF16065E
+ for <buildroot@buildroot.org>; Sat, 15 Aug 2026 10:34:22 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 1C1988835C; Sat, 15 Aug 2026 10:33:32 +0000 (UTC)
 To: buildroot@buildroot.org
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 15 Aug 2026 12:03:06 +0200
-Message-ID: <20260815100306.100753-1-thomas.petazzoni@bootlin.com>
-X-Mailer: git-send-email 2.55.0
-MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
-Subject: [Buildroot] [PATCH] package/cramfs: bump to version 2.2
+Date: Sat, 15 Aug 2026 12:05:16 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: dc500671dfa6e25e8ff3b4d82904f5e5806a9368
+X-Git-Newrev: 97f027ce41ced23df556dea56f5d61db8c8b073a
+X-Patchwork-Hint: ignore
+Message-Id: <20260815103332.1C1988835C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gcc: fortran support now requires
+ MMU
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,65 +69,68 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changes:
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/97f027ce41ced23df556dea56f5d61db8c8b073a
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Security and robustness release.  Notable cramfsck changes:
+Since upstream commit
+c66d1ba685b0d03b28967d2f7a48f6c64687efa2 ("Fortran: Add a shared
+memory multi process coarray implementation [PR88076]"), libgfortran
+now unconditionally uses fork(), which makes it impossible to build
+Fortran support on noMMU architectures.
 
-  * Reject dirent names containing "/", "." or ".." to close a path
-    traversal during `cramfsck -x` (reported in issue #12).
-  * Open regular files with O_CREAT|O_EXCL during extraction to
-    prevent duplicate-dirent attacks from truncating files reached
-    via a previously-extracted symlink.
-  * Fix outbuffer NUL termination and a 1-byte overflow in
-    do_symlink when running with both -v and -x.
-  * Harden romfs_read against truncated/malformed images by
-    zero-filling the window buffer and checking lseek/read returns.
-  * Reject directory entries that extend past their parent's size.
+In follow-up commit efb497c23a6f4109bf8794342617cbc161c08301, it was
+made even more clear: if you don't have fork() and you're not on
+WIN32:
 
-Documentation: README now documents cramfsck and lists all current
-mkcramfs options; stale hard-link and endianness claims corrected;
-NOTES trimmed of the 25-year-old Future Development section.
++#else
++#error "no way known to start child processes."
++#endif
 
-(See https://github.com/npitre/cramfs-tools/releases/tag/v2.2)
+There are apparently no autobuilder failures for this issue, but the
+simple defconfig below allows to trigger the build failure:
 
+BR2_arm=y
+BR2_cortex_m7=y
+BR2_GCC_VERSION_16_X=y
+BR2_TOOLCHAIN_BUILDROOT_FORTRAN=y
+
+Even though this issue is only starting from GCC 16.x, we make Fortran
+unavailable on noMMU configurations regardless of the GCC version,
+with the reasoning that:
+
+1. Fortran on noMMU is unlikely to be in use
+
+2. Moving forward, all future versions of GCC will have this
+   restriction
+
+Cc: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/cramfs/cramfs.hash | 2 +-
- package/cramfs/cramfs.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gcc/Config.in.host | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/cramfs/cramfs.hash b/package/cramfs/cramfs.hash
-index 672266b468..3795c862c9 100644
---- a/package/cramfs/cramfs.hash
-+++ b/package/cramfs/cramfs.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  cdb7a4ecad034f063b6456b37cdf653ae31758a224c32161e54712a9d7f01cc3  cramfs-2.1.tar.gz
-+sha256  6217c93cbfa79ae720bad4139739c1bd7a665928a9bfc2dd820b98df27c66da2  cramfs-2.2.tar.gz
- sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  COPYING
-diff --git a/package/cramfs/cramfs.mk b/package/cramfs/cramfs.mk
-index 85706d1a8e..a6196ca85e 100644
---- a/package/cramfs/cramfs.mk
-+++ b/package/cramfs/cramfs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CRAMFS_VERSION = 2.1
-+CRAMFS_VERSION = 2.2
- CRAMFS_SITE = $(call github,npitre,cramfs-tools,v$(CRAMFS_VERSION))
- CRAMFS_LICENSE = GPL-2.0+
- CRAMFS_LICENSE_FILES = COPYING
--- 
-2.55.0
-
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index d8b89d942c..bc3223eb59 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -98,6 +98,8 @@ config BR2_TOOLCHAIN_BUILDROOT_FORTRAN
+ 	# on architecture building libquadmath, wchar is required
+ 	depends on !BR2_TOOLCHAIN_HAS_LIBQUADMATH || \
+ 		(BR2_TOOLCHAIN_HAS_LIBQUADMATH && BR2_USE_WCHAR)
++	# requires fork() since gcc 16.x
++	depends on BR2_USE_MMU
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	help
+ 	  Enable this option if you want your toolchain to support the
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
