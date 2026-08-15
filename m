@@ -1,62 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22F7BC5AD5A
-	for <buildroot@archiver.kernel.org>; Sat, 15 Aug 2026 15:09:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7C9C3C5AD5A
+	for <buildroot@archiver.kernel.org>; Sat, 15 Aug 2026 15:09:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9A90C605B5;
-	Sat, 15 Aug 2026 15:09:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C6A5A80E8F;
+	Sat, 15 Aug 2026 15:09:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fKmxMaU_tpRM; Sat, 15 Aug 2026 15:09:43 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Syr11bqBiGQS; Sat, 15 Aug 2026 15:09:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AF32B60617
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 971A080E95
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786806583;
-	bh=JJfCiqjAuiHspE2CchcE1cOXBPmyRx0W5WhNbDaH+YQ=;
+	s=default; t=1786806584;
+	bh=92sGCcB9zzzRRBjqTcGqc5Cjd/LyTRCuDLfVdxfAc08=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=eXdyXOOfo6SPNJXI9uTDNVmQSyhWmnTfV+UsjNE52LRXebJmOQcn2Wi1fUWvZ8xg+
-	 cMlyHl9kwlwqEPBvZtKKKwpXuXzYvJ8yBDULIfllkDJS7o43hpZhLTGPH2R7xh1ft7
-	 5XIXSjqTabtVhE87oYz7Wd/hJkgxwzyefumXIA7MCX/9YXFbVchGxAMPe0MEejVw0F
-	 FGkfcG1Ic6uJIXOk593uh5hfIKT24E26lCpm3zKAJC4gxGsTabCN0LGDfGDRESGUry
-	 kyGCi85JuYkQMW12ss8A+iPk0NxyUaCaAFuN93hnyEXzLqLm6IyDmO1qOiStuCghcF
-	 yrUtik8WR2TEA==
+	b=Moy4IN8EZod44ToLu8FM9F1XD+VPAYwxAygMWbWvfTUky8jUiJhp9u08Ypnn57g1f
+	 86UiZSkc8twVPj9puOjVleIEHo9D9/Kvmb+NYANYuA07Tatz3I0+0mdHXW/F2+pFa8
+	 Qdn3krZDj3TvwYCQi/wrGVYPj/nlDNv7tU0vARqecHrizO2TybJMvS9UfopH6FFlkz
+	 aWnBitGK0nmb0uo9OFBgRipyvNO4GVrwAJzbp8nZL2kpHVlFyT0yM/N70grHYJyp2v
+	 0eFFSjtzl/63KsZ1Ob8BTWuYApoxUVGEWdMyjbe5AUKPrmc6pPMyPGmpC6IGquAFmk
+	 JwlRpV7PFGhrQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AF32B60617;
-	Sat, 15 Aug 2026 15:09:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 971A080E95;
+	Sat, 15 Aug 2026 15:09:44 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 9290C1393
- for <buildroot@buildroot.org>; Sat, 15 Aug 2026 15:09:41 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 421FB392
+ for <buildroot@buildroot.org>; Sat, 15 Aug 2026 15:09:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 84B494008A
- for <buildroot@buildroot.org>; Sat, 15 Aug 2026 15:09:41 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 28D8740084
+ for <buildroot@buildroot.org>; Sat, 15 Aug 2026 15:09:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YSP73dtWo4VD for <buildroot@buildroot.org>;
+ id qgv0hJ73MEO5 for <buildroot@buildroot.org>;
  Sat, 15 Aug 2026 15:09:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5007A40084
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1E21040026
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5007A40084
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1E21040026
  for <buildroot@buildroot.org>; Sat, 15 Aug 2026 15:09:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B621A8878A; Sat, 15 Aug 2026 15:08:49 +0000 (UTC)
+ id 82A8888460; Sat, 15 Aug 2026 15:08:49 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Sat, 15 Aug 2026 17:07:04 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 506830c40bccdc0b77fa6d1ada4f75724e1a4ce9
-X-Git-Newrev: 0b3d526226662af8b16525aecec7da5ff0e5fa1d
+X-Git-Oldrev: d2ceab1c154aeab278f50f4f1451afdacda630f4
+X-Git-Newrev: 22c38bbc1e48dc696a9639fa3d76b21cbf73e436
 X-Patchwork-Hint: ignore
-Message-Id: <20260815150849.B621A8878A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gdb: drop ARC-specific version
+Message-Id: <20260815150849.82A8888460@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] toolchain/toolchain-external: drop
+ Synopsys ARC toolchain
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,17 +77,18 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/0b3d526226662af8b16525aecec7da5ff0e5fa1d
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/22c38bbc1e48dc696a9639fa3d76b21cbf73e436
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-A warning was sent to Synopsys ARC people in December 2025 that the
-ARC support in Buildroot was poorly maintained and in particular the
-ARC-pspecific toolchain components. Despite a reply that some effort
-would be made [1], no contributions were actually done. Also, Alexey
-Brodkin is no longer at Synopsys. Time to remove Synopsys ARC specific
-toolchain and toolchain components.
+This toolchain is from 2024.06 and has not been updated since then. It
+was marked as broken in commit 11a8cdd2bbbd0ef4adf600e4792d75f6f2122ec8
+in January 2025.
 
-This commit removes the ARC-specific gdb version.
+A warning was sent to Synopsys ARC people in December 2025, and
+despite a reply that some effort would be made [1], no contributions
+were actually done. Also, Alexey Brodkin is no longer at
+Synopsys. Time to remove Synopsys ARC specific toolchain and toolchain
+components.
 
 [1] https://lore.kernel.org/buildroot/SJ2PR12MB818487232470DA4456967C73A1A3A@SJ2PR12MB8184.namprd12.prod.outlook.com/
 
@@ -94,91 +96,175 @@ Cc: ARC Maintainers <arc-buildroot@synopsys.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- Config.in.legacy           | 7 +++++++
- package/gdb/Config.in.host | 8 +-------
- package/gdb/gdb.hash       | 3 ---
- package/gdb/gdb.mk         | 7 -------
- 4 files changed, 8 insertions(+), 17 deletions(-)
+ Config.in.legacy                                   |  7 ++++
+ toolchain/toolchain-external/Config.in             |  6 ----
+ .../toolchain-external-synopsys-arc/Config.in      | 18 ----------
+ .../Config.in.options                              | 41 ----------------------
+ .../toolchain-external-synopsys-arc.hash           |  7 ----
+ .../toolchain-external-synopsys-arc.mk             | 29 ---------------
+ 6 files changed, 7 insertions(+), 101 deletions(-)
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index fdfc50af42..4da157fbba 100644
+index e2f9d9131f..da69682f93 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -146,6 +146,13 @@ endif
  
  comment "Legacy options removed in 2026.08"
  
-+config BR2_GDB_VERSION_ARC
-+	bool "ARC-specific gdb version removed"
++config BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC
++	bool "Synopsys ARC toolchain removed"
 +	select BR2_LEGACY
 +	help
-+	  Support for the ARC-specific gdb version was removed, as it
++	  The Synopsys ARC external toolchain has been removed, as it
 +	  was no longer maintained in Buildroot.
 +
- config BR2_BINUTILS_VERSION_ARC
- 	bool "ARC-specific binutils version removed"
+ config BR2_PACKAGE_TS4900_FPGA
+ 	bool "ts4900-fpga removed"
  	select BR2_LEGACY
-diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
-index 0cc28ef7f0..93f174db99 100644
---- a/package/gdb/Config.in.host
-+++ b/package/gdb/Config.in.host
-@@ -46,15 +46,10 @@ config BR2_PACKAGE_HOST_GDB_SIM
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index 831387bc4e..9d8c815438 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -14,9 +14,6 @@ source "toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in"
+ # Aarch64 big-endian
+ source "toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in"
  
- choice
- 	prompt "GDB debugger Version"
--	default BR2_GDB_VERSION_16 if !BR2_arc
--	default BR2_GDB_VERSION_ARC if BR2_arc
-+	default BR2_GDB_VERSION_16
- 	help
- 	  Select the version of gdb you wish to use.
- 
--config BR2_GDB_VERSION_ARC
--	bool "gdb arc (15.x)"
--	depends on BR2_arc
+-# ARC
+-source "toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in"
 -
- config BR2_GDB_VERSION_15
- 	bool "gdb 15.x"
+ # ARM (use ARM toolchain by default)
+ source "toolchain/toolchain-external/toolchain-external-arm-arm/Config.in"
  
-@@ -71,7 +66,6 @@ endif
- # If cross-gdb is not enabled, the latest stable version is chosen.
- config BR2_GDB_VERSION
- 	string
--	default "arc-2024.12-release-gdb" if BR2_GDB_VERSION_ARC || (!BR2_PACKAGE_HOST_GDB && BR2_arc)
- 	default "15.2"	   if BR2_GDB_VERSION_15
- 	default "16.3"	   if BR2_GDB_VERSION_16
- 	default "17.1"	   if BR2_GDB_VERSION_17
-diff --git a/package/gdb/gdb.hash b/package/gdb/gdb.hash
-index a0add73dca..241fe9c7c4 100644
---- a/package/gdb/gdb.hash
-+++ b/package/gdb/gdb.hash
-@@ -3,9 +3,6 @@ sha512  624007deceb5b15ba89c0725883d1a699fa46714ef30887f3d0165e17c5d65d634671740
- sha512  fffd6689c3405466a179670b04720dc825e4f210a761f63dd2b33027432f8cd5d1c059c431a5ec9e165eedd1901220b5329d73c522f9a444788888c731b29e9c  gdb-16.3.tar.xz
- sha512  f1a6751e439a2128fecf3eae8b57c1608a0dc7cfe79b4356a937874e5a42bb2df0aba36eb6a9452c41966908b9a59076c7cad9720f684688ab956b65080f1d7c  gdb-17.1.tar.xz
+@@ -102,9 +99,6 @@ source "toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in.op
+ # Aarch64 big-endian
+ source "toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in.options"
  
--# Locally calculated (fetched from Github)
--sha512  a909a687abf6e9623c7ec99a8b2cbb03ab6fdeccee9ebd33ce34fffdb2bed5e4d519113aeb29ba3ca8db52e9bdbb63b59973914c74e3eebf4a4a2a6033b9e784  gdb-arc-2024.12-release-gdb.tar.gz
+-# ARC
+-source "toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in.options"
 -
- # Locally calculated (fetched from gcc.gnu.org)
- sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING3
-diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-index 2a2fdb260d..685d1fe992 100644
---- a/package/gdb/gdb.mk
-+++ b/package/gdb/gdb.mk
-@@ -7,13 +7,6 @@
- GDB_VERSION = $(call qstrip,$(BR2_GDB_VERSION))
- GDB_SITE = $(BR2_GNU_MIRROR)/gdb
- GDB_SOURCE = gdb-$(GDB_VERSION).tar.xz
+ # ARM
+ source "toolchain/toolchain-external/toolchain-external-arm-arm/Config.in.options"
+ 
+diff --git a/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in b/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in
+deleted file mode 100644
+index 07688a1416..0000000000
+--- a/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in
++++ /dev/null
+@@ -1,18 +0,0 @@
+-config BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC
+-	bool "Synopsys ARC 2024.06 toolchain"
+-	depends on BR2_arc750d || BR2_arc770d || \
+-		BR2_archs38_64mpy || BR2_archs38_full || \
+-		BR2_archs4x_rel31 || BR2_archs4x
+-	depends on BR2_HOSTARCH = "x86_64"
+-	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_15
+-	# The toolchains have libncurses and libexpat in their
+-	# sysroot, confusing Buildroot and causing build
+-	# issues. Disable until the toolchains get fixed.
+-	depends on BR2_BROKEN
+-	select BR2_INSTALL_LIBSTDCPP
+-	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_16
+-	select BR2_TOOLCHAIN_GCC_AT_LEAST_14
+-	help
+-	  Toolchain for the ARC cores, from
+-	  https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases
+diff --git a/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in.options b/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in.options
+deleted file mode 100644
+index c60cf73460..0000000000
+--- a/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in.options
++++ /dev/null
+@@ -1,41 +0,0 @@
+-if BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC
 -
--ifeq ($(BR2_GDB_VERSION_ARC),y)
--GDB_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,binutils-gdb,$(GDB_VERSION))
--GDB_SOURCE = gdb-$(GDB_VERSION).tar.gz
--GDB_FROM_GIT = y
+-choice
+-	prompt "Synopsys toolchain variant"
+-
+-config BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC700
+-	bool "Linux/uClibc ARC 700"
+-	depends on BR2_arc750d || BR2_arc770d
+-	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+-	select BR2_USE_WCHAR
+-	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+-	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+-
+-config BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARCHS_UCLIBC
+-	bool "Linux/uClibc ARC HS"
+-	depends on BR2_archs38_64mpy || BR2_archs38_full || \
+-		BR2_archs4x_rel31 || BR2_archs4x
+-	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+-	select BR2_USE_WCHAR
+-	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+-	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+-	select BR2_TOOLCHAIN_HAS_FORTRAN
+-
+-config BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARCHS_GLIBC
+-	bool "Linux/glibc ARC HS"
+-	depends on BR2_archs38_64mpy || BR2_archs38_full || \
+-		BR2_archs4x_rel31 || BR2_archs4x
+-	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+-	select BR2_TOOLCHAIN_HAS_FORTRAN
+-
+-endchoice
+-
+-config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+-	default "arc-linux"
+-
+-config BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL
+-	default "toolchain-external-synopsys-arc"
+-
+-endif
+diff --git a/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.hash b/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.hash
+deleted file mode 100644
+index 52273871ab..0000000000
+--- a/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.hash
++++ /dev/null
+@@ -1,7 +0,0 @@
+-# From https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases/tag/arc-2024.06-release
+-sha256  080bbf8c0747d221314d04b0fcef89f91dc82710afa1aa66a88f04c93719663a  arc_gnu_2024.06_prebuilt_uclibc_le_arc700_linux_install.tar.bz2
+-sha256  37ad59b2624608cd126fab3a83a188edc18ad9e2bba8bbb778d46cdd49ad2ffe  arc_gnu_2024.06_prebuilt_glibc_le_archs_linux_install.tar.bz2
+-sha256  6867bc6f895c29b053020423923ead2054b8474816f1d067f2726b13e8ee16c0  arc_gnu_2024.06_prebuilt_uclibc_le_archs_linux_install.tar.bz2
+-sha256  6efd9025e4b226bf1b4a4d448670e00f928e61e0051a0b209b7adaa327945a32  arc_gnu_2024.06_prebuilt_uclibc_be_arc700_linux_install.tar.bz2
+-sha256  ae2ffb5fbe8d6002341dd87d005400010e85dfc1df1e8db070a19ab7300d738f  arc_gnu_2024.06_prebuilt_glibc_be_archs_linux_install.tar.bz2
+-sha256  892a576acdf962afafde345d2c830317cb14ff8ef95da7cadc79177c226db269  arc_gnu_2024.06_prebuilt_uclibc_be_archs_linux_install.tar.bz2
+diff --git a/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.mk b/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.mk
+deleted file mode 100644
+index c88ca35c43..0000000000
+--- a/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.mk
++++ /dev/null
+@@ -1,29 +0,0 @@
+-################################################################################
+-#
+-# toolchain-external-synopsys-arc
+-#
+-################################################################################
+-
+-TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_VERSION = 2024.06
+-TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_SITE = https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases/download/arc-$(TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_VERSION)-release
+-
+-ifeq ($(BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC700),y)
+-TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_CORE = arc700
+-TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_LIBC = uclibc
+-else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARCHS_UCLIBC),y)
+-TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_CORE = archs
+-TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_LIBC = uclibc
+-else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARCHS_GLIBC),y)
+-TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_CORE = archs
+-TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_LIBC = glibc
 -endif
 -
- GDB_LICENSE = GPL-2.0+, LGPL-2.0+, GPL-3.0+, LGPL-3.0+
- GDB_LICENSE_FILES = COPYING COPYING.LIB COPYING3 COPYING3.LIB
- GDB_CPE_ID_VENDOR = gnu
+-ifeq ($(BR2_arcle),y)
+-TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_ENDIANESS = le
+-else
+-TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_ENDIANESS = be
+-endif
+-
+-TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_SOURCE = arc_gnu_$(TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_VERSION)_prebuilt_$(TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_LIBC)_$(TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_ENDIANESS)_$(TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_CORE)_linux_install.tar.bz2
+-
+-$(eval $(toolchain-external-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
