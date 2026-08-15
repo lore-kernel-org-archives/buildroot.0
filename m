@@ -4,59 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 507F9C5AD5A
-	for <buildroot@archiver.kernel.org>; Sat, 15 Aug 2026 11:08:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28AB2C5AD5A
+	for <buildroot@archiver.kernel.org>; Sat, 15 Aug 2026 11:08:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E867080E26;
-	Sat, 15 Aug 2026 11:08:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D3C7480E8F;
+	Sat, 15 Aug 2026 11:08:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AdLC15sTinCA; Sat, 15 Aug 2026 11:08:46 +0000 (UTC)
+ id d1KY68FeIsHj; Sat, 15 Aug 2026 11:08:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D576780E12
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F388D80E36
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786792125;
-	bh=kMbh8Mmseyx9R1fu/JEYQnP0HNmFnl1/lUVWEBu5US4=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=np6qjPkxCOcfaCZaKFOer8AyozqZ7OKBrD6nANMNsKFVtkzGbmBLuexDcJu62m8+7
-	 gyuUKk+2wxFMrB4DLdSpENO/s59Q5M82NvYdMWsVneuNcmX4jazsuP4rCBRSBc6UvP
-	 7TFKF2oGA6RIkNvotXs5bQcV/UfCT6OxMA9vWou0xm9B1SIqDFf+gG5w2zomj6VZxj
-	 8l8vkb/yLXtUriAU/yvdBKqqmCf/VSelbIinlSF4wOPuvV/3Ts46qmhTk/l2fuLQez
-	 6n4u4F2TO2J9PlXPXCX4Dwkd8XaUuBvzGhqTlCwiD7y5gDHSWiq4J83wpn9s205/aC
-	 omzPcODAJM8Yg==
+	s=default; t=1786792130;
+	bh=TaxrnpDjcS/ODU+SxgKWt6M/pxyWm9/9YcFgF50aal8=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=q0NvjAm/4LaHPirFSeN1cl/GLGiKJVXj4X64LSt9yJTih4/8XHky224vSRfqDMnol
+	 KmvONDWq74NgrReyaEVbUMuyAi9mIHoSELC6JkaKiiE19jAl9L64BDMAJkc+15IEbv
+	 gzY9NNB8f7uaZSsmHGgdXWLzmUMgxQphf7aDXureF2QlazuYhuvagEY8XbCHS7cZtb
+	 T4B+fZSlcQTLnlQCd8+THF5ZKYK3Wsin1nWqvONNdtW3b/Aql9prbiCXgCGHb8t6U9
+	 tHHvxvldRWlb4mwQkt+ZP+NhxJX88dyfbySbqFgVQOj42GCexthBIDePhNzDyLHHLG
+	 pfslRqARY4KYw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D576780E12;
-	Sat, 15 Aug 2026 11:08:45 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id A0705109
- for <buildroot@buildroot.org>; Sat, 15 Aug 2026 11:08:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F388D80E36;
+	Sat, 15 Aug 2026 11:08:49 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1B74E361
+ for <buildroot@buildroot.org>; Sat, 15 Aug 2026 11:08:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 92B694004E
- for <buildroot@buildroot.org>; Sat, 15 Aug 2026 11:08:44 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0D64F40869
+ for <buildroot@buildroot.org>; Sat, 15 Aug 2026 11:08:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Aurh8icmIsUd for <buildroot@buildroot.org>;
- Sat, 15 Aug 2026 11:08:43 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B251B40026
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B251B40026
- for <buildroot@buildroot.org>; Sat, 15 Aug 2026 11:08:43 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 423888835C; Sat, 15 Aug 2026 11:07:53 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 15 Aug 2026 12:44:00 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 97f027ce41ced23df556dea56f5d61db8c8b073a
-X-Git-Newrev: 2c96a67d9ba53dc152dce72e8ff08b5078a77b8c
-X-Patchwork-Hint: ignore
-Message-Id: <20260815110753.423888835C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/cramfs: bump to version 2.2
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id o4s07syaRLAs for <buildroot@buildroot.org>;
+ Sat, 15 Aug 2026 11:08:48 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 3960E4085C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3960E4085C
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3960E4085C
+ for <buildroot@buildroot.org>; Sat, 15 Aug 2026 11:08:47 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id EFD5E2003D0;
+ Sat, 15 Aug 2026 13:08:44 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 15 Aug 2026 13:08:44 +0200
+MIME-Version: 1.0
+Date: Sat, 15 Aug 2026 13:08:44 +0200
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20260815100306.100753-1-thomas.petazzoni@bootlin.com>
+References: <20260815100306.100753-1-thomas.petazzoni@bootlin.com>
+User-Agent: Webmail Free/1.6.17
+Message-ID: <7a475cbf31266f212e4204514e6f28c3@free.fr>
+X-Sender: ju.o@free.fr
+Subject: Re: [Buildroot] [PATCH] package/cramfs: bump to version 2.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,65 +78,36 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/2c96a67d9ba53dc152dce72e8ff08b5078a77b8c
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 15/08/2026 12:03, Thomas Petazzoni via buildroot wrote:
+> Changes:
+> 
+> Security and robustness release.  Notable cramfsck changes:
+> 
+>   * Reject dirent names containing "/", "." or ".." to close a path
+>     traversal during `cramfsck -x` (reported in issue #12).
+>   * Open regular files with O_CREAT|O_EXCL during extraction to
+>     prevent duplicate-dirent attacks from truncating files reached
+>     via a previously-extracted symlink.
+>   * Fix outbuffer NUL termination and a 1-byte overflow in
+>     do_symlink when running with both -v and -x.
+>   * Harden romfs_read against truncated/malformed images by
+>     zero-filling the window buffer and checking lseek/read returns.
+>   * Reject directory entries that extend past their parent's size.
+> 
+> Documentation: README now documents cramfsck and lists all current
+> mkcramfs options; stale hard-link and endianness claims corrected;
+> NOTES trimmed of the 25-year-old Future Development section.
+> 
+> (See https://github.com/npitre/cramfs-tools/releases/tag/v2.2)
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-Changes:
-
-Security and robustness release.  Notable cramfsck changes:
-
-  * Reject dirent names containing "/", "." or ".." to close a path
-    traversal during `cramfsck -x` (reported in issue #12).
-  * Open regular files with O_CREAT|O_EXCL during extraction to
-    prevent duplicate-dirent attacks from truncating files reached
-    via a previously-extracted symlink.
-  * Fix outbuffer NUL termination and a 1-byte overflow in
-    do_symlink when running with both -v and -x.
-  * Harden romfs_read against truncated/malformed images by
-    zero-filling the window buffer and checking lseek/read returns.
-  * Reject directory entries that extend past their parent's size.
-
-Documentation: README now documents cramfsck and lists all current
-mkcramfs options; stale hard-link and endianness claims corrected;
-NOTES trimmed of the 25-year-old Future Development section.
-
-(See https://github.com/npitre/cramfs-tools/releases/tag/v2.2)
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/cramfs/cramfs.hash | 2 +-
- package/cramfs/cramfs.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/cramfs/cramfs.hash b/package/cramfs/cramfs.hash
-index 672266b468..3795c862c9 100644
---- a/package/cramfs/cramfs.hash
-+++ b/package/cramfs/cramfs.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  cdb7a4ecad034f063b6456b37cdf653ae31758a224c32161e54712a9d7f01cc3  cramfs-2.1.tar.gz
-+sha256  6217c93cbfa79ae720bad4139739c1bd7a665928a9bfc2dd820b98df27c66da2  cramfs-2.2.tar.gz
- sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  COPYING
-diff --git a/package/cramfs/cramfs.mk b/package/cramfs/cramfs.mk
-index 85706d1a8e..a6196ca85e 100644
---- a/package/cramfs/cramfs.mk
-+++ b/package/cramfs/cramfs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CRAMFS_VERSION = 2.1
-+CRAMFS_VERSION = 2.2
- CRAMFS_SITE = $(call github,npitre,cramfs-tools,v$(CRAMFS_VERSION))
- CRAMFS_LICENSE = GPL-2.0+
- CRAMFS_LICENSE_FILES = COPYING
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
