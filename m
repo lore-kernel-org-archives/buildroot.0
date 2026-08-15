@@ -4,59 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7878C5AD5A
-	for <buildroot@archiver.kernel.org>; Sat, 15 Aug 2026 14:19:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68576C5DF6A
+	for <buildroot@archiver.kernel.org>; Sat, 15 Aug 2026 14:19:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ABEC24099A;
-	Sat, 15 Aug 2026 14:19:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1C0B940978;
+	Sat, 15 Aug 2026 14:19:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XQnW5BbgWrL7; Sat, 15 Aug 2026 14:19:21 +0000 (UTC)
+ id w6rbl2KHvvFu; Sat, 15 Aug 2026 14:19:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BD90F407CC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A8C2A4098D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786803561;
-	bh=pcu4eTekrLOldaXy1ptK91UoKjpUiwbiJSDEy7o1Ugk=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=sd8M+OpnArkqwpIgCa3QzLUdorXlw3Md2c19BTqnN68CWOUgZBa04QVwFsGEOUQa3
-	 nNUUfVa4B+gKF9TQRRBIcCOo59v4BSya0jWUVTIfQB9plvVKucjg+F55JmThtBbfCU
-	 M1DII89d1FgnivdHNfy9LHBTMZzwdAu84Wlpz90kDsPoScPdSsEl3PucdcOnX/17r4
-	 +CL7EQ8Hx+KBnG+56icFMokG9xczH0mbEcwKMe0SSHYN1xl4dPk7fiLGL2N5m6wYko
-	 fTGj0CK0m/xCZbIlYfU6zFgyU8AGejZgr08sAzGAArj/T8d9XyOmoKseCOnM1I7S5o
-	 2zXyn1RaCqmBA==
+	s=default; t=1786803571;
+	bh=G/iX5zoA1iCGEIxaZPcCFS4sQHwjkkCzYS6h3x7o5fU=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=KXBM9fBD1snTunpgV0afLZA4y52yChLfVUONTBCIzsNMQisIB63+v2JjEEV0kqnXg
+	 D+iz9rqlRCCaW5fD9MK7mEBeVzIPAOuMmazKLZF8xQ0WDUMpn68+XA0iSOmbFmgLLW
+	 6gSp1ofYNuYChpa+fuImuJfc7iVZBBwQIHWOe3J9Op6Cdo8t3L+i+0BRprpDH/2KQs
+	 xJCBbVEFLCl4lDs8E7Wjg4dOWYsLxYoRCsmAT8DqFHucNIXcovq80Rwy8zXVpLNzm3
+	 YJwLrQD4egVJ18137WnUtiViXK4yp3XQSJB+3LfAhShKlVnfR2f8sQvksMvAWSen7Q
+	 zI9f2E5ctlsoQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BD90F407CC;
-	Sat, 15 Aug 2026 14:19:21 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id A15AD361
- for <buildroot@buildroot.org>; Sat, 15 Aug 2026 14:19:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A8C2A4098D;
+	Sat, 15 Aug 2026 14:19:31 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 20B6B361
+ for <buildroot@buildroot.org>; Sat, 15 Aug 2026 14:19:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 888604004D
- for <buildroot@buildroot.org>; Sat, 15 Aug 2026 14:19:19 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 12A3E80934
+ for <buildroot@buildroot.org>; Sat, 15 Aug 2026 14:19:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yL-oHAx9sJKy for <buildroot@buildroot.org>;
- Sat, 15 Aug 2026 14:19:18 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C6A0440026
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C6A0440026
- for <buildroot@buildroot.org>; Sat, 15 Aug 2026 14:19:18 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3A4D38880D; Sat, 15 Aug 2026 14:18:28 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 15 Aug 2026 16:09:27 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 76b47472af9c78a36891a2ab3f3c0ee954534013
-X-Git-Newrev: e1b83b5d3348497797ba785b1a4f42bd8254681b
-X-Patchwork-Hint: ignore
-Message-Id: <20260815141828.3A4D38880D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-tzlocal: bump to version
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id x-_PLJn5EdG1 for <buildroot@buildroot.org>;
+ Sat, 15 Aug 2026 14:19:29 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 23552808D8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 23552808D8
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 23552808D8
+ for <buildroot@buildroot.org>; Sat, 15 Aug 2026 14:19:29 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id 6F01C13F8A2;
+ Sat, 15 Aug 2026 16:19:24 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 15 Aug 2026 16:19:24 +0200
+MIME-Version: 1.0
+Date: Sat, 15 Aug 2026 16:19:24 +0200
+To: Manuel Diener <manuel.diener@oss.othermo.de>
+Cc: buildroot@buildroot.org, James Hilliard <james.hilliard1@gmail.com>
+In-Reply-To: <20260814123753.968246-1-manuel.diener@oss.othermo.de>
+References: <20260814123753.968246-1-manuel.diener@oss.othermo.de>
+User-Agent: Webmail Free/1.6.17
+Message-ID: <3444892f943c83cd7f2a7e6c1de04c5b@free.fr>
+X-Sender: ju.o@free.fr
+Subject: Re: [Buildroot] [PATCH] package/python-tzlocal: bump to version
  5.4.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -71,54 +79,24 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/e1b83b5d3348497797ba785b1a4f42bd8254681b
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 14/08/2026 14:37, Manuel Diener wrote:
+> This skipps the following releases:
+> - 5.4
+> - 5.4.1
+> - 5.4.2
+> - 5.4.3
+> 
+> See the release notes here: 
+> https://github.com/regebro/tzlocal/blob/master/CHANGES.txt
+> 
+> Signed-off-by: Manuel Diener <manuel.diener@oss.othermo.de>
 
-For release notes since v5.3.1, see:
-https://github.com/regebro/tzlocal/blob/5.4.4/CHANGES.txt
-
-Signed-off-by: Manuel Diener <manuel.diener@oss.othermo.de>
-[Julien: change release notes link to use the version tag]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/python-tzlocal/python-tzlocal.hash | 4 ++--
- package/python-tzlocal/python-tzlocal.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/python-tzlocal/python-tzlocal.hash b/package/python-tzlocal/python-tzlocal.hash
-index 838e6ded21..d870d54d1f 100644
---- a/package/python-tzlocal/python-tzlocal.hash
-+++ b/package/python-tzlocal/python-tzlocal.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/tzlocal/json
--md5  f8eb4bf0eb262ba422741d032d6cfedf  tzlocal-5.3.1.tar.gz
--sha256  cceffc7edecefea1f595541dbd6e990cb1ea3d19bf01b2809f362a03dd7921fd  tzlocal-5.3.1.tar.gz
-+md5  24e01420acf49871034e25bcb64139ba  tzlocal-5.4.4.tar.gz
-+sha256  8dbb8660838688a7b6ba4fed31d18dedf842afb4d47ca050d6d891c2c15f3be4  tzlocal-5.4.4.tar.gz
- # Locally computed sha256 checksums
- sha256  d99ab209aeb16aad2c25c90ffd83c1a981e290ffff76a420a2ab03e03f041b8c  LICENSE.txt
-diff --git a/package/python-tzlocal/python-tzlocal.mk b/package/python-tzlocal/python-tzlocal.mk
-index 2c1e5ff87a..fa60a1b7bd 100644
---- a/package/python-tzlocal/python-tzlocal.mk
-+++ b/package/python-tzlocal/python-tzlocal.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_TZLOCAL_VERSION = 5.3.1
-+PYTHON_TZLOCAL_VERSION = 5.4.4
- PYTHON_TZLOCAL_SOURCE = tzlocal-$(PYTHON_TZLOCAL_VERSION).tar.gz
--PYTHON_TZLOCAL_SITE = https://files.pythonhosted.org/packages/8b/2e/c14812d3d4d9cd1773c6be938f89e5735a1f11a9f184ac3639b93cef35d5
-+PYTHON_TZLOCAL_SITE = https://files.pythonhosted.org/packages/81/5b/879b2f932adfa7a053c360d50bc896c977fa6426109185f7c12ebdd0cb9d
- PYTHON_TZLOCAL_SETUP_TYPE = setuptools
- PYTHON_TZLOCAL_LICENSE = MIT
- PYTHON_TZLOCAL_LICENSE_FILES = LICENSE.txt
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
