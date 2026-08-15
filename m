@@ -4,68 +4,79 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7F43C5DF67
-	for <buildroot@archiver.kernel.org>; Sat, 15 Aug 2026 14:39:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8BCE7C5AD5A
+	for <buildroot@archiver.kernel.org>; Sat, 15 Aug 2026 14:41:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7AFE44080E;
-	Sat, 15 Aug 2026 14:39:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 53976408BA;
+	Sat, 15 Aug 2026 14:41:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JNwBjgO2Feyx; Sat, 15 Aug 2026 14:39:38 +0000 (UTC)
+ id gUQ7wkmJFyk7; Sat, 15 Aug 2026 14:41:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1EC4D408A5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 302C840807
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786804778;
-	bh=U52851mCEzNzR9YXzv9+nw/JwnlrXzn9mZQVSKxlUvc=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=p5QuGKGDzEW2/L7Lep3SHYXu+5Dq/SRdydy9cgbObq47mHsTHYjx+QeCbpVgKYakk
-	 sF4clXSQAniVwf9dYFeJME72S0HD6u9G/rU7J0acqz8Vy91g4J0iQwiSEN4NXLuOva
-	 thKMSPlw6m9U0E3itsFChngXojZQY+Y57/aaaVZSJj5UmgJXYoVHsq81eYmxUlDbJM
-	 ln7Jalyl5jgW94Bam/kqhcomyWJgfX2UKAeDQlgu4ogj3ellZG5E8Cnpc/hc6I5jAX
-	 phMxYfO1VEuF8nGaKFziisBei6h614JTd86ceJhHKNlcsPSQTIiyRFKymwMul58Ypw
-	 prauuntW4jwcA==
+	s=default; t=1786804880;
+	bh=JZ/x7YjrKRGbp+wmGjinRCd6Rz4InsRZi+K8i5/vvgM=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=HqbWpjQCJjZwTnZEQRq53x+5Lwa8UC+/oS3RgQPyDEDzsBagwCL2fdn4RNyroeYvu
+	 TtlJOSCHoT219XKehdysUJp7jQ1s+JD62JSZ/J3ZqJXqCixPnFoz+C7dWHOnXS4+OS
+	 ERjYSUVlR1Si5Ktb9gPZkLTCTjAPLoAYleAjS2z5kAFL9/PMDik4gljcFMqIaQCHpi
+	 5S/NONZzWgUaq6cBZaTSLa+/TeRAiFjdObzvvd8TilHWRVTiduDSnc82MNmwnQ+KMC
+	 uyAinHVEOJoXZw7HZgd/jkBPZjTiFnkWIWGV925I3tkK2hWsItJ39Hbh1k8Vty8f1X
+	 Z19hiRnUz8t8w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1EC4D408A5;
-	Sat, 15 Aug 2026 14:39:38 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id D7EFF2BB
- for <buildroot@buildroot.org>; Sat, 15 Aug 2026 14:39:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 302C840807;
+	Sat, 15 Aug 2026 14:41:20 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6FA4E4CD
+ for <buildroot@buildroot.org>; Sat, 15 Aug 2026 14:41:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C9F38606A6
- for <buildroot@buildroot.org>; Sat, 15 Aug 2026 14:39:36 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6160E80E00
+ for <buildroot@buildroot.org>; Sat, 15 Aug 2026 14:41:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id U6NjrohQA9Cd for <buildroot@buildroot.org>;
- Sat, 15 Aug 2026 14:39:36 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D81FB6067B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D81FB6067B
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D81FB6067B
- for <buildroot@buildroot.org>; Sat, 15 Aug 2026 14:39:35 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id 94AAF2003C6;
- Sat, 15 Aug 2026 16:39:31 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 15 Aug 2026 16:39:31 +0200
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9vSGeTbj-fNa for <buildroot@buildroot.org>;
+ Sat, 15 Aug 2026 14:41:18 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 07E5880DFF
+Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none) header.from=kuhls.net
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 07E5880DFF
+Authentication-Results: smtp1.osuosl.org; dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202605290044 header.b=lizVg/41
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 07E5880DFF
+ for <buildroot@buildroot.org>; Sat, 15 Aug 2026 14:41:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
+ s=kas202605290044; t=1786804875;
+ bh=yR+jxJ98nDmqaM5DI277EKs5V9gApSalzqPSYAp7TUg=;
+ h=From:To:Subject:Date:From;
+ b=lizVg/41uf3NIx9ZLT5Tc3qcgovFidpyAfSvnVGqlPBoHwY+eLFrndu7ENxNiUqFH
+ p4DawMxMzLRE7kKW3tcCmV1Moo3UoYFpY2bwFZdQ5HVe/KdyvEbts/gG4iWMFQMGxv
+ WYl0kK/tPPXahg00PnQ0ShLGlAM2vwQYhRHe21xwK7SNpJUh1os3SB0TeQOntDFE0c
+ F0B8Y66iG6N83ACHoJI8TDtz6Gs/wcnaTCWud6vtNZs5tN5VAIjwo7GeScedG2fCHz
+ c9+KSCE86TVoGqq2VuNGTYaJvyszPK1RVKSx/2ljZrZXhibgyu8p45tdD+jxVotCYK
+ EIAn1PvpklIQg==
+Received: from fli4l.lan.fli4l (p54a1bf47.dip0.t-ipconnect.de [84.161.191.71])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id E37BFA4C4B3D
+ for <buildroot@buildroot.org>; Sat, 15 Aug 2026 16:41:15 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:60174)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99.5)
+ (envelope-from <bernd@kuhls.net>) id 1wvFZT-000000000iz-1MZB
+ for buildroot@buildroot.org; Sat, 15 Aug 2026 14:41:15 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Date: Sat, 15 Aug 2026 16:41:15 +0200
+Message-ID: <20260815144115.173696-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-Date: Sat, 15 Aug 2026 16:39:31 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org, Maxim Kochetkov <fido_max@inbox.ru>
-In-Reply-To: <20260815140041.100370-1-bernd@kuhls.net>
-References: <20260815140041.100370-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.17
-Message-ID: <5c4f65e1223e2e17fd150cef73415a42@free.fr>
-X-Sender: ju.o@free.fr
-Subject: Re: [Buildroot] [PATCH 1/1] package/postgresql: security bump
- version to 18.6
+X-Spamd-Bar: +
+Subject: [Buildroot] [PATCH 1/1] package/samba4: bump version to 4.24.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,80 +88,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 15/08/2026 16:00, Bernd Kuhls wrote:
-> https://www.postgresql.org/about/news/postgresql-186-1711-1615-1519-1424-and-19-beta-3-released-3365/
-> "This release skips PostgreSQL 18 versions from PostgreSQL 18.4 to 
-> 18.6.
->  18.5 was not shipped due to a regression."
-> 
-> Fixes the following CVEs:
-> 
-> CVE-2026-6464: psql COPY FROM STDIN early failure processes data lines 
-> as psql commands (CVSS v3.1: 8.1)
-> CVE-2026-6469: ALTER TABLE ALTER TYPE resets extended statistics 
-> ownership (CVSS v3.1: 3.8)
-> CVE-2026-6470: Fails to check type USAGE privilege (CVSS v3.1: 4.3)
-> CVE-2026-6471: Logical decoding can dlopen arbitrary file (CVSS v3.1: 
-> 7.2)
-> CVE-2026-14662: tsvector and tsquery undersize allocations, via integer 
-> wraparound (CVSS v3.1: 8.8)
-> CVE-2026-14663: pgcrypto, for OpenSSL-disabled ciphers, silently 
-> encrypts to and decrypts from cleartext (CVSS v3.1: 6.5)
-> CVE-2026-14664: Regexp heap buffer overflow executes arbitrary code 
-> (CVSS v3.1: 8.8)
-> CVE-2026-14666: Row security caching disregards role modifications 
-> (CVSS v3.1: 4.2)
-> CVE-2026-14668: ctid type confusion in selectivity estimator discloses 
-> derivative of arbitrary read (CVSS v3.1: 8.1)
-> CVE-2026-14669: to_char heap buffer overflow executes arbitrary code 
-> (CVSS v3.1: 8.8)
-> CVE-2026-14670: plperl tied object heap buffer overflow executes 
-> arbitrary code (CVSS v3.1: 8.8)
-> CVE-2026-14671: refint plan cache type confusion executes arbitrary 
-> code (CVSS v3.1: 8.8)
-> CVE-2026-14672: Observable response discrepancy with non-default 
-> scram_iterations provides user existence oracle (CVSS v3.1: 5.3)
-> CVE-2026-14673: amcheck does not clear untrusted search path (CVSS 
-> v3.1: 3.8)
-> CVE-2026-14676: pg_stat_statements heap buffer overflow executes 
-> arbitrary code (CVSS v3.1: 8.8)
-> CVE-2026-14677: 32-bit pltcl and plperl undersize allocations, via 
-> integer wraparound (CVSS v3.1: 8.8)
-> CVE-2026-14678: pg_trgm picksplit reads past end of buffer (CVSS v3.1: 
-> 4.3)
-> CVE-2026-14679: Stack buffer overflow in argument match writes 0x0 and 
-> 0x1 to server memory (CVSS v3.1: 8.2)
-> CVE-2026-14680: Type confusion via "internal" arguments (CVSS v3.1: 
-> 8.8)
-> CVE-2026-14681: Improper enforcement of GSSAPI encryption when coupled 
-> with SSL (CVSS v3.1: 4.2)
-> CVE-2026-15741: Expression deparse allows SQL injection via EXTRACT 
-> argument (CVSS v3.1: 8.8)
-> CVE-2026-15742: fuzzystrmatch writes effectively-arbitrary addresses, 
-> via integer wraparound (CVSS v3.1: 8.8)
-> CVE-2026-16238: Type confusion in pg_restore_attribute_stats() executes 
-> arbitrary code (CVSS v3.1: 8.8)
-> CVE-2026-16239: Type confusion in cursor CLOSE + DECLARE executes 
-> arbitrary code (CVSS v3.1: 8.8)
-> CVE-2026-16241: ECPG integer underflow can crash the client (CVSS v3.1: 
-> 3.8)
-> CVE-2026-18024: ascii() function reads past end of buffer (CVSS v3.1: 
-> 4.3)
-> CVE-2026-18408: psql \unrestrict lets superuser of pg_dump origin 
-> server execute arbitrary code in psql client (CVSS v3.1: 8.8)
-> CVE-2026-19385: pg_dump heap buffer overflow executes arbitrary code 
-> (CVSS v3.1: 8.8)
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+https://www.samba.org/samba/history/samba-4.24.6.html
 
-Applied to master, thanks.
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+Gitlab pipelines passed:
+https://gitlab.com/bkuhls/buildroot/-/commits/d945475f7eff0e3722fdbfa68247031d83f12210
+
+ package/samba4/samba4.hash | 4 ++--
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index 3931e55669..9fccc9bf5e 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://download.samba.org/pub/samba/stable/samba-4.24.5.tar.asc
+-sha256  6d5d7ee82f5ce9da4135086c9b184e47a58b4b023565f58abbb1f8c8a922306b  samba-4.24.5.tar.gz
++# https://download.samba.org/pub/samba/stable/samba-4.24.6.tar.asc
++sha256  810cc955acb367e9bde556dccfb50db177a02b7c553aa1629a0b905fa7616267  samba-4.24.6.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 79551e1ee4..6291cb29b9 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SAMBA4_VERSION = 4.24.5
++SAMBA4_VERSION = 4.24.6
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
+-- 
+2.47.3
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
