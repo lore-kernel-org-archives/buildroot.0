@@ -4,59 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76A2DC5CFDB
-	for <buildroot@archiver.kernel.org>; Sat, 15 Aug 2026 17:22:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85933C5AD5A
+	for <buildroot@archiver.kernel.org>; Sat, 15 Aug 2026 17:23:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B82E180E6E;
-	Sat, 15 Aug 2026 17:22:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4921F80E41;
+	Sat, 15 Aug 2026 17:23:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YkJiA4TrYpbw; Sat, 15 Aug 2026 17:22:33 +0000 (UTC)
+ id v3iG2Hgx6bvN; Sat, 15 Aug 2026 17:23:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F25A480E02
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E903780E5A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786814553;
-	bh=OzrKsLtwB6RBo3WENUd9cO4vJK5nWJ02aEvxDRVdbl8=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=V17Q44dnOSxLb4ACT9hFYH1HJ4jTGRTn9QEVAWM0am5xIS3k7qWjsWvC8Nr7+MVPj
-	 SHDwP4sjf/IqzLnGkTb5CNicRe7TpCjRuOn6cJGxmcRj7ftbRULKjZfAGUS3qoN5iX
-	 1iRba5FjCg2t9IEgccu9Rf06EkF/GfYFRCUxoO/ig3mAMOIMcbPVKCbSuXYsbrgUSh
-	 Z8QoxFNtUSyg6ZTGFkwahdDDJbe6WuhnCtyi3t8TXNIuZdIlDMQzQk73hhuWV6j+Fx
-	 3qRV4BrntAmjBYtTZ6Ih1iShezi3cKOVctu48lQJPrt50JzPWgSovodkiVBZ1ldlSR
-	 oxnIW8LLrctNQ==
+	s=default; t=1786814583;
+	bh=qjKSmASJ8DP0jc7GYxJWpwRs1P9lE57q/RMUhoLXsN8=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=qz6i7bSGzP59uLKznD37j/hzYxAt4k+jlVk5DXV2CFwWYz9pUa8Xl2qi+TBoyW+qP
+	 21wibIYF/YyvNp8Ws9S+U9jG9JlQb4RfWUoHU1jKzbOoRYXmat59mSaniG0wu2JrjU
+	 jjgVyCJEtjdKR5z90+wl9GDoiW8YVMhlFb1BxwRG6+UnIm3ri/BsItM9F0JiLFceVK
+	 kc5LcVy85YMON/A1IsTFjlVshuww1QqmLiMEYiteeJWfVwIIv3Mf0+/YYRzfCjH6t6
+	 fuwH0vFkDNdCGnwBYDMcGLX47Xf0ibaMRxwXZAiORn0wdH3S3FbhlBWRXck8yeOeai
+	 9RImkd0SDhwmQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F25A480E02;
-	Sat, 15 Aug 2026 17:22:32 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 2B2EB2B2
- for <buildroot@buildroot.org>; Sat, 15 Aug 2026 17:22:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E903780E5A;
+	Sat, 15 Aug 2026 17:23:02 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id CB9D423F
+ for <buildroot@buildroot.org>; Sat, 15 Aug 2026 17:23:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1DA1240878
- for <buildroot@buildroot.org>; Sat, 15 Aug 2026 17:22:32 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B1E1760644
+ for <buildroot@buildroot.org>; Sat, 15 Aug 2026 17:23:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RmkkJ10yJYPq for <buildroot@buildroot.org>;
- Sat, 15 Aug 2026 17:22:31 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3A44F407C8
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3A44F407C8
- for <buildroot@buildroot.org>; Sat, 15 Aug 2026 17:22:31 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A0D638D7AC; Sat, 15 Aug 2026 17:21:40 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 15 Aug 2026 19:15:55 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 328fa370f0bc45cbce22fa73263e2a2c3b597e07
-X-Git-Newrev: cf89a66d6c7852372ff0dc8163f85814ddd56dce
-X-Patchwork-Hint: ignore
-Message-Id: <20260815172140.A0D638D7AC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libdvdcss: bump version to 1.6.0
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sHSQpKUoywQf for <buildroot@buildroot.org>;
+ Sat, 15 Aug 2026 17:23:00 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org AB5E7605E5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AB5E7605E5
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id AB5E7605E5
+ for <buildroot@buildroot.org>; Sat, 15 Aug 2026 17:22:58 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id D28F613F86E;
+ Sat, 15 Aug 2026 19:22:53 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 15 Aug 2026 19:22:53 +0200
+MIME-Version: 1.0
+Date: Sat, 15 Aug 2026 19:22:53 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org, Steve Kenton <skenton@ou.edu>
+In-Reply-To: <20260814054216.7491-1-bernd@kuhls.net>
+References: <20260814054216.7491-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.17
+Message-ID: <82a72dee6cc921be97a3b87755539c97@free.fr>
+X-Sender: ju.o@free.fr
+Subject: Re: [Buildroot] [PATCH v2 1/3] package/libdvdcss: needs gcc >= 8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,120 +78,29 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============9216963901874575278=="
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============9216963901874575278==
-Content-Type: text/plain
+On 14/08/2026 07:42, Bernd Kuhls wrote:
+> Buildroot commit cd3a2f0ff35346ad5fd6a9867113260addccf127 switched the
+> build system to meson which depends on c17:
+> https://code.videolan.org/videolan/libdvdcss/-/commit/9f16597859120b96006415c084039f63efc84b83#line_0cc1139e3_A5
+> 
+> Add the necessary dependency and propagate to reverse dependencies to
+> fix a build error caught by the Gitlab pipelines:
+> 
+> br-test-pkg/bootlin-aarch64-glibc-old/build/libdvdcss-1.5.0/meson.build:1:0:
+>  ERROR: None of values ['c17'] are supported by the C compiler. 
+> Possible
+>  values for option "c_std" are ['none', 'c89', 'c99', 'c11', 'gnu89',
+>  'gnu99', 'gnu11']
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/cf89a66d6c7852372ff0dc8163f85814ddd56dce
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
-
-https://code.videolan.org/videolan/libdvdcss/-/blob/1.6.0/NEWS
-
-Removed sha1 hash, sha256 is enough.
-
-Removed patch which is included in this release.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- ...-Fixed-compilation-problems-with-PATH_MAX.patch | 46 ----------------------
- package/libdvdcss/libdvdcss.hash                   |  6 +--
- package/libdvdcss/libdvdcss.mk                     |  2 +-
- 3 files changed, 3 insertions(+), 51 deletions(-)
-
-diff --git a/package/libdvdcss/0001-Fixed-compilation-problems-with-PATH_MAX.patch b/package/libdvdcss/0001-Fixed-compilation-problems-with-PATH_MAX.patch
-deleted file mode 100644
-index 35ebf4f4d1..0000000000
---- a/package/libdvdcss/0001-Fixed-compilation-problems-with-PATH_MAX.patch
-+++ /dev/null
-@@ -1,46 +0,0 @@
--From be34d026f44389745e29a7da977f84712066d3d0 Mon Sep 17 00:00:00 2001
--From: Bernd Kuhls <bernd@kuhls.net>
--Date: Sat, 15 Nov 2025 19:41:09 +0100
--Subject: [PATCH] Fixed compilation problems with PATH_MAX
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--In file included from ../src/cpxm.c:38:
--../src/libdvdcss.h:65:26: error: ‘PATH_MAX’ undeclared here (not in a function)
--   65 |     char   psz_cachefile[PATH_MAX];
--
--In file included from ../src/error.c:26:
--../src/libdvdcss.h:65:26: error: ‘PATH_MAX’ undeclared here (not in a function)
--   65 |     char   psz_cachefile[PATH_MAX];
--
--In file included from ../src/libdvdcpxm.c:47:
--../src/libdvdcss.h:65:26: error: ‘PATH_MAX’ undeclared here (not in a function)
--   65 |     char   psz_cachefile[PATH_MAX];
--
--Upstream: https://code.videolan.org/videolan/libdvdcss/-/merge_requests/24
--
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-----
-- src/libdvdcss.h | 5 +++++
-- 1 file changed, 5 insertions(+)
--
--diff --git a/src/libdvdcss.h b/src/libdvdcss.h
--index f9d36ba..997af34 100644
----- a/src/libdvdcss.h
--+++ b/src/libdvdcss.h
--@@ -26,6 +26,11 @@
-- 
-- #include <limits.h>
-- 
--+#include <config.h>
--+#ifdef HAVE_SYS_PARAM_H
--+#   include <sys/param.h>
--+#endif
--+
-- #include "dvdcss/dvdcss.h"
-- #include "cpxm.h"
-- #include "css.h"
---- 
--2.47.3
--
-diff --git a/package/libdvdcss/libdvdcss.hash b/package/libdvdcss/libdvdcss.hash
-index 835155be80..a6b9992a13 100644
---- a/package/libdvdcss/libdvdcss.hash
-+++ b/package/libdvdcss/libdvdcss.hash
-@@ -1,7 +1,5 @@
--# From https://download.videolan.org/pub/videolan/libdvdcss/1.5.0/libdvdcss-1.5.0.tar.xz.sha1
--sha1  bb21a27a32fa2a1d1e81448722fdc62c521a8803  libdvdcss-1.5.0.tar.xz
--# From https://download.videolan.org/pub/videolan/libdvdcss/1.5.0/libdvdcss-1.5.0.tar.xz.sha256
--sha256  529463e4d1befef82e5c6e470db7661a2db0343e092a2fb0d6c037cab8a5c399  libdvdcss-1.5.0.tar.xz
-+# From http://download.videolan.org/pub/videolan/libdvdcss/1.6.0/libdvdcss-1.6.0.tar.xz.sha256
-+sha256  7ea556c846b7bfc32d47b41cae56d1863a6b6d5f706bb162778d6f298490977c  libdvdcss-1.6.0.tar.xz
- 
- # Hash for license file:
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/libdvdcss/libdvdcss.mk b/package/libdvdcss/libdvdcss.mk
-index dae62fb592..a953145547 100644
---- a/package/libdvdcss/libdvdcss.mk
-+++ b/package/libdvdcss/libdvdcss.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBDVDCSS_VERSION = 1.5.0
-+LIBDVDCSS_VERSION = 1.6.0
- LIBDVDCSS_SOURCE = libdvdcss-$(LIBDVDCSS_VERSION).tar.xz
- LIBDVDCSS_SITE = https://download.videolan.org/pub/videolan/libdvdcss/$(LIBDVDCSS_VERSION)
- LIBDVDCSS_INSTALL_STAGING = YES
-
---===============9216963901874575278==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+Series applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============9216963901874575278==--
