@@ -1,72 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B83E1C5CFDB
-	for <buildroot@archiver.kernel.org>; Sat, 15 Aug 2026 16:38:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A3E9C5AD5A
+	for <buildroot@archiver.kernel.org>; Sat, 15 Aug 2026 17:09:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C74B74086C;
-	Sat, 15 Aug 2026 16:38:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A9F4B606C1;
+	Sat, 15 Aug 2026 17:09:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TuARpZx4S3i4; Sat, 15 Aug 2026 16:38:13 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2rFlY8Q5pGvH; Sat, 15 Aug 2026 17:09:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3EDB940855
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6C75460655
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786811893;
-	bh=F1l847tdFDtv30XVOu0bL0pmGWIrPXQZxqWKUs4aKJs=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	s=default; t=1786813744;
+	bh=R1lRzCpFmaP+U9F6buSq5HZtH69/9dq5aNavlUEYYP8=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=mP2tizj6vAHkL9mc1NxPTPfhFAKXAvXrCcwTbHF/C8Lg0bAQkw5CSfjAdmyF7uZ/+
-	 v65Ql+zGeMTz3Nu731hxibPIz3Ph+qZ4fU8AeVHGgiE2tPsXxC8rzeMbuiz1u/WPBE
-	 gIDRXMO6ZDazEc0zCwit02EOsRiX9APaVtZ1xXbeBhVrCaEwALxHlb2DkldWO1tSUJ
-	 FupJ8eWOxbtt0yD1RLkXWdgoE8EIgHtHci/LhoXJV1tr0xUzEeAtQaUT1nuR6r+Ftd
-	 g3HalHEEUZXlMbEO35FJ2UzG0iPYCP2xekitF8HZkiMgUeYJMFd/uetnXCcrApPBqK
-	 DcH/KcVw90ZLw==
+	b=cMMRYn9JSKqkHql6QtMC5TW2+mwC92t2P3cYIPSmLlD5K27WTHRUQuPDibb07GUxF
+	 G/1jWiY851HECBshNrEXJGqmJkxlp+6keq6iC4/BeKtGtGcaUaWqZ16pZDHWgDH4Fr
+	 TTAPOHvP6fW5wsVfQx/oMpP/TQozfID6gjGPrj0A4mgPNM647XTPmW1kLHx2NChRKq
+	 ID06l9GiF94PtQu95a4POwIaScw3msZtcpWtgYDUv7Fq9SnHYcz38sjsBaYmloUG6B
+	 dns16CBdYnD3Jsunc+xw1d6abcqr0Fy5cTgIqCn9MAcP3E/bzWKjDYCEMYmhrdEvpk
+	 RkgkRBniSyjRA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3EDB940855;
-	Sat, 15 Aug 2026 16:38:13 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id C222023F
- for <buildroot@buildroot.org>; Sat, 15 Aug 2026 16:38:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6C75460655;
+	Sat, 15 Aug 2026 17:09:04 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3C46523F
+ for <buildroot@buildroot.org>; Sat, 15 Aug 2026 17:09:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A85CB400A4
- for <buildroot@buildroot.org>; Sat, 15 Aug 2026 16:38:12 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2E5A1400A6
+ for <buildroot@buildroot.org>; Sat, 15 Aug 2026 17:09:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Vd93c9HDYHZm for <buildroot@buildroot.org>;
- Sat, 15 Aug 2026 16:38:12 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C994240026
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C994240026
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C994240026
- for <buildroot@buildroot.org>; Sat, 15 Aug 2026 16:38:11 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id C9EC55FFB7;
- Sat, 15 Aug 2026 18:38:05 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 15 Aug 2026 18:38:05 +0200
+ id 2Ebkc0VMWIRB for <buildroot@buildroot.org>;
+ Sat, 15 Aug 2026 17:09:01 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
+ helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E75FE40026
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E75FE40026
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E75FE40026
+ for <buildroot@buildroot.org>; Sat, 15 Aug 2026 17:08:59 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-02.galae.net (Postfix) with ESMTPS id 758DE1A1670;
+ Sat, 15 Aug 2026 17:08:57 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 3CF22604AA;
+ Sat, 15 Aug 2026 17:08:57 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id DBC2E11C4F5D6; 
+ Sat, 15 Aug 2026 19:08:51 +0200 (CEST)
+Date: Sat, 15 Aug 2026 19:08:50 +0200
+To: Andreas Ziegler <br025@umbiko.net>
+Cc: buildroot@buildroot.org, Marcus Hoffmann <buildroot@bubu1.eu>
+Message-ID: <aoCchJJvG9qP4NAs@windsurf>
+References: <20260709110822.305873-1-br025@umbiko.net>
+ <20260709110822.305873-2-br025@umbiko.net>
 MIME-Version: 1.0
-Date: Sat, 15 Aug 2026 18:38:05 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org, Joseph Kogut <joseph.kogut@gmail.com>, Romain
- Naour <romain.naour@gmail.com>
-In-Reply-To: <20260815153325.349674-1-bernd@kuhls.net>
-References: <20260815153325.349674-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.17
-Message-ID: <01d29603fddf7fb5b802adfddf2fb790@free.fr>
-X-Sender: ju.o@free.fr
-Subject: Re: [Buildroot] [PATCH 1/1] package/{mesa3d,
- mesa3d-headers}: bump version to 26.1.7
+Content-Disposition: inline
+In-Reply-To: <20260709110822.305873-2-br025@umbiko.net>
+X-Last-TLS-Session-Version: TLSv1.3
+Subject: Re: [Buildroot] [PATCH v2 01/11] package/mpd: install provided
+ sample configuration file as mpd.conf
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -78,19 +81,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 15/08/2026 17:33, Bernd Kuhls wrote:
-> https://lists.freedesktop.org/archives/mesa-announce/2026-August/000864.html
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Hello Andreas,
 
-Applied to master, thanks.
+On Thu, Jul 09, 2026 at 01:08:05PM +0200, Andreas Ziegler wrote:
+> The configuration file supplied by Buildroot is only a sample; it will not
+> start MPD on a default installation. Usually a custom mpd.conf is supplied
+> in a rootfs overlay.
+> 
+> Drop the Buildroot configuration file and install the sample supplied by
+> MPD instead, it is more complete, contains useful examples and is updated
+> regularly.
+> 
+> Signed-off-by: Andreas Ziegler <br025@umbiko.net>
+
+I am not conviced by this change. Indeed, doc/mpdconf.example in the
+mpd code base is basically almost entirely commented out. The options
+that are set by our package/mpd/mpd.conf are not set by
+doc/mpdconf.example (like log_file, music_directory, etc.).
+
+So I am not sure to understand why doc/mpdconf.example is better, as
+it actually doesn't configure anything. The only not commented lines
+are:
+
+input {
+        plugin "curl"
+}
+
+which is clearly a lot less than:
+
+music_directory		"/var/lib/mpd/music"
+playlist_directory	"/var/lib/mpd/playlists"
+db_file			"/var/lib/mpd/database"
+log_file		"/var/log/mpd.log"
+pid_file		"/var/run/mpd.pid"
+state_file		"/var/lib/mpd/state"
+bind_to_address		"any"
+bind_to_address		"/var/lib/mpd/socket"
+
+in our mpd.conf.
+
+So overall I don't understand why it is an "improvement". Could you
+clarify?
+
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
