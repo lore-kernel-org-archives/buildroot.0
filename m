@@ -4,104 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33AD7C5DF6D
-	for <buildroot@archiver.kernel.org>; Sun, 16 Aug 2026 16:36:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84D6BC5B572
+	for <buildroot@archiver.kernel.org>; Sun, 16 Aug 2026 17:29:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BFB9840568;
-	Sun, 16 Aug 2026 16:36:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1BFD7406E3;
+	Sun, 16 Aug 2026 17:29:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QPuRq5kUhgl2; Sun, 16 Aug 2026 16:36:22 +0000 (UTC)
+ id foYUGkb02-v8; Sun, 16 Aug 2026 17:29:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C049440569
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B08C8406D2
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786898182;
-	bh=s+W1lZzWPgmwXB9euniZ7PfWkeEs/3hmvToQhnV4FMM=;
+	s=default; t=1786901362;
+	bh=o1l2tUnM+V5NdwgkQGvtJLU6OE4oMag8kyGgwSR8CHc=;
 	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=Svib3EA4EeWirP8mxWwz+vXoJ6BnCRh0An0Ru3YWwwqgGGMYUr7mVPCsSRGzbaqUl
-	 RDRU+atrjnZFGKfBkLbDOIgl+scYecXOHDPDvjV5Pa0m654vLFXPqTZtzTe+1bYlIq
-	 cpGrIXgKB+Phb191LjinAgvQpST44yIVuR5ZsiniHzD1wf9WTZCBtoQgiZUGkx/9Eb
-	 z/gZlTZ3ZhIESAr5rE0s498w3S8iQzil3AuCoRBzz0JDIzYJaQvZgQbgIXmrSzOPBC
-	 3nSnoPaxLGySc939est8YSprILxIpok8ZjnoSZBA4iEVnRXEnLIvc/nOcTWyWr2yU7
-	 6glZmdpF6x10w==
+	b=TMFfvIOJGS/DnzdFHGuEz/jbIkgzYl3Tjeje2U7wonWBUf6piIMMhrx9HrEiGx/QH
+	 BNQsYHUn5UIziDcuF4GKAvsT9/cgnGwW7V3eVoBGnApwXauf3z3IadfYl8HEDPAzLs
+	 mowQrQ7IxbBe1AQ78U4fdlgPbzpAt9uNftvkdoJSpvBDhxnWQ7vR9Hi1y91YXymboR
+	 JbQOuzcsHaoSCfBRitDMbPQKZwG1ZJ/YkRsxmnOQKXgGFjOATR8DE73uWCoPGXFxT4
+	 TjvqkPzAY3RBHLcyyX7rNS3b4XrUJLI1eBTSklNDwEsELf62iR8CY72ovlrbmUPnti
+	 SZSnv0ujFJEmA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C049440569;
-	Sun, 16 Aug 2026 16:36:22 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 30C643A0
- for <buildroot@buildroot.org>; Sun, 16 Aug 2026 16:36:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B08C8406D2;
+	Sun, 16 Aug 2026 17:29:22 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id E78DF23F
+ for <buildroot@buildroot.org>; Sun, 16 Aug 2026 17:29:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 171B540077
- for <buildroot@buildroot.org>; Sun, 16 Aug 2026 16:36:22 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id CD5D160629
+ for <buildroot@buildroot.org>; Sun, 16 Aug 2026 17:29:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id a00BG-WD0udn for <buildroot@buildroot.org>;
- Sun, 16 Aug 2026 16:36:21 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
- envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 148F540076
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 148F540076
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
- [IPv6:2a00:1450:4864:20::333])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 148F540076
- for <buildroot@buildroot.org>; Sun, 16 Aug 2026 16:36:20 +0000 (UTC)
-Received: by mail-wm1-x333.google.com with SMTP id
- 5b1f17b1804b1-49554ebb87dso25345965e9.3
- for <buildroot@buildroot.org>; Sun, 16 Aug 2026 09:36:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1786898179; x=1787502979;
- h=content-transfer-encoding:content-type:in-reply-to:content-language
- :from:references:cc:to:subject:user-agent:mime-version:date
- :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to:content-type;
- bh=GQ2t0ZSYXrVizlHeuQMcbOeF5KBb+1pGtw4vJojd0C8=;
- b=lh76tPBi6QqBmIWQOBF63mpzlvgZWssWGVcN2FU9hJaAqm5FhDuPlSqIvVQ1ns6aQX
- mMZTSxsfDEYmb7UzE9TpbsceW5CLD+FVk/Ds0CHf37vMWQEGbodKgwnvboD3n8YtkxmA
- YPuofoDFtKNtq5UE0JfXFnuRQQLqOdlsu7NdeF0+T+0skDvtPEg+smSOF19DXSVZ5Wk5
- bsdjrwoQrsKHfcjza6DvQWbKSWbL9ATvDBNaR7ecimcgLDqTR3MYoV3l3uwuMzPP4mY/
- eBBVMhDce3QxaDXH5F+OG6BUhbb2nJy7tZcaoUtGe6V7ZB5Bm6FmDMfuSMzotAIzkG6A
- BhgA==
-X-Forwarded-Encrypted: i=1;
- AHgh+RqXWxW/ogvT/zS7uDaHUic53w2jwVzzdy8ZY0I1xnVpCCWPrhxGs9pa32g8h8rjb6JX6v0c9I4pLCU=@buildroot.org
-X-Gm-Message-State: AOJu0YyRoy9HoK0yaypimAWqBHa8OpIOEWbNaNL10Zf3yniLeoouFxVC
- jj3+Oa8WJFEird+JmPlN42fZrAYXfTcd/YDeRw/+xlZH9tGeQXY4CmN5V/C+JHeUpiTpuvI4Ugu
- yBcQaa8A=
-X-Gm-Gg: AR+sD10TDLOxNbgKsmwSwC69PYVw1y49hB1HN7ka8O51ORAnhCypPEGaOIyoFopEvnX
- rU/la7a1fP7zqHSZl/E+AVa/X7rOxOMV2f+0mL9jVdtWq23G2K/Fkx9vgsdRWbad1Mn64AWMRnG
- xcbj9auqb0NkLqPsO4tGNDj4Q/ejj6FYEJ33FUWdl2/gnHz8pKhozV0KFCYqF/LBoMgVqZuIk3C
- HtYP5igSrQVrJJ1hyMDsNUxMvUYoxVTYCvMMLBWF2ns37xuhHUEVsNSgvV6udLcyx+61VGQHwG6
- BT8e17mrG+UCDYf8bjFM4qtvvmCsCD+REBQFaGjOIcWfnDwQ6A4VQG9U4f4XJmGpgoDASqthmmy
- 7NlXavsVj4EqP1r4uk/RwLGRSwn+Sc5wEU8VmB2oDoSCBWEmqUZ7Yw4xzTYy9jwmd6wB0WuVutf
- MO1rtTJfDRMO9vJChv4iU2R0x9giKnZ35bczwZY9al5BCr99QlOhzW+L+rrW3jHU1OUuZVZdtl7
- RZ869L3a93JVt+YagmOogLuoPPS/oKS6KFkM98wCiRy19DLjWbTeLBz4gr4PWtVUH0MUuwlSoWL
- LmBZGk3H4IDxeN4T54gxn6sIdeM=
-X-Received: by 2002:a7b:c4d2:0:b0:499:8191:62c7 with SMTP id
- 5b1f17b1804b1-499879b38dcmr229409305e9.18.1786898178746; 
- Sun, 16 Aug 2026 09:36:18 -0700 (PDT)
-Received: from ?IPV6:2a01:cb05:94a2:a200:2ad9:827a:59cb:148a?
- (2a01cb0594a2a2002ad9827a59cb148a.ipv6.abo.wanadoo.fr.
- [2a01:cb05:94a2:a200:2ad9:827a:59cb:148a])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4998777caebsm218190755e9.0.2026.08.16.09.36.18
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 16 Aug 2026 09:36:18 -0700 (PDT)
-Message-ID: <aaef4695-4de2-4292-9185-ef021f099c70@smile.fr>
-Date: Sun, 16 Aug 2026 18:36:17 +0200
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gshO45Quhiec for <buildroot@buildroot.org>;
+ Sun, 16 Aug 2026 17:29:20 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
+ helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7DF0E6061A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7DF0E6061A
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7DF0E6061A
+ for <buildroot@buildroot.org>; Sun, 16 Aug 2026 17:29:19 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-03.galae.net (Postfix) with ESMTPS id 5339F4E41263;
+ Sun, 16 Aug 2026 17:29:17 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 1324860352;
+ Sun, 16 Aug 2026 17:29:17 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 669D511C4F9F3; 
+ Sun, 16 Aug 2026 19:29:09 +0200 (CEST)
+Date: Sun, 16 Aug 2026 19:29:08 +0200
+To: Love =?utf-8?Q?Fogelstr=C3=B6m?= <love.fogelstrom@outlook.com>
+Cc: buildroot@buildroot.org, ljfogelstrom <ljfogelstrom@protonmail.com>
+Message-ID: <aoHw1fSkmK7RdWLr@windsurf>
+References: <MRWPR10MB9601C2E95E8C59899FBB997EF2F62@MRWPR10MB9601.EURPRD10.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Adam Ford <aford173@gmail.com>, buildroot@buildroot.org
-Cc: Bernd Kuhls <bernd@kuhls.net>, Joseph Kogut <joseph.kogut@gmail.com>,
- Romain Naour <romain.naour@gmail.com>
-References: <20260710133225.484041-1-aford173@gmail.com>
-Content-Language: fr, en-US
-In-Reply-To: <20260710133225.484041-1-aford173@gmail.com>
-Subject: Re: [Buildroot] [PATCH] package/mesa3d: add intel-virtio host
- native context config
+Content-Disposition: inline
+In-Reply-To: <MRWPR10MB9601C2E95E8C59899FBB997EF2F62@MRWPR10MB9601.EURPRD10.PROD.OUTLOOK.COM>
+X-Last-TLS-Session-Version: TLSv1.3
+Subject: Re: [Buildroot] [PATCH 1/1] package/postfix: add postfix 3.11.4
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -113,76 +80,330 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Romain Naour via buildroot <buildroot@buildroot.org>
-Reply-To: Romain Naour <romain.naour@smile.fr>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gQWRhbSwgQWxsLAoKTGUgMTAvMDcvMjAyNiDDoCAxNTozMiwgQWRhbSBGb3JkIGEgw6lj
-cml0wqA6Cj4gQWRkIEJSMl9QQUNLQUdFX01FU0EzRF9IT1NUX05BVElWRV9DT05URVhUX0RSSVZF
-Ul9JTlRFTCBpbiB0aGUgc2FtZQo+IHBhdHRlcm4gYXMgYW1kZ3B1LXZpcnRpby4gV2hlbiBlbmFi
-bGVkLCAtRGludGVsLXZpcnRpby1leHBlcmltZW50YWw9dHJ1ZQo+IGRlZmluZXMgSEFWRV9JTlRF
-TF9WSVJUSU8gc28gdGhlIGd1ZXN0LXNpZGUgSW50ZWwgbmF0aXZlIGNvbnRleHQKPiAoaTkxNSBh
-bmQgeGUgY29udGV4dCB0eXBlcykgaXMgY29tcGlsZWQgaW4uIFRoaXMgaXMgdGhlIGd1ZXN0IGhh
-bGYKPiBvZiB0aGUgSW50ZWwgdkRSTSBHUFUgcGFzc3Rocm91Z2ggcGF0aCwgdXNhYmxlIGJ5IHRo
-ZSBjcm9jdXMvaXJpcwo+IChPcGVuR0wpIGFuZCBBTlYgKFZ1bGthbikgZHJpdmVycy4KPiAKPiBO
-b3RlIHRoYXQgdGhpcyBpcyBhbiBleHBlcmltZW50YWwgTWVzYSBmZWF0dXJlICh0aGUgdXBzdHJl
-YW0gbWVzb24KPiBvcHRpb24gaXMgbmFtZWQgaW50ZWwtdmlydGlvLWV4cGVyaW1lbnRhbCkgYW5k
-IGlzIGRpc2FibGVkIGJ5IGRlZmF1bHQuCj4gCj4gU2lnbmVkLW9mZi1ieTogQWRhbSBGb3JkIDxh
-Zm9yZDE3M0BnbWFpbC5jb20+Cj4gCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvbWVzYTNkL0NvbmZp
-Zy5pbiBiL3BhY2thZ2UvbWVzYTNkL0NvbmZpZy5pbgo+IGluZGV4IGUxODQwMzkxNTAuLmFkMDJi
-NWU4MjkgMTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS9tZXNhM2QvQ29uZmlnLmluCj4gKysrIGIvcGFj
-a2FnZS9tZXNhM2QvQ29uZmlnLmluCj4gQEAgLTEzMCw2ICsxMzAsNyBAQCBjb25maWcgQlIyX1BB
-Q0tBR0VfTUVTQTNEX0dBTExJVU1fRFJJVkVSX0NST0NVUwo+ICAJYm9vbCAiR2FsbGl1bSBjcm9j
-dXMgZHJpdmVyIgo+ICAJZGVwZW5kcyBvbiBCUjJfaTM4NiB8fCBCUjJfeDg2XzY0Cj4gIAlzZWxl
-Y3QgQlIyX1BBQ0tBR0VfTUVTQTNEX0dBTExJVU1fRFJJVkVSCj4gKwlzZWxlY3QgQlIyX1BBQ0tB
-R0VfTUVTQTNEX0hPU1RfTkFUSVZFX0NPTlRFWFRfU1VQUE9SVEVEX0RSSVZFUgo+ICAJaGVscAo+
-ICAJICBNZXNhIGRyaXZlciBmb3IgZ2VuNC03IEludGVsIEdQVXMuCj4gIAo+IEBAIC0xNjcsNiAr
-MTY4LDcgQEAgY29uZmlnIEJSMl9QQUNLQUdFX01FU0EzRF9HQUxMSVVNX0RSSVZFUl9JUklTCj4g
-IAlib29sICJHYWxsaXVtIGlyaXMgZHJpdmVyIgo+ICAJZGVwZW5kcyBvbiBCUjJfUEFDS0FHRV9N
-RVNBM0RfTExWTQo+ICAJc2VsZWN0IEJSMl9QQUNLQUdFX01FU0EzRF9HQUxMSVVNX0RSSVZFUgo+
-ICsJc2VsZWN0IEJSMl9QQUNLQUdFX01FU0EzRF9IT1NUX05BVElWRV9DT05URVhUX1NVUFBPUlRF
-RF9EUklWRVIKPiAgCXNlbGVjdCBCUjJfUEFDS0FHRV9NRVNBM0RfTkVFRFNfUFJFQ09NUF9DT01Q
-SUxFUgo+ICAJc2VsZWN0IEJSMl9QQUNLQUdFX01FU0EzRF9SVVNUSUNMX1NVUFBPUlRFRF9EUklW
-RVIKPiAgCWhlbHAKPiBAQCAtMzkzLDYgKzM5NSw3IEBAIGNvbmZpZyBCUjJfUEFDS0FHRV9NRVNB
-M0RfVlVMS0FOX0RSSVZFUl9JTlRFTAo+ICAJZGVwZW5kcyBvbiBCUjJfVE9PTENIQUlOX0hFQURF
-UlNfQVRfTEVBU1RfM18xNyAjIG1lbWZkLmgKPiAgCWRlcGVuZHMgb24gQlIyX1RPT0xDSEFJTl9V
-U0VTX0dMSUJDICMgaWZ1bmMsIHN0YXRpY19hc3NlcnQKPiAgCWRlcGVuZHMgb24gQlIyX1BBQ0tB
-R0VfTUVTQTNEX0xMVk0KPiArCXNlbGVjdCBCUjJfUEFDS0FHRV9NRVNBM0RfSE9TVF9OQVRJVkVf
-Q09OVEVYVF9TVVBQT1JURURfRFJJVkVSCj4gIAlzZWxlY3QgQlIyX1BBQ0tBR0VfTUVTQTNEX05F
-RURTX1BSRUNPTVBfQ09NUElMRVIKPiAgCXNlbGVjdCBCUjJfUEFDS0FHRV9NRVNBM0RfVlVMS0FO
-X0RSSVZFUgo+ICAJaGVscAo+IEBAIC00NTksNiArNDYyLDIyIEBAIGNvbmZpZyBCUjJfUEFDS0FH
-RV9NRVNBM0RfSE9TVF9OQVRJVkVfQ09OVEVYVF9EUklWRVJfRlJFRURSRU5PCj4gIAkgIFNlbGVj
-dCB0aGlzIHdoZW4gcnVubmluZyBNZXNhIGluc2lkZSBhIHZpcnR1YWwgbWFjaGluZQo+ICAJICB3
-aXRoIHZpcnRpby1ncHUgaG9zdCBuYXRpdmUgY29udGV4dCBzdXBwb3J0Lgo+ICAKPiArY29uZmln
-IEJSMl9QQUNLQUdFX01FU0EzRF9IT1NUX05BVElWRV9DT05URVhUX0RSSVZFUl9JTlRFTAo+ICsJ
-Ym9vbCAiaW50ZWwtdmlydGlvIgo+ICsJZGVwZW5kcyBvbiBCUjJfUEFDS0FHRV9NRVNBM0RfR0FM
-TElVTV9EUklWRVJfQ1JPQ1VTIHx8IFwKPiArCQlCUjJfUEFDS0FHRV9NRVNBM0RfR0FMTElVTV9E
-UklWRVJfSVJJUyB8fCBcCj4gKwkJQlIyX1BBQ0tBR0VfTUVTQTNEX1ZVTEtBTl9EUklWRVJfSU5U
-RUwKPiArCWhlbHAKPiArCSAgRW5hYmxlIFZpcnRJTyBzdXBwb3J0IGZvciBJbnRlbCBuYXRpdmUg
-Y29udGV4dHMKPiArCSAgdXNlZCBieSB0aGUgY3JvY3VzL2lyaXMgKE9wZW5HTCkgYW5kIEFOViAo
-VnVsa2FuKQo+ICsJICBkcml2ZXJzLgo+ICsKPiArCSAgVGhpcyBpcyBhbiBleHBlcmltZW50YWwg
-TWVzYSBmZWF0dXJlIGFuZCBpcyBkaXNhYmxlZAo+ICsJICBieSBkZWZhdWx0Lgo+ICsKPiArCSAg
-U2VsZWN0IHRoaXMgd2hlbiBydW5uaW5nIE1lc2EgaW5zaWRlIGEgdmlydHVhbCBtYWNoaW5lCj4g
-KwkgIHdpdGggdmlydGlvLWdwdSBob3N0IG5hdGl2ZSBjb250ZXh0IHN1cHBvcnQuCj4gKwo+ICBj
-b25maWcgQlIyX1BBQ0tBR0VfTUVTQTNEX0hPU1RfTkFUSVZFX0NPTlRFWFRfU1VQUE9SVEVEX0RS
-SVZFUgo+ICAJYm9vbAo+ICAKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9tZXNhM2QvbWVzYTNkLm1r
-IGIvcGFja2FnZS9tZXNhM2QvbWVzYTNkLm1rCj4gaW5kZXggOGU2YzJlZTViOC4uODczNzdiN2Nl
-NCAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL21lc2EzZC9tZXNhM2QubWsKPiArKysgYi9wYWNrYWdl
-L21lc2EzZC9tZXNhM2QubWsKPiBAQCAtMTY0LDYgKzE2NCwxMiBAQCBlbHNlCj4gIE1FU0EzRF9D
-T05GX09QVFMgKz0gLURhbWRncHUtdmlydGlvPWZhbHNlCj4gIGVuZGlmCj4gIAo+ICtpZmVxICgk
-KEJSMl9QQUNLQUdFX01FU0EzRF9IT1NUX05BVElWRV9DT05URVhUX0RSSVZFUl9JTlRFTCkseSkK
-PiArTUVTQTNEX0NPTkZfT1BUUyArPSAtRGludGVsLXZpcnRpby1leHBlcmltZW50YWw9dHJ1ZQo+
-ICtlbHNlCj4gK01FU0EzRF9DT05GX09QVFMgKz0gLURpbnRlbC12aXJ0aW8tZXhwZXJpbWVudGFs
-PWZhbHNlCj4gK2VuZGlmCj4gKwoKTG9va3MgZ29vZC4KCkpvc2VwaCwgc2luY2UgaXMgcmVsYXRl
-ZCB0byBtZXNhIHZpcnRpbyBzdXBwb3J0IGNhbiB5b3UgaGF2ZSBhIGxvb2sgdG9vPwpUaGFua3Mh
-CgpSZXZpZXdlZC1ieTogUm9tYWluIE5hb3VyIDxyb21haW4ubmFvdXJAc21pbGUuZnI+CgpCZXN0
-IHJlZ2FyZHMsClJvbWFpbgoKPiAgaWZuZXEgKCQoQlIyX1BBQ0tBR0VfTUVTQTNEX0dBTExJVU1f
-RFJJVkVSX0ZSRUVEUkVOTykkKEJSMl9QQUNLQUdFX01FU0EzRF9WVUxLQU5fRFJJVkVSX0ZSRUVE
-UkVOTyksKQo+ICBNRVNBM0RfRlJFRURSRU5PX0tNRFMgPSBtc20KPiAgaWZlcSAoJChCUjJfUEFD
-S0FHRV9NRVNBM0RfSE9TVF9OQVRJVkVfQ09OVEVYVF9EUklWRVJfRlJFRURSRU5PKSx5KQoKX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1h
-aWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9v
-dC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Hello Love,
+
+Thanks a lot for your patch and your contribution. There is however
+quite a lot to fix before it can be accepted in Buildroot. See below.
+
+On Wed, Jul 01, 2026 at 07:16:20PM +0200, Love Fogelstr=F6m wrote:
+> From: ljfogelstrom <ljfogelstrom@protonmail.com>
+> =
+
+> Signed-off-by: ljfogelstrom <ljfogelstrom@protonmail.com>
+
+We will need your git configuration to be fixed so that your first
+name/last name show up here.
+
+The commit title should be just:
+
+    package/postfix: new package
+
+> diff --git a/package/postfix/0001-makedefs.patch b/package/postfix/0001-m=
+akedefs.patch
+> new file mode 100644
+> index 0000000000..f54e98d982
+> --- /dev/null
+> +++ b/package/postfix/0001-makedefs.patch
+> @@ -0,0 +1,203 @@
+> +From a0cf1c49eb846a55d014ae91c24810c340e4e85a Mon Sep 17 00:00:00 2001
+> +From: ljfogelstrom <ljfogelstrom@protonmail.com>
+> +Date: Thu, 25 Jun 2026 11:56:40 +0200
+> +Subject: [PATCH] makedefs+install
+> +
+> +Signed-off-by: ljfogelstrom <ljfogelstrom@protonmail.com>
+
+Same: first name/last name.
+
+But more important, we need:
+
+1. A proper commit log that explains what is going on
+
+2. The patch must be submitted upstream. We no longer accept "hacks"
+   in Buildroot that are not submitted upstream. Each patch must have
+   an Upstream: tag that points to the upstream submission.
+
+> diff --git a/package/postfix/Config.in b/package/postfix/Config.in
+> new file mode 100644
+> index 0000000000..9305ce09cc
+> --- /dev/null
+> +++ b/package/postfix/Config.in
+> @@ -0,0 +1,27 @@
+> +config BR2_PACKAGE_POSTFIX
+> +	bool "postfix"
+> +	depends on BR2_USE_MMU
+> +	select BR2_PACKAGE_BERKELEYDB
+> +	select BR2_PACKAGE_PCRE2
+> +	help
+> +	  Postfix Mail Transfer Agent
+> +
+> +	   http://postfix.org
+
+Indentation for this line should be one tab + 2 spaces.
+
+ +
+> +if BR2_PACKAGE_POSTFIX
+> +
+> +	config BR2_PACKAGE_POSTFIX_ICU
+
+Do not intend sub-options.
+
+> +		bool "UTF-8 support"
+> +		select BR2_PACKAGE_ICU
+
+You need to replicate the depends on from ICU here:
+
+        depends on BR2_INSTALL_LIBSTDCPP # icu
+        depends on BR2_USE_WCHAR # icu
+        depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # icu
+        depends on BR2_HOST_GCC_AT_LEAST_7 # icu
+        depends on BR2_TOOLCHAIN_HAS_THREADS # icu
+	depends on !BR2_BINFMT_FLAT # icu
+
+> +		help
+> +		  Enable support for SMTPUTF8 with the ICU library
+> +		  which allows international characters
+> +		  in email addresses and headers.
+> +	comment "icu needs a toolchain w/ C++, wchar, threads, gcc >=3D 7, host=
+ gcc >=3D 7"
+
+And this should be:
+
+comment "UTF-8 support needs ..."
+
+> diff --git a/package/postfix/init/systemd/postfix.service b/package/postf=
+ix/init/systemd/postfix.service
+
+File should be directly in package/postfix, the init/systemd subdirs
+are not needed.
+
+> new file mode 100644
+> index 0000000000..7a72aaa8e5
+> --- /dev/null
+> +++ b/package/postfix/init/systemd/postfix.service
+
+postfix doesn't provide upstream a proper systemd unit file?
+> diff --git a/package/postfix/init/sysv/S51postfix b/package/postfix/init/=
+sysv/S51postfix
+> new file mode 100644
+> index 0000000000..d3e6d61648
+> --- /dev/null
+> +++ b/package/postfix/init/sysv/S51postfix
+
+No need for package/postfix/init/sysv/S51postfix, put it directly in
+package/postfix.
+
+Make sure to have a look at package/busybox/S01syslogd and use it as a
+template for init scripts. You can also check out the Buildroot
+manual. We try to have consistency between our initscripts.
+
+> diff --git a/package/postfix/postfix.mk b/package/postfix/postfix.mk
+> new file mode 100644
+> index 0000000000..e2cda4e85f
+> --- /dev/null
+> +++ b/package/postfix/postfix.mk
+> @@ -0,0 +1,94 @@
+> +########################################################################=
+########
+> +#
+> +# postfix
+> +#
+> +########################################################################=
+########
+> +
+> +POSTFIX_VERSION =3D 3.11.4
+> +POSTFIX_SITE =3D https://www.artfiles.org/postfix.org/postfix-release/of=
+ficial
+
+POSTFIX_LICENSE and POSTFIX_LICENSE_FILES must be added.
+
+> +POSTFIX_DEPENDENCIES =3D berkeleydb pcre2
+> +
+> +ifdef BR2_PACKAGE_POSTFIX_ICU
+
+ifeq ($(BR2_PACKAGE_POSTFIX_ICU),y)
+
+> +POSTFIX_DEPENDENCIES +=3D icu
+> +endif
+> +
+> +ifdef BR2_LINUX_KERNEL_VERSION
+> +export pf_linux_release !=3D echo $(call qstrip,$(BR2_LINUX_KERNEL_VERSI=
+ON)) | grep -Eo \
+> +	"[1-7]\.[0-9]{1,3}(\.[0-9]{1,3})?"
+> +else
+> +export pf_linux_release =3D 6.12 # assuming we're building for linux, de=
+fault version shouldn't matter
+> +endif
+
+Hu? What are you trying to do here?
+
+> +pf_ccargs =3D -DNO_NIS -DNO_NISPLUS -DHAS_DEV_URANDOM $(strip $(TARGET_C=
+FLAGS))
+> +ifneq "$(strip $(TARGET_LDFLAGS))" ""
+> +pf_ccargs +=3D -Wl,$(TARGET_LDFLAGS:$() $()=3D,)
+> +endif
+
+Variables should be in capital letters, and prefixed by the package
+name, i.e POSTFIX_CFLAGS for example.
+
+Why do you need to strip TARGET_CFLAGS?
+
+What are you trying to do with TARGET_LDFLAGS?
+
+> +pf_shared =3D $(if $(BR2_STATIC_LIBS),no,yes)
+
+Variables should be in capital letters, and prefixed by the package
+name, i.e POSTFIX_SHARED for example.
+
+> +
+> +pf_default_settings =3D config_directory=3D/etc/postfix \
+
+Same comment.
+
+> +			 command_directory=3D/usr/sbin \
+> +			 daemon_directory=3D/usr/libexec/postfix \
+> +			 data_directory=3D/var/lib/postfix \
+> +			 html_directory=3Dno \
+> +			 mail_owner=3Dpostfix \
+> +			 mailq_path=3D/usr/bin/mailq \
+> +			 manpage_directory=3D/usr/local/man \
+
+Really relevant?
+
+> +			 newaliases_path=3D/usr/bin/newaliases \
+> +			 queue_directory=3D/var/spool/postfix \
+> +			 readme_directory=3Dno \
+> +			 sendmail_path=3D/usr/sbin/sendmail \
+> +			 setgid_group=3Dpostdrop \
+> +			 shlib_directory=3D/usr/lib/postfix \
+> +			 meta_directory=3D/etc/postfix \
+> +			 sample_directory=3D/etc/postfix \
+> +			 mail_version=3D$(POSTFIX_VERSION)
+> +
+> +# Replace definitions in the 'makedefs' script to enable cross-compilati=
+on.
+> +define POSTFIX_CONFIGURE_CMDS
+> +	[ ! -f $(@D)/makedefs.orig ] && mv -v $(@D)/makedefs $(@D)/makedefs.ori=
+g;:
+
+Why is this needed?
+
+> +	/usr/bin/sed -E -e "s,/usr/,$(STAGING_DIR)/usr/,g" \
+
+Use $(SED).
+
+> +			 -e "s,\s/lib(32|64)?, $(STAGING_DIR)/lib\1,g" \
+> +			 -e "s,(pcre2|icu|pkg)-config,$(STAGING_DIR)/bin/\1-config,g" \
+> +			 -e "s,pkgconf,$(STAGING_DIR)/bin/pkgconf,g" \
+> +			$(@D)/makedefs.orig >$(@D)/makedefs
+
+Why aren't you doing this in place in $(@D)/makedefs ?
+
+> +	$(MAKE) $(TARGET_CONFIGURE_OPTS) \
+
+Please pass $(TARGET_MAKE_ENV) in the environment.
+
+> +		CCARGS+=3D"$(pf_ccargs)" \
+> +		OPT=3D$(shell echo $(TARGET_CFLAGS) | grep -Eo "\-O([0-3gsz]|fast)?") \
+> +		DEBUG=3D$(shell echo $(TARGET_CFLAGS) | grep -Eo "\-g[a-z0-9]*") \
+
+This is a bit meh :/
+
+> +		SHELL=3D"/bin/sh" \
+> +		shared=3D$(pf_shared) makefiles -C $(@D)
+> +	/usr/bin/sed -Ei -e "s,bin/postconf,:,g" \
+> +			$(@D)/Makefile;: just in case
+> +endef
+> +
+> +define POSTFIX_BUILD_CMDS
+> +	$(MAKE) -C $(@D)
+
+$(TARGET_MAKE_ENV) in the environment.
+
+> +endef
+> +
+> +define POSTFIX_INSTALL_TARGET_CMDS
+> +	$(MAKE) POSTFIX_INSTALL_OPTS=3D"install_root=3D$(TARGET_DIR) $(strip $(=
+pf_default_settings))" \
+
+Why do you need to strip $(pf_default_settings) ?
+
+> +		non-interactive-package -C $(@D)
+> +endef
+> +
+> +define POSTFIX_INSTALL_INIT_SYSV
+> +	$(INSTALL) -m 755 $(POSTFIX_PKGDIR)/init/sysv/*postfix $(TARGET_DIR)/et=
+c/init.d
+
+Please make this:
+
+       $(INSTALL) -D -m 755 $(POSTFIX_PKGDIR)/S51postfix $(TARGET_DIR)/etc/=
+init.d/S51postfix
+
+> +	if [ "$(BR2_INIT_OPENRC)" ] ; then \
+> +		if ! find -P $(TARGET_DIR)/etc/init.d -type f -name "sysv-rcs" ;\
+> +		then \
+> +			ln -st $(TARGET_DIR)/etc/runlevels/default \
+> +				$(TARGET_DIR)/etc/init.d/*postfix ;\
+> +		fi ;\
+> +	fi
+
+What are you trying to do here?
+
+If you really need to so something related to openrc, then:
+
+ifeq ($(BR2_INIT_OPENRC),y)
+define POSTFIX_OPENRC_FIXUPS
+       ...
+endef
+endif
+
+define POSTFIX_INSTALL_INIT_SYSV
+       ...
+	$(POSTFIX_OPENRC_FIXUPS)
+endef
+
+
+> +define POSTFIX_INSTALL_INIT_SYSTEMD
+> +	$(INSTALL) -m 644 $(POSTFIX_PKGDIR)/init/systemd/postfix.service $(TARG=
+ET_DIR)/etc/systemd/system
+
+Change to:
+
+       $(INSTALL) -D -m 644 $(POSTFIX_PKGDIR)/postfix.service $(TARGET_DIR)=
+/etc/systemd/system/postfix.service
+
+> +endef
+> +
+> +define POSTFIX_USERS
+> +	postfix -1 postfix -1 ! - - - Postfix Mail Transfer Agent
+> +	postdrop -1 postdrop -1 ! - - -
+> +endef
+> +
+> +$(eval $(generic-package))
+
+Also, you need to add a .hash file.
+
+And ideally, a runtime test in support/testing/ would be good for this
+kind of package.
+
+Could you try to work on a new iteration?
+
+Thanks a lot!
+
+Thomas
+-- =
+
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
