@@ -1,73 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A18EFC5B572
-	for <buildroot@archiver.kernel.org>; Sun, 16 Aug 2026 09:24:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4DBEC5B572
+	for <buildroot@archiver.kernel.org>; Sun, 16 Aug 2026 09:26:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 643E980DDF;
-	Sun, 16 Aug 2026 09:24:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 98DC26069F;
+	Sun, 16 Aug 2026 09:26:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IK3GMOwAn3dV; Sun, 16 Aug 2026 09:24:45 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wr8mRTzBTKcW; Sun, 16 Aug 2026 09:26:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7F30B80D97
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1488060657
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786872285;
-	bh=6O4kk9+HiJGEfkJYiC75DN0oTtYde/ig20oFEC7oVDM=;
+	s=default; t=1786872409;
+	bh=gyQi7TAeWwaIlssmkjP5fflrqfhVXMJwJx7fZLFRDYw=;
 	h=Date:From:To:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=eV8nlIyalOg/0Q4gvxq/YrDlvu1P+JRoIT9tlAHxk2+oonsXSfXXaSt+Enu2VYuxs
-	 qjVtryZZKVF0lX7XD4shWMh+IsZkPBNUwA7F9/PU2MdLA77pcDT4lzhJmkX6+bD4a3
-	 ZeQ6pwxUY0+WAnKwGRVE1zJYIY0XDKGIuCt5qg4pRVrO/CoUwnYTtc/XqLsE2KT0K6
-	 mrVm+DJnnFVEHKNiVUlNsAMEyXvYh8eYFRn9QgFETF6AwSByR0VpHg1ToQr7BskmWZ
-	 wVf2QMfHxcpQsW6cj1PS51oEJUA8k5bp1580mfjjMHUY7ZNO7I60+10VWVtPQvspVW
-	 5L6wyHVUTgn8Q==
+	b=MuHzOzFSwUmPx8f6g/WIU+8cBadMwzSYYLN0NmyzhW4+7DTIjcDGwVRg5B/8cG5ie
+	 CfBbMiiarofY3L+YTa4p8Rq6yTngnJZcDQEKnsPgS6kuYExOlqOzEjINotw01VziWM
+	 ZDaKpQiq1aKaLDi7G8Oex4CLXUCHmIlpXkeTbiv6gwgXqH2VbJO9C9YFkglekjDo7O
+	 H3lNxOkw36T8WqpAkBzezuDyBaTcLVsp3yBqcV623GQG5niNSsNAf846fdiKjl9Ub7
+	 BUBq6mwuzTx13cK9ryZnZ4HYLyeoH9BscxG+OgCZI2TFaisfaV/3NLG5nqUG8NDnTT
+	 tM+IBgilJ6kKA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7F30B80D97;
-	Sun, 16 Aug 2026 09:24:45 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id DBA6F33B
- for <buildroot@buildroot.org>; Sun, 16 Aug 2026 09:24:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1488060657;
+	Sun, 16 Aug 2026 09:26:49 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 49CCC33B
+ for <buildroot@buildroot.org>; Sun, 16 Aug 2026 09:26:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CD01940742
- for <buildroot@buildroot.org>; Sun, 16 Aug 2026 09:24:43 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3B7C940475
+ for <buildroot@buildroot.org>; Sun, 16 Aug 2026 09:26:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Xa4fgOTE8okz for <buildroot@buildroot.org>;
- Sun, 16 Aug 2026 09:24:43 +0000 (UTC)
+ id ynaWiTQkiGtL for <buildroot@buildroot.org>;
+ Sun, 16 Aug 2026 09:26:46 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.238.66.15;
  helo=helium.openadk.org; envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D1E224073D
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1DF164046C
 Authentication-Results: smtp4.osuosl.org;
  dmarc=none (p=none dis=none) header.from=openadk.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D1E224073D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1DF164046C
 Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D1E224073D
- for <buildroot@buildroot.org>; Sun, 16 Aug 2026 09:24:42 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1DF164046C
+ for <buildroot@buildroot.org>; Sun, 16 Aug 2026 09:26:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=openadk.org; s=2022;
- t=1786872280; bh=H5Hvu0KU1u+XLJaCtp96aWHDE6tiXl5mGlRUiOL+Apk=;
+ t=1786872404; bh=foA8HVQLM8nDsm1GyJjhwQoo89NkGbg0LKBOG4N0dKU=;
  h=Date:From:To:Subject:From;
- b=GNqZLzG/ZX0+qO9VSB1bkHJu+1ydn6G9c2n8h6NgfwCY72FAATobTvrhR0zwQTQXJ
- L25FlP4C748vNlOU6yyH+bQQ9QtZegRJg0oxage0Z6H/NWj8pAqGNw2dHmDpHveZUI
- mImH0uJiraW9qUAgtnuMAF3XJt9uKf/GUecNwZ86SIHCnxcy1HslFl6Ryge4P97cdW
- rgepom0CGFajBhtXnF2gVpy4vN7G0u1VbEtsLbG/C1lpvsVwmgIrqd1pcoUzo0jmKF
- Z9NUWsLnvtRowwxhjOTiwJzDNA7Ildj246eEXxQ8ETiw4hT+flIRZmN9naXsBBIV4B
- PQ+YmgRtIQLSw==
+ b=puSX+/cRJv0bN5ykQWiW4DN2LTWR9lYr4y+sfcB+Rf6nV5wWLoIkzF4OMUz55ypd8
+ ULOEJBiyQtSgF5mnGHdeibjbhu1M6acIiou/Ci/PDsGdnZPmGWE/wgfXxjwTnKnAKq
+ 443F6+mTa0RAbpjoTjZPGB9TbxiGOjuzVLzgJrKX3U9ZAVngyvwUhtOFIR0xhWbp0/
+ i70RhS/NTFoXDqRNfgMaZDdOb4FpEwEWtq6yn0Aj6qefAtiP24zcKQHKUea3eqcuMu
+ 3+GDWCEZe25Vza/XBcSnMHvve5012givcASrkaGliFATRB/0Lct3QtiOZ82Za+9RSh
+ odq50/gWfVy1A==
 Received: by helium.openadk.org (Postfix, from userid 1000)
- id 7445531E0AF6; Sun, 16 Aug 2026 11:24:40 +0200 (CEST)
-Date: Sun, 16 Aug 2026 11:24:40 +0200
+ id 358D331E0AF6; Sun, 16 Aug 2026 11:26:44 +0200 (CEST)
+Date: Sun, 16 Aug 2026 11:26:44 +0200
 From: Waldemar Brodkorb <wbx@openadk.org>
 To: buildroot@buildroot.org
-Message-ID: <aoGB2EKYfAEH5N8t@waldemar-brodkorb.de>
+Message-ID: <aoGCVOA28ZKnveLq@waldemar-brodkorb.de>
 MIME-Version: 1.0
 Content-Disposition: inline
 X-Operating-System: Linux 6.12.96+deb13-amd64 x86_64
-Subject: [Buildroot] [PATCH] package/uclibc: enable FENV support
+Subject: [Buildroot] [PATCH] package/uclibc: automatically enable uchar when
+ wchar is enabled
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,26 +85,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Enable FENV support unconditionally when a hard-float toolchain is in use.
-Useful for packages as quickjs and chawan.
-Adds 24kb to the C library on aarch64.
+When wchar in uClibc is enabled, just enable uchar support, too.
+Adds 5kb to the C library on aarch64. Makes the default uClibc
+config more compatible to musl and glibc.
 
 Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- package/uclibc/uclibc.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/uclibc/uclibc.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index 0cee106014..c19328e87a 100644
+index c19328e87a..beaa32e67f 100644
 --- a/package/uclibc/uclibc.mk
 +++ b/package/uclibc/uclibc.mk
-@@ -286,6 +286,7 @@ else
- define UCLIBC_FLOAT_CONFIG
- 	$(call KCONFIG_ENABLE_OPT,UCLIBC_HAS_FPU)
- 	$(call KCONFIG_ENABLE_OPT,UCLIBC_HAS_FLOATS)
-+	$(call KCONFIG_ENABLE_OPT,UCLIBC_HAS_FENV)
- endef
+@@ -365,6 +365,7 @@ endif
+ 
+ ifeq ($(BR2_TOOLCHAIN_BUILDROOT_WCHAR),y)
+ UCLIBC_WCHAR_CONFIG = $(call KCONFIG_ENABLE_OPT,UCLIBC_HAS_WCHAR)
++UCLIBC_UCHAR_CONFIG = $(call KCONFIG_ENABLE_OPT,UCLIBC_HAS_UCHAR)
+ else
+ UCLIBC_WCHAR_CONFIG = $(call KCONFIG_DISABLE_OPT,UCLIBC_HAS_WCHAR)
  endif
+@@ -431,6 +432,7 @@ define UCLIBC_KCONFIG_FIXUP_CMDS
+ 	$(UCLIBC_THREAD_DEBUG_CONFIG)
+ 	$(UCLIBC_LOCALE_CONFIG)
+ 	$(UCLIBC_WCHAR_CONFIG)
++	$(UCLIBC_UCHAR_CONFIG)
+ 	$(UCLIBC_SHARED_LIBS_CONFIG)
+ endef
  
 -- 
 2.47.3
