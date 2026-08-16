@@ -4,114 +4,114 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 417ACC5DF66
-	for <buildroot@archiver.kernel.org>; Sun, 16 Aug 2026 19:18:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65484C5DF66
+	for <buildroot@archiver.kernel.org>; Sun, 16 Aug 2026 19:18:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3980180E20;
-	Sun, 16 Aug 2026 19:18:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F213F80E28;
+	Sun, 16 Aug 2026 19:18:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ux33yBVC3my9; Sun, 16 Aug 2026 19:18:07 +0000 (UTC)
+ id 8Ki8hPiknJ_8; Sun, 16 Aug 2026 19:18:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C637980E0B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D2F7A80E29
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786907887;
-	bh=IzwcodF9L2xH4SK6PD6jkGZBphpNd8vSdSFaM4y7Dis=;
+	s=default; t=1786907890;
+	bh=nqN+59PLJhwktwxr5Tmj3+6CWZzI7xGDAch4RxRuegw=;
 	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=buGetoiMuRdH1MSiahm7FS8FzgYniV+B1ioL3O/hH/xzqORQPGQQgRo1rle7O9qGZ
-	 DzfdQ/nkLkHV6Ou/Lm05zDB17dIMaKwJn0HMuOR3YsNqLz0HUQzqzUhws97vwvBXB6
-	 VbcaFi5+5VqxRo4Q/bixRRLRDIM+jRgXuSl+wlxu1JWv41eD2lchHaV8o2FRdVMmkm
-	 hZtX1W1LPOrFXmo+iULk7UwB2bPz2H5aDoMH6MidjPXIGkfONK+bbD2M8xetWYHmMF
-	 aHWt4PKm5xlJiQzflKWWvZmynkqtlUICU/gvmYNUPvTw/zAX3rUCpA3kATQB86HCZ3
-	 0VVtXacmOUy4w==
+	b=S12orZtZq6jF1oKj6rrJT99ZGD1jKBLu0LTdpcKd+lei6Cx3dbdWj3atSfFY+gfvA
+	 NqunZ2Su8jQsHSdwBpImI1NUIst6VZHUxwtvZvlRQbEWWrIG0Z2RkuFRDrNX+SwZWC
+	 L5TJxNsYCaG80GdjGE3pHqXRdc3ytNKOKEgQz5pIh0DVfjE9S/iNEeNPgP4490vgrQ
+	 8YlAzcRKxIjCb4Y6Bzf+CgIE3+6SNpq+1kPDufXDyygMITQB17C7DdCQ6HTXS3+3IT
+	 1pvHc658l89KLmOM8Btxc3f+DaBXv1KjjNKwEEGpm7PwxGeS/fdeuq6U9u4lwEmA2R
+	 aNtU/Cd+rMm/w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C637980E0B;
-	Sun, 16 Aug 2026 19:18:06 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 3BB453A0
- for <buildroot@buildroot.org>; Sun, 16 Aug 2026 19:18:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D2F7A80E29;
+	Sun, 16 Aug 2026 19:18:09 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id B6CEA3A0
+ for <buildroot@buildroot.org>; Sun, 16 Aug 2026 19:18:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2123240063
- for <buildroot@buildroot.org>; Sun, 16 Aug 2026 19:18:02 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A80DB80DF2
+ for <buildroot@buildroot.org>; Sun, 16 Aug 2026 19:18:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id J6bW37CAlxG7 for <buildroot@buildroot.org>;
- Sun, 16 Aug 2026 19:18:01 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Bu--G0jJ7oMS for <buildroot@buildroot.org>;
+ Sun, 16 Aug 2026 19:18:02 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::734; helo=mail-qk1-x734.google.com;
+ client-ip=2607:f8b0:4864:20::736; helo=mail-qk1-x736.google.com;
  envelope-from=alseycmiller@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5E5B740086
-Authentication-Results: smtp2.osuosl.org;
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4DD6680DC8
+Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=gmail.com
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5E5B740086
-Authentication-Results: smtp2.osuosl.org;
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4DD6680DC8
+Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20251104 header.b=UGfhMb9f
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com
- [IPv6:2607:f8b0:4864:20::734])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5E5B740086
- for <buildroot@buildroot.org>; Sun, 16 Aug 2026 19:18:01 +0000 (UTC)
-Received: by mail-qk1-x734.google.com with SMTP id
- af79cd13be357-92ea24a2dbfso228324085a.0
- for <buildroot@buildroot.org>; Sun, 16 Aug 2026 12:18:01 -0700 (PDT)
+ header.a=rsa-sha256 header.s=20251104 header.b=rJOc0POZ
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com
+ [IPv6:2607:f8b0:4864:20::736])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4DD6680DC8
+ for <buildroot@buildroot.org>; Sun, 16 Aug 2026 19:18:02 +0000 (UTC)
+Received: by mail-qk1-x736.google.com with SMTP id
+ af79cd13be357-936d00181abso119154685a.2
+ for <buildroot@buildroot.org>; Sun, 16 Aug 2026 12:18:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1786907880; x=1787512680; darn=buildroot.org;
+ d=gmail.com; s=20251104; t=1786907881; x=1787512681; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to:content-type;
- bh=R2oM0SAZYKNeRJn6UMECc0f8wfyTywh4lWzDUFQc/7M=;
- b=UGfhMb9fOvQkpFxAuJ+xFtrjlPwKYhqKsHzAW3Z8lhfH2mCn3LEiU9QAYzDcqScrS6
- Nd6DYJywGWj8JoSQfoQgSRiuo2bh6tQJx6HGfWP87PecNFU/IpfgXCHz3/+f1CkQku7h
- uMpiixtXlEI7VFiKPnNRJHMiM70Mw2sOEZSmHTqRZTGhD9YP6CqxZSlTiTgc6Xvzac99
- d5tvcZJBuVCQi46N7+yKjAHlt8lnVTxheCtdxIthMP3AdLKyiXvZcy9lBRpsCmEAklVO
- ZDDM+x9gutNnuSFsVKyXtlVhZlqUfaV6klc4m0lOqwGDkRFm7K5Iw2RoHSIuZ/c2PlNs
- T1iw==
+ bh=CKtbZP82DmL7wCDbvJlXimowgyCYOWhhmK9Jbs/GTeE=;
+ b=rJOc0POZ1uy2xwe5dXnej05qNXLB5TCxXCG6P2lHSN+NhisEdGSM+YwuGhl2uKC+8f
+ L6k7o/qHPwV0mqlUAboRGrCG2EgqzN4lhFDbldAtqFBpaV9GCkG2tZOiUdYwiOeuE5nU
+ auhi1dUTpflwkNp1fCLIrOlTNpnLr1l48YWzRL2JTQeGXxvmEv0RvBIlgeRtoAE7pYan
+ FdP6S8p83vkTbOSm+IHQOuk994Cam9duu/WtYk+aga2XdS+Hh+bNX9Mq50QiGNbnBsvA
+ X+iXW9THny7mtMXiZfOejCUj9+E7Uq6U4JU1kM8u6ekKwCleEeNyWYttzpp0A5Qkw8RG
+ X0RQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1786907880; x=1787512680;
+ d=1e100.net; s=20251104; t=1786907881; x=1787512681;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=R2oM0SAZYKNeRJn6UMECc0f8wfyTywh4lWzDUFQc/7M=;
- b=g37NYgbWHjNZhLhGvlzH6RohssPwvV9DC6lOG1/RvHUk4OJTe1orHCYaYi5NQuYFU8
- LAILql9JRSaeR11TEnfi4uvvMyTh398wz4bRgqAgt6PxK/a7lVc/RBOYflfZ8lwJdojV
- F3dC1AnZd0W3r+h/PeZcNSB2coCMKpfFU52fM9TjBdom0rhQ8+dqoFJIa4ymKvppbN4t
- dEJZPjnYZ5PujfLVvMRBN64NClZtfx9VwXKP04S0CPpTG2toxlakwwLKA5SThMbAfrWO
- 1uf+9KmzQ9IRLu6E1s1fYFeKaVEwWxHlRPyvS1yk8hCRNrW3xqAQ5h6FK6OLx5GHcDWz
- +cGg==
-X-Gm-Message-State: AOJu0Yy+Gd8Mmnjvl2gymMVdgyD6JC75caePh7XX6Ze6YR+qUR8VM0KR
- oHUfFLagXATRoEVfYV5ZWfXbUlayDXdfjjO0ed8x2gxL10bR46k8fAxExmmlNw==
-X-Gm-Gg: AR+sD12nRcabhBWx5yo96U4aTp0ey/Q8Uu6DjfUcPXOBmEpg6OdvW528bP5VE7c5evc
- 4FYvfnn4R6VfVTufTWLpiUYiTBAwEhoazoppRSixzvUPOR2nUiiA6HgYPjPgRtZoKQbRRMVYJQ3
- ABJx1K6rbwr1QKzmZveo1/n7y4FEANk/RxU817Mli37nST9QSm/gs+p/CZuDYZNRYtrfi/Oj/Wj
- w9XxNWVBFgTI0duU8Z85mrW8WoyXK08tUFVEeg1sjEuM0WLIuH56Gb6YvQvKVHEwuh5gs1zcDBJ
- JCikaeIjKj4cmefjL015ZrYf7I9NAvLd3RwHRIz4CuvtFdhCA+ZqHr7px4DLEZgtB41LIBRAuNK
- 1iGHeUOZ3Hqlt1cER/h11VyygbyBOaJDjV0Qx1senjTkSSg9AmcMi+6DlCEbnxfFXQZx9BdY8nF
- 0UEZ4sRXLOCQrV70cYLwrEhjKxMAmsXYQNoAm9O3Apf3P2eTJx2eKZPi1IF4ckci3emyroH8rHD
- C9MY3EMVz/HKFc=
-X-Received: by 2002:a05:620a:8e0c:b0:92e:e2fc:26d3 with SMTP id
- af79cd13be357-936d2339dccmr1524849385a.46.1786907880080; 
+ bh=CKtbZP82DmL7wCDbvJlXimowgyCYOWhhmK9Jbs/GTeE=;
+ b=fWYUU23P0+MPz8ABcpnDoI7CuLisCB5Pq1pCxBEc/Ot5yer4APxY2sIyIWTvNzOfJO
+ STjivaJGKVkM/JId9n3WQNbIO5sF0hyx9U+Agt8XTTprTXTxC9a9wnvIDkN+XhFZwmEr
+ zzCIkbmh3+xB00q01YV5+2SPDakcmad89a57pggMwEOfGVJtM/QFVVB/nc99sMzQ9y9x
+ /iF/mLrcMBU0laBfQYO3aUaHoHhEuqQ3rbM/DmKyi2O5vxlAMspDk630zIWnr81wb1WL
+ 1EZ3T6ixNtXljaY7fYortJYnZ3FtSSiw0N6hrDyBnKr4PsI4gnB/VM4CVgvcJ8rZMlD0
+ Grlg==
+X-Gm-Message-State: AOJu0Yxgqre928fPwuejRQf4jQVTsK7tZtO8IS6a1cvlGxB5APOyROZr
+ i/rzaGggSDVXI1cTkPnApPK1JtuJg3Fh+0XeiL66jhijsu3E8svpKotqmB25Lg==
+X-Gm-Gg: AR+sD11QHqKktsk8SavKecPlmWtI+UqdtXna5O5uKr9bxJqGUt+vUgTqTBOHY05q09z
+ Ue/h2dsk7puLbf14/GGPOTNQz5lzY68SohwXNBcHz7LsCsxbvmeJjwlUkVOMCQfY8P4H+RhPyHb
+ WQjUIrD+S3lfqCAXIw22ZxKtugL2BGT1V4xNTipAQZ1qOIm3XPCQMtvCb+vZ8QWy7ZNUvzj3CHq
+ qypTe+V0nZ+h4AO4cmv06jAuh6SSOPm75GBqEskeu/31IUa1DX1n77AHtaiO1xk4SHAfTRtK9Lv
+ Tb6clUqsJ08XLMbMWcZJDseuAsUv949bhR433+d9OeUF8kekDv37k+YZirc0Fwysk6in6YXhuRQ
+ EzVGP9ZK3uiv6rwAkxSTlsaukO5ClAxwjWcCTZuEK4jEV5PJcJ0mdWoJo6KELKa9r2dfEo038MI
+ bklSmouVKD9QAz+5SIRrkJFQItVZMRvVZ+jATXmLNpni7rPtB6XAu0cOrUgLFNy6qTHGAE4pLMm
+ MlSoyLxxZ/giyR1Z3KrTeysww8=
+X-Received: by 2002:a05:620a:72b4:b0:936:cae6:5869 with SMTP id
+ af79cd13be357-936d23607b3mr1640510085a.46.1786907880931; 
  Sun, 16 Aug 2026 12:18:00 -0700 (PDT)
 Received: from optiplex-7020.tail176fc.ts.net ([67.21.186.162])
  by smtp.gmail.com with ESMTPSA id
- af79cd13be357-936cdf561efsm825489585a.8.2026.08.16.12.17.59
+ af79cd13be357-936cdf561efsm825489585a.8.2026.08.16.12.18.00
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 16 Aug 2026 12:17:59 -0700 (PDT)
+ Sun, 16 Aug 2026 12:18:00 -0700 (PDT)
 From: Alsey Coleman Miller <alseycmiller@gmail.com>
 To: buildroot@buildroot.org
 Cc: Michael Fischer <mf@go-sys.de>,
  Alsey Coleman Miller <alseycmiller@gmail.com>
-Date: Sun, 16 Aug 2026 15:18:27 -0400
-Message-ID: <20260816191830.533747-6-alseycmiller@gmail.com>
+Date: Sun, 16 Aug 2026 15:18:28 -0400
+Message-ID: <20260816191830.533747-7-alseycmiller@gmail.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260816191830.533747-1-alseycmiller@gmail.com>
 References: <20260816191830.533747-1-alseycmiller@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 5/8] package/sdl3_ttf: do not build the samples
- or install man pages
+Subject: [Buildroot] [PATCH 6/8] package/sdl3_ttf: build plutosvg support
+ when available
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -128,40 +128,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SDLTTF_SAMPLES builds example programs that are not installed, and
-SDLTTF_INSTALL_MAN puts man pages on the target that Buildroot removes
-again. STRICT makes the build fail on a missing dependency rather than
-quietly dropping the feature it belongs to.
+Colour emoji fonts store their glyphs as SVG, which SDL3_ttf renders
+through plutosvg. Without it those glyphs are skipped and the rest of
+the font still renders.
 
-Also state SDLTTF_HARFBUZZ=OFF in the branch where harfbuzz is absent
-instead of relying on the default set above it, so both halves of the
-condition read the same way.
+plutosvg is packaged in the swift-linux ports tree rather than in
+Buildroot, so BR2_PACKAGE_PLUTOSVG is undefined on a plain Buildroot and
+the branch selects SDLTTF_PLUTOSVG=OFF - the behaviour before this
+commit. Not for upstream until plutosvg and plutovg are packaged there.
 
 Signed-off-by: Alsey Coleman Miller <alseycmiller@gmail.com>
 ---
- package/sdl3_ttf/sdl3_ttf.mk | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ package/sdl3_ttf/sdl3_ttf.mk | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
 diff --git a/package/sdl3_ttf/sdl3_ttf.mk b/package/sdl3_ttf/sdl3_ttf.mk
-index 12441e243e..130e07746e 100644
+index 130e07746e..660661a5b7 100644
 --- a/package/sdl3_ttf/sdl3_ttf.mk
 +++ b/package/sdl3_ttf/sdl3_ttf.mk
-@@ -15,11 +15,15 @@ SDL3_TTF_DEPENDENCIES = sdl3 freetype host-pkgconf
- 
- SDL3_TTF_CONF_OPTS = \
- 	-DSDLTTF_VENDORED=OFF \
--	-DSDLTTF_HARFBUZZ=OFF
-+	-DSDLTTF_STRICT=ON \
-+	-DSDLTTF_SAMPLES=OFF \
-+	-DSDLTTF_INSTALL_MAN=OFF
- 
- ifeq ($(BR2_PACKAGE_HARFBUZZ),y)
- SDL3_TTF_DEPENDENCIES += harfbuzz
- SDL3_TTF_CONF_OPTS += -DSDLTTF_HARFBUZZ=ON
-+else
-+SDL3_TTF_CONF_OPTS += -DSDLTTF_HARFBUZZ=OFF
+@@ -26,4 +26,14 @@ else
+ SDL3_TTF_CONF_OPTS += -DSDLTTF_HARFBUZZ=OFF
  endif
  
++# plutosvg renders the SVG glyphs in a colour emoji font, through the
++# FreeType OpenType-SVG hooks. Without it those glyphs are skipped and the
++# rest of the font still renders.
++ifeq ($(BR2_PACKAGE_PLUTOSVG),y)
++SDL3_TTF_DEPENDENCIES += plutosvg
++SDL3_TTF_CONF_OPTS += -DSDLTTF_PLUTOSVG=ON
++else
++SDL3_TTF_CONF_OPTS += -DSDLTTF_PLUTOSVG=OFF
++endif
++
  $(eval $(cmake-package))
 -- 
 2.47.3
