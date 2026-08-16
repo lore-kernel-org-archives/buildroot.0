@@ -1,62 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 336F0C5B572
-	for <buildroot@archiver.kernel.org>; Sun, 16 Aug 2026 08:07:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 174C3C5DF66
+	for <buildroot@archiver.kernel.org>; Sun, 16 Aug 2026 08:08:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 11FC6606B4;
-	Sun, 16 Aug 2026 08:07:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C4E2E40764;
+	Sun, 16 Aug 2026 08:08:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZalncBynlIct; Sun, 16 Aug 2026 08:07:52 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id yWlcAYVggCKx; Sun, 16 Aug 2026 08:08:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 05B8D60657
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 04E764077B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786867672;
-	bh=4wNocIBgQzVW/R/c0IqStjq3OI9NWXU49UK6Y6cikq4=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=iuZw4isznUo298beDCpl49je+/xBosM+uV8Bjtm1G40PKbVgl4yCbRCCD2WBTW/Yu
-	 DXV/+Si7CIka/KBiLhCVGSWvshvwlR0eynsnsxxAN2JuLaIV2GWfxYSkePP3K5x02w
-	 IYG/O4EXfc9ofU7y7lWPhDzIllJd8KbQB6AED2foD0CjCVqGs06N9veGDuwHlfelJT
-	 403Jwn8gv4SeS3Tyls6jAw9loTlvPHcpguZcWJRIAKRaJnY6F37t155lxyejLgJhab
-	 zPdS4bd96yZYDZri6dIre5nLJU/nJPZLOc4iENamlR84DfpzKPrD6jQLiOY72S5f0D
-	 vJP497AkaD5DA==
+	s=default; t=1786867685;
+	bh=kEJyB8VV9VC1lTI3pS+ulGIS7Z6APxiLUoQ7zs3ROSM=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=sAD/Xbr62BZRuLSC0pLNAtcME/MMKH3YXgVvRD1ETbCzTABoEF8yb+HPjRkdZsG0D
+	 9qGn68W5FDPjCay5R7Q2jfxZm4t2i2mzRXN5eXeDCRVj07wO7YzlhIgdntqZDHd/XQ
+	 C6tryTi69u5+vEF+Zbf3GfN1BRuuC5gjkuGER08Ecvb+qYeUvnk/8cJ2fkCzMPHKL1
+	 1ngG3KUpd6LNfmiyHEcK9wd6Sgqpnsw3E6kpDsqNLijYkbvhsJA57PGs65jQ9qisHe
+	 u7cJnpUggMnZnV7OyEm0cWJq23oeoJsT2C9Rg5XkGBitYc5z7JkWU7ggeFXdp77EXX
+	 5O66cO4X3gn/g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 05B8D60657;
-	Sun, 16 Aug 2026 08:07:52 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 6B702333
- for <buildroot@buildroot.org>; Sun, 16 Aug 2026 08:07:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 04E764077B;
+	Sun, 16 Aug 2026 08:08:05 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id A4872333
+ for <buildroot@buildroot.org>; Sun, 16 Aug 2026 08:08:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 693BA400C0
- for <buildroot@buildroot.org>; Sun, 16 Aug 2026 08:07:50 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8AE894077B
+ for <buildroot@buildroot.org>; Sun, 16 Aug 2026 08:08:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bR6xuwfAmfPc for <buildroot@buildroot.org>;
- Sun, 16 Aug 2026 08:07:49 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AB0574006B
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id AB0574006B
- for <buildroot@buildroot.org>; Sun, 16 Aug 2026 08:07:49 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B25AC8DA0B; Sun, 16 Aug 2026 08:06:58 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 16 Aug 2026 10:05:12 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2c92087605c30bd5c1384a62198855f7836b5215
-X-Git-Newrev: e3d5341e01eb83fb4f76a5c721a3363cff8a7f73
-X-Patchwork-Hint: ignore
-Message-Id: <20260816080658.B25AC8DA0B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/expat: security bump version to
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id X5xzZh7FBtKJ for <buildroot@buildroot.org>;
+ Sun, 16 Aug 2026 08:08:03 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::15;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C450640764
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C450640764
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C450640764
+ for <buildroot@buildroot.org>; Sun, 16 Aug 2026 08:08:02 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id 90204780368;
+ Sun, 16 Aug 2026 10:07:58 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 16 Aug 2026 10:07:58 +0200
+MIME-Version: 1.0
+Date: Sun, 16 Aug 2026 10:07:58 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org, Fabrice Fontaine <fontaine.fabrice@gmail.com>
+In-Reply-To: <20260816075242.1844454-1-bernd@kuhls.net>
+References: <20260816075242.1844454-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.17
+Message-ID: <14a728ac0c09b93ec422b9840e76df34@free.fr>
+X-Sender: ju.o@free.fr
+Subject: Re: [Buildroot] [PATCH 1/1] package/expat: security bump version to
  2.8.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -71,51 +79,20 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/e3d5341e01eb83fb4f76a5c721a3363cff8a7f73
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 16/08/2026 09:52, Bernd Kuhls wrote:
+> https://github.com/libexpat/libexpat/blob/R_2_8_3/expat/Changes
+> https://blog.hartwork.org/posts/expat-2-8-3-released/
+> 
+> Fixes CVE-2026-72522.
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-https://github.com/libexpat/libexpat/blob/R_2_8_3/expat/Changes
-https://blog.hartwork.org/posts/expat-2-8-3-released/
-
-Fixes CVE-2026-72522.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/expat/expat.hash | 4 ++--
- package/expat/expat.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/expat/expat.hash b/package/expat/expat.hash
-index 2087133382..c5a8816f9b 100644
---- a/package/expat/expat.hash
-+++ b/package/expat/expat.hash
-@@ -1,4 +1,4 @@
--# From https://github.com/libexpat/libexpat/releases/tag/R_2_8_2
--sha256  3ad89b8588e6644bd4e49981480d48b21289eebbcd4f0a1a4afb1c29f99b6ab4  expat-2.8.2.tar.xz
-+# From https://github.com/libexpat/libexpat/releases/tag/R_2_8_3
-+sha256  f6256df90c906773d344da084402b7d3e4f22ed41b1a59c989098a83d3ea0c85  expat-2.8.3.tar.xz
- # Locally calculated
- sha256  31b15de82aa19a845156169a17a5488bf597e561b2c318d159ed583139b25e87  COPYING
-diff --git a/package/expat/expat.mk b/package/expat/expat.mk
-index fb25a4a47b..7645edfd52 100644
---- a/package/expat/expat.mk
-+++ b/package/expat/expat.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--EXPAT_VERSION = 2.8.2
-+EXPAT_VERSION = 2.8.3
- EXPAT_SITE = https://github.com/libexpat/libexpat/releases/download/R_$(subst .,_,$(EXPAT_VERSION))
- EXPAT_SOURCE = expat-$(EXPAT_VERSION).tar.xz
- EXPAT_INSTALL_STAGING = YES
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
