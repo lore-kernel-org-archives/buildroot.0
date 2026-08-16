@@ -1,62 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 090C3C5DF6D
-	for <buildroot@archiver.kernel.org>; Sun, 16 Aug 2026 14:47:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99273C5DF6D
+	for <buildroot@archiver.kernel.org>; Sun, 16 Aug 2026 14:59:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ACC6A80E23;
-	Sun, 16 Aug 2026 14:47:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5099540687;
+	Sun, 16 Aug 2026 14:59:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Y3nHp-xeBENs; Sun, 16 Aug 2026 14:47:13 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dRL-PPnXqP-y; Sun, 16 Aug 2026 14:59:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C5F9380E48
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 656CD406BF
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786891633;
-	bh=JOkgKTUUaqCji8wWGg9iaapkjG1hfkm9uy7U13eaUnk=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=j8yy0Vr6DrYVgugNsHsbICFsNSRv3PQLEqb2/v9M2tH6CKv42x+Cpuj7W8BIvwRaZ
-	 H6MEON2yNxeD0ay42Yk6QikpFkchPps4ZAqf9pK8tn3IWZ2WGjRtl+hLfx1A3Oz8JL
-	 G1XXM29LNHzAg4V/0xttn2HnXzrqsPDG9FSCDu6CB7gKL9/eGj4utVc1E5Wb7k4GQg
-	 2eFEf/CXNeWyke50smWlEFT6puT49VquwCTTwayDspX1/St1XxEnvIv02XMjc+xvak
-	 I5xrvlzfFUvb4qSa5CTHVm4J/Nr/k1i+OamxLkYB7I+dEhLbLdEGlSGw8s2fNw4ijp
-	 TfdFuNMwIo4gg==
+	s=default; t=1786892381;
+	bh=sEhW60FNuUAHiie7KXn5nAUOhLAmNum6nzWOQkTs5w0=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=NuUUgbzkSovGHyiV0hzs8sQo/H0iCCrIshnThr1CipZoTSvmmDcRpJvOvXOuXU+KX
+	 3OrYtKTmYPdoJtIPxk8OA2UySmM06WlXQ/HtptTpLeZ1gYFIn34OzLt/uB13UlVT0h
+	 sZxuV3QZtbOXQsCfuXUb2Dvzz0DrmQIxllp0ieg0+SL5umvKMz++1i0m4hv1Zb7/bf
+	 WPUmHHgIOTJrGV0VyoAWqrakFn7YWGKHcr85nhr9maK/+N26eX6m4QMezTBGCtkDUr
+	 toa90YfJaS9PiHzUZl9TytVs5ia+Uv7e5mnh3sD+EjXno6skYu24MAxuIvbXkneVBl
+	 d7iYqv3d9wXwQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C5F9380E48;
-	Sun, 16 Aug 2026 14:47:13 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 07235147
- for <buildroot@buildroot.org>; Sun, 16 Aug 2026 14:47:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 656CD406BF;
+	Sun, 16 Aug 2026 14:59:41 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 07FFF147
+ for <buildroot@buildroot.org>; Sun, 16 Aug 2026 14:59:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E20084005C
- for <buildroot@buildroot.org>; Sun, 16 Aug 2026 14:47:11 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E20B940687
+ for <buildroot@buildroot.org>; Sun, 16 Aug 2026 14:59:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jxg0PXD3X7gw for <buildroot@buildroot.org>;
- Sun, 16 Aug 2026 14:47:11 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 311A84004E
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 311A84004E
- for <buildroot@buildroot.org>; Sun, 16 Aug 2026 14:47:11 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 288B58DA99; Sun, 16 Aug 2026 14:46:20 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OFWszOSbXkqc for <buildroot@buildroot.org>;
+ Sun, 16 Aug 2026 14:59:39 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B6F194062E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B6F194062E
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B6F194062E
+ for <buildroot@buildroot.org>; Sun, 16 Aug 2026 14:59:38 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:1065:2100:52d9:65fe:2df3:c492])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id C2CF36012D;
+ Sun, 16 Aug 2026 16:59:34 +0200 (CEST)
 To: buildroot@buildroot.org
-Date: Sun, 16 Aug 2026 16:46:58 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1f48599867d9fe45433c14d9f23eb3bd8fe07a7f
-X-Git-Newrev: 380dd8a348dc7c5edf2b187245b8d4e70a3d96c2
-X-Patchwork-Hint: ignore
-Message-Id: <20260816144620.288B58DA99@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/firewalld: bump to v2.4.3
+Cc: Julien Olivain <ju.o@free.fr>
+Date: Sun, 16 Aug 2026 16:59:30 +0200
+Message-ID: <20260816145930.3581966-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.55.0
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH 1/1] support/testing: quickjs: new runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -68,106 +70,126 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/380dd8a348dc7c5edf2b187245b8d4e70a3d96c2
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
-
-- Switch to release tarball using GitHub generated checksum
-- Drop backported patch
-
-Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...-functions-don-t-use-deprecated-pipes.quo.patch | 42 ----------------------
- package/firewalld/firewalld.hash                   |  3 +-
- package/firewalld/firewalld.mk                     |  6 ++--
- 3 files changed, 5 insertions(+), 46 deletions(-)
+Patch tested in:
+https://gitlab.com/jolivain/buildroot/-/jobs/15922186716
+---
+ DEVELOPERS                                    |  2 +
+ support/testing/tests/package/test_quickjs.py | 52 +++++++++++++++++++
+ .../rootfs-overlay/root/mandel.js             | 21 ++++++++
+ 3 files changed, 75 insertions(+)
+ create mode 100644 support/testing/tests/package/test_quickjs.py
+ create mode 100644 support/testing/tests/package/test_quickjs/rootfs-overlay/root/mandel.js
 
-diff --git a/package/firewalld/0001-improvement-functions-don-t-use-deprecated-pipes.quo.patch b/package/firewalld/0001-improvement-functions-don-t-use-deprecated-pipes.quo.patch
-deleted file mode 100644
-index 0deacbcca0..0000000000
---- a/package/firewalld/0001-improvement-functions-don-t-use-deprecated-pipes.quo.patch
-+++ /dev/null
-@@ -1,42 +0,0 @@
--From 0bfa4eb3e15d8df8a68a8c3429505905afae112e Mon Sep 17 00:00:00 2001
--From: Thomas Haller <thaller@redhat.com>
--Date: Fri, 7 Jul 2023 18:13:10 +0200
--Subject: [PATCH] improvement(functions): don't use deprecated pipes.quote()
--
--Since Python 3.3, shlex.quote() replaces it. This avoids a deprecation
--warning.
--
--Upstream: f7f5613b76c044c62c876ae87c6b85f5a41acb2a
--[Romain: backport to 2.0.2]
--Signed-off-by: Romain Naour <romain.naour@smile.fr>
-----
-- src/firewall/functions.py | 6 +-----
-- 1 file changed, 1 insertion(+), 5 deletions(-)
--
--diff --git a/src/firewall/functions.py b/src/firewall/functions.py
--index f7133d71..6213e778 100644
----- a/src/firewall/functions.py
--+++ b/src/firewall/functions.py
--@@ -34,7 +34,6 @@ import socket
-- import os
-- import os.path
-- import shlex
---import pipes
-- import string
-- import tempfile
-- from firewall.core.logger import log
--@@ -607,10 +606,7 @@ def checkContext(context):
--     return True
-- 
-- def joinArgs(args):
---    if "quote" in dir(shlex):
---        return " ".join(shlex.quote(a) for a in args)
---    else:
---        return " ".join(pipes.quote(a) for a in args)
--+    return " ".join(shlex.quote(a) for a in args)
-- 
-- def splitArgs(_string):
--     return shlex.split(_string)
---- 
--2.51.0
--
-diff --git a/package/firewalld/firewalld.hash b/package/firewalld/firewalld.hash
-index cbd4c7685b..48d80b1b87 100644
---- a/package/firewalld/firewalld.hash
-+++ b/package/firewalld/firewalld.hash
-@@ -1,3 +1,4 @@
-+# Hash generated by GitHub https://github.com/firewalld/firewalld/releases
-+sha256  d441705746cf3d0a5efaad58b1b1193a23c58114162d81a9a0f4fe0c58ee43cf  firewalld-2.4.3.tar.bz2
- # Locally computed
--sha256  1433247299367f707279d50e0759ed27fbcc9bb973b7b2131e8cee96e006d96e  firewalld-2.0.2.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/firewalld/firewalld.mk b/package/firewalld/firewalld.mk
-index eae8afc27f..c443ab3db4 100644
---- a/package/firewalld/firewalld.mk
-+++ b/package/firewalld/firewalld.mk
-@@ -4,12 +4,12 @@
- #
- ################################################################################
- 
--FIREWALLD_VERSION = 2.0.2
--FIREWALLD_SITE = $(call github,firewalld,firewalld,v$(FIREWALLD_VERSION))
-+FIREWALLD_VERSION = 2.4.3
-+FIREWALLD_SITE = https://github.com/firewalld/firewalld/releases/download/v$(FIREWALLD_VERSION)
-+FIREWALLD_SOURCE = firewalld-$(FIREWALLD_VERSION).tar.bz2
- FIREWALLD_LICENSE = GPL-2.0
- FIREWALLD_LICENSE_FILES = COPYING
- FIREWALLD_CPE_ID_VENDOR = firewalld
--FIREWALLD_AUTORECONF = YES
- 
- FIREWALLD_DEPENDENCIES = \
- 	host-intltool \
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 98c9ee55d3..cb5348dc6f 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2028,6 +2028,8 @@ F:	support/testing/tests/package/test_python_pyqt5.py
+ F:	support/testing/tests/package/test_python_pyqt5/
+ F:	support/testing/tests/package/test_python_spake2.py
+ F:	support/testing/tests/package/test_python_sympy.py
++F:	support/testing/tests/package/test_quickjs.py
++F:	support/testing/tests/package/test_quickjs/
+ F:	support/testing/tests/package/test_rdma_core.py
+ F:	support/testing/tests/package/test_rdma_core/
+ F:	support/testing/tests/package/test_rrdtool.py
+diff --git a/support/testing/tests/package/test_quickjs.py b/support/testing/tests/package/test_quickjs.py
+new file mode 100644
+index 0000000000..5d5354ab26
+--- /dev/null
++++ b/support/testing/tests/package/test_quickjs.py
+@@ -0,0 +1,52 @@
++import os
++
++import infra.basetest
++
++
++class TestQuickJS(infra.basetest.BRTest):
++    rootfs_overlay = \
++        infra.filepath("tests/package/test_quickjs/rootfs-overlay")
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++        f"""
++        BR2_PACKAGE_QUICKJS=y
++        BR2_ROOTFS_OVERLAY="{rootfs_overlay}"
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def test_run(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv7",
++                           kernel="builtin",
++                           options=["-initrd", cpio_file])
++        self.emulator.login()
++
++        # We check can print a message from the command line.
++        msg = "Hello Buildroot!"
++        js_expr = f"console.log(\"{msg}\");"
++        cmd = f"qjs -e '{js_expr}'"
++        out, ret = self.emulator.run(cmd)
++        self.assertEqual(ret, 0)
++        self.assertEqual(out[0], msg)
++
++        # We check we can exit with a specific code.
++        exit_code = 123
++        js_expr = f"std.exit({exit_code});"
++        cmd = f"qjs --std -e '{js_expr}'"
++        out, ret = self.emulator.run(cmd)
++        self.assertEqual(ret, exit_code)
++        self.assertEqual(len(out), 0)
++
++        # We check we can do basic arithmetic.
++        val1 = 1234
++        val2 = 5678
++        js_expr = f"console.log({val1} * {val2});"
++        cmd = f"qjs -e '{js_expr}'"
++        out, ret = self.emulator.run(cmd)
++        self.assertEqual(ret, 0)
++        expected_result = val1 * val2
++        self.assertEqual(int(out[0]), expected_result)
++
++        # We check we can run a slightly more complex program and dump
++        # the memory usage.
++        self.assertRunOk("qjs -d --std mandel.js")
+diff --git a/support/testing/tests/package/test_quickjs/rootfs-overlay/root/mandel.js b/support/testing/tests/package/test_quickjs/rootfs-overlay/root/mandel.js
+new file mode 100644
+index 0000000000..4004a26527
+--- /dev/null
++++ b/support/testing/tests/package/test_quickjs/rootfs-overlay/root/mandel.js
+@@ -0,0 +1,21 @@
++function mandel(file) {
++    points = ",.:-;!/>)|&IH%*Z";
++    for (y = -15; y <= 15; y++) {
++        for (x = 1; x <= 84; x++) {
++            i = 0;
++            r = 0;
++            for (k = 0; k <= 111; k++) {
++                j = (r*r) - (i*i) - 2 + (x/25);
++                i = 2 * r * i + (y/10);
++                if ((j*j + i*i) >= 11) {
++                    break;
++                }
++                r = j;
++            }
++            file.puts(points[k & 0xF]);
++        }
++        file.puts("\n");
++    }
++}
++
++mandel(std.out);
+-- 
+2.55.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
