@@ -1,113 +1,132 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B88C9C5DF66
-	for <buildroot@archiver.kernel.org>; Sun, 16 Aug 2026 19:56:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D39CC5B572
+	for <buildroot@archiver.kernel.org>; Sun, 16 Aug 2026 20:18:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6A67B80DCF;
-	Sun, 16 Aug 2026 19:56:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 236A14068C;
+	Sun, 16 Aug 2026 20:18:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QhdJsxky5jbQ; Sun, 16 Aug 2026 19:56:45 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3kPqG_x2EbnG; Sun, 16 Aug 2026 20:18:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 23FE480DE3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1421040619
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786910205;
-	bh=riWKUeXNzLdSYmbNvcK9v/DRXas6NRaHff2fOzwdcGM=;
-	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
+	s=default; t=1786911531;
+	bh=AHeNdw+j6h2oLKVDSmowAaPVTXP6NQCNzg0KzcXUp5Q=;
+	h=References:In-Reply-To:From:Date:To:Cc:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 Cc:From;
-	b=WQvClF+KPiMhz+E4OgqcKo1UMRDl/EiLFgG8sTf35TDyfbV33dW2lSlPaID9zkQMk
-	 i7HjJz1cnfGjPWompEeDJ0DkfTFaac1iUuuxsOYkA8QkIPe3l2t3zBT+/PXcTPG+bd
-	 Y+Sjng8Y+umXgqqACQZlpkuGGDAcO3LzDQjrQlXYEExo7AIfRzkgW+KeAiV84mgM+r
-	 +JSjnxG17xRmP1XfTeE9qb0ipZUrqGDjBo+5wdfrsfr5RfIEvQ4KXr7gRTf8AL5ZV7
-	 XUV6oHAuZRhM06uMa+tu9A0XZ5eqC48ITKEff4IQLbWwiHIwnubO+2ZHZ1QMaEw4sD
-	 zHt1shP+2AB1Q==
+	 From;
+	b=nzGWVOyfMBcsFatqutZPjmbWXXnbjr7hcYCZy76UI5KqOX7jpcQU9krS10ZZui8VW
+	 InKv5N3k1ywhjfPMeiwvnyYiJpsI3OdtcANs0F2uQ3QY6KWJfhIbutTa4/Zw0pf+h0
+	 /9z8YCbwV8D1U8OdU4CmSbhrkoXxEZgdTHYJLRsLT3KvDifeD6w8u+a04AVdChh5BJ
+	 m595ZqTLgalAClDwrmzzKlkSFGUgeVc+ya5p6dI04LX4zFDbLZHbZoJuHdMOlicsmB
+	 9mPUGJpq3Bf8YRoo9EIYVwdj8BPx7QloNtiSnJQEI/tLpudeJKoWKT4gRjqJcTHQk4
+	 kwffcFj+HvsEQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 23FE480DE3;
-	Sun, 16 Aug 2026 19:56:45 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 4DA733A0
- for <buildroot@buildroot.org>; Sun, 16 Aug 2026 19:56:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1421040619;
+	Sun, 16 Aug 2026 20:18:51 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id DE4413A0
+ for <buildroot@buildroot.org>; Sun, 16 Aug 2026 20:18:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4831E80DDA
- for <buildroot@buildroot.org>; Sun, 16 Aug 2026 19:56:44 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C496C6060B
+ for <buildroot@buildroot.org>; Sun, 16 Aug 2026 20:18:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gZRtoj4vbMCh for <buildroot@buildroot.org>;
- Sun, 16 Aug 2026 19:56:43 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id meX-FgIOU2_1 for <buildroot@buildroot.org>;
+ Sun, 16 Aug 2026 20:18:49 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::431; helo=mail-wr1-x431.google.com;
- envelope-from=mattianarducci1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9D78980DB4
-Authentication-Results: smtp1.osuosl.org;
+ client-ip=2607:f8b0:4864:20::c29; helo=mail-oo1-xc29.google.com;
+ envelope-from=joseph.kogut@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B328C6061A
+Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=gmail.com
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9D78980DB4
-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20251104 header.b=bjGw4l3c
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
- [IPv6:2a00:1450:4864:20::431])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9D78980DB4
- for <buildroot@buildroot.org>; Sun, 16 Aug 2026 19:56:42 +0000 (UTC)
-Received: by mail-wr1-x431.google.com with SMTP id
- ffacd0b85a97d-47f7027ca11so1615988f8f.3
- for <buildroot@buildroot.org>; Sun, 16 Aug 2026 12:56:42 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B328C6061A
+Authentication-Results: smtp3.osuosl.org; dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20251104 header.b=bmFpJOG1
+Received: from mail-oo1-xc29.google.com (mail-oo1-xc29.google.com
+ [IPv6:2607:f8b0:4864:20::c29])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B328C6061A
+ for <buildroot@buildroot.org>; Sun, 16 Aug 2026 20:18:48 +0000 (UTC)
+Received: by mail-oo1-xc29.google.com with SMTP id
+ 006d021491bc7-6b03e59a9b4so1166125eaf.3
+ for <buildroot@buildroot.org>; Sun, 16 Aug 2026 13:18:48 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1786911527; cv=none;
+ d=google.com; s=arc-20260327;
+ b=qAnElLuKdzH+2+P7ygF7nHZPWPfZMv4ClP6Gt2vvubRC1jBCmtY18svmDaV0F7Qlae
+ HQQWVaTLaVobWkkIOHe6EoTNjfYQKNrgIBGAVDnR8TQQuFxRPueGtlHGpYs4mISZq6uz
+ 4hXTxJtIxCIQe4rUHU/U1mvPt7+KQO5OJl5zH3Zsp4G7cNUmooLW++0/O3bjOBqrK3dv
+ EIaUs1opfBPRxNTdSkr/JoNbYWUxxEo6Nb0efBbLIMQU3aqcKxUFFrdIoKqsuOrcanat
+ Il2Fftzt772WcraSVIoIWr/otDcbkJUL8knJPmvU/pw1I+dSiFOUVrXH6rcyQYKSnixG
+ wqug==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com;
+ s=arc-20260327; 
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:dkim-signature;
+ bh=O/7ruVpv90p2F37sSGIDhUbWLrxviqXADeYY70P20nc=;
+ fh=FRQJCU2rgZux+XlYjD4Zr07q0G9dcXfWdVHRPr65poM=;
+ b=EDOfoFSY+P4Tfw+T5S0dyUcgJ/FOhVguBT6pYVBFp843Ykf/2ylijou6bywHn77R/F
+ 2H9Qlbpjx0VfoOsgAOV67ok4hbDkuaZo4DAm6EHRm4NHD9qcb5ldN7PsJbSCwhnd50Zd
+ wFUbt5M5T5Oalujmw4my4kd4VamC0H/V84yCiVtksdAfkz/ai1UiiY4vbkVP4xhQopvB
+ zwbhdl2D5DuLnNfCy6bHilSpyN6XMGDUD14Lakw0FO+VJ5QM5L49A6K1erhZ53SWNOzy
+ KmCi0OjfOYTwTnIUurN5zS+Uekz1XpSRhhX30UAV8fLlAWDNgzmvKoUoRipoGnq/xXNg
+ zwzw==; darn=buildroot.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1786910201; x=1787515001; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
- :message-id:reply-to:content-type;
- bh=QoaJJDNTX1/xUpYN66gmrA7BBUAA5GcneejC+Vd153U=;
- b=bjGw4l3cpfAoriXrwswvh2FeKsaUNYIfE7WOyfA46B+iPag1Knt5xjjLVdrS54CWUr
- Cj6f9tEPBJm25shIpm+EpZdhRz0K2AqtqxfqtYnLnDLdIx5FwjNUYIbkT133E2NuOIFo
- BycWwzy95dRkKD6yLTB9uO+9a5XoZpKnurek23tNQjt7mLGxwi269g7BR/Hvf05/Glpa
- JnMPofHQy4iapxHor7hCE2xwVEictb+JtNOfptcxk3zibgQX/JkazSOnbTzlf/+47XIQ
- lqo/E43OMn0d0dsL0xLsH9hlOx4JEwLax5/+2Sl/vIOEytL4VpZzP+9uziLtz1hHvGLt
- pQXg==
+ d=gmail.com; s=20251104; t=1786911527; x=1787516327; darn=buildroot.org;
+ h=content-transfer-encoding:content-type:cc:to:subject:message-id
+ :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+ :date:message-id:reply-to:content-type;
+ bh=O/7ruVpv90p2F37sSGIDhUbWLrxviqXADeYY70P20nc=;
+ b=bmFpJOG1t1ChhcALOTYMPXTqFp9R4jgzmM0kntI3dXJBD6HzaEX3G2lw7AGp3+VdTj
+ sg7Mpgas21IvZpwLfDGW0Z6XKrl9d51QdpCkHZHghEZZqACf1G9R6XoFtrckF5/Zy0xS
+ VSz1cOZkKxUdIO9rmTeTDFvqTStxRD0Hx+j11vtzxBESaXOTaQM4N7rT+kIFcOFcPFdp
+ kzT0fLgDXXmmmFsQYX8L48cAMnVf9VCnmulvcldAsi2KXCKLQlgQSoNlhscdmOCn0DfV
+ guAG/mX8jz3QvO0YjLAqPP32US/EgoMXB3R3f5Iyj5qAhsKSTuqrv3OY0k8Ga9pg6SOd
+ hyXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1786910201; x=1787515001;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:sender:x-gm-gg
+ d=1e100.net; s=20251104; t=1786911527; x=1787516327;
+ h=content-transfer-encoding:content-type:cc:to:subject:message-id
+ :date:from:in-reply-to:references:mime-version:x-gm-gg
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
  :content-type;
- bh=QoaJJDNTX1/xUpYN66gmrA7BBUAA5GcneejC+Vd153U=;
- b=gXIoQkazZ9y+4qy58gASkXt/UQswnRxOZ86S3tjXv18QDetFWCIIdjhgyV52EIwZg6
- rxhBYz19Azp+Zkg+MkD5ksihne2+eLvoAaiyzJbdQ/J1jYfABuW9Uj6n51MsR9tqetP8
- qz9w/PbR/ly/g1Z1aPlAbVXvFeOpmOUWOu0nHjerKNR9GJBRWDMf6o4WbdxTPXpelgT6
- U3a/lSy3irBYkeC+gZ4ezeB9hdkB3J6Mv0RHFlJNJiLzTWEQfjcTRIZYpb2atxX5JAsS
- +rXYoVer00bsusbiLIYPKM1nM5RpKRYoe51VJf5Xjs2E1BASmuYNG4z+PA7nRCoooUig
- 9/1Q==
-X-Gm-Message-State: AOJu0YzKbAPHUeNfXWbJZh/6cGVz2zIf6vm7OmRZTC65i6NmPRfYIzXF
- Q48FEj3hSsDhTA8T31KRMbblwRzIj+FI2+LKVphqckwVQi7+LOG6pBqrVABXPuRQa4w=
-X-Gm-Gg: AR+sD10Pn4davmHXjw+f8t61/XOOLBnfqZyClMhSok0vhRZ2HT4+d6TGU6RlzL/UkUZ
- vUH9OdjTRHIx59ZfxM01KwEJycx7b+QkJvu/J2CFPBgkemD1d3wIaoyNJpVtjIC5HmbEMCxRulW
- 6KZDCR9b4IEmLLNvNQjlLp/kbn9myREU3TL4L17XLyoiEcr77Z0e0pOFWDahCzt72Ngd6BjDnQq
- uahyU+hQ4VKMIaMiqyTcNu+kaogcmawj6VyfqhwUmY8CS6ff8xYLl/R6n+bBryLswIorgvZn+az
- K1Cn/8tFe2WsnVa5bmXzgIz0P6kcob76mpjbqk/1Eguf5jLR5eC2MuOl9Zu24DToP4v4a23UP4T
- d8KF5XEovHXyxWFTEWCLjuAmLIiPkQYg7A1LKoeDJ2brZr09xFz6W6aF9062YAlSg8Nw5s2w0uM
- LaOdaqnRZFTsdYrbbAE6aR0dwGAWr61Q9Tv90DsrRUrCWSWzAvC5MiXj2d5nArj+XeYw==
-X-Received: by 2002:a05:600c:4ed2:b0:499:8743:77c8 with SMTP id
- 5b1f17b1804b1-49987941ae1mr300005845e9.8.1786910200409; 
- Sun, 16 Aug 2026 12:56:40 -0700 (PDT)
-Received: from localhost ([37.101.131.182]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4999611bf65sm65199265e9.13.2026.08.16.12.56.39
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 16 Aug 2026 12:56:40 -0700 (PDT)
-From: Mattia Narducci <mattianarducci1@gmail.com>
-To: buildroot@buildroot.org
-Date: Sun, 16 Aug 2026 21:56:09 +0200
-Message-ID: <20260816195616.279864-4-mattianarducci1@gmail.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260816195616.279864-1-mattianarducci1@gmail.com>
-References: <20260816195616.279864-1-mattianarducci1@gmail.com>
+ bh=O/7ruVpv90p2F37sSGIDhUbWLrxviqXADeYY70P20nc=;
+ b=Ihpdy+YPKrIKqAVdHYTpviqqaQkMaMgatGoT3MlPkP7ZWShtJxQyeg6xcvZc4kRt7G
+ P6JwHUb6iX+bprAyRD3/QFoOkNkLnQS8YGLE+pXfcUUlZxpsnwHpc+3E6e9B5+lojHVv
+ QDaVkEHtmMEGjizXw0unJBntEe8GzfSv9JCYEnCVHzKpy0QfHAty8O6xZJjaQciD9EHf
+ 0ysigWTUQUmYqShlDfsWlimLsCt8iNiqDve81OucKn7sqU9zJGkdGW3m8B0oPC5s2V3V
+ bAdxQs0NrjW9DKSlT3HF7umvJZtaSQP49e9aDOMgNKUrCWjjOQYZRvBAu1OLftNdmUZo
+ ONpA==
+X-Gm-Message-State: AOJu0YwRNnU7WMl9ph+DuYMKxOoYlIo7GAxUtbzBAbNDR/mOidbnO97q
+ d2Fok1Pf4RbJsLiM5EuP3l9imNqhAlUOFJ31M2vYM3K5s3gjzJ3J5wtXbyK4cuKcsCQueWo5ZIA
+ 2J8kbCYCboUdUMXMYoqfUf97ruP1my0uyBh8mUvU=
+X-Gm-Gg: AR+sD11ybGgIBFGGWGC5l6yhsxMkWEHlms1m/hrxEQmSJUriHKOIh4pzxQawf7xoDMM
+ o2xlpdrfDKBgbGJLc3i57lj3PaCwOPZwf1g6iicXLk+JW3QBdWp+6VFdHoD9OrfRPI5lJtqmOJm
+ 1gbCbkNF2bTuMfFzsJbLay0EAj8nxHXFkTiysGihy1lSFg0gGh6Toaypmk7DoH9kQQcu132OulY
+ LG7+s+Y+N5MIEPQbLyJUsBGGa4smqPRT3S2hzRgiOLtC+BOM0ffopfcP8XzJKiArDwg2AtMfOjy
+ zRwnGYaZZdqH+65NkAR7JXQa3rzyfvco5l4Yc9xjT2eK
+X-Received: by 2002:a05:6820:4c8b:b0:6a3:d77e:725a with SMTP id
+ 006d021491bc7-6b0d6246236mr17852633eaf.20.1786911527475; Sun, 16 Aug 2026
+ 13:18:47 -0700 (PDT)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 4/4] package/ser2net: bump version to 4.6.8
+References: <20260710133225.484041-1-aford173@gmail.com>
+In-Reply-To: <20260710133225.484041-1-aford173@gmail.com>
+From: Joseph Kogut <joseph.kogut@gmail.com>
+Date: Sun, 16 Aug 2026 13:18:11 -0700
+X-Gm-Features: AcwNN1X_SJs1zmJjWv6e-Nqy7L3DSjrSnwBfDHZjNLwUSGeF1O1wbGeHDW-DMCA
+Message-ID: <CAMWSM7i+F_03QNzUGx=6AA2M5kwoVj9unBtyLy+FqfRVMkP4RQ@mail.gmail.com>
+To: Adam Ford <aford173@gmail.com>
+Cc: buildroot@buildroot.org, Bernd Kuhls <bernd@kuhls.net>, 
+ Romain Naour <romain.naour@gmail.com>
+Subject: Re: [Buildroot] [PATCH] package/mesa3d: add intel-virtio host
+ native context config
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -119,332 +138,86 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Francisco Gonzalez <gzmorell@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changelog: https://sourceforge.net/p/ser2net/news
-
-Static builds are no longer supported after bumping gensio to 3.0.4.
-
-Updated licenses hashes due to upstream commit:
-https://github.com/cminyard/ser2net/commit/2bc83f09548dec25b0bec48e11a3ee1942fb3c3e
-
-Drop patch 0001 that was a backport of a upstream security fix.
-
-Add a upstream patch to fix build against uClibc.
-
-Signed-off-by: Mattia Narducci <mattianarducci1@gmail.com>
----
- ...-crypt-when-crypt_r-is-not-available.patch | 140 ++++++++++++++++++
- ...0001-Fix-authorization-path-handling.patch |  89 -----------
- package/ser2net/Config.in                     |   2 +
- package/ser2net/ser2net.hash                  |   8 +-
- package/ser2net/ser2net.mk                    |   8 +-
- 5 files changed, 153 insertions(+), 94 deletions(-)
- create mode 100644 package/ser2net/0001-Fallback-to-crypt-when-crypt_r-is-not-available.patch
- delete mode 100644 package/ser2net/0001-Fix-authorization-path-handling.patch
-
-diff --git a/package/ser2net/0001-Fallback-to-crypt-when-crypt_r-is-not-available.patch b/package/ser2net/0001-Fallback-to-crypt-when-crypt_r-is-not-available.patch
-new file mode 100644
-index 0000000000..a90095fd89
---- /dev/null
-+++ b/package/ser2net/0001-Fallback-to-crypt-when-crypt_r-is-not-available.patch
-@@ -0,0 +1,140 @@
-+From 6af8ca88193b66b0309d9ca355d6c551e0fc1fbe Mon Sep 17 00:00:00 2001
-+From: Mattia Narducci <mattianarducci1@gmail.com>
-+Date: Fri, 14 Aug 2026 21:55:11 +0200
-+Subject: [PATCH] Fallback to crypt() when crypt_r() is not available
-+
-+Use crypt(3) for hashed passwords on systems where libcrypt does not
-+provide the reentrant crypt_r(3), eg. uClibc. Calls to crypt() are
-+guarded by a global lock.
-+
-+Signed-off-by: Mattia Narducci <mattianarducci1@gmail.com>
-+Signed-off-by: Corey Minyard <corey@minyard.net>
-+
-+Upstream: https://github.com/cminyard/ser2net/commit/6af8ca88193b66b0309d9ca355d6c551e0fc1fbe
-+
-+Signed-off-by: Mattia Narducci <mattianarducci1@gmail.com>
-+---
-+ auth.c       | 12 ++++++++++++
-+ configure.ac | 11 ++++++-----
-+ ser2net.c    | 14 ++++++++++++++
-+ ser2net.h    |  4 ++++
-+ 4 files changed, 36 insertions(+), 5 deletions(-)
-+
-+diff --git a/auth.c b/auth.c
-+index 7e53069..1af057b 100644
-+--- a/auth.c
-++++ b/auth.c
-+@@ -33,6 +33,10 @@
-+ #include <gensio/gensio_list.h>
-+ #include "ser2net.h"
-+ 
-++#ifndef HAVE_CRYPT_R
-++#include <gensio/gensio_os_funcs_public.h>
-++#endif
-++
-+ #if defined(USE_PAM)
-+ #include <pwd.h>
-+ #include <security/pam_appl.h>
-+@@ -288,7 +292,9 @@ handle_password(struct gensio *net, const char *authdir, const char *password)
-+     char readpw[256], *s;
-+     int err;
-+     bool hashed = true;
-++#ifdef HAVE_CRYPT_R
-+     struct crypt_data cdata;
-++#endif
-+     char *newhash;
-+ 
-+     len = sizeof(username);
-+@@ -341,7 +347,13 @@ handle_password(struct gensio *net, const char *authdir, const char *password)
-+ 	return GE_NOTSUP;
-+     }
-+ 
-++#ifdef HAVE_CRYPT_R
-+     newhash = crypt_r(password, readpw, &cdata);
-++#else
-++    gensio_os_funcs_lock(so, crypt_lock);
-++    newhash = crypt(password, readpw);
-++    gensio_os_funcs_unlock(so, crypt_lock);
-++#endif
-+     if (!newhash)
-+ 	return GE_NOTSUP;
-+ 
-+diff --git a/configure.ac b/configure.ac
-+index 1ac44f2..1814286 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -39,11 +39,12 @@ if test "x$use_pam" != "xno"; then
-+     AC_DEFINE([USE_PAM], [], [Enable PAM support])
-+ fi
-+ 
-+-have_crypt_r=no
-+-AC_CHECK_LIB(crypt, crypt_r, [have_crypt_r=yes], [])
-+-if test $have_crypt_r != "yes"; then
-+-  AC_MSG_ERROR([No libcrypt with crypt_r()])
-+-fi
-++AC_CHECK_LIB(crypt, crypt_r,
-++  [AC_DEFINE([HAVE_CRYPT_R], [1], [Define if you have crypt_r() in libcrypt])],
-++  [AC_CHECK_LIB(crypt, crypt, [],
-++    [AC_MSG_ERROR([No libcrypt with crypt_r() or crypt()])]
-++  )]
-++)
-+ LIBS="$LIBS -lcrypt"
-+ 
-+ AC_ARG_WITH(sysfs-led-support,
-+diff --git a/ser2net.c b/ser2net.c
-+index 04cbb00..17e0c23 100644
-+--- a/ser2net.c
-++++ b/ser2net.c
-+@@ -604,6 +604,9 @@ do_detach(void)
-+ 
-+ static struct gensio_lock *config_lock;
-+ static struct gensio_lock *maint_lock;
-++#ifndef HAVE_CRYPT_R
-++struct gensio_lock *crypt_lock;
-++#endif
-+ 
-+ static int in_config_read = 0;
-+ 
-+@@ -1011,6 +1014,14 @@ main(int argc, char *argv[])
-+ 	return 1;
-+     }
-+ 
-++#ifndef HAVE_CRYPT_R
-++    crypt_lock = gensio_os_funcs_alloc_lock(so);
-++    if (!crypt_lock) {
-++	fprintf(stderr, "Could not alloc ser2net crypt lock\n");
-++	return 1;
-++    }
-++#endif
-++
-+     err = init_dataxfer();
-+     if (err) {
-+ 	fprintf(stderr,
-+@@ -1098,6 +1109,9 @@ main(int argc, char *argv[])
-+     if (config_lines)
-+ 	free(config_lines);
-+ 
-++#ifndef HAVE_CRYPT_R
-++    gensio_os_funcs_free_lock(so, crypt_lock);
-++#endif
-+     gensio_os_funcs_free_lock(so, maint_lock);
-+     gensio_os_funcs_free_lock(so, config_lock);
-+     gensio_os_funcs_free(so);
-+diff --git a/ser2net.h b/ser2net.h
-+index 8bc9227..d9e361b 100644
-+--- a/ser2net.h
-++++ b/ser2net.h
-+@@ -66,6 +66,10 @@ int sub_time(gensio_time *left, gensio_time *right);
-+    integer was invalid.  Spaces are not handled. */
-+ int scan_int(const char *str);
-+ 
-++#ifndef HAVE_CRYPT_R
-++/* Used to avoid races in crypt() when crypt_r() is not available */
-++extern struct gensio_lock *crypt_lock;
-++#endif
-+ /*
-+  * Handle authorization events from accepters.
-+  */
-+-- 
-+2.55.0
-+
-diff --git a/package/ser2net/0001-Fix-authorization-path-handling.patch b/package/ser2net/0001-Fix-authorization-path-handling.patch
-deleted file mode 100644
-index a90130844f..0000000000
---- a/package/ser2net/0001-Fix-authorization-path-handling.patch
-+++ /dev/null
-@@ -1,89 +0,0 @@
--From fa6c2a8840cbc8d7622e46ce12ba15ecc0fb51b7 Mon Sep 17 00:00:00 2001
--From: Corey Minyard <corey@minyard.net>
--Date: Thu, 23 Jul 2026 10:51:25 -0500
--Subject: [PATCH] Fix authorization path handling
--
--The username is received from the remote end and thus untrusted.  Make
--sure it doesn't have any characters that can cause it to escape the
--directory it is supposed to be in when constructing a path.
--
--Reported-by: TristanInSec
--Signed-off-by: Corey Minyard <corey@minyard.net>
--
--Upstream: https://github.com/cminyard/ser2net/commit/fa6c2a8840cbc8d7622e46ce12ba15ecc0fb51b7
--
--Signed-off-by: Mattia Narducci <mattianarducci1@gmail.com>
-----
-- auth.c | 42 ++++++++++++++++++++++++++++++++++++++----
-- 1 file changed, 38 insertions(+), 4 deletions(-)
--
--diff --git a/auth.c b/auth.c
--index 95c80b4..53c3186 100644
----- a/auth.c
--+++ b/auth.c
--@@ -185,6 +185,40 @@ handle_auth_begin(struct gensio *net, const char *authdir, const char *pamauth,
--     return GE_NOTSUP;
-- }
-- 
--+/*
--+ * Construct a secure authorization path.
--+ *
--+ * filename must be at least MAX_PATH.
--+ *
--+ * "username" is untrusted, the rest of the data is trusted.
--+ */
--+static bool
--+construct_auth_path(char *filename, const char *authdir, const char *username,
--+		    const char *format, ...)
--+{
--+    size_t baselen;
--+    va_list ap;
--+
--+    /*
--+     * '/', '.', and '\' are all parts of things that can modify the base
--+     * path.  Don't allow them in usernames.
--+     */
--+    if (strchr(username, '.') || strchr(username, '/')
--+		|| strchr(username, '\\'))
--+	return false;
--+
--+    /* Get a good base path ending in / */
--+    baselen = snprintf(filename, PATH_MAX, "%s/%s/",
--+		       authdir, username);
--+
--+    /* Now append the rest of the path. */
--+    va_start(ap, format);
--+    vsnprintf(filename + baselen, PATH_MAX - baselen, format, ap);
--+    va_end(ap);
--+
--+    return true;
--+}
--+
-- static int
-- handle_precert(struct gensio *net, const char *authdir)
-- {
--@@ -228,8 +262,8 @@ handle_precert(struct gensio *net, const char *authdir)
-- 	}
--     }
-- 
---    snprintf(filename, sizeof(filename), "%s/%s/allowed_certs/",
---	     authdir, s);
--+    if (!construct_auth_path(filename, authdir, s, "allowed_certs/"))
--+	return GE_AUTHREJECT;
--     err = gensio_control(net, 0, false, GENSIO_CONTROL_CERT_AUTH,
-- 			 filename, &len);
--     if (err && err != GE_CERTNOTFOUND) {
--@@ -258,8 +292,8 @@ handle_password(struct gensio *net, const char *authdir, const char *password)
-- 	return GE_AUTHREJECT;
--     }
-- 
---    snprintf(filename, sizeof(filename), "%s/%s/password",
---	     authdir, username);
--+    if (!construct_auth_path(filename, authdir, username, "password"))
--+	return GE_AUTHREJECT;
--     pwfile = fopen(filename, "r");
--     if (!pwfile) {
-- 	syslog(LOG_ERR, "Can't open password file %s: %s", filename,
---- 
--2.55.0
--
-diff --git a/package/ser2net/Config.in b/package/ser2net/Config.in
-index 1859d42c8f..fdab226e60 100644
---- a/package/ser2net/Config.in
-+++ b/package/ser2net/Config.in
-@@ -1,8 +1,10 @@
- config BR2_PACKAGE_SER2NET
- 	bool "ser2net"
- 	depends on BR2_USE_MMU # fork()
-+	depends on !BR2_STATIC_LIBS # gensio
- 	depends on BR2_TOOLCHAIN_HAS_ATOMIC # gensio
- 	select BR2_PACKAGE_GENSIO
-+	select BR2_PACKAGE_LIBXCRYPT if BR2_TOOLCHAIN_USES_GLIBC
- 	select BR2_PACKAGE_LIBYAML
- 	help
- 	  Ser2net provides a way for a user to connect from a network
-diff --git a/package/ser2net/ser2net.hash b/package/ser2net/ser2net.hash
-index 50a2efdee8..19ced28655 100644
---- a/package/ser2net/ser2net.hash
-+++ b/package/ser2net/ser2net.hash
-@@ -1,6 +1,6 @@
- # From https://sourceforge.net/projects/ser2net/files/ser2net/
--md5  73b4ccc7e9d89034f1a1a20a780b9da9  ser2net-4.3.8.tar.gz
--sha1  d1597d88d154489cb08bac69bb1772712d30cbcd  ser2net-4.3.8.tar.gz
-+md5  91594fb9c1d8e03a99a1739539919eba  ser2net-4.6.8.tar.gz
-+sha1  ee8c12ce23ee3ebc54a845c2416bee0b6f4ea18c  ser2net-4.6.8.tar.gz
- # Locally computed:
--sha256  e5620975523059a38709bb53c0567600adbbcb8011066a2d2fe1b4db9efe0ba3  ser2net-4.3.8.tar.gz
--sha256  501f3108e6c03e5a0a5585ebaaa369171aead5319cd0a7a4dc1f66211c1f09f1  COPYING
-+sha256  e651adcc4cc0d0ceaa36e5997dab9ea7f8aea732b4c87ba6018d2dcc88fbe8e3  ser2net-4.6.8.tar.gz
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/ser2net/ser2net.mk b/package/ser2net/ser2net.mk
-index 679aaec29a..bd8f9dc399 100644
---- a/package/ser2net/ser2net.mk
-+++ b/package/ser2net/ser2net.mk
-@@ -4,11 +4,17 @@
- #
- ################################################################################
- 
--SER2NET_VERSION = 4.3.8
-+SER2NET_VERSION = 4.6.8
- SER2NET_SITE = https://downloads.sourceforge.net/project/ser2net/ser2net
- SER2NET_LICENSE = GPL-2.0+
- SER2NET_LICENSE_FILES = COPYING
- SER2NET_DEPENDENCIES = gensio libyaml
-+# We are patching configure.ac
-+SER2NET_AUTORECONF = YES
-+
-+ifeq ($(BR2_PACKAGE_LIBXCRYPT),y)
-+SER2NET_DEPENDENCIES += libxcrypt
-+endif
- 
- ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
- SER2NET_CONF_OPTS += --with-pthreads
--- 
-2.55.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gQWRhbSwKClRoYW5rcyBmb3Igc3VibWl0dGluZyB0aGlzLgoKT24gRnJpLCBKdWwgMTAs
+IDIwMjYgYXQgNjozMuKAr0FNIEFkYW0gRm9yZCA8YWZvcmQxNzNAZ21haWwuY29tPiB3cm90ZToK
+Pgo+IEFkZCBCUjJfUEFDS0FHRV9NRVNBM0RfSE9TVF9OQVRJVkVfQ09OVEVYVF9EUklWRVJfSU5U
+RUwgaW4gdGhlIHNhbWUKPiBwYXR0ZXJuIGFzIGFtZGdwdS12aXJ0aW8uIFdoZW4gZW5hYmxlZCwg
+LURpbnRlbC12aXJ0aW8tZXhwZXJpbWVudGFsPXRydWUKPiBkZWZpbmVzIEhBVkVfSU5URUxfVklS
+VElPIHNvIHRoZSBndWVzdC1zaWRlIEludGVsIG5hdGl2ZSBjb250ZXh0Cj4gKGk5MTUgYW5kIHhl
+IGNvbnRleHQgdHlwZXMpIGlzIGNvbXBpbGVkIGluLiBUaGlzIGlzIHRoZSBndWVzdCBoYWxmCj4g
+b2YgdGhlIEludGVsIHZEUk0gR1BVIHBhc3N0aHJvdWdoIHBhdGgsIHVzYWJsZSBieSB0aGUgY3Jv
+Y3VzL2lyaXMKPiAoT3BlbkdMKSBhbmQgQU5WIChWdWxrYW4pIGRyaXZlcnMuCj4KCkFzIEkgdW5k
+ZXJzdGFuZCwgdGhpcyBjdXJyZW50bHkgcmVxdWlyZXMgdGhlIGk5MTUgS01ELCBhbmQgZG9lcyBu
+b3QKc3VwcG9ydCB0aGUgbmV3ZXIgWGUgS01EIHRoYXQgYWxzbyBzdXBwb3J0cyB0aGUgSXJpcy9h
+bnYgVU1EcywgaXMgdGhhdApjb3JyZWN0PyBQZXJoYXBzIHdlIHNob3VsZCBub3RlIHRoYXQgaW4g
+dGhlIEtjb25maWcgaGVscCwgYW5kIHJlbW92ZQptZW50aW9uIG9mIFhlIGNvbnRleHQgc3VwcG9y
+dCwgdG8gcHJldmVudCBjb25mdXNpb24uCgpJdCBsb29rcyBsaWtlIHRoZXJlJ3Mgc29tZSBvdXQt
+b2YtdHJlZSBlZmZvcnQgdG8gc3VwcG9ydCBYZSBjb250ZXh0cywKYnV0IHRoaXMgaXMgbm90IHVw
+c3RyZWFtIG9yIHBlbmRpbmcgcmV2aWV3IGFzIG9mIG5vdy4gWzBdCgo+IE5vdGUgdGhhdCB0aGlz
+IGlzIGFuIGV4cGVyaW1lbnRhbCBNZXNhIGZlYXR1cmUgKHRoZSB1cHN0cmVhbSBtZXNvbgo+IG9w
+dGlvbiBpcyBuYW1lZCBpbnRlbC12aXJ0aW8tZXhwZXJpbWVudGFsKSBhbmQgaXMgZGlzYWJsZWQg
+YnkgZGVmYXVsdC4KPgo+IFNpZ25lZC1vZmYtYnk6IEFkYW0gRm9yZCA8YWZvcmQxNzNAZ21haWwu
+Y29tPgo+Cj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvbWVzYTNkL0NvbmZpZy5pbiBiL3BhY2thZ2Uv
+bWVzYTNkL0NvbmZpZy5pbgo+IGluZGV4IGUxODQwMzkxNTAuLmFkMDJiNWU4MjkgMTAwNjQ0Cj4g
+LS0tIGEvcGFja2FnZS9tZXNhM2QvQ29uZmlnLmluCj4gKysrIGIvcGFja2FnZS9tZXNhM2QvQ29u
+ZmlnLmluCj4gQEAgLTEzMCw2ICsxMzAsNyBAQCBjb25maWcgQlIyX1BBQ0tBR0VfTUVTQTNEX0dB
+TExJVU1fRFJJVkVSX0NST0NVUwo+ICAgICAgICAgYm9vbCAiR2FsbGl1bSBjcm9jdXMgZHJpdmVy
+Igo+ICAgICAgICAgZGVwZW5kcyBvbiBCUjJfaTM4NiB8fCBCUjJfeDg2XzY0Cj4gICAgICAgICBz
+ZWxlY3QgQlIyX1BBQ0tBR0VfTUVTQTNEX0dBTExJVU1fRFJJVkVSCj4gKyAgICAgICBzZWxlY3Qg
+QlIyX1BBQ0tBR0VfTUVTQTNEX0hPU1RfTkFUSVZFX0NPTlRFWFRfU1VQUE9SVEVEX0RSSVZFUgo+
+ICAgICAgICAgaGVscAo+ICAgICAgICAgICBNZXNhIGRyaXZlciBmb3IgZ2VuNC03IEludGVsIEdQ
+VXMuCj4KPiBAQCAtMTY3LDYgKzE2OCw3IEBAIGNvbmZpZyBCUjJfUEFDS0FHRV9NRVNBM0RfR0FM
+TElVTV9EUklWRVJfSVJJUwo+ICAgICAgICAgYm9vbCAiR2FsbGl1bSBpcmlzIGRyaXZlciIKPiAg
+ICAgICAgIGRlcGVuZHMgb24gQlIyX1BBQ0tBR0VfTUVTQTNEX0xMVk0KPiAgICAgICAgIHNlbGVj
+dCBCUjJfUEFDS0FHRV9NRVNBM0RfR0FMTElVTV9EUklWRVIKPiArICAgICAgIHNlbGVjdCBCUjJf
+UEFDS0FHRV9NRVNBM0RfSE9TVF9OQVRJVkVfQ09OVEVYVF9TVVBQT1JURURfRFJJVkVSCj4gICAg
+ICAgICBzZWxlY3QgQlIyX1BBQ0tBR0VfTUVTQTNEX05FRURTX1BSRUNPTVBfQ09NUElMRVIKPiAg
+ICAgICAgIHNlbGVjdCBCUjJfUEFDS0FHRV9NRVNBM0RfUlVTVElDTF9TVVBQT1JURURfRFJJVkVS
+Cj4gICAgICAgICBoZWxwCj4gQEAgLTM5Myw2ICszOTUsNyBAQCBjb25maWcgQlIyX1BBQ0tBR0Vf
+TUVTQTNEX1ZVTEtBTl9EUklWRVJfSU5URUwKPiAgICAgICAgIGRlcGVuZHMgb24gQlIyX1RPT0xD
+SEFJTl9IRUFERVJTX0FUX0xFQVNUXzNfMTcgIyBtZW1mZC5oCj4gICAgICAgICBkZXBlbmRzIG9u
+IEJSMl9UT09MQ0hBSU5fVVNFU19HTElCQyAjIGlmdW5jLCBzdGF0aWNfYXNzZXJ0Cj4gICAgICAg
+ICBkZXBlbmRzIG9uIEJSMl9QQUNLQUdFX01FU0EzRF9MTFZNCj4gKyAgICAgICBzZWxlY3QgQlIy
+X1BBQ0tBR0VfTUVTQTNEX0hPU1RfTkFUSVZFX0NPTlRFWFRfU1VQUE9SVEVEX0RSSVZFUgo+ICAg
+ICAgICAgc2VsZWN0IEJSMl9QQUNLQUdFX01FU0EzRF9ORUVEU19QUkVDT01QX0NPTVBJTEVSCj4g
+ICAgICAgICBzZWxlY3QgQlIyX1BBQ0tBR0VfTUVTQTNEX1ZVTEtBTl9EUklWRVIKPiAgICAgICAg
+IGhlbHAKPiBAQCAtNDU5LDYgKzQ2MiwyMiBAQCBjb25maWcgQlIyX1BBQ0tBR0VfTUVTQTNEX0hP
+U1RfTkFUSVZFX0NPTlRFWFRfRFJJVkVSX0ZSRUVEUkVOTwo+ICAgICAgICAgICBTZWxlY3QgdGhp
+cyB3aGVuIHJ1bm5pbmcgTWVzYSBpbnNpZGUgYSB2aXJ0dWFsIG1hY2hpbmUKPiAgICAgICAgICAg
+d2l0aCB2aXJ0aW8tZ3B1IGhvc3QgbmF0aXZlIGNvbnRleHQgc3VwcG9ydC4KPgo+ICtjb25maWcg
+QlIyX1BBQ0tBR0VfTUVTQTNEX0hPU1RfTkFUSVZFX0NPTlRFWFRfRFJJVkVSX0lOVEVMCj4gKyAg
+ICAgICBib29sICJpbnRlbC12aXJ0aW8iCj4gKyAgICAgICBkZXBlbmRzIG9uIEJSMl9QQUNLQUdF
+X01FU0EzRF9HQUxMSVVNX0RSSVZFUl9DUk9DVVMgfHwgXAo+ICsgICAgICAgICAgICAgICBCUjJf
+UEFDS0FHRV9NRVNBM0RfR0FMTElVTV9EUklWRVJfSVJJUyB8fCBcCj4gKyAgICAgICAgICAgICAg
+IEJSMl9QQUNLQUdFX01FU0EzRF9WVUxLQU5fRFJJVkVSX0lOVEVMCj4gKyAgICAgICBoZWxwCj4g
+KyAgICAgICAgIEVuYWJsZSBWaXJ0SU8gc3VwcG9ydCBmb3IgSW50ZWwgbmF0aXZlIGNvbnRleHRz
+Cj4gKyAgICAgICAgIHVzZWQgYnkgdGhlIGNyb2N1cy9pcmlzIChPcGVuR0wpIGFuZCBBTlYgKFZ1
+bGthbikKPiArICAgICAgICAgZHJpdmVycy4KPiArCj4gKyAgICAgICAgIFRoaXMgaXMgYW4gZXhw
+ZXJpbWVudGFsIE1lc2EgZmVhdHVyZSBhbmQgaXMgZGlzYWJsZWQKPiArICAgICAgICAgYnkgZGVm
+YXVsdC4KPiArCj4gKyAgICAgICAgIFNlbGVjdCB0aGlzIHdoZW4gcnVubmluZyBNZXNhIGluc2lk
+ZSBhIHZpcnR1YWwgbWFjaGluZQo+ICsgICAgICAgICB3aXRoIHZpcnRpby1ncHUgaG9zdCBuYXRp
+dmUgY29udGV4dCBzdXBwb3J0Lgo+ICsKPiAgY29uZmlnIEJSMl9QQUNLQUdFX01FU0EzRF9IT1NU
+X05BVElWRV9DT05URVhUX1NVUFBPUlRFRF9EUklWRVIKPiAgICAgICAgIGJvb2wKPgo+IGRpZmYg
+LS1naXQgYS9wYWNrYWdlL21lc2EzZC9tZXNhM2QubWsgYi9wYWNrYWdlL21lc2EzZC9tZXNhM2Qu
+bWsKPiBpbmRleCA4ZTZjMmVlNWI4Li44NzM3N2I3Y2U0IDEwMDY0NAo+IC0tLSBhL3BhY2thZ2Uv
+bWVzYTNkL21lc2EzZC5tawo+ICsrKyBiL3BhY2thZ2UvbWVzYTNkL21lc2EzZC5tawo+IEBAIC0x
+NjQsNiArMTY0LDEyIEBAIGVsc2UKPiAgTUVTQTNEX0NPTkZfT1BUUyArPSAtRGFtZGdwdS12aXJ0
+aW89ZmFsc2UKPiAgZW5kaWYKPgo+ICtpZmVxICgkKEJSMl9QQUNLQUdFX01FU0EzRF9IT1NUX05B
+VElWRV9DT05URVhUX0RSSVZFUl9JTlRFTCkseSkKPiArTUVTQTNEX0NPTkZfT1BUUyArPSAtRGlu
+dGVsLXZpcnRpby1leHBlcmltZW50YWw9dHJ1ZQo+ICtlbHNlCj4gK01FU0EzRF9DT05GX09QVFMg
+Kz0gLURpbnRlbC12aXJ0aW8tZXhwZXJpbWVudGFsPWZhbHNlCj4gK2VuZGlmCj4gKwo+ICBpZm5l
+cSAoJChCUjJfUEFDS0FHRV9NRVNBM0RfR0FMTElVTV9EUklWRVJfRlJFRURSRU5PKSQoQlIyX1BB
+Q0tBR0VfTUVTQTNEX1ZVTEtBTl9EUklWRVJfRlJFRURSRU5PKSwpCj4gIE1FU0EzRF9GUkVFRFJF
+Tk9fS01EUyA9IG1zbQo+ICBpZmVxICgkKEJSMl9QQUNLQUdFX01FU0EzRF9IT1NUX05BVElWRV9D
+T05URVhUX0RSSVZFUl9GUkVFRFJFTk8pLHkpCj4gLS0KPiAyLjUzLjAKPgoKV2l0aCB0aGUgcmV2
+aXNlZCBoZWxwIG1lc3NhZ2UsIHlvdSBoYXZlIG15CgpSZXZpZXdlZC1ieTogSm9zZXBoIEtvZ3V0
+IDxqb3NlcGgua29ndXRAZ21haWwuY29tPgoKQmVzdApKb3NlcGgKClswXSBodHRwczovL2dpdGh1
+Yi5jb20vY21zcGFtL3hlLW5hdGl2ZS1jb250ZXh0LWVuYWJsZW1lbnQKX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApi
+dWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1h
+bi9saXN0aW5mby9idWlsZHJvb3QK
