@@ -1,70 +1,73 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16F41C5DF66
-	for <buildroot@archiver.kernel.org>; Sun, 16 Aug 2026 09:24:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A18EFC5B572
+	for <buildroot@archiver.kernel.org>; Sun, 16 Aug 2026 09:24:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BCD2A60639;
-	Sun, 16 Aug 2026 09:24:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 643E980DDF;
+	Sun, 16 Aug 2026 09:24:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NNtDJLLnreLV; Sun, 16 Aug 2026 09:24:05 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id IK3GMOwAn3dV; Sun, 16 Aug 2026 09:24:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 692AC6063E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7F30B80D97
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786872245;
-	bh=523Fa/SxjmWnS5U4g6QexP5cqrHTXuPoSCPCTFM/XF0=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=gAFqxT1EQEb+TJrtx7Dg9SVP0Iz1Eyaal6aP26qfk40CS/zaSzjdOOVTdMBJYaXOh
-	 t/F+pXlnyrQeBixNbPeankdAPaVGyA7rPoM9PCkTFcynazwi6HOQ69OEz37jz6Dtqy
-	 jGf9qtMRd1GCO4n6miiPlZ/664q3qG3ft4P3lQGizN7O5GS7ZkA6BOdyUKVWTL4GKp
-	 GxWiTikNHQqpONSNbwRCIIs2nNoT8wPZnbleK0VkG0HNk518DgV24/G41Jyrc06+CO
-	 5c4lqVVNs02RsESR6wldkfRBiL+XykmaMV4Vg01L8VYgwQsunmO6nwvrxRpAVem1qr
-	 D6axcPVR63S9A==
+	s=default; t=1786872285;
+	bh=6O4kk9+HiJGEfkJYiC75DN0oTtYde/ig20oFEC7oVDM=;
+	h=Date:From:To:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=eV8nlIyalOg/0Q4gvxq/YrDlvu1P+JRoIT9tlAHxk2+oonsXSfXXaSt+Enu2VYuxs
+	 qjVtryZZKVF0lX7XD4shWMh+IsZkPBNUwA7F9/PU2MdLA77pcDT4lzhJmkX6+bD4a3
+	 ZeQ6pwxUY0+WAnKwGRVE1zJYIY0XDKGIuCt5qg4pRVrO/CoUwnYTtc/XqLsE2KT0K6
+	 mrVm+DJnnFVEHKNiVUlNsAMEyXvYh8eYFRn9QgFETF6AwSByR0VpHg1ToQr7BskmWZ
+	 wVf2QMfHxcpQsW6cj1PS51oEJUA8k5bp1580mfjjMHUY7ZNO7I60+10VWVtPQvspVW
+	 5L6wyHVUTgn8Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 692AC6063E;
-	Sun, 16 Aug 2026 09:24:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7F30B80D97;
+	Sun, 16 Aug 2026 09:24:45 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 62BB5334
- for <buildroot@buildroot.org>; Sun, 16 Aug 2026 09:24:04 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id DBA6F33B
+ for <buildroot@buildroot.org>; Sun, 16 Aug 2026 09:24:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 489904073D
- for <buildroot@buildroot.org>; Sun, 16 Aug 2026 09:24:04 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id CD01940742
+ for <buildroot@buildroot.org>; Sun, 16 Aug 2026 09:24:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XnN-ses0CCdN for <buildroot@buildroot.org>;
- Sun, 16 Aug 2026 09:24:03 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 32136406F7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 32136406F7
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 32136406F7
- for <buildroot@buildroot.org>; Sun, 16 Aug 2026 09:24:03 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id C67CD19F5B2;
- Sun, 16 Aug 2026 11:23:58 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 16 Aug 2026 11:23:58 +0200
+ id Xa4fgOTE8okz for <buildroot@buildroot.org>;
+ Sun, 16 Aug 2026 09:24:43 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.238.66.15;
+ helo=helium.openadk.org; envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D1E224073D
+Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none) header.from=openadk.org
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D1E224073D
+Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D1E224073D
+ for <buildroot@buildroot.org>; Sun, 16 Aug 2026 09:24:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=openadk.org; s=2022;
+ t=1786872280; bh=H5Hvu0KU1u+XLJaCtp96aWHDE6tiXl5mGlRUiOL+Apk=;
+ h=Date:From:To:Subject:From;
+ b=GNqZLzG/ZX0+qO9VSB1bkHJu+1ydn6G9c2n8h6NgfwCY72FAATobTvrhR0zwQTQXJ
+ L25FlP4C748vNlOU6yyH+bQQ9QtZegRJg0oxage0Z6H/NWj8pAqGNw2dHmDpHveZUI
+ mImH0uJiraW9qUAgtnuMAF3XJt9uKf/GUecNwZ86SIHCnxcy1HslFl6Ryge4P97cdW
+ rgepom0CGFajBhtXnF2gVpy4vN7G0u1VbEtsLbG/C1lpvsVwmgIrqd1pcoUzo0jmKF
+ Z9NUWsLnvtRowwxhjOTiwJzDNA7Ildj246eEXxQ8ETiw4hT+flIRZmN9naXsBBIV4B
+ PQ+YmgRtIQLSw==
+Received: by helium.openadk.org (Postfix, from userid 1000)
+ id 7445531E0AF6; Sun, 16 Aug 2026 11:24:40 +0200 (CEST)
+Date: Sun, 16 Aug 2026 11:24:40 +0200
+From: Waldemar Brodkorb <wbx@openadk.org>
+To: buildroot@buildroot.org
+Message-ID: <aoGB2EKYfAEH5N8t@waldemar-brodkorb.de>
 MIME-Version: 1.0
-Date: Sun, 16 Aug 2026 11:23:58 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-In-Reply-To: <20260816080802.2794593-1-bernd@kuhls.net>
-References: <20260816080802.2794593-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.17
-Message-ID: <314190d8987705ef942b0edfb0592a6f@free.fr>
-X-Sender: ju.o@free.fr
-Subject: Re: [Buildroot] [PATCH 1/1] package/libffi: bump version to 3.8.0
+Content-Disposition: inline
+X-Operating-System: Linux 6.12.96+deb13-amd64 x86_64
+Subject: [Buildroot] [PATCH] package/uclibc: enable FENV support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,19 +79,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 16/08/2026 10:08, Bernd Kuhls wrote:
-> https://github.com/libffi/libffi/releases/tag/v3.8.0
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Enable FENV support unconditionally when a hard-float toolchain is in use.
+Useful for packages as quickjs and chawan.
+Adds 24kb to the C library on aarch64.
 
-Applied to master, thanks.
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ package/uclibc/uclibc.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index 0cee106014..c19328e87a 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -286,6 +286,7 @@ else
+ define UCLIBC_FLOAT_CONFIG
+ 	$(call KCONFIG_ENABLE_OPT,UCLIBC_HAS_FPU)
+ 	$(call KCONFIG_ENABLE_OPT,UCLIBC_HAS_FLOATS)
++	$(call KCONFIG_ENABLE_OPT,UCLIBC_HAS_FENV)
+ endef
+ endif
+ 
+-- 
+2.47.3
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
