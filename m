@@ -4,113 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3123C5B572
-	for <buildroot@archiver.kernel.org>; Sun, 16 Aug 2026 04:46:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C52AFC5DF6A
+	for <buildroot@archiver.kernel.org>; Sun, 16 Aug 2026 07:17:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8B2E280EA4;
-	Sun, 16 Aug 2026 04:46:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 60DA580EC9;
+	Sun, 16 Aug 2026 07:17:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id B2A2EIVI4z8M; Sun, 16 Aug 2026 04:46:13 +0000 (UTC)
+ id DXkEO4hWfArD; Sun, 16 Aug 2026 07:17:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7B8B980EA5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 73A4980ECA
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786855573;
-	bh=VixaUDaFAagQAV//8RHGWOYB+Znxa8vr2nV2zakJl5A=;
-	h=Date:From:To:Cc:References:In-Reply-To:Subject:List-Id:
+	s=default; t=1786864626;
+	bh=AS+YxF8Mbxr+H+Kk28qmWCbC29aNr/gf0JCLeI2AHJQ=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=I3RjY5Y/Tb2i4TogCSXcQNNcXnJyGdto+G+fbaAevBXeZ4lI07WsjuTswdCmEfIm3
-	 O7l4HJujCfxm1+A8sV2BHuglTUyRqmqyJs1n0guynQRReOBLyiSX00EaSkvozYRx6W
-	 nuLHEEiWtuoYOlDPOQ1FwmhIFdP9CgJa+9R4hgOTawb9dqasRR5sXZJQpGsXoTAK6d
-	 AChJTTpProkdHX8WLPTxg+yO3P3+IaX8HrSrgNXuGksc7AbRgwdkBZrdY1mjs5kV/K
-	 +IUUoCaNmL9DfFvMRY1jTUW+6fTqYmVW/nBY6yl8otNCfZ4+e+Y5VhzGEVuS6KAR5G
-	 LztDRVnyJ486g==
+	 From:Reply-To:From;
+	b=REoyUQYu1eFtJmRn1sZK8Lc5vjPI//NcCpeGD5hiOvib7+cWxifGKcdVzr8PhEoVH
+	 bP226PadZQ/feJgP3BdV1LF/LtUt5TnytIodweBKDaeE4hy4KNcbfpbm5Kb42FEj2f
+	 UlQg/LkpMMekA2e/NS8xpIDbbpTABTMUhhVPl+Z4sA0D+KBrqMdQ/mXw/Yd8KtTzz6
+	 58T0K3C0Zyjx0K6ow302zlNQapwC30RhHKaF7dlHKp3OHDUsBFOXoNd1nR7GkeJ87E
+	 iV4l3+z+YVu16hwcqNKhx9vQm+54DLUS5oc9iStaHumRaTbAO9HaT8hhPNSE8aa20B
+	 Djo3tJebMwKZA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7B8B980EA5;
-	Sun, 16 Aug 2026 04:46:13 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id EA013282
- for <buildroot@buildroot.org>; Sun, 16 Aug 2026 04:46:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 73A4980ECA;
+	Sun, 16 Aug 2026 07:17:06 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 52570334
+ for <buildroot@buildroot.org>; Sun, 16 Aug 2026 07:17:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D367580EA5
- for <buildroot@buildroot.org>; Sun, 16 Aug 2026 04:46:11 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4174E80ECA
+ for <buildroot@buildroot.org>; Sun, 16 Aug 2026 07:17:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5Ydeo_btBLcO for <buildroot@buildroot.org>;
- Sun, 16 Aug 2026 04:46:11 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::634; helo=mail-pl1-x634.google.com;
- envelope-from=thecharlesjenkins@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 12ED680EA4
-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none) header.from=gmail.com
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 12ED680EA4
-Authentication-Results: smtp1.osuosl.org; dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20251104 header.b=N9Ycje4F
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com
- [IPv6:2607:f8b0:4864:20::634])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 12ED680EA4
- for <buildroot@buildroot.org>; Sun, 16 Aug 2026 04:46:10 +0000 (UTC)
-Received: by mail-pl1-x634.google.com with SMTP id
- d9443c01a7336-2cc97653887so38939455ad.1
- for <buildroot@buildroot.org>; Sat, 15 Aug 2026 21:46:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1786855570; x=1787460370; darn=buildroot.org;
- h=in-reply-to:content-disposition:content-type:mime-version
- :references:message-id:subject:cc:to:from:date:from:to:cc:subject
- :date:message-id:reply-to:content-type;
- bh=gGpi5qXOP2v/fTHRRmjru0FPLD8tM2ojKwglxKqcncw=;
- b=N9Ycje4FlJCG7/QAuxnUmjTWyAM5kgkLuVgKNvMNKpRwz/d66lTabZZr5tT+FClzym
- 1NeSuV0xL6Q88wEmHoUFBvm1utPdTjP22mMQKQmfxDpq16y37bxYRNt1BkXm8QWSUV8m
- 8+JeJmVG26JVCLRAgKY4XW4ZROg8uAmMJ9zmkyKV0Q22l9dWToJbwu6/+r0fuwJnOU6B
- KW9/DW1OB8UHf3IerkKjOfrRomTI6BXGahBlEi8qbUrXrKYzQcY2ezIM39NLmhzprNgd
- A2xHrTuY3yo+dHpMmcg0Z1qCeASgbhqo8Vnssda+bSLfInQevKhPoODK5ZzoOK1rdmXn
- SgAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1786855570; x=1787460370;
- h=in-reply-to:content-disposition:content-type:mime-version
- :references:message-id:subject:cc:to:from:date:x-gm-gg
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
- :content-type;
- bh=gGpi5qXOP2v/fTHRRmjru0FPLD8tM2ojKwglxKqcncw=;
- b=LmbhSg7Bo0AsCghO8mn5RuQR+X1ZHxPJbMEUWJMStd1J7yAFe9gGhZK43di/Z/Evda
- oAyAUAWEMn3M+rU+Go+fuqE+ieDadY3Gb78GV5EWJ/oFFawuK/jVZ254159xBMpP7dCv
- mZrksIaUakbn2A8QWtSTlCTs1++hyDDd7KuxjkWQRsjcNFIvaNegLWrAh9o1iI/+M+FN
- qwelNDhk+tJSOW9TbGeLps3/XZqFAhPnEyzux6Gvv22z+7dc37c4Esq43K9iE1h4kJbZ
- cGsnpjs5ufJsSglZWS2QNr6tcKV8om3A/aF2KfEgvG0YF8snp45xtuFzgrMqD3jkhkT/
- 6AXg==
-X-Gm-Message-State: AOJu0YwDJ9r2Bhe4lf9KuXxGOifyReoNib7UWVqUrpslI2DcJi9dl9Ld
- RYZAmvvLbnghmTSP1JGvClhOTs+XbI95mBcnpRvx+Y3CVK+6LOc4T0u4mJpIiQ==
-X-Gm-Gg: AR+sD10Ajzsyib0r02uqt0iYmj1wF2vwKIkVxmCvuSw6D12LWuflTn8GDrBe5UcjV6n
- YOqd07XCPIbOMw/5gRaak3Fkdrt/vZgPQ/ibhiIJJ+FtUab96s/hTtfc2xqwQlvzE+kZEtZZSfr
- 46KJCESJvygQolaQh//Dq4jmgvLR99HRHWTj6kcIaPs/qy8jguLy2Mam5qnSaJd5LNRimf6wzL5
- K1qAv3pgpPxSF8aSqas4EoVlltA+METUmib5FGQGaLFdkJKyOa7RS+QnHjhdsXKg7slbbF9EmIO
- Abnrw19c6AQr1mO5qfZ+PzBIaAAJ6b5gOweQDQj19E/r+NAD0oCZWUYRbFrf/bvJjxf619wAcDA
- ZY8JdJvTi2xC1oIM7af+j//ocDSVyx+wyFxNUboBYF3Ts6ElR8fZ26R79hTorGOPuJsTp51/ZGI
- +Bmh2joM7e6C8WwYeBFJUw6g451jDw9dZqCC7uBGNt2JOWs9qZ3HQItSSWFxN0JG3SdM2G87sf9
- AhmIBtPm33u4UpSUXU+AbE=
-X-Received: by 2002:a05:6a20:2587:b0:3c3:33df:4d9a with SMTP id
- adf61e73a8af0-3cc71c1b66fmr16978071637.1.1786855570131; 
- Sat, 15 Aug 2026 21:46:10 -0700 (PDT)
-Received: from blinky ([67.174.242.98]) by smtp.gmail.com with ESMTPSA id
- a92af1059eb24-141387af4adsm24657561c88.1.2026.08.15.21.46.08
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 15 Aug 2026 21:46:09 -0700 (PDT)
-Date: Sat, 15 Aug 2026 21:46:07 -0700
-From: Charlie Jenkins <thecharlesjenkins@gmail.com>
-To: Baruch Siach <baruch@tkos.co.il>
-Cc: buildroot@buildroot.org
-Message-ID: <aoFAj5Sx-c-ULa9Q@blinky>
-References: <20260815-ncurses_strip-v1-1-da424b80d70d@gmail.com>
- <87o6f2wva3.fsf@tarshish>
+ id 20nJBodY4ZbE for <buildroot@buildroot.org>;
+ Sun, 16 Aug 2026 07:17:03 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 344FD80EB6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 344FD80EB6
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 344FD80EB6
+ for <buildroot@buildroot.org>; Sun, 16 Aug 2026 07:17:02 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id 531B45FFB7;
+ Sun, 16 Aug 2026 09:16:58 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 16 Aug 2026 09:16:58 +0200
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <87o6f2wva3.fsf@tarshish>
-Subject: Re: [Buildroot] [PATCH] package/ncurses: Enable stripping of progs
+Date: Sun, 16 Aug 2026 09:16:58 +0200
+To: Petr Vorel <petr.vorel@gmail.com>
+Cc: buildroot@buildroot.org, Giulio Benetti
+ <giulio.benetti@benettiengineering.com>
+In-Reply-To: <a89c6eb42eea4e1609f0a75dc157191e@free.fr>
+References: <20260811045801.234968-1-petr.vorel@gmail.com>
+ <a89c6eb42eea4e1609f0a75dc157191e@free.fr>
+User-Agent: Webmail Free/1.6.17
+Message-ID: <5588dc00d19f533a6e87325c19d92330@free.fr>
+X-Sender: ju.o@free.fr
+Subject: Re: [Buildroot] [RFC][PATCH] package/nfs-utils: bump version to
+ 2.9.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -122,76 +79,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, Aug 16, 2026 at 07:20:52AM +0300, Baruch Siach wrote:
-> Hi Charlie,
-> 
-> On Sat, Aug 15 2026, Charlie Jenkins wrote:
-> > Commit 2ab611c40ff08bd4a7922456fed22af6953af3b1("ncurses: fix build
-> > failure with ncurses 6.1") added --disable-stripping to the ncurses
-> > build because ncurses started stripping by default but using the host
-> > strip instead of the cross strip.
-> >
-> > Enable stripping and change the strip program to $(TARGET_CROSS)strip.
-> > This shrinks the binary sizes of the programs generated by
-> > BR2_PACKAGE_NCURSES_TARGET_PROGS on aarch64 by:
-> >
-> > clear:		18k -> 10k
-> > infocmp:	76k -> 62k
-> > tabs:		27k -> 18k
-> > tic:		103k -> 87k
-> > toe:		27k -> 18k
-> > tput:		33k -> 22k
-> > tset:		33k -> 22k
-> 
-> The 'target-finalize' target defined in top level Makefile should strip
-> all target binaries. Lookup STRIPCMD in top Makefile.
-> 
-> Doesn't that work for ncurses binaries?
+Hi Petr,
 
-That's a silly oversight on my part, thank you! I was looking at this
-Makefile and the outputs but didn't look at the final outputs generated
-by this step, oops.
+On 11/08/2026 21:35, Julien Olivain wrote:
+> Hi Petr,
+> 
+> On 11/08/2026 06:58, Petr Vorel wrote:
+>> Remove patches upstreamed in this release.
+>> 
+>> Release announce:
+>> https://lore.kernel.org/linux-nfs/dc0f6f41-84be-4a70-92db-89890bded3ab@redhat.com/
+>> 
+>> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+>> ---
+>> [RFC] Building nfs-utils 2.9.2 with --disable-nfsdctl fails to link
+>> exportfs [1]. This is a regression from 2.9.1. Buildroot uses
+>> --disable-nfsdctl => we should probably wait for the fix.
+> 
+> I agree, we should wait for a fix before merging.
+> Please, send a v2 adding the fix or including a newer version when
+> available.
 
-- Charlie
+For info, a fix was committed in:
+https://git.linux-nfs.org/?p=steved/nfs-utils.git;a=commitdiff;h=67ed1bdb1af1c70a5fd3b377a997401b7676b827
 
+So you either include it as a package patch, or wait for the next 
+version.
+
+>> Kind regards,
+>> Petr
+>> 
+>> [1] 
+>> https://lore.kernel.org/linux-nfs/9fec9f1b-1c10-4a20-8282-dfc9addb4ee8@est.tech/
 > 
-> baruch
+> Best regards,
 > 
-> >
-> > Signed-off-by: Charlie Jenkins <thecharlesjenkins@gmail.com>
-> > ---
-> >  package/ncurses/ncurses.mk | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
-> > index 5e2077500a..e017bacf6e 100644
-> > --- a/package/ncurses/ncurses.mk
-> > +++ b/package/ncurses/ncurses.mk
-> > @@ -31,7 +31,7 @@ NCURSES_CONF_OPTS = \
-> >  	--enable-const \
-> >  	--enable-overwrite \
-> >  	--enable-pc-files \
-> > -	--disable-stripping \
-> > +	--with-strip-program=$(TARGET_CROSS)strip \
-> >  	--with-pkg-config-libdir="/usr/lib/pkgconfig" \
-> >  	$(if $(BR2_PACKAGE_NCURSES_TARGET_PROGS),,--without-progs) \
-> >  	--without-manpages
-> >
-> > ---
-> > base-commit: e389f1b44c54660c7bb5512207a561e684b41595
-> > change-id: 20260815-ncurses_strip-615a30afa120
-> >
-> > Best regards,
-> 
-> -- 
->                                                      ~. .~   Tk Open Systems
-> =}------------------------------------------------ooO--U--Ooo------------{=
->    - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+> Julien.
+
+Best regards,
+
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
