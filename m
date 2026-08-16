@@ -1,73 +1,83 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C52AFC5DF6A
-	for <buildroot@archiver.kernel.org>; Sun, 16 Aug 2026 07:17:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25A13C5DF6A
+	for <buildroot@archiver.kernel.org>; Sun, 16 Aug 2026 07:32:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 60DA580EC9;
-	Sun, 16 Aug 2026 07:17:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C275E406A7;
+	Sun, 16 Aug 2026 07:32:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DXkEO4hWfArD; Sun, 16 Aug 2026 07:17:06 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id i8eu8TId283A; Sun, 16 Aug 2026 07:32:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 73A4980ECA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 87D92406F5
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786864626;
-	bh=AS+YxF8Mbxr+H+Kk28qmWCbC29aNr/gf0JCLeI2AHJQ=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=REoyUQYu1eFtJmRn1sZK8Lc5vjPI//NcCpeGD5hiOvib7+cWxifGKcdVzr8PhEoVH
-	 bP226PadZQ/feJgP3BdV1LF/LtUt5TnytIodweBKDaeE4hy4KNcbfpbm5Kb42FEj2f
-	 UlQg/LkpMMekA2e/NS8xpIDbbpTABTMUhhVPl+Z4sA0D+KBrqMdQ/mXw/Yd8KtTzz6
-	 58T0K3C0Zyjx0K6ow302zlNQapwC30RhHKaF7dlHKp3OHDUsBFOXoNd1nR7GkeJ87E
-	 iV4l3+z+YVu16hwcqNKhx9vQm+54DLUS5oc9iStaHumRaTbAO9HaT8hhPNSE8aa20B
-	 Djo3tJebMwKZA==
+	s=default; t=1786865539;
+	bh=38Me/eFapYpUjFwx38fMM1G/FUKB+biwILs5zCbziJE=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=HYCC/i2KZhC8+G6gXFjgeF+Z5RTjUI4v/exw52wZIjuNVJ8o4kk9AvC8+ImTLk+ub
+	 CXrhABP13ew3Xm+CBunBa7a3Bbdg5V1D/0z138vCKdDO60egDtqjSSkBBSrQUDNrRw
+	 /YYJ9rZu4ZWJXXVXNg/UUoxC6J9kTTUvgcM3IJ6ZOet7Fxjn1qjVkqfFIAt7Atehng
+	 Ybwl6YPr81rF7SLhDGLcE59DA5XT47CObSdoTl9zw9EugwbKaefFWjhnKW74rFZRDL
+	 9cXCyxlhBfBYx8MBPYwkJDVZ8IcqznSsKvfvLWps7rQ4jS8mBubgo/xHy1UDzaxYN9
+	 GErK2lEeMzkng==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 73A4980ECA;
-	Sun, 16 Aug 2026 07:17:06 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 52570334
- for <buildroot@buildroot.org>; Sun, 16 Aug 2026 07:17:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 87D92406F5;
+	Sun, 16 Aug 2026 07:32:19 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id D58EE337
+ for <buildroot@buildroot.org>; Sun, 16 Aug 2026 07:32:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4174E80ECA
- for <buildroot@buildroot.org>; Sun, 16 Aug 2026 07:17:04 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id BBED66062B
+ for <buildroot@buildroot.org>; Sun, 16 Aug 2026 07:32:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 20nJBodY4ZbE for <buildroot@buildroot.org>;
- Sun, 16 Aug 2026 07:17:03 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 344FD80EB6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 344FD80EB6
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 344FD80EB6
- for <buildroot@buildroot.org>; Sun, 16 Aug 2026 07:17:02 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id 531B45FFB7;
- Sun, 16 Aug 2026 09:16:58 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 16 Aug 2026 09:16:58 +0200
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OMX1zHdFnkM1 for <buildroot@buildroot.org>;
+ Sun, 16 Aug 2026 07:32:16 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 03BA360616
+Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none) header.from=kuhls.net
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 03BA360616
+Authentication-Results: smtp3.osuosl.org; dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202605290044 header.b=GuFG6DdE
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 03BA360616
+ for <buildroot@buildroot.org>; Sun, 16 Aug 2026 07:32:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
+ s=kas202605290044; t=1786865532;
+ bh=sHq8eSMxJGbeiBxslz4Hprj6pngA0liecXME6SI8Zwo=;
+ h=From:To:Subject:Date:From;
+ b=GuFG6DdEJNP8DTyZIHWaKdAc41yKLr/2fuqfaTmJaiFbyr+/nJGVC9FkA7cQQOKW/
+ UuROWDMJLOBJv/AKdDYd0JgpAWzl41JHIMAzvQbharUK8WCaTkPb+l6Z1rzVSMQKW0
+ AwZO6pv/pZR566qTK85AkHWcjStFAb2uiGkENpk6Dn3wK54iXJupoYKAqGjAQrhnAS
+ YReAKxufbIFfDdHQEPJIvtGUxIOgoi/5l6lWP5+0Z6DQWagpU3gDIq1m6U8KfTFyx1
+ +6dND8yxqiw8LyUdq8/lCAGwQ1sHblIwoc42riXCB0pDSNZFlv6dpzbSi98RH8IyoX
+ quhlg3pollQNw==
+Received: from fli4l.lan.fli4l (p54a1bf47.dip0.t-ipconnect.de [84.161.191.71])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 52A69A4C12AD
+ for <buildroot@buildroot.org>; Sun, 16 Aug 2026 09:32:12 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:45140)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99.5)
+ (envelope-from <bernd@kuhls.net>) id 1wvVLn-000000003J8-1OBw
+ for buildroot@buildroot.org; Sun, 16 Aug 2026 07:32:11 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Date: Sun, 16 Aug 2026 09:32:11 +0200
+Message-ID: <20260816073211.1830243-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-Date: Sun, 16 Aug 2026 09:16:58 +0200
-To: Petr Vorel <petr.vorel@gmail.com>
-Cc: buildroot@buildroot.org, Giulio Benetti
- <giulio.benetti@benettiengineering.com>
-In-Reply-To: <a89c6eb42eea4e1609f0a75dc157191e@free.fr>
-References: <20260811045801.234968-1-petr.vorel@gmail.com>
- <a89c6eb42eea4e1609f0a75dc157191e@free.fr>
-User-Agent: Webmail Free/1.6.17
-Message-ID: <5588dc00d19f533a6e87325c19d92330@free.fr>
-X-Sender: ju.o@free.fr
-Subject: Re: [Buildroot] [RFC][PATCH] package/nfs-utils: bump version to
- 2.9.2
+X-Spamd-Bar: +
+Subject: [Buildroot] [PATCH 1/1] package/intel-microcode: security bump
+ version to 20260812
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -79,53 +89,74 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Petr,
+https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files/releases/tag/microcode-20260812
+https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files/releases/tag/microcode-20260811
 
-On 11/08/2026 21:35, Julien Olivain wrote:
-> Hi Petr,
-> 
-> On 11/08/2026 06:58, Petr Vorel wrote:
->> Remove patches upstreamed in this release.
->> 
->> Release announce:
->> https://lore.kernel.org/linux-nfs/dc0f6f41-84be-4a70-92db-89890bded3ab@redhat.com/
->> 
->> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
->> ---
->> [RFC] Building nfs-utils 2.9.2 with --disable-nfsdctl fails to link
->> exportfs [1]. This is a regression from 2.9.1. Buildroot uses
->> --disable-nfsdctl => we should probably wait for the fix.
-> 
-> I agree, we should wait for a fix before merging.
-> Please, send a v2 adding the fix or including a newer version when
-> available.
+Fixes the following CVEs:
 
-For info, a fix was committed in:
-https://git.linux-nfs.org/?p=steved/nfs-utils.git;a=commitdiff;h=67ed1bdb1af1c70a5fd3b377a997401b7676b827
+CVE-2025-31936
+https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01379.html
 
-So you either include it as a package patch, or wait for the next 
-version.
+CVE-2025-31938
+https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01404.html
 
->> Kind regards,
->> Petr
->> 
->> [1] 
->> https://lore.kernel.org/linux-nfs/9fec9f1b-1c10-4a20-8282-dfc9addb4ee8@est.tech/
-> 
-> Best regards,
-> 
-> Julien.
+CVE-2026-20917
+https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01423.html
 
-Best regards,
+CVE-2025-35973
+https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01428.html
 
-Julien.
+CVE-2026-20716
+https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01435.html
+
+CVE-2026-20760
+https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01441.html
+
+CVE-2026-20713
+https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01442.html
+
+CVE-2026-20707
+https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01443.html
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+Gitlab pipeline passed:
+https://gitlab.com/bkuhls/buildroot/-/commits/d465150875451085466b514a4a4507586cdb965b
+
+ package/intel-microcode/intel-microcode.hash | 2 +-
+ package/intel-microcode/intel-microcode.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/intel-microcode/intel-microcode.hash b/package/intel-microcode/intel-microcode.hash
+index bb36a52fc5..6f465fd679 100644
+--- a/package/intel-microcode/intel-microcode.hash
++++ b/package/intel-microcode/intel-microcode.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  5a07ce745d0bd8b360a4713564d46d5e38be797316a52abedaff0761e1b02370  intel-microcode-20260512.tar.gz
++sha256  7614616d7b2988c278060486f47de716ef44c19317928cb45ac9e288fafd5bd1  intel-microcode-20260812.tar.gz
+ sha256  03efb1491c7e899feb2665fa299363e64035e5444c1b8bc1f6ebed30de964e12  license
+diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
+index f6fbee54b4..9c97b0aa5e 100644
+--- a/package/intel-microcode/intel-microcode.mk
++++ b/package/intel-microcode/intel-microcode.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-INTEL_MICROCODE_VERSION = 20260512
++INTEL_MICROCODE_VERSION = 20260812
+ INTEL_MICROCODE_SITE = $(call github,intel,Intel-Linux-Processor-Microcode-Data-Files,microcode-$(INTEL_MICROCODE_VERSION))
+ INTEL_MICROCODE_LICENSE = PROPRIETARY
+ INTEL_MICROCODE_LICENSE_FILES = license
+-- 
+2.47.3
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
