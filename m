@@ -1,86 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E6CFC5DF66
-	for <buildroot@archiver.kernel.org>; Sun, 16 Aug 2026 22:16:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13A8AC5DF70
+	for <buildroot@archiver.kernel.org>; Sun, 16 Aug 2026 22:20:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 04D8D80D81;
-	Sun, 16 Aug 2026 22:16:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C969640680;
+	Sun, 16 Aug 2026 22:20:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pxe7KFBHZ3lW; Sun, 16 Aug 2026 22:16:43 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8vTYabPOSxaO; Sun, 16 Aug 2026 22:20:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9EFD280D9D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B91164066C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786918603;
-	bh=NvwI1lTyQaumcbWOooILonRGDt2AWPhZFgBTkApg1rQ=;
-	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=bESdn1lRHNlv804O5WB0GGsjyw8qD0bjhdl87pC3vUOSxqmSY7L5Lit8nISfJ9TgZ
-	 yK8AfrtFJcQUonJKhmi92kC4ITePuPPNoswZwGGZVx3s8mAkE3MVXpoAa+fzXsjcsk
-	 TKrDVxtYUG3/kGc73RY+xW7Ljj2mHt10G5em7OGzzp3y1zt1pLATxKTLO9OeE1VHTA
-	 q3onb9PtesJlLhgpnEeFaVUrBjxH8Qm3+MLb0FdWkrZWD0Xhn8aSKdNMI9SCt1Fjyn
-	 r3TgyxcpzS1VKzw4t5uHQsod7Jn5/36LxIw6EiwoxCkUgXhHpxfUu6CalpAdnLY4hd
-	 AQwPL5pDfuHgQ==
+	s=default; t=1786918832;
+	bh=dslSYG+ZI3fdf9Hwg3wH59iML1Obl1wmpCqrsdmJTiE=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=WhEuHIi99HIFqFUfQMcfdZf4beSu7Xks1YQTWuGXVg5SivR5ESBbFx0WM9GBKd/Eq
+	 6glHqLNmCDM0i6AKCIAjqzUm2o1YNjn06jNVbyB+jgCjtK1yMAFx5gjXLzPuViaJvK
+	 IYXeiU3OSMsjdBqt+QZ8i7gm0E4Fg62hS+nZY4E1lUm+KkRIq4JE6j6vSoqcwDMuP/
+	 dOzVOs5uUfbPI3hlQQnh8+TbfA92sDvILaiMCoK0tGxVKoW/7bQllIPl0a9SdmMPh4
+	 q7itEiQet87bkoWMftvenenysBi0lZgx16k2F1cbpSnrcufaFa7YDV9N2U1uPDqg0K
+	 LCBfx7bPDaR2w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9EFD280D9D;
-	Sun, 16 Aug 2026 22:16:43 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 61763147
- for <buildroot@buildroot.org>; Sun, 16 Aug 2026 22:16:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B91164066C;
+	Sun, 16 Aug 2026 22:20:32 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 672A223F
+ for <buildroot@buildroot.org>; Sun, 16 Aug 2026 22:20:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 53FA280D96
- for <buildroot@buildroot.org>; Sun, 16 Aug 2026 22:16:42 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5949A6061A
+ for <buildroot@buildroot.org>; Sun, 16 Aug 2026 22:20:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KzNJnMlqnWpo for <buildroot@buildroot.org>;
- Sun, 16 Aug 2026 22:16:41 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id o8NhnMpGg6IZ for <buildroot@buildroot.org>;
+ Sun, 16 Aug 2026 22:20:30 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3C92D80D81
-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none) header.from=korsgaard.com
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3C92D80D81
-Authentication-Results: smtp1.osuosl.org; dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail3 header.b=o0KsHwWI
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3C92D80D81
- for <buildroot@buildroot.org>; Sun, 16 Aug 2026 22:16:40 +0000 (UTC)
-DKIM-Signature: a=rsa-sha256;
- b=o0KsHwWIUiXW0ZoJ8QtiT2/oC32Ke/pOI9QFPmyOqErBWh0gN7KDEJDO3r/H+gE3h5YueV2V2/Pqrw0VCSsy5hlEo+URXMeuxhlSLQ05rKzoPyJBkDgz8kJvQ3dRamneuwyy+3V16F1n8tENC/cZWeMDlH2sH+ZpQXzIScTCQHARbf8u6fLSb8vU5hrlJSi+5D6nfDne87te9z8Y21ylRk+w2gPrRiKVNnZ84GtoIOcBcE0LMk31z3RxeI3O33WlJgSbPy1zlJNO24rfx9RqDhZpzkAp6XN4SjU/qsLNXl59oz7nn5ridriy7APhXFQT+G6HXjuWnyTc1TmoG/d8WA==;
- s=purelymail3; d=purelymail.com; v=1;
- bh=+ekdZBzUz82jvmLdOBUF4GTZ9UL+W2Ko+SODpR2bPWc=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 1336848027; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Sun, 16 Aug 2026 22:16:37 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peter@korsgaard.com>) id 1wvj9g-000000021QJ-1cw6;
- Mon, 17 Aug 2026 00:16:36 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AE27D6061F
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id AE27D6061F
+ for <buildroot@buildroot.org>; Sun, 16 Aug 2026 22:20:30 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 7F02B8DB16; Sun, 16 Aug 2026 22:19:39 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org,  Christian Stewart <christian@aperture.us>
-In-Reply-To: <20260816203207.3980846-3-bernd@kuhls.net> (Bernd Kuhls's message
- of "Sun, 16 Aug 2026 22:32:05 +0200")
-References: <20260816203207.3980846-1-bernd@kuhls.net>
- <20260816203207.3980846-3-bernd@kuhls.net>
-Date: Mon, 17 Aug 2026 00:16:36 +0200
-Message-ID: <87qzjxbtiz.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 3/5] package/docker-compose: bump to version
- 2.40.3
+To: buildroot@buildroot.org
+Date: Mon, 17 Aug 2026 00:08:24 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: a9ac8fb74b8e5d9b9ad6c1655bd4b1bc74279cee
+X-Git-Newrev: 64aa4f2db3126de5c3b7f46a434cf1af9603886c
+X-Patchwork-Hint: ignore
+Message-Id: <20260816221939.7F02B8DB16@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/docker-cli: bump version to 28.5.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -92,25 +69,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/64aa4f2db3126de5c3b7f46a434cf1af9603886c
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
- > For release notes since version 2.38.2, see:
- > https://github.com/docker/compose/releases
+For consistency with docker-engine. Release notes:
+https://github.com/docker/cli/issues?q=is%3Aclosed+milestone%3A28.4.0
+https://github.com/docker/cli/issues?q=is%3Aclosed+milestone%3A28.5.1
+https://github.com/docker/cli/issues?q=is%3Aclosed+milestone%3A28.5.2
 
- > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
- > ---
- > Gitlab pipelines passed:
- > https://gitlab.com/bkuhls/buildroot/-/commits/99b74ab8c322d7aacf9b9bee370fc273a0dc7fa5
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/docker-cli/docker-cli.hash | 2 +-
+ package/docker-cli/docker-cli.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/docker-cli/docker-cli.hash b/package/docker-cli/docker-cli.hash
+index 1424f95752..06758086bd 100644
+--- a/package/docker-cli/docker-cli.hash
++++ b/package/docker-cli/docker-cli.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  172dca437abb36485275a8d43550db90b6878bcc676fc0b73a67a57a15026cff  docker-cli-28.3.3-go2.tar.gz
++sha256  5864ccdfceef3a9e8ddb29b4a555d5b82a551b5258067aac164b6156c6cfdc08  docker-cli-28.5.2-go2.tar.gz
+ sha256  2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
+diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
+index 8d1b8f1bbe..8ca74af7d0 100644
+--- a/package/docker-cli/docker-cli.mk
++++ b/package/docker-cli/docker-cli.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DOCKER_CLI_VERSION = 28.3.3
++DOCKER_CLI_VERSION = 28.5.2
+ DOCKER_CLI_SITE = $(call github,docker,cli,v$(DOCKER_CLI_VERSION))
+ 
+ DOCKER_CLI_LICENSE = Apache-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
