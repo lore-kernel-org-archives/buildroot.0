@@ -4,81 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1474AC5B572
-	for <buildroot@archiver.kernel.org>; Sun, 16 Aug 2026 10:30:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 696DBC5B572
+	for <buildroot@archiver.kernel.org>; Sun, 16 Aug 2026 10:30:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2DAD160628;
-	Sun, 16 Aug 2026 10:30:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 37FE96061A;
+	Sun, 16 Aug 2026 10:30:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id l3ckHzPfPZjG; Sun, 16 Aug 2026 10:30:45 +0000 (UTC)
+ id q75Nkn9FnQFE; Sun, 16 Aug 2026 10:30:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4EAF86061E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4AC3E6061F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786876245;
-	bh=UEKj18MiKLpPLtf5cE67Vpuk9ztqTjcwNSV8GQwES2w=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=rLq3vXThT81ASoktFi0pPqiKq2zV5hJXi6nzVAvHz/ubbL7S8ONhtxocdgPpGfswR
-	 rpnrZP5zBPra8L4nryGw3oOXCiluRxugzHgBo8LvxSAiGfXvBW1KBcrPy+3PZsfhRK
-	 XD9tylTZnKoWc87NFYMJ5ffaxnQg2Cgq+ibuP/6fSNHTwNrITdddGUyBwuSmAZpHP8
-	 Y+aiJIvCmlsKKIc0u+0sMp+iIHfLEGLfzSR9AgM2fWyjaXyMrUzo1esTBBSO6PGJeu
-	 p2iZQ33+drJTmyTpo2thCV4NItHDxJpAEazQ2+KNNJUDLBf1AnVxOsL9CeyxkTZbmT
-	 C8NOJ2Hu/7C/A==
+	s=default; t=1786876257;
+	bh=Z8XrQmmY22x+U11O+RFQaq7VvkPQyraJLcQbkSGZ098=;
+	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=gW51ZixbeUtX1r3B9ayUWTa1AZ3EDCVEx/alrjmzg3pz6X67bR2WtXp0yvNK0y9E0
+	 ugYCKgrNWmgsRZwzkmd2z7X9X+TjzUvCKBH3OyYa1av1XXCHtp/ThSGR2ZsvvBCIHI
+	 ytjZuskO2cLivQ2f6Qj/jWr/jVUEF5rPUSD6lEDYq8rVdBuBH5aQJi6Ylx8WS+fTgC
+	 4shWNk0/KMNcOZeyz7nyJBsz4BQYIAbjFb0hcskLxFnXvrLuvS9SDT2t0/u5GpLr+a
+	 hRydzvGYPay4H1oiuisleIfX7RiXPlH+uc/Qfd9UFz00JscEVlc2fXvqqFKLhLjV+e
+	 xX6XZ3yMA1GSg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4EAF86061E;
-	Sun, 16 Aug 2026 10:30:45 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id E4EEE333
- for <buildroot@buildroot.org>; Sun, 16 Aug 2026 10:30:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4AC3E6061F;
+	Sun, 16 Aug 2026 10:30:57 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id F0EA6333
+ for <buildroot@buildroot.org>; Sun, 16 Aug 2026 10:30:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E2AE1400AB
- for <buildroot@buildroot.org>; Sun, 16 Aug 2026 10:30:43 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D5C6D6061F
+ for <buildroot@buildroot.org>; Sun, 16 Aug 2026 10:30:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lOIwiPQkpbXa for <buildroot@buildroot.org>;
- Sun, 16 Aug 2026 10:30:42 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3nYQ9CXFucUm for <buildroot@buildroot.org>;
+ Sun, 16 Aug 2026 10:30:55 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org BE26F4005C
-Authentication-Results: smtp2.osuosl.org;
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 9A09960629
+Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=kuhls.net
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BE26F4005C
-Authentication-Results: smtp2.osuosl.org; dkim=pass (2048-bit key,
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9A09960629
+Authentication-Results: smtp3.osuosl.org; dkim=pass (2048-bit key,
  unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=Hfopw3M+
+ header.s=kas202605290044 header.b=ZlLMpcX3
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id BE26F4005C
- for <buildroot@buildroot.org>; Sun, 16 Aug 2026 10:30:41 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9A09960629
+ for <buildroot@buildroot.org>; Sun, 16 Aug 2026 10:30:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
  s=kas202605290044; t=1786876238;
- bh=omqluEog9fmDTVrtVQr4vWAcHrAqBFAMyF62ws2s3w0=;
- h=From:To:Cc:Subject:Date:From;
- b=Hfopw3M+MLIpcOsoCV1HXeRhU7RYWGkpURm8JQ9VEtOFvbZv1sFRzgzSbWDDFR8wK
- VG3itgdeX22HcaNX5F3lOLHErYUym3js4Yz8gVqO4gHZHjKEgMcxsnKuobRayIg+tg
- cHA3decFZxiOPoEIA7CXya0oDAVJad047wJlP9g00Rxma/B5mqNQ8eS+ggiwisbvhx
- Zhz2LfsIQw5qfV58X3hJUYOPpfrHztc24BcB7yGjUgNUkZud+cfZb1utzOqbZnt9f+
- Y1Jjn7KFh8EKLYFOSB92av6Ov6giEDen6FvHjk0TRr1kvA/EWVvGsx8gUTjXcVccx5
- L8fTWDAND0jJQ==
+ bh=jRnwdl/JAEr5Ko0D9uP2AHaG3gSCdgXS/EShQZ2spV8=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:From;
+ b=ZlLMpcX3oKzcpcBYAW8Wy9ZjRDFz2RsjL4jQDOMgJNnGyqgYGDTNJMxotwn63/6ao
+ oudg/V5cnMsZTXHZR8hL0lcnDOVtmaM5NiK2l8wuK4G3gr3WYhXEYH9gqk+0am7oE0
+ 9yiQ2fSMbq6Ryc4Axp5fm5yEIYlo3uj6W+9S86lHDDaIuYBrwQwptCbQ7YgJDq8hoh
+ FGxBowHSDhxhi14g2nfieD7TzJXC0c4xZ+7bL5kInoNb3AQOUfH87wMVXqNarD0kbq
+ mzsJjADiqwooEfIBEj2GlY6BGoHSCHXX//nMTph6Wa4Py0VqXTK6ztzU/2aeJt14Qu
+ xm99voBTQizXw==
 Received: from fli4l.lan.fli4l (p5b3a090d.dip0.t-ipconnect.de [91.58.9.13])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 5A38CA4C1176;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 5F413A4C4E0B;
  Sun, 16 Aug 2026 12:30:38 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:56640)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.5)
- (envelope-from <bernd@kuhls.net>) id 1wvY8T-000000007MY-1f84;
+ (envelope-from <bernd@kuhls.net>) id 1wvY8T-000000007MY-2OH5;
  Sun, 16 Aug 2026 10:30:38 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
 Cc: Joseph Kogut <joseph.kogut@gmail.com>,
  Romain Naour <romain.naour@gmail.com>
-Date: Sun, 16 Aug 2026 12:30:36 +0200
-Message-ID: <20260816103037.1714478-1-bernd@kuhls.net>
+Date: Sun, 16 Aug 2026 12:30:37 +0200
+Message-ID: <20260816103037.1714478-2-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260816103037.1714478-1-bernd@kuhls.net>
+References: <20260816103037.1714478-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Spamd-Bar: /
-Subject: [Buildroot] [PATCH 1/2] package/mesa-libclc: new package
+Subject: [Buildroot] [PATCH 2/2] package/{mesa3d,
+ mesa3d-headers}: bump version to 26.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,129 +99,103 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+https://lists.freedesktop.org/archives/mesa-announce/2026-August/000863.html
+"One important note for packagers is that there is now a Mesa community
+maintained libclc fork that is verified to pass the OpenCL CTS with
+Mesa/Rusticl, and will fix bugs after an upstream libclc major release
+branch goes EoL. The Mesa build system will pick it up when available,
+and fall back to upstream libclc if not. This libclc fork is not
+verified for any other usages or users of libclc outside of Mesa."
+
+This bump includes the switch to the newly introduced mesa-libclc
+package.
+
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
-Gitlab check-* pipeline passed:
-https://gitlab.com/bkuhls/buildroot/-/commits/b4ca952392ac2a057a101fe44058b9d53b437ff7
+Gitlab pipeline passed:
+https://gitlab.com/bkuhls/buildroot/-/commits/4702c71bf0f40007edb57b55ae95bdc64d8d594f
 
-Building defconfig
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ package/mesa3d/Config.in                 | 4 +---
+ package/mesa3d/mesa3d.hash               | 6 +++---
+ package/mesa3d/mesa3d.mk                 | 6 +++---
+ 4 files changed, 8 insertions(+), 10 deletions(-)
 
-BR2_PACKAGE_LLVM=y
-BR2_PACKAGE_MESA_LIBCLC=y
-
-stopped after reaching the 3h timeout on the Gitlab pipelines:
-https://gitlab.com/bkuhls/buildroot/-/pipelines/2762788072
-
- DEVELOPERS                           |  1 +
- package/Config.in                    |  1 +
- package/mesa-libclc/Config.in        | 13 +++++++++
- package/mesa-libclc/mesa-libclc.hash |  3 ++
- package/mesa-libclc/mesa-libclc.mk   | 42 ++++++++++++++++++++++++++++
- 5 files changed, 60 insertions(+)
- create mode 100644 package/mesa-libclc/Config.in
- create mode 100644 package/mesa-libclc/mesa-libclc.hash
- create mode 100644 package/mesa-libclc/mesa-libclc.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 98c9ee55d3..bcb1d54e04 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -469,6 +469,7 @@ F:	package/libzippp/
- F:	package/linux-firmware/
- F:	package/mc/
- F:	package/mesa3d/
-+F:	package/mesa-libclc/
- F:	package/minidlna/
- F:	package/mjpg-streamer/
- F:	package/mpg123/
-diff --git a/package/Config.in b/package/Config.in
-index 6058800682..5fdb3fdf25 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2270,6 +2270,7 @@ endif
- 	source "package/llvm-project/llvm/Config.in"
- 	source "package/lttng-libust/Config.in"
- 	source "package/matio/Config.in"
-+	source "package/mesa-libclc/Config.in"
- 	source "package/mpc/Config.in"
- 	source "package/mpdecimal/Config.in"
- 	source "package/mpfr/Config.in"
-diff --git a/package/mesa-libclc/Config.in b/package/mesa-libclc/Config.in
-new file mode 100644
-index 0000000000..620bfb13e8
---- /dev/null
-+++ b/package/mesa-libclc/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_MESA_LIBCLC
-+	bool "mesa-libclc"
-+	depends on BR2_PACKAGE_LLVM
-+	select BR2_PACKAGE_LLVM_AMDGPU
-+	select BR2_PACKAGE_LLVM_RTTI
-+	help
-+	  This is a fork of LLVM's libclc applying some fixes of a
-+	  known good state to be used by Mesa3D.
-+
-+	  https://gitlab.freedesktop.org/karolherbst/mesa-libclc
-+
-+comment "mesa-libclc needs llvm"
-+	depends on !BR2_PACKAGE_LLVM
-diff --git a/package/mesa-libclc/mesa-libclc.hash b/package/mesa-libclc/mesa-libclc.hash
-new file mode 100644
-index 0000000000..a03274867e
---- /dev/null
-+++ b/package/mesa-libclc/mesa-libclc.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  c77fc1104fbc2d254a48d2176a33cbec915dde9a48beda7a274f2e837b796386  mesa-libclc-22.1.8.3-git4.tar.gz
-+sha256  3c536c052db9afd997809e38785c9f2a9e54e2892330fa7c5b438e18a7413479  LICENSE.TXT
-diff --git a/package/mesa-libclc/mesa-libclc.mk b/package/mesa-libclc/mesa-libclc.mk
-new file mode 100644
-index 0000000000..62d7fef69e
---- /dev/null
-+++ b/package/mesa-libclc/mesa-libclc.mk
-@@ -0,0 +1,42 @@
-+################################################################################
-+#
-+# mesa-libclc
-+#
-+################################################################################
-+
-+MESA_LIBCLC_VERSION = 22.1.8.3
-+MESA_LIBCLC_SITE = https://gitlab.freedesktop.org/karolherbst/mesa-libclc.git
-+MESA_LIBCLC_SITE_METHOD = git
-+MESA_LIBCLC_LICENSE = Apache-2.0 with exceptions or MIT
-+MESA_LIBCLC_LICENSE_FILES = LICENSE.TXT
-+MESA_LIBCLC_DEPENDENCIES = host-clang host-llvm host-spirv-llvm-translator
-+HOST_MESA_LIBCLC_DEPENDENCIES = host-clang host-llvm host-spirv-llvm-translator
-+MESA_LIBCLC_INSTALL_STAGING = YES
-+
-+# CMAKE_*_COMPILER_FORCED=ON skips testing the tools and assumes
-+# llvm-config provided values
-+#
-+# CMAKE_*_COMPILER has to be set to the host compiler to build a host
-+# 'prepare_builtins' tool used during the build process
-+#
-+# The headers are installed in /usr/share and not /usr/include,
-+# because they are needed at runtime on the target to build the OpenCL
-+# kernels.
-+MESA_LIBCLC_CONF_OPTS = \
-+	-DCMAKE_SYSROOT="" \
-+	-DCMAKE_C_COMPILER_FORCED=ON \
-+	-DCMAKE_INSTALL_DATADIR="share" \
-+	-DCMAKE_FIND_ROOT_PATH="$(HOST_DIR)" \
-+	-DCMAKE_C_FLAGS="$(HOST_CFLAGS)" \
-+	-DCMAKE_EXE_LINKER_FLAGS="$(HOST_LDFLAGS)" \
-+	-DCMAKE_SHARED_LINKER_FLAGS="$(HOST_LDFLAGS)" \
-+	-DCMAKE_MODULE_LINKER_FLAGS="$(HOST_LDFLAGS)" \
-+	-DCMAKE_C_COMPILER="$(CMAKE_HOST_C_COMPILER)" \
-+	-DLLVM_CMAKE_DIR="$(HOST_DIR)/lib/cmake/llvm" \
-+	-DLIBCLC_CUSTOM_LLVM_TOOLS_BINARY_DIR="$(HOST_DIR)/bin"
-+
-+HOST_MESA_LIBCLC_CONF_OPTS = \
-+	-DLIBCLC_TARGETS_TO_BUILD=spirv64-mesa3d-
-+
-+$(eval $(cmake-package))
-+$(eval $(host-cmake-package))
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 0ce4b15dfc..430d78956f 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 26.1.7
++MESA3D_HEADERS_VERSION = 26.2.0
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://archive.mesa3d.org
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index e184039150..311fe3c33d 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -71,11 +71,9 @@ menuconfig BR2_PACKAGE_MESA3D_OPENCL
+ 		 BR2_PACKAGE_MESA3D_RUSTICL_SUPPORTED_DRIVER)
+ 	select BR2_PACKAGE_LLVM_RTTI
+ 	select BR2_PACKAGE_CLANG
+-	select BR2_PACKAGE_LIBCLC
++	select BR2_PACKAGE_MESA_LIBCLC
+ 	select BR2_PACKAGE_HAS_LIBOPENCL
+ if BR2_PACKAGE_MESA3D_OPENCL
+-# libclc dependency is satisfied by
+-# BR2_PACKAGE_MESA3D_LLVM
+ config BR2_PACKAGE_MESA3D_RUSTICL
+ 	bool "RustiCL"
+ 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 34ffd95e8f..d759c56047 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2026-August/000864.html
+-sha256  25e0a669e6638c3563e7be32a0a09f1888317e6eed0d047dc41d49dc8de26c7d  mesa-26.1.7.tar.xz
+-sha512  9acc75c3d6386f90cf761dfa42e72b1c36d399a6905127d18aa3eb84d665502da7c3cebead82fdbca91ad510673ba7e296b5e148602d6db7e79172d6155f3ec5  mesa-26.1.7.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2026-August/000863.html
++sha256  efd4bb08cdb7c365a812cd4e6c9202ab55b2f22cdcd13c7d6c4f9647b799a4ef  mesa-26.2.0.tar.xz
++sha512  c7c810c6958fa18eb75eea9968d84d0edd29b579d351a7f22d8c2b2b13b6e04e5b0df31dae3aa943672c792d124325bab03ccbd475a16d27267418bddbec4936  mesa-26.2.0.tar.xz
+ # License
+ sha256  0d1a0472ecc81830e75c20d59b0ea02841e3db21255e0ebad97ab682c54d6615  docs/license.rst
+ sha256  323c587d0ccf10e376f8bf9a7f31fb4ca6078105194b42e0b1e0ee2bc9bde71f  licenses/MIT
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 99ef0f5edb..a77ac8930e 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 26.1.7
++MESA3D_VERSION = 26.2.0
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://archive.mesa3d.org
+ MESA3D_LICENSE = MIT, SGI, Khronos
+@@ -52,7 +52,7 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_MESA3D_OPENCL),y)
+ MESA3D_PROVIDES += libopencl
+-MESA3D_DEPENDENCIES += clang libclc
++MESA3D_DEPENDENCIES += clang mesa-libclc
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_MESA3D_RUSTICL),y)
+@@ -350,7 +350,7 @@ HOST_MESA3D_CONF_OPTS = \
+ 	-Dvulkan-drivers=""
+ 
+ HOST_MESA3D_DEPENDENCIES = \
+-	host-libclc \
++	host-mesa-libclc \
+ 	host-libdrm \
+ 	host-llvm \
+ 	host-python-mako \
 -- 
 2.47.3
 
