@@ -4,68 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB324C5DF70
-	for <buildroot@archiver.kernel.org>; Mon, 17 Aug 2026 17:17:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3021AC5B572
+	for <buildroot@archiver.kernel.org>; Mon, 17 Aug 2026 17:50:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 622AA607C7;
-	Mon, 17 Aug 2026 17:17:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C278E60617;
+	Mon, 17 Aug 2026 17:50:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id r2taXkbayXMs; Mon, 17 Aug 2026 17:17:11 +0000 (UTC)
+ id q0CiC99ns83S; Mon, 17 Aug 2026 17:50:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5B380607C3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A69CA6063A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786987031;
-	bh=SIuvS3jSUBnXs65jRzpITYQpP+gFVLczF0RDIq949fU=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=m7xmmetD+O485SsZmHZK1H5ZTcsGzMPnV6+MByiAvHuC+wByLJ1mrwe+3C8xWtOdd
-	 d89dwXj01j2TzjZHgkZziALKspSGrfBjewruIQMBQ11Dt1L9xpcQ9Kd/plb2eT6o8d
-	 sXTdBnXXNqT7DFcVDuAGcH+bsxBdrjJeuRY8ZeuKCzS2+qrrNok/sDMgJ8wUjAPmOL
-	 b69Vv6jayjc6tYA7XfAtxEy8g35MTTiQ4Qk6kZApiwtbU/5DxPQQll6XUzq84jp32z
-	 ZQtfG+w0/bq19s/9LtU1DL4NKLRuMVDi+B38iBZ/Jjfgf4U5VtGLNSR44urbeExr6l
-	 VA9i0P6ihSxBw==
+	s=default; t=1786989006;
+	bh=dXI1EVhpAzSy3IS0GAp7+8qWc8V3bcpCtHiCV/k26TY=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=sWWVVgSdkV3h8UZMaGQldFaOyazkGZZZachuYlrTKdor5fhoYaUKpn7w9Jsfpw133
+	 iGCwIXLI+fbVwk8sZnLFa47q2nKDSo6FTXqSYTJZwp8+7Jwbf74aeuQwp4gnH5YQru
+	 sVkd1BrmEAwCnS/Acjh9Fx2C1EhX3VxJ6/hS5t4Nojb2Iy8ep9dfBgbJioQR/NrE4k
+	 mW0QSoJ8YoSB6ksVsB2YOEPNCC37Kxuqy7qcQ7fwRY0LA9gAbI0SDtTLK88hX8CG2P
+	 cSgizx6PYLU0PrGGph4dPAyrkdHA7YiVbu2ECVwdqZ88ea+w5Frp41GAC2gFnywYQe
+	 TGJivy1n58i8A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5B380607C3;
-	Mon, 17 Aug 2026 17:17:11 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id A6EF1282
- for <buildroot@buildroot.org>; Mon, 17 Aug 2026 17:17:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A69CA6063A;
+	Mon, 17 Aug 2026 17:50:06 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id BA904194
+ for <buildroot@buildroot.org>; Mon, 17 Aug 2026 17:50:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 989D9405CB
- for <buildroot@buildroot.org>; Mon, 17 Aug 2026 17:17:10 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id ACBB16063A
+ for <buildroot@buildroot.org>; Mon, 17 Aug 2026 17:50:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gTLZMZ5AzjAF for <buildroot@buildroot.org>;
- Mon, 17 Aug 2026 17:17:10 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A025840575
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A025840575
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A025840575
- for <buildroot@buildroot.org>; Mon, 17 Aug 2026 17:17:09 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id B45942003B4;
- Mon, 17 Aug 2026 19:17:04 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Mon, 17 Aug 2026 19:17:04 +0200
-MIME-Version: 1.0
-Date: Mon, 17 Aug 2026 19:17:04 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20260816202952.3978163-1-bernd@kuhls.net>
-References: <20260816202952.3978163-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.17
-Message-ID: <b78e979b4a57908e2d84b83a4cfb6256@free.fr>
-X-Sender: ju.o@free.fr
-Subject: Re: [Buildroot] [PATCH 1/1] package/linux-firmware: bump version to
- 20260810
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eBBxlKbzkXse for <buildroot@buildroot.org>;
+ Mon, 17 Aug 2026 17:50:03 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B610560617
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id B610560617
+ for <buildroot@buildroot.org>; Mon, 17 Aug 2026 17:50:03 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 2289B8D32C; Mon, 17 Aug 2026 17:49:12 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 17 Aug 2026 19:45:38 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: ec8f1b03e61e865a93c9253b1a57431cfa573f1d
+X-Git-Newrev: 9e9110bf23a86d1e312e23fc19921cd911f53861
+X-Patchwork-Hint: ignore
+Message-Id: <20260817174912.2289B8D32C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/go: security bump to version 1.26.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -79,28 +70,186 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 16/08/2026 22:29, Bernd Kuhls wrote:
-> Mass-update of license file paths due to upstream commit
-> https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/commit/?id=1221848f23764faab10ff63bc5d9ea5d5b39a506
-> "Move firmware licenses to a LICENSES/ directory"
-> 
-> Updated the hash of the WHENCE file, due to firmware additions and
-> firmware changes, but no changes to the redistribution/licensing
-> conditions.
-> 
-> Removed mts_mt9234mu.fw & mts_mt9234zba.fw from the
-> BR2_PACKAGE_LINUX_FIRMWARE_USB_SERIAL_TI option due to their upstream
-> removal:
-> https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/commit/?id=1e6faaf837aea079582214c9c1382e5476175576
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/9e9110bf23a86d1e312e23fc19921cd911f53861
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Applied to master, thanks.
+Fixes the following security issues:
+
+ - x/mod/sumdb/tlog: fix transparency log tile verification bypass
+
+   A malicious GOPROXY was previously capable of forging up to two sumdb
+   tiles that allow for a requested module to bypass the GOSUMDB check and
+   persist attacker-controlled module content to a local Go module cache.
+
+   This attack allows for a malicious GOPROXY to serve malicious module
+   content that cannot be detected by evaluating the transparency log.
+
+   All tiles are now correctly verified against their parents.
+
+   In order to determine if you have been affected:
+
+   rm -r go.sum go.work.sum vendor/ && go mod tidy
+
+   Thanks to Filippo Valsorda (Geomys) for reporting this issue.
+
+   This is CVE-2026-56865 and Go issue https://go.dev/issue/80744.
+
+ - x/mod/sumdb: ignore unrelated, unauthenticated hashes in Lookup
+
+   A malicious GOSUMDB was capable of serving arbitrary module content not
+   contained within the transparency log.
+
+   This attack allows for a coordinating GOPROXY and GOSUMDB to serve a
+   client malicious module content that cannot be detected by evaluating
+   the transparency log.
+
+   In order to determine if you have been affected:
+
+   rm -r go.sum go.work.sum vendor/ && go mod tidy
+
+   Thanks to mundur for reporting this issue.
+
+   This is CVE-2026-56864 and Go issue https://go.dev/issue/80745.
+
+ - encoding/xml: add recursion depth guard during decode
+
+   Previously, DecodeElement would reset the depth counter causing it to
+   never fire; this could lead to stack exhaustion.
+
+   This is CVE-2026-56859 and Go issue https://go.dev/issue/80481.
+
+ - net/http: apply ReadHeaderTimeout when doing unencrypted HTTP/2 check
+
+   When a server is configured to support unencrypted HTTP/2, it reads a few
+   bytes from each new connection to see if they contain the HTTP/2 client
+   preface.  Previously, this was being done with no timeout applied.
+   ReadHeaderTimeout is now applied for this.
+
+   This is CVE-2026-56853 and Go issue https://go.dev/issue/80205.
+
+ - net/url: avoid quadratic complexity in resolvePath
+
+   Previously, resolving relative paths containing parent directory (..)
+   segments performed string conversions and buffer rewrites on each step,
+   resulting in quadratic time complexity and high memory allocation
+   overhead.
+
+   Now, path resolution operates on a byte buffer using index-based
+   backtracking for ..  segments, eliminating the quadratic time complexity
+   and significantly reducing memory allocations.
+
+   This is CVE-2026-56860 and Go issue https://go.dev/issue/80494.
+
+ - golang.org/x/net/dns/dnsmessage: panic when parsing invalid SVCB record
+
+   Parsing an invalid SVCB or HTTPS RR can panic when the size of a
+   parameter value overflows the message buffer.
+
+   Thanks to Mundur (https://github.com/M0nd0R) for reporting this issue.
+
+   This is CVE-2026-46600 and Go issue https://go.dev/issue/79795.
+
+ - crypto/tls: limit handshake messages we are willing to accept post-handshake
+
+   Previously, we always counted handshake messages, such as KeyUpdate, as
+   state-advancing, regardless of whether a handshake has been completed or
+   not.  As a result, a malicious client can keep sending KeyUpdate messages
+   to force the server to keep performing key derivation operations
+   indefinitely.
+
+   Thanks to Qi Deng of Aurascape.ai for reporting this issue.
+
+   This is CVE-2026-56862 and Go issue https://go.dev/issue/80528.
+
+ - html/template: fix Javascript regexp context tracking
+
+   Previously, pathological inputs could close an unescaped / early,
+   allowing for attack-controlled data to inject arbitrary content,
+   potentially leading to XSS.
+
+   Thanks to Ali Sherif for reporting this issue.
+
+   This is CVE-2026-56858 and Go issue https://go.dev/issue/80435.
+
+ - x/net/idna: failure to reject ASCII-only Punycode-encoded labels
+
+   The ToASCII and ToUnicode functions incorrectly accepted Punycode-encoded
+   labels that decode to an ASCII-only label.  For example,
+   ToUnicode("xn--example-.com") incorrectly returned the name "example.com"
+   rather than an error.
+
+   The idna package implements the processing algorithm from UTS 46.  Older
+   versions of UTS 46 included a specification bug which permitted multiple
+   ASCII labels to decode to the same Unicode label.  UTS 46 revision 33
+   fixed the specification bug.  The idna package now implements the updated
+   specification.
+
+   This behavior can lead to privilege escalation in programs using the idna
+   package.  For example, a program which performs privilege checks on the
+   ASCII hostname may reject "example.com" but permit "xn--example-.com".
+   If that program subsequently converts the ASCII hostname to Unicode, it
+   will inadvertently permits access to the Unicode name "example.com".
+
+   Thanks to KC1zs4 (https://github.com/KC1zs4) for reporting this issue.
+
+   This is CVE-2026-39821 and Go issue https://go.dev/issue/78760.
+
+ - encoding/asn1: enforce maximum recursion depth
+
+   Enforce a recursion limit in Unmarshal to prevent stack exhaustion when
+   parsing deeply-nested, recursive structures.
+
+   Thanks to Marwan Atia (marwansamir688@gmail.com) for reporting this issue.
+
+   This is CVE-2026-33818 and Go issue https://go.dev/issue/80405.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/go/go.hash | 14 +++++++-------
+ package/go/go.mk   |  2 +-
+ 2 files changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/package/go/go.hash b/package/go/go.hash
+index 6c9c20be69..1c43cabf7b 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,9 +1,9 @@
+ # sha256 checksum from https://go.dev/dl/
+-sha256  495be4bc87176ac567392e5b4116abd98466d33d7b49d41e764ccc6976b2dc42  go1.26.5.src.tar.gz
+-sha256  88c162b204e6eefcc32499453b492e80209f4a4c78c33092636901c540fb0d05  go1.26.5.linux-386.tar.gz
+-sha256  5c2c3b16caefa1d968a94c1daca04a7ca301a496d9b086e17ad77bb81393f053  go1.26.5.linux-amd64.tar.gz
+-sha256  fe4789e92b1f33358680864bbe8704289e7bb5fc207d80623c308935bd696d49  go1.26.5.linux-arm64.tar.gz
+-sha256  6dae9edab81c13bccf962dec15f1fd2ec26c14a6821b4d2c92dab4130c289d7a  go1.26.5.linux-armv6l.tar.gz
+-sha256  c5d60e2b303bb612f20cd82786594b64874e73b35134025e27d3390bf284ae43  go1.26.5.linux-ppc64le.tar.gz
+-sha256  09ce3c504c0323968b75a717244dca4f25cd4cf0443e5ff6bc0bfa74add89fa7  go1.26.5.linux-s390x.tar.gz
++sha256  a0721c54c688901448d77ad9b3ec7ea7c474730755ff891382e92ecb93ff2cb1  go1.26.6.src.tar.gz
++sha256  f09a71029fc5cd2940fbe36b0eb1fb2d8f3407cd6adb6b7b4de3eaf04007f8c4  go1.26.6.linux-386.tar.gz
++sha256  708effb774be8237570d0add163225abbdfaf4fca28b2611df167beba4feef89  go1.26.6.linux-amd64.tar.gz
++sha256  d0507e9e9d7fe012aae570108cbd76c15de879e17130ab8cb90d4d7445cb1f2e  go1.26.6.linux-arm64.tar.gz
++sha256  e1379a2fe77bd30fa29833074388247e7c65416e09279f746f20de2d5cf4dfea  go1.26.6.linux-armv6l.tar.gz
++sha256  232b65543a42eda95df6a63f76235c1795bb535eba5c74e509faec71bc648388  go1.26.6.linux-ppc64le.tar.gz
++sha256  958757933d38172dd544085d253c8738cf09793d24c8bc0422e5e1e1fffa4fde  go1.26.6.linux-s390x.tar.gz
+ sha256  911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 265d3aa880..df1023c19b 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -7,7 +7,7 @@
+ # When bumping this to 1.27 (or beyond), remove the workaround for
+ # upstream issue https://github.com/golang/go/issues/77436, below
+ # (i.e. revert the commit adding these lines).
+-GO_VERSION = 1.26.5
++GO_VERSION = 1.26.6
+ 
+ HOST_GO_GOPATH = $(HOST_DIR)/share/go-path
+ HOST_GO_HOST_CACHE = $(HOST_DIR)/share/host-go-cache
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
