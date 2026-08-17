@@ -4,80 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC523C5B572
-	for <buildroot@archiver.kernel.org>; Mon, 17 Aug 2026 16:30:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B4E5C5B572
+	for <buildroot@archiver.kernel.org>; Mon, 17 Aug 2026 17:07:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8FD5D40765;
-	Mon, 17 Aug 2026 16:30:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id ED5ED407D0;
+	Mon, 17 Aug 2026 17:07:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bbw4TLlLHBr9; Mon, 17 Aug 2026 16:30:40 +0000 (UTC)
+ id eEc88Jwo-dHP; Mon, 17 Aug 2026 17:07:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 831054076F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AB576406B9
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786984240;
-	bh=nyjjOrmcpYQkHHQPY8GKCxZMf729b9C/mOk295HHbfg=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=sSGCkFDPef2VHaUIjbOsMNNRePzXNaXT3+DlyxpyEkRshTTWn3y+UO7KoH0sXV+t/
-	 IofQxXpDp4J9xc4MHMu4+gUhoZc6ER/dJ1LLtlp8/PsZYJIit9MmCgMHKCeyVrNMVV
-	 i3DtaGYPKa05QkhZh1vst0ucNl1lvsOL6bQ9ieRDQV6FKzsbvSu1AHonSl4uVQ1Mpt
-	 z0yTv/m6DO8mtHGTCZ6SjwOvPiew5M73zLRBcOGqlfdSPzYfTw+Ep3fq5dNxAY5Wjd
-	 d8foFzqJ2iZw5nu9KZSGuXVFF3jcxUnOksksXUlFsN6nOYmbUwUFPLF0KvbskVlULf
-	 eqIArD3gbD3ew==
+	s=default; t=1786986456;
+	bh=rQNeICqsCAMherU4+afLpG7znnmsf8D/EpYuuOcfhEI=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=i0zxyEd7/Kc0k3Gy/mkuaLWM+OST1u9eFcKolnxF5hmNpS3cMna0SnogXsiAke5cF
+	 wY6/Hhjr1dVpJLTdPMap22IpOcdmJk8UoEcH8dsbzdNOB7jckp9p9+8lir2cUWi8KJ
+	 3nOiMle640z6ryws7h3Si3yO/zCATdbE4AGxW+SNuWZf3Q06Lte4XnfRizfyB2B116
+	 mSGTLWfJTpMORiqngTR0VRdRPiUBqHTZC00vL5UfSPdqnmjdOXBmahrtS66q8NXKUt
+	 pn6+A70O6gI6mLZz6cCUDXMjCOtOuD1VP9Ta1UBbZfF3oSUULqBxsZny0/k0j2cgRZ
+	 70hIMgT3ApbDw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 831054076F;
-	Mon, 17 Aug 2026 16:30:40 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id E41482EF
- for <buildroot@buildroot.org>; Mon, 17 Aug 2026 16:30:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AB576406B9;
+	Mon, 17 Aug 2026 17:07:36 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 62B71337
+ for <buildroot@buildroot.org>; Mon, 17 Aug 2026 17:07:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D57DE4076F
- for <buildroot@buildroot.org>; Mon, 17 Aug 2026 16:30:38 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5443380FFD
+ for <buildroot@buildroot.org>; Mon, 17 Aug 2026 17:07:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id un6PZ_oGpuGH for <buildroot@buildroot.org>;
- Mon, 17 Aug 2026 16:30:38 +0000 (UTC)
-X-Greylist: delayed 1229 seconds by postgrey-1.37 at util1.osuosl.org;
- Mon, 17 Aug 2026 16:30:36 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 2E23A40765
-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none) header.from=igalia.com
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2E23A40765
-Authentication-Results: smtp4.osuosl.org; dkim=pass (2048-bit key,
- unprotected) header.d=igalia.com header.i=@igalia.com header.a=rsa-sha256
- header.s=20170329 header.b=UJYTADxV
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=213.97.179.56;
- helo=fanzine2.igalia.com; envelope-from=aperez@igalia.com; receiver=<UNKNOWN> 
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2E23A40765
- for <buildroot@buildroot.org>; Mon, 17 Aug 2026 16:30:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com; 
- s=20170329;
- h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:
- Cc:To:From:From:Reply-To; bh=edxqNuDQWtiw0ngksWTkIhMvHK6gvl+32nQtJouY5WY=; b=
- UJYTADxVwG+T1+EnAFAqzELZnd4a2IqCcz3nMebgbXTblCRtDRPBtr38bEPeMX/rghR2gFdBTgIEH
- bt3bRZozWLGi6NCRIuYfHDZs2fVA0bCZFl+RsOHdy1Cbv/dioDbtdy5MQnMmrfpasG1PC6uwdOzfP
- QdqOqwKbC6nvHhHn78e+XGYwerr1UpnZvVirbGEEtsUjMjgGmfYO1xgZAvDrvKnAoDaBYyyD3ba5Q
- d/KBtxCjktVyzBlRIIuHLPt2ZQwsUKKxsCUnT/WT6K1TQtOu4412f//JERYVuW6R2smutwTTcNvDb
- tSgx15JFcJ9QDWyZ5/dY0rxcbZaT4wFMRg==;
-Received: from 68.171.94.90.dynamic.jazztel.es ([90.94.171.68] helo=kodama)
- by fanzine2.igalia.com with esmtpsa 
- (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
- id 1wvzuW-004jv8-E3; Mon, 17 Aug 2026 18:10:04 +0200
-Received: from localhost (kodama [local])
- by kodama (OpenSMTPD) with ESMTPA id 4b36812d;
- Mon, 17 Aug 2026 16:10:04 +0000 (UTC)
-From: Adrian Perez de Castro <aperez@igalia.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oiQCAVKlMugY for <buildroot@buildroot.org>;
+ Mon, 17 Aug 2026 17:07:34 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 355BB81004
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 355BB81004
+ for <buildroot@buildroot.org>; Mon, 17 Aug 2026 17:07:34 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 7837D8CA20; Mon, 17 Aug 2026 17:06:42 +0000 (UTC)
 To: buildroot@buildroot.org
-Cc: Adrian Perez de Castro <aperez@igalia.com>
-Date: Mon, 17 Aug 2026 18:10:02 +0200
-Message-ID: <20260817161004.932094-1-aperez@igalia.com>
-X-Mailer: git-send-email 2.55.0
-MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/libpsl: bump to version 0.23.3
+Date: Mon, 17 Aug 2026 18:52:58 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 335a57525f28425fa076e1b2098679dc2211f8e4
+X-Git-Newrev: de14a2ab51b22edbde4bdae03670932ee3918610
+X-Patchwork-Hint: ignore
+Message-Id: <20260817170642.7837D8CA20@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libnl: fix build with kernel < 4.15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -89,61 +68,183 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============1352306670514965767=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The most relevant change is included in 0.23.0, which fixed handling
-of trailing dots (so e.g. "co.uk" and "co.uk." are treated as the same
-suffix). Otherwise, it's mostly cleanups and support for non-Linux
-platforms:
+--===============1352306670514965767==
+Content-Type: text/plain
 
-  https://github.com/rockdaboot/libpsl/releases/tag/0.22.0
-  https://github.com/rockdaboot/libpsl/releases/tag/0.23.0
-  https://github.com/rockdaboot/libpsl/releases/tag/0.23.2
-  https://github.com/rockdaboot/libpsl/releases/tag/0.23.3
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/de14a2ab51b22edbde4bdae03670932ee3918610
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-The changed hash for the COPYING file does not imply a license change:
-it is unchanged, but the copyright year was removed in favor of a note
-telling to check the Git history.
+Buildroot commit 0f2e9cc8784715bdf18e72c433fe9bece4537f85 bumped the
+package from 3.11.0 to 3.12.0. This bump includes upstream commit
+https://github.com/thom311/libnl/commit/9f8945251da404fb59778edc74be5775091e1f44
+which added the usage of enums not present in older kernel versions.
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+The Gitlab pipelines caught the build errors with the defconfig
+bootlin-aarch64-glibc-old:
+
+lib/route/nh_encap_ila.c:50:19: error: ‘ILA_ATTR_IDENT_TYPE’ undeclared
+ (first use in this function)
+lib/route/nh_encap_ila.c:53:19: error: ‘ILA_ATTR_HOOK_TYPE’ undeclared
+ (first use in this function)
+
+Both enums were added to the Linux kernel in version 4.15:
+https://github.com/torvalds/linux/commit/fddb231ebe647749782a9ebf11106a81f7168ba7
+https://github.com/torvalds/linux/commit/70d5aef48a421a68bd9d1bf8f8267af406681580
+
+Add upstream commit to fix the problem.
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/libpsl/libpsl.hash | 4 ++--
- package/libpsl/libpsl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...-include-linux-include-linux-header-ila.h.patch | 107 +++++++++++++++++++++
+ package/libnl/libnl.mk                             |   4 +
+ 2 files changed, 111 insertions(+)
 
-diff --git a/package/libpsl/libpsl.hash b/package/libpsl/libpsl.hash
-index caf760c496..4d9e796395 100644
---- a/package/libpsl/libpsl.hash
-+++ b/package/libpsl/libpsl.hash
-@@ -1,6 +1,6 @@
- # Locally generated
--sha256  1dcc9ceae8b128f3c0b3f654decd0e1e891afc6ff81098f227ef260449dae208  libpsl-0.21.5.tar.gz
-+sha256  93941f85a1e7bd593fa94f299233cb5dfc91cd144fd9a78a6ceb75001c5b03be  libpsl-0.23.3.tar.gz
+diff --git a/package/libnl/0002-include-linux-include-linux-header-ila.h.patch b/package/libnl/0002-include-linux-include-linux-header-ila.h.patch
+new file mode 100644
+index 0000000000..3270366dac
+--- /dev/null
++++ b/package/libnl/0002-include-linux-include-linux-header-ila.h.patch
+@@ -0,0 +1,107 @@
++From 49f8b364c9a6f6db4ab535f999386fecfa38241b Mon Sep 17 00:00:00 2001
++From: Thomas Haller <thom311@gmail.com>
++Date: Thu, 11 Dec 2025 22:27:07 +0100
++Subject: [PATCH] include/linux: include linux header "ila.h"
++
++Taken from v6.18 (7d0a66e4bb9081d75c82ec4957c50034cb0ea449).
++
++https://github.com/thom311/libnl/issues/447
++
++Upstream: https://github.com/thom311/libnl/commit/49f8b364c9a6f6db4ab535f999386fecfa38241b
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ Makefile.am                       |  1 +
++ include/linux-private/linux/ila.h | 68 +++++++++++++++++++++++++++++++
++ 2 files changed, 69 insertions(+)
++ create mode 100644 include/linux-private/linux/ila.h
++
++diff --git a/Makefile.am b/Makefile.am
++index 2bd0c06e..e63e3112 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -278,6 +278,7 @@ noinst_HEADERS = \
++ 	include/linux-private/linux/if_packet.h \
++ 	include/linux-private/linux/if_tunnel.h \
++ 	include/linux-private/linux/if_vlan.h \
+++	include/linux-private/linux/ila.h \
++ 	include/linux-private/linux/in.h \
++ 	include/linux-private/linux/in6.h \
++ 	include/linux-private/linux/in_route.h \
++diff --git a/include/linux-private/linux/ila.h b/include/linux-private/linux/ila.h
++new file mode 100644
++index 00000000..6a6c97cf
++--- /dev/null
+++++ b/include/linux-private/linux/ila.h
++@@ -0,0 +1,68 @@
+++/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+++/* ila.h - ILA Interface */
+++
+++#ifndef _LINUX_ILA_H
+++#define _LINUX_ILA_H
+++
+++/* NETLINK_GENERIC related info */
+++#define ILA_GENL_NAME		"ila"
+++#define ILA_GENL_VERSION	0x1
+++
+++enum {
+++	ILA_ATTR_UNSPEC,
+++	ILA_ATTR_LOCATOR,			/* u64 */
+++	ILA_ATTR_IDENTIFIER,			/* u64 */
+++	ILA_ATTR_LOCATOR_MATCH,			/* u64 */
+++	ILA_ATTR_IFINDEX,			/* s32 */
+++	ILA_ATTR_DIR,				/* u32 */
+++	ILA_ATTR_PAD,
+++	ILA_ATTR_CSUM_MODE,			/* u8 */
+++	ILA_ATTR_IDENT_TYPE,			/* u8 */
+++	ILA_ATTR_HOOK_TYPE,			/* u8 */
+++
+++	__ILA_ATTR_MAX,
+++};
+++
+++#define ILA_ATTR_MAX		(__ILA_ATTR_MAX - 1)
+++
+++enum {
+++	ILA_CMD_UNSPEC,
+++	ILA_CMD_ADD,
+++	ILA_CMD_DEL,
+++	ILA_CMD_GET,
+++	ILA_CMD_FLUSH,
+++
+++	__ILA_CMD_MAX,
+++};
+++
+++#define ILA_CMD_MAX	(__ILA_CMD_MAX - 1)
+++
+++#define ILA_DIR_IN	(1 << 0)
+++#define ILA_DIR_OUT	(1 << 1)
+++
+++enum {
+++	ILA_CSUM_ADJUST_TRANSPORT,
+++	ILA_CSUM_NEUTRAL_MAP,
+++	ILA_CSUM_NO_ACTION,
+++	ILA_CSUM_NEUTRAL_MAP_AUTO,
+++};
+++
+++enum {
+++	ILA_ATYPE_IID = 0,
+++	ILA_ATYPE_LUID,
+++	ILA_ATYPE_VIRT_V4,
+++	ILA_ATYPE_VIRT_UNI_V6,
+++	ILA_ATYPE_VIRT_MULTI_V6,
+++	ILA_ATYPE_NONLOCAL_ADDR,
+++	ILA_ATYPE_RSVD_1,
+++	ILA_ATYPE_RSVD_2,
+++
+++	ILA_ATYPE_USE_FORMAT = 32, /* Get type from type field in identifier */
+++};
+++
+++enum {
+++	ILA_HOOK_ROUTE_OUTPUT,
+++	ILA_HOOK_ROUTE_INPUT,
+++};
+++
+++#endif /* _LINUX_ILA_H */
++-- 
++2.47.3
++
+diff --git a/package/libnl/libnl.mk b/package/libnl/libnl.mk
+index 2dcb594141..5b79ea24a1 100644
+--- a/package/libnl/libnl.mk
++++ b/package/libnl/libnl.mk
+@@ -13,6 +13,10 @@ LIBNL_CPE_ID_VALID = YES
+ LIBNL_INSTALL_STAGING = YES
+ LIBNL_DEPENDENCIES = host-bison host-flex host-pkgconf
  
- # Hashes for license files:
--sha256  322392e6001b2b3b0fca705dc9f11f26e12441188ecde50eb1d22909980b2925  COPYING
-+sha256  e7c9f0d8498d28a360a7e8293ea70fd7bd952955b636938322c13d60a03b5a45  COPYING
- sha256  1d7f52747a9169751cdf2641a8299c0098e9ecdf9429296ffd55bdb14c9ed5b3  src/LICENSE.chromium
-diff --git a/package/libpsl/libpsl.mk b/package/libpsl/libpsl.mk
-index d1a12f864c..6e7300529e 100644
---- a/package/libpsl/libpsl.mk
-+++ b/package/libpsl/libpsl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
++# 0002-include-linux-include-linux-header-ila.h.patch
++LIBNL_AUTORECONF = YES
++HOST_LIBNL_AUTORECONF = YES
++
+ HOST_LIBNL_DEPENDENCIES = host-bison host-flex host-pkgconf
  
--LIBPSL_VERSION = 0.21.5
-+LIBPSL_VERSION = 0.23.3
- LIBPSL_SITE = https://github.com/rockdaboot/libpsl/releases/download/$(LIBPSL_VERSION)
- LIBPSL_LICENSE = MIT, BSD-3-Clause
- LIBPSL_LICENSE_FILES = COPYING src/LICENSE.chromium
--- 
-2.55.0
+ ifeq ($(BR2_PACKAGE_LIBNL_TOOLS),y)
+
+--===============1352306670514965767==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1352306670514965767==--
