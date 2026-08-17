@@ -4,77 +4,77 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37CF7C5DF6D
-	for <buildroot@archiver.kernel.org>; Mon, 17 Aug 2026 03:18:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70584C5B572
+	for <buildroot@archiver.kernel.org>; Mon, 17 Aug 2026 03:27:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8B63B6060E;
-	Mon, 17 Aug 2026 03:18:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 22F8160611;
+	Mon, 17 Aug 2026 03:27:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6QYadtdMQSvW; Mon, 17 Aug 2026 03:18:36 +0000 (UTC)
+ id zUVo2xnCEh9N; Mon, 17 Aug 2026 03:27:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EA539606B1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4DF6060632
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786936716;
-	bh=w16Wp0HF4biJuJN88JoITuopON+zxJNb16NSEaot/ic=;
+	s=default; t=1786937261;
+	bh=ELlCJ3KuqJcEETqhYvk1v5kYsCkqEZ30m2RgTU4/3dM=;
 	h=Date:From:To:Cc:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=G2r9e8yUQFVZSSoz6vNHa8VAu9RdF7gYiDOg97ZujHE1xH/6DYieA/6s3+liBZrer
-	 1r+hEz6dwta1WRg/xPWD8C32jDOtY1gaEvyYoMcdKL/ZYJ7wRveviYc2He4RS8xXp4
-	 vhRl6iqazvSTNrpanNivA922SnTwnlBrcNZFsRwOARSi1pdahZN30KWalXYZHkVwpk
-	 d8z4S6jx+kmOJOZl/6bv+PJ2EFJB+DPZKld7W221LqpgnzAkEeThEhYMuquftSgG6Y
-	 tebkeLzuXCrHvchVsalsQ5sZvUxiT+glb2bJj3UPLKk95Tuv1Q7xZnFIUrBM+nvCex
-	 ICPEiw/i4Vl3A==
+	b=cPg2wj5Bqi/9LgYt2Rp8E9109StMXifCz4Qp/ET/EHMgjs9aY98Z4wjupkLK2V5pi
+	 9zQpz3wP/o3Acb/XxDy+46BnoM0GzjEyrNG6UI2AyI3F9TZmMji4Nre26D/ibLyyhK
+	 W876iCJRPix/wYkBSFh4oEVknk+347FeMmTCvr6E0dTmLyZfCmm22bJq++2j+F8e+h
+	 9yQjVnLKwiBND/M8mbaOCEJbhI/MyH8gcokAs93rjFIVGTk6rrVIqtl+dVQ337ZMdd
+	 wGejq60YW6hOdqKpLAoMklAaICi52yEHxlLKc/jAAILx1RyDadxh5X2K6WZBiv++wu
+	 92bnIgV/0hxsw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EA539606B1;
-	Mon, 17 Aug 2026 03:18:35 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 905242EF
- for <buildroot@buildroot.org>; Mon, 17 Aug 2026 03:18:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4DF6060632;
+	Mon, 17 Aug 2026 03:27:41 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 86722336
+ for <buildroot@buildroot.org>; Mon, 17 Aug 2026 03:27:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8279F60611
- for <buildroot@buildroot.org>; Mon, 17 Aug 2026 03:18:33 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 840FC60632
+ for <buildroot@buildroot.org>; Mon, 17 Aug 2026 03:27:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id heOR83E5Dk1x for <buildroot@buildroot.org>;
- Mon, 17 Aug 2026 03:18:32 +0000 (UTC)
+ id 1tp3KW6lC4AK for <buildroot@buildroot.org>;
+ Mon, 17 Aug 2026 03:27:39 +0000 (UTC)
 Received-SPF: None (mailfrom) identity=mailfrom; client-ip=176.9.89.163;
  helo=serv15.avernis.de; envelope-from=br025@umbiko.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org CF4166060E
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org CA55760611
 Authentication-Results: smtp3.osuosl.org;
  dmarc=none (p=none dis=none) header.from=umbiko.net
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CF4166060E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CA55760611
 Authentication-Results: smtp3.osuosl.org; dkim=pass (1024-bit key,
  unprotected) header.d=umbiko.net header.i=@umbiko.net header.a=rsa-sha256
- header.s=mail header.b=QngD81mQ
+ header.s=mail header.b=LylxjRnv
 Received: from serv15.avernis.de (serv15.avernis.de [176.9.89.163])
- by smtp3.osuosl.org (Postfix) with ESMTPS id CF4166060E
- for <buildroot@buildroot.org>; Mon, 17 Aug 2026 03:18:30 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id CA55760611
+ for <buildroot@buildroot.org>; Mon, 17 Aug 2026 03:27:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=umbiko.net; s=mail;
- t=1786936706; bh=ZkGNUAZGIKT+UfGEAMU4Uz4Qcy+7yzc0vETWFW+QZCk=;
+ t=1786937256; bh=hbOohFSpJjAX6uNk20OMGTpLz2al08SXMVLPjyKi6uo=;
  h=Date:From:To:Cc:Subject:In-Reply-To:References;
- b=QngD81mQ+ijNTaihT1lW7yHCd+Qc3BLnB6CtL9FKCHHu7ibbSUlrpxTkCd1WSd9D+
- z39709OdudxwhXlxgfBDbUOOe1DgTaR39JpUkvg6E/x6XonCnkQZYHuTsDdpf1cdZe
- XjgNeETAbj9kl3SPJtOKMgC90Hji+nsLsBvyOz30=
-Received: by serv15.avernis.de (Postfix) with ESMTPSA id A383ABDE078D;
- Mon, 17 Aug 2026 05:18:26 +0200 (CEST)
+ b=LylxjRnvZZmL7wPUrmJVUdoDx2xDiPETckf0LOAO22hsMwxtBhwxN4xKyv9NWSZaK
+ ia+XC1z3nkFWIlbOCXujW+3ll+UUU6poC9ugdAugKMumWoJcD0P4FFYUVGiksVni7X
+ mFLVLcDUS9wDTGKWp5pO96b2YKjYC5VRtiRwvqPU=
+Received: by serv15.avernis.de (Postfix) with ESMTPSA id BBF4FBDE0F0B;
+ Mon, 17 Aug 2026 05:27:36 +0200 (CEST)
 MIME-Version: 1.0
-Date: Mon, 17 Aug 2026 03:18:26 +0000
+Date: Mon, 17 Aug 2026 03:27:36 +0000
 From: Andreas Ziegler <br025@umbiko.net>
 To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: buildroot@buildroot.org, Marcus Hoffmann <buildroot@bubu1.eu>
-In-Reply-To: <aoCchJJvG9qP4NAs@windsurf>
+In-Reply-To: <aoC_d9SXLJGYRqR4@windsurf>
 References: <20260709110822.305873-1-br025@umbiko.net>
- <20260709110822.305873-2-br025@umbiko.net> <aoCchJJvG9qP4NAs@windsurf>
-Message-ID: <c696334dc51a1599e864f7104f5a9eb9@umbiko.net>
+ <20260709110822.305873-3-br025@umbiko.net> <aoC_d9SXLJGYRqR4@windsurf>
+Message-ID: <e35f8cc7da4cd9603ae104e957795646@umbiko.net>
 X-Sender: br025@umbiko.net
 X-Virus-Scanned: clamav-milter 1.4.3 at serv15.avernis.de
 X-Virus-Status: Clean
-Subject: Re: [Buildroot] [PATCH v2 01/11] package/mpd: install provided
- sample configuration file as mpd.conf
+Subject: Re: [Buildroot] [PATCH v2 02/11] package/mpd: remove duplicated
+ dependencies from sub-options
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -91,93 +91,41 @@ Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Thomas, Everyone
+Hi Thomas, Everyone,
 
-Thank you for the review.
-
-On 2026-08-15 17:08, Thomas Petazzoni wrote:
+On 2026-08-15 19:37, Thomas Petazzoni wrote:
 > Hello Andreas,
 > 
-> On Thu, Jul 09, 2026 at 01:08:05PM +0200, Andreas Ziegler wrote:
->> The configuration file supplied by Buildroot is only a sample; it will 
->> not
->> start MPD on a default installation. Usually a custom mpd.conf is 
->> supplied
->> in a rootfs overlay.
+> Thanks for your patch!
+> 
+> On Thu, Jul 09, 2026 at 01:08:06PM +0200, Andreas Ziegler wrote:
+>> After various updates since version 0.20, most dependencies placing
+>> restrictions on sub-components are now superseded by restrictions 
+>> placed on
+>> MPD itself. Example: io_uring needs kernel headers > 5.1; MPD needs 
+>> kernel
+>> headers > 5.6.
 >> 
->> Drop the Buildroot configuration file and install the sample supplied 
->> by
->> MPD instead, it is more complete, contains useful examples and is 
->> updated
->> regularly.
+>> Remove dependencies from sub-options if they are already imposed on 
+>> MPD.
 >> 
 >> Signed-off-by: Andreas Ziegler <br025@umbiko.net>
 > 
-> I am not conviced by this change. Indeed, doc/mpdconf.example in the
-> mpd code base is basically almost entirely commented out. The options
-> that are set by our package/mpd/mpd.conf are not set by
-> doc/mpdconf.example (like log_file, music_directory, etc.).
+> Actually the general policy in Buildroot is somewhat the opposite of
+> what you're proposing here, even though I admit our general policy may
+> not be applied anywhere.
 
-Reason for switching was just because the Buildroot configuration does 
-not start mpd, due to a missing output section [1]. Rather than fix it I 
-would like to switch to a more complete example.
+OK, if this is the general policy, I will just drop this change.
 
-It is not more than an example, since a working mpd instance needs a 
-custom configuration file supplied via overlay or post-build script, 
-there are too many use cases and possible hard- and software layouts. 
-The default script would normally never be used, unless someone just 
-started to add and configure mpd. A highly complete and commented 
-example would definitely help. It is also kept up-to-date automatically.
-
-> So I am not sure to understand why doc/mpdconf.example is better, as
-> it actually doesn't configure anything. The only not commented lines
-> are:
+> The reasoning for this policy is that it is either to review/verify
+> when an option "select" another one, that all "depends on" have
+> properly been replicated. Yes, this means potentially some duplication
+> of "depends on" between the main package option and the sub-options,
+> but it also allows to ensure that if we remove/change one of those
+> "depends on" from the main package option, we don't forget to have it
+> on the sub-option.
 > 
-> input {
->         plugin "curl"
-> }
-> 
-> which is clearly a lot less than:
-> 
-> music_directory		"/var/lib/mpd/music"
-> playlist_directory	"/var/lib/mpd/playlists"
-> db_file			"/var/lib/mpd/database"
-> log_file		"/var/log/mpd.log"
-> pid_file		"/var/run/mpd.pid"
-> state_file		"/var/lib/mpd/state"
-> bind_to_address		"any"
-> bind_to_address		"/var/lib/mpd/socket"
-> 
-> in our mpd.conf.
-
-The commented-out configuration items are not unusual, many default 
-configurations contain all available parameters with their default 
-values, all of them commented. Unless someone changes anything, the 
-default is used. (one example: /etc/ssh/sshd_config). The single 
-uncommented entry for libsamplerate is probably a typo.
-
-The Buildroot mpd.conf is from 2013; at that time it represented the 
-only valid topology for mpd: both database and output on one machine. 
-Since version 0.20, mpd can be configured as server (database, no 
-output), client (remote access to database, output) or standalone. You 
-might also use mpd as a streaming only solution, with input exclusively 
-from the internet. So which is the correct configuration to use for 
-Buildroot?
-
-There is one issue that still prevents the mpd supplied sample 
-configuration to run mpd properly: not setting a value for pid_file 
-prevents the file to be used (OK for a systemd install, not OK for 
-sysV), which results in mpd refusing to terminate gracefully.
-
-Mitigation: inject pid_file and log_file via POST_BUILD_HOOK for builds 
-without systemd.
-
-Thoughts?
-
-> So overall I don't understand why it is an "improvement". Could you
-> clarify?
-> 
-> Thanks a lot!
+> Best regards,
 > 
 > Thomas
 > --
@@ -187,9 +135,6 @@ Thoughts?
 
 Kind regards,
 Andreas
-
-[1] Actually this changed in the latest version, mpd now auto-detects 
-alsa devices, if present.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
