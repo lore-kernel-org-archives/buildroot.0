@@ -1,76 +1,103 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52E44C5B572
-	for <buildroot@archiver.kernel.org>; Mon, 17 Aug 2026 04:13:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8DBBC5CFC1
+	for <buildroot@archiver.kernel.org>; Mon, 17 Aug 2026 06:30:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 107D1606CC;
-	Mon, 17 Aug 2026 04:13:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7AFCA80E52;
+	Mon, 17 Aug 2026 06:30:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fh9gtvB8kG_E; Mon, 17 Aug 2026 04:13:46 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PQBq5QpR4Tf8; Mon, 17 Aug 2026 06:30:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A4016606D4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 64FE180E4D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786940026;
-	bh=qAwrIfeXwT/cfFuARPZkTU9Cm5tLAwQfSk8VjaOjYeQ=;
-	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 From;
-	b=YcYLoaeOVVhKpSEEnYM1RrQRw21Ec8BbBGZ9atUDUYo9KKUWM7S/dWJBagWtlQEUM
-	 stJyOsvJwyqLpXT1KCYlXBW3zTSumB6S1T3udSFc6aXeqj4iVzMNbBk/pauWIAuVHK
-	 4FpIItgXY4hIUK5gTOl2ZkirJ1TYEARU4ugQmuECSEZI7vf2GYyiOmHiZ/TrLwZVLS
-	 O/CNkm+yhPCrXqUhFrIa7seKL3BIMelUluXwGa5HLaWP3Wgvl7IWfakBuaKKdF3RNs
-	 Y0QPIqKUqNq5xc7gaJVnWjmrcudy3Ah+hM6OtD4ClKfyeNsyLCan6y1lfEeCeUZuSP
-	 CfCVVkGJB1W9Q==
+	s=default; t=1786948216;
+	bh=uJD+3LGSX7gSY1DmXQoiANP60HFZsYrPqXDF8TkKp6E=;
+	h=From:To:CC:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=SmgrwmmcCQa6EvP8FfURDkm5V5X7jxkwvVKqMD826IK/8WY8N3Mih4RVUWaE0o2+S
+	 MxzGq43xGFoTMRvZ/EtYwU+gIxnkICxAvMOATGuylE4zEST6pLcU6jcK9kVfPpLKTX
+	 1FJHGAfoI5Lzlyan58PYW4prlnuAtfu7F3WdVHTOT3xsLuLB5k2oyF65iUUe+9a/jE
+	 6tUrJej70UEZu7XhyfPwWKQEzhEiT1g7xQ92iwFBbHOOklzg/vHg/yMNDVKByJIUCm
+	 oWZ8GaCU3KipdRGgPeeJnRqcMp0Z2Z9iLumaS5ptCE/Nv9zltpV8nlM8MjE/RHdn1J
+	 z/AFxQBgNQVJA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A4016606D4;
-	Mon, 17 Aug 2026 04:13:46 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id C7758147
- for <buildroot@buildroot.org>; Mon, 17 Aug 2026 04:13:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 64FE180E4D;
+	Mon, 17 Aug 2026 06:30:16 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id E6AC123F
+ for <buildroot@buildroot.org>; Mon, 17 Aug 2026 06:30:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id ACF0940566
- for <buildroot@buildroot.org>; Mon, 17 Aug 2026 04:13:45 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id CC88C80E4C
+ for <buildroot@buildroot.org>; Mon, 17 Aug 2026 06:30:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nbxoE27Aa04I for <buildroot@buildroot.org>;
- Mon, 17 Aug 2026 04:13:44 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.221.237.155;
- helo=send60.i.mail.ru; envelope-from=fido_max@inbox.ru; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 085C8404C9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 085C8404C9
-Received: from send60.i.mail.ru (send60.i.mail.ru [89.221.237.155])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 085C8404C9
- for <buildroot@buildroot.org>; Mon, 17 Aug 2026 04:13:43 +0000 (UTC)
-Received: by exim-smtp-848884f6cb-lj4dd with esmtpa (envelope-from
- <fido_max@inbox.ru>)
- id 1wvojD-00000000Iy8-25xU; Mon, 17 Aug 2026 07:13:39 +0300
-Message-ID: <ea698fdc-c2b9-46a3-bd1b-3e63200a6a6e@inbox.ru>
-Date: Mon, 17 Aug 2026 07:13:38 +0300
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fidPfgmqe4um for <buildroot@buildroot.org>;
+ Mon, 17 Aug 2026 06:30:13 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.210.123;
+ helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5026980E4B
+Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none) header.from=orange.com
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5026980E4B
+Authentication-Results: smtp1.osuosl.org; dkim=pass (2048-bit key,
+ unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
+ header.s=orange002 header.b=P+fswpIT
+Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.210.123])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5026980E4B
+ for <buildroot@buildroot.org>; Mon, 17 Aug 2026 06:30:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
+ t=1786948213; x=1818484213;
+ h=from:to:cc:subject:date:message-id:mime-version:
+ content-transfer-encoding;
+ bh=eD4YJ6vFUBN+yTCgo2XD+YnkGqaS4EEnaCxHnrUnkqA=;
+ b=P+fswpITSrimI7TB/Cqnq8E/V093nvVsDV68UvtMZivVJgO85h71ODvG
+ PIqoZdBCYvI6smiOUq8a4Jhvojz+43qxf2vQsqJpA5OS9rlVZ2lCAhHyq
+ LtxlFirL9X4Noz4O+lRb02cWdj8+e9OvBH/f40sMOvjgzn4cg+M+6eLBE
+ mPTenAc+eEFPIVwGGmufAg9c81tjYj13+DMtgnnzQs7aEv4MMqj+L3Hbh
+ hALd8HOn1IAoKzJrPrQxiFlVCqSqq1eXHVCShMqkun31hweZf6+STenQa
+ AE+JH+XDrPjadsLJiILv/PU/sWtjf9ijXdKjTZ5Ts6nHHZp5k1vxYDYW2 g==;
+X-CSE-ConnectionGUID: uKNub+EBTL69gu1jh5+8fw==
+X-CSE-MsgGUID: 9J1aFRfdTrihskZIadqIRw==
+Received: from unknown (HELO opfedv1rlp0g.nor.fr.ftgroup) ([x.x.x.x]) by
+ smtp-out.orange.com with ESMTP/TLS/TLS_AES_256_GCM_SHA384;
+ 17 Aug 2026 08:30:09 +0200
+Received: from unknown (HELO OPE16NORMBX506.corporate.adroot.infra.ftgroup)
+ ([x.x.x.x]) by opfedv1rlp0g.nor.fr.ftgroup with
+ ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2026 08:30:09 +0200
+Received: from yd-6wlzhs3 [x.x.x.x] by
+ OPE16NORMBX506.corporate.adroot.infra.ftgroup
+ [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.45;
+ Mon, 17 Aug 2026 08:30:07 +0200
+Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
+ Mon, 17 Aug 2026 08:30:07 +0200
+X-CSE-ConnectionGUID: chi8c/5BRcOQtqxFVAvT9w==
+X-CSE-MsgGUID: 123xxF+GR86l2kZDK2B6AA==
+X-IronPort-AV: E=Sophos;i="6.25,228,1779141600"; d="scan'208";a="461816536"
+X-Amp-Result: SKIPPED(no attachment in message)
+From: <yann.morin@orange.com>
+To: <buildroot@buildroot.org>
+CC: <yann.morin@orange.com>, Christian Stewart <christian@aperture.us>, Thomas
+ Perale <thomas.perale@mind.be>
+Date: Mon, 17 Aug 2026 08:30:07 +0200
+Message-ID: <552622897e269a9cbd28f3a4b08f4c45cab46124.1786948207.git.yann.morin@orange.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
-References: <20260815140041.100370-1-bernd@kuhls.net>
-Content-Language: en-US
-In-Reply-To: <20260815140041.100370-1-bernd@kuhls.net>
-X-Mailru-Src: smtp
-X-4EC0790: 10
-X-7564579A: 78E4E2B564C1792B
-X-77F55803: 4F1203BC0FB41BD95DAF57E302A5299C40966F27D38929CDF44C517335AE80DF182A05F538085040CA0C17A2195475253DE06ABAFEAF6705AAD0D103B074614E86E34E6EE61F4E88BDDFA93EA4B3182B
-X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE7D77100FFB2844417EA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F7900637AC83A81C8FD4AD23D82A6BABE6F325AC2E85FA5F3EDFCBAA7353EFBB55337566915EB6444AA4888D59DFEEABC941A70E29379CEE37C23CA3FF7C38A2517E6FD58EEF46B7454FC60B9742502CCDD46D0DEDCF5861DED71B2F389733CBF5DBD5E913377AFFFEAFD269176DF2183F8FC7C015BBC38BE64FE4678941B15DA834481FCF19DD082D7633A0EF3E4896CB9E6436389733CBF5DBD5E9D5E8D9A59859A8B6CDE59DDCCE53AF2BCC7F00164DA146DA6F5DAA56C3B73B237318B6A418E8EAB86D1867E19FE14079C09775C1D3CA48CF17B107DEF921CE791DD303D21008E298D5E8D9A59859A8B6B372FE9A2E580EFC725E5C173C3A84C3335407143AA9223635872C767BF85DA2F004C90652538430E4A6367B16DE6309
-X-C1DE0DAB: 0D63561A33F958A50088E2F9ABE2CBEE5002B1117B3ED696ED8B854908B006CE92212597CCBD6D77823CB91A9FED034534781492E4B8EEAD5DF1C2DF01CE7211BDAD6C7F3747799A
-X-C8649E89: 1C3962B70DF3F0AD73CAD6646DEDE191716CD42B3DD1D34CAB70F9BE574AE9C625B6776AC983F447FC0B9F89525902EE6F57B2FD27647F25E66C117BDB76D659BFCE7DFEDA082F31496B0408A7D6071C86DA523C9AB069840ED40E66D0DF2B16ABB0D8BE643E79D9B8341EE9D5BE9A0ABC64C9617D94CB3139E79827DF73E726AE859F5CBD822A868CD93680B12512CF4C41F94D744909CEE921556F0E976A29E6EC0772259F8F8F8815B87D7EC76CB9
-X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu53w8ahmwBjZKM/YPHZyZHvz5uv+WouB9+ObcCpyrx6l7KImUglyhkEat/+ysWwi0gdhEs0JGjl6ggRWTy1haxBpVdbIX1nthFXMZebaIdHP2ghjoIc/363UZI6Kf1ptIMVQHpos7JM5NNZ2uETStwiu8=
-X-Mailru-Sender: 689FA8AB762F7393520AF17B8A65FDE2F8048C309CE6D96D6A683F1330F1F0E4F5D3BDD6C31E177790DE4A6105A3658D481B2AED7BCCC0A49AE3A01A4DD0D55C6C99E19F044156F45FEEDEB644C299C0ED14614B50AE0675
-X-Mras: Ok
-Subject: Re: [Buildroot] [PATCH 1/1] package/postgresql: security bump
- version to 18.6
+X-Originating-IP: [10.115.26.51]
+X-ClientProxiedBy: OPE16NORMBX502.corporate.adroot.infra.ftgroup
+ (10.115.26.26) To OPE16NORMBX506.corporate.adroot.infra.ftgroup
+ (10.115.27.26)
+Subject: [Buildroot] [PATCH 1/1] package/go: decrease debug level for CGO
+ linking
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,52 +109,76 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Maxim Kochetkov via buildroot <buildroot@buildroot.org>
-Reply-To: Maxim Kochetkov <fido_max@inbox.ru>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-15.08.2026 17:00, Bernd Kuhls wrote:
-> https://www.postgresql.org/about/news/postgresql-186-1711-1615-1519-1424-and-19-beta-3-released-3365/
-> "This release skips PostgreSQL 18 versions from PostgreSQL 18.4 to 18.6.
->   18.5 was not shipped due to a regression."
-> 
-> Fixes the following CVEs:
-> 
-> CVE-2026-6464: psql COPY FROM STDIN early failure processes data lines as psql commands (CVSS v3.1: 8.1)
-> CVE-2026-6469: ALTER TABLE ALTER TYPE resets extended statistics ownership (CVSS v3.1: 3.8)
-> CVE-2026-6470: Fails to check type USAGE privilege (CVSS v3.1: 4.3)
-> CVE-2026-6471: Logical decoding can dlopen arbitrary file (CVSS v3.1: 7.2)
-> CVE-2026-14662: tsvector and tsquery undersize allocations, via integer wraparound (CVSS v3.1: 8.8)
-> CVE-2026-14663: pgcrypto, for OpenSSL-disabled ciphers, silently encrypts to and decrypts from cleartext (CVSS v3.1: 6.5)
-> CVE-2026-14664: Regexp heap buffer overflow executes arbitrary code (CVSS v3.1: 8.8)
-> CVE-2026-14666: Row security caching disregards role modifications (CVSS v3.1: 4.2)
-> CVE-2026-14668: ctid type confusion in selectivity estimator discloses derivative of arbitrary read (CVSS v3.1: 8.1)
-> CVE-2026-14669: to_char heap buffer overflow executes arbitrary code (CVSS v3.1: 8.8)
-> CVE-2026-14670: plperl tied object heap buffer overflow executes arbitrary code (CVSS v3.1: 8.8)
-> CVE-2026-14671: refint plan cache type confusion executes arbitrary code (CVSS v3.1: 8.8)
-> CVE-2026-14672: Observable response discrepancy with non-default scram_iterations provides user existence oracle (CVSS v3.1: 5.3)
-> CVE-2026-14673: amcheck does not clear untrusted search path (CVSS v3.1: 3.8)
-> CVE-2026-14676: pg_stat_statements heap buffer overflow executes arbitrary code (CVSS v3.1: 8.8)
-> CVE-2026-14677: 32-bit pltcl and plperl undersize allocations, via integer wraparound (CVSS v3.1: 8.8)
-> CVE-2026-14678: pg_trgm picksplit reads past end of buffer (CVSS v3.1: 4.3)
-> CVE-2026-14679: Stack buffer overflow in argument match writes 0x0 and 0x1 to server memory (CVSS v3.1: 8.2)
-> CVE-2026-14680: Type confusion via "internal" arguments (CVSS v3.1: 8.8)
-> CVE-2026-14681: Improper enforcement of GSSAPI encryption when coupled with SSL (CVSS v3.1: 4.2)
-> CVE-2026-15741: Expression deparse allows SQL injection via EXTRACT argument (CVSS v3.1: 8.8)
-> CVE-2026-15742: fuzzystrmatch writes effectively-arbitrary addresses, via integer wraparound (CVSS v3.1: 8.8)
-> CVE-2026-16238: Type confusion in pg_restore_attribute_stats() executes arbitrary code (CVSS v3.1: 8.8)
-> CVE-2026-16239: Type confusion in cursor CLOSE + DECLARE executes arbitrary code (CVSS v3.1: 8.8)
-> CVE-2026-16241: ECPG integer underflow can crash the client (CVSS v3.1: 3.8)
-> CVE-2026-18024: ascii() function reads past end of buffer (CVSS v3.1: 4.3)
-> CVE-2026-18408: psql \unrestrict lets superuser of pg_dump origin server execute arbitrary code in psql client (CVSS v3.1: 8.8)
-> CVE-2026-19385: pg_dump heap buffer overflow executes arbitrary code (CVSS v3.1: 8.8)
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+From: "Yann E. MORIN" <yann.morin@orange.com>
 
-Reviewed-by: Maxim Kochetkov <fido_max@inbox.ru>
+Workaround an upstream issue that arises when packages are build with
+gdb -g3 debug level:
+    https://github.com/golang/go/issues/77436
+
+This has been fixed upstream, but is not released yet, so add a comment
+stating when to remove the workaround.
+
+Fixes:
+    https://autobuild.buildroot.org/results/97cd9c2586a0cc2a16cdb2a75dae1836feb5ffc3/
+    (and probably a lot more...)
+
+Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+Cc: Christian Stewart <christian@aperture.us>
+Cc: Thomas Perale <thomas.perale@mind.be>
+---
+ package/go/go.mk | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/package/go/go.mk b/package/go/go.mk
+index a64d7538f8..265d3aa880 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -4,6 +4,9 @@
+ #
+ ################################################################################
+ 
++# When bumping this to 1.27 (or beyond), remove the workaround for
++# upstream issue https://github.com/golang/go/issues/77436, below
++# (i.e. revert the commit adding these lines).
+ GO_VERSION = 1.26.5
+ 
+ HOST_GO_GOPATH = $(HOST_DIR)/share/go-path
+@@ -75,11 +78,14 @@ HOST_GO_TARGET_ENV = \
+ 	$(if $(GO_GOARM),GOARM=$(GO_GOARM)) \
+ 	CC="$(TARGET_CC)" \
+ 	CXX="$(TARGET_CXX)" \
+-	CGO_CFLAGS="$(TARGET_CFLAGS)" \
+-	CGO_CXXFLAGS="$(TARGET_CXXFLAGS)" \
+ 	CGO_LDFLAGS="$(TARGET_LDFLAGS)" \
+ 	GOTOOLDIR="$(HOST_GO_TOOLDIR)"
+ 
++# Workaround for https://github.com/golang/go/issues/77436
++HOST_GO_TARGET_ENV += \
++	CGO_CFLAGS="$(subst -g3,-g2,$(TARGET_CFLAGS))" \
++	CGO_CXXFLAGS="$(subst -g3,-g2,$(TARGET_CXXFLAGS))"
++
+ # Allow packages to use cgo support if it is available for the target. They
+ # will need the toolchain for cgo support; for convenence, include that
+ # dependency here.
+-- 
+2.43.0
+
+____________________________________________________________________________________________________________
+Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
+pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
+a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
+Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
+
+This message and its attachments may contain confidential or privileged information that may be protected by law;
+they should not be distributed, used or copied without authorisation.
+If you have received this email in error, please notify the sender and delete this message and its attachments.
+As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
+Thank you.
 
 _______________________________________________
 buildroot mailing list
