@@ -4,108 +4,80 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05CBDC5B572
-	for <buildroot@archiver.kernel.org>; Mon, 17 Aug 2026 15:54:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC523C5B572
+	for <buildroot@archiver.kernel.org>; Mon, 17 Aug 2026 16:30:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C44C04073D;
-	Mon, 17 Aug 2026 15:54:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8FD5D40765;
+	Mon, 17 Aug 2026 16:30:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id b9oZLjINyrxB; Mon, 17 Aug 2026 15:54:39 +0000 (UTC)
+ id bbw4TLlLHBr9; Mon, 17 Aug 2026 16:30:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E97BB40741
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 831054076F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786982079;
-	bh=2rqdOn4UPNn0vUcrPm+cqK0xaF0CN/VHtXr48Pg2uZk=;
+	s=default; t=1786984240;
+	bh=nyjjOrmcpYQkHHQPY8GKCxZMf729b9C/mOk295HHbfg=;
 	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=Vbrr8uG9CgQ+Q6pjZq+sfwAuXxjdVrach7s9NS6qWb7zpJoCkxn7tceh72IR5V8nR
-	 3LjLKYfHtClIkoAa2pURkzBS5uXUKo7ESQCjQtQO/2cT2ejDGXUlZ2CIft6A4iSYZi
-	 QG/uiEgZWoAZRbmGGH/NVjGmoL6zQP0+ku+0Yh9Qouv5dlYpH2anjx6IYhWUSpzSJC
-	 bV3YHEfvlfazChCWDmP8+xp6N5i7uTZa+rXQv76oGxeKA5oKBRsH5onaa8JG9sEveG
-	 d6xO5Bjnn19kT2iMbV04eP+eAuFvi/NVDJQAiAbHSq9zNccvxdIBOttHHTmEoSUXe0
-	 UOWZypZKzpc3A==
+	b=sSGCkFDPef2VHaUIjbOsMNNRePzXNaXT3+DlyxpyEkRshTTWn3y+UO7KoH0sXV+t/
+	 IofQxXpDp4J9xc4MHMu4+gUhoZc6ER/dJ1LLtlp8/PsZYJIit9MmCgMHKCeyVrNMVV
+	 i3DtaGYPKa05QkhZh1vst0ucNl1lvsOL6bQ9ieRDQV6FKzsbvSu1AHonSl4uVQ1Mpt
+	 z0yTv/m6DO8mtHGTCZ6SjwOvPiew5M73zLRBcOGqlfdSPzYfTw+Ep3fq5dNxAY5Wjd
+	 d8foFzqJ2iZw5nu9KZSGuXVFF3jcxUnOksksXUlFsN6nOYmbUwUFPLF0KvbskVlULf
+	 eqIArD3gbD3ew==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E97BB40741;
-	Mon, 17 Aug 2026 15:54:38 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 1ACB8194
- for <buildroot@buildroot.org>; Mon, 17 Aug 2026 15:54:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 831054076F;
+	Mon, 17 Aug 2026 16:30:40 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id E41482EF
+ for <buildroot@buildroot.org>; Mon, 17 Aug 2026 16:30:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1847380A70
- for <buildroot@buildroot.org>; Mon, 17 Aug 2026 15:54:37 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D57DE4076F
+ for <buildroot@buildroot.org>; Mon, 17 Aug 2026 16:30:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RDHfZ0BuDsTt for <buildroot@buildroot.org>;
- Mon, 17 Aug 2026 15:54:36 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::42c; helo=mail-pf1-x42c.google.com;
- envelope-from=chakrabortyshubham66@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 41EF2809B1
-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none) header.from=gmail.com
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 41EF2809B1
-Authentication-Results: smtp1.osuosl.org; dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20251104 header.b=XvpqSdwn
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com
- [IPv6:2607:f8b0:4864:20::42c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 41EF2809B1
- for <buildroot@buildroot.org>; Mon, 17 Aug 2026 15:54:36 +0000 (UTC)
-Received: by mail-pf1-x42c.google.com with SMTP id
- d2e1a72fcca58-84f38f3b36eso2306215b3a.1
- for <buildroot@buildroot.org>; Mon, 17 Aug 2026 08:54:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1786982075; x=1787586875; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
- bh=oYbE2fXmhoJwoD81e+b2a7+mdS1y4sgPUIhbCwNHRoY=;
- b=XvpqSdwnRWoK3pyqZ7wfvyZDkkIhdcS+Kv/svzqFESoLfHKS2IVNujxcevO2kKAzcq
- r4/7jQ1muZqCBv8fxYtcbPIy707Ry/EVF4xK0dDTD9I5FmsCipl7guqVIVL4dlN02AgT
- IIzBg6qPJmJMgxDKePKzjgXTUMntflyo77bpBy1CYdernS6GyrDElD1brez2mMFRFXGH
- YV5Abd3KXYiZhniYSdnfQ7Rfw1thMo0n0CD2G3ZSRdUASJr5AVhF9RYCSuBqoFyNQ/hB
- SVTd93kJZc7ChA1YJHoDUwa4j9yVZ63yozDvSWPOFD2fwwkaa/oj5qWuSPjVVZ2nTd/U
- 6dUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1786982075; x=1787586875;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to:content-type;
- bh=oYbE2fXmhoJwoD81e+b2a7+mdS1y4sgPUIhbCwNHRoY=;
- b=Mdquwjg7v/v4vptSKUpo0IFqA3F+K9lSBkSpgaAiKRpoY6pcMsotV+O7AMTSgWDepP
- jIKO/TvMFHZK6Cmp/vEq68FTgUVMo/SoVVguAHrQZpZtWBJ9CiV8EIWFHxKyWf1t02KM
- 30ZeaKtFcBGbLMhW2/hqgbfvXBQT+hfG6bxE4hgmMCskaZAPw5GBK4dKEv6OdXSWcUmY
- nQVvgkl/jeWDHQyE4atncLGdT8DncC8W0mxdQfm88Xp4FZRjn+QDL0KywJxNI1I74LkR
- FgJAzyj/0LnzdItSBGw1vRc4mBowzLnhU5ajrx2bQ/1nH3gJf+dnXh/gZFUrmt/obNzl
- hHHQ==
-X-Gm-Message-State: AOJu0YybFnUrmlT6dl4H3d5/z61YGUnuXzkDrh+d9KI4ub8O5uVC+11o
- ZJOJRnxjnjb7TbYfokkAC8Wa0g6Ws9YfgVdPbtg4F0zgrXkViQhmJkYFrp9rug==
-X-Gm-Gg: AR+sD10bi4iZwImoQFl9QtmF/Vpg2/wmYm7LYAFBeissGPwRTonFvJ3LLEsP//NAxmS
- GsNLr8i44NCPFUWjRza9Bfq20605nCrTmUSrut/Nd5Jiaj6dEK+MniScAKiiC1wXvsjYWUADq6O
- q64OCebnI71QWoD5gPB6sEWvvdH+tvv7uqr8PNqod5Q+cniambpuel51RKOjwz0CXuBpwRbTFSc
- jdqtDPl0uu4S7/baEKFj5qEaHNJ1cWHqBJSXx9hDwNVxTx8s/zVsY5e+mUmTxLhkhqxMu8FM8W6
- JLY/t7L4GO+vE+UZ176R0QRRXijB8S5l6hgzox7n/G9wXwAN2NmeHoQFsmXtHNqDJNdZ6zXUGWU
- bHKZ5j6JOQUil73J1ztmU3jhU9F293dbu99f7CftXrDYwfRwiDbWeMOdwszVGF3a/FOjvi909UO
- THUp6rmvb/DXKLlXc6CAY/83s8yoDpHqlC9sLDRdDBHNzXJ6n4GohdayaIfUsbjgUJKNOJlULck
- lzvxQ==
-X-Received: by 2002:a05:6a00:1793:b0:847:9c3a:b77f with SMTP id
- d2e1a72fcca58-84fde314673mr25596513b3a.35.1786982075264; 
- Mon, 17 Aug 2026 08:54:35 -0700 (PDT)
-Received: from fedora.taildae27b.ts.net ([2a09:bac5:3cea:a82::10c:6d])
- by smtp.gmail.com with ESMTPSA id
- d2e1a72fcca58-851b401ddd9sm825184b3a.3.2026.08.17.08.54.32
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 17 Aug 2026 08:54:34 -0700 (PDT)
-From: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id un6PZ_oGpuGH for <buildroot@buildroot.org>;
+ Mon, 17 Aug 2026 16:30:38 +0000 (UTC)
+X-Greylist: delayed 1229 seconds by postgrey-1.37 at util1.osuosl.org;
+ Mon, 17 Aug 2026 16:30:36 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 2E23A40765
+Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none) header.from=igalia.com
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2E23A40765
+Authentication-Results: smtp4.osuosl.org; dkim=pass (2048-bit key,
+ unprotected) header.d=igalia.com header.i=@igalia.com header.a=rsa-sha256
+ header.s=20170329 header.b=UJYTADxV
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=213.97.179.56;
+ helo=fanzine2.igalia.com; envelope-from=aperez@igalia.com; receiver=<UNKNOWN> 
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 2E23A40765
+ for <buildroot@buildroot.org>; Mon, 17 Aug 2026 16:30:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com; 
+ s=20170329;
+ h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:
+ Cc:To:From:From:Reply-To; bh=edxqNuDQWtiw0ngksWTkIhMvHK6gvl+32nQtJouY5WY=; b=
+ UJYTADxVwG+T1+EnAFAqzELZnd4a2IqCcz3nMebgbXTblCRtDRPBtr38bEPeMX/rghR2gFdBTgIEH
+ bt3bRZozWLGi6NCRIuYfHDZs2fVA0bCZFl+RsOHdy1Cbv/dioDbtdy5MQnMmrfpasG1PC6uwdOzfP
+ QdqOqwKbC6nvHhHn78e+XGYwerr1UpnZvVirbGEEtsUjMjgGmfYO1xgZAvDrvKnAoDaBYyyD3ba5Q
+ d/KBtxCjktVyzBlRIIuHLPt2ZQwsUKKxsCUnT/WT6K1TQtOu4412f//JERYVuW6R2smutwTTcNvDb
+ tSgx15JFcJ9QDWyZ5/dY0rxcbZaT4wFMRg==;
+Received: from 68.171.94.90.dynamic.jazztel.es ([90.94.171.68] helo=kodama)
+ by fanzine2.igalia.com with esmtpsa 
+ (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+ id 1wvzuW-004jv8-E3; Mon, 17 Aug 2026 18:10:04 +0200
+Received: from localhost (kodama [local])
+ by kodama (OpenSMTPD) with ESMTPA id 4b36812d;
+ Mon, 17 Aug 2026 16:10:04 +0000 (UTC)
+From: Adrian Perez de Castro <aperez@igalia.com>
 To: buildroot@buildroot.org
-Cc: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-Date: Mon, 17 Aug 2026 21:24:11 +0530
-Message-ID: <20260817155413.2644351-1-chakrabortyshubham66@gmail.com>
+Cc: Adrian Perez de Castro <aperez@igalia.com>
+Date: Mon, 17 Aug 2026 18:10:02 +0200
+Message-ID: <20260817161004.932094-1-aperez@igalia.com>
 X-Mailer: git-send-email 2.55.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/vorbis-tools: fix build with GCC 15
+Subject: [Buildroot] [PATCH] package/libpsl: bump to version 0.23.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -122,46 +94,52 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-vorbis-tools fails to build with GCC 15 because its bundled legacy
-getopt implementation uses unprototyped K&R C function declarations
-(such as `extern char *getenv();`). GCC 15 defaults to -std=gnu23
-(C23), where unprototyped functions are strictly treated as (void),
-causing compilation to fail with:
+The most relevant change is included in 0.23.0, which fixed handling
+of trailing dots (so e.g. "co.uk" and "co.uk." are treated as the same
+suffix). Otherwise, it's mostly cleanups and support for non-Linux
+platforms:
 
-getopt.c:399:21: error: too many arguments to function 'getenv'; expected 0, have 1
+  https://github.com/rockdaboot/libpsl/releases/tag/0.22.0
+  https://github.com/rockdaboot/libpsl/releases/tag/0.23.0
+  https://github.com/rockdaboot/libpsl/releases/tag/0.23.2
+  https://github.com/rockdaboot/libpsl/releases/tag/0.23.3
 
-Fix this by preserving Buildroot's TARGET_CFLAGS and appending -std=gnu17
-for toolchains that support it (GCC >= 8).
+The changed hash for the COPYING file does not imply a license change:
+it is unchanged, but the copyright year was removed in favor of a note
+telling to check the Git history.
 
-Tested with `./utils/test-pkg -p vorbis-tools -a`:
-32 builds, 0 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
-
-Fixes:
- - https://autobuild.buildroot.org/results/dda/dda9e20f43368898b913bf2b00a8491ba089643f/
-
-Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 ---
- package/vorbis-tools/vorbis-tools.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/libpsl/libpsl.hash | 4 ++--
+ package/libpsl/libpsl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/vorbis-tools/vorbis-tools.mk b/package/vorbis-tools/vorbis-tools.mk
-index d64fe0b1ee..869224c4df 100644
---- a/package/vorbis-tools/vorbis-tools.mk
-+++ b/package/vorbis-tools/vorbis-tools.mk
-@@ -15,6 +15,13 @@ VORBIS_TOOLS_CONF_OPTS = --program-transform-name=''
- # ogg123 calls math functions but forgets to link with libm
- VORBIS_TOOLS_CONF_ENV = LIBS=-lm
+diff --git a/package/libpsl/libpsl.hash b/package/libpsl/libpsl.hash
+index caf760c496..4d9e796395 100644
+--- a/package/libpsl/libpsl.hash
++++ b/package/libpsl/libpsl.hash
+@@ -1,6 +1,6 @@
+ # Locally generated
+-sha256  1dcc9ceae8b128f3c0b3f654decd0e1e891afc6ff81098f227ef260449dae208  libpsl-0.21.5.tar.gz
++sha256  93941f85a1e7bd593fa94f299233cb5dfc91cd144fd9a78a6ceb75001c5b03be  libpsl-0.23.3.tar.gz
  
-+# GCC 15 and newer default to -std=gnu23, which breaks the legacy
-+# K&R-style function declarations used by vorbis-tools.
-+# Use GNU C17 for toolchains that support it.
-+ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_8),y)
-+VORBIS_TOOLS_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -std=gnu17"
-+endif
-+
- ifeq ($(BR2_PACKAGE_FLAC),y)
- VORBIS_TOOLS_DEPENDENCIES += flac
- endif
+ # Hashes for license files:
+-sha256  322392e6001b2b3b0fca705dc9f11f26e12441188ecde50eb1d22909980b2925  COPYING
++sha256  e7c9f0d8498d28a360a7e8293ea70fd7bd952955b636938322c13d60a03b5a45  COPYING
+ sha256  1d7f52747a9169751cdf2641a8299c0098e9ecdf9429296ffd55bdb14c9ed5b3  src/LICENSE.chromium
+diff --git a/package/libpsl/libpsl.mk b/package/libpsl/libpsl.mk
+index d1a12f864c..6e7300529e 100644
+--- a/package/libpsl/libpsl.mk
++++ b/package/libpsl/libpsl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBPSL_VERSION = 0.21.5
++LIBPSL_VERSION = 0.23.3
+ LIBPSL_SITE = https://github.com/rockdaboot/libpsl/releases/download/$(LIBPSL_VERSION)
+ LIBPSL_LICENSE = MIT, BSD-3-Clause
+ LIBPSL_LICENSE_FILES = COPYING src/LICENSE.chromium
 -- 
 2.55.0
 
