@@ -4,72 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70584C5B572
-	for <buildroot@archiver.kernel.org>; Mon, 17 Aug 2026 03:27:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8FFEC5B572
+	for <buildroot@archiver.kernel.org>; Mon, 17 Aug 2026 03:31:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 22F8160611;
-	Mon, 17 Aug 2026 03:27:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4561F606C9;
+	Mon, 17 Aug 2026 03:31:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zUVo2xnCEh9N; Mon, 17 Aug 2026 03:27:41 +0000 (UTC)
+ id mw7g0P3E9Cpv; Mon, 17 Aug 2026 03:31:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4DF6060632
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 93A58606B9
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1786937261;
-	bh=ELlCJ3KuqJcEETqhYvk1v5kYsCkqEZ30m2RgTU4/3dM=;
+	s=default; t=1786937480;
+	bh=YFTuUhi9sp46zPtfuZyUWmHZBZgc3drGH2Qg8y/nhrs=;
 	h=Date:From:To:Cc:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=cPg2wj5Bqi/9LgYt2Rp8E9109StMXifCz4Qp/ET/EHMgjs9aY98Z4wjupkLK2V5pi
-	 9zQpz3wP/o3Acb/XxDy+46BnoM0GzjEyrNG6UI2AyI3F9TZmMji4Nre26D/ibLyyhK
-	 W876iCJRPix/wYkBSFh4oEVknk+347FeMmTCvr6E0dTmLyZfCmm22bJq++2j+F8e+h
-	 9yQjVnLKwiBND/M8mbaOCEJbhI/MyH8gcokAs93rjFIVGTk6rrVIqtl+dVQ337ZMdd
-	 wGejq60YW6hOdqKpLAoMklAaICi52yEHxlLKc/jAAILx1RyDadxh5X2K6WZBiv++wu
-	 92bnIgV/0hxsw==
+	b=h05Q+9pw3ODQeHbjRB+YpUrT+U58XjdIMinLaB12seJyJTJdhpADkGC0NzdDOJO6u
+	 GylFPlqxgTXyKLSWXGCFyF90K6g8Tpig0i5rCyyq4pP3RPZdhTJjzyMZjhXe1FGlab
+	 beDLWM2F6bwq6nGV4q9qRbJQZwKaxbhx+o7HJTRdgFIVKaPH1k3gbPFfidn9VFPiiQ
+	 IL7jVrndU7Z10RF0fg/TuNvCyToLGdqlPrmakB2E12LjZhYi7e+um6DdSHNZZwno31
+	 1B98ib0fsQ2dgqZ79qL8PkfTjKBysEhzGkScdZHxBJvsqYlXx2P19Ho541d97HrFot
+	 0uLLzQA2VFl9g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4DF6060632;
-	Mon, 17 Aug 2026 03:27:41 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 86722336
- for <buildroot@buildroot.org>; Mon, 17 Aug 2026 03:27:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 93A58606B9;
+	Mon, 17 Aug 2026 03:31:20 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6AECC2EF
+ for <buildroot@buildroot.org>; Mon, 17 Aug 2026 03:31:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 840FC60632
- for <buildroot@buildroot.org>; Mon, 17 Aug 2026 03:27:40 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 50F1480DCC
+ for <buildroot@buildroot.org>; Mon, 17 Aug 2026 03:31:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1tp3KW6lC4AK for <buildroot@buildroot.org>;
- Mon, 17 Aug 2026 03:27:39 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id R6TUl7HBGWHZ for <buildroot@buildroot.org>;
+ Mon, 17 Aug 2026 03:31:17 +0000 (UTC)
 Received-SPF: None (mailfrom) identity=mailfrom; client-ip=176.9.89.163;
  helo=serv15.avernis.de; envelope-from=br025@umbiko.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org CA55760611
-Authentication-Results: smtp3.osuosl.org;
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8197B80DC0
+Authentication-Results: smtp1.osuosl.org;
  dmarc=none (p=none dis=none) header.from=umbiko.net
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CA55760611
-Authentication-Results: smtp3.osuosl.org; dkim=pass (1024-bit key,
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8197B80DC0
+Authentication-Results: smtp1.osuosl.org; dkim=pass (1024-bit key,
  unprotected) header.d=umbiko.net header.i=@umbiko.net header.a=rsa-sha256
- header.s=mail header.b=LylxjRnv
+ header.s=mail header.b=q/GUGUxk
 Received: from serv15.avernis.de (serv15.avernis.de [176.9.89.163])
- by smtp3.osuosl.org (Postfix) with ESMTPS id CA55760611
- for <buildroot@buildroot.org>; Mon, 17 Aug 2026 03:27:38 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8197B80DC0
+ for <buildroot@buildroot.org>; Mon, 17 Aug 2026 03:31:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=umbiko.net; s=mail;
- t=1786937256; bh=hbOohFSpJjAX6uNk20OMGTpLz2al08SXMVLPjyKi6uo=;
+ t=1786937474; bh=f833Yk1lI6nLhoafNnTIwjii452SeWN1qXV6It7fgLE=;
  h=Date:From:To:Cc:Subject:In-Reply-To:References;
- b=LylxjRnvZZmL7wPUrmJVUdoDx2xDiPETckf0LOAO22hsMwxtBhwxN4xKyv9NWSZaK
- ia+XC1z3nkFWIlbOCXujW+3ll+UUU6poC9ugdAugKMumWoJcD0P4FFYUVGiksVni7X
- mFLVLcDUS9wDTGKWp5pO96b2YKjYC5VRtiRwvqPU=
-Received: by serv15.avernis.de (Postfix) with ESMTPSA id BBF4FBDE0F0B;
- Mon, 17 Aug 2026 05:27:36 +0200 (CEST)
+ b=q/GUGUxkRdn3X14LJwAnCoCP6K9oizCF1PbiuYMOSt/Xy/n5DMTc+ny+14nqEDCAF
+ a91dzR7F48KQadol43zIQg4DvGsCTCqrBsD8PdB3itOON3L41p5aQl8Xow5bVD+LP7
+ KIlC/M+MLKGNvuAHMDJIkO2Ji8hPsCnwrKn4L5qk=
+Received: by serv15.avernis.de (Postfix) with ESMTPSA id 3509CBDE1031;
+ Mon, 17 Aug 2026 05:31:14 +0200 (CEST)
 MIME-Version: 1.0
-Date: Mon, 17 Aug 2026 03:27:36 +0000
+Date: Mon, 17 Aug 2026 03:31:14 +0000
 From: Andreas Ziegler <br025@umbiko.net>
 To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: buildroot@buildroot.org, Marcus Hoffmann <buildroot@bubu1.eu>
 In-Reply-To: <aoC_d9SXLJGYRqR4@windsurf>
 References: <20260709110822.305873-1-br025@umbiko.net>
  <20260709110822.305873-3-br025@umbiko.net> <aoC_d9SXLJGYRqR4@windsurf>
-Message-ID: <e35f8cc7da4cd9603ae104e957795646@umbiko.net>
+Message-ID: <7a39e5bd8a0aa90c003ee00047cc5401@umbiko.net>
 X-Sender: br025@umbiko.net
 X-Virus-Scanned: clamav-milter 1.4.3 at serv15.avernis.de
 X-Virus-Status: Clean
@@ -91,8 +91,9 @@ Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Thomas, Everyone,
+[resend due to missing CC]
 
+Hi Thomas, Everyone,
 On 2026-08-15 19:37, Thomas Petazzoni wrote:
 > Hello Andreas,
 > 
