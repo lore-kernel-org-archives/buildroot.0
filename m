@@ -1,153 +1,111 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23CC0C5DF6D
-	for <buildroot@archiver.kernel.org>; Wed, 19 Aug 2026 13:44:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF914C5DF81
+	for <buildroot@archiver.kernel.org>; Wed, 19 Aug 2026 14:32:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D276D80E47;
-	Wed, 19 Aug 2026 13:44:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B75FC6072B;
+	Wed, 19 Aug 2026 14:32:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id z9FooXSyPI8j; Wed, 19 Aug 2026 13:44:42 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KwfzJ8ZPjDer; Wed, 19 Aug 2026 14:32:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787147082;
-	bh=stAXTwDlTmWEANy5szlwsUnCsRbuqCN5gLiDh9KKvCE=;
-	h=From:To:CC:Date:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=G8kKiAu9+3gz79ZBFqC1pnJmQM/fHeC53mSD1G3zTtSfogNkvH1ljMEVHUqKj5K0E
-	 lfxuYB204Wl2e4XaLAcE8zC1lmzuYO/ZnzBO69o05cBuPLd3pcJByCWdpkI6EUuMiD
-	 6BTOOc8fSmZKgAOIvE90T6pF4otiJsE/vFFjuMCehvmRKwPueaurBFvjB5dd3xpqPt
-	 nXaYTSs6LgF1VcfNbt8VEoBAaQ/w/7/CTHHEMPX++xkV6CBM0HHlFGYkH8HNQW7Ujv
-	 o+QLnl7vZ2ydyJ6CVXV+q//8Ql/pAnn2MxMsCX8NHAFwqPrdPFr166UfsEAjLEx8gW
-	 1G2h+pOZGK9yA==
+	s=default; t=1787149960;
+	bh=tJsyuPptgMyvZ/YvX92wm0N2OhPTpO1eQtPlvUNjK4Q=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=shhn+FQQvoIveQeylPmLJDkWJ9V6ellbArOhYTilnUqe7ocMLPSiol3c0u+ESiiJ7
+	 8I3Y+b5pR52IVPZXdNTTlA0nZ7eI5E/ccVs70Fsj6ZxMVVuJLzcp+IdLQmwkApkltx
+	 /+xs78I26evx7mTozweenUMn7HPmYjVGgg161uslGSJMETzoCjgzBZyYY39AQ/8D6l
+	 UiweaygKWc36x8i3Ub5z3PSsRHDIDi2T5TF3a4VHbaujx4d6OKXfl3KhbV10PTREYa
+	 Hg6qiHzL7FVH7T+xjCopFVKpeAm3198Zk2Ja0zVHxw81okOz+yuNeKaBfmMoeEtOxR
+	 sfh/oFsTILPnQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B9F3080DC9;
-	Wed, 19 Aug 2026 13:44:42 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 13FC229B
- for <buildroot@buildroot.org>; Wed, 19 Aug 2026 13:44:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B519E60736;
+	Wed, 19 Aug 2026 14:32:40 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id D37952FD
+ for <buildroot@buildroot.org>; Wed, 19 Aug 2026 14:32:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 05D0480DAE
- for <buildroot@buildroot.org>; Wed, 19 Aug 2026 13:44:41 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B0B2880D18
+ for <buildroot@buildroot.org>; Wed, 19 Aug 2026 14:32:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oZvu5ZhVvDv6 for <buildroot@buildroot.org>;
- Wed, 19 Aug 2026 13:44:40 +0000 (UTC)
-Received-SPF: Permerror (mailfrom) identity=mailfrom;
- client-ip=2001:489a:2202:c::606;
- helo=usg02-bn3-obe.outbound.protection.office365.us;
- envelope-from=vfazio@xes-inc.com; receiver=<UNKNOWN> 
+ id 9O6MH8UazDBJ for <buildroot@buildroot.org>;
+ Wed, 19 Aug 2026 14:32:38 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::335; helo=mail-wm1-x335.google.com;
+ envelope-from=philippemontcho@gmail.com; receiver=<UNKNOWN> 
 Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none) header.from=xes-inc.com
+ dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp1.osuosl.org; dkim=pass (2048-bit key,
- unprotected) header.d=xes-inc.com header.i=@xes-inc.com header.a=rsa-sha256
- header.s=selector1 header.b=a8kvYE7P
-Received: from USG02-BN3-obe.outbound.protection.office365.us
- (mail-bn3usg02on0606.outbound.protection.office365.us
- [IPv6:2001:489a:2202:c::606])
- by smtp1.osuosl.org (Postfix) with ESMTPS id ED86C80DC9
- for <buildroot@buildroot.org>; Wed, 19 Aug 2026 13:44:39 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector5401; d=microsoft.com; cv=none;
- b=DeacjCVb3Xm40AUZkuL0pOi3JXK6P16RY5zQ6TO/7s31VGY5Uu93DozX5EbJ2INSBOYvVLbYn+lwbqVb3F6kPwkp2ZptwGDCoHq7pFRTsheDmf+GLhBp+b0Jd2ylZ6oFe1WaY8vVOn4Jn6DGJrSX9GRvub/AulwUBZ9BD7SV4ahyOEKWoQQ8lDHvWGkmVE5TIPE/wCYLm3I4OyS/ilhOdnh2O2tMMN/X+6SkfXPnxWG2kDDPlK+PB5553qOcVNp4gmeB8OrcxWh/LM5yuLGvEvO/FutylGRF0nfGfWTJVG5hwdtnAGp0pFXNPErm+kBPahTZyQ1EItoZ2/dhs6Fncg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector5401;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gcyxT/rVq0jiaptuEobgHTf8PUgfJgKfpckLx8JO9Gs=;
- b=uGkhLDsaVlzQ/XcS4Wi33YHAeNDSVZWMOrPPt5qj1nilzVxBpPlXbFnUYTvpzBJcMuJ4HC8auRKROpKyGVqPqtBcIxFtJKjBe3kdHc/RGTvXWLZkUBOmjv4HvmZ5qimQPm9gVn0gCqiHfvdiaBsRNdL//q59bBuLjfZTaWIHe9BFNnFnH/sRJ5+bEUe3MAvJPe5FQ4J8GxwOXIfrp49GdLvNmmYOZdTLLwI/35K4u85x1Iww6epsfmvKsX7D7n7oNGZAtBa2O9Ts0y5Br5p6f0po/B9lyW4tgqjcDyMuLMCcoQzta1e1R3tRI6noCzucZnyX8UvIWIeCmCVrqLjkEQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=xes-inc.com; dmarc=pass action=none header.from=xes-inc.com;
- dkim=pass header.d=xes-inc.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xes-inc.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=gcyxT/rVq0jiaptuEobgHTf8PUgfJgKfpckLx8JO9Gs=;
- b=a8kvYE7P+39FhnCgLyml/EIafItZS6cYOEGJC5ez01Yw8GJd3mPpd17KkZxSjmY9rFDM+ogbLjIAgFcuKuqihTGebUsRVt5RxvE8pNDUeTCSfGjRqtGiEnEqu/hGbtnEOwVb8Za7OCoi7FfFrwxga1Se4faBqWXdnJCuN3YNf3mnL6bHzWzHzvP0RwTeHp9tZn6CDpPKDz2miF1KQWmzMkEhPmR99MvWashITW6Vuq0zRV/v9uHb6lImKQ9W9M7/pAhAD7A/TkBdg6qzURBngKeD/wDo9hGisfJgPyspLT2dp/TRxwTZZoUDIzKWYpkPbofWgrt7HexOhg4t+G6CQw==
-Received: from PH1P110MB1603.NAMP110.PROD.OUTLOOK.COM (2001:489a:200:18b::15)
- by BN8P110MB2436.NAMP110.PROD.OUTLOOK.COM (2001:489a:200:4c0::19)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.315.17; Wed, 19 Aug
- 2026 13:44:34 +0000
-Received: from PH1P110MB1603.NAMP110.PROD.OUTLOOK.COM
- ([fe80::de5f:f4ab:6e45:cf52]) by PH1P110MB1603.NAMP110.PROD.OUTLOOK.COM
- ([fe80::de5f:f4ab:6e45:cf52%5]) with mapi id 15.21.0315.016; Wed, 19 Aug 2026
- 13:44:33 +0000
-From: Vincent Fazio <vfazio@xes-inc.com>
-To: "yann.morin@orange.com" <yann.morin@orange.com>, "buildroot@buildroot.org"
- <buildroot@buildroot.org>
-CC: Michael Klein <m.klein@mvz-labor-lb.de>
-Thread-Topic: [PATCH 2/2] support/scripts/size-stats: properly assign
- pre-compiled .pyc files
-Thread-Index: AQHdL+DeAboouUzIYEak6xY7PtCvTA==
-Date: Wed, 19 Aug 2026 13:44:33 +0000
-Message-ID: <PH1P110MB16031631D241E9E2C84C0CF49FA5A@PH1P110MB1603.NAMP110.PROD.OUTLOOK.COM>
-References: <cover.1786368449.git.yann.morin@orange.com>
- <c45315df9f1084fe0f6f932e1523cfa9c4e6d992.1786368449.git.yann.morin@orange.com>
-In-Reply-To: <c45315df9f1084fe0f6f932e1523cfa9c4e6d992.1786368449.git.yann.morin@orange.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=xes-inc.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PH1P110MB1603:EE_|BN8P110MB2436:EE_
-x-ms-office365-filtering-correlation-id: e89b6fe2-b187-419c-7f79-08defdf800b0
-x-ms-exchange-atpmessageproperties: SA
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
- ARA:13230040|366016|23010399003|1800799024|41320700013|38070700021|6133799003|56012099006|4143699003|5023799004|10067099003|22082099003|18002099003|55112099003;
-x-microsoft-antispam-message-info: 5IRRHEbo+g0B23xgoBRwwe/iECaEsXx0r38HDdt7XcUDTcFLy5jW8jP5Wx1Tq9xKAs43wPiOl1fSjVkPA3O2IYh7FyyHyKS1RciTFBVQk899fcKbanGosj6OORHAk5QDd8nUmZA8ROVEcuYHhHj20u583fZXjPgj8dB0lUnk4PwFO+U+6MzInYCU6XvdSe9P+Nh3AqpIVMqnk5kzmH9O5+8l8/mZuf30v7K27p4D38YzhfqG7ZyS9xOrQ6nMW6BpLJmbLZ7YSsY06BsMw9zASRNJ1O6jboY6ynFvFeHQpSr+pCwJP9wWHFgvVKBbRUdZebge8RSAglFOSnzbnGygGAP7BexljZoaITNRCFiZi4QC7dM5KLuOgTS02600O7IhdYIxmZVl32Epeb5nnumDUXk3SJAPRUyyhYFEKbw58xNAd/2QEViYc+iU1rLkbeQgu9Kzc89HaphCZFCDPuDn9bLY1G8OnxJ9qN76lTB+LxdNfQdfJQ6AFyznyaQ8HOqChvrwf63fi3SAhljcQOfmU8gx0HaEi2JXckmxCYACvmhhOsCPziKoswzBbTrknv9w0u6AMXfyx6YWeeVu+p8sdOnSJLf0ckkEtMi5kXlZT2xj+hSWmVxRkQ2hdytVr7RSwSTiz8mMyGmBRmoPvlt/lwbGR4Skzuir9CcTrHXCMN1zez/zL6bwxkMNqJQmawiMnF4gZ66k/DY3uuzBf24bO/9JSSZN2ZuGYPs9cLUPV9k=
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:PH1P110MB1603.NAMP110.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
- SFS:(13230040)(366016)(23010399003)(1800799024)(41320700013)(38070700021)(6133799003)(56012099006)(4143699003)(5023799004)(10067099003)(22082099003)(18002099003)(55112099003);
- DIR:OUT; SFP:1101; 
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?dbrw5XM6h/OhPV3tGwgD/CI9j0QlNEEbnsYuAvovrNVeQWnzJvp9sYmxmaFM?=
- =?us-ascii?Q?cvtw8i0ioWRVJ2Bb0D91KOaf2U7hIGDhGiosA3zFdnkek2FhCuDC1XYlzb9A?=
- =?us-ascii?Q?WeDp//ihMeZEtWKCVLgudTmmBlSSTa4yDYpyDUWIwm8qmbcF3ctDn9MlhKVF?=
- =?us-ascii?Q?O+tyehX74sgPAvGNtYkraYQ+Py6z6UtKX2O9+eds353t6KmHFhmzexFfNRoQ?=
- =?us-ascii?Q?z5fIG8XTBPUjMf2C+S2VS0Mxl/4IOWcnR8gEWD+7j5PED1JQdJD4JFgtaehV?=
- =?us-ascii?Q?Pb0sn0wGfZ+2aWhEc1zwuPs3QuWIGIvG9y0sOnJ8Qw8EzTVtMY34XKx0oIl7?=
- =?us-ascii?Q?z7S7FQvMUsqPEvgdTdTQMAqTiDifrfXs7tIyDmiw+K3dL22MaeX3iM2Z4DKg?=
- =?us-ascii?Q?WOeanp6mTL0BMddOpb5W9wsTA/hJmGvHydXmrjuRvf2QSKeBd0vFB0j+pI+V?=
- =?us-ascii?Q?eE7ifPdSkqzHE4sHrreETLCGCnDScR2qJsLjCbXkvN1f71/h+CiP2y1k2tmE?=
- =?us-ascii?Q?r+vMPeMcui1Baai8nT2Opf0L4ThyomrJ9G6YidSQZ4TmtNg0aNs65RlWTvyu?=
- =?us-ascii?Q?t2MY6kXpiAxww8s9E1ulF0seTz6vpmqxFmXuqZoE4xM0gB5whYvcUabl5wwB?=
- =?us-ascii?Q?lycmPsbS9bX3Fa09s9WtsmmoDMn8gI/4DAgP0euHKlxfMWWCJLoAkMu7asDl?=
- =?us-ascii?Q?T4lYZt2X0x4lbS4Csp8qRj1m5vT5hejWpJZmPsAgS/8kix3GIASdLcHNwP6F?=
- =?us-ascii?Q?1L17wstLA9/O9umx0tDsLPN6m0b3hPb/Y3IzRZGWSo1yL173mue84SPMZ2Xa?=
- =?us-ascii?Q?/FM9moKftyBvTmDl/c5ZcfqNzLOZtp8bvQID11Q6XqRQ2GoPnS22qf/250Ld?=
- =?us-ascii?Q?VV99CDlAgmr1bMaWLInkyF4DS4ZemOkHaqL8lpac3Y8YaM0YOHZCHLNBRxJ9?=
- =?us-ascii?Q?A59D5MJb5O4m/D5XU7lDHxlkOqZe1jqMmD/lX4iUmHxzmz+ysXgkbyYvuL0H?=
- =?us-ascii?Q?E3G8w7MhiNTb/ABdTbeh8B/8iYDV3yRvqCEdaRhDsc3W4Tj2VtIFpG3O0LDt?=
- =?us-ascii?Q?6KeHZRBoTFHJn/Lefehi9+f7ffAW2HHYhGnxkqOpvZYhcmGOyA4UW9Hk91UV?=
- =?us-ascii?Q?YYiwTIIkjYUOvK6ks4iTejRxXN8YnOMpTH3jDh31MsuBAGp/gofsowXwG2Se?=
- =?us-ascii?Q?mcfeXHi9yozq74zx0FnzU12X92kgR2kfE9rkjSibIYEjvUEQ+dPvnY77UlLB?=
- =?us-ascii?Q?QOMxZBCWMBZDQeFJDVsEJr0WO07Uw5vp15Mk4Fqds9JnJLHkUZB8MODxpqxH?=
- =?us-ascii?Q?wNvGAhN2dsTXdR43AaBwU6Nee0JKw58H+NjYrln9aqSRDvLJWPhGE4MQDwBt?=
- =?us-ascii?Q?9yRCfHEIwjjJBW9oaTlZc+Uspj4Z5lfpxhWgojUYDhSiKpq9j9Oznm5JTpkL?=
- =?us-ascii?Q?yBokp8z1ceLAIkGnZu2QZGOKzmwOmUmtZ+gr9xv+xaVRi0jFQLgEdCpj002H?=
- =?us-ascii?Q?CYWqDFJXFj1504CyHDsU3hFneXk7DXKlAz7hsqI+cPUsamedYPMQXzYmh92j?=
- =?us-ascii?Q?F7gcRF4JxXKYzLGfGViucbm4ksUn/+x1LbbMmjLcxAQl5KWlCwev01OlRcz9?=
- =?us-ascii?Q?H6HijKLJb5RwHlNCYSpAT8OA9S9wrl0YKkbqNOYW/Y89?=
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20251104 header.b=AsjAw/fQ
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
+ [IPv6:2a00:1450:4864:20::335])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 882DD80C86
+ for <buildroot@buildroot.org>; Wed, 19 Aug 2026 14:32:37 +0000 (UTC)
+Received: by mail-wm1-x335.google.com with SMTP id
+ 5b1f17b1804b1-4956869750eso6990295e9.2
+ for <buildroot@buildroot.org>; Wed, 19 Aug 2026 07:32:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20251104; t=1787149955; x=1787754755; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+ bh=aqUgRHBgxZiXrgWHew+f2i3XbK1vGCb5IteBPCZpIj4=;
+ b=AsjAw/fQxWAQwRuhC3Hcd8IR70hj1X022JnJJLu+sux80OICz25xv/skeLTcjO+xBW
+ tSxxscqbf/afGkYIO08YrVOZyZIdse09ZgL7jq95RbufunfLCY7DsRHqoBITpaVRXw5g
+ 3OjWlBsj/++zU0CmOvgY4npp6338ORam/38kf8f227MoVfybWNPvIqzQ5gggs3Cm2u1p
+ B5uCb0Ze3jaJVXBCZLqLGblTuYh3tapyiLPb3w20gQlvqzYn7rdJEA45D7a+qU2oPsla
+ O98UqFLMfqd4lEB4TYfEBjxObs4MPLPVyWSGATd+nQEHHfDm5tKEdiQJ4y3zRZUpTLzF
+ P8Iw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20251104; t=1787149955; x=1787754755;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to:content-type;
+ bh=aqUgRHBgxZiXrgWHew+f2i3XbK1vGCb5IteBPCZpIj4=;
+ b=B8oIhEQUoDysyOEW0AUoaSeCnj+I2l+zsvm8ZQfiUTUC/O7ldwVP9M2xQtL4qlzSCX
+ rIEtxlMBK7KBP82O3ALbt0wsHnlLAhxSRlBsgomEPsMUbyxuO3G2Fc/zYcuAUhUOLc4L
+ lu/5KfFmha6jMwYxu/sVzTG4r+/dK3n9ZYnEhFGCgqdGWGICD8h5VAvGdty2AGTJQFke
+ oqtR03X6I471nOp5ffaDR0ZE376k9HLzh4GDipAbTbaFrRmVVKG0vnGcbeQWECzZGgar
+ uUsTcXIKJRUIR3d6cEtoryTG7E7TnmkgvtGaujHjCXQXWiqp404woxtZAe8kYDFHdV5b
+ 6K9A==
+X-Gm-Message-State: AOJu0YxegA/OhZVRBpLj4ZTWUa70Al8xnS5ODl1XoY6SxqxNolyEfL3e
+ JAV8vQn6ZqLroRBY+UQCq/Z5RxHdQJ/sgRAF5Oj55SOZA0lRr4Ks92FiLDhbIQ==
+X-Gm-Gg: AR+sD10A5hhC5AA15XzqAt2p4/9zqSrNzzARqiZ0db+ehKXvlsFbBks29zkmB2yGFGy
+ 5PCBRkPkSWIV5xOwhRLzlgfhMOqBBjJmvIyxC+687VBaNi80P7X215+1SgUHYkre8gCVi6TIhoA
+ ks28tb8DzF3y19Oo94gALMw9PN5hSBvL1s70PLMDcFpnckPY8yMuxol737yPCtEjphGF5b+TZtP
+ coRPGFe7x/FhureY5kpLSJ0QsvLbjWOHcvOlAHABFl+9DDUFRFr3pKJSRSOpampt0AjYx7dp1fa
+ iaMOYU17Mb837FBFZrdSb8vqQ4ToZ+qC879JvZYVJPdWFfTxaeAeGGn3KcbCLE4a5rUR8jvYSPJ
+ a9tywBC+Hu66AoA4ACPoKPHBTsatNAJPQqN27feYcmpO9dM0mB7Aqcorv1kCbef+8kY7CqNplbZ
+ wx0k3rnaQVl37sudR4jlotEhMns+nfuYvBWQHUpytnihvUuxEiBD8OsorP4TipvGfaHZXA27zV+
+ H1UF4MKhIjZ79u92YzdErgBkKUrV+mjqcP0W1KmSRWTUluqLYKpp9/XnKG1imNkkI+a3PPv+mIT
+ 6/UXYc4b+sRXApCkdMuGbjMMCcb1MRUkyYkDQqcD7whq
+X-Received: by 2002:a05:600c:a05:b0:499:93b3:91ea with SMTP id
+ 5b1f17b1804b1-499aa1f85demr81012095e9.15.1787149955036; 
+ Wed, 19 Aug 2026 07:32:35 -0700 (PDT)
+Received: from Phil-Pictz.home
+ (2a01cb0000b3fe0090609422362943bc.ipv6.abo.wanadoo.fr.
+ [2a01:cb00:b3:fe00:9060:9422:3629:43bc])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-499a9e805a4sm71490175e9.4.2026.08.19.07.32.33
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 19 Aug 2026 07:32:34 -0700 (PDT)
+From: Philippe MONTCHO <philippemontcho@gmail.com>
+To: buildroot@buildroot.org
+Cc: Philippe MONTCHO <philippemontcho@gmail.com>
+Date: Wed, 19 Aug 2026 16:32:15 +0200
+Message-ID: <20260819143215.905349-1-philippemontcho@gmail.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-OriginatorOrg: xes-inc.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH1P110MB1603.NAMP110.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: e89b6fe2-b187-419c-7f79-08defdf800b0
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Aug 2026 13:44:33.8083 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 2925f1cd-bdc3-4a76-bb38-6159e20a17f1
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8P110MB2436
-Subject: Re: [Buildroot] [PATCH 2/2] support/scripts/size-stats: properly
- assign pre-compiled .pyc files
+Subject: [Buildroot] [PATCH 1/1] package/mtools: bump version to 4.0.49
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -164,82 +122,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Yann,
+Release note:
+https://lists.gnu.org/archive/html/info-mtools/2025-06/msg00005.html
 
+Signed-off-by: Philippe MONTCHO <philippemontcho@gmail.com>
+---
+ package/mtools/mtools.hash | 2 +-
+ package/mtools/mtools.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> -----Original Message-----
-> From: yann.morin@orange.com <yann.morin@orange.com>
-> Sent: Monday, August 10, 2026 8:28 AM
-> To: buildroot@buildroot.org
-> Cc: yann.morin@orange.com; Michael Klein <m.klein@mvz-labor-lb.de>;
-> Vincent Fazio <vfazio@xes-inc.com>
-> Subject: [PATCH 2/2] support/scripts/size-stats: properly assign
-> pre-compiled .pyc files
-> 
-> From: "Yann E. MORIN" <yann.morin@orange.com>
-> 
-> Since commit 3fed42456693 (package/python3: use the provided pyc
-> compiler), we abide by the PEP 3147 guidelines on where the pyc files
-> are located. In practice, this means that, for a .py file /foo/bar.py,
-> the corresponding .pyc file will be /foo/__pycache__/bar.pythonX.Y.pyc
-> (where X.Y is the current major.minor python version, e.g. 3.14).
-> 
-> Add support for this layout in the size-stats scrip, which so far only
-> supported the legacy, pre-PEP 3147 layout of having the .pyc next to the
-> .py.
-> 
-> When we associate files to a package, we only have the original name,
-> and we must construct the associated filenames. For the .pyc, this would
-> require that the version of python be passed to the size-stats script,
-> but this is not so nice. Instead, just scan the pycache directory to
-> find the corresponding files. This is not much nicer either, but at
-> least the wart, if bigger, is in a single place that would be easy to
-> chop out or rework if need be (e.g. if we need to add support for more
-> similarly target-finalize-generated files in the future)...
-> 
-> Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
-> Cc: Michael Klein <m.klein@mvz-labor-lb.de>
-> Cc: Vincent Fazio <vfazio@xes-inc.com>
-> ---
->  support/scripts/size-stats | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
-> 
-> diff --git a/support/scripts/size-stats b/support/scripts/size-stats
-> index fdcaeaa546..9a0aafbf2e 100755
-> --- a/support/scripts/size-stats
-> +++ b/support/scripts/size-stats
-> @@ -77,7 +77,23 @@ def add_file(filesdict, relpath, abspath, pkg):
->  def get_associated_files(relpath, abspath):
->      # also check for compiled .pyc file
->      if relpath.endswith(".py"):
-> +        # Legacy .pyc next to .py
->          yield (relpath + "c", abspath + "c")
-> +        # PEP 3147 layout
-> +        basename = os.path.basename(abspath).rsplit(".", 1)[0]
-> +        reldir = os.path.join(os.path.dirname(relpath), "__pycache__")
-> +        absdir = os.path.join(os.path.dirname(abspath), "__pycache__")
-> +        try:
-> +            for fname in (
-> +                fn
-> +                for fn in os.listdir(absdir)
-> +                if fn.endswith(".pyc")
-> +                and fn.rsplit(".", 2)[0] == basename
+diff --git a/package/mtools/mtools.hash b/package/mtools/mtools.hash
+index 44f0803b0f..13f34ce044 100644
+--- a/package/mtools/mtools.hash
++++ b/package/mtools/mtools.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256  7d57f14a2482dc4658e4b386180793ef50f0de89ee3a9a28f0a371630baac7c4  mtools-4.0.48.tar.lz
++sha256  76dfea98d923dfc9806ce34bd1786aa9b5a39d70f56f26c0670a348c664f1d2a  mtools-4.0.49.tar.lz
+ 
+ # Locally calculated
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/mtools/mtools.mk b/package/mtools/mtools.mk
+index 8c7a348fea..d4923a46e5 100644
+--- a/package/mtools/mtools.mk
++++ b/package/mtools/mtools.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MTOOLS_VERSION = 4.0.48
++MTOOLS_VERSION = 4.0.49
+ MTOOLS_SOURCE = mtools-$(MTOOLS_VERSION).tar.lz
+ MTOOLS_SITE = $(BR2_GNU_MIRROR)/mtools
+ MTOOLS_LICENSE = GPL-3.0+
+-- 
+2.43.0
 
-It's not an immediate concern because we don't have support for it (yet), but there are multiple optimization levels which pyc can be compiled for (1-3) [0][1].
-
-I think (untested) the current rsplit will fail on an optimized file pattern and we can be a bit more future-proof so we don't accidentally run into this same problem again?
-
-Maybe we can leverage `source_from_cache` [2] and compare the file names?
-
-It's probably overkill, but I think this is one of those easily overlooked things where if we did add support for optimization levels that we'd miss fixing the code here to account for it.
-
-Anyway, something to consider.
-
--Vincent
-
-[0]: https://peps.python.org/pep-0488/
-[1]: https://docs.python.org/3.15/using/cmdline.html#cmdoption-O
-[2]: https://github.com/python/cpython/blob/20e6c2fc7c174342214d561845419c4030f8638f/Lib/importlib/_bootstrap_external.py#L299
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
