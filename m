@@ -1,45 +1,45 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1082C5DF81
-	for <buildroot@archiver.kernel.org>; Thu, 20 Aug 2026 06:57:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1EFF2C5DF87
+	for <buildroot@archiver.kernel.org>; Thu, 20 Aug 2026 06:57:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9231280C27;
-	Thu, 20 Aug 2026 06:57:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B001A40598;
+	Thu, 20 Aug 2026 06:57:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GK953RnELqvN; Thu, 20 Aug 2026 06:57:14 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id V9Xa8s7PyIvW; Thu, 20 Aug 2026 06:57:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787209032;
-	bh=pU49M8jDSeJgfjeXahQenzS8z6eixI8BVqDp70pNwE8=;
-	h=To:CC:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=Vx5iNQ59z+a2KATomd1sH5SDq2c5rYdD3/S4QOcjb2XN/xJmdhOlTqro3W4ZuGU+A
-	 lPpk3R7IJoKPUJdoIDCdn97NP6vlKnr8gPAUh9qRP+FI35vC42RCK2ptkIyUnJVpjT
-	 7C8LXFoSvkRntuLR2PcadZskKQBJm4vZz56QyqpKZPO2kyiLaaGMOXo1oT3Zso6yM9
-	 vaKpxoscTDuCKw7P2wJGKeN0hr6PDsdyhGFbuHx8a1sezToJLdkFkEngMnGBTHJPq6
-	 6RL991WYJC6yvLmfIPB5SijRONlrKmTeulDMQjejr9ToJZfy718zcWVAGLLDlUqcVS
-	 H0nCoH9yZgPcA==
+	s=default; t=1787209037;
+	bh=z6HDg1BwWgMY3wgB8r7/DvQivb0Yb1ucpkufCDgr7wc=;
+	h=To:CC:Date:References:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	 From;
+	b=rW6i6Ve7DeuuLnt6ttQLYjnx6GCobKrCFns01OPT9oiAvmQyjkNdRFFcRYvhrxzRy
+	 9am9Po5o9MRgFBNboyCY83+KagqN0camlKjL+6/VmGU3TxcAb5v2IDY0C3WsvWGOwQ
+	 IevktYTVVQ0lvWzMXkj6+02hqD+uKhj7tILpC6R/kPeO75l7Ve7UurkMSZT3VtWBvP
+	 WbRJ2sccVuiV0uzHuvbymnP2mhoNtF5NchYp/i5F+IJXIL93z+tbuJ6HD0io9bnLz/
+	 oYzuO95H0OvgYt6hHFJ7soFsO7Dgat3f5Mtuwx9QgH2UdfVLt4X706CbdFqt86N0Fx
+	 eKA/uO0xtGx0w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AD20380C32;
-	Thu, 20 Aug 2026 06:57:12 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id D485C1EA4
- for <buildroot@buildroot.org>; Thu, 20 Aug 2026 06:57:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B55AF405AA;
+	Thu, 20 Aug 2026 06:57:17 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id A80D9334
+ for <buildroot@buildroot.org>; Thu, 20 Aug 2026 06:57:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A597780BBD
- for <buildroot@buildroot.org>; Thu, 20 Aug 2026 06:57:09 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9764040581
+ for <buildroot@buildroot.org>; Thu, 20 Aug 2026 06:57:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id r29SVyTb62xh for <buildroot@buildroot.org>;
- Thu, 20 Aug 2026 06:57:08 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zZ9YFKa-7qsD for <buildroot@buildroot.org>;
+ Thu, 20 Aug 2026 06:57:10 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
  client-ip=2a01:111:f403:c213::5;
  helo=zr1p278cu001.outbound.protection.outlook.com;
@@ -47,78 +47,78 @@ Received-SPF: Pass (mailfrom) identity=mailfrom;
 Received: from ZR1P278CU001.outbound.protection.outlook.com
  (mail-switzerlandnorthazlp170120005.outbound.protection.outlook.com
  [IPv6:2a01:111:f403:c213::5])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A899B80BBE
- for <buildroot@buildroot.org>; Thu, 20 Aug 2026 06:57:07 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3E38D4057E
+ for <buildroot@buildroot.org>; Thu, 20 Aug 2026 06:57:10 +0000 (UTC)
 ARC-Seal: i=2; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
- b=rnsCekgOGD3MZOsgJ2A7x4KZnCw2nL5yJjTxzi0UzzjDrYKVecG3CpvVfjZBnj0zbwjGKF71ILEpBzv4LlZG9GmU13Pcl8Z7Fv0ruytBJ9rvQCfULDYnR5lDerIKOsPQbJMGd1AqABSNVPDcI9M2vmkUKa7DCCjVP+qzN3vSEa6xcZn7NzEW/75F3wA1HAxAdi91hIGrt5V4QjChWO+8QKANO3Z2lAN444k+fcf/dUKVZYNjOYJBeAQJPFOGYEZzX95q9xvj9hOD0K232owOSvqrykrNJb0FqtXoM+u2OZW8wVkB/M44XroZP/p6nlV2VxpQG/TM2O7iS5yTHpwzgg==
+ b=Emxg1qZWHlzNj6dlF/lZJ4+gfh7fhRhEQDwSqSE0fDBWoBuxwIC61RNKA5htuE1VJBG2AbEzva3p4UXdNTusFg3F6GULQb9ksNtwAz+SeTqXf2OCgAs/0HZmPR8oO/vc6mdMKkC2VEKYYwfIMkixPB0moTJiHvqm1dj1MBTZo25ngs2YJ84+YK2cLcG/u0/zbdpnE7RjJ7GTEJjoBeNQ9hRWTWt+7gLDlNq4wxOZRczAFtrSJ2labmGOeqgdBr1I8E6qNBSatYfpYUI2LL1fwEbGl3TZpgW/WCP4dEWT6Me2hyoPMOuf4CLbtOyNTFuUP1Zixfk1/sNQbeNBVZZesg==
 ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FbzdmuMGr44hk1DX3lYL6Kc3kJDFQw+saJsKj+R7Gvk=;
- b=r5ObuXQQ5e1o+Cxgp5Ny9LdBRJ39NrF3fbaHhhbJyVmb8d9iobwELRnaf78BqHneNlKurICerwCPR46Nywo/i84RfychhcqO2ul1evT5SEI+WQpuTxV9MbvjR+YEWS6pdaxjuRI33RU58bMZs5T1LzB32kMSZe1+Z30iScHJE/8XR+mwUoRRwmsXE06IYvjE9HcqubOSy6GlAV/hbGFWclrDCMjnlcrYOGQHaPmcS3IBLUyrXHrGljRg8qMw+QH85ZiqEuSDMg6W9TSyx8pn5+wJwLWQut86+I0u++YqJgStzMzk6+ovCtEPgri+xKj27l45SD65BCpL2DrU39BcuA==
+ bh=bwuYf0MMZaLRQNcmM35p25JB0GKnqNPTj2xN7ixTbEA=;
+ b=TadxqjcqRW2If/ovKqNGDa9mvf29g+NOQiZuxBblSqsl6dFTOi5+aY3Oe7LNmyE3dXAwbZWcTV++2fTbIOV8XXewB0lwqXzO6m2CAr/aMJ3N6NeTmKIpnrYnq9/bpcSispXu8tzX2wOIAUSmuAPWOrvOUTy99heaN7uW6aWP+A4NA5X8SGQ1GZbioVTqSqstS/Whn8expsMXZbPQT7Nb37l+9zv1Pi1D2yVOuMv6Tw/NqkSMv2fs8aHSIVuSf3+yM3j9y5LRlVzg+pEn4IpyCdJmpRgmbfF6nOnhxYSlknFio1N8K8UIZcR+mR38GOjybwUorEsic7Gsc0cfVUEgsg==
 ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=fail (sender ip is
- 94.140.18.225) smtp.rcpttodomain=buildroot.org
+ 94.140.18.226) smtp.rcpttodomain=buildroot.org
  smtp.mailfrom=rey-technology.com; dmarc=pass (p=reject sp=reject pct=100)
  action=none header.from=rey-technology.com; dkim=pass (signature was
  verified) header.d=rey-technology.com; arc=pass (0 oda=1 ltdi=1
  spf=[1,1,smtp.mailfrom=rey-technology.com]
  dmarc=[1,1,header.from=rey-technology.com])
-Received: from AM9P192CA0017.EURP192.PROD.OUTLOOK.COM (2603:10a6:20b:21d::22)
- by ZR3P278MB1275.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:71::12) with
+Received: from AM9P250CA0007.EURP250.PROD.OUTLOOK.COM (2603:10a6:20b:21c::12)
+ by ZR1PPFE824120AE.CHEP278.PROD.OUTLOOK.COM (2603:10a6:918::2b0) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.339.8; Thu, 20 Aug
- 2026 06:57:01 +0000
-Received: from AM1PEPF000252DA.eurprd07.prod.outlook.com
- (2603:10a6:20b:21d:cafe::81) by AM9P192CA0017.outlook.office365.com
- (2603:10a6:20b:21d::22) with Microsoft SMTP Server (version=TLS1_3,
+ 2026 06:57:05 +0000
+Received: from AMS0EPF00000192.eurprd05.prod.outlook.com
+ (2603:10a6:20b:21c:cafe::c) by AM9P250CA0007.outlook.office365.com
+ (2603:10a6:20b:21c::12) with Microsoft SMTP Server (version=TLS1_3,
  cipher=TLS_AES_256_GCM_SHA384) id 15.21.339.8 via Frontend Transport; Thu, 20
- Aug 2026 06:57:01 +0000
-X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 94.140.18.225)
+ Aug 2026 06:57:05 +0000
+X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 94.140.18.226)
  smtp.mailfrom=rey-technology.com; dkim=pass (signature was verified)
  header.d=rey-technology.com;dmarc=pass action=none
  header.from=rey-technology.com;
 Received-SPF: Fail (protection.outlook.com: domain of rey-technology.com does
- not designate 94.140.18.225 as permitted sender)
- receiver=protection.outlook.com; client-ip=94.140.18.225;
+ not designate 94.140.18.226 as permitted sender)
+ receiver=protection.outlook.com; client-ip=94.140.18.226;
  helo=mfod-euc1.prod.hydra.sophos.com;
-Received: from mfod-euc1.prod.hydra.sophos.com (94.140.18.225) by
- AM1PEPF000252DA.mail.protection.outlook.com (10.167.16.52) with Microsoft
+Received: from mfod-euc1.prod.hydra.sophos.com (94.140.18.226) by
+ AMS0EPF00000192.mail.protection.outlook.com (10.167.16.218) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.339.3 via Frontend Transport; Thu, 20 Aug 2026 06:57:00 +0000
-Received: from localhost (ip-172-20-1-109.eu-central-1.compute.internal
+ 15.21.339.3 via Frontend Transport; Thu, 20 Aug 2026 06:57:04 +0000
+Received: from localhost (ip-172-20-0-240.eu-central-1.compute.internal
  [127.0.0.1])
- by mfod-euc1.prod.hydra.sophos.com (Postfix) with ESMTP id 4hQZ4C6q4JzlZrx
- for <buildroot@buildroot.org>; Thu, 20 Aug 2026 06:56:59 +0000 (UTC)
+ by mfod-euc1.prod.hydra.sophos.com (Postfix) with ESMTP id 4hQZ4J19JyzsWCJ
+ for <buildroot@buildroot.org>; Thu, 20 Aug 2026 06:57:04 +0000 (UTC)
 X-Sophos-Product-Type: Mailflow
-X-Sophos-Email-ID: 56efa1e1b1be49db92402f049a6e0f16
-Received: from ZRAP278CU002.outbound.protection.outlook.com
- (mail-switzerlandnorthazon11020107.outbound.protection.outlook.com
- [52.101.186.107])
+X-Sophos-Email-ID: eaa96a597c184f4fa42f0f9381754e61
+Received: from ZR1P278CU001.outbound.protection.outlook.com
+ (mail-switzerlandnorthazon11022131.outbound.protection.outlook.com
+ [40.107.168.131])
  (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
  (No client certificate requested)
  by mf-outbound-eu-central-1.prod.hydra.sophos.com (Postfix) with ESMTPS id
- 4hQZ4B5blhznTVV
- for <buildroot@buildroot.org>; Thu, 20 Aug 2026 06:56:58 +0000 (UTC)
+ 4hQZ4G6C9qzvPrk
+ for <buildroot@buildroot.org>; Thu, 20 Aug 2026 06:57:02 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=VCTykzSHGiS6JaZ8NzT6Gnd0BtDa6tB7Ds4w5PWHzZYH6L2EzVsbZo+Ns7a2aWX/xKrTbh9tBd0u41H1JUzfsKrXv8/fyZT4J4l7S1Kx8gT59yIZSu53+3dXE+i8cEv2d0DjS9MIz2TcK/Watf9zEI2lqhBGzN+kQeq5BUyQ6JVsv8td6bd1km3FiGUUnl70X0ukZaBkuH0BzWYS+/zHx1wnifr4zY5AVxdapLepjzdaOB7Aeo57QZv0+6suXeYZVeJ+BMilIEkaAKEKV4BOM6hOLiZ5M0cISXi8PJ/+3Q6pjk/bOAMwt7LW7qQuiiQGaYw/Vstf+QJakFcYghoHlg==
+ b=XhspdZq2GjyuHVYEYPhLgMWbhQ1MI8CUGoOis/KzoujHsp1XfsfyKENar5kBkI0n7tWwNc5/4YFvaV5uQdEPTRknwdmToomY6aiMXm9GovWa6yADvZUGq3VmLIpRazxIUGy62zwDGAGFjjksKMrE+1XTuaELpsHalM2yLjNKyMtBeSGudOfGdpdLTPVywLHvAdCOOscmgLwoqa09CyKsj4az73fMpCPNiezaF7hzo/YKHpbzQa86Srqn5i7BP/eEy3DitK88Lih7Jeg4vgHbuUgXrEefh/2N/1fEjUdoiL3w/loEOGPM+uq+Kp8kSq1X9gvqHxTIPCEYgE+TicKB/w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FbzdmuMGr44hk1DX3lYL6Kc3kJDFQw+saJsKj+R7Gvk=;
- b=So2+mc8cwJn5Bu3GfNflg4C1PaFgmPl5wojnCtwNYmjyucMr93SJJmRKcPpHsVnd04tNCMDC2MsuJuddCRth8OtSjToLgD7s6V473yAByB3vZrhTQSIh+3GkOhYt/R5L+BweHffa4IwXsmqF0sTW7X+N4CSZft4C31XG38FJq2z1FUzpomc+1vsIl6xhRy66sQ+VQfBTVUV2qfx1Nni92+JrBtaXbHmm2aTTG2UEkRfP1FbAWc8xqN8oPWNF7GPgAxYA8W91YE1ITnBaXo+FNh16bZ7IkFQVmOuLGE4rGOYIlL1dFn9DcqoXu7oixkw1BqDfV+8n9kFqojIEcNqcwA==
+ bh=bwuYf0MMZaLRQNcmM35p25JB0GKnqNPTj2xN7ixTbEA=;
+ b=OaWywqb/hHwtZzDBrrXTanIZO6BmBKGHu4HXJtoBYZrz+F7n4sTz+U2F/LFZcoxzJ2b9g9OALCkZGTeJsmupPu/jPDrvJJhNMi5GZJBQcvvIwSJntYM/w9Qa0C9b6V78hT3XsmGrvCRwdHRkLc3lwhhFEkXltT+XD28MU/R/wNPDckJYNpur4i4pKSH6xK1nlqdz5ONDY4WrYgI8FrbaZ8qTnMn/9eHeCcRir+wRlfFKOZGeE/EKYneNBZAF30TvEdUqaFgqweQB0rwWwPTp5vBoSTotKnzUDyfQgoe6P+aPRc7hUS+k21+QcBSl8EZvJ8KC5/asUGSyV08/WKpn4g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  20.79.220.33) smtp.rcpttodomain=buildroot.org
  smtp.mailfrom=rey-technology.com; dmarc=pass (p=reject sp=reject pct=100)
  action=none header.from=rey-technology.com; dkim=none (message not signed);
  arc=none (0)
-Received: from DU6P191CA0007.EURP191.PROD.OUTLOOK.COM (2603:10a6:10:540::22)
- by GV0P278MB1639.CHEP278.PROD.OUTLOOK.COM (2603:10a6:710:66::7) with
+Received: from AS4P192CA0022.EURP192.PROD.OUTLOOK.COM (2603:10a6:20b:5e1::20)
+ by ZR5P278MB1774.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:ad::7) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.339.8; Thu, 20 Aug
- 2026 06:56:56 +0000
-Received: from DB5PEPF00014B88.eurprd02.prod.outlook.com
- (2603:10a6:10:540:cafe::6b) by DU6P191CA0007.outlook.office365.com
- (2603:10a6:10:540::22) with Microsoft SMTP Server (version=TLS1_3,
+ 2026 06:56:57 +0000
+Received: from AM3PEPF00009B9D.eurprd04.prod.outlook.com
+ (2603:10a6:20b:5e1:cafe::a2) by AS4P192CA0022.outlook.office365.com
+ (2603:10a6:20b:5e1::20) with Microsoft SMTP Server (version=TLS1_3,
  cipher=TLS_AES_256_GCM_SHA384) id 15.21.339.8 via Frontend Transport; Thu, 20
  Aug 2026 06:56:56 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 20.79.220.33)
@@ -128,22 +128,22 @@ Received-SPF: Pass (protection.outlook.com: domain of rey-technology.com
  designates 20.79.220.33 as permitted sender) receiver=protection.outlook.com; 
  client-ip=20.79.220.33; helo=de1-emailsignatures-cloud.codetwo.com; pr=C
 Received: from de1-emailsignatures-cloud.codetwo.com (20.79.220.33) by
- DB5PEPF00014B88.mail.protection.outlook.com (10.167.8.196) with Microsoft
+ AM3PEPF00009B9D.mail.protection.outlook.com (10.167.16.22) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
  15.21.339.3 via Frontend Transport; Thu, 20 Aug 2026 06:56:55 +0000
-Received: from ZRZP278CU001.outbound.protection.outlook.com (40.93.85.28) by
+Received: from ZRAP278CU002.outbound.protection.outlook.com (40.93.85.5) by
  de1-emailsignatures-cloud.codetwo.com with CodeTwo SMTP Server (TLS12) via
- SMTP; Thu, 20 Aug 2026 06:56:54 +0000
-Received: from DU2PR04CA0287.eurprd04.prod.outlook.com (2603:10a6:10:28c::22)
- by GV0P278MB1915.CHEP278.PROD.OUTLOOK.COM (2603:10a6:710:70::19) with
+ SMTP; Thu, 20 Aug 2026 06:56:55 +0000
+Received: from DU2PR04CA0282.eurprd04.prod.outlook.com (2603:10a6:10:28c::17)
+ by GV1PPF260593666.CHEP278.PROD.OUTLOOK.COM (2603:10a6:718::209) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.339.10; Thu, 20 Aug
- 2026 06:56:50 +0000
+ 2026 06:56:49 +0000
 Received: from DU2PEPF00028CFF.eurprd03.prod.outlook.com
- (2603:10a6:10:28c:cafe::2c) by DU2PR04CA0287.outlook.office365.com
- (2603:10a6:10:28c::22) with Microsoft SMTP Server (version=TLS1_3,
+ (2603:10a6:10:28c:cafe::15) by DU2PR04CA0282.outlook.office365.com
+ (2603:10a6:10:28c::17) with Microsoft SMTP Server (version=TLS1_3,
  cipher=TLS_AES_256_GCM_SHA384) id 15.21.339.8 via Frontend Transport; Thu, 20
- Aug 2026 06:56:50 +0000
+ Aug 2026 06:56:48 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 213.196.177.45)
  smtp.mailfrom=rey-technology.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=rey-technology.com;
@@ -154,129 +154,131 @@ Received-SPF: Pass (protection.outlook.com: domain of rey-technology.com
 Received: from mailrelay.reygruppe.ch (213.196.177.45) by
  DU2PEPF00028CFF.mail.protection.outlook.com (10.167.242.183) with Microsoft
  SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.21.339.3
- via Frontend Transport; Thu, 20 Aug 2026 06:56:49 +0000
+ via Frontend Transport; Thu, 20 Aug 2026 06:56:48 +0000
 Received: from build.reycloud.net (unknown [172.20.60.115])
- by mailrelay.reygruppe.ch (Postfix) with ESMTP id A4973801D4;
+ by mailrelay.reygruppe.ch (Postfix) with ESMTP id 651017FE27;
  Thu, 20 Aug 2026 08:56:47 +0200 (CEST)
 To: buildroot@buildroot.org
 CC: =?UTF-8?q?Stefan=20M=C3=BCller?= <stefan.mueller@rey-technology.com>
-Date: Thu, 20 Aug 2026 06:56:46 +0000
-Message-ID: <20260820065646.375321-6-stefan.mueller@rey-technology.com>
+Date: Thu, 20 Aug 2026 06:56:41 +0000
+Message-ID: <20260820065646.375321-1-stefan.mueller@rey-technology.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20260820065646.375321-1-stefan.mueller@rey-technology.com>
-References: <20260820065646.375321-1-stefan.mueller@rey-technology.com>
- <4e118c97-1508-4315-bc90-2b0b02fc43b2.a680deba-e8f9-456f-ab7c-ac325426e0a3.ca0ad5ef-d59b-485e-ae90-b209c6a302a1@emailsignatures365.codetwo.com>
 MIME-Version: 1.0
 X-EOPAttributedMessage: 2
-X-MS-TrafficTypeDiagnostic: DU2PEPF00028CFF:EE_|GV0P278MB1915:EE_|DB5PEPF00014B88:EE_|GV0P278MB1639:EE_|AM1PEPF000252DA:EE_|ZR3P278MB1275:EE_
-X-MS-Office365-Filtering-Correlation-Id: 094942f4-f9ed-4f29-7d4b-08defe883b9b
+X-MS-TrafficTypeDiagnostic: DU2PEPF00028CFF:EE_|GV1PPF260593666:EE_|AM3PEPF00009B9D:EE_|ZR5P278MB1774:EE_|AMS0EPF00000192:EE_|ZR1PPFE824120AE:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4e0e8ea5-cb5e-458e-d027-08defe883e1f
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam-Untrusted: BCL:0;
- ARA:13230040|82310400026|23010399003|376014|1800799024|36860700016|13003099007|10067099003|56012099006|11063799006|22082099003|18002099003;
-X-Microsoft-Antispam-Message-Info-Original: 6lh5PkezdzT9mtedFbJy4Zf2gy5GflBGH6h901SlxNeRVJXDv+4Jia+OO4vU4LSPHd1XYa5lQmKmphnaFvNQekqTE+uzdSy8UpUb6CaEA3IAIwMOXpPPfY4VHjL9vznOs6FjGJn7d29JgUCeq+451xkn95T971qUxGR2fYeBy/r/WH4OqX3pxj1g3sTyTmHS0PjUkY7LfRwmqdEDQ8nNBAmALk1CRgxRNfZ3aPaXEdFyrWmMqgt3gtScZLvzGZaGl7oxrWzcwsMGIL/1BILpP9Zdj+EhHn13U5lNQCCnlKo0i6wp5RedH0wmcQkXmzRKKNb9pBUl8/FGSfhkRcWq0RiBuYlmONXk43DZhVCpDCAPZUZ9dKzu20VbvzVcwN+WZsBpxFrM8LddKJ2H5sQt/2KMvoZL8AihFoqoLS7VDChMJPHYv8NMVdVQsE7UqQL4H2d+Er8itF5E+Wo+dsK+RYs0mRTc9eKvbqXEVc8yTi0IHZWOGjmHQRWGFkpX9kqk0gXeyJlD+/w8u4FG0U+t3MjfDf66boNGhqaQ4Hv74dpNfpgkUx7vXt+rh5sKXAKzYn6rHqbJO0oNPBCgeIsOZUc7xNIhXXDEokQJ5jb6AqiABbR8V2Tc3EsivUs0nbzOICs4e8QN+ZpPcnH5IhvpajbTACG8bwTgPdSpS6LzYgP3zsDdOGqahSn8Ed+A7+Qh+HUwUUWjA0IPbdwgRIBx3w==
+ ARA:13230040|82310400026|376014|1800799024|36860700016|23010399003|10067099003|18002099003|11063799006|56012099006;
+X-Microsoft-Antispam-Message-Info-Original: JDBnY2lzjKZe+pbgncro/KrPH0GgM2Gbw1hVcC/Yk6DbnTnk+xt1YXka4G/ZC3NCb/wfu6MNCuZL8+rlilY1BgN0ahdBgY0DGc2+LmatP5sd0LptQEzGT277MBQvVS6mhBSXzDXf+qASZl6mtTDrL0wfyWajo7lj0OoiZbsIvLOhXH1FARRnopdFHTojz3unZjq4YfqMblO3dC218oCKbSY2diGORF/s3MVOFWCjLF6Qv+MviSSwbmieL99p6niA9Ydj5vFqNlqjPRxvgJVqE+sO/tq0HwaW8VACtfK+Mrce3y35Q1cvsQOmADr4SnI4zN2f14zgf4j7VRS3ydXnr8FpKubxH8wV+uJHiXtwRkFGGmYlgXmn9/+S9RkMrKjtvl2sL6/zAH+3taVQoGjK4Pct5og92aSzbpV2ovsq0sXQtoqx84FEz+EbQvEe/Fn4kmaoSMCWcK/ehg8hJCWsDaG0rTzGBKdhYM/R+oi08Ba581yXdMVKhrKocRrFriL2agZFjg1z782NEfZ+7ab41dsgJ2wa4Ihu3RxUnJpkUod+xpZoPTQAd4mcbW32mKsL29MXjw4iL1aNRXnysWFsTMtedVwviRNf6FRjL310PQLi4/Sly32/Y+t0q7LpPePaFBQaSZhhKsJ5b7hrCHgs/Mn6+UVY4s0GAtu/YlSlVkAIjfsicCG5Eda1aIlVdtctSPifmvjNGBO4FqIsGs9BvQ==
 X-Forefront-Antispam-Report-Untrusted: CIP:213.196.177.45; CTRY:CH; LANG:en;
  SCL:1; SRV:; IPV:NLI; SFV:NSPM; H:mailrelay.reygruppe.ch;
  PTR:ftth-177-045.tbwil.ch; CAT:NONE;
- SFS:(13230040)(82310400026)(23010399003)(376014)(1800799024)(36860700016)(13003099007)(10067099003)(56012099006)(11063799006)(22082099003)(18002099003);
+ SFS:(13230040)(82310400026)(376014)(1800799024)(36860700016)(23010399003)(10067099003)(18002099003)(11063799006)(56012099006);
  DIR:OUT; SFP:1102; 
-X-Exchange-RoutingPolicyChecked: Ph1H3WUDRcRWp93OSpyljlYCvaOUzzdP2wfj1oCflbCasvxPCP4Gk5mGAikPtCwnmek2UQduOeVrK2SQmSFdGgXFM43lCpq4j1qsIsRSAPN+c+GBr61RvxeY9WkjJ20QbF8G3l0C7eMn53kO4SmO5UGvq+32YsI3dNQ5zfKqQrlJhYfGRTqN/kio73oEFWlZl9lCHyLbwISVPURDvr9+/OeHgeoJ3ij8H1DQeC9RMiLFBqkAmR8IyAFOLiOsLijW4PBZcXK62dmQjlqS2vEOsOPwuMi6NbwxyYLz6oJ704sJMCq9oi2G1c+Q7lMGy3NNCRkmNEnVvBqUyJXp0W0i7Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV0P278MB1915
-X-CodeTwo-MessageID: 247ede2b-44a1-436d-8875-7884ad45fa07.20260820065654@de1-emailsignatures-cloud.codetwo.com
+X-Exchange-RoutingPolicyChecked: FtrEAZZ52VdNmkmRbG7xGyGggNYfNyMvMstOinwZT3Q5LoyuLZky+xCMfjB0D/pFbwFn1Yr19dan7zqjNxjTi1t0PsEWH4f3gcXNhUfV7OmiCZtNtyyj5T57VUa8qn65bEJHzFEDtGv0ARSyleU3+Re1Nh80vZ9++NoIjmpVlYA4JdkyFpxgfBcrwJmejG2BLpjzLXJPw8eo+9wbU8VU9Gz4S7McgtaVzWGFswzOaoFTq4qvK5Twu82fVYtXEcE9KZI+/UiYtL9RkYN9E2id6V0Qj87leE9JiXBPEpdSMc8wWUrSIFi+lxISfuQtBC6OpY8HHPrSEqdVN/xN4rjEmA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV1PPF260593666
+X-CodeTwo-MessageID: 4bb3040e-b155-4719-ae03-d2ee8c252f28.20260820065655@de1-emailsignatures-cloud.codetwo.com
+References: <4e118c97-1508-4315-bc90-2b0b02fc43b2.a680deba-e8f9-456f-ab7c-ac325426e0a3.7f9be450-dceb-4ebb-b9e9-685b8eeceb2d@emailsignatures365.codetwo.com>
 X-CodeTwoProcessed: true
-X-MS-Exchange-Transport-CrossTenantHeadersStripped: DB5PEPF00014B88.eurprd02.prod.outlook.com
-X-MS-Office365-Filtering-Correlation-Id-Prvs: fa80c775-c8f5-46fb-461e-08defe883541
+X-MS-Exchange-Transport-CrossTenantHeadersStripped: AM3PEPF00009B9D.eurprd04.prod.outlook.com
+X-MS-Office365-Filtering-Correlation-Id-Prvs: 2ee4e2d7-9610-43cb-4446-08defe88346a
 X-Microsoft-Antispam-Untrusted: BCL:0;
- ARA:13230040|6049299003|1800799024|35042699022|36860700016|14060799003|7149299003|82310400026|23010399003|376014|22082099003|18002099003|4053099003|13003099007|10067099003|56012099006|4143699003|11063799006|4076899003|8096899003;
-X-Microsoft-Antispam-Message-Info-Original: cjNQMo/1ax6jlTTbH0VvS8kTUD/y+XvXhdqRcXRZV0547QvVaukVBqJSUdTg4B1neb93IIGenlIX43ehQoccEPnhwEfLDnvkP9AOFeGZ/C5uGQLvXI6zsU5XOk53k+ohAxQ1yM9zszK8vNnechnyTMFzYi84vSS2aCysbp7pLGPsPxvJQUdkgnyjtphcHscrhWA16F1QE6jFzSiDcHTHH1HRALoU29+4LWefspTW85iOMu9MF4bPVDtEt9zkGuPczpQQPU2YqVxolAELEVl26dPomm4NeVqe7kdRPZKNYeEO9r73FKvVtmzb5qxao0KP6qXXuOIfjAvyBkMZUwSsi3r7OLln1WOiISEeiUWquHGw5j0NDwIIpAsC5lqCx/0NfZKkU3NHyJ+b9gJagwegNv1kw8P3r0cuyO+lRcKD07doOCVPW8TERI9ievIIvapEW53fHqFlgFgRUpW2uGaUhaQTaAl5jd0vC/O3XqfYdqB3OBjm8kTsPjF/jaN14prYeofHCK/+SLeRPjXWBY1rluQ3DSguLf/v5I4hAbPeOofAbIBKC14wJjsW3+JL+QSfwe9PUGcIA7m/zu8mwBkF1hj/rNvo/5Eflft1dDuak6Eh5xBw9ry2NV/b0KPYUpdiIszUyEnry9OZojmSlMF6HA==
+ ARA:13230040|6049299003|23010399003|14060799003|35042699022|1800799024|7149299003|376014|82310400026|36860700016|10067099003|56012099006|4076899003|8096899003|18002099003|11063799006|4053099003;
+X-Microsoft-Antispam-Message-Info-Original: Y+PVZqipti3/TVHMofYOKFsBr9TyiV70btGeyLxHKE8ZPkMNPI1Ot4yK0fIbZuLV9jNbD+vm1aFWvzxwh20snhbFf/WWVtIVADKHwPqIxOAiyxt6sN1KTMUhKbpakf0bYNzxsNGsLiPYrLXNS9GYcEpDUa9uDRJjb7UPLEC0J06Nmg6E4PMAEHoW7jZY2h/xm5Stx+wY/alGEoXwRvnuzyfX96awj7hK6zVprfZxjGHK82n66oT3uS1Mk67ZP9xvtf6MDUYtTVEvjISGW29z/lCBdspqK5yQhTBYvE1PkNdGfjEr8aMmY5izZkc+Djo1sJg0pYAu51bG98L6S427u7vD5XfQyDioz6Ou+2aFyPLMBzLRDdmvTeIOXXzwZKMBzSXC0jnQnZO3JcfOcd1xYgYKP7cSdd1/hnBrjH2Ikzr08YYPRmlYnFF8rFnAgUJgbTePUoMO8iUKcNgs9XNmXDNNYXtzqhuBealDvTWttT3cLiAuAFtcWw8u1r0n3kOzHCdtsMLW9pVwC1iMYGpRn+j2dYY9dOvrTbH1ZR1ndes8i7COYVNHzRCsRlbDF+czcdUHw82yCrQ7h+1TLqK/Ym8ocZKPFdguZMFSl1u6m9x/CDQlSHuP/T4v38g1EJIBD/OwoH3BR5XVGDL5HgmCrg==
 X-Forefront-Antispam-Report-Untrusted: CIP:20.79.220.33; CTRY:DE; LANG:en;
  SCL:1; SRV:; IPV:NLI; SFV:NSPM; H:de1-emailsignatures-cloud.codetwo.com;
  PTR:de1-emailsignatures-cloud.codetwo.com; CAT:NONE;
- SFS:(13230040)(6049299003)(1800799024)(35042699022)(36860700016)(14060799003)(7149299003)(82310400026)(23010399003)(376014)(22082099003)(18002099003)(4053099003)(13003099007)(10067099003)(56012099006)(4143699003)(11063799006)(4076899003)(8096899003);
+ SFS:(13230040)(6049299003)(23010399003)(14060799003)(35042699022)(1800799024)(7149299003)(376014)(82310400026)(36860700016)(10067099003)(56012099006)(4076899003)(8096899003)(18002099003)(11063799006)(4053099003);
  DIR:OUT; SFP:1102; 
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV0P278MB1639
-X-Sophos-Mailflow-Processing-Id: 3f6e07135dbe47549fcb5005624f992d
-X-Lased-Hits: BODYTEXTH_SIZE_3000_MORE 0.000000, BODY_SIZE_10000_PLUS
- 0.000000, DKIM_ALIGNS 0.000000, DKIM_SIGNATURE 0.000000,
- HREF_LABEL_TEXT_ONLY 0.000000, HTML_50_70 0.100000, IMG_AR_1 0.000000,
- IMG_ATTACHED_2P 0.000000, IMP_FROM_NOTSELF 0.000000, IN_REP_TO 0.000000,
- LEGITIMATE_SIGNS 0.000000, MULTIPLE_ATTACHMENTS 0.000000,
- MULTIPLE_REAL_RCPTS 0.000000, NO_FUR_HEADER 0.000000, OUTBOUND 0.000000,
- OUTBOUND_SOPHOS 0.000000, PNG_PIXPERBYTE_LOW 0.000000, REFERENCES 0.000000,
- SUSP_DH_NEG 0.000000, __ANY_URI 0.000000, __ARCAUTH_DKIM_NONE 0.000000,
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: ZR5P278MB1774
+X-Lased-Spam: NonSpam
+X-Sophos-Mailflow-Processing-Id: 65de06abc11b4140afcd21d6500dd7e9
+X-Lased-Spamprobability: 0.083173
+X-Lased-Impersonation: False
+X-Lased-Hits: BODYTEXTH_SIZE_10000_LESS 0.000000, BODYTEXTH_SIZE_3000_MORE
+ 0.000000, BODY_SIZE_10000_PLUS 0.000000, DKIM_ALIGNS 0.000000,
+ DKIM_SIGNATURE 0.000000, HREF_LABEL_TEXT_NO_URI 0.000000, HTML_70_90
+ 0.100000, IMG_AR_1 0.000000, IMG_ATTACHED_2P 0.000000, IMP_FROM_NOTSELF
+ 0.000000, INVOICE_ATTACHMENT 0.100000, LEGITIMATE_SIGNS 0.000000,
+ LINK_TO_IMAGE 0.000000, MULTIPLE_ATTACHMENTS 0.000000, MULTIPLE_REAL_RCPTS
+ 0.000000, NO_FUR_HEADER 0.000000, OUTBOUND 0.000000, OUTBOUND_SOPHOS
+ 0.000000, PNG_PIXPERBYTE_LOW 0.000000, REFERENCES 0.000000, SUSP_DH_NEG
+ 0.000000, __ANY_URI 0.000000, __ARCAUTH_DKIM_NONE 0.000000,
  __ARCAUTH_DMARC_PASSED 0.000000, __ARCAUTH_PASSED 0.000000,
  __ARC_SEAL_MICROSOFT 0.000000, __ARC_SIGNATURE_MICROSOFT 0.000000,
  __ATTACH_CTE_BASE64 0.000000, __ATTACH_CTE_QUOTED_PRINTABLE 0.000000,
  __BODY_TEXT_X4 0.000000, __BULK_NEGATE 0.000000, __CC_NAME 0.000000,
  __CC_NAME_DIFF_FROM_ACC 0.000000, __CC_REAL_NAMES 0.000000,
- __COURIER_PHRASE 0.000000, __CP_URI_IN_BODY 0.000000, __CT 0.000000,
- __CTYPE_HAS_BOUNDARY 0.000000, __CTYPE_MULTIPART 0.000000, __DKIM_ALIGNS_1
- 0.000000, __DKIM_ALIGNS_2 0.000000, __DQ_NEG_DOMAIN 0.000000, __DQ_NEG_HEUR
- 0.000000, __DQ_NEG_IP 0.000000, __EXTRA_MPART_TYPE_N1 0.000000,
- __FILESHARE_PHRASE 0.000000, __FRAUD_MONEY_CURRENCY 0.000000,
- __FRAUD_MONEY_CURRENCY_DOLLAR 0.000000, __FROM_DOMAIN_IN_ANY_CC1 0.000000,
- __FROM_DOMAIN_IN_RCPT 0.000000, __FROM_ENCODED 0.000000,
- __FROM_NAME_NOT_IN_BODY 0.000000, __FROM_UTF_Q 0.000000, __FUR_RDNS_SOPHOS
- 0.000000, __HAS_ATTACHMENT 0.000000, __HAS_ATTACHMENT1 0.000000,
- __HAS_ATTACHMENT2 0.000000, __HAS_CC_HDR 0.000000, __HAS_FROM 0.000000,
- __HAS_HTML 0.000000, __HAS_MSGID 0.000000, __HAS_REFERENCES 0.000000,
- __HAS_X_FF_ASR 0.000000, __HAS_X_FF_ASR_CAT 0.000000, __HAS_X_FF_ASR_SFV
- 0.000000, __HAS_X_MAILER 0.000000, __HIGHBIT_ASCII_MIX 0.000000,
- __HREF_LABEL_TEXT 0.000000, __HREF_LABEL_URI 0.000000, __HTML_AHREF_TAG
- 0.000000, __HTML_BAD_END 0.000000, __HTML_ENTITIES_X4 0.000000,
- __HTML_HREF_TAG_X2 0.000000, __HTML_TAG_DIV 0.000000, __HTML_TAG_TABLE
- 0.000000, __HTTPS_URI 0.000000, __IMG_ATTACHED 0.000000, __IMG_SIZE_1K_10K
- 0.000000, __IMP_FROM_MY_ORG 0.000000, __IMP_FROM_NOTSELF 0.000000,
- __IN_REP_TO 0.000000, __JSON_HAS_SCHEMA_VERSION 0.000000,
+ __COURIER_PHRASE 0.000000, __CT 0.000000, __CTYPE_HAS_BOUNDARY 0.000000,
+ __CTYPE_MULTIPART 0.000000, __DKIM_ALIGNS_1 0.000000, __DKIM_ALIGNS_2
+ 0.000000, __DQ_NEG_DOMAIN 0.000000, __DQ_NEG_HEUR 0.000000, __DQ_NEG_IP
+ 0.000000, __EMBEDDED_IMG 0.000000, __EXTRA_MPART_TYPE_N1 0.000000,
+ __FROM_DOMAIN_IN_ANY_CC1 0.000000, __FROM_DOMAIN_IN_RCPT 0.000000,
+ __FROM_ENCODED 0.000000, __FROM_NAME_NOT_IN_BODY 0.000000, __FROM_UTF_Q
+ 0.000000, __FUR_RDNS_SOPHOS 0.000000, __HAS_ATTACHMENT 0.000000,
+ __HAS_ATTACHMENT1 0.000000, __HAS_ATTACHMENT2 0.000000, __HAS_CC_HDR
+ 0.000000, __HAS_FROM 0.000000, __HAS_HTML 0.000000, __HAS_MSGID 0.000000,
+ __HAS_REFERENCES 0.000000, __HAS_X_FF_ASR 0.000000, __HAS_X_FF_ASR_CAT
+ 0.000000, __HAS_X_FF_ASR_SFV 0.000000, __HAS_X_MAILER 0.000000,
+ __HIGHBIT_ASCII_MIX 0.000000, __HREF_LABEL_IMG 0.000000, __HREF_LABEL_TEXT
+ 0.000000, __HTML_AHREF_TAG 0.000000, __HTML_ENTITIES_X4 0.000000,
+ __HTML_HREF_TAG_X2 0.000000, __HTML_TAG_DIV 0.000000, __HTML_TAG_IMG_X2
+ 0.000000, __HTML_TAG_TABLE 0.000000, __HTTPS_URI 0.000000, __IMG_ATTACHED
+ 0.000000, __IMG_SIZE_1K_10K 0.000000, __IMG_THEN_TEXT 0.000000,
+ __IMP_FROM_MY_ORG 0.000000, __IMP_FROM_NOTSELF 0.000000,
+ __INVOICE_MULTILINGUAL 0.000000, __JSON_HAS_SCHEMA_VERSION 0.000000,
  __JSON_HAS_TENANT_DOMAINS 0.000000, __JSON_HAS_TENANT_ID 0.000000,
  __JSON_HAS_TENANT_SCHEMA_VERSION 0.000000, __JSON_HAS_TENANT_VIPS 0.000000,
  __JSON_HAS_TRACKING_ID 0.000000, __MIME_ATTACHMENT_1_N 0.000000,
  __MIME_ATTACHMENT_N_2 0.000000, __MIME_ATTACHMENT_N_3 0.000000,
  __MIME_ATTACHMENT_N_4 0.000000, __MIME_HTML 0.000000, __MIME_TEXT_H
  0.000000, __MIME_TEXT_H1 0.000000, __MIME_TEXT_H2 0.000000, __MIME_VERSION
- 0.000000, __MSGID_DOMAIN_IN_REFERENCES 0.000000, __MULTIPLE_URI_HTML
- 0.000000, __MULTIPLE_URI_TEXT 0.000000, __OUTBOUND_SOPHOS_FUR 0.000000,
- __OUTBOUND_SOPHOS_FUR_IP 0.000000, __OUTBOUND_SOPHOS_FUR_RDNS 0.000000,
- __PART_2_IMAGE_PNG 0.000000, __PNG_AR_1 0.000000, __PRODUCT_TYPE_MAILFLOW
- 0.000000, __RCVD_NO_PTR 0.000000, __RCVD_PASS 0.000000, __REFERENCES
- 0.000000, __SANE_MSGID 0.000000, __SCAN_D_NEG2 0.000000, __SCAN_D_NEG_HEUR2
- 0.000000, __SL_HEAVY 0.000000, __STYLE_RATWARE_NEG 0.000000, __STYLE_TAG
- 0.000000, __SUBJ_STARTS_S_BRACKETS 0.000000, __TAG_EXISTS_BODY 0.000000,
+ 0.000000, __MULTIPLE_URI_HTML 0.000000, __MULTIPLE_URI_TEXT 0.000000,
+ __OUTBOUND_SOPHOS_FUR 0.000000, __OUTBOUND_SOPHOS_FUR_IP 0.000000,
+ __OUTBOUND_SOPHOS_FUR_RDNS 0.000000, __PART_2_IMAGE_PNG 0.000000,
+ __PHISH_SPEAR_SUBJ_SUBJECT 0.000000, __PNG_AR_1 0.000000,
+ __PRODUCT_TYPE_MAILFLOW 0.000000, __RCVD_NO_PTR 0.000000, __RCVD_PASS
+ 0.000000, __REFERENCES 0.000000, __SANE_MSGID 0.000000, __SCAN_D_NEG2
+ 0.000000, __SCAN_D_NEG_HEUR2 0.000000, __SL_HEAVY 0.000000,
+ __STYLE_RATWARE_NEG 0.000000, __STYLE_TAG 0.000000,
+ __SUBJ_STARTS_S_BRACKETS 0.000000, __TAG_EXISTS_BODY 0.000000,
  __TAG_EXISTS_HEAD 0.000000, __TAG_EXISTS_HTML 0.000000, __TAG_EXISTS_META
- 0.000000, __TO_MALFORMED_2 0.000000, __TO_NO_NAME 0.000000, __URI_IN_BODY
- 0.000000, __URI_MAILTO 0.000000, __URI_NOT_IMG 0.000000, __URI_NO_WWW
- 0.000000, __URI_NS 0.000000, __URI_WITHOUT_PATH 0.000000, __URI_WITH_PATH
- 0.000000, __X_FF_ASR_SCL_NSP 0.000000, __X_FF_ASR_SFV_NSPM 0.000000
+ 0.000000, __TO_MALFORMED_2 0.000000, __TO_NO_NAME 0.000000,
+ __URI_EMAIL_IN_QUERY 0.000000, __URI_ENDS_IN_SLASH 0.000000,
+ __URI_HAS_HYPHEN_USC 0.000000, __URI_IN_BODY 0.000000, __URI_MAILTO
+ 0.000000, __URI_NOT_IMG 0.000000, __URI_NS 0.000000, __URI_WITHOUT_PATH
+ 0.000000, __URI_WITH_PATH 0.000000, __X_FF_ASR_SCL_NSP 0.000000,
+ __X_FF_ASR_SFV_NSPM 0.000000
 X-Sophos-Email: [eu-central-1] Antispam-Engine: 6.0.3, AntispamData:
  2026.8.19.182719
-X-Lased-Spam: NonSpam
-X-Lased-Spamprobability: 0.079439
-X-Lased-Impersonation: False
-X-Sophos-MH-Mail-Info-Key: NGhRWjRDNnE0SnpsWnJ4LTE3Mi4yMC4xLjEwOQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStripped: AM1PEPF000252DA.eurprd07.prod.outlook.com
+X-Sophos-MH-Mail-Info-Key: NGhRWjRKMTlKeXpzV0NKLTE3Mi4yMC4wLjI0MA==
+X-MS-Exchange-Transport-CrossTenantHeadersStripped: AMS0EPF00000192.eurprd05.prod.outlook.com
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs: d0f7df95-aa1d-4180-1202-08defe8838ba
+X-MS-Office365-Filtering-Correlation-Id-Prvs: 5ccc8f7a-f80c-4472-acfd-08defe8838e2
 X-Microsoft-Antispam: BCL:0;
- ARA:13230040|6049299003|82310400026|23010399003|1800799024|35042699022|36860700016|7149299003|376014|10067099003|56012099006|18002099003|11063799006|4143699003|22082099003|4076899003|8096899003|13003099007|4053099003;
-X-Microsoft-Antispam-Message-Info: 6C0nBRZz10AqjO8KRsHiWTEYMbGLtVcs0V9a9aT6HIq9Tp6jhhZCyJZCbhkmQiz9lSj36p6y8wH74PB86Ob+eWqUj5IT1UjDXB1dTfY7MDHes5gnONqrHjbW+9sXYWw3yvXlErzH41or1zRblMSo7pfXS/afNSijNdDp5fQ19QMO2JmqzZDQ2pmwrYBDNFc04QDe9+0IbSTSOGT7jgWBdMeO20w195xNDi6iEEFQvODxIxbSGXLIiBtGfmSBMVrXr9tJQlPCpZ77xFn3kPR7eXSSSv+UVYVlFYH5y8ahr6QT1g31kIXIHo4R7E6gNXMw2iep3oG5871NAxFx9CaxHR12PjQRJPa+lphyhczmPH8vW6+osaKwdMQWxErRpQ1gUXv+AdHYThKQ69oHbkb+HIlMSuDuRydMLlIDqK3NYD6veOfovjxhrc4GF6YujvfagzRvAOxc3cp25GVa7Ki/YxsWB9Qh3daK+7dIG6z3d437SIWCBIr6VNqjJFcVGL6YkjAvKay9PnZecM7r1UsCAsV2pKLsI8tquhmbEKo1Ira8zGwuLp0UrFptKWqHsWhN/SrQzJZbpoWHs41x+cACvat7nYnK3Hx/wP8HRcXBhXPLgH03gV/WRnuXyPOH8CkrERQUipTpSB3xZT7L6Q2Dbw==
-X-Forefront-Antispam-Report: CIP:94.140.18.225; CTRY:US; LANG:en; SCL:1; SRV:;
+ ARA:13230040|35042699022|376014|23010399003|36860700016|6049299003|7149299003|82310400026|1800799024|10067099003|56012099006|18002099003|11063799006|8096899003|4076899003|4053099003;
+X-Microsoft-Antispam-Message-Info: NEgzr4k/i9UGBvEjtb4Ccr6/awhFQGp0Sxq4XilGSjdZ00W6z282VLFn6h4TimgGIWVI79NWal01mViJme6uCIpI8EPxs5ky2Z/F2t2G9gdQFASEHo8WNkynN/W6pVU+ROb3D3jtcH9Ekg3Vom3p/wvUlepVhVhPZDK1CoFcwQeK2r4Ls+4VXpw7Yo41FEg2l6PGmFeFnA9GnGYLEaoEZW6Bu7xUpmxr31MeHwg1AcJdAVVKgQZR4EITRvoJBQiagUFacYpFg2bBUO5rzCFa40JWlm8rvJLE0TVZQ6PR+o0OXYYM4KYS2IkrE+Kk8MzQc/7PWiMmRQtAd0jOnOrvumzJ2K4qsExZks3KhzHOTKhLenOSXq5qjsXTn791B3QzlCHRTbRptBmTP2zYOb5BdiMIlY7FEoRpFZXM1ZNkwtdPomWdoT/ZO9LIDLQP+K4tX5nUdGdp92bp42JWd5DYqXqhZTMU2dX3BJkuxfd8lGf5uL5eyqAcnvDtshE9osfC3jL+cXf6+s4/FKTkG5gOfqJhQS1au28yYRFIN5Y4b0LeCoFESBtYUtfnKcRVamF10aFwzrn/AKlPf5EKi8ZdRTorrrYlO3yavRuylP+RyLvZoDmBXiXLYHjyeZva0GDj2myL9EbFOcvl8tTcLFS5+g==
+X-Forefront-Antispam-Report: CIP:94.140.18.226; CTRY:US; LANG:en; SCL:1; SRV:;
  IPV:NLI; SFV:NSPM; H:mfod-euc1.prod.hydra.sophos.com;
  PTR:mfod-euc1.prod.hydra.sophos.com; CAT:NONE;
- SFS:(13230040)(6049299003)(82310400026)(23010399003)(1800799024)(35042699022)(36860700016)(7149299003)(376014)(10067099003)(56012099006)(18002099003)(11063799006)(4143699003)(22082099003)(4076899003)(8096899003)(13003099007)(4053099003);
+ SFS:(13230040)(35042699022)(376014)(23010399003)(36860700016)(6049299003)(7149299003)(82310400026)(1800799024)(10067099003)(56012099006)(18002099003)(11063799006)(8096899003)(4076899003)(4053099003);
  DIR:OUT; SFP:1102; 
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: B8063sv3OPGgioCANNkdK2SeD3cSAnb0MDnkrdtjMo3qvJWOQ3jSzXpJaY7QlPN33RPaKkCmdp9oTYx0hbBXEVw3UMzJPJ+dkQvw0Hur6vzJc/SGOG2tJxE2WYXgwGww2w1IVXATpIkbj21yW8UNGlTmW4BokNJ7iDX1eF+XxRYgyarbg8+Cfze7d2hzXLiJu30plSe7I+0tF5dVcIYj0xoGH2d4HCpkDXZQ4+44cP/716iAw+WNdWZbcbnsvSuJUtH6xDZZeUU0U5uhcjJpoX5l3gPp6xaNOjDrgFRrCA9XUoyscGnmXpXxazVJ47EdXQLJoGwo5eLm72LVfxWTSQnN6FebPn1ITf93xx3W0aqF2oJNgWG2QbQ4NZp/K+xT5OCAV7+L8wbBNmU/mUVm0ApYle0zmzacuYe6Oh2EO8Lwt2kmik+/FppyHd68vD8r
+X-MS-Exchange-AntiSpam-MessageData-0: r3xo4tKLy+88+O/zCjRNxuTxEpHavAgGwoe2El7d6C67jC+MU8iw32T3TVOQ/dHDbqgtBpNDh6rb6QemIMVkNssan9lN/wJpdNMX1TYKuygRnwEbiIkeN2lj+oIhuJZWL4cn68NX4SDziCFhqOwDgLxhMcnD7HLsXE/U8qmJUPVoNfhprYW7PvxPmcmvx1a6pyXtzYVTSr8JanGKVP3eUGCuPRxj87A/f6SKZ0L1KTiMzeZKSd2ICmwHovxQFVsi0Uyajuc5O4B4CgMXjzhYdoMpmzXjKBT+CplvXur3FmkIAMjXhq6fRsgeSmgDySR2psao3fVE/Ki1QcQd53tlqpVJVYzPctMqHKXdM8R7Shm6KJd280/puSjlM9/kAzlMoCd73isAlwNNa858L9oh4Klyuh8MqGd9ec1GQTT9XZlPtKsbiNpE5PtWMb8fVFJY
 X-OriginatorOrg: rey-technology.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Aug 2026 06:57:00.1621 (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 094942f4-f9ed-4f29-7d4b-08defe883b9b
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Aug 2026 06:57:04.3753 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4e0e8ea5-cb5e-458e-d027-08defe883e1f
 X-MS-Exchange-CrossTenant-Id: 7137cfb5-c814-4224-8896-1b4a6ff99146
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=7137cfb5-c814-4224-8896-1b4a6ff99146; Ip=[94.140.18.225];
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=7137cfb5-c814-4224-8896-1b4a6ff99146; Ip=[94.140.18.226];
  Helo=[mfod-euc1.prod.hydra.sophos.com]
-X-MS-Exchange-CrossTenant-AuthSource: AM1PEPF000252DA.eurprd07.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: AMS0EPF00000192.eurprd05.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: ZR3P278MB1275
-Subject: [Buildroot] [PATCH 5/5] package/libssh2: fix CVE-2026-66035
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: ZR1PPFE824120AE
+Subject: [Buildroot] [PATCH 0/5] package/libssh2: fix five security
+ vulnerabilities
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -290,15 +292,15 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: =?utf-8?q?Stefan_M=C3=BCller_via_buildroot?= <buildroot@buildroot.org>
 Reply-To: =?UTF-8?q?Stefan=20M=C3=BCller?= <stefan.mueller@rey-technology.com>
-Content-Type: multipart/mixed; boundary="===============0932905226191117557=="
+Content-Type: multipart/mixed; boundary="===============0365630571176096259=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0932905226191117557==
+--===============0365630571176096259==
 Content-Type: multipart/related;
-	boundary="_1f4cd725-262a-4d31-b391-515faa4579dd_"
+	boundary="_ed5fc116-fec1-44f6-b173-8637f8346e4a_"
 
---_1f4cd725-262a-4d31-b391-515faa4579dd_
+--_ed5fc116-fec1-44f6-b173-8637f8346e4a_
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/html; charset="utf-8"
 
@@ -309,126 +311,67 @@ Content-Type: text/html; charset="utf-8"
 <style>.EmailQuote { margin-left: 1pt; padding-left: 4pt; border-left: #800=
 000 2px solid; }</style></head>
 <body>
-<font size=3D"2"><div class=3D"PlainText">Backport the fix for CVE-2026-660=
-35.<br>
+<font size=3D"2"><div class=3D"PlainText">This series backports fixes for f=
+ive libssh2 security vulnerabilities<br>
+affecting version 1.11.1.<br>
 <br>
-The ETM decrypt path does not validate the received packet length before<br=
->
-calculating the decrypt buffer size. A malformed packet can therefore<br>
-lead to a heap overflow.<br>
+CVE-2025-15661 requires the upstream SFTP bounds checking fix, a<br>
+LIBSSH2_UNCONST compatibility backport for libssh2 1.11.1, and the<br>
+upstream follow-up fixing SSH_FXP_STATUS handling.<br>
 <br>
-Use Debian's libssh2 1.11.1 backport of the upstream fix.<br>
+The remaining four commits fix a dangling pointer in SFTP processing,<br>
+AES-GCM bounds checking, a publickey out-of-bounds read, and a<br>
+potential heap overflow in the ETM decrypt path.<br>
 <br>
-Signed-off-by: Stefan M=C3=BCller &lt;stefan.mueller@rey-technology.com&gt;=
+Matching LIBSSH2_IGNORE_CVES entries are added for all five CVEs.<br>
 <br>
----<br>
-Backport to: 2025.02.x<br>
----<br>
-&nbsp;...tential-heap-overflow-on-ETM-decrypt.patch | 41 &#43;&#43;&#43;&#4=
-3;&#43;&#43;&#43;&#43;&#43;&#43;&#43;&#43;&#43;&#43;&#43;&#43;&#43;&#43;&#4=
-3;<br>
+The patches were checked with check-package and git diff --check, and<br>
+all patches apply successfully to libssh2 1.11.1.<br>
+<br>
+The fixes also apply to the 2025.02.x maintenance branch; each commit<br>
+contains a corresponding Backport to: 2025.02.x note.<br>
+<br>
+Stefan M=C3=BCller (5):<br>
+&nbsp; package/libssh2: fix CVE-2025-15661<br>
+&nbsp; package/libssh2: fix CVE-2026-66032<br>
+&nbsp; package/libssh2: fix CVE-2026-66033<br>
+&nbsp; package/libssh2: fix CVE-2026-66034<br>
+&nbsp; package/libssh2: fix CVE-2026-66035<br>
+<br>
+&nbsp;...-sftp-symlink-fix-out-of-bounds-read.patch | 116 &#43;&#43;&#43;&#=
+43;&#43;&#43;&#43;&#43;&#43;&#43;&#43;&#43;&#43;&#43;&#43;&#43;&#43;&#43;<b=
+r>
+&nbsp;...ibssh2-priv-backport-LIBSSH2_UNCONST.patch |&nbsp; 29 &#43;&#43;&#=
+43;&#43;&#43;<br>
+&nbsp;...-symlink-fix-SSH_FXP_STATUS-response.patch |&nbsp; 46 &#43;&#43;&#=
+43;&#43;&#43;&#43;&#43;<br>
+&nbsp;...-prevent-dangling-pointer-after-free.patch |&nbsp; 28 &#43;&#43;&#=
+43;&#43;&#43;<br>
+&nbsp;...08-openssl-fix-AES-GCM-bounds-checks.patch |&nbsp; 44 &#43;&#43;&#=
+43;&#43;&#43;&#43;&#43;<br>
+&nbsp;...009-publickey-fix-potential-OOB-read.patch |&nbsp; 35 &#43;&#43;&#=
+43;&#43;&#43;&#43;<br>
+&nbsp;...tential-heap-overflow-on-ETM-decrypt.patch |&nbsp; 41 &#43;&#43;&#=
+43;&#43;&#43;&#43;&#43;<br>
 &nbsp;package/libssh2/libssh2.mk&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
 nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&n=
-bsp; 3 &#43;&#43;<br>
-&nbsp;2 files changed, 44 insertions(&#43;)<br>
+bsp; 17 &#43;&#43;&#43;<br>
+&nbsp;8 files changed, 356 insertions(&#43;)<br>
+&nbsp;create mode 100644 package/libssh2/0004-sftp-symlink-fix-out-of-bound=
+s-read.patch<br>
+&nbsp;create mode 100644 package/libssh2/0005-libssh2-priv-backport-LIBSSH2=
+_UNCONST.patch<br>
+&nbsp;create mode 100644 package/libssh2/0006-sftp-symlink-fix-SSH_FXP_STAT=
+US-response.patch<br>
+&nbsp;create mode 100644 package/libssh2/0007-sftp-prevent-dangling-pointer=
+-after-free.patch<br>
+&nbsp;create mode 100644 package/libssh2/0008-openssl-fix-AES-GCM-bounds-ch=
+ecks.patch<br>
+&nbsp;create mode 100644 package/libssh2/0009-publickey-fix-potential-OOB-r=
+ead.patch<br>
 &nbsp;create mode 100644 package/libssh2/0010-transport-fix-potential-heap-=
 overflow-on-ETM-decrypt.patch<br>
 <br>
-diff --git a/package/libssh2/0010-transport-fix-potential-heap-overflow-on-=
-ETM-decrypt.patch b/package/libssh2/0010-transport-fix-potential-heap-overf=
-low-on-ETM-decrypt.patch<br>
-new file mode 100644<br>
-index 0000000000..ee253315d7<br>
---- /dev/null<br>
-&#43;&#43;&#43; b/package/libssh2/0010-transport-fix-potential-heap-overflo=
-w-on-ETM-decrypt.patch<br>
-@@ -0,0 &#43;1,41 @@<br>
-&#43;From 42e33d81577ed4b95d4b4f6f845e5ee8efe5eeb4 Mon Sep 17 00:00:00 2001=
-<br>
-&#43;From: Viktor Szakats &lt;commit@vsz.me&gt;<br>
-&#43;Date: Fri, 3 Jul 2026 18:22:55 &#43;0200<br>
-&#43;Subject: [PATCH] transport: fix potential heap overflow on ETM decrypt=
-<br>
-&#43;<br>
-&#43;Reported-by: Vladimir Eli Tokarev<br>
-&#43;Fixes GHSA-6c79-444r-wx26<br>
-&#43;<br>
-&#43;Closes #2198<br>
-&#43;Forwarded: not-needed<br>
-&#43;<br>
-&#43;CVE: CVE-2026-66035<br>
-&#43;Upstream: <a href=3D"https://github.com/libssh2/libssh2/commit/42e33d8=
-1577ed4b95d4b4f6f845e5ee8efe5eeb4">https://github.com/libssh2/libssh2/commi=
-t/42e33d81577ed4b95d4b4f6f845e5ee8efe5eeb4</a><br>
-&#43;Signed-off-by: Stefan M=C3=BCller &lt;stefan.mueller@rey-technology.co=
-m&gt;<br>
-&#43;---<br>
-&#43; src/transport.c | 7 &#43;&#43;&#43;&#43;&#43;&#43;-<br>
-&#43; 1 file changed, 6 insertions(&#43;), 1 deletion(-)<br>
-&#43;<br>
-&#43;--- a/src/transport.c<br>
-&#43;&#43;&#43;&#43; b/src/transport.c<br>
-&#43;@@ -242,6 &#43;242,12 @@<br>
-&#43;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
-p;&nbsp;&nbsp;&nbsp;&nbsp; unsigned char *decrypt_buffer;<br>
-&#43;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
-p;&nbsp;&nbsp;&nbsp;&nbsp; int blocksize =3D session-&gt;remote.crypt-&gt;b=
-locksize;<br>
-&#43;<br>
-&#43;&#43;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
-;&nbsp;&nbsp;&nbsp;&nbsp; if(p-&gt;total_num &lt; mac_len &#43; 4 &#43; (si=
-ze_t)blocksize) {<br>
-&#43;&#43;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
-;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; LIBSSH2_FREE(session, p-&=
-gt;payload);<br>
-&#43;&#43;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
-;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return LIBSSH2_ERROR_DECR=
-YPT;<br>
-&#43;&#43;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
-;&nbsp;&nbsp;&nbsp;&nbsp; }<br>
-&#43;&#43;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
-;&nbsp;&nbsp;&nbsp;&nbsp; decrypt_size =3D (ssize_t)(p-&gt;total_num - mac_=
-len - 4);<br>
-&#43;&#43;<br>
-&#43;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
-p;&nbsp;&nbsp;&nbsp;&nbsp; rc =3D decrypt(session, p-&gt;payload &#43; 4,<b=
-r>
-&#43;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
-p;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
-nbsp;&nbsp;&nbsp;&nbsp;&nbsp; first_block, blocksize, FIRST_BLOCK);<br>
-&#43;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
-p;&nbsp;&nbsp;&nbsp;&nbsp; if(rc) {<br>
-&#43;@@ -249,7 &#43;255,6 @@<br>
-&#43;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
-p;&nbsp;&nbsp;&nbsp;&nbsp; }<br>
-&#43;<br>
-&#43;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
-p;&nbsp;&nbsp;&nbsp;&nbsp; /* we need buffer for decrypt */<br>
-&#43;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
-sp;&nbsp;&nbsp;&nbsp; decrypt_size =3D p-&gt;total_num - mac_len - 4;<br>
-&#43;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
-p;&nbsp;&nbsp;&nbsp;&nbsp; decrypt_buffer =3D LIBSSH2_ALLOC(session, decryp=
-t_size);<br>
-&#43;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
-p;&nbsp;&nbsp;&nbsp;&nbsp; if(!decrypt_buffer) {<br>
-&#43;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
-p;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return LIBSSH2_ERROR_ALL=
-OC;<br>
-diff --git a/package/libssh2/libssh2.mk b/package/libssh2/libssh2.mk<br>
-index 4a4491f0f1..7715b0bc0a 100644<br>
---- a/package/libssh2/libssh2.mk<br>
-&#43;&#43;&#43; b/package/libssh2/libssh2.mk<br>
-@@ -36,6 &#43;36,9 @@ LIBSSH2_IGNORE_CVES &#43;=3D CVE-2026-66033<br>
-&nbsp;# 0009-publickey-fix-potential-OOB-read.patch<br>
-&nbsp;LIBSSH2_IGNORE_CVES &#43;=3D CVE-2026-66034<br>
-&nbsp;<br>
-&#43;# 0010-transport-fix-potential-heap-overflow-on-ETM-decrypt.patch<br>
-&#43;LIBSSH2_IGNORE_CVES &#43;=3D CVE-2026-66035<br>
-&#43;<br>
-&nbsp;ifeq ($(BR2_PACKAGE_LIBSSH2_MBEDTLS),y)<br>
-&nbsp;LIBSSH2_DEPENDENCIES &#43;=3D mbedtls<br>
-&nbsp;LIBSSH2_CONF_OPTS &#43;=3D --with-libmbedcrypto-prefix=3D$(STAGING_DI=
-R)/usr \<br>
 -- <br>
 2.25.1<br>
 <br>
@@ -511,7 +454,7 @@ idth: 25px; height: 25px; font-family: Aptos, Calibri, Arial;" width=3D"25"=
 pan></span></span></td></tr></tbody></table></body>
 </html>
 
---_1f4cd725-262a-4d31-b391-515faa4579dd_
+--_ed5fc116-fec1-44f6-b173-8637f8346e4a_
 Content-Description: linkedinmedium_e5ee0685-3767-4ffd-a5c5-9e4e3fc32352.png
 Content-Type: image/png;
 	name="linkedinmedium_e5ee0685-3767-4ffd-a5c5-9e4e3fc32352.png"
@@ -548,7 +491,7 @@ ybQ4CFgylROy3VXsiI8JQQipYxxZ5d5UfyOkjdZQdAyjSO1S+RLJObKA7NnJdlexIT6Jbz6kn5J2
 258I86MaGTvJsCPvH9UsZeEzJ1naN+byPnPy5kIYihfkMyc/mt9ZT/NOLQKqxl3th2dEVXjLdgGQ
 vWUn++GZrBMwptgl7hj17wzhwzOi/wDAA8rS0C6JMAAAAABJRU5ErkJggg==
 
---_1f4cd725-262a-4d31-b391-515faa4579dd_
+--_ed5fc116-fec1-44f6-b173-8637f8346e4a_
 Content-Description: instagrammedium_908c8ebd-b03d-4881-a6e2-043808ead83d.png
 Content-Type: image/png;
 	name="instagrammedium_908c8ebd-b03d-4881-a6e2-043808ead83d.png"
@@ -592,7 +535,7 @@ n+L6Op5yoQJuIJbAb3bGR5pqoEymbOXEtwj5X3x6I4zAiFOiZVCGBCNIZUMII84aXmz65WTBvFmG
 BCNI5a5VyhT/w0Byi4Rhgpy7uRAhF6e9CDBt5MG8MhpBsrdImEv+TzWlXPJ/c4oj+OOZb/YdyX88
 wx6b29OJ++OZyL8IKgbjey+HCwAAAABJRU5ErkJggg==
 
---_1f4cd725-262a-4d31-b391-515faa4579dd_
+--_ed5fc116-fec1-44f6-b173-8637f8346e4a_
 Content-Description: teamsmedium_9934c99a-98a5-42b7-9a66-2bebfdd7ebf1.png
 Content-Type: image/png;
 	name="teamsmedium_9934c99a-98a5-42b7-9a66-2bebfdd7ebf1.png"
@@ -636,9 +579,9 @@ eJF/aSJLHqQ5aCzFNEYNltxiLdX32UAbw/+27KVjjngxesgyBU8RGStPiLiXmM5j9xXyvp10Jn0v
 fTy1w7ledI60ZlZBEiX3ziC2jIZDw3GDaag+FZNFL+iYebx/PONqyMdgO0ypV49SYSGCXLQQ/Qeq
 615O/QJTAQAAAABJRU5ErkJggg==
 
---_1f4cd725-262a-4d31-b391-515faa4579dd_--
+--_ed5fc116-fec1-44f6-b173-8637f8346e4a_--
 
---===============0932905226191117557==
+--===============0365630571176096259==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -649,4 +592,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============0932905226191117557==--
+--===============0365630571176096259==--
