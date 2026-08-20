@@ -4,58 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D58C7C5DF93
-	for <buildroot@archiver.kernel.org>; Fri, 21 Aug 2026 15:07:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF0FCC5DF96
+	for <buildroot@archiver.kernel.org>; Fri, 21 Aug 2026 15:07:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B67CD811EC;
-	Fri, 21 Aug 2026 15:07:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E2D2681230;
+	Fri, 21 Aug 2026 15:07:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VgH736M8miQf; Fri, 21 Aug 2026 15:07:22 +0000 (UTC)
+ id MefHTIdkXknT; Fri, 21 Aug 2026 15:07:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787324842;
-	bh=TFjdd/ApOjA+89LoMpVpFsle+b4XH7cmQox8ff+lnmc=;
+	s=default; t=1787324845;
+	bh=zrzNqMov6laTv+oiYlPeAb1p4B3zGsAdAJWQcuKTUMQ=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=LRZRF1t2sRQPhHHI44FoUP8Ko2tjA8XK//2JaddYntPNZulBCxWPmpKRTTBND8Phr
-	 5VNQn/Vr1fKx9fYW6N2T42IyAny+9wQqIEp7ujFdyE45FVqGx120Mt005Tdw9FUiGw
-	 JNqPSdrpbmIfkD1VfPrFdZHi/sxzTgygsml0tz+Y8AIcGbf+u2gTLWXz0z2X9au/zX
-	 k9JmEquefWqFTpX1OgpN56VXafcOjgdDNSRo7N243BHwsQWCWR7kf4cMbm0tXRy4ZD
-	 HLZZY0VeT6EXFahQViYov0tQFcAELMmE/WNBSGcKWLwK/NsA4ldx7fIEP8pnQGfdPh
-	 Zs1a6d1HXSscQ==
+	b=pGyhZffs0oQwPCNjSOIgqH6EwwLIvR+Fw1Akm6/3NRDQ2RM+8Wi88OV0jpPXbEtMr
+	 oW0I+GpPcTq8ohVOPhn8naYs38nbNzzxDrUW7oc3kjkc9IKQjyMLipC0NLyh4OeDMZ
+	 ENnmOiSAtEgMnvlWqN7Tf3MSD5sQeYijf4z4aMHdF9AJg2QBjd/9MAqyebqKyC0zdV
+	 AaslYxd4f7eUT3k0LBudqWa4DbLAUWmvVmq1Lb4N+77g//Yc322RZl2Ij/8QM2qmcA
+	 HTccFF+jSgedbq+RVvCGwVbyMPG6AOl4m+uQmSqizmf6BMfOiERi5U0py7xflru5BK
+	 bvJmhL3nUJszA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6FD3181211;
-	Fri, 21 Aug 2026 15:07:22 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id E3C4F1CF2
+	by smtp1.osuosl.org (Postfix) with ESMTP id D156681221;
+	Fri, 21 Aug 2026 15:07:24 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id F1155EA3
  for <buildroot@buildroot.org>; Fri, 21 Aug 2026 15:07:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E1FC981184
+ by smtp4.osuosl.org (Postfix) with ESMTP id E2EE540A15
  for <buildroot@buildroot.org>; Fri, 21 Aug 2026 15:07:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xItE1gJGRDYC for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xG5Lz-TM0DCi for <buildroot@buildroot.org>;
  Fri, 21 Aug 2026 15:07:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6649D8117B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2108F40A11
  for <buildroot@buildroot.org>; Fri, 21 Aug 2026 15:07:07 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CD9568E127; Fri, 21 Aug 2026 15:06:13 +0000 (UTC)
+ id 827418E183; Fri, 21 Aug 2026 15:06:13 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 21 Aug 2026 17:03:46 +0200
+Date: Thu, 20 Aug 2026 10:43:28 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: a0ac9811437eb947ae252e3145904fb8f09e546a
-X-Git-Newrev: 92c41f1b183bb6fef1519dc063dc601ca2397706
+X-Git-Oldrev: da2b780f1c14733ea0e62319426adecf966d834e
+X-Git-Newrev: 62d273c836d808af9032b99b33cfccdbb4420cab
 X-Patchwork-Hint: ignore
-Message-Id: <20260821150613.CD9568E127@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/busybox: patch
- CVE-2024-58251
+Message-Id: <20260821150613.827418E183@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] {linux,
+ linux-headers}: bump 5.{10, 15}, 6.{1, 6, 12} series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -75,100 +75,77 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/92c41f1b183bb6fef1519dc063dc601ca2397706
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/62d273c836d808af9032b99b33cfccdbb4420cab
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-Based on the work of the Debian community, this patch fixes the
-following vulnerability:
+Update the latest kernel releases:
+    - 5.10.264 -> 5.10.265
+    - 5.15.215 -> 5.15.216
+    - 6.1.182 -> 6.1.183
+    - 6.6.151 -> 6.6.152
+    - 6.12.103 -> 6.12.104
 
-- CVE-2024-58251:
-    In netstat in BusyBox through 1.37.0, local users can launch of
-    network application with an argv[0] containing an ANSI terminal escape
-    sequence, leading to a denial of service (terminal locked up) when
-    netstat is used by a victim.
-
-For more information, see:
-  - https://salsa.debian.org/installer-team/busybox/-/blob/master/debian/patches/netstat-sanitize-argv0-for-p-CVE-2024-58251.patch
-  - https://www.cve.org/CVERecord?id=CVE-2024-58251
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-(alternative to commit 0e94f8d4de7b5421d5c0d21e22122a444c632770)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- ...tstat-sanitize-argv0-for-p-CVE-2024-58251.patch | 50 ++++++++++++++++++++++
- package/busybox/busybox.mk                         |  3 ++
- 2 files changed, 53 insertions(+)
+ linux/Config.in                      |  2 +-
+ linux/linux.hash                     | 10 +++++-----
+ package/linux-headers/Config.in.host | 10 +++++-----
+ 3 files changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/package/busybox/0015-netstat-sanitize-argv0-for-p-CVE-2024-58251.patch b/package/busybox/0015-netstat-sanitize-argv0-for-p-CVE-2024-58251.patch
-new file mode 100644
-index 0000000000..5891424c00
---- /dev/null
-+++ b/package/busybox/0015-netstat-sanitize-argv0-for-p-CVE-2024-58251.patch
-@@ -0,0 +1,50 @@
-+From: Valery Ushakov <valery.ushakov@bell-sw.com>
-+Date: Thu, 21 Aug 2025 12:31:53 +0000
-+Subject: netstat: CVE-2024-58251 - sanitize argv0 for -p
-+Bug-Debian: https://bugs.debian.org/1104009
-+
-+Signed-off-by: Valery Ushakov <valery.ushakov@bell-sw.com>
-+Upstream: https://salsa.debian.org/installer-team/busybox/-/blob/master/debian/patches/netstat-sanitize-argv0-for-p-CVE-2024-58251.patch
-+CVE: CVE-2024-58251
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-+---
-+ networking/netstat.c | 7 ++++++-
-+ 1 file changed, 6 insertions(+), 1 deletion(-)
-+
-+diff --git a/networking/netstat.c b/networking/netstat.c
-+index 807800a62..d979f6079 100644
-+--- a/networking/netstat.c
-++++ b/networking/netstat.c
-+@@ -41,6 +41,7 @@
-+ 
-+ #include "libbb.h"
-+ #include "inet_common.h"
-++#include "unicode.h"
-+ 
-+ //usage:#define netstat_trivial_usage
-+ //usage:       "[-"IF_ROUTE("r")"al] [-tuwx] [-en"IF_FEATURE_NETSTAT_WIDE("W")IF_FEATURE_NETSTAT_PRG("p")"]"
-+@@ -314,9 +315,12 @@ static int FAST_FUNC dir_act(struct recursive_state *state,
-+ 		return FALSE;
-+ 	cmdline_buf[n] = '\0';
-+ 
-++	/* don't write process-controlled argv[0] to the user's terminal as-is */
-++	const char *argv0base = printable_string(bb_basename(cmdline_buf));
-++
-+ 	/* go through all files in /proc/PID/fd and check whether they are sockets */
-+ 	strcpy(proc_pid_fname + len - (sizeof("cmdline")-1), "fd");
-+-	pid_slash_progname = concat_path_file(pid, bb_basename(cmdline_buf)); /* "PID/argv0" */
-++	pid_slash_progname = concat_path_file(pid, argv0base); /* "PID/argv0" */
-+ 	n = recursive_action(proc_pid_fname,
-+ 			ACTION_RECURSE | ACTION_QUIET,
-+ 			add_to_prg_cache_if_socket,
-+@@ -686,6 +690,7 @@ int netstat_main(int argc UNUSED_PARAM, char **argv)
-+ 	unsigned opt;
-+ 
-+ 	INIT_G();
-++	init_unicode();
-+ 
-+ 	/* Option string must match NETSTAT_xxx constants */
-+ 	opt = getopt32(argv, NETSTAT_OPTS);
-+-- 
-+2.34.1
-+
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 092fd5d1e1..0488518086 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -19,6 +19,9 @@ BUSYBOX_IGNORE_CVES += CVE-2022-28391
- # 0008-awk.c-fix-CVE-2023-42366-bug-15874.patch
- BUSYBOX_IGNORE_CVES += CVE-2023-42366
+diff --git a/linux/Config.in b/linux/Config.in
+index be15702bde..fc0ae271e1 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -139,7 +139,7 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_GIT_SUBMODULES
  
-+# 0015-netstat-sanitize-argv0-for-p-CVE-2024-58251.patch
-+BUSYBOX_IGNORE_CVES += CVE-2024-58251
-+
- # 0012-archival-libarchive-sanitize-filenames-on-output.patch
- # 0013-testsuite-tar-tests-fix-test-after-cve-2025-46394.patch
- BUSYBOX_IGNORE_CVES += CVE-2025-46394
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "6.12.103" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "6.12.104" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "5.10.246-cip66" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "5.10.246-cip66-rt29" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 5a4765f6bc..ce3ab83616 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,10 +1,10 @@
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  f143aaade8877ba5616e788b4482576db28481bcf557ef537f4fcc3938fc3176  linux-6.12.103.tar.xz
+-sha256  de01e5ae73412b70bceb41a6f97da6d0f29b6536f1f00f8b6a6fd40c729969f7  linux-6.6.151.tar.xz
+-sha256  f38416bb6e8024a21ae868c7f29cd15293a73755e3484c7f2f4adea5b03c1f85  linux-6.1.182.tar.xz
++sha256  949d166a1263bd0cf0c5aab44eeb57869615099e7c48bf88d0e4adb77379b999  linux-6.12.104.tar.xz
++sha256  778b058c63da849d0b74006b23509255b2bed57c62a5151e9dd7a62e2cdd70d6  linux-6.6.152.tar.xz
++sha256  362d07fe4938c415ce651aefee063a5c4151109b39c97be039bbaa8312ffc0e2  linux-6.1.183.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256  d57f279da0813fa6d69fb2e59cf9a364be4faa1cd18cb76b0b64c074fd23b7a7  linux-5.15.215.tar.xz
+-sha256  f27552ec32783512c81918c3b8f155fed8dbaf8a90a5a20afdc01aac715b489e  linux-5.10.264.tar.xz
++sha256  09affb2005aea3f44eec3f3eab4c1944e00707355ea7ca7fa2ba6b34a82605ed  linux-5.15.216.tar.xz
++sha256  d10cb9169e49da3d5f7154a01e450012486565fa9442e23d660b0581a3f92645  linux-5.10.265.tar.xz
+ sha256  ae6a3207f12aa4d6cfb0fa793ec9da4a6fcdfdcb57d869d63d6b77e3a8c1423d  linux-5.4.302.tar.xz
+ # Locally computed
+ sha256  93408e0c5d70ff0ab63dcf9edec6fda2b8524281d611a88e56590436bda43914  linux-cip-5.10.246-cip66.tar.gz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 42c961e15c..71de0b4f6b 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -429,11 +429,11 @@ endchoice
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "5.4.302"	if BR2_KERNEL_HEADERS_5_4
+-	default "5.10.264"	if BR2_KERNEL_HEADERS_5_10
+-	default "5.15.215"	if BR2_KERNEL_HEADERS_5_15
+-	default "6.1.182"	if BR2_KERNEL_HEADERS_6_1
+-	default "6.6.151"	if BR2_KERNEL_HEADERS_6_6
+-	default "6.12.103"	if BR2_KERNEL_HEADERS_6_12
++	default "5.10.265"	if BR2_KERNEL_HEADERS_5_10
++	default "5.15.216"	if BR2_KERNEL_HEADERS_5_15
++	default "6.1.183"	if BR2_KERNEL_HEADERS_6_1
++	default "6.6.152"	if BR2_KERNEL_HEADERS_6_6
++	default "6.12.104"	if BR2_KERNEL_HEADERS_6_12
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
