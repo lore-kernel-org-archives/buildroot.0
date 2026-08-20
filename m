@@ -4,58 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CDACAC5DF93
-	for <buildroot@archiver.kernel.org>; Fri, 21 Aug 2026 15:12:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA477C5DF89
+	for <buildroot@archiver.kernel.org>; Fri, 21 Aug 2026 15:12:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 65F8281B04;
-	Fri, 21 Aug 2026 15:12:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7C50D81D24;
+	Fri, 21 Aug 2026 15:12:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id q9NyK1qRE_FG; Fri, 21 Aug 2026 15:11:59 +0000 (UTC)
+ id j1Qkv6FEoMKT; Fri, 21 Aug 2026 15:12:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787325117;
-	bh=Gps4RJztoz72kjQrBreUeoMsoMXGTd4FEPYO6LhaR/4=;
+	s=default; t=1787325118;
+	bh=oK3aeFWN98dIZvm9zpC+DdqbJnR5BTOceRnbn9bAsx8=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=jx2si5EIekttFPUrvjhjnSKb95EmQ4Qv81sQi2LInn5DpadRFp+qb01GhbkUPpwRz
-	 IkA4gjBEh4SqKMjyw8OKcAvj28YIh6sy3EwMCkGgGGP4PXHDojYBZLBhg7Q4eQzbRp
-	 l6psXmnANKAc3Jiy0pQRdS0/Qo7qXw5QZFawH0R0vR+hh3q8TL2wYiAdXTR/davXIi
-	 cJr2EXnBEWen0nt5nrHHnP3mxKh8Qqxq9d4ks2jQdwP9TRnE36EXi7IXwMW2i/EKzM
-	 o45FZlbpyLlyMiOgKH1B2lUVQ6LVt6AHj7SKea1DokCodnaiaGXOBvsmKug/KP7Sal
-	 7KxCKwUNzXcqQ==
+	b=raPQRHyvSt82LDacithawrKbV4/5zv2xw5WY7dBNeNi+rp232D/t1yJNL8ZsUrNIg
+	 7DM9qCNn1pPHnwLTjQZdR3tdXHD3BVXpiAdQfQ4qlP/OmUnlIFnAOSudDOVcvo4fSv
+	 0WsVD6RRfGtf7Tjjqrwb4knwAggvYMfLtS5DCqBVaSsFvT9EJnTsBiRd4s+MyaUaEE
+	 JN/LUymMyKtGvXPZHXjip/CgXgbSVM6vt9GDysb6D6dTKUbRl45pKQLBUMqxLrQVQ4
+	 Qy8bEuGc0wFM+07kVuEp2a7w1z5QdcXOJJ1HI2a0puo8gPYSxR2705vMdiFIhvMQSj
+	 2L/jQdNEP8xuA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 841D181BB0;
-	Fri, 21 Aug 2026 15:11:57 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 83F7A1F4B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 810D481230;
+	Fri, 21 Aug 2026 15:11:58 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id AA434EA3
  for <buildroot@buildroot.org>; Fri, 21 Aug 2026 15:11:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8184C81138
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9C2E640BA3
  for <buildroot@buildroot.org>; Fri, 21 Aug 2026 15:11:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cNodfNWKoH2Z for <buildroot@buildroot.org>;
- Fri, 21 Aug 2026 15:11:10 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kzyBQcDvsrHx for <buildroot@buildroot.org>;
+ Fri, 21 Aug 2026 15:11:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id CBFE981134
+ by smtp4.osuosl.org (Postfix) with ESMTP id ECEEA40A15
  for <buildroot@buildroot.org>; Fri, 21 Aug 2026 15:11:10 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3ECF18DE49; Fri, 21 Aug 2026 15:10:17 +0000 (UTC)
+ id 6BFD18E132; Fri, 21 Aug 2026 15:10:17 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 20 Aug 2026 13:55:41 +0200
+Date: Thu, 20 Aug 2026 14:20:34 +0200
 X-Git-Refname: refs/heads/2026.05.x
-X-Git-Oldrev: 5ba2541ddd5614b0d1777320f69908f6435e0b81
-X-Git-Newrev: 6f5e5881005d53439b9b19bece0555294916f8c4
+X-Git-Oldrev: 8d4e5f9cccd1e5866dadd500cc3457f72b32d3bb
+X-Git-Newrev: e38702fc5796a0dd09c2c37c9752886b2c00889d
 X-Patchwork-Hint: ignore
-Message-Id: <20260821151017.3ECF18DE49@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.05.x] package/rygel: update
- project URL
+Message-Id: <20260821151017.6BFD18E132@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.05.x]
+ boot/arm-trusted-firmware: fix CPE
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -75,33 +75,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/6f5e5881005d53439b9b19bece0555294916f8c4
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/e38702fc5796a0dd09c2c37c9752886b2c00889d
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.05.x
 
-wiki.gnome.org has a big deprecation warning saying "All information
-on this site is out of date and should not be used." Point at the
-project website instead.
+A new (and hopefully definitive) CPE is to be used for TF-A:
 
-Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
+cpe:2.3:o:trustedfirmware:trusted_firmware-a:
+
+as reported in TF-A directly[1]. NVD correctly reports[2] the new CPE
+deprecates the "old" one Buildroot was using.
+
+CVEs for projects under the TrustedFirmware umbrella are now seemingly
+handled under the CPE vendor "trustedfirmware".
+
+[1] https://review.trustedfirmware.org/plugins/gitiles/TF-A/trusted-firmware-a/+/efd7b189fa259c349699957462c7b52bf640e27b%5E%21/
+[2] https://nvd.nist.gov/products/cpe/detail/2E1BD3E8-DF65-42E3-A0BA-747137D6DEF2
+Signed-off-by: Quentin Schulz <quentin.schulz@cherry.de>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 949063f92b3b492e731f856cd513fb9251c60ddf)
+(cherry picked from commit b7cf802aceba9ee2bd3064230f1bcbc86a58f926)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- package/rygel/Config.in | 2 +-
+ boot/arm-trusted-firmware/arm-trusted-firmware.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/rygel/Config.in b/package/rygel/Config.in
-index a3c2bd29da..1a5c1493ea 100644
---- a/package/rygel/Config.in
-+++ b/package/rygel/Config.in
-@@ -34,7 +34,7 @@ config BR2_PACKAGE_RYGEL
- 	  Most Rygel functionality is implemented through a plug-in
- 	  mechanism.
+diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+index 1b52f36783..798efd5a15 100644
+--- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
++++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+@@ -6,7 +6,7 @@
  
--	  https://wiki.gnome.org/Projects/Rygel
-+	  https://rygel-project.org/
- 
- if BR2_PACKAGE_RYGEL
+ ARM_TRUSTED_FIRMWARE_VERSION = $(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_VERSION))
+ ARM_TRUSTED_FIRMWARE_CPE_ID_PREFIX = cpe:2.3:o
+-ARM_TRUSTED_FIRMWARE_CPE_ID_VENDOR = arm
++ARM_TRUSTED_FIRMWARE_CPE_ID_VENDOR = trustedfirmware
+ ARM_TRUSTED_FIRMWARE_CPE_ID_PRODUCT = trusted_firmware-a
+ ARM_TRUSTED_FIRMWARE_CPE_ID_VERSION = $(patsubst v%,%,$(patsubst lts-%,%,$(ARM_TRUSTED_FIRMWARE_VERSION)))
  
 _______________________________________________
 buildroot mailing list
