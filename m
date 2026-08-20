@@ -4,58 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7B3AC5DF89
-	for <buildroot@archiver.kernel.org>; Fri, 21 Aug 2026 15:12:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9089FC5DF94
+	for <buildroot@archiver.kernel.org>; Fri, 21 Aug 2026 15:12:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5C90C81E19;
-	Fri, 21 Aug 2026 15:12:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5655C813C6;
+	Fri, 21 Aug 2026 15:12:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0EeOgyZDFkp5; Fri, 21 Aug 2026 15:12:12 +0000 (UTC)
+ id J7v6mmibILCv; Fri, 21 Aug 2026 15:12:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787325132;
-	bh=TTnZAmZOB1BxI+DIJ+NWB9GCptm6IN+EKXCDOBPSoSY=;
+	s=default; t=1787325134;
+	bh=qG0Nyu1aiZ4UF2oxUknKSk/3JwzuqL70iZEBfXZuzn4=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=eez/b4Wek1PYCcjWnk3vJIAw37Jm+RySzXHsh7tyd14EnNG4kzQZUwC0NfbXAaDYi
-	 XMTx/Ww22E5fSeOoP1kRInnAFdtF8luYBpTQpJ66Nxodq3bJQ4FvaoLomPAKCfoPes
-	 zP2ZpG8pfUB94Rj/bBtmQXDpwbXQD4nrv6qDcGx8WZEkeGWeckQ8/F2stiKNi1NXf2
-	 6wHjmaRgrsC1k9STEoBh5jQIYkH1Ln2WRQGXgyNTlXv1j5WmZ3iwNvnukQTn25vH52
-	 XbIZatqiZB3tvf7b4CcTxK68ZDcZfaPfx7FgQg+l8EFl0IUmy20+qKXhuK5/DElP1x
-	 eMnyG3CdT7LLg==
+	b=VP/M9oUYzpEoTRTRUt8e6aB7pFD6qD2Cn7s86so0DgU6wdtS8DOEP7YhqS0WU0+24
+	 wKiSBKSfBQ5O9fKqRwX2EO6GDHgrGuQYBYLSb4yF7Q/gt4Lyy8mT87NaUEhMsJ9SqY
+	 I+Gt9LVNryBKxjmn2hmxUtbRE/yZl/rFXDvAn0Xj/upix0auQk83jitMeuI+EvxDbD
+	 TMJkIq7C7DlPZ6kEk3yAdTMXWL2MnTom83Pch8b2rl2SNH425PLws2KjIzQdEMyL97
+	 pGE3nNSqlk3Yfg4tNVtUvr/m20TCzy8KdZlyrlFOfIaKGYw28AiWXVIv9g6/Rts6ny
+	 JO2Knz8VeRT2Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 15825812DF;
-	Fri, 21 Aug 2026 15:12:12 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 292222017
+	by smtp1.osuosl.org (Postfix) with ESMTP id 37F3181E13;
+	Fri, 21 Aug 2026 15:12:14 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 41F0B29B
  for <buildroot@buildroot.org>; Fri, 21 Aug 2026 15:11:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 255C481154
+ by smtp3.osuosl.org (Postfix) with ESMTP id 253DC606A6
  for <buildroot@buildroot.org>; Fri, 21 Aug 2026 15:11:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id n6HZpF3Dg_Eu for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id m9BO143pEVCC for <buildroot@buildroot.org>;
  Fri, 21 Aug 2026 15:11:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 58BA48110C
+ by smtp3.osuosl.org (Postfix) with ESMTP id 81C066063E
  for <buildroot@buildroot.org>; Fri, 21 Aug 2026 15:11:11 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CB98B8DE49; Fri, 21 Aug 2026 15:10:17 +0000 (UTC)
+ id E85258E17F; Fri, 21 Aug 2026 15:10:17 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 20 Aug 2026 14:48:26 +0200
+Date: Thu, 20 Aug 2026 14:53:31 +0200
 X-Git-Refname: refs/heads/2026.05.x
-X-Git-Oldrev: 0a638fdaf6828af7fd030124bec47ea00e4c6274
-X-Git-Newrev: 685efb096b29102995a9b98212484fab75b9540d
+X-Git-Oldrev: 1705db05ae627738f29ee91e505d0b28edc64373
+X-Git-Newrev: 6b0f605183db930be6a17c886750f280dbfdd6a5
 X-Patchwork-Hint: ignore
-Message-Id: <20260821151017.CB98B8DE49@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.05.x] package/gdb: drop
- ARC-specific version
+Message-Id: <20260821151017.E85258E17F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.05.x] package/intel-microcode:
+ security bump version to 20260812
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -75,111 +75,69 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/685efb096b29102995a9b98212484fab75b9540d
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/6b0f605183db930be6a17c886750f280dbfdd6a5
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.05.x
 
-A warning was sent to Synopsys ARC people in December 2025 that the
-ARC support in Buildroot was poorly maintained and in particular the
-ARC-pspecific toolchain components. Despite a reply that some effort
-would be made [1], no contributions were actually done. Also, Alexey
-Brodkin is no longer at Synopsys. Time to remove Synopsys ARC specific
-toolchain and toolchain components.
+https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files/releases/tag/microcode-20260812
+https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files/releases/tag/microcode-20260811
 
-This commit removes the ARC-specific gdb version.
+Fixes the following CVEs:
 
-[1] https://lore.kernel.org/buildroot/SJ2PR12MB818487232470DA4456967C73A1A3A@SJ2PR12MB8184.namprd12.prod.outlook.com/
+CVE-2025-31936
+https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01379.html
 
-Cc: ARC Maintainers <arc-buildroot@synopsys.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+CVE-2025-31938
+https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01404.html
+
+CVE-2026-20917
+https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01423.html
+
+CVE-2025-35973
+https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01428.html
+
+CVE-2026-20716
+https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01435.html
+
+CVE-2026-20760
+https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01441.html
+
+CVE-2026-20713
+https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01442.html
+
+CVE-2026-20707
+https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01443.html
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 0b3d526226662af8b16525aecec7da5ff0e5fa1d)
+(cherry picked from commit 2c92087605c30bd5c1384a62198855f7836b5215)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- Config.in.legacy           | 7 +++++++
- package/gdb/Config.in.host | 8 +-------
- package/gdb/gdb.hash       | 3 ---
- package/gdb/gdb.mk         | 7 -------
- 4 files changed, 8 insertions(+), 17 deletions(-)
+ package/intel-microcode/intel-microcode.hash | 2 +-
+ package/intel-microcode/intel-microcode.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 04bb237d78..17e3a9519e 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,13 @@ endif
+diff --git a/package/intel-microcode/intel-microcode.hash b/package/intel-microcode/intel-microcode.hash
+index bb36a52fc5..6f465fd679 100644
+--- a/package/intel-microcode/intel-microcode.hash
++++ b/package/intel-microcode/intel-microcode.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  5a07ce745d0bd8b360a4713564d46d5e38be797316a52abedaff0761e1b02370  intel-microcode-20260512.tar.gz
++sha256  7614616d7b2988c278060486f47de716ef44c19317928cb45ac9e288fafd5bd1  intel-microcode-20260812.tar.gz
+ sha256  03efb1491c7e899feb2665fa299363e64035e5444c1b8bc1f6ebed30de964e12  license
+diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
+index f6fbee54b4..9c97b0aa5e 100644
+--- a/package/intel-microcode/intel-microcode.mk
++++ b/package/intel-microcode/intel-microcode.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- comment "Legacy options removed in 2026.05.2"
- 
-+config BR2_GDB_VERSION_ARC
-+	bool "ARC-specific gdb version removed"
-+	select BR2_LEGACY
-+	help
-+	  Support for the ARC-specific gdb version was removed, as it
-+	  was no longer maintained in Buildroot.
-+
- config BR2_BINUTILS_VERSION_ARC
- 	bool "ARC-specific binutils version removed"
- 	select BR2_LEGACY
-diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
-index 963c46129d..d1aa2afcd7 100644
---- a/package/gdb/Config.in.host
-+++ b/package/gdb/Config.in.host
-@@ -41,15 +41,10 @@ config BR2_PACKAGE_HOST_GDB_SIM
- 
- choice
- 	prompt "GDB debugger Version"
--	default BR2_GDB_VERSION_15 if !BR2_arc
--	default BR2_GDB_VERSION_ARC if BR2_arc
-+	default BR2_GDB_VERSION_15
- 	help
- 	  Select the version of gdb you wish to use.
- 
--config BR2_GDB_VERSION_ARC
--	bool "gdb arc (15.x)"
--	depends on BR2_arc
--
- config BR2_GDB_VERSION_14
- 	bool "gdb 14.x"
- 
-@@ -72,7 +67,6 @@ endif
- # If cross-gdb is not enabled, the latest stable version is chosen.
- config BR2_GDB_VERSION
- 	string
--	default "arc-2024.12-release-gdb" if BR2_GDB_VERSION_ARC || (!BR2_PACKAGE_HOST_GDB && BR2_arc)
- 	default "14.2"     if BR2_GDB_VERSION_14 || (!BR2_PACKAGE_HOST_GDB && !BR2_TOOLCHAIN_GCC_AT_LEAST_9)
- 	default "15.2"	   if BR2_GDB_VERSION_15 || (!BR2_PACKAGE_HOST_GDB && BR2_TOOLCHAIN_GCC_AT_LEAST_9)
- 	default "16.3"	   if BR2_GDB_VERSION_16
-diff --git a/package/gdb/gdb.hash b/package/gdb/gdb.hash
-index 7844b765e6..b4338e4c31 100644
---- a/package/gdb/gdb.hash
-+++ b/package/gdb/gdb.hash
-@@ -3,9 +3,6 @@ sha512  7e07941f1fe661288cc571b4964012ceabc1760624fce20320db2f470c01439b2386f859
- sha512  624007deceb5b15ba89c0725883d1a699fa46714ef30887f3d0165e17c5d65d634671740a135aa69e437d916218abb08cfa2a38ed309ff19d48f51da56b2a8ba  gdb-15.2.tar.xz
- sha512  fffd6689c3405466a179670b04720dc825e4f210a761f63dd2b33027432f8cd5d1c059c431a5ec9e165eedd1901220b5329d73c522f9a444788888c731b29e9c  gdb-16.3.tar.xz
- 
--# Locally calculated (fetched from Github)
--sha512  a909a687abf6e9623c7ec99a8b2cbb03ab6fdeccee9ebd33ce34fffdb2bed5e4d519113aeb29ba3ca8db52e9bdbb63b59973914c74e3eebf4a4a2a6033b9e784  gdb-arc-2024.12-release-gdb.tar.gz
--
- # Locally calculated (fetched from gcc.gnu.org)
- sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING3
-diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-index 2a2fdb260d..685d1fe992 100644
---- a/package/gdb/gdb.mk
-+++ b/package/gdb/gdb.mk
-@@ -7,13 +7,6 @@
- GDB_VERSION = $(call qstrip,$(BR2_GDB_VERSION))
- GDB_SITE = $(BR2_GNU_MIRROR)/gdb
- GDB_SOURCE = gdb-$(GDB_VERSION).tar.xz
--
--ifeq ($(BR2_GDB_VERSION_ARC),y)
--GDB_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,binutils-gdb,$(GDB_VERSION))
--GDB_SOURCE = gdb-$(GDB_VERSION).tar.gz
--GDB_FROM_GIT = y
--endif
--
- GDB_LICENSE = GPL-2.0+, LGPL-2.0+, GPL-3.0+, LGPL-3.0+
- GDB_LICENSE_FILES = COPYING COPYING.LIB COPYING3 COPYING3.LIB
- GDB_CPE_ID_VENDOR = gnu
+-INTEL_MICROCODE_VERSION = 20260512
++INTEL_MICROCODE_VERSION = 20260812
+ INTEL_MICROCODE_SITE = $(call github,intel,Intel-Linux-Processor-Microcode-Data-Files,microcode-$(INTEL_MICROCODE_VERSION))
+ INTEL_MICROCODE_LICENSE = PROPRIETARY
+ INTEL_MICROCODE_LICENSE_FILES = license
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
