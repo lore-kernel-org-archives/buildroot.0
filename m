@@ -4,82 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39F12C5DF93
-	for <buildroot@archiver.kernel.org>; Fri, 21 Aug 2026 14:47:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E4E7C5DF93
+	for <buildroot@archiver.kernel.org>; Fri, 21 Aug 2026 15:07:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 348CC811A7;
-	Fri, 21 Aug 2026 14:47:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8EB868119F;
+	Fri, 21 Aug 2026 15:07:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zH9kSnZ52cMs; Fri, 21 Aug 2026 14:47:39 +0000 (UTC)
+ id nlXFYb5TDMTa; Fri, 21 Aug 2026 15:07:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787323658;
-	bh=ztrkD7czVGgVoqjl44dMQ68qFydcy8jGghB6OZt6Vh4=;
-	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=ARmqoG4KOEuV8g2FDaXNXUQJjXr7Zh2IuMefTuO4TcwkNPjkcRxDR90ReF3z0g9Oq
-	 ugsU3cyKg3FR9yeYb1vN1wAQJ8rdHm4LYZg2YbzPnyYjPodb0D8sQJzggxgkAsBCCl
-	 Fg/cWOmDQmqZY5UZuVAP1FY0t5UR5zjEvnY50lpV4KIqV08GxxcAufNZbK4anBDMTa
-	 D+DhLbgifafAB6rrrO4OJhSXi/CqxHR4PpCe1LuuFkDxMtY6QljSADdVf7X3gxqlJf
-	 QHgcDTODNeSXnj7fVJ9p0HLaRzljv+Mxobs89HRwATDy+NY2vzDv6nBl0dgm3J5BtT
-	 6MzEkbs4t6CXA==
+	s=default; t=1787324830;
+	bh=z3OyLi3j7KlzHJxh9rDYvoIww6jo8X4xjTXrutaOv/8=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=GlcWsl0cE+8lmOXxUly36m8kWEjrXdXI0h9dSx8ifH22RRCJqjSyjwLl7fW4b9GVj
+	 zD7M0FQR/EMakCMpnMO1ciYPXh1nOYWm2QXtuCtAwsOJbsqXlynhi+79WaeyDbv1IB
+	 fcKFgkdb6MSdsrsBBnIT9YeGAivaQZd3tIp4BAKB+zm2VkyRtAt+3Qta7DteK56AVu
+	 k21Ic6gSnICMQnyiVeySWTTCFQbpIefC+8EcyGHWuHw+DVloXlOTvplBET/kXBTVyG
+	 GxLx4fsdGLzFTM7hxLoLj7UX3EQipFoVZzrudrq2RYuYB6qHSlScQzNyD4CCCZlZw5
+	 Va28eh2EltFIQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DA24480F67;
-	Fri, 21 Aug 2026 14:47:38 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id BBC76336
- for <buildroot@buildroot.org>; Fri, 21 Aug 2026 14:47:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 23A298117C;
+	Fri, 21 Aug 2026 15:07:10 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4BAD529B
+ for <buildroot@buildroot.org>; Fri, 21 Aug 2026 15:07:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9C8F980F67
- for <buildroot@buildroot.org>; Fri, 21 Aug 2026 14:47:37 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3DF1740417
+ for <buildroot@buildroot.org>; Fri, 21 Aug 2026 15:07:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wKCM7hLCvmHU for <buildroot@buildroot.org>;
- Fri, 21 Aug 2026 14:47:36 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fsjjBy7hktrL for <buildroot@buildroot.org>;
+ Fri, 21 Aug 2026 15:07:07 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none) header.from=korsgaard.com
-Authentication-Results: smtp1.osuosl.org; dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail1 header.b=HTOviIom
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7407980F29
- for <buildroot@buildroot.org>; Fri, 21 Aug 2026 14:47:35 +0000 (UTC)
-DKIM-Signature: a=rsa-sha256;
- b=HTOviIomBDrrbswCvFJ7QdTx27XmXN3SW26ayeaOhe/mYF5b/s7h47i5HTQHeGg69v4XDpSlNwS8vblcxYvQCWuhgNTUMk8XqgrGrwC7/zLP3mIewAtxB5fA6X84AQnTeNnl6nz6UJQU/YVCsJAsRQ0VribHOoQTIaX5Ylv3+z170AfhSwgE9tFthevx//ARtQDbgU3aAEpUDJ4MaVuJVPc1e5jRM0G7dgo7JJHt8B8zH3IY8pFarFOaICC7n9dEyilolYrpNriAemo2dOf8l6mnNAPFWn3CA8hVVmuQ40n5asvPI6JTjFHMaJYRK3UdGZQTM2xF7/ICb367PFTB5g==;
- s=purelymail1; d=purelymail.com; v=1;
- bh=5tRJ6UdfwfUqcbqNw8XwTpqfqPcS/wBZ/7Hqgcdsli4=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1702845494; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Fri, 21 Aug 2026 14:47:33 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peter@korsgaard.com>) id 1wxQWq-00000006Xcc-1REm;
- Fri, 21 Aug 2026 16:47:32 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Fred Lefranc <fred.lefranc.evs@gmail.com>, Titouan Christophe
- <titouan.christophe@mind.be>
-Cc: buildroot@buildroot.org,  Fabrice Fontaine <fontaine.fabrice@gmail.com>
-In-Reply-To: <CAGkXw1U23+yWPktkA2Sk=+c0Prh4M9mJvhWERPJwkri6oO2=Kg@mail.gmail.com>
- (Fred Lefranc's message of "Fri, 21 Aug 2026 11:49:40 +0200")
-References: <20260817140122.27796-1-fred.lefranc.evs@gmail.com>
- <87qzjw6cd9.fsf@dell.be.48ers.dk>
- <CAGkXw1U23+yWPktkA2Sk=+c0Prh4M9mJvhWERPJwkri6oO2=Kg@mail.gmail.com>
-Date: Fri, 21 Aug 2026 16:47:32 +0200
-Message-ID: <87zeyf7cor.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] packages/haproxy: security bump to version
- 2.6.32
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1D1C440026
+ for <buildroot@buildroot.org>; Fri, 21 Aug 2026 15:07:07 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 8DD0F8E198; Fri, 21 Aug 2026 15:06:13 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 20 Aug 2026 10:55:56 +0200
+X-Git-Refname: refs/heads/2025.02.x
+X-Git-Oldrev: 62d273c836d808af9032b99b33cfccdbb4420cab
+X-Git-Newrev: 53e27a7c5d649195ae0868bad6ab5282a02d0d9f
+X-Patchwork-Hint: ignore
+Message-Id: <20260821150613.8DD0F8E198@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/libgit2: bump
+ version to 1.9.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -91,21 +67,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Titouan Christophe via buildroot <buildroot@buildroot.org>
+Reply-To: Titouan Christophe <titouan.christophe@mind.be>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fred" == Fred Lefranc <fred.lefranc.evs@gmail.com> writes:
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/53e27a7c5d649195ae0868bad6ab5282a02d0d9f
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
- > Will you backport it to 2025.02.x branch also or do I need to to
- > request a patch specifically?
+Release notes:
+https://github.com/libgit2/libgit2/releases/tag/v1.9.3
 
-Normally it will be picked up automatically next time 2025.02.x is
-synched with the fixes in master, thanks.
+Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit a562b8c3aa8f47976c4eb10dc9723f1dc86e5d56)
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+---
+ package/libgit2/libgit2.hash | 2 +-
+ package/libgit2/libgit2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libgit2/libgit2.hash b/package/libgit2/libgit2.hash
+index e8c155c994..11eab3001c 100644
+--- a/package/libgit2/libgit2.hash
++++ b/package/libgit2/libgit2.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  6f097c82fc06ece4f40539fb17e9d41baf1a5a2fc26b1b8562d21b89bc355fe6  libgit2-1.9.2.tar.gz
++sha256  d532172d7ab24d2a25944e2434212d63ee85f3650e97b5f7579e7f201a78ad64  libgit2-1.9.3.tar.gz
+ sha256  e3712465634e97cfd850822a4eb5ac7d2f8a10f753189366d5a2060046f28288  COPYING
+diff --git a/package/libgit2/libgit2.mk b/package/libgit2/libgit2.mk
+index 02af500a65..7c95145fce 100644
+--- a/package/libgit2/libgit2.mk
++++ b/package/libgit2/libgit2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBGIT2_VERSION = 1.9.2
++LIBGIT2_VERSION = 1.9.3
+ LIBGIT2_SITE = $(call github,libgit2,libgit2,v$(LIBGIT2_VERSION))
+ LIBGIT2_LICENSE = \
+ 	GPL-2.0 with linking exception, \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
