@@ -4,57 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA665C5DF81
-	for <buildroot@archiver.kernel.org>; Thu, 20 Aug 2026 19:18:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35A05C5DF86
+	for <buildroot@archiver.kernel.org>; Thu, 20 Aug 2026 19:20:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9E7FA80F69;
-	Thu, 20 Aug 2026 19:18:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EE57280E66;
+	Thu, 20 Aug 2026 19:20:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1ycPyOWW4dqU; Thu, 20 Aug 2026 19:18:00 +0000 (UTC)
+ id 9x4wnPFIyiDR; Thu, 20 Aug 2026 19:20:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787253479;
-	bh=pJhxQLy/1U/4AkrwpdC2uve4L2AaF13GH9VXcDVcIDY=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=o/jroa8WTU/1iI8/URmYlKnsf7fngUzReYMxfSBzsyfupi2PSmucbORZekVnWhhRp
-	 HIxZpGodOiSFVV2LM8J5gU44N9tn0hLF+9hg9RjwX1jgJBcuDDxd6WkqdAa0gfXIUX
-	 Kl8AgKitQ5+JYGEZ+4e3NUA42T58TOJj7D1YtB2yS5BipK9NeoaqZ92urHsEoR+yVt
-	 3jYxUGUFMNYL6dUrydLP6vIBYeg792vfaDiVMO1r2Mk1zI1SV5QWmFuGYx/aP3hi83
-	 Svbp3cefQbwjrUeCKh3UZuGSNviv25of35QCBVutNoqBdx0QzjNzKVqOejba0FVp+S
-	 xK3pIhIUtv1zA==
+	s=default; t=1787253611;
+	bh=W19bYQkRD3PKTdqFwTe12TYYNbCTaYiWm4iIzWiZmC0=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=G/LrV1ssnKNNXVMLJQ3dgcqV45DU13TXCMTvHv3lyrQpC7ok8X61ziUbMaFyuc/KS
+	 PGSEf/PojFEVVL4Uzvn6g5hdqiIPGuj9ekBnyYqidhtcBpLaXUx9sz9za0MCVICj47
+	 Pb26GkVl+s6lIDdMqlC+yiaypk7j0mhFjQIcmjYGU8JaMnrq1HceO48t44qG4g4JQC
+	 pzfunSfKnxUOl82W0hpJ0iaw8Xh7rFcCNe5voGN+jKQnjNvww9CZfUsOBzyXdrsC1b
+	 0RAX6eO9partLgyV7B0FfihLw1drD4bq3WopKKHO7esH3Y7nCRMNMvgrhJ0BBeMx3j
+	 4wnvx0S4J5vKw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D49E680E6A;
-	Thu, 20 Aug 2026 19:17:59 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 3760B198
- for <buildroot@buildroot.org>; Thu, 20 Aug 2026 19:17:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3979480E6A;
+	Thu, 20 Aug 2026 19:20:11 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 191F5198
+ for <buildroot@buildroot.org>; Thu, 20 Aug 2026 19:20:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 272954081E
- for <buildroot@buildroot.org>; Thu, 20 Aug 2026 19:17:58 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 090A780E6A
+ for <buildroot@buildroot.org>; Thu, 20 Aug 2026 19:20:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Mkcm6bkxGioI for <buildroot@buildroot.org>;
- Thu, 20 Aug 2026 19:17:57 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TMHr6F985rKm for <buildroot@buildroot.org>;
+ Thu, 20 Aug 2026 19:20:09 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
+ helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7FDEB4081B
- for <buildroot@buildroot.org>; Thu, 20 Aug 2026 19:17:57 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3CF448DF53; Thu, 20 Aug 2026 19:17:04 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 20 Aug 2026 21:14:48 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5245c41441bacca292d129d4339e79e5179af79c
-X-Git-Newrev: e913afbeb1ad67ba43829aee94d01d8ca32120fe
-X-Patchwork-Hint: ignore
-Message-Id: <20260820191704.3CF448DF53@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/Makefile.in: fix support for
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1AC3F80E66
+ for <buildroot@buildroot.org>; Thu, 20 Aug 2026 19:20:08 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-03.galae.net (Postfix) with ESMTPS id 1D0384E41306
+ for <buildroot@buildroot.org>; Thu, 20 Aug 2026 19:20:06 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id E5EE95FF59;
+ Thu, 20 Aug 2026 19:20:05 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 2F09711C76733; 
+ Thu, 20 Aug 2026 21:20:00 +0200 (CEST)
+Date: Thu, 20 Aug 2026 21:20:00 +0200
+To: Fengwei Tan <tfx2001@outlook.com>
+Cc: buildroot@buildroot.org
+Message-ID: <aodS3qtR9YJL5U63@windsurf>
+References: <SY8P300MB0041B37C6A3A259B05B0404DF8A72@SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <SY8P300MB0041B37C6A3A259B05B0404DF8A72@SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM>
+X-Last-TLS-Session-Version: TLSv1.3
+Subject: Re: [Buildroot] [PATCH] package: fix builds with
  $(PKG)_FLAT_STACKSIZE
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -69,57 +79,57 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/e913afbeb1ad67ba43829aee94d01d8ca32120fe
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+Hello!
 
-When a package defines $(PKG)_FLAT_STACKSIZE, ELF2FLT_FLAGS contains
--Wl,-elf2flt="-r -s<stack-size>". The embedded quotes are needed to
-keep both elf2flt options in single linker argument.
+On Tue, Aug 18, 2026 at 02:17:29AM +0800, Fengwei Tan wrote:
+> When a package defines $(PKG)_FLAT_STACKSIZE, ELF2FLT_FLAGS contains
+> -Wl,-elf2flt="-r -s<stack-size>". The embedded quotes are needed to
+> keep both elf2flt options in single linker argument.
+> 
+> However, many package Makefiles wrap $(TARGET_CFLAGS) in double quotes,
+> for example:
+> 
+>   CFLAGS="$(TARGET_CFLAGS)"
+> 
+> After expansion, the embedded quote terminates the outer CFLAGS quote.
+> As a result, the shell interprets "-s<stack-size> ..." as a command
+> instead of passing it to the compiler.
+> 
+> Pass -r and -s<stack-size> in separate -Wl arguments instead. This
+> avoids embedded quotes; GCC forwards both -elf2flt options to
+> ld-elf2flt, which collects them before invoking elf2flt.
+> 
+> Signed-off-by: Fengwei Tan <tfx2001@outlook.com>
 
-However, many package Makefiles wrap $(TARGET_CFLAGS) in double quotes,
-for example:
+Thanks a lot for your patch, well spotted!
 
-  CFLAGS="$(TARGET_CFLAGS)"
+One thing that was missing from your commit message is the indication
+of which commit broke this, so I added that and applied your commit to
+our master branch.
 
-After expansion, the embedded quote terminates the outer CFLAGS quote.
-As a result, the shell interprets "-s<stack-size> ..." as a command
-instead of passing it to the compiler.
+This feature is not actually used by any package in Buildroot, which
+explains why this problem remained unnoticed. Would you be willing to
+work on adding a simple test case in support/testing/ for this? I
+guess it could be a very simple br2-external, with a very simple
+package that uses <pkg>_FLAT_STACKSIZE.
 
-Pass -r and -s<stack-size> in separate -Wl arguments instead. This
-avoids embedded quotes; GCC forwards both -elf2flt options to
-ld-elf2flt, which collects them before invoking elf2flt.
+Aside from that, no many of our users use Buildroot for noMMU
+platforms. Would you mind sharing your use case? Which platform are
+you using, in which context, how did you end up running into this
+<pkg>_FLAT_STACKSIZE issue?
 
-This got broken by commit
-04d7ea4720cbc1e9c4d7ec6307aff71567b0653d ("package: Makefile.in: fix
-elf2flt invocation options"), which by adding -r as an elf2flt
-argument, did not correctly handle -s$($(PKG)_FLAT_STACKSIZE).
+Again, thanks for your contribution!
 
-Signed-off-by: Fengwei Tan <tfx2001@outlook.com>
-[Thomas: improve commit message]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/Makefile.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/Makefile.in b/package/Makefile.in
-index eac28b3a96..229206d393 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -218,7 +218,7 @@ ifeq ($(BR2_riscv),y)
- TARGET_CFLAGS += -fPIC
- endif
- ELF2FLT_FLAGS = $(if $($(PKG)_FLAT_STACKSIZE),\
--	-Wl$(comma)-elf2flt="-r -s$($(PKG)_FLAT_STACKSIZE)",\
-+	-Wl$(comma)-elf2flt=-r -Wl$(comma)-elf2flt=-s$($(PKG)_FLAT_STACKSIZE),\
-         -Wl$(comma)-elf2flt=-r)
- TARGET_CFLAGS += $(ELF2FLT_FLAGS)
- TARGET_CXXFLAGS += $(ELF2FLT_FLAGS)
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
