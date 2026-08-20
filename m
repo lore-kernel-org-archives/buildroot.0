@@ -4,58 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D904C5DF94
-	for <buildroot@archiver.kernel.org>; Fri, 21 Aug 2026 15:11:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02103C5DF93
+	for <buildroot@archiver.kernel.org>; Fri, 21 Aug 2026 15:11:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 52D388126B;
-	Fri, 21 Aug 2026 15:11:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C94EB812BB;
+	Fri, 21 Aug 2026 15:11:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bDYeObtCmMWN; Fri, 21 Aug 2026 15:11:18 +0000 (UTC)
+ id sFEkGGiqzBwE; Fri, 21 Aug 2026 15:11:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787325078;
-	bh=EpaEDp4RuAuE466IaKHeu29w1KqFuR8jm0lC5UA568c=;
+	s=default; t=1787325080;
+	bh=ZwkNtVT7GBeqxjUtLUoBrrRoAwrzXu0aOEiacwcl10E=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=dBVNBUtHK/iEaqZxEhS35SPD85IJYzyGZQg4W9bcN7zJwyavN56LbdfT6QWfqUcbT
-	 JltGjITToFzbI1HSwBiN53Dq5FtFjl6SaJnjh4dHL7wVX6hz4/R9qE6X9zyZpQLkLm
-	 Eay16cu9NDBcF5cwS8ElzsxN8dd8uWpssLOiveJRo50/HExRC9aNQYJoaDITbtjM/h
-	 u0lgbS4GWgdkN7MercVRZE/Ov26k+VSa0WI7qMe4fy6dPzH8mSJ35TB/oYAXYVrajq
-	 aK/8fI02jhUOKEfiewYWuYrsVl+mfGu1mNsxyo8No0J4N9B5x6r9azOZt5SHlRAFx+
-	 hW5ZRz23rN8Ow==
+	b=Wtc//GPiZI0kaeb+kxsCffmb9LbscLZyoxQ/3bZntN9+Z2n7qNX4IghOBmNOWoIyJ
+	 q+oleTHefPYkWeLHYOifPG1tCeCBTslrI6sQyZXx7xalRHuFmWg6fa5FasdfecsCUx
+	 NxtO70jeDGTBr7numQ+Zyyp0G4JjwQ2mL0e9Hf2o4C6Kw98T8zsIQYovh95ZmZ7A2G
+	 oqvxzBvNGCmlpN7IwDLjX4Ps0u/H7QE9h6HaAd/klS3ejxEmHqcx6l8KB4OxwAG/pp
+	 ekRvv9LsD/WVgL1JbWvWvXXFwve/2bNMz7sN4Q02N1i82dWJffK6SAA3p8Hc3y+Xnq
+	 p9BfH3D/+9WcA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 53E8D81166;
-	Fri, 21 Aug 2026 15:11:18 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 39E2AEA3
+	by smtp1.osuosl.org (Postfix) with ESMTP id E42F981275;
+	Fri, 21 Aug 2026 15:11:19 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 388B81CF2
  for <buildroot@buildroot.org>; Fri, 21 Aug 2026 15:11:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2A6994004E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2A54F60A79
  for <buildroot@buildroot.org>; Fri, 21 Aug 2026 15:11:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Epq8uewRE4rA for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id m-zFBNaUy72L for <buildroot@buildroot.org>;
  Fri, 21 Aug 2026 15:11:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8900A400AB
+ by smtp3.osuosl.org (Postfix) with ESMTP id 783736063E
  for <buildroot@buildroot.org>; Fri, 21 Aug 2026 15:11:09 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 08CB98E198; Fri, 21 Aug 2026 15:10:16 +0000 (UTC)
+ id DEEE58E198; Fri, 21 Aug 2026 15:10:15 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 20 Aug 2026 11:00:04 +0200
+Date: Thu, 20 Aug 2026 10:56:08 +0200
 X-Git-Refname: refs/heads/2026.05.x
-X-Git-Oldrev: 6b8e25393a538f329684a300ad7442bbdea2edf7
-X-Git-Newrev: 579c1048c3d6b8ed507cda818153afbd513dfcb8
+X-Git-Oldrev: afdb07b5c5674713cf1d79e9d17fad63c721d660
+X-Git-Newrev: 31bdf1643d9e4aad864451f3b366f306e418fb6c
 X-Patchwork-Hint: ignore
-Message-Id: <20260821151016.08CB98E198@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.05.x] package/redis: switch
- download site to https
+Message-Id: <20260821151015.DEEE58E198@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.05.x] package/libgit2: security
+ bump version to 1.9.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -75,30 +75,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/579c1048c3d6b8ed507cda818153afbd513dfcb8
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/31bdf1643d9e4aad864451f3b366f306e418fb6c
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.05.x
 
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+v1.9.5 fixes CVE-2026-53586, CVE-2026-53587, CVE-2026-53585,
+CVE-2026-53584, CVE-2026-53583.  v1.9.6 fixes other non-security issues.
+
+Release notes:
+https://github.com/libgit2/libgit2/releases/tag/v1.9.5
+https://github.com/libgit2/libgit2/releases/tag/v1.9.6
+
+v1.9.5 also replaces a bundled vulnerable libpcre with libpcre2 and
+updated the PCRE license in COPYING as a result.  This is mostly useful
+on Windows; On POSIX systems, libgit2 can use regcomp() and Buildroot
+already asks for it. See:
+https://github.com/libgit2/libgit2/commit/3a9102dae9aef333791bf03ba1a00d2cc78ecfc2
+
+Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+[Julien: add link to license update upstream commit]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit a3a53b05f8cf25a55306dd0301dd6b310752b09c)
+(cherry picked from commit 3c2d207f8c65d025d12e40d786f5208933684f44)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- package/redis/redis.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/libgit2/libgit2.hash | 4 ++--
+ package/libgit2/libgit2.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-index e5a6e39792..b08cf9ab92 100644
---- a/package/redis/redis.mk
-+++ b/package/redis/redis.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/libgit2/libgit2.hash b/package/libgit2/libgit2.hash
+index f30f0c528c..38486c4e4d 100644
+--- a/package/libgit2/libgit2.hash
++++ b/package/libgit2/libgit2.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  824b73bd13647800fe4b566a1008ae77fea0e3e3424edab632fcfd8c0b14ba8b  libgit2-1.9.4.tar.gz
+-sha256  e3712465634e97cfd850822a4eb5ac7d2f8a10f753189366d5a2060046f28288  COPYING
++sha256  a88a42a4ea9bdab7aa8686eead3bf7d9c6dd74529caca16ab22eaa92433d31d9  libgit2-1.9.6.tar.gz
++sha256  e0938121c0554985fe17196ac38fc590d149268e9c46e0c0e7a2eae1354fae71  COPYING
+diff --git a/package/libgit2/libgit2.mk b/package/libgit2/libgit2.mk
+index 5f18be9550..b4d9984540 100644
+--- a/package/libgit2/libgit2.mk
++++ b/package/libgit2/libgit2.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- REDIS_VERSION = 8.6.5
--REDIS_SITE = http://download.redis.io/releases
-+REDIS_SITE = https://download.redis.io/releases
- REDIS_LICENSE = \
- 	AGPL-3.0 or SSPL-1.0 or RSAL-2.0 (core); \
- 	MIT and BSD family licenses (Bundled components)
+-LIBGIT2_VERSION = 1.9.4
++LIBGIT2_VERSION = 1.9.6
+ LIBGIT2_SITE = $(call github,libgit2,libgit2,v$(LIBGIT2_VERSION))
+ LIBGIT2_LICENSE = \
+ 	GPL-2.0 with linking exception, \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
