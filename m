@@ -1,60 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6F41C5DF8C
-	for <buildroot@archiver.kernel.org>; Thu, 20 Aug 2026 22:17:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C210C5DF8E
+	for <buildroot@archiver.kernel.org>; Thu, 20 Aug 2026 22:18:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A11CC40816;
-	Thu, 20 Aug 2026 22:17:44 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bprWkQhyC64l; Thu, 20 Aug 2026 22:17:43 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787264263;
-	bh=wUQlLUT2PFQc9sFzI0XHQEYRyMRJnDQWB5zKe0ejHrI=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=CB+e7QsUYndVAokUCG8Zwl1qhodEBJDU2nGC6UpEEuK23FtpxAxU8yXlRYHhjjRiG
-	 lCDaR9Nzvk45LwWREBaOzdC1J67auj4GoVjkesRR3/No4k1t7tJLQnZJEplL1UulwG
-	 nBWa7V/Pc+0lTw5KK3bo76Xv2Z/CpDqf9zTQYx1QJlUpvav7cit1tPcBfqpVTEwO5i
-	 +Fj/yEjtaCr7/HyXSH+MLLvEDKXPNVTx+ZOx3Mw+Wpv4eIl08H/a7h+zuVxEkwN9UG
-	 LoMbokx868xkp2TT0H/R962GZhMrJkkwm5yNkt/4VAbpzO1vK4WoLUdvYDzztqK2Nu
-	 IWOKhEoHV56Qg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C34D94081B;
-	Thu, 20 Aug 2026 22:17:43 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id E4C25EA3
- for <buildroot@buildroot.org>; Thu, 20 Aug 2026 22:17:42 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C4EFF80C41
- for <buildroot@buildroot.org>; Thu, 20 Aug 2026 22:17:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3982E80FC1;
+	Thu, 20 Aug 2026 22:18:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tOTUAAeK2tEZ for <buildroot@buildroot.org>;
- Thu, 20 Aug 2026 22:17:42 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id Y-hv22tRii0B; Thu, 20 Aug 2026 22:18:14 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1787264293;
+	bh=n5q74cKT5f3VInZid83i0+RGJxnOX3SVJCPOL6k1klY=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=ALbdnL2ClFGH/6iCrCKEC1xXl/2LbFbLI5/1p32/hSOblkuGJNbOUtB7pdcSD5/1x
+	 EcYRzHDL5csaps1lzCY73RlH1ZPYmcEmQljqsH9kfSy1GBpvKdIP4/BKCfm/BVtl4I
+	 NwBYZXzBHcf6aF65qq131P51Gtawv5snr7DvC2kgWIDh/BVjYpVxIv53n0OlLAEw6Q
+	 CG4BOzLfVSjZMrPs7h8mR+Uh/2BxVjwGNsGZx6fMOaxtNEguXNqpptthLgkjVov9Tq
+	 WQrjQ3Be+KiNADrAo5m9e61dJk4Nsus6dr4AgXX3h3YuXAhhQp2RV4Tu2mIZERIF8G
+	 6ei2RGEnwQYfg==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id D392C80C41;
+	Thu, 20 Aug 2026 22:18:13 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 89473EA3
+ for <buildroot@buildroot.org>; Thu, 20 Aug 2026 22:18:12 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7858980C41
+ for <buildroot@buildroot.org>; Thu, 20 Aug 2026 22:18:12 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VciC7Tot14YN for <buildroot@buildroot.org>;
+ Thu, 20 Aug 2026 22:18:11 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
+ helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1F32F80B63
- for <buildroot@buildroot.org>; Thu, 20 Aug 2026 22:17:42 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E4A138DAE4; Thu, 20 Aug 2026 22:16:48 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 21 Aug 2026 00:15:52 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 139025f79328e1a93be972ed46d75366449c6695
-X-Git-Newrev: 86102dd8279ac6c4c0244f3e490af98dc7460d5e
-X-Patchwork-Hint: ignore
-Message-Id: <20260820221648.E4A138DAE4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/kodi: add upstream patch to fix
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7041780B63
+ for <buildroot@buildroot.org>; Thu, 20 Aug 2026 22:18:10 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-03.galae.net (Postfix) with ESMTPS id 1F71F4E4130E;
+ Thu, 20 Aug 2026 22:18:09 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id D90A55FF59;
+ Thu, 20 Aug 2026 22:18:08 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id DE67511C76915; 
+ Fri, 21 Aug 2026 00:18:03 +0200 (CEST)
+Date: Fri, 21 Aug 2026 00:18:02 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+Message-ID: <aod9DnrVNEch93zS@windsurf>
+References: <20260623051725.4526-1-bernd@kuhls.net>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20260623051725.4526-1-bernd@kuhls.net>
+X-Last-TLS-Session-Version: TLSv1.3
+Subject: Re: [Buildroot] [PATCH 1/1] package/kodi: add upstream patch to fix
  build on s390, mark unavailable on m68k
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -69,122 +79,34 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5252882834858727738=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5252882834858727738==
-Content-Type: text/plain
-
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/86102dd8279ac6c4c0244f3e490af98dc7460d5e
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
-
-Build errors were found by the Gitlab pipelines with these defconfigs:
-
-- bootlin-m68k-68040-uclibc
-  CMake Error at cmake/scripts/linux/ArchSetup.cmake:50 (message):
-    Unknown CPU: m68k
-
-- bootlin-s390x-z13-glibc
-  CMake Error at cmake/scripts/linux/ArchSetup.cmake:50 (message):
-    Unknown CPU: s390x
-
-Backport an upstream commit from the upcoming Piers branch to fix the
-restriction in ArchSetup.cmake.
-
-This caused a different build error on m68k later on:
-
-/builds/bkuhls/buildroot/br-test-pkg/bootlin-m68k-68040-uclibc/build/kodi-21.3-Omega/xbmc/utils/MathUtils.h:142:5:
- error: unknown register name ‘st’ in ‘asm’
-  142 |     __asm__ __volatile__ (
-
-because m68k is not part of the list of archs to disable asm code:
-https://github.com/xbmc/xbmc/blob/Omega/xbmc/utils/MathUtils.h#L26
-
-Upstream rejected to add m68k there:
-https://github.com/xbmc/xbmc/pull/22519
-https://github.com/xbmc/xbmc/pull/22357#issuecomment-1368358471
-
-so we disable m68k in BR2_PACKAGE_KODI_ARCH_SUPPORTS.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .../0006-cmake-Set-ARCH-to-CPU-by-default.patch    | 41 ++++++++++++++++++++++
- package/kodi/Config.in                             |  2 ++
- 2 files changed, 43 insertions(+)
-
-diff --git a/package/kodi/0006-cmake-Set-ARCH-to-CPU-by-default.patch b/package/kodi/0006-cmake-Set-ARCH-to-CPU-by-default.patch
-new file mode 100644
-index 0000000000..c5bbbe9636
---- /dev/null
-+++ b/package/kodi/0006-cmake-Set-ARCH-to-CPU-by-default.patch
-@@ -0,0 +1,41 @@
-+From 1695ba12380272056f369f434747839b2ae38d91 Mon Sep 17 00:00:00 2001
-+From: fossdd <fossdd@pwned.life>
-+Date: Sat, 22 Feb 2025 20:59:28 +0100
-+Subject: [PATCH] [cmake] Set ARCH to CPU by default
-+
-+Reduces complexity of redundant architecture names and allows building
-+for other architectures implicitly.
-+
-+Upstream: https://github.com/xbmc/xbmc/commit/1695ba12380272056f369f434747839b2ae38d91
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ cmake/scripts/linux/ArchSetup.cmake | 11 +----------
-+ 1 file changed, 1 insertion(+), 10 deletions(-)
-+
-+diff --git a/cmake/scripts/linux/ArchSetup.cmake b/cmake/scripts/linux/ArchSetup.cmake
-+index ab142177c8..f29a870a1e 100644
-+--- a/cmake/scripts/linux/ArchSetup.cmake
-++++ b/cmake/scripts/linux/ArchSetup.cmake
-+@@ -37,17 +37,8 @@ else()
-+   elseif(CPU MATCHES aarch64 OR CPU MATCHES arm64)
-+     set(ARCH aarch64)
-+     set(NEON True)
-+-  elseif(CPU MATCHES riscv64)
-+-    set(ARCH riscv64)
-+-    set(NEON False)
-+-  elseif(CPU MATCHES ppc64le)
-+-    set(ARCH ppc64le)
-+-    set(NEON False)
-+-  elseif(CPU MATCHES loongarch64)
-+-    set(ARCH loongarch64)
-+-    set(NEON False)
-+   else()
-+-    message(SEND_ERROR "Unknown CPU: ${CPU}")
-++    set(ARCH ${CPU})
-+   endif()
-+ endif()
-+ 
-+-- 
-+2.47.3
-+
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 6f256ada43..08a7caae2c 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -4,6 +4,8 @@ config BR2_PACKAGE_KODI_ARCH_SUPPORTS
- 	default y if BR2_PACKAGE_HOST_OPENJDK_BIN_ARCH_SUPPORTS
- 	# i386: needs sse (see upstream PR 10351)
- 	depends on !(BR2_i386 && !BR2_X86_CPU_HAS_SSE)
-+	# m68k not supported upstream
-+	depends on !BR2_m68k
- 	depends on BR2_USE_MMU # libcdio, and others
- 
- comment "kodi needs python3 w/ .py modules, a uClibc or glibc toolchain w/ C++, threads, wchar, dynamic library, gcc >= 9.x, host gcc >= 9.x"
-
---===============5252882834858727738==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5252882834858727738==--
+T24gVHVlLCBKdW4gMjMsIDIwMjYgYXQgMDc6MTc6MjVBTSArMDIwMCwgQmVybmQgS3VobHMgd3Jv
+dGU6Cj4gQnVpbGQgZXJyb3JzIHdlcmUgZm91bmQgYnkgdGhlIEdpdGxhYiBwaXBlbGluZXMgd2l0
+aCB0aGVzZSBkZWZjb25maWdzOgo+IAo+IC0gYm9vdGxpbi1tNjhrLTY4MDQwLXVjbGliYwo+ICAg
+Q01ha2UgRXJyb3IgYXQgY21ha2Uvc2NyaXB0cy9saW51eC9BcmNoU2V0dXAuY21ha2U6NTAgKG1l
+c3NhZ2UpOgo+ICAgICBVbmtub3duIENQVTogbTY4awo+IAo+IC0gYm9vdGxpbi1zMzkweC16MTMt
+Z2xpYmMKPiAgIENNYWtlIEVycm9yIGF0IGNtYWtlL3NjcmlwdHMvbGludXgvQXJjaFNldHVwLmNt
+YWtlOjUwIChtZXNzYWdlKToKPiAgICAgVW5rbm93biBDUFU6IHMzOTB4Cj4gCj4gQmFja3BvcnQg
+YW4gdXBzdHJlYW0gY29tbWl0IGZyb20gdGhlIHVwY29taW5nIFBpZXJzIGJyYW5jaCB0byBmaXgg
+dGhlCj4gcmVzdHJpY3Rpb24gaW4gQXJjaFNldHVwLmNtYWtlLgo+IAo+IFRoaXMgY2F1c2VkIGEg
+ZGlmZmVyZW50IGJ1aWxkIGVycm9yIG9uIG02OGsgbGF0ZXIgb246Cj4gCj4gL2J1aWxkcy9ia3Vo
+bHMvYnVpbGRyb290L2JyLXRlc3QtcGtnL2Jvb3RsaW4tbTY4ay02ODA0MC11Y2xpYmMvYnVpbGQv
+a29kaS0yMS4zLU9tZWdhL3hibWMvdXRpbHMvTWF0aFV0aWxzLmg6MTQyOjU6Cj4gIGVycm9yOiB1
+bmtub3duIHJlZ2lzdGVyIG5hbWUg4oCYc3TigJkgaW4g4oCYYXNt4oCZCj4gICAxNDIgfCAgICAg
+X19hc21fXyBfX3ZvbGF0aWxlX18gKAo+IAo+IGJlY2F1c2UgbTY4ayBpcyBub3QgcGFydCBvZiB0
+aGUgbGlzdCBvZiBhcmNocyB0byBkaXNhYmxlIGFzbSBjb2RlOgo+IGh0dHBzOi8vZ2l0aHViLmNv
+bS94Ym1jL3hibWMvYmxvYi9PbWVnYS94Ym1jL3V0aWxzL01hdGhVdGlscy5oI0wyNgo+IAo+IFVw
+c3RyZWFtIHJlamVjdGVkIHRvIGFkZCBtNjhrIHRoZXJlOgo+IGh0dHBzOi8vZ2l0aHViLmNvbS94
+Ym1jL3hibWMvcHVsbC8yMjUxOQo+IGh0dHBzOi8vZ2l0aHViLmNvbS94Ym1jL3hibWMvcHVsbC8y
+MjM1NyNpc3N1ZWNvbW1lbnQtMTM2ODM1ODQ3MQo+IAo+IHNvIHdlIGRpc2FibGUgbTY4ayBpbiBC
+UjJfUEFDS0FHRV9LT0RJX0FSQ0hfU1VQUE9SVFMuCj4gCj4gU2lnbmVkLW9mZi1ieTogQmVybmQg
+S3VobHMgPGJlcm5kQGt1aGxzLm5ldD4KClRoYW5rcywgYXBwbGllZCB0byBtYXN0ZXIhCgpUaG9t
+YXMKLS0gClRob21hcyBQZXRhenpvbmksIGNvLW93bmVyIGFuZCBDRU8sIEJvb3RsaW4KRW1iZWRk
+ZWQgTGludXggYW5kIEtlcm5lbCBlbmdpbmVlcmluZyBhbmQgdHJhaW5pbmcKaHR0cHM6Ly9ib290
+bGluLmNvbQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpi
+dWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlz
+dHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
