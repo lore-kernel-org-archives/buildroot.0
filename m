@@ -4,107 +4,118 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58A07C5DF81
-	for <buildroot@archiver.kernel.org>; Thu, 20 Aug 2026 00:03:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26000C5B572
+	for <buildroot@archiver.kernel.org>; Thu, 20 Aug 2026 01:35:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C5F2680BF5;
-	Thu, 20 Aug 2026 00:03:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4254A80C33;
+	Thu, 20 Aug 2026 01:35:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nv4km7J57hrg; Thu, 20 Aug 2026 00:03:02 +0000 (UTC)
+ id ZQpYItG5o_87; Thu, 20 Aug 2026 01:35:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787184182;
-	bh=SO4JfO+O/nTdA85ZbHQfnz/GRF573tkj+MTENHUW9ks=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	s=default; t=1787189700;
+	bh=DA/hIruiiZw809lzIU7fxBIcsm0lV1it9ZvIZlzR8dI=;
+	h=From:Date:To:Cc:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=WHQaSJ8CT1QG7h+svZROqygnQGUgvsb0gk+9W7PK93Xknl3eCVYIxJxtCM37cUV6A
-	 pdHkwT5eIQCrQpXBT7bw0dh3jBUHU9LJ8JZk/lILM6CiB0URc5+eYNO0y6e6rOrN73
-	 t/l/MywZkah7ZL7l3P3U4QxuCMFo3GeLWqC+2MHyg3iLxvAri2H8lkwaGVnmP4Xd5y
-	 1I5LUdyptuuHloh15lTmycd4E6qB869Wj9GaU7GLDfAaFlclWuoXoFaJHkY5fVwE0x
-	 hMl7D6IwL6RRr67J1r0ZtRPLLHAJbotTtRl56THy5qZOiVUECB7SGj5O1S0Z1aDF/Y
-	 Z4nTKCpHcLBww==
+	b=peABrn5vPkP8b18XBvmoHADyV4e99QXdp9ppgKfU1IlxDkbKdCtPcLmsfcunZFRR1
+	 pFST6oLCqIoJUj9Tkp3nv9f4+bz/PHN9cDmRENxWdpKwsWJE9E+mtKUhA0u9c52vSD
+	 VMTtua7zU5HERjtRbNeg70ikRFRxFqay+1akOeSFanPyMc/M1snojc3MFR/DCZekQW
+	 Bas/Nn0lgE0IIUzxO5qBcBRjC8HATmqgTP9nY7KuD73TNSbwlwwMRZTGx9FF1Y5wCI
+	 cHi7nKsvYgvkwNNAXzGsCV8T5/jslwKPYJgjd9nSbnN60ec5qWjbANe/1SUDJdxjID
+	 ah8KBrXqR/0PQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 105A680BFA;
-	Thu, 20 Aug 2026 00:03:02 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 35F22323
- for <buildroot@buildroot.org>; Thu, 20 Aug 2026 00:03:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6F00980BFE;
+	Thu, 20 Aug 2026 01:35:00 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id F1D972FD
+ for <buildroot@buildroot.org>; Thu, 20 Aug 2026 01:34:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1C4F880C41
- for <buildroot@buildroot.org>; Thu, 20 Aug 2026 00:03:01 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id DB22C60604
+ for <buildroot@buildroot.org>; Thu, 20 Aug 2026 01:34:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Y4PRAgY6Jwcu for <buildroot@buildroot.org>;
- Thu, 20 Aug 2026 00:02:59 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PPBA_PNEUlWn for <buildroot@buildroot.org>;
+ Thu, 20 Aug 2026 01:34:59 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::335; helo=mail-wm1-x335.google.com;
- envelope-from=petr.vorel@gmail.com; receiver=<UNKNOWN> 
-Authentication-Results: smtp1.osuosl.org;
+ client-ip=2607:f8b0:4864:20::1035; helo=mail-pj1-x1035.google.com;
+ envelope-from=joseph.kogut@gmail.com; receiver=<UNKNOWN> 
+Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp1.osuosl.org;
+Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20251104 header.b=THmLG+Ru
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
- [IPv6:2a00:1450:4864:20::335])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4E5D580BF5
- for <buildroot@buildroot.org>; Thu, 20 Aug 2026 00:02:59 +0000 (UTC)
-Received: by mail-wm1-x335.google.com with SMTP id
- 5b1f17b1804b1-499840a2575so12469745e9.3
- for <buildroot@buildroot.org>; Wed, 19 Aug 2026 17:02:58 -0700 (PDT)
+ header.a=rsa-sha256 header.s=20251104 header.b=BaH+KkGk
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com
+ [IPv6:2607:f8b0:4864:20::1035])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id EACDB60603
+ for <buildroot@buildroot.org>; Thu, 20 Aug 2026 01:34:58 +0000 (UTC)
+Received: by mail-pj1-x1035.google.com with SMTP id
+ 98e67ed59e1d1-38511175ad3so1577011a91.2
+ for <buildroot@buildroot.org>; Wed, 19 Aug 2026 18:34:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1787184177; x=1787788977; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
- bh=Ebp8yQ0itXF/mE2lxaACWXI4lnerLaq0BeGaARwtHsM=;
- b=THmLG+RuYCd2uzwgsXbF/sqdUEbouUxf247PgKkFfmA5pCnvLpd9tgY9sLGC4IBNZ3
- iwekU9cC8vgP9Ob/+grNEP/XSheMadHHWYPF8Pfiors3R9ibp/8L8Ua9YRer54HaJPZg
- fv+8BbE87iE/svwW7I03pLXcNque5RXDcBaY5PKbiKGYNotj5dFu7i2GJbbw4UGcZgbQ
- bZQuKlVJFTQmKEjSzZ1GVKdofH5EA0nyRJcYVkotpNe1GsOAPp9xnI8ci1fd+LvooF2l
- PXx7MqodjTxaTe8/qFN0l5uMiHkHFouwdEI7MoQsuwXPqWoDWVy88//TDhdFEvu+Am6H
- 8u2g==
+ d=gmail.com; s=20251104; t=1787189698; x=1787794498; darn=buildroot.org;
+ h=cc:to:message-id:content-transfer-encoding:content-type
+ :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+ :reply-to:content-type;
+ bh=ZmO8CGTHrXfXj66ur+Be9cVbuBrr3IUedU99QysFYFg=;
+ b=BaH+KkGk4Z+Zs7lbmGrhXaqUHczNrE1G+/b00WcRNMNHxeTB8ZCsmcYVZzvEMTOlR7
+ t/BjS4vxoORpPQDEP8k5K0WMhnrY2OMphjV0aFaFot7a2JoBagIb7aJSWccuO3H7xrsh
+ HhZuQMISBOrMxydEHTVzaIaCEz++FO/eqT1K8kqxXvqATs+DFw0o+lbIFqUls83x16NO
+ EShdsCVk9POxcFs9MG5V6vpRXREl7p/S+wlEtWUbJk+D8BcPgBt1EW6jWhSautchRhW/
+ yHrYHSWB9UiHGZgFEkWYRoaoea1ooKVOUlRwK/sCgL9kznQK8RiX8ug+sA0J9kRlP0qW
+ jfdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1787184177; x=1787788977;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to:content-type;
- bh=Ebp8yQ0itXF/mE2lxaACWXI4lnerLaq0BeGaARwtHsM=;
- b=ECLclMiUDqeoniVJx98jdIUtd99ahj8qAiGxE+NAL9U1vfibSo0dzOKzGHeZeWYAJD
- QG0tv1WKnQFaDbD7anJm4si2ByRqmmp6TERqrbIpcBI4tdddc8cHybXE9yJyunNnhfXN
- ydlwrEVz1c2/U0Mpp+TI83O4hKzAEXFbXZan8wW2mKwhiL6bWwVXkY/A+zvdAiJB/aik
- VtDbMkfAuzFJweBYBxwnpsJf2hZJ798FrXmBc4PBWzDunszOdkbelY83HM0xCzCtqyuV
- 9Jh4sgrdr1+FiME1B3285stU7dTeEmdd2H2eB7u+PaRgqG3e9HEKjDHQVZWrgeJS+l+M
- Poyg==
-X-Gm-Message-State: AOJu0YznsC/6rYcqeC1sXBAwdrTPBZK40bjbCgVm+eCU7qBk2Lf1m1eS
- U7Ba9mF4SMNQeW4bIkToozKKQ8FYWouSvSB9UHiZfD4VJabubJn4Z/EbNB8fpg==
-X-Gm-Gg: AR+sD12I2Xwai3SKDWF+ZU1ED/37xyCdn6GFKPE61OyT6HP0rd8EOEhuDuWG2LjjYUk
- Iic3Uiwyi9QjBrmVbmj6y2XTdyJrvEScGzImFazwqUidTrZvR6RVorkD4j2yd8bdJFvpG0Mw4yj
- dXchzAv6nTihGzEhHMfIHvQ0mabbzyYZv9RucVXhKaYwR6gQIfPihjRGHj2rhsvzgWFtPH8nOTj
- 5HrqiXCXCotNHRWm/scuaZewaHf/uuR+s7zxMMEQbHB+DeZAzFfohhPauHjk29syM1n6RRelUs0
- xg0f1O5wkAfrfQMGnAlj+zCOaIulyE9Hnh0pqRab0+ofIAO0EsUj6CQdaUPJ0TRIu/FzxqJs5yX
- zRuGKD91plY5e3XQ9TX2aY9YqW0eHISHbUaL5HUp8Ei0djRwphp/yKKzdUhhOhj+FTt2XLoIHvo
- Iv+e2EcLt4HyB/4t8dKC3GIyg6FIBEli48j+bmn07xHAZ8YoE2Z9qFJAhDybE2WjeNnT/h23JSf
- HO868PxAQT/j+eWLuOuxwc=
-X-Received: by 2002:a05:600c:37c6:b0:499:858f:2653 with SMTP id
- 5b1f17b1804b1-499aa14b457mr164589765e9.2.1787184176850; 
- Wed, 19 Aug 2026 17:02:56 -0700 (PDT)
-Received: from x230 (gw1.ms-free.net. [185.243.124.10])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-499aa0d6721sm127909395e9.11.2026.08.19.17.02.55
+ d=1e100.net; s=20251104; t=1787189698; x=1787794498;
+ h=cc:to:message-id:content-transfer-encoding:content-type
+ :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
+ :cc:subject:date:message-id:reply-to:content-type;
+ bh=ZmO8CGTHrXfXj66ur+Be9cVbuBrr3IUedU99QysFYFg=;
+ b=MzwSdPQPDiVvr9U8tAHe8AvhN50hOedBrhJG1idVddCum6qihPeeA8g7NC7HQB6qzC
+ R6gR7xHXf/g2E+mTszr7O12fU25Vmv7KGwHyuM5G+UHWJf41Onk5n0lM63eMCsdZhrKm
+ Cam+1WpRICLL7OOJL/SgePZhq4r4Zw0tHAb0rGUvWG0GgsOkyKWnaWJ+WX2bBApqapae
+ 1W6eiVFyuo3lRu1qoXj9clays2ZBLnTG8tnRTAXwY4ByliMji2JsJjJpFbTrhbcF6NbY
+ nzNlkF3rmPbPnT18Ps5Lltl1x3blMXf7Fev2yCHcERlFKn3ejx14Q8sdvNdaauPfz1Qk
+ fp/Q==
+X-Gm-Message-State: AFuF++lanLbNgKT2w1i1oZq2Xd7LYVnUG6dHWxbd2cQO8mWbm2Xxo6bQ
+ 5DTXF8WWGjlAqyh2k8gQBpT4VMa1xYPnw5NHA8vem12ImdtqNr1HqTM2
+X-Gm-Gg: AR+sD128cc+ZxbQzV/swqOsDMOYzrk1HeSuhrct3tl7VhifkinOuhr+rbV6TS5qAufk
+ 6qEgcdcEAcd6jBe3r/aQEpWxA2SqwyphMdx4ZQv3VRo3gsbiE+SJQHmoJDiA+kb2fPdKdQ4eqfk
+ UDKfq8CKcBvZeYB89sNj0d+xyvofpFYoBVRmmuRtMcV68d4/xRf1DTmYC5PsLHSZE/9UC/sqtQh
+ RcpObUyY6dUh34GZ9lr8tYqvofiS/3zrcB2QkC7x5V8OgQzuzTy3KVfk9Yd05XF02Vii/GNbuE3
+ o5dFLz1nir76nOCM1oLgg6ATfAsnxZAELcciW6uKk+Dty+1X/GCuSPevJZtdfG6LMfa45lZ3fhE
+ EMjF/jR72AdkxAUkoYXYk9k8sp+YrLIZfoMSvHOI0lgC5+fp6fRsPV8Xke9tCLX7NDpZ1l0AS2g
+ /1muz2pAxNLSd1bqsKmKqX3iChz9qSS2TAdsbf+M8fxvHSO1fcojAPVg67/LrS4CJ8
+X-Received: by 2002:a17:90b:2f06:b0:37f:e177:f58 with SMTP id
+ 98e67ed59e1d1-3958108a0f9mr17215929a91.9.1787189697792; 
+ Wed, 19 Aug 2026 18:34:57 -0700 (PDT)
+Received: from wash-4.local ([50.47.124.161]) by smtp.gmail.com with ESMTPSA id
+ 98e67ed59e1d1-3957f96cb76sm4916563a91.1.2026.08.19.18.34.57
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 19 Aug 2026 17:02:56 -0700 (PDT)
-From: Petr Vorel <petr.vorel@gmail.com>
-To: buildroot@buildroot.org
-Cc: Petr Vorel <petr.vorel@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Julien Olivain <ju.o@free.fr>
-Date: Thu, 20 Aug 2026 02:02:51 +0200
-Message-ID: <20260820000251.441942-1-petr.vorel@gmail.com>
-X-Mailer: git-send-email 2.53.0
+ Wed, 19 Aug 2026 18:34:57 -0700 (PDT)
+From: Joseph Kogut <joseph.kogut@gmail.com>
+Date: Wed, 19 Aug 2026 18:32:20 -0700
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2 1/1] package/nfs-utils: bump version to 2.9.2
+Message-Id: <20260819-concurrent-test-pkg-v4-1-a84c1a54e90c@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/23NTQ6DIBAF4Ks0rEvDn0a66j2aLhAGJa1ggJo2x
+ rsXXZnUzOolb743owTRQULX04wiTC654EsQ5xPSvfIdYGdKRoywitRUYh28fscIPuMMKePx2WH
+ LlakN14S2ApXPMYJ1n029P0puVQLcRuV1v1qDShniWuxdyiF+t/WJrvVtiBLGDocmistZkLWxt
+ LTaWzco97roMKB1aGJ7gx8brBiyksoIwY2QfwbfG82xwYuhgFBhaAOVrfbGsiw/2eZAD1cBAAA
+ =
+X-Change-ID: 20250619-concurrent-test-pkg-f3ad6d3c01b4
+To: buildroot@buildroot.org
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ Joseph Kogut <joseph.kogut@gmail.com>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1787189697; l=7703;
+ i=joseph.kogut@gmail.com; s=20251022; h=from:subject:message-id;
+ bh=EhL6NGkPzI+1HVgVJKJpyThl49WNEnWkwVDSmuONOQg=;
+ b=4NYIIEEznU2cTPAA4egrkXqOKNCPgGuaC8++wv+Z2wZOzUqIfx3BrQrBqCQZyZB4J7WzuCwRR
+ tXOn9iyIO/NBCtZchf86rmBMAxj4f9D8We2WXjUzOtAMrTbiS1HXFve
+X-Developer-Key: i=joseph.kogut@gmail.com; a=ed25519;
+ pk=pkWqHIjgowoQ51cQZTl6aTwJnXIFThap40f4w8cEsxw=
+Subject: [Buildroot] [PATCH v4] utils/test-pkg: add --jobs option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -121,423 +132,218 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Remove patches upstreamed in this release.
+Builds run by test-pkg are often not CPU limited, so running several
+builds concurrently reduces the time needed to test a package across
+many toolchains.
 
-Release announce:
-https://lore.kernel.org/linux-nfs/dc0f6f41-84be-4a70-92db-89890bded3ab@redhat.com/
+Add a -j/--jobs option to run multiple builds in parallel.
 
-Backport 3 patches from upstream fixing this release regressions:
+Quote "keep" in build_one(), as it is now passed in as an argument
+rather than set from a literal.
 
-* 67ed1bdb ("exportfs: link failure with --disable-nfsdctl")
-* cec8eeb6 ("getport: fix missing stddef.h inclusion")
-* cf80edae ("statd: fix memory leak in sm_mon_1_svc() when existing host re-monitors")
+Testing sdl2 on six toolchains with a 16-core Ryzen 9 9950X reduced wall
+clock time from 2m32.979s with -j1 to 0m41.704s with -j0. Testing libpng
+across all 35 toolchains reduced wall clock time from 23m34.593s to
+2m6.510s, an approximately 11x speedup.
 
-And 4th patch which fixes error on old toolchains, e.g.
-br-arm-full-static or bootlin-aarch64-glibc-old.
-
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
 ---
-Changes v1->v2:
-* Backport 3 fixes + 1 reported upstream.
+Changes in v4:
+- Rewritten to use GNU parallel
+- Changed -C -> -j (more idiomatic)
+- Link to v3: https://lore.kernel.org/r/20251028-concurrent-test-pkg-v3-1-ae014d18e5f5@gmail.com
 
-Tested:
-                    bootlin-armv5-uclibc [1/6]: OK
-                     bootlin-armv7-glibc [2/6]: OK
-                   bootlin-armv7m-uclibc [3/6]: SKIPPED
-                     bootlin-x86-64-musl [4/6]: OK
-                      br-arm-full-static [5/6]: OK
-               bootlin-aarch64-glibc-old [6/6]: OK
-6 builds, 1 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
+Changes in v3:
+- Fix improper removal of '-T' short option during rebase
+- Minor tweak to remove newline between prompt and output
+- Simplify make job termination
+- Link to v2: https://lore.kernel.org/r/20251023-concurrent-test-pkg-v2-1-959ad443d49b@gmail.com
 
- ..._file-fix-missing-string.h-inclusion.patch | 28 -------
- ...-leak-in-sm_mon_1_svc-when-existing-.patch | 40 ++++++++++
- ....h-file-to-deal-with-old-Linux-api-a.patch | 77 -------------------
- ...tport-fix-missing-stddef.h-inclusion.patch | 33 ++++++++
- ...fs-link-failure-with-disable-nfsdctl.patch | 39 ++++++++++
- ...kend_sqlite.c-fix-getrandom-fallback.patch | 30 --------
- ...ort-Fix-switch-case-on-old-compilers.patch | 46 +++++++++++
- package/nfs-utils/nfs-utils.hash              |  4 +-
- package/nfs-utils/nfs-utils.mk                |  5 +-
- 9 files changed, 164 insertions(+), 138 deletions(-)
- delete mode 100644 package/nfs-utils/0001-fh_key_file-fix-missing-string.h-inclusion.patch
- create mode 100644 package/nfs-utils/0001-statd-fix-memory-leak-in-sm_mon_1_svc-when-existing-.patch
- delete mode 100644 package/nfs-utils/0002-Introduce-compat.h-file-to-deal-with-old-Linux-api-a.patch
- create mode 100644 package/nfs-utils/0002-getport-fix-missing-stddef.h-inclusion.patch
- create mode 100644 package/nfs-utils/0003-exportfs-link-failure-with-disable-nfsdctl.patch
- delete mode 100644 package/nfs-utils/0003-support-backend_sqlite.c-fix-getrandom-fallback.patch
- create mode 100644 package/nfs-utils/0004-getport-Fix-switch-case-on-old-compilers.patch
+Changes in v2:
+- Rebase on origin/master
+- Properly restore cursor on interrupt
+- Properly terminate running jobs on interrupt
+- Add animated spinner for running builds
+- Simplify status updates
+- Link to v1: https://lore.kernel.org/r/20251022-concurrent-test-pkg-v1-1-1fe96df1102b@gmail.com
 
-diff --git a/package/nfs-utils/0001-fh_key_file-fix-missing-string.h-inclusion.patch b/package/nfs-utils/0001-fh_key_file-fix-missing-string.h-inclusion.patch
-deleted file mode 100644
-index 838d519d5a..0000000000
---- a/package/nfs-utils/0001-fh_key_file-fix-missing-string.h-inclusion.patch
-+++ /dev/null
-@@ -1,28 +0,0 @@
--From 2d99ff0aa8a3b4d20558bce742edaaed9d24b3cb Mon Sep 17 00:00:00 2001
--From: Giulio Benetti <giulio.benetti@benettiengineering.com>
--Date: Tue, 7 Apr 2026 17:23:13 +0200
--Subject: [PATCH] fh_key_file: fix missing string.h inclusion
--
--Add #include <string.h> to fix build failure.
--
--Upstream: https://lore.kernel.org/linux-nfs/20260408173535.3992116-1-giulio.benetti@benettiengineering.com/T/#t
--Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-----
-- support/nfs/fh_key_file.c | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/support/nfs/fh_key_file.c b/support/nfs/fh_key_file.c
--index 5f5eafc1..81ea1500 100644
----- a/support/nfs/fh_key_file.c
--+++ b/support/nfs/fh_key_file.c
--@@ -26,6 +26,7 @@
-- #include <sys/types.h>
-- #include <unistd.h>
-- #include <errno.h>
--+#include <string.h>
-- #include <uuid/uuid.h>
-- 
-- #include "nfslib.h"
---- 
--2.47.3
--
-diff --git a/package/nfs-utils/0001-statd-fix-memory-leak-in-sm_mon_1_svc-when-existing-.patch b/package/nfs-utils/0001-statd-fix-memory-leak-in-sm_mon_1_svc-when-existing-.patch
-new file mode 100644
-index 0000000000..b83fb21687
---- /dev/null
-+++ b/package/nfs-utils/0001-statd-fix-memory-leak-in-sm_mon_1_svc-when-existing-.patch
-@@ -0,0 +1,40 @@
-+From cf80edaeb9b120b7a533e0d3aea2f05cfcab85ae Mon Sep 17 00:00:00 2001
-+From: xuchenchen <xuchenchen@kylinos.cn>
-+Date: Sat, 15 Aug 2026 13:58:16 -0400
-+Subject: [PATCH 1/3] statd: fix memory leak in sm_mon_1_svc() when existing
-+ host re-monitors
-+
-+When an already-monitored host sends a new SM_MON request with a
-+different priv cookie, the code sets existing=1 and reuses the
-+existing notify_list entry. However, clnt->dns_name is overwritten
-+with the newly allocated dnsname without freeing the old value,
-+causing a memory leak.
-+
-+Since statd is a long-running daemon, repeated SM_MON requests with
-+changing cookies will accumulate leaked strings.
-+
-+Fix by freeing the old dns_name before overwriting it.
-+
-+Signed-off-by: xuchenchen <xuchenchen@kylinos.cn>
-+Signed-off-by: Steve Dickson <steved@redhat.com>
-+[Upstream status: https://git.linux-nfs.org/?p=steved/nfs-utils.git;a=commit;h=cf80edaeb9b120b7a533e0d3aea2f05cfcab85ae]
-+---
-+ utils/statd/monitor.c | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/utils/statd/monitor.c b/utils/statd/monitor.c
-+index c76589ca..76ef16f1 100644
-+--- a/utils/statd/monitor.c
-++++ b/utils/statd/monitor.c
-+@@ -187,6 +187,8 @@ sm_mon_1_svc(struct mon *argp, struct svc_req *rqstp)
-+ 	NL_MY_VERS(clnt) = id->my_vers;
-+ 	NL_MY_PROC(clnt) = id->my_proc;
-+ 	memcpy(NL_PRIV(clnt), argp->priv, SM_PRIV_SIZE);
-++	if (existing)
-++		free(clnt->dns_name);
-+ 	clnt->dns_name = dnsname;
-+ 
-+ 	/*
-+-- 
-+2.53.0
-+
-diff --git a/package/nfs-utils/0002-Introduce-compat.h-file-to-deal-with-old-Linux-api-a.patch b/package/nfs-utils/0002-Introduce-compat.h-file-to-deal-with-old-Linux-api-a.patch
-deleted file mode 100644
-index c5c57c6503..0000000000
---- a/package/nfs-utils/0002-Introduce-compat.h-file-to-deal-with-old-Linux-api-a.patch
-+++ /dev/null
-@@ -1,77 +0,0 @@
--From 218e1b572123f527bd92c17ebb7ac00c2a7e6c01 Mon Sep 17 00:00:00 2001
--From: Giulio Benetti <giulio.benetti@benettiengineering.com>
--Date: Tue, 7 Apr 2026 17:47:40 +0200
--Subject: [PATCH] Introduce compat.h file to deal with old Linux api and fix
-- build failure due to missing NETLINK_EXT_ACK
--
--In compat.h check if NETLINK_EXT_ACK exists, otherwise define it to fix
--build failure and where at the moment <linux/netlink.h> is included
--let's include "compat.h"
--
--Upstream: https://lore.kernel.org/linux-nfs/20260408173535.3992116-2-giulio.benetti@benettiengineering.com/T/#u
--Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-----
-- support/export/cache.c       |  2 +-
-- support/export/cache_flush.c |  2 ++
-- support/include/compat.h     | 10 ++++++++++
-- utils/nfsdctl/nfsdctl.c      |  1 +
-- 4 files changed, 14 insertions(+), 1 deletion(-)
-- create mode 100644 support/include/compat.h
--
--diff --git a/support/export/cache.c b/support/export/cache.c
--index 2f128d7d..65008f51 100644
----- a/support/export/cache.c
--+++ b/support/export/cache.c
--@@ -40,7 +40,7 @@
-- #include <netlink/genl/ctrl.h>
-- #include <netlink/msg.h>
-- #include <netlink/attr.h>
---#include <linux/netlink.h>
--+#include "compat.h"
-- 
-- #ifdef USE_SYSTEM_NFSD_NETLINK_H
-- #include <linux/nfsd_netlink.h>
--diff --git a/support/export/cache_flush.c b/support/export/cache_flush.c
--index ed7b964f..2a24dec7 100644
----- a/support/export/cache_flush.c
--+++ b/support/export/cache_flush.c
--@@ -38,6 +38,8 @@ extern int no_netlink;
-- #include "sunrpc_netlink.h"
-- #endif
-- 
--+#include "compat.h"
--+
-- static int nl_send_flush(struct nl_sock *sock, int family, int cmd)
-- {
-- 	struct nl_msg *msg;
--diff --git a/support/include/compat.h b/support/include/compat.h
--new file mode 100644
--index 00000000..83229b65
----- /dev/null
--+++ b/support/include/compat.h
--@@ -0,0 +1,10 @@
--+#ifndef COMPAT_H
--+#define COMPAT_H
--+
--+#include <linux/netlink.h>
--+
--+#ifndef NETLINK_EXT_ACK
--+#define NETLINK_EXT_ACK 11
--+#endif
--+
--+#endif /* COMPAT_H */
--diff --git a/utils/nfsdctl/nfsdctl.c b/utils/nfsdctl/nfsdctl.c
--index 016dd2eb..c7126748 100644
----- a/utils/nfsdctl/nfsdctl.c
--+++ b/utils/nfsdctl/nfsdctl.c
--@@ -26,6 +26,7 @@
-- #include <netlink/msg.h>
-- #include <netlink/attr.h>
-- #include <linux/netlink.h>
--+#include "compat.h"
-- 
-- #include <readline/readline.h>
-- #include <readline/history.h>
---- 
--2.47.3
--
-diff --git a/package/nfs-utils/0002-getport-fix-missing-stddef.h-inclusion.patch b/package/nfs-utils/0002-getport-fix-missing-stddef.h-inclusion.patch
-new file mode 100644
-index 0000000000..51f41f97fb
---- /dev/null
-+++ b/package/nfs-utils/0002-getport-fix-missing-stddef.h-inclusion.patch
-@@ -0,0 +1,33 @@
-+From cec8eeb69dc65eb91e0cb23ebff23530d9397425 Mon Sep 17 00:00:00 2001
-+From: Jaipaul Cheernam <jaipaul.cheernam@est.tech>
-+Date: Sat, 15 Aug 2026 14:00:36 -0400
-+Subject: [PATCH 2/3] getport: fix missing stddef.h inclusion
-+
-+getport.c uses offsetof() but does not include <stddef.h>. On glibc
-+this works because offsetof is pulled in transitively, but on musl it
-+is not available without the explicit include, causing:
-+
-+  getport.c:459:41: error: implicit declaration of function 'offsetof'
-+
-+Signed-off-by: Jaipaul Cheernam <jaipaul.cheernam@est.tech>
-+Signed-off-by: Steve Dickson <steved@redhat.com>
-+[Upstream status: https://git.linux-nfs.org/?p=steved/nfs-utils.git;a=commit;h=cec8eeb69dc65eb91e0cb23ebff23530d9397425]
-+---
-+ support/nfs/getport.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/support/nfs/getport.c b/support/nfs/getport.c
-+index 608e185b..6bd2f713 100644
-+--- a/support/nfs/getport.c
-++++ b/support/nfs/getport.c
-+@@ -27,6 +27,7 @@
-+ #endif
-+ 
-+ #include <sys/types.h>
-++#include <stddef.h>
-+ #include <sys/time.h>
-+ #include <unistd.h>
-+ #include <fcntl.h>
-+-- 
-+2.53.0
-+
-diff --git a/package/nfs-utils/0003-exportfs-link-failure-with-disable-nfsdctl.patch b/package/nfs-utils/0003-exportfs-link-failure-with-disable-nfsdctl.patch
-new file mode 100644
-index 0000000000..80a54d5f90
---- /dev/null
-+++ b/package/nfs-utils/0003-exportfs-link-failure-with-disable-nfsdctl.patch
-@@ -0,0 +1,39 @@
-+From 67ed1bdb1af1c70a5fd3b377a997401b7676b827 Mon Sep 17 00:00:00 2001
-+From: jaipaul Cheernam <jaipaul.cheernam@est.tech>
-+Date: Sat, 15 Aug 2026 14:20:03 -0400
-+Subject: [PATCH 3/3] exportfs: link failure with --disable-nfsdctl
-+
-+Building nfs-utils 2.9.2 with --disable-nfsdctl fails to link
-+exportfs. This is a regression from 2.9.1.
-+
-+Signed-off-by: Steve Dickson <steved@redhat.com>
-+[Upstream status: https://git.linux-nfs.org/?p=steved/nfs-utils.git;a=commit;h=67ed1bdb1af1c70a5fd3b377a997401b7676b827]
-+---
-+ configure.ac | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 4ea19715..2ce1e129 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -256,8 +256,6 @@ PKG_CHECK_MODULES(LIBNL3, libnl-3.0 >= 3.1)
-+ PKG_CHECK_MODULES(LIBNLGENL3, libnl-genl-3.0 >= 3.1)
-+ 
-+ AC_CHECK_HEADERS(linux/nfsd_netlink.h)
-+-AC_DEFINE([HAVE_NFSD_NETLINK], 1,
-+-	  [Define to 1 if nfsd generic netlink support is available])
-+ 
-+ # ensure the system netlink headers have the latest features
-+ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <linux/nfsd_netlink.h>]],
-+@@ -279,6 +277,8 @@ AC_ARG_ENABLE(nfsdctl,
-+ 	enable_nfsdctl="yes")
-+ 	AM_CONDITIONAL(CONFIG_NFSDCTL, [test "$enable_nfsdctl" = "yes" ])
-+ 	if test "$enable_nfsdctl" = yes; then
-++		AC_DEFINE([HAVE_NFSD_NETLINK], 1,
-++	  		[Define to 1 if nfsd generic netlink support is available])
-+ 		PKG_CHECK_MODULES(LIBREADLINE, readline)
-+ 	fi
-+ 
-+-- 
-+2.53.0
-+
-diff --git a/package/nfs-utils/0003-support-backend_sqlite.c-fix-getrandom-fallback.patch b/package/nfs-utils/0003-support-backend_sqlite.c-fix-getrandom-fallback.patch
-deleted file mode 100644
-index 86d615ca34..0000000000
---- a/package/nfs-utils/0003-support-backend_sqlite.c-fix-getrandom-fallback.patch
-+++ /dev/null
-@@ -1,30 +0,0 @@
--From dbd44e7d6d4140e5e9d01f0a6daf6f3e45e5acbc Mon Sep 17 00:00:00 2001
--From: Giulio Benetti <giulio.benetti@benettiengineering.com>
--Date: Wed, 8 Apr 2026 14:28:28 +0200
--Subject: [PATCH] support/backend_sqlite.c: fix getrandom() fallback
--
--In old Linux/Glibc versions __NR_getrandom is defined in <sys/random.h>
--so let's add it to fix build failure.
--
--Upstream: https://lore.kernel.org/linux-nfs/20260408173535.3992116-3-giulio.benetti@benettiengineering.com/T/#u
--Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-----
-- support/reexport/backend_sqlite.c | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/support/reexport/backend_sqlite.c b/support/reexport/backend_sqlite.c
--index 0eb5ea37..a1e981e4 100644
----- a/support/reexport/backend_sqlite.c
--+++ b/support/reexport/backend_sqlite.c
--@@ -9,6 +9,8 @@
-- #include <string.h>
-- #include <unistd.h>
-- 
--+#include <sys/syscall.h>
--+
-- #ifdef HAVE_GETRANDOM
-- # include <sys/random.h>
-- # if !defined(SYS_getrandom) && defined(__NR_getrandom)
---- 
--2.47.3
--
-diff --git a/package/nfs-utils/0004-getport-Fix-switch-case-on-old-compilers.patch b/package/nfs-utils/0004-getport-Fix-switch-case-on-old-compilers.patch
-new file mode 100644
-index 0000000000..cfccf0b9f6
---- /dev/null
-+++ b/package/nfs-utils/0004-getport-Fix-switch-case-on-old-compilers.patch
-@@ -0,0 +1,46 @@
-+From 7b886f3502977040461a8b31f5948a128f7069e2 Mon Sep 17 00:00:00 2001
-+From: Petr Vorel <petr.vorel@gmail.com>
-+Date: Thu, 20 Aug 2026 01:03:10 +0200
-+Subject: [FTBFS,PATCH,nfs-utils 1/1] getport: Fix switch case on old compilers
-+Cc: Steve Dickson <SteveD@RedHat.com>,
-+    Giulio Benetti <giulio.benetti@benettiengineering.com>,
-+    Julien Olivain <ju.o@free.fr>
-+
-+Buildroot distro compiles with fairly old compilers, which defaults to
-+old C11 standard (some of still used compilers don't even have newer
-+standard than C11). Workaround code which requires C23 with using { }.
-+
-+This fixes error:
-+
-+    getport.c:460:3: error: a label can only be part of a statement and a declaration is not a statement
-+       size_t path_len = len - offsetof(struct sockaddr_un, sun_path);
-+       ^~~~~~
-+
-+Fixes: 1a6dcd74 ("Removed warnings in nfs_sockaddr2universal()")
-+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-+[Upstream status:
-+https://lore.kernel.org/linux-nfs/20260819232049.438643-1-petr.vorel@gmail.com/
-+]
-+---
-+ support/nfs/getport.c | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/support/nfs/getport.c b/support/nfs/getport.c
-+index 6bd2f713..18ea0777 100644
-+--- a/support/nfs/getport.c
-++++ b/support/nfs/getport.c
-+@@ -456,9 +456,10 @@ char *nfs_sockaddr2universal(const struct sockaddr *sap)
-+ 	int len = sizeof(struct sockaddr);
-+ 
-+ 	switch (sap->sa_family) {
-+-	case AF_LOCAL:
-++	case AF_LOCAL: {
-+ 		size_t path_len = len - offsetof(struct sockaddr_un, sun_path);
-+ 		return strndup(sun->sun_path, path_len);
-++	}
-+ 	case AF_INET:
-+ 		if (inet_ntop(AF_INET, (const void *)&sin->sin_addr.s_addr,
-+ 					buf, (socklen_t)sizeof(buf)) == NULL)
-+-- 
-+2.53.0
-+
-diff --git a/package/nfs-utils/nfs-utils.hash b/package/nfs-utils/nfs-utils.hash
-index 19315e60a3..93f8e463a1 100644
---- a/package/nfs-utils/nfs-utils.hash
-+++ b/package/nfs-utils/nfs-utils.hash
-@@ -1,4 +1,4 @@
--# From https://www.kernel.org/pub/linux/utils/nfs-utils/2.9.1/sha256sums.asc
--sha256  302846343bf509f8f884c23bdbd0fe853b7f7cbb6572060a9082279d13b21a2c  nfs-utils-2.9.1.tar.xz
-+# From https://www.kernel.org/pub/linux/utils/nfs-utils/2.9.2/sha256sums.asc
-+sha256  e1dd8a9c95af15492065942cc3b52b1339ffd586baa2280ed86c9d3dc4097e8c  nfs-utils-2.9.2.tar.xz
- # Locally computed
- sha256  576540abf5e95029ad4ad90e32071385a5e95b2c30708c706116f3eb87b9a3de  COPYING
-diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
-index df9fdbc052..6e0fb1a04c 100644
---- a/package/nfs-utils/nfs-utils.mk
-+++ b/package/nfs-utils/nfs-utils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+To: buildroot@buildroot.org
+---
+ utils/test-pkg | 84 ++++++++++++++++++++++++++++++++++++++++++++++++----------
+ 1 file changed, 70 insertions(+), 14 deletions(-)
+
+diff --git a/utils/test-pkg b/utils/test-pkg
+index cea7ace7cb..887cebb4d2 100755
+--- a/utils/test-pkg
++++ b/utils/test-pkg
+@@ -17,13 +17,13 @@ do_clean() {
  
--NFS_UTILS_VERSION = 2.9.1
-+NFS_UTILS_VERSION = 2.9.2
- NFS_UTILS_SOURCE = nfs-utils-$(NFS_UTILS_VERSION).tar.xz
- NFS_UTILS_SITE = https://www.kernel.org/pub/linux/utils/nfs-utils/$(NFS_UTILS_VERSION)
- NFS_UTILS_LICENSE = GPL-2.0+
-@@ -12,6 +12,9 @@ NFS_UTILS_LICENSE_FILES = COPYING
- NFS_UTILS_DEPENDENCIES = host-nfs-utils host-pkgconf libevent libnl libtirpc sqlite util-linux
- NFS_UTILS_CPE_ID_VENDOR = linux-nfs
+ main() {
+     local o O opts
+-    local cfg dir pkg random toolchains_csv toolchain all number mode prepare_only
+-    local ret nb nb_skip nb_fail nb_legal nb_show nb_tc build_dir keep
++    local cfg dir pkg random toolchains_csv toolchain all number mode prepare_only jobs
++    local ret nb nb_skip nb_fail nb_legal nb_show nb_tc keep
+     local -a toolchains
+     local pkg_br_name
  
-+# 0003-exportfs-link-failure-with-disable-nfsdctl.patch
-+NFS_UTILS_AUTORECONF = YES
+-    o='hakc:d:n:p:r:t:T:'
+-    O='help,all,keep,prepare-only,config-snippet:,build-dir:,number:,package:,random:,toolchains-csv:,toolchain-name:'
++    o='hakc:d:j:n:p:r:t:T:'
++    O='help,all,keep,prepare-only,config-snippet:,build-dir:,jobs:,number:,package:,random:,toolchains-csv:,toolchain-name:'
+     opts="$(getopt -n "${my_name}" -o "${o}" -l "${O}" -- "${@}")"
+     eval set -- "${opts}"
+ 
+@@ -33,6 +33,7 @@ main() {
+     number=0
+     mode=0
+     prepare_only=0
++    jobs=1
+     toolchains_csv="${TOOLCHAINS_CSV}"
+     while [ ${#} -gt 0 ]; do
+         case "${1}" in
+@@ -54,6 +55,9 @@ main() {
+         (-d|--build-dir)
+             dir="${2}"; shift 2
+             ;;
++        (-j|--jobs)
++            jobs="${2}"; shift 2
++            ;;
+         (-n|--number)
+             number="${2}"; shift 2
+             ;;
+@@ -88,6 +92,12 @@ main() {
+     if [ ! -e "${cfg}" ]; then
+         printf "error: %s: no such file\n" "${cfg}" >&2; exit 1
+     fi
++    case "${jobs}" in
++    (''|*[!0-9]*) printf "error: invalid number of jobs: %s\n" "${jobs}" >&2; exit 1;;
++    esac
++    if [ "${jobs}" -eq 0 ]; then
++        jobs="$(getconf _NPROCESSORS_ONLN 2>/dev/null || echo 1)"
++    fi
+     if [ -z "${dir}" ]; then
+         dir="${HOME}/br-test-pkg"
+     fi
+@@ -137,12 +147,9 @@ main() {
+     nb_fail=0
+     nb_legal=0
+     nb_show=0
+-    for toolchainconfig in "${toolchains[@]}"; do
++    while read -r ret toolchain; do
+         : $((nb++))
+-        toolchain="$(basename "${toolchainconfig}" .config)"
+-        build_dir="${dir}/${toolchain}"
+         printf "%40s [%*d/%d]: " "${toolchain}" ${#nb_tc} "${nb}" "${nb_tc}"
+-        build_one "${build_dir}" "${toolchainconfig}" "${cfg}" "${pkg}" "${prepare_only}" && ret=0 || ret=${?}
+         case ${ret} in
+         (0) printf "OK\n";;
+         (1) : $((nb_skip++)); printf "SKIPPED\n";;
+@@ -150,11 +157,15 @@ main() {
+         (3) : $((nb_legal++)); printf "FAILED\n";;
+         (4) : $((nb_show++)); printf "FAILED\n";;
+         esac
++    done < <(run_builds)
+ 
+-        if [ "${abort}" -eq 1 ]; then
+-            return 1
+-        fi
+-    done
++    if [ "${abort}" -eq 1 ]; then
++        return 1
++    fi
++    if [ "${nb}" -ne "${nb_tc}" ]; then
++        printf "error: only %d of the %d builds reported a status\n" "${nb}" "${nb_tc}" >&2
++        return 1
++    fi
+ 
+     printf "%d builds, %d skipped, %d build failed, %d legal-info failed, %d show-info failed\n" \
+         "${nb}" "${nb_skip}" "${nb_fail}" "${nb_legal}" "${nb_show}"
+@@ -162,6 +173,47 @@ main() {
+     return $((nb_fail + nb_legal))
+ }
+ 
++run_builds() {
++    local toolchainconfig
 +
- NFS_UTILS_CONF_ENV = knfsd_cv_bsd_signals=no
++    if [ "${jobs}" -gt 1 ]; then
++        if parallel --version 2>/dev/null | grep -q '^GNU parallel'; then
++            export -f build_one build_one_status
++            # --quote, so that empty and spaced arguments survive.
++            PARALLEL_SHELL=bash parallel --will-cite --quote --jobs "${jobs}" \
++                --ungroup build_one_status {} "${dir}" "${cfg}" "${pkg}" \
++                "${prepare_only}" "${keep}" ::: "${toolchains[@]}" || true
++            return
++        fi
++        printf "warning: GNU parallel not available; running builds serially\n" >&2
++    fi
++    # We run in a sub-shell, which does not inherit the trap set in
++    # main(), so re-arm it to keep stopping after the current build.
++    trap do_abort INT
++    for toolchainconfig in "${toolchains[@]}"; do
++        build_one_status "${toolchainconfig}" "${dir}" "${cfg}" "${pkg}" \
++            "${prepare_only}" "${keep}"
++
++        if [ "${abort}" -eq 1 ]; then
++            break
++        fi
++    done
++}
++
++build_one_status() {
++    local toolchainconfig="${1}"
++    local dir="${2}"
++    local cfg="${3}"
++    local pkg="${4}"
++    local prepare_only="${5}"
++    local keep="${6}"
++    local toolchain ret
++
++    toolchain="$(basename "${toolchainconfig}" .config)"
++    build_one "${dir}/${toolchain}" "${toolchainconfig}" "${cfg}" "${pkg}" "${prepare_only}" && ret=0 || ret=${?}
++    printf "%d %s\n" "${ret}" "${toolchain}"
++}
++
+ build_one() {
+     local dir="${1}"
+     local toolchainconfig="${2}"
+@@ -182,7 +234,7 @@ build_one() {
+     # done in the same locale.
+     comm -23 <(sort "${cfg}") <(sort "${dir}/.config") >"${dir}/missing.config"
+     if [ -s "${dir}/missing.config" ]; then
+-        if [ ${keep} -ne 1 ]; then
++        if [ "${keep}" -ne 1 ]; then
+             # Invalid configuration, drop it
+             rm -f "${dir}/.config"
+         fi
+@@ -229,7 +281,7 @@ build_one() {
  
- NFS_UTILS_CONF_OPTS = \
--- 
-2.53.0
+     # If we get here, the build was successful. Clean up the build/host
+     # directories to save disk space, unless 'keep' was set.
+-    if [ ${keep} -ne 1 ]; then
++    if [ "${keep}" -ne 1 ]; then
+         make O="${dir}" clean >> "${dir}/logfile" 2>&1
+     fi
+ }
+@@ -299,6 +351,10 @@ Options:
+         is specified, then a single build will be performed on that
+         specific toolchain only.
+ 
++    -j N, --jobs N
++        Run N builds concurrently using GNU parallel. If N is 0, match the
++        number of logical CPUs. Builds run serially if GNU parallel is missing.
++
+     -k, --keep
+         Keep the build directories even if the build succeeds.
+         Note: the logfile and configuration is always retained, even without
+
+---
+base-commit: 6144b0f4b73bea810809f09d23bbe76b4979bc13
+change-id: 20250619-concurrent-test-pkg-f3ad6d3c01b4
+
+Best regards,
+--  
+Joseph Kogut <joseph.kogut@gmail.com>
 
 _______________________________________________
 buildroot mailing list
