@@ -4,58 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72956C5DF95
-	for <buildroot@archiver.kernel.org>; Fri, 21 Aug 2026 15:11:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79523C5DF89
+	for <buildroot@archiver.kernel.org>; Fri, 21 Aug 2026 15:11:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 25DE581769;
-	Fri, 21 Aug 2026 15:11:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4B20F8177E;
+	Fri, 21 Aug 2026 15:11:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nHIVfcl4PxKX; Fri, 21 Aug 2026 15:11:36 +0000 (UTC)
+ id s4SBoP8KQBDg; Fri, 21 Aug 2026 15:11:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787325096;
-	bh=FIw7W9r5tUa7/q3Giyosy8LT71PAUp5U6T4UdFiulLs=;
+	s=default; t=1787325098;
+	bh=qxIJKRasyGsO8hMSvZU6XKVfA3534n+kce+JtrTPuE0=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=DIYyNwmiev/o74WQPVd9dnMWpx/dPcpSJw1pTBXfxcUM3aRyiSWFTIB5y/Zw/5LFp
-	 Wjtm/haigv5NCBCA9UrQKyMu/67NqqqR77M8J0YX8xhMDCtyuX1lY7WgxaPM/bNtbR
-	 gVJEt6SsIGJwJ5+S5CgurITW2kYFnYxtGx35YPPfrVm57/MOyn5UAqMD4EnfDMIsmh
-	 TMAD6LBaEY7FfFYJCZVQNm9mpjYpMFsr6XHnU7tsO6S0iBxbvi7qtJCXnuSg7d+1+G
-	 5Gx94+mOV3PCmPLXXJW3PjgQqwnz/tiubxsycGBFFec7uspmvmGnFXlcq/59ALV+z0
-	 LpADlsP9ye8vw==
+	b=M618jOqB0axHgNxlUWoUV2JU2KNPyvZE7d2425mbjiG8dFyLUX/QCQ4fWzvWu3aDj
+	 LtZrAbw2SDvQ/tw8I3CFKAaeXdUhJDLI6ErRdtF8jX37ylVFBC5w1eAIgTbyXzEKVt
+	 NEWy/9Ai683ZQkq1c6owLBl8SXIgadGOrfa8z8B/dOWP/je2Uyn+kueT3r6az1P2IB
+	 wxxRUJoMba2uLi/GWbUDjOBOmaxNf5X5YCwlt5b6+ruA87NeVtoajSrLEszXJfqOxc
+	 fG70g6g9zT4cPQG5FQjgsuo4vhfwC49CRK0KXbG0R5Yk2U1GaMtYGoXYytcA6LsKqD
+	 rGiCCIbO3MQjQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5264281757;
-	Fri, 21 Aug 2026 15:11:36 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id DD16AEA3
+	by smtp1.osuosl.org (Postfix) with ESMTP id E668B81761;
+	Fri, 21 Aug 2026 15:11:37 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id ED78029B
  for <buildroot@buildroot.org>; Fri, 21 Aug 2026 15:11:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C3568606A6
+ by smtp3.osuosl.org (Postfix) with ESMTP id DD2BC60884
  for <buildroot@buildroot.org>; Fri, 21 Aug 2026 15:11:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id j1JvKCA2u4Ea for <buildroot@buildroot.org>;
+ id eKsjLa0zPn_y for <buildroot@buildroot.org>;
  Fri, 21 Aug 2026 15:11:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1534460884
+ by smtp3.osuosl.org (Postfix) with ESMTP id 236C660A75
  for <buildroot@buildroot.org>; Fri, 21 Aug 2026 15:11:10 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 878288DF43; Fri, 21 Aug 2026 15:10:16 +0000 (UTC)
+ id 9562A8DBE4; Fri, 21 Aug 2026 15:10:16 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 20 Aug 2026 13:53:43 +0200
+Date: Thu, 20 Aug 2026 13:53:56 +0200
 X-Git-Refname: refs/heads/2026.05.x
-X-Git-Oldrev: 3e9c7084c7b933f5c98a2a146451002cd9970a26
-X-Git-Newrev: 314bd8bcda22aa264fe9c30b3b6fc00640695d0f
+X-Git-Oldrev: 314bd8bcda22aa264fe9c30b3b6fc00640695d0f
+X-Git-Newrev: 1817abc750da72bd3d24ecaf3edf187e7a80b704
 X-Patchwork-Hint: ignore
-Message-Id: <20260821151016.878288DF43@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.05.x] package/rsync: security
- bump to version 3.5.0
+Message-Id: <20260821151016.9562A8DBE4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.05.x] package/memcached:
+ security bump version to 1.6.45
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -75,55 +75,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/314bd8bcda22aa264fe9c30b3b6fc00640695d0f
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/1817abc750da72bd3d24ecaf3edf187e7a80b704
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.05.x
 
-https://download.samba.org/pub/rsync/NEWS#3.5.0
+https://github.com/memcached/memcached/wiki/ReleaseNotes1644
+> Hot on the heels of the last security release is...
+> another security release
 
-Fixes CVE-2026-53802, CVE-2026-53803, CVE-2026-53785, CVE-2026-53784,
-CVE-2026-53793, CVE-2026-53795, CVE-2026-53796, CVE-2026-53797,
-CVE-2026-53799, CVE-2026-53800, CVE-2026-53801, CVE-2026-53783,
-CVE-2026-53786, CVE-2026-53798, CVE-2026-53788, CVE-2026-53789,
-CVE-2026-53791, CVE-2026-53790, CVE-2026-53792, CVE-2026-53794,
-CVE-2026-70461, CVE-2026-70458, CVE-2026-70456, CVE-2026-70457,
-CVE-2026-70459, CVE-2026-70464, CVE-2026-70455, CVE-2026-70453,
-CVE-2026-70452, CVE-2026-70463, CVE-2026-70460, CVE-2026-70462 &
-CVE-2026-70454.
+https://github.com/memcached/memcached/wiki/ReleaseNotes1645
+> So this is a lot of crash and security bugs.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Franciszek Stachura <fbstachura@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 2722eb1216697dd1f36fb2879a6fa1c0dca551fb)
+(cherry picked from commit b00c3b58b9ae37e239cb782a5e411e6ea4be9178)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- package/rsync/rsync.hash | 4 ++--
- package/rsync/rsync.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/memcached/memcached.hash | 6 +++---
+ package/memcached/memcached.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/rsync/rsync.hash b/package/rsync/rsync.hash
-index 2deaed0674..84cdaf680b 100644
---- a/package/rsync/rsync.hash
-+++ b/package/rsync/rsync.hash
+diff --git a/package/memcached/memcached.hash b/package/memcached/memcached.hash
+index 93480d338c..6a3de856e9 100644
+--- a/package/memcached/memcached.hash
++++ b/package/memcached/memcached.hash
 @@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://rsync.samba.org/ftp/rsync/src/rsync-3.4.4.tar.gz.asc
--sha256  bd88cf82fa653da32314fb229136407c5c90f80d1758d8f4b091767877d8fa96  rsync-3.4.4.tar.gz
-+# https://rsync.samba.org/ftp/rsync/src/rsync-3.5.0.tar.gz.asc
-+sha256  c7ffd1ef653e99540f661e47cb00b7f9cad1ee6b972399b16f93d672656e0d33  rsync-3.5.0.tar.gz
- # Locally calculated
- sha256  85c19ea50a224c2d0067a69c083584e5717b40b76610ec1218f91385775067dd  COPYING
-diff --git a/package/rsync/rsync.mk b/package/rsync/rsync.mk
-index 5dd89a82d2..391659a33d 100644
---- a/package/rsync/rsync.mk
-+++ b/package/rsync/rsync.mk
+-# From http://www.memcached.org/files/memcached-1.6.43.tar.gz.sha1
+-sha1  37307d13528f355fb282bc8841ca033272e44ac9  memcached-1.6.43.tar.gz
++# From http://www.memcached.org/files/memcached-1.6.45.tar.gz.sha1
++sha1  45038980ea7045a548b9b5b5125ef7116312a768  memcached-1.6.45.tar.gz
+ # Locally computed
+-sha256  8042ee26e004efa0db41ca4a7c713f759c3280c2f8bee438579f13de1e509435  memcached-1.6.43.tar.gz
++sha256  d362c64e6d8d5287153501eabf7c85b4a761432fbf53f5d7b085d0bb1653c1dd  memcached-1.6.45.tar.gz
+ sha256  bc887c4ad8051fe690ace9528fe37a2e0bb362e6d963331d82e845ca9b585a0c  COPYING
+diff --git a/package/memcached/memcached.mk b/package/memcached/memcached.mk
+index e297ca17ff..f86bd56006 100644
+--- a/package/memcached/memcached.mk
++++ b/package/memcached/memcached.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RSYNC_VERSION = 3.4.4
-+RSYNC_VERSION = 3.5.0
- RSYNC_SITE = https://rsync.samba.org/ftp/rsync/src
- RSYNC_LICENSE = GPL-3.0+ with exceptions
- RSYNC_LICENSE_FILES = COPYING
+-MEMCACHED_VERSION = 1.6.43
++MEMCACHED_VERSION = 1.6.45
+ MEMCACHED_SITE = http://www.memcached.org/files
+ MEMCACHED_DEPENDENCIES = libevent
+ MEMCACHED_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
