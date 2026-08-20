@@ -4,58 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 020E4C5DF94
-	for <buildroot@archiver.kernel.org>; Fri, 21 Aug 2026 15:11:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72956C5DF95
+	for <buildroot@archiver.kernel.org>; Fri, 21 Aug 2026 15:11:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6F45181755;
-	Fri, 21 Aug 2026 15:11:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 25DE581769;
+	Fri, 21 Aug 2026 15:11:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id I54fUQvJRhAv; Fri, 21 Aug 2026 15:11:34 +0000 (UTC)
+ id nHIVfcl4PxKX; Fri, 21 Aug 2026 15:11:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787325094;
-	bh=3IQfgr9Jnnb8nTCMuLGjlTowlo/7q7LvtziiYI/ZOWQ=;
+	s=default; t=1787325096;
+	bh=FIw7W9r5tUa7/q3Giyosy8LT71PAUp5U6T4UdFiulLs=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=oEjfpnVRQuDXSrK8FuTIG7/Oc5FGRujJvFqindWiFiDunKMeXMWjvMBZ2uOz06fPx
-	 dryEd/mQ/ep7Jy+YZdQkXoV6aDJ/TqxS8p87d/fdnh+g7jNUwvKD9d9JdQ0szFwy/W
-	 EeAH5bjTCaHAL3bVwZe6NTFy77woFDmxDGpkvAS5h0wHcOKHzf+n6yWelpJ1YD5TJB
-	 F3iiBzl0vxKuRyOng8aclJHS8UyZE65d7T1D+YtD2VrlsDFJ3O5ar5na3skBNWPn/m
-	 FiVY1ULTi95y1/yKIy6n4bISQGebPt1N+n9krNS4x08Q48Ey0iyrz8eHtES+d3Q4QM
-	 hwVKFpYBjTtZQ==
+	b=DIYyNwmiev/o74WQPVd9dnMWpx/dPcpSJw1pTBXfxcUM3aRyiSWFTIB5y/Zw/5LFp
+	 Wjtm/haigv5NCBCA9UrQKyMu/67NqqqR77M8J0YX8xhMDCtyuX1lY7WgxaPM/bNtbR
+	 gVJEt6SsIGJwJ5+S5CgurITW2kYFnYxtGx35YPPfrVm57/MOyn5UAqMD4EnfDMIsmh
+	 TMAD6LBaEY7FfFYJCZVQNm9mpjYpMFsr6XHnU7tsO6S0iBxbvi7qtJCXnuSg7d+1+G
+	 5Gx94+mOV3PCmPLXXJW3PjgQqwnz/tiubxsycGBFFec7uspmvmGnFXlcq/59ALV+z0
+	 LpADlsP9ye8vw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4E4D7816FE;
-	Fri, 21 Aug 2026 15:11:34 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id C8B3429B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5264281757;
+	Fri, 21 Aug 2026 15:11:36 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id DD16AEA3
  for <buildroot@buildroot.org>; Fri, 21 Aug 2026 15:11:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AF6FA400AB
+ by smtp3.osuosl.org (Postfix) with ESMTP id C3568606A6
  for <buildroot@buildroot.org>; Fri, 21 Aug 2026 15:11:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vPJw58UfAb1m for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id j1JvKCA2u4Ea for <buildroot@buildroot.org>;
  Fri, 21 Aug 2026 15:11:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id EA6BF400DC
- for <buildroot@buildroot.org>; Fri, 21 Aug 2026 15:11:09 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1534460884
+ for <buildroot@buildroot.org>; Fri, 21 Aug 2026 15:11:10 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5D83E8E13D; Fri, 21 Aug 2026 15:10:16 +0000 (UTC)
+ id 878288DF43; Fri, 21 Aug 2026 15:10:16 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 20 Aug 2026 11:43:43 +0200
+Date: Thu, 20 Aug 2026 13:53:43 +0200
 X-Git-Refname: refs/heads/2026.05.x
-X-Git-Oldrev: 34b36081608779221954590177a9fb2f07c8c59a
-X-Git-Newrev: 43d970f062dc98215046dd0ab864d0dfaa954923
+X-Git-Oldrev: 3e9c7084c7b933f5c98a2a146451002cd9970a26
+X-Git-Newrev: 314bd8bcda22aa264fe9c30b3b6fc00640695d0f
 X-Patchwork-Hint: ignore
-Message-Id: <20260821151016.5D83E8E13D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.05.x] package/dracut: bump
- version to 111
+Message-Id: <20260821151016.878288DF43@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.05.x] package/rsync: security
+ bump to version 3.5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,113 +70,61 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Titouan Christophe via buildroot <buildroot@buildroot.org>
 Reply-To: Titouan Christophe <titouan.christophe@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8461752611501706797=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8461752611501706797==
-Content-Type: text/plain
-
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/43d970f062dc98215046dd0ab864d0dfaa954923
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/314bd8bcda22aa264fe9c30b3b6fc00640695d0f
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.05.x
 
-https://github.com/dracut-ng/dracut/blob/111/NEWS.md
+https://download.samba.org/pub/rsync/NEWS#3.5.0
 
-Removed patch which is included in this release.
+Fixes CVE-2026-53802, CVE-2026-53803, CVE-2026-53785, CVE-2026-53784,
+CVE-2026-53793, CVE-2026-53795, CVE-2026-53796, CVE-2026-53797,
+CVE-2026-53799, CVE-2026-53800, CVE-2026-53801, CVE-2026-53783,
+CVE-2026-53786, CVE-2026-53798, CVE-2026-53788, CVE-2026-53789,
+CVE-2026-53791, CVE-2026-53790, CVE-2026-53792, CVE-2026-53794,
+CVE-2026-70461, CVE-2026-70458, CVE-2026-70456, CVE-2026-70457,
+CVE-2026-70459, CVE-2026-70464, CVE-2026-70455, CVE-2026-70453,
+CVE-2026-70452, CVE-2026-70463, CVE-2026-70460, CVE-2026-70462 &
+CVE-2026-70454.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit c6fa81a18c8c78515e621c26122fa227e1556022)
+(cherry picked from commit 2722eb1216697dd1f36fb2879a6fa1c0dca551fb)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- ...ns-prevent-find_binary-from-dropping-last.patch | 45 ----------------------
- package/dracut/dracut.hash                         |  2 +-
- package/dracut/dracut.mk                           |  2 +-
- 3 files changed, 2 insertions(+), 47 deletions(-)
+ package/rsync/rsync.hash | 4 ++--
+ package/rsync/rsync.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/dracut/0001-fix-functions-prevent-find_binary-from-dropping-last.patch b/package/dracut/0001-fix-functions-prevent-find_binary-from-dropping-last.patch
-deleted file mode 100644
-index ad312d0b85..0000000000
---- a/package/dracut/0001-fix-functions-prevent-find_binary-from-dropping-last.patch
-+++ /dev/null
-@@ -1,45 +0,0 @@
--From 94c4274e32467235fb580a27ea182169f253ca5f Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?Mat=C3=A9o=20Pourrier?= <mateo.pourrier@smile.fr>
--Date: Tue, 28 Apr 2026 17:23:23 +0200
--Subject: [PATCH] fix(functions): prevent find_binary from dropping last PATH
-- element
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--When `read` encounters EOF before the delimiter, it returns a non-zero
--exit status, causing the while loop to terminate immediately. As a result,
--if the PATH string doesn't end with a colon, the very last directory in
--PATH is ignored by find_binary().
--
--This caused regressions on split-usr architectures where critical
--binaries reside exclusively in /bin, and /bin happens to be
--appended at the very end of the PATH by dracut.sh.
--
--Appending a virtual colon to the Here-String ensures the loop processes
--all directories correctly.
--
--Fixes dracut-ng issue #1467 : https://github.com/dracut-ng/dracut-ng/issues/1467
--
--Upstream: https://github.com/dracut-ng/dracut-ng/pull/2416
--Signed-off-by: Matéo Pourrier <mateo.pourrier@smile.fr>
-----
-- dracut-functions.sh | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/dracut-functions.sh b/dracut-functions.sh
--index f430a28e..5046f45e 100755
----- a/dracut-functions.sh
--+++ b/dracut-functions.sh
--@@ -94,7 +94,7 @@ find_binary() {
--             printf "%s\n" "${_path}"
--             return 0
--         fi
---    done <<< "$PATH"
--+    done <<< "${PATH}:"
-- 
--     [[ -n ${dracutsysrootdir-} ]] && return 1
--     type -P "${1##*/}"
---- 
--2.34.1
--
-diff --git a/package/dracut/dracut.hash b/package/dracut/dracut.hash
-index 3288ed6ad4..1b5b3dce55 100644
---- a/package/dracut/dracut.hash
-+++ b/package/dracut/dracut.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  0d357853f8cf2371d89a8ebcbbb1fd2c1c85a79d8866925fd7385eaeb20a27dc  dracut-110.tar.gz
-+sha256  ca949190692e91611ef16ea3642c0f764f63948860f3f742524310728c991493  dracut-111.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/dracut/dracut.mk b/package/dracut/dracut.mk
-index b40f618fe8..3a1c1567e8 100644
---- a/package/dracut/dracut.mk
-+++ b/package/dracut/dracut.mk
+diff --git a/package/rsync/rsync.hash b/package/rsync/rsync.hash
+index 2deaed0674..84cdaf680b 100644
+--- a/package/rsync/rsync.hash
++++ b/package/rsync/rsync.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://rsync.samba.org/ftp/rsync/src/rsync-3.4.4.tar.gz.asc
+-sha256  bd88cf82fa653da32314fb229136407c5c90f80d1758d8f4b091767877d8fa96  rsync-3.4.4.tar.gz
++# https://rsync.samba.org/ftp/rsync/src/rsync-3.5.0.tar.gz.asc
++sha256  c7ffd1ef653e99540f661e47cb00b7f9cad1ee6b972399b16f93d672656e0d33  rsync-3.5.0.tar.gz
+ # Locally calculated
+ sha256  85c19ea50a224c2d0067a69c083584e5717b40b76610ec1218f91385775067dd  COPYING
+diff --git a/package/rsync/rsync.mk b/package/rsync/rsync.mk
+index 5dd89a82d2..391659a33d 100644
+--- a/package/rsync/rsync.mk
++++ b/package/rsync/rsync.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DRACUT_VERSION = 110
-+DRACUT_VERSION = 111
- DRACUT_SITE = $(call github,dracut-ng,dracut-ng,$(DRACUT_VERSION))
- DRACUT_LICENSE = GPL-2.0
- DRACUT_LICENSE_FILES = COPYING
-
---===============8461752611501706797==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-RSYNC_VERSION = 3.4.4
++RSYNC_VERSION = 3.5.0
+ RSYNC_SITE = https://rsync.samba.org/ftp/rsync/src
+ RSYNC_LICENSE = GPL-3.0+ with exceptions
+ RSYNC_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8461752611501706797==--
