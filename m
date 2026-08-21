@@ -4,58 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3807C5DF89
-	for <buildroot@archiver.kernel.org>; Fri, 21 Aug 2026 15:07:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EEB1DC5DF93
+	for <buildroot@archiver.kernel.org>; Fri, 21 Aug 2026 15:07:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 04010811C1;
-	Fri, 21 Aug 2026 15:07:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B55578124D;
+	Fri, 21 Aug 2026 15:07:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vc7GjW2_wrJY; Fri, 21 Aug 2026 15:07:27 +0000 (UTC)
+ id uaatFhHkagAa; Fri, 21 Aug 2026 15:07:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787324847;
-	bh=KGVtgLEn/C70T780YD3BiviA7aWuqQT27cGJnZGm7S4=;
+	s=default; t=1787324849;
+	bh=SQQHY52HEel8u8SLL3lksB+1T0Suis3E/XIjryXmZEo=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=FvH4JcnkOscy+obI7HlV9nUg38whwCYPXEHb+q2azmIJgWIFtfqqPfLAoa8UCkogO
-	 UOYtWaSGj4cl50ILZzrQtmv+RnlWfqKYXCm7V4pHX6w7jn7VmNsBDMCSw+MvVe2H0Y
-	 f+7IpQLmWVJ7PwwvY37n5gAhV5qUQ9YUctsBCsRSPvx7uAyaaOj/crqq++XBe7Z59s
-	 SphWBzczOrbCPqyYov3YBrUY7KkA5l4GpBbhniavrphzYdsKZ5j+hcqf4OTvsJfZzn
-	 yEtnpF3bpYanhOxNn0kLZ88zfNzXInWuDfyPDdqiR/MNKjaaRzmorTNXFTs5HqRCsX
-	 BMy91lYrAg8pg==
+	b=oZK33RC0jaFZwvwBxViHX3VREsWOvvMzeaOFYLy0CgjpEKmsL9PdmHGjf6rdQvFft
+	 XbC0eETg1bzDHL/niwAP6UdmGsjawa0uLNOyGLvRqWrSh6i21ijpU8AtEWPh+3n3KU
+	 fzCC3WkvAnVuNqapE+wbvHcVyltX/nr4/iSU0XVdcJQPKDf8dT/T+fSAGFWbVobpTJ
+	 Ilka36eEY+ig11cvCxJTTIiAFaThByodqQ1tWyoe6Zvd4O9iKPW9c2u+TYdS0+Ph/R
+	 WtRuJ9ResG9AMXKX4D2hxVbILW2vY5tOUKOUeFRL9Ijs1ZLbQOGA6SPMUNn7TeIJCr
+	 G7bhdPWLyjs8A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C169D811D9;
-	Fri, 21 Aug 2026 15:07:26 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 02D891F4B
+	by smtp1.osuosl.org (Postfix) with ESMTP id B00778123C;
+	Fri, 21 Aug 2026 15:07:28 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0DB491CF2
  for <buildroot@buildroot.org>; Fri, 21 Aug 2026 15:07:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DD0EB8117C
- for <buildroot@buildroot.org>; Fri, 21 Aug 2026 15:07:08 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 008C440443
+ for <buildroot@buildroot.org>; Fri, 21 Aug 2026 15:07:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id f5RMrggaWn3R for <buildroot@buildroot.org>;
- Fri, 21 Aug 2026 15:07:07 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id B5p80zvUuOJJ for <buildroot@buildroot.org>;
+ Fri, 21 Aug 2026 15:07:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id A1B4E81184
+ by smtp2.osuosl.org (Postfix) with ESMTP id C6456403D9
  for <buildroot@buildroot.org>; Fri, 21 Aug 2026 15:07:07 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 15D858E127; Fri, 21 Aug 2026 15:06:14 +0000 (UTC)
+ id 468E68E0EC; Fri, 21 Aug 2026 15:06:14 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 21 Aug 2026 17:04:18 +0200
+Date: Fri, 21 Aug 2026 17:04:19 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 3a5af1b3c0ac801887deeef0d0247f4537df8eff
-X-Git-Newrev: 339bd0948ca07941adb47837f2f3027446f308d3
+X-Git-Oldrev: 8101c6df42ab156b04d87da0965cc13ac12f0750
+X-Git-Newrev: 619ddb7812893fdcb9179be760bb18f3cf57212b
 X-Patchwork-Hint: ignore
-Message-Id: <20260821150614.15D858E127@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/libarchive:
- security bump version to 3.8.9
+Message-Id: <20260821150614.468E68E0EC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/dracut: security
+ bump to version 112
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -75,48 +75,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/339bd0948ca07941adb47837f2f3027446f308d3
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/619ddb7812893fdcb9179be760bb18f3cf57212b
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-https://github.com/libarchive/libarchive/releases/tag/v3.8.9
-"Libarchive 3.8.9 is a security, bugfix and minor feature release."
+Upstream changelog:
+https://github.com/dracut-ng/dracut/releases/tag/112
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+The changelog lists multiple "security related commits", though only
+one mentions a CVE: CVE-2026-6893 [1], which allows a malicious DHCP
+server to inject code into shell scripts.
+
+[1] https://nvd.nist.gov/vuln/detail/CVE-2026-6893
+
+Signed-off-by: Fiona Klute (Othermo GmbH) <fiona.klute@gmx.de>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 6ccc514cdc9c5e698be2493d6583226a5e19a819)
+(cherry picked from commit 7b2e6578267d27f37e3a9c8cdc1d053ed862a88b)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- package/libarchive/libarchive.hash | 6 +++---
- package/libarchive/libarchive.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/dracut/dracut.hash | 2 +-
+ package/dracut/dracut.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libarchive/libarchive.hash b/package/libarchive/libarchive.hash
-index dccb2cc4a7..acd4b9ef22 100644
---- a/package/libarchive/libarchive.hash
-+++ b/package/libarchive/libarchive.hash
-@@ -1,6 +1,6 @@
--# From https://github.com/libarchive/libarchive/releases/tag/v3.8.8
-+# From https://github.com/libarchive/libarchive/releases/tag/v3.8.9
- # After verifying the pgp signature from:
--# https://www.libarchive.de/downloads/libarchive-3.8.8.tar.xz.asc
--sha256  3873a88801da067d0528a989af06877710529d50ee8fe6f3970cbb4302efb918  libarchive-3.8.8.tar.xz
-+# https://www.libarchive.de/downloads/libarchive-3.8.9.tar.xz.asc
-+sha256  888c934f9d95648ecb9163dc8e23ab80a476ecb81a8f1154704a227b5b676dde  libarchive-3.8.9.tar.xz
- # Locally computed:
- sha256  30e556b3959e3985d66efefec5eaac51d4995053caa1d3cffe6eb916f146f229  COPYING
-diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
-index 23cb82f7b5..5b6aea3407 100644
---- a/package/libarchive/libarchive.mk
-+++ b/package/libarchive/libarchive.mk
+diff --git a/package/dracut/dracut.hash b/package/dracut/dracut.hash
+index 1b5b3dce55..3615c2af14 100644
+--- a/package/dracut/dracut.hash
++++ b/package/dracut/dracut.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  ca949190692e91611ef16ea3642c0f764f63948860f3f742524310728c991493  dracut-111.tar.gz
++sha256  839d21eb4bd27bb0ee40d74c9da46df088c2e1425fcd8c3ea62b7e3a3dd28a91  dracut-112.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/dracut/dracut.mk b/package/dracut/dracut.mk
+index 3a1c1567e8..0bd24d49f4 100644
+--- a/package/dracut/dracut.mk
++++ b/package/dracut/dracut.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBARCHIVE_VERSION = 3.8.8
-+LIBARCHIVE_VERSION = 3.8.9
- LIBARCHIVE_SOURCE = libarchive-$(LIBARCHIVE_VERSION).tar.xz
- LIBARCHIVE_SITE = https://www.libarchive.de/downloads
- LIBARCHIVE_INSTALL_STAGING = YES
+-DRACUT_VERSION = 111
++DRACUT_VERSION = 112
+ DRACUT_SITE = $(call github,dracut-ng,dracut-ng,$(DRACUT_VERSION))
+ DRACUT_LICENSE = GPL-2.0
+ DRACUT_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
