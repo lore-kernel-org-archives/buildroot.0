@@ -1,67 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37BA1C5DF8C
-	for <buildroot@archiver.kernel.org>; Fri, 21 Aug 2026 21:13:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88FB3C5DF94
+	for <buildroot@archiver.kernel.org>; Fri, 21 Aug 2026 21:38:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 04E4C409F6;
-	Fri, 21 Aug 2026 21:13:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4C7608130E;
+	Fri, 21 Aug 2026 21:38:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7NojY1F6KA-9; Fri, 21 Aug 2026 21:13:38 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 81iQQ995ksH5; Fri, 21 Aug 2026 21:38:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787346818;
-	bh=Se+KqZYNN13fpADR8FSKtpN0C3PPkL22XlOtEos7CvU=;
+	s=default; t=1787348311;
+	bh=wIhvmGQsxlrmb2Ni2fqVPngtMzhf//B/IM2NPIr85vk=;
 	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=XZ7vWJ7OvH7MBGJBtKhpC6rPDb0tpbnIoBkg67uvu2UKnO665U9zO9AvS95o8tEOt
-	 lpl5RwYQ5rEro5wu2Cw1nSmbu0PKMu//QgURF4jT2To8hJRwx7Clc2yhTb0CfkOqQ7
-	 EW6T1oTB1necnkRMaujBjemRTVjNZ+rOBjeTe3XP4gvnLm6jFWDx4DeJjGLP0QJdJS
-	 LjlxqmXRdngW2XygwJm88b9DEtRqEEAHh8VvCtKkCwoGcShH/7b1R2ZHoKTEDO+yFc
-	 NCA8NGrroB+StIgS2g6fgg8hzOjozV7zzU58UTLaQ97XTNCQzM4oe/8O38NVWXyfGo
-	 iC5FNQx01UtCA==
+	b=ZtNpNVsvt1WyHdpmp8u9wANJj/Gglm4R2Sv+kdICshxkMxLLxKek4LcaVaSlPEAr0
+	 LRdMets1Q5gRhiVBqstAgxXiixInG6YY+eD6kI7xGrZ77BMQBfDQWpy6+bpilfFQwI
+	 wXLBUsp2+MfOc3AC0Yz5pyen/5NNdSRwKnhMsgpZhMM1rel2Na/1nY3D6RkxZjNiT8
+	 +oaybb3xUclILnzgRBlKP/cvWLKvXgyzkf7K8vsmvGD9V5mfi3Z4OYRLd28AFGktVI
+	 w5AISsPF1IRJQkDScu4YWqS66Z2y5QA0EwrzNb7Pa967dJZ1gLgxmi4vM0XxxI7h+5
+	 VJGMEcqiaaQQw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2C00E409D9;
-	Fri, 21 Aug 2026 21:13:38 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id AF0B3386
- for <buildroot@buildroot.org>; Fri, 21 Aug 2026 21:13:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1D7D98124A;
+	Fri, 21 Aug 2026 21:38:31 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id AD7E093F
+ for <buildroot@buildroot.org>; Fri, 21 Aug 2026 21:38:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A0A53409D9
- for <buildroot@buildroot.org>; Fri, 21 Aug 2026 21:13:36 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8B88D60AB2
+ for <buildroot@buildroot.org>; Fri, 21 Aug 2026 21:38:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YihHZOe58gnn for <buildroot@buildroot.org>;
- Fri, 21 Aug 2026 21:13:36 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp4.osuosl.org (Postfix) with ESMTPS id EA78D406F6
- for <buildroot@buildroot.org>; Fri, 21 Aug 2026 21:13:35 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Lcrd_8U-z8v6 for <buildroot@buildroot.org>;
+ Fri, 21 Aug 2026 21:38:28 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7DECB60A8A
+ for <buildroot@buildroot.org>; Fri, 21 Aug 2026 21:38:27 +0000 (UTC)
 Received: from webmail.free.fr (unknown [172.20.246.3])
  (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id BDFF919F576;
- Fri, 21 Aug 2026 23:13:30 +0200 (CEST)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id 29A5D5FFAA;
+ Fri, 21 Aug 2026 23:38:22 +0200 (CEST)
 Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
  via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 21 Aug 2026 23:13:30 +0200
+ with HTTP (HTTP/1.0 POST); Fri, 21 Aug 2026 23:38:22 +0200
 MIME-Version: 1.0
-Date: Fri, 21 Aug 2026 23:13:30 +0200
+Date: Fri, 21 Aug 2026 23:38:22 +0200
 To: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc: buildroot@buildroot.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-In-Reply-To: <20260821-doc-typo-v1-1-70429bfa1a19@bootlin.com>
-References: <20260821-doc-typo-v1-1-70429bfa1a19@bootlin.com>
+Cc: buildroot@buildroot.org, =?UTF-8?Q?Alexis_Lothor=C3=A9?=
+ <alexis.lothore@bootlin.com>, Thomas Petazzoni
+ <thomas.petazzoni@bootlin.com>
+In-Reply-To: <20260821-heaptrack-v4-1-01f232abcdcd@bootlin.com>
+References: <20260821-heaptrack-v4-1-01f232abcdcd@bootlin.com>
 User-Agent: Webmail Free/1.6.18
-Message-ID: <573a316b7d0b3f85a32e36a6d9e49ac6@free.fr>
+Message-ID: <41a346904f1a83a6e8d99ecb5f6bc20c@free.fr>
 X-Sender: ju.o@free.fr
-Subject: Re: [Buildroot] [PATCH] docs/manual: fix typo
+Subject: Re: [Buildroot] [PATCH v4] package/heaptrack: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -80,12 +82,95 @@ Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 21/08/2026 22:30, Luca Ceresoli via buildroot wrote:
-> Fix significant -> significantly.
+Hi Luca,
+
+Thanks for the update.
+
+On 21/08/2026 21:51, Luca Ceresoli via buildroot wrote:
+> Add heaptrack, a memory allocation tracer toolkit.
+> 
+> This implementation builds all the command line components, not the
+> heaptrack_gui graphical visualization program.
 > 
 > Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+> ---
+[...]
+> diff --git a/package/heaptrack/Config.in b/package/heaptrack/Config.in
+> new file mode 100644
+> index 000000000000..808193a73f68
+> --- /dev/null
+> +++ b/package/heaptrack/Config.in
+> @@ -0,0 +1,39 @@
+> +config BR2_PACKAGE_HEAPTRACK
+> +	bool "heaptrack"
+> +	depends on BR2_INSTALL_LIBSTDCPP
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # boost, libunwind, elfutils
+> +	depends on BR2_USE_WCHAR # boost, elfutils
+> +	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # 
+> boost-filesystem
+> +	depends on BR2_PACKAGE_LIBUNWIND_ARCH_SUPPORTS # libunwind
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libunwind
 
-Applied to master, thanks.
+There is one last build failure with test-pkg:
+https://gitlab.com/jolivain/buildroot/-/jobs/16041509274
+
+It seems that heaptrack is using std::filesystem:
+https://invent.kde.org/sdk/heaptrack/-/blob/master/src/interpret/heaptrack_interpret.cpp?ref_type=heads#L15
+
+which is a C++17 feature which was fully implemented in gcc 8.1:
+https://gcc.gnu.org/gcc-8/changes.html#libstdcxx
+
+So I believe this gcc version should be raised at gcc >= 8.
+
+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # C++17 filesystem
+
+The comment should also be updated below.
+
+> +	depends on !BR2_STATIC_LIBS # libunwind, elfutils
+> +	depends on !BR2_TOOLCHAIN_USES_UCLIBC # no dlmopen() support
+> +	select BR2_PACKAGE_BOOST
+> +	select BR2_PACKAGE_BOOST_IOSTREAMS
+> +	select BR2_PACKAGE_BOOST_PROGRAM_OPTIONS
+> +	# For heaptrack_print
+> +	select BR2_PACKAGE_BOOST_FILESYSTEM
+> +	select BR2_PACKAGE_ELFUTILS
+> +	select BR2_PACKAGE_LIBUNWIND
+> +	select BR2_PACKAGE_ZLIB
+> +	help
+> +	  Heaptrack traces all memory allocations and annotates these
+> +	  events with stack traces. Dedicated analysis tools then allow
+> +	  you to interpret the heap memory profile to find hotspots,
+> +	  memory leaks, allocation hotspots and temporary allocations.
+> +
+> +	  Zstandard offers better (de)compression performance compared
+> +	  with gzip/zlib, making heaptrack faster and datafiles smaller,
+> +	  so enabling BR2_PACKAGE_ZSTD is recommended.
+> +
+> +	  https://apps.kde.org/heaptrack/
+> +
+> +comment "heaptrack needs a glibc or musl toolchain w/ C++, threads, 
+> wchar, gcc >= 4.9, dynamic library"
+
+"needs gcc >= 8"
+
+> +	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
+> +	depends on BR2_PACKAGE_LIBUNWIND_ARCH_SUPPORTS
+> +	depends on !BR2_INSTALL_LIBSTDCPP \
+> +		|| !BR2_TOOLCHAIN_HAS_THREADS \
+> +		|| !BR2_USE_WCHAR \
+> +		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 \
+
+		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_8 \
+
+> +		|| BR2_STATIC_LIBS \
+> +		|| BR2_TOOLCHAIN_USES_UCLIBC
+[...]
+
+Could you send an updated patch please?
+
+Best regards,
+
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
