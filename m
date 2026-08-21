@@ -4,58 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 897EDC5DF95
-	for <buildroot@archiver.kernel.org>; Fri, 21 Aug 2026 15:12:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 814BFC5DF93
+	for <buildroot@archiver.kernel.org>; Fri, 21 Aug 2026 15:12:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 43A2181758;
-	Fri, 21 Aug 2026 15:12:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 526D381F16;
+	Fri, 21 Aug 2026 15:12:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ccy4rumv54zT; Fri, 21 Aug 2026 15:12:29 +0000 (UTC)
+ id lG0cN41UNmAY; Fri, 21 Aug 2026 15:12:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787325149;
-	bh=FjU7B3K2Mdc4lv5eC+3DisaSAw0CSq8f2aabEvZechk=;
+	s=default; t=1787325150;
+	bh=Q2utRjDbIDogSooAVGdGfkofRkWJZJZ5z6LdlTeiY/8=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=paTY96tP9dx0CASYjQSnyW8bDscINIyxY4/MgooBH2/SSaQVyyhb9MN8WkBfXRpaf
-	 GnHwpDkj5sRh0/Hi+WU6jn6UCk/nqqflnEvoL5OaT4I0H7DKqhOxt9YB48kt0INAKr
-	 P0pUzGjTAU1FECeOygEWOFaBJaOej29i71CFOO/iv5g6S4NuWo2mQSzN6yLsmfz6o0
-	 9DG71K6gP/rHlCdPDMrdWMp6rUqPMg+GRkUupn+sA4/IRAmyVklxSmCfGu/FzoAWXf
-	 h8XoEvD5nEbO06SP58AoBTAqHdYre0gvieUKzXrn6qDflI0iRm6sJD+jkXoAggCDCq
-	 nX8vaeGFWqXQg==
+	b=kf66pVKc7c9ZNjvhjSBwKNDUI2OcvOpQhjbsbol3icQ64ZdFQTBvNd9pkEyo5y4Jk
+	 jlKqTo4qOT8qks744iTIp4fg867uxm9vomyL07i0ofsZH4rR7APQo1jJIO3WwtvKUB
+	 5gOghZnAAEsHpxggartwmubnn9DDpGlrIR9ucTPDS5CEw+8BujR0kX9iJgSM7qbTH1
+	 UeZqZwnmGxgAfmdL8XyMNeZiTVNO78aqWAC0CVvQmGtqLqAYnPf3SXWHAdQzfB4Fd4
+	 /BwlLK6/zOjRy1wQr7T9o+LEo9aFr3DcRwj3kGhqVeQJ+mL4nJ41IC4rA4Bk1tdZjA
+	 mnVome7Wk3vPQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 00C9E81EEB;
-	Fri, 21 Aug 2026 15:12:28 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 99D8C2BAA
+	by smtp1.osuosl.org (Postfix) with ESMTP id B486081F01;
+	Fri, 21 Aug 2026 15:12:30 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id BA7241CF2
  for <buildroot@buildroot.org>; Fri, 21 Aug 2026 15:11:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7A16160666
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9B36C8117B
  for <buildroot@buildroot.org>; Fri, 21 Aug 2026 15:11:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6lqc0qXen9RV for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id V-Av5V9krzJ1 for <buildroot@buildroot.org>;
  Fri, 21 Aug 2026 15:11:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id AAF6760884
+ by smtp1.osuosl.org (Postfix) with ESMTP id D761981140
  for <buildroot@buildroot.org>; Fri, 21 Aug 2026 15:11:11 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1DEF58E17F; Fri, 21 Aug 2026 15:10:18 +0000 (UTC)
+ id 4AC5E8E127; Fri, 21 Aug 2026 15:10:18 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 20 Aug 2026 15:03:12 +0200
+Date: Fri, 21 Aug 2026 11:48:26 +0200
 X-Git-Refname: refs/heads/2026.05.x
-X-Git-Oldrev: 5137a02a8a23fd95c1622373b66b3085f909ae56
-X-Git-Newrev: 08f74f598b0a4187ad5178b7d6ef709ae858401a
+X-Git-Oldrev: 6700a74d5e899f0f6ab88bcc85c4be2a71634092
+X-Git-Newrev: 583e189d42ffcb8713734f99991b25bb89d3639a
 X-Patchwork-Hint: ignore
-Message-Id: <20260821151018.1DEF58E17F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.05.x] package/uclibc: Fix SSP
- support for RISCV32
+Message-Id: <20260821151018.4AC5E8E127@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.05.x] package/apache: use
+ "Debian" filesystem layout to fix read-only rootfs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -75,203 +75,96 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/08f74f598b0a4187ad5178b7d6ef709ae858401a
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/583e189d42ffcb8713734f99991b25bb89d3639a
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.05.x
 
-Add patch pending upstream to fix SSP for RISCV32.
+The previous configuration placed both logs and PID file in /var/logs,
+which is not writable with a read-only rootfs (e.g. squashfs), as well
+as non-standard. Starting HTTPD during boot failed with:
 
-Fixes:
-  https://autobuild.buildroot.org/results/1b6/1b6f2161b11390b6545bddbc39b444401c718ebb/
+(30)Read-only file system: AH00091: httpd: could not open error log file /var/logs/error_log.
+AH00015: Unable to open logs
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Tested-by: Romain Naour <romain.naour@smile.fr>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 3c4b5e31df0a8fcbc45c88cb9d0ca4546254d7a7)
+An additional issue was that the Buildroot-default --prefix=/usr
+override meant various Apache-internal directories (e.g. htdocs) were
+placed directly in /usr. Note that the upstream default prefix is
+/usr/local/apache2, not /usr/local.
+
+Using the "Debian" layout provides a standard-compatible layout with
+logs in /var/log/apache2 and PID file in /var/run/apache2 (both in
+tmpfs with the default Buildroot fstab). Both directories need to
+exist when the server starts, so handle that in the init script.
+
+Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 1006666f67ba2837ba4cf1014186f3b1cc8f3415)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- .../uclibc/0001-Fix-SSP-support-for-riscv32.patch  | 174 +++++++++++++++++++++
- 1 file changed, 174 insertions(+)
+ package/apache/S50apache      |  2 ++
+ package/apache/apache.mk      | 13 ++++++++-----
+ package/apache/apache.service |  1 +
+ 3 files changed, 11 insertions(+), 5 deletions(-)
 
-diff --git a/package/uclibc/0001-Fix-SSP-support-for-riscv32.patch b/package/uclibc/0001-Fix-SSP-support-for-riscv32.patch
-new file mode 100644
-index 0000000000..b2e38726f5
---- /dev/null
-+++ b/package/uclibc/0001-Fix-SSP-support-for-riscv32.patch
-@@ -0,0 +1,174 @@
-+From c6efc293a52fdde7d4876243faaaa768fe052719 Mon Sep 17 00:00:00 2001
-+From: Waldemar Brodkorb <wbx@openadk.org>
-+Date: Sat, 15 Aug 2026 18:20:33 +0200
-+Subject: [PATCH] Fix SSP support for riscv32
+diff --git a/package/apache/S50apache b/package/apache/S50apache
+index 71e8837bae..fd1c58312f 100644
+--- a/package/apache/S50apache
++++ b/package/apache/S50apache
+@@ -2,6 +2,8 @@
+ # shellcheck disable=SC2034 # checkpackage-required variable
+ DAEMON="apache"
+ 
++mkdir -p "/var/log/apache2" "/var/run/apache2"
 +
-+On modern 32-bit architectures like RISC-V (riscv32), legacy 32-bit
-+time syscalls like __NR_gettimeofday are intentionally omitted because
-+RV32 implements a strict time64-only ABI to avoid the Year 2038 bug.
-+
-+Therefore, use AT_RANDOM from the auxiliary vector first, as glibc does,
-+to obtain random data for the stack canary. If AT_RANDOM is unavailable,
-+fall back to reading random data from /dev/urandom.
-+
-+Tested with aarch64, riscv32 and riscv32 noMMU targets.
-+
-+Upstream: https://mailman.openadk.org/mailman3/hyperkitty/list/devel@uclibc-ng.org/thread/WIKMWPXJYAPTVVZ2MMZINUJNPIJXBMOE/
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-+---
-+ extra/Configs/Config.in               | 10 -------
-+ ldso/include/dl-syscall.h             | 12 --------
-+ ldso/ldso/ldso.c                      |  4 ++-
-+ libc/misc/internals/__uClibc_main.c   |  4 ++-
-+ libc/sysdeps/linux/common/dl-osinfo.h | 40 +++++++++++++++++----------
-+ 5 files changed, 32 insertions(+), 38 deletions(-)
-+
-+diff --git a/extra/Configs/Config.in b/extra/Configs/Config.in
-+index c3aabf1b4..15a072593 100644
-+--- a/extra/Configs/Config.in
-++++ b/extra/Configs/Config.in
-+@@ -2211,16 +2211,6 @@ config UCLIBC_HAS_SSP
-+ 
-+ 	  Most people will answer N.
-+ 
-+-config SSP_QUICK_CANARY
-+-	bool "Use simple guard values without accessing /dev/urandom"
-+-	depends on UCLIBC_HAS_SSP
-+-	help
-+-	  Use gettimeofday(2) to define the __guard without accessing
-+-	  /dev/urandom.
-+-	  WARNING: This makes smashing stack protector vulnerable to timing
-+-	  	attacks.
-+-	  Most people will answer N.
-+-
-+ choice
-+ 	prompt "Propolice protection blocking signal"
-+ 	depends on UCLIBC_HAS_SSP
-+diff --git a/ldso/include/dl-syscall.h b/ldso/include/dl-syscall.h
-+index c143b8d45..e08b2cd41 100644
-+--- a/ldso/include/dl-syscall.h
-++++ b/ldso/include/dl-syscall.h
-+@@ -260,18 +260,6 @@ _dl_pread(int fd, void *buf, size_t count, off_t offset)
-+ }
-+ #endif
-+ 
-+-#ifdef __UCLIBC_HAS_SSP__
-+-# include <sys/time.h>
-+-# define __NR__dl_gettimeofday __NR_gettimeofday
-+-static __always_inline _syscall2(int, _dl_gettimeofday, struct timeval *, tv,
-+-# ifdef __USE_BSD
-+-                        struct timezone *
-+-# else
-+-                        void *
-+-# endif
-+-						, tz)
-+-#endif
-+-
-+ /* Some architectures always use 12 as page shift for mmap2() eventhough the
-+  * real PAGE_SHIFT != 12.  Other architectures use the same value as
-+  * PAGE_SHIFT...
-+diff --git a/ldso/ldso/ldso.c b/ldso/ldso/ldso.c
-+index 55f7d7e45..96ee3d496 100755
-+--- a/ldso/ldso/ldso.c
-++++ b/ldso/ldso/ldso.c
-+@@ -1225,7 +1225,9 @@ of this helper program; chances are you did not intend to run this program.\n\
-+ #ifdef __UCLIBC_HAS_SSP__
-+ 	_dl_debug_early("Setting up SSP guards\n");
-+ 	/* Set up the stack checker's canary.  */
-+-	stack_chk_guard = _dl_setup_stack_chk_guard ();
-++	stack_chk_guard = _dl_setup_stack_chk_guard (
-++		_dl_auxvt[AT_RANDOM].a_type == AT_RANDOM ?
-++		(void *)_dl_auxvt[AT_RANDOM].a_un.a_val : NULL);
-+ # ifdef THREAD_SET_STACK_GUARD
-+ 	THREAD_SET_STACK_GUARD (stack_chk_guard);
-+ # else
-+diff --git a/libc/misc/internals/__uClibc_main.c b/libc/misc/internals/__uClibc_main.c
-+index 549606505..bbf471b17 100644
-+--- a/libc/misc/internals/__uClibc_main.c
-++++ b/libc/misc/internals/__uClibc_main.c
-+@@ -296,7 +296,9 @@ void __uClibc_init(void)
-+ #ifndef SHARED
-+ # ifdef __UCLIBC_HAS_SSP__
-+     /* Set up the stack checker's canary.  */
-+-    stack_chk_guard = _dl_setup_stack_chk_guard();
-++    stack_chk_guard = _dl_setup_stack_chk_guard(
-++    _dl_auxvt[AT_RANDOM].a_type == AT_RANDOM ?
-++        (void *)_dl_auxvt[AT_RANDOM].a_un.a_val : NULL);
-+ #  ifdef THREAD_SET_STACK_GUARD
-+     THREAD_SET_STACK_GUARD (stack_chk_guard);
-+ #  else
-+diff --git a/libc/sysdeps/linux/common/dl-osinfo.h b/libc/sysdeps/linux/common/dl-osinfo.h
-+index 3110cb05d..0a42ea094 100644
-+--- a/libc/sysdeps/linux/common/dl-osinfo.h
-++++ b/libc/sysdeps/linux/common/dl-osinfo.h
-+@@ -21,22 +21,42 @@
-+ #  ifdef IS_IN_libc
-+ #   include <fcntl.h>
-+ #   include <unistd.h>
-+-#   include <sys/time.h>
-++#   include <string.h>
-+ #   define OPEN open
-+ #   define READ read
-+ #   define CLOSE close
-+-#   define GETTIMEOFDAY gettimeofday
-++#   define MEMCPY memcpy
-+ #  else
-++#   include <dl-string.h>
-+ #   define OPEN _dl_open
-+ #   define READ _dl_read
-+ #   define CLOSE _dl_close
-+-#   define GETTIMEOFDAY _dl_gettimeofday
-++#   define MEMCPY _dl_memcpy
-+ #  endif
-+ 
-+-static __always_inline uintptr_t _dl_setup_stack_chk_guard(void)
-++static __always_inline uintptr_t
-++_dl_setup_stack_chk_guard(void *dl_random)
-+ {
-+ 	uintptr_t ret;
-+-#  ifndef __SSP_QUICK_CANARY__
-++
-++	/*
-++	 * Linux supplies random data through AT_RANDOM.
-++	 * Use it directly when available.
-++	 */
-++	if (dl_random != NULL) {
-++		MEMCPY(&ret, dl_random, sizeof(ret));
-++
-++#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-++		ret &= ~(uintptr_t)0xff;
-++#elif __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
-++		ret &= ~((uintptr_t)0xff << (8 * (sizeof(ret) - 1)));
-++#else
-++# error "Unknown byte order"
-++#endif
-++
-++		return ret;
-++	}
-++
-+ 	{
-+ 		int fd = OPEN("/dev/urandom", O_RDONLY, 0);
-+ 		if (fd >= 0) {
-+@@ -46,18 +66,10 @@ static __always_inline uintptr_t _dl_setup_stack_chk_guard(void)
-+ 				return ret;
-+ 		}
-+ 	}
-+-#  endif /* !__SSP_QUICK_CANARY__ */
-+ 
-+-	/* Start with the "terminator canary". */
-++	/* Fallback just the "terminator canary". */
-+ 	ret = 0xFF0A0D00UL;
-+ 
-+-	/* Everything failed? Or we are using a weakened model of the
-+-	 * terminator canary */
-+-	{
-+-		struct timeval tv;
-+-		if (GETTIMEOFDAY(&tv, NULL) != (-1))
-+-			ret ^= tv.tv_usec ^ tv.tv_sec;
-+-	}
-+ 	return ret;
-+ }
-+ # endif /* libc || rtld */
-+-- 
-+2.47.3
-+
+ case "$1" in
+ 	start|restart|graceful|graceful-stop|stop)
+ 		apachectl -k "$1"
+diff --git a/package/apache/apache.mk b/package/apache/apache.mk
+index 2466bc9461..debc999bcd 100644
+--- a/package/apache/apache.mk
++++ b/package/apache/apache.mk
+@@ -43,7 +43,9 @@ APACHE_CONF_OPTS = \
+ 	--without-suexec-bin \
+ 	--enable-mods-shared=all \
+ 	--with-mpm=$(APACHE_MPM) \
+-	--disable-luajit
++	--disable-luajit \
++	--enable-layout=Debian \
++	--prefix=/
+ 
+ ifeq ($(BR2_PACKAGE_BROTLI),y)
+ APACHE_CONF_OPTS += --enable-brotli
+@@ -111,14 +113,15 @@ endif
+ 
+ define APACHE_FIX_STAGING_APACHE_CONFIG
+ 	$(SED) 's%"/usr/bin"%"$(STAGING_DIR)/usr/bin"%' $(STAGING_DIR)/usr/bin/apxs
+-	$(SED) 's%/usr/build%$(STAGING_DIR)/usr/build%' $(STAGING_DIR)/usr/bin/apxs
+-	$(SED) 's%^prefix =.*%prefix = $(STAGING_DIR)/usr%' $(STAGING_DIR)/usr/build/config_vars.mk
+-	$(SED) 's%^sbindir =.*%sbindir = $(STAGING_DIR)/usr/bin%' $(STAGING_DIR)/usr/build/config_vars.mk
++	$(SED) 's%/usr/share/apache2/build%$(STAGING_DIR)/usr/share/apache2/build%' $(STAGING_DIR)/usr/bin/apxs
++	$(SED) 's%^prefix =.*%prefix = $(STAGING_DIR)/%' $(STAGING_DIR)/usr/share/apache2/build/config_vars.mk
++	$(SED) 's%^sbindir =.*%sbindir = $(STAGING_DIR)/usr/sbin%' $(STAGING_DIR)/usr/share/apache2/build/config_vars.mk
++	$(SED) 's%^includedir = .*%includedir = $(STAGING_DIR)/usr/include/apache2%' $(STAGING_DIR)/usr/share/apache2/build/config_vars.mk
+ endef
+ APACHE_POST_INSTALL_STAGING_HOOKS += APACHE_FIX_STAGING_APACHE_CONFIG
+ 
+ define APACHE_CLEANUP_TARGET
+-	$(RM) -rf $(TARGET_DIR)/usr/manual $(TARGET_DIR)/usr/build
++	$(RM) -rf $(TARGET_DIR)/usr/share/apache2/default-site/htdocs/manual $(TARGET_DIR)/usr/share/apache2/build
+ endef
+ APACHE_POST_INSTALL_TARGET_HOOKS += APACHE_CLEANUP_TARGET
+ 
+diff --git a/package/apache/apache.service b/package/apache/apache.service
+index b8747e2658..561e4e2851 100644
+--- a/package/apache/apache.service
++++ b/package/apache/apache.service
+@@ -4,6 +4,7 @@ After=network.target
+ 
+ [Service]
+ Type=forking
++ExecStartPre=/bin/mkdir -p /var/log/apache2 /var/run/apache2
+ ExecStart=/usr/bin/apachectl start
+ ExecReload=/usr/bin/apachectl graceful
+ ExecStop=/usr/bin/apachectl stop
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
