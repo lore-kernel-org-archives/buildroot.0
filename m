@@ -4,58 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EEB1DC5DF93
-	for <buildroot@archiver.kernel.org>; Fri, 21 Aug 2026 15:07:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A419C5DF89
+	for <buildroot@archiver.kernel.org>; Fri, 21 Aug 2026 15:07:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B55578124D;
-	Fri, 21 Aug 2026 15:07:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A762D8117B;
+	Fri, 21 Aug 2026 15:07:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uaatFhHkagAa; Fri, 21 Aug 2026 15:07:29 +0000 (UTC)
+ id 6I4qe5Rm5Gix; Fri, 21 Aug 2026 15:07:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787324849;
-	bh=SQQHY52HEel8u8SLL3lksB+1T0Suis3E/XIjryXmZEo=;
+	s=default; t=1787324850;
+	bh=DVmL8d9ZQIuowsQnVZLNFBhqJjH6NmATvWJQzug+IUE=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=oZK33RC0jaFZwvwBxViHX3VREsWOvvMzeaOFYLy0CgjpEKmsL9PdmHGjf6rdQvFft
-	 XbC0eETg1bzDHL/niwAP6UdmGsjawa0uLNOyGLvRqWrSh6i21ijpU8AtEWPh+3n3KU
-	 fzCC3WkvAnVuNqapE+wbvHcVyltX/nr4/iSU0XVdcJQPKDf8dT/T+fSAGFWbVobpTJ
-	 Ilka36eEY+ig11cvCxJTTIiAFaThByodqQ1tWyoe6Zvd4O9iKPW9c2u+TYdS0+Ph/R
-	 WtRuJ9ResG9AMXKX4D2hxVbILW2vY5tOUKOUeFRL9Ijs1ZLbQOGA6SPMUNn7TeIJCr
-	 G7bhdPWLyjs8A==
+	b=f57IH1aTMbC85Gk67Fs1hzd+cmw2w3hhBV/Ncy36OcB3QB0ZTaNvGRndNeGmqxQzB
+	 Rc95tGYGFKQDso5YWEEAgXiX3zQcOyhHc4jJ/I/LLs0b5sIjD3X5KxJJgggqPsW6o5
+	 F4ywYBezHnXOvQo7MjsaSQHpSg7QvQ0NdAr/TPpqbpSFZS+lxuRCHLManL7BzszJDy
+	 tRT+w7RA9GkfzqA2oWac0HMbRvNZOQ5MZj1b1C0OwspGg14FtegdfWhIss1mP9ceYK
+	 SEuAcwO0oG12B5AfC62p8ZshFOs2tjdmI1HbIa1M8RNCIbYYSN4GrCQPgs2oo3p7C1
+	 pjVT2lUfsD1Pw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B00778123C;
-	Fri, 21 Aug 2026 15:07:28 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 0DB491CF2
+	by smtp1.osuosl.org (Postfix) with ESMTP id 856C281241;
+	Fri, 21 Aug 2026 15:07:30 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 155FA2017
  for <buildroot@buildroot.org>; Fri, 21 Aug 2026 15:07:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 008C440443
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0732740A11
  for <buildroot@buildroot.org>; Fri, 21 Aug 2026 15:07:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id B5p80zvUuOJJ for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id W_dVUiiET2ky for <buildroot@buildroot.org>;
  Fri, 21 Aug 2026 15:07:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C6456403D9
- for <buildroot@buildroot.org>; Fri, 21 Aug 2026 15:07:07 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5D10140B29
+ for <buildroot@buildroot.org>; Fri, 21 Aug 2026 15:07:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 468E68E0EC; Fri, 21 Aug 2026 15:06:14 +0000 (UTC)
+ id D0DB78E0EC; Fri, 21 Aug 2026 15:06:14 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Fri, 21 Aug 2026 17:04:19 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 8101c6df42ab156b04d87da0965cc13ac12f0750
-X-Git-Newrev: 619ddb7812893fdcb9179be760bb18f3cf57212b
+X-Git-Oldrev: 9812a9f41074577c5c8c6f95c81cc69568181347
+X-Git-Newrev: cdbb84c3ae7dc0637820dc7d5a3a8ba3e24a9146
 X-Patchwork-Hint: ignore
-Message-Id: <20260821150614.468E68E0EC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/dracut: security
- bump to version 112
+Message-Id: <20260821150614.D0DB78E0EC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/cramfs: bump to
+ version 2.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -75,49 +75,61 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/619ddb7812893fdcb9179be760bb18f3cf57212b
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/cdbb84c3ae7dc0637820dc7d5a3a8ba3e24a9146
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-Upstream changelog:
-https://github.com/dracut-ng/dracut/releases/tag/112
+Changes:
 
-The changelog lists multiple "security related commits", though only
-one mentions a CVE: CVE-2026-6893 [1], which allows a malicious DHCP
-server to inject code into shell scripts.
+Security and robustness release.  Notable cramfsck changes:
 
-[1] https://nvd.nist.gov/vuln/detail/CVE-2026-6893
+  * Reject dirent names containing "/", "." or ".." to close a path
+    traversal during `cramfsck -x` (reported in issue #12).
+  * Open regular files with O_CREAT|O_EXCL during extraction to
+    prevent duplicate-dirent attacks from truncating files reached
+    via a previously-extracted symlink.
+  * Fix outbuffer NUL termination and a 1-byte overflow in
+    do_symlink when running with both -v and -x.
+  * Harden romfs_read against truncated/malformed images by
+    zero-filling the window buffer and checking lseek/read returns.
+  * Reject directory entries that extend past their parent's size.
 
-Signed-off-by: Fiona Klute (Othermo GmbH) <fiona.klute@gmx.de>
+Documentation: README now documents cramfsck and lists all current
+mkcramfs options; stale hard-link and endianness claims corrected;
+NOTES trimmed of the 25-year-old Future Development section.
+
+(See https://github.com/npitre/cramfs-tools/releases/tag/v2.2)
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 7b2e6578267d27f37e3a9c8cdc1d053ed862a88b)
+(cherry picked from commit 2c96a67d9ba53dc152dce72e8ff08b5078a77b8c)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- package/dracut/dracut.hash | 2 +-
- package/dracut/dracut.mk   | 2 +-
+ package/cramfs/cramfs.hash | 2 +-
+ package/cramfs/cramfs.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/dracut/dracut.hash b/package/dracut/dracut.hash
-index 1b5b3dce55..3615c2af14 100644
---- a/package/dracut/dracut.hash
-+++ b/package/dracut/dracut.hash
+diff --git a/package/cramfs/cramfs.hash b/package/cramfs/cramfs.hash
+index 672266b468..3795c862c9 100644
+--- a/package/cramfs/cramfs.hash
++++ b/package/cramfs/cramfs.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256  ca949190692e91611ef16ea3642c0f764f63948860f3f742524310728c991493  dracut-111.tar.gz
-+sha256  839d21eb4bd27bb0ee40d74c9da46df088c2e1425fcd8c3ea62b7e3a3dd28a91  dracut-112.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/dracut/dracut.mk b/package/dracut/dracut.mk
-index 3a1c1567e8..0bd24d49f4 100644
---- a/package/dracut/dracut.mk
-+++ b/package/dracut/dracut.mk
+ # Locally computed:
+-sha256  cdb7a4ecad034f063b6456b37cdf653ae31758a224c32161e54712a9d7f01cc3  cramfs-2.1.tar.gz
++sha256  6217c93cbfa79ae720bad4139739c1bd7a665928a9bfc2dd820b98df27c66da2  cramfs-2.2.tar.gz
+ sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  COPYING
+diff --git a/package/cramfs/cramfs.mk b/package/cramfs/cramfs.mk
+index 85706d1a8e..a6196ca85e 100644
+--- a/package/cramfs/cramfs.mk
++++ b/package/cramfs/cramfs.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DRACUT_VERSION = 111
-+DRACUT_VERSION = 112
- DRACUT_SITE = $(call github,dracut-ng,dracut-ng,$(DRACUT_VERSION))
- DRACUT_LICENSE = GPL-2.0
- DRACUT_LICENSE_FILES = COPYING
+-CRAMFS_VERSION = 2.1
++CRAMFS_VERSION = 2.2
+ CRAMFS_SITE = $(call github,npitre,cramfs-tools,v$(CRAMFS_VERSION))
+ CRAMFS_LICENSE = GPL-2.0+
+ CRAMFS_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
