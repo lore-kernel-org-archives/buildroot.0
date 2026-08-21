@@ -1,72 +1,61 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 114F8C5DF7D
-	for <buildroot@archiver.kernel.org>; Fri, 21 Aug 2026 20:25:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D477BC5DF7D
+	for <buildroot@archiver.kernel.org>; Fri, 21 Aug 2026 20:30:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B7ED840C2D;
-	Fri, 21 Aug 2026 20:25:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 93E4B60AB9;
+	Fri, 21 Aug 2026 20:30:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WrdsVb-mcerq; Fri, 21 Aug 2026 20:25:10 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lw-xx_NH_p2g; Fri, 21 Aug 2026 20:30:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787343909;
-	bh=xa6Qt8wCD4qJ/f+E+qgdACzIZGzf7Bi3YOFhXhH5E/g=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=Z9vAKBZe9WZ7A6TMoCXrnNscn+1QnoR9Zg9BakqIHDZ44YHAKsyX98XWy3ZPUd1nQ
-	 baCu6x2U/QA4HZg/Cq/mLMa9tMSYdgyuQ+DZfgJ7xKnG2E8SmFGBgGtL6Oy+u0gB/J
-	 49c30VNEybqzJo5sPd9DqqvKA6aHKoruRHVFHA0PEkCMrEIPPtPTAT5tnDNIfHaiiA
-	 PvwES1qTqgHpx1j4mAzgb+awaV9mcn/4X5QEwZm4jIgrBSlSvbEgsPK0/g6YpFxSk9
-	 irYxqBA0LCRmlC0MPEl9ueG8M4HSaDbb947+Pj2zKti2QAYbkVwzaVFLvC0JyWq4rV
-	 v7ZvXjP1k6Ocg==
+	s=default; t=1787344237;
+	bh=BBEFpKZ1mcdow6pD/rXtArEgoqU3wYPLXo5pqSY3lCU=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=oBrBUOT0Syo22Ga8uPcHQD4Hi+5VXchx+h1yjStYY8ccvBR9cJ/Dt7tmuIiX3ml0o
+	 fCzV9gWV/wrFV7s053UWAdgBrsgvhyLoGjWDx9FHqtV6i0UWMiASORd7p78vX+EST1
+	 UdRlFjWdkoChbdOm73mMl8ty4Sz1jcvQEKAsO2jZN9siYZuQAnzgs0kk69FKneENWR
+	 4QTTXYcE3jgH7GTzF6xU2d6RYJWY/kPGzRa/fe9W/+1PDmRbXbBqusOmqhlynPTAj/
+	 U6h2Hqt9omVphe/KQ5YgMuGfOWJ7u5lay63c39IGRfb22hv+tiQwueiTGAVKCsQ9wM
+	 nzQM4gvGGg37g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D92ED40C54;
-	Fri, 21 Aug 2026 20:25:09 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id A4C664C4
- for <buildroot@buildroot.org>; Fri, 21 Aug 2026 20:25:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C62E960ABD;
+	Fri, 21 Aug 2026 20:30:37 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2E02E263
+ for <buildroot@buildroot.org>; Fri, 21 Aug 2026 20:30:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9671A40C54
- for <buildroot@buildroot.org>; Fri, 21 Aug 2026 20:25:08 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 13EA381257
+ for <buildroot@buildroot.org>; Fri, 21 Aug 2026 20:30:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WESBF--VXnDK for <buildroot@buildroot.org>;
- Fri, 21 Aug 2026 20:25:07 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
- helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6LjgVHEXaV9S for <buildroot@buildroot.org>;
+ Fri, 21 Aug 2026 20:30:35 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
- by smtp4.osuosl.org (Postfix) with ESMTPS id AF9EA40C2D
- for <buildroot@buildroot.org>; Fri, 21 Aug 2026 20:25:06 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-02.galae.net (Postfix) with ESMTPS id BA3621A178E
- for <buildroot@buildroot.org>; Fri, 21 Aug 2026 20:25:04 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 78403604AA;
- Fri, 21 Aug 2026 20:25:04 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 841F711C77608; 
- Fri, 21 Aug 2026 22:24:59 +0200 (CEST)
-Date: Fri, 21 Aug 2026 22:24:58 +0200
-To: Fengwei Tan <tfx2001@outlook.com>
-Cc: buildroot@buildroot.org
-Message-ID: <aoizvh0-63Qk71KB@windsurf>
-References: <aodS3qtR9YJL5U63@windsurf>
- <SY8P300MB0041233A165784A8729859B2F8A32@SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <SY8P300MB0041233A165784A8729859B2F8A32@SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM>
-X-Last-TLS-Session-Version: TLSv1.3
-Subject: Re: [Buildroot] [PATCH] package: fix builds with
- $(PKG)_FLAT_STACKSIZE
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 50CFF8124F
+ for <buildroot@buildroot.org>; Fri, 21 Aug 2026 20:30:35 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 964658E343; Fri, 21 Aug 2026 20:29:41 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 21 Aug 2026 22:13:27 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 7eb4a552c4037581144b1cbcce69daded51f24f1
+X-Git-Newrev: e4cf512c394f218cc71eb6b496ce4cb004c917bb
+X-Patchwork-Hint: ignore
+Message-Id: <20260821202941.964658E343@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/igh-ethercat: backport upstream
+ fix to build with Linux >= 6.19.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -78,52 +67,69 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/e4cf512c394f218cc71eb6b496ce4cb004c917bb
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-On Sat, Aug 22, 2026 at 01:26:13AM +0800, Fengwei Tan wrote:
+Fixes:
 
-> Sure. I would be glad to add a test case for this, and I will send it as
-> a separate patch.
+  https://autobuild.buildroot.org/results/9b270904b2f7cf9eaa661c98370c582a61ff2342/
 
-Excellent, thanks!
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ .../igh-ethercat/0002-Linux-6.19.0-support.patch   | 36 ++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
 
-> I am working on a fork of Buildroot for HPMicro MCUs:
-> https://github.com/hpm-rs/buildroot
-> 
-> I have ported Linux to a new RISC-V MCU called HPM6750 from HPMicro
-> Semiconductor Ltd., and I am adding board support for it to Buildroot.
-> 
-> I ran into this problem when trying to run FFmpeg on it. Initially, it
-> failed with a "stack smashing detected" error. To resolve this, I
-> attempted to use FFMPEG_FLAT_STACKSIZE to allocate a larger FLAT stack,
-> which led me to discover the build failure caused by this bug.
-
-Nice! To be honest I had never heard of HPMicro, so it's nice to
-discover.
-
-Do not hesitate to send patches to add support for your
-platform(s). However, for this, we will require that the support for
-your platform is also in the upstream Linux kernel: we don't want to
-carry dozens/hundreds of platform-specific patches in Buildroot.
-
-But aside from your platform-specific support, do not hesitate to
-submit any noMMU fixes you might have, like the one you already
-submitted.
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/igh-ethercat/0002-Linux-6.19.0-support.patch b/package/igh-ethercat/0002-Linux-6.19.0-support.patch
+new file mode 100644
+index 0000000000..6a6af5508c
+--- /dev/null
++++ b/package/igh-ethercat/0002-Linux-6.19.0-support.patch
+@@ -0,0 +1,36 @@
++From 2c947e90d93d9c5a0129b62744de9720b48d2a17 Mon Sep 17 00:00:00 2001
++From: Nicola Fontana <ntd@entidi.it>
++Date: Sun, 8 Mar 2026 15:39:41 +0100
++Subject: [PATCH] Linux 6.19.0 support
++
++Commit 89aec171d9d1ab168e43fcf9754b82e4c0aef9b9 (part of linux kernel
++6.19.0-rc1) introduced an arbitrarily sized sockaddr struct to be used
++instead of the classical one.
++
++Closes #200
++
++Upstream: https://gitlab.com/etherlab.org/ethercat/-/commit/c42c9cf8bc31c56cc20ae630605495e3f19f3f9a
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ devices/generic.c | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/devices/generic.c b/devices/generic.c
++index f6cef9b5..a08af54b 100644
++--- a/devices/generic.c
+++++ b/devices/generic.c
++@@ -234,7 +234,11 @@ int ec_gen_device_create_socket(
++     sa.sll_family = AF_PACKET;
++     sa.sll_protocol = htons(ETH_P_ETHERCAT);
++     sa.sll_ifindex = desc->ifindex;
+++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 19, 0)
+++    ret = kernel_bind(dev->socket, (struct sockaddr_unsized *) &sa, sizeof(sa));
+++#else
++     ret = kernel_bind(dev->socket, (struct sockaddr *) &sa, sizeof(sa));
+++#endif
++     if (ret) {
++         printk(KERN_ERR PFX "Failed to bind() socket to interface"
++                 " (ret = %i).\n", ret);
++-- 
++2.55.0
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
