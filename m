@@ -4,58 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EBDF7C5DF89
-	for <buildroot@archiver.kernel.org>; Fri, 21 Aug 2026 15:08:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36975C5DF94
+	for <buildroot@archiver.kernel.org>; Fri, 21 Aug 2026 15:08:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A4BBC8142F;
-	Fri, 21 Aug 2026 15:08:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C43C18145A;
+	Fri, 21 Aug 2026 15:08:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id F8BFe2uH6fxe; Fri, 21 Aug 2026 15:08:18 +0000 (UTC)
+ id OIUSTUCifF2h; Fri, 21 Aug 2026 15:08:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787324898;
-	bh=Y8jhjysTvYefbRZnlI5I0W4IW+AIvDEGS8q9tYoZYjo=;
+	s=default; t=1787324899;
+	bh=LPeAj4uOVnSCiwMh+7zS90McGWwjRGoN3GWUpUcFXQE=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=lxH6ZVSkRIvmWoNFszVdQi9g+gtpPUPiSSQ5DJm8gQDOzDwz8CX0PgLq9sdlj8ew2
-	 ejKmSzEKA8sDRGAy8MPpukw9tceYkFqqqH8bU7/Rzhmt4NHI85uAzG4DfF6fexaWkg
-	 OXoAlk2NbjBqML5MAcSyxrE2ImX9bVSF94pPpZP30qUgrikeSQIub0ArOD3I48BivT
-	 B74iYfzOdAS8cOMbFR6ayS+UVVWUrnLPHaYrDoGySv3vIep/g9W36jpfbAbWvzJVyN
-	 g3aqcrye7CkIo4du9dbycGookH3V85WnTQ+BDxnXntOPRlky4YNrNmt74TJ8ExsZTo
-	 7FQjVPHAMtDMA==
+	b=ZXEH69lfVlYSAAxI6LnV9S39vg92gZTTYNMNpaJ2m4HZKWQdBNVcmwLKvuBbHBpnu
+	 z5RwoSCmmg6LVvSQtHEH1LdGUKN/2xMZKGMGUzgdT803YiacTadk2l9FnpwpkJzHb+
+	 KU2sXxpa4l3oymSnjbyz2ROFzfcorsMl1JA1axQPOfwfx7eLztHS6CQFEMeLJ7BDPh
+	 aJnYrUggcJxi4/9r9AnZeNtKIvDjadGOKta/Mk1d+hNvPCnFH7qLn2I01JNUoUaNWj
+	 LIFXHEP+N5ewOblMxng7ol8rfmick07tLepFnYT4X+XNuZdeIWcqGaWfPrJ5gNbNfd
+	 fjO5u+hCZ5/Uw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B0C5D81420;
-	Fri, 21 Aug 2026 15:08:18 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id A551729B
+	by smtp1.osuosl.org (Postfix) with ESMTP id CAB6681259;
+	Fri, 21 Aug 2026 15:08:19 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id B0EB51CF2
  for <buildroot@buildroot.org>; Fri, 21 Aug 2026 15:07:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 976B040026
+ by smtp2.osuosl.org (Postfix) with ESMTP id AE2D5400B4
  for <buildroot@buildroot.org>; Fri, 21 Aug 2026 15:07:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id M8WFPo9JUTYO for <buildroot@buildroot.org>;
+ id 8htu3U_BVvzk for <buildroot@buildroot.org>;
  Fri, 21 Aug 2026 15:07:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B7BDF4041D
- for <buildroot@buildroot.org>; Fri, 21 Aug 2026 15:07:08 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 11843400C1
+ for <buildroot@buildroot.org>; Fri, 21 Aug 2026 15:07:09 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 37FC48E0EC; Fri, 21 Aug 2026 15:06:15 +0000 (UTC)
+ id 8299D8E0EC; Fri, 21 Aug 2026 15:06:15 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Fri, 21 Aug 2026 17:04:28 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 7abb4198336547688a770d57a9b5e765e2ce0f35
-X-Git-Newrev: 641c2ec18ef63fb0813606d778938eae5ad06fe8
+X-Git-Oldrev: 94cafd26735775cd74e17fb56b05ca393d3ede72
+X-Git-Newrev: fc538710536aa4a8390492de807f3e79a9de6d00
 X-Patchwork-Hint: ignore
-Message-Id: <20260821150615.37FC48E0EC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/gcc: drop
- ARC-specific host-flex/host-bison dependency
+Message-Id: <20260821150615.8299D8E0EC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/containerd:
+ security bump version to 2.0.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -75,40 +75,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/641c2ec18ef63fb0813606d778938eae5ad06fe8
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/fc538710536aa4a8390492de807f3e79a9de6d00
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-host-flex/host-bison are needed when building GCC from Git or from a
-snapshot, not from release tarballs. The condition for the dependency
-was actually incorrect: it was needed for the ARC-specific gcc
-version (BR2_GCC_VERSION_ARC) but not for the ARC architecture in
-general: building upstream GCC release tarballs for ARC does not
-require host-flex/host-bison.
+https://github.com/containerd/containerd/releases/tag/v2.0.11
 
-Cc: ARC Maintainers <arc-buildroot@synopsys.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 4f867f10392bcb651a42ec2ccf68efddfccf8c43)
+https://github.com/containerd/containerd/releases/tag/v2.0.10
+Fixes CVE-2026-47262 & CVE-2026-53488.
+
+https://github.com/containerd/containerd/releases/tag/v2.0.9
+Fixes CVE-2026-46680.
+
+https://github.com/containerd/containerd/releases/tag/v2.0.8
+Fixes CVE-2026-35469.
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit d7acf1235564c48881eda9ac53a4abbfa9508f8c)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- package/gcc/gcc.mk | 4 ----
- 1 file changed, 4 deletions(-)
+ package/containerd/containerd.hash | 2 +-
+ package/containerd/containerd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index 8a3739b007..834c0a4c5f 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -198,10 +198,6 @@ else
- HOST_GCC_COMMON_CONF_OPTS += --without-isl --without-cloog
- endif
+diff --git a/package/containerd/containerd.hash b/package/containerd/containerd.hash
+index 0916c603bb..410e5d61e1 100644
+--- a/package/containerd/containerd.hash
++++ b/package/containerd/containerd.hash
+@@ -1,3 +1,3 @@
+ # Computed locally
+-sha256  2bbf9fedcf4ab31736fcb3ce224ef22610a87da9d53bbd8f6d205710fd849831  containerd-2.0.7-go2.tar.gz
++sha256  eadaa5301c0f633f6fed6a3b22f5cf4343ac522401ad2e84bb3299f811a35976  containerd-2.0.11-go2.tar.gz
+ sha256  4bbe3b885e8cd1907ab4cf9a41e862e74e24b5422297a4f2fe524e6a30ada2b4  LICENSE
+diff --git a/package/containerd/containerd.mk b/package/containerd/containerd.mk
+index baac19d406..630106b1a2 100644
+--- a/package/containerd/containerd.mk
++++ b/package/containerd/containerd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--ifeq ($(BR2_arc),y)
--HOST_GCC_COMMON_DEPENDENCIES += host-flex host-bison
--endif
--
- ifeq ($(BR2_SOFT_FLOAT),y)
- # only mips*-*-*, arm*-*-* and sparc*-*-* accept --with-float
- # powerpc seems to be needing it as well
+-CONTAINERD_VERSION = 2.0.7
++CONTAINERD_VERSION = 2.0.11
+ CONTAINERD_SITE = $(call github,containerd,containerd,v$(CONTAINERD_VERSION))
+ CONTAINERD_LICENSE = Apache-2.0
+ CONTAINERD_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
