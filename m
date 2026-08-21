@@ -1,60 +1,67 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03BBFC5DF8C
-	for <buildroot@archiver.kernel.org>; Fri, 21 Aug 2026 21:09:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6221FC5DF7D
+	for <buildroot@archiver.kernel.org>; Fri, 21 Aug 2026 21:09:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B8E54406F6;
-	Fri, 21 Aug 2026 21:09:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6E9728128D;
+	Fri, 21 Aug 2026 21:09:42 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hfVdbL6gn9n0; Fri, 21 Aug 2026 21:09:40 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1787346580;
+	bh=ILqsqFgriM/B7kMCKZT0+zHVQ8GS/zDdeEJPpdnu4bE=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=YusZC1gPoI/meTavPOayb2W6VdAiP/HOH19aTrEhXW6Y/uaikP9L/4yUxJw+F12ZL
+	 bt8+qz/6iYYLPIyjD7zBoMVtXl72kPDYMax52z1FgM87eHXhjaQCwmPppkBDzcznII
+	 +BiRyGP8Tz5ZPChsa6tsM9wFf7MzY8F+kvzigIFXbt5mHXScjIk0m72QVJDEql6yXi
+	 l04EWLrG2mpbj13tLcT62vsM5IjNp+Fs9RNUlEzVh8BQd9oOHIYIiFMEcSYRDDTni9
+	 uV8I9LTy3mxui1ssoQ/kaOW0KaIYfY/JCkBoBrs6vYtzdGOK6HBOnQU0jxviMc2huN
+	 5e3dIxpJZD1cQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id C433381281;
+	Fri, 21 Aug 2026 21:09:40 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id E9A4D386
+ for <buildroot@buildroot.org>; Fri, 21 Aug 2026 21:09:38 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id DAF75409F7
+ for <buildroot@buildroot.org>; Fri, 21 Aug 2026 21:09:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ob8ooZvyrAbV; Fri, 21 Aug 2026 21:09:26 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787346566;
-	bh=RyJO2btTpEJ7URdEyOr4t7AiHHI3I/5Ug1McjsFBRfA=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=eIyykDr7rv1XjzpLXz0z7JkybHzZAgLDU0UDeU5ulV3h0y9x/mAz+eDAIJ+lO2h3u
-	 +zCB/LbpPEwO8BAq85lF90T6lK9IO/RRkWYGW1MLsMkVqKsjIXiSOcmHUQmp+kiMf3
-	 J3TshckbslhjnC0m8uSWU/+dQ2xB2HooAN/TzUTx7ASfh/xGkBBCsX3zTJRDd8S0rs
-	 HirtiG/3TysRCM1wSedBqUNVNG+2trlGPs2s49wJ3i+ApMwD7Hf7uRG2TICXag+9Xm
-	 BXb28ymTd9hzCaskePP9N8IrXnp163Pp1cHVlS5HFhPSObX5Q1NlQHg5TZpv00vaUk
-	 HuTE9E/aUHI1A==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B02A0409D9;
-	Fri, 21 Aug 2026 21:09:26 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 569AC93F
- for <buildroot@buildroot.org>; Fri, 21 Aug 2026 21:09:24 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3CF2260A9B
- for <buildroot@buildroot.org>; Fri, 21 Aug 2026 21:09:24 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yVbj-LkmRAxk for <buildroot@buildroot.org>;
- Fri, 21 Aug 2026 21:09:23 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 57F4160698
- for <buildroot@buildroot.org>; Fri, 21 Aug 2026 21:09:23 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9CC278E39C; Fri, 21 Aug 2026 21:08:29 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 21 Aug 2026 22:39:59 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e4cf512c394f218cc71eb6b496ce4cb004c917bb
-X-Git-Newrev: 5795000c25c89db3f568c4039b21a256fc662706
-X-Patchwork-Hint: ignore
-Message-Id: <20260821210829.9CC278E39C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/uclibc: PPC fix e500 fenv support
+ id 4AwTIzOzE81h for <buildroot@buildroot.org>;
+ Fri, 21 Aug 2026 21:09:38 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0189D406F6
+ for <buildroot@buildroot.org>; Fri, 21 Aug 2026 21:09:37 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id 8AC3313F880;
+ Fri, 21 Aug 2026 23:09:33 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Fri, 21 Aug 2026 23:09:33 +0200
+MIME-Version: 1.0
+Date: Fri, 21 Aug 2026 23:09:33 +0200
+To: Waldemar Brodkorb <wbx@openadk.org>
+Cc: buildroot@buildroot.org
+In-Reply-To: <aoR7ez3vQcTtkViY@waldemar-brodkorb.de>
+References: <aoR7ez3vQcTtkViY@waldemar-brodkorb.de>
+User-Agent: Webmail Free/1.6.18
+Message-ID: <55341a46afb6228ad52e4d2563541c35@free.fr>
+X-Sender: ju.o@free.fr
+Subject: Re: [Buildroot] [PATCH] package/uclibc: PPC fix e500 fenv support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -68,273 +75,23 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/5795000c25c89db3f568c4039b21a256fc662706
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 18/08/2026 17:34, Waldemar Brodkorb wrote:
+> Problem found via Buildroot autobuilders, seems to be some
+> bitrotting code. Tested with qemu_ppc_mpc8544ds_defconfig
+> and a hard-float toolchain.
+> 
+> Fixes:
+>  - 
+> https://autobuild.buildroot.net/results/464/46448883b1682718aeff066d204349d8e9a3b1d1/
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 
-Problem found via Buildroot autobuilders, seems to be some
-bitrotting code. Tested with qemu_ppc_mpc8544ds_defconfig
-and a hard-float toolchain.
-
-Fixes:
- - https://autobuild.buildroot.net/results/464/46448883b1682718aeff066d204349d8e9a3b1d1/
- - https://gitlab.com/buildroot.org/buildroot/-/jobs/15969219363
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-[Julien: add link to CI build failure]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- .../uclibc/0002-ppc-fix-e500-fenv-support.patch    | 237 +++++++++++++++++++++
- 1 file changed, 237 insertions(+)
-
-diff --git a/package/uclibc/0002-ppc-fix-e500-fenv-support.patch b/package/uclibc/0002-ppc-fix-e500-fenv-support.patch
-new file mode 100644
-index 0000000000..bc64b8f762
---- /dev/null
-+++ b/package/uclibc/0002-ppc-fix-e500-fenv-support.patch
-@@ -0,0 +1,237 @@
-+From dff69277d71965cff0a757a030e03994a4a83aa6 Mon Sep 17 00:00:00 2001
-+From: Waldemar Brodkorb <wbx@openadk.org>
-+Date: Tue, 18 Aug 2026 06:02:54 +0200
-+Subject: [PATCH] ppc: fix e500 fenv support
-+
-+Upstream: https://gogs.waldemar-brodkorb.de/oss/uclibc-ng/commit/dff69277d71965cff0a757a030e03994a4a83aa6
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-+---
-+ libm/powerpc/e500/fpu/fclrexcpt.c    | 1 -
-+ libm/powerpc/e500/fpu/fe_nomask.c    | 1 -
-+ libm/powerpc/e500/fpu/fedisblxcpt.c  | 1 -
-+ libm/powerpc/e500/fpu/feenablxcpt.c  | 1 -
-+ libm/powerpc/e500/fpu/fegetenv.c     | 1 -
-+ libm/powerpc/e500/fpu/fegetexcept.c  | 1 -
-+ libm/powerpc/e500/fpu/fegetround.c   | 1 -
-+ libm/powerpc/e500/fpu/feholdexcpt.c  | 2 --
-+ libm/powerpc/e500/fpu/fenv_const.c   | 1 -
-+ libm/powerpc/e500/fpu/fesetenv.c     | 5 +----
-+ libm/powerpc/e500/fpu/fesetround.c   | 2 --
-+ libm/powerpc/e500/fpu/feupdateenv.c  | 1 -
-+ libm/powerpc/e500/fpu/fgetexcptflg.c | 1 -
-+ libm/powerpc/e500/fpu/fraiseexcpt.c  | 3 ---
-+ libm/powerpc/e500/fpu/fsetexcptflg.c | 1 -
-+ libm/powerpc/e500/fpu/ftestexcept.c  | 1 -
-+ 16 files changed, 1 insertion(+), 23 deletions(-)
-+
-+diff --git a/libm/powerpc/e500/fpu/fclrexcpt.c b/libm/powerpc/e500/fpu/fclrexcpt.c
-+index 805aaa487..02dc4bcf8 100644
-+--- a/libm/powerpc/e500/fpu/fclrexcpt.c
-++++ b/libm/powerpc/e500/fpu/fclrexcpt.c
-+@@ -1,6 +1,5 @@
-+ /* Clear given exceptions in current floating-point environment.
-+    Copyright (C) 2004 Free Software Foundation, Inc.
-+-   This file is part of the GNU C Library.
-+ 
-+    The GNU C Library is free software; you can redistribute it and/or
-+    modify it under the terms of the GNU Lesser General Public
-+diff --git a/libm/powerpc/e500/fpu/fe_nomask.c b/libm/powerpc/e500/fpu/fe_nomask.c
-+index d5915165c..fe709803d 100644
-+--- a/libm/powerpc/e500/fpu/fe_nomask.c
-++++ b/libm/powerpc/e500/fpu/fe_nomask.c
-+@@ -1,6 +1,5 @@
-+ /* Procedure definition for FE_NOMASK_ENV.
-+    Copyright (C) 1997 Free Software Foundation, Inc.
-+-   This file is part of the GNU C Library.
-+ 
-+    The GNU C Library is free software; you can redistribute it and/or
-+    modify it under the terms of the GNU Lesser General Public
-+diff --git a/libm/powerpc/e500/fpu/fedisblxcpt.c b/libm/powerpc/e500/fpu/fedisblxcpt.c
-+index 0700f4577..0a54df6fb 100644
-+--- a/libm/powerpc/e500/fpu/fedisblxcpt.c
-++++ b/libm/powerpc/e500/fpu/fedisblxcpt.c
-+@@ -1,6 +1,5 @@
-+ /* Disable floating-point exceptions.
-+    Copyright (C) 2004 Free Software Foundation, Inc.
-+-   This file is part of the GNU C Library.
-+    Contributed by Aldy Hernandez <aldyh@redhat.com>, 2004.
-+ 
-+    The GNU C Library is free software; you can redistribute it and/or
-+diff --git a/libm/powerpc/e500/fpu/feenablxcpt.c b/libm/powerpc/e500/fpu/feenablxcpt.c
-+index 9f03181f4..bc1c30a83 100644
-+--- a/libm/powerpc/e500/fpu/feenablxcpt.c
-++++ b/libm/powerpc/e500/fpu/feenablxcpt.c
-+@@ -1,6 +1,5 @@
-+ /* Enable floating-point exceptions.
-+    Copyright (C) 2004 Free Software Foundation, Inc.
-+-   This file is part of the GNU C Library.
-+    Contributed by Aldy Hernandez <aldyh@redhat.com>, 2004.
-+ 
-+    The GNU C Library is free software; you can redistribute it and/or
-+diff --git a/libm/powerpc/e500/fpu/fegetenv.c b/libm/powerpc/e500/fpu/fegetenv.c
-+index c1a914dc3..934ac92e9 100644
-+--- a/libm/powerpc/e500/fpu/fegetenv.c
-++++ b/libm/powerpc/e500/fpu/fegetenv.c
-+@@ -1,7 +1,6 @@
-+ /* Store current floating-point environment.
-+    Copyright (C) 2004 Free Software Foundation, Inc.
-+    Contributed by Aldy Hernandez <aldyh@redhat.com>, 2004
-+-   This file is part of the GNU C Library.
-+ 
-+    The GNU C Library is free software; you can redistribute it and/or
-+    modify it under the terms of the GNU Lesser General Public
-+diff --git a/libm/powerpc/e500/fpu/fegetexcept.c b/libm/powerpc/e500/fpu/fegetexcept.c
-+index bf0215d62..b932f8036 100644
-+--- a/libm/powerpc/e500/fpu/fegetexcept.c
-++++ b/libm/powerpc/e500/fpu/fegetexcept.c
-+@@ -1,6 +1,5 @@
-+ /* Get floating-point exceptions.
-+    Copyright (C) 2004 Free Software Foundation, Inc.
-+-   This file is part of the GNU C Library.
-+    Contributed by Aldy Hernandez <aldyh@redhat.com>, 2004.
-+ 
-+    The GNU C Library is free software; you can redistribute it and/or
-+diff --git a/libm/powerpc/e500/fpu/fegetround.c b/libm/powerpc/e500/fpu/fegetround.c
-+index f501c6ce8..7b54ead30 100644
-+--- a/libm/powerpc/e500/fpu/fegetround.c
-++++ b/libm/powerpc/e500/fpu/fegetround.c
-+@@ -1,6 +1,5 @@
-+ /* Return current rounding direction.
-+    Copyright (C) 2004 Free Software Foundation, Inc.
-+-   This file is part of the GNU C Library.
-+    Contributed by Aldy Hernandez <aldyh@redhat.com>, 2004.
-+ 
-+    The GNU C Library is free software; you can redistribute it and/or
-+diff --git a/libm/powerpc/e500/fpu/feholdexcpt.c b/libm/powerpc/e500/fpu/feholdexcpt.c
-+index edeb2cf81..2b0c4ca4c 100644
-+--- a/libm/powerpc/e500/fpu/feholdexcpt.c
-++++ b/libm/powerpc/e500/fpu/feholdexcpt.c
-+@@ -1,6 +1,5 @@
-+ /* Store current floating-point environment and clear exceptions.
-+    Copyright (C) 2004, 2006 Free Software Foundation, Inc.
-+-   This file is part of the GNU C Library.
-+    Contributed by Aldy Hernandez <aldyh@redhat.com>, 2004.
-+ 
-+    The GNU C Library is free software; you can redistribute it and/or
-+@@ -41,4 +40,3 @@ feholdexcept (fenv_t *envp)
-+ 
-+   return 0;
-+ }
-+-libm_hidden_def (feholdexcept)
-+diff --git a/libm/powerpc/e500/fpu/fenv_const.c b/libm/powerpc/e500/fpu/fenv_const.c
-+index 3c9f5578a..cfbff0793 100644
-+--- a/libm/powerpc/e500/fpu/fenv_const.c
-++++ b/libm/powerpc/e500/fpu/fenv_const.c
-+@@ -1,6 +1,5 @@
-+ /* Constants for fenv_bits.h.
-+    Copyright (C) 2004 Free Software Foundation, Inc.
-+-   This file is part of the GNU C Library.
-+    Contributed by Aldy Hernandez <aldyh@redhat.com>, 2004.
-+ 
-+    The GNU C Library is free software; you can redistribute it and/or
-+diff --git a/libm/powerpc/e500/fpu/fesetenv.c b/libm/powerpc/e500/fpu/fesetenv.c
-+index 392e0c0bf..28d113959 100644
-+--- a/libm/powerpc/e500/fpu/fesetenv.c
-++++ b/libm/powerpc/e500/fpu/fesetenv.c
-+@@ -1,6 +1,5 @@
-+ /* Install given floating-point environment.
-+    Copyright (C) 1997,99,2000,01,02 Free Software Foundation, Inc.
-+-   This file is part of the GNU C Library.
-+ 
-+    The GNU C Library is free software; you can redistribute it and/or
-+    modify it under the terms of the GNU Lesser General Public
-+@@ -21,7 +20,7 @@
-+ #include <sys/prctl.h>
-+ 
-+ int
-+-__fesetenv (const fenv_t *envp)
-++fesetenv (const fenv_t *envp)
-+ {
-+   fenv_union_t u;
-+   INTERNAL_SYSCALL_DECL (err);
-+@@ -33,5 +32,3 @@ __fesetenv (const fenv_t *envp)
-+   /* Success.  */
-+   return 0;
-+ }
-+-
-+-libm_hidden_ver (__fesetenv, fesetenv)
-+diff --git a/libm/powerpc/e500/fpu/fesetround.c b/libm/powerpc/e500/fpu/fesetround.c
-+index 783541d5b..800a8a4d2 100644
-+--- a/libm/powerpc/e500/fpu/fesetround.c
-++++ b/libm/powerpc/e500/fpu/fesetround.c
-+@@ -1,6 +1,5 @@
-+ /* Set current rounding direction.
-+    Copyright (C) 2004, 2006 Free Software Foundation, Inc.
-+-   This file is part of the GNU C Library.
-+    Contributed by Aldy Hernandez <aldyh@redhat.com>, 2004.
-+ 
-+    The GNU C Library is free software; you can redistribute it and/or
-+@@ -33,4 +32,3 @@ fesetround (int round)
-+ 
-+   return 0;
-+ }
-+-libm_hidden_def (fesetround)
-+diff --git a/libm/powerpc/e500/fpu/feupdateenv.c b/libm/powerpc/e500/fpu/feupdateenv.c
-+index 47f316318..6c1f8941c 100644
-+--- a/libm/powerpc/e500/fpu/feupdateenv.c
-++++ b/libm/powerpc/e500/fpu/feupdateenv.c
-+@@ -1,6 +1,5 @@
-+ /* Install given floating-point environment and raise exceptions.
-+    Copyright (C) 2004 Free Software Foundation, Inc.
-+-   This file is part of the GNU C Library.
-+    Contributed by Aldy Hernandez <aldyh@redhat.com>, 2004.
-+ 
-+    The GNU C Library is free software; you can redistribute it and/or
-+diff --git a/libm/powerpc/e500/fpu/fgetexcptflg.c b/libm/powerpc/e500/fpu/fgetexcptflg.c
-+index d27356574..d4847ef6d 100644
-+--- a/libm/powerpc/e500/fpu/fgetexcptflg.c
-++++ b/libm/powerpc/e500/fpu/fgetexcptflg.c
-+@@ -1,6 +1,5 @@
-+ /* Store current representation for exceptions.
-+    Copyright (C) 2004 Free Software Foundation, Inc.
-+-   This file is part of the GNU C Library.
-+    Contributed by Aldy Hernandez <aldyh@redhat.com>, 2004.
-+ 
-+    The GNU C Library is free software; you can redistribute it and/or
-+diff --git a/libm/powerpc/e500/fpu/fraiseexcpt.c b/libm/powerpc/e500/fpu/fraiseexcpt.c
-+index 0c92b2868..43025fe25 100644
-+--- a/libm/powerpc/e500/fpu/fraiseexcpt.c
-++++ b/libm/powerpc/e500/fpu/fraiseexcpt.c
-+@@ -1,6 +1,5 @@
-+ /* Raise given exceptions.
-+    Copyright (C) 2004, 2006 Free Software Foundation, Inc.
-+-   This file is part of the GNU C Library.
-+    Contributed by Aldy Hernandez <aldyh@redhat.com>, 2004.
-+ 
-+    The GNU C Library is free software; you can redistribute it and/or
-+@@ -24,5 +23,3 @@
-+ #define __FERAISEEXCEPT_INTERNAL feraiseexcept
-+ 
-+ #include "../spe-raise.c"
-+-
-+-libm_hidden_def (feraiseexcept)
-+diff --git a/libm/powerpc/e500/fpu/fsetexcptflg.c b/libm/powerpc/e500/fpu/fsetexcptflg.c
-+index 11ea89f16..2fde513a0 100644
-+--- a/libm/powerpc/e500/fpu/fsetexcptflg.c
-++++ b/libm/powerpc/e500/fpu/fsetexcptflg.c
-+@@ -1,6 +1,5 @@
-+ /* Set floating-point environment exception handling.
-+    Copyright (C) 1997,99,2000,01,04 Free Software Foundation, Inc.
-+-   This file is part of the GNU C Library.
-+ 
-+    The GNU C Library is free software; you can redistribute it and/or
-+    modify it under the terms of the GNU Lesser General Public
-+diff --git a/libm/powerpc/e500/fpu/ftestexcept.c b/libm/powerpc/e500/fpu/ftestexcept.c
-+index 55f752b25..2c082f509 100644
-+--- a/libm/powerpc/e500/fpu/ftestexcept.c
-++++ b/libm/powerpc/e500/fpu/ftestexcept.c
-+@@ -1,6 +1,5 @@
-+ /* Test exception in current environment.
-+    Copyright (C) 2004 Free Software Foundation, Inc.
-+-   This file is part of the GNU C Library.
-+    Contributed by Aldy Hernandez <aldyh@redhat.com>, 2004.
-+ 
-+    The GNU C Library is free software; you can redistribute it and/or
-+-- 
-+2.47.3
-+
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
