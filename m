@@ -4,66 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88FB3C5DF94
-	for <buildroot@archiver.kernel.org>; Fri, 21 Aug 2026 21:38:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3846C5DF97
+	for <buildroot@archiver.kernel.org>; Fri, 21 Aug 2026 22:04:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4C7608130E;
-	Fri, 21 Aug 2026 21:38:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6EBC580ED9;
+	Fri, 21 Aug 2026 22:04:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 81iQQ995ksH5; Fri, 21 Aug 2026 21:38:31 +0000 (UTC)
+ id EjeLI_Av9gxd; Fri, 21 Aug 2026 22:04:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787348311;
-	bh=wIhvmGQsxlrmb2Ni2fqVPngtMzhf//B/IM2NPIr85vk=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=ZtNpNVsvt1WyHdpmp8u9wANJj/Gglm4R2Sv+kdICshxkMxLLxKek4LcaVaSlPEAr0
-	 LRdMets1Q5gRhiVBqstAgxXiixInG6YY+eD6kI7xGrZ77BMQBfDQWpy6+bpilfFQwI
-	 wXLBUsp2+MfOc3AC0Yz5pyen/5NNdSRwKnhMsgpZhMM1rel2Na/1nY3D6RkxZjNiT8
-	 +oaybb3xUclILnzgRBlKP/cvWLKvXgyzkf7K8vsmvGD9V5mfi3Z4OYRLd28AFGktVI
-	 w5AISsPF1IRJQkDScu4YWqS66Z2y5QA0EwrzNb7Pa967dJZ1gLgxmi4vM0XxxI7h+5
-	 VJGMEcqiaaQQw==
+	s=default; t=1787349871;
+	bh=ZtLj08soIlpj0M0xdwlsh5W7INaoW1/RcShvrgfgj9s=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=Ts2QbaFUH1a+YAUEmlqhBbwva+eGMNxaVDASHHtPQJ9uOFBqxrrtK4Rco/LKIrbwK
+	 F51B3pRN86BETcoA9SJ1ovHS/9vhZMEsoHf8/sekFAdLhWS1NDOmoT0UVNDkyzcmVc
+	 Cl3QiN31IZ0bX+xRFk+JOeuqs9f9qq5VcC0t5rOVuaEIR9yH2efDOSBJ9qXtEYon9X
+	 klM3xGlUJPSBw4T8BBvdp//qeTgdfsXYfwuPhCO85FcEj9ne5EvRCQF5sHjHEvRCTs
+	 xogSFxkSaeXSgj9cRXKBxAYfp6KZ1DTLV8k36v7hleGWWlJCCIFPWhkFPknigxL9Fx
+	 Ouac0LcJi4TXA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1D7D98124A;
-	Fri, 21 Aug 2026 21:38:31 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id AD7E093F
- for <buildroot@buildroot.org>; Fri, 21 Aug 2026 21:38:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8EF5E812EC;
+	Fri, 21 Aug 2026 22:04:31 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1F61D118
+ for <buildroot@buildroot.org>; Fri, 21 Aug 2026 22:04:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8B88D60AB2
- for <buildroot@buildroot.org>; Fri, 21 Aug 2026 21:38:29 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 10F2A404F7
+ for <buildroot@buildroot.org>; Fri, 21 Aug 2026 22:04:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Lcrd_8U-z8v6 for <buildroot@buildroot.org>;
- Fri, 21 Aug 2026 21:38:28 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7DECB60A8A
- for <buildroot@buildroot.org>; Fri, 21 Aug 2026 21:38:27 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id 29A5D5FFAA;
- Fri, 21 Aug 2026 23:38:22 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 21 Aug 2026 23:38:22 +0200
-MIME-Version: 1.0
-Date: Fri, 21 Aug 2026 23:38:22 +0200
-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc: buildroot@buildroot.org, =?UTF-8?Q?Alexis_Lothor=C3=A9?=
- <alexis.lothore@bootlin.com>, Thomas Petazzoni
- <thomas.petazzoni@bootlin.com>
-In-Reply-To: <20260821-heaptrack-v4-1-01f232abcdcd@bootlin.com>
-References: <20260821-heaptrack-v4-1-01f232abcdcd@bootlin.com>
-User-Agent: Webmail Free/1.6.18
-Message-ID: <41a346904f1a83a6e8d99ecb5f6bc20c@free.fr>
-X-Sender: ju.o@free.fr
-Subject: Re: [Buildroot] [PATCH v4] package/heaptrack: new package
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rU4hbO9ptWUE for <buildroot@buildroot.org>;
+ Fri, 21 Aug 2026 22:04:30 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6BE5A404EF
+ for <buildroot@buildroot.org>; Fri, 21 Aug 2026 22:04:30 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id B5C978E499; Fri, 21 Aug 2026 22:03:36 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 21 Aug 2026 23:43:00 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: b088e5dbe43d1c31add4b99cd05b8ba71228761a
+X-Git-Newrev: d21a81ef8c2969d46fd3c569936f056dfb7d1abd
+X-Patchwork-Hint: ignore
+Message-Id: <20260821220336.B5C978E499@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/distribution-registry: needs NPTL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,100 +68,39 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Luca,
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d21a81ef8c2969d46fd3c569936f056dfb7d1abd
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Thanks for the update.
+distribution-registry calls pthread_getattr_np() which is only available
+with NPTL; i.e. always available with glibc (where it originates from,
+since 2.2.3), always available with musl (which has had it since 0.9.10
+in 2013), and only available when uClibc has NPTL (since 1.0.0 in 2015).
 
-On 21/08/2026 21:51, Luca Ceresoli via buildroot wrote:
-> Add heaptrack, a memory allocation tracer toolkit.
-> 
-> This implementation builds all the command line components, not the
-> heaptrack_gui graphical visualization program.
-> 
-> Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-> ---
-[...]
-> diff --git a/package/heaptrack/Config.in b/package/heaptrack/Config.in
-> new file mode 100644
-> index 000000000000..808193a73f68
-> --- /dev/null
-> +++ b/package/heaptrack/Config.in
-> @@ -0,0 +1,39 @@
-> +config BR2_PACKAGE_HEAPTRACK
-> +	bool "heaptrack"
-> +	depends on BR2_INSTALL_LIBSTDCPP
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS # boost, libunwind, elfutils
-> +	depends on BR2_USE_WCHAR # boost, elfutils
-> +	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # 
-> boost-filesystem
-> +	depends on BR2_PACKAGE_LIBUNWIND_ARCH_SUPPORTS # libunwind
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libunwind
+Fixes: https://autobuild.buildroot.org/results/9395500a8baee6c6142f96d7bc97e81725c2e754/
 
-There is one last build failure with test-pkg:
-https://gitlab.com/jolivain/buildroot/-/jobs/16041509274
+Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/distribution-registry/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-It seems that heaptrack is using std::filesystem:
-https://invent.kde.org/sdk/heaptrack/-/blob/master/src/interpret/heaptrack_interpret.cpp?ref_type=heads#L15
-
-which is a C++17 feature which was fully implemented in gcc 8.1:
-https://gcc.gnu.org/gcc-8/changes.html#libstdcxx
-
-So I believe this gcc version should be raised at gcc >= 8.
-
-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # C++17 filesystem
-
-The comment should also be updated below.
-
-> +	depends on !BR2_STATIC_LIBS # libunwind, elfutils
-> +	depends on !BR2_TOOLCHAIN_USES_UCLIBC # no dlmopen() support
-> +	select BR2_PACKAGE_BOOST
-> +	select BR2_PACKAGE_BOOST_IOSTREAMS
-> +	select BR2_PACKAGE_BOOST_PROGRAM_OPTIONS
-> +	# For heaptrack_print
-> +	select BR2_PACKAGE_BOOST_FILESYSTEM
-> +	select BR2_PACKAGE_ELFUTILS
-> +	select BR2_PACKAGE_LIBUNWIND
-> +	select BR2_PACKAGE_ZLIB
-> +	help
-> +	  Heaptrack traces all memory allocations and annotates these
-> +	  events with stack traces. Dedicated analysis tools then allow
-> +	  you to interpret the heap memory profile to find hotspots,
-> +	  memory leaks, allocation hotspots and temporary allocations.
-> +
-> +	  Zstandard offers better (de)compression performance compared
-> +	  with gzip/zlib, making heaptrack faster and datafiles smaller,
-> +	  so enabling BR2_PACKAGE_ZSTD is recommended.
-> +
-> +	  https://apps.kde.org/heaptrack/
-> +
-> +comment "heaptrack needs a glibc or musl toolchain w/ C++, threads, 
-> wchar, gcc >= 4.9, dynamic library"
-
-"needs gcc >= 8"
-
-> +	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
-> +	depends on BR2_PACKAGE_LIBUNWIND_ARCH_SUPPORTS
-> +	depends on !BR2_INSTALL_LIBSTDCPP \
-> +		|| !BR2_TOOLCHAIN_HAS_THREADS \
-> +		|| !BR2_USE_WCHAR \
-> +		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 \
-
-		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_8 \
-
-> +		|| BR2_STATIC_LIBS \
-> +		|| BR2_TOOLCHAIN_USES_UCLIBC
-[...]
-
-Could you send an updated patch please?
-
-Best regards,
-
-Julien.
+diff --git a/package/distribution-registry/Config.in b/package/distribution-registry/Config.in
+index af650171b1..3db2a8d906 100644
+--- a/package/distribution-registry/Config.in
++++ b/package/distribution-registry/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_DISTRIBUTION_REGISTRY
+ 	bool "distribution-registry"
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL  # pthread_*_np()
+ 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
+ 	help
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
