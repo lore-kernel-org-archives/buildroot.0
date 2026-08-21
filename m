@@ -4,57 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3846C5DF97
-	for <buildroot@archiver.kernel.org>; Fri, 21 Aug 2026 22:04:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88A64C5DF94
+	for <buildroot@archiver.kernel.org>; Fri, 21 Aug 2026 22:04:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6EBC580ED9;
-	Fri, 21 Aug 2026 22:04:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5E14B81338;
+	Fri, 21 Aug 2026 22:04:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EjeLI_Av9gxd; Fri, 21 Aug 2026 22:04:31 +0000 (UTC)
+ id haCcdR42asVp; Fri, 21 Aug 2026 22:04:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787349871;
-	bh=ZtLj08soIlpj0M0xdwlsh5W7INaoW1/RcShvrgfgj9s=;
+	s=default; t=1787349872;
+	bh=8BRP21A8THomyU4IbKiCEaQeNjEsSlSOcFPJS1fWRDg=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Ts2QbaFUH1a+YAUEmlqhBbwva+eGMNxaVDASHHtPQJ9uOFBqxrrtK4Rco/LKIrbwK
-	 F51B3pRN86BETcoA9SJ1ovHS/9vhZMEsoHf8/sekFAdLhWS1NDOmoT0UVNDkyzcmVc
-	 Cl3QiN31IZ0bX+xRFk+JOeuqs9f9qq5VcC0t5rOVuaEIR9yH2efDOSBJ9qXtEYon9X
-	 klM3xGlUJPSBw4T8BBvdp//qeTgdfsXYfwuPhCO85FcEj9ne5EvRCQF5sHjHEvRCTs
-	 xogSFxkSaeXSgj9cRXKBxAYfp6KZ1DTLV8k36v7hleGWWlJCCIFPWhkFPknigxL9Fx
-	 Ouac0LcJi4TXA==
+	b=mHlkod+0JofDgH1Lfm70R6v6DRq+S2bPX/NoR1cyjvIJvYFQGezbmilKsUo8rDst3
+	 kRHw73hoQyzDG8JKBOCzJHcxjluZjrneFhxOhR1DLylP17EB9tRHxvnZlMhdbE3K7/
+	 izGhcOaD4m0dj6jD/IGbgXIovVYsVNEcA3o8QdyrT2+AjQgB/nlw+APzW+uwoy5knb
+	 nGpVwd4y5o+vfKXP5cONKEE/omAFfDsXoSqk6LFyS0vnGxJxkZmbI7MK9+FZxsvHKR
+	 3XJApyqx28pLtTPJgxelo7RcfjUfGS58ca76Q/1HZrdKG50L+hqnuLQWLVws+989FH
+	 pFmWN7HKaDMTQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8EF5E812EC;
-	Fri, 21 Aug 2026 22:04:31 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1F61D118
+	by smtp1.osuosl.org (Postfix) with ESMTP id D78358131B;
+	Fri, 21 Aug 2026 22:04:32 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 374A8118
  for <buildroot@buildroot.org>; Fri, 21 Aug 2026 22:04:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 10F2A404F7
+ by smtp4.osuosl.org (Postfix) with ESMTP id 29913404EF
  for <buildroot@buildroot.org>; Fri, 21 Aug 2026 22:04:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rU4hbO9ptWUE for <buildroot@buildroot.org>;
+ id PQlRPmt_2C_b for <buildroot@buildroot.org>;
  Fri, 21 Aug 2026 22:04:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6BE5A404EF
+ by smtp4.osuosl.org (Postfix) with ESMTP id 917CA404F8
  for <buildroot@buildroot.org>; Fri, 21 Aug 2026 22:04:30 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B5C978E499; Fri, 21 Aug 2026 22:03:36 +0000 (UTC)
+ id C16518E49A; Fri, 21 Aug 2026 22:03:36 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Fri, 21 Aug 2026 23:43:00 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b088e5dbe43d1c31add4b99cd05b8ba71228761a
-X-Git-Newrev: d21a81ef8c2969d46fd3c569936f056dfb7d1abd
+X-Git-Oldrev: d21a81ef8c2969d46fd3c569936f056dfb7d1abd
+X-Git-Newrev: 0480567def9c99b6228b32c0f3638998b372ab4f
 X-Patchwork-Hint: ignore
-Message-Id: <20260821220336.B5C978E499@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/distribution-registry: needs NPTL
+Message-Id: <20260821220336.C16518E49A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] DEVELOPERS: add Yann E. MORIN (work) for
+ distribution-registry
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -74,33 +75,27 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d21a81ef8c2969d46fd3c569936f056dfb7d1abd
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/0480567def9c99b6228b32c0f3638998b372ab4f
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
-
-distribution-registry calls pthread_getattr_np() which is only available
-with NPTL; i.e. always available with glibc (where it originates from,
-since 2.2.3), always available with musl (which has had it since 0.9.10
-in 2013), and only available when uClibc has NPTL (since 1.0.0 in 2015).
-
-Fixes: https://autobuild.buildroot.org/results/9395500a8baee6c6142f96d7bc97e81725c2e754/
 
 Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/distribution-registry/Config.in | 1 +
+ DEVELOPERS | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/distribution-registry/Config.in b/package/distribution-registry/Config.in
-index af650171b1..3db2a8d906 100644
---- a/package/distribution-registry/Config.in
-+++ b/package/distribution-registry/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_DISTRIBUTION_REGISTRY
- 	bool "distribution-registry"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL  # pthread_*_np()
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
- 	help
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 98c9ee55d3..f4e296abc2 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -3517,6 +3517,7 @@ F:	package/tpm2-pkcs11/
+ N:	Yann E. MORIN <yann.morin@orange.com>
+ F:	.editorconfig
+ F:	package/amazon-ecr-credential-helper/
++F:	package/distribution-registry/
+ F:	package/docker-credential-acr-env/
+ F:	package/docker-credential-gcr/
+ F:	package/gpsd/
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
