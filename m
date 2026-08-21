@@ -4,57 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 81463C5DF93
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D656CC5DF89
 	for <buildroot@archiver.kernel.org>; Fri, 21 Aug 2026 15:08:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 48C2C81336;
+	by smtp1.osuosl.org (Postfix) with ESMTP id 757C981338;
 	Fri, 21 Aug 2026 15:08:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ln8yg0NsXhC4; Fri, 21 Aug 2026 15:07:56 +0000 (UTC)
+ id bCMbA3uFhn5Q; Fri, 21 Aug 2026 15:07:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787324876;
-	bh=PhAazY67daSaZJjKnQnMJD+HpjL0ceRpRqw5XyaLPtg=;
+	s=default; t=1787324878;
+	bh=4Drvw3Utl0cSG45cVG09Ud0JotXwFpuc1btad/fpdsU=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=qDQBmqQINcXQ0aPKJBDs8BtpkH0y4yyWXrIkFOvguurHlOhNLw7jeRc0gj8t8irdA
-	 zufu0+wRF/yg7pU3izLplH9FR6kFH9imPPwMsBdwdxKR/xBOydE+w5RM9b09w3wNCs
-	 n7o6QefTa2AG+W7cDo2DJxW6F2y312huPJot25C29ClUfl5Jbsv9U/yT6VZXAi3oL6
-	 rLKUm0WIbfhH3lKH0MGg6vchjerWD+MmlS9Gz4BLbnKFis2GgAxa2b9GoyLks7zhBr
-	 wz05FHyVEB7t8GEa7EIc6T8tCn9aYNfBNTp549Qh/6lFlulM0SZu2gJtV2yUGAYrd7
-	 dcv8zeo9C2tUg==
+	b=cVvsb0NmXw2jlcFxzn/6KZfTLf4uAILCCTKWLutmT8pdSAS+/zP3YrQnH//SlXx4W
+	 sJEOwFmCty17a/gR4tjeLVeF9cav/Ge2F6GtMoZX1kxbcL2F1a2voIWzDyPE81rvrC
+	 Qoj/lsnCnmpQ6jTYmI5ORdGtnKwV7WExeXG5gBVBLJiIMKr6Cdk1UdhDfWtM+cxti7
+	 3kpUky7Myj/idCh3BX9XyKSiJKlCayy2vLI7ypX7B/e6B3vYbUgXwbavVSQ1jieCfG
+	 eNWkymV8olm8FQFFieP4F53XgcAocCI0H2KPaTw2VtQbyqSqLAxHuD+1jPSOmhIX8r
+	 3a5uDQKik2iKw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 86B6081311;
-	Fri, 21 Aug 2026 15:07:56 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id E7969EA3
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1808981200;
+	Fri, 21 Aug 2026 15:07:58 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id EAD731CF2
  for <buildroot@buildroot.org>; Fri, 21 Aug 2026 15:07:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D505E402A8
+ by smtp2.osuosl.org (Postfix) with ESMTP id D1B9B40026
  for <buildroot@buildroot.org>; Fri, 21 Aug 2026 15:07:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3vdvQxVMCNDA for <buildroot@buildroot.org>;
+ id 0tgeQtxtZ0s7 for <buildroot@buildroot.org>;
  Fri, 21 Aug 2026 15:07:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0524D4040A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 310A140414
  for <buildroot@buildroot.org>; Fri, 21 Aug 2026 15:07:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 799578E127; Fri, 21 Aug 2026 15:06:14 +0000 (UTC)
+ id A567E8E0EC; Fri, 21 Aug 2026 15:06:14 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Fri, 21 Aug 2026 17:04:19 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: b89e79e44cc2f3ced2cdaca182a5362f6a08cdc0
-X-Git-Newrev: 770debff092fac44addcbe0efd7abda6bec454f8
+X-Git-Oldrev: 5372f27b796f23459c9facecf12a60002d918079
+X-Git-Newrev: d1614f91bd82fbd463b9ad72bdbf3f016ccdc119
 X-Patchwork-Hint: ignore
-Message-Id: <20260821150614.799578E127@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/gvfs: update
+Message-Id: <20260821150614.A567E8E0EC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/libsoup: update
  project URL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -75,7 +75,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/770debff092fac44addcbe0efd7abda6bec454f8
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d1614f91bd82fbd463b9ad72bdbf3f016ccdc119
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
 wiki.gnome.org has a big deprecation warning saying "All information
@@ -84,25 +84,25 @@ project repository instead.
 
 Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 15c4abfa524d236e3b2b65fdabdd7ff0050baaf2)
+(cherry picked from commit 16c5253138499b083f7fa7b918e3fa18ff1720d5)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- package/gvfs/Config.in | 2 +-
+ package/libsoup/Config.in | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/gvfs/Config.in b/package/gvfs/Config.in
-index 720b8e6c20..0fd9535bd0 100644
---- a/package/gvfs/Config.in
-+++ b/package/gvfs/Config.in
-@@ -15,7 +15,7 @@ config BR2_PACKAGE_GVFS
- 	  all applications using the gio API. It also supports exposing
- 	  the gvfs mounts to non-gio applications using fuse.
+diff --git a/package/libsoup/Config.in b/package/libsoup/Config.in
+index 02e8e8b578..f566e9a508 100644
+--- a/package/libsoup/Config.in
++++ b/package/libsoup/Config.in
+@@ -12,7 +12,7 @@ config BR2_PACKAGE_LIBSOUP
+ 	  and the GLib main loop, to integrate well with GNOME
+ 	  applications.
  
--	  https://wiki.gnome.org/Projects/gvfs
-+	  https://gitlab.gnome.org/GNOME/gvfs
+-	  https://wiki.gnome.org/Projects/libsoup
++	  https://gitlab.gnome.org/GNOME/libsoup
  
- comment "gvfs needs a toolchain w/ wchar, threads, dynamic library"
- 	depends on BR2_USE_MMU
+ if BR2_PACKAGE_LIBSOUP
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
