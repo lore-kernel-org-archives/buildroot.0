@@ -1,75 +1,155 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 747C1C5DF94
-	for <buildroot@archiver.kernel.org>; Fri, 21 Aug 2026 17:12:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56D08C5DF8C
+	for <buildroot@archiver.kernel.org>; Fri, 21 Aug 2026 17:28:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0727340A13;
-	Fri, 21 Aug 2026 17:12:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EF74981173;
+	Fri, 21 Aug 2026 17:28:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RHgjsrXvUot2; Fri, 21 Aug 2026 17:12:04 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WWtUDxgotFr2; Fri, 21 Aug 2026 17:28:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787332324;
-	bh=h1Uuv6agHcN3sipymnbwI12KJ1n2KxWXHJtktXCAzT8=;
-	h=Date:To:Cc:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=MJUJe9+2ufMgHbvCaVeiU7RWKX1DveT4gN/sSuESq9iGe3wdfCw5RNtRnfR56bMpS
-	 XsvcOEzrrCY97pgW0CWFzXQJlLD+dPwgZLvlcnw6apas+G2MjURd3kVYpSt5gf661m
-	 cSM+MM/Y/xE6BlRkwFx/Yy44cbITV4JXWkzWh3EbYpKLWgvCEI2VYmrzMRnCZGbcxW
-	 u4zBKIKS7AeYXLSCmY9zrixuDBZx2j6YiF1NcI+alSN8Z6PZdcK9jroY/WylkDbAHb
-	 xregpFo7O7+u9fEJodS1IxjrvluillplFhrrZAYmG/pUR5wg70H4RM649BsuRp4Ezh
-	 NyH1nmTcw98Rw==
+	s=default; t=1787333281;
+	bh=KVgYyyB/07vA+j9lqDSrTp+eLsF86rHh7DdKeofMgKM=;
+	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=GbtdLOxXD/2VqxmdUyh0FBlF5zzA3DYLEH1Wc1CkBqN+Mga9EDk9YinKtIjYiaxVd
+	 aylVMBV6dVbgAXqJ+cBXqw8HHMje+iIAPc3X5X5oEjR595eoV6/1Bo4ZSahCdXl0mN
+	 4QKrF1mdevrEQTyO0EC2VoUjXr/Yhf5OPvMP3DQD1F/QSB6/8Z1nSLgXelQiWISrx6
+	 yMQc6sguZDYAPIM+xCnn6rauhs8hFVIVVTM87QH/aMYSYjSe4wbxeqwF+1jpSQ4Sda
+	 0ixzuT3aUNkqfUyKhskYWFYvvrr8vSiGnK5uC2WNdBom6tocsiCQq+MvqfAh743g81
+	 0Z2Ctzh76DdGw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2E62A40A26;
-	Fri, 21 Aug 2026 17:12:04 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 98B7B93F
- for <buildroot@buildroot.org>; Fri, 21 Aug 2026 17:12:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C3C92811AE;
+	Fri, 21 Aug 2026 17:28:01 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 745864B8
+ for <buildroot@buildroot.org>; Fri, 21 Aug 2026 17:28:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8A73F60A6D
- for <buildroot@buildroot.org>; Fri, 21 Aug 2026 17:12:02 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 65762811AE
+ for <buildroot@buildroot.org>; Fri, 21 Aug 2026 17:28:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Uhsl1L2oUZpk for <buildroot@buildroot.org>;
- Fri, 21 Aug 2026 17:12:01 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
- helo=smtpout-03.galae.net; envelope-from=alexis.lothore@bootlin.com;
- receiver=<UNKNOWN> 
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8DEFE60A64
- for <buildroot@buildroot.org>; Fri, 21 Aug 2026 17:12:00 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-03.galae.net (Postfix) with ESMTPS id E559D4E4131C
- for <buildroot@buildroot.org>; Fri, 21 Aug 2026 17:11:57 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id AA9ED604AA;
- Fri, 21 Aug 2026 17:11:57 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 49AC411C77474; 
- Fri, 21 Aug 2026 19:11:50 +0200 (CEST)
-Date: Fri, 21 Aug 2026 19:11:42 +0200
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aNLPoTRwKadA for <buildroot@buildroot.org>;
+ Fri, 21 Aug 2026 17:27:59 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a01:111:f403:d40d::1;
+ helo=sy2pr01cu004.outbound.protection.outlook.com;
+ envelope-from=tfx2001@outlook.com; receiver=<UNKNOWN> 
+Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none) header.from=outlook.com
+Authentication-Results: smtp1.osuosl.org; dkim=pass (2048-bit key,
+ unprotected) header.d=outlook.com header.i=@outlook.com header.a=rsa-sha256
+ header.s=selector1 header.b=Pi20essX
+Received: from SY2PR01CU004.outbound.protection.outlook.com
+ (mail-australiaeastazolkn190110001.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:d40d::1])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3FAFA81173
+ for <buildroot@buildroot.org>; Fri, 21 Aug 2026 17:27:57 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=p5NlaPbcsQoHLQ7BsKFggDRY3jN5oF6cNnrv/wkHlfWmV6Q6x8Yofgm1iANHN/D6O56sdysq/LCCqdK0yDvVzAyNKHosMqfICRROHf+toMAIzPq9kCE8cWe/OvwrCI4UMXT3f2Duw5qmh4Dh8BXOFu1lHSZGUSuP8RAAABow8Q67GV7wqsxZNM95jSVRJryEl9qgYISGpLY/TotH+lanm37/+4CyLobeCRgo7J8yg5wZPZptasuNZnXnrqCWuPQpRP4Qr+HJEuHA5lqjZo20u5mpAO54BSxFRU18wpl6tMu/s35VSVQpkQfuPGEMPUhFLG7dthbRTDuFx/Zj5pPbtQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=tiMsOLWB270b8Nwzm3q0z2V0I0RMILOy3JWHNEWWmSQ=;
+ b=d/kwoq5AGIMKn3MM9eAQAIDf0si+EMFiKu0+HNvogInK1XLZ6G8LAN3A4moTuTqXQK4J6cc3h/u/bXSXRJJZPAW06ifeXNceqDXOFH7/0g2o9ASDP29yDZ2qATLwRh68IARd7zeeHMwdfQkghNzYSV5MNi+Nab0redKAbL1EIoh/dC10S/ewSXf4kz3+CXo92Udyr8ypLXmeYm04YBvtZUSXVZH2iTtrRRejqrfKOrSu/oOjCLc+Y9N1wBPTlEjg6565HWTmAa4diTR+VTsailc74CGI+r172VRGeApkV0T8L4TUenjZJ9y3l8r6N/jj/MV1AZ5MMzEWHW/iJ293VQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=tiMsOLWB270b8Nwzm3q0z2V0I0RMILOy3JWHNEWWmSQ=;
+ b=Pi20essXkjG9vd50zjGH+FNKatE2wnzTZakB8FZysQROo5k/Mc9GKHEmqV5DbbkUkayDyDLmMoSse167p3yA7AZmiSNWwP3qDdAtIbYm5zCtaFdXwZBNQQRHmw4BWYtELpkkyzfaS19YZoEh0E9EyY1ks8H8lDjzAMgQbhGGjOio/qjPCW159ztwKSTkHRmfILiblt8E1O3i+4e7ue63fNBFvJ1YtLqup7d+3S6LaEfuzRs8OgGPY3idtoVWE5zo8iuFWLubuiu+13UyWxXcCyLWiBHhVI7dDSGaOmlLpewZPZWi7r07SZjv87mgJthIkmzadVUOl57msUX46B8SXQ==
+Received: from SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM (2603:10c6:10:261::8) by
+ SY3PPFF5D16F40F.AUSP300.PROD.OUTLOOK.COM (2603:10c6:18::4b7) with
+ Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.21.339.11; Fri, 21 Aug 2026 17:27:50 +0000
+Received: from SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM
+ ([fe80::338a:60df:663b:c222]) by SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM
+ ([fe80::338a:60df:663b:c222%6]) with mapi id 15.21.0339.010; Fri, 21 Aug 2026
+ 17:27:49 +0000
+From: Fengwei Tan <tfx2001@outlook.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Fengwei Tan <tfx2001@outlook.com>,
+	buildroot@buildroot.org
+Date: Sat, 22 Aug 2026 01:26:13 +0800
+Message-ID: <SY8P300MB0041233A165784A8729859B2F8A32@SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <aodS3qtR9YJL5U63@windsurf>
+References: <aodS3qtR9YJL5U63@windsurf>
+X-ClientProxiedBy: TPYP295CA0032.TWNP295.PROD.OUTLOOK.COM
+ (2603:1096:7d0:7::13) To SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM
+ (2603:10c6:10:261::8)
+X-Microsoft-Original-Message-ID: <20260821172613.47260-1-tfx2001@outlook.com>
 MIME-Version: 1.0
-Message-Id: <20260821-qt5_allow_other_openssl_implementations-v2-1-7f3f82c610ca@bootlin.com>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/42Oyw7CIBBFf6VhLYaHfbnyP0xDKE4thkIFrJqm/
- y6tce9iFie5OWdmFMBrCOiYzcjDpIN2NgHbZUj10l4B60tixAgrSMUIvsdcSGPcU7jYgxduBBu
- CEXoYDQxgo4xJEXDBuOp4nk7WKNlGD51+baVz8+XwaG+g4qpfF70O0fn39spE192vSv+uThRT3
- AI98KokJa/5qXUuGm33yg2oWZblA1y0DGryAAAA
-X-Change-ID: 20260820-qt5_allow_other_openssl_implementations-623cf35cf3a9
-To: buildroot@buildroot.org
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- Giulio Benetti <giulio.benetti@benettiengineering.com>, 
- =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-X-Mailer: b4 0.15.2
-X-Last-TLS-Session-Version: TLSv1.3
-Subject: [Buildroot] [PATCH v2] package/qt5: relax openssl constraint to
- allow compatible implementations
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SY8P300MB0041:EE_|SY3PPFF5D16F40F:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0af6efa9-b511-4791-fbd5-08deffa985b4
+X-Microsoft-Antispam: BCL:0;
+ ARA:14566002|19110799012|8060799015|15080799012|24021099003|23021999003|41001999006|8022599003|5072599009|25010399006|10035399007|2607281247196008|3071699003|3412199025|440099028|26104999009|1710799026;
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?XitYFQPWQ3mQlpI7EOqsSyBkSATwPLpW2dGzYS2SOtymyLJXCNVK8/3uIxtS?=
+ =?us-ascii?Q?SuGb1b02Ii/xiAJ4mvc+oLL9YI7OADpTQgZWOTjLdLYDHF6R+ah11lX4F5ai?=
+ =?us-ascii?Q?fP5cR76WT2aVLOVDPeBEjUSPIrtRSdDyIFZQDVGAzInJ6u50t1lyH+1tImRs?=
+ =?us-ascii?Q?ymeTr5QPf124c2H/XCWaElQ+Dv06hIfDsta27KKem0jyFokP6jyV/VNeXXgA?=
+ =?us-ascii?Q?8jU4XVo21jkrjKZvZV+UqjGiWoM7lFOnys8rPOJ79V/H6ggpZ/GBcMcXtsa+?=
+ =?us-ascii?Q?Uu8UVriGA0pkG2sm+th39bLW0K+XF2XWAMpsE//Cme3ZySvUdQIUWTwqJLNv?=
+ =?us-ascii?Q?PQ7C7MMlrelqVXnNu1Pj5jvSA1Hcv4OC8lPs0oaEjhGavIsB+cgQFG+wQ/Yk?=
+ =?us-ascii?Q?eFznVFFT8Ad70Esah9kXjtcmznTy4aaDNy7HYDVy8GQLL7thI53nl/CCnLDK?=
+ =?us-ascii?Q?YA3L7uwr7i9R8oWOILdzu75Ja2WyAbtEHL82kBNh876vIilFJ/p6YyMNFbhi?=
+ =?us-ascii?Q?CTEcY840dnPuNXT+iHxvre31eJUsthEcgpFVmxRPsb6kftn8D3RaqNE5Y2N0?=
+ =?us-ascii?Q?2Hg93VSPkFbpfNJaBEZfQwzCb+UoKh9hHQUCYCCdoZ18yPH8x22T4tv+S+Pc?=
+ =?us-ascii?Q?nEysR67TREt1qO0C9wv0LRfxwCJ8zWEyLEwzUn+Lt4yySwqm2oEg8kDxfxmW?=
+ =?us-ascii?Q?44nYlmrkNezI0yj1tJyhbaSfJY3mxAZGLRH5pi6vDqAdb8B30BJYhEuHWwR7?=
+ =?us-ascii?Q?SGVS2HWfSmRFcF9KuMrPhrmXbz2+bjU7SwlfNpcaonixAPSRWc+AnzwWWFmm?=
+ =?us-ascii?Q?EHGwM72TpJLFjdEK30bORzCLuimDE1CS8oCq9Y0YVU0PUHJm8+/XqYguGu1M?=
+ =?us-ascii?Q?Gunw8R/vcDUbOiPzrXPNx+TxuAb2m54fFrCkpXnG+tyWeHhbTKH4slsL5/JM?=
+ =?us-ascii?Q?1xAhKR/pX3RXZxngFS2lMqVXP02HBiawF+A78p/RA1g=3D?=
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?x20dKqGiDZEh9BOW9B4MzcoA4oCOYnqIwZtQzomn4nBUgXvzpccFOPtRV5oi?=
+ =?us-ascii?Q?JTeT9sBGD6h4ZC56ZyGdQkW590oWM07zrgJqdW3rB7Wi+HZV0EWItgxKm7Re?=
+ =?us-ascii?Q?fY6LB5Du66zH8S08v4G7InpXKue2fumFwgnNo5z+pmxU1zDB6/PtE9OQj9cF?=
+ =?us-ascii?Q?6lYhtqEZ21sHEkp72/8qpPo5S+Mkiyz0PWWHnp2zxEvPrCNi/CABUIvBk2og?=
+ =?us-ascii?Q?hzgpNCdcOaWgV3ZxKX1fxF1eeoCrH5Dxx7fnjS0tTpO7HNRm1dE++6y3FA9o?=
+ =?us-ascii?Q?Iuaw9627nbCjOgMlx+to76mhf+ZW3U6zKcDJHzz4HO41lWK/56w7kkwQig6E?=
+ =?us-ascii?Q?APKOYGKozS0YShfQ4J3iYD7pd+bHy0DYngRZ/GGQglmql5Id/nksv51GEy+6?=
+ =?us-ascii?Q?UOW6T7KYZjO5gQ/612xz/siJktei1EnVpUMAs/1VPAJLEQiW/Y46qmcoJ0R2?=
+ =?us-ascii?Q?VvJeNgRa5GWYE0FoXhCSO5H5/ldNpABXNl8MJfuSGS8GBIVYeRqJMviqNH96?=
+ =?us-ascii?Q?+5r/htIPIDxy+BisF5oIsu1nRyD1fU4WrPBaC1OXelUpcvSXURoAmPVrBTBE?=
+ =?us-ascii?Q?AHVgtzHrZbN3Z8YqIrcBOKSk842DXRVcg5pzTJULXi1L3LkyAqUuJl69qDVh?=
+ =?us-ascii?Q?+ZP4V35263zNBpTTEa+ZX3+70b0p9ICQqlP8wtGEFk2KuZMwahhe+HI6kkb9?=
+ =?us-ascii?Q?JHnHnlWeeBquR6RkuABQzr7ZyRWktd+wGXTZciJmMXukNUG/DeKgNIatOv+Y?=
+ =?us-ascii?Q?NRPunkOWc6H+OGshjMVxrVhBCkvqeXeSqYcuv+09ez6k5ifhjkN9WhSJxJv2?=
+ =?us-ascii?Q?l30OrnWseZC1yHJAcARyNZqKTxD80XqnAHZUsTAOqf+iJlL88xsouplk46px?=
+ =?us-ascii?Q?oWXnsWxKYDYSXQYWH0HpLnuy7Gyl5BUnFcg4uqxHhMlH4pNlq9NSVzoJXW/I?=
+ =?us-ascii?Q?PhV4dYLOqasby9r2wMXynJvC9fEvaMNgs0NVc6x1yfzh/2hwH04KD19e950j?=
+ =?us-ascii?Q?EdBdm87UPi/SChZWfFfkd+eos+Fx+H2Z7x01eBYe/Ti8Rzfts2MvmXfXg16n?=
+ =?us-ascii?Q?KqUztnyP/vn7spAeoeJveyEcHaH7TjZVPo1/YoTNvIsEvK98m6U/CIJ8i92N?=
+ =?us-ascii?Q?1ew9BQQETyomZHFQc9a8rsNvHtfP/+4Fke93D8yW4n+FjL4njmRFaDPw8kQI?=
+ =?us-ascii?Q?0y5ifhL88PiOUF6vAavH8X0AIUQvrYhyK17T84IhrvctTJa2QJTmX0n8baHs?=
+ =?us-ascii?Q?jLrVXhrAn4mnAL01kkRtFFYY2Pm7Tm4d6HdUfoJJIaEHjjHUZP6ExfNNpM7m?=
+ =?us-ascii?Q?CKpZWxlKS92VYybHWtFmoT+0fGiw71/ymwiZOnH64P0yGJ66kNq1i8rtw5jZ?=
+ =?us-ascii?Q?6moEMjejSJwstJSRZFTi38Yc/gzY?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0af6efa9-b511-4791-fbd5-08deffa985b4
+X-MS-Exchange-CrossTenant-AuthSource: SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Aug 2026 17:27:49.8602 (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SY3PPFF5D16F40F
+Subject: Re: [Buildroot] [PATCH] package: fix builds with
+ $(PKG)_FLAT_STACKSIZE
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,65 +161,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: =?utf-8?q?Alexis_Lothor=C3=A9_via_buildroot?= <buildroot@buildroot.org>
-Reply-To: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-UXQ1IGNhbiBiZSBidWlsdCB3aXRoIG9yIHdpdGhvdXQgb3BlbnNzbCBzdXBwb3J0LiBGb2xsb3dp
-bmcgc29tZSBidWlsZApmYWlsdXJlcywgY29tbWl0IGE5NGQzOWQ2OTNkOCAoInBhY2thZ2UvcXQ1
-OiBmaXggYnVpbGQgZmFpbHVyZSBkdWUgdG8KbGlicmVzc2wgdXNlIikgZW5mb3JjZWQgbGlib3Bl
-bnNzbCBhcyB0aGUgb25seSB2YWxpZCBpbXBsZW1lbnRhdGlvbiBmb3IKUXQ1IG9wZW5zc2wgc3Vw
-cG9ydC4KCldoaWxlIHRoaXMgc29sdXRpb24gaXMgZmluZSB0byBmaWx0ZXIgYmV0d2VlbiB0aGUg
-dHdvIG9wZW5zc2wgdmFyaWFudHMKb2ZmaWNpYWxseSBzdXBwb3J0ZWQgYnkgQnVpbGRyb290LCBp
-dCBwcmV2ZW50cyB1c2VycyBicmluZ2luZyB0aGVpciBvd24KT3BlblNTTCBpbXBsZW1lbnRhdGlv
-bnMgKHRocm91Z2ggdGhlIHZpcnR1YWwgcGFja2FnZSBtZWNoYW5pc20pIGZyb20KYnVpbGRpbmcg
-UXQ1IHdpdGggb3BlbnNzbCBzdXBwb3J0LCBldmVuIGlmIHRoZSBjdXN0b20gaW1wbGVtZW50YXRp
-b24KbWF0Y2hlcyB0aGUgZXhwZWN0ZWQgT3BlblNTTCBBUEkuCgpBbGxvdyBjb21wYXRpYmxlIGV4
-dGVybmFsIGltcGxlbWVudGF0aW9ucyB0byBiZSBwcm92aWRlZCBmb3IgUXQ1IG9wZW5zc2wKc3Vw
-cG9ydC4gUmVsYXggdGhlIGNvbnN0cmFpbnQgYnkgcGFydGlhbGx5IHJldmVydGluZyBhOTRkMzlk
-NjkzZDggYW5kCmNoZWNraW5nIHRoYXQgdGhlIHNlbGVjdGVkIG9wZW5zc2wgaW1wbGVtZW50YXRp
-b24gaXNuJ3QgbGlicmVzc2wuIEl0CnRoZW4gYmVjb21lcyB1cCB0byB1c2VycyB0byBlbnN1cmUg
-dGhhdCB0aGUgaW1wbGVtZW50YXRpb24gdGhleSBhcmUKcHJvdmlkaW5nIGlzIGZ1bGx5IGNvbXBh
-dGlibGUgd2l0aCBsaWJvcGVuc3NsJ3MuIFNvbWUgcXQ1CnN1Yi1wYWNrYWdlcyBlbmZvcmNlIEJS
-Ml9QQUNLQUdFX09QRU5TU0xfRk9SQ0VfTElCT1BFTlNTTCwgdGhleSBkb24ndApuZWVkIGFueSB1
-cGRhdGUgYXMgaXQgZG9lcyBub3QgcmVhbGx5IHN0cmljdGx5IHNlbGVjdCBsaWJvcGVuc3NsLCBp
-dApyYXRoZXIgcHJldmVudHMgbGlicmVzc2wsIHNvIGl0IHN0aWxsIGFsbG93cyBjdXN0b20gcHJv
-dmlkZXJzLgoKU2lnbmVkLW9mZi1ieTogQWxleGlzIExvdGhvcsOpIDxhbGV4aXMubG90aG9yZUBi
-b290bGluLmNvbT4KLS0tCkNoYW5nZXMgaW4gdjI6Ci0gcy9wcm92aWRlcyBtZWNoYW5pc20vdmly
-dHVhbCBwYWNrYWdlIG1lY2hhbmlzbS8gKFRob21hcyBQLikKLSB1c2UgaWZlcSBvbiBwYWlyIG9y
-IGtjb25maWcgdmFyaWFibGVzIHRvIGNsYXJpZnkgdGhlIGNvbmRpdGlvbiAoVGhvbWFzIFAuKQot
-IExpbmsgdG8gdjE6IGh0dHBzOi8vcGF0Y2gubXNnaWQubGluay8yMDI2MDgyMS1xdDVfYWxsb3df
-b3RoZXJfb3BlbnNzbF9pbXBsZW1lbnRhdGlvbnMtdjEtMS1iZTE0Mzg3MDczOTNAYm9vdGxpbi5j
-b20KClRvOiBidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpDYzogVGhvbWFzIFBldGF6em9uaSA8dGhv
-bWFzLnBldGF6em9uaUBib290bGluLmNvbT4KQ2M6IEdpdWxpbyBCZW5ldHRpIDxnaXVsaW8uYmVu
-ZXR0aUBiZW5ldHRpZW5naW5lZXJpbmcuY29tPgotLS0KVGhlIGlzc3VlIGFmZmVjdHMgMjAyNS4w
-Mi54LCAyMDI2LjA1LngsIDIwMjYuMDgueCBhbmQgbWFzdGVyCi0tLQogcGFja2FnZS9xdDUvcXQ1
-YmFzZS9xdDViYXNlLm1rIHwgMTIgKysrKysrKysrKy0tCiAxIGZpbGUgY2hhbmdlZCwgMTAgaW5z
-ZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9wYWNrYWdlL3F0NS9xdDVi
-YXNlL3F0NWJhc2UubWsgYi9wYWNrYWdlL3F0NS9xdDViYXNlL3F0NWJhc2UubWsKaW5kZXggMTU5
-ZDQxMWRlODViLi4zZTU0NDY1ZWQ3ODkgMTAwNjQ0Ci0tLSBhL3BhY2thZ2UvcXQ1L3F0NWJhc2Uv
-cXQ1YmFzZS5taworKysgYi9wYWNrYWdlL3F0NS9xdDViYXNlL3F0NWJhc2UubWsKQEAgLTIzMCw4
-ICsyMzAsMTYgQEAgZWxzZQogUVQ1QkFTRV9DT05GSUdVUkVfT1BUUyArPSAtbm8tZWdsZnMKIGVu
-ZGlmCiAKLVFUNUJBU0VfQ09ORklHVVJFX09QVFMgKz0gJChpZiAkKEJSMl9QQUNLQUdFX0xJQk9Q
-RU5TU0wpLC1vcGVuc3NsLC1uby1vcGVuc3NsKQotUVQ1QkFTRV9ERVBFTkRFTkNJRVMgICArPSAk
-KGlmICQoQlIyX1BBQ0tBR0VfTElCT1BFTlNTTCksb3BlbnNzbCkKKyMgUXQ1IG9mZmljaWFsbHkg
-b25seSBzdXBwb3J0cyBPcGVuU1NMLiBVc2VycyBjYW4gYWxzbyBwcm92aWRlIHRoZWlyIG93bgor
-IyBPcGVuU1NMIHZhcmlhbnQgdGhyb3VnaCB0aGUgdmlydHVhbCBwYWNrYWdlIG1lY2hhbmlzbSwg
-YnV0IGl0IGlzIHRoZW4gdXAKKyMgdG8gdGhlbSB0byBlbnN1cmUgdGhhdCB0aGUgcHJvdmlkZWQg
-QVBJIGlzIGV4YWN0bHkgY29tcGF0aWJsZSB3aXRoIHRoZQorIyBsaWJvcGVuc3NsIG9uZQoraWZl
-cSAoJChCUjJfUEFDS0FHRV9PUEVOU1NMKTokKEJSMl9QQUNLQUdFX0xJQlJFU1NMKSx5OikKK1FU
-NUJBU0VfQ09ORklHVVJFX09QVFMgKz0gLW9wZW5zc2wKK1FUNUJBU0VfREVQRU5ERU5DSUVTICAg
-Kz0gb3BlbnNzbAorZWxzZQorUVQ1QkFTRV9DT05GSUdVUkVfT1BUUyArPSAtbm8tb3BlbnNzbAor
-ZW5kaWYKIAogUVQ1QkFTRV9DT05GSUdVUkVfT1BUUyArPSAkKGlmICQoQlIyX1BBQ0tBR0VfUVQ1
-QkFTRV9GT05UQ09ORklHKSwtZm9udGNvbmZpZywtbm8tZm9udGNvbmZpZykKIFFUNUJBU0VfREVQ
-RU5ERU5DSUVTICAgKz0gJChpZiAkKEJSMl9QQUNLQUdFX1FUNUJBU0VfRk9OVENPTkZJRyksZm9u
-dGNvbmZpZykKCi0tLQpiYXNlLWNvbW1pdDogNTI0NWM0MTQ0MWJhY2NhMjkyZDEyOWQ0MzM5ZTc5
-ZTUxNzlhZjc5YwpjaGFuZ2UtaWQ6IDIwMjYwODIwLXF0NV9hbGxvd19vdGhlcl9vcGVuc3NsX2lt
-cGxlbWVudGF0aW9ucy02MjNjZjM1Y2YzYTkKCkJlc3QgcmVnYXJkcywKLS0gIApBbGV4aXMgTG90
-aG9yw6kgPGFsZXhpcy5sb3Rob3JlQGJvb3RsaW4uY29tPgoKX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJv
-b3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0
-aW5mby9idWlsZHJvb3QK
+Hi Thomas,
+
+Thank you for taking the time to review my patch!
+
+On Thu, Aug 20, 2026 at 09:20:00PM +0200, Thomas Petazzoni wrote:
+> Thanks a lot for your patch, well spotted!
+>
+> One thing that was missing from your commit message is the indication
+> of which commit broke this, so I added that and applied your commit to
+> our master branch.
+>
+> This feature is not actually used by any package in Buildroot, which
+> explains why this problem remained unnoticed. Would you be willing to
+> work on adding a simple test case in support/testing/ for this? I
+> guess it could be a very simple br2-external, with a very simple
+> package that uses <pkg>_FLAT_STACKSIZE.
+
+Sure. I would be glad to add a test case for this, and I will send it as
+a separate patch.
+
+>
+> Aside from that, no many of our users use Buildroot for noMMU
+> platforms. Would you mind sharing your use case? Which platform are
+> you using, in which context, how did you end up running into this
+> <pkg>_FLAT_STACKSIZE issue?
+
+I am working on a fork of Buildroot for HPMicro MCUs:
+https://github.com/hpm-rs/buildroot
+
+I have ported Linux to a new RISC-V MCU called HPM6750 from HPMicro
+Semiconductor Ltd., and I am adding board support for it to Buildroot.
+
+I ran into this problem when trying to run FFmpeg on it. Initially, it
+failed with a "stack smashing detected" error. To resolve this, I
+attempted to use FFMPEG_FLAT_STACKSIZE to allocate a larger FLAT stack,
+which led me to discover the build failure caused by this bug.
+
+>
+> Again, thanks for your contribution!
+>
+> Thomas
+> --
+> Thomas Petazzoni, co-owner and CEO, Bootlin
+> Embedded Linux and Kernel engineering and training
+> https://bootlin.com
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
