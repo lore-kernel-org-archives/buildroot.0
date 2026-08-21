@@ -4,58 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 582C4C5DF93
-	for <buildroot@archiver.kernel.org>; Fri, 21 Aug 2026 15:07:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F72AC5DF94
+	for <buildroot@archiver.kernel.org>; Fri, 21 Aug 2026 15:07:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 01AF881288;
-	Fri, 21 Aug 2026 15:07:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B1BC381297;
+	Fri, 21 Aug 2026 15:07:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hIYJJi1s7zvJ; Fri, 21 Aug 2026 15:07:39 +0000 (UTC)
+ id BpqYWTJM9ehC; Fri, 21 Aug 2026 15:07:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787324859;
-	bh=wkpniK2QZEX16oBsXsO01CDrGXt/aXyueqPT2yahGd0=;
+	s=default; t=1787324861;
+	bh=TVk+PB/IkpKsHZjVu2U0Gfwn44Q4bQpixqmWTKtFAaw=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Q9y8JYmJL6r8DroAAOM14P5lz29sIY/YiSwRP/9tN0iana7KHOG3UoVlrDU3cMM1O
-	 WQrzpiT4AwmsS+/ms5/bcdfxFtITTQ5+1kBI49Sjc5x43gl/EgbapAFEwzED77bGGv
-	 ss3M6CruvA3cBANDhazSQArdHzVs7C5wi1s3bQnccba5QC68gh20J8PvMN3EwHWmJ4
-	 F2iFkDXRpHike1VCbSIkbkqb79511eKatacsZ4VI2DXp34SzfiPLXNDqmXXODqAzb/
-	 YfAZ2tPpmHsd7EAdAOaD0/LZCAll4mDGB3sTLO0n1yxWrjgrXoUfx/zoHEZrFOflao
-	 TdyhA88DgIChw==
+	b=smvqRcoKNHbk5TbKNXA00RDBdSvMswDEKYa1siO2F7tkjFSFuXF57OOCdnFiHCK5e
+	 Wfsczw0dtSyO9roPn7UPZMHYO9s07Cl9g3T05TofRWtzmoKkOMOg2UxYZtEBAAjqt5
+	 FcqRbLDhcpQRv+KRPK6GoGUo6rZ62GKbcxe12OdiGzQgq2eoWR2+EarYyOCbs99IF+
+	 2uJmnv8aNf7SzvN2eqyH3H+5lrx0mMdDUt2HTXLmEajBaCwnpOYRMSLrYQ7htkxNgW
+	 Jyem3AHFEJhWIozpb/7vOeZEm8R/7BCsjCHkG7PXd0SIFj3yUwaMExEi7/B2/y/MJZ
+	 sQxGMd7qd4IQA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 96AEB81228;
-	Fri, 21 Aug 2026 15:07:39 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 2EF0E1CF2
+	by smtp1.osuosl.org (Postfix) with ESMTP id 86BD681228;
+	Fri, 21 Aug 2026 15:07:41 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 354702D26
  for <buildroot@buildroot.org>; Fri, 21 Aug 2026 15:07:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2118E40A11
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1AC9F60884
  for <buildroot@buildroot.org>; Fri, 21 Aug 2026 15:07:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6OdJ2OGh1s0H for <buildroot@buildroot.org>;
- Fri, 21 Aug 2026 15:07:07 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SILJtXet2a58 for <buildroot@buildroot.org>;
+ Fri, 21 Aug 2026 15:07:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C85A240A1E
- for <buildroot@buildroot.org>; Fri, 21 Aug 2026 15:07:07 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 734B96063E
+ for <buildroot@buildroot.org>; Fri, 21 Aug 2026 15:07:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3C71A8E127; Fri, 21 Aug 2026 15:06:14 +0000 (UTC)
+ id DB79B8E127; Fri, 21 Aug 2026 15:06:14 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 21 Aug 2026 17:04:18 +0200
+Date: Fri, 21 Aug 2026 17:04:22 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 6e64a2ff7f3f4f1716ca7459888abb1dbd003cf7
-X-Git-Newrev: 8101c6df42ab156b04d87da0965cc13ac12f0750
+X-Git-Oldrev: cdbb84c3ae7dc0637820dc7d5a3a8ba3e24a9146
+X-Git-Newrev: 5c47b9236d887572496295cd77162cee915c2e4c
 X-Patchwork-Hint: ignore
-Message-Id: <20260821150614.3C71A8E127@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/dracut: bump
- version to 111
+Message-Id: <20260821150614.DB79B8E127@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/postgresql:
+ security bump to v17.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,105 +70,86 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Titouan Christophe via buildroot <buildroot@buildroot.org>
 Reply-To: Titouan Christophe <titouan.christophe@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============9086552305492057060=="
+Content-Type: multipart/mixed; boundary="===============3590442403286440256=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============9086552305492057060==
+--===============3590442403286440256==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/8101c6df42ab156b04d87da0965cc13ac12f0750
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/5c47b9236d887572496295cd77162cee915c2e4c
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-https://github.com/dracut-ng/dracut/blob/111/NEWS.md
+For more information about the release, see:
+  - https://www.postgresql.org/docs/17/release-17-11.html
 
-Removed patch which is included in this release.
+Fixes the following vulnerabilities:
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit c6fa81a18c8c78515e621c26122fa227e1556022)
+- CVE-2026-6471
+- CVE-2026-14663
+- CVE-2026-6464
+- CVE-2026-16239
+- CVE-2026-14669
+- CVE-2026-14664
+- CVE-2026-18024
+- CVE-2026-16238
+- CVE-2026-14668
+- CVE-2026-14662
+- CVE-2026-14679
+- CVE-2026-14680
+- CVE-2026-6469
+- CVE-2026-15741
+- CVE-2026-6470
+- CVE-2026-14666
+- CVE-2026-14681
+- CVE-2026-14672
+- CVE-2026-16241
+- CVE-2026-18408
+- CVE-2026-19385
+- CVE-2026-14670
+- CVE-2026-14677
+- CVE-2026-14673
+- CVE-2026-15742
+- CVE-2026-14676
+- CVE-2026-14678
+- CVE-2026-14671
+
+Assisted-by: Claude:claude-sonnet-5
+Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
+Reviewed-by: Maxim Kochetkov <fido_max@inbox.ru>
+(alternative to commit 2456e44d6779f9664b45c8d2b85f3ea8a250ecc0)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- ...ns-prevent-find_binary-from-dropping-last.patch | 45 ----------------------
- package/dracut/dracut.hash                         |  2 +-
- package/dracut/dracut.mk                           |  2 +-
- 3 files changed, 2 insertions(+), 47 deletions(-)
+ package/postgresql/postgresql.hash | 4 ++--
+ package/postgresql/postgresql.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/dracut/0001-fix-functions-prevent-find_binary-from-dropping-last.patch b/package/dracut/0001-fix-functions-prevent-find_binary-from-dropping-last.patch
-deleted file mode 100644
-index ad312d0b85..0000000000
---- a/package/dracut/0001-fix-functions-prevent-find_binary-from-dropping-last.patch
-+++ /dev/null
-@@ -1,45 +0,0 @@
--From 94c4274e32467235fb580a27ea182169f253ca5f Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?Mat=C3=A9o=20Pourrier?= <mateo.pourrier@smile.fr>
--Date: Tue, 28 Apr 2026 17:23:23 +0200
--Subject: [PATCH] fix(functions): prevent find_binary from dropping last PATH
-- element
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--When `read` encounters EOF before the delimiter, it returns a non-zero
--exit status, causing the while loop to terminate immediately. As a result,
--if the PATH string doesn't end with a colon, the very last directory in
--PATH is ignored by find_binary().
--
--This caused regressions on split-usr architectures where critical
--binaries reside exclusively in /bin, and /bin happens to be
--appended at the very end of the PATH by dracut.sh.
--
--Appending a virtual colon to the Here-String ensures the loop processes
--all directories correctly.
--
--Fixes dracut-ng issue #1467 : https://github.com/dracut-ng/dracut-ng/issues/1467
--
--Upstream: https://github.com/dracut-ng/dracut-ng/pull/2416
--Signed-off-by: Matéo Pourrier <mateo.pourrier@smile.fr>
-----
-- dracut-functions.sh | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/dracut-functions.sh b/dracut-functions.sh
--index f430a28e..5046f45e 100755
----- a/dracut-functions.sh
--+++ b/dracut-functions.sh
--@@ -94,7 +94,7 @@ find_binary() {
--             printf "%s\n" "${_path}"
--             return 0
--         fi
---    done <<< "$PATH"
--+    done <<< "${PATH}:"
-- 
--     [[ -n ${dracutsysrootdir-} ]] && return 1
--     type -P "${1##*/}"
---- 
--2.34.1
--
-diff --git a/package/dracut/dracut.hash b/package/dracut/dracut.hash
-index 3288ed6ad4..1b5b3dce55 100644
---- a/package/dracut/dracut.hash
-+++ b/package/dracut/dracut.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  0d357853f8cf2371d89a8ebcbbb1fd2c1c85a79d8866925fd7385eaeb20a27dc  dracut-110.tar.gz
-+sha256  ca949190692e91611ef16ea3642c0f764f63948860f3f742524310728c991493  dracut-111.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/dracut/dracut.mk b/package/dracut/dracut.mk
-index b40f618fe8..3a1c1567e8 100644
---- a/package/dracut/dracut.mk
-+++ b/package/dracut/dracut.mk
+diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
+index 48bbbd2443..ca0d350708 100644
+--- a/package/postgresql/postgresql.hash
++++ b/package/postgresql/postgresql.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.postgresql.org/pub/source/v17.10/postgresql-17.10.tar.bz2.sha256
+-sha256  078a03516dcdbdb705fecaf415ea3d13a956c589e46f09fed68a06fb00598c90  postgresql-17.10.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v17.11/postgresql-17.11.tar.bz2.sha256
++sha256  dd27f2b3c59e73ed14aa3324901242bf69a032a6347805f274e6260322d42979  postgresql-17.11.tar.bz2
+ # License file, Locally calculated
+ sha256  3d6af92ff8a4c2cdf69afb1cf44edea727922f5cd0cf8b5f72b11cdecac8fdfd  COPYRIGHT
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 6f6f36702f..d7fad7c5a1 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DRACUT_VERSION = 110
-+DRACUT_VERSION = 111
- DRACUT_SITE = $(call github,dracut-ng,dracut-ng,$(DRACUT_VERSION))
- DRACUT_LICENSE = GPL-2.0
- DRACUT_LICENSE_FILES = COPYING
+-POSTGRESQL_VERSION = 17.10
++POSTGRESQL_VERSION = 17.11
+ POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+ POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+ POSTGRESQL_LICENSE = PostgreSQL
 
---===============9086552305492057060==
+--===============3590442403286440256==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -179,4 +160,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============9086552305492057060==--
+--===============3590442403286440256==--
