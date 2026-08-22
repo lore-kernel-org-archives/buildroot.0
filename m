@@ -1,67 +1,61 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3EB1C5DF97
-	for <buildroot@archiver.kernel.org>; Sat, 22 Aug 2026 10:43:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E73C4C5B572
+	for <buildroot@archiver.kernel.org>; Sat, 22 Aug 2026 10:58:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 396CD81175;
-	Sat, 22 Aug 2026 10:43:33 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PLgfaUhZ0dvA; Sat, 22 Aug 2026 10:43:32 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787395411;
-	bh=8rhm8niHXmCqFIUbQyH8gHH3DiqX1x/GZVtQu8wY6oE=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=CPQ2VsJOe+Sp3RnAzIBwynn7SQ8l5lYeDI8awv0zS5PvnyQop1ybhLXvA4gHdPSaz
-	 f0yLCpCs6qZSw/Y8RoYoMVQz30/PTQyhkYJQTOeZQSYqzw+9nWd0mhfCYQW1F1LZbt
-	 6AwMy4U8cpde5CJqDqsg3wGYIuUryrs3BspHju6aW7ZdrfxGSKAJ0DuHRvMt9whPqe
-	 0ApZ0cqyRsYT2u4OJF3GKXRlJfV00XccPSQDuU6J6ryod+3qDP/empQGlsc6B3OaQo
-	 2nw+SdJH2P0V2QWdidaAGMum2qddJpEUczqonvppR2exHAf3Dw5468ohwtJcZVFPNs
-	 P+TNX1V+BCs6Q==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D43E6810F2;
-	Sat, 22 Aug 2026 10:43:31 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 54B0D476
- for <buildroot@buildroot.org>; Sat, 22 Aug 2026 10:43:31 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3ABBB409C8
- for <buildroot@buildroot.org>; Sat, 22 Aug 2026 10:43:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 86CF840726;
+	Sat, 22 Aug 2026 10:58:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ml_fywgwF1CG for <buildroot@buildroot.org>;
- Sat, 22 Aug 2026 10:43:30 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 26D73409C2
- for <buildroot@buildroot.org>; Sat, 22 Aug 2026 10:43:29 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id 8982B13F86E;
- Sat, 22 Aug 2026 12:43:26 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 22 Aug 2026 12:43:26 +0200
-MIME-Version: 1.0
-Date: Sat, 22 Aug 2026 12:43:26 +0200
-To: Philippe MONTCHO <philippemontcho@gmail.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20260819143215.905349-1-philippemontcho@gmail.com>
-References: <20260819143215.905349-1-philippemontcho@gmail.com>
-User-Agent: Webmail Free/1.6.18
-Message-ID: <0e18c06e0323ff6f2c5116fa5494be35@free.fr>
-X-Sender: ju.o@free.fr
-Subject: Re: [Buildroot] [PATCH 1/1] package/mtools: bump version to 4.0.49
+ id mX3xrRbaZumk; Sat, 22 Aug 2026 10:58:48 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1787396328;
+	bh=AEJ165hXNDufAom2QxCImuFpTk+IAD/1hb/hJgH6FzA=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=L2XUYyiacDZkRxFxmaakJjPBGJBJSclvStOtOq0GZPvt+UOkAsO5GCClccPF7G1TC
+	 sCnmIWWJ2uraQ5TJnkwiqPNT9xrUrnAlQE8Sa87H2Zm2yyl5/b+vGVNhYXn85/ZIha
+	 1P+NzE8RGGygNTqYCeXejNLcDWP595B9rBzoi/xAkWrf4z0elRtjXXma+nBpw1vrWN
+	 KITHNoaC0SJbmSN+nuxK4Z6HT1KFU9KfhQsOiWFfmI9JEaKkXrllOdOuezwiFoIoBr
+	 BRoSGym+MWeOw0VFY+rH1AL1JEXeBJvixg0bBoxY2Mhr0knieMYJAWpJLHyTTpY2oH
+	 JiB5gM/137rAQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id B2C0240729;
+	Sat, 22 Aug 2026 10:58:48 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9B1A039E
+ for <buildroot@buildroot.org>; Sat, 22 Aug 2026 10:58:47 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8124840073
+ for <buildroot@buildroot.org>; Sat, 22 Aug 2026 10:58:47 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Soh4imCvS0_7 for <buildroot@buildroot.org>;
+ Sat, 22 Aug 2026 10:58:46 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id E06BF4005F
+ for <buildroot@buildroot.org>; Sat, 22 Aug 2026 10:58:46 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id DC2228909A; Sat, 22 Aug 2026 10:57:52 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 22 Aug 2026 12:45:30 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 0a91e760f467a90b0f0acf00ec76aac011b241f1
+X-Git-Newrev: bdd74f011f88fd1a3d7dc4c2a93a54ed7ce7286b
+X-Patchwork-Hint: ignore
+Message-Id: <20260822105752.DC2228909A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/bind: bump version to
+ 9.20.27
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -75,18 +69,49 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 19/08/2026 16:32, Philippe MONTCHO wrote:
-> Release note:
-> https://lists.gnu.org/archive/html/info-mtools/2025-06/msg00005.html
-> 
-> Signed-off-by: Philippe MONTCHO <philippemontcho@gmail.com>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/bdd74f011f88fd1a3d7dc4c2a93a54ed7ce7286b
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/next
 
-Applied to master (since it's a bugfix only release), thanks.
+https://downloads.isc.org/isc/bind9/9.20.27/doc/arm/html/notes.html#notes-for-bind-9-20-27
+https://downloads.isc.org/isc/bind9/9.20.27/doc/arm/html/changelog.html
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/bind/bind.hash | 4 ++--
+ package/bind/bind.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/bind/bind.hash b/package/bind/bind.hash
+index 36ff7b2d0a..2131f51978 100644
+--- a/package/bind/bind.hash
++++ b/package/bind/bind.hash
+@@ -1,4 +1,4 @@
+-# Verified from https://ftp.isc.org/isc/bind9/9.20.26/bind-9.20.26.tar.xz.asc
++# Verified from https://ftp.isc.org/isc/bind9/9.20.27/bind-9.20.27.tar.xz.asc
+ # with key 706B6C28620E76F91D11F7DF510A642A06C52CEC
+-sha256  55248def0f870c4c46b3de72978ea972615131516663188a4564dca1d20bf350  bind-9.20.26.tar.xz
++sha256  145ab7a50b33a06d9d488b5e668c887e754f42acf8954e2b5dc7e238b080e4a0  bind-9.20.27.tar.xz
+ sha256  9734825d67a3ac967b2c2f7c9a83c9e5db1c2474dbe9599157c3a4188749ebd4  COPYRIGHT
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index 172bbf79b5..2b42e87d62 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BIND_VERSION = 9.20.26
++BIND_VERSION = 9.20.27
+ BIND_SOURCE= bind-$(BIND_VERSION).tar.xz
+ BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ BIND_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
