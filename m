@@ -1,100 +1,100 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 203D1C5DF97
-	for <buildroot@archiver.kernel.org>; Sat, 22 Aug 2026 12:29:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E83DEC5B572
+	for <buildroot@archiver.kernel.org>; Sat, 22 Aug 2026 12:30:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 592DC40816;
-	Sat, 22 Aug 2026 12:29:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A784780ED6;
+	Sat, 22 Aug 2026 12:30:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3iQoXsoY6FgC; Sat, 22 Aug 2026 12:28:58 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bRIVDpZduMGp; Sat, 22 Aug 2026 12:30:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787401738;
-	bh=OTNErLz4pSL8W4xud5EkuNvAjSBHTErtKCeCvaO2bLI=;
+	s=default; t=1787401803;
+	bh=ftdnDVQZfIJzK1++t0QzRxTPCTjxF2ATXaDR16uneq4=;
 	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=BEuBzzveJYxVrjEOHRMXTGwiCIU7vFxbciIFxUTKYpD468wnc94rb0uaia72xH5D+
-	 dF/CxXECyo9BzPSpC6cnz58CiVDq9k6dP09ZXTP+jjmho1AfhupEqG2hdELqHiB9tT
-	 qqEatf1dnbfgO+qSba3bFK9g87e50MxWAe1X4RCqwIHBkRwVMbFZuUTSzc4konJNsd
-	 VizUzXklAgWL3Lqz+bORAJ6bvLiT00WkFA6v7cwE5pRkAhOlfVDUQmifvdJbfuXF7V
-	 wC4P6I+rnH0YbEbTle28dQ1C5oTQpnT5x5LvemXGi9c7kY/low4EVXBKVxJvJFq3s+
-	 N2m8RR1dxwtBg==
+	b=YgPAAOGgt1YBVc4B2Nzif/b3j9cvNbj1/Vl7ngWwiYZPL63BWLyNSMLHpoDf0grNY
+	 G1tywMqNvRG9MLRw4x8BRkSeBKQyHQUSbKAfLaJ2oDX+wLUhLFaXr+vTlkNbOz3io8
+	 7oKDAK/lOI3tPYEhNymvZ6TkXXBCOXgCiiRD2IP02XboPOnYX2O9uTXBDdXivqdeqF
+	 uZ8Snwu4exz3TQR2z68FaIM6XcdPtrJ7KEk5DErfr2xSoO55qHkBRmn5NJrciMkS+e
+	 vlWwbtIshxTlT1fLQ5jVQtYLlvF9ZGITpqh+om2qnGAp2oE7CJ+oKLMSeo014/K3Ja
+	 jORdyxAnG4e1Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B578F407E5;
-	Sat, 22 Aug 2026 12:28:58 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id E94E2118
- for <buildroot@buildroot.org>; Sat, 22 Aug 2026 12:28:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D5E8380ECE;
+	Sat, 22 Aug 2026 12:30:03 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8D33A2B2
+ for <buildroot@buildroot.org>; Sat, 22 Aug 2026 12:30:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CF37F40073
- for <buildroot@buildroot.org>; Sat, 22 Aug 2026 12:28:57 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7318C605FA
+ for <buildroot@buildroot.org>; Sat, 22 Aug 2026 12:30:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NAFcPdToHEEH for <buildroot@buildroot.org>;
- Sat, 22 Aug 2026 12:28:57 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RnJmLvuwQBP6 for <buildroot@buildroot.org>;
+ Sat, 22 Aug 2026 12:30:01 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::62a; helo=mail-ej1-x62a.google.com;
+ client-ip=2a00:1450:4864:20::52c; helo=mail-ed1-x52c.google.com;
  envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com
- [IPv6:2a00:1450:4864:20::62a])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C11C44005F
- for <buildroot@buildroot.org>; Sat, 22 Aug 2026 12:28:55 +0000 (UTC)
-Received: by mail-ej1-x62a.google.com with SMTP id
- a640c23a62f3a-c2020421077so327172866b.3
- for <buildroot@buildroot.org>; Sat, 22 Aug 2026 05:28:55 -0700 (PDT)
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com
+ [IPv6:2a00:1450:4864:20::52c])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 703BC605F9
+ for <buildroot@buildroot.org>; Sat, 22 Aug 2026 12:30:00 +0000 (UTC)
+Received: by mail-ed1-x52c.google.com with SMTP id
+ 4fb4d7f45d1cf-6983d3dae7aso4999456a12.0
+ for <buildroot@buildroot.org>; Sat, 22 Aug 2026 05:30:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1787401733; x=1788006533;
+ d=1e100.net; s=20251104; t=1787401799; x=1788006599;
  h=content-transfer-encoding:content-type:in-reply-to:from
  :content-language:references:cc:to:subject:user-agent:mime-version
  :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to:content-type;
- bh=f/+gKa5fqGXyRvSOkAacldyYZCCdnoeBejbusStJIh0=;
- b=pMgjlKQ4nenF/w4QJso6eh7zoyv+bzjRFdMecdgJIvxWpnCq8Hr9CC3o4HJ4jvIrCN
- qLyj6yakPusoC1GymJjzrfDRJVbyasyE1r6AV5blTXyspsq6SFJAXNdWwvCYONj6GuAQ
- nv9DJ7jDj4tGYKw9oBEEcUzHswx7vZMJuxZyXry0wszFrei9evJwHvOIBw+4SyfZ8H7t
- Yp+iyVFbsXE7VGHwlm2i1LYQtRl05UmmLn+UQ38DWnvj9JUIjg1CWhLUBuhRsk2zXzv4
- 740BUOpjNgGuJu8n/yrsWPpyXhRTDSssQU/hlWO/doG71fiwq13fClg1Pw+0+RrbrtF9
- cwUA==
+ bh=/Wwe7xjZNiQ8q7gI9eVzF5zS4KqHD3PETyk5lC0CJ2k=;
+ b=VDsugQuDh2KGJhbWG0xswk087aY7M3Kk6bJdMIvlsevMYwPJmDRo1NI6zNJ4pOOUg0
+ oQ/0Ih6fqmvxF2UcFGX8HjsEnLvD7uu5D30E7OXf+Me8ZHhHQIlmJcVTAO2ryozcr7Nm
+ eHZ5XBMACU//g6/7kBmu4rDb7so5PdGwWhO8eBK2s5zpchf3TEmaELl2L6rnlDhJPHd1
+ MPUKW/5JZVfxGpsJ2qZinLZC0eoznotKlzrpVpB6r+3qYOdHmVgxdHGMPWCkYLyGcNF9
+ CpUkK3izcpTlBRtbmkyM8bwOxV+zyxwAfmZh6zkWhibZOjTo2HysWAwfBWnXFnL/H3mu
+ sHMA==
 X-Forwarded-Encrypted: i=1;
- AHgh+Rp2D1nJqfMNHObipWGewbA1eeNtmDfa4PhGBb/5fEqcDgfAoofoSrL5uwR9K3zjjUcQyiDJktC1znY=@buildroot.org
-X-Gm-Message-State: AFuF++m+gS8YfLeQeOIQbAfYQ/C4wXIHd9NU457VxxzgTnYXbdsxENCq
- HMUGHDFL/N8pdvHNvjIsVVhL3Kc5iGtoecMNBKgrUCcZ0gTibdHek+hORZ/+V63/V0fqTcjDxr/
- hPVp8
-X-Gm-Gg: AR+sD12IOU//mJdSXe2u4Kf+820tylovCdiAET0YH3wTE+3am+rnqh3it7GpOd08lX3
- omi14wk/icmWoBmWIkV/rXCvLn3AQbGNpNJc9mbkRxSKeCMxeFY84Nlc6HhFhuAwdi+fyRa3olt
- 2LSXaVJ23nSW0HxiR8LN08uHaYDCScv5J8oZfapP5MER8BKAoFEr06ibIQhklJ9DvvOZJmlketX
- Gh8QYmieinv2XJL+yER1+VAqnJinlZJuf3tI0IGsxouwruepuVGnKW/lG6sUSn1wA+XdmNqtzy5
- UP5mHvylePd5gp+Hn9cqn8fe8J4MwZ1UMWfMe8ZY0MhlLsqpsTHpKRD4yv7alCd8+9qB6Uo8GtN
- rWEoYx8C9dVCw05KlTfH4CMeqsjUqRFwDx9+6H/EW+ZQmw7zHHGPAY3aHVbvX5x/YMSOuf2EYlz
- GPafX94wP/mJdiwepawB2OUsLMEKqg6ihQRp1qG6juCtC4hWnUvfxthcXVgMV+J7dFAebXavRfe
- rgDTtYUuDACPHuojpQ/UFGzFv8Pa2VBd4FOCGgn9cAdtQX2
-X-Received: by 2002:a17:907:c008:b0:c24:6505:8f66 with SMTP id
- a640c23a62f3a-c2491e83843mr626030266b.13.1787401733581; 
- Sat, 22 Aug 2026 05:28:53 -0700 (PDT)
+ AHgh+RoniouC95CFwz/GyK+StV0hc2sw9ULffEGwv5M2Ys130K6j0GcMNoM3nj5LosnN5HbnLBRio4cN/xY=@buildroot.org
+X-Gm-Message-State: AFuF++lO4IVPyINKshm5LYav0I4her2dtnXLxIfxE8ZTXBNmTEVWhOgH
+ HdavJP0jpELRGpkM+3+M2Fq5ZyeWdWN0ScH0FrxisCwyYRZwqGFmtpSXuSTzZpomrcDpoRpyEl8
+ ctw6w
+X-Gm-Gg: AR+sD12bsK9LI6q2umbvkZRt8NXVsK9jx35GV/jpomuct75Qi/XTtexzLoviM48Drdz
+ EcbbPZNYmZT69XouXaz5JjyohFZi1TdkVdfhznpzLw8FC0fvStqtuhR2S0t2OAxb/ZbOwmTakAp
+ aKugRFe2MsoNc0eZqq09w2h8dR3sYMVxl/s09DZ8HrIOGnxIG71YKRtw6SNuzzma9asRW9P423C
+ uC2jySV/t6zCnd8ggzO9NEyQhgeY+cCG4jHKbxvS8UhvWIVeSi66ybAiMrcl+ZdB3c+a/uTuLVL
+ +SPVu7eif2T4PY+sZpAJwlidA8JUupEOtPbZt44U0k3iK1jFgUhAqP2Tgy7tQ6w5dEhsx+UEMrZ
+ 37tr56dTLU7ae9ZeY1vhCSSPJVewqgQ0GMqKt4xVE1thsAaXx27oSgTH+wzv0hiajDMKQbBTXQ7
+ 8G9FatzMxDDynAt3Wknhp2rNvLXQtsWbmkb+PNPB6A2ZXmBbzbUX1ioBjuO6NbWk0GCuSpxoH2I
+ tqnGjYLHJs35TdvOdZinQwlWCwPuxXqpCsOW1Zjzh1qKk8I
+X-Received: by 2002:a17:907:1c19:b0:c16:785:cfb6 with SMTP id
+ a640c23a62f3a-c246d5b7ebemr1211077466b.3.1787401798673; 
+ Sat, 22 Aug 2026 05:29:58 -0700 (PDT)
 Received: from [192.168.129.33] (154.186-200-80.adsl-dyn.isp.belgacom.be.
  [80.200.186.154]) by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-c249606a905sm331444266b.13.2026.08.22.05.28.53
+ a640c23a62f3a-c249606b208sm284912966b.10.2026.08.22.05.29.58
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 22 Aug 2026 05:28:53 -0700 (PDT)
-Message-ID: <256fc1f6-1c15-4d75-bc4a-ed358b878156@mind.be>
-Date: Sat, 22 Aug 2026 14:28:52 +0200
+ Sat, 22 Aug 2026 05:29:58 -0700 (PDT)
+Message-ID: <ab89a2c7-634c-42be-9075-327117028d52@mind.be>
+Date: Sat, 22 Aug 2026 14:29:57 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Mattia Narducci <mattianarducci1@gmail.com>, buildroot@buildroot.org
-Cc: Francisco Gonzalez <gzmorell@gmail.com>
-References: <20260812113306.353838-1-mattianarducci1@gmail.com>
+To: Fiona Klute <fiona.klute@gmx.de>, buildroot@buildroot.org
+Cc: Thierry Bultel <tbultel@free.fr>
+References: <20260813143405.2868517-1-fiona.klute@gmx.de>
 Content-Language: en-US
-In-Reply-To: <20260812113306.353838-1-mattianarducci1@gmail.com>
-Subject: Re: [Buildroot] [PATCH] package/ser2net: backport security patch
- for GHSA-cgh5-39mg-vhfr
+In-Reply-To: <20260813143405.2868517-1-fiona.klute@gmx.de>
+Subject: Re: [Buildroot] [PATCH 1/3] package/dracut: security bump to
+ version 112
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -113,15 +113,22 @@ Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 12/08/26 13:33, Mattia Narducci wrote:
-> - GHSA-cgh5-39mg-vhfr: Path traversal in authentication via unsanitized
->    username allows auth bypass
->    https://github.com/cminyard/ser2net/security/advisories/GHSA-cgh5-39mg-vhfr
->    No CVE ID yet.
+On 13/08/26 16:34, Fiona Klute via buildroot wrote:
+> From: "Fiona Klute (Othermo GmbH)" <fiona.klute@gmx.de>
 >
-> Signed-off-by: Mattia Narducci <mattianarducci1@gmail.com>
+> Upstream changelog:
+> https://github.com/dracut-ng/dracut/releases/tag/112
+>
+> The changelog lists multiple "security related commits", though only
+> one mentions a CVE: CVE-2026-6893 [1], which allows a malicious DHCP
+> server to inject code into shell scripts.
+>
+> [1] https://nvd.nist.gov/vuln/detail/CVE-2026-6893
+>
+> Signed-off-by: Fiona Klute (Othermo GmbH) <fiona.klute@gmx.de>
 
 Applied to 2025.02.x and 2026.05.x, thanks !
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
