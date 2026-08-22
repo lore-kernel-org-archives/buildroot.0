@@ -4,64 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B144AC5DF8C
-	for <buildroot@archiver.kernel.org>; Sat, 22 Aug 2026 14:29:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F189DC5DF8C
+	for <buildroot@archiver.kernel.org>; Sat, 22 Aug 2026 16:36:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6C8CE80FA9;
-	Sat, 22 Aug 2026 14:29:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5771080EC9;
+	Sat, 22 Aug 2026 16:36:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MNgbk1cllpaf; Sat, 22 Aug 2026 14:29:55 +0000 (UTC)
+ id owv_oDcJhZd2; Sat, 22 Aug 2026 16:36:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787408995;
-	bh=YVt0XPoBabg2rt4QsV6EVWMnuWHyde5Z9zN2QuuW8gc=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=aypOAWP3nPT6qwgc49I0yMaaT9m2j5CLpvqsNGIalk2l7Ked0ysd9igVAQvuLIqI0
-	 INsL33Ktt3SKZStkhUQcyrfsIMtLXJLUHDnhCWVxZ7Q15nJNI00nF0dpTp9D6dbNIH
-	 ofOqpKKVuh5un84ZFh5FYcD2YqQOsmuMvJz18ePabl3fxW5jiet3i2EQXEqgTT9vOc
-	 64w46sDIhsG/nGgMD2VZ7DHcHR3oEZYSE9GJ3TxYRngIkU/3ZldKsx3Gz5rFQ6vG3Q
-	 OZy2W8JKxlMSw/4FxiKVgF5MvybyFjgWK0NYSePuVl7jtg2BDSXIxJt1DgDvWfLfcG
-	 zMaSbZjNiv2xQ==
+	s=default; t=1787416561;
+	bh=cZ/swSX+2XAHuLmjGGXjEmnYnDR17ze7tT0lH6LjkPM=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=NLw9XeGPnTi50mZ01Gv7354FBG40u1NWSpRwN3OlzqdU+pEll7P3aAByrTvNcoWE7
+	 GliR6ZaK6Kovlt7shBXhQ0/iicCm5PVcb6CJHRTS/fRRJynn0mnNi9Eu1Bf5gDdI+o
+	 rc6Orlo9zMqBGMJrBewbIVe87pfbz2QZGz3MMylrS9uz694V/fV9CmRlpUmhK7xdTt
+	 KyGP1ku8JkYkxIt27OmIUHa1jogJMj2JBZ8/rsDept6T07/wjZPuYLXXgiVwAO1Wtw
+	 I2CFh/qcYhV+ijWm1vEhEH4/NGL3325gqhatxq37C+FR/8aUJ6o1Lvj+ScZBm84cwV
+	 7hR4QkGzB7czA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7526880EE3;
-	Sat, 22 Aug 2026 14:29:55 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id D74CB336
- for <buildroot@buildroot.org>; Sat, 22 Aug 2026 14:29:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5354A80ECA;
+	Sat, 22 Aug 2026 16:36:01 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 64BC42E9
+ for <buildroot@buildroot.org>; Sat, 22 Aug 2026 16:35:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BD2354007E
- for <buildroot@buildroot.org>; Sat, 22 Aug 2026 14:29:53 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 56F9B80ECD
+ for <buildroot@buildroot.org>; Sat, 22 Aug 2026 16:35:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XrHAg1oH1Lvb for <buildroot@buildroot.org>;
- Sat, 22 Aug 2026 14:29:53 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp2.osuosl.org (Postfix) with ESMTPS id BDF014005F
- for <buildroot@buildroot.org>; Sat, 22 Aug 2026 14:29:51 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id 359F55FFA3;
- Sat, 22 Aug 2026 16:29:47 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 22 Aug 2026 16:29:47 +0200
-MIME-Version: 1.0
-Date: Sat, 22 Aug 2026 16:29:47 +0200
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Cc: buildroot@buildroot.org, Alexander Dahl <post@lespocky.de>
-In-Reply-To: <20260818174955.835507-1-giulio.benetti@benettiengineering.com>
-References: <20260818174955.835507-1-giulio.benetti@benettiengineering.com>
-User-Agent: Webmail Free/1.6.18
-Message-ID: <22ab939e9d419d948cfc3c913c153e54@free.fr>
-X-Sender: ju.o@free.fr
-Subject: Re: [Buildroot] [PATCH] package/putty: bump to version 0.85
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DC9syHf_-85A for <buildroot@buildroot.org>;
+ Sat, 22 Aug 2026 16:35:57 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8EE7780EC9
+ for <buildroot@buildroot.org>; Sat, 22 Aug 2026 16:35:57 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 76BCA8E5F1; Sat, 22 Aug 2026 16:35:03 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 22 Aug 2026 17:56:05 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 131952483b10e53c443f90b089fc7a050b2eeef8
+X-Git-Newrev: 937e33237ef739350bcba6fe0e18382ef7305afd
+X-Patchwork-Hint: ignore
+Message-Id: <20260822163503.76BCA8E5F1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/wget: fix CVE-2026-58469
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -75,26 +68,198 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============7458521794651438865=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 18/08/2026 19:49, Giulio Benetti wrote:
-> Release notes:
-> https://www.chiark.greenend.org.uk/~sgtatham/putty/changes.html
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+--===============7458521794651438865==
+Content-Type: text/plain
 
-Applied to master, thanks.
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/937e33237ef739350bcba6fe0e18382ef7305afd
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Even if this release is not fixing CVEs, I marked it as "security".
-The release notes has only security related bugfixes.
+Backport the upstream fix for a buffer underflow in
+clean_metalink_string(), together with the two required follow-up
+fixes for the inverted whitespace check and missing ctype.h include.
 
-Best regards,
+Backport to: 2025.02.x
 
-Julien.
+Signed-off-by: Stefan Müller <stemu86@gmx.ch>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ ...lean_metalink_string-Fix-buffer-underflow.patch | 54 ++++++++++++++++++++++
+ ..._string-Fix-inverted-trailing-space-check.patch | 40 ++++++++++++++++
+ .../wget/0004-src-metalink.c-Include-ctype.h.patch | 28 +++++++++++
+ package/wget/wget.mk                               |  5 ++
+ 4 files changed, 127 insertions(+)
+
+diff --git a/package/wget/0002-src-metalink.c-clean_metalink_string-Fix-buffer-underflow.patch b/package/wget/0002-src-metalink.c-clean_metalink_string-Fix-buffer-underflow.patch
+new file mode 100644
+index 0000000000..652f99786d
+--- /dev/null
++++ b/package/wget/0002-src-metalink.c-clean_metalink_string-Fix-buffer-underflow.patch
+@@ -0,0 +1,54 @@
++From 37a40fcb450153f69537c7cbc2a7a4fb0b6f7826 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Tim=20R=C3=BChsen?= <tim.ruehsen@gmx.de>
++Date: Mon, 29 Jun 2026 18:32:02 +0200
++Subject: [PATCH] * src/metalink.c (clean_metalink_string): Fix buffer
++ underflow
++
++Reported-by: TristanInSec@gmail.com
++CVE: CVE-2026-58469
++Upstream: https://gitlab.com/gnuwget/wget/-/commit/37a40fcb450153f69537c7cbc2a7a4fb0b6f7826
++Signed-off-by: Stefan Müller <stemu86@gmx.ch>
++
++---
++ src/metalink.c | 9 +++------
++ 1 file changed, 3 insertions(+), 6 deletions(-)
++
++diff --git a/src/metalink.c b/src/metalink.c
++index 9e355fd0..3acdc3a2 100644
++--- a/src/metalink.c
+++++ b/src/metalink.c
++@@ -1041,7 +1041,6 @@ void
++ clean_metalink_string (char **str)
++ {
++   int c;
++-  size_t len;
++   char *new, *beg, *end;
++ 
++   if (!str || !*str)
++@@ -1049,7 +1048,7 @@ clean_metalink_string (char **str)
++ 
++   beg = *str;
++ 
++-  while ((c = *beg) && (c == '\n' || c == '\r' || c == '\t' || c == ' '))
+++  while (isspace(*beg))
++     beg++;
++ 
++   end = beg;
++@@ -1062,12 +1061,10 @@ clean_metalink_string (char **str)
++   /* If we are at the end of the string, search the first legit
++      character going backward.  */
++   if (*end == '\0')
++-    while ((c = *(end - 1)) && (c == '\n' || c == '\r' || c == '\t' || c == ' '))
+++    while (end > beg && !isspace(*(end - 1)))
++       end--;
++ 
++-  len = end - beg;
++-
++-  new = xmemdup0 (beg, len);
+++  new = xmemdup0 (beg, end - beg);
++   xfree (*str);
++   *str = new;
++ }
++-- 
++GitLab
++
+diff --git a/package/wget/0003-src-metalink.c-clean_metalink_string-Fix-inverted-trailing-space-check.patch b/package/wget/0003-src-metalink.c-clean_metalink_string-Fix-inverted-trailing-space-check.patch
+new file mode 100644
+index 0000000000..e6b6b7180a
+--- /dev/null
++++ b/package/wget/0003-src-metalink.c-clean_metalink_string-Fix-inverted-trailing-space-check.patch
+@@ -0,0 +1,40 @@
++From 7b1cdecc49bc77bde220fc575c8a00386c3f3bcf Mon Sep 17 00:00:00 2001
++From: ChenYanpan <chenyanpan@xfusion.com>
++Date: Wed, 8 Jul 2026 12:09:55 +0800
++Subject: [PATCH] * src/metalink.c (clean_metalink_string): Fix inverted
++ trailing-space check
++
++37a40fcb added an `end > beg' bound guard to prevent a buffer
++underflow, but accidentally flipped the condition from `isspace' to
++`!isspace'. The loop therefore walked back over non-space characters
++instead of trailing whitespace, collapsing any string without a
++trailing newline to "". Every Metalink/HTTP resource URL was wiped,
++so wget could not follow any mirror and
++testenv/Test-metalink-http.py failed ("Expected file test.meta not
++found"). Restore the `isspace' condition.
++
++Copyright-paperwork-exempt: Yes
++CVE: CVE-2026-58469
++Upstream: https://gitlab.com/gnuwget/wget/-/commit/7b1cdecc49bc77bde220fc575c8a00386c3f3bcf
++Signed-off-by: Stefan Müller <stemu86@gmx.ch>
++
++---
++ src/metalink.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/metalink.c b/src/metalink.c
++index 3acdc3a2..3794909f 100644
++--- a/src/metalink.c
+++++ b/src/metalink.c
++@@ -1061,7 +1061,7 @@ clean_metalink_string (char **str)
++   /* If we are at the end of the string, search the first legit
++      character going backward.  */
++   if (*end == '\0')
++-    while (end > beg && !isspace(*(end - 1)))
+++    while (end > beg && isspace(*(end - 1)))
++       end--;
++ 
++   new = xmemdup0 (beg, end - beg);
++-- 
++GitLab
++
+diff --git a/package/wget/0004-src-metalink.c-Include-ctype.h.patch b/package/wget/0004-src-metalink.c-Include-ctype.h.patch
+new file mode 100644
+index 0000000000..0782bf2563
+--- /dev/null
++++ b/package/wget/0004-src-metalink.c-Include-ctype.h.patch
+@@ -0,0 +1,28 @@
++From 82d945ff5dc9942b78b2bf736aac298c24fe00a1 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Tim=20R=C3=BChsen?= <tim.ruehsen@gmx.de>
++Date: Thu, 9 Jul 2026 14:50:40 +0200
++Subject: [PATCH] * src/metalink.c: Include ctype.h
++
++CVE: CVE-2026-58469
++Upstream: https://gitlab.com/gnuwget/wget/-/commit/82d945ff5dc9942b78b2bf736aac298c24fe00a1
++Signed-off-by: Stefan Müller <stemu86@gmx.ch>
++
++---
++ src/metalink.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/metalink.c b/src/metalink.c
++index 3794909f..954546d2 100644
++--- a/src/metalink.c
+++++ b/src/metalink.c
++@@ -46,6 +46,7 @@ as that of the covered work.  */
++ #include "c-strcase.h"
++ #include <errno.h>
++ #include <unistd.h> /* For unlink.  */
+++#include <ctype.h>
++ #include <metalink/metalink_parser.h>
++ #ifdef HAVE_GPGME
++ #include <gpgme.h>
++-- 
++GitLab
++
+diff --git a/package/wget/wget.mk b/package/wget/wget.mk
+index de03ec9cef..8118811efe 100644
+--- a/package/wget/wget.mk
++++ b/package/wget/wget.mk
+@@ -12,6 +12,11 @@ WGET_LICENSE = GPL-3.0+
+ WGET_LICENSE_FILES = COPYING
+ WGET_CPE_ID_VENDOR = gnu
+ 
++# 0002-src-metalink.c-clean_metalink_string-Fix-buffer-underflow.patch
++# 0003-src-metalink.c-clean_metalink_string-Fix-inverted-trailing-space-check.patch
++# 0004-src-metalink.c-Include-ctype.h.patch
++WGET_IGNORE_CVES += CVE-2026-58469
++
+ WGET_CONF_OPTS += --disable-pcre
+ 
+ ifeq ($(BR2_PACKAGE_LIBPSL),y)
+
+--===============7458521794651438865==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7458521794651438865==--
