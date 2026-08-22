@@ -1,101 +1,99 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CEB05C5DF97
-	for <buildroot@archiver.kernel.org>; Sat, 22 Aug 2026 12:06:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E150C5B572
+	for <buildroot@archiver.kernel.org>; Sat, 22 Aug 2026 12:07:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7641940733;
-	Sat, 22 Aug 2026 12:06:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C945180DA1;
+	Sat, 22 Aug 2026 12:07:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NsKAgXXGc3NY; Sat, 22 Aug 2026 12:06:39 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7j3iXt0Wesz2; Sat, 22 Aug 2026 12:07:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787400399;
-	bh=/jc7GO3zsGjO6QkvGmdknYymi3CerQJ8Jt7BUv/z30Q=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=UWB9wma8x6eIzV3otuqZv9WjzgHQXKXrWjggpDZ83l5xu6XMtNVGiaOQ6M/S1aFAR
-	 8J8XZqgLZO6WkRRTIFillsyuQTi+m3krMSUYQJKCM/9HM/iLp6dmAPEOZAxKrTPhhb
-	 kDv627kz34XGYk46N2bmW/jIgQ8XhFztdGt4naOtVZU14A8cAWYk3rZJw4oowiN6SU
-	 +HmarbvwyaMCWjptlHx6HDKuLIaauc8yb8LgOa1rxGIkGYmdLHKY78dL3mJeAmkNxw
-	 yKAC/iOyyEgwtq96swBZ5dC15V2t3dXITxi7+4q/a3fzYfUOXnKnizpYlrD9JxxAxx
-	 aFyDf9kyzgJFQ==
+	s=default; t=1787400448;
+	bh=ITnzT68u+bUdoWo3PzfA+na9RpdWQcNw7G7LKOY0mfs=;
+	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	 From;
+	b=owHQhBAvQkW3EkJ99YOPlWpdBrNnY8MhBywvg3tse7dzOp/HexFlf1m+F7417yFBB
+	 ZFieYAAbsutbusZSLDLkYseVPtpGecCMQu65nuz5759p5xUUE2aQbfIc2OG6KwD2do
+	 TlMq6tSl2rfhBh80sJgAxiumJi/oukj1DU+FJxMPyFd3VZs46W4tqasgA2wNS7AMCz
+	 Tt1IHnpoSU2BnptwA0V+8/SJnsdvptCC8iHyk6KA4L3JMbCrhub99xe7VOG/n6t4rr
+	 O8/AxxhtQ3GzzLZd282FpWwjxxhtKeBPPR/3nmT4eL/2VtTo7rbP4ZSAHueSBk4B3U
+	 JiUP9OXX7oPBQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A5A904072E;
-	Sat, 22 Aug 2026 12:06:39 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 00A4A476
- for <buildroot@buildroot.org>; Sat, 22 Aug 2026 12:06:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D0E0880D39;
+	Sat, 22 Aug 2026 12:07:28 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id BBB81476
+ for <buildroot@buildroot.org>; Sat, 22 Aug 2026 12:07:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D6C59605D9
- for <buildroot@buildroot.org>; Sat, 22 Aug 2026 12:06:37 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id ADCD6605D9
+ for <buildroot@buildroot.org>; Sat, 22 Aug 2026 12:07:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OpD0rBDs1S-9 for <buildroot@buildroot.org>;
- Sat, 22 Aug 2026 12:06:37 +0000 (UTC)
+ id L2Rs47RuGYBQ for <buildroot@buildroot.org>;
+ Sat, 22 Aug 2026 12:07:26 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::632; helo=mail-ej1-x632.google.com;
+ client-ip=2a00:1450:4864:20::533; helo=mail-ed1-x533.google.com;
  envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com
- [IPv6:2a00:1450:4864:20::632])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 095EC605D7
- for <buildroot@buildroot.org>; Sat, 22 Aug 2026 12:06:36 +0000 (UTC)
-Received: by mail-ej1-x632.google.com with SMTP id
- a640c23a62f3a-c1671ec8692so280892066b.0
- for <buildroot@buildroot.org>; Sat, 22 Aug 2026 05:06:36 -0700 (PDT)
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com
+ [IPv6:2a00:1450:4864:20::533])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C7CF6605D7
+ for <buildroot@buildroot.org>; Sat, 22 Aug 2026 12:07:24 +0000 (UTC)
+Received: by mail-ed1-x533.google.com with SMTP id
+ 4fb4d7f45d1cf-6a38098734bso3452023a12.1
+ for <buildroot@buildroot.org>; Sat, 22 Aug 2026 05:07:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1787400395; x=1788005195;
+ d=1e100.net; s=20251104; t=1787400443; x=1788005243;
  h=content-transfer-encoding:content-type:in-reply-to:from
- :content-language:references:cc:to:subject:user-agent:mime-version
- :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :content-language:references:to:subject:user-agent:mime-version:date
+ :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to:content-type;
- bh=vdGEHjzAhtsWi7VvYvO0i7rBE7NVKttDBYauJqyHIEA=;
- b=CXedAU3WrsX9gwKePa7C0bRPENkndltWX00ipYfYc7fwxjErRC+FwXMwEfhk2vwjaW
- TbvLjepvGdbJxYzjaqXmUr757OS+cF4ZUO4UryLRtYmQKtbFn7AO5/zXXTmCezjDPyH4
- MZGB/FXAGRedRTyOyzlfL4ayaMUjjtjSUUT1MCR8vKz1To07pXgJm4AZPHpWDUJr+/OM
- f5eATxDcig8QpsOWP0Wv0JlEk1OpX54mm1/Swh9pGraLy0vx/0mz6WPrHblYYVpJA75+
- UQa6rVex+zycLN9HR01dnyVKiyfN0l/5ud7PtVjAMpj4lhBhcbtG6Bup6v8AzeuWb/ZH
- nkQQ==
+ bh=LfSFOhcyt1QlYNW7dhISLvpE7OCwB7qCYK7fiFEsHFg=;
+ b=kP7ZqcBvUYbV2IH7N9Ayo7iRQZS/9XlKQFJcJuPw5zj1rNnv3vcu4GSpCfHA7blfQh
+ VgSZcx6wqdjTwkbNH7XH1J4SsY4bTiDH4O+y+3n92Q28HLRGPQI9atFQSKak7s3p6xk7
+ GCkd+6XpuOf5KYLzE7GG4lm4zzRklhhQJI3pR9fKcwt5HCd8KY2E4+eph2sBl2wVXKMH
+ z6FvmVFDQYcDmiOGaC6in3UGOmxZq5bQN96dT/nG3uhsNQuRFYaW9rB6yVr9+A/FuizM
+ VAqGu0lcGCiko60xAoTrA5gM+HJzjqtO0bPe5rIg6/P0OmPb7PszfIhELaw5YzRXioK5
+ uC6w==
 X-Forwarded-Encrypted: i=1;
- AHgh+Rrc5w3Yw2Ekvvw0ZLabEEYciThamdZMbeXGvWYdwBP2mNI6DgyqsEsn53XkPteGASn5Vu8wNvHpxGY=@buildroot.org
-X-Gm-Message-State: AFuF++lvucnLfVEphS/SPx2u9VB9Z+BUNqKA9Y3L1AhfTTI/YH8WTC1J
- 6lpK4JYEa8A6rxpcBiHnX9T01+wnC/1XrWeP1hbqeU/d9/Hdn5k6QdaQ6k6zhigO1Ew=
-X-Gm-Gg: AR+sD11L7xPLGPuFZsMpu0iV5qIcz7ov+jmGK90DC1lIupCgbn03pPqDZVRyJl/MDoF
- 6wruEZZK1fAQEz8uYv4SNKNKOCYtfYEq0a0ACtzHhMPvyy0TdO+r1c6hIIfDl9vabIr3GcZHsN3
- I9c5aHhq4nzrVg4gMq44fyZISkZPOXqRzxYS17epqWi7wt2gBZDM5wTbQ9yVyyy6ISLNyJc8VNd
- Lfpckg+YgeM1qxYa7ECqB7XWghkSNuSnS99MvHBaPZMpUwe7IMRDezaF8slEYnOUCo7dAOjka73
- bF/6mze5WYW30awsuBwoIcCtpWrfllR622RhrVEwJVGmEz2CToMJ4QWa3WsToReGGCqvPGti3km
- 4qyuCzvYyYeq68au4KDD/uS6Pogy5hdTMv8SImCllVsS9RNloNGtTJMlpXl9ghg9J1sdehQh5uo
- IuMwFsAIyRSab56XIK8chQGH9XMUcjsU3IEcaNOcHhPiVua+addkKsJTt2HfdkJXyU+AT3gQgOO
- 5LoVsp5hOMSeTEI7wcmLdN+upnlusD/wQJDvipV/9dc3aRkxdrb5q+oJyQ=
-X-Received: by 2002:a17:907:60c9:b0:c21:992e:63f2 with SMTP id
- a640c23a62f3a-c2491c28461mr564019566b.1.1787400394180; 
- Sat, 22 Aug 2026 05:06:34 -0700 (PDT)
+ AHgh+Rrvldi4NhpooMf2BHoLcEcUZRqSX2LvTdxdH2LSw5zgsJOeBpXDOEFdzRIE9q5R2lrQWHsJDhxKOrw=@buildroot.org
+X-Gm-Message-State: AFuF++llukNz0dp8M1pLvXjyD4eh/dAShRGZ+oW24Vu45qsdSI3xcRSg
+ lczAV9KZ8NCPU/3933fHtuSSC3XMQDOXKFN1MojTqyXoyCWUpoZ538RkDeoAtl2vGt2EOWHY8nL
+ b8vCn
+X-Gm-Gg: AR+sD11BOWkd37ggqqHcJmfBZuYedlaW/bQLCnPz+RIktYwE2E6qFD92eW4oUgLFrIG
+ +DUzrTqjP/ldKWpAu/EAw5FLr7GxSJZAjr4ZgXADea3qVxFI03aOYSfRVaMWvMcEAl4QJb4d5kv
+ 3L0r7JsoFj1ciSlizhg7DjDK8tlnEzCG78jZI2SyOFmSD/V5q9yccdi0hfkEuT1+Az1QiX+2k0e
+ CkrIcl5eUm5hildwNS+MA1QY3kN/k/dsYAI+R+9OaY8+k9iiTRcw2TPECZiw13mkm81DKmypv71
+ jP+4yyPmVD9rThj9fAsGEhdsdauqF+VYouEfNcc7sD/Ekg0RXPBE9HtG9Qrldq0+OR+u5rJgteO
+ Uy/LnutaihD2Yd+9JG90mB7r2iGHLutDivkbu/jppJtxRAnAGDvpVzYIgQjLZMFxAiaH+bqw7kY
+ lrGGm4v06Tfqq2Cxnxr3RG03Q/1fV1+JBt8l6LS6MHLOnkdde+Meg+HyTyNNDBS22xI0IeOZyfT
+ vtcCL5J+0NcEasSuByEC78bwHvZZgm23XikKoU6vz1U3Kq+
+X-Received: by 2002:a05:6402:4607:b0:6a0:e963:f546 with SMTP id
+ 4fb4d7f45d1cf-6a42f27960bmr13323545a12.15.1787400441313; 
+ Sat, 22 Aug 2026 05:07:21 -0700 (PDT)
 Received: from [192.168.129.33] (154.186-200-80.adsl-dyn.isp.belgacom.be.
  [80.200.186.154]) by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-c2495ee5295sm306908466b.0.2026.08.22.05.06.33
+ 4fb4d7f45d1cf-6a3fec280e9sm12929511a12.0.2026.08.22.05.07.20
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 22 Aug 2026 05:06:33 -0700 (PDT)
-Message-ID: <968da06f-6fc9-4ae2-a258-6d864b033b42@mind.be>
-Date: Sat, 22 Aug 2026 14:06:32 +0200
+ Sat, 22 Aug 2026 05:07:20 -0700 (PDT)
+Message-ID: <7ab22d6f-8755-4be8-b260-aabc4349e709@mind.be>
+Date: Sat, 22 Aug 2026 14:07:19 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>,
- buildroot@buildroot.org
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20260811-add_missing_tests_in_developpers-v1-1-4ee158838089@bootlin.com>
+To: Thomas Perale <thomas.perale@mind.be>, buildroot@buildroot.org
+References: <20260811114250.116254-1-thomas.perale@mind.be>
 Content-Language: en-US
-In-Reply-To: <20260811-add_missing_tests_in_developpers-v1-1-4ee158838089@bootlin.com>
-Subject: Re: [Buildroot] 
- =?utf-8?q?=5BPATCH=5D_DEVELOPERS=3A_add_Alexis_Lotho?=
- =?utf-8?q?r=C3=A9_for_libldns_and_python=5Fscp_tests?=
+In-Reply-To: <20260811114250.116254-1-thomas.perale@mind.be>
+Subject: Re: [Buildroot] [PATCH 2025.02.x RESEND 1/5] package/busybox:
+ re-introduce IGNORE_CVES for CVE-2023-42366
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -109,18 +107,25 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Titouan Christophe via buildroot <buildroot@buildroot.org>
 Reply-To: Titouan Christophe <titouan.christophe@mind.be>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gMTEvMDgvMjYgMTY6NDAsIEFsZXhpcyBMb3Rob3LDqSB2aWEgYnVpbGRyb290IHdyb3RlOgo+
-IFdoZW4gYWRkaW5nIHRoZSBsaWJsZG5zIGFuZCBweXRob25fc2NwLCB0aGUgY29ycmVzcG9uZGlu
-ZyB0ZXN0cyB3ZXJlIG5vdAo+IGFkZGVkIHRvIERFVkVMT1BFUlMsIHByZXZlbnRpbmcgY29ycmVj
-dCBub3RpZmljYXRpb25zIGluIGNhc2Ugb2YgdGVzdHMKPiBmYWlsdXJlcy4KPgo+IEFkZCB0aGUg
-bWlzc2luZyBlbnRyaWVzIHRvIGVuYWJsZSBwcm9wZXIgYXV0aG9yIG5vdGlmaWNhdGlvbnMgaW4g
-Y2FzZSBvZgo+IGZhaWxpbmcgdGVzdHMuCj4KPiBTaWduZWQtb2ZmLWJ5OiBBbGV4aXMgTG90aG9y
-w6kgPGFsZXhpcy5sb3Rob3JlQGJvb3RsaW4uY29tPgpBcHBsaWVkIHRvIDIwMjYuMDUueCwgdGhh
-bmtzICEKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1
-aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0
-cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+On 11/08/26 13:42, Thomas Perale via buildroot wrote:
+> The patch `0008-awk.c-fix-CVE-2023-42366-bug-15874.patch` was introduced
+> in [1]. The IGNORE_CVES entry was removed while the patch is still
+> present in [2].
+>
+> Re-introduce this IGNORE_CVES entry.
+>
+> [1] 75c594d446 package/busybox: fix pending CVEs
+> [2] f88537c46b package/busybox: drop stale IGNORE_CVES entries
+>
+> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Series applied to 2025.02.x, thanks !
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
