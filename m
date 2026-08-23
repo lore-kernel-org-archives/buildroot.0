@@ -1,79 +1,61 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8964AC5DF9B
-	for <buildroot@archiver.kernel.org>; Sun, 23 Aug 2026 09:26:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53319C5DF8C
+	for <buildroot@archiver.kernel.org>; Sun, 23 Aug 2026 13:54:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E3C0F606E3;
-	Sun, 23 Aug 2026 09:26:52 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id O4xpea2xyuvb; Sun, 23 Aug 2026 09:26:51 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787477211;
-	bh=ioElaHX2jufbaonKz94ve2cRf2wrJ4GNWT8ys9FVjkM=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=YC9ao1d0Xa1wtusFNlGXMa2vwEkJspMdQ0TpEfaPY8ah/G63au4wzInYohVKgoPDm
-	 QjZJDbMBL/AriH6LtAsHwnuIOnfVOpiMZV3BcnKgIfpmmxh8+NX9X5jFeE00FnLvQm
-	 lJeXBCp1MjT3fq0fzfAbvIV/Ng9yPQ4mbqNOf1HBiQawmlOEWFay4AkyvG1rIynPAq
-	 PtBsoUcZNtlRwJHsMfsEWo1Utr8m8YkH1MF7rG8hizGvPvDT76CfnwseGzFatRMr2w
-	 HKXSR5POcAOEbGndngSO8o+xwElJb6mcs6S6uyBpsEdWyuOAaVvHTEVv/KpBqH5RFz
-	 C3uZPMFdh3taQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1007C60621;
-	Sun, 23 Aug 2026 09:26:51 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id E35922FD
- for <buildroot@buildroot.org>; Sun, 23 Aug 2026 09:26:48 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C96B34066F
- for <buildroot@buildroot.org>; Sun, 23 Aug 2026 09:26:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C536F40555;
+	Sun, 23 Aug 2026 13:54:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ELiMUgRaIgKE for <buildroot@buildroot.org>;
- Sun, 23 Aug 2026 09:26:47 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none) header.from=kuhls.net
-Authentication-Results: smtp4.osuosl.org; dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=Bwbdqp8T
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1B7B64066E
- for <buildroot@buildroot.org>; Sun, 23 Aug 2026 09:26:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
- s=kas202605290044; t=1787477202;
- bh=552ue/2V2mY8L0y4wCdD/JMBMZjXem/q+X8gT8jJ64g=;
- h=From:To:Subject:Date:From;
- b=Bwbdqp8T22KasHHYs92oLVmhAMdWef4dK8TNUWy0CzhFnvtOcNvH/yc+/Eo7DbkSW
- C/B0pqlb98h20wU5KNHMI14C9a/Nm2F1fgx2gFOjO2/3OXaXuEYsLCBUa1mHfve/u3
- od74HhWBMWC97eq9fgiXUBEjUkz9AWgV79pV9L3E5eu0GUmZjD36VGSk1JKcm6fp1B
- d+PiQqjN+xYTUjhFxKRZxEwmOF19YFv+PuUNs8ocqiVIzsh4wRcJbcgtJ9uZID/wH3
- 2uxAgsA7dSXhRTXsVnhNEDrbUjNa/pGLzJJ9SPFpGybC/hmWwPs6thNGt532YFijBQ
- zDCeRcb330o5A==
-Received: from fli4l.lan.fli4l (p4fd6cbb1.dip0.t-ipconnect.de [79.214.203.177])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id E2918A4C1057
- for <buildroot@buildroot.org>; Sun, 23 Aug 2026 11:26:42 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:48236)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.5)
- (envelope-from <bernd@kuhls.net>) id 1wy4TS-000000001UY-1OWJ
- for buildroot@buildroot.org; Sun, 23 Aug 2026 09:26:42 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+ id qpgiBE7vDSsX; Sun, 23 Aug 2026 13:54:47 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1787493287;
+	bh=2epfZAXTT164f7wbt0nDyH0IamVzx6/X3hc2+XDDx9s=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=LP/QQ67gl6w9NZIbwxP2WzvQfMFqA9N4TD6BxXfwo2nwBjthyFt0IKq1RcKSLm4Iu
+	 AvyKXxoMDzVk7wbVwrotYr2d1J2MtmGty4g1IJOrWzOaVJtE1YrRpCXH8OBYWidD6A
+	 gGUDCOZuhT2Jq6gqFeU02mpRBIPzw/LEjVdF63hAmp3go6Sf5DpcT8Ap6zzekRI7wc
+	 uAGYKwglVdaqCZAlHU/qDC6KRtOzm7OdZyhQ6dsl3GXqUJhNs8yNWCRnzuCEp3AdXn
+	 so5QNBZxDw4Uw8jKB/jwnZ470yfX3IYViQo/j+9+/ZBdU1gMr1+X5DDfY+e0FKz61M
+	 0SXwsr0ztvpWw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id A72C940565;
+	Sun, 23 Aug 2026 13:54:47 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8754E336
+ for <buildroot@buildroot.org>; Sun, 23 Aug 2026 13:54:46 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6D72640565
+ for <buildroot@buildroot.org>; Sun, 23 Aug 2026 13:54:46 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nwmHC3BZx3iN for <buildroot@buildroot.org>;
+ Sun, 23 Aug 2026 13:54:45 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7AA3340555
+ for <buildroot@buildroot.org>; Sun, 23 Aug 2026 13:54:45 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id E5A688EBEA; Sun, 23 Aug 2026 13:53:50 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 23 Aug 2026 11:26:42 +0200
-Message-ID: <20260823092642.1284862-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
-MIME-Version: 1.0
-X-Spamd-Bar: +
-Subject: [Buildroot] [PATCH 1/1] package/clamav: requires DES in openssl
+Date: Sun, 23 Aug 2026 15:53:47 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: edffc0bc50b329928f556b008c96bf57b583c510
+X-Git-Newrev: c3f3705a2fd27206cf2e79fd802b681e77be2cfe
+X-Patchwork-Hint: ignore
+Message-Id: <20260823135350.E5A688EBEA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libgpiod2: fix build failure on
+ missing C++ compiler
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -85,63 +67,89 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Buildroot commit 8b1d8dd25d39df120700666942278b1a99fef416 bumped the
-package from 1.4.3 to 1.5.1 which includes upstream commit
-https://github.com/Cisco-Talos/clamav/commit/8d485b9bfd26a91301592b99590a7eb2069dd905
-that adds the usage of the OpenSSL crate from rust.
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/c3f3705a2fd27206cf2e79fd802b681e77be2cfe
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-This crate depends on DES and causes build errors when missing:
+The meson build configuration of libgpiod2 unconditionally requires a
+C++ compiler, although it is only useful if building the C++ bindings.
+This is causing autobuild failures with an obscure error message:
+"ERROR: Unable to get gcc pre-processor defines".
 
-/home/autobuild/autobuild/instance-11/output-1/host/lib/gcc/i686-buildroot-linux-gnu/15.3.0/../../../../i686-buildroot-linux-gnu/bin/ld:
- ../libclamav/libclamav.so.12.1.0: undefined reference to `EVP_des_ede3_cfb8'
-/home/autobuild/autobuild/instance-11/output-1/host/lib/gcc/i686-buildroot-linux-gnu/15.3.0/../../../../i686-buildroot-linux-gnu/bin/ld:
- ../libclamav/libclamav.so.12.1.0: undefined reference to `EVP_des_ede3_cbc'
-/home/autobuild/autobuild/instance-11/output-1/host/lib/gcc/i686-buildroot-linux-gnu/15.3.0/../../../../i686-buildroot-linux-gnu/bin/ld:
- ../libclamav/libclamav.so.12.1.0: undefined reference to `EVP_des_ede3_cfb64'
-/home/autobuild/autobuild/instance-11/output-1/host/lib/gcc/i686-buildroot-linux-gnu/15.3.0/../../../../i686-buildroot-linux-gnu/bin/ld:
- ../libclamav/libclamav.so.12.1.0: undefined reference to `EVP_des_ede3_ecb'
-/home/autobuild/autobuild/instance-11/output-1/host/lib/gcc/i686-buildroot-linux-gnu/15.3.0/../../../../i686-buildroot-linux-gnu/bin/ld:
- ../libclamav/libclamav.so.12.1.0: undefined reference to `EVP_des_ecb'
-/home/autobuild/autobuild/instance-11/output-1/host/lib/gcc/i686-buildroot-linux-gnu/15.3.0/../../../../i686-buildroot-linux-gnu/bin/ld:
- ../libclamav/libclamav.so.12.1.0: undefined reference to `EVP_des_ede3'
-/home/autobuild/autobuild/instance-11/output-1/host/lib/gcc/i686-buildroot-linux-gnu/15.3.0/../../../../i686-buildroot-linux-gnu/bin/ld:
- ../libclamav/libclamav.so.12.1.0: undefined reference to `EVP_des_ede3_ofb'
-/home/autobuild/autobuild/instance-11/output-1/host/lib/gcc/i686-buildroot-linux-gnu/15.3.0/../../../../i686-buildroot-linux-gnu/bin/ld:
- ../libclamav/libclamav.so.12.1.0: undefined reference to `EVP_des_cbc'
+Fix the failures by only requiring a C++ compiler when we want the C++
+bindings.
 
 Fixes:
-https://autobuild.buildroot.net/results/b93/b9359c5c177f3e4bcef991cde3c2dcf412dee5de/
-https://autobuild.buildroot.net/results/300/300721a882f3410528878db730aaff1aa6822986/
-https://autobuild.buildroot.net/results/a16/a163a9229c04f638a46e6250dc135c475e5d1576/
-https://autobuild.buildroot.net/results/7e8/7e88cba9974f6f5acd125b69b95b7269d8128886/
+ - https://autobuild.buildroot.org/results/d1c19ffa0c599bd2ba9be965a98fc8f778d6e366
+ - https://autobuild.buildroot.org/results/c6b3c9311d628bdb4ea103431767493fab9a3668
+ - https://autobuild.buildroot.org/results/8e799050c5779c680ff5e5136571f57d29239f2f
+ - https://autobuild.buildroot.org/results/d6d8833acfe00559579defbbf3ca34c0edbe7869
 
-A backport to LTS branches should be considered.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Edgar Bonet <bonet@grenoble.cnrs.fr>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/clamav/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ ...t-require-a-C-compiler-if-it-is-not-neede.patch | 46 ++++++++++++++++++++++
+ 1 file changed, 46 insertions(+)
 
-diff --git a/package/clamav/Config.in b/package/clamav/Config.in
-index ae5cad036a..839518ebd6 100644
---- a/package/clamav/Config.in
-+++ b/package/clamav/Config.in
-@@ -14,6 +14,7 @@ config BR2_PACKAGE_CLAMAV
- 	select BR2_PACKAGE_LIBXML2
- 	select BR2_PACKAGE_MUSL_FTS if !BR2_TOOLCHAIN_USES_GLIBC
- 	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
- 	select BR2_PACKAGE_PCRE2
- 	select BR2_PACKAGE_ZLIB
- 	select BR2_PACKAGE_ZLIB_FORCE_LIBZLIB
--- 
-2.47.3
-
+diff --git a/package/libgpiod2/0001-build-do-not-require-a-C-compiler-if-it-is-not-neede.patch b/package/libgpiod2/0001-build-do-not-require-a-C-compiler-if-it-is-not-neede.patch
+new file mode 100644
+index 0000000000..ccc4430a8c
+--- /dev/null
++++ b/package/libgpiod2/0001-build-do-not-require-a-C-compiler-if-it-is-not-neede.patch
+@@ -0,0 +1,46 @@
++From fce6b611e2530602c44fd914222529028173c509 Mon Sep 17 00:00:00 2001
++From: Edgar Bonet <bonet@grenoble.cnrs.fr>
++Date: Wed, 19 Aug 2026 18:15:25 +0200
++Subject: [PATCH] build: do not require a C++ compiler if it is not needed
++
++Languages specified in the meson project() function are considered hard
++dependencies. When trying to build libgpiod in an environment lacking a
++C++ compiler, the build fails with an obscure error message ("ERROR:
++Unable to get gcc pre-processor defines").
++
++As the C++ compiler is only needed for building the C++ bindings, do not
++require it unless the option bindings-cxx is enabled.
++
++Signed-off-by: Edgar Bonet <bonet@grenoble.cnrs.fr>
++Upstream: https://lore.kernel.org/linux-gpio/0eb5c26d-731c-4ebb-be34-76466cf57720@grenoble.cnrs.fr/
++---
++ meson.build | 6 +++++-
++ 1 file changed, 5 insertions(+), 1 deletion(-)
++
++diff --git a/meson.build b/meson.build
++index c030b50..fed612f 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -1,7 +1,7 @@
++ # SPDX-License-Identifier: GPL-2.0-or-later
++ # SPDX-FileCopyrightText: 2026 Qualcomm Technologies, Inc. and/or its subsidiaries
++ 
++-project('libgpiod', ['c', 'cpp'],
+++project('libgpiod', 'c',
++   version: '2.3.1',
++   license: 'LGPL-2.1-or-later',
++   default_options: [
++@@ -56,6 +56,10 @@ opt_dbus                = get_option('dbus')
++ opt_introspection       = get_option('introspection')
++ opt_systemd             = get_option('systemd')
++ 
+++if opt_bindings_cxx.allowed()
+++  add_languages('cpp')
+++endif
+++
++ if get_option('profiling')
++   profiling_c_args    = ['-fprofile-arcs', '-ftest-coverage']
++   profiling_link_args = ['-lgcov']
++-- 
++2.43.0
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
