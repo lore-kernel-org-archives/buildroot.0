@@ -1,62 +1,83 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77C2CC5DF8C
-	for <buildroot@archiver.kernel.org>; Sun, 23 Aug 2026 20:07:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54BBDC5DF8C
+	for <buildroot@archiver.kernel.org>; Sun, 23 Aug 2026 20:39:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 379A580B50;
-	Sun, 23 Aug 2026 20:07:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1C3D860721;
+	Sun, 23 Aug 2026 20:39:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GEdjOzwvAr5f; Sun, 23 Aug 2026 20:07:57 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dQTS77FMXt_z; Sun, 23 Aug 2026 20:39:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787515677;
-	bh=cTyKuw4lzmeIe2MnMW3Yvn0eRDaSBo5b6ytBeeyeNc0=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=YoCmj9UqY92ZcZs4Q2SqMI1R3LQVwoJBaOdyHLNzdlbxn6Pcz+Su6O9gCJmEC5RuU
-	 p4bv3tQc4rOvfLpgeHA5hd7OCpxHTyZ8yXk8EfbfT492FIZ4R+qUwskGoPQwVUAtbe
-	 zuRNpnk9PXZ5gdU0o0+ewcxOvyB214VIfna61P1Nixsvho9H90jr2gbxF08kQm3nI0
-	 wlzHQ/JbxzXhCKxPKlMfUwZYHKRwu1Vjf+o22Wiar6vFTk51SEC5csWh9AI6RhYo8z
-	 GKqw2O+QS9c8usb8khfSaEhpW6HQhr55k+EI0J7YoD1KHj/HOu2DoEOC4a8ox0ymHK
-	 oS8C1XGj/2txA==
+	s=default; t=1787517587;
+	bh=IKDQBTYPeG5PBblf6Ul6M/vTu2E2OJz3Xjbw2zwsd1M=;
+	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=lDDFVi21vLarH+ikSWB6I23OVcK8UWg+ycQP0N/4DxzNvyg6h1V45fITxr3zqhCmg
+	 5G9K/fF4+Ar7HA5xqBKMfZTimuVn4q/N/HU6Qu3ItrVVC76aJiV41blcHWHTDrct16
+	 PLf1N5UXTkN0f+A7mMWVPoPNmbsw7a/PDM9VXw9Zoxeh2tV8kTnySQzn404eykb0jt
+	 0xHEF2zaPk52MlZPbDFTUi+nWq2cToyne3dp4YYtZeddleRe0wW1cWyJ5ZabrGAfVc
+	 F7wfiP3VjMGEQ76TnGOwwGtuNZ747x18e/brYED1tj1NLPgJEIJFKqE7jAoEtC1DcP
+	 0dq9nXZwLszpA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 724BA80BCD;
-	Sun, 23 Aug 2026 20:07:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0EF2D606C5;
+	Sun, 23 Aug 2026 20:39:47 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 9D744435
- for <buildroot@buildroot.org>; Sun, 23 Aug 2026 20:07:54 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 104792FD
+ for <buildroot@buildroot.org>; Sun, 23 Aug 2026 20:39:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8F9A680BC4
- for <buildroot@buildroot.org>; Sun, 23 Aug 2026 20:07:54 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id F2A1680D88
+ for <buildroot@buildroot.org>; Sun, 23 Aug 2026 20:39:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3kvT5nt2Lho3 for <buildroot@buildroot.org>;
- Sun, 23 Aug 2026 20:07:53 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id VyJLU23MT-MU for <buildroot@buildroot.org>;
+ Sun, 23 Aug 2026 20:39:40 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E7D9580B50
- for <buildroot@buildroot.org>; Sun, 23 Aug 2026 20:07:53 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4AC2D8EE95; Sun, 23 Aug 2026 20:06:59 +0000 (UTC)
+Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none) header.from=korsgaard.com
+Authentication-Results: smtp1.osuosl.org; dkim=pass (2048-bit key,
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail1 header.b=RBeNUPkz
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 47E3680D56
+ for <buildroot@buildroot.org>; Sun, 23 Aug 2026 20:39:39 +0000 (UTC)
+DKIM-Signature: a=rsa-sha256;
+ b=RBeNUPkzXKbkAjlpbT9IDpWfbc9rnQsN//XSaHFRbfC+WkFxnH3E25SzHHB7LjEhpoaXHyBIx0JrTfn9rlJYRNYPeS18T2dMc0WxPdbdbSKRl5EgPdXnkBpCyTEsVn7qFdqEWsmy0IeCQTy0J9UtXSHFj3hlepcwZOaiAOdQbR6LWBRu5fFEnG4d2VyAtHOD8gMov0QjQPTXVeLVGnc3U3iWrsBBxgO4tlNHynKDek8WHhcY3tIzqF1gX7zk/DGt7MBU2ZNrjwHQGuuU+CfFQUijzqCvwsNyEvWiMNUsHWcsO+nyMItwg3C7OuSD2eMRFE9i+ECOSqNvaIxrCKXaDg==;
+ s=purelymail1; d=purelymail.com; v=1;
+ bh=OMAB61tplyBUhjl6AcRGB/YiJ0qo/88nqS6UErwa5I4=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 619566654; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Sun, 23 Aug 2026 20:39:35 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
+ (envelope-from <peter@korsgaard.com>) id 1wyEyc-0000000AQKy-2K5B;
+ Sun, 23 Aug 2026 22:39:34 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 23 Aug 2026 22:04:34 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c4f41f4f3f6273a37e2c4c96c230c6c99f5826b6
-X-Git-Newrev: ca2c31b019eadbed5875dce52ed8e6249a606e86
-X-Patchwork-Hint: ignore
-Message-Id: <20260823200659.4AC2D8EE95@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] board/qemu/x86_64-efi/linux.config: enable
- CONFIG_EFI_STUB to fix with grub2 >= 2.14
+To: Julien Olivain via buildroot <buildroot@buildroot.org>
+Cc: Julien Olivain <ju.o@free.fr>,  Fiona Klute <fiona.klute@gmx.de>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+In-Reply-To: <20260821164832.1906581-1-ju.o@free.fr> (Julien Olivain via
+ buildroot's message of "Fri, 21 Aug 2026 18:48:31 +0200")
+References: <20260821164832.1906581-1-ju.o@free.fr>
+Date: Sun, 23 Aug 2026 22:39:34 +0200
+Message-ID: <87ecfobmgp.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/2] Revert "package/btrfs-progs: bump to
+ version 7.1"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -68,52 +89,30 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/ca2c31b019eadbed5875dce52ed8e6249a606e86
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+>>>>> "Julien" == Julien Olivain via buildroot <buildroot@buildroot.org> writes:
 
-Since Buildroot commit [1] (boot/grub2: bump to version 2.14), the
-qemu_x86_64_efi_defconfig fails at boot time with the error:
+ > We need to revert the fakeroot update which is introducing
+ > filesystem build issue.
 
-    !!!! X64 Exception Type - 0E(#PF - Page-Fault)  CPU Apic ID - 00000000 !!!!
-    ExceptionData - 0000000000000003  I:0 R:0 U:0 W:1 P:1 PK:0 SS:0 SGX:0
+ > Since btrfs-progs needed this new fakeroot version, it needs to be
+ > reverted too.
 
-This issue happens because EDK2 and Grub 2.14 are enabling NX and the
-kernel lacks the CONFIG_EFI_STUB configuration. For the full explanation
-see the commit log of [2] (board/pc/linux.config: enable CONFIG_EFI_STUB).
+ > This commit reverts to the previous btrfs-progs version, which is not
+ > using the nftw() libc function.
 
-This commit enables CONFIG_EFI_STUB=y.
+ > This reverts commit 7aba8ecc6aa74cc9c2604ac3bf5548d0d6c2687e.
 
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/15969219375
+ > Signed-off-by: Julien Olivain <ju.o@free.fr>
 
-[1] https://gitlab.com/buildroot.org/buildroot/-/commit/da278ba1dab7e29369879c8a29cbd1b42dbe9ce0
-[2] https://gitlab.com/buildroot.org/buildroot/-/commit/1c1fa6ce67448ef8bab16d795623be730ff658ea
+Committed, thanks.
 
-Reported-by: Romain Naour <romain.naour@smile.fr>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- board/qemu/x86_64-efi/linux.config | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/board/qemu/x86_64-efi/linux.config b/board/qemu/x86_64-efi/linux.config
-index 9362b7ecb5..4f5f0b386d 100644
---- a/board/qemu/x86_64-efi/linux.config
-+++ b/board/qemu/x86_64-efi/linux.config
-@@ -3,6 +3,7 @@ CONFIG_SMP=y
- CONFIG_HYPERVISOR_GUEST=y
- CONFIG_PARAVIRT=y
- CONFIG_EFI=y
-+CONFIG_EFI_STUB=y
- # CONFIG_GCC_PLUGINS is not set
- CONFIG_MODULES=y
- CONFIG_MODULE_UNLOAD=y
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
