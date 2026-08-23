@@ -1,45 +1,45 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE567C5DF8C
-	for <buildroot@archiver.kernel.org>; Sun, 23 Aug 2026 19:20:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BBCD1C5DF8C
+	for <buildroot@archiver.kernel.org>; Sun, 23 Aug 2026 19:30:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1499B40649;
-	Sun, 23 Aug 2026 19:20:16 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id edumYIcq8UCc; Sun, 23 Aug 2026 19:20:14 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787512814;
-	bh=CO10XXk17AzkVKXdvXwz0s0pFbf00mNT3JPWONCrI9s=;
-	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=oV45kmOQB5ZMYiNcwwtJdtdq3ZfR6J08Fc0wLQGukTvFrG/gq3UHYA0zF/8ilEDkC
-	 yZz1TR26U52W3TQjKhX1v+JSOUWsIfCvDwkqUCirckP5j1Jw1rebYUVSwY+ILzrzaH
-	 RtmoZEzEA26WvWJnbOi46hzIDHuecXaGni/XZ6AW/w46O1VQwrpS2IvJ5YNLktZ3hU
-	 JW5yt2MYBwsPQCcnzvxsOe35N7saUwAuWrdytXU3yZV8Y37+6AhySgDMumbONRaXTd
-	 9UXmEHisFadUWhClT21tcAp/G6gMMuGn76I3UNofhzBQKPJWEYpPeyLnDyuW/33OHG
-	 8nH8eyukdknog==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 26AF140611;
-	Sun, 23 Aug 2026 19:20:14 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 270EF386
- for <buildroot@buildroot.org>; Sun, 23 Aug 2026 19:20:13 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 18CAC606ED
- for <buildroot@buildroot.org>; Sun, 23 Aug 2026 19:20:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 76CAA6061B;
+	Sun, 23 Aug 2026 19:30:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id s9sBpkziYRNy for <buildroot@buildroot.org>;
- Sun, 23 Aug 2026 19:20:11 +0000 (UTC)
+ id ePKOdeg8jgwj; Sun, 23 Aug 2026 19:30:24 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1787513424;
+	bh=amI3ZUTIl1MVprkM/4dV2tl9op12OSVWbC3OPNodowU=;
+	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=RzjMwzv5JT43ycIGs9s0lcv1Z031lPVnkfewGnze7o4yVh/BLtXjaNDmLLkamfm43
+	 BikzVsG2EyoCRXqFb8HiwGeIS2caHNksYMkCJvhTBwLHn+TVGKLNg7Qgt6+LMBTLUO
+	 QHxKCJJkE1rXjdQiQtr1Ym4Ug8CKFcgO9QWsYzGJPY6onVSuwJb5xll4h6ynreYFaX
+	 2Bw1T1KrtuJyrugxppMiAN3l91K4ZQZbdu/XWMVpX3y16tfYUudA3VCk3/AdgBv5qt
+	 c8rCK8lwzsbSutyl0o2fT/bDBprTLubz09S1BzhQdgTpposFPNlFB76VucAuk4IkLf
+	 KVQBOmyZIxQKA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 908E460622;
+	Sun, 23 Aug 2026 19:30:24 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id CBD5542B
+ for <buildroot@buildroot.org>; Sun, 23 Aug 2026 19:30:23 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id C97DE60622
+ for <buildroot@buildroot.org>; Sun, 23 Aug 2026 19:30:23 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 50OiNvHlDldS for <buildroot@buildroot.org>;
+ Sun, 23 Aug 2026 19:30:23 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
  helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
@@ -47,37 +47,36 @@ Authentication-Results: smtp3.osuosl.org;
  dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: smtp3.osuosl.org; dkim=pass (2048-bit key,
  unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail1 header.b=Eu+9ypS/
+ header.a=rsa-sha256 header.s=purelymail1 header.b=JTi8GitG
 Received: from sendmail.purelymail.com (sendmail.purelymail.com
  [34.202.193.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3503E606C5
- for <buildroot@buildroot.org>; Sun, 23 Aug 2026 19:20:10 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7D6F96061B
+ for <buildroot@buildroot.org>; Sun, 23 Aug 2026 19:30:22 +0000 (UTC)
 DKIM-Signature: a=rsa-sha256;
- b=Eu+9ypS/l+eZdkJZerfvaEinSt0UzNG734xG8AKBrydJQUGklVn7+k0xPhScbgiQ7TeLTCRpYK3TCfeNhI0vCXMKM/f06z3V72Ywt8YNgvfzq00aLZN2+DPyrAt8K4xwUwlr7Y/MmU+V+MpykGfGx/6Z2J+dsTDCCQWYuUrHhOR4XoEiQP6CzTEe6w+IFOtuS0BWfTAmK3ky14nD/+V6PGzL6iXAln7v2BwZaaKBvX5ag/x/FN6nVAo7X8BpzhJsziEZKMeD+L86+pNFhm+pQzR7eGeNosKxLig9rhqeXQ7Orve/klERe9XYGZFLZ3xDMBsIitBZyE/oCOCDpYdHZA==;
+ b=JTi8GitG7YTszZr/ALUOdcKKu3JI0fUqrhTZZ+bOXXu1XsM7CNc/9urfWMsjEoVslXMPFl2XOzvhRoPfN+iW3PWaBdwo4DTxBAobokglGFFzIgLBtiTSVG5OJVWwITpe/btlfqbzLt1fvRzzmtQ/17abPwMrM+rh8KBkpw7T5KegOdnh4VKkyrJPaNjBNuKSMhmF8PCoaIjjFQdPZ59RFhmdPGDWYnJOjx+SB3LT3DQN6aV/d9hlvgOiqm2hA3VbpY/wuyf7eYrsdr3E6g5QT2mR8SanA+SGZk8S/zdCnA5rkS18pCQ6aXFItij2EwQCinoqFE8arFEZqe3ex0oQRA==;
  s=purelymail1; d=purelymail.com; v=1;
- bh=JLtTnwJt1URbzDBaXhau9CradGp5nbjldXUlLbmP6AQ=;
+ bh=wSkjWp44ymYofrPezre4rr/Edm5mvoUDI4jzmipSqvU=;
  h=Feedback-ID:Received:Received:From:To:Subject:Date; 
 Feedback-ID: 21632:4007:null:purelymail
 X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 1344810245; 
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1650129;
  (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Sun, 23 Aug 2026 19:20:09 +0000 (UTC)
+ Sun, 23 Aug 2026 19:30:21 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peter@korsgaard.com>) id 1wyDjj-0000000ALII-3Tus;
- Sun, 23 Aug 2026 21:20:07 +0200
+ (envelope-from <peter@korsgaard.com>) id 1wyDtc-0000000AMDv-0dy7;
+ Sun, 23 Aug 2026 21:30:20 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Christopher Obbard via buildroot <buildroot@buildroot.org>
-Cc: Christopher Obbard <chris.obbard@oss.qualcomm.com>
-In-Reply-To: <20260822-wip-obbardc-change-email-v1-1-d78487afd04a@oss.qualcomm.com>
- (Christopher Obbard via buildroot's message of "Sat, 22 Aug 2026
- 17:42:51 +0100")
-References: <20260822-wip-obbardc-change-email-v1-1-d78487afd04a@oss.qualcomm.com>
-Date: Sun, 23 Aug 2026 21:20:07 +0200
-Message-ID: <87ecfod4pk.fsf@dell.be.48ers.dk>
+To: Julien Olivain via buildroot <buildroot@buildroot.org>
+Cc: Julien Olivain <ju.o@free.fr>
+In-Reply-To: <20260809180926.2942045-1-ju.o@free.fr> (Julien Olivain via
+ buildroot's message of "Sun, 9 Aug 2026 20:09:26 +0200")
+References: <20260809180926.2942045-1-ju.o@free.fr>
+Date: Sun, 23 Aug 2026 21:30:20 +0200
+Message-ID: <87a4qcd48j.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] DEVELOPERS: update email for Christopher
- Obbard
+Subject: Re: [Buildroot] [PATCH 1/1] package/fluidsynth: security bump to
+ version 2.5.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,10 +93,57 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Christopher" == Christopher Obbard via buildroot <buildroot@buildroot.org> writes:
+>>>>> "Julien" == Julien Olivain via buildroot <buildroot@buildroot.org> writes:
 
- > Update my email address.
- > Signed-off-by: Christopher Obbard <chris.obbard@oss.qualcomm.com>
+ > For change log since v2.4.7, see:
+ > https://github.com/FluidSynth/fluidsynth/releases
+
+ > According to:
+ > https://github.com/FluidSynth/fluidsynth/blob/master/doc/wiki/ChangeLog.md
+
+ > FluidSynth 2.5.6 fixes:
+ > CVE-2026-58264 - a heap-based buffer overrun in command handler (GHSA-mqmq-w63q-cj94)
+ > CVE-2026-61714 - a heap-based buffer overflow in MIDI player (GHSA-976m-35rw-h3m6)
+ > CVE-2026-61721 - a heap-based buffer overrun for DLS samples (GHSA-59ph-rx8r-8p4j)
+ > CVE-2026-61723 - a DLS ptbl chunk integer overflow (GHSA-r4mc-v3p8-pv47)
+ > CVE-2026-61722 - a DLS articulation chunk integer overflow (GHSA-hp72-35pr-6h6r)
+ > CVE-2026-61720 - a SF2 DMOD chunk integer underflow (GHSA-rmc4-c8hw-455w)
+
+ > FluidSynth 2.5.2 fixes:
+ > CVE-2025-68617 - a heap-based use-after-free involving DLS files (GHSA-ffw2-xvvp-39ch)
+
+ > SDL2 audio support was removed upstream in commit:
+ > https://github.com/FluidSynth/fluidsynth/commit/89145b004a44a53e734b6bf82a73cef255baef5d
+
+ > It was replaced by the newer SDL3. This commit reflects that change
+ > (update option name and comments, add legacy option entry).
+
+ > Also, dynamic library dependency was added in Buildroot commit:
+ > https://gitlab.com/buildroot.org/buildroot/-/commit/111a1c7091aed6f9da03c2a095bcc2f50a1ad32c
+ > This commot removes the duplicate dependency for SDL3.
+
+ > FluidSynth also added a native DLS soundfont support in:
+ > https://github.com/FluidSynth/fluidsynth/commit/c959f8d208bbad9e396dfb745285806b5a4c5a07
+ > It is enabled by default and uses C++17. This commit adds a new
+ > option with a dependency on gcc >= 7.
+
+ > The license option hash is also updated, after the FSF address
+ > update in:
+ > https://github.com/FluidSynth/fluidsynth/commit/db42fa333baf1cb7c60556ab75ad1e592c850f68
+
+ > Signed-off-by: Julien Olivain <ju.o@free.fr>
+ > ---
+ > Patch tested in:
+ > https://gitlab.com/jolivain/buildroot/-/pipelines/2745501844
+
+ > Note to the LTS maintainers:
+
+ > The CVEs fixed here are a bit hard to backport.
+ > This new FluidSynth version also depends of a new SDL3 library.
+
+ > I let you decide what to do (update the package in LTS, do nothing,
+ > try to backport, or remove the package). What would be your opinion
+ > in such a case?
 
 Committed, thanks.
 
