@@ -4,80 +4,81 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54BBDC5DF8C
-	for <buildroot@archiver.kernel.org>; Sun, 23 Aug 2026 20:39:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A80AC5DF81
+	for <buildroot@archiver.kernel.org>; Sun, 23 Aug 2026 20:39:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1C3D860721;
-	Sun, 23 Aug 2026 20:39:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2AC3A605FF;
+	Sun, 23 Aug 2026 20:39:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dQTS77FMXt_z; Sun, 23 Aug 2026 20:39:47 +0000 (UTC)
+ id 2YhcjNDIURMb; Sun, 23 Aug 2026 20:39:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787517587;
-	bh=IKDQBTYPeG5PBblf6Ul6M/vTu2E2OJz3Xjbw2zwsd1M=;
+	s=default; t=1787517591;
+	bh=O3BfhgbtOS9TIFzhrB1LMQumXyochWKOf2yOTk/GJIM=;
 	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=lDDFVi21vLarH+ikSWB6I23OVcK8UWg+ycQP0N/4DxzNvyg6h1V45fITxr3zqhCmg
-	 5G9K/fF4+Ar7HA5xqBKMfZTimuVn4q/N/HU6Qu3ItrVVC76aJiV41blcHWHTDrct16
-	 PLf1N5UXTkN0f+A7mMWVPoPNmbsw7a/PDM9VXw9Zoxeh2tV8kTnySQzn404eykb0jt
-	 0xHEF2zaPk52MlZPbDFTUi+nWq2cToyne3dp4YYtZeddleRe0wW1cWyJ5ZabrGAfVc
-	 F7wfiP3VjMGEQ76TnGOwwGtuNZ747x18e/brYED1tj1NLPgJEIJFKqE7jAoEtC1DcP
-	 0dq9nXZwLszpA==
+	b=MfeOCya0wG2Y+as3aysaZruQslSKXNVbEuAuCHMvRR2dcgdXNTfYhu14aC4dvjCgx
+	 V8QYeN+BPryRdsaTypVRGnQ6Alxo4rF4MQ5aOoSfExmJKElaXctcWU7XSgkvVB9og9
+	 Hg+pU5FEeAOIMCqddLq3FADPxIuFMTjc0JRQOoBb7XOGlOwEcYMwcgiWOA9/qwjUHN
+	 DwnnRVGthUVNpX95tw/WdYMc70+rAQ0zOvSPSSQyhBelzlVKUF+7ffLUQ8juHhVEmD
+	 DonpmgMstf/fECO+g4R6BYYlhyanXIOn5zc2RuuAo3ZL4uSkAa/zKbkHKeNc9IVgdb
+	 IsZj60o53a86g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0EF2D606C5;
-	Sun, 23 Aug 2026 20:39:47 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 104792FD
- for <buildroot@buildroot.org>; Sun, 23 Aug 2026 20:39:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 283DE60747;
+	Sun, 23 Aug 2026 20:39:51 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6603042B
+ for <buildroot@buildroot.org>; Sun, 23 Aug 2026 20:39:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id F2A1680D88
- for <buildroot@buildroot.org>; Sun, 23 Aug 2026 20:39:41 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4CD6140059
+ for <buildroot@buildroot.org>; Sun, 23 Aug 2026 20:39:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VyJLU23MT-MU for <buildroot@buildroot.org>;
- Sun, 23 Aug 2026 20:39:40 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id taem6DaVEQ3I for <buildroot@buildroot.org>;
+ Sun, 23 Aug 2026 20:39:44 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
  helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-Authentication-Results: smtp1.osuosl.org;
+Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none) header.from=korsgaard.com
-Authentication-Results: smtp1.osuosl.org; dkim=pass (2048-bit key,
+Authentication-Results: smtp2.osuosl.org; dkim=pass (2048-bit key,
  unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail1 header.b=RBeNUPkz
+ header.a=rsa-sha256 header.s=purelymail1 header.b=Q/K8SzL4
 Received: from sendmail.purelymail.com (sendmail.purelymail.com
  [34.202.193.197])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 47E3680D56
- for <buildroot@buildroot.org>; Sun, 23 Aug 2026 20:39:39 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4574440056
+ for <buildroot@buildroot.org>; Sun, 23 Aug 2026 20:39:43 +0000 (UTC)
 DKIM-Signature: a=rsa-sha256;
- b=RBeNUPkzXKbkAjlpbT9IDpWfbc9rnQsN//XSaHFRbfC+WkFxnH3E25SzHHB7LjEhpoaXHyBIx0JrTfn9rlJYRNYPeS18T2dMc0WxPdbdbSKRl5EgPdXnkBpCyTEsVn7qFdqEWsmy0IeCQTy0J9UtXSHFj3hlepcwZOaiAOdQbR6LWBRu5fFEnG4d2VyAtHOD8gMov0QjQPTXVeLVGnc3U3iWrsBBxgO4tlNHynKDek8WHhcY3tIzqF1gX7zk/DGt7MBU2ZNrjwHQGuuU+CfFQUijzqCvwsNyEvWiMNUsHWcsO+nyMItwg3C7OuSD2eMRFE9i+ECOSqNvaIxrCKXaDg==;
+ b=Q/K8SzL4SVhTE3wFNRo0WN9qQjGjgcTZNmUtxtvccT919b2WUhLcrgxbFzConCFbRKiRMVb/XCKa36yD75mGeQZDqQF3ZycXow63TalkV1j202fr7pftfWfPiKiI39N68xZaw5UG2Bt98phHeoGAol8/lB7ay3UK623UnlxRPNsbAO75woYbcOVQTu6A23/j3IooK6+ACLQEBr00y4zrpicQEA+gYhCAxX5/ZExHP29cJHzRxdIDGEMNeK4i5PPdSzmrITzvd5C9ZqtCKaQ6k3oCRPNxI1X6t8lkRCWBZApwGnbMJlm84rlruYNVIFhY9j7w8c1PR2PwYYqeUMbIiw==;
  s=purelymail1; d=purelymail.com; v=1;
- bh=OMAB61tplyBUhjl6AcRGB/YiJ0qo/88nqS6UErwa5I4=;
+ bh=YQHhIyOjY5+shvV34R9Q7jok/qJBwPVKdU50RpuIp2Q=;
  h=Feedback-ID:Received:Received:From:To:Subject:Date; 
 Feedback-ID: 21632:4007:null:purelymail
 X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 619566654; 
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1785387431; 
  (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Sun, 23 Aug 2026 20:39:35 +0000 (UTC)
+ Sun, 23 Aug 2026 20:39:42 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peter@korsgaard.com>) id 1wyEyc-0000000AQKy-2K5B;
- Sun, 23 Aug 2026 22:39:34 +0200
+ (envelope-from <peter@korsgaard.com>) id 1wyEyi-0000000AQL6-49Ga;
+ Sun, 23 Aug 2026 22:39:40 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Julien Olivain via buildroot <buildroot@buildroot.org>
 Cc: Julien Olivain <ju.o@free.fr>,  Fiona Klute <fiona.klute@gmx.de>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-In-Reply-To: <20260821164832.1906581-1-ju.o@free.fr> (Julien Olivain via
- buildroot's message of "Fri, 21 Aug 2026 18:48:31 +0200")
+In-Reply-To: <20260821164832.1906581-2-ju.o@free.fr> (Julien Olivain via
+ buildroot's message of "Fri, 21 Aug 2026 18:48:32 +0200")
 References: <20260821164832.1906581-1-ju.o@free.fr>
-Date: Sun, 23 Aug 2026 22:39:34 +0200
-Message-ID: <87ecfobmgp.fsf@dell.be.48ers.dk>
+ <20260821164832.1906581-2-ju.o@free.fr>
+Date: Sun, 23 Aug 2026 22:39:40 +0200
+Message-ID: <87a4qcbmgj.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/2] Revert "package/btrfs-progs: bump to
- version 7.1"
+Subject: Re: [Buildroot] [PATCH 2/2] Revert "package/fakeroot: bump to
+ version 2.1.4"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,16 +97,25 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Julien" == Julien Olivain via buildroot <buildroot@buildroot.org> writes:
 
- > We need to revert the fakeroot update which is introducing
- > filesystem build issue.
+ > This major fakeroot bump is introducing xattr issues on hosts with
+ > SELinux enabled (for example a Fedora 44 default installation).
 
- > Since btrfs-progs needed this new fakeroot version, it needs to be
- > reverted too.
+ > Trying to build defconfigs such as:
 
- > This commit reverts to the previous btrfs-progs version, which is not
- > using the nftw() libc function.
+ >     make qemu_aarch64_virt_defconfig
+ >     make
 
- > This reverts commit 7aba8ecc6aa74cc9c2604ac3bf5548d0d6c2687e.
+ > produces error when building the filesystem image:
+
+ >>>> Generating filesystem image rootfs.ext2
+ >     ...
+ >     mke2fs 1.47.4 (6-Mar-2025)
+ >     ...
+ >     Copying files into the device: set_inode_xattr: No data available while reading attribute "security.selinux" of /buildroot/output/build/buildroot-fs/ext2/target"
+ >     populate_fs3: No data available while copying xattrs on root directory
+ >     mkfs.ext4: No data available while populating file system
+
+ > This reverts commit 344d64f38539b28a5b8753d18ceb43ff2ee969bd.
 
  > Signed-off-by: Julien Olivain <ju.o@free.fr>
 
