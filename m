@@ -4,57 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 032A2C5DF81
-	for <buildroot@archiver.kernel.org>; Sun, 23 Aug 2026 20:59:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70DC6C5DF81
+	for <buildroot@archiver.kernel.org>; Sun, 23 Aug 2026 21:00:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BFBD780B1B;
-	Sun, 23 Aug 2026 20:59:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4027580D16;
+	Sun, 23 Aug 2026 21:00:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3jNZ8g0SJ2Vc; Sun, 23 Aug 2026 20:59:41 +0000 (UTC)
+ id bPVj1Ckq1jUU; Sun, 23 Aug 2026 21:00:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787518780;
-	bh=j7zZojXCQy1DHjLRlmS3EcTU0+fD3gduoAWbj0dhbC4=;
+	s=default; t=1787518849;
+	bh=sR8jY9D1+7AEVdrPXoXH86UJhUSUmytF1RwFihPHau0=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Trg2bekHk2shWZ8QXRCYqeTDnPxbrKRFM4VR0rbdEpOHWOq/JGGAWaRg9p02xwYnf
-	 5OSTb+hFrNiuDiBZw3uQ7cgcSF4anAKBEifBNVqzHDgPeMpOZtYjubld/uOaLYpelW
-	 M7CfLVdbiK2TqbaBaqmnfHuyPVcHQqJQQbBtA7x1kO5bVPA+/FJtJxkz4Cy03YXNAw
-	 y9SKCBJDSJYdysqTIUpTOcMPs6SKSOrGAntjfyWgRROBngzfv3rkEsnqqf43QlnLKA
-	 WpdeoeNNAyB5hcFEru5dPJlT8oKSlJp913v6qcWpwiFpLwsEJbhX2ZmQY5Af7gpR/n
-	 Bc4y2KGK/TdWA==
+	b=gNRuPOYj0BWRIlmW1LRuQXJVH0JUQW7hQZ8PKinIVP/RbEwEQwSTWbnWqCqIuZchE
+	 9w5r86eOTY6dhyodiR+gSJAh0q/G7bC7sDS/DfY6o3Z+H/AKgJ1hQ69+To9tFSAbMd
+	 SQeRRguCguyhtaOKimBLJ2/cVcAqTl/iF70AWsIsk2aiGMBseaf22ETIubAicR7oWz
+	 g4TVKG/GutUy23euv3tJ7g/y9IDkC++opYtWXzauLoq4KJchtc247I+ugaTatcrcxf
+	 WfC+aeYOxQTY6v+4n54N/KYAAWpKjeCPYQXBSzHcgvM8WI6nH4anXixM0pSdigo3sD
+	 pYBH18Za5N2xQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B6B0B80B19;
-	Sun, 23 Aug 2026 20:59:40 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 1716A435
- for <buildroot@buildroot.org>; Sun, 23 Aug 2026 20:59:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8848280CF0;
+	Sun, 23 Aug 2026 21:00:49 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 948E22FD
+ for <buildroot@buildroot.org>; Sun, 23 Aug 2026 21:00:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 157C380B03
- for <buildroot@buildroot.org>; Sun, 23 Aug 2026 20:59:38 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5B40580CF0
+ for <buildroot@buildroot.org>; Sun, 23 Aug 2026 21:00:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id M34Dq1yF5hfo for <buildroot@buildroot.org>;
- Sun, 23 Aug 2026 20:59:37 +0000 (UTC)
+ id TTguMgQpw9Jw for <buildroot@buildroot.org>;
+ Sun, 23 Aug 2026 21:00:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4F6D780B19
- for <buildroot@buildroot.org>; Sun, 23 Aug 2026 20:59:37 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D8E8680B1D
+ for <buildroot@buildroot.org>; Sun, 23 Aug 2026 21:00:46 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 995C48F01F; Sun, 23 Aug 2026 20:58:42 +0000 (UTC)
+ id 2E8208EE98; Sun, 23 Aug 2026 20:59:52 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 23 Aug 2026 22:59:06 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 46679da1df040b847e8aed7715a2532e4dcb4d7f
-X-Git-Newrev: 157342931ba3ffcd46e153f9fa81af078320c749
+Date: Sun, 23 Aug 2026 22:59:48 +0200
+X-Git-Refname: refs/heads/2026.05.x
+X-Git-Oldrev: a87cdf66c47f10d6f93997946a31276fe4a83cae
+X-Git-Newrev: 72d9d4fa636a371ef9eb99c92a735ce9f6d829d5
 X-Patchwork-Hint: ignore
-Message-Id: <20260823205842.995C48F01F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] CHANGES: Update for 2025.02.17
+Message-Id: <20260823205952.2E8208EE98@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.05.x] Makefile: Update for
+ 2026.05.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -74,152 +75,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/157342931ba3ffcd46e153f9fa81af078320c749
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/72d9d4fa636a371ef9eb99c92a735ce9f6d829d5
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.05.x
 
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
-
-(cherry picked from commit f8089744f95a27f45a9668a0c1f5b35c9f7ccafc)
 ---
- CHANGES | 125 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 125 insertions(+)
+ Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index a649442d99..4fa4de4abe 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1609,6 +1609,131 @@
- 	- netsnmp: unexpected header length in /proc/net/snmp...
- 	  https://gitlab.com/buildroot.org/buildroot/-/issues/110
+diff --git a/Makefile b/Makefile
+index 9de07c2740..e3dd63518d 100644
+--- a/Makefile
++++ b/Makefile
+@@ -92,9 +92,9 @@ all:
+ .PHONY: all
  
-+2025.02.17, released August 23, 2026
-+
-+	Important / security related fixes:
-+
-+	apr-util: CVE-2025-49506, CVE-2026-32327, CVE-2026-34191,
-+	  CVE-2026-34501, CVE-2026-34502
-+	bind: CVE-2026-10723, CVE-2026-10822, CVE-2026-11331, CVE-2026-11605,
-+	  CVE-2026-11622, CVE-2026-11721, CVE-2026-12617, CVE-2026-13204,
-+	  CVE-2026-13321
-+	botan: CVE-2026-32877, CVE-2026-32883, CVE-2026-32884, CVE-2026-34580,
-+	  CVE-2026-34582
-+	busybox: CVE-2023-39810, CVE-2024-58251, CVE-2026-26157,
-+	  CVE-2026-26158, CVE-2026-29004
-+	containerd: CVE-2026-35469, CVE-2026-46680, CVE-2026-47262,
-+	  CVE-2026-53488
-+	dracut: CVE-2026-6893
-+	dropbear: (no CVE assigned)
-+	exim: GCVE-25-2026-07-45-1, CVE-2026-66140, CVE-2026-66141
-+	expat: CVE-2026-72522
-+	go: CVE-2026-39822
-+	intel-microcode: CVE-2025-31936, CVE-2025-31938, CVE-2025-35973,
-+	  CVE-2026-20707, CVE-2026-20713, CVE-2026-20716, CVE-2026-20760,
-+	  CVE-2026-20917
-+	libarchive: (no CVE assigned)
-+	libass: CVE-2026-61626, CVE-2026-61627
-+	libgcrypt: CVE-2026-41989
-+	libgit2: CVE-2026-53583, CVE-2026-53584, CVE-2026-53585,
-+	  CVE-2026-53586, CVE-2026-53587
-+	libheif: CVE-2026-62289, CVE-2026-62291, CVE-2026-62292,
-+	  CVE-2026-62377, GHSA-46rp-pcq2-rpmr, GHSA-73p7-m7gg-w2jv,
-+	  GHSA-9ww4-9v47-m7pj, GHSA-jc8f-p23p-5hjg, GHSA-xpw3-9rhw-482x
-+	libmodsecurity: CVE-2026-52747, CVE-2026-52761
-+	libssh: CVE-2026-15370, CVE-2026-59843, CVE-2026-59844, CVE-2026-59845,
-+	  CVE-2026-59846, CVE-2026-59847, CVE-2026-59848, CVE-2026-59849,
-+	  CVE-2026-59850
-+	memcached: (no CVE assigned)
-+	ntfs-3g: CVE-2026-42616, CVE-2026-42617, CVE-2026-42618,
-+	  CVE-2026-46569, CVE-2026-46570, CVE-2026-46571, CVE-2026-46572,
-+	  CVE-2026-56135, CVE-2026-56136
-+	openssh: CVE-2026-59995, CVE-2026-59996, CVE-2026-59997,
-+	  CVE-2026-59998, CVE-2026-59999, CVE-2026-60000, CVE-2026-60001,
-+	  CVE-2026-60002
-+	openvpn: CVE-2026-63649
-+	perl: CVE-2026-13221, CVE-2026-57432, CVE-2026-8376
-+	php: CVE-2026-17543, CVE-2026-7260, CVE-2026-9672
-+	postgresql: CVE-2026-14662, CVE-2026-14663, CVE-2026-14664,
-+	  CVE-2026-14666, CVE-2026-14668, CVE-2026-14669, CVE-2026-14670,
-+	  CVE-2026-14671, CVE-2026-14672, CVE-2026-14673, CVE-2026-14676,
-+	  CVE-2026-14677, CVE-2026-14678, CVE-2026-14679, CVE-2026-14680,
-+	  CVE-2026-14681, CVE-2026-15741, CVE-2026-15742, CVE-2026-16238,
-+	  CVE-2026-16239, CVE-2026-16241, CVE-2026-18024, CVE-2026-18408,
-+	  CVE-2026-19385, CVE-2026-6464, CVE-2026-6469, CVE-2026-6470,
-+	  CVE-2026-6471
-+	python3: CVE-2025-13462, CVE-2026-15308, CVE-2026-2297, CVE-2026-3644,
-+	  CVE-2026-4224, CVE-2026-4519, CVE-2026-7210
-+	redis: (no CVE assigned)
-+	rsync: CVE-2026-53783, CVE-2026-53784, CVE-2026-53785, CVE-2026-53786,
-+	  CVE-2026-53788, CVE-2026-53789, CVE-2026-53790, CVE-2026-53791,
-+	  CVE-2026-53792, CVE-2026-53793, CVE-2026-53794, CVE-2026-53795,
-+	  CVE-2026-53796, CVE-2026-53797, CVE-2026-53798, CVE-2026-53799,
-+	  CVE-2026-53800, CVE-2026-53801, CVE-2026-53802, CVE-2026-53803,
-+	  CVE-2026-70452, CVE-2026-70453, CVE-2026-70454, CVE-2026-70455,
-+	  CVE-2026-70456, CVE-2026-70457, CVE-2026-70458, CVE-2026-70459,
-+	  CVE-2026-70460, CVE-2026-70461, CVE-2026-70462, CVE-2026-70463,
-+	  CVE-2026-70464
-+	samba4: CVE-2026-58216, CVE-2026-58218, CVE-2026-58221, CVE-2026-58222,
-+	  CVE-2026-58224, CVE-2026-6949
-+	screen: (no CVE assigned)
-+	ser2net: GHSA-cgh5-39mg-vhfr
-+	socat: CVE-2026-56123
-+	sqlite: CVE-2026-1182, CVE-2026-11822, CVE-2026-11824
-+	stunnel: CVE-2026-70367, CVE-2026-70368
-+	syslog-ng: CVE-2026-39879
-+	util-linux: CVE-2026-13595
-+	vim: CVE-2026-28417, CVE-2026-28418, CVE-2026-28419, CVE-2026-28420,
-+	  CVE-2026-28421, CVE-2026-28422, CVE-2026-32249, CVE-2026-33412,
-+	  CVE-2026-34714, CVE-2026-34982, CVE-2026-35177, CVE-2026-39881,
-+	  CVE-2026-41411, CVE-2026-42307, CVE-2026-44656, CVE-2026-45130,
-+	  CVE-2026-46483, CVE-2026-47162, CVE-2026-47167, CVE-2026-52858,
-+	  CVE-2026-52859, CVE-2026-52860, CVE-2026-55693, CVE-2026-55892,
-+	  CVE-2026-55895, CVE-2026-57451, CVE-2026-57452, CVE-2026-57453,
-+	  CVE-2026-57455, CVE-2026-57456, CVE-2026-59856, CVE-2026-59857,
-+	  CVE-2026-59858
-+	wpa_supplicant: (no CVE assigned)
-+	xlib_libXfont2: CVE-2026-56001, CVE-2026-56002, CVE-2026-56003
-+	xserver_xorg-server: CVE-2026-55999, CVE-2026-56000
-+	xwayland: CVE-2026-55999, CVE-2026-56000
-+
-+	Toolchain:
-+
-+	- toolchain-buildroot: drop Synopsys ARC specific GCC, binutils and gdb
-+	- toolchain-external: drop Synopsys ARC toolchain
-+	- linux-headers:: bump to 5.10.265, 5.15.216, 6.1.183, 6.6.152,
-+	  6.12.104
-+
-+	Infrastructure updates/fixes:
-+
-+	- Add license information for skeleton packages
-+	- Make docker image reproducible again
-+	- New runtime tests for guile, libgpiod2, mdnsd, php, python-pydal
-+
-+	Updated defconfigs: acmesystems_acqua_a5_*
-+
-+	Removed defconfigs: acmesystems_aria_g25_{128mb, 256mb},
-+	  acmesystems_arietta_g25_{128mb, 256mb}, s6lx9_microboard, ts4900,
-+	  ts5500
-+
-+	Removed packages: argparse, ts4900-fpga
-+
-+	Updated / fixed packages: apache, apr-util, arm-trusted-firmware,
-+	  at-spi2-core, bind, binutils, botan, busybox, cantarell, cifs-utils,
-+	  containerd, cramfs, dbus-broker, dracut, drop, dropbear,
-+	  environment-setup, exim, expat, glibc, go, guile, gvfs,
-+	  ifupdown-scripts, initscripts, intel-microcode, libarchive, libass,
-+	  libcamera, libgcrypt, libgee, libgit2, libglib2, libgpg-error,
-+	  libgtk4, libgudev, libheif, libmicrohttpd, libmodsecurity, libpeas,
-+	  librsvg, libsecret, libsoup, libsoup3, libssh, linux, linux-headers:,
-+	  localedef, mbedtls, memcached, mini-snmpd, nettle, ntfs-3g, ogre,
-+	  open62541, openblas, openssh, openvpn, optee-os, p11-kit, pahole,
-+	  perl, php, postgresql, python-paho-mqtt, python-pydal, python-web2py,
-+	  python3, qt6, quickjs, redis, rsync, rygel, samba4, screen, ser2net,
-+	  socat, sqlite, stunnel, syslog-ng, uclibc, urandom-scripts, usbutils,
-+	  util-linux, vim, wpa_supplicant, xlib_libXfont2, xserver_xorg-server,
-+	  xwayland, xz
-+
- 2025.02.16, released July 15, 2026
+ # Set and export the version string
+-export BR2_VERSION := 2026.05.1
++export BR2_VERSION := 2026.05.2
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1784143900
++BR2_VERSION_EPOCH = 1787518800
  
- 	Important / security related fixes:
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
