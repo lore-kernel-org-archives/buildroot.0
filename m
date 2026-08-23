@@ -1,69 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C471BC5DF81
-	for <buildroot@archiver.kernel.org>; Sun, 23 Aug 2026 15:41:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B481C5DF8C
+	for <buildroot@archiver.kernel.org>; Sun, 23 Aug 2026 19:19:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B4CB980CB9;
-	Sun, 23 Aug 2026 15:41:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1E6896061B;
+	Sun, 23 Aug 2026 19:19:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9cd3sHOVMLIE; Sun, 23 Aug 2026 15:41:18 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KYFEIUTQf1Kx; Sun, 23 Aug 2026 19:19:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787499678;
-	bh=hp7T0vkymxUgeq+Y71mtuNOYkfAympeQzDEQh/NL4ks=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=lHu9U7Szo9JbvMfbeeMycQbwYLiIvAIAIXy+2mKAxoYTBf6/n6t5EcwY99Z8gX3M2
-	 KXJrujxhs7WtT+8yIk67UNMGUd3BtZaS9OdgtnFnW5AHnTEySQ3vMcB2028cjJDvBP
-	 pSd7TS3vaYO7altdQGEF7J9BBkceqoRODKwTbDuR6eEQScor8skqEdF0Q8H5BvSECd
-	 izkIxh9gn2Km2brBQ7RjGb/KY+l+3mlDtOzrbOiRL1E+DZtfjQMiPAnaH52sfjP/xb
-	 FBt3tkhyCoSeAum501u54YatPI72awnBOtlsAisNKu6dmDeS+/AbtgJAfo55OWsidp
-	 tE18V26spOrtA==
+	s=default; t=1787512780;
+	bh=9T5xtq2Mc6FlT7qrwP5lyuymBBenkw9MVkoz1AJ0bYY=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=DzHD7i4OkiLc5Wt4yMk1yR9kvfjtmnSl/QFyrwLtFwAVINLe8bkZXcWOTqth5aTtf
+	 SdohdMMqYZnpYzRa9G0pjQSVqu1UHSiRuicfFXrclEAe/wnxGgdCrFb5mFeM1MqdOf
+	 v3neieGopVOYaKScdhNfWQW6Y+bJxT45oNxLQztfackXgwfE4y9onbxU1vJ/mYLXA5
+	 P6bl4m128Mgcm/gHR9YwcRWKfE8R81Tc6EanhNs6yIGyBTT23A96+Db51oqccduPlM
+	 yBhLNWtawYY+jQk9d6VGkcX+a4maqLKym8bax0uway4DrWxWfy4k2q0T5qNR0IS3KN
+	 fziAe8e5y5tyA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EE55D80C9A;
-	Sun, 23 Aug 2026 15:41:17 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1CF4E336
- for <buildroot@buildroot.org>; Sun, 23 Aug 2026 15:41:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E7B89606C5;
+	Sun, 23 Aug 2026 19:19:39 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 13EDA42B
+ for <buildroot@buildroot.org>; Sun, 23 Aug 2026 19:19:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0EFC940656
- for <buildroot@buildroot.org>; Sun, 23 Aug 2026 15:41:17 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 05D63606C5
+ for <buildroot@buildroot.org>; Sun, 23 Aug 2026 19:19:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ifsQqTvo9h6J for <buildroot@buildroot.org>;
- Sun, 23 Aug 2026 15:41:16 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 15E8440652
- for <buildroot@buildroot.org>; Sun, 23 Aug 2026 15:41:15 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id 9D82260129;
- Sun, 23 Aug 2026 17:41:09 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 23 Aug 2026 17:41:09 +0200
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xF5YGZ_nutOH for <buildroot@buildroot.org>;
+ Sun, 23 Aug 2026 19:19:38 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
+ helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id DFC206061B
+ for <buildroot@buildroot.org>; Sun, 23 Aug 2026 19:19:36 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-03.galae.net (Postfix) with ESMTPS id 803044E41372;
+ Sun, 23 Aug 2026 19:19:34 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 4EC6760378;
+ Sun, 23 Aug 2026 19:19:34 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 57A7C11C7853B; 
+ Sun, 23 Aug 2026 21:19:28 +0200 (CEST)
+To: buildroot@buildroot.org
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Romain Naour <romain.naour@smile.fr>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Romain Naour <romain.naour@gmail.com>
+Date: Sun, 23 Aug 2026 21:19:25 +0200
+Message-ID: <20260823191926.2684260-1-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.55.0
 MIME-Version: 1.0
-Date: Sun, 23 Aug 2026 17:41:09 +0200
-To: Benjamin DeCamp <benjamin8532@protonmail.com>
-Cc: buildroot@buildroot.org, Fiona Klute <fiona.klute@gmx.de>, Pascal de
- Bruijn <p.debruijn@unilogic.nl>
-In-Reply-To: <c-LIqtVGERPuiF6keYuaBafYyc7kAd3_m1-5cU1R2x-Akg3D5jWjzo1SgFGQOE_Hfwms6HQBgSjm3pQqgd584wZWumaMDikhOKE3IMN2ct0=@protonmail.com>
-References: <c-LIqtVGERPuiF6keYuaBafYyc7kAd3_m1-5cU1R2x-Akg3D5jWjzo1SgFGQOE_Hfwms6HQBgSjm3pQqgd584wZWumaMDikhOKE3IMN2ct0=@protonmail.com>
-User-Agent: Webmail Free/1.6.18
-Message-ID: <5e4411f4ed1b1096f94f9d4e8743660f@free.fr>
-X-Sender: ju.o@free.fr
-Subject: Re: [Buildroot] [PATCH 1/1] package/linux-tools/S10hyperv: fix
- invalid return value
+X-Last-TLS-Session-Version: TLSv1.3
+Subject: [Buildroot] [PATCH] toolchain/Config.in: refine
+ BR2_TOOLCHAIN_HAS_LIBQUADMATH definition
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -75,34 +77,105 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 20/08/2026 18:11, Benjamin DeCamp via buildroot wrote:
-> In both start() and stop(), ret is only assigned on failure. When
-> hypervkvpd starts or stops successfully, return "$ret" expands to an
-> empty string and causes:
-> 
->   /etc/init.d/S10hyperv: return: line 31: Illegal number:
-> 
-> Remove the double quotes so an unset ret expands to a bare return while
-> preserving the existing return status behavior.
-> 
-> Signed-off-by: Benjamin DeCamp <benjamin8532@protonmail.com>
+In commit a2380157f6688c5c065fa19060a2c33145bab95b ("toolchain: enable
+libquadmath for PowerPC with VSX"), the definition of
+BR2_TOOLCHAIN_HAS_LIBQUADMATH has been extended to also be true when
+BR2_POWERPC_CPU_HAS_VSX.
 
-Applied to master, thanks.
+However, practical experiments show that when 64-bit VSX-capable cores
+are used in 32-bit mode, libquadmath is not built by GCC, causing
+build failures:
 
-I also fixed a check-package error, which was the initial reason I added
-those double quotes. See:
-https://gitlab.com/buildroot.org/buildroot/-/commit/667335cd187150c5afebac2a278f92d5b6ef744d
+cp: cannot stat '/home/autobuild/autobuild/instance-3/output-1/host/powerpc-buildroot-linux-musl/lib*/libquadmath*': No such file or directory
 
-Best regards,
+We did an extensive testing, building the 27 combinations of:
 
-Julien.
+- GCC versions: 14, 15, 16
+- C library: glibc, uclibc, musl
+- PowerPC 32-bit, PowerPC 64-bit, PowerPC 64-bit little endian
+
+This testing provides the following results:
+
+|      gcc14 |       powerpc64 |      glibc |         OK |
+|      gcc14 |     powerpc64le |      glibc |         OK |
+|      gcc14 |     powerpc64le |       musl |         OK |
+|      gcc14 |     powerpc64le |     uclibc |    SKIPPED |
+|      gcc14 |       powerpc64 |       musl |         OK |
+|      gcc14 |       powerpc64 |     uclibc |    SKIPPED |
+|      gcc14 |         powerpc |      glibc |     FAILED |
+|      gcc14 |         powerpc |       musl |     FAILED |
+|      gcc14 |         powerpc |     uclibc |     FAILED |
+|      gcc15 |       powerpc64 |      glibc |         OK |
+|      gcc15 |     powerpc64le |      glibc |         OK |
+|      gcc15 |     powerpc64le |       musl |         OK |
+|      gcc15 |     powerpc64le |     uclibc |    SKIPPED |
+|      gcc15 |       powerpc64 |       musl |         OK |
+|      gcc15 |       powerpc64 |     uclibc |    SKIPPED |
+|      gcc15 |         powerpc |      glibc |     FAILED |
+|      gcc15 |         powerpc |       musl |     FAILED |
+|      gcc15 |         powerpc |     uclibc |     FAILED |
+|      gcc16 |       powerpc64 |      glibc |         OK |
+|      gcc16 |     powerpc64le |      glibc |         OK |
+|      gcc16 |     powerpc64le |       musl |         OK |
+|      gcc16 |     powerpc64le |     uclibc |    SKIPPED |
+|      gcc16 |       powerpc64 |       musl |         OK |
+|      gcc16 |       powerpc64 |     uclibc |    SKIPPED |
+|      gcc16 |         powerpc |      glibc |     FAILED |
+|      gcc16 |         powerpc |       musl |     FAILED |
+|      gcc16 |         powerpc |     uclibc |     FAILED |
+
+The "SKIPPED" are when the configuration is not possible: uClibc
+doesn't support powerpc64 or powerpc64le.
+
+Then, as we can see, the build fails for all "powerpc"
+configuration. Our conclusion is therefore that libquadmath is not
+supported on PowerPC 32-bit. While we were not able to find direct
+evidence in the gcc code base, this practical experiment shows that is
+simply doesn't work on PowerPC 32-bit.
+
+So, we take the logical action of adjusting
+BR2_TOOLCHAIN_HAS_LIBQUADMATH so that it is true only on
+powerpc64/powerpc64le.
+
+Fixes:
+
+  https://autobuild.buildroot.org/results/46d435c9f5086a8695f4f6cd4026bb0d194de13c/
+
+Cc: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ toolchain/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index 7762106bee..128f8faef2 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -989,12 +989,12 @@ config BR2_TOOLCHAIN_HAS_ATOMIC
+ # - At least, libquadmath is available on:
+ #   - i*86
+ #   - x86_64
+-#   - PowerPC with vector scalar (VSX) instruction set
++#   - PowerPC64 with vector scalar (VSX) instruction set
+ # - When available, libquadmath requires wchar support.
+ config BR2_TOOLCHAIN_HAS_LIBQUADMATH
+ 	bool
+ 	default y if BR2_i386 || BR2_x86_64
+-	default y if BR2_POWERPC_CPU_HAS_VSX
++	default y if (BR2_powerpc64 || BR2_powerpc64le) && BR2_POWERPC_CPU_HAS_VSX
+ 
+ comment "Bare metal toolchain"
+ 
+-- 
+2.55.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
