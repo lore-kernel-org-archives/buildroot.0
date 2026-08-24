@@ -4,89 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 817A2C5DF81
-	for <buildroot@archiver.kernel.org>; Mon, 24 Aug 2026 10:16:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F1EDC5DF94
+	for <buildroot@archiver.kernel.org>; Mon, 24 Aug 2026 10:17:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2675A6060A;
-	Mon, 24 Aug 2026 10:16:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CB64E60629;
+	Mon, 24 Aug 2026 10:17:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 92YXJaGkUTwX; Mon, 24 Aug 2026 10:16:09 +0000 (UTC)
+ id UhFjE68isHHm; Mon, 24 Aug 2026 10:17:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787566569;
-	bh=89ANDoYTf8J4xHlnaQdpgbweg+Ad/WHjDgwSpxVCDAI=;
+	s=default; t=1787566632;
+	bh=bXhUprNA+BodPXLxdVKiEG0Qodxx3SXQ3P+mtKMgREI=;
 	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=Jjpu2cBr7tctSL8OkMMxlwB55gxazG4JdNvEA6PeV9Pt7NDGXe6o57cMJ9vG+MBCK
-	 v9yssGf/HW+BfUuzhOH0fntaNcpO1aJLWrhVEgr2qnRb/Q33rEku6xkxyTh3DISj/V
-	 ZEMAlGQII8cF86dqsILqkPT0bexFVwAO9HiJ7+C4T5v5sR4ldpu9hscAtak8viFeaC
-	 g5DBSJgIcIlADDjzeQvnnRQWimbITlt8kwrAGk7j0/SZJjBkQvEw0/OX3jNskpc16Y
-	 zj1SzzhNd+iv24fmVD5VYAkDrNlvOH7k9Tlx3buchFpJ2CEktLxwqWImI7VSHMeBlv
-	 +D1LZw4eG0s6A==
+	b=KmbJcfI19CkZIJc6SE6VtydoUWXuLXXfJNeDSypj1D5SrQFj7abHCgfFXqOE8n26w
+	 N0dwVQDX3llis4aVXM52W72/jydV2b1R/GFkLozccZyXpTMAXmdWUc1o+rdWyGiVOZ
+	 rxoONDC+FFywtiYQTf7P5j/tlLvRKDAcgpjKOLEiyASW6ZX8lstJ5rDtWIArUUmqYk
+	 PQFzkmmzAnGwCOI8OmY6WuU8EhXH0SeAj2kahFrN1I/rzSRE5KvgrGyr02jnJN2Inj
+	 B8uBeNlscS0PbC7Mv4bCGYJhEDccNkzx5q3h3qmJmybQbxeGdS5/iOf8gpEEdBd1Rq
+	 n//b2lxWH5kUQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 475FA60617;
-	Mon, 24 Aug 2026 10:16:09 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 210173DA
- for <buildroot@buildroot.org>; Mon, 24 Aug 2026 10:16:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DEF1F60617;
+	Mon, 24 Aug 2026 10:17:11 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2B09A336
+ for <buildroot@buildroot.org>; Mon, 24 Aug 2026 10:17:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0705880C09
- for <buildroot@buildroot.org>; Mon, 24 Aug 2026 10:16:08 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 113E240604
+ for <buildroot@buildroot.org>; Mon, 24 Aug 2026 10:17:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FLTq8ACzqFEw for <buildroot@buildroot.org>;
- Mon, 24 Aug 2026 10:16:06 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id V2DRGGDzfFz1 for <buildroot@buildroot.org>;
+ Mon, 24 Aug 2026 10:17:09 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::62e; helo=mail-ej1-x62e.google.com;
+ client-ip=2a00:1450:4864:20::636; helo=mail-ej1-x636.google.com;
  envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com
- [IPv6:2a00:1450:4864:20::62e])
- by smtp1.osuosl.org (Postfix) with ESMTPS id CF00480BEC
- for <buildroot@buildroot.org>; Mon, 24 Aug 2026 10:16:05 +0000 (UTC)
-Received: by mail-ej1-x62e.google.com with SMTP id
- a640c23a62f3a-c214e625259so467515066b.2
- for <buildroot@buildroot.org>; Mon, 24 Aug 2026 03:16:05 -0700 (PDT)
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com
+ [IPv6:2a00:1450:4864:20::636])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C4EAF4054C
+ for <buildroot@buildroot.org>; Mon, 24 Aug 2026 10:17:08 +0000 (UTC)
+Received: by mail-ej1-x636.google.com with SMTP id
+ a640c23a62f3a-c2020421077so551924866b.3
+ for <buildroot@buildroot.org>; Mon, 24 Aug 2026 03:17:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1787566563; x=1788171363;
+ d=1e100.net; s=20251104; t=1787566626; x=1788171426;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to:content-type;
- bh=0vnDz6KQwJVSMGe19rLvYvwXYRUTdurJlheHEf3e+14=;
- b=Yap1iQdHj1CePHQ8i3Eg2+b+fcV+N8YJ6q0To6PhF++1w/0u8oYFuq/6OvzJ714g1O
- kFGGqkhUucqwFwcCvJKlg7iwhb3RA4q9u4RA/lc341lAqFz43fwSpYpv5hJU+6cC8m6e
- rV/LDPiZnLsUsQhIpi3wheuZx5u2AoFNDiRuB5xfNiu0N2Het6iaWtMOba6MrGUlM4mG
- r9jDmUJe8CiM6j4D2y3lGASSSprT55ybYlnXux5vvfuUqO6nl3sAOKwlmg3v+UrxGx/n
- +gxW64LCZ6ySDbdt+MKGoG3tfphWe2wNvXtFHIwthwHx5FNxGEDgZ/j7lnX2XNfDdGYm
- /SBw==
-X-Gm-Message-State: AFuF++mNzRAG+urv0nhBbEy2wGtPPxdyuiIyZ5Twb70a9yivLQbJqh69
- JIu7EbIfEE7uNPPIM4XZa334sTOzFuPBqJqImtnNeP3De/2ZaZLBEgbV9YygtvnX2mXM09DQWe2
- PeNk0
-X-Gm-Gg: AR+sD10wH5N99E4I9Z+q7ogZTvCB4wK4NJs/7BYV/sBw83PaQ17WmxkLL3ZV0C6dvKQ
- oxc/RhsN+/NWqpaJoCGqGUE9R7Up7bjpEon9FMnZO74g7Pu69Kz2Lx2XAXaGryOdqNQMjI9ezPz
- Ttgjh0/JMiBGBqYaQIshCymId7kKVEpQ+8Mx/tNjNlEPm2E3XPxAejhmluYuP2Z3XtZpc/PcX7D
- bICFRel5/jSC2l/32K8TqlcykCldWAmw0jJxyztjj8LRYpmciMOGIoSqnJ7EZXsggWPFUJSnBfP
- awt9prj++jmqpFtWq8vX+BFFmCIHp9lQLv69CIt5iImtzvxdUK7MHdPmoDuj8U6U7eqGs+6MoN6
- xcEQAUwgNo/3CsTh0EPxGmbbJv9oOnBAuJ6+fYEsWPou54xWHnA4+Al66Orl/pK9wcSu/gm3hRU
- 2bf8ZtlMpwN5pa0ixa38x1kpxW4I2xE+zdHbODBcyDfvyH4oXjL4dEaiRgyyjO4M0rihRKiaUR2
- 4z48yYdi6pHskw5znjRs3W+fD1o+UK/ArHe1RyjgGr7kJzlB84uaw==
-X-Received: by 2002:a17:907:e901:b0:c16:769b:9838 with SMTP id
- a640c23a62f3a-c246a2eba8amr2811448466b.5.1787566563170; 
- Mon, 24 Aug 2026 03:16:03 -0700 (PDT)
+ bh=YRXeayS1Ait6GPaNFxnzZ8epxmyBrv9ETMa8MoCVrH8=;
+ b=KM+165uDxypJthBMa3ZRXAnpbcvbSZxad0FcX2sPciGiJ1W5kI/70bXovQzLj37/u8
+ sLSLKzBSVH8OY62i/14jLtzig/z4AeE3iu/sYAMpuu7OKkggd6JDcHRq+VayFtssAS0+
+ GTJscohYaQZ28ZggpTeWrLdLguOp5IMhx1ndodgF96jLQhVw90BncKRnOrDq/hLXNTQr
+ fsj7g+ydmyqT2WIDAy+taFdlv1B57148FST08RES3AlMJRhAQhBYht6c1RbnaBDME+ly
+ f86U8Sy0nGKFTDvqs+a1LLUu4nADrFuztB6qfNp5ODLJoOwP/RD1Nggf1VMkGRjgSNIN
+ ijUw==
+X-Gm-Message-State: AFuF++nzP8d7XKCrwn3Uk0AuUWV4Q1+3eup0VyJgBM4T2lKoZrfpcq0z
+ jSp+hHtDVE0RxiThSZxeeYXN8DKSMXRLKNusrRuOWaifuCCvO050V8xMb9q2ceU8ULNo4ClymUw
+ iN5e0
+X-Gm-Gg: AR+sD10vlfXMNytFc8kNhQZRr5wPgbD3xzOLcNsjm1lEhA1qPtGXoY3Lb2qzbmSiMGT
+ /Yr5XOSgJ0Cq7zkH7TMdMEHp19MssJDg1RVs7yaQSrcxMVSqQeKTZxQR9GrbVdszUxkIhPTk/Fw
+ VAPuR3atdhwq38fbAp9/77oa6TedyV9Lefsn+tzAT7xWR0cooFVoOlARedaOEWsiZHFowGzzYAq
+ 7kxBdzYf7nA8+pGGIlu5z/fuZ9Kj3JDV8FsaOd62UJ3so2IMeKoxvOt0p0LF3Kpj/rFe1tn7Csy
+ +2SPqlY5nxG7TVITk9v2oRzD/vBBQx9Ny+AxZaKUkTOBGlXln570NkV4RmyD3CZHxKRD46tbGef
+ ghq89ysgQNZ3zgOkSydu16c9iFS2zaZ1Bj9NDb5Gzy47itVnIMoCEuBYdcGDEBwYqpf3ehwYpSw
+ y+/fx48wIETd0TwgT+vTBLRW3MomuxmAuDiBv6bkw/aiBGkpzHOxE9P9KpRASAk4QrFWkuaVYLn
+ Dk7Yt3NaBewahcQHo+6MJujwLGpRq10ZWkrOhY+aA==
+X-Received: by 2002:a17:907:c0b:b0:c24:42b1:3092 with SMTP id
+ a640c23a62f3a-c2491e83af8mr2030274066b.15.1787566626263; 
+ Mon, 24 Aug 2026 03:17:06 -0700 (PDT)
 Received: from dragon.home (154.186-200-80.adsl-dyn.isp.belgacom.be.
  [80.200.186.154]) by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-c24962bd8fasm1853753866b.28.2026.08.24.03.16.02
+ a640c23a62f3a-c249606b696sm1328232766b.7.2026.08.24.03.17.05
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 24 Aug 2026 03:16:02 -0700 (PDT)
+ Mon, 24 Aug 2026 03:17:06 -0700 (PDT)
 To: buildroot@buildroot.org
 Cc: Daniel Price <daniel.price@gmail.com>
-Date: Mon, 24 Aug 2026 12:16:00 +0200
-Message-ID: <20260824101600.3179888-1-titouan.christophe@mind.be>
+Date: Mon, 24 Aug 2026 12:17:02 +0200
+Message-ID: <20260824101702.3180630-1-titouan.christophe@mind.be>
 X-Mailer: git-send-email 2.55.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/redis: security bump to v8.10.1
+Subject: [Buildroot] [PATCH for 2025.02.x] package/redis: security bump to
+ v7.2.16
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -106,11 +107,9 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 See the release notes:
-https://github.com/redis/redis/blob/8.10.1/00-RELEASENOTES
+https://github.com/redis/redis/blob/7.2.16/00-RELEASENOTES
 
-Notably, this fixes CVE-2026-62356: miscalculated buffer size in
-`CMSketch` RDB loading may lead to heap OOB write, as well as other
-security fixes without CVE number
+This fixes a few security issues (without CVE number)
 
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
@@ -119,29 +118,29 @@ Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
  2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/package/redis/redis.hash b/package/redis/redis.hash
-index db03ded5e4..c3239337d6 100644
+index cbd4255df9..1d58f98462 100644
 --- a/package/redis/redis.hash
 +++ b/package/redis/redis.hash
 @@ -1,5 +1,5 @@
  # From https://github.com/redis/redis-hashes/blob/master/README
--sha256  f1baa4b28befd417aa6577ebeedde9e9fc7814cfcc299b2a6d2fd99ef7420a6c  redis-8.10.0.tar.gz
-+sha256  60166c95ab7aedaa9dfe516de685be0a4dd87be95ded59ba429df14c13f1b663  redis-8.10.1.tar.gz
+-sha256  7bf7975331511fdb788e85dae63964b128fccee1df026a10db57444babc9c9c4  redis-7.2.15.tar.gz
++sha256  960a8ec15e34ff40e57ff16837b26b33bd81f2da6d24497bb63de532a323a18e  redis-7.2.16.tar.gz
  
  # Locally calculated
- sha256  4a0e416b9537688f30dfe69ddaceb2ca64d96b7df02a0a6760d376890ddc4e40  LICENSE.txt
+ sha256  97f0a15b7bbae580d2609dad2e11f1956ae167be296ab60f4691ab9c30ee9828  COPYING
 diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-index 13cc7b687a..30142bc0e5 100644
+index 02c25327ed..31b4aad2b2 100644
 --- a/package/redis/redis.mk
 +++ b/package/redis/redis.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--REDIS_VERSION = 8.10.0
-+REDIS_VERSION = 8.10.1
+-REDIS_VERSION = 7.2.15
++REDIS_VERSION = 7.2.16
  REDIS_SITE = https://download.redis.io/releases
- REDIS_LICENSE = \
- 	AGPL-3.0 or SSPL-1.0 or RSAL-2.0 (core); \
+ REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
+ REDIS_LICENSE_FILES = COPYING
 -- 
 2.55.0
 
