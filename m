@@ -1,72 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D5A9C5DF9C
-	for <buildroot@archiver.kernel.org>; Mon, 24 Aug 2026 19:24:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60C91C5DF9C
+	for <buildroot@archiver.kernel.org>; Mon, 24 Aug 2026 19:34:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1D5D780CA8;
-	Mon, 24 Aug 2026 19:24:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AE629405F4;
+	Mon, 24 Aug 2026 19:34:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PM5T6pG7UL-P; Mon, 24 Aug 2026 19:24:49 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2d70KWSXoMUX; Mon, 24 Aug 2026 19:34:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787599489;
-	bh=Q2h+ouR74wmKBkhuBvxQJXhyZk//SYgyX9r26AR/Ecs=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=AEG4YIndHygPULArm1ZMgCo88n5xXlk477BiJjP55HxG/swvGxF+SwoSHtODfc7V+
-	 iCqL5wBqH5Jj+dsM0KRECZ45mQ2zEHFhMPrJFR5GNpxd/8MzXRdty4KRqQwc4iHhkO
-	 RjqUfxWIXK0cmflVJlvt9ObbMS8JFPbUvlX7JJAQJsaAakqDAXgsnuyPsTBX+1bF7R
-	 DpIFWOOSZqEXNvlGqdry7BqTJZeTgimJx8OLY8/ofb9P6ZCxWTYxAgCajcN3+jEZhr
-	 lCfE4a9/oA+jkBO/DlxzMPLP6HAHMyLCctwJe2Cjke4CEEE9ROYN08YEPrf5gdv7F7
-	 YFTUDudTv23dg==
+	s=default; t=1787600075;
+	bh=/0uyZv7UUN8SHFocGDplf+2uF/5lcqbgIoO5if7lOBc=;
+	h=Date:From:To:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=lXP+jssKyw2BtJNdpV8qbmd9P7+mUlts66lId7dnRDu8JpA3ayka/WjSC1lIqyYzv
+	 y0OMg9yc4/QlcIw4japyMP+t2y3uioi9+vgSgOqiJW0aHsVNlUeVo0R7AS0NQqas0Z
+	 2HJXD8AI5B2qzcB+osZ0Q7rsberPzZ0QMrtVOwtp0ZosBaOW+ZCszifUcdDZQAth2R
+	 lEimtXYmxwuH6ojhLDMZOhgtwn84qdCHy6DNRYXb3qWbBQtqlryt3Kv8MVd1v1vZgJ
+	 IGqROMOW/APJlG3woXdpeIJof5RxNenwG4e+IoXLZBl4xtJeGeoFF0ATsRwPwwQKr2
+	 ooHZQqSHWvZYQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3BF5280CB8;
-	Mon, 24 Aug 2026 19:24:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5BCA24059A;
+	Mon, 24 Aug 2026 19:34:35 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id E310D4B8
- for <buildroot@buildroot.org>; Mon, 24 Aug 2026 19:24:47 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 3ADD22FD
+ for <buildroot@buildroot.org>; Mon, 24 Aug 2026 19:34:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D4EE2400A2
- for <buildroot@buildroot.org>; Mon, 24 Aug 2026 19:24:47 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 183F1400A2
+ for <buildroot@buildroot.org>; Mon, 24 Aug 2026 19:34:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TzvJkrm3DX57 for <buildroot@buildroot.org>;
- Mon, 24 Aug 2026 19:24:47 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
- helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D48B840083
- for <buildroot@buildroot.org>; Mon, 24 Aug 2026 19:24:45 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-02.galae.net (Postfix) with ESMTPS id E17F01A1804;
- Mon, 24 Aug 2026 19:24:43 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id B09DE5FFC1;
- Mon, 24 Aug 2026 19:24:43 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 4412F11C79B32; 
- Mon, 24 Aug 2026 21:24:37 +0200 (CEST)
-Date: Mon, 24 Aug 2026 21:24:37 +0200
-To: Thomas Perale <thomas.perale@mind.be>
-Cc: buildroot@buildroot.org, Fiona Klute <fiona.klute@gmx.de>, 
- Edgar Bonet <bonet@grenoble.cnrs.fr>
-Message-ID: <aoyaaO07A4YIzDj2@windsurf>
-References: <20260811120530.130487-1-thomas.perale@mind.be>
+ id BkZs5vP6MLJp for <buildroot@buildroot.org>;
+ Mon, 24 Aug 2026 19:34:32 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.238.66.15;
+ helo=helium.openadk.org; envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
+Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none) header.from=openadk.org
+Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 08B1140083
+ for <buildroot@buildroot.org>; Mon, 24 Aug 2026 19:34:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=openadk.org; s=2022;
+ t=1787600069; bh=rDrbaFCvxSPA9eUqLkgwy2R2SAcDhiIn4baWl8ezM48=;
+ h=Date:From:To:Subject:From;
+ b=qQRw9S5jst6QhNXeChfWCUWPQgY+N0xPYcLVzC6ZpsVJDbsIyo32s8g8+z4/RjzyQ
+ TkyKHnzG9ZMXUzpj6RiWexfU7cdjNBLFMKjxKXIc7MpSdCTyY95Ph9wU14zm72GLNI
+ ItY/ZIoaGd7BOFQMiPdt0kBOBphv59mVgefjFFvhMynnH6FMX+d6KDxnlLK5KqLLkF
+ kVfbKAwlIVzxoc3MMvVNE5abwRpXyOwMlviCw3N45FTq5DBUfxZIhkjreI43OlmtOm
+ 23M91+CIWieBS0+2l1KkzF3NylPjs7J2V7azeXN8BIlgixxrMfczV7JP/XZhmJ2pCV
+ maR5e+Cn9w8aA==
+Received: by helium.openadk.org (Postfix, from userid 1000)
+ id 56AC631E0D44; Mon, 24 Aug 2026 21:34:29 +0200 (CEST)
+Date: Mon, 24 Aug 2026 21:34:28 +0200
+From: Waldemar Brodkorb <wbx@openadk.org>
+To: buildroot@buildroot.org
+Message-ID: <aoycxGKgl6IjLCPv@waldemar-brodkorb.de>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20260811120530.130487-1-thomas.perale@mind.be>
-X-Last-TLS-Session-Version: TLSv1.3
-Subject: Re: [Buildroot] [PATCH v3] docs/manual: update 'releases' to
- reflect LTS changes
+X-Operating-System: Linux 6.12.96+deb13-amd64 x86_64
+Subject: [Buildroot] [PATCH] arch/Config.in.arc: clarify float configuration
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -78,28 +76,78 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, Aug 11, 2026 at 02:05:29PM +0200, Thomas Perale via buildroot wrote:
-> With the release of 2025.02, LTS releases are now made every two years
-> with a 3-year support.
-> 
-> This reflect the table showed at https://lts.buildroot.org/#releases.
-> 
-> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Select soft-float configurations where appropriate,
+checked with all selectable CPU's and uClibc-ng toolchains.
 
-Applied to master, thanks!
+uClibc-ng enabled FENV support for hard-float toolchains
+unconditionally in commit 4c5039b80ebbe42db35af189afcff7fb7d5cace6.
 
-Thomas
+Glibc has a preconfigure script to check if the toolchain is a
+soft-float toolchain.
+
+Fixes:
+ - https://autobuild.buildroot.org/results/d0e735bcd9de979ab74df0c2f5229f7534d1539a
+
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ arch/Config.in.arc | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/arch/Config.in.arc b/arch/Config.in.arc
+index f250ae5eeb..8fac281045 100644
+--- a/arch/Config.in.arc
++++ b/arch/Config.in.arc
+@@ -7,12 +7,15 @@ choice
+ 
+ config BR2_arc750d
+ 	bool "ARC 750D"
++	select BR2_SOFT_FLOAT
+ 
+ config BR2_arc770d
+ 	bool "ARC 770D"
++	select BR2_SOFT_FLOAT
+ 
+ config BR2_archs38
+ 	bool "ARC HS38"
++	select BR2_SOFT_FLOAT
+ 	help
+ 	  Generic ARC HS capable of running Linux, i.e. with MMU,
+ 	  caches and 32-bit multiplier. Also it corresponds to the
+@@ -20,6 +23,7 @@ config BR2_archs38
+ 
+ config BR2_archs38_64mpy
+ 	bool "ARC HS38 with 64-bit mpy"
++	select BR2_SOFT_FLOAT
+ 	help
+ 	  Fully featured ARC HS capable of running Linux, i.e. with
+ 	  MMU, caches and 64-bit multiplier.
+@@ -39,15 +43,17 @@ config BR2_archs38_full
+ 
+ config BR2_archs4x_rel31
+ 	bool "ARC HS48 rel 31"
++	select BR2_SOFT_FLOAT
+ 	help
+ 	  Build for HS48 release 3.1
+ 
+ config BR2_archs4x
+ 	bool "ARC HS48"
++	select BR2_SOFT_FLOAT
+ 	help
+ 	  Latest release of HS48 processor
+ 	   - Dual and Quad multiply and MAC operations
+-	   - Double-precision FPU
++	   - Double-precision FPU (optional)
+ 
+ endchoice
+ 
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.47.3
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
