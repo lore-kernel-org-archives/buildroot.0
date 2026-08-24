@@ -1,60 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 264EBC5DF9C
-	for <buildroot@archiver.kernel.org>; Mon, 24 Aug 2026 19:42:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BFC2C5DF9C
+	for <buildroot@archiver.kernel.org>; Mon, 24 Aug 2026 20:00:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C05DB60608;
-	Mon, 24 Aug 2026 19:42:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DD51680BD3;
+	Mon, 24 Aug 2026 20:00:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id N0oP9UGxpDDE; Mon, 24 Aug 2026 19:42:57 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id T4HZmAwWpIE4; Mon, 24 Aug 2026 20:00:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787600577;
-	bh=ychcETTZA/MZAuVLHM+tgTIQigsQgZsH22h9BAKhL2o=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=jlxGFKU1RLhakhNmDVej/khwvqFDhMYpNFZQJy9b79ZeluWIWoHbjKpiQlYThT9Xs
-	 1ZB7vhE53mIvAH9BCwSCJLZxweXwuvFj8z0CTPfnLctAHjSrQaQjzR9sJKLLGZTIYW
-	 EDRvLKLywWulWs6f7bliaL13RWqQAx7yZbXutBuRr2w3GEhFxmXkHKq5DFmDyTxZkk
-	 l87zBHezf2aliXhPM8BTKx7ZXj9FdVPfGuvaAWBI0mnrfPTDUtSpvgYTyrwJiFihpk
-	 UQUP7IDP5uUMuFgTiEM58ZCZi633ni/6bRqwdcsjOIfQJXAsR0nnzHcMPy7/Q0yfOf
-	 pyjLcA5A6OgiA==
+	s=default; t=1787601628;
+	bh=QKjnnHi6I4weKTs+bzZAPc7ot2jWeTxtricqWJvY7U0=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=Bk2SuNmkVqBQBIpKyCJJCtJZFNYeNxaNJqWiOunZoUUTbypdDvwZtucbGQ7QUMGgU
+	 lSFsId9wNBY4YuY0rcTQQaMZ2/0FrZ67INDBEZLQaM4r0g3LyzdS4kHU00f4FCiNpY
+	 CXxmr2oVPC+Ayrv+0sLkOsCF77ykUk3wUYiIrK7EBBzojfvlzqxNGmKSHprxwexhvR
+	 j0G/jMEFSjxPrQEo2X1FvdYbPsLUITYPOKlK1ZX2MtpxCvuxNBtXVDtNofVYe57509
+	 lVLzO9kEOTh2EGs+iXsy7ALyD8Gtnm5AsZTL7KkufVLDweSxLMTnzFB6FFWM2XBp7n
+	 8mDZsp4DJYf/w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ECB4F60624;
-	Mon, 24 Aug 2026 19:42:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EBF4C806FC;
+	Mon, 24 Aug 2026 20:00:27 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id E8DE74B8
- for <buildroot@buildroot.org>; Mon, 24 Aug 2026 19:42:54 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id B0615279
+ for <buildroot@buildroot.org>; Mon, 24 Aug 2026 20:00:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D9C0340577
- for <buildroot@buildroot.org>; Mon, 24 Aug 2026 19:42:54 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A23C040510
+ for <buildroot@buildroot.org>; Mon, 24 Aug 2026 20:00:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6wtmJhBVKeT3 for <buildroot@buildroot.org>;
- Mon, 24 Aug 2026 19:42:54 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id 78lN5rGbGwkz for <buildroot@buildroot.org>;
+ Mon, 24 Aug 2026 20:00:24 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
+ helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2ADA040569
- for <buildroot@buildroot.org>; Mon, 24 Aug 2026 19:42:54 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EE68990004; Mon, 24 Aug 2026 19:41:58 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 24 Aug 2026 21:40:00 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7e036c739ff82bf3a5aaf5dc79b7c560e5040787
-X-Git-Newrev: 1a0a2134e6e632852e23ca8cc583af7ea347ec6d
-X-Patchwork-Hint: ignore
-Message-Id: <20260824194158.EE68990004@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/taglib: mp4 support needs threads
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A336A404F2
+ for <buildroot@buildroot.org>; Mon, 24 Aug 2026 20:00:23 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-02.galae.net (Postfix) with ESMTPS id 29CEC1A1804;
+ Mon, 24 Aug 2026 20:00:21 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id E32235FFC1;
+ Mon, 24 Aug 2026 20:00:20 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id B854711C79B90; 
+ Mon, 24 Aug 2026 22:00:15 +0200 (CEST)
+Date: Mon, 24 Aug 2026 22:00:14 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+Message-ID: <aoyivLhRbgBke6ou@windsurf>
+References: <20260724164829.304335-1-bernd@kuhls.net>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20260724164829.304335-1-bernd@kuhls.net>
+X-Last-TLS-Session-Version: TLSv1.3
+Subject: Re: [Buildroot] [PATCH 1/3] package/taglib: mp4 support needs
+ threads
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -68,79 +79,37 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5883283723865331926=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5883283723865331926==
-Content-Type: text/plain
-
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/1a0a2134e6e632852e23ca8cc583af7ea347ec6d
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
-
-Buildroot commit 1c5730ebb5e8b9a67433aa9997e5cfd6cae18cfe bumped the
-package from version 2.2.1 to version 2.3 which includes upstream commit
-https://github.com/taglib/taglib/commit/5d63187a8b8d291cbf4f77d1bb973bc5ee91cf03
-that uses std::call_once and is only available with threads support.
-
-Inspired by buildroot commit f9a2d65cae88ca7c641af2f69161ab0d21bac91c
-which fixed a similar error.
-
-This patch fixes a build error
-
-/builds/bkuhls/buildroot/br-test-pkg/br-arm-full-nothread/build/taglib-2.3/taglib/mp4/mp4itemfactory.cpp:51:16:
- error: ‘once_flag’ in namespace ‘std’ does not name a type
-
-caught by the Gitlab pipelines. To reproduce use this defconfig:
-
-  BR2_arm=y
-  BR2_arm1176jzf_s=y
-  BR2_TOOLCHAIN_EXTERNAL=y
-  BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-  BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-  BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm11-full-nothread-2020.11.2.tar.bz2"
-  BR2_TOOLCHAIN_EXTERNAL_GCC_9=y
-  BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_9=y
-  BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-  # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS is not set
-  BR2_TOOLCHAIN_EXTERNAL_CXX=y
-  BR2_PER_PACKAGE_DIRECTORIES=y
-  BR2_PACKAGE_TAGLIB=y
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/taglib/taglib.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/package/taglib/taglib.mk b/package/taglib/taglib.mk
-index 924d3f339d..9a111a86c6 100644
---- a/package/taglib/taglib.mk
-+++ b/package/taglib/taglib.mk
-@@ -12,6 +12,12 @@ TAGLIB_LICENSE = LGPL-2.1 or MPL-1.1
- TAGLIB_LICENSE_FILES = COPYING.LGPL COPYING.MPL
- TAGLIB_CPE_ID_VENDOR = taglib
- 
-+ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
-+TAGLIB_CONF_OPTS += -DWITH_MP4=ON
-+else
-+TAGLIB_CONF_OPTS += -DWITH_MP4=OFF
-+endif
-+
- ifeq ($(BR2_PACKAGE_ZLIB),y)
- TAGLIB_DEPENDENCIES += zlib
- TAGLIB_CONF_OPTS += -DWITH_ZLIB=ON
-
---===============5883283723865331926==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5883283723865331926==--
+T24gRnJpLCBKdWwgMjQsIDIwMjYgYXQgMDY6NDg6MjdQTSArMDIwMCwgQmVybmQgS3VobHMgd3Jv
+dGU6Cj4gQnVpbGRyb290IGNvbW1pdCAxYzU3MzBlYmI1ZThiOWE2NzQzM2FhOTk5N2U1Y2ZkNmNh
+ZTE4Y2ZlIGJ1bXBlZCB0aGUKPiBwYWNrYWdlIGZyb20gdmVyc2lvbiAyLjIuMSB0byB2ZXJzaW9u
+IDIuMyB3aGljaCBpbmNsdWRlcyB1cHN0cmVhbSBjb21taXQKPiBodHRwczovL2dpdGh1Yi5jb20v
+dGFnbGliL3RhZ2xpYi9jb21taXQvNWQ2MzE4N2E4YjhkMjkxY2JmNGY3N2QxYmI5NzNiYzVlZTkx
+Y2YwMwo+IHRoYXQgdXNlcyBzdGQ6OmNhbGxfb25jZSBhbmQgaXMgb25seSBhdmFpbGFibGUgd2l0
+aCB0aHJlYWRzIHN1cHBvcnQuCj4gCj4gSW5zcGlyZWQgYnkgYnVpbGRyb290IGNvbW1pdCBmOWEy
+ZDY1Y2FlODhjYTdjNjQxYWYyZjY5MTYxYWIwZDIxYmFjOTFjCj4gd2hpY2ggZml4ZWQgYSBzaW1p
+bGFyIGVycm9yLgo+IAo+IFRoaXMgcGF0Y2ggZml4ZXMgYSBidWlsZCBlcnJvcgo+IAo+IC9idWls
+ZHMvYmt1aGxzL2J1aWxkcm9vdC9ici10ZXN0LXBrZy9ici1hcm0tZnVsbC1ub3RocmVhZC9idWls
+ZC90YWdsaWItMi4zL3RhZ2xpYi9tcDQvbXA0aXRlbWZhY3RvcnkuY3BwOjUxOjE2Ogo+ICBlcnJv
+cjog4oCYb25jZV9mbGFn4oCZIGluIG5hbWVzcGFjZSDigJhzdGTigJkgZG9lcyBub3QgbmFtZSBh
+IHR5cGUKPiAKPiBjYXVnaHQgYnkgdGhlIEdpdGxhYiBwaXBlbGluZXMuIFRvIHJlcHJvZHVjZSB1
+c2UgdGhpcyBkZWZjb25maWc6Cj4gCj4gICBCUjJfYXJtPXkKPiAgIEJSMl9hcm0xMTc2anpmX3M9
+eQo+ICAgQlIyX1RPT0xDSEFJTl9FWFRFUk5BTD15Cj4gICBCUjJfVE9PTENIQUlOX0VYVEVSTkFM
+X0NVU1RPTT15Cj4gICBCUjJfVE9PTENIQUlOX0VYVEVSTkFMX0RPV05MT0FEPXkKPiAgIEJSMl9U
+T09MQ0hBSU5fRVhURVJOQUxfVVJMPSJodHRwOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5vcmcvdG9v
+bGNoYWlucy90YXJiYWxscy9ici1hcm0xMS1mdWxsLW5vdGhyZWFkLTIwMjAuMTEuMi50YXIuYnoy
+Igo+ICAgQlIyX1RPT0xDSEFJTl9FWFRFUk5BTF9HQ0NfOT15Cj4gICBCUjJfVE9PTENIQUlOX0VY
+VEVSTkFMX0hFQURFUlNfNV85PXkKPiAgIEJSMl9UT09MQ0hBSU5fRVhURVJOQUxfTE9DQUxFPXkK
+PiAgICMgQlIyX1RPT0xDSEFJTl9FWFRFUk5BTF9IQVNfVEhSRUFEUyBpcyBub3Qgc2V0Cj4gICBC
+UjJfVE9PTENIQUlOX0VYVEVSTkFMX0NYWD15Cj4gICBCUjJfUEVSX1BBQ0tBR0VfRElSRUNUT1JJ
+RVM9eQo+ICAgQlIyX1BBQ0tBR0VfVEFHTElCPXkKPiAKPiBTaWduZWQtb2ZmLWJ5OiBCZXJuZCBL
+dWhscyA8YmVybmRAa3VobHMubmV0PgoKVGhhbmtzIGEgbG90LCBhcHBsaWVkIHRvIG1hc3RlciEK
+ClRob21hcwotLSAKVGhvbWFzIFBldGF6em9uaSwgY28tb3duZXIgYW5kIENFTywgQm9vdGxpbgpF
+bWJlZGRlZCBMaW51eCBhbmQgS2VybmVsIGVuZ2luZWVyaW5nIGFuZCB0cmFpbmluZwpodHRwczov
+L2Jvb3RsaW4uY29tCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6
+Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
