@@ -1,70 +1,60 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60C91C5DF9C
-	for <buildroot@archiver.kernel.org>; Mon, 24 Aug 2026 19:34:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 264EBC5DF9C
+	for <buildroot@archiver.kernel.org>; Mon, 24 Aug 2026 19:42:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AE629405F4;
-	Mon, 24 Aug 2026 19:34:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C05DB60608;
+	Mon, 24 Aug 2026 19:42:57 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id N0oP9UGxpDDE; Mon, 24 Aug 2026 19:42:57 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1787600577;
+	bh=ychcETTZA/MZAuVLHM+tgTIQigsQgZsH22h9BAKhL2o=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=jlxGFKU1RLhakhNmDVej/khwvqFDhMYpNFZQJy9b79ZeluWIWoHbjKpiQlYThT9Xs
+	 1ZB7vhE53mIvAH9BCwSCJLZxweXwuvFj8z0CTPfnLctAHjSrQaQjzR9sJKLLGZTIYW
+	 EDRvLKLywWulWs6f7bliaL13RWqQAx7yZbXutBuRr2w3GEhFxmXkHKq5DFmDyTxZkk
+	 l87zBHezf2aliXhPM8BTKx7ZXj9FdVPfGuvaAWBI0mnrfPTDUtSpvgYTyrwJiFihpk
+	 UQUP7IDP5uUMuFgTiEM58ZCZi633ni/6bRqwdcsjOIfQJXAsR0nnzHcMPy7/Q0yfOf
+	 pyjLcA5A6OgiA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id ECB4F60624;
+	Mon, 24 Aug 2026 19:42:56 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id E8DE74B8
+ for <buildroot@buildroot.org>; Mon, 24 Aug 2026 19:42:54 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id D9C0340577
+ for <buildroot@buildroot.org>; Mon, 24 Aug 2026 19:42:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2d70KWSXoMUX; Mon, 24 Aug 2026 19:34:35 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787600075;
-	bh=/0uyZv7UUN8SHFocGDplf+2uF/5lcqbgIoO5if7lOBc=;
-	h=Date:From:To:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=lXP+jssKyw2BtJNdpV8qbmd9P7+mUlts66lId7dnRDu8JpA3ayka/WjSC1lIqyYzv
-	 y0OMg9yc4/QlcIw4japyMP+t2y3uioi9+vgSgOqiJW0aHsVNlUeVo0R7AS0NQqas0Z
-	 2HJXD8AI5B2qzcB+osZ0Q7rsberPzZ0QMrtVOwtp0ZosBaOW+ZCszifUcdDZQAth2R
-	 lEimtXYmxwuH6ojhLDMZOhgtwn84qdCHy6DNRYXb3qWbBQtqlryt3Kv8MVd1v1vZgJ
-	 IGqROMOW/APJlG3woXdpeIJof5RxNenwG4e+IoXLZBl4xtJeGeoFF0ATsRwPwwQKr2
-	 ooHZQqSHWvZYQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5BCA24059A;
-	Mon, 24 Aug 2026 19:34:35 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 3ADD22FD
- for <buildroot@buildroot.org>; Mon, 24 Aug 2026 19:34:33 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 183F1400A2
- for <buildroot@buildroot.org>; Mon, 24 Aug 2026 19:34:33 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BkZs5vP6MLJp for <buildroot@buildroot.org>;
- Mon, 24 Aug 2026 19:34:32 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.238.66.15;
- helo=helium.openadk.org; envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none) header.from=openadk.org
-Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 08B1140083
- for <buildroot@buildroot.org>; Mon, 24 Aug 2026 19:34:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=openadk.org; s=2022;
- t=1787600069; bh=rDrbaFCvxSPA9eUqLkgwy2R2SAcDhiIn4baWl8ezM48=;
- h=Date:From:To:Subject:From;
- b=qQRw9S5jst6QhNXeChfWCUWPQgY+N0xPYcLVzC6ZpsVJDbsIyo32s8g8+z4/RjzyQ
- TkyKHnzG9ZMXUzpj6RiWexfU7cdjNBLFMKjxKXIc7MpSdCTyY95Ph9wU14zm72GLNI
- ItY/ZIoaGd7BOFQMiPdt0kBOBphv59mVgefjFFvhMynnH6FMX+d6KDxnlLK5KqLLkF
- kVfbKAwlIVzxoc3MMvVNE5abwRpXyOwMlviCw3N45FTq5DBUfxZIhkjreI43OlmtOm
- 23M91+CIWieBS0+2l1KkzF3NylPjs7J2V7azeXN8BIlgixxrMfczV7JP/XZhmJ2pCV
- maR5e+Cn9w8aA==
-Received: by helium.openadk.org (Postfix, from userid 1000)
- id 56AC631E0D44; Mon, 24 Aug 2026 21:34:29 +0200 (CEST)
-Date: Mon, 24 Aug 2026 21:34:28 +0200
-From: Waldemar Brodkorb <wbx@openadk.org>
+ id 6wtmJhBVKeT3 for <buildroot@buildroot.org>;
+ Mon, 24 Aug 2026 19:42:54 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2ADA040569
+ for <buildroot@buildroot.org>; Mon, 24 Aug 2026 19:42:54 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id EE68990004; Mon, 24 Aug 2026 19:41:58 +0000 (UTC)
 To: buildroot@buildroot.org
-Message-ID: <aoycxGKgl6IjLCPv@waldemar-brodkorb.de>
-MIME-Version: 1.0
-Content-Disposition: inline
-X-Operating-System: Linux 6.12.96+deb13-amd64 x86_64
-Subject: [Buildroot] [PATCH] arch/Config.in.arc: clarify float configuration
+Date: Mon, 24 Aug 2026 21:40:00 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 7e036c739ff82bf3a5aaf5dc79b7c560e5040787
+X-Git-Newrev: 1a0a2134e6e632852e23ca8cc583af7ea347ec6d
+X-Patchwork-Hint: ignore
+Message-Id: <20260824194158.EE68990004@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/taglib: mp4 support needs threads
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,79 +66,81 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============5883283723865331926=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Select soft-float configurations where appropriate,
-checked with all selectable CPU's and uClibc-ng toolchains.
+--===============5883283723865331926==
+Content-Type: text/plain
 
-uClibc-ng enabled FENV support for hard-float toolchains
-unconditionally in commit 4c5039b80ebbe42db35af189afcff7fb7d5cace6.
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/1a0a2134e6e632852e23ca8cc583af7ea347ec6d
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Glibc has a preconfigure script to check if the toolchain is a
-soft-float toolchain.
+Buildroot commit 1c5730ebb5e8b9a67433aa9997e5cfd6cae18cfe bumped the
+package from version 2.2.1 to version 2.3 which includes upstream commit
+https://github.com/taglib/taglib/commit/5d63187a8b8d291cbf4f77d1bb973bc5ee91cf03
+that uses std::call_once and is only available with threads support.
 
-Fixes:
- - https://autobuild.buildroot.org/results/d0e735bcd9de979ab74df0c2f5229f7534d1539a
+Inspired by buildroot commit f9a2d65cae88ca7c641af2f69161ab0d21bac91c
+which fixed a similar error.
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+This patch fixes a build error
+
+/builds/bkuhls/buildroot/br-test-pkg/br-arm-full-nothread/build/taglib-2.3/taglib/mp4/mp4itemfactory.cpp:51:16:
+ error: ‘once_flag’ in namespace ‘std’ does not name a type
+
+caught by the Gitlab pipelines. To reproduce use this defconfig:
+
+  BR2_arm=y
+  BR2_arm1176jzf_s=y
+  BR2_TOOLCHAIN_EXTERNAL=y
+  BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+  BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+  BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm11-full-nothread-2020.11.2.tar.bz2"
+  BR2_TOOLCHAIN_EXTERNAL_GCC_9=y
+  BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_9=y
+  BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+  # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS is not set
+  BR2_TOOLCHAIN_EXTERNAL_CXX=y
+  BR2_PER_PACKAGE_DIRECTORIES=y
+  BR2_PACKAGE_TAGLIB=y
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- arch/Config.in.arc | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ package/taglib/taglib.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/arch/Config.in.arc b/arch/Config.in.arc
-index f250ae5eeb..8fac281045 100644
---- a/arch/Config.in.arc
-+++ b/arch/Config.in.arc
-@@ -7,12 +7,15 @@ choice
+diff --git a/package/taglib/taglib.mk b/package/taglib/taglib.mk
+index 924d3f339d..9a111a86c6 100644
+--- a/package/taglib/taglib.mk
++++ b/package/taglib/taglib.mk
+@@ -12,6 +12,12 @@ TAGLIB_LICENSE = LGPL-2.1 or MPL-1.1
+ TAGLIB_LICENSE_FILES = COPYING.LGPL COPYING.MPL
+ TAGLIB_CPE_ID_VENDOR = taglib
  
- config BR2_arc750d
- 	bool "ARC 750D"
-+	select BR2_SOFT_FLOAT
- 
- config BR2_arc770d
- 	bool "ARC 770D"
-+	select BR2_SOFT_FLOAT
- 
- config BR2_archs38
- 	bool "ARC HS38"
-+	select BR2_SOFT_FLOAT
- 	help
- 	  Generic ARC HS capable of running Linux, i.e. with MMU,
- 	  caches and 32-bit multiplier. Also it corresponds to the
-@@ -20,6 +23,7 @@ config BR2_archs38
- 
- config BR2_archs38_64mpy
- 	bool "ARC HS38 with 64-bit mpy"
-+	select BR2_SOFT_FLOAT
- 	help
- 	  Fully featured ARC HS capable of running Linux, i.e. with
- 	  MMU, caches and 64-bit multiplier.
-@@ -39,15 +43,17 @@ config BR2_archs38_full
- 
- config BR2_archs4x_rel31
- 	bool "ARC HS48 rel 31"
-+	select BR2_SOFT_FLOAT
- 	help
- 	  Build for HS48 release 3.1
- 
- config BR2_archs4x
- 	bool "ARC HS48"
-+	select BR2_SOFT_FLOAT
- 	help
- 	  Latest release of HS48 processor
- 	   - Dual and Quad multiply and MAC operations
--	   - Double-precision FPU
-+	   - Double-precision FPU (optional)
- 
- endchoice
- 
--- 
-2.47.3
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
++TAGLIB_CONF_OPTS += -DWITH_MP4=ON
++else
++TAGLIB_CONF_OPTS += -DWITH_MP4=OFF
++endif
++
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+ TAGLIB_DEPENDENCIES += zlib
+ TAGLIB_CONF_OPTS += -DWITH_ZLIB=ON
+
+--===============5883283723865331926==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5883283723865331926==--
