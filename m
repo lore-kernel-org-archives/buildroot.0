@@ -1,115 +1,115 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62BCDC5DF9D
-	for <buildroot@archiver.kernel.org>; Mon, 24 Aug 2026 06:39:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E664C5DF81
+	for <buildroot@archiver.kernel.org>; Mon, 24 Aug 2026 06:39:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 376384065D;
-	Mon, 24 Aug 2026 06:39:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 192F260629;
+	Mon, 24 Aug 2026 06:39:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id laYI3VKMquy6; Mon, 24 Aug 2026 06:38:59 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0vUP-MNMunkx; Mon, 24 Aug 2026 06:39:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787553539;
-	bh=Fov7BEQ1J8aD6vbgfoEMINiBH5vvb4iqfF5+hDltAIE=;
+	s=default; t=1787553540;
+	bh=tiaZUJWE9ATbTtFls8g50b+gGAOxhJae+IS+lPG2RB8=;
 	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=MlG/vEJgmKPffK8UOHqMHQTq51vMqqKURbsy5mvRj8zoZW1f/s0u0MJAhXbMyADAO
-	 Uu3aVgi30pIQQkXNuw6lOhvzn+G1A6Me9Awu8c79PIYGZSS8f3fPE881d7S6Npe7FB
-	 FFoNvuA816kmJ7a49DlSfvLAkZKc00UdgmO8DFGAZ8UWVBlSniKblYm6n9RexbhcjD
-	 O9aFrzH7p49Yd7NtEuQyRx+EyQy85fKBMOtiUPGIgIcRDjMcmMUTvFXvHacVK/OS0c
-	 C/CZegMclD2QIfkjhB/19YPKgtaIM91P4rFu3iYMOCNBTAyT/JzH4Wus1JGIKr84KS
-	 POatM1GZAKpTw==
+	b=CsS5370MVnu6hvPnRC4lGO7cAUfBClaeN62OwT05RQBbShwIlbCvv9s6gFS1Uoqv9
+	 0tTPZmIGm3qnU1u0/O1bSHHiMl5jFtqWBJgRjIDj9q5XZ+XS8kYzwy3gBXTE5YdBR9
+	 ik487ITxwxIGXIHfPY3zw3dr6AgL4AbE6wTbSwbg77OuCGwq2jIHpaCEKumXGFeHlv
+	 4jzE9fDllguWh9keMhkCHDfPaznPUOvKUyPuviLUy/tkAysPU+nwcim/if3UhvEy0b
+	 G5XuRgfSMxZwxuAbLYIf2ZkOzXXeeeGaykPL66zFHxV26bw7Pd+8+DmtyLepnLQG7e
+	 wACpRuGwqLH8g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2F75F4067A;
-	Mon, 24 Aug 2026 06:38:59 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 3F99C42B
- for <buildroot@buildroot.org>; Mon, 24 Aug 2026 06:38:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1EE20606CE;
+	Mon, 24 Aug 2026 06:39:00 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4758D386
+ for <buildroot@buildroot.org>; Mon, 24 Aug 2026 06:38:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 264C0400AE
- for <buildroot@buildroot.org>; Mon, 24 Aug 2026 06:38:56 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 38E2460635
+ for <buildroot@buildroot.org>; Mon, 24 Aug 2026 06:38:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 68ZJ_Y0PfjTb for <buildroot@buildroot.org>;
- Mon, 24 Aug 2026 06:38:55 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Pgj9bHVPmKWy for <buildroot@buildroot.org>;
+ Mon, 24 Aug 2026 06:38:56 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::62d; helo=mail-ej1-x62d.google.com;
+ client-ip=2a00:1450:4864:20::629; helo=mail-ej1-x629.google.com;
  envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-Authentication-Results: smtp2.osuosl.org; dmarc=pass (p=none dis=none)
+Authentication-Results: smtp3.osuosl.org; dmarc=pass (p=none dis=none)
  header.from=amarulasolutions.com
-Authentication-Results: smtp2.osuosl.org;
+Authentication-Results: smtp3.osuosl.org;
  dkim=pass (1024-bit key) header.d=amarulasolutions.com
  header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=P16SHbh8
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com
- [IPv6:2a00:1450:4864:20::62d])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D62F8400E5
- for <buildroot@buildroot.org>; Mon, 24 Aug 2026 06:38:54 +0000 (UTC)
-Received: by mail-ej1-x62d.google.com with SMTP id
- a640c23a62f3a-c15e2dab83eso581752666b.1
- for <buildroot@buildroot.org>; Sun, 23 Aug 2026 23:38:54 -0700 (PDT)
+ header.b=Fe5CZp72
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com
+ [IPv6:2a00:1450:4864:20::629])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D081C6060B
+ for <buildroot@buildroot.org>; Mon, 24 Aug 2026 06:38:55 +0000 (UTC)
+Received: by mail-ej1-x629.google.com with SMTP id
+ a640c23a62f3a-c1670dad7a8so537359166b.3
+ for <buildroot@buildroot.org>; Sun, 23 Aug 2026 23:38:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1787553533; x=1788158333;
+ d=amarulasolutions.com; s=google; t=1787553534; x=1788158334;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to:content-type;
- bh=Z0fo/RNfK2oKhqirw3tPOLb2wLDai/xzgIGNqjv1/hA=;
- b=P16SHbh8kgg/uSUA+vdK+Sm8IFHXMEnPJ2ilkHbUOaemaCziEne7hIsR8Kwx4/5DOn
- FOjaa03mENjQok44lEqFVA0IgmL9hy+8QOP6lLPaD2u7t3jV/mTpHuiA9g0yEZzRNeJu
- b3C4d9UxvuP1tVFpQFIHVDK45ibGqqbVrT2lg=
+ bh=eeyVjRmFUyreHlB0/wMhY25evOWELYmYRYX8Y5SOHc0=;
+ b=Fe5CZp72+vkV42eav3jAzwl6tyOoWDZEKAPBoxj899FOilM9vtjzXf93HEXfrp4h0z
+ sVHYEtj6B55xZD3KgdB0X94ZBOT1R2p/S/4+BQAQ6AplpRu1VdNqDm7qUfLNy9ysZ6Sd
+ vWoffQv9F1ssIpkRuFfZUZvBXaNAtiWKLYTv4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1787553533; x=1788158333;
+ d=1e100.net; s=20251104; t=1787553534; x=1788158334;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=Z0fo/RNfK2oKhqirw3tPOLb2wLDai/xzgIGNqjv1/hA=;
- b=X4j/nOcvfy1rMXokH9oxP0nPGr0mmNJCipOPBlt8jsO1f3Jhe9HSNwautSGru/aHin
- P81hDc6TLRSYBE6pTobD9NeBUGuc1v6q/xYMRtNFPL9xRm+4sTjFAvIYxJnO0ltj3Dd5
- TPUZ2TqBcFYc+OdiMAo2piKnfqkOsFk5+VVWuGkaLUmd9TGlF6IR1k81i+7i36NjYo5+
- 9U6Dc8BpLJOU/zKQ5tGns+74+XvTQgiKIA0CRjW54+mBeznwqzJmd4gnvFIDYt7i4y1u
- 6LGAvEuLzCTnM7eZcaBrPERm6S6T3bmmRSlOGhkjYY2T1gUNNzVPBHsaHftg6WydMxkP
- qK1Q==
-X-Gm-Message-State: AFuF++kxajNUpNT2rHWsv2jzMmgFg/eR3wbUum7RoI/U20XRAMkzR4vm
- uus3NzQaxG8NpDy0CZXwMqSyFSgm83jQd1ndFTk9YEfUVCpQqK/tQgOahRMSaINAO9D3/j5sNBn
- OpLTEE7M=
-X-Gm-Gg: AR+sD11QWIpFws0pMMCyO37+fL+XS1Efe0h010o74DnfagYDe8D0w6Tn0y0ldI40Su7
- k/UgD3tFqtOR27AiRWPYBsVVSoqiHBXc88T5C50xNBYyjIOyjWaEps6QHS8lMoKwl259O9VGGsg
- w4GjkM2bBfUltTLTLPERRWV/Gf0H9FvC979X9l8qEzt+pzZNeaa2hDAjS3e70LkScG5PFy6VRcm
- K+NHQSnewS0vNrQjheGNbVyBCrUBThLjVdMI3YdSuiiFRRPzHMke5YlBC9K5GvawOmacmKCnM+R
- PeuPsS35RH7/IPp6h6ohXJWakd37ClHBBif4u2WvgJ86r4/IJ9KDa/Fb/J8IgUV8Pfv21yJeoW0
- 1q6ZcHHIohqHi+OiLrvxiUksneNt+U8J1gGhcTBW8U3FNWsIfx/zSk9cOTxf3Lr9KTv7AZJjCwH
- Riq9VGDjB4u547E2YDDeJVJeySrjgj0bIH2PJYuyslN0ERvoBwt3eV4p6lJ9MNTb2rwsDCm/3E0
- sM4LYR3JP/dS0a57bd2rqkHUBs3eDVoaKotqoPD6ukX4gaJ22G3Gi4SPgy2AGOqoXTm5yEMkrKr
- WfPR3rZNtnBlF3uPI/PnGfz3ylML3IPoloFbcQ/7oPZjF672q38GuYoFDkfFdA==
-X-Received: by 2002:a17:906:fe03:b0:c16:242a:472f with SMTP id
- a640c23a62f3a-c246b4af7e1mr3089206066b.23.1787553532594; 
- Sun, 23 Aug 2026 23:38:52 -0700 (PDT)
+ bh=eeyVjRmFUyreHlB0/wMhY25evOWELYmYRYX8Y5SOHc0=;
+ b=oiwUB0ksqSE3acEtQ8p2e+0OK69/rcOeFice/WsgNdte/3oKgw6Quv8cSGFEk4iBLV
+ rX7gQQNoOHom7RIEy1H0C0ejvmlntq4GkbaiIwfsMLMUXvZxPs9oRkRv6ILX74H535ut
+ jr1dcwPOXn6njX9MRULj3Y4CXjxTECrD93nb3UWBowEFju+WRpk3AjFh09WtUBGlJNR9
+ 9TTy+1QTu6M5acFnGRZdjZOKV2forP8u8YdN24zWUxzAlES/vYg+pxr/QI9jJoIvygDe
+ kXzIE7LBzQfMhaDSy4xOP+XjdQfZf9tQWa316f3SrwzOBjrwm6IW3euq1BrueraSPy+L
+ Ew4w==
+X-Gm-Message-State: AFuF++kDREqBeGebIFYL0t/E9yI3b1ek5jDlXMHP96ve4CRInh8w/aU5
+ xv+4l/F83gKH/vzdv/BVwfueFnu2IeBgE3KMztD2rD+sOhyKenOGNddrjhMYjSwxyi6mjt9CsBG
+ ByhUtHuo=
+X-Gm-Gg: AR+sD12W7VbU+lOHKIrCPTTAuW74lJwqGl3pLA5rEZ68oCEBECGnEXSk0J3HeTKGMy/
+ pAO/Uj3uuSKCq1y9MT2IhQaGs4jBvdd85om7VtYbXXXTHgpyhXQwBhCpfJX+SotJr/JjJlHB13+
+ stfUxNCe6GlMuWk02NAM/2SA0+xwwJ2n8ULDh+IBBS/kb+KW3OJnkjETunpcIht4NtSnaD11RFd
+ E6juGkW00w54lc2sEyxVhVMQpuGXAom38nA3NthJwlBv/HRhA71VTwA/SdPsFbsDr/W0haHbHBw
+ Qcgd8j0KNRcAg1gGxNEDnj458kB29Ivigwa3Wbj9addNI7/Fo84970lCJ+MTVSi1Ana9awEtC07
+ zCJJbZwsJ6WqY0ZCm5ALaL/yO/ZpkJGXvRIRXuhlrhQpmVXIWOKijZUnEpeJ8y0Oy5J6fbfHS03
+ qLOfU5wFAQArHhWMjV2Cb4LAYAdzz71AOaic+DySn4dsKRyyiXkDB8X+7VUY2xfBvYNvG7vOy7x
+ OOzP0pnCsnZ7RbCyDJcAkPSXdeLyOJ0qyyMsVWYHwZeKxOsZM07hwtsHSaw5a9ULWX1m8L07GEi
+ 3YDosSoHA+1opnroH2ldWHYWN/XbdXBD5PM4KTM5AToAs/iE2tf4GfX4C0Q9hA==
+X-Received: by 2002:a17:907:7b9b:b0:c1f:bda0:a771 with SMTP id
+ a640c23a62f3a-c246a68427amr2826784166b.13.1787553533531; 
+ Sun, 23 Aug 2026 23:38:53 -0700 (PDT)
 Received: from dario-ThinkPad-P14s-Gen-5.homenet.telecomitalia.it
  (host-87-9-102-148.retail.telecomitalia.it. [87.9.102.148])
  by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-c249685ef7bsm1226186766b.52.2026.08.23.23.38.51
+ a640c23a62f3a-c249685ef7bsm1226186766b.52.2026.08.23.23.38.52
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 23 Aug 2026 23:38:52 -0700 (PDT)
+ Sun, 23 Aug 2026 23:38:53 -0700 (PDT)
 From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
 Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
  Michael Fischer <mf@go-sys.de>
-Date: Mon, 24 Aug 2026 08:38:41 +0200
-Message-ID: <20260824063843.839745-5-dario.binacchi@amarulasolutions.com>
+Date: Mon, 24 Aug 2026 08:38:42 +0200
+Message-ID: <20260824063843.839745-6-dario.binacchi@amarulasolutions.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260824063843.839745-1-dario.binacchi@amarulasolutions.com>
 References: <20260824063843.839745-1-dario.binacchi@amarulasolutions.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v6 4/6] package/isocline: new package
+Subject: [Buildroot] [PATCH v6 5/6] package/canvenient: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -126,159 +126,146 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Isocline is a pure C library that can be used as an alternative to the
-GNU readline library.
+CANvenient is an abstraction layer for multiple CAN APIs on Windows and
+Linux. It provides a unified interface for CAN communication, allowing
+developers to write code that is portable across different platforms and
+CAN hardware.
 
-Project page: https://github.com/daanx/isocline
+Project page: https://github.com/CANopenTerm/CANvenient
 
 Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 ---
  DEVELOPERS                                    |  1 +
  package/Config.in                             |  1 +
- ...nly-require-CXX-compiler-when-needed.patch | 55 +++++++++++++++++++
- package/isocline/Config.in                    |  9 +++
- package/isocline/isocline.hash                |  3 +
- package/isocline/isocline.mk                  | 21 +++++++
- 6 files changed, 90 insertions(+)
- create mode 100644 package/isocline/0001-Only-require-CXX-compiler-when-needed.patch
- create mode 100644 package/isocline/Config.in
- create mode 100644 package/isocline/isocline.hash
- create mode 100644 package/isocline/isocline.mk
+ .../canvenient/0001-Fix-build-with-musl.patch | 43 +++++++++++++++++++
+ package/canvenient/Config.in                  | 13 ++++++
+ package/canvenient/canvenient.hash            |  3 ++
+ package/canvenient/canvenient.mk              | 14 ++++++
+ 6 files changed, 75 insertions(+)
+ create mode 100644 package/canvenient/0001-Fix-build-with-musl.patch
+ create mode 100644 package/canvenient/Config.in
+ create mode 100644 package/canvenient/canvenient.hash
+ create mode 100644 package/canvenient/canvenient.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 5eb438906f1b..2de3312fe9c8 100644
+index 2de3312fe9c8..49c5b93c13ed 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -826,6 +826,7 @@ F:	package/drogon/
- F:	package/empty/
- F:	package/iana-assignments/
- F:	package/inih/
-+F:	package/isocline/
- F:	package/less/
- F:	package/libgphoto2/
- F:	package/pocketpy/
+@@ -820,6 +820,7 @@ F:	package/armadillo/
+ F:	package/atf/
+ F:	package/babeld/
+ F:	package/bc/
++F:	package/canvenient/
+ F:	package/cmocka/
+ F:	package/connman/
+ F:	package/drogon/
 diff --git a/package/Config.in b/package/Config.in
-index 6058800682b4..7ae097582e3c 100644
+index 7ae097582e3c..8fae0a27e7f6 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -2331,6 +2331,7 @@ menu "Text and terminal handling"
- 	source "package/icu/Config.in"
- 	source "package/inih/Config.in"
- 	source "package/iniparser/Config.in"
-+	source "package/isocline/Config.in"
- 	source "package/libcli/Config.in"
- 	source "package/libecoli/Config.in"
- 	source "package/libedit/Config.in"
-diff --git a/package/isocline/0001-Only-require-CXX-compiler-when-needed.patch b/package/isocline/0001-Only-require-CXX-compiler-when-needed.patch
+@@ -1992,6 +1992,7 @@ menu "Networking"
+ 	source "package/batman-adv/Config.in"
+ 	source "package/bluez5_utils-headers/Config.in"
+ 	source "package/c-ares/Config.in"
++	source "package/canvenient/Config.in"
+ 	source "package/cni-plugins/Config.in"
+ 	source "package/cpp-httplib/Config.in"
+ 	source "package/cppzmq/Config.in"
+diff --git a/package/canvenient/0001-Fix-build-with-musl.patch b/package/canvenient/0001-Fix-build-with-musl.patch
 new file mode 100644
-index 000000000000..ddc150b42136
+index 000000000000..8043a87ac743
 --- /dev/null
-+++ b/package/isocline/0001-Only-require-CXX-compiler-when-needed.patch
-@@ -0,0 +1,55 @@
-+From a811b3dc38d296b5e4dc76ab2b932cf196795d47 Mon Sep 17 00:00:00 2001
++++ b/package/canvenient/0001-Fix-build-with-musl.patch
+@@ -0,0 +1,43 @@
++From 46ac90d46b7773a804cd0bbaf71fa487bcc4cca8 Mon Sep 17 00:00:00 2001
 +From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-+Date: Sat, 22 Aug 2026 16:58:05 +0200
-+Subject: [PATCH] Only require CXX compiler when needed
++Date: Sat, 22 Aug 2026 17:38:47 +0200
++Subject: [PATCH] Fix build with musl
 +
-+isocline is a pure C library and only requires a C++ compiler when
-+IC_USE_CXX=ON.
++This was exposed while integrating the package into Buildroot and
++testing its compilation with a musl-based toolchain:
 +
-+Unconditionally enabling CXX in project() makes the configure step fail
-+for C-only toolchains. This was exposed while integrating isocline into
-+Buildroot by running:
++  CANvenient_SocketCAN.c: In function 'socketcan_open':
++  CANvenient_SocketCAN.c:186:24: error: storage size of 'tv' isn't known
++    186 |         struct timeval tv;
++        |                        ^~
++  CANvenient_SocketCAN.c: In function 'socketcan_recv':
++  CANvenient_SocketCAN.c:364:36: error: invalid application of 'sizeof' to incomplete type 'struct timeval'
++    364 |     char ctrlmsg[CMSG_SPACE(sizeof(struct timeval))];
++        |                                    ^~~~~~
++  CANvenient_SocketCAN.c:406:28: error: invalid use of undefined type 'const struct timeval'
++    406 |             *timestamp = tv->tv_sec * 1000000ULL + tv->tv_usec;
++        |                            ^~
 +
-+  $ utils/test-pkg -p isocline -T br-arm-basic
-+
-+which fails during the CMake configure step with:
-+
-+  -- Check for working CXX compiler: /bin/false - broken
-+  CMake Error at CMakeTestCXXCompiler.cmake:60 (message):
-+    The C++ compiler "/bin/false" is not able to compile a simple test
-+    program.
-+  Call Stack (most recent call first):
-+    CMakeLists.txt:5 (project)
-+
-+Do not enable CXX in project() unless IC_USE_CXX=ON.
++Include <sys/time.h> to fix the build.
 +
 +Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-+Upstream: https://github.com/daanx/isocline/pull/54
++Upstream: https://github.com/CANopenTerm/CANvenient/pull/6
 +---
-+ CMakeLists.txt | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
++ src/drivers/CANvenient_SocketCAN.c | 1 +
++ 1 file changed, 1 insertion(+)
 +
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 11aff09bba58..a679098c97f7 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -2,7 +2,7 @@
-+ # Copyright (c) 2021, Daan Leijen
-+ # -----------------------------------------------------------------------------
-+ cmake_minimum_required(VERSION 3.10)
-+-project(libisocline C CXX ASM)
-++project(libisocline C ASM)
-+ 
-+ set(CMAKE_C_STANDARD   99)
-+ set(CMAKE_CXX_STANDARD 11)
-+@@ -44,6 +44,7 @@ if(IC_SEPARATE_OBJS)
-+ endif()
-+ 
-+ if(IC_USE_CXX)
-++  enable_language(CXX)
-+   set(IC_COMPILER_ID "${CMAKE_CXX_COMPILER_ID}")
-+   set_source_files_properties(${ic_sources}         PROPERTIES LANGUAGE CXX )
-+   set_source_files_properties(${ic_example_sources} PROPERTIES LANGUAGE CXX )
++diff --git a/src/drivers/CANvenient_SocketCAN.c b/src/drivers/CANvenient_SocketCAN.c
++index d4db584ff51d..fb356b8f227f 100644
++--- a/src/drivers/CANvenient_SocketCAN.c
+++++ b/src/drivers/CANvenient_SocketCAN.c
++@@ -20,6 +20,7 @@ void socketcan_close(int index);
++ #include <dirent.h>
++ #include <fcntl.h>
++ #include <sys/ioctl.h>
+++#include <sys/time.h>
++ #include <net/if.h>
++ #include <linux/can.h>
++ #include <linux/can/raw.h>
 +-- 
 +2.43.0
 +
-diff --git a/package/isocline/Config.in b/package/isocline/Config.in
+diff --git a/package/canvenient/Config.in b/package/canvenient/Config.in
 new file mode 100644
-index 000000000000..b58c2b22a866
+index 000000000000..6989bf496ef3
 --- /dev/null
-+++ b/package/isocline/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_ISOCLINE
-+	bool "isocline"
++++ b/package/canvenient/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_CANVENIENT
++	bool "canvenient"
++	depends on !BR2_STATIC_LIBS
++	select BR2_PACKAGE_LIBSOCKETCAN
 +	help
-+	  Isocline is a pure C library that can be used as an
-+	  alternative to the GNU readline library. It provides
-+	  multi-line editing, history, completion and syntax
-+	  highlighting.
++	  CANvenient is a portable CAN abstraction library
++	  supporting several driver backends. On Linux it is
++	  implemented on top of SocketCAN.
 +
-+	  https://github.com/daanx/isocline
-diff --git a/package/isocline/isocline.hash b/package/isocline/isocline.hash
++	  https://github.com/CANopenTerm/CANvenient
++
++comment "canvenient needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
+diff --git a/package/canvenient/canvenient.hash b/package/canvenient/canvenient.hash
 new file mode 100644
-index 000000000000..3eeb187cc3a5
+index 000000000000..32b5559d3503
 --- /dev/null
-+++ b/package/isocline/isocline.hash
++++ b/package/canvenient/canvenient.hash
 @@ -0,0 +1,3 @@
 +# Locally computed
-+sha256  cd9e32618267c282599ff409015e22cfc6654f6e27e229d75f3e212029666d39  isocline-1.0.9.tar.gz
-+sha256  60c6b0415a2e0afa8e65630a980b64b4df09cde910e44481a1b0946ebfc840e4  LICENSE
-diff --git a/package/isocline/isocline.mk b/package/isocline/isocline.mk
++sha256  dae4c0a4b6a2b62220341466509a57d9a10ee5cc60be5a2def42d0afd345dc41  canvenient-1.02.tar.gz
++sha256  877e5e09cf4243583c7b0593d1453343f6e8d67977e3e4e97ed001dd0856a334  LICENSE.md
+diff --git a/package/canvenient/canvenient.mk b/package/canvenient/canvenient.mk
 new file mode 100644
-index 000000000000..96b8e916b3f2
+index 000000000000..68b5af3dcc4d
 --- /dev/null
-+++ b/package/isocline/isocline.mk
-@@ -0,0 +1,21 @@
++++ b/package/canvenient/canvenient.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# isocline
++# canvenient
 +#
 +################################################################################
 +
-+ISOCLINE_VERSION = 1.0.9
-+ISOCLINE_SITE = $(call github,daanx,isocline,v$(ISOCLINE_VERSION))
-+ISOCLINE_LICENSE = MIT
-+ISOCLINE_LICENSE_FILES = LICENSE
-+ISOCLINE_INSTALL_STAGING = YES
-+ISOCLINE_INSTALL_TARGET = NO
-+
-+define ISOCLINE_INSTALL_STAGING_CMDS
-+	$(INSTALL) -D -m 0644 $(@D)/libisocline.a \
-+		$(STAGING_DIR)/usr/lib/libisocline.a
-+	$(INSTALL) -D -m 0644 $(@D)/include/isocline.h \
-+		$(STAGING_DIR)/usr/include/isocline.h
-+endef
++CANVENIENT_VERSION = 1.02
++CANVENIENT_SITE = $(call github,CANopenTerm,CANvenient,v$(CANVENIENT_VERSION))
++CANVENIENT_LICENSE = MIT
++CANVENIENT_LICENSE_FILES = LICENSE.md
++CANVENIENT_INSTALL_STAGING = YES
++CANVENIENT_DEPENDENCIES = libsocketcan
 +
 +$(eval $(cmake-package))
 -- 
