@@ -4,58 +4,105 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79F5BC5DF94
-	for <buildroot@archiver.kernel.org>; Mon, 24 Aug 2026 07:01:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8529FC5DF94
+	for <buildroot@archiver.kernel.org>; Mon, 24 Aug 2026 08:46:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 69E3D4067A;
-	Mon, 24 Aug 2026 07:01:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C39E640698;
+	Mon, 24 Aug 2026 08:46:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HXagvsQeWjvA; Mon, 24 Aug 2026 07:01:40 +0000 (UTC)
+ id 5rFnYqTlheen; Mon, 24 Aug 2026 08:46:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787554900;
-	bh=y1Op4iQT1uQTd/1Q7LH12LJC97dURKV+vQ0iv65dWPs=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	s=default; t=1787561201;
+	bh=N/DfOi/1wcIqbt7bXyWFX9hSA8oUhKg47lHqUHNcJ5Y=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=DW5E/eh2Sn1Pg5zaDB+XvE/xA2/rO0YJ1j4W9HSR+TYb5WZRvnLAYh6fsUXXKaFYn
-	 34o8+ZUIE9NGpz0q/T4nluaIyKEioOUHo1AwxCfb/bthbmGZOm5VsQedAkjpHT6gbv
-	 Y7h8CxXpG3wazPH/Ma8SeKzU51DqcHUZxldgE1r72i+WABvHy0svCUhuaPHe2l+u8X
-	 Tcnce7DZrQV/f+LIWx1cRfRAOZcgFh3FPW02SybB9Wyup81tB+phWPwXYPhyRMp4fr
-	 qpqZNvHmUeY9EfClTqUkUllH9VtEOixtpy6fl13sCAtGMovR0P/XCi6SnnGQWk1Jls
-	 b3lG63Ob/+kBA==
+	b=SuihxsjY3yxSpnKzdMRy4RVFXyNMrZtT7e08d3sJx0EolBDv2OCV3700rlMj7Vav1
+	 7N29x4d49o9FubBKlxAuD+c6j6QV/lVoW5joUIjQ73yar1zTvp1mX/4Qa/BDWWnT0j
+	 uUeW0cHP2FufzDSbCQwA16ALrGwh+KCyCsJDkEfJ4ES8ygzWIt7ubUmlWKcSmqRf59
+	 +1hj4K3xbaSUd2oFyk39Iwr/xlFTlLLvO5XFmK4Ii8+fbt14BLPWVm+7o2YDq9Sc+h
+	 dmw5mnrvn0iLb2dKlaW51/EnUp3Rg9iyxFJM48Vv6pF8N6xAO0x3+WLPOaDlmPgEu5
+	 hf4hsF/5Ws0VQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 60A4F4065D;
-	Mon, 24 Aug 2026 07:01:40 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 785E63DA
- for <buildroot@buildroot.org>; Mon, 24 Aug 2026 07:01:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2EE514054D;
+	Mon, 24 Aug 2026 08:46:41 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id A48D6230
+ for <buildroot@buildroot.org>; Mon, 24 Aug 2026 08:46:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6A43380DD8
- for <buildroot@buildroot.org>; Mon, 24 Aug 2026 07:01:38 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 869184054D
+ for <buildroot@buildroot.org>; Mon, 24 Aug 2026 08:46:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YXEpen5-TqO9 for <buildroot@buildroot.org>;
- Mon, 24 Aug 2026 07:01:37 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 90E6480DD2
- for <buildroot@buildroot.org>; Mon, 24 Aug 2026 07:01:37 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A6CC98F2AA; Mon, 24 Aug 2026 07:00:42 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id k2iKtTVlZmbB for <buildroot@buildroot.org>;
+ Mon, 24 Aug 2026 08:46:39 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::636; helo=mail-ej1-x636.google.com;
+ envelope-from=shirokovalexs@gmail.com; receiver=<UNKNOWN> 
+Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20251104 header.b=nx7MUTYE
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com
+ [IPv6:2a00:1450:4864:20::636])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 946C840545
+ for <buildroot@buildroot.org>; Mon, 24 Aug 2026 08:46:37 +0000 (UTC)
+Received: by mail-ej1-x636.google.com with SMTP id
+ a640c23a62f3a-c214321dc32so626025166b.0
+ for <buildroot@buildroot.org>; Mon, 24 Aug 2026 01:46:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20251104; t=1787561196; x=1788165996; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+ bh=oBW0WYpSkeClcopWyZxV8Ja5kl4ZpWgNPl89nZ/TmCw=;
+ b=nx7MUTYEovatUA/CMuEggiGwUPawAK6N9na49xHakvomBMIwVSRWu7QK009cfl5MbC
+ 6z0B313xhXbU5yM/EOa+RgeIrAYXNLK2+D4wbz20ZQAPozl33k7EwdwX1c4aVOfQLv7Y
+ HYteSGTPhKxcd0RM/V+yJp3bGqAwKhOnQwoXH4QFL1cGZtZNLAso4cQw2JD0LqB1KM7X
+ KENIvQLwgDuQTf+HOwVdta4hhV8XHzkhpI/WOxwk3xgY8neSNJeZ5lVWHRPta1JZoqkF
+ feWVuAOo11ZAYmXahF/nG7IM0Bx8ZCYiD4YZl9yzUkiJnJim8o96Eg9NFZaabgsgKXuA
+ UUFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20251104; t=1787561196; x=1788165996;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to:content-type;
+ bh=oBW0WYpSkeClcopWyZxV8Ja5kl4ZpWgNPl89nZ/TmCw=;
+ b=RbLupECGeiPsdE7ulNUikVz0RckGwjXfMEAlOZR3XxOqBxOPlTeom6Hb/AZnBftLeB
+ /V3j8blJZ3RGC4J5PEvBcOqMhpEkxlO1YuGGJxX15O5Aoim/7HDSZ+KjhhRZJPWCvhRy
+ pyQ1e7Urp/8QmaMxGVTRl3HGWB4NTS+ORWU9lLnD4/Ph0Cu1M5Ki6IM90WUhqgHFfgJI
+ ZFxlgkHICHyxRnfkNMcr+h7X3baa4RLxUH/ZSI5EIfPkgcvLJyS3hz5Ycj8SdgOLFMHC
+ S/Q93lXfCzYTkzUXxhMbAphfpD6l41hQxIvVvHI11mxrqhHjAG17DztLKkMsPotrVqje
+ h0Ow==
+X-Gm-Message-State: AFuF++nUoauTPITqIMsrnieSvY1BU0VTOCbzIvtL8JTNpUWKHRYia0BL
+ Ut14bgbOj6rEmwyBDpc4QGbhnIbD9Lo+li5dfj9U3Cl1TbylxnJn2DUHDlGofGM=
+X-Gm-Gg: AR+sD13zAvet7EWYHPVtq1mWj58Z+h4KDd7iQjVjCtnzFRXi3IVobzBzyjCEj6/EtN9
+ DrDNBk5f6Ty4tNIu09GT6e6iFkaODjqUhggFzLud/rmKuhI75AMCmzCJjG4guJs3VrWTTDfH18N
+ q0qg4uKEd4cEu7VMwcpCvLpg/3kT85sQUFs8PGdWjh1/z5KnRKJyr+yUrKKZD6398pFYNJ1zfXq
+ KepLxeN868+k1Vahh3GzzcrmRB9qbUYX4vobocKLpovFC64voMd1r2dfi7Y8RZBFUjCanYd6U3E
+ dD7oviSsfk57PieuMXnEQV3t9ODTnQ5Ah9FYxssD2sVUjto3XCfixqAmkooJ0taeh/zEk3yVTV9
+ 9O/rM/NLwxbyM8IapFIvndEBRSB9AY6i6pExpk5oPw5CiZRzrQ+SgGgq8xNTmhgnnK+IwpXph6b
+ ZdwKiPNa9Q/GGFubWzgryVdbDCwqkLxcDV10IjazKKl5mZixK8XiIA2V0+ahv6gY1M0V2lXHRuI
+ Ek=
+X-Received: by 2002:a17:907:3e16:b0:c16:3074:657f with SMTP id
+ a640c23a62f3a-c246a4ce3b8mr2793651566b.9.1787561195617; 
+ Mon, 24 Aug 2026 01:46:35 -0700 (PDT)
+Received: from devhost1.play.pl ([2a02:a319:a1e0:eb00:92eb:221f:6fb6:f3ab])
+ by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-c249606b696sm1289639666b.7.2026.08.24.01.46.34
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 24 Aug 2026 01:46:35 -0700 (PDT)
+From: Alexander Shirokov <shirokovalexs@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 24 Aug 2026 08:41:49 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d74a065a16be4e18e6c85ddf257c4f5ff033e6b8
-X-Git-Newrev: c0a51767a0d33b5f8da866a6a0f1f35968311614
-X-Patchwork-Hint: ignore
-Message-Id: <20260824070042.A6CC98F2AA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/jpeg-turbo: fix libm linking issue
+Cc: Alexander Shirokov <shirokovalexs@gmail.com>
+Date: Mon, 24 Aug 2026 10:46:24 +0200
+Message-ID: <20260824084631.26721-1-shirokovalexs@gmail.com>
+X-Mailer: git-send-email 2.55.0
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH 1/1] package/zellij: bump to version 0.45.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -67,160 +114,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/c0a51767a0d33b5f8da866a6a0f1f35968311614
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+Changelog: https://github.com/zellij-org/zellij/blob/v0.45.0/CHANGELOG.md
 
-Buildroot commit bb38f6f7208497cf5a4df922e833492001170111 bumped the
-package to 3.2.0. This version first included upstream commit
-https://github.com/libjpeg-turbo/libjpeg-turbo/commit/ed00e0f4b39291e954958b96a8d941ca4a9e03a2
-which removed the dependency to libm causing build errors detected by
-the autobuilders.
-
-Disabling the build of tests by the previous patch of this series is not
-enough because the build will fail on other tools like
-
-[ 98%] Linking C executable djpeg-static
-/home/bernd/buildroot/output/per-package/jpeg-turbo/host/bin/../lib/gcc/i686-buildroot-linux-gnu/15.3.0/../../../../i686-buildroot-linux-gnu/bin/ld:
- src/spng/CMakeFiles/spng-static.dir/spng.c.o: in function
- `spng_decode_image':
-spng.c:(.text+0x4c62): undefined reference to `__fpclassifyf'
-
-Add upstream commit to fix the problem.
-
-Fixes:
-https://autobuild.buildroot.net/results/981/98114d4ea7afe62bb4cef934a06bf289d863ad3f/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Alexander Shirokov <shirokovalexs@gmail.com>
 ---
- ...bspng-Really-remove-gamma-correction-code.patch | 113 +++++++++++++++++++++
- 1 file changed, 113 insertions(+)
+ package/zellij/zellij.hash | 2 +-
+ package/zellij/zellij.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/jpeg-turbo/0001-libspng-Really-remove-gamma-correction-code.patch b/package/jpeg-turbo/0001-libspng-Really-remove-gamma-correction-code.patch
-new file mode 100644
-index 0000000000..594e28f65c
---- /dev/null
-+++ b/package/jpeg-turbo/0001-libspng-Really-remove-gamma-correction-code.patch
-@@ -0,0 +1,113 @@
-+From 0da22762971551462cfad8f0b11cfb037472a4e8 Mon Sep 17 00:00:00 2001
-+From: DRC <information@libjpeg-turbo.org>
-+Date: Thu, 16 Jul 2026 12:09:54 -0400
-+Subject: [PATCH] libspng: Really remove gamma correction code
-+
-+We really don't use it, and fpclassify() apparently introduces yet
-+another libm dependency in some cases (although I can't reproduce that.)
-+
-+Fixes #904
-+
-+Upstream: https://github.com/libjpeg-turbo/libjpeg-turbo/commit/0da22762971551462cfad8f0b11cfb037472a4e8
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ src/spng/spng.c | 20 ++++++++++++++++++--
-+ 1 file changed, 18 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/spng/spng.c b/src/spng/spng.c
-+index 06249d68..aeadb67e 100644
-+--- a/src/spng/spng.c
-++++ b/src/spng/spng.c
-+@@ -353,9 +353,12 @@ struct spng_ctx
-+     int widest_pass;
-+     int last_pass; /* last non-empty pass */
-+ 
-++#if 0 /* libjpeg-turbo: Eliminate unused gamma correction code, which
-++         introduces an unwanted libm dependency */
-+     uint16_t *gamma_lut; /* points to either _lut8 or _lut16 */
-+     uint16_t *gamma_lut16;
-+     uint16_t gamma_lut8[256];
-++#endif
-+     unsigned char trns_px[8];
-+     union spng__decode_plte decode_plte;
-+     struct spng_sbit decode_sb;
-+@@ -1742,6 +1745,8 @@ static uint16_t sample_to_target(uint16_t sample, unsigned bit_depth, unsigned s
-+     return sample;
-+ }
-+ 
-++#if 0 /* libjpeg-turbo: Eliminate unused gamma correction code, which
-++         introduces an unwanted libm dependency */
-+ static inline void gamma_correct_row(unsigned char *row, uint32_t pixels, int fmt, const uint16_t *gamma_lut)
-+ {
-+     uint32_t i;
-+@@ -1785,6 +1790,7 @@ static inline void gamma_correct_row(unsigned char *row, uint32_t pixels, int fm
-+         }
-+     }
-+ }
-++#endif
-+ 
-+ /* Apply transparency to output row */
-+ static inline void trns_row(unsigned char *row,
-+@@ -3302,7 +3308,10 @@ int spng_decode_scanline(spng_ctx *ctx, void *out, size_t len)
-+     const struct spng_subimage *sub = ctx->subimage;
-+ 
-+     const struct spng_ihdr *ihdr = &ctx->ihdr;
-++#if 0 /* libjpeg-turbo: Eliminate unused gamma correction code, which
-++         introduces an unwanted libm dependency */
-+     const uint16_t *gamma_lut = ctx->gamma_lut;
-++#endif
-+     unsigned char *trns_px = ctx->trns_px;
-+     const struct spng_sbit *sb = &ctx->decode_sb;
-+     const struct spng_plte_entry *plte = ctx->decode_plte.rgba;
-+@@ -3529,7 +3538,10 @@ int spng_decode_scanline(spng_ctx *ctx, void *out, size_t len)
-+ 
-+     if(f.do_scaling) scale_row(out, width, fmt, processing_depth, sb);
-+ 
-++#if 0 /* libjpeg-turbo: Eliminate unused gamma correction code, which
-++         introduces an unwanted libm dependency */
-+     if(f.apply_gamma) gamma_correct_row(out, width, fmt, gamma_lut);
-++#endif
-+ 
-+     /* The previous scanline is always defiltered */
-+     void *t = ctx->prev_scanline;
-+@@ -3768,6 +3780,8 @@ int spng_decode_image(spng_ctx *ctx, void *out, size_t len, int fmt, int flags)
-+ 
-+     /*if(f.same_layout && !flags && !f.interlaced) f.zerocopy = 1;*/
-+ 
-++#if 0 /* libjpeg-turbo: Eliminate unused gamma correction code, which
-++         introduces an unwanted libm dependency */
-+     uint16_t *gamma_lut = NULL;
-+ 
-+     if(f.apply_gamma)
-+@@ -3807,15 +3821,14 @@ int spng_decode_image(spng_ctx *ctx, void *out, size_t len, int fmt, int flags)
-+         unsigned i;
-+         for(i=0; i < lut_entries; i++)
-+         {
-+-#if 0 /* libjpeg-turbo: Eliminate libm dependency */
-+             float c = pow((float)i / max, exponent) * max;
-+-#endif
-+             float c = 0.0f;
-+             if(c > max) c = max;
-+ 
-+             gamma_lut[i] = (uint16_t)c;
-+         }
-+     }
-++#endif
-+ 
-+     struct spng_sbit *sb = &ctx->decode_sb;
-+ 
-+@@ -5000,7 +5013,10 @@ void spng_ctx_free(spng_ctx *ctx)
-+ 
-+     if(!ctx->user_owns_out_png) spng__free(ctx, ctx->out_png);
-+ 
-++#if 0 /* libjpeg-turbo: Eliminate unused gamma correction code, which
-++         introduces an unwanted libm dependency */
-+     spng__free(ctx, ctx->gamma_lut16);
-++#endif
-+ 
-+     spng__free(ctx, ctx->row_buf);
-+     spng__free(ctx, ctx->scanline_buf);
-+-- 
-+2.47.3
-+
+diff --git a/package/zellij/zellij.hash b/package/zellij/zellij.hash
+index ac6a219270..73ef5729db 100644
+--- a/package/zellij/zellij.hash
++++ b/package/zellij/zellij.hash
+@@ -1,3 +1,3 @@
+ # Locally generated
+-sha256  2a565f28d89c9e8caf2bad7a0f07f03747e3d3ee2d988297a41d1ffcfb034237  zellij-0.44.3-cargo6.tar.gz
++sha256  ca775a98e78fc8b721dc3c67ca511733c3eaa106423652e621ae66b6d10ecbf8  zellij-0.45.0-cargo6.tar.gz
+ sha256  9aa6c363b18a48eeecbffe13ff390c76ede2c90eb37ba17dfbbaffc42892d87d  LICENSE.md
+diff --git a/package/zellij/zellij.mk b/package/zellij/zellij.mk
+index 4b4e7d6a3f..39cfe2e460 100644
+--- a/package/zellij/zellij.mk
++++ b/package/zellij/zellij.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ZELLIJ_VERSION = 0.44.3
++ZELLIJ_VERSION = 0.45.0
+ ZELLIJ_SITE = $(call github,zellij-org,zellij,v$(ZELLIJ_VERSION))
+ ZELLIJ_LICENSE = MIT
+ ZELLIJ_LICENSE_FILES = LICENSE.md
+-- 
+2.55.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
