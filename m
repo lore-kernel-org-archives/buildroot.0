@@ -4,68 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 504AFC5DF9C
-	for <buildroot@archiver.kernel.org>; Mon, 24 Aug 2026 20:01:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D305C5DF81
+	for <buildroot@archiver.kernel.org>; Mon, 24 Aug 2026 20:08:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E3FB160618;
-	Mon, 24 Aug 2026 20:01:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CEECC60608;
+	Mon, 24 Aug 2026 20:08:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jLJ9cqnq30Jw; Mon, 24 Aug 2026 20:01:32 +0000 (UTC)
+ id 12fVj91BouPh; Mon, 24 Aug 2026 20:08:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787601692;
-	bh=BWjwpqK/3PpHb9fHqnjEm9BbirzWyMa4FvxuQ3Y9EVk=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=HwRETjpqpio7Mt670/g4u5cjG9QHGkQBqYrQJnvahCikn5R96jssHr1mIfD+j2L+S
-	 rRM8apXvNu7q7sAOBSmhHdNf3ojh8j4mkL7GMY8bHg017TGAUjwifJjCctAkgQnv0j
-	 RqOBsPNhLDO9t1LX2mp2m7H5/YCSBRfhW4dN5JqvmVk35eQItGjXhwz2eHb6IA8XX0
-	 K6iCKj5I1ZGjdpVf1XHmu47GVVMOotFmk8B0A+nsdSxgNsrqW8hknM8glkoKD8Bywq
-	 plSwuTbyF8H58KHVPCALr3zVCTtU2vpj5zSFye7VgOO28qZHsy4Opzz1Nzr4Mayrv1
-	 U23QA57ayaDpw==
+	s=default; t=1787602135;
+	bh=0d9k09WDOkC+FTzagD5brkOv9aTQAflNsgec2A+QTtY=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=Fe6Jf7fijaV5Vglu94HMyzjR8yOtGfLFc7JW3O0XZF2AA00BxQkzMPrSswEGXpjjF
+	 TnpaRYXSxzhuixmTU/grD9KwxDwQ/IXHuPGPATCeVons4gLQVR7lKUt3gEyMaqD0c9
+	 NceVeSo+y9FbeHF6Rz1ciZ2OVHKlcCvlTsGRrK6zij18OdziCgfwmtS/qGk2RZg9DI
+	 bCa/8IBxzwXSKkmGy/Y4rdCnT/xBn4WysdMZE6UYgnDqh0/0C1qXeK+68hy6Wsjuzc
+	 7bQlOIzUuRWLRJsLhTOnapeNXEWWP63RPMCa9++imxEn+Mr/E6bm/GmZx8OGYedZ1+
+	 dujVsWdtczNEw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 04E8A60624;
-	Mon, 24 Aug 2026 20:01:32 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 92423279
- for <buildroot@buildroot.org>; Mon, 24 Aug 2026 20:01:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E4E3260618;
+	Mon, 24 Aug 2026 20:08:54 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 98DD31465
+ for <buildroot@buildroot.org>; Mon, 24 Aug 2026 20:08:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 83DEE60624
- for <buildroot@buildroot.org>; Mon, 24 Aug 2026 20:01:30 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8B22960618
+ for <buildroot@buildroot.org>; Mon, 24 Aug 2026 20:08:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MLkiOPqJs0ea for <buildroot@buildroot.org>;
- Mon, 24 Aug 2026 20:01:29 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
- helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id tgxU25hl1raA for <buildroot@buildroot.org>;
+ Mon, 24 Aug 2026 20:08:52 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7824E60618
- for <buildroot@buildroot.org>; Mon, 24 Aug 2026 20:01:28 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-02.galae.net (Postfix) with ESMTPS id 3D9221A1804;
- Mon, 24 Aug 2026 20:01:27 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 11DDA5FFC1;
- Mon, 24 Aug 2026 20:01:27 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 6F04011C797BD; 
- Mon, 24 Aug 2026 22:01:22 +0200 (CEST)
-Date: Mon, 24 Aug 2026 22:01:21 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-Message-ID: <aoyi1476LyooLpig@windsurf>
-References: <20260724164829.304335-1-bernd@kuhls.net>
- <20260724164829.304335-2-bernd@kuhls.net>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20260724164829.304335-2-bernd@kuhls.net>
-X-Last-TLS-Session-Version: TLSv1.3
-Subject: Re: [Buildroot] [PATCH/RFC 2/3] package/taglib: needs gcc >= 7
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id BBCA1605F4
+ for <buildroot@buildroot.org>; Mon, 24 Aug 2026 20:08:52 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 889FA90307; Mon, 24 Aug 2026 20:07:57 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 24 Aug 2026 21:57:54 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 1a0a2134e6e632852e23ca8cc583af7ea347ec6d
+X-Git-Newrev: d16e4939ca7ca8e0e464230e0b2edbea843e3e3e
+X-Patchwork-Hint: ignore
+Message-Id: <20260824200757.889FA90307@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/taglib: needs gcc >= 7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -79,36 +68,93 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============7632399538778500294=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gRnJpLCBKdWwgMjQsIDIwMjYgYXQgMDY6NDg6MjhQTSArMDIwMCwgQmVybmQgS3VobHMgd3Jv
-dGU6Cj4gRml4ZXMgYSBidWlsZCBlcnJvciBjYXVnaHQgYnkgdGhlIEdpdGxhYiBwaXBlbGluZXM6
-Cj4gCj4gL2J1aWxkcy9ia3VobHMvYnVpbGRyb290L2JyLXRlc3QtcGtnL2Jvb3RsaW4tYWFyY2g2
-NC1nbGliYy1vbGQvYnVpbGQvdGFnbGliLTIuMy90YWdsaWIvbXBlZy9tcGVnZmlsZS5jcHA6MTEz
-OjEwOgo+ICBlcnJvcjogZXhwZWN0ZWQgcHJpbWFyeS1leHByZXNzaW9uIGJlZm9yZSDigJhjb25z
-dOKAmQo+ICAgICAgICBpZihjb25zdCBIZWFkZXIgaGVhZGVyKCZmaWxlLCBoZWFkZXJPZmZzZXQg
-KyBpLCB0cnVlKTsgaGVhZGVyLmlzVmFsaWQoKSkgewo+IAo+IHdoaWNoIHdhcyBpbnRyb2R1Y2Vk
-IGJ5IGNvZGUgZm9ybWF0IGNoYW5nZXMgaW4gdXBzdHJlYW0gY29tbWl0Cj4gaHR0cHM6Ly9naXRo
-dWIuY29tL3RhZ2xpYi90YWdsaWIvY29tbWl0L2RmZTJhYTUyNTMyZmM5ZjczYTY3NDk5ZGQxN2Zi
-NTI3YTg1NmEyMmYKPiAKPiB3aGljaCB3YXMgZmlyc3QgcmVsZWFzZWQgd2l0aCB0YWdsaWIgMi4w
-LCBhZGRlZCB0byBidWlsZHJvb3Qgd2l0aCBjb21taXQKPiA5Y2QzNDY0YWZhMTNmZDAxOTBmYjNl
-OTRmZDg1MGNjODA2M2NmMjk3Lgo+IAo+IFNpZ25lZC1vZmYtYnk6IEJlcm5kIEt1aGxzIDxiZXJu
-ZEBrdWhscy5uZXQ+Cj4gLS0tCj4gSSBoYXZlIG5vIGlkZWEgaWYgdGhpcyBwYXRjaCBpcyBjb3Jy
-ZWN0LCBhdCBsZWFzdCBibG9ja2luZyBnY2MgNiBtYWtlcwo+IHRoZSBHaXRsYWIgcGlwZWxpbmVz
-IGhhcHB5LiBJdCBzZWVtcyB0byBtZSB0aGF0IHRoZSB1cHN0cmVhbSBjb21taXQgdXNlcwo+IG5l
-d2VyIGxhbmd1YWdlIGZlYXR1cmVzIG5vdCBzdXBwb3J0ZWQgYnkgZ2NjIDYsIGJ1dCB3aXRoIG15
-IGxpbWl0ZWQKPiBrbm93bGVkZ2UgYWJvdXQgQysrIEkgY291bGQgbm90IGZpbmQgZXZpZGVuY2Ug
-dG8gc3VwcG9ydCBteSB0aGVvcnkuCgpJJ20gYWxzbyBub3QgYSBDKysgZ3VydSwgYnV0IHNvbWUg
-cmVzZWFyY2ggc2hvd3MgdGhhdCB0aGlzIGlzIGNhbGxlZAoiaW5pdC1zdGF0ZW1lbnQiLCB3YXMg
-ZGVzY3JpYmVkIGJ5IHByb3Bvc2FsIFAwMzA1UjEgYW5kIGFjY29yZGluZyB0bwpodHRwczovL2Vu
-LmNwcHJlZmVyZW5jZS5jb20vY3BwL2NvbXBpbGVyX3N1cHBvcnQvMTcgdGhpcyBmZWF0dXJlCmlu
-ZGVlZCBoYXMgYmVlbiBzdXBwb3J0ZWQgc2luY2UgZ2NjIDcuCgpJJ3ZlIGV4dGVuZGVkIHRoZSBj
-b21taXQgbG9nIHdpdGggdGhpcyBpbmZvcm1hdGlvbiwgYW5kIGFwcGxpZWQgdG8KbWFzdGVyLiBU
-aGFua3MhCgpUaG9tYXMKLS0gClRob21hcyBQZXRhenpvbmksIGNvLW93bmVyIGFuZCBDRU8sIEJv
-b3RsaW4KRW1iZWRkZWQgTGludXggYW5kIEtlcm5lbCBlbmdpbmVlcmluZyBhbmQgdHJhaW5pbmcK
-aHR0cHM6Ly9ib290bGluLmNvbQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3Jn
-Cmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+--===============7632399538778500294==
+Content-Type: text/plain
+
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d16e4939ca7ca8e0e464230e0b2edbea843e3e3e
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+
+Fixes a build error caught by the Gitlab pipelines:
+
+/builds/bkuhls/buildroot/br-test-pkg/bootlin-aarch64-glibc-old/build/taglib-2.3/taglib/mpeg/mpegfile.cpp:113:10:
+ error: expected primary-expression before ‘const’
+       if(const Header header(&file, headerOffset + i, true); header.isValid()) {
+
+which was introduced by code format changes in upstream commit
+https://github.com/taglib/taglib/commit/dfe2aa52532fc9f73a67499dd17fb527a856a22f
+which was first released with taglib 2.0, added to buildroot with commit
+9cd3464afa13fd0190fb3e94fd850cc8063cf297.
+
+This "init-statement" C++17 language feature was described in proposal
+P0305R1, and according to
+https://en.cppreference.com/cpp/compiler_support/17, this feature was
+only supported in gcc starting from gcc 7.x.
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/gstreamer1/gst1-plugins-good/Config.in | 6 ++++--
+ package/taglib/Config.in                       | 6 ++++--
+ 2 files changed, 8 insertions(+), 4 deletions(-)
+
+diff --git a/package/gstreamer1/gst1-plugins-good/Config.in b/package/gstreamer1/gst1-plugins-good/Config.in
+index 6a738faa00..c4eb4efb65 100644
+--- a/package/gstreamer1/gst1-plugins-good/Config.in
++++ b/package/gstreamer1/gst1-plugins-good/Config.in
+@@ -403,13 +403,15 @@ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_SPEEX
+ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_TAGLIB
+ 	bool "taglib"
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17
+ 	depends on BR2_USE_WCHAR
+ 	select BR2_PACKAGE_TAGLIB
+ 	help
+ 	  Taglib tagging plugin library
+ 
+-comment "taglib needs a toolchain w/ C++, wchar"
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
++comment "taglib needs a toolchain w/ C++, wchar, gcc >= 7"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR \
++		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_7
+ 
+ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_TWOLAME
+ 	bool "twolame"
+diff --git a/package/taglib/Config.in b/package/taglib/Config.in
+index 5b641a9653..9a43c82a5e 100644
+--- a/package/taglib/Config.in
++++ b/package/taglib/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_TAGLIB
+ 	bool "taglib"
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17
+ 	depends on BR2_USE_WCHAR
+ 	select BR2_PACKAGE_UTFCPP
+ 	help
+@@ -12,5 +13,6 @@ config BR2_PACKAGE_TAGLIB
+ 
+ 	  http://taglib.org/
+ 
+-comment "taglib needs a toolchain w/ C++, wchar"
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
++comment "taglib needs a toolchain w/ C++, wchar, gcc >= 7"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR \
++		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_7
+
+--===============7632399538778500294==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7632399538778500294==--
