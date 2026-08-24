@@ -4,153 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96D72C5DF94
-	for <buildroot@archiver.kernel.org>; Mon, 24 Aug 2026 12:41:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F1D8C5DF81
+	for <buildroot@archiver.kernel.org>; Mon, 24 Aug 2026 12:55:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 26A7D40692;
-	Mon, 24 Aug 2026 12:41:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7BC3B40666;
+	Mon, 24 Aug 2026 12:55:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aGVWZXK-lCGz; Mon, 24 Aug 2026 12:41:32 +0000 (UTC)
+ id IvY9VgQCmPfE; Mon, 24 Aug 2026 12:55:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787575292;
-	bh=kTQhYEi6HW7jURCwOncpS8hz9BJgBp1ir2jtP+LosnE=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=ogvCfxR1BAJVe8FFshGQ9vgJY7PqeU14HUFzC5EBu2+S0ubuHfX2w/XwGqlMwLtjO
-	 9hEPdLa4LGL5yuRVpofcen9Hm7LLZXLejLX9EMtt+IO2f+QGCgm2GfUAc95omlGzmo
-	 6E/I9iechWK3iAUks7A56rWo7EVuk9ltqK77VtSxei0V3KFNS+O1dCMg8dztKzsdsu
-	 2zRiSvucirtN8TIGMupiKIGnhCm1TQU8YsfnNyTwKdCcmp0isTNNQK+FF4ilqo8mdi
-	 Brh5PYnLGVP/RIuoa4mxK/V14htqpJ8rauOcILefoT4Ut2dW7fyIJ1RFAXcgF6mRKA
-	 WaIXe6BuvzTHw==
+	s=default; t=1787576156;
+	bh=ETsNTMkhlhH5otil6J/IlvYqm0StSecm6WJwC47sjbs=;
+	h=Date:To:Cc:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=CD02hjvv2NZaRQLCOrBns7cgMjH6O/GesRavZ+upKCsQI3rakAw0ZFXXWm++2kHgE
+	 aleltMJ9lBiUteT3t9oDortRrSJ4TUBLnLIz1Prh4LQ/Ry8USYQwXKJBeWF0WxrLBE
+	 6MDQgfnqU1Fgnqh8I+ol/EhmDyag24xZCd/IlR7reQeqipNcqVzxrD6vcqDyJAizer
+	 rBtkKWXrHKlzgBwEGShJxT7VF0pszP8oc8EJRpqZbEwfUtZVixLmvjXJ2nw7P7wEmM
+	 g4XzdanZV/CheNax5u4fS48b/4LY+dP0pKWmAJCP4qOj5Uwt3+8bqLM4GchbJRj4Y/
+	 FkLDmlv+ywxqA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B5A7D40633;
-	Mon, 24 Aug 2026 12:41:32 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 5AD8341A
- for <buildroot@buildroot.org>; Mon, 24 Aug 2026 12:41:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6E16340659;
+	Mon, 24 Aug 2026 12:55:56 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 566B4386
+ for <buildroot@buildroot.org>; Mon, 24 Aug 2026 12:55:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 40DB140633
- for <buildroot@buildroot.org>; Mon, 24 Aug 2026 12:41:31 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4804080CC5
+ for <buildroot@buildroot.org>; Mon, 24 Aug 2026 12:55:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wCNMwDzAEkxY for <buildroot@buildroot.org>;
- Mon, 24 Aug 2026 12:41:30 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f403:c10c::1;
- helo=sa9pr02cu001.outbound.protection.outlook.com;
- envelope-from=stewart.hildebrand@amd.com; receiver=<UNKNOWN> 
-Received: from SA9PR02CU001.outbound.protection.outlook.com
- (mail-southcentralusazlp170130001.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:c10c::1])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4C4CD40555
- for <buildroot@buildroot.org>; Mon, 24 Aug 2026 12:41:29 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=j5LzuFCQcSlXXIHka3VN9IJFiL0bUmMOfKFpsbilE6NYWVYkHu5/iQXa4APqxUv/oDpiqR0pNmeqhyv6uRQSPBa/7Fo1Bwt+7RMfl5ONPrf1JQt9bGS0rGosKglz/tqsV5qnNaey1Vsa2jn8xJWKHQPR01g3LeVvwVgjRWhxeazrZKLV4AyUlMcvwQzNlzsAt2KOwtdxz8whHP72OMVLky/eL/dm+sNcVcECkp/2EFOg5iPuc8boL21K/CnUAIQmTTYD1EGtLtxnNipWON7L1in7USmBr4q0A+KY2UfsjFnWIEJlxIIHfxC5UixiJf4YonGDuxngwwaekCU5C3dmyw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/Y6H32sZlVpJWvIeouDSPugmGTIR+QyJ5rB4WURVXRM=;
- b=BljPeCfGJuvgvF6xM3wI9kS0RYxOqo3oeJw5kP+gXkvPlIXKgINqOGK5L3KjjWyPG6OjSxFE7retF83q/UOPZMl07XgLQRAbjh6TEdOEbzzBx7utYgCiwPB28JSQICNYnDorqVO/84bDSRzB0Y84lpgvko0xjpT86g1Xb8ot1NNk+z5MJWLGSEDpLKJ3Uubw75TycgBJVMBIpm6sWgTioOVV34g41nntSr+ESCYbOilXvMHDnmvN7kyzox889TVePCNO/noabgokNMgBHDQJDxQIVa+u9udj1ZNLMb9EB6fZtOcXr/BqZhoi+xvfwk7VfaBnhk/lhFrLLaZgKA+eiQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-Received: from DM4PR12MB6472.namprd12.prod.outlook.com (2603:10b6:8:bc::7) by
- IA1PR12MB6019.namprd12.prod.outlook.com (2603:10b6:208:3d5::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.339.8; Mon, 24 Aug
- 2026 12:41:22 +0000
-Received: from DM4PR12MB6472.namprd12.prod.outlook.com
- ([fe80::4a4d:4208:3862:fb7a]) by DM4PR12MB6472.namprd12.prod.outlook.com
- ([fe80::4a4d:4208:3862:fb7a%6]) with mapi id 15.21.0339.012; Mon, 24 Aug 2026
- 12:41:22 +0000
-Message-ID: <a880e3e6-f71f-45f4-aab9-9f434a65f9d0@amd.com>
-Date: Mon, 24 Aug 2026 14:41:17 +0200
-User-Agent: Mozilla Thunderbird
-To: Neal Frager <neal.frager@amd.com>, buildroot@buildroot.org
-Cc: alistair@alistair23.me, stefano.stabellini@amd.com,
- ibai.erkiaga-elorza@amd.com, luca.ceresoli@bootlin.com,
- micheal.saleab@amd.com, yann.morin@orange.com, matthew.l.weber3@boeing.com,
- Matthew Weber <mathew.l.weber3@boeing.com>, brandon.maier@collins.com,
- john.ernberg@actia.se, brian.j.wood2@boeing.com, ju.o@free.fr,
- thomas.petazzoni@bootlin.com, romain.naour@smile.fr, michal.simek@amd.com,
- romain.naour@gmail.com
-References: <20260803145152.102135-1-neal.frager@amd.com>
- <20260803145152.102135-2-neal.frager@amd.com>
-Content-Language: en-US
-In-Reply-To: <20260803145152.102135-2-neal.frager@amd.com>
-X-ClientProxiedBy: CPCP307CA0001.DNKP307.PROD.OUTLOOK.COM (2603:10a6:380::11)
- To DM4PR12MB6472.namprd12.prod.outlook.com
- (2603:10b6:8:bc::7)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id C0qPw-6EdZCk for <buildroot@buildroot.org>;
+ Mon, 24 Aug 2026 12:55:53 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
+ helo=smtpout-03.galae.net; envelope-from=luca.ceresoli@bootlin.com;
+ receiver=<UNKNOWN> 
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id CC9D580CB2
+ for <buildroot@buildroot.org>; Mon, 24 Aug 2026 12:55:51 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-03.galae.net (Postfix) with ESMTPS id 6DF1E4E413A5;
+ Mon, 24 Aug 2026 12:55:49 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 3BFAE5FFC1;
+ Mon, 24 Aug 2026 12:55:49 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 0FCCF11C79421; 
+ Mon, 24 Aug 2026 14:55:47 +0200 (CEST)
+Date: Mon, 24 Aug 2026 14:55:21 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR12MB6472:EE_|IA1PR12MB6019:EE_
-X-MS-Office365-Filtering-Correlation-Id: c786601c-d333-48ad-062a-08df01dd00ad
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
- ARA:13230040|366016|1800799024|23010399003|7416014|376014|56012099006|10067099003|22082099003|18002099003|4143699003|11063799006|41080700001;
-X-Microsoft-Antispam-Message-Info: t34AxqqHc9q533OTGh0lOFlcvkwVi+8zADmj8OHvfEKrN7YPZGqb7wg3XpxMskOzEyEMWUm2uFsZrCVCWKVd463ymxblS1POtLMf3U7bwaBkmxHBsDBfEnIuGDquFEh1rQ014QGMXnWj5bcdgYPkLjKv1nhB76s63EuQI//kPtmhx7FLAQsxmxwQH5w+qEnYqZveJjLtRPsiuecP07OWlBGvapYx+4PoDXfhUWLmGZ4FvxA5TI+c2ffOBPtos8Vv7VEV+hRqz27Em+4f8VCUBHXc58yh5r+IdG4PPMLylVN+r1MEH5Mv+LcUxUAALUznu311zUagxh2qhet2/J29QYz3/dqHPxoY6e24G5rdgONftwNqDFyhTKmfQAa3iDIUzPDYvI/zonUKKFYi62pihqkU6JedqIM67myZNBrbo1BsQ2ze7u2/ycIPnHBBFtEUTFGiqNAJzvagpGknl5eE+8hvPSMUfLop8LKugGcHoXVs05A2utjJbFx3uWsFXmS0ddLYSLBxjdrQ44CPm3c7zRo8MW4BPmDWGu7dI3sJKsvCALMAMrxxKHhQGRPoLne5AgKRQeehe7HYSLxYJ48qBqD8Fl6Fq69SedAu50Hq6Nox7fzOVOetWWzeSGEgQjkOqe6G8hazSvZZE9dcGwXWgcuLXE8+nSutC8NLRoeffVG1xkQ4HG99y8N2f/yyl09t/AOHopeUlyJ0iAkGWR6BirAr9ty+ty1ozaj8e72mx5w=
-X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:DM4PR12MB6472.namprd12.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230040)(366016)(1800799024)(23010399003)(7416014)(376014)(56012099006)(10067099003)(22082099003)(18002099003)(4143699003)(11063799006)(41080700001);
- DIR:OUT; SFP:1101; 
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bjRNN3lSK1NPZ29OZlVxVUQwaWlKQXJtOGFZbkpZN3Q4UjFhQ3BaYzAwcWM5?=
- =?utf-8?B?eDFhYnZrUzhEUGo3UUFWNURGcjRFN2dlTzByd1AzeFZJSGMxVXB2bU95S2xi?=
- =?utf-8?B?R2NwSlAyejR5WmJNTXlmUDBrSXJxSThNME4zc0Qva0xCR045SlUxWG9QY09k?=
- =?utf-8?B?VlN5ZGZNcEFXamhxeGlKZUFBQU1ESlJlazZEc3REalhBWGc0UG9sUWJrelpT?=
- =?utf-8?B?dXpaSEJIckxFc1pzcE9WQy9Ec0RycnMvd1FReTVvTUVIR25XMXYwQjRjWGsz?=
- =?utf-8?B?dVJ5QXpTNWExemhjSnZGUXRNV0VUODlpZ096ai9qWGZhUUhQK3B5amJVNlg0?=
- =?utf-8?B?clJOZCtZR2lKMExHQWtpZWZvdlIwaFZYdUJ4MmZKSjlET201MVNtZXNWWVBq?=
- =?utf-8?B?Q3hXckVkSFgybzBqNEVCTHdXTTBQa3JUcTVNTzA5MjRWSDEyNE9GT3d2MlpD?=
- =?utf-8?B?KzVBbVNUcTlJTlNUWW5NS2pyRnFNczhQSi8xTzVucEt5MmtZcm9EQTFuakRU?=
- =?utf-8?B?R1QzTnRGSXJzS1JtVzJwOUcrQnlzb2lkc2xTS2p1KzJvbWlYUk8rbXorMG0w?=
- =?utf-8?B?L210TXloRDF1RFFGaUp4UXNmWTE4YjVuUUttQTExcWZCUmdocmVxaXRnd3pW?=
- =?utf-8?B?eUJMeEdSTkJlUktRUXEvTUYvbm1xa2FDSVdvY0dieVFTUzNrVTRDRjFGbk1h?=
- =?utf-8?B?a0NvRHltL3lNY3h3YkxQTStGdGlqT0tvdVpIekhPQ3YxaXEwWWg5ZDdXeTlk?=
- =?utf-8?B?THNrUnk1MVJDRjNRRDFYUHQ1RTZ0T2dKcGJVMlgxK2RkWlAxNHBSMnlqbmN6?=
- =?utf-8?B?enR5a0dkZ3VYckRyVjhtQjhmb2JiWkVuNGNiR1NvRGpVNC90YnRLREV6bVJw?=
- =?utf-8?B?c2xha2xwRHFUcW0xRElqMTliUXpXQ05XeTJEUWU3ejhmZkZuMGNuNVlrWGxE?=
- =?utf-8?B?V1k4RHdoVmxOMWsrc2tRNUJlM0lsZmpXME1NMDI4Y3FEUzlvNC9EaUFpTXc1?=
- =?utf-8?B?Q1RHYjc0Vk10WXk5SktDVnlFMXBFcWtJTlVtRS9XQmFlUG9aNXlEcnJSRmhV?=
- =?utf-8?B?MVB4MDlXaWhEZWxBaE55Sm9BaVNlSnUwQlRjK3FHcTMzODhoanF4TlRWT0lE?=
- =?utf-8?B?R1F3RHdBL2tYaXVWbVJvcmcwbElXQ3ozVnM1YVhyWFBFTEZ5ckROK001R1hB?=
- =?utf-8?B?WkZTSXM0SmZWVWE3VlBhdWZDeUkxUkFxUHdVMndvT2hZNWZ5ZmFkaFljalpU?=
- =?utf-8?B?dXd6VTBVRzFJU2tpdC9ZUnNzSENPcTRKT0lrMjlOamZuSG92TXcwQUREV1FH?=
- =?utf-8?B?Rkx2cmFhakxjSUdFY1ROMDVkQlRyRlhlMmE1cDR4SW9abWJUMjhBWklIZys5?=
- =?utf-8?B?NlVFQlIxdVJaN25ROFZhQWhpa0xLRTV6U2MyUGNTY0tkMTU4Q1dXaXBtRzBL?=
- =?utf-8?B?UDA2SUZTMjA0NTM2cU1NeHFCTDlGcml0WVhZUzQ3d3czYU1hV0NOampGWENa?=
- =?utf-8?B?MS9tSzlsQmI4Z3ZnUkMrQjRvcnpCRGlTSWlOV1hubGtlbnRRQXJHLzVpa1BJ?=
- =?utf-8?B?M0Z2Qzc4eXJBbE9IV21WczcxcnFnaXdVaXp5bm1mM28rN2JUanhGL055L0lS?=
- =?utf-8?B?Q3I1cWJCTHNGNjUzdWZ0R2gwZ0FnbXk0MHRRcDJwcitWeDFzTDUxREdrT3FD?=
- =?utf-8?B?Z1ByRVMzNWMyRHBiaGdtWkdGQzUybGdLV0d6eEFhbm1yZkt0NmV0WlFzTXZO?=
- =?utf-8?B?bmVCWkVOMEtQKzliSkNPMWZuczV2VFZ1ajZXNEh1NVMxLzVrdW5wM2toQWZw?=
- =?utf-8?B?NGV4Sk9LUEJ1V0hud09EeFVEaHFLVDZwMFFQb1I2OS9heGdYMm1jODJLYVFT?=
- =?utf-8?B?OTh1TTIvclgyQWd1aHdvaXpNeTB0WUxuUm9vbk9seHhPT3hRN2lsaGpsSXNM?=
- =?utf-8?B?dFZJalF6YXYvVkQ3RUZHM096SGdtUXMzRTBDbFQ2SWxvL3pCU2ZUWGJINElR?=
- =?utf-8?B?THNnYzgwTGpsZ2NNc20zYVVOSXZ3RTlEbTd2ekkvMFVBcXo4c2FydDMyblIx?=
- =?utf-8?B?OFZIQU5wTFhnejVyc1FraHViR1VFeGpIcDYxamVQNDhza29mdFdjMFBnVEox?=
- =?utf-8?B?RWRWRGhXTG5xR2M3bXJ0eUF1c3VyVDVKWTI1dXNrMjBlbFpIQjdCblhDbnJt?=
- =?utf-8?B?ci9TZi9LbTltSjVkd3lhNHZNdmcwM2p5Y2FIK3hRUXdjeThGeGUvdVFnMXdo?=
- =?utf-8?B?YmpkWUdDcjRRWG5PQlpGSnlQaGFCci9CNVc3SlIyRVdza2VQbW0wSWZXVzN5?=
- =?utf-8?Q?GBDg4CspQ45ji5PlJQ?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c786601c-d333-48ad-062a-08df01dd00ad
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6472.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Aug 2026 12:41:22.2443 (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: XmFYzpVqXu6951BvyQzEEsBrxr1J5ic9KVpd08MGEFbvMyMPXuq1nmmjewYVzC9ZUPs0JeAoa70Rlsmj0kNL6w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6019
-Subject: Re: [Buildroot] [PATCH v4 2/4] package/xen: add custom version
- support
+Message-Id: <20260824-heaptrack-v5-1-a8ac25daa1d9@bootlin.com>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/23NTW7CMBQE4KsgrzHyfwyr3qNi4bw8N24hRnaIW
+ qHcHScsSJQuR5pv5kEypoCZnHYPknAIOcSuBL3fEWhd94U0NCUTwYRhleS0RXfrk4MfCo3yxls
+ PCJaU/i2hD7/z1uf5lfO9/kbop4Gp0Ybcx/Q3nw186v23O3DKKWhtK66hViA/6hj7S+gOEK9kW
+ h7E21qml1YUa5SR0hh71EfcWrmwfPUri60qwS1zBo1WW6sWVqysKpZxL6RwNTTQrO04jk/3e+p
+ PagEAAA==
+X-Change-ID: 20260731-heaptrack-cd4f6f8fcec8
+To: buildroot@buildroot.org
+Cc: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ Julien Olivain <ju.o@free.fr>, Luca Ceresoli <luca.ceresoli@bootlin.com>
+X-Mailer: b4 0.16.0
+X-Last-TLS-Session-Version: TLSv1.3
+Subject: [Buildroot] [PATCH v5] package/heaptrack: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -162,35 +81,245 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Stewart Hildebrand via buildroot <buildroot@buildroot.org>
-Reply-To: Stewart Hildebrand <stewart.hildebrand@amd.com>
+From: Luca Ceresoli via buildroot <buildroot@buildroot.org>
+Reply-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 8/3/26 16:51, Neal Frager via buildroot wrote:
-> Add the ability to configure specific Xen versions while leaving the default
-> version unchanged to avoid breaking any builds already using Xen 4.21.1.
-> 
-> To test:
-> BR2_aarch64=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-> BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
-> BR2_PACKAGE_XEN=y
+Add heaptrack, a memory allocation tracer toolkit.
 
-Nit: perhaps mention how to test the custom version feature? E.g.:
-BR2_PACKAGE_XEN_CUSTOM_VERSION=y
-BR2_PACKAGE_XEN_CUSTOM_VERSION_VALUE="4.22.0"
+This implementation builds all the command line components, not the
+heaptrack_gui graphical visualization program.
 
-> 
-> Signed-off-by: Neal Frager <neal.frager@amd.com>
-> Tested-by: Matthew Weber <mathew.l.weber3@boeing.com>
-> Prior test details: https://gist.github.com/matthew-l-weber/c17f14a3793ccee440a383e4177ff3db
-> Reviewed-by: John Ernberg <john.ernberg@actia.se>
-With or without the commit message adjustment:
-Reviewed-by: Stewart Hildebrand <stewart.hildebrand@amd.com>
+Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+---
+Changes in v5:
+- Require gcc >= 8 (std::filesystem)
+- Test-build with 'test-pkg -a' both with and without BR2_PACKAGE_ZSTD
+- Link to v4: https://patch.msgid.link/20260821-heaptrack-v4-1-01f232abcdcd@bootlin.com
+
+Changes in v4:
+- Disable for uclibc (dlmopen)
+- Sort _DEPENDENCIES
+- Use '=' instead of '+=' on first assignment
+- Add more complex test cases
+- Runtime tested on:
+   - qemu_arm_vexpress, Bootlin armv7-eabihf glibc stable 2025.08-1 toolchain
+   - qemu_aarch64_virt, Bootlin aarch64 musl bleeding-edge 2025.08-1 toolchain
+     - Note: heaptrack_print for 'ls -la /' OOMs with the default qemu cmdline;
+       adding '-m 512' it worked (the qemu default is 128 MB of RAM)
+- Link to v3: https://patch.msgid.link/20260811-heaptrack-v3-1-772180a6e654@bootlin.com
+
+Changes in v3:
+- Removed 'linux' from _DEPENDENCIES
+- Link to v2: https://patch.msgid.link/20260805-heaptrack-v2-1-64633668959e@bootlin.com
+
+Changes in v2:
+- removed unnecessary depends on BR2_LINUX_KERNEL
+- added missing recursive 'depends on'
+- sort alphabetically the 'select' lines
+- completed 'depends on' list for comment line
+- Add "Locally calculated" for the hash
+- Add hashes of license files
+- Use single tab for indentation
+- Add test case
+- Update DEVELOPERS file
+- Link to v1: https://patch.msgid.link/20260731-heaptrack-v1-1-c558715cb4c3@bootlin.com
+---
+ DEVELOPERS                                      |  2 ++
+ package/Config.in                               |  1 +
+ package/heaptrack/Config.in                     | 39 +++++++++++++++++++++++
+ package/heaptrack/heaptrack.hash                | 10 ++++++
+ package/heaptrack/heaptrack.mk                  | 26 +++++++++++++++
+ support/testing/tests/package/test_heaptrack.py | 42 +++++++++++++++++++++++++
+ 6 files changed, 120 insertions(+)
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 98c9ee55d31b..3a288afb1a00 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2192,6 +2192,7 @@ F:	configs/zynq_zc706_defconfig
+ F:	configs/zynqmp_zcu106_defconfig
+ F:	package/agentpp/
+ F:	package/exim/
++F:	package/heaptrack/
+ F:	package/libpjsip/
+ F:	package/linux-tools/linux-tool-usbtools.mk.in
+ F:	package/qpid-proton/
+@@ -2200,6 +2201,7 @@ F:	package/snmppp/
+ F:	package/stm32flash/
+ F:	package/unzip/
+ F:	support/legal-info/
++F:	support/testing/tests/package/test_heaptrack.py
+ 
+ N:	Lucas De Marchi <lucas.de.marchi@gmail.com>
+ F:	package/fswebcam/
+diff --git a/package/Config.in b/package/Config.in
+index 6058800682b4..307f7ce86a3e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -106,6 +106,7 @@ menu "Debugging, profiling and benchmark"
+ 	source "package/fwts/Config.in"
+ 	source "package/gdb/Config.in"
+ 	source "package/google-breakpad/Config.in"
++	source "package/heaptrack/Config.in"
+ 	source "package/hyperfine/Config.in"
+ 	source "package/iozone/Config.in"
+ 	source "package/k3conf/Config.in"
+diff --git a/package/heaptrack/Config.in b/package/heaptrack/Config.in
+new file mode 100644
+index 000000000000..a7ef6f097073
+--- /dev/null
++++ b/package/heaptrack/Config.in
+@@ -0,0 +1,39 @@
++config BR2_PACKAGE_HEAPTRACK
++	bool "heaptrack"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_THREADS # boost, libunwind, elfutils
++	depends on BR2_USE_WCHAR # boost, elfutils
++	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-filesystem
++	depends on BR2_PACKAGE_LIBUNWIND_ARCH_SUPPORTS # libunwind
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # C++17 filesystem
++	depends on !BR2_STATIC_LIBS # libunwind, elfutils
++	depends on !BR2_TOOLCHAIN_USES_UCLIBC # no dlmopen() support
++	select BR2_PACKAGE_BOOST
++	select BR2_PACKAGE_BOOST_IOSTREAMS
++	select BR2_PACKAGE_BOOST_PROGRAM_OPTIONS
++	# For heaptrack_print
++	select BR2_PACKAGE_BOOST_FILESYSTEM
++	select BR2_PACKAGE_ELFUTILS
++	select BR2_PACKAGE_LIBUNWIND
++	select BR2_PACKAGE_ZLIB
++	help
++	  Heaptrack traces all memory allocations and annotates these
++	  events with stack traces. Dedicated analysis tools then allow
++	  you to interpret the heap memory profile to find hotspots,
++	  memory leaks, allocation hotspots and temporary allocations.
++
++	  Zstandard offers better (de)compression performance compared
++	  with gzip/zlib, making heaptrack faster and datafiles smaller,
++	  so enabling BR2_PACKAGE_ZSTD is recommended.
++
++	  https://apps.kde.org/heaptrack/
++
++comment "heaptrack needs a glibc or musl toolchain w/ C++, threads, wchar, gcc >= 8, dynamic library"
++	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
++	depends on BR2_PACKAGE_LIBUNWIND_ARCH_SUPPORTS
++	depends on !BR2_INSTALL_LIBSTDCPP \
++		|| !BR2_TOOLCHAIN_HAS_THREADS \
++		|| !BR2_USE_WCHAR \
++		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_8 \
++		|| BR2_STATIC_LIBS \
++		|| BR2_TOOLCHAIN_USES_UCLIBC
+diff --git a/package/heaptrack/heaptrack.hash b/package/heaptrack/heaptrack.hash
+new file mode 100644
+index 000000000000..6ad9619f23b9
+--- /dev/null
++++ b/package/heaptrack/heaptrack.hash
+@@ -0,0 +1,10 @@
++# Locally calculated
++sha256  e69de2209ab0e16c8e26c1b60feeb852b3a88e46a4f16588c08254e1bd81a183  heaptrack-3e6cce3d210a6672fe6f92de0bed567c49b7a9c5-git4.tar.gz
++
++sha256  fa6f36630bb1e0c571d34b2bbdf188d08495c9dbf58f28cac112f303fc1f58fb  LICENSES/LGPL-2.1-only.txt
++sha256  aaf135472f81c5b4a0dca9367e5bb5e9750032b5bebe5442b36e4c0a47430df3  LICENSES/GPL-2.0-or-later.txt
++sha256  6aee5c3d7c55f3d8ff45b1245b8427efaf0a59e9c52d7139c79bff7056e9a611  LICENSES/LGPL-2.1-or-later.txt
++sha256  84c6ef3ea9e3254a54d0acf5d3e0c61ae011b8fef7dd6940591cf060e6380a8f  LICENSES/BSL-1.0.txt
++sha256  b85dcd3e453d05982552c52b5fc9e0bdd6d23c6f8e844b984a88af32570b0cc0  LICENSES/MIT.txt
++sha256  074e6e32c86a4c0ef8b3ed25b721ca23aca83df277cd88106ef7177c354615ff  LICENSES/Apache-2.0.txt
++sha256  42639b2e5507163d35069be166e37a784f48a5f17e3577c16eb48fab215247cd  LICENSES/BSD-3-Clause.txt
+diff --git a/package/heaptrack/heaptrack.mk b/package/heaptrack/heaptrack.mk
+new file mode 100644
+index 000000000000..6ae49ba1a88f
+--- /dev/null
++++ b/package/heaptrack/heaptrack.mk
+@@ -0,0 +1,26 @@
++################################################################################
++#
++# heaptrack
++#
++################################################################################
++
++HEAPTRACK_SITE_METHOD = git
++HEAPTRACK_SITE = https://invent.kde.org/sdk/heaptrack.git
++HEAPTRACK_VERSION = 3e6cce3d210a6672fe6f92de0bed567c49b7a9c5
++HEAPTRACK_LICENSE = LGPL-2.1-or-later, GPL-2.0-or-later (heaptrack_interpret)
++HEAPTRACK_LICENSE_FILES = \
++	LICENSES/LGPL-2.1-only.txt \
++	LICENSES/GPL-2.0-or-later.txt \
++	LICENSES/LGPL-2.1-or-later.txt \
++	LICENSES/BSL-1.0.txt \
++	LICENSES/MIT.txt \
++	LICENSES/Apache-2.0.txt \
++	LICENSES/BSD-3-Clause.txt
++HEAPTRACK_DEPENDENCIES = host-pkgconf boost elfutils libunwind zlib
++HEAPTRACK_CONF_OPTS = -DHEAPTRACK_BUILD_GUI=OFF -DHEAPTRACK_BUILD_PRINT=ON
++
++ifeq ($(BR2_PACKAGE_ZSTD),y)
++HEAPTRACK_DEPENDENCIES += zstd
++endif
++
++$(eval $(cmake-package))
+diff --git a/support/testing/tests/package/test_heaptrack.py b/support/testing/tests/package/test_heaptrack.py
+new file mode 100644
+index 000000000000..be353f89185b
+--- /dev/null
++++ b/support/testing/tests/package/test_heaptrack.py
+@@ -0,0 +1,42 @@
++import os
++
++import infra.basetest
++
++
++class TestHeaptrack(infra.basetest.BRTest):
++    # infra.basetest.BASIC_TOOLCHAIN_CONFIG cannot be used as it does
++    # not include BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
++    # needed by heaptrack.
++    config = \
++        """
++        BR2_aarch64=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
++        BR2_LINUX_KERNEL=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.42"
++        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
++        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++        BR2_PACKAGE_HEAPTRACK=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        BR2_TARGET_ROOTFS_CPIO=y
++        """
++
++    def test_run(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        kern = os.path.join(self.builddir, "images", "Image")
++        self.emulator.boot(arch="aarch64",
++                           kernel=kern,
++                           kernel_cmdline=["console=ttyAMA0"],
++                           options=["-M", "virt",
++                                    "-cpu", "cortex-a57",
++                                    "-m", "256M",
++                                    "-initrd", cpio_file])
++
++        self.emulator.login()
++
++        self.assertRunOk("/usr/bin/heaptrack --version")
++        self.assertRunOk("/usr/bin/heaptrack /bin/busybox")
++        self.assertRunOk("/usr/bin/heaptrack -o /tmp/ls.heaptrack ls -al /")
++        self.assertRunOk("/usr/bin/heaptrack_print --file /tmp/ls.heaptrack.gz")
+
+---
+base-commit: 7aba8c3f90da93d138493fe4eb24953731b1e7a2
+change-id: 20260731-heaptrack-cd4f6f8fcec8
+
+Best regards,
+--  
+Luca Ceresoli, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
