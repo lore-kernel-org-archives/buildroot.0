@@ -4,80 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49318C5DF94
-	for <buildroot@archiver.kernel.org>; Mon, 24 Aug 2026 06:58:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74C9AC5DF94
+	for <buildroot@archiver.kernel.org>; Mon, 24 Aug 2026 07:01:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 16FB280BB4;
-	Mon, 24 Aug 2026 06:58:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 361F580DD2;
+	Mon, 24 Aug 2026 07:01:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9ORxSYWRYzpi; Mon, 24 Aug 2026 06:58:48 +0000 (UTC)
+ id fL77TLkVAEQV; Mon, 24 Aug 2026 07:01:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787554728;
-	bh=YCBoj6p2PODZui0oUbBhYcDY0z4UzWiY5yB1RdF+zZs=;
-	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=X0lcqhU2UMTXQ5I9eRyuq3X3pyEk7AmP5yc1YAI6t/hH1cq2wRCgq3bMzgOaubk9A
-	 O3a89MNlURUt42sf7JHg4pbUpxp5LjL2TRQkeITYrh/WufBKcl+5SZa8iDcP9xdB8i
-	 +Lnym10iTztEa5dlR86px6dLHIH0gr5TW2/TnwO/h1YxB1ZF5X5IowCjimpR6SoCm+
-	 MqjP9owYEnqgIGa6Y8Idggij2Lh58+GXnk7GBUVXZEbqL7pqQYjEcKS/SBs//c6sIO
-	 LuTztk6SCDmWy9u4WEdsbmfsKFA/rWM5XzKks7JMYCRpqqbxBy8RViTgU0aKqsriBv
-	 ERmCCpbN8RFOQ==
+	s=default; t=1787554899;
+	bh=XmqHPpTpZj0vhXNslaJiNfhZww2f4cWm6z+6k7lrZNQ=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=ci3GgZ7oqq0Ru/WlknJz2n9LXFxCNPcAIyYOmEgbfEy3TPhiAo1GEXxZ/U+LzI5vQ
+	 Zsn0ZGHeJZ0noWZLYBWuXnobNL3ldIwwKoFavI7sxzne8fH4pJYeyc9NaaebYGnR8y
+	 GSu09v4I6RlXyueCFVYmT1BzYt45CCm15LlMjyysHWcP04iANn+7d7ZZ/TVaCCeDBN
+	 6gd+uxD44YfoT+RWz8G3ZHiW8XqmwdljcVlXgnblcORtYTLh/mckTXv7H441/TzFpY
+	 YRnvNLPhv1UN3aXG5fMkVg1PdrTdAeiqrNourTSwx2NVRkvir5KlHGL2w2WGSP5AVj
+	 WsX+GWh6UuYXg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F1D7480B42;
-	Mon, 24 Aug 2026 06:58:47 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 466483DA
- for <buildroot@buildroot.org>; Mon, 24 Aug 2026 06:58:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6431A80DD8;
+	Mon, 24 Aug 2026 07:01:39 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 26EBF336
+ for <buildroot@buildroot.org>; Mon, 24 Aug 2026 07:01:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 387C380B42
- for <buildroot@buildroot.org>; Mon, 24 Aug 2026 06:58:46 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 195D44065D
+ for <buildroot@buildroot.org>; Mon, 24 Aug 2026 07:01:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EZjs_waf_e17 for <buildroot@buildroot.org>;
- Mon, 24 Aug 2026 06:58:45 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id o3_bwi0yAUpC for <buildroot@buildroot.org>;
+ Mon, 24 Aug 2026 07:01:37 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none) header.from=korsgaard.com
-Authentication-Results: smtp1.osuosl.org; dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail1 header.b=TODzGT3M
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0CA4E80B32
- for <buildroot@buildroot.org>; Mon, 24 Aug 2026 06:58:44 +0000 (UTC)
-DKIM-Signature: a=rsa-sha256;
- b=TODzGT3MzFhig0liM68UlK3qHPxrVn5iKeCP0lvnnA0tosHImctoqQNPGpwNDPSBz6pKPektYBkb0CAJ11OlszZSRQZIkNLXsH7sT90Ye//jmG6lvaF3GivrxJlMejZtMSBMDTjOS5VllyLwCme2Xj/EMHOkh450okisIaR455Zaq8ej5OUj0btUJWPKtDEjmw6fP4Wgo4DaztPWdQRAlg2j/4mAIDKj1d8j++GnuyKpBJFwU8G570RLZQYRsV7iTRaH2lCREb8iL22kF4+lQ8yEz3kC1EoGfP5qNrmrYKVsh1kmON7M3neeE6u7KUy4o4m6kgenD0E+fBtS9BXnCA==;
- s=purelymail1; d=purelymail.com; v=1;
- bh=NAlxzwUNtlQ67Y+tpwK1tG9hjco4dKJzXGjYQxAWgFU=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1382373120; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Mon, 24 Aug 2026 06:58:40 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peter@korsgaard.com>) id 1wyOdj-0000000BbWs-29YO;
- Mon, 24 Aug 2026 08:58:39 +0200
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7E0AA405BE
+ for <buildroot@buildroot.org>; Mon, 24 Aug 2026 07:01:37 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 904458F2A9; Mon, 24 Aug 2026 07:00:42 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org,  Murat Demirten <mdemirten@yh.com.tr>
-In-Reply-To: <20260726212249.155140-2-bernd@kuhls.net> (Bernd Kuhls's message
- of "Sun, 26 Jul 2026 23:22:48 +0200")
-References: <20260726212249.155140-1-bernd@kuhls.net>
- <20260726212249.155140-2-bernd@kuhls.net>
-Date: Mon, 24 Aug 2026 08:58:39 +0200
-Message-ID: <87wltg80o0.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v2 2/2] package/jpeg-turbo: fix libm linking
- issue
+To: buildroot@buildroot.org
+Date: Mon, 24 Aug 2026 08:28:33 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 212b7edc22623e38aa2b0165e34e2b9a541d5ba3
+X-Git-Newrev: d74a065a16be4e18e6c85ddf257c4f5ff033e6b8
+X-Patchwork-Hint: ignore
+Message-Id: <20260824070042.904458F2A9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/jpeg-turbo: use configure option
+ WITH_{TESTS, TOOLS}
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -89,41 +68,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d74a065a16be4e18e6c85ddf257c4f5ff033e6b8
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
- > Buildroot commit bb38f6f7208497cf5a4df922e833492001170111 bumped the
- > package to 3.2.0. This version first included upstream commit
- > https://github.com/libjpeg-turbo/libjpeg-turbo/commit/ed00e0f4b39291e954958b96a8d941ca4a9e03a2
- > which removed the dependency to libm causing build errors detected by
- > the autobuilders.
+Buildroot commit c531fe65209defd356e5ee8142896478a20ab371 bumped the
+package to 3.1.2. This version first included upstream commit
+https://github.com/libjpeg-turbo/libjpeg-turbo/commit/942ac87e479c48199d48781e9a5b2cda3b910d7b
+which added configure options to disable the build of command-line
+tools and tests.
 
- > Disabling the build of tests by the previous patch of this series is not
- > enough because the build will fail on other tools like
+This patch replaces the current _POST_INSTALL_TARGET_HOOK with the new
+configure option and disables the build of tests.
 
- > [ 98%] Linking C executable djpeg-static
- > /home/bernd/buildroot/output/per-package/jpeg-turbo/host/bin/../lib/gcc/i686-buildroot-linux-gnu/15.3.0/../../../../i686-buildroot-linux-gnu/bin/ld:
- >  src/spng/CMakeFiles/spng-static.dir/spng.c.o: in function
- >  `spng_decode_image':
- > spng.c:(.text+0x4c62): undefined reference to `__fpclassifyf'
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/jpeg-turbo/jpeg-turbo.mk | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
 
- > Add upstream commit to fix the problem.
-
- > Fixes:
- > https://autobuild.buildroot.net/results/981/98114d4ea7afe62bb4cef934a06bf289d863ad3f/
-
- > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
- > ---
- > v2: add upstream commit instead of -lm
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/jpeg-turbo/jpeg-turbo.mk b/package/jpeg-turbo/jpeg-turbo.mk
+index 9a10110766..073a607188 100644
+--- a/package/jpeg-turbo/jpeg-turbo.mk
++++ b/package/jpeg-turbo/jpeg-turbo.mk
+@@ -15,7 +15,7 @@ JPEG_TURBO_INSTALL_STAGING = YES
+ JPEG_TURBO_PROVIDES = jpeg
+ JPEG_TURBO_DEPENDENCIES = host-pkgconf
+ 
+-JPEG_TURBO_CONF_OPTS = -DWITH_JPEG8=ON
++JPEG_TURBO_CONF_OPTS = -DWITH_JPEG8=ON -DWITH_TESTS=OFF
+ 
+ ifeq ($(BR2_STATIC_LIBS),y)
+ JPEG_TURBO_CONF_OPTS += -DENABLE_STATIC=ON -DENABLE_SHARED=OFF
+@@ -43,11 +43,10 @@ ifeq ($(BR2_STATIC_LIBS),)
+ JPEG_TURBO_CONF_OPTS += -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_JPEG_TURBO_TOOLS),)
+-define JPEG_TURBO_REMOVE_TOOLS
+-	rm -f $(addprefix $(TARGET_DIR)/usr/bin/,cjpeg djpeg jpegtran rdjpgcom tjbench wrjpgcom)
+-endef
+-JPEG_TURBO_POST_INSTALL_TARGET_HOOKS += JPEG_TURBO_REMOVE_TOOLS
++ifeq ($(BR2_PACKAGE_JPEG_TURBO_TOOLS),y)
++JPEG_TURBO_CONF_OPTS += -DWITH_TOOLS=ON
++else
++JPEG_TURBO_CONF_OPTS += -DWITH_TOOLS=OFF
+ endif
+ 
+ $(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
