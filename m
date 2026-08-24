@@ -4,57 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D4B2C5DF81
-	for <buildroot@archiver.kernel.org>; Mon, 24 Aug 2026 18:52:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67A21C5DF81
+	for <buildroot@archiver.kernel.org>; Mon, 24 Aug 2026 19:15:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A584880C4D;
-	Mon, 24 Aug 2026 18:52:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 241F880BCD;
+	Mon, 24 Aug 2026 19:15:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1l_V5fmO1Bty; Mon, 24 Aug 2026 18:52:52 +0000 (UTC)
+ id 02OKbXSo5ep4; Mon, 24 Aug 2026 19:15:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787597572;
-	bh=74TQU6jn7QlmEjXBsMkSZRPqJMKpyVlmtUxEDnlU1TE=;
+	s=default; t=1787598928;
+	bh=f9XUGDygKwlpN1RrrH373jeUGqkzZ3gvZHM11CAQI6E=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=R+Ww4lwne2dg1xJJqOYR9r8HoxNgIrvt/gprnJ3mb+1Rclt8WhyRrv7h+joVNXSG9
-	 XQgHudTt9vzXkUnV4DZLxzCvX/ps0jd3v0J6W6uG73G0nx0WaZN1McOlgExtbdK7ZU
-	 8P8i7nLCy7IwWOl4VXd1kISDrgG1j1fmfl0YsZ7MjlFSZdjqRh+dKt85uDp0DnOPTR
-	 x23d7DoKuQVo35RO+4psFxN8osgYy7z1WBTTxvXUv7gWYzrTeL0kF2RHgXIiBh/n7x
-	 KFFMRU2PSoAp5GeOXNHuULWRHdEjYBXrEoqWBbjUmPhn0uTnzzUwW9jocYjTT6EzPi
-	 RltB5TAew9KFg==
+	b=WFk6+eKWQbQkxs7pDN1/6qSsJP0K4UPOkWT0vHqI9qdlxO4mt+Spv+UfuYROo5yCP
+	 5KWFAPjGbEYN2oKHX+b58CdN9/TAwKMUR4VfMv0woz2T0kcWL8CVVEibQe/7KPV2Ab
+	 4bvFWJ1KroBJiVQ3dTSNhn/sqae9myUBnvuSAbzn088bbxneqtC2VOZb3tA6eyOll6
+	 tp6q42Ql+2T1Jsx26qZqkU4oOY7qfKVknleN0mOUrixfy+TWzpFOVVmMzKHTyWMTyu
+	 HJeSdVsWcHaHfQTZRJwcj+f1EILPsYC3n9D8vixteFcdGDpSBY89rT07f8WCQXJqAt
+	 12f72K7x4vQzw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1884880C44;
-	Mon, 24 Aug 2026 18:52:52 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id D239E4B8
- for <buildroot@buildroot.org>; Mon, 24 Aug 2026 18:52:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4268580BD2;
+	Mon, 24 Aug 2026 19:15:28 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 40B91396
+ for <buildroot@buildroot.org>; Mon, 24 Aug 2026 19:15:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B6F2380C44
- for <buildroot@buildroot.org>; Mon, 24 Aug 2026 18:52:50 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 32D4C400A2
+ for <buildroot@buildroot.org>; Mon, 24 Aug 2026 19:15:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wsvh_fUW6ny4 for <buildroot@buildroot.org>;
- Mon, 24 Aug 2026 18:52:49 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8jY7zY17dfFf for <buildroot@buildroot.org>;
+ Mon, 24 Aug 2026 19:15:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id C3F7880C43
- for <buildroot@buildroot.org>; Mon, 24 Aug 2026 18:52:49 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7DB2C400D1
+ for <buildroot@buildroot.org>; Mon, 24 Aug 2026 19:15:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 92BC18FC81; Mon, 24 Aug 2026 18:51:54 +0000 (UTC)
+ id 5B1368FF41; Mon, 24 Aug 2026 19:14:30 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 24 Aug 2026 20:51:23 +0200
+Date: Mon, 24 Aug 2026 21:14:39 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 70f762ea6e45f5433268c4cbe0879de85e17f908
-X-Git-Newrev: 087a15f578823206ead71b791ea4d299af96ed38
+X-Git-Oldrev: 087a15f578823206ead71b791ea4d299af96ed38
+X-Git-Newrev: 7e036c739ff82bf3a5aaf5dc79b7c560e5040787
 X-Patchwork-Hint: ignore
-Message-Id: <20260824185154.92BC18FC81@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] website/lts: update release wording
+Message-Id: <20260824191430.5B1368FF41@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libxml-parser-perl: add
+ host-libxcrypt dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -74,52 +75,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/087a15f578823206ead71b791ea4d299af96ed38
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/7e036c739ff82bf3a5aaf5dc79b7c560e5040787
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Update the release wording to align with the documentation.
+host-libxml-parser-perl compiles XS modules against the system perl
+headers, which #include <crypt.h>. On build hosts without libcrypt-dev
+installed, the build fails:
 
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+    .../CORE/reentr.h:126:16: fatal error: crypt.h: No such file or directory
+
+Declaring host-libxcrypt ensures crypt.h is present in the per-package
+host sysroot before the build.
+
+This can for example be reproduced on a minimal Debian Forky system,
+where libc6-dev no longer pulls libxcrypt-dev.
+
+Signed-off-by: Adam Ford <aford173@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- docs/website/lts.html | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ package/libxml-parser-perl/libxml-parser-perl.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/docs/website/lts.html b/docs/website/lts.html
-index 8384d3a88b..caa9344f4a 100644
---- a/docs/website/lts.html
-+++ b/docs/website/lts.html
-@@ -80,7 +80,7 @@
-             </h2>
-             <p class="br-lts-item-text">
-             Vulnerability fixes applied to the <code>master</code> branch will be
--            prioritized for backporting to the LTS & stable branches.
-+            prioritized for backporting to stable branches.
-             </p>
-         </div>
-     </div>
-@@ -98,9 +98,9 @@
-     <br/>
-     To address these requirements, the release model evolves into the following.
-     <br/>
--    The LTS releases are now extended for a 3-year period. An LTS release
--    is started every 2 years.
--    In between, stable releases are made every 3 months.
-+    Starting with 2025.02, the first release of every odd-numbered year is a long-term
-+    support (LTS) release supported for three years.
-+    In between, non-LTS releases are made every 3 months.
-     </p>
- 
-     <br/>
-@@ -328,7 +328,7 @@
-                 To make sure the packages of interest to the sponsors don't
-                 include regressions between releases.
-                 Sponsors may submit a list of packages to be tested
--                before an LTS & stable release.
-+                before a bugfix release.
-             </p>
-         </div>
-     </div>
+diff --git a/package/libxml-parser-perl/libxml-parser-perl.mk b/package/libxml-parser-perl/libxml-parser-perl.mk
+index 06bbd3b1ad..7cc60774bd 100644
+--- a/package/libxml-parser-perl/libxml-parser-perl.mk
++++ b/package/libxml-parser-perl/libxml-parser-perl.mk
+@@ -7,7 +7,7 @@
+ LIBXML_PARSER_PERL_VERSION = 2.47
+ LIBXML_PARSER_PERL_SOURCE = XML-Parser-$(LIBXML_PARSER_PERL_VERSION).tar.gz
+ LIBXML_PARSER_PERL_SITE = $(BR2_CPAN_MIRROR)/authors/id/T/TO/TODDR
+-HOST_LIBXML_PARSER_PERL_DEPENDENCIES = host-expat
++HOST_LIBXML_PARSER_PERL_DEPENDENCIES = host-expat host-libxcrypt
+ LIBXML_PARSER_PERL_LICENSE = Artistic or GPL-1.0+
+ LIBXML_PARSER_PERL_LICENSE_FILES = README
+ LIBXML_PARSER_PERL_RUN_PERL = `which perl`
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
