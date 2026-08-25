@@ -1,74 +1,82 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97231C5DF94
-	for <buildroot@archiver.kernel.org>; Tue, 25 Aug 2026 08:19:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B061C5DF94
+	for <buildroot@archiver.kernel.org>; Tue, 25 Aug 2026 08:24:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 53F5A60608;
-	Tue, 25 Aug 2026 08:19:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E6C7280B50;
+	Tue, 25 Aug 2026 08:24:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XOt3aikfrybr; Tue, 25 Aug 2026 08:19:58 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4bU6trS1OPGl; Tue, 25 Aug 2026 08:24:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787645998;
-	bh=1IrmmfbCO4JrzqG8CfTrOQP8+ibIJdOh3yXJJGLhEpI=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	s=default; t=1787646258;
+	bh=E//fZqjIFBaAgVV62+uE9HkkFBqecDOSmScVjjqX3ko=;
+	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=oWgVTk543sV5KqYvn9OucjPdaWM+Tiewfb4j0bz8jGbCVnxzFpjDCbuqlC4+p3P3K
-	 Oi7EwNTcyHA+g/liITNdO9WlF11ImZHbPN/po2edRXTl1JoCY+I/Y8MGjJ2Q3zsDSI
-	 uQmsYRrS0hQMeDmHhe2iArSi2McGh5YoPGlTHxQ1JbMVh6JT2Akc/9ctbIvyGK975i
-	 9S8mFEp0HfW7dV2TItn6JvIojUeYhzsK16eZH2EsOTSTO9kb8gkU8MK+D++VIISB/y
-	 boUsMqWKa4Db6vFcjq19s6+XTWUBMauZQ6e0hEl8rsDAmrpar1LOBHKY4M7uXFFjbS
-	 D05Vg//1jXh4w==
+	 From;
+	b=oJ6yusrzAo2gAAULtVPk3Pc/Wx/h6AClc+aTsBUCCAVeNLCJniGRxWjLLQbn3+Yjz
+	 Rb4B21zXZuFL6gaOB2WTwjIjSvIIfzIi6drAx68y03T1589DpHhMthiVY1eC7oA0jf
+	 d5gLG192Tpx92jiaZdN5lFEuZsFToKODOQeOMCpuI26zzquYugE8WqgSP5+5XEeHce
+	 /qQ3UGFF2OqWC4Bb0ypLy/ASfyGuETyzMAh0L/MKXr4S/zk8X+vTFKhxRzQVxJc4uO
+	 GgftgOMiRigrcaFPBJQT5vK0zVnVT3wNT/OmEe7zm/PbF0Sy4K2OLKI6/CdNRegosi
+	 IRhizdAi1QgGg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5DAAE6060B;
-	Tue, 25 Aug 2026 08:19:58 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 90DC535E
- for <buildroot@buildroot.org>; Tue, 25 Aug 2026 08:19:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EFC8980B2E;
+	Tue, 25 Aug 2026 08:24:17 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id A18C1118
+ for <buildroot@buildroot.org>; Tue, 25 Aug 2026 08:24:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8ED6E405FB
- for <buildroot@buildroot.org>; Tue, 25 Aug 2026 08:19:57 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9385E40068
+ for <buildroot@buildroot.org>; Tue, 25 Aug 2026 08:24:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RX0YzNyRnL0i for <buildroot@buildroot.org>;
- Tue, 25 Aug 2026 08:19:56 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
- helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7CCCrcGLGimh for <buildroot@buildroot.org>;
+ Tue, 25 Aug 2026 08:24:14 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 81465405F6
- for <buildroot@buildroot.org>; Tue, 25 Aug 2026 08:19:55 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-03.galae.net (Postfix) with ESMTPS id A22D34E412E1;
- Tue, 25 Aug 2026 08:19:52 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 6C408604C4;
- Tue, 25 Aug 2026 08:19:52 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id AC2CC11C7A0F0; 
- Tue, 25 Aug 2026 10:19:45 +0200 (CEST)
-Date: Tue, 25 Aug 2026 10:19:44 +0200
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: buildroot@buildroot.org, 
- "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>,
- David Laight <David.Laight@aculab.com>
-Message-ID: <ao1Pks3_H87lajHF@windsurf>
-References: <20260824213435.3324692-1-thomas.petazzoni@bootlin.com>
- <ao1E7m-2c4BbHUt9@landeda>
+Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none) header.from=korsgaard.com
+Authentication-Results: smtp2.osuosl.org; dkim=pass (2048-bit key,
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail1 header.b=fyYqj3ZL
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 14EA840064
+ for <buildroot@buildroot.org>; Tue, 25 Aug 2026 08:24:13 +0000 (UTC)
+DKIM-Signature: a=rsa-sha256;
+ b=fyYqj3ZLd6JoGe08VdcfDRHBGJADoERDq9XPDMOknZhAibUt598XiJfkBIBcGLJN71dxLo19IQ3y/UUXTOojxv1Xggmc5Id6k84R72GfBZtkwD8QE5SoQSkv9R8WglEroNeyM+wz39J1h0R8Ap1oHxGrL60vKDb45OOMcZA9S3wFLhBnUDALiHljRufkH5myo47VsHPocx0tRZCMIIQ4UJ/nw/SNExqxLHbvrqoOLUhxEgvmYFu5Kgthv5Ud/24uinwHgYRe2KU6hXMej7vKh8qjcvZr99ZykpKDGGbE0na4UKgyUGOxKADyhSiepI6FrIqSznqLY2x9Zv/AY3nRvw==;
+ s=purelymail1; d=purelymail.com; v=1;
+ bh=vPT5zmpIMRe/+sSTOSP0ca8JPP6X8b+MPhd5MKMDRpU=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1155230727; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Tue, 25 Aug 2026 08:24:09 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
+ (envelope-from <peter@korsgaard.com>) id 1wymS0-0000000CPQ9-1B2P;
+ Tue, 25 Aug 2026 10:24:08 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20260825075109.3385-1-bernd@kuhls.net> (Bernd Kuhls's message of
+ "Tue, 25 Aug 2026 09:51:09 +0200")
+References: <20260825075109.3385-1-bernd@kuhls.net>
+Date: Tue, 25 Aug 2026 10:24:08 +0200
+Message-ID: <87se42y5ef.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <ao1E7m-2c4BbHUt9@landeda>
-X-Last-TLS-Session-Version: TLSv1.3
-Subject: Re: [Buildroot] [PATCH v2] support/scripts/check-host-libs: add new
- check on host binaries/libs
+Subject: Re: [Buildroot] [PATCH 1/1] {linux, linux-headers}: bump 6.12.x,
+ 6.6.x, 6.1.x, 5.15.x, 5.10.x, 7.1.x, 6.18.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -80,129 +88,28 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+>>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
 
-On Tue, Aug 25, 2026 at 09:31:58AM +0200, Yann E. MORIN wrote:
+ > Update the latest kernel releases to:
+ >  - 7.1.9 -> 7.1.10
+ >  - 6.18.45 -> 6.18.46
+ >  - 6.12.104 -> 6.12.105
+ >  - 6.6.152 -> 6.6.153
+ >  - 6.1.183 -> 6.1.184
+ >  - 5.15.216 -> 5.15.217
+ >  - 5.10.265 -> 5.10.266
 
-> I was wondering why you would not extend check-host-rpath, see my
-> tentative, totally untested patch at the end...
-> 
-> Also, check-host-rpath is run after each package install, so it will
-> catch executables installed without their dependent libraries, should
-> they later be installed.
+ > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Ah, good idea. Then maybe check-host-rpath should be renamed into
-check-host-bins or something like that, because it would no longer
-check just RPATH, but other aspects of host-installed bins and libs?
+Committed, thanks.
 
-> > +HOST_DIR=$1
-> 
-> Double-quote variable expansion (shellcheck should have reported that
-> one, I think).
-
-I just passed "./utils/docker-run shellcheck" on it, maybe there's
-some additional shellcheck options to pass to have stricter checks.
-
-> There is a construct that I tend to use nowadas, which is to use
-> true/false, rather than 0/1 or yes/no, because that can be reused
-> without a test;
-> 
->     success=true
->     for loop; do
->         if [ conditiion ]; then
->             success=false
->         fi
->     done
->     ${success}
-
-OK, nice.
-
-> And here's a tentative, totally untested patch to introduce that in
-> check-host-rpath (indented so that patchwork does not see it):
-> 
->     diff --git a/support/scripts/check-host-rpath b/support/scripts/check-host-rpath
->     index 41aa0aa1ed..e1fdf16829 100755
->     --- a/support/scripts/check-host-rpath
->     +++ b/support/scripts/check-host-rpath
->     @@ -21,6 +21,14 @@ main() {
->          while read file; do
->              is_elf "${file}" || continue
->              elf_needs_rpath "${file}" "${hostdir}" || continue
->     +        missing_libs="$(get_missing_libs "${file}" "${hostdir}")"
->     +        if [ "${missing_libs}" ]; then
->     +            ret=1
->     +            printf "***\n"
->     +            printf "*** ERROR: package %s uses libs not in HOST_DIR:\n" "${pkg}"
->     +            # shellcheck disable=SC2086 # we need the word splitting
->     +            printf '  - %s\n' ${missing_libs}
->     +        fi
->              check_elf_has_rpath "${file}" "${hostdir}" "${perpackagedir}" && continue
->              if [ ${ret} -eq 0 ]; then
->                  ret=1
->     @@ -57,16 +65,44 @@ is_elf() {
->      elf_needs_rpath() {
->          local file="${1}"
->          local hostdir="${2}"
->     +
->     +    [ -n "$(get_libs "${file}" "${hostdir}")" ]
->     +}
->     +
->     +# This function returns all non-toolchain libs tha tare not in HOST_DIR
->     +get_missing_libs() {
->     +    local file="${1}"
->     +    local hostdir="${2}"
->     +    local lib
->     +
->     +    get_libs "${file}" "${hostdir}" \
->     +    | while read lib; do
->     +        if [ -not -e "${hostdir}/lib/${lib}" ]; then
->     +            printf '%s\n' "${lib}"
->     +        fi
->     +    done
->     +}
->     +
->     +# This function returns the list of non-toolchain libraries that an ELF
->     +# file has as DT_NEEDED
->     +get_libs() {
->     +    local file="${1}"
->     +    local hostdir="${2}"
->          local lib
-> 
->          while read lib; do
->     -        [ -e "${hostdir}/lib/${lib}" ] && return 0
->     +        case "${lib}" in
->     +            libc.so*|libm.so*|libstdc++.so*|libpthread.so*|libgcc_s.so*|libdl.so*|ld-*|libgomp.so*|libcrypt.so*|libcrypto.so*|libatomic.so*|librt.so*|libutil.so*|libresolv.so*)
->     +                continue
->     +                ;;
->     +            *)
->     +                printf '%s\n' "${lib}"
->     +                ;;
->     +        esac
->          done < <( readelf -d "${file}" 2>/dev/null                             \
->                    |sed -r -e '/^.* \(NEEDED\) .*Shared library: \[(.+)\]$/!d;' \
->                           -e 's//\1/;'                                          \
->                  )
->     -
->     -    return 1
->      }
-
-OK, I'll review this and try to get back with a v3... hopefully
-earlier than in 4 years!
-
-Thanks for the prompt review and feedback!
-
-Thomas
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
