@@ -1,85 +1,61 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0DD4C5DF94
-	for <buildroot@archiver.kernel.org>; Tue, 25 Aug 2026 08:34:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 032E6C61DB6
+	for <buildroot@archiver.kernel.org>; Tue, 25 Aug 2026 08:34:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7AC6F40624;
-	Tue, 25 Aug 2026 08:34:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A950B80C80;
+	Tue, 25 Aug 2026 08:34:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id M_kIn1YV42Gc; Tue, 25 Aug 2026 08:34:36 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id D_szFbmKjmYY; Tue, 25 Aug 2026 08:34:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787646876;
-	bh=6fqLa1AerGLD228Tj+A4VTK4cqEfITgxG8ivzDyniP0=;
-	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=LIMgsNsnhkWIVtYgvMqJtiCW54H4QNFMPBX50LU9NDa70v9pgYAXqUD03WmvYbDZP
-	 lkTVj4VjkZQ/++xIJYF69Ypm8hffdPCuZ6pRJAf3HAb7k98833M5LIa6WudxGKjuVG
-	 nHHJSofkwW3Emh6Iquf1qkwMh2BQ+sCh8XJFi3IKWirqgBhuK0/pdDEBIS9d9K1gFp
-	 mgwL+2CW2Ntaw9z78SPIGyrtPayJfzhFEUKzoTBeicjfdD9j/yiieFygXn11SRqMlG
-	 2gPOocztourxie87/zzycnIhZd24dUsyphHe4D1Fe7uDDOuSDsIJlJCbFQl/SP8hVa
-	 Lf+KbGC26k7HQ==
+	s=default; t=1787646897;
+	bh=a6VU/r5NKclins92TtKtTCJ1KPWNoikN3DG7R+D8XqE=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=I8cUorhd/UNYWE3mkBd72q6UjZ3mTq+NTjbxbmiag/9wlmIN5W9v0ohZkJuge7IFi
+	 Whrl3hKdanSu9jCQW8EdatVw6K0l36GFKXb6IYX2QfeYoJpj5jvB+sJNwftKq0cGNP
+	 ykMjG+GcPoD38pyJTnZsXZy5S/dj1QTOFVrhqoDx4ufbkndPRv1/EbrBhYvdGLTwax
+	 cqBzj9zYrFDaJsUlzGDm1eVRbl2EeeWPgPteuBO+SzWg2gfSnV5do1F54l9f3+3k9p
+	 ZKTspWyxVmhNDFABbeIcEhioXyjY9szza7fwCLLoQREEwJ0N3aN8nwn4LaucpXuAtK
+	 PONTIazErZ1Ng==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8BFBE40613;
-	Tue, 25 Aug 2026 08:34:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id ABD2980C74;
+	Tue, 25 Aug 2026 08:34:57 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 434B7279
- for <buildroot@buildroot.org>; Tue, 25 Aug 2026 08:34:35 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0E2D2279
+ for <buildroot@buildroot.org>; Tue, 25 Aug 2026 08:34:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2F7786060B
- for <buildroot@buildroot.org>; Tue, 25 Aug 2026 08:34:35 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0008E6060B
+ for <buildroot@buildroot.org>; Tue, 25 Aug 2026 08:34:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id weTLzT7xhzVb for <buildroot@buildroot.org>;
- Tue, 25 Aug 2026 08:34:34 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+ id MRjXwijEb9nH for <buildroot@buildroot.org>;
+ Tue, 25 Aug 2026 08:34:55 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none) header.from=korsgaard.com
-Authentication-Results: smtp3.osuosl.org; dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail1 header.b=N0jH283U
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 247E96060A
- for <buildroot@buildroot.org>; Tue, 25 Aug 2026 08:34:34 +0000 (UTC)
-DKIM-Signature: a=rsa-sha256;
- b=N0jH283UtpB7A3dYEQJzOxy96EWf8WYFk1tvSgiW0jO3I07ZkXpoOH0XV8uGRxXqBWQWZWF4iD9wCSEMKLKk43aFRzXTgMs/a5Gzm6Mce+nsHNg8QNzuIZOXZxGXz1TWuKO7bUFlQd6D/hj5WsJGuY02rjHU4U6RoTsUiuanx8V2NbVoPSC1DLFsEJeO/LQkdsYGjvsFIbew4VQ4jQeA9Od4cwYSBE3+hROEHNGh8JCDjdF9tu1L33N/jDgn+yu2kM8ynL6PK++bwYvXS5dnAVshmv1piPkWjDWqCzAb8i1XkhYoZJKpxoCBYigeyLTGPMLMnU0JNIAbSx3nTWqUkQ==;
- s=purelymail1; d=purelymail.com; v=1;
- bh=Xf0UrxFR8xrIqrCo4j86qY6vJ1rDap36CBpM4tJgI9U=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 1607912799; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Tue, 25 Aug 2026 08:34:32 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peter@korsgaard.com>) id 1wymc3-0000000CRHT-2MPC;
- Tue, 25 Aug 2026 10:34:31 +0200
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 426D16060A
+ for <buildroot@buildroot.org>; Tue, 25 Aug 2026 08:34:55 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id AEABF91622; Tue, 25 Aug 2026 08:33:59 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,  Romain Naour
- <romain.naour@smile.fr>,  Giulio Benetti
- <giulio.benetti@benettiengineering.com>,  Romain Naour
- <romain.naour@gmail.com>
-In-Reply-To: <20260823191926.2684260-1-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni via buildroot's message of "Sun, 23 Aug 2026 21:19:25
- +0200")
-References: <20260823191926.2684260-1-thomas.petazzoni@bootlin.com>
-Date: Tue, 25 Aug 2026 10:34:31 +0200
-Message-ID: <87fr02y4x4.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] toolchain/Config.in: refine
+To: buildroot@buildroot.org
+Date: Tue, 25 Aug 2026 10:34:02 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: c782302e2fc7ed4c87e893ad291adadd3467b7f9
+X-Git-Newrev: 06426297c4e50c3394d494b7cd907b9c84222d85
+X-Patchwork-Hint: ignore
+Message-Id: <20260825083359.AEABF91622@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] toolchain/Config.in: refine
  BR2_TOOLCHAIN_HAS_LIBQUADMATH definition
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -92,38 +68,105 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/06426297c4e50c3394d494b7cd907b9c84222d85
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
- > In commit a2380157f6688c5c065fa19060a2c33145bab95b ("toolchain: enable
- > libquadmath for PowerPC with VSX"), the definition of
- > BR2_TOOLCHAIN_HAS_LIBQUADMATH has been extended to also be true when
- > BR2_POWERPC_CPU_HAS_VSX.
+In commit a2380157f6688c5c065fa19060a2c33145bab95b ("toolchain: enable
+libquadmath for PowerPC with VSX"), the definition of
+BR2_TOOLCHAIN_HAS_LIBQUADMATH has been extended to also be true when
+BR2_POWERPC_CPU_HAS_VSX.
 
- > However, practical experiments show that when 64-bit VSX-capable cores
- > are used in 32-bit mode, libquadmath is not built by GCC, causing
- > build failures:
+However, practical experiments show that when 64-bit VSX-capable cores
+are used in 32-bit mode, libquadmath is not built by GCC, causing
+build failures:
 
- > cp: cannot stat
- > '/home/autobuild/autobuild/instance-3/output-1/host/powerpc-buildroot-linux-musl/lib*/libquadmath*':
- > No such file or directory
+cp: cannot stat '/home/autobuild/autobuild/instance-3/output-1/host/powerpc-buildroot-linux-musl/lib*/libquadmath*': No such file or directory
 
- > We did an extensive testing, building the 27 combinations of:
+We did an extensive testing, building the 27 combinations of:
 
- > - GCC versions: 14, 15, 16
- > - C library: glibc, uclibc, musl
- > - PowerPC 32-bit, PowerPC 64-bit, PowerPC 64-bit little endian
+- GCC versions: 14, 15, 16
+- C library: glibc, uclibc, musl
+- PowerPC 32-bit, PowerPC 64-bit, PowerPC 64-bit little endian
 
-Wow ;)
+This testing provides the following results:
 
-Committed, thanks.
+|      gcc14 |       powerpc64 |      glibc |         OK |
+|      gcc14 |     powerpc64le |      glibc |         OK |
+|      gcc14 |     powerpc64le |       musl |         OK |
+|      gcc14 |     powerpc64le |     uclibc |    SKIPPED |
+|      gcc14 |       powerpc64 |       musl |         OK |
+|      gcc14 |       powerpc64 |     uclibc |    SKIPPED |
+|      gcc14 |         powerpc |      glibc |     FAILED |
+|      gcc14 |         powerpc |       musl |     FAILED |
+|      gcc14 |         powerpc |     uclibc |     FAILED |
+|      gcc15 |       powerpc64 |      glibc |         OK |
+|      gcc15 |     powerpc64le |      glibc |         OK |
+|      gcc15 |     powerpc64le |       musl |         OK |
+|      gcc15 |     powerpc64le |     uclibc |    SKIPPED |
+|      gcc15 |       powerpc64 |       musl |         OK |
+|      gcc15 |       powerpc64 |     uclibc |    SKIPPED |
+|      gcc15 |         powerpc |      glibc |     FAILED |
+|      gcc15 |         powerpc |       musl |     FAILED |
+|      gcc15 |         powerpc |     uclibc |     FAILED |
+|      gcc16 |       powerpc64 |      glibc |         OK |
+|      gcc16 |     powerpc64le |      glibc |         OK |
+|      gcc16 |     powerpc64le |       musl |         OK |
+|      gcc16 |     powerpc64le |     uclibc |    SKIPPED |
+|      gcc16 |       powerpc64 |       musl |         OK |
+|      gcc16 |       powerpc64 |     uclibc |    SKIPPED |
+|      gcc16 |         powerpc |      glibc |     FAILED |
+|      gcc16 |         powerpc |       musl |     FAILED |
+|      gcc16 |         powerpc |     uclibc |     FAILED |
 
--- 
-Bye, Peter Korsgaard
+The "SKIPPED" are when the configuration is not possible: uClibc
+doesn't support powerpc64 or powerpc64le.
+
+Then, as we can see, the build fails for all "powerpc"
+configuration. Our conclusion is therefore that libquadmath is not
+supported on PowerPC 32-bit. While we were not able to find direct
+evidence in the gcc code base, this practical experiment shows that is
+simply doesn't work on PowerPC 32-bit.
+
+So, we take the logical action of adjusting
+BR2_TOOLCHAIN_HAS_LIBQUADMATH so that it is true only on
+powerpc64/powerpc64le.
+
+Fixes:
+
+  https://autobuild.buildroot.org/results/46d435c9f5086a8695f4f6cd4026bb0d194de13c/
+
+Cc: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ toolchain/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index 7762106bee..128f8faef2 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -989,12 +989,12 @@ config BR2_TOOLCHAIN_HAS_ATOMIC
+ # - At least, libquadmath is available on:
+ #   - i*86
+ #   - x86_64
+-#   - PowerPC with vector scalar (VSX) instruction set
++#   - PowerPC64 with vector scalar (VSX) instruction set
+ # - When available, libquadmath requires wchar support.
+ config BR2_TOOLCHAIN_HAS_LIBQUADMATH
+ 	bool
+ 	default y if BR2_i386 || BR2_x86_64
+-	default y if BR2_POWERPC_CPU_HAS_VSX
++	default y if (BR2_powerpc64 || BR2_powerpc64le) && BR2_POWERPC_CPU_HAS_VSX
+ 
+ comment "Bare metal toolchain"
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
