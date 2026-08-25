@@ -4,58 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0497C61DB9
-	for <buildroot@archiver.kernel.org>; Tue, 25 Aug 2026 20:13:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95E51C61DBD
+	for <buildroot@archiver.kernel.org>; Tue, 25 Aug 2026 20:13:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6D2CB80D48;
-	Tue, 25 Aug 2026 20:13:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A066A80D60;
+	Tue, 25 Aug 2026 20:13:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dsL4eoDcJapy; Tue, 25 Aug 2026 20:13:35 +0000 (UTC)
+ id pNgh_xbVfrj2; Tue, 25 Aug 2026 20:13:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787688815;
-	bh=oFHJlPmNbbLPdqraNTzB1haWMTatuuEpNsfUsFrMIRM=;
+	s=default; t=1787688816;
+	bh=ogU2VSSCmkjhUh9MtQ1z4UafSy5FUCwJJmeux8UWCjI=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=ICqc+7g8jHG+S5c5K213fTp0MhyPp7a4R8j3BpFTmzPc/jyHlU2lalyNoGH4VuWoF
-	 PSMktUzUI8htQ6AYn7UO5zTLMqkM3+v0+tRaqzav1mt4g9atbdWZu1cC+gmSi6SM3u
-	 D4qeYKsEIHLJoqFvSkv0mR1O07JmsH5weoadGeMfYrQ8LTTgQQ43jTF9twv074C9NN
-	 R+PUB5HAGUvt+hFUyl6fzJDw2aOnOJrVpANjQJJAApx39gza6Hx9dUD1nQyj9Mm1yH
-	 M/SJHm8dfhmnWtyKpS4oR/hS8LhunArLmg/EYFt67B+2TLJj+XAy5uOwIKbCBvowg8
-	 9SWBhfOGnpBiQ==
+	b=STfQPyXmHBkMb08kYB/cEZt0quPfuYEltYHu8b9ng7iwTuZTrd7n0MWwRLo5DT0VN
+	 poJvGIWfjSrMT7I0nz+wP4GVOrRuaMsTXjEe7FXjBHQtFtaVlSzYcGrUt69/VAgk/C
+	 dnASmKo2klqeNDQiWVmjdE3t/Qk+0vK6rMw6CuVlE9oy7A+TtJz0giH1x2LbF38qLc
+	 8M8XlxoLZAkZ5Gyqqtqz8rsxlCG8dF2w2cXOb52pgel8kMz9o3hCqFit5o54VfhWZG
+	 ePMr3+gyxmVqI2ZLuDG3mXkdqb4GzAe9BcRxptuAX5jfCs0AfEf+eHEVVURzz3K2hK
+	 zfQ7cI1pJXwvw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 485A380D05;
-	Tue, 25 Aug 2026 20:13:35 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id F0183334
- for <buildroot@buildroot.org>; Tue, 25 Aug 2026 20:13:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4A2DD80D45;
+	Tue, 25 Aug 2026 20:13:36 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0615D8F1
+ for <buildroot@buildroot.org>; Tue, 25 Aug 2026 20:13:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E21A66072A
+ by smtp3.osuosl.org (Postfix) with ESMTP id E05D1606AE
  for <buildroot@buildroot.org>; Tue, 25 Aug 2026 20:13:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QNblZi5_EvFF for <buildroot@buildroot.org>;
+ id eLLM4Mz9nYxv for <buildroot@buildroot.org>;
  Tue, 25 Aug 2026 20:13:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E9A03606F6
+ by smtp3.osuosl.org (Postfix) with ESMTP id EE9A46070D
  for <buildroot@buildroot.org>; Tue, 25 Aug 2026 20:13:32 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3F0EB91C83; Tue, 25 Aug 2026 20:12:37 +0000 (UTC)
+ id 4694391C98; Tue, 25 Aug 2026 20:12:37 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Tue, 25 Aug 2026 22:11:11 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c22fc74f2b4e5b6082203ecd839d530058e0106d
-X-Git-Newrev: e1a9ff1d67dcbf258e5c8331ee3dcfd3fba2ab8f
+X-Git-Oldrev: e1a9ff1d67dcbf258e5c8331ee3dcfd3fba2ab8f
+X-Git-Newrev: 79066532007db8c908b40af8c39d20fd81003655
 X-Patchwork-Hint: ignore
-Message-Id: <20260825201237.3F0EB91C83@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/uclibc: fix for gcc libquadmath
- conflict
+Message-Id: <20260825201237.4694391C98@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/uclibc: fix m68000 toolchain builds
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -75,175 +74,140 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/e1a9ff1d67dcbf258e5c8331ee3dcfd3fba2ab8f
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/79066532007db8c908b40af8c39d20fd81003655
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-As seen in the Buildroot autobuilders, struct rm_ctx should
-not be exposed in the public fenv.h header.
+Add a patch from Upstream to fix building of a m68000
+toolchain.
 
 Fixes:
- - https://autobuild.buildroot.net/results/761/7613538e0847a10eb3e2a7e40f3ae76386ac015b/
+ - https://autobuild.buildroot.net/results/4cc/4cc0de3d33339bd50792ca224f10dfd18a636b00/
 
 Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...-rm_ctx-should-be-private-and-not-exposed.patch | 151 +++++++++++++++++++++
- 1 file changed, 151 insertions(+)
+ ...e-kernel-helper-on-every-core-without-CAS.patch | 116 +++++++++++++++++++++
+ 1 file changed, 116 insertions(+)
 
-diff --git a/package/uclibc/0003-fenv-struct-rm_ctx-should-be-private-and-not-exposed.patch b/package/uclibc/0003-fenv-struct-rm_ctx-should-be-private-and-not-exposed.patch
+diff --git a/package/uclibc/0004-m68k-use-the-kernel-helper-on-every-core-without-CAS.patch b/package/uclibc/0004-m68k-use-the-kernel-helper-on-every-core-without-CAS.patch
 new file mode 100644
-index 0000000000..e77f079dcc
+index 0000000000..3ac756f4c7
 --- /dev/null
-+++ b/package/uclibc/0003-fenv-struct-rm_ctx-should-be-private-and-not-exposed.patch
-@@ -0,0 +1,151 @@
-+From 1105fd6c97f020f6ca7426e19d29081f404b567d Mon Sep 17 00:00:00 2001
-+From: Waldemar Brodkorb <wbx@openadk.org>
-+Date: Tue, 18 Aug 2026 18:13:29 +0200
-+Subject: [PATCH] fenv: struct rm_ctx should be private and not exposed in a
-+ public header
++++ b/package/uclibc/0004-m68k-use-the-kernel-helper-on-every-core-without-CAS.patch
+@@ -0,0 +1,116 @@
++From 5222fefffa0270c2f2d50961a4b75ef7f5605c29 Mon Sep 17 00:00:00 2001
++From: ramin <lordrasmus@gmail.com>
++Date: Mon, 24 Aug 2026 13:06:02 +0200
++Subject: [PATCH] m68k: use the kernel helper on every core without CAS, not
++ just ColdFire
 +
-+Upstream: https://gogs.waldemar-brodkorb.de/oss/uclibc-ng/commit/1105fd6c97f020f6ca7426e19d29081f404b567d
++The atomic header split the world into ColdFire and "the rest", assuming the
++rest was 68020 and up. That holds for the MMU port, but not for the 68000 and
++68010, which have no atomic read-modify-write instruction either. Building for
++one of them stops at the first cas:
++
++  Error: invalid instruction for this architecture; needs 68020 or higher
++         (68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040],
++          68060 [68ec060]) -- statement `cas.l %d0,%d1,(%a1)' ignored
++
++Reported by Waldemar Brodkorb from a Buildroot autobuilder failure; Buildroot
++supports m68000 and has at least one user on it.
++
++Decide by the presence of CAS instead. The instruction came with the 68020, so
++the test is the list of the 68020-and-up cores: gcc defines a separate macro
++per core and does not imply __mc68020__ on the later ones, and __mc68000__ is
++no help because it is defined on every m68k, the 68040 and ColdFire included.
++
++Nothing else changes: the kernel's atomic_cmpxchg_32 is syscall 335 "common"
++in arch/m68k/kernel/syscalls/syscall.tbl and has an implementation for the MMU
++as well as the noMMU port, so the branch the old cores now take is the one
++ColdFire has been using all along - including its documented limit that the
++8- and 16-bit variants stay non-atomic, since the helper is 32-bit only.
++
++Checked with a cross gcc over -m68000, -m68010, -m68020, -m68030, -m68040,
++-m68060, -mcpu=5206 and -mcpu=5208: the three old cores and both ColdFires
++select the helper, the four others select cas, and each branch assembles for
++the cores that select it.
++
++Upstream: https://gogs.waldemar-brodkorb.de/oss/uclibc-ng/commit/5222fefffa0270c2f2d50961a4b75ef7f5605c29
++Signed-off-by: Ramin Moussavi <ramin.moussavi@yacoub.de>
 +Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 +---
-+ include/fenv.h              | 10 ----------
-+ include/fenv_private.h      | 24 ++++++++++++++++++++++++
-+ libm/aarch64/fenv_private.h |  1 +
-+ libm/arc/fenv_private.h     |  1 +
-+ libm/arm/fenv_private.h     |  1 +
-+ libm/csky/fenv_private.h    |  1 +
-+ libm/mips/fenv_private.h    |  1 +
-+ libm/sparc/fenv_private.h   |  1 +
-+ 8 files changed, 30 insertions(+), 10 deletions(-)
-+ create mode 100644 include/fenv_private.h
++ libc/sysdeps/linux/m68k/bits/atomic.h | 32 ++++++++++++++++++---------
++ 1 file changed, 22 insertions(+), 10 deletions(-)
 +
-+diff --git a/include/fenv.h b/include/fenv.h
-+index 4b532c573..34042d5ac 100644
-+--- a/include/fenv.h
-++++ b/include/fenv.h
-+@@ -1,5 +1,4 @@
-+ /* Copyright (C) 1997, 1999, 2000 Free Software Foundation, Inc.
-+-   This file is part of the GNU C Library.
++diff --git a/libc/sysdeps/linux/m68k/bits/atomic.h b/libc/sysdeps/linux/m68k/bits/atomic.h
++index cf7fd5f65..6acec1ed8 100644
++--- a/libc/sysdeps/linux/m68k/bits/atomic.h
+++++ b/libc/sysdeps/linux/m68k/bits/atomic.h
++@@ -3,13 +3,15 @@
 + 
-+    The GNU C Library is free software; you can redistribute it and/or
-+    modify it under the terms of the GNU Lesser General Public
-+@@ -131,15 +130,6 @@ extern int fedisableexcept (int __excepts) __THROW;
-+ extern int fegetexcept (void) __THROW;
++    Licensed under the LGPL v2.1, see the file COPYING.LIB in this tarball.
++ 
++-   m68k (68020 and up, which is everything the MMU Linux port runs on) has
++-   the CAS instruction.  We implement the compare-and-exchange primitive
++-   with cas.b/cas.w/cas.l; include/atomic.h derives every higher-level
++-   operation from it.
+++   The CAS instruction arrived with the 68020.  Where it exists we implement
+++   the compare-and-exchange primitive with cas.b/cas.w/cas.l and let
+++   include/atomic.h derive every higher-level operation from it.
++ 
++-   ColdFire has no CAS at all, so there we use the kernel's
++-   atomic_cmpxchg_32 helper, which exists for exactly this reason.
+++   ColdFire, 68000 and 68010 have no atomic read-modify-write instruction at
+++   all.  There we use the kernel's atomic_cmpxchg_32 helper, which exists for
+++   exactly this reason and is available on every m68k (syscall 335, "common"
+++   in arch/m68k/kernel/syscalls/syscall.tbl, with an implementation for both
+++   the MMU and the noMMU port).
++ 
++    Without this file m68k fell back to the generic non-atomic
++    bits/atomic.h, whose "atomic" compare-and-exchange is a plain
++@@ -22,7 +24,17 @@
++ #define _M68K_BITS_ATOMIC_H	1
++ 
++ #include <stdint.h>
++-#ifdef __mcoldfire__
+++
+++/* CAS came with the 68020.  gcc sets a separate macro per core and does not
+++   imply __mc68020__ on the later ones, hence the list; __mc68000__ is no help
+++   here, it is defined on every m68k, the 68040 and ColdFire included.
+++   Everything without CAS - ColdFire, 68000, 68010 - uses the kernel helper.  */
+++#if defined __mc68020__ || defined __mc68030__ \
+++    || defined __mc68040__ || defined __mc68060__
+++# define __M68K_HAVE_CAS	1
+++#endif
+++
+++#ifndef __M68K_HAVE_CAS
++ # include <sys/syscall.h>
 + #endif
 + 
-+-/* Rounding mode context.  This allows functions to set/restore rounding mode
-+-   only when the desired rounding mode is different from the current rounding
-+-   mode.  */
-+-struct rm_ctx
-+-{
-+-  fenv_t env;
-+-  bool updated_status;
-+-};
-+-
-+ __END_DECLS
++@@ -58,7 +70,7 @@ typedef uintmax_t uatomic_max_t;
++ #define atomic_read_barrier()	atomic_full_barrier ()
++ #define atomic_write_barrier()	atomic_full_barrier ()
 + 
-+ #endif /* fenv.h */
-+diff --git a/include/fenv_private.h b/include/fenv_private.h
-+new file mode 100644
-+index 000000000..5e81c71aa
-+--- /dev/null
-++++ b/include/fenv_private.h
-+@@ -0,0 +1,24 @@
-++/* Copyright (C) 1997, 1999, 2000 Free Software Foundation, Inc.
-++
-++   The GNU C Library is free software; you can redistribute it and/or
-++   modify it under the terms of the GNU Lesser General Public
-++   License as published by the Free Software Foundation; either
-++   version 2.1 of the License, or (at your option) any later version.
-++
-++   The GNU C Library is distributed in the hope that it will be useful,
-++   but WITHOUT ANY WARRANTY; without even the implied warranty of
-++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-++   Lesser General Public License for more details.
-++
-++   You should have received a copy of the GNU Lesser General Public
-++   License along with the GNU C Library; if not, see
-++   <http://www.gnu.org/licenses/>.  */
-++
-++/* Rounding mode context.  This allows functions to set/restore rounding mode
-++   only when the desired rounding mode is different from the current rounding
-++   mode.  */
-++struct rm_ctx
-++{
-++  fenv_t env;
-++  bool updated_status;
-++};
-+diff --git a/libm/aarch64/fenv_private.h b/libm/aarch64/fenv_private.h
-+index 5afb790ea..3eaf0eb3f 100644
-+--- a/libm/aarch64/fenv_private.h
-++++ b/libm/aarch64/fenv_private.h
-+@@ -19,6 +19,7 @@
-+ #define AARCH64_FENV_PRIVATE_H 1
++-#ifndef __mcoldfire__
+++#ifdef __M68K_HAVE_CAS
 + 
-+ #include <fenv.h>
-++#include <fenv_private.h>
-+ #include <fpu_control.h>
++ /* cas Dc,Du,<ea>: compare <ea> with Dc; if equal store Du, else load <ea>
++    into Dc.  Either way Dc ends up holding the original *MEM, which is the
++@@ -87,7 +99,7 @@ typedef uintmax_t uatomic_max_t;
++ 		       : "memory");					\
++      __ret; })
 + 
-+ static __always_inline void
-+diff --git a/libm/arc/fenv_private.h b/libm/arc/fenv_private.h
-+index 5f74c5e13..2e985722f 100644
-+--- a/libm/arc/fenv_private.h
-++++ b/libm/arc/fenv_private.h
-+@@ -19,6 +19,7 @@
-+ #define _FENV_PRIVATE_H 1
++-#else /* __mcoldfire__ */
+++#else /* !__M68K_HAVE_CAS */
 + 
-+ #include <fenv.h>
-++#include <fenv_private.h>
-+ #include "get-rounding-mode.h"
++ /* d0 = syscall number, d1 = newval, d2 = oldval, a0 = mem; the helper
++    returns the previous value.  The swap happens inside the syscall, so
++@@ -116,7 +128,7 @@ typedef uintmax_t uatomic_max_t;
++ #define __arch_compare_and_exchange_val_16_acq(mem, newval, oldval) \
++   __arch_compare_and_exchange_val_8_acq (mem, newval, oldval)
 + 
-+ /* The standards only specify one variant of the fenv.h interfaces.
-+diff --git a/libm/arm/fenv_private.h b/libm/arm/fenv_private.h
-+index 566bf443c..61418d9f4 100644
-+--- a/libm/arm/fenv_private.h
-++++ b/libm/arm/fenv_private.h
-+@@ -19,6 +19,7 @@
-+ #define ARM_FENV_PRIVATE_H 1
++-#endif /* __mcoldfire__ */
+++#endif /* __M68K_HAVE_CAS */
 + 
-+ #include <fenv.h>
-++#include <fenv_private.h>
-+ #include <fpu_control.h>
-+ 
-+ static __always_inline void
-+diff --git a/libm/csky/fenv_private.h b/libm/csky/fenv_private.h
-+index f0f48a88a..e6015abee 100644
-+--- a/libm/csky/fenv_private.h
-++++ b/libm/csky/fenv_private.h
-+@@ -19,6 +19,7 @@
-+ #define CSKY_FENV_PRIVATE_H 1
-+ 
-+ #include <fenv.h>
-++#include <fenv_private.h>
-+ #include <fpu_control.h>
-+ #include "fenv_libc.h"
-+ 
-+diff --git a/libm/mips/fenv_private.h b/libm/mips/fenv_private.h
-+index bc9be3b62..273d6faf8 100644
-+--- a/libm/mips/fenv_private.h
-++++ b/libm/mips/fenv_private.h
-+@@ -24,6 +24,7 @@
-+    code instead.  */
-+ 
-+ #include <fenv.h>
-++#include <fenv_private.h>
-+ #include "fenv_libc.h"
-+ #include <fpu_control.h>
-+ 
-+diff --git a/libm/sparc/fenv_private.h b/libm/sparc/fenv_private.h
-+index b888d8442..c76fbad7f 100644
-+--- a/libm/sparc/fenv_private.h
-++++ b/libm/sparc/fenv_private.h
-+@@ -2,6 +2,7 @@
-+ #define SPARC_FENV_PRIVATE_H 1
-+ 
-+ #include <fenv.h>
-++#include <fenv_private.h>
-+ #include <fpu_control.h>
-+ 
-+ /* For internal use only: access the fp state register.  */
++ /* m68k has no 64-bit CAS; NPTL and include/atomic.h only use int- and
++    pointer-sized objects, so the bysize dispatch never reaches this.  */
 +-- 
 +2.47.3
 +
