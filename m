@@ -1,158 +1,172 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5E93C61DBD
-	for <buildroot@archiver.kernel.org>; Wed, 26 Aug 2026 05:15:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A09DC5DF97
+	for <buildroot@archiver.kernel.org>; Wed, 26 Aug 2026 06:19:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8E30380B5C;
-	Wed, 26 Aug 2026 05:15:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 07AB3605F7;
+	Wed, 26 Aug 2026 06:19:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hBeIxo7j_bI3; Wed, 26 Aug 2026 05:15:06 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Iis_2XmEDlAr; Wed, 26 Aug 2026 06:19:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787721306;
-	bh=Zl6RViKt/jl2dOwek9YEuTx/SFUDSt/WktDE5OKVOT8=;
-	h=To:Date:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
-	 From;
-	b=prLd4QYdrX3iuWK1g1Qyw0pW8Jx8EnYKXifQq91g9RPT5FGR1WV5NIykVND3cf0pu
-	 o6oFRfePMtL3wKCHv73D+PsX175fqvYx8Zt56j49Py8ljtJTaiVXZYcYUDUa2TN1Zl
-	 kaIUeMi4/l0VJGCg1mucAs5qdGosvYEGniqiKpu8rf1NZh3AHd112RBJVz1CE/vqJE
-	 n7OUfUD0QsBWfYanUgW0BNQkLD4Lj0/e/NF8RzgBU3wsxr8QVnpKlnJ3pI2+4282as
-	 qE4Il+OT/cIWgbLY3v9f6Iv0qBUiwGAHJmNP4sskjSpYBbjacBvTKHHJIoJLBvmOdr
-	 p6AdCX2JJGdgQ==
+	s=default; t=1787725166;
+	bh=MnqHPGhWOwdv/iVytN3qXkx0xXGlRZwRpO0pjd7kMLw=;
+	h=To:CC:Date:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=JYmT/wbWfk1K9aQ4D1vh5JQbyVDXqwjZ9oqz/15tIYNGOn5Bl0BG2RlNrWjRxQj5M
+	 hfxuXEj4w1sAxum9i5Uvj3TcjXifRLpoEnqDdBOUZ4r5ePeiKDeDa3jw2jSFn7qII0
+	 ezy4qk54r6ZZG2l/nY1OVvYFUSTtHnybV3fHLSZ20zxlN4aZ3WpofmT7TjQZ0C44fP
+	 bSaVZq/ju+hHVpKRQBiv4csqVZm3wBF+MrxGKNtNqCsDG9H+DXXS+tYbZXUr5KRQGZ
+	 KNT4WudFqWVcWsAwG2P6zlRGlVjyINQSV6tYPJdPkrZMOyu8BLJqGVd+vqhw4N0w2s
+	 Vzack06tV41Ug==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E9B9480AE7;
-	Wed, 26 Aug 2026 05:15:05 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 9A5A539E
- for <buildroot@buildroot.org>; Wed, 26 Aug 2026 05:15:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id ED0C8605FC;
+	Wed, 26 Aug 2026 06:19:25 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id DAFF023E
+ for <buildroot@buildroot.org>; Wed, 26 Aug 2026 06:19:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 809604054B
- for <buildroot@buildroot.org>; Wed, 26 Aug 2026 05:15:04 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C0F9E605FC
+ for <buildroot@buildroot.org>; Wed, 26 Aug 2026 06:19:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3NQ91IRPYFa7 for <buildroot@buildroot.org>;
- Wed, 26 Aug 2026 05:15:03 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HlvFpHOc2Skx for <buildroot@buildroot.org>;
+ Wed, 26 Aug 2026 06:19:24 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f403:c10d::3;
- helo=sn4pr0501cu005.outbound.protection.outlook.com;
+ client-ip=2a01:111:f403:c10c::1;
+ helo=sa9pr02cu001.outbound.protection.outlook.com;
  envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
-Received: from SN4PR0501CU005.outbound.protection.outlook.com
- (mail-southcentralusazlp170110003.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:c10d::3])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5CCD840547
- for <buildroot@buildroot.org>; Wed, 26 Aug 2026 05:15:01 +0000 (UTC)
+Received: from SA9PR02CU001.outbound.protection.outlook.com
+ (mail-southcentralusazlp170130001.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:c10c::1])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 87E0060602
+ for <buildroot@buildroot.org>; Wed, 26 Aug 2026 06:19:22 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=pkDjaDHzHb5YQkrmnytW1bzN3AHpYCR27tf3n13slLczwRHdN0dcYrPb8nuA+n0qr2YJzyW0AlBJJRefIkeF1tpuqswG+92YM+vBylUNwwrDrKqZaQufRfzXM/GOz4uuQmxKvbfrHHB0Zqslzo3uA2xRW7hTGLFjpRRc5yyMNjDHkQsmzFBayU/yuaM/KLoudfv7mfZ3FGrnqXq8bTFqeP/ntIcOt6Jq/oaMHC03KZVJwawZuj+7DqUwKsavmW2dOHfG8wU9AZOTuJLAYDOcbAT/iAp8iRC8j3PObZKHODaDqfEy0Wv7qUtzirG9DHPCeKVTO2Zt8nmdBJrsszC4pA==
+ b=pUO1RiGYB5pyfvYYHEHFKER/u9qHcOt+0p9yJ8jOsS7Afau+XCtG8PFGw/z8e2/jOshHT9gypCRdwe+jh9bS79877AIZ4EdHKCuoUxOporWxoU3arKizZPwZbrlx/OpPtTsW0ndYFO8K/ayvZJ+l3bGNhGfBsllrfDpxlMv9rstxvbCxPfW4lQXIGzVm8vKU5ONzWh5yrmhPPFQ+i1hT1J41xcgWA5+wThCQHQ+AH+w3DcxF74Gpc+sIEmXgSe7dy3ARcdBukzfxqObDewmpKkfPmC+k/v4Tdh8+J7Mc0U0O89brkmDbwzJZCiRTMfOCx+02n557qdr/apdKpGzjTQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=f1waYnPjDFS+Bf5AOSCKk/ckvZlqprwGz0yP0qzwZL4=;
- b=GM29InWIsDj0WmYBTEgQ23O/z0mOwMRKbm/brVtgqmJ1aPqpLEXVlPDdSbW+phh2KvySQFdC4+PEcUOcCNjDYzfh8G2j49sKmwg3LCT2VnYLCKmbXvow8tORXccvqt/g84YQRvExAeKeR+vPd76BEVtGBz20YqYO3FLDuoSbepLxpPJ8zZ+lKJJ7wWJdqu5cIJNON7kbozXryqieu92aujzNohUoks5LGw5OtTcQiZis0ds5HQbNh1RP67/+NQEKdVyzG9G5LWEW5OND42GtHnxvGvtX/5bdgXDVPk970IAfG38HMTgaFOIGkcYtkD3P6Du6iVrUYL7PKsEPQG9WLA==
+ bh=y7rXe9dPPPHa/mYLT81bWYRWXCwR67rPGdLnSeLj81k=;
+ b=lHO07kHb76D6syUBAev6CNsNNk//nqCX7AAqZ23n3X1VuMRFJwqE6I+wk2AaTYQRH9YkkYa3jGlOjpSQbXvwaJhAKtsCVSRCPSSSgqi0SQDjThkvwBtUeiuImww9nhaXpkGbd3RQRWoZrboO7l2UyMQ1xdnqGedghTPMmwlQJ0tn3mkkbdvFQ4kc98Z/2XaiZLNfVknsfk7h50MwuJt1il5Ihf/PVrxJn7d2Yu/RYMzhI+u8tjFtozG7MSrW3vK4hPdlILSVp+W1m8H5dKWAX2BBdpKiyQ+T8IUK0QksRasv80UFeWD9zGaerjOU3kcEnvLtsWpUKirS0ntaI+DhFw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 Received: from BL1PR12MB5032.namprd12.prod.outlook.com (2603:10b6:208:30a::12)
- by IA1PR12MB9029.namprd12.prod.outlook.com (2603:10b6:208:3f0::15)
+ by IA1PR12MB7687.namprd12.prod.outlook.com (2603:10b6:208:421::11)
  with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.339.12; Wed, 26 Aug
- 2026 05:14:49 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.360.8; Wed, 26 Aug
+ 2026 06:19:16 +0000
 Received: from BL1PR12MB5032.namprd12.prod.outlook.com
  ([fe80::3c13:eeb6:d9ef:c95d]) by BL1PR12MB5032.namprd12.prod.outlook.com
  ([fe80::3c13:eeb6:d9ef:c95d%6]) with mapi id 15.21.0360.005; Wed, 26 Aug 2026
- 05:14:48 +0000
+ 06:19:15 +0000
 To: "Hildebrand, Stewart" <Stewart.Hildebrand@amd.com>,
  "buildroot@buildroot.org" <buildroot@buildroot.org>
-Thread-Topic: [PATCH v4 1/4] package/xen: fix build error when
- BR2_PACKAGE_XEN_TOOLS not enabled
-Thread-Index: AQHdI1etVPwadop6qEuBo1S6c50B3LatI6qAgALI54A=
-Date: Wed, 26 Aug 2026 05:14:48 +0000
-Message-ID: <BL1PR12MB5032890E5995DD9CC95D7E9DF0AE2@BL1PR12MB5032.namprd12.prod.outlook.com>
+CC: "alistair@alistair23.me" <alistair@alistair23.me>, "Stabellini, Stefano"
+ <stefano.stabellini@amd.com>, "Erkiaga Elorza, Ibai"
+ <ibai.erkiaga-elorza@amd.com>, "luca.ceresoli@bootlin.com"
+ <luca.ceresoli@bootlin.com>, "Saleab, Micheal" <Micheal.Saleab@amd.com>,
+ "yann.morin@orange.com" <yann.morin@orange.com>,
+ "matthew.l.weber3@boeing.com" <matthew.l.weber3@boeing.com>, Matthew Weber
+ <mathew.l.weber3@boeing.com>, "brandon.maier@collins.com"
+ <brandon.maier@collins.com>, "john.ernberg@actia.se" <john.ernberg@actia.se>, 
+ "brian.j.wood2@boeing.com" <brian.j.wood2@boeing.com>, "ju.o@free.fr"
+ <ju.o@free.fr>, "thomas.petazzoni@bootlin.com"
+ <thomas.petazzoni@bootlin.com>, "romain.naour@smile.fr"
+ <romain.naour@smile.fr>, "Simek, Michal" <michal.simek@amd.com>,
+ "romain.naour@gmail.com" <romain.naour@gmail.com>
+Thread-Topic: [Buildroot] [PATCH v4 3/4] package/xen: add custom tarball
+ support
+Thread-Index: AQHdI1fGvunlbezGUEK7Ax9nA9wpDLauky+AgAFrTQA=
+Date: Wed, 26 Aug 2026 06:19:15 +0000
+Message-ID: <BL1PR12MB50328CB0D38E9C3F2D91DCB6F0AE2@BL1PR12MB5032.namprd12.prod.outlook.com>
 References: <20260803145152.102135-1-neal.frager@amd.com>
- <85f125d6-df38-4e3d-a503-1b6443b939da@amd.com>
-In-Reply-To: <85f125d6-df38-4e3d-a503-1b6443b939da@amd.com>
+ <20260803145152.102135-3-neal.frager@amd.com>
+ <dd93f44f-eb98-454b-8061-1589bb9cef63@amd.com>
+In-Reply-To: <dd93f44f-eb98-454b-8061-1589bb9cef63@amd.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
 msip_labels: MSIP_Label_198e8dea-a4f3-4850-b16a-fd6d2b1302b4_Enabled=True;
  MSIP_Label_198e8dea-a4f3-4850-b16a-fd6d2b1302b4_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
- MSIP_Label_198e8dea-a4f3-4850-b16a-fd6d2b1302b4_SetDate=2026-08-26T05:13:27.0000000Z;
+ MSIP_Label_198e8dea-a4f3-4850-b16a-fd6d2b1302b4_SetDate=2026-08-26T06:17:35.0000000Z;
  MSIP_Label_198e8dea-a4f3-4850-b16a-fd6d2b1302b4_Name=AMD General
  v26; MSIP_Label_198e8dea-a4f3-4850-b16a-fd6d2b1302b4_ContentBits=3;
  MSIP_Label_198e8dea-a4f3-4850-b16a-fd6d2b1302b4_Method=Standard
 x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BL1PR12MB5032:EE_|IA1PR12MB9029:EE_
-x-ms-office365-filtering-correlation-id: d27d60a6-335b-4dbe-959f-08df0330f358
+x-ms-traffictypediagnostic: BL1PR12MB5032:EE_|IA1PR12MB7687:EE_
+x-ms-office365-filtering-correlation-id: 9f826fe7-42f1-46ca-d8a0-08df0339f448
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
- ARA:13230040|7416014|376014|1800799024|366016|23010399003|4143699003|10067099003|56012099006|11063799006|6133799003|18002099003|22082099003|3023799007|38070700021|41080700001;
-x-microsoft-antispam-message-info: +chs8JZ4ALfIWM/0qZHRbkdL2+M4tq3SZjbI+N4wpwJv1ELjFAhSwkypI24PJlsHxoTWaemGfePgthmWJVUyX2D3mGSqvlrF5L9JPYQWzzHf+jE23Vl2lTkX03SW7EYXhU79AdZ+WSbdr/AL1MnVQG7TNPqh2lc5tLVii7jum3eOyOaI14mEn+RWYWJAZy9l5+U5gNeA9s4f4GHOTmmq4l/8pYfUVRmXx984M/3d3LKuMM2U8NCd0P9sxwS0j9ED/4dVpQnS2QOXrFEZU4NJmUtXS91udRSRsDf7leXNIr3HIykx1uPq6LDfwgOvAIXGNp6nZPFH0HiTyZ/2yMa0QFS/0Mdiy6Q3cMAEZAIn1FAzhFW8l81dZJPDTf8luRf7t0G5AXCyzALwhYC83P67cV5QrZTYMuQ3oknGu0Uh0SVJGR7BFPt+cl7yof2wqpLqG8Ka6gOD4ankpYRFQTW3AKKzWzbiInfcesBKKy+X/XbTZM6I2hM2NjbutxtVq2ph90UVDKxE+L+62nz4wNthAYbEcSPvzeAx7hlckXojPkzW/kX5Q7RFgUL/H8E/XZaZHWY5p74z5wB1QNxSrPzgAtE/DiUauP9fCd8wpyM53bbEmA6SPn9wFmocm/Cer4xgwD5kerw8nWMKWX4Gp8Tnq2SF7Rs8kz4iJWnk9dLSPs1NQs+2DpJ2jN+wlUdDUZ74Lj8R+I2BJBtWMHsCeK1XMqWsxUcWHra+shYPx/btgUQ4BlTumhK/EbhlNPygPwOQ
+ ARA:13230040|1800799024|23010399003|366016|7416014|376014|13003099007|38070700021|6133799003|4143699003|10067099003|56012099006|11063799006|22082099003|18002099003|41080700001;
+x-microsoft-antispam-message-info: r18sT3++8Q2y2GWwD5ckQYuzxjATn63/f2HJQ+KLiR4YlqTQW6O2VUR66nrjD5ATXOGV/kSxX3UemD8dNYxjkHlGS6CRb4ekbrUcU8ttJ05DAJ2ep94SVj+x/cQxxfx8vlnkTZVExL6iHD1Jp/tPUHRqWZnfQ2UJf8QYE9UN9zVOreCOvMAQUMwVZnrBkNuqrPOazK6osksGEpfxbrNwuEVCkjZ/94VbyK6PYeH6A+9gKnfRsxt0AANpM80QzpawTcNkX3x/MyHiLsjnDi66sGtWc4YvNqIg5b61TuaSInZwEysV3gsoqBZrDmFiJEsFIh47nNi7yucaID8NvTA/XXBhOVDkoyv0Zr2+2OEm31j6e3uqAV39uPjLJLVuYVi/kMTOLSK738eZWh5xBrxlaiGJnAMCTwNNCXzAUrxB+QY5SxAtTsBv/rLvXdJc9rBkySIDjNshfiqx+2rmItjNGITSCrbRdNeLOTePypDjwW3gvpd1ylfbUfNk/gl6NCYTUTUcM7mAP+TPeppNMLQ1+pjJgdYb48oOnLnyepJdSNv4vMOQrmX6K86Uqx6cmWaBr1jXPSkw+01Y5tl0AKaQB/SNFgl+tSVmKWJ4tIKvMWfu+odC1gaWbsYx/uS/BaG9k9dGm6BfI1No4v/zw8ob2Xx91ig4MPj0iN1ZcZEMUPzSwzyqFua3eIY/HIQtlC8hNTaSla7ICJT3EGyij6eB2g==
 x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
  IPV:NLI; SFV:NSPM; H:BL1PR12MB5032.namprd12.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230040)(7416014)(376014)(1800799024)(366016)(23010399003)(4143699003)(10067099003)(56012099006)(11063799006)(6133799003)(18002099003)(22082099003)(3023799007)(38070700021)(41080700001);
+ SFS:(13230040)(1800799024)(23010399003)(366016)(7416014)(376014)(13003099007)(38070700021)(6133799003)(4143699003)(10067099003)(56012099006)(11063799006)(22082099003)(18002099003)(41080700001);
  DIR:OUT; SFP:1101; 
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?UDZEQk5OaHc1YStRWXI1bWNzYjlGaFJ1OWZETExnUDVob25JNkowY0ltOENw?=
- =?utf-8?B?TFl2OUtpclBxaU1sTTAvUitOZSt0WDdDT3AvOFV5akQzTXJuQnRESFNkL05V?=
- =?utf-8?B?UGtiWisxakFjTllmcXFnVUVJZ0s4cEVRUEZYODlBYitwVEFuSXE2T1M1ZEVP?=
- =?utf-8?B?RlRvd0trc3pML2ZxT3dXU05Oay9nUlI3S1dpdVNzYWpnbW9RMnN1Y2wzOE41?=
- =?utf-8?B?YTRZdm5QUllYaEErK0Z0dnR5UWhlMkhSMkorcllCaWdqeHJGOWNwZFgrWEJp?=
- =?utf-8?B?ZW0yd28vaTUwQVc3dk0yNGNUV21haG9BMFZjNC9DbklPM1c4azc4Rlo0ZHBI?=
- =?utf-8?B?MXRza1djWCt1eVA1elRQZWE4NmhUd2Fsdmduck1hVjlPZWE3RXgwOFdLQWR4?=
- =?utf-8?B?bHAyM2gwS1hJRllkQURaMmNRQlVWd3k0eWVCR1NHNXJQTEh2U01YYS93bzli?=
- =?utf-8?B?d29oZU9yUzF2WHNpMWp1VE9XRkFhQVR5cXdTaGw5eGxrQTROTmpmMDdkVDYr?=
- =?utf-8?B?ZVh5ei8yZUNHd1EyZnlZNjhDU3NUN1dsYUR3WVc4QWdUKzNFdTQya01tTndz?=
- =?utf-8?B?clluQXBWN05tUDNsUmRBdm9PbDd5YjVtRlFvR0JWUmNrMENUNzl6c3lXckp1?=
- =?utf-8?B?dWpYNzZha1pUdHNQTlBJZ21MNGUvQ3lYanRnSVR3M2ppSTJoeUxUbkE0bG80?=
- =?utf-8?B?SVNTQVpLN0JnaVd3NVBGcXliOTNMRFVVNDRSMzVIUXI0VXMzQmNBZGZsUlph?=
- =?utf-8?B?Y1FKYkV6SExUV0VXakJyVWJ6aDkrWGpJNXgzVjZ5b0NZUDNrSC80dkpVSlpr?=
- =?utf-8?B?Rjc1dXhXRHdiVnhsNXNoVHNsSGJKYlpTWGFIeVdqclluVUx6UTZQT1YralJW?=
- =?utf-8?B?WmhUNjQzdGR2ZitFZEx5Vkx6UkUxY2tjVWpEUUhRbnV0bzNyL2ErQUZtZGxu?=
- =?utf-8?B?L2lETVpqc0wvQ21TY2tqd090UUhHSVpqWjk1TnIrQktBM2Vock5RbG5IVFho?=
- =?utf-8?B?Y3YrNXA2eFhjbk9QSFZRQk93VjE1K1hKdUtITW8rbEJRdHl2OTUyRXFMRm4w?=
- =?utf-8?B?SllzekpnYkRScWhwaVB3allacEwweER6b0NzWUd0Q1FPYjVtSjFSRmc5eHhn?=
- =?utf-8?B?Ym1ZQUtublR5QVV5VXdjTEZieE43aVBsZE9lT3pHa1Nic0hMSWpDbzBOVWpr?=
- =?utf-8?B?YWlvSXJ4OEFXdWYvbEJTRS9uNjFVTWl4RkRBZWZVaXRqK1FXNld6azd3Wit2?=
- =?utf-8?B?eVVocDJKMkpUa0E1eVAxRE9tMzd2RXVYY3JtRStKZHpEeFVnMVhQditOOTcz?=
- =?utf-8?B?TXk1UVVVbjVrMWFPWWM3NFNiQldJUVE4Wnp3KzFPc2VaMHc1dTg5RnFMbXdY?=
- =?utf-8?B?RWlRRDR5UFRKWWQwU0QzeDhoK29DSUJMZWlFK3c5L0dxTnZlS05lWWs4Szhp?=
- =?utf-8?B?NDFFVHd0cjhmcnNpNWRkZ0xsY2Y0UGU4SkhXeU5Zb0JXL1ZsY3FxcWw0NzJH?=
- =?utf-8?B?ZzNHUGVQNXdFNUdudGdRM2liTStORDlLTm5HZmp6SWF1WVJpTlZVR0pGV2pO?=
- =?utf-8?B?bUtBMHZINkFRdGJSdytvSHVwQ3F2UURtOEF6bWljNndtb3VBQlRObE9CZURC?=
- =?utf-8?B?cG5RcmYzTDhYYVdrdFkvQzRuT2I0dVdhSFVPWlVvdm1yYkpFdGt5UUlUaTFU?=
- =?utf-8?B?dUdnbWpLV0pSS0pyanhJTDdHZTJMZ1VIQzdBcjZIbnI2amFQWFlnN0Fza0Nt?=
- =?utf-8?B?L1YyM2FkVUtyWm4wRjBGWmxySmY4SVUxWHoyTlRCeHNrdERrcHpzbTMrRDVy?=
- =?utf-8?B?T2JnVWJ0ZU4xV2FGMTkvSkVjaXBpaS9leW9FejZ0dUxNYUJLZkM4UFpMbmVU?=
- =?utf-8?B?YUFsaWNtQVA2SFJlVFBZRlYvd0dSYm1CaVN3cHQxUDJmUzNmU0h5UjFOeHBk?=
- =?utf-8?B?c0poMU9CcmEzV21wYTVGVU9obnNXaEtPTXMwYUREaENLbncweTF0c0hpeml1?=
- =?utf-8?B?blY2YlBqbUYrUmFPZHo2N0xKODQ2NjNyQloydUxIdE1MTWxYeGM2V1JvNUo3?=
- =?utf-8?B?ZndGc29xTlhhWlRqZkVmaHlVNFplQTU3dDduVHhVaHlXSXFtd2tRUzZVSWtn?=
- =?utf-8?B?Zk8zRTgvQzZYTXV3OXdCS29HMVBraG1tNWQ2SzdUNEdNMXQ3YjFyL0RPbXRH?=
- =?utf-8?B?V3dZRVR0WUo2NUJ0UUxpSTdRMTJrTGxOaFYzbWtKUlhEY2h6dFVINWh3ck1Q?=
- =?utf-8?B?NS8vQkd3Z0pibGdjV2phdS9aVVZVMDkvZjhRdnFKOFlpMGVvc3lqTzVJN1A3?=
- =?utf-8?Q?pJse7GZT8R34PF7vpH?=
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?dy9ZUHNHbWVFYVlwUkVaUkorN1hqTUFwaU9sWURYY2pYSHZ5anpjU3lXQmZ0?=
+ =?utf-8?B?bmZQaVQzaDRIaHBTMEtzQ3BpQ1Zib2NORS9iNnZjdzR2TjdZb2hwNWcvN1JT?=
+ =?utf-8?B?ZnVpMGYrY1hzME9QZzJuWjRMdmdGbWJvUElVbUozeWM3KzZWSmNnVmFzK1pu?=
+ =?utf-8?B?dlIrb1lZZ3MyTCs4cGpaK2sxSHY0QUdsNys1Mm94Wjlud0FUZjZUSWpMZ1lF?=
+ =?utf-8?B?WXd2ZU9VVlh4RlpJc085eWEvMGxBUUlOUkZLTnpuVm8rRTMwZkl6K1B0T2Va?=
+ =?utf-8?B?cm02VTlrRkhUbEN6emErWERUdktkSnVzcllKU21maENzb055Qk5hT1lKb0th?=
+ =?utf-8?B?ako2N3hVUkIwWVg2T20vUEU3VmNNNGNnTmdIN3FDQUNJVUs4TzdqcEZTMVJs?=
+ =?utf-8?B?RVRET1VCMU1Da1p6anpnT0taZDVnSDlyUkl2UWlLSEtKNitWRUtGMXJXQ0xO?=
+ =?utf-8?B?SUVySW5HbXZzeGlPazRHWHFUZm1qTVJLRzFxSDJSOTdjQmN1R1JGTDlGWVNF?=
+ =?utf-8?B?YktFV2dmTjVIRCtaMVdGNWE3MVNEVThCWnp0TlNiL1puMEMzWkREdUNiNnJ4?=
+ =?utf-8?B?L0NmUmxDQmVYdWRCbGVaL1BEOVBpeFk4Y2llV08wa2ZWNXNGYksrdEw4L25i?=
+ =?utf-8?B?cGxsVmd4VjEwSjEyWTBIeTBVdWVYTnRVUEUrSE5TSVhwbTlYTlBkMFBuSkFO?=
+ =?utf-8?B?emtpaW9pTHZuT1UrMGdYOWh3a2ZSUVF6YzFETzRycTlNQXZYam5EbXh2QkVD?=
+ =?utf-8?B?OUtjTEhIazF1WXE3Y2tSaUFKbDFtM3FHbDFEd2oySmZENXVRcFdpdXhyb1Vi?=
+ =?utf-8?B?VXpBbzhKWmhyYWk0WGNHUUxFaFFmSXhZRkxYMWE1ZU5YR25xUXhyWWpYSGVJ?=
+ =?utf-8?B?Ui9ndVBEL3N3dVdzT04reVQrajB1cFNzTVlPMGRaemgvZ2lNSHFyb0V2SG1q?=
+ =?utf-8?B?UFVLek8zdkRtQ3JGYWtKUCs3bXhTUDlEMFN2RkxLbnB2TW9tbTAyUjczYnZi?=
+ =?utf-8?B?a3RLZXhPVXc1SWNlOWRwMHVUMW9EMStUSVZBSTlDMWhYSGplZzdpKzY1Z0Vp?=
+ =?utf-8?B?TGZPWXlTWnNoYzRvc2ZmTkZweUQ1N1g0UWE4dWtPVEhIbElodGxLNm9aZ3RW?=
+ =?utf-8?B?TlR3VjdUc0N2eXJaZkkwWGx2cFFFYVhFTUw0TENiUkZWS0tVMjZJUEEzeHVs?=
+ =?utf-8?B?RFJwbmFxTnpVcmhaVkg3dkQ5SFpWaEtBa3ZXeEtVL3MyOUxTcFZFbmsvT256?=
+ =?utf-8?B?UUtuYUJCMTVSOGtLcmZTWURKM1Bmc1BWTFQ4M2tVODF2QXU4SFpmTzc4SWNL?=
+ =?utf-8?B?SHpWckxLMzNDNzB1UlFWbnNCUGU2TXhONkRJeXdRTzQwU3ZsTzdhL09lY21s?=
+ =?utf-8?B?MVc3V3d1M0RmWk4zWm4wVlBvRExpbXltWC8rMHlMK2pNcjJzN2gvMUJjUDN5?=
+ =?utf-8?B?N1lCN2ZsNnlzV3c0OExXcWF0eGJQdno4aTRoYVh0YUxvaTJId3hqOHkzUktP?=
+ =?utf-8?B?S1pxNXZBNnMyYzh6RWZYUm93aGR3aTUzWWtsU3ZTaE4xZDFxM0haSElMNWlh?=
+ =?utf-8?B?RGwxcmp3em5ic0R0NE4rclhEWXNENmRTcGQ5MWdmZTRtUllOLy94MTZBQXRo?=
+ =?utf-8?B?UmpYL3hkQ3NqSXlGanltdDVPYXA1TGVwK3J3WVhQajZhb1VteWMrS3pKaWg4?=
+ =?utf-8?B?ZVV1UVRZRS90MmlZaWN0ZDIyU2hTekVzSkJGdURlalRWWjdXVFJXVDVqbmZM?=
+ =?utf-8?B?clhqaktYWEhFUFlhQjg4WGc1YVRKRTVTQ1c4OTRQT092RHh5dlRMNzF2azVl?=
+ =?utf-8?B?VDhaUitBMTFvZGNzTWVwVEt1dnBCbER6cU10ZEFqMXBSMEY3Rlc4L1A3VXMw?=
+ =?utf-8?B?L1NGWWFyUXV5aDk0cEdRSWdWdWZnZ2VnZ2M1bktTN2pkTm82Qm1jRmc0UWFj?=
+ =?utf-8?B?RzdhQ1J2UUd2WFR5QVRJa0FYSWpodHU4WXQwRzBjVTdLck9CZURtVmU3ZmU4?=
+ =?utf-8?B?YXBhanpkbGVoVDU1TjhpdjJNMmU4T3lzekxyMVBDYW8rTmlVMUl0UjBUWDND?=
+ =?utf-8?B?eWpPUDIvdHRRMEV5WG9hSkJpL1hNcmdHRXZ4aDMxVXBaakZwQ3VHeFpnWDcr?=
+ =?utf-8?B?OWFwQVhqUElPL3FiM0paS21EcWNzZU5yeVEybVRzdjRTV3R1M0J4ZDlXRVJI?=
+ =?utf-8?B?bXc4aUJzbEI3ZjhjZ2M5V2twdTluRTlLWW5ialBYVnBhYlFON0p4RXNpSnJF?=
+ =?utf-8?B?aldLdDc4L0hNWjJqZUkyRXVCN2Uvdnh4MVNncGtVcGpvOU9UcDk4c3l6Wmxs?=
+ =?utf-8?Q?p23cQ2TvHhFPzH/u6G?=
 MIME-Version: 1.0
 X-OriginatorOrg: amd.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5032.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d27d60a6-335b-4dbe-959f-08df0330f358
-X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Aug 2026 05:14:48.5736 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9f826fe7-42f1-46ca-d8a0-08df0339f448
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Aug 2026 06:19:15.6197 (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: r375hNJw+4aAuw9FynvnzJDWww8vjqiRiIyLKxNz8ttEA4VMu/sYFYMAyRf18cSQ
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB9029
-Subject: Re: [Buildroot] [PATCH v4 1/4] package/xen: fix build error when
- BR2_PACKAGE_XEN_TOOLS not enabled
+X-MS-Exchange-CrossTenant-userprincipalname: Zr8/XOP5Ao/423DKf4euPA20ODB5iv5HBxc+Ki78I4AwAoiGdCICpYkrDdqyPe3W
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB7687
+Subject: Re: [Buildroot] [PATCH v4 3/4] package/xen: add custom tarball
+ support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -166,21 +180,6 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: "Frager, Neal via buildroot" <buildroot@buildroot.org>
 Reply-To: "Frager, Neal" <neal.frager@amd.com>
-Cc: "alistair@alistair23.me" <alistair@alistair23.me>, "Stabellini,
- Stefano" <stefano.stabellini@amd.com>, "Erkiaga Elorza,
- Ibai" <ibai.erkiaga-elorza@amd.com>,
- "luca.ceresoli@bootlin.com" <luca.ceresoli@bootlin.com>, "Saleab,
- Micheal" <Micheal.Saleab@amd.com>,
- "yann.morin@orange.com" <yann.morin@orange.com>,
- "matthew.l.weber3@boeing.com" <matthew.l.weber3@boeing.com>,
- "brandon.maier@collins.com" <brandon.maier@collins.com>,
- "john.ernberg@actia.se" <john.ernberg@actia.se>,
- "brian.j.wood2@boeing.com" <brian.j.wood2@boeing.com>,
- "ju.o@free.fr" <ju.o@free.fr>,
- "thomas.petazzoni@bootlin.com" <thomas.petazzoni@bootlin.com>,
- "romain.naour@smile.fr" <romain.naour@smile.fr>, "Simek,
- Michal" <michal.simek@amd.com>,
- "romain.naour@gmail.com" <romain.naour@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -188,70 +187,126 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 AMD General
 
-Hi Stewart,
+Hi Stewart.
 
-> The 0002-Update-linker-flags.patch assumes that the qemu-xen files are included
-> in the xen source tree. However, if BR2_PACKAGE_XEN_TOOLS is not enabled, the
-> qemu-xen dependency will not be handled and the patch will fail to apply with
-> the following error.
+> Add support for custom tarballs such as tarballs from vendor Xen trees.
 >
-> Fixes: build error below
-> Applying 0002-Update-linker-flags.patch using patch:
-> patching file tools/Makefile
-> Hunk #1 succeeded at 36 (offset -1 lines).
-> Hunk #2 succeeded at 185 (offset -8 lines).
-> can't find file to patch at input line 76
-> Perhaps you used the wrong -p or --strip option?
-> The text leading up to this was:
-> --------------------------
-> |diff --git a/tools/qemu-xen/include/hw/xen/xen_native.h b/tools/qemu-xen/include/hw/xen/xen_native.h
-> |index 6bcc83ba..2590904e 100644
-> |--- a/tools/qemu-xen/include/hw/xen/xen_native.h
-> |+++ b/tools/qemu-xen/include/hw/xen/xen_native.h
-> --------------------------
-> No file to patch.  Skipping patch.
-> 1 out of 1 hunk ignored
-> make: *** [package/pkg-generic.mk:239: output/build/xen-4.21.1/.stamp_patched] Error 1
+> To test this feature, use the following configs to test latest release of the
+> Xilinx Xen vendor tree.
 >
-> To avoid making BR2_PACKAGE_XEN_TOOLS a required option, fix the
-> 0002-Update-linker-flags.patch so that the part that modifies the qemu-xen
-> sources is correctly moved to a patch in the qemu-xen package.
+> To test:
+> BR2_aarch64=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+> BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
+> BR2_PACKAGE_XEN=y
+> BR2_PACKAGE_XEN_CUSTOM_TARBALL=y
+> BR2_PACKAGE_XEN_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,xen,xlnx-rebase-v4.21_2026.1)/xlnx-rebase-v4.21_2026.1.tar.gz"
 >
-> Move this:
->  #define QEMU_HW_XEN_NATIVE_H
+> Add to package/xen/xen.hash:
+> sha256  03498f51b8daae70c429ace4bde6e2be679b3a0ac28b886c7335c022feef6100  xlnx-rebase-v4.21_2026.1.tar.gz
 >
->  #ifdef __XEN_INTERFACE_VERSION__
-> -#error In Xen native files, include xen_native.h before other Xen headers
-> +#warning In Xen native files, include xen_native.h before other Xen headers
->  #endif
+> Signed-off-by: Neal Frager <neal.frager@amd.com>
+> Tested-by: Matthew Weber <mathew.l.weber3@boeing.com>
+> Prior test details: https://gist.github.com/matthew-l-weber/c17f14a3793ccee440a383e4177ff3db
+> Reviewed-by: John Ernberg <john.ernberg@actia.se>
 >
->  /*
+> ---
+> V1->V2:
+> - rebased to updated master branch
+> - added the line move of the XEN_SITE definition
+> V2->V4:
+> - merged into new patch series as the second patch
+> ---
+>  package/xen/Config.in | 11 +++++++++++
+>  package/xen/xen.mk    | 19 ++++++++++++++++++-
+>  2 files changed, 29 insertions(+), 1 deletion(-)
 >
-> to:
-> package/qemu-xen/0001-Update-linker-flags.patch
-
-
-> Can you undefine __XEN_INTERFACE_VERSION__, and drop the xen_native.h hunk
-> altogether?
-
+> diff --git a/package/xen/Config.in b/package/xen/Config.in
+> index e50b232f0a..3726504334 100644
+> --- a/package/xen/Config.in
+> +++ b/package/xen/Config.in
+> @@ -23,8 +23,18 @@ config BR2_PACKAGE_XEN_CUSTOM_VERSION
+>       help
+>         This option allows to use a specific official version
+>
+> +config BR2_PACKAGE_XEN_CUSTOM_TARBALL
+> +     bool "Custom tarball"
+> +
+>  endchoice
+>
+> +if BR2_PACKAGE_XEN_CUSTOM_TARBALL
+> +
+> +config BR2_PACKAGE_XEN_CUSTOM_TARBALL_LOCATION
+> +     string "URL of custom Xen tarball"
+> +
+> +endif
+> +
+>  config BR2_PACKAGE_XEN_CUSTOM_VERSION_VALUE
+>       string "Xen version"
+>       depends on BR2_PACKAGE_XEN_CUSTOM_VERSION
+> @@ -34,6 +44,7 @@ config BR2_PACKAGE_XEN_VERSION
+>       default "4.21.1"        if BR2_PACKAGE_XEN_LATEST_VERSION
+>       default BR2_PACKAGE_XEN_CUSTOM_VERSION_VALUE \
+>                               if BR2_PACKAGE_XEN_CUSTOM_VERSION
+> +     default "custom"        if BR2_PACKAGE_XEN_CUSTOM_TARBALL
+>
+>  config BR2_PACKAGE_XEN_HYPERVISOR
+>       bool "Xen hypervisor"
 > diff --git a/package/xen/xen.mk b/package/xen/xen.mk
-> index 75252d1123b7..bddfdbba38a6 100644
+> index 51d51333ac..81568020d5 100644
 > --- a/package/xen/xen.mk
 > +++ b/package/xen/xen.mk
-> @@ -40,7 +40,8 @@ XEN_MAKE_ENV = \
->       CROSS_COMPILE=$(TARGET_CROSS) \
->       HOST_EXTRACFLAGS="-Wno-error" \
->       XEN_HAS_CHECKPOLICY=n \
-> -     $(TARGET_CONFIGURE_OPTS)
-> +     $(TARGET_CONFIGURE_OPTS) \
-> +     EXTRA_CFLAGS_QEMU_XEN="-U__XEN_INTERFACE_VERSION__"
+> @@ -5,7 +5,6 @@
+>  ################################################################################
+>
+>  XEN_VERSION = $(call qstrip,$(BR2_PACKAGE_XEN_VERSION))
+> -XEN_SITE = https://downloads.xenproject.org/release/xen/$(XEN_VERSION)
+>  XEN_SELINUX_MODULES = systemd udev xen
+>  XEN_LICENSE = GPL-2.0
+>  XEN_LICENSE_FILES = COPYING LICENSES/GPL-2.0
+> @@ -19,6 +18,18 @@ XEN_DEPENDENCIES = \
+>       host-python3 \
+>       host-python-distlib
+>
+> +ifeq ($(BR2_PACKAGE_XEN_CUSTOM_TARBALL),y)
+> +# Handle custom Xen tarballs as specified by the configuration
+> +XEN_TARBALL = $(call qstrip,$(BR2_PACKAGE_XEN_CUSTOM_TARBALL_LOCATION))
+> +XEN_SITE = $(patsubst %/,%,$(dir $(XEN_TARBALL)))
+> +XEN_SOURCE = $(notdir $(XEN_TARBALL))
+> +else
+> +# Handle stable official Xen versions
+> +XEN_SITE = https://downloads.xenproject.org/release/xen/$(XEN_VERSION)
+> +endif
+> +
+> +BR_NO_CHECK_HASH_FOR += $(XEN_SOURCE)
 
-> ifeq ($(BR2_PACKAGE_XEN_HYPERVISOR),y)
-> XEN_MAKE_OPTS += dist-xen
 
-Yes, this is a much better solution!
+> I'm curious why you're adding XEN_SOURCE to BR_NO_CHECK_HASH_FOR, yet it's
+> still required to manually add the hash to xen.hash?
 
-I will include it in v5.  Thank you!
+You are right.  Thank you for catching this.
+
+I added this early on when developing these patches and forgot to remove it.
+It always helps to have another set of eyes reviewing!
+
+Thanks!
+
+> +
+>  # Calculate XEN_ARCH
+>  ifeq ($(ARCH),aarch64)
+>  XEN_ARCH = arm64
+> @@ -90,4 +101,10 @@ XEN_INSTALL_TARGET = NO
+>  XEN_CONF_OPTS += --disable-tools
+>  endif
+>
+> +ifeq ($(BR2_PACKAGE_XEN_CUSTOM_TARBALL),y)
+> +ifeq ($(call qstrip,$(BR2_PACKAGE_XEN_CUSTOM_TARBALL_LOCATION)),)
+> +$(error No tarball location specified. Please check BR2_PACKAGE_XEN_CUSTOM_TARBALL_LOCATION)
+> +endif
+> +endif
+> +
+>  $(eval $(autotools-package))
 
 Best regards,
 Neal Frager
