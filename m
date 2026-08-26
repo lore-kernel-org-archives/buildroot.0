@@ -4,65 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70DEEC5DF97
-	for <buildroot@archiver.kernel.org>; Wed, 26 Aug 2026 20:33:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AEB78C61DBE
+	for <buildroot@archiver.kernel.org>; Wed, 26 Aug 2026 20:33:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 12390404F4;
-	Wed, 26 Aug 2026 20:33:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 05C28406E6;
+	Wed, 26 Aug 2026 20:33:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cFtLQqpQopNt; Wed, 26 Aug 2026 20:33:18 +0000 (UTC)
+ id X34D8bZikuSC; Wed, 26 Aug 2026 20:33:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787776398;
-	bh=HwzRKE+6JUnGh613One9VbV3Z5nbj1gNmUYtdfbgUk0=;
-	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=rQWg0EifPlDei7aJRMkOiLJDADe+0++G027AxCjNJifXHF1Yxb+KwA7AbRxur1KKT
-	 r/wt6FB+8Y8b6Dnhq6b+ktIB6nsA1N4RnAlt8a2ygdlXtOsEaQUsIfzfvYsuTxtbru
-	 8Lb9qgUDB7Lc19oQ9i8PHq270EKATIOox74ruEK7Ef4La44oqVKgAEHToSwJhiUbW1
-	 pcIj6nV9Wzp5xS5C2s15fddnJzV/e3B7k5TGhLaj0g3cV2zcaNCALnVn6luqZXqnJw
-	 8k5Lizn+9P6/kIkFbR2S5hMKbAOSSrBe5VVvhO2RXkP+HaaMKo01dYs0VIgJo9NyIe
-	 PnS/tKtjvSGwA==
+	s=default; t=1787776401;
+	bh=uDbrQqWJ6813rlbghe/Wnnqs45kVT8UACsvLOM/t7dk=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=PgVFRtmM7lyj6WZUDh7t5J0Anpay5jRfAlGtHEQTGQGq3+GrbYbN/fNrW/mHQ8DTR
+	 svQcN/HDMh5JZ4emZAG2hwW5dwgan6Anik6QTLeMZS1IPtJrfmyVcv1/vF9yeoehkn
+	 BXcuE/yHGa7YTKSbXZR1nJ6+eiDLIgTHbMROCR1IZfvuVGMckC/LQk4r/9MCC5GPPf
+	 4O7yc70GKbxhvDT0DKzm43UOqmHnfzcxZRS4KYVQtI3GfOJq85nbeClbHy4r5AsVUh
+	 0sKssOCWrLAZxduNkqO7RiXaAl8a1xvBC/449HVFvLEAe8Zf7QVoaKFaAC5xXaxqIK
+	 e/J3d0cTHKthQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 17C99406DF;
-	Wed, 26 Aug 2026 20:33:18 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 129BE3AD
- for <buildroot@buildroot.org>; Wed, 26 Aug 2026 20:33:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0E05940804;
+	Wed, 26 Aug 2026 20:33:21 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id C9299323
+ for <buildroot@buildroot.org>; Wed, 26 Aug 2026 20:33:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E4F67605EE
- for <buildroot@buildroot.org>; Wed, 26 Aug 2026 20:33:15 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id AFC414027C
+ for <buildroot@buildroot.org>; Wed, 26 Aug 2026 20:33:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Foz72YfLUM1F for <buildroot@buildroot.org>;
- Wed, 26 Aug 2026 20:33:15 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
- helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jwq1yU-GJtOM for <buildroot@buildroot.org>;
+ Wed, 26 Aug 2026 20:33:18 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E283F605E6
- for <buildroot@buildroot.org>; Wed, 26 Aug 2026 20:33:13 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-02.galae.net (Postfix) with ESMTPS id 72C0F1A1852;
- Wed, 26 Aug 2026 20:33:11 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 33FC2604EC;
- Wed, 26 Aug 2026 20:33:11 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 0B58A11C78051; 
- Wed, 26 Aug 2026 22:33:05 +0200 (CEST)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id B189140247
+ for <buildroot@buildroot.org>; Wed, 26 Aug 2026 20:33:18 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 8C6AA91FFB; Wed, 26 Aug 2026 20:32:22 +0000 (UTC)
 To: buildroot@buildroot.org
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Francois Perrad <francois.perrad.86@gmail.com>
-Date: Wed, 26 Aug 2026 22:33:02 +0200
-Message-ID: <20260826203304.387458-1-thomas.petazzoni@bootlin.com>
-X-Mailer: git-send-email 2.55.0
-MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
-Subject: [Buildroot] [PATCH] package/perl: fix build issue with musl
+Date: Wed, 26 Aug 2026 20:37:40 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 198317785a89ed7fd398fda7ab8ede7dfb4871c7
+X-Git-Newrev: 6f5d678c371196410082864b78e47ae0e8475f41
+X-Patchwork-Hint: ignore
+Message-Id: <20260826203222.8C6AA91FFB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/nodejs: security bump to v22.23.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -74,108 +66,95 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============1288736728507705079=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-perl does not build with musl due to memrchr() being unavailable. This
-is caused by a perl-cross bug, which does function availability
-detection with _GNU_SOURCE defined, but then does the build without
-_GNU_SOURCE defined. At least OpenEmbedded and NixOS have faced the
-same issue, and worked it around in slightly different ways.
+--===============1288736728507705079==
+Content-Type: text/plain
 
-On our side, we create a patch, which was submitted upstream, to solve
-the issue.
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/6f5d678c371196410082864b78e47ae0e8475f41
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-This issue has been introduced in perl-cross commit b40c560f5d5e,
-which was first merged in perl-cross release 1.4.1. From a Buildroot
-perspective, we bumped from perl-cross 1.4 to 1.4.1 in commit
-8a289667f5dba6fffb3a21faa14517e9b49726a4, which was merged
-2023.05. And indeed the build failure can be reproduced even on our
-LTS 2025.02.x, so the fix needs to be backported there.
+See the release notes:
 
-It should be noted that even if the patch is against perl-cross, we
-add it to package/perl/ directly, as patches in perl are applied after
-perl has been extracted *and* perl-cross has been extracted on top.
+- https://github.com/nodejs/node/releases/tag/v22.23.2
+- https://github.com/nodejs/node/releases/tag/v22.23.1
+- https://github.com/nodejs/node/releases/tag/v22.22.1
+- https://github.com/nodejs/node/releases/tag/v22.22.2
+- https://github.com/nodejs/node/releases/tag/v22.22.3
 
-Fixes:
+It fixes the following vulnerabilities:
 
-  https://autobuild.buildroot.net/results/3e47ade0963642988fd8e1be9a6e8042700619ec/
+- (CVE-2026-56846) http2: retain header memory in session accounting (Matteo Collina) – High
+- (CVE-2026-56848) http2: defer rst stream while in scope (Matteo Collina) – High
+- (CVE-2026-58043) permission: avoid granting radix split nodes (RafaelGSS) – High
+- (CVE-2026-56850) https: distinguish PFX object-array agent keys (RafaelGSS) – Medium
+- (CVE-2026-58040) https: bind identity checks to session reuse (Matteo Collina) – Medium
+- (CVE-2026-58042) dns: handle large resolveAny address replies (RafaelGSS) – Medium
+- (CVE-2026-58045) zlib: throw on out-of-bounds write buffers (RafaelGSS) – Medium
+- (CVE-2026-56847) permission: enforce fs write permission for trace events (RafaelGSS) – Low
+- (CVE-2026-58039) permission: check final report output path (RafaelGSS) – Low
+- (CVE-2026-58044) http: reject requests exceeding max header count (Matteo Collina) – Low
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+The LICENSE was changed in 22.22.1, see [1].
+
+[1] https://github.com/nodejs/node/commit/9cafec084e4856e2f03d06523eaeec0c8ba352b2
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...gure-keep-_GNU_SOURCE-in-build-flags.patch | 55 +++++++++++++++++++
- 1 file changed, 55 insertions(+)
- create mode 100644 package/perl/0001-configure-keep-_GNU_SOURCE-in-build-flags.patch
+ package/nodejs/nodejs.hash | 15 ++++++++-------
+ package/nodejs/nodejs.mk   |  2 +-
+ 2 files changed, 9 insertions(+), 8 deletions(-)
 
-diff --git a/package/perl/0001-configure-keep-_GNU_SOURCE-in-build-flags.patch b/package/perl/0001-configure-keep-_GNU_SOURCE-in-build-flags.patch
-new file mode 100644
-index 0000000000..497e58c502
---- /dev/null
-+++ b/package/perl/0001-configure-keep-_GNU_SOURCE-in-build-flags.patch
-@@ -0,0 +1,55 @@
-+From 6bdfdff24f4a7d17d3b7d9d02bca3eac11c235a4 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Wed, 26 Aug 2026 19:34:39 +0200
-+Subject: [PATCH] configure: keep _GNU_SOURCE in build flags
+diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+index c3372f443c..bf7a8358ba 100644
+--- a/package/nodejs/nodejs.hash
++++ b/package/nodejs/nodejs.hash
+@@ -1,8 +1,9 @@
+-# From https://nodejs.org/dist/v22.22.0/SHASUMS256.txt.asc
+-sha256  1bf1eb9ee63ffc4e5d324c0b9b62cf4a289f44332dfef9607cea1a0d9596ba6f  node-v22.22.0-linux-arm64.tar.xz
+-sha256  a8b4f15f6e1f371422f1f7abcca4c46bd7abc1c732c274bc5cb108b841c1f0ff  node-v22.22.0-linux-armv7l.tar.xz
+-sha256  d83b9957431cc18e1fc143a4b99f89cde7b8a18f53ef392231b4336afd058865  node-v22.22.0-linux-ppc64le.tar.xz
+-sha256  9aa8e9d2298ab68c600bd6fb86a6c13bce11a4eca1ba9b39d79fa021755d7c37  node-v22.22.0-linux-x64.tar.xz
+-sha256  4c138012bb5352f49822a8f3e6d1db71e00639d0c36d5b6756f91e4c6f30b683  node-v22.22.0.tar.xz
++# From https://nodejs.org/dist/v22.23.2/SHASUMS256.txt.asc
++sha256  fff4078c5def658577f92c88db7db3bc0072924bfb93fe52c1e744a54e94abb8  node-v22.23.2-linux-arm64.tar.xz
++sha256  ef8f26a3de19acd8c23548e6c3cfc2052610b0e67abb5fd64dbd92c8b1c1245b  node-v22.23.2-linux-armv7l.tar.xz
++sha256  e2ba10110ad34096c051fe47134fcd12175ecc48e7e879d7d4c78b70cf66442c  node-v22.23.2-linux-ppc64le.tar.xz
++sha256  d60acfe00a2932254bb0ad20e01b0d74397a0875595de719654b214f4b03f307  node-v22.23.2-linux-x64.tar.xz
++sha256  bbe768df8d5815d7fa76124052985332452e0a4742d39f32027550d1aab8f6fb  node-v22.23.2.tar.xz
 +
-+The checkfunc() function probes available libc functions with _GNU_SOURCE
-+defined. The generated config.sh did not retain that define in ccflags, so
-+the actual cross build could use functions whose prototypes remain hidden by
-+feature-test macros. This breaks musl builds, where memrchr is declared only
-+with _GNU_SOURCE.
-+
-+To fix this, append _GNU_SOURCE to explicit -Dccflags values while parsing
-+configure arguments. Such values are locked before configure_tool.sh can
-+append flags. This keeps the function-availability checks and subsequent
-+compilation in the same feature set, including when flags are supplied
-+through CFLAGS.
-+
-+This fixes the regression introduced by b40c560f5d5e (configure_func.sh: Add
-+_GNU_SOURCE define and function signatures).
-+
-+It fixes the following build issue with musl:
-+
-+    In file included from op.c:163:
-+    op.c: In function 'Perl_newATTRSUB_x':
-+    perl.h:2385:25: error: implicit declaration of function 'memrchr'; did
-+    you mean 'memchr'? [-Wimplicit-function-declaration]
-+     2385 | #    define my_memrchr  memrchr
-+          |                         ^~~~~~~
-+
-+This issue is worked around in several build systems:
-+
-+- In OpenEmbedded:
-+  https://github.com/openembedded/openembedded-core/commit/6422e62
-+
-+- In NixOS:
-+  https://github.com/NixOS/nixpkgs/pull/441527
-+
-+Fixes: https://github.com/arsv/perl-cross/issues/158
-+Upstream: https://github.com/arsv/perl-cross/pull/180
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+
-+diff --git a/cnf/configure_args.sh b/cnf/configure_args.sh
-+index 5bc4c6b..65ffc96 100644
-+--- a/cnf/configure_args.sh
-++++ b/cnf/configure_args.sh
-+@@ -225,6 +225,9 @@ while [ $i -le $# -o -n "$n" ]; do
-+ 		host|target|build) ;;
-+ 		# original Configure options
-+ 		D)
-++			if [ "$k" = 'ccflags' ]; then
-++				v="$v -D_GNU_SOURCE"
-++			fi
-+ 			setordefine "$k" "$x" "$v" 'define' 'true'
-+ 			;;
-+ 		U)
--- 
-2.55.0
+ # Locally calculated
+-sha256  e991d81497a85bb24fc6bffae0a3637a6accd6c6bc5ce1f2c5698bd555cf9d49  LICENSE
++sha256  c738ae413cf561f174e34f6961f8ca458aae2369a73640dda6234c629b98bcc4  LICENSE
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index 9f01d60baa..1147245504 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # _VERSION, _SOURCE and _SITE must be kept empty to avoid downloading anything
+-NODEJS_COMMON_VERSION = 22.22.0
++NODEJS_COMMON_VERSION = 22.23.2
+ NODEJS_COMMON_SOURCE = node-v$(NODEJS_COMMON_VERSION).tar.xz
+ NODEJS_COMMON_SITE = https://nodejs.org/dist/v$(NODEJS_COMMON_VERSION)
+ 
+
+--===============1288736728507705079==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1288736728507705079==--
