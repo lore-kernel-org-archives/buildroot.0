@@ -1,97 +1,97 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4B8EC61DBD
-	for <buildroot@archiver.kernel.org>; Wed, 26 Aug 2026 12:37:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC8ECC5DF97
+	for <buildroot@archiver.kernel.org>; Wed, 26 Aug 2026 12:37:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8154840564;
-	Wed, 26 Aug 2026 12:37:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A231F80C27;
+	Wed, 26 Aug 2026 12:37:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id r9wpymZHRbyU; Wed, 26 Aug 2026 12:37:12 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id yDNxe4wFrkoY; Wed, 26 Aug 2026 12:37:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787747832;
-	bh=3MFD3Xyv2G4hxVd9SrzDRJuEFmGXDVK/vo0+nZa+SKw=;
+	s=default; t=1787747833;
+	bh=4nB5kjivW/UopAeLubtiMC+Xacpr6dtLRteeNrAqC38=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=hQKw+1M2nDLcxnHhegHh2Lv9L+eO8nxsPAd2FQyB+Oz/UsscDE58swwshhTwVWfn5
-	 vw5XlUIil5Dd+C2S9yj+NpRkzALukOQQUIAbtKEH/5O0DMKxM2woZSJ9FKrcQ74fd7
-	 rYJD/jccffoC74kl0pjHGVXsOpUDSN3drzgLALwLoza2hsSuqFTOqnE3WR9JGMYo6S
-	 migAGhNdONNaAKiiDUw2xYQPZsYaERdimvaLaxjmz8S2v6LkPjHTN+Z4i5L5vEpBYp
-	 CP8756ZhDleVG9viQ7V+kH3Ra81Fbg7Psgk8O4rxztn3eZuAtz6Ngtr4rl4Gqts0Bj
-	 2LH5sBo2U1sUg==
+	b=MYnc6I+NYw3lEgIw7dznsXlcYwvQblyfxxJaGRsv8IEFycmWsUFnK/uFJ7e7Z05Qh
+	 ZtRmztQ6HLb0kgJ7LCDJVbt8VNxWcxBRsfYf+XNx6IH58kFqk6Pf2Hni+CmTZaLhoI
+	 imnADL+k9X/yueJXeSDuBkoAj77/Knh/ShDfDbxCq6+RyalfALW1RwKr7eGWhRGyJQ
+	 bVE01r3tgw8QDHc6V8lmeMGLyXASAZCleJ5n50wS4NcqMVxeZtowhnaoHHhcNjPc3I
+	 8P6tC87/JOmezKBH1XbqgjqYSKnT7ij44tZjOZI09FBfA3gcBfHG5ql91fOSUnJuvR
+	 VrDW1L38WegpQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 11E0640653;
-	Wed, 26 Aug 2026 12:37:12 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id AB775396
- for <buildroot@buildroot.org>; Wed, 26 Aug 2026 12:37:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9C2F180C47;
+	Wed, 26 Aug 2026 12:37:13 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7A60E396
+ for <buildroot@buildroot.org>; Wed, 26 Aug 2026 12:37:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 87FEE40640
- for <buildroot@buildroot.org>; Wed, 26 Aug 2026 12:37:01 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 604056062B
+ for <buildroot@buildroot.org>; Wed, 26 Aug 2026 12:37:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VXZpyALnC3uo for <buildroot@buildroot.org>;
- Wed, 26 Aug 2026 12:37:00 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8hGpL5emE9r7 for <buildroot@buildroot.org>;
+ Wed, 26 Aug 2026 12:37:01 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::533; helo=mail-ed1-x533.google.com;
+ client-ip=2a00:1450:4864:20::536; helo=mail-ed1-x536.google.com;
  envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com
- [IPv6:2a00:1450:4864:20::533])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6231240562
- for <buildroot@buildroot.org>; Wed, 26 Aug 2026 12:36:59 +0000 (UTC)
-Received: by mail-ed1-x533.google.com with SMTP id
- 4fb4d7f45d1cf-6a3e145e1bfso1313237a12.1
- for <buildroot@buildroot.org>; Wed, 26 Aug 2026 05:36:59 -0700 (PDT)
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com
+ [IPv6:2a00:1450:4864:20::536])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 51BF7605EB
+ for <buildroot@buildroot.org>; Wed, 26 Aug 2026 12:37:00 +0000 (UTC)
+Received: by mail-ed1-x536.google.com with SMTP id
+ 4fb4d7f45d1cf-6a3819e8be8so2108227a12.0
+ for <buildroot@buildroot.org>; Wed, 26 Aug 2026 05:37:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1787747817; x=1788352617;
+ d=1e100.net; s=20251104; t=1787747819; x=1788352619;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=0UBG4GieWm6LC0Rqrn9/xByuUWtXsQEFufeIAtG+D6s=;
- b=T/i1spQgdnu2lGZTauZjz2ZQh8PlH2tQFuPmPsYm+fQbMOFmILX1wrE65QG5HTaHn0
- I6vIuCux3JYG7L0TzlNT/mwu1WPaPvoX53mgiIXLJzMPv0rWP2ZncVLCCJo+QSKyfHPj
- GQEJXnwuhEMiPi5BNm/r8YSQK+h4kjmrbnvo8Don52gLo8YOSEyWXTwwVEBssVix7S+y
- awcp/9RaSq00Wm9iah6/PIi6TPNUtToUQv4O/5L2xWxbhSS0OrhZNx24Sb9QW0iTIKTV
- vxVbheom1v+G44+p4eHKBIWerKXgyJAVy7ZVkeKcdp/UR0gqbs4mnhfl0IkG1MKewFaC
- 6snA==
-X-Gm-Message-State: AFuF++lPxPEb1AkggxUyOfUVmP2jSzpcFlAaydWXoXDz4Tt2stLp1bMS
- l3MmFO0reBRc6s7EQF+CKv+defx+lVXL7hBQA6QCquVOaElSCJIFZX/+9F0ZVKatd/FeprANIDK
- LEMXD1qo=
-X-Gm-Gg: AR+sD13pUxfutLc0ugevVJS9ORaypzCx/1bCqA2bNJ9I06R/tKhIFh36GejlmtpueJY
- fQNj58RlJsRBlNF1OgWCanvGfC4bqjXrfCgap/SF1U71GJpnng9uuKkEHGeQhSKaQ85TI9WZ8n4
- sVMVfcfvLFC1VHa70Zsq+BZSlNXNuN3fUIgX0rdPwfWakXToHUtDtPzZxr2xFDozAzVw6U0KTCn
- aczci6rymSJ3LfbUFPtLZOF/94LNGs8dFPSttCtE6PSu0Rv0Y6FOQ83pzX2Z06ywSRB/NBE5MqA
- SkoSF6DsVxxFRXFFoh4TGjw4B4tx3PjD2rxGfKfN8uHUSwsaChaNKZ+el5uKOKGAP3d2oqU4JMB
- 4UPvOSJlN7XOUzO2Y5VxIwdNligVS+x+xhkUahV79IyE/hFeGc/samp3A0lNbVCUOy94r1cfSyE
- R96vgphpmS8vechqmeozhtkiki2b4vGbyrDtVRYGA9jwTMWRRbQVoeGMXJPr0l928UyHL+Ix0tv
- eEtyQ==
-X-Received: by 2002:a05:6402:1f02:b0:6a5:d694:6e9 with SMTP id
- 4fb4d7f45d1cf-6a5df5aecfamr9191900a12.2.1787747817274; 
- Wed, 26 Aug 2026 05:36:57 -0700 (PDT)
+ bh=1EfLFAU3loIBR21caXEh+skEygVXTy+5ydXernjRxaA=;
+ b=D5qoGUtPILu0DQa81BEx+v8D+bEPZ1Ji8Urgg9oE8tpyUUKNtfJWD7S+lVwyW0UaJk
+ 0vHCN6mD0TrIlgJhu7dZRJvMtYwwi+d8pUhlHV4JpIY2CtsbZLrQXeeOgV6JlwdZaObX
+ yvvGpqdnRZ0wumI/8O70EP/PQNKu+wm5SnFdUxaPeQpsQrDRAHzO8+DxPTtEzaBsVdaw
+ E7ejfDQ8LVmpjvzK6NTg+FyUJyUKwoev6kfyR01KSg2QbelSXrjXhwqiZRYjE7g6me5F
+ IzxYAAhUJN4cFZys/G55gm5IJXDVmGRpXcRG7Vdx3B4DjV0HdeYW8G4ByLsvAIw54ixF
+ SQlw==
+X-Gm-Message-State: AFuF++lkIY+kXQHWXaDpRU2h/9McspGsYdta/o51SWdX66JFWz9j5aym
+ EnaYXQESO5SokHg++q6BGvf2K6lX2RAAZz4J20HxITNZVYQNloKGKQNt+5lmXL+1VB3MiCPxZwk
+ faCS9/O8=
+X-Gm-Gg: AR+sD10a5E5Wr+H3GvGlbxdyiseTDaJm4YTLXCQvMZ8Pv34D0Y1tnCtmg4OUOX/0Wrx
+ dbiea+McZ51+Cyb46aqfL7eyea0X5jSd9uIPMT2aO6TmQ/SAtIPVvmfFOegpxJg/sEGZlL/uo0k
+ nRTeUnSIcsxvJWHiN3e7iuivPKPphrmH3dc+iVXjjFDGPAv8wXuH40R9uvzMwmjjxxgYWxgpZUm
+ 1e/d3BgN6pTkFQqp04e64JYo2DkolhmKJE/Kh0+AGqRDDBslwH+KdkjccDfyQIULmLAmddHGnxy
+ +oXIOCuVd5o/HQw1vEHBQx3DDQbgtncJXe5nCP3toYEtqaE6VS8XWi23JjSBlymu8M9wmkQgEUr
+ M7MrUs+lY8BTSM3Lvfmli/t+0KIjXFb7mizbyAWCS+Mi9MmEmwZREyDena6kpjODAkYBXe4jVqn
+ jqIDhk+LSAebSbSOJxKabY3ZZaxihbQqFvH069gKVQE3+dqw6RAweULDssXGsKV1oinT5Viq/kX
+ aUY
+X-Received: by 2002:a05:6402:a68f:b0:6a0:50d8:142d with SMTP id
+ 4fb4d7f45d1cf-6a5c3a70ee9mr11547094a12.0.1787747818505; 
+ Wed, 26 Aug 2026 05:36:58 -0700 (PDT)
 Received: from chapelon.home ([2a02:a03f:63ab:dc01:ce15:1729:c989:3a9e])
  by smtp.gmail.com with ESMTPSA id
- 4fb4d7f45d1cf-6a5de8ea6d0sm4925258a12.13.2026.08.26.05.36.56
+ 4fb4d7f45d1cf-6a5de8ea6d0sm4925258a12.13.2026.08.26.05.36.58
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 26 Aug 2026 05:36:57 -0700 (PDT)
+ Wed, 26 Aug 2026 05:36:58 -0700 (PDT)
 To: buildroot@buildroot.org
 Cc: Bernd Kuhls <bernd@kuhls.net>, thomas.perale@mind.be,
  raphael.melotte@mind.be, Titouan Christophe <titouan.christophe@mind.be>
-Date: Wed, 26 Aug 2026 14:36:33 +0200
-Message-ID: <20260826123637.410258-13-titouan.christophe@mind.be>
+Date: Wed, 26 Aug 2026 14:36:35 +0200
+Message-ID: <20260826123637.410258-15-titouan.christophe@mind.be>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260826123637.410258-1-titouan.christophe@mind.be>
 References: <20260826123637.410258-1-titouan.christophe@mind.be>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH for 2025.02.x 12/16] package/clamav: add patch
- for CVE-2026-20345
+Subject: [Buildroot] [PATCH for 2025.02.x 14/16] package/clamav: add patch
+ for CVE-2026-20346
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -112,64 +112,63 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- ...-partition-name-conversion-index-103.patch | 37 +++++++++++++++++++
+ ...guard-pdf-hex-string-newline-skip-98.patch | 36 +++++++++++++++++++
  package/clamav/clamav.mk                      |  3 ++
- 2 files changed, 40 insertions(+)
- create mode 100644 package/clamav/0011-libclamav-fix-gpt-partition-name-conversion-index-103.patch
+ 2 files changed, 39 insertions(+)
+ create mode 100644 package/clamav/0013-libclamav-guard-pdf-hex-string-newline-skip-98.patch
 
-diff --git a/package/clamav/0011-libclamav-fix-gpt-partition-name-conversion-index-103.patch b/package/clamav/0011-libclamav-fix-gpt-partition-name-conversion-index-103.patch
+diff --git a/package/clamav/0013-libclamav-guard-pdf-hex-string-newline-skip-98.patch b/package/clamav/0013-libclamav-guard-pdf-hex-string-newline-skip-98.patch
 new file mode 100644
-index 0000000000..e5cbceb9ab
+index 0000000000..41607a82ee
 --- /dev/null
-+++ b/package/clamav/0011-libclamav-fix-gpt-partition-name-conversion-index-103.patch
-@@ -0,0 +1,37 @@
++++ b/package/clamav/0013-libclamav-guard-pdf-hex-string-newline-skip-98.patch
+@@ -0,0 +1,36 @@
 +From: "Val S." <valsnyde@cisco.com>
-+Date: Tue, 28 Jul 2026 09:02:34 -0400
-+Subject: Libclamav: fix GPT partition name conversion index (#103)
++Date: Tue, 28 Jul 2026 09:05:37 -0400
++Subject: Libclamav: guard PDF hex string newline skip (#98)
 +
-+The GPT partition parser converted the UTF-16 partition name with the outer
-+partition loop index instead of the inner name loop index. A GPT with enough
-+partition entries could read and write past the end of the stack-allocated
-+partition entry while scanning disk images.
++The PDF hex-string reader skips newlines immediately after the opening
++angle bracket. A malformed string can consume the remaining bounded input
++before the parser searches for the closing bracket.
 +
-+Use the name loop index so each UTF-16 code unit is converted in bounds.
++Return early when the bounded length is exhausted so the parser does not
++pass an underflowed length to memchr().
 +
-+Credit: Atuin - Automated Vulnerability Discovery Engine, Tianchu Chen of
-+Tencent Xuanwu Lab.
++Reported-by: Tristan (@TristanInSec)
 +
-+CLAM-2999
++CLAM-3002
 +
 +---
-+Upstream: https://github.com/Cisco-Talos/clamav/commit/434617ed00218dacdf3274dca5279f052c3f1d46
-+CVE: CVE-2026-20345
++Upstream: https://github.com/Cisco-Talos/clamav/commit/354f71e192168b6c966c4d15122b455cbb2d6ecb
++CVE: CVE-2026-20346
 +Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 +---
-+ libclamav/gpt.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ libclamav/pdf.c | 2 ++
++ 1 file changed, 2 insertions(+)
 +
-+diff --git a/libclamav/gpt.c b/libclamav/gpt.c
-+index c92cf6bc97..9cc05d42f8 100644
-+--- a/libclamav/gpt.c
-++++ b/libclamav/gpt.c
-+@@ -303,7 +303,7 @@ static cl_error_t gpt_scan_partitions(cli_ctx *ctx, struct gpt_header hdr, size_
-+         gpe.lastLBA    = le64_to_host(gpe.lastLBA);
-+         gpe.attributes = le64_to_host(gpe.attributes);
-+         for (j = 0; j < 36; ++j) {
-+-            gpe.name[i] = le16_to_host(gpe.name[i]);
-++            gpe.name[j] = le16_to_host(gpe.name[j]);
++diff --git a/libclamav/pdf.c b/libclamav/pdf.c
++index 51b97a0a17..7769a6a6ec 100644
++--- a/libclamav/pdf.c
+++++ b/libclamav/pdf.c
++@@ -2680,6 +2680,8 @@ static char *pdf_readstring(const char *q0, int len, const char *key, unsigned *
++             start = ++q;
++             len -= 1;
 +         }
-+ 
-+         /* check that partition is not empty and within a valid location */
+++        if (len <= 0)
+++            return NULL;
++         q = memchr(q + 1, '>', len - 1);
++         if (!q)
++             return NULL;
 diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
-index ef6d33e96d..7c643c99cf 100644
+index 723b23a99c..b3055b6ce9 100644
 --- a/package/clamav/clamav.mk
 +++ b/package/clamav/clamav.mk
-@@ -51,6 +51,9 @@ CLAMAV_IGNORE_CVES += CVE-2026-20215
- # 0009-fix-32-bit-dmg-mish-size-checks-65.patch
- CLAMAV_IGNORE_CVES += CVE-2026-20244
+@@ -57,6 +57,9 @@ CLAMAV_IGNORE_CVES += CVE-2026-20345
+ # 0012-libclamav-fix-pespin-rebuilt-section-size-overflow-101.patch
+ CLAMAV_IGNORE_CVES += CVE-2026-20339
  
-+# 0011-libclamav-fix-gpt-partition-name-conversion-index-103.patch
-+CLAMAV_IGNORE_CVES += CVE-2026-20345
++# 0013-libclamav-guard-pdf-hex-string-newline-skip-98.patch
++CLAMAV_IGNORE_CVES += CVE-2026-20346
 +
  CLAMAV_DEPENDENCIES = \
  	bzip2 \
