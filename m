@@ -4,94 +4,94 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9885EC61DC2
-	for <buildroot@archiver.kernel.org>; Wed, 26 Aug 2026 12:37:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95DE1C61DBE
+	for <buildroot@archiver.kernel.org>; Wed, 26 Aug 2026 12:37:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C821B40580;
-	Wed, 26 Aug 2026 12:37:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 43BA0405CC;
+	Wed, 26 Aug 2026 12:37:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uMnWfoI4wDPA; Wed, 26 Aug 2026 12:37:02 +0000 (UTC)
+ id NyNNFxQgLjYt; Wed, 26 Aug 2026 12:37:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787747822;
-	bh=U24H34i5PptgpKzAHiqHa0fJyaO9xNs3NVutYn58v/g=;
+	s=default; t=1787747825;
+	bh=EXE0Es09r/QY9oRJvmCWnXewOCGsKWaJGP+TFE6SBEc=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=YT5UWDqRN9fFj1HLewYrJiwmol9co6AMvnEjywWXYWU3H+KRNyFOVjSZy1PHXem7L
-	 pf85LXgB/4hxUVUjSl3Vf8itDJMpoEveIZP6wmBUBxs1KbGIx+yOfCgtjDPu59ar7O
-	 +naxC38Yu2cxois6BTlNaoFebvndvCk5ksRNgsq1ZmZdXQuFoYkkOmdK+cGNLjmQe6
-	 dfeovq4AYxUyoft79DAq4GWNdBRONMpGUD7imWJyxvYy3cAMqmbBNEAQUx5AyWW423
-	 /yujxRb7mIDHJ7Ls8TAtuFCQv7UKYHdGV3BtDxwEEWU2HehaiKchXyuSOOa6wK5SRo
-	 Ac9/lXG1SbdCw==
+	b=plbUDSqri9Kq+Ai3XkhjM/aVVzSQS8GlhesbqSUCNQmAdSnPFEgIAmNKWWecJzJHh
+	 axCFi/boYG23fnWrIp5xbeGAfeBDczp74u/ktnRg5lfApO3yt8wjQfRRN93B9uteGS
+	 NP7BBpEJxnTYuTQLHCDQNrKj7mPrHZdEBofNFMFJNxXn+4jIV1YHSm9T02NudiRIRM
+	 JjtE5NRTPdNW+9wq4linh5iqxuqetMku/8Pf97hIN4G0Fv+YFomnajJkUZYx1ECXOW
+	 io4+3c6Nma/ZKG0uzS5sEhKp2Cn4lb2FtpfIkK3gRPjy/tV2x0h/NYICrYOhcTy5kn
+	 5HPQ9xoWXGNmA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2A53440557;
-	Wed, 26 Aug 2026 12:37:02 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 520DC3AD
- for <buildroot@buildroot.org>; Wed, 26 Aug 2026 12:36:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4807C40693;
+	Wed, 26 Aug 2026 12:37:05 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0DC0F472
+ for <buildroot@buildroot.org>; Wed, 26 Aug 2026 12:36:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 43FA3605ED
+ by smtp2.osuosl.org (Postfix) with ESMTP id F1CD74005F
  for <buildroot@buildroot.org>; Wed, 26 Aug 2026 12:36:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YRKmP66JW3Xv for <buildroot@buildroot.org>;
- Wed, 26 Aug 2026 12:36:55 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZOAvHFChHieR for <buildroot@buildroot.org>;
+ Wed, 26 Aug 2026 12:36:56 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::532; helo=mail-ed1-x532.google.com;
+ client-ip=2a00:1450:4864:20::52a; helo=mail-ed1-x52a.google.com;
  envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com
- [IPv6:2a00:1450:4864:20::532])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0963A605EB
- for <buildroot@buildroot.org>; Wed, 26 Aug 2026 12:36:54 +0000 (UTC)
-Received: by mail-ed1-x532.google.com with SMTP id
- 4fb4d7f45d1cf-6a5ebf75d62so907018a12.1
- for <buildroot@buildroot.org>; Wed, 26 Aug 2026 05:36:54 -0700 (PDT)
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com
+ [IPv6:2a00:1450:4864:20::52a])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D9106400AF
+ for <buildroot@buildroot.org>; Wed, 26 Aug 2026 12:36:55 +0000 (UTC)
+Received: by mail-ed1-x52a.google.com with SMTP id
+ 4fb4d7f45d1cf-6a422090b2fso1241966a12.0
+ for <buildroot@buildroot.org>; Wed, 26 Aug 2026 05:36:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1787747812; x=1788352612;
+ d=1e100.net; s=20251104; t=1787747813; x=1788352613;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=+rrVNlu+HWF8baEudTEyufJcxskWjyCmlVXpZHH16Kc=;
- b=A9RztLrywgZgIepIGvhJF2g8+spv0JEXvAZlkDvq1PXgXt9m7ddKikRHX6npWajSvg
- x31ZvsH+5TnX61WlzP2yI+gdW6zbhZ/Cb19ReDVoARLk+c+20V1y6cvBn6YzWI33PjGp
- ntzfrpfCRlJB2TcItVV81TlQDWq9PVYZcEYUO9f4RPvRpBUaYOTJtQWRubKs+a37t80l
- Omh5f3CE21burUiOP3KCRP+/8kmgFLKb42wAAahNqGeauN4qcdOCyvrH1vtp07+AfSdv
- ochzIprhu6OXxl45dBrg4g4vSAnMMut0dlhuGZ7ncFeO8HiWakVdbmi2NENgYCh9GEx7
- 9L2w==
-X-Gm-Message-State: AFuF++mefUr0066Bk518Tw6+nubBCIjlmT57Odw/CJmtcD3snq2xUL+D
- sABkOWH2s3Z+vFRdx0g5CJE1xsaf4pWycqM1rVkxLW/k2S8d8uphsV/DTrh2bXWmyQaoz1eFBf/
- 4HUqN6mM=
-X-Gm-Gg: AR+sD12q/W9ZJZ1OvwoJj+gOA/CnnFu0h8Wbjh8k96TXfYDuhAwmvZS5mXW3IKhpZxz
- mlPeygfDy9mZ1WGWrCG1us8u3EbIuZ7pJUiLBRJOUhrd/EJNmjLTNL8rYXn0DAeOsOsf5O9NH/z
- dCwzACwuU7HmLrOJ6ItBgGiVqr8GIxl7B8oSUAuaqayxomwHEu9Uxm9ysY4XXVZ5n6GmOrRlllT
- F5Ks5AOva/6NbfFH/JqNp5BuH1Wn3sFr0rCpfvwhnC4bnj/VBGGFhlDoqt23l8nEeICuL/KEfhE
- 4rI3AthPwrJeOctNe58y3eKACymAs/QF93b3vRl6NAbHf0e93k2K92SfOIyy8wgoUNt2wT+fugU
- IFad64xHPC0DbvlLlZT2B7MjyZ4yD8s7VQsCcwuV1aWfx0rK/uOruqW0gpzcbtAKX6l3uj44o8D
- bQHFybZZ8nrQwXidEzarT6TWNfCnHsGosMjGw4HY9WJDUk5QwksppHeEPDwGE3l910Ot++GI0aY
- chY
-X-Received: by 2002:a05:6402:160f:b0:6a5:c47e:8d6d with SMTP id
- 4fb4d7f45d1cf-6a5c47e8e11mr11480266a12.9.1787747811741; 
- Wed, 26 Aug 2026 05:36:51 -0700 (PDT)
+ bh=VKxODdGCV76sR8BUNfzJxsx8OLu8eD0QsM4FGLpUVw0=;
+ b=a6B4lr2gQZlfExE/FtAG4zcHMtuwfNaXMTrlXGmsnNhoS4iYpmKs4zIu+VG8oUvHMC
+ ryyqH9Ud0jw5gONu5WAMdP8TfJ45jFjHKNTf38WA84DRWAc77I831aEevZx6bpTL8F4e
+ WebbP04Pj5PzlX7EEKV9pIe2BWwgzVYpUfxNW61HM2LOLUVoSmjUNerZTCTUCBWnwMx7
+ 5RfZWPQ+2Y5xtH1OfmnsvgS6j6WRiOaLaNiyhYbF8yeAIgBgLtHMMY+gRbjYc36M3hYD
+ xNMAmOjCYs1MxZ+5bFENnWSTA/gRa4wQyhRCQUc94kQCxMbjgGjuRrB2xa+xRd0bkvH7
+ aOuQ==
+X-Gm-Message-State: AFuF++mGzN+4i32avKXKoUe3YQq7iIW8W3VNPKx0scCFPj75rUQN74ug
+ nUxzA/MuSU5eWTrSgZU5zKGyu01oI7l9FxtqcAz5al7tpgnvN8pof1W/c+dEvit90j4/YS8CEY8
+ Zb8G7res=
+X-Gm-Gg: AR+sD13o/oqRX/6myN/bYHw0iykIsL1iustDLR87++VtwJ6ogl0HVlrtqKTpcFvMZWM
+ d878FR6A8xtKbWXKO/E+xSRUtfEKLgZYPu2c4BLX1qOhzvp+NPbMfzKA+RV8rWN8LUOmNyb5auX
+ 1MZF3pKY2HiPU+u5Bsy7WmOYfMZUKTGdHoryjY7Z0rypMyh6HEYJtu8xv68t7u4b+6ZkP00A05c
+ iEf1veV5qIe7fEi0L1KSEi3sFwaGpNeKLw9wSD5tAxpbSAXGwy+nllDSa69Cl+JpBGL2ses0Oky
+ 0nhkFJMnjrTBYnfqrUAjXReNPPpBTgPzAbvbzNxtxNkRBECnZGmdqudv6tYSfD0EtMgb+si5/Lv
+ 9eIqtZsk1QWacp+LCMpA5BV/5EDhP0Iz/E+qG/HynfPYxQSc1bu/nm/Z58dqbPigLy7dExa84WS
+ 0jFBfKHROwhSNl7KqGOP7TB7PgLYXuRSwL3FvcqRgR1fr8G+4r0zg/hHyOX+WeAbvgYezn326GX
+ X/1
+X-Received: by 2002:a05:6402:234d:b0:6a3:f47c:969 with SMTP id
+ 4fb4d7f45d1cf-6a5df5b0e3bmr9248117a12.3.1787747813559; 
+ Wed, 26 Aug 2026 05:36:53 -0700 (PDT)
 Received: from chapelon.home ([2a02:a03f:63ab:dc01:ce15:1729:c989:3a9e])
  by smtp.gmail.com with ESMTPSA id
- 4fb4d7f45d1cf-6a5de8ea6d0sm4925258a12.13.2026.08.26.05.36.51
+ 4fb4d7f45d1cf-6a5de8ea6d0sm4925258a12.13.2026.08.26.05.36.53
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 26 Aug 2026 05:36:51 -0700 (PDT)
+ Wed, 26 Aug 2026 05:36:53 -0700 (PDT)
 To: buildroot@buildroot.org
 Cc: Bernd Kuhls <bernd@kuhls.net>, thomas.perale@mind.be,
  raphael.melotte@mind.be, Titouan Christophe <titouan.christophe@mind.be>
-Date: Wed, 26 Aug 2026 14:36:25 +0200
-Message-ID: <20260826123637.410258-5-titouan.christophe@mind.be>
+Date: Wed, 26 Aug 2026 14:36:28 +0200
+Message-ID: <20260826123637.410258-8-titouan.christophe@mind.be>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260826123637.410258-1-titouan.christophe@mind.be>
 References: <20260826123637.410258-1-titouan.christophe@mind.be>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH for 2025.02.x 04/16] package/clamav: add patch
- for CVE-2026-20217
+Subject: [Buildroot] [PATCH for 2025.02.x 07/16] package/clamav: add patch
+ for CVE-2026-20214
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -112,73 +112,67 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- ...ix-pespin-cleanup-bitmap-tracking-47.patch | 46 +++++++++++++++++++
+ ...av-fix-fsg-section-loop-underflow-51.patch | 40 +++++++++++++++++++
  package/clamav/clamav.mk                      |  3 ++
- 2 files changed, 49 insertions(+)
- create mode 100644 package/clamav/0003-libclamav-fix-pespin-cleanup-bitmap-tracking-47.patch
+ 2 files changed, 43 insertions(+)
+ create mode 100644 package/clamav/0006-libclamav-fix-fsg-section-loop-underflow-51.patch
 
-diff --git a/package/clamav/0003-libclamav-fix-pespin-cleanup-bitmap-tracking-47.patch b/package/clamav/0003-libclamav-fix-pespin-cleanup-bitmap-tracking-47.patch
+diff --git a/package/clamav/0006-libclamav-fix-fsg-section-loop-underflow-51.patch b/package/clamav/0006-libclamav-fix-fsg-section-loop-underflow-51.patch
 new file mode 100644
-index 0000000000..a2ac405d92
+index 0000000000..e7561b47cd
 --- /dev/null
-+++ b/package/clamav/0003-libclamav-fix-pespin-cleanup-bitmap-tracking-47.patch
-@@ -0,0 +1,46 @@
++++ b/package/clamav/0006-libclamav-fix-fsg-section-loop-underflow-51.patch
+@@ -0,0 +1,40 @@
 +From: "Val S." <valsnyde@cisco.com>
-+Date: Tue, 16 Jun 2026 11:43:04 -0400
-+Subject: Libclamav: fix PESpin cleanup bitmap tracking (#47)
++Date: Wed, 17 Jun 2026 09:25:13 -0400
++Subject: Libclamav: fix FSG section loop underflow (#51)
 +
-+The PESpin unpacker mixes heap-owned section buffers with pointers
-+back into the original PE image. Its final cleanup loop is supposed
-+to walk a copy of the ownership bitmap and free only the entries
-+that were allocated by the unpacker.
++A malformed FSG sample can leave the recovered section count at
++zero in the v1.31 unpacker path. The code then allocates space for
++one section entry but initializes recovered RVAs with a loop bound
++that underflows, causing an out-of-bounds write past the end of the
++sections array.
 +
-+That loop checked bitmap but shifted bitman instead. When the low
-+bit was set, bitmap never changed and the loop could free every
-+entry in sects, including pointers into the input buffer. A crafted
-+sample can drive this path after an allocation failure and crash in
-+free() with an invalid pointer.
++Fix the loop bound by iterating while t is strictly less than the
++section count. This preserves the intended behavior for valid
++nonzero counts and correctly performs zero iterations when no
++original sections were recovered.
 +
-+Shift bitmap in the cleanup loop so the free decision advances one
-+section at a time using the same working bitmap that the condition
-+already tests. This matches the existing intent of saving bitmap as
-+a disposable free bitmap copy and avoids touching the original
-+bitman state.
++Credit: Trail of Bits, in collaboration with Anthropic
 +
-+Credit: Atuin - Automated Vulnerability Discovery Engine, Tianchu Chen of Tencent Xuanwu Lab.
-+
-+CLAM-2961
++CLAM-2966
 +
 +---
-+Upstream: https://github.com/Cisco-Talos/clamav/commit/2410b002feb151500fa6cdee3233fe97c9fe865a
-+CVE: CVE-2026-20217
++Upstream: https://github.com/Cisco-Talos/clamav/commit/042bc35d0a89d6658de30ebc8494b3532e73dcc8
++CVE: CVE-2026-20214
 +Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 +---
-+ libclamav/spin.c | 2 +-
++ libclamav/pe.c | 2 +-
 + 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/libclamav/spin.c b/libclamav/spin.c
-+index a741fb83be..d0470b317a 100644
-+--- a/libclamav/spin.c
-++++ b/libclamav/spin.c
-+@@ -508,7 +508,7 @@ int unspin(char *src, int ssize, struct cli_exe_section *sections, int sectcnt,
-+     for (j = 0; j < sectcnt; j++) {
-+         if (bitmap & 1)
-+             free(sects[j]);
-+-        bitman = bitman >> 1 & 0x7fffffff;
-++        bitmap = bitmap >> 1 & 0x7fffffff;
-+     }
-+     free(sects);
-+     return 1; /* :( */
++diff --git a/libclamav/pe.c b/libclamav/pe.c
++index 23f4c4ae0d..c894ec7ca8 100644
++--- a/libclamav/pe.c
+++++ b/libclamav/pe.c
++@@ -3753,7 +3753,7 @@ int cli_scanpe(cli_ctx *ctx)
++         }
++ 
++         sections[0].rva = newedi;
++-        for (t = 0; t <= (uint32_t)sectcnt - 1; t++)
+++        for (t = 0; t < (uint32_t)sectcnt; t++)
++             sections[t + 1].rva = (((support[t * 2] | (support[t * 2 + 1] << 8)) - 2) << 12) - EC32(peinfo->pe_opt.opt32.ImageBase);
++ 
++         if (!peinfo->sections[i + 1].rsz || !(src = fmap_need_off_once(map, peinfo->sections[i + 1].raw, ssize))) {
 diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
-index 84bcadde6d..017d07fc05 100644
+index 67042efeb8..1a464a8326 100644
 --- a/package/clamav/clamav.mk
 +++ b/package/clamav/clamav.mk
-@@ -30,6 +30,9 @@ CLAMAV_IGNORE_CVES += CVE-2026-20031
- # 0002-upgrade-rust-dependency-to-resolve-a-security-issue.patch
- CLAMAV_IGNORE_CVES += CVE-2026-25541
+@@ -39,6 +39,9 @@ CLAMAV_IGNORE_CVES += CVE-2026-20213
+ # 0005-libclamav-enforce-installshield-extraction-limits-55.patch
+ CLAMAV_IGNORE_CVES += CVE-2026-20216
  
-+# 0003-libclamav-fix-pespin-cleanup-bitmap-tracking-47.patch
-+CLAMAV_IGNORE_CVES += CVE-2026-20217
++# 0006-libclamav-fix-fsg-section-loop-underflow-51.patch
++CLAMAV_IGNORE_CVES += CVE-2026-20214
 +
  CLAMAV_DEPENDENCIES = \
  	bzip2 \
