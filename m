@@ -4,65 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA7DEC61DBD
-	for <buildroot@archiver.kernel.org>; Wed, 26 Aug 2026 15:06:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17D8DC61DBD
+	for <buildroot@archiver.kernel.org>; Wed, 26 Aug 2026 15:27:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A389740564;
-	Wed, 26 Aug 2026 15:06:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B6445403E1;
+	Wed, 26 Aug 2026 15:27:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GpR57roEzlxf; Wed, 26 Aug 2026 15:06:29 +0000 (UTC)
+ id tmHW2l5z_SMz; Wed, 26 Aug 2026 15:27:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787756789;
-	bh=4GtLPgjYu3VSXNQnp4zUUrk2srAiPMfq+FV9aQcwdh0=;
+	s=default; t=1787758065;
+	bh=NuD5K2St7BV6FDhfQLG5Hf0J37qOjNVFPBbU8ptEcVg=;
 	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=gPOk+nNa3wj9FOmn8jKCg6cvFiLpDn0+3wdJFjnsjK6MRzbNYv8o9wnkqJKUmWLav
-	 2nEDcCF/wsk4XdawTv+Ub+faZePZFYpUPlp+vjChUVYo219bNC/OlKEescgXmNyOv7
-	 kpF78Dy7iGVLYBgM4RlhCGWf5NkFjMZYUfoQQZpTE/FTU+7gZ7cJzAdkBa5NaVk/gn
-	 QwL4hebTDZZn7CkkCADrVYa8WYl9pbkcS/8BrVRnoZ7SybaTmRegfZUB60d7YFH4P3
-	 RsGkpiJQ1pz0/195QFHtaPFqCX0lyNmB8wujrrH+HWMRtCh/cRr+vK7X6kMlLTDjo/
-	 0PyZFo1YyEf7A==
+	b=MyuMXFyTRG8pzDLcefrO2RUrW9/DpLy/Gsl5Bwb9n+8t61+68W0QdfwlwYAqreGp4
+	 xulYrMeANDsrEvr0O4s4JcLxtAqq1h5jJjpyiXsf0ez+L6dvEUVrYEigu0QgoTF3NS
+	 S4fm44BdDYiN8CVOkxu8G1PPIBm749BhdkzmYBqEpr7ZlF+SyKlHwiHlA1bIHZ7oG/
+	 1Tcaq5TRSOiw/3mu9GdfiMbmlsl9kWMioxVCXE6xbEcBbCQnkvgjLMVohWJAkwt9dt
+	 f1kLmH4pPSHfTIUHBvougMPy2eYQHiPtJrjpCSutWlrkbS4Itqu0xJZ63c9By18pW7
+	 wMT4yund/ITjg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3942040526;
-	Wed, 26 Aug 2026 15:06:29 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 093FB3C3
- for <buildroot@buildroot.org>; Wed, 26 Aug 2026 15:06:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EDCA7403FF;
+	Wed, 26 Aug 2026 15:27:44 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id E7C1B334
+ for <buildroot@buildroot.org>; Wed, 26 Aug 2026 15:27:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 064E840118
- for <buildroot@buildroot.org>; Wed, 26 Aug 2026 15:06:28 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D97C580ADA
+ for <buildroot@buildroot.org>; Wed, 26 Aug 2026 15:27:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JMMPnH_9PY-N for <buildroot@buildroot.org>;
- Wed, 26 Aug 2026 15:06:26 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
- helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7C73540064
- for <buildroot@buildroot.org>; Wed, 26 Aug 2026 15:06:25 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-03.galae.net (Postfix) with ESMTPS id 2B4094E413BB
- for <buildroot@buildroot.org>; Wed, 26 Aug 2026 15:06:23 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id E420C604EC
- for <buildroot@buildroot.org>; Wed, 26 Aug 2026 15:06:22 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id BAFAB11C78394; 
- Wed, 26 Aug 2026 17:06:21 +0200 (CEST)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AzGuzcU98s1x for <buildroot@buildroot.org>;
+ Wed, 26 Aug 2026 15:27:43 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::62f; helo=mail-ej1-x62f.google.com;
+ envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com
+ [IPv6:2a00:1450:4864:20::62f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B92EA80AC5
+ for <buildroot@buildroot.org>; Wed, 26 Aug 2026 15:27:42 +0000 (UTC)
+Received: by mail-ej1-x62f.google.com with SMTP id
+ a640c23a62f3a-c207cb16cf5so165070866b.1
+ for <buildroot@buildroot.org>; Wed, 26 Aug 2026 08:27:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20251104; t=1787758060; x=1788362860;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to:content-type;
+ bh=OFKA+VNc0WpPsBFM0A/pewfwCaU5Sge+mCFe730Fclk=;
+ b=WQPvUHqpTUJ0IANCo6pO86fyw+PHxxS5uqb1br+KuPO+jjpru/ctT4gUz70x67aPkZ
+ AdipkxBhRghy8iVb8kQ68tIwlLhWhIEPiZHkBjMzItyRaYYu0C8ge6U9zdoFyx5gp5uW
+ ALzfQTb7f25qMAhXyy9Aif9PhGcpO2HlKManzkSN/fh9x5X/TubfJ4Pj+1PN9ccFYeFT
+ RKhw98l73Gzxa9plmByMJLcnVslGh4NmyzE8N0lsvt535T7fSGsqxNMyl1RiHwXotXDC
+ 4Plxo2pXHkwvbaBbiIoFNcgiFJPs+jA7ojEpz5nIdXD1zS7a7PUBIIJigsNiniuZFSMZ
+ 8J7A==
+X-Gm-Message-State: AFuF++kgc0e4rRwNnrUFhoIoPxFigLDLNgjsqHlk0ULiA+7XTcd656VS
+ ePX/koJrhgdeHMSqRq0eh/DOoun5cAc3Ggwpb+8SIT4lsSSgbosSObQdxjPW+y14BFishbh17ww
+ 8mazFeMQ=
+X-Gm-Gg: AR+sD10vLG8jw+zYEU1QjJIiS3K5PjEwULCjOQu51CT4ke3i4niBikavJkVlHJtpcXi
+ aCyloPJL07vErRoFs1lfknk+ZvBa1D9xLOP82AaKmFTJTTu8dtRMwgzRkKfe26OdteWE97cXu+N
+ BErpG8n6gUQoYL5lUdnfRDMXXCV74637UoAeWVlo0d6UoDsRduM1BN6h5I7iDM9i0/2Iejc1P6g
+ JKsL2xohBWMEyZhPTAm0+bU9yYR0G8Xo3eAZr/P0abdbFxdmfj6MprnieAvpnzu8S5Fx8YdCFi4
+ q1015IK87EAFl930zCO4DiUSja2M/pEaUphVe/pZY15zqbY4QU+1wTIOCN8kOSQuHrb0tC1mzLb
+ j67GlJPHfA67E6IqmpuIqrn3M4XE8VWD9jTS6nDzRFO4JsxioW79zG1wQbvS8xgpuY4SOHmwPln
+ B8xj5yQ/epPs+aYxG6hlUP2e35FB6TLOPbhrTh3wpOinpJhpQ3eqAtiYqan8aYqIap1yisTZYXp
+ TTfGzSmBwLU9u5ZE+slut40SKWUtW6SdXxyiJA2PqT86+PIFVw=
+X-Received: by 2002:a17:907:97c4:b0:c1c:3b06:ed1b with SMTP id
+ a640c23a62f3a-c250c36bc3cmr1050571566b.22.1787758060064; 
+ Wed, 26 Aug 2026 08:27:40 -0700 (PDT)
+Received: from P-NTS-Evian
+ (static-css-ccs-204145.business.bouyguestelecom.com. [176.157.204.145])
+ by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-c250a9ec343sm403804666b.57.2026.08.26.08.27.39
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 26 Aug 2026 08:27:39 -0700 (PDT)
 To: buildroot@buildroot.org
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 26 Aug 2026 17:06:19 +0200
-Message-ID: <20260826150620.4062409-1-thomas.petazzoni@bootlin.com>
+Cc: Romain Naour <romain.naour@smile.fr>
+Date: Wed, 26 Aug 2026 17:27:30 +0200
+Message-ID: <20260826152732.3556127-1-romain.naour@smile.fr>
 X-Mailer: git-send-email 2.55.0
 MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
-Subject: [Buildroot] [PATCH] package/dahdi-linux: backport commits to fix
- build with recent kernels
+Subject: [Buildroot] [PATCH 1/3] support/testing: TestPythonPy3Gobject: test
+ glib 2.88 regression
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -74,306 +100,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Romain Naour via buildroot <buildroot@buildroot.org>
+Reply-To: Romain Naour <romain.naour@smile.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes build with kernels >= 6.15.
+In Glib >= 2.88, GLib.unix_signal_add has been moved to a separate
+platform-specific library. This break backward compatibility from
+GLib-2.0. A workaround has been applied to pygobject >= 3.55.3
+https://gitlab.gnome.org/GNOME/pygobject/-/commit/74e4e0f40a66436a55c72d4a6e6058c1f91a7310
 
-Fixes:
+This issue currently break TestFirewalldSysVInit and
+TestFirewalldSystemd runtime tests since the bump to glib 2.88.3 [1]:
 
-  https://autobuild.buildroot.net/results/ed73aa844a18cfc15e942ced4ae363c3d0d09015/
+https://gitlab.com/buildroot.org/buildroot/-/jobs/16060152329 (TestFirewalldSysVInit)
+https://gitlab.com/buildroot.org/buildroot/-/jobs/16060152332 (TestFirewalldSystemd)
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Break the test TestPythonPy3Gobject now in order to reproduce the same
+issue than for Firewalld test.
+
+[1] e313a2d2590af689eb1f79e55b5a488154400da1
+
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ---
- ...ppers-for-del_timer-and-del_timer_sy.patch |  38 ++++
- ...se-ccflags-y-instead-of-EXTRA_CFLAGS.patch | 186 ++++++++++++++++++
- ...pper-for-renamed-from_timer-function.patch |  35 ++++
- 3 files changed, 259 insertions(+)
- create mode 100644 package/dahdi-linux/0004-kernel.h-Add-wrappers-for-del_timer-and-del_timer_sy.patch
- create mode 100644 package/dahdi-linux/0005-Kbuild-Use-ccflags-y-instead-of-EXTRA_CFLAGS.patch
- create mode 100644 package/dahdi-linux/0006-kernel.h-Add-wrapper-for-renamed-from_timer-function.patch
+ support/testing/tests/package/sample_python_gobject.py | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/dahdi-linux/0004-kernel.h-Add-wrappers-for-del_timer-and-del_timer_sy.patch b/package/dahdi-linux/0004-kernel.h-Add-wrappers-for-del_timer-and-del_timer_sy.patch
-new file mode 100644
-index 0000000000..aac013016a
---- /dev/null
-+++ b/package/dahdi-linux/0004-kernel.h-Add-wrappers-for-del_timer-and-del_timer_sy.patch
-@@ -0,0 +1,38 @@
-+From 96a67c8e51997a18bfc0942416b815057e279caf Mon Sep 17 00:00:00 2001
-+From: InterLinked1 <24227567+InterLinked1@users.noreply.github.com>
-+Date: Tue, 8 Jul 2025 18:35:56 -0400
-+Subject: [PATCH] kernel.h: Add wrappers for del_timer and del_timer_sync.
-+
-+del_timer[_sync] was renamed to timer_delete[_sync] in kernel
-+commit bb663f0f3c396c6d05f6c5eeeea96ced20ff112e, and the
-+compatibility wrappers were removed completely in kernel commit
-+8fa7292fee5c5240402371ea89ab285ec856c916. Add the wrappers
-+back on newer kernels to allow compilation.
-+
-+Resolves: #91
-+
-+Upstream: https://github.com/asterisk/dahdi-linux/commit/67d909a8a73364d6fa47bbf8baf314175c94f546
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ include/dahdi/kernel.h | 5 +++++
-+ 1 file changed, 5 insertions(+)
-+
-+diff --git a/include/dahdi/kernel.h b/include/dahdi/kernel.h
-+index ab129a8..ddd3eb4 100644
-+--- a/include/dahdi/kernel.h
-++++ b/include/dahdi/kernel.h
-+@@ -62,6 +62,11 @@
-+ #define netif_napi_add netif_napi_add_weight
-+ #endif
-+ 
-++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6,15,0)
-++#define del_timer timer_delete
-++#define del_timer_sync timer_delete_sync
-++#endif
-++
-+ #if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 18, 0)
-+ #include <linux/pci.h>
-+ #include <linux/dma-mapping.h>
-+-- 
-+2.55.0
-+
-diff --git a/package/dahdi-linux/0005-Kbuild-Use-ccflags-y-instead-of-EXTRA_CFLAGS.patch b/package/dahdi-linux/0005-Kbuild-Use-ccflags-y-instead-of-EXTRA_CFLAGS.patch
-new file mode 100644
-index 0000000000..857f317173
---- /dev/null
-+++ b/package/dahdi-linux/0005-Kbuild-Use-ccflags-y-instead-of-EXTRA_CFLAGS.patch
-@@ -0,0 +1,186 @@
-+From fc3748466d96fa465fe665403b73d6f4f75c124b Mon Sep 17 00:00:00 2001
-+From: InterLinked1 <24227567+InterLinked1@users.noreply.github.com>
-+Date: Fri, 21 Feb 2025 21:42:19 -0500
-+Subject: [PATCH] Kbuild: Use ccflags-y instead of EXTRA_CFLAGS.
-+
-+ccflags-y was added to the kernel back in 2007, in commit
-+f77bf01425b11947eeb3b5b54. Recent kernel commit
-+dbd83ea09699390892e5efecddd74ae43a00f071 has now completely
-+removed the deprecated EXTRA_CFLAGS.
-+
-+Comments in Kbuild and the Makefile for the oct612x library were
-+added back when it was created in 2013 in commit f65299e8b2e6ffb0b07089759f8c4ff33a695c09
-+to use the newer ccflags-y based on the kernel version,
-+but the change was never made to conditionally move away
-+from the EXTRA_CFLAGS.
-+
-+Now that the older way no longer exists, always use ccflags-y.
-+
-+Resolves: #76
-+
-+Upstream: https://github.com/asterisk/dahdi-linux/commit/9d5b120cb5573d39bcd9e3d8a7b212e25ab5c2c4
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ drivers/dahdi/Kbuild            | 4 ++--
-+ drivers/dahdi/oct612x/Kbuild    | 5 +----
-+ drivers/dahdi/oct612x/Makefile  | 5 +----
-+ drivers/dahdi/voicebus/Kbuild   | 4 ++--
-+ drivers/dahdi/wcb4xxp/Kbuild    | 2 +-
-+ drivers/dahdi/wct4xxp/Kbuild    | 6 +++---
-+ drivers/dahdi/wctc4xxp/Kbuild   | 4 ++--
-+ drivers/dahdi/wctdm24xxp/Kbuild | 2 +-
-+ drivers/dahdi/xpp/Kbuild        | 4 ++--
-+ 9 files changed, 15 insertions(+), 21 deletions(-)
-+
-+diff --git a/drivers/dahdi/Kbuild b/drivers/dahdi/Kbuild
-+index cd0365b..9c9355a 100644
-+--- a/drivers/dahdi/Kbuild
-++++ b/drivers/dahdi/Kbuild
-+@@ -75,13 +75,13 @@ CFLAGS_MODULE += -I$(DAHDI_INCLUDE) -I$(src) -Wno-format-truncation
-+ BAD_KERNELS_VERS := 22 34 34.0.1 34.0.2
-+ BAD_KERNELS := $(foreach ver,$(BAD_KERNELS_VERS),2.6.9-$(ver).EL 2.6.9-$(ver).ELsmp)
-+ ifneq (,$(filter $(KVERS),$(BAD_KERNELS)))
-+-EXTRA_CFLAGS+=-Drw_lock_t=rwlock_t
-++ccflags-y+=-Drw_lock_t=rwlock_t
-+ endif
-+ 
-+ # A number of Fedora 10 (9 also?) kernels backported hrtimer to 2.6.27
-+ # as part of an ALSA backport. TODO: Any better way to detect that?
-+ ifeq (1,$(shell fgrep -q ' hrtimer_set_expires' include/linux/hrtimer.h 2>/dev/null && echo 1))
-+-EXTRA_CFLAGS+=-DHAVE_HRTIMER_ACCESSORS=1
-++ccflags-y+=-DHAVE_HRTIMER_ACCESSORS=1
-+ endif
-+ 
-+ ifeq (1,$(shell fgrep -q 'wait_for_completion_timeout' include/linux/completion.h 2>/dev/null && echo 1))
-+diff --git a/drivers/dahdi/oct612x/Kbuild b/drivers/dahdi/oct612x/Kbuild
-+index ac53fe7..5015f7e 100644
-+--- a/drivers/dahdi/oct612x/Kbuild
-++++ b/drivers/dahdi/oct612x/Kbuild
-+@@ -24,9 +24,6 @@ octapi_files = octdeviceapi/oct6100api/oct6100_api/oct6100_adpcm_chan.o \
-+ 		apilib/llman/octapi_llman.o \
-+ 		oct612x-user.o
-+ 
-+-# TODO: ccflags was added in 2.6.24 in commit f77bf01425b11947eeb3b5b54. This
-+-# should be changed to a conditional compilation based on the Kernel Version.
-+-# ccflags-y := -I$(src)/.. -Wno-undef -I$(src)/include -I$(src)/octdeviceapi -I$(src)/octdeviceapi/oct6100api
-+-EXTRA_CFLAGS = -I$(src)/.. -Wno-undef -I$(src)/include -I$(src)/octdeviceapi -I$(src)/octdeviceapi/oct6100api
-++ccflags-y := -I$(src)/.. -Wno-undef -I$(src)/include -I$(src)/octdeviceapi -I$(src)/octdeviceapi/oct6100api
-+ obj-$(DAHDI_BUILD_ALL)$(CONFIG_DAHDI_OCT612X) := oct612x.o
-+ oct612x-objs := $(octapi_files)
-+diff --git a/drivers/dahdi/oct612x/Makefile b/drivers/dahdi/oct612x/Makefile
-+index 5d29143..d01997b 100644
-+--- a/drivers/dahdi/oct612x/Makefile
-++++ b/drivers/dahdi/oct612x/Makefile
-+@@ -23,8 +23,5 @@ octapi_files = octdeviceapi/oct6100api/oct6100_api/oct6100_adpcm_chan.o \
-+ 		apilib/largmath/octapi_largmath.o \
-+ 		apilib/llman/octapi_llman.o
-+ 
-+-# TODO: ccflags was added in 2.6.24 in commit f77bf01425b11947eeb3b5b54. This
-+-# should be changed to a conditional compilation based on the Kernel Version.
-+-# ccflags-y := -I$(src)/.. -Wno-undef -I$(src)/include -I$(src)/octdeviceapi -I$(src)/octdeviceapi/oct6100api
-+-EXTRA_CFLAGS = -I$(src)/.. -Wno-undef -I$(src)/include -I$(src)/octdeviceapi -I$(src)/octdeviceapi/oct6100api
-++ccflags-y := -I$(src)/.. -Wno-undef -I$(src)/include -I$(src)/octdeviceapi -I$(src)/octdeviceapi/oct6100api
-+ lib-y := $(octapi_files)
-+diff --git a/drivers/dahdi/voicebus/Kbuild b/drivers/dahdi/voicebus/Kbuild
-+index 3bf9640..45026d9 100644
-+--- a/drivers/dahdi/voicebus/Kbuild
-++++ b/drivers/dahdi/voicebus/Kbuild
-+@@ -8,10 +8,10 @@ ifneq ($(HOTPLUG_FIRMWARE),yes)
-+ dahdi_voicebus-objs += $(FIRM_DIR)/dahdi-fw-vpmoct032.o
-+ $(warning WARNING: You are compiling firmware into voicebus.ko which is not available under the terms of the GPL. It may be a violation of the GPL to distribute the resulting image since it combines both GPL and non-GPL work. You should consult a lawyer of your own before distributing such an image.)
-+ else
-+-  EXTRA_CFLAGS+=-DHOTPLUG_FIRMWARE
-++  ccflags-y+=-DHOTPLUG_FIRMWARE
-+ endif
-+ 
-+-EXTRA_CFLAGS += -I$(src)/.. -Wno-undef
-++ccflags-y += -I$(src)/.. -Wno-undef
-+ 
-+ $(obj)/$(FIRM_DIR)/dahdi-fw-vpmoct032.o: $(obj)/voicebus.o
-+ 	$(MAKE) -C $(obj)/$(FIRM_DIR) dahdi-fw-vpmoct032.o
-+diff --git a/drivers/dahdi/wcb4xxp/Kbuild b/drivers/dahdi/wcb4xxp/Kbuild
-+index 80606bf..59ffc8d 100644
-+--- a/drivers/dahdi/wcb4xxp/Kbuild
-++++ b/drivers/dahdi/wcb4xxp/Kbuild
-+@@ -1,6 +1,6 @@
-+ obj-m += wcb4xxp.o
-+ 
-+-EXTRA_CFLAGS += -I$(src)/.. -Wno-undef
-++ccflags-y += -I$(src)/.. -Wno-undef
-+ 
-+ wcb4xxp-objs := base.o
-+ 
-+diff --git a/drivers/dahdi/wct4xxp/Kbuild b/drivers/dahdi/wct4xxp/Kbuild
-+index cf01ccf..eeeb2f6 100644
-+--- a/drivers/dahdi/wct4xxp/Kbuild
-++++ b/drivers/dahdi/wct4xxp/Kbuild
-+@@ -2,16 +2,16 @@ obj-$(DAHDI_BUILD_ALL)$(CONFIG_DAHDI_WCT4XXP) += wct4xxp.o
-+ 
-+ FIRM_DIR	:= ../firmware
-+ 
-+-EXTRA_CFLAGS += -I$(src)/.. -I$(src)/../oct612x/ $(shell $(src)/../oct612x/octasic-helper cflags $(src)/../oct612x) -Wno-undef
-++ccflags-y += -I$(src)/.. -I$(src)/../oct612x/ $(shell $(src)/../oct612x/octasic-helper cflags $(src)/../oct612x) -Wno-undef
-+ 
-+ # The OCT612X source files are from a vendor drop and we do not want to edit
-+ # them to make this warning go away. Therefore, turn off the
-+ # unused-but-set-variable warning for this driver.
-+ 
-+-EXTRA_CFLAGS += $(call cc-option, -Wno-unused-but-set-variable)
-++ccflags-y += $(call cc-option, -Wno-unused-but-set-variable)
-+ 
-+ ifeq ($(HOTPLUG_FIRMWARE),yes)
-+-  EXTRA_CFLAGS+=-DHOTPLUG_FIRMWARE
-++  ccflags-y+=-DHOTPLUG_FIRMWARE
-+ endif
-+ 
-+ wct4xxp-objs := base.o vpm450m.o
-+diff --git a/drivers/dahdi/wctc4xxp/Kbuild b/drivers/dahdi/wctc4xxp/Kbuild
-+index 9f97498..2f1bfbf 100644
-+--- a/drivers/dahdi/wctc4xxp/Kbuild
-++++ b/drivers/dahdi/wctc4xxp/Kbuild
-+@@ -2,10 +2,10 @@ obj-$(DAHDI_BUILD_ALL)$(CONFIG_DAHDI_WCTC4XXP) += wctc4xxp.o
-+ 
-+ FIRM_DIR	:= ../firmware
-+ 
-+-EXTRA_CFLAGS += -I$(src)/.. -Wno-undef
-++ccflags-y += -I$(src)/.. -Wno-undef
-+ 
-+ ifeq ($(HOTPLUG_FIRMWARE),yes)
-+-  EXTRA_CFLAGS+=-DHOTPLUG_FIRMWARE
-++  ccflags-y+=-DHOTPLUG_FIRMWARE
-+ endif
-+ 
-+ wctc4xxp-objs := base.o
-+diff --git a/drivers/dahdi/wctdm24xxp/Kbuild b/drivers/dahdi/wctdm24xxp/Kbuild
-+index 22cc71a..c9d96b7 100644
-+--- a/drivers/dahdi/wctdm24xxp/Kbuild
-++++ b/drivers/dahdi/wctdm24xxp/Kbuild
-+@@ -1,5 +1,5 @@
-+ obj-$(DAHDI_BUILD_ALL)$(CONFIG_DAHDI_WCTDM24XXP) += wctdm24xxp.o
-+ 
-+-EXTRA_CFLAGS += -I$(src)/.. -Wno-undef
-++ccflags-y += -I$(src)/.. -Wno-undef
-+ 
-+ wctdm24xxp-objs := base.o xhfc.o
-+diff --git a/drivers/dahdi/xpp/Kbuild b/drivers/dahdi/xpp/Kbuild
-+index e46a9d7..02d3149 100644
-+--- a/drivers/dahdi/xpp/Kbuild
-++++ b/drivers/dahdi/xpp/Kbuild
-+@@ -1,4 +1,4 @@
-+-EXTRA_CFLAGS	=	$(XPP_LOCAL_CFLAGS)	\
-++ccflags-y	=	$(XPP_LOCAL_CFLAGS)	\
-+ 			-DDEBUG			\
-+ 			-DPOLL_DIGITAL_INPUTS	\
-+ 			-DDEBUG_PCMTX		\
-+@@ -32,7 +32,7 @@ xpd_echo-objs		+= card_echo.o
-+ xpp_mmap-objs		+= mmapbus.o mmapdrv.o
-+ 
-+ ifeq	(y,$(PARPORT_DEBUG))
-+-EXTRA_CFLAGS	+= -DDEBUG_SYNC_PARPORT
-++ccflags-y	+= -DDEBUG_SYNC_PARPORT
-+ obj-m		+= parport_debug.o
-+ endif
-+ 
-+-- 
-+2.55.0
-+
-diff --git a/package/dahdi-linux/0006-kernel.h-Add-wrapper-for-renamed-from_timer-function.patch b/package/dahdi-linux/0006-kernel.h-Add-wrapper-for-renamed-from_timer-function.patch
-new file mode 100644
-index 0000000000..6651083ee3
---- /dev/null
-+++ b/package/dahdi-linux/0006-kernel.h-Add-wrapper-for-renamed-from_timer-function.patch
-@@ -0,0 +1,35 @@
-+From 13e360f1bc65dba29ba22c46f30ba868bea9805d Mon Sep 17 00:00:00 2001
-+From: InterLinked1 <24227567+InterLinked1@users.noreply.github.com>
-+Date: Sat, 12 Jul 2025 17:52:40 -0400
-+Subject: [PATCH] kernel.h: Add wrapper for renamed from_timer function.
-+
-+from_timer was renamed to timer_container_of in kernel commit
-+41cb08555c4164996d67c78b3bf1c658075b75f1 as part of updates to
-+the timer APIs. Add a compatibility wrapper for kernels >= 6.16.0.
-+
-+Resolves: #95
-+
-+Upstream: https://github.com/asterisk/dahdi-linux/commit/0d864e9f97ba22e340380ce24a1bd366ca33ebc2
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ include/dahdi/kernel.h | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/include/dahdi/kernel.h b/include/dahdi/kernel.h
-+index ddd3eb4..01fe113 100644
-+--- a/include/dahdi/kernel.h
-++++ b/include/dahdi/kernel.h
-+@@ -58,6 +58,10 @@
-+ 
-+ #include <linux/poll.h>
-+ 
-++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 16, 0)
-++#define from_timer timer_container_of
-++#endif
-++
-+ #if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 1, 0)
-+ #define netif_napi_add netif_napi_add_weight
-+ #endif
-+-- 
-+2.55.0
-+
+diff --git a/support/testing/tests/package/sample_python_gobject.py b/support/testing/tests/package/sample_python_gobject.py
+index 4490a73613..1c2b327206 100644
+--- a/support/testing/tests/package/sample_python_gobject.py
++++ b/support/testing/tests/package/sample_python_gobject.py
+@@ -4,6 +4,12 @@ from gi.repository import GLib
+ 
+ 
+ def main():
++    # In Glib >= 2.88, GLib.unix_signal_add has been moved to a
++    # separate platform-specific library. This break backward
++    # compatibility from GLib-2.0.
++    # A workaround has been applied to pygobject >= 3.55.3
++    # https://gitlab.gnome.org/GNOME/pygobject/-/commit/74e4e0f40a66436a55c72d4a6e6058c1f91a7310
++    unix_signal_add = GLib.unix_signal_add_full  # noqa
+     sh_path = GLib.find_program_in_path('sh')
+     if sh_path == "/bin/sh":
+         return True
 -- 
 2.55.0
 
