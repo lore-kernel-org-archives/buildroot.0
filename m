@@ -1,44 +1,45 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D8E6C61DC2
-	for <buildroot@archiver.kernel.org>; Wed, 26 Aug 2026 06:47:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7CC3DC61DBD
+	for <buildroot@archiver.kernel.org>; Wed, 26 Aug 2026 06:47:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1180180B6E;
-	Wed, 26 Aug 2026 06:47:20 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SmlNIEJd4X-n; Wed, 26 Aug 2026 06:47:19 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787726839;
-	bh=YBCPO5KdCZfl08dIIFYSV4PyggmZsweFUYk/KfixYP8=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
-	b=CwMDil6OFzhY4lR6xDPIYftA+3JdoS4vQMgecEb+pD8zNX+gRLwbZoN7KobttU631
-	 snhMyPLKF7D0ayDnXNk/Z/D+yMydQTZwXE3R80N13HGyGtnMf7QDapa4n+b8Ctv/WT
-	 FhQCfDe1XDKmi/Rm/8UQmOwy9xVd9NBQt8oHcaQyYbv9JoUy3feh0Gm7Eh/unRXRwf
-	 f3R9SCNTGS1eEHsGqZJWRbzlH5Qvq5/9I7Ss+Mrj1b3421apMzJbGK8WHjT4Prhlbv
-	 mkmEOwZIvjmZZkjoEigCD25aTolZblZ/NV9wj2CJZmEe+DDfz4ZlQY/JAKJvnx1uNN
-	 9zZjLbJ5FJpmA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 138F480B84;
-	Wed, 26 Aug 2026 06:47:19 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id D7948105
- for <buildroot@buildroot.org>; Wed, 26 Aug 2026 06:47:17 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BD93040550
- for <buildroot@buildroot.org>; Wed, 26 Aug 2026 06:47:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0AE8E40550;
+	Wed, 26 Aug 2026 06:47:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pD9ypz4lGb2J for <buildroot@buildroot.org>;
- Wed, 26 Aug 2026 06:47:16 +0000 (UTC)
+ id 2a_6OElg3u7K; Wed, 26 Aug 2026 06:47:21 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1787726841;
+	bh=LVO3j084lM8jdVRKZ1+HQXYylZ4s8INuudt3gG15NEk=;
+	h=To:Date:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
+	 From;
+	b=etYuG3zWHhUdp7SLrm9UqTEuvi0fELzz8F2EreB/pBq2E/Lqe1Yipn9IFrt42i81F
+	 2hcbaXhxEKpKqXGxIphmT0vxSqJ2vJRr/9fNCH9OBH2EQoVjRqop3yG2asSnJKZ2yL
+	 XYhx2EsTumkNwouNps2DBp4Uug+FLtq+cHLBAwq38NwsufrRvNhxOupg4HYtybEF6H
+	 cxTmqr9RpmECipzgwDWInbMob6xRTg02pJP6esdlLC4dmdvMR2AiAgLe6E7JTLv3zN
+	 d2nVux0fPRj05PUcPD9FIwE4uqGyvRmlTpw7ki/O1xA4aPhAS/y2tdLvvFgAzGcUJC
+	 qSOpIXKPx1Qgw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 17C2740555;
+	Wed, 26 Aug 2026 06:47:21 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9941439E
+ for <buildroot@buildroot.org>; Wed, 26 Aug 2026 06:47:19 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8B7B580B9C
+ for <buildroot@buildroot.org>; Wed, 26 Aug 2026 06:47:19 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id MF0qaC60w_uG for <buildroot@buildroot.org>;
+ Wed, 26 Aug 2026 06:47:18 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
  client-ip=2a01:111:f403:c000::1;
  helo=byapr05cu005.outbound.protection.outlook.com;
@@ -46,78 +47,79 @@ Received-SPF: Pass (mailfrom) identity=mailfrom;
 Received: from BYAPR05CU005.outbound.protection.outlook.com
  (mail-westusazlp170100001.outbound.protection.outlook.com
  [IPv6:2a01:111:f403:c000::1])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7E51B403FF
- for <buildroot@buildroot.org>; Wed, 26 Aug 2026 06:47:15 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7E59B80AE6
+ for <buildroot@buildroot.org>; Wed, 26 Aug 2026 06:47:18 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=pcPlVRyc1JvLt6He+pHWBB9wV+m70V27LRZZltONjxXGhvDv0JSgSvL+s6R4I0ANhuUiqWw16emRs6s/UvxY0w5rVPujf1THtJuygdku1YUO0ttrmYhbANU9fJlvN0IBzUKINRH+kv6ahriIyUMccOPH1rQJfuKxKC2mrenCA1RXJTFqlHysQGE1AoLYjj3sukV6mdmnaT+cTA4FlfJLmyksKJrEbsWk7bxQwjrpW5SfyrQ454L6d1bKB1QoOPW4dW7x6dYW8qDBAXe8prQiUQxJsJDhAOOzjq0ree58MWzHmBAYzH5Wv95vOLBojVkPnHvwr6ZtZ/eQaWfmdgI2eg==
+ b=RwA2YFtFQj9VtgdsP06AbuJKz8+YjTP6eWZfFOQ3oW+oComFNe7+N+iRK6c6AX6WDk8Ny72IJ3XmKydDJhg2rlAPVv3t7Nr44OUwEN8zsCauLmi919Fig2jz/Mrsj8um3Fc83p3Yv9DgJQA7K2zHE8wfjESgV8IeNMYTjFLJk1yl5WNlW5EW8yogCoxa27XyWeRt86D1EfhzyInlc87okFbPz1n/ThWOO2d/9RGMl50Z4HD3mUUUB5Gjtlu2Xf5rpRaG0nDvjz4KhTWPWqUF1Sm6tm+KrjuIZWhW8p78oTRLjtv5tnfukNzgj607rjasDpzkg27tdOixhX6IhL8kHw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Gzqw2WMHo3dEHkxOYPYGWiv8aiGQ5AuZMvG+TkLfMis=;
- b=QS2QDuYHlv/5sxQLeQ73b9QPGm81i2VbtTb/kDuVUKmr6VAijj2v8blxr2DfHSzEDX83yX15JguEfz8KBqNJtjXCJ92i/oZ3Vjmobbt/LO+7s3pv3zTpeQ2PgfGkWIzJHPcCuV3KFaE0/dN7SExiPTc0HeZqe9s7Je9ToSF0UQ00sYSaQEAJBRBxjCpjcGqMVaGipvsSxFgg29pYlTdnie9LDG0MFuUVAXOiCnSiDN15ICSqaFDuTwhdOLFV7tNWzU2rFJTMT2WHTI7CA6iQI6ZmaquWMU6FZk5Wxoe5F7pqgzG+iFXJAlYGPhkcGV/KByVheJYd9PORDwWF6ZxeEw==
+ bh=Ec0UojxbVfSb4i3WQjv2uy140PjJ7fpMYNYsU9/EskQ=;
+ b=QQi8SbJmhoEGrmQ/trk9C+580FkyO8AHg1uoXeUS9K/sUMwUQYVWycIPMvRF8ADp6zBxvKVaLN+333PN3O0B7ELNJm5hgxzsLQfJ1gNcq3yO8k/fAJSnqN7iO/C/NkX86Gn6U5Hogv3IRICu1lVFu8MLRhVaFIJb9D7cRbqaz3Isi1AZ6Ogf+S+ajbOuPc7suzR+u2+EdOdlH5yLzlQuPl8D1Gly6mhZt+u/TTl0wcrzTPGvVLvLQFFpwZeaoD3Ao8es61l5Acio1+W5P2OSvwmDfOs+8V0r5sHRJkaQPqHnR0xZ8AY9Q737hHlbDl5IzqG6EKpa2/KPorLTRya2vw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=softfail (sender ip
  is 149.199.90.133) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
  dmarc=fail (p=quarantine sp=quarantine pct=100) action=quarantine
  header.from=amd.com; dkim=none (message not signed); arc=none (0)
-Received: from BN9PR03CA0138.namprd03.prod.outlook.com (2603:10b6:408:fe::23)
- by DM6PR12MB4252.namprd12.prod.outlook.com (2603:10b6:5:211::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.360.6; Wed, 26 Aug
- 2026 06:47:01 +0000
-Received: from BN6PEPF00000074.namprd03.prod.outlook.com
- (2603:10b6:408:fe:cafe::22) by BN9PR03CA0138.outlook.office365.com
- (2603:10b6:408:fe::23) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.360.8 via Frontend Transport; Wed, 26
- Aug 2026 06:47:01 +0000
+Received: from BN0PR04CA0039.namprd04.prod.outlook.com (2603:10b6:408:e8::14)
+ by BY5PR12MB4113.namprd12.prod.outlook.com (2603:10b6:a03:207::15)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.360.8; Wed, 26 Aug
+ 2026 06:47:11 +0000
+Received: from BN6PEPF00000071.namprd03.prod.outlook.com
+ (2603:10b6:408:e8:cafe::6e) by BN0PR04CA0039.outlook.office365.com
+ (2603:10b6:408:e8::14) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.360.7 via Frontend Transport; Wed, 26
+ Aug 2026 06:47:11 +0000
 X-MS-Exchange-Authentication-Results: spf=softfail (sender IP is
  149.199.90.133) smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=fail action=quarantine header.from=amd.com;
 Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
  amd.com discourages use of 149.199.90.133 as permitted sender)
 Received: from satlexmb07.amd.com (149.199.90.133) by
- BN6PEPF00000074.mail.protection.outlook.com (10.167.248.201) with Microsoft
+ BN6PEPF00000071.mail.protection.outlook.com (10.167.248.198) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.360.3 via Frontend Transport; Wed, 26 Aug 2026 06:47:01 +0000
+ 15.21.360.3 via Frontend Transport; Wed, 26 Aug 2026 06:47:10 +0000
 Received: from satlexmb07.amd.com (10.181.42.216) by satlexmb07.amd.com
  (10.181.42.216) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.45; Wed, 26 Aug
- 2026 01:46:58 -0500
+ 2026 01:47:03 -0500
 Received: from xirengwts09.xilinx.com (10.180.168.240) by satlexmb07.amd.com
  (10.181.42.216) with Microsoft SMTP Server id 15.2.2562.45 via Frontend
- Transport; Wed, 26 Aug 2026 01:46:56 -0500
+ Transport; Wed, 26 Aug 2026 01:47:01 -0500
 To: <buildroot@buildroot.org>
-Date: Wed, 26 Aug 2026 07:46:46 +0100
-Message-ID: <20260826064649.292291-1-neal.frager@amd.com>
+Date: Wed, 26 Aug 2026 07:46:47 +0100
+Message-ID: <20260826064649.292291-2-neal.frager@amd.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20260826064649.292291-1-neal.frager@amd.com>
+References: <20260826064649.292291-1-neal.frager@amd.com>
 MIME-Version: 1.0
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN6PEPF00000074:EE_|DM6PR12MB4252:EE_
-X-MS-Office365-Filtering-Correlation-Id: 62dc1023-bf80-4507-0239-08df033dd50d
+X-MS-TrafficTypeDiagnostic: BN6PEPF00000071:EE_|BY5PR12MB4113:EE_
+X-MS-Office365-Filtering-Correlation-Id: 36fe48e7-bf65-4d21-e44f-08df033ddad1
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
- ARA:13230040|82310400026|376014|7416014|36860700016|1800799024|23010399003|6133799003|3023799007|56012099006|10067099003|11063799006|18002099003|41080700001;
-X-Microsoft-Antispam-Message-Info: f/H1FhASPUlo0d8LYGNRms0LQLQszk9d7SMngRQe2JbHA7gMkyhxkEQ6RMcTPZXlq00Q6flJPteTzuCeu2fKHnk6Ni6J2sl1uK4BsxuimZkVzO82VYWTerFtE6YDcCt0AHuY95Kx39gW6gcrUMXuCIYtfpA3nspmHwKOQQvZY7eIlPvTY1t+YQFvYBziZ+lEbrlWSKmEx2EaTR3qhDCUdJ3KUdNbkkt1+uK4LL7oE1jX2vhyuNwpMzLV5LhwkshVIF4Z5VMQnoFiMG0Et9Ujtgmnbiyn6SZ5EYUxFhRRADtxuCSJL1hPaoC8/KMYC07+sQ8l6rNmnYoohoRSOYbVYs11nbqrYBOQlWXQHNWptfeHUEqm+3QC5TW0KGoDAemXZFrrkSUo6pMc2QI4U4zFsmcGn2yA+mMCtaNjLvBtw/85GUPZxhtpfSp5JDIoe2HCXMAdXUrLL86CKeELP8KvDkeER/G/PC7uNzNrNLSRskUAT/eoJGrk9QNzwjHRpggUUWFbAoqsE4WwSKecHZUfU0ll2A5JC4CASSMXa0maqHqK8adm7SQZj4dMtTs4eOJGHLJ1Kg83UetkdNRAeQZ5Rv/v/wJLE1K2PRYYDr71dn+oO4RQJUazDOcXtRNALUGhSrrJ9yABldzh/NTTDyAhs0U397U1gRO/4gEnCjYEZRZG3B6ikJ7TMpycmxYzIhlrVZATWnYaLTYouVhnM1DodLcM8UcA+e42ixuir7myCU3F6xoddBXKB1KSu91SotgnNIcaUojb78YPJi4xlMHgOw==
+ ARA:13230040|1800799024|82310400026|23010399003|7416014|376014|36860700016|13003099007|10067099003|56012099006|11063799006|22082099003|18002099003|41080700001;
+X-Microsoft-Antispam-Message-Info: rUnKphkeEsa5veO/o5v2IqPNXo4zeY4ODGP1eL4xu2r1IFD/wi0vvkOpOD7GZx2DcICU5JZWgci3MehnI6ZErPjVNRngzOQgpXFH2eSO3q14nw9T8nyY4NZRu3GdGwj82v+4+s55EkkJ4nMFNnvTmMqVJIRVR1eXUq/lIEv78FdQK22acSSRWJUQS4A0yTq/rocZNoPgfQEoQzjKXPda+aIwMcmueJviy3hgEYNSWgURVw7tswl/BGy+ISEQwsgvXmMQmFc1H1507vqYP4LtQJovg0mo0Kreai8J9fpUlof4ZlefGickfw0QM2fAL0kRX1W7B5PuCyiH3a66nwoGuqHI3uQfb9+pJum3D1jLa2nI3vIeQIGlN7jocJj3p1O9kvD14npVlucGcHsqkithAJzLe9o/BzLYTgbHhfoubs64FexwN+lgJKxOJYnlk/BIS9/JchoHIo1H7dIs6z+l/sLepMhP8sxFl6kW/Nbk9qute5v3JCX43GoBZTR7simFuIzdG7Sm/iukUROJ9u2xGczAZkC47kFL/tUf0MyQ3JZwULejm1ret2LpUEIjmMJyjUE18TlIujTfX+Glmgmg9qHalhq7fgbmJbFSpwOxXZ0ZuHlcXceuhpQdSSO/HpuUzo3vX0y6wi+7avNkgOZvBfFsqk55UX4ZVAGhUCPHEZMQID4EgEA3Rs65aek53nTc1hQbahZC5g8MC+kIwbr8Yw==
 X-Forefront-Antispam-Report: CIP:149.199.90.133; CTRY:US; LANG:en; SCL:1; SRV:;
  IPV:NLI; SFV:NSPM; H:satlexmb07.amd.com; PTR:unknown-90-133.xilinx.com;
  CAT:NONE;
- SFS:(13230040)(82310400026)(376014)(7416014)(36860700016)(1800799024)(23010399003)(6133799003)(3023799007)(56012099006)(10067099003)(11063799006)(18002099003)(41080700001);
+ SFS:(13230040)(1800799024)(82310400026)(23010399003)(7416014)(376014)(36860700016)(13003099007)(10067099003)(56012099006)(11063799006)(22082099003)(18002099003)(41080700001);
  DIR:OUT; SFP:1101; 
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: GwDM+Gz0DYXEv4PFvqaCso4IdXZs1vvcvt4DZn4Y5TLtJEytEvpTKs5m7ORxnjVYEmPLZbHEB4FiczUsXfhbH7nGP2xSxQBZRGifueeaSoKrG5G3GE0wzx/8eigx5Qdgg8Gl0ayTMc2A6bBC05ttsi4qzgluzw+5LJ3C3ObxRbVp0mWXDuu+vS0F8YioB65aAWNmQaile86H6I4O/2qQLaBiqplLW19oERT4ieqgkobZrU3jpnSYAukAYeuCw67NdnQwRimCJoidkf7QLSyTTdu3aZxMLOHqFUQm7zfLV2/lWYeyu/ANoWO7QboEVlSlQDmpCoVuds/io+TQCymSutmE0o6F3cj4II0Ci6QSFakVPbRr0uAdxHs4/DiXVzrxQOKl3SLJ+ZBeCTjMjx93MjpoP0KysFu3FyQfy87x7nBbw0NnNZrPHQiqWcKyt7+D
+X-MS-Exchange-AntiSpam-MessageData-0: UzVHVpITUBdDdprXkAkRvW8gc8BX4eAZlX/lWUf3eFidFkdennA7iohgkla05LiJWzVapMz4zWDUt68TOE201jexBtk9JVWEC2ZDO6USiv0++B/c06CtbAyFzkxvym6ykvRFLZCWekOeUgCl1RcW/OWcjrfrBCQXrWwVEUPZj1ejCxqZhiSFmiLY8znLDbMr+ijddYTqQOXKWjJCj7ClBNWPe+jPfKOXyTx+jvoA6V1Plfo12DlakNsuk6K2SYaQwT+94x2fkW0FIT9sCYIaKxcmkFFW2BYwHXVJv1DJ1p70zZRTOh8Tiy2M+4z8JoDazgghXzjJr7DFNuzgiEa00qC6ksVP0cySsuwoKECZDPshY0IurQYaOB0PRdJ3ovHUEoa/VzgoDkQg0WFnR0zE7rYq5zC24WH2bpKWiLPN0B9L1/DGjp8a51Utjn1aRa2E
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Aug 2026 06:47:01.0451 (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 62dc1023-bf80-4507-0239-08df033dd50d
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Aug 2026 06:47:10.7215 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 36fe48e7-bf65-4d21-e44f-08df033ddad1
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d; Ip=[149.199.90.133];
  Helo=[satlexmb07.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN6PEPF00000074.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: BN6PEPF00000071.namprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4252
-Subject: [Buildroot] [PATCH v5 1/4] package/xen: fix build error when
- BR2_PACKAGE_XEN_TOOLS not enabled
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4113
+Subject: [Buildroot] [PATCH v5 2/4] package/xen: add custom version support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -133,48 +135,19 @@ From: Neal Frager via buildroot <buildroot@buildroot.org>
 Reply-To: Neal Frager <neal.frager@amd.com>
 Cc: alistair@alistair23.me, stefano.stabellini@amd.com,
  ibai.erkiaga-elorza@amd.com, luca.ceresoli@bootlin.com, micheal.saleab@amd.com,
- yann.morin@orange.com, matthew.l.weber3@boeing.com, brandon.maier@collins.com,
+ yann.morin@orange.com, matthew.l.weber3@boeing.com,
+ Matthew Weber <mathew.l.weber3@boeing.com>, brandon.maier@collins.com,
  john.ernberg@actia.se, brian.j.wood2@boeing.com, ju.o@free.fr,
  stewart.hildebrand@amd.com, thomas.petazzoni@bootlin.com,
  romain.naour@smile.fr, michal.simek@amd.com, romain.naour@gmail.com,
  Neal Frager <neal.frager@amd.com>
-Content-Type: multipart/mixed; boundary="===============2747884872677731143=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2747884872677731143==
-Content-Type: text/plain; charset="y"
-Content-Transfer-Encoding: 8bit
-
-The 0002-Update-linker-flags.patch assumes that the qemu-xen files are included
-in the xen source tree. However, if BR2_PACKAGE_XEN_TOOLS is not enabled, the
-qemu-xen dependency will not be handled and the patch will fail to apply with
-the following error.
-
-Fixes: build error below
-Applying 0002-Update-linker-flags.patch using patch:
-patching file tools/Makefile
-Hunk #1 succeeded at 36 (offset -1 lines).
-Hunk #2 succeeded at 185 (offset -8 lines).
-can't find file to patch at input line 76
-Perhaps you used the wrong -p or --strip option?
-The text leading up to this was:
---------------------------
-|diff --git a/tools/qemu-xen/include/hw/xen/xen_native.h b/tools/qemu-xen/include/hw/xen/xen_native.h
-|index 6bcc83ba..2590904e 100644
-|--- a/tools/qemu-xen/include/hw/xen/xen_native.h
-|+++ b/tools/qemu-xen/include/hw/xen/xen_native.h
---------------------------
-No file to patch.  Skipping patch.
-1 out of 1 hunk ignored
-make: *** [package/pkg-generic.mk:239: output/build/xen-4.21.1/.stamp_patched] Error 1
-
-To avoid making BR2_PACKAGE_XEN_TOOLS a required option, fix the
-0002-Update-linker-flags.patch so that modifying source from the qemu-xen
-package is no longer included.
-
-Instead of patching qemu-xen, a better solution is undefining the
-__XEN_INTERFACE_VERSION__ from the qemu-xen package.
+Add the ability to configure specific Xen versions while leaving the default
+version unchanged to avoid breaking any builds already using Xen 4.21.1.
 
 To test:
 BR2_aarch64=y
@@ -182,85 +155,83 @@ BR2_TOOLCHAIN_EXTERNAL=y
 BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
 BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
 BR2_PACKAGE_XEN=y
- # BR2_PACKAGE_XEN_TOOLS is not set
+BR2_PACKAGE_XEN_CUSTOM_VERSION=y
+BR2_PACKAGE_XEN_CUSTOM_VERSION_VALUE="4.22.0"
+
+Add to package/xen/xen.hash:
+sha256  b2a14ca369e3cf26f123a455b1603f3962ae9fcee0b8640a9cc33879de198223  xen-4.22.0.tar.gz
 
 Signed-off-by: Neal Frager <neal.frager@amd.com>
+Tested-by: Matthew Weber <mathew.l.weber3@boeing.com>
+Prior test details: https://gist.github.com/matthew-l-weber/c17f14a3793ccee440a383e4177ff3db
+Reviewed-by: John Ernberg <john.ernberg@actia.se>
+Reviewed-by: Stewart Hildebrand <stewart.hildebrand@amd.com>
 ---
 V1->V2:
-- changed method to modify patches instead of xen.mk
-V2->V3:
-- removed text from commit message which appears as start of patch
-V3->V4:
-- merged into patch series as the first patch
+- rebased to updated master branch
+- removed the line move of the XEN_SITE definition
+V2->V4:
+- merged into new patch series as the second patch
 V4->V5:
-- removed qemu-xen patch
-- undefined __XEN_INTERFACE_VERSION__ from qemu-xen
+- added custom version test to commit message
 ---
- package/xen/0002-Update-linker-flags.patch | 16 +---------------
- package/xen/xen.mk                         |  3 ++-
- 2 files changed, 3 insertions(+), 16 deletions(-)
+ package/xen/Config.in | 25 +++++++++++++++++++++++++
+ package/xen/xen.mk    |  2 +-
+ 2 files changed, 26 insertions(+), 1 deletion(-)
 
-diff --git a/package/xen/0002-Update-linker-flags.patch b/package/xen/0002-Update-linker-flags.patch
-index ac02722781..3ba678cd9b 100644
---- a/package/xen/0002-Update-linker-flags.patch
-+++ b/package/xen/0002-Update-linker-flags.patch
-@@ -16,8 +16,7 @@ Upstream: Buildroot specific. This is a temporary patch for an intermediate bump
- Signed-off-by: Vincent Stehlé <vincent.stehle@arm.com>
- ---
-  tools/Makefile                              | 29 ++++++++++++++++++++-
-- tools/qemu-xen/include/hw/xen/xen_native.h |  2 +-
-- 2 files changed, 29 insertions(+), 2 deletions(-)
-+ 1 file changed, 28 insertions(+), 1 deletions(-)
+diff --git a/package/xen/Config.in b/package/xen/Config.in
+index d63a3f6002..e50b232f0a 100644
+--- a/package/xen/Config.in
++++ b/package/xen/Config.in
+@@ -10,6 +10,31 @@ config BR2_PACKAGE_XEN
  
- diff --git a/tools/Makefile b/tools/Makefile
- index a9a3196e..5d289651 100644
-@@ -69,19 +68,6 @@ index a9a3196e..5d289651 100644
-  		--bindir=$(LIBEXEC_BIN) \
-  		--datadir=$(SHAREDIR)/qemu-xen \
-  		--localstatedir=$(localstatedir) \
--diff --git a/tools/qemu-xen/include/hw/xen/xen_native.h b/tools/qemu-xen/include/hw/xen/xen_native.h
--index 6bcc83ba..2590904e 100644
----- a/tools/qemu-xen/include/hw/xen/xen_native.h
--+++ b/tools/qemu-xen/include/hw/xen/xen_native.h
--@@ -2,7 +2,7 @@
-- #define QEMU_HW_XEN_NATIVE_H
-- 
-- #ifdef __XEN_INTERFACE_VERSION__
---#error In Xen native files, include xen_native.h before other Xen headers
--+#warning In Xen native files, include xen_native.h before other Xen headers
-- #endif
-- 
-- /*
- -- 
- 2.51.0
+ if BR2_PACKAGE_XEN
  
++choice
++	prompt "Xen Version"
++	help
++	  Select the specific Xen version you want to use
++
++config BR2_PACKAGE_XEN_LATEST_VERSION
++	bool "4.21.1"
++
++config BR2_PACKAGE_XEN_CUSTOM_VERSION
++	bool "Custom version"
++	help
++	  This option allows to use a specific official version
++
++endchoice
++
++config BR2_PACKAGE_XEN_CUSTOM_VERSION_VALUE
++	string "Xen version"
++	depends on BR2_PACKAGE_XEN_CUSTOM_VERSION
++
++config BR2_PACKAGE_XEN_VERSION
++	string
++	default "4.21.1"	if BR2_PACKAGE_XEN_LATEST_VERSION
++	default BR2_PACKAGE_XEN_CUSTOM_VERSION_VALUE \
++				if BR2_PACKAGE_XEN_CUSTOM_VERSION
++
+ config BR2_PACKAGE_XEN_HYPERVISOR
+ 	bool "Xen hypervisor"
+ 	help
 diff --git a/package/xen/xen.mk b/package/xen/xen.mk
-index 75252d1123..bddfdbba38 100644
+index bddfdbba38..4e953edeea 100644
 --- a/package/xen/xen.mk
 +++ b/package/xen/xen.mk
-@@ -40,7 +40,8 @@ XEN_MAKE_ENV = \
- 	CROSS_COMPILE=$(TARGET_CROSS) \
- 	HOST_EXTRACFLAGS="-Wno-error" \
- 	XEN_HAS_CHECKPOLICY=n \
--	$(TARGET_CONFIGURE_OPTS)
-+	$(TARGET_CONFIGURE_OPTS) \
-+	EXTRA_CFLAGS_QEMU_XEN="-U__XEN_INTERFACE_VERSION__"
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_XEN_HYPERVISOR),y)
- XEN_MAKE_OPTS += dist-xen
+-XEN_VERSION = 4.21.1
++XEN_VERSION = $(call qstrip,$(BR2_PACKAGE_XEN_VERSION))
+ XEN_SITE = https://downloads.xenproject.org/release/xen/$(XEN_VERSION)
+ XEN_SELINUX_MODULES = systemd udev xen
+ XEN_LICENSE = GPL-2.0
 -- 
 2.25.1
-
-
---===============2747884872677731143==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============2747884872677731143==--
