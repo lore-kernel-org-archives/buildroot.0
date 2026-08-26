@@ -1,97 +1,97 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6384EC5DF97
-	for <buildroot@archiver.kernel.org>; Wed, 26 Aug 2026 12:37:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7DAA9C61DC2
+	for <buildroot@archiver.kernel.org>; Wed, 26 Aug 2026 12:37:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2B0BD80C4E;
-	Wed, 26 Aug 2026 12:37:18 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Hz0CABEW0N4b; Wed, 26 Aug 2026 12:37:17 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787747837;
-	bh=UtV7aW92P8r0MLnw9BcqZ/ADoBlj3RvSo4EAeGpU518=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=fEPBQ8EznEnB6pTB3tkbHqULZQFm88t5Pwevlz7CpBEMj3/WcaqinEBOreLkao8Kh
-	 DAQmyqWEJvcuHK1TvpbVFrP+hoky+fI6cl8lJxU/sA9OV7mJPbjoCaZA9ZjyHtic5q
-	 Gfz4ttOSfAYS2fntFI/O2nYD95XWmECGZjW/7LkWRonhEQEAP1z8Q22f36ChPVJHEk
-	 ykHpy5b+6LA7P3ysfJGM+k6b4tn2+P36gaog65ak4cuN0vMfKlGyhPvHQemWkot9L2
-	 1Q5NbVi/+vumV/gMUq/YNKv8+QSzzn+/Idfe6iTpshvwlq7TClUxBGU9l4aB5VKb8F
-	 J6qviiqu/Ochw==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E45A380C71;
-	Wed, 26 Aug 2026 12:37:16 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 76EC2396
- for <buildroot@buildroot.org>; Wed, 26 Aug 2026 12:37:04 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 64AA040557
- for <buildroot@buildroot.org>; Wed, 26 Aug 2026 12:37:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 428DC406EB;
+	Wed, 26 Aug 2026 12:37:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id o4G1juG1dd-W for <buildroot@buildroot.org>;
- Wed, 26 Aug 2026 12:37:02 +0000 (UTC)
+ id u6VvK9n8zAgq; Wed, 26 Aug 2026 12:37:16 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1787747834;
+	bh=4v4Ll0T/I3W8wWFZQnJaZssZlArcHbsueRRrWL6GAe4=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=fxRC6b2cN1jtE5mcvsW47FWzd5rhlZIlNJLCqlBj0ocsfRbdc80HEQIP3FYO9FUAY
+	 H+JYdLm94wBY/CXPSTMFSHlq0JoqEN7c6Mca3lNe9VoU/X2f9q2SHgd02pghSw7hU9
+	 E0UQrifGEqtIlpBYOxhUr/Sdhiry/27KQCBFNvmwG7EsLKxoQAPAC40nPR2e7jBMRo
+	 /vJYaERWMHqpAhZGBitEpPrU8t1Q8/1xC5vaP+tgTFOkgO2eyQH5pgvV8kpBFmIr/s
+	 vss9R9XlszmC8C+SCCQL00rMW+jAS74VhEmMad0oQvDibDmRUzNDPGkHceMAvOYx3r
+	 Z7mCIwt3JeQ+g==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id A9A5E406CC;
+	Wed, 26 Aug 2026 12:37:14 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id AA9DD396
+ for <buildroot@buildroot.org>; Wed, 26 Aug 2026 12:37:02 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9CC3B605EB
+ for <buildroot@buildroot.org>; Wed, 26 Aug 2026 12:37:02 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oDBgaD5RqDJZ for <buildroot@buildroot.org>;
+ Wed, 26 Aug 2026 12:37:01 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::52e; helo=mail-ed1-x52e.google.com;
+ client-ip=2a00:1450:4864:20::535; helo=mail-ed1-x535.google.com;
  envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com
- [IPv6:2a00:1450:4864:20::52e])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 813CC40586
- for <buildroot@buildroot.org>; Wed, 26 Aug 2026 12:37:01 +0000 (UTC)
-Received: by mail-ed1-x52e.google.com with SMTP id
- 4fb4d7f45d1cf-698ae09e356so1350232a12.2
- for <buildroot@buildroot.org>; Wed, 26 Aug 2026 05:37:01 -0700 (PDT)
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com
+ [IPv6:2a00:1450:4864:20::535])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 51C22605ED
+ for <buildroot@buildroot.org>; Wed, 26 Aug 2026 12:36:59 +0000 (UTC)
+Received: by mail-ed1-x535.google.com with SMTP id
+ 4fb4d7f45d1cf-6a374bea882so1108228a12.1
+ for <buildroot@buildroot.org>; Wed, 26 Aug 2026 05:36:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1787747820; x=1788352620;
+ d=1e100.net; s=20251104; t=1787747818; x=1788352618;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=yXdJGGusmBhOzDzdvMOgqhg4ACDu2OxrZqVxaRT4/R4=;
- b=HqhKOT5Q31QFZOwgluHXK5VyboXvyEFdwQ29obNJA6ViVHgZjlNBRO3aRsk6B6zldk
- UaoUodMamGyBZOhI2fx06xUhXD+kRISzY7zvAlFhA7gjX1PZJAREiWqUitsfhQJ31uhG
- XgM7bpreocNTiOQLPwRJFr2+tpOgZTYW65n1b11KOJmnhKqdonV4vrOs50dE1T5DIord
- ycexovdVQ12xLhdIJygUIF6nOiHHPRsWSfVSFlXan4FdsM8PMITZaDF8Ci9ZD/LCFjxs
- +yGCK7Qb+AyyRBnH2XhlvugY51UPzVWLQwFCYqs/Nv9nVdTCIhaoZfIKKuvsPfVxWhsA
- XUbQ==
-X-Gm-Message-State: AFuF++lFz59asEu6kvHrk/0tb9mRv+YJw0230Pp7b8AjNnf3Ay5ssgGM
- FyYJkD5CoL/ZZAR2vdfOWc3uvhas14J1uL4YK+4AbHhQ1koFCavrR9kUR4unJTgqg8HNNWDHVJ0
- p6B/FaXs=
-X-Gm-Gg: AR+sD13AbcpKdvdYa6z+JMmPj+hnmLAQDMnNKI12m8I2OEkL2p85pDDuELdRN3Z2b4e
- T3vdHgbzE1/WNtvKin1TVz5RPmmMBUhcQmdb2zZ3UytwoMY06IjsPfc85IO6Q9fEaPqhh0gqFZE
- Adh0pCL+vhNmIgl0bUg0JumyimTY2iIkbujr7PJDHQ2Fo5l8IluEYN3/iSXO+nnVyEBmZuL8oSW
- kUpiaHk3NyJ53cn5ixdRAzIOFY6Nkf3WXvVYYzrZtdXhaktfwQACKvyALwDkF/Nqj8VsjTMLFGt
- GzykCf3KcTeVElsIoNSF373TayTikl82eI5IupN8SeevLbqyPYhSUzoxmp7wLrgtAOtqZtwj+tW
- 2HjA/ebRuzguvfpCjs3cIVicdzebVLM9eA5JaT0YpVZ8m1RLl88tS1zASoHuioh6bbeYtzdNGL/
- SGU3M4XFI49DBzQoIXu+Gd4hxejO7AjczUPKOZ0K9bNc0zvt7w8Dv5oPBKUjPEp8DrE+DjlR8fO
- A1l
-X-Received: by 2002:a05:6402:21d9:b0:698:be4d:ca2a with SMTP id
- 4fb4d7f45d1cf-6a5df6621f1mr7783797a12.15.1787747819926; 
- Wed, 26 Aug 2026 05:36:59 -0700 (PDT)
+ bh=TECMYjFlBSjwoxdtQf0ud3iO15uoRC9jKpKyeakAas0=;
+ b=mBO/3FXV7YSrl/mjxKCH6ON52JiMYC4EsNwwFodRiAg28oT+oSKg5ch2yPDbf4jvtD
+ x/BAlZQHsRlZiH8d3B8maVmRjGJlXIc+mbMTYWXEz1uh3sL2VeTtucPbgSSWo9FPc2CW
+ qhv548BRkSJzcuogle/mfE5UmablwX/syqKwUQhpio+EFeY5hHw5E0lgiXH2daZVclo7
+ 2Ic7nEKxAUA0QOZwjEinzPlnOUg3qhzmkDlviFLZESAc5qHbEjC3/TkHHOuLZ5+eIprK
+ jORPKABxzSNeGhqyO2u0GGFgmAMeqbxyQukopce5qwUXrKMTTUu/HEwXyHM3UB6Jc5r2
+ InIw==
+X-Gm-Message-State: AFuF++nD/+Pbe28GIsFnugAc3jaCS1Ai3VmMfDdZU+/4fiJTjc++IZc/
+ T7pMbK3SMYwk/Mk3VmJZ/2bKidDoKVXHsqKRNS1A4NSVEbGfngHo94fRd6+u8uRpYcB9838kIMY
+ cYq12ttI=
+X-Gm-Gg: AR+sD10xROkO0JitRkzS4NSkcnmfIsbE9X6ZCWifbfU3qz7yX4mMRmrOHyCj5RpXR8+
+ DZcRfIqazDKLjPk2pex5SuE0G+gXZQNGH67XR1dC/bh+MPWmmAzo2nae0h9QMEuna3JK1aYYHHZ
+ qQVGrauAJZN/nWm+8iCbGmkbcHR3PbIJgpjV7/FzE5qvqrM99Mh0j3vRpDSbkvYFFL20ONjpctf
+ Ch4Il21BOh+lzRACRwvqoJ6iVoqYphBy2Bp42llpPaZV6MzwsYuxYylecWsMVVPivAd+AnV+bZo
+ 3W/RrFa2DRfNIwgh2nfIY0M0hHehdkeKrcoAKWNncPVtEAi3ZbMC7sozTrqrzivxxkBsVql5RDe
+ lDdiA2RJxqa7Zme9NOjWHnHL4Kipya8S9/GqgIiwC3XC7EQUeRcG76mgjbLIei4LwT2d+S+daJU
+ BIayDC2RuXmUH4wQtb9LIN6BG86qrAq8n3BX1xkzYYy5H4wktVYJsCKcH7dqY3Vr9ogVEKVLhyo
+ FNrLQ==
+X-Received: by 2002:a05:6402:5513:b0:6a3:6b8f:94ce with SMTP id
+ 4fb4d7f45d1cf-6a5df5e9e04mr9375218a12.3.1787747817877; 
+ Wed, 26 Aug 2026 05:36:57 -0700 (PDT)
 Received: from chapelon.home ([2a02:a03f:63ab:dc01:ce15:1729:c989:3a9e])
  by smtp.gmail.com with ESMTPSA id
- 4fb4d7f45d1cf-6a5de8ea6d0sm4925258a12.13.2026.08.26.05.36.59
+ 4fb4d7f45d1cf-6a5de8ea6d0sm4925258a12.13.2026.08.26.05.36.57
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 26 Aug 2026 05:36:59 -0700 (PDT)
+ Wed, 26 Aug 2026 05:36:57 -0700 (PDT)
 To: buildroot@buildroot.org
 Cc: Bernd Kuhls <bernd@kuhls.net>, thomas.perale@mind.be,
  raphael.melotte@mind.be, Titouan Christophe <titouan.christophe@mind.be>
-Date: Wed, 26 Aug 2026 14:36:37 +0200
-Message-ID: <20260826123637.410258-17-titouan.christophe@mind.be>
+Date: Wed, 26 Aug 2026 14:36:34 +0200
+Message-ID: <20260826123637.410258-14-titouan.christophe@mind.be>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260826123637.410258-1-titouan.christophe@mind.be>
 References: <20260826123637.410258-1-titouan.christophe@mind.be>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH for 2025.02.x 16/16] package/clamav: add patch
- for CVE-2026-20348
+Subject: [Buildroot] [PATCH for 2025.02.x 13/16] package/clamav: add patch
+ for CVE-2026-20339
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -112,304 +112,251 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- ...xar-limits-against-inflated-toc-size.patch | 277 ++++++++++++++++++
+ ...in-rebuilt-section-size-overflow-101.patch | 224 ++++++++++++++++++
  package/clamav/clamav.mk                      |   3 +
- 2 files changed, 280 insertions(+)
- create mode 100644 package/clamav/0015-libclamav-enforce-xar-limits-against-inflated-toc-size.patch
+ 2 files changed, 227 insertions(+)
+ create mode 100644 package/clamav/0012-libclamav-fix-pespin-rebuilt-section-size-overflow-101.patch
 
-diff --git a/package/clamav/0015-libclamav-enforce-xar-limits-against-inflated-toc-size.patch b/package/clamav/0015-libclamav-enforce-xar-limits-against-inflated-toc-size.patch
+diff --git a/package/clamav/0012-libclamav-fix-pespin-rebuilt-section-size-overflow-101.patch b/package/clamav/0012-libclamav-fix-pespin-rebuilt-section-size-overflow-101.patch
 new file mode 100644
-index 0000000000..962ccfcf40
+index 0000000000..0746385ac7
 --- /dev/null
-+++ b/package/clamav/0015-libclamav-enforce-xar-limits-against-inflated-toc-size.patch
-@@ -0,0 +1,277 @@
-+From: John Humlick <15677335+jhumlick@users.noreply.github.com>
-+Date: Fri, 17 Jul 2026 15:27:26 -0700
-+Subject: libclamav: Enforce XAR limits against inflated TOC size
++++ b/package/clamav/0012-libclamav-fix-pespin-rebuilt-section-size-overflow-101.patch
+@@ -0,0 +1,224 @@
++From: "Val S." <valsnyde@cisco.com>
++Date: Tue, 28 Jul 2026 09:04:39 -0400
++Subject: Libclamav: fix PESpin rebuilt section size overflow (#101)
 +
-+Inflate XAR table-of-contents data incrementally and enforce scan and
-+allocation limits against the actual output instead of the declared
-+header length. Require the compressed stream to finish before parsing.
++The PESpin unpacker accumulated rebuilt section sizes in a signed int
++before allocating the intermediate rebuilt image buffer. A crafted PE with
++many sections could wrap the total to a small value and then copy full
++section contents into that undersized allocation.
 +
-+Add regression coverage for mismatched TOC lengths, oversized actual
-+output, and incomplete compressed streams.
++Track the rebuilt size in a 64-bit accumulator and reject additions that
++would exceed CLI_MAX_ALLOCATION before allocating. Also avoid related
++undefined behavior in the PESpin checksum and resource bitmap paths, and
++share bitmap-based cleanup through one helper.
 +
-+CLAM-3010
++Reported-by: Feng Xue
++Also independently reported by: Yazdan Soltani
++
++CLAM-3008
 +
 +---
-+Upstream: https://github.com/Cisco-Talos/clamav/commit/10ee017ebe51ecd593bf13944a25c6c8fe70aa8a
-+CVE: CVE-2026-20348
-+[Titouan: fix merge conflict with clamav-1.4.3: drop diff for test file not in tree]
++Upstream: https://github.com/Cisco-Talos/clamav/commit/d442da6418391b84c6124717e0153237187972dd
++CVE: CVE-2026-20339
 +Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 +---
-+ libclamav/xar.c | 190 +++++++++++++++++++++++++++++++++++++-----------
-+ 1 file changed, 149 insertions(+), 41 deletions(-)
++ libclamav/spin.c | 112 +++++++++++++++++++++++++++++++++++++----------
++ 1 file changed, 89 insertions(+), 23 deletions(-)
 +
-+diff --git a/libclamav/xar.c b/libclamav/xar.c
-+index 12f911551..a4fac0b3a 100644
-+--- a/libclamav/xar.c
-++++ b/libclamav/xar.c
-+@@ -34,6 +34,8 @@
-+ #include "inflate64.h"
-+ #include "lzma_iface.h"
++diff --git a/libclamav/spin.c b/libclamav/spin.c
++index d0470b317a..a7e3a2d01d 100644
++--- a/libclamav/spin.c
+++++ b/libclamav/spin.c
++@@ -62,6 +62,64 @@
++ #include "packlibs.h"
++ #include "spin.h"
 + 
-++#define XAR_TOC_INFLATE_CHUNK_SIZE (64 * 1024)
-++
-+ /*
-+    xar_cleanup_temp_file - cleanup after cli_gentempfd
-+    parameters:
-+@@ -408,6 +410,124 @@ static int xar_hash_check(int hash, const void *result, const void *expected)
-+     return memcmp(result, expected, len);
-+ }
-+ 
-++static cl_error_t xar_inflate_toc(cli_ctx *ctx, const unsigned char *compressed_toc, size_t compressed_length,
-++                                  char **toc_out, size_t *toc_length_out)
+++/**
+++ * @brief Add a section size to the rebuilt PESpin image size.
+++ *
+++ * @return 0 if the size was added, 1 if the rebuilt image would exceed
+++ * CLI_MAX_ALLOCATION.
+++ */
+++static int spin_add_blob_size(uint64_t *blobsz, uint32_t size)
 ++{
-++    cl_error_t ret = CL_SUCCESS;
-++    z_stream strm;
-++    char *toc                = NULL;
-++    size_t capacity          = XAR_TOC_INFLATE_CHUNK_SIZE;
-++    size_t toc_length        = 0;
-++    bool inflate_initialized = false;
-++
-++    memset(&strm, 0, sizeof(strm));
-++
-++    if (compressed_length > UINT_MAX) {
-++        cli_dbgmsg("cli_scanxar: Compressed TOC is too large for zlib.\n");
-++        return CL_EFORMAT;
+++    if (*blobsz > (uint64_t)CLI_MAX_ALLOCATION ||
+++        (uint64_t)size > (uint64_t)CLI_MAX_ALLOCATION - *blobsz) {
+++        cli_dbgmsg("spin: rebuilt section data exceeds allocation limit\n");
+++        return 1;
 ++    }
 ++
-++    toc = cli_max_malloc(capacity);
-++    if (toc == NULL) {
-++        cli_dbgmsg("cli_scanxar: Failed to allocate the initial TOC buffer.\n");
-++        return CL_EMEM;
-++    }
-++
-++    strm.next_in  = (unsigned char *)compressed_toc;
-++    strm.avail_in = (uInt)compressed_length;
-++
-++    if (inflateInit(&strm) != Z_OK) {
-++        cli_dbgmsg("cli_scanxar: inflateInit failed.\n");
-++        ret = CL_EFORMAT;
-++        goto done;
-++    }
-++    inflate_initialized = true;
-++
-++    while (true) {
-++        uInt avail_in_before;
-++        uInt output_available;
-++        size_t produced;
-++        int zret;
-++
-++        output_available = (uInt)(capacity - toc_length - 1);
-++        strm.next_out    = (unsigned char *)toc + toc_length;
-++        strm.avail_out   = output_available;
-++        avail_in_before  = strm.avail_in;
-++
-++        zret     = inflate(&strm, Z_NO_FLUSH);
-++        produced = output_available - strm.avail_out;
-++
-++        if (toc_length > SIZE_MAX - produced) {
-++            cli_dbgmsg("cli_scanxar: Decompressed TOC length overflow.\n");
-++            ret = CL_EFORMAT;
-++            goto done;
-++        }
-++        toc_length += produced;
-++
-++        ret = cli_checklimits("cli_scanxar", ctx, toc_length, 0, 0);
-++        if (ret != CL_SUCCESS) {
-++            goto done;
-++        }
-++
-++        if (zret == Z_STREAM_END) {
-++            break;
-++        }
-++        if (zret != Z_OK) {
-++            cli_dbgmsg("cli_scanxar: inflate failed with status %d.\n", zret);
-++            ret = CL_EFORMAT;
-++            goto done;
-++        }
-++        if (produced == 0 && strm.avail_in == avail_in_before) {
-++            cli_dbgmsg("cli_scanxar: inflate made no progress before reaching the end of the TOC stream.\n");
-++            ret = CL_EFORMAT;
-++            goto done;
-++        }
-++
-++        if (strm.avail_out == 0) {
-++            char *new_toc;
-++            size_t new_capacity;
-++
-++            if (capacity == CLI_MAX_ALLOCATION) {
-++                cli_dbgmsg("cli_scanxar: Decompressed TOC exceeds the internal allocation limit.\n");
-++                ret = CL_EFORMAT;
-++                goto done;
-++            }
-++
-++            new_capacity = capacity + XAR_TOC_INFLATE_CHUNK_SIZE;
-++            if (new_capacity < capacity || new_capacity > CLI_MAX_ALLOCATION) {
-++                new_capacity = CLI_MAX_ALLOCATION;
-++            }
-++
-++            new_toc = cli_max_realloc(toc, new_capacity);
-++            if (new_toc == NULL) {
-++                cli_dbgmsg("cli_scanxar: Failed to grow the TOC buffer.\n");
-++                ret = CL_EMEM;
-++                goto done;
-++            }
-++            toc      = new_toc;
-++            capacity = new_capacity;
-++        }
-++    }
-++
-++    if (inflateEnd(&strm) != Z_OK) {
-++        cli_dbgmsg("cli_scanxar: inflateEnd failed.\n");
-++        ret = CL_EFORMAT;
-++        goto done;
-++    }
-++    inflate_initialized = false;
-++
-++    toc[toc_length] = '\0';
-++    *toc_out        = toc;
-++    *toc_length_out = toc_length;
-++    toc             = NULL;
-++
-++done:
-++    if (inflate_initialized)
-++        inflateEnd(&strm);
-++    free(toc);
-++    return ret;
+++    *blobsz += size;
+++    return 0;
 ++}
 ++
-+ /*
-+   cli_scanxar - scan an xar archive.
-+   Parameters:
-+@@ -427,7 +547,8 @@ int cli_scanxar(cli_ctx *ctx)
-+     size_t length, offset, size, at;
-+     int encoding;
-+     z_stream strm;
-+-    char *toc, *tmpname = NULL;
-++    char *toc = NULL, *tmpname = NULL;
-++    size_t toc_length       = 0;
-+     xmlTextReaderPtr reader = NULL;
-+     int a_hash, e_hash;
-+     unsigned char *a_cksum = NULL, *e_cksum = NULL;
-+@@ -435,8 +556,6 @@ int cli_scanxar(cli_ctx *ctx)
-+     char e_hash_result[SHA1_HASH_SIZE];
-+     char a_hash_result[SHA1_HASH_SIZE];
-+ 
-+-    memset(&strm, 0x00, sizeof(z_stream));
-+-
-+     /* retrieve xar header */
-+     if (fmap_readn(ctx->fmap, &hdr, 0, sizeof(hdr)) != sizeof(hdr)) {
-+         cli_dbgmsg("cli_scanxar: Invalid header, too short.\n");
-+@@ -463,46 +582,35 @@ int cli_scanxar(cli_ctx *ctx)
-+     /* cli_dbgmsg("hdr.toc_length_decompressed %lu\n", hdr.toc_length_decompressed); */
-+     /* cli_dbgmsg("hdr.chksum_alg %i\n", hdr.chksum_alg); */
-+ 
-+-    /* Uncompress TOC */
-+-    strm.next_in = (unsigned char *)fmap_need_off_once(ctx->fmap, hdr.size, hdr.toc_length_compressed);
-+-    if (strm.next_in == NULL) {
-+-        cli_dbgmsg("cli_scanxar: fmap_need_off_once fails on TOC.\n");
-+-        return CL_EREAD;
-+-    }
-+-    strm.avail_in = hdr.toc_length_compressed;
-+-    toc           = cli_max_malloc(hdr.toc_length_decompressed + 1);
-+-    if (toc == NULL) {
-+-        cli_dbgmsg("cli_scanxar: cli_max_malloc fails on TOC decompress buffer.\n");
-+-        return CL_EMEM;
-++    /* Check time and file-count limits before inflating. Size limits are
-++     * enforced against the actual decompressed TOC length below. */
-++    rc = cli_checklimits("cli_scanxar", ctx, 0, 0, 0);
-++    if (rc != CL_SUCCESS) {
-++        return rc;
-+     }
-+-    toc[hdr.toc_length_decompressed] = '\0';
-+-    strm.avail_out                   = hdr.toc_length_decompressed;
-+-    strm.next_out                    = (unsigned char *)toc;
-+-    rc                               = inflateInit(&strm);
-+-    if (rc != Z_OK) {
-+-        cli_dbgmsg("cli_scanxar:inflateInit error %i \n", rc);
-+-        rc = CL_EFORMAT;
-+-        goto exit_toc;
+++/**
+++ * @brief Replace an already-counted section size in the rebuilt PESpin image.
+++ *
+++ * @return 0 if the size was replaced, 1 if the previous size was not counted
+++ * or the rebuilt image would exceed CLI_MAX_ALLOCATION.
+++ */
+++static int spin_replace_blob_size(uint64_t *blobsz, uint32_t old_size, uint32_t new_size)
+++{
+++    uint64_t adjusted_blobsz;
 ++
-++    if (hdr.toc_length_compressed > SIZE_MAX) {
-++        cli_dbgmsg("cli_scanxar: Compressed TOC length cannot be represented safely.\n");
-++        return CL_EFORMAT;
-+     }
-+-    rc = inflate(&strm, Z_SYNC_FLUSH);
-+-    if (rc != Z_OK && rc != Z_STREAM_END) {
-+-        inflateEnd(&strm);
-+-        cli_dbgmsg("cli_scanxar:inflate error %i \n", rc);
-+-        rc = CL_EFORMAT;
-+-        goto exit_toc;
+++    if (*blobsz < old_size) {
+++        cli_dbgmsg("spin: rebuilt section data accounting underflow\n");
+++        return 1;
+++    }
 ++
-++    /* Uncompress TOC */
-++    {
-++        const unsigned char *compressed_toc = fmap_need_off_once(ctx->fmap, hdr.size, (size_t)hdr.toc_length_compressed);
+++    adjusted_blobsz = *blobsz - old_size;
+++    if (adjusted_blobsz > (uint64_t)CLI_MAX_ALLOCATION ||
+++        (uint64_t)new_size > (uint64_t)CLI_MAX_ALLOCATION - adjusted_blobsz) {
+++        cli_dbgmsg("spin: rebuilt section data exceeds allocation limit\n");
+++        return 1;
+++    }
 ++
-++        if (compressed_toc == NULL) {
-++            cli_dbgmsg("cli_scanxar: fmap_need_off_once fails on TOC.\n");
-++            return CL_EREAD;
-++        }
-++        rc = xar_inflate_toc(ctx, compressed_toc, (size_t)hdr.toc_length_compressed, &toc, &toc_length);
-+     }
-+-    rc = inflateEnd(&strm);
-+-    if (rc != Z_OK) {
-+-        cli_dbgmsg("cli_scanxar:inflateEnd error %i \n", rc);
-+-        rc = CL_EFORMAT;
-+-        goto exit_toc;
-++    if (rc != CL_SUCCESS) {
-++        return rc;
-+     }
+++    *blobsz = adjusted_blobsz + new_size;
+++    return 0;
+++}
+++
+++/**
+++ * @brief Free PESpin section buffers that are marked as grown in the bitmap.
+++ */
+++static void spin_free_grown_sections(char **sects, int sectcnt, uint32_t bitmap)
+++{
+++    int j;
+++
+++    for (j = 0; j < sectcnt; j++) {
+++        if (bitmap & 1)
+++            free(sects[j]);
+++        bitmap >>= 1;
+++    }
+++}
+++
++ static char exec86(uint8_t aelle, uint8_t cielle, char *curremu, int *retval)
++ {
++     int len = 0;
++@@ -143,7 +201,7 @@ static uint32_t summit(char *src, int size)
++     int i;
 + 
-+-    if (hdr.toc_length_decompressed != strm.total_out) {
-+-        cli_dbgmsg("TOC decompress length %" PRIu64 " does not match amount decompressed %lu\n",
-+-                   hdr.toc_length_decompressed, strm.total_out);
-+-        toc[strm.total_out]         = '\0';
-+-        hdr.toc_length_decompressed = strm.total_out;
-++    if (hdr.toc_length_decompressed != toc_length) {
-++        cli_dbgmsg("TOC declared decompress length %" PRIu64 " does not match amount decompressed %zu\n",
-++                   hdr.toc_length_decompressed, toc_length);
-+     }
-+ 
-+     /* cli_dbgmsg("cli_scanxar: TOC xml:\n%s\n", toc); */
-+@@ -512,7 +620,7 @@ int cli_scanxar(cli_ctx *ctx)
-+ 
-+     /* scan the xml */
-+     cli_dbgmsg("cli_scanxar: scanning xar TOC xml in memory.\n");
-+-    rc = cli_magic_scan_buff(toc, hdr.toc_length_decompressed, ctx, NULL, LAYER_ATTRIBUTES_NONE);
-++    rc = cli_magic_scan_buff(toc, toc_length, ctx, NULL, LAYER_ATTRIBUTES_NONE);
-+     if (rc != CL_SUCCESS) {
-+         goto exit_toc;
-+     }
-+@@ -523,7 +631,7 @@ int cli_scanxar(cli_ctx *ctx)
-+             cli_dbgmsg("cli_scanxar: Can't create temporary file for TOC.\n");
-+             goto exit_toc;
++     while (size) {
++-        eax ^= *src++ << 8 & 0xff00;
+++        eax ^= ((uint32_t)(uint8_t)*src++ << 8) & 0xff00;
++         eax = eax >> 3 & 0x1fffffff;
++         for (i = 0; i < 4; i++) {
++             uint32_t swap;
++@@ -164,7 +222,8 @@ int unspin(char *src, int ssize, struct cli_exe_section *sections, int sectcnt,
++ {
++     char *curr, *emu, *ep, *spinned;
++     char **sects;
++-    int blobsz = 0, j;
+++    uint64_t blobsz = 0;
+++    int j;
++     uint32_t key32, bitmap, bitman;
++     uint32_t len;
++     uint8_t key8;
++@@ -402,12 +461,16 @@ int unspin(char *src, int ssize, struct cli_exe_section *sections, int sectcnt,
++     len = 0;
++     for (j = 0; j < sectcnt; j++) {
++         if (bitmap & 1) {
+++            if (spin_add_blob_size(&blobsz, sections[j].vsz)) {
+++                len = 1;
+++                break;
+++            }
+++
++             if ((sects[j] = (char *)cli_max_malloc(sections[j].vsz)) == NULL) {
++                 cli_dbgmsg("spin: malloc(%u) failed\n", sections[j].vsz);
++                 len = 1;
++                 break;
++             }
++-            blobsz += sections[j].vsz;
++             memset(sects[j], 0, sections[j].vsz);
++             cli_dbgmsg("spin: Growing sect%d: was %x will be %x\n", j, sections[j].rsz, sections[j].vsz);
++             if (cli_unfsg(src + sections[j].raw, sects[j], sections[j].rsz, sections[j].vsz, NULL, NULL) == -1) {
++@@ -415,7 +478,11 @@ int unspin(char *src, int ssize, struct cli_exe_section *sections, int sectcnt,
++                 cli_dbgmsg("spin: Unpack failure\n");
++             }
++         } else {
++-            blobsz += sections[j].rsz;
+++            if (spin_add_blob_size(&blobsz, sections[j].rsz)) {
+++                len = 1;
+++                break;
+++            }
+++
++             sects[j] = src + sections[j].raw;
++             cli_dbgmsg("spin: Not growing sect%d\n", j);
 +         }
-+-        if (cli_writen(fd, toc, hdr.toc_length_decompressed) == (size_t)-1) {
-++        if (cli_writen(fd, toc, toc_length) == (size_t)-1) {
-+             cli_dbgmsg("cli_scanxar: cli_writen error writing TOC.\n");
-+             rc = CL_EWRITE;
-+             xar_cleanup_temp_file(ctx, fd, tmpname);
-+@@ -535,7 +643,7 @@ int cli_scanxar(cli_ctx *ctx)
-+             goto exit_toc;
++@@ -425,12 +492,7 @@ int unspin(char *src, int ssize, struct cli_exe_section *sections, int sectcnt,
++     cli_dbgmsg("spin: decompression complete\n");
++ 
++     if (len) {
++-        int t;
++-        for (t = 0; t < j; t++) {
++-            if (bitman & 1)
++-                free(sects[t]);
++-            bitman = bitman >> 1 & 0x7fffffff;
++-        }
+++        spin_free_grown_sections(sects, j, bitman);
++         free(sects);
++         return 1;
++     }
++@@ -444,7 +506,7 @@ int unspin(char *src, int ssize, struct cli_exe_section *sections, int sectcnt,
++                 break;
++         }
++ 
++-        if (j != sectcnt && ((bitman & (1 << j)) == 0)) { /* FIXME: not really sure either the res sect is lamed or just compressed, but this'll save some major headaches */
+++        if (j != sectcnt && j < 32 && ((bitman & ((uint32_t)1 << j)) == 0)) { /* FIXME: not really sure either the res sect is lamed or just compressed, but this'll save some major headaches */
++             cli_dbgmsg("spin: Resources (sect%d) appear to be compressed\n\tuncompressed offset %x, len %x\n\tcompressed offset %x, len %x\n", j, sections[j].rva, key32 - sections[j].rva, key32, sections[j].vsz - (key32 - sections[j].rva));
++ 
++             if ((curr = (char *)cli_max_malloc(sections[j].vsz)) != NULL) {
++@@ -454,26 +516,34 @@ int unspin(char *src, int ssize, struct cli_exe_section *sections, int sectcnt,
++ 
++                     free(curr);
++                     cli_dbgmsg("spin: Failed to grow resources, continuing anyway\n");
++-                    blobsz += sections[j].rsz;
++                 } else {
++-                    sects[j] = curr;
++-                    bitman |= 1 << j;
++-                    cli_dbgmsg("spin: Resources grown\n");
++-                    blobsz += sections[j].vsz;
+++                    if (spin_replace_blob_size(&blobsz, sections[j].rsz, sections[j].vsz)) {
+++                        free(curr);
+++                        len = 1;
+++                    } else {
+++                        sects[j] = curr;
+++                        bitman |= (uint32_t)1 << j;
+++                        cli_dbgmsg("spin: Resources grown\n");
+++                    }
++                 }
++             } else {
++                 /* malloc failed but i'm too deep into this crap to quit without leaking more :( */
++                 cli_dbgmsg("spin: memory allocation failed, continuing anyway\n");
++-                blobsz += sections[j].rsz;
++             }
++         } else {
++             cli_dbgmsg("spin: No res?!\n");
++         }
 +     }
 + 
-+-    reader = xmlReaderForMemory(toc, hdr.toc_length_decompressed, "noname.xml", NULL, CLAMAV_MIN_XMLREADER_FLAGS);
-++    reader = xmlReaderForMemory(toc, toc_length, "noname.xml", NULL, CLAMAV_MIN_XMLREADER_FLAGS);
-+     if (reader == NULL) {
-+         cli_dbgmsg("cli_scanxar: xmlReaderForMemory error for TOC\n");
-+         goto exit_toc;
+++    if (len) {
+++        spin_free_grown_sections(sects, sectcnt, bitman);
+++        free(sects);
+++        return 1;
+++    }
+++
++     bitmap = bitman; /* save as a free() bitmap */
++ 
++-    if ((ep = (char *)cli_max_malloc(blobsz)) != NULL) {
+++    if ((ep = (char *)cli_max_malloc((size_t)blobsz)) != NULL) {
++         struct cli_exe_section *rebhlp;
++         if ((rebhlp = (struct cli_exe_section *)cli_max_malloc(sizeof(struct cli_exe_section) * (sectcnt))) != NULL) {
++             char *to   = ep;
++@@ -505,11 +575,7 @@ int unspin(char *src, int ssize, struct cli_exe_section *sections, int sectcnt,
++     }
++ 
++     cli_dbgmsg("spin: free bitmap is %x\n", bitman);
++-    for (j = 0; j < sectcnt; j++) {
++-        if (bitmap & 1)
++-            free(sects[j]);
++-        bitmap = bitmap >> 1 & 0x7fffffff;
++-    }
+++    spin_free_grown_sections(sects, sectcnt, bitmap);
++     free(sects);
++     return 1; /* :( */
++ }
 diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
-index 7604f74c6b..512b582f13 100644
+index 7c643c99cf..723b23a99c 100644
 --- a/package/clamav/clamav.mk
 +++ b/package/clamav/clamav.mk
-@@ -63,6 +63,9 @@ CLAMAV_IGNORE_CVES += CVE-2026-20346
- # 0014-libclamav-harden-mach-o-section-validation-96.patch
- CLAMAV_IGNORE_CVES += CVE-2026-20347
+@@ -54,6 +54,9 @@ CLAMAV_IGNORE_CVES += CVE-2026-20244
+ # 0011-libclamav-fix-gpt-partition-name-conversion-index-103.patch
+ CLAMAV_IGNORE_CVES += CVE-2026-20345
  
-+# 0015-libclamav-enforce-xar-limits-against-inflated-toc-size.patch
-+CLAMAV_IGNORE_CVES += CVE-2026-20348
++# 0012-libclamav-fix-pespin-rebuilt-section-size-overflow-101.patch
++CLAMAV_IGNORE_CVES += CVE-2026-20339
 +
  CLAMAV_DEPENDENCIES = \
  	bzip2 \
