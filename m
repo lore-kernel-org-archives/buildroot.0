@@ -1,97 +1,97 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC8ECC5DF97
-	for <buildroot@archiver.kernel.org>; Wed, 26 Aug 2026 12:37:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15B8FC61DBE
+	for <buildroot@archiver.kernel.org>; Wed, 26 Aug 2026 12:37:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A231F80C27;
+	by smtp4.osuosl.org (Postfix) with ESMTP id D8882406D8;
 	Wed, 26 Aug 2026 12:37:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yDNxe4wFrkoY; Wed, 26 Aug 2026 12:37:13 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id yVZUjJk-wQ4g; Wed, 26 Aug 2026 12:37:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787747833;
-	bh=4nB5kjivW/UopAeLubtiMC+Xacpr6dtLRteeNrAqC38=;
+	s=default; t=1787747829;
+	bh=mzjXRRSh44U8LWX0xSZK+kGrsLnyr8T8uXJCypXz8Rw=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=MYnc6I+NYw3lEgIw7dznsXlcYwvQblyfxxJaGRsv8IEFycmWsUFnK/uFJ7e7Z05Qh
-	 ZtRmztQ6HLb0kgJ7LCDJVbt8VNxWcxBRsfYf+XNx6IH58kFqk6Pf2Hni+CmTZaLhoI
-	 imnADL+k9X/yueJXeSDuBkoAj77/Knh/ShDfDbxCq6+RyalfALW1RwKr7eGWhRGyJQ
-	 bVE01r3tgw8QDHc6V8lmeMGLyXASAZCleJ5n50wS4NcqMVxeZtowhnaoHHhcNjPc3I
-	 8P6tC87/JOmezKBH1XbqgjqYSKnT7ij44tZjOZI09FBfA3gcBfHG5ql91fOSUnJuvR
-	 VrDW1L38WegpQ==
+	b=m+7kkX/VlVRlL+9B6uVn/kumV1ttwggoNIyzyBI7/jkU/xDogz5HhljthUkBjVmLR
+	 Z83VeakNXktzTt3ToHk4te7GfuaTu7+I/XnKyXCht5c7XW4WdSThXlpbvBMpRzAAwJ
+	 BysXMnItqKbDqXZK2+kHB5693SkKtB20K6FVdFmt35uSMxpRMc7itiaHtox6zyUyUG
+	 oESCz/ibcOKUHTJjpHmRPZMloGpotlpwsRJaiSzQd1U+xdiizfTi0zuvB6JPXkJ4ca
+	 iW1jbmPhsCO6/HUgQIwjYZ9tLnN3wC7YMwkUelNPR7R8mmEalHWSJ9qs5MIlum4Lyb
+	 X6je+MUEX4HUQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9C2F180C47;
-	Wed, 26 Aug 2026 12:37:13 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 7A60E396
- for <buildroot@buildroot.org>; Wed, 26 Aug 2026 12:37:02 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 604056062B
- for <buildroot@buildroot.org>; Wed, 26 Aug 2026 12:37:02 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8hGpL5emE9r7 for <buildroot@buildroot.org>;
- Wed, 26 Aug 2026 12:37:01 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::536; helo=mail-ed1-x536.google.com;
- envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com
- [IPv6:2a00:1450:4864:20::536])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 51BF7605EB
+	by smtp4.osuosl.org (Postfix) with ESMTP id AA464405E6;
+	Wed, 26 Aug 2026 12:37:09 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 56B5B3AD
  for <buildroot@buildroot.org>; Wed, 26 Aug 2026 12:37:00 +0000 (UTC)
-Received: by mail-ed1-x536.google.com with SMTP id
- 4fb4d7f45d1cf-6a3819e8be8so2108227a12.0
- for <buildroot@buildroot.org>; Wed, 26 Aug 2026 05:37:00 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 548C4400AF
+ for <buildroot@buildroot.org>; Wed, 26 Aug 2026 12:37:00 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Tjgnf86-9djP for <buildroot@buildroot.org>;
+ Wed, 26 Aug 2026 12:36:58 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::52b; helo=mail-ed1-x52b.google.com;
+ envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com
+ [IPv6:2a00:1450:4864:20::52b])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 541584005F
+ for <buildroot@buildroot.org>; Wed, 26 Aug 2026 12:36:56 +0000 (UTC)
+Received: by mail-ed1-x52b.google.com with SMTP id
+ 4fb4d7f45d1cf-6a1542cdb53so1035856a12.2
+ for <buildroot@buildroot.org>; Wed, 26 Aug 2026 05:36:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1787747819; x=1788352619;
+ d=1e100.net; s=20251104; t=1787747815; x=1788352615;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=1EfLFAU3loIBR21caXEh+skEygVXTy+5ydXernjRxaA=;
- b=D5qoGUtPILu0DQa81BEx+v8D+bEPZ1Ji8Urgg9oE8tpyUUKNtfJWD7S+lVwyW0UaJk
- 0vHCN6mD0TrIlgJhu7dZRJvMtYwwi+d8pUhlHV4JpIY2CtsbZLrQXeeOgV6JlwdZaObX
- yvvGpqdnRZ0wumI/8O70EP/PQNKu+wm5SnFdUxaPeQpsQrDRAHzO8+DxPTtEzaBsVdaw
- E7ejfDQ8LVmpjvzK6NTg+FyUJyUKwoev6kfyR01KSg2QbelSXrjXhwqiZRYjE7g6me5F
- IzxYAAhUJN4cFZys/G55gm5IJXDVmGRpXcRG7Vdx3B4DjV0HdeYW8G4ByLsvAIw54ixF
- SQlw==
-X-Gm-Message-State: AFuF++lkIY+kXQHWXaDpRU2h/9McspGsYdta/o51SWdX66JFWz9j5aym
- EnaYXQESO5SokHg++q6BGvf2K6lX2RAAZz4J20HxITNZVYQNloKGKQNt+5lmXL+1VB3MiCPxZwk
- faCS9/O8=
-X-Gm-Gg: AR+sD10a5E5Wr+H3GvGlbxdyiseTDaJm4YTLXCQvMZ8Pv34D0Y1tnCtmg4OUOX/0Wrx
- dbiea+McZ51+Cyb46aqfL7eyea0X5jSd9uIPMT2aO6TmQ/SAtIPVvmfFOegpxJg/sEGZlL/uo0k
- nRTeUnSIcsxvJWHiN3e7iuivPKPphrmH3dc+iVXjjFDGPAv8wXuH40R9uvzMwmjjxxgYWxgpZUm
- 1e/d3BgN6pTkFQqp04e64JYo2DkolhmKJE/Kh0+AGqRDDBslwH+KdkjccDfyQIULmLAmddHGnxy
- +oXIOCuVd5o/HQw1vEHBQx3DDQbgtncJXe5nCP3toYEtqaE6VS8XWi23JjSBlymu8M9wmkQgEUr
- M7MrUs+lY8BTSM3Lvfmli/t+0KIjXFb7mizbyAWCS+Mi9MmEmwZREyDena6kpjODAkYBXe4jVqn
- jqIDhk+LSAebSbSOJxKabY3ZZaxihbQqFvH069gKVQE3+dqw6RAweULDssXGsKV1oinT5Viq/kX
- aUY
-X-Received: by 2002:a05:6402:a68f:b0:6a0:50d8:142d with SMTP id
- 4fb4d7f45d1cf-6a5c3a70ee9mr11547094a12.0.1787747818505; 
- Wed, 26 Aug 2026 05:36:58 -0700 (PDT)
+ bh=ZmfLiN99WgvP+MKGM2tvGBYsu4EkuGP0AOW5G4HiKyU=;
+ b=dq8AAZcXBBAT95LtTxZak1EatvfKR5Pt487r+Il5TolTzXH0BO4Gc+x63ElVXsSfSM
+ Uch9mXeEcpM7ODuAgkGneYiPOrdBjSB9y3KJpCK2nhseWw1SFEpfVmLuCIdK34xwFHD8
+ OjgPk0/tkS3WO6p85vmxTaB+Ne8ZVpt0lkIfKuFAzb3JZbsUzoC7Z7eYr+UzREtCMy2K
+ zdY8eKTbG9zzvM6jhEXFnIFygiPkmo52OgdFTSYnQNvGe+NIhox2kXTQIkBg8ArBzwE2
+ Ewt6LhTAgVn9j3M8Sfv1xHaoIuxpXIo2jdaLXX5yT0DK4N4z98l/oK7xGeLGP6jFhOaE
+ Y9uQ==
+X-Gm-Message-State: AFuF++kwtKY6GZ6PTfJmjRElLP4LI56/r4O+Vz63wRR5pvW54r4BBM3K
+ AAYqur02DOwpbfD9IqNOBV3Q7BR7vm5oJG2klAxV0clf4TUWgAGJCPcYR6GNXobb43A/hlLp7/y
+ kR8/cUwA=
+X-Gm-Gg: AR+sD11QvMHWrxgIsDi8Ur4o6hFV8V25duGrzIA8B7D7nPfSQmQrKFMqo1FKAnflHr3
+ 2C7gZXJr4MyZvYwBce+ZlU5p7oieQUA2DwnRuWLJJCaGny1BVWIre0LTYZfLprPfXupurSgfrEk
+ 8E+5FW5RmexRBMurhbbMKtOjt2Nc5Jeof/wb3IFRcE3O61CyYCbYU55byuqFc/sLR4E7WubDPED
+ 6xxiJHCkgOrIo9Pzqozbyl3WfOWs8hJwNCTEbLt45kF3gq7/d7ao/JJwVX6GnkxAJcCZA4KQRjL
+ R2+rpZVRb5roYl699ohfTAn1QdiC0kPxDJO+el2CnnIUDZw8By2/x4xH0d1FahDqi1DbRM5KN6Q
+ IZG5Zj9jLtCGhXmz9AVpVg0VkfIBjGIPfVR6+5MvtPhGKxG5JWw1U7ov+DoDgrUuYAWvPHDz1KD
+ btP4Nm2tIdoic76AXhXVEPL5hSkwL1jvUdTxbkGYDT6xoCK2X9dW157B70fUL3vItPwhxQBkHhS
+ CUa
+X-Received: by 2002:a05:6402:5419:b0:6a4:cc9:e32b with SMTP id
+ 4fb4d7f45d1cf-6a5df62b860mr9120405a12.9.1787747814299; 
+ Wed, 26 Aug 2026 05:36:54 -0700 (PDT)
 Received: from chapelon.home ([2a02:a03f:63ab:dc01:ce15:1729:c989:3a9e])
  by smtp.gmail.com with ESMTPSA id
- 4fb4d7f45d1cf-6a5de8ea6d0sm4925258a12.13.2026.08.26.05.36.58
+ 4fb4d7f45d1cf-6a5de8ea6d0sm4925258a12.13.2026.08.26.05.36.53
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 26 Aug 2026 05:36:58 -0700 (PDT)
+ Wed, 26 Aug 2026 05:36:54 -0700 (PDT)
 To: buildroot@buildroot.org
 Cc: Bernd Kuhls <bernd@kuhls.net>, thomas.perale@mind.be,
  raphael.melotte@mind.be, Titouan Christophe <titouan.christophe@mind.be>
-Date: Wed, 26 Aug 2026 14:36:35 +0200
-Message-ID: <20260826123637.410258-15-titouan.christophe@mind.be>
+Date: Wed, 26 Aug 2026 14:36:29 +0200
+Message-ID: <20260826123637.410258-9-titouan.christophe@mind.be>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260826123637.410258-1-titouan.christophe@mind.be>
 References: <20260826123637.410258-1-titouan.christophe@mind.be>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH for 2025.02.x 14/16] package/clamav: add patch
- for CVE-2026-20346
+Subject: [Buildroot] [PATCH for 2025.02.x 08/16] package/clamav: add patch
+ for CVE-2026-20243
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -112,63 +112,1530 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- ...guard-pdf-hex-string-newline-skip-98.patch | 36 +++++++++++++++++++
- package/clamav/clamav.mk                      |  3 ++
- 2 files changed, 39 insertions(+)
- create mode 100644 package/clamav/0013-libclamav-guard-pdf-hex-string-newline-skip-98.patch
+ ...rser-robustness-and-scan-coverage-63.patch | 1503 +++++++++++++++++
+ package/clamav/clamav.mk                      |    3 +
+ 2 files changed, 1506 insertions(+)
+ create mode 100644 package/clamav/0007-fix-alz-parser-robustness-and-scan-coverage-63.patch
 
-diff --git a/package/clamav/0013-libclamav-guard-pdf-hex-string-newline-skip-98.patch b/package/clamav/0013-libclamav-guard-pdf-hex-string-newline-skip-98.patch
+diff --git a/package/clamav/0007-fix-alz-parser-robustness-and-scan-coverage-63.patch b/package/clamav/0007-fix-alz-parser-robustness-and-scan-coverage-63.patch
 new file mode 100644
-index 0000000000..41607a82ee
+index 0000000000..3b02ceb880
 --- /dev/null
-+++ b/package/clamav/0013-libclamav-guard-pdf-hex-string-newline-skip-98.patch
-@@ -0,0 +1,36 @@
++++ b/package/clamav/0007-fix-alz-parser-robustness-and-scan-coverage-63.patch
+@@ -0,0 +1,1503 @@
 +From: "Val S." <valsnyde@cisco.com>
-+Date: Tue, 28 Jul 2026 09:05:37 -0400
-+Subject: Libclamav: guard PDF hex string newline skip (#98)
++Date: Wed, 17 Jun 2026 10:07:43 -0400
++Subject: Fix ALZ parser robustness and scan coverage (#63)
 +
-+The PDF hex-string reader skips newlines immediately after the opening
-+angle bracket. A malformed string can consume the remaining bounded input
-+before the parser searches for the closing bracket.
++Malformed ALZ entries could panic or abort archive processing before
++payloads and metadata were scanned. Header size claims and decompression
++behavior could bypass scan limits or skip valid members, and the deflate
++path could inflate oversized output before applying limits.
 +
-+Return early when the bounded length is exhausted so the parser does not
-+pass an underflowed length to memchr().
++Harden ALZ size arithmetic, extract stored, bzip2, and deflate members
++under scan budgets, and keep scanning after metadata, extraction, and
++later parse errors. Report accurate metadata including file positions
++and encryption state. Use bounded flate2 reads for deflate output, drop
++the old inflate dependency, and add Rust and clamscan regressions.
 +
-+Reported-by: Tristan (@TristanInSec)
++Keep ALZ per-member and archive-total limit accounting separate so
++archive totals do not get reported as MaxFileSize for archives with
++multiple smaller members. Preserve MaxScanSize exceeds-max reporting for
++truncated archive totals and cover the behavior with Rust and clamscan
++tests.
 +
-+CLAM-3002
++Credit: Yazdan Soltani
++
++CLAM-2988
 +
 +---
-+Upstream: https://github.com/Cisco-Talos/clamav/commit/354f71e192168b6c966c4d15122b455cbb2d6ecb
-+CVE: CVE-2026-20346
++Upstream: https://github.com/Cisco-Talos/clamav/commit/610c1d1eeb67ced3645c205d62bcd9eb7e2000ed
++CVE: CVE-2026-20243
++[Titouan: fix merge conflict with clamav-1.4.3]
 +Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 +---
-+ libclamav/pdf.c | 2 ++
-+ 1 file changed, 2 insertions(+)
++ Cargo.lock                      |  16 -
++ libclamav/libclamav.map         |   1 +
++ libclamav_rust/Cargo.toml       |   1 -
++ libclamav_rust/build.rs         |   1 +
++ libclamav_rust/src/alz.rs       | 622 +++++++++++++++++++++++++++-----
++ libclamav_rust/src/scanners.rs  | 123 ++++++-
++ libclamav_rust/src/sys.rs       |   6 +
++ libclamav_rust/src/util.rs      |  31 +-
++ unit_tests/clamscan/alz_test.py | 321 ++++++++++++++++
++ 9 files changed, 1006 insertions(+), 116 deletions(-)
 +
-+diff --git a/libclamav/pdf.c b/libclamav/pdf.c
-+index 51b97a0a17..7769a6a6ec 100644
-+--- a/libclamav/pdf.c
-++++ b/libclamav/pdf.c
-+@@ -2680,6 +2680,8 @@ static char *pdf_readstring(const char *q0, int len, const char *key, unsigned *
-+             start = ++q;
-+             len -= 1;
++diff --git a/Cargo.lock b/Cargo.lock
++index e96f29ffa..8ec8d3400 100644
++--- a/Cargo.lock
+++++ b/Cargo.lock
++@@ -8,12 +8,6 @@ version = "1.0.2"
++ source = "registry+https://github.com/rust-lang/crates.io-index"
++ checksum = "f26201604c87b1e01bd3d98f8d5d9a8fcbb815e8cedb41ffccbeb4bf593a35fe"
++ 
++-[[package]]
++-name = "adler32"
++-version = "1.2.0"
++-source = "registry+https://github.com/rust-lang/crates.io-index"
++-checksum = "aae1277d39aeec15cb388266ecc24b11c80469deae6067e17a1a7aa9e5c1f234"
++-
++ [[package]]
++ name = "aho-corasick"
++ version = "1.1.3"
++@@ -199,7 +193,6 @@ dependencies = [
++  "hex",
++  "hex-literal",
++  "image",
++- "inflate",
++  "libc",
++  "log",
++  "num-traits",
++@@ -523,12 +516,14 @@ dependencies = [
++ ]
++ 
++ [[package]]
++-name = "inflate"
++-version = "0.4.5"
+++name = "interpolate_name"
+++version = "0.2.4"
++ source = "registry+https://github.com/rust-lang/crates.io-index"
++-checksum = "1cdb29978cc5797bd8dcc8e5bf7de604891df2a8dc576973d71a281e916db2ff"
+++checksum = "c34819042dc3d3971c46c2190835914dfbe0c3c13f61449b2997f4e9722dfa60"
++ dependencies = [
++- "adler32",
+++ "proc-macro2",
+++ "quote",
+++ "syn 2.0.113",
++ ]
++ 
++ [[package]]
++diff --git a/libclamav/libclamav.map b/libclamav/libclamav.map
++index a34a05dbb..f8cf8a299 100644
++--- a/libclamav/libclamav.map
+++++ b/libclamav/libclamav.map
++@@ -292,6 +292,7 @@ CLAMAV_PRIVATE {
++     cli_getdsig;
++     cli_infomsg_simple;
++     cli_set_debug_flag;
+++    cli_append_potentially_unwanted_if_heur_exceedsmax;
++     fmap_dump_to_file;
++     init_allow_list;
++     init_domain_list;
++diff --git a/libclamav_rust/Cargo.toml b/libclamav_rust/Cargo.toml
++index efab908656..b75185b6c7 100644
++--- a/libclamav_rust/Cargo.toml
+++++ b/libclamav_rust/Cargo.toml
++@@ -22,7 +22,6 @@ unicode-segmentation = "1.10"
++ bindgen = "0.65"
++ onenote_parser = { git = "https://github.com/Cisco-Talos/onenote.rs.git", branch = "CLAM-2329-new-from-slice" }
++ hex-literal = "0.4"
++-inflate = "0.4"
++ bzip2-rs = "0.1"
++ byteorder = "1.5"
++ delharc = "0.6"
++diff --git a/libclamav_rust/build.rs b/libclamav_rust/build.rs
++index ede1743f41..a35bc6211a 100644
++--- a/libclamav_rust/build.rs
+++++ b/libclamav_rust/build.rs
++@@ -48,6 +48,7 @@ const BINDGEN_FUNCTIONS: &[&str] = &[
++     "cli_infomsg_simple",
++     "cli_errmsg",
++     "cli_append_virus",
+++    "cli_append_potentially_unwanted_if_heur_exceedsmax",
++     "lsig_increment_subsig_match",
++     "cli_versig2",
++     "cli_getdsig",
++diff --git a/libclamav_rust/src/alz.rs b/libclamav_rust/src/alz.rs
++index fef676a0db..0ee30a0a04 100644
++--- a/libclamav_rust/src/alz.rs
+++++ b/libclamav_rust/src/alz.rs
++@@ -30,11 +30,12 @@
++ )]
++ */
++ 
+++use std::convert::TryFrom;
++ use std::io::{Cursor, Read};
++ 
++ use byteorder::{LittleEndian, ReadBytesExt};
++ use bzip2_rs::DecoderReader;
++-use inflate::InflateStream;
+++use flate2::read::DeflateDecoder;
++ use log::debug;
++ 
++ /// File header
++@@ -61,6 +62,12 @@ pub enum Error {
++     #[error("Failed to extract file")]
++     Extract,
++ 
+++    #[error("Failed to allocate extracted file")]
+++    Alloc,
+++
+++    #[error("Extracted file exceeds scan limits")]
+++    ScanLimitExceeded(u64),
+++
++     #[error("Failed to read field: {0}")]
++     Read(&'static str),
++ }
++@@ -273,16 +280,20 @@ impl AlzLocalFileHeader {
++             }
 +         }
-++        if (len <= 0)
-++            return NULL;
-+         q = memchr(q + 1, '>', len - 1);
-+         if (!q)
-+             return NULL;
++ 
++-        #[allow(clippy::cast_possible_truncation)]
++-        let idx0: usize = cursor.position() as usize;
++-        let idx1: usize = idx0 + self.head.file_name_length as usize;
+++        let idx0: usize = usize::try_from(cursor.position())
+++            .map_err(|_| Error::Parse("Invalid file name offset"))?;
+++        let idx1: usize = idx0
+++            .checked_add(usize::from(self.head.file_name_length))
+++            .ok_or(Error::Parse("Invalid file name length"))?;
++ 
++         if idx1 > cursor.get_ref().len() {
++             return Err(Error::Parse("Invalid file name length"));
++         }
++ 
++         let filename = &cursor.get_ref().as_slice()[idx0..idx1];
++-        cursor.set_position(idx1 as u64);
+++        cursor.set_position(
+++            u64::try_from(idx1).map_err(|_| Error::Parse("Invalid file name length"))?,
+++        );
++ 
++         self.file_name = String::from_utf8_lossy(filename).into_owned();
++ 
++@@ -293,12 +304,20 @@ impl AlzLocalFileHeader {
++         }
++ 
++         self.start_of_compressed_data = cursor.position();
++-        cursor.set_position(self.start_of_compressed_data + self.compressed_size);
++-
++-        if self.start_of_compressed_data + self.compressed_size > cursor.get_ref().len() as u64 {
+++        let end_of_compressed_data = self
+++            .start_of_compressed_data
+++            .checked_add(self.compressed_size)
+++            .ok_or(Error::Parse("Invalid compressed data length"))?;
+++
+++        if end_of_compressed_data
+++            > u64::try_from(cursor.get_ref().len())
+++                .map_err(|_| Error::Parse("Invalid compressed data length"))?
+++        {
++             return Err(Error::Parse("Invalid compressed data length"));
++         }
++ 
+++        cursor.set_position(end_of_compressed_data);
+++
++         Ok(())
++     }
++ 
++@@ -323,120 +342,196 @@ impl AlzLocalFileHeader {
++         &mut self,
++         cursor: &std::io::Cursor<&Vec<u8>>,
++         files: &mut Vec<ExtractedFile>,
+++        max_extracted_size: u64,
++     ) -> Result<(), Error> {
++-        #[allow(clippy::cast_possible_truncation)]
++-        let start: usize = self.start_of_compressed_data as usize;
++-        #[allow(clippy::cast_possible_truncation)]
++-        let end: usize = start + self.compressed_size as usize;
++-        if end >= cursor.get_ref().len() {
++-            return Err(Error::Extract);
++-        }
++-        let data: &[u8] = &cursor.get_ref().as_slice()[start..end];
+++        let start: usize =
+++            usize::try_from(self.start_of_compressed_data).map_err(|_| Error::Extract)?;
+++        let len: usize = usize::try_from(self.compressed_size).map_err(|_| Error::Extract)?;
+++        let end: usize = start.checked_add(len).ok_or(Error::Extract)?;
+++        let data: &[u8] = cursor
+++            .get_ref()
+++            .as_slice()
+++            .get(start..end)
+++            .ok_or(Error::Extract)?;
++ 
++-        let mut inflater = InflateStream::new();
++         let mut out: Vec<u8> = Vec::<u8>::new();
++-        let mut n: usize = 0;
++-
++-        while n < data.len() {
++-            let res = inflater.update(&data[n..]);
++-            if let Ok((num_bytes_read, result)) = res {
++-                n += num_bytes_read;
++-                out.extend(result.iter().copied());
++-            } else {
++-                return Err(Error::Extract);
+++        let mut decompressor = DeflateDecoder::new(data);
+++        let mut buffer = [0u8; 8192];
+++
+++        loop {
+++            let len = decompressor.read(&mut buffer).map_err(|_| {
+++                debug!("Unable to decompress deflate data");
+++                Error::Extract
+++            })?;
+++            if len == 0 {
+++                break;
+++            }
+++
+++            if let Some(needed) =
+++                self.append_output(&mut out, &buffer[..len], max_extracted_size)?
+++            {
+++                self.push_file(out, files)?;
+++                return Err(Error::ScanLimitExceeded(needed));
++             }
++         }
++ 
++-        self.write_file(&out, files);
+++        self.push_file(out, files)
+++    }
++ 
++-        Ok(())
+++    fn append_output(
+++        &self,
+++        out: &mut Vec<u8>,
+++        buffer: &[u8],
+++        max_extracted_size: u64,
+++    ) -> Result<Option<u64>, Error> {
+++        let needed = out.len().checked_add(buffer.len()).ok_or(Error::Extract)?;
+++        let needed_u64 = u64::try_from(needed).map_err(|_| Error::Extract)?;
+++
+++        if needed_u64 > max_extracted_size {
+++            let current = u64::try_from(out.len()).map_err(|_| Error::Extract)?;
+++            let remaining = max_extracted_size.saturating_sub(current);
+++            let copy_len = usize::try_from(remaining)
+++                .unwrap_or(usize::MAX)
+++                .min(buffer.len());
+++
+++            out.try_reserve(copy_len).map_err(|_| Error::Alloc)?;
+++            out.extend_from_slice(&buffer[..copy_len]);
+++
+++            return Ok(Some(needed_u64));
+++        }
+++
+++        out.try_reserve(buffer.len()).map_err(|_| Error::Alloc)?;
+++        out.extend_from_slice(buffer);
+++
+++        Ok(None)
++     }
++ 
++-    fn write_file(&mut self, buffer: &[u8], files: &mut Vec<ExtractedFile>) {
+++    fn push_file(&mut self, data: Vec<u8>, files: &mut Vec<ExtractedFile>) -> Result<(), Error> {
+++        if data.is_empty() {
+++            return Ok(());
+++        }
+++
+++        let mut name = String::new();
+++        name.try_reserve(self.file_name.len())
+++            .map_err(|_| Error::Alloc)?;
+++        name.push_str(&self.file_name);
+++
++         let extracted_file: ExtractedFile = ExtractedFile {
++-            name: Some(self.file_name.to_string()),
++-            data: buffer.to_vec(),
+++            name: Some(name),
+++            data,
++         };
++ 
++-        if 0 != extracted_file.data.len() {
++-            files.push(extracted_file);
++-        }
+++        files.try_reserve(1).map_err(|_| Error::Alloc)?;
+++        files.push(extracted_file);
+++
+++        Ok(())
+++    }
+++
+++    fn write_file(&mut self, buffer: &[u8], files: &mut Vec<ExtractedFile>) -> Result<(), Error> {
+++        let mut data: Vec<u8> = Vec::new();
+++        data.try_reserve_exact(buffer.len())
+++            .map_err(|_| Error::Alloc)?;
+++        data.extend_from_slice(buffer);
+++
+++        self.push_file(data, files)
++     }
++ 
++     fn extract_file_nocomp(
++         &mut self,
++-        cursor: &mut std::io::Cursor<&Vec<u8>>,
+++        cursor: &std::io::Cursor<&Vec<u8>>,
++         files: &mut Vec<ExtractedFile>,
+++        max_extracted_size: u64,
++     ) -> Result<(), Error> {
++-        #[allow(clippy::cast_possible_truncation)]
++-        let idx0: usize = self.start_of_compressed_data as usize;
+++        let idx0: usize =
+++            usize::try_from(self.start_of_compressed_data).map_err(|_| Error::Extract)?;
++ 
++-        let mut len = self.compressed_size;
++         if self.compressed_size != self.uncompressed_size {
++-            debug!("Uncompressed file has different lengths for compressed vs uncompressed, using the shorter");
++-            if self.compressed_size > self.uncompressed_size {
++-                len = self.uncompressed_size;
++-            }
+++            debug!("Uncompressed file has different lengths for compressed vs uncompressed, using the stored size");
++         }
++ 
++-        #[allow(clippy::cast_possible_truncation)]
++-        let idx1: usize = idx0 + len as usize;
++-        if idx1 > cursor.get_ref().len() {
++-            debug!("Invalid data length");
++-            return Err(Error::Extract);
+++        let len: usize = usize::try_from(self.compressed_size).map_err(|_| Error::Extract)?;
+++        let idx1: usize = idx0.checked_add(len).ok_or(Error::Extract)?;
+++
+++        let contents = cursor
+++            .get_ref()
+++            .as_slice()
+++            .get(idx0..idx1)
+++            .ok_or(Error::Extract)?;
+++
+++        let contents_len = u64::try_from(contents.len()).map_err(|_| Error::Extract)?;
+++        if contents_len > max_extracted_size {
+++            let copy_len = usize::try_from(max_extracted_size)
+++                .unwrap_or(usize::MAX)
+++                .min(contents.len());
+++            self.write_file(&contents[..copy_len], files)?;
+++            return Err(Error::ScanLimitExceeded(contents_len));
++         }
++ 
++-        let contents = &cursor.get_ref().as_slice()[idx0..idx1];
++-        cursor.set_position(idx1 as u64);
++-
++-        self.write_file(contents, files);
++-        Ok(())
+++        self.write_file(contents, files)
++     }
++ 
++     fn extract_file_bzip2(
++         &mut self,
++         cursor: &std::io::Cursor<&Vec<u8>>,
++         files: &mut Vec<ExtractedFile>,
+++        max_extracted_size: u64,
++     ) -> Result<(), Error> {
++-        #[allow(clippy::cast_possible_truncation)]
++-        let idx0: usize = self.start_of_compressed_data as usize;
++-        #[allow(clippy::cast_possible_truncation)]
++-        let idx1: usize = idx0 + self.compressed_size as usize;
+++        let idx0: usize =
+++            usize::try_from(self.start_of_compressed_data).map_err(|_| Error::Extract)?;
+++        let len: usize = usize::try_from(self.compressed_size).map_err(|_| Error::Extract)?;
+++        let idx1: usize = idx0.checked_add(len).ok_or(Error::Extract)?;
++ 
++-        let contents = &cursor.get_ref().as_slice()[idx0..idx1];
+++        let contents = cursor
+++            .get_ref()
+++            .as_slice()
+++            .get(idx0..idx1)
+++            .ok_or(Error::Extract)?;
++ 
++-        /*
++-         * Create vector of the needed capacity.
++-         */
++         let mut out: Vec<u8> = Vec::new();
++-        for _i in 0..self.uncompressed_size {
++-            out.push(0);
+++        let mut decompressor = DecoderReader::new(contents);
+++        let mut buffer = [0u8; 8192];
+++        loop {
+++            let len = decompressor.read(&mut buffer).map_err(|_| {
+++                debug!("Unable to decompress bz2 data");
+++                Error::Extract
+++            })?;
+++            if len == 0 {
+++                break;
+++            }
+++
+++            if let Some(needed) =
+++                self.append_output(&mut out, &buffer[..len], max_extracted_size)?
+++            {
+++                self.push_file(out, files)?;
+++                return Err(Error::ScanLimitExceeded(needed));
+++            }
++         }
++ 
++-        let mut decompressor = DecoderReader::new(contents);
++-        let ret = decompressor.read_exact(&mut out);
++-        if ret.is_err() {
++-            debug!("Unable to decompress bz2 data");
++-            return Err(Error::Extract);
+++        if let Ok(uncompressed_size) = usize::try_from(self.uncompressed_size) {
+++            if out.len() != uncompressed_size {
+++                debug!(
+++                    "Bzip2 file has different lengths for declared vs decompressed data, using the decompressed size"
+++                );
+++            }
++         }
++ 
++-        self.write_file(&out, files);
++-        Ok(())
+++        self.push_file(out, files)
++     }
++ 
++     fn extract_file(
++         &mut self,
++         cursor: &mut std::io::Cursor<&Vec<u8>>,
++         files: &mut Vec<ExtractedFile>,
+++        max_extracted_size: u64,
++     ) -> Result<(), Error> {
++         const ALZ_COMP_NOCOMP: u8 = 0;
++         const ALZ_COMP_BZIP2: u8 = 1;
++         const ALZ_COMP_DEFLATE: u8 = 2;
++ 
++         match self.compression_method {
++-            ALZ_COMP_NOCOMP => self.extract_file_nocomp(cursor, files),
++-            ALZ_COMP_BZIP2 => self.extract_file_bzip2(cursor, files),
++-            ALZ_COMP_DEFLATE => self.extract_file_deflate(cursor, files),
+++            ALZ_COMP_NOCOMP => self.extract_file_nocomp(cursor, files, max_extracted_size),
+++            ALZ_COMP_BZIP2 => self.extract_file_bzip2(cursor, files, max_extracted_size),
+++            ALZ_COMP_DEFLATE => self.extract_file_deflate(cursor, files, max_extracted_size),
++             _ => Err(Error::Extract),
++         }
++     }
++@@ -448,9 +543,27 @@ pub struct ExtractedFile {
++     pub data: Vec<u8>,
++ }
++ 
+++pub struct AlzFileMetadata<'a> {
+++    pub file_name: &'a str,
+++    pub compressed_size: u64,
+++    pub uncompressed_size: u64,
+++    pub is_encrypted: bool,
+++    pub file_crc: u32,
+++    pub filepos: usize,
+++}
+++
+++pub struct AlzExtractionLimits {
+++    pub max_file_size: u64,
+++    pub max_total_size: u64,
+++}
+++
++ #[derive(Default)]
++ pub struct Alz {
++     pub embedded_files: Vec<ExtractedFile>,
+++    pub file_limit_exceeded_size: Option<u64>,
+++    pub total_limit_exceeded_size: Option<u64>,
+++    extracted_size: u64,
+++    parse_error: bool,
++ }
++ 
++ impl<'aa> Alz {
++@@ -462,29 +575,97 @@ impl<'aa> Alz {
++             .map_or(false, |n| ALZ_FILE_HEADER == n)
++     }
++ 
++-    fn parse_local_fileheader(&mut self, cursor: &mut std::io::Cursor<&Vec<u8>>) -> bool {
+++    fn parse_local_fileheader<F>(
+++        &mut self,
+++        cursor: &mut std::io::Cursor<&Vec<u8>>,
+++        filepos: &mut usize,
+++        should_extract: &mut F,
+++    ) -> Result<(), Error>
+++    where
+++        F: FnMut(&AlzFileMetadata<'_>) -> Option<AlzExtractionLimits>,
+++    {
++         let mut local_fileheader = AlzLocalFileHeader::new();
++ 
++-        if let Err(err) = local_fileheader.parse(cursor) {
++-            debug!("{err}");
++-            return false;
++-        }
+++        local_fileheader.parse(cursor)?;
++ 
++-        if let Err(err) = local_fileheader.is_supported() {
++-            debug!("{err}");
++-            return false;
++-        }
+++        let metadata_filepos = *filepos;
+++        *filepos = metadata_filepos.saturating_add(1);
++ 
++         if !local_fileheader.is_directory() {
++             /* The is_file flag doesn't appear to always be set, so we'll just assume it's a file if
++              * it's not marked as a directory.*/
++-            let res2 = local_fileheader.extract_file(cursor, &mut self.embedded_files);
++-            if res2.is_err() {
++-                return false;
+++            let metadata = AlzFileMetadata {
+++                file_name: &local_fileheader.file_name,
+++                compressed_size: local_fileheader.compressed_size,
+++                uncompressed_size: local_fileheader.uncompressed_size,
+++                is_encrypted: local_fileheader.is_encrypted(),
+++                file_crc: local_fileheader.file_crc,
+++                filepos: metadata_filepos,
+++            };
+++
+++            let limits = should_extract(&metadata);
+++
+++            if let Err(err) = local_fileheader.is_supported() {
+++                debug!("{err}");
+++                return Ok(());
+++            }
+++
+++            let Some(limits) = limits else {
+++                return Ok(());
+++            };
+++
+++            let base_extracted_size = self.extracted_size;
+++            let max_total_remaining = limits.max_total_size.saturating_sub(base_extracted_size);
+++            let max_extracted_size = limits.max_file_size.min(max_total_remaining);
+++            let files_start = self.embedded_files.len();
+++
+++            match local_fileheader.extract_file(
+++                cursor,
+++                &mut self.embedded_files,
+++                max_extracted_size,
+++            ) {
+++                Ok(()) => {}
+++                Err(Error::ScanLimitExceeded(needed)) => {
+++                    debug!(
+++                        "ALZ file {:?} exceeded extraction size limits. Scanning truncated content.",
+++                        local_fileheader.file_name
+++                    );
+++                    if needed > limits.max_file_size
+++                        && self
+++                            .file_limit_exceeded_size
+++                            .map_or(true, |current| current < needed)
+++                    {
+++                        self.file_limit_exceeded_size = Some(needed);
+++                    }
+++
+++                    let total_needed = base_extracted_size.saturating_add(needed);
+++                    if total_needed > limits.max_total_size
+++                        && self
+++                            .total_limit_exceeded_size
+++                            .map_or(true, |current| current < total_needed)
+++                    {
+++                        self.total_limit_exceeded_size = Some(total_needed);
+++                    }
+++                }
+++                Err(Error::Extract) => {
+++                    debug!(
+++                        "Failed to extract ALZ file {:?}. Continuing with next entry.",
+++                        local_fileheader.file_name
+++                    );
+++                }
+++                Err(err) => return Err(err),
+++            }
+++
+++            for file in &self.embedded_files[files_start..] {
+++                let Ok(file_size) = u64::try_from(file.data.len()) else {
+++                    self.extracted_size = u64::MAX;
+++                    break;
+++                };
+++                self.extracted_size = self.extracted_size.saturating_add(file_size);
++             }
++         }
++ 
++-        true
+++        Ok(())
++     }
++ 
++     #[allow(clippy::unused_self)]
++@@ -503,16 +684,39 @@ impl<'aa> Alz {
++     pub const fn new() -> Self {
++         Self {
++             embedded_files: Vec::new(),
+++            file_limit_exceeded_size: None,
+++            total_limit_exceeded_size: None,
+++            extracted_size: 0,
+++            parse_error: false,
++         }
++     }
++ 
+++    pub const fn has_parse_error(&self) -> bool {
+++        self.parse_error
+++    }
+++
++     /// # Errors
++     /// Will return `Error::Parse` if file headers are not correct or are inconsistent.
++     pub fn from_bytes(bytes: &'aa [u8]) -> Result<Self, Error> {
+++        Self::from_bytes_with_filter(bytes, |_| {
+++            Some(AlzExtractionLimits {
+++                max_file_size: u64::MAX,
+++                max_total_size: u64::MAX,
+++            })
+++        })
+++    }
+++
+++    /// # Errors
+++    /// Will return `Error::Parse` if file headers are not correct or are inconsistent.
+++    pub fn from_bytes_with_filter<F>(bytes: &'aa [u8], mut should_extract: F) -> Result<Self, Error>
+++    where
+++        F: FnMut(&AlzFileMetadata<'_>) -> Option<AlzExtractionLimits>,
+++    {
++         let binding = bytes.to_vec();
++         let mut cursor = Cursor::new(&binding);
++ 
++         let mut alz: Self = Self::new();
+++        let mut filepos: usize = 1;
++ 
++         if !alz.is_alz(&mut cursor) {
++             return Err(Error::Parse("No ALZ file header"));
++@@ -531,9 +735,21 @@ impl<'aa> Alz {
++ 
++             match sig {
++                 ALZ_LOCAL_FILE_HEADER => {
++-                    if alz.parse_local_fileheader(&mut cursor) {
++-                        continue;
+++                    match alz.parse_local_fileheader(&mut cursor, &mut filepos, &mut should_extract)
+++                    {
+++                        Ok(()) => {}
+++                        Err(Error::Alloc) => return Err(Error::Alloc),
+++                        Err(err) => {
+++                            if filepos == 1 {
+++                                return Err(err);
+++                            }
+++
+++                            debug!("Failed to parse ALZ local file header: {err}");
+++                            alz.parse_error = true;
+++                            break;
+++                        }
++                     }
+++                    continue;
++                 }
++                 ALZ_CENTRAL_DIRECTORY_HEADER => {
++                     if alz.parse_central_directoryheader(&mut cursor) {
++@@ -546,7 +762,14 @@ impl<'aa> Alz {
++                 }
++                 _ => {
++                     #[allow(clippy::uninlined_format_args)]
++-                    return Err(Error::UnrecognizedSig(format!("{:x}", sig)));
+++                    let err = Error::UnrecognizedSig(format!("{:x}", sig));
+++                    if filepos == 1 {
+++                        return Err(err);
+++                    }
+++
+++                    debug!("Failed to parse ALZ archive: {err}");
+++                    alz.parse_error = true;
+++                    break;
++                 }
++             }
++         }
++@@ -554,3 +777,226 @@ impl<'aa> Alz {
++         Ok(alz)
++     }
++ }
+++
+++#[cfg(test)]
+++mod tests {
+++    use super::*;
+++    use std::io::Write;
+++
+++    fn append_local_file(
+++        alz: &mut Vec<u8>,
+++        name: &str,
+++        compression_method: u8,
+++        uncompressed_size: u8,
+++        data: &[u8],
+++    ) {
+++        append_local_entry(
+++            alz,
+++            name,
+++            AlzFileAttribute::File as u8,
+++            0x10,
+++            compression_method,
+++            uncompressed_size,
+++            data,
+++        );
+++    }
+++
+++    fn append_local_entry(
+++        alz: &mut Vec<u8>,
+++        name: &str,
+++        file_attribute: u8,
+++        file_descriptor: u8,
+++        compression_method: u8,
+++        uncompressed_size: u8,
+++        data: &[u8],
+++    ) {
+++        let name = name.as_bytes();
+++        let name_len = u16::try_from(name.len()).unwrap();
+++        let compressed_size = u8::try_from(data.len()).unwrap();
+++
+++        alz.extend_from_slice(&ALZ_LOCAL_FILE_HEADER.to_le_bytes());
+++        alz.extend_from_slice(&name_len.to_le_bytes());
+++        alz.push(file_attribute);
+++        alz.extend_from_slice(&0u32.to_le_bytes());
+++        alz.push(file_descriptor);
+++        alz.push(0);
+++        alz.push(compression_method);
+++        alz.push(0);
+++        alz.extend_from_slice(&0u32.to_le_bytes());
+++        alz.push(compressed_size);
+++        alz.push(uncompressed_size);
+++        alz.extend_from_slice(name);
+++        if file_descriptor & 0x01 != 0 {
+++            alz.extend_from_slice(&[0; ALZ_ENCR_HEADER_LEN as usize]);
+++        }
+++        alz.extend_from_slice(data);
+++    }
+++
+++    fn extraction_limits() -> AlzExtractionLimits {
+++        AlzExtractionLimits {
+++            max_file_size: u64::MAX,
+++            max_total_size: u64::MAX,
+++        }
+++    }
+++
+++    fn raw_deflate(data: &[u8]) -> Vec<u8> {
+++        let mut encoder =
+++            flate2::write::DeflateEncoder::new(Vec::new(), flate2::Compression::default());
+++        encoder.write_all(data).unwrap();
+++        encoder.finish().unwrap()
+++    }
+++
+++    #[test]
+++    fn extraction_error_does_not_stop_later_entries() {
+++        const ALZ_COMP_NOCOMP: u8 = 0;
+++        const ALZ_COMP_BZIP2: u8 = 1;
+++
+++        let mut bytes = Vec::new();
+++        bytes.extend_from_slice(&ALZ_FILE_HEADER.to_le_bytes());
+++        bytes.extend_from_slice(&0u32.to_le_bytes());
+++        append_local_file(&mut bytes, "bad.bz2", ALZ_COMP_BZIP2, 1, &[0]);
+++        append_local_file(&mut bytes, "good.txt", ALZ_COMP_NOCOMP, 4, b"good");
+++        bytes.extend_from_slice(&ALZ_END_OF_CENTRAL_DIRECTORY_HEADER.to_le_bytes());
+++
+++        let alz = Alz::from_bytes_with_filter(&bytes, |_| Some(extraction_limits())).unwrap();
+++
+++        assert_eq!(alz.embedded_files.len(), 1);
+++        assert_eq!(alz.embedded_files[0].name.as_deref(), Some("good.txt"));
+++        assert_eq!(alz.embedded_files[0].data, b"good");
+++    }
+++
+++    #[test]
+++    fn later_parse_error_preserves_earlier_extracted_entries() {
+++        const ALZ_COMP_NOCOMP: u8 = 0;
+++
+++        let mut bytes = Vec::new();
+++        bytes.extend_from_slice(&ALZ_FILE_HEADER.to_le_bytes());
+++        bytes.extend_from_slice(&0u32.to_le_bytes());
+++        append_local_file(&mut bytes, "good.txt", ALZ_COMP_NOCOMP, 4, b"good");
+++        bytes.extend_from_slice(&ALZ_LOCAL_FILE_HEADER.to_le_bytes());
+++
+++        let alz = Alz::from_bytes_with_filter(&bytes, |_| Some(extraction_limits())).unwrap();
+++
+++        assert!(alz.has_parse_error());
+++        assert_eq!(alz.embedded_files.len(), 1);
+++        assert_eq!(alz.embedded_files[0].name.as_deref(), Some("good.txt"));
+++        assert_eq!(alz.embedded_files[0].data, b"good");
+++    }
+++
+++    #[test]
+++    fn deflate_limit_uses_decompressed_size_not_header() {
+++        const ALZ_COMP_DEFLATE: u8 = 2;
+++        let payload = vec![b'A'; 1024];
+++        let compressed = raw_deflate(&payload);
+++        assert!(compressed.len() <= u8::MAX.into());
+++
+++        let mut bytes = Vec::new();
+++        bytes.extend_from_slice(&ALZ_FILE_HEADER.to_le_bytes());
+++        bytes.extend_from_slice(&0u32.to_le_bytes());
+++        append_local_file(&mut bytes, "big.txt", ALZ_COMP_DEFLATE, 1, &compressed);
+++        bytes.extend_from_slice(&ALZ_END_OF_CENTRAL_DIRECTORY_HEADER.to_le_bytes());
+++
+++        let alz = Alz::from_bytes_with_filter(&bytes, |_| {
+++            Some(AlzExtractionLimits {
+++                max_file_size: 64,
+++                max_total_size: u64::MAX,
+++            })
+++        })
+++        .unwrap();
+++
+++        assert_eq!(alz.file_limit_exceeded_size, Some(payload.len() as u64));
+++        assert_eq!(alz.embedded_files.len(), 1);
+++        assert_eq!(alz.embedded_files[0].name.as_deref(), Some("big.txt"));
+++        assert_eq!(alz.embedded_files[0].data.as_slice(), &payload[..64]);
+++    }
+++
+++    #[test]
+++    fn total_limit_does_not_set_per_file_limit() {
+++        const ALZ_COMP_NOCOMP: u8 = 0;
+++        let payload = vec![b'A'; 60];
+++
+++        let mut bytes = Vec::new();
+++        bytes.extend_from_slice(&ALZ_FILE_HEADER.to_le_bytes());
+++        bytes.extend_from_slice(&0u32.to_le_bytes());
+++        append_local_file(
+++            &mut bytes,
+++            "a",
+++            ALZ_COMP_NOCOMP,
+++            payload.len() as u8,
+++            &payload,
+++        );
+++        append_local_file(
+++            &mut bytes,
+++            "b",
+++            ALZ_COMP_NOCOMP,
+++            payload.len() as u8,
+++            &payload,
+++        );
+++        bytes.extend_from_slice(&ALZ_END_OF_CENTRAL_DIRECTORY_HEADER.to_le_bytes());
+++
+++        let alz = Alz::from_bytes_with_filter(&bytes, |_| {
+++            Some(AlzExtractionLimits {
+++                max_file_size: 64,
+++                max_total_size: 100,
+++            })
+++        })
+++        .unwrap();
+++
+++        assert_eq!(alz.file_limit_exceeded_size, None);
+++        assert_eq!(alz.total_limit_exceeded_size, Some(120));
+++        assert_eq!(alz.embedded_files.len(), 2);
+++        assert_eq!(alz.embedded_files[0].data.len(), 60);
+++        assert_eq!(alz.embedded_files[1].data.len(), 40);
+++    }
+++
+++    #[test]
+++    fn metadata_file_positions_are_one_based_and_include_skipped_entries() {
+++        const ALZ_COMP_NOCOMP: u8 = 0;
+++
+++        let mut bytes = Vec::new();
+++        bytes.extend_from_slice(&ALZ_FILE_HEADER.to_le_bytes());
+++        bytes.extend_from_slice(&0u32.to_le_bytes());
+++        append_local_entry(
+++            &mut bytes,
+++            "dir/",
+++            AlzFileAttribute::Directory as u8,
+++            0x10,
+++            ALZ_COMP_NOCOMP,
+++            0,
+++            b"",
+++        );
+++        append_local_entry(
+++            &mut bytes,
+++            "encrypted.bin",
+++            AlzFileAttribute::File as u8,
+++            0x11,
+++            ALZ_COMP_NOCOMP,
+++            0,
+++            b"",
+++        );
+++        append_local_file(&mut bytes, "first.txt", ALZ_COMP_NOCOMP, 5, b"first");
+++        append_local_file(&mut bytes, "second.txt", ALZ_COMP_NOCOMP, 6, b"second");
+++        bytes.extend_from_slice(&ALZ_END_OF_CENTRAL_DIRECTORY_HEADER.to_le_bytes());
+++
+++        let mut metadata_positions = Vec::new();
+++        let alz = Alz::from_bytes_with_filter(&bytes, |metadata| {
+++            metadata_positions.push((
+++                metadata.file_name.to_owned(),
+++                metadata.filepos,
+++                metadata.is_encrypted,
+++            ));
+++            None
+++        })
+++        .unwrap();
+++
+++        assert!(alz.embedded_files.is_empty());
+++        assert_eq!(
+++            metadata_positions,
+++            vec![
+++                ("encrypted.bin".to_owned(), 2, true),
+++                ("first.txt".to_owned(), 3, false),
+++                ("second.txt".to_owned(), 4, false),
+++            ]
+++        );
+++    }
+++}
++diff --git a/libclamav_rust/src/scanners.rs b/libclamav_rust/src/scanners.rs
++index be8c52acd1..862b0f46e1 100644
++--- a/libclamav_rust/src/scanners.rs
+++++ b/libclamav_rust/src/scanners.rs
++@@ -21,6 +21,7 @@
++  */
++ 
++ use std::{
+++    convert::TryFrom,
++     ffi::{c_char, CString},
++     io::Read,
++     panic,
++@@ -33,14 +34,17 @@ use libc::c_void;
++ use log::{debug, error, warn};
++ 
++ use crate::{
++-    alz::Alz,
+++    alz::{Alz, AlzExtractionLimits, Error as AlzError},
++     ctx,
++     onenote::OneNote,
++     sys::{
++-        cl_error_t, cl_error_t_CL_EFORMAT, cl_error_t_CL_ERROR, cl_error_t_CL_SUCCESS, cli_ctx,
+++        cl_error_t, cl_error_t_CL_EFORMAT, cl_error_t_CL_EMAXSIZE, cl_error_t_CL_EMEM,
+++        cl_error_t_CL_ERROR, cl_error_t_CL_SUCCESS, cl_error_t_CL_VIRUS, cli_ctx,
++         cli_magic_scan_buff,
++     },
++-    util::{check_scan_limits, scan_archive_metadata},
+++    util::{
+++        append_potentially_unwanted_if_heur_exceedsmax, check_scan_limits, scan_archive_metadata,
+++    },
++ };
++ 
++ /// Rust wrapper of libclamav's cli_magic_scan_buff() function.
++@@ -307,6 +311,30 @@ pub unsafe extern "C" fn scan_lha_lzh(ctx: *mut cli_ctx) -> cl_error_t {
++     cl_error_t_CL_SUCCESS
++ }
++ 
+++unsafe fn alz_extraction_limits(ctx: *mut cli_ctx) -> AlzExtractionLimits {
+++    if ctx.is_null() || (*ctx).engine.is_null() {
+++        return AlzExtractionLimits {
+++            max_file_size: u64::MAX,
+++            max_total_size: u64::MAX,
+++        };
+++    }
+++
+++    let engine = &*(*ctx).engine;
+++
+++    AlzExtractionLimits {
+++        max_file_size: if engine.maxfilesize == 0 {
+++            u64::MAX
+++        } else {
+++            engine.maxfilesize
+++        },
+++        max_total_size: if engine.maxscansize == 0 {
+++            u64::MAX
+++        } else {
+++            engine.maxscansize.saturating_sub((*ctx).scansize)
+++        },
+++    }
+++}
+++
++ /// Scan an Alz file for attachments
++ ///
++ /// # Safety
++@@ -333,14 +361,89 @@ pub unsafe extern "C" fn cli_scanalz(ctx: *mut cli_ctx) -> cl_error_t {
++         }
++     };
++ 
++-    let alz = match Alz::from_bytes(file_bytes) {
++-        Ok(x) => x,
++-        Err(err) => {
++-            error!("Failed to parse Alz file: {}", err.to_string());
++-            return cl_error_t_CL_ERROR;
+++    let mut alz_metadata_ret = cl_error_t_CL_SUCCESS;
+++    let alz_result = panic::catch_unwind(panic::AssertUnwindSafe(|| {
+++        Alz::from_bytes_with_filter(file_bytes, |metadata| {
+++            if check_scan_limits("ALZ", ctx, 0, 0, 0) != cl_error_t_CL_SUCCESS {
+++                debug!("Exceeded scan limits. Bailing out.");
+++                return None;
+++            }
+++
+++            match (
+++                usize::try_from(metadata.compressed_size),
+++                usize::try_from(metadata.uncompressed_size),
+++            ) {
+++                (Ok(compressed_size), Ok(uncompressed_size)) => {
+++                    let metadata_ret = scan_archive_metadata(
+++                        ctx,
+++                        metadata.file_name,
+++                        compressed_size,
+++                        uncompressed_size,
+++                        metadata.is_encrypted,
+++                        metadata.filepos,
+++                        metadata.file_crc as i32,
+++                    );
+++                    if metadata_ret == cl_error_t_CL_VIRUS {
+++                        alz_metadata_ret = metadata_ret;
+++                        debug!(
+++                            "ALZ file {:?} metadata did not pass scan checks. Skipping extraction.",
+++                            metadata.file_name
+++                        );
+++                        return None;
+++                    } else if metadata_ret != cl_error_t_CL_SUCCESS {
+++                        debug!(
+++                            "ALZ file {:?} metadata scan failed with {}. Continuing extraction.",
+++                            metadata.file_name, metadata_ret
+++                        );
+++                    }
+++                }
+++                _ => debug!(
+++                    "ALZ file {:?} metadata sizes are too large for this platform. Continuing extraction.",
+++                    metadata.file_name
+++                ),
+++            }
+++
+++            Some(alz_extraction_limits(ctx))
+++        })
+++    }));
+++
+++    let alz = match alz_result {
+++        Ok(Ok(x)) => x,
+++        Ok(Err(AlzError::Alloc)) => {
+++            debug!("Failed to allocate memory when parsing ALZ archive");
+++            return cl_error_t_CL_EMEM;
+++        }
+++        Ok(Err(err)) => {
+++            debug!("Failed to parse Alz file: {}", err.to_string());
+++            return cl_error_t_CL_EFORMAT;
+++        }
+++        Err(_) => {
+++            debug!("Panic occurred when trying to parse ALZ archive");
+++            return cl_error_t_CL_EFORMAT;
++         }
++     };
++ 
+++    if alz_metadata_ret != cl_error_t_CL_SUCCESS {
+++        return alz_metadata_ret;
+++    }
+++
+++    if let Some(needed) = alz.file_limit_exceeded_size {
+++        let ret = check_scan_limits("ALZ", ctx, needed, 0, 0);
+++        if ret != cl_error_t_CL_SUCCESS && ret != cl_error_t_CL_EMAXSIZE {
+++            return ret;
+++        }
+++    }
+++
+++    if alz.total_limit_exceeded_size.is_some() {
+++        let ret = append_potentially_unwanted_if_heur_exceedsmax(
+++            ctx,
+++            "Heuristics.Limits.Exceeded.MaxScanSize",
+++        );
+++        if ret != cl_error_t_CL_SUCCESS {
+++            return ret;
+++        }
+++    }
+++
++     for i in 0..alz.embedded_files.len() {
++         let ret = magic_scan(
++             ctx,
++@@ -352,5 +455,9 @@ pub unsafe extern "C" fn cli_scanalz(ctx: *mut cli_ctx) -> cl_error_t {
++         }
++     }
++ 
+++    if alz.has_parse_error() {
+++        return cl_error_t_CL_EFORMAT;
+++    }
+++
++     cl_error_t_CL_SUCCESS
++ }
++diff --git a/libclamav_rust/src/sys.rs b/libclamav_rust/src/sys.rs
++index 399ec438a4..9e36a11709 100644
++--- a/libclamav_rust/src/sys.rs
+++++ b/libclamav_rust/src/sys.rs
++@@ -795,6 +795,12 @@ extern "C" {
++         virname: *const ::std::os::raw::c_char,
++     ) -> cl_error_t;
++ }
+++extern "C" {
+++    pub fn cli_append_potentially_unwanted_if_heur_exceedsmax(
+++        ctx: *mut cli_ctx,
+++        vname: *mut ::std::os::raw::c_char,
+++    );
+++}
++ extern "C" {
++     pub fn cli_warnmsg(str_: *const ::std::os::raw::c_char, ...);
++ }
++diff --git a/libclamav_rust/src/util.rs b/libclamav_rust/src/util.rs
++index 086fdf2786..5a459919f3 100644
++--- a/libclamav_rust/src/util.rs
+++++ b/libclamav_rust/src/util.rs
++@@ -22,7 +22,7 @@
++ 
++ use std::{ffi::CStr, fs::File};
++ 
++-use log::error;
+++use log::{debug, error};
++ 
++ use crate::sys;
++ 
++@@ -85,7 +85,7 @@ pub unsafe fn check_scan_limits(
++     let module_name = match std::ffi::CString::new(module_name) {
++         Ok(name) => name,
++         Err(_) => {
++-            error!("Invalid module_name: {}", module_name);
+++            error!("Invalid module_name: {:?}", module_name);
++             return sys::cl_error_t_CL_EFORMAT;
++         }
++     };
++@@ -93,6 +93,31 @@ pub unsafe fn check_scan_limits(
++     unsafe { sys::cli_checklimits(module_name.as_ptr(), ctx, need1, need2, need3) }
++ }
++ 
+++/// Append an exceeds-max heuristic alert or metadata entry.
+++///
+++/// # Safety
+++///
+++/// ctx must be a valid pointer to a clamav scan context structure
+++///
+++pub unsafe fn append_potentially_unwanted_if_heur_exceedsmax(
+++    ctx: *mut sys::cli_ctx,
+++    virname: &str,
+++) -> sys::cl_error_t {
+++    let virname = match std::ffi::CString::new(virname) {
+++        Ok(name) => name,
+++        Err(_) => {
+++            error!("Invalid virname: {:?}", virname);
+++            return sys::cl_error_t_CL_EFORMAT;
+++        }
+++    };
+++
+++    unsafe {
+++        sys::cli_append_potentially_unwanted_if_heur_exceedsmax(ctx, virname.as_ptr().cast_mut());
+++    }
+++
+++    sys::cl_error_t_CL_SUCCESS
+++}
+++
++ /// Scan archive metadata.
++ ///
++ /// # Safety
++@@ -111,7 +136,7 @@ pub unsafe fn scan_archive_metadata(
++     let module_name = match std::ffi::CString::new(filename) {
++         Ok(name) => name,
++         Err(_) => {
++-            error!("Invalid module_name: {}", filename);
+++            debug!("Invalid archive metadata filename: {:?}", filename);
++             return sys::cl_error_t_CL_EFORMAT;
++         }
++     };
++diff --git a/unit_tests/clamscan/alz_test.py b/unit_tests/clamscan/alz_test.py
++index 78b294b339..995c4a5156 100644
++--- a/unit_tests/clamscan/alz_test.py
+++++ b/unit_tests/clamscan/alz_test.py
++@@ -4,12 +4,58 @@
++ Run clamscan tests.
++ """
++ 
+++import hashlib
++ import sys
+++import zlib
++ 
++ sys.path.append('../unit_tests')
++ import testcase
++ 
++ 
+++ALZ_FILE_HEADER = 0x015A4C41
+++ALZ_LOCAL_FILE_HEADER = 0x015A4C42
+++ALZ_END_OF_CENTRAL_DIRECTORY_HEADER = 0x025A4C43
+++ALZ_ATTR_DIRECTORY = 0x10
+++ALZ_ATTR_FILE = 0x20
+++ALZ_COMP_NOCOMP = 0
+++ALZ_COMP_BZIP2 = 1
+++ALZ_COMP_DEFLATE = 2
+++ALZ_ENCR_HEADER_LEN = 12
+++
+++
+++def append_alz_file(
+++    alz,
+++    name,
+++    compression_method,
+++    uncompressed_size,
+++    data,
+++    file_attribute=ALZ_ATTR_FILE,
+++    file_descriptor=0x10,
+++):
+++    name = name.encode('utf-8')
+++
+++    alz.extend(ALZ_LOCAL_FILE_HEADER.to_bytes(4, 'little'))
+++    alz.extend(len(name).to_bytes(2, 'little'))
+++    alz.append(file_attribute)
+++    alz.extend((0).to_bytes(4, 'little'))  # file time/date
+++    alz.append(file_descriptor)
+++    alz.append(0)  # unknown
+++    alz.append(compression_method)
+++    alz.append(0)  # unknown
+++    alz.extend((0).to_bytes(4, 'little'))  # crc
+++    alz.append(len(data))
+++    alz.append(uncompressed_size)
+++    alz.extend(name)
+++    if file_descriptor & 0x01:
+++        alz.extend(b'\x00' * ALZ_ENCR_HEADER_LEN)
+++    alz.extend(data)
+++
+++
+++def raw_deflate(data):
+++    compressor = zlib.compressobj(wbits=-15)
+++    return compressor.compress(data) + compressor.flush()
+++
+++
++ class TC(testcase.TestCase):
++     @classmethod
++     def setUpClass(cls):
++@@ -116,6 +162,281 @@ def test_uncompressed_with_binary(self):
++         ]
++         self.verify_output(output.out, expected=expected_results)
++ 
+++    def test_extraction_error_does_not_abort_archive_scan(self):
+++        self.step_name('Test alz scan continues after a malformed member')
+++
+++        payload = b'alz-later-member'
+++        testfile = TC.path_tmp / 'bad-then-good.alz'
+++        path_db = TC.path_tmp / 'bad-then-good.hdb'
+++
+++        alz = bytearray()
+++        alz.extend(ALZ_FILE_HEADER.to_bytes(4, 'little'))
+++        alz.extend((0).to_bytes(4, 'little'))
+++        append_alz_file(alz, 'bad.bz2', ALZ_COMP_BZIP2, 1, b'\x00')
+++        append_alz_file(alz, 'good.txt', ALZ_COMP_NOCOMP, len(payload), payload)
+++        alz.extend(ALZ_END_OF_CENTRAL_DIRECTORY_HEADER.to_bytes(4, 'little'))
+++
+++        testfile.write_bytes(alz)
+++        path_db.write_text(
+++            '{}:{}:ALZ_LATER_FILE\n'.format(hashlib.sha1(payload).hexdigest(), len(payload))
+++        )
+++
+++        command = '{valgrind} {valgrind_args} {clamscan} -d {path_db} {testfile}'.format(
+++            valgrind=TC.valgrind, valgrind_args=TC.valgrind_args, clamscan=TC.clamscan,
+++            path_db=path_db,
+++            testfile=testfile,
+++        )
+++        output = self.execute_command(command)
+++
+++        assert output.ec == 1  # virus
+++
+++        expected_results = [
+++            'ALZ_LATER_FILE.UNOFFICIAL FOUND',
+++        ]
+++        self.verify_output(output.out, expected=expected_results)
+++
+++    def test_later_parse_error_does_not_skip_earlier_member_scan(self):
+++        self.step_name('Test alz scan checks earlier members before later parse errors')
+++
+++        payload = b'alz-earlier-member'
+++        testfile = TC.path_tmp / 'good-then-bad-header.alz'
+++        path_db = TC.path_tmp / 'good-then-bad-header.hdb'
+++
+++        alz = bytearray()
+++        alz.extend(ALZ_FILE_HEADER.to_bytes(4, 'little'))
+++        alz.extend((0).to_bytes(4, 'little'))
+++        append_alz_file(alz, 'good.txt', ALZ_COMP_NOCOMP, len(payload), payload)
+++        alz.extend(ALZ_LOCAL_FILE_HEADER.to_bytes(4, 'little'))
+++
+++        testfile.write_bytes(alz)
+++        path_db.write_text(
+++            '{}:{}:ALZ_EARLIER_FILE\n'.format(hashlib.sha1(payload).hexdigest(), len(payload))
+++        )
+++
+++        command = '{valgrind} {valgrind_args} {clamscan} -d {path_db} {testfile}'.format(
+++            valgrind=TC.valgrind, valgrind_args=TC.valgrind_args, clamscan=TC.clamscan,
+++            path_db=path_db,
+++            testfile=testfile,
+++        )
+++        output = self.execute_command(command)
+++
+++        assert output.ec == 1  # virus
+++
+++        expected_results = [
+++            'ALZ_EARLIER_FILE.UNOFFICIAL FOUND',
+++        ]
+++        self.verify_output(output.out, expected=expected_results)
+++
+++    def test_deflate_limit_uses_decompressed_size(self):
+++        self.step_name('Test alz deflate scan limits use decompressed output size')
+++
+++        truncated_payload = b'A' * 64
+++        payload = b'A' * 4096
+++        compressed = raw_deflate(payload)
+++        assert len(compressed) <= 255
+++
+++        testfile = TC.path_tmp / 'deflate-limit.alz'
+++        path_db = TC.path_tmp / 'deflate-limit.hdb'
+++
+++        alz = bytearray()
+++        alz.extend(ALZ_FILE_HEADER.to_bytes(4, 'little'))
+++        alz.extend((0).to_bytes(4, 'little'))
+++        append_alz_file(alz, 'x', ALZ_COMP_DEFLATE, 1, compressed)
+++        alz.extend(ALZ_END_OF_CENTRAL_DIRECTORY_HEADER.to_bytes(4, 'little'))
+++        assert len(alz) <= 64
+++
+++        testfile.write_bytes(alz)
+++        path_db.write_text(
+++            '{}:{}:ALZ_DEFLATE_LIMIT\n'.format(
+++                hashlib.sha1(truncated_payload).hexdigest(),
+++                len(truncated_payload),
+++            )
+++        )
++ 
+++        command = (
+++            '{valgrind} {valgrind_args} {clamscan} --max-filesize=64 '
+++            '--max-scansize=4096 -d {path_db} {testfile}'
+++        ).format(
+++            valgrind=TC.valgrind,
+++            valgrind_args=TC.valgrind_args,
+++            clamscan=TC.clamscan,
+++            path_db=path_db,
+++            testfile=testfile,
+++        )
+++        output = self.execute_command(command)
+++
+++        assert output.ec == 1  # virus
+++
+++        expected_results = [
+++            'ALZ_DEFLATE_LIMIT.UNOFFICIAL FOUND',
+++        ]
+++        self.verify_output(output.out, expected=expected_results)
++ 
+++    def test_inflated_header_size_does_not_skip_extraction(self):
+++        self.step_name('Test alz scan ignores inflated header size for extraction gating')
+++
+++        payload = b'alz-small-hit'
+++        testfile = TC.path_tmp / 'inflated-header-size.alz'
+++        path_db = TC.path_tmp / 'inflated-header-size.hdb'
+++
+++        alz = bytearray()
+++        alz.extend(ALZ_FILE_HEADER.to_bytes(4, 'little'))
+++        alz.extend((0).to_bytes(4, 'little'))
+++        append_alz_file(alz, 'x', ALZ_COMP_NOCOMP, 80, payload)
+++        alz.extend(ALZ_END_OF_CENTRAL_DIRECTORY_HEADER.to_bytes(4, 'little'))
+++
+++        testfile.write_bytes(alz)
+++        path_db.write_text(
+++            '{}:{}:ALZ_INFLATED_HEADER_SIZE\n'.format(
+++                hashlib.sha1(payload).hexdigest(),
+++                len(payload),
+++            )
+++        )
++ 
+++        command = (
+++            '{valgrind} {valgrind_args} {clamscan} --max-filesize=64 '
+++            '--max-scansize=1024 -d {path_db} {testfile}'
+++        ).format(
+++            valgrind=TC.valgrind,
+++            valgrind_args=TC.valgrind_args,
+++            clamscan=TC.clamscan,
+++            path_db=path_db,
+++            testfile=testfile,
+++        )
+++        output = self.execute_command(command)
+++
+++        assert output.ec == 1  # virus
+++
+++        expected_results = [
+++            'ALZ_INFLATED_HEADER_SIZE.UNOFFICIAL FOUND',
+++        ]
+++        self.verify_output(output.out, expected=expected_results)
+++
+++    def test_total_limit_does_not_report_max_file_size(self):
+++        self.step_name('Test alz archive total limit is not reported as max file size')
+++
+++        payload = b'A' * 60
+++        testfile = TC.path_tmp / 'total-limit.alz'
+++        path_db = TC.path_tmp / 'total-limit.hdb'
+++
+++        alz = bytearray()
+++        alz.extend(ALZ_FILE_HEADER.to_bytes(4, 'little'))
+++        alz.extend((0).to_bytes(4, 'little'))
+++        append_alz_file(alz, 'a', ALZ_COMP_NOCOMP, len(payload), payload)
+++        append_alz_file(alz, 'b', ALZ_COMP_NOCOMP, len(payload), payload)
+++        alz.extend(ALZ_END_OF_CENTRAL_DIRECTORY_HEADER.to_bytes(4, 'little'))
+++        assert len(alz) <= 200
+++
+++        testfile.write_bytes(alz)
+++        path_db.write_text(
+++            '{}:{}:ALZ_UNUSED\n'.format(
+++                hashlib.sha1(b'not-present').hexdigest(),
+++                len(b'not-present'),
+++            )
+++        )
+++
+++        command = (
+++            '{valgrind} {valgrind_args} {clamscan} --alert-exceeds-max=yes '
+++            '--max-filesize=200 --max-scansize=100 -d {path_db} {testfile}'
+++        ).format(
+++            valgrind=TC.valgrind,
+++            valgrind_args=TC.valgrind_args,
+++            clamscan=TC.clamscan,
+++            path_db=path_db,
+++            testfile=testfile,
+++        )
+++        output = self.execute_command(command)
+++
+++        assert output.ec == 1  # virus
+++
+++        expected_results = [
+++            'Heuristics.Limits.Exceeded.MaxScanSize FOUND',
+++        ]
+++        unexpected_results = [
+++            'Heuristics.Limits.Exceeded.MaxFileSize FOUND',
+++        ]
+++        self.verify_output(output.out, expected=expected_results, unexpected=unexpected_results)
+++
+++    def test_metadata_filepos_counts_skipped_entries_from_one(self):
+++        self.step_name('Test alz metadata file position counts skipped entries from one')
+++
+++        payload = b'alz-filepos-member'
+++        testfile = TC.path_tmp / 'filepos-skipped.alz'
+++        path_db = TC.path_tmp / 'filepos-skipped.cdb'
+++
+++        alz = bytearray()
+++        alz.extend(ALZ_FILE_HEADER.to_bytes(4, 'little'))
+++        alz.extend((0).to_bytes(4, 'little'))
+++        append_alz_file(
+++            alz,
+++            'dir/',
+++            ALZ_COMP_NOCOMP,
+++            0,
+++            b'',
+++            file_attribute=ALZ_ATTR_DIRECTORY,
+++        )
+++        append_alz_file(
+++            alz,
+++            'encrypted.bin',
+++            ALZ_COMP_NOCOMP,
+++            0,
+++            b'',
+++            file_descriptor=0x11,
+++        )
+++        append_alz_file(alz, 'good.txt', ALZ_COMP_NOCOMP, len(payload), payload)
+++        alz.extend(ALZ_END_OF_CENTRAL_DIRECTORY_HEADER.to_bytes(4, 'little'))
+++
+++        testfile.write_bytes(alz)
+++        path_db.write_text('ALZ_FILEPOS_TEST:CL_TYPE_ALZ:*:good.txt:*:*:0:3:*:*\n')
+++
+++        command = '{valgrind} {valgrind_args} {clamscan} -d {path_db} {testfile}'.format(
+++            valgrind=TC.valgrind, valgrind_args=TC.valgrind_args, clamscan=TC.clamscan,
+++            path_db=path_db,
+++            testfile=testfile,
+++        )
+++        output = self.execute_command(command)
+++
+++        assert output.ec == 1  # virus
+++
+++        expected_results = [
+++            'ALZ_FILEPOS_TEST.UNOFFICIAL FOUND',
+++        ]
+++        self.verify_output(output.out, expected=expected_results)
+++
+++    def test_encrypted_metadata_matches_before_extraction_skip(self):
+++        self.step_name('Test alz encrypted entries are matched before extraction skip')
+++
+++        testfile = TC.path_tmp / 'encrypted-metadata.alz'
+++        path_db = TC.path_tmp / 'encrypted-metadata.cdb'
+++
+++        alz = bytearray()
+++        alz.extend(ALZ_FILE_HEADER.to_bytes(4, 'little'))
+++        alz.extend((0).to_bytes(4, 'little'))
+++        append_alz_file(
+++            alz,
+++            'encrypted.bin',
+++            ALZ_COMP_NOCOMP,
+++            0,
+++            b'',
+++            file_descriptor=0x11,
+++        )
+++        alz.extend(ALZ_END_OF_CENTRAL_DIRECTORY_HEADER.to_bytes(4, 'little'))
+++
+++        testfile.write_bytes(alz)
+++        path_db.write_text(
+++            'ALZ_ENCRYPTED_METADATA_TEST:CL_TYPE_ALZ:*:encrypted.bin:*:*:1:1:*:*\n'
+++        )
+++
+++        command = '{valgrind} {valgrind_args} {clamscan} -d {path_db} {testfile}'.format(
+++            valgrind=TC.valgrind, valgrind_args=TC.valgrind_args, clamscan=TC.clamscan,
+++            path_db=path_db,
+++            testfile=testfile,
+++        )
+++        output = self.execute_command(command)
+++
+++        assert output.ec == 1  # virus
+++
+++        expected_results = [
+++            'ALZ_ENCRYPTED_METADATA_TEST.UNOFFICIAL FOUND',
+++        ]
+++        self.verify_output(output.out, expected=expected_results)
 diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
-index 723b23a99c..b3055b6ce9 100644
+index 1a464a8326..6be8ab1acd 100644
 --- a/package/clamav/clamav.mk
 +++ b/package/clamav/clamav.mk
-@@ -57,6 +57,9 @@ CLAMAV_IGNORE_CVES += CVE-2026-20345
- # 0012-libclamav-fix-pespin-rebuilt-section-size-overflow-101.patch
- CLAMAV_IGNORE_CVES += CVE-2026-20339
+@@ -42,6 +42,9 @@ CLAMAV_IGNORE_CVES += CVE-2026-20216
+ # 0006-libclamav-fix-fsg-section-loop-underflow-51.patch
+ CLAMAV_IGNORE_CVES += CVE-2026-20214
  
-+# 0013-libclamav-guard-pdf-hex-string-newline-skip-98.patch
-+CLAMAV_IGNORE_CVES += CVE-2026-20346
++# 0007-fix-alz-parser-robustness-and-scan-coverage-63.patch
++CLAMAV_IGNORE_CVES += CVE-2026-20243
 +
  CLAMAV_DEPENDENCIES = \
  	bzip2 \
