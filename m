@@ -4,122 +4,122 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 855B1C61DBD
-	for <buildroot@archiver.kernel.org>; Wed, 26 Aug 2026 06:47:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB1B0C61DC2
+	for <buildroot@archiver.kernel.org>; Wed, 26 Aug 2026 06:47:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4BF0280BE2;
-	Wed, 26 Aug 2026 06:47:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A99EB80B6E;
+	Wed, 26 Aug 2026 06:47:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QcldjxvkThoL; Wed, 26 Aug 2026 06:47:23 +0000 (UTC)
+ id 9ERgzcJF-9aI; Wed, 26 Aug 2026 06:47:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787726843;
-	bh=FGC6p5sDC/2VqjF/a5ivSFn+W2Em/pDxzlSauz4WDWQ=;
+	s=default; t=1787726870;
+	bh=7R2XCJRlMzk+yIy2uCncJe6iFiMw1p9LBdI+VMp8GyU=;
 	h=To:Date:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
 	 From;
-	b=J5lCZ788PKG4P99oR/yMxm/R/xoj3IEY5waGd9W/6IPH0mhGwJkygjLSwzoXvvP2E
-	 zL/Hf+ntpqt8KUpT4OEoEitkcMrnrvRnSUKem8Fc0q91JHrSgOlnjDFukTKB0vBvhe
-	 EuEFUlD5dcARni4Kjvivpq+L4p0v+S7+KVva1/RgEmRGV6C3w8yw49kc72x4/80+li
-	 SIv1VzEXY7+sXtIRbMspInY8bkaOWizcRKtA5ICB5vNkPBnsrHlQtruk9hTj5bfqWU
-	 LcS5yIZwJEkgMxugABbi64NUEARJ8jGK8bpKFMAAqJFctx+SF0NFScJIxMI5+K6JiP
-	 T/joDFQhsa1KA==
+	b=oFdG5+dVQat/5rIUwC9WPFrfRZ501D3meiFBJYaGyHd0OSqZwlLvIXy06nQ0wSPiP
+	 Nw0rZUxnvhF8Cmznn5ZacywoA4bahuf0VrVVeJ5rtTppQjXk9jOZuggK6K/F7vMdeL
+	 tMXLaSs++xmU4UfmDzXlGG7f6SBl9+sNBXREbj5vAamKM8chPuV4p2QgwePHUpTa2E
+	 SId6iL3GhJNsjBHmKP6JffdTnL2lACvst+EIY0sAvpaWHP9rjC7Q67Nti52LieFCeF
+	 /V/Sszgnl/5N+CXxuJGyZ0E/0CWED/Vun4e+YaM98c9F44Z1VWc+Ao0y4dlCYW9F5S
+	 DG/kSLLaUuJVg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 316AA80BD1;
-	Wed, 26 Aug 2026 06:47:23 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 99072105
- for <buildroot@buildroot.org>; Wed, 26 Aug 2026 06:47:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A43A480B84;
+	Wed, 26 Aug 2026 06:47:50 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 91A5D2FD
+ for <buildroot@buildroot.org>; Wed, 26 Aug 2026 06:47:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7F8AC605FC
- for <buildroot@buildroot.org>; Wed, 26 Aug 2026 06:47:20 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 77E2180B84
+ for <buildroot@buildroot.org>; Wed, 26 Aug 2026 06:47:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZyHXfCAwSEFN for <buildroot@buildroot.org>;
- Wed, 26 Aug 2026 06:47:19 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AcuCD-Kl4UJ4 for <buildroot@buildroot.org>;
+ Wed, 26 Aug 2026 06:47:48 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f403:c105::1;
- helo=ch1pr05cu001.outbound.protection.outlook.com;
+ client-ip=2a01:111:f403:c10d::1;
+ helo=sn4pr2101cu001.outbound.protection.outlook.com;
  envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
-Received: from CH1PR05CU001.outbound.protection.outlook.com
- (mail-northcentralusazlp170100001.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:c105::1])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 76CD8605F7
- for <buildroot@buildroot.org>; Wed, 26 Aug 2026 06:47:18 +0000 (UTC)
+Received: from SN4PR2101CU001.outbound.protection.outlook.com
+ (mail-southcentralusazlp170120001.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:c10d::1])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7906980B6E
+ for <buildroot@buildroot.org>; Wed, 26 Aug 2026 06:47:47 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=jEd+kW6SMR9tEVqSSF0T0KWJZ6jDRTs9nfdEjWuCqHMkKP6c28I1pgAyGwTCrbKiBNEnAm/fd4ifB1AzaQtlzPCRqyyjkjLticdZlsMriIl+8Xz1qAmYNxsnZnVDgfi+jbqwAa72yHpDS/mEBkGhARTXGrb/6M7y5gaLkH+5jnM/GZxH4TT5CxEzEEdsV4bAFuO3td9qrBlBtLFInkQT3SWgOsSr4WmWfggcVwOvn4kLJe0h+2b6sFR4s530KeNjVwulcPEsKJrsmnqLaP8j5bSekTQe5ukXm2CDv06sJpLE0tNbSwlosnV0K7tLYbs2eO/SIjLykNXZPyATHRrUHQ==
+ b=mX+spUu2gfbeEbDEhq7gMzcSq2gRKDsn25rUviGDsvj9sCz1Uey2JqjSjX3qX3BY47rKhGl7ft6H+bMb+AYsS5qmB3KWMrSU+Evi6eZopHa1iQmeE7bcx/3lKpZmmycwdLPmu61JCgm86d6BkjdeRdp0Ly7Y1V499gZiKXHtIVut0uDhEimesXSgIGcWf3YQ4dmFDb4s6AuEpPSZ37iFHgNnPNQAa5Dg2B2MC888XsSNtHusJtHZUU8QsHRyuCNtRm7m19+3Ch1pe/kl32xFuItKU0ENIxGXClECKURE93v9CEHwHibeccuhqUBslwPOhWyFgmnE4i4xoLgqVKlMew==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8Pp8fTRK4xjXv7nSHHpx9OcdkBDXC4/IZSxV855HbIM=;
- b=JrtNnvlUuGcAz2YDJDeWYDk2s2jYWNot181tDkEi00k2J5SLdsEgN4ZOI1oiVlGYsTO12S4TzgYdopGXQxVjF1DG5WHdEaumm85lbK6Inv5j7AnJ8RD/gFjinWeO7l421i7uusUQn7BznnrCjG/B6XUTp9kjw4eCE18CGj3CzagWulj4L9uPnjWJcxmDFonAEDc/UP8dLiRsUw5bkEJfIyrYYLPmFVjK+W5R+oRQYLzQ4SmhlsV7kbpzsnXp8x0ARc1gyhvpBYlfBtP4Cc/8EyeCVsYPc/P9Cm0jaDbQLZM3tAPwozLnQvKtmCawdfUf/NJ3ciajrBykx1ENlQNWCA==
+ bh=xk90K9aGAjk+4Z9utl1NtrqW4XV8T8sWsrS5EPZzdSc=;
+ b=JhKiRFqfq5xQTurVAeZ1wBZMm695VOuHBJZuV4buglPOx6kn9Pph9iG43LLpicczZS027796NcvbGYzMD9ERDc+cLG4E3OUXBEWE2ifYOn6JXuZLIWpqI9EyP4ijHKre6V5eQUlcvtNiU9y0OWJ0CiRW5OzDyMcO2SHxiSeo0128QwYMeBpXgtk7BTbcdyScG/xKZuYJpQP3ET1+PbgDS/X0sDB5rLX37MJcvRvM8itwUz7RvnFWxqLKKbMnzo8au7WrrsIVWyOkAGKiyCW8kEzSEn8hBkRHRlsCmeufM6QcU3lj3uVk3sGLkKoBmG94nzR0xcoIkhFfpsGnj9gcKw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=softfail (sender ip
  is 149.199.90.133) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
  dmarc=fail (p=quarantine sp=quarantine pct=100) action=quarantine
  header.from=amd.com; dkim=none (message not signed); arc=none (0)
-Received: from SJ0PR05CA0047.namprd05.prod.outlook.com (2603:10b6:a03:33f::22)
- by SA3PR12MB8023.namprd12.prod.outlook.com (2603:10b6:806:320::9)
+Received: from SJ0PR05CA0005.namprd05.prod.outlook.com (2603:10b6:a03:33b::10)
+ by CH1PR12MB9671.namprd12.prod.outlook.com (2603:10b6:610:2b0::8)
  with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.360.7; Wed, 26 Aug
- 2026 06:47:12 +0000
-Received: from SJ5PEPF000001F1.namprd05.prod.outlook.com
- (2603:10b6:a03:33f:cafe::80) by SJ0PR05CA0047.outlook.office365.com
- (2603:10b6:a03:33f::22) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.360.6 via Frontend Transport; Wed, 26
- Aug 2026 06:47:12 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.360.6; Wed, 26 Aug
+ 2026 06:47:27 +0000
+Received: from SJ5PEPF000001F7.namprd05.prod.outlook.com
+ (2603:10b6:a03:33b:cafe::97) by SJ0PR05CA0005.outlook.office365.com
+ (2603:10b6:a03:33b::10) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.360.8 via Frontend Transport; Wed, 26
+ Aug 2026 06:47:27 +0000
 X-MS-Exchange-Authentication-Results: spf=softfail (sender IP is
  149.199.90.133) smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=fail action=quarantine header.from=amd.com;
 Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
  amd.com discourages use of 149.199.90.133 as permitted sender)
 Received: from satlexmb08.amd.com (149.199.90.133) by
- SJ5PEPF000001F1.mail.protection.outlook.com (10.167.242.69) with Microsoft
+ SJ5PEPF000001F7.mail.protection.outlook.com (10.167.242.75) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.360.3 via Frontend Transport; Wed, 26 Aug 2026 06:47:11 +0000
+ 15.21.360.3 via Frontend Transport; Wed, 26 Aug 2026 06:47:26 +0000
 Received: from satlexmb07.amd.com (10.181.42.216) by satlexmb08.amd.com
  (10.181.42.217) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.45; Wed, 26 Aug
- 2026 01:47:10 -0500
+ 2026 01:47:07 -0500
 Received: from xirengwts09.xilinx.com (10.180.168.240) by satlexmb07.amd.com
  (10.181.42.216) with Microsoft SMTP Server id 15.2.2562.45 via Frontend
- Transport; Wed, 26 Aug 2026 01:47:08 -0500
+ Transport; Wed, 26 Aug 2026 01:47:05 -0500
 To: <buildroot@buildroot.org>
-Date: Wed, 26 Aug 2026 07:46:49 +0100
-Message-ID: <20260826064649.292291-4-neal.frager@amd.com>
+Date: Wed, 26 Aug 2026 07:46:48 +0100
+Message-ID: <20260826064649.292291-3-neal.frager@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20260826064649.292291-1-neal.frager@amd.com>
 References: <20260826064649.292291-1-neal.frager@amd.com>
 MIME-Version: 1.0
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ5PEPF000001F1:EE_|SA3PR12MB8023:EE_
-X-MS-Office365-Filtering-Correlation-Id: f6b42228-9461-48ae-bec1-08df033ddb62
+X-MS-TrafficTypeDiagnostic: SJ5PEPF000001F7:EE_|CH1PR12MB9671:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8e58e4de-2352-4d40-2357-08df033de45f
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
- ARA:13230040|82310400026|376014|7416014|1800799024|36860700016|23010399003|13003099007|6133799003|56012099006|10067099003|11063799006|18002099003|22082099003|41080700001;
-X-Microsoft-Antispam-Message-Info: 3rQ/FoKAVO8gsOynI5JnZcOhYbmBWWwyojpT00tgnn86/FjoIk+N1cRLOE5F+Aqtwp+my4tS97wYSQfaXca9Mq4e94ajM+PXFBJGSlZx7A8coTdK9sHi3e0GlwO0WuzA+2Eq98d0DsRx30OS9ZGXDgTBDeX1SS8mj7QoRCgAbTTt+1DmFkKa6jkjGSG5EfRaTSxDcPCsXZHeOpgGDvCUo/X7CYIrpXaq3YjKQJle80kVGJaXeoh5x/D0lTuwgwIT95WYwCe9qPO0xg8NGsdZvQ5Ty6wdzi9avhAchYM+8UypAdfLdXCllJMpEea0xPtCwRx7mjXZ6Lf8jO6r840OcIFZALW4ZwzbWvOi92A9S5TmaWSqGSzGSK+S6msn1gicWCOOA3pQKu7SRj+tKshRWsNDgR/h0Ry9Er6zUrBw5iQHSCutjoL0cAZktS8Q/P76GG1yp2Pqy4WGYo/IRci1shmPuvfv6yb21bmhqXo9tDEK14NxNAjpPxzht53f59zJyLlMtaHO0xU9hvYNd6e+EcygNUDi6uOZBOMSU1EVCmzPlC/ZsZIRbYwqnm0Wos1RjrNinagXElYyXybKcXf66aTkZgQ4EWuuIDI83p0i/cRjrvaw4MReJMU12mlQ/PSI3fqHhuyPUpevkemOPH4JUwyapRK6ENHLSgHgMilexfy98Bam/v6kJVxS4/hULvoDi9jknr6dp0lGYcvnycF67Q==
+ ARA:13230040|82310400026|1800799024|23010399003|7416014|376014|36860700016|13003099007|6133799003|10067099003|56012099006|11063799006|22082099003|18002099003|41080700001;
+X-Microsoft-Antispam-Message-Info: VG2AL86MaN5UVb3r0BPrBmVR5k7LWmBqmqBBt9xmFLPLeTIL6B5hH5NPvK0DfMAfmkmerF6ijSTijx+Q7ysqA7nwGNuF58qKCgLbyIvTfCqVAqEva989wxi7C0m2IfCXvYWNf1PgTpuBcIj4wyusxqQRBVQsDHNA6klpizrnBbU7pJbhpzbld6YoRDIBfpz1BZC/Dts6slmVJoYgv3EEqXRccvwAEUhLu3XXe0Sth8MehcQERS7wTj1KxDLRVh8jNFDdYXPnB4NmiUNVYwS7EHvdj5gAD7VKf7T899ykbCpz7RN0Va9L8bp10vpa/ZdMJWHUGo0xaAYrE9SHOqA/E92V4W3ufhkrX54nM6t8rKleGx0P47dJRwW60nbm7M9qg/wJgHW9gZB/4JlpmxgOMNn/WoZOdyeBF1IgAX/yu7+pb4UNNxron4p89t1eYTX81YXXbO9HpvGFed7DPHbbcW2S+jH5Oi1WUU2JKwqcTUGQ95HQ60b0LiL927FF0/bJfAEktUF8zb5ovf3Z+MqwmdM00RhPgzO8xGaBmvvREPP3vniJP+9F+ZV6cbbmWzhy7r0S9Qz3roFUDy8hro3Gayz1YiIUAoRs2upVpjN34st4xexHDpVFMb2V0y0EplSbxbDAgSlf2ucXHkP6kZMsxjzpvYYcX9t2f42ESeuGE/0DCm3VGgUA+REAE9s3saDGfm65Uc6GFxIwNgXl5VqIEg==
 X-Forefront-Antispam-Report: CIP:149.199.90.133; CTRY:US; LANG:en; SCL:1; SRV:;
  IPV:NLI; SFV:NSPM; H:satlexmb08.amd.com; PTR:unknown-90-133.xilinx.com;
  CAT:NONE;
- SFS:(13230040)(82310400026)(376014)(7416014)(1800799024)(36860700016)(23010399003)(13003099007)(6133799003)(56012099006)(10067099003)(11063799006)(18002099003)(22082099003)(41080700001);
+ SFS:(13230040)(82310400026)(1800799024)(23010399003)(7416014)(376014)(36860700016)(13003099007)(6133799003)(10067099003)(56012099006)(11063799006)(22082099003)(18002099003)(41080700001);
  DIR:OUT; SFP:1101; 
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: XnoX5i8vzb/FOeL8Snx8wDzGOfOwj2tUPmubUzSS7/Xv8jN94RP9TozFe7tkbRP27lhTHhYUHkQ9hiDKGbAZv4we0zzyF+OWx5PozZVGVcOB9SY5BpCcrgIIfmkjuYMgv49bGwFKR7wNySB7v+cqk04AMtr163g0BNZ1Nr9oeiuw22e3yTvDOAEhVNGRztKQks0uTBGCiCHnklMkGBkyJ9CuZ+4vTjCXYvuDTjic3OLlVoK11FXkAVZIuVcIkzj/jVKiAbcTaFn+cRXsMNU9A+2xwLZrLCoxikVqgBDYNFNSlv4eKvRB/cv3JuoTsSYdX40eq7tdtVn5ZF5Ut14rCVO0z/X5yMN9OVJWJtnA6gpo0O6c+/lb/ktk35UdAi/zSvo69pmAO+g6txvfKYNWEKFWMNJwDBcNnQZBUXUakGoKsZaCUsOT6DTtdClWk1lp
+X-MS-Exchange-AntiSpam-MessageData-0: AAgkhWHjS82CZNyeBd6uS5JTOTDgOlmveYVCliMAfY55CM4+9ZgotUjpYWE6NRYI89lucoeE+CiOQ6zaz9Yh3RaXouPEhzOKBRomuJd6MTdt0diSls9rpea3JTvd7+7DqEDuu+aPySkzqL+UK+FzIKN4ILl97r9/50/HMww15PC6cXSd/JyuXEpjs2+Ndq3WduI4QLrK3MtD2H5qEiU1hriDAJ3LLJsYaBn35V3ZzkGxEM3nrwctQXkgePzoQWdgsXBciq4kxu1puTXKZcob2I8SldGHDWkRMyUYYTh+KpATV1NueLG81pwNDzykiMo1TbtocBzXRJPFCkJFsL2I8Aeyn2/XdoOY2riNGeH2YqAJMRMKnp/7qkhp4ca0Lm1T4eVSUxnZyJFBMsudcOxRpN+vncyoOOTD2ehSWEC2Wy3M4tk0bgQFrZiD9CihfBoJ
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Aug 2026 06:47:11.7144 (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f6b42228-9461-48ae-bec1-08df033ddb62
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Aug 2026 06:47:26.7901 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8e58e4de-2352-4d40-2357-08df033de45f
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d; Ip=[149.199.90.133];
  Helo=[satlexmb08.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: SJ5PEPF000001F1.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: SJ5PEPF000001F7.namprd05.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR12MB8023
-Subject: [Buildroot] [PATCH v5 4/4] package/xen: add custom git support
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH1PR12MB9671
+Subject: [Buildroot] [PATCH v5 3/4] package/xen: add custom tarball support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -146,8 +146,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For completeness, add custom git support to match the capabilities of other
-packages such as Linux, uboot or ATF.
+Add support for custom tarballs such as tarballs from vendor Xen trees.
 
 To test this feature, use the following configs to test latest release of the
 Xilinx Xen vendor tree.
@@ -158,93 +157,96 @@ BR2_TOOLCHAIN_EXTERNAL=y
 BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
 BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
 BR2_PACKAGE_XEN=y
-BR2_PACKAGE_XEN_CUSTOM_GIT=y
-BR2_PACKAGE_XEN_CUSTOM_REPO_URL="https://github.com/Xilinx/xen.git"
-BR2_PACKAGE_XEN_CUSTOM_REPO_VERSION="xlnx-rebase-v4.21_2026.1"
+BR2_PACKAGE_XEN_CUSTOM_TARBALL=y
+BR2_PACKAGE_XEN_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,xen,xlnx-rebase-v4.21_2026.1)/xlnx-rebase-v4.21_2026.1.tar.gz"
 
 Add to package/xen/xen.hash:
-sha256  e8016e81627fe3b4fca5463723428606cd3750c7fd76a3cfaa0b0d0e7cd9b32b  xen-xlnx-rebase-v4.21_2026.1-git4.tar.gz
+sha256  03498f51b8daae70c429ace4bde6e2be679b3a0ac28b886c7335c022feef6100  xlnx-rebase-v4.21_2026.1.tar.gz
 
 Signed-off-by: Neal Frager <neal.frager@amd.com>
 Tested-by: Matthew Weber <mathew.l.weber3@boeing.com>
 Prior test details: https://gist.github.com/matthew-l-weber/c17f14a3793ccee440a383e4177ff3db
 Reviewed-by: John Ernberg <john.ernberg@actia.se>
-Reviewed-by: Stewart Hildebrand <stewart.hildebrand@amd.com>
-Tested-by: Stewart Hildebrand <stewart.hildebrand@amd.com>
-Tested on VEK385 Evaluation Board
 ---
 V1->V2:
 - rebased to updated master branch
+- added the line move of the XEN_SITE definition
 V2->V4:
-- merged into new patch series as the fourth patch
+- merged into new patch series as the third patch
 V4->V5:
-- updated commit message to use release tag name for test
-- added error message in case no version specified
+- removed unnecessary BR_NO_CHECK_HASH_FOR
 ---
- package/xen/Config.in | 18 ++++++++++++++++++
- package/xen/xen.mk    | 12 ++++++++++++
- 2 files changed, 30 insertions(+)
+ package/xen/Config.in | 11 +++++++++++
+ package/xen/xen.mk    | 17 ++++++++++++++++-
+ 2 files changed, 27 insertions(+), 1 deletion(-)
 
 diff --git a/package/xen/Config.in b/package/xen/Config.in
-index 3726504334..eb58c6928f 100644
+index e50b232f0a..3726504334 100644
 --- a/package/xen/Config.in
 +++ b/package/xen/Config.in
-@@ -26,6 +26,9 @@ config BR2_PACKAGE_XEN_CUSTOM_VERSION
- config BR2_PACKAGE_XEN_CUSTOM_TARBALL
- 	bool "Custom tarball"
+@@ -23,8 +23,18 @@ config BR2_PACKAGE_XEN_CUSTOM_VERSION
+ 	help
+ 	  This option allows to use a specific official version
  
-+config BR2_PACKAGE_XEN_CUSTOM_GIT
-+	bool "Custom Git repository"
++config BR2_PACKAGE_XEN_CUSTOM_TARBALL
++	bool "Custom tarball"
 +
  endchoice
  
- if BR2_PACKAGE_XEN_CUSTOM_TARBALL
-@@ -45,6 +48,21 @@ config BR2_PACKAGE_XEN_VERSION
- 	default BR2_PACKAGE_XEN_CUSTOM_VERSION_VALUE \
- 				if BR2_PACKAGE_XEN_CUSTOM_VERSION
- 	default "custom"	if BR2_PACKAGE_XEN_CUSTOM_TARBALL
-+	default BR2_PACKAGE_XEN_CUSTOM_REPO_VERSION \
-+				if BR2_PACKAGE_XEN_CUSTOM_GIT
++if BR2_PACKAGE_XEN_CUSTOM_TARBALL
 +
-+if BR2_PACKAGE_XEN_CUSTOM_GIT
-+
-+config BR2_PACKAGE_XEN_CUSTOM_REPO_URL
-+	string "URL of custom repository"
-+
-+config BR2_PACKAGE_XEN_CUSTOM_REPO_VERSION
-+	string "Custom repository version"
-+	help
-+	  Revision to use in the typical format used by Git
-+	  E.G. a sha id, a tag, ..
++config BR2_PACKAGE_XEN_CUSTOM_TARBALL_LOCATION
++	string "URL of custom Xen tarball"
 +
 +endif
++
+ config BR2_PACKAGE_XEN_CUSTOM_VERSION_VALUE
+ 	string "Xen version"
+ 	depends on BR2_PACKAGE_XEN_CUSTOM_VERSION
+@@ -34,6 +44,7 @@ config BR2_PACKAGE_XEN_VERSION
+ 	default "4.21.1"	if BR2_PACKAGE_XEN_LATEST_VERSION
+ 	default BR2_PACKAGE_XEN_CUSTOM_VERSION_VALUE \
+ 				if BR2_PACKAGE_XEN_CUSTOM_VERSION
++	default "custom"	if BR2_PACKAGE_XEN_CUSTOM_TARBALL
  
  config BR2_PACKAGE_XEN_HYPERVISOR
  	bool "Xen hypervisor"
 diff --git a/package/xen/xen.mk b/package/xen/xen.mk
-index 473f0e23fa..4ecf56ab49 100644
+index 4e953edeea..473f0e23fa 100644
 --- a/package/xen/xen.mk
 +++ b/package/xen/xen.mk
-@@ -23,6 +23,9 @@ ifeq ($(BR2_PACKAGE_XEN_CUSTOM_TARBALL),y)
- XEN_TARBALL = $(call qstrip,$(BR2_PACKAGE_XEN_CUSTOM_TARBALL_LOCATION))
- XEN_SITE = $(patsubst %/,%,$(dir $(XEN_TARBALL)))
- XEN_SOURCE = $(notdir $(XEN_TARBALL))
-+else ifeq ($(BR2_PACKAGE_XEN_CUSTOM_GIT),y)
-+XEN_SITE = $(call qstrip,$(BR2_PACKAGE_XEN_CUSTOM_REPO_URL))
-+XEN_SITE_METHOD = git
- else
- # Handle stable official Xen versions
- XEN_SITE = https://downloads.xenproject.org/release/xen/$(XEN_VERSION)
-@@ -106,4 +109,13 @@ $(error No tarball location specified. Please check BR2_PACKAGE_XEN_CUSTOM_TARBA
- endif
+@@ -5,7 +5,6 @@
+ ################################################################################
+ 
+ XEN_VERSION = $(call qstrip,$(BR2_PACKAGE_XEN_VERSION))
+-XEN_SITE = https://downloads.xenproject.org/release/xen/$(XEN_VERSION)
+ XEN_SELINUX_MODULES = systemd udev xen
+ XEN_LICENSE = GPL-2.0
+ XEN_LICENSE_FILES = COPYING LICENSES/GPL-2.0
+@@ -19,6 +18,16 @@ XEN_DEPENDENCIES = \
+ 	host-python3 \
+ 	host-python-distlib
+ 
++ifeq ($(BR2_PACKAGE_XEN_CUSTOM_TARBALL),y)
++# Handle custom Xen tarballs as specified by the configuration
++XEN_TARBALL = $(call qstrip,$(BR2_PACKAGE_XEN_CUSTOM_TARBALL_LOCATION))
++XEN_SITE = $(patsubst %/,%,$(dir $(XEN_TARBALL)))
++XEN_SOURCE = $(notdir $(XEN_TARBALL))
++else
++# Handle stable official Xen versions
++XEN_SITE = https://downloads.xenproject.org/release/xen/$(XEN_VERSION)
++endif
++
+ # Calculate XEN_ARCH
+ ifeq ($(ARCH),aarch64)
+ XEN_ARCH = arm64
+@@ -91,4 +100,10 @@ XEN_INSTALL_TARGET = NO
+ XEN_CONF_OPTS += --disable-tools
  endif
  
-+ifeq ($(BR2_PACKAGE_XEN_CUSTOM_GIT),y)
-+ifeq ($(call qstrip,$(BR2_PACKAGE_XEN_CUSTOM_REPO_URL)),)
-+$(error No repository specified. Please check BR2_PACKAGE_XEN_CUSTOM_REPO_URL)
-+endif
-+ifeq ($(call qstrip,$(BR2_PACKAGE_XEN_CUSTOM_REPO_VERSION)),)
-+$(error No version specified. Please check BR2_PACKAGE_XEN_CUSTOM_REPO_VERSION)
++ifeq ($(BR2_PACKAGE_XEN_CUSTOM_TARBALL),y)
++ifeq ($(call qstrip,$(BR2_PACKAGE_XEN_CUSTOM_TARBALL_LOCATION)),)
++$(error No tarball location specified. Please check BR2_PACKAGE_XEN_CUSTOM_TARBALL_LOCATION)
 +endif
 +endif
 +
