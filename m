@@ -1,94 +1,97 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17D8DC61DBD
-	for <buildroot@archiver.kernel.org>; Wed, 26 Aug 2026 15:27:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E8F8C5DF97
+	for <buildroot@archiver.kernel.org>; Wed, 26 Aug 2026 15:27:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B6445403E1;
-	Wed, 26 Aug 2026 15:27:45 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tmHW2l5z_SMz; Wed, 26 Aug 2026 15:27:45 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787758065;
-	bh=NuD5K2St7BV6FDhfQLG5Hf0J37qOjNVFPBbU8ptEcVg=;
-	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=MyuMXFyTRG8pzDLcefrO2RUrW9/DpLy/Gsl5Bwb9n+8t61+68W0QdfwlwYAqreGp4
-	 xulYrMeANDsrEvr0O4s4JcLxtAqq1h5jJjpyiXsf0ez+L6dvEUVrYEigu0QgoTF3NS
-	 S4fm44BdDYiN8CVOkxu8G1PPIBm749BhdkzmYBqEpr7ZlF+SyKlHwiHlA1bIHZ7oG/
-	 1Tcaq5TRSOiw/3mu9GdfiMbmlsl9kWMioxVCXE6xbEcBbCQnkvgjLMVohWJAkwt9dt
-	 f1kLmH4pPSHfTIUHBvougMPy2eYQHiPtJrjpCSutWlrkbS4Itqu0xJZ63c9By18pW7
-	 wMT4yund/ITjg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EDCA7403FF;
-	Wed, 26 Aug 2026 15:27:44 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id E7C1B334
- for <buildroot@buildroot.org>; Wed, 26 Aug 2026 15:27:43 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D97C580ADA
- for <buildroot@buildroot.org>; Wed, 26 Aug 2026 15:27:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2A9F3809EC;
+	Wed, 26 Aug 2026 15:27:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AzGuzcU98s1x for <buildroot@buildroot.org>;
- Wed, 26 Aug 2026 15:27:43 +0000 (UTC)
+ id f4xslJ0GaMKV; Wed, 26 Aug 2026 15:27:48 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1787758068;
+	bh=ikJHlhnz2B0Z8+3owcfzIr7noaMYx8RX+HPucXEe4vY=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=L5fnq21M3nfcJmWBmONY+yG3V+2es4oUXF26q/EXWu7QZiMpkRhp4iq01H8I3e8Xk
+	 KPXgpXpulX20OFAeX6gHgaG5GCjgPIn4ueYyvhWgXJ1F92UagBlRTFm0hIAZ7TObcu
+	 zCeXe0c5F0orQaexmGnnX/MmkHtc8ZjqS03uGT2UbTh6Q+9imvnc0YaDZVZbk6R20c
+	 M7I5fS6+u9BcDKv57zvIHBb3CitUnQ/OB3nqwPD06LgqBW5vYqs9ps5jIJdFZNBEv9
+	 8eEC7lnFE6fWX4gNVNIdxfeMYR/Ie3zAjE7rZJii9X/ijRYAYavphNOdxU9p0nOrQC
+	 xv/GE+zSQpk6Q==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4804080AC5;
+	Wed, 26 Aug 2026 15:27:48 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id AC875334
+ for <buildroot@buildroot.org>; Wed, 26 Aug 2026 15:27:45 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 935B940115
+ for <buildroot@buildroot.org>; Wed, 26 Aug 2026 15:27:45 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZRqThpMZML88 for <buildroot@buildroot.org>;
+ Wed, 26 Aug 2026 15:27:44 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::62f; helo=mail-ej1-x62f.google.com;
+ client-ip=2a00:1450:4864:20::634; helo=mail-ej1-x634.google.com;
  envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com
- [IPv6:2a00:1450:4864:20::62f])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B92EA80AC5
- for <buildroot@buildroot.org>; Wed, 26 Aug 2026 15:27:42 +0000 (UTC)
-Received: by mail-ej1-x62f.google.com with SMTP id
- a640c23a62f3a-c207cb16cf5so165070866b.1
- for <buildroot@buildroot.org>; Wed, 26 Aug 2026 08:27:42 -0700 (PDT)
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com
+ [IPv6:2a00:1450:4864:20::634])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5D63F40064
+ for <buildroot@buildroot.org>; Wed, 26 Aug 2026 15:27:43 +0000 (UTC)
+Received: by mail-ej1-x634.google.com with SMTP id
+ a640c23a62f3a-c1c26d7e951so162195966b.0
+ for <buildroot@buildroot.org>; Wed, 26 Aug 2026 08:27:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1787758060; x=1788362860;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to:content-type;
- bh=OFKA+VNc0WpPsBFM0A/pewfwCaU5Sge+mCFe730Fclk=;
- b=WQPvUHqpTUJ0IANCo6pO86fyw+PHxxS5uqb1br+KuPO+jjpru/ctT4gUz70x67aPkZ
- AdipkxBhRghy8iVb8kQ68tIwlLhWhIEPiZHkBjMzItyRaYYu0C8ge6U9zdoFyx5gp5uW
- ALzfQTb7f25qMAhXyy9Aif9PhGcpO2HlKManzkSN/fh9x5X/TubfJ4Pj+1PN9ccFYeFT
- RKhw98l73Gzxa9plmByMJLcnVslGh4NmyzE8N0lsvt535T7fSGsqxNMyl1RiHwXotXDC
- 4Plxo2pXHkwvbaBbiIoFNcgiFJPs+jA7ojEpz5nIdXD1zS7a7PUBIIJigsNiniuZFSMZ
- 8J7A==
-X-Gm-Message-State: AFuF++kgc0e4rRwNnrUFhoIoPxFigLDLNgjsqHlk0ULiA+7XTcd656VS
- ePX/koJrhgdeHMSqRq0eh/DOoun5cAc3Ggwpb+8SIT4lsSSgbosSObQdxjPW+y14BFishbh17ww
- 8mazFeMQ=
-X-Gm-Gg: AR+sD10vLG8jw+zYEU1QjJIiS3K5PjEwULCjOQu51CT4ke3i4niBikavJkVlHJtpcXi
- aCyloPJL07vErRoFs1lfknk+ZvBa1D9xLOP82AaKmFTJTTu8dtRMwgzRkKfe26OdteWE97cXu+N
- BErpG8n6gUQoYL5lUdnfRDMXXCV74637UoAeWVlo0d6UoDsRduM1BN6h5I7iDM9i0/2Iejc1P6g
- JKsL2xohBWMEyZhPTAm0+bU9yYR0G8Xo3eAZr/P0abdbFxdmfj6MprnieAvpnzu8S5Fx8YdCFi4
- q1015IK87EAFl930zCO4DiUSja2M/pEaUphVe/pZY15zqbY4QU+1wTIOCN8kOSQuHrb0tC1mzLb
- j67GlJPHfA67E6IqmpuIqrn3M4XE8VWD9jTS6nDzRFO4JsxioW79zG1wQbvS8xgpuY4SOHmwPln
- B8xj5yQ/epPs+aYxG6hlUP2e35FB6TLOPbhrTh3wpOinpJhpQ3eqAtiYqan8aYqIap1yisTZYXp
- TTfGzSmBwLU9u5ZE+slut40SKWUtW6SdXxyiJA2PqT86+PIFVw=
-X-Received: by 2002:a17:907:97c4:b0:c1c:3b06:ed1b with SMTP id
- a640c23a62f3a-c250c36bc3cmr1050571566b.22.1787758060064; 
- Wed, 26 Aug 2026 08:27:40 -0700 (PDT)
+ d=1e100.net; s=20251104; t=1787758062; x=1788362862;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to:content-type;
+ bh=J5RbegBZqr/fVqHTthR2WufJESjZnMH2uOc2RXR3ZM4=;
+ b=Z0+o2KidB8/ue9kSPuMRCrmYBbKT6tD98rlQm/XVNecAJ8h6aJRFQN9pF92MObkvFB
+ TjyeYBHvO8vYe8fGUK/Espknt3GPRlxdstsmOjKuqFY4mTVa93cZvaOi/4DtFMyE1fE3
+ dzeQU0PUuCtSGIKu2TPJoI2LDQkS1XwJRmQfvZfmPA5rmLNDbwnIILSfMf3lz/Hc9KpW
+ K0vWg2pCUzMKIUBbLkp0Zy7xgIbrSr5XNRZl4mOlIf1z1r4gDM4hqfF4MGaKVqmFUeuL
+ NtScFTHv72BXfs+dHNwUR0FSm17KJILcVpKENwWSlAQ7pa9lUihME7c7AzUb265uP3yC
+ UcNQ==
+X-Gm-Message-State: AFuF++kdhCVnr+rWV2Cd2S9mcB3cfMALr0b24auPt8o+OG8ur4e+Rw3b
+ YreIJl8zFDCqPxg1ggkvt5TeBOyW19vR2m/ySuHGPFV+SlS+jNKboh3sqHprjbOGvcj7lbFgbGj
+ jDgd0Y2w=
+X-Gm-Gg: AR+sD115qPci/zdAGz2jbFLgm4mmDxLEWh1aNiC5pumg6gbLI4T9SnxhdCfaCzv/O4r
+ 6qBrBdGhfcmhMIAT1q5mWqVmFCzvO7jV29uHKo1GJzOupv6JeTf8MdvtRWDjRTt1GC9cBhzYGsK
+ K5HnQOtM6Oz7z3Fpm26uPrNTrZ0db2lKXa/5Oo7OYfnfpneAW7uejXMSDp5flO5j3Uz7U2noqTS
+ JOw8P5+dxuP+nNBhyOfELT41IRVrlm1vW+VXeyIi5sL5F3jufojuEdDxGCyelfP1SpKYk3WRpXs
+ QNe0JeSCMpx3NJXbO6scLYNBZRlLntz8P32yIf2ctvQ4myrrWidTfctkHajkYc3nDuP1yehovyY
+ D618X1SmDPlaO/ewuAnZ9Jvz1UF4WzSapmdg0p+7gVRftZS1PRnY18EPiwA4UgqF5PII4iwJ0Ey
+ 2qDAxl12Jwld7yoiFXtj/BaspfwsSGXVtFGSt63lh+lStL9msigbfP23FdSqTBeik1GTw2iak+h
+ PShKOfMgqa8Bm9NBv0wDRDaK+mTa5Edcoau83nDR3z2T8W0QaY=
+X-Received: by 2002:a17:907:930d:b0:c20:ff26:336e with SMTP id
+ a640c23a62f3a-c250c31267fmr913512666b.14.1787758061769; 
+ Wed, 26 Aug 2026 08:27:41 -0700 (PDT)
 Received: from P-NTS-Evian
  (static-css-ccs-204145.business.bouyguestelecom.com. [176.157.204.145])
  by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-c250a9ec343sm403804666b.57.2026.08.26.08.27.39
+ a640c23a62f3a-c250a9ec343sm403804666b.57.2026.08.26.08.27.41
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 26 Aug 2026 08:27:39 -0700 (PDT)
+ Wed, 26 Aug 2026 08:27:41 -0700 (PDT)
 To: buildroot@buildroot.org
-Cc: Romain Naour <romain.naour@smile.fr>
-Date: Wed, 26 Aug 2026 17:27:30 +0200
-Message-ID: <20260826152732.3556127-1-romain.naour@smile.fr>
+Cc: Romain Naour <romain.naour@smile.fr>,
+	Fiona Klute <fiona.klute@gmx.de>
+Date: Wed, 26 Aug 2026 17:27:32 +0200
+Message-ID: <20260826152732.3556127-3-romain.naour@smile.fr>
 X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260826152732.3556127-1-romain.naour@smile.fr>
+References: <20260826152732.3556127-1-romain.naour@smile.fr>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/3] support/testing: TestPythonPy3Gobject: test
- glib 2.88 regression
+Subject: [Buildroot] [PATCH 3/3] package/python-gobject: bump to 3.56
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -107,44 +110,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-In Glib >= 2.88, GLib.unix_signal_add has been moved to a separate
-platform-specific library. This break backward compatibility from
-GLib-2.0. A workaround has been applied to pygobject >= 3.55.3
-https://gitlab.gnome.org/GNOME/pygobject/-/commit/74e4e0f40a66436a55c72d4a6e6058c1f91a7310
+This version bump is required following the glib security version bump
+to 2.88.3 [1] to fix a runtime issue due to GLib-2.0 backward
+compatibility removal [2].
 
-This issue currently break TestFirewalldSysVInit and
-TestFirewalldSystemd runtime tests since the bump to glib 2.88.3 [1]:
+We prefer updating python-gobject to 3.56 stable release instead of
+backporting complex commits from 3.55.x unstable release [3].
 
+Fixes:
 https://gitlab.com/buildroot.org/buildroot/-/jobs/16060152329 (TestFirewalldSysVInit)
 https://gitlab.com/buildroot.org/buildroot/-/jobs/16060152332 (TestFirewalldSystemd)
 
-Break the test TestPythonPy3Gobject now in order to reproduce the same
-issue than for Firewalld test.
-
 [1] e313a2d2590af689eb1f79e55b5a488154400da1
+[2] https://gitlab.gnome.org/GNOME/glib/-/commit/e02603d44dd71fa7bcb07a1c5d64c5a91d3e93af
+[3] https://gitlab.gnome.org/GNOME/pygobject/-/commit/74e4e0f40a66436a55c72d4a6e6058c1f91a7310
 
+Runtime tested with TestGst1Python and TestFirewalld{Systemd,SysVInit}.
+
+Cc: Fiona Klute <fiona.klute@gmx.de>
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ---
- support/testing/tests/package/sample_python_gobject.py | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/python-gobject/python-gobject.hash | 4 ++--
+ package/python-gobject/python-gobject.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/support/testing/tests/package/sample_python_gobject.py b/support/testing/tests/package/sample_python_gobject.py
-index 4490a73613..1c2b327206 100644
---- a/support/testing/tests/package/sample_python_gobject.py
-+++ b/support/testing/tests/package/sample_python_gobject.py
-@@ -4,6 +4,12 @@ from gi.repository import GLib
+diff --git a/package/python-gobject/python-gobject.hash b/package/python-gobject/python-gobject.hash
+index 191b74b1e6..6b26e289e7 100644
+--- a/package/python-gobject/python-gobject.hash
++++ b/package/python-gobject/python-gobject.hash
+@@ -1,3 +1,3 @@
+-# from https://download.gnome.org/sources/pygobject/3.54/pygobject-3.54.5.sha256sum
+-sha256  b6656f6348f5245606cf15ea48c384c7f05156c75ead206c1b246c80a22fb585  pygobject-3.54.5.tar.gz
++# from https://download.gnome.org/sources/pygobject/3.56/pygobject-3.56.3.sha256sum
++sha256  12760e4a0e3d04b6eb95e06f7a27e362c826d567ea613373a92c003b6c70d2d6  pygobject-3.56.3.tar.gz
+ sha256  f4cac31434b287b10a70b81c62cfa973d250417f8f248c4c1b5566d061ecfb2f  COPYING
+diff --git a/package/python-gobject/python-gobject.mk b/package/python-gobject/python-gobject.mk
+index 9386b6fed8..310cde24a7 100644
+--- a/package/python-gobject/python-gobject.mk
++++ b/package/python-gobject/python-gobject.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
- 
- def main():
-+    # In Glib >= 2.88, GLib.unix_signal_add has been moved to a
-+    # separate platform-specific library. This break backward
-+    # compatibility from GLib-2.0.
-+    # A workaround has been applied to pygobject >= 3.55.3
-+    # https://gitlab.gnome.org/GNOME/pygobject/-/commit/74e4e0f40a66436a55c72d4a6e6058c1f91a7310
-+    unix_signal_add = GLib.unix_signal_add_full  # noqa
-     sh_path = GLib.find_program_in_path('sh')
-     if sh_path == "/bin/sh":
-         return True
+-PYTHON_GOBJECT_VERSION_MAJOR = 3.54
+-PYTHON_GOBJECT_VERSION = $(PYTHON_GOBJECT_VERSION_MAJOR).5
++PYTHON_GOBJECT_VERSION_MAJOR = 3.56
++PYTHON_GOBJECT_VERSION = $(PYTHON_GOBJECT_VERSION_MAJOR).3
+ PYTHON_GOBJECT_SOURCE = pygobject-$(PYTHON_GOBJECT_VERSION).tar.gz
+ PYTHON_GOBJECT_SITE = https://download.gnome.org/sources/pygobject/$(PYTHON_GOBJECT_VERSION_MAJOR)
+ PYTHON_GOBJECT_LICENSE = LGPL-2.1+
 -- 
 2.55.0
 
