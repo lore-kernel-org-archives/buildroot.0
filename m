@@ -1,74 +1,133 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF8C8C5DF9D
-	for <buildroot@archiver.kernel.org>; Thu, 27 Aug 2026 04:05:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9AD08C5DF9D
+	for <buildroot@archiver.kernel.org>; Thu, 27 Aug 2026 04:20:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 227D6809F5;
-	Thu, 27 Aug 2026 04:05:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0F9B9405CC;
+	Thu, 27 Aug 2026 04:20:00 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qk5aBQy9rEpi; Thu, 27 Aug 2026 04:19:58 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1787804398;
+	bh=roHM1BPviOXqwD038VFhqNgh0wIHvC6u7eSquqHahbA=;
+	h=References:In-Reply-To:From:Date:To:Cc:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=DUhWv1RS4nwO0RfTynQj936Qoo85kIbigkBiwG6eRotSmrOrHV5ZgE7kTEz0W4Ucg
+	 FbPKyehYCG0jNCoA3d5bENaBKEaT1HMakwOBg8HVuhvcin1vpL1WHoGBPQ8A5EzcDn
+	 ORP+6iaKIjniiQzjEVADED+2kuCC/DNwmXFwYQZpLOUJMFhf6jTUiAmHkUKbwR6osW
+	 35M5Lu48obyCLAE50LTD4EYtm3Xutft+3JYf7ahjQMktBsDa6H6wk3KaZnTcE3TQu1
+	 ELKPQynEEVhpWCT90WmfrxNaXYsKDybf+2t25w7V/lhpwZO8wuZjlWLJufRQENhEih
+	 pMiHxN85fKUrA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3AC7740596;
+	Thu, 27 Aug 2026 04:19:58 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7C8693A4
+ for <buildroot@buildroot.org>; Thu, 27 Aug 2026 04:19:56 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5DC4080AD0
+ for <buildroot@buildroot.org>; Thu, 27 Aug 2026 04:19:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iVYEFUoF9G7L; Thu, 27 Aug 2026 04:05:30 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787803530;
-	bh=d/W9LM1V3eEF37xG2P8EWitICDsADE9GyFq5coytx08=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=Qi/MNilm3AJepphLNmD5tPsNgWAvX6WWQijC7tT3tn7H4B9al24aw2dXA53sXOPP/
-	 +Xld8iC5Z6joyqCTiEn8ZscGZ4g+0PdWlbSFiJ1vWkew7gZYP4GxtQ7mhRqDsmZjnn
-	 F56NHo4qEaBHcdiRCgspOulKniz4/Za7783ZPyNGopAtccKWZxmXWmgHEI3icJUj7R
-	 AQDU3qhEm2bZ1fJmZJqdLtdB+DcpS4tSZMch0TNF94vrVF4hx1+5kGMWSNbu0D3ZZg
-	 dSLvzON3CcMmzPFzzRIHOwb7VPMJXnn5IE/LVWqRMpUYnA/oSizCMuECJ/rOhQrxua
-	 jbrUaiqkmNNmQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0BDC0809F8;
-	Thu, 27 Aug 2026 04:05:30 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id E7FF4334
- for <buildroot@buildroot.org>; Thu, 27 Aug 2026 04:05:28 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C84524009E
- for <buildroot@buildroot.org>; Thu, 27 Aug 2026 04:05:28 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IFUvCSy16_6p for <buildroot@buildroot.org>;
- Thu, 27 Aug 2026 04:05:27 +0000 (UTC)
-Received-SPF: None (mailfrom) identity=mailfrom;
- client-ip=2a01:4f8:151:30a2::163; helo=serv15.avernis.de;
- envelope-from=br025@umbiko.net; receiver=<UNKNOWN> 
-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none) header.from=umbiko.net
-Authentication-Results: smtp2.osuosl.org; dkim=pass (1024-bit key,
- unprotected) header.d=umbiko.net header.i=@umbiko.net header.a=rsa-sha256
- header.s=mail header.b=bZ4khHhK
-Received: from serv15.avernis.de (serv15.avernis.de
- [IPv6:2a01:4f8:151:30a2::163])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A885B4009C
- for <buildroot@buildroot.org>; Thu, 27 Aug 2026 04:05:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=umbiko.net; s=mail;
- t=1787803520; bh=xWP7pWc0z4IvrysPWh93MggWntNKnp8LdhCv28U9GsM=;
- h=From:To:Cc:Subject:Date;
- b=bZ4khHhKuj1o6Ywwrdip1g/tvjyeCE05+xmzqpcy13vnpXnUoZCv6f1CefAD5vRuc
- 8Ud14G4r3DfM4Ej4/s2+OLWRiZNPArEjQF73huXD/eI3c06yTY5dvrn9sEmSfyJbdX
- 9HZtt3aoUrhlVMKHxtRE+1jQho0nqyFUN97tOk6c=
-Received: by serv15.avernis.de (Postfix) with ESMTPSA id DF7ACBDE2C23;
- Thu, 27 Aug 2026 06:05:19 +0200 (CEST)
-From: Andreas Ziegler <br025@umbiko.net>
-To: buildroot@buildroot.org
-Cc: Andreas Ziegler <br025@umbiko.net>
-Date: Thu, 27 Aug 2026 06:05:12 +0200
-Message-ID: <20260827040513.3903-1-br025@umbiko.net>
-X-Mailer: git-send-email 2.53.0
+ id JX1vIozq_p_l for <buildroot@buildroot.org>;
+ Thu, 27 Aug 2026 04:19:55 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::22f; helo=mail-lj1-x22f.google.com;
+ envelope-from=matthew.l.weber@gmail.com; receiver=<UNKNOWN> 
+Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none) header.from=thewebers.ws
+Authentication-Results: smtp1.osuosl.org; dkim=pass (2048-bit key,
+ unprotected) header.d=thewebers-ws.20251104.gappssmtp.com
+ header.i=@thewebers-ws.20251104.gappssmtp.com header.a=rsa-sha256
+ header.s=20251104 header.b=gzyLPknV
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com
+ [IPv6:2a00:1450:4864:20::22f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C824680AC7
+ for <buildroot@buildroot.org>; Thu, 27 Aug 2026 04:19:52 +0000 (UTC)
+Received: by mail-lj1-x22f.google.com with SMTP id
+ 38308e7fff4ca-39faa67fab8so10816111fa.2
+ for <buildroot@buildroot.org>; Wed, 26 Aug 2026 21:19:52 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1787804391; cv=none;
+ d=google.com; s=arc-20260327;
+ b=fFvAAkTLbwQDlUpDGWSdk2lGdzwv+AzhYGWe8haG1LI79BmoWgX610jbpYtQ/nOl7s
+ T1zIClNyDQ5o2CvA9ibViGfQMKelFHghKU7/AtOSZMIgdqst96dKqnlFjanO3kNkjgfm
+ i+Vhjcxk7/eilCswQUYpM7zGoadpoKeTQ7+AFltubZA3082pFwPKd9R45k8R6VeQN1El
+ rvm2cDTcEG7V4dXbQ+ui99hQZw9A4pKyj3fLeC+EFrKWwhL2ZFXAHg8kLZRSPGQ+AAe6
+ E4i7xlAK9PTHO4cawj+4FrOvZ/qQEKW3vyTJAbefeJtgrtlL5ODj8M5BYsbWWBFhWz62
+ l0Lw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com;
+ s=arc-20260327; 
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:dkim-signature;
+ bh=RjbzL/CC7lD21C+yV+ItKsiW4zKkhnOI3uJhWjW7QCY=;
+ fh=+LA+0Nl6fIBxrk7d4ZetPSGeD+MMH1AiLmqaUBeAVto=;
+ b=cPiSOzIiANm3h8mE21KKxAQIV7CzzJ0P3VVad5RFRKYPXpUtL3DmaMEC2kdFJlPH3F
+ dm/+4wAxgtBXRLSMgwkxX6HkFkMh983UOmflYt81NuXyotMt0lpGRoD4ysq5OBMZw5sD
+ aTBiaPHyQt4XH1YoS2bkhks/R7Oj0kWfqHJglMfMRSC92ExPr7MJIJ56ihEY/DVwfvmH
+ Ra9t0NVGZiyeTXbw4Q09WDRHjtpPbnQIqHepVbAgC3zNtOKkfGY9nHXzqMOHkJl077Ry
+ 3PASUQ5ji3kLmdmg2T1C5rTqf8gr89GU0ELdb1OoGuc3efgEBHOBh5ulDw9OYm5LCgWs
+ 43sA==; darn=buildroot.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=thewebers-ws.20251104.gappssmtp.com; s=20251104; t=1787804391; x=1788409191;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:content-type:cc:to:subject:message-id
+ :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+ :date:message-id:reply-to:content-type;
+ bh=RjbzL/CC7lD21C+yV+ItKsiW4zKkhnOI3uJhWjW7QCY=;
+ b=gzyLPknV9Nz6I0pCwwjrghiDDlodz63Gw/oPKgiIkwwZroGgvPbgGrIbezxWt+7oqY
+ YKJRSiMxOelUlluFQ/u4XP/uv9kWsNS5ZqgbTI2NOrU08a07c+x6TyPVmiVPoYhrLzK/
+ Q63KOx0HYh8EWnqYrvtjf//YYtfZsbSjdTAzAm3jBLQm4SfbKnm/WKRBrud2YeykowG6
+ 5QC261ZloiXz48N0WdBnECi86kDm1zCPSYcDiYaKmtHMBpQTtQNeqssKt2TmAM4B/Adj
+ 6EVF051PMn9vMb7KoYpdXvNtKrkcGsovaRi1LaXDERoorUSDXMm0vgVTndRaILw6MdF4
+ j20Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20251104; t=1787804391; x=1788409191;
+ h=content-transfer-encoding:content-type:cc:to:subject:message-id
+ :date:from:in-reply-to:references:mime-version:x-gm-gg
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+ :content-type;
+ bh=RjbzL/CC7lD21C+yV+ItKsiW4zKkhnOI3uJhWjW7QCY=;
+ b=A2kPf64WjYGAR4tYPGZbVR6ang5cTurJSkkog+SwTx1ejgUpAqg1k56iYKG5z2wxf7
+ F368OjlKhe3xbbi0OVLbRSdq7wkRB7XeERiO62mP9PnrOyWDXUfqvYQDUenM9731vnxb
+ 0bWaG+gbwHJYisJFKnF5GQ3HeuT1z6wlv1PluF1FBfMLpqlI3C+NMN1ENOrkgxOr08c3
+ FBWpUyR0z0I+hSM/DU+PN7L3QGew+nTleipzScWvUQO63Y1YqsGS1/HWyTcVnKxETuC6
+ o3ib4SzETpi3RvCUDIck6Cfaw864GD9DoOewAa54CSKSAFRsJpdy1aO0/P2N2BxzAbCg
+ dSEQ==
+X-Gm-Message-State: AFuF++lTHbFMzo8h0qMmKh0RP/Rv81JxZYLWobxo0sHoAEm7I7ZQ5w7E
+ 4x7OGgBctYFYTWrP4AdQ2q8nFrDN+yYcObGR0iix7e58okj9fHfULse+jxw+65kDsqW3IN27Syy
+ ZMeobBrylKQtc7KFYlsD/aYYoUDDkVPc=
+X-Gm-Gg: AR+sD13D1L/aFyzsLjSqVSvodep5+X8KCOC1RxsRvBzfj+VUvOPxKBRgyL8Wz0uzd9+
+ 3pcNlomCQEDC3M4zL/iytfhMbSAfEGvtQhPkPw6Ii8NloywsHc6teAKBsV23v+3sduvNzKsTq19
+ gtvxg/zDt3MAWceZQabjnepkzhVPeXpt5+n2cm120Hf467qhMrtwdfMQsns/Ry4DGYrECfGnq0p
+ 36/wz4YvId2LftxaYm0AjcwHwTNUe5EtEjlanEEq6Hn0INIA/VeiW5rCW0eDfMIYeJ3Kbj6yfvw
+ m3e9BCa5YWOpLzVv/KzcjjXz7CvEmjO68Puh73ffEUKY
+X-Received: by 2002:a05:651c:31d7:b0:3a1:4f33:f60e with SMTP id
+ 38308e7fff4ca-3a1fd5e292dmr24756051fa.8.1787804390464; Wed, 26 Aug 2026
+ 21:19:50 -0700 (PDT)
 MIME-Version: 1.0
-X-Virus-Scanned: clamav-milter 1.4.3 at serv15.avernis.de
-X-Virus-Status: Clean
-Subject: [Buildroot] [PATCH 1/1] package/libnfs: update version to 7.0.0
+References: <20260825214203.3708181-1-thomas.petazzoni@bootlin.com>
+ <20260825214203.3708181-4-thomas.petazzoni@bootlin.com>
+In-Reply-To: <20260825214203.3708181-4-thomas.petazzoni@bootlin.com>
+From: Matthew Weber <matt@thewebers.ws>
+Date: Wed, 26 Aug 2026 23:19:37 -0500
+X-Gm-Features: AcwNN1XhXPtuolHVwzI8nGG0Ati4mtZ68RyWQGrPZcfuZcheB_EtTxQssIk06fw
+Message-ID: <CAFt09wMrVryrn14zaNKfjvAbk_Whpw=PQ2k=QWFScq2qNHtQ5w@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Buildroot List <buildroot@buildroot.org>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>, 
+ "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+Subject: Re: [Buildroot] [PATCH v3 3/3] support/scripts/check-host-bins: add
+ new check on host binaries/libs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -80,303 +139,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-New version contains all current patches, plus one that fixes
-"undefined reference to 'gnutls_*'" if libnfs was built with
-GnuTLS support
-
-Change log:
-https://github.com/sahlberg/libnfs/compare/libnfs-6.0.2...libnfs-7.0.0
-
-Fixes:
-https://autobuild.buildroot.net/results/b07/b070248b2bceaceaaed8e826b1247ccfba1ba9fb
-https://autobuild.buildroot.net/results/e14/e1461b76121addd8f04f08819b2e3e453a12c679
-https://autobuild.buildroot.net/results/87c/87c79193d2ea86f47e36232fe514837ad99c5f30
-
-Signed-off-by: Andreas Ziegler <br025@umbiko.net>
----
- ...t-and-use-const-qualifier-from-point.patch |  37 ------
- ...t-qualifier-from-pointer-target-type.patch | 117 ------------------
- ...void-cast-to-allow-compile-for-arm32.patch |  68 ----------
- package/libnfs/libnfs.hash                    |   2 +-
- package/libnfs/libnfs.mk                      |   2 +-
- 5 files changed, 2 insertions(+), 224 deletions(-)
- delete mode 100644 package/libnfs/0001-Do-not-edit-const-and-use-const-qualifier-from-point.patch
- delete mode 100644 package/libnfs/0002-use-const-qualifier-from-pointer-target-type.patch
- delete mode 100644 package/libnfs/0003-socket-use-void-cast-to-allow-compile-for-arm32.patch
-
-diff --git a/package/libnfs/0001-Do-not-edit-const-and-use-const-qualifier-from-point.patch b/package/libnfs/0001-Do-not-edit-const-and-use-const-qualifier-from-point.patch
-deleted file mode 100644
-index d463ecd356..0000000000
---- a/package/libnfs/0001-Do-not-edit-const-and-use-const-qualifier-from-point.patch
-+++ /dev/null
-@@ -1,37 +0,0 @@
--From 89a795fee97a3da348c28dbd58500100a13dcec0 Mon Sep 17 00:00:00 2001
--From: Rudi Heitbaum <rudi@heitbaum.com>
--Date: Sun, 25 Jan 2026 08:30:43 +0000
--Subject: [PATCH] Do not edit const and use const qualifier from pointer target
-- type
--
--Fixes:
--    ../../lib/libnfs.c: In function 'nfs_set_context_args':
--    ../../lib/libnfs.c:301:30: error: initialization discards 'const' qualifier from pointer target type [-Werror=discarded-qualifiers]
--      301 |                 char *strp = strchr(val, ',');
--          |                              ^~~~~~
--
--Upstream: https://github.com/sahlberg/libnfs/commit/89a795fee97a3da348c28dbd58500100a13dcec0
--
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-----
-- lib/libnfs.c | 3 +--
-- 1 file changed, 1 insertion(+), 2 deletions(-)
--
--diff --git a/lib/libnfs.c b/lib/libnfs.c
--index bbe6666..162492b 100755
----- a/lib/libnfs.c
--+++ b/lib/libnfs.c
--@@ -316,9 +316,8 @@ nfs_set_context_args(struct nfs_context *nfs, const char *arg, const char *val)
-- 	} else if (!strcmp(arg, "wsize")) {
-- 		nfs_set_writemax(nfs, atoi(val));
-- 	} else if (!strcmp(arg, "readdir-buffer")) {
---		char *strp = strchr(val, ',');
--+		const char *strp = strchr(val, ',');
-- 		if (strp) {
---			*strp = 0;
-- 			strp++;
-- 			nfs_set_readdir_max_buffer_size(nfs, atoi(val), atoi(strp));
-- 		} else {
---- 
--2.47.3
--
-diff --git a/package/libnfs/0002-use-const-qualifier-from-pointer-target-type.patch b/package/libnfs/0002-use-const-qualifier-from-pointer-target-type.patch
-deleted file mode 100644
-index 6fe8f6433b..0000000000
---- a/package/libnfs/0002-use-const-qualifier-from-pointer-target-type.patch
-+++ /dev/null
-@@ -1,117 +0,0 @@
--From 6a06cb6dba0065705179329729cca2f95a842a63 Mon Sep 17 00:00:00 2001
--From: Rudi Heitbaum <rudi@heitbaum.com>
--Date: Sun, 25 Jan 2026 08:42:18 +0000
--Subject: [PATCH] use const qualifier from pointer target type
--
--Fixes:
--    ../../lib/nfs_v3.c: In function 'nfs3_mknod_async':
--    ../../lib/nfs_v3.c:3260:13: error: assignment discards 'const' qualifier from pointer target type [-Werror=discarded-qualifiers]
--     3260 |         ptr = strrchr(path, '/');
--          |             ^
--    ../../lib/nfs_v3.c: In function 'nfs3_unlink_async':
--    ../../lib/nfs_v3.c:3361:13: error: assignment discards 'const' qualifier from pointer target type [-Werror=discarded-qualifiers]
--     3361 |         ptr = strrchr(path, '/');
--          |             ^
--    ../../lib/nfs_v3.c: In function 'nfs3_rmdir_async':
--    ../../lib/nfs_v3.c:3472:13: error: assignment discards 'const' qualifier from pointer target type [-Werror=discarded-qualifiers]
--     3472 |         ptr = strrchr(path, '/');
--          |             ^
--    ../../lib/nfs_v3.c: In function 'nfs3_mkdir2_async':
--    ../../lib/nfs_v3.c:3574:13: error: assignment discards 'const' qualifier from pointer target type [-Werror=discarded-qualifiers]
--     3574 |         ptr = strrchr(path, '/');
--          |             ^
--
--Upstream: https://github.com/sahlberg/libnfs/commit/6a06cb6dba0065705179329729cca2f95a842a63
--
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-----
-- lib/nfs_v3.c | 24 ++++++++++++------------
-- 1 file changed, 12 insertions(+), 12 deletions(-)
--
--diff --git a/lib/nfs_v3.c b/lib/nfs_v3.c
--index addd0ae..2c32fff 100644
----- a/lib/nfs_v3.c
--+++ b/lib/nfs_v3.c
--@@ -3244,7 +3244,7 @@ int
-- nfs3_mknod_async(struct nfs_context *nfs, const char *path, int mode, int dev,
--                  nfs_cb cb, void *private_data)
-- {
---	char *ptr;
--+	const char *ptr;
-- 	struct mknod_cb_data *cb_data;
-- 
-- 	cb_data = malloc(sizeof(struct mknod_cb_data));
--@@ -3262,8 +3262,8 @@ nfs3_mknod_async(struct nfs_context *nfs, const char *path, int mode, int dev,
--                                       "buffer for mknod path");
--                         return -1;
--                 }
---                ptr = strrchr(cb_data->path, '/');
---                *ptr = 0;
--+                char *ptr2 = strrchr(cb_data->path, '/');
--+                *ptr2 = 0;
--         } else {
--                 cb_data->path = malloc(strlen(path) + 2);
--                 if (cb_data->path == NULL) {
--@@ -3353,7 +3353,7 @@ nfs3_unlink_async(struct nfs_context *nfs, const char *path, nfs_cb cb,
--                   void *private_data)
-- {
-- 	char *new_path;
---	char *ptr;
--+	const char *ptr;
-- 
--         ptr = strrchr(path, '/');
--         if (ptr) {
--@@ -3363,8 +3363,8 @@ nfs3_unlink_async(struct nfs_context *nfs, const char *path, nfs_cb cb,
--                                       "buffer for unlink path");
--                         return -1;
--                 }
---                ptr = strrchr(new_path, '/');
---                *ptr = 0;
--+                char *ptr2 = strrchr(new_path, '/');
--+                *ptr2 = 0;
--         } else {
--                 new_path = malloc(strlen(path) + 2);
--                 if (new_path == NULL) {
--@@ -3464,7 +3464,7 @@ nfs3_rmdir_async(struct nfs_context *nfs, const char *path, nfs_cb cb,
--                  void *private_data)
-- {
-- 	char *new_path;
---	char *ptr;
--+	const char *ptr;
-- 
--         ptr = strrchr(path, '/');
--         if (ptr) {
--@@ -3474,8 +3474,8 @@ nfs3_rmdir_async(struct nfs_context *nfs, const char *path, nfs_cb cb,
--                                       "buffer for rmdir path");
--                         return -1;
--                 }
---                ptr = strrchr(new_path, '/');
---                *ptr = 0;
--+                char *ptr2 = strrchr(new_path, '/');
--+                *ptr2 = 0;
--         } else {
--                 new_path = malloc(strlen(path) + 2);
--                 if (new_path == NULL) {
--@@ -3566,7 +3566,7 @@ nfs3_mkdir2_async(struct nfs_context *nfs, const char *path, int mode,
--                  nfs_cb cb, void *private_data)
-- {
-- 	char *new_path;
---	char *ptr;
--+	const char *ptr;
-- 
--         ptr = strrchr(path, '/');
--         if (ptr) {
--@@ -3576,8 +3576,8 @@ nfs3_mkdir2_async(struct nfs_context *nfs, const char *path, int mode,
--                                       "buffer for mkdir path");
--                         return -1;
--                 }
---                ptr = strrchr(new_path, '/');
---                *ptr = 0;
--+                char *ptr2 = strrchr(new_path, '/');
--+                *ptr2 = 0;
--         } else {
--                 new_path = malloc(strlen(path) + 2);
--                 if (new_path == NULL) {
---- 
--2.47.3
--
-diff --git a/package/libnfs/0003-socket-use-void-cast-to-allow-compile-for-arm32.patch b/package/libnfs/0003-socket-use-void-cast-to-allow-compile-for-arm32.patch
-deleted file mode 100644
-index 1f71a391e7..0000000000
---- a/package/libnfs/0003-socket-use-void-cast-to-allow-compile-for-arm32.patch
-+++ /dev/null
-@@ -1,68 +0,0 @@
--From c66dc9a65723e610fd02da38471d68b8289eb074 Mon Sep 17 00:00:00 2001
--From: Rudi Heitbaum <rudi@heitbaum.com>
--Date: Tue, 14 Jan 2025 14:09:36 +0000
--Subject: [PATCH] socket: use void cast to allow compile for arm32
--
--When compiling for arm32 the error: cast increases required alignment
--of target type occurs.
--
--/lib/socket.c: In function 'rpc_read_from_socket':
--lib/socket.c:586:49: error: cast increases required alignment of target type [-Werror=cast-align]
--  586 |                         rpc->rm_xid[1] = ntohl(*(uint32_t *)&buf[0]);
--      |                                                 ^
--lib/socket.c:587:61: error: cast increases required alignment of target type [-Werror=cast-align]
--  587 |                         rpc->pdu = rpc_find_pdu(rpc, ntohl(*(uint32_t *)&buf[0]));
--      |                                                             ^
--lib/socket.c:799:35: error: cast increases required alignment of target type [-Werror=cast-align]
--  799 |                                 *((uint32_t *)rpc->inbuf) = htonl(rpc->rm_xid[1]);
--      |                                   ^
--lib/socket.c:861:71: error: cast increases required alignment of target type [-Werror=cast-align]
--  861 |                                                 const READ3res *res = (READ3res *) rpc->pdu->zdr_decode_buf;
--      |                                                                       ^
--
--cast via (void *) to allow the compile to suceed, as all of the source buffers should be 32bit aligned.
--
--Signed-off-by: Rudi Heitbaum <rudi@heitbaum.com>
--
--Upstream: https://github.com/sahlberg/libnfs/commit/a01d42a0d9682d3e506d3c78680db8c7d158fe88
--Signed-off-by: Florian Larysch <fl@n621.de>
-----
-- lib/socket.c | 8 ++++----
-- 1 file changed, 4 insertions(+), 4 deletions(-)
--
--diff --git a/lib/socket.c b/lib/socket.c
--index f51ca4d..5b9fce5 100644
----- a/lib/socket.c
--+++ b/lib/socket.c
--@@ -583,8 +583,8 @@ rpc_read_from_socket(struct rpc_context *rpc)
-- 		}
-- 		if (!rpc->is_server_context) {
-- 			rpc->rm_xid[0] = count;
---			rpc->rm_xid[1] = ntohl(*(uint32_t *)&buf[0]);
---			rpc->pdu = rpc_find_pdu(rpc, ntohl(*(uint32_t *)&buf[0]));
--+			rpc->rm_xid[1] = ntohl(*(uint32_t *)(void *)&buf[0]);
--+			rpc->pdu = rpc_find_pdu(rpc, ntohl(*(uint32_t *)(void *)&buf[0]));
-- 			if (rpc->pdu == NULL) {
-- 				rpc_set_error(rpc, "Failed to match incoming PDU/XID."
-- 						" Ignoring PDU");
--@@ -796,7 +796,7 @@ rpc_read_from_socket(struct rpc_context *rpc)
--                                 }
-- 
--                                 /* Copy the next 4 bytes into inbuf */
---                                *((uint32_t *)rpc->inbuf) = htonl(rpc->rm_xid[1]);
--+                                *((uint32_t *)(void *)rpc->inbuf) = htonl(rpc->rm_xid[1]);
-- 
--                                 /* but set inpos to 0, we will update it above
--                                  * that we have already read these 4 bytes in
--@@ -858,7 +858,7 @@ rpc_read_from_socket(struct rpc_context *rpc)
--                                                  * If the READ failed, bail out here as there is no
--                                                  * data.
--                                                  */
---                                                const READ3res *res = (READ3res *) rpc->pdu->zdr_decode_buf;
--+                                                const READ3res *res = (READ3res *)(void *) rpc->pdu->zdr_decode_buf;
--                                                 if (res->status != NFS3_OK) {
--                                                         goto payload_finished;
--                                                 }
---- 
--2.53.0
--
-diff --git a/package/libnfs/libnfs.hash b/package/libnfs/libnfs.hash
-index c0e5ef5c81..4aefc83f80 100644
---- a/package/libnfs/libnfs.hash
-+++ b/package/libnfs/libnfs.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  4e5459cc3e0242447879004e9ad28286d4d27daa42cbdcde423248fad911e747  libnfs-6.0.2.tar.gz
-+sha256  d25c70537d60f1ab307b9cb5e9fb01acff71065fc9547b54dfaec109ba993003  libnfs-7.0.0.tar.gz
- sha256  edd960c0142b8ada98b43b6396b78f4e557b0bc70ac601a51e397ad04070e2c5  COPYING
- sha256  d9406ced95457941032aa11d04623b8ab71f2827a3395ebef137aec475be35b1  LICENCE-BSD.txt
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENCE-LGPL-2.1.txt
-diff --git a/package/libnfs/libnfs.mk b/package/libnfs/libnfs.mk
-index 12afb7c697..57ccbf1c2b 100644
---- a/package/libnfs/libnfs.mk
-+++ b/package/libnfs/libnfs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBNFS_VERSION = 6.0.2
-+LIBNFS_VERSION = 7.0.0
- LIBNFS_SITE = $(call github,sahlberg,libnfs,libnfs-$(LIBNFS_VERSION))
- LIBNFS_INSTALL_STAGING = YES
- LIBNFS_AUTORECONF = YES
--- 
-2.53.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+VGhvbWFzL1lhbm4sCgpPbiBUdWUsIEF1ZyAyNSwgMjAyNiBhdCA0OjQy4oCvUE0gVGhvbWFzIFBl
+dGF6em9uaSB2aWEgYnVpbGRyb290CjxidWlsZHJvb3RAYnVpbGRyb290Lm9yZz4gd3JvdGU6Cj4K
+PiBPbmUgZnJlcXVlbnQgaXNzdWUgaW4gQnVpbGRyb290IGlzIHRoYXQgd2hlbiBidWlsZGluZyBo
+b3N0IGxpYnJhcmllcwo+IG9yIGFwcGxpY2F0aW9ucywgdGhlIGJ1aWxkIHN5c3RlbSBvZiB0aGUg
+cGFja2FnZSBkZXRlY3RzIHNvbWUKPiBsaWJyYXJpZXMgcHJvdmlkZWQgYnkgdGhlIHN5c3RlbSwg
+YW5kIGhhcHBpbHkgbGlua3MgdG8gdGhlbSwgd2l0aG91dAo+IEJ1aWxkcm9vdCBrbm93aW5nLiBT
+b21ldGltZXMgdGhpcyBkb2Vzbid0IGNhdXNlIGFueSBwcm9ibGVtLCBidXQKPiBzb21ldGltZXMg
+dGhpcyBjYXVzZXMgaXNzdWVzLCBhbmQgd2UncmUgcmVndWxhcmx5IGVsaW1pbmF0aW5nIHN1Y2gK
+PiBtaXMtZGV0ZWN0aW9uIGJ5IGZvcmNpbmcgdGhvc2UgcGFja2FnZXMgdG8gbm90IGRldGVjdCB0
+aGUgc3lzdGVtCj4gbGlicmFyaWVzIHRoYXQgaGF2ZSBub3QgYmVlbiBidWlsdCBieSBCdWlsZHJv
+b3QuCj4KPiBCYXNlZCBvbiBhIHN1Z2dlc3Rpb24gZnJvbSBZYW5uIEUuIE1vcmluLCB0aGlzIGNv
+bW1pdCBleHRlbmRzCj4gY2hlY2staG9zdC1iaW5zIHRvIHZlcmlmeSB0aGF0IGFsbCBiaW5hcmll
+cyBhbmQgbGlicmFyaWVzIGluCj4gJChIT1NUX0RJUikgb25seSBoYXZlIHNoYXJlZCBsaWJyYXJ5
+IGRlcGVuZGVuY2llcyBvbiBsaWJyYXJpZXMgdGhhdAo+IGFyZSBpbiBCdWlsZHJvb3QgJChIT1NU
+X0RJUiksIHRvIHRoZSBleGNlcHRpb24gb2YgdGhlIEMgbGlicmFyeSAoYW5kCj4gZnJpZW5kcyks
+IGZvciB3aGljaCB3ZSBvZiBjb3Vyc2UgdXNlIHRoZSBzeXN0ZW0gQyBsaWJyYXJ5Lgo+Cj4gRm9y
+IGV4YW1wbGUsIGlmIHRoZSBiaW5hcnkgb3V0cHV0L2hvc3QvYmluL3Bsb3AgaXMgbGlua2VkIGFn
+YWluc3QKPiBsaWJwbmcsIGJ1dCBsaWJwbmcgd2FzIG5vdCBidWlsdCBhbmQgaW5zdGFsbGVkIGJ5
+IEJ1aWxkcm9vdCwgdGhlIGJ1aWxkCj4gd2lsbCBub3cgZmFpbCB3aXRoOgo+Cj4gKioqIEVSUk9S
+OiBwYWNrYWdlIGhvc3QtZ2RiIHVzZXMgbGlicyBub3QgaW4gSE9TVF9ESVI6Cj4gICAtIGxpYmx6
+bWEuc28uNQo+ICAgLSBsaWJ4eGhhc2guc28uMAo+Cj4gVGhlIHNjcmlwdCBpbmNsdWRlcyBhbiBh
+bGxvd2xpc3Qgb2YgbGlicmFyaWVzIHByb3ZpZGVkIGJ5IHRoZSBDCj4gbGlicmFyeS4gSXQgaXMg
+cG90ZW50aWFsbHkgcG9zc2libGUgdGhhdCB0aGlzIGxpc3QgbWlnaHQgbmVlZCB0byBiZQo+IGV4
+dGVuZGVkIHRvIGNvdmVyIGFsbCBzeXN0ZW1zL2Rpc3RyaWJ1dGlvbnMvQyBsaWJyYXJpZXMsIGJ1
+dCBvbmx5Cj4gd2lkZXIgdGVzdGluZyBvZiB0aGlzIHNjcmlwdCB3aWxsIGhlbHAgZGV0ZWN0IHN1
+Y2ggY2FzZXMuCj4KPiBDby1kZXZlbG9wZWQtYnk6IFlhbm4gRS4gTU9SSU4gPHlhbm4ubW9yaW4u
+MTk5OEBmcmVlLmZyPgo+IFNpZ25lZC1vZmYtYnk6IFRob21hcyBQZXRhenpvbmkgPHRob21hcy5w
+ZXRhenpvbmlAYm9vdGxpbi5jb20+Cj4gLS0tCj4gSXQgd291bGQgYmUgdmVyeSB1c2VmdWwgaWYg
+YSBmZXcgcGVvcGxlIGNvdWxkIGFwcGx5IHRoaXMgcGF0Y2ggdG8KPiB0aGVpciBsb2NhbCB0cmVl
+LCBydW4gdGhlaXIgdXN1YWwgYnVpbGQsIGFuZCBzZWUgaG93IGl0IGJlaGF2ZXMuIFRoaXMKPiB3
+YXksIEkgY2FuIGdldCBzb21lIGZlZWRiYWNrIHRvIGFkZHJlc3MgdGhlIG1vc3Qgb2J2aW91cyBp
+c3N1ZXMgYmVmb3JlCj4gaXQgZ2V0cyBtZXJnZWQgYW5kIHN0YXJ0cyBjYXVzaW5nIGJ1aWxkIGZh
+aWx1cmVzIGluIHRoZSBhdXRvYnVpbGRlcnMuCgpJIGRpZCBzb21lIHRlc3RpbmcgYW5kIGZvdW5k
+IHRoZSBtdXNsIGxpYnJhcnkgbmVlZHMgYWRkZWQgdG8gdGhlCndoaXRlbGlzdCBmb3IgQWxwaW5l
+LiAgSSBhbHNvIGFkZGVkIGxpYnJhcmllcyB0byB0aGUgc2NhbiB3aGljaCBhZGRlZAptb3JlIGNo
+YW5nZXMgdGhlbiB3aGF0IEkgY291bGQgZWFzaWx5IGluY2x1ZGUgaGVyZS4gIEhlcmUncyBteSBt
+b2NrZWQKdXAgY2hlY2staG9zdC1iaW5zIGFuZCB0ZXN0IHNjcmlwdC4gIFRoZSB0ZXN0IGNhc2Ug
+NSB3YXMgbW9kZWxlZCBhZnRlcgp0aGUgZGlzdHJvIHRlc3RzIHRoYXQgeGVuIGRvZXMgdG8gdGFy
+Z2V0IGRpZmZlcmVudCBjb250YWluZXJzIHRvIGZpbmQKd2hpdGVsaXN0IGdhcHMuCgpodHRwczov
+L2dpc3QuZ2l0aHViLmNvbS9tYXR0aGV3LWwtd2ViZXIvMzRmYWUxNWE0MzE5YTgxNDYyOTYxZWFk
+ZjBlMzExNjQKClNvbWUgb2YgdGhpcyB3YXMgQUkgZ2VuZXJhdGVkLCBkb2VzIEJ1aWxkcm9vdCBo
+YXZlIGFueSBydWxlcyBhcm91bmQgQUkgdXNlPwoKQmVzdCBSZWdhcmRzLApNYXR0Cl9fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5n
+IGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3Jn
+L21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
