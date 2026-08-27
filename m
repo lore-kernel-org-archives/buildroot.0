@@ -1,69 +1,60 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F27B1C61DC4
-	for <buildroot@archiver.kernel.org>; Thu, 27 Aug 2026 20:26:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D29ABC61DB9
+	for <buildroot@archiver.kernel.org>; Thu, 27 Aug 2026 20:34:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C9D8B60828;
-	Thu, 27 Aug 2026 20:26:44 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id j4yiSiyy73iB; Thu, 27 Aug 2026 20:26:43 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787862403;
-	bh=Rt2i6OBN2P/5WtP84SNJwM2riUesTjroH/0jayUJ/Ys=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=RfvUtuDUNpxCSy+gB6bgOperY+wEKyLrCzuUe6DtaAUPCl1KzdE/UMXuqlfONAx8n
-	 1bcazZLmuTkHjedVdy70dxREd7dIMJqkmJpImSM7TiYznGXwkej8l1MSj5jdLkM1P1
-	 btuWW6YJ9vgi0809HSJ6jaL4wurSYNYvY2LEQ+cpg4ImP87k7t+ScYkN/YSQGZh7jw
-	 Y3cOpBwJD4BOTQZ/pjeZoUKppoU4dCSaENxP1lR4tmHNAPaXzdRuvNT7J7CNeQo0OE
-	 Lzdj2cn0t3pt9IWMU4HcUcKaQb/0I6iNV+tyC7dXwUFtiaZnB+CG4OeS+/mTeyvfd2
-	 J9gpeopqvsIlg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 40E466079B;
-	Thu, 27 Aug 2026 20:26:43 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id AA3AA334
- for <buildroot@buildroot.org>; Thu, 27 Aug 2026 20:26:41 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9C7F5406E3
- for <buildroot@buildroot.org>; Thu, 27 Aug 2026 20:26:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3FF2D40809;
+	Thu, 27 Aug 2026 20:34:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5ieW1009eMEq for <buildroot@buildroot.org>;
- Thu, 27 Aug 2026 20:26:41 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B36E740550
- for <buildroot@buildroot.org>; Thu, 27 Aug 2026 20:26:39 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id 696ED13F8CF;
- Thu, 27 Aug 2026 22:26:35 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Thu, 27 Aug 2026 22:26:35 +0200
-MIME-Version: 1.0
-Date: Thu, 27 Aug 2026 22:26:35 +0200
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org, Giulio Benetti
- <giulio.benetti@benettiengineering.com>
-In-Reply-To: <20260826214030.630675-1-thomas.petazzoni@bootlin.com>
-References: <20260826214030.630675-1-thomas.petazzoni@bootlin.com>
-User-Agent: Webmail Free/1.6.18
-Message-ID: <475b5097ea97972ffbb472d33b6eb434@free.fr>
-X-Sender: ju.o@free.fr
-Subject: Re: [Buildroot] [PATCH] package/bind: fix build with old host GCC
- since autoconf bump
+ id ERpMteCfz-nD; Thu, 27 Aug 2026 20:34:11 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1787862851;
+	bh=nV0MWSasLyeXeL01jIpeDKzKI6JNm1V7OmBxUrZNaP4=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=hEkw2xhP9N40m3/Qclv+JM1cISo7vfDAnlzLoOmuc03ZDy4yDKV4z/k8h8BZrUZov
+	 G6UmNOS5CIztHMw1eVS15P4giOW4NNXzPKy2k+lIj3JjnNwW02tRJTRjWhEtX5zLHw
+	 geRYKmGn4EAB/YBVMh3eLeTwXJU7yCpgmeOA2oC1LOFDjhh6I9gO3mfp8g+hw9WeBe
+	 RJRBSvyYMqt0iJ6mZqYLedmz21mSirMVU0wpg1AsQ3F68wC2BFn9cjm1bZ6IzGWSVm
+	 Ff1S7kggSSiKrfl/bjAomh75RQVTGngAAUB1L9kIIQLPiJ2HLAWOkQJuokFpCzzidi
+	 elvD6WdLfLsiQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 743AB407E7;
+	Thu, 27 Aug 2026 20:34:11 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id E662D334
+ for <buildroot@buildroot.org>; Thu, 27 Aug 2026 20:34:09 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id D7EA86070B
+ for <buildroot@buildroot.org>; Thu, 27 Aug 2026 20:34:09 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ES4xySfnc4jP for <buildroot@buildroot.org>;
+ Thu, 27 Aug 2026 20:34:09 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 205FE606CC
+ for <buildroot@buildroot.org>; Thu, 27 Aug 2026 20:34:09 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 622CC920D9; Thu, 27 Aug 2026 20:33:12 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 27 Aug 2026 22:29:08 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 7538f675d7024ec1f83086e39a40469098e59955
+X-Git-Newrev: d950fff290b1318fd72c7f09fedbd1b87b96155f
+X-Patchwork-Hint: ignore
+Message-Id: <20260827203312.622CC920D9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/perl: fix build issue with musl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,47 +68,106 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 26/08/2026 23:40, Thomas Petazzoni via buildroot wrote:
-> Since the bump of autoconf to version 2.73 in Buildroot commit, the
-> build of target bind fails if the host compiler is too old, because
-> the bind build system tries to use -std=gnu23 when building host tools
-> which isn't supported by older GCC releases, causing:
-> 
-> checking whether the C compiler works... no
-> configure: error: in 
-> '/home/thomas/autobuild/instance-2/output-1/build/bind-9.20.26':
-> configure: error: C compiler cannot create executables
-> See 'config.log' for more details
-> make: *** [package/pkg-generic.mk:263: 
-> /home/thomas/autobuild/instance-2/output-1/build/bind-9.20.26/.stamp_configured] 
-> Error 77
-> 
-> To fix this, we backport a number of patches from autoconf-archive, to
-> fix the m4/ax_prog_cc_for_build.m4 macro file, so that it works with
-> autoconf 2.73.
-> 
-> OpenEmbedded has a similar fix:
-> https://git.openembedded.org/openembedded-core/tree/meta/recipes-connectivity/bind/bind/0001-m4-Backport-ax_prog_cc_for_build.m4-macros.patch
-> but did not backport as carefully the autoconf-archive commits (and
-> their commit message reverts to sudo).
-> 
-> The patches can be dropped when we update to a newer version of bind
-> that itself has an updated copy of the m4/ax_prog_cc_for_build.m4
-> file.
-> 
-> Fixes:
-> 
->   
-> https://autobuild.buildroot.net/results/13e07755101b7cae2f84eef173ef752f92842e71/
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d950fff290b1318fd72c7f09fedbd1b87b96155f
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Applied to master, thanks.
+perl does not build with musl due to memrchr() being unavailable. This
+is caused by a perl-cross bug, which does function availability
+detection with _GNU_SOURCE defined, but then does the build without
+_GNU_SOURCE defined. At least OpenEmbedded and NixOS have faced the
+same issue, and worked it around in slightly different ways.
+
+On our side, we create a patch, which was submitted upstream, to solve
+the issue.
+
+This issue has been introduced in perl-cross commit b40c560f5d5e,
+which was first merged in perl-cross release 1.4.1. From a Buildroot
+perspective, we bumped from perl-cross 1.4 to 1.4.1 in commit
+8a289667f5dba6fffb3a21faa14517e9b49726a4, which was merged
+2023.05. And indeed the build failure can be reproduced even on our
+LTS 2025.02.x, so the fix needs to be backported there.
+
+It should be noted that even if the patch is against perl-cross, we
+add it to package/perl/ directly, as patches in perl are applied after
+perl has been extracted *and* perl-cross has been extracted on top.
+
+Fixes:
+
+  https://autobuild.buildroot.net/results/3e47ade0963642988fd8e1be9a6e8042700619ec/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ ...configure-keep-_GNU_SOURCE-in-build-flags.patch | 55 ++++++++++++++++++++++
+ 1 file changed, 55 insertions(+)
+
+diff --git a/package/perl/0001-configure-keep-_GNU_SOURCE-in-build-flags.patch b/package/perl/0001-configure-keep-_GNU_SOURCE-in-build-flags.patch
+new file mode 100644
+index 0000000000..497e58c502
+--- /dev/null
++++ b/package/perl/0001-configure-keep-_GNU_SOURCE-in-build-flags.patch
+@@ -0,0 +1,55 @@
++From 6bdfdff24f4a7d17d3b7d9d02bca3eac11c235a4 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Wed, 26 Aug 2026 19:34:39 +0200
++Subject: [PATCH] configure: keep _GNU_SOURCE in build flags
++
++The checkfunc() function probes available libc functions with _GNU_SOURCE
++defined. The generated config.sh did not retain that define in ccflags, so
++the actual cross build could use functions whose prototypes remain hidden by
++feature-test macros. This breaks musl builds, where memrchr is declared only
++with _GNU_SOURCE.
++
++To fix this, append _GNU_SOURCE to explicit -Dccflags values while parsing
++configure arguments. Such values are locked before configure_tool.sh can
++append flags. This keeps the function-availability checks and subsequent
++compilation in the same feature set, including when flags are supplied
++through CFLAGS.
++
++This fixes the regression introduced by b40c560f5d5e (configure_func.sh: Add
++_GNU_SOURCE define and function signatures).
++
++It fixes the following build issue with musl:
++
++    In file included from op.c:163:
++    op.c: In function 'Perl_newATTRSUB_x':
++    perl.h:2385:25: error: implicit declaration of function 'memrchr'; did
++    you mean 'memchr'? [-Wimplicit-function-declaration]
++     2385 | #    define my_memrchr  memrchr
++          |                         ^~~~~~~
++
++This issue is worked around in several build systems:
++
++- In OpenEmbedded:
++  https://github.com/openembedded/openembedded-core/commit/6422e62
++
++- In NixOS:
++  https://github.com/NixOS/nixpkgs/pull/441527
++
++Fixes: https://github.com/arsv/perl-cross/issues/158
++Upstream: https://github.com/arsv/perl-cross/pull/180
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++
++diff --git a/cnf/configure_args.sh b/cnf/configure_args.sh
++index 5bc4c6b..65ffc96 100644
++--- a/cnf/configure_args.sh
+++++ b/cnf/configure_args.sh
++@@ -225,6 +225,9 @@ while [ $i -le $# -o -n "$n" ]; do
++ 		host|target|build) ;;
++ 		# original Configure options
++ 		D)
+++			if [ "$k" = 'ccflags' ]; then
+++				v="$v -D_GNU_SOURCE"
+++			fi
++ 			setordefine "$k" "$x" "$v" 'define' 'true'
++ 			;;
++ 		U)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
