@@ -1,61 +1,61 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B410FC61DC4
-	for <buildroot@archiver.kernel.org>; Thu, 27 Aug 2026 19:21:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8528C61DCB
+	for <buildroot@archiver.kernel.org>; Thu, 27 Aug 2026 19:21:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 64D0B605EE;
-	Thu, 27 Aug 2026 19:21:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9B570809CA;
+	Thu, 27 Aug 2026 19:21:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qxSyDr8Uc7L7; Thu, 27 Aug 2026 19:21:57 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gzLllEPsjJb5; Thu, 27 Aug 2026 19:21:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787858517;
-	bh=//Y/p4nlD89VXvQSMUZQDenBv4L67jj6dAdAL1lRbcw=;
+	s=default; t=1787858518;
+	bh=beyxZ3QCZP94G8r3fZyyrSMLwfyvefqjWTt6AaTgEBI=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Tp1sVAn39FbWc5GRXWEpt+j7kEcXFvkeis5iH63D9Znzuq+NRsJBNFLCqLfWiZ5n+
-	 x4M3n9XWf1i6Cx69Vm1Egz+xnrNYt0QMMC8ag7cifV06kMhwAb/YmGYVQiEpPSxIZv
-	 bfZzp0vuPAqEHwirjtEmzjH+tZUClAmBXOt0qoTUX6GZhUnc5MIwzfISPQ4Th+v8Al
-	 Y3lV9DKCO6EyRRU9AAj+A2ziBfnOOtc5nC9kpD9UemFREHf7Aw6yw7AVGP91H5RJNa
-	 AhVeD2//8CNJf5lNX6gbgk0HFYtPeoAMB+AAxSQMxWCNYoiMOrNTCpFqmQ8XsHkmBA
-	 lEhDLgPvPLD9Q==
+	b=War7k6/fhZS0SLVRp8sM27m8sK5mnOpEb8kxovpwIHxA1rdyW+8wWAdPnhrjd2JGm
+	 /NI0rMOeV3traphBQCrZ2hkeG32YFHxJS81ExH1dDak0RG0X6Dq4p9LTMw4vHHSTXG
+	 CXZP/EqtyosNvJkpR/i4902zb1dZhUQQIFOwWekXQPyFvOvhj2qxF5FzdgVPvKlbyC
+	 +RFjA6nMkyvySvD/T4jlTgj4DDudtEss8/qsOv4erOIgvUu9IDqHxF94kGBvOStRI+
+	 /DeCV4gH3580drXqmJMM2ol17ze4W+YYd492IdQ5GmI/0EnparBWqb4Nov0o1WGCc6
+	 7tiye+RVx8MuA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 91DB6607E0;
-	Thu, 27 Aug 2026 19:21:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C4A31809CF;
+	Thu, 27 Aug 2026 19:21:58 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 347FECBC
+ by lists1.osuosl.org (Postfix) with ESMTP id 4103ED26
  for <buildroot@buildroot.org>; Thu, 27 Aug 2026 19:21:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2712180EC4
+ by smtp1.osuosl.org (Postfix) with ESMTP id 26D7F80EC3
  for <buildroot@buildroot.org>; Thu, 27 Aug 2026 19:21:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8HUHg828Ushf for <buildroot@buildroot.org>;
+ id 6wvVBoBJZ0M5 for <buildroot@buildroot.org>;
  Thu, 27 Aug 2026 19:21:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 352F480EC1
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3AE7480EC2
  for <buildroot@buildroot.org>; Thu, 27 Aug 2026 19:21:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9185B9201E; Thu, 27 Aug 2026 19:20:57 +0000 (UTC)
+ id 8908792012; Thu, 27 Aug 2026 19:20:57 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Thu, 27 Aug 2026 19:55:18 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3bd3d5004df09ccb13e54d7fcb2719c629602c40
-X-Git-Newrev: 803cac2271f6c033f37ac2b76e88dce78354a110
+X-Git-Oldrev: b4b1de1f7f1865af25f5dc47beac06a37b929c4a
+X-Git-Newrev: 3bd3d5004df09ccb13e54d7fcb2719c629602c40
 X-Patchwork-Hint: ignore
-Message-Id: <20260827192057.9185B9201E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/testing: TestFirewalld{Systemd,
- SysVInit}: fix expected ouput
+Message-Id: <20260827192057.8908792012@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing: TestPythonPy3Gobject:
+ test glib 2.88 regression
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -75,61 +75,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/803cac2271f6c033f37ac2b76e88dce78354a110
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/3bd3d5004df09ccb13e54d7fcb2719c629602c40
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Since Firewalld v2.4.3 [1] firewall-cmd added a new log line while
-waiting for dbus connection [2].
+In Glib >= 2.88, GLib.unix_signal_add has been moved to a separate
+platform-specific library. This break backward compatibility from
+GLib-2.0. A workaround has been applied to pygobject >= 3.55.3
+https://gitlab.gnome.org/GNOME/pygobject/-/commit/74e4e0f40a66436a55c72d4a6e6058c1f91a7310
 
-  [BRTEST# firewall-cmd --state
-  Waiting on dbus connection...
-  running
+This issue currently break TestFirewalldSysVInit and
+TestFirewalldSystemd runtime tests since the bump to glib 2.88.3 [1]:
 
-The line "Waiting on dbus connection..." is not always printed by
-firewall-cmd, so we have to search explicitely for the expected
-string to get a reproducible test result.
-
-Update both TestFirewalld accordingly.
-
-This change is required to fix:
 https://gitlab.com/buildroot.org/buildroot/-/jobs/16060152329 (TestFirewalldSysVInit)
 https://gitlab.com/buildroot.org/buildroot/-/jobs/16060152332 (TestFirewalldSystemd)
 
-[1] 380dd8a348dc7c5edf2b187245b8d4e70a3d96c2
-[2] https://github.com/firewalld/firewalld/commit/5e1c37c9664f57d81236ba999f13e60bf753ba45
+Break the test TestPythonPy3Gobject now in order to reproduce the same
+issue than for Firewalld test.
+
+[1] e313a2d2590af689eb1f79e55b5a488154400da1
 
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- support/testing/tests/package/test_firewalld.py | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ support/testing/tests/package/sample_python_gobject.py | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/support/testing/tests/package/test_firewalld.py b/support/testing/tests/package/test_firewalld.py
-index 9a1bd41f62..49a553947a 100644
---- a/support/testing/tests/package/test_firewalld.py
-+++ b/support/testing/tests/package/test_firewalld.py
-@@ -59,7 +59,10 @@ class TestFirewalldSystemd(infra.basetest.BRTest):
- 
-         cmd = "firewall-cmd --state"
-         output, exit_code = self.emulator.run(cmd, timeout=10)
--        self.assertIn("running", output[0])
-+        # Ignore any unexpected log from firewall-cmd
-+        # like "Waiting on dbus connection..."
-+        expected_line = next(ln for ln in output if ln.strip().startswith('running'))
-+        self.assertIn("running", expected_line)
-         self.assertEqual(exit_code, 0)
+diff --git a/support/testing/tests/package/sample_python_gobject.py b/support/testing/tests/package/sample_python_gobject.py
+index 4490a73613..1c2b327206 100644
+--- a/support/testing/tests/package/sample_python_gobject.py
++++ b/support/testing/tests/package/sample_python_gobject.py
+@@ -4,6 +4,12 @@ from gi.repository import GLib
  
  
-@@ -104,5 +107,8 @@ class TestFirewalldSysVInit(infra.basetest.BRTest):
-         self.emulator.login(timeout=120)
-         cmd = "firewall-cmd --state"
-         output, exit_code = self.emulator.run(cmd, timeout=10)
--        self.assertIn("running", output[0])
-+        # Ignore any unexpected log from firewall-cmd
-+        # like "Waiting on dbus connection..."
-+        expected_line = next(ln for ln in output if ln.strip().startswith('running'))
-+        self.assertIn("running", expected_line)
-         self.assertEqual(exit_code, 0)
+ def main():
++    # In Glib >= 2.88, GLib.unix_signal_add has been moved to a
++    # separate platform-specific library. This break backward
++    # compatibility from GLib-2.0.
++    # A workaround has been applied to pygobject >= 3.55.3
++    # https://gitlab.gnome.org/GNOME/pygobject/-/commit/74e4e0f40a66436a55c72d4a6e6058c1f91a7310
++    unix_signal_add = GLib.unix_signal_add_full  # noqa
+     sh_path = GLib.find_program_in_path('sh')
+     if sh_path == "/bin/sh":
+         return True
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
