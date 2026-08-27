@@ -1,61 +1,61 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 092F9C61DC4
-	for <buildroot@archiver.kernel.org>; Thu, 27 Aug 2026 21:08:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8050C61DC7
+	for <buildroot@archiver.kernel.org>; Thu, 27 Aug 2026 21:08:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C848380EF7;
-	Thu, 27 Aug 2026 21:08:54 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rjQfFnIZz0cN; Thu, 27 Aug 2026 21:08:53 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787864933;
-	bh=f96T/kvo8Wl9gDa16rhDCa5ZnjsunUZ5+ryN4nChYVk=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=khilnxBBwi0ZKblXfpN0yXFewAASngRyf6xbVQSa60BeTLF6VnHo+kNW5eHHBKF5a
-	 5vQO8ndRvnTMb3Mi0G8h37JBV/d1uxo+fekPastpraWlo58YW1e7E9ixeWq7M1p0+b
-	 qbr6UcgxO87O7Q9Qpu8R6vq0U1/HR/AfUs8tr0byKdwwblRvxxN/CIlbgUl55Vybix
-	 uPpV9pQuaYz61rAniJ33LKZnwG8DR/+Knv0XuJzMXDX54sSWfEbHDU/fP281lUNb8O
-	 cI+Vc+PVVkivQh0dKcaOJ+l1NZQKr4h1J6ri/Uoeau86akEHI8iq3X5YQ8LwWobKc2
-	 dRKj+xYvA1IMw==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C62CD80F05;
-	Thu, 27 Aug 2026 21:08:53 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 01B8E334
- for <buildroot@buildroot.org>; Thu, 27 Aug 2026 21:08:47 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E7C81607EC
- for <buildroot@buildroot.org>; Thu, 27 Aug 2026 21:08:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0531E60840;
+	Thu, 27 Aug 2026 21:08:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YLZ_aG82NsQy for <buildroot@buildroot.org>;
+ id 31_g2S8rIEOx; Thu, 27 Aug 2026 21:08:55 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1787864935;
+	bh=e/pe/gUA0CHOGAwwICwLkiipiOSb1B9jmL8dHZNxTpk=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=dzAlxxwnxekAwRcU8Jx0/4+elguJBiBV9NECAlZSu5ugbKe6GnrFECrdJCSTdzBoi
+	 o6XxkvJOZQ23qXdqJ9VvaeeaokG3LZ87KLbov/hIPiHr/NB8QwypV3QDcoEIzDacuH
+	 944clAJgOKSl4yX4A8U1MwW8UdFajydmXPR5BccTsVMZalqGHjNFza1lQVKdtjlER5
+	 Nb95jhoeZdec4hhUv7hnroRmUj0WwHROedvtXw3ZRIqGZLreT24o9ZGNlvfyQLvL77
+	 iSpE1vg06CLmetjTzue45YKY6Qq42tQch57abb5HKo2n6nBq4gThVaagsa/gdmAVS0
+	 Cw7Zp8v+D3mGQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id E74006084B;
+	Thu, 27 Aug 2026 21:08:54 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1B140D26
+ for <buildroot@buildroot.org>; Thu, 27 Aug 2026 21:08:47 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0D1E4607A0
+ for <buildroot@buildroot.org>; Thu, 27 Aug 2026 21:08:47 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8r5UhscQso9I for <buildroot@buildroot.org>;
  Thu, 27 Aug 2026 21:08:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1F81C607A0
+ by smtp3.osuosl.org (Postfix) with ESMTP id 29F52607E6
  for <buildroot@buildroot.org>; Thu, 27 Aug 2026 21:08:46 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 67B02920D9; Thu, 27 Aug 2026 21:07:49 +0000 (UTC)
+ id 71F8E92160; Thu, 27 Aug 2026 21:07:49 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 27 Aug 2026 22:49:34 +0200
+Date: Thu, 27 Aug 2026 22:50:38 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4e62ac3a21111b1df279018c95e83eba2ec235b8
-X-Git-Newrev: 6eaa34ecdf85a604fd813495bedbbf18648b54df
+X-Git-Oldrev: 6eaa34ecdf85a604fd813495bedbbf18648b54df
+X-Git-Newrev: e1ba84b9a7b75edfde4872d2b85684605c79bb97
 X-Patchwork-Hint: ignore
-Message-Id: <20260827210749.67B02920D9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/testing: wpa_supplicant: new
- runtime test
+Message-Id: <20260827210749.71F8E92160@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] {linux, linux-headers}: bump 6.12.x, 6.6.x,
+ 6.1.x, 5.15.x, 5.10.x, 7.1.x, 6.18.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -75,206 +75,140 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/6eaa34ecdf85a604fd813495bedbbf18648b54df
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/e1ba84b9a7b75edfde4872d2b85684605c79bb97
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
+Update the latest kernel releases to:
+ - 6.12.105 -> 6.12.106
+ - 6.6.153 -> 6.6.154
+ - 6.1.184 -> 6.1.185
+ - 5.15.217 -> 5.15.218
+ - 5.10.266 -> 5.10.267
+ - 7.1.10 -> 7.1.11
+ - 6.18.46 -> 6.18.47
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- DEVELOPERS                                         |   2 +
- .../testing/tests/package/test_wpa_supplicant.py   | 121 +++++++++++++++++++++
- .../linux-mac80211-hwsim.fragment                  |   3 +
- .../rootfs-overlay/etc/hostapd.conf                |  14 +++
- .../rootfs-overlay/etc/wpa_supplicant.conf         |  13 +++
- 5 files changed, 153 insertions(+)
+ linux/{7.1.10 => 7.1.11}                     |  0
+ linux/Config.in                              |  2 +-
+ linux/before-6.17/linux.hash                 | 10 +++++-----
+ linux/from-6.17/linux.hash                   |  4 ++--
+ package/linux-headers/{5.10.266 => 5.10.267} |  0
+ package/linux-headers/{5.15.217 => 5.15.218} |  0
+ package/linux-headers/{6.1.184 => 6.1.185}   |  0
+ package/linux-headers/{6.12.105 => 6.12.106} |  0
+ package/linux-headers/{6.18.46 => 6.18.47}   |  0
+ package/linux-headers/{6.6.153 => 6.6.154}   |  0
+ package/linux-headers/{7.1.10 => 7.1.11}     |  0
+ package/linux-headers/Config.in.host         | 14 +++++++-------
+ 12 files changed, 15 insertions(+), 15 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 95a347588f..5e5f112783 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2065,6 +2065,8 @@ F:	support/testing/tests/package/test_weston/
- F:	support/testing/tests/package/test_wget.py
- F:	support/testing/tests/package/test_which.py
- F:	support/testing/tests/package/test_wine.py
-+F:	support/testing/tests/package/test_wpa_supplicant.py
-+F:	support/testing/tests/package/test_wpa_supplicant/
- F:	support/testing/tests/package/test_xfsprogs.py
- F:	support/testing/tests/package/test_xfsprogs/
- F:	support/testing/tests/package/test_xvisor.py
-diff --git a/support/testing/tests/package/test_wpa_supplicant.py b/support/testing/tests/package/test_wpa_supplicant.py
-new file mode 100644
-index 0000000000..ba6cef3fef
---- /dev/null
-+++ b/support/testing/tests/package/test_wpa_supplicant.py
-@@ -0,0 +1,121 @@
-+import os
-+import time
-+
-+import infra.basetest
-+
-+
-+class TestWPASupplicant(infra.basetest.BRTest):
-+    test_dir = "tests/package/test_wpa_supplicant"
-+    # This test uses the mac80211_hwsim kernel test driver. See:
-+    # https://docs.kernel.org/networking/mac80211_hwsim/mac80211_hwsim.html
-+    kern_frag = \
-+        infra.filepath(f"{test_dir}/linux-mac80211-hwsim.fragment")
-+    rootfs_overlay = \
-+        infra.filepath(f"{test_dir}/rootfs-overlay")
-+    config = \
-+        f"""
-+        BR2_aarch64=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_LINUX_KERNEL=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.44"
-+        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
-+        BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{kern_frag}"
-+        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+        BR2_PACKAGE_HOSTAPD=y
-+        BR2_PACKAGE_IPROUTE2=y
-+        BR2_PACKAGE_IW=y
-+        BR2_PACKAGE_WPA_SUPPLICANT=y
-+        BR2_PACKAGE_WPA_SUPPLICANT_CLI=y
-+        BR2_ROOTFS_OVERLAY="{rootfs_overlay}"
-+        BR2_TARGET_ROOTFS_EXT2=y
-+        BR2_TARGET_ROOTFS_EXT2_4=y
-+        BR2_TARGET_ROOTFS_EXT2_SIZE="256M"
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    def test_run(self):
-+        disk = os.path.join(self.builddir, "images", "rootfs.ext4")
-+        kern = os.path.join(self.builddir, "images", "Image")
-+        bootargs = ["root=/dev/vda"]
-+        qemu_opts = ["-M", "virt", "-cpu", "cortex-a57", "-m", "512M",
-+                     "-drive", f"file={disk},if=virtio,format=raw"]
-+        self.emulator.boot(arch="aarch64",
-+                           kernel=kern,
-+                           kernel_cmdline=bootargs,
-+                           options=qemu_opts)
-+        self.emulator.login()
-+
-+        # We check the program can run.
-+        self.assertRunOk("wpa_supplicant -v")
-+
-+        # We define a network namespace to isolate our
-+        # access point components.
-+        ns = "ap-ns"
-+
-+        # We create the network namespace.
-+        self.assertRunOk(f"ip netns add {ns}")
-+
-+        # We isolate our wireless network device in our namespace.
-+        self.assertRunOk(f"iw phy phy0 set netns name {ns}")
-+
-+        # We define the command prefix to execute commands inside
-+        # our network namespace.
-+        ns_exec = f"ip netns exec {ns}"
-+
-+        # We start the hostapd daemon.
-+        cmd = [
-+            ns_exec,
-+            "hostapd",
-+            "-B",
-+            "-f /var/log/hostapd.log",
-+            "/etc/hostapd.conf"
-+        ]
-+        self.assertRunOk(" ".join(cmd))
-+
-+        # We wait for the wlan0 interface to come up.
-+        for attempt in range(10):
-+            time.sleep(3)
-+
-+            cmd = ns_exec
-+            cmd += " cat /sys/class/net/wlan0/operstate"
-+            out, ret = self.emulator.run(cmd)
-+            self.assertEqual(ret, 0)
-+            if out[0] == "up":
-+                break
-+        else:
-+            self.fail("Timeout while waiting for wlan0 to be up.")
-+
-+        # We start the wpa_supplicant client process.
-+        cmd = [
-+            "wpa_supplicant",
-+            "-B",
-+            "-f /var/log/wpa_supplicant.log",
-+            "-i wlan1",
-+            "-c /etc/wpa_supplicant.conf"
-+        ]
-+        self.assertRunOk(" ".join(cmd))
-+
-+        # We wait for the wlan1 interface to come up.
-+        for attempt in range(10):
-+            time.sleep(3)
-+
-+            cmd = "cat /sys/class/net/wlan1/operstate"
-+            out, ret = self.emulator.run(cmd)
-+            self.assertEqual(ret, 0)
-+            if out[0] == "up":
-+                break
-+        else:
-+            self.fail("Timeout while waiting for wlan1 to be up.")
-+
-+        # We set an IP address on the wlan0 hostapd side.
-+        cmd = ns_exec
-+        cmd += " ip addr add dev wlan0 192.168.1.111/24"
-+        self.assertRunOk(cmd)
-+
-+        # We set an IP address on the wlan1 wpa_supplicant side.
-+        self.assertRunOk("ip addr add dev wlan1 192.168.1.222/24")
-+
-+        # We check we can ping the hostapd wlan0 IP address.
-+        self.assertRunOk("ping -c 3 -i 0.2 -W 2 192.168.1.111")
-diff --git a/support/testing/tests/package/test_wpa_supplicant/linux-mac80211-hwsim.fragment b/support/testing/tests/package/test_wpa_supplicant/linux-mac80211-hwsim.fragment
-new file mode 100644
-index 0000000000..30aee1e9a0
---- /dev/null
-+++ b/support/testing/tests/package/test_wpa_supplicant/linux-mac80211-hwsim.fragment
-@@ -0,0 +1,3 @@
-+CONFIG_CFG80211=y
-+CONFIG_MAC80211=y
-+CONFIG_MAC80211_HWSIM=y
-diff --git a/support/testing/tests/package/test_wpa_supplicant/rootfs-overlay/etc/hostapd.conf b/support/testing/tests/package/test_wpa_supplicant/rootfs-overlay/etc/hostapd.conf
-new file mode 100644
-index 0000000000..b7c3c1a446
---- /dev/null
-+++ b/support/testing/tests/package/test_wpa_supplicant/rootfs-overlay/etc/hostapd.conf
-@@ -0,0 +1,14 @@
-+# Config example taken from kernel
-+# Documentation/networking/mac80211_hwsim/hostapd.conf
-+
-+interface=wlan0
-+driver=nl80211
-+
-+hw_mode=g
-+channel=1
-+ssid=mac80211 test
-+
-+wpa=2
-+wpa_key_mgmt=WPA-PSK
-+wpa_pairwise=CCMP
-+wpa_passphrase=12345678
-diff --git a/support/testing/tests/package/test_wpa_supplicant/rootfs-overlay/etc/wpa_supplicant.conf b/support/testing/tests/package/test_wpa_supplicant/rootfs-overlay/etc/wpa_supplicant.conf
-new file mode 100644
-index 0000000000..3914a03046
---- /dev/null
-+++ b/support/testing/tests/package/test_wpa_supplicant/rootfs-overlay/etc/wpa_supplicant.conf
-@@ -0,0 +1,13 @@
-+# Config example taken from kernel
-+# Documentation/networking/mac80211_hwsim/wpa_supplicant.conf
-+
-+ctrl_interface=/var/run/wpa_supplicant
-+
-+network={
-+	ssid="mac80211 test"
-+	psk="12345678"
-+	key_mgmt=WPA-PSK
-+	proto=WPA2
-+	pairwise=CCMP
-+	group=CCMP
-+}
+diff --git a/linux/7.1.10 b/linux/7.1.11
+similarity index 100%
+rename from linux/7.1.10
+rename to linux/7.1.11
+diff --git a/linux/Config.in b/linux/Config.in
+index e7b4ef473e..f18b74dbff 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -143,7 +143,7 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_GIT_SUBMODULES
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "7.1.10" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "7.1.11" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "5.10.254-cip72" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "5.10.254-cip72-rt32" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/before-6.17/linux.hash b/linux/before-6.17/linux.hash
+index 06ba1b17ed..73dac876e8 100644
+--- a/linux/before-6.17/linux.hash
++++ b/linux/before-6.17/linux.hash
+@@ -1,10 +1,10 @@
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  eb36801e119529b13513c3459dc20e2a32f7053629f3aabb63ea501a4d88f63d  linux-6.12.105.tar.xz
+-sha256  39bc77068923520dee396766361e3728a22cf3e69eff389f494285bf91c99557  linux-6.6.153.tar.xz
+-sha256  960976085b6054856fa0befeac42810169b9adc15f02ab6a9caeb24dbb6f4cb9  linux-6.1.184.tar.xz
++sha256  0392555761d99c7604503f6178951e2df77e978b92cc96d11e248423e48ed785  linux-6.12.106.tar.xz
++sha256  edee00f83db050239fc1186535e1037782a5025001381f1353d0d3d741ed0234  linux-6.6.154.tar.xz
++sha256  3864d9a1137dc626497757c7406a6d865456fd8956c80795ff3aa46c7f1a2674  linux-6.1.185.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256  e320fd344fbde45a5d94e345df93c10eeb8beb7cf2aae7a378a50d99b673a5e5  linux-5.15.217.tar.xz
+-sha256  940ea3be9390a46f7070798acbe613e0f047307a0f25d8fd227af8599df23afe  linux-5.10.266.tar.xz
++sha256  c3801bd134f3e9eeb77e370983d42126ac1a1d75039e985f928818dd6b8df236  linux-5.15.218.tar.xz
++sha256  5b440750ac42c88abc06c26f5d47d2c839164ead382387df07654517c67cb106  linux-5.10.267.tar.xz
+ # Locally computed
+ sha256  bd5db7fe3b0475cce4fc72db7a7f7df1c22b970aabe5ebff6ddd48098973bdf2  linux-cip-5.10.254-cip72.tar.gz
+ sha256  97d7d5139900c10ff7435779be4857dda531e7cf6abba52c12a5f39aae195411  linux-cip-5.10.254-cip72-rt32.tar.gz
+diff --git a/linux/from-6.17/linux.hash b/linux/from-6.17/linux.hash
+index 612570d040..421cd7831b 100644
+--- a/linux/from-6.17/linux.hash
++++ b/linux/from-6.17/linux.hash
+@@ -1,8 +1,8 @@
+ # From https://www.kernel.org/pub/linux/kernel/v7.x/sha256sums.asc
+-sha256  67d2f4697a02f3bec98e744b1bdc307e920c24bb4e88b5ee97dc9a34e9aa9999  linux-7.1.10.tar.xz
++sha256  3029540d8f2ec75bee5cbdb7c2a0daa60bffa1d105c82ecb99b53432f6351afc  linux-7.1.11.tar.xz
+ 
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  f5d44b93808b02cc2969c5404ba081d97523719c9fd2ba2de6db318b4141cca0  linux-6.18.46.tar.xz
++sha256  1b3fbafd43601a5473107cf8172a2b66f42994119089d7aee078e4bca3dee818  linux-6.18.47.tar.xz
+ 
+ # Licenses hashes
+ sha256  fb5a425bd3b3cd6071a3a9aff9909a859e7c1158d54d32e07658398cd67eb6a0  COPYING
+diff --git a/package/linux-headers/5.10.266 b/package/linux-headers/5.10.267
+similarity index 100%
+rename from package/linux-headers/5.10.266
+rename to package/linux-headers/5.10.267
+diff --git a/package/linux-headers/5.15.217 b/package/linux-headers/5.15.218
+similarity index 100%
+rename from package/linux-headers/5.15.217
+rename to package/linux-headers/5.15.218
+diff --git a/package/linux-headers/6.1.184 b/package/linux-headers/6.1.185
+similarity index 100%
+rename from package/linux-headers/6.1.184
+rename to package/linux-headers/6.1.185
+diff --git a/package/linux-headers/6.12.105 b/package/linux-headers/6.12.106
+similarity index 100%
+rename from package/linux-headers/6.12.105
+rename to package/linux-headers/6.12.106
+diff --git a/package/linux-headers/6.18.46 b/package/linux-headers/6.18.47
+similarity index 100%
+rename from package/linux-headers/6.18.46
+rename to package/linux-headers/6.18.47
+diff --git a/package/linux-headers/6.6.153 b/package/linux-headers/6.6.154
+similarity index 100%
+rename from package/linux-headers/6.6.153
+rename to package/linux-headers/6.6.154
+diff --git a/package/linux-headers/7.1.10 b/package/linux-headers/7.1.11
+similarity index 100%
+rename from package/linux-headers/7.1.10
+rename to package/linux-headers/7.1.11
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index c7501decb7..25d61f6a9d 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -472,13 +472,13 @@ endchoice
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "5.10.266"	if BR2_KERNEL_HEADERS_5_10
+-	default "5.15.217"	if BR2_KERNEL_HEADERS_5_15
+-	default "6.1.184"	if BR2_KERNEL_HEADERS_6_1
+-	default "6.6.153"	if BR2_KERNEL_HEADERS_6_6
+-	default "6.12.105"	if BR2_KERNEL_HEADERS_6_12
+-	default "6.18.46"	if BR2_KERNEL_HEADERS_6_18
+-	default "7.1.10"	if BR2_KERNEL_HEADERS_7_1
++	default "5.10.267"	if BR2_KERNEL_HEADERS_5_10
++	default "5.15.218"	if BR2_KERNEL_HEADERS_5_15
++	default "6.1.185"	if BR2_KERNEL_HEADERS_6_1
++	default "6.6.154"	if BR2_KERNEL_HEADERS_6_6
++	default "6.12.106"	if BR2_KERNEL_HEADERS_6_12
++	default "6.18.47"	if BR2_KERNEL_HEADERS_6_18
++	default "7.1.11"	if BR2_KERNEL_HEADERS_7_1
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
