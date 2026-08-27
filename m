@@ -1,117 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 188C4C61DC2
-	for <buildroot@archiver.kernel.org>; Thu, 27 Aug 2026 10:24:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0242EC61DC2
+	for <buildroot@archiver.kernel.org>; Thu, 27 Aug 2026 11:06:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A9D7380DA4;
-	Thu, 27 Aug 2026 10:24:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id ADA83606CC;
+	Thu, 27 Aug 2026 11:06:14 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id M2bpGFWpNL1Z; Thu, 27 Aug 2026 11:06:12 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1787828772;
+	bh=80opBbdThiGbCG11u2yP3IVUSfjkQ5kiaLtPrwY36dU=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=Kc6oxTsPRt92M4w/DzFOLi/RBde4uvzAVuhQ5xOzWBMqBpd64Od+6dLmeUg3cnpJH
+	 VjpPqohKQqpLZuwH7V2vOes2fjlKTCsYesdp7bhM8tLhnIZ9rMyXpMGYUbOksddzfH
+	 h5NSBqMTHSAH/H0IwA1V3s+7Q57YIzin6WutTWWJrdc3Ep5RYGqNBXSQtyGWJ8ZeN2
+	 avsvKrEqlfAyhQof7zQKQwJBNSfGjxn/f4rjjaTnLslP1OMojlt6dUKcku3dr8ecBi
+	 0bhueQ//WUnbx23No4B0WHtppRfI0bUYBjelCv5sq9STLlOastinZVBnaVsW6IUbmt
+	 k8CVKKYxCxTeg==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 50E45606C4;
+	Thu, 27 Aug 2026 11:06:12 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3E33E7AA
+ for <buildroot@buildroot.org>; Thu, 27 Aug 2026 11:06:10 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2FCF380DF9
+ for <buildroot@buildroot.org>; Thu, 27 Aug 2026 11:06:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OYIlIT7vqU45; Thu, 27 Aug 2026 10:24:14 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787826254;
-	bh=DiRp1UDTBTo66mQNxh7EPCg4/NHIMcvKxNFUzL/WpGo=;
-	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=H+rvktS6zvrQTaBZpf3twrjUE8n5He8m3sNU2uefknUE97SRNXV2HB9VU5VXlpiqp
-	 +cLlbHIGkRdWrFkAs3npnaFlXIbLGB2wlDJIO+UnWR9g36Rc3S1/uJCdK9Msgk35LS
-	 WVgOHxyXRr+Q5dcsZ4/BShL2ii35DbOjW6FeYuwhveOSeG7gQRGBshxcxNibtF1mki
-	 HSgvRB9ea9tneGXIcZS22pz5C7UQXBK7hYyUmvAoThejnmYMPPaqeZlJ6XdqBYXJLi
-	 fVyNJFlLT4qo7wOuxJjaSmLe2xc8PZ8OwdjYN1IFH1TbPq1PHf2wfCKjmEVXJVNnGo
-	 jQrYc9A8du0gg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 662A380DA8;
-	Thu, 27 Aug 2026 10:24:14 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id B6CA63A4
- for <buildroot@buildroot.org>; Thu, 27 Aug 2026 10:24:13 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A8C7140156
- for <buildroot@buildroot.org>; Thu, 27 Aug 2026 10:24:13 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id O0r92xq2RECe for <buildroot@buildroot.org>;
- Thu, 27 Aug 2026 10:24:12 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::331; helo=mail-wm1-x331.google.com;
- envelope-from=thomas.devoogdt@gmail.com; receiver=<UNKNOWN> 
-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none) header.from=devoogdt.com
-Authentication-Results: smtp2.osuosl.org; dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20251104 header.b=PVKwXtLG
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
- [IPv6:2a00:1450:4864:20::331])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 228F74007C
- for <buildroot@buildroot.org>; Thu, 27 Aug 2026 10:24:11 +0000 (UTC)
-Received: by mail-wm1-x331.google.com with SMTP id
- 5b1f17b1804b1-49b8eeb3ff2so2359265e9.2
- for <buildroot@buildroot.org>; Thu, 27 Aug 2026 03:24:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1787826250; x=1788431050; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
- :message-id:reply-to:content-type;
- bh=VGPdtnYkd9ORR7uEy+XSfpOr+YSUOw3aH4aLDfnNh9Y=;
- b=PVKwXtLG8AurmGlaSWA5WYEm9HrkbKh1loGY6hRq7iSH00ik9A1PzQFMMEU+4qpTZo
- uk8ADW1kBdXQHxKQjp3Oq595vz5dKAf0uXuZsVNsoEzteutR0xc4Yd0FluyKLsCldRIz
- c5VUNKkWc+9A9jfKV1xYlocClH1/0EVW/SRYmgDwlZ4Gcj2xZ8g90O64nmsTXBDVNh+k
- Eg2hXMocOvOz5vAV4njIr3+0h8lsPxXPsgYLuxQH58VFAJjWLVGa/qgFlJUC45JOWiOD
- 0TPGLCBDgw0kDvJ2J2Vf9p3pyKIpsAckHABaQ87Wgtk1E/FjBS4AqjRX9gwhIn5NKzJl
- UR2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1787826250; x=1788431050;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:sender:x-gm-gg
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
- :content-type;
- bh=VGPdtnYkd9ORR7uEy+XSfpOr+YSUOw3aH4aLDfnNh9Y=;
- b=SP3pvkVqT38Nhk/yQT7JfIpWd/t820Log3ECM74hVYY3F79kRjOBMuksgNdm3/A2SC
- TPzysY7YUmvU3YaCQxR5rhZAC/5q4FckQ0i5E3iks2MA6OYmrXtZja6H212eIxxVZhjD
- HErqP+mN/c4ENid/IAOaEg83Hm+MdA4DlQs/TCUoM4U7fM/7tPXyYRZH2ejpNADHeFiY
- YB0/MA0dyz7LEnbjQoNbFliy8t76qwlVWsnvFn4HELcl9mOKjuIQkRQBguQXrLR3SI2j
- UX7do733MN+UBOleuqr0lpeRIxO49mHbinVdyartlaPCJZQzcsW3VfRU+9cXYI9Mose+
- 3l1A==
-X-Gm-Message-State: AFuF++luDfWHwFGn2BYz1zWirMJkY+ECRX5ZO8AWIUlBhC1Fce6ErTZm
- Uf4d9KUExJgIi/gWH1kGj2EoHaYrmUvCY+ffsU6NaA0sF8sSJ3Jfeb3N
-X-Gm-Gg: AR+sD121MhfDxLNHfR4hSuie8Lqs1PTFc6mI+FjciEi3/Pzjj8x2/C5C1K6cjxg34US
- AW3DjFYZTbawzdGhiPXXI1P3tiCXfjMXJkRn00xym9VIHhUENp6QssbfQNuyJ/w7JJg6qCCOEuD
- Bl5EnrTHSeVwlOvTpgz5s6GIazleSxibTVXsEQsXOuseiXjSVl2G37zrTuTdz9ueVWAQXTxFYHB
- FhPn2Pxa5OE36KUyrPQIQIQQSU6YwHOnvynqMspInTSHTrA2hvqL2bOSlORo/dH2ecTe+EmlmKg
- 2As3uDEAx0xa9ATGIZqKDf71ilA4nlgQDAyqHUrtyw/rCqNY+KxbafEdryzKXx3SmM/KHZuZUOk
- cQ79Ym85ssApFXw3RsNRgAttkk9bO909R1bFQj0/KCFU+dkALf9NHt9XW6fud7Q2+DHyrKXsI7P
- as31Y6knZdblaLI/gQX+5Jkl/Pt1M1gNCNBAeQiNsMAV6yiY9DVYXdpDcMTeTN1ge/CJK7RfY9C
- v84/UaQhdZCpuanY/BvfhN9WaoqpV/E25UKWithXzPjM6hVFF88JSZ/U/cNJubyfxTKG0gmHbSW
- fFF12PpwX8s9EOdXI838SKk+mEzhk4lqXxyv0LG9uVBfUxktUAT7ag==
-X-Received: by 2002:a05:600c:c3ce:20b0:49a:b082:fccf with SMTP id
- 5b1f17b1804b1-49ab08302e8mr92396845e9.5.1787826249348; 
- Thu, 27 Aug 2026 03:24:09 -0700 (PDT)
-Received: from KORLIN40066.barco.com (d528f5fc4.static.telenet.be.
- [82.143.95.196]) by smtp.googlemail.com with ESMTPSA id
- 5b1f17b1804b1-49b8eb6ef7bsm17040895e9.5.2026.08.27.03.24.08
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 27 Aug 2026 03:24:08 -0700 (PDT)
-From: Thomas Devoogdt <thomas@devoogdt.com>
-X-Google-Original-From: Thomas Devoogdt <thomas.devoogdt@barco.com>
-To: thomas@devoogdt.com
-Cc: buildroot@buildroot.org, jorik.devreese@barco.com,
- thomas.petazzoni@bootlin.com
-Date: Thu, 27 Aug 2026 12:24:06 +0200
-Message-ID: <20260827102406.3088679-1-thomas.devoogdt@barco.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260827090100.3046806-1-thomas.devoogdt@barco.com>
-References: <20260827090100.3046806-1-thomas.devoogdt@barco.com>
+ id cIpZ_znWEzGz for <buildroot@buildroot.org>;
+ Thu, 27 Aug 2026 11:06:08 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.57;
+ helo=smtpcmd0757.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
+ receiver=<UNKNOWN> 
+Authentication-Results: smtp1.osuosl.org; dmarc=pass (p=none dis=none)
+ header.from=benettiengineering.com
+Authentication-Results: smtp1.osuosl.org; dkim=pass (2048-bit key,
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=LXZRaM3n
+Received: from smtpcmd0757.aruba.it (smtpcmd0757.aruba.it [62.149.156.57])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 18CC680DF5
+ for <buildroot@buildroot.org>; Thu, 27 Aug 2026 11:06:06 +0000 (UTC)
+Received: from localhost.localdomain ([84.33.84.190])
+ by Aruba SMTP with ESMTPSA
+ id zXvnwsrIdtpTfzXvowDm3R; Thu, 27 Aug 2026 13:06:04 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+ t=1787828764; bh=oER8cbpdYzls0GL1T+iz1a1GwM9Jt3A1lCyp26HThAU=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=LXZRaM3nyGKEU9zwm68xI8Tnz3hd1OAi90jqq8mwXfPFZCqo8ka+ysiX7kof7qps3
+ bGiyCtDb2zR4cp8XH7UEhE3Wcd3HRDLvOucqs3xblq4DRK+GyOZ2vDuxez/FAj+dOw
+ imxetQ/RI5fcuJKDbJEDkOaQmTZj7DDSRu8A306LlNt23b3LFJ/ZLMG4VPjmoFpr/I
+ sF+96Tbet84vXdOqxwvwsWSNWjjbWSvr+mc9obDeD+cqK3WzRjOK1m9enrDBt/Om7h
+ reEu4k10T86PdnsLAKg6UGqAxe1NLrIGVgBdmlH0LCfLtNVlspR+VXzcQHBPeo10Lo
+ HSQUVD88uO1PQ==
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+To: buildroot@buildroot.org
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Thu, 27 Aug 2026 13:06:03 +0200
+Message-ID: <20260827110603.3318017-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v7] package/sema-linux: add new unified adlink
- sema drivers package
+X-CMAE-Envelope: MS4xfP0nZJXLEPBPjns9keIk78hSN9DxBhblxYklVZWJuKt/eal7wdaEpSHho0nAb8vyNJJm5T1VgCABiGJ1hl+xMCIRblaiMGUJRo7EJ9DdxZFmhUnWYmiG
+ l5avfVAw31fV9ja4sPq8d+9+7oV0ADmmYocTONCxNT1yf9yTJpbplmXJn6J/SqfTtfsJ7AnC5YVDqy75/dVYd7/X9Vm+E9ETyhpqu4p4aj+yIutGamLfxCYS
+ gou4sgZWt9iVJ7z21NP6lUDXrNJrEGfUqKZRuWS37B4=
+Subject: [Buildroot] [PATCH] package/harfbuzz: bump version to 14.4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -128,320 +89,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Devreese Jorik <jorik.devreese@barco.com>
+https://github.com/harfbuzz/harfbuzz/blob/14.4.0/NEWS
 
-Add the unified sema-linux package, which replaces the archived
-sema-linux-ec repository from Adlink. This unified upstream repository
-provides support for both BMC (Board Management Controller) and EC
-(Embedded Controller) devices.
-
-Signed-off-by: Devreese Jorik <jorik.devreese@barco.com>
-Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
-v2: reworked patch
- - added user sw step
- - fixed help text
- - fixed hash and license info
-v3: fixed build args
-v4: fix missing util-linux dependency
-v5: reworked patch
- - fix parallel build
- - add and use app_build/app_install
-v6: rework to use sema-linux as sema-linux-ec was archived
-v7: fix wrong hash entry
----
- package/Config.in                             |  1 +
- ...CC-variable-instead-of-hardcoded-gcc.patch | 54 +++++++++++++++++++
- ...ure-that-lsema-is-always-built-first.patch | 32 +++++++++++
- ...3-Makefile-add-cross-install-support.patch | 38 +++++++++++++
- ...file-add-a-separate-app_build-target.patch | 42 +++++++++++++++
- package/sema-linux/Config.in                  | 14 +++++
- package/sema-linux/sema-linux.hash            |  5 ++
- package/sema-linux/sema-linux.mk              | 34 ++++++++++++
- 8 files changed, 220 insertions(+)
- create mode 100644 package/sema-linux/0001-Makefile-use-CC-variable-instead-of-hardcoded-gcc.patch
- create mode 100644 package/sema-linux/0002-Makefile-ensure-that-lsema-is-always-built-first.patch
- create mode 100644 package/sema-linux/0003-Makefile-add-cross-install-support.patch
- create mode 100644 package/sema-linux/0004-Makefile-add-a-separate-app_build-target.patch
- create mode 100644 package/sema-linux/Config.in
- create mode 100644 package/sema-linux/sema-linux.hash
- create mode 100644 package/sema-linux/sema-linux.mk
+ package/harfbuzz/harfbuzz.hash | 4 ++--
+ package/harfbuzz/harfbuzz.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 6058800682..b0793ed6cf 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -609,6 +609,7 @@ endmenu
- 	source "package/sane-backends/Config.in"
- 	source "package/sdparm/Config.in"
- 	source "package/sedutil/Config.in"
-+	source "package/sema-linux/Config.in"
- 	source "package/setserial/Config.in"
- 	source "package/sg3_utils/Config.in"
- 	source "package/sigrok-cli/Config.in"
-diff --git a/package/sema-linux/0001-Makefile-use-CC-variable-instead-of-hardcoded-gcc.patch b/package/sema-linux/0001-Makefile-use-CC-variable-instead-of-hardcoded-gcc.patch
-new file mode 100644
-index 0000000000..f9b454eef5
---- /dev/null
-+++ b/package/sema-linux/0001-Makefile-use-CC-variable-instead-of-hardcoded-gcc.patch
-@@ -0,0 +1,54 @@
-+From 6492dcc89737799b39555fdcb79e7254332fe2f4 Mon Sep 17 00:00:00 2001
-+From: Devreese Jorik <jorik.devreese@barco.com>
-+Date: Mon, 19 Jan 2026 15:00:00 +0000
-+Subject: [PATCH] Makefile: use CC variable instead of hardcoded gcc
-+
-+Allow the compiler to be overridden via the CC variable for
-+cross-compilation support.
-+
-+Upstream: https://github.com/ADLINK/sema-linux/pull/2
-+Signed-off-by: Devreese Jorik <jorik.devreese@barco.com>
-+Signed-off-by: Hendrik De Vloed <hendrik.devloed@dekimo.com>
-+Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
-+---
-+ Makefile | 12 ++++++------
-+ 1 file changed, 6 insertions(+), 6 deletions(-)
-+
-+diff --git a/Makefile b/Makefile
-+index 1c4274d..cfad0c7 100755
-+--- a/Makefile
-++++ b/Makefile
-+@@ -20,7 +20,7 @@ all: libsema.so semautil wdogtest modules
-+ driver: modules
-+ 
-+ libsema.so: $(SEMA_OBJS)
-+-	@gcc -shared -fPIC -g -o lib/$@ $^
-++	@$(CC) -shared -fPIC -g -o lib/$@ $^
-+ 
-+ modules:
-+ 	@make -C /lib/modules/`uname -r`/build M=`pwd` $@
-+@@ -52,16 +52,16 @@ app_clean:
-+ 	@rm -f semautil wdogtest app/*.o lib/*.o lib/*.so
-+ 
-+ semautil: $(APP_OBJS)
-+-	@gcc -g -o $@ $^ -Llib -lsema -luuid
-++	@$(CC) -g -o $@ $^ -Llib -lsema -luuid
-+ 
-+ wdogtest: $(WDOG_OBJS)
-+-	@gcc $^ -g -o $@
-++	@$(CC) $^ -g -o $@
-+ 
-+ lib/%.o: lib/%.c
-+-	@gcc -Wall -I lib -g -fPIC -c $< -o $@
-++	@$(CC) -Wall -I lib -g -fPIC -c $< -o $@
-+ 
-+ app/%.o: app/%.c
-+-	@gcc -Wall -I lib -g -fPIC -c $< -o $@
-++	@$(CC) -Wall -I lib -g -fPIC -c $< -o $@
-+ 
-+ watchdogtest/%.o: watchdogtest/%.c
-+-	@gcc -Wall -I lib -g -fPIC -c $< -o $@
-++	@$(CC) -Wall -I lib -g -fPIC -c $< -o $@
-+-- 
-+2.43.0
-+
-diff --git a/package/sema-linux/0002-Makefile-ensure-that-lsema-is-always-built-first.patch b/package/sema-linux/0002-Makefile-ensure-that-lsema-is-always-built-first.patch
-new file mode 100644
-index 0000000000..d278b30b06
---- /dev/null
-+++ b/package/sema-linux/0002-Makefile-ensure-that-lsema-is-always-built-first.patch
-@@ -0,0 +1,32 @@
-+From 2f1e58beeee7aedd1000f85e5f3a63766d131bc5 Mon Sep 17 00:00:00 2001
-+From: Thomas Devoogdt <thomas.devoogdt@barco.com>
-+Date: Tue, 10 Mar 2026 09:08:05 +0100
-+Subject: [PATCH] Makefile: ensure that -lsema is always built first
-+
-+When using parallel builds, there is no guarantee that libsema.so
-+is built first.
-+
-+Upstream: https://github.com/ADLINK/sema-linux/pull/2
-+Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
-+---
-+ Makefile | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/Makefile b/Makefile
-+index cfad0c7..37926e1 100755
-+--- a/Makefile
-++++ b/Makefile
-+@@ -51,8 +51,8 @@ driver_clean:
-+ app_clean:
-+ 	@rm -f semautil wdogtest app/*.o lib/*.o lib/*.so
-+ 
-+-semautil: $(APP_OBJS)
-+-	@$(CC) -g -o $@ $^ -Llib -lsema -luuid
-++semautil: libsema.so $(APP_OBJS)
-++	@$(CC) -g -o $@ $(APP_OBJS) -Llib -lsema -luuid
-+ 
-+ wdogtest: $(WDOG_OBJS)
-+ 	@$(CC) $^ -g -o $@
-+-- 
-+2.43.0
-+
-diff --git a/package/sema-linux/0003-Makefile-add-cross-install-support.patch b/package/sema-linux/0003-Makefile-add-cross-install-support.patch
-new file mode 100644
-index 0000000000..0e84e9cbb6
---- /dev/null
-+++ b/package/sema-linux/0003-Makefile-add-cross-install-support.patch
-@@ -0,0 +1,38 @@
-+From dcd82a06551ade5c7dd85c3dbb472bd3593602ef Mon Sep 17 00:00:00 2001
-+From: Thomas Devoogdt <thomas.devoogdt@barco.com>
-+Date: Tue, 10 Mar 2026 09:09:59 +0100
-+Subject: [PATCH] Makefile: add cross install support
-+
-+Add support to override the DESTDIR & PREFIX.
-+
-+Upstream: https://github.com/ADLINK/sema-linux/pull/2
-+Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
-+---
-+ Makefile | 7 +++++--
-+ 1 file changed, 5 insertions(+), 2 deletions(-)
-+
-+diff --git a/Makefile b/Makefile
-+index 37926e1..1432e0d 100755
-+--- a/Makefile
-++++ b/Makefile
-+@@ -1,3 +1,5 @@
-++DESTDIR ?=
-++PREFIX ?= /usr
-+ 
-+ SEMA_OBJS = $(patsubst %.c,%.o,$(wildcard lib/*.c))
-+ WDOG_OBJS = $(patsubst %.c,%.o,$(wildcard watchdogtest/*.c))
-+@@ -38,8 +40,9 @@ driver_install:
-+ 	@depmod -a
-+ 
-+ app_install:
-+-	@cp lib/libsema.so /usr/lib
-+-	@cp wdogtest semautil /usr/bin
-++	@install -d $(DESTDIR)$(PREFIX)/lib $(DESTDIR)$(PREFIX)/bin
-++	@install -m 755 lib/libsema.so $(DESTDIR)$(PREFIX)/lib
-++	@install -m 755 wdogtest semautil $(DESTDIR)$(PREFIX)/bin
-+ 
-+ driver_clean:
-+ 	@make -C /lib/modules/`uname -r`/build M=`pwd` clean
-+-- 
-+2.43.0
-+
-diff --git a/package/sema-linux/0004-Makefile-add-a-separate-app_build-target.patch b/package/sema-linux/0004-Makefile-add-a-separate-app_build-target.patch
-new file mode 100644
-index 0000000000..346d31a75d
---- /dev/null
-+++ b/package/sema-linux/0004-Makefile-add-a-separate-app_build-target.patch
-@@ -0,0 +1,42 @@
-+From 6c7f7a88357c291780236738fabf82229d2598c5 Mon Sep 17 00:00:00 2001
-+From: Thomas Devoogdt <thomas.devoogdt@barco.com>
-+Date: Tue, 10 Mar 2026 09:25:07 +0100
-+Subject: [PATCH] Makefile: add a separate app_build target
-+
-+By this, there is:
-+ - app_build
-+ - app_install
-+ - app_clean
-+
-+This makes compilation of the app-only a bit easier to maintain.
-+
-+Upstream: https://github.com/ADLINK/sema-linux/pull/2
-+Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
-+---
-+ Makefile | 4 +++-
-+ 1 file changed, 3 insertions(+), 1 deletion(-)
-+
-+diff --git a/Makefile b/Makefile
-+index 1432e0d..ee8089d 100755
-+--- a/Makefile
-++++ b/Makefile
-+@@ -17,13 +17,15 @@ obj-m := driver/adl-bmc.o \
-+ 
-+ adl-bmc-nvmem-sec-m := driver/adl-bmc-nvmem-sec.o driver/nvmem-common.o	 
-+ adl-bmc-nvmem-m := driver/adl-bmc-nvmem.o driver/nvmem-common.o	 
-+-all: libsema.so semautil wdogtest modules
-++all: app_build modules
-+ 
-+ driver: modules
-+ 
-+ libsema.so: $(SEMA_OBJS)
-+ 	@$(CC) -shared -fPIC -g -o lib/$@ $^
-+ 
-++app_build: libsema.so semautil wdogtest
-++
-+ modules:
-+ 	@make -C /lib/modules/`uname -r`/build M=`pwd` $@
-+ 
-+-- 
-+2.43.0
-+
-diff --git a/package/sema-linux/Config.in b/package/sema-linux/Config.in
-new file mode 100644
-index 0000000000..04a1448444
---- /dev/null
-+++ b/package/sema-linux/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_SEMA_LINUX
-+	bool "sema-linux"
-+	depends on !BR2_s390x
-+	depends on BR2_LINUX_KERNEL
-+	select BR2_PACKAGE_UTIL_LINUX
-+	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
-+	help
-+	  SEMA (Smart Embedded Management Agent) is an agent used to
-+	  manage system health and access the I/O pins through an API.
-+
-+	  https://github.com/ADLINK/sema-linux
-+
-+comment "sema-linux needs a toolchain w/ dynamic library, Linux kernel"
-+	depends on BR2_STATIC_LIBS || !BR2_LINUX_KERNEL
-diff --git a/package/sema-linux/sema-linux.hash b/package/sema-linux/sema-linux.hash
-new file mode 100644
-index 0000000000..20e4d74995
---- /dev/null
-+++ b/package/sema-linux/sema-linux.hash
-@@ -0,0 +1,5 @@
-+# locally computed
-+sha256  fe67c77b12db6db02e2c745dce79085b5fc16be2dabd3eedda625d53ccbd5b26  sema-linux-v4.4.3.tar.gz
-+sha256  71be2577bc5028f0e15bb170439878b61593967460e88e0d26a889430a32db00  LICENSE.BSD3
-+sha256  d8c320ffc0030d1b096ae4732b50d2b811cf95e9a9b7377c1127b2563e0a0388  LICENSE.GPLv2
-+sha256  f484be998be05569aa68e5afb1d29a37cbe2cc7947aea66df83bab7bbdfd74f3  LICENSE.dual
-diff --git a/package/sema-linux/sema-linux.mk b/package/sema-linux/sema-linux.mk
-new file mode 100644
-index 0000000000..daabd8b8c0
---- /dev/null
-+++ b/package/sema-linux/sema-linux.mk
-@@ -0,0 +1,34 @@
-+################################################################################
-+#
-+# sema-linux
-+#
-+################################################################################
-+
-+SEMA_LINUX_VERSION = v4.4.3
-+SEMA_LINUX_SITE = $(call github,ADLINK,sema-linux,$(SEMA_LINUX_VERSION))
-+SEMA_LINUX_LICENSE = BSD-3-Clause or GPL-2.0
-+SEMA_LINUX_LICENSE_FILES = LICENSE.BSD3 LICENSE.GPLv2 LICENSE.dual
-+SEMA_LINUX_DEPENDENCIES = util-linux
-+
-+define SEMA_LINUX_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) app_build
-+endef
-+
-+define SEMA_LINUX_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) app_install
-+endef
-+
-+define SEMA_LINUX_LINUX_CONFIG_FIXUPS
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_BACKLIGHT_CLASS_DEVICE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_GPIO_SYSFS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_GPIOLIB)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_HWMON)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_I2C)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_I2C_BOARDINFO)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NVMEM)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_WATCHDOG)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_WATCHDOG_CORE)
-+endef
-+
-+$(eval $(kernel-module))
-+$(eval $(generic-package))
+diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
+index 3d7540f788..f8ee98e172 100644
+--- a/package/harfbuzz/harfbuzz.hash
++++ b/package/harfbuzz/harfbuzz.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/harfbuzz/harfbuzz/releases/tag/14.3.1
+-sha256  9dae9538aae2ffdf70cec31f2c27bf68e2aaeeae3112688467697d5faf6194f7  harfbuzz-14.3.1.tar.xz
++# From https://github.com/harfbuzz/harfbuzz/releases/tag/14.4.0
++sha256  2357ed966c6ced7bfa720b0640c0231065af01158fbea215093ffa15aed44371  harfbuzz-14.4.0.tar.xz
+ # Locally computed
+ sha256  ba8f810f2455c2f08e2d56bb49b72f37fcf68f1f4fade38977cfd7372050ad64  COPYING
+diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
+index 909629d7d0..184253949e 100644
+--- a/package/harfbuzz/harfbuzz.mk
++++ b/package/harfbuzz/harfbuzz.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-HARFBUZZ_VERSION = 14.3.1
++HARFBUZZ_VERSION = 14.4.0
+ HARFBUZZ_SITE = https://github.com/harfbuzz/harfbuzz/releases/download/$(HARFBUZZ_VERSION)
+ HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.xz
+ HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
 -- 
-2.43.0
+2.47.3
 
 _______________________________________________
 buildroot mailing list
