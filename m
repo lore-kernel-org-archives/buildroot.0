@@ -4,58 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3A45C61DD3
-	for <buildroot@archiver.kernel.org>; Fri, 28 Aug 2026 14:26:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 808F8C61DBD
+	for <buildroot@archiver.kernel.org>; Fri, 28 Aug 2026 14:26:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 719C68116C;
-	Fri, 28 Aug 2026 14:26:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 30B00811D9;
+	Fri, 28 Aug 2026 14:26:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Y70Qq-uqYwt1; Fri, 28 Aug 2026 14:26:12 +0000 (UTC)
+ id 60krp1PHzEST; Fri, 28 Aug 2026 14:26:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787927170;
-	bh=5g21BFrXc4gKfeOCo8RNXl+62GhCf4i6w6n4T2RFah4=;
+	s=default; t=1787927173;
+	bh=3BWWpZJRf81xVV62SvC23p9JfnoB0YPMsWbNbi/zyQs=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=oH5ChelT/55VQcjzyEZ/yNLImebNgW/z+zEcryrE/wo4CmaP1LLwO0u882h5cKWoU
-	 MbHkUypciuKKGjy3QqCmE6Ppq5WWxv702iYlG6cFO+EA5f1HBEAnN+0/iou1+tbnXm
-	 hf0X9L5plxSMG/e13xGGao1/TZFphu9Ng5QybFsVW1nrmzxMQSzoRS0xfDOzOeOcXt
-	 qvBou2jwWMQQ0cJ7Dl7D1pdeq1wGsw0GgOHh8khvIBc7LdYbhPtdb/WfZV18HzhjpD
-	 JNxPEzq22LtYmp6YVZqOn+eZrkl8/VAy+r153hDElAfX6jy0MadQfgX/dDGbq/JnHu
-	 yEbu7kAh+063A==
+	b=ri3TGFXmVtYZPKoXJbQ6VxD5MiALi7Tc9GtrUMCZX1RyuUmXeDiQMr40tPmiHgSQc
+	 MFKf54piSw6Zwbc310uKGsp+NUP0JnFEXNe0xuMVJ2bsf8aOHP0fP50eZCVt5iGJ8t
+	 dXGjISknJ6JXOO/pTyz7MEwbHFdA0Wr4vf6UoaAp17+hePlH0gP6rGgSS9vI0BSmFQ
+	 1YDkgVrTl1cCLx34bcCiXeLDQaK5J5m6G6VXlP4vWw8g1mZNbA6OLvCt4nyLqndfpu
+	 Y8W1I5Gl3TxLjMC608jVpjpvDWcYjK2k7EmSdQuq8awe7V20ovuNxT69H8kHB104ZY
+	 Dm1h/z7+Hg0jA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0BE2E811B3;
-	Fri, 28 Aug 2026 14:26:10 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 682CED28
+	by smtp1.osuosl.org (Postfix) with ESMTP id 33A8E811B8;
+	Fri, 28 Aug 2026 14:26:13 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8370BD2D
  for <buildroot@buildroot.org>; Fri, 28 Aug 2026 14:25:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 579526078A
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7229380E1D
  for <buildroot@buildroot.org>; Fri, 28 Aug 2026 14:25:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 30eQJkVahAYu for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id EO0NpUrqFHxN for <buildroot@buildroot.org>;
  Fri, 28 Aug 2026 14:25:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7826B6072E
+ by smtp1.osuosl.org (Postfix) with ESMTP id A4F6B80ED0
  for <buildroot@buildroot.org>; Fri, 28 Aug 2026 14:25:39 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7693D921F9; Fri, 28 Aug 2026 14:24:42 +0000 (UTC)
+ id A34EC921FA; Fri, 28 Aug 2026 14:24:42 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Fri, 28 Aug 2026 15:58:04 +0200
 X-Git-Refname: refs/heads/2026.05.x
-X-Git-Oldrev: 5710385a72874f68b57c90c3b523b1a594044505
-X-Git-Newrev: fd6d1b7f99dbc12a3a11c8a81be238b33596df44
+X-Git-Oldrev: 56ad2396ee71e3a842da9ce7eaa28485210898a9
+X-Git-Newrev: 24f10b7bd83c25d6699d8853e1974dcf3bf172fb
 X-Patchwork-Hint: ignore
-Message-Id: <20260828142442.7693D921F9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.05.x] package/wget: fix
- CVE-2026-58470
+Message-Id: <20260828142442.A34EC921FA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.05.x] package/libssh2: fix
+ CVE-2026-66033
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,189 +70,101 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Titouan Christophe via buildroot <buildroot@buildroot.org>
 Reply-To: Titouan Christophe <titouan.christophe@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2115533988700014915=="
+Content-Type: multipart/mixed; boundary="===============0814361040341861364=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2115533988700014915==
+--===============0814361040341861364==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/fd6d1b7f99dbc12a3a11c8a81be238b33596df44
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/24f10b7bd83c25d6699d8853e1974dcf3bf172fb
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.05.x
 
-Backport the upstream fix for integer overflows while parsing
-Content-Range headers, together with the follow-up fix using
-strtoll() for wgint values.
+Backport the fix for CVE-2026-66033.
 
-Backport to: 2025.02.x
+The OpenSSL AES-GCM cipher path lacks runtime bounds checks around the
+input block size. A malformed packet can therefore lead to an
+out-of-bounds read or write.
 
-Signed-off-by: Stefan Müller <stemu86@gmx.ch>
+Use Debian's libssh2 1.11.1 backport of the upstream fix.
+
+Signed-off-by: Stefan Müller <stefan.mueller@rey-technology.com>
+[Julien: add links to Debian patches]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 89485adb296732e9e40e0ca7089381b3ca5486ce)
+(cherry picked from commit 6755a00cd23e52cee0085cf2a16f29042731bc0c)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- ...-parse_content_range-Fix-integer-overflow.patch | 80 ++++++++++++++++++++++
- ...ntent_range-Use-strtoll-instead-of-strtol.patch | 48 +++++++++++++
- package/wget/wget.mk                               |  4 ++
- 3 files changed, 132 insertions(+)
+ .../0008-openssl-fix-AES-GCM-bounds-checks.patch   | 45 ++++++++++++++++++++++
+ package/libssh2/libssh2.mk                         |  3 ++
+ 2 files changed, 48 insertions(+)
 
-diff --git a/package/wget/0005-src-http.c-parse_content_range-Fix-integer-overflow.patch b/package/wget/0005-src-http.c-parse_content_range-Fix-integer-overflow.patch
+diff --git a/package/libssh2/0008-openssl-fix-AES-GCM-bounds-checks.patch b/package/libssh2/0008-openssl-fix-AES-GCM-bounds-checks.patch
 new file mode 100644
-index 0000000000..c36aac458c
+index 0000000000..4d8eed0643
 --- /dev/null
-+++ b/package/wget/0005-src-http.c-parse_content_range-Fix-integer-overflow.patch
-@@ -0,0 +1,80 @@
-+From 43d3ba9336bc94937e6fae2365c6ffd30c34ffcf Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Tim=20R=C3=BChsen?= <tim.ruehsen@gmx.de>
-+Date: Mon, 29 Jun 2026 18:57:54 +0200
-+Subject: [PATCH] * src/http.c (parse_content_range): Fix integer overflow
++++ b/package/libssh2/0008-openssl-fix-AES-GCM-bounds-checks.patch
+@@ -0,0 +1,45 @@
++From a2ed82d40964bbc0d64cd717aa0a5a892117d2e6 Mon Sep 17 00:00:00 2001
++From: Viktor Szakats <commit@vsz.me>
++Date: Thu, 23 Jul 2026 10:32:04 +0200
++Subject: [PATCH] openssl: fix potential OOB read/write with AES-GCM in
++ `ssh2_cipher_crypt()`
 +
-+Reported-by: TristanInSec@gmail.com
-+CVE: CVE-2026-58470
-+Upstream: https://gitlab.com/gnuwget/wget/-/commit/43d3ba9336bc94937e6fae2365c6ffd30c34ffcf
-+Signed-off-by: Stefan Müller <stemu86@gmx.ch>
++By applying two bounds checks to non-debug builds.
 +
++Reported-by: Vladimir Eli Tokarev
++Fixes GHSA-c4f7-cvfc-33j7
++Follow-up to 3c953c05d67eb1ebcfd3316f279f12c4b1d600b4 #797
++
++Closes #2401
++Forwarded: not-needed
++
++CVE: CVE-2026-66033
++Upstream: https://sources.debian.org/patches/libssh2/1.11.1-6/CVE-2026-66033.patch/
++Upstream: https://github.com/libssh2/libssh2/commit/a2ed82d40964bbc0d64cd717aa0a5a892117d2e6
++Signed-off-by: Stefan Müller <stefan.mueller@rey-technology.com>
 +---
-+ src/http.c | 35 ++++++++++++++++++++++++-----------
-+ 1 file changed, 24 insertions(+), 11 deletions(-)
++ src/openssl.c | 10 ++++++----
++ 1 file changed, 6 insertions(+), 4 deletions(-)
 +
-+diff --git a/src/http.c b/src/http.c
-+index 61d83df1..f447c7f7 100644
-+--- a/src/http.c
-++++ b/src/http.c
-+@@ -914,6 +914,7 @@ parse_content_range (const char *hdr, wgint *first_byte_ptr,
-+                      wgint *last_byte_ptr, wgint *entity_length_ptr)
-+ {
-+   wgint num;
-++  char *end;
-+ 
-+   /* Ancient versions of Netscape proxy server, presumably predating
-+      rfc2068, sent out `Content-Range' without the "bytes"
-+@@ -932,27 +933,39 @@ parse_content_range (const char *hdr, wgint *first_byte_ptr,
-+     }
-+   if (!c_isdigit (*hdr))
-+     return false;
-+-  for (num = 0; c_isdigit (*hdr); hdr++)
-+-    num = 10 * num + (*hdr - '0');
-+-  if (*hdr != '-' || !c_isdigit (*(hdr + 1)))
++--- a/src/openssl.c
+++++ b/src/openssl.c
++@@ -1042,13 +1042,15 @@
++     const int aadlen = (is_aesgcm && IS_FIRST(firstlast)) ? 4 : 0;
++     /* size of AT, if present */
++     const int authenticationtag = IS_LAST(firstlast) ? authlen : 0;
++-    /* length to encrypt */
++-    const int cryptlen = (unsigned int)blocksize - aadlen - authenticationtag;
+++    unsigned int cryptlen; /* length to encrypt */
++
++     (void)algo;
++
++-    assert(blocksize <= sizeof(buf));
++-    assert(cryptlen >= 0);
+++    if(blocksize > sizeof(buf) ||
+++       blocksize < (size_t)(aadlen + authenticationtag))
+++        return 1;
 ++
-++  errno = 0;
-++  num = strtol(hdr, &end, 10);
-++  if (errno == ERANGE)
-++    return false;
-++  hdr = end;
-++
-++  if (*hdr++ != '-' || !c_isdigit (*hdr))
-+     return false;
-+   *first_byte_ptr = num;
-+-  ++hdr;
-+-  for (num = 0; c_isdigit (*hdr); hdr++)
-+-    num = 10 * num + (*hdr - '0');
-+-  if (*hdr != '/')
-++
-++  errno = 0;
-++  num = strtol(hdr, &end, 10);
-++  if (errno == ERANGE)
-++    return false;
-++  hdr = end;
-++
-++  if (*hdr++ != '/')
-+     return false;
-+   *last_byte_ptr = num;
-+-  if (!(c_isdigit (*(hdr + 1)) || *(hdr + 1) == '*'))
-++  if (!(c_isdigit (*hdr) || *hdr == '*'))
-+     return false;
-+   if (*last_byte_ptr < *first_byte_ptr)
-+     return false;
-+-  ++hdr;
-+   if (*hdr == '*')
-+     num = -1;
-+   else
-+-    for (num = 0; c_isdigit (*hdr); hdr++)
-+-      num = 10 * num + (*hdr - '0');
-++    {
-++      errno = 0;
-++      num = strtol(hdr, NULL, 10);
-++      if (errno == ERANGE)
-++        return false;
-++    }
-+   *entity_length_ptr = num;
-+   if ((*entity_length_ptr <= *last_byte_ptr) && *entity_length_ptr != -1)
-+     return false;
-+-- 
-+GitLab
+++    cryptlen = (unsigned int)blocksize - aadlen - authenticationtag;
 +
-diff --git a/package/wget/0006-src-http.c-parse_content_range-Use-strtoll-instead-of-strtol.patch b/package/wget/0006-src-http.c-parse_content_range-Use-strtoll-instead-of-strtol.patch
-new file mode 100644
-index 0000000000..9c484dda32
---- /dev/null
-+++ b/package/wget/0006-src-http.c-parse_content_range-Use-strtoll-instead-of-strtol.patch
-@@ -0,0 +1,48 @@
-+From 01ff771caac1958662ca8665eed2021ec386a7af Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Tim=20R=C3=BChsen?= <tim.ruehsen@gmx.de>
-+Date: Wed, 12 Aug 2026 19:45:21 +0200
-+Subject: [PATCH] * src/http.c (parse_content_range): Use strtoll instead of
-+ strtol.
-+
-+CVE: CVE-2026-58470
-+Upstream: https://gitlab.com/gnuwget/wget/-/commit/01ff771caac1958662ca8665eed2021ec386a7af
-+Signed-off-by: Stefan Müller <stemu86@gmx.ch>
-+
-+---
-+ src/http.c | 6 +++---
-+ 1 file changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/src/http.c b/src/http.c
-+index e5e75ee6..8170a43c 100644
-+--- a/src/http.c
-++++ b/src/http.c
-+@@ -949,7 +949,7 @@ parse_content_range (const char *hdr, wgint *first_byte_ptr,
-+     return false;
-+ 
-+   errno = 0;
-+-  num = strtol(hdr, &end, 10);
-++  num = strtoll(hdr, &end, 10);
-+   if (errno == ERANGE)
-+     return false;
-+   hdr = end;
-+@@ -959,7 +959,7 @@ parse_content_range (const char *hdr, wgint *first_byte_ptr,
-+   *first_byte_ptr = num;
-+ 
-+   errno = 0;
-+-  num = strtol(hdr, &end, 10);
-++  num = strtoll(hdr, &end, 10);
-+   if (errno == ERANGE)
-+     return false;
-+   hdr = end;
-+@@ -976,7 +976,7 @@ parse_content_range (const char *hdr, wgint *first_byte_ptr,
-+   else
-+     {
-+       errno = 0;
-+-      num = strtol(hdr, NULL, 10);
-++      num = strtoll(hdr, NULL, 10);
-+       if (errno == ERANGE)
-+         return false;
-+     }
-+-- 
-+GitLab
-+
-diff --git a/package/wget/wget.mk b/package/wget/wget.mk
-index 8118811efe..015fc0c59e 100644
---- a/package/wget/wget.mk
-+++ b/package/wget/wget.mk
-@@ -17,6 +17,10 @@ WGET_CPE_ID_VENDOR = gnu
- # 0004-src-metalink.c-Include-ctype.h.patch
- WGET_IGNORE_CVES += CVE-2026-58469
++ #if LIBSSH2_AES_GCM
++     /* First block */
+diff --git a/package/libssh2/libssh2.mk b/package/libssh2/libssh2.mk
+index 583ed56c1c..a3c0b6a67f 100644
+--- a/package/libssh2/libssh2.mk
++++ b/package/libssh2/libssh2.mk
+@@ -30,6 +30,9 @@ LIBSSH2_IGNORE_CVES += CVE-2025-15661
+ # 0007-sftp-prevent-dangling-pointer-after-free.patch
+ LIBSSH2_IGNORE_CVES += CVE-2026-66032
  
-+# 0005-src-http.c-parse_content_range-Fix-integer-overflow.patch
-+# 0006-src-http.c-parse_content_range-Use-strtoll-instead-of-strtol.patch
-+WGET_IGNORE_CVES += CVE-2026-58470
++# 0008-openssl-fix-AES-GCM-bounds-checks.patch
++LIBSSH2_IGNORE_CVES += CVE-2026-66033
 +
- WGET_CONF_OPTS += --disable-pcre
- 
- ifeq ($(BR2_PACKAGE_LIBPSL),y)
+ ifeq ($(BR2_PACKAGE_LIBSSH2_MBEDTLS),y)
+ LIBSSH2_DEPENDENCIES += mbedtls
+ LIBSSH2_CONF_OPTS += --with-libmbedcrypto-prefix=$(STAGING_DIR)/usr \
 
---===============2115533988700014915==
+--===============0814361040341861364==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -263,4 +175,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============2115533988700014915==--
+--===============0814361040341861364==--
