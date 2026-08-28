@@ -1,61 +1,61 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D29FAC61DCB
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2303C61DD9
 	for <buildroot@archiver.kernel.org>; Fri, 28 Aug 2026 14:26:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9F39560877;
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9B557811B8;
 	Fri, 28 Aug 2026 14:26:17 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MM0MNAJ5udxg; Fri, 28 Aug 2026 14:26:16 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787927176;
-	bh=pW6Tzn7yhs1Yb5WSNlYU0/4TNYJRDn/vF+NRhapzBVc=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=dGw9+GTCS3uKrn3NDRJ0v3dK+eZfBs3yfX6ZVjCGoZQM5nh/7LI9256MCycsheLX4
-	 rB+56mKif5WX1WUwFzMBNTrj7e224K9VuDitGZdWPx50egBKq49O/wFcb/YQ9o+4wF
-	 BsH/m3WQQ6aA/u/QI4U3SwwUO9tEgwJUGmXs/fyhVTEYbAVBG9Izy/G7nyUGviWqo2
-	 U1DXRwaRs7LZCvT52VQf/bNrsoc6bs2qzLNy6zIHEr4uchU79sWj3pmr/Xzmt4s7Nv
-	 Jhay5Vl8hGnKfVMt6LwWWiti5YxHEVAggjZcHtybWTw2Rm38RExGBBXjWbf5a+SnoP
-	 2hE6SYX4imtTw==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 97A2C6087B;
-	Fri, 28 Aug 2026 14:26:16 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 85E6D386
- for <buildroot@buildroot.org>; Fri, 28 Aug 2026 14:25:40 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 729F480F45
- for <buildroot@buildroot.org>; Fri, 28 Aug 2026 14:25:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RVPHlgQwYWql for <buildroot@buildroot.org>;
+ id sY49FBguR79U; Fri, 28 Aug 2026 14:26:14 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1787927171;
+	bh=PQQG2FahI6pBrejx4zBk+nueDsHtLFcFXIlb9RfUclI=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=HA05Hemr1Y2tolBTouV2BL4NIM7k5Qt3HH0wiHXE9kp26v6dLtq+2+lZUWSw3jhSX
+	 vAsfKvtBphv8TkTyPMvuyU6MALsZ78nDZHv3eGDooICSv+En1erxb90xzjeWoMl4DG
+	 vDmYP0tZ0Vskvc1Hk9Gzlz6QYHirvVfow0vvXrfq3y3Ur8f5lngDDs52tAWl6Kt7wF
+	 WQNb8oIOSDruz4E6tue+7mYmwQkwHkDMjndaqPIuguktbGp+WBAMdmvpN1ohD54t1o
+	 1hbYJFantwkIyUGSXIsVrigBzNQdxZIMBaPytSVVpOCYefEZFnCuzmt8GU+SQ2DXyo
+	 wVwMreBQEvYFA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 25C0E8118C;
+	Fri, 28 Aug 2026 14:26:11 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 726D4D2A
+ for <buildroot@buildroot.org>; Fri, 28 Aug 2026 14:25:40 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 584D36082A
+ for <buildroot@buildroot.org>; Fri, 28 Aug 2026 14:25:40 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JHPsqPUZT8FT for <buildroot@buildroot.org>;
  Fri, 28 Aug 2026 14:25:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6E2B080E6A
+ by smtp3.osuosl.org (Postfix) with ESMTP id AD48C607EC
  for <buildroot@buildroot.org>; Fri, 28 Aug 2026 14:25:39 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6C655921FA; Fri, 28 Aug 2026 14:24:42 +0000 (UTC)
+ id ABBEC921F9; Fri, 28 Aug 2026 14:24:42 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Fri, 28 Aug 2026 15:58:04 +0200
 X-Git-Refname: refs/heads/2026.05.x
-X-Git-Oldrev: e419b2bcfce5b3b05380001e34a88c8315be77c0
-X-Git-Newrev: 5710385a72874f68b57c90c3b523b1a594044505
+X-Git-Oldrev: 24f10b7bd83c25d6699d8853e1974dcf3bf172fb
+X-Git-Newrev: 7d1c8b992f2dc44237a9599e7fe01e03ae83ca2e
 X-Patchwork-Hint: ignore
-Message-Id: <20260828142442.6C655921FA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.05.x] package/wget: fix
- CVE-2026-58469
+Message-Id: <20260828142442.ABBEC921F9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.05.x] package/libssh2: fix
+ CVE-2026-66034
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,191 +70,92 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Titouan Christophe via buildroot <buildroot@buildroot.org>
 Reply-To: Titouan Christophe <titouan.christophe@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1292255898795764426=="
+Content-Type: multipart/mixed; boundary="===============0219822751537390938=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1292255898795764426==
+--===============0219822751537390938==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/5710385a72874f68b57c90c3b523b1a594044505
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/7d1c8b992f2dc44237a9599e7fe01e03ae83ca2e
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.05.x
 
-Backport the upstream fix for a buffer underflow in
-clean_metalink_string(), together with the two required follow-up
-fixes for the inverted whitespace check and missing ctype.h include.
+Backport the fix for CVE-2026-66034.
 
-Backport to: 2025.02.x
+The publickey subsystem does not sufficiently validate the length of a
+server-controlled comment field. A malformed response can therefore
+cause an out-of-bounds read.
 
-Signed-off-by: Stefan Müller <stemu86@gmx.ch>
+Use Debian's libssh2 1.11.1 backport of the upstream fix.
+
+Signed-off-by: Stefan Müller <stefan.mueller@rey-technology.com>
+[Julien: add links to Debian patches]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 937e33237ef739350bcba6fe0e18382ef7305afd)
+(cherry picked from commit 58581deeca7768271056e9a1461362a2a698105b)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- ...lean_metalink_string-Fix-buffer-underflow.patch | 54 ++++++++++++++++++++++
- ..._string-Fix-inverted-trailing-space-check.patch | 40 ++++++++++++++++
- .../wget/0004-src-metalink.c-Include-ctype.h.patch | 28 +++++++++++
- package/wget/wget.mk                               |  5 ++
- 4 files changed, 127 insertions(+)
+ .../0009-publickey-fix-potential-OOB-read.patch    | 36 ++++++++++++++++++++++
+ package/libssh2/libssh2.mk                         |  3 ++
+ 2 files changed, 39 insertions(+)
 
-diff --git a/package/wget/0002-src-metalink.c-clean_metalink_string-Fix-buffer-underflow.patch b/package/wget/0002-src-metalink.c-clean_metalink_string-Fix-buffer-underflow.patch
+diff --git a/package/libssh2/0009-publickey-fix-potential-OOB-read.patch b/package/libssh2/0009-publickey-fix-potential-OOB-read.patch
 new file mode 100644
-index 0000000000..652f99786d
+index 0000000000..91cd42f640
 --- /dev/null
-+++ b/package/wget/0002-src-metalink.c-clean_metalink_string-Fix-buffer-underflow.patch
-@@ -0,0 +1,54 @@
-+From 37a40fcb450153f69537c7cbc2a7a4fb0b6f7826 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Tim=20R=C3=BChsen?= <tim.ruehsen@gmx.de>
-+Date: Mon, 29 Jun 2026 18:32:02 +0200
-+Subject: [PATCH] * src/metalink.c (clean_metalink_string): Fix buffer
-+ underflow
++++ b/package/libssh2/0009-publickey-fix-potential-OOB-read.patch
+@@ -0,0 +1,36 @@
++From a13bb6c773f0d55ad1628cede57e99803cd898d9 Mon Sep 17 00:00:00 2001
++From: Viktor Szakats <commit@vsz.me>
++Date: Sat, 4 Jul 2026 11:19:49 +0200
++Subject: [PATCH] publickey: fix potential OOB read in
++ `libssh2_publickey_list_fetch()`
 +
-+Reported-by: TristanInSec@gmail.com
-+CVE: CVE-2026-58469
-+Upstream: https://gitlab.com/gnuwget/wget/-/commit/37a40fcb450153f69537c7cbc2a7a4fb0b6f7826
-+Signed-off-by: Stefan Müller <stemu86@gmx.ch>
++Reported-by: Vladimir Eli Tokarev
++Fixes GHSA-w6g9-cpfp-22gc
 +
++Closes #2202
++Forwarded: not-needed
++
++CVE: CVE-2026-66034
++Upstream: https://sources.debian.org/patches/libssh2/1.11.1-6/CVE-2026-66034.patch/
++Upstream: https://github.com/libssh2/libssh2/commit/a13bb6c773f0d55ad1628cede57e99803cd898d9
++Signed-off-by: Stefan Müller <stefan.mueller@rey-technology.com>
 +---
-+ src/metalink.c | 9 +++------
-+ 1 file changed, 3 insertions(+), 6 deletions(-)
++ src/publickey.c | 7 +++++++
++ 1 file changed, 7 insertions(+)
 +
-+diff --git a/src/metalink.c b/src/metalink.c
-+index 9e355fd0..3acdc3a2 100644
-+--- a/src/metalink.c
-++++ b/src/metalink.c
-+@@ -1041,7 +1041,6 @@ void
-+ clean_metalink_string (char **str)
-+ {
-+   int c;
-+-  size_t len;
-+   char *new, *beg, *end;
-+ 
-+   if (!str || !*str)
-+@@ -1049,7 +1048,7 @@ clean_metalink_string (char **str)
-+ 
-+   beg = *str;
-+ 
-+-  while ((c = *beg) && (c == '\n' || c == '\r' || c == '\t' || c == ' '))
-++  while (isspace(*beg))
-+     beg++;
-+ 
-+   end = beg;
-+@@ -1062,12 +1061,10 @@ clean_metalink_string (char **str)
-+   /* If we are at the end of the string, search the first legit
-+      character going backward.  */
-+   if (*end == '\0')
-+-    while ((c = *(end - 1)) && (c == '\n' || c == '\r' || c == '\t' || c == ' '))
-++    while (end > beg && !isspace(*(end - 1)))
-+       end--;
-+ 
-+-  len = end - beg;
-+-
-+-  new = xmemdup0 (beg, len);
-++  new = xmemdup0 (beg, end - beg);
-+   xfree (*str);
-+   *str = new;
-+ }
-+-- 
-+GitLab
++--- a/src/publickey.c
+++++ b/src/publickey.c
++@@ -988,6 +988,13 @@
++                 }
 +
-diff --git a/package/wget/0003-src-metalink.c-clean_metalink_string-Fix-inverted-trailing-space-check.patch b/package/wget/0003-src-metalink.c-clean_metalink_string-Fix-inverted-trailing-space-check.patch
-new file mode 100644
-index 0000000000..e6b6b7180a
---- /dev/null
-+++ b/package/wget/0003-src-metalink.c-clean_metalink_string-Fix-inverted-trailing-space-check.patch
-@@ -0,0 +1,40 @@
-+From 7b1cdecc49bc77bde220fc575c8a00386c3f3bcf Mon Sep 17 00:00:00 2001
-+From: ChenYanpan <chenyanpan@xfusion.com>
-+Date: Wed, 8 Jul 2026 12:09:55 +0800
-+Subject: [PATCH] * src/metalink.c (clean_metalink_string): Fix inverted
-+ trailing-space check
-+
-+37a40fcb added an `end > beg' bound guard to prevent a buffer
-+underflow, but accidentally flipped the condition from `isspace' to
-+`!isspace'. The loop therefore walked back over non-space characters
-+instead of trailing whitespace, collapsing any string without a
-+trailing newline to "". Every Metalink/HTTP resource URL was wiped,
-+so wget could not follow any mirror and
-+testenv/Test-metalink-http.py failed ("Expected file test.meta not
-+found"). Restore the `isspace' condition.
-+
-+Copyright-paperwork-exempt: Yes
-+CVE: CVE-2026-58469
-+Upstream: https://gitlab.com/gnuwget/wget/-/commit/7b1cdecc49bc77bde220fc575c8a00386c3f3bcf
-+Signed-off-by: Stefan Müller <stemu86@gmx.ch>
-+
-+---
-+ src/metalink.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/metalink.c b/src/metalink.c
-+index 3acdc3a2..3794909f 100644
-+--- a/src/metalink.c
-++++ b/src/metalink.c
-+@@ -1061,7 +1061,7 @@ clean_metalink_string (char **str)
-+   /* If we are at the end of the string, search the first legit
-+      character going backward.  */
-+   if (*end == '\0')
-+-    while (end > beg && !isspace(*(end - 1)))
-++    while (end > beg && isspace(*(end - 1)))
-+       end--;
-+ 
-+   new = xmemdup0 (beg, end - beg);
-+-- 
-+GitLab
-+
-diff --git a/package/wget/0004-src-metalink.c-Include-ctype.h.patch b/package/wget/0004-src-metalink.c-Include-ctype.h.patch
-new file mode 100644
-index 0000000000..0782bf2563
---- /dev/null
-+++ b/package/wget/0004-src-metalink.c-Include-ctype.h.patch
-@@ -0,0 +1,28 @@
-+From 82d945ff5dc9942b78b2bf736aac298c24fe00a1 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Tim=20R=C3=BChsen?= <tim.ruehsen@gmx.de>
-+Date: Thu, 9 Jul 2026 14:50:40 +0200
-+Subject: [PATCH] * src/metalink.c: Include ctype.h
-+
-+CVE: CVE-2026-58469
-+Upstream: https://gitlab.com/gnuwget/wget/-/commit/82d945ff5dc9942b78b2bf736aac298c24fe00a1
-+Signed-off-by: Stefan Müller <stemu86@gmx.ch>
-+
-+---
-+ src/metalink.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/metalink.c b/src/metalink.c
-+index 3794909f..954546d2 100644
-+--- a/src/metalink.c
-++++ b/src/metalink.c
-+@@ -46,6 +46,7 @@ as that of the covered work.  */
-+ #include "c-strcase.h"
-+ #include <errno.h>
-+ #include <unistd.h> /* For unlink.  */
-++#include <ctype.h>
-+ #include <metalink/metalink_parser.h>
-+ #ifdef HAVE_GPGME
-+ #include <gpgme.h>
-+-- 
-+GitLab
-+
-diff --git a/package/wget/wget.mk b/package/wget/wget.mk
-index de03ec9cef..8118811efe 100644
---- a/package/wget/wget.mk
-+++ b/package/wget/wget.mk
-@@ -12,6 +12,11 @@ WGET_LICENSE = GPL-3.0+
- WGET_LICENSE_FILES = COPYING
- WGET_CPE_ID_VENDOR = gnu
++                 if(comment_len) {
+++                    if(pkey->listFetch_s + comment_len >
+++                       pkey->listFetch_data + pkey->listFetch_data_len) {
+++                        _libssh2_error(session, LIBSSH2_ERROR_BUFFER_TOO_SMALL,
+++                                 "ListFetch data too short");
+++                        goto err_exit;
+++                    }
+++
++                     list[keys].num_attrs = 1;
++                     list[keys].attrs =
++                         LIBSSH2_ALLOC(session,
+diff --git a/package/libssh2/libssh2.mk b/package/libssh2/libssh2.mk
+index a3c0b6a67f..4a4491f0f1 100644
+--- a/package/libssh2/libssh2.mk
++++ b/package/libssh2/libssh2.mk
+@@ -33,6 +33,9 @@ LIBSSH2_IGNORE_CVES += CVE-2026-66032
+ # 0008-openssl-fix-AES-GCM-bounds-checks.patch
+ LIBSSH2_IGNORE_CVES += CVE-2026-66033
  
-+# 0002-src-metalink.c-clean_metalink_string-Fix-buffer-underflow.patch
-+# 0003-src-metalink.c-clean_metalink_string-Fix-inverted-trailing-space-check.patch
-+# 0004-src-metalink.c-Include-ctype.h.patch
-+WGET_IGNORE_CVES += CVE-2026-58469
++# 0009-publickey-fix-potential-OOB-read.patch
++LIBSSH2_IGNORE_CVES += CVE-2026-66034
 +
- WGET_CONF_OPTS += --disable-pcre
- 
- ifeq ($(BR2_PACKAGE_LIBPSL),y)
+ ifeq ($(BR2_PACKAGE_LIBSSH2_MBEDTLS),y)
+ LIBSSH2_DEPENDENCIES += mbedtls
+ LIBSSH2_CONF_OPTS += --with-libmbedcrypto-prefix=$(STAGING_DIR)/usr \
 
---===============1292255898795764426==
+--===============0219822751537390938==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -265,4 +166,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============1292255898795764426==--
+--===============0219822751537390938==--
