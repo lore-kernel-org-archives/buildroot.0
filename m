@@ -4,58 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63DC1C61DCB
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB364C61DD9
 	for <buildroot@archiver.kernel.org>; Fri, 28 Aug 2026 14:25:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1EB2180F5A;
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6FB1980F6E;
 	Fri, 28 Aug 2026 14:25:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id u1Y0DmyPLGZD; Fri, 28 Aug 2026 14:25:43 +0000 (UTC)
+ id ZQAasVNxwLYo; Fri, 28 Aug 2026 14:25:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787927143;
-	bh=54EHez9lqFAC1pS2Rd+/9lOxBDIGhhh8ehNveBnNVSc=;
+	s=default; t=1787927145;
+	bh=m3cpuY/kz0n/8G2D+cxA+0LXrB15nHRLcm5GPCo2QDE=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=bEFz7xU5Z16U7Skv0vpbIFB9mC+8wsFMatCdH/c8rPOS9w/klOn/Fil2lIx845uLN
-	 EE3gvxx6pzQV2W/upfF1uSPpKcie9zOFmSL5gnJu+/0qMlhl3EpSZ1gLe6tzBr4tx+
-	 MuLjaYOySxLhUGyj94g54urrHkh6NmajGP5eB9KqoA/MkvtocxOM/6tHn6afw6+/db
-	 GRdja6UBJeDefVfq16m5rWTz7tzc8HHtNktuMYnVly586S4WxN3MGpOk8yrtk4QY/x
-	 Ss5sfqYqb+sxhBw+wgAYQ0tbGei8n9KwlLAQ74osGFIosVkNRlmD66P+2NvzC/fdKP
-	 Ug49Y80nXsGpg==
+	b=hgEwP73f+xXraITsNeD7ZW7U9BI/ZuKZIlvWiSRZhLQ6wRx8YBAX2tQRhrJd7hlDJ
+	 s54cp7T121s3w8SwoFOEeu93gOyy8ftGJN/BGr9Hn8VdFNjtSCRLtKIRWnYM7/18yp
+	 MOtcm8zHSOByWvIFwlCvJqCNCtgcJ7aLu/GXVTzD6l1YY/mzBNfNBN4FX0mAqE+qvi
+	 HRyLG1RNWBoMK1NYT06yBj8444JNXUxPZYtNQIDnAXLHpUKPDxQhEaM1g8KhY2iwsU
+	 7g5PD2l78vBGAxB0vavV8k69vUetfF4HYlvdu9yD+v865SAwGwjVJFe3uJoKSqmSPV
+	 2kNvsdHCTnNrg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DA9C080E6A;
-	Fri, 28 Aug 2026 14:25:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2F42C80F85;
+	Fri, 28 Aug 2026 14:25:45 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 81EEB386
+ by lists1.osuosl.org (Postfix) with ESMTP id 9B84E386
  for <buildroot@buildroot.org>; Fri, 28 Aug 2026 14:25:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 68B726082A
+ by smtp3.osuosl.org (Postfix) with ESMTP id 810C160831
  for <buildroot@buildroot.org>; Fri, 28 Aug 2026 14:25:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id grsJqT2M979c for <buildroot@buildroot.org>;
+ id S-RuShVSVTUE for <buildroot@buildroot.org>;
  Fri, 28 Aug 2026 14:25:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 99C846072E
+ by smtp3.osuosl.org (Postfix) with ESMTP id C866D6078A
  for <buildroot@buildroot.org>; Fri, 28 Aug 2026 14:25:38 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 95D1C921FA; Fri, 28 Aug 2026 14:24:41 +0000 (UTC)
+ id C6B0D921FA; Fri, 28 Aug 2026 14:24:41 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Fri, 28 Aug 2026 15:58:04 +0200
 X-Git-Refname: refs/heads/2026.05.x
-X-Git-Oldrev: 44867126f0baf359e7f3e5013f45cc998add1275
-X-Git-Newrev: edad306d63595fc16e25c8d564c7a32ba6590048
+X-Git-Oldrev: 7fee4818cddcc8df32b30610abfcab59c92c1d62
+X-Git-Newrev: 92c3e21893ae9de832f7aa629f4ea863bc4b854e
 X-Patchwork-Hint: ignore
-Message-Id: <20260828142441.95D1C921FA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.05.x] packages/haproxy:
- security bump to version 2.6.32
+Message-Id: <20260828142441.C6B0D921FA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.05.x] package/libxkbcommon:
+ build libxkbregistry when libxml2 is available
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -75,162 +75,90 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/edad306d63595fc16e25c8d564c7a32ba6590048
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/92c3e21893ae9de832f7aa629f4ea863bc4b854e
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.05.x
 
-Bugfix release with large number of (security) fixes.
+libxkbregistry is the keyboard layout catalogue half of the library. It
+parses the XML layout registry and so needs libxml2, which is presumably
+why it was disabled unconditionally rather than wired to a dependency.
 
-HAProxy 2.6.32 was released on 2026/07/29. It added 33 new commits
-after version 2.6.31.
+wine needs it. Its configure.ac requires XKBREGISTRY_LIBS alongside
+wayland-client, wayland-scanner, xkbcommon and linux/input.h before it
+will build the Wayland driver, and wine.mk passes --with-wayland for any
+build with BR2_PACKAGE_WAYLAND - which turns that notice into a hard
+error:
 
-As for the 2.8.27, the announce is an expurgated copy-paste of the 3.4.3
-announce:
+  checking for wayland-client.h... yes
+  checking for wl_display_connect in -lwayland-client... yes
+  checking for wayland-scanner... .../host/bin/wayland-scanner
+  checking for xkb_context_new in -lxkbcommon... yes
+  checking for wayland-egl.h... yes
+  checking for wl_egl_window_create in -lwayland-egl... yes
+  configure: error: Wayland development files not found, the Wayland
+    driver won't be supported.
+  This is an error since --with-wayland was requested.
 
-* stats: Two issues about the stats page, reported by Red Hat/AISLE
-  Research, were fixed.
+Every other term of that test passes; only XKBREGISTRY_LIBS is empty, so
+wine and wayland together could not be built on any architecture.
 
-  Proxies updated through the stats page while in "stats admin" mode were
-  not subject to the "stats scope" filtering, meaning a scope meant to
-  restrict which proxies are visible/actionable could be silently bypassed
-  on POST requests.
-  Separately, POST requests to the stats interface did not validate that the
-  Origin (or Referer) header matched the Host, which is now checked to
-  mitigate CSRF attacks.
+Gated on BR2_PACKAGE_LIBXML2 rather than turned on outright, because
+meson.build takes dependency('libxml-2.0') unconditionally once
+enable-xkbregistry is set, so a target without libxml2 would fail to
+configure.
 
-* ssl-gencert: A memory leak on every certificate generation was fixed.
+Regarding since when this is broken, three pieces had to come together:
 
-  Two temporary buffers were not freed after generating a certificate on the
-  fly, leaking memory each time a new SNI triggered certificate
-  generation. This issue was reported by Red Hat/AISLE Research.
+ - libxkbcommon has passed -Denable-xkbregistry=false since commit
+   1791bc30a5 ("package/libxkbcommon: bump version to 1.0.1", Sep 2020),
+   i.e. Buildroot 2020.11. libxkbregistry has therefore never been built
+   in Buildroot.
 
-* sample/protobuf: buffer overflows after pointer-shift converters, reported
-  by Red Hat/AISLE Research and Charles Vosburgh, were fixed.
+ - wine's configure gained the XKBREGISTRY_LIBS term in its Wayland
+   test in wine 9.0, with upstream commit d64ea8e4a6c9
+   ("winewayland.drv: Enumerate Xkb layouts and create matching HKL.",
+   Nov 2023).
 
-  Several converters (protobuf/ungrpc field extraction, ltrim())
-  move the sample's data pointer forward on success but did not shrink the
-  sample's recorded buffer capacity accordingly. A converter chained
-  afterwards that relies on that capacity (e.g. padding via memset()) could
-  then write past the end of the buffer, leading to heap corruption or a
-  worker crash. All the affected converters now adjust the capacity
-  together with the pointer.
+ - wine.mk started passing --with-wayland in commit 7cb49e7712
+   ("package/wine: bump to version 9.19", Oct 2024), which is what turns
+   the missing XKBREGISTRY_LIBS from a notice into a hard error.
 
-* protobuf: A nested-path validation bypass reported by Red Hat/AISLE
-  Research was fixed.
+The breakage therefore dates from Buildroot 2024.11, and every branch
+since is affected, including the LTS one: 2025.02.x carries wine 10.0,
+whose configure has the XKBREGISTRY_LIBS check, together with
+libxkbcommon 1.9.2 built with -Denable-xkbregistry=false, and its wine.mk
+passes --with-wayland. 2025.05.x and 2025.08.x are in the same state.
+A backport to 2025.02.x is thus needed.
 
-  The protobuf field lookup used for the protobuf()/ungrpc() converters did
-  not strictly enforce hierarchical boundaries, so a flat sibling field
-  could incorrectly satisfy a nested-path lookup (e.g. matching a root-level
-  field as if it were nested under a parent). The lookup was rewritten as a
-  strict, non-recursive path walker that correctly bounds each nesting
-  level.
-  Separately, a crash because of deprecated protobuf group wire types was
-  fixed. These wire types are now explicitly rejected.
-
-* http-fetch: Two crashes reachable from health-check configurations were
-  fixed.
-
-  "res.body"/"res.hdr"/... and similar response fetches assumed the
-  health-check receive buffer always held an HTX message, which is only true
-  for actual HTTP checks; on a plain TCP check, a hostile/misbehaving server
-  could craft the first bytes of its reply to be misinterpreted as HTX
-  internal fields, causing a wild read and worker crash (or leaking
-  arbitrary process memory).
-  Separately, "capture.req.hdr"/"capture.res.hdr" only validated the upper
-  bound of their index argument, so a negative capture id was accepted at
-  boot and dereferenced an out-of-bounds array entry at runtime, crashing
-  the worker on the very first request.
-
-* slz: Several issues were fixed in the SLZ library.
-
-  A stream alternating many literals in the 144-255 range with cheap
-  back-references could keep inflating indefinitely instead of falling
-  back to a stored block, exceeding the library's documented worst-case
-  output size by several percent. A new accounting mechanism now bounds
-  this overhead. Practical impact on haproxy requires tune.bufsize above
-  ~43 kB with the default reserve.
-  Five small correctness fixes inherited from upstream libslz were also
-  backported: Avoid reading up to a few bytes past the end of very short
-  inputs on architectures without fast unaligned access; stop appending an
-  extra, misplaced block to an already-finished deflate/gzip/zlib stream
-  (which could corrupt the trailing checksum in ~2% of fuzzed streams); fix
-  the Adler32 checksum accumulator sign handling on 32-bit systems
-  (affecting the zlib format only); avoid an undefined-behaviour signed left
-  shift when assembling input words byte by byte; and use the exact bit cost
-  when deciding whether to emit the last literals of a block as a stored
-  block, avoiding compressed output slightly larger than the documented
-  worst case.
-
-* peers: A heap overflow when replicating large stick-table dictionary
-  entries was fixed.
-
-  peer_prepare_updatemsg() never verified that a stick-table entry's
-  dictionary value (e.g. server_key, up to ~16 kB) actually fit in the
-  update message being built. Since the peers protocol is plain-text and
-  unauthenticated, a rogue or compromised peer could plant an oversized
-  entry that overflows the 16 kB trash buffer as soon as the victim
-  replicates ("teaches") it, confirmed as a heap-buffer-overflow write. The
-  function now checks the available room before encoding and fails cleanly
-  if it doesn't fit. This was reported and fixes by Matt Suiche from Tolmo
-  Inc.
-
-And, as usual, the bunch of minor fixes here and there, mainly raised during
-AI-assisted code reviews. Most were never noticed:
-
-* HTX API: Some bugs about how the HTX API was used were fixed here and
-  there.
-
-* http-act: Double-frees and a couple of state bugs on parsing errors were
-  fixed.
-
-* http-fetch/http-ana/http-htx: Few out-of-bounds reads were fixed.
-
-* http-conv: The last input character could be lost when calling url-dec
-  converter, when the input buffer was full. This was fixed by failing the
-  converter in that case.
-
-* mux-h1: An extra 200ms delay was observed on some H2-to-H1 messages
-  because the end of the message was not always properly detected. This
-  case is now properly handled.
-
-* sample: An edge case in be2hex() was fixed.
-
-For more details, see the announcement:
-https://www.mail-archive.com/haproxy@formilux.org/msg47353.html
-
-Signed-off-by: Fred Lefranc <fred.lefranc.evs@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 335a57525f28425fa076e1b2098679dc2211f8e4)
+Signed-off-by: Alsey Coleman Miller <alseycmiller@gmail.com>
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 4349b22b918b61cc8271167750c8ed53a7747a79)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- package/haproxy/haproxy.hash | 4 ++--
- package/haproxy/haproxy.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libxkbcommon/libxkbcommon.mk | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/package/haproxy/haproxy.hash b/package/haproxy/haproxy.hash
-index 6bb5dda804..2575c408d7 100644
---- a/package/haproxy/haproxy.hash
-+++ b/package/haproxy/haproxy.hash
-@@ -1,5 +1,5 @@
--# From: http://www.haproxy.org/download/2.6/src/haproxy-2.6.27.tar.gz.sha256
--sha256  ccdaf08e8653f9651992212b51af0b5513c2e2cf0cd822ca67c94cffe10386a6  haproxy-2.6.27.tar.gz
-+# From: http://www.haproxy.org/download/2.6/src/haproxy-2.6.32.tar.gz.sha256
-+sha256  8791585ee3bd24cde652d1d840ac7b1f73f086d5e9ec41c5e079592703ea52a4  haproxy-2.6.32.tar.gz
- # Locally computed:
- sha256  0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28  LICENSE
- sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  doc/lgpl.txt
-diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
-index cf1484243c..970347d3ed 100644
---- a/package/haproxy/haproxy.mk
-+++ b/package/haproxy/haproxy.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/libxkbcommon/libxkbcommon.mk b/package/libxkbcommon/libxkbcommon.mk
+index 21a2b937ef..406affe401 100644
+--- a/package/libxkbcommon/libxkbcommon.mk
++++ b/package/libxkbcommon/libxkbcommon.mk
+@@ -12,8 +12,14 @@ LIBXKBCOMMON_CPE_ID_VENDOR = xkbcommon
+ LIBXKBCOMMON_INSTALL_STAGING = YES
+ LIBXKBCOMMON_DEPENDENCIES = host-bison host-flex
+ LIBXKBCOMMON_CONF_OPTS = \
+-	-Denable-docs=false \
+-	-Denable-xkbregistry=false
++	-Denable-docs=false
++
++ifeq ($(BR2_PACKAGE_LIBXML2),y)
++LIBXKBCOMMON_CONF_OPTS += -Denable-xkbregistry=true
++LIBXKBCOMMON_DEPENDENCIES += libxml2
++else
++LIBXKBCOMMON_CONF_OPTS += -Denable-xkbregistry=false
++endif
  
- HAPROXY_VERSION_MAJOR = 2.6
--HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).27
-+HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).32
- HAPROXY_SITE = http://www.haproxy.org/download/$(HAPROXY_VERSION_MAJOR)/src
- HAPROXY_LICENSE = GPL-2.0+ and LGPL-2.1+ with exceptions
- HAPROXY_LICENSE_FILES = LICENSE doc/lgpl.txt doc/gpl.txt
+ ifeq ($(BR2_PACKAGE_XORG7),y)
+ LIBXKBCOMMON_CONF_OPTS += -Denable-x11=true
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
