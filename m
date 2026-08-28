@@ -4,79 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2055C61DC6
-	for <buildroot@archiver.kernel.org>; Fri, 28 Aug 2026 09:03:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A856C61DC6
+	for <buildroot@archiver.kernel.org>; Fri, 28 Aug 2026 09:08:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8A15060708;
-	Fri, 28 Aug 2026 09:03:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1A08B60648;
+	Fri, 28 Aug 2026 09:08:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WOcNBwYHdEa1; Fri, 28 Aug 2026 09:03:39 +0000 (UTC)
+ id HAOwhxUGFVCG; Fri, 28 Aug 2026 09:08:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787907819;
-	bh=CG4iHHFkH9CIq6dbRMhlXHcXSK1bcO/DBgDpM3U557Y=;
+	s=default; t=1787908106;
+	bh=CYxAzwd801clNcfZ6nRaHTX5SgbotdrFW7m/Js8+yjY=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=QoBdAyMBVeebOWhRvgFa0i4HrGnx5TJxCLBLtJcNrEHGUusXOVprNW3OLzairL51b
-	 ItGIuuCGiMrOG/Nzxn+X0FTcCXFviLs3mGKOiGknvkf4IL2Py3a/mYSp7iOmIc34uO
-	 324OdqaMOP2EY77F93JQaGW1Dh5jk+W8L2NN9Bq/0SK5oazL1nRUAAw8PMWMhjBFIU
-	 uAyW2wVknbMnUbkPeYNn7AZsyyejF6M+1f9oQssHYB+mjjzjgjgYcTgK0xv1+wVBG+
-	 a7bVQny7lyeERHBPVWMopLsGbBh2NsZOLNK3Ehr5Pze3+xeKh7PaoKiZhz44yjvwli
-	 4bnRqVidp8o4A==
+	b=B+VrAMEUMjSn51QvaKz+sXyrRG15qre4QVhjPiSeC0dNXiUVgZZG9isR6wVkt16IU
+	 0Z9Wh7e2+CSu7NgYNQc71o6gxAEV4YNpepodx2itu5t0c7Q3NtKPFLG4qjFtVZLbEk
+	 fSTxyhUX9NQTczjHPwbAOEy3MjvFClDDKIiAJGBrBxezRkp3qzBPbmnNU+cuCE/VtQ
+	 ZuvL6Syw4zy82fG/sT5yb0f/eJL7hrKzKsz75wIIi6BeSX6h7NvH6faqkbtIDoaBR9
+	 lSyCtOrLaH6pVtm7guv6/VIjF9myn1Ifi5vWZXgsduLSRMyjlBZgKx3A0AXw6Ycaq9
+	 JmdOWtdKHGYvA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 596D1606CB;
-	Fri, 28 Aug 2026 09:03:39 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id E7A7C23E
- for <buildroot@buildroot.org>; Fri, 28 Aug 2026 09:03:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 171B9606CB;
+	Fri, 28 Aug 2026 09:08:26 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id BFC99386
+ for <buildroot@buildroot.org>; Fri, 28 Aug 2026 09:08:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CBDAA606CB
- for <buildroot@buildroot.org>; Fri, 28 Aug 2026 09:03:37 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B131D407BB
+ for <buildroot@buildroot.org>; Fri, 28 Aug 2026 09:08:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id e1_SaMhopwP9 for <buildroot@buildroot.org>;
- Fri, 28 Aug 2026 09:03:37 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=195.10.208.61;
- helo=mout-b-201.mailbox.org; envelope-from=manuel.diener@oss.othermo.de;
- receiver=<UNKNOWN> 
-Authentication-Results: smtp3.osuosl.org; dmarc=pass (p=none dis=none)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NVVMlb2vfi2j for <buildroot@buildroot.org>;
+ Fri, 28 Aug 2026 09:08:23 +0000 (UTC)
+X-Greylist: delayed 172116 seconds by postgrey-1.37 at util1.osuosl.org;
+ Fri, 28 Aug 2026 09:08:23 UTC
+Authentication-Results: smtp4.osuosl.org; dmarc=pass (p=none dis=none)
  header.from=oss.othermo.de
-Authentication-Results: smtp3.osuosl.org; dkim=pass (2048-bit key,
+Authentication-Results: smtp4.osuosl.org; dkim=pass (2048-bit key,
  unprotected) header.d=oss.othermo.de header.i=@oss.othermo.de
- header.a=rsa-sha256 header.s=MBO0001 header.b=09jRlvw1
-Received: from mout-b-201.mailbox.org (mout-b-201.mailbox.org [195.10.208.61])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 9B05A60644
- for <buildroot@buildroot.org>; Fri, 28 Aug 2026 09:03:34 +0000 (UTC)
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [10.196.197.2])
+ header.a=rsa-sha256 header.s=MBO0001 header.b=M2KnpWkE
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2001:67c:2050:102:465::110; helo=mout-b-110.mailbox.org;
+ envelope-from=manuel.diener@oss.othermo.de; receiver=<UNKNOWN> 
+Received: from mout-b-110.mailbox.org (mout-b-110.mailbox.org
+ [IPv6:2001:67c:2050:102:465::110])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9E0984077E
+ for <buildroot@buildroot.org>; Fri, 28 Aug 2026 09:08:23 +0000 (UTC)
+Received: from smtp202.mailbox.org (smtp202.mailbox.org [10.196.197.202])
  (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
  key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
  (No client certificate requested)
- by mout-b-201.mailbox.org (Postfix) with ESMTPS id 4hWXVV4wBGzLlqV;
- Fri, 28 Aug 2026 11:03:30 +0200 (CEST)
+ by mout-b-110.mailbox.org (Postfix) with ESMTPS id 4hWXc30dttzNlHJ;
+ Fri, 28 Aug 2026 11:08:19 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oss.othermo.de;
- s=MBO0001; t=1787907810;
+ s=MBO0001; t=1787908099;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=CzMc0/+8ew4kumw0/KErZthkQmSMKUmh0bQgzD6Kmrg=;
- b=09jRlvw1woACssXtNTm4lGo+6sb+KgLE50lgXsBzS7kJHG1C2/kHdffHxfOITOh5ZbFEdz
- L6s+XZYNmilBv5PPNs8bkIWTLz6TFXpyfjdk60XVP4Ln6X36uxJTzur0wwWSd3Iwfdhflz
- ezi8gombSjkFRNCI4xkS+TG7oYVb54Sy8O9Lp1/2lmx2ujvGzuFkIGHBCo80KD/PSUDuPc
- d41t21/1oxKfsAcn33ITP2K67STPLff4TkIILjBOqHbvyByUNjzYNnfg+o29ctt/Hu8ogl
- J7TmJRrgkTsswDEyKZ7AFsgq9Pxoe47mp1uu/OdUfoyaqyTSWhR3SGDc22d/9Q==
+ bh=kW0TX0Y1d2qQ8rry+FaRiIP0irkVHds6Sy2YawIGLlk=;
+ b=M2KnpWkEy1kqCj19eIHdmr5kKNI4iaseL6YxzJdH/tQ3Qg4YKKyys1XqUIW3NcDya1UtyU
+ eU2KWNF7sWGRLVFBhsE7XeN+3V3hKw6kfJqRUyP2uLB4l5AbUM0NUU0GglTxCY49X4cN3o
+ 4UnNQfC74hH7hiCqzrzgIedLWy4wHqujPhJ9oFeJx4Um/3j2yjxUllbBJtIbILcVSgDQQK
+ 4p8R9OOn2zZdgYElT13cB1ml/5y0Gc1HH/EdD9LAtVJPWWESkfbwz00WXO4MQBFyGewkH6
+ yn9jVPFuRvSDb9Dl63gF/FbSKorfO7jxQhrPy80SprAbMHBuJWDZlx70RoZBiw==
 From: Manuel Diener <manuel.diener@oss.othermo.de>
 To: buildroot@buildroot.org
-Date: Fri, 28 Aug 2026 11:02:40 +0200
-Message-ID: <20260828090241.1849085-1-manuel.diener@oss.othermo.de>
-In-Reply-To: <20260826091851.467182-1-manuel.diener@oss.othermo.de>
-References: <20260826091851.467182-1-manuel.diener@oss.othermo.de>
+Date: Fri, 28 Aug 2026 11:07:56 +0200
+Message-ID: <20260828090757.1862504-1-manuel.diener@oss.othermo.de>
+In-Reply-To: <20260828090241.1849085-1-manuel.diener@oss.othermo.de>
+References: <20260828090241.1849085-1-manuel.diener@oss.othermo.de>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2] package/python-questionary: new package
+Subject: [Buildroot] [PATCH v3] package/python-questionary: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -98,14 +101,14 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Manuel Diener <manuel.diener@oss.othermo.de>
 ---
- DEVELOPERS                                    |  1 +
+ DEVELOPERS                                    |  2 ++
  package/Config.in                             |  1 +
  package/python-questionary/Config.in          |  8 ++++++++
  .../python-questionary.hash                   |  5 +++++
  .../python-questionary/python-questionary.mk  | 14 +++++++++++++
  .../package/sample_python_questionary.py      | 16 +++++++++++++++
  .../tests/package/test_python_questionary.py  | 20 +++++++++++++++++++
- 7 files changed, 65 insertions(+)
+ 7 files changed, 66 insertions(+)
  create mode 100644 package/python-questionary/Config.in
  create mode 100644 package/python-questionary/python-questionary.hash
  create mode 100644 package/python-questionary/python-questionary.mk
@@ -113,7 +116,7 @@ Signed-off-by: Manuel Diener <manuel.diener@oss.othermo.de>
  create mode 100644 support/testing/tests/package/test_python_questionary.py
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 49a72bb69a..d0f4d7d582 100644
+index 49a72bb69a..edd2e46117 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
 @@ -2252,6 +2252,7 @@ F:	package/python-log-rate-limit/
@@ -124,6 +127,14 @@ index 49a72bb69a..d0f4d7d582 100644
  F:	package/python-typing-inspection/
  F:	package/python-tzlocal/
  F:	package/python-sdbus-modemmanager/
+@@ -2259,6 +2260,7 @@ F:	package/python-sdbus-systemd/
+ F:	package/python-varlink/
+ F:	package/python-waitress/
+ F:	package/python-whitenoise/
++F:	support/testing/tests/package/test_python_questionary.py
+ 
+ N:	Marcin Bis <marcin@bis.org.pl>
+ F:	package/bluez5_utils/
 diff --git a/package/Config.in b/package/Config.in
 index 6058800682..f363e16069 100644
 --- a/package/Config.in
