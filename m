@@ -1,61 +1,61 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 825A8C61DD9
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 777F3C61DD3
 	for <buildroot@archiver.kernel.org>; Fri, 28 Aug 2026 14:23:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C46BA80F46;
+	by smtp3.osuosl.org (Postfix) with ESMTP id F04BA607EC;
+	Fri, 28 Aug 2026 14:23:44 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CxEB43eS_LPq; Fri, 28 Aug 2026 14:23:43 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1787927023;
+	bh=jI8rkrrDL0wqLLqEMoIjNCvJqa+SFdG0VoOWhp5GzbY=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=ebGhMtrn6qmZT6d6KSy8NjY/pBSiXO0WaaRxAMIm2AFuEGRS11qLywQ6yLkRNQuH0
+	 CdKr3t7+E9z9sYsCgF8D3wavnwNCLHU/9sSTULhcHIvzEdpQ6FDKvCLWyhDn00bl5C
+	 s+MLcnA6RWW8LgtRurDz+xSXTOndLgnAVm8AsQ6CihG61Sws8YHTxEPuYx7UnZIQEi
+	 YXAjAvReXpqS5kX805goakKcTJkCK31Tkq49YBZrJhp9uBBEjx3y5S73YVvpVLiRGu
+	 Zm6KcEc55RKuwQVjONx4ye/5TSQ79lUY++0ADfGHHFDRIZ3yCM3YMk9oP6MGyZKXcq
+	 mslW0MVh6P1dg==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2DBFC6072C;
 	Fri, 28 Aug 2026 14:23:43 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5AFD7D2A
+ for <buildroot@buildroot.org>; Fri, 28 Aug 2026 14:23:39 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 414ED80ECD
+ for <buildroot@buildroot.org>; Fri, 28 Aug 2026 14:23:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WD6JZaTZm_KR; Fri, 28 Aug 2026 14:23:42 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787927021;
-	bh=qRvLUULvnVePcHFNH14V0ZlbMjLNFmAbRiTufbsz9bA=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=WCc+Ouw8KBuzIZxaxJKFe/FxfTEb2QN0J8R/5PXHrZ+Ri/HE65tBCKOA0RBXQKKKr
-	 8pCv9WalYMWyJ0tqg7nxqxFJoIAiL/w9ltLWgQeCcBAPy00/4tCFoDT+1tKMijFjKj
-	 yGbykTS9Z6pmxysqbCxd5PLkZ6NaBVI/aLY73SUVi5QF/WhvRaEBWN7zm4cT43LFX2
-	 JlWzxIZ39udllsriEHXceu5QcMXuS0d0KTTSZebGuPIRD3LRsqiUPMwymNUUomrAnZ
-	 aLzj16nQjLhJ2G4qtIL9k8fvs7ZCdi0v/Dqtt+3UP1Pi+jgT1Rj+BwHJs1PmKmIGKz
-	 b8K/8UBn38gGQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B44A480E18;
-	Fri, 28 Aug 2026 14:23:41 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 537A3D28
- for <buildroot@buildroot.org>; Fri, 28 Aug 2026 14:23:39 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4523C4086A
- for <buildroot@buildroot.org>; Fri, 28 Aug 2026 14:23:39 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vWwvtIu-OIiW for <buildroot@buildroot.org>;
- Fri, 28 Aug 2026 14:23:38 +0000 (UTC)
+ id A9QCTEsp5uFq for <buildroot@buildroot.org>;
+ Fri, 28 Aug 2026 14:23:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 06B54407D6
- for <buildroot@buildroot.org>; Fri, 28 Aug 2026 14:23:38 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id AC32C80E18
+ for <buildroot@buildroot.org>; Fri, 28 Aug 2026 14:23:37 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0526E921F9; Fri, 28 Aug 2026 14:22:41 +0000 (UTC)
+ id A2643921F9; Fri, 28 Aug 2026 14:22:40 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Fri, 28 Aug 2026 15:57:20 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: a86d248b071124b0eabe10913d5ae3ffe569c739
-X-Git-Newrev: 13b42633d37d516e667abe3b4081ad67d0e99c8a
+X-Git-Oldrev: d0820dd09916edcefc44e525355afbea30d5bee4
+X-Git-Newrev: 7c0eac94763b341e0d1aea60b53a95a2ca0e9571
 X-Patchwork-Hint: ignore
-Message-Id: <20260828142241.0526E921F9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/wine: select
- libxkbcommon and libxml2 for the Wayland driver
+Message-Id: <20260828142240.A2643921F9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/mongoose:
+ security bump to version 7.23
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -75,67 +75,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/13b42633d37d516e667abe3b4081ad67d0e99c8a
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/7c0eac94763b341e0d1aea60b53a95a2ca0e9571
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-wine.mk passes --with-wayland whenever BR2_PACKAGE_WAYLAND is enabled,
-but nothing guarantees the rest of what wine's Wayland test needs is in
-the configuration. That test is:
+Release notes:
+https://github.com/cesanta/mongoose/releases/tag/7.23
 
-  WINE_NOTICE_WITH(wayland, [test -z "$WAYLAND_CLIENT_LIBS" \
-    -o -z "$WAYLAND_SCANNER" -o -z "$XKBCOMMON_LIBS" \
-    -o -z "$XKBREGISTRY_LIBS" -o "$ac_cv_header_linux_input_h" = "no"], ...)
+Fixes CVE-2026-73261, CVE-2026-73260, CVE-2026-63626, CVE-2026-73252,
+CVE-2026-73251.
 
-and because --with-wayland is passed explicitly, WINE_NOTICE_WITH turns
-into AC_MSG_ERROR rather than a notice.
-
-So wine needs libxkbcommon, and it needs the libxkbregistry part of it,
-which is only built when libxml2 is available. Select both when Wayland
-support is enabled, and add libxkbcommon to the build dependencies.
-
-Note that libxml2 is not a direct dependency of wine, it only has to be
-in the configuration so that libxkbcommon builds libxkbregistry; the
-build ordering is handled by libxkbcommon's own dependency on libxml2.
-
-Signed-off-by: Alsey Coleman Miller <alseycmiller@gmail.com>
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit a5e7f7af9fe9ca887003d725dc1ed26a314f1d45)
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 2bf6549d185aa3c106ed3f86a3314558d77d6745)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- package/wine/Config.in | 5 +++++
- package/wine/wine.mk   | 2 +-
- 2 files changed, 6 insertions(+), 1 deletion(-)
+ package/mongoose/mongoose.hash | 2 +-
+ package/mongoose/mongoose.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/wine/Config.in b/package/wine/Config.in
-index db3b1570ef..7a01ef6f7c 100644
---- a/package/wine/Config.in
-+++ b/package/wine/Config.in
-@@ -17,6 +17,11 @@ config BR2_PACKAGE_WINE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	select BR2_PACKAGE_ALSA_LIB_SEQ if BR2_PACKAGE_ALSA_LIB
- 	select BR2_PACKAGE_ALSA_LIB_RAWMIDI if BR2_PACKAGE_ALSA_LIB
-+	# The Wayland driver needs libxkbcommon, including its
-+	# libxkbregistry part, which is only built when libxml2 is
-+	# available.
-+	select BR2_PACKAGE_LIBXKBCOMMON if BR2_PACKAGE_WAYLAND
-+	select BR2_PACKAGE_LIBXML2 if BR2_PACKAGE_WAYLAND
- 	help
- 	  Wine is a compatibility layer capable of running Windows
- 	  applications on Linux. Instead of simulating internal
-diff --git a/package/wine/wine.mk b/package/wine/wine.mk
-index efee63a294..29908b577b 100644
---- a/package/wine/wine.mk
-+++ b/package/wine/wine.mk
-@@ -195,7 +195,7 @@ endif
+diff --git a/package/mongoose/mongoose.hash b/package/mongoose/mongoose.hash
+index 1a60b0c89c..80cf033774 100644
+--- a/package/mongoose/mongoose.hash
++++ b/package/mongoose/mongoose.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  87727cd2c240ff559b16e9710d44b61ba3513dbee50428bd8ee1596d7c58460a  mongoose-7.22.tar.gz
++sha256  93208f164038b05d156935b8b725063e1afb3984a362dbcf3a9ea37b6f1f2255  mongoose-7.23.tar.gz
+ sha256  f0d9cfd6f7d92f6ec061a5fb2882f67d2521a151bf09a637c33ca6181834b048  LICENSE
+diff --git a/package/mongoose/mongoose.mk b/package/mongoose/mongoose.mk
+index 207d31cdfa..abb36aeb2c 100644
+--- a/package/mongoose/mongoose.mk
++++ b/package/mongoose/mongoose.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_WAYLAND),y)
- WINE_CONF_OPTS += --with-wayland
--WINE_DEPENDENCIES += wayland
-+WINE_DEPENDENCIES += wayland libxkbcommon
- else
- WINE_CONF_OPTS += --without-wayland
- endif
+-MONGOOSE_VERSION = 7.22
++MONGOOSE_VERSION = 7.23
+ MONGOOSE_SITE = $(call github,cesanta,mongoose,$(MONGOOSE_VERSION))
+ MONGOOSE_LICENSE = GPL-2.0
+ MONGOOSE_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
