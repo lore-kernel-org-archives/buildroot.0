@@ -1,61 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25E99C61DBD
-	for <buildroot@archiver.kernel.org>; Fri, 28 Aug 2026 14:43:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B34EC61DBD
+	for <buildroot@archiver.kernel.org>; Fri, 28 Aug 2026 16:47:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C1E7681123;
-	Fri, 28 Aug 2026 14:43:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8575060879;
+	Fri, 28 Aug 2026 16:47:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MDt-odl7sNhR; Fri, 28 Aug 2026 14:43:11 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vb5pMWDK66hO; Fri, 28 Aug 2026 16:47:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787928191;
-	bh=rmLp+SRETkXIS/LeXw6LCiemgcjV3ZxVsFAhAo1+x18=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=mM+xB1/hz4Af93HIm8sSJoZCg101pe3/qUQDrO/QVfAv8bPKGleBLv7dH5Zn2Wsho
-	 aBxbDEMy+LqPvfZD0Mq/2HiruOx52EReTIs/Bo8bQOpDPRrPkpY8vLbnnakl2iTC/g
-	 ZDq+W7KQftjcUXFWs/RbDRF3lznQASEvGNb86ANtqjGDpWsVgl2O/i7EeIo6PsJG7x
-	 pQQSEcmyZfCL76ofkcsxLqLfMMbDbGJihNtCSg0BUkvPvwQewye9iWww8lDk6ksCmE
-	 Im259/u8ZhLwajCl2eR002+sjXds+2Ac45/R0Da2mR9WNo10mcvZilOku0qvmk/8MZ
-	 Q2FLFNrhGAARw==
+	s=default; t=1787935629;
+	bh=wbUaGHt69b/quSNDPvjEU/xF39VMpA3JZ5dUB2jwrqQ=;
+	h=Date:To:Cc:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=at0dYQ29HdyLeYWynaEqbpgl0XSRxyPqtopEWgo1AQP6kIyFMvVwSB7bj+XM85bvo
+	 CLtHv/pmZyYyM/NmKfSEMsB5V3vV2KEEoPIS0sCXA6piWlRoBW8pk7bHp27ANN5UrV
+	 WX9bHFEXYYs4GNOcxE5bxME2B7EbFXRxs4ksaU3QhOz27fwFFTRoRkkR3oUnI3ZMtG
+	 cwYmz6OwxB7FaPPJRq9KPppQABKUQ0rRBRHewtrwuf6xmotEJtlMHNgIAnr0gWrZqP
+	 sZXOi+xZyc8NPtw9ioy/AAuCG1pMa1qL1VaS+tUvt2K0gYUIYyHhj1By50FJAxM6+Y
+	 /8Wmay391BvBw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DF2C181126;
-	Fri, 28 Aug 2026 14:43:10 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id BFDC1127
- for <buildroot@buildroot.org>; Fri, 28 Aug 2026 14:43:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6553860826;
+	Fri, 28 Aug 2026 16:47:09 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 94AF5334
+ for <buildroot@buildroot.org>; Fri, 28 Aug 2026 16:47:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BD3CC407A2
- for <buildroot@buildroot.org>; Fri, 28 Aug 2026 14:43:09 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8674D401A0
+ for <buildroot@buildroot.org>; Fri, 28 Aug 2026 16:47:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id K6Iw0EABhs5M for <buildroot@buildroot.org>;
- Fri, 28 Aug 2026 14:43:09 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id u8GT5bdHr47l for <buildroot@buildroot.org>;
+ Fri, 28 Aug 2026 16:47:06 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
+ helo=smtpout-03.galae.net; envelope-from=theo.lebrun@bootlin.com;
  receiver=<UNKNOWN> 
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1A1FD40762
- for <buildroot@buildroot.org>; Fri, 28 Aug 2026 14:43:09 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 07907921FC; Fri, 28 Aug 2026 14:42:12 +0000 (UTC)
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8F8214016F
+ for <buildroot@buildroot.org>; Fri, 28 Aug 2026 16:47:05 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-03.galae.net (Postfix) with ESMTPS id 4719D4E41408;
+ Fri, 28 Aug 2026 16:47:03 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 145EF60537;
+ Fri, 28 Aug 2026 16:47:03 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 74DAA11C78230; 
+ Fri, 28 Aug 2026 18:46:56 +0200 (CEST)
+Date: Fri, 28 Aug 2026 18:46:46 +0200
+Message-Id: <20260828-xdp-tools-tleb-v1-0-463c25b5a99b@bootlin.com>
+MIME-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIAHa7kWoC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIzMDCyML3YqUAt2S/PycYt2SnNQkXQNTk2STZAsgTktSAmoqKEpNy6wAGxg
+ dC+EXlyZlpSaXgExRqq0FAJp5Um5yAAAA
+X-Change-ID: 20260828-xdp-tools-tleb-054c4c8c4cfb
 To: buildroot@buildroot.org
-Date: Fri, 28 Aug 2026 16:40:17 +0200
-X-Git-Refname: refs/heads/2026.05.x
-X-Git-Oldrev: 458f2bf01bdd574f32bfed9510d323d4be20bbc1
-X-Git-Newrev: 3cb30131935c04ce6a8238dc5a9e95d977f8546f
-X-Patchwork-Hint: ignore
-Message-Id: <20260828144212.07907921FC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.05.x] Revert
- "package/fluidsynth: security bump to version 2.5.7"
+Cc: James Hilliard <james.hilliard1@gmail.com>, Daniel Lang <dalang@gmx.at>, 
+ Joseph Kogut <joseph.kogut@gmail.com>, 
+ Romain Naour <romain.naour@gmail.com>, 
+ Valentin Korenblit <valentinkorenblit@gmail.com>, 
+ =?utf-8?q?Beno=C3=AEt_Monin?= <benoit.monin@bootlin.com>, 
+ Gregory CLEMENT <gregory.clement@bootlin.com>, 
+ Jimmy Wesolowski <Jimmy.Wesolowski@mobileye.com>, 
+ Tawfik Bayouk <tawfik.bayouk@mobileye.com>, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
+ =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+X-Mailer: b4 0.15-dev
+X-Last-TLS-Session-Version: TLSv1.3
+Subject: [Buildroot] [PATCH 0/4] Add xdp-tools package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -67,137 +87,63 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Perale via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Perale <thomas.perale@mind.be>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: =?utf-8?q?Th=C3=A9o_Lebrun_via_buildroot?= <buildroot@buildroot.org>
+Reply-To: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/3cb30131935c04ce6a8238dc5a9e95d977f8546f
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.05.x
-
-This reverts commit a40212568cb602b949992aae4a079b36633781dc.
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
----
- Config.in.legacy                   |  6 ------
- package/fluidsynth/Config.in       | 21 ++++++++-------------
- package/fluidsynth/fluidsynth.hash |  4 ++--
- package/fluidsynth/fluidsynth.mk   | 16 +++++-----------
- 4 files changed, 15 insertions(+), 32 deletions(-)
-
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 7b2d448aba..affd1cf8c0 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,12 +146,6 @@ endif
- 
- comment "Legacy options removed in 2026.05.2"
- 
--config BR2_PACKAGE_FLUIDSYNTH_SDL2
--	bool "fluidsynth sdl2 audio support removed"
--	select BR2_LEGACY
--	help
--	  FluidSynth SDL2 audio support was removed in v2.5.0.
--
- config BR2_PACKAGE_HOSTAPD_DRIVER_HOSTAP
- 	bool "hostapd hostap driver removed"
- 	select BR2_LEGACY
-diff --git a/package/fluidsynth/Config.in b/package/fluidsynth/Config.in
-index 206824560b..66fb07f45e 100644
---- a/package/fluidsynth/Config.in
-+++ b/package/fluidsynth/Config.in
-@@ -84,11 +84,15 @@ comment "pulseaudio support needs a toolchain w/ dynamic library, wchar, threads
- 	depends on BR2_PACKAGE_PULSEAUDIO_HAS_ATOMIC
- 	depends on BR2_STATIC_LIBS || !BR2_USE_MMU || !BR2_TOOLCHAIN_HAS_THREADS
- 
--config BR2_PACKAGE_FLUIDSYNTH_SDL3
--	bool "sdl3"
--	select BR2_PACKAGE_SDL3
-+config BR2_PACKAGE_FLUIDSYNTH_SDL2
-+	bool "sdl2"
-+	depends on !BR2_STATIC_LIBS
-+	select BR2_PACKAGE_SDL2
- 	help
--	  Enable SDL3 audio support.
-+	  Enable SDL2 audio support.
-+
-+comment "SDL2 audio support needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
- 
- comment "Misc options"
- 
-@@ -110,15 +114,6 @@ config BR2_PACKAGE_FLUIDSYNTH_FLOATS
- 	  Enable 32-bit single precision float support, instead of
- 	  64-bit double precision floats for DSP samples.
- 
--config BR2_PACKAGE_FLUIDSYNTH_NATIVE_DLS
--	bool "Native DLS soundfont"
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17
--	help
--	  Enable the native DLS soundfont format support.
--
--comment "native dls soundfont support needs gcc >= 7"
--	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_7
--
- config BR2_PACKAGE_FLUIDSYNTH_READLINE
- 	bool "readline"
- 	select BR2_PACKAGE_READLINE
-diff --git a/package/fluidsynth/fluidsynth.hash b/package/fluidsynth/fluidsynth.hash
-index 0d727e75e6..9953997692 100644
---- a/package/fluidsynth/fluidsynth.hash
-+++ b/package/fluidsynth/fluidsynth.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  ce27840221ab00dd59bf27e85ecbba480c6c2a7c9fbec4243658f68f59c07f4a  fluidsynth-2.5.7.tar.gz
--sha256  20e50fe7aae3e56378ebf0417d9de904f55a0e61e4df315333e632a4d3555d95  LICENSE
-+sha256  7fb0e328c66a24161049e2b9e27c3b6e51a6904b31b1a647f73cc1f322523e88  fluidsynth-2.4.7.tar.gz
-+sha256  9b872a8a070b8ad329c4bd380fb1bf0000f564c75023ec8e1e6803f15364b9e9  LICENSE
-diff --git a/package/fluidsynth/fluidsynth.mk b/package/fluidsynth/fluidsynth.mk
-index 1d6cb118ff..e06afe4a07 100644
---- a/package/fluidsynth/fluidsynth.mk
-+++ b/package/fluidsynth/fluidsynth.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FLUIDSYNTH_VERSION = 2.5.7
-+FLUIDSYNTH_VERSION = 2.4.7
- FLUIDSYNTH_SITE = $(call github,FluidSynth,fluidsynth,v$(FLUIDSYNTH_VERSION))
- FLUIDSYNTH_LICENSE = LGPL-2.1+
- FLUIDSYNTH_LICENSE_FILES = LICENSE
-@@ -46,12 +46,6 @@ else
- FLUIDSYNTH_CONF_OPTS += -Denable-libsndfile=0
- endif
- 
--ifeq ($(BR2_PACKAGE_FLUIDSYNTH_NATIVE_DLS),y)
--FLUIDSYNTH_CONF_OPTS += -Denable-native-dls=1
--else
--FLUIDSYNTH_CONF_OPTS += -Denable-native-dls=0
--endif
--
- ifeq ($(BR2_PACKAGE_FLUIDSYNTH_PORTAUDIO),y)
- FLUIDSYNTH_CONF_OPTS += -Denable-portaudio=1
- FLUIDSYNTH_DEPENDENCIES += portaudio
-@@ -73,11 +67,11 @@ else
- FLUIDSYNTH_CONF_OPTS += -Denable-readline=0
- endif
- 
--ifeq ($(BR2_PACKAGE_FLUIDSYNTH_SDL3),y)
--FLUIDSYNTH_CONF_OPTS += -Denable-sdl3=1
--FLUIDSYNTH_DEPENDENCIES += sdl3
-+ifeq ($(BR2_PACKAGE_FLUIDSYNTH_SDL2),y)
-+FLUIDSYNTH_CONF_OPTS += -Denable-sdl2=1
-+FLUIDSYNTH_DEPENDENCIES += sdl2
- else
--FLUIDSYNTH_CONF_OPTS += -Denable-sdl3=0
-+FLUIDSYNTH_CONF_OPTS += -Denable-sdl2=0
- endif
- 
- ifeq ($(BR2_PACKAGE_SYSTEMD),y)
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+VGhpcyBpcyBhIG5ldyB0YWtlIG9uIHRoZSBzZXJpZXMgYWRkaW5nIGFuIHhkcC10b29scyBwYWNr
+YWdlIGJ5IEppbW15CkRXIFswXS4gSGVyZSB3ZSBzdGljayB0byBob3N0LWxsdm0gZm9yIGNvbXBp
+bGluZyBCUEYgcHJvZ3JhbXMgaW5zdGVhZApvZiBob3N0LWdjYy4KClNlZSB0aGlzIHNlcmllcyBh
+cyBhICJldmVyeXRoaW5nIHRoYXQgbmVlZHMgdG8gYmUgZG9uZSB0byBnZXQgd29ya2luZwp4ZHAt
+dG9vbHMgb24gYSBNSVBTIEV5ZVEgcGxhdGZvcm0iLgoKIC0gRmlyc3QgcGF0Y2ggaXMgYSBmaXgg
+aW4gYnBmdG9vbC4gSSBoZXNpdGF0ZWQgc2VuZGluZyBpdCBzZXBhcmF0ZWx5LgoKIC0gU2Vjb25k
+IHBhdGNoIGlzIGFib3V0IGFsbG93aW5nIGJwZnRvb2wgdG8gYmUgYnVpbHQgb24gTUlQUy4gSXQg
+d2FzCiAgIHByb2JhYmx5IHJlc3RyYWluZWQgb3V0IG9mIHByZWNhdXRpb24uIEkgY2FuIHRlc3Rp
+ZnkgdGhhdCBpdCB3b3Jrcy4KCiAtIFRoaXJkIHBhdGNoIGlzIGFib3V0IGFkZGluZyBhIGNvbmZp
+ZyBlbnRyeSB0byBob3N0LWxsdm0gZm9yIHdoZW4gaXQKICAgc2hvdWxkIGJ1aWxkIHRoZSBCUEYg
+YmFja2VuZC4gQ3VycmVudGx5LCBCUjJfUEFDS0FHRV9MTFZNX0JQRj15CiAgIGltcGxpZXMgaG9z
+dC1sbHZtIGhhcyB0aGUgQlBGIGJhY2tlbmQ7IHRoaXMgYmVoYXZpb3IgaXMgb2RkLgoKICAgSW5z
+dGVhZCB3ZSBhZGQgYW4gb3B0aW9uIHRoYXQgcGFja2FnZXMgbmVlZGluZyBhIEJQRiBjb21waWxl
+ciBzaG91bGQKICAgZW5hYmxlLiBOb3RlIHRoYXQgd2Ugc3VwcG9ydCBidWlsZGluZyBob3N0LWxs
+dm0gd2l0aCBCUEYgYXMgdGhlIHNvbGUKICAgdGFyZ2V0LgoKIC0gRmluYWxseSB3ZSBhZGQgdGhl
+IHhkcC10b29scyBwYWNrYWdlLiBJdCBjb21lcyB3aXRoIHR3byBvcHRpb25zOiBvbmUKICAgZm9y
+IHRoZSBwYWNrYWdlLCBvbmUgZm9yIGJ1aWxkaW5nICYgaW5zdGFsbGluZyB0aGUgdGVzdHMuIFdl
+IG5lZWQKICAgdGhyZWUgcGF0Y2hlcyBvbiB0b3Agb2YgdXBzdHJlYW0uCgpBYm91dCB0aG9zZSB4
+ZHAtdG9vbHMgcGF0Y2hlcywgdGhleSdsbCBoYXZlIHRvIGJlIHNlbnQgdXBzdHJlYW0uIEknbGwK
+YWxzbyBzZW5kIGFuIHVwc3RyZWFtIHBhdGNoIHRvIHNpbXBsaWZ5IGRpc2FibGluZyB0ZXN0czsg
+d2UgbWFuYWdlIHRvCmRpc2FibGUgdGhlbSB3aXRob3V0IGEgcGF0Y2ggYnV0IGl0J3MgYSB3b3Jr
+YXJvdW5kLiBJIHdhbnRlZCBmZWVkYmFjawpvbiB0aGUgc2VyaWVzIGFuZCB0aGUgZGlyZWN0aW9u
+IGl0IGlzIGhlYWRpbmcuCgpUaGFua3MhClRow6lvCgpbMF06IGh0dHBzOi8vbG9yZS5rZXJuZWwu
+b3JnL2J1aWxkcm9vdC9EQjlQUjA5TUI0OTg3NjNCNkZBNUE3MjIxM0NFQUYyQTZGNjlBQUBEQjlQ
+UjA5TUI0OTg3LmV1cnByZDA5LnByb2Qub3V0bG9vay5jb20vCgpTaWduZWQtb2ZmLWJ5OiBUaMOp
+byBMZWJydW4gPHRoZW8ubGVicnVuQGJvb3RsaW4uY29tPgotLS0KVGjDqW8gTGVicnVuICg0KToK
+ICAgICAgcGFja2FnZS9icGZ0b29sOiBkaXNhYmxlIGZlYXR1cmUgYXV0by1kZXRlY3Rpb24gZm9y
+IGhvc3QgYnVpbGQKICAgICAgcGFja2FnZS9icGZ0b29sOiBhbGxvdyBidWlsZGluZyBvbiBNSVBT
+IGFyY2hpdGVjdHVyZQogICAgICBwYWNrYWdlL2xsdm06IGFkZCBvcHRpb24gdG8gYnVpbGQgdGhl
+IEJQRiBiYWNrZW5kIGluIGhvc3QtbGx2bQogICAgICBwYWNrYWdlL3hkcC10b29sczogbmV3IHBh
+Y2thZ2UKCiBERVZFTE9QRVJTICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICB8ICAgMyArCiBwYWNrYWdlL0NvbmZpZy5pbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICB8ICAgMSArCiBwYWNrYWdlL0NvbmZpZy5pbi5ob3N0ICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICB8ICAgMSArCiBwYWNrYWdlL2JwZnRvb2wvQ29uZmlnLmluICAgICAgICAgICAgICAg
+ICAgICAgICAgICB8ICAgMSArCiBwYWNrYWdlL2JwZnRvb2wvYnBmdG9vbC5tayAgICAgICAgICAg
+ICAgICAgICAgICAgICB8ICAgNSArLQogcGFja2FnZS9sbHZtLXByb2plY3QvbGx2bS9Db25maWcu
+aW4uaG9zdCAgICAgICAgICAgfCAgMTAgKysKIHBhY2thZ2UvbGx2bS1wcm9qZWN0L2xsdm0vbGx2
+bS5tayAgICAgICAgICAgICAgICAgIHwgIDEyICsrLQogLi4uLzAwMDEtbGliLWJ1aWxkLUJQRi1v
+YmplY3RzLWZyZWVzdGFuZGluZy5wYXRjaCAgfCAxMTYgKysrKysrKysrKysrKysrKysrKysrCiAu
+Li4vMDAwMi1saWItdGVzdGluZy1zdXBwb3J0LWJ1c3lib3gtbWt0ZW1wLnBhdGNoICB8ICA2NCAr
+KysrKysrKysrKysKIHBhY2thZ2UveGRwLXRvb2xzL0NvbmZpZy5pbiAgICAgICAgICAgICAgICAg
+ICAgICAgIHwgIDU1ICsrKysrKysrKysKIC4uLmQtQlBGLW9iamVjdHMtd2l0aC1hc3NlbWJsZXIt
+cmF0aGVyLXRoYW4tLnBhdGNoIHwgIDU5ICsrKysrKysrKysrCiBwYWNrYWdlL3hkcC10b29scy9u
+by10ZXN0cy9NYWtlZmlsZSAgICAgICAgICAgICAgICB8ICAgMyArCiBwYWNrYWdlL3hkcC10b29s
+cy94ZHAtdG9vbHMuaGFzaCAgICAgICAgICAgICAgICAgICB8ICAgOCArKwogcGFja2FnZS94ZHAt
+dG9vbHMveGRwLXRvb2xzLm1rICAgICAgICAgICAgICAgICAgICAgfCAgNzkgKysrKysrKysrKysr
+KysKIDE0IGZpbGVzIGNoYW5nZWQsIDQxNSBpbnNlcnRpb25zKCspLCAyIGRlbGV0aW9ucygtKQot
+LS0KYmFzZS1jb21taXQ6IGUzMTNhMmQyNTkwYWY2ODllYjFmNzllNTViNWE0ODgxNTQ0MDBkYTEK
+Y2hhbmdlLWlkOiAyMDI2MDgyOC14ZHAtdG9vbHMtdGxlYi0wNTRjNGM4YzRjZmIKCkJlc3QgcmVn
+YXJkcywKLS0gIApUaMOpbyBMZWJydW4gPHRoZW8ubGVicnVuQGJvb3RsaW4uY29tPgoKX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxp
+bmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5v
+cmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
