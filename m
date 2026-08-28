@@ -4,58 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84F24C61DBD
-	for <buildroot@archiver.kernel.org>; Fri, 28 Aug 2026 14:23:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4BE0C61DD3
+	for <buildroot@archiver.kernel.org>; Fri, 28 Aug 2026 14:23:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 389E180F51;
-	Fri, 28 Aug 2026 14:23:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6776280F55;
+	Fri, 28 Aug 2026 14:23:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ixj7QnV-4l8M; Fri, 28 Aug 2026 14:23:53 +0000 (UTC)
+ id m00jIe9KCm0P; Fri, 28 Aug 2026 14:23:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787927033;
-	bh=R7mvqRgf2OnnZNX45aC9SPbt0pvZeRyAEPALfrhYGm4=;
+	s=default; t=1787927035;
+	bh=3aUbgzyTJLPm+plIjUUHkH2A4GqONvimFTuEsdVlRis=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=U619PNaWAcJ0oUIGnp5WYx7kPV5vz86J5Jlm3XxG1gtGJ4zRQxo+Hvk2jHoDuSegt
-	 heYFjggk0Wj0FLDLRT836bvtFb1jfDSSo/GGVFHUbduCvB6fqxoKI5h2ThDqo1buPx
-	 y+0c0DYXSyUe6Y9iMpHWQOBwfKak5/PK230IKNStCdeQBHplFHHIR7HToVfM/KhMOm
-	 WpW2aUYtlyU1T4kXbDQRUjX/8CJJhLF7fM9t04PJgujD6JhZnwz17ZjBisT0d3SzcT
-	 Y1A4bIT//bfkngFx2vAyD8A3SFQ2Qnn2NK20KRfAXNrGDeymKMgzJGEKFMCegAw0Sf
-	 q4aevW19Ep/KA==
+	b=NWvKOvNnLV6rDV1mnlviN8vmgBE+/+ixLy7JUL7NRKnWi3V6U5Cp9q6nNw+dJTSDL
+	 LMyvESWKAtgF1HMEZieixX2MWj8c51q8QPuXE2pHvdR+InMEFnehmRC0/r/i5kSqjc
+	 Ve0xvI0usGcOM3L60VIJqw8RYSJLoyTuwEM9N56Yb9m0ZN+kiE9pxVvE29+dDrdJCs
+	 Xz1xcDqxOrJJaef0fHpKOH7DjDc4ggAYcxi2AuwAKPNJKRnUEVOgQhNK5irE0Vs0Pd
+	 0u6zzJyhr85M5+F5/CbAH1ux8xHPc/kbUiLXEEYq2h6cQzPKaOPTU9sqTD0jj4Fq5Q
+	 WkXA40RV5STBA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8CE8F80F7F;
-	Fri, 28 Aug 2026 14:23:53 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 8C3BCD2F
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2192780F6D;
+	Fri, 28 Aug 2026 14:23:55 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8BE8CD2B
  for <buildroot@buildroot.org>; Fri, 28 Aug 2026 14:23:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 73D6180E93
+ by smtp4.osuosl.org (Postfix) with ESMTP id 77501407A0
  for <buildroot@buildroot.org>; Fri, 28 Aug 2026 14:23:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YXuNYTNcUQYG for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id s1YM2193IDff for <buildroot@buildroot.org>;
  Fri, 28 Aug 2026 14:23:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E4D0C80E1D
+ by smtp4.osuosl.org (Postfix) with ESMTP id BF95B40786
  for <buildroot@buildroot.org>; Fri, 28 Aug 2026 14:23:37 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D69DC921F9; Fri, 28 Aug 2026 14:22:40 +0000 (UTC)
+ id AE066921FA; Fri, 28 Aug 2026 14:22:40 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Fri, 28 Aug 2026 15:57:20 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 850a3c2a550854111a4ac3b1ec99ae6406b2a93b
-X-Git-Newrev: 989de112fd18dcc2b93b8ad419665f5f3c747855
+X-Git-Oldrev: 7c0eac94763b341e0d1aea60b53a95a2ca0e9571
+X-Git-Newrev: d1c9a65b6049011a73312f108d683801464531d0
 X-Patchwork-Hint: ignore
-Message-Id: <20260828142240.D69DC921F9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/go: security bump
- to version 1.26.6
+Message-Id: <20260828142240.AE066921FA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] packages/haproxy:
+ security bump to version 2.6.32
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -75,182 +75,162 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/989de112fd18dcc2b93b8ad419665f5f3c747855
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d1c9a65b6049011a73312f108d683801464531d0
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-Fixes the following security issues:
+Bugfix release with large number of (security) fixes.
 
- - x/mod/sumdb/tlog: fix transparency log tile verification bypass
+HAProxy 2.6.32 was released on 2026/07/29. It added 33 new commits
+after version 2.6.31.
 
-   A malicious GOPROXY was previously capable of forging up to two sumdb
-   tiles that allow for a requested module to bypass the GOSUMDB check and
-   persist attacker-controlled module content to a local Go module cache.
+As for the 2.8.27, the announce is an expurgated copy-paste of the 3.4.3
+announce:
 
-   This attack allows for a malicious GOPROXY to serve malicious module
-   content that cannot be detected by evaluating the transparency log.
+* stats: Two issues about the stats page, reported by Red Hat/AISLE
+  Research, were fixed.
 
-   All tiles are now correctly verified against their parents.
+  Proxies updated through the stats page while in "stats admin" mode were
+  not subject to the "stats scope" filtering, meaning a scope meant to
+  restrict which proxies are visible/actionable could be silently bypassed
+  on POST requests.
+  Separately, POST requests to the stats interface did not validate that the
+  Origin (or Referer) header matched the Host, which is now checked to
+  mitigate CSRF attacks.
 
-   In order to determine if you have been affected:
+* ssl-gencert: A memory leak on every certificate generation was fixed.
 
-   rm -r go.sum go.work.sum vendor/ && go mod tidy
+  Two temporary buffers were not freed after generating a certificate on the
+  fly, leaking memory each time a new SNI triggered certificate
+  generation. This issue was reported by Red Hat/AISLE Research.
 
-   Thanks to Filippo Valsorda (Geomys) for reporting this issue.
+* sample/protobuf: buffer overflows after pointer-shift converters, reported
+  by Red Hat/AISLE Research and Charles Vosburgh, were fixed.
 
-   This is CVE-2026-56865 and Go issue https://go.dev/issue/80744.
+  Several converters (protobuf/ungrpc field extraction, ltrim())
+  move the sample's data pointer forward on success but did not shrink the
+  sample's recorded buffer capacity accordingly. A converter chained
+  afterwards that relies on that capacity (e.g. padding via memset()) could
+  then write past the end of the buffer, leading to heap corruption or a
+  worker crash. All the affected converters now adjust the capacity
+  together with the pointer.
 
- - x/mod/sumdb: ignore unrelated, unauthenticated hashes in Lookup
+* protobuf: A nested-path validation bypass reported by Red Hat/AISLE
+  Research was fixed.
 
-   A malicious GOSUMDB was capable of serving arbitrary module content not
-   contained within the transparency log.
+  The protobuf field lookup used for the protobuf()/ungrpc() converters did
+  not strictly enforce hierarchical boundaries, so a flat sibling field
+  could incorrectly satisfy a nested-path lookup (e.g. matching a root-level
+  field as if it were nested under a parent). The lookup was rewritten as a
+  strict, non-recursive path walker that correctly bounds each nesting
+  level.
+  Separately, a crash because of deprecated protobuf group wire types was
+  fixed. These wire types are now explicitly rejected.
 
-   This attack allows for a coordinating GOPROXY and GOSUMDB to serve a
-   client malicious module content that cannot be detected by evaluating
-   the transparency log.
+* http-fetch: Two crashes reachable from health-check configurations were
+  fixed.
 
-   In order to determine if you have been affected:
+  "res.body"/"res.hdr"/... and similar response fetches assumed the
+  health-check receive buffer always held an HTX message, which is only true
+  for actual HTTP checks; on a plain TCP check, a hostile/misbehaving server
+  could craft the first bytes of its reply to be misinterpreted as HTX
+  internal fields, causing a wild read and worker crash (or leaking
+  arbitrary process memory).
+  Separately, "capture.req.hdr"/"capture.res.hdr" only validated the upper
+  bound of their index argument, so a negative capture id was accepted at
+  boot and dereferenced an out-of-bounds array entry at runtime, crashing
+  the worker on the very first request.
 
-   rm -r go.sum go.work.sum vendor/ && go mod tidy
+* slz: Several issues were fixed in the SLZ library.
 
-   Thanks to mundur for reporting this issue.
+  A stream alternating many literals in the 144-255 range with cheap
+  back-references could keep inflating indefinitely instead of falling
+  back to a stored block, exceeding the library's documented worst-case
+  output size by several percent. A new accounting mechanism now bounds
+  this overhead. Practical impact on haproxy requires tune.bufsize above
+  ~43 kB with the default reserve.
+  Five small correctness fixes inherited from upstream libslz were also
+  backported: Avoid reading up to a few bytes past the end of very short
+  inputs on architectures without fast unaligned access; stop appending an
+  extra, misplaced block to an already-finished deflate/gzip/zlib stream
+  (which could corrupt the trailing checksum in ~2% of fuzzed streams); fix
+  the Adler32 checksum accumulator sign handling on 32-bit systems
+  (affecting the zlib format only); avoid an undefined-behaviour signed left
+  shift when assembling input words byte by byte; and use the exact bit cost
+  when deciding whether to emit the last literals of a block as a stored
+  block, avoiding compressed output slightly larger than the documented
+  worst case.
 
-   This is CVE-2026-56864 and Go issue https://go.dev/issue/80745.
+* peers: A heap overflow when replicating large stick-table dictionary
+  entries was fixed.
 
- - encoding/xml: add recursion depth guard during decode
+  peer_prepare_updatemsg() never verified that a stick-table entry's
+  dictionary value (e.g. server_key, up to ~16 kB) actually fit in the
+  update message being built. Since the peers protocol is plain-text and
+  unauthenticated, a rogue or compromised peer could plant an oversized
+  entry that overflows the 16 kB trash buffer as soon as the victim
+  replicates ("teaches") it, confirmed as a heap-buffer-overflow write. The
+  function now checks the available room before encoding and fails cleanly
+  if it doesn't fit. This was reported and fixes by Matt Suiche from Tolmo
+  Inc.
 
-   Previously, DecodeElement would reset the depth counter causing it to
-   never fire; this could lead to stack exhaustion.
+And, as usual, the bunch of minor fixes here and there, mainly raised during
+AI-assisted code reviews. Most were never noticed:
 
-   This is CVE-2026-56859 and Go issue https://go.dev/issue/80481.
+* HTX API: Some bugs about how the HTX API was used were fixed here and
+  there.
 
- - net/http: apply ReadHeaderTimeout when doing unencrypted HTTP/2 check
+* http-act: Double-frees and a couple of state bugs on parsing errors were
+  fixed.
 
-   When a server is configured to support unencrypted HTTP/2, it reads a few
-   bytes from each new connection to see if they contain the HTTP/2 client
-   preface.  Previously, this was being done with no timeout applied.
-   ReadHeaderTimeout is now applied for this.
+* http-fetch/http-ana/http-htx: Few out-of-bounds reads were fixed.
 
-   This is CVE-2026-56853 and Go issue https://go.dev/issue/80205.
+* http-conv: The last input character could be lost when calling url-dec
+  converter, when the input buffer was full. This was fixed by failing the
+  converter in that case.
 
- - net/url: avoid quadratic complexity in resolvePath
+* mux-h1: An extra 200ms delay was observed on some H2-to-H1 messages
+  because the end of the message was not always properly detected. This
+  case is now properly handled.
 
-   Previously, resolving relative paths containing parent directory (..)
-   segments performed string conversions and buffer rewrites on each step,
-   resulting in quadratic time complexity and high memory allocation
-   overhead.
+* sample: An edge case in be2hex() was fixed.
 
-   Now, path resolution operates on a byte buffer using index-based
-   backtracking for ..  segments, eliminating the quadratic time complexity
-   and significantly reducing memory allocations.
+For more details, see the announcement:
+https://www.mail-archive.com/haproxy@formilux.org/msg47353.html
 
-   This is CVE-2026-56860 and Go issue https://go.dev/issue/80494.
-
- - golang.org/x/net/dns/dnsmessage: panic when parsing invalid SVCB record
-
-   Parsing an invalid SVCB or HTTPS RR can panic when the size of a
-   parameter value overflows the message buffer.
-
-   Thanks to Mundur (https://github.com/M0nd0R) for reporting this issue.
-
-   This is CVE-2026-46600 and Go issue https://go.dev/issue/79795.
-
- - crypto/tls: limit handshake messages we are willing to accept post-handshake
-
-   Previously, we always counted handshake messages, such as KeyUpdate, as
-   state-advancing, regardless of whether a handshake has been completed or
-   not.  As a result, a malicious client can keep sending KeyUpdate messages
-   to force the server to keep performing key derivation operations
-   indefinitely.
-
-   Thanks to Qi Deng of Aurascape.ai for reporting this issue.
-
-   This is CVE-2026-56862 and Go issue https://go.dev/issue/80528.
-
- - html/template: fix Javascript regexp context tracking
-
-   Previously, pathological inputs could close an unescaped / early,
-   allowing for attack-controlled data to inject arbitrary content,
-   potentially leading to XSS.
-
-   Thanks to Ali Sherif for reporting this issue.
-
-   This is CVE-2026-56858 and Go issue https://go.dev/issue/80435.
-
- - x/net/idna: failure to reject ASCII-only Punycode-encoded labels
-
-   The ToASCII and ToUnicode functions incorrectly accepted Punycode-encoded
-   labels that decode to an ASCII-only label.  For example,
-   ToUnicode("xn--example-.com") incorrectly returned the name "example.com"
-   rather than an error.
-
-   The idna package implements the processing algorithm from UTS 46.  Older
-   versions of UTS 46 included a specification bug which permitted multiple
-   ASCII labels to decode to the same Unicode label.  UTS 46 revision 33
-   fixed the specification bug.  The idna package now implements the updated
-   specification.
-
-   This behavior can lead to privilege escalation in programs using the idna
-   package.  For example, a program which performs privilege checks on the
-   ASCII hostname may reject "example.com" but permit "xn--example-.com".
-   If that program subsequently converts the ASCII hostname to Unicode, it
-   will inadvertently permits access to the Unicode name "example.com".
-
-   Thanks to KC1zs4 (https://github.com/KC1zs4) for reporting this issue.
-
-   This is CVE-2026-39821 and Go issue https://go.dev/issue/78760.
-
- - encoding/asn1: enforce maximum recursion depth
-
-   Enforce a recursion limit in Unmarshal to prevent stack exhaustion when
-   parsing deeply-nested, recursive structures.
-
-   Thanks to Marwan Atia (marwansamir688@gmail.com) for reporting this issue.
-
-   This is CVE-2026-33818 and Go issue https://go.dev/issue/80405.
-
+Signed-off-by: Fred Lefranc <fred.lefranc.evs@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 9e9110bf23a86d1e312e23fc19921cd911f53861)
+(cherry picked from commit 335a57525f28425fa076e1b2098679dc2211f8e4)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- package/go/go.hash | 14 +++++++-------
- package/go/go.mk   |  2 +-
- 2 files changed, 8 insertions(+), 8 deletions(-)
+ package/haproxy/haproxy.hash | 4 ++--
+ package/haproxy/haproxy.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index 6c9c20be69..1c43cabf7b 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,9 +1,9 @@
- # sha256 checksum from https://go.dev/dl/
--sha256  495be4bc87176ac567392e5b4116abd98466d33d7b49d41e764ccc6976b2dc42  go1.26.5.src.tar.gz
--sha256  88c162b204e6eefcc32499453b492e80209f4a4c78c33092636901c540fb0d05  go1.26.5.linux-386.tar.gz
--sha256  5c2c3b16caefa1d968a94c1daca04a7ca301a496d9b086e17ad77bb81393f053  go1.26.5.linux-amd64.tar.gz
--sha256  fe4789e92b1f33358680864bbe8704289e7bb5fc207d80623c308935bd696d49  go1.26.5.linux-arm64.tar.gz
--sha256  6dae9edab81c13bccf962dec15f1fd2ec26c14a6821b4d2c92dab4130c289d7a  go1.26.5.linux-armv6l.tar.gz
--sha256  c5d60e2b303bb612f20cd82786594b64874e73b35134025e27d3390bf284ae43  go1.26.5.linux-ppc64le.tar.gz
--sha256  09ce3c504c0323968b75a717244dca4f25cd4cf0443e5ff6bc0bfa74add89fa7  go1.26.5.linux-s390x.tar.gz
-+sha256  a0721c54c688901448d77ad9b3ec7ea7c474730755ff891382e92ecb93ff2cb1  go1.26.6.src.tar.gz
-+sha256  f09a71029fc5cd2940fbe36b0eb1fb2d8f3407cd6adb6b7b4de3eaf04007f8c4  go1.26.6.linux-386.tar.gz
-+sha256  708effb774be8237570d0add163225abbdfaf4fca28b2611df167beba4feef89  go1.26.6.linux-amd64.tar.gz
-+sha256  d0507e9e9d7fe012aae570108cbd76c15de879e17130ab8cb90d4d7445cb1f2e  go1.26.6.linux-arm64.tar.gz
-+sha256  e1379a2fe77bd30fa29833074388247e7c65416e09279f746f20de2d5cf4dfea  go1.26.6.linux-armv6l.tar.gz
-+sha256  232b65543a42eda95df6a63f76235c1795bb535eba5c74e509faec71bc648388  go1.26.6.linux-ppc64le.tar.gz
-+sha256  958757933d38172dd544085d253c8738cf09793d24c8bc0422e5e1e1fffa4fde  go1.26.6.linux-s390x.tar.gz
- sha256  911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index 265d3aa880..df1023c19b 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -7,7 +7,7 @@
- # When bumping this to 1.27 (or beyond), remove the workaround for
- # upstream issue https://github.com/golang/go/issues/77436, below
- # (i.e. revert the commit adding these lines).
--GO_VERSION = 1.26.5
-+GO_VERSION = 1.26.6
+diff --git a/package/haproxy/haproxy.hash b/package/haproxy/haproxy.hash
+index 6bb5dda804..2575c408d7 100644
+--- a/package/haproxy/haproxy.hash
++++ b/package/haproxy/haproxy.hash
+@@ -1,5 +1,5 @@
+-# From: http://www.haproxy.org/download/2.6/src/haproxy-2.6.27.tar.gz.sha256
+-sha256  ccdaf08e8653f9651992212b51af0b5513c2e2cf0cd822ca67c94cffe10386a6  haproxy-2.6.27.tar.gz
++# From: http://www.haproxy.org/download/2.6/src/haproxy-2.6.32.tar.gz.sha256
++sha256  8791585ee3bd24cde652d1d840ac7b1f73f086d5e9ec41c5e079592703ea52a4  haproxy-2.6.32.tar.gz
+ # Locally computed:
+ sha256  0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28  LICENSE
+ sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  doc/lgpl.txt
+diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
+index a61c66d01f..9c3eb690ca 100644
+--- a/package/haproxy/haproxy.mk
++++ b/package/haproxy/haproxy.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- HOST_GO_GOPATH = $(HOST_DIR)/share/go-path
- HOST_GO_HOST_CACHE = $(HOST_DIR)/share/host-go-cache
+ HAPROXY_VERSION_MAJOR = 2.6
+-HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).27
++HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).32
+ HAPROXY_SITE = http://www.haproxy.org/download/$(HAPROXY_VERSION_MAJOR)/src
+ HAPROXY_LICENSE = GPL-2.0+ and LGPL-2.1+ with exceptions
+ HAPROXY_LICENSE_FILES = LICENSE doc/lgpl.txt doc/gpl.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
