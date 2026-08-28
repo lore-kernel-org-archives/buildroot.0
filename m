@@ -1,61 +1,61 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E20AC61DD3
-	for <buildroot@archiver.kernel.org>; Fri, 28 Aug 2026 14:23:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 949D2C61DD9
+	for <buildroot@archiver.kernel.org>; Fri, 28 Aug 2026 14:23:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6597B80F78;
-	Fri, 28 Aug 2026 14:23:51 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ErtQlYZ5IGyL; Fri, 28 Aug 2026 14:23:50 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787927030;
-	bh=/Nd0NLZDmbwf0OETgDREqKPI19zLFjbFzwjjgKiiXNY=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=maMGLL8b9d/24fAypHCHTzF1U5uh+5s7AP6j5uBvalOexYVa3ASCarR2vkI4wrvfg
-	 r5soSqXrUSWpd5bm1WvEpuj/2WxbME7SMhEe1XDErDzdYVPFP0ckLOTjKG2E99pDuN
-	 MJJEZ4DN7NF9W7wywHVnQLQi9i3MLBtIWkDnHZCv9HHpTUub23ib/rEiYH4ufP9QMK
-	 mEvtKaocwdFPLPBsYWhwxMu4Fy95HCJDSc2kcqXf9ApXVhMFw504DuZnF7hEmtMDg2
-	 DChECNsAFW2btxGs3gF1pk/01Dd7VL/aErpVg29AnOhEuy4p4WvXD4l5niJwqPf5ML
-	 1gOQOIVbfHmfg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 48ACF80F73;
-	Fri, 28 Aug 2026 14:23:50 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 7C0C6D2D
- for <buildroot@buildroot.org>; Fri, 28 Aug 2026 14:23:39 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5E18A6072C
- for <buildroot@buildroot.org>; Fri, 28 Aug 2026 14:23:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5B78F6083D;
+	Fri, 28 Aug 2026 14:23:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id j35chIWFUugK for <buildroot@buildroot.org>;
+ id 27i5CMsIFXAG; Fri, 28 Aug 2026 14:23:52 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1787927032;
+	bh=Rb6vqF8Bf7avXKo7I3mQYg+FytSLwOZ6Y2ZszCUejGY=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=FTlkBYVcNnnm7LAlq8/hgVctKHlRawdfCynVse/XNTCqccC9w3t52N/g7CZag5H1x
+	 hUVA9vkNelzQvNechx2hrSVemcIrBVpLgeMRaD7KC3rdOWho1J8rqHMiTDKfEHgkiR
+	 MDIX9Pnox2J51AaonbP69FyNn/ihA4MV5HOToNcJ7eMAYV++gBSRyuvx9EVyuQJS6K
+	 dXWj/DuX3V0srUVZ2lLBa6kgEgt9tQhL1ElPrlSC/8N0WovjEZX7LttxkQ1djSmbjn
+	 Bsi6e5TRlsqm7g/LBF/VTsubBH6WWfcORii8+h3JZt50Rq1d6a3asZhwycKBG4TNk8
+	 kfPKm1jZhtFHw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7A012607EC;
+	Fri, 28 Aug 2026 14:23:52 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7DAB8D2E
+ for <buildroot@buildroot.org>; Fri, 28 Aug 2026 14:23:39 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 701FB403A6
+ for <buildroot@buildroot.org>; Fri, 28 Aug 2026 14:23:39 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dPuSq2yLd1pR for <buildroot@buildroot.org>;
  Fri, 28 Aug 2026 14:23:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 80DB66072E
+ by smtp2.osuosl.org (Postfix) with ESMTP id A3C24403A1
  for <buildroot@buildroot.org>; Fri, 28 Aug 2026 14:23:38 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7F798921FA; Fri, 28 Aug 2026 14:22:41 +0000 (UTC)
+ id A182E921DD; Fri, 28 Aug 2026 14:22:41 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Fri, 28 Aug 2026 15:57:20 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 87b425ca6dab61fc8a202f8570c91a725d1cbebd
-X-Git-Newrev: 0f853df25fd7908d263d7854990011e86e9cacaa
+X-Git-Oldrev: cdb6b23824b17799cd999a481d2c75cb64bb38c9
+X-Git-Newrev: 4f1d3b786deb4e234bd4a7e20bd9c975ee544017
 X-Patchwork-Hint: ignore
-Message-Id: <20260828142241.7F798921FA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/libssh2: fix
- CVE-2026-66033
+Message-Id: <20260828142241.A182E921DD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x]
+ package/linux-tools/S10hyperv: fix invalid return value
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,109 +70,81 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Titouan Christophe via buildroot <buildroot@buildroot.org>
 Reply-To: Titouan Christophe <titouan.christophe@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8017974866767740920=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8017974866767740920==
-Content-Type: text/plain
-
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/0f853df25fd7908d263d7854990011e86e9cacaa
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/4f1d3b786deb4e234bd4a7e20bd9c975ee544017
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-Backport the fix for CVE-2026-66033.
+In both start() and stop(), ret is only assigned on failure. When
+hypervkvpd starts or stops successfully, return "$ret" expands to an
+empty string and causes:
 
-The OpenSSL AES-GCM cipher path lacks runtime bounds checks around the
-input block size. A malformed packet can therefore lead to an
-out-of-bounds read or write.
+  /etc/init.d/S10hyperv: return: line 31: Illegal number:
 
-Use Debian's libssh2 1.11.1 backport of the upstream fix.
+Those double quotes were added in Buildroot commit [1], to fix a
+new ShellCheck warning at that time. This was not a complete fix.
 
-Signed-off-by: Stefan Müller <stefan.mueller@rey-technology.com>
-[Julien: add links to Debian patches]
+Only removing the double quote would reintroduce the ShellCheck
+warning. This would also reintroduce a check-package error.
+
+Since a bare return is equivalent to a "return 0", this commit
+also initializes with ret=0. Doing so will tell ShellCheck "ret" is
+an integer. Therefore, the ShellCheck warning will no longer be
+reported.
+
+This commit fixes the invalid return value by removing the double
+quotes and initialzing "ret=0".
+
+[1] https://gitlab.com/buildroot.org/buildroot/-/commit/c4173d8b08525f260fea8a2a1e805b806bcba9fc
+
+Signed-off-by: Benjamin DeCamp <benjamin8532@protonmail.com>
+[Julien:
+ - add "ret=0" initialization in script to fix check-package error
+ - add extra info in the commit log
+]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 6755a00cd23e52cee0085cf2a16f29042731bc0c)
+(cherry picked from commit 667335cd187150c5afebac2a278f92d5b6ef744d)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- .../0008-openssl-fix-AES-GCM-bounds-checks.patch   | 45 ++++++++++++++++++++++
- package/libssh2/libssh2.mk                         |  3 ++
- 2 files changed, 48 insertions(+)
+ package/linux-tools/S10hyperv | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/libssh2/0008-openssl-fix-AES-GCM-bounds-checks.patch b/package/libssh2/0008-openssl-fix-AES-GCM-bounds-checks.patch
-new file mode 100644
-index 0000000000..4d8eed0643
---- /dev/null
-+++ b/package/libssh2/0008-openssl-fix-AES-GCM-bounds-checks.patch
-@@ -0,0 +1,45 @@
-+From a2ed82d40964bbc0d64cd717aa0a5a892117d2e6 Mon Sep 17 00:00:00 2001
-+From: Viktor Szakats <commit@vsz.me>
-+Date: Thu, 23 Jul 2026 10:32:04 +0200
-+Subject: [PATCH] openssl: fix potential OOB read/write with AES-GCM in
-+ `ssh2_cipher_crypt()`
-+
-+By applying two bounds checks to non-debug builds.
-+
-+Reported-by: Vladimir Eli Tokarev
-+Fixes GHSA-c4f7-cvfc-33j7
-+Follow-up to 3c953c05d67eb1ebcfd3316f279f12c4b1d600b4 #797
-+
-+Closes #2401
-+Forwarded: not-needed
-+
-+CVE: CVE-2026-66033
-+Upstream: https://sources.debian.org/patches/libssh2/1.11.1-6/CVE-2026-66033.patch/
-+Upstream: https://github.com/libssh2/libssh2/commit/a2ed82d40964bbc0d64cd717aa0a5a892117d2e6
-+Signed-off-by: Stefan Müller <stefan.mueller@rey-technology.com>
-+---
-+ src/openssl.c | 10 ++++++----
-+ 1 file changed, 6 insertions(+), 4 deletions(-)
-+
-+--- a/src/openssl.c
-++++ b/src/openssl.c
-+@@ -1042,13 +1042,15 @@
-+     const int aadlen = (is_aesgcm && IS_FIRST(firstlast)) ? 4 : 0;
-+     /* size of AT, if present */
-+     const int authenticationtag = IS_LAST(firstlast) ? authlen : 0;
-+-    /* length to encrypt */
-+-    const int cryptlen = (unsigned int)blocksize - aadlen - authenticationtag;
-++    unsigned int cryptlen; /* length to encrypt */
-+
-+     (void)algo;
-+
-+-    assert(blocksize <= sizeof(buf));
-+-    assert(cryptlen >= 0);
-++    if(blocksize > sizeof(buf) ||
-++       blocksize < (size_t)(aadlen + authenticationtag))
-++        return 1;
-++
-++    cryptlen = (unsigned int)blocksize - aadlen - authenticationtag;
-+
-+ #if LIBSSH2_AES_GCM
-+     /* First block */
-diff --git a/package/libssh2/libssh2.mk b/package/libssh2/libssh2.mk
-index 583ed56c1c..a3c0b6a67f 100644
---- a/package/libssh2/libssh2.mk
-+++ b/package/libssh2/libssh2.mk
-@@ -30,6 +30,9 @@ LIBSSH2_IGNORE_CVES += CVE-2025-15661
- # 0007-sftp-prevent-dangling-pointer-after-free.patch
- LIBSSH2_IGNORE_CVES += CVE-2026-66032
+diff --git a/package/linux-tools/S10hyperv b/package/linux-tools/S10hyperv
+index be9ed2c5df..63424f5ae2 100644
+--- a/package/linux-tools/S10hyperv
++++ b/package/linux-tools/S10hyperv
+@@ -24,11 +24,12 @@ start_one() {
+ }
  
-+# 0008-openssl-fix-AES-GCM-bounds-checks.patch
-+LIBSSH2_IGNORE_CVES += CVE-2026-66033
-+
- ifeq ($(BR2_PACKAGE_LIBSSH2_MBEDTLS),y)
- LIBSSH2_DEPENDENCIES += mbedtls
- LIBSSH2_CONF_OPTS += --with-libmbedcrypto-prefix=$(STAGING_DIR)/usr \
-
---===============8017974866767740920==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+ start() {
++	ret=0
+ 	# shellcheck disable=SC2086 # we need the word splitting
+ 	for prog in ${PROGS}; do
+ 		start_one "${prog}" || ret=$?
+ 	done
+-	return "$ret"
++	return $ret
+ }
+ 
+ stop_one() {
+@@ -45,11 +46,12 @@ stop_one() {
+ }
+ 
+ stop() {
++	ret=0
+ 	# shellcheck disable=SC2086 # we need the word splitting
+ 	for prog in ${PROGS}; do
+ 		stop_one "${prog}" || ret=$?
+ 	done
+-	return "$ret"
++	return $ret
+ }
+ 
+ restart() {
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8017974866767740920==--
