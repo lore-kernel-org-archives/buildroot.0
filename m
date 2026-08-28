@@ -4,58 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B7B7C61DCB
-	for <buildroot@archiver.kernel.org>; Fri, 28 Aug 2026 14:24:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF092C61DCB
+	for <buildroot@archiver.kernel.org>; Fri, 28 Aug 2026 14:24:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 26714810EC;
-	Fri, 28 Aug 2026 14:24:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AD563810EF;
+	Fri, 28 Aug 2026 14:24:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cTNDRrZywrh9; Fri, 28 Aug 2026 14:24:19 +0000 (UTC)
+ id sPBrREOR47Yr; Fri, 28 Aug 2026 14:24:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787927059;
-	bh=vjGJUhiMSpMcx6KFvMj2PY+duqEiAFacQHFZw850kNg=;
+	s=default; t=1787927060;
+	bh=fgiyci4eeuCVFUi0u/nbi18OIXNga/ocoBtObCFSmhI=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=BYI5MKs302iqIRNQxaSD+crCbi9R6jP0zRklhf1v32DiEzfnwacE3SjFDM1e9Z6oQ
-	 UumWE8pyunXSsb+NjB6dAmjqBW9ycpB3DlsUZEcJ4ej+s4d+f2PFGmNcN8pALNx/U4
-	 eCLTVbrj8/UimsNulUnCr0LL9fzvuyn6on6Lc0CNZCq9r5DxwUzU6QhQ+JdqZV9ZBb
-	 sVE6nC8Zfn1So3kmTP0w0URKNkFfT3wFGlv0odUiGRhd/ch975KG9dY3A2OaE3wxzh
-	 LafDM7oVMlJHZvDQZej88dhmsEsiQyoBQLKd8BhGwhJPiIz+M+5yBrqv415DEFMbQU
-	 QZj0Ks9Pvxviw==
+	b=FoXHb5B0qLxxNdwIAEPhDvqOG+33Wiz+HwsJLd2Jr21XRgWTlR+m7H5CsdhkpVsfa
+	 iG9StKyU4nHiqpxMgGlUz5Zpp8sWjY7liHqpp3SjGwH87nDEj8jJRNmuGTgYEp8UM6
+	 LlOcjFN53DstQahGC42y/kxsCzsooy+HGOrQMXCRSqENV32NJ74HaFj14wymf5dBxN
+	 8NGn2rVQ7+vBvT5RR+Eg6JIZuUObQkJ+nch+jlVh340D0WTLnalBZITty4DLbVHt7K
+	 +Fj74dRdo/nyt5FcjeVojArtumGcLrBAfMXb+MJn2CXFl0q/57mk1YDev55+5wYj8O
+	 lX+mCM62+g/UA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 524CB810D5;
-	Fri, 28 Aug 2026 14:24:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9CFE8810DE;
+	Fri, 28 Aug 2026 14:24:20 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 5B451386
- for <buildroot@buildroot.org>; Fri, 28 Aug 2026 14:23:41 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 008EDD28
+ for <buildroot@buildroot.org>; Fri, 28 Aug 2026 14:23:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 41D98407FB
- for <buildroot@buildroot.org>; Fri, 28 Aug 2026 14:23:41 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E56C240792
+ for <buildroot@buildroot.org>; Fri, 28 Aug 2026 14:23:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id r9JmmzXR12HO for <buildroot@buildroot.org>;
- Fri, 28 Aug 2026 14:23:38 +0000 (UTC)
+ id FH3mcxdjY_jZ for <buildroot@buildroot.org>;
+ Fri, 28 Aug 2026 14:23:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 133FA407E3
+ by smtp4.osuosl.org (Postfix) with ESMTP id DEE9F4085C
  for <buildroot@buildroot.org>; Fri, 28 Aug 2026 14:23:38 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1199B921F9; Fri, 28 Aug 2026 14:22:41 +0000 (UTC)
+ id DCF1F921DD; Fri, 28 Aug 2026 14:22:41 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 28 Aug 2026 15:57:20 +0200
+Date: Fri, 28 Aug 2026 15:57:21 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 13b42633d37d516e667abe3b4081ad67d0e99c8a
-X-Git-Newrev: a6c86f85118caaec7e07188947f10fa38214e614
+X-Git-Oldrev: 367133ac70752cb9b8079f50ad237abe39504628
+X-Git-Newrev: 8024b6c3f0da2c711a6fe5f964fe1298e682e8d9
 X-Patchwork-Hint: ignore
-Message-Id: <20260828142241.1199B921F9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package: udisks: add
- patches for CVE-2026-7867
+Message-Id: <20260828142241.DCF1F921DD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/gcc-bare-metal:
+ bump to 14.4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,1017 +70,695 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Titouan Christophe via buildroot <buildroot@buildroot.org>
 Reply-To: Titouan Christophe <titouan.christophe@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2120263527501737790=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2120263527501737790==
-Content-Type: text/plain
-
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/a6c86f85118caaec7e07188947f10fa38214e614
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/8024b6c3f0da2c711a6fe5f964fe1298e682e8d9
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-This fixes the following vulnerability:
-- CVE-2026-7867:
-    A flaw was found in udisks2. A local attacker with an active console
-    session can exploit insufficient authorization checking on the 'as-
-    user' option in the org.freedesktop.UDisks2.Filesystem.Mount() D-Bus
-    method. This allows the attacker to spoof the 'as-user' parameter,
-    mounting filesystems on behalf of arbitrary users, including
-    privileged accounts. This can lead to local privilege escalation
-    through mount point injection and manipulation of the mount namespace
-    visible to privileged users.
-    https://www.cve.org/CVERecord?id=CVE-2026-7867
+See the announcement:
+https://gcc.gnu.org/pipermail/gcc-announce/2026/000192.html
 
-Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>7
-(alternative to commit 93049b2559b4e87a6d03cf8c1b0125ffeab86477)
-[Titouan:
-    - Add upstream, SoB, CVE tags in patches
-    - Add UDISKS_IGNORE_CVES entry
-    - Add CVE description in the commit message
-]
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- ...filesystem-Separate-real-caller-identity-.patch | 252 +++++++++++++++
- ...filesystem-Rework-fstab-mount-authorizati.patch | 211 +++++++++++++
- ...filesystem-Log-real-caller-uid-for-as-use.patch |  57 ++++
- ...nutil-Pass-as-user-target-to-polkit-detai.patch |  43 +++
- ...ecurity-tests-for-as-user-mount-authoriza.patch | 351 +++++++++++++++++++++
- package/udisks/udisks.mk                           |   7 +
- 6 files changed, 921 insertions(+)
+ ...icroblaze-add-atomic-test-and-set-support.patch | 286 ---------------------
+ ...libcody-Make-it-buildable-by-C-11-to-C-26.patch | 261 -------------------
+ ...sstream-and-memory-include-above-safe-cty.patch |  78 ------
+ package/gcc-bare-metal/gcc-bare-metal.hash         |   4 +-
+ package/gcc-bare-metal/gcc-bare-metal.mk           |   2 +-
+ 5 files changed, 3 insertions(+), 628 deletions(-)
 
-diff --git a/package/udisks/0001-udiskslinuxfilesystem-Separate-real-caller-identity-.patch b/package/udisks/0001-udiskslinuxfilesystem-Separate-real-caller-identity-.patch
-new file mode 100644
-index 0000000000..9c490ae86c
---- /dev/null
-+++ b/package/udisks/0001-udiskslinuxfilesystem-Separate-real-caller-identity-.patch
-@@ -0,0 +1,252 @@
-+From 2d97818f41fbeb645fbb7b0373ed448bd26503f6 Mon Sep 17 00:00:00 2001
-+From: Tomas Bzatek <tbzatek@redhat.com>
-+Date: Tue, 28 Apr 2026 19:10:09 +0200
-+Subject: [PATCH] udiskslinuxfilesystem: Separate real caller identity from
-+ as-user target
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+When the 'as-user' option is specified in Filesystem.Mount(), the code
-+previously overwrote caller_uid/caller_gid with the target user's identity.
-+This meant downstream functions received a uid they believed was the
-+D-Bus caller's, but was actually the target's.
-+
-+Introduce effective_uid/effective_gid/effective_user_name to hold the
-+as-user target identity (or the caller's identity when as-user is not
-+set). The real D-Bus caller identity is now always resolved into
-+caller_uid/caller_gid and used for authorization-related decisions
-+(setup_by_user, on_user_seat checks), while effective_* is used for
-+mount point calculation, run_as_uid/run_as_gid, and state tracking.
-+
-+Reported-by: Azizcan Daştan <azizcan.dastan5@gmail.com>
-+Reported-by: Özlem Ozan <oozan1725@gmail.com>
-+Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
-+(cherry picked from commit 397eea88d58f77f6e02d537c4c961201b9245943)
-+---
-+CVE: CVE-2026-7867
-+Upstream: https://github.com/storaged-project/udisks/commit/2d97818f41fbeb645fbb7b0373ed448bd26503f6
-+Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
-+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-+---
-+ src/udiskslinuxfilesystem.c | 93 +++++++++++++++++++++----------------
-+ 1 file changed, 53 insertions(+), 40 deletions(-)
-+
-+diff --git a/src/udiskslinuxfilesystem.c b/src/udiskslinuxfilesystem.c
-+index 9f4880ad..ebdd2e05 100644
-+--- a/src/udiskslinuxfilesystem.c
-++++ b/src/udiskslinuxfilesystem.c
-+@@ -905,7 +905,8 @@ handle_mount_fstab (UDisksDaemon          *daemon,
-+                     UDisksObject          *object,
-+                     uid_t                  caller_uid,
-+                     gid_t                  caller_gid,
-+-                    gboolean               mount_other_user,
-++                    uid_t                  effective_uid,
-++                    gid_t                  effective_gid,
-+                     const gchar           *mount_point_to_use,
-+                     const gchar           *fstab_mount_options,
-+                     GDBusMethodInvocation *invocation,
-+@@ -936,7 +937,7 @@ handle_mount_fstab (UDisksDaemon          *daemon,
-+        * will be replaced by the name of the drive/device in question
-+        */
-+       message = N_("Authentication is required to mount $(drive)");
-+-      if (mount_other_user)
-++      if (caller_uid != effective_uid)
-+         {
-+           action_id = "org.freedesktop.udisks2.filesystem-mount-other-user";
-+         }
-+@@ -981,14 +982,14 @@ handle_mount_fstab (UDisksDaemon          *daemon,
-+       job = udisks_daemon_launch_simple_job (daemon,
-+                                              UDISKS_OBJECT (object),
-+                                              "filesystem-mount",
-+-                                             mount_fstab_as_root ? 0 : caller_uid,
-++                                             mount_fstab_as_root ? 0 : effective_uid,
-+                                              NULL /* cancellable */);
-+ 
-+       /* XXX: using run_as_uid for root doesn't work even if the caller is already root */
-+-      if (!mount_fstab_as_root && caller_uid != 0)
-++      if (!mount_fstab_as_root && effective_uid != 0)
-+         {
-+-          BDExtraArg uid_arg = { g_strdup ("run_as_uid"), g_strdup_printf ("%d", caller_uid) };
-+-          BDExtraArg gid_arg = { g_strdup ("run_as_gid"), g_strdup_printf ("%d", caller_gid) };
-++          BDExtraArg uid_arg = { g_strdup ("run_as_uid"), g_strdup_printf ("%d", effective_uid) };
-++          BDExtraArg gid_arg = { g_strdup ("run_as_gid"), g_strdup_printf ("%d", effective_gid) };
-+           const BDExtraArg *extra_args[3] = { &uid_arg, &gid_arg, NULL };
-+ 
-+           success = bd_fs_mount (NULL, mount_point_to_use, NULL, NULL, extra_args, &error);
-+@@ -1066,8 +1067,9 @@ handle_mount_dynamic (UDisksDaemon          *daemon,
-+                       UDisksObject          *object,
-+                       uid_t                  caller_uid,
-+                       gid_t                  caller_gid,
-+-                      const gchar           *caller_user_name,
-+-                      gboolean               mount_other_user,
-++                      uid_t                  effective_uid,
-++                      gid_t                  effective_gid,
-++                      const gchar           *effective_user_name,
-+                       gchar                **mount_point_to_use,
-+                       gboolean              *mpoint_persistent,
-+                       GDBusMethodInvocation *invocation,
-+@@ -1127,7 +1129,7 @@ handle_mount_dynamic (UDisksDaemon          *daemon,
-+    * will be replaced by the name of the drive/device in question
-+    */
-+   message = N_("Authentication is required to mount $(drive)");
-+-  if (mount_other_user)
-++  if (caller_uid != effective_uid)
-+     {
-+       action_id = "org.freedesktop.udisks2.filesystem-mount-other-user";
-+     }
-+@@ -1161,9 +1163,9 @@ handle_mount_dynamic (UDisksDaemon          *daemon,
-+   /* Calculate mount point (guaranteed to be valid UTF-8) */
-+   *mount_point_to_use = calculate_mount_point (daemon,
-+                                                block,
-+-                                               caller_uid,
-+-                                               caller_gid,
-+-                                               caller_user_name,
-++                                               effective_uid,
-++                                               effective_gid,
-++                                               effective_user_name,
-+                                                fs_type_to_use,
-+                                                mpoint_persistent,
-+                                                &error);
-+@@ -1178,7 +1180,7 @@ handle_mount_dynamic (UDisksDaemon          *daemon,
-+   /* Calculate mount options (guaranteed to be valid UTF-8) */
-+   mount_options = udisks_linux_calculate_mount_options (daemon,
-+                                                         block,
-+-                                                        caller_uid,
-++                                                        effective_uid,
-+                                                         fs_signature,
-+                                                         fs_type_to_use,
-+                                                         options,
-+@@ -1258,14 +1260,16 @@ handle_mount (UDisksFilesystem      *filesystem,
-+   UDisksBlock *block;
-+   UDisksDaemon *daemon;
-+   UDisksState *state = NULL;
-+-  gchar *opt_as_user = NULL;
-++  const gchar *opt_as_user = NULL;
-+   uid_t caller_uid;
-+   gid_t caller_gid;
-++  uid_t effective_uid = 0;
-++  gid_t effective_gid = 0;
-++  gchar *effective_user_name = NULL;
-+   const gchar * const *existing_mount_points;
-+   gchar *mount_point_to_use = NULL;
-+   gboolean mpoint_persistent = TRUE;
-+   gchar *fstab_mount_options = NULL;
-+-  gchar *caller_user_name = NULL;
-+   GError *error = NULL;
-+   gboolean system_managed = FALSE;
-+   gchar *device = NULL;
-+@@ -1323,35 +1327,42 @@ handle_mount (UDisksFilesystem      *filesystem,
-+       goto out;
-+     }
-+ 
-++  /* Always resolve the real D-Bus caller identity */
-++  if (!udisks_daemon_util_get_caller_uid_sync (daemon,
-++                                               invocation,
-++                                               NULL /* GCancellable */,
-++                                               &caller_uid,
-++                                               &error))
-++    {
-++      g_dbus_method_invocation_return_gerror (invocation, error);
-++      g_clear_error (&error);
-++      goto out;
-++    }
-++
-++  if (!udisks_daemon_util_get_user_info (caller_uid,
-++                                         &caller_gid,
-++                                         opt_as_user ? NULL : &effective_user_name,
-++                                         &error))
-++    {
-++      g_dbus_method_invocation_return_gerror (invocation, error);
-++      g_clear_error (&error);
-++      goto out;
-++    }
-++
-+   if (opt_as_user)
-+     {
-+-      if (!udisks_daemon_util_get_user_info_by_name (opt_as_user, &caller_uid, &caller_gid, &error))
-++      if (!udisks_daemon_util_get_user_info_by_name (opt_as_user, &effective_uid, &effective_gid, &error))
-+         {
-+           g_dbus_method_invocation_return_gerror (invocation, error);
-+           g_clear_error (&error);
-+           goto out;
-+         }
-+-      caller_user_name = g_strdup (opt_as_user);
-++      effective_user_name = g_strdup (opt_as_user);
-+     }
-+   else
-+     {
-+-      if (!udisks_daemon_util_get_caller_uid_sync (daemon,
-+-                                                   invocation,
-+-                                                   NULL /* GCancellable */,
-+-                                                   &caller_uid,
-+-                                                   &error))
-+-        {
-+-          g_dbus_method_invocation_return_gerror (invocation, error);
-+-          g_clear_error (&error);
-+-          goto out;
-+-        }
-+-
-+-      if (!udisks_daemon_util_get_user_info (caller_uid, &caller_gid, &caller_user_name, &error))
-+-        {
-+-          g_dbus_method_invocation_return_gerror (invocation, error);
-+-          g_clear_error (&error);
-+-          goto out;
-+-        }
-++      effective_uid = caller_uid;
-++      effective_gid = caller_gid;
-+     }
-+ 
-+   /* Mount it */
-+@@ -1361,7 +1372,8 @@ handle_mount (UDisksFilesystem      *filesystem,
-+                                object,
-+                                caller_uid,
-+                                caller_gid,
-+-                               opt_as_user != NULL,
-++                               effective_uid,
-++                               effective_gid,
-+                                mount_point_to_use,
-+                                fstab_mount_options,
-+                                invocation,
-+@@ -1374,8 +1386,9 @@ handle_mount (UDisksFilesystem      *filesystem,
-+                                  object,
-+                                  caller_uid,
-+                                  caller_gid,
-+-                                 caller_user_name,
-+-                                 opt_as_user != NULL,
-++                                 effective_uid,
-++                                 effective_gid,
-++                                 effective_user_name,
-+                                  &mount_point_to_use,
-+                                  &mpoint_persistent,
-+                                  invocation,
-+@@ -1387,7 +1400,7 @@ handle_mount (UDisksFilesystem      *filesystem,
-+   udisks_state_add_mounted_fs (state,
-+                                mount_point_to_use,
-+                                udisks_block_get_device_number (block),
-+-                               caller_uid,
-++                               effective_uid,
-+                                system_managed,
-+                                system_managed ? FALSE : mpoint_persistent);
-+ 
-+@@ -1395,7 +1408,7 @@ handle_mount (UDisksFilesystem      *filesystem,
-+                  device,
-+                  system_managed ? " (system)" : "",
-+                  mount_point_to_use,
-+-                 caller_uid);
-++                 effective_uid);
-+ 
-+   udisks_linux_block_object_trigger_uevent_sync (UDISKS_LINUX_BLOCK_OBJECT (object),
-+                                                  UDISKS_DEFAULT_WAIT_TIMEOUT);
-+@@ -1409,7 +1422,7 @@ handle_mount (UDisksFilesystem      *filesystem,
-+     udisks_state_check (state);
-+   g_free (mount_point_to_use);
-+   g_free (fstab_mount_options);
-+-  g_free (caller_user_name);
-++  g_free (effective_user_name);
-+   g_free (device);
-+   g_clear_object (&object);
-+ 
-+-- 
-+2.54.0
-+
-diff --git a/package/udisks/0002-udiskslinuxfilesystem-Rework-fstab-mount-authorizati.patch b/package/udisks/0002-udiskslinuxfilesystem-Rework-fstab-mount-authorizati.patch
-new file mode 100644
-index 0000000000..d0b51e7a54
---- /dev/null
-+++ b/package/udisks/0002-udiskslinuxfilesystem-Rework-fstab-mount-authorizati.patch
-@@ -0,0 +1,211 @@
-+From 0050f51d40e468f6a3197ccdc77b5bd59c923a37 Mon Sep 17 00:00:00 2001
-+From: Tomas Bzatek <tbzatek@redhat.com>
-+Date: Tue, 28 Apr 2026 19:29:14 +0200
-+Subject: [PATCH] udiskslinuxfilesystem: Rework fstab mount authorization
-+ for as-user
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+The polkit authorization logic in handle_mount_fstab() had two problems
-+when 'as-user' was combined with fstab entries containing 'user',
-+'users' or 'x-udisks-auth' mount options:
-+
-+1. The 'filesystem-mount-other-user' polkit check was inside the code
-+   block that is skipped when 'user'/'users'/'x-udisks-auth' options
-+   are present, allowing an unprivileged caller to mount on behalf of
-+   another user without any authorization.
-+
-+2. When 'user' or 'users' fstab options were present and the initial
-+   mount attempt failed with a permission error, the code would fall
-+   back to mounting as root. This fallback should only be available
-+   when 'x-udisks-auth' is explicitly specified.
-+
-+Restructure the authorization flow so that:
-+ - The 'filesystem-mount-other-user' check is evaluated first,
-+   independently of fstab mount options, and is always enforced
-+   when caller_uid != effective_uid.
-+ - The root fallback on BD_FS_ERROR_AUTH is gated on 'x-udisks-auth'
-+   being present, not just any of the user-level mount options.
-+ - When root uses 'as-user' without 'user'/'users' fstab options,
-+   the root fallback is implicitly enabled.
-+ - Regular polkit checks (filesystem-mount, mount-system,
-+   mount-other-seat) only apply for same-user mounts without
-+   'user'/'users'/'x-udisks-auth'.
-+
-+Update the D-Bus API documentation to reflect the new behavior.
-+
-+Reported-by: Azizcan Daştan <azizcan.dastan5@gmail.com>
-+Reported-by: Özlem Ozan <oozan1725@gmail.com>
-+Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
-+(cherry picked from commit 68108081aa9049cf3bb2fb0044cb4de83f962390)
-+---
-+CVE: CVE-2026-7867
-+Upstream: https://github.com/storaged-project/udisks/commit/0050f51d40e468f6a3197ccdc77b5bd59c923a37
-+Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
-+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-+---
-+ data/org.freedesktop.UDisks2.xml | 24 ++++++-----
-+ src/udiskslinuxfilesystem.c      | 73 ++++++++++++++++++++++++--------
-+ 2 files changed, 70 insertions(+), 27 deletions(-)
-+
-+diff --git a/data/org.freedesktop.UDisks2.xml b/data/org.freedesktop.UDisks2.xml
-+index 53194c70..f7201adc 100644
-+--- a/data/org.freedesktop.UDisks2.xml
-++++ b/data/org.freedesktop.UDisks2.xml
-+@@ -2654,7 +2654,8 @@
-+         filesystem is mounted on behalf of the specified user instead
-+         of the calling one. This has usually an effect on the returned
-+         @mount_path and it also allows that user to unmount the
-+-        filesystem later. This option expects a user name, not a UID.
-++        filesystem later. This option expects a user name, not a UID
-++        and always performs an authorization check.
-+ 
-+         If the device in question is referenced in the
-+         <filename>/etc/fstab</filename> file, the
-+@@ -2662,15 +2663,18 @@
-+         and the given options or filesystem type given in @options are
-+         ignored.
-+ 
-+-        If <literal>x-udisks-auth</literal> is specified as an option
-+-        for the device in the <filename>/etc/fstab</filename> file,
-+-        then the <command>mount</command> command is run as the
-+-        calling user, without performing any authorization check
-+-        mentioned above. If this fails because of insufficient
-+-        permissions, an authorization check is performed (which
-+-        typically results in the user having to authenticate as an
-+-        administrator). If authorized, the <command>mount</command>
-+-        command is then run as root.
-++        If <literal>x-udisks-auth</literal>, <literal>user</literal> or
-++        <literal>users</literal> are specified as options for the
-++        device in the <filename>/etc/fstab</filename> file, then the
-++        <command>mount</command> command is run as the calling user
-++        (or the effective user of the <parameter>as-user</parameter>
-++        option respectively), without performing any authorization check
-++        mentioned above. If this fails because of insufficient permissions
-++        and <literal>x-udisks-auth</literal> is specified, an
-++        authorization check is performed (which typically results in
-++        the user having to authenticate as an administrator). If
-++        authorized, the <command>mount</command> command is then run
-++        as root.
-+ 
-+         The filesystem should be unmounted using the
-+         org.freedesktop.UDisks2.Filesystem.Unmount() method.
-+diff --git a/src/udiskslinuxfilesystem.c b/src/udiskslinuxfilesystem.c
-+index ebdd2e05..eb2a3f21 100644
-+--- a/src/udiskslinuxfilesystem.c
-++++ b/src/udiskslinuxfilesystem.c
-+@@ -918,30 +918,60 @@ handle_mount_fstab (UDisksDaemon          *daemon,
-+   const gchar *message = NULL;
-+   gboolean success = FALSE;
-+   gboolean mount_fstab_as_root = FALSE;
-++  gboolean x_udisks_auth = FALSE;
-++  gboolean user_mount = FALSE;
-+   UDisksBaseJob *job = NULL;
-+   GError *error = NULL;
-+ 
-+   block = udisks_object_peek_block (object);
-+   device = udisks_block_get_device (block);
-+ 
-+-  if (!has_option (fstab_mount_options, "x-udisks-auth") &&
-+-      !has_option (fstab_mount_options, "user") &&
-+-      !has_option (fstab_mount_options, "users"))
-++  x_udisks_auth = has_option (fstab_mount_options, "x-udisks-auth");
-++  user_mount = x_udisks_auth ||
-++               has_option (fstab_mount_options, "user") ||
-++               has_option (fstab_mount_options, "users");
-++
-++  /* 'as-user' rules:
-++   *  - when caller is root:
-++   *    - if 'user'/'users' present, do not fall back to mounting as root, unless 'x-udisks-auth' is specified
-++   *    - if 'user'/'users' not present, try as effective user first and allow fallback to mounting as root (implies 'x-udisks-auth')
-++   *  - when caller is unprivileged:
-++   *    - always require polkit auth to prevent identity spoofing
-++   *    - do not fall back to mounting as root, unless 'x-udisks-auth' is specified
-++   *    - if neither 'user'/'users'/'x-udisks-auth' present, failure is expected by nature (unless 'as-user=root')
-++   *
-++   * general fstab mounting rules:
-++   *  - when caller is root, mount as root, allow anything
-++   *  - when caller is unprivileged:
-++   *    - if 'user'/'users' present, do not fall back to mounting as root, unless 'x-udisks-auth' is specified
-++   *    - if only 'x-udisks-auth' present, mount as user and fall back to mounting as root if not successful
-++   *    - if neither 'user'/'users'/'x-udisks-auth' present, require polkit auth and mount as root
-++   *
-++   * Further assumptions:
-++   *  - when 'user'/'users' not present and mounting as unprivileged, this typically fails but it is still beneficial to try that e.g. for FUSE mounts
-++   *  - assuming libblockdev mount error code mapping works reliably (for the BD_FS_ERROR_AUTH check)
-++   */
-++
-++  if (caller_uid != effective_uid)
-++    {
-++      /* Always require authorization when mounting on behalf of another user,
-++       * regardless of fstab mount options.
-++       */
-++      action_id = "org.freedesktop.udisks2.filesystem-mount-other-user";
-++
-++      /* When 'user'/'users' not present and the caller is root, allow
-++       * fallback mounting as root.
-++       */
-++      if (caller_uid == 0 && !user_mount)
-++        x_udisks_auth = TRUE;
-++    }
-++  else
-++  if (!user_mount)
-+     {
-+       mount_fstab_as_root = TRUE;
-++
-+       action_id = "org.freedesktop.udisks2.filesystem-mount";
-+-      /* Translators: Shown in authentication dialog when the user
-+-       * requests mounting a filesystem.
-+-       *
-+-       * Do not translate $(drive), it's a placeholder and
-+-       * will be replaced by the name of the drive/device in question
-+-       */
-+-      message = N_("Authentication is required to mount $(drive)");
-+-      if (caller_uid != effective_uid)
-+-        {
-+-          action_id = "org.freedesktop.udisks2.filesystem-mount-other-user";
-+-        }
-+-      else if (!udisks_daemon_util_setup_by_user (daemon, object, caller_uid))
-++      if (!udisks_daemon_util_setup_by_user (daemon, object, caller_uid))
-+         {
-+           if (udisks_block_get_hint_system (block))
-+             {
-+@@ -952,7 +982,17 @@ handle_mount_fstab (UDisksDaemon          *daemon,
-+               action_id = "org.freedesktop.udisks2.filesystem-mount-other-seat";
-+             }
-+         }
-++    }
-+ 
-++  if (action_id)
-++    {
-++      /* Translators: Shown in authentication dialog when the user
-++       * requests mounting a filesystem.
-++       *
-++       * Do not translate $(drive), it's a placeholder and
-++       * will be replaced by the name of the drive/device in question
-++       */
-++      message = N_("Authentication is required to mount $(drive)");
-+       if (!udisks_daemon_util_check_authorization_sync (daemon,
-+                                                         object,
-+                                                         action_id,
-+@@ -962,7 +1002,6 @@ handle_mount_fstab (UDisksDaemon          *daemon,
-+         return FALSE;
-+     }
-+ 
-+-
-+   if (!g_file_test (mount_point_to_use, G_FILE_TEST_IS_DIR))
-+     {
-+       if (g_mkdir_with_parents (mount_point_to_use, 0755) != 0)
-+@@ -1011,7 +1050,7 @@ handle_mount_fstab (UDisksDaemon          *daemon,
-+ 
-+       if (!success)
-+         {
-+-          if (!mount_fstab_as_root && g_error_matches (error, BD_FS_ERROR, BD_FS_ERROR_AUTH))
-++          if (!mount_fstab_as_root && g_error_matches (error, BD_FS_ERROR, BD_FS_ERROR_AUTH) && x_udisks_auth)
-+             {
-+               g_clear_error (&error);
-+               action_id = "org.freedesktop.udisks2.filesystem-fstab";
-+-- 
-+2.54.0
-+
-diff --git a/package/udisks/0003-udiskslinuxfilesystem-Log-real-caller-uid-for-as-use.patch b/package/udisks/0003-udiskslinuxfilesystem-Log-real-caller-uid-for-as-use.patch
-new file mode 100644
-index 0000000000..db63d97c9b
---- /dev/null
-+++ b/package/udisks/0003-udiskslinuxfilesystem-Log-real-caller-uid-for-as-use.patch
-@@ -0,0 +1,57 @@
-+From 132ebab4a196f7fbd01fa28283627b2227eb399b Mon Sep 17 00:00:00 2001
-+From: Tomas Bzatek <tbzatek@redhat.com>
-+Date: Sun, 3 May 2026 14:00:01 +0200
-+Subject: [PATCH] udiskslinuxfilesystem: Log real caller uid for as-user
-+ mounts
-+
-+When a mount is performed with the as-user option targeting a different
-+user, log both the effective (target) uid and the real caller uid to
-+provide an audit trail of who authorized the operation.
-+
-+Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
-+(cherry picked from commit 98e5a76c155640d155280cdb642791f00def736a)
-+---
-+CVE: CVE-2026-7867
-+Upstream: https://github.com/storaged-project/udisks/commit/132ebab4a196f7fbd01fa28283627b2227eb399b
-+Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
-+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-+---
-+ src/udiskslinuxfilesystem.c | 22 +++++++++++++++++-----
-+ 1 file changed, 17 insertions(+), 5 deletions(-)
-+
-+diff --git a/src/udiskslinuxfilesystem.c b/src/udiskslinuxfilesystem.c
-+index eb2a3f21..5e2508cc 100644
-+--- a/src/udiskslinuxfilesystem.c
-++++ b/src/udiskslinuxfilesystem.c
-+@@ -1443,11 +1443,23 @@ handle_mount (UDisksFilesystem      *filesystem,
-+                                system_managed,
-+                                system_managed ? FALSE : mpoint_persistent);
-+ 
-+-  udisks_notice ("Mounted %s%s at %s on behalf of uid %u",
-+-                 device,
-+-                 system_managed ? " (system)" : "",
-+-                 mount_point_to_use,
-+-                 effective_uid);
-++  if (effective_uid != caller_uid)
-++    {
-++      udisks_notice ("Mounted %s%s at %s on behalf of uid %u (requested by uid %u)",
-++                     device,
-++                     system_managed ? " (system)" : "",
-++                     mount_point_to_use,
-++                     effective_uid,
-++                     caller_uid);
-++    }
-++  else
-++    {
-++      udisks_notice ("Mounted %s%s at %s on behalf of uid %u",
-++                     device,
-++                     system_managed ? " (system)" : "",
-++                     mount_point_to_use,
-++                     effective_uid);
-++    }
-+ 
-+   udisks_linux_block_object_trigger_uevent_sync (UDISKS_LINUX_BLOCK_OBJECT (object),
-+                                                  UDISKS_DEFAULT_WAIT_TIMEOUT);
-+-- 
-+2.54.0
-+
-diff --git a/package/udisks/0004-udisksdaemonutil-Pass-as-user-target-to-polkit-detai.patch b/package/udisks/0004-udisksdaemonutil-Pass-as-user-target-to-polkit-detai.patch
-new file mode 100644
-index 0000000000..b7a51944f6
---- /dev/null
-+++ b/package/udisks/0004-udisksdaemonutil-Pass-as-user-target-to-polkit-detai.patch
-@@ -0,0 +1,43 @@
-+From 3b016cc881b1d3c3d843ec13e35102beaaac7023 Mon Sep 17 00:00:00 2001
-+From: Tomas Bzatek <tbzatek@redhat.com>
-+Date: Tue, 28 Apr 2026 19:10:38 +0200
-+Subject: [PATCH] udisksdaemonutil: Pass as-user target to polkit details
-+
-+When the 'as-user' D-Bus method option is present, propagate the
-+target username to polkit details as 'mount.as-user'. This allows
-+polkit rules to make fine-grained authorization decisions based on
-+who the mount is being performed for.
-+
-+Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
-+(cherry picked from commit 681d58a76f6aaa5045eb43e665c65f497d35b810)
-+---
-+CVE: CVE-2026-7867
-+Upstream: https://github.com/storaged-project/udisks/commit/3b016cc881b1d3c3d843ec13e35102beaaac7023
-+Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
-+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-+---
-+ src/udisksdaemonutil.c | 8 ++++++++
-+ 1 file changed, 8 insertions(+)
-+
-+diff --git a/src/udisksdaemonutil.c b/src/udisksdaemonutil.c
-+index 3db92f58..36e3184b 100644
-+--- a/src/udisksdaemonutil.c
-++++ b/src/udisksdaemonutil.c
-+@@ -797,6 +797,14 @@ udisks_daemon_util_check_authorization_sync_with_error (UDisksDaemon           *
-+   polkit_details_insert (details, "polkit.message", message);
-+   polkit_details_insert (details, "polkit.gettext_domain", "udisks2");
-+ 
-++  if (options != NULL &&
-++      g_strcmp0 (action_id, "org.freedesktop.udisks2.filesystem-mount-other-user") == 0)
-++    {
-++      const gchar *as_user = NULL;
-++      g_variant_lookup (options, "as-user", "&s", &as_user);
-++      _safe_polkit_details_insert (details, "mount.as-user", as_user);
-++    }
-++
-+   /* Find drive associated with the block device, if any */
-+   if (object != NULL)
-+     {
-+-- 
-+2.54.0
-+
-diff --git a/package/udisks/0005-tests-Add-security-tests-for-as-user-mount-authoriza.patch b/package/udisks/0005-tests-Add-security-tests-for-as-user-mount-authoriza.patch
-new file mode 100644
-index 0000000000..abd180688a
---- /dev/null
-+++ b/package/udisks/0005-tests-Add-security-tests-for-as-user-mount-authoriza.patch
-@@ -0,0 +1,351 @@
-+From 36231768dde088c8b4d4796ff2d311d089d84052 Mon Sep 17 00:00:00 2001
-+From: Tomas Bzatek <tbzatek@redhat.com>
-+Date: Wed, 29 Apr 2026 16:36:45 +0200
-+Subject: [PATCH] tests: Add security tests for as-user mount authorization
-+
-+Add tests verifying that an unprivileged D-Bus caller cannot exploit
-+the 'as-user' option in Filesystem.Mount() to mount on behalf of
-+another user without polkit authorization. Use a dedicated
-+'udisks_test_target' user instead of 'nobody' to avoid OS-level
-+special treatment of system users that could mask real behavior.
-+
-+Dynamic mount tests (in UdisksFSTestCase, inherited by all FS types):
-+- test_mount_as_user_denied: as-user=<another_user> is denied
-+- test_mount_as_user_root_denied: as-user=root is denied
-+- test_mount_as_user_self: as-user=<self> behaves like plain mount
-+
-+Fstab mount tests (in NonPOSIXTestCase, inherited by VFAT/EXFAT):
-+- test_mount_fstab_{users,user,x-udisks-auth}_as_user_denied:
-+  fstab entries that normally allow unprivileged mounting must still
-+  require authorization when as-user is specified
-+- test_mount_fstab_{users,user,x-udisks-auth}_as_root_denied:
-+  same but with as-user=root
-+- test_mount_fstab_defaults_as_user_from_root: root can mount
-+  fstab 'defaults' device with as-user targeting a non-root user
-+- test_mount_fstab_defaults_as_user_denied: unprivileged user
-+  cannot mount fstab 'defaults' device with as-user
-+
-+Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
-+(cherry picked from commit 5ec20c9d5719ead510d800bc3eb5a731e5712f39)
-+---
-+CVE: CVE-2026-7867
-+Upstream: https://github.com/storaged-project/udisks/commit/36231768dde088c8b4d4796ff2d311d089d84052
-+Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
-+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-+---
-+ src/tests/dbus-tests/test_80_filesystem.py | 278 +++++++++++++++++++++
-+ 1 file changed, 278 insertions(+)
-+
-+diff --git a/src/tests/dbus-tests/test_80_filesystem.py b/src/tests/dbus-tests/test_80_filesystem.py
-+index 1f375ac6..03336512 100644
-+--- a/src/tests/dbus-tests/test_80_filesystem.py
-++++ b/src/tests/dbus-tests/test_80_filesystem.py
-+@@ -30,6 +30,8 @@ class UdisksFSTestCase(udiskstestcase.UdisksTestCase):
-+     _can_query_size = False
-+ 
-+     username = 'udisks_test_user'
-++    # a separate target user used for 'as-user' mount tests
-++    target_username = 'udisks_test_target'
-+ 
-+     requested_plugins = BlockDev.plugin_specs_from_names(("fs",))
-+ 
-+@@ -1037,6 +1039,174 @@ class UdisksFSTestCase(udiskstestcase.UdisksTestCase):
-+         pipe.send([True, ''])
-+         pipe.close()
-+ 
-++    def _mount_with_as_user_fail(self, pipe, uid, gid, device, target_user):
-++        """ Try to mount @device as user with given @uid and @gid using the
-++            'as-user' option set to @target_user. This is expected to fail
-++            with a NotAuthorized error.
-++        """
-++        os.setresgid(gid, gid, gid)
-++        os.setresuid(uid, uid, uid)
-++
-++        try:
-++            safe_dbus.call_sync(self.iface_prefix,
-++                                self.path_prefix + '/block_devices/' + os.path.basename(device),
-++                                self.iface_prefix + '.Filesystem',
-++                                'Mount',
-++                                GLib.Variant('(a{sv})', ({'as-user': GLib.Variant('s', target_user)},)))
-++        except Exception as e:
-++            msg = str(e)
-++            if 'org.freedesktop.UDisks2.Error.NotAuthorized' in msg and \
-++               'Not authorized to perform operation' in msg:
-++                pipe.send([True, ''])
-++                pipe.close()
-++                return
-++            else:
-++                pipe.send([False, 'Mount DBus call failed with unexpected exception: %s' % msg])
-++                pipe.close()
-++                return
-++
-++        pipe.send([False, 'Mount with as-user=%s unexpectedly succeeded for uid %d' % (target_user, uid)])
-++        pipe.close()
-++
-++    def _test_mount_as_user_denied(self, target_user):
-++        """ Test that an unprivileged user cannot use as-user to mount on
-++            behalf of @target_user without polkit authorization.
-++        """
-++        self._check_can_create()
-++
-++        if not self._can_mount:
-++            self.skipTest('Cannot mount %s filesystem' % self._fs_signature)
-++
-++        disk = self.get_object('/block_devices/' + os.path.basename(self.vdevs[0]))
-++        self.assertIsNotNone(disk)
-++
-++        disk.Format(self._fs_signature, self.no_options, dbus_interface=self.iface_prefix + '.Block')
-++        self.addCleanup(self.wipe_fs, self.vdevs[0])
-++        self.addCleanup(self.try_unmount, self.vdevs[0])
-++
-++        self.addCleanup(self._remove_user, self.username)
-++        uid, gid = self._add_user(self.username)
-++
-++        if target_user != 'root':
-++            self.addCleanup(self._remove_user, target_user)
-++            self._add_user(target_user)
-++
-++        parent_conn, child_conn = Pipe()
-++        proc = Process(target=self._mount_with_as_user_fail,
-++                       args=(child_conn, int(uid), int(gid), self.vdevs[0], target_user))
-++        proc.start()
-++        res = parent_conn.recv()
-++        parent_conn.close()
-++        proc.join()
-++
-++        if not res[0]:
-++            self.fail(res[1])
-++
-++    @udiskstestcase.tag_test(udiskstestcase.TestTags.UNSAFE)
-++    def test_mount_as_user_denied(self):
-++        """ Test that an unprivileged user cannot use as-user to mount on
-++            behalf of another user without authorization.
-++        """
-++        self._test_mount_as_user_denied(self.target_username)
-++
-++    @udiskstestcase.tag_test(udiskstestcase.TestTags.UNSAFE)
-++    def test_mount_as_user_root_denied(self):
-++        """ Test that an unprivileged user cannot use as-user=root to mount
-++            without authorization.
-++        """
-++        self._test_mount_as_user_denied('root')
-++
-++    def _mount_as_user_result(self, pipe, uid, gid, device, options):
-++        """ Try to mount @device as user with given @uid and @gid using
-++            the given @options dict. Returns [True, error_string] on D-Bus
-++            error or [True, ''] on success.
-++        """
-++        os.setresgid(gid, gid, gid)
-++        os.setresuid(uid, uid, uid)
-++
-++        try:
-++            safe_dbus.call_sync(self.iface_prefix,
-++                                self.path_prefix + '/block_devices/' + os.path.basename(device),
-++                                self.iface_prefix + '.Filesystem',
-++                                'Mount',
-++                                GLib.Variant('(a{sv})', (options,)))
-++        except Exception as e:
-++            pipe.send([True, str(e)])
-++            pipe.close()
-++            return
-++
-++        pipe.send([True, ''])
-++        pipe.close()
-++
-++    @udiskstestcase.tag_test(udiskstestcase.TestTags.UNSAFE)
-++    def test_mount_as_user_self(self):
-++        """ Test that as-user targeting the caller's own username behaves
-++            identically to mounting without as-user (no extra mount-other-user
-++            authorization required).
-++        """
-++        self._check_can_create()
-++
-++        if not self._can_mount:
-++            self.skipTest('Cannot mount %s filesystem' % self._fs_signature)
-++
-++        disk = self.get_object('/block_devices/' + os.path.basename(self.vdevs[0]))
-++        self.assertIsNotNone(disk)
-++
-++        disk.Format(self._fs_signature, self.no_options, dbus_interface=self.iface_prefix + '.Block')
-++        self.addCleanup(self.wipe_fs, self.vdevs[0])
-++        self.addCleanup(self.try_unmount, self.vdevs[0])
-++
-++        self.addCleanup(self._remove_user, self.username)
-++        uid, gid = self._add_user(self.username)
-++
-++        # first try a plain mount without as-user
-++        parent_conn, child_conn = Pipe()
-++        proc = Process(target=self._mount_as_user_result,
-++                       args=(child_conn, int(uid), int(gid), self.vdevs[0], {}))
-++        proc.start()
-++        res_plain = parent_conn.recv()
-++        parent_conn.close()
-++        proc.join()
-++
-++        self.assertTrue(res_plain[0])
-++        plain_error = res_plain[1]
-++
-++        # unmount if the plain mount succeeded
-++        if not plain_error:
-++            self.try_unmount(self.vdevs[0])
-++
-++        # now try with as-user=<self>
-++        parent_conn, child_conn = Pipe()
-++        proc = Process(target=self._mount_as_user_result,
-++                       args=(child_conn, int(uid), int(gid), self.vdevs[0],
-++                             {'as-user': GLib.Variant('s', self.username)}))
-++        proc.start()
-++        res_as_user = parent_conn.recv()
-++        parent_conn.close()
-++        proc.join()
-++
-++        self.assertTrue(res_as_user[0])
-++        as_user_error = res_as_user[1]
-++
-++        if not plain_error and not as_user_error:
-++            return
-++        if plain_error and as_user_error:
-++            # extract the GDBus error name (e.g. 'org.freedesktop.UDisks2.Error.NotAuthorizedCanObtain')
-++            dbus_err_re = re.compile(r'GDBus\.Error:([\w.]+):')
-++            plain_match = dbus_err_re.search(plain_error)
-++            as_user_match = dbus_err_re.search(as_user_error)
-++            plain_err_name = plain_match.group(1) if plain_match else plain_error
-++            as_user_err_name = as_user_match.group(1) if as_user_match else as_user_error
-++            self.assertEqual(plain_err_name, as_user_err_name,
-++                             'as-user=<self> produced a different error than plain mount: '
-++                             'plain=%s, as-user=%s' % (plain_error, as_user_error))
-++            return
-++
-++        if plain_error:
-++            self.fail('Plain mount failed (%s) but as-user=<self> succeeded' % plain_error)
-++        else:
-++            self.fail('Plain mount succeeded but as-user=<self> failed: %s' % as_user_error)
-++
-+     @udiskstestcase.tag_test(udiskstestcase.TestTags.UNSAFE)
-+     def test_mount_as_user(self):
-+         """ Test mounting a filesystem on behalf of a different user."""
-+@@ -1550,6 +1720,108 @@ class NonPOSIXTestCase(UdisksFSTestCase):
-+             self.fail(res[1])
-+ 
-+ 
-++    def _test_mount_fstab_as_user_denied(self, fstab_options, target_user):
-++        """ Test that an unprivileged user cannot use 'as-user' option to mount
-++            a device listed in /etc/fstab with @fstab_options on behalf of
-++            @target_user without polkit authorization.
-++        """
-++        disk = self.get_object('/block_devices/' + os.path.basename(self.vdevs[0]))
-++        self.assertIsNotNone(disk)
-++
-++        self.addCleanup(self._remove_user, self.username)
-++        uid, gid = self._add_user(self.username)
-++
-++        if target_user != 'root':
-++            self.addCleanup(self._remove_user, target_user)
-++            self._add_user(target_user)
-++
-++        self.addCleanup(self.try_unmount, self.vdevs[0])
-++        self._prepare_mount_test(disk, True, fstab_options)
-++
-++        parent_conn, child_conn = Pipe()
-++        proc = Process(target=self._mount_with_as_user_fail,
-++                       args=(child_conn, int(uid), int(gid), self.vdevs[0], target_user))
-++        proc.start()
-++        res = parent_conn.recv()
-++        parent_conn.close()
-++        proc.join()
-++
-++        if not res[0]:
-++            self.fail(res[1])
-++
-++    @udiskstestcase.tag_test(udiskstestcase.TestTags.UNSAFE)
-++    def test_mount_fstab_as_user_denied(self):
-++        """ Test that user cannot use as-user to mount fstab 'users' device
-++            on behalf of another user without authorization.
-++        """
-++        self._test_mount_fstab_as_user_denied('users', self.target_username)
-++
-++    @udiskstestcase.tag_test(udiskstestcase.TestTags.UNSAFE)
-++    def test_mount_fstab_user_as_user_denied(self):
-++        """ Test that user cannot use as-user to mount fstab 'user' device
-++            on behalf of another user without authorization.
-++        """
-++        self._test_mount_fstab_as_user_denied('user', self.target_username)
-++
-++    @udiskstestcase.tag_test(udiskstestcase.TestTags.UNSAFE)
-++    def test_mount_fstab_x_udisks_auth_as_user_denied(self):
-++        """ Test that user cannot use as-user to mount fstab 'x-udisks-auth'
-++            device on behalf of another user without authorization.
-++        """
-++        self._test_mount_fstab_as_user_denied('x-udisks-auth', self.target_username)
-++
-++    @udiskstestcase.tag_test(udiskstestcase.TestTags.UNSAFE)
-++    def test_mount_fstab_as_root_denied(self):
-++        """ Test that user cannot use as-user=root to mount fstab 'users'
-++            device without authorization.
-++        """
-++        self._test_mount_fstab_as_user_denied('users', 'root')
-++
-++    @udiskstestcase.tag_test(udiskstestcase.TestTags.UNSAFE)
-++    def test_mount_fstab_user_as_root_denied(self):
-++        """ Test that user cannot use as-user=root to mount fstab 'user'
-++            device without authorization.
-++        """
-++        self._test_mount_fstab_as_user_denied('user', 'root')
-++
-++    @udiskstestcase.tag_test(udiskstestcase.TestTags.UNSAFE)
-++    def test_mount_fstab_x_udisks_auth_as_root_denied(self):
-++        """ Test that user cannot use as-user=root to mount fstab
-++            'x-udisks-auth' device without authorization.
-++        """
-++        self._test_mount_fstab_as_user_denied('x-udisks-auth', 'root')
-++
-++    @udiskstestcase.tag_test(udiskstestcase.TestTags.UNSAFE)
-++    def test_mount_fstab_defaults_as_user_from_root(self):
-++        """ Test that root can mount a device listed in /etc/fstab with
-++            'defaults' (no 'user', 'users' or 'x-udisks-auth' options)
-++            using the 'as-user' option targeting a non-root user.
-++        """
-++        disk = self.get_object('/block_devices/' + os.path.basename(self.vdevs[0]))
-++        self.assertIsNotNone(disk)
-++
-++        self.addCleanup(self._remove_user, self.target_username)
-++        self._add_user(self.target_username)
-++
-++        self.addCleanup(self.try_unmount, self.vdevs[0])
-++        self._prepare_mount_test(disk, True, 'defaults')
-++
-++        d = dbus.Dictionary(signature='sv')
-++        d['as-user'] = self.target_username
-++        mnt_path = disk.Mount(d, dbus_interface=self.iface_prefix + '.Filesystem')
-++        self.assertIsNotNone(mnt_path)
-++        self.assertTrue(os.path.ismount(mnt_path))
-++
-++    @udiskstestcase.tag_test(udiskstestcase.TestTags.UNSAFE)
-++    def test_mount_fstab_defaults_as_user_denied(self):
-++        """ Test that an unprivileged user cannot use 'as-user' option to
-++            mount a device listed in /etc/fstab with 'defaults' (no 'user',
-++            'users' or 'x-udisks-auth') on behalf of another user without
-++            polkit authorization.
-++        """
-++        self._test_mount_fstab_as_user_denied('defaults', self.target_username)
-++
-++
-+ class VFATTestCase(NonPOSIXTestCase):
-+     _fs_signature = 'vfat'
-+     _can_mount = True
-+@@ -1691,6 +1963,12 @@ class UDFTestCase(UdisksFSTestCase):
-+     def test_mount_fstab_complex_label_bad(self):
-+         super(UDFTestCase, self).test_mount_fstab_complex_label_bad()
-+ 
-++    def test_mount_as_user_denied(self):
-++        self.skipTest('Skipping as-user authorization test for UDF')
-++
-++    def test_mount_as_user_root_denied(self):
-++        self.skipTest('Skipping as-user authorization test for UDF')
-++
-+ 
-+ class FailsystemTestCase(UdisksFSTestCase):
-+     # test that not supported operations fail 'nicely'
-+-- 
-+2.54.0
-+
-diff --git a/package/udisks/udisks.mk b/package/udisks/udisks.mk
-index 515797f39a..a77f693881 100644
---- a/package/udisks/udisks.mk
-+++ b/package/udisks/udisks.mk
-@@ -39,6 +39,13 @@ UDISKS_CONF_OPTS = \
- 	--disable-vdo \
- 	--disable-zram
+diff --git a/package/gcc-bare-metal/0003-microblaze-add-atomic-test-and-set-support.patch b/package/gcc-bare-metal/0003-microblaze-add-atomic-test-and-set-support.patch
+deleted file mode 100644
+index db6aefaef2..0000000000
+--- a/package/gcc-bare-metal/0003-microblaze-add-atomic-test-and-set-support.patch
++++ /dev/null
+@@ -1,286 +0,0 @@
+-From cd01b277c4a9e03c83427290228e4b289a169431 Mon Sep 17 00:00:00 2001
+-From: Gopi Kumar Bulusu <gopi@sankhya.com>
+-Date: Thu, 10 Jul 2025 12:44:44 +0530
+-Subject: [PATCH] MicroBlaze : Enhance support for atomics. Fix PR118280
+-
+-Atomic support enhanced to fix existing atomic_compare_and_swapsi pattern
+-to handle side effects; new patterns atomic_fetch_op and atomic_test_and_set
+-added. As MicroBlaze has no QImode test/set instruction, use shift magic
+-to implement atomic_test_and_set. This fixes PR118280.
+-
+-Files Changed
+-
+-* gcc/config/microblaze/iterators.md: New
+-* microblaze-protos.h/microblaze.cc : Add microblaze_subword_address
+-* gcc/config/microblaze/microblaze.md: constants: Add UNSPECV_CAS_BOOL,
+-  UNSPECV_CAS_MEM, UNSPECV_CAS_VAL, UNSPECV_ATOMIC_FETCH_OP
+-  type: add atomic
+-* gcc/config/microblaze/sync.md: Add atomic_fetch_<atomic_optab>si
+-  atomic_test_and_set
+-
+-Fixes: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=118280
+-Upstream: https://patchwork.ozlabs.org/project/gcc/list/?series=466193
+-
+-Signed-off-by: Kirk Meyer <kirk.meyer@sencore.com>
+-Signed-off-by: David Holsgrove <david.holsgrove@xilinx.com>
+-Signed-off-by: Gopi Kumar Bulusu <gopi@sankhya.com>
+----
+- gcc/config/microblaze/iterators.md        |  25 +++++
+- gcc/config/microblaze/microblaze-protos.h |   1 +
+- gcc/config/microblaze/microblaze.cc       |  28 ++++++
+- gcc/config/microblaze/microblaze.h        |   2 +-
+- gcc/config/microblaze/microblaze.md       |   7 +-
+- gcc/config/microblaze/sync.md             | 107 ++++++++++++++++++----
+- 6 files changed, 150 insertions(+), 20 deletions(-)
+- create mode 100644 gcc/config/microblaze/iterators.md
+-
+-diff --git a/gcc/config/microblaze/iterators.md b/gcc/config/microblaze/iterators.md
+-new file mode 100644
+-index 00000000000..2ffc2422a0a
+---- /dev/null
+-+++ b/gcc/config/microblaze/iterators.md
+-@@ -0,0 +1,25 @@ 
+-+;; Iterator definitions for GCC MicroBlaze machine description files.
+-+;; Copyright (C) 2012-2024 Free Software Foundation, Inc.
+-+;;
+-+;; This file is part of GCC.
+-+;;
+-+;; GCC is free software; you can redistribute it and/or modify
+-+;; it under the terms of the GNU General Public License as published by
+-+;; the Free Software Foundation; either version 3, or (at your option)
+-+;; any later version.
+-+;;
+-+;; GCC is distributed in the hope that it will be useful,
+-+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+-+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-+;; GNU General Public License for more details.
+-+;;
+-+;; You should have received a copy of the GNU General Public License
+-+;; along with GCC; see the file COPYING3.  If not see
+-+;; <http://www.gnu.org/licenses/>.
+-+
+-+; atomics code iterator
+-+(define_code_iterator any_atomic [plus ior xor and])
+-+
+-+; atomics code attribute
+-+(define_code_attr atomic_optab
+-+  [(plus "add") (ior "or") (xor "xor") (and "and")])
+-diff --git a/gcc/config/microblaze/microblaze-protos.h b/gcc/config/microblaze/microblaze-protos.h
+-index 90b79cfe716..1cee0b3096c 100644
+---- a/gcc/config/microblaze/microblaze-protos.h
+-+++ b/gcc/config/microblaze/microblaze-protos.h
+-@@ -62,6 +62,7 @@  extern int symbol_mentioned_p (rtx);
+- extern int label_mentioned_p (rtx);
+- extern bool microblaze_cannot_force_const_mem (machine_mode, rtx);
+- extern void microblaze_eh_return (rtx op0);
+-+extern void microblaze_subword_address (rtx, rtx *, rtx *);
+- #endif  /* RTX_CODE */
+- 
+- /* Declare functions in microblaze-c.cc.  */
+-diff --git a/gcc/config/microblaze/microblaze.cc b/gcc/config/microblaze/microblaze.cc
+-index 2ab5ada4ec9..80d10ab60e0 100644
+---- a/gcc/config/microblaze/microblaze.cc
+-+++ b/gcc/config/microblaze/microblaze.cc
+-@@ -1299,6 +1299,34 @@  microblaze_expand_block_move (rtx dest, rtx src, rtx length, rtx align_rtx)
+-   return false;
+- }
+- 
+-+/* Compute memory address *aligned_mem and corresponding shift value (*shift)
+-+   from a QImode memory reference MEM */
+-+void
+-+microblaze_subword_address (rtx mem, rtx *aligned_mem, rtx *shift)
+-+{
+-+  /* Align the memory address to a word.  */
+-+  rtx addr = force_reg (Pmode, XEXP (mem, 0));
+-+
+-+  rtx addr_mask = gen_int_mode (-4, Pmode);
+-+
+-+  rtx aligned_addr = gen_reg_rtx (Pmode);
+-+
+-+  emit_move_insn (aligned_addr,  gen_rtx_AND (Pmode, addr, addr_mask));
+-+
+-+  *aligned_mem = change_address (mem, SImode, aligned_addr);
+-+
+-+  /* Calculate the shift amount.  */
+-+  emit_move_insn (*shift, gen_rtx_AND (SImode, addr, gen_int_mode (3, SImode)));
+-+
+-+  if (TARGET_LITTLE_ENDIAN == 0) {
+-+    emit_move_insn (*shift,
+-+		    gen_rtx_MINUS (SImode, gen_int_mode (3, SImode), *shift));
+-+  }
+-+
+-+  emit_move_insn (*shift, gen_rtx_ASHIFT (SImode, *shift,
+-+					  gen_int_mode (3, SImode)));
+-+}
+-+
+- static bool
+- microblaze_rtx_costs (rtx x, machine_mode mode, int outer_code ATTRIBUTE_UNUSED,
+- 		      int opno ATTRIBUTE_UNUSED, int *total,
+-diff --git a/gcc/config/microblaze/microblaze.h b/gcc/config/microblaze/microblaze.h
+-index 2390542434b..b2e9ccde363 100644
+---- a/gcc/config/microblaze/microblaze.h
+-+++ b/gcc/config/microblaze/microblaze.h
+-@@ -57,7 +57,7 @@  extern enum pipeline_type microblaze_pipe;
+- 
+- /* Default target_flags if no switches are specified  */
+- #define TARGET_DEFAULT      (MASK_SOFT_MUL | MASK_SOFT_DIV | MASK_SOFT_FLOAT \
+--                             | TARGET_ENDIAN_DEFAULT)
+-+			      | TARGET_ENDIAN_DEFAULT)
+- 
+- /* Do we have CLZ?  */
+- #define TARGET_HAS_CLZ      (TARGET_PATTERN_COMPARE && microblaze_has_clz)
+-diff --git a/gcc/config/microblaze/microblaze.md b/gcc/config/microblaze/microblaze.md
+-index 45c48a71e8d..270df8da0c5 100644
+---- a/gcc/config/microblaze/microblaze.md
+-+++ b/gcc/config/microblaze/microblaze.md
+-@@ -21,6 +21,7 @@ 
+- 
+- (include "constraints.md")
+- (include "predicates.md")
+-+(include "iterators.md")
+- 
+- ;;----------------------------------------------------
+- ;; Constants
+-@@ -43,6 +44,10 @@ 
+-   (UNSPEC_TLS           106)    ;; jump table
+-   (UNSPEC_SET_TEXT      107)    ;; set text start
+-   (UNSPEC_TEXT          108)    ;; data text relative
+-+  (UNSPECV_CAS_BOOL     201)    ;; compare and swap (bool)
+-+  (UNSPECV_CAS_VAL      202)    ;; compare and swap (val)
+-+  (UNSPECV_CAS_MEM      203)    ;; compare and swap (mem)
+-+  (UNSPECV_ATOMIC_FETCH_OP     204)    ;; atomic fetch op
+- ])
+- 
+- (define_c_enum "unspec" [
+-@@ -79,7 +84,7 @@ 
+- ;; bshift 	Shift operations
+- 
+- (define_attr "type"
+--  "unknown,branch,jump,call,load,store,move,arith,darith,imul,idiv,icmp,multi,nop,no_delay_arith,no_delay_load,no_delay_store,no_delay_imul,no_delay_move,bshift,fadd,frsub,fmul,fdiv,fcmp,fsl,fsqrt,fcvt,trap"
+-+  "unknown,branch,jump,call,load,store,move,arith,darith,imul,idiv,icmp,multi,nop,no_delay_arith,no_delay_load,no_delay_store,no_delay_imul,no_delay_move,bshift,fadd,frsub,fmul,fdiv,fcmp,fsl,fsqrt,fcvt,trap,atomic"
+-   (const_string "unknown"))
+- 
+- ;; Main data type used by the insn
+-diff --git a/gcc/config/microblaze/sync.md b/gcc/config/microblaze/sync.md
+-index db7b11e5379..6478ab6dcac 100644
+---- a/gcc/config/microblaze/sync.md
+-+++ b/gcc/config/microblaze/sync.md
+-@@ -18,26 +18,97 @@ 
+- ;; <http://www.gnu.org/licenses/>.
+- 
+- (define_insn "atomic_compare_and_swapsi"
+--  [(match_operand:SI 0 "register_operand" "=&d")	;; bool output
+--   (match_operand:SI 1 "register_operand" "=&d")	;; val output
+--   (match_operand:SI 2 "nonimmediate_operand" "+Q")	;; memory
+--   (match_operand:SI 3 "register_operand" "d")		;; expected value
+--   (match_operand:SI 4 "register_operand" "d")		;; desired value
+--   (match_operand:SI 5 "const_int_operand" "")		;; is_weak
+--   (match_operand:SI 6 "const_int_operand" "")		;; mod_s
+--   (match_operand:SI 7 "const_int_operand" "")		;; mod_f
+-+  [(set (match_operand:SI 0 "register_operand" "=&d")		;; bool output
+-+        (unspec_volatile:SI
+-+          [(match_operand:SI 2 "nonimmediate_operand" "+Q")	;; memory
+-+           (match_operand:SI 3 "register_operand" "d")		;; expected value
+-+           (match_operand:SI 4 "register_operand" "d")]		;; desired value
+-+          UNSPECV_CAS_BOOL))
+-+   (set (match_operand:SI 1 "register_operand" "=&d")		;; val output
+-+        (unspec_volatile:SI [(const_int 0)] UNSPECV_CAS_VAL))
+-+   (set (match_dup 2)
+-+        (unspec_volatile:SI [(const_int 0)] UNSPECV_CAS_MEM))
+-+   (match_operand:SI 5 "const_int_operand" "")			;; is_weak
+-+   (match_operand:SI 6 "const_int_operand" "")			;; mod_s
+-+   (match_operand:SI 7 "const_int_operand" "")			;; mod_f
+-    (clobber (match_scratch:SI 8 "=&d"))]
+-   ""
+-   {
+--    output_asm_insn ("addc \tr0,r0,r0", operands);
+--    output_asm_insn ("lwx  \t%1,%y2,r0", operands);
+--    output_asm_insn ("addic\t%8,r0,0", operands);
+--    output_asm_insn ("bnei \t%8,.-8", operands);
+--    output_asm_insn ("cmp  \t%0,%1,%3", operands);
+--    output_asm_insn ("bnei \t%0,.+16", operands);
+--    output_asm_insn ("swx  \t%4,%y2,r0", operands);
+--    output_asm_insn ("addic\t%8,r0,0", operands);
+--    output_asm_insn ("bnei \t%8,.-28", operands);
+--    return "";
+-+    return "add  \t%0,r0,r0\n\t"
+-+      "lwx  \t%1,%y2,r0\n\t"
+-+      "addic\t%8,r0,0\n\t"
+-+      "bnei \t%8,.-8\n\t"
+-+      "cmp  \t%8,%1,%3\n\t"
+-+      "bnei \t%8,.+20\n\t"
+-+      "swx  \t%4,%y2,r0\n\t"
+-+      "addic\t%8,r0,0\n\t"
+-+      "bnei \t%8,.-28\n\t"
+-+      "addi \t%0,r0,1";
+-   }
+-+  [(set_attr "type"	"atomic")
+-+  (set_attr "mode"	"SI")
+-+  (set_attr "length"	"40")]
+- )
+-+
+-+;;
+-+;;
+-+;;
+-+;;
+-+(define_insn "atomic_fetch_<atomic_optab>si"
+-+  [(set (match_operand:SI 0 "register_operand" "=&d")
+-+	(match_operand:SI 1 "memory_operand" "+Q"))
+-+   (set (match_dup 1)
+-+	(unspec_volatile:SI
+-+	  [(any_atomic:SI (match_dup 1)
+-+		   (match_operand:SI 2 "register_operand" "d"))
+-+	   (match_operand:SI 3 "const_int_operand")] ;; model
+-+	 UNSPECV_ATOMIC_FETCH_OP))
+-+   (clobber (match_scratch:SI 4 "=&d"))]	  ;; tmp_1
+-+  ""
+-+  {
+-+    return 
+-+      "lwx  \t%0,%y1,r0\n\t"
+-+      "addic\t%4,r0,0\n\t"
+-+      "bnei \t%4,.-8\n\t"
+-+      "<atomic_optab>\t%4,%0,%2\n\t"
+-+      "swx  \t%4,%y1,r0\n\t"
+-+      "addic\t%4,r0,0\n\t"
+-+      "bnei \t%4,.-24";
+-+  }
+-+  [(set_attr "type"	"atomic")
+-+  (set_attr "mode"	"SI")
+-+  (set_attr "length"	"28")])
+-+
+-+;;
+-+;; MicroBlaze only supports lx/sx instructions for word mode only
+-+;;
+-+;; Use shift|mask magic to implement atomic_test_and_set using lwx/swx
+-+;;
+-+(define_expand "atomic_test_and_set"
+-+  [(match_operand:QI 0 "register_operand" "")    ;; bool output
+-+   (match_operand:QI 1 "memory_operand" "m")    ;; memory
+-+   (match_operand:SI 2 "const_int_operand" "")]  ;; model
+-+  ""
+-+{
+-+  rtx old = gen_reg_rtx (SImode);
+-+  rtx mem = operands[1];
+-+  rtx model = operands[2];
+-+  rtx set = gen_reg_rtx (SImode);
+-+  rtx aligned_mem = gen_reg_rtx (SImode);
+-+  rtx shift = gen_reg_rtx (SImode);
+-+
+-+  microblaze_subword_address (mem, &aligned_mem, &shift);
+-+
+-+  emit_move_insn (set, GEN_INT (1));
+-+  rtx shifted_set = gen_reg_rtx (SImode);
+-+
+-+  emit_move_insn (shifted_set, gen_rtx_ASHIFT (SImode, set, shift));
+-+
+-+  emit_insn (gen_atomic_fetch_orsi (old, aligned_mem, shifted_set, model));
+-+
+-+  emit_move_insn (old, gen_rtx_ASHIFTRT (SImode, old, shift));
+-+
+-+  emit_move_insn (operands[0], gen_lowpart (QImode, old));
+-+
+-+  DONE;
+-+})
+--- 
+-2.43.5
+-
+diff --git a/package/gcc-bare-metal/0005--libcody-Make-it-buildable-by-C-11-to-C-26.patch b/package/gcc-bare-metal/0005--libcody-Make-it-buildable-by-C-11-to-C-26.patch
+deleted file mode 100644
+index f9f983b464..0000000000
+--- a/package/gcc-bare-metal/0005--libcody-Make-it-buildable-by-C-11-to-C-26.patch
++++ /dev/null
+@@ -1,261 +0,0 @@
+-From daa3e1ead791bc58208043cfc4595ba1a78cdd34 Mon Sep 17 00:00:00 2001
+-From: Jakub Jelinek <jakub@redhat.com>
+-Date: Fri, 21 Nov 2025 16:25:58 +0100
+-Subject: [PATCH] libcody: Make it buildable by C++11 to C++26
+-
+-The following builds with -std=c++11 and c++14 and c++17 and c++20 and c++23
+-and c++26.
+-
+-I see the u8 string literals are mixed e.g. with strerror, so in
+--fexec-charset=IBM1047 there will still be garbage, so am not 100% sure if
+-the u8 literals everywhere are worth it either.
+-
+-2025-11-21  Jakub Jelinek  <jakub@redhat.com>
+-
+-	* cody.hh (S2C): For __cpp_char8_t >= 201811 use char8_t instead of
+-	char in argument type.
+-	(MessageBuffer::Space): Revert 2025-11-15 change.
+-	(MessageBuffer::Append): For __cpp_char8_t >= 201811 add overload
+-	with char8_t const * type of first argument.
+-	(Packet::Packet): Similarly for first argument.
+-	* client.cc (CommunicationError, Client::ProcessResponse,
+-	Client::Connect, ConnectResponse, PathnameResponse, OKResponse,
+-	IncludeTranslateResponse): Cast u8 string literals to (const char *)
+-	where needed.
+-	* server.cc (Server::ProcessRequests, ConnectRequest): Likewise.
+-
+-(cherry picked from commit 07a767c7a50d1daae8ef7d4aba73fe53ad40c0b7)
+-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+-Upstream: https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=daa3e1ead791bc58208043cfc4595ba1a78cdd34
+----
+- libcody/client.cc | 36 +++++++++++++++++++-----------------
+- libcody/cody.hh   | 22 ++++++++++++++++++++++
+- libcody/server.cc | 28 ++++++++++++++--------------
+- 3 files changed, 55 insertions(+), 31 deletions(-)
+-
+-diff --git a/libcody/client.cc b/libcody/client.cc
+-index ae69d190cb7..147fecdbe50 100644
+---- a/libcody/client.cc
+-+++ b/libcody/client.cc
+-@@ -97,7 +97,7 @@ int Client::CommunicateWithServer ()
+- 
+- static Packet CommunicationError (int err)
+- {
+--  std::string e {u8"communication error:"};
+-+  std::string e {(const char *) u8"communication error:"};
+-   e.append (strerror (err));
+- 
+-   return Packet (Client::PC_ERROR, std::move (e));
+-@@ -110,33 +110,34 @@ Packet Client::ProcessResponse (std::vector<std::string> &words,
+-     {
+-       if (e == EINVAL)
+- 	{
+--	  std::string msg (u8"malformed string '");
+-+	  std::string msg ((const char *) u8"malformed string '");
+- 	  msg.append (words[0]);
+--	  msg.append (u8"'");
+-+	  msg.append ((const char *) u8"'");
+- 	  return Packet (Client::PC_ERROR, std::move (msg));
+- 	}
+-       else
+--	return Packet (Client::PC_ERROR, u8"missing response");
+-+	return Packet (Client::PC_ERROR, (const char *) u8"missing response");
+-     }
+- 
+-   Assert (!words.empty ());
+--  if (words[0] == u8"ERROR")
+-+  if (words[0] == (const char *) u8"ERROR")
+-     return Packet (Client::PC_ERROR,
+--		   words.size () == 2 ? words[1]: u8"malformed error response");
+-+		   words.size () == 2 ? words[1]
+-+		   : (const char *) u8"malformed error response");
+- 
+-   if (isLast && !read.IsAtEnd ())
+-     return Packet (Client::PC_ERROR,
+--		   std::string (u8"unexpected extra response"));
+-+		   std::string ((const char *) u8"unexpected extra response"));
+- 
+-   Assert (code < Detail::RC_HWM);
+-   Packet result (responseTable[code] (words));
+-   result.SetRequest (code);
+-   if (result.GetCode () == Client::PC_ERROR && result.GetString ().empty ())
+-     {
+--      std::string msg {u8"malformed response '"};
+-+      std::string msg {(const char *) u8"malformed response '"};
+- 
+-       read.LexedLine (msg);
+--      msg.append (u8"'");
+-+      msg.append ((const char *) u8"'");
+-       result.GetString () = std::move (msg);
+-     }
+-   else if (result.GetCode () == Client::PC_CONNECT)
+-@@ -199,7 +200,7 @@ Packet Client::Connect (char const *agent, char const *ident,
+- 			  size_t alen, size_t ilen)
+- {
+-   write.BeginLine ();
+--  write.AppendWord (u8"HELLO");
+-+  write.AppendWord ((const char *) u8"HELLO");
+-   write.AppendInteger (Version);
+-   write.AppendWord (agent, true, alen);
+-   write.AppendWord (ident, true, ilen);
+-@@ -211,7 +212,8 @@ Packet Client::Connect (char const *agent, char const *ident,
+- // HELLO $version $agent [$flags]
+- Packet ConnectResponse (std::vector<std::string> &words)
+- {
+--  if (words[0] == u8"HELLO" && (words.size () == 3 || words.size () == 4))
+-+  if (words[0] == (const char *) u8"HELLO"
+-+      && (words.size () == 3 || words.size () == 4))
+-     {
+-       char *eptr;
+-       unsigned long val = strtoul (words[1].c_str (), &eptr, 10);
+-@@ -247,7 +249,7 @@ Packet Client::ModuleRepo ()
+- // PATHNAME $dir | ERROR
+- Packet PathnameResponse (std::vector<std::string> &words)
+- {
+--  if (words[0] == u8"PATHNAME" && words.size () == 2)
+-+  if (words[0] == (const char *) u8"PATHNAME" && words.size () == 2)
+-     return Packet (Client::PC_PATHNAME, std::move (words[1]));
+- 
+-   return Packet (Client::PC_ERROR, u8"");
+-@@ -256,7 +258,7 @@ Packet PathnameResponse (std::vector<std::string> &words)
+- // OK or ERROR
+- Packet OKResponse (std::vector<std::string> &words)
+- {
+--  if (words[0] == u8"OK")
+-+  if (words[0] == (const char *) u8"OK")
+-     return Packet (Client::PC_OK);
+-   else
+-     return Packet (Client::PC_ERROR,
+-@@ -319,11 +321,11 @@ Packet Client::IncludeTranslate (char const *include, Flags flags, size_t ilen)
+- // PATHNAME $cmifile
+- Packet IncludeTranslateResponse (std::vector<std::string> &words)
+- {
+--  if (words[0] == u8"BOOL" && words.size () == 2)
+-+  if (words[0] == (const char *) u8"BOOL" && words.size () == 2)
+-     {
+--      if (words[1] == u8"FALSE")
+--	return Packet (Client::PC_BOOL, 0);
+--      else if (words[1] == u8"TRUE")
+-+      if (words[1] == (const char *) u8"FALSE")
+-+	return Packet (Client::PC_BOOL);
+-+      else if (words[1] == (const char *) u8"TRUE")
+- 	return Packet (Client::PC_BOOL, 1);
+-       else
+- 	return Packet (Client::PC_ERROR, u8"");
+-diff --git a/libcody/cody.hh b/libcody/cody.hh
+-index 789ce9e70b7..93bce93aa94 100644
+---- a/libcody/cody.hh
+-+++ b/libcody/cody.hh
+-@@ -47,12 +47,21 @@ namespace Detail  {
+- 
+- // C++11 doesn't have utf8 character literals :(
+- 
+-+#if __cpp_char8_t >= 201811
+-+template<unsigned I>
+-+constexpr char S2C (char8_t const (&s)[I])
+-+{
+-+  static_assert (I == 2, "only single octet strings may be converted");
+-+  return s[0];
+-+}
+-+#else
+- template<unsigned I>
+- constexpr char S2C (char const (&s)[I])
+- {
+-   static_assert (I == 2, "only single octet strings may be converted");
+-   return s[0];
+- }
+-+#endif
+- 
+- /// Internal buffering class.  Used to concatenate outgoing messages
+- /// and Lex incoming ones.
+-@@ -123,6 +132,13 @@ public:
+-       Space ();
+-     Append (str, maybe_quote, len);
+-   }
+-+#if __cpp_char8_t >= 201811
+-+  void AppendWord (char8_t const *str, bool maybe_quote = false,
+-+		   size_t len = ~size_t (0))
+-+  {
+-+    AppendWord ((const char *) str, maybe_quote, len);
+-+  }
+-+#endif
+-   /// Add a word as with AppendWord
+-   /// @param str the string to append
+-   /// @param maybe_quote string might need quoting, as for Append
+-@@ -264,6 +280,12 @@ public:
+-     : string (s), cat (STRING), code (c)
+-   {
+-   }
+-+#if __cpp_char8_t >= 201811
+-+  Packet (unsigned c, const char8_t *s)
+-+    : string ((const char *) s), cat (STRING), code (c)
+-+  {
+-+  }
+-+#endif
+-   Packet (unsigned c, std::vector<std::string> &&v)
+-     : vector (std::move (v)), cat (VECTOR), code (c)
+-   {
+-diff --git a/libcody/server.cc b/libcody/server.cc
+-index e2fa069bb93..c18469fae84 100644
+---- a/libcody/server.cc
+-+++ b/libcody/server.cc
+-@@ -36,12 +36,12 @@ static RequestPair
+-   const requestTable[Detail::RC_HWM] =
+-   {
+-     // Same order as enum RequestCode
+--    RequestPair {u8"HELLO", nullptr},
+--    RequestPair {u8"MODULE-REPO", ModuleRepoRequest},
+--    RequestPair {u8"MODULE-EXPORT", ModuleExportRequest},
+--    RequestPair {u8"MODULE-IMPORT", ModuleImportRequest},
+--    RequestPair {u8"MODULE-COMPILED", ModuleCompiledRequest},
+--    RequestPair {u8"INCLUDE-TRANSLATE", IncludeTranslateRequest},
+-+    RequestPair {(const char *) u8"HELLO", nullptr},
+-+    RequestPair {(const char *) u8"MODULE-REPO", ModuleRepoRequest},
+-+    RequestPair {(const char *) u8"MODULE-EXPORT", ModuleExportRequest},
+-+    RequestPair {(const char *) u8"MODULE-IMPORT", ModuleImportRequest},
+-+    RequestPair {(const char *) u8"MODULE-COMPILED", ModuleCompiledRequest},
+-+    RequestPair {(const char *) u8"INCLUDE-TRANSLATE", IncludeTranslateRequest},
+-   };
+- }
+- 
+-@@ -135,21 +135,21 @@ void Server::ProcessRequests (void)
+- 	  std::string msg;
+- 
+- 	  if (err > 0)
+--	    msg = u8"error processing '";
+-+	    msg = (const char *) u8"error processing '";
+- 	  else if (ix >= Detail::RC_HWM)
+--	    msg = u8"unrecognized '";
+-+	    msg = (const char *) u8"unrecognized '";
+- 	  else if (IsConnected () && ix == Detail::RC_CONNECT)
+--	    msg = u8"already connected '";
+-+	    msg = (const char *) u8"already connected '";
+- 	  else if (!IsConnected () && ix != Detail::RC_CONNECT)
+--	    msg = u8"not connected '";
+-+	    msg = (const char *) u8"not connected '";
+- 	  else
+--	    msg = u8"malformed '";
+-+	    msg = (const char *) u8"malformed '";
+- 
+- 	  read.LexedLine (msg);
+--	  msg.append (u8"'");
+-+	  msg.append ((const char *) u8"'");
+- 	  if (err > 0)
+- 	    {
+--	      msg.append (u8" ");
+-+	      msg.append ((const char *) u8" ");
+- 	      msg.append (strerror (err));
+- 	    }
+- 	  resolver->ErrorResponse (this, std::move (msg));
+-@@ -176,7 +176,7 @@ Resolver *ConnectRequest (Server *s, Resolver *r,
+-     return nullptr;
+- 
+-   if (words.size () == 3)
+--    words.emplace_back (u8"");
+-+    words.emplace_back ((const char *) u8"");
+-   unsigned version = ParseUnsigned (words[1]);
+-   if (version == ~0u)
+-     return nullptr;
+--- 
+-2.54.0
+-
+diff --git a/package/gcc-bare-metal/0006-build-Move-sstream-and-memory-include-above-safe-cty.patch b/package/gcc-bare-metal/0006-build-Move-sstream-and-memory-include-above-safe-cty.patch
+deleted file mode 100644
+index e48dd91c18..0000000000
+--- a/package/gcc-bare-metal/0006-build-Move-sstream-and-memory-include-above-safe-cty.patch
++++ /dev/null
+@@ -1,78 +0,0 @@
+-From 046776dac7cc74bdbab36f450af80644a045858a Mon Sep 17 00:00:00 2001
+-From: Andrew Pinski <quic_apinski@quicinc.com>
+-Date: Mon, 25 Nov 2024 14:03:27 -0800
+-Subject: [PATCH] build: Move sstream and memory include above safe-ctype.h
+- [PR124830]
+-
+-This picks r15-5661-gf6e00226a4ca6 to older branches, also moving
+-the <memory> include to fix build issues with a C++20 host compiler.
+-
+-sstream in some versions of libstdc++ include locale which might not have been
+-included yet. safe-ctype.h defines the toupper, tolower, etc. as macros so the
+-c++ header files needed to be included before hand as comment in system.h says:
+-/* Include C++ standard headers before "safe-ctype.h" to avoid GCC
+-   poisoning the ctype macros through safe-ctype.h */
+-
+-I don't understand how it was working before when memory was included after
+-safe-ctype.h rather than before. But this makes sstream consistent with the
+-other C++ headers.
+-
+-gcc/ChangeLog:
+-
+-	PR target/117771
+-	PR c/124830
+-	* system.h: Move the include of sstream and memory above safe-ctype.h.
+-
+-Signed-off-by: Andrew Pinski <quic_apinski@quicinc.com>
+-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+-Upstream: https://gcc.gnu.org/git?p=gcc.git;a=commit;h=046776dac7cc74bdbab36f450af80644a045858a
+----
+- gcc/system.h | 21 +++++++++------------
+- 1 file changed, 9 insertions(+), 12 deletions(-)
+-
+-diff --git a/gcc/system.h b/gcc/system.h
+-index b18482c7190..da331f105ba 100644
+---- a/gcc/system.h
+-+++ b/gcc/system.h
+-@@ -222,6 +222,15 @@ extern int fprintf_unlocked (FILE *, const char *, ...);
+- #ifdef INCLUDE_FUNCTIONAL
+- # include <functional>
+- #endif
+-+#ifdef INCLUDE_SSTREAM
+-+# include <sstream>
+-+#endif
+-+/* Some of the headers included by <memory> can use "abort" within a
+-+   namespace, e.g. "_VSTD::abort();", which fails after we use the
+-+   preprocessor to redefine "abort" as "fancy_abort" below.  */
+-+#ifdef INCLUDE_MEMORY
+-+# include <memory>
+-+#endif
+- # include <cstring>
+- # include <initializer_list>
+- # include <new>
+-@@ -758,22 +767,10 @@ private:
+- #define LIKELY(x) (__builtin_expect ((x), 1))
+- #define UNLIKELY(x) (__builtin_expect ((x), 0))
+- 
+--/* Some of the headers included by <memory> can use "abort" within a
+--   namespace, e.g. "_VSTD::abort();", which fails after we use the
+--   preprocessor to redefine "abort" as "fancy_abort" below.  */
+--
+--#ifdef INCLUDE_MEMORY
+--# include <memory>
+--#endif
+--
+- #ifdef INCLUDE_MUTEX
+- # include <mutex>
+- #endif
+- 
+--#ifdef INCLUDE_SSTREAM
+--# include <sstream>
+--#endif
+--
+- #ifdef INCLUDE_MALLOC_H
+- #if defined(HAVE_MALLINFO) || defined(HAVE_MALLINFO2)
+- #include <malloc.h>
+--- 
+-2.54.0
+-
+diff --git a/package/gcc-bare-metal/gcc-bare-metal.hash b/package/gcc-bare-metal/gcc-bare-metal.hash
+index d6db148430..972ce41534 100644
+--- a/package/gcc-bare-metal/gcc-bare-metal.hash
++++ b/package/gcc-bare-metal/gcc-bare-metal.hash
+@@ -1,5 +1,5 @@
+-# From https://gcc.gnu.org/pub/gcc/releases/gcc-14.3.0/sha512.sum
+-sha512  cb4e3259640721bbd275c723fe4df53d12f9b1673afb3db274c22c6aa457865dccf2d6ea20b4fd4c591f6152e6d4b87516c402015900f06ce9d43af66d3b7a93  gcc-14.3.0.tar.xz
++# From https://gcc.gnu.org/pub/gcc/releases/gcc-14.4.0/sha512.sum
++sha512  725ed8bdd43ef1726ffe8b5e8615a13e247fac9575b7626ae013a2975d000ea213212dc414b2f2631ac4785c1c8beca85555222faf9904d3b2fa6a3807a83a15  gcc-14.4.0.tar.xz
  
-+# 0001-udiskslinuxfilesystem-Separate-real-caller-identity-.patch
-+# 0002-udiskslinuxfilesystem-Rework-fstab-mount-authorizati.patch
-+# 0003-udiskslinuxfilesystem-Log-real-caller-uid-for-as-use.patch
-+# 0004-udisksdaemonutil-Pass-as-user-target-to-polkit-detai.patch
-+# 0005-tests-Add-security-tests-for-as-user-mount-authoriza.patch
-+UDISKS_IGNORE_CVES += CVE-2026-7867
-+
- ifeq ($(BR2_PACKAGE_UDISKS_FHS_MEDIA),y)
- UDISKS_CONF_OPTS += --enable-fhs-media
- else
-
---===============2120263527501737790==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+ # Locally calculated
+ sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
+diff --git a/package/gcc-bare-metal/gcc-bare-metal.mk b/package/gcc-bare-metal/gcc-bare-metal.mk
+index a69d86057e..27c778d4ed 100644
+--- a/package/gcc-bare-metal/gcc-bare-metal.mk
++++ b/package/gcc-bare-metal/gcc-bare-metal.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GCC_BARE_METAL_VERSION = 14.3.0
++GCC_BARE_METAL_VERSION = 14.4.0
+ GCC_BARE_METAL_SITE = $(BR2_GNU_MIRROR)/gcc/gcc-$(GCC_BARE_METAL_VERSION)
+ GCC_BARE_METAL_SOURCE = gcc-$(GCC_BARE_METAL_VERSION).tar.xz
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============2120263527501737790==--
