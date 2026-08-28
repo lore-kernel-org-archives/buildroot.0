@@ -4,58 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02D56C61DCB
-	for <buildroot@archiver.kernel.org>; Fri, 28 Aug 2026 14:26:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2949BC61DD3
+	for <buildroot@archiver.kernel.org>; Fri, 28 Aug 2026 14:26:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BF98360889;
-	Fri, 28 Aug 2026 14:26:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EB53460896;
+	Fri, 28 Aug 2026 14:26:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Yp3ZQzDcGogf; Fri, 28 Aug 2026 14:26:04 +0000 (UTC)
+ id N87HRdYtfSeA; Fri, 28 Aug 2026 14:26:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1787927164;
-	bh=XzDeOniVLG8X0hXc0gX2jFBAauKJIwxJdJJBNdpZq8s=;
+	s=default; t=1787927169;
+	bh=uQvyZ5A7/6VawsgYljLnBHJyK0S9aW8x7VmkQ+ONhEo=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=rbSqwig0cc5z6SjY4KXYlgKuQbFt5RV8BTcFV4lqppmUD0E3PFqD3GuoOyHT6KUBX
-	 Qw43vZBsFSiUNmH6h6jr1+B5DegiXZRj1pzrxh85A53VkFZuy+x1pOHPgn/FkF+dCS
-	 +rHv1rd+k0I9vmxn5JVSpW0cuLqW4vPIP25OUzwaQWAca6yNXuLWlU5+fAd7sdqe4U
-	 +7NsqZPmfFXjZOiV1iwyLhJPuANnxJC4eF6KLdY5LzExG3Uu7RQWcNdqQyI2OgQyac
-	 Q7TispczmUchJL0d9FAD0kePbtLiEdpBMo/qyGV1g5oXwGouIvCDVHEvgh/Z+sI7Bq
-	 rBVwKGgbu1y7Q==
+	b=Mb2fNuXpHSR+TBniYiX2QM1bbmSy4Vv8X0VbJWIz9DMiZuFuTV0kpRRrJM5wf8YLx
+	 4Wl1c8qttFjzxIpODiSm3IjOtwEs4IDU8U/pxR2oAEy082nWf6IUDLhrpHBqz+lZpJ
+	 PR7wTHdqHPJvdS7U6BRp/TVt8UjSpLX/9vHCs99T8VJGBSFpsPGUOo0/YXnR3n2tcU
+	 FGkpzdrFEjT+tp5SDeDVETgff9bRIQ/kGPGfTg0wdTIA2anHrlHJqJMQ/XeDZdhKVT
+	 nyYHLYxd6x8t8E5mDRYffmL2HvLbZoyUFJ00J3hK+CBjJotxLlv/T2aih97psAKIVE
+	 vw0u+numbW1Pw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B86586087E;
-	Fri, 28 Aug 2026 14:26:04 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 4B5A2D28
+	by smtp3.osuosl.org (Postfix) with ESMTP id 15FCF60882;
+	Fri, 28 Aug 2026 14:26:09 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6B71A386
  for <buildroot@buildroot.org>; Fri, 28 Aug 2026 14:25:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2D79880F45
+ by smtp3.osuosl.org (Postfix) with ESMTP id 58A1160832
  for <buildroot@buildroot.org>; Fri, 28 Aug 2026 14:25:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Sk5uIhpApokU for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8RuJQVp31RZs for <buildroot@buildroot.org>;
  Fri, 28 Aug 2026 14:25:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 163CB80F48
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9C19460831
  for <buildroot@buildroot.org>; Fri, 28 Aug 2026 14:25:39 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 14990921FA; Fri, 28 Aug 2026 14:24:42 +0000 (UTC)
+ id 9A7F0921F9; Fri, 28 Aug 2026 14:24:42 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Fri, 28 Aug 2026 15:58:04 +0200
 X-Git-Refname: refs/heads/2026.05.x
-X-Git-Oldrev: 202c0c4eac16eed7323f85bf698b573dece71610
-X-Git-Newrev: d485b0677cee471b0b0699e40e002b81c5503060
+X-Git-Oldrev: 28f764e641b279b58d0201652b74c267d3f3964e
+X-Git-Newrev: 56ad2396ee71e3a842da9ce7eaa28485210898a9
 X-Patchwork-Hint: ignore
-Message-Id: <20260828142442.14990921FA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.05.x] package/uhttpd: bump
- version, fix cmake 4 compatibility
+Message-Id: <20260828142442.9A7F0921F9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.05.x] package/libssh2: fix
+ CVE-2026-66032
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,70 +70,93 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Titouan Christophe via buildroot <buildroot@buildroot.org>
 Reply-To: Titouan Christophe <titouan.christophe@mind.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============8334910504605244182=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d485b0677cee471b0b0699e40e002b81c5503060
+--===============8334910504605244182==
+Content-Type: text/plain
+
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/56ad2396ee71e3a842da9ce7eaa28485210898a9
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.05.x
 
-This bump includes upstream commit
-https://git.openwrt.org/?p=project/uhttpd.git;a=commitdiff;h=ebb92e6b339b88bbc6b76501b6603c52d4887ba1
-which fixes cmake 4 builds. No backports necessary because the cmake 4
-bump commit e46695bbe4ab583f39f9448f3ef3e044efa28808 is not present in
-any older branches.
+Backport the fix for CVE-2026-66032.
 
-Updated hash of header file which is used as license file due to
-upstream commits:
-https://github.com/openwrt/uhttpd/commits/master/uhttpd.h
+A SFTP error path can leave a dangling pointer after freeing the
+response buffer, which may result in a double free on subsequent error
+handling.
 
-Disabled new configure option UCODE_SUPPORT which was added by upstream
-commit:
-https://git.openwrt.org/?p=project/uhttpd.git;a=commitdiff;h=3ceccd02d86bf4d6609f46d8b30963cc52034cc2
+Use Debian's libssh2 1.11.1 backport of the upstream fix.
 
-Fixes:
-https://autobuild.buildroot.net/results/cc2/cc265d34aed684b88032edd04ca0fc88186ec676/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 88c353351ad4dd0fda97d1a7e2e683db012759d6)
+Signed-off-by: Stefan Müller <stefan.mueller@rey-technology.com>
+[Julien: add links to Debian patches]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 05c13e87e983705ef65c18979a5d1bb7b50438a2)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- package/uhttpd/uhttpd.hash | 4 ++--
- package/uhttpd/uhttpd.mk   | 3 ++-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ ...-sftp-prevent-dangling-pointer-after-free.patch | 29 ++++++++++++++++++++++
+ package/libssh2/libssh2.mk                         |  3 +++
+ 2 files changed, 32 insertions(+)
 
-diff --git a/package/uhttpd/uhttpd.hash b/package/uhttpd/uhttpd.hash
-index e84d2dc3ed..015a04af5a 100644
---- a/package/uhttpd/uhttpd.hash
-+++ b/package/uhttpd/uhttpd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  397aa4bccc4acb06031270d4a549fb266fec3950a88fe3523f0d7de74caff010  uhttpd-15346de8d3ba422002496526ee24c62a3601ab8c-git4.tar.gz
--sha256  ce1803f83f776cc88661e303fede0e5ff52faf1d9f74508fadbecf7705b4c84d  uhttpd.h
-+sha256  5835ced5fd67358b95c07d41a3e2a5991719048f99b5d43bf191287524d8fabe  uhttpd-506e24987b97fbc866005bfb71316bd63601a1ef-git4.tar.gz
-+sha256  b98de120bce554de7d205fbc5734c2b72973e55ce36ef6403510c4583cbe2e14  uhttpd.h
-diff --git a/package/uhttpd/uhttpd.mk b/package/uhttpd/uhttpd.mk
-index f4fcccfa67..2adf409487 100644
---- a/package/uhttpd/uhttpd.mk
-+++ b/package/uhttpd/uhttpd.mk
-@@ -4,12 +4,13 @@
- #
- ################################################################################
+diff --git a/package/libssh2/0007-sftp-prevent-dangling-pointer-after-free.patch b/package/libssh2/0007-sftp-prevent-dangling-pointer-after-free.patch
+new file mode 100644
+index 0000000000..3658c00e0d
+--- /dev/null
++++ b/package/libssh2/0007-sftp-prevent-dangling-pointer-after-free.patch
+@@ -0,0 +1,29 @@
++From 5e4776146552d898b9c0e1b313cd093fa8dc92d0 Mon Sep 17 00:00:00 2001
++From: Will Cosgrove <will@panic.com>
++Date: Thu, 2 Jul 2026 11:00:23 -0700
++Subject: [PATCH] Prevent dangling pointer by nullifying data (#2180)
++
++Set data to NULL after freeing it to avoid dangling pointer. fixes
++GHSA-px3w-7g75-hg7w.
++
++Credit: VladimirEliTokarev
++Forwarded: not-needed
++
++CVE: CVE-2026-66032
++Upstream: https://sources.debian.org/patches/libssh2/1.11.1-6/CVE-2026-66032.patch/
++Upstream: https://github.com/libssh2/libssh2/commit/5e4776146552d898b9c0e1b313cd093fa8dc92d0
++Signed-off-by: Stefan Müller <stefan.mueller@rey-technology.com>
++---
++ src/sftp.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++--- a/src/sftp.c
+++++ b/src/sftp.c
++@@ -1279,6 +1279,7 @@
++                                "got HANDLE FXOK"));
++
++                 LIBSSH2_FREE(session, data);
+++                data = NULL;
++
++                 /* silly situation, but check for a HANDLE */
++                 rc = sftp_packet_require(sftp, SSH_FXP_HANDLE,
+diff --git a/package/libssh2/libssh2.mk b/package/libssh2/libssh2.mk
+index 6b2d774b38..583ed56c1c 100644
+--- a/package/libssh2/libssh2.mk
++++ b/package/libssh2/libssh2.mk
+@@ -27,6 +27,9 @@ LIBSSH2_IGNORE_CVES += CVE-2026-55200
+ # 0006-sftp-symlink-fix-SSH_FXP_STATUS-response.patch
+ LIBSSH2_IGNORE_CVES += CVE-2025-15661
  
--UHTTPD_VERSION = 15346de8d3ba422002496526ee24c62a3601ab8c
-+UHTTPD_VERSION = 506e24987b97fbc866005bfb71316bd63601a1ef
- UHTTPD_SITE = https://git.openwrt.org/project/uhttpd.git
- UHTTPD_SITE_METHOD = git
- UHTTPD_LICENSE = ISC
- UHTTPD_LICENSE_FILES = uhttpd.h
- UHTTPD_DEPENDENCIES = libubox json-c
-+UHTTPD_CONF_OPTS += -DUCODE_SUPPORT=OFF
- 
- ifeq ($(BR2_PACKAGE_LIBXCRYPT),y)
- UHTTPD_DEPENDENCIES += libxcrypt
++# 0007-sftp-prevent-dangling-pointer-after-free.patch
++LIBSSH2_IGNORE_CVES += CVE-2026-66032
++
+ ifeq ($(BR2_PACKAGE_LIBSSH2_MBEDTLS),y)
+ LIBSSH2_DEPENDENCIES += mbedtls
+ LIBSSH2_CONF_OPTS += --with-libmbedcrypto-prefix=$(STAGING_DIR)/usr \
+
+--===============8334910504605244182==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8334910504605244182==--
