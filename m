@@ -1,60 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D085C61DCB
-	for <buildroot@archiver.kernel.org>; Sat, 29 Aug 2026 21:13:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C15AC61DCB
+	for <buildroot@archiver.kernel.org>; Sat, 29 Aug 2026 21:15:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2D99B605D0;
-	Sat, 29 Aug 2026 21:13:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4929B80DF9;
+	Sat, 29 Aug 2026 21:15:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WC4LJkvMoq_i; Sat, 29 Aug 2026 21:13:56 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iGZSwmF5Z-YS; Sat, 29 Aug 2026 21:15:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1788038036;
-	bh=C6D5Yl/Dqmvi3k7g3mHKaLzWaiEJuzDHP24cqZbEQvQ=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=aU8U/wK+2RcCDKJszvhAj6E62qpX9qnUys0G5x1rRzBARfUQGfJXC9bSUhRwHqDwu
-	 fYi3bkoTqWwP11BScMKFLSc1trWVIYx1JguTsFZBeq9pdmIznas47Wi1bB+IuNX672
-	 6dKSTsDlnQIZRA96LCv2AXwjjQhNlF8nhat5Yq8lHSQpKDetR2NeachLZ6Wbceiul1
-	 D2onSd4AqxuxatvtBFrSANcElOSQoxyR0pSy/YsSm3uhUwrAvJostfjYg6E7kNTGJV
-	 Mc7BWhcMK0ybx1DB6+sdTHwa+NdUjnDCBFgrm87GaO6bbuWNjQTWWeBl2zEctYzVj/
-	 RK/witnHNAYaQ==
+	s=default; t=1788038100;
+	bh=qTEWZv5K84tnci7IlWGmWWAx17UUzqHc9JzGDZ4MJwo=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=h8H02Ai877lsjuy/CjC4bpclbseh3Z9vzWoo5SfQnparjLTzZUCRRXNQDdqeYmDD6
+	 F73jR1RQr22BPtnVmgzuBKY8ybYp2WM0jSTgVpIjNm1J8Oz0jKghdJbElocymxInv7
+	 BV9D/BKslT5nflBFEgJrl3jTF+zRceQZlJuDhJvhUOUDbXtZ6YQm0+dnMb2X7mQOTX
+	 56W5JsxBoOjutDSithFUVICD2BTbu+v5kuJTioh1FEukNUH6Teopr9oKqZIO5thZ1m
+	 iM0tbGpeV6xVzgxOxqXfCKVi2DT+qrF/ZePWRd5VDGOU/W5FDeNKu8xZTDAUL1z+E3
+	 ddv8txq4CsIog==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 42319605EE;
-	Sat, 29 Aug 2026 21:13:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4FC4380E07;
+	Sat, 29 Aug 2026 21:15:00 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 6E5F59D4
- for <buildroot@buildroot.org>; Sat, 29 Aug 2026 21:13:54 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 725599D4
+ for <buildroot@buildroot.org>; Sat, 29 Aug 2026 21:14:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6B4A5605EE
- for <buildroot@buildroot.org>; Sat, 29 Aug 2026 21:13:54 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6448D605EE
+ for <buildroot@buildroot.org>; Sat, 29 Aug 2026 21:14:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id puxX74WxVvWv for <buildroot@buildroot.org>;
- Sat, 29 Aug 2026 21:13:53 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id 7Atzu8kT0X14 for <buildroot@buildroot.org>;
+ Sat, 29 Aug 2026 21:14:57 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
+ helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id AEABF605D0
- for <buildroot@buildroot.org>; Sat, 29 Aug 2026 21:13:53 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E47C38F011; Sat, 29 Aug 2026 21:12:55 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 29 Aug 2026 23:13:21 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5ea2135a56d6038329ede3f744fbe5a363bc3557
-X-Git-Newrev: bd5b267b1de0f9e00083ad862cdd5b11f16f402d
-X-Patchwork-Hint: ignore
-Message-Id: <20260829211255.E47C38F011@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/openscap: fix build failure with
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1C6FD605D0
+ for <buildroot@buildroot.org>; Sat, 29 Aug 2026 21:14:56 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-02.galae.net (Postfix) with ESMTPS id 66E2D1A17F7;
+ Sat, 29 Aug 2026 21:14:55 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 267506053C;
+ Sat, 29 Aug 2026 21:14:55 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id A161B11C781D9; 
+ Sat, 29 Aug 2026 23:14:49 +0200 (CEST)
+Date: Sat, 29 Aug 2026 23:14:49 +0200
+To: Alexis =?utf-8?Q?Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+Cc: buildroot@buildroot.org, Titouan Christophe <titouan.christophe@mind.be>,
+ Thomas Perale <thomas.perale@mind.be>
+Message-ID: <apNLj_oBAfcOQcXb@windsurf>
+References: <20260814-openscap_musl_dbus-v1-1-cd42c1c3e0e2@bootlin.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20260814-openscap_musl_dbus-v1-1-cd42c1c3e0e2@bootlin.com>
+X-Last-TLS-Session-Version: TLSv1.3
+Subject: Re: [Buildroot] [PATCH] package/openscap: fix build failure with
  dbus and musl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -69,127 +80,112 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1971486125248318467=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1971486125248318467==
-Content-Type: text/plain
-
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/bd5b267b1de0f9e00083ad862cdd5b11f16f402d
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
-
-The openscap build can fail with the following error:
-
-In file included from [...]/src/OVAL/probes/unix/linux/systemdunitproperty_probe.c:38:
-[...]/src/OVAL/probes/unix/linux/systemdshared.h: In function ‘get_all_systemd_units’:
-[...]/src/OVAL/probes/unix/linux/systemdshared.h:188:50: error: implicit declaration of function ‘basename’; did you mean ‘rename’? [-Wimplicit-function-declaration]
-  188 |                 char *unit_name_s = oscap_strdup(basename(value.str));
-      |                                                  ^~~~~~~~
-      |                                                  rename
-In file included from [...]/src/OVAL/probes/unix/linux/systemdunitdependency_probe.c:37:
-[...]/src/OVAL/probes/unix/linux/systemdshared.h: In function ‘get_all_systemd_units’:
-[...]/src/OVAL/probes/unix/linux/systemdshared.h:188:50: error: implicit declaration of function ‘basename’; did you mean ‘rename’? [-Wimplicit-function-declaration]
-  188 |                 char *unit_name_s = oscap_strdup(basename(value.str));
-      |                                                  ^~~~~~~~
-      |                                                  rename
-
-This error happens when:
-- dbus is enabled in the configuration, making openscap build probes
-  code
-- the toolchain uses musl, which does not declare basename() in string.h
-  the way glibc does
-
-The build error can be reproduced with the following minimal defconfig:
-
-  BR2_arm=y
-  BR2_cortex_a9=y
-  BR2_ARM_ENABLE_NEON=y
-  BR2_ARM_ENABLE_VFP=y
-  BR2_TOOLCHAIN_EXTERNAL=y
-  BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-  BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_MUSL_BLEEDING_EDGE=y
-  BR2_PACKAGE_DBUS=y
-  BR2_PACKAGE_OPENSCAP=y
-
-Backport the upstream fix to allow openscap to build with such
-configuration. The custom patch can be removed once openscap is
-re-released on its branch 1.3.x.
-
-The issue affects master, 2026.05.x and 2025.02.x
-
-Fixes: https://autobuild.buildroot.org/results/a874d4f34d36fa9f8566be90ad2d5facb99aec24/
-Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...02-OVAL-probes-add-missing-header-include.patch | 48 ++++++++++++++++++++++
- 1 file changed, 48 insertions(+)
-
-diff --git a/package/openscap/0002-OVAL-probes-add-missing-header-include.patch b/package/openscap/0002-OVAL-probes-add-missing-header-include.patch
-new file mode 100644
-index 0000000000..0c7598b2b5
---- /dev/null
-+++ b/package/openscap/0002-OVAL-probes-add-missing-header-include.patch
-@@ -0,0 +1,48 @@
-+From ab69b76cb40d6f35d252246e965245804b17591f Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Alexis=20Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-+Date: Thu, 13 Aug 2026 15:18:15 +0200
-+Subject: [PATCH] OVAL/probes: add missing header include
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Openscap build can fail with the following log when
-+-Wimplicit-function-declaration is turned into an error:
-+
-+In file included from [...]/src/OVAL/probes/unix/linux/systemdunitproperty_probe.c:38:
-+[...]/src/OVAL/probes/unix/linux/systemdshared.h: In function ‘get_all_systemd_units’:
-+[...]/src/OVAL/probes/unix/linux/systemdshared.h:188:50: error: implicit declaration of function ‘basename’; did you mean ‘rename’? [-Wimplicit-function-declaration]
-+  188 |                 char *unit_name_s = oscap_strdup(basename(value.str));
-+      |                                                  ^~~~~~~~
-+      |                                                  rename
-+In file included from [...]/src/OVAL/probes/unix/linux/systemdunitdependency_probe.c:37:
-+[...]/src/OVAL/probes/unix/linux/systemdshared.h: In function ‘get_all_systemd_units’:
-+[...]/src/OVAL/probes/unix/linux/systemdshared.h:188:50: error: implicit declaration of function ‘basename’; did you mean ‘rename’? [-Wimplicit-function-declaration]
-+  188 |                 char *unit_name_s = oscap_strdup(basename(value.str));
-+      |                                                  ^~~~~~~~
-+      |                                                  rename
-+
-+Add the missing header include pointed by `man 3 basename` to fix the
-+error.
-+
-+Upstream: https://github.com/OpenSCAP/openscap/commit/ab69b76cb40d6f35d252246e965245804b17591f
-+Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
-+---
-+ src/OVAL/probes/unix/linux/systemdshared.h | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/OVAL/probes/unix/linux/systemdshared.h b/src/OVAL/probes/unix/linux/systemdshared.h
-+index 879ae5be9d6c..57e94ca6f49e 100644
-+--- a/src/OVAL/probes/unix/linux/systemdshared.h
-++++ b/src/OVAL/probes/unix/linux/systemdshared.h
-+@@ -35,6 +35,7 @@
-+ #include <config.h>
-+ #endif
-+ 
-++#include <libgen.h>
-+ #include <limits.h>
-+ #include <stdio.h>
-+ #include "common/debug_priv.h"
-+-- 
-+2.55.0
-+
-
---===============1971486125248318467==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1971486125248318467==--
+T24gRnJpLCBBdWcgMTQsIDIwMjYgYXQgMDI6MDY6MTNQTSArMDIwMCwgQWxleGlzIExvdGhvcsOp
+IHZpYSBidWlsZHJvb3Qgd3JvdGU6Cj4gVGhlIG9wZW5zY2FwIGJ1aWxkIGNhbiBmYWlsIHdpdGgg
+dGhlIGZvbGxvd2luZyBlcnJvcjoKPiAKPiBJbiBmaWxlIGluY2x1ZGVkIGZyb20gWy4uLl0vc3Jj
+L09WQUwvcHJvYmVzL3VuaXgvbGludXgvc3lzdGVtZHVuaXRwcm9wZXJ0eV9wcm9iZS5jOjM4Ogo+
+IFsuLi5dL3NyYy9PVkFML3Byb2Jlcy91bml4L2xpbnV4L3N5c3RlbWRzaGFyZWQuaDogSW4gZnVu
+Y3Rpb24g4oCYZ2V0X2FsbF9zeXN0ZW1kX3VuaXRz4oCZOgo+IFsuLi5dL3NyYy9PVkFML3Byb2Jl
+cy91bml4L2xpbnV4L3N5c3RlbWRzaGFyZWQuaDoxODg6NTA6IGVycm9yOiBpbXBsaWNpdCBkZWNs
+YXJhdGlvbiBvZiBmdW5jdGlvbiDigJhiYXNlbmFtZeKAmTsgZGlkIHlvdSBtZWFuIOKAmHJlbmFt
+ZeKAmT8gWy1XaW1wbGljaXQtZnVuY3Rpb24tZGVjbGFyYXRpb25dCj4gICAxODggfCAgICAgICAg
+ICAgICAgICAgY2hhciAqdW5pdF9uYW1lX3MgPSBvc2NhcF9zdHJkdXAoYmFzZW5hbWUodmFsdWUu
+c3RyKSk7Cj4gICAgICAgfCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgXn5+fn5+fn4KPiAgICAgICB8ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICByZW5hbWUKPiBJbiBmaWxlIGluY2x1ZGVkIGZyb20gWy4uLl0v
+c3JjL09WQUwvcHJvYmVzL3VuaXgvbGludXgvc3lzdGVtZHVuaXRkZXBlbmRlbmN5X3Byb2JlLmM6
+Mzc6Cj4gWy4uLl0vc3JjL09WQUwvcHJvYmVzL3VuaXgvbGludXgvc3lzdGVtZHNoYXJlZC5oOiBJ
+biBmdW5jdGlvbiDigJhnZXRfYWxsX3N5c3RlbWRfdW5pdHPigJk6Cj4gWy4uLl0vc3JjL09WQUwv
+cHJvYmVzL3VuaXgvbGludXgvc3lzdGVtZHNoYXJlZC5oOjE4ODo1MDogZXJyb3I6IGltcGxpY2l0
+IGRlY2xhcmF0aW9uIG9mIGZ1bmN0aW9uIOKAmGJhc2VuYW1l4oCZOyBkaWQgeW91IG1lYW4g4oCY
+cmVuYW1l4oCZPyBbLVdpbXBsaWNpdC1mdW5jdGlvbi1kZWNsYXJhdGlvbl0KPiAgIDE4OCB8ICAg
+ICAgICAgICAgICAgICBjaGFyICp1bml0X25hbWVfcyA9IG9zY2FwX3N0cmR1cChiYXNlbmFtZSh2
+YWx1ZS5zdHIpKTsKPiAgICAgICB8ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICBefn5+fn5+fgo+ICAgICAgIHwgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgIHJlbmFtZQo+IAo+IFRoaXMgZXJyb3IgaGFwcGVucyB3
+aGVuOgo+IC0gZGJ1cyBpcyBlbmFibGVkIGluIHRoZSBjb25maWd1cmF0aW9uLCBtYWtpbmcgb3Bl
+bnNjYXAgYnVpbGQgcHJvYmVzCj4gICBjb2RlCj4gLSB0aGUgdG9vbGNoYWluIHVzZXMgbXVzbCwg
+d2hpY2ggZG9lcyBub3QgZGVjbGFyZSBiYXNlbmFtZSgpIGluIHN0cmluZy5oCj4gICB0aGUgd2F5
+IGdsaWJjIGRvZXMKPiAKPiBUaGUgYnVpbGQgZXJyb3IgY2FuIGJlIHJlcHJvZHVjZWQgd2l0aCB0
+aGUgZm9sbG93aW5nIG1pbmltYWwgZGVmY29uZmlnOgo+IAo+ICAgQlIyX2FybT15Cj4gICBCUjJf
+Y29ydGV4X2E5PXkKPiAgIEJSMl9BUk1fRU5BQkxFX05FT049eQo+ICAgQlIyX0FSTV9FTkFCTEVf
+VkZQPXkKPiAgIEJSMl9UT09MQ0hBSU5fRVhURVJOQUw9eQo+ICAgQlIyX1RPT0xDSEFJTl9FWFRF
+Uk5BTF9CT09UTElOPXkKPiAgIEJSMl9UT09MQ0hBSU5fRVhURVJOQUxfQk9PVExJTl9BUk1WN19F
+QUJJSEZfTVVTTF9CTEVFRElOR19FREdFPXkKPiAgIEJSMl9QQUNLQUdFX0RCVVM9eQo+ICAgQlIy
+X1BBQ0tBR0VfT1BFTlNDQVA9eQo+IAo+IEJhY2twb3J0IHRoZSB1cHN0cmVhbSBmaXggdG8gYWxs
+b3cgb3BlbnNjYXAgdG8gYnVpbGQgd2l0aCBzdWNoCj4gY29uZmlndXJhdGlvbi4gVGhlIGN1c3Rv
+bSBwYXRjaCBjYW4gYmUgcmVtb3ZlZCBvbmNlIG9wZW5zY2FwIGlzCj4gcmUtcmVsZWFzZWQgb24g
+aXRzIGJyYW5jaCAxLjMueC4KPiAKPiBGaXhlczogaHR0cHM6Ly9hdXRvYnVpbGQuYnVpbGRyb290
+Lm9yZy9yZXN1bHRzL2E4NzRkNGYzNGQzNmZhOWY4NTY2YmU5MGFkMmQ1ZmFjYjk5YWVjMjQvCj4g
+U2lnbmVkLW9mZi1ieTogQWxleGlzIExvdGhvcsOpIDxhbGV4aXMubG90aG9yZUBib290bGluLmNv
+bT4KPiAtLS0KPiBUaGUgaXNzdWUgYWZmZWN0cyBtYXN0ZXIsIDIwMjYuMDUueCBhbmQgMjAyNS4w
+Mi54CgpJIGJlbGlldmUgdGhpcyBpbmZvcm1hdGlvbiBzaG91bGQgYmUgcGFydCBvZiB0aGUgY29t
+bWl0IGxvZyBpdHNlbGYsIHNvCnRoYXQgd2hlbiB0aGUgTFRTIGZvbGtzIHJldmlldyB0aGUgY29t
+bWl0cywgdGhleSBoYXZlIGl0IGFzIHBhcnQgb2YKdGhlIGNvbW1pdCBsb2cuIFRpdG91YW4sIFRo
+b21hcywgZG8geW91IGFncmVlPwoKCgo+IC0tLQo+ICAuLi4wMi1PVkFMLXByb2Jlcy1hZGQtbWlz
+c2luZy1oZWFkZXItaW5jbHVkZS5wYXRjaCB8IDQ4ICsrKysrKysrKysrKysrKysrKysrKysKPiAg
+MSBmaWxlIGNoYW5nZWQsIDQ4IGluc2VydGlvbnMoKykKPiAKPiBkaWZmIC0tZ2l0IGEvcGFja2Fn
+ZS9vcGVuc2NhcC8wMDAyLU9WQUwtcHJvYmVzLWFkZC1taXNzaW5nLWhlYWRlci1pbmNsdWRlLnBh
+dGNoIGIvcGFja2FnZS9vcGVuc2NhcC8wMDAyLU9WQUwtcHJvYmVzLWFkZC1taXNzaW5nLWhlYWRl
+ci1pbmNsdWRlLnBhdGNoCj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPiBpbmRleCAwMDAwMDAwMDAw
+MDAuLjBjNzU5OGIyYjVlMQo+IC0tLSAvZGV2L251bGwKPiArKysgYi9wYWNrYWdlL29wZW5zY2Fw
+LzAwMDItT1ZBTC1wcm9iZXMtYWRkLW1pc3NpbmctaGVhZGVyLWluY2x1ZGUucGF0Y2gKPiBAQCAt
+MCwwICsxLDQ4IEBACj4gK0Zyb20gYWI2OWI3NmNiNDBkNmYzNWQyNTIyNDZlOTY1MjQ1ODA0YjE3
+NTkxZiBNb24gU2VwIDE3IDAwOjAwOjAwIDIwMDEKPiArRnJvbTogPT9VVEYtOD9xP0FsZXhpcz0y
+MExvdGhvcj1DMz1BOT89IDxhbGV4aXMubG90aG9yZUBib290bGluLmNvbT4KPiArRGF0ZTogVGh1
+LCAxMyBBdWcgMjAyNiAxNToxODoxNSArMDIwMAo+ICtTdWJqZWN0OiBbUEFUQ0hdIE9WQUwvcHJv
+YmVzOiBhZGQgbWlzc2luZyBoZWFkZXIgaW5jbHVkZQo+ICtNSU1FLVZlcnNpb246IDEuMAo+ICtD
+b250ZW50LVR5cGU6IHRleHQvcGxhaW47IGNoYXJzZXQ9VVRGLTgKPiArQ29udGVudC1UcmFuc2Zl
+ci1FbmNvZGluZzogOGJpdAo+ICsKPiArT3BlbnNjYXAgYnVpbGQgY2FuIGZhaWwgd2l0aCB0aGUg
+Zm9sbG93aW5nIGxvZyB3aGVuCj4gKy1XaW1wbGljaXQtZnVuY3Rpb24tZGVjbGFyYXRpb24gaXMg
+dHVybmVkIGludG8gYW4gZXJyb3I6Cj4gKwo+ICtJbiBmaWxlIGluY2x1ZGVkIGZyb20gWy4uLl0v
+c3JjL09WQUwvcHJvYmVzL3VuaXgvbGludXgvc3lzdGVtZHVuaXRwcm9wZXJ0eV9wcm9iZS5jOjM4
+Ogo+ICtbLi4uXS9zcmMvT1ZBTC9wcm9iZXMvdW5peC9saW51eC9zeXN0ZW1kc2hhcmVkLmg6IElu
+IGZ1bmN0aW9uIOKAmGdldF9hbGxfc3lzdGVtZF91bml0c+KAmToKPiArWy4uLl0vc3JjL09WQUwv
+cHJvYmVzL3VuaXgvbGludXgvc3lzdGVtZHNoYXJlZC5oOjE4ODo1MDogZXJyb3I6IGltcGxpY2l0
+IGRlY2xhcmF0aW9uIG9mIGZ1bmN0aW9uIOKAmGJhc2VuYW1l4oCZOyBkaWQgeW91IG1lYW4g4oCY
+cmVuYW1l4oCZPyBbLVdpbXBsaWNpdC1mdW5jdGlvbi1kZWNsYXJhdGlvbl0KPiArICAxODggfCAg
+ICAgICAgICAgICAgICAgY2hhciAqdW5pdF9uYW1lX3MgPSBvc2NhcF9zdHJkdXAoYmFzZW5hbWUo
+dmFsdWUuc3RyKSk7Cj4gKyAgICAgIHwgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgIF5+fn5+fn5+Cj4gKyAgICAgIHwgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgIHJlbmFtZQo+ICtJbiBmaWxlIGluY2x1ZGVkIGZy
+b20gWy4uLl0vc3JjL09WQUwvcHJvYmVzL3VuaXgvbGludXgvc3lzdGVtZHVuaXRkZXBlbmRlbmN5
+X3Byb2JlLmM6Mzc6Cj4gK1suLi5dL3NyYy9PVkFML3Byb2Jlcy91bml4L2xpbnV4L3N5c3RlbWRz
+aGFyZWQuaDogSW4gZnVuY3Rpb24g4oCYZ2V0X2FsbF9zeXN0ZW1kX3VuaXRz4oCZOgo+ICtbLi4u
+XS9zcmMvT1ZBTC9wcm9iZXMvdW5peC9saW51eC9zeXN0ZW1kc2hhcmVkLmg6MTg4OjUwOiBlcnJv
+cjogaW1wbGljaXQgZGVjbGFyYXRpb24gb2YgZnVuY3Rpb24g4oCYYmFzZW5hbWXigJk7IGRpZCB5
+b3UgbWVhbiDigJhyZW5hbWXigJk/IFstV2ltcGxpY2l0LWZ1bmN0aW9uLWRlY2xhcmF0aW9uXQo+
+ICsgIDE4OCB8ICAgICAgICAgICAgICAgICBjaGFyICp1bml0X25hbWVfcyA9IG9zY2FwX3N0cmR1
+cChiYXNlbmFtZSh2YWx1ZS5zdHIpKTsKPiArICAgICAgfCAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgXn5+fn5+fn4KPiArICAgICAgfCAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgcmVuYW1lCj4gKwo+ICtBZGQg
+dGhlIG1pc3NpbmcgaGVhZGVyIGluY2x1ZGUgcG9pbnRlZCBieSBgbWFuIDMgYmFzZW5hbWVgIHRv
+IGZpeCB0aGUKPiArZXJyb3IuCj4gKwo+ICtVcHN0cmVhbTogaHR0cHM6Ly9naXRodWIuY29tL09w
+ZW5TQ0FQL29wZW5zY2FwL2NvbW1pdC9hYjY5Yjc2Y2I0MGQ2ZjM1ZDI1MjI0NmU5NjUyNDU4MDRi
+MTc1OTFmCj4gK1NpZ25lZC1vZmYtYnk6IEFsZXhpcyBMb3Rob3LDqSA8YWxleGlzLmxvdGhvcmVA
+Ym9vdGxpbi5jb20+Cj4gKy0tLQo+ICsgc3JjL09WQUwvcHJvYmVzL3VuaXgvbGludXgvc3lzdGVt
+ZHNoYXJlZC5oIHwgMSArCj4gKyAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKykKPiArCj4g
+K2RpZmYgLS1naXQgYS9zcmMvT1ZBTC9wcm9iZXMvdW5peC9saW51eC9zeXN0ZW1kc2hhcmVkLmgg
+Yi9zcmMvT1ZBTC9wcm9iZXMvdW5peC9saW51eC9zeXN0ZW1kc2hhcmVkLmgKPiAraW5kZXggODc5
+YWU1YmU5ZDZjLi41N2U5NGNhNmY0OWUgMTAwNjQ0Cj4gKy0tLSBhL3NyYy9PVkFML3Byb2Jlcy91
+bml4L2xpbnV4L3N5c3RlbWRzaGFyZWQuaAo+ICsrKysgYi9zcmMvT1ZBTC9wcm9iZXMvdW5peC9s
+aW51eC9zeXN0ZW1kc2hhcmVkLmgKPiArQEAgLTM1LDYgKzM1LDcgQEAKPiArICNpbmNsdWRlIDxj
+b25maWcuaD4KPiArICNlbmRpZgo+ICsgCj4gKysjaW5jbHVkZSA8bGliZ2VuLmg+Cj4gKyAjaW5j
+bHVkZSA8bGltaXRzLmg+Cj4gKyAjaW5jbHVkZSA8c3RkaW8uaD4KPiArICNpbmNsdWRlICJjb21t
+b24vZGVidWdfcHJpdi5oIgo+ICstLSAKPiArMi41NS4wCj4gKwo+IAo+IC0tLQo+IGJhc2UtY29t
+bWl0OiA2NzliOWVhZDc2MjBiYmYxOTM2MjBkMWViZjU2ZjUzYzE3NjRkMzdhCj4gY2hhbmdlLWlk
+OiAyMDI2MDgxNC1vcGVuc2NhcF9tdXNsX2RidXMtMzJhYjhhNTc1YTQ5Cj4gCj4gQmVzdCByZWdh
+cmRzLAo+IC0tICAKPiBBbGV4aXMgTG90aG9yw6kgPGFsZXhpcy5sb3Rob3JlQGJvb3RsaW4uY29t
+Pgo+IAo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4g
+YnVpbGRyb290IG1haWxpbmcgbGlzdAo+IGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCj4gaHR0cHM6
+Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290CgotLSAKVGhv
+bWFzIFBldGF6em9uaSwgY28tb3duZXIgYW5kIENFTywgQm9vdGxpbgpFbWJlZGRlZCBMaW51eCBh
+bmQgS2VybmVsIGVuZ2luZWVyaW5nIGFuZCB0cmFpbmluZwpodHRwczovL2Jvb3RsaW4uY29tCl9f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBt
+YWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJv
+b3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
