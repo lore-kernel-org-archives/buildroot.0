@@ -1,82 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D5E8C61DBE
-	for <buildroot@archiver.kernel.org>; Sat, 29 Aug 2026 18:30:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48FC5C61DBE
+	for <buildroot@archiver.kernel.org>; Sat, 29 Aug 2026 18:45:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5567A40742;
-	Sat, 29 Aug 2026 18:30:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3DAE26061B;
+	Sat, 29 Aug 2026 18:45:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7PVmnbyY48KC; Sat, 29 Aug 2026 18:30:18 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GK6B8eqV6rhm; Sat, 29 Aug 2026 18:45:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1788028218;
-	bh=49/1nVT0w5WuD83osMCMNiuQWAw0yxGFlCZ61p3OfJA=;
-	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	s=default; t=1788029126;
+	bh=Icbk1c9bgkBkgM0mD6Dx22sEX6veQlxtl2Hgp7l2x9M=;
+	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
 	 From;
-	b=SlwPMQGiLmou1EX5Sq/jN1Oq8zmzHwz6IDQobmYJF74OOURxtnx31GBi/bqK+j/+a
-	 gPwQ8nB8gsn3+TDqayxna50IxOLDOdQ4nXBEYyB7etyPI30W/+VsK6DaYFLwxJGRek
-	 e+DV9fclvecE9kMdwvGIXhalNk1xJjMZW94efifEmMmznKbzB5MlU3VWtKb8NNueo+
-	 gh0i01TwlN1QHEqH7waoDGT8a9JB7+AQVZYT4Iu/SPYThWOqVCc2FfMMn6pT+wVIrj
-	 YmpKc4vCrc/cSDgzzwea3GyDR2Ixd84HiQ+SdBG4nx7NrLOHKS3yEji+9jYrtk+Qos
-	 uoAr0pncj7URg==
+	b=evGqpCyaLa/YyctDLXPBqy04Qa1IkzKuX79u269y9gc4Ei6GaXiqLbERZNuknX4Y4
+	 OnURo+qk/LVPaDghjNZbA6GMq/VUQ9TLr26wpVbjHlVLIyLF7cLBphmLoHmEG24nC5
+	 n6Cu+EBDwg50Vh1hy4ak5dCCrILmiMgFbRvOP4+dgAjrRr4XiQ1AvxK9oLypW7KEGH
+	 1tFipASgoak8MlQJDC/jRJ9mRp/OtOYNCGJMoz52TjBPr3rJK/eOErwh/J/be5zFVC
+	 6qcaazKLA3xzyw0nuhBo0Wi96uiAsCXZ6ZhlBZXa1G03ctxHSm6xKIKneqidJCBL3o
+	 BsfB762ILww/w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E353D40730;
-	Sat, 29 Aug 2026 18:30:17 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 9C4CC23E
- for <buildroot@buildroot.org>; Sat, 29 Aug 2026 18:30:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B08496060C;
+	Sat, 29 Aug 2026 18:45:26 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id F057023E
+ for <buildroot@buildroot.org>; Sat, 29 Aug 2026 18:45:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 829EB80E7B
- for <buildroot@buildroot.org>; Sat, 29 Aug 2026 18:30:16 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id EE495400A5
+ for <buildroot@buildroot.org>; Sat, 29 Aug 2026 18:45:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6L8wXTlUPJ4d for <buildroot@buildroot.org>;
- Sat, 29 Aug 2026 18:30:15 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OEQoE23_2ngL for <buildroot@buildroot.org>;
+ Sat, 29 Aug 2026 18:45:24 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
+ helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none) header.from=korsgaard.com
-Authentication-Results: smtp1.osuosl.org; dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail2 header.b=NeUmS94n
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 655E580E6B
- for <buildroot@buildroot.org>; Sat, 29 Aug 2026 18:30:15 +0000 (UTC)
-DKIM-Signature: a=rsa-sha256;
- b=NeUmS94nGVOJ0fZARisqjtbkqvBqDSaeqnp+8eIlyvx3p+CjqDu9kq8UjMr+ZsgXQGyhMqXN7s/b2qBhk5ppJGh+AO9uk/SA0BUxFk5CBkipyjgUZ/8vzRO41YEZnvjzx6jmvRut7cF/S44VaSnn2YoxY53PPpLn76qCPkwRv9szOqIR0AqHydKoB8EWbw6FnGw5FvgxDQ/grUN0ARKwEn+0No5TaSzM/cJcDIS5fJrrSc8rP+A5L3A9ZLKS1wQq18hNVCgmuF7dMSE42H4cZmvcQE4AaUqwFX4DZtIVG8NY+r9iuhL7eIRnO1Htl4VsiKYqxMcNxkHndq8ZixGvtA==;
- s=purelymail2; d=purelymail.com; v=1;
- bh=K6Zs4ejebRMj1jYVfdri/dABZgYWv9fhgdkd5RmVi8o=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1593292210; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Sat, 29 Aug 2026 18:30:11 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peter@korsgaard.com>) id 1x0Nog-000000002zx-2ILT;
- Sat, 29 Aug 2026 20:30:10 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20260829060259.4186-1-bernd@kuhls.net> (Bernd Kuhls's message of
- "Sat, 29 Aug 2026 08:02:59 +0200")
-References: <20260829060259.4186-1-bernd@kuhls.net>
-Date: Sat, 29 Aug 2026 20:30:10 +0200
-Message-ID: <87tsocu6dp.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id EB2194008C
+ for <buildroot@buildroot.org>; Sat, 29 Aug 2026 18:45:23 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-03.galae.net (Postfix) with ESMTPS id 456504E41425
+ for <buildroot@buildroot.org>; Sat, 29 Aug 2026 18:45:21 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id EB6CE6053C;
+ Sat, 29 Aug 2026 18:45:20 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 957A811C787FD; 
+ Sat, 29 Aug 2026 20:45:14 +0200 (CEST)
+Date: Sat, 29 Aug 2026 20:45:13 +0200
+To: Julien Olivain <ju.o@free.fr>
+Message-ID: <apMogNfb_5pg-OmH@windsurf>
+References: <20260827095520.1049186-1-thomas.petazzoni@bootlin.com>
+ <20260827095520.1049186-3-thomas.petazzoni@bootlin.com>
+ <8733vxypoh.fsf@dell.be.48ers.dk>
+ <ea3adbc598ea273edba25e595fad4969@free.fr>
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] {linux, linux-headers}: bump 6.12.x,
- 6.6.x, 6.1.x, 5.15.x, 5.10.x, 7.1.x, 6.18.x series
+Content-Disposition: inline
+In-Reply-To: <ea3adbc598ea273edba25e595fad4969@free.fr>
+X-Last-TLS-Session-Version: TLSv1.3
+Subject: Re: [Buildroot] [PATCH 3/3] support/testing: add bpftrace test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -88,28 +78,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: romain.naour@smile.fr,
+ Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
+On Sat, Aug 29, 2026 at 06:52:08PM +0200, Julien Olivain wrote:
 
- > Update the latest kernel releases to:
- >  - 6.12.106 -> 6.12.107
- >  - 6.6.154 -> 6.6.155
- >  - 6.1.185 -> 6.1.186
- >  - 5.15.218 -> 5.15.219
- >  - 5.10.267 -> 5.10.268
- >  - 7.1.11 -> 7.1.12
- >  - 6.18.47 -> 6.18.48
+> I initially had the same question. Then, I assumed this new runtime test
+> has been simply copied from the existing test_bcc:
+> https://gitlab.com/buildroot.org/buildroot/-/blob/master/support/testing/tests/package/test_bcc.py
+> which was written with kernel 6.6.32, which was the latest LTS at that time.
 
- > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Absolutely correct. And of course, I see no problem in migrating all
+these tests to 6.18.
 
-Committed, thanks.
+> Once the next 2026.08 release will be complete, I think we will do a cleanup
+> in runtime tests, to add a Aarch64 builtin kernel at the latest LTS. So all
+> those runtime tests will be updated.
 
+I vaguely remember that one intern from Romain Naour was working on
+this, I even vaguely remember seeing patches implementing this, no?
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
