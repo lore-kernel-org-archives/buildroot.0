@@ -4,42 +4,42 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2E05C61DBE
-	for <buildroot@archiver.kernel.org>; Sat, 29 Aug 2026 11:13:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47F5AC61DBE
+	for <buildroot@archiver.kernel.org>; Sat, 29 Aug 2026 11:13:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B8CA6606A3;
-	Sat, 29 Aug 2026 11:13:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 142A460639;
+	Sat, 29 Aug 2026 11:13:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0TZgsaBwKv4i; Sat, 29 Aug 2026 11:13:14 +0000 (UTC)
+ id Gtnzrd914U7p; Sat, 29 Aug 2026 11:13:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1788001994;
-	bh=jvo+vcWgaoAR4uJj69tm5T06u8E38MRxWM1xHZFc9Ac=;
+	s=default; t=1788001997;
+	bh=/PLyw4WEk0ekW284Prp7TKBlyj3xnlHIThhkG1Bz/xQ=;
 	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=f98qa5LqATLurYLdeAfRQeVLHxTynckTl0wOQt2z5FfYR+iebzcClM5xSSSem2Q1z
-	 3UzGGlmK1+DUeC9AdoqDkGwZ9gGpwii4AZvlNkcbjQc8ItzhcqoulnPWczGubFrC19
-	 WDlWVD52Ow+kqT5hvcNxBZmhi8Kfw0ulaQFPyE0k1iQXjUZTkZFaIMAyiz70r+fdhL
-	 f8uBWxfNVYd4mFeOu9CekFi0nWa2K+fmSEaNO10ANIHDJbz/dudm1t9f0+ETdCLw3K
-	 LDOn17b1FZSL8f8/BRRYVTZVwTSF35dMg2uXZzvzsKYY8al2Nef1aJDD0EQxjLoCIk
-	 NpoXrMs/TOT8g==
+	b=FbN7+HDx0NfXR7DnwySueqa2YjIgJyDQrDI8mq7p3D3wVP4lKMDg42xMeQD2bbE7O
+	 PjaLBQTlxBce+zUM7SG62KXGs3oa7mlszMxnm4gUFqyv+Ofg9xUdTFQSkiqzLO4N9H
+	 +qlH3BWPDIk9sN6uyRqQilMz0hlFIwjZZ9ah0EnNdN4PcU7n+jwTG1jwQ6TlMfWkdq
+	 BdBbTnFw/DkSIb+MsdVOiozgHAbKbaLhVQNkzg4UvXEQ22E2v0HncLNefSVd+CJXpU
+	 kvAOsMa3auBWcY89G+LSiLGtDiP9gKZs6CqFhgmuv70QAFE08Kpb4i9334C/cTcBhu
+	 l7d4DuoEgvkow==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AEE7460644;
-	Sat, 29 Aug 2026 11:13:14 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 7A65D334
+	by smtp3.osuosl.org (Postfix) with ESMTP id DDF2D60644;
+	Sat, 29 Aug 2026 11:13:16 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 817273AD
  for <buildroot@buildroot.org>; Sat, 29 Aug 2026 11:13:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6D04B400A5
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6A4EF40052
  for <buildroot@buildroot.org>; Sat, 29 Aug 2026 11:13:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VleJj6ELOuYd for <buildroot@buildroot.org>;
- Sat, 29 Aug 2026 11:13:11 +0000 (UTC)
+ id YBNR0dWfIpVG for <buildroot@buildroot.org>;
+ Sat, 29 Aug 2026 11:13:10 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:111:f403:d40e::;
  helo=meupr01cu001.outbound.protection.outlook.com;
  envelope-from=tfx2001@outlook.com; receiver=<UNKNOWN> 
@@ -47,126 +47,125 @@ Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=outlook.com
 Authentication-Results: smtp2.osuosl.org; dkim=pass (2048-bit key,
  unprotected) header.d=outlook.com header.i=@outlook.com header.a=rsa-sha256
- header.s=selector1 header.b=k0v/YLOS
+ header.s=selector1 header.b=lWqAWakq
 Received: from MEUPR01CU001.outbound.protection.outlook.com
  (mail-australiasoutheastazolkn190100000.outbound.protection.outlook.com
  [IPv6:2a01:111:f403:d40e::])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5A81E4009A
- for <buildroot@buildroot.org>; Sat, 29 Aug 2026 11:13:11 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id BF49F40058
+ for <buildroot@buildroot.org>; Sat, 29 Aug 2026 11:13:09 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=UdBkdWAQhGM5KFvxN0aSEpT13/EEjCI0KJoNmTKhU5hTsyMvu8rXkk/43f9gtoCqvrHjh3DdLnZE1RGRMwP7UqvIlbzVqcFNCc/T+ci+Zj9RpC28O0KEazUbzSm+KUqhHVphZJOZdV+GpOkGJhMgRgXVfG303dkVw3pSNDlDtuZR4h6BgQLgGVt7fmd900qDF7DWUfKid/gE7GPzaL6rEiyP8nHJWgDIsXyFP5mpIee3BbwOu3qXZnxNMMkv5eKSuUQ8YCSaCwyU6idwlZIJG3MzlCp1a9xBrJjJ0jmB2UEyPCYuWs4dxs/skwsdOLfYwGcp4D2pgCzoOiEwTd7wUw==
+ b=bKB9HVPAwnaeK69bpMmzAnNT+B/1ilZdDmArKBosS47jCqcJ6s0WdE1bsQqOXEkH0Be9FsgMLphegE36lOdPrX3y9oeVnoNCq/0leuYMsYyzk5aY1A4IXrqxGtdWzHmQfE6PL3Bozx4rn+5D9pGh8wz/MIPrA3/1+pJSKUW54g+UgGvsehVsFYth3H5xDDxXVoUSZgnXHuqiC3f/D+tjQ4qCFtYovn9KdlzQ81gAWyqTXseoY0FTE/j10VenKyaRFgdpNLZK2fQP5f3fQVkLSKohYbSMCk1wTnADZfayYdG/xJLeHQ5OrbUuIgRlqKJE19UAWpnWD6obvfruPd1nlw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+xvMuDmpb2BbjvRosWXjpcgu0G9KiAfZTpNqMi8Ff6I=;
- b=Dp7Ez4eIvFiLswWBIfjGY/zS1kJ8Birhj599Nv7w7L3sZf2N/BoKmSYXluGk4m6pFo4WkJXOvOVldJJKaEnWSrnsqPaCl42Pll8rexlaDp0XdpHDRKSwIKlEb9+3oAmuK7DHuQlF/UQ2OYPbYUKltr4h2cR491mK6+dWoNysn2hz2VnDIcmJBu0Q0poMvaRJNqFW7fFwG8S6vE8Y0RtQsDRvM2HEtoO84Jy7rIQisRqX5eSr+ALwEtssLuoElsL1IdfYSyXAB2EyD4IkyCO0oY0BwB9qKDVJQaBffH2liAiS7AI056JC8/KuOxGS3u+cEw24R7sSjdlEldWfMCdD8A==
+ bh=bmY7G/gKz54srLJs3tCbBfnXqd/bJXu9/0OhoO4a2FU=;
+ b=TyX2+vyRS2T64QRiTmI/WGcOzVi9LrKRjTnPoij+kwGfKvcGN++O9zAeG1SnJYTJYn5H3Vd4Ejqc4DoMdiJKsvofw+mOi84m4D7jNnAsPw1L97b6w0F64WWSVawGX29JqrGLGQvnDk+SznO+22ZX4tbyazHjOUsYcH3M9NC3bRu9NNYp+jHJbepC7aWtqKtSaWEBiQZr0TA9jykI+D56dGRXSnA5tuKEfnVTBscCsf57mPuDj5HnxTjVvrrXS0cYyFS3JVBoDQ1IsTbM3/4QzTlhX1sDz2hFID3CwtqRbwEzFpg4hf4/CsF2KfdiuSI8cBeWaVl9Y3Nv5uHs9fVNCQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+xvMuDmpb2BbjvRosWXjpcgu0G9KiAfZTpNqMi8Ff6I=;
- b=k0v/YLOSRadygVDXSnXlsP+4PdyXHC31P27of+9vyiqGk2XRsyPWAVjb+q0Ctc2y3qjirfxy3TZmUF8cTyHnf9g3D49weI5XwWksPZxPSdDxLvdJQGpDYOCqJmQiFe+V02JqattvH+6XFl8tLVMamlabH9JKN2xqyG9sxvbNi/YOy9T+6mCkgnmuJv6FFI+lhDEHarPC6VFlnZdwUVpUi8Uv9BDlU4mdgZou33Fu+GFdZLx8RZx1yWUoxdM3U4hiygU1KuI3VbXlkkdK5OpsV9+y6tANsxhNWIqaaz3s63tpe3he30rHRHF0saoM1VYlDVtlMP1dNt0Q272Yo/A03w==
+ bh=bmY7G/gKz54srLJs3tCbBfnXqd/bJXu9/0OhoO4a2FU=;
+ b=lWqAWakqyIIoAHviLwNdZVONKhZR/gRzdYC97LLA6tMFGNXEqEuvGuoPPjv7oSJTShLcH9BJBxQ1lQj3rlO/xknlSFm6+y6Butz++ix1p+KvA/oYFBS8pgDT3Ye4duF9U5CVuUjlojLlJS0H/k+0GMuu7PuJ3iEG4NBawBSz1MZc2Z1fLnFDx76HZq9e2owZt/jtRVuMuWOCrllq32cYbIuM2urqLU0wvpi4Sj1Uce/SZiyCNvm1diPLM6dLnXevdrjmYBoSu6BXYu8Aq4nFjpdLgKR0D+NkOm0n9MeQRSjc1wHCYM2Ld6CLsgwSveJTE2qMkk9GKw9kGX39mfb2iQ==
 Received: from SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM (2603:10c6:10:261::8) by
  SY0P300MB0708.AUSP300.PROD.OUTLOOK.COM (2603:10c6:10:27d::13) with
  Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.360.12; Sat, 29 Aug 2026 11:13:05 +0000
+ 15.21.360.12; Sat, 29 Aug 2026 11:13:00 +0000
 Received: from SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM
  ([fe80::338a:60df:663b:c222]) by SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM
  ([fe80::338a:60df:663b:c222%4]) with mapi id 15.21.0360.008; Sat, 29 Aug 2026
- 11:13:05 +0000
+ 11:13:00 +0000
 From: Fengwei Tan <tfx2001@outlook.com>
 To: buildroot@buildroot.org
 Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
  Romain Naour <romain.naour@gmail.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  Fengwei Tan <tfx2001@outlook.com>
-Date: Sat, 29 Aug 2026 19:12:12 +0800
-Message-ID: <SY8P300MB00410C376146872F9A78FBE6B5AB2@SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM>
+Date: Sat, 29 Aug 2026 19:12:10 +0800
+Message-ID: <SY8P300MB00417A5927F225DDE66026F5B5AB2@SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <SY8P300MB0041EFD8D13BF20DAB3D61FCB5AB2@SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM>
 References: <SY8P300MB0041EFD8D13BF20DAB3D61FCB5AB2@SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM>
 X-ClientProxiedBy: TP0P295CA0015.TWNP295.PROD.OUTLOOK.COM
  (2603:1096:910:2::13) To SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM
  (2603:10c6:10:261::8)
-X-Microsoft-Original-Message-ID: <20260829-missing-toolchain-deps-v1-3-1c2b4919c455@outlook.com>
+X-Microsoft-Original-Message-ID: <20260829-missing-toolchain-deps-v1-1-1c2b4919c455@outlook.com>
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: SY8P300MB0041:EE_|SY0P300MB0708:EE_
-X-MS-Office365-Filtering-Correlation-Id: 368f8be3-28ee-417a-a5a3-08df05be7fc4
+X-MS-Office365-Filtering-Correlation-Id: d91c38be-a51f-495f-8897-08df05be7c82
 X-Microsoft-Antispam: BCL:0;
- ARA:14566002|25010399006|21061999006|6090799003|5072599009|23021999003|19110799012|8060799015|24021099003|51005399006|15080799012|3412199025|440099028|26104999009|40105399003|2607281247196008|1710799026;
-X-Microsoft-Antispam-Message-Info: =?utf-8?B?b25UaVRRNDUvd3lhYmlSN3R3SnVqOHo1TWl6eWI4V2JpUnhsS05WMG51THll?=
- =?utf-8?B?NEdGNU1hUHBlTVpyc0oreGo3V3hyNUhNTGE2SEtJNmdXYjFtUUk2Z055OHkv?=
- =?utf-8?B?cnRLU0toZzZqTCt6WEJ5Y1puNktxVEhaV2JZSVNmQ3VBcG9raURiUXYrYVIw?=
- =?utf-8?B?bjhOaU5Za3hYWklEVTZIVUF2YWxLc0tkUkdlRkZCMWhVbEoxVjJyODhIZW5Q?=
- =?utf-8?B?ekJPZXYyV01pUEE2UWpvUzFHck16MFFDYzRLbHlQT2ZFR2tXbGhEWExwMkFa?=
- =?utf-8?B?dEdabHplZ1lXNWpTVVlFZUpRdER1Znd0MXhlT3RCTDR5STRUTkpacTZOa1ox?=
- =?utf-8?B?Z05qSmdsaGU0QTJiUkdUa3FTWHF5Y0liTGYrMFptL0R1UWdtU2s3eFJSa0pT?=
- =?utf-8?B?OVdqRnFjM1VrNEpZdnBQMGx0NTNQTDdvMnJ0NnI5a0xLNjhhOUFLUVhxczha?=
- =?utf-8?B?dlk4S0F3T1NtUmpRTFRZTUNxUkdlYnQ4TjgyeGp6TUgvRGtvc1dpMStpWXZt?=
- =?utf-8?B?bzYzbk5INmRBK2orVDdaTER0NHI4dW0zNGhla0lEclp0bWJvRm43S3A1UkZY?=
- =?utf-8?B?aFlyb2srTTZiWWx6QWxoM01vdDVySE8xeVZEOHhuL3MxOXJiczE5TUFIS0tP?=
- =?utf-8?B?RlBKZHN6U1E4Y2VGQSsrUVd0cEphajlYS0NaSk14WHB5UWZ1Q2hBeDJYdlhN?=
- =?utf-8?B?Q0pqeklvcW0xbWNDS0hCZG93cGd1bFprcUplTEg3Ui8wdEo2dUR4VDRicVE5?=
- =?utf-8?B?RFdBRDlJajFSZDhZc1FGc0ZmazhkMUdlTE8xWDFwMXlzL3VNN09kd0dJeXdU?=
- =?utf-8?B?TXZiZ05jcm16RmFmcDBjcEhTeG5jSXJDRVA3WnBpRlAvL0VqQ1hoNFZWSlNN?=
- =?utf-8?B?Nm9OTFAyUWlScmRyK3U4dlRqbFVZd1hGOElWdEMvNnJ2T0FONE9peDFDQTJh?=
- =?utf-8?B?NGxLM1A1TGMzd3BZdjY2ZS9Kei9TR2ZzZmozS1FKNzFCY1AzRE4yRnQ0WkYz?=
- =?utf-8?B?b25tMHZwUU1yNzBlNXpIbU9DTUwwMTg2c3BSUzZQK1RpSEt4azdqSVJiQWZM?=
- =?utf-8?B?MWIvODJtU3ZmYlgzRFBZam42ZkdGcE1pNVhDMXJ4MEwzeWI2eFVJU2dVZ0I0?=
- =?utf-8?B?V0NUL3A3TW1FalZ6cW16eVJ6VXhHWTBIYTBDODQrNkRqa3Z3WXV6L2xIa25O?=
- =?utf-8?B?S2hFRlFFeUg3TGZuQS9lUjlMVDRQSUtJRmF0V2Npa2NYZmd1WDJIRkhNbENi?=
- =?utf-8?B?S0RLSmsrQURwWTcxNllJK2FvRmpQMDc2Tk1EVFErMTdIb096TnNhRFNpdmxS?=
- =?utf-8?B?ZzlpUm5iU3lQYTVxTGRmdzE5dXQ0TXh4KzFpSmdaVURHZGIvZ0IzZFZwczdi?=
- =?utf-8?B?SC9lcllsbXNrYWc9PQ==?=
+ ARA:14566002|25010399006|6090799003|5072599009|23021999003|19110799012|8060799015|24021099003|51005399006|15080799012|3412199025|440099028|26104999009|40105399003|2607281247196008|1710799026;
+X-Microsoft-Antispam-Message-Info: =?utf-8?B?Tkh1OTJJZ3BBTE02cFplVk5UZ293QnBFazdYZDROdHREQjlsVml0eFU4cTQ5?=
+ =?utf-8?B?Y3liZGo0dGxQSENUTW1vdVFSN0RxZUM4aVppWFBMVDljcXBaSGpiWGdBYzB2?=
+ =?utf-8?B?RkJ2T3lqclBRelNVU3VFbW1qMlZ1UFcvVCtlMXZGV09MZDYrdm9YeWsxSnNi?=
+ =?utf-8?B?eTJpOCtCMHNrc1VHckRGUEc1WTRFZ25kTkIvODR5UmdWWktNcmNkYTl6Y2Jm?=
+ =?utf-8?B?V1I5SVJmckFqSm02azY3OG51WEVwWFV0R2NkUUloNXJ4OGJkWC9vMnhNcEJj?=
+ =?utf-8?B?bHk3elo5RXBGWUU4THo3L24vMHZBd0REYW1oVGRMUEJUV29jRWdVNEdtZ2l5?=
+ =?utf-8?B?TDA5K1dNL2hES09CWGZuMkFIS2ltNE1DWlZoc3lsaTc1bGkxUHF3K2xQa2pZ?=
+ =?utf-8?B?dHhBS3FOWkp0MkNZQjMwRHpPNVJDc1k2eU4xM1IzcW9QdEVBNEVFelZmdFZP?=
+ =?utf-8?B?V2ZZSDdKbXZLMW0xVlJYc1RKdFpqNHkrZWo2T2t2eE5sZFpSbGt0MlpUblBD?=
+ =?utf-8?B?aHd6N0trQjAzM1NGeFRCMFpPMUFWTzZndmd0cERyU0ljVkZabW1QQkZxZy9x?=
+ =?utf-8?B?VjNzTDZCbzJtcXlXUURia2IxYVFqOTZUTjA5RzA1SWY1TS9xZEpldGpmemNX?=
+ =?utf-8?B?dUhNUkVaSXhCNzl3M0ZXSE5ITUJXbTlrMUE3QU0ya3o1bFVOREpWM0h6L0Fh?=
+ =?utf-8?B?SlpZVndFV0ZhSXJmZEE2MEFZK25ucWtLeVZLUWtzZ1luOU00VkFaT1pnbzhT?=
+ =?utf-8?B?NDFZemlhZU8ybG1kTkVIS05YM21QUDR6SGZ1elBnd2FQREpSaWg0QzgxN0sz?=
+ =?utf-8?B?YXg1TjVpcDUySU96M2VEcXdXNVVkMjRiOUc0aVhmQk4xWDQ2VXpGN1RnTHNh?=
+ =?utf-8?B?eTB2eUdkS21heDh6d2xIbFhLMlJZWjIvaFVOaGdxeEtxbEN6SktHVUdhU2pQ?=
+ =?utf-8?B?Ny9rSk1lazEzWnF0Y21yYW9jK0N1aXRidFpuMm1rRFRIaVAySE05UXArMS9u?=
+ =?utf-8?B?Z0JFT2NMV0lobHZsd0orOUR0aFdkTUZtNXJ2TGVGaEdUeXB1Q3BneHVnSy96?=
+ =?utf-8?B?bUdoSU9nUzBKeEVwOWNGcmVkWFRIb3FXL01EREg2ZTczbEVZci9pOEthVHBM?=
+ =?utf-8?B?SUVtR1JIY3N5c3JJdWhjNjUvZlg5ZnQ0RVN6SHBQVlFKMzJnMHYxK3lvbFow?=
+ =?utf-8?B?WjBLQWhnSmo3K09aVmh1S0pYVFZrTnFNendmSmRPRWlvNkxPb0tKajhUUkF0?=
+ =?utf-8?B?S0MwWFZDMDJnYWhqY0NpMVBlalFJN2I4THNUaE96eXZqSUZuWm9FTUltNHBY?=
+ =?utf-8?Q?RetVWikyZXVDgUZ30eI0Rky+9LVkRIGk6h?=
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bzZFOXkvT0VhcWtkMjF3UmpCT1JvbVZ0RHVKTnV2OFpLMWZ3NmQ1QjZON3BU?=
- =?utf-8?B?dHkzM1hWR3krcnBPalE4UXRpZi9HUXl6NjMzUE9CLytSWUV4NWpvOFlTUlFx?=
- =?utf-8?B?VUZ2UVJ0Mlg0STM3UWppaGcrK3RhdGJpZ3Y3ckViU1diTjRobklIdHdENFlX?=
- =?utf-8?B?eGNob3V3RzI0YXVDUnZmaFV2d29leUpTeHlydHZKRzFERjFyeEJ3ay9md29k?=
- =?utf-8?B?dlA5OFRQTGR2RHZpdnFIS00rTm9KNnFzWEl1dVNpV1BSOGExSDFqYnk2UTF1?=
- =?utf-8?B?UHdwb3RFaytoczdnNit5cXQ5cGNCd0pSUjhlbktKR1hSYlRuS2dDSWdrMG9z?=
- =?utf-8?B?dXdSQWNkdHg0TWVxY0ZoWHdGZmZLMjk5OHFxWWV5RHdYVVYrY1dYOGxFSjV6?=
- =?utf-8?B?enVTWlJMazEvWHBzTGxiWmxRQ1hiVklZWlpuNG9aa0ZYSDVONjlEUHJvQi8y?=
- =?utf-8?B?UGtITWUrTkdiRUZ4dk5veXVibERIMXBoSUlNVW1LcTUzMUNkSDFqbjV2NFNJ?=
- =?utf-8?B?Wm9FbXUzTXpVMWMwRE1LQWpwaS9ScHkzU0FMNHdDeWR0Rk51WmNzQ0d3QXY2?=
- =?utf-8?B?U2Y1WEhyakNlNGJWczJpRVhadlM1S0NHdENGVDlObWljdm5UUDcrdGY3Qjh2?=
- =?utf-8?B?aGhLb2wrY0IrMWNHVElmUFk4WmZPWmhqZTVUNDU5U0ZYTVhWSWxnVFVKdEd1?=
- =?utf-8?B?MTd5TzlxajRmYTBHengrMjgwM1JnV0VoTE1jVXQ1a1ZYc1VSY3J0QUl5MWhX?=
- =?utf-8?B?dWhTQkN1MGM5cDY3cEtmZzVxMnNXMnRqMVZkakg0ZzZ6ZmtqS1hITW5XRXBC?=
- =?utf-8?B?cm1rVmZWUG1DeEtrQ1p1OGs4WnQzUVppMFNsTWh1UU1CaGFkMytPTUxueXVJ?=
- =?utf-8?B?Ym5FUEp5aUhUVCtHTURSQ3BldXRRM2hTakFaSWJyWlU1cy9PSVR2U1VSdjdO?=
- =?utf-8?B?dmIwbDdqRXJWbXhVeDJyTVltNEkwKyttbVRzOUswOGlLQ0t4cWtiQVFSTnRM?=
- =?utf-8?B?cWt6NmxmN3VxUXA4bEorSUpBT3pQMUZVcHdGb3NHdFRLTjZjSjBQb1k5NzE1?=
- =?utf-8?B?dGpWZVF1YnJua0lkakJlWmppTXUrVUhDR1dKU2dHVTNIb2RmTDBrTWR4emtS?=
- =?utf-8?B?MWppeXVZN0lTUzlXaUl5ZnJ3TSswRUZWMUh6ZDhmcVdISjduYUlDZFM0YmpL?=
- =?utf-8?B?bWJwTFJMWm9vZnRZU1JjdllBM1JKaEQxaHg1UDZRVjMrNVN1OVVkaXhxMHUv?=
- =?utf-8?B?SU16UGVKTmJUT283TFRqUW5BcjB1L0xMRklsdHNtZEVNQ1FSa09obExWVklG?=
- =?utf-8?B?ZDc1cXZieHYrcnV3RllmcHkyZEVpZmhUc1BRYWkvbE9oNlc3QmhVT0s5YThN?=
- =?utf-8?B?U3FCVGx1NVNKSHRRa0hnYWZ3bitBRkIwbmZGaEFnazVUaVE0K3ZXa0pybzZw?=
- =?utf-8?B?SFJsaU4rV0cxdVZpS3ZVYlJ2K2VDT0x5Qy9UYWhHRE1FaDZqdFdiSU9ZOGpT?=
- =?utf-8?B?T1laWU50Mi9tVG8vWXNVNnBudkVPclNRTWZtejBXL1pvSDVWaXhZMzR3NTFH?=
- =?utf-8?B?M0d6THdCWjJHZDJQR3pZcTdpVmtUOFVaVVlzSThGa1dreWRWNVFtY2w4RHVw?=
- =?utf-8?B?Rk5PNTY3SndWdjI2RmlMQThDZUltODEzNUZpS1Zkc21LSzFwSUcvUjErQkZo?=
- =?utf-8?B?d25DT2EyS1N2TUY0TGRkWU0zckNYSVIzSFdKNDNrN0MvRWo5U1ZxdC9UZWF4?=
- =?utf-8?B?TjdXMkEzWkVVbWExbVdraUNZaVRYUTVIVWRjUUFjL0pMSmZ5ZnJtZTN0bW5v?=
- =?utf-8?B?dk4rM0YvZEJzTTY5THBQRHVCV29KN0FRTXlRY0VWYkZIa2g3ZWVOSzkyVHFp?=
- =?utf-8?Q?mFe/NDo/cLSMT?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NDhFdkYwdlVRQWhQMzBXNS9zR2U2bDlHclFuM283aXRuYXBwOFZveW9uMng2?=
+ =?utf-8?B?RjVHMGI0cEZHRml0SGlzOHY3a290TGZOdnpqRDdLM0hJQklRRm5sWGxsOXJu?=
+ =?utf-8?B?cVFYY0hNd0l5bzdqMGh6QXl1bnVuUFFyRERiTU1vN3cxNXJKdGNxaVNsT0ts?=
+ =?utf-8?B?VVlpQ0wzOW1JYlhIdmQyTm9qTkh1MWFtVytsd21md1YrMmplRVhUQy9EVGdw?=
+ =?utf-8?B?NkZxZ2NPVG9TT0JHcTdkKzZ6R2o0OTRTWWhmbnNYTmk2Uk42VElEUG1qeVoy?=
+ =?utf-8?B?RHp1YmV1aEFuek5FMXh0VUZxN3VNSi9GK1FLa0Rsbjd4SjdEczNMd2pHSllH?=
+ =?utf-8?B?bmpMS2FyRk9JdU9vOURYRUtMUnhQTHQvSDlLdVhNOHc4QmdpVGN5czVCb1NX?=
+ =?utf-8?B?Z1Uva01IN2VsVW9uRHN1TjFuYXcvdlczbVVQcjZOVGQ4Rk90OEQ5ZjdIbUZz?=
+ =?utf-8?B?dTFyQXNVN0hwak5JUDFWczBVbW9LTlZBeGswaEhmVllGQXdPbjc2SEM5OU5o?=
+ =?utf-8?B?VStqR0FHWldyY014bmQ0eHkvN3V5TUNTN3htSTIyWVBOdC9pUi9YaFhIVEU5?=
+ =?utf-8?B?ZHRPd01jNG93bkpTUGllK1MrcVhyWnlRamxUNnR6VFFoWlNjTGRUM0sxaHJO?=
+ =?utf-8?B?bmxqVDg5OXhyUTBGdSs2VHdsT3FtOVRiL0hLS0puK2E1MjJjVE9sclg1TVdz?=
+ =?utf-8?B?WGo2UElYVUIyNUQ0N2szRVJGTktaMG94Ykc2TG5iQVIrVWRyQjRsNHBJUEZF?=
+ =?utf-8?B?ZUFHZUxvdXRJS0hEd2puV0h2SFZMOUVtSEs5L1ZabXVzOSs0NCs3UnEyOTFP?=
+ =?utf-8?B?THBFLzRKN1cwNVB6ZUw0eVU4KytvNE9ySzFuUkdBdXpKUnNyK0hvWm43QXVz?=
+ =?utf-8?B?WXdKWXFNM295QWQyOEpIR3F5SmtVM3oxd0phRTRCYmZRZXBET0EzS1FaRGM5?=
+ =?utf-8?B?Y2t6Z28xTU42NVNnSWwxYUJKVWdSamF4bGtDQk1iZTVNcUs0d2VoNEFoV0Rw?=
+ =?utf-8?B?andpSjIrdEQxSTBEbEVKOXpSdk94RjI0Rzg1VUNkbHZXUnhBbzJDNzhyRnBh?=
+ =?utf-8?B?eDBsR0pZclRVZyszV3hWaG4rZmpDQ0o0eXhsWkpFcTkxTWpsQ1JkUWlOaUxO?=
+ =?utf-8?B?bHEvVngzeVBNcXVNOFBJczRqWE5ETXNTckFHY3FTa1htU2gzL2Ftb0sxeEgv?=
+ =?utf-8?B?TWhLZnlhZkxzd2J4dEtQTGJsS3RFSzJpWFNMWWdrMis1QlNNRm85R1VFOE5Q?=
+ =?utf-8?B?Q3JIN3ZhbXhIVkJiRVFwRHQ3dU52Q0hpOGJLWG9rd3M1M0hzbC9mMWExbndO?=
+ =?utf-8?B?QUxrbU1vb0Uya3lZdEFValRsU2NNclgxbmIrZy9yM1prQzlsbWc4S09YVG80?=
+ =?utf-8?B?clVndnA5bC9tSzVzT3hoQ0VZcmJvYzNiSjJSblhjcVdTQmxaV0svTVlsaEwz?=
+ =?utf-8?B?NGFXcUhmYytCWTVMMlEwblRkSS9Xa28yeW5Ld1h3OGJxNUNXS1BuRE51d0lD?=
+ =?utf-8?B?WC9nZTJIWDlMYXdpaHR6aFJPeXZOQ1BvU0hzemtmOFY4RTZoS2RFUVF1Z205?=
+ =?utf-8?B?eHhBQzQ0ZE1BQ0VnMG5rK0JGSzdNR3FaZTdEaDFwS2pXaldFVnhvRFlMZlRB?=
+ =?utf-8?B?dWh6MStIM0RWSzJSUG1NSk1kQ2o2T1N0anJsV1NGb292c2RueWkwcFVXZ1Fz?=
+ =?utf-8?B?Q0FpaUNDaldKUE9tNlB6TG9JZVdjVktOeDY4SmRRN2R5cUlwNUU3ejczMUh4?=
+ =?utf-8?B?S2l2Z3hxMnN5UlMvRzlSbUl1bmkrWVRPV3ZRQ0ZNUjRPWDdoRmlIeExlanpL?=
+ =?utf-8?B?OVR3Qi95aXRETUNRcFFxN3VyZStiMmtTaXVFQ2x3REg2anAzWGh6MDhvdTRL?=
+ =?utf-8?Q?HvalXf6AEMIIw?=
 X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 368f8be3-28ee-417a-a5a3-08df05be7fc4
+X-MS-Exchange-CrossTenant-Network-Message-Id: d91c38be-a51f-495f-8897-08df05be7c82
 X-MS-Exchange-CrossTenant-AuthSource: SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Aug 2026 11:13:05.8181 (UTC)
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Aug 2026 11:13:00.5064 (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
 X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: SY0P300MB0708
-Subject: [Buildroot] [PATCH 3/3] support/testing,
- toolchain/toolchain-external/toolchain-external-bootlin: regenerate
- after MMU dependency update
+Subject: [Buildroot] [PATCH 1/3]
+ toolchain/toolchain-external/toolchain-external-bootlin: drop duplicate
+ BR2_TOOLCHAIN_HAS_THREADS selections
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -183,247 +182,2415 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Regenerate the Bootlin toolchain Kconfig and test configurations using
-support/scripts/gen-bootlin-toolchains.
+Regenerate the Bootlin toolchain Kconfig file with
+support/scripts/gen-bootlin-toolchains to remove duplicate
+BR2_TOOLCHAIN_HAS_THREADS selections.
 
-This adds BR2_USE_MMU to the affected uClibc entries and to the
-architecture support conditions, and updates the generated tests.
-The glibc and musl changes only reorder their existing BR2_USE_MMU
-dependencies.
+Commit 184d47a7adb8 ("support/scripts/gen-bootlin-toolchains: add new
+script to support Bootlin toolchains") initially introduced this issue.
+
+Although commit a33e1af4a01c ("support/scripts/gen-bootlin-toolchains:
+avoid selecting _HAS_THREADS multiple times") fixed the generator script,
+the Config.in.options file was not regenerated accordingly.
+
+This is a non-functional cleanup, as repeated Kconfig select statements
+are harmless.
 
 Signed-off-by: Fengwei Tan <tfx2001@outlook.com>
 ---
- .../tests/toolchain/test_external_bootlin.py       |  8 +++++++
- .../toolchain-external-bootlin/Config.in.options   | 28 +++++++++++++---------
- 2 files changed, 25 insertions(+), 11 deletions(-)
+ .../toolchain-external-bootlin/Config.in.options   | 432 ---------------------
+ 1 file changed, 432 deletions(-)
 
-diff --git a/support/testing/tests/toolchain/test_external_bootlin.py b/support/testing/tests/toolchain/test_external_bootlin.py
-index 6bcebf80c0..ecbb364642 100644
---- a/support/testing/tests/toolchain/test_external_bootlin.py
-+++ b/support/testing/tests/toolchain/test_external_bootlin.py
-@@ -2223,6 +2223,7 @@ class TestExternalToolchainBootlinRiscv32ilp32dGlibcBleedingEdge(TestExternalToo
-         BR2_riscv_g=y
-         BR2_RISCV_32=y
-         BR2_RISCV_ABI_ILP32D=y
-+        BR2_USE_MMU=y
-         BR2_TOOLCHAIN_EXTERNAL=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_RISCV32_ILP32D_GLIBC_BLEEDING_EDGE=y
-@@ -2240,6 +2241,7 @@ class TestExternalToolchainBootlinRiscv32ilp32dGlibcStable(TestExternalToolchain
-         BR2_riscv_g=y
-         BR2_RISCV_32=y
-         BR2_RISCV_ABI_ILP32D=y
-+        BR2_USE_MMU=y
-         BR2_TOOLCHAIN_EXTERNAL=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_RISCV32_ILP32D_GLIBC_STABLE=y
-@@ -2257,6 +2259,7 @@ class TestExternalToolchainBootlinRiscv32ilp32dMuslBleedingEdge(TestExternalTool
-         BR2_riscv_g=y
-         BR2_RISCV_32=y
-         BR2_RISCV_ABI_ILP32D=y
-+        BR2_USE_MMU=y
-         BR2_TOOLCHAIN_EXTERNAL=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_RISCV32_ILP32D_MUSL_BLEEDING_EDGE=y
-@@ -2274,6 +2277,7 @@ class TestExternalToolchainBootlinRiscv32ilp32dMuslStable(TestExternalToolchain)
-         BR2_riscv_g=y
-         BR2_RISCV_32=y
-         BR2_RISCV_ABI_ILP32D=y
-+        BR2_USE_MMU=y
-         BR2_TOOLCHAIN_EXTERNAL=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_RISCV32_ILP32D_MUSL_STABLE=y
-@@ -2291,6 +2295,7 @@ class TestExternalToolchainBootlinRiscv32ilp32dUclibcBleedingEdge(TestExternalTo
-         BR2_riscv_g=y
-         BR2_RISCV_32=y
-         BR2_RISCV_ABI_ILP32D=y
-+        BR2_USE_MMU=y
-         BR2_TOOLCHAIN_EXTERNAL=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_RISCV32_ILP32D_UCLIBC_BLEEDING_EDGE=y
-@@ -2308,6 +2313,7 @@ class TestExternalToolchainBootlinRiscv32ilp32dUclibcStable(TestExternalToolchai
-         BR2_riscv_g=y
-         BR2_RISCV_32=y
-         BR2_RISCV_ABI_ILP32D=y
-+        BR2_USE_MMU=y
-         BR2_TOOLCHAIN_EXTERNAL=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_RISCV32_ILP32D_UCLIBC_STABLE=y
-@@ -3332,6 +3338,7 @@ class TestExternalToolchainBootlinXtensalx60UclibcBleedingEdge(TestExternalToolc
-         BR2_xtensa=y
-         BR2_XTENSA_CUSTOM=y
-         BR2_XTENSA_LITTLE_ENDIAN=y
-+        BR2_USE_MMU=y
-         BR2_TOOLCHAIN_EXTERNAL=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_XTENSA_LX60_UCLIBC_BLEEDING_EDGE=y
-@@ -3348,6 +3355,7 @@ class TestExternalToolchainBootlinXtensalx60UclibcStable(TestExternalToolchain):
-         BR2_xtensa=y
-         BR2_XTENSA_CUSTOM=y
-         BR2_XTENSA_LITTLE_ENDIAN=y
-+        BR2_USE_MMU=y
-         BR2_TOOLCHAIN_EXTERNAL=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_XTENSA_LX60_UCLIBC_STABLE=y
 diff --git a/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options b/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options
-index e8c5301780..f59c6aed5e 100644
+index e98ee023cb..e8c5301780 100644
 --- a/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options
 +++ b/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options
-@@ -11,7 +11,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARCH_SUPPORTS
- 	default y if BR2_arm && (BR2_ARM_CPU_ARMV7A && BR2_ARM_EABIHF) || BR2_ARM_CPU_ARMV8A
- 	default y if BR2_armeb && (BR2_ARM_CPU_ARMV7A && BR2_ARM_EABIHF) || BR2_ARM_CPU_ARMV8A
- 	default y if BR2_arm && BR2_ARM_CPU_ARMV7M && BR2_BINFMT_FLAT
--	default y if BR2_m68k_m68k
-+	default y if BR2_m68k_m68k && BR2_USE_MMU
- 	default y if BR2_m68k_cf
- 	default y if BR2_microblazebe
- 	default y if BR2_microblazeel
-@@ -30,7 +30,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARCH_SUPPORTS
- 	default y if BR2_powerpc64 && BR2_powerpc_e6500
- 	default y if BR2_powerpc64 && BR2_powerpc_power8
- 	default y if BR2_powerpc64le && BR2_powerpc_power8
--	default y if BR2_riscv && BR2_riscv_g && BR2_RISCV_32 && BR2_RISCV_ABI_ILP32D
-+	default y if BR2_riscv && BR2_riscv_g && BR2_RISCV_32 && BR2_RISCV_ABI_ILP32D && BR2_USE_MMU
- 	default y if BR2_riscv && BR2_riscv_g && BR2_RISCV_64 && BR2_RISCV_ABI_LP64D && BR2_USE_MMU
- 	default y if BR2_s390x && BR2_s390x_z13
- 	default y if BR2_sh && BR2_sh4
-@@ -44,7 +44,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARCH_SUPPORTS
- 	default y if BR2_x86_64 && BR2_X86_CPU_HAS_MMX && BR2_X86_CPU_HAS_SSE && BR2_X86_CPU_HAS_SSE2 && BR2_X86_CPU_HAS_SSE3 && BR2_X86_CPU_HAS_SSSE3 && BR2_X86_CPU_HAS_SSE4 && BR2_X86_CPU_HAS_SSE42
- 	default y if BR2_i386 && BR2_X86_CPU_HAS_MMX && BR2_X86_CPU_HAS_SSE && BR2_X86_CPU_HAS_SSE2 && BR2_X86_CPU_HAS_SSE3 && BR2_X86_CPU_HAS_SSSE3
- 	default y if BR2_i386 && !BR2_x86_i486 && !BR2_x86_i586 && !BR2_x86_x1000 && !BR2_x86_pentium_mmx && !BR2_x86_geode && !BR2_x86_c3 && !BR2_x86_winchip_c6 && !BR2_x86_winchip2
--	default y if BR2_xtensa && BR2_XTENSA_CUSTOM && BR2_XTENSA_LITTLE_ENDIAN
-+	default y if BR2_xtensa && BR2_XTENSA_CUSTOM && BR2_XTENSA_LITTLE_ENDIAN && BR2_USE_MMU
- 
- if BR2_TOOLCHAIN_EXTERNAL_BOOTLIN
- 
-@@ -1087,8 +1087,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7M_UCLIBC_STABLE
- config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_M68K_68XXX_GLIBC_BLEEDING_EDGE
- 	bool "m68k-68xxx glibc bleeding-edge 2025.08-1"
- 	depends on BR2_m68k_m68k
--	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_16
- 	depends on BR2_USE_MMU
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_16
+@@ -67,10 +67,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -91,10 +89,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -116,10 +112,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_MUSL_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -140,10 +134,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_MUSL_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -164,10 +156,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_UCLIBC_BLEEDING_EDGE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -188,10 +178,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_UCLIBC_STABLE
+ 	select BR2_ENABLE_LOCALE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -213,10 +201,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64BE_GLIBC_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -237,10 +223,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64BE_GLIBC_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -262,10 +246,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64BE_MUSL_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -286,10 +268,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64BE_MUSL_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -310,10 +290,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64BE_UCLIBC_BLEEDING_EDGE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -334,10 +312,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64BE_UCLIBC_STABLE
+ 	select BR2_ENABLE_LOCALE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -360,10 +336,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARCLE_750D_UCLIBC_BLEEDING_EDGE
+ 	select BR2_ENABLE_LOCALE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -385,10 +359,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARCLE_750D_UCLIBC_STABLE
+ 	select BR2_USE_WCHAR
+ 	select BR2_ENABLE_LOCALE
+ 	select BR2_INSTALL_LIBSTDCPP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -410,10 +382,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARCLE_HS38_GLIBC_BLEEDING_EDGE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -434,10 +404,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARCLE_HS38_GLIBC_STABLE
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -459,10 +427,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARCLE_HS38_UCLIBC_BLEEDING_EDGE
+ 	select BR2_ENABLE_LOCALE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -483,10 +449,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARCLE_HS38_UCLIBC_STABLE
+ 	select BR2_USE_WCHAR
+ 	select BR2_ENABLE_LOCALE
+ 	select BR2_INSTALL_LIBSTDCPP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -510,10 +474,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV5_EABI_GLIBC_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -536,10 +498,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV5_EABI_GLIBC_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -563,10 +523,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV5_EABI_MUSL_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -589,10 +547,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV5_EABI_MUSL_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -616,10 +572,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV5_EABI_UCLIBC_BLEEDING_EDGE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -642,10 +596,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV5_EABI_UCLIBC_STABLE
+ 	select BR2_ENABLE_LOCALE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -669,10 +621,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV6_EABIHF_GLIBC_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -695,10 +645,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV6_EABIHF_GLIBC_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -722,10 +670,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV6_EABIHF_MUSL_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -748,10 +694,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV6_EABIHF_MUSL_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -775,10 +719,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV6_EABIHF_UCLIBC_BLEEDING_EDGE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -801,10 +743,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV6_EABIHF_UCLIBC_STABLE
+ 	select BR2_ENABLE_LOCALE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -827,10 +767,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_GLIBC_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -852,10 +790,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_GLIBC_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -878,10 +814,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_MUSL_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -903,10 +837,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_MUSL_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -929,10 +861,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_UCLIBC_BLEEDING_EDGE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -954,10 +884,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_UCLIBC_STABLE
+ 	select BR2_ENABLE_LOCALE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -980,10 +908,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMEBV7_EABIHF_GLIBC_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -1005,10 +931,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMEBV7_EABIHF_GLIBC_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -1031,10 +955,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMEBV7_EABIHF_MUSL_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -1056,10 +978,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMEBV7_EABIHF_MUSL_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -1082,10 +1002,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMEBV7_EABIHF_UCLIBC_BLEEDING_EDGE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -1107,10 +1025,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMEBV7_EABIHF_UCLIBC_STABLE
+ 	select BR2_ENABLE_LOCALE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -1134,7 +1050,6 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7M_UCLIBC_BLEEDING_EDGE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+@@ -1158,7 +1073,6 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7M_UCLIBC_STABLE
+ 	select BR2_ENABLE_LOCALE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+@@ -1181,10 +1095,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_M68K_68XXX_GLIBC_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -1205,10 +1117,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_M68K_68XXX_GLIBC_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -1230,10 +1140,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_M68K_68XXX_MUSL_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -1254,10 +1162,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_M68K_68XXX_MUSL_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -1279,10 +1185,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_M68K_68XXX_UCLIBC_BLEEDING_EDGE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -1303,10 +1207,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_M68K_68XXX_UCLIBC_STABLE
+ 	select BR2_ENABLE_LOCALE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -1328,7 +1230,6 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_M68K_COLDFIRE_UCLIBC_BLEEDING_EDGE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+@@ -1350,7 +1251,6 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_M68K_COLDFIRE_UCLIBC_STABLE
+ 	select BR2_ENABLE_LOCALE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+@@ -1371,10 +1271,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MICROBLAZEBE_GLIBC_BLEEDING_EDGE
  	select BR2_TOOLCHAIN_GCC_AT_LEAST_15
  	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_15
  	select BR2_INSTALL_LIBSTDCPP
-@@ -1110,8 +1110,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_M68K_68XXX_GLIBC_BLEEDING_EDGE
- config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_M68K_68XXX_GLIBC_STABLE
- 	bool "m68k-68xxx glibc stable 2025.08-1"
- 	depends on BR2_m68k_m68k
--	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_15
- 	depends on BR2_USE_MMU
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_15
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -1394,10 +1292,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MICROBLAZEBE_GLIBC_STABLE
  	select BR2_TOOLCHAIN_GCC_AT_LEAST_14
  	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
  	select BR2_INSTALL_LIBSTDCPP
-@@ -1132,8 +1132,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_M68K_68XXX_GLIBC_STABLE
- config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_M68K_68XXX_MUSL_BLEEDING_EDGE
- 	bool "m68k-68xxx musl bleeding-edge 2025.08-1"
- 	depends on BR2_m68k_m68k
--	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_16
- 	depends on BR2_USE_MMU
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_16
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -1417,10 +1313,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MICROBLAZEBE_MUSL_BLEEDING_EDGE
  	select BR2_TOOLCHAIN_GCC_AT_LEAST_15
  	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_15
  	select BR2_INSTALL_LIBSTDCPP
-@@ -1155,8 +1155,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_M68K_68XXX_MUSL_BLEEDING_EDGE
- config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_M68K_68XXX_MUSL_STABLE
- 	bool "m68k-68xxx musl stable 2025.08-1"
- 	depends on BR2_m68k_m68k
--	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_15
- 	depends on BR2_USE_MMU
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_15
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -1440,10 +1334,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MICROBLAZEBE_MUSL_STABLE
  	select BR2_TOOLCHAIN_GCC_AT_LEAST_14
  	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
  	select BR2_INSTALL_LIBSTDCPP
-@@ -1177,6 +1177,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_M68K_68XXX_MUSL_STABLE
- config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_M68K_68XXX_UCLIBC_BLEEDING_EDGE
- 	bool "m68k-68xxx uclibc bleeding-edge 2025.08-1"
- 	depends on BR2_m68k_m68k
-+	depends on BR2_USE_MMU
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_16
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_15
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_15
-@@ -1200,6 +1201,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_M68K_68XXX_UCLIBC_BLEEDING_EDGE
- config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_M68K_68XXX_UCLIBC_STABLE
- 	bool "m68k-68xxx uclibc stable 2025.08-1"
- 	depends on BR2_m68k_m68k
-+	depends on BR2_USE_MMU
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_15
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_14
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
-@@ -3455,8 +3457,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_RISCV32_ILP32D_GLIBC_BLEEDING_EDGE
- 	depends on BR2_riscv_g
- 	depends on BR2_RISCV_32
- 	depends on BR2_RISCV_ABI_ILP32D
--	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_16
- 	depends on BR2_USE_MMU
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_16
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -1464,10 +1356,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MICROBLAZEBE_UCLIBC_BLEEDING_EDGE
+ 	select BR2_USE_WCHAR
+ 	select BR2_ENABLE_LOCALE
+ 	select BR2_INSTALL_LIBSTDCPP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -1488,10 +1378,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MICROBLAZEBE_UCLIBC_STABLE
+ 	select BR2_USE_WCHAR
+ 	select BR2_ENABLE_LOCALE
+ 	select BR2_INSTALL_LIBSTDCPP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -1511,10 +1399,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MICROBLAZEEL_GLIBC_BLEEDING_EDGE
  	select BR2_TOOLCHAIN_GCC_AT_LEAST_15
  	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_15
  	select BR2_INSTALL_LIBSTDCPP
-@@ -3481,8 +3483,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_RISCV32_ILP32D_GLIBC_STABLE
- 	depends on BR2_riscv_g
- 	depends on BR2_RISCV_32
- 	depends on BR2_RISCV_ABI_ILP32D
--	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_15
- 	depends on BR2_USE_MMU
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_15
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -1534,10 +1420,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MICROBLAZEEL_GLIBC_STABLE
  	select BR2_TOOLCHAIN_GCC_AT_LEAST_14
  	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
  	select BR2_INSTALL_LIBSTDCPP
-@@ -3506,8 +3508,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_RISCV32_ILP32D_MUSL_BLEEDING_EDGE
- 	depends on BR2_riscv_g
- 	depends on BR2_RISCV_32
- 	depends on BR2_RISCV_ABI_ILP32D
--	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_16
- 	depends on BR2_USE_MMU
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_16
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -1557,10 +1441,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MICROBLAZEEL_MUSL_BLEEDING_EDGE
  	select BR2_TOOLCHAIN_GCC_AT_LEAST_15
  	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_15
  	select BR2_INSTALL_LIBSTDCPP
-@@ -3532,8 +3534,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_RISCV32_ILP32D_MUSL_STABLE
- 	depends on BR2_riscv_g
- 	depends on BR2_RISCV_32
- 	depends on BR2_RISCV_ABI_ILP32D
--	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_15
- 	depends on BR2_USE_MMU
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_15
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -1580,10 +1462,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MICROBLAZEEL_MUSL_STABLE
  	select BR2_TOOLCHAIN_GCC_AT_LEAST_14
  	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
  	select BR2_INSTALL_LIBSTDCPP
-@@ -3557,6 +3559,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_RISCV32_ILP32D_UCLIBC_BLEEDING_EDGE
- 	depends on BR2_riscv_g
- 	depends on BR2_RISCV_32
- 	depends on BR2_RISCV_ABI_ILP32D
-+	depends on BR2_USE_MMU
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_16
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_15
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_15
-@@ -3583,6 +3586,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_RISCV32_ILP32D_UCLIBC_STABLE
- 	depends on BR2_riscv_g
- 	depends on BR2_RISCV_32
- 	depends on BR2_RISCV_ABI_ILP32D
-+	depends on BR2_USE_MMU
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_15
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_14
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -1604,10 +1484,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MICROBLAZEEL_UCLIBC_BLEEDING_EDGE
+ 	select BR2_USE_WCHAR
+ 	select BR2_ENABLE_LOCALE
+ 	select BR2_INSTALL_LIBSTDCPP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -1628,10 +1506,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MICROBLAZEEL_UCLIBC_STABLE
+ 	select BR2_USE_WCHAR
+ 	select BR2_ENABLE_LOCALE
+ 	select BR2_INSTALL_LIBSTDCPP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -1655,10 +1531,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MIPS32_GLIBC_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -1681,10 +1555,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MIPS32_GLIBC_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -1708,10 +1580,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MIPS32_MUSL_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -1734,10 +1604,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MIPS32_MUSL_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -1760,10 +1628,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MIPS32_UCLIBC_BLEEDING_EDGE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -1786,10 +1652,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MIPS32_UCLIBC_STABLE
+ 	select BR2_ENABLE_LOCALE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -1813,10 +1677,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MIPS32EL_GLIBC_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -1839,10 +1701,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MIPS32EL_GLIBC_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -1866,10 +1726,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MIPS32EL_MUSL_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -1892,10 +1750,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MIPS32EL_MUSL_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -1918,10 +1774,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MIPS32EL_UCLIBC_BLEEDING_EDGE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -1944,10 +1798,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MIPS32EL_UCLIBC_STABLE
+ 	select BR2_ENABLE_LOCALE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -1971,10 +1823,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MIPS32R5EL_GLIBC_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -1997,10 +1847,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MIPS32R5EL_GLIBC_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -2024,10 +1872,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MIPS32R5EL_MUSL_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -2050,10 +1896,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MIPS32R5EL_MUSL_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -2077,10 +1921,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MIPS32R5EL_UCLIBC_BLEEDING_EDGE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -2103,10 +1945,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MIPS32R5EL_UCLIBC_STABLE
+ 	select BR2_ENABLE_LOCALE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -2130,10 +1970,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MIPS32R6EL_GLIBC_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -2156,10 +1994,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MIPS32R6EL_GLIBC_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -2183,10 +2019,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MIPS32R6EL_MUSL_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -2209,10 +2043,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MIPS32R6EL_MUSL_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -2236,10 +2068,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MIPS32R6EL_UCLIBC_BLEEDING_EDGE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -2262,10 +2092,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MIPS32R6EL_UCLIBC_STABLE
+ 	select BR2_ENABLE_LOCALE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -2290,10 +2118,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MIPS64_N32_GLIBC_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -2317,10 +2143,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MIPS64_N32_GLIBC_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -2345,10 +2169,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MIPS64_N32_MUSL_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -2372,10 +2194,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MIPS64_N32_MUSL_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -2400,10 +2220,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MIPS64_N32_UCLIBC_BLEEDING_EDGE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -2427,10 +2245,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MIPS64_N32_UCLIBC_STABLE
+ 	select BR2_ENABLE_LOCALE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -2455,10 +2271,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MIPS64EL_N32_GLIBC_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -2482,10 +2296,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MIPS64EL_N32_GLIBC_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -2510,10 +2322,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MIPS64EL_N32_MUSL_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -2537,10 +2347,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MIPS64EL_N32_MUSL_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -2565,10 +2373,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MIPS64EL_N32_UCLIBC_BLEEDING_EDGE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -2592,10 +2398,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MIPS64EL_N32_UCLIBC_STABLE
+ 	select BR2_ENABLE_LOCALE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -2620,10 +2424,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MIPS64R6EL_N32_GLIBC_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -2647,10 +2449,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MIPS64R6EL_N32_GLIBC_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -2675,10 +2475,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MIPS64R6EL_N32_MUSL_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -2702,10 +2500,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MIPS64R6EL_N32_MUSL_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -2730,10 +2526,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MIPS64R6EL_N32_UCLIBC_BLEEDING_EDGE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -2757,10 +2551,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MIPS64R6EL_N32_UCLIBC_STABLE
+ 	select BR2_ENABLE_LOCALE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -2783,10 +2575,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_OPENRISC_GLIBC_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -2808,10 +2598,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_OPENRISC_GLIBC_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -2834,10 +2622,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_OPENRISC_MUSL_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -2859,10 +2645,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_OPENRISC_MUSL_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -2884,10 +2668,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_OPENRISC_UCLIBC_BLEEDING_EDGE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -2909,10 +2691,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_OPENRISC_UCLIBC_STABLE
+ 	select BR2_ENABLE_LOCALE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -2935,10 +2715,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_440FP_GLIBC_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -2960,10 +2738,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_440FP_GLIBC_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -2985,10 +2761,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_440FP_MUSL_BLEEDING_EDGE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -3009,10 +2783,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_440FP_MUSL_STABLE
  	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
-@@ -5411,6 +5415,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_XTENSA_LX60_UCLIBC_BLEEDING_EDGE
- 	depends on BR2_xtensa
- 	depends on BR2_XTENSA_CUSTOM
- 	depends on BR2_XTENSA_LITTLE_ENDIAN
-+	depends on BR2_USE_MMU
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_16
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_15
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_15
-@@ -5436,6 +5441,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_XTENSA_LX60_UCLIBC_STABLE
- 	depends on BR2_xtensa
- 	depends on BR2_XTENSA_CUSTOM
- 	depends on BR2_XTENSA_LITTLE_ENDIAN
-+	depends on BR2_USE_MMU
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_15
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_14
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -3035,10 +2807,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_440FP_UCLIBC_BLEEDING_EDGE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -3060,10 +2830,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_440FP_UCLIBC_STABLE
+ 	select BR2_ENABLE_LOCALE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -3086,10 +2854,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_E300C3_GLIBC_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -3111,10 +2877,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_E300C3_GLIBC_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -3136,10 +2900,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_E300C3_MUSL_BLEEDING_EDGE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -3160,10 +2922,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_E300C3_MUSL_STABLE
  	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -3186,10 +2946,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_E300C3_UCLIBC_BLEEDING_EDGE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -3211,10 +2969,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_E300C3_UCLIBC_STABLE
+ 	select BR2_ENABLE_LOCALE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -3237,10 +2993,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_E500MC_GLIBC_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -3262,10 +3016,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_E500MC_GLIBC_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -3287,10 +3039,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_E500MC_MUSL_BLEEDING_EDGE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -3311,10 +3061,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_E500MC_MUSL_STABLE
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -3337,10 +3085,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_E500MC_UCLIBC_BLEEDING_EDGE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -3362,10 +3108,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_E500MC_UCLIBC_STABLE
+ 	select BR2_ENABLE_LOCALE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -3388,10 +3132,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC64_E5500_GLIBC_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -3413,10 +3155,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC64_E5500_GLIBC_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -3439,10 +3179,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC64_E6500_GLIBC_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -3464,10 +3202,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC64_E6500_GLIBC_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -3490,10 +3226,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC64_E6500_MUSL_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -3515,10 +3249,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC64_E6500_MUSL_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -3541,10 +3273,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC64_POWER8_GLIBC_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -3566,10 +3296,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC64_POWER8_GLIBC_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -3592,10 +3320,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC64_POWER8_MUSL_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -3617,10 +3343,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC64_POWER8_MUSL_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -3643,10 +3367,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC64LE_POWER8_GLIBC_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -3668,10 +3390,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC64LE_POWER8_GLIBC_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -3694,10 +3414,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC64LE_POWER8_MUSL_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -3719,10 +3437,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC64LE_POWER8_MUSL_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -3747,10 +3463,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_RISCV32_ILP32D_GLIBC_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -3774,10 +3488,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_RISCV32_ILP32D_GLIBC_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -3802,10 +3514,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_RISCV32_ILP32D_MUSL_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -3829,10 +3539,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_RISCV32_ILP32D_MUSL_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -3857,10 +3565,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_RISCV32_ILP32D_UCLIBC_BLEEDING_EDGE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -3884,10 +3590,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_RISCV32_ILP32D_UCLIBC_STABLE
+ 	select BR2_ENABLE_LOCALE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -3912,10 +3616,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_RISCV64_LP64D_GLIBC_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -3939,10 +3641,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_RISCV64_LP64D_GLIBC_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -3967,10 +3667,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_RISCV64_LP64D_MUSL_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -3994,10 +3692,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_RISCV64_LP64D_MUSL_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -4023,10 +3719,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_RISCV64_LP64D_UCLIBC_BLEEDING_EDGE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -4051,10 +3745,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_RISCV64_LP64D_UCLIBC_STABLE
+ 	select BR2_ENABLE_LOCALE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -4077,10 +3769,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_S390X_Z13_GLIBC_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -4102,10 +3792,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_S390X_Z13_GLIBC_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -4128,10 +3816,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_S390X_Z13_MUSL_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -4153,10 +3839,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_S390X_Z13_MUSL_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -4178,10 +3862,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_SH_SH4_GLIBC_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -4203,10 +3885,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_SH_SH4_GLIBC_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -4229,10 +3909,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_SH_SH4_MUSL_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -4254,10 +3932,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_SH_SH4_MUSL_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -4279,10 +3955,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_SH_SH4_UCLIBC_BLEEDING_EDGE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -4304,10 +3978,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_SH_SH4_UCLIBC_STABLE
+ 	select BR2_ENABLE_LOCALE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -4330,10 +4002,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_SH_SH4AEB_GLIBC_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -4355,10 +4025,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_SH_SH4AEB_GLIBC_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -4381,10 +4049,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_SH_SH4AEB_MUSL_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -4406,10 +4072,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_SH_SH4AEB_MUSL_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -4431,10 +4095,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_SPARC64_GLIBC_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -4456,10 +4118,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_SPARC64_GLIBC_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -4482,10 +4142,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_SPARCV8_UCLIBC_BLEEDING_EDGE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -4507,10 +4165,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_SPARCV8_UCLIBC_STABLE
+ 	select BR2_ENABLE_LOCALE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -4535,10 +4191,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_GLIBC_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -4562,10 +4216,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_GLIBC_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -4590,10 +4242,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_MUSL_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -4617,10 +4267,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_MUSL_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -4644,10 +4292,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_UCLIBC_BLEEDING_EDGE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -4671,10 +4317,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_UCLIBC_STABLE
+ 	select BR2_ENABLE_LOCALE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -4703,10 +4347,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_V2_GLIBC_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -4734,10 +4376,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_V2_GLIBC_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -4766,10 +4406,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_V2_MUSL_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -4797,10 +4435,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_V2_MUSL_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -4828,10 +4464,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_V2_UCLIBC_BLEEDING_EDGE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -4859,10 +4493,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_V2_UCLIBC_STABLE
+ 	select BR2_ENABLE_LOCALE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -4893,10 +4525,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_V3_GLIBC_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -4926,10 +4556,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_V3_GLIBC_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -4960,10 +4588,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_V3_MUSL_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -4993,10 +4619,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_V3_MUSL_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -5026,10 +4650,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_V3_UCLIBC_BLEEDING_EDGE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -5059,10 +4681,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_V3_UCLIBC_STABLE
+ 	select BR2_ENABLE_LOCALE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -5094,10 +4714,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_V4_GLIBC_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -5128,10 +4746,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_V4_GLIBC_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -5163,10 +4779,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_V4_MUSL_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -5197,10 +4811,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_V4_MUSL_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -5231,10 +4843,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_V4_UCLIBC_BLEEDING_EDGE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -5265,10 +4875,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_V4_UCLIBC_STABLE
+ 	select BR2_ENABLE_LOCALE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -5297,10 +4905,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_CORE_I7_GLIBC_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -5328,10 +4934,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_CORE_I7_GLIBC_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -5360,10 +4964,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_CORE_I7_MUSL_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -5391,10 +4993,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_CORE_I7_MUSL_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -5423,10 +5023,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_CORE_I7_UCLIBC_BLEEDING_EDGE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -5454,10 +5052,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_CORE_I7_UCLIBC_STABLE
+ 	select BR2_ENABLE_LOCALE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -5484,10 +5080,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_CORE2_GLIBC_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -5513,10 +5107,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_CORE2_GLIBC_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -5542,10 +5134,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_CORE2_MUSL_BLEEDING_EDGE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -5570,10 +5160,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_CORE2_MUSL_STABLE
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -5599,10 +5187,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_CORE2_UCLIBC_BLEEDING_EDGE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -5628,10 +5214,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_CORE2_UCLIBC_STABLE
+ 	select BR2_ENABLE_LOCALE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -5661,10 +5245,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_I686_GLIBC_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -5693,10 +5275,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_I686_GLIBC_STABLE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+@@ -5725,10 +5305,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_I686_MUSL_BLEEDING_EDGE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -5756,10 +5334,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_I686_MUSL_STABLE
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+@@ -5788,10 +5364,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_I686_UCLIBC_BLEEDING_EDGE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -5820,10 +5394,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_I686_UCLIBC_STABLE
+ 	select BR2_ENABLE_LOCALE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -5847,10 +5419,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_XTENSA_LX60_UCLIBC_BLEEDING_EDGE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
+@@ -5873,10 +5443,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_XTENSA_LX60_UCLIBC_STABLE
+ 	select BR2_ENABLE_LOCALE
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	help
 
 -- 
 2.55.0
