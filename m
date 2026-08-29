@@ -4,41 +4,42 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C29ACC61DBE
-	for <buildroot@archiver.kernel.org>; Sat, 29 Aug 2026 11:13:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06ABDC61DC4
+	for <buildroot@archiver.kernel.org>; Sat, 29 Aug 2026 11:13:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 35B5E605C7;
-	Sat, 29 Aug 2026 11:13:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3061860628;
+	Sat, 29 Aug 2026 11:13:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id u50p8eCGgj5d; Sat, 29 Aug 2026 11:13:11 +0000 (UTC)
+ id x3eh2lN6SmQH; Sat, 29 Aug 2026 11:13:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1788001991;
-	bh=bqrWtEs2C+HUfMuSnqA0Zw9rcLBd8FQgGVE928+eOrE=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=lzG760NH+ADh6mAgEyVlH752d4YWw8D527XzSsulRVwDlkgPMghn5nHJnC7Orv6kT
-	 K4FjbKzEOm4dx/7xd6nnLTU5GGTLnRSJJIQQjG0GNrMLG5AN42VxU83YDy6tY1iP2A
-	 A3NxZzprK30G9sYnLVX0n/UG/mP5TkLzvG0+NensFuQ62DlLsPCuKN3pjOxFv4dlUv
-	 fIoHNg9hx6I9U+8N6z0zITmTHp9v74wXGboKyZ3JY0Hd9zCJzQWSW8gsJ0fTW326YH
-	 o+gZ/DIMJcQJVpdAy0EP0aYSL2rAA4NZk7qrzfxeP2BWiNB6jJwg8d4x9wMqPhG3vd
-	 4H7bp5vcGVhFA==
+	s=default; t=1788001993;
+	bh=UzrpLaIX+rOhQ3weWJJgHRe5HdvfbsJcdwsPD6X+SSw=;
+	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=SMlBZjPAzUhPYm8VRB6yCIt/zhO0CUU+PdWhulFj/LU3PaKSVHGd2B5E8ZVtgvBNw
+	 ITKl0MuWWGnD/KO14S/rbd+L0KDzp0GCCQWFqLuhed2u8S0gvAd5xZrHMaIhtepWOp
+	 3mnzGa9V7HvDvfiSm5l3x3L86BTDtBxmpm3TADd4JgIUNaE8FmGIsce2p/I/uNAFrm
+	 MB0agDXFv9vylYGGGGCkvP3r8pWX6p6Ses0NZ7INeesQJlYlLCzvIiU2lkHaNFBWJh
+	 fMu8UmQNuUY+SuEKUxHx11yTTuHly1Iv+aFv0y/AaSKMFur2+UQb79mL3lETVoAYBl
+	 fGqdF6C4HQY/w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4A977605D1;
-	Sat, 29 Aug 2026 11:13:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 50BAA60629;
+	Sat, 29 Aug 2026 11:13:13 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 4DC2F118
- for <buildroot@buildroot.org>; Sat, 29 Aug 2026 11:13:10 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id C4598334
+ for <buildroot@buildroot.org>; Sat, 29 Aug 2026 11:13:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 343064009A
- for <buildroot@buildroot.org>; Sat, 29 Aug 2026 11:13:10 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id AAF96400A5
+ for <buildroot@buildroot.org>; Sat, 29 Aug 2026 11:13:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ueMWMWFWE-iZ for <buildroot@buildroot.org>;
- Sat, 29 Aug 2026 11:13:09 +0000 (UTC)
+ id KPaWsTssAuvn for <buildroot@buildroot.org>;
+ Sat, 29 Aug 2026 11:13:11 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:111:f403:d40e::;
  helo=meupr01cu001.outbound.protection.outlook.com;
  envelope-from=tfx2001@outlook.com; receiver=<UNKNOWN> 
@@ -46,124 +47,124 @@ Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=outlook.com
 Authentication-Results: smtp2.osuosl.org; dkim=pass (2048-bit key,
  unprotected) header.d=outlook.com header.i=@outlook.com header.a=rsa-sha256
- header.s=selector1 header.b=gYblPxFq
+ header.s=selector1 header.b=JFk2AnrW
 Received: from MEUPR01CU001.outbound.protection.outlook.com
  (mail-australiasoutheastazolkn190100000.outbound.protection.outlook.com
  [IPv6:2a01:111:f403:d40e::])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1464640052
- for <buildroot@buildroot.org>; Sat, 29 Aug 2026 11:13:08 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id BFA2540052
+ for <buildroot@buildroot.org>; Sat, 29 Aug 2026 11:13:10 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=ARZlW5uVvNhWgFbwxeG4rJDUiHCgFizKzFRChE9riMR8XFC2/U3H40uHNsm+1+wxyn6bU9+tzwbDAEc+8vNNCZ7fVnJb4v4Br5inuemX0xLQvrBWwtFLOBEPGpcUcN0uUdSnwctaowq7qeXXx7bqxxBKQ2C5gvSm0vK/DB0m5yPSWvDHHttr0jLIFDHEp/Ur7/ok7owubLi9qsiymAjwFZ0BKkHuey5K8jq3HWhSekznRTu0rZVufjpBE+ztZ4eBbdeoIU7fjovpihw6xH8u37fTkWzTz4MJOJxhzAqiABCTf15vZ1w8ImlXeAXSzdy+/banhGTvEwXbzSepqR8CCQ==
+ b=C/XpYsV66jrrsBZnJhgn3Teq61uOXhkyH1sjCHlEyhRXxaM4+8Cw2OqB61rxSCZ3w3FHGgqiNif6rE7dqEiqSyxpg9OyRbbhBCP137/ZlpS+Qa+xVzWpqhn00Pi3yw4PlihM895YFpdZFKfI5gYFlC+rJfi1RHFAD6XZAwiNFP7OaQBaWsh7XjKA+eKoUkC+hYciHVvSKsiJmCOJT/PWn79XvvCiXGJG/2Hbvohf80U21OQ8g55DtUnsXd9g00XyqJF6bZr+s9Np3QZWypzdWBRz4LSY/iJ3QWfsrSfztSENfKXfJmz82tQWz9CbZWx3lwxf72JuCWG2JmlNMFrWiQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=R92ecapqWK/2sZg4bDkluK0p3MVtNyQ904UTUHwiUzI=;
- b=vLCKjtiCSmKWuH2G4huADUE/Sf090XEs2/vD9Q4X6GQzPM79N0K9KT9Z3w6Q6c9AupVkSgnfV7MYbFf9724v5L2hnaHEvM+dkBok1JulXK7pkwxju5QcGsPZSrRNdreIS+orbEFspwFaCnxWzfIz87tVIxj9/S2xXAG+Pf8iOMLZOATvbWTUMvVXJo1DP4iyYzmrXcOKUhTcrKSmVvFkWr7PEKDzQcz7Z9eSIRzf3Tpibf/go0MLy1NCqNfO9DUtG7z6ArWD/KC7tDlSTC1j8kJDNFG5/WTgjJsfyJZ4QMXgtEAonrWSuMHZj9B7kIPsNnJrJD/AbbR3xLXGCrYtJg==
+ bh=GegGT8GYok6PMBliIdJsPoNPe/6yZ6URrQz5Hy8IWiU=;
+ b=sA7Y5A+aKmEJULgfHAc/+pBDeQngEU8MYprY6YNq398P6rCIoSC9e4NIiFHpo6v3mv9ELuqWA1Tga2vkKDUFbiWXj7B0xexGJEIAw6ySLB3ZOn9oE8mGJd9wcibsr9d6noFFiem1y3GeLWxIDVWWlI1rcrKWebcWUpye1TjVsUHfXByV1HQwJMe4uqDX6ffcjl7EcGxVK03feJ+4ITzTgPWIkljOXxaze6tQBjPCmddJbEY+Xh7OsZILhwy/68MwoIjrOvq3ht0MRLkR52OK7ZezHuFkBTNGcFNGzr8+AfkqYA4nLfhVdVIwVup5/ADOOjKpO/evemwYdw6nCojxfA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=R92ecapqWK/2sZg4bDkluK0p3MVtNyQ904UTUHwiUzI=;
- b=gYblPxFqEdND/q4udA1C9TDHwptpBIyfN0Na+YHXEW8dSDPMCOBODqxptGmF2wyyUSDjHSPKcl00rp7sBMzdmiIC8TQMWgxyTD5DBCZwtT/VE4YmR2jcGCzNoOjCh/R8KYDP0Sof0oypENLqnyqerezITHa9uOoRKM9XVAynXICDIyX7DtANxFp6YjmMfIH2BvbTGjpfFXiCo+n767whgVHb4Pb2aIHXyjZ4/6kb0FP+xJiNiU1UMPq7XGXgcu4GFQiS1/l/09UpZ20u7OieEykApfQZanDh8zOGFSl1KXFGQUouWEFoqdIA/9J+jJzpgBJCEvQO54NbqBEG5Vs6gg==
+ bh=GegGT8GYok6PMBliIdJsPoNPe/6yZ6URrQz5Hy8IWiU=;
+ b=JFk2AnrWKncF9Wzhkl48oIXxKhxE0ttTua3ctSGzE4pWZ1pKnUvpsds/nLfGZiQVWBTriv+cqfgjY/JOXF6DmqwScWVYkSUtUa6RxhOl69UJN6cYtkrxR9CS7z438E6zbYRlkpJuob0M2Mp0ktCIX18Tr5Aregm+dsdQyf9SaWc5dZZHyDgEbo/er/6I5WF3d2HD91tZ0GKXmvR0tXUW9xtFxiE0JCT6kzjolV7uNyjyXvHruL+5jICny89RC9apSk5Hb7YM+9QTilAjuWGrAAgUO+Dgn78JX0B/p4Lv7OvEkuFI6d6M1qC+0WUCDfTPE8qh7yKmzEw6lfbseSqqIA==
 Received: from SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM (2603:10c6:10:261::8) by
  SY0P300MB0708.AUSP300.PROD.OUTLOOK.COM (2603:10c6:10:27d::13) with
  Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.360.12; Sat, 29 Aug 2026 11:12:57 +0000
+ 15.21.360.12; Sat, 29 Aug 2026 11:13:03 +0000
 Received: from SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM
  ([fe80::338a:60df:663b:c222]) by SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM
  ([fe80::338a:60df:663b:c222%4]) with mapi id 15.21.0360.008; Sat, 29 Aug 2026
- 11:12:57 +0000
+ 11:13:03 +0000
 From: Fengwei Tan <tfx2001@outlook.com>
 To: buildroot@buildroot.org
 Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
  Romain Naour <romain.naour@gmail.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  Fengwei Tan <tfx2001@outlook.com>
-Date: Sat, 29 Aug 2026 19:12:09 +0800
-Message-ID: <SY8P300MB0041EFD8D13BF20DAB3D61FCB5AB2@SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM>
+Date: Sat, 29 Aug 2026 19:12:11 +0800
+Message-ID: <SY8P300MB0041672EF4D2FB7673811ABBB5AB2@SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM>
 X-Mailer: git-send-email 2.55.0
-X-Change-ID: 20260829-missing-toolchain-deps-cb57f97ceca4
+In-Reply-To: <SY8P300MB0041EFD8D13BF20DAB3D61FCB5AB2@SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM>
+References: <SY8P300MB0041EFD8D13BF20DAB3D61FCB5AB2@SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM>
 X-ClientProxiedBy: TP0P295CA0015.TWNP295.PROD.OUTLOOK.COM
  (2603:1096:910:2::13) To SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM
  (2603:10c6:10:261::8)
-X-Microsoft-Original-Message-ID: <20260829-missing-toolchain-deps-v1-0-1c2b4919c455@outlook.com>
+X-Microsoft-Original-Message-ID: <20260829-missing-toolchain-deps-v1-2-1c2b4919c455@outlook.com>
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: SY8P300MB0041:EE_|SY0P300MB0708:EE_
-X-MS-Office365-Filtering-Correlation-Id: a128ad9d-b8f4-4d17-0637-08df05be7b12
+X-MS-Office365-Filtering-Correlation-Id: 396b45c1-2d93-4137-bb18-08df05be7e42
 X-Microsoft-Antispam: BCL:0;
- ARA:14566002|25010399006|41001999006|21061999006|6090799003|5062599005|5072599009|23021999003|19110799012|8060799015|24021099003|51005399006|15080799012|3412199025|440099028|26104999009|40105399003|2607281247196008|10035399007|1710799026;
-X-Microsoft-Antispam-Message-Info: =?utf-8?B?UjRlYjlxcjN3bkVaZWN5OHFHVk5RMnpjS0RBVm9UZDN4aXRUL3VXR1lKSSt6?=
- =?utf-8?B?RnAxMEE1RjduU1daLzhEeU1ldmlXY2FOSTUrMnJOUWhxRG5OTkFpelF2OFdR?=
- =?utf-8?B?ckJJYm5ySE1jTDNld3hCTTIzYkx5c0RpeDgwbGlYdU9lWHJqdWdWZlgzR1dO?=
- =?utf-8?B?WlVSNlNYZzBYUnc3YlFDNkxGVnNrK3JTTmtaczRvSVJVT3BCY01FOEVDQlJo?=
- =?utf-8?B?dzN4VjUzNUF6REZudjB0YlorZlRlQjc2RmhJelRnQldrcVM2elhWemFyWkND?=
- =?utf-8?B?NVdWQVJTdUtwN1NhSEMrcDZ0Z1FsVTBmT2ZxNElJcDB0L0ZoS3k2V3RUNWh1?=
- =?utf-8?B?NzM4dldBT2FIMDQyWnVDQ243RlhEaU45dGxMTnpMSzU2NEhtOGYxUU15MHll?=
- =?utf-8?B?ZHZNczdYazNlR0MxcFRKeTJ3bm9XOU9IZWI5K05rS282Y0l3aGNOT3BGWlpQ?=
- =?utf-8?B?Q0puMitJQkQydUFhM2pKN0JXaitFQXVaRWw2NVJDQjBTMG9KbUJ0V0JqSVRU?=
- =?utf-8?B?Q1R1K0ZIOWJOaWoxYVZweVRyQjRWZStpVkI5bGZpcmJtZXhuUWJpQ1BtL0pk?=
- =?utf-8?B?ZE1lNU9MVk0zZ2VQZEtpYTNCSkdhM3NHZGVyWUxIaWltTVZiSkViWCtzVXRU?=
- =?utf-8?B?Z1k3MDhJYTN5Vlh5REU1VGNhZnJ5UzlzYmFVTGg5endaMkZqWEk1bEdYMUYx?=
- =?utf-8?B?dVpoS2lDeVpjbUExMEFabSs5d3ZjUWFjZ1NLSTd4Zm43R2ZOd2VhblJRUlRB?=
- =?utf-8?B?UnMvVmIwZWZQd0RVU1lFQXg2WFBuZkFPK21LQkpVcFJmUXRObHdMV1g0cmZC?=
- =?utf-8?B?UktBdkZlSmlidHlVcGxuSktHbmcxeEpvQnJLMHZtK1FwV0pGRktHRjhyVjlB?=
- =?utf-8?B?Z3VGY2lySzc1bFU1TlJDUElqakJ2QmVZL2RuQm9PQXE0c2cwazRXK2NjbVBw?=
- =?utf-8?B?emo1YlZyNnN2ZCtveVdwNjlVMm9pOWdscVluNVk1YTZFdjdWNVd6aGVucGhM?=
- =?utf-8?B?U0pNRHpieldmZ0hESG9jR2VJaVhqcXRDdUtFbHVtS0gyQXZIY3N1UURXdHNW?=
- =?utf-8?B?cUlMb1B1K3h1TG5sTG02RjZJdi9aMlVhUWQwRnhKZnkyckFlcXVzRmJRTXgz?=
- =?utf-8?B?NTJGUVJDeEIrQ24zT2xNeHJWQ29VNmdQbjhVWEE1ZXhBR0pIUEU5czZRcGM3?=
- =?utf-8?B?SmlQS3FEanBkY2RVOW54b2NodmFBQnFUVTAvaG1KTGFGMWY1S1h5dkpzN2Vk?=
- =?utf-8?B?RHE3c2lOTWVWaXpGNVU0ck1zOUM4RmFmdzVmTWxsZE5ob3BVakZjVTNOT2N1?=
- =?utf-8?B?akhya1lIWXcvekRUb094MFM3VFY2SVNPTUhGMjVrUVh3Yis2QW1wNkhLakVa?=
- =?utf-8?B?aWlvUmpiZzFNTERTckNRcStFR3czdVhjN1RvOFMyeVR4L2FYdXFndDNCM0dy?=
- =?utf-8?Q?dU1aJoot?=
+ ARA:14566002|25010399006|21061999006|6090799003|5072599009|23021999003|19110799012|8060799015|24021099003|51005399006|15080799012|3412199025|440099028|26104999009|40105399003|2607281247196008|1710799026;
+X-Microsoft-Antispam-Message-Info: =?utf-8?B?ckNJYW1jN0N2WU1JT2FCd0lMN0hYOHpqWmFEOXVwc1Nld0ZFZkpWSTg4TmYy?=
+ =?utf-8?B?Ty9Cb2pVdmY5bk1ZNkNiczJkRFJwTmVOZzkyV00vaFBCMnQ5N3ZUWm5tbk9U?=
+ =?utf-8?B?aEs2WmdhZHZwRFQ0cElnVGtSMEZxWko5MndnTWdpV2drRlpBS3Z3MWNjZXhG?=
+ =?utf-8?B?bDhBdnFacVlhMGJkak43YTNmWjJ5dlM3cnQ4SFdISDFJVWljTDJqdGVtSFNu?=
+ =?utf-8?B?bnhIbHJ1UmQ2ZDgxT2h6TG1DakpGaklxbmkwQzlRSXN0aHRpNlJjaDZZUjJG?=
+ =?utf-8?B?VHduTU5GeEtVUUVwazg0WDA0TzlzSWVpcUdXMTBQcHFzTUtmS2RvWHBxYmRT?=
+ =?utf-8?B?M0t3SG9sMzhrNjNqN1ZwL0t4MmZvUlcxaG42TmhoZXJwNmUwaHdHcDB6VXVS?=
+ =?utf-8?B?WFZJcjRTOW1FUmlKRFFGY3daZGI4bUUweGJyVUNXN1J5VURqZURNZnEvcTBJ?=
+ =?utf-8?B?UnZJc2FOM1hOc3F2Y1ZpTGZLNW1jMjNMWEZrbVlRVi9Da0t3R0JneGRzOVlX?=
+ =?utf-8?B?UzhIUUVrb1AwbHJXZVd1d0FUdEFNM0FWOXN5MllVQWhZRmFCVEtSUFU0WW9Q?=
+ =?utf-8?B?bXN0YjQ3M1dUNVZCZ0JBNmRZZnpva01iUXNmZDNqbjl3Zy8zZk0xNjdCQ1Z4?=
+ =?utf-8?B?bEtXV1Bsb1RJa2ZWYzNDdHcya1lHekJKS0JyM3FKL3AwY2ZRY25JaEo3d3dI?=
+ =?utf-8?B?SFhudWpJenFCVERqdDhWbTgwcmxwT1gyT21Uc0JHeXowZjRHdDFrelMvdGFG?=
+ =?utf-8?B?NzRqNnFsNko5VGRKVm44VUxmbVRzRzdIbXY3T0kzVW9ObkhmT2QwUjdLUXN0?=
+ =?utf-8?B?d01tOCsxZjV4dG52YVpuLzBiaDhzazNENFFqbE9maCtzUDRRUXFyUlVQZ0Na?=
+ =?utf-8?B?R21UWkhkenpQdk1FdUUya3MrcUpsakdYaHA4THk4ZVVBVHFxSEhzNVhVaG85?=
+ =?utf-8?B?YW5kQXBYa0NlcFp1WGFLWG5NYkVRSHdnMVRGVGNyVW5jVUs2T0taOFBCVnNq?=
+ =?utf-8?B?bkhCTDRWOW9rU1VsaWxqSmxubDZsUnR5SXQ5U3Z4bjcxeGpoRUpwMEp5T3J5?=
+ =?utf-8?B?WWprK3I5N3FyK3YvNXZ0QnY2b1RkWEFMVk5DS00zK0hYZmsyc2dncUdxbE5I?=
+ =?utf-8?B?eTNheVB3dkdFWFduN1kzblpHQXpyUHFiTUFzbXZiVTNSWTR4Q1BUZjAzTXgw?=
+ =?utf-8?B?SmpScDBPNjlsdmQ4emlsTm55U0RFamhiR056NEJGMkZIc3NtOHZvWXpETERS?=
+ =?utf-8?B?enR5d2V3Z1ZqcVJFRVNaRW9NRWlzbWsrU0h5T1FTVnJTc0V3eENKRFlwLzJP?=
+ =?utf-8?B?RHgrMXhCc1M5SWZoZGYwUVl0b0tINjFFOXM4V2hiUnNzayt5R0JITHRkaHZo?=
+ =?utf-8?B?VGhIN0JwWFdKTmc9PQ==?=
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?d1VvK0xhcTUyWUVBcVdFSzcva2tGWjBLYmpNazI4N0tLMUpxQVRVdzJJQXBM?=
- =?utf-8?B?elgrYW5TVElmV2dWMzIxOUtLSW13Y24zVVZTUmt2MjRJa08yRlIyZ0tac0I4?=
- =?utf-8?B?ZjB6MFhuNnRsOHM3UnJTNERnbFIweFNkZmlsQmZaOE9pT0hoSlhZM1Rtb0Q5?=
- =?utf-8?B?TE1zS0JwQWpPeXlTa1I0MnhLeDZQS1R5MnpDSFNzWEpHdnFpV0tyY1I2WnpV?=
- =?utf-8?B?aWlkcFg3Uy9IQXlTaDZxc1V1MmFZYk5lQVg1MTNIRm81SEVJczFXVzY3K0Nx?=
- =?utf-8?B?c0V0c1Jia2pLL3lUQUhxcFNYTEFSTWZuU2FQUll2THk0cjFVR1Y0TnpTWGc2?=
- =?utf-8?B?aStqMVVGT2poYnF4K0RGNjVYWE44Rmh5L0c2WEFlVDVuK1ZIWHJlaENycVJR?=
- =?utf-8?B?REZoS3l2YllpZDBkYnVXejI4Sk8zMEo5bk93UUZPYlo0M0RuZHc5NHlxcDRS?=
- =?utf-8?B?V0lQejl3UkZ1QVplZk5wQytNSlNlY0pQRVphQTA3SlpuOC93WXBkL1ZmT2xP?=
- =?utf-8?B?YTZSSS9jT0IxYnluM1J2V2Z3S0pKUlNvejd3SnNFdXpJNHZ5WGlMSGNJMThs?=
- =?utf-8?B?eVVKdHFTWllpTUorYll3eGttMGJyM28xS2U1MzA2SnJNbnYrR3lNSVVBVElK?=
- =?utf-8?B?UUN1UUo1UVhXdHYzMm5TdjRoMlJPanVEZUYrYVc1eGRaOStIL280WU9CVXdV?=
- =?utf-8?B?S3IrZDVJVmJhVzFTVFBuRXFtbU8wcHNaMGoyUVVjMlBYS2MxaDFaZnhsUDlD?=
- =?utf-8?B?bFdPR2t3U2RrZkM0WWNROVduQ3NqNVpxeUpTeWR6VGh3YXM5SzlrQkJ5a2xu?=
- =?utf-8?B?azRidHNtbGFKbm51azQyNEZaUnl6V1BUK0w0dnRiakNIZ1VRTW1saFBHZmRB?=
- =?utf-8?B?c2VVaEIybTBVZDFucGthSmpCWkUvWFp4K21VYnRicVkwRTl5bzN4d1FTVjA0?=
- =?utf-8?B?NEVXMXo2VFJabG5qamdaVDRtWGhhME5pbzdXVG96WU5NdFFLTCt6bHhPQXFZ?=
- =?utf-8?B?UjVWU2orNDBoYzZFYjliMUJSZVRLenNqaWtxRHRXdFJSZjdveld3Tm5HVUpB?=
- =?utf-8?B?MGRRNXpWVUtoNGJOUlVOZDlzeHJlUlVMcjBlZEd4SW51MGt0TVpZUnB1UDBF?=
- =?utf-8?B?OG1NSTJUdWpvZWljTCtPL2tXUXdtdFdLZ0ZtN01JcStEUW9sckdFYXVFYmtS?=
- =?utf-8?B?cGFZRzVhelc3b1R1WEE1Z3FBRTU2cWZxUmVPbGNhMEZNRnhJMVhFOEdBZFRT?=
- =?utf-8?B?QXg5UmNlQzR6YnhjN3htbGFwdHVaQ2FqUUFzb1h2NnluWCtCK1o3cnAybU9J?=
- =?utf-8?B?TS91MjBMUHZLS3RQWUhvdGFSV1R0dkJoaklpQkpRSy9BZjNibDV3ck1MTDNQ?=
- =?utf-8?B?V2tVSkZ3MGYrQnh5cVJpVlJCekc3NkdwN0plUEJqc0QwN1dOMmp3UExNMEE0?=
- =?utf-8?B?ME1VWWNtL3p3L0JTcTRPTW9sM1pDZkdBQVJwOGZHMGh3ekJIanpLRG92a0g2?=
- =?utf-8?B?MitzdUh5c1Mwenc3L0RrZEc5aGdUQnIzenhLU0huVHMydTBSbk5aZDAvRmdD?=
- =?utf-8?B?dXFLR1FMS2ZLcnIrOEY1WWR6SzhaYjF1bzBENnRxbGxhWXpxY200eUZ0ZHFz?=
- =?utf-8?B?cEFCTVRncTJaMG5YdUV5dTlaNS9DaHBGQ2J2enB4bTlocWN0SVB3ZXZEaWF5?=
- =?utf-8?B?b3JMWjJKSjJOd0ZBOEJKaEJ6dkNIdEo2b3hlb1dXN2JqbmF3b0xuK0l0bHZy?=
- =?utf-8?B?V1lObStVMExOQllkekxtMVJxYmR3dElweXZGdWFEUi94dUhZazkzT00wL0Nq?=
- =?utf-8?B?eldIam1TNnZpTDdxSEpYTDAyeDJKL1BVbzV0bytaa1ZUbGQzZUpGcUc2ZnRP?=
- =?utf-8?Q?JHHfzOW9xPwju?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZHN5MVVrZ1JOeGhsY3p4YlFsd2lqSnFTV1VxT25ZWEZiUENUQkxaa21Nci85?=
+ =?utf-8?B?RVpYTHI0NE5KY1FYVm5uNmVqMDd6NmVNaVUrc3lnbUhJVlRDNS81OGM2K3ND?=
+ =?utf-8?B?WDJXNjF3UmVWOWxIdmtuWWltZkx6RXAxdG1BVWhoYTNqRE00V0lHKzNiWCt5?=
+ =?utf-8?B?dDVBQUt5RWlaU3gwTWZFUUZTVnk3TTdsdEp6RytueDQwSXM4azlxT2c5MnVt?=
+ =?utf-8?B?L282ekFTMzFUY2NUdWFJZ1hLMzVSWFE2WE5NNDRjelRkSHdQUEpnVjBIcWJp?=
+ =?utf-8?B?TVBEZDhSQnJxTmUrT0prellRVVhMVzJPSitPMndPalR3ZHhHYlZaWGs2ekEy?=
+ =?utf-8?B?Mm1TTnB1Q3NiSVhmcjJuMGh5Wm9Va3hUZ21ZWlZPQTVlb1EwcGpPK1FnSmt1?=
+ =?utf-8?B?MmNpSHJ5blJQcGdRVU41KzZRaDRJSWo5emQ1bnhPbTRSR0xUMTZIS05OUnlh?=
+ =?utf-8?B?Qm5aUHlteG1jSllzRjlpTU1HWVIyellVaXlXT2xyRXg1M2R6YWJ0SGVJczBY?=
+ =?utf-8?B?d1d4YWhHZWJseU1ueXl4eHVCK1dGZ2NDTkRKSjNVNFZOejBSNUhZcUJ3dmlj?=
+ =?utf-8?B?RTA1UjJlZjFtZVFOdStzSnFKSDVUOExsVy9LallSVC91WEM3MmlZZk5SZ3JL?=
+ =?utf-8?B?c3V4RGlMM3hTYW9JNEJBblNteENkQ1I0RERhQTRVOFlFU2M4QlZLYkpZVThO?=
+ =?utf-8?B?YVZVdXhnb0QwaGM3TDVEMkVhZXB4d1h3eEF3QjV1YjRXK1IvRmc5VlR3czA1?=
+ =?utf-8?B?WERNd2ZpbHBEa1dLMUpFMWJlRVBNTFVRdUoyazMrRDVNdFBOY3RXVmYxRFVR?=
+ =?utf-8?B?VUJwaWM2VGhNK1ZHYzVLVlNXaGxuelJZZW9oYzExYnl5ZHoxUk5LZTNFMkln?=
+ =?utf-8?B?TTRYa3cvUDlRSGxuSnZZT09RNGQzcWhYOUtQdm4vY1VjQVlmWDRVWG1abkpz?=
+ =?utf-8?B?WjRINzdXTk9BbytkOXJaWmZFNXhyZmtYOHZLQXJmVDAwSXhNeGFKK082UU5m?=
+ =?utf-8?B?YWZsT2srNHZsbW9kRVVOay9JdGhHLzkxZmxCWnRiZUNOQmpVUCtiMzFWekRz?=
+ =?utf-8?B?bjVKSjMwU3FWbEo1eVFFU1JaVmd3ZVFXbGdHWW9qNVgwZ2E5M0hueEdQWGFT?=
+ =?utf-8?B?MDV5d0IrRWl6QytMTDVDbW9MaXlLbm1KK3dGa1lhQWpCNzU4dEgzWW51N3cw?=
+ =?utf-8?B?WGlqeVJZQXdBSHRsSHFwM1R0b0R0czVnWUJrRDJEWlpqUWp0bERVZjVoUGRJ?=
+ =?utf-8?B?TnJibU1DU2RBUndnR3FKeWZ3NGQ3aUVWSU5KdXZFenM2UmNjUGpieXlCeFBS?=
+ =?utf-8?B?WGFTaGlReWprRHByTEdrdE05K0syclgxT1UweGFrMERSQmJNZ29zVWJNWnhB?=
+ =?utf-8?B?bkt3VDgyMWdkTjRUVDR6UjBaV2M3R3MzeWZPc1QrV1lEY0JQc1k0eGM5YU92?=
+ =?utf-8?B?eFQ0NFZWTndMN3lYSnpKRXpSMnlmN0pmakVvM0FEZTh0aERoTG1rR3lXakN6?=
+ =?utf-8?B?cWNOM3RHdnkrY2tIQjhTdnVzZ3VIQWFXellwdWNsSXRoTnAvSmxJSWZJalFQ?=
+ =?utf-8?B?cytCSFEybExvQ2lxSWJuaXdqNXhlZWpUSUJremN0SFNlMWZHQ0ltOHpvSW00?=
+ =?utf-8?B?TVJjbW0xNjBnZFNQTUVGOG9vNGpFUUxLbE02Y2lTVUJmSUJUMUpqVkx1UjZu?=
+ =?utf-8?B?U25uVVNKSWV3eWdJSzZoOTFwWUZrTWVqWDJnZHdjNDZ4VXRqSUpnZWFta0hX?=
+ =?utf-8?B?WTF2Ri9UYUN0eXFsQ1lOd0tIbFNaY29CTDMrRkpUaWpyTG82czFqbW5KZ09F?=
+ =?utf-8?B?OGdzcmt3emsvaHZXMzl1WEVvOVliblo1dElST1NNTVdUYno4ZVUrQkFJMUww?=
+ =?utf-8?Q?vZtVCLYaXFVOs?=
 X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a128ad9d-b8f4-4d17-0637-08df05be7b12
+X-MS-Exchange-CrossTenant-Network-Message-Id: 396b45c1-2d93-4137-bb18-08df05be7e42
 X-MS-Exchange-CrossTenant-AuthSource: SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Aug 2026 11:12:57.8053 (UTC)
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Aug 2026 11:13:03.2594 (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
 X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: SY0P300MB0708
-Subject: [Buildroot] [PATCH 0/3] support/scripts/gen-bootlin-toolchains: add
+Subject: [Buildroot] [PATCH 2/3] support/scripts/gen-bootlin-toolchains: add
  missing BR2_USE_MMU dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -181,66 +182,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello all,
-
-Buildroot supports both MMU and noMMU configurations for the m68k-68xxx,
-riscv32-ilp32d, and xtensa-lx60 architectures. The configurations used
-by Bootlin's toolchains-builder [1] do not explicitly set BR2_USE_MMU.
-Instead, it is enabled through Buildroot's architecture-specific Kconfig
-selections and defaults, as illustrated by the RISC-V configuration [2].
-As a result, the corresponding Bootlin uClibc toolchains are built with
-MMU support.
-
-This can be confirmed by running, for example:
-
-curl -fsSL 'https://toolchains.bootlin.com/downloads/releases/toolchains/riscv32-ilp32d/tarballs/riscv32-ilp32d--uclibc--stable-2025.08-1.tar.xz' \
-| tar -xOJf - --wildcards --no-anchored 'uClibc_config.h' \
-| grep -E '^#define __ARCH_(HAS|USE)_MMU__ 1$'
-
-However, their generated Kconfig entries lack a BR2_USE_MMU dependency,
-allowing them to be selected for noMMU targets. External toolchain
-validation then fails with:
+The Bootlin uClibc toolchains for m68k-68xxx, riscv32-ilp32d, and
+xtensa-lx60 require an MMU. However, their generated Kconfig entries
+lack a BR2_USE_MMU dependency, allowing them to be selected for noMMU
+configurations. External toolchain validation then fails with:
 
   MMU support available in C library, please enable BR2_USE_MMU
 
-Patch 1 regenerates Config.in.options to bring it in sync with an
-existing generator fix for duplicate BR2_TOOLCHAIN_HAS_THREADS
-selections.
-
-Patch 2 adds the missing BR2_USE_MMU dependencies for m68k-68xxx,
-riscv32-ilp32d, and xtensa-lx60 to the generator script.
-
-Patch 3 regenerates the Bootlin toolchain Kconfig and test cases using
-the updated generator script from Patch 2.
-
-This should address the immediate issue in Buildroot. A possible
-longer-term solution would be to expose in the toolchain metadata
-whether a toolchain requires MMU support, allowing the generator to
-derive the dependency automatically.
-
-Please let me know if I missed anything. Thanks a lot!
-
-[1] https://github.com/bootlin/toolchains-builder
-[2] https://gitlab.com/buildroot.org/buildroot/-/blob/83fc4aa55eeab8f6dab64e6fe26a04284fa73881/arch/Config.in.riscv#L73
+Add the missing BR2_USE_MMU dependencies for these architectures to
+prevent them from being selected for noMMU targets.
 
 Signed-off-by: Fengwei Tan <tfx2001@outlook.com>
 ---
-Fengwei Tan (3):
-      toolchain/toolchain-external/toolchain-external-bootlin: drop duplicate BR2_TOOLCHAIN_HAS_THREADS selections
-      support/scripts/gen-bootlin-toolchains: add missing BR2_USE_MMU dependencies
-      support/testing, toolchain/toolchain-external/toolchain-external-bootlin: regenerate after MMU dependency update
+ support/scripts/gen-bootlin-toolchains | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
- support/scripts/gen-bootlin-toolchains             |   6 +-
- .../tests/toolchain/test_external_bootlin.py       |   8 +
- .../toolchain-external-bootlin/Config.in.options   | 460 +--------------------
- 3 files changed, 28 insertions(+), 446 deletions(-)
----
-base-commit: 83fc4aa55eeab8f6dab64e6fe26a04284fa73881
-change-id: 20260829-missing-toolchain-deps-cb57f97ceca4
+diff --git a/support/scripts/gen-bootlin-toolchains b/support/scripts/gen-bootlin-toolchains
+index 75fa2c7e0f..4579949d18 100755
+--- a/support/scripts/gen-bootlin-toolchains
++++ b/support/scripts/gen-bootlin-toolchains
+@@ -68,7 +68,7 @@ arches = {
+         'prefix': 'arm',
+     },
+     'm68k-68xxx': {
+-        'conditions': ['BR2_m68k_m68k'],
++        'conditions': ['BR2_m68k_m68k', 'BR2_USE_MMU'],
+         'test_options': ['BR2_m68k', 'BR2_m68k_68040'],
+         'prefix': 'm68k',
+     },
+@@ -156,7 +156,7 @@ arches = {
+         'prefix': 'powerpc64le',
+     },
+     'riscv32-ilp32d': {
+-        'conditions': ['BR2_riscv', 'BR2_riscv_g', 'BR2_RISCV_32', 'BR2_RISCV_ABI_ILP32D'],
++        'conditions': ['BR2_riscv', 'BR2_riscv_g', 'BR2_RISCV_32', 'BR2_RISCV_ABI_ILP32D', 'BR2_USE_MMU'],
+         'prefix': 'riscv32',
+     },
+     'riscv64-lp64d': {
+@@ -269,7 +269,7 @@ arches = {
+         'prefix': 'i686',
+     },
+     'xtensa-lx60': {
+-        'conditions': ['BR2_xtensa', 'BR2_XTENSA_CUSTOM', 'BR2_XTENSA_LITTLE_ENDIAN'],
++        'conditions': ['BR2_xtensa', 'BR2_XTENSA_CUSTOM', 'BR2_XTENSA_LITTLE_ENDIAN', 'BR2_USE_MMU'],
+         'prefix': 'xtensa',
+     },
+ }
 
-Best regards,
---  
-Fengwei Tan <tfx2001@outlook.com>
+-- 
+2.55.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
