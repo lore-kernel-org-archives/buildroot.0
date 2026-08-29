@@ -1,70 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D898C61DD6
-	for <buildroot@archiver.kernel.org>; Sat, 29 Aug 2026 16:52:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2CD65C61DCB
+	for <buildroot@archiver.kernel.org>; Sat, 29 Aug 2026 17:38:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 56D78605FD;
-	Sat, 29 Aug 2026 16:52:17 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eBLHQsqqDySq; Sat, 29 Aug 2026 16:52:15 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1788022334;
-	bh=lepDyxvc0lcJnwgAjMYWjWuUbt404JceLf9NZYRFZVg=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=K6xUkMZe1afaSMeV3sDmWfD/RVvPkm+xHOSbBLp4A/3Yft1UkYxAAciZWxhNzrqtT
-	 dwJQaFt/kCjSY8Ziv5VO6TTMYLoP4P47nFlTzaF5McxRlm6PjnYzVocQfsaooSSon2
-	 WeRJEmts2RD/SToSSULARQe5D5Cq7WIXIOn9OXJP3sUd7FJfC3peWImeaulElzDUzA
-	 78SfBOLslwWuLQYxqNqrpA+6l0+7N8FfCD8+7O93DTAEhFxkX3YjQk/BNPOvmbWS7j
-	 MrPcG1ioqsemiHcMcnMmJCVYhsts6cI2y+Pf1bBiA3Yz6WD04fiGS9J3DZshvu7UzF
-	 265a9fBZ4l90A==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D9523605F3;
-	Sat, 29 Aug 2026 16:52:14 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id EFCD6355
- for <buildroot@buildroot.org>; Sat, 29 Aug 2026 16:52:13 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D4CC040669
- for <buildroot@buildroot.org>; Sat, 29 Aug 2026 16:52:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9B64A40720;
+	Sat, 29 Aug 2026 17:38:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NtzlFJm5cYmY for <buildroot@buildroot.org>;
- Sat, 29 Aug 2026 16:52:13 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
- helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 009794072E
- for <buildroot@buildroot.org>; Sat, 29 Aug 2026 16:52:12 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPA id 6461A780331;
- Sat, 29 Aug 2026 18:52:08 +0200 (CEST)
-Received: from 2a0d:e487:118f:32f7:a07:17e2:1c81:e739
- via 2a0d:e487:118f:32f7:a07:17e2:1c81:e739 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 29 Aug 2026 18:52:08 +0200
+ id x12sdQQtq1Br; Sat, 29 Aug 2026 17:38:32 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1788025112;
+	bh=0dkCnGKD+4jVgFrB0/QitXhpYuLSSQnlCCsIrUTbnBA=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=IC3Nx0R89q6y26edygY9Bq42BjU/UGFVP/Q0RQhcSITmq5J1SI5NLyRnMyENh6tDk
+	 WGl1CdwovWxkob6/BLu0rhTub4TmUNVlbXhxDzIO1hkipmlc0gBKhvU6NRQh+2nQBK
+	 Ic10GjqwAyMEFs7OsD8CSXQNOrmNkPbEsYqjd2f+vDRZBt2PL17yntIN7epR1QomhP
+	 dJ/Pa2yT1WCVTdYedpHmdqQRn5S1D36sKdwaFWBBJvPnom2/OdfxRszlsSTQqEA+WC
+	 1/dqFAmDJveDAg6Ytek/L39mBBVVTCVCmye+KDGHdaiVstL9XZPn5ffPx91ARmdac2
+	 7nbZ2GubpZo1A==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 914974070E;
+	Sat, 29 Aug 2026 17:38:32 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id ED90A14F
+ for <buildroot@buildroot.org>; Sat, 29 Aug 2026 17:38:31 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id D3BA6400AC
+ for <buildroot@buildroot.org>; Sat, 29 Aug 2026 17:38:31 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6CWAYN-Mzfvo for <buildroot@buildroot.org>;
+ Sat, 29 Aug 2026 17:38:30 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none) header.from=kuhls.net
+Authentication-Results: smtp2.osuosl.org; dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202605290044 header.b=PzIUII9A
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 23E00400A5
+ for <buildroot@buildroot.org>; Sat, 29 Aug 2026 17:38:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
+ s=kas202605290044; t=1788025106;
+ bh=O/J44lhUyLSty/RIEmnA7IZJQ2I401s76dLW+Tj6S60=;
+ h=From:To:Subject:Date:From;
+ b=PzIUII9AerRWBiEUnn1B1OIUtd/No2gMNdXyEKtR9laLcS2MkJhPaUSd8U/2BE+GX
+ IgXo76CfUsVzmr9XGXfBMgwIrS4GIpwCfL+Hh9ily3wL5AUz2MeppiuqfnCO1cGDTV
+ iNcm08qFQfIsJ4+EXfouGUuyaKbdAi5kP6QBFv0p5bWIH2bpzx/Tn4lVL65Gn/HEvG
+ PnniR+56Pi3m3anfysPDN/Qz8+x2HcY3Ys05JOjTd0hLv7h3vSfiK/QTqFKysLFcf6
+ UNYT0eveY8xX8bKk9E6cW5w0ULFApIciUmua+TXtyDO4QedKA2iG4hjWx9oDvKe/Oy
+ yfij092r14fIQ==
+Received: from fli4l.lan.fli4l (p5b3a0f14.dip0.t-ipconnect.de [91.58.15.20])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 68A2DA4C0887
+ for <buildroot@buildroot.org>; Sat, 29 Aug 2026 19:38:26 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:47402)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99.5)
+ (envelope-from <bernd@kuhls.net>) id 1x0N0c-000000001G9-1PUI
+ for buildroot@buildroot.org; Sat, 29 Aug 2026 17:38:25 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Date: Sat, 29 Aug 2026 19:38:25 +0200
+Message-ID: <20260829173825.93129-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-Date: Sat, 29 Aug 2026 18:52:08 +0200
-To: Peter Korsgaard <peter@korsgaard.com>
-Cc: Thomas Petazzoni via buildroot <buildroot@buildroot.org>, Thomas
- Petazzoni <thomas.petazzoni@bootlin.com>
-In-Reply-To: <8733vxypoh.fsf@dell.be.48ers.dk>
-References: <20260827095520.1049186-1-thomas.petazzoni@bootlin.com>
- <20260827095520.1049186-3-thomas.petazzoni@bootlin.com>
- <8733vxypoh.fsf@dell.be.48ers.dk>
-User-Agent: Webmail Free/1.6.18
-Message-ID: <ea3adbc598ea273edba25e595fad4969@free.fr>
-X-Sender: ju.o@free.fr
-Subject: Re: [Buildroot] [PATCH 3/3] support/testing: add bpftrace test
+X-Spamd-Bar: +
+Subject: [Buildroot] [PATCH 1/1] package/fetchmail: bump version to 6.6.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,62 +85,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Peter, Thomas,
+https://sourceforge.net/p/fetchmail/mailman/message/59381086/
+"Fetchmail 6.6.7 bugfix version has been released"
 
-On 29/08/2026 16:19, Peter Korsgaard wrote:
->>>>>> "Thomas" == Thomas Petazzoni via buildroot 
->>>>>> <buildroot@buildroot.org> writes:
-> 
->  > This commit adds a simple bpftrace test that ensures that not only 
-> it
->  > builds fine, but it also runs properly on a minimal test scenario.
-> 
->  > +    config = f"""
->  > +        BR2_aarch64=y
->  > +        BR2_TOOLCHAIN_EXTERNAL=y
->  > +        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
->  > +        BR2_LINUX_KERNEL=y
->  > +        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
->  > +        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.32"
-> 
-> Any specific reason to use such an old kernel? The qemu_aarch64_virt
-> defconfig uses a 6.18 kernel. Is it to match the default ARM 15.2
-> external toolchain? If so, that one is built against 6.6.44.
-> 
-> cat 
-> output/host/usr/aarch64-buildroot-linux-gnu/sysroot/usr/include/linux/version.h
-> #define LINUX_VERSION_CODE 394796
-> #define KERNEL_VERSION(a,b,c) (((a) << 16) + ((b) << 8) + ((c) > 255 ? 
-> 255 : (c)))
-> #define LINUX_VERSION_MAJOR 6
-> #define LINUX_VERSION_PATCHLEVEL 6
-> #define LINUX_VERSION_SUBLEVEL 44
+https://sourceforge.net/p/fetchmail/mailman/message/59350877/
+"The 6.6.6 critical bug fix release of fetchmail is available"
 
-I initially had the same question. Then, I assumed this new runtime test
-has been simply copied from the existing test_bcc:
-https://gitlab.com/buildroot.org/buildroot/-/blob/master/support/testing/tests/package/test_bcc.py
-which was written with kernel 6.6.32, which was the latest LTS at that 
-time.
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+Gitlab pipelines passed:
+https://gitlab.com/bkuhls/buildroot/-/commits/e5014b0d231271bad52a9271ef717fbbae99c0f7
 
-Once the next 2026.08 release will be complete, I think we will do a 
-cleanup
-in runtime tests, to add a Aarch64 builtin kernel at the latest LTS. So 
-all
-those runtime tests will be updated.
+ package/fetchmail/fetchmail.hash | 4 ++--
+ package/fetchmail/fetchmail.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-> --
-> Bye, Peter Korsgaard
+diff --git a/package/fetchmail/fetchmail.hash b/package/fetchmail/fetchmail.hash
+index cbf1ef2afb..023667e207 100644
+--- a/package/fetchmail/fetchmail.hash
++++ b/package/fetchmail/fetchmail.hash
+@@ -1,4 +1,4 @@
+-# From https://sourceforge.net/p/fetchmail/mailman/message/59347909/
+-sha256  ab0320fe4df0b5ee8659189e66590d9de96aadbf929fe59f353ae7a317e9ef1e  fetchmail-6.6.5.tar.xz
++# From https://sourceforge.net/p/fetchmail/mailman/message/59381086/
++sha256  bece8aaaa68e029eed9fd55fffd2adc7dd6cd5e9574d5bf92e2d9208bd97a881  fetchmail-6.6.7.tar.xz
+ # Locally computed:
+ sha256  48aea24325e55932dbd79b30f558b9c87a416d675fe5f94445e8be5cb6606fde  COPYING
+diff --git a/package/fetchmail/fetchmail.mk b/package/fetchmail/fetchmail.mk
+index 9b3c035844..9d00d876d2 100644
+--- a/package/fetchmail/fetchmail.mk
++++ b/package/fetchmail/fetchmail.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ FETCHMAIL_VERSION_MAJOR = 6.6
+-FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).5
++FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).7
+ FETCHMAIL_SOURCE = fetchmail-$(FETCHMAIL_VERSION).tar.xz
+ FETCHMAIL_SITE = https://downloads.sourceforge.net/project/fetchmail/branch_$(FETCHMAIL_VERSION_MAJOR)
+ FETCHMAIL_LICENSE = GPL-2.0; some exceptions are mentioned in COPYING
+-- 
+2.47.3
 
-Best regards,
-
-Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
