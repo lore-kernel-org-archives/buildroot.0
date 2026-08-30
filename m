@@ -1,109 +1,110 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A84C2C61DD9
-	for <buildroot@archiver.kernel.org>; Sun, 30 Aug 2026 18:07:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44682C61DD9
+	for <buildroot@archiver.kernel.org>; Sun, 30 Aug 2026 18:08:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 44BCC4058A;
-	Sun, 30 Aug 2026 18:07:43 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id n2dmjlpwJCDA; Sun, 30 Aug 2026 18:07:42 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1788113262;
-	bh=/nrXKC5PjYDhz9nlOB4poKX/K32ZQ/cOvRlC4ZfVMIo=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=PFfGZnsZAVraMr7v4qVpPU/33E1Sb1zZfuAU3E5fG/6d3vOyKz8aTdRwMmku7umJ7
-	 UiFaoFjdLtPU3uiAtDsajpVPeqs3gTgi9TDPBGzXgAK0HUvtF1WvgjsN50LgGB3/pu
-	 Ve+/HgRi11yAACj+pGrMl8yJncKP0CpD1c5xGr2UH+ZPJGElbzIjAxPBC9jifjpOb1
-	 UvDMll4/AIcbmaD+b3broUkJBns8QBrSQ03J35B9GIPzhTDrbntiDBIz7/HJh3taAq
-	 kZqKKdCvoVcJCgURiJLXeOfE3raeSE8abzvClLbOiSUl3htULuBhdnaMoW78a7ss8g
-	 PBd0Ly03U+zIw==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 522124043B;
-	Sun, 30 Aug 2026 18:07:42 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id D5094F2
- for <buildroot@buildroot.org>; Sun, 30 Aug 2026 18:07:40 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C383C605D8
- for <buildroot@buildroot.org>; Sun, 30 Aug 2026 18:07:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4898060614;
+	Sun, 30 Aug 2026 18:08:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WopCDwlC_faU for <buildroot@buildroot.org>;
- Sun, 30 Aug 2026 18:07:40 +0000 (UTC)
+ id Ozk5Nh7HUcBg; Sun, 30 Aug 2026 18:08:15 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1788113295;
+	bh=UfXMQt9Y34FUC9F1I9WHDqhO+XgaEosbU6JPRnU2bsw=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=WCs4MJpOe56pw9RZg7vsgEFRX2IXVZaF6XUJPvNalMHMj4ZXtK3cTPOL7Ao2DRccc
+	 kkBA0qJTH2f0Xl0/0+pCf3P31NhoTLuy6anlJWs8E5ACae+XbUPIMVO7un6mpo0obR
+	 r9IQGBAc8TDRKf6XiYVUIpcboKrzrIx2HcZ9ii05hFc9gGJwXEA0LNp/fCNGv+KJly
+	 10DhIazMLGstCfkOc8OPVl/Te7En8w9VWnzB0XBehAfzJ2U317myMPNsRVOs57ZgMw
+	 i4JebKkdvrRsulTfY46EucDgTLuMZSuQSiZLGL24lkdryzGquo+wri3JLe+ZZ2+/7A
+	 mYaJiSMXTUhqg==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5A107605E5;
+	Sun, 30 Aug 2026 18:08:15 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 91602F2
+ for <buildroot@buildroot.org>; Sun, 30 Aug 2026 18:08:14 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 77EBD4058E
+ for <buildroot@buildroot.org>; Sun, 30 Aug 2026 18:08:14 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3RQAYP9FQ8lQ for <buildroot@buildroot.org>;
+ Sun, 30 Aug 2026 18:08:13 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::430; helo=mail-wr1-x430.google.com;
+ client-ip=2a00:1450:4864:20::436; helo=mail-wr1-x436.google.com;
  envelope-from=alexander.sverdlin@gmail.com; receiver=<UNKNOWN> 
-Authentication-Results: smtp3.osuosl.org;
+Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp3.osuosl.org; dkim=pass (2048-bit key,
+Authentication-Results: smtp4.osuosl.org; dkim=pass (2048-bit key,
  unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20251104 header.b=hnYzQE6S
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
- [IPv6:2a00:1450:4864:20::430])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E10BF605A9
- for <buildroot@buildroot.org>; Sun, 30 Aug 2026 18:07:39 +0000 (UTC)
-Received: by mail-wr1-x430.google.com with SMTP id
- ffacd0b85a97d-48436668d20so391519f8f.3
- for <buildroot@buildroot.org>; Sun, 30 Aug 2026 11:07:39 -0700 (PDT)
+ header.s=20251104 header.b=jNV+4NvI
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
+ [IPv6:2a00:1450:4864:20::436])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 62B024058A
+ for <buildroot@buildroot.org>; Sun, 30 Aug 2026 18:08:12 +0000 (UTC)
+Received: by mail-wr1-x436.google.com with SMTP id
+ ffacd0b85a97d-4843c41f35bso102069f8f.0
+ for <buildroot@buildroot.org>; Sun, 30 Aug 2026 11:08:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1788113257; x=1788718057; darn=buildroot.org;
+ d=gmail.com; s=20251104; t=1788113291; x=1788718091; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
- bh=5diu3DthhpAg1ijEdL4TrCtNf7Si9oiNcHZu1jjNbxM=;
- b=hnYzQE6SAKGGM/rB7Ea+7A9PCJWro7bp3hSml6tVdKd5aC72+VWwo+LUgNxgswdY/F
- /SsBqtanivEWMI0whHT33+jdDjx7p21VrYOMNfPQ5FP5s4EdkNiliP8mYECczOrOG4ZP
- dQ6bWyL67FjTViscgekphEM2XIPLAJ6HY9l9F6Tl1GA/u7nlLwsFk6annidwGYByXbuY
- LAQ5YcvbGk5zO/TaH0sd7izr7Ns80hVbGms5MuUjbkJ8rEz7qtTkNjRXjXhk9nCH+g2I
- muSX1kHDquLyWNBydxc7kZTzb9d5oDcEXyY3wG/sQrTagrc7SxhF7d+UHF9Jk74d2e0Z
- 3HLg==
+ bh=UzJuoYfn2rB1qswpnysMIsH7STpmWaFOfEdLsORhVTY=;
+ b=jNV+4NvIXHNgl76SgMMvhWDL25bHW0tPb9s9fusxEnIZzBG/ZK9v6lReXbi30cTtWt
+ Ar4xujXb8PlxOfvBockQHVhYnw3Ee+ODY7ahR8Vq6mcotnhLyAgrgcFBRHwBCXCbvvIV
+ PySicNA9dd1v0zPnzdLgJ6mUhZ/gvCBXs/0nlFkRX8n4M5LOXlzQIbndEg8w4z3EI/Ye
+ nrMTo4N4kv0YUyUBnGytaQX2NGB0C+ntGCHarls9j9Zh1FPd3zE2kOL/p7+kCkruzXZ3
+ Ib9a6bz75uapyCGHaL0nUuSvCLbUCHm4CWNsa+IU3welgepA57xZsVipadmj6zdVTiOt
+ etcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1788113257; x=1788718057;
+ d=1e100.net; s=20251104; t=1788113291; x=1788718091;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to:content-type;
- bh=5diu3DthhpAg1ijEdL4TrCtNf7Si9oiNcHZu1jjNbxM=;
- b=AAahBA9sc6l2szcs10q+IHMrrhhs8dkTqJENWM3qg+JxcnIvXbOq3KbMgZobMQKK4X
- KFVbxJm5YSPfOdAtRHcnxdT9KM/0u6lYr2bnSzqu2GioDJq2iSMdvdN81GwVO19/OgVZ
- qa+WF0NTO0lQ45ak5iYETscUhY+DAQeNcobERSqXTF31fA88g3W6ihTVaxBfsPUJQE+e
- wKmHdGrLSPz6QqcdLNl/nuefNka6qcnApFRSgrn/YlYxP7MjcuKVWDbnIlMm1hUyb9IP
- 4fFLb8BBYkt+2wRjOUzIvNMFXvSiQAlPY5Mgx/uTy79SqxEetc7rPF/V/8JLncfRBs8D
- W8Kg==
-X-Gm-Message-State: AFuF++k6wvzPvU1D4BwtQ+vCoqSrF/EizCwCTCA7SpsPldLOTIqmrYl9
- Dl7MHouG1rhZEBxc3N2XAwimZTNU6U5Adu1ZQO9X2nrL3xtT56/kpywE4XXO/g==
-X-Gm-Gg: AYBFou2o5NjMf5nr7OtUu7mQ87dnigx55a5dkTYPcuQRNndJGyhFi9txD/EAw+EDihG
- 72wyQRE4nV7xnNxcn8F5dYxHOXxvgLokJzsmebWJwEMmT4xFB9mvyf6V9Ou6PVuqksVO7SYBd+2
- 29QyY/+4/gLBqzIh+pnONf8Y9m70OTRd/wxI6BvFV7OTBMRIX25bR8K6YPi9n4KMOI7acpK1rpK
- zd6I9zSzG2uh7CyHNWfa/QZi+H7TwepXulvbqD8fjlWFB6LDp/wZB0wLhyaLUzJHeSRD1agr6QY
- G7tj53iPzy2JgTtj6qIqP3t/a04efx/vN9Z0cmw0hiYKDLehOF0ZQ8VCNCwQjD612ho3rn71ymg
- f0/5ZzO9nOdKKmO2Kbh57jTkPhwPij8Hl4zD5OU0f1tlQeTvXE0A5baPqzwE5TngHbvUye2gs0S
- jrbN7xaZCJlZa+X7UgIT42JC2hD4oe9C5On9XLEAE0UfvKa6THw2hwDKu4hbc0SuMYraRMEdb3B
- qOk+xEoBItbn3YA
-X-Received: by 2002:a05:6000:3106:b0:47f:8d71:210a with SMTP id
- ffacd0b85a97d-482f79cf4d0mr29530834f8f.15.1788113257158; 
- Sun, 30 Aug 2026 11:07:37 -0700 (PDT)
+ bh=UzJuoYfn2rB1qswpnysMIsH7STpmWaFOfEdLsORhVTY=;
+ b=orHVuP0Z/nVXmr33p/+BJVhK+ue6fKtfh5D+SBwRmJyFHUwhpmb1bhX5tq42kXBMlM
+ dR+M/Xr1NCCYxbGAIr/OdHxSMfN32K4usp3s0CJ7vu9RJKG2fsn5gg1LRyNoZ30fiFc+
+ VXtIJoylWT15KRBzRtK3ToXT0/qcXk2G9MJMyxDL+lqD2QZiNmDojLIWIC/mLEJpTvaA
+ KKcD8W30DBNjsMrIkypPRbb46EfkKIHCnEIZvROci2XbYqU7NjjuP0dB3+nJm7fJVU2t
+ yxvy3sSvzZhlR2F6ze83kIPOG50o2k6/xjVbPkzrfC3m6rQED/MFi7R6kSzDVJKTHko7
+ zXuw==
+X-Gm-Message-State: AFuF++lL8bhjrTnz4oAz0h3U86+Q6VmTtRO6yInZnkwmFbMd5kltKyDZ
+ BfqziTbHbwjsUPjmMFfvW/EW1DSYK2jBUAebMmis1ih1TgkhaFySDFbQXt74tQ==
+X-Gm-Gg: AYBFou32qswDv+/xKtivS7s69oZkdzA7HjxlNzdoPHziAhWsjruPWmfrw3S+sw0ghJU
+ NlCISO/S0lmMrTOMtC04zOJZllm6PwzSoL1mIO2w20NyLB6pOJjxICODX7tXO5+r4qDRE7g5eo5
+ TLfFUogyr6i1gQs1n+3qT/JUuf97slEjWxyZ0jTQ0YO/Zrx6tJ+T0YwzSwXR4z2DZiys39WA9eb
+ /Zigeuot9xmuClKN9uF6GykxLJ7ogXGTaL+YyU4bLfjszUUk1Z5rUKamoJ0DOVhMUUJh4CvxKis
+ 9i0RzU8GkL7d4OhcZrcE47BjR27EJ/UmvQVVpZnnNnQ0eSFa9iqhG60V8JieLuAvm6fXv7kzwrY
+ BBFMA1Tq42uk5AcFLZubIJoKWCPHngkCZWCDAxvG2m7OSKF3t4pHZE5HY3DUBC18R4HuU2L/sEz
+ eDIAQiJflI7z69bnAeIJET/UeScVp8liOVV17aKh8RQmfxz5tBWOD78PtL1GQFzvo1r3CBeNGFl
+ YL+RHHIFjtea1krRN0NRWVODIY=
+X-Received: by 2002:a05:6000:26c7:b0:482:e4bc:51a9 with SMTP id
+ ffacd0b85a97d-48439794d83mr4863509f8f.4.1788113290582; 
+ Sun, 30 Aug 2026 11:08:10 -0700 (PDT)
 Received: from localhost.localdomain
  ([2a02:1210:8642:2b00:82ee:73ff:feb8:99e3])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-482fbb2e6e8sm19071327f8f.32.2026.08.30.11.07.34
+ ffacd0b85a97d-482fbab3f16sm19237700f8f.1.2026.08.30.11.08.09
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 30 Aug 2026 11:07:35 -0700 (PDT)
+ Sun, 30 Aug 2026 11:08:09 -0700 (PDT)
 From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
 To: buildroot@buildroot.org
-Cc: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-Date: Sun, 30 Aug 2026 20:07:13 +0200
-Message-ID: <20260830180717.96967-1-alexander.sverdlin@gmail.com>
+Cc: Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+ Joachim Wiberg <troglobit@gmail.com>
+Date: Sun, 30 Aug 2026 20:07:55 +0200
+Message-ID: <20260830180758.97741-1-alexander.sverdlin@gmail.com>
 X-Mailer: git-send-email 2.55.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/civetweb: fix underlinked shared library
+Subject: [Buildroot] [PATCH] package/mini-snmpd: bump to version 2.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -120,40 +121,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The install steps re-link libcivetweb.so but do not pass LIBS, so the link
-falls back to the upstream Makefile defaults and loses the OpenSSL flags
-added by the package. The correctly linked library produced by the build
-step is then overwritten by an underlinked one, leaving SSL_CTX_free,
-EVP_Digest and friends undefined and breaking any package linking against
--lcivetweb.
+Fixes:
+- Reassemble SNMP requests split across TCP segments, and drop
+  over-large messages, by Noam Rathaus
+- Fix encoded-length accounting for decoded OIDs, by Noam Rathaus
+- Zero-fill memory from the internal `allocate()` helper
+- Build the interface trap OIDs without a run-time format string
+- Avoid needless variable shadowing under `-Wshadow`
 
 Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
 ---
- package/civetweb/civetweb.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/mini-snmpd/mini-snmpd.hash | 4 ++--
+ package/mini-snmpd/mini-snmpd.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/civetweb/civetweb.mk b/package/civetweb/civetweb.mk
-index af221e9133..4fdd94ecc7 100644
---- a/package/civetweb/civetweb.mk
-+++ b/package/civetweb/civetweb.mk
-@@ -93,7 +93,7 @@ define CIVETWEB_INSTALL_STAGING_CMDS
- 		PREFIX="$(STAGING_DIR)/usr" \
- 		$(CIVETWEB_INSTALL_OPTS) \
- 		$(CIVETWEB_CONF_OPTS) \
--		COPT='$(CIVETWEB_COPT)'
-+		COPT='$(CIVETWEB_COPT)' LIBS="$(CIVETWEB_LIBS)"
- endef
+diff --git a/package/mini-snmpd/mini-snmpd.hash b/package/mini-snmpd/mini-snmpd.hash
+index d1e8f51f8e..937de891ad 100644
+--- a/package/mini-snmpd/mini-snmpd.hash
++++ b/package/mini-snmpd/mini-snmpd.hash
+@@ -1,4 +1,4 @@
+-# sha256 from https://github.com/troglobit/mini-snmpd/releases/tag/v2.0
+-sha256  851acf49a1a36356664af0a7a040fa31f75403eb26e03627eba188ee15d4854c  mini-snmpd-2.0.tar.gz
++# sha256 from https://github.com/troglobit/mini-snmpd/releases/tag/v2.1
++sha256  2f9936e4c62d1469a13e43611001b6ac36901ddb9809e3c7cb2297830615a6a1  mini-snmpd-2.1.tar.gz
+ # Locally calculated
+ sha256  8a43b895972a24567297f44f35dab0f5f9ed3b7db6dac0bf6094075b27ab9d56  COPYING
+diff --git a/package/mini-snmpd/mini-snmpd.mk b/package/mini-snmpd/mini-snmpd.mk
+index 9873ad2dee..157aabfb53 100644
+--- a/package/mini-snmpd/mini-snmpd.mk
++++ b/package/mini-snmpd/mini-snmpd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- define CIVETWEB_INSTALL_TARGET_CMDS
-@@ -102,7 +102,7 @@ define CIVETWEB_INSTALL_TARGET_CMDS
- 		PREFIX="$(TARGET_DIR)/usr" \
- 		$(CIVETWEB_INSTALL_OPTS) \
- 		$(CIVETWEB_CONF_OPTS) \
--		COPT='$(CIVETWEB_COPT)'
-+		COPT='$(CIVETWEB_COPT)' LIBS="$(CIVETWEB_LIBS)"
- endef
- 
- $(eval $(generic-package))
+-MINI_SNMPD_VERSION = 2.0
++MINI_SNMPD_VERSION = 2.1
+ MINI_SNMPD_SITE = https://github.com/troglobit/mini-snmpd/releases/download/v$(MINI_SNMPD_VERSION)
+ MINI_SNMPD_LICENSE = GPL-2.0
+ MINI_SNMPD_LICENSE_FILES = COPYING
 -- 
 2.55.0
 
