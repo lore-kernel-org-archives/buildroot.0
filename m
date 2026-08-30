@@ -1,76 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3DEAC61DB9
-	for <buildroot@archiver.kernel.org>; Sun, 30 Aug 2026 03:53:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F63CC61DE2
+	for <buildroot@archiver.kernel.org>; Sun, 30 Aug 2026 07:51:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 535984065C;
-	Sun, 30 Aug 2026 03:53:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DDE3D6061A;
+	Sun, 30 Aug 2026 07:51:37 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id B_nnFX_B0TzR; Sun, 30 Aug 2026 07:51:36 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1788076296;
+	bh=zWScitgKiOemMhmWfQsjaWQ05hS9RjV2M9UneK3/6Yo=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=fn7maYSJmS9TRQKkst9wbZljjiXja0jcO6vYG0duc4Lz+VLKV2nKpd1tsed6k04i6
+	 jYoyMPXOBXMQZ9QARilgWErTtBM7M0JShskcRcsQWxo/ZkGyurhU7VSn+WBYhwHdrL
+	 rnDqosR8MBTltuf593soJiLDJf+XVRXE9Dj2QDGIFL4IiLvEC8a69MiHBa8jCJum4l
+	 KQwCG6YG3Q0tzfFSb32cbvuFaw5VKwxQJ1sasMXcxvyoWxEB8AqNI0lP3C0TmIIUFd
+	 4chxyTgKJtF8mZWcetb07Umn3AtoHcXNqgh5bc+KPdVx5Ku+JoaIorT7jJpmGtFIQt
+	 bB7Z8vbY5AghA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id E599E60611;
+	Sun, 30 Aug 2026 07:51:35 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 57E1834E
+ for <buildroot@buildroot.org>; Sun, 30 Aug 2026 07:51:34 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 55BA44068E
+ for <buildroot@buildroot.org>; Sun, 30 Aug 2026 07:51:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id s7-MfJtD7Dt9; Sun, 30 Aug 2026 03:53:00 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1788061980;
-	bh=o4Jb+RufNCGn0MbUiTdtI9Xni8UJYbZHcVO+wbR6rOk=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=YSR1Is8hRVSY9tV7xak1zI1ugNzHEHsFjVBelyDUukXDRQp2THO0K4yUsa4XNJjFU
-	 6W9+LDB8NDd2781PmTLMGYMttY6Y5zjboF4B+D5nLirmvB3PWGlm9Ok1HwxAVPMmE9
-	 hqguWSgZFl4PgungBXjh81DJ5wYiyz8HnWdKcso+BJlQF0+/nJ/j7unMO7CoIemqUx
-	 0qLMxr5FOha5L0qIQ+R7zQ/xv9vFuh4X1SyEQnfMY2bDU5ODKn10TZc9RqS6NpPdRV
-	 nIzsr1ZHhZMQ1epjieiYJ1HdvDVXUDwn6dcw0tcg36237CUQHylSMQm8WV7YQ95t9u
-	 oRE1jYeby6qKg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2484E4061E;
-	Sun, 30 Aug 2026 03:53:00 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 4C77A2FD
- for <buildroot@buildroot.org>; Sun, 30 Aug 2026 03:52:59 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3EA9F40098
- for <buildroot@buildroot.org>; Sun, 30 Aug 2026 03:52:59 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EX-l62BS4712 for <buildroot@buildroot.org>;
- Sun, 30 Aug 2026 03:52:58 +0000 (UTC)
-Received-SPF: None (mailfrom) identity=mailfrom; client-ip=176.9.89.163;
- helo=serv15.avernis.de; envelope-from=br025@umbiko.net; receiver=<UNKNOWN> 
-Authentication-Results: smtp2.osuosl.org;
+ id 8_zM4fz9_CXS for <buildroot@buildroot.org>;
+ Sun, 30 Aug 2026 07:51:33 +0000 (UTC)
+Received-SPF: None (mailfrom) identity=mailfrom;
+ client-ip=2a01:4f8:151:30a2::163; helo=serv15.avernis.de;
+ envelope-from=br025@umbiko.net; receiver=<UNKNOWN> 
+Authentication-Results: smtp4.osuosl.org;
  dmarc=none (p=none dis=none) header.from=umbiko.net
-Authentication-Results: smtp2.osuosl.org; dkim=pass (1024-bit key,
+Authentication-Results: smtp4.osuosl.org; dkim=pass (1024-bit key,
  unprotected) header.d=umbiko.net header.i=@umbiko.net header.a=rsa-sha256
- header.s=mail header.b=meIiedzc
-Received: from serv15.avernis.de (serv15.avernis.de [176.9.89.163])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 133F440050
- for <buildroot@buildroot.org>; Sun, 30 Aug 2026 03:52:56 +0000 (UTC)
+ header.s=mail header.b=iCs8m8g0
+Received: from serv15.avernis.de (serv15.avernis.de
+ [IPv6:2a01:4f8:151:30a2::163])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id F1BE740506
+ for <buildroot@buildroot.org>; Sun, 30 Aug 2026 07:51:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=umbiko.net; s=mail;
- t=1788061972; bh=42j4zkuj6N+MbTRQjeQoPrKVuphKd2Olr9PreAZsQJc=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References;
- b=meIiedzcP5BS3QBg0p6Q36euX6Itu/SoJvYXJ5b60b/Itf1txnwemen0t1eM12IoQ
- NqdwZV/DX0Q3bSGRu9bUokayjrdv+G0T+Qha6NUUHrU56r+wsATAlhMe1hpRnGjeiA
- 7h+A98/vpIQ8DRny/x61LGBhO2Mlch9IcxLjHT3k=
-Received: by serv15.avernis.de (Postfix) with ESMTPSA id CF250BDE162D;
- Sun, 30 Aug 2026 05:52:52 +0200 (CEST)
-MIME-Version: 1.0
-Date: Sun, 30 Aug 2026 03:52:52 +0000
+ t=1788076287; bh=2CO+DoStZ1/PqFoYYw3G8Q/fwrlM5ahkT9bJ3NRmCbQ=;
+ h=From:To:Cc:Subject:Date;
+ b=iCs8m8g0Pu1/vA84Sp/Mo7YmFVvAu7IsNCbj6Y3rE+MmRXck6TxKS14Yybcb23JCe
+ Iktz+z/yk7bxWgsyMYGBJtwehZ6QB0ahQilOvZUxxy3k4ZysAJPjDPE8M04NH+zcts
+ cI1qa/c/A6Y93wSJBdi+5NyvXSGUUXIMVOwAXQls=
+Received: by serv15.avernis.de (Postfix) with ESMTPSA id C4E18BDE2B17;
+ Sun, 30 Aug 2026 09:51:26 +0200 (CEST)
 From: Andreas Ziegler <br025@umbiko.net>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Buildroot List <buildroot@buildroot.org>
-In-Reply-To: <20260828194058.2405217-3-thomas.petazzoni@bootlin.com>
-References: <20260828194058.2405217-1-thomas.petazzoni@bootlin.com>
- <20260828194058.2405217-3-thomas.petazzoni@bootlin.com>
-Message-ID: <5c1cc121914f27cb08f135667fdae1e9@umbiko.net>
-X-Sender: br025@umbiko.net
+To: buildroot@buildroot.org
+Cc: Andreas Ziegler <br025@umbiko.net>
+Date: Sun, 30 Aug 2026 09:51:06 +0200
+Message-ID: <20260830075108.767345-1-br025@umbiko.net>
+X-Mailer: git-send-email 2.53.0
+MIME-Version: 1.0
 X-Virus-Scanned: clamav-milter 1.4.3 at serv15.avernis.de
 X-Virus-Status: Clean
-Subject: Re: [Buildroot] [PATCH v3 2/2] package/libnfs: bump version to 7.0.1
+Subject: [Buildroot] [PATCH 1/1] package/mpd: update to version 0.24.15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,26 +80,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Version 0.24.15 change log: 
 
-On 2026-08-28 19:40, Thomas Petazzoni wrote:
-> From: Andreas Ziegler <br025@umbiko.net>
-> 
-> Change log:
-> https://github.com/sahlberg/libnfs/compare/libnfs-6.0.2...libnfs-7.0.1
-> 
-> All patches are dropped as they are all included in 7.0.1.
-> 
-> Signed-off-by: Andreas Ziegler <br025@umbiko.net>
-> [Thomas: bump to 7.0.1]
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Tested-by: Andreas Ziegler <br025@umbiko.net>
+* protocol
+	fix crash on "sticker delete" and "sticker find"
+* database
+	upnp: fix crash bug
+* input
+	alsa, curl, nfs: fix stalled transfers
+* playlist
+	asx, pls, rss, xspf: limit to 16 MB
+	cue: fix problem playing CUE tracks in music directory root
+* player
+	fix noise with replay gain and cross-fade
+
+Signed-off-by: Andreas Ziegler <br025@umbiko.net>
 ---
-Tested on aarch64 (build, run)
+ package/mpd/mpd.hash | 2 +-
+ package/mpd/mpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
+index bf9ed653fd..7d0c2072d8 100644
+--- a/package/mpd/mpd.hash
++++ b/package/mpd/mpd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking pgp signature
+-sha256  367e85debb4427605cccb5415f2858ebb401d849a80615553f59520f4640811e  mpd-0.24.14.tar.xz
++sha256  524c70bce3fcd268016156bdc97abcf5be1904f0c6fd622688999123e3c4c457  mpd-0.24.15.tar.xz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index d063d509f4..4db0aee7cb 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ MPD_VERSION_MAJOR = 0.24
+-MPD_VERSION = $(MPD_VERSION_MAJOR).14
++MPD_VERSION = $(MPD_VERSION_MAJOR).15
+ MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
+ MPD_SITE = https://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
+ MPD_DEPENDENCIES = host-pkgconf fmt
+-- 
+2.53.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
