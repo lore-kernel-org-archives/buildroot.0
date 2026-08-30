@@ -4,68 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F28AEC61DD9
-	for <buildroot@archiver.kernel.org>; Sun, 30 Aug 2026 17:22:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA73AC61DE1
+	for <buildroot@archiver.kernel.org>; Sun, 30 Aug 2026 17:28:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BDF91405CE;
-	Sun, 30 Aug 2026 17:22:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E74FE405D0;
+	Sun, 30 Aug 2026 17:28:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7NSUu_fIZweY; Sun, 30 Aug 2026 17:22:48 +0000 (UTC)
+ id mqqwrs02vXnt; Sun, 30 Aug 2026 17:28:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1788110568;
-	bh=pE5vt9mJafQeJtFa8BZgw2ywI2Gt1o7xaOl9KPIsjdw=;
+	s=default; t=1788110907;
+	bh=W5y8xdmQpPSn6aJORMkh7AttwEdE9jFfZr4FFY3atlw=;
 	h=Date:From:To:References:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=XeguqOgYQ06XEOri2GSd8sste32uloqTMKVtN/L6A3wen/1G8hNNwq8LKx/J8JoMX
-	 BPgsQNKysRvNOpGmZgHLPjekkAnc0n3T4xX/P3xdo50ewIbXsm1J5taxf1TlEl//8R
-	 NqXQ6b72L+pPW1F752vlHzbDOZsbzyG3UeRrRDhrY7RbjP2Sv/X8zpJmKVKV1KZBm6
-	 +NjaDdjpkhSahCKFqGhs4hZC2GJOcSCn/Ach8LyAf+S38HeA5AkANK1CX5HwMjF3Yz
-	 ijVuiGyQ6yOZbaNu8kguqJeg3oJvsXG40ewB4yUOLKQp2L9iyzc50aAc9tw63znsSf
-	 lIcqUihMa8VUw==
+	b=JqWKxGO1FVV2wUdzszOUOFNQLrTY5+bwIyiZs/InDi8s7n8231HXmXxTBFbJOGIYt
+	 8Ex1trGec2Y3uCQIIAc9wXiLCsS8dz9D6nAKSObRCca8z3J9Nr8+f8Kh8Xl6kOp2Xn
+	 sGnn8zkOPehmV5RGyeZMpkR4PVPpXxxt+m6BsZ3xHWv1puB1j78J5rNNxhOg9JxbNX
+	 6Ecixy37tG5ivVkMws3/1/asKSA0Wy/xs9lhPHeL5izREzmFcH5u7fKIx4irpcIMr9
+	 ohPUvdHhJi+Iy+4qKEbOZEQwVgkteoSC246xjJyWG2OtI5X3rKb7WFmj9rDRii0qHY
+	 AUgy/yvS53X3w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4ADFE405AA;
-	Sun, 30 Aug 2026 17:22:48 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 4A03AF2
- for <buildroot@buildroot.org>; Sun, 30 Aug 2026 17:22:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D1646405AE;
+	Sun, 30 Aug 2026 17:28:27 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 435FF23E
+ for <buildroot@buildroot.org>; Sun, 30 Aug 2026 17:28:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3BB8A405AA
- for <buildroot@buildroot.org>; Sun, 30 Aug 2026 17:22:47 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 351A2809CE
+ for <buildroot@buildroot.org>; Sun, 30 Aug 2026 17:28:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VQeEBmcQ5Oqv for <buildroot@buildroot.org>;
- Sun, 30 Aug 2026 17:22:46 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GLrzzhsbS3X2 for <buildroot@buildroot.org>;
+ Sun, 30 Aug 2026 17:28:25 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.238.66.15;
  helo=helium.openadk.org; envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
-Authentication-Results: smtp4.osuosl.org;
+Authentication-Results: smtp1.osuosl.org;
  dmarc=none (p=none dis=none) header.from=openadk.org
 Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 23247405A7
- for <buildroot@buildroot.org>; Sun, 30 Aug 2026 17:22:45 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 73CC3809B3
+ for <buildroot@buildroot.org>; Sun, 30 Aug 2026 17:28:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=openadk.org; s=2022;
- t=1788110557; bh=tqXm0hCeO2wTRkh9upwf9wc+YAGA2TZ8FaROIe8PgvE=;
+ t=1788110902; bh=eVHtympgpjlWipzKVbKHhPy/lDMC5dUiIvDEhIDVo8o=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=Gv46WCLOqYFgfEqyD2ShNPnS0pEb9a18vkZmjd8v1euc6HIrZXI7pEc4byZb9m9Go
- xeo422tlZkwCWoAfIS0NjfR5id8sMr8RQcng9b0mtj2oCIOsoC7hiGrOXxWC2iG9M1
- 9+TQLQEEDgMrYofN+nAaQoeGrY3OFDDKKTIlTZIqcKkgnWTfj4xQ/0DB+0tZpLpAlw
- dwaD9YhBmbeLcsVoKDoHwskZ8hNRt14QICggKs9+BZbj0v9GFq15Nz2YOd5u3myitU
- Hym+BHXMHxzTm1Zzh6T3wzIJTKljRl2xTZbtG1gYn0HB196S2a4MIP7AU1Eu3YzdA6
- jmD82Rlc912iw==
+ b=udF967wzc6S/BDkBmhYefqf5gDmDQ38D1MkNrVKbUnNNABuwgF0e8LkipcWe6Xecn
+ r0fg/uZ7DhejV0WYoV8RyDQyUVIRB58ieYiH4U5gjgD/JlEh0NU62ooZ/kDIUjyRqM
+ L3PTdBmzdGtueI+E0vkBTgj38aNRAOM5QKenStrSygIf5xNvG9+MhzMGLXwPq2iZUs
+ Mpi53Y48YeZxJ/pbEzYnjDN4q2LUX1DsAoja0Do8AMhcWFzoLTfSdSrTxiDmVkygfk
+ gfbLxdfEFOMGQv28Is6jTJ0sIOEju0vnpzh3A/exID/vgO0lfYKq8Hkuwjr7oU/D3x
+ aWMl5TCiwpPHg==
 Received: by helium.openadk.org (Postfix, from userid 1000)
- id 2FAD731E0AEB; Sun, 30 Aug 2026 19:22:35 +0200 (CEST)
-Date: Sun, 30 Aug 2026 19:22:34 +0200
+ id 5620631E0D8B; Sun, 30 Aug 2026 19:28:21 +0200 (CEST)
+Date: Sun, 30 Aug 2026 19:28:21 +0200
 From: Waldemar Brodkorb <wbx@openadk.org>
 To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <apRm2p0SBim7_BtZ@waldemar-brodkorb.de>
+Message-ID: <apRoNTQRjDuv0m-O@waldemar-brodkorb.de>
 References: <aoYrHjB83RoRdw1j@waldemar-brodkorb.de> <apLDmvqL1lzNhoH5@windsurf>
+ <apLFfy3hJ6NSAWkv@windsurf>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <apLDmvqL1lzNhoH5@windsurf>
+In-Reply-To: <apLFfy3hJ6NSAWkv@windsurf>
 X-Operating-System: Linux 6.12.96+deb13-amd64 x86_64
 Subject: Re: [Buildroot] [PATCH] arch/or1k: fix uClibc issues with fenv
  enabled
@@ -86,84 +87,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Thomas,
+Hi Thomas,
 Thomas Petazzoni wrote,
 
-> Hello Waldemar,
+> Hello,
 > 
-> On Thu, Aug 20, 2026 at 12:15:58AM +0200, Waldemar Brodkorb wrote:
-> > OpenRISC architecture can be either soft-float or hard-float, so add the
-> > ability to the user to configure it.
+> On Sat, Aug 29, 2026 at 01:39:26PM +0200, Thomas Petazzoni wrote:
+> 
+> > But more importantly, I don't see how your patch fixes the soft float
+> > situation. My understanding is that soft-float is the default on
+> > OR1K. Your patch doesn't change *anything* in soft-float
+> > configuration, it only passes -mhard-float in hard float
+> > configurations, and makes hard float the default.
 > > 
-> > GNU libc has hard-float support since 03 May 2024, see here:
-> > https://sourceware.org/pipermail/glibc-cvs/2024q2/085211.html
-> > There fenv functions f.e. were added to glibc.
-> > 
-> > uClibc-ng has added fenv functions in commit 8a77b4785acd143d76ccc08142abb39c0100de3d
-> > on 27 April 2025.
-> > 
-> > musl does not have any or1k architecture specific fenv support.
-> > 
-> > Tested with all 6 combinations of C libraries and float configurations.
+> > How can your patch fix anything with BR2_OR1K_SOFT_FLOAT enabled?
 > 
-> Are you sure? I don't see how your patch solves the soft-float
-> configuration.
+> Sorry for my mistake, but re-reading, I know understand:
+> BR2_OR1K_SOFT_FLOAT selects BR2_SOFT_FLOAT, and based on that uClibc
+> uses or doesn't use hard-float fenv stuff. That makes sense.
 > 
-> > diff --git a/arch/Config.in.or1k b/arch/Config.in.or1k
-> > index f42aef9eef..e626907496 100644
-> > --- a/arch/Config.in.or1k
-> > +++ b/arch/Config.in.or1k
-> > @@ -1,3 +1,12 @@
-> > +config BR2_OR1K_SOFT_FLOAT
-> > +	bool "Use soft-float"
-> > +	select BR2_SOFT_FLOAT
-> 
-> This should be "default y", to preserve existing behavior.
-> 
-> > +	help
-> > +	  If your target CPU does not have a Floating Point Unit (FPU)
-> > +	  or a kernel FPU emulator, but you still wish to support
-> > +	  floating point functions, then everything will need to be
-> > +	  compiled with soft floating point support (-msoft-float).
-> > +
-> >  config BR2_ARCH
-> >  	default "or1k"
-> >  
-> > diff --git a/package/Makefile.in b/package/Makefile.in
-> > index eac28b3a96..69859e8ce4 100644
-> > --- a/package/Makefile.in
-> > +++ b/package/Makefile.in
-> > @@ -106,6 +106,14 @@ TARGET_ABI += -mabi=spe -mfloat-gprs=double -Wa,-me500mc
-> >  endif
-> >  endif
-> >  
-> > +# use hard-float option globally for OpenRISC, when not
-> > +# soft-float choosen by the user.
-> > +ifeq ($(BR2_or1k),y)
-> > +ifneq ($(BR2_OR1K_SOFT_FLOAT),y)
-> > +TARGET_ABI += -mhard-float
-> > +endif
-> > +endif
-> 
-> This needs somehow to go in the toolchain wrapper, so instead of your
-> change, you would need something like this:
-> 
-> diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-> index 180e90856d..16c9e08ba5 100644
-> --- a/package/gcc/gcc.mk
-> +++ b/package/gcc/gcc.mk
-> @@ -212,6 +212,10 @@ ifeq ($(BR2_SOFT_FLOAT),y)
->  ifeq ($(BR2_arm)$(BR2_armeb)$(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el)$(BR2_powerpc)$(BR2_sparc),y)
->  HOST_GCC_COMMON_CONF_OPTS += --with-float=soft
->  endif
-> +else
-> +ifeq ($(BR2_or1k),y)
-> +HOST_GCC_COMMON_CONF_OPTS += --with-float=hard
-> +endif
->  endif
+> Still the patch seems incorrect to me, and should modify gcc.mk and
+> the toolchain external stuff instead.
 
-The or1k gcc configuration has no --with-float. Only passing
--mhard-float as CFLAGS is possible.
+As I stated in my other mail --with-float is not available for gcc
+on or1k. How should I proceed? How does the toolchain-wrapper
+recognizes the user wants a hard-float toolchain?
+For the external toolchains I understand it, but not for the
+internal BR toolchains.
 
 best regards
  Waldemar
