@@ -1,163 +1,165 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1BFE8C61DD3
-	for <buildroot@archiver.kernel.org>; Mon, 31 Aug 2026 12:51:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C56EC624C9
+	for <buildroot@archiver.kernel.org>; Mon, 31 Aug 2026 12:51:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D69CE80993;
-	Mon, 31 Aug 2026 12:51:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 332B1605D2;
+	Mon, 31 Aug 2026 12:51:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5zfFbonBme1s; Mon, 31 Aug 2026 12:51:24 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2o5v6wBEeDT1; Mon, 31 Aug 2026 12:51:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1788180684;
-	bh=KYJunRLtLnD4HY8vWxVV4nZuMZJlk8m+BbeIsBUNh3w=;
+	s=default; t=1788180687;
+	bh=bzXdi9rA8wWWobecDZyksoYRp+GXbVWFuLvVlwAXnkI=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=NuPoisf9kcBFFsLYLEJVW+GsJdgs2rd5ugL2Yzaf/rMkFdW3QCPrZzZ0Dz337um0j
-	 BAjkmK3QoHEt58V25Sc7JDYBC2c/aiitt0z/64DmcuXDarGVfTkYpWZCmbtHhIZS/c
-	 M0wvQqP6AF1wColFAGC5xpK8qK1+nLjDHNjMv/4e9KPJxItsX0TfcpTz3KaDSSE6gr
-	 +ZdGjzYVqd8MNmtG+MnZsdNNRR6s/LjDIqnSP5MOMPv9eZIK1ZOMf+KIA4Fk4fHX1n
-	 b2+9aOfvQDos0qfYsbTZljVLDTBknIXIHU5rDDjXQU8tmn05EpkIXcVGMJP5NbHHZP
-	 Kgv6dhVyieiHg==
+	b=BRxRNYBIcMo+1RUK1HHWo8f0NCxj9H6akii6AqyWh0dGvflhHPAJt1VA7HBV30a14
+	 rIIejS1Im5SsverSrXCYt88HcKvKB3LDSRZPQbl1lgsnBYCij90j09W1MkK372HCwu
+	 jbXco8DlQ+xXTA0cMr/w9zzZasHTnBN9GxS3FpfsuTCKKoOwIH8IC3F/rnIlCjHfqj
+	 0PpnNYUuUcj+tg5ixBusYpH6S1Cz0PUp9oC9pdOTEZe/CbUNmuKUNkUc7MPb2K6evN
+	 Ia1AVOy0VxGOTP91/7IT9WIrw9Rgnr+V6+c+xe/3BiIi4qUQLTAIeHi5xFHiibR7b+
+	 9PsgpH35d6H+Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2C30C80880;
-	Mon, 31 Aug 2026 12:51:24 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id C14E223E
- for <buildroot@buildroot.org>; Mon, 31 Aug 2026 12:51:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3FDD060608;
+	Mon, 31 Aug 2026 12:51:27 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3C0CE23E
+ for <buildroot@buildroot.org>; Mon, 31 Aug 2026 12:51:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A788580880
- for <buildroot@buildroot.org>; Mon, 31 Aug 2026 12:51:22 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2266440595
+ for <buildroot@buildroot.org>; Mon, 31 Aug 2026 12:51:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dr0vfV2giOeR for <buildroot@buildroot.org>;
- Mon, 31 Aug 2026 12:51:22 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qfKbgID2soR1 for <buildroot@buildroot.org>;
+ Mon, 31 Aug 2026 12:51:24 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.22;
  helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
 Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 840F38087E
- for <buildroot@buildroot.org>; Mon, 31 Aug 2026 12:51:20 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C886C405AA
+ for <buildroot@buildroot.org>; Mon, 31 Aug 2026 12:51:23 +0000 (UTC)
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from client.hidden.invalid by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1N8XU1-1wnZB62rHF-00rzi9; Mon, 31
- Aug 2026 14:51:17 +0200
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1M6ll8-1wyFnT0Cj8-00C15u; Mon, 31
+ Aug 2026 14:51:21 +0200
 To: buildroot@buildroot.org
 Cc: "Fiona Klute (othermo GmbH)" <fiona.klute@gmx.de>
-Date: Mon, 31 Aug 2026 14:51:02 +0200
-Message-ID: <20260831125103.841338-2-fiona.klute@gmx.de>
+Date: Mon, 31 Aug 2026 14:51:03 +0200
+Message-ID: <20260831125103.841338-3-fiona.klute@gmx.de>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260831125103.841338-1-fiona.klute@gmx.de>
 References: <20260831125103.841338-1-fiona.klute@gmx.de>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:g5kroVl6MzUlCGcIA5arjEx9Pt6yVEralZvsZ2/XZVtphtguIgr
- gRs5d86z/41kZS52gNSrG6ipvQE0GxDaFmCkJ6tpE+7SvnXwzmRsjo9OP6FpGVTVnu0ksGn
- UsxCUY2k4vuim1XntrUYZt4btVZS/D2S7tIbXe2OogYqVDTE9uB6EO+ddNni/v2VrtCj8DQ
- reqL7vXZ7xb5B7ciwUZFw==
-UI-OutboundReport: notjunk:1;M01:P0:yw1cPiwIGhA=;ytI4i/F6yr2p2qhAWrQKb6H3T1G
- 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
-Subject: [Buildroot] [PATCH next 2/3] fs/squashfs: add option to build
- verity tree
+X-Provags-ID: V03:K1:WkE6vql5R/v0qCLx/kd0jc9Y3gMeKZwh9nvqewT4mtVQSbeiY3n
+ ZADfkLER+pIVWKuxZz/1X0Sr6wOWaYv/br3ZtPbtpr6SB0hx8OV1c+GJkdy7YfBwy2ZeW16
+ h0VMK3k6gjRMMPjflZxtoqyrf/z9Oqp73JQ9wrLEAcOa5/vyOA6t35/W9CtbQpFgrI+iXJ8
+ iscj362HfzrKsc1MELKiA==
+UI-OutboundReport: notjunk:1;M01:P0:GaGpzdExjcM=;1qFQTfvcIXerG2tCCcRH1Mzcq5s
+ iee5R1Ofp8XU+BA6LkJqS6ngEytW6IXGN/OBXU4wZRIO3H8VhsIipGfcBA4F4I3Gugsp+i34F
+ eGTG7q5XJDXQPCklvSqYjKaK5SS20V7eVTPK850BcKHS6vYO6dvq0BrnDUFziZfJkoYnp1TA0
+ KBCar4MA/5HyWSpiMV6QUDdovSSpCuNywfaiUrSaOhDV1LGGheSwr3n/+UA3Nh4XrM245j70A
+ dXAzwZFZYyqeXJgqBVHNj0bT9Mv869HuoQGjMfS+6rZfyP9p4/J967urNiYx00eeGtDzVOZd7
+ 8NS3LewEUWUB9W3VVCBXDvEdFgBYFwKPi8LX0gmaLX5RkVqGYWf5lE/gaCzXce0gG6z6gO8AL
+ ZIaZSdm6hVrnG8JqdEQOrhFa3rfxM6NzFBS9QPJAKJ3QNYYmvNSGAb9hBc7JxTWG1WCZ/6wE+
+ oaA5RJjpEasaYwjou1g75km1EnHgAuoXS6lk/5TB7BQoZ81pPX/t02sMU6nEHVeJY2PGqWIMQ
+ 0I8L9ChOfs/o5zKQTJ8QeTE5M2FGmsW5aPBoACH6ND5Zsq2skRtqJ4VTnvjOwdGkybM1SsAFK
+ X3wNQGWaQAarbsLOwZ6w4bhkhPYbwRs4jcVGsr/B0ZBc2QLLsxvz/p8B8U0qLM3YGpiogb/wB
+ m373MBL5IOSR3APQObzz+kaZFYgyRdJ/N15wmzUqgqk7ge/MenHadRMKT0xbSnjca0A9tUNt5
+ Q6pddSiOfymxYa3mdAlIbemt+J0Ay/BTlnMJHWapHZzMz/69XXn85EBNQCNWkb1Bq8KgF7nSk
+ VFam63yNb5x+e2ALTW6bLbOorYLQqUAXsXGqE9yXhQWK6DNlLEVd6ne8AZq8BlcGHyXuGEplA
+ f5SkSK6dS2luzXFzae/g8GCwPkd4Y5/3LgEIY4tIib0KbYgs/y6S8f4TA9dOqUpXlUdMBPOWC
+ 7LW/3fvMNpl2sfO5Fd1tSlSuR7V2WIFR+VnDspciYmxdNtCKfbcYx5KcYSPppSzfM9WmlhtfV
+ tFyLacsWd1SWRuYxY0MGh5wJb4i1/6moSTfiKVOzaR7FagjXG1wWSI9THgFP1DZMdRsCcwFrB
+ aAwgV3mqACzUfKyipubNm4nYOCIkCqvq46Kmz6qHX8ySedpTcB0F6VUMm8v8YJeL0gwSHZJ1F
+ TxYEQHXLel8Bppb5Y3u/KKL1Yio7GhraK8NVB3pyy7IwPnnnHNMy4LyZgoharGt1Wx9MGlvWp
+ /K54+PDYTl2x/yluZUBpE6u9GrWMZvfz9tMGZ83lX3z/IQzr2n/xLOOtxJw0yoUmhsD+QWTQ/
+ i0fVrMKIYmlYYvM+mVFz+uVoW7LslH9FDa6YxcV17ux/AdnqnApy2qxH8i4lkxZfm1ehTi2Va
+ EC+0iQTW1ciLw66fVxzYjeUfp7rbSyUqYvEF9tGvGGbdmNqqz6v8wRJckk3oP/2hqwxgAC/aG
+ dvy3aWZi1TUf7utt0YCRTivG1vjI1KJZcZ4dnqjvmkQy0JMSPRwc24tkzkt6BBGj/z8cMVlkO
+ NPkfUPIxvMVInDGQzDPbJrWZtAr9sTw1LWCIYm+EjQadaSgpjpOk4/ghlwTRRNWjKT+I38Jnw
+ GFlCDkIr04mUG0L7H62RB4plodlRfojVWznZ62dDLmDKWv28rR993GMzIl9+ROkCtyodPAc38
+ cKwMa//pblo9rM6WeYk4LLqpp0h3m5Zm7Fok2iGBe9UCbn9o80C0WeIn8Bj1BTxtJ6iln8cdp
+ FkSsrEfXir5Ga3KaNp5RlXe5qyt27H1eicNt4kpZ0sucb+WVJX/iao2bL/XB2rFlN7cZYFAj9
+ OOXQR8R3FyeXz8QeCGCW/4d9hBxB7v9Rrg27k9qpXP4ivAYC5KkpNEcCk3PP78O/Iwlf2y8VF
+ 9LxXB10rpZ9jPB3SG/rzSTvZZnTOZ8rp/h3WuwqUn2dpnRJJhUJGDVMTdNu702EiLrPSeMpj2
+ 9akJWpdp7gLJpvepesZ7hD1Df1sJrIRwgPXX/+vSPsxg4MBn4hG2eKZLZdT4piy+ljWBAcpkt
+ 1uw49OcyOC6st6P6IChXndadox5z9Oefs8vbk9yzJ6v7Sp2mmVfFObx19VeBF+gmgUUlQ0QaT
+ PVp253Udho/ItnB9Ih3AyNbfMOiLc2TW9w4NZ43+6MorXEZe2Gv8Pkz3IbA/cRN5cr9BaePty
+ JUbeDshtJbyYAnUXvsuunaohQZWfhIo6uZJiQ6M+PWD6xL9XnVNqPIh3kUNZ66rtWiKc4OiGE
+ tyIRYp3WjYhjP45iyx4ViO4ThwK0+FPunyIfVkRlEFMbLvNLUnCpOje0HEsH/YMxTUFbHvT5w
+ ArVd6Y1yoSJ+nTFR4aFeDvvmzVAK7c/nEFI3cSzRDD2zL4DMt9lCez3ra0BDcmlyAkpW7Pape
+ hVYUPKBvh8EBmccctHvkXKpfcS3I416EWvp4mFMHroV1uMV2fhsAHAXOydCOLTI0qhX23WIlj
+ Rig7YSamC4gJ3ATPKD+wwtqIYwGX4IrylTzpnC6g/eYEReWAxab4yXKHEkW24VCt9o37QU5Re
+ ft3NTt9GxCd2WDUBPuQalLu+TScbgnsbeJlgjIEisbBLI3Nv3Cg/1o+w7O+7Lwy9Ho8Ma5x3f
+ IOMambrrxBfqKfj4ZcxUWQ62c0G4xcV04wHQu5Z77g0f+fc/Gf5wPWfg7f1OH0qusH/KHEpTM
+ X+qKSmre1oduMMaWpMmMXyUS7EOmC5ugBY0lF+7CrfJVvAixHKC+5zJufSJTTWJX5DEe/P8K7
+ X3nV49U+PHbi6GpVrjrGK2QhAGrompybP79TgrBjDumITfR9Kj8A5w1TLz/t3zRbRUI0YozxK
+ gmmUSzzLYjcNrHeyyQULOCj40wNoy7wqh8T4NXpcTSYj0H2cscbXedRLarWgMdId0tH5qcBp0
+ HMvH7Wqd0ygY8hkjIrtt5ALxrjG/HTMpzo2QMjhnQPuKxvqjaElOL3vEgv60zoHkqeM3X2D1S
+ BS0xHNcOHY/yWpWK+btyPdmNTP1R466qW6vb09fXdneUGyJt3tRe7LAl92dItJcH+iwPYIzpg
+ dVLW9xs2V1BZDctqjqOoq+Q3nyUWp85FJ4zWnLWpKsabw9shHkNGx+s6nDAHEUFDg8pory8oi
+ h6H85TefRkcERsK9ckG3hv6s2dcb3jqWs5SPmfmnhRHcnke2mUGj7VrUhzWz1P3H8TwuCM2vP
+ YWX3vD/nQCoPXUtoM9Y9d15YScACim3Duv03XrGr76ww7oeg7p4NkysRAY3xxOB9gHxzeej9E
+ vUprX959i8PeXWM7jyIZLPtiqBSEYepSUulAWy77wKzcn36DyGyBOjL3Uvocd2wwyycOl/Ac2
+ 3ntSCYksFKmTFdppk/tSPT8OGDvf/KYHtKmE15agA8PKc5LMPR7DpS+BAlJRO6Pe7OPAWftOQ
+ hEX8nfvbDYyW5/C3mFKzJmX8NW/WdQwETSnrcI464ecrPxAQ3ac1+aEp6FZjUTONJ6Ic6x3u3
+ QxS9akhNzIgnWORJUXgLyGGmxT139XXqjILnNq4sJ+vuB5z/Yn2fMju87O7tSv5pHv7LcMUV/
+ AFv6BXg3+tdYhXV3JX/S4Hqh6vzv2a47c5MqNZrvCaVsEM1F9zJ9ZTXCroapy6QZB/XpnzAv3
+ Tj+rjOdP3N0AWRXYUfOBe+mzJJbi1ezROKLHAVtO3VPwnbjeorOFJY75z00So5UOWMBfdponC
+ 0G733L49jjtuZg82ZdcaBcV8Z5InlMF8KSuwj/bmcjgpCSp129b6jXbkP4Q10lED55bOPx06m
+ K9lekkMgkeU9O0BVWP8uDE8uTbgCDPC4E/ymLV3h/a2oKTwUOX3mHdum0NmoXXK0i/aut6CmP
+ gT3xrE8c7U2c+V0KX0JJG3nKBoPpn975S4qFFx57RWljy2TrT/xVwa6Y/Ik9griosACZALt0V
+ HTcNRR+WHB2F2aK/4nZvsHLLj2CjOT3WaxbBHJGmJQupSOQbw46Rl10PxdnoAhS/p9ogf9kdu
+ TjRrwjpibI+T8XC4Gzd7VAGUFGGbRZ74z1fzdziEKTk2TsL0eTDqiM9VjcKgq+vp7DAT//IUo
+ ZiYlbWXn7eEAziOMftnsF5eWcxM6ijMVfS6Ohm5XoAhB3sMaZ3CUM4DEc0TkTAsTSwvbFRJRQ
+ tEBBpCMaexnV4b3q+S73M1jvaJEb6H858ERaQ8QpZRlUJsGsNEJmRwi/Gn970bPdXGwHtb7LE
+ hKycMcN3Jt+dEu+RaJQF/SuO877BiGjmWQENjXFLDB8UQslycHINS6T0YiTk/80a9gva9VsFq
+ 0xlJlTmcvOvDbQ2lk8tnpRsv4ftCXugamPrwYlNypOIvUfuUEiGYAajczmzlwbRU6bLmR++Zg
+ lUS/kGsnflOmVMDvAgC6OfKB3rT5iuvAvnG407dVbMnbV5RgLXwJGqPynlkD+S+tFwFQdTXqa
+ Znt6eE8W1/tiui9l3XDQs39ljpc4jLYfng7xT//wlYNRoIvoiuoGSTwAnwsDiSfKUaWTMB4sM
+ qJ7VfGSsEHysAS3TUomKC/soJd07ZoCrAXMAr/PDzDl0/+6tK2JgnBDxHxuAEnfQ0R6fq3evq
+ 9VdLxRrR9Fa4ADqqQf4vkxA8d1fJh1+ra8fIe1k+JTMKNvf3yodZ/VIfzbvRgdC08/ytlNYLh
+ FkePPJlxvA2F90pmjFovXOOrghk3//nfa+sGaoD5d01qizGnjEBHa/V05ZMZJHGnSqSZBe3Z4
+ 0vYwcdDponY1J1IbKJCIEmK4DAMekHpbew6/FmL4delRZfGNzxoWH+7ukulQyd9gRrd5YA5ZU
+ vOgrclTjN1AUJ+Uf45l9cnReXWOhAyXJlO2EfNO4hXupIv4BG98vmZjMDqw3j/V5f7gxFuugJ
+ 6UFxnBuA9aeEE84u5/F83rBqO3ORXAhK/zQyJuOyumglh8dkYB93Dd9/7namPnuJGK+DJjRGr
+ hj+P+4heh4kYdkxyLWBlGLKTqTCWIZ0KNMT6oQ96KS9b6IOEe7EZ/hUmG6zCie5+pySs52uyB
+ LYAbPOvlMxgUhiUAL/VRwA7aQoWFl1TdvJ7dV1oAttadjA9IpseOcr2rYGXduBsWH+tVxVWvj
+ rcArTUwlJNgcS/NU3DfkNu6CXUFVTIPPjpJGHYIVUFbqIzvaoHo9pRz+CJ4ETj5aZtCq93F8m
+ oyjd/GglGZ7gxnzd7Ij5D9xsZtw3w/Hhv50tLIf15dlvU3L4tGiDaEAAZu8m2XiLdWk5dcTNT
+ dHl+pGsMs5vFDFVe9gVFAxk/Y2aa4qpJDXXXOl97jEINoTbJC3vAomAzBBtvSnqEoCP09BLXi
+ wHMc6sDZhq8Wi/hLDHc08huJSQCAguHhHxx85GqliGA7ufLu3qtfLlrq7LGr0CXLsTxQhGev6
+ HHV3o/lZyM9brpG+FNxF8r/4Lp4a2gk/3ApuVTOrkHJPrBG0FmavI8A3hId7A+RS9inmmGEqp
+ kxi10YeQBpuLX8zGoX6z1OjjlF3+UgcMIdsnVYYjh3Iilz4/pJ85t3f3tT9hv1hbjEMyODosj
+ a790AceyYqzlo9P9Xm19lwE1UH3zWWGCk9tKJ3UL9c5nC25Qq9YPQOoMy5p7ldRfJ7ntBgwNQ
+ JNDAT7gi507Mu6ILNkqXG9e/WZAmxta8lEoWcF0rzvHnANEYWwBJsZPjpjF3bV0Oiw3ZOYBHO
+ vqyze49aqZO5jYAMPPi5vvtJRRSxSCu6UN81EbADCMtyFDkyyvPs/+xHW4Hhh2XrYUf9yeA12
+ YIcTQMrw4Mfg7j1q43wnCSH3o0RXx/cYqHL3lGnSxNSOM/3Dmmiza3YPGRuXXOsRbX2S4INe8
+ PPiKGpID1am5/Cm5a1ZHu5dQsfB/3eiqX5a0AYsRCOJ7UCpwxoD937YJPr8KSKYNeILxMF1IY
+ +vk9vhxlcpAN1FUd6iz+LWqbV7skzTnXRxZY+AcRvco7QLzK4y2/jUDcEA9R2as6df62j0Idj
+ YYa5qltInHNY2QWzywz4/oNl8K9lb02LZxVKmqQpd8KN3g5Ds8BTDACwm9J9jd+YMgQZ0uX8j
+ 7qEx42Zzb7wM60NY0gVptIy2wF44Yf1A/1FBRl/GrqNIsisMRqOOcnpykS3OI7BTRkm8MzNFh
+ ti1acvVbko16kXONyPtB42kcO4rnAVrsm1LTLIz+aneasW5D4wefVnyiy9dTzrx/oFrugegko
+ gChLSd7Y3rxey/S784BpF/UicJl5sdK2s0j6RZga+k3puKntoO7IB3VKQVtME1lRgA6gC28yd
+ o+BRX21m8v186K+EaczMUvkevX75t/Sw5CXGN4Twr4xSnVQpCBa/pu8efKiE9YvhQM/a6Ef88
+ UnLokiJK9+csTrW01zmhwsMo298+UEiD/xoEZHg6RNyiXvcnJ042+ooi7pdsPsS8PqgNJzHbx
+ hFJoRMyZjZObgBk1KzNDOEIQj2rprzbNOYY2f4aCTs2jFQ1lVMUCatLO5oMsTf5wfzEwhM4BM
+ rg6PcmgbRS+zzBYlon0U7e1P1JJ2zH5OvD8Eu+Ew++CDNkJr8XSXQMOZWUvOw7znACa1r+6kO
+ a6aCNI2C86hQTq2PyGvgfUBJZ4x2BQdkXVK62nu5pwIHsngqzD+83w9oq6FTP20hFySG8+waJ
+ Amb4QDbx1wPlNaLnXxOWsrTgSu49bDSpyYXTj2wBXD42h3E7TOHe3oxHNvc+iujfQza3xHW7l
+ 51xQan8Fvi8nfn3deC3sR1yXohluLMU9vBM1U1o6kkI4iFjeOZNVHaCx4X6jTVMt6wPyYp9gz
+ aP/FdXRq8c8X4Gf/NGaxRG+UqTa1ME3Dhk/X8noFOaYpWRD37zr7n+kYxjzVAow+hPBD0Dq1Y
+ PUxqlzn4Y7txzgTDQZ2nz+df/YptAx25mqgOVZbTC0YXSBcAmapwMaGoh4/aKcPsAe4Io90py
+ k/b2p4A2wW15Us
+Subject: [Buildroot] [PATCH next 3/3]
+ support/testing/tests/fs/test_squashfs.py: add test with dm-verity
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -178,32 +180,155 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: "Fiona Klute (othermo GmbH)" <fiona.klute@gmx.de>
 
-Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
----
- fs/squashfs/Config.in | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+This test uses the option added in the previous commits to build a
+disk image with squashfs root and matching verity tree, and boots from
+it. Building a kernel is necessary to get the required device-mapper
+and squashfs support.
 
-diff --git a/fs/squashfs/Config.in b/fs/squashfs/Config.in
-index cb2f5ec969..c267640401 100644
---- a/fs/squashfs/Config.in
-+++ b/fs/squashfs/Config.in
-@@ -121,4 +121,16 @@ config BR2_TARGET_ROOTFS_SQUASHFS_COMP_OPTS
- 	default "-Xcompression-level 22" if BR2_TARGET_ROOTFS_SQUASHFS4_ZSTD
- 	depends on BR2_TARGET_ROOTFS_SQUASHFS_EXTREME_COMP
+The test also serves to demonstrate usage of a verity image, more
+complex setup may use an initramfs instead of dm-mod.create.
+
+Signed-off-by: Fiona Klute (othermo GmbH) <fiona.klute@gmx.de>
+---
+ support/testing/tests/fs/test_squashfs.py     | 85 +++++++++++++++++++
+ .../fs/test_squashfs/genimage-verity.cfg      | 14 +++
+ .../fs/test_squashfs/linux-verity.fragment    |  8 ++
+ 3 files changed, 107 insertions(+)
+ create mode 100644 support/testing/tests/fs/test_squashfs/genimage-verity.cfg
+ create mode 100644 support/testing/tests/fs/test_squashfs/linux-verity.fragment
+
+diff --git a/support/testing/tests/fs/test_squashfs.py b/support/testing/tests/fs/test_squashfs.py
+index 0ceb4cab58..eae84fa454 100644
+--- a/support/testing/tests/fs/test_squashfs.py
++++ b/support/testing/tests/fs/test_squashfs.py
+@@ -1,4 +1,5 @@
+ import os
++import re
  
-+config BR2_TARGET_ROOTFS_SQUASHFS_VERITY
-+	bool "create verity hash data for root filesystem"
-+	select BR2_PACKAGE_HOST_CRYPTSETUP
-+	help
-+	  Create verity hash tree for the root filesystem. This allows
-+	  setting up a dm-verity device for the root filesystem, to
-+	  ensure data integrity. The root hash must be provided from a
-+	  trusted source, or with a kernel-verifiable signature.
+ import infra.basetest
+ 
+@@ -55,3 +56,87 @@ class TestSquashfsMaxBlocksize(TestSquashfs):
+         # BR2_TARGET_ROOTFS_TAR is not set
+         """
+     expected_blocksize_in_bytes = 1024*1024
 +
-+	  The verity hash image will be called rootfs.squashfs.verity,
-+	  with the root hash in rootfs.squashfs.verity.root-hash.
 +
- endif
++class TestSquashfsVerity(infra.basetest.BRTest):
++    kernel_fragment = \
++        infra.filepath("tests/fs/test_squashfs/linux-verity.fragment")
++    genimage_config = \
++        infra.filepath("tests/fs/test_squashfs/genimage-verity.cfg")
++    config = \
++        f"""
++        BR2_aarch64=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
++        BR2_LINUX_KERNEL=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.48"
++        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
++        BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{kernel_fragment}"
++        BR2_TARGET_ROOTFS_SQUASHFS=y
++        BR2_TARGET_ROOTFS_SQUASHFS4_LZO=y
++        BR2_TARGET_ROOTFS_SQUASHFS_VERITY=y
++        BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++        BR2_ROOTFS_POST_SCRIPT_ARGS="-c {genimage_config}"
++        BR2_PACKAGE_CRYPTSETUP=y
++        BR2_PACKAGE_HOST_GENIMAGE=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def test_run(self) -> None:
++        img = os.path.join(self.builddir, "images", "rootfs.squashfs")
++        hash_img = f"{img}.verity"
++        root_hash_file = f"{hash_img}.root-hash"
++        verify_cmd = [
++            "host/sbin/veritysetup", "verify",
++            "--root-hash-file", root_hash_file, img, hash_img
++        ]
++        infra.run_cmd_on_host(self.builddir, verify_cmd)
++
++        dump_cmd = ["host/sbin/veritysetup", "dump", hash_img]
++        out = infra.run_cmd_on_host(self.builddir, dump_cmd)
++        params = dict()
++        for line in out.splitlines():
++            m = re.match(r"^(.*):\s+(\S+)", line)
++            if m is None:
++                continue
++            params[m.group(1)] = m.group(2)
++        print(params)
++
++        data_block_size = int(params["Data block size"])
++        data_blocks = int(params["Data blocks"])
++        sector_size = 512  # default
++        data_sectors = data_blocks * data_block_size // sector_size
++        hash_algorithm = params["Hash algorithm"]
++        hash_start_block = 1  # skip header
++        hash_block_size = int(params["Hash block size"])
++        salt = params["Salt"]
++        with open(root_hash_file) as fh:
++            root_hash = fh.read()
++
++        disk_img = os.path.join(self.builddir, "images", "disk.img")
++        kern = os.path.join(self.builddir, "images", "Image")
++        self.emulator.boot(
++            arch="aarch64",
++            kernel=kern,
++            kernel_cmdline=[
++                "console=ttyAMA0",
++                "root=/dev/dm-0",
++                "rootfstype=squashfs",
++                f'dm-mod.create="verity,,,ro,0 {data_sectors} verity 1 '
++                f'/dev/vda1 /dev/vda2 {data_block_size} {hash_block_size} '
++                f'{data_blocks} {hash_start_block} {hash_algorithm} '
++                f'{root_hash} {salt}"',
++            ],
++            options=[
++                "-M", "virt", "-cpu", "cortex-a57", "-m", "256M",
++                "-drive", f"file={disk_img},if=virtio,format=raw",
++            ])
++        self.emulator.login()
++
++        self.assertRunOk("mount | grep '/dev/root on / type squashfs'")
++        out, ret = self.emulator.run("dmsetup info verity", 5)
++        self.assertEqual(ret, 0)
++        state = next(filter(lambda s: s.startswith("State:"), out))
++        self.assertRegex(state, r"^State:\s+ACTIVE \(READ-ONLY\)$")
+diff --git a/support/testing/tests/fs/test_squashfs/genimage-verity.cfg b/support/testing/tests/fs/test_squashfs/genimage-verity.cfg
+new file mode 100644
+index 0000000000..13761dca8e
+--- /dev/null
++++ b/support/testing/tests/fs/test_squashfs/genimage-verity.cfg
+@@ -0,0 +1,14 @@
++image disk.img {
++	hdimage {
++	}
++
++	partition root {
++		partition-type = 0x83
++		image = "rootfs.squashfs"
++	}
++
++	partition verity {
++		partition-type = 0x83
++		image = "rootfs.squashfs.verity"
++	}
++}
+diff --git a/support/testing/tests/fs/test_squashfs/linux-verity.fragment b/support/testing/tests/fs/test_squashfs/linux-verity.fragment
+new file mode 100644
+index 0000000000..914dc87fbc
+--- /dev/null
++++ b/support/testing/tests/fs/test_squashfs/linux-verity.fragment
+@@ -0,0 +1,8 @@
++CONFIG_MD=y
++CONFIG_BLK_DEV_DM=y
++CONFIG_DM_VERITY=y
++CONFIG_DM_INIT=y
++CONFIG_CRYPTO_SHA256=y
++CONFIG_MISC_FILESYSTEMS=y
++CONFIG_SQUASHFS=y
++CONFIG_SQUASHFS_LZO=y
 -- 
 2.55.0
 
