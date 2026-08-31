@@ -1,91 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AAD24C624A5
-	for <buildroot@archiver.kernel.org>; Mon, 31 Aug 2026 16:04:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A505C624A5
+	for <buildroot@archiver.kernel.org>; Mon, 31 Aug 2026 16:10:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A2DC44056B;
-	Mon, 31 Aug 2026 16:04:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1B88260669;
+	Mon, 31 Aug 2026 16:10:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wSa-iz620RFe; Mon, 31 Aug 2026 16:04:30 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9AiHMia3ArlX; Mon, 31 Aug 2026 16:10:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1788192270;
-	bh=GwMoIMUtEHc4Tv0vhKYq/Gm5N9Pj66qY3izUu+RxOjI=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=FjLtaoA7GJTGOpw5s24DB+NSIIZw6hN5Atbmf2JEdtcxPQMYOl6YK7Fw5DAdni/TO
-	 hS1y+81OQOcbMqg5B3n97/MS30aoJXLrZ/v9jPSmc4oy1nHSh3Kf9XD5dwlWKQ8pYM
-	 25QcyCMsJdgtFddCmYly8J3GYk5lfR0CjrD88aKOGAjCImcxm37pq7vGAJMCG1nplg
-	 FLMIHN6utstVQQoi0nZSW/sBsmVXA4Hs/0yVNQWi4711DuJUxue0+A8p/YWwo9Q4EY
-	 WajDtgWGHHX5zI1hJRc0jrbjJARgYgY9ybDieMby6IJ0aw1ncy/Slm1Xp9liHqs/7J
-	 PoP6BjSR6vSeA==
+	s=default; t=1788192628;
+	bh=PZWzg6khTYdWqXVOEoFUzIKASqdUCWQ+4DBcGszFWbA=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=kWATuJ/EcDCjMjwwarALPUITQ3Hj2eR/vyUUNNsi5FBvKr4Qw/O+XSeGxdrCPRcAq
+	 Yt8qVOrvWNOAZV+twYOXJSHSPuZ+ykmWLRjfE3DJckL2A1VFLDxNqlPoJtFcHox6eY
+	 hv+pmaXeRSDQQPhK2qGm3MYl/ZHzh+14e6r1xdPOtJXGAqnKi9cocliSbPhnhn4v/t
+	 o4ooNTrPjtSNEyZfWGbYS4RXXBgS06Ui+3qNxAyz6JYAjQ+na/7+WR4LDILihS6r48
+	 p73dOfETcvDboG2KqaWZf/NUgsVQqB79QBQrsbYss7APco9T57Z8IGypElbKTy31uD
+	 8PxGO7KKQpFQg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8DD8340545;
-	Mon, 31 Aug 2026 16:04:30 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 2A7F4127
- for <buildroot@buildroot.org>; Mon, 31 Aug 2026 16:04:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9997A60658;
+	Mon, 31 Aug 2026 16:10:28 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id B8D0523E
+ for <buildroot@buildroot.org>; Mon, 31 Aug 2026 16:10:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1FB9D80B22
- for <buildroot@buildroot.org>; Mon, 31 Aug 2026 16:04:29 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 963DC60658
+ for <buildroot@buildroot.org>; Mon, 31 Aug 2026 16:10:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id juc5ATMeAqGF for <buildroot@buildroot.org>;
- Mon, 31 Aug 2026 16:04:28 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::532; helo=mail-ed1-x532.google.com;
- envelope-from=yegorslists@googlemail.com; receiver=<UNKNOWN> 
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com
- [IPv6:2a00:1450:4864:20::532])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D1D3880ADA
- for <buildroot@buildroot.org>; Mon, 31 Aug 2026 16:04:27 +0000 (UTC)
-Received: by mail-ed1-x532.google.com with SMTP id
- 4fb4d7f45d1cf-6a601ba6870so5521494a12.0
- for <buildroot@buildroot.org>; Mon, 31 Aug 2026 09:04:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1788192265; x=1788797065;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to:content-type;
- bh=mchkUvY++9AOEcMYB3a5s5uVgeee9QJ7XAQ/PMlrbko=;
- b=gIy5giDAkhmHqjRhiuw/bv41tUgFZ85H+ncvWr1HQ+nPW2sDjI0urwlpXbDUzyg4GK
- KEHPcfxWn0XZSRh36DjH77ikF2hI7bc1JCkiGAl+bewH65by6DWG3lW143+v3GVJOMZX
- epsEbdVSCFse9biJVhNkdJ45R3RCAlN2VMRLUWq3MSP1xxnZ8ICEGEijIFPpTKYXfuF8
- jw93VT81PY43+ZsAdWfAfLmahniNSv09HaN0fSz0hTphuhAouKOel4EYWaCOymurTpUN
- hbq39jk2l5D+WsVplrijHNa+RDzrUQUsQBD+jRi0F6RhbUBis9LtKMjgoZzxjQwwn6+h
- OXog==
-X-Gm-Message-State: AFuF++nv04YEp2/LrBhfkjrZFlT4K0TQ967K0XZNUSK6kY8C5zOIZfOg
- fD0iB32becp5sICqQWq0XCpi0cK8uE4Ci05sbo1f/SJKrdLMsk8DR899vtPpww==
-X-Gm-Gg: AR+sD10kMB2rXB1K3N0bOIN7KCFb6d09SbYHYgsKvE2WTV2T6eDtCcTiP4SefTl+wlt
- j84Qko54GwNR2a0/USUgQ09qMDhu5Dm2Q4JaEKh/NJM/ieXGLqaJ59jS0R7zWNtmfkdmGJUb05V
- cMpF1g9O2QQ8aOgKgDT4GNpwX8labhyW09UQU0jWTlQnn6uq17O9blkGiRz2DF/JHUCDVaLvjcF
- WgYD/cOPIpyDOx0nja98LFkCdsUEwJIWTZh7uGgvrTno+sp1ZIBdBwcKEouFRUHPTSYq+TJlLOL
- 4CMvS+z/zZ+oUjMt87vT+70IJFtzk3/KsCwQJ80qba7l+Za5ZOLE1F0Bh9BKbLx6f8JDQqlewC5
- HrX2kiWHxg87xzNxZR2Z3sy0Vdh2Q69YizJywowUm5NgYi6mYAs71PTvVvXtU+H8XZSr/M8PgfD
- VXp6zR1wn6H0pUd8FarfB8V0Tl+09bmGRD/lS1KlQ2G3PjFgY33WNwWm+cfYGDAbzbG5jUbFGjF
- sQldtQBs6RFMXHS8x134f2SojxIsfTont4nSxej8Xf1WFaXNwFwNA==
-X-Received: by 2002:a17:907:9444:b0:c25:437:3dcf with SMTP id
- a640c23a62f3a-c2557488af4mr1660845966b.21.1788192264885; 
- Mon, 31 Aug 2026 09:04:24 -0700 (PDT)
-Received: from development2.visionsystems.local (mail.visionsystems.de.
- [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-c255f1fa3ddsm448379666b.45.2026.08.31.09.04.24
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 31 Aug 2026 09:04:24 -0700 (PDT)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id czZwA4qqSaEt for <buildroot@buildroot.org>;
+ Mon, 31 Aug 2026 16:10:25 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=23.90.104.147;
+ helo=esa2.hc555-34.eu.iphmx.com; envelope-from=jimmy.wesolowski@mobileye.com;
+ receiver=<UNKNOWN> 
+Received: from esa2.hc555-34.eu.iphmx.com (esa2.hc555-34.eu.iphmx.com
+ [23.90.104.147])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 761366064E
+ for <buildroot@buildroot.org>; Mon, 31 Aug 2026 16:10:21 +0000 (UTC)
+X-CSE-ConnectionGUID: EpcjP6NbT4O2mSuBSpryTQ==
+X-CSE-MsgGUID: IUul/hUdRFuXPjUXRrECJg==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from unknown (HELO ces02_data.me-corp.lan) ([146.255.191.134])
+ by esa2.hc555-34.eu.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
+ 31 Aug 2026 19:10:19 +0300
+X-CSE-ConnectionGUID: 2n2tKLq/TqWRwmRey3pLLQ==
+X-CSE-MsgGUID: JFAcOUW8QjKksIlVVv5kJQ==
+Received: from unknown (HELO epgd074.me-corp.lan) ([10.154.54.2])
+ by ces02_data.me-corp.lan with SMTP; 31 Aug 2026 19:16:53 +0300
+Received: by epgd074.me-corp.lan (sSMTP sendmail emulation);
+ Mon, 31 Aug 2026 19:10:17 +0300
 To: buildroot@buildroot.org
-Date: Mon, 31 Aug 2026 18:04:20 +0200
-Message-Id: <20260831160420.2415569-1-yegorslists@googlemail.com>
-X-Mailer: git-send-email 2.34.1
+Cc: guenther.harrasser@mobileye.com,
+ Jimmy Durand Wesolowski <jimmy.wesolowski@mobileye.com>
+Date: Mon, 31 Aug 2026 19:09:41 +0300
+Message-ID: <20260831160943.3999351-1-jimmy.wesolowski@mobileye.com>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260727100739.1847998-1-jimmy.wesolowski@mobileye.com>
+References: <20260727100739.1847998-1-jimmy.wesolowski@mobileye.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2] package/attr: don't rely on kernel headers
- for struct xattr_args
+Subject: [Buildroot] [PATCH] openssh: ensure libxcrypt is enabled to provide
+ a crypt() implementation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -97,138 +82,95 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: yegorslists--- via buildroot <buildroot@buildroot.org>
-Reply-To: yegorslists@googlemail.com
+From: Jimmy Durand Wesolowski via buildroot <buildroot@buildroot.org>
+Reply-To: Jimmy Durand Wesolowski <jimmy.wesolowski@mobileye.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+When OpenSSL is enabled, if DES support is enabled, OpenSSH uses
+DES_crypt. However, without OpenSSL or its DES support, there is no
+available crypt() implementation for OpenSSH libopenbsd-compat xcrypt()
+function, resulting in the following error:
 
-struct xattr_args was added to <linux/xattr.h> in Linux 6.13, but the
-getxattrat() and setxattrat() syscall numbers can be defined
-independently of the kernel headers: musl libc, for example, defines
-them in <bits/syscall.h> for all kernel header versions.  Building
-against kernel headers older than 6.13 with such a libc fails:
+.../host/bin/i686-buildroot-linux-gnu-gcc -o sshd-auth sshd-auth.o
+  auth2-methods.o auth-rhosts.o auth-passwd.o sshpty.o sshlogin.o
+  servconf.o serverloop.o auth.o auth2.o auth-options.o session.o
+  auth2-chall.o groupaccess.o auth-bsdauth.o auth2-hostbased.o
+  auth2-kbdint.o auth2-none.o auth2-passwd.o auth2-pubkey.o
+  auth2-pubkeyfile.o auth2-gss.o gss-serv.o gss-serv-krb5.o
+  monitor_wrap.o auth-krb5.o audit.o audit-bsm.o audit-linux.o
+  platform.o loginrec.o auth-pam.o auth-shadow.o auth-sia.o
+  sandbox-null.o sandbox-rlimit.o sandbox-darwin.o
+  sandbox-seccomp-filter.o sandbox-capsicum.o sandbox-solaris.o
+  sftp-server.o sftp-common.o uidswap.o ssh-pkcs11-client.o
+  ssh-sk-client.o -L. -Lopenbsd-compat/ -D_LARGEFILE_SOURCE
+  -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -O2 -g0
+  -D_FORTIFY_SOURCE=1 -Wl,-z,relro -Wl,-z,now -Wl,-z,noexecstack
+  -fstack-protector-strong -pie -lssh -lopenbsd-compat
+  -L.../host/bin/../i686-buildroot-linux-gnu/sysroot/usr/lib
+  -lssl -lcrypto -lcrypto -lz
+.../host/lib/gcc/i686-buildroot-linux-gnu/15.3.0/../../../../
+  i686-buildroot-linux-gnu/bin/ld:
+  openbsd-compat//libopenbsd-compat.a(xcrypt.o): in function `xcrypt':
+xcrypt.c:(.text+0x51): undefined reference to `crypt'
+.../host/lib/gcc/i686-buildroot-linux-gnu/15.3.0/../../../../
+  i686-buildroot-linux-gnu/bin/ld:
+openbsd-compat//libopenbsd-compat.a(xcrypt.o): in function `xcrypt':
+xcrypt.c:(.text+0x51): undefined reference to `crypt' collect2: error:
+ld returned 1 exit status make[2]: *** [Makefile:233: sshd-auth] Error
+1 make[2]: *** Waiting for unfinished jobs....  collect2: error: ld
+returned 1 exit status make[2]: *** [Makefile:230: sshd-session] Error
+1 make[1]: *** [package/pkg-generic.mk:273:
+.../build/openssh-10.4p1/.stamp_built]
+Error 2 make: *** [Makefile:83: _all] Error 2
 
-  libmisc/xattrat.c:35:16: error: variable 'uargs' has initializer but
-  incomplete type
-     35 |         struct xattr_args uargs = {
+This commit enables BR2_PACKAGE_LIBXCRYPT with OpenSSH as long as the
+glibc is used. Since "sshd-auth" is compiled regardless of
+BR2_PACKAGE_OPENSSH_SERVER, we need to enable it with BR2_PACKAGE_OPENSSH.
 
-Stop including <linux/xattr.h> and use our own definition of this fixed
-part of the kernel ABI instead, so that the build no longer depends on
-the kernel headers version.  The struct layout is identical to the
-kernel definition (size 16, members at offsets 0, 8 and 12) on 32-bit
-and 64-bit architectures.
-
-Upstream: https://lists.nongnu.org/archive/html/acl-devel/2026-08/msg00000.html
-
-Fixes:
-https://autobuild.buildroot.org/results/10926ccaf3d3212d8816f5156ae2405b469195aa
-
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Jimmy Durand Wesolowski <jimmy.wesolowski@mobileye.com>
 ---
-Changes v1 -> v2:
-  - add the upstream patch URL
+ package/openssh/Config.in  | 2 +-
+ package/openssh/openssh.mk | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- ...ly-on-kernel-headers-for-struct-xatt.patch | 85 +++++++++++++++++++
- 1 file changed, 85 insertions(+)
- create mode 100644 package/attr/0002-libmisc-don-t-rely-on-kernel-headers-for-struct-xatt.patch
-
-diff --git a/package/attr/0002-libmisc-don-t-rely-on-kernel-headers-for-struct-xatt.patch b/package/attr/0002-libmisc-don-t-rely-on-kernel-headers-for-struct-xatt.patch
-new file mode 100644
-index 0000000000..9ab7a99891
---- /dev/null
-+++ b/package/attr/0002-libmisc-don-t-rely-on-kernel-headers-for-struct-xatt.patch
-@@ -0,0 +1,85 @@
-+From 9755020b815066732677d6107d40af12a58d1a0d Mon Sep 17 00:00:00 2001
-+From: Yegor Yefremov <yegorslists@googlemail.com>
-+Date: Fri, 28 Aug 2026 23:43:48 +0200
-+Subject: [PATCH] libmisc: don't rely on kernel headers for struct xattr_args
-+
-+struct xattr_args was added to <linux/xattr.h> in Linux 6.13, but the
-+getxattrat() and setxattrat() syscall numbers can be defined
-+independently of the kernel headers: musl libc, for example, defines
-+them in <bits/syscall.h> for all kernel header versions.  Building
-+against kernel headers older than 6.13 with such a libc fails:
-+
-+  libmisc/xattrat.c:35:16: error: variable 'uargs' has initializer but
-+  incomplete type
-+     35 |         struct xattr_args uargs = {
-+
-+Stop including <linux/xattr.h> and use our own definition of this fixed
-+part of the kernel ABI instead, so that the build no longer depends on
-+the kernel headers version.  The struct layout is identical to the
-+kernel definition (size 16, members at offsets 0, 8 and 12) on 32-bit
-+and 64-bit architectures.
-+
-+Upstream: https://lists.nongnu.org/archive/html/acl-devel/2026-08/msg00000.html
-+
-+Assisted-by: Claude:claude-opus-5
-+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-+---
-+ libmisc/xattrat.c | 23 ++++++++++++++++++-----
-+ 1 file changed, 18 insertions(+), 5 deletions(-)
-+
-+diff --git a/libmisc/xattrat.c b/libmisc/xattrat.c
-+index 5f6212c..c07c04d 100644
-+--- a/libmisc/xattrat.c
-++++ b/libmisc/xattrat.c
-+@@ -18,7 +18,7 @@
-+ */
-+ 
-+ #include "config.h"
-+-#include <linux/xattr.h>
-++#include <stdint.h>
-+ #include <sys/syscall.h>
-+ #include <unistd.h>
-+ #include <errno.h>
-+@@ -27,13 +27,26 @@
-+ 
-+ #pragma GCC diagnostic ignored "-Wunused-parameter"
-+ 
-++/*
-++ * struct xattr_args was added to <linux/xattr.h> in Linux 6.13, but the
-++ * syscall numbers can be defined independently of the kernel headers (musl
-++ * libc defines them in <bits/syscall.h>, for example), so we cannot rely on
-++ * the kernel headers to define the struct.  Use our own definition of this
-++ * fixed part of the kernel ABI instead.
-++ */
-++struct attr_xattr_args {
-++	uint64_t value __attribute__((aligned(8)));
-++	uint32_t size;
-++	uint32_t flags;
-++};
-++
-+ ssize_t
-+ getxattrat(int dirfd, const char *path, int at_flags, const char *name,
-+ 	   void *value, size_t size)
-+ {
-+ #ifdef __NR_getxattrat
-+-	struct xattr_args uargs = {
-+-		.value = (unsigned long)value,
-++	struct attr_xattr_args uargs = {
-++		.value = (uintptr_t)value,
-+ 		.size = size,
-+ 	};
-+ 
-+@@ -50,8 +63,8 @@ setxattrat(int dirfd, const char *path, int at_flags, const char *name,
-+ 	   const void *value, size_t size, int flags)
-+ {
-+ #ifdef __NR_setxattrat
-+-	struct xattr_args uargs = {
-+-		.value = (unsigned long)value,
-++	struct attr_xattr_args uargs = {
-++		.value = (uintptr_t)value,
-+ 		.size = size,
-+ 		.flags = flags,
-+ 	};
-+-- 
-+2.34.1
-+
+diff --git a/package/openssh/Config.in b/package/openssh/Config.in
+index 25843447a7..3b0adad63d 100644
+--- a/package/openssh/Config.in
++++ b/package/openssh/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_OPENSSH
+ 	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_ZLIB
++	select BR2_PACKAGE_LIBXCRYPT if BR2_TOOLCHAIN_USES_GLIBC
+ 	help
+ 	  A free version of the SSH protocol suite of network
+ 	  connectivity tools. The standard 'ssh', 'sshd', 'scp', and
+@@ -22,7 +23,6 @@ config BR2_PACKAGE_OPENSSH_CLIENT
+ config BR2_PACKAGE_OPENSSH_SERVER
+ 	bool "server"
+ 	default y
+-	select BR2_PACKAGE_LIBXCRYPT if BR2_TOOLCHAIN_USES_GLIBC
+ 	help
+ 	  Server programs: sshd, sftp-server
+ 
+diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+index dd0a6e023e..f2e1f235c0 100644
+--- a/package/openssh/openssh.mk
++++ b/package/openssh/openssh.mk
+@@ -51,7 +51,7 @@ endif
+ OPENSSH_DEPENDENCIES = host-pkgconf zlib openssl
+ 
+ # crypt() in libcrypt only required for sshd.
+-ifeq ($(BR2_PACKAGE_OPENSSH_SERVER)$(BR2_PACKAGE_LIBXCRYPT),yy)
++ifeq ($(BR2_PACKAGE_LIBXCRYPT),y)
+ OPENSSH_DEPENDENCIES += libxcrypt
+ endif
+ 
 -- 
-2.34.1
+2.55.0
 
 _______________________________________________
 buildroot mailing list
