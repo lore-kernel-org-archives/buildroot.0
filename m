@@ -4,59 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE215C61DFD
-	for <buildroot@archiver.kernel.org>; Mon, 31 Aug 2026 19:10:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D9FCC61DD3
+	for <buildroot@archiver.kernel.org>; Mon, 31 Aug 2026 19:11:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1463B80AA9;
-	Mon, 31 Aug 2026 19:10:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B85D980962;
+	Mon, 31 Aug 2026 19:11:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UMZgG5z653ci; Mon, 31 Aug 2026 19:10:11 +0000 (UTC)
+ id O_-yy7vTi36L; Mon, 31 Aug 2026 19:10:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1788203411;
-	bh=jR2Jhzms++w3OMPwo9n+LWnXYrAYuqiF+D3Y+IZCw90=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=Fwn6mBXYReCpVLB2sDPWAiZlniLfDAJagl/bnsGQOeMpSc/eCGX7PZ3vsK3Qk26nD
-	 oAXv/dJU+NPu4Z1T2Zm2n5QmwFtAzOXGTqlWPP/WPdUHC6jGCX3aBxQFGDBGPyLUov
-	 W4ojOayDi9+VwJy2la76TcyyOvWeVU3WnwT1OE0F7v3+EVufhCCFGm5z3tui4AdoE2
-	 Xsclfj7bs1H3Cwbs7raRxs8sbPpYDQ1sRjmOHv6kws8cRf3hcLq21Mj5pE+KHApxVH
-	 yjY0RrzyDIf85AfMPtumf7rpjROitHfp1zuSHcmIxR2VEEmIVNALBAnJwmMQYt5tVm
-	 mtEqNVQh8vDfg==
+	s=default; t=1788203458;
+	bh=f9Wzq5NfeInjRwK5uQj4cRftuUk5F+S64k0oDmD2BpQ=;
+	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=HpOMfQVhd4sVrXAeDU1Es+/q7tmIw/PmC2+YliIKvIY2wmSslQRTgcfj8gZyKOSto
+	 8rCcaEyhW3qtK9Yg8JsQZNkPBp/rVmL4Y8BehAkwkebbHiV44+n5MKzsrxn5qxlsT+
+	 WHyk27B2Uktn17pfCT0t5XtSYfDQT4GMmpqkvkxwS2bJnxPuaoN82RAjmu0xTCUgV1
+	 HTUH4sdeQFQg1ULBjWBdv+z3R84Hx2fx0rkdc8qhJA5jBUxrF9M2IxOzSTXlOpVLoc
+	 v3QlJ+bpHYgqocAlQPOLQaNjC5R9AMHv3jYJX8lKJZTuJx9gUd0tvtZjB5FRdmugil
+	 +XO69RRYVzFPg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5264980ABB;
-	Mon, 31 Aug 2026 19:10:11 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id E58E72FC
- for <buildroot@buildroot.org>; Mon, 31 Aug 2026 19:10:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 77FA18061A;
+	Mon, 31 Aug 2026 19:10:58 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9541E2FC
+ for <buildroot@buildroot.org>; Mon, 31 Aug 2026 19:10:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D743B4051F
- for <buildroot@buildroot.org>; Mon, 31 Aug 2026 19:10:09 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7BC974051F
+ for <buildroot@buildroot.org>; Mon, 31 Aug 2026 19:10:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6uspAATg0ieF for <buildroot@buildroot.org>;
- Mon, 31 Aug 2026 19:10:09 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id 43nZXppeq0tR for <buildroot@buildroot.org>;
+ Mon, 31 Aug 2026 19:10:55 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4EAB74051D
- for <buildroot@buildroot.org>; Mon, 31 Aug 2026 19:10:09 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A00339346B; Mon, 31 Aug 2026 19:09:10 +0000 (UTC)
+Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none) header.from=korsgaard.com
+Authentication-Results: smtp4.osuosl.org; dkim=pass (2048-bit key,
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail2 header.b=VySfeeQc
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7E3284051D
+ for <buildroot@buildroot.org>; Mon, 31 Aug 2026 19:10:54 +0000 (UTC)
+DKIM-Signature: a=rsa-sha256;
+ b=VySfeeQc6fi15Pzhxq0XeewiOf/jb1ro20603aKZlL7OxhxzAzpIa02TvJYUdCcNIWedKcdTHOjWGQxFpjG6EQdgFDqClfq0qbXyyrGGQOOtJDSN1s50Yh/7UTKEUpwXlSj03d8h10+m93yjRtOZ2sPIaOmzQKLw8hboVHJ+a4PLX+g4eJctRY2pMP1IIDdtgVCoBvS+5RNFD7QZaYpOFS6AGhDxW/AcPsWFDuwYESTayKLIooTaVSsX+SJ0vGKepHdVE56Y4jrOmsD6n3kDd9I/i5TGGH9k1F0R9YVnNc8DYRrTsVSCty5Nwo10yJjLwLmZwubWBoLEv14LBGEZew==;
+ s=purelymail2; d=purelymail.com; v=1;
+ bh=JZMfzQ6AL4+CiJ/NrTdxfRZi1hnwwTo8OivtL5xveF0=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1766301592; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Mon, 31 Aug 2026 19:10:51 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
+ (envelope-from <peter@korsgaard.com>) id 1x17P8-00000002NcO-369b;
+ Mon, 31 Aug 2026 21:10:50 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Mon, 31 Aug 2026 21:08:46 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: cb18f3a74a49a62119857ce1ab712ff4528a1d3d
-X-Git-Newrev: 4c504ef75df4caf58acd20c02c9b2993708b1390
-X-Patchwork-Hint: ignore
-Message-Id: <20260831190910.A00339346B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/expat: security bump version to
- 2.8.4
+To: Jimmy Durand Wesolowski via buildroot <buildroot@buildroot.org>
+Cc: Jimmy Durand Wesolowski <jimmy.wesolowski@mobileye.com>,
+ guenther.harrasser@mobileye.com
+In-Reply-To: <20260831160943.3999351-1-jimmy.wesolowski@mobileye.com> (Jimmy
+ Durand Wesolowski via buildroot's message of "Mon, 31 Aug 2026
+ 19:09:41 +0300")
+References: <20260727100739.1847998-1-jimmy.wesolowski@mobileye.com>
+ <20260831160943.3999351-1-jimmy.wesolowski@mobileye.com>
+Date: Mon, 31 Aug 2026 21:10:50 +0200
+Message-ID: <87qzjejebp.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH] openssh: ensure libxcrypt is enabled to
+ provide a crypt() implementation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -68,51 +91,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/4c504ef75df4caf58acd20c02c9b2993708b1390
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+>>>>> "Jimmy" == Jimmy Durand Wesolowski via buildroot <buildroot@buildroot.org> writes:
 
-https://github.com/libexpat/libexpat/blob/R_2_8_4/expat/Changes
-https://blog.hartwork.org/posts/expat-2-8-4-released/
+ > When OpenSSL is enabled, if DES support is enabled, OpenSSH uses
+ > DES_crypt. However, without OpenSSL or its DES support, there is no
+ > available crypt() implementation for OpenSSH libopenbsd-compat xcrypt()
+ > function, resulting in the following error:
 
-Fixes CVE-2026-66046, CVE-2026-76641, CVE-2026-76956 & CVE-2026-76957.
+ > .../host/bin/i686-buildroot-linux-gnu-gcc -o sshd-auth sshd-auth.o
+ >   auth2-methods.o auth-rhosts.o auth-passwd.o sshpty.o sshlogin.o
+ >   servconf.o serverloop.o auth.o auth2.o auth-options.o session.o
+ >   auth2-chall.o groupaccess.o auth-bsdauth.o auth2-hostbased.o
+ >   auth2-kbdint.o auth2-none.o auth2-passwd.o auth2-pubkey.o
+ >   auth2-pubkeyfile.o auth2-gss.o gss-serv.o gss-serv-krb5.o
+ >   monitor_wrap.o auth-krb5.o audit.o audit-bsm.o audit-linux.o
+ >   platform.o loginrec.o auth-pam.o auth-shadow.o auth-sia.o
+ >   sandbox-null.o sandbox-rlimit.o sandbox-darwin.o
+ >   sandbox-seccomp-filter.o sandbox-capsicum.o sandbox-solaris.o
+ >   sftp-server.o sftp-common.o uidswap.o ssh-pkcs11-client.o
+ >   ssh-sk-client.o -L. -Lopenbsd-compat/ -D_LARGEFILE_SOURCE
+ >   -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -O2 -g0
+ >   -D_FORTIFY_SOURCE=1 -Wl,-z,relro -Wl,-z,now -Wl,-z,noexecstack
+ >   -fstack-protector-strong -pie -lssh -lopenbsd-compat
+ >   -L.../host/bin/../i686-buildroot-linux-gnu/sysroot/usr/lib
+ >   -lssl -lcrypto -lcrypto -lz
+ > .../host/lib/gcc/i686-buildroot-linux-gnu/15.3.0/../../../../
+ >   i686-buildroot-linux-gnu/bin/ld:
+ >   openbsd-compat//libopenbsd-compat.a(xcrypt.o): in function `xcrypt':
+ > xcrypt.c:(.text+0x51): undefined reference to `crypt'
+ > .../host/lib/gcc/i686-buildroot-linux-gnu/15.3.0/../../../../
+ >   i686-buildroot-linux-gnu/bin/ld:
+ > openbsd-compat//libopenbsd-compat.a(xcrypt.o): in function `xcrypt':
+ > xcrypt.c:(.text+0x51): undefined reference to `crypt' collect2: error:
+ > ld returned 1 exit status make[2]: *** [Makefile:233: sshd-auth] Error
+ > 1 make[2]: *** Waiting for unfinished jobs....  collect2: error: ld
+ > returned 1 exit status make[2]: *** [Makefile:230: sshd-session] Error
+ > 1 make[1]: *** [package/pkg-generic.mk:273:
+ > .../build/openssh-10.4p1/.stamp_built]
+ > Error 2 make: *** [Makefile:83: _all] Error 2
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/expat/expat.hash | 4 ++--
- package/expat/expat.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ > This commit enables BR2_PACKAGE_LIBXCRYPT with OpenSSH as long as the
+ > glibc is used. Since "sshd-auth" is compiled regardless of
+ > BR2_PACKAGE_OPENSSH_SERVER, we need to enable it with BR2_PACKAGE_OPENSSH.
 
-diff --git a/package/expat/expat.hash b/package/expat/expat.hash
-index c5a8816f9b..d8b4eef2f9 100644
---- a/package/expat/expat.hash
-+++ b/package/expat/expat.hash
-@@ -1,4 +1,4 @@
--# From https://github.com/libexpat/libexpat/releases/tag/R_2_8_3
--sha256  f6256df90c906773d344da084402b7d3e4f22ed41b1a59c989098a83d3ea0c85  expat-2.8.3.tar.xz
-+# From https://github.com/libexpat/libexpat/releases/tag/R_2_8_4
-+sha256  656ae1cc8da3b4ea513bb4e254f33e6243938084c0ec6239da873376b09985a7  expat-2.8.4.tar.xz
- # Locally calculated
- sha256  31b15de82aa19a845156169a17a5488bf597e561b2c318d159ed583139b25e87  COPYING
-diff --git a/package/expat/expat.mk b/package/expat/expat.mk
-index a82be75a4d..1e5b738463 100644
---- a/package/expat/expat.mk
-+++ b/package/expat/expat.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--EXPAT_VERSION = 2.8.3
-+EXPAT_VERSION = 2.8.4
- EXPAT_SITE = https://github.com/libexpat/libexpat/releases/download/R_$(subst .,_,$(EXPAT_VERSION))
- EXPAT_SOURCE = expat-$(EXPAT_VERSION).tar.xz
- EXPAT_INSTALL_STAGING = YES
+ > Signed-off-by: Jimmy Durand Wesolowski <jimmy.wesolowski@mobileye.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
