@@ -1,61 +1,82 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79C66C61DF0
-	for <buildroot@archiver.kernel.org>; Mon, 31 Aug 2026 06:00:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5051AC61DE8
+	for <buildroot@archiver.kernel.org>; Mon, 31 Aug 2026 06:01:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 91C1B4054E;
-	Mon, 31 Aug 2026 06:00:30 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QUwZnrqkLO0O; Mon, 31 Aug 2026 06:00:28 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1788156028;
-	bh=gVOvtZHhsDbvevXE9Cf180LWOP5wHzwvvluYjhMbDMw=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=IzZNJRvP09SFc1Yeb7k3ILX5huvgjQ4wzloXHTUcO3g/CAYpNYN8OPphXgTyS3AsR
-	 cxWoZ9fkaMzIEDtM88rCEdw7qXJ92R4G9zQgArgWWoTShVDtNOBAoBTJkczCPJyftH
-	 AMLM5NsD4Kjcx3EZnpVhjhY3U6ljKxlgWULhsXdFvUk8wMaA8CYnYWocZthRxSiZGm
-	 /Na0+6cUQCAXnW6iU69vRkQlhoiWx+Y7O5L892o+tqlKWM2KXF1bsGkuZqZcwfF2X0
-	 T/PsobLQiFu2QnYIcs0ESdLBUATNZb4ry/KWbnBHTT4oIMiIXBjsz2QVRW18Xgh09a
-	 78Z6dWhHUpDGA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 460BA4054F;
-	Mon, 31 Aug 2026 06:00:28 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 409B0356
- for <buildroot@buildroot.org>; Mon, 31 Aug 2026 06:00:26 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 328B2605D8
- for <buildroot@buildroot.org>; Mon, 31 Aug 2026 06:00:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0CD74605EF;
+	Mon, 31 Aug 2026 06:01:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id n6fAJD_c4h3q for <buildroot@buildroot.org>;
- Mon, 31 Aug 2026 06:00:25 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id 8U8ug4G6jteG; Mon, 31 Aug 2026 06:01:03 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1788156063;
+	bh=l3xShIbFz030SuAGg5Sd380YyCczVR/QBG0YdzDHZ4g=;
+	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=CDScnAGuKbsEYuXS95c+89hKJFa4MnDKzU2JAQCRVJEAY5WoOqcYAZHspt993vyRm
+	 Kb81SEO4kAHl3X16u7Lq/KZrCOIhQil02qKuL8zkT8ydcxmNFXsVX1U8O7sA+GLTUv
+	 jsqXzuM4ZISstQqpL7XLW3gQpIVCUFi+llx5F/eHzP9/TDtTp5ppcmE7mcRdYJIiFt
+	 PGdnAd5ZoZuSvloM6QK5w0PviQMBYS3qRcmocBBeO9geHb55/Y7CWFJhXk3H3TSj5x
+	 u14s/HIAVXjZBF85gbXUjUHlYmyG+U0kWIc2xJQKgC5GqJuQdFsbAdVvPpJswMxcD3
+	 7f5Y2Njn0F6Aw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 39DCE605D8;
+	Mon, 31 Aug 2026 06:01:03 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 156A8355
+ for <buildroot@buildroot.org>; Mon, 31 Aug 2026 06:01:02 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id EF8C080863
+ for <buildroot@buildroot.org>; Mon, 31 Aug 2026 06:01:01 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Wel4vwbKkNi0 for <buildroot@buildroot.org>;
+ Mon, 31 Aug 2026 06:01:01 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 268BE605D5
- for <buildroot@buildroot.org>; Mon, 31 Aug 2026 06:00:25 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C64BB923A7; Mon, 31 Aug 2026 05:59:26 +0000 (UTC)
+Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none) header.from=korsgaard.com
+Authentication-Results: smtp1.osuosl.org; dkim=pass (2048-bit key,
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail2 header.b=FCrqlK11
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8B2A8807B3
+ for <buildroot@buildroot.org>; Mon, 31 Aug 2026 06:00:58 +0000 (UTC)
+DKIM-Signature: a=rsa-sha256;
+ b=FCrqlK11wW9J/Jy98MmCQwzNa2AbIKjlyxEvsRO6/Fro4vvL3EnOHMqkk9KbqVX9pUi4y1aCNEBYLeArzJ/iaZv5XmxkDSO94ZmXDpmMseCgZfCHFgBe98ZBjKGU1CBa6PcaFTFSCUugL2B94EYWgPHUhZUd9EqXlyCw8TKjHZG0YeXW33dWQqjCU/BOEyOPCM5VhbpedxefNZCw5w9L453KmFc+yq+Q88rXJUTSsqk16zjLjdOVoMbmmNl434SdCksFMdSW8sTkZJNQr8j89cgIVXSwQqOuqrqkZnJyGY8FGfxC+RZc0klHUUr2K1abRGisj6eKHacxNbhIM8SaOQ==;
+ s=purelymail2; d=purelymail.com; v=1;
+ bh=IGELTg3NlrVosRU1/av/NLx4FwmbjkXesT0CpO0CW0s=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 33336129;
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Mon, 31 Aug 2026 06:00:57 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
+ (envelope-from <peter@korsgaard.com>) id 1x0v4i-00000001oie-1n5b;
+ Mon, 31 Aug 2026 08:00:56 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Mon, 31 Aug 2026 07:58:52 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 911dc3a5d28ca33a1e44358a5c4760a6eba1f9ae
-X-Git-Newrev: 2d7d9d8200232bce215d87cadda443ba74308f01
-X-Patchwork-Hint: ignore
-Message-Id: <20260831055926.C64BB923A7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] docs/manual: patchwork is now at
+To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+In-Reply-To: <20260828172002.2364384-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni via buildroot's message of "Fri, 28 Aug 2026 19:19:59
+ +0200")
+References: <20260828172002.2364384-1-thomas.petazzoni@bootlin.com>
+Date: Mon, 31 Aug 2026 08:00:56 +0200
+Message-ID: <878q5momlj.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/2] docs/manual: patchwork is now at
  patchwork.buildroot.org
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -68,73 +89,23 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/2d7d9d8200232bce215d87cadda443ba74308f01
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+>>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
 
-patchwork.buildroot.org used to be a redirect to patchwork.ozlabs.org,
-but we are now running our own instance, so let's adjust the links in
-the manual accordingly.
+ > patchwork.buildroot.org used to be a redirect to patchwork.ozlabs.org,
+ > but we are now running our own instance, so let's adjust the links in
+ > the manual accordingly.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- docs/manual/contribute.adoc | 10 +++++-----
- docs/manual/resources.adoc  |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-diff --git a/docs/manual/contribute.adoc b/docs/manual/contribute.adoc
-index a0002ce188..f82eb14303 100644
---- a/docs/manual/contribute.adoc
-+++ b/docs/manual/contribute.adoc
-@@ -460,7 +460,7 @@ editing the commit message. Below the +Signed-off-by+ section, add
- 
- Although the changelog will be visible for the reviewers in the mail
- thread, as well as in
--https://patchwork.ozlabs.org/project/buildroot/list/[patchwork], +git+
-+https://patchwork.buildroot.org/project/buildroot/list/[patchwork], +git+
- will automatically ignores lines below +---+ when the patch will be
- merged. This is the intended behavior: the changelog is not meant to
- be preserved forever in the +git+ history of the project.
-@@ -513,19 +513,19 @@ $ git format-patch -v4 -M -s -o outgoing origin/master
- 
- When you provide a new version of a patch, please mark the old one as
- superseded in
--https://patchwork.ozlabs.org/project/buildroot/list/[patchwork]. You
-+https://patchwork.buildroot.org/project/buildroot/list/[patchwork]. You
- need to create an account on
--https://patchwork.ozlabs.org/project/buildroot/list/[patchwork] to be
-+https://patchwork.buildroot.org/project/buildroot/list/[patchwork] to be
- able to modify the status of your patches. Note that you can only change
- the status of patches you submitted yourself, which means the email
- address you register in
--https://patchwork.ozlabs.org/project/buildroot/list/[patchwork] should
-+https://patchwork.buildroot.org/project/buildroot/list/[patchwork] should
- match the one you use for sending patches to the mailing list.
- 
- You can also add the +--in-reply-to=<message-id>+ option when
- submitting a patch to the mailing list. The id of the mail to reply to
- can be found under the "Message Id" tag on
--https://patchwork.ozlabs.org/project/buildroot/list/[patchwork]. The
-+https://patchwork.buildroot.org/project/buildroot/list/[patchwork]. The
- advantage of *in-reply-to* is that patchwork will automatically mark
- the previous version of the patch as superseded.
- 
-diff --git a/docs/manual/resources.adoc b/docs/manual/resources.adoc
-index a1b8b366e1..331929e0c6 100644
---- a/docs/manual/resources.adoc
-+++ b/docs/manual/resources.adoc
-@@ -68,4 +68,4 @@ review comments in a clean and concise web interface, it can be useful
- for all Buildroot developers.
- +
- The Buildroot patch management interface is available at
--https://patchwork.ozlabs.org/project/buildroot/list/[].
-+https://patchwork.buildroot.org/project/buildroot/list/[].
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
