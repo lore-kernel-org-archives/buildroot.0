@@ -1,68 +1,60 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12785C61DD3
-	for <buildroot@archiver.kernel.org>; Tue,  1 Sep 2026 21:57:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1659C61DD6
+	for <buildroot@archiver.kernel.org>; Tue,  1 Sep 2026 22:00:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E085F407C1;
-	Tue,  1 Sep 2026 21:57:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 850DC806F0;
+	Tue,  1 Sep 2026 22:00:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oRGymi5bZntn; Tue,  1 Sep 2026 21:57:37 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JwwRICTVFscm; Tue,  1 Sep 2026 22:00:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1788299857;
-	bh=+6Us4Fi1Uglx/wogNtRpGE7YYumU/c4aRAu0vLeW6Nw=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=XT/uAeAxqcOjdGsURN+fJyvq1zFEN0o6EO+4MumNuxfLcrvxM9q8k7X8xM6yaFJjO
-	 sMJOV5J/1h28x03DQRHtqU7wmQyjxvYyePUYWC/FHhLeOfqb4tTE449Xe72yHPBIEc
-	 5zLEsWeA5m/1JmqkjzOe714clH3ahqVI8nmsIZHGFiTUagRgSVYzTor7SeUXkwQmP8
-	 DwTUrdWKAYF7bB8w0JzEn4qpEOmOVE+h/me/PUQRs+RzmkfwrJhHGFYE156Rae8cOF
-	 M4Hqsu5jyH42g9lfG5tpw36+pglxn9z7XHYH4FU15z7RYs3taj0Va99oIO8t50dZf2
-	 HfbgZXCfNfUmg==
+	s=default; t=1788300037;
+	bh=1Ow/1YBXnpY8wsNOsUnTF/pV4A0TVTX6LWVmIZ9Wjeo=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=HXobu4U3nA8UIIYRQg3Klef9MMxOsdxwtT3lZtYD5bvzic4cF0B9BPU9OzOtTVVpj
+	 cDBglUZbdaNfgyKFMAY0tHwMOI02LljQlxBAj1cIjMDAT3Wdi4l2M67oqnWBYbn3Rs
+	 hQhuGeqNNmvDxnCwAmhiyRk8GIguVFMc7s3fQOM3eojo2CI9HPYuhR8f6qssy5p9Em
+	 OCYDZCE7sTziA5JsY2AOR+XpIgN1Jhst7EnPpqRzp264Iqw6yeYbXS+3+0xTtxF13V
+	 NpCZV4Ff+NUXZkPsiXgMcuGCY8hI5QFU0roLAA5olePEzEh7EOHuodXcYZgp9aYOwZ
+	 e2nMzqtlsuXDg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 39B3540770;
-	Tue,  1 Sep 2026 21:57:37 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 700E0127
- for <buildroot@buildroot.org>; Tue,  1 Sep 2026 21:57:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A752C80882;
+	Tue,  1 Sep 2026 22:00:37 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 64821498
+ for <buildroot@buildroot.org>; Tue,  1 Sep 2026 22:00:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 61766607B8
- for <buildroot@buildroot.org>; Tue,  1 Sep 2026 21:57:35 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 61DF88071F
+ for <buildroot@buildroot.org>; Tue,  1 Sep 2026 22:00:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VUuTWMmBw6lv for <buildroot@buildroot.org>;
- Tue,  1 Sep 2026 21:57:34 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 915DF6079B
- for <buildroot@buildroot.org>; Tue,  1 Sep 2026 21:57:33 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id 7C3032003AE;
- Tue,  1 Sep 2026 23:57:29 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Tue, 01 Sep 2026 23:57:29 +0200
-MIME-Version: 1.0
-Date: Tue, 01 Sep 2026 23:57:29 +0200
-To: Romain Naour <romain.naour@smile.fr>
-Cc: buildroot@buildroot.org, Alexander Egorenkov <egorenar@linux.ibm.com>
-In-Reply-To: <20260827212125.1988552-2-romain.naour@smile.fr>
-References: <20260827212125.1988552-1-romain.naour@smile.fr>
- <20260827212125.1988552-2-romain.naour@smile.fr>
-User-Agent: Webmail Free/1.6.18
-Message-ID: <079deed2f8284f877fc1ab91f00a84d2@free.fr>
-X-Sender: ju.o@free.fr
-Subject: Re: [Buildroot] [PATCH] package/gcc: enable decimal float on s390
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 10H_2L3PIhRv for <buildroot@buildroot.org>;
+ Tue,  1 Sep 2026 22:00:35 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id A301C806F0
+ for <buildroot@buildroot.org>; Tue,  1 Sep 2026 22:00:35 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 714669358B; Tue,  1 Sep 2026 21:59:36 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 1 Sep 2026 23:58:23 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 789485b3e7a70e18c799ea330b3c184ce9ea245e
+X-Git-Newrev: 79fd6241e4347f67d659cc02669448397b458d52
+X-Patchwork-Hint: ignore
+Message-Id: <20260901215936.714669358B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] board/qemu: add xtensa kernel patch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,47 +68,98 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 27/08/2026 23:21, Romain Naour via buildroot wrote:
-> Floating-point type _Float16 added in gcc-16 on s390 now requires
-> decimal floating-point support enabled in the toolchain [1][2].
-> 
-> Without decimal floating-point, gcc 16.2.0 fails to build with:
-> 
-> ../../../libgcc/config/s390/_dpd_sd_to_hf.c:27:25: error: decimal 
-> floating-point not supported for this target
->    27 | HFtype __dpd_truncsdhf (_Decimal32);
->       |                         ^~~~~~~~~~
-> ../../../libgcc/config/s390/_dpd_sd_to_hf.c:31:16: error: decimal 
-> floating-point not supported for this target
->    31 | force_convert (_Decimal32 x)
->       |                ^~~~~~~~~~
-> ../../../libgcc/config/s390/_dpd_hf_to_td.c:34:1: error: decimal 
-> floating-point not supported for this target
->    34 | _Decimal128
->       | ^~~~~~~~~~~
-> ../../../libgcc/config/s390/_dpd_sd_to_hf.c:35:18: error: decimal 
-> floating-point not supported for this target
->    35 | __dpd_truncsdhf (_Decimal32 x)
-> 
-> Enable decimal floating-point support as suggested by Alexander
-> Egorenkov.
-> 
-> Fixes:
-> https://lore.kernel.org/buildroot/ansJ5dXXblvYeMLB@windsurf/
-> 
-> [1] https://gcc.gnu.org/gcc-16/changes.html#s390
-> [2] 
-> https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=5d6d56d837c3dbeabd382c1fb4f7d21d9891f4b9
-> 
-> Cc: Alexander Egorenkov <egorenar@linux.ibm.com>
-> Signed-off-by: Romain Naour <romain.naour@smile.fr>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/79fd6241e4347f67d659cc02669448397b458d52
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Applied to master, thanks.
+-fno-stack-protector must be passed to avoid linking errors related to
+undefined references to '__stack_chk_guard' and '__stack_chk_fail' if
+toolchain enforces -fstack-protector.
+
+Fixes:
+https://gitlab.com/buildroot.org/toolchains-builder/-/jobs/15876432953
+
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ .../0001-xtensa-disable-SSP-when-needed.patch      | 36 ++++++++++++++++++++++
+ configs/qemu_xtensa_lx60_defconfig                 |  2 +-
+ configs/qemu_xtensa_lx60_nommu_defconfig           |  2 +-
+ 3 files changed, 38 insertions(+), 2 deletions(-)
+
+diff --git a/board/qemu/xtensa-lx60/patches/linux/0001-xtensa-disable-SSP-when-needed.patch b/board/qemu/xtensa-lx60/patches/linux/0001-xtensa-disable-SSP-when-needed.patch
+new file mode 100644
+index 0000000000..cc19348140
+--- /dev/null
++++ b/board/qemu/xtensa-lx60/patches/linux/0001-xtensa-disable-SSP-when-needed.patch
+@@ -0,0 +1,36 @@
++From 5358d4e20801ffbb1c0834eab36c003049d4055f Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@smile.fr>
++Date: Sun, 16 Aug 2026 22:27:28 +0200
++Subject: [PATCH] xtensa: disable SSP when needed
++
++-fno-stack-protector must be passed to avoid linking errors related to
++undefined references to '__stack_chk_guard' and '__stack_chk_fail' if
++toolchain enforces -fstack-protector.
++
++Fixes:
++https://gitlab.com/buildroot.org/toolchains-builder/-/jobs/15876432953
++
++Upstream: Submitted to Max Filippov via email for initial review.
++
++Cc: Max Filippov <jcmvbkbc@gmail.com>
++Signed-off-by: Romain Naour <romain.naour@smile.fr>
++---
++ arch/xtensa/boot/Makefile | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/arch/xtensa/boot/Makefile b/arch/xtensa/boot/Makefile
++index d8b0fadf429a9..dfb758cdb2756 100644
++--- a/arch/xtensa/boot/Makefile
+++++ b/arch/xtensa/boot/Makefile
++@@ -9,7 +9,7 @@
++ 
++ 
++ # KBUILD_CFLAGS used when building rest of boot (takes effect recursively)
++-KBUILD_CFLAGS	+= -fno-builtin
+++KBUILD_CFLAGS	+= -fno-builtin -fno-stack-protector
++ 
++ subdir-y	:= lib
++ targets		+= vmlinux.bin vmlinux.bin.gz
++-- 
++2.55.0
++
+diff --git a/configs/qemu_xtensa_lx60_defconfig b/configs/qemu_xtensa_lx60_defconfig
+index d2d6c92faf..a84395a344 100644
+--- a/configs/qemu_xtensa_lx60_defconfig
++++ b/configs/qemu_xtensa_lx60_defconfig
+@@ -2,7 +2,7 @@ BR2_xtensa=y
+ BR2_XTENSA_CUSTOM=y
+ BR2_XTENSA_OVERLAY_FILE="https://github.com/jcmvbkbc/xtensa-toolchain-build/raw/95291b7c39e6f790d0b2f062c945a630290f2c81/overlays/xtensa_dc233c.tar.gz"
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
+-BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
++BR2_GLOBAL_PATCH_DIR="board/qemu/patches board/qemu/xtensa-lx60/patches"
+ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+ BR2_SYSTEM_DHCP="eth0"
+diff --git a/configs/qemu_xtensa_lx60_nommu_defconfig b/configs/qemu_xtensa_lx60_nommu_defconfig
+index 89b73ee1e6..a937112a9e 100644
+--- a/configs/qemu_xtensa_lx60_nommu_defconfig
++++ b/configs/qemu_xtensa_lx60_nommu_defconfig
+@@ -3,7 +3,7 @@ BR2_XTENSA_CUSTOM=y
+ BR2_XTENSA_OVERLAY_FILE="https://github.com/jcmvbkbc/xtensa-toolchain-build/raw/95291b7c39e6f790d0b2f062c945a630290f2c81/overlays/xtensa_dc233c.tar.gz"
+ # BR2_XTENSA_USE_MMU is not set
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
+-BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
++BR2_GLOBAL_PATCH_DIR="board/qemu/patches board/qemu/xtensa-lx60/patches"
+ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+ BR2_SYSTEM_DHCP="eth0"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
