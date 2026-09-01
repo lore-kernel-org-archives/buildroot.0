@@ -1,127 +1,122 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9885AC61DD6
-	for <buildroot@archiver.kernel.org>; Tue,  1 Sep 2026 07:12:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82A5DC61DD3
+	for <buildroot@archiver.kernel.org>; Tue,  1 Sep 2026 08:45:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 54D19406A5;
-	Tue,  1 Sep 2026 07:12:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0881B60740;
+	Tue,  1 Sep 2026 08:45:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rYXM1SH7j65I; Tue,  1 Sep 2026 07:12:26 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rCjmtI3hcEC2; Tue,  1 Sep 2026 08:45:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1788246746;
-	bh=DSsIcz+jLEy5vDEckxXgFGrduhV7jJbZ/mKYlMrjYIo=;
-	h=References:In-Reply-To:From:Date:To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=q3A1yR4ZpBKfQ/aRONjt90dH2AxBE+XHYxeytXw/2H4ohYzF1H7JGU/Vs5mLnIOGh
-	 k8EffkRBlSbjlTQxOCxV2ZSceV0bsxXupMvn6ST5zOHz5r3JUzm4nXSM6MpCIUcW/I
-	 xwwik5FJtwQsY8FzyAin7WpVnELQLzIWLfPo4lDY/MAK7nMC1X0fTTHAYMZEJNJz7D
-	 5c3qlclO/mpOoRnxcz3T4ZkIVYtOQow1azZkpC45x6QGb8B/42AiAjFvO7pE307zD5
-	 gfISDYZS3W+34HDOwnhZ7i8L1moXfVusGUe9W55jXyDg8PJXr+kZvGS+h93mcbX0Vg
-	 F7QGEBgH0X8+w==
+	s=default; t=1788252301;
+	bh=lnvZgj6tLZgafzn4YTgdxq/lh1r+1d7L3IOq7AoWSZc=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
+	b=Pt8+9RmzbG860vqIyWQ/yTft2qEJbKbiZ9pdsuzp9AlwIEv57WoKq96xmRcIEkeY7
+	 bRuosjcjcW5TqG2nPVA4eRdwSzNES2oeNGU8GVmO2OxK4Lxl/wrBfTU2MVbpx29mrw
+	 zl2M7U2MHLec+Qmjp5sgJaiZVorlNgGW80z0OPBcDI3XOBkEaxQXMakL/7UR/KuKg+
+	 qTXT+LwfCh7EdkJoa6ICmVC89bEMFyrnGDdZzw3DffIGckB5O6UoBs9U/CTLyzTxIY
+	 eopdyKtpoJQSHKOxXkDhfocfUluaAScw4YmN490p+7bxz0cF14tiFGgQGRWBcRAQZM
+	 Hv+EGzDyGwa8g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 86888404E9;
-	Tue,  1 Sep 2026 07:12:26 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 4079B4AD
- for <buildroot@buildroot.org>; Tue,  1 Sep 2026 07:12:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0C4736072A;
+	Tue,  1 Sep 2026 08:45:01 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 49209363
+ for <buildroot@buildroot.org>; Tue,  1 Sep 2026 08:44:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 22E55404E9
- for <buildroot@buildroot.org>; Tue,  1 Sep 2026 07:12:25 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 311A36072A
+ for <buildroot@buildroot.org>; Tue,  1 Sep 2026 08:44:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Bxtsii56jkb6 for <buildroot@buildroot.org>;
- Tue,  1 Sep 2026 07:12:24 +0000 (UTC)
-Received-SPF: Permerror (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::536; helo=mail-ed1-x536.google.com;
- envelope-from=rhidian.dewit@openpixelsystems.org; receiver=<UNKNOWN> 
-Authentication-Results: smtp4.osuosl.org; dmarc=none (p=none dis=none)
- header.from=openpixelsystems.org
-Authentication-Results: smtp4.osuosl.org; dkim=pass (2048-bit key,
- unprotected) header.d=openpixelsystems.org header.i=@openpixelsystems.org
- header.a=rsa-sha256 header.s=google header.b=AVe0I2qv
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com
- [IPv6:2a00:1450:4864:20::536])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 471D7404E7
- for <buildroot@buildroot.org>; Tue,  1 Sep 2026 07:12:23 +0000 (UTC)
-Received: by mail-ed1-x536.google.com with SMTP id
- 4fb4d7f45d1cf-6a600a1caf8so803085a12.2
- for <buildroot@buildroot.org>; Tue, 01 Sep 2026 00:12:23 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1788246742; cv=none;
- d=google.com; s=arc-20260327;
- b=TdXjUOtyERjG2cxDp+neqZjy8K2oJaAOlhEjr7D+20okcPmscVx1C6mSeZYdZXjOLG
- ZKjNLjJClGA6cymuKA7TOKZmOtDIG8bHE1x4Bl3K+xCm0YHFh/6MZxu/ijYsoOQsEsUi
- afzQgSxaFTpTkFPd/tXlbIqHmYE2O8KZDl7kUKLcusBZyf7XR4J6eNuKNjEfKxeEOSZg
- 0hH/NE+V2XDan6bsUpyXlb11jImCxO/I/POpne5E3/9HuVUGBLU71eqklRF5jypBhstR
- Yfdzjq+kLlR+Edv6gDVQOljDp1iQ8581izEiTJAB/O2ddmbTT/C4zGgWtQZUJI5asKDL
- LL7g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com;
- s=arc-20260327; 
- h=to:subject:message-id:date:from:in-reply-to:references:mime-version
- :dkim-signature;
- bh=PjeWl9hkO6j1/Z4D3T2IniZVQC2oF7Ag9QcApzxbUhQ=;
- fh=3pWBXGdSiVldOzJ6ypfJcTUIWlbrikH1EIZUHFIjzuo=;
- b=VTjOPi7s4JsJL7km9JrnvR3V0F1i8gGU+e0Zh1TAIFU7iBqo+mz82BIRoQalPKNhPu
- UJ7pqmNpDHlscW/j7NtNI056llov8l26pCICcp1BtyeeI0/PQQS29BMiTpnivdbbyb/T
- tBLDMQD3aKnB14cWTV7tBcFtkwjRW50vsc6Roxh2snSBT2ORGxFoOUavAyKid9simeIe
- 2P5lu1rMkbGDz1efwYD19tHpVjTpW/AVAfseP3Gnxt8l0qNphB04EFrAt+dCutXgJ/yt
- qtk0uGcaU5MiOxJvyxdFsWbLXQasIIewMuw4DdZF+CW3X3UCVQi9FaFnDnn9mOM7t9ww
- T4Fg==; darn=buildroot.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=openpixelsystems.org; s=google; t=1788246742; x=1788851542;
- darn=buildroot.org; 
- h=content-type:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to
- :content-type; bh=PjeWl9hkO6j1/Z4D3T2IniZVQC2oF7Ag9QcApzxbUhQ=;
- b=AVe0I2qvLoE4Bq9WrBkVwALt+qyMSEXJU5KUgV8XPXWQfymYatDi9DbpCAD772SFb2
- JyuceaY+vMN5NRW2DVFdOSfTm5NbHiaKHEbSb8xy1uJ1yv9++KWGDXqwiTT9R9lxNq5j
- IfCLuWLc8BAp7KVH6KucnbjgaDMaBWWrV24NVQ8sSm217RSj0sNh1MPHNhGxE1Oe1VhG
- g9xCa/k1F/kvolSCtg42zGNOhqDRlhd3RyUvYZuLLJfNwQzbaV1MLH8rQcD3NOZFz+la
- QS7pAYqARjnkMyUrdkBCQ+eZhDhCFGCpNBgB7CaibUfGgSSJHKaPmeV1BWBNKZORL6oM
- 9ncg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1788246742; x=1788851542;
- h=content-type:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to:content-type;
- bh=PjeWl9hkO6j1/Z4D3T2IniZVQC2oF7Ag9QcApzxbUhQ=;
- b=c334WhEC0DSX/MspLr5cuvl0nZgArvVCuKxg4rYzPnDgbsjFC7vBS02/KbZ/baNgZ5
- W8N9d9GRIx8uclrq+VAzjRUGrhARpXuyajhBpkR5nUAk0fiJ/4x3OZRfjj0v98iQ7CNb
- 3qsTDklRillStOx4np+UmopGp8mEJXH9l81ZYW/6Y6oi8fyvokWY97IpxSgnekrVQRqH
- k9LHEwwt2TWamKY7ukt4Nbe287giB2v5gBfsvkkp93Wat+ycIZs2GU5XZgKne86ftxQF
- hTDFpuYsalrnSMJhzPhrsM4qx9/lD7jDmMdnNcUbEj7snDs0R70EFvpsCD9HfUkvtz6/
- /elw==
-X-Gm-Message-State: AFuF++mjyf41jXDb2T+C9JSXJhgzr3umgBqy3BcTIeLFg3tqvtoJLA8Y
- jNRCZIAp07A4t5t1T3FOY4hrSPlqad40rCbWccflI2OODx3Thh50Bngq1HJgpA2sV1X9piMF6zU
- 0SpxfP6eKa1Jljr/QYchJBM9i8iGrrfIPNAXjaO+m3ubtyhuxro8h
-X-Gm-Gg: AYBFou1BxexL/Zlc5xAmEzJI4bED8QHYc2p96D6S2pGVma8LXIOrW4sXoknGQsmHRkL
- OIGI0MyAeHXHlpQMsaR/JGzyFQxhWzZNYGzpptkYcJbm3qAN0VKE63EKVfI8Zxdv08sbtzo14+I
- PgG7Z9hZjLCmXY5114/X+t+Odg2gTqLU3EJxmAtAggIurSfzLUC8Dy7gKSC/W5+K3rMIAc6POFj
- MaO+ydyvB1FEyB8+TlWSXtSTz147fRGtL5o1sQOtbPLxjCouYyuCs4PFKKcBF7czJAAXPe1pZjD
- g7bcLUBSvrou1fSOk2c9DhymC1mkF0IbyorQQmmbvnYIsfk67H0kPdvZIwtDh+20x0RcQwqPTKF
- U8ks=
-X-Received: by 2002:a05:6402:a0ce:b0:6a6:2022:fee with SMTP id
- 4fb4d7f45d1cf-6a6202211fcmr14122618a12.7.1788246742082; Tue, 01 Sep 2026
- 00:12:22 -0700 (PDT)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wXoKn9nOXqk3 for <buildroot@buildroot.org>;
+ Tue,  1 Sep 2026 08:44:58 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a01:111:f403:c10d::1;
+ helo=sn4pr2101cu001.outbound.protection.outlook.com;
+ envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
+Received: from SN4PR2101CU001.outbound.protection.outlook.com
+ (mail-southcentralusazlp170120001.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:c10d::1])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 72ED1606E5
+ for <buildroot@buildroot.org>; Tue,  1 Sep 2026 08:44:57 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=gTYSzi7PNw9n+ohSBrYXSWjFL9MfEY+vRXhZwv4+9nYhh/Fuv5xwtFTu8Dj0Nhl4ySks05jihdsGBcwc1w2gksVSZ7gLUhGssG2forHiUtESYBOaPLYnvMGQFqaH/diVVoN3Pbeq8LDTf6uOV+cciwQt5jy4otTKLCGLg0szHXbJ3DRgzvUYsxgG42NzAluTfIqrfFyfqZ360Yk93BOCdRtfAetifa8lXjzrupJhYKHHy8swEHJ0mrDHxEFgJVd0ho0InpRXx9UWLR7nBPtWC212D5LQUtSRIm+5mJFGphfyfCYh2G6rnYj4YC2cFREk2skj4nIS+S82h+hdcMho/A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=RmZVDEgr5zD8JC1omtHE+1SwvOFmOxHXuSDcAOeUqh0=;
+ b=JkG/gicrlJmPdP5Em9uXIprFCGW+GOahqtyxvL7loAqwaKlCpuk2DKpQ0Gz60EiNoOtd47om6+NIovJV7VODdSUebMNIoBhjs2V3juxdou4MgLyhqVZ12c62tYaEuBHJs7rLOKT13VF+9dacgzYFKsJ+2Awt9qd1iWaaOEDbyccDDQGwAAkOWHHzFr7pHF7QiF9ha2Yj2qs2easOjaktNPAEQguZgqYec/VIpBgYNYMdoq61GFPO+8qR1TkocA89wjgt9AnKema0Dtqn1iv89nHc6uwAkXsEHMLcB8aQYdFLT1aYhnAOuyuyYbEk4LV2cNMoj50QTgBNZ0f9eyPDnQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+Received: from SJ0PR13CA0062.namprd13.prod.outlook.com (2603:10b6:a03:2c4::7)
+ by DS0PR12MB8366.namprd12.prod.outlook.com (2603:10b6:8:f9::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.360.13; Tue, 1 Sep
+ 2026 08:44:50 +0000
+Received: from SJ1PEPF00001CEB.namprd03.prod.outlook.com
+ (2603:10b6:a03:2c4:cafe::b7) by SJ0PR13CA0062.outlook.office365.com
+ (2603:10b6:a03:2c4::7) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.382.10 via Frontend Transport; Tue, 1
+ Sep 2026 08:44:49 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=satlexmb08.amd.com; pr=C
+Received: from satlexmb08.amd.com (165.204.84.17) by
+ SJ1PEPF00001CEB.mail.protection.outlook.com (10.167.242.27) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.21.382.8 via Frontend Transport; Tue, 1 Sep 2026 08:44:49 +0000
+Received: from satlexmb08.amd.com (10.181.42.217) by satlexmb08.amd.com
+ (10.181.42.217) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.46; Tue, 1 Sep
+ 2026 03:44:48 -0500
+Received: from xirengwts09.xilinx.com (10.180.168.240) by satlexmb08.amd.com
+ (10.181.42.217) with Microsoft SMTP Server id 15.2.2562.46 via Frontend
+ Transport; Tue, 1 Sep 2026 03:44:47 -0500
+To: <buildroot@buildroot.org>
+Date: Tue, 1 Sep 2026 09:44:38 +0100
+Message-ID: <20260901084443.584247-1-neal.frager@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20260901071121.834356-1-rhidian.dewit@openpixelsystems.org>
-In-Reply-To: <20260901071121.834356-1-rhidian.dewit@openpixelsystems.org>
-From: Rhidian De Wit <rhidian.dewit@openpixelsystems.org>
-Date: Tue, 1 Sep 2026 09:12:10 +0200
-X-Gm-Features: AcwNN1X8gdSFUnuhDFIG4M_-QF1iyZP1Vt5ycMmUpwzIR4-pXEK2mA0of_Ya38c
-Message-ID: <CAKWiKxErbBNpQDe715qsva1k2=L5EkYs2vgkr__iPxtPawuMLA@mail.gmail.com>
-To: buildroot@buildroot.org
-Subject: Re: [Buildroot] [PATCH] Avoid segfault on x86-64 with invalid EFI
- boot entries
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ1PEPF00001CEB:EE_|DS0PR12MB8366:EE_
+X-MS-Office365-Filtering-Correlation-Id: 821b257e-81e5-4cb7-4d86-08df08054885
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+ ARA:13230040|1800799024|376014|23010399003|36860700016|82310400026|56012099006|10067099003|11063799006|18002099003|41080700001;
+X-Microsoft-Antispam-Message-Info: i8e6/IFjtsC+5Nx8KLNPd1QcmpfP3j8s5qbrey66br5oJyXgGLo98NcpNDgFWriHDAt5USCmoikvMnpv+Zny6JPJbbD9c3yTtSSOexkRIN9rgfFEHZFNQh3I+1g2SooSIwl891KxHp8OIboqlMJJcbimOdkTPceOLch9aVj4hfPEzlA3UwAqIxnF9Srl5D5xvSNnHi/wNO5a4fEwApscf62YkGDukcAmBUGKZerAabwe5bxHCPTKPbrX0QnGjIJt++O9QJciRzAiPimJgTtgbN9ZAGj1UOZu9hvI+3Uuw8QSfVII+bkObN9i9gp/iRFwEa3mQh2CqCkvmSZoLQQfpbYJ1F7itYpiMxh/pSPN2Ws3B1pF8pmjy6X8zwXa1DzXXN1hPKG6UwcqEfpfpWhLmk6npJTH0cv5Gt4Xg1M4O/VjtX1VICyCPKeDMGunituU2MRvzRiMQyyDCnbqW/0T7F8uEwfhJ+4ZPxoh6eGP7cuqhBTfuP5qW1v3yzoGCxQdfuB/gSMcLcICh7LE+cwmnZobcVbCnZ3JkdpQAKCXE6DVBj6oKZ4j/8uKZpEo0GLRRjcOucOt41qlSWjB1MgP4HwMudrB+kQ2wY0OLtqT2jGgyLOoY9XMJ6GfpSj/GK8j5sJQgQqWhRiL0cImp9D76e3aQ0VBX/5fJdx1AynOlpwN9n1S7l6+qFUi49S6epcoTSAPSG5ZRnDgoXV6ZVGVx94dKugENdAko4VhkcjxVD+Eeo81eKUWlwJ5CfuSA/47sIarmJNfTKQBvxzmCerZzA==
+X-Forefront-Antispam-Report: CIP:165.204.84.17; CTRY:US; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:satlexmb08.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
+ SFS:(13230040)(1800799024)(376014)(23010399003)(36860700016)(82310400026)(56012099006)(10067099003)(11063799006)(18002099003)(41080700001);
+ DIR:OUT; SFP:1101; 
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: 6UwtSj3yJZqUZr20MkaeeQHG53GE5+CNe6RGi5/mqkdQOkid/ogPryes7KtZPU6ynAr/DNoeB6SCUICq7KILFuKlrjzR+beB5Pl3tIVxP/XtPAYi/wONpJlXNgDQLLyeHnz7WxwnME5boZ6Z/J4U2ypptLSMgiNfAMrRAnwlWZZerQCfFQmbYCh1nkc7RQM/8v3bxAkuEN4TNCshR8c+IGHwjnXNcySnnlirsl01P4HaCkmFJ7CrFneCE/YPm0PQf8DvuzmyvzWGZLReAfz8oJ98eZBshB3lVgyTvyiGImx2J1EJrERaBICPblOBUuTSHpLd5GHWiCGAnPkSkQlPX5ooEh3ClqR1De1q6LjniVj9Wh9q79i1N5/9HPa+0YoJZtjf7PQGoN+rQJJ9owMm93rOQ7PF6dlgfpxh7Ex3RCy2jGBHWnLPlmruGsdzNi73
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Sep 2026 08:44:49.3194 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 821b257e-81e5-4cb7-4d86-08df08054885
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d; Ip=[165.204.84.17];
+ Helo=[satlexmb08.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: SJ1PEPF00001CEB.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8366
+Subject: [Buildroot] [PATCH v1 1/6] board/xilinx: add Linux 6.18.40 hash
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -133,12 +128,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Neal Frager via buildroot <buildroot@buildroot.org>
+Reply-To: Neal Frager <neal.frager@amd.com>
+Cc: ibai.erkiaga-elorza@amd.com, luca.ceresoli@bootlin.com,
+ Neal Frager <neal.frager@amd.com>, brandon.maier@collins.com, ju.o@free.fr,
+ thomas.petazzoni@bootlin.com, arnout@rnout.be, romain.naour@smile.fr,
+ michal.simek@amd.com, romain.naour@gmail.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Apologies for the confusion on my end, these are the correct patches.
+Add the hash for the Xilinx Linux 6.18.40 release tag.
+
+Signed-off-by: Neal Frager <neal.frager@amd.com>
+---
+ .../linux_6.18.40/patches/linux-headers/linux-headers.hash | 1 +
+ board/xilinx/linux_6.18.40/patches/linux/linux.hash        | 7 +++++++
+ 2 files changed, 8 insertions(+)
+ create mode 120000 board/xilinx/linux_6.18.40/patches/linux-headers/linux-headers.hash
+ create mode 100644 board/xilinx/linux_6.18.40/patches/linux/linux.hash
+
+diff --git a/board/xilinx/linux_6.18.40/patches/linux-headers/linux-headers.hash b/board/xilinx/linux_6.18.40/patches/linux-headers/linux-headers.hash
+new file mode 120000
+index 0000000000..5808d92afe
+--- /dev/null
++++ b/board/xilinx/linux_6.18.40/patches/linux-headers/linux-headers.hash
+@@ -0,0 +1 @@
++../linux/linux.hash
+\ No newline at end of file
+diff --git a/board/xilinx/linux_6.18.40/patches/linux/linux.hash b/board/xilinx/linux_6.18.40/patches/linux/linux.hash
+new file mode 100644
+index 0000000000..f0b8984573
+--- /dev/null
++++ b/board/xilinx/linux_6.18.40/patches/linux/linux.hash
+@@ -0,0 +1,7 @@
++# Locally calculated
++sha256  bdb5c40d7b43f8a1ea6ee34e2392a389935120b11cf54c36ad3ccff937b1a179  xlnx_rebase_v6.18_LTS_2026.1_update_merge_v6.18.40.tar.gz
++
++# Locally calculated
++sha256  fb5a425bd3b3cd6071a3a9aff9909a859e7c1158d54d32e07658398cd67eb6a0  COPYING
++sha256  8780e78a1a737e127f25a65f6d95269bffd36158dc261114de7859b490bfc5aa  LICENSES/preferred/GPL-2.0
++sha256  8e378ab93586eb55135d3bc119cce787f7324f48394777d00c34fa3d0be3303f  LICENSES/exceptions/Linux-syscall-note
+-- 
+2.25.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
