@@ -1,104 +1,60 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CC600C61DD6
-	for <buildroot@archiver.kernel.org>; Tue,  1 Sep 2026 21:15:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BBB50C61DD6
+	for <buildroot@archiver.kernel.org>; Tue,  1 Sep 2026 21:18:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A5CDC60823;
-	Tue,  1 Sep 2026 21:15:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 72A5A407E9;
+	Tue,  1 Sep 2026 21:18:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cg0GDSX4yYbB; Tue,  1 Sep 2026 21:15:55 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id R9-BHBP7ecGq; Tue,  1 Sep 2026 21:18:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1788297355;
-	bh=Yaj3OwX7t0dX69YBpRp6ZdNdu4TQt01rc7oJkxx57Z4=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=XRPzNDkb/KY/md0kMiU4LDPkKScV990UhEK/h8NAjSOjra7oVnL6A8sSBj809oux7
-	 gAzCRjeIGosOdvVTVED/sPfG3cBrwMMjKxAJVY/lFP/KvBFfJX6yBpiXEYDnD3z/ts
-	 G9DFPiultxvDRAmIjWUn0xDmnfhdvS/wB164CxhUabttW9rg7V4O1s1NAeZico/a6n
-	 x4UqV57pqvLjkqtSdl08p11M+gN8LZYPYvXbtEhEh7ZwnKrgxXVexcjGoP23toBfYY
-	 vbcflo3vFN095PBYxtNzKU4hafO42WqioaIl1oE9PTPSdgW/tXH0NdsCdR3MNuIeUl
-	 HkXHpUiGtxcVA==
+	s=default; t=1788297512;
+	bh=U+KQl5qiCdDzNajatoDRy0iQ+eEbnHs7Y4lvxKVxW3M=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=eP/INOnrxjI12k7QZg7F8Sv9fimk8MQd+LX2fRMlKP9q/TJcpusIbx5DhNFrAFcua
+	 O/2/NZH1KPyrbH/QRQozq/oyalvJc9s1QfJc9fgoLlOmdDdij6IQ5UyNPmi9T+aGdQ
+	 Ctj6wrcq8r3EyfsWGFc6kdDvZri7UUcmoPlyWZdejs2UtrAIsmE4fwvcT7jjZNj9os
+	 wnXl8Xc02YJ9fqqw6zt5WxFIUDQU2BqW1/yPcyiQ5FFEQe56Z/tgcLJ8LyqaRWyZi2
+	 1k5YaukyoqtkYLlYTr1pNm2+YV0939IubfXoAhZzN75e4yASBCk90V+ljD7vps1oVd
+	 fs/JMjutwM08A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4C08960802;
-	Tue,  1 Sep 2026 21:15:55 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id CB048127
- for <buildroot@buildroot.org>; Tue,  1 Sep 2026 21:15:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7B3EE407F9;
+	Tue,  1 Sep 2026 21:18:32 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 14018127
+ for <buildroot@buildroot.org>; Tue,  1 Sep 2026 21:18:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B0C0760802
- for <buildroot@buildroot.org>; Tue,  1 Sep 2026 21:15:54 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id EEC0360802
+ for <buildroot@buildroot.org>; Tue,  1 Sep 2026 21:18:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Iqx-PuJSLImv for <buildroot@buildroot.org>;
- Tue,  1 Sep 2026 21:15:54 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42b; helo=mail-wr1-x42b.google.com;
- envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
- [IPv6:2a00:1450:4864:20::42b])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 9C828607AE
- for <buildroot@buildroot.org>; Tue,  1 Sep 2026 21:15:53 +0000 (UTC)
-Received: by mail-wr1-x42b.google.com with SMTP id
- ffacd0b85a97d-4843f205a5bso274543f8f.1
- for <buildroot@buildroot.org>; Tue, 01 Sep 2026 14:15:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1788297351; x=1788902151;
- h=content-transfer-encoding:content-type:in-reply-to:content-language
- :from:references:cc:to:subject:user-agent:mime-version:date
- :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to:content-type;
- bh=wpPXST+ia7/bcfjU+jK02P1P2IsRntB4fMisgdVyfUc=;
- b=WMzKv7KZur911r7U9S8MBqZI7pQwaMenhriV4+D6ocd71rglgUuOWMjAmf9e8r241E
- 96HM6lSENgL5itT/zYvZvyzvNobcVziIexIMSz4ZgGqMeC7XBWf2G4Ed0kxn8BZAQrrO
- Ju1nxM6sezBZT6l5ir7LLc5yJrPJ5ML7ey8zzra7cftcmgvNrpF/8shyYxWFFt2feZ0G
- silSK78Hg2ARAKmwnjHHHLfK/RlWlrOEkwQxaQ2RPyy82/Bfs7N4i3yqO035/87jjrIr
- FfWFq9GIPPl1jUO9VdJbSJtfEqt0oMUorESKZueRbvOLTG9eXeYrft2Oxwkvgz++IzPf
- cmpQ==
-X-Forwarded-Encrypted: i=1;
- AHgh+RrjHtlj+6pmJWhaYDEo5rHkg57pqxdscatcLehm1hNL85Ag1N6/RXQr7HscrJip684fNIIZ4Bo/wkI=@buildroot.org
-X-Gm-Message-State: AFuF++kwiDGpFWBAGhXJo5iGJ4rjLNnWx1o3/cdc07R9vvIUmb826JIg
- LjmyR5Q891XAlpiex83A9n9CJI73JHiy64yxS2Vx2w/VMkQ7eM6dPi46N200n7J2cPk=
-X-Gm-Gg: AR+sD10Ii7KHJCsz/8Gt/BsoFn9aHIQ/n1uEQYcUFiOgAqujuEaECAR3MDg0uuxAIWI
- Sf4Jcp8QwgwiM029PkVe2fvS8hxq14o1jBS4CQS26M9khhWHOJ4sgcH1XpLWrtOeJiHBL4bQhlq
- TpiV58jiPPGzdT5pXLyv1D7zst0i2Vi44FJ3DW1vKTIw0SUhUkfDrA9mjM4QpUUbRZ9kxSORBUz
- zs5ZJAdxiLfz/0ifQN/IqHxbpDjbm0EEmqlnBUyJEiHHNL+KxQAOYcgXBP528MmNH9RcLUrDvqd
- x1BydFP2TuZ/Xb9l2Irf387jny9dz4Tx4Yit31Iqi1yFoCx0eZg5YkD6rXf3OQ4JdG5Uxf8EbdI
- Hfn1AgbK0zF7V1ymxpRjPVPmc3bvYnmHk03l6pMCe4suV/Kz9yUT7Wf1bRBnXXquFFxYgxswfUt
- KdEzDTYLPLDNSO70Q8dHBQcE4TrnDQbgtRjT2kLvYY1GtflcPttR1NGzWOY8RfPEpeOMNm7acvU
- B6VZvf0w+QRjEKJsZrfU5npf0C+sAY/KMDXr3Wkm3zWcn7mdNotkpDvVGr8ZorEquedjIBmIsty
- P0TKwgDDY9TgfhPcEvUe6V88PqsfxHEONvD9hw==
-X-Received: by 2002:a05:600c:3496:b0:493:f5bf:4dc6 with SMTP id
- 5b1f17b1804b1-49ce57fb12cmr6961555e9.7.1788297351003; 
- Tue, 01 Sep 2026 14:15:51 -0700 (PDT)
-Received: from ?IPV6:2a01:cb05:94a2:a200:2ad9:827a:59cb:148a?
- (2a01cb0594a2a2002ad9827a59cb148a.ipv6.abo.wanadoo.fr.
- [2a01:cb05:94a2:a200:2ad9:827a:59cb:148a])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-49cdce10153sm103123055e9.4.2026.09.01.14.15.50
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 01 Sep 2026 14:15:50 -0700 (PDT)
-Message-ID: <d6573706-511f-4139-908e-64c90dc886b8@smile.fr>
-Date: Tue, 1 Sep 2026 23:15:49 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Fiona Klute <fiona.klute@gmx.de>, buildroot@buildroot.org
-Cc: Joachim Wiberg <troglobit@gmail.com>
-References: <20260831205703.3909457-1-romain.naour@smile.fr>
- <20260831205703.3909457-2-romain.naour@smile.fr>
- <9d071a34-5e26-4a04-9419-14754ccadc51@gmx.de>
-Content-Language: en-US
-In-Reply-To: <9d071a34-5e26-4a04-9419-14754ccadc51@gmx.de>
-Subject: Re: [Buildroot] [PATCH 2/2] support/testing: TestMdnsd: improve
- test reliability
+ id 8Z3vTfdGm17C for <buildroot@buildroot.org>;
+ Tue,  1 Sep 2026 21:18:30 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2E3166080E
+ for <buildroot@buildroot.org>; Tue,  1 Sep 2026 21:18:30 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id E195993574; Tue,  1 Sep 2026 21:17:30 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 1 Sep 2026 23:00:29 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 45636d67c93e3722543e181900bcb74a52b01bbb
+X-Git-Newrev: 32b4f3f942a26476da9533cb11afdeb5a27861ba
+X-Patchwork-Hint: ignore
+Message-Id: <20260901211730.E195993574@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] linux: disable SSP support when needed
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -110,58 +66,111 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Romain Naour via buildroot <buildroot@buildroot.org>
-Reply-To: Romain Naour <romain.naour@smile.fr>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gRmlvbmEsIEFsbCwKCkxlIDAxLzA5LzIwMjYgw6AgMjI6MTEsIEZpb25hIEtsdXRlIGEg
-w6ljcml0wqA6Cj4gQW0gMzEuMDguMjYgdW0gMjI6NTcgc2NocmllYiBSb21haW4gTmFvdXIgdmlh
-IGJ1aWxkcm9vdDoKPj4gVGhlIG1kbnNkIHJ1bnRpbWUgdGVzdCBjYW4gcmFuZG9tbHkgZmFpbCBv
-biBzbG93IHJ1bm5lcnMuCj4+Cj4+IEl0J3MgaGFyZCB0byByZXByb2R1Y2UgbG9jYWxseSAob25s
-eSBvbmUgZmFpbHVyZSBhZnRlciBhIGZldyBhdHRlbXB0cykKPj4gYnV0IHdlIGNhbiByZXByb2R1
-Y2UgaXQgZWFzaWx5IGJ5IHJlbW92aW5nIHRoZSB3aGlsZSBsb29wIGVudGlyZWx5Lgo+Pgo+PiBJ
-dCB0dXJucyBvdXQgdGhhdCBtZG5zZCBpcyBzdGFydGVkIGJ5IFM1MG1kbnNkIGJlZm9yZSB0aGUK
-Pj4gZW11bGF0b3IubG9naW4oKSBjaGFuZ2UgdGhlIHN5c3RlbSBkYXRlOgo+Pgo+PiDCoMKgIFtC
-UlRFU1QjIGRhdGUgLXMgQDE3ODgwMzI4NjQKPj4gwqDCoCBTYXQgQXVnIDI5IDE5OjQ3OjQ0IFVU
-QyAyMDI2Cj4+Cj4+IFNpbmNlIHRoZSBtaW5pbWFsIHJvb3Rmcy5jcGlvIGdlbmVyYXRlZMKgwqDC
-oCBmb3IgVGVzdE1kbnNkIGRvZXNuJ3QgaGF2ZSBhbnkKPj4gbnRwIGNsaWVudCBpbnN0YWxsZWQs
-IGl0IHN0YXJ0IHdpdGggIkphbnVhcnkgMSwgMTk3MCIuCj4+Cj4+IFRoZSBkYXRlIGNoYW5nZSBt
-YXkgY2F1c2Ugc29tZSBpc3N1ZSB0byB0aGUgbWRuc2QgZGFlbW9uIHdoaWNoIGJsb2Nrcwo+PiBh
-bnkgcmVzcG9uc2UgZnJvbSBtcXVlcnkgY29tbWFuZC4KPj4KPj4gV2hlbiB0aGUgcHJvYmxlbSBv
-Y2N1cnMsICJtcXVlcnkgLVQgX2h0dHAuX3RjcCIgcmVwbHkgaXMgZW1wdHk6Cj4+Cj4+IMKgwqAg
-IyBtcXVlcnkgLVQgX2h0dHAuX3RjcAo+PiDCoMKgIFF1ZXJ5aW5nIF9odHRwLl90Y3AubG9jYWwu
-IGZvciBQVFIgKDEyKSAuLi4gcHJlc3MgQ3RybC1DIHRvIHN0b3AKPj4KPj4gVG8gd29ya2Fyb3Vu
-ZCB0aGUgaXNzdWUsIHJlc3RhcnQgbWRuc2QgbWFudWFsbHkuCj4gCj4gVGhhbmtzIGZvciB0aGUg
-d29ya2Fyb3VuZCEgSWYgbWRuc2QgZ2V0cyBzdHVjayBpZiB0aGVyZSdzIGEgdGltZSBqdW1wLCB0
-aGF0Cj4gc291bmRzIGxpa2UgYW4gaXNzdWUgdGhhdCBzaG91bGQgYWxzbyBiZSByZXBvcnRlZCB1
-cHN0cmVhbSAoYW5kIGhvcGVmdWxseSBmaXhlZAo+IHRoZXJlKS4gRXZlbiB3aXRoIGFuIE5UUCBj
-bGllbnQgaW5zdGFsbGVkIHRoZXJlJ2QgYmUgbm8gZ3VhcmFudGVlIHRoZSB0aW1lIHdvdWxkCj4g
-aGF2ZSBiZWVuIHNldCBiZWZvcmUgbWRuc2Qgc3RhcnRzLgoKSSBqdXN0IGNyZWF0ZWQgYSBuZXcg
-aXNzdWUgb24gR2l0aHViOgpodHRwczovL2dpdGh1Yi5jb20vdHJvZ2xvYml0L21kbnNkL2lzc3Vl
-cy85OQoKSG9wZWZ1bGx5IHRoaXMgaXMgdGhlIGxhc3QgaXNzdWUgZm9yIHRoZSBydW50aW1lIHRl
-c3RzdWl0ZSBmb3IgdGhlIHVwY29taW5nCjIwMjYuMDggcmVsZWFzZSEKCkJlc3QgcmVnYXJkcywK
-Um9tYWluCgo+IAo+IEJlc3QgcmVnYXJkcywKPiBGaW9uYQo+IAo+PiBGaXhlczoKPj4gaHR0cHM6
-Ly9naXRsYWIuY29tL2J1aWxkcm9vdC5vcmcvYnVpbGRyb290Ly0vam9icy8xNjE4NTk0ODU1NQo+
-Pgo+PiBTaWduZWQtb2ZmLWJ5OiBSb21haW4gTmFvdXIgPHJvbWFpbi5uYW91ckBzbWlsZS5mcj4K
-Pj4gLS0tCj4+IMKgIHN1cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNrYWdlL3Rlc3RfbWRuc2QucHkg
-fCA0ICsrKysKPj4gwqAgMSBmaWxlIGNoYW5nZWQsIDQgaW5zZXJ0aW9ucygrKQo+Pgo+PiBkaWZm
-IC0tZ2l0IGEvc3VwcG9ydC90ZXN0aW5nL3Rlc3RzL3BhY2thZ2UvdGVzdF9tZG5zZC5weSBiL3N1
-cHBvcnQvdGVzdGluZy8KPj4gdGVzdHMvcGFja2FnZS90ZXN0X21kbnNkLnB5Cj4+IGluZGV4IDIx
-NGVlYTdkZDkuLmViYjg5NzFlMzggMTAwNjQ0Cj4+IC0tLSBhL3N1cHBvcnQvdGVzdGluZy90ZXN0
-cy9wYWNrYWdlL3Rlc3RfbWRuc2QucHkKPj4gKysrIGIvc3VwcG9ydC90ZXN0aW5nL3Rlc3RzL3Bh
-Y2thZ2UvdGVzdF9tZG5zZC5weQo+PiBAQCAtMjMsNiArMjMsMTAgQEAgY2xhc3MgVGVzdE1kbnNk
-KGluZnJhLmJhc2V0ZXN0LkJSVGVzdCk6Cj4+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgICItbmV0IiwgInVz
-ZXIiXSkKPj4gwqDCoMKgwqDCoMKgwqDCoMKgIHNlbGYuZW11bGF0b3IubG9naW4oKQo+PiDCoCAr
-wqDCoMKgwqDCoMKgwqAgIyBSZXN0YXJ0IG1kbnNkIGFmdGVyIHNldHRpbmcgdGhlIGRhdGUgaW4g
-ZW11bGF0b3IubG9naW4oKSBzZXR1cC4KPj4gK8KgwqDCoMKgwqDCoMKgIGNtZCA9ICIvZXRjL2lu
-aXQuZC9TNTBtZG5zZCByZXN0YXJ0Igo+PiArwqDCoMKgwqDCoMKgwqAgc2VsZi5hc3NlcnRSdW5P
-ayhjbWQsIHRpbWVvdXQ9MzApCj4+ICsKPj4gwqDCoMKgwqDCoMKgwqDCoMKgICMgV2UgY2hlY2sg
-dGhlIHByb2dyYW0gY2FuIGV4ZWN1dGUuCj4+IMKgwqDCoMKgwqDCoMKgwqDCoCBzZWxmLmFzc2Vy
-dFJ1bk9rKCJtZG5zZCAtdiIpCj4+IMKgIAo+IAoKX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVp
-bGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9i
-dWlsZHJvb3QK
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/32b4f3f942a26476da9533cb11afdeb5a27861ba
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+
+x86 and x86_64 kernels >= 6.15 now requires ssp toolchain support
+when CONFIG_STACKPROTECTOR is enabled [1].
+
+For toolchains without SSP support, make sure to disable
+CONFIG_STACKPROTECTOR to avoid link issues when building kernel
+modules.
+
+  MODPOST Module.symvers
+  ERROR: modpost: "__stack_chk_guard" [drivers/<module>.ko] undefined!
+
+While the SSP support is mandatory for glibc and musl based toolchains
+[2], it's still optional for uClibc-ng based toolchains and not enabled
+by default when building a new toolchain.
+
+The Toolchain builder project enabled recently the SSP support for all
+uClibc toolchains [3] to avoid such issue.
+
+But x86 (32bits) musl based toolchains lack of SSP support due to a
+long term gcc issue [4]. For a decade Alpine Linux, OpenWRT and Yocto
+povide additional gcc and musl patches to workaround the gcc issue [5]
+
+We may consider in the long term removing the support for toolchains
+without SSP and doing so removing x86 (32bits) musl toolchain.
+
+Fixes:
+https://gitlab.com/buildroot.org/toolchains-builder/-/jobs/15832356731 (x86-64--uclibc--bleeding-edge_test)
+https://gitlab.com/buildroot.org/toolchains-builder/-/jobs/15832356104 (x86-64--uclibc--stable_test)
+
+https://gitlab.com/buildroot.org/toolchains-builder/-/jobs/15832355429 (x86-64-core-i7--uclibc--bleeding-edge_test)
+https://gitlab.com/buildroot.org/toolchains-builder/-/jobs/15832354341 (x86-64-core-i7--uclibc--stable_test)
+
+https://gitlab.com/buildroot.org/toolchains-builder/-/jobs/15832326525 (x86-64-v2--uclibc--bleeding-edge_test)
+https://gitlab.com/buildroot.org/toolchains-builder/-/jobs/15832316220 (x86-64-v2--uclibc--stable_test)
+
+https://gitlab.com/buildroot.org/toolchains-builder/-/jobs/15819139512 (x86-i686--uclibc--stable_test)
+https://gitlab.com/buildroot.org/toolchains-builder/-/jobs/15819139511 (x86-i686--uclibc--bleeding-edge_test)
+
+https://gitlab.com/buildroot.org/toolchains-builder/-/jobs/15819139510 (x86-i686--musl--stable_test)
+https://gitlab.com/buildroot.org/toolchains-builder/-/jobs/15819139509 (x86-i686--musl--bleeding-edge_test)
+
+https://gitlab.com/buildroot.org/toolchains-builder/-/jobs/15819139506 (x86-core2--uclibc--stable_test)
+https://gitlab.com/buildroot.org/toolchains-builder/-/jobs/15819139505 (x86-core2--uclibc--bleeding-edge_test)
+
+https://gitlab.com/buildroot.org/toolchains-builder/-/jobs/15819139504 (x86-core2--musl--stable_test)
+https://gitlab.com/buildroot.org/toolchains-builder/-/jobs/15819139503 (x86-core2--musl--bleeding-edge_test)
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=0ee2689b9374d6fd5f43b703713a53227
+[2] e811f5154944147e4fceb8d199321aba91070587
+[3] https://gitlab.com/buildroot.org/toolchains-builder/-/commit/90413f665735e1786cca2403cd1ff997920c99ae
+[4] https://www.openwall.com/lists/musl/2016/12/04/2
+[5] https://git.alpinelinux.org/aports/tree/main/musl/APKBUILD#n65
+    https://git.alpinelinux.org/aports/tree/main/gcc/0018-Alpine-musl-package-provides-libssp_nonshared.a.-We-.patch
+    https://github.com/openwrt/openwrt/blob/v25.12.5/toolchain/gcc/patches-15.x/230-musl_libssp.patch
+    https://github.com/openwrt/openwrt/blob/v25.12.5/toolchain/musl/patches/200-add_libssp_nonshared.patch
+    https://github.com/openembedded/openembedded-core/commit/77fb841f2e747dc7fb5e9234d870a7a32a74d09b
+
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ linux/linux.mk | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/linux/linux.mk b/linux/linux.mk
+index e790daff66..e3c89282fe 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -419,6 +419,17 @@ define LINUX_KCONFIG_FIXUP_CMDS_ROOTFS_CPIO
+ endef
+ endif
+ 
++# Since kernel >= 6.15.y, x86 and x86_64 kernels requires a toolchain
++# with SSP support when CONFIG_STACKPROTECTOR is enabled.
++# For toolchains without SSP support, make sure to disable
++# CONFIG_STACKPROTECTOR to avoid link issues when building kernel
++# modules.
++ifeq ($(BR2_i386)$(BR2_x86_64):$(BR2_TOOLCHAIN_HAS_SSP),y:)
++define LINUX_FIXUP_CONFIG_STACKPROTECTOR
++	$(call KCONFIG_DISABLE_OPT,CONFIG_STACKPROTECTOR)
++endef
++endif
++
+ define LINUX_KCONFIG_FIXUP_CMDS
+ 	@$(call MESSAGE,"Updating kernel config with fixups")
+ 	$(if $(LINUX_NEEDS_MODULES),
+@@ -429,6 +440,7 @@ define LINUX_KCONFIG_FIXUP_CMDS
+ 	)
+ 	$(LINUX_FIXUP_CONFIG_ENDIANNESS)
+ 	$(LINUX_FIXUP_CONFIG_PAHOLE_CHECK)
++	$(LINUX_FIXUP_CONFIG_STACKPROTECTOR)
+ 	$(if $(BR2_arm)$(BR2_armeb),
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_AEABI))
+ 	$(if $(BR2_powerpc)$(BR2_powerpc64)$(BR2_powerpc64le),
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
