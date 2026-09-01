@@ -1,67 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA8FCC61DD6
-	for <buildroot@archiver.kernel.org>; Tue,  1 Sep 2026 21:19:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C990AC61DD6
+	for <buildroot@archiver.kernel.org>; Tue,  1 Sep 2026 21:19:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9098940831;
-	Tue,  1 Sep 2026 21:19:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 87B4B60802;
+	Tue,  1 Sep 2026 21:19:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VNRQedyBqY6F; Tue,  1 Sep 2026 21:18:59 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id w_HgoCSKyPu1; Tue,  1 Sep 2026 21:19:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1788297539;
-	bh=tRW7T8pibxIPppt1Wlu5Rqt4oWozfCMoiEfnXtKo10s=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=FmFJlrtFpCSwHenTa4vab93Watvbs0jYdXFqlsYCA1sHaI1qujQykyfKOiqeG/DbE
-	 INoox9I/6UQwwcdbogMvtYEr5re25e4qrMsXqzRIF1m43Tn76x8qSwlY/FgGaVtG9D
-	 KHPGyyDQYWIEQ9FemuUYG5ibpgzXrcEhiSttHa217YEg5KbyuyR67FSlo/Fj2hzK6y
-	 HQVe7pKuUfeO8Qxx3HlCj5srxCISqlF0ILeJPnHS4SKbGOQGQQ7C7TA5XLp6L2kzBh
-	 NLsv2PD0hp3GYPKeLFCdNlxS4+ib69GCbxnWONy8UEEYatj2X4X3h+QeUIA6by8wAU
-	 hGIwda+BwHIQg==
+	s=default; t=1788297598;
+	bh=JBtVa7Keur0MotiTRsom3vPXHZg3s5jn9luAgejnTWU=;
+	h=Date:From:To:Cc:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=J8I5cPYh7Axr1KzzBg3WEtsxG4gGKH99WOBFDRBOy06vlbldOxdODUM7jaNduibOH
+	 a7UPWuiyLOh/bfYyE8r2dOpw4NyDlc1iQQUc5ZVdSlK3lzGxIkwDpwd68jWh27Yz76
+	 DlBzjFQZ4MP1kJVwdLEIZhuOuPalviLJ5YcfGPFH3NNt9vuhAHFHE/jsbwc6UbWX5z
+	 GdW3pxoacEsRG4JeUtZqVi1BMXevhWgrgzbfzIhM3s/9C1A33ADAcT2N5VDO62V8W8
+	 ifdjSA7PWnpOG+vf6Y3iDNEKkuMfpLzzcXKRy+jKaOxuttjdVbhsqjzBJ6gv+zwFyR
+	 cwsZdToXGhskg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9DC6D40A1B;
-	Tue,  1 Sep 2026 21:18:59 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id F2C222FE
- for <buildroot@buildroot.org>; Tue,  1 Sep 2026 21:18:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A63806080E;
+	Tue,  1 Sep 2026 21:19:58 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id AEAC3127
+ for <buildroot@buildroot.org>; Tue,  1 Sep 2026 21:19:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E4AFF40143
- for <buildroot@buildroot.org>; Tue,  1 Sep 2026 21:18:57 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 94DB86080E
+ for <buildroot@buildroot.org>; Tue,  1 Sep 2026 21:19:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yD4NwVvf70JQ for <buildroot@buildroot.org>;
- Tue,  1 Sep 2026 21:18:57 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 934104011D
- for <buildroot@buildroot.org>; Tue,  1 Sep 2026 21:18:56 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id 6B59D13F86E;
- Tue,  1 Sep 2026 23:18:51 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Tue, 01 Sep 2026 23:18:51 +0200
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RROHA6Yw-oGz for <buildroot@buildroot.org>;
+ Tue,  1 Sep 2026 21:19:56 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.238.66.15;
+ helo=helium.openadk.org; envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
+Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none) header.from=openadk.org
+Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 897E760802
+ for <buildroot@buildroot.org>; Tue,  1 Sep 2026 21:19:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=openadk.org; s=2022;
+ t=1788297593; bh=8tTpGORgPceGjNyzCMuXuz9sqZ5bX8FD7c3vGZNyg0c=;
+ h=Date:From:To:Cc:Subject:From;
+ b=tDLnmrpWpvzV7DVTOdmFxmA7dpb4N6fgkGbrRBpEsWAuPwSLcMom83fN1ugZX0Sj7
+ JI3HBqyFwBQ8rcISqvczDrFbvL6mI43TSuY/xuVFEjZfCpP0UD7cj4FWBxwOnWWys0
+ ecYWyCwQsly/ZTs2GzJ/jYCZfVsjZmdmLPYu6E5QTTwuCGSOO0POaqUwnPizDCxv7R
+ joetXmYKdtMfqwqf1Zvv0/CamZGaw0Jj/A8kW8Bz82IwmBi7H1UV7Aee5Q7XwaIA4a
+ zG17PXy04dWwXxAg/229YkE1OWiDMtt5n5oNxDTtNeMEpzhQgwYvxBwnbCkKZrWzAl
+ wE4yzJCXHNp1w==
+Received: by helium.openadk.org (Postfix, from userid 1000)
+ id EEFC931E0CF9; Tue, 01 Sep 2026 23:19:53 +0200 (CEST)
+Date: Tue, 1 Sep 2026 23:19:53 +0200
+From: Waldemar Brodkorb <wbx@openadk.org>
+To: buildroot@buildroot.org
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Christian Stewart <christian@aperture.us>
+Message-ID: <apdBeSPwf13pL2Cy@waldemar-brodkorb.de>
 MIME-Version: 1.0
-Date: Tue, 01 Sep 2026 23:18:51 +0200
-To: Romain Naour <romain.naour@smile.fr>
-Cc: buildroot@buildroot.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-In-Reply-To: <20260827212125.1988552-1-romain.naour@smile.fr>
-References: <20260827212125.1988552-1-romain.naour@smile.fr>
-User-Agent: Webmail Free/1.6.18
-Message-ID: <21d24a056be82c542efc4fad639d9d5b@free.fr>
-X-Sender: ju.o@free.fr
-Subject: Re: [Buildroot] [PATCH] linux: disable SSP support when needed
+Content-Disposition: inline
+X-Operating-System: Linux 6.12.96+deb13-amd64 x86_64
+Subject: [Buildroot] [PATCH v2] package/runc: enable uClibc support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -73,94 +78,105 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 27/08/2026 23:21, Romain Naour via buildroot wrote:
-> x86 and x86_64 kernels >= 6.15 now requires ssp toolchain support
-> when CONFIG_STACKPROTECTOR is enabled [1].
-> 
-> For toolchains without SSP support, make sure to disable
-> CONFIG_STACKPROTECTOR to avoid link issues when building kernel
-> modules.
-> 
->   MODPOST Module.symvers
->   ERROR: modpost: "__stack_chk_guard" [drivers/<module>.ko] undefined!
-> 
-> While the SSP support is mandatory for glibc and musl based toolchains
-> [2], it's still optional for uClibc-ng based toolchains and not enabled
-> by default when building a new toolchain.
-> 
-> The Toolchain builder project enabled recently the SSP support for all
-> uClibc toolchains [3] to avoid such issue.
-> 
-> But x86 (32bits) musl based toolchains lack of SSP support due to a
-> long term gcc issue [4]. For a decade Alpine Linux, OpenWRT and Yocto
-> povide additional gcc and musl patches to workaround the gcc issue [5]
-> 
-> We may consider in the long term removing the support for toolchains
-> without SSP and doing so removing x86 (32bits) musl toolchain.
-> 
-> Fixes:
-> https://gitlab.com/buildroot.org/toolchains-builder/-/jobs/15832356731 
-> (x86-64--uclibc--bleeding-edge_test)
-> https://gitlab.com/buildroot.org/toolchains-builder/-/jobs/15832356104 
-> (x86-64--uclibc--stable_test)
-> 
-> https://gitlab.com/buildroot.org/toolchains-builder/-/jobs/15832355429 
-> (x86-64-core-i7--uclibc--bleeding-edge_test)
-> https://gitlab.com/buildroot.org/toolchains-builder/-/jobs/15832354341 
-> (x86-64-core-i7--uclibc--stable_test)
-> 
-> https://gitlab.com/buildroot.org/toolchains-builder/-/jobs/15832326525 
-> (x86-64-v2--uclibc--bleeding-edge_test)
-> https://gitlab.com/buildroot.org/toolchains-builder/-/jobs/15832316220 
-> (x86-64-v2--uclibc--stable_test)
-> 
-> https://gitlab.com/buildroot.org/toolchains-builder/-/jobs/15819139512 
-> (x86-i686--uclibc--stable_test)
-> https://gitlab.com/buildroot.org/toolchains-builder/-/jobs/15819139511 
-> (x86-i686--uclibc--bleeding-edge_test)
-> 
-> https://gitlab.com/buildroot.org/toolchains-builder/-/jobs/15819139510 
-> (x86-i686--musl--stable_test)
-> https://gitlab.com/buildroot.org/toolchains-builder/-/jobs/15819139509 
-> (x86-i686--musl--bleeding-edge_test)
-> 
-> https://gitlab.com/buildroot.org/toolchains-builder/-/jobs/15819139506 
-> (x86-core2--uclibc--stable_test)
-> https://gitlab.com/buildroot.org/toolchains-builder/-/jobs/15819139505 
-> (x86-core2--uclibc--bleeding-edge_test)
-> 
-> https://gitlab.com/buildroot.org/toolchains-builder/-/jobs/15819139504 
-> (x86-core2--musl--stable_test)
-> https://gitlab.com/buildroot.org/toolchains-builder/-/jobs/15819139503 
-> (x86-core2--musl--bleeding-edge_test)
-> 
-> [1] 
-> https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=0ee2689b9374d6fd5f43b703713a53227
-> [2] e811f5154944147e4fceb8d199321aba91070587
-> [3] 
-> https://gitlab.com/buildroot.org/toolchains-builder/-/commit/90413f665735e1786cca2403cd1ff997920c99ae
-> [4] https://www.openwall.com/lists/musl/2016/12/04/2
-> [5] https://git.alpinelinux.org/aports/tree/main/musl/APKBUILD#n65
->     
-> https://git.alpinelinux.org/aports/tree/main/gcc/0018-Alpine-musl-package-provides-libssp_nonshared.a.-We-.patch
->     
-> https://github.com/openwrt/openwrt/blob/v25.12.5/toolchain/gcc/patches-15.x/230-musl_libssp.patch
->     
-> https://github.com/openwrt/openwrt/blob/v25.12.5/toolchain/musl/patches/200-add_libssp_nonshared.patch
->     
-> https://github.com/openembedded/openembedded-core/commit/77fb841f2e747dc7fb5e9234d870a7a32a74d09b
-> 
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Signed-off-by: Romain Naour <romain.naour@smile.fr>
+fexecve was added to uClibc in 2019 in commit
+858ffad217076227089cc17eb832db0bd1497792.
 
-Applied to master, thanks.
+Also containerd and docker can be used with uClibc.
+
+Runtime tested on a Raspberry PI4 (64 Bit).
+System compiled with Bootlin Toolchain.
+
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+v1 -> v2:
+  - fix comment in runc Config.in (Thomas Petazzoni)
+  - also check recursive dependencies - I already
+  had that prepared while testing docker on my rpi.
+  (Thomas Petazzoni)
+---
+ package/containerd/Config.in    | 5 ++---
+ package/docker-engine/Config.in | 4 +---
+ package/runc/Config.in          | 5 ++---
+ 3 files changed, 5 insertions(+), 9 deletions(-)
+
+diff --git a/package/containerd/Config.in b/package/containerd/Config.in
+index 9712b11b1c..1f9cf5b1b4 100644
+--- a/package/containerd/Config.in
++++ b/package/containerd/Config.in
+@@ -3,7 +3,6 @@ config BR2_PACKAGE_CONTAINERD
+ 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	depends on !BR2_TOOLCHAIN_USES_UCLIBC # runc
+ 	depends on BR2_USE_MMU # util-linux
+ 	select BR2_PACKAGE_HOST_GO
+ 	select BR2_PACKAGE_RUNC if !BR2_PACKAGE_CRUN # runtime dependency
+@@ -62,8 +61,8 @@ config BR2_PACKAGE_CONTAINERD_CRI
+ 
+ endif
+ 
+-comment "containerd needs a glibc or musl toolchain w/ threads"
++comment "containerd needs a toolchain w/ threads"
+ 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_USES_UCLIBC
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/docker-engine/Config.in b/package/docker-engine/Config.in
+index 541472d957..37d7f7928d 100644
+--- a/package/docker-engine/Config.in
++++ b/package/docker-engine/Config.in
+@@ -4,7 +4,6 @@ config BR2_PACKAGE_DOCKER_ENGINE
+ 	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_2
+-	depends on !BR2_TOOLCHAIN_USES_UCLIBC # containerd -> runc
+ 	depends on BR2_USE_MMU # containerd
+ 	depends on !BR2_PACKAGE_CGROUPFS_MOUNT
+ 	depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS # libseccomp
+@@ -79,11 +78,10 @@ config BR2_PACKAGE_DOCKER_ENGINE_DOCKER_INIT_NAME
+ 
+ endif
+ 
+-comment "docker-engine needs a glibc or musl toolchain w/ threads, headers >= 5.2"
++comment "docker-engine needs a toolchain w/ threads, headers >= 5.2"
+ 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
+ 	depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
+-		BR2_TOOLCHAIN_USES_UCLIBC || \
+ 		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_2
+ 	depends on BR2_USE_MMU
+diff --git a/package/runc/Config.in b/package/runc/Config.in
+index 73eac72527..4c6664d6f7 100644
+--- a/package/runc/Config.in
++++ b/package/runc/Config.in
+@@ -3,7 +3,6 @@ config BR2_PACKAGE_RUNC
+ 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	depends on !BR2_TOOLCHAIN_USES_UCLIBC # no fexecve
+ 	select BR2_PACKAGE_HOST_GO
+ 	help
+ 	  runC is a CLI tool for spawning and running containers
+@@ -11,7 +10,7 @@ config BR2_PACKAGE_RUNC
+ 
+ 	  https://github.com/opencontainers/runc
+ 
+-comment "runc needs a glibc or musl toolchain w/ threads"
++comment "runc needs a toolchain w/ threads"
+ 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS && \
+ 		BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_USES_UCLIBC
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+-- 
+2.47.3
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
