@@ -4,81 +4,112 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49134C61DD6
-	for <buildroot@archiver.kernel.org>; Tue,  1 Sep 2026 06:41:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B39B3C61DD6
+	for <buildroot@archiver.kernel.org>; Tue,  1 Sep 2026 07:01:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 44F5C4030F;
-	Tue,  1 Sep 2026 06:41:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0999140683;
+	Tue,  1 Sep 2026 07:01:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7eZ15Pv6rxOC; Tue,  1 Sep 2026 06:41:14 +0000 (UTC)
+ id vbZ1j-HgS4fm; Tue,  1 Sep 2026 07:01:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1788244874;
-	bh=bwViwrRJ+XeHBG6HIrANPYiGFHwJwLxe9jvXtM+DD5Y=;
-	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
+	s=default; t=1788246092;
+	bh=dU7pyLwNCCSFFwxFe6kI1P0uMQxM3Hi0jWwx9ori1UE=;
+	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=BQiTISJDYZEc+O2baZtqb5XiWDpcLl5hnM0Z33I8YocBPssgDKtO6fRuE/2N58YpB
-	 sLT/3iioaEuQqRIxBblcwLsmieoj2tQ7zFnwF9GTrDBe0C2iLk91kKlAAbmin9E+e6
-	 gYXXTAwx/kREn/hr1CMCGksd3sSns4LxEo7w8sPvcvx+htLcdmAg19ivTRSe1NK99r
-	 paOH916Vcf7oN11/Zbn/6MOGZlrUfJoZzsZfkNm2lJHDiu0pEaoXguPxunoowTPwtx
-	 4dVPC2L6xjlieg7A14cg+oy6Q6UcWJFJ/TET/toEu/FdxqkrIN94OhNUWyi/wnIBWY
-	 ye2SE9hVqdG5Q==
+	b=RzDGyYM5xK5pIBRRD8uNj8ci+4dw+pTUZFN3iYRRAV7WRdTv4sYrsjWucb764tL+k
+	 lnNxwUJYAfVXF8oZaLU8pmy9zxq4WpzQnzWWvXU+tSlfO9AxoJ2rqBhCk5rw+4ON/S
+	 MjTBQUhTZjBgUav/3WN8QWDWfh62OC03wOLf9giwhWzJzW/uKZxbCNjNJ4KthvGFb7
+	 dfiKhhjrzexSzvb0DZnaaMqBmEpQwsm4ZPItr9Fx61FzCIakIahP4VgP26qZF8Qr/F
+	 EDl3LLd2KZU4OnnvTd/6RiFyR2d4GI6w4btQCf6FduFuvrhCZhHUAK6/s58cAzSoEa
+	 IZU/8W49RdF+g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0F4484029B;
-	Tue,  1 Sep 2026 06:41:14 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 5F05B377
- for <buildroot@buildroot.org>; Tue,  1 Sep 2026 06:41:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 69A684064E;
+	Tue,  1 Sep 2026 07:01:32 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4A048127
+ for <buildroot@buildroot.org>; Tue,  1 Sep 2026 07:01:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 50C1840061
- for <buildroot@buildroot.org>; Tue,  1 Sep 2026 06:41:13 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 227F880AFB
+ for <buildroot@buildroot.org>; Tue,  1 Sep 2026 07:01:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Bt4HZ0MPEsx7 for <buildroot@buildroot.org>;
- Tue,  1 Sep 2026 06:41:12 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
- receiver=<UNKNOWN> 
-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none) header.from=korsgaard.com
-Authentication-Results: smtp2.osuosl.org; dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail2 header.b=Y+2WcKnU
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C3D274013B
- for <buildroot@buildroot.org>; Tue,  1 Sep 2026 06:41:10 +0000 (UTC)
-DKIM-Signature: a=rsa-sha256;
- b=Y+2WcKnUU3C7/h+FU8fIOKKRtQbwc/phUjE1rcI7O3t3qHA+yYxHD6dP+vuvm007CSABnRViL/RraBQ/5UsuMIqPeM4ALxYrT+55IjhnIeMdj2fReAMcs9YqoHDK+KbqraIk6l5bEsk7vmGa1v+7zfMZ9tu00K/RUdv9nJ0Z0rpnPEwEA06KJXANxzyzZEexPQqbornjSk22iK46KwrABvs8lA+c6JB+IONaMEtDjDdGUUbPD6pu7WN8+hmz6ADBaRrrU6oroMozWFxo47Dusw3wZfH2BYJHPEUjnuEx/E7HRK0ET+gZ/7eViP6GDo3Xj2A7WmlQB0t4x6hRgIvtnA==;
- s=purelymail2; d=purelymail.com; v=1;
- bh=AhkZ93ijIZfwa2osvRWslkl6I3VrKWp4Thrf/gzbb2o=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1710549187; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Tue, 01 Sep 2026 06:41:06 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peter@korsgaard.com>) id 1x1IB7-00000002o6j-1SUK;
- Tue, 01 Sep 2026 08:41:05 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Fiona Klute <fiona.klute@gmx.de>
-Cc: Fiona Klute via buildroot <buildroot@buildroot.org>
-In-Reply-To: <76f38e09-f5c4-4b0c-8397-01061d7fbced@gmx.de> (Fiona Klute's
- message of "Mon, 31 Aug 2026 23:10:21 +0200")
-References: <20260831125103.841338-1-fiona.klute@gmx.de>
- <87mru2je25.fsf@dell.be.48ers.dk>
- <76f38e09-f5c4-4b0c-8397-01061d7fbced@gmx.de>
-Date: Tue, 01 Sep 2026 08:41:05 +0200
-Message-ID: <878q5lh3su.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tbe-RX7Teaky for <buildroot@buildroot.org>;
+ Tue,  1 Sep 2026 07:01:30 +0000 (UTC)
+Received-SPF: Permerror (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::42f; helo=mail-wr1-x42f.google.com;
+ envelope-from=rhidian.dewit@openpixelsystems.org; receiver=<UNKNOWN> 
+Authentication-Results: smtp1.osuosl.org; dmarc=none (p=none dis=none)
+ header.from=openpixelsystems.org
+Authentication-Results: smtp1.osuosl.org; dkim=pass (2048-bit key,
+ unprotected) header.d=openpixelsystems.org header.i=@openpixelsystems.org
+ header.a=rsa-sha256 header.s=google header.b=O+hqUheb
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
+ [IPv6:2a00:1450:4864:20::42f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8E45480ACC
+ for <buildroot@buildroot.org>; Tue,  1 Sep 2026 07:01:26 +0000 (UTC)
+Received: by mail-wr1-x42f.google.com with SMTP id
+ ffacd0b85a97d-484415c8cb1so611667f8f.2
+ for <buildroot@buildroot.org>; Tue, 01 Sep 2026 00:01:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=openpixelsystems.org; s=google; t=1788246084; x=1788850884;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to:content-type;
+ bh=OvgbWpxcp7PFFd0UukUIMj68njTEp9ZCeg6Qq9uyh7A=;
+ b=O+hqUheb46p4n19QqBg1lNnIGgHyb2S2NgY7LgDGMzZcxemZovQSjLFliHidSZlVk2
+ Ij2hPErdv6W+OeQJYa8G+VoXIL+LZXsnvJLncspCugDgsdh7ObBKRfMIDyz02RdHyTCP
+ hk+EXVNDHH5g8kuTUOEtqZU5ffwPBWn9WRk9+ItSplRtY1D2/TaiSfqmJwv04GE3uH7g
+ xLBO2KNo8salSB6AqzbbdNUQ4QQfPix1qdKyw6MFAVT2kXDlQnRuYbfhnxGHlC7XqAT2
+ nEgLn2oK96EtKUWCzAeQ64ODecbWn0VaZgCDRHvwDWRwrw4ioHU+4yetrlmhVdc3nC8I
+ uiag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20251104; t=1788246084; x=1788850884;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to:content-type;
+ bh=OvgbWpxcp7PFFd0UukUIMj68njTEp9ZCeg6Qq9uyh7A=;
+ b=J4/A1Ah5FlW35Hvmp5xQ8LZSnbIxr6B6gTBJW5Mp8XJXpxWm+AwM5a5TgBux4aCr/F
+ 4VY262U0qnRWVD9ODqErmg13e+oZ45O85eg3pLy+lgGkTctkOeCtOLdk7tnG5hgm4yGz
+ VdN3jbO6joqbfKdQm3F9yt5zDH2Tw0fFa3/ZNmcmXnFqkfSF2UIwokHGg8J2Sbj790Vz
+ /UKTIEP6KaIJX38wvFjcXbwJ1MS/WZ0ZaUPY1QOuF3H3i/6n9DAK8hGOIA+1FmoHuooN
+ Ku2FlpVbpbtGHDXg2bYtK7ifAnuBqEk9ocSMUwH/CAeFQ6cI6fl8S5mtZvcSH43CHHqm
+ t8Kw==
+X-Gm-Message-State: AFuF++lvlGjxKTUFWQ+Uj5AN1/pvmxG4rjnZXcc7lLSqxQHKBMaqC8kC
+ rwJOS7KsZGj/gTb2EgA9/mPudlikPLcPWL8sMZcIsKKo37tkgpEJ7mkTFS6Cw7OTQzscKlmz/8k
+ jP7zt
+X-Gm-Gg: AYBFou2imaIzrcHmyRcxxC6MWu2ykp7ECJwdwCQ5d5CTQ1Fny3LR+eP6KH0hSlcSGKa
+ aFfoCP1FUw+jD1PKb4GkV5LVTtoHwxBIH8UboYm0rqSWoSWkJF37a1+fvDdoz0LnOXxpxEE3ScB
+ UT7neUH+euETJU3XknyutjdHM3qGvt6mu7WdrREjuQd8JvQa6IXsKTP83reDcpYhgPaic5mB1MG
+ xFgFuy/gm8aShdYwNWR4tB3DFpkvLsPnPy9V5SzgZZEDBACHF9s3y/ezQhYd98WB7cI81S53Cu9
+ YdPd/G8YOsJS1EgPYBi6obgxOoI5Q4RmRw3fMjKC9T6lu5lepJlv1PuK8oIXPBtuYfkKsQWeNDU
+ 6hKb2hTXKy0MKd11IuAGvSDCIP5Bcem0/l9dc8xM2gSruS4rvj4QJ7TXfb/lLnTGkd71c+cym0h
+ KbZRzqWN6DWb/dn7Fpq6HRufSYAQ8szYsH12Oflk8LkqNiYKF/0k79pFvmWd/YhqgkwUw3KecTG
+ 0sNhU1bjhIvPHKVXOJzfdXaMin7T80AKGNEKJ5bwelKL1af8RbC7I8EgTiLOOkq
+X-Received: by 2002:a5d:4985:0:b0:484:372b:9524 with SMTP id
+ ffacd0b85a97d-48440ffe6a0mr8879352f8f.18.1788246084088; 
+ Tue, 01 Sep 2026 00:01:24 -0700 (PDT)
+Received: from titanium.opsys.org (253.124-78-194.adsl-static.isp.belgacom.be.
+ [194.78.124.253]) by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-48442d78a0bsm2850052f8f.28.2026.09.01.00.01.23
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 01 Sep 2026 00:01:23 -0700 (PDT)
+From: Rhidian De Wit <rhidian.dewit@openpixelsystems.org>
+To: buildroot@buildroot.org
+Cc: Rhidian De Wit <rhidian.dewit@openpixelsystems.org>
+Date: Tue,  1 Sep 2026 09:00:57 +0200
+Message-ID: <20260901070113.831292-2-rhidian.dewit@openpixelsystems.org>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20260901070113.831292-1-rhidian.dewit@openpixelsystems.org>
+References: <20260901070113.831292-1-rhidian.dewit@openpixelsystems.org>
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH next 1/3] fs/common.mk: add optional hook to
- build a verity hash tree
+Subject: [Buildroot] [PATCH] Avoid double-free on x86-64 systems with no
+ cmdline set
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -90,40 +121,68 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Pj4+Pj4gIkZpb25hIiA9PSBGaW9uYSBLbHV0ZSA8ZmlvbmEua2x1dGVAZ214LmRlPiB3cml0ZXM6
-CgpIaSwKCiA+IEhvdyBhYm91dCBhbiBfRVhUUkFfQVJHUyBvcHRpb24/IEkgdGhpbmsgYWRkaW5n
-IG9wdGlvbnMgZm9yIGFsbAogPiBwb3NzaWJsZSBwYXJhbWV0ZXJzIHdvdWxkIGJlIGEgbG90IG9m
-IGNvZGUgZm9yIGxpdHRsZSBnYWluLgoKUG9zc2libHksIGJ1dCBzaG91bGQgdGhhdCB0aGVuIGJl
-IHBlci1mcyBvciBnbG9iYWw/IEkgd29uZGVyIGlmIGl0IGlzCndvcnRoIHRoZSBjb21wbGV4aXR5
-IHRvIGFkZCB0aGlzIGxvZ2ljIHZlcnN1cyBob3cgZmFpcmx5IHNpbXBsZSBpdCBpcyB0bwpqdXN0
-IGRvIGl0IHdpdGggd2hhdGV2ZXIgb3B0aW9ucyB5b3Ugd2FudCBpbiBhIHBvc3QtaW1hZ2Ugc2Ny
-aXB0LgoKCiA+IEZvciBoYXNoIGFsZ29yaXRobSBhIHNwZWNpZmljIG9wdGlvbiBtaWdodCBzZW5z
-ZSBpZiB3ZSBjb3VsZCB1c2UgdGhhdAogPiB0byBlbnN1cmUgdGhlIG1hdGNoaW5nIGhhc2ggaXMg
-ZW5hYmxlZCBpbiB0aGUga2VybmVsLiBCdXQgdGhhdCdkCiA+IHJlcXVpcmUgYWRkaW5nIExJTlVY
-X0NPTkZJR19GSVhVUFMgaW5mcmFzdHJ1Y3R1cmUgZm9yIGZzLywgbm90IHN1cmUgaWYKID4gd29y
-dGggaXQ/IFRob3VnaCBlbmFibGluZyBmaWxlc3lzdGVtcyBzZWxlY3RlZCBmb3Igcm9vdGZzIGlu
-IHRoZQogPiBrZXJuZWwgY291bGQgYmUgdXNlZnVsLCB0b28gKEkndmUgYmVlbiB0aGVyZSwgY2hh
-bmdlZCByb290ZnMgYW5kCiA+IGZvcmdvdCB0byBlbmFibGUgaXQgaW4gdGhlIGtlcm5lbCDigJMg
-bm90IG9mdGVuLCBidXQgaXQgaGFwcGVucykuCgpJIHdvdWxkIGJlIE9LIHdpdGggdGhhdC4gVGhl
-c2UgZml4dXBzIGFyZSBhIGJpdCBpY2t5IHRob3VnaCBhcyB3ZSBkbyBub3QKa25vdyB3aGF0IGtl
-cm5lbCB2ZXJzaW9uIHdpbGwgYmUgdXNlZCBhbmQgdGhlIGRlcGVuZGVuY2llcyBtYXkgY2hhbmdl
-Cm92ZXIgdGltZSAtIFNvIG1haW50ZW5hbmNlIGFuZCB0ZXN0aW5nIGlzIG5vdCBzbyB0cml2aWFs
-LgoKCiA+IFRoZSBvbmUgcmVhc29uIEkgY2FuIGltYWdpbmUgd2FudGluZyB0byBzZXQgdXVpZC9z
-YWx0IGlzIGlmIHNvbWVvbmUKID4gd2FudHMgYSBieXRlLWlkZW50aWNhbCB2ZXJpdHkgcGFydGl0
-aW9uLiBmcy9lcm9mcyBzZXRzIGFsbC16ZXJvIFVVSUQsCiA+IHdoaWNoIHdlIGNvdWxkIGRvIGZv
-ciB2ZXJpdHkgdG9vLCBidXQgSSdtIG5vdCBzdXJlIHdoYXQgdGhlIHNlY3VyaXR5CiA+IGltcGxp
-Y2F0aW9ucyBvZiBhIGZpeGVkIChvciBwc2V1ZG9yYW5kb20/KSBzYWx0IHdvdWxkIGJlLgoKWWVz
-LCBpdCBpcyBhbHNvIG9ubHkgaW4gdGhlIGNvbnRleHQgb2YgcmVwcm9kdWNpYmxlIGJ1aWxkcyB0
-aGF0IEkgaGF2ZQpldmVyIHVzZWQgYSBmaXhlZCB1dWlkL3NhbHQuCgpTZWN1cml0eSB3aXNlLCBh
-cyB0aGlzIGlzIGFib3V0IGhhc2hpbmcgcmF0aGVyIHRoYW4gZW5jcnlwdGlvbiBJICpUSElOSyoK
-aXQgaXMgZmluZSBhcyBsb25nIGFzIHRoZSBoYXNoaW5nIGFsZ29yaXRobSBpcyBzdHJvbmcgZW5v
-dWdoIChFLkcuIHlvdQp3b3VsZCBuZWVkIGZpbmQgc2FtZS1zaXplIGNvbGxpc2lvbnMpLgoKLS0g
-CkJ5ZSwgUGV0ZXIgS29yc2dhYXJkCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5v
-cmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290
-Cg==
+Upstream: https://github.com/rauc/rauc/pull/2028
+
+Signed-off-by: Rhidian De Wit <rhidian.dewit@openpixelsystems.org>
+---
+ ...i-slot-bootname-to-avoid-double-free.patch | 39 +++++++++++++++++++
+ 1 file changed, 39 insertions(+)
+ create mode 100644 package/rauc/0002-Duplicate-efi-slot-bootname-to-avoid-double-free.patch
+
+diff --git a/package/rauc/0002-Duplicate-efi-slot-bootname-to-avoid-double-free.patch b/package/rauc/0002-Duplicate-efi-slot-bootname-to-avoid-double-free.patch
+new file mode 100644
+index 0000000000..a062844659
+--- /dev/null
++++ b/package/rauc/0002-Duplicate-efi-slot-bootname-to-avoid-double-free.patch
+@@ -0,0 +1,39 @@
++From 1b17578e90b2929e1a7ed1f3eec8d3b5f663b673 Mon Sep 17 00:00:00 2001
++From: Rhidian De Wit <rhidian.dewit@openpixelsystems.org>
++Date: Fri, 21 Aug 2026 16:37:45 +0200
++Subject: [PATCH] Duplicate efi slot bootname to avoid double free
++
++Signed-off-by: Rhidian De Wit <rhidian.dewit@openpixelsystems.org>
++---
++ src/bootloaders/efi.c | 2 +-
++ test/bootchooser.c    | 1 +
++ 2 files changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/src/bootloaders/efi.c b/src/bootloaders/efi.c
++index 19224118..8b0cf820 100644
++--- a/src/bootloaders/efi.c
+++++ b/src/bootloaders/efi.c
++@@ -630,7 +630,7 @@ gchar *r_efi_get_current_bootname(RaucConfig *config, GError **error)
++ 	RaucSlot *slot = NULL;
++ 	while (g_hash_table_iter_next(&iter, NULL, (gpointer*) &slot)) {
++ 		if (g_strcmp0(slot->bootname, bootcurrent->name) == 0) {
++-			return slot->bootname;
+++			return g_strdup(slot->bootname);
++ 		}
++ 	}
++ 
++diff --git a/test/bootchooser.c b/test/bootchooser.c
++index 43c45397..c35a78f1 100644
++--- a/test/bootchooser.c
+++++ b/test/bootchooser.c
++@@ -970,6 +970,7 @@ bootname=system1\n";
++ 
++ 	bootname = r_boot_get_current_bootname(r_context()->config, "", &error);
++ 	g_assert_nonnull(bootname);
+++	g_clear_pointer(&bootname, g_free);
++ }
++ 
++ /* If the underlying 'efibootmgr --bootorder ...' call fails (e.g. the
++-- 
++2.51.0
++
+-- 
+2.51.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
