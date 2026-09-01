@@ -4,67 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17E3EC61DD6
-	for <buildroot@archiver.kernel.org>; Tue,  1 Sep 2026 20:51:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7DD5C61DD6
+	for <buildroot@archiver.kernel.org>; Tue,  1 Sep 2026 21:11:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C5C9540A40;
-	Tue,  1 Sep 2026 20:51:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 747B640A1F;
+	Tue,  1 Sep 2026 21:11:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id T7Dc1KokL2Tp; Tue,  1 Sep 2026 20:51:40 +0000 (UTC)
+ id RCb8pWl0vXe3; Tue,  1 Sep 2026 21:11:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1788295900;
-	bh=vHoROpdwXUajN54ddy3spKinaxCFJ+qKAFYhb3ALMEQ=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=hAT8i13pBfq5H/9iNasSMlqWb8uKspCyTcumlBol5MjKMJoKJhXVcRkuwRwNqzZ1w
-	 vOg+/3tkYyAL25I0ee9SuhLOcvfy28L9N7QU6idLQAXW7feS/LIDOxYlniOpjZtBT8
-	 zMFm1syI2rCkP7yqpV/7ZeHAhSEkJFDjfDCE3DVYpgrHr9YqgHTeHfqWaJvjFJq3o/
-	 LxTRZmNr75nFUE00ap5GMacD65xB45E00GuuUYAmr/2JIw5Rdv0uQkDUJsU9V1RjOR
-	 pKzCSqlw7Xolnatv0CvZYnst0zMP5LGaCfzWacCWhO1cx9MrkPqc6IL8cHJfGddRvb
-	 aMtsxjo0tXBrg==
+	s=default; t=1788297086;
+	bh=Ua4oPNPtaGik5SYprhJ2bc9Qk8VxzypNtpSB77/bYlk=;
+	h=Date:To:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=nov+11VtLduYZFjtOaZBHuqIC7wVZGyojtF7aML/D86gKrh+V6UrKRAytn49t+q81
+	 veUrg7vUT3k9WmWTdJ9j25EUqu++19Ht/7s5+2xJeGjethAy+DD0fTIPv3rnmx+feJ
+	 xFeEwTW6aDhJyOjbF17gaf581PuY2YiOC0rnZVyfizRuEjRZx2gBfczvSK3+HvBsXJ
+	 pzWkKhiuabGazeLl+7gAW3uXs8GhhHydQzWr5GfuA8e/yMXeMP0cOuSsEbUMhRVXrF
+	 /q5DsEemS/Sk91MLPspobjxLZKqdpsrVY4ZZpoj4SWOnPCwN8N35eN4Hw3rSZsubKj
+	 fDl5RhfX8gALQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0E70F40A29;
-	Tue,  1 Sep 2026 20:51:40 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 9FD272FD
- for <buildroot@buildroot.org>; Tue,  1 Sep 2026 20:51:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D3FB140822;
+	Tue,  1 Sep 2026 21:11:26 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 74704127
+ for <buildroot@buildroot.org>; Tue,  1 Sep 2026 21:11:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 909CD80ED8
- for <buildroot@buildroot.org>; Tue,  1 Sep 2026 20:51:38 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5AE0D60805
+ for <buildroot@buildroot.org>; Tue,  1 Sep 2026 21:11:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bcelg3XlWlWR for <buildroot@buildroot.org>;
- Tue,  1 Sep 2026 20:51:37 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
- helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xJoJCjOSK0zz for <buildroot@buildroot.org>;
+ Tue,  1 Sep 2026 21:11:24 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=109.224.244.102;
+ helo=mail-244102.protonmail.ch; envelope-from=benjamin8532@protonmail.com;
  receiver=<UNKNOWN> 
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 92EEF80E47
- for <buildroot@buildroot.org>; Tue,  1 Sep 2026 20:51:36 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-02.galae.net (Postfix) with ESMTPS id E18EA1A1937;
- Tue,  1 Sep 2026 20:51:33 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id B52426053C;
- Tue,  1 Sep 2026 20:51:33 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 8942111C7927E; 
- Tue,  1 Sep 2026 22:51:28 +0200 (CEST)
-Date: Tue, 1 Sep 2026 22:51:27 +0200
-To: Waldemar Brodkorb <wbx@openadk.org>
-Cc: buildroot@buildroot.org, Christian Stewart <christian@aperture.us>
-Message-ID: <apc5egLCDDm39inI@windsurf>
-References: <aoG3tN3r2SnRX0el@waldemar-brodkorb.de>
+Received: from mail-244102.protonmail.ch (mail-244102.protonmail.ch
+ [109.224.244.102])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 41160607A9
+ for <buildroot@buildroot.org>; Tue,  1 Sep 2026 21:11:23 +0000 (UTC)
+Date: Tue, 01 Sep 2026 21:11:05 +0000
+To: "buildroot@buildroot.org" <buildroot@buildroot.org>
+Message-ID: <FfB4hHudSTlCrinyaiQWX0uqh2zlb_Fvqiegzc40Se7JoDDmmXXNpHJlJZvW89FZNi2ymPJRnsaHWAv6IJhOnHqfEfRNfPPvso_7mMTOi9Y=@protonmail.com>
+Feedback-ID: 216224038:user:proton
+X-Pm-Message-ID: 13ce805e748c8b3a00f00f16c34b8447b84a732a
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <aoG3tN3r2SnRX0el@waldemar-brodkorb.de>
-X-Last-TLS-Session-Version: TLSv1.3
-Subject: Re: [Buildroot] [PATCH] package/runc: enable uClibc support
+Subject: [Buildroot] [PATCH 1/1] package/usbip: use kernel source when
+ available
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,75 +65,67 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Benjamin DeCamp via buildroot <buildroot@buildroot.org>
+Reply-To: Benjamin DeCamp <benjamin8532@protonmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Waldemar,
+adding a conditional that detects if a kernel is being built, and if so, use that kernels usbip sources
 
-Thanks for your patch!
+when a kernel is not being built, use a pinned kernel version
 
-On Sun, Aug 16, 2026 at 03:14:28PM +0200, Waldemar Brodkorb wrote:
-> fexecve was added to uClibc in 2019 in commit
-> 858ffad217076227089cc17eb832db0bd1497792.
-> 
-> Runtime tested on a Raspberry PI4 (64 Bit).
-> System compiled with Bootlin Toolchain.
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> ---
->  package/runc/Config.in | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/package/runc/Config.in b/package/runc/Config.in
-> index 73eac72527..e4027fddaa 100644
-> --- a/package/runc/Config.in
-> +++ b/package/runc/Config.in
-> @@ -3,7 +3,6 @@ config BR2_PACKAGE_RUNC
->  	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
->  	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
-> -	depends on !BR2_TOOLCHAIN_USES_UCLIBC # no fexecve
->  	select BR2_PACKAGE_HOST_GO
->  	help
->  	  runC is a CLI tool for spawning and running containers
-> @@ -14,4 +13,4 @@ config BR2_PACKAGE_RUNC
->  comment "runc needs a glibc or musl toolchain w/ threads"
+Signed-off-by: Benjamin DeCamp <benjamin8532@protonmail.com>
+---
+ package/usbip/usbip.mk | 18 ++++++++++++++----
+ 1 file changed, 14 insertions(+), 4 deletions(-)
 
-You need to update this comment, to drop "glibc or musl". I had done
-that locally, because it was trivial.
-
-But the less trivial thing that you need to do is look at the reverse
-dependencies of runc:
-
-package/containerd/Config.in:   select BR2_PACKAGE_RUNC if !BR2_PACKAGE_CRUN # runtime dependency
-package/podman/Config.in:       select BR2_PACKAGE_RUNC if !BR2_PACKAGE_CRUN  # runtime
-
-containerd has:
-
-        depends on !BR2_TOOLCHAIN_USES_UCLIBC # runc
-
-which is no longer correct since runc no longer depends on !uclibc. So
-either this dependency can be dropped, or its comment needs to be
-updated to explain why containerd still doesn't work with uclibc.
-
-Regarding podman, it's even weirder because it doesn't have this
-dependency.. But I guess that's OK because podman needs rust, and rust
-is only available for glibc and musl configurations. That's why we
-didn't see any issue there.
-
-Still, the containerd case needs to be looked at. Can you check this?
-
-Thanks!
-
-Thomas
+diff --git a/package/usbip/usbip.mk b/package/usbip/usbip.mk
+index b4475c8d89..4dfd160605 100644
+--- a/package/usbip/usbip.mk
++++ b/package/usbip/usbip.mk
+@@ -14,18 +14,27 @@
+ #
+ # usbip is not very tied to the kernel, in fact. It is pretty stable, API-wise,
+ # so we can just use a recent kernel version.
++#
++# but when a kernel is being built, use the local kernel source
++ifeq ($(BR2_LINUX_KERNEL),y)
++USBIP_VERSION = $(call qstrip,$(BR2_LINUX_KERNEL_VERSION))
++USBIP_SITE = $(LINUX_DIR)/tools/usb/usbip
++USBIP_SITE_METHOD = local
++USBIP_LICENSE_FILES = COPYING
++USBIP_DEPENDENCIES = linux udev
++else
+ USBIP_VERSION = 6.12.6
+ USBIP_SOURCE = linux-$(USBIP_VERSION).tar.xz
+ USBIP_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v6.x
+ USBIP_DL_SUBDIR = linux
++USBIP_SUBDIR = tools/usb/usbip
++USBIP_LICENSE_FILES = tools/usb/usbip/COPYING
++USBIP_DEPENDENCIES = udev
++endif
+ 
+ # usbip's licensing diverges from that of the rest of the kernel
+ USBIP_LICENSE = GPL-2.0-or-later
+-USBIP_LICENSE_FILES = tools/usb/usbip/COPYING
+ 
+-USBIP_DEPENDENCIES = udev
+-
+-USBIP_SUBDIR = tools/usb/usbip
+ USBIP_INSTALL_STAGING = YES
+ 
+ USBIP_AUTORECONF = YES
+@@ -39,3 +48,4 @@ define USBIP_LINUX_CONFIG_FIXUPS
+ endef
+ 
+ $(eval $(autotools-package))
++
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.47.3
+
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
