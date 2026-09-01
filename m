@@ -4,64 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7A94C61DD6
-	for <buildroot@archiver.kernel.org>; Tue,  1 Sep 2026 20:48:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17E3EC61DD6
+	for <buildroot@archiver.kernel.org>; Tue,  1 Sep 2026 20:51:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 501124084D;
-	Tue,  1 Sep 2026 20:48:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C5C9540A40;
+	Tue,  1 Sep 2026 20:51:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yAGuScyyC1dz; Tue,  1 Sep 2026 20:48:18 +0000 (UTC)
+ id T7Dc1KokL2Tp; Tue,  1 Sep 2026 20:51:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1788295698;
-	bh=n7YpFY4kgjjetET8h0bS7RO3ld5Dnjj9XOzMV5LbcUo=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	s=default; t=1788295900;
+	bh=vHoROpdwXUajN54ddy3spKinaxCFJ+qKAFYhb3ALMEQ=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=Kr77Env1SF5fm6KJz2A13Lx5yN0LqfmbmIrfs2OX5lEm01gWC8wqZYgmujF5nlzh9
-	 KEDg6a0vC5zuvD+NYeEfPkU+bHYuKZaCgdAOoeJMAmuyP/hPZC6qnfWwkj0vBlpdFa
-	 FSlvGgBqN1ay8D6oq1SuJyyvx8tsm7FzoTdm070Z5SzPqJYkly3/aE85yrI482C1j0
-	 JtcAp78OfWV9oRBYQ9othxCBE+YhdK/bFdncVo8hguyxAkLrdMmRBf2Sw2rugwNsUx
-	 jAa+Bn5XJiLqK5ozdoesTDOBkfs1TgaS4F3caGW8AfXUroVaB/y2Bvf+0t7tAFqVaq
-	 6I2/gkUnoF2Ww==
+	b=hAT8i13pBfq5H/9iNasSMlqWb8uKspCyTcumlBol5MjKMJoKJhXVcRkuwRwNqzZ1w
+	 vOg+/3tkYyAL25I0ee9SuhLOcvfy28L9N7QU6idLQAXW7feS/LIDOxYlniOpjZtBT8
+	 zMFm1syI2rCkP7yqpV/7ZeHAhSEkJFDjfDCE3DVYpgrHr9YqgHTeHfqWaJvjFJq3o/
+	 LxTRZmNr75nFUE00ap5GMacD65xB45E00GuuUYAmr/2JIw5Rdv0uQkDUJsU9V1RjOR
+	 pKzCSqlw7Xolnatv0CvZYnst0zMP5LGaCfzWacCWhO1cx9MrkPqc6IL8cHJfGddRvb
+	 aMtsxjo0tXBrg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A25894077E;
-	Tue,  1 Sep 2026 20:48:18 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 8CE0B2FD
- for <buildroot@buildroot.org>; Tue,  1 Sep 2026 20:48:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0E70F40A29;
+	Tue,  1 Sep 2026 20:51:40 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9FD272FD
+ for <buildroot@buildroot.org>; Tue,  1 Sep 2026 20:51:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8A8EB4077E
- for <buildroot@buildroot.org>; Tue,  1 Sep 2026 20:48:17 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 909CD80ED8
+ for <buildroot@buildroot.org>; Tue,  1 Sep 2026 20:51:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gcyxJpU4CdUA for <buildroot@buildroot.org>;
- Tue,  1 Sep 2026 20:48:16 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A103140746
- for <buildroot@buildroot.org>; Tue,  1 Sep 2026 20:48:16 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id 4494D13F86E;
- Tue,  1 Sep 2026 22:48:12 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Tue, 01 Sep 2026 22:48:12 +0200
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bcelg3XlWlWR for <buildroot@buildroot.org>;
+ Tue,  1 Sep 2026 20:51:37 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
+ helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 92EEF80E47
+ for <buildroot@buildroot.org>; Tue,  1 Sep 2026 20:51:36 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-02.galae.net (Postfix) with ESMTPS id E18EA1A1937;
+ Tue,  1 Sep 2026 20:51:33 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id B52426053C;
+ Tue,  1 Sep 2026 20:51:33 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 8942111C7927E; 
+ Tue,  1 Sep 2026 22:51:28 +0200 (CEST)
+Date: Tue, 1 Sep 2026 22:51:27 +0200
+To: Waldemar Brodkorb <wbx@openadk.org>
+Cc: buildroot@buildroot.org, Christian Stewart <christian@aperture.us>
+Message-ID: <apc5egLCDDm39inI@windsurf>
+References: <aoG3tN3r2SnRX0el@waldemar-brodkorb.de>
 MIME-Version: 1.0
-Date: Tue, 01 Sep 2026 22:48:12 +0200
-To: Peter Korsgaard <peter@korsgaard.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20260901192724.1021544-1-peter@korsgaard.com>
-References: <20260901192724.1021544-1-peter@korsgaard.com>
-User-Agent: Webmail Free/1.6.18
-Message-ID: <ec4ac307d4302d02182457be822cfb6c@free.fr>
-X-Sender: ju.o@free.fr
-Subject: Re: [Buildroot] [PATCH] package/libgcrypt: bump version to 1.2.3
+Content-Disposition: inline
+In-Reply-To: <aoG3tN3r2SnRX0el@waldemar-brodkorb.de>
+X-Last-TLS-Session-Version: TLSv1.3
+Subject: Re: [Buildroot] [PATCH] package/runc: enable uClibc support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -73,72 +76,75 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Peter,
+Hello Waldemar,
 
-The commit title says "1.2.3" but should rather be "1.12.3".
+Thanks for your patch!
 
-On 01/09/2026 21:27, Peter Korsgaard wrote:
-> Release notes:
-> https://lists.gnu.org/archive/html/info-gnu/2026-08/msg00007.html
+On Sun, Aug 16, 2026 at 03:14:28PM +0200, Waldemar Brodkorb wrote:
+> fexecve was added to uClibc in 2019 in commit
+> 858ffad217076227089cc17eb832db0bd1497792.
 > 
-> Contains a number of bugfixes, some of which may have (low severity)
-> security impact.  As stated by Werner Koch:
+> Runtime tested on a Raspberry PI4 (64 Bit).
+> System compiled with Bootlin Toolchain.
 > 
->  All in all we received 26 reports alone from ANSSI but as even the 
-> reporter
->  mentioned, the real world attack severity is not critical.  Thus we 
-> don't
->  consider 1.12.3 a security fix release.  There are some bugs which 
-> should
->  be fixed to avoid crashes, and thus may lead to DoS.  However, 16384 
-> bit
->  RSA keys can also be used for a practical DoS; it all depends on your 
-> use
->  case.
-> 
-> https://www.openwall.com/lists/oss-security/2026/08/31/11
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 > ---
-[...]
-> diff --git a/package/libgcrypt/libgcrypt.mk 
-> b/package/libgcrypt/libgcrypt.mk
-> index 0bc281da42..a49897fd4f 100644
-> --- a/package/libgcrypt/libgcrypt.mk
-> +++ b/package/libgcrypt/libgcrypt.mk
-> @@ -4,7 +4,7 @@
->  #
->  
-> ################################################################################
+>  package/runc/Config.in | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 > 
-> -LIBGCRYPT_VERSION = 1.12.2
-> +LIBGCRYPT_VERSION = 1.12.3
+> diff --git a/package/runc/Config.in b/package/runc/Config.in
+> index 73eac72527..e4027fddaa 100644
+> --- a/package/runc/Config.in
+> +++ b/package/runc/Config.in
+> @@ -3,7 +3,6 @@ config BR2_PACKAGE_RUNC
+>  	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+>  	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS
+> -	depends on !BR2_TOOLCHAIN_USES_UCLIBC # no fexecve
+>  	select BR2_PACKAGE_HOST_GO
+>  	help
+>  	  runC is a CLI tool for spawning and running containers
+> @@ -14,4 +13,4 @@ config BR2_PACKAGE_RUNC
+>  comment "runc needs a glibc or musl toolchain w/ threads"
 
-Also, this new version introduces build failures:
-https://gitlab.com/jolivain/buildroot/-/pipelines/2810830147
+You need to update this comment, to drop "glibc or musl". I had done
+that locally, because it was trivial.
 
-For reference, the previous version 1.12.2 passes test-pkg:
-https://gitlab.com/jolivain/buildroot/-/pipelines/2810888453
+But the less trivial thing that you need to do is look at the reverse
+dependencies of runc:
 
-Since those fixes are described as low severity, we should probably
-fix those before merging this bump.
+package/containerd/Config.in:   select BR2_PACKAGE_RUNC if !BR2_PACKAGE_CRUN # runtime dependency
+package/podman/Config.in:       select BR2_PACKAGE_RUNC if !BR2_PACKAGE_CRUN  # runtime
 
->  LIBGCRYPT_SOURCE = libgcrypt-$(LIBGCRYPT_VERSION).tar.bz2
->  LIBGCRYPT_LICENSE = LGPL-2.1+
->  LIBGCRYPT_LICENSE_FILES = COPYING.LIB
-> --
-> 2.47.3
+containerd has:
 
-Best regards,
+        depends on !BR2_TOOLCHAIN_USES_UCLIBC # runc
 
-Julien.
+which is no longer correct since runc no longer depends on !uclibc. So
+either this dependency can be dropped, or its comment needs to be
+updated to explain why containerd still doesn't work with uclibc.
+
+Regarding podman, it's even weirder because it doesn't have this
+dependency.. But I guess that's OK because podman needs rust, and rust
+is only available for glibc and musl configurations. That's why we
+didn't see any issue there.
+
+Still, the containerd case needs to be looked at. Can you check this?
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
