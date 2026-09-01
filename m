@@ -4,113 +4,124 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F40E2C61DD3
-	for <buildroot@archiver.kernel.org>; Tue,  1 Sep 2026 07:11:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9885AC61DD6
+	for <buildroot@archiver.kernel.org>; Tue,  1 Sep 2026 07:12:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E8BC2406CC;
-	Tue,  1 Sep 2026 07:11:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 54D19406A5;
+	Tue,  1 Sep 2026 07:12:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yzklmnhAuPna; Tue,  1 Sep 2026 07:11:32 +0000 (UTC)
+ id rYXM1SH7j65I; Tue,  1 Sep 2026 07:12:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1788246691;
-	bh=5+CFT2IgnXxz9Ewn9L1OFa/crwpzX2ap3XzEWExTUpk=;
-	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	s=default; t=1788246746;
+	bh=DSsIcz+jLEy5vDEckxXgFGrduhV7jJbZ/mKYlMrjYIo=;
+	h=References:In-Reply-To:From:Date:To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=auok9s00YvgQfp5IaM5Xavt+dGi4Epu93SOQP6/AGOvyDlt+i4JOBr6Zbk62PcW9B
-	 T9a9FoiO+veaiWWdXZdJ1AFXjOzhIvbh3VKuhQA7LMfU7Rtq5Nn03C58seFk4QZk5K
-	 NQwC7mvSbdElKKRVh9AoO2PMR9wfje5hwMXu7fV9Z8/aLekkcq1NP8VmnDT/d0F3+h
-	 hhBs3Nwnt9IrvWRRK6qG/aLoFBSfqZx0LjeYCiebXqSMIdvgPTJ0Jc4jOtUdZNYBmb
-	 DSYclYpkSD4b4O3/fMWjQJsXSPDODqGQAq8Vlp45lzfiOd0Rvevv3pCsQRCMgP2P+G
-	 gnDlUi6BZd4Pw==
+	b=q3A1yR4ZpBKfQ/aRONjt90dH2AxBE+XHYxeytXw/2H4ohYzF1H7JGU/Vs5mLnIOGh
+	 k8EffkRBlSbjlTQxOCxV2ZSceV0bsxXupMvn6ST5zOHz5r3JUzm4nXSM6MpCIUcW/I
+	 xwwik5FJtwQsY8FzyAin7WpVnELQLzIWLfPo4lDY/MAK7nMC1X0fTTHAYMZEJNJz7D
+	 5c3qlclO/mpOoRnxcz3T4ZkIVYtOQow1azZkpC45x6QGb8B/42AiAjFvO7pE307zD5
+	 gfISDYZS3W+34HDOwnhZ7i8L1moXfVusGUe9W55jXyDg8PJXr+kZvGS+h93mcbX0Vg
+	 F7QGEBgH0X8+w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6615D404E9;
-	Tue,  1 Sep 2026 07:11:31 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 660721D9
- for <buildroot@buildroot.org>; Tue,  1 Sep 2026 07:11:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 86888404E9;
+	Tue,  1 Sep 2026 07:12:26 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4079B4AD
+ for <buildroot@buildroot.org>; Tue,  1 Sep 2026 07:12:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 490AA605D2
- for <buildroot@buildroot.org>; Tue,  1 Sep 2026 07:11:30 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 22E55404E9
+ for <buildroot@buildroot.org>; Tue,  1 Sep 2026 07:12:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZgozttTphdaz for <buildroot@buildroot.org>;
- Tue,  1 Sep 2026 07:11:29 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Bxtsii56jkb6 for <buildroot@buildroot.org>;
+ Tue,  1 Sep 2026 07:12:24 +0000 (UTC)
 Received-SPF: Permerror (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32b; helo=mail-wm1-x32b.google.com;
+ client-ip=2a00:1450:4864:20::536; helo=mail-ed1-x536.google.com;
  envelope-from=rhidian.dewit@openpixelsystems.org; receiver=<UNKNOWN> 
-Authentication-Results: smtp3.osuosl.org; dmarc=none (p=none dis=none)
+Authentication-Results: smtp4.osuosl.org; dmarc=none (p=none dis=none)
  header.from=openpixelsystems.org
-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=openpixelsystems.org
- header.i=@openpixelsystems.org header.a=rsa-sha256 header.s=google
- header.b=PYkZY7IH
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
- [IPv6:2a00:1450:4864:20::32b])
- by smtp3.osuosl.org (Postfix) with ESMTPS id BBA8260720
- for <buildroot@buildroot.org>; Tue,  1 Sep 2026 07:11:27 +0000 (UTC)
-Received: by mail-wm1-x32b.google.com with SMTP id
- 5b1f17b1804b1-49ccfbe062eso22455175e9.3
- for <buildroot@buildroot.org>; Tue, 01 Sep 2026 00:11:27 -0700 (PDT)
+Authentication-Results: smtp4.osuosl.org; dkim=pass (2048-bit key,
+ unprotected) header.d=openpixelsystems.org header.i=@openpixelsystems.org
+ header.a=rsa-sha256 header.s=google header.b=AVe0I2qv
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com
+ [IPv6:2a00:1450:4864:20::536])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 471D7404E7
+ for <buildroot@buildroot.org>; Tue,  1 Sep 2026 07:12:23 +0000 (UTC)
+Received: by mail-ed1-x536.google.com with SMTP id
+ 4fb4d7f45d1cf-6a600a1caf8so803085a12.2
+ for <buildroot@buildroot.org>; Tue, 01 Sep 2026 00:12:23 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1788246742; cv=none;
+ d=google.com; s=arc-20260327;
+ b=TdXjUOtyERjG2cxDp+neqZjy8K2oJaAOlhEjr7D+20okcPmscVx1C6mSeZYdZXjOLG
+ ZKjNLjJClGA6cymuKA7TOKZmOtDIG8bHE1x4Bl3K+xCm0YHFh/6MZxu/ijYsoOQsEsUi
+ afzQgSxaFTpTkFPd/tXlbIqHmYE2O8KZDl7kUKLcusBZyf7XR4J6eNuKNjEfKxeEOSZg
+ 0hH/NE+V2XDan6bsUpyXlb11jImCxO/I/POpne5E3/9HuVUGBLU71eqklRF5jypBhstR
+ Yfdzjq+kLlR+Edv6gDVQOljDp1iQ8581izEiTJAB/O2ddmbTT/C4zGgWtQZUJI5asKDL
+ LL7g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com;
+ s=arc-20260327; 
+ h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+ :dkim-signature;
+ bh=PjeWl9hkO6j1/Z4D3T2IniZVQC2oF7Ag9QcApzxbUhQ=;
+ fh=3pWBXGdSiVldOzJ6ypfJcTUIWlbrikH1EIZUHFIjzuo=;
+ b=VTjOPi7s4JsJL7km9JrnvR3V0F1i8gGU+e0Zh1TAIFU7iBqo+mz82BIRoQalPKNhPu
+ UJ7pqmNpDHlscW/j7NtNI056llov8l26pCICcp1BtyeeI0/PQQS29BMiTpnivdbbyb/T
+ tBLDMQD3aKnB14cWTV7tBcFtkwjRW50vsc6Roxh2snSBT2ORGxFoOUavAyKid9simeIe
+ 2P5lu1rMkbGDz1efwYD19tHpVjTpW/AVAfseP3Gnxt8l0qNphB04EFrAt+dCutXgJ/yt
+ qtk0uGcaU5MiOxJvyxdFsWbLXQasIIewMuw4DdZF+CW3X3UCVQi9FaFnDnn9mOM7t9ww
+ T4Fg==; darn=buildroot.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=openpixelsystems.org; s=google; t=1788246685; x=1788851485;
+ d=openpixelsystems.org; s=google; t=1788246742; x=1788851542;
  darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to:content-type;
- bh=atpxmnolXwDbze9owOdoiXrdvQRv2DP+QfdCLyOjFQU=;
- b=PYkZY7IHhm/37ngT8ByQS6AHOa6U/KStnQga3uIjBG+CsXVsh42o98+3k3O6Z7DeU0
- 4VDQ4OJzg9P0nuamjZvH+sQ9DKRCMHV1rHX6+MRRVtsUArVQDic6GbILGct3UBNRnKGO
- 9iTtWsAAHTEPU55pxqhL/nIifBobdZl83QcrsC1sr8qe3Jt+CN5Fdq8TLOhyUArnaw3D
- 21/xZo+7mBqhKXPxF12Joiu7+PFH1p7c1cG9Z4g90nd4KCStf8SgOXVR85bpsprjQG3E
- UFVYAI5MbFDoKlBNc2h+QlgcsjCYykhf1aiiuU7nCGkcfFJXoDalR6wQW2ObHX3Pf/KJ
- t9uQ==
+ h=content-type:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to
+ :content-type; bh=PjeWl9hkO6j1/Z4D3T2IniZVQC2oF7Ag9QcApzxbUhQ=;
+ b=AVe0I2qvLoE4Bq9WrBkVwALt+qyMSEXJU5KUgV8XPXWQfymYatDi9DbpCAD772SFb2
+ JyuceaY+vMN5NRW2DVFdOSfTm5NbHiaKHEbSb8xy1uJ1yv9++KWGDXqwiTT9R9lxNq5j
+ IfCLuWLc8BAp7KVH6KucnbjgaDMaBWWrV24NVQ8sSm217RSj0sNh1MPHNhGxE1Oe1VhG
+ g9xCa/k1F/kvolSCtg42zGNOhqDRlhd3RyUvYZuLLJfNwQzbaV1MLH8rQcD3NOZFz+la
+ QS7pAYqARjnkMyUrdkBCQ+eZhDhCFGCpNBgB7CaibUfGgSSJHKaPmeV1BWBNKZORL6oM
+ 9ncg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1788246685; x=1788851485;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to:content-type;
- bh=atpxmnolXwDbze9owOdoiXrdvQRv2DP+QfdCLyOjFQU=;
- b=NrXYQU5S1Z5p9TTTGFcTU3lkH7NA73XXH2ZnybLIAf82qWtLCZxiALqc7WmDIaOBlO
- 0rOXt8+R5eWxbnBjKN9RQUQOjFfu6pC3TXaXDbXoIq37MKsmmqTF1LNQeYW3Y6wj0+Ub
- +Rq4IujCpulq0HTcZCLDomeMy7kt7F/T3ADHjoww2QDW9AXsoA7UZRKX5hZkpFgh61iW
- oooq6BkB4UU/sqdSwKwq9S1psmNFvpFdurNg49AEHVbH3GjOGPLpxW6VwSKtl9GjUWA9
- +KADz2ygy8yGAuVKLs+cMT29n8Z7MMc1xuT3K5Vcgxv28Wap60Qop1v1DlkvUiG/ThKi
- ZINg==
-X-Gm-Message-State: AFuF++l8s0/lrqL292/XrLojcZgfUWSdN7Zz8/r1HAcv3QDgR1x1VaBb
- f1nKkbtsg4zIY4/pAIjiOIdyVwYdGrajF+TAF0M9zSgiHn3uPu+6sO+czej4B4Np97UJLoQAwrD
- uGczg
-X-Gm-Gg: AR+sD10UDP1M6UNTVoP9nMA6NqvLJEX1o8HqUx+aszOJNXGNNxcrxKmGk7ZimlWg9Rb
- 5rCxdcleIVayeMQ/VTwfbooOHM9n/9ST4m940C85q419AUdrg4zmc8/OStLGuqe7U+XIV/o6E3l
- 6dROmADT1bt5ipiAomfY1nnBTZR+eBfGez+wbyWuRfxZrNvAHrK/sV957p0mC2iHNyCmmNuD9CN
- Oc0nczcNS2MH1BWgFkS7HRgHw4fRLq8pki2U/F0r2dWFkz/B7phvXBepibTGFfXJk2h57QRo4VX
- 88QdsiQ+acKsofP4p8zKASVKV/xVt1X+wLXyJ/cogWQgp3bk/IAZ/U/3Vk62011TsGQfTrG6NgA
- nUtQIMoWL9LNegDGYaOvDp2P2WGck56QAsMaxhBU9T/VnjRL6ePxiIqd3Iib4djoK/uMvRxC0WC
- uTkG8Z0qf1X0WK3BhMgiJ4d6ZOLo/boeFKCt/EF1Z7DJf6qaRZV7M9vAMm3e2iibUP1NAerE/d6
- fe8YYbe0OOcrvho+4A0k8MxouMdNTJcHf9bU16PmNwYKygX65zjOzPnbgWIMmD+
-X-Received: by 2002:a05:600c:1c27:b0:49c:cfae:34d2 with SMTP id
- 5b1f17b1804b1-49ccfae35c2mr303127515e9.4.1788246685298; 
- Tue, 01 Sep 2026 00:11:25 -0700 (PDT)
-Received: from titanium.opsys.org (253.124-78-194.adsl-static.isp.belgacom.be.
- [194.78.124.253]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-48442d787b8sm3040192f8f.29.2026.09.01.00.11.24
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 01 Sep 2026 00:11:24 -0700 (PDT)
-From: Rhidian De Wit <rhidian.dewit@openpixelsystems.org>
-To: buildroot@buildroot.org
-Cc: Rhidian De Wit <rhidian.dewit@openpixelsystems.org>
-Date: Tue,  1 Sep 2026 09:11:21 +0200
-Message-ID: <20260901071121.834356-2-rhidian.dewit@openpixelsystems.org>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20260901071121.834356-1-rhidian.dewit@openpixelsystems.org>
-References: <20260901071121.834356-1-rhidian.dewit@openpixelsystems.org>
+ d=1e100.net; s=20251104; t=1788246742; x=1788851542;
+ h=content-type:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to:content-type;
+ bh=PjeWl9hkO6j1/Z4D3T2IniZVQC2oF7Ag9QcApzxbUhQ=;
+ b=c334WhEC0DSX/MspLr5cuvl0nZgArvVCuKxg4rYzPnDgbsjFC7vBS02/KbZ/baNgZ5
+ W8N9d9GRIx8uclrq+VAzjRUGrhARpXuyajhBpkR5nUAk0fiJ/4x3OZRfjj0v98iQ7CNb
+ 3qsTDklRillStOx4np+UmopGp8mEJXH9l81ZYW/6Y6oi8fyvokWY97IpxSgnekrVQRqH
+ k9LHEwwt2TWamKY7ukt4Nbe287giB2v5gBfsvkkp93Wat+ycIZs2GU5XZgKne86ftxQF
+ hTDFpuYsalrnSMJhzPhrsM4qx9/lD7jDmMdnNcUbEj7snDs0R70EFvpsCD9HfUkvtz6/
+ /elw==
+X-Gm-Message-State: AFuF++mjyf41jXDb2T+C9JSXJhgzr3umgBqy3BcTIeLFg3tqvtoJLA8Y
+ jNRCZIAp07A4t5t1T3FOY4hrSPlqad40rCbWccflI2OODx3Thh50Bngq1HJgpA2sV1X9piMF6zU
+ 0SpxfP6eKa1Jljr/QYchJBM9i8iGrrfIPNAXjaO+m3ubtyhuxro8h
+X-Gm-Gg: AYBFou1BxexL/Zlc5xAmEzJI4bED8QHYc2p96D6S2pGVma8LXIOrW4sXoknGQsmHRkL
+ OIGI0MyAeHXHlpQMsaR/JGzyFQxhWzZNYGzpptkYcJbm3qAN0VKE63EKVfI8Zxdv08sbtzo14+I
+ PgG7Z9hZjLCmXY5114/X+t+Odg2gTqLU3EJxmAtAggIurSfzLUC8Dy7gKSC/W5+K3rMIAc6POFj
+ MaO+ydyvB1FEyB8+TlWSXtSTz147fRGtL5o1sQOtbPLxjCouYyuCs4PFKKcBF7czJAAXPe1pZjD
+ g7bcLUBSvrou1fSOk2c9DhymC1mkF0IbyorQQmmbvnYIsfk67H0kPdvZIwtDh+20x0RcQwqPTKF
+ U8ks=
+X-Received: by 2002:a05:6402:a0ce:b0:6a6:2022:fee with SMTP id
+ 4fb4d7f45d1cf-6a6202211fcmr14122618a12.7.1788246742082; Tue, 01 Sep 2026
+ 00:12:22 -0700 (PDT)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] Avoid double-free on x86-64 systems with no
- cmdline set
+References: <20260901071121.834356-1-rhidian.dewit@openpixelsystems.org>
+In-Reply-To: <20260901071121.834356-1-rhidian.dewit@openpixelsystems.org>
+From: Rhidian De Wit <rhidian.dewit@openpixelsystems.org>
+Date: Tue, 1 Sep 2026 09:12:10 +0200
+X-Gm-Features: AcwNN1X8gdSFUnuhDFIG4M_-QF1iyZP1Vt5ycMmUpwzIR4-pXEK2mA0of_Ya38c
+Message-ID: <CAKWiKxErbBNpQDe715qsva1k2=L5EkYs2vgkr__iPxtPawuMLA@mail.gmail.com>
+To: buildroot@buildroot.org
+Subject: Re: [Buildroot] [PATCH] Avoid segfault on x86-64 with invalid EFI
+ boot entries
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -127,64 +138,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Rhidian De Wit <rhidian.dewit@openpixelsystems.org>
----
- ...i-slot-bootname-to-avoid-double-free.patch | 43 +++++++++++++++++++
- 1 file changed, 43 insertions(+)
- create mode 100644 package/rauc/0002-Duplicate-efi-slot-bootname-to-avoid-double-free.patch
-
-diff --git a/package/rauc/0002-Duplicate-efi-slot-bootname-to-avoid-double-free.patch b/package/rauc/0002-Duplicate-efi-slot-bootname-to-avoid-double-free.patch
-new file mode 100644
-index 0000000000..d8a429e06f
---- /dev/null
-+++ b/package/rauc/0002-Duplicate-efi-slot-bootname-to-avoid-double-free.patch
-@@ -0,0 +1,43 @@
-+From 240d8ae22adea51667346854e6f863b558dfc470 Mon Sep 17 00:00:00 2001
-+From: Rhidian De Wit <rhidian.dewit@openpixelsystems.org>
-+Date: Fri, 21 Aug 2026 16:37:45 +0200
-+Subject: [PATCH] Duplicate efi slot bootname to avoid double free
-+
-+Upstream: https://github.com/rauc/rauc/pull/2028
-+
-+Signed-off-by: Rhidian De Wit <rhidian.dewit@openpixelsystems.org>
-+---
-+ src/bootloaders/efi.c | 3 +--
-+ test/bootchooser.c    | 1 +
-+ 2 files changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/bootloaders/efi.c b/src/bootloaders/efi.c
-+index 65875c9f..e6eb0351 100644
-+--- a/src/bootloaders/efi.c
-++++ b/src/bootloaders/efi.c
-+@@ -632,9 +632,8 @@ gchar *r_efi_get_current_bootname(RaucConfig *config, GError **error)
-+ 		RaucSlot *slot = NULL;
-+ 		while (g_hash_table_iter_next(&iter, NULL, (gpointer*) &slot)) {
-+ 			if (g_strcmp0(slot->bootname, bootcurrent->name) == 0) {
-+-				return slot->bootname;
-++				return g_strdup(slot->bootname);
-+ 			}
-+-		}
-+ 	}
-+ 
-+ 	g_set_error(error,
-+diff --git a/test/bootchooser.c b/test/bootchooser.c
-+index 43c45397..c35a78f1 100644
-+--- a/test/bootchooser.c
-++++ b/test/bootchooser.c
-+@@ -970,6 +970,7 @@ bootname=system1\n";
-+ 
-+ 	bootname = r_boot_get_current_bootname(r_context()->config, "", &error);
-+ 	g_assert_nonnull(bootname);
-++	g_clear_pointer(&bootname, g_free);
-+ }
-+ 
-+ /* If the underlying 'efibootmgr --bootorder ...' call fails (e.g. the
-+-- 
-+2.51.0
-+
--- 
-2.51.0
-
+Apologies for the confusion on my end, these are the correct patches.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
