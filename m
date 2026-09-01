@@ -1,86 +1,91 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD83EC624CF
-	for <buildroot@archiver.kernel.org>; Tue,  1 Sep 2026 11:39:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67238C624CF
+	for <buildroot@archiver.kernel.org>; Tue,  1 Sep 2026 11:50:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5CAFB80BAA;
-	Tue,  1 Sep 2026 11:39:06 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id q4AoTuCJXocr; Tue,  1 Sep 2026 11:39:04 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1788262744;
-	bh=NyHrSt18O9/x3E+nAga7KvVI0WOX5Zi0fdnNVk6Gogk=;
-	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=rwHAF2732fCrokD6IpVJsW78VGT0ZtN7/SnrfCDR8q5jOwFmVjU/SCEVNLM+y3QcZ
-	 luIFaUQPgUma3pN2w2HZzJ9I/kgsyV9gD4rc75w1SVXtrhxd6Jr2nrc1vjc+UUjXa6
-	 +jQtKdly8FHWDqUI26PZPoG+U+Foh7xttzB/8skBFMIne12P26giLofykiFpFF2MhI
-	 5rNlVktYgJEW0dRgqV3mFNx9db/CheQDLaUn7L+7zfvQ1DMk5kd10ZHg2cbdxTZtL+
-	 0uzy04tmyghsYBlbLpjA5cZYyRGyJSl1WnQbUVVbc++RJjaJKEWDhamoqX4qRdAlKv
-	 00/bseRua9vTw==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BE87A80B89;
-	Tue,  1 Sep 2026 11:39:04 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 7C2091DE
- for <buildroot@buildroot.org>; Tue,  1 Sep 2026 11:39:03 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 58A9160737
- for <buildroot@buildroot.org>; Tue,  1 Sep 2026 11:39:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DFD7760749;
+	Tue,  1 Sep 2026 11:50:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id T5QEgEGObBaz for <buildroot@buildroot.org>;
- Tue,  1 Sep 2026 11:39:02 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
- receiver=<UNKNOWN> 
-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none) header.from=korsgaard.com
-Authentication-Results: smtp3.osuosl.org; dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail2 header.b=rTR+mvFX
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 71411606BE
- for <buildroot@buildroot.org>; Tue,  1 Sep 2026 11:39:00 +0000 (UTC)
-DKIM-Signature: a=rsa-sha256;
- b=rTR+mvFXIdpeGVnMefM3S7fq1mLU/wsDfACpfcbjrN9KDc8YZ5LL8hxStp8ujHT98Yze7RIcpK7PeU5KpqGx6BflHpplaIdzMsmrc2McaKCzICCLsbs8FbXdc3GJZ1kQsnb8gZdOOnyNumDTQo95XYVP0Fj9dqNV0zGC5cBo9FroFAFit+4IXwT759RWKd3GIICVpAz5vpnlMYDYDLWx3Ja/FcLATYeVtMByC3KOoOalQpHUZmRFjcduQaHtP+NTtKCQ0TU/J50RXsoY3RA0kE07s9cNLOFgMNYy2Qx66CdPFNHepZgDHUrJ7mZp6vhcSueKOpfte+piD91BD3Iiqg==;
- s=purelymail2; d=purelymail.com; v=1;
- bh=gTGFdYriZgoG44yS2pRkOWCbMcNIYnwgLlEKE3fLwyU=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 1449319341; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Tue, 01 Sep 2026 11:38:56 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peter@korsgaard.com>) id 1x1MpL-00000003LQ0-2zAm;
- Tue, 01 Sep 2026 13:38:55 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Fiona Klute <fiona.klute@gmx.de>
-Cc: Fiona Klute via buildroot <buildroot@buildroot.org>
-In-Reply-To: <ac74c754-7c42-421e-a16c-c019b902652e@gmx.de> (Fiona Klute's
- message of "Tue, 1 Sep 2026 12:26:19 +0200")
-References: <20260831125103.841338-1-fiona.klute@gmx.de>
- <87mru2je25.fsf@dell.be.48ers.dk>
- <76f38e09-f5c4-4b0c-8397-01061d7fbced@gmx.de>
- <878q5lh3su.fsf@dell.be.48ers.dk>
- <ac74c754-7c42-421e-a16c-c019b902652e@gmx.de>
-Date: Tue, 01 Sep 2026 13:38:55 +0200
-Message-ID: <875x0p8als.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+ id mkDThBfQUQbw; Tue,  1 Sep 2026 11:49:59 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1788263399;
+	bh=zhWmrdTye0HTK1o0+aDG/lgBtDzJ5I3LeAJgqoDoLBc=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
+	b=DvjQgGog0SWtDS8Cb1vVUlGZDoN60mrBQ/cSrLcVgkuEFP+bMai7VYV7yzDNB7yA/
+	 oCKau59H4i+MBYAb0XHW4pxIj/D6T9j5RJmUErRoboPJYXCa1D6O2KExvpZ9GvQvDB
+	 ih90J3/Jci9Ni5H23HkTP4rOd7PSCMN/1k6v8LB218hMXre6WQQvqjQcCgwxPQ+DGF
+	 J79MUlHHxmE6o2WRExfgUezXSMGUFuCkuI97N0sus8bbcm75RSGFR+d+awtUNzKZFY
+	 xFVQ3RDZzJhTHsY87VCN/1HXUuGlpX7sgCOUfHhSWeHd4/JgnwXHxL+cE1OUxP5WWH
+	 bGnPlG+IboH3w==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 962D560740;
+	Tue,  1 Sep 2026 11:49:59 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 60C08105
+ for <buildroot@buildroot.org>; Tue,  1 Sep 2026 11:49:58 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 52858406AB
+ for <buildroot@buildroot.org>; Tue,  1 Sep 2026 11:49:58 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id C9QXMfgjuuH1 for <buildroot@buildroot.org>;
+ Tue,  1 Sep 2026 11:49:57 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::532; helo=mail-ed1-x532.google.com;
+ envelope-from=yegorslists@googlemail.com; receiver=<UNKNOWN> 
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com
+ [IPv6:2a00:1450:4864:20::532])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 63EA2406CD
+ for <buildroot@buildroot.org>; Tue,  1 Sep 2026 11:49:56 +0000 (UTC)
+Received: by mail-ed1-x532.google.com with SMTP id
+ 4fb4d7f45d1cf-6a5ebf75d62so1602472a12.1
+ for <buildroot@buildroot.org>; Tue, 01 Sep 2026 04:49:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20251104; t=1788263395; x=1788868195;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to:content-type;
+ bh=EWuDL0dbcXKR3MI3z4FrQDkKQJpK9KLH3Qj8NSBRNx8=;
+ b=MiQOB+MwiRz8zIFVMegF2bedEW3E5TCWQir9XjAEQz8/JZseJ5AsxoG9SEQdem7vD3
+ S7a9/ugu9NQpGMGFoo4hVhBxwPgvNGinTX8tim2en+3ipDIOmu1n9iTAeI66xg71T9Bc
+ VEvHNN/SuHZrwDxCT/IdGfwzUDdHdSmlDyNOYGHIf5TFPNazF5xidEnnvboK0TRcZxiP
+ TuD+JkHwD1BCBXqzO6C0JvE1/YEdDDNiMwwfOwt0Z5Fy+xn2szQQgpO0hdnIDosjz1Kb
+ ygnJzClz1Zw0n1BIXZXoNLRPvuwk5hz7hTu6PMmyHLcI6mreEOhpWtDakOaTM0APs1mY
+ 2zCw==
+X-Gm-Message-State: AFuF++lV3yczptXyrBLRB1O2HvtlfbN4wf6V5+i6cALBIBSnFpu56fSV
+ psM/FER5Y0s2UUXvG9iwSoGo5sDGvngt9SvTIVNc2R34Y1Le2jWb3mLVb/Yskg==
+X-Gm-Gg: AYBFou2334wBYLBtrXdTP0i0GfLmPSlRDw5nvqpSkpYVaTxlqmlh06ivxKWo8b+R3+H
+ SEnSDHPCbX6GXtaw6yk1rh1Hj03GC2G55wAAqMJ+koyBxtoGMux6ZNhKYcFrDUL45cjmyAWvMIJ
+ jzKO06G1S9Xx3ijO7Up3TcysRDsroXxXEXY+XBC1gHrsqwuDFgSYeygiAgHWfMj2ubdKYi+M7Oh
+ bCKh8+yJCOO82OJNSptniNFDZKVcKnqhvliZ28OjGUfWSz11tWIDv2wKjjn0b+rWe5O4ygV6YuD
+ ehPpXX0Yu2tvrKyZvo/Kq9XqiJqjy6351QrUeyDoTJocjbNWthNvQvv5J9TYFxakSHCUjSRYyva
+ anXkJFy82yOLZzsUzqWn8s7jVrthQlo+5fObiTpGN/e0KilSnY+zU78tDO0iUMiOERWOW5535aR
+ xm4EvVK4aqNjNUiPuy3CCmZnMVi+MwfDvtIwGLYyJwYc1TOby7KONefk5AGow6t0XxrJtSG4Rv7
+ yH7/0Mm8MKqzdqpXhi4BaO+8ztltRnZIurBnSaDAWg=
+X-Received: by 2002:a05:6402:3888:b0:6a5:f4dd:9ee3 with SMTP id
+ 4fb4d7f45d1cf-6a66a75b745mr3611962a12.8.1788263394604; 
+ Tue, 01 Sep 2026 04:49:54 -0700 (PDT)
+Received: from development2.visionsystems.local (mail.visionsystems.de.
+ [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
+ 4fb4d7f45d1cf-6a66ccdf77bsm694228a12.12.2026.09.01.04.49.54
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 01 Sep 2026 04:49:54 -0700 (PDT)
+To: buildroot@buildroot.org
+Date: Tue,  1 Sep 2026 13:49:51 +0200
+Message-Id: <20260901114951.2675876-1-yegorslists@googlemail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH next 1/3] fs/common.mk: add optional hook to
- build a verity hash tree
+Subject: [Buildroot] [PATCH v2] package/libmicrohttpd: ignore CVE-2025-59777
+ and CVE-2025-62689
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -92,104 +97,72 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: yegorslists--- via buildroot <buildroot@buildroot.org>
+Reply-To: yegorslists@googlemail.com
+Cc: Bernd Kuhls <bernd@kuhls.net>, Will Newton <will.newton@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fiona" == Fiona Klute <fiona.klute@gmx.de> writes:
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-Hi,
+Both CVEs affect the experimental WebSocket helper library
+(src/microhttpd_ws, installed as libmicrohttpd_ws.so), as stated in the
+originating JPCERT/CC advisory JVN76719218:
 
- >> Possibly, but should that then be per-fs or global? I wonder if it
- >> is
- >> worth the complexity to add this logic versus how fairly simple it is to
- >> just do it with whatever options you want in a post-image script.
+  "The vulnerability exists in libmicrohttpd_ws.so, which is generated
+   when building with the --enable-experimental option."
 
- > I'd say per-fs. The logic could be shared like the general veritysetup
- > call, just the option would need to be added for each fs (in
- > Config.in). I don't think Kconfig has a kind of templating for that?
+That directory is guarded by AM_CONDITIONAL([HAVE_EXPERIMENTAL]) in
+src/Makefile.am, and --enable-experimental defaults to "no". Buildroot
+never passes it, so no Buildroot version has ever built the vulnerable
+code. Upstream removed the module outright in commit
+ff13abc1c1d7d2b30d69d5c0bd4a237e1801c50b ("remove broken experimental
+code", 13651 deletions), first released in 1.0.3.
 
- > I agree running veritysetup in a post-image script isn't very
- > complicated. Where I'm actually trying to do is to have the roothash
- > of my rootfs before building an initramfs (using
- > BR2_TARGET_ROOTFS_CPIO_DRACUT), so it can be included (and signed
- > along with the initramfs, in my case in a FIT image). Of course these
- > patches don't achieve that, they'd just provide the roothash as a
- > start.
+An ignore is needed rather than a version bump, because the NVD entries
+for both CVEs share a single CPE match criteria that encodes the affected
+range as
 
- > If you have a better idea how to do that I'm all ears.
+  cpe:2.3:a:gnu:libmicrohttpd:*:*:*:*:*:*:*:*, versionEndExcluding 2025-09-16
 
-The way I have solved it in the past is to use "late" binding between
-the kernel and rootfs, E.G. only when I build the FIT image by sticking
-the root hash into a u-boot boot script that I generate in my post-image
-script and embed in the FIT.
+i.e. the author date of the fix commit instead of a version number. Since
+support/scripts/cve.py compares versions using LooseVersion, every 1.0.x
+version evaluates as smaller than "2025-09-16" and is reported as
+affected, no matter how far the package gets bumped.
 
-U-Boot can afaik source a boot script from a FIT image nowadays, but I
-wanted it more integrated into the bootm flow, so I simply added the
-bootscript as a type = "script" data file and referred to it from the
-configuration with:
+Assisted-by: Claude:claude-opus-5
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+Changes v1 -> v2:
+  - describe why Buildroot was never affected by these CVEs
 
- kernel = "kernel-1";
- fdt = ..
- loadables = "script-1";
+ package/libmicrohttpd/libmicrohttpd.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-And then some trivial logic in my board code to handle such loadable:
-
-/* support "script" loadables in FIT images */
-static void board_script_handler(ulong addr, size_t size)
-{
-        run_command_list((char *)addr, size, 0);
-}
-
-U_BOOT_FIT_LOADABLE_HANDLER(IH_TYPE_SCRIPT, board_script_handler);
-
-
- > script can't do it (rootfs image isn't ready), post-image doesn't have
- > the fakeroot environment for running Dracut (and other setup [1]).
- > Maybe we should move building initramfs to a separate stage, after
- > rootfs (I'd definitely need to order cpio after other fs types), and
- > add a pre-initramfs script? Is there another non-messy way to use the
- > fakeroot environment and variables from Buildroot config that I've
- > missed so far (other than rules in external.mk)?
-
-Initramfs is indeed annoying because of the circular dependencies. It
-has been quite a while since I last used one. Out of interest, what do
-you need the initramfs for?
-
-
- >> I would be OK with that. These fixups are a bit icky though as we do
- >> not
- >> know what kernel version will be used and the dependencies may change
- >> over time - So maintenance and testing is not so trivial.
-
- > Yeah, and for something that you'll usually set up once and update
- > only rarely, which is why I'm not sure it's worth it. And many
- > filesystems have extra kernel options we can't guess anyway.
-
-Exactly!
-
-
- >> > The one reason I can imagine wanting to set uuid/salt is if someone
- >> > wants a byte-identical verity partition. fs/erofs sets all-zero UUID,
- >> > which we could do for verity too, but I'm not sure what the security
- >> > implications of a fixed (or pseudorandom?) salt would be.
- >> Yes, it is also only in the context of reproducible builds that I
- >> have
- >> ever used a fixed uuid/salt.
- >> Security wise, as this is about hashing rather than encryption I
- >> *THINK*
- >> it is fine as long as the hashing algorithm is strong enough (E.G. you
- >> would need find same-size collisions).
-
- > I don't *see* any huge problem either, but making a fixed salt the
- > default seems risky. If someone sets that via an _EXTRA_ARGS option
- > that's their responsibility. ;-)
-
-;)
-
+diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
+index 8756adb4c6..43e9766106 100644
+--- a/package/libmicrohttpd/libmicrohttpd.mk
++++ b/package/libmicrohttpd/libmicrohttpd.mk
+@@ -10,6 +10,14 @@ LIBMICROHTTPD_LICENSE_FILES = COPYING
+ LIBMICROHTTPD_CPE_ID_VENDOR = gnu
+ LIBMICROHTTPD_INSTALL_STAGING = YES
+ LIBMICROHTTPD_DEPENDENCIES = host-pkgconf
++
++# Both affect the experimental WebSocket library (src/microhttpd_ws,
++# libmicrohttpd_ws.so), which is only built with --enable-experimental.
++# That option defaults to "no" and we never pass it, so no Buildroot
++# version has ever been affected. Upstream removed the code outright in
++# commit ff13abc1c1d7d2b30d69d5c0bd4a237e1801c50b, released in 1.0.3.
++LIBMICROHTTPD_IGNORE_CVES += CVE-2025-59777 CVE-2025-62689
++
+ LIBMICROHTTPD_CONF_OPTS = --disable-curl --disable-examples
+ LIBMICROHTTPD_CFLAGS = $(TARGET_CFLAGS) -std=c99
+ 
 -- 
-Bye, Peter Korsgaard
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
