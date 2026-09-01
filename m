@@ -1,91 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 488ACC624CF
-	for <buildroot@archiver.kernel.org>; Tue,  1 Sep 2026 11:23:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD83EC624CF
+	for <buildroot@archiver.kernel.org>; Tue,  1 Sep 2026 11:39:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 88581406C6;
-	Tue,  1 Sep 2026 11:23:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5CAFB80BAA;
+	Tue,  1 Sep 2026 11:39:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eY22LbZyB_DF; Tue,  1 Sep 2026 11:23:34 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id q4AoTuCJXocr; Tue,  1 Sep 2026 11:39:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1788261814;
-	bh=zNAYNJEI9WEFVHqiNduD2yBi0GucXbYgqEIQlLczbfM=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
-	b=CxGorOfdbkQfykvzkGhZtn7J6chsv7Xfa9k3YslOQynrZUVeypFrU3WscKCesLk/H
-	 EOEkfBcXKPPPicJoTZyH2AD5xUGGEQHwAr6iOyX8YcQkyjXs0mTjC65iRjNO3EJaWh
-	 n+21AVW9L62MDL3UqB4QITVsR3qeEbsbjUlreglVf3pcB8I/sUkBuxTSxxVmWyDCka
-	 AAed1Ei1PpUpkzEfUuPoGHg7EB1EVOUguJ33OwLHoEyZop4kAtHkuVRdMVt7P0Bk9F
-	 fD5XyZ6+bgalEBkbODc6smxgOKJCpkxUCNzMgf/cuEMxb6KCgzRubo4MDTqwUfMEAY
-	 g3gBgRKfSKO0w==
+	s=default; t=1788262744;
+	bh=NyHrSt18O9/x3E+nAga7KvVI0WOX5Zi0fdnNVk6Gogk=;
+	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=rwHAF2732fCrokD6IpVJsW78VGT0ZtN7/SnrfCDR8q5jOwFmVjU/SCEVNLM+y3QcZ
+	 luIFaUQPgUma3pN2w2HZzJ9I/kgsyV9gD4rc75w1SVXtrhxd6Jr2nrc1vjc+UUjXa6
+	 +jQtKdly8FHWDqUI26PZPoG+U+Foh7xttzB/8skBFMIne12P26giLofykiFpFF2MhI
+	 5rNlVktYgJEW0dRgqV3mFNx9db/CheQDLaUn7L+7zfvQ1DMk5kd10ZHg2cbdxTZtL+
+	 0uzy04tmyghsYBlbLpjA5cZYyRGyJSl1WnQbUVVbc++RJjaJKEWDhamoqX4qRdAlKv
+	 00/bseRua9vTw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5D77740612;
-	Tue,  1 Sep 2026 11:23:34 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 8D3B91D9
- for <buildroot@buildroot.org>; Tue,  1 Sep 2026 11:23:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BE87A80B89;
+	Tue,  1 Sep 2026 11:39:04 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7C2091DE
+ for <buildroot@buildroot.org>; Tue,  1 Sep 2026 11:39:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6A94B400A8
- for <buildroot@buildroot.org>; Tue,  1 Sep 2026 11:23:32 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 58A9160737
+ for <buildroot@buildroot.org>; Tue,  1 Sep 2026 11:39:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dH5Yi8MEVZ7f for <buildroot@buildroot.org>;
- Tue,  1 Sep 2026 11:23:31 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::630; helo=mail-ej1-x630.google.com;
- envelope-from=yegorslists@googlemail.com; receiver=<UNKNOWN> 
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com
- [IPv6:2a00:1450:4864:20::630])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 25A4F4000B
- for <buildroot@buildroot.org>; Tue,  1 Sep 2026 11:23:30 +0000 (UTC)
-Received: by mail-ej1-x630.google.com with SMTP id
- a640c23a62f3a-c2533d83e3bso752567266b.2
- for <buildroot@buildroot.org>; Tue, 01 Sep 2026 04:23:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1788261808; x=1788866608;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to:content-type;
- bh=6JHFXqw7zqWKOZTsPE4+4K7lYJo5Xjvy/7cFa8GYR1w=;
- b=HmAl5VpQKSBXaVHulrnYth/2poJ3wfbGzAUPdaEKS69fvbitHpgsbjnDFyhjbRcdcN
- i+53lG7jKO7ZfYYSzRCEenoX81pnfcWYRgqpOqcpBOH9ydOZDPG9RBhpXue24aW7P2sE
- xXWYLCD4/SfvVWhv3ehJcj8UgN1r+u2OtpB4EoQCF8f7vvb/w312H6H7pyxJFbEiJx+8
- jSnlBTFHyCIJKLGw2q2fqV8MrYzWRUWpuMiHmKo10jd9ru2s/oyxMFzcUbZx3mFSIvX6
- 1S+rdmyUPBpnqkWyLDIe29IlmbR5WWPk5bcsaFATaj9gK2GYDlebsjdC3AerWo3FCtLF
- qLqA==
-X-Gm-Message-State: AFuF++lhPA9uWcUwZhb89U9dI6zpBNowjiWR2ff8T7pudNXxYtGQUOzE
- EVDkYjMJSb+xXALamLa/1oT0AnEgp6dYCpS1ENI0WKBRiRdTNz6iM9xV9dpN3w==
-X-Gm-Gg: AR+sD10BV3vft7+ZfdmRIKyfjIWtjYbO9XYPHDGbVpBB4EDfSqFU0MhkIAMmQ0J4X72
- I56/z5razZu3WDkhbsgzG5Ss5Dk/xpKn5LWWw/YsZi5yYctysSv/VRy0EEXoE4ZeBEMxgkjU798
- qh4hLdbYWZUoATHUCR4xGjr59arSqEThIv6J5MKeH1xHpw+okyqLssrzs6SRLcytihsoGzlSYuT
- 8ziv9aQSCO+ZI7RkC4CMJcLGrGh4t+OvFlRjdew0VlTSdhy6ecFnqIYqTs5JuWkuC6HjUVaItz7
- dtwzsC0yerdUtk1AEL+EGDsO04LcLrAW2r4YMxtKAVd9Zb4DNkbp19Be5fbph59oITiAvny35Ex
- AFyTYWnoQq2AL60PxNi9E91rXx+lO7KhyQQuUuT+M6gi3LDSXDeFdp1/x9RK1CfBAh5NGFNP3Nf
- NINNZwkGSPCklQfM02zVIEVnm09K+oC2A8PHWIWHc6JmotzFRssgySLxfDFcEgYK678LIJ/iUiW
- O5Uyeo+PGZnjWLud5CcS9dubQgiiPrDzKWGdP5g058=
-X-Received: by 2002:a17:907:3c93:b0:c25:30ec:bec3 with SMTP id
- a640c23a62f3a-c25b3be4d0emr460387266b.8.1788261808114; 
- Tue, 01 Sep 2026 04:23:28 -0700 (PDT)
-Received: from development2.visionsystems.local (mail.visionsystems.de.
- [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-c255f1fb4c3sm575754166b.48.2026.09.01.04.23.27
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 01 Sep 2026 04:23:27 -0700 (PDT)
-To: buildroot@buildroot.org
-Date: Tue,  1 Sep 2026 13:23:23 +0200
-Message-Id: <20260901112323.2671803-1-yegorslists@googlemail.com>
-X-Mailer: git-send-email 2.34.1
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id T5QEgEGObBaz for <buildroot@buildroot.org>;
+ Tue,  1 Sep 2026 11:39:02 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+ receiver=<UNKNOWN> 
+Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none) header.from=korsgaard.com
+Authentication-Results: smtp3.osuosl.org; dkim=pass (2048-bit key,
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail2 header.b=rTR+mvFX
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 71411606BE
+ for <buildroot@buildroot.org>; Tue,  1 Sep 2026 11:39:00 +0000 (UTC)
+DKIM-Signature: a=rsa-sha256;
+ b=rTR+mvFXIdpeGVnMefM3S7fq1mLU/wsDfACpfcbjrN9KDc8YZ5LL8hxStp8ujHT98Yze7RIcpK7PeU5KpqGx6BflHpplaIdzMsmrc2McaKCzICCLsbs8FbXdc3GJZ1kQsnb8gZdOOnyNumDTQo95XYVP0Fj9dqNV0zGC5cBo9FroFAFit+4IXwT759RWKd3GIICVpAz5vpnlMYDYDLWx3Ja/FcLATYeVtMByC3KOoOalQpHUZmRFjcduQaHtP+NTtKCQ0TU/J50RXsoY3RA0kE07s9cNLOFgMNYy2Qx66CdPFNHepZgDHUrJ7mZp6vhcSueKOpfte+piD91BD3Iiqg==;
+ s=purelymail2; d=purelymail.com; v=1;
+ bh=gTGFdYriZgoG44yS2pRkOWCbMcNIYnwgLlEKE3fLwyU=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 1449319341; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Tue, 01 Sep 2026 11:38:56 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
+ (envelope-from <peter@korsgaard.com>) id 1x1MpL-00000003LQ0-2zAm;
+ Tue, 01 Sep 2026 13:38:55 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Fiona Klute <fiona.klute@gmx.de>
+Cc: Fiona Klute via buildroot <buildroot@buildroot.org>
+In-Reply-To: <ac74c754-7c42-421e-a16c-c019b902652e@gmx.de> (Fiona Klute's
+ message of "Tue, 1 Sep 2026 12:26:19 +0200")
+References: <20260831125103.841338-1-fiona.klute@gmx.de>
+ <87mru2je25.fsf@dell.be.48ers.dk>
+ <76f38e09-f5c4-4b0c-8397-01061d7fbced@gmx.de>
+ <878q5lh3su.fsf@dell.be.48ers.dk>
+ <ac74c754-7c42-421e-a16c-c019b902652e@gmx.de>
+Date: Tue, 01 Sep 2026 13:38:55 +0200
+Message-ID: <875x0p8als.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/libmicrohttpd: ignore CVE-2025-59777
- and CVE-2025-62689
+Subject: Re: [Buildroot] [PATCH next 1/3] fs/common.mk: add optional hook to
+ build a verity hash tree
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -97,58 +92,104 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: yegorslists--- via buildroot <buildroot@buildroot.org>
-Reply-To: yegorslists@googlemail.com
-Cc: Bernd Kuhls <bernd@kuhls.net>, Will Newton <will.newton@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+>>>>> "Fiona" == Fiona Klute <fiona.klute@gmx.de> writes:
 
-Both CVEs describe a NULL pointer dereference affecting libmicrohttpd
-1.0.2 and earlier. They were fixed upstream in commit
-ff13abc1c1d7d2b30d69d5c0bd4a237e1801c50b, released in version 1.0.3, so
-the current LIBMICROHTTPD_VERSION is not affected.
+Hi,
 
-pkg-stats nevertheless keeps reporting both, because the NVD entries
-encode the affected range as
+ >> Possibly, but should that then be per-fs or global? I wonder if it
+ >> is
+ >> worth the complexity to add this logic versus how fairly simple it is to
+ >> just do it with whatever options you want in a post-image script.
 
-  cpe:2.3:a:gnu:libmicrohttpd:*:*:*:*:*:*:*:*, versionEndExcluding 2025-09-16
+ > I'd say per-fs. The logic could be shared like the general veritysetup
+ > call, just the option would need to be added for each fs (in
+ > Config.in). I don't think Kconfig has a kind of templating for that?
 
-i.e. the date of the fix commit instead of a version number. Since
-support/scripts/cve.py compares versions using LooseVersion, every 1.0.x
-version evaluates as smaller than "2025-09-16" and is thus reported as
-affected, no matter how far the package gets bumped.
+ > I agree running veritysetup in a post-image script isn't very
+ > complicated. Where I'm actually trying to do is to have the roothash
+ > of my rootfs before building an initramfs (using
+ > BR2_TARGET_ROOTFS_CPIO_DRACUT), so it can be included (and signed
+ > along with the initramfs, in my case in a FIT image). Of course these
+ > patches don't achieve that, they'd just provide the roothash as a
+ > start.
 
-Assisted-by: Claude:claude-opus-5
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/libmicrohttpd/libmicrohttpd.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ > If you have a better idea how to do that I'm all ears.
 
-diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
-index 8756adb4c6..69b45a8c05 100644
---- a/package/libmicrohttpd/libmicrohttpd.mk
-+++ b/package/libmicrohttpd/libmicrohttpd.mk
-@@ -10,6 +10,13 @@ LIBMICROHTTPD_LICENSE_FILES = COPYING
- LIBMICROHTTPD_CPE_ID_VENDOR = gnu
- LIBMICROHTTPD_INSTALL_STAGING = YES
- LIBMICROHTTPD_DEPENDENCIES = host-pkgconf
-+
-+# Both fixed in commit ff13abc1c1d7d2b30d69d5c0bd4a237e1801c50b, released in
-+# version 1.0.3. The NVD entries encode the affected range as
-+# "< 2025-09-16", i.e. the date of the fix instead of a version number, so
-+# every 1.0.x version compares as affected.
-+LIBMICROHTTPD_IGNORE_CVES += CVE-2025-59777 CVE-2025-62689
-+
- LIBMICROHTTPD_CONF_OPTS = --disable-curl --disable-examples
- LIBMICROHTTPD_CFLAGS = $(TARGET_CFLAGS) -std=c99
- 
+The way I have solved it in the past is to use "late" binding between
+the kernel and rootfs, E.G. only when I build the FIT image by sticking
+the root hash into a u-boot boot script that I generate in my post-image
+script and embed in the FIT.
+
+U-Boot can afaik source a boot script from a FIT image nowadays, but I
+wanted it more integrated into the bootm flow, so I simply added the
+bootscript as a type = "script" data file and referred to it from the
+configuration with:
+
+ kernel = "kernel-1";
+ fdt = ..
+ loadables = "script-1";
+
+And then some trivial logic in my board code to handle such loadable:
+
+/* support "script" loadables in FIT images */
+static void board_script_handler(ulong addr, size_t size)
+{
+        run_command_list((char *)addr, size, 0);
+}
+
+U_BOOT_FIT_LOADABLE_HANDLER(IH_TYPE_SCRIPT, board_script_handler);
+
+
+ > script can't do it (rootfs image isn't ready), post-image doesn't have
+ > the fakeroot environment for running Dracut (and other setup [1]).
+ > Maybe we should move building initramfs to a separate stage, after
+ > rootfs (I'd definitely need to order cpio after other fs types), and
+ > add a pre-initramfs script? Is there another non-messy way to use the
+ > fakeroot environment and variables from Buildroot config that I've
+ > missed so far (other than rules in external.mk)?
+
+Initramfs is indeed annoying because of the circular dependencies. It
+has been quite a while since I last used one. Out of interest, what do
+you need the initramfs for?
+
+
+ >> I would be OK with that. These fixups are a bit icky though as we do
+ >> not
+ >> know what kernel version will be used and the dependencies may change
+ >> over time - So maintenance and testing is not so trivial.
+
+ > Yeah, and for something that you'll usually set up once and update
+ > only rarely, which is why I'm not sure it's worth it. And many
+ > filesystems have extra kernel options we can't guess anyway.
+
+Exactly!
+
+
+ >> > The one reason I can imagine wanting to set uuid/salt is if someone
+ >> > wants a byte-identical verity partition. fs/erofs sets all-zero UUID,
+ >> > which we could do for verity too, but I'm not sure what the security
+ >> > implications of a fixed (or pseudorandom?) salt would be.
+ >> Yes, it is also only in the context of reproducible builds that I
+ >> have
+ >> ever used a fixed uuid/salt.
+ >> Security wise, as this is about hashing rather than encryption I
+ >> *THINK*
+ >> it is fine as long as the hashing algorithm is strong enough (E.G. you
+ >> would need find same-size collisions).
+
+ > I don't *see* any huge problem either, but making a fixed salt the
+ > default seems risky. If someone sets that via an _EXTRA_ARGS option
+ > that's their responsibility. ;-)
+
+;)
+
 -- 
-2.34.1
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
