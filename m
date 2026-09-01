@@ -1,62 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98A8BC624D4
-	for <buildroot@archiver.kernel.org>; Tue,  1 Sep 2026 14:11:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13370C61DD3
+	for <buildroot@archiver.kernel.org>; Tue,  1 Sep 2026 14:11:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 553B660748;
-	Tue,  1 Sep 2026 14:11:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B279E80742;
+	Tue,  1 Sep 2026 14:11:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id h7JvQNwuYVwC; Tue,  1 Sep 2026 14:11:28 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rfyJ7AF3Q4f5; Tue,  1 Sep 2026 14:11:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1788271888;
-	bh=xHdVZSvtLgPN+SYHAYHbuaMmjW5wPyj0gs7vzUskm4Y=;
+	s=default; t=1788271887;
+	bh=JUS0TWfJruYxVR9tKqD9wvt7Rr2UNV3xKRkhkm5+h7w=;
 	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=mRu66e+8SRNZaLURFWLpu8yTrFZBZjSorNdQOO/ZIA9wOUfBqaGUW/vm9YIiQPQVZ
-	 lzi/R+1fOHKmtm4vcqxXCLNfUqK1KMN9BRTKL9/3xQ8gEy+cQ9/6FncDDu1VfgPSDP
-	 7yAk4DwsdeMz2IEVwAPmv7RcVp1dRKDuZvJ3giPAAgrsmY6th2nSSM8vHtXyje70+p
-	 NQqvfDTGs9rPHP6G2QA4xDHCIgFQXEszF1bQuUKVr7M5GoQhLqu5Jj+f8sMdBIQJRP
-	 vLaihA1T+4DvU4IITFkbZKt3oeyhjcyL8haJrSHeDxTp1gHU0OH+oTdG8urJ2gfPgb
-	 GNaQ05SS3ax6g==
+	b=Y0iNhCzYZzzYvevq+BNoyojiNuLNJFW8XyoJEhMKe0Nu2bB1D36IWhHCbDo2lx0SS
+	 6J4IlS8bUQmiOBj7cTzwMgX6vOPZcUhD9NMFLwLnnYewmZ0NytOIKVHpsmhoupJwgr
+	 XPIC8lti4F8KA8ku8yAu5xJCEUbR2+V46pZV+AfUBZojXz3IP13Dx2Kf1n1EVxBqDv
+	 hbC+4qvLblEHYrcypRZthJJwgS73le27DsmEv5bxv/R1lxNHYiPiEVE+qYwbxL4l3L
+	 qznAcnTN/eIxQzmSoHy7KVVxCu13WvwtWFINvI1Q4nkEUrOIjsNksvGbLhf2aALKcT
+	 0doGBDrLa6jCg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B10AA606DE;
-	Tue,  1 Sep 2026 14:11:28 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id B7538265
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3E68D80AD6;
+	Tue,  1 Sep 2026 14:11:27 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id AE9A6E45
  for <buildroot@buildroot.org>; Tue,  1 Sep 2026 14:11:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 95E1F606DE
+ by smtp4.osuosl.org (Postfix) with ESMTP id 951254064A
  for <buildroot@buildroot.org>; Tue,  1 Sep 2026 14:11:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oHELsR9qIviz for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id u7AXmxShYZ0m for <buildroot@buildroot.org>;
  Tue,  1 Sep 2026 14:11:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7C689606BE
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6B3D240648
  for <buildroot@buildroot.org>; Tue,  1 Sep 2026 14:11:23 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 802A59340A; Tue,  1 Sep 2026 14:10:24 +0000 (UTC)
+ id 699BC9340A; Tue,  1 Sep 2026 14:10:24 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 1 Sep 2026 16:10:56 +0200
+Date: Tue, 1 Sep 2026 16:09:26 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: db3d0d44acae1bda1fb5d06cbdd01f7fe3621857
-X-Git-Newrev: 55a7ece9e53f2de0cd96294efeb38045bbd41bef
+X-Git-Oldrev: 8dea6e7c089cb5d4fa7bd788fc6e07c9f19f70a8
+X-Git-Newrev: 0742e67d2f94118d4227d29e409dc50de0acfb07
 X-Patchwork-Hint: ignore
-Message-Id: <20260901141024.802A59340A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/dpdk: make the libvirt dependency
- explicit
+Message-Id: <20260901141024.699BC9340A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/drogon: Fix incomplete 'struct tm'
+ type on uClibc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -74,39 +74,67 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/55a7ece9e53f2de0cd96294efeb38045bbd41bef
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/0742e67d2f94118d4227d29e409dc50de0acfb07
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-examples/vm_power_manager/meson.build in DPDK detects the presence of
-libvirt:
+Add a patch including <time.h> in Date.h to fix the following build
+failure:
 
-opt_dep = cc.find_library('virt', required : false)
+  Date.cc:98:28: error: return type 'struct trantor::tm' is incomplete
+     98 | struct tm Date::tmStruct() const
+        |                            ^~~~~
 
-and then builds some examples or not depending on the availability of
-libvirt. Let's make this optional dependency explicit in dpdk.mk, even
-if there's no explicit enable/disable option for it.
+Fixes:
+- https://autobuild.buildroot.org/results/e48e0fc1b95a8ad5de964b1e6d12bc45ac39f0b4
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dpdk/dpdk.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ ...2-Fix-incomplete-struct-tm-type-on-uClibc.patch | 36 ++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
 
-diff --git a/package/dpdk/dpdk.mk b/package/dpdk/dpdk.mk
-index 147bdb23d3..968a5a877d 100644
---- a/package/dpdk/dpdk.mk
-+++ b/package/dpdk/dpdk.mk
-@@ -112,6 +112,10 @@ ifeq ($(BR2_PACKAGE_LIBBPF),y)
- DPDK_DEPENDENCIES += libbpf
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBVIRT),y)
-+DPDK_DEPENDENCIES += libvirt
-+endif
+diff --git a/package/drogon/0002-Fix-incomplete-struct-tm-type-on-uClibc.patch b/package/drogon/0002-Fix-incomplete-struct-tm-type-on-uClibc.patch
+new file mode 100644
+index 0000000000..4fad84664c
+--- /dev/null
++++ b/package/drogon/0002-Fix-incomplete-struct-tm-type-on-uClibc.patch
+@@ -0,0 +1,36 @@
++From cd29aa61d299c82d82d3285215fc4fc65e4d4fb9 Mon Sep 17 00:00:00 2001
++From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
++Date: Sun, 30 Aug 2026 12:00:00 +0200
++Subject: [PATCH] Fix incomplete 'struct tm' type on uClibc
 +
- ifeq ($(BR2_PACKAGE_RDMA_CORE),y)
- DPDK_DEPENDENCIES += rdma-core
- endif
++Fix a build failure [1] reported by Buildroot autobuild for the
++mips/uClibc configuration:
++
++  Date.cc:98:28: error: return type 'struct trantor::tm' is incomplete
++     98 | struct tm Date::tmStruct() const
++        |                            ^~~~~
++
++Add the missing include to Date.h.
++
++[1] https://autobuild.buildroot.org/results/e48e0fc1b95a8ad5de964b1e6d12bc45ac39f0b4/
++Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
++Upstream: https://github.com/an-tao/trantor/pull/415
++---
++ trantor/utils/Date.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/trantor/trantor/utils/Date.h b/trantor/trantor/utils/Date.h
++index 4367d76e0305..41b02d355d14 100644
++--- a/trantor/trantor/utils/Date.h
+++++ b/trantor/trantor/utils/Date.h
++@@ -16,6 +16,7 @@
++ 
++ #include <trantor/exports.h>
++ #include <stdint.h>
+++#include <time.h>
++ #include <string>
++ 
++ namespace trantor
++-- 
++2.43.0
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
