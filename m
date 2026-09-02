@@ -1,94 +1,97 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E5DEC624D9
-	for <buildroot@archiver.kernel.org>; Wed,  2 Sep 2026 13:17:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77C91C61DD6
+	for <buildroot@archiver.kernel.org>; Wed,  2 Sep 2026 13:17:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D9BFE80989;
-	Wed,  2 Sep 2026 13:17:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1E4F240A3C;
+	Wed,  2 Sep 2026 13:17:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BwfKzKyVqfzj; Wed,  2 Sep 2026 13:17:14 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id csntyQB0uxrX; Wed,  2 Sep 2026 13:17:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1788355034;
-	bh=f+k6dJSI6xIJOsNHGYpZZPiem7Ks4xo56aA9i120750=;
-	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=VgMcQs09jlXA3ynl6iXDrahMnXJm8Wa+IG8Y4ga0saJQfhSD0VeL9CxUACqKJ/ARV
-	 4Z30i3ZknXLrnZlapL7QwKXw4tNlyOU2EgPSt8pUSkTfhdz4fdEUgDCyRdLjzo0CqH
-	 qiAaaw7w8y41V5EfbYOrgV+UPbxc2Elyq4U1PQ9q88SAf9QkJag7FouW+pB+X1Zs95
-	 yART3smVnmNzDf84xpFc5z5zxvhUHGgBfNYfWD6jTIlKxrAxz8BYDIo4vG6fIiabDf
-	 3UOjJAnBSVtiAL/Rk1nOmx98DCd0EY6ae9cWg/tBbfGkBEWjA2isNC2O0vnerNBgsW
-	 C3LHWITZRsGuw==
+	s=default; t=1788355035;
+	bh=48OU6F4Vf3CD73+0QuyRnoyc/7IJPJ75i4wN75zTLmk=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=m4+bKbZzoxP6nn0d0+h0cYfRbwtZlFeVwc5N+Dm6TjeXAT0yuxez3IADqddTDjXGz
+	 mLi3FMIuk4xG8u52T89d+PVcJJu7DypstO5UCffpu+hqlGMAhIHZ4OPzBe8dHj0cmL
+	 xT37m+PPkGzYGlyqXQlZyYUdHQF4+in28N4OwJ/o+ekunijQQhPpellJguhtl6g0qt
+	 Xma0A76mv5mca9szDsKqMVBsksiLhFOP/iFlHvLrLxkloRJCYx9nW2Q2BNKRKOmozi
+	 43PYIDi9PrN2mZ68+Yx39xPzTopvxNSnETfgV8rA1BQuih8ttp/9hEvCfVgwMXahMK
+	 Rz95fFg2e+1eg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DE2908098C;
-	Wed,  2 Sep 2026 13:17:13 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 52540230
+	by smtp4.osuosl.org (Postfix) with ESMTP id 02AE440A4C;
+	Wed,  2 Sep 2026 13:17:15 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6B242230
  for <buildroot@buildroot.org>; Wed,  2 Sep 2026 13:17:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 42BA260648
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5C0204005A
  for <buildroot@buildroot.org>; Wed,  2 Sep 2026 13:17:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id l8L1qnVjgSpU for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 11YRSp-Yut7o for <buildroot@buildroot.org>;
  Wed,  2 Sep 2026 13:17:06 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::434; helo=mail-wr1-x434.google.com;
+ client-ip=2a00:1450:4864:20::436; helo=mail-wr1-x436.google.com;
  envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
- [IPv6:2a00:1450:4864:20::434])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3BCE9606F1
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
+ [IPv6:2a00:1450:4864:20::436])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3F4264004D
  for <buildroot@buildroot.org>; Wed,  2 Sep 2026 13:17:05 +0000 (UTC)
-Received: by mail-wr1-x434.google.com with SMTP id
- ffacd0b85a97d-482fc2b44a7so1081784f8f.2
+Received: by mail-wr1-x436.google.com with SMTP id
+ ffacd0b85a97d-482e2fdf5abso550968f8f.2
  for <buildroot@buildroot.org>; Wed, 02 Sep 2026 06:17:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20251104; t=1788355024; x=1788959824;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to:content-type;
- bh=9CwRORy2ZlJatIxJa/jiFK9dh3MQRQUEVjb1pCMs47I=;
- b=IxKkWwLIMYgeHq0IkT9gEribAThWsosfuOvxSV7Ib3gy/dxg5E+Pz5w4EMDruL+zdp
- SIr7J+yMufOv3/Tz/09NxMylWWKzx8bneq8rSifue/m5gTisXTWSgk1ymN9NwZ72iFI1
- +N15O6EoOjlwgbnq+rlJNdgEzIzWdf6HyFBf1fmZWJXFFIG36cL5u9Yqq2gRB9/tcgWr
- UOXPT+r1M9spqX7AOShHVmNNnCceWT56LB0MA3qW/Xye1MJlGSZO/SDxmudCN7UmXAkM
- b62KSYVTX1+rHgPRhbngxxCdgGkcCa4Oyfa9N38QNmkdi266a+m5Fe8wTO8bZfMtKBLU
- jHQQ==
-X-Gm-Message-State: AFuF++kUgVtTfn44nn15kz911K5opkrG6IKwNcL6rLtLqLOu4rJVaCqw
- FMYjt8pnyOAbTjy2+vTVBt2UPyvfHGD7Pa/IkG6HkIHhSr02O7W+6qaMZ6cLw35E7C92EWocn0U
- y+SVq5Qk=
-X-Gm-Gg: AYBFou2b+83ecFcbjzaLENRAkp14CMn+ESYK7hpOvsHPjSqjYdXRsbPRDEZ3BwCIkdG
- qyFI55SX2sSy1ZPKAPZyVkR1RgQx25OfBQIaMcmzIfDuZeD9KvmdluR7BlIl/RcwNa4vkqDvkJ3
- s0rZXH++JjWEtQqDz2ZcNE3u9gNya/VUtXE8XxqUX/G+dDyo2P5/7hZlVuuxDOBiLMHMd1SJnR8
- toO4QEW6mc0mWEQxJ1ezYEoWIZuYDiy1owqC09JYGuVlWYIUTCmnNh7CQ1KtNLzinW1IYaIZSw8
- LiPadRje3XkCQuPaeHx9xc8UNnXNLJ1IcT7tlewsFsHEHMnk+gi49vOpvo3u2AnYlN88c6eGqe3
- 42rKxOIf7TzPdSof59GGYlLU3+lax5qCyATjxkjFXteeLpiIIme0s2mdG4+pljU8dLdEK9VT5Xr
- GOUxQ3IiYcuaupPbSm00LHWzK1ztKD7RswH9dKYwviYE47cpWFULkqKlFdIlqYcYmV6hb/KZfOB
- LEmgBKKuQdBbjc=
-X-Received: by 2002:a05:6000:2486:b0:484:453a:8889 with SMTP id
- ffacd0b85a97d-48488f1d9f0mr7695247f8f.22.1788355020151; 
- Wed, 02 Sep 2026 06:17:00 -0700 (PDT)
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to:content-type;
+ bh=quScRAhI9dlgiMTv3kl6tfv84vVuqZ5B14Nmp+9sXug=;
+ b=SJbWNpotrAIbsCme9MC4Vux9y0dmIS5uSGNyz7YhTjtQXSFmRGY1jXL0xSZf3TSR/Z
+ jZR4+6/X7Du/cTOIpggoYlPie6G3vXzKOR1NmhCGtsNOV0QSJpffALxuz1SX4lRQ8WXE
+ whrjfu9OZbhjQ8I30MMY451BLbpEX8CtJWa59I/d0dNeqYETCDjCo/oLvWTVPmD802MS
+ /mECFTBzcMTzifyhQaswWVt+v6y0wWx+lD+lliABwcJC6pEbxa6SADi7xueQ6P/cUyWl
+ TMCqHcD7H+/T+q8P17Hvwa4mfb/Z+yJYQDnMj3Uc43EIUjT2YBfYRUtFXodlACfdnIdJ
+ +Zdg==
+X-Gm-Message-State: AFuF++kld9b0ML+dtNe612qrOD1/Ic2+RvwOKxzEzKjYhngqmWxMAqXd
+ FEP70mRE5XAkYXryfKm/AupT+W6jxq67o6d8rNvBAdk3oO/69a2XzVDuqOLApB1lHX0Gyf5ipKl
+ pYPZYz8w=
+X-Gm-Gg: AYBFou0O7NuFKhHUUjnqYsLPzumW8KkTjAG1oqf/XqJZ1Bm3dc67raE9vspkoZa5wx/
+ yRGfBAbzdxD3k5EdXx7aJTj2+WTaPjXcW+eNChr+MKYZpjT+WCMk3uOGWQp0VR1SLwewCt/BS1B
+ dgSREFMmyFwlO4ar69xG8fysO4RhgSgE0fFlS90mQgQ2emPUpZwJUYuMOgYFMivA6f/VMRmcJrn
+ vpHYsH0cIC1gOOXIMNGKgE7gApT+rwxL5LZyJeV/ERfLWjsyIYufa/ewTB7Ny+EHnnnPH7lxNAQ
+ GxqmTrsO18xyqPlY7pSBWFmsoEvxLwDlGY8Ws0IHBLIL+Sh/Gib8Xxfj6LTqOFLTPZlVp1Rgcky
+ 93xHtZChwQoDOsBpBhkWopPflsvIWfxF9T8gHdci6+kz4tkDYi0//c3eMD4d+2NO8kFPti2Du2u
+ gk0Yzu2aLC+PHiPe2AY7n2zp+PSPGj/DZuNkczUYXoh8m6Udf93WEWQJ/WoulvXoMLH2TT8Yy9d
+ umM
+X-Received: by 2002:a05:6000:4b02:b0:482:f528:be4 with SMTP id
+ ffacd0b85a97d-48488f20a04mr10322313f8f.16.1788355023828; 
+ Wed, 02 Sep 2026 06:17:03 -0700 (PDT)
 Received: from chapelon.home ([2a02:a03f:63ab:dc01:ce15:1729:c989:3a9e])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-48448e736a6sm6176617f8f.5.2026.09.02.06.16.59
+ ffacd0b85a97d-48448e736a6sm6176617f8f.5.2026.09.02.06.17.03
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 02 Sep 2026 06:16:59 -0700 (PDT)
+ Wed, 02 Sep 2026 06:17:03 -0700 (PDT)
 To: buildroot@buildroot.org
 Cc: Bernd Kuhls <bernd@kuhls.net>, thomas.perale@mind.be,
  raphael.melotte@mind.be, Titouan Christophe <titouan.christophe@mind.be>
-Date: Wed,  2 Sep 2026 15:16:25 +0200
-Message-ID: <20260902131640.379588-1-titouan.christophe@mind.be>
+Date: Wed,  2 Sep 2026 15:16:31 +0200
+Message-ID: <20260902131640.379588-7-titouan.christophe@mind.be>
 X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260902131640.379588-1-titouan.christophe@mind.be>
+References: <20260902131640.379588-1-titouan.christophe@mind.be>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2 for 2025.02.x 00/15] package/clamav: update
- to upstream LTS
+Subject: [Buildroot] [PATCH v2 for 2025.02.x 06/15] package/clamav: add
+ patch for CVE-2026-20214
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -107,79 +110,73 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-As indicated on ClamAV End of Life policy webpage [1], the 1.0 series is the
-previous LTS (and therefore unmaintained). The ClamAV 1.4 series is the current
-LTS version, maintained for 3 years. The latest release being ClamAV 1.4.6.
-
-However, there is a breaking build-system change in ClamAV 1.4.4 [2]:
-    "The minimum Rust version for ClamAV 1.4.4 is now 1.87.0."
-
-Unfortunately, Buildroot LTS 2025.02.x is still on Rust v1.82, and therefore
-building ClamAV>=1.4.4 fails because of missing features for Rust.
-
-Consequently, this series:
-- Bump ClamAV to the latest LTS version that can be built with Buildroot
-  2025.02.x, which is ClamAV 1.4.3
-- Backport security fixes from ClamAV 1.4.4, 1.4.5 and 1.4.6
-
-[1] https://docs.clamav.net/faq/faq-eol.html
-[2] https://github.com/Cisco-Talos/clamav/releases/tag/clamav-1.4.4
-
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
-Changes v1-v2:
-  - Removed patch 03/16 from series v1 which didn't work properly
----
-
-Titouan Christophe (15):
-  package/clamav: bump to v1.4.3
-  package/clamav: add patch for CVE-2026-20031
-  package/clamav: add patch for CVE-2026-20217
-  package/clamav: add patch for CVE-2026-20213
-  package/clamav: add patch for CVE-2026-20216
-  package/clamav: add patch for CVE-2026-20214
-  package/clamav: add patch for CVE-2026-20243
-  package/clamav: add patch for CVE-2026-20215
-  package/clamav: add patch for CVE-2026-20244
-  package/clamav: add hardening patch for TOCTOU issue in quarantine
-    actions
-  package/clamav: add patch for CVE-2026-20345
-  package/clamav: add patch for CVE-2026-20339
-  package/clamav: add patch for CVE-2026-20346
-  package/clamav: add patch for CVE-2026-20347
-  package/clamav: add patch for CVE-2026-20348
-
- ...-panic-when-scanning-some-html-files.patch |  240 +
- ...ix-pespin-cleanup-bitmap-tracking-47.patch |   46 +
- ...ack-triggered-rebuild-pe-overflow-49.patch |   90 +
- ...e-installshield-extraction-limits-55.patch |  126 +
- ...av-fix-fsg-section-loop-underflow-51.patch |   40 +
- ...rser-robustness-and-scan-coverage-63.patch | 1503 +++
- ...v-fix-7z-substream-count-overflow-53.patch |   40 +
- ...8-fix-32-bit-dmg-mish-size-checks-65.patch |  136 +
- ...rantine-actions-against-toctou-races.patch | 8117 +++++++++++++++++
- ...-partition-name-conversion-index-103.patch |   37 +
- ...in-rebuilt-section-size-overflow-101.patch |  224 +
- ...guard-pdf-hex-string-newline-skip-98.patch |   36 +
- ...-harden-mach-o-section-validation-96.patch |  149 +
- ...xar-limits-against-inflated-toc-size.patch |  277 +
- package/clamav/clamav.hash                    |    5 +-
- package/clamav/clamav.mk                      |   42 +-
- 16 files changed, 11105 insertions(+), 3 deletions(-)
- create mode 100644 package/clamav/0001-fix-possible-panic-when-scanning-some-html-files.patch
- create mode 100644 package/clamav/0002-libclamav-fix-pespin-cleanup-bitmap-tracking-47.patch
- create mode 100644 package/clamav/0003-libclamav-fix-aspack-triggered-rebuild-pe-overflow-49.patch
- create mode 100644 package/clamav/0004-libclamav-enforce-installshield-extraction-limits-55.patch
+ ...av-fix-fsg-section-loop-underflow-51.patch | 40 +++++++++++++++++++
+ package/clamav/clamav.mk                      |  3 ++
+ 2 files changed, 43 insertions(+)
  create mode 100644 package/clamav/0005-libclamav-fix-fsg-section-loop-underflow-51.patch
- create mode 100644 package/clamav/0006-fix-alz-parser-robustness-and-scan-coverage-63.patch
- create mode 100644 package/clamav/0007-libclamav-fix-7z-substream-count-overflow-53.patch
- create mode 100644 package/clamav/0008-fix-32-bit-dmg-mish-size-checks-65.patch
- create mode 100644 package/clamav/0009-harden-quarantine-actions-against-toctou-races.patch
- create mode 100644 package/clamav/0010-libclamav-fix-gpt-partition-name-conversion-index-103.patch
- create mode 100644 package/clamav/0011-libclamav-fix-pespin-rebuilt-section-size-overflow-101.patch
- create mode 100644 package/clamav/0012-libclamav-guard-pdf-hex-string-newline-skip-98.patch
- create mode 100644 package/clamav/0013-libclamav-harden-mach-o-section-validation-96.patch
- create mode 100644 package/clamav/0014-libclamav-enforce-xar-limits-against-inflated-toc-size.patch
 
+diff --git a/package/clamav/0005-libclamav-fix-fsg-section-loop-underflow-51.patch b/package/clamav/0005-libclamav-fix-fsg-section-loop-underflow-51.patch
+new file mode 100644
+index 0000000000..e7561b47cd
+--- /dev/null
++++ b/package/clamav/0005-libclamav-fix-fsg-section-loop-underflow-51.patch
+@@ -0,0 +1,40 @@
++From: "Val S." <valsnyde@cisco.com>
++Date: Wed, 17 Jun 2026 09:25:13 -0400
++Subject: Libclamav: fix FSG section loop underflow (#51)
++
++A malformed FSG sample can leave the recovered section count at
++zero in the v1.31 unpacker path. The code then allocates space for
++one section entry but initializes recovered RVAs with a loop bound
++that underflows, causing an out-of-bounds write past the end of the
++sections array.
++
++Fix the loop bound by iterating while t is strictly less than the
++section count. This preserves the intended behavior for valid
++nonzero counts and correctly performs zero iterations when no
++original sections were recovered.
++
++Credit: Trail of Bits, in collaboration with Anthropic
++
++CLAM-2966
++
++---
++Upstream: https://github.com/Cisco-Talos/clamav/commit/042bc35d0a89d6658de30ebc8494b3532e73dcc8
++CVE: CVE-2026-20214
++Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
++---
++ libclamav/pe.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/libclamav/pe.c b/libclamav/pe.c
++index 23f4c4ae0d..c894ec7ca8 100644
++--- a/libclamav/pe.c
+++++ b/libclamav/pe.c
++@@ -3753,7 +3753,7 @@ int cli_scanpe(cli_ctx *ctx)
++         }
++ 
++         sections[0].rva = newedi;
++-        for (t = 0; t <= (uint32_t)sectcnt - 1; t++)
+++        for (t = 0; t < (uint32_t)sectcnt; t++)
++             sections[t + 1].rva = (((support[t * 2] | (support[t * 2 + 1] << 8)) - 2) << 12) - EC32(peinfo->pe_opt.opt32.ImageBase);
++ 
++         if (!peinfo->sections[i + 1].rsz || !(src = fmap_need_off_once(map, peinfo->sections[i + 1].raw, ssize))) {
+diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
+index 4eb1840c84..f6a5e0edf4 100644
+--- a/package/clamav/clamav.mk
++++ b/package/clamav/clamav.mk
+@@ -36,6 +36,9 @@ CLAMAV_IGNORE_CVES += CVE-2026-20213
+ # 0004-libclamav-enforce-installshield-extraction-limits-55.patch
+ CLAMAV_IGNORE_CVES += CVE-2026-20216
+ 
++# 0005-libclamav-fix-fsg-section-loop-underflow-51.patch
++CLAMAV_IGNORE_CVES += CVE-2026-20214
++
+ CLAMAV_DEPENDENCIES = \
+ 	bzip2 \
+ 	host-pkgconf \
 -- 
 2.55.0
 
