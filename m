@@ -1,97 +1,97 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98737C624D6
-	for <buildroot@archiver.kernel.org>; Wed,  2 Sep 2026 13:17:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10F4EC624DA
+	for <buildroot@archiver.kernel.org>; Wed,  2 Sep 2026 13:17:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7DE9240A34;
-	Wed,  2 Sep 2026 13:17:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CAD42606F5;
+	Wed,  2 Sep 2026 13:17:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qoRJ-3nDSjNg; Wed,  2 Sep 2026 13:17:11 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id USS08VElWzD3; Wed,  2 Sep 2026 13:17:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1788355031;
-	bh=M48H/+7xr1qURKmAXz4ypH8TvHDh3H4L+ySHzw0z/yw=;
+	s=default; t=1788355032;
+	bh=BAUVjbPS68X2qAWeOLKTAqzAmH/sWxFwq0VwKg1/yLw=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=jVmmhd+v1G+6QVljp0zomlVTrUE+5yqrU1BCfZLvrO3ZfZMoz09jwLhNLiQGw+lQC
-	 liFHBlbJ90OG61kkOHzatlIH4ZAH8m1TlC7r1XtiEdv/6dAF0Ri/8q1avOVXgjlGoB
-	 Bm6nSjfd46G9OaVE3o8cGygI1a7JOw8ppyQLavrMmnRRXh5xtS5feVI7fGab06YxXd
-	 OtYcwWasump2Drf/UF6txNFxE6C6XreNSFsrWrZDKKqBoo2B65nvf6uCFWuixDHXE7
-	 /Ck0GmpULJsLM556/r+W/oYwYAIFoocxhDt5OGPG6YEntfn49QSwAUhfko2N9rGdIA
-	 vpMVlAeEVeIrQ==
+	b=ZcuCjbQxcg5MLYqFxQ7TWwfuKYYbUjZxp2E1+HOE9qdx4UrKfKJ9FK7TmwYcvsEMW
+	 GWqeU7/Z66u1N2gkfNrVTIJThZrwRkpCDQP4MENFXn/qgEIGGC+7scVUAoju9dF2nd
+	 C6cyBPmg0SdwguyDdsANV+n97mWXOZrktyrBeAPlabRX2Av+UXDXlqpm1PemGsZXEA
+	 CcLlznbNOJ0/IUmfkkLaA5ix/EyF9CDhRp8gkK01aqRR4vaDm81ctUkz+aiWGtobWh
+	 cArGjCY2CcE03/uUWE94kc8kQ32LoTWS7pdFtbw45vGWJ5DZwbyFRHmBx5B29eUjqt
+	 +JNYsS7i4KVBg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6039240A3A;
-	Wed,  2 Sep 2026 13:17:11 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1B62E230
+	by smtp3.osuosl.org (Postfix) with ESMTP id C38B060726;
+	Wed,  2 Sep 2026 13:17:12 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 36552230
  for <buildroot@buildroot.org>; Wed,  2 Sep 2026 13:17:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0D78B405AC
+ by smtp2.osuosl.org (Postfix) with ESMTP id 283CF4006F
  for <buildroot@buildroot.org>; Wed,  2 Sep 2026 13:17:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JNuGX3_bxOBi for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HLUvkUH0VvbS for <buildroot@buildroot.org>;
  Wed,  2 Sep 2026 13:17:06 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::433; helo=mail-wr1-x433.google.com;
+ client-ip=2a00:1450:4864:20::32e; helo=mail-wm1-x32e.google.com;
  envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
- [IPv6:2a00:1450:4864:20::433])
- by smtp4.osuosl.org (Postfix) with ESMTPS id BE46C40577
- for <buildroot@buildroot.org>; Wed,  2 Sep 2026 13:17:03 +0000 (UTC)
-Received: by mail-wr1-x433.google.com with SMTP id
- ffacd0b85a97d-48444ec4fe2so554182f8f.0
- for <buildroot@buildroot.org>; Wed, 02 Sep 2026 06:17:03 -0700 (PDT)
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
+ [IPv6:2a00:1450:4864:20::32e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A4FD64005A
+ for <buildroot@buildroot.org>; Wed,  2 Sep 2026 13:17:05 +0000 (UTC)
+Received: by mail-wm1-x32e.google.com with SMTP id
+ 5b1f17b1804b1-49556f97a9dso7878995e9.1
+ for <buildroot@buildroot.org>; Wed, 02 Sep 2026 06:17:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1788355022; x=1788959822;
+ d=1e100.net; s=20251104; t=1788355023; x=1788959823;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=EuEaqjvvLztgOzta42Fu+i1UnSnkNsFjRrMJlgZF3ls=;
- b=Np+HiEnKA5A3yDDPpOLaBGHEDgcR5AU/yLzVkcGO/tBY3jHGPuTbfqWUEiTHotP4MF
- eeYzJtEjfytGMVpLaHlN9GtVyvHYvixMaoUlPnGG2qLTOv23W2ybjNGBPeUG+h7hJBQ0
- nyNa3O0+epINnDTxB0GS240YpQk84ZiBIovz4g3WwC6EG4ZxRQ7cvha2MzhIvx7kltP8
- czQKdG0op8/EmFUUA6VG4sQkFmqjes7VtmFItOp59w7wUi+E1mMNMPO8/CK6Eg3KDvYT
- Gf1ZVhgX4CpT6kkGW0GvhfpEXY12znI9A7Qe9WfZUR5MujtvUEFdFIaY0q6srFAzCAml
- RsTg==
-X-Gm-Message-State: AFuF++nToTMgYzax289kMEoC5NMIEMovv8JGVW+XGA8i0d9BAL2gBI1E
- bE3F5S5dcCWxJ5K3tNhIlBlh4eAkQtl+s9WlB+oaFEXauHe/mJjhmLkID9EMow3TuyQ6AIgx8aC
- jG/CeWdQ=
-X-Gm-Gg: AYBFou3HBC4Q5E1R+lAJnu5bn/vFXvezmWo7Reycb9h14IIRQN4ZZtcZK/rYdMr3xd4
- nbxe9dchP9hSfcCGBrAVo7vk2vbEugqVbaE7T5cXo+IU1BmRTw96iwYY9T5t3q/W9nk/DTdw98C
- xtf5CW1IDKnbZK0V42Bn47bWa6YZ7llWD5D00AWQ8elYPklFpRIalQ1OAKpic6UViMCHqUiisv0
- V9pOUoDvgskPrEVeitMk8elJAg9o43pOyPQGp+EifEjArnm69eOyIgM1AXTjUvJI0cwrfTsSX4m
- EbqsiWwk6R+5Vl19/wCZMudS+Mg487NDDsV+/ksnmtuFwVn96vujblwXpmjd2/xON/q97/CDNM7
- EjYugSuiO4ZHpF8CyUIlJei/Gsbvi+r/HqJQsAOuavfrQ1hDMYJ0uNraWjMP3W/Qm1M8pJG+Q5x
- wplQ8M24xg/qnJrq5/1uhlsNdhfF0Rk7DcClZZiTnfP4rX3wyxSZhwqciGJzgWfO++NvoEM7EIj
- h32
-X-Received: by 2002:a05:6000:2481:b0:484:3310:710b with SMTP id
- ffacd0b85a97d-484913bf064mr7660619f8f.23.1788355021454; 
- Wed, 02 Sep 2026 06:17:01 -0700 (PDT)
+ bh=Ye/I7DjGQmXJryeLfju7UZxdQ4f+Kgs8W6BVEhPCwhM=;
+ b=PDJizA7B4KMGHdo6z/aroaEb2qf56sNY2l+II10z12GtUPgup4cONfyks3tgPMTo1g
+ dTkr5ftxx4GZC57fe/1bJQEtJUqbMoQaDEZTUfbMadyVQgKxseazT/L9oKYmalC+YF1C
+ XlQg4XJfD3RnTz3t84nA02rGBSCnKQoycNxbINEVO7h+KvJ6iNRQrhQiv5gAbnMnqxMg
+ bv1h68ZHMy8CqwpKlA9DD5HHdIiieiF+y+1e9RnKHKf1PurbJ3mJPNYIicYrNlZnAcdA
+ 0dbp/3mseC+JgoBhHx1s15+Z5sajIAboR6qpMHrssTTBVGuuaUXT9DIa/mTsYCeUtqvW
+ aO1g==
+X-Gm-Message-State: AFuF++kDJjvTegwXoTZUGOYVlkjHVcscgTenV4Dr6fr4hZ9ZjpeJqbVq
+ diCog9zitVFdfcBTEEUWoIwTtqrsPe2l6lbUbqPWEEhg2zy3eeSWaN/MlVmGsvyS8eZk3TiW8R8
+ AZt5hJMY=
+X-Gm-Gg: AR+sD10J748s3nnIA0zR2Sx0d0TNK/aucgdwpNZtGChf7n206zvg20Jv2F9OIu95YS2
+ ki9ZSJFgD26KuBWhGZDkl9aHFb2kJvPtXudpBu9yGX0z8AfLEwfWqQPBxQLjeAyBFW1jOSqlxkP
+ h+zdYIolVDRU1drBHnrvivaeb6vtneYl0F8sjF0Rm9aN6mEpuoHx7SnoksOb1aQQLdxAKj+M2ce
+ ghNPaYz+GGgfWa/bXPIFk2jCUKevDeiZgoHid73E4H+ekWP1lSbDbaX10Bq3omCWt6IJ1+aLbe2
+ TVTEgxOQgJ6Ozfc2z3bSstzQDJ/FB1thl2WaHA34EsJUuzLS7AKxzGqmXg6pP0baxk78EFowD+q
+ 3VjhgWDD+DuK2RVQCx4aRT6/CzXCeXMMm21c7ARH61ifIn4tCCxAGNmt+M0PoSRVZ4mSandcqPz
+ kJ3URNINtqm0anbPrsUWcr4xKX65iGeJ1UePz2SfVBHULDRqBtmK0c/UXbOf1GpwkxH+3ex+GZB
+ 1SVthnHiD5/Xqo=
+X-Received: by 2002:a05:600c:1d89:b0:49c:ed8f:d094 with SMTP id
+ 5b1f17b1804b1-49ced8fd250mr23842895e9.10.1788355023237; 
+ Wed, 02 Sep 2026 06:17:03 -0700 (PDT)
 Received: from chapelon.home ([2a02:a03f:63ab:dc01:ce15:1729:c989:3a9e])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-48448e736a6sm6176617f8f.5.2026.09.02.06.17.00
+ ffacd0b85a97d-48448e736a6sm6176617f8f.5.2026.09.02.06.17.02
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 02 Sep 2026 06:17:01 -0700 (PDT)
+ Wed, 02 Sep 2026 06:17:03 -0700 (PDT)
 To: buildroot@buildroot.org
 Cc: Bernd Kuhls <bernd@kuhls.net>, thomas.perale@mind.be,
  raphael.melotte@mind.be, Titouan Christophe <titouan.christophe@mind.be>
-Date: Wed,  2 Sep 2026 15:16:27 +0200
-Message-ID: <20260902131640.379588-3-titouan.christophe@mind.be>
+Date: Wed,  2 Sep 2026 15:16:30 +0200
+Message-ID: <20260902131640.379588-6-titouan.christophe@mind.be>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260902131640.379588-1-titouan.christophe@mind.be>
 References: <20260902131640.379588-1-titouan.christophe@mind.be>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2 for 2025.02.x 02/15] package/clamav: add
- patch for CVE-2026-20031
+Subject: [Buildroot] [PATCH v2 for 2025.02.x 05/15] package/clamav: add
+ patch for CVE-2026-20216
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -112,268 +112,153 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- ...-panic-when-scanning-some-html-files.patch | 240 ++++++++++++++++++
- package/clamav/clamav.mk                      |   4 +
- 2 files changed, 244 insertions(+)
- create mode 100644 package/clamav/0001-fix-possible-panic-when-scanning-some-html-files.patch
+ ...e-installshield-extraction-limits-55.patch | 126 ++++++++++++++++++
+ package/clamav/clamav.mk                      |   3 +
+ 2 files changed, 129 insertions(+)
+ create mode 100644 package/clamav/0004-libclamav-enforce-installshield-extraction-limits-55.patch
 
-diff --git a/package/clamav/0001-fix-possible-panic-when-scanning-some-html-files.patch b/package/clamav/0001-fix-possible-panic-when-scanning-some-html-files.patch
+diff --git a/package/clamav/0004-libclamav-enforce-installshield-extraction-limits-55.patch b/package/clamav/0004-libclamav-enforce-installshield-extraction-limits-55.patch
 new file mode 100644
-index 0000000000..8ed631a379
+index 0000000000..517974f97b
 --- /dev/null
-+++ b/package/clamav/0001-fix-possible-panic-when-scanning-some-html-files.patch
-@@ -0,0 +1,240 @@
-+From: "Val S." <mx.val@icloud.com>
-+Date: Fri, 5 Sep 2025 15:53:23 -0400
-+Subject: Fix possible panic when scanning some HTML files
++++ b/package/clamav/0004-libclamav-enforce-installshield-extraction-limits-55.patch
+@@ -0,0 +1,126 @@
++From: "Val S." <valsnyde@cisco.com>
++Date: Tue, 16 Jun 2026 23:51:14 -0400
++Subject: Libclamav: enforce InstallShield extraction limits (#55)
 +
-+It is possible that invalid UTF-8 characters may trigger a Rust panic
-+(crash) when parsing CSS style blocks to extract images.
++A multi-chunk InstallShield payload could bypass the intended file
++size limits because the extractor checked zlib's per-stream total_out
++instead of the cumulative bytes written across all chunks. The
++extraction path also collapsed timeout and maxfiles limit hits to
++CL_BREAK, and the header parser trusted declared sizes that can be
++forged to skip scanning a small payload entirely.
 +
-+The issue is using `split_at()` instead of `split_at_checked()`.
++Fix this by enforcing maxfilesize and maxscansize against the
++cumulative output written while inflating and by propagating hard-stop
++limit errors out of is_extract_cab(). Keep the parser preflight, but
++only use cli_checklimits() for non-size checks before extraction so
++size decisions are based on actual inflated output instead of
++attacker-controlled metadata.
 +
-+I also found a few places where I could use string trim methods rather
-+than doing that logic manually.
++Thanks to Mizu for reporting this issue.
 +
-+Thank you to Krishnap7p for reporting this issue.
-+
-+CLAM-2819
-+CLAM-2828
++CLAM-2956
 +
 +---
-+Upstream: https://github.com/Cisco-Talos/clamav/commit/1818981219beeecf94ee91e0fa68972f1f239ac0
-+CVE: CVE-2026-20031
++Upstream: https://github.com/Cisco-Talos/clamav/commit/52f38b9e14c379615b244874802ad57bf37483c4
++CVE: CVE-2026-20216
 +Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 +---
-+ libclamav_rust/src/css_image_extract.rs | 141 +++++++++++-------------
-+ 1 file changed, 62 insertions(+), 79 deletions(-)
++ libclamav/ishield.c | 60 +++++++++++++++++++++++++++++++++++++--------
++ 1 file changed, 50 insertions(+), 10 deletions(-)
 +
-+diff --git a/libclamav_rust/src/css_image_extract.rs b/libclamav_rust/src/css_image_extract.rs
-+index 394c86816f..bf637c78dc 100644
-+--- a/libclamav_rust/src/css_image_extract.rs
-++++ b/libclamav_rust/src/css_image_extract.rs
-+@@ -66,10 +66,15 @@ impl<'a> CssImageExtractor<'a> {
-+         'outer: loop {
-+             // Find occurrence of "url" with
-+             if let Some(pos) = self.remaining.find("url") {
-+-                (_, self.remaining) = self.remaining.split_at(pos + "url".len());
-+-                // Found 'url'.
-++                // Found 'url'. Get the stuff after it.
-++                if let Some((_, rest)) = self.remaining.split_at_checked(pos + "url".len()) {
-++                    self.remaining = rest;
-++                } else {
-++                    // Split failed.
-++                    self.remaining = "";
-++                    return None;
++diff --git a/libclamav/ishield.c b/libclamav/ishield.c
++index 53035c6398..50fb5813d0 100644
++--- a/libclamav/ishield.c
+++++ b/libclamav/ishield.c
++@@ -658,10 +658,15 @@ static cl_error_t is_parse_hdr(cli_ctx *ctx, struct IS_CABSTUFF *c)
++                         if (file_size) {
++                             unsigned int j;
++                             cl_error_t cabret = CL_SUCCESS;
+++                            cl_error_t limitret;
++ 
++-                            if (ctx->engine->maxfilesize && file_csize > ctx->engine->maxfilesize) {
++-                                cli_dbgmsg("is_parse_hdr: skipping file due to size limits (%lu vs %lu)\n", (unsigned long int)file_csize, (unsigned long int)ctx->engine->maxfilesize);
++-                                break;
+++                            limitret = cli_checklimits("InstallShield", ctx, 0, 0, 0);
+++                            if (limitret != CL_SUCCESS) {
+++                                if (file_name != emptyname)
+++                                    fmap_unneed_ptr(map, (void *)file_name, strlen(file_name) + 1);
+++                                if (dir_name != emptyname)
+++                                    fmap_unneed_ptr(map, (void *)dir_name, strlen(dir_name) + 1);
+++                                return limitret;
++                             }
++ 
++                             for (j = 0; j < c->cabcnt && c->cabs[j].cabno != cabno; j++) {
++@@ -737,6 +742,7 @@ static void md5str(uint8_t *sum)
++ static cl_error_t is_extract_cab(cli_ctx *ctx, uint64_t off, uint64_t size, uint64_t csize)
++ {
++     cl_error_t ret = CL_SUCCESS;
+++    cl_error_t abortret = CL_SUCCESS;
++     const uint8_t *inbuf;
++     uint8_t *outbuf;
++     char *tempfile;
++@@ -801,17 +807,51 @@ static cl_error_t is_extract_cab(cli_ctx *ctx, uint64_t off, uint64_t size, uint
++             zret        = inflate(&z, 0);
++             if (zret == Z_OK || zret == Z_STREAM_END || zret == Z_BUF_ERROR) {
++                 unsigned int umpd = IS_CABBUFSZ - z.avail_out;
++-                if (cli_writen(ofd, outbuf, umpd) != umpd)
+++                uint64_t writelen = umpd;
+++                cl_error_t limitret;
+++
+++                if (outsz > UINT64_MAX - writelen) {
+++                    cli_dbgmsg("ishield_extract_cab: output size overflow guard hit\n");
++                     break;
++-                outsz += umpd;
++-                if (zret == Z_STREAM_END || z.avail_out == IS_CABBUFSZ /* FIXMEISHIELD: is the latter ok? */) {
 ++                }
-+             } else {
-+-                // No occurrence of "url"
-+                 // No more 'url's.
-+                 self.remaining = "";
-+                 return None;
-+@@ -78,8 +83,14 @@ impl<'a> CssImageExtractor<'a> {
-+             // Skip whitespace until we find '('
-+             for (pos, c) in self.remaining.grapheme_indices(true) {
-+                 if c == "(" {
-+-                    // Found left-paren.
-+-                    (_, self.remaining) = self.remaining.split_at(pos + 1);
-++                    // Found left-paren. Get the stuff after it.
-++                    self.remaining =
-++                        if let Some((_, rest)) = self.remaining.split_at_checked(pos + 1) {
-++                            rest
-++                        } else {
-++                            // Split failed. Was not whitespace or '(', and maybe not a legal char.
-++                            continue 'outer;
-++                        };
-+                     break;
-+                 } else if c.contains(char::is_whitespace) {
-+                     // Skipping whitespace.
-+@@ -103,7 +114,13 @@ impl<'a> CssImageExtractor<'a> {
-+                         depth -= 1;
-+                     } else {
-+                         // Found right-paren.
-+-                        let (contents, remaining) = self.remaining.split_at(pos);
-++                        let (contents, remaining) =
-++                            if let Some((c, r)) = self.remaining.split_at_checked(pos) {
-++                                (c, r)
-++                            } else {
-++                                // Split failed.
-++                                continue;
-++                            };
-+                         url_parameter = Some(contents);
-+ 
-+                         // Set the remaining bytes so we can look for more later.
-+@@ -123,65 +140,14 @@ impl<'a> CssImageExtractor<'a> {
-+ 
-+             // Strip optional whitespace and quotes from front and back.
-+ 
-+-            // Trim off whitespace at beginning
-+-            for (pos, c) in url_parameter.grapheme_indices(true) {
-+-                if c.contains(char::is_whitespace) {
-+-                    // Skipping whitespace before url contents.
-+-                    continue;
-+-                } else {
-+-                    (_, url_parameter) = url_parameter.split_at(pos);
-+-                    break;
-+-                }
-+-            }
-++            // Trim off whitespace at beginning and end.
-++            url_parameter = url_parameter.trim();
-+ 
-+-            // Trim off whitespace at end
-+-            for (pos, c) in url_parameter.graphemes(true).rev().enumerate() {
-+-                if c.contains(char::is_whitespace) {
-+-                    // Skipping whitespace after url contents.
-+-                    continue;
-+-                } else {
-+-                    (url_parameter, _) = url_parameter.split_at(url_parameter.len() - pos);
-+-                    break;
-+-                }
-+-            }
-+-
-+-            // Trim off " at beginning.
-+-            let c = url_parameter.graphemes(true).next();
-+-            if let Some(c) = c {
-+-                if c == "\"" {
-+-                    (_, url_parameter) = url_parameter.split_at(1);
-+-                }
-+-            };
-+-
-+-            // Trim off " at end.
-+-            let c = url_parameter.graphemes(true).next_back();
-+-            if let Some(c) = c {
-+-                if c == "\"" {
-+-                    (url_parameter, _) = url_parameter.split_at(url_parameter.len() - 1);
-+-                }
-+-            };
-+-
-+-            // Trim off whitespace at beginning.
-+-            for (pos, c) in url_parameter.grapheme_indices(true) {
-+-                if c.contains(char::is_whitespace) {
-+-                    // Skipping whitespace before url contents.
-+-                    continue;
-+-                } else {
-+-                    (_, url_parameter) = url_parameter.split_at(pos);
-+-                    break;
-+-                }
-+-            }
-++            // Trim off " at beginning and end.
-++            url_parameter = url_parameter.trim_matches('"');
-+ 
-+-            // Trim off whitespace at end.
-+-            for (pos, c) in url_parameter.graphemes(true).rev().enumerate() {
-+-                if c.contains(char::is_whitespace) {
-+-                    // Skipping whitespace after url contents.
-+-                    continue;
-+-                } else {
-+-                    (url_parameter, _) = url_parameter.split_at(url_parameter.len() - pos);
-+-                    break;
-+-                }
-+-            }
-++            // Trim off more whitespace at beginning and end which had been inside the quotes.
-++            url_parameter = url_parameter.trim();
-+ 
-+             // Check for embedded image data for the "url"
-+             if !url_parameter.starts_with("data:") {
-+@@ -190,7 +156,12 @@ impl<'a> CssImageExtractor<'a> {
-+             }
-+ 
-+             // Found "data:"
-+-            (_, url_parameter) = url_parameter.split_at("data:".len());
-++            if let Some((_, rest)) = url_parameter.split_at_checked("data:".len()) {
-++                url_parameter = rest;
-++            } else {
-++                // Split failed. Let's move along.
-++                continue;
-++            }
-+ 
-+             // The exact image type doesn't matter at all to a browser.
-+             // They really don't care if it's "image/gif" or "blah blah blah".
-+@@ -198,8 +169,13 @@ impl<'a> CssImageExtractor<'a> {
-+ 
-+             // Find contents after ";"
-+             if let Some(pos) = url_parameter.find(';') {
-+-                (_, url_parameter) = url_parameter.split_at(pos + ";".len());
-+-                // Found ";"
-++                // Found ";". Get the stuff after it.
-++                if let Some((_, rest)) = url_parameter.split_at_checked(pos + ";".len()) {
-++                    url_parameter = rest;
-++                } else {
-++                    // Split failed. Something in this data appears to be malformed. Let's move along.
-++                    continue 'outer;
+++
+++                limitret = cli_checklimits("InstallShield", ctx, outsz + writelen, 0, 0);
+++                if (limitret == CL_ETIMEOUT || limitret == CL_EMAXFILES) {
+++                    abortret = limitret;
+++                    break;
 ++                }
-+             } else {
-+                 // No occurrence of ";" in the url() parameter.
-+                 continue 'outer;
-+@@ -209,7 +185,12 @@ impl<'a> CssImageExtractor<'a> {
-+             for (pos, c) in url_parameter.grapheme_indices(true) {
-+                 if c == "b" {
-+                     // Found 'b'.
-+-                    (_, url_parameter) = url_parameter.split_at(pos + 1);
-++                    if let Some((_, rest)) = url_parameter.split_at_checked(pos + 1) {
-++                        url_parameter = rest;
-++                    } else {
-++                        // Split failed. Was not whitespace or 'b', and maybe not a legal char.
-++                        continue 'outer;
+++                if (limitret == CL_EMAXSIZE) {
+++                    uint64_t allowed = writelen;
+++
+++                    if (ctx->engine->maxfilesize) {
+++                        uint64_t remaining = (outsz < ctx->engine->maxfilesize) ? (ctx->engine->maxfilesize - outsz) : 0;
+++                        if (allowed > remaining)
+++                            allowed = remaining;
 ++                    }
-+                     break;
-+                 } else if c.contains(char::is_whitespace) {
-+                     // Skipping whitespace.
-+@@ -227,13 +208,23 @@ impl<'a> CssImageExtractor<'a> {
-+             }
-+ 
-+             // Found "base64"
-+-            (_, url_parameter) = url_parameter.split_at("ase64".len());
-++            if let Some((_, rest)) = url_parameter.split_at_checked("ase64".len()) {
-++                url_parameter = rest;
-++            } else {
-++                // Split failed. Something in this data appears to be malformed. Let's move along.
-++                continue 'outer;
-++            }
-+ 
-+             // Skip whitespace until we find ','
-+             for (pos, c) in url_parameter.grapheme_indices(true) {
-+                 if c == "," {
-+-                    // Found ','.
-+-                    (_, url_parameter) = url_parameter.split_at(pos + 1);
-++                    // Found ','. Get the stuff after it.
-++                    if let Some((_, rest)) = url_parameter.split_at_checked(pos + 1) {
-++                        url_parameter = rest;
-++                    } else {
-++                        // Split failed. Was not whitespace or ',', and maybe not a legal char.
-++                        continue 'outer;
+++
+++                    if (ctx->engine->maxscansize) {
+++                        uint64_t remaining_scan = (ctx->scansize < ctx->engine->maxscansize) ? (ctx->engine->maxscansize - ctx->scansize) : 0;
+++                        uint64_t remaining      = (outsz < remaining_scan) ? (remaining_scan - outsz) : 0;
+++                        if (allowed > remaining)
+++                            allowed = remaining;
 ++                    }
+++
+++                    cli_dbgmsg("ishield_extract_cab: trimming output file due to size limits (" STDu64 " vs " STDu64 ")\n",
+++                               outsz + writelen,
+++                               outsz + allowed);
+++                    writelen = allowed;
+++                }
+++
+++                if (writelen && cli_writen(ofd, outbuf, writelen) != writelen)
+++                    break;
+++                outsz += writelen;
+++
+++                if (writelen != umpd) {
++                     success = 1;
 +                     break;
-+                 } else if c.contains(char::is_whitespace) {
-+                     // Skipping whitespace.
-+@@ -245,15 +236,7 @@ impl<'a> CssImageExtractor<'a> {
-+             }
-+ 
-+             // Trim off whitespace at beginning.
-+-            for (pos, c) in url_parameter.grapheme_indices(true) {
-+-                if c.contains(char::is_whitespace) {
-+-                    // Skipping whitespace before url contents.
-+-                    continue;
-+-                } else {
-+-                    (_, url_parameter) = url_parameter.split_at(pos);
-+-                    break;
-+-                }
-+-            }
-++            url_parameter = url_parameter.trim_start();
-+ 
-+             debug!("Found base64'd image data CSS url() function args.");
-+             return Some(url_parameter);
++                 }
++-                if (ctx->engine->maxfilesize && z.total_out > ctx->engine->maxfilesize) {
++-                    cli_dbgmsg("ishield_extract_cab: trimming output file due to size limits (%lu vs %lu)\n", z.total_out, (unsigned long int)ctx->engine->maxfilesize);
+++                if (zret == Z_STREAM_END || z.avail_out == IS_CABBUFSZ /* FIXMEISHIELD: is the latter ok? */) {
++                     success = 1;
++-                    outsz   = size;
++                     break;
++                 }
++                 continue;
++@@ -837,5 +877,5 @@ static cl_error_t is_extract_cab(cli_ctx *ctx, uint64_t off, uint64_t size, uint
++     if (!ctx->engine->keeptmp)
++         if (cli_unlink(tempfile)) ret = CL_EUNLINK;
++     free(tempfile);
++-    return success ? ret : CL_BREAK;
+++    return success ? ret : ((abortret != CL_SUCCESS) ? abortret : CL_BREAK);
++ }
 diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
-index 93ddfaae5b..56e4217f3f 100644
+index bdb94e7436..4eb1840c84 100644
 --- a/package/clamav/clamav.mk
 +++ b/package/clamav/clamav.mk
-@@ -23,6 +23,10 @@ CLAMAV_CPE_ID_VENDOR = clamav
- CLAMAV_SELINUX_MODULES = clamav
- # affects only Cisco devices
- CLAMAV_IGNORE_CVES += CVE-2016-1405
-+
-+# 0001-fix-possible-panic-when-scanning-some-html-files.patch
-+CLAMAV_IGNORE_CVES += CVE-2026-20031
+@@ -33,6 +33,9 @@ CLAMAV_IGNORE_CVES += CVE-2026-20217
+ # 0003-libclamav-fix-aspack-triggered-rebuild-pe-overflow-49.patch
+ CLAMAV_IGNORE_CVES += CVE-2026-20213
+ 
++# 0004-libclamav-enforce-installshield-extraction-limits-55.patch
++CLAMAV_IGNORE_CVES += CVE-2026-20216
 +
  CLAMAV_DEPENDENCIES = \
  	bzip2 \
