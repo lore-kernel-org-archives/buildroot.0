@@ -1,103 +1,115 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4C82C624D4
-	for <buildroot@archiver.kernel.org>; Wed,  2 Sep 2026 19:11:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93FFFC624D4
+	for <buildroot@archiver.kernel.org>; Wed,  2 Sep 2026 19:14:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CA1CE40B5A;
-	Wed,  2 Sep 2026 19:11:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C4D19608A3;
+	Wed,  2 Sep 2026 19:14:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Bd7nSk-Lw4Ps; Wed,  2 Sep 2026 19:11:30 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 58FED40B57
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1788376290;
-	b=EMBfibu3qv40+GoM+75h3aZBjeHOZvjyOYbC7qXC3FrFyAcjracvcIKVRMZNYCmGIRhY
-	 sJNCMBYW0oVNQ9DKig1v/Ft1rFQY++rLTvKEszrYrQ6GwJE06NOIMW5yRMsfQLzCVyCYe
-	 owD8a51dFnA2VqKcKlISoldOFGaVE4xwn1D/EThkd/kW1j7SQb39NEHumNa1RB8M1F433
-	 g9wuxej+89rHQhczoHb3TwKeY0G8PXZOALVDOczCPcbb6iXP5jBU2RkOCATsi0LZQICW6
-	 WmzuxUtq/rIfygYX3rojJBR82+aq0GqFPMLhE5rusL5qf6w61hzufZPrQkyaZzCEc/g==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tWV1mdBDgpkO; Wed,  2 Sep 2026 19:14:16 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 0C6A76078B
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1788376456;
+	b=ha2iAX6aEDMd+y1Yvv97pk3+GZsQ/AmVKZA1AzVB65Z1RgBk97tDe1DXII+OcvHy0jdC
+	 GUbyz51N/TxZSFADYR92KoNlCmWMqEmsOhHB29WxBSxy1FG7xWGkk5xaa5EKoZ4rLrmmN
+	 bVYbwMLtTo3uVQNQPohn6ixCDKGN0+yiqAWdnYksDlOJ2aCDilzjDCr2mheHb+VB5fo8x
+	 cYOexe5qhESdiJWESxuQ7tKiYdsf/kZtsKHcQFz6doMso3nexQG4Ifzd1Y2BcH2OheetN
+	 MmgC3XqVV3ZFMyqyZ2jcrOk4AUxu/0Z1RdrOkBAMsexw1tLyF9/IhpQCCpn4C8VB4Rw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1788376290;
+	c=relaxed/relaxed; t=1788376456;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
-	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
-	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
-	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=5SRa9OKzxm4gNf7XExVzEKOft1fCUq+TgZkl1m9+Lxs=;
-	b=kt6HzYheyT/w+PpajK72f9OyobZA/AeWK3xqwNTdvw/y/Vnjvv3O6MYw+BDvXVqXOC4P
-	 K1CR59F9tWg6UJNzqU+mjGYwhDFqfQRXjCPjeAgvEYDAXSGtn7TrYQNv69jo+0PZ1VrSC
-	 QwmHpRIu6KMEpHMOBbVZdpP72wuRoAL6XbFq93f/Lw+bKRPBliRFPQUg9by4LuzUI8xI5
-	 KnsJ/k0kuBInl1RH27hguKjP8v6YdJ+BPH9hb4X631Vcy1RF3YS7jCLRZixOvzQVBe8AM
-	 E7P3Syuz0POey6kNRIUSCajzmfy7e7d2hHltZNUqjg/PsclYJLFJkTmUosyBsDHVilA==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 Received:MIME-Version:Date:To:Cc:In-Reply-To:References:User-Agent:
+	 Message-ID:X-Sender:Subject:X-BeenThere:X-Mailman-Version:Precedence:
+	 List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:Content-Transfer-Encoding:Content-Type:
+	 Errors-To:Sender;
+	bh=4+9nS8VPd0AUFYrCPvID8eVuq1RQNMIT3DZkidfHLuM=;
+	b=DG/tbr+6ZAoTrl3dvx++ByUW4hhQcdwZte0xzVpMIuiaYBhI5Af5bPXjgtqLjN+4PLuu
+	 6Tu/uq8r8Wwv21CVQlZ9eb9wvaJpOUas26oQ0h4C2vaWTLE84fkt8JsRtq00XKh9ypnRY
+	 h6QWKFuq7SX717vzWSDY84d4+AJYvaMhlNP0lKBlZ5tAFtps79bmaeZCy/oibk7Qy8zE4
+	 jr5hbAxYuTBW9xCM8MI1NUnAXyVVPIzefKltnK7Y8J260Kbzgox37K1p5QToSOpLVOFR5
+	 ALUBmp5CYnm2nGbyaJdptp/t7kEJILfxWrQPVZ5QHn6fmYqGz2iZYrCZ/JXS6GOllpg==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1788376290;
-	bh=5SRa9OKzxm4gNf7XExVzEKOft1fCUq+TgZkl1m9+Lxs=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=T5fKCWORrI88fuZB8sGj2vpPgEMao/O6u9j4tpWzfcF30Qr1pZAAdbqCBqOBUK3rD
-	 gPDR9RKCadni2aMSp4mIpsQhyjv1bsF/MhKoKatPP3iP2XDZ6P6TeCoZQDYU5LHkFr
-	 HQbirKwuSyvQnnL7lRGcFWpXik6WiJFg7xOso0KUmVpAmoKdowSea6HLan2n9fnr4k
-	 6+b9rG6dyhPzpdAcuy/YD3cA7Ejqbhxk/os5U879HhhoF+EyDqS393eU0zIw4Mv9Yg
-	 IXk7+Xcjeg+eU1y3Hf6r7EJTBgjAddHyUj0+FUYbZZTlVJU87fT8BpIhX6fMfjOCDX
-	 AbScr/JFbNrVA==
+	s=default; t=1788376456;
+	bh=4+9nS8VPd0AUFYrCPvID8eVuq1RQNMIT3DZkidfHLuM=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=nRpMBmjJ4qHFn0/Bwbdh+SEXp4GOLI6V2RSeqx2JTslvqHnBJ1prN9OVUaN0S0R5h
+	 6TIBM0BElo0yDHlN7P4bcfJQ+6R3H5YfNO4eVBc8/mjkkOavchGMcpbhStgdL3GkAa
+	 RadgbWDy6QXMHEIFFpBlsI7tChHny3IcOuyvneElhgwgKhAOiFxs0t1X8Z1qVrzGyL
+	 1mSlKPTOK93epwHv6RCX5jhVM+o1Buqve+BPhZmu9U7fWG2eGJ7bp73O2aTTR3BvgP
+	 /gUF25P5kvwSEB7i1m95ddELxCoT6WCGTey+tTspYAfFDxqZvzZylfiETM2LtIxmlD
+	 9uFblEHxbAamg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 58FED40B57;
-	Wed,  2 Sep 2026 19:11:30 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id BB00E2FD
- for <buildroot@buildroot.org>; Wed,  2 Sep 2026 19:11:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0C6A76078B;
+	Wed,  2 Sep 2026 19:14:16 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id D7D9C2FD
+ for <buildroot@buildroot.org>; Wed,  2 Sep 2026 19:14:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A070140B5A
- for <buildroot@buildroot.org>; Wed,  2 Sep 2026 19:11:29 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id BD33F810B6
+ for <buildroot@buildroot.org>; Wed,  2 Sep 2026 19:14:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vmGUAEO2SvHz for <buildroot@buildroot.org>;
- Wed,  2 Sep 2026 19:11:28 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org ADC3D40B53
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1788376288;
- b=c2u4pP6AR7t7cTf8zs3DJmLZGKNlEX6vIuSoYno7scDrl88+jgd0WloaHzsLCBN5lC59
- pTaXsACi01+uwM/iGjhkYbFPkPLzBPDR2kygs7+s5BdgLGyRgmAUpEmi9/gUC8owdQAiW
- u1LoDTGdmHm2WupZVLqJpedRS8dy8jMpbzNk8XJ+GhQdu3g1j2Y8Ua1d5lWLQ75UCGrOu
- AG+KMzEL4BN4Qos1SXdR92+EsHqSySUnGfViC86WilscGochOB6N/c43F5rk3/C83fJKP
- H5i88ZJbK38Oy5r3vG64aP49s0ReE2hdU7QLrj78pQhGNMD96CgHfponbzwNvv2f2kg==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id BDXfu8IBMtd6 for <buildroot@buildroot.org>;
+ Wed,  2 Sep 2026 19:14:14 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org A50BB810B0
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1788376454;
+ b=TTfdDem9wkRhBmvh812otcS5+0B6QpQ7UrLWGFvLPCSveGK5zluG+O4lGKtpXBxHhLsY
+ T8wuhhU+dvUjfzJOz5lCY+7Dq3qb02aeQLFodQ7mxSRr8XEkGziSanTMQo7W8gRkQMEg7
+ +PWF/WZFn82rlucdP+L31Yl822dcyUqt7Hjvocd2dw+96a181lViAhBQBxhxYFxe0vuHX
+ bqlieVMxr3pysXdwcHuEREW0jZ3fYua+TvKonIIMGZxvBZ/xi3Tdc8KyjZFGUiFKqWGOC
+ KV6akk48rCE5dgaVZtc8vizxruhnz6QMO3fbN9ozoTspWAtEJPzrSXjAKd8OhSdOTKQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1788376288;
- h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
- X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=1mObFqhDwmVxNcbegccO5HnrkOTe9CLqh5Qifpx9Mqs=;
- b=shI6dbJ+0ztI7cMcd9w7G9TQhGi5Y0ltdw2QxmnVYsCT8PTCmyykgbBlzqdwU9QDfcFa
- UlFRp7mgdtOq0vnnyy3FaXGNTWAOkXgQnaLErhA1q2vvA7HankIfA1z1BUchHy1a3s1a6
- sQPlLfYwcxhaG7fkFktYU2+OTHcr5E2C/OrbozNOPXQM9+P/YqFqRW5kvnseQO8KRzqDi
- MZ4x5aZNAT5LKvFAk3zcVsauJ4aVAj/aCQU38LOmYY0xlIspoLXlSG//yG8CgcrDEOPgF
- SQaeKTt49YsbEk/mGd3JnRWMAbyzrDtIl80gu7Tbk8I7nDGKO7sNwASGUN39mw55bJw==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org;
- arc=none smtp.remote-ip=140.211.167.122
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id ADC3D40B53
- for <buildroot@buildroot.org>; Wed,  2 Sep 2026 19:11:28 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EFF84935B0; Wed,  2 Sep 2026 19:10:28 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 2 Sep 2026 21:04:20 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 79fd6241e4347f67d659cc02669448397b458d52
-X-Git-Newrev: 94013c3a95a849b6a8d8db5321f9bfea4c389b10
-X-Patchwork-Hint: ignore
-Message-Id: <20260902191028.EFF84935B0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/exiv2: security bump to version
+ c=relaxed/relaxed; t=1788376454;
+ h=Received-SPF:Received:DKIM-Signature:Received:MIME-Version:Date:From:
+ To:Cc:Subject:In-Reply-To:References:User-Agent:Message-ID:X-Sender:
+ Content-Type:Content-Transfer-Encoding;
+ bh=QGg3y7TlwK+BSzChWh4o3YUZo01SlhmFCyHrXd5cJXA=;
+ b=Y7O2vAWuDrisWNOfRy7wC3moj7GLkMPns66ayEbObGJ9h3FeaABRoHWZz4/zYdJcliLE
+ iX6PDUfA+eaed0RTcFWWom6t9fFqmJYgnlw5ARXHr9aissIKZbjEYxDExeSzt9CGLZVFN
+ lyyh1KFHjoSRX6OOiNuBdUITEw5cEhZh6pm7M8MCh9rgg7rb6uqFeqHQ2MXfWwQP6bwpz
+ 8pLUFFE+3jMElkQd/sz4f3py7K7YnlFBdDP+xZm97E5cL0Pb0h+Waanl+zil7C7A1k2up
+ pxU9afbAPf68pcRLX9sYXiu1LO7IRIBfwnytIebyc1MY8JHlQvL9r+m4bYFAsItztNQ==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org;
+ dmarc=pass header.from=free.fr; 
+ dkim=pass header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=QGNR2sBI; 
+ arc=none smtp.remote-ip=212.27.42.5
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A50BB810B0
+ for <buildroot@buildroot.org>; Wed,  2 Sep 2026 19:14:12 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id 3EFB45FFB7;
+ Wed,  2 Sep 2026 21:14:09 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Wed, 02 Sep 2026 21:14:09 +0200
+MIME-Version: 1.0
+Date: Wed, 02 Sep 2026 21:14:09 +0200
+To: Peter Korsgaard <peter@korsgaard.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20260901194156.1045810-1-peter@korsgaard.com>
+References: <20260901194156.1045810-1-peter@korsgaard.com>
+User-Agent: Webmail Free/1.6.18
+Message-ID: <d601e74b42e33fce26b89012bafb7904@free.fr>
+X-Sender: ju.o@free.fr
+Subject: Re: [Buildroot] [PATCH] package/exiv2: security bump to version
  0.28.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -112,72 +124,44 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/94013c3a95a849b6a8d8db5321f9bfea4c389b10
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 01/09/2026 21:41, Peter Korsgaard wrote:
+> Fixes the following vulnerabilities:
+> 
+> CVE-2026-68546: Heap out-of-bounds write in RemoteIo when reading from 
+> a
+> malicious remote server (WebReady/Curl builds)
+> https://github.com/Exiv2/exiv2/security/advisories/GHSA-3695-mjv8-3r52
+> 
+> CVE-2026-68547: Heap out-of-bounds read in RemoteIo when reading
+> block-aligned remote CRW files
+> https://github.com/Exiv2/exiv2/security/advisories/GHSA-jcgh-p9v3-pw6j
+> 
+> CVE-2026-49275: Out of bounds read in CrwMap::decodeBasic
+> https://github.com/Exiv2/exiv2/security/advisories/GHSA-hxph-pv7w-8649
+> 
+> Out-of-bounds write in RemoteIo::mmap
+> https://github.com/Exiv2/exiv2/security/advisories/GHSA-vg6c-9f6h-4x5q
+> 
+> Out of bounds write in http.cpp
+> https://github.com/Exiv2/exiv2/security/advisories/GHSA-9v3x-mhg4-wwv2
+> 
+> Infinite loop in QuickTimeVideo::userDataDecoder
+> https://github.com/Exiv2/exiv2/security/advisories/GHSA-fgw8-p7pr-37cp
+> 
+> For more details, see the announcement:
+> https://www.openwall.com/lists/oss-security/2026/08/30/1
+> 
+> Notice: the RemoteIo-related vulnerabilities are not applicable for
+> Buildroot as exiv2 is not built with libcurl support.
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Fixes the following vulnerabilities:
-
-CVE-2026-68546: Heap out-of-bounds write in RemoteIo when reading from a
-malicious remote server (WebReady/Curl builds)
-https://github.com/Exiv2/exiv2/security/advisories/GHSA-3695-mjv8-3r52
-
-CVE-2026-68547: Heap out-of-bounds read in RemoteIo when reading
-block-aligned remote CRW files
-https://github.com/Exiv2/exiv2/security/advisories/GHSA-jcgh-p9v3-pw6j
-
-CVE-2026-49275: Out of bounds read in CrwMap::decodeBasic
-https://github.com/Exiv2/exiv2/security/advisories/GHSA-hxph-pv7w-8649
-
-Out-of-bounds write in RemoteIo::mmap
-https://github.com/Exiv2/exiv2/security/advisories/GHSA-vg6c-9f6h-4x5q
-
-Out of bounds write in http.cpp
-https://github.com/Exiv2/exiv2/security/advisories/GHSA-9v3x-mhg4-wwv2
-
-Infinite loop in QuickTimeVideo::userDataDecoder
-https://github.com/Exiv2/exiv2/security/advisories/GHSA-fgw8-p7pr-37cp
-
-For more details, see the announcement:
-https://www.openwall.com/lists/oss-security/2026/08/30/1
-
-Notice: the RemoteIo-related vulnerabilities are not applicable for
-Buildroot as exiv2 is not built with libcurl support.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/exiv2/exiv2.hash | 2 +-
- package/exiv2/exiv2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/exiv2/exiv2.hash b/package/exiv2/exiv2.hash
-index 7c497cf0eb..ff8e82333a 100644
---- a/package/exiv2/exiv2.hash
-+++ b/package/exiv2/exiv2.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  ea51b0609f58a9afa063b60daa1539948b62247721e154f4fff0ad3aec9f9756  exiv2-0.28.8.tar.gz
-+sha256  700b76b97695b2fab4ef8c79619c68ae57d09e0c130724791cafbd39e0eb4aef  exiv2-0.28.9.tar.gz
- sha256  a7ba75cb966aca374711e2af49e5f3aea6a4443a803440f5d93e73a5a1222f66  COPYING
-diff --git a/package/exiv2/exiv2.mk b/package/exiv2/exiv2.mk
-index d45acae34e..7c9ac5c6cc 100644
---- a/package/exiv2/exiv2.mk
-+++ b/package/exiv2/exiv2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--EXIV2_VERSION = 0.28.8
-+EXIV2_VERSION = 0.28.9
- EXIV2_SITE = $(call github,Exiv2,exiv2,v$(EXIV2_VERSION))
- EXIV2_INSTALL_STAGING = YES
- EXIV2_LICENSE = GPL-2.0+
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
