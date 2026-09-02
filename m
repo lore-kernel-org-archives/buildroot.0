@@ -4,69 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D0D0C61DFD
-	for <buildroot@archiver.kernel.org>; Wed,  2 Sep 2026 08:12:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50E2EC61DD6
+	for <buildroot@archiver.kernel.org>; Wed,  2 Sep 2026 11:36:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F104D40A1F;
-	Wed,  2 Sep 2026 08:12:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BE85D40835;
+	Wed,  2 Sep 2026 11:36:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KlQAsBFNGz7x; Wed,  2 Sep 2026 08:12:19 +0000 (UTC)
+ id Pc1oQsGD1QhZ; Wed,  2 Sep 2026 11:36:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1788336738;
-	bh=6EdaGh9fMp2xLaAcI2pP2S+/rJYdmxs4Wsks/P07rB4=;
-	h=Date:To:Cc:Subject:List-Id:List-Unsubscribe:List-Archive:
+	s=default; t=1788348976;
+	bh=/31c/plEvRBz7CxHpM3Jfk7D2L+bbZbf1PE3SEIDPT0=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=IXXqkxS2CvkAdAdmCkRppVrZboq36Y+6O0cSnr8+zigBf+hId5PJeSxakI9V5s3WN
-	 1Qm1ypZ5usrMB1JBB5H4qU5liSPWSEUuapDMnIP5fwQw/3SfpHR/r0ICObUgvfKPgl
-	 7Ngvcovp1n5yqqbADsvZdspJ+HkXRTj75EsM3EkjCoKIR6va7yrCe4J2+oSBfU+JE7
-	 XrjItsFniW83cGK4pSuKRrLhR6NnbmsST3DGajS+LTEmQ7co3J0K5/T6me0uBI2b2/
-	 EwePr4bVBD5XG7DmivQ9O1CvUjw5Qx6Jnl0Y/uZTweqrZKsjRe+f/QGPw1pXOqqKa4
-	 /aWIuBcBx9nIw==
+	b=g6Bvt6VQ4aSVGMVKOLDEfSG2TRGSdocf43W1PT3VK0Uh/Mchom6SWptaCaJoB4XPJ
+	 Jjq9lry7IUzJRcqkeMOcAQdpfMoeBGMDWmEHblmIUseLPO2+zHRSblFDIe/mZEVFyI
+	 sUqM3P6xjxnfRad2PdljV+M66OoSFxbHfIFTlmLzT6jaHCnsBWWkntNR2NGNhHZrtS
+	 SVctezNsDv5EmYgp3+86sRtpxTTlI4A5z59fWU6WzRV8IpZmR3KjMXIZyuCq2xsjSE
+	 qRdOkbBKSUNmdnNg2JVoLLUwSrpii7h226eM+Dl2t9QwUcSlbJd0FBLpBa8FrNgTMs
+	 RdQJzrVyJ2YxA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DB93A406CC;
-	Wed,  2 Sep 2026 08:12:18 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 307E6127
- for <buildroot@buildroot.org>; Wed,  2 Sep 2026 08:12:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A231C40821;
+	Wed,  2 Sep 2026 11:36:16 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 272CA363
+ for <buildroot@buildroot.org>; Wed,  2 Sep 2026 11:36:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0D8F780B39
- for <buildroot@buildroot.org>; Wed,  2 Sep 2026 08:12:18 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 11A196072A
+ for <buildroot@buildroot.org>; Wed,  2 Sep 2026 11:36:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QOhBkWbo1nId for <buildroot@buildroot.org>;
- Wed,  2 Sep 2026 08:12:17 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
- helo=smtpout-02.galae.net; envelope-from=alexis.lothore@bootlin.com;
- receiver=<UNKNOWN> 
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E79D980BAD
- for <buildroot@buildroot.org>; Wed,  2 Sep 2026 08:12:15 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-02.galae.net (Postfix) with ESMTPS id 6A79F1A1927
- for <buildroot@buildroot.org>; Wed,  2 Sep 2026 08:12:13 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 373C06053C
- for <buildroot@buildroot.org>; Wed,  2 Sep 2026 08:12:13 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id E0DAF11C79315; 
- Wed,  2 Sep 2026 10:12:06 +0200 (CEST)
-Date: Wed, 02 Sep 2026 10:11:49 +0200
-MIME-Version: 1.0
-Message-Id: <20260902-revert-openscap-patch-v1-1-f56161b6c7bd@bootlin.com>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXMwQ6CMBCE4Vche3aTWqWir0I81DLAeihNtxoTw
- rtb5fglM/9KiixQujUrZbxFZYkVx0NDYfZxAstQTdZYZ67Gch0hF14SogafOPkSZnYXi1Pnzq7
- tRqrflDHK59/t77v19XgilF+Mtu0Lab1ZfnkAAAA=
-X-Change-ID: 20260902-revert-openscap-patch-672e3864658f
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ARlpj5hC39PL for <buildroot@buildroot.org>;
+ Wed,  2 Sep 2026 11:36:14 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::42f; helo=mail-wr1-x42f.google.com;
+ envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
+ [IPv6:2a00:1450:4864:20::42f])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E56A360726
+ for <buildroot@buildroot.org>; Wed,  2 Sep 2026 11:36:13 +0000 (UTC)
+Received: by mail-wr1-x42f.google.com with SMTP id
+ ffacd0b85a97d-48436216a98so616384f8f.0
+ for <buildroot@buildroot.org>; Wed, 02 Sep 2026 04:36:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20251104; t=1788348971; x=1788953771;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to:content-type;
+ bh=BDQdPmU9ySOw4GE7q2OCxYYfHVCz9KnBlVgPHTGX+1I=;
+ b=c2ZeEj196ptRdAEFVrm+X2+a55CxGPWkMIIaa1wKuT8edDla0YiLAvKmPHYvTW2yQJ
+ oEkGzrf8Ma+CmTg7VxxamXlmFGAhHORHkIv1yPXcM38BNtOASEm/StlFxOq52lZtTtJl
+ 4V6iZtLN4assOcykGzqEp3aM93A992gYUEOnoHIP+p41BQ8BsbT/vLrlYAiWrlGcyAte
+ Nuza9JkeDdb/D0xCy+rL7erUU7XGjTEHzMZwSTJZNTudrQOZI64hg9S1ypIWwk+AN4Tf
+ Vqanub4V6FiVYUUVXJ9pu2UXE0xUk1Y+1OqyAGPCF23bOTlKjINrDflHeeui7IzYQ9VS
+ ygLg==
+X-Gm-Message-State: AFuF++nFMksBw84crxomtM61zTgXbDx2GsZCovzYXXf30b9SWdjqcI3t
+ Cl4THyYKMpj5L5tTdEOWgJ1IOZ2KDzRS06jdMXNn60VmXlxcoPXm7Kpap92PRxDOXGfATOwAOHO
+ tagOqkqE=
+X-Gm-Gg: AYBFou1QFqxCrkjlUrxl0ZPFkMghauxbadgt6sVvWCs1HtAhjc859ZnvSPPhq+5eOK8
+ m4AIgpb35UeldLYWBsMxVGqvF1rdpUTxwkhJJn2wgJF42CsrVPtrM4/+qhgLN+GblObsEaZBFyK
+ MHeCHUb93W1vPzWHpYMlXEQZeRlkdzD0q/H+5+eSILbq7kOiX6du/ajWwj/5lDjgVhGQDQV6/49
+ 3mfcqLbtplGJhAqq3SVsbI6yMy7svKZbEsxX9W3Y5ZRQCiB4VI9CkcfbkJL04NmFQQP2y1werDR
+ miXuwhHVYCQiSCoq8ZhN0HtbCztqc+/g8jAz/YMQJFk3mKTHjeB41WaSJW+LnEnj21CM384QEAR
+ CMWIEM337i9bFPQhDlFV3QTd81mzQsO4yO9OmgICiP9P06G4hEAvQmk614Zo56RjtlNbrYLJpeh
+ 5L20tg1MbcET4scl7e+RoJ09juoJwkeN3KV72+JJ8R8+BUVuTJxwYujAyvXSKxQDhyLx/UVkWdt
+ dlqyw==
+X-Received: by 2002:a5d:5f54:0:b0:482:e658:bb8e with SMTP id
+ ffacd0b85a97d-48488f0dba5mr7886399f8f.12.1788348971062; 
+ Wed, 02 Sep 2026 04:36:11 -0700 (PDT)
+Received: from chapelon.home ([2a02:a03f:63ab:dc01:ce15:1729:c989:3a9e])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-48448ed3840sm6101877f8f.17.2026.09.02.04.36.10
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 02 Sep 2026 04:36:10 -0700 (PDT)
 To: buildroot@buildroot.org
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-X-Mailer: b4 0.15.2
-X-Last-TLS-Session-Version: TLSv1.3
-Subject: [Buildroot] [PATCH] package/openscap: drop duplicate patch
+Cc: Romain Naour <romain.naour@gmail.com>, thomas.perale@mind.be,
+ raphael.melotte@mind.be, Titouan Christophe <titouan.christophe@mind.be>
+Date: Wed,  2 Sep 2026 13:35:53 +0200
+Message-ID: <20260902113553.164630-1-titouan.christophe@mind.be>
+X-Mailer: git-send-email 2.55.0
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH for 2025.02.x] package/glibc: security bump to
+ v2.41-159
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -78,80 +100,86 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: =?utf-8?q?Alexis_Lothor=C3=A9_via_buildroot?= <buildroot@buildroot.org>
-Reply-To: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Titouan Christophe via buildroot <buildroot@buildroot.org>
+Reply-To: Titouan Christophe <titouan.christophe@mind.be>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Q29tbWl0IGJkNWIyNjdiMWRlMCAoInBhY2thZ2Uvb3BlbnNjYXA6IGZpeCBidWlsZCBmYWlsdXJl
-IHdpdGggZGJ1cyBhbmQKbXVzbCIpIGJyb3VnaHQgYW4gdXBzdHJlYW0gcGF0Y2ggdG8gZml4IGEg
-YnVpbGQgZmFpbHVyZSBvbiB0aGUgb3BlbnNjYXAKcGFja2FnZSwgZGV0ZWN0ZWQgYnkgdGhlIGF1
-dG9idWlsZGVyIG9uIGJ1aWxkcm9vdCAyMDI2LjAyLngsIHdoaWNoIGhhZApvcGVuc2NhcCAxLjMu
-MTIgYXQgdGhhdCB0aW1lLiBiZDViMjY3YjFkZTAgaGFzIHJlY2VudGx5IGJlZW4gbWVyZ2VkIG9u
-Cm1hc3Rlcjsgb3BlbnNjYXAgaGFzIGFscmVhZHkgYmVlbiBidW1wZWQgdG8gMS40LjQgb24gdGhp
-cyBicmFuY2gsIGFuZCBzbwppdCBhbHJlYWR5IGJyaW5ncyB0aGUgbmVlZGVkIGZpeCBmb3IgbXVz
-bCtkYnVzIGJ1aWxkIGNvbmZpZ3VyYXRpb25zLApoZW5jZSBtYWtpbmcgdGhlIHBhdGNoIHN0ZXAg
-ZmFpbC4gVGhpcyB1cHN0cmVhbSBwYXRjaCBpcyB0aGVuIG5vdCBuZWVkZWQKYW55bW9yZSBvbiBh
-bnkgbWFpbnRhaW5lZCBicmFuY2guCgpGaXhlczogaHR0cHM6Ly9hdXRvYnVpbGQuYnVpbGRyb290
-Lm9yZy9yZXN1bHRzL2QxMWQwYjgyZGNkYjRiZjEwZjZjMzdkYjhiZGJjNDJhNzhiZGYyOGIvCkZp
-eGVzOiBodHRwczovL2F1dG9idWlsZC5idWlsZHJvb3Qub3JnL3Jlc3VsdHMvNDM5N2E0ZWY5NGNj
-ZjQ4MmYxYWI5ZDI0YjYzMzRhZGIwMjIyYTU4MC8KU2lnbmVkLW9mZi1ieTogQWxleGlzIExvdGhv
-csOpIDxhbGV4aXMubG90aG9yZUBib290bGluLmNvbT4KLS0tClVwIHRvIG15IGtub3dsZWRnZSB0
-aGUgZmF1bHR5IHBhdGNoIGhhcyBiZWVuIG1lcmdlZCBvbmx5IG9uIG1hc3Rlciwgc28KdGhlIHJl
-dmVydCBpcyBvbmx5IG5lZWRlZCBvbiBtYXN0ZXIuCi0tLQogLi4uMDItT1ZBTC1wcm9iZXMtYWRk
-LW1pc3NpbmctaGVhZGVyLWluY2x1ZGUucGF0Y2ggfCA0OCAtLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-CiAxIGZpbGUgY2hhbmdlZCwgNDggZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvcGFja2FnZS9v
-cGVuc2NhcC8wMDAyLU9WQUwtcHJvYmVzLWFkZC1taXNzaW5nLWhlYWRlci1pbmNsdWRlLnBhdGNo
-IGIvcGFja2FnZS9vcGVuc2NhcC8wMDAyLU9WQUwtcHJvYmVzLWFkZC1taXNzaW5nLWhlYWRlci1p
-bmNsdWRlLnBhdGNoCmRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAppbmRleCAwYzc1OThiMmI1ZTEu
-LjAwMDAwMDAwMDAwMAotLS0gYS9wYWNrYWdlL29wZW5zY2FwLzAwMDItT1ZBTC1wcm9iZXMtYWRk
-LW1pc3NpbmctaGVhZGVyLWluY2x1ZGUucGF0Y2gKKysrIC9kZXYvbnVsbApAQCAtMSw0OCArMCww
-IEBACi1Gcm9tIGFiNjliNzZjYjQwZDZmMzVkMjUyMjQ2ZTk2NTI0NTgwNGIxNzU5MWYgTW9uIFNl
-cCAxNyAwMDowMDowMCAyMDAxCi1Gcm9tOiA9P1VURi04P3E/QWxleGlzPTIwTG90aG9yPUMzPUE5
-Pz0gPGFsZXhpcy5sb3Rob3JlQGJvb3RsaW4uY29tPgotRGF0ZTogVGh1LCAxMyBBdWcgMjAyNiAx
-NToxODoxNSArMDIwMAotU3ViamVjdDogW1BBVENIXSBPVkFML3Byb2JlczogYWRkIG1pc3Npbmcg
-aGVhZGVyIGluY2x1ZGUKLU1JTUUtVmVyc2lvbjogMS4wCi1Db250ZW50LVR5cGU6IHRleHQvcGxh
-aW47IGNoYXJzZXQ9VVRGLTgKLUNvbnRlbnQtVHJhbnNmZXItRW5jb2Rpbmc6IDhiaXQKLQotT3Bl
-bnNjYXAgYnVpbGQgY2FuIGZhaWwgd2l0aCB0aGUgZm9sbG93aW5nIGxvZyB3aGVuCi0tV2ltcGxp
-Y2l0LWZ1bmN0aW9uLWRlY2xhcmF0aW9uIGlzIHR1cm5lZCBpbnRvIGFuIGVycm9yOgotCi1JbiBm
-aWxlIGluY2x1ZGVkIGZyb20gWy4uLl0vc3JjL09WQUwvcHJvYmVzL3VuaXgvbGludXgvc3lzdGVt
-ZHVuaXRwcm9wZXJ0eV9wcm9iZS5jOjM4OgotWy4uLl0vc3JjL09WQUwvcHJvYmVzL3VuaXgvbGlu
-dXgvc3lzdGVtZHNoYXJlZC5oOiBJbiBmdW5jdGlvbiDigJhnZXRfYWxsX3N5c3RlbWRfdW5pdHPi
-gJk6Ci1bLi4uXS9zcmMvT1ZBTC9wcm9iZXMvdW5peC9saW51eC9zeXN0ZW1kc2hhcmVkLmg6MTg4
-OjUwOiBlcnJvcjogaW1wbGljaXQgZGVjbGFyYXRpb24gb2YgZnVuY3Rpb24g4oCYYmFzZW5hbWXi
-gJk7IGRpZCB5b3UgbWVhbiDigJhyZW5hbWXigJk/IFstV2ltcGxpY2l0LWZ1bmN0aW9uLWRlY2xh
-cmF0aW9uXQotICAxODggfCAgICAgICAgICAgICAgICAgY2hhciAqdW5pdF9uYW1lX3MgPSBvc2Nh
-cF9zdHJkdXAoYmFzZW5hbWUodmFsdWUuc3RyKSk7Ci0gICAgICB8ICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBefn5+fn5+fgotICAgICAgfCAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgcmVuYW1lCi1JbiBmaWxl
-IGluY2x1ZGVkIGZyb20gWy4uLl0vc3JjL09WQUwvcHJvYmVzL3VuaXgvbGludXgvc3lzdGVtZHVu
-aXRkZXBlbmRlbmN5X3Byb2JlLmM6Mzc6Ci1bLi4uXS9zcmMvT1ZBTC9wcm9iZXMvdW5peC9saW51
-eC9zeXN0ZW1kc2hhcmVkLmg6IEluIGZ1bmN0aW9uIOKAmGdldF9hbGxfc3lzdGVtZF91bml0c+KA
-mToKLVsuLi5dL3NyYy9PVkFML3Byb2Jlcy91bml4L2xpbnV4L3N5c3RlbWRzaGFyZWQuaDoxODg6
-NTA6IGVycm9yOiBpbXBsaWNpdCBkZWNsYXJhdGlvbiBvZiBmdW5jdGlvbiDigJhiYXNlbmFtZeKA
-mTsgZGlkIHlvdSBtZWFuIOKAmHJlbmFtZeKAmT8gWy1XaW1wbGljaXQtZnVuY3Rpb24tZGVjbGFy
-YXRpb25dCi0gIDE4OCB8ICAgICAgICAgICAgICAgICBjaGFyICp1bml0X25hbWVfcyA9IG9zY2Fw
-X3N0cmR1cChiYXNlbmFtZSh2YWx1ZS5zdHIpKTsKLSAgICAgIHwgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIF5+fn5+fn5+Ci0gICAgICB8ICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICByZW5hbWUKLQotQWRkIHRo
-ZSBtaXNzaW5nIGhlYWRlciBpbmNsdWRlIHBvaW50ZWQgYnkgYG1hbiAzIGJhc2VuYW1lYCB0byBm
-aXggdGhlCi1lcnJvci4KLQotVXBzdHJlYW06IGh0dHBzOi8vZ2l0aHViLmNvbS9PcGVuU0NBUC9v
-cGVuc2NhcC9jb21taXQvYWI2OWI3NmNiNDBkNmYzNWQyNTIyNDZlOTY1MjQ1ODA0YjE3NTkxZgot
-U2lnbmVkLW9mZi1ieTogQWxleGlzIExvdGhvcsOpIDxhbGV4aXMubG90aG9yZUBib290bGluLmNv
-bT4KLS0tLQotIHNyYy9PVkFML3Byb2Jlcy91bml4L2xpbnV4L3N5c3RlbWRzaGFyZWQuaCB8IDEg
-KwotIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKQotCi1kaWZmIC0tZ2l0IGEvc3JjL09W
-QUwvcHJvYmVzL3VuaXgvbGludXgvc3lzdGVtZHNoYXJlZC5oIGIvc3JjL09WQUwvcHJvYmVzL3Vu
-aXgvbGludXgvc3lzdGVtZHNoYXJlZC5oCi1pbmRleCA4NzlhZTViZTlkNmMuLjU3ZTk0Y2E2ZjQ5
-ZSAxMDA2NDQKLS0tLSBhL3NyYy9PVkFML3Byb2Jlcy91bml4L2xpbnV4L3N5c3RlbWRzaGFyZWQu
-aAotKysrIGIvc3JjL09WQUwvcHJvYmVzL3VuaXgvbGludXgvc3lzdGVtZHNoYXJlZC5oCi1AQCAt
-MzUsNiArMzUsNyBAQAotICNpbmNsdWRlIDxjb25maWcuaD4KLSAjZW5kaWYKLSAKLSsjaW5jbHVk
-ZSA8bGliZ2VuLmg+Ci0gI2luY2x1ZGUgPGxpbWl0cy5oPgotICNpbmNsdWRlIDxzdGRpby5oPgot
-ICNpbmNsdWRlICJjb21tb24vZGVidWdfcHJpdi5oIgotLS0gCi0yLjU1LjAKLQoKLS0tCmJhc2Ut
-Y29tbWl0OiA3OWZkNjI0MWU0MzQ3ZjY3ZDY1OWNjMDI2Njk0NDgzOTdiNDU4ZDUyCmNoYW5nZS1p
-ZDogMjAyNjA5MDItcmV2ZXJ0LW9wZW5zY2FwLXBhdGNoLTY3MmUzODY0NjU4ZgoKQmVzdCByZWdh
-cmRzLAotLSAgCkFsZXhpcyBMb3Rob3LDqSA8YWxleGlzLmxvdGhvcmVAYm9vdGxpbi5jb20+Cgpf
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3Qg
-bWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRy
-b290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+This fixes the following known vulnerabilities:
+- CVE-2026-5435
+- CVE-2026-6238
+- CVE-2026-6791
+- CVE-2026-6368
+- CVE-2026-19499
+- CVE-2026-77117
+- CVE-2026-80489
+
+(alternative to commit be382f6061216ca82a735d0992894c4e6fe5173a)
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+---
+ package/glibc/glibc.hash |  2 +-
+ package/glibc/glibc.mk   | 24 +++++++++++++++++++++++-
+ 2 files changed, 24 insertions(+), 2 deletions(-)
+
+diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
+index 03e8722057..87dd8b67ac 100644
+--- a/package/glibc/glibc.hash
++++ b/package/glibc/glibc.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated (fetched from git)
+-sha256  130d77e16a08f7e52e14b49d8554997877a4fe82ac6b840a0202716146ac8fb5  glibc-2.41-143-gfc7a48bc9e999c0f9a1f9fa1b209eac1d6a93363-git4.tar.gz
++sha256  e3550f6d074325ad8ee75fff96f16a967055e88f69e1455333ace515b8ac2067  glibc-2.41-159-g3d141c23899d90559741b5fe74db97ccf0ef5c29-git4.tar.gz
+ 
+ # Hashes for license files
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index 7c64fea4a2..65a99b4a68 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -7,7 +7,7 @@
+ # Generate version string using:
+ #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
+ # When updating the version, please also update localedef
+-GLIBC_VERSION = 2.41-143-gfc7a48bc9e999c0f9a1f9fa1b209eac1d6a93363
++GLIBC_VERSION = 2.41-159-g3d141c23899d90559741b5fe74db97ccf0ef5c29
+ GLIBC_SITE = https://gitlab.com/gnutools/glibc.git
+ GLIBC_SITE_METHOD = git
+ 
+@@ -66,6 +66,28 @@ GLIBC_IGNORE_CVES += CVE-2026-5928
+ # Fixed by glibc-2.41-142-g1a74f82eedaf0987eda1f522121e6a48fac502e7
+ GLIBC_IGNORE_CVES += CVE-2026-5450
+ 
++# Fixed by glibc-2.41-149-g0e8c56b386d72ba2ddf15784423f2e894c63a241
++GLIBC_IGNORE_CVES += CVE-2026-5435
++
++# Fixed by glibc-2.41-150-g05e1eaea619072a92ff1f5fefe1ac2dd5758829c
++GLIBC_IGNORE_CVES += CVE-2026-6238
++
++# Fixed by glibc-2.41-152-g965b580070b8184b0dd390800d9194291a600e67
++GLIBC_IGNORE_CVES += CVE-2026-6791
++
++# Fixed by glibc-2.41-153-gdfc8ef388ef7856f318ade7dec501f92ce54f9e3
++GLIBC_IGNORE_CVES += CVE-2026-6368
++
++# Fixed by glibc-2.41-156-g5256941bc811248670eda4636dccd0a390d34dec
++GLIBC_IGNORE_CVES += CVE-2026-19499
++
++# Fixed by glibc-2.41-157-ge43e46f94398b3de446fec11da1e7633ea5202ec
++GLIBC_IGNORE_CVES += CVE-2026-77117
++
++# Fixed by glibc-2.41-158-gec116a0fbedcc860631e525e70b409cf295f27da
++GLIBC_IGNORE_CVES += CVE-2026-80489
++
++
+ # glibc is part of the toolchain so disable the toolchain dependency
+ GLIBC_ADD_TOOLCHAIN_DEPENDENCY = NO
+ 
+-- 
+2.55.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
