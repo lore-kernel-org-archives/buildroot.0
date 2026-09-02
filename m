@@ -1,116 +1,103 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93FFFC624D4
-	for <buildroot@archiver.kernel.org>; Wed,  2 Sep 2026 19:14:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6A87C624D4
+	for <buildroot@archiver.kernel.org>; Wed,  2 Sep 2026 19:26:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C4D19608A3;
-	Wed,  2 Sep 2026 19:14:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D2C1A40BD9;
+	Wed,  2 Sep 2026 19:26:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tWV1mdBDgpkO; Wed,  2 Sep 2026 19:14:16 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 0C6A76078B
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1788376456;
-	b=ha2iAX6aEDMd+y1Yvv97pk3+GZsQ/AmVKZA1AzVB65Z1RgBk97tDe1DXII+OcvHy0jdC
-	 GUbyz51N/TxZSFADYR92KoNlCmWMqEmsOhHB29WxBSxy1FG7xWGkk5xaa5EKoZ4rLrmmN
-	 bVYbwMLtTo3uVQNQPohn6ixCDKGN0+yiqAWdnYksDlOJ2aCDilzjDCr2mheHb+VB5fo8x
-	 cYOexe5qhESdiJWESxuQ7tKiYdsf/kZtsKHcQFz6doMso3nexQG4Ifzd1Y2BcH2OheetN
-	 MmgC3XqVV3ZFMyqyZ2jcrOk4AUxu/0Z1RdrOkBAMsexw1tLyF9/IhpQCCpn4C8VB4Rw==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sefxriHdF66s; Wed,  2 Sep 2026 19:26:16 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org D8DF940BD2
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1788377176;
+	b=FjYmPQRwZLxxWPY99JRPX2LZl46k5ZwwaK04ruww0PpqyZHQIrqekK50HKX4sd0Ctz6+
+	 KrEBiX+PypItNa2kh/DGRBGRq8nHFlSLjzoMJRmP2kG8Ip29DVQ8ac91mWInMnigmsx8F
+	 E8V43f7hixRn8nWln2WDzpLEswc9r4EUa8PKBGhGMtOlE9/rCzvH9CsgD8pndPWxk3ytR
+	 lyYqDc/0d0E5OrJpovIvJYXvbhmG0CS8t9sMxG77Uyq194xzeMju970wnyXMXIqm2jHI0
+	 1esfkeai4C5YGMEhYlDURQ4XDK1aghH2yqvLgatn3QZwmf4UPKYnijD1DgAcP25V05A==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1788376456;
+	c=relaxed/relaxed; t=1788377176;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 Received:MIME-Version:Date:To:Cc:In-Reply-To:References:User-Agent:
-	 Message-ID:X-Sender:Subject:X-BeenThere:X-Mailman-Version:Precedence:
-	 List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:From:Reply-To:Content-Transfer-Encoding:Content-Type:
-	 Errors-To:Sender;
-	bh=4+9nS8VPd0AUFYrCPvID8eVuq1RQNMIT3DZkidfHLuM=;
-	b=DG/tbr+6ZAoTrl3dvx++ByUW4hhQcdwZte0xzVpMIuiaYBhI5Af5bPXjgtqLjN+4PLuu
-	 6Tu/uq8r8Wwv21CVQlZ9eb9wvaJpOUas26oQ0h4C2vaWTLE84fkt8JsRtq00XKh9ypnRY
-	 h6QWKFuq7SX717vzWSDY84d4+AJYvaMhlNP0lKBlZ5tAFtps79bmaeZCy/oibk7Qy8zE4
-	 jr5hbAxYuTBW9xCM8MI1NUnAXyVVPIzefKltnK7Y8J260Kbzgox37K1p5QToSOpLVOFR5
-	 ALUBmp5CYnm2nGbyaJdptp/t7kEJILfxWrQPVZ5QHn6fmYqGz2iZYrCZ/JXS6GOllpg==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
+	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
+	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
+	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
+	 Sender;
+	bh=VICIJRe2lU2UqY5xj05E1otjJMxVzhWGZMCWtcrfAuA=;
+	b=I1sqKVB4aoWa+1IEo0MLvN2RlYKZSZVlXWqlX21+KsiaWCRstZNHx4SXUHs1iSLsSrBY
+	 JBFdcJRhzlVZ59aZzCM2p+DdHt+AqVl7FaRGjM8Lv+7EgyIoKoLnhryYeRbnoSTzqfRiL
+	 QyiMTUKe93Ot0QrTkFPupKIwF0SLyz1gLvB0L3vsOWvBscyS5E5f1NMkziSW9T/7A8DeJ
+	 dkZMChdpfTfaqWhogyVU6KCQalJ/IiOTgO18Y7b6Npwd7DQxqPKj8LsvwYgresG5T3rrM
+	 KeQT50ne7770dFSsOuw6m1dLohkRCyFIPv+LwsCokR/pnh9bGon5gqTVZ503wbRb+vQ==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1788376456;
-	bh=4+9nS8VPd0AUFYrCPvID8eVuq1RQNMIT3DZkidfHLuM=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=nRpMBmjJ4qHFn0/Bwbdh+SEXp4GOLI6V2RSeqx2JTslvqHnBJ1prN9OVUaN0S0R5h
-	 6TIBM0BElo0yDHlN7P4bcfJQ+6R3H5YfNO4eVBc8/mjkkOavchGMcpbhStgdL3GkAa
-	 RadgbWDy6QXMHEIFFpBlsI7tChHny3IcOuyvneElhgwgKhAOiFxs0t1X8Z1qVrzGyL
-	 1mSlKPTOK93epwHv6RCX5jhVM+o1Buqve+BPhZmu9U7fWG2eGJ7bp73O2aTTR3BvgP
-	 /gUF25P5kvwSEB7i1m95ddELxCoT6WCGTey+tTspYAfFDxqZvzZylfiETM2LtIxmlD
-	 9uFblEHxbAamg==
+	s=default; t=1788377175;
+	bh=VICIJRe2lU2UqY5xj05E1otjJMxVzhWGZMCWtcrfAuA=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=P29nXj/FrEJe3zVVh8kNu/MUsspTp8S1Bm09NxN5T4W7RZdfFJt52x8RXDeZm/zjP
+	 VYinsBfMHMUZYefrB8UzUOqajI2bFD1rFn2LzhV3UTSUjn3o+QRRMCpeF9pbKSYS75
+	 R73++koqksVWNC1RMtEGnvcvqoH9zm5hu3Ys1GYKOHIWvNRO3+oIy6Xp+4SLQWfhuF
+	 kTHqAcozmUTGQjm79kVQ+YSAzbQipsrTH/li9Gj7MoBIJZteZx4NbAvykTgjmrq8LL
+	 y7+leAY6yyctFqgXwkK081k0lwjmAsGdc8BdoZxU7yqgiqNGfct71MW7At8i3m9sm+
+	 VWSUubOdgNiYw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0C6A76078B;
-	Wed,  2 Sep 2026 19:14:16 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id D7D9C2FD
- for <buildroot@buildroot.org>; Wed,  2 Sep 2026 19:14:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D8DF940BD2;
+	Wed,  2 Sep 2026 19:26:15 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id DB27A2B2
+ for <buildroot@buildroot.org>; Wed,  2 Sep 2026 19:26:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BD33F810B6
- for <buildroot@buildroot.org>; Wed,  2 Sep 2026 19:14:14 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C165A40BD2
+ for <buildroot@buildroot.org>; Wed,  2 Sep 2026 19:26:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BDXfu8IBMtd6 for <buildroot@buildroot.org>;
- Wed,  2 Sep 2026 19:14:14 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org A50BB810B0
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1788376454;
- b=TTfdDem9wkRhBmvh812otcS5+0B6QpQ7UrLWGFvLPCSveGK5zluG+O4lGKtpXBxHhLsY
- T8wuhhU+dvUjfzJOz5lCY+7Dq3qb02aeQLFodQ7mxSRr8XEkGziSanTMQo7W8gRkQMEg7
- +PWF/WZFn82rlucdP+L31Yl822dcyUqt7Hjvocd2dw+96a181lViAhBQBxhxYFxe0vuHX
- bqlieVMxr3pysXdwcHuEREW0jZ3fYua+TvKonIIMGZxvBZ/xi3Tdc8KyjZFGUiFKqWGOC
- KV6akk48rCE5dgaVZtc8vizxruhnz6QMO3fbN9ozoTspWAtEJPzrSXjAKd8OhSdOTKQ==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Kz0YvfV3j3EC for <buildroot@buildroot.org>;
+ Wed,  2 Sep 2026 19:26:14 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 13D1040BCE
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1788377174;
+ b=KfBqAlXZ+Jzl7dKl+/4Aqo0glkAoiIB4xykO8/6mkl8FhtSfHpBR5i+Ue8Mu6w65qMwO
+ OpWtOs1RPyYwJ5u663C8hTa3JQL0LKoon4UqOa/t9+vs6iXiEEwze5VxbownCAZZuW2/E
+ iuOf0q8QUgxG0uuLD21KGkRosXgVjfN66huNDEXenZ1HOCkyZMLEr2xxMZ26ZbaLJgCAq
+ 7XzKJgjhGPnCsdelvcS46g9NVP6TnUUB9ou9pfC/5iLt9P6UXH3uwaxxV3ynF3qHrADAn
+ WdHlQRJhKdBtAcYWuCFgSn0f4wkA29loR0vrjEJ9um1hKeyFAttK5GroJyJvCkbxfPA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1788376454;
- h=Received-SPF:Received:DKIM-Signature:Received:MIME-Version:Date:From:
- To:Cc:Subject:In-Reply-To:References:User-Agent:Message-ID:X-Sender:
- Content-Type:Content-Transfer-Encoding;
- bh=QGg3y7TlwK+BSzChWh4o3YUZo01SlhmFCyHrXd5cJXA=;
- b=Y7O2vAWuDrisWNOfRy7wC3moj7GLkMPns66ayEbObGJ9h3FeaABRoHWZz4/zYdJcliLE
- iX6PDUfA+eaed0RTcFWWom6t9fFqmJYgnlw5ARXHr9aissIKZbjEYxDExeSzt9CGLZVFN
- lyyh1KFHjoSRX6OOiNuBdUITEw5cEhZh6pm7M8MCh9rgg7rb6uqFeqHQ2MXfWwQP6bwpz
- 8pLUFFE+3jMElkQd/sz4f3py7K7YnlFBdDP+xZm97E5cL0Pb0h+Waanl+zil7C7A1k2up
- pxU9afbAPf68pcRLX9sYXiu1LO7IRIBfwnytIebyc1MY8JHlQvL9r+m4bYFAsItztNQ==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org;
- dmarc=pass header.from=free.fr; 
- dkim=pass header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=QGNR2sBI; 
- arc=none smtp.remote-ip=212.27.42.5
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A50BB810B0
- for <buildroot@buildroot.org>; Wed,  2 Sep 2026 19:14:12 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id 3EFB45FFB7;
- Wed,  2 Sep 2026 21:14:09 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Wed, 02 Sep 2026 21:14:09 +0200
-MIME-Version: 1.0
-Date: Wed, 02 Sep 2026 21:14:09 +0200
-To: Peter Korsgaard <peter@korsgaard.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20260901194156.1045810-1-peter@korsgaard.com>
-References: <20260901194156.1045810-1-peter@korsgaard.com>
-User-Agent: Webmail Free/1.6.18
-Message-ID: <d601e74b42e33fce26b89012bafb7904@free.fr>
-X-Sender: ju.o@free.fr
-Subject: Re: [Buildroot] [PATCH] package/exiv2: security bump to version
- 0.28.9
+ c=relaxed/relaxed; t=1788377174;
+ h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
+ X-Git-Newrev:X-Patchwork-Hint:Message-Id;
+ bh=FUtjZTe+eN5HVLE29AWaURwJ2MYq/Lg2bQnr1iCCcMk=;
+ b=ZfFcXFmHEVtfgOlTxRwW6tzjR8ElpH8nnDFl/C7Pw/Bvy0Mv2rLxHwCs78S4rdp+Qfsq
+ cJndytL64B6N3en0T+8MvtDKbSATpRVse8mC6g5fy//fwvDfQIWxx2RX4M3X2Ev0QZJYE
+ tpJfCrqgv2nZjVvtRydPjuuD0J38e6M8G05Qv771RZ2EUQ4hHfHIsqD6vAYL07eCGoAV7
+ dHgNVxcLPllyrvYs9TpvPwax1Yti5W1s0floyQDHOBdYd/rWbjGIy46DABoW+8oSOkGO/
+ 4ia52xclUOcPEoknjz96eQ4CAw3K0XINa2ufhP4sDyp6XmbMx2GIX44bey0lyH7E0Gw==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org;
+ arc=none smtp.remote-ip=140.211.167.122
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 13D1040BCE
+ for <buildroot@buildroot.org>; Wed,  2 Sep 2026 19:26:14 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 612938F54B; Wed,  2 Sep 2026 19:25:14 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 2 Sep 2026 21:25:29 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 94013c3a95a849b6a8d8db5321f9bfea4c389b10
+X-Git-Newrev: 672b5f9213841bd79f1596e755bbffa7e4f39d2a
+X-Patchwork-Hint: ignore
+Message-Id: <20260902192514.612938F54B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/openscap: drop duplicate patch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -124,45 +111,98 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============0813706815633404738=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 01/09/2026 21:41, Peter Korsgaard wrote:
-> Fixes the following vulnerabilities:
-> 
-> CVE-2026-68546: Heap out-of-bounds write in RemoteIo when reading from 
-> a
-> malicious remote server (WebReady/Curl builds)
-> https://github.com/Exiv2/exiv2/security/advisories/GHSA-3695-mjv8-3r52
-> 
-> CVE-2026-68547: Heap out-of-bounds read in RemoteIo when reading
-> block-aligned remote CRW files
-> https://github.com/Exiv2/exiv2/security/advisories/GHSA-jcgh-p9v3-pw6j
-> 
-> CVE-2026-49275: Out of bounds read in CrwMap::decodeBasic
-> https://github.com/Exiv2/exiv2/security/advisories/GHSA-hxph-pv7w-8649
-> 
-> Out-of-bounds write in RemoteIo::mmap
-> https://github.com/Exiv2/exiv2/security/advisories/GHSA-vg6c-9f6h-4x5q
-> 
-> Out of bounds write in http.cpp
-> https://github.com/Exiv2/exiv2/security/advisories/GHSA-9v3x-mhg4-wwv2
-> 
-> Infinite loop in QuickTimeVideo::userDataDecoder
-> https://github.com/Exiv2/exiv2/security/advisories/GHSA-fgw8-p7pr-37cp
-> 
-> For more details, see the announcement:
-> https://www.openwall.com/lists/oss-security/2026/08/30/1
-> 
-> Notice: the RemoteIo-related vulnerabilities are not applicable for
-> Buildroot as exiv2 is not built with libcurl support.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+--===============0813706815633404738==
+Content-Type: text/plain
 
-Applied to master, thanks.
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/672b5f9213841bd79f1596e755bbffa7e4f39d2a
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+
+Commit bd5b267b1de0 ("package/openscap: fix build failure with dbus and
+musl") brought an upstream patch to fix a build failure on the openscap
+package, detected by the autobuilder on buildroot 2026.02.x, which had
+openscap 1.3.12 at that time. bd5b267b1de0 has recently been merged on
+master; openscap has already been bumped to 1.4.4 on this branch, and so
+it already brings the needed fix for musl+dbus build configurations,
+hence making the patch step fail. This upstream patch is then not needed
+anymore on any maintained branch.
+
+Fixes: https://autobuild.buildroot.org/results/d11d0b82dcdb4bf10f6c37db8bdbc42a78bdf28b/
+Fixes: https://autobuild.buildroot.org/results/4397a4ef94ccf482f1ab9d24b6334adb0222a580/
+Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ ...02-OVAL-probes-add-missing-header-include.patch | 48 ----------------------
+ 1 file changed, 48 deletions(-)
+
+diff --git a/package/openscap/0002-OVAL-probes-add-missing-header-include.patch b/package/openscap/0002-OVAL-probes-add-missing-header-include.patch
+deleted file mode 100644
+index 0c7598b2b5..0000000000
+--- a/package/openscap/0002-OVAL-probes-add-missing-header-include.patch
++++ /dev/null
+@@ -1,48 +0,0 @@
+-From ab69b76cb40d6f35d252246e965245804b17591f Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?Alexis=20Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+-Date: Thu, 13 Aug 2026 15:18:15 +0200
+-Subject: [PATCH] OVAL/probes: add missing header include
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-Openscap build can fail with the following log when
+--Wimplicit-function-declaration is turned into an error:
+-
+-In file included from [...]/src/OVAL/probes/unix/linux/systemdunitproperty_probe.c:38:
+-[...]/src/OVAL/probes/unix/linux/systemdshared.h: In function ‘get_all_systemd_units’:
+-[...]/src/OVAL/probes/unix/linux/systemdshared.h:188:50: error: implicit declaration of function ‘basename’; did you mean ‘rename’? [-Wimplicit-function-declaration]
+-  188 |                 char *unit_name_s = oscap_strdup(basename(value.str));
+-      |                                                  ^~~~~~~~
+-      |                                                  rename
+-In file included from [...]/src/OVAL/probes/unix/linux/systemdunitdependency_probe.c:37:
+-[...]/src/OVAL/probes/unix/linux/systemdshared.h: In function ‘get_all_systemd_units’:
+-[...]/src/OVAL/probes/unix/linux/systemdshared.h:188:50: error: implicit declaration of function ‘basename’; did you mean ‘rename’? [-Wimplicit-function-declaration]
+-  188 |                 char *unit_name_s = oscap_strdup(basename(value.str));
+-      |                                                  ^~~~~~~~
+-      |                                                  rename
+-
+-Add the missing header include pointed by `man 3 basename` to fix the
+-error.
+-
+-Upstream: https://github.com/OpenSCAP/openscap/commit/ab69b76cb40d6f35d252246e965245804b17591f
+-Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
+----
+- src/OVAL/probes/unix/linux/systemdshared.h | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/src/OVAL/probes/unix/linux/systemdshared.h b/src/OVAL/probes/unix/linux/systemdshared.h
+-index 879ae5be9d6c..57e94ca6f49e 100644
+---- a/src/OVAL/probes/unix/linux/systemdshared.h
+-+++ b/src/OVAL/probes/unix/linux/systemdshared.h
+-@@ -35,6 +35,7 @@
+- #include <config.h>
+- #endif
+- 
+-+#include <libgen.h>
+- #include <limits.h>
+- #include <stdio.h>
+- #include "common/debug_priv.h"
+--- 
+-2.55.0
+-
+
+--===============0813706815633404738==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0813706815633404738==--
