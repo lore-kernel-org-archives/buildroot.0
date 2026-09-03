@@ -1,105 +1,138 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03B67C624A4
-	for <buildroot@archiver.kernel.org>; Thu,  3 Sep 2026 07:33:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 591B1C624A4
+	for <buildroot@archiver.kernel.org>; Thu,  3 Sep 2026 09:54:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C7823608AA;
-	Thu,  3 Sep 2026 07:33:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E144A4080B;
+	Thu,  3 Sep 2026 09:54:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bpEKtnK5F-0N; Thu,  3 Sep 2026 07:33:42 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 204CD60633
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1788420822;
-	b=oNJuBrPsyb+PdAGPjZHCFoSIHY2/mivSn+9LV3hVyW6XBXLL9poRHmRVDCop+zA3xzUk
-	 padH2Y+xErh3ah1owlt7/oDM9DRhJvOU9aZaEPbGfV27aKeGfJC6z/MVJTjdbqaghpySE
-	 8I9XfpO6K7xF//q2lbZX4SJbRlEWfNOucO41BlN2PFmPZqzCtIBwYbzuOVL1hrQEZ6X6v
-	 gJPiUTSCBscSf3P03OlSywqdPxag6ickLlQWInrfqbRqqIZ4CoDHwTyk1lR+mNqZHQmdN
-	 iPUOJHC5N/BBChAyfQuF0HhwB2Tj/9ju21n/7bIAMg2mC3k6BllyLYvz9z34/e64txA==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id h5SkibbFSXHo; Thu,  3 Sep 2026 09:54:23 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org A8CC9407E5
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1788429263;
+	b=g4goB4EvL7PCVOtXf8EarUJEHYhV1/kELwSApMS5DsO7Di4Tcx88v/lfjSqV+FYtnbcs
+	 wItfUD5SjRS02Qx4YEQgCW2JF9g94X8TFHYZvuiF2as6Rw3QqbJM2dQM1IngXTJpncjlO
+	 IVSIre0nH4wdQvMrF0KPoCeCvjaaHWyiQnLsBoxZvVAo3pi0nS1gOt4XPtxSMMGab+lFt
+	 QVkoDQ5HCA5LeTRl46KsXw+4pNLxsdXgd95exAsEZoSEFMdkIr8o5qFMsvPow8eG1NHuu
+	 jRRIzH1uHKeQZTLFIzMFE/ngeqq0O4ABNUK6V/wjEpHo/klcGmMpscd6imoGHr7IZ/w==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1788420822;
+	c=relaxed/relaxed; t=1788429263;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:To:
-	 Date:Message-ID:X-Mailer:MIME-Version:X-Last-TLS-Session-Version:
-	 Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
-	 Reply-To:Cc:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=o1CEkwOJzI0HPsMGBsOtgVWjYeA43EMiXAoOcMbyRZA=;
-	b=AtHv5oPXT0ZbC3tZ1VWrGF+044cG8vWdur+h38V4jhPnEjcCLj7HDZY5oghtVsD2A28C
-	 VDSNhJsOAvoBEE6QZxpI6IPMrhHgogyFk54pRbkSagidVdtnta7kDcuBRiaLGxlHKxsH6
-	 7cCfn5q4MUgw3WmnHWyufCr0JXvrlbZBCmCmkb4XXhjuR6TzqPkIV+dTzN+ajoQktNnb2
-	 GkD00JN/7JqEbmzjml62NfPTMq3pBzqtckBwiqgz/Yu7mXK+s8JnOuP3ZtZyZ9Dnh1PFu
-	 r8HN74ZbKBgkchcAbC3FrXjjtbwIOq+XvmCmlCn6pLAO5jFtUFkBqEt6btXBGvRwOjA==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 Received:To:Date:Message-Id:X-Mailer:MIME-Version:Subject:X-BeenThere:
+	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:Content-Type:
+	 Content-Transfer-Encoding:Errors-To:Sender;
+	bh=Ktck3u2UTOJ3OcSM8HR2EbLcIrooidJNiZO3TX3fez4=;
+	b=YZLfSqnKArELTrQ4qkcGxxAp/WRsYaIwooOJLWs8j2MiDQDqltToxz5cHq6qzBSsZnDo
+	 ulnQUYlAwvhxRyyrE/hWqdUgIeuSN5wmZLWOiqyINz+ejZ8ved8O2hMvuTuoXNg0bfH39
+	 regPkC+et1uyXkGHkHomKbLxxgTItn0Yw5it7YUaLrvY72RZt6QQ7OnQawvKX9j35f74a
+	 TSj7NH/PwGHWKcVSZGU75HCX8I0JGjvAHbFz+IYf4+owWjEtl+eJVbjX3yfW7Uu43pwwJ
+	 31FdCgk38xbvZtP/DIp9UQiE1BUpYbKSeTL/ebHffcMuQjFKpVgFUnEbVm8dH1hLfrQ==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1788420822;
-	bh=o1CEkwOJzI0HPsMGBsOtgVWjYeA43EMiXAoOcMbyRZA=;
+	s=default; t=1788429263;
+	bh=Ktck3u2UTOJ3OcSM8HR2EbLcIrooidJNiZO3TX3fez4=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
-	b=Wu8lx+IpoLve6Qr0fA1+RWUmH6Tq3p1Yi0YrJEBns33dGy88FSyZT9l2x3mCrTJbZ
-	 N273d9PuVh9cfgLyfOnMO65p6gymzI3YdfErMrjuQGSOXB+wtciRCs91sC/SP+4kJ4
-	 KyGRVKwwT5f/B2J7vmTWcstgbUvpyJk4NEIdw4tIIAjOTLkH1UZMTJ2fmn186majOH
-	 urcswkARXSiJsGh0MjkzoPMnvd2e88J1aALI66WA/0DljzNM2qLDFhaJGiEOooEIFo
-	 ZUpT903zuuPn3OdldniCmcvCB0hw61U0oFZCSIFg5E7eYQ1bZ1IwRcN/jk/eo7FAbP
-	 8+BKMBcoiJ8nw==
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=skeZbnIHAWbvWmtzEpeo7X8MVtIQw6vaJDbIVNIoDmQQ+ePXEOG/qbEkwqnyNBvad
+	 DGyEhHuBB2x5snynAtmlmy5TePzspMOR4zpqJcT9IX6DQGE3N771GMd1oW4L8D2HMz
+	 CLzjXJsifB/FbhYEqoEy7AEvNSrj4o0utYF3Et4ATHLg5N2OoDfAJRcNH1DeSzlHbT
+	 ubQaG45BLz7TSNAESGXeZp+2aQM6kHmdB2n6ZUGNtfMxBrYwMJxutHMrJw9ewmvzi1
+	 CE+ZAkZ0B4osKhfm0n8fuoRk81U2INJV5q+YWRHAbPkPlTIUo7yekVSJinAQVwPiIY
+	 QYWG5XMegCi6w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 204CD60633;
-	Thu,  3 Sep 2026 07:33:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A8CC9407E5;
+	Thu,  3 Sep 2026 09:54:23 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 7653234E
- for <buildroot@buildroot.org>; Thu,  3 Sep 2026 07:33:41 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1559C3AF
+ for <buildroot@buildroot.org>; Thu,  3 Sep 2026 09:54:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5C36860633
- for <buildroot@buildroot.org>; Thu,  3 Sep 2026 07:33:41 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id EFC50608B9
+ for <buildroot@buildroot.org>; Thu,  3 Sep 2026 09:54:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jrFxtk8uicQv for <buildroot@buildroot.org>;
- Thu,  3 Sep 2026 07:33:40 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 3BA7A605DA
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1788420820;
- b=dCrn5XXjoLoilqCJTZOrhg75wC/gzZDlFhIesEPopWXn5jPoFYp0LHk3Gx94dESiaCFl
- vYm1eaqyNKPmxoMdIUGMhFlAa5sCvpPMudrpzNkCW73wvEF/nL3jfFYbkTGDGpe6lWdzD
- P4QHK0WudGftLcsH49s91CwEeEgSdVtsoQm1d3/XbtcOd8RsQ9QdITi1HQvahbVVCjLvo
- dv48xgxi6jTznTHsWQ+sOTKSspUShQWa0s23ULmcLsCGKDurmfwrDB75fFS+23P79TMO6
- vSDrrDMhu/VA+CVPiAxVK1zxZlKjM0nF070alnIWJw3kHU2U+EBYblp+K5GadR+BYUg==
+ id uVHFoZZd5K4I for <buildroot@buildroot.org>;
+ Thu,  3 Sep 2026 09:54:21 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org BDC84608A4
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1788429261;
+ b=iE0PzAP2cccHX6DHFrLV8nqRXgmfDFOKiZfvbcMqRPFRRwmaNwfSIrPscXtrVof5jAp7
+ 9Uc80UZV2MMMNCSNC0+ErjUHuJc/w/y/FC+Ke4vo3Cm3TBTvOXyFDTv/yoQCAFOnGJIFQ
+ Zg37+a6+5F/Ktgr1QcCWqWAYqWeYNb5ca8Ipg995uzonKKe85+KgkgvfLiWIRC+P103hM
+ DUPyGRnCTJhrcRPdBSQ141kkC70Ryhf+jg06XwNQCuBk443x1RL6NNgibzDI1VnD9PZzX
+ IfylD/jYq8ZkIgEgmR4IzhGLUsrf1kTrU2dST+NzDttgAcZMdGukwtC1sDYw8SP6duw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1788420820;
- h=Received-SPF:Received:DKIM-Signature:From:To:Cc:Subject:Date:
- Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding:
- X-Last-TLS-Session-Version;
- bh=1ly+6eDaUFIn0DHBP+N/B8AClZ3j3Ykhd8Q17PVLhjU=;
- b=mAY2EsmZy9zH3+aJC8ByMMvhFrLtMiUjwZfODIHaXgELGUAc0v6IRhM2DTEHZDF+qB8o
- iKxCzV1L+Ud5nptkRejdvo5oKjmngLezhBC1E7enmZIhen3AbS6x/UpU1aXUcrndidwud
- PZP7QmHfkrvuxiFAmwssYrwtMaxuTCxLE32pEZg5fIVPxHgacPAFu0RwGhF/48xqtgSE4
- 4lWss7+aOwz/r4QHvzvByItLUnct7kM8usYss8v/GGHggp6fPqTKM70hBb+qfIVcbJh3U
- QUrJ18Eg7QkjxP1PWeFDPGLbPjgbyDGxnZ4MQG3Ptv3Wazc2qf/fxzJ8GcYvrOJsZLw==
+ c=relaxed/relaxed; t=1788429261;
+ h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
+ X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+ Date:Message-Id:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+ bh=pwIS2IPdzCbjfdRQCWogZPyiGKm9h72xrnaInmnoKIg=;
+ b=dn2OBDtNd9Gri5Y1DsciCfK8yAa5Ms04Yg1AhubAt85LZCG9PyqWGFSVlOwQEiyKCxNI
+ VrrwNHkqUv6cmgW2GU9hXxcPdiGleg1Ys6DgSOXIgxwprNnR7rh5Hp2pLBuP3w1zfR0cZ
+ Jwoq6lQk0EdN0TUpB3KnJZrDTCJtV+6YGGYz3VK2bSsdZXeqviVpycD/n866BVO3vg+rW
+ T2FBXl4UvBrVjVfjfIawodFCU4egovV0AH32Sf9S6+7tfSpZj/yL5xglBx2NADoYA7Kfq
+ 23oXBjuXr5C4Ucp3iCnwmZJNy2hkP3GDHXaiTCZ5rTd3AqYfQfB8POqITQp63V4Wg1w==
 ARC-Authentication-Results: i=1; smtp3.osuosl.org;
- dmarc=pass header.from=heine.tech; 
- dkim=pass header.d=heine.tech header.i=@heine.tech header.a=rsa-sha256
- header.s=dkim header.b=D2ERCC11; 
- arc=none smtp.remote-ip=195.201.24.99
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=195.201.24.99;
- helo=mail.heine.tech; envelope-from=buildroot@heine.tech; receiver=<UNKNOWN> 
-Received: from mail.heine.tech (mail.heine.tech [195.201.24.99])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3BA7A605DA
- for <buildroot@buildroot.org>; Thu,  3 Sep 2026 07:33:39 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id BF93D1814BC; Thu, 03 Sep 2026 09:24:53 +0200 (CEST)
+ dmarc=pass header.from=googlemail.com; 
+ dkim=pass header.d=googlemail.com header.i=@googlemail.com header.a=rsa-sha256
+ header.s=20251104 header.b=itXuvhGw; 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::52d"
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::52d; helo=mail-ed1-x52d.google.com;
+ envelope-from=yegorslists@googlemail.com; receiver=<UNKNOWN> 
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com
+ [IPv6:2a00:1450:4864:20::52d])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id BDC84608A4
+ for <buildroot@buildroot.org>; Thu,  3 Sep 2026 09:54:20 +0000 (UTC)
+Received: by mail-ed1-x52d.google.com with SMTP id
+ 4fb4d7f45d1cf-6a61910369bso2620776a12.0
+ for <buildroot@buildroot.org>; Thu, 03 Sep 2026 02:54:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20251104; t=1788429258; x=1789034058;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to:content-type;
+ bh=pwIS2IPdzCbjfdRQCWogZPyiGKm9h72xrnaInmnoKIg=;
+ b=eDU7hmbV7+pEK5yP0vVITFEdLVA0p2E5ktnJSWevGc2wAb/3VbMZ7SB3ImRQ8rtVGG
+ 502WCDPfQbpVu16Z98V45NyyTXgElxFilkvZ2wbyHgEm0v/B56RxOrBSzgxY/0cSwnjn
+ 4P856kZYARTFCztWY8ojKuffpQl1n1QVD4yyZtJ2HzufVDUe8R2qZRtbL0lW4prfhXhi
+ /TWg/rbZzGWc4VdvgLcA03dGY2leTbVATj766wTnz4p4jnIP+7Q+7GwzMTZ2rigUhaI9
+ W4/rUUQkr6hG5iCJ8mcaJX1ZtCIFG7OT7RhyE/jjBESEBH/5qzKk82MlPYo/dc7z/EA/
+ wliQ==
+X-Gm-Message-State: AFuF++mcRUsgBwg65vY5SuLTJ5uJ75eP9EF2CCpMUAkhYWO7Bet4gHgl
+ Fxc2X7dQmrXOHBZmrzQJFRhNkDJ34lVpR40aYrqqx1eg8JNhEgma+rC4ZCNjcw==
+X-Gm-Gg: AYBFou214ym9lA/DGFOj6MBivmjS5R1N4marR0RwHJHbxBPjdBxpsifp9FoQth2Mh2w
+ UavWlMoWiXmnQhbcfMdEnz3qwIGj7/s3ipuW5ul4I8S2L4pL16CSTC5L1Mq1Y9HZYFkcH5bQ4jS
+ GU90ygN/sqUhWbGtEOidZ+ecqB6jV2LXd9lXfNfBXhuyj6cSrgIIeebN39JFTZ85fACprIAcyY0
+ pA9Q7qNPSyvPy3l3dZUiqx2qt+8jg2zvazBcbZYEF9GllShfgvZUnx0PZB16QPL9UCdz75RRfaB
+ /AD4GzVX2H69thzQHf8BA0eiz0UuBfM3MIqZ0A7aqVE1DDrjFYvqqrQt0UDN/8cThS/emsZuxRF
+ xLAhakIRcTR8ciV2c1wx9ZcI4DNGC9omOBsac46IEEfzAU+xqZxbxtKV7l0xCqB6uH2wcwJ8YAo
+ AUNsrVXT4Wz2ghRPHidGq18BFagrLfm/8jJb9HPp3JSz7akTMw9uN2jT3Yt/tsu3VdSQ1/2DknV
+ QhL54I0gkLUzHX2Vt5Q8AC8hE0OT9vFACpgb/IhliI=
+X-Received: by 2002:a17:907:9813:b0:c25:4e5:fe33 with SMTP id
+ a640c23a62f3a-c25d555ccd3mr695577366b.24.1788429258300; 
+ Thu, 03 Sep 2026 02:54:18 -0700 (PDT)
+Received: from development2.visionsystems.local (mail.visionsystems.de.
+ [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-c25f3eef879sm77380666b.6.2026.09.03.02.54.17
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 03 Sep 2026 02:54:17 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Thu,  3 Sep 2026 09:24:42 +0200
-Message-ID: <20260903072446.554946-1-buildroot@heine.tech>
-X-Mailer: git-send-email 2.43.0
+Date: Thu,  3 Sep 2026 11:54:15 +0200
+Message-Id: <20260903095415.3657050-1-yegorslists@googlemail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
-Subject: [Buildroot] [PATCH] package/{python-}protobuf: bump to version 36.1
+Subject: [Buildroot] [PATCH] package/imlib2: add zlib dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -111,75 +144,71 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Michael Nosthoff via buildroot <buildroot@buildroot.org>
-Reply-To: Michael Nosthoff <buildroot@heine.tech>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+From: yegorslists--- via buildroot <buildroot@buildroot.org>
+Reply-To: yegorslists@googlemail.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-changelog:
-https://github.com/protocolbuffers/protobuf/releases/tag/v36.1
-https://github.com/protocolbuffers/protobuf/releases/tag/v36.0
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+The demo programs, which have always been built and are still enabled by
+default, gained a zlib dependency in imlib2 1.12.3: upstream commit
+f8a451043871 ("imlib2_load: Add crc32 printout") started using zlib's
+crc32() in imlib2_load, and 31006b425e11 ("imlib2_view: Optionally show
+crc32 of image data") did the same for imlib2_view. Both hardcoded -lz.
+
+Upstream commit b9555030dace ("autofoo: don't hardcode zlib flags"),
+first released in 1.12.4, replaced -lz with $(ZLIB_LIBS) and added an
+unconditional PKG_CHECK_MODULES(ZLIB, zlib) to the demo programs branch
+of configure, turning the previously silent link-time requirement into a
+configure failure:
+
+  checking for zlib... no
+  configure: error: Package requirements (zlib) were not met:
+
+  Package 'zlib' not found
+
+As Buildroot went straight from 1.7.3 to 1.12.5 the intermediate state
+was never packaged, but the dependency has in fact been missing since the
+crc32 support landed.
+
+Fixes: https://autobuild.buildroot.org/results/4e05404c353ef985d74757d0b1ec3eda2cdff523/
+
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/protobuf/protobuf.hash               | 2 +-
- package/protobuf/protobuf.mk                 | 2 +-
- package/python-protobuf/python-protobuf.hash | 4 ++--
- package/python-protobuf/python-protobuf.mk   | 2 +-
- 4 files changed, 5 insertions(+), 5 deletions(-)
+ package/imlib2/Config.in | 1 +
+ package/imlib2/imlib2.mk | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/protobuf/protobuf.hash b/package/protobuf/protobuf.hash
-index aaf5d77095..17d42534a6 100644
---- a/package/protobuf/protobuf.hash
-+++ b/package/protobuf/protobuf.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
- sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
--sha256  f0b6838e7522a8da96126d487068c959bc624926368f3024ac8fd03abd0a1ac4  protobuf-35.1.tar.gz
-+sha256  dc74fa582f559cbd31614ddfefb4868f43c919d7184bde514bb47f90c6025eb8  protobuf-36.1.tar.gz
-diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
-index d4d0e3e0d0..c4ffbe9eca 100644
---- a/package/protobuf/protobuf.mk
-+++ b/package/protobuf/protobuf.mk
-@@ -7,7 +7,7 @@
- # When bumping this package, make sure to also verify if the
- # python-protobuf package still works and to update its hash,
- # as they share the same version/site variables.
--PROTOBUF_VERSION = 35.1
-+PROTOBUF_VERSION = 36.1
- PROTOBUF_SITE = https://github.com/protocolbuffers/protobuf/releases/download/v$(PROTOBUF_VERSION)
- PROTOBUF_LICENSE = BSD-3-Clause
- PROTOBUF_LICENSE_FILES = LICENSE
-diff --git a/package/python-protobuf/python-protobuf.hash b/package/python-protobuf/python-protobuf.hash
-index 714e2cf49b..469ca3e6bd 100644
---- a/package/python-protobuf/python-protobuf.hash
-+++ b/package/python-protobuf/python-protobuf.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/protobuf/json
--md5  e9074f4f40672c900f878be049f86cb8  protobuf-7.35.1.tar.gz
--sha256  ce115a26fe0c39a2c29973d914d327e516a6455464489fe3cd1e51a1b354f81a  protobuf-7.35.1.tar.gz
-+md5  5cef553eb5bceb0d5a57610f1aa3c40c  protobuf-7.36.1.tar.gz
-+sha256  d0f6470f0ce2b84e3feaea2d4b816378b37ba4d4aa08a274305373de93e2d524  protobuf-7.36.1.tar.gz
- # Locally computed sha256 checksums
- sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
-diff --git a/package/python-protobuf/python-protobuf.mk b/package/python-protobuf/python-protobuf.mk
-index 17369d1462..d73c265302 100644
---- a/package/python-protobuf/python-protobuf.mk
-+++ b/package/python-protobuf/python-protobuf.mk
-@@ -6,7 +6,7 @@
+diff --git a/package/imlib2/Config.in b/package/imlib2/Config.in
+index c47178f174..46edf375f3 100644
+--- a/package/imlib2/Config.in
++++ b/package/imlib2/Config.in
+@@ -5,6 +5,7 @@ config BR2_PACKAGE_IMLIB2
+ 	bool "imlib2"
+ 	depends on !BR2_STATIC_LIBS # dlopen()
+ 	select BR2_PACKAGE_FREETYPE
++	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  Imlib 2 is the successor to Imlib. This library provides
+ 	  routines to load, save and render images in various formats.
+diff --git a/package/imlib2/imlib2.mk b/package/imlib2/imlib2.mk
+index 5ad89289a4..c650981501 100644
+--- a/package/imlib2/imlib2.mk
++++ b/package/imlib2/imlib2.mk
+@@ -12,7 +12,7 @@ IMLIB2_LICENSE_FILES = COPYING COPYING-PLAIN
+ IMLIB2_CPE_ID_VENDOR = enlightenment
  
- PYTHON_PROTOBUF_VERSION = $(PROTOBUF_VERSION)
- PYTHON_PROTOBUF_SOURCE = protobuf-7.$(PYTHON_PROTOBUF_VERSION).tar.gz
--PYTHON_PROTOBUF_SITE = https://files.pythonhosted.org/packages/da/01/9ef0afd7999eb9badb3a768b4aedd78c86d4c65cfaf1958ab276199e76b4
-+PYTHON_PROTOBUF_SITE = https://files.pythonhosted.org/packages/86/73/f66c748df06e7fe24e658eddd600d19c4b40bad836c97ce2d0ad9851fb6b
+ IMLIB2_INSTALL_STAGING = YES
+-IMLIB2_DEPENDENCIES = host-pkgconf freetype
++IMLIB2_DEPENDENCIES = host-pkgconf freetype zlib
+ IMLIB2_CONF_OPTS = --with-freetype-config=$(STAGING_DIR)/usr/bin/freetype-config
  
- PYTHON_PROTOBUF_LICENSE = BSD-3-Clause
- PYTHON_PROTOBUF_LICENSE_FILES = LICENSE
+ ifeq ($(BR2_PACKAGE_IMLIB2_X),y)
 -- 
-2.43.0
+2.34.1
 
 _______________________________________________
 buildroot mailing list
