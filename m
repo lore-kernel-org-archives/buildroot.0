@@ -4,135 +4,137 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 591B1C624A4
-	for <buildroot@archiver.kernel.org>; Thu,  3 Sep 2026 09:54:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70871C61DD3
+	for <buildroot@archiver.kernel.org>; Thu,  3 Sep 2026 11:47:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E144A4080B;
-	Thu,  3 Sep 2026 09:54:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EDF1840AC0;
+	Thu,  3 Sep 2026 11:47:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id h5SkibbFSXHo; Thu,  3 Sep 2026 09:54:23 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org A8CC9407E5
+ id AOi0nGTIjN-Y; Thu,  3 Sep 2026 11:47:35 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org C2CF740AC2
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1788429263;
-	b=g4goB4EvL7PCVOtXf8EarUJEHYhV1/kELwSApMS5DsO7Di4Tcx88v/lfjSqV+FYtnbcs
-	 wItfUD5SjRS02Qx4YEQgCW2JF9g94X8TFHYZvuiF2as6Rw3QqbJM2dQM1IngXTJpncjlO
-	 IVSIre0nH4wdQvMrF0KPoCeCvjaaHWyiQnLsBoxZvVAo3pi0nS1gOt4XPtxSMMGab+lFt
-	 QVkoDQ5HCA5LeTRl46KsXw+4pNLxsdXgd95exAsEZoSEFMdkIr8o5qFMsvPow8eG1NHuu
-	 jRRIzH1uHKeQZTLFIzMFE/ngeqq0O4ABNUK6V/wjEpHo/klcGmMpscd6imoGHr7IZ/w==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1788436054;
+	b=g2FV+0/Hn+aEtdfk66PTvkMqZ4514mG0ydmnjFa2+Csxa1TPzTiNDl39tl53PDte/ApU
+	 4Kk9eFeroMA7E+MThr2KFr4YMM824lgShhgxfcRY5G5b1ZqsCiLbQgTq4vgoykZcqGNtI
+	 M4Up+h+gdU7zpahcCsQAG5tuQuCHcJ/p/G1pZfptk6JO597/uVg1HaR3PpW1VxaErHRnm
+	 Jyfxf4lJmHAhM3vqfWpAFlpy0/IVGYLFQF60DZpxX5I06NM0IDnt6HNEsAWopJC2gFjfj
+	 SE3thJKaSNXeCl1cQu42aIRjP86NWA5q7zwKpS6mabnmS/nwC1YZ3l/ggypEwZdgOhA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1788429263;
+	c=relaxed/relaxed; t=1788436054;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
 	 X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 Received:To:Date:Message-Id:X-Mailer:MIME-Version:Subject:X-BeenThere:
-	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:Content-Type:
-	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=Ktck3u2UTOJ3OcSM8HR2EbLcIrooidJNiZO3TX3fez4=;
-	b=YZLfSqnKArELTrQ4qkcGxxAp/WRsYaIwooOJLWs8j2MiDQDqltToxz5cHq6qzBSsZnDo
-	 ulnQUYlAwvhxRyyrE/hWqdUgIeuSN5wmZLWOiqyINz+ejZ8ved8O2hMvuTuoXNg0bfH39
-	 regPkC+et1uyXkGHkHomKbLxxgTItn0Yw5it7YUaLrvY72RZt6QQ7OnQawvKX9j35f74a
-	 TSj7NH/PwGHWKcVSZGU75HCX8I0JGjvAHbFz+IYf4+owWjEtl+eJVbjX3yfW7Uu43pwwJ
-	 31FdCgk38xbvZtP/DIp9UQiE1BUpYbKSeTL/ebHffcMuQjFKpVgFUnEbVm8dH1hLfrQ==
+	 Received:X-Google-Original-From:To:Date:Message-Id:X-Mailer:
+	 MIME-Version:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
+	 Reply-To:Cc:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
+	bh=qCYYjmFarLpqI5IkgyZkDxZxEH2EZg+lEsETwd3Hwjg=;
+	b=HEFhCR7k4IwZ3OjJktrR05Kqm6uW2AGmFaAgG989q1kyhpLuy0PZD4ZCM0NAXqk0UgA+
+	 nEINbuoq5KjYORhWP0BTbBvTCwZvUagL90pCBdldSdaCCgYWW1yAZZcIrTy3tlliSX/1K
+	 sujlFBebl+cC5VqwEA1GNyecjEgclMh4GU5ECp0M/uZ7cQHSEouOauEUzUr1tebcwTTLk
+	 L6Q6pfSFv4hpGMmkVIkbC/HsccPzQZAicPHYR312NLANTAmh22dIOMAqZYvoKdM4OjPEV
+	 Iscdq3ouVhJBjdPMn1G4OLMV/dRMY16xaKu0jnZjbV4ZQ3PomrJpHW8bTe09VXB5d1w==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1788429263;
-	bh=Ktck3u2UTOJ3OcSM8HR2EbLcIrooidJNiZO3TX3fez4=;
+	s=default; t=1788436054;
+	bh=qCYYjmFarLpqI5IkgyZkDxZxEH2EZg+lEsETwd3Hwjg=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=skeZbnIHAWbvWmtzEpeo7X8MVtIQw6vaJDbIVNIoDmQQ+ePXEOG/qbEkwqnyNBvad
-	 DGyEhHuBB2x5snynAtmlmy5TePzspMOR4zpqJcT9IX6DQGE3N771GMd1oW4L8D2HMz
-	 CLzjXJsifB/FbhYEqoEy7AEvNSrj4o0utYF3Et4ATHLg5N2OoDfAJRcNH1DeSzlHbT
-	 ubQaG45BLz7TSNAESGXeZp+2aQM6kHmdB2n6ZUGNtfMxBrYwMJxutHMrJw9ewmvzi1
-	 CE+ZAkZ0B4osKhfm0n8fuoRk81U2INJV5q+YWRHAbPkPlTIUo7yekVSJinAQVwPiIY
-	 QYWG5XMegCi6w==
+	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
+	b=L9Oua0Qcz47Q+65TtTr37xge1ICpjxMgRv3Y8fOpCOVlINpKyXyhRbW03AjAO31xF
+	 llTr58KT3v7Z6MFafBCAACyI366bJBP7LfvuNCaEWc3X+xREuYv7CQfZqA1HSGLb/b
+	 MUMMUPxe2K5NhB44lUZTSvM5hnnXEN8oGLIoRNFSrwxhZttKttg4rJHf0QxzMtgMDm
+	 J28E/bTiiw0r1LF6Hv3C7Uz0VXmt6j0Lffvr0RkCAHfWalv19TeTUeQsSmbj2nvY1G
+	 30kQIDOTv53sJlBIVXVsJ6hTnLuIwWeyC5o1LeUX7vlCkiwnx2psLTewTzWFGzSYup
+	 T5XtyfX58iPKw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A8CC9407E5;
-	Thu,  3 Sep 2026 09:54:23 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 1559C3AF
- for <buildroot@buildroot.org>; Thu,  3 Sep 2026 09:54:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C2CF740AC2;
+	Thu,  3 Sep 2026 11:47:34 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0A902265
+ for <buildroot@buildroot.org>; Thu,  3 Sep 2026 11:47:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EFC50608B9
- for <buildroot@buildroot.org>; Thu,  3 Sep 2026 09:54:21 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id F055040AC2
+ for <buildroot@buildroot.org>; Thu,  3 Sep 2026 11:47:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uVHFoZZd5K4I for <buildroot@buildroot.org>;
- Thu,  3 Sep 2026 09:54:21 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org BDC84608A4
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1788429261;
- b=iE0PzAP2cccHX6DHFrLV8nqRXgmfDFOKiZfvbcMqRPFRRwmaNwfSIrPscXtrVof5jAp7
- 9Uc80UZV2MMMNCSNC0+ErjUHuJc/w/y/FC+Ke4vo3Cm3TBTvOXyFDTv/yoQCAFOnGJIFQ
- Zg37+a6+5F/Ktgr1QcCWqWAYqWeYNb5ca8Ipg995uzonKKe85+KgkgvfLiWIRC+P103hM
- DUPyGRnCTJhrcRPdBSQ141kkC70Ryhf+jg06XwNQCuBk443x1RL6NNgibzDI1VnD9PZzX
- IfylD/jYq8ZkIgEgmR4IzhGLUsrf1kTrU2dST+NzDttgAcZMdGukwtC1sDYw8SP6duw==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RoW1NXBR7rGZ for <buildroot@buildroot.org>;
+ Thu,  3 Sep 2026 11:47:33 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org BAA1E40AC0
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1788436053;
+ b=UXjGRZC+gSfy+8DkEeKNAlz0eyhRBYOqazNgwHLUaxwhpZ12+G8E6ol8CmooDOKRKLlR
+ TS60L4KOiYhLPG39yTRhHEL06qdSuZXTP6+khDL8YgutBF0dKS7cs8T885yEEoOrJhVCq
+ j7jQMG8xrVQkl8wIgX4E9VCl2lqDIAmlGBa/dbRWOh7iTxauCAUtN1eX42QEglE/Fj36o
+ cb6emrAPj1BIsQsRbz4w2QSuJJE2LVhwOux/qsykcO1qtuXG0s7yNVQ8ikEommXRS/Uwf
+ wUdC3KGXUe8gZzQQR4MQ0lDL+5b54LMlOkB6c/vJMXx1Fjl9tMpcT1eA90DJMB7SZmg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1788429261;
+ c=relaxed/relaxed; t=1788436053;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
- X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
- Date:Message-Id:X-Mailer:MIME-Version:Content-Transfer-Encoding;
- bh=pwIS2IPdzCbjfdRQCWogZPyiGKm9h72xrnaInmnoKIg=;
- b=dn2OBDtNd9Gri5Y1DsciCfK8yAa5Ms04Yg1AhubAt85LZCG9PyqWGFSVlOwQEiyKCxNI
- VrrwNHkqUv6cmgW2GU9hXxcPdiGleg1Ys6DgSOXIgxwprNnR7rh5Hp2pLBuP3w1zfR0cZ
- Jwoq6lQk0EdN0TUpB3KnJZrDTCJtV+6YGGYz3VK2bSsdZXeqviVpycD/n866BVO3vg+rW
- T2FBXl4UvBrVjVfjfIawodFCU4egovV0AH32Sf9S6+7tfSpZj/yL5xglBx2NADoYA7Kfq
- 23oXBjuXr5C4Ucp3iCnwmZJNy2hkP3GDHXaiTCZ5rTd3AqYfQfB8POqITQp63V4Wg1w==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org;
+ X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:
+ X-Google-Original-From:To:Cc:Subject:Date:Message-Id:X-Mailer:
+ MIME-Version:Content-Transfer-Encoding;
+ bh=OXqCWjEvJF42W+WsTIq/HARt+o7m7WvVmrHVl1Lz7UQ=;
+ b=mKTkOGMLRVaSQmCU4cu6L3YWdMZw9zDtNBs1FzuFqL2nRqdjqE8XNKCsO/VsCZIfp4UX
+ Te8+XLlQvu4gN0LyYEoX0GsUY6V6Wzld7kg9enddI3YaqRqXuVefVetJ7/NQggS4dG/mR
+ YNYShKljpHnGDEpOdUqH+A+nr4KTT9ixRNnOjSBsfj0I3YwVsirOMzY94I2R+QWPFaAPb
+ IrwJHp1ZWELf8dpbxmvvqMGG6eB5Xh91pV+rYeHqbLR7mRgg0YroLE15qst/jJqsNlZtr
+ n7FcgMpbBZr2fs6p6KXeCtic6qTkD/v01VA1Cf684muTt3U5yVFe8vtYJg8smUAkMvw==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org;
  dmarc=pass header.from=googlemail.com; 
  dkim=pass header.d=googlemail.com header.i=@googlemail.com header.a=rsa-sha256
- header.s=20251104 header.b=itXuvhGw; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::52d"
+ header.s=20251104 header.b=kGyowFvn; 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::635"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::52d; helo=mail-ed1-x52d.google.com;
+ client-ip=2a00:1450:4864:20::635; helo=mail-ej1-x635.google.com;
  envelope-from=yegorslists@googlemail.com; receiver=<UNKNOWN> 
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com
- [IPv6:2a00:1450:4864:20::52d])
- by smtp3.osuosl.org (Postfix) with ESMTPS id BDC84608A4
- for <buildroot@buildroot.org>; Thu,  3 Sep 2026 09:54:20 +0000 (UTC)
-Received: by mail-ed1-x52d.google.com with SMTP id
- 4fb4d7f45d1cf-6a61910369bso2620776a12.0
- for <buildroot@buildroot.org>; Thu, 03 Sep 2026 02:54:20 -0700 (PDT)
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com
+ [IPv6:2a00:1450:4864:20::635])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id BAA1E40AC0
+ for <buildroot@buildroot.org>; Thu,  3 Sep 2026 11:47:32 +0000 (UTC)
+Received: by mail-ej1-x635.google.com with SMTP id
+ a640c23a62f3a-c1c52d920b8so303734866b.2
+ for <buildroot@buildroot.org>; Thu, 03 Sep 2026 04:47:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1788429258; x=1789034058;
+ d=1e100.net; s=20251104; t=1788436050; x=1789040850;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to:content-type;
- bh=pwIS2IPdzCbjfdRQCWogZPyiGKm9h72xrnaInmnoKIg=;
- b=eDU7hmbV7+pEK5yP0vVITFEdLVA0p2E5ktnJSWevGc2wAb/3VbMZ7SB3ImRQ8rtVGG
- 502WCDPfQbpVu16Z98V45NyyTXgElxFilkvZ2wbyHgEm0v/B56RxOrBSzgxY/0cSwnjn
- 4P856kZYARTFCztWY8ojKuffpQl1n1QVD4yyZtJ2HzufVDUe8R2qZRtbL0lW4prfhXhi
- /TWg/rbZzGWc4VdvgLcA03dGY2leTbVATj766wTnz4p4jnIP+7Q+7GwzMTZ2rigUhaI9
- W4/rUUQkr6hG5iCJ8mcaJX1ZtCIFG7OT7RhyE/jjBESEBH/5qzKk82MlPYo/dc7z/EA/
- wliQ==
-X-Gm-Message-State: AFuF++mcRUsgBwg65vY5SuLTJ5uJ75eP9EF2CCpMUAkhYWO7Bet4gHgl
- Fxc2X7dQmrXOHBZmrzQJFRhNkDJ34lVpR40aYrqqx1eg8JNhEgma+rC4ZCNjcw==
-X-Gm-Gg: AYBFou214ym9lA/DGFOj6MBivmjS5R1N4marR0RwHJHbxBPjdBxpsifp9FoQth2Mh2w
- UavWlMoWiXmnQhbcfMdEnz3qwIGj7/s3ipuW5ul4I8S2L4pL16CSTC5L1Mq1Y9HZYFkcH5bQ4jS
- GU90ygN/sqUhWbGtEOidZ+ecqB6jV2LXd9lXfNfBXhuyj6cSrgIIeebN39JFTZ85fACprIAcyY0
- pA9Q7qNPSyvPy3l3dZUiqx2qt+8jg2zvazBcbZYEF9GllShfgvZUnx0PZB16QPL9UCdz75RRfaB
- /AD4GzVX2H69thzQHf8BA0eiz0UuBfM3MIqZ0A7aqVE1DDrjFYvqqrQt0UDN/8cThS/emsZuxRF
- xLAhakIRcTR8ciV2c1wx9ZcI4DNGC9omOBsac46IEEfzAU+xqZxbxtKV7l0xCqB6uH2wcwJ8YAo
- AUNsrVXT4Wz2ghRPHidGq18BFagrLfm/8jJb9HPp3JSz7akTMw9uN2jT3Yt/tsu3VdSQ1/2DknV
- QhL54I0gkLUzHX2Vt5Q8AC8hE0OT9vFACpgb/IhliI=
-X-Received: by 2002:a17:907:9813:b0:c25:4e5:fe33 with SMTP id
- a640c23a62f3a-c25d555ccd3mr695577366b.24.1788429258300; 
- Thu, 03 Sep 2026 02:54:18 -0700 (PDT)
+ bh=OXqCWjEvJF42W+WsTIq/HARt+o7m7WvVmrHVl1Lz7UQ=;
+ b=C4N3NkizZYha5sahKfHA0kJljDUqSanOdVg7StCrN+RwePiaSOCzrtvdDRMWggeZAo
+ du+YIkjl4sf2sZe3j0UCLQmvLOPRbMcB5USw/4PzVF/sAJboV9beIZ0Jr2KHcjvO7Bjy
+ ICX0x4j9VNugutJTtqA6tQPDYoxL5ACGJQY9xi7E955AccyXRCtTv12wZzRegrWDtbwq
+ 0l+s7Hs09/k943woCwM5igbWxDHVFQ/E6c8RAHr81RqyQkcqGTBkbv30hj8cC7Lf791l
+ MPRfkxU0DnD2+bvbbDMusW3nhQRIlznbANbEqg6lZnJELIeKrLEsKBWkE1e6aFu184Bg
+ ohxQ==
+X-Gm-Message-State: AFuF++m6v4ywPC+W7/4E+xXGBrdn3TFhTHDHdkSiLUe2QprmPfgbTey0
+ /s/C/+aZBe1zvo/nnfbftUFhJtaNEEySVWv4ruuCgAf2FvqYXIALR5k2vIRkuA==
+X-Gm-Gg: AYBFou1pBqcMjiDqchb0+qjLHEmw9t97rgMmiK0/iNrkXa7IAlsU6Ta7ICYMcZgj/BY
+ RaP5oXbKDszFQugm2zRPmQrkXnNHNB2NvrObiT+FFwGhLMdwGkN9tux/YUZPQln1FL98b3WQS6f
+ BnJRZl8CHo9f8BmxUh0JRDR2S6IdVI63Bz1ohQETW52CHN49ymfhsbX7HuUoluNY2A/SIFk8cac
+ 05AupQnbQpPewoOOEa/17Dz/PhoQYO7YD72QV8Pwl1mjd33qlAiwgEKjV6LQgNlwcrlSuXqWDOn
+ vCTvl/4bOiHOqolErZZPj2Fxra46qeeXwXj+mgZggDfSwUipj8g8FtbP1PK2KLR1CxpGHsb8PRD
+ RJaOpxBIEMwgQ4DzU1GIOwzsTxNKZQWLO58VJ72f4kRPgNYwLTNFKZlO1dwDpsJSlo/a46zojrF
+ yqDmxWSMn+YpzRzyuOW1HW+hDwBLSUwCdlovmpkQ6KIWHtj4w/6Nwxym9udq2DCEofG1jTc8xjb
+ HF18LoZRc5mX+6Tb29OiYtaLuIhDoaYYQ/H
+X-Received: by 2002:a17:906:6a05:b0:c24:c24f:e176 with SMTP id
+ a640c23a62f3a-c25d5440617mr712846566b.15.1788436050005; 
+ Thu, 03 Sep 2026 04:47:30 -0700 (PDT)
 Received: from development2.visionsystems.local (mail.visionsystems.de.
  [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-c25f3eef879sm77380666b.6.2026.09.03.02.54.17
+ a640c23a62f3a-c25f41e71a9sm90589566b.43.2026.09.03.04.47.29
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 03 Sep 2026 02:54:17 -0700 (PDT)
+ Thu, 03 Sep 2026 04:47:29 -0700 (PDT)
+X-Google-Original-From: Yegor Yefremov <yegorslists@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu,  3 Sep 2026 11:54:15 +0200
-Message-Id: <20260903095415.3657050-1-yegorslists@googlemail.com>
+Date: Thu,  3 Sep 2026 13:47:21 +0200
+Message-Id: <20260903114721.984785-1-yegorslists@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/imlib2: add zlib dependency
+Subject: [Buildroot] [PATCH] package/ncftp: fix cross compilation detection
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -144,8 +146,9 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: yegorslists--- via buildroot <buildroot@buildroot.org>
-Reply-To: yegorslists@googlemail.com
+From: Yegor Yefremov via buildroot <buildroot@buildroot.org>
+Reply-To: Yegor Yefremov <yegorslists@googlemail.com>
+Cc: Claude Opus 5 <noreply@anthropic.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -153,60 +156,117 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: Yegor Yefremov <yegorslists@googlemail.com>
 
-The demo programs, which have always been built and are still enabled by
-default, gained a zlib dependency in imlib2 1.12.3: upstream commit
-f8a451043871 ("imlib2_load: Add crc32 printout") started using zlib's
-crc32() in imlib2_load, and 31006b425e11 ("imlib2_view: Optionally show
-crc32 of image data") did the same for imlib2_view. Both hardcoded -lz.
+ncftp still ships a configure script generated with autoconf 2.13, which
+determines whether it is cross compiling by simply trying to run a
+trivial program built with $CC, instead of looking at --host/--build.
+That heuristic breaks when the build machine is able to execute the
+binaries produced by the cross compiler, which is typically the case
+when building for x86/x86-64 on an x86-64 machine:
 
-Upstream commit b9555030dace ("autofoo: don't hardcode zlib flags"),
-first released in 1.12.4, replaced -lz with $(ZLIB_LIBS) and added an
-unconditional PKG_CHECK_MODULES(ZLIB, zlib) to the demo programs branch
-of configure, turning the previously silent link-time requirement into a
-configure failure:
+  checking whether the C compiler (...) is a cross-compiler... no
 
-  checking for zlib... no
-  configure: error: Package requirements (zlib) were not met:
+configure then takes the AC_TRY_RUN path for the remaining tests. Those
+tests link against the target libraries but are executed on the build
+machine, so they fail as soon as more than the bare C library is
+involved. The most visible victim is the curses detection, which links
+the test program against the target libncurses and then runs it:
 
-  Package 'zlib' not found
+  checking for curses library headers... checking for ncurses.h... yes
+  checking for curses.h... yes
+  checking for curses library... no
 
-As Buildroot went straight from 1.7.3 to 1.12.5 the intermediate state
-was never packaged, but the dependency has in fact been missing since the
-crc32 support landed.
+With no curses library, ncftpbookmarks is silently dropped from the
+build and installation later fails with:
 
-Fixes: https://autobuild.buildroot.org/results/4e05404c353ef985d74757d0b1ec3eda2cdff523/
+  install: cannot stat '.../build/ncftp-3.3.0/bin/ncftpbookmarks': No such file or directory
+
+Other checks are mis-detected the same way, e.g. the 64-bit integral
+type checks, which end up breaking the build itself:
+
+  checking how to scan a 64-bit integral type... cannot scan
+  io_get.c:763:96: error: expected ')' before 'PRINTF_LONG_LONG'
+
+So add a patch making the generated configure script follow what
+autoconf has been doing since 2.50, and consider the build cross
+compilation as soon as --host is given and differs from --build,
+regardless of whether the produced binaries happen to be runnable.
+
+Fixes:
+https://autobuild.buildroot.org/results/ab25f98d7ab8b397e2aa4f87af9cf1d814f3d6cc/
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
 ---
- package/imlib2/Config.in | 1 +
- package/imlib2/imlib2.mk | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ ...cross-compilation-from-host-and-buil.patch | 60 +++++++++++++++++++
+ 1 file changed, 60 insertions(+)
+ create mode 100644 package/ncftp/0001-configure-detect-cross-compilation-from-host-and-buil.patch
 
-diff --git a/package/imlib2/Config.in b/package/imlib2/Config.in
-index c47178f174..46edf375f3 100644
---- a/package/imlib2/Config.in
-+++ b/package/imlib2/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_IMLIB2
- 	bool "imlib2"
- 	depends on !BR2_STATIC_LIBS # dlopen()
- 	select BR2_PACKAGE_FREETYPE
-+	select BR2_PACKAGE_ZLIB
- 	help
- 	  Imlib 2 is the successor to Imlib. This library provides
- 	  routines to load, save and render images in various formats.
-diff --git a/package/imlib2/imlib2.mk b/package/imlib2/imlib2.mk
-index 5ad89289a4..c650981501 100644
---- a/package/imlib2/imlib2.mk
-+++ b/package/imlib2/imlib2.mk
-@@ -12,7 +12,7 @@ IMLIB2_LICENSE_FILES = COPYING COPYING-PLAIN
- IMLIB2_CPE_ID_VENDOR = enlightenment
- 
- IMLIB2_INSTALL_STAGING = YES
--IMLIB2_DEPENDENCIES = host-pkgconf freetype
-+IMLIB2_DEPENDENCIES = host-pkgconf freetype zlib
- IMLIB2_CONF_OPTS = --with-freetype-config=$(STAGING_DIR)/usr/bin/freetype-config
- 
- ifeq ($(BR2_PACKAGE_IMLIB2_X),y)
+diff --git a/package/ncftp/0001-configure-detect-cross-compilation-from-host-and-buil.patch b/package/ncftp/0001-configure-detect-cross-compilation-from-host-and-buil.patch
+new file mode 100644
+index 0000000000..c3ecd61d1f
+--- /dev/null
++++ b/package/ncftp/0001-configure-detect-cross-compilation-from-host-and-buil.patch
+@@ -0,0 +1,60 @@
++From: Yegor Yefremov <yegorslists@googlemail.com>
++Date: Thu, 3 Sep 2026 10:00:00 +0200
++Subject: [PATCH] configure: detect cross compilation from --host and --build
++
++ncftp still ships a configure script generated with autoconf 2.13, which
++determines whether it is cross compiling by simply trying to run a
++trivial program built with $CC. That heuristic breaks when the build
++machine is able to execute the binaries produced by the cross compiler,
++which is typically the case when building for x86/x86-64 on an x86-64
++machine: configure then concludes it is not cross compiling and starts
++using AC_TRY_RUN based tests.
++
++Those tests link against the target libraries but are executed on the
++build machine, so they fail as soon as more than the bare C library is
++involved. The most visible victim is the curses detection, which links
++the test program against the target libncurses and then runs it:
++
++  checking for curses library headers... checking for ncurses.h... yes
++  checking for curses.h... yes
++  checking for curses library... no
++
++With no curses library, ncftpbookmarks is silently dropped from the
++build and installation later fails with:
++
++  install: cannot stat '.../build/ncftp-3.3.0/bin/ncftpbookmarks': No such file or directory
++
++Follow what autoconf has been doing since 2.50 and consider the build
++cross compilation as soon as --host is given and differs from --build,
++regardless of whether the produced binaries happen to be runnable.
++
++Note: configure is not regenerated during the build, hence the generated
++script is patched directly.
++
++Upstream: N/A, patching a generated file (upstream has neither a public
++VCS nor a bug tracker)
++
++Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
++---
++ configure | 7 ++++++-
++ 1 file changed, 6 insertions(+), 1 deletion(-)
++
++diff --git a/configure b/configure
++index d955e20..2311c73 100755
++--- a/configure
+++++ b/configure
++@@ -845,8 +845,13 @@ int main(void){return(0);}
++ EOF
++ if { (eval echo configure:847: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
++   ac_cv_prog_cc_works=yes
+++  # If --host was given and differs from --build, we are cross compiling,
+++  # even when the build machine happens to be able to run the binaries
+++  # produced by the cross compiler.
+++  if test "$host" != NONE && test "$host" != "$build"; then
+++    ac_cv_prog_cc_cross=yes
++   # If we can't run a trivial program, we are probably using a cross compiler.
++-  if (./conftest; exit) 2>/dev/null; then
+++  elif (./conftest; exit) 2>/dev/null; then
++     ac_cv_prog_cc_cross=no
++   else
++     ac_cv_prog_cc_cross=yes
 -- 
 2.34.1
 
