@@ -4,137 +4,254 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70871C61DD3
-	for <buildroot@archiver.kernel.org>; Thu,  3 Sep 2026 11:47:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0617DC624A4
+	for <buildroot@archiver.kernel.org>; Thu,  3 Sep 2026 13:38:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EDF1840AC0;
-	Thu,  3 Sep 2026 11:47:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BF9F540B01;
+	Thu,  3 Sep 2026 13:38:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AOi0nGTIjN-Y; Thu,  3 Sep 2026 11:47:35 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org C2CF740AC2
+ id V8o289blVXVV; Thu,  3 Sep 2026 13:38:09 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 62AE040AF5
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1788436054;
-	b=g2FV+0/Hn+aEtdfk66PTvkMqZ4514mG0ydmnjFa2+Csxa1TPzTiNDl39tl53PDte/ApU
-	 4Kk9eFeroMA7E+MThr2KFr4YMM824lgShhgxfcRY5G5b1ZqsCiLbQgTq4vgoykZcqGNtI
-	 M4Up+h+gdU7zpahcCsQAG5tuQuCHcJ/p/G1pZfptk6JO597/uVg1HaR3PpW1VxaErHRnm
-	 Jyfxf4lJmHAhM3vqfWpAFlpy0/IVGYLFQF60DZpxX5I06NM0IDnt6HNEsAWopJC2gFjfj
-	 SE3thJKaSNXeCl1cQu42aIRjP86NWA5q7zwKpS6mabnmS/nwC1YZ3l/ggypEwZdgOhA==
-ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1788436054;
+ARC-Seal: i=3; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1788442689;
+	b=swYUouA12+sKnHxfr6U5C8edJqe317bf3GMQYmmNWf8xvbVJXcC9mydIgNPS/2GosSYk
+	 ZCxYxHMF+jhPrkxrHD5OGwIaZNlyPZ2uByqI90Fi9rzPKLKt93hblq6ROCDKOBdXnnEJI
+	 91t0KKbOk17UhP0VQiKowTdhOxt/sM06a4DmZulHzTu45SxcXBBcHqzVSmZvJOboDb8JE
+	 gLewy2GjW9nrTYN62mUFyew9TfedFC/wuuuQnmHr/3qZPi4v/1K0KQ40MdODpK/91yjJf
+	 zhMJG0cUxkmcmRLEpiQ3S2bhluyKZ8J0NbzUdX707yU8wil+KjhiSu52wBxIAzDBm4A==
+ARC-Message-Signature: i=3; d=osuosl.org; s=arc; a=rsa-sha256;
+	c=relaxed/relaxed; t=1788442689;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 Received:X-Google-Original-From:To:Date:Message-Id:X-Mailer:
-	 MIME-Version:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
-	 Reply-To:Cc:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=qCYYjmFarLpqI5IkgyZkDxZxEH2EZg+lEsETwd3Hwjg=;
-	b=HEFhCR7k4IwZ3OjJktrR05Kqm6uW2AGmFaAgG989q1kyhpLuy0PZD4ZCM0NAXqk0UgA+
-	 nEINbuoq5KjYORhWP0BTbBvTCwZvUagL90pCBdldSdaCCgYWW1yAZZcIrTy3tlliSX/1K
-	 sujlFBebl+cC5VqwEA1GNyecjEgclMh4GU5ECp0M/uZ7cQHSEouOauEUzUr1tebcwTTLk
-	 L6Q6pfSFv4hpGMmkVIkbC/HsccPzQZAicPHYR312NLANTAmh22dIOMAqZYvoKdM4OjPEV
-	 Iscdq3ouVhJBjdPMn1G4OLMV/dRMY16xaKu0jnZjbV4ZQ3PomrJpHW8bTe09VXB5d1w==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
+	 DKIM-Signature:Received:Received:X-MS-Exchange-Authentication-Results:
+	 Received-SPF:Received:Received:Authentication-Results-Original:
+	 Received:Received:Message-ID:Date:User-Agent:Content-Language:To:CC:
+	 From:X-ClientProxiedBy:MIME-Version:X-MS-TrafficTypeDiagnostic:
+	 X-MS-Office365-Filtering-Correlation-Id:X-MS-Exchange-SenderADCheck:
+	 X-MS-Exchange-AntiSpam-Relay:X-Microsoft-Antispam-Untrusted:
+	 X-Microsoft-Antispam-Message-Info-Original:
+	 X-Forefront-Antispam-Report-Untrusted:X-Exchange-RoutingPolicyChecked:
+	 X-MS-Exchange-Transport-CrossTenantHeadersStamped:X-CodeTwo-MessageID:
+	 X-CodeTwoProcessed:X-EOPAttributedMessage:
+	 X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+	 X-MS-PublicTrafficType:X-MS-Office365-Filtering-Correlation-Id-Prvs:
+	 X-Microsoft-Antispam:X-Microsoft-Antispam-Message-Info:
+	 X-Forefront-Antispam-Report:
+	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
+	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
+	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
+	 X-MS-Exchange-CrossTenant-Network-Message-Id:
+	 X-MS-Exchange-CrossTenant-Id:
+	 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp:
+	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
+	 X-MS-Exchange-CrossTenant-FromEntityHeader:
+	 X-MS-Exchange-Transport-CrossTenantHeadersStamped:Subject:X-BeenThere:
+	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:Content-Transfer-Encoding:
+	 Content-Type:Errors-To:Sender;
+	bh=LEYxTTtKrZAPPr5SYj+UsI5mS3lgOm/TIbtZNkoHEDE=;
+	b=EinYfcpT6rE8fIbpYNQJy2xov7MOM44FVppbuzxzf5dOlJFM/REwiE+QlPjBwy//hMhD
+	 V6WhqBO8OB6SXFnRksMpyEBYGvuD59aGgxMBUcT5GFb2WK2IBM4fcxzpbCD7hu+taoUMs
+	 KWePDtZ3w47OjyUCHKU1LRQg2uNDoERmR/WCYA9O7ixRQ+5nohXkhVJGb2af/r4NvVRVk
+	 HPc1Qv4dDeP3qYJUmf4ulbqFNbdYxNGVNhymttu3pQtkbi9epGXiyKbJH4hF5QldwA4Um
+	 Y+uU2bpFP5MgZ1rW2Y+lLsNz1G/U968w5MSajP+bzQeiM3YNmzCHsiCEfuJG+acGk0Q==
+ARC-Authentication-Results: i=3; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1788436054;
-	bh=qCYYjmFarLpqI5IkgyZkDxZxEH2EZg+lEsETwd3Hwjg=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
-	b=L9Oua0Qcz47Q+65TtTr37xge1ICpjxMgRv3Y8fOpCOVlINpKyXyhRbW03AjAO31xF
-	 llTr58KT3v7Z6MFafBCAACyI366bJBP7LfvuNCaEWc3X+xREuYv7CQfZqA1HSGLb/b
-	 MUMMUPxe2K5NhB44lUZTSvM5hnnXEN8oGLIoRNFSrwxhZttKttg4rJHf0QxzMtgMDm
-	 J28E/bTiiw0r1LF6Hv3C7Uz0VXmt6j0Lffvr0RkCAHfWalv19TeTUeQsSmbj2nvY1G
-	 30kQIDOTv53sJlBIVXVsJ6hTnLuIwWeyC5o1LeUX7vlCkiwnx2psLTewTzWFGzSYup
-	 T5XtyfX58iPKw==
+	s=default; t=1788442689;
+	bh=LEYxTTtKrZAPPr5SYj+UsI5mS3lgOm/TIbtZNkoHEDE=;
+	h=Date:To:CC:From:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=nZaum4SL6sMVfBSIKXp41gSDnDxv+Lv0cT1d5uNaozqMGZlBZdWECPV/I6Ture/PH
+	 FAMKiOMrq2qtgeEVBFgNXPW/LUQQl3hLjneElfRrCtLYdl8zmoB0r1Y65k+KY1aJ8l
+	 lMo9hmqjWESKMkS6Q66czccKqtMaTf1aYDmG7EH01KWo+fJ01LDx216BVwKxq0wZjT
+	 sz6EqweScKkbf1kDjzsCpyS2TwNgmdUFsJ9gEIAXb4KwkTS9Uvbw1ItN5bj0Y7sE4g
+	 7tjsknSQH80uqU95TRh81IJFCZSRPbse0VFdxm5HenVvPhoto1AFFvCIsxQ9+IBxtL
+	 o7FTqoIlmj1Mg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C2CF740AC2;
-	Thu,  3 Sep 2026 11:47:34 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0A902265
- for <buildroot@buildroot.org>; Thu,  3 Sep 2026 11:47:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 62AE040AF5;
+	Thu,  3 Sep 2026 13:38:09 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id CD5F722F
+ for <buildroot@buildroot.org>; Thu,  3 Sep 2026 13:38:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F055040AC2
- for <buildroot@buildroot.org>; Thu,  3 Sep 2026 11:47:33 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id BEC0880F79
+ for <buildroot@buildroot.org>; Thu,  3 Sep 2026 13:38:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RoW1NXBR7rGZ for <buildroot@buildroot.org>;
- Thu,  3 Sep 2026 11:47:33 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org BAA1E40AC0
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1788436053;
- b=UXjGRZC+gSfy+8DkEeKNAlz0eyhRBYOqazNgwHLUaxwhpZ12+G8E6ol8CmooDOKRKLlR
- TS60L4KOiYhLPG39yTRhHEL06qdSuZXTP6+khDL8YgutBF0dKS7cs8T885yEEoOrJhVCq
- j7jQMG8xrVQkl8wIgX4E9VCl2lqDIAmlGBa/dbRWOh7iTxauCAUtN1eX42QEglE/Fj36o
- cb6emrAPj1BIsQsRbz4w2QSuJJE2LVhwOux/qsykcO1qtuXG0s7yNVQ8ikEommXRS/Uwf
- wUdC3KGXUe8gZzQQR4MQ0lDL+5b54LMlOkB6c/vJMXx1Fjl9tMpcT1eA90DJMB7SZmg==
-ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1788436053;
- h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
- X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:
- X-Google-Original-From:To:Cc:Subject:Date:Message-Id:X-Mailer:
- MIME-Version:Content-Transfer-Encoding;
- bh=OXqCWjEvJF42W+WsTIq/HARt+o7m7WvVmrHVl1Lz7UQ=;
- b=mKTkOGMLRVaSQmCU4cu6L3YWdMZw9zDtNBs1FzuFqL2nRqdjqE8XNKCsO/VsCZIfp4UX
- Te8+XLlQvu4gN0LyYEoX0GsUY6V6Wzld7kg9enddI3YaqRqXuVefVetJ7/NQggS4dG/mR
- YNYShKljpHnGDEpOdUqH+A+nr4KTT9ixRNnOjSBsfj0I3YwVsirOMzY94I2R+QWPFaAPb
- IrwJHp1ZWELf8dpbxmvvqMGG6eB5Xh91pV+rYeHqbLR7mRgg0YroLE15qst/jJqsNlZtr
- n7FcgMpbBZr2fs6p6KXeCtic6qTkD/v01VA1Cf684muTt3U5yVFe8vtYJg8smUAkMvw==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org;
- dmarc=pass header.from=googlemail.com; 
- dkim=pass header.d=googlemail.com header.i=@googlemail.com header.a=rsa-sha256
- header.s=20251104 header.b=kGyowFvn; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::635"
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PNZTTbXdaz-r for <buildroot@buildroot.org>;
+ Thu,  3 Sep 2026 13:38:07 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 3E74F80F77
+Authentication-Results: smtp1.osuosl.org; arc=pass header.oldest-pass=0
+ smtp.remote-ip="2a01:111:f403:c207::3"
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=pass; t=1788442687;
+ b=KB/2ipvXHWV6nRmWFuzax81HG2HDWzyqU4wOlzGzFP5Z+P3o7waRCLMdDXGB8QLSP+Hb
+ 6TFoGKp9LUHdDtjvCF+LSlTepSHE3lQGBSMj8Gd7tPHCula90ejKvXv3nAjWdXhWC7GV5
+ Z8UtiZp2fllZidDDX/TtfE6yhqFlJXIbT23dm02gLrKIpgQvMtZbbKDCD30z7JN+sZP8g
+ bdcWtDihsL7IzEIiGC+qcbMLAGxzx95SCobk9r/+MCzb2m9oIiSbNnuntboJzucC5c2cX
+ mAw2n42+KLXoUK/hV1xAAAWg1jKPkdeZlaqUM6M1j3/0QUE6galShVdyL+UTTQaQnpA==
+ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
+ c=relaxed/relaxed; t=1788442687;
+ h=Received-SPF:DKIM-Signature:Received:Received:
+ X-MS-Exchange-Authentication-Results:Received-SPF:Received:Received:
+ Authentication-Results-Original:Received:Received:Message-ID:Date:
+ User-Agent:Content-Language:To:CC:From:Subject:Content-Type:
+ Content-Transfer-Encoding:X-ClientProxiedBy:MIME-Version:
+ X-MS-TrafficTypeDiagnostic:X-MS-Office365-Filtering-Correlation-Id:
+ X-MS-Exchange-SenderADCheck:X-MS-Exchange-AntiSpam-Relay:
+ X-Microsoft-Antispam-Untrusted:
+ X-Microsoft-Antispam-Message-Info-Original:
+ X-Forefront-Antispam-Report-Untrusted:X-Exchange-RoutingPolicyChecked:
+ X-MS-Exchange-Transport-CrossTenantHeadersStamped:X-CodeTwo-MessageID:
+ X-CodeTwoProcessed:X-EOPAttributedMessage:
+ X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ X-MS-PublicTrafficType:X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ X-Microsoft-Antispam:X-Microsoft-Antispam-Message-Info:
+ X-Forefront-Antispam-Report:
+ X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
+ X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
+ X-MS-Exchange-CrossTenant-OriginalArrivalTime:
+ X-MS-Exchange-CrossTenant-Network-Message-Id:
+ X-MS-Exchange-CrossTenant-Id:
+ X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp:
+ X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
+ X-MS-Exchange-CrossTenant-FromEntityHeader:
+ X-MS-Exchange-Transport-CrossTenantHeadersStamped;
+ bh=ZcHnnUEygqiK1gSdN9IPK4MIlGUjpB2N9qD4EQ4ESgo=;
+ b=X0eK8dAgMwpYcpbEKRju5fxx8VNoHm4NU98JDT+Ja2io8s7qnwdpCMmpoG41NO0dbDUg
+ 97wkmq8IxQ6hChyj7j3dBnHcKnVMIesl+XwHYPAG2de1sBgi/B+95dkNCYct1qYrAlYvw
+ iESTHZhixkfCTYtanBF3a/noJss3d4gpJI9Z29SydQzzCfZ52ZJ+UIgx4KLhatBL4epsy
+ m9XzotmNr2lnlR52SxyEzdhpVSKm+bGxnEdCJhA2Z5T+IVDR/167JPyDy5enJ5NmtP2rx
+ PduGTBjYssJHgTZGpKAyjHpFUJdOxh1FTtirm5mkye9FY9akElx1a64BwBerwiiUtmg==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org;
+ dmarc=pass header.from=ginzinger.com; 
+ dkim=pass header.d=ginzinger.com header.i=@ginzinger.com header.a=rsa-sha256
+ header.s=selector1 header.b="1PIt/3pt"; 
+ arc=pass header.oldest-pass=0 smtp.remote-ip="2a01:111:f403:c207::3"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::635; helo=mail-ej1-x635.google.com;
- envelope-from=yegorslists@googlemail.com; receiver=<UNKNOWN> 
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com
- [IPv6:2a00:1450:4864:20::635])
- by smtp4.osuosl.org (Postfix) with ESMTPS id BAA1E40AC0
- for <buildroot@buildroot.org>; Thu,  3 Sep 2026 11:47:32 +0000 (UTC)
-Received: by mail-ej1-x635.google.com with SMTP id
- a640c23a62f3a-c1c52d920b8so303734866b.2
- for <buildroot@buildroot.org>; Thu, 03 Sep 2026 04:47:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1788436050; x=1789040850;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to:content-type;
- bh=OXqCWjEvJF42W+WsTIq/HARt+o7m7WvVmrHVl1Lz7UQ=;
- b=C4N3NkizZYha5sahKfHA0kJljDUqSanOdVg7StCrN+RwePiaSOCzrtvdDRMWggeZAo
- du+YIkjl4sf2sZe3j0UCLQmvLOPRbMcB5USw/4PzVF/sAJboV9beIZ0Jr2KHcjvO7Bjy
- ICX0x4j9VNugutJTtqA6tQPDYoxL5ACGJQY9xi7E955AccyXRCtTv12wZzRegrWDtbwq
- 0l+s7Hs09/k943woCwM5igbWxDHVFQ/E6c8RAHr81RqyQkcqGTBkbv30hj8cC7Lf791l
- MPRfkxU0DnD2+bvbbDMusW3nhQRIlznbANbEqg6lZnJELIeKrLEsKBWkE1e6aFu184Bg
- ohxQ==
-X-Gm-Message-State: AFuF++m6v4ywPC+W7/4E+xXGBrdn3TFhTHDHdkSiLUe2QprmPfgbTey0
- /s/C/+aZBe1zvo/nnfbftUFhJtaNEEySVWv4ruuCgAf2FvqYXIALR5k2vIRkuA==
-X-Gm-Gg: AYBFou1pBqcMjiDqchb0+qjLHEmw9t97rgMmiK0/iNrkXa7IAlsU6Ta7ICYMcZgj/BY
- RaP5oXbKDszFQugm2zRPmQrkXnNHNB2NvrObiT+FFwGhLMdwGkN9tux/YUZPQln1FL98b3WQS6f
- BnJRZl8CHo9f8BmxUh0JRDR2S6IdVI63Bz1ohQETW52CHN49ymfhsbX7HuUoluNY2A/SIFk8cac
- 05AupQnbQpPewoOOEa/17Dz/PhoQYO7YD72QV8Pwl1mjd33qlAiwgEKjV6LQgNlwcrlSuXqWDOn
- vCTvl/4bOiHOqolErZZPj2Fxra46qeeXwXj+mgZggDfSwUipj8g8FtbP1PK2KLR1CxpGHsb8PRD
- RJaOpxBIEMwgQ4DzU1GIOwzsTxNKZQWLO58VJ72f4kRPgNYwLTNFKZlO1dwDpsJSlo/a46zojrF
- yqDmxWSMn+YpzRzyuOW1HW+hDwBLSUwCdlovmpkQ6KIWHtj4w/6Nwxym9udq2DCEofG1jTc8xjb
- HF18LoZRc5mX+6Tb29OiYtaLuIhDoaYYQ/H
-X-Received: by 2002:a17:906:6a05:b0:c24:c24f:e176 with SMTP id
- a640c23a62f3a-c25d5440617mr712846566b.15.1788436050005; 
- Thu, 03 Sep 2026 04:47:30 -0700 (PDT)
-Received: from development2.visionsystems.local (mail.visionsystems.de.
- [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-c25f41e71a9sm90589566b.43.2026.09.03.04.47.29
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 03 Sep 2026 04:47:29 -0700 (PDT)
-X-Google-Original-From: Yegor Yefremov <yegorslists@gmail.com>
+ client-ip=2a01:111:f403:c207::3;
+ helo=mrwpr03cu001.outbound.protection.outlook.com;
+ envelope-from=andreas.vida@ginzinger.com; receiver=<UNKNOWN> 
+Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none) header.from=ginzinger.com
+Authentication-Results: smtp1.osuosl.org; dkim=pass (2048-bit key,
+ unprotected) header.d=ginzinger.com header.i=@ginzinger.com
+ header.a=rsa-sha256 header.s=selector1 header.b=1PIt/3pt
+Received: from MRWPR03CU001.outbound.protection.outlook.com
+ (mail-francesouthazlp170110003.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:c207::3])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3E74F80F77
+ for <buildroot@buildroot.org>; Thu,  3 Sep 2026 13:38:04 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=pTeqG1+RPKn8QkENbgp1Bb8muBQnLiYsizyKpno6kLtQw+uB88+vwLtl1z50PiTkrMsEkmc06ptGXz2ItB8hJH29ntrbp79mK99aqqrEAdOGNN43tQwz3SYQ41q82CTvENqtD/4vRPnHfoqrEudY7ZqjPXYjxlgTdgrxz5FZTnKvPlouL9qaNRlO66xyYSr6sgS767gWqKiFZQ7ZEu2BaS0+2meVHZYTRzLmCK/xWfg940WN6Y4GM78ovT7IDarvdosaYbWm+h8ty2Jcdj1adS9Pw6Sbg/KBKT8X6BcyASQBDNmYT+QYfoZGGZt2NM1e+HPkMMRYx1vvbry4QwtD+w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ZcHnnUEygqiK1gSdN9IPK4MIlGUjpB2N9qD4EQ4ESgo=;
+ b=cnByHe8iIt8FPZ50Ru+tzQy973e2JicOfTI2gyQY3hAGv5BdrxLTWuSMggLk5pKMnJJtC3Is9TKIurLoGQ+jdT4BgY2ChsMVynxy2uUyS6MwF+E+23l6d8wYetEoWxcxAHMxY6tbisgLgQbvuCGH3k9Xvs5LDJojfEp1MX9eJF/v13klcUHhHWp+2ZGotZjPeVKtknJqJbWdLlf/UQkvfxkaVNf66Ar63rtiksZcrmY8xp81CR/XZbAnO43rXshlLvajJDA6dqMPYchlwefF3KaBPXz1eXkYxyjGq3nUK/hQTqdgfhO2SQYljs5alvBo5cPKQzMo1Z/h9IJ+kieh/Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 20.93.157.195) smtp.rcpttodomain=buildroot.org smtp.mailfrom=ginzinger.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=ginzinger.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ginzinger.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZcHnnUEygqiK1gSdN9IPK4MIlGUjpB2N9qD4EQ4ESgo=;
+ b=1PIt/3ptr1G3PY5wTJrOoqagZNAiWrZVa4rZw+le7xo28pUIRap2P4gRCF06ytBkM6P9lAyxEd45a0v9RvsFHVprh1SjPSxGPz/HI8WC+Gv9oElAhafFcC2SJsVcaV4AGkSi4erbqqUlKgNIUtnCDBzGIUVabccTADyHpwtvNQrecZxdUq0NNH4ZUMVgBFTmhhBSbK/qTIBxGvQd15B08xWNceeryJ++61graU6sy/jxgcbKP30TYfKXj/vqLO9sVt3ZhRS5KvJQwzjRhG5vKcslJcXTy+gMAHJoIecjXpjwdVPjoGbksfXYX1rv+oSgbA0INfIuw4bgOR8aiVWA+w==
+Received: from DU7P190CA0017.EURP190.PROD.OUTLOOK.COM (2603:10a6:10:550::24)
+ by PAWPR06MB8786.eurprd06.prod.outlook.com (2603:10a6:102:387::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.360.10; Thu, 3 Sep
+ 2026 13:37:59 +0000
+Received: from DU2PEPF00028D0B.eurprd03.prod.outlook.com
+ (2603:10a6:10:550:cafe::d) by DU7P190CA0017.outlook.office365.com
+ (2603:10a6:10:550::24) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.382.11 via Frontend Transport; Thu, 3
+ Sep 2026 13:37:59 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 20.93.157.195)
+ smtp.mailfrom=ginzinger.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=ginzinger.com;
+Received-SPF: Pass (protection.outlook.com: domain of ginzinger.com designates
+ 20.93.157.195 as permitted sender)
+ receiver=protection.outlook.com; 
+ client-ip=20.93.157.195; helo=westeu11-emailsignatures-cloud.codetwo.com;
+ pr=C
+Received: from westeu11-emailsignatures-cloud.codetwo.com (20.93.157.195) by
+ DU2PEPF00028D0B.mail.protection.outlook.com (10.167.242.171) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.21.382.8 via Frontend Transport; Thu, 3 Sep 2026 13:37:58 +0000
+Received: from AS8PR07CU003.outbound.protection.outlook.com (40.93.65.48) by
+ westeu11-emailsignatures-cloud.codetwo.com with CodeTwo SMTP Server (TLS12)
+ via SMTP; Thu, 03 Sep 2026 13:37:57 +0000
+Authentication-Results-Original: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=ginzinger.com;
+Received: from GV2PR06MB10206.eurprd06.prod.outlook.com
+ (2603:10a6:150:2d4::14) by AS8PR06MB7894.eurprd06.prod.outlook.com
+ (2603:10a6:20b:3c4::7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.360.13; Thu, 3 Sep
+ 2026 13:37:56 +0000
+Received: from GV2PR06MB10206.eurprd06.prod.outlook.com
+ ([fe80::c3c5:3dcf:45ab:bd74]) by GV2PR06MB10206.eurprd06.prod.outlook.com
+ ([fe80::c3c5:3dcf:45ab:bd74%4]) with mapi id 15.21.0360.008; Thu, 3 Sep 2026
+ 13:37:55 +0000
+Message-ID: <219210df-977f-44b1-9db3-55c783935a95@ginzinger.com>
+Date: Thu, 3 Sep 2026 15:37:54 +0200
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
 To: buildroot@buildroot.org
-Date: Thu,  3 Sep 2026 13:47:21 +0200
-Message-Id: <20260903114721.984785-1-yegorslists@gmail.com>
-X-Mailer: git-send-email 2.34.1
+CC: Angelo Compagnucci <angelo.compagnucci@gmail.com>,
+ Olivier Schonken <olivier.schonken@gmail.com>
+From: Andreas Vida <andreas.vida@ginzinger.com>
+X-ClientProxiedBy: VIVP296CA0020.AUTP296.PROD.OUTLOOK.COM
+ (2603:10a6:800:354::15) To GV2PR06MB10206.eurprd06.prod.outlook.com
+ (2603:10a6:150:2d4::14)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/ncftp: fix cross compilation detection
+X-MS-TrafficTypeDiagnostic: GV2PR06MB10206:EE_|AS8PR06MB7894:EE_|DU2PEPF00028D0B:EE_|PAWPR06MB8786:EE_
+X-MS-Office365-Filtering-Correlation-Id: fbe33598-52c0-42fa-6ff9-08df09c09169
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted: BCL:0;
+ ARA:13230040|366016|1800799024|376014|23010399003|18002099003|56012099006|11063799006|10067099003;
+X-Microsoft-Antispam-Message-Info-Original: qcd5NjkDgmMKjxbXi29ipGANvZHQzSdp899UVnCTC+gRdHYGQgaaAvFi8vvOas8tvRlNUP827xuTXriqz1j/5XxsrT2ihJF3SNIgnp4dG3QAETx8nSmjcrJRfArMYm9Vlq8niO5sDVqhDeo8CXojf00R22LNBQs/dSwy7tRhtj1OvTLo04Cem7MMxtKXwvhRw4iQtBJ9wXac3MwtFsN1Vt0bs57r8y45gnoT9W2S++65YjersGXO/mADFMa/8zJlZkDL4i5fXugyx8/qzoWKwauUjMEn28Cr+U3zaUupY069AWU50TFSRHOSxqS8HGy4/Z3TaKO0GasqxrkjA4TPcWiNRtNS5cMz7u75plwPGelxrf2kMSYjTbeJQCgUM5Yiada+V1mz/4hACafXEyIAgKQ//hj/SsnKIMFcTR5qj+5YeEaIh78ImYGlFsHEZxceI1UIhfSof2ocrkGFp8cxPM1fNCTdzuElzs4hjXTgYYhEsnTRcdSkdnPF2ie5t41Cf1NSH5SDv+YE05QZw+Q0UlaeIYp99rCe3A/rN6V5xZUmkHgCJlaRiPVJi8mkf7KLfbKI7fv7dUsyiWlUNM0FXA07XXSQ9H4r6Lpo3wTskbgsoy0GmHXVouRGoPQ6SBnIj6gZ7nZ0xAcK63Zdcg+LAnmXvbU4gEZQfMd6zQRHGAw=
+X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255; CTRY:; LANG:en;
+ SCL:1; SRV:; IPV:NLI; SFV:NSPM; H:GV2PR06MB10206.eurprd06.prod.outlook.com;
+ PTR:; CAT:NONE;
+ SFS:(13230040)(366016)(1800799024)(376014)(23010399003)(18002099003)(56012099006)(11063799006)(10067099003);
+ DIR:OUT; SFP:1102; 
+X-Exchange-RoutingPolicyChecked: IgWQUuNi0yfGA+O6YUI/i8y9gN7cD71RUlNnXkR7XZ74b/DCNOzc1SExfG4HryNJ/sKnCIVCYtENWy/AdxAnPWS3t/z8FbEf07pOKy1NUEgeKR0k7CJ0UKuRNGpk8HSggHia6C+kwlihegKzrJ3KNZmu7ofMVWtAgSlaCtJW8UnhkW+diK8SSnvMSBKupmGi7fFHi+KdyYCWY6CXUa+friFsaQ1SiDlOOart/TqIoDsRibAaaiaU0Gl0uZ84R9M+OuEGEwCyN9RZ+OmNJuEu8GdIH0NCweF6AL1WBdQbzGc+5NJf8LUVvvw1SQw9bTYLAYFn2tc/xjIifP2LfZOSwg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR06MB7894
+X-CodeTwo-MessageID: 5b0553ea-e5f5-4eda-8411-ec92b78b1aa8.20260903133757@westeu11-emailsignatures-cloud.codetwo.com
+X-CodeTwoProcessed: true
+X-EOPAttributedMessage: 0
+X-MS-Exchange-Transport-CrossTenantHeadersStripped: DU2PEPF00028D0B.eurprd03.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id-Prvs: 7339f9fe-80f7-465b-ff62-08df09c08f4c
+X-Microsoft-Antispam: BCL:0;
+ ARA:13230040|36860700016|1800799024|376014|23010399003|14060799003|82310400026|35042699022|10067099003|56012099006|11063799006|18002099003;
+X-Microsoft-Antispam-Message-Info: KvVR9wLteA1vCkm3PHQmicwywidAHYEI68vKtSJgTcccJe5b9plCQ9GQF+ufMRUrCtW2RWlvVvP9bgZkEYtMBpAMZNUNfs1rJoKUSB8VlqhsLyAp+qrCgntnJRDbQEtGMHQ4XV/3EweZtP/ZjaI8uCV5iodJvNiCv0bVdST6DF51HpyD8Kyx3Zuj8TkZS9fyrTJsLmSoNM0G9xFHJc4BXz7QHJ2f0OoCrob25sBELPoXPwqeyVgNYMcbeA2CXt23toXH772uTAw6Op1QvsMr92BnfnZCmlf/ODkv01OMGVEOSfvH9TP+1ZjD8TLynCyr7gnfF6+co1WkCljRXKNJTr68bP8f3+gVfXXZ29Sm+FTrKgW0M5vcnX9Rb+tWSON8dM+gf4kxR7ktpbp4Ec9h/OKKsTcUXNneMCbG1CnB05XT7ZGYnIiP3YjSuT7/yNL25ocM7xmrkNF78pdRPQZL93E+y+q4ldizEe5GVu7WCbXcva0BNx76C62ncib4NXS2+W/xcIqywO03jdS7SobrUef49Uwr66aCNRtEMC9b+fvpfsfdEoMThWx8YrmVpE96OJj8hu0ZOCwry1awubEiONfqhej/ZY/Ohu7BB7A1ZIbUSeXhcmIlKuBpHROzY51mjbMO+1mgR7Y1OPcDKhsl/yGbbK9NtLZJiTEaOK78ga0VrIhOgj87GyRDRo7Kcmg3
+X-Forefront-Antispam-Report: CIP:20.93.157.195; CTRY:NL; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:westeu11-emailsignatures-cloud.codetwo.com;
+ PTR:westeu11-emailsignatures-cloud.codetwo.com; CAT:NONE;
+ SFS:(13230040)(36860700016)(1800799024)(376014)(23010399003)(14060799003)(82310400026)(35042699022)(10067099003)(56012099006)(11063799006)(18002099003);
+ DIR:OUT; SFP:1102; 
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: Syke55N4QtHjA/wLBv875SIxuEJouJfHG3dr+BDvPdXyoUP6vJNLvuG+A6kJDIFK+JN4Y339D2STkyCQXHA/iSSi9+h++vkasHN+n1aOAf41jArHxZzGircQal5OkM9tBMS+1sZWhWbPvBfaLRevNilxwhe87j6axeVU9bT09O5ub1amRH2alVHBBOWtedfV4IrWBzKZiEVKPUPENPz1ylU+JLNEovqaWBGccKG1IAoABrwHroFPudeAFXkhGJc6CAeO8Y11mp3tiQiWNwQdZKhD3TVOLImL7o8uAdF2agoL6KB/fw1xGN77dB50KNQKoIhzPUqXkq66Ckj4hNBL7kItxaFZmOPYCXeab7bWqCk9+4jirbQV9pKJtBLI3yodVUb38pnwF/7dLx6247/fshw+zvtVI5Uz0ZUGsgfNZV2y5el0I9S02G1QG2uW7Hrm
+X-OriginatorOrg: ginzinger.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Sep 2026 13:37:58.7208 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: fbe33598-52c0-42fa-6ff9-08df09c09169
+X-MS-Exchange-CrossTenant-Id: 198354b3-f56d-4ad5-b1e4-7eb8b115ed44
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=198354b3-f56d-4ad5-b1e4-7eb8b115ed44; Ip=[20.93.157.195];
+ Helo=[westeu11-emailsignatures-cloud.codetwo.com]
+X-MS-Exchange-CrossTenant-AuthSource: DU2PEPF00028D0B.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAWPR06MB8786
+Subject: [Buildroot] [PATCH] package/cups: install D-Bus config file
+ cups.conf
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -146,130 +263,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Yegor Yefremov via buildroot <buildroot@buildroot.org>
-Reply-To: Yegor Yefremov <yegorslists@googlemail.com>
-Cc: Claude Opus 5 <noreply@anthropic.com>
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+When CUPS is built with D-Bus enabled,
+install cups.conf under /usr/share/dbus-1/system.d
+as it already happens in other packages that have D-Bus configs
+e.g. dnsmasq, wpa_supplicant etc.
 
-ncftp still ships a configure script generated with autoconf 2.13, which
-determines whether it is cross compiling by simply trying to run a
-trivial program built with $CC, instead of looking at --host/--build.
-That heuristic breaks when the build machine is able to execute the
-binaries produced by the cross compiler, which is typically the case
-when building for x86/x86-64 on an x86-64 machine:
-
-  checking whether the C compiler (...) is a cross-compiler... no
-
-configure then takes the AC_TRY_RUN path for the remaining tests. Those
-tests link against the target libraries but are executed on the build
-machine, so they fail as soon as more than the bare C library is
-involved. The most visible victim is the curses detection, which links
-the test program against the target libncurses and then runs it:
-
-  checking for curses library headers... checking for ncurses.h... yes
-  checking for curses.h... yes
-  checking for curses library... no
-
-With no curses library, ncftpbookmarks is silently dropped from the
-build and installation later fails with:
-
-  install: cannot stat '.../build/ncftp-3.3.0/bin/ncftpbookmarks': No such file or directory
-
-Other checks are mis-detected the same way, e.g. the 64-bit integral
-type checks, which end up breaking the build itself:
-
-  checking how to scan a 64-bit integral type... cannot scan
-  io_get.c:763:96: error: expected ')' before 'PRINTF_LONG_LONG'
-
-So add a patch making the generated configure script follow what
-autoconf has been doing since 2.50, and consider the build cross
-compilation as soon as --host is given and differs from --build,
-regardless of whether the produced binaries happen to be runnable.
-
-Fixes:
-https://autobuild.buildroot.org/results/ab25f98d7ab8b397e2aa4f87af9cf1d814f3d6cc/
-
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+Signed-off-by: Andreas Vida <andreas.vida@ginzinger.com>
 ---
- ...cross-compilation-from-host-and-buil.patch | 60 +++++++++++++++++++
- 1 file changed, 60 insertions(+)
- create mode 100644 package/ncftp/0001-configure-detect-cross-compilation-from-host-and-buil.patch
+  package/cups/cups.mk | 5 +++++
+  1 file changed, 5 insertions(+)
 
-diff --git a/package/ncftp/0001-configure-detect-cross-compilation-from-host-and-buil.patch b/package/ncftp/0001-configure-detect-cross-compilation-from-host-and-buil.patch
-new file mode 100644
-index 0000000000..c3ecd61d1f
---- /dev/null
-+++ b/package/ncftp/0001-configure-detect-cross-compilation-from-host-and-buil.patch
-@@ -0,0 +1,60 @@
-+From: Yegor Yefremov <yegorslists@googlemail.com>
-+Date: Thu, 3 Sep 2026 10:00:00 +0200
-+Subject: [PATCH] configure: detect cross compilation from --host and --build
-+
-+ncftp still ships a configure script generated with autoconf 2.13, which
-+determines whether it is cross compiling by simply trying to run a
-+trivial program built with $CC. That heuristic breaks when the build
-+machine is able to execute the binaries produced by the cross compiler,
-+which is typically the case when building for x86/x86-64 on an x86-64
-+machine: configure then concludes it is not cross compiling and starts
-+using AC_TRY_RUN based tests.
-+
-+Those tests link against the target libraries but are executed on the
-+build machine, so they fail as soon as more than the bare C library is
-+involved. The most visible victim is the curses detection, which links
-+the test program against the target libncurses and then runs it:
-+
-+  checking for curses library headers... checking for ncurses.h... yes
-+  checking for curses.h... yes
-+  checking for curses library... no
-+
-+With no curses library, ncftpbookmarks is silently dropped from the
-+build and installation later fails with:
-+
-+  install: cannot stat '.../build/ncftp-3.3.0/bin/ncftpbookmarks': No such file or directory
-+
-+Follow what autoconf has been doing since 2.50 and consider the build
-+cross compilation as soon as --host is given and differs from --build,
-+regardless of whether the produced binaries happen to be runnable.
-+
-+Note: configure is not regenerated during the build, hence the generated
-+script is patched directly.
-+
-+Upstream: N/A, patching a generated file (upstream has neither a public
-+VCS nor a bug tracker)
-+
-+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-+---
-+ configure | 7 ++++++-
-+ 1 file changed, 6 insertions(+), 1 deletion(-)
-+
-+diff --git a/configure b/configure
-+index d955e20..2311c73 100755
-+--- a/configure
-++++ b/configure
-+@@ -845,8 +845,13 @@ int main(void){return(0);}
-+ EOF
-+ if { (eval echo configure:847: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
-+   ac_cv_prog_cc_works=yes
-++  # If --host was given and differs from --build, we are cross compiling,
-++  # even when the build machine happens to be able to run the binaries
-++  # produced by the cross compiler.
-++  if test "$host" != NONE && test "$host" != "$build"; then
-++    ac_cv_prog_cc_cross=yes
-+   # If we can't run a trivial program, we are probably using a cross compiler.
-+-  if (./conftest; exit) 2>/dev/null; then
-++  elif (./conftest; exit) 2>/dev/null; then
-+     ac_cv_prog_cc_cross=no
-+   else
-+     ac_cv_prog_cc_cross=yes
+diff --git a/package/cups/cups.mk b/package/cups/cups.mk
+index 0df4f411bb..096a1be21d 100644
+--- a/package/cups/cups.mk
++++ b/package/cups/cups.mk
+@@ -45,6 +45,11 @@ endif
+  ifeq ($(BR2_PACKAGE_DBUS),y)
+  CUPS_CONF_OPTS += --enable-dbus
+  CUPS_DEPENDENCIES += dbus
++define CUPS_INSTALL_DBUS
++	$(INSTALL) -m 0644 -D $(@D)/desktop/cups.conf \
++	$(TARGET_DIR)/usr/share/dbus-1/system.d/cups.conf
++endef
++CUPS_POST_INSTALL_TARGET_HOOKS += CUPS_INSTALL_DBUS
+  else
+  CUPS_CONF_OPTS += --disable-dbus
+  endif
 -- 
-2.34.1
-
+2.47.3
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
