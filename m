@@ -4,130 +4,104 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37231C624D3
-	for <buildroot@archiver.kernel.org>; Fri,  4 Sep 2026 11:54:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D758C624DE
+	for <buildroot@archiver.kernel.org>; Fri,  4 Sep 2026 11:54:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EC9F660BC2;
-	Fri,  4 Sep 2026 11:54:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E15B860BB4;
+	Fri,  4 Sep 2026 11:54:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1vc6ffS4uBV3; Fri,  4 Sep 2026 11:54:26 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 25D7D60BB4
+ id pjNcEY-86EeW; Fri,  4 Sep 2026 11:54:41 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 43E8660BC2
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1788522866;
-	b=Syq4NdhgPJK18qiC32gK17eO5Jncei5HohvRSTxJYm5XmD3ziHXirhMw9L1u/z9cHyIb
-	 7KOicU0IuwzE77uvnPmi29w31d2HRqCoKnKyAMhn7zjuY3jteumT+foAuvOiUzKro+N6A
-	 8YEY+RMsuSoJh1aegLN5hCzOHuKffzjav6s0HvVpttQ+KQ3kzzL/Eyu8L8D9L+08gcsD7
-	 6ffHcIEA1SOQW531JCUHHA7XNn3X++x1JhMV/6BUqtBvPQgPLQ3/YUTvWhOTJ1i8gvOCG
-	 RuxuZwDQoveiRfnPHzCO4IhxFpd1JM6oobvD1FPDldjDIKvqHayXl1Ue0lIDT4+NhVA==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1788522881;
+	b=qjwMbLS9VTKK14aXGV6bbDxCFTxbUnejTc1Sp1e2eTeunzeGE4hssmqpgF0lr/JNc+oH
+	 BADmHICPH9OOl5OksmEjZVNaetKBDz0W3aSi7Mq/YQaclE6kC9m5r7nMQzd0oPNMiyTUA
+	 fIGtXjU18RqzfRvptT6lvN9cIETSCnMQMVdlabk90r/iC071cTn/xmpxTccf4SrWYZlmO
+	 M9jlil3hm6bNZ9AsqbWBIF93wEo0HRkgYz8fNQPRanCGm0LFvQAfy1vYG+jsW0ZAKFSs2
+	 +wSo505pGxWtWzTis9aPiPT0fOCf2HkmMRnx50dhTd3Cz9Akmr3IDfx4dYvb80unTmg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1788522866;
+	c=relaxed/relaxed; t=1788522881;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
-	 DKIM-Signature:Feedback-ID:X-Pm-Original-To:Received:Received:From:To:
-	 Cc:In-Reply-To:References:Date:Message-ID:User-Agent:MIME-Version:
-	 Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=pVl4I/rU4GIvuUGsBzHaE2VXVw1JSJTva70/dxo9+l8=;
-	b=e01gkQO026qR3lgx3+UIJyxjPlvlSx0WDbii0PuDhs5pj0+5iTH0UoERHGKkB5Wj/1bb
-	 ZEUxj8QUERgow9Gd4JK0PaIcEJo2XnnyeXnL4mgQzKL02fIQCaOmeVcpEfjsuoWH0AcO8
-	 j2/kUZIX7f21H827Keuf/iOvFQQk7061UIMvMeL7V4l8Km6dY2yDK/e2qGZFwGqgSxwWR
-	 7hmFEbW/IlqTRsiuZktUF3CBGihJGIWJzo9qcD1SsIVrjg/F2rUHs9QjBotWgXYftiiNi
-	 IkHXsQWzsUSTgYHb+qhyyzpzB9wNttvVwerZPPxhFu1EMyPI3lP9YPXgMixqOnrEYgg==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; dmarc=none header.from=korsgaard.com;
-	dkim=pass header.d=purelymail.com header.i=@purelymail.com header.a=rsa-sha256 header.s=purelymail3 header.b=WP8pd3sb;
-	arc=fail smtp.remote-ip=140.211.166.142
+	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
+	 Received:From:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
+	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
+	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	 Errors-To:Sender;
+	bh=tLleOd1geNMwCvmStSs3XIoASaA5YLap6mP4zEPKge0=;
+	b=AiutRtEa/1Wxl2mbleqGIgoxWsHLmfa2gw8N/h2ULRR0me5ARF8WzBRxlNbHrhxtg5OH
+	 To7UXPy3u2EOg6oGWQn52FypQEP8L1Xu5qWTqxgJXBNfWir35JeNE+FKczyA1vAM63YVu
+	 6WRneBiYEDS0h2MlyQ9x/KF2ZDYrSYY4JBbTQunqxFqMJfBBtAbuwmeViBWVKaHZqH9xi
+	 v6OpT8o1S1eXkbo1RSNJKqyY0b+nFmlWoktD/4RP/dWq/o7o2Qtr/uAeB6CwTD9PsqoSX
+	 AZqS78BZ+kOCNv/NuipArYD+krumhUbZKMY2ghDS48HFqENNEpU7sTJChst3UBnPsGw==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1788522866;
-	bh=pVl4I/rU4GIvuUGsBzHaE2VXVw1JSJTva70/dxo9+l8=;
-	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=i7yrYY0/000K85KVnOLY4pAe63vMEylVB2L6ZY5Q7LEJXgrCOdRFC0i6J1TLipbQi
-	 fEHVcA2vWdvwxFYSVL7+GvOJpz8uTxRMjc8vx9jGi6nb3ZCRil0aMtHRPsoqB85RMR
-	 7Kk2VtPolQUpHwfm5pFy2sR28fUK7DyNIniOGoj9z7qZCSN66YsQE0cVZL5NGGKPJm
-	 He5PVz4ZLYnPnBtiBK49Pog+ZzBTbsMxyFE1IMBsufG3rALuMvhEeZKPorW9xHZ7+x
-	 KPaD/qDl61k2hBwDrq7HX9qawuLCw+r7Vekce86u9JlxUO2uIFm5HqFFUYF9q2c3SN
-	 rTDYsoWckyX5A==
+	s=default; t=1788522881;
+	bh=tLleOd1geNMwCvmStSs3XIoASaA5YLap6mP4zEPKge0=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=Vl++GbWu0h8e1GBKlcciNJDUO/Mvn+ws4P4YwYb/2HAzzbzX5j1ftSz2eKLoW5DIh
+	 xRbxCKna4wfBvnjHnfjlYNDyZA7MHEwUhp2E/trH+aErNek6e07OS7QnNXMuF+GP8A
+	 4yqAedu9ULCTTtJbOhRGRnrNbvkVqvpWMd7nIlvteTWJrdNC+BrbjgFNFTzEXKTNFY
+	 rPyyFWx6n5gxuE4fCld+QhM3EEYdt6VtGS2rBqTneaB8/kqq+QsVjqASw7fZwfIfck
+	 +8TpBHuEZrf4yhIMfbwERp1M9DcP5bQ3YMJVsO+jsOnSwVi093W70vggwnVUn0ykdl
+	 DHr4cvfCvcwVg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 25D7D60BB4;
-	Fri,  4 Sep 2026 11:54:26 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 00AC92FD
- for <buildroot@buildroot.org>; Fri,  4 Sep 2026 11:54:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 43E8660BC2;
+	Fri,  4 Sep 2026 11:54:41 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id D24A32FD
+ for <buildroot@buildroot.org>; Fri,  4 Sep 2026 11:54:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DB0D560BB4
- for <buildroot@buildroot.org>; Fri,  4 Sep 2026 11:54:24 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C428D607FF
+ for <buildroot@buildroot.org>; Fri,  4 Sep 2026 11:54:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZBpiDR4LTpta for <buildroot@buildroot.org>;
- Fri,  4 Sep 2026 11:54:23 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org E9850607FF
+ id yyOWLwlql62J for <buildroot@buildroot.org>;
+ Fri,  4 Sep 2026 11:54:39 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 0A209605A7
 Authentication-Results: smtp3.osuosl.org;
- arc=none smtp.remote-ip=34.202.193.197
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1788522863;
- b=CqcbmLdeND6jpgl5pOAHp0qABLmbRX0NbNZW7JHsCBwQTvY0j1UbC2YCOIwp2jqQXbCU
- MSd8+5ZhhMKgXh4hD7KIK1m+tx+nob2RbCbcYAa8PQyGMqjAm4flG/RGhj8VFN7qsi8Xr
- 5NHX4JR/wE4oOiSfqVQLvvTfu4tvWfG6Q1JJU30AGS/fU2qDenUC3ekvqv4L8+DQp0Jn2
- Eq+aFsZAx5KEbMVEanKldTA+vw64TCb7Sy30Ecv9coEkO0Qxijph5aH1nvhuQPe1vS8f6
- hgN4Tq4TVeA7GR3usnDTahSXerNt3aE8mQ9uD8bmOyy9UWMFhlMdcIUkPEXDxCCTFAA==
+ arc=none smtp.remote-ip=140.211.167.122
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1788522879;
+ b=TYbXTGFRanhzY3FzEjwCBfh3FKixxkNY2l1QW+SVKBT1R5cNu+R0GECootY3CD9NZbtO
+ HuBw0JodeupDI7kuju0y9s5Y0BFKrkuRpoEgsbMa/m+PP/g8J7ft8wHY89LCEoXkkkAwD
+ NU3rwyXkEMLJd1zZjYoAePHNUHJsgqY4LptX55T94Gc7MDz4ruWiade60fFWIO+sP8Odn
+ Mist9fJekfVX6s+0+EQgMbwKhg6myNWKqa2rsZgjnc4pSmD9oiUgnVV8H42iQYtV5s14f
+ vh21qQq3n7nogIrTE7kBoBf4cVrqhMEyLAXKT7EeBQotSNKAw2lcgniRo1RGd6TTRCA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1788522863;
- h=Received-SPF:DKIM-Signature:Feedback-ID:X-Pm-Original-To:Received:
- Received:From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
- User-Agent:MIME-Version:Content-Type;
- bh=Nx3lAAuycSsiU1HwLJv7m6qhKZSphfxBT4MLheWHvEg=;
- b=K7GYz6NL8k60CZpBcsr7qPhh9ScShwjTuUmRGB2BSqdqGnjt+xwwfvZp4Xq6PJyi4Ie1
- mFqtk4OEG/uGbtuAKdsmOQrzZRvrM/UwmHF8WdQ8wdkG11xHOArH1sHf996jfPp33taUE
- V/NVdb0vsYh3eUWbGLr67cqb83p/LrEtABbSyr+x1ogwQo5ztTfB9Y8un3M/Iu3e9n4EF
- s/fqqe6R8gnUu6oQy5DW6sejmvi3IdIISl5dvjzh/xgh6l+ErV2ot7f66is3M/BeykdA8
- MksNShKxWJ+FDJP/BtpNZ4RGpKmT244DWjGfrVkijAKc5B58q65RM8/zSKOTxnxY7Kg==
+ c=relaxed/relaxed; t=1788522879;
+ h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
+ X-Git-Newrev:X-Patchwork-Hint:Message-Id;
+ bh=paNWrKyOd7YpziSCdOsYgncheTnCmaaUOh2FAliq4yA=;
+ b=K0fEFjLpa3E+Dg8eR2K7spXbqg3Ae3sQIlCFFB3uM5Pl7u2JKLwjKyi9tKRoIxd3gqpt
+ fcO54LndHyBvjZLsOrEQI0rxMuo9J3mmqrPvtjG7oZD4ELL4bJhhFlOTs4M6qz7leucl1
+ g85fZgfkHss/AVK09f1bP7o29SLgh8IviSxh4kbTcZGXOi3aDm1t/L2zpRwN86otU6ZxF
+ 3P8cbU6tiGSdE96yUViXxQ8ZaIDVLnRHqhNfxw2b6iFCjeM8vAIh5vbjR3uYuoiPqD6j/
+ qxH4axkDIkzDCr7oBnnADW+fS8P36qCtlQSkG/jpC94a7QNlXOxrlk/3veXBkwp7JCA==
 ARC-Authentication-Results: i=1; smtp3.osuosl.org;
- dmarc=none header.from=korsgaard.com; 
- dkim=pass header.d=purelymail.com header.i=@purelymail.com header.a=rsa-sha256
- header.s=purelymail3 header.b=WP8pd3sb; 
- arc=none smtp.remote-ip=34.202.193.197
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+ arc=none smtp.remote-ip=140.211.167.122
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none) header.from=korsgaard.com
-Authentication-Results: smtp3.osuosl.org; dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail3 header.b=WP8pd3sb
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E9850607FF
- for <buildroot@buildroot.org>; Fri,  4 Sep 2026 11:54:22 +0000 (UTC)
-DKIM-Signature: a=rsa-sha256;
- b=WP8pd3sbOyAF/xit2GmOefsW1gSGo7FQ1ByWljaJgL0Fx4AXk/IQ89d2XWI/TDb8ic2Db3pfJU+DVgLaexL+8B+W3QpVt4L+1i9yUPJO2u7q4eo41v0Yn4Fs4OQqhDFXmwLn2KxFWyaKyTVSyCI38BpEkXl2tJ3JP4pCYjoLbiFkoJVeWuzICBxaXR2Zt98eAzes4KQdH6KDmmrQT6usZtX3o5bdOyGiKEzNc1QrVILPHv7peJkJ4TrVAGauoUTuh9ysBrz685+YUVB4VSvK/rOySWdgQP+4i+6ypicdayu72eKwX6VXf0FzMGqzrScnXnGzdEJxswdcRVeWou2wSA==;
- s=purelymail3; d=purelymail.com; v=1;
- bh=uEMnPCEWc1Yjld6+iiuhcjPxfcR+pcn58lPIYUEm23U=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 280461336; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Fri, 04 Sep 2026 11:54:20 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peter@korsgaard.com>) id 1x2SUt-00000007M3Q-00f6;
- Fri, 04 Sep 2026 13:54:19 +0200
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0A209605A7
+ for <buildroot@buildroot.org>; Fri,  4 Sep 2026 11:54:39 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 8120E948FE; Fri,  4 Sep 2026 11:53:38 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Thomas Perale via buildroot <buildroot@buildroot.org>
-Cc: Thomas Perale <thomas.perale@mind.be>, Will Newton <will.newton@gmail.com>
-In-Reply-To: <20260904070045.110534-1-thomas.perale@mind.be> (Thomas Perale
- via buildroot's message of "Fri, 4 Sep 2026 09:00:45 +0200")
-References: <20260904070045.110534-1-thomas.perale@mind.be>
-Date: Fri, 04 Sep 2026 13:54:18 +0200
-Message-ID: <87v78lnset.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/erlang: security bump to v26.2.5.21
+To: buildroot@buildroot.org
+Date: Thu, 3 Sep 2026 21:08:18 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: c05de97a2bfe51d5d85e3071df3be7eec61a8375
+X-Git-Newrev: 5f8d0b78ec32bd35b8a38812c71f33529a2723cb
+X-Patchwork-Hint: ignore
+Message-Id: <20260904115338.8120E948FE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libopenssl: disable atomic
+ operations for m68k Coldfire
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -139,29 +113,121 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Thomas" == Thomas Perale via buildroot <buildroot@buildroot.org> writes:
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/5f8d0b78ec32bd35b8a38812c71f33529a2723cb
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
- > See the changelogs:
- > - https://www.erlang.org/patches/OTP-26.2.5.16
- > - https://www.erlang.org/patches/OTP-26.2.5.17
- > - https://www.erlang.org/patches/OTP-26.2.5.18
- > - https://www.erlang.org/patches/OTP-26.2.5.19
- > - https://www.erlang.org/patches/OTP-26.2.5.20
- > - https://www.erlang.org/patches/OTP-26.2.5.21
+This patch fixes a build error with OpenSSL-enabled libcurl which was
+detected by the Gitlab pipelines:
 
- > This fixes the following vulnerabilies:
+checking for openssl options with pkg-config... found
+configure: pkg-config: SSL_LIBS: "-lssl -lcrypto -pthread"
+configure: pkg-config: SSL_LDFLAGS: "-L/builds/bkuhls/buildroot/br-test-pkg/bootlin-m68k-5208-uclibc/host/bin/../m68k-buildroot-uclinux-uclibc/sysroot/usr/lib"
+configure: pkg-config: SSL_CPPFLAGS: ""
+checking for HMAC_Update in -lcrypto... no
+checking for HMAC_Init_ex in -lcrypto... no
+checking OpenSSL linking with -ldl... no
+checking OpenSSL linking with -ldl and -lpthread... no
+checking for SSL_set_quic_use_legacy_codepoint... no
+checking for SSL_set_quic_tls_cbs... no
+configure: OpenSSL version does not speak any known QUIC API
+configure: OPT_OPENSSL: /builds/bkuhls/buildroot/br-test-pkg/bootlin-m68k-5208-uclibc/host/m68k-buildroot-uclinux-uclibc/sysroot/usr
+configure: OPENSSL_ENABLED:
+configure: error: --with-openssl was given but OpenSSL could not be detected
+make[1]: *** [package/pkg-generic.mk:263: /builds/bkuhls/buildroot/br-test-pkg/bootlin-m68k-5208-uclibc/build/libcurl-8.21.0/.stamp_configured] Error 1
 
-s/vulnerabilies/vulnerabilities/
+Although OpenSSL was found using pkg-config the build tests fail.
 
-Committed with that fixed, thanks.
+A local build shows the concrete error in config.log, for example:
 
--- 
-Bye, Peter Korsgaard
+configure:27577: checking for HMAC_Update in -lcrypto
+configure:27599: /home/bernd/buildroot/output/host/bin/m68k-linux-gcc
+ -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+ -D_FILE_OFFSET_BITS=64 -O2 -g0 -fno-dwarf2-cfi-asm -Wl,-elf2flt=-r
+ -static -Werror-implicit-function-declaration -Wno-system-headers
+ -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+ -D_GNU_SOURCE     -Wl,-elf2flt=-r -static
+ -L/home/bernd/buildroot/output/host/bin/../m68k-buildroot-uclinux-uclibc/sysroot/usr/lib
+ -L/home/bernd/buildroot/output/host/bin/../m68k-buildroot-uclinux-uclibc/sysroot/usr/lib
+ conftest.c -lcrypto  -lssl -lcrypto -lz -pthread -lz  >&5
+/home/bernd/buildroot/output/host/opt/ext-toolchain/m68k-buildroot-uclinux-uclibc/bin/ld.real:
+ /home/bernd/buildroot/output/host/bin/../m68k-buildroot-uclinux-uclibc/sysroot/usr/lib/libcrypto.a(libcrypto-lib-threads_pthread.o):
+ in function `ossl_rcu_read_lock':
+threads_pthread.c:(.text+0xa4): undefined reference to `__atomic_fetch_add_8'
+
+This error occurs many times for various atomic operations:
+
+$ grep "undefined reference to \`__atomic" output/build/libcurl-8.20.0/config.log | sort -u | grep -v real
+threads_pthread.c:(.text+0x28a): undefined reference to `__atomic_fetch_sub_8'
+threads_pthread.c:(.text+0x3b4): undefined reference to `__atomic_fetch_add_8'
+threads_pthread.c:(.text+0x9c8): undefined reference to `__atomic_is_lock_free'
+threads_pthread.c:(.text+0xa4): undefined reference to `__atomic_fetch_add_8'
+threads_pthread.c:(.text+0xa9c): undefined reference to `__atomic_is_lock_free'
+threads_pthread.c:(.text+0xb66): undefined reference to `__atomic_is_lock_free'
+threads_pthread.c:(.text+0xc30): undefined reference to `__atomic_is_lock_free'
+threads_pthread.c:(.text+0xcdc): undefined reference to `__atomic_is_lock_free'
+
+The build error can be reproduced with the current buildroot tree using
+this defconfig:
+
+BR2_m68k=y
+BR2_m68k_cf5208=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_M68K_COLDFIRE_UCLIBC_STABLE=y
+BR2_PACKAGE_OPENSSL=y
+BR2_PACKAGE_LIBCURL=y
+
+Although the toolchain lacks atomics support
+
+$ grep ATOMIC .config
+$
+
+it emits atomic-related defines, for example:
+
+$ echo | output/host/bin/m68k-linux-gcc -dM -E - | grep __ATOMIC_ACQ_REL
+#define __ATOMIC_ACQ_REL 4
+$
+
+This specific define __ATOMIC_ACQ_REL is used in OpenSSL to enable
+atomic support at various places:
+https://github.com/openssl/openssl/blob/openssl-3.6.3/crypto/threads_pthread.c
+
+causing the build errors we see with the mentioned defconfig.
+
+To fix the problem we use an OpenSSL-provided define to forcefully
+disable the usage of atomic intrinsics.
+
+The misdetection of atomic intrinsics for m68k coldfire is not a new
+problem:
+https://lists.buildroot.org/pipermail/buildroot/2017-May/180841.html
+https://lists.buildroot.org/pipermail/buildroot/2026-May/803110.html
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libopenssl/libopenssl.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
+index 9ddc85c197..9b3eec4baa 100644
+--- a/package/libopenssl/libopenssl.mk
++++ b/package/libopenssl/libopenssl.mk
+@@ -23,6 +23,10 @@ ifeq ($(BR2_m68k_cf),y)
+ LIBOPENSSL_CFLAGS += -mxgot
+ # resolves an assembler "out of range error" with blake2 and sha512 algorithms
+ LIBOPENSSL_CFLAGS += -DOPENSSL_SMALL_FOOTPRINT
++# disable atomic operations
++ifeq ($(BR2_TOOLCHAIN_HAS_ATOMIC),)
++LIBOPENSSL_CFLAGS += -DBROKEN_CLANG_ATOMICS
++endif
+ endif
+ 
+ ifeq ($(BR2_USE_MMU),)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
