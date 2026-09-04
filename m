@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90394C61DD6
-	for <buildroot@archiver.kernel.org>; Fri,  4 Sep 2026 12:18:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8361C79F85
+	for <buildroot@archiver.kernel.org>; Fri,  4 Sep 2026 12:18:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 32A8C60DAD;
-	Fri,  4 Sep 2026 12:18:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3D50160DD2;
+	Fri,  4 Sep 2026 12:18:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YCEnXcPowDps; Fri,  4 Sep 2026 12:18:49 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 9D8B160C1F
+ id y1QfexsCLN4W; Fri,  4 Sep 2026 12:18:51 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org E457360D4B
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1788524320;
-	b=pkGh3hrdO6gBoV27Kk2jlNZel9l9Uyb9m+BpC8iOLk9fQEfN44nBLt8vQ2sffb02CuyZ
-	 FNUMHA09TYEoxZ2DqrPJycgj74e9fTj14GlZ8jvm+AU+Q5nzXzQp0XLSHPiI92p7uGtUW
-	 N9C4wMu+3s+kTV80wUXm00Az3zflQQrJqaIQcY49JFwY+STCsGDZ19rOObGRowvwdJ9Ht
-	 49SrGeKSMaHXjs2ppa5Htre7XjHv3U2zts9xdXVaDpLw2AdXmOp9PXNJo0IqjtRY3hoE1
-	 xXP0gX8DQwdYKUCuVzQqsmI7duPQpmGfKbYXUGobcj1D/oWKcV0G4FrXiAIVfmwcZ9Q==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1788524322;
+	b=At7iuHHB5B/HJ/RFQo8Md0p6XixOGZl5Iy2/RLgh7c/qpVAzXJDcL/vcHbcMUIY0MPDO
+	 gWQFYW9+a9epGUa0yA4HOLbjGwDT7EPUbwl2LeFvvapYmyv7DfTYNta86xS5ePysoKD1A
+	 E5VL7vSQn7WJ3XoM+qN+0p4u+DqGiOCYbc/fL/wS44yCcLZoASwaWN/qpJidWh+eo8gr0
+	 Il9f20zbRdwZ1fnwulEDiY/IFg7vqKp3auST5/njfMcsyz5e+CTQ4PjPqESfXTWZjYI1B
+	 EfYTs/5wsu93/UrjfqxS/BUkGbL0419Vhs7eoOcAbPHTXl0FeCHzs9GeYAfyszxYjvQ==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1788524320;
+	c=relaxed/relaxed; t=1788524322;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -32,115 +32,116 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From:Reply-To:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=fjBQc2rHLgzchWLD+/9A68a+SC2UDVnPc8LfxFVRD+8=;
-	b=jUvK+pA5dWQE9b99eco2DwDdw3kBgR118cPpvvbSwCxOUhzogOoS7wSu5QBGH8SUsN7/
-	 XLbNrOmr+1tKkp0+b8sR9uyDrr2kSsYnZQFCK4udM627IDlNoYItW7Xpj1KWH+FK9/NE7
-	 F2vmJpEIXHpXDkjfAJ55C7DSMw/HXbSeDk9JZM9WuUyrV+dIWDUGxY7L1gQ3q1ywD3RcP
-	 6lOcFWIklP5BJfihpEv/+mrbSGLa2A9mLmRm2Ne1FDQz/nCr6/pONuKcUfOTT1xCmicL0
-	 Ae+JYuu7BDm8GarZ4mG6qJ9RgS9FXBEO0+2zqgE5fYYyn+U5gCOACjDKXPXgjtan5zw==
+	bh=HsKJJNvCnsQzAhbmZyQXdpjQBd+/KWwYh0Uq/5Xt5g4=;
+	b=mtBiHs7CMfFzvpFTgeX+sNYqLzXZkPrbbfL8hGOR7nUW/3Yth4IbV2sd5YASm0Jmv5Wn
+	 0P8CoON3BsBsG3BoH2ibzUNcjfySmGIWrlXeTYi2NVFmhXOogFzM/hKQlciuisoMAdzT7
+	 kULmK2CGeTEEytcndXeAH+xijkREFhhjly17Td/CYBkvr0T8nBdB+9dVjEALA8fQ5yfXW
+	 rmJoXvhZjbVPhDOZrnA7xXm1r4FlCcktAAOxMNMWHRNxeW2UGTx0usOavatfcAHV20m8j
+	 dSoUQVJ7nQTgdiHvPtc6C+8rVMvkqZev1WTi0KY+WqWn2t5cMNrKzQZxZBKAk9cIlfg==
 ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1788524320;
-	bh=fjBQc2rHLgzchWLD+/9A68a+SC2UDVnPc8LfxFVRD+8=;
+	s=default; t=1788524322;
+	bh=HsKJJNvCnsQzAhbmZyQXdpjQBd+/KWwYh0Uq/5Xt5g4=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=DoL5gEVn0KckPsiCLPJxJoIdMX6TXx4ia9bd4s8StS6isNFXfImTJWlshxFFRMsFv
-	 9x6XT5cOYF9SVwTVB0q/BeYK2Fb1fucfbLq8GVOmLfIYj4jAlQ2c0cX2wAh5dHiXX8
-	 Xifi9VdtuWWKC0x8j7QkZtiDWdeBVHC1qt87zFBGfQVpHLmxlDT0zLTTA6V7CXXEAf
-	 MHpZegvBuwtvJEHqKxTFtUqqrgA7lK2pLVVhcufaZarFpD/8OmWhphuzW4c73rKH7G
-	 CmZpX0jIuN0ebMUnvevVYYBjYCOEBmu9L9AJYsw7KgFScPMP60YafAy9LZtn57YYqZ
-	 T5e6ZGew2JImQ==
+	b=OTyIuCaskbWHms0+rKW3sv0V2gWTSPj41UDDXG5jcUpK3uHCr/tn9ZFua5caEcXM+
+	 d2JKU5sNYivOrqi491rkFBp6r1b2J5J03g9HHLvnxaD8zu6nlNI7oiCyLCjRiCNV6E
+	 lXtnBr5OXbr7sdLBRZJzhY5rXFKOGQEH5NN5Q+LiLHY217EINAlF31jNzpS+lxYNRO
+	 huyP16Kr+Os9jONylTFNUMIT0yzQUC9jDobbXzicnTWmFKAY9wMLrkvYcIZAc+EJt8
+	 jVfRFeH1zarWykiDNac1gUWsGyS/CJHiYyOjkXEGw0LBiaxS+jtREtagdFQmGjwv4Y
+	 6Vg04+O48q4Dg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9D8B160C1F;
-	Fri,  4 Sep 2026 12:18:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E457360D4B;
+	Fri,  4 Sep 2026 12:18:41 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id D705C200E
- for <buildroot@buildroot.org>; Fri,  4 Sep 2026 12:18:38 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 3BEBE10E
+ for <buildroot@buildroot.org>; Fri,  4 Sep 2026 12:18:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B5A8180F20
- for <buildroot@buildroot.org>; Fri,  4 Sep 2026 12:18:38 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 66A9180F31
+ for <buildroot@buildroot.org>; Fri,  4 Sep 2026 12:18:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Gay9FLPxnc0I for <buildroot@buildroot.org>;
- Fri,  4 Sep 2026 12:18:37 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 7B10380F5E
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1788524317;
- b=CQCJRXWITDqp0reUEQMa1GnYnfETJkFuNf7Pg2+6gVGMkyaz1wcn5K14VWV943OPelxQ
- bYfjwQI4jW5IDYm9j7jA04gEaieKpkwWUcubp1WOiLCOuzDVCvteSb5CF3wgV8WjvbMOR
- gx3OPQY0SeEePwFVUhwPXzRYJiCkP3GxjBKAceyctZaVw299BdlJRvSFDgLcsDB31UO3s
- znJdlJeDvtZz98doNqPP3NoR/zYU+1v53tQrxdhY80kDvpWA/pcXxlvXdRQ6BO9DlZ9gy
- 4Bphnq4UxV9QCIrcRxYt4mrUDGRArS1k/N41chMaAMdE8pkOpRrCZXHlSjMkSCm3Q1Q==
+ id hOoxBCT4P-fP for <buildroot@buildroot.org>;
+ Fri,  4 Sep 2026 12:18:39 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 31BA080F20
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1788524319;
+ b=etqTLg6qKu4UPPVKXNIf24zmyso684jxJB2adU529crR2AKR8zyMtkN6/DTMWV8dgFjx
+ bFGN6AT4TZJqNzp6PyssEeH/ykVS04loib9ZuGs9TqKALEx1T8Jjo7RBRb26nQ4AvVwpj
+ NYQLrElnc4x3sUsnmFargVRUHBVbTbnrP4JIliMW+beaGRNNaiwr4jojRheZXDBH7cvV4
+ HAwGbS257Q+EeekzacaMN275yJ/TVt52yvUOUjZEjrx8yPyv38f+SNWP+e5I1Yt9qY5e5
+ m38jaacAsFddT2+GQrzHnTkdtOo6tdgul7YFm358lZKX9Klk6iZjOs54wAgs9DyAwBg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1788524317;
+ c=relaxed/relaxed; t=1788524319;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
  X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
  From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
  MIME-Version:Content-Transfer-Encoding;
- bh=F14HDIBZHO9ywn3ID2JrFlX9DnTHuAsnISyUw8Ef8pA=;
- b=RCTFAEvWlyRtvz/XTCeFsFbhTZswfcIrwS8RtiWWBM73alVtuRK98IjFfbR2QZlJBhoC
- xQFgVxe1TBiQQX/FZZNsCqo7ug9aQDiOxmJcUcQTtBHfH2rQSVXWqd1ECUScf+bVd+TJn
- AzRlHnxdbNJPseDQZlE0p80EAvZnX2Z/4vdEFzAK+5FkRfPYpMfaxUGKqTGgrsPRLa8RS
- mL6ppBxXwb5XDqk9aFsQCm1xiISppYmLrnq2+ZVLZm2ZDB1blT1x5HXM8SWUc0WqrRZpo
- h52fIQH6zhhoZXTS/eHR3fBNgXiYIYBCvqLRAg2iWwq2Q0HQpRgAfzHMlzA+mwsRDlA==
+ bh=tMasZRkapLaUYG1DlxycR0Y3dTaiHcGMw/A3PF7Bkmk=;
+ b=Z/7fcUeIF9fq8CvtpFOQfXbq8Lz1Y0RPwnIakiA+T95YOlDauM514HO2HRAdgZga6LHF
+ lagwRQWFjLU1SmbQSD9BSMPfGXOvE6Cwqq2/nMINkX7AJoc4HoCEpWZHrodcqE8IYDwl3
+ JeIV9zG/y7oLz9KQHQEhDo1ZNn76GIRDqBpQmSosX3XfQGkqCxmvhUPnU0wxTk64KzsrU
+ ZdI72ZJ5pyb7K9rsF5eLsH7icY3GLm/+3mM9W2Gcs2FALIsFdpTPM/rE5GubANtwxveO3
+ RZiPis3NiVnf8nfcGBabWtY7R2r70wo6nFDD9Fx4JtgLSp7SLbpJGnIu4Wt1zPzemew==
 ARC-Authentication-Results: i=1; smtp1.osuosl.org;
  dmarc=pass header.from=mind.be; 
  dkim=pass header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=LChkXomu; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::335"
+ header.s=google header.b=YvKB5xcw; 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::333"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::335; helo=mail-wm1-x335.google.com;
+ client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
- [IPv6:2a00:1450:4864:20::335])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7B10380F5E
- for <buildroot@buildroot.org>; Fri,  4 Sep 2026 12:18:37 +0000 (UTC)
-Received: by mail-wm1-x335.google.com with SMTP id
- 5b1f17b1804b1-49b8eeb3ff2so8691475e9.2
- for <buildroot@buildroot.org>; Fri, 04 Sep 2026 05:18:37 -0700 (PDT)
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
+ [IPv6:2a00:1450:4864:20::333])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 31BA080F20
+ for <buildroot@buildroot.org>; Fri,  4 Sep 2026 12:18:38 +0000 (UTC)
+Received: by mail-wm1-x333.google.com with SMTP id
+ 5b1f17b1804b1-49b0eab380eso8157595e9.0
+ for <buildroot@buildroot.org>; Fri, 04 Sep 2026 05:18:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1788524315; x=1789129115;
+ d=1e100.net; s=20251104; t=1788524316; x=1789129116;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=F14HDIBZHO9ywn3ID2JrFlX9DnTHuAsnISyUw8Ef8pA=;
- b=PB8BiR8DsjqWmu/lO8x7ojkOkERqtPmmgGpxOGlZISmcZG8FGxqceqnql+INxpNwkQ
- uadz3JKqfLO6wPI6YwOJHTtVKPflmQTtr0tn6zKs14c6YQpB9uSvW90nhXUn5iQuLnHq
- Hv4YG5bSdaCcel4NBnc+qDekPTWD5HbxQ3uNa+8056CIaKT2zJ4wl7mUgKv24qW/qjQx
- ia62BgR8ImsdW1hrNLi14cAd4Vyz7xDl1uputuIrD8/RHd5ZaXveiYWCBaowYAtdO6cJ
- T4wgRcHaxZKSVr7URlhmqh2Q11EtIUjfVwZxmQZ0cFRz4gM/weuqIIh0ZA4yM9zb0k0S
- 76nw==
+ bh=tMasZRkapLaUYG1DlxycR0Y3dTaiHcGMw/A3PF7Bkmk=;
+ b=qcw2C2Wx91qCNj6C3ETATWHH63YbQPBDS6Aq2E9SvDLo3Ajy6qyw6Z5vBZG/ZXzlKC
+ HltA0ThYWgfFal5146JRvrscypd0aFy/EHmbtINEO6+5YEqptBMf/tcXZU7wYEXSxkuC
+ Nu13v17pBtqNMRSdsXyYge2o7fa4u7vSUB2CFJ5mL4T+4Gunu649CQOLzIU21pPqoH1o
+ WhkjIQ8EEANsfra6GMKsbeLgE0GRDFV6MfyTcyt4mQ3UMnLktmml0sEUo7DfE0ajrdL1
+ tp6QsWc8YrpuQ1pBrz6qRBfrJfn2oz5KdZSig+i9WSeIIUMNtcyXq88xLgjN/Ph+fA3v
+ NFAA==
 X-Forwarded-Encrypted: i=1;
- AKwUvByaI7rZhKQ8cqhtebo090xQu71NtP4kHqIXfC5M+dO9m1sBE8I32CEB/9N/X4qmyv1/rJ1S7PF59e0=@buildroot.org
-X-Gm-Message-State: AFuF++kq/5zQOTcLKZef0usFInpObb3a21WZaPxQsE6N4iV+wP+vt9dG
- M3aoBM+KbV0TGxqbH15wJbSEbyfY1xgzwMHqhDAAh/M6G+yRTglWN9aMg9I8QjgZcVc=
-X-Gm-Gg: AYBFou2Wn1/WThpYsJ/2eaYddg0NkdtcUgnPYZWXAqbAL1dGQbvuOzRdZ1gTiSLkKtW
- nEvdOvOIBiQVV3ERFVZMMOTevvLOi7KnY93mpVJmuwYyqjXlp6eyR3LXxBf15/DurpNblA9t+Nz
- vMyR0nKDGZ6SYTW0wqjw+pQsu914+rgvRJh77UtEXGjES1QeLn7Mp7TE5Tmo7pEbQEZbafxt09K
- cu8TOQ1yCDdQsNzpGLmDQWjsXonlM0J9IwNKaFRJpLaNtoXpqTA1CAM4/u73ycWzaB3sYkdZA1z
- dKIEKOdk4tTPvZSOOcH2i4Uoxs2z8WPOXRTQdpvAt4YslGxzQnPqIM7hXd9hcHIE+926fkPiCvN
- kYmO9DsGVFkJLXMHMKcQ15jRS6CzJJhJ/j817RiZzO+5+8HfSP8sG0DzJ0ULn3x2H7mDxmGc7gn
- VjuUOQbpX+aszot9QPKA+dECylNl+OUgQNh0PZJXF3QjIWCFJg8VLu0w==
-X-Received: by 2002:a05:600c:190b:b0:49c:fa21:e743 with SMTP id
- 5b1f17b1804b1-49cfa21e92amr37111015e9.25.1788524314970; 
- Fri, 04 Sep 2026 05:18:34 -0700 (PDT)
+ AKwUvByRkNSZTPApV30VLdov1wn+O96iPvG1Lehb5WXaCIYKBY0nRGO/kluj4Ia+cIYgQLdE8+TpZHPhvmU=@buildroot.org
+X-Gm-Message-State: AFuF++nWxb7+912jBiad10xecKkAY+ywXI72tQAY33o6kvVKuz4IX9H3
+ wsQyyr1Mc4q++tLg99Ucy99dHKNIwDjM1uTQYfLMETb+6o/D2DOXaGlsdiZ3929BKkngcFEF4KB
+ XSA+G
+X-Gm-Gg: AYBFou2X0+/WBry1lv6aBODIaaB6HN+1ouyfYkfZqs+6XsN9DLVXbDONgVLPa/porAY
+ pKxyGvzD8W7O/tk6FJ5e/b4A0Ks6gxDcMRz7RaM3YC4XA91pBjP0UO6aEBqJTmwNxQHZZWCUYbM
+ VwoyxkGLnVufz5B1rtbg5DOoCz0aOuL1N1PBOL/eNKyngkTmizAjALm3KwTba40GJ+P2CR7nKVm
+ JipUgKyiWDUR+A2Gi1w2GYw7neLdx1lWZFrmq7ZTlJYAbXaV/3mgzB2cgle7+kKXICDhj19+YVp
+ jz3W63PhAC9QdvOMF4JgYkQOq1zHbUyn5KbOA/q0OyYBkpOZf8R+dV+Ty5uM0ealAoohch23uxs
+ l1Ay8EWDGbehVtf9IvD5kpJ9kzz4NO72ajAuJ0jZn5TPGQZLRSiigbaiXgK4HtlsZowZhXjfOA0
+ P3oZzwj0T/wMd6NkuFpa3tQtLCEFenLCpyoSAwGhx6t9Znnpb4HhvyiQ==
+X-Received: by 2002:a05:600c:3b0a:b0:49c:f13e:e4c with SMTP id
+ 5b1f17b1804b1-49cf86f49b5mr39764135e9.9.1788524316127; 
+ Fri, 04 Sep 2026 05:18:36 -0700 (PDT)
 Received: from arch ([213.219.153.196]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-49ce551bf7asm127961535e9.2.2026.09.04.05.18.34
+ 5b1f17b1804b1-49cf755c22esm66645715e9.0.2026.09.04.05.18.35
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 04 Sep 2026 05:18:34 -0700 (PDT)
+ Fri, 04 Sep 2026 05:18:35 -0700 (PDT)
 To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri,  4 Sep 2026 14:18:32 +0200
-Message-ID: <20260904121832.405560-1-thomas.perale@mind.be>
+Date: Fri,  4 Sep 2026 14:18:35 +0200
+Message-ID: <20260904121835.405609-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260823191926.2684260-1-thomas.petazzoni@bootlin.com>
-References: <20260823191926.2684260-1-thomas.petazzoni@bootlin.com>
+In-Reply-To: <20260824213315.3323882-1-thomas.petazzoni@bootlin.com>
+References: <20260824213315.3323882-1-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] toolchain/Config.in: refine
- BR2_TOOLCHAIN_HAS_LIBQUADMATH definition
+Subject: Re: [Buildroot] [PATCH 1/2] package/gdb: handle lzma option for
+ host-gdb
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -160,98 +161,61 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> In commit a2380157f6688c5c065fa19060a2c33145bab95b ("toolchain: enable
-> libquadmath for PowerPC with VSX"), the definition of
-> BR2_TOOLCHAIN_HAS_LIBQUADMATH has been extended to also be true when
-> BR2_POWERPC_CPU_HAS_VSX.
+> For target gdb, we properly enable/disable lzma support depending on
+> BR2_PACKAGE_XZ.
 > 
-> However, practical experiments show that when 64-bit VSX-capable cores
-> are used in 32-bit mode, libquadmath is not built by GCC, causing
-> build failures:
+> However, for host-gdb we don't do anything, which can lead the gdb
+> configure script to detect and use a system-provided xz library, which
+> is not desired.
 > 
-> cp: cannot stat '/home/autobuild/autobuild/instance-3/output-1/host/powerpc-buildroot-linux-musl/lib*/libquadmath*': No such file or directory
+> Instead, add an explicit option BR2_PACKAGE_HOST_GDB_LZMA, which when
+> enabled pulls in host-xz, but also when disabled ensures gdb doesn't
+> try to use a system-provided xz library.
 > 
-> We did an extensive testing, building the 27 combinations of:
-> 
-> - GCC versions: 14, 15, 16
-> - C library: glibc, uclibc, musl
-> - PowerPC 32-bit, PowerPC 64-bit, PowerPC 64-bit little endian
-> 
-> This testing provides the following results:
-> 
-> |      gcc14 |       powerpc64 |      glibc |         OK |
-> |      gcc14 |     powerpc64le |      glibc |         OK |
-> |      gcc14 |     powerpc64le |       musl |         OK |
-> |      gcc14 |     powerpc64le |     uclibc |    SKIPPED |
-> |      gcc14 |       powerpc64 |       musl |         OK |
-> |      gcc14 |       powerpc64 |     uclibc |    SKIPPED |
-> |      gcc14 |         powerpc |      glibc |     FAILED |
-> |      gcc14 |         powerpc |       musl |     FAILED |
-> |      gcc14 |         powerpc |     uclibc |     FAILED |
-> |      gcc15 |       powerpc64 |      glibc |         OK |
-> |      gcc15 |     powerpc64le |      glibc |         OK |
-> |      gcc15 |     powerpc64le |       musl |         OK |
-> |      gcc15 |     powerpc64le |     uclibc |    SKIPPED |
-> |      gcc15 |       powerpc64 |       musl |         OK |
-> |      gcc15 |       powerpc64 |     uclibc |    SKIPPED |
-> |      gcc15 |         powerpc |      glibc |     FAILED |
-> |      gcc15 |         powerpc |       musl |     FAILED |
-> |      gcc15 |         powerpc |     uclibc |     FAILED |
-> |      gcc16 |       powerpc64 |      glibc |         OK |
-> |      gcc16 |     powerpc64le |      glibc |         OK |
-> |      gcc16 |     powerpc64le |       musl |         OK |
-> |      gcc16 |     powerpc64le |     uclibc |    SKIPPED |
-> |      gcc16 |       powerpc64 |       musl |         OK |
-> |      gcc16 |       powerpc64 |     uclibc |    SKIPPED |
-> |      gcc16 |         powerpc |      glibc |     FAILED |
-> |      gcc16 |         powerpc |       musl |     FAILED |
-> |      gcc16 |         powerpc |     uclibc |     FAILED |
-> 
-> The "SKIPPED" are when the configuration is not possible: uClibc
-> doesn't support powerpc64 or powerpc64le.
-> 
-> Then, as we can see, the build fails for all "powerpc"
-> configuration. Our conclusion is therefore that libquadmath is not
-> supported on PowerPC 32-bit. While we were not able to find direct
-> evidence in the gcc code base, this practical experiment shows that is
-> simply doesn't work on PowerPC 32-bit.
-> 
-> So, we take the logical action of adjusting
-> BR2_TOOLCHAIN_HAS_LIBQUADMATH so that it is true only on
-> powerpc64/powerpc64le.
-> 
-> Fixes:
-> 
->   https://autobuild.buildroot.org/results/46d435c9f5086a8695f4f6cd4026bb0d194de13c/
-> 
-> Cc: Romain Naour <romain.naour@smile.fr>
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
 Applied to 2025.02.x & 2026.05.x. Thanks
 
 > ---
->  toolchain/Config.in | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  package/gdb/Config.in.host | 5 +++++
+>  package/gdb/gdb.mk         | 8 ++++++++
+>  2 files changed, 13 insertions(+)
 > 
-> diff --git a/toolchain/Config.in b/toolchain/Config.in
-> index 7762106bee..128f8faef2 100644
-> --- a/toolchain/Config.in
-> +++ b/toolchain/Config.in
-> @@ -989,12 +989,12 @@ config BR2_TOOLCHAIN_HAS_ATOMIC
->  # - At least, libquadmath is available on:
->  #   - i*86
->  #   - x86_64
-> -#   - PowerPC with vector scalar (VSX) instruction set
-> +#   - PowerPC64 with vector scalar (VSX) instruction set
->  # - When available, libquadmath requires wchar support.
->  config BR2_TOOLCHAIN_HAS_LIBQUADMATH
->  	bool
->  	default y if BR2_i386 || BR2_x86_64
-> -	default y if BR2_POWERPC_CPU_HAS_VSX
-> +	default y if (BR2_powerpc64 || BR2_powerpc64le) && BR2_POWERPC_CPU_HAS_VSX
+> diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+> index 2e1eed6f50..823c2e9966 100644
+> --- a/package/gdb/Config.in.host
+> +++ b/package/gdb/Config.in.host
+> @@ -44,6 +44,11 @@ config BR2_PACKAGE_HOST_GDB_SIM
+>  	help
+>  	  This option enables the simulator support in the cross gdb.
 >  
->  comment "Bare metal toolchain"
+> +config BR2_PACKAGE_HOST_GDB_LZMA
+> +	bool "lzma support"
+> +	help
+> +	  This option enables lzma support in the cross gdb.
+> +
+>  choice
+>  	prompt "GDB debugger Version"
+>  	default BR2_GDB_VERSION_16
+> diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+> index 685d1fe992..ebb80072cf 100644
+> --- a/package/gdb/gdb.mk
+> +++ b/package/gdb/gdb.mk
+> @@ -293,6 +293,14 @@ else
+>  HOST_GDB_CONF_OPTS += --disable-sim
+>  endif
 >  
+> +ifeq ($(BR2_PACKAGE_HOST_GDB_LZMA),y)
+> +HOST_GDB_CONF_OPTS += --with-lzma
+> +HOST_GDB_CONF_OPTS += --with-liblzma-prefix=$(HOST_DIR)
+> +HOST_GDB_DEPENDENCIES += host-xz
+> +else
+> +HOST_GDB_CONF_OPTS += --without-lzma
+> +endif
+> +
+>  # Since gdb 9, in-tree builds for GDB are not allowed anymore,
+>  # so we create a 'build' subdirectory in the gdb sources, and
+>  # build from there.
 > -- 
 > 2.55.0
 > 
