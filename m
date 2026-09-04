@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62EEAC624DE
-	for <buildroot@archiver.kernel.org>; Fri,  4 Sep 2026 12:19:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89E59C79F85
+	for <buildroot@archiver.kernel.org>; Fri,  4 Sep 2026 12:19:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2426E60D5B;
-	Fri,  4 Sep 2026 12:19:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 54ABE60E15;
+	Fri,  4 Sep 2026 12:19:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ymasqLk7LHcY; Fri,  4 Sep 2026 12:19:08 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 194ED60C27
+ id 7SnwoB2buY4i; Fri,  4 Sep 2026 12:19:10 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 6329A60DFB
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1788524343;
-	b=pI8uumK6/EEpKMK8Pj+VcLOpibg8HJ6w5og9cpjjl5mwt5xqWTbayZiqa0fR7mjmqQmW
-	 gNVOfsUSGThiOMhOCohHp6zNmSTFnKtoan9a0ilHPPJB5awx9IpPP4j4TbVQOA6QkzFN9
-	 bdBKXYoa+mtEl4hp3lrr6h887sTUv39J2Pf+fzE0TaeTOdFVxxqKExePD0NIeIXwA2cXo
-	 HxRP408DfwcRukLVUIqMHivBO/ooCyfVuBS+5qthu/n/5/9PNR88qEhSNKAoZT+/IH7LC
-	 ol+s/pDqFG7zZ1gyeuJ8qV5NpcMEgIh1oAE5rhzD9oD7d25U5RyDxd7vNQOCs5Sgshg==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1788524345;
+	b=QFuV06/bOx+quGc185bBdChy+ckOpjtptRWojzj89I3Qw78GJMQQoMHTZ32TP2wd5/6e
+	 9S1pWFvx7T2aM9zlIsU7Y3ZX6AGmkwfu664DKCIz415rINzLS0GZCAXA/QGW5+4xCPWA5
+	 bQq4XDq9F4G4CggTtJ+Mwk9KvE7+AK1+TMq56+wptr5F99yZgWpMmE1BZBgZsh7PTN50S
+	 61d3Hv1Fu2MHzPuzJ1swcfCYDFO2m32g8WZnBcJhNR3KdtruYjKy+dqwVS+SnT8Dgepld
+	 i7rIuLLpNwwrKG6gfEaCVljnzOsE9TJjOIafeWmwlwvXoZb8aNuspi1WinExQc7ZMVg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1788524343;
+	c=relaxed/relaxed; t=1788524345;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -32,114 +32,115 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From:Reply-To:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=F5TaKZHS/8DibcbSps2jc4/OtL2/O7/P5q9NGDOu5yg=;
-	b=pTD09+7nmfCGO/jZh4gMtlL1j8k9EmCOgPFzby6rmf7mFEAMCaGbhsCWe0pxOAurw49d
-	 gYJbrwz8DYovx2twxPBclkTdVlFQdim9ngTBXCWrJAsxY6tA4eXQ6gz9zkpIniBgX7poY
-	 J/iBwnbrY84jq/4b2xrdWkPMOdz00Wz5UhBv8rWKoE+ooB2vVfEppqJk0vtujPMSpKUJ/
-	 7rtePThnvLY64swFcvubdTCNfCpY3VSLVbvoEE+ZnbH7xF8MkEcS+OlgV/4c78nezxQOB
-	 t2vPspoft8PJg0Qb07njroqJayQO7xomz7uP1fp0gBxDqjVc+6lvmeMrcCHa+fQGDIg==
+	bh=drb+uVU5jWlozLWRymIFbW5cRwccNmAvMrd4fIWHWWM=;
+	b=F9e7qLIC4L1KuyBzXKEV46Mhp5KjvoaI6B0xt7xnBgT2x6/PeXRyWlAU3OtlDRX8/tGS
+	 +iypj4m8iVSqUPImDbZDyKbp+Rf5a2nbdScAJgJr719aSR/AP4hu9AFJ46q7iQxAE2tSB
+	 uxm6q60fUaHT1Nkruz/JvZe2I+dB96TH5FzF8tpc7Kw9eKqjtRsTHt+Cwl5VgteEmKbTq
+	 zrcS+DZkqIeBfGgMVbQzqKDLl6/U4hsAiYS4h8X95WDBRN70IEXkY5Q0Qt830/2Zy9/Vr
+	 bdZOfcLQ5dUsA0YqrKbkHKPUIgJFB0eIG0gQNoQIKD8ssPH/PvbjrznZ8nUmqtiZlpg==
 ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1788524343;
-	bh=F5TaKZHS/8DibcbSps2jc4/OtL2/O7/P5q9NGDOu5yg=;
+	s=default; t=1788524345;
+	bh=drb+uVU5jWlozLWRymIFbW5cRwccNmAvMrd4fIWHWWM=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=cxpn6fM1a4GfaRIWCq/YgxvS3rLqOvbaaNkpo8qus7N8XNAZmgyr48W/RAmpOcX7p
-	 PHNofa14CgT380z0yW3oPgywI9kDgZxNoRhJaar11Ow/45bNz9cx/ZKMETv7ZabJgx
-	 qGgPV5MwMII1yaQI7p3otPVKel3gM3cd0QqAKRa5f0qpAXEy+PXCeGIc+xreSRoPp4
-	 FFqp3sKCufz38fyZ5SmqhYEsWHW5p5CdxA2iIrIB7VTJYSLCulB6XgdQro8DVmmIkT
-	 o0w0UMUX0y9MqNjR2CDdUXRNqp+Iokkj2JeV33hQyi+/exKsJpGxkodFJd4K/WAy8A
-	 xHSDBEStUl9YA==
+	b=RgAPjEXZyhDe+Q8ZNRoAKdD8TJjn8F03ItPMpAk6V5GNz9PDf9fRvPxVFySqDsri+
+	 sgbhyY7O80kYvGCZyIMAG8XrZQIMiPDq1Gq2bDWDyTECRJdj/weQgVwuFhgkBNJSCH
+	 0TSg0SuvjmSnv+4DrrtFORAP4MN5JTK0R7oY3u8T7xh6c+35nT+JC6Y5lWnBTQbU8n
+	 lRUQaNzCEjDwS1A+TAmShI84WRMxMSrJ1UoqK4+R4tMrh3eyxo8HcbFOaN3/9Kde6f
+	 A4rxGXyvFXSb4zyMXxbl7UEE/nMFmjTufoHmBY8Rd4b9KgNNbMhMerXC9VfeoL+iQ8
+	 HI5Hf1Hfb8NMQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 194ED60C27;
-	Fri,  4 Sep 2026 12:19:03 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 614DB10E
- for <buildroot@buildroot.org>; Fri,  4 Sep 2026 12:18:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6329A60DFB;
+	Fri,  4 Sep 2026 12:19:05 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 275A0F14
+ for <buildroot@buildroot.org>; Fri,  4 Sep 2026 12:19:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 480FF40B8E
- for <buildroot@buildroot.org>; Fri,  4 Sep 2026 12:18:59 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0D7774031A
+ for <buildroot@buildroot.org>; Fri,  4 Sep 2026 12:19:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kD67LkcV-K0G for <buildroot@buildroot.org>;
- Fri,  4 Sep 2026 12:18:58 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 1BF1840B7F
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1788524338;
- b=S11/rpONg3Ykq6jibHkHxSw2uCnX3snwInFVYoykv+uEawdagKAaYrPGiKWBgXVSkBAp
- FiyWpUARN3X3yixhoCiPD1oASqEIzKhwgMKARI3NSEIkYVYQdATr2s+dWd2uxJ+h7m/fw
- kh6OxCfCWN0G7G5fZAnm9d11ot1cPMd5GzbeV7iiD7gg+NhDntMpEe+yh/iBJaNjc3FD4
- rDbA2/7Dntd9lImfe/stGetD58EIP1u+HgsmkyNZ4vh5Dnc4s4GgSZMAr3nSS6CzR646g
- qg4kkHIa2g4ca+b3eUr3L7GCvqsBtbl9ZvGdlsHopWtNOFEWx8ZnqPiVMsaSnp7Bq2g==
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dFeYy01DRaZP for <buildroot@buildroot.org>;
+ Fri,  4 Sep 2026 12:19:00 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org CC7ED40080
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1788524340;
+ b=g8U/oSZqXAivCe490a8bNKJR7enxKfwOjuszfCNQOvjG00+9cuKdSFCxZwm39qTjEpr3
+ 7Y59Swa4stFE6wAyWhuD8D1qhbYUMezPowNX8Dpe9MpxCgnKeDXk0dCd+YA32iS7aPxOW
+ pelx2iwCIcv3ZE2NfXlSdxYvJ1wkvdZAb2akJr+Tyc6d1x4jRnMIV/KQ5Y2oA39i5ayW1
+ BnvOUnIr+XRSo1VFS41kcfPJU/6jJMZruwvm3NmysN9OvWVOzDu8v8a+oygJmCBWHbfy6
+ 1E8M75KivPPoAaFYEnvFxcC0rK0MHnS/Tc2J9LKr/GJ8fp5y1aaMsrl+SLOq/4cLtRw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1788524338;
+ c=relaxed/relaxed; t=1788524340;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
  X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
  From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
  MIME-Version:Content-Transfer-Encoding;
- bh=TQHjMOAqlN1Bqh7h2ktl0sgtnCJWYXECiWPnP7BaKD4=;
- b=KTQpEisHuU/Sk5atkZ0uU8QZpSo82lpgPtKI9TMilLjoRXoj5DXHv0AkZu0SFKbd0Ytr
- C6unFqHblb61l9uGv9VJesbgDm3+Ii5H7tci3GQCQytM1trkjcFrKmBa9SySkalTC9Ivu
- LJ0p1P40rhRhlYRr4HJl2i89Bt7xNrRe9k/RnjwDxZlyDfAnTfM73Dw5tXIIm8Clm56p5
- FRhZGckDEdEcGY+MS5tYss+fPbvNHkYtLE9zCBrPQ4/yIGLUK5l/LFE1O7avNQAbIfh6D
- KaLIDAyLil9n3gqoSfHtRL9/Bg/B7eG6+4zffqWZaS/0zroqJ7IvMqmNTXMP+yKpM9A==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org;
+ bh=o0B2/eGiOuiI3+Zh+iIEDbo8Zekfs35hEii9CorWsng=;
+ b=CX94U8Q39/rb8MFgUIBTfFNt1ecw4iIvF7p6Bz2nyYj/8PtKZ864j1hfbxPKN2wv4BrC
+ 79rU05GOJecPOwG8zCFQ3DYtPsOKenadCnLX4BqUWbcvJFcTbaBc2PTWTI+ObIwWP2JQL
+ rzeR1So+3nyitakjZU43LtkpSt36ilmvNsqy4UEd2viEeGGXLk39hHZusX7S0l8MlkFtu
+ IE3Z4EZqmiSs8jz2vNF7evYf31XvVBRQnbfHKQz/7U8byg2AuF3dwu0m6A0J2aUnfPVFJ
+ BMdmELTncSNcMXcqSOM1gfNtRLsG47M6tDeLvewl7VKWRGcrHqLAMDURMTtEGxX9qzg==
+ARC-Authentication-Results: i=1; smtp2.osuosl.org;
  dmarc=pass header.from=mind.be; 
  dkim=pass header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=BkY0ORDi; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::436"
+ header.s=google header.b=DYaQOlgw; 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::42a"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::436; helo=mail-wr1-x436.google.com;
+ client-ip=2a00:1450:4864:20::42a; helo=mail-wr1-x42a.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
- [IPv6:2a00:1450:4864:20::436])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1BF1840B7F
- for <buildroot@buildroot.org>; Fri,  4 Sep 2026 12:18:57 +0000 (UTC)
-Received: by mail-wr1-x436.google.com with SMTP id
- ffacd0b85a97d-482e067e908so843101f8f.2
- for <buildroot@buildroot.org>; Fri, 04 Sep 2026 05:18:57 -0700 (PDT)
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
+ [IPv6:2a00:1450:4864:20::42a])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id CC7ED40080
+ for <buildroot@buildroot.org>; Fri,  4 Sep 2026 12:18:59 +0000 (UTC)
+Received: by mail-wr1-x42a.google.com with SMTP id
+ ffacd0b85a97d-484374f54d0so562942f8f.3
+ for <buildroot@buildroot.org>; Fri, 04 Sep 2026 05:18:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1788524336; x=1789129136;
+ d=1e100.net; s=20251104; t=1788524338; x=1789129138;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=TQHjMOAqlN1Bqh7h2ktl0sgtnCJWYXECiWPnP7BaKD4=;
- b=hM56eq0fdA5ciojbfDofFmIKyuo9gp1lHgsInWNV8a0tOa4MzQqkLZvWOL4bD2DOdV
- JPBUfVUm/7aFPI/OnovCJhXP0jF4s3gXZIa4MJOGUF031PPsINm7FpH/ipyvh0JChVxs
- qktX28pkLjiZ/USNj+NgnbwLbcc2OHSVNcMI8QtGLyljQV4rYJfiFfcEsiShdOyWY/De
- FeBeYWj4Q9JHq2NGnKE3Cljz3SrrUOXydI1Y73LCfOV9saclCwQtRaxQ9kASB81y7PmK
- MM7CIEObck4+sJLso8aa6DkbdfjN0uMyNmzbf8cvlXbbgpVoTJJS8y3z0i9thNI0ba2D
- qLYw==
+ bh=o0B2/eGiOuiI3+Zh+iIEDbo8Zekfs35hEii9CorWsng=;
+ b=mNBy2Qyx1IGdMDkdEy6W42oYdhXxEMg2yp72Cdws0Rh4hnM9k+TicjhTOPAAYM99E1
+ ACB803bMoDd3+tbsStDbvjNXdbSiNqMwuT5LvUco46gUvOycqXUXtjPT3xCAHU1hluWj
+ XsK22CP4Vycl+SS/MlWXZIEYvI5d364qwfkZpnlS1sp+ynd9Rc+tKkZMYl6bNigVFFtO
+ HlyZ4bD97zg6P1HppRu3oGN6UYf1xPkMOcQWMXRnNu/JZUXUCwVkls63oXz806IMENN+
+ uQzMfRiw1sU9G59xkZtIsJBPW/HfBoIEFKfDoJcCPSWgZTyiec/XGzX8XK9XhRgNmF22
+ wW7g==
 X-Forwarded-Encrypted: i=1;
- AKwUvBzycMDYgb+9JCt0CpRcIfNYvIf7lPOB3orHMh/1v2fUImxu48QIFAxRbKaSQc3jkcKGx1LKAo7Rjfw=@buildroot.org
-X-Gm-Message-State: AFuF++lS0vAgSODTv7XUK430qZPRLfdV9oQNa1TNWDYCSmBU3jzCur8y
- Xn7CgPTgoxpBKg8LqA+jlq0FyQkhav5Bia4Xu5nrjLLfq3U4w3FfD8SX4uRWnBv0vwY=
-X-Gm-Gg: AYBFou32UYyEdp3rhDrVe08In6gkRPEubXyeBeIIlRUCs02ycHH1bBbe0HufC7Lrcjp
- 3WjGUOf5PoyCofjqyDbhkd9YaAOK+0Hr+dRXCPCe3Vi5gW/c4dnr3AfHq7nUebu/Zp7D44jyDlT
- DEpfqtPfLc8RqHOuaNomMqRyXpRmNK/qd0mwBcsvT9sZL2hsOzDkiJf/UY1kKIX6C0f2R0BdNI+
- HVwKFt3Ijozf2pXXPJCclq77Me1/jfWE93P2/kLy59XSfwZcBBXsUPVMRD5P2m1hZ8ka3Z6rQYR
- v4lb6xILUn69pzncA1SluI/jicKNo0x8XHyzRDp4oVsznwylTDajqnlxplulAPAMXN3DwbiNv6Z
- oYKfF+NJAQbqeR1vSeXpQUY83I/v1QxgCAWcIiK7laYXvPTGqJRs4QPgZW4xNJ/WhXbmOxKM+tm
- 47qlBqfFnv0BUIpVTxCtC8UmhCDojf8zLKprDYRlgmuVAfkw0nRzPxQw==
-X-Received: by 2002:a05:6000:470c:b0:485:8a46:705c with SMTP id
- ffacd0b85a97d-4858a4671b8mr3830160f8f.46.1788524335882; 
- Fri, 04 Sep 2026 05:18:55 -0700 (PDT)
+ AKwUvBx4zG3KRgUVqEhfuQ7B7orwo//ACdY+RFJHFQU3l+9teVSxCvSkqAL5ERZ3fxe4sO92Ub/BP+tgPXs=@buildroot.org
+X-Gm-Message-State: AFuF++nPHulH1cuFeMtFW9hw6XeLaLl71gbkgoD05/HYKDHsinaDq3XJ
+ +e6Mv3bIjVzCPItu6DF3XFCYEYnKiDHKH8jqEUPcs70LlWeaGXQWyASZaIZ84JbjCOA=
+X-Gm-Gg: AYBFou0yHFBRcBtOag4A7KAO1oKUipepjULxLyQ/AiP3Vu0o3aAQyhLGsNBzjWDBkl9
+ V3ZgXuP+mSYPv+WvFyrglXAcACkGlYVf8FvSynCRZp4Ud2zLTJuN2L9nDC7w259z4PsJo8/xiAm
+ UyvP2aLI6CJXoLrymz1HKmMblF3c1MCLJz9EOFWQoif8RMtiAl1T+4MqHe6rB10a+Ccs0cBCLsw
+ bOiqODC8SMNmWijmL1Dau7HLoA2M2j6HDIOxRHD3OU0fex9fNZ9F8K2+VUEZnA+8CZcj5EeD4KE
+ kOBTWap/KOItoQ3x3tmJkQIgS8bQmm0GgW6ACU/d7dF9MxCGVoRp5YxBRdUPQDiTuF6NCrvTki6
+ CQYyruxM3J4X7H9R+Gdtih+wD+UaSH1wp6kjcnCnrEhH1v4lT9RG1uhByFkfNG8puc3BqzQTSov
+ S6uwsYxyJmPImjZ9fiP2eZLI1SAxpIR6yLz3S7frPRiWSdc8VYpaCg3A==
+X-Received: by 2002:a05:6000:470a:b0:485:8101:dc40 with SMTP id
+ ffacd0b85a97d-48587057037mr3630196f8f.9.1788524337618; 
+ Fri, 04 Sep 2026 05:18:57 -0700 (PDT)
 Received: from arch ([213.219.153.196]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-4858e239862sm857851f8f.9.2026.09.04.05.18.55
+ ffacd0b85a97d-4858bc74298sm3522450f8f.6.2026.09.04.05.18.57
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 04 Sep 2026 05:18:55 -0700 (PDT)
+ Fri, 04 Sep 2026 05:18:57 -0700 (PDT)
 To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri,  4 Sep 2026 14:18:54 +0200
-Message-ID: <20260904121854.406207-1-thomas.perale@mind.be>
+Date: Fri,  4 Sep 2026 14:18:56 +0200
+Message-ID: <20260904121856.406260-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260826203304.387458-1-thomas.petazzoni@bootlin.com>
-References: <20260826203304.387458-1-thomas.petazzoni@bootlin.com>
+In-Reply-To: <20260826142830.4040428-2-thomas.petazzoni@bootlin.com>
+References: <20260826142830.4040428-2-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/perl: fix build issue with musl
+Subject: Re: [Buildroot] [PATCH 2/2] package/qt6/qt6declarative: fix select
+ of host-qt6base network
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -159,100 +160,71 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> perl does not build with musl due to memrchr() being unavailable. This
-> is caused by a perl-cross bug, which does function availability
-> detection with _GNU_SOURCE defined, but then does the build without
-> _GNU_SOURCE defined. At least OpenEmbedded and NixOS have faced the
-> same issue, and worked it around in slightly different ways.
+> The BR2_PACKAGE_QT6DECLARATIVE_QUICK option has some logic to select
+> network support in host-qt6base if network support is enabled in
+> qt6base. However, it turns out that this is actually required at the
+> top level BR2_PACKAGE_QT6DECLARATIVE option: as soon as network
+> support is available in qt6base, the qt6declarative build will assume
+> that qmlprofiler is available... but that requires network support in
+> host-qt6base.
 > 
-> On our side, we create a patch, which was submitted upstream, to solve
-> the issue.
+> This fixes the following build failure:
 > 
-> This issue has been introduced in perl-cross commit b40c560f5d5e,
-> which was first merged in perl-cross release 1.4.1. From a Buildroot
-> perspective, we bumped from perl-cross 1.4 to 1.4.1 in commit
-> 8a289667f5dba6fffb3a21faa14517e9b49726a4, which was merged
-> 2023.05. And indeed the build failure can be reproduced even on our
-> LTS 2025.02.x, so the fix needs to be backported there.
-> 
-> It should be noted that even if the patch is against perl-cross, we
-> add it to package/perl/ directly, as patches in perl are applied after
-> perl has been extracted *and* perl-cross has been extracted on top.
+> CMake Error at /home/thomas/autobuild/instance-2/output-1/build/qt6base-6.9.1/cmake/QtToolHelpers.cmake:784 (message):
+>   Failed to find the host tool "Qt6::qmlprofiler".  It is part of the
+>   Qt6QmlTools package, but the package did not contain the tool.  Make sure
+>   that the host module Qml was built with all features enabled (no explicitly
+>   disabled tools).
+> Call Stack (most recent call first):
+>   /home/thomas/autobuild/instance-2/output-1/build/qt6base-6.9.1/cmake/QtToolHelpers.cmake:83 (qt_internal_find_tool)
+>   tools/qmlprofiler/CMakeLists.txt:11 (qt_internal_add_tool)
 > 
 > Fixes:
 > 
->   https://autobuild.buildroot.net/results/3e47ade0963642988fd8e1be9a6e8042700619ec/
+>   https://autobuild.buildroot.net/results/72c956fdf982382d2981c649c456d1edc2c9d6b2/
+> 
+> We did not trace back exactly since when the problem exists, but we
+> verified that the problem exists in 2025.02.x. It can be reproduced
+> with the following defconfig:
+> 
+> BR2_aarch64=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+> BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
+> BR2_PACKAGE_QT6=y
+> BR2_PACKAGE_QT6BASE_NETWORK=y
+> BR2_PACKAGE_QT6DECLARATIVE=y
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
 Applied to 2025.02.x & 2026.05.x. Thanks
 
 > ---
->  ...gure-keep-_GNU_SOURCE-in-build-flags.patch | 55 +++++++++++++++++++
->  1 file changed, 55 insertions(+)
->  create mode 100644 package/perl/0001-configure-keep-_GNU_SOURCE-in-build-flags.patch
+>  package/qt6/qt6declarative/Config.in | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
 > 
-> diff --git a/package/perl/0001-configure-keep-_GNU_SOURCE-in-build-flags.patch b/package/perl/0001-configure-keep-_GNU_SOURCE-in-build-flags.patch
-> new file mode 100644
-> index 0000000000..497e58c502
-> --- /dev/null
-> +++ b/package/perl/0001-configure-keep-_GNU_SOURCE-in-build-flags.patch
-> @@ -0,0 +1,55 @@
-> +From 6bdfdff24f4a7d17d3b7d9d02bca3eac11c235a4 Mon Sep 17 00:00:00 2001
-> +From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> +Date: Wed, 26 Aug 2026 19:34:39 +0200
-> +Subject: [PATCH] configure: keep _GNU_SOURCE in build flags
-> +
-> +The checkfunc() function probes available libc functions with _GNU_SOURCE
-> +defined. The generated config.sh did not retain that define in ccflags, so
-> +the actual cross build could use functions whose prototypes remain hidden by
-> +feature-test macros. This breaks musl builds, where memrchr is declared only
-> +with _GNU_SOURCE.
-> +
-> +To fix this, append _GNU_SOURCE to explicit -Dccflags values while parsing
-> +configure arguments. Such values are locked before configure_tool.sh can
-> +append flags. This keeps the function-availability checks and subsequent
-> +compilation in the same feature set, including when flags are supplied
-> +through CFLAGS.
-> +
-> +This fixes the regression introduced by b40c560f5d5e (configure_func.sh: Add
-> +_GNU_SOURCE define and function signatures).
-> +
-> +It fixes the following build issue with musl:
-> +
-> +    In file included from op.c:163:
-> +    op.c: In function 'Perl_newATTRSUB_x':
-> +    perl.h:2385:25: error: implicit declaration of function 'memrchr'; did
-> +    you mean 'memchr'? [-Wimplicit-function-declaration]
-> +     2385 | #    define my_memrchr  memrchr
-> +          |                         ^~~~~~~
-> +
-> +This issue is worked around in several build systems:
-> +
-> +- In OpenEmbedded:
-> +  https://github.com/openembedded/openembedded-core/commit/6422e62
-> +
-> +- In NixOS:
-> +  https://github.com/NixOS/nixpkgs/pull/441527
-> +
-> +Fixes: https://github.com/arsv/perl-cross/issues/158
-> +Upstream: https://github.com/arsv/perl-cross/pull/180
-> +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> +
-> +diff --git a/cnf/configure_args.sh b/cnf/configure_args.sh
-> +index 5bc4c6b..65ffc96 100644
-> +--- a/cnf/configure_args.sh
-> ++++ b/cnf/configure_args.sh
-> +@@ -225,6 +225,9 @@ while [ $i -le $# -o -n "$n" ]; do
-> + 		host|target|build) ;;
-> + 		# original Configure options
-> + 		D)
-> ++			if [ "$k" = 'ccflags' ]; then
-> ++				v="$v -D_GNU_SOURCE"
-> ++			fi
-> + 			setordefine "$k" "$x" "$v" 'define' 'true'
-> + 			;;
-> + 		U)
+> diff --git a/package/qt6/qt6declarative/Config.in b/package/qt6/qt6declarative/Config.in
+> index a57b203071..e24133c3e5 100644
+> --- a/package/qt6/qt6declarative/Config.in
+> +++ b/package/qt6/qt6declarative/Config.in
+> @@ -1,5 +1,9 @@
+>  config BR2_PACKAGE_QT6DECLARATIVE
+>  	bool "qt6declarative"
+> +	# When target qt6base has network support, qt6declarative
+> +	# assumes that qmlprofiler is available, but that requires
+> +	# network support in host-qt6base.
+> +	select BR2_PACKAGE_HOST_QT6BASE_NETWORK if BR2_PACKAGE_QT6BASE_NETWORK # qmlprofiler
+>  	help
+>  	  Qt is a cross-platform application and UI framework for
+>  	  developers using C++.
+> @@ -14,7 +18,6 @@ config BR2_PACKAGE_QT6DECLARATIVE_QUICK
+>  	bool "quick module"
+>  	# Enable host test module to ensure that qmltestrunner is built
+>  	select BR2_PACKAGE_HOST_QT6BASE_TEST if BR2_PACKAGE_QT6BASE_TEST # qmltestrunner
+> -	select BR2_PACKAGE_HOST_QT6BASE_NETWORK if BR2_PACKAGE_QT6BASE_NETWORK # qmlprofiler
+>  	select BR2_PACKAGE_QT6BASE_GUI
+>  	select BR2_PACKAGE_QT6BASE_OPENGL if BR2_PACKAGE_QT6_GL_SUPPORTS
+>  	select BR2_PACKAGE_QT6SHADERTOOLS
 > -- 
 > 2.55.0
 > 
