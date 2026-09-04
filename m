@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CDC0DC61DD6
-	for <buildroot@archiver.kernel.org>; Fri,  4 Sep 2026 12:18:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1FD73C61DD6
+	for <buildroot@archiver.kernel.org>; Fri,  4 Sep 2026 12:18:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9665E60D65;
-	Fri,  4 Sep 2026 12:18:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D6F4B60BF3;
+	Fri,  4 Sep 2026 12:18:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TBd0TwmtZIeH; Fri,  4 Sep 2026 12:18:33 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 6E05160D8A
+ id TShTJdEFVkfG; Fri,  4 Sep 2026 12:18:38 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 30A7F60D6E
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1788524313;
-	b=O0VtBmAPtmr4TaOdJZeS1fw+mhjHxRkLfaAw0zYGEl04u+01CKW5Of98rzinnaLoRtDL
-	 F0sCZpgm0AQ/qPlNmcPyLPd3OhXF9vZFVjVyw7CGaPT6V5Iv51hQAxKFFRINUWYz906Ht
-	 ovGhWaIVXIlvfr4PQqPUF+ZaetgrQCtSecOOQIMCgmWzFvYQIE0nx0Y2U+kuPd9gMP4Zj
-	 VMgj4UvjdIARUYSz6/C4VQdgunOB0cTegDi33jwafNYB2RggtU/o6C1w2sXLLgCXUDtqk
-	 udMm2p2yM085eLd5BpHwwiE0a/uJJEHWDoScpyB4JmPNIYbxtbyVWt71/PQsZHn+DEw==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1788524318;
+	b=IKyyF81PMYIoBPeDLKse+9Wd2vvM+63DR2bmUikieXEOnXHnjP/T7wCcjmnUJWX1vgdN
+	 hk2vHU/WRirHP+WedqRSAB0K5VjXkCJS+OjOCMb/oYTGFbml4d7sKLCuSJGRCM+iSUreM
+	 FnlrZigno9+lpSxu2joA5Hk1lWXjx1H+sgokZj+zdfLJrS4QjBipE5n9WsfTpkJyQ2W2E
+	 EbNCV+0PvV8nmO5ll2lkadlv0n14873NOn6PVwz3Rf2jIxTN8QcMlehZfg5LW0nmKujpW
+	 /DxUpaqGQe7/CgLk7mdbEITK6h4QuC/HUnEoKi27mW1Wbo7EwOpyfKfYzMh8fP7ZzsA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1788524313;
+	c=relaxed/relaxed; t=1788524318;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -32,116 +32,117 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From:Reply-To:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=GYXwz5bagsdWOd1CZkmjUa9H4FeKJwnRdqFON9qzwVw=;
-	b=ZtjmB/cguIZmmm7xEI/DzFlSCte2VTMrTBzbHSEJTH8juq4pVfOKFIpFER8GnPjsp7Lj
-	 TbK6qsYx+bAfEmJAgkFxzp3JLxF9DBvaQKymJdj73cJYu5zwKeMm3t04tV9dacjelvrvM
-	 XQjpC0F4Qe1NeLt5DEbfZ2F2sbFZM7O3zXcSglfXcqDeNx903yw+uZgEYjQtZk5aFB07t
-	 F5IwmLEKKdxHNm5qt2l5P7pggd/kjruvL8bEfCH9iakQJK5LDXlb1ldFOCeh/ZFucyzFi
-	 JreImpKS6CoKsdtZW0ISt7D0KA2kGVYjCbQ8H0Oi8DBYRHlBQfcVx0gW7TxtCsmq9nA==
+	bh=bZLT2AHGzh0I6N+qVO33GmSUaI6poVEUe3TalMrm/tk=;
+	b=W4gUy2BtuOcQw8++X6MAm23H6hjxlgrrDh7UZvWAp4+6T37U0eWG1z6mqJ/32vStm5Gz
+	 UhdZ4iZGydVcinY/eBKZfkMoUE6vpQLFkba7Yb5jkOLfPtrsExYG2jl/aCk4++eTYaMjz
+	 wxi4tn2+imVuO2W+7gGWBpW99ah4Yfmvp69mr5mLS7wTzR+9mp6W5jGXzd40nMQ5VZxYZ
+	 3PmkEqLQm5RRTpj9RDj3UhWrQWdZ4zGgF0aovnDEXSZ2kJfkL92ROwhFPsgfk2gYyAtMU
+	 cELzCeyBIAGUz3s6nhdwm+ofuxfkGollGTcEOqqCA4/uykqc2aKSKkZikclX43dunJA==
 ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1788524313;
-	bh=GYXwz5bagsdWOd1CZkmjUa9H4FeKJwnRdqFON9qzwVw=;
+	s=default; t=1788524318;
+	bh=bZLT2AHGzh0I6N+qVO33GmSUaI6poVEUe3TalMrm/tk=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=cFg38zyvldSV/mfGjv8TyZVnPHM4jdTe6CXbQGFr+6qyQoEq6ox4qiRIAslRPXvUW
-	 dESBrSmNBGWrnBbN230d1H/qR4fJP8OtjUEobM9W6mB+6n393O3zbEua8Shpya3JcT
-	 GfKBFXXhbQa3GBzLC1PBTLOnwkhFzyjQXcTNJG8PN4O1TUl+kRbkgu8hDSAumqgLG6
-	 gAqQ2fOW2ZzGJR6xqeXzU86+kvAfnxYp6NifGz4GfA41171Xq8hYyTjIWvGAMZOkBk
-	 wlRiOP7KBUbKrq/7gFeKm23T4MXD5nyx34EHl/GU4Pol7b34pK/v9C9T5lx3fi9iuE
-	 wic8qvfg9pIMA==
+	b=BXSid+/QN3aWwwuVKnQLz8am4bZRChmYHo02tkV3DbdLRIhyV7ygUsraraQhmqD6M
+	 GKVPFYG75dN8WClK7vAFLto3Y7CPCcqAfYMUuGm2HuEHmuZkeO3UHZwp+Ai/vbi7/j
+	 HbTh4Mzl+u2Y+bSuVzGK+IPLFVk2ilU12zi7TZLTeLUsnHDdG/rhZj35SpQpk9J3e2
+	 msxCTjC+O/fxGUxfu4CCEAoaMdKTyh/H0a2zzlW7wghUP12EG0gZ9WNbdQ72wV7Fkc
+	 X7d7zox5UPoFoSXCMZBLZ6ZWXjqgTjTJtCDReQnFl2EjyfXfX6ic0qKAiNIOzPu+Qo
+	 hhdHvbMl3ImQA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6E05160D8A;
-	Fri,  4 Sep 2026 12:18:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 30A7F60D6E;
+	Fri,  4 Sep 2026 12:18:38 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 374ABF14
- for <buildroot@buildroot.org>; Fri,  4 Sep 2026 12:18:29 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id AE43310E
+ for <buildroot@buildroot.org>; Fri,  4 Sep 2026 12:18:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id F050D80F20
- for <buildroot@buildroot.org>; Fri,  4 Sep 2026 12:18:27 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2967580F24
+ for <buildroot@buildroot.org>; Fri,  4 Sep 2026 12:18:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Eqxyq3jCKCMq for <buildroot@buildroot.org>;
- Fri,  4 Sep 2026 12:18:27 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org EBAD580F24
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1788524307;
- b=R1pInz9mVCbBl55zg2U3cfIdeanmt4Oq3xIQ2ZCK2/cOipitrDdisVppM5ze/GEcGZwq
- /kpql1ze7RA+mszDzbpf0WZIXER2LTsb1FaMDVjvsdhTWkYp6139JXcOgYp5RAJo0CjOt
- pk7k4J8xyo3VBoJO9s98aREjnY26owj7QrMfennC4PVyAnhg/g5u4olEhV8YmIGukIUjy
- ISlJPTVpVz/y8RLEA4Qt/Aqbpbh2dlIi+xR31jPk52fNO1G0W/yqb0KJza6Mv+QnyLEYQ
- PKq9PZTewIOLCfnG8xP+nm02y6WMiJ+w1wPU8pvQoxA/k08boFcu5xyDQDFkRGJN2QA==
+ id tyveC8iJ6ijG for <buildroot@buildroot.org>;
+ Fri,  4 Sep 2026 12:18:28 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org D315180EF0
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1788524308;
+ b=oxcohAoFT6xC1UPcjRsMoAC2S4ox+lFiUfq8cGFtVW/YQnqp6NZ2dKHVBfrExxesRhi2
+ yDCSnALLMGXfEFDMQpMchcNqtPBvVMd2pu6SfO4crK+UNPkbxplI4ah53eCpu1lBldhLc
+ BVv+R/k99qUL4tJAztfP4rxWMUwxrSu9EQlZmL4tZ7E4hBSgAutVG6CpSZqmmxIA78V/3
+ 5P8EgxnRit+FcqUQ3THeg0yxwV0HqBLMZAzJjLI7hYOkWDCvK28GxsCCoCbeW9IDDA8ml
+ Fk4/Sqa3SH5/jtwiXnvwpVfasYZ0vQ6+XtvvEXOC7mdBcMWIiXyOhp2DB4aowrOTerw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1788524307;
+ c=relaxed/relaxed; t=1788524308;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
  X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
  From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
  MIME-Version:Content-Transfer-Encoding;
- bh=eT3iBXtimU1NODtELbOQPJ6UROOMQ7Zpb9uC1wj8TzA=;
- b=E6xr+0NJxB2wkKoaaahtiYTCE5wY7IsPGK6MbozjhkI6AizxfU3tubXQJaF+K/io6BbR
- MGWK5WTzBGYGGWrPUBQS+c4XSI9VbOXdXisTFrlzYFL1uU0zNwJFSrTRFERK4kFyefBLK
- yvV9NC3by2IHh4ag3smA5R7bcbhjeuWIj+Fdxtq0nL4lg3whx6f9nBC0VrgNBsB3i1uLv
- wxKGm/GCbBQt6c1tiv2bGte8LO3BGzkr5/SxDbsdeQMu/IwnqDnBmUsSSQlnUmml7mhtH
- YFnq304VjXftugFp3rcI5/MipgT0yDTGPqMG5h7w0FUg5+lzS1jDtRmC/g+1oKU0sNA==
+ bh=9BxJeXRsZ26MdZGXksFa4t6YMrbEfYWrcr8tG/dmEQ4=;
+ b=EQUaUBJ5NcXN4V0GlfNhYk5GwHMpMbGaaCrmfG0UkOyo1b1F6sZgzGeHcGJrIaRsgoZs
+ ZaE9fBjZc1iwcMFq76308bQsXnBFrby02ibwPx00sExhadaDs+kZiPTyhSnOYNaOjzZu0
+ kUgfegQ3bkyG9XlO2UDGliRKAz2i8r+pfPcVdxYxIOQLgOVCw0/xaPy7B6TpsQc/I2gnv
+ rJ4kfzLv/kn/Lrm6LEadqrRInDjjCkDxkAjOy4boy7/aV12my+DhvOnck8G+WqdIQjWAt
+ EBYlVcoTEIzdkz6aM9sSzmN3fgx1IDx12Mygm78jgo1nSJ3pntzrWsK+zhVWOvM/fwg==
 ARC-Authentication-Results: i=1; smtp1.osuosl.org;
  dmarc=pass header.from=mind.be; 
  dkim=pass header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=gP9vQTmH; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::32f"
+ header.s=google header.b=IYgvAQoV; 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::42a"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
+ client-ip=2a00:1450:4864:20::42a; helo=mail-wr1-x42a.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
- [IPv6:2a00:1450:4864:20::32f])
- by smtp1.osuosl.org (Postfix) with ESMTPS id EBAD580F24
- for <buildroot@buildroot.org>; Fri,  4 Sep 2026 12:18:26 +0000 (UTC)
-Received: by mail-wm1-x32f.google.com with SMTP id
- 5b1f17b1804b1-49b8687630fso8694095e9.3
- for <buildroot@buildroot.org>; Fri, 04 Sep 2026 05:18:26 -0700 (PDT)
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
+ [IPv6:2a00:1450:4864:20::42a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D315180EF0
+ for <buildroot@buildroot.org>; Fri,  4 Sep 2026 12:18:27 +0000 (UTC)
+Received: by mail-wr1-x42a.google.com with SMTP id
+ ffacd0b85a97d-4858595f997so584125f8f.1
+ for <buildroot@buildroot.org>; Fri, 04 Sep 2026 05:18:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1788524304; x=1789129104;
+ d=1e100.net; s=20251104; t=1788524305; x=1789129105;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=eT3iBXtimU1NODtELbOQPJ6UROOMQ7Zpb9uC1wj8TzA=;
- b=Q0XWWtXffbQjLd8H/QePdT2LeWf2q3Th3UC61KCzi2+A/euOftW1nkr+8sCGbQ7Vz4
- Q1iR3z2MMBlxRvX4dJ5vsRDn3+0kzJhuMoiXAO+sFPR6Gy5ba5zOZbi/U327BDYLzez+
- a8wY6kq4V7a1OQnHIUFXAgZuBQDPsNloCquZMzP2uL474vpVV7corWvufT2HuaXvq+Q6
- keZFY4oVF2rfovcyCfZI93gn5rtZJMecTJWtPqIk9vWNo0OAmP7rAWXMuZPEFobe0qNS
- s3zIzHMh7M1e0nSfbaflJ9qKU5lMULW7bQxtA8p0cH5dtsElGGsV49lAHoWAHj1elIeO
- fgSw==
+ bh=9BxJeXRsZ26MdZGXksFa4t6YMrbEfYWrcr8tG/dmEQ4=;
+ b=BpBh7tQG+rtbWb/WmGoLeIFPfYNhK8kBk9OuPkxzNgaUst7TxAS6CYbhG1CfcPHqmZ
+ ce2SqDIBRZKuopJVZarP/BQ8TBAHARFhW/eSlakNo//FM0iP3eGGbTue3ndon74bSfdT
+ ZOW1N9/pWdFs6ymIUA8UAEqUYmNTc7YJKDGYYfhYIfQYi9W74fDjn02JVF64yHb3+WzW
+ JXVn6CYBbpkKpeSZFtQhZ34wbuaKopjWxY1OmM7ueZnI7icnyOosl7kb9mbl0S90fhHU
+ j+LAHqE3MLJajYY4N8UXdV5wqlv+4utzwGcwz9jVE4vkRj2IGg24WJhAu6WuLaa1yDvh
+ 491A==
 X-Forwarded-Encrypted: i=1;
- AKwUvBxDV6aAwBubUhT2H28yBjngSHLcYwOngy+IZ4ZLZsdN9cV8d32WNIfNJO/VNYwrxJn8f1Mh69NtdXg=@buildroot.org
-X-Gm-Message-State: AFuF++mnVVJtyUBYWmyb+2L1cVSh2TyMZY3IO3SWHtidwSwohUxOL2En
- 6St44Lom+J6PwwGOka8fOZ6QQTln3pMGUMcHO9S/GNNHvtVEr/pifD6oJoYb9BCon5qgw4T7LP6
- 4MDin
-X-Gm-Gg: AYBFou3DPs/AckfKiJQPQ/XLOWHfPTb49+f+OjMhLQHsM9FQndXk3Sw3GYAir74yBVQ
- NkzIvLl+ozhMM1ZOGVs5D4owADUOyKRtvcrUd7gvMRPlfTRUouI8bVcFz11KH4KUF4fBT5NxFDI
- eNHF4OpPyRdjSpRz2HPxsO/cYLIESwrZqVHVUIWrjhYIvPYyXvY/H2gsO+xNDYaGtiowPMyI7j/
- peepev8vdzJP3D4zlfCaCtIuob/M7zPkU/MOZ4VVx4olrP2s3uDLUQK/FlWapNxV9aAq/GgZbjG
- RiwkI1GvuIu/fHl9Hh2uMxpaBeQOAAI+Qo2jJGh1Q9zV5cODtMBc3s34yaeLSaMOgP807rhyIKf
- KS+QvhZJVztdCCBfenurtPnjdqEpalW1Hf3qJrX+FZvdjl6l6LlbqtBmwOUIz/OaKOcknXLuEpI
- EPUuUdZXUMha21Lh4O6qjlscd2JSEGBEV0TTN23VatFjFzyZ00V/+jFw==
-X-Received: by 2002:a05:600c:474c:b0:49c:f4e1:4c2d with SMTP id
- 5b1f17b1804b1-49cf828cd70mr50803925e9.16.1788524304457; 
- Fri, 04 Sep 2026 05:18:24 -0700 (PDT)
+ AKwUvBzeFbIVAXiYLd03fcI2TpIm4Jh7ByDrRDZg6XbCIh1X+cxedVFcvYKoykTJLSrNy6qkTWVVOfO+ykE=@buildroot.org
+X-Gm-Message-State: AFuF++nlRKkJWD/5mn4lKxveQng6FQ0YcgMGVIMpP/BefxnwziI84Yd7
+ y6mlMEBbOXRBMmfC9W2Ew9WhwilRZb/d51nbigwSBq3iEBGt7UDy2zHkx4+QUIQ1xnrYWAoLnik
+ NbamA
+X-Gm-Gg: AYBFou1tqQQiKSnOGpPoeOFjO/LBU6D+G/vTdNlTDPNkfHMCJMrhBl5jL4Y40llodh7
+ bcXzgqp4vOkH453w09kuMYbxXNTPmFmXpUHn0sQ8+TSp62u39KX2LbkW2VTqGNfxkGHPK+vXubA
+ iqphI5dODsenddhrbfCSrez9MrLLult/XUQEmihQwKnlFPPt1VVVGE11/Jt5rsicg2bxIs7v4LX
+ vJ4AgobSrwieMQtnfvnFzGEKGxu0Vy0db/GYwR3NvMsj3U8xMvLnhNHrKnmcIiputCzFH5d74PX
+ w9xRvQ3x1o/lZKR5U3p1GM1GrWdops8B68Jx+saNkV+Ma9nzbNa2SVLiFNEZtRmyHNIcfHXdo43
+ ckjDWXadHVORFWbhENUJLZzmjXHJUXHaPrU5N9EUeJKSFlv4MloB8lsyE1NiqSWBGrEHhsXVnFT
+ XMl51J/3TfpbXLAB8qLvtU2EA/lj1vShTiRgum2n8rA+gifLoP3twcHidZoO8gpTkh9yXrGS1Fq
+ WHkBg==
+X-Received: by 2002:a05:6000:2084:b0:482:f0ee:1390 with SMTP id
+ ffacd0b85a97d-48587289c5bmr11540193f8f.22.1788524305400; 
+ Fri, 04 Sep 2026 05:18:25 -0700 (PDT)
 Received: from arch ([213.219.153.196]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-485883a9b49sm5187072f8f.17.2026.09.04.05.18.23
+ ffacd0b85a97d-48588390e30sm6023142f8f.7.2026.09.04.05.18.24
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 04 Sep 2026 05:18:23 -0700 (PDT)
-To: Julien Olivain <ju.o@free.fr>
+ Fri, 04 Sep 2026 05:18:25 -0700 (PDT)
+To: Waldemar Brodkorb <wbx@openadk.org>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri,  4 Sep 2026 14:18:23 +0200
-Message-ID: <20260904121823.405189-1-thomas.perale@mind.be>
+Date: Fri,  4 Sep 2026 14:18:24 +0200
+Message-ID: <20260904121824.405285-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260815130430.1016271-1-ju.o@free.fr>
-References: <20260815130430.1016271-1-ju.o@free.fr>
+In-Reply-To: <aoSh0nj09EJBIC4F@waldemar-brodkorb.de>
+References: <aoSh0nj09EJBIC4F@waldemar-brodkorb.de>
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] support/testing: fs: new cramfs runtime
- test
+Subject: Re: [Buildroot] [PATCH] package/uclibc: fix for gcc libquadmath
+ conflict
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -161,91 +162,180 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
+> As seen in the Buildroot autobuilders, struct rm_ctx should
+> not be exposed in the public fenv.h header.
+> 
+> Fixes:
+>  - https://autobuild.buildroot.net/results/761/7613538e0847a10eb3e2a7e40f3ae76386ac015b/
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 
 Applied to 2025.02.x & 2026.05.x. Thanks
 
 > ---
-> Patch tested in:
-> https://gitlab.com/jolivain/buildroot/-/jobs/15915576004
-> ---
->  DEVELOPERS                                    |  2 +
->  support/testing/tests/fs/test_cramfs.py       | 42 +++++++++++++++++++
->  .../fs/test_cramfs/linux-cramfs.fragment      |  1 +
->  3 files changed, 45 insertions(+)
->  create mode 100644 support/testing/tests/fs/test_cramfs.py
->  create mode 100644 support/testing/tests/fs/test_cramfs/linux-cramfs.fragment
+>  ...tx-should-be-private-and-not-exposed.patch | 151 ++++++++++++++++++
+>  1 file changed, 151 insertions(+)
+>  create mode 100644 package/uclibc/0003-fenv-struct-rm_ctx-should-be-private-and-not-exposed.patch
 > 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 4460523447..586407a200 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1856,6 +1856,8 @@ F:	support/testing/tests/boot/test_optee_os.py
->  F:	support/testing/tests/boot/test_optee_os/
->  F:	support/testing/tests/fs/test_btrfs.py
->  F:	support/testing/tests/fs/test_btrfs/
-> +F:	support/testing/tests/fs/test_cramfs.py
-> +F:	support/testing/tests/fs/test_cramfs/
->  F:	support/testing/tests/fs/test_erofs.py
->  F:	support/testing/tests/fs/test_erofs/
->  F:	support/testing/tests/fs/test_xfs.py
-> diff --git a/support/testing/tests/fs/test_cramfs.py b/support/testing/tests/fs/test_cramfs.py
+> diff --git a/package/uclibc/0003-fenv-struct-rm_ctx-should-be-private-and-not-exposed.patch b/package/uclibc/0003-fenv-struct-rm_ctx-should-be-private-and-not-exposed.patch
 > new file mode 100644
-> index 0000000000..8beb27f4ab
+> index 0000000000..e77f079dcc
 > --- /dev/null
-> +++ b/support/testing/tests/fs/test_cramfs.py
-> @@ -0,0 +1,42 @@
-> +import os
+> +++ b/package/uclibc/0003-fenv-struct-rm_ctx-should-be-private-and-not-exposed.patch
+> @@ -0,0 +1,151 @@
+> +From 1105fd6c97f020f6ca7426e19d29081f404b567d Mon Sep 17 00:00:00 2001
+> +From: Waldemar Brodkorb <wbx@openadk.org>
+> +Date: Tue, 18 Aug 2026 18:13:29 +0200
+> +Subject: [PATCH] fenv: struct rm_ctx should be private and not exposed in a
+> + public header
 > +
-> +import infra.basetest
+> +Upstream: https://gogs.waldemar-brodkorb.de/oss/uclibc-ng/commit/1105fd6c97f020f6ca7426e19d29081f404b567d
+> +Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> +---
+> + include/fenv.h              | 10 ----------
+> + include/fenv_private.h      | 24 ++++++++++++++++++++++++
+> + libm/aarch64/fenv_private.h |  1 +
+> + libm/arc/fenv_private.h     |  1 +
+> + libm/arm/fenv_private.h     |  1 +
+> + libm/csky/fenv_private.h    |  1 +
+> + libm/mips/fenv_private.h    |  1 +
+> + libm/sparc/fenv_private.h   |  1 +
+> + 8 files changed, 30 insertions(+), 10 deletions(-)
+> + create mode 100644 include/fenv_private.h
 > +
+> +diff --git a/include/fenv.h b/include/fenv.h
+> +index 4b532c573..34042d5ac 100644
+> +--- a/include/fenv.h
+> ++++ b/include/fenv.h
+> +@@ -1,5 +1,4 @@
+> + /* Copyright (C) 1997, 1999, 2000 Free Software Foundation, Inc.
+> +-   This file is part of the GNU C Library.
+> + 
+> +    The GNU C Library is free software; you can redistribute it and/or
+> +    modify it under the terms of the GNU Lesser General Public
+> +@@ -131,15 +130,6 @@ extern int fedisableexcept (int __excepts) __THROW;
+> + extern int fegetexcept (void) __THROW;
+> + #endif
+> + 
+> +-/* Rounding mode context.  This allows functions to set/restore rounding mode
+> +-   only when the desired rounding mode is different from the current rounding
+> +-   mode.  */
+> +-struct rm_ctx
+> +-{
+> +-  fenv_t env;
+> +-  bool updated_status;
+> +-};
+> +-
+> + __END_DECLS
+> + 
+> + #endif /* fenv.h */
+> +diff --git a/include/fenv_private.h b/include/fenv_private.h
+> +new file mode 100644
+> +index 000000000..5e81c71aa
+> +--- /dev/null
+> ++++ b/include/fenv_private.h
+> +@@ -0,0 +1,24 @@
+> ++/* Copyright (C) 1997, 1999, 2000 Free Software Foundation, Inc.
+> ++
+> ++   The GNU C Library is free software; you can redistribute it and/or
+> ++   modify it under the terms of the GNU Lesser General Public
+> ++   License as published by the Free Software Foundation; either
+> ++   version 2.1 of the License, or (at your option) any later version.
+> ++
+> ++   The GNU C Library is distributed in the hope that it will be useful,
+> ++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+> ++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> ++   Lesser General Public License for more details.
+> ++
+> ++   You should have received a copy of the GNU Lesser General Public
+> ++   License along with the GNU C Library; if not, see
+> ++   <http://www.gnu.org/licenses/>.  */
+> ++
+> ++/* Rounding mode context.  This allows functions to set/restore rounding mode
+> ++   only when the desired rounding mode is different from the current rounding
+> ++   mode.  */
+> ++struct rm_ctx
+> ++{
+> ++  fenv_t env;
+> ++  bool updated_status;
+> ++};
+> +diff --git a/libm/aarch64/fenv_private.h b/libm/aarch64/fenv_private.h
+> +index 5afb790ea..3eaf0eb3f 100644
+> +--- a/libm/aarch64/fenv_private.h
+> ++++ b/libm/aarch64/fenv_private.h
+> +@@ -19,6 +19,7 @@
+> + #define AARCH64_FENV_PRIVATE_H 1
+> + 
+> + #include <fenv.h>
+> ++#include <fenv_private.h>
+> + #include <fpu_control.h>
+> + 
+> + static __always_inline void
+> +diff --git a/libm/arc/fenv_private.h b/libm/arc/fenv_private.h
+> +index 5f74c5e13..2e985722f 100644
+> +--- a/libm/arc/fenv_private.h
+> ++++ b/libm/arc/fenv_private.h
+> +@@ -19,6 +19,7 @@
+> + #define _FENV_PRIVATE_H 1
+> + 
+> + #include <fenv.h>
+> ++#include <fenv_private.h>
+> + #include "get-rounding-mode.h"
+> + 
+> + /* The standards only specify one variant of the fenv.h interfaces.
+> +diff --git a/libm/arm/fenv_private.h b/libm/arm/fenv_private.h
+> +index 566bf443c..61418d9f4 100644
+> +--- a/libm/arm/fenv_private.h
+> ++++ b/libm/arm/fenv_private.h
+> +@@ -19,6 +19,7 @@
+> + #define ARM_FENV_PRIVATE_H 1
+> + 
+> + #include <fenv.h>
+> ++#include <fenv_private.h>
+> + #include <fpu_control.h>
+> + 
+> + static __always_inline void
+> +diff --git a/libm/csky/fenv_private.h b/libm/csky/fenv_private.h
+> +index f0f48a88a..e6015abee 100644
+> +--- a/libm/csky/fenv_private.h
+> ++++ b/libm/csky/fenv_private.h
+> +@@ -19,6 +19,7 @@
+> + #define CSKY_FENV_PRIVATE_H 1
+> + 
+> + #include <fenv.h>
+> ++#include <fenv_private.h>
+> + #include <fpu_control.h>
+> + #include "fenv_libc.h"
+> + 
+> +diff --git a/libm/mips/fenv_private.h b/libm/mips/fenv_private.h
+> +index bc9be3b62..273d6faf8 100644
+> +--- a/libm/mips/fenv_private.h
+> ++++ b/libm/mips/fenv_private.h
+> +@@ -24,6 +24,7 @@
+> +    code instead.  */
+> + 
+> + #include <fenv.h>
+> ++#include <fenv_private.h>
+> + #include "fenv_libc.h"
+> + #include <fpu_control.h>
+> + 
+> +diff --git a/libm/sparc/fenv_private.h b/libm/sparc/fenv_private.h
+> +index b888d8442..c76fbad7f 100644
+> +--- a/libm/sparc/fenv_private.h
+> ++++ b/libm/sparc/fenv_private.h
+> +@@ -2,6 +2,7 @@
+> + #define SPARC_FENV_PRIVATE_H 1
+> + 
+> + #include <fenv.h>
+> ++#include <fenv_private.h>
+> + #include <fpu_control.h>
+> + 
+> + /* For internal use only: access the fp state register.  */
+> +-- 
+> +2.47.3
 > +
-> +class TestCramfs(infra.basetest.BRTest):
-> +    kern_frag = \
-> +        infra.filepath("tests/fs/test_cramfs/linux-cramfs.fragment")
-> +    config = \
-> +        f"""
-> +        BR2_aarch64=y
-> +        BR2_TOOLCHAIN_EXTERNAL=y
-> +        BR2_LINUX_KERNEL=y
-> +        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> +        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.44"
-> +        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-> +        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
-> +        BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{kern_frag}"
-> +        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-> +        BR2_PACKAGE_CRAMFS=y
-> +        BR2_TARGET_ROOTFS_CRAMFS=y
-> +        # BR2_TARGET_ROOTFS_TAR is not set
-> +        """
-> +
-> +    def test_run(self):
-> +        disk = os.path.join(self.builddir, "images", "rootfs.cramfs")
-> +        kern = os.path.join(self.builddir, "images", "Image")
-> +        bootargs = ["root=/dev/vda"]
-> +        qemu_opts = ["-M", "virt", "-cpu", "cortex-a57", "-m", "512M",
-> +                     "-drive", f"file={disk},if=virtio,format=raw"]
-> +        self.emulator.boot(arch="aarch64",
-> +                           kernel=kern,
-> +                           kernel_cmdline=bootargs,
-> +                           options=qemu_opts)
-> +        self.emulator.login()
-> +
-> +        # We check our root filesystem is in cramfs format.
-> +        cmd = "mount | grep '/dev/root on / type cramfs'"
-> +        self.assertRunOk(cmd)
-> +
-> +        # We run cramfsck on the filesystem.
-> +        self.assertRunOk("cramfsck -v /dev/vda")
-> diff --git a/support/testing/tests/fs/test_cramfs/linux-cramfs.fragment b/support/testing/tests/fs/test_cramfs/linux-cramfs.fragment
-> new file mode 100644
-> index 0000000000..91bc54bed3
-> --- /dev/null
-> +++ b/support/testing/tests/fs/test_cramfs/linux-cramfs.fragment
-> @@ -0,0 +1 @@
-> +CONFIG_CRAMFS=y
 > -- 
-> 2.55.0
+> 2.47.3
 > 
 > _______________________________________________
 > buildroot mailing list
