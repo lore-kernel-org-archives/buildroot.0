@@ -4,249 +4,158 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0F17C624DE
-	for <buildroot@archiver.kernel.org>; Fri,  4 Sep 2026 20:40:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 282C1C79F82
+	for <buildroot@archiver.kernel.org>; Fri,  4 Sep 2026 21:25:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C908B40B9A;
-	Fri,  4 Sep 2026 20:40:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BE4FD40BA4;
+	Fri,  4 Sep 2026 21:25:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id c65h1dbOSSVk; Fri,  4 Sep 2026 20:40:45 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 6D28240B90
+ id zeqUKnHqPHTq; Fri,  4 Sep 2026 21:25:07 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 60D5040A81
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1788554445;
-	b=lrmqvFoM4fMoqs6TECnWf8mLmdBm5sQVZJeqGXYhgD8LVM+qKntxWdBjBc/qfowjqEn6
-	 byaQs1U/D39hBFovOPYQ+0wF+VRMqz5VNPuSpLERhfhVQY2saopQS3cnjslWMVFC0VCOx
-	 hEJ72rYMZ5daRS52WBcpCOUKPULADouc3WiUaUsixtnBlcLy5tA5J+iY2bOHhjLphZRWU
-	 Bfm3M/omKZSCGIs6vGzSL/YYH7Z+LxOoHPBQI04iZh3yJE88iC/vn6gEQ55ZgHzzaQSPn
-	 s4FQIe2GQaUH1iqVDtm6OO9XLNO8WG7ijM7Ab66XpubtT0H87E9e1XVAAcKsXes+HjQ==
-ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1788554445;
+ARC-Seal: i=3; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1788557107;
+	b=iFGdgyJo+Dp1DLDlamOYMxccOW36zSLYIhypMTyqRLhXa2NYPSutI/6bmVS1fx7rheEM
+	 hoGLi5kaPSbtB48T4diBY4Mnym9nN4G2LWZZtPFl+1czFF/qmtWV3nF/RWJSwqZccBCtZ
+	 x/y9fRJ3lW0qbAM5w//FxaWEDMxKRzPzyPH8sbQ0rzQ8JPLcWZzrwKO8/8P04ZLoJ/cZh
+	 AZIqrttz9BIG2xR6pRtGiu3ovpiywGHUt3qeCRZL6ztut/1k13Wt57gk40F7tvTpxrsdx
+	 GFykW82WFQUAYH4/OW1gWbDHIEUCrE3aSfYppDQvXECvJQH6B6DrelUTOYJo2vy6FNw==
+ARC-Message-Signature: i=3; d=osuosl.org; s=arc; a=rsa-sha256;
+	c=relaxed/relaxed; t=1788557107;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
-	 X-UI-Sender-Class:Received:Message-ID:Date:MIME-Version:User-Agent:To:
-	 References:Content-Language:Autocrypt:In-Reply-To:X-Provags-ID:
-	 UI-OutboundReport:Subject:X-BeenThere:X-Mailman-Version:Precedence:
-	 List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:From:Reply-To:Content-Transfer-Encoding:Content-Type:
-	 Errors-To:Sender;
-	bh=CAombx8l+3Nh7+8bn5TOPAsQF5fz2GWg8gc8jqDA8dg=;
-	b=ImE9NO3KgSNaacJ4baww+plfdgFBSI30kocMSi2LwAup+Br6BKaGTeGkP4mvXK1Kqybm
-	 46R9HMoTTFl3baisnoG5UfuRoTiZp+AkNKCgUngi0ixJjJ3nIPveRiapcpEDU32G6/F4Q
-	 5hUZLKnjWtZVqlqTTI3oORW9ggwsxWuznAPGIkc1FYz+QXkcYTe0ggKoijMSEZKdyYGV7
-	 dvLhhufSLO8SJ08fyn3iIquOPfzS30oxzHkNl3uNG9GEBIakzXoaSHXhTSq+xVASwdBjX
-	 9c2GVFVThb/k2GGruZc1f8zZIIZEU7EfxAJ5YfJogzBpCTYyjea0sWDbujC0/GiN++A==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 X-Google-DKIM-Signature:X-Forwarded-Encrypted:X-Gm-Message-State:
+	 X-Gm-Gg:X-Received:MIME-Version:References:In-Reply-To:Date:
+	 X-Gm-Features:Message-ID:To:Cc:Subject:X-BeenThere:X-Mailman-Version:
+	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:Content-Type:Errors-To:Sender;
+	bh=T5WGNdKPDhy0ykwt7OqRe9RpaFV4vhJndl8j9y192uI=;
+	b=jc9d7dJLo6YFHjmaK+Cox0UaYohJwpeGs+SmhsMQ/kNBWt6CwbEfky1wqHIMMWvpGJbK
+	 G8Esf9PoSslzWK4Z53ptzrQs+IpAVn0uRthw1FE9qwtNE4Y+2vWH7l9goEAM2xut+R+fI
+	 jtdvQDmQFcJavJYKoUzEJYqyg4TCQAEXiRFgDpiSeP6s1qc3dHytm16W9GhSgq5KVke2P
+	 b4+p0c4co1qVqhBT9ot733paQfDjlOWQvlOOyTtWqj3PivS0xkdJOSDFAU36hgrrgSi9Y
+	 +FBGk9dQNqeFjqcTwFRMNqd46+FDScTmNuMcikz8v6tzNfZNifOaygbJprzAAJKg0gw==
+ARC-Authentication-Results: i=3; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1788554445;
-	bh=CAombx8l+3Nh7+8bn5TOPAsQF5fz2GWg8gc8jqDA8dg=;
-	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 From;
-	b=Vrz+ctIjjA1RhubwiW3FN8xdHMgJCB+LdLo8VY6FrV/o/5GvSBKPhXqgVYnDTFQh5
-	 pvmIMOjNsPVmQtLULLw3iR21caxmYa1jX+Jy1Lt38CQ0Y22fAITWkrkBrZEknIy0sr
-	 NBJFjsb9xVkUJGK8zyXCpHWBDghO0kXWjHpsr01PgaH80o66c/82X4/MwXMd3a+FJc
-	 2JbAZjeYTGcpwUFPcKoGfxo36HW4eGZ2qLMlizHekzsFZnLc9ifbyLcaWhYi2T159x
-	 +PUF0TCXRMnAlM4BuYUhrOETzkc0EVlPN73YpSjMejJlEkQCngP8mwsTEh3iyH7ZSl
-	 1wKj6lTWMOaPQ==
+	s=default; t=1788557107;
+	bh=T5WGNdKPDhy0ykwt7OqRe9RpaFV4vhJndl8j9y192uI=;
+	h=References:In-Reply-To:Date:To:Cc:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=dZhV4Rf01aXi+XAPSvvo3amjUBxTRwt9Cq7szItn0yNZVljCwkqUzWh3HOc+Fi3be
+	 cVw1qRuAAEErji0ZAoxY/3C30pQIqUUgXZFMJHX2uoVQTuoJhRBW2a9qdx5ElWoLR8
+	 3D4aURRqlXvby+NYn6HV7te+sJhymzRl/VsqXyEgFkUgylRSH8LsG2s0le3eCMAsl8
+	 kywyRRkYaUQnh5cV8WuW8OxzPDOdAuFijwAZQaIjQqQVkZt7emkLHOwQxuHzFOfSjT
+	 4upeqXfukwLuBp1PW8gLM0/fP/HOsws/G3XolWszX7nxivwqdjFcKE/Ynx/gvGXBIQ
+	 Y2xAkOCDY1DCw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6D28240B90;
-	Fri,  4 Sep 2026 20:40:45 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 4104010E
- for <buildroot@buildroot.org>; Fri,  4 Sep 2026 20:40:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 60D5040A81;
+	Fri,  4 Sep 2026 21:25:07 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 95E66724
+ for <buildroot@buildroot.org>; Fri,  4 Sep 2026 21:25:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 27A1860B8A
- for <buildroot@buildroot.org>; Fri,  4 Sep 2026 20:40:44 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7B2E081172
+ for <buildroot@buildroot.org>; Fri,  4 Sep 2026 21:25:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id swmH2Mp9Jfbw for <buildroot@buildroot.org>;
- Fri,  4 Sep 2026 20:40:43 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org AAFA060B89
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1788554443;
- b=ixQ1l3glOfLtXO3w+NEjMTVPb57ptz5ZXKn6rPt5W5nn/915HSEqbmWaGAG2RtjUQa83
- FywAV+rhHvHsLIxaZlJ0fwyYHIfn1EK1efdzqT0jsL8Ph6Tbc3A20A0rhNJTHhBXAnVDk
- 9bRx/hIV4k+8F+YoRPSvXhwMRV24K1BuTCRRUee8Ak53rGJpFkoI0EGbd6U2ooj2C7+0C
- OB8Iq0q5yZWUMdRh6p2Q2krcTl75gbeYx8lxh79uQL42ziH/jCmuZjKNh25/Z6VfhVoRI
- POEM4P8j4H/dk74v0qSkxOG7lbTvY3Ypm6WOG6fK0hQTTSWHNR3CRwmX5GJ+Xlw2v7w==
-ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1788554443;
- h=Received-SPF:DKIM-Signature:X-UI-Sender-Class:Received:Message-ID:
- Date:MIME-Version:User-Agent:Subject:To:References:Content-Language:
- From:Autocrypt:In-Reply-To:Content-Type:Content-Transfer-Encoding:
- X-Provags-ID:X-Spam-Flag:UI-OutboundReport;
- bh=SUWZyMJsvAwiutux7KIYbGJddVTto8C7ADjEi6NFg4Y=;
- b=mE5M8MUqLQchCoBTnx8GMdYzhoN9SuHZdzOmH3/R4MFfdYCiCNbBlRg001GS58FOtwTo
- hgLkHn+iTvpnAq8+Vls94RQDP+14+yaieDxUpN6KBGYtQFZC0WU6k38TMzqgsdmPwiwmP
- gzhyUCC+7W1YNoH027PRXI+J+enI3iPd7S9LFTqxzWKrH3tYkpeA6ieWCm/8RdctLIC9J
- ciKuNoMckJec/PTCESZ3HIRPMKBqbXBPhbv+ksmEyoims5ulMyVuNmxytlbNDG4UYNSVM
- Re2EBj1Gytx/50gCgfqypXY9fUyhfqHWIAkfnrhm6IS3vxbxwc7Xkc6YgTyU1Cs8DuQ==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org;
- dmarc=pass header.from=gmx.de; 
- dkim=pass header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
- header.s=s31663417 header.b=iTkKfbIv; 
- arc=none smtp.remote-ip=212.227.17.22
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.22;
- helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
- by smtp3.osuosl.org (Postfix) with ESMTPS id AAFA060B89
- for <buildroot@buildroot.org>; Fri,  4 Sep 2026 20:40:41 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from client.hidden.invalid by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mnpnm-1wV9mn0Bpq-00jNCu; Fri, 04
- Sep 2026 22:40:39 +0200
-Message-ID: <158cdc1a-acaa-4292-b959-dfb561f47aa2@gmx.de>
-Date: Fri, 4 Sep 2026 22:40:38 +0200
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UecWRz0Vdo4I for <buildroot@buildroot.org>;
+ Fri,  4 Sep 2026 21:25:04 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 2337881166
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=pass; t=1788557104;
+ b=ZH3O432tt/pwpeOYVJJv7FTgMYV2r5xi9IFrnOjVAaDemQeE43aIEUw2C6X3V+d972SJ
+ Pg7uu6UsqJdiJBimbfB8a5L0nNWHV+nEgszglUlBby7rRjjhW5HFF3ybdCwK7ejygGhQ4
+ 92NPzOd/Q3EhZOuH5F3M8VxNRti13brgsJTSnU8G33Wl/E5K0bVyWNY8XWRuAGxari455
+ 0C+ZdM19AOHRtR7UvW94ttCPnsvWO97Qe7K3vNmU6JUD2p/0mb+9DVMsu6Q536IaDaM5r
+ kitZ5BPRp04yedRqalp+b6NzRQc68X1deZ2wBAbMJDw4yNndWxk9FVuTCsM4vWiq4Zg==
+ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
+ c=relaxed/relaxed; t=1788557104;
+ h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
+ X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+ MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+ Message-ID:Subject:To:Cc:Content-Type;
+ bh=dbhmpQs9t8woBoheVVD/BuHn940CFsrDpCC3FHFWH/M=;
+ b=CaSlVUpx7qf+d8oU+wiwr+8iMsPyc/vhU8iYBKgyjxjIW+Vl8B9mODPe1utXFL+1gUHD
+ bo54RwUjpK0/SigHEVdtRu5Cbscr/3ZrdToVtR1qeoABY0S4CK8pADD+CuiFedB5gxFU/
+ qSSxYY1fREfas1JJvF1beuHMADbhABuQMKWNrccVsB0p7+6a7o2X0dBIABE1pUWYK58oE
+ pQ/xj518TDg8BQNkpXGL+QLx2YO3OHdvWMiO6bvMthI96DHxGvC4Sey5BWVvmG0VGzfTx
+ W70GXK5JXjr++YSXEITZOdXhRDp52gyGfWTFO5gi4ZxufUo4rVgdJXXDimBTa0pUIcg==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org;
+ dmarc=pass header.from=outrider.ai; 
+ dkim=pass header.d=outrider.ai header.i=@outrider.ai header.a=rsa-sha256
+ header.s=google header.b=Q0xQklNY; 
+ arc=pass header.oldest-pass=0 smtp.remote-ip="2607:f8b0:4864:20::62f"
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::62f; helo=mail-pl1-x62f.google.com;
+ envelope-from=jkoch@outrider.ai; receiver=<UNKNOWN> 
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com
+ [IPv6:2607:f8b0:4864:20::62f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2337881166
+ for <buildroot@buildroot.org>; Fri,  4 Sep 2026 21:25:03 +0000 (UTC)
+Received: by mail-pl1-x62f.google.com with SMTP id
+ d9443c01a7336-2d9201076b3so17456685ad.0
+ for <buildroot@buildroot.org>; Fri, 04 Sep 2026 14:25:02 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1788557102; cv=none;
+ d=google.com; s=arc-20260327;
+ b=sDuoHyjmj/LwjFk2IHumG9ahr3HqeNAm8pQV/pQolFWJ37zXquig3Oy92uXGoHO8Hf
+ L/GyKlVKwFpNPIlr1GIh/PkjgDHxXOPq65zxwidhYJfwMT9qM4a6MBUar+hmFSLTyFsv
+ dQcawJcKh3nIG1KQ7zw8+xbnY+KnKU1+xqSLzKupxAjueW+ZXOHmbir17KPmzgfOfsy7
+ 90cF+Ljvd8IsVqI3zO6fZslcrwHjlnQSka30J8Amv9noenJAAVpPQKXiXUrOxc+he66C
+ 566mVs9lwhlR7PpqMrGI37QbLIX5QDfyEi1fe3eTSmU91T77VFQZJFq5HoriV48KrAUV
+ IfUw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com;
+ s=arc-20260327; 
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:dkim-signature;
+ bh=dbhmpQs9t8woBoheVVD/BuHn940CFsrDpCC3FHFWH/M=;
+ fh=ETUoGLZp70eGC31td5Cd46m7jarYr1tol1KktqVLh80=;
+ b=XKHc5x/3vQFF/WUsCx/1E6ZpBFzkefS9oSfw1r4Bg/O4VCpDmr7rgASflad+n8+tck
+ ViaW7LRNLc+ZCqZwxiLOONg3Fv37g5Uxi19LGqk/vwx49HtmPL6guLZ5OHqpCgTPdK4K
+ M+ZJt6vgsO5aBBy6dL49Pi0Hxyz0J8xejkPwxGB10yZzp8l4DFleC0IYVnfCuhMHblSz
+ RtpzanqJ3veYPjT/KG51QaS5m6WB47MfcvPDcOKcfZprdxBojOgGkU2i7ieJ3nva+Va9
+ NBR8mc7ROseQ2Cn9HFHZX8oE8LaSDQxswGka2YmfG4WJDuknnnQ2MwKjAavYQYFIAJ+n
+ LQIg==; darn=buildroot.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20251104; t=1788557102; x=1789161902;
+ h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+ :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to:content-type;
+ bh=dbhmpQs9t8woBoheVVD/BuHn940CFsrDpCC3FHFWH/M=;
+ b=V+rZ56MevBgwmTfCwloEVN+62MLG20T7gpgbRS3CeRSmUaYVH3qxpJ/nzzz/Mci7h8
+ f5PJr01lROt9pi1PsYz3wb5Z0zc1OMtdCq0T2IgFa1+3XNQWJQD3rG8d4B/BUTWigxp4
+ Tq5dPh5kHMQLGLkPld2aKK6HERCJcyUnsT8Tdiu+v7r1a5ojRKzng+QZ+4kAT/tArFjw
+ rxbZw21RlHf9/zBAFpkRrz+oTM98OAzZ5s1y9Q6GfnH5rnQCX+aitFsuvUtPTb0MGrai
+ A1VX1R2NgTDsGatJZgJDlT5QsS/cz2acEVnlck6q6wCJBsg9b6HVTfdeWLQ5UzyivFrr
+ YR+A==
+X-Forwarded-Encrypted: i=1;
+ AKwUvBwv+6WtU8FK7zHeAz6iRJqpWAQUqu4kUh6IvWqHCuV0gOjTiZooqmMZsY+92zWEJZsSYpKzwmgB6aM=@buildroot.org
+X-Gm-Message-State: AFuF++mfjyAFqryHKauRu3zLjza+6c6TNhoLYm4bLONeE3Ku1WJ3ciFp
+ GiyRVjd/JcrbHtgBwR03Lhffn+ULm0ABueK7okmzCKAwrvByj0LfrDPjU9YqP2JD5EbAHTpng3g
+ 0vx/OWgtmXl1mi6lXY2KbIIzB1ToMrw2FLzOvzEfg
+X-Gm-Gg: AYBFou1IQLyMrm9/NVTVp4apbZ1yHqrAUpwK+CviyuulIHVGrTW9vZtynMNRu99F15P
+ aNUtL/dFngakAPwKkW2Ej9f+zRFJ2uofLyhmPqflwFpD95yOvuHxJA2rnKNGRKGh8af+mqyRqpS
+ v7MiiWzIYEnREKxJISHbrAgm10aMbQgMm4+k7U8ykT0kBYPunUlw1tS7IxqDRoFU0PKqNkTWO//
+ 9y9/77D3tvieZS6v1c0wbj1DNZQgyYsRMK+10Q3UL1zH8DS8SBN3fzktieYXu40BG3QEjE/8hmj
+ hD/bkjycjM3YiANA39/nLRRV5sCk1Jp5r0vN/l9+
+X-Received: by 2002:a17:90a:e7cb:b0:398:9bd4:d12 with SMTP id
+ 98e67ed59e1d1-39b2624a3famr11100302a91.17.1788557102104; Fri, 04 Sep 2026
+ 14:25:02 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Martin Bachmann <martin.bachmann@designwerk.com>,
- buildroot <buildroot@buildroot.org>
-References: <ZR0P278MB0869330F8A433371A1F8CB008B7AA@ZR0P278MB0869.CHEP278.PROD.OUTLOOK.COM>
-Content-Language: en-US, de-DE-1901, de-DE
-Autocrypt: addr=fiona.klute@gmx.de; keydata=
- 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
-In-Reply-To: <ZR0P278MB0869330F8A433371A1F8CB008B7AA@ZR0P278MB0869.CHEP278.PROD.OUTLOOK.COM>
-X-Provags-ID: V03:K1:PFSd4n55d/nv8O73kjUZh3F2ZJIEH1erWou+0Ozocusw0ioERfJ
- Xn4DYCDg3ExZy6XGwDKyYZhmHjrrxn/uBLNGCpEA5buJxOwvX5XGGvCraajgBLneR8Fo9RO
- s87PQKiGyeT75nShrJgLvbPuo+X3/51BuFx8xxSwfeofY0EVNZNWNzCyCeMe7nXuHMH0oqc
- AEfVV7wUzIhIQfyy2YclA==
-UI-OutboundReport: notjunk:1;M01:P0:6vOBxgQ+Q/c=;6KbZbV6hfqvubWODES5wWto78Gc
- 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
- W09LjSCxxqhfgwlG5MXmdfXKuzsC3A094Nw==
-Subject: Re: [Buildroot] [PATCH 1/3] package/dejavu: add missing license
- information
+References: <20260902195708.2168193-1-j@j-ernberg.se>
+In-Reply-To: <20260902195708.2168193-1-j@j-ernberg.se>
+Date: Fri, 4 Sep 2026 15:24:49 -0600
+X-Gm-Features: AcwNN1VxrJHA0V9xIPgzPr-CbReO44YTqv9yTI8HbmwOoXaC92BxOdab8DHtZOM
+Message-ID: <CAMQGCcjXAx56Jtk31ArAZJyPxc=cXU48KyrzObu-p-F19agEpQ@mail.gmail.com>
+To: j@j-ernberg.se
+Cc: Adam Ford <aford173@gmail.com>, "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Vincent Fazio <vfazio@xes-inc.com>, Zach Vargas <zvargas@xes-inc.com>,
+ buildroot@buildroot.org
+Subject: Re: [Buildroot] Updating nvidia-driver package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -258,37 +167,252 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Fiona Klute via buildroot <buildroot@buildroot.org>
-Reply-To: Fiona Klute <fiona.klute@gmx.de>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+From: John Koch via buildroot <buildroot@buildroot.org>
+Reply-To: John Koch <jkoch@outrider.ai>
+Content-Type: multipart/mixed; boundary="===============8678765705842001540=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Am 06.03.26 um 15:03 schrieb Martin Bachmann:
-> DEJAVU_LICENSE is primarily BitstreamVera. The license file also specifies that DejaVu-specific changes and certain math extensions are in the Public Domain. This matches the licensing logic used by OpenEmbedded/Yocto.
-> 
-> Signed-off-by: Martin Bachmann <martin.bachmann@designwerk.com>
+--===============8678765705842001540==
+Content-Type: multipart/alternative; boundary="000000000000bb5b1a065aaee659"
 
-Applied to master after fixing line wrapping, thank you.
+--000000000000bb5b1a065aaee659
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> ---
->   package/dejavu/dejavu.mk | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/dejavu/dejavu.mk b/package/dejavu/dejavu.mk
-> index 9b57f0992e..bcb8675442 100644
-> --- a/package/dejavu/dejavu.mk
-> +++ b/package/dejavu/dejavu.mk
-> @@ -7,6 +7,7 @@
->   DEJAVU_VERSION = 2.37
->   DEJAVU_SITE = https://sourceforge.net/projects/dejavu/files/dejavu/$(DEJAVU_VERSION)
->   DEJAVU_SOURCE = dejavu-fonts-ttf-$(DEJAVU_VERSION).tar.bz2
-> +DEJAVU_LICENSE = Bitstream-Vera
->   DEJAVU_LICENSE_FILES = LICENSE
->   
->   DEJAVU_FONTS_INSTALL =
+I=E2=80=99ve been maintaining a renamed local version to avoid conflicts wi=
+th the
+existing one. I don't know everything maintaining an official Buildroot
+package involves, but I'm happy to help where I can.
+
+My main motivation is to reduce our out-of-tree patches and hopefully help
+others in the community. However, because our systems run strictly headless
+for GPU-accelerated Docker containers, I haven't tested any window managers
+or display servers, so I can't speak to the Xwayland/LIB_GL build issue
+directly.
+
+I have changed the driver package fairly significantly, and to align with
+standard release practices it might require further changes. For example,
+the standard release includes modprobe and persistenced as separate
+packages, looking like the following:
+Target packages ---> Hardware handling --->
+nvidia-driver
+    CUDA support
+    nvidia kernel module
+nvidia-modprobe
+nvidia-persistenced
+
+Users may need a different driver version based on their GPU hardware
+architecture. I made the hardware architecture a selectable option because
+it seemed like the most user-friendly method. I also added an option for
+"Management utilities" (e.g. nvidia-smi, nvidia-persistenced,
+nvidia-debugdump, etc.). It makes more sense to me to bundle those under
+the driver rather than have them as separate packages. Perhaps they should
+be individually selectable within the driver package. I also give the
+option to build the kernel-open driver versus the proprietary driver where
+the option is available (e.g. Turing, Ampere, Ada, Hopper). My
+implementation looks like the following:
+nvidia-driver
+    GPU architecture
+        Fermi
+        Kepler
+        Maxwell / Pascal / Volta
+        Turing / Ampere / Ada / Hopper
+        Blackwell and newer
+    Open-source kernel module (kernel-open/) [Based on GPU architecture
+selection]
+    CUDA support
+    Management utilities
+    Kernel modules
+
+In terms of kernel and toolchain support, I=E2=80=99ve primarily focused on=
+ recent
+Buildroot LTS releases and their default kernel pairings. My testing is
+limited to newer NVIDIA hardware (Ada and Blackwell), so I'll definitely
+need help from others to confirm the driver works with older legacy GPUs.
+That being said, I have confirmed driver compilation works for many default
+configurations under 2025.02.x, 2026.05.x, and the 2026.08.x release
+candidate.
+
+If that all sounds reasonable I can prepare and send over the patch series
+for review.
+
+On Wed, Sep 2, 2026 at 1:57=E2=80=AFPM John Ernberg <j@j-ernberg.se> wrote:
+
+> Hi John,
+>
+> > For a while I have been locally modifying the nvidia-driver package to
+> > allow its use with more modern hardware architectures (e.g., Turing and
+> > above). Recently I also added support for the open-source driver which =
+is
+> > required for the Blackwell architecture (and beyond). I believe I
+> retained
+> > support for the older legacy architectures but I am unable to test thos=
+e
+> > due to lack of supported hardware. Would there be any interest in
+> reviewing
+> > and possibly merging these changes into the nvidia-driver package?
+>
+> If you're using it and plan to maintain it, post the patches, the package
+> is currently orphaned, so adding yourself to DEVELOPERS as well could be =
+an
+> idea.
+>
+> I started looking at trying to compile the existing nvidia-driver package
+> after Adam ran into an xwayland compile issue with the LIB_GL providers
+> (which I also ran into earlier and didn't have time to figure out how to
+> properly fix - due to the nvidia driver not being buildable).
+>
+> The last few days I have tried again to figure out how to build the curre=
+nt
+> nvidia-driver with a supported kernel (according to nvidia docs) and have
+> not
+> been able to find a combination of internal toolchain and kernel version
+> that
+> builds.
+>
+> As far as I can tell all in-tree toolchains are too new, so when the kern=
+el
+> versions compile the driver doesn't, and when the kernel doesn't compile
+> ...
+> I don't know if the driver would compile either.
+>
+> Do you or any of the others CC'd use the package as it is today? And if s=
+o,
+> have a defconfig that builds the current nvidia-driver package?
+> It needs a myriad of patches if it's going to build for any kernel beside=
+s
+> possibly the 5.10 CIP kernel (which is doesn't build for either... as far
+> as I can tell).
+> So maybe support for this version is not necessary to keep.
+>
+> Best regards // John Ernberg
+>
+
+--000000000000bb5b1a065aaee659
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div><span style=3D"background-color:transparent">I=E2=80=
+=99ve been maintaining a renamed local version to avoid conflicts with the =
+existing one. I don&#39;t know everything maintaining an official Buildroot=
+ package involves, but I&#39;m happy to help where I can.</span></div><div>=
+<span style=3D"background-color:transparent"><br></span></div><div>My main =
+motivation is to reduce our out-of-tree patches and hopefully help others i=
+n the community. However, because our systems run strictly headless for GPU=
+-accelerated Docker containers, I haven&#39;t tested any window managers or=
+ display servers, so I can&#39;t speak to the Xwayland/LIB_GL build issue d=
+irectly.<br></div><div><br></div><div><span style=3D"background-color:trans=
+parent">I have changed the driver package fairly significantly, and to alig=
+n with standard release practices it might require further changes. For exa=
+mple, the standard release includes modprobe and persistenced as separate p=
+ackages, looking like the following:</span></div><div><span style=3D"backgr=
+ound-color:transparent">Target packages ---&gt; Hardware handling ---&gt;</=
+span></div><div><span style=3D"background-color:transparent">nvidia-driver<=
+/span></div><div><span style=3D"background-color:transparent">=C2=A0 =C2=A0=
+ CUDA support</span></div><div><span style=3D"background-color:transparent"=
+>=C2=A0 =C2=A0 nvidia kernel module</span></div><div><span style=3D"backgro=
+und-color:transparent">nvidia-modprobe</span></div><div><span style=3D"back=
+ground-color:transparent">nvidia-persistenced</span></div><div><span style=
+=3D"background-color:transparent"><br></span></div><div><span style=3D"back=
+ground-color:transparent">Users may need a different driver version based o=
+n their GPU hardware architecture. I made the hardware architecture a selec=
+table option because it seemed like the most user-friendly method. I also a=
+dded an option for &quot;Management utilities&quot; (e.g. nvidia-smi, nvidi=
+a-persistenced, nvidia-debugdump, etc.). It makes more sense to me to bundl=
+e those under the driver rather than have them as separate packages. Perhap=
+s they should be individually selectable within the driver package. I also =
+give the option to build the kernel-open driver versus the proprietary driv=
+er where the option is available (e.g. Turing, Ampere, Ada, Hopper). My imp=
+lementation looks like the following:<br>nvidia-driver</span></div><div><sp=
+an style=3D"background-color:transparent">=C2=A0 =C2=A0 GPU architecture</s=
+pan></div><div><span style=3D"background-color:transparent">=C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 Fermi</span></div><div>=C2=A0 =C2=A0 =C2=A0 =C2=A0 Kepler<spa=
+n style=3D"background-color:transparent"></span></div><div>=C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 Maxwell / Pascal / Volta</div><div>=C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 Turing / Ampere / Ada / Hopper</div><div>=C2=A0 =C2=A0 =C2=A0 =C2=A0 Bl=
+ackwell and newer</div><div>=C2=A0 =C2=A0 Open-source kernel module (kernel=
+-open/) [Based on GPU architecture selection]</div><div>=C2=A0 =C2=A0 CUDA =
+support</div><div>=C2=A0 =C2=A0 Management utilities</div><div>=C2=A0 =C2=
+=A0 Kernel modules</div><div><br>In terms of kernel and toolchain support, =
+I=E2=80=99ve primarily focused on recent Buildroot LTS releases and their d=
+efault kernel pairings. My testing is limited to newer NVIDIA hardware (Ada=
+ and Blackwell), so I&#39;ll definitely need help from others to confirm th=
+e driver works with older legacy GPUs. That being said, I have confirmed dr=
+iver compilation works for many default configurations under 2025.02.x, 202=
+6.05.x, and the 2026.08.x release candidate.</div><div><br>If that all soun=
+ds reasonable I can prepare and send over the patch series for review.</div=
+></div><br><div class=3D"gmail_quote gmail_quote_container"><div dir=3D"ltr=
+" class=3D"gmail_attr">On Wed, Sep 2, 2026 at 1:57=E2=80=AFPM John Ernberg =
+&lt;<a href=3D"mailto:j@j-ernberg.se">j@j-ernberg.se</a>&gt; wrote:<br></di=
+v><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;borde=
+r-left:1px solid rgb(204,204,204);padding-left:1ex">Hi John,<br>
+<br>
+&gt; For a while I have been locally modifying the nvidia-driver package to=
+<br>
+&gt; allow its use with more modern hardware architectures (e.g., Turing an=
+d<br>
+&gt; above). Recently I also added support for the open-source driver which=
+ is<br>
+&gt; required for the Blackwell architecture (and beyond). I believe I reta=
+ined<br>
+&gt; support for the older legacy architectures but I am unable to test tho=
+se<br>
+&gt; due to lack of supported hardware. Would there be any interest in revi=
+ewing<br>
+&gt; and possibly merging these changes into the nvidia-driver package?<br>
+<br>
+If you&#39;re using it and plan to maintain it, post the patches, the packa=
+ge<br>
+is currently orphaned, so adding yourself to DEVELOPERS as well could be an=
+<br>
+idea.<br>
+<br>
+I started looking at trying to compile the existing nvidia-driver package<b=
+r>
+after Adam ran into an xwayland compile issue with the LIB_GL providers<br>
+(which I also ran into earlier and didn&#39;t have time to figure out how t=
+o<br>
+properly fix - due to the nvidia driver not being buildable).<br>
+<br>
+The last few days I have tried again to figure out how to build the current=
+<br>
+nvidia-driver with a supported kernel (according to nvidia docs) and have n=
+ot<br>
+been able to find a combination of internal toolchain and kernel version th=
+at<br>
+builds.<br>
+<br>
+As far as I can tell all in-tree toolchains are too new, so when the kernel=
+<br>
+versions compile the driver doesn&#39;t, and when the kernel doesn&#39;t co=
+mpile ...<br>
+I don&#39;t know if the driver would compile either.<br>
+<br>
+Do you or any of the others CC&#39;d use the package as it is today? And if=
+ so,<br>
+have a defconfig that builds the current nvidia-driver package?<br>
+It needs a myriad of patches if it&#39;s going to build for any kernel besi=
+des<br>
+possibly the 5.10 CIP kernel (which is doesn&#39;t build for either... as f=
+ar<br>
+as I can tell).<br>
+So maybe support for this version is not necessary to keep.<br>
+<br>
+Best regards // John Ernberg<br>
+</blockquote></div>
+
+--000000000000bb5b1a065aaee659--
+
+--===============8678765705842001540==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8678765705842001540==--
