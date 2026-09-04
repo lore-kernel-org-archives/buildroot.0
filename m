@@ -4,126 +4,129 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3CB65C79F82
-	for <buildroot@archiver.kernel.org>; Fri,  4 Sep 2026 18:41:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D10AC79F82
+	for <buildroot@archiver.kernel.org>; Fri,  4 Sep 2026 18:42:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0137C40B65;
-	Fri,  4 Sep 2026 18:41:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 32A0740B65;
+	Fri,  4 Sep 2026 18:42:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ecVgpW6IODMj; Fri,  4 Sep 2026 18:41:56 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 03C3340B6C
+ id sQ2FLRTk14_z; Fri,  4 Sep 2026 18:42:09 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 4C36140B6E
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1788547316;
-	b=diXc8ya1wcem8V8HlcWf0OOHlEb5AzujZQgru2nuQ5dyOyaed/kcT/QP+dgVuBgBlx0x
-	 KtFcYZ2WCXAWnUHzsaAKR2f89Ds+m2dTJS7oCwDnWQmkoOXkBJ1317qrB4IHAvF6P2HO6
-	 KlIP7/7zmmYLTeHbr5QN4pWdcuMP1tt7qWLLYyoL/NfJ/8r7yXg30saETErfaj7i51uhS
-	 oWFUT4z51dw2mwv9dKQvjHOMVI85oM9hjBsfycphvWJ96AMul7VvKqQzC9wvvBxe37tS8
-	 sTI1U8Fo0WVT9dIoXtAuOGmkawubaKUXA6qs86001MPAMZ9b4fIuo7NLDopX5fVd6KQ==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1788547329;
+	b=dLNZe04RL5RPhX6tHWaXUqVFgwFy+pStCnirsMmrjmXRzJDja1Aq0ZMt25eUWufIqpHv
+	 WektQmsfkwhshJSRSL0tvIZETSmtg1v/88RVV6zZBMeKU0UA2CNEeg0BgLtyXIDvx0ZBt
+	 C2El2a5scALECNGHAK53mgOn/MNgVj7Bodv1ZV61H/KL+x7rDDTmCWGs5gnYAAjYldW8M
+	 C0vFzz0mg0NhR1cfmSLgOSwzMk/sPNJiQ0rZsOZy5zBhh/dOBNxQda9wCKuvg2dkhCKZs
+	 IHXHCtwJQJtUBl60IiJDf+osPg3rCuMSW/TqnFgzQ9NadvdrYc4EjRil1SfuF3PI79g==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1788547316;
+	c=relaxed/relaxed; t=1788547329;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
 	 DKIM-Signature:Received:Received:From:To:Cc:Date:Message-ID:X-Mailer:
-	 MIME-Version:X-Spamd-Bar:Subject:X-BeenThere:X-Mailman-Version:
-	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:Content-Type:Content-Transfer-Encoding:Errors-To:
-	 Sender;
-	bh=YyQ5azfgG/SGbv3a2LQ7wJZ0ngOrTq55PCiNk53Os0Y=;
-	b=YoIDRU0nlulxEDHUo+h4ShSJtBbIuKjgpkq5iyoqWHsVVziIrYBrgB2Xcg7/wDJD7Eyk
-	 p7YKxFK0h7kL9ecmq/YWLoYLTdD3CZpzsIQij9wRT8mMP9/xmhLhsxq4wDluMQAuS0u+l
-	 vWNn0lyH3UKhf/un9hyGRCed2nRPAVvLiexAa15t0oXoNcRf1wJFO6pCftCYerwEIGE99
-	 aTDzUZ+FIY32W9In134N6Tn7pg3xxLzJuMBHgpNeli34s7+ODVL7ALdcG42wJvdGaIHgw
-	 prbLQLfRIKq0lki9l66bcdvoeiZHLb71rVEGuV+BKeDmkMa4coj86Q6HhVawC4SlGJw==
+	 In-Reply-To:References:MIME-Version:X-Spamd-Bar:Subject:X-BeenThere:
+	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:Content-Type:
+	 Content-Transfer-Encoding:Errors-To:Sender;
+	bh=jtTM7kFIidVb/soOe5QTG0CHlvIr9aURoCUlx6N/YqE=;
+	b=ehKhZuNdHEKJmpKWIVL5SIDyiWSzJGDU//nF246s4m6NQAvZyIDFllXnc+4kivvDdkWd
+	 zkVQ0P4l6kPBm1SIjWqNunII0KLqeBZb+0S23GSv/URjnPR9gQx/un3KRHQsVjn3taiXm
+	 whpaGubB4PfowWG2i9DT5W/k7l3d0T1uwjviH03dPohN8myD1oD1sdmFVQZuLjaIGYvZO
+	 Cef5BcT3rFFiehTakiEaTAkjUoti7ddJAwc/RNSGYftnbdEr7HCwWONMNpDvUnJG5jUkg
+	 P9DvMXYYfIGCXaP4wSlCTmbNGcnmHrgR5iiJoQKx98ycSo6MGvnrjEWaVwoNx1+AJEg==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1788547316;
-	bh=YyQ5azfgG/SGbv3a2LQ7wJZ0ngOrTq55PCiNk53Os0Y=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=nNaF43qFa1d1QRZz7vddpWFKjfh7BZi8yl0GlvgR9NsfwMu+awmsCp1CiLbPGU69Q
-	 Ppgbsuo1vN4bMGhPivEGy92/ON2bn8hdmxWL5/iHg0OOOtSvd6l5+2UiS5xt6fsX41
-	 QV96hjwe/ChUsBFoK75hjXf4VRW7OyHlAFJvZ6bKlv1rjQaQz30Y64VxSbPiqIqSc9
-	 bYZ76vP0JfVg9cdon1XvFPSQWfVf8yHP16RyCtq18kUQSF2Dxjyu56PDxwEBdyEh7h
-	 eRbRD9aDcZAbsW+hICWp+ljmOOjj3oj9FF2Em3hiseupmFCDyGE91C7xO9cw7Gf5I6
-	 8kv2nFe2zUK1Q==
+	s=default; t=1788547329;
+	bh=jtTM7kFIidVb/soOe5QTG0CHlvIr9aURoCUlx6N/YqE=;
+	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=EacPvtR1hEhxqZb7ATMnzAloLkckdosBEj8a4MEtZyAGBNm+8cWQxWdS3tolcIKBw
+	 8Q2lMG0yg6NfxSlHYECWBStRhvHO2xA5Aw2z805J4eLXWbaiQN5TmAteaVCPL9O1UF
+	 1brEfv8WPPnKm9JXZ+fne34IDnXBW5wIIYOGftnaIe/3ClHG7sWQ5Tq5kqPiSJiHMp
+	 /IR2kT87BHIAMXvSKw/Bx73UM0rsbCVeaN17AUGD4P2SIfJEALToQ6tJs5XLwmV7mZ
+	 eHxEt/E0qWvTEeIG66aAi+vfC2JhX4o4tVmKnPH1pgL6ssaovdLCz1Q/DuQ9lWXBYo
+	 9j+Rl2cp0urLw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 03C3340B6C;
-	Fri,  4 Sep 2026 18:41:56 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 913D13DA
- for <buildroot@buildroot.org>; Fri,  4 Sep 2026 18:41:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4C36140B6E;
+	Fri,  4 Sep 2026 18:42:09 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 402C529B
+ for <buildroot@buildroot.org>; Fri,  4 Sep 2026 18:42:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 77A2D404F9
- for <buildroot@buildroot.org>; Fri,  4 Sep 2026 18:41:54 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3236260B89
+ for <buildroot@buildroot.org>; Fri,  4 Sep 2026 18:42:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CyeCZWS1Oz8g for <buildroot@buildroot.org>;
- Fri,  4 Sep 2026 18:41:53 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org 5F924404F8
-Authentication-Results: smtp2.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1788547313;
- b=fDo0oW6OMj4x3Uad/1SNk/zeoaChJiXgbKzY1jAwFg3YcKzeCKQPL0XjW4227K1SCxhZ
- Umkvosng5kVYOGgn2fzHlP4fYsgxRN1LG+Lx98UPVCkWLUN6YBqYl4JQTUuNHTMAZupwE
- 9lFGmDnms+mCFO0XONp/CDtq1QByoz3cQQXceQp55LBs//ZMwM+LP0k995dcxONvr4w4y
- aqe1GpqwvuZ0lDiqc7WP4IiJ4/BS0GYkUzEhXxzZzqQJH+5kEPtV8UO2/7IWroz0FY+1p
- 8QDeeoaxvXoiyM3QZPZbJ82C+Ta3gD4A17b4kbNjK9Uns3CO0o3Y5esglWbEiCTitAg==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1IzaCj7f6jEU for <buildroot@buildroot.org>;
+ Fri,  4 Sep 2026 18:42:06 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 2486F605EC
+Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1788547326;
+ b=sQZ4kIAsanAm0S2YvwtRw0grEK87pwec76fk/KC+QdaCBXnfaf9Dy5JKeWp2aONuj0hf
+ rDl4Nz+V0pzmQ0FNEonzaDft3wC+DIpbPBFau0KUCL6dxjDvWt5B6NTZ54/PpnkgkkL+s
+ 8fJn9s9vwjZMYv+M+NPhWig4jifOEJ+hrQJF21NlVSq8PEjLXl4SUmTOxB4Ma5UeoiGaV
+ 7JGtqVZhyiAxBKL2bOpWac4y1+kgrXMT0rnXgArAUERZZQO2nAU2Vk0MKcq2Yhlqi+vcQ
+ /ik5p4DhkLXik25+QqKpQRHVOpiacxx9m+HrKl6IcGwb0S+uSYoipGEwy4J9MNOIpFQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1788547313;
+ c=relaxed/relaxed; t=1788547326;
  h=Received-SPF:DKIM-Signature:Received:Received:From:To:Cc:Subject:
- Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding:
- X-Spam-Score:X-Spamd-Bar;
- bh=MTbGycoeZkF6LUh5XdZ43K3qPyZ8cF+co78E+xBCdHs=;
- b=rEeL0S77rzYpYR9rgLBL0n0esRgujbh5G9TqT0KAB3Ftjncn5JwIcdpGhUuG4MT23l7S
- OMJYRCXmVa5F7yh4HHWZVhxlrBsveiBAqGZ/HPnZBLrTY7v8A14HZZ/JCOpNAtkrOyLGp
- BP4F+Y2Z3hKB8hgZdp9jTNGl7Y78axpVJs57tFNc4RegDI5um4+PDZ8eEcouxfKoskTX5
- SF5BRksgmSccYJ05DYW07wfRK852ffSsTIJ319E5A4Alv+dZ0LFPlLX3Htn8yqssGbI7N
- Hftpr8pC8VDGLdEXxBBMzE0XlLn/DIcqVJZpTHpOHJtBi7cR2WcqOFXGUQjPVFoI2LQ==
-ARC-Authentication-Results: i=1; smtp2.osuosl.org;
+ Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+ Content-Transfer-Encoding:X-Spam-Score:X-Spamd-Bar;
+ bh=AE1GbNkOTK6zyXa1fJYYE8KH74trQRxt8AmkYEw1sTo=;
+ b=LaB5A5sq45O7czjhlkf6wYjDcv8XkmHIAenAbivVYbQ6e1j8f8Wuy3iMGH1CuqFRexUe
+ Sy1yzIT9zTGv5ASmgH2gGSv2M0wJ9YfICFPeCddrkuodXx5pyefl1AdgDokAz+lKakUGE
+ CkyGmnTOPzIVzNPeF1YIVlXMkE6LtnOyZuqHTrM0hzL0NpG0Ca++cxQOidqDLkteR1+pn
+ 0dPJV+JUpzLfSIP8mG+Bb2rM9uzrCU01RQeCnsMSpbl8R2+BOW/ikrWS/0G7a6XvvefIY
+ n87BBwHGzVXUj7OvVWBPTS76iqh9D2IyaGwV1dxHwWleft39YyFUxaBNlCs1DLsEySw==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org;
  dmarc=pass header.from=kuhls.net; 
  dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=bhJZas2b; 
+ header.s=kas202605290044 header.b=PxmwgFX9; 
  arc=none smtp.remote-ip=85.13.140.57
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-Authentication-Results: smtp2.osuosl.org;
+Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=kuhls.net
-Authentication-Results: smtp2.osuosl.org;
+Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202605290044 header.b=bhJZas2b
+ header.a=rsa-sha256 header.s=kas202605290044 header.b=PxmwgFX9
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5F924404F8
- for <buildroot@buildroot.org>; Fri,  4 Sep 2026 18:41:52 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2486F605EC
+ for <buildroot@buildroot.org>; Fri,  4 Sep 2026 18:42:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
  s=kas202605290044; t=1788547296;
- bh=MTbGycoeZkF6LUh5XdZ43K3qPyZ8cF+co78E+xBCdHs=;
- h=From:To:Cc:Subject:Date:From;
- b=bhJZas2bNlCmSahzni0qAQZKmmu9B5/sdLfvCcIgCYhCA1AebrHU62naNQtSmHOTR
- nMPjDO6iUq4s2x8QEZ0QfnPly/qbPRBTiwzkvI4GD61j02Bc9Sm6ybCvT9qz3vhIBN
- 0B2QSvXfNihrusY63F6ceDligb7AJpbqNdAISdY0twaErGTFXbfJiBcki1+Nvcazzm
- LiRocY8Dp8LO+Po/rmQuHQcvMvkN7Zty21+0v+YLjcuEjXRMNAhYGfN153hyPMjWOB
- ZM0OnPDDkOpjL3gjKTO2Pge+MK37l3KUopW+igPC0JxKgxTJw52JZlFw0WQABrQGvu
- e5sa4H0O14nQA==
+ bh=AE1GbNkOTK6zyXa1fJYYE8KH74trQRxt8AmkYEw1sTo=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:From;
+ b=PxmwgFX9r3HOSXUxraEvi3xZl55xcOCnid/M4lI13CCzzRG3kf0MRFIvlen5r8EEh
+ PYejnabTJdeoKI86K2LbtfnsNnjp8YIxEuNcs5Bi5ErY+LWf+DPVetsNpgzu2pVp9s
+ r34BUZLczDQf/dqrxwZK7TiMeWL2T29iu95oc+pBDC/jYsvlKk8nizDCLwlv2uj6dT
+ 8LtpqqCuBsaYfsTkLtag7rOBfrxFQRQ0sm5A53Kc/7cD/brvIBnQ1MgS2DEeFay/Lf
+ 4ZCByELwCst31zw/Nb8SOuKfRj0Xyn2B07e5n2GyogT+3W5DQX9CvAQibS9x2pvjHu
+ 3xUMTZ1DkwRzg==
 Received: from fli4l.lan.fli4l (p5b3a03a0.dip0.t-ipconnect.de [91.58.3.160])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 1B469A4C1FC3;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 40ACBA4C33A7;
  Fri,  4 Sep 2026 20:41:36 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:51846)
  by fli4l.lan.fli4l with esmtp (Exim 4.100)
- (envelope-from <bernd@kuhls.net>) id 1x2Yr1-000000004rO-36lV;
- Fri, 04 Sep 2026 18:41:35 +0000
+ (envelope-from <bernd@kuhls.net>) id 1x2Yr1-000000004rO-45ZL;
+ Fri, 04 Sep 2026 18:41:36 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
 Cc: Julien Olivain <ju.o@free.fr>
-Date: Fri,  4 Sep 2026 20:41:33 +0200
-Message-ID: <20260904184135.875634-1-bernd@kuhls.net>
+Date: Fri,  4 Sep 2026 20:41:35 +0200
+Message-ID: <20260904184135.875634-3-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260904184135.875634-1-bernd@kuhls.net>
+References: <20260904184135.875634-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: /
-Subject: [Buildroot] [PATCH 1/3] package/libgcrypt: bump version to 1.12.3
+X-Spamd-Bar: +
+Subject: [Buildroot] [PATCH 3/3] package/gnupg2: bump version to 2.5.22
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -140,164 +143,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://lists.gnupg.org/pipermail/gnupg-announce/2026q3/000508.html
-
-Added upstream patch to fix a build error introduced by this bump that
-was detected by the Gitlab pipelines:
-
-sm4-intel-avx512-amd64.S: Assembler messages:
-sm4-intel-avx512-amd64.S:138: Error: operand size mismatch for `vsm4rnds4'
+https://lists.gnupg.org/pipermail/gnupg-announce/2026q3/000509.html
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
 Series passed Gitlab pipelines:
 https://gitlab.com/bkuhls/buildroot/-/commits/641bea0dd5838e2ecb955efdb4a17684a35deaef
 
- ...-configure-check-for-AVX512-SM4-inst.patch | 108 ++++++++++++++++++
- package/libgcrypt/libgcrypt.hash              |   4 +-
- package/libgcrypt/libgcrypt.mk                |   2 +-
- 3 files changed, 111 insertions(+), 3 deletions(-)
- create mode 100644 package/libgcrypt/0002-sm4-add-separate-configure-check-for-AVX512-SM4-inst.patch
+ package/gnupg2/gnupg2.hash | 4 ++--
+ package/gnupg2/gnupg2.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libgcrypt/0002-sm4-add-separate-configure-check-for-AVX512-SM4-inst.patch b/package/libgcrypt/0002-sm4-add-separate-configure-check-for-AVX512-SM4-inst.patch
-new file mode 100644
-index 0000000000..67bcf667f5
---- /dev/null
-+++ b/package/libgcrypt/0002-sm4-add-separate-configure-check-for-AVX512-SM4-inst.patch
-@@ -0,0 +1,108 @@
-+From f0bc379e0f3585908707095db5d3c505e664726f Mon Sep 17 00:00:00 2001
-+From: Jussi Kivilinna <jussi.kivilinna@iki.fi>
-+Date: Sun, 30 Aug 2026 11:16:11 +0300
-+Subject: [PATCH] sm4: add separate configure check for AVX512 SM4 instructions
-+
-+* cipher/sm4-intel-avx512-amd64.S: Check for
-+HAVE_GCC_INLINE_ASM_SM4_AVX512 instead of HAVE_GCC_INLINE_ASM_SM4.
-+* cipher/sm4.c (USE_INTEL_SM4_AVX512): Require USE_INTEL_SM4_AVX2 and
-+HAVE_GCC_INLINE_ASM_SM4_AVX512.
-+* configure.ac (gcry_cv_gcc_inline_asm_sm4_avx512)
-+(HAVE_GCC_INLINE_ASM_SM4_AVX512): New.
-+--
-+
-+Toolchain may support VEX encoded SM4 instructions but not EVEX encoded
-+ones. Commit adds separate check for EVEX coding and gates SM4-AVX512
-+implementation behind the new check.
-+
-+Reported in FreeBSD bugtracker:
-+ https://bugs.freebsd.org/bugzilla/show_bug.cgi?id=297987
-+
-+Signed-off-by: Jussi Kivilinna <jussi.kivilinna@iki.fi>
-+
-+Upstream: https://github.com/gpg/libgcrypt/commit/f0bc379e0f3585908707095db5d3c505e664726f
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ cipher/sm4-intel-avx512-amd64.S |  4 ++--
-+ cipher/sm4.c                    |  8 +++-----
-+ configure.ac                    | 24 ++++++++++++++++++++++++
-+ 3 files changed, 29 insertions(+), 7 deletions(-)
-+
-+diff --git a/cipher/sm4-intel-avx512-amd64.S b/cipher/sm4-intel-avx512-amd64.S
-+index c5eaa723..ac8076ec 100644
-+--- a/cipher/sm4-intel-avx512-amd64.S
-++++ b/cipher/sm4-intel-avx512-amd64.S
-+@@ -23,7 +23,7 @@
-+ #ifdef __x86_64
-+ #if (defined(HAVE_COMPATIBLE_GCC_AMD64_PLATFORM_AS) || \
-+      defined(HAVE_COMPATIBLE_GCC_WIN64_PLATFORM_AS)) && \
-+-    defined(ENABLE_AVX512_SUPPORT) && defined(HAVE_GCC_INLINE_ASM_SM4)
-++    defined(ENABLE_AVX512_SUPPORT) && defined(HAVE_GCC_INLINE_ASM_SM4_AVX512)
-+ 
-+ #include "asm-common-amd64.h"
-+ 
-+@@ -164,5 +164,5 @@ ELF(.size __sm4_intel_crypt_blk32,.-__sm4_intel_crypt_blk32;)
-+ #define SM4_CRYPT_BLK32 __sm4_intel_crypt_blk32
-+ #include "sm4-avx512-amd64.h"
-+ 
-+-#endif /*defined(ENABLE_AVX512_SUPPORT) && defined(HAVE_GCC_INLINE_ASM_SM4)*/
-++#endif /*ENABLE_AVX512_SUPPORT && HAVE_GCC_INLINE_ASM_SM4_AVX512*/
-+ #endif /*__x86_64*/
-+diff --git a/cipher/sm4.c b/cipher/sm4.c
-+index 482a7983..58aaea10 100644
-+--- a/cipher/sm4.c
-++++ b/cipher/sm4.c
-+@@ -87,11 +87,9 @@
-+ /* USE_INTEL_SM4_AVX512 indicates whether to compile with Intel SM4
-+  * instructions (VSM4RNDS4) based AVX512 code. */
-+ #undef USE_INTEL_SM4_AVX512
-+-#if defined(ENABLE_AVX512_SUPPORT) && defined(HAVE_GCC_INLINE_ASM_SM4)
-+-# if defined(__x86_64__) && (defined(HAVE_COMPATIBLE_GCC_AMD64_PLATFORM_AS) || \
-+-     defined(HAVE_COMPATIBLE_GCC_WIN64_PLATFORM_AS))
-+-#  define USE_INTEL_SM4_AVX512 1
-+-# endif
-++#if defined(USE_INTEL_SM4_AVX2) && defined(ENABLE_AVX512_SUPPORT) && \
-++    defined(HAVE_GCC_INLINE_ASM_SM4_AVX512)
-++# define USE_INTEL_SM4_AVX512 1
-+ #endif
-+ 
-+ /* Assembly implementations use SystemV ABI, ABI conversion and additional
-+diff --git a/configure.ac b/configure.ac
-+index a5e8d683..ea7ea7ae 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -1659,6 +1659,30 @@ if test "$gcry_cv_gcc_inline_asm_sm4" = "yes" ; then
-+ fi
-+ 
-+ 
-++#
-++# Check whether GCC inline assembler supports EVEX encoded Intel SM4
-++# instructions.
-++#
-++AC_CACHE_CHECK([whether GCC inline assembler supports AVX512 Intel SM4 instructions],
-++       [gcry_cv_gcc_inline_asm_sm4_avx512],
-++       [if test "$mpi_cpu_arch" != "x86" ||
-++           test "$try_asm_modules" != "yes" ; then
-++          gcry_cv_gcc_inline_asm_sm4_avx512="n/a"
-++        else
-++          gcry_cv_gcc_inline_asm_sm4_avx512=no
-++          AC_LINK_IFELSE([AC_LANG_PROGRAM(
-++          [[void a(void) {
-++              __asm__("vsm4key4 %%zmm2, %%zmm1, %%zmm3\n\t":::"cc");
-++              __asm__("vsm4rnds4 %%zmm2, %%zmm1, %%zmm3\n\t":::"cc");
-++            }]], [ a(); ] )],
-++          [gcry_cv_gcc_inline_asm_sm4_avx512=yes])
-++        fi])
-++if test "$gcry_cv_gcc_inline_asm_sm4_avx512" = "yes" ; then
-++   AC_DEFINE(HAVE_GCC_INLINE_ASM_SM4_AVX512,1,
-++     [Defined if inline assembler supports AVX512 Intel SM4 instructions])
-++fi
-++
-++
-+ #
-+ # Check whether GCC inline assembler supports SSE4.1 instructions.
-+ #
-+-- 
-+2.47.3
-+
-diff --git a/package/libgcrypt/libgcrypt.hash b/package/libgcrypt/libgcrypt.hash
-index 7be6554d56..e76496a7e4 100644
---- a/package/libgcrypt/libgcrypt.hash
-+++ b/package/libgcrypt/libgcrypt.hash
+diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
+index a53f46c67a..deb7a0da17 100644
+--- a/package/gnupg2/gnupg2.hash
++++ b/package/gnupg2/gnupg2.hash
 @@ -1,5 +1,5 @@
  # From https://www.gnupg.org/download/integrity_check.html
--sha1  7b8ff21966a0b6e7a735466b9b9b55d9dac9fa87  libgcrypt-1.12.2.tar.bz2
--sha256  7ce33c2492221a0436f96a8500215e9f3e3dcb5fd26a757cd415e7a843babd5e  libgcrypt-1.12.2.tar.bz2
-+sha1  b4654d75f0e5d0850cc699f02c9b44a06367502f  libgcrypt-1.12.3.tar.bz2
-+sha256  98d1b0b3202d2b03fa754a35aa3cbbfcf526a3260d8d2ee213748001b1043006  libgcrypt-1.12.3.tar.bz2
+-sha1  51fae4f4d902787624eb7047f6d3e7c263ad7690  gnupg-2.5.21.tar.bz2
+-sha256  e3af2c8caa46a66a9329fa7c6880af260451914d819595beabc2c26597b31352  gnupg-2.5.21.tar.bz2
++sha1  4921a199ae868c8dd0478352d2d93bb470489e23  gnupg-2.5.22.tar.bz2
++sha256  96e27b020ad26510388e06f5f07f3f70a4ed8916ee995f1b72b7a024e6d9d87e  gnupg-2.5.22.tar.bz2
  # Locally calculated
- sha256  20e50fe7aae3e56378ebf0417d9de904f55a0e61e4df315333e632a4d3555d95  COPYING.LIB
-diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
-index 0bc281da42..a49897fd4f 100644
---- a/package/libgcrypt/libgcrypt.mk
-+++ b/package/libgcrypt/libgcrypt.mk
+ sha256  bc2d6664f6276fa0a72d57633b3ae68dc7dcb677b71018bf08c8e93e509f1357  COPYING
+diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
+index 05acd4811d..5b8b30e702 100644
+--- a/package/gnupg2/gnupg2.mk
++++ b/package/gnupg2/gnupg2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBGCRYPT_VERSION = 1.12.2
-+LIBGCRYPT_VERSION = 1.12.3
- LIBGCRYPT_SOURCE = libgcrypt-$(LIBGCRYPT_VERSION).tar.bz2
- LIBGCRYPT_LICENSE = LGPL-2.1+
- LIBGCRYPT_LICENSE_FILES = COPYING.LIB
+-GNUPG2_VERSION = 2.5.21
++GNUPG2_VERSION = 2.5.22
+ GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
+ GNUPG2_SITE = https://gnupg.org/ftp/gcrypt/gnupg
+ GNUPG2_LICENSE = GPL-3.0+
 -- 
 2.47.3
 
