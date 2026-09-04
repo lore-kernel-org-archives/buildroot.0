@@ -4,140 +4,144 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A031EC79F85
-	for <buildroot@archiver.kernel.org>; Fri,  4 Sep 2026 12:18:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CDC0DC61DD6
+	for <buildroot@archiver.kernel.org>; Fri,  4 Sep 2026 12:18:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6806760C14;
-	Fri,  4 Sep 2026 12:18:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9665E60D65;
+	Fri,  4 Sep 2026 12:18:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5PAi03XGrxSD; Fri,  4 Sep 2026 12:18:31 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 2B03360D66
+ id TBd0TwmtZIeH; Fri,  4 Sep 2026 12:18:33 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 6E05160D8A
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1788524311;
-	b=k+2t0zma8fmGQaapWsHSxJGX1dO5hsve7lOvlp8bd/Bax+A0VnVb2wXHbKmJdl2JYhbV
-	 EWvBgk6Z+Rpp7/aDoTam5jrzg9Q3nCSoMdueHIPJSfsrmoRl4opjc8zJTeF1zoSdmTyPW
-	 I8NEkCLlrtVIs87Pl/idy93Qgrz3lCsxjpc7zXFugfZ0mtXIh6fF7f5DyCgWPAwjuuhCN
-	 lCDik4H1Q4pe6Y0F9Tx4H98zYRfdo/3r+SArs9tBrKtjszbkb2a35KU6oUjmWifUyljWc
-	 SAOj+rTeEG/hySPM0T9mADfmCLCSQzwUqRJNqwPW1CFNbvD7ip6lhkKf9how60I4sUw==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1788524313;
+	b=O0VtBmAPtmr4TaOdJZeS1fw+mhjHxRkLfaAw0zYGEl04u+01CKW5Of98rzinnaLoRtDL
+	 F0sCZpgm0AQ/qPlNmcPyLPd3OhXF9vZFVjVyw7CGaPT6V5Iv51hQAxKFFRINUWYz906Ht
+	 ovGhWaIVXIlvfr4PQqPUF+ZaetgrQCtSecOOQIMCgmWzFvYQIE0nx0Y2U+kuPd9gMP4Zj
+	 VMgj4UvjdIARUYSz6/C4VQdgunOB0cTegDi33jwafNYB2RggtU/o6C1w2sXLLgCXUDtqk
+	 udMm2p2yM085eLd5BpHwwiE0a/uJJEHWDoScpyB4JmPNIYbxtbyVWt71/PQsZHn+DEw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1788524311;
+	c=relaxed/relaxed; t=1788524313;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 Received:To:Cc:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
-	 Reply-To:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=JSgZHAQyQc/Wuf/MfK/etecH2pA7qRfR/nmI0+4NLSA=;
-	b=Lh1/V4SR3tQPoIj/6h8G6dYzG2+ZKtXGjjatKag7vJZEuNLLl+pNsw09BROdgnbvUri2
-	 DtMF8kQCVEVCC6TAiZa6zvHkNt3EboiblG6QVaPgIZ7CPe0V/M933wsisXl5oE9MNB442
-	 dp4dXW5TxYriQspLWJP8VbatUpx2jM9a0fHK42cSFBGUvUKsVTZUi3+xwrABM/Ql2JNMK
-	 +CYyAzCUeNBc8exVcRhyFcTJdcKs/SvNQ0C30isto+gK8tqMD/j9xGq3ODLKa5bRTCT4E
-	 lDWPZGRCUK6VkdemG61xScGC9t02hoyvlmjKrnCfBStvx8VeT6SCVweT9ZZRwJIJlNA==
+	 X-Google-DKIM-Signature:X-Forwarded-Encrypted:X-Gm-Message-State:
+	 X-Gm-Gg:X-Received:Received:To:Cc:Date:Message-ID:X-Mailer:
+	 In-Reply-To:References:MIME-Version:Subject:X-BeenThere:
+	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:Content-Type:
+	 Content-Transfer-Encoding:Errors-To:Sender;
+	bh=GYXwz5bagsdWOd1CZkmjUa9H4FeKJwnRdqFON9qzwVw=;
+	b=ZtjmB/cguIZmmm7xEI/DzFlSCte2VTMrTBzbHSEJTH8juq4pVfOKFIpFER8GnPjsp7Lj
+	 TbK6qsYx+bAfEmJAgkFxzp3JLxF9DBvaQKymJdj73cJYu5zwKeMm3t04tV9dacjelvrvM
+	 XQjpC0F4Qe1NeLt5DEbfZ2F2sbFZM7O3zXcSglfXcqDeNx903yw+uZgEYjQtZk5aFB07t
+	 F5IwmLEKKdxHNm5qt2l5P7pggd/kjruvL8bEfCH9iakQJK5LDXlb1ldFOCeh/ZFucyzFi
+	 JreImpKS6CoKsdtZW0ISt7D0KA2kGVYjCbQ8H0Oi8DBYRHlBQfcVx0gW7TxtCsmq9nA==
 ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1788524311;
-	bh=JSgZHAQyQc/Wuf/MfK/etecH2pA7qRfR/nmI0+4NLSA=;
+	s=default; t=1788524313;
+	bh=GYXwz5bagsdWOd1CZkmjUa9H4FeKJwnRdqFON9qzwVw=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=i7VWKrZfUBXrByYnPgLDsJn3RGyc9HftBxAJSBApDiHZhWWJifSBQMS7WnOeHKLMc
-	 EP/tgdYwRjUMYIxfhjHxaUWJnuECfwOUwADNfjzGf6KL35ukyUWAkhFPOeQNbXsPXT
-	 J0ckIBPmV/NYeKUD1/KYOULrRItKVaTSF0BGjyYn2eMZgFYkNGvHhssbPrup2MougW
-	 QLeUU70oYKz3LLxPTNzmGmNAm7Vz3gSq4a/GHgN5W7Ig0t5LLRSLgwMk9VcrZS2XYk
-	 pEl4VojBQ8bBFo0I5MhTSIgzWPbXFYI833Ev0Nyx21e1uUCuIWogj2cZaJJgrkE/Zh
-	 nGLUtf6+Gt8qQ==
+	b=cFg38zyvldSV/mfGjv8TyZVnPHM4jdTe6CXbQGFr+6qyQoEq6ox4qiRIAslRPXvUW
+	 dESBrSmNBGWrnBbN230d1H/qR4fJP8OtjUEobM9W6mB+6n393O3zbEua8Shpya3JcT
+	 GfKBFXXhbQa3GBzLC1PBTLOnwkhFzyjQXcTNJG8PN4O1TUl+kRbkgu8hDSAumqgLG6
+	 gAqQ2fOW2ZzGJR6xqeXzU86+kvAfnxYp6NifGz4GfA41171Xq8hYyTjIWvGAMZOkBk
+	 wlRiOP7KBUbKrq/7gFeKm23T4MXD5nyx34EHl/GU4Pol7b34pK/v9C9T5lx3fi9iuE
+	 wic8qvfg9pIMA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2B03360D66;
-	Fri,  4 Sep 2026 12:18:31 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 09A8310E
- for <buildroot@buildroot.org>; Fri,  4 Sep 2026 12:18:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6E05160D8A;
+	Fri,  4 Sep 2026 12:18:33 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 374ABF14
+ for <buildroot@buildroot.org>; Fri,  4 Sep 2026 12:18:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F023440B87
- for <buildroot@buildroot.org>; Fri,  4 Sep 2026 12:18:26 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id F050D80F20
+ for <buildroot@buildroot.org>; Fri,  4 Sep 2026 12:18:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PCrrwU71ggI6 for <buildroot@buildroot.org>;
- Fri,  4 Sep 2026 12:18:26 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org D216D40B7F
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1788524306;
- b=SpmEEkCZTYZD+Llk0R5RqlZFGfzD41Iu88pXChpXHRDmkXX9jIC9th62hga9BUym78uP
- WZ/SegvA8zYpeG5A4gtVVqq/Svc851sCWSg9iRI/4/jYfiJSrxpjBWuzOJJr5us4+eBgo
- U6i/Dmpsc/LActBo3Y/MghWpCt+L46TQ/lomqFm1faCeuC+qeEiiaIygF3X0yEUzzmY4V
- 6H1nMG3igf+tIpTVlfRYnnUHvyIvRb+GkpWUywHlF3bfILN4thdUdbyyLq6grR9dfDgaP
- guMffLh8QJqiawRtIffwplgtdUD2zdjX4W36uX4TmfotyKaDk7UPc76gjRQtLals2Vw==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Eqxyq3jCKCMq for <buildroot@buildroot.org>;
+ Fri,  4 Sep 2026 12:18:27 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org EBAD580F24
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1788524307;
+ b=R1pInz9mVCbBl55zg2U3cfIdeanmt4Oq3xIQ2ZCK2/cOipitrDdisVppM5ze/GEcGZwq
+ /kpql1ze7RA+mszDzbpf0WZIXER2LTsb1FaMDVjvsdhTWkYp6139JXcOgYp5RAJo0CjOt
+ pk7k4J8xyo3VBoJO9s98aREjnY26owj7QrMfennC4PVyAnhg/g5u4olEhV8YmIGukIUjy
+ ISlJPTVpVz/y8RLEA4Qt/Aqbpbh2dlIi+xR31jPk52fNO1G0W/yqb0KJza6Mv+QnyLEYQ
+ PKq9PZTewIOLCfnG8xP+nm02y6WMiJ+w1wPU8pvQoxA/k08boFcu5xyDQDFkRGJN2QA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1788524306;
+ c=relaxed/relaxed; t=1788524307;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
- X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
- Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
- Content-Transfer-Encoding;
- bh=2Sv9UBBrRO6J2gYysBPmqKtUD8H9isvYeb/WSpbv128=;
- b=ZzKyViCQy1FHr7HQNtIK+3LYXoBPf5QpPW0oDe6gsgK5Pgaeg6a44n3nNwYZdAfNW96r
- 012qlBOlFONrryj825S/8N05NlNLRvmUc98s1Vg1K4dd6Atb01SvAJK1rbnlh+qNoVuSI
- BZ70SvL47KEeaiEKGp8qC0Bkl01/dF5hQgSWi145/qvDmPMEi4q5AupCnJiy8ZLYsfUCd
- AJl2l3sztB7QWMBZ1aMZ/n24FZ1zPldTlJ7e/X92Nmcrnm/IlrgX9rjEyzAdVau684ZQ/
- OI8a4s8/JbCire1Fpak9giS1WDslRgCDlm90Q3jQnMbgWCj04z2B6WCHU6OzYNF6apA==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org;
+ X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+ From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+ MIME-Version:Content-Transfer-Encoding;
+ bh=eT3iBXtimU1NODtELbOQPJ6UROOMQ7Zpb9uC1wj8TzA=;
+ b=E6xr+0NJxB2wkKoaaahtiYTCE5wY7IsPGK6MbozjhkI6AizxfU3tubXQJaF+K/io6BbR
+ MGWK5WTzBGYGGWrPUBQS+c4XSI9VbOXdXisTFrlzYFL1uU0zNwJFSrTRFERK4kFyefBLK
+ yvV9NC3by2IHh4ag3smA5R7bcbhjeuWIj+Fdxtq0nL4lg3whx6f9nBC0VrgNBsB3i1uLv
+ wxKGm/GCbBQt6c1tiv2bGte8LO3BGzkr5/SxDbsdeQMu/IwnqDnBmUsSSQlnUmml7mhtH
+ YFnq304VjXftugFp3rcI5/MipgT0yDTGPqMG5h7w0FUg5+lzS1jDtRmC/g+1oKU0sNA==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org;
  dmarc=pass header.from=mind.be; 
  dkim=pass header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b="EWg/xeFt"; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::32c"
+ header.s=google header.b=gP9vQTmH; 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::32f"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
+ client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
- [IPv6:2a00:1450:4864:20::32c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D216D40B7F
- for <buildroot@buildroot.org>; Fri,  4 Sep 2026 12:18:25 +0000 (UTC)
-Received: by mail-wm1-x32c.google.com with SMTP id
- 5b1f17b1804b1-49b8ce9b733so7509475e9.1
- for <buildroot@buildroot.org>; Fri, 04 Sep 2026 05:18:25 -0700 (PDT)
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
+ [IPv6:2a00:1450:4864:20::32f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id EBAD580F24
+ for <buildroot@buildroot.org>; Fri,  4 Sep 2026 12:18:26 +0000 (UTC)
+Received: by mail-wm1-x32f.google.com with SMTP id
+ 5b1f17b1804b1-49b8687630fso8694095e9.3
+ for <buildroot@buildroot.org>; Fri, 04 Sep 2026 05:18:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1788524303; x=1789129103;
+ d=1e100.net; s=20251104; t=1788524304; x=1789129104;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=2Sv9UBBrRO6J2gYysBPmqKtUD8H9isvYeb/WSpbv128=;
- b=qWiQiYpKIiVuGZwcxR4z7/rIq2ugQFfsJaS4nwpVqNI1RHm/BcXNPz/p0+bnujjdXi
- OP7c4B2qE7wW2DdJfp7J6+oD5ojCA6JCUDK8g43muOphswSLBf8T80y20Z8QQt5ghYJw
- AsC6sx/gt3oTYUgMqt71khW00lkAAd8afh8YX8GdFDx9vvV4dl6i0dBrG7rnk9WvQn0K
- aSTNLivl90SGVQ6PIbqnrWkJrQKkV1I7m91wbQOwjMtKMKdmnqUH29geiOgebmbCrwHT
- o9dKdu+ZX5mQkbvoLToTEryK/+7o7yUKf/z74Iu0CWqASmPWOfYtz+BgAHMwYcX1JWk9
- vfyQ==
-X-Gm-Message-State: AFuF++lm65g9u4M9lo9acPOeCkrZiWexe9iIXEADGhbfTMDYW7I5fSUc
- 8oPyFpTx7olnrstptvHcJvBAPZ8sEf9VHaPGYMaqycblOndhPs8eWR3KS7MmzFp3RtZA1JXjVWk
- hafB0
-X-Gm-Gg: AYBFou2xYVcFJjuynRsVGEOqsx5HNxhvqUS4qoSrnkcyYEM+wHILigJGLi1hO8EhqYB
- 1a9M9xoMeMdrV/IXrAMMsYmoP8Mhhllb8Icje9b69yIQW7zRNIKPN+MWs8TUlnQVab8Vjb93Dsd
- IAxqJ982ofLznb+pJ3B0jco2IQ2ifsUZ5UAqmvKGJC1VZAKui+lTtcMbcAaU49pfECzK4/4BkSw
- k57gezXnn3OXR9JOchdGrm2ECSOLNCDMl30B3kUSD0E1/SbIacgWqp+1E0+dwz4EjJyagcCcJV9
- kORwh5STZgk0kFJzeDFmS8Gemh1eQc0deoJ4FfKFVTQtbGFzGYAPq/adbg9yzn2Hi4EGS6AYHNT
- /Y066dGGktvOtnV3oPlnvS2xvTin8Z0x6xrHvYiEw6JwURB/Xs+og49+uMQCULO5OlqO8tyDsCP
- bFoo/KthfzP/IzQmyOMcigILui5SRvjIBaEmieFklQcPNDpRoafPqiN97tYBv4Xl13Wcc=
-X-Received: by 2002:a05:600c:6095:b0:493:f5bf:4dc6 with SMTP id
- 5b1f17b1804b1-49cf81ff697mr46611955e9.7.1788524303085; 
- Fri, 04 Sep 2026 05:18:23 -0700 (PDT)
+ bh=eT3iBXtimU1NODtELbOQPJ6UROOMQ7Zpb9uC1wj8TzA=;
+ b=Q0XWWtXffbQjLd8H/QePdT2LeWf2q3Th3UC61KCzi2+A/euOftW1nkr+8sCGbQ7Vz4
+ Q1iR3z2MMBlxRvX4dJ5vsRDn3+0kzJhuMoiXAO+sFPR6Gy5ba5zOZbi/U327BDYLzez+
+ a8wY6kq4V7a1OQnHIUFXAgZuBQDPsNloCquZMzP2uL474vpVV7corWvufT2HuaXvq+Q6
+ keZFY4oVF2rfovcyCfZI93gn5rtZJMecTJWtPqIk9vWNo0OAmP7rAWXMuZPEFobe0qNS
+ s3zIzHMh7M1e0nSfbaflJ9qKU5lMULW7bQxtA8p0cH5dtsElGGsV49lAHoWAHj1elIeO
+ fgSw==
+X-Forwarded-Encrypted: i=1;
+ AKwUvBxDV6aAwBubUhT2H28yBjngSHLcYwOngy+IZ4ZLZsdN9cV8d32WNIfNJO/VNYwrxJn8f1Mh69NtdXg=@buildroot.org
+X-Gm-Message-State: AFuF++mnVVJtyUBYWmyb+2L1cVSh2TyMZY3IO3SWHtidwSwohUxOL2En
+ 6St44Lom+J6PwwGOka8fOZ6QQTln3pMGUMcHO9S/GNNHvtVEr/pifD6oJoYb9BCon5qgw4T7LP6
+ 4MDin
+X-Gm-Gg: AYBFou3DPs/AckfKiJQPQ/XLOWHfPTb49+f+OjMhLQHsM9FQndXk3Sw3GYAir74yBVQ
+ NkzIvLl+ozhMM1ZOGVs5D4owADUOyKRtvcrUd7gvMRPlfTRUouI8bVcFz11KH4KUF4fBT5NxFDI
+ eNHF4OpPyRdjSpRz2HPxsO/cYLIESwrZqVHVUIWrjhYIvPYyXvY/H2gsO+xNDYaGtiowPMyI7j/
+ peepev8vdzJP3D4zlfCaCtIuob/M7zPkU/MOZ4VVx4olrP2s3uDLUQK/FlWapNxV9aAq/GgZbjG
+ RiwkI1GvuIu/fHl9Hh2uMxpaBeQOAAI+Qo2jJGh1Q9zV5cODtMBc3s34yaeLSaMOgP807rhyIKf
+ KS+QvhZJVztdCCBfenurtPnjdqEpalW1Hf3qJrX+FZvdjl6l6LlbqtBmwOUIz/OaKOcknXLuEpI
+ EPUuUdZXUMha21Lh4O6qjlscd2JSEGBEV0TTN23VatFjFzyZ00V/+jFw==
+X-Received: by 2002:a05:600c:474c:b0:49c:f4e1:4c2d with SMTP id
+ 5b1f17b1804b1-49cf828cd70mr50803925e9.16.1788524304457; 
+ Fri, 04 Sep 2026 05:18:24 -0700 (PDT)
 Received: from arch ([213.219.153.196]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-49ce5941cb4sm88671395e9.4.2026.09.04.05.18.22
+ ffacd0b85a97d-485883a9b49sm5187072f8f.17.2026.09.04.05.18.23
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 04 Sep 2026 05:18:22 -0700 (PDT)
-To: Thomas Perale <thomas.perale@mind.be>
-Cc: buildroot@buildroot.org
-Date: Fri,  4 Sep 2026 14:18:22 +0200
-Message-ID: <20260904121822.405041-1-thomas.perale@mind.be>
+ Fri, 04 Sep 2026 05:18:23 -0700 (PDT)
+To: Julien Olivain <ju.o@free.fr>
+Cc: Thomas Perale <thomas.perale@mind.be>,
+	buildroot@buildroot.org
+Date: Fri,  4 Sep 2026 14:18:23 +0200
+Message-ID: <20260904121823.405189-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260811120530.130487-1-thomas.perale@mind.be>
-References: <20260811120530.130487-1-thomas.perale@mind.be>
+In-Reply-To: <20260815130430.1016271-1-ju.o@free.fr>
+References: <20260815130430.1016271-1-ju.o@free.fr>
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v3] docs/manual: update 'releases' to
- reflect LTS changes
+Subject: Re: [Buildroot] [PATCH 1/1] support/testing: fs: new cramfs runtime
+ test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -157,58 +161,89 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> With the release of 2025.02, LTS releases are now made every two years
-> with a 3-year support.
-> 
-> This reflect the table showed at https://lts.buildroot.org/#releases.
-> 
-> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
 
 Applied to 2025.02.x & 2026.05.x. Thanks
 
 > ---
-> v1 --> v2: Took the suggestion from https://lore.kernel.org/r/<a00e615b-c2b2-42d9-b525-8852fc0d74a4@grenoble.cnrs.fr>
-> v2 --> v3: Took the suggestion from https://lore.kernel.org/r/<393511ee-1b43-4e3c-bc64-e71c1d900c0a@gmx.de> . All the releases are stable and divided in two categories: LTS & non-LTS. Also updated the lts website page to reflect those changes.
+> Patch tested in:
+> https://gitlab.com/jolivain/buildroot/-/jobs/15915576004
 > ---
->  docs/manual/release-engineering.adoc | 22 ++++++++++++----------
->  1 file changed, 12 insertions(+), 10 deletions(-)
+>  DEVELOPERS                                    |  2 +
+>  support/testing/tests/fs/test_cramfs.py       | 42 +++++++++++++++++++
+>  .../fs/test_cramfs/linux-cramfs.fragment      |  1 +
+>  3 files changed, 45 insertions(+)
+>  create mode 100644 support/testing/tests/fs/test_cramfs.py
+>  create mode 100644 support/testing/tests/fs/test_cramfs/linux-cramfs.fragment
 > 
-> diff --git a/docs/manual/release-engineering.adoc b/docs/manual/release-engineering.adoc
-> index 0cf38183f9..cbd310d682 100644
-> --- a/docs/manual/release-engineering.adoc
-> +++ b/docs/manual/release-engineering.adoc
-> @@ -5,19 +5,21 @@
->  == Release Engineering
->  === Releases
->  
-> -The Buildroot project makes quarterly releases with monthly bugfix
-> -releases.  The first release of each year is a long term support
-> -release, LTS.
-> +The Buildroot project makes quarterly stable releases with monthly bugfix
-> +releases. Starting with 2025.02, the first release of every odd-numbered year
-> +is a long-term support (LTS) release supported for three years.
->  
-> - - Quarterly releases: 2020.02, 2020.05, 2020.08, and 2020.11
-> - - Bugfix releases: 2020.02.1, 2020.02.2, ...
-> - - LTS releases: 2020.02, 2021.02, ...
-> + - LTS releases: 2025.02, 2027.02, 2029.02 ...
-> + - Non-LTS releases: 2025.05, 2025.08, 2025.11, 2026.02, ...
-> + - Bugfix releases: 2025.02.1, 2025.02.2, ...
->  
-> -Releases are supported until the first bugfix release of the next
-> -release, e.g., 2020.05.x is EOL when 2020.08.1 is released.
-> +LTS releases are supported for three years, with a one-year overlap with the
-> +next LTS release, e.g., 2025.02.x is EOL when 2028.02 is released.
->  
-> -LTS releases are supported until the first bugfix release of the next
-> -LTS, e.g., 2020.02.x is supported until 2021.02.1 is released.
-> +Non-LTS releases are supported until the next release, e.g., 2025.05.x is EOL
-> +when 2025.08 is released.
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 4460523447..586407a200 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -1856,6 +1856,8 @@ F:	support/testing/tests/boot/test_optee_os.py
+>  F:	support/testing/tests/boot/test_optee_os/
+>  F:	support/testing/tests/fs/test_btrfs.py
+>  F:	support/testing/tests/fs/test_btrfs/
+> +F:	support/testing/tests/fs/test_cramfs.py
+> +F:	support/testing/tests/fs/test_cramfs/
+>  F:	support/testing/tests/fs/test_erofs.py
+>  F:	support/testing/tests/fs/test_erofs/
+>  F:	support/testing/tests/fs/test_xfs.py
+> diff --git a/support/testing/tests/fs/test_cramfs.py b/support/testing/tests/fs/test_cramfs.py
+> new file mode 100644
+> index 0000000000..8beb27f4ab
+> --- /dev/null
+> +++ b/support/testing/tests/fs/test_cramfs.py
+> @@ -0,0 +1,42 @@
+> +import os
 > +
-> +See the table at https://lts.buildroot.org/#releases[lts.buildroot.org].
->  
->  === Development
->  
+> +import infra.basetest
+> +
+> +
+> +class TestCramfs(infra.basetest.BRTest):
+> +    kern_frag = \
+> +        infra.filepath("tests/fs/test_cramfs/linux-cramfs.fragment")
+> +    config = \
+> +        f"""
+> +        BR2_aarch64=y
+> +        BR2_TOOLCHAIN_EXTERNAL=y
+> +        BR2_LINUX_KERNEL=y
+> +        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> +        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.44"
+> +        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+> +        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
+> +        BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{kern_frag}"
+> +        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+> +        BR2_PACKAGE_CRAMFS=y
+> +        BR2_TARGET_ROOTFS_CRAMFS=y
+> +        # BR2_TARGET_ROOTFS_TAR is not set
+> +        """
+> +
+> +    def test_run(self):
+> +        disk = os.path.join(self.builddir, "images", "rootfs.cramfs")
+> +        kern = os.path.join(self.builddir, "images", "Image")
+> +        bootargs = ["root=/dev/vda"]
+> +        qemu_opts = ["-M", "virt", "-cpu", "cortex-a57", "-m", "512M",
+> +                     "-drive", f"file={disk},if=virtio,format=raw"]
+> +        self.emulator.boot(arch="aarch64",
+> +                           kernel=kern,
+> +                           kernel_cmdline=bootargs,
+> +                           options=qemu_opts)
+> +        self.emulator.login()
+> +
+> +        # We check our root filesystem is in cramfs format.
+> +        cmd = "mount | grep '/dev/root on / type cramfs'"
+> +        self.assertRunOk(cmd)
+> +
+> +        # We run cramfsck on the filesystem.
+> +        self.assertRunOk("cramfsck -v /dev/vda")
+> diff --git a/support/testing/tests/fs/test_cramfs/linux-cramfs.fragment b/support/testing/tests/fs/test_cramfs/linux-cramfs.fragment
+> new file mode 100644
+> index 0000000000..91bc54bed3
+> --- /dev/null
+> +++ b/support/testing/tests/fs/test_cramfs/linux-cramfs.fragment
+> @@ -0,0 +1 @@
+> +CONFIG_CRAMFS=y
 > -- 
 > 2.55.0
 > 
