@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43B5AC61DD6
-	for <buildroot@archiver.kernel.org>; Fri,  4 Sep 2026 12:17:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD748C79F85
+	for <buildroot@archiver.kernel.org>; Fri,  4 Sep 2026 12:17:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0B55760C06;
-	Fri,  4 Sep 2026 12:17:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 834C160D7E;
+	Fri,  4 Sep 2026 12:17:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IaPF3VvH8Ur6; Fri,  4 Sep 2026 12:17:43 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 988F660D59
+ id CDDC33EwoJu0; Fri,  4 Sep 2026 12:17:47 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 7526260D5E
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1788524262;
-	b=tE95jzG9lBu/3+x6RtraUkdkbjucyDf4yDhrxpOTTRxUw+hlSriDfg838VhK6Je6+iej
-	 tGr/D63esQAKVucX28avY2nk6lRmW1ms10wDhs+5t5UC9d6W0Rxv/55VvE7+ip7VzRbvT
-	 HOUPV4AwNMblo5PH/q4JmmdGDCzYrOT/nqj0AiX+VFbe7qIIFunzyPQRGib4tLhG1fgT1
-	 p0hzbmoGMSZyWmznIHxPcJnFI43VRP5S26hVA7xJQREuIXGDf4DwR8u1t3/dzwlLVPLXF
-	 QHWItRMaUokyHVSNMnIBPhxk2+Xba2ox/yPu/zXmI7QuBKHQyZY3N0SVHeorfj2b3Tg==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1788524267;
+	b=Aatha9LKrkATmr5mY4NQVTo3sH7J6DCMXWO88VAvDNzNgTr6iyeE9Hs2OD0SzAM1rMVx
+	 S8/QyiDC1DezccCmzHHDh/pYXRODIwDZbcWB3mR3JkIluRHwQM3N9w9gmznUzFW5Nmz3Z
+	 vvAhazbIDLwaUzJBRxXM+S4yCX0/GlgdIEiN7XLCWte8OvdQnSMKhWUy7isoNNTPUKwkh
+	 WtruwOVBaY3YXLvnBeJBNZ48Lz5DfBc38U7UE5q1zXXnAGgQ8gAH89pBDEC34v82nZ5VW
+	 FwsQeUh6kNunXTABbNSGRLI7wczdtm1cgXtfVhU0DKmCbDu+uWTmbUpqif2wWBJZhsg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1788524262;
+	c=relaxed/relaxed; t=1788524267;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -32,114 +32,114 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From:Reply-To:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=Cl/8e8GUS5kxc2+5zsfkyE+XoKpgisIFqqZNPQDQDmo=;
-	b=JickdhT9e+zVCzbhVCtIlRMsUlPxtHsaivkRNEVLxEz6Vj+lym/Hu44HQ0zl43OtWu7W
-	 BQ0PIb0JaOP4BYEBMOU+CvbUGcQfs3wTIvDX2MfRSFAZT1KK/UiVy8i2v6gcu4QWYlEE6
-	 Bhdjd7CVJe9YrrcqlzSkJ+ZmqF0DqpCevL0gcjQ/seIkgTl+ODcA5u08SooVk8GuCANV3
-	 u/W5SXJm/ksMmR84ns3POhQPaGBEW5fLGqkjG5IW5/YIcS4qkp5JIC/wXf3ltepicT/hQ
-	 kKtUD8QeFLQHD/x6SXBG4WO7e1A30dtiY3I8vnG8lGqrEU0IXvkqjj/9LJSfCPoltlQ==
+	bh=8RJitlBmCyOuwKm//283LirQei3uYDnDtxpwe35jy9U=;
+	b=T9MygaeI3TBTrSnnFN7uGhTG4B7wEvPtCHMN93qXj1rb2nNVYtHDY/EL++ggpYMwD42O
+	 r7QyOc6oieTvnRpxtLNPVf9mZajRwA1dV3Lsm893T2b6La2STPPzPfommwhfLr9Mr0H2L
+	 GcNnfECqwJoHQMIO9xZIsxLmj0VQztto2zxhmgYI6NQZajJSEBCtLip2KHVxjRr3/E20Y
+	 NoYFVsGKEZrVuO78IKmb4JgomqtaeEBXnv2Oa0nyVAJegcs1eoqbB2iGWH4T5qaerMu/N
+	 bu9wgbQJl5vD1sDCGTxd4y43WQgM243Rfxik85M4I9PCQcUr3tCVSP7NbNTu1B5EdCw==
 ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1788524262;
-	bh=Cl/8e8GUS5kxc2+5zsfkyE+XoKpgisIFqqZNPQDQDmo=;
+	s=default; t=1788524267;
+	bh=8RJitlBmCyOuwKm//283LirQei3uYDnDtxpwe35jy9U=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=qjF9XcZ6NPK7936ksakUqe+tB0iCeGkQdCoWzcYIm5dt8I1rdeZZH6YSeM1V4gvLV
-	 WRJjTBtMeB9/0RnfHGOlNcgy+hksG4MTLe3hAGalIRv8+ag2T1gV0b3M+SZSfQcwSb
-	 W3Qu94gfw1xMswSGOwn6i4nZ4Cw70Y3rxuSui4nrHm3jz6g0DVhWM1qu6iog+/YnXM
-	 vBMwGZ8GOCCxOkiYO5ofKU/4lmUQyxrl5aS/sRPPozcURytWuoQoTCcgUOVoCYxniX
-	 ciymyBKQ5D77BYqDzXs8+F/xNqrmRgqyxXXkMocoUKtXK7EYzHOtUvcilXTSQjDmNJ
-	 uXq+CdDfYUSng==
+	b=MBGAY1DgBvqCTNnm1kQwapscMIMVoXf3+6S3W6J5NbjNxp2aVmJMTlkpvA02OR3Zn
+	 69ZtysiOTWmgRofVipNJq4EUv7TCYysUmV27YaBihiEyET6wwJATmjKznFwD7xrecB
+	 QKx2QwvDQBd1j1E0dZtDW/89A1M7f9bNMzS1peyLYW1jg8KCpwxvHz5N9B7tSP+ujd
+	 Lg2JdNCXIUWOPjxJ6j7yAT286JzBUXoh3ZZ7sESdgwkSkxqIOHJ9kdq9QFny3bpPZa
+	 wo/YF43qqcVJhApxoqopLIMNHCKmZrwA9HTvUb6SO+SspVRSmDwsgl2TUe1SeVpScG
+	 NzdLNq0DbdENw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 988F660D59;
-	Fri,  4 Sep 2026 12:17:42 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 6193A10E
- for <buildroot@buildroot.org>; Fri,  4 Sep 2026 12:17:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7526260D5E;
+	Fri,  4 Sep 2026 12:17:47 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 06CEC10E
+ for <buildroot@buildroot.org>; Fri,  4 Sep 2026 12:17:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 45A2C60D4D
- for <buildroot@buildroot.org>; Fri,  4 Sep 2026 12:17:39 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E161B40B7F
+ for <buildroot@buildroot.org>; Fri,  4 Sep 2026 12:17:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iMNvM07LSRcp for <buildroot@buildroot.org>;
- Fri,  4 Sep 2026 12:17:38 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org E9A0F60C26
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1788524258;
- b=LHvOISDLs9D8ipf4/nuY9udWQ4mQ/ae1JCcKzo2bCEMjV+8mHORQXsNvKXwzkcVDQjj1
- ZTjGOHv0gx9TiYZpF/d7cVkvvqDGK3dDLHfuVltG34xYnOXD5ZcM872DuYpNN6BZ4jqvH
- C7Oj/cGLlQ8nHwLuHA1hgxkvdBftMOIbUUPPhxi2sFCrBT+Z3vV6BwgS5z9gMwGRWLwie
- q2AHCGQJJ7HnnasymUEUToJ2ZfdyW45Xyu58AvDUksMm9rMw4T8G98yKQKYk4Vl2yOWML
- LpienGZ4I7xnfU/o2YnDKKRnFds6IXal4GU1RiG5AbT3AUxBdA9heSEoUaTCC+oqEOA==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WNB-5T-cPlJr for <buildroot@buildroot.org>;
+ Fri,  4 Sep 2026 12:17:44 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org CC8F040B2E
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1788524264;
+ b=agDgX9Fj+QMlMQPWi+nugQmj80lh9e+wv9ONuu+/i88lUVAAm9+GAQ7hWD/Yq8W17BDy
+ 7y2SMBpjN3UQ8Opj17MeR0kwSkzgbjMB73c0guh+2u3oUjbUBrIRcehY3diHok7r9Mw3A
+ yfTW1D3GHT2kVTQ7iVJWse4KfCxeGEMZo6FEyT0qk//BWuNHyeBbVvekA4I7YjfvjUKt1
+ KFssqjuEwN+QhE6v2I/3f55m3DKmE98x8t6rELctXO/kIFnlOufVQ53gNgqmSG40IT4ns
+ n8w85K0QPGC+YxtXz/0wSdVp4IUfObbALM1nnRCp7oJofrhj8Tu6DSqnbnVNyiQS0Cg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1788524258;
+ c=relaxed/relaxed; t=1788524264;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
  X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
  From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
  MIME-Version:Content-Transfer-Encoding;
- bh=xZteV3qPKLvGjwHe8aVQHEiIpc7o3SxiChjcE32YeAk=;
- b=pUcwA0uoV7UhpYrnk857XU1w0fpYWVhg3hmSz2cDRR+azlrc4l3xxzIEdX461Z0tEiDr
- ZLumiND7HU1tvuvVnH26LLpge9xXZ2JgoGfGuy8gmLg6hv1siHYJKqPT03wrdX3jr66vp
- qf7wh3jtOHNmmlVJD5U0GmCUkOKiuIThgBLyRtf3j7iXiCJhQYLcMm5T6PVIdxDZawaqX
- w5I8uwaR5jcGweETrsxVJzdB6dzDspjNIr0WUSGvQFuQw1GkhE0dJk9IeZtY/651pAlkB
- s/7ArTN3rtMg6+vLfPFkbOYfE1teVE4N9kmNzcdtLPlvqRDPna+2z7PQ3hM8ZIMBwRQ==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org;
+ bh=C5BfXnPdKmm8kfY6HKxmQWO9Qa4tBKii9GEfdAvhzgo=;
+ b=rT0ZnwZCDd2RZ3o3TcjfbPXttdSsdLurnqtIb4whTbpY77GyxStBzX4NasIwMFDuj6e9
+ Bjeqy2XDCWXDL7wu0WBEoDxykDCqmHm9wW41ZSMvFTDFky+KLT2LStBoukWypW6ppYwta
+ HTorp4P2OnExbx7GwDhx1+WgyrjxC3HMxuAo4tXY5jX6lnESboyNfYBQD+NI9cawCsxju
+ EmGBi3nrt5N6ejeLOfGwrMzD9dtBDhG9JlluqjgxlHZOIH7SGpOGUsmZCHJGyJxydvhrm
+ tqxw2yDnfwtRTYvrwjVAe1W8ugya+mXqdqzuhJL7rYD3a43Ykg8kxSknD6D1ED6HRfw==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org;
  dmarc=pass header.from=mind.be; 
  dkim=pass header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=R3CL0+81; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::334"
+ header.s=google header.b=gxCqSjdw; 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::32e"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::334; helo=mail-wm1-x334.google.com;
+ client-ip=2a00:1450:4864:20::32e; helo=mail-wm1-x32e.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
- [IPv6:2a00:1450:4864:20::334])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E9A0F60C26
- for <buildroot@buildroot.org>; Fri,  4 Sep 2026 12:17:37 +0000 (UTC)
-Received: by mail-wm1-x334.google.com with SMTP id
- 5b1f17b1804b1-49cf4f81d86so6774245e9.2
- for <buildroot@buildroot.org>; Fri, 04 Sep 2026 05:17:37 -0700 (PDT)
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
+ [IPv6:2a00:1450:4864:20::32e])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id CC8F040B2E
+ for <buildroot@buildroot.org>; Fri,  4 Sep 2026 12:17:39 +0000 (UTC)
+Received: by mail-wm1-x32e.google.com with SMTP id
+ 5b1f17b1804b1-49b8be0409fso6537335e9.2
+ for <buildroot@buildroot.org>; Fri, 04 Sep 2026 05:17:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1788524255; x=1789129055;
+ d=1e100.net; s=20251104; t=1788524258; x=1789129058;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=xZteV3qPKLvGjwHe8aVQHEiIpc7o3SxiChjcE32YeAk=;
- b=CttnUy1MgZKji63Y/BhI4PP2izbN6COqmx814LXMPD6j4BR9k6vHp2d58zfSece12j
- 7YQB4VhcK3/XB8Ihzzn6xjmKl8HARNo7sgtkfGMv4aAsDHrNGlKZIs8TQBZL7ekzev78
- P2pHLLpQDmw/VIe4+apXD8R4hQQDZPHsVJS6fTugpHOkdUiTl/PQfP8Z9c/O5MNiKMRc
- xxWpPig+cTdXsZCW4llsU+GfIK6ZhNxO8IXjhzgCdK6QtAJAvzzvTN0AKsdXbF9td1RP
- 4KO7wYkbFz5JwyX06QjGwW5GtXu4xg4gvd2vnIqJz8LWBLHWLlkDXUQbqYf7h+2aAf/8
- YNmg==
+ bh=C5BfXnPdKmm8kfY6HKxmQWO9Qa4tBKii9GEfdAvhzgo=;
+ b=D5soN1VeKSxDP049t7jOXcuoC6VlJgsn2s2VgSxOC3UtvuF4pL02hljASK++qvMDAd
+ OhuoxWRd3JipC36xET8Q5eDadfUMzgTJpkLSu+wJUte7OhF8c8UF/WwllZQaW5BZ8iGx
+ Fr6tHN7ipGKy/yp444VJWeCW/LXza5dqlCGMzMRS1oc10YKC34Z18Vcz5V1WRUBParfD
+ PU+cIAWBO9yQaCAqeP/kkiYnNFY+HBqSKkV9FdJ+QXdV0wkLbjK6Kq0i1KUINONBUpPa
+ nq+EFrZAqpAvfcv0rNisA2flZmGgTy3YpMq5voTU3cjaHbWkdC1EzlRoLHg5ndKEeUNq
+ cqDw==
 X-Forwarded-Encrypted: i=1;
- AKwUvBywZFUp4mHqVDZ0k3jrSd1zNyh0Ly98+ASjgOjwcP77YidqkO3gAA8afrgZyBZPoT9Ip/FAgzWA3C0=@buildroot.org
-X-Gm-Message-State: AFuF++nv+rSw4cYi+5+OAWqrhCFvir8gbowxPZ6lun+SNESRGRM8ZfSl
- G7hbntz3ae1MJQdcGAsun1C469t3b6lY3mzel8yN6OoNOF5GFwagkEJZxoyMzZIKDfw=
-X-Gm-Gg: AYBFou0xqAHt3Ls3YZb4W/tS2w+ooqzk4jSIwkaJ6pqMkTepzVg8YlCKsblNxaQLrdr
- vg2ff6XC6j3nJL0hx3eMg2InJAIW/ccVoSM/2ByQBl5t2YEJ65znN6GaWuXgilQ+AYxt58WnBlU
- +CvHJK9lvWAK/3kxMfXJKyZ/ypF36r2CePoHcM0zILxlY8WpyoppTowA8ds14lFsR1tJdpP6cdU
- 69ihGSyd8fb/x5qIQpk+v5B0BSBrh89EP8YlzFlEDFzKoZ189xUsUX4BVxZF2wmLE33N8cmFqTC
- 5bYp7VxvnMDiLWh9W1njrjyZh6KhA8CI0JdmPPOWdBdsXleerGB54aFm+hTg/zs8d5Ykk7DwJva
- WuFRtCnknBYDWYBP8ZTcFk7CE1Q3VBGxN3StmySRGeXDzd1qqh2BMxErwLFymOZ2oxhmrpDPK/K
- /usbBTTeCCZgg7QwmF17TXAqyTybKqXdzWugkzE/M2kwgh72FHp1lssw==
-X-Received: by 2002:a05:600c:8b04:b0:49c:fc6c:be11 with SMTP id
- 5b1f17b1804b1-49cfc6cc0c3mr26776485e9.23.1788524255262; 
- Fri, 04 Sep 2026 05:17:35 -0700 (PDT)
+ AKwUvBybuqDM3C7NIU6HKhnF43E1TFYzdYrOxWbxPyUNgBsCkEs1c+QVKI2OITNgDfElyUtZ8udCbyqdp1Y=@buildroot.org
+X-Gm-Message-State: AFuF++m9gNwElFr511Q9bm/6WX4DkEG3aKpooXv/qG75I5wGnkvAEzwk
+ Um59ZTU6CJ3aqMFhRec13e/XRh0VBqeoaYV8Z8FJ9mIxyDzUsOJvJGtwsO9nFXhuAqE=
+X-Gm-Gg: AYBFou1zdLttcgNpgw35VUAUR1eNa5FZeRfmyVmdF6Vs7/uBOBUO1pDzd4pTDdVz3s1
+ LdYobS3zPbBesOgL11VZNZmM+UjQbPzpFQxGiZGABfucU/KwOqzhe33gJH6cn1RztPLqZnUdgLt
+ KIXjDeuJs4xDRzRt/5u95qONQ1GIFDF5VCjoPBlyP9ZsKrUzGKRD6+9ruOjL+mKisaUZUTjNKfa
+ 4ZmPEfrbcdhJiO/ERZP+hjJEm+6WFhiWZXlkMWCFsof+YsSann9g9fHQwveJlRqd9iSil6QJI3b
+ ohZPxyxSzKaO+OE8B/miMtulMvMwDJqPA3b+nOIV1scvU5azayJyXPiBM8YLI+wvEvDNb11lMpT
+ xue6Vc1m+hQ67FR4jae1JGdCstucM3rhPatbpy8lMAWqVBvYkFgMeJNBMJ7fb/jOaBFgu/QVX5X
+ QXRxWY48cE6/ufCXxB/l/3gQIvlEpWziLKN3BM8wI8P0j5wJJ0rYDmjg==
+X-Received: by 2002:a05:600c:1991:b0:49b:2796:be30 with SMTP id
+ 5b1f17b1804b1-49cf824f7damr53463505e9.11.1788524257849; 
+ Fri, 04 Sep 2026 05:17:37 -0700 (PDT)
 Received: from arch ([213.219.153.196]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-48588394fa1sm6030009f8f.8.2026.09.04.05.17.34
+ 5b1f17b1804b1-49cee7fec25sm166571705e9.13.2026.09.04.05.17.37
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 04 Sep 2026 05:17:35 -0700 (PDT)
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ Fri, 04 Sep 2026 05:17:37 -0700 (PDT)
+To: Romain Naour <romain.naour@smile.fr>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri,  4 Sep 2026 14:17:34 +0200
-Message-ID: <20260904121734.403913-1-thomas.perale@mind.be>
+Date: Fri,  4 Sep 2026 14:17:36 +0200
+Message-ID: <20260904121736.404020-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260826163955.37127-1-thomas.petazzoni@bootlin.com>
-References: <20260826163955.37127-1-thomas.petazzoni@bootlin.com>
+In-Reply-To: <20260826210042.212245-1-romain.naour@smile.fr>
+References: <20260826210042.212245-1-romain.naour@smile.fr>
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/olsr: fix build with GCC >= 15
+Subject: Re: [Buildroot] [PATCH] package/qt6: fix c++ static_assert issue
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -159,60 +159,69 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> This commit introduces a patch, submitted upstream, that fixes the
-> build of OLSR with GCC >= 15.
+> Since the last qt6 version bump to 6.11.1 [1], the TestQuazipQt6 fail to
+> build due to a c++ static_assert issue.
+> 
+> Backport a patch from v6.11.2 release.
 > 
 > Fixes:
+> https://gitlab.com/buildroot.org/buildroot/-/jobs/16060153667 (TestQuazipQt6)
 > 
->   https://autobuild.buildroot.net/results/650edf74dec513ad540f80f4d3ef8c8222dfd711/
+> [1] https://github.com/qt/qtbase/commit/2983318421d623c6c9feff95ff947ca489f4313d
 > 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Signed-off-by: Romain Naour <romain.naour@smile.fr>
 
 Applied to 2026.05.x. Thanks
 
 > ---
->  ...es.h-fix-boolean-type-check-with-C23.patch | 35 +++++++++++++++++++
->  1 file changed, 35 insertions(+)
->  create mode 100644 package/olsr/0007-src-olsr_types.h-fix-boolean-type-check-with-C23.patch
+>  ...e.cpp-remove-is_always_lock_free-sta.patch | 41 +++++++++++++++++++
+>  1 file changed, 41 insertions(+)
+>  create mode 100644 package/qt6/qt6base/0001-qtestsupport_core.cpp-remove-is_always_lock_free-sta.patch
 > 
-> diff --git a/package/olsr/0007-src-olsr_types.h-fix-boolean-type-check-with-C23.patch b/package/olsr/0007-src-olsr_types.h-fix-boolean-type-check-with-C23.patch
+> diff --git a/package/qt6/qt6base/0001-qtestsupport_core.cpp-remove-is_always_lock_free-sta.patch b/package/qt6/qt6base/0001-qtestsupport_core.cpp-remove-is_always_lock_free-sta.patch
 > new file mode 100644
-> index 0000000000..dbb167fe96
+> index 0000000000..3347caa8da
 > --- /dev/null
-> +++ b/package/olsr/0007-src-olsr_types.h-fix-boolean-type-check-with-C23.patch
-> @@ -0,0 +1,35 @@
-> +From 6d7aab6d01ffa68f79b0b238d812a074051d94c4 Mon Sep 17 00:00:00 2001
-> +From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> +Date: Wed, 26 Aug 2026 00:00:00 +0000
-> +Subject: [PATCH] src/olsr_types.h: fix boolean type check with C23
+> +++ b/package/qt6/qt6base/0001-qtestsupport_core.cpp-remove-is_always_lock_free-sta.patch
+> @@ -0,0 +1,41 @@
+> +From 2983318421d623c6c9feff95ff947ca489f4313d Mon Sep 17 00:00:00 2001
+> +From: Mitch Curtis <mitch.curtis@qt.io>
+> +Date: Mon, 11 May 2026 08:41:08 +0800
+> +Subject: [PATCH] qtestsupport_core.cpp: remove is_always_lock_free
+> + static_assert
 > +
-> +GCC 15 defaults to GNU C23. In C23, bool, true and false are keywords,
-> +and <stdbool.h> no longer defines __bool_true_false_are_defined. Therefore
-> +the existing preprocessor check incorrectly rejects a valid C23 environment.
+> +This causes a build failure when cross-compiling Qt for MIPS32 targets
+> +(e.g. `mips-unknown-linux-musl`, `mipsel-unknown-linux-musl`).
 > +
-> +Keep the check for older C standards, where these identifiers must be
-> +provided as macros by <stdbool.h> or by the GNU C fallback.
+> +Amends 9b938823776865837901f29082301f5624ac2b04.
 > +
-> +Upstream: https://github.com/OLSR/olsrd/pull/139
-> +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> +Fixes: QTBUG-146670
+> +Change-Id: I170bd9f93c1ef809f56e5b36835e457bbbe8e16c
+> +Reviewed-by: Thiago Macieira <thiago.macieira@intel.com>
+> +Reviewed-by: Qt Cherry-pick Bot <cherrypick_bot@qt-project.org>
+> +
+> +Upstream: https://github.com/qt/qtbase/commit/2983318421d623c6c9feff95ff947ca489f4313d
+> +[Romain: backport to 6.11.1]
+> +Signed-off-by: Romain Naour <romain.naour@smile.fr>
 > +---
-> + src/olsr_types.h | 3 ++-
-> + 1 file changed, 2 insertions(+), 1 deletion(-)
+> + src/corelib/kernel/qtestsupport_core.cpp | 4 ----
+> + 1 file changed, 4 deletions(-)
 > +
-> +diff --git a/src/olsr_types.h b/src/olsr_types.h
-> +index 36d2b723..ce2a0559 100644
-> +--- a/src/olsr_types.h
-> ++++ b/src/olsr_types.h
-> +@@ -82,7 +82,8 @@ typedef signed int int32_t;
+> +diff --git a/src/corelib/kernel/qtestsupport_core.cpp b/src/corelib/kernel/qtestsupport_core.cpp
+> +index 9bbe1c18e84..5f28cedec68 100644
+> +--- a/src/corelib/kernel/qtestsupport_core.cpp
+> ++++ b/src/corelib/kernel/qtestsupport_core.cpp
+> +@@ -8,10 +8,6 @@
 > + 
-> + /* add some safe-gaurds */
-> + #ifndef _MSC_VER
-> +-#if !defined bool || !defined true || !defined false || !defined __bool_true_false_are_defined
-> ++#if (!defined __STDC_VERSION__ || __STDC_VERSION__ < 202311L) && \
-> ++    (!defined bool || !defined true || !defined false || !defined __bool_true_false_are_defined)
-> + #error You have no C99-like boolean types. Please extend src/olsr_type.h!
-> + #endif /* !defined bool || !defined true || !defined false || !defined __bool_true_false_are_defined */
-> + #endif /* _MSC_VER */
+> + using namespace std::chrono_literals;
+> + 
+> +-// Assert that this instantiation of std::atomic is always lock-free so we
+> +-// know that no code will execute on destruction.
+> +-static_assert(std::atomic<std::chrono::milliseconds>::is_always_lock_free);
+> +-
+> + QT_BEGIN_NAMESPACE
+> + 
+> + // ### Qt 7: reduce the default: QTBUG-138160
 > +-- 
 > +2.55.0
 > +
