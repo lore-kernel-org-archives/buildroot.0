@@ -4,144 +4,138 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A57CBC79F85
-	for <buildroot@archiver.kernel.org>; Fri,  4 Sep 2026 12:19:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E42DAC61DD6
+	for <buildroot@archiver.kernel.org>; Fri,  4 Sep 2026 12:19:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 64A3F60E30;
-	Fri,  4 Sep 2026 12:19:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B018560E20;
+	Fri,  4 Sep 2026 12:19:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LAVJpIRiTxgv; Fri,  4 Sep 2026 12:19:19 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org C08DB60E25
+ id RIG8ZjueD1LN; Fri,  4 Sep 2026 12:19:21 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 483B760E25
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1788524359;
-	b=GUaQ/rS7Vu6ivrsnwLDPi9WsqfE5fQPTtwRUcvpSZ/IRjgm6DcK3pPD9mnho2MgwH8QR
-	 WoOT1pnUfHpjcAgc863r1pwiknB1Xaegj+mqfA1lZzHIYixwpK8u1sYdHCTAxb4rsbXDM
-	 +NsF0uHhWGdyNo92nOuc2xYFcQWBb6yL/0Re9Ayw4wKmbDZCUR3LNuRG+zcV4uJmHBvgW
-	 jJbkPrAgOSbLH4sZ14BsahXONyCr4EE4gHj5UJSRtZBq4gJxzlsDELtqm6nuRJoEtxUrT
-	 BbMeZ3kIfVBVi8di7q+Kfnk9XLK7GNB6H4noNoJc2JGey2PWS/6UH8OMuZjrop6JuDg==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1788524361;
+	b=pzq8m09vaxoHCuuz2JBT9sn0IElqLTkiP838T6OeHOZ9HvyeQgSud+mE5j1EfUC62UZ6
+	 K5Kq36V7EAqx7HgeTuF6RolGIToVgiYGP/T+re9qQnR4jEW+9R9tOcMDWICAjGlZ9BB8K
+	 3tnPqduCODa+mhe75dShg8YhqA36brst9NFAZyApkTjqJLrSoczkj1HH829ARIIJnFSg2
+	 sYj3Opm66OXHfy6+rDrS3FzYZ//yt5FdwE4ssd2olm2xpD+bW/kDdNLmauMGwgOOrhLRs
+	 hBTgKYC3oNMEpDQTULLIwODAeG9cgKfY6k9WI4Mztkl+JzOA10MBaWaiP0jRi2mMVfQ==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1788524359;
+	c=relaxed/relaxed; t=1788524361;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 X-Google-DKIM-Signature:X-Forwarded-Encrypted:X-Gm-Message-State:
-	 X-Gm-Gg:X-Received:Received:To:Cc:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Subject:X-BeenThere:
-	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:Content-Type:
-	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=WotYMkVH+3hgFoE3mRqpqZyoT0askIqRgH1EX05FdU8=;
-	b=jMgOnsLoMQVvthuiEmq1g6kYF7ZFOjqJgb6MWb/XcKV6ewkmK170j2IjsK9zIc1lzhB1
-	 JXjRGt7LOtLzROAVLnEKgaKsRKEsOvK62Qr5M1VkZE8KMQ3XW/lBgnFpFEJfw4o/dQvaq
-	 CZ28KYpWDAZSvcFyn8t1kiGr1bBO9A3Mv21qCDALf/6OBkohvkVJrUMDKLRlh1A+qB/Uh
-	 7y62K6mkXekig1vh6dedIPJUkS/MRKenmioadHaVGgKTRYZscdolEGAbUCC9lUV+tHvn5
-	 Ht/+tqYOlm+JVg1s8ziDkhtWGSlSDKbZ5djNdx8k8erx2cXnd8T0V5R2+piZN6PQP0w==
+	 X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 Received:To:Cc:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
+	 Reply-To:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
+	bh=e/tBBKfGiOGJsoOeysayMvTo1s9pgcyz346yy1OqYYE=;
+	b=caJcbu6K0M2yMAgLaCBrPdalGSe4bzr6C39wSvkM5iGiCsUthBrkJLvWYl/UIUt9OBZy
+	 ujoBPhLi8n3365+3qfpYGzFrlFNYVxd9qQNMLLadaOQh4YBEwG1lsRpN3c9IwXktboVqo
+	 W5wdZIOiI0s+nfCRFU5EilTqEZIlzhLxgA3nnX+HYSmlZfw/df9LYTqalvgQetpwSqWXM
+	 U4zQYN4eNZhfhhTKKneZbW/Kcd7Tv7ahk8tZHZCb70fHGVuSrMC/he3JG+s/ke3u0G6gG
+	 9gWxrV/OGPT8lKiCuocPd+ph5lLKOgwJGmzJ3CR3WeheNBKEBRsfoPjlgaGKo4GjD/w==
 ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1788524359;
-	bh=WotYMkVH+3hgFoE3mRqpqZyoT0askIqRgH1EX05FdU8=;
+	s=default; t=1788524361;
+	bh=e/tBBKfGiOGJsoOeysayMvTo1s9pgcyz346yy1OqYYE=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=rd2SXW05q8Vd0paBMzQ+O6h2sOLon9RVMS75L0sZHY5FRXSDaWx1xXlcq+2J5yn5o
-	 TQUbB8G0RnxDQ82EnnPVuzOwfgGpC+sD0rOc7ExF/Jgj1QQ9lpzoxy2nYl2Akdf2XG
-	 UyK3vBh42e632wsQjw3QzgRPpAzJMhCP5LkIPzOJDEud9+Py2X5ZNDB60l8JAvAzz4
-	 0X50bsDDB+hEKFCLcdmWXmUcvP26z3OOzhMdqPM+MbDIKlQTkbZ7gpKlTp6bKWL07V
-	 0whSrVeZAKyIWXN9iHzfBLTfiyAipUqqHO5gq4PVMiPw9kt6b4wZvU9bIyEJ2TyPy/
-	 P4v8m8dE9lRqA==
+	b=SulOCebYw3n3dQ/Kj3l+oyt+7QjJzuG1BSNnc/qKqUPEzvP28EfAccLIlZF+q3r/n
+	 JspZpq3TAeNVdgxKxuHylcZTS+hRNWVUZerHt3OFfxfSb+zgbmohj7hGyzC55ogr8q
+	 IwG6owRYn456+0usKYIqYa2PSYnojMqv7O2PQtAhp2VXazu/amqRsRMDkbT60D23g0
+	 4Vijr0TLMg52g08UXw8jIgSQbF/0IQR+SCRmobQjsbxmy9/ABTmZrWQPlkW4eq78oz
+	 l389SjGZ2AmAqAcMJ2J9X/MdZbS6KI65jJ+HZOU1GIqbr/JjPk9qJrN8irHQPb8iwF
+	 3X8kyVdmPVmzw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C08DB60E25;
-	Fri,  4 Sep 2026 12:19:18 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 4DF8F10E
- for <buildroot@buildroot.org>; Fri,  4 Sep 2026 12:19:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 483B760E25;
+	Fri,  4 Sep 2026 12:19:21 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8B92BF14
+ for <buildroot@buildroot.org>; Fri,  4 Sep 2026 12:19:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3461C4031A
- for <buildroot@buildroot.org>; Fri,  4 Sep 2026 12:19:09 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6ED7B60E16
+ for <buildroot@buildroot.org>; Fri,  4 Sep 2026 12:19:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id a4eO-xHMtG82 for <buildroot@buildroot.org>;
- Fri,  4 Sep 2026 12:19:08 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org 170EC40080
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1788524348;
- b=rnss2OtxKw+JJYY2qIjo58tmF2MmjHsGAhjSaFcouay4Nb8hMr7/Ag4MU2zi6wpBrct+
- HU0KLmfQK1l7uYSLUHlWwFwQi7us0Venme1DcDvh6qkagNHpAdjWphL6W9aAFkgY5PT9A
- Q1NHfbzg1Rbx3gz0yJHBGZ7c6gIBx2ph3+OAZfUhEGT6jQokh2MHcMOz4o2rrOsuop49Y
- D1VGsOlL+UvW2auCPPdLq/BQtz4DQNPfoeLsdjmpWZXlpV0b94OWV7WfhDy1qMVSlVz4n
- tHAx3uq51IH/INYUy17ZAMiexMiz/rwAnKyqg/vrX9DK7iuwu/bY3AaVuP03WHH84/Q==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id L0NwDmwZbf8D for <buildroot@buildroot.org>;
+ Fri,  4 Sep 2026 12:19:10 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 9795C60C0A
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1788524346;
+ b=FyjICzMOg3EVnuMROYeiZXG6CVrc2fA70C2v5YYXGaA8xI4JDrxVwGpTeWwEefK9ImAG
+ RHaF3Ww3oFrSI5TY5yHwDaMsj1U1ntzC4otfyC+6g4stgzpLDYQO93kRHxJ83Dg6v5Q7A
+ 6GK3D1nF7GtRWQAaTRc49uoMl6uAE82Qp1zKzpnl0KNbFzQ406C/4GmRFBpbUrgImuCG5
+ NDgEycC8aHOIx/QWJwIQTa2ajQkEyB7ghyEylfMC7dkjMCdToJ0g5lKeAyGCk/MuLdMnL
+ O5CDS3IyUfFD8VsCGKnU8CfYTUT1z3/7cfZ28vJ3GcLucJXDaM+7BpKIffl4fFE3B6A==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1788524348;
+ c=relaxed/relaxed; t=1788524346;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
- X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
- From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
- MIME-Version:Content-Transfer-Encoding;
- bh=983hBz2ud5ADXkCBfxBR64du7fbeXL60xDyReSMkDFI=;
- b=nt4LkSuZRbMTZa2PpK2/EDvkQNm2jgfmJIbWVgxUo4I+8jld19e6ugOSQcwVxWJHfDye
- JS6ZrzHJPjrEEHs0JjI6rgtv3ZEoNUZgdxyn0Zd7hN99jjLBjOzJKI7Ljw/1RumSAIq3H
- BkWqc7yGAhWYVntO64W5cXAliuWqzzhdRffscKrF6Hlr8XsS1lm9tRbVS/r/qmN8IFyYF
- voh/Rts8BpQBpzYp+cXeXbxt3+5PS0L6v5W3sNZ4G1D5qBYeu0mb9AhjPAKN/GkIr4lkN
- jlB7yZgx5Y+mVEdMYO2Hb+WULksjxD4gfeVc616ohVXDLTZjhIhdgKwC7KJnfux1ZTw==
-ARC-Authentication-Results: i=1; smtp2.osuosl.org;
+ X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+ Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+ Content-Transfer-Encoding;
+ bh=Ilf80LnUfzNNSSTvKR16+wgGDH/eUDQtOVsryFD8PTU=;
+ b=giNL7TzjCDsTF7GbkP88Wr+RUJQrYuWgd/KE/edgVjgXD7ek86sHtEWrjUdDF77AixfT
+ gfVWa35/62eTkCtLDturr6PHAIiil8uczlAPTz58EIK49P5lcJvCt4IGYaR/xDjgcfZNg
+ aimwXqmDygE8jGHN8j27gjPYC2mSjMnKUslWuiJeKJzj65K2Bj9PZtQDa8Oy7J1Wd0mKK
+ pe3OAIoZfdY9OlR0mfD8FG4B25eZ6snf0M/ssYeioce4/uzQCvFSLJY7TscCcEN4wAq9r
+ pGXR89YinmKyScFhgNjs275zVvcrUcR9Z8mVdghZO9zwSvKdRw//Lr5D8ZPvtdy/Eyw==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org;
  dmarc=pass header.from=mind.be; 
  dkim=pass header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=OqLKqUW2; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::32f"
+ header.s=google header.b="aEnbao9/"; 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::333"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
+ client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
- [IPv6:2a00:1450:4864:20::32f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 170EC40080
- for <buildroot@buildroot.org>; Fri,  4 Sep 2026 12:19:07 +0000 (UTC)
-Received: by mail-wm1-x32f.google.com with SMTP id
- 5b1f17b1804b1-49b8be0409fso6549735e9.2
- for <buildroot@buildroot.org>; Fri, 04 Sep 2026 05:19:07 -0700 (PDT)
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
+ [IPv6:2a00:1450:4864:20::333])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9795C60C0A
+ for <buildroot@buildroot.org>; Fri,  4 Sep 2026 12:19:05 +0000 (UTC)
+Received: by mail-wm1-x333.google.com with SMTP id
+ 5b1f17b1804b1-49cca4ffdcfso7646285e9.0
+ for <buildroot@buildroot.org>; Fri, 04 Sep 2026 05:19:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1788524346; x=1789129146;
+ d=1e100.net; s=20251104; t=1788524343; x=1789129143;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=983hBz2ud5ADXkCBfxBR64du7fbeXL60xDyReSMkDFI=;
- b=YFAjfp1+duOkeA6ufvOxxaY5SI9/gPPLkTSzK/k03SWRK9mtFX1Em4dSYQJgl33S8u
- RwHkuGYI0gg40HhNijnCZCxHtwFo1DeKP5lQ+JAL5gMpo/XWfirWYk0Kvn+qqTpjwkE4
- FfCu6JJP1Uf+WQpTktpUEfGy+i3hgXY6BoM5anIdfzRvtCk0+HpNbYstb9YqI6Dn1cD8
- htoaxW3hfgjkah2wvUSmzpBfLe5nLMfdnyZpnwOcvT3E4uc8NRMcJlWBpS0kyGxpuQX/
- FzZ6jRkOrjxqKd7EzNkv2+0p9lmkkzcqmpWfji3hc00ctMGL9Zp9/t6IMUr3l60IVMOI
- f0/A==
-X-Forwarded-Encrypted: i=1;
- AKwUvBxaK7tSwVaXtxHCS8x11orkrxH+NvEJlwlaAk2MBK2ZFtnxw/aS07w29rqI3xB0f37fCr0+XzvGJzk=@buildroot.org
-X-Gm-Message-State: AFuF++nvbRINuIgV4vDAHQXTqjsprOguxL7P2JqCE73Ba9pZQPLPgvQI
- fU7kqsoVn5ov2yQ+zDsTrj85Lv2z6pdUxG5HtOGi3f8ijA4fZgmjBgDBTPJh780GvCOqZd7E9Ia
- uuW/v
-X-Gm-Gg: AYBFou03dItjZ1+9eAtRTY+bG2ibsXCOaM8czLL4GUiQ+0pxKpSyIGURY3WIcv6hHQ0
- leMSZ2u7J5so6PUS6J/gss9ttUBEI3fbke1LtwpkjJr47TpDLfiX2zOvuWODGegFxjPHwJJ/g5o
- UvfLoZ2hthTKE//sBjHKVZsdMQUTZM7EBMSVMShHDthNNsojGIHCtfmGEDWRmtOZJmvRNHE7XnE
- 523f7o2IRYHzWLtXsbqh2RD2sTpn/wdALlZPluISLWVh4s/n5b7cJcOwu9fF1rg1YbioDkb0X3O
- HVFFW/OZ2C1FwwtuB5GtKOsW4Mw5jeT+2aAbM9z3W2za4p7g2mNe/WEY0cMb3zfS4k1for/ZSyg
- o41MUqaryCGY8QofsQME4Dhl1/v9nlZKilDj9wo5AJjGu/ibgvv+MKFW3YVNi8WY2yJrldlha8X
- OBrGl1Y4eJbR2ux/TR7PywCt+3Avwckmdy6HVDxAGsDMJ+PuPGsdkRuw==
-X-Received: by 2002:a05:600c:3588:b0:49c:fc6e:a3d7 with SMTP id
- 5b1f17b1804b1-49cfc6ea7d5mr28005325e9.22.1788524345799; 
- Fri, 04 Sep 2026 05:19:05 -0700 (PDT)
+ bh=Ilf80LnUfzNNSSTvKR16+wgGDH/eUDQtOVsryFD8PTU=;
+ b=badcVWci0h86meUTwmsn8RrLtZEMyeZAJYizbpokx7CI2bkT6VGA/N3fpKUiGlInKX
+ cbQSZCDRheQtvrwpJ1m8cYkPqLc0cI0P+fpV0Tr7ooH0jmGgNa+ksF9jb7cpQHQJiLiQ
+ 0mHFKxX+3WiBM2QEc+71+qehhQq7cTq82Z02mX8OpfYx5nf/VV0c8vXVs91jvx5PIMAZ
+ Tk0MsfiDz4SGkjdjSwduY89W/lBdGVhbycHmNbE241Qaq0RPjUuADrlHgW2gHX8U7Jvo
+ WpmLyIHkOKkKKAaRu8KAtRf/G6a4VhOUQ11TEL4MvwjCgrsJrDjbvyAEhF43lIs8DW7G
+ 7GBQ==
+X-Gm-Message-State: AFuF++l658XH6FcFvchQ4WbgP15k1aWMIrueltwgDSSMfcGEUY3+UA6B
+ VqwccqFZUr7l4TzWLzm2B4G1Jv7yPK5cSVlUA8VZcLlzuHbUDH7EB8ACxtisapRz9ZA=
+X-Gm-Gg: AYBFou3W8jJWDTIerH93YA3fCuwXwYAaR0tvMUCpqsuIJ4bhACwz0w4eQ697LVbLodY
+ 8orJixM0aPmcRf5FasEaHTC4Hz/BagsYtnJKag0igySzjyKIFRG9H4edRYIkJtNBlc3CPzLvu7u
+ 41AnqQbz/3bZjS3wGz8GE7ydtliLt7lYFW4ILhyF806R71jObFixjYfVgQnL/pft4xa+EhUS6Gp
+ a3x/xhmTbHuxLFd7Q93kI10D0rwtYYtVEctM25knKIUm5XsJBt8Pc+VQtKlcqX3NpzzCekb3Sr4
+ p3NlDUioIf/Un1H9m9vxUPjgCridKpz9oyNnzMJNIfQOn61rujv//EvHF0FvVFvdr4NbqVp6Dee
+ 6CesNAhkllr8vA4bczYALDlYnMG1ZGE6sZyadAKPeX4jdP3EOl++TeiP5E6+aGmPYVvyH0HfztK
+ pvgqTwXELgt8Di2zXDArygh1J3LgXOAHfwZhy7ZhGLAI60omvUeJxVVA==
+X-Received: by 2002:a05:600c:4f43:b0:49c:fc6e:a3d9 with SMTP id
+ 5b1f17b1804b1-49cfc6ea7b4mr31641995e9.24.1788524343055; 
+ Fri, 04 Sep 2026 05:19:03 -0700 (PDT)
 Received: from arch ([213.219.153.196]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-49cf771e9absm67165575e9.9.2026.09.04.05.19.05
+ 5b1f17b1804b1-49cee5d4938sm149902375e9.2.2026.09.04.05.19.02
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 04 Sep 2026 05:19:05 -0700 (PDT)
-To: Peter Korsgaard <peter@korsgaard.com>
-Cc: Thomas Perale <thomas.perale@mind.be>,
-	buildroot@buildroot.org
-Date: Fri,  4 Sep 2026 14:19:04 +0200
-Message-ID: <20260904121904.406524-1-thomas.perale@mind.be>
+ Fri, 04 Sep 2026 05:19:02 -0700 (PDT)
+To: Thomas Perale <thomas.perale@mind.be>
+Cc: buildroot@buildroot.org
+Date: Fri,  4 Sep 2026 14:19:01 +0200
+Message-ID: <20260904121901.406419-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260827165534.3741128-1-peter@korsgaard.com>
-References: <20260827165534.3741128-1-peter@korsgaard.com>
+In-Reply-To: <20260826202207.976260-1-thomas.perale@mind.be>
+References: <20260826202207.976260-1-thomas.perale@mind.be>
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/2] package/haproxy: needs signed overflow
- handling
+Subject: Re: [Buildroot] [PATCH] package/unbound: security bump to v1.25.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -161,56 +155,101 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> haproxy has a runtime test to verify that it is built with -fwrapv:
+> See the changelog:
 > 
-> haproxy
-> FATAL ERROR: invalid code detected -- cannot go further, please recompile!
-> The source code was miscompiled by the compiler, which usually indicates that
-> some of the CFLAGS needed to work around overzealous compiler optimizations
-> were overwritten at build time. Please do not force CFLAGS, and read Makefile
-> and INSTALL files to decide on the best way to pass your local build options.
+> - https://nlnetlabs.nl/projects/unbound/download/#unbound-1-25-2
 > 
-> Build options :
->   TARGET  = custom
->   CPU     = generic
->   CC      = /home/peko/source/buildroot/output-haproxy/host/bin/arm-linux-gcc
->   CFLAGS  = -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -O2 -g0 -D_FORTIFY_SOURCE=1 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -O2 -g0 -D_FORTIFY_SOURCE=1
->   OPTIONS = USE_THREAD=1 USE_DL=1
->   DEBUG   = -DDEBUG_STRICT -DDEBUG_MEMORY_POOLS
+> It fixes the following vulnerabilities:
 > 
-> Which comes from:
-> https://github.com/haproxy/haproxy/blob/v2.6.0/src/haproxy.c#L3008-L3037
+> - CVE-2026-14586: Assertion in libngtcp2 when under pressure in high
+>   concurrency DNS-over-QUIC environments.
+> - CVE-2026-32665: Remote DNS-over-QUIC denial of service due to
+>   `quic-size` budget bypass.
+> - CVE-2026-40691: Packet of death for DNSCrypt over TCP.
+> - CVE-2026-41637 Degradation of resolution service from improperly
+>   accounted client-terminated DNS-over-QUIC queries.
+> - CVE-2026-42955: Extra fix for CVE-2026-40622 to also clamp the TTL of
+>   A/AAAA records disallowing a one-time 'ghost domain' delegation
+>   renewal via glue records.
+> - CVE-2026-44621: Libunbound applications configured with
+>   'unwanted-reply-threshold' could eventually be abruptly terminated.
+> - CVE-2026-44687: Off-by-one error in 'harden-below-nxdomain' logic can
+>   shadow a stub/forward zone by a legitimate parent's NXDOMAIN.
+> - CVE-2026-44690: Cross-zone wildcard cache poisoning via RRSIG.labels
+>   manipulation.
+> - CVE-2026-46582: A wildcard replay, as another piece of data, triggers
+>   poisoning in the serve expired reply path.
+> - CVE-2026-50045: 'max-global-quota' reset by DNSSEC validation
+>   restarts.
+> - CVE-2026-50046: Possible heap use-after-free in an error path when a
+>   DoT forwarded query is jostled out.
+> - CVE-2026-50243: 'response-ip'/'rpz' can rewrite BOGUS answers instead
+>   of returning SERVFAIL.
+> - CVE-2026-50248: BOGUS configured primary hostname accepted for XFR in
+>   auth/rpz zones.
+> - CVE-2026-50251: Attacker supplied `0.0.0.0`/`::` glue triggers
+>   defensive full-cache flush.
+> - CVE-2026-50252: Possible cache poisoning attack by mapping source port
+>   population per thread.
+> - CVE-2026-52863: Memory corruption could lead to crash and denial of
+>   service.
+> - CVE-2026-54478: DNS Cookie bypass when combined with proxy-protocol
+>   use.
+> - CVE-2026-55708: Privacy/configuration issue when adding local data in
+>   views through 'unbound-control'.
+> - CVE-2026-55717: 'serve-expired-client-timeout' and 'response-ip' CNAME
+>   redirect could lead to a crash.
+> - CVE-2026-55973: 'dns-error-reporting: yes' leads to stack buffer
+>   overflow.
+> - CVE-2026-55990: Packet of death for a DNSCrypt misconfigured Unbound.
+> - CVE-2026-55991: Remote DNS-over-QUIC (DoQ) flow-control assertion
+>   failure in libngtcp2.
+> - CVE-2026-56416: Possible heap buffer overflow when validator
+>   canonicalizes RDATA that contains domain name.
+> - CVE-2026-56444: Degradation of resolution service when
+>   'discard-timeout' and 'serve-expired-client-timeout' are combined in
+>   unusual configuration.
 > 
-> So build it with -fwrapv to fix that.
-> 
-> Notice that this message also embeds the build path (through CC), breaking
-> reproducible builds.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 
 Applied to 2025.02.x & 2026.05.x. Thanks
 
 > ---
->  package/haproxy/haproxy.mk | 2 ++
->  1 file changed, 2 insertions(+)
+>  package/unbound/unbound.hash | 6 +++---
+>  package/unbound/unbound.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
-> index 970347d3ed..f75f18e031 100644
-> --- a/package/haproxy/haproxy.mk
-> +++ b/package/haproxy/haproxy.mk
-> @@ -15,8 +15,10 @@ HAPROXY_CPE_ID_VENDOR = haproxy
->  # https://git.haproxy.org/?p=haproxy-2.6.git;a=commit;h=832b672eee54866c7a42a1d46078cc9ae0d544d9
->  HAPROXY_IGNORE_CVES += CVE-2023-45539
+> diff --git a/package/unbound/unbound.hash b/package/unbound/unbound.hash
+> index 46b88900e6..85724ca243 100644
+> --- a/package/unbound/unbound.hash
+> +++ b/package/unbound/unbound.hash
+> @@ -1,8 +1,8 @@
+> -# From https://nlnetlabs.nl/downloads/unbound/unbound-1.25.1.tar.gz.sha256
+> +# From https://nlnetlabs.nl/downloads/unbound/unbound-1.25.2.tar.gz.sha256
+>  # After checking pgp signature from:
+> -# https://nlnetlabs.nl/downloads/unbound/unbound-1.25.1.tar.gz.asc
+> +# https://nlnetlabs.nl/downloads/unbound/unbound-1.25.2.tar.gz.asc
+>  # with key: 231018690C4D903EF419146AA144323DEAACDF45
+> -sha256  0fe8b6277b0959cfd17562debac0aa5f71e0b02dc4ffa9c60271c583edab586f  unbound-1.25.1.tar.gz
+> +sha256  0d92275c703d5f5f8baba3dab22117dd8c29b495588a5c229768ed6581566600  unbound-1.25.2.tar.gz
 >  
-> +# haproxy relies on signed overflow, so MUST be built with -fwrapv
->  HAPROXY_MAKE_OPTS = \
->  	LD=$(TARGET_CC) \
-> +	CFLAGS="$(TARGET_CFLAGS) -fwrapv" \
->  	PREFIX=/usr \
->  	TARGET=custom
+>  # Locally calculated
+>  sha256  8eb9a16cbfb8703090bbfa3a2028fd46bb351509a2f90dc1001e51fbe6fd45db  LICENSE
+> diff --git a/package/unbound/unbound.mk b/package/unbound/unbound.mk
+> index fab6e67455..46fca5e2d2 100644
+> --- a/package/unbound/unbound.mk
+> +++ b/package/unbound/unbound.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
 >  
+> -UNBOUND_VERSION = 1.25.1
+> +UNBOUND_VERSION = 1.25.2
+>  UNBOUND_SITE = https://nlnetlabs.nl/downloads/unbound
+>  UNBOUND_INSTALL_STAGING = YES
+>  UNBOUND_DEPENDENCIES = host-pkgconf expat libevent openssl
 > -- 
-> 2.47.3
+> 2.55.0
 > 
 > _______________________________________________
 > buildroot mailing list
