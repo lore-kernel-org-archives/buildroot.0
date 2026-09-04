@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD748C79F85
-	for <buildroot@archiver.kernel.org>; Fri,  4 Sep 2026 12:17:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 088CBC624DE
+	for <buildroot@archiver.kernel.org>; Fri,  4 Sep 2026 12:17:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 834C160D7E;
-	Fri,  4 Sep 2026 12:17:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C8BF660BEC;
+	Fri,  4 Sep 2026 12:17:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CDDC33EwoJu0; Fri,  4 Sep 2026 12:17:47 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 7526260D5E
+ id qkh9yyf8m8ne; Fri,  4 Sep 2026 12:17:49 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 6645260D80
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1788524267;
-	b=Aatha9LKrkATmr5mY4NQVTo3sH7J6DCMXWO88VAvDNzNgTr6iyeE9Hs2OD0SzAM1rMVx
-	 S8/QyiDC1DezccCmzHHDh/pYXRODIwDZbcWB3mR3JkIluRHwQM3N9w9gmznUzFW5Nmz3Z
-	 vvAhazbIDLwaUzJBRxXM+S4yCX0/GlgdIEiN7XLCWte8OvdQnSMKhWUy7isoNNTPUKwkh
-	 WtruwOVBaY3YXLvnBeJBNZ48Lz5DfBc38U7UE5q1zXXnAGgQ8gAH89pBDEC34v82nZ5VW
-	 FwsQeUh6kNunXTABbNSGRLI7wczdtm1cgXtfVhU0DKmCbDu+uWTmbUpqif2wWBJZhsg==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1788524269;
+	b=VKe6hA33EtQodOeRpeFPV7l/yWUoryaz88cmwoPYnqE7AFq66ofcT3WbLT9xLcfXcjFA
+	 JpjkG7nNsKm+MmYIXPNufF7IHOmBzC2lbgU/TbXjCxZO0TZscXUCcrvXgIHxzJpqN/niF
+	 axAzI0tJNrvOw82ce/DDw538TQbKZz9zfz+JM1nq98YK4wxBha/50kC9mL7RRJUD/sKZr
+	 ckeySgs3VBzCuuMThZBepAYZ9pz73ogKYcNwtcB/PUUoGO13PNtr+Cr5TLKlV+E7gcYLv
+	 TJv4uQcaq6XzMOEJq1l4H3cUWN6/j3Ci5JI4oHl2Q0bmd9i5/sgwH45whD16zceinHw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1788524267;
+	c=relaxed/relaxed; t=1788524269;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -32,114 +32,116 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From:Reply-To:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=8RJitlBmCyOuwKm//283LirQei3uYDnDtxpwe35jy9U=;
-	b=T9MygaeI3TBTrSnnFN7uGhTG4B7wEvPtCHMN93qXj1rb2nNVYtHDY/EL++ggpYMwD42O
-	 r7QyOc6oieTvnRpxtLNPVf9mZajRwA1dV3Lsm893T2b6La2STPPzPfommwhfLr9Mr0H2L
-	 GcNnfECqwJoHQMIO9xZIsxLmj0VQztto2zxhmgYI6NQZajJSEBCtLip2KHVxjRr3/E20Y
-	 NoYFVsGKEZrVuO78IKmb4JgomqtaeEBXnv2Oa0nyVAJegcs1eoqbB2iGWH4T5qaerMu/N
-	 bu9wgbQJl5vD1sDCGTxd4y43WQgM243Rfxik85M4I9PCQcUr3tCVSP7NbNTu1B5EdCw==
+	bh=1NkyqUSLe95zvY35/1QkT/5xw7JEb50Jq9749UxF1CY=;
+	b=UUmICeR7/VcvW9ds3FUFXAxiGePNJWaYKAUrWq7/GssqBi2fQj245cbfYDjRaPicnbY6
+	 xm0tkHuWG8K+1tFwRJJXfdl5tBmHe9Zsac8AJEEI8zdhZa2N8xLfvwIWgH5HdkX9bw2KL
+	 mE15m7nQy1SHKMzN/+gjHoon+em1xH16lqTf+Ixajt0NuYVNrB+xcaLndT2/oCc1TQadO
+	 V/1JEyBuOzUzAJk1XiwP0EzUFmz+d18l2N9CLmFJ5Ww0ky4BXnxjcw99JMMkH5PnF3w1I
+	 t8u+4voAgteqEvHx2g0Fx+Q2VrVszg6SJu2wohQZIZdOs/L4/ojqv40w1IyNYlfBLug==
 ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1788524267;
-	bh=8RJitlBmCyOuwKm//283LirQei3uYDnDtxpwe35jy9U=;
+	s=default; t=1788524269;
+	bh=1NkyqUSLe95zvY35/1QkT/5xw7JEb50Jq9749UxF1CY=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=MBGAY1DgBvqCTNnm1kQwapscMIMVoXf3+6S3W6J5NbjNxp2aVmJMTlkpvA02OR3Zn
-	 69ZtysiOTWmgRofVipNJq4EUv7TCYysUmV27YaBihiEyET6wwJATmjKznFwD7xrecB
-	 QKx2QwvDQBd1j1E0dZtDW/89A1M7f9bNMzS1peyLYW1jg8KCpwxvHz5N9B7tSP+ujd
-	 Lg2JdNCXIUWOPjxJ6j7yAT286JzBUXoh3ZZ7sESdgwkSkxqIOHJ9kdq9QFny3bpPZa
-	 wo/YF43qqcVJhApxoqopLIMNHCKmZrwA9HTvUb6SO+SspVRSmDwsgl2TUe1SeVpScG
-	 NzdLNq0DbdENw==
+	b=e1GqFOtSRBqz1aQZ8UyzZFPTIyfhHrIE8ylvi93FWduudM1LtJ3v8AMwOtH4wJoFl
+	 0cETUoDPxSMZd+U0AUBvin97Ei4YUvKLtpm+qBBCpBoRGZ750TzVNE82/aQlZzUzoe
+	 7opUnW0O7aFUrdUKTd3JCAAOYOkmc0Lb0mmZoyFOWijaz+9dDP1RD2M9cRVpnJZrVt
+	 FVCVmsC6MaC9MGkIPgM+1hIpk9ABCF94wKdlRqQ75xP9dL1hoIYwDaPpqrhTrHngoN
+	 6ZgECcBMB0kPQjTwP4xbzMBtwnVOTNu9n0kml/imhQawMARN3tDMAqUECYcIGFGip0
+	 sFjdfqxfW5/Hg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7526260D5E;
-	Fri,  4 Sep 2026 12:17:47 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 06CEC10E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6645260D80;
+	Fri,  4 Sep 2026 12:17:49 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 11FA1200E
  for <buildroot@buildroot.org>; Fri,  4 Sep 2026 12:17:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E161B40B7F
- for <buildroot@buildroot.org>; Fri,  4 Sep 2026 12:17:44 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0363A60D56
+ for <buildroot@buildroot.org>; Fri,  4 Sep 2026 12:17:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WNB-5T-cPlJr for <buildroot@buildroot.org>;
- Fri,  4 Sep 2026 12:17:44 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org CC8F040B2E
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1788524264;
- b=agDgX9Fj+QMlMQPWi+nugQmj80lh9e+wv9ONuu+/i88lUVAAm9+GAQ7hWD/Yq8W17BDy
- 7y2SMBpjN3UQ8Opj17MeR0kwSkzgbjMB73c0guh+2u3oUjbUBrIRcehY3diHok7r9Mw3A
- yfTW1D3GHT2kVTQ7iVJWse4KfCxeGEMZo6FEyT0qk//BWuNHyeBbVvekA4I7YjfvjUKt1
- KFssqjuEwN+QhE6v2I/3f55m3DKmE98x8t6rELctXO/kIFnlOufVQ53gNgqmSG40IT4ns
- n8w85K0QPGC+YxtXz/0wSdVp4IUfObbALM1nnRCp7oJofrhj8Tu6DSqnbnVNyiQS0Cg==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rZCsjN3kGZ4Q for <buildroot@buildroot.org>;
+ Fri,  4 Sep 2026 12:17:43 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 072DC60681
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1788524262;
+ b=ZXVVSuvhfgOQKmmWAESIBj8+AcCJqMnYlkNtr4E2g7mSwEuB1JIOhV6FdurNY4eW92xU
+ /B41iOovMAaQBJl1FxCP9FdvlfIk09wiZfOBnUOJzGmMSLwQ2WL35mJuBrAtYITXuybKG
+ 4+9C6ms3DpO+LS4V2gnEDzV7K2GwuEz7J8LcAsNdeJOz00BlARnz0+Jwfcmj7yijtRqCY
+ VJ5gfQHYUlzZx4DGDZ4I8r+4Szy1MyKRTC7onOG+5ZwK08mlqp6gSP1Rz6lyjN4tTAZeT
+ qKagQ8p60cPeGxnW+nguOs+LAMkDA9bIHis31nXuEmsbqO6x0chyYZdVKh96WIypc6Q==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1788524264;
+ c=relaxed/relaxed; t=1788524262;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
  X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
  From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
  MIME-Version:Content-Transfer-Encoding;
- bh=C5BfXnPdKmm8kfY6HKxmQWO9Qa4tBKii9GEfdAvhzgo=;
- b=rT0ZnwZCDd2RZ3o3TcjfbPXttdSsdLurnqtIb4whTbpY77GyxStBzX4NasIwMFDuj6e9
- Bjeqy2XDCWXDL7wu0WBEoDxykDCqmHm9wW41ZSMvFTDFky+KLT2LStBoukWypW6ppYwta
- HTorp4P2OnExbx7GwDhx1+WgyrjxC3HMxuAo4tXY5jX6lnESboyNfYBQD+NI9cawCsxju
- EmGBi3nrt5N6ejeLOfGwrMzD9dtBDhG9JlluqjgxlHZOIH7SGpOGUsmZCHJGyJxydvhrm
- tqxw2yDnfwtRTYvrwjVAe1W8ugya+mXqdqzuhJL7rYD3a43Ykg8kxSknD6D1ED6HRfw==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org;
+ bh=WQNj2ItzuiXo10c+PfEwBwMWGIeRlPHgCfLEDQT26OQ=;
+ b=qQhGRkVA/IodsYAOzIv/8KmzBnUGDPgng3R5uODfyFxsFxK6B4EOblak2WDLIHS01g6t
+ QWv3FbGp3APKRDdXJ+vz1yU72tKSbWnkWcsvNEWBj/U0HfWqrqW1NTWIir7CAqTQsqQ6M
+ TEDU0pwRDx4SUrPUf+DrbGkzNJRFbuVC7OE6EumNurtFdM3HXgqsLTEmwXa4/DA+G0dSU
+ ZVRuYyFkrrUJNLjku5uuE2lR+e1UZLuAy2OJUU1GTLIoYYCMEzh7zf4wWI/HTFJwx3yyf
+ LxTVDrgjEVzQaRqQe/r+X+JCmZIXKCCAAV2z0JW82jkFUflCc1JloBPKS5D0N0mkm6A==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org;
  dmarc=pass header.from=mind.be; 
  dkim=pass header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=gxCqSjdw; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::32e"
+ header.s=google header.b=dPj+aaBf; 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::433"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32e; helo=mail-wm1-x32e.google.com;
+ client-ip=2a00:1450:4864:20::433; helo=mail-wr1-x433.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
- [IPv6:2a00:1450:4864:20::32e])
- by smtp4.osuosl.org (Postfix) with ESMTPS id CC8F040B2E
- for <buildroot@buildroot.org>; Fri,  4 Sep 2026 12:17:39 +0000 (UTC)
-Received: by mail-wm1-x32e.google.com with SMTP id
- 5b1f17b1804b1-49b8be0409fso6537335e9.2
- for <buildroot@buildroot.org>; Fri, 04 Sep 2026 05:17:39 -0700 (PDT)
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
+ [IPv6:2a00:1450:4864:20::433])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 072DC60681
+ for <buildroot@buildroot.org>; Fri,  4 Sep 2026 12:17:41 +0000 (UTC)
+Received: by mail-wr1-x433.google.com with SMTP id
+ ffacd0b85a97d-4843efcbdb2so548799f8f.2
+ for <buildroot@buildroot.org>; Fri, 04 Sep 2026 05:17:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1788524258; x=1789129058;
+ d=1e100.net; s=20251104; t=1788524259; x=1789129059;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=C5BfXnPdKmm8kfY6HKxmQWO9Qa4tBKii9GEfdAvhzgo=;
- b=D5soN1VeKSxDP049t7jOXcuoC6VlJgsn2s2VgSxOC3UtvuF4pL02hljASK++qvMDAd
- OhuoxWRd3JipC36xET8Q5eDadfUMzgTJpkLSu+wJUte7OhF8c8UF/WwllZQaW5BZ8iGx
- Fr6tHN7ipGKy/yp444VJWeCW/LXza5dqlCGMzMRS1oc10YKC34Z18Vcz5V1WRUBParfD
- PU+cIAWBO9yQaCAqeP/kkiYnNFY+HBqSKkV9FdJ+QXdV0wkLbjK6Kq0i1KUINONBUpPa
- nq+EFrZAqpAvfcv0rNisA2flZmGgTy3YpMq5voTU3cjaHbWkdC1EzlRoLHg5ndKEeUNq
- cqDw==
+ bh=WQNj2ItzuiXo10c+PfEwBwMWGIeRlPHgCfLEDQT26OQ=;
+ b=KgMNXc5ZEl0LqJLlBDfurNq/K4eyILOt/h2X4DGp+nSgFt2AEQ3+7eDlGzOVTfReo7
+ ENUBW9k5dH8DmGFbdBy9DBIG55dB470vXglCzXoaHQohmcQ0CqY2VWNYdzcMU9VbOz/K
+ bDMkRTnf9rXK2nulmlyvvzlfyO+5GIeDDLngMGka5/Ay2S4Hn5DgnqN3jDdoMlX0pd/e
+ gv6ohQlktUDSodZQ9NkRLOjDXCZJ5GxglJV+BDkQ6r4uBhfKn5MeGPZ56EJ/VMJviJH6
+ BSydypwBUAZyx6ydyTiC22lTF5/okH2dGWtK3khwAd8Ts/r9/gh6PYL0RSo2yT6yjuc+
+ YliA==
 X-Forwarded-Encrypted: i=1;
- AKwUvBybuqDM3C7NIU6HKhnF43E1TFYzdYrOxWbxPyUNgBsCkEs1c+QVKI2OITNgDfElyUtZ8udCbyqdp1Y=@buildroot.org
-X-Gm-Message-State: AFuF++m9gNwElFr511Q9bm/6WX4DkEG3aKpooXv/qG75I5wGnkvAEzwk
- Um59ZTU6CJ3aqMFhRec13e/XRh0VBqeoaYV8Z8FJ9mIxyDzUsOJvJGtwsO9nFXhuAqE=
-X-Gm-Gg: AYBFou1zdLttcgNpgw35VUAUR1eNa5FZeRfmyVmdF6Vs7/uBOBUO1pDzd4pTDdVz3s1
- LdYobS3zPbBesOgL11VZNZmM+UjQbPzpFQxGiZGABfucU/KwOqzhe33gJH6cn1RztPLqZnUdgLt
- KIXjDeuJs4xDRzRt/5u95qONQ1GIFDF5VCjoPBlyP9ZsKrUzGKRD6+9ruOjL+mKisaUZUTjNKfa
- 4ZmPEfrbcdhJiO/ERZP+hjJEm+6WFhiWZXlkMWCFsof+YsSann9g9fHQwveJlRqd9iSil6QJI3b
- ohZPxyxSzKaO+OE8B/miMtulMvMwDJqPA3b+nOIV1scvU5azayJyXPiBM8YLI+wvEvDNb11lMpT
- xue6Vc1m+hQ67FR4jae1JGdCstucM3rhPatbpy8lMAWqVBvYkFgMeJNBMJ7fb/jOaBFgu/QVX5X
- QXRxWY48cE6/ufCXxB/l/3gQIvlEpWziLKN3BM8wI8P0j5wJJ0rYDmjg==
-X-Received: by 2002:a05:600c:1991:b0:49b:2796:be30 with SMTP id
- 5b1f17b1804b1-49cf824f7damr53463505e9.11.1788524257849; 
- Fri, 04 Sep 2026 05:17:37 -0700 (PDT)
+ AKwUvBwGZvdKKdLBYHs5GFx7utinmsM1xcKS+y1jD0h+3ygZoag05iLMq0UNTEKIIUXe+ITr1mQCcgP9asw=@buildroot.org
+X-Gm-Message-State: AFuF++ksdacW7nmJ/k9AzlA6vAvNi8Ey3/rsqsWqiEyK3t2NSEVikKPK
+ JzH4dZ0TvdpVAnJcRtfTe9aN+6927w64H5lpT0TFm0eJXOEj+4S69/h7jMo8cQQAYPF3lvEoZL2
+ E7TjX
+X-Gm-Gg: AYBFou3AOEgZF/g2jYImG/qIGllkHtp1L13M5fbLBsLOy4EG/ENC2K2RtWq2nJ9rqJh
+ cvMGinTGpzrhpXMCqsvenJY7pHAqctAKvKn8vy3yKCeX5SAqWAUjEREYJihzajsDpGuTfugQvb/
+ Arn30ifTr5GfB1WyUA8kBmteCtxIgWj42hX0wbVzQxJOoBW3MXiWW7OhJb9qrXhlrL3xdoiU5FF
+ ubG0shFD1NKnwiZqT5CrZA87MnwUUPHvY5St3ECPH2061Enb1LcRi0cwLYgUdyBd2In2954fLfb
+ pcsYfNlAUOAdlvMiB+QEJTLZ31VmLog3AXL9FxwdsJtBgRlpwwPMmxPKkqaaLehu1hHRRQstwI4
+ 2YaDxVcDPfvxYr9Uw0YFd/AoOA7cyrdgHZThSb/MbKT2r7VTcNu0vyqkgA6h4xHNpmcnM+4eJIq
+ o99XGlQw7MjkEzTxNeb7tZ+O4XpJjKyqsQxrrpdYZ7+AGf8MWcRtPWCQ==
+X-Received: by 2002:a05:6000:250f:b0:485:8a47:5b8a with SMTP id
+ ffacd0b85a97d-4858a475d57mr4319031f8f.39.1788524259553; 
+ Fri, 04 Sep 2026 05:17:39 -0700 (PDT)
 Received: from arch ([213.219.153.196]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-49cee7fec25sm166571705e9.13.2026.09.04.05.17.37
+ ffacd0b85a97d-485885c5bbdsm5607618f8f.36.2026.09.04.05.17.38
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 04 Sep 2026 05:17:37 -0700 (PDT)
+ Fri, 04 Sep 2026 05:17:39 -0700 (PDT)
 To: Romain Naour <romain.naour@smile.fr>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri,  4 Sep 2026 14:17:36 +0200
-Message-ID: <20260904121736.404020-1-thomas.perale@mind.be>
+Date: Fri,  4 Sep 2026 14:17:38 +0200
+Message-ID: <20260904121738.404092-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260826210042.212245-1-romain.naour@smile.fr>
-References: <20260826210042.212245-1-romain.naour@smile.fr>
+In-Reply-To: <20260826152732.3556127-1-romain.naour@smile.fr>
+References: <20260826152732.3556127-1-romain.naour@smile.fr>
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/qt6: fix c++ static_assert issue
+Subject: Re: [Buildroot] [PATCH 1/3] support/testing: TestPythonPy3Gobject:
+ test glib 2.88 regression
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -159,72 +161,47 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Since the last qt6 version bump to 6.11.1 [1], the TestQuazipQt6 fail to
-> build due to a c++ static_assert issue.
+> In Glib >= 2.88, GLib.unix_signal_add has been moved to a separate
+> platform-specific library. This break backward compatibility from
+> GLib-2.0. A workaround has been applied to pygobject >= 3.55.3
+> https://gitlab.gnome.org/GNOME/pygobject/-/commit/74e4e0f40a66436a55c72d4a6e6058c1f91a7310
 > 
-> Backport a patch from v6.11.2 release.
+> This issue currently break TestFirewalldSysVInit and
+> TestFirewalldSystemd runtime tests since the bump to glib 2.88.3 [1]:
 > 
-> Fixes:
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/16060153667 (TestQuazipQt6)
+> https://gitlab.com/buildroot.org/buildroot/-/jobs/16060152329 (TestFirewalldSysVInit)
+> https://gitlab.com/buildroot.org/buildroot/-/jobs/16060152332 (TestFirewalldSystemd)
 > 
-> [1] https://github.com/qt/qtbase/commit/2983318421d623c6c9feff95ff947ca489f4313d
+> Break the test TestPythonPy3Gobject now in order to reproduce the same
+> issue than for Firewalld test.
+> 
+> [1] e313a2d2590af689eb1f79e55b5a488154400da1
 > 
 > Signed-off-by: Romain Naour <romain.naour@smile.fr>
 
 Applied to 2026.05.x. Thanks
 
 > ---
->  ...e.cpp-remove-is_always_lock_free-sta.patch | 41 +++++++++++++++++++
->  1 file changed, 41 insertions(+)
->  create mode 100644 package/qt6/qt6base/0001-qtestsupport_core.cpp-remove-is_always_lock_free-sta.patch
+>  support/testing/tests/package/sample_python_gobject.py | 6 ++++++
+>  1 file changed, 6 insertions(+)
 > 
-> diff --git a/package/qt6/qt6base/0001-qtestsupport_core.cpp-remove-is_always_lock_free-sta.patch b/package/qt6/qt6base/0001-qtestsupport_core.cpp-remove-is_always_lock_free-sta.patch
-> new file mode 100644
-> index 0000000000..3347caa8da
-> --- /dev/null
-> +++ b/package/qt6/qt6base/0001-qtestsupport_core.cpp-remove-is_always_lock_free-sta.patch
-> @@ -0,0 +1,41 @@
-> +From 2983318421d623c6c9feff95ff947ca489f4313d Mon Sep 17 00:00:00 2001
-> +From: Mitch Curtis <mitch.curtis@qt.io>
-> +Date: Mon, 11 May 2026 08:41:08 +0800
-> +Subject: [PATCH] qtestsupport_core.cpp: remove is_always_lock_free
-> + static_assert
-> +
-> +This causes a build failure when cross-compiling Qt for MIPS32 targets
-> +(e.g. `mips-unknown-linux-musl`, `mipsel-unknown-linux-musl`).
-> +
-> +Amends 9b938823776865837901f29082301f5624ac2b04.
-> +
-> +Fixes: QTBUG-146670
-> +Change-Id: I170bd9f93c1ef809f56e5b36835e457bbbe8e16c
-> +Reviewed-by: Thiago Macieira <thiago.macieira@intel.com>
-> +Reviewed-by: Qt Cherry-pick Bot <cherrypick_bot@qt-project.org>
-> +
-> +Upstream: https://github.com/qt/qtbase/commit/2983318421d623c6c9feff95ff947ca489f4313d
-> +[Romain: backport to 6.11.1]
-> +Signed-off-by: Romain Naour <romain.naour@smile.fr>
-> +---
-> + src/corelib/kernel/qtestsupport_core.cpp | 4 ----
-> + 1 file changed, 4 deletions(-)
-> +
-> +diff --git a/src/corelib/kernel/qtestsupport_core.cpp b/src/corelib/kernel/qtestsupport_core.cpp
-> +index 9bbe1c18e84..5f28cedec68 100644
-> +--- a/src/corelib/kernel/qtestsupport_core.cpp
-> ++++ b/src/corelib/kernel/qtestsupport_core.cpp
-> +@@ -8,10 +8,6 @@
-> + 
-> + using namespace std::chrono_literals;
-> + 
-> +-// Assert that this instantiation of std::atomic is always lock-free so we
-> +-// know that no code will execute on destruction.
-> +-static_assert(std::atomic<std::chrono::milliseconds>::is_always_lock_free);
-> +-
-> + QT_BEGIN_NAMESPACE
-> + 
-> + // ### Qt 7: reduce the default: QTBUG-138160
-> +-- 
-> +2.55.0
-> +
+> diff --git a/support/testing/tests/package/sample_python_gobject.py b/support/testing/tests/package/sample_python_gobject.py
+> index 4490a73613..1c2b327206 100644
+> --- a/support/testing/tests/package/sample_python_gobject.py
+> +++ b/support/testing/tests/package/sample_python_gobject.py
+> @@ -4,6 +4,12 @@ from gi.repository import GLib
+>  
+>  
+>  def main():
+> +    # In Glib >= 2.88, GLib.unix_signal_add has been moved to a
+> +    # separate platform-specific library. This break backward
+> +    # compatibility from GLib-2.0.
+> +    # A workaround has been applied to pygobject >= 3.55.3
+> +    # https://gitlab.gnome.org/GNOME/pygobject/-/commit/74e4e0f40a66436a55c72d4a6e6058c1f91a7310
+> +    unix_signal_add = GLib.unix_signal_add_full  # noqa
+>      sh_path = GLib.find_program_in_path('sh')
+>      if sh_path == "/bin/sh":
+>          return True
 > -- 
 > 2.55.0
 > 
