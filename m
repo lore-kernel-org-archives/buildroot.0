@@ -1,118 +1,104 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB698C624D3
-	for <buildroot@archiver.kernel.org>; Sat,  5 Sep 2026 13:51:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15300C624D3
+	for <buildroot@archiver.kernel.org>; Sat,  5 Sep 2026 13:55:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A5FD340A58;
-	Sat,  5 Sep 2026 13:51:16 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Gm8f_w8pAZ3p; Sat,  5 Sep 2026 13:51:15 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 081A440A77
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1788616275;
-	b=VNCmL+ccdGbqtNlTW/HLIKdbOeUwBqZ+mDLtiH9P1xotu47CIMO5QYnz1FngLxe0JSdC
-	 gw6qXcCIPe/nktXPfw7fa8CTAQkFRcIzrfed5KUxJLgkaGkDzxZghxMX3//ud3eQtStEu
-	 k5m0PLPKfDAP1v1zSxsYFFKFmEe/8n0jbfNTq5xGB+TnoQOnaePG61Z+/uv7bDaPewaEb
-	 lm+yNSkuPENSHHdiVkxYZWeJeAodeoSx5AcJku6bqnq6ZNHU4WGpwbaxcPWYALv7e7pah
-	 p3Jr44UUl0lHUMutd8LKFQe9MSWC3D4lthunBJszDvxtA3ewmU1iZRbe3rvpMnlD4/Q==
-ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1788616275;
-	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 Received:Received:Date:To:Cc:Message-ID:References:MIME-Version:
-	 Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version:Subject:
-	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=E2+Qz0Of54PMvFBv+PNyhC6aXP7lw92ZDUWqwXqVCBs=;
-	b=nBMhZCGtZKGVOiGm96Ute22V139V4IfhqG9R5ACh8Tv6F91uTJ3OuLgK8q5Q4n9f7FlU
-	 6+aDrYf1FmDXTBDYeaiXDk1XnWfo8jSSscnMm15cK9Ze8bFPYLzA5HLAhSQo+TDOBA7eu
-	 rZQ3Xq9sIfg5j348jftc4Z/Rf+1sulHNgWG89DinPQ1KRt90dVd+mvtvdrVbtE9JljaLE
-	 uy8H3JCI3GldsRbOHfcgve1NYpeSkdj/ECwaYIRXmHV3XvHlEVhMLNm4lT6DXvdA1PHir
-	 fE9BxyetLZnrQI5BfqvUMJhUcUm6MrC5DYQOd1Wk12SLdvnKIRQcbmKfGF8NsA9TBWg==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1788616275;
-	bh=E2+Qz0Of54PMvFBv+PNyhC6aXP7lw92ZDUWqwXqVCBs=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=Gp/ILltFx/j2xeztkBxe+BaY12jL9MFu0Y5LRuL1V5J/wQeo6lxcyO0glHNjyR+BF
-	 SX11iia5Jlvn3V7lJybwcDNCiOkMbGo/Ykr44BIKTkFCVa5U+RC+oRGweUadunVYvE
-	 17upUv1mIcA4Cak7jAtaIKsJRGNUeTnE8PIrUb90ju2Z6MIoU1v+ThNyy7AeRWFA7a
-	 7EP8P2a9E83jj0FVXwhSQ2iDU87TyjU2vZmJp4qfiO0pNLzFtZ4dcf6/JIvN8BlYCd
-	 P40VIaX6f62fnbBsABVpRpW2BynbK7QUwXbGjZ9VmOphvKO4S9QWxVSKNPyFbriXhP
-	 X+FOJHFYQMFDA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 081A440A77;
-	Sat,  5 Sep 2026 13:51:15 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id EEB8349D
- for <buildroot@buildroot.org>; Sat,  5 Sep 2026 13:51:13 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DFF6B81069
- for <buildroot@buildroot.org>; Sat,  5 Sep 2026 13:51:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D1CA180F27;
+	Sat,  5 Sep 2026 13:55:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gTCogY6GShNV for <buildroot@buildroot.org>;
- Sat,  5 Sep 2026 13:51:13 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 07DB681067
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1788616273;
- b=UjD7TvJiiOwt9qAXyFB0Mhpq5PselF7xrzd0WbaexF8q+M6eVX6LsAtRykQ4lPBsMXzE
- EWzNXPkO3M9Q3+rPYkniJpjbams3+B1vuryyC6u9mfZU7fsZYgcmRXa1NNVjwJeB+tnRb
- hZk6StbzObrmIcCyuUBxbsjAFG5VSnLddxd4cMkN2tvxxOHJp4l3o4rO4dhnlaClSa/A5
- ha6DZ7nPytagztc/XNH+LS75bqLotqI6dg1Ikbo+RHE3HWf593IJqQMjNTenQj7v8+TCz
- XZECpPiLlo936glHA3HyD1U3hbrkeBzTP3NseQL5zZHjEQ5CeMO8NjubTRImLSekW8w==
+ id uQDCshwKcnPW; Sat,  5 Sep 2026 13:55:55 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org C61ED80F2B
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1788616554;
+	b=Gj7NnfeYYopk7Sp3BrlgJv1uDbMRbILxpG97Ptv+o7+qbVUX+ZqNO+aNnrcAX6vwqzUy
+	 czxVr3YpCAgBlogIT8zXSiZQLbpGp4NgQYL5t5oJ8WslHXOu+g9ZFis0esKBqSUAiRr10
+	 mssFABWtVwHemzUCIF9W7DjepVb7kT3Fnl5vS5fVPEWrDu59MPfPQJMa+d5Jfn0L+wfnt
+	 EyWqgTC3WAuIbcxG92HSocHEv5GcNVUVYI7m0G8+sjKXL2Cwjm9E4ZCEXrxcMykY7MsJI
+	 gbgMEXHOCxEON9k3ovVxxixfvw23yXmJFOSt+CPAamyX6Jn1MkMMAmh0SaDzeAeGFBg==
+ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
+	c=relaxed/relaxed; t=1788616554;
+	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
+	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
+	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
+	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
+	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:Errors-To:Sender;
+	bh=/vCBpBUaEwlnmQxNMIh4FNBsjgw22xRKbyiGI4stbt0=;
+	b=OX7OGjZzM8p9IRA8z4LJScqLc4JYOEk7zNuSDK2ndQ4gZNcpPasuZzImpSE4aKiDswPP
+	 ygvtxkQNrLJvYUx9JeEhQeg3rCNBqBf1PZo9KoMyp+B7HGHJx4fsLwDTclHyh9g25o2Ge
+	 robKMR3tz9JO0IiJEz/BqGBrVYa5NUULSu5rROhVauVGXcWKhiWPwxv/CT63uPFCwPiwr
+	 COxhEpZF+GrTQKFl6qvmTpeqxUcQlKGVTA39/IjXFvDOWNuRdoBBEVnlArxmNBZm2HD/l
+	 YwuhEzAoZ/w7FKRFLMvuBGB/39yzpfJkTKsx/LbqEXf02RG+BpTfGfM6tbTro+q06gg==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1788616554;
+	bh=/vCBpBUaEwlnmQxNMIh4FNBsjgw22xRKbyiGI4stbt0=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=Z2agwA5CwRAZCfF0wnWVfu4ppT8yPV1ZiuFc1CQNTtHUmENrX5An7VviV1j1r/cOH
+	 +Np0ukBAmBsI8X6amr9AL5XW4kZyJyO/cXiGlEHkO61Jr0gVo6hRwjlplAgpOO8Y3w
+	 BusOzplplqVgW5i0rgMoMqOdGKAxKvrsGX5J/5O5lII0jFE6oxaaOANMJL0DmpyZiU
+	 SggaY7ZbKJOjdqriSHB1BRDD+//OrottnUvCBZLh/7Dbt1SV74VpQCTbqJ4xKlMXBT
+	 8PDJcf7FIdTUGSv1GDULMlzN4dMJ8Nef0MQaWvCrVSMVqXU20/Sc4ZPZg3LoyYW6ab
+	 uuj/4C5PdcgEg==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id C61ED80F2B;
+	Sat,  5 Sep 2026 13:55:54 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7245D49D
+ for <buildroot@buildroot.org>; Sat,  5 Sep 2026 13:55:53 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5877660604
+ for <buildroot@buildroot.org>; Sat,  5 Sep 2026 13:55:53 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xGCJWVTQMtdM for <buildroot@buildroot.org>;
+ Sat,  5 Sep 2026 13:55:52 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 79A59605F8
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1788616552;
+ b=Xo/Up/tDPm07oJefl8uEBfsOX1/pnxahqPvKwhMP4kyNF9luolRLG27Tr6+efRJkbcdR
+ 6vqlec8Oigv79avd+bocFIZJnRMoTUM5ni/ptxdcjiYlgnCm+KbizKkE4NTgMX2JAQCbZ
+ i59M44C8cvlLp6dW5pP8EYG4EI4R+rmHxqXHZA+dbLzw8ctaqSwnf9Lo43mN4PYB5HsDN
+ 6jQ4wnZ1nuQpkbe5pjJ+WEF60si0ebTk8M6LxmZkUfE32pMRB1V76pDWSU7SAdRu1IO8d
+ YzhtoLCgGMoBk2u6+BjHLL6SEzyOjJ+bkFNqTW5YXPCl+CZ514BGQCqll3S7qeeXb9w==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1788616273;
- h=Received-SPF:Received:Received:Received:DKIM-Signature:Date:From:To:
- Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
- Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version;
- bh=WdACzZOB7t0BdVXUrkLZPlYtMY7zmhMByCbYzoe7beY=;
- b=lX/DjOT/QxDB//Hd16/FX755a8c1PONuM+IPEoz84g7ffM926lLImk/SlrtQY44M6rVD
- LaFNIKyW/C+Q/w88ftZdvVTSR4k7j1++a6hNxyrJvJFsTFpUt0VYjfWE7xnas9LJ8S3cp
- X06HYZKsFdgCXSaOAqAx4GMUv+XyDvMQAmrwJVImelFnscMulGFZqsQWGd5Mpi8PKYL/V
- sPEgNjv4Son/1MBau1A+UhCSjOo26wRqWnMvEMv1xiPhFl1Wtd2V8X0sCkp/uwgd0AkzV
- 0pIh7cAu0WB0QAQM9H0CP/HayGEmLdrGEE5rIFbf/aYEh8gTA+wwPMPhSGsSJQKT9KQ==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org;
- dmarc=pass header.from=bootlin.com; 
- dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=tpJURXxp; 
- arc=none smtp.remote-ip=185.246.84.56
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
- helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ c=relaxed/relaxed; t=1788616552;
+ h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
+ X-Git-Newrev:X-Patchwork-Hint:Message-Id;
+ bh=LR0B1AT7Q0HxiYxudEXSjCvMrhy4GsX4LpmSlzD6j9k=;
+ b=DufnXN4e4Al2GMYUt0jTeDsFz28MF7Mz65Zwtpa60teweOWvfIaE2wHFGJeWJQEyX0ov
+ cxV9DtUWW8qNieHtw7LUdnNP260QL4El3yXezclLIsQzVaCJEUJSqHa0uqy4qu1hsi/XL
+ ABvsgK7LmPP8aZ/iNbnBTvxGHoB9EyBlx5ZDYDApyMoIBsnKhPrnSpvv5eB8h8tX2fqgc
+ buCmW5oBViWwN7hyFTLxGAhI9mz926U46iu0UI9xprThSnSzjCVshhGKBlR5ZCInuSpKX
+ Gb5tZDQtqjVCBQZPDotMSt5G5ymve+0rB3qZUZdH7+2DzRKzuAU/griwJhvLr+CBueg==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org;
+ arc=none smtp.remote-ip=140.211.167.122
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 07DB681067
- for <buildroot@buildroot.org>; Sat,  5 Sep 2026 13:51:12 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-02.galae.net (Postfix) with ESMTPS id 8D45B1A1901;
- Sat,  5 Sep 2026 13:51:10 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 61E8660233;
- Sat,  5 Sep 2026 13:51:10 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 827C411C7957A; 
- Sat,  5 Sep 2026 15:51:09 +0200 (CEST)
-Date: Sat, 5 Sep 2026 15:51:09 +0200
-To: Michael Nosthoff <buildroot@heine.tech>
-Cc: buildroot@buildroot.org
-Message-ID: <apweRqv3X_4T-W72@windsurf>
-References: <20260904065305.575693-1-buildroot@heine.tech>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20260904065305.575693-1-buildroot@heine.tech>
-X-Last-TLS-Session-Version: TLSv1.3
-Subject: Re: [Buildroot] [PATCH] package/catch2: bump to version 3.16.0
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 79A59605F8
+ for <buildroot@buildroot.org>; Sat,  5 Sep 2026 13:55:52 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 6E4258B847; Sat,  5 Sep 2026 13:54:51 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 5 Sep 2026 15:52:15 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 7209f55cd22286eb61c058062aa5f6eebeda8e40
+X-Git-Newrev: 698535473f7340402d3c36bc1eb66237c63ef083
+X-Patchwork-Hint: ignore
+Message-Id: <20260905135451.6E4258B847@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rustc: add
+ BR2_PACKAGE_HOST_RUSTC_TARGET_HAS_ATOMIC_U64
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -126,26 +112,94 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, Sep 04, 2026 at 08:52:55AM +0200, Michael Nosthoff via buildroot wrote:
-> changelog:
-> https://github.com/catchorg/Catch2/releases/tag/v3.16.0
-> 
-> Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/698535473f7340402d3c36bc1eb66237c63ef083
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Applied to master, thanks!
+Rust does not provide 64-bit atomics on every target Buildroot can
+generate. rustc sets max_atomic_width = 32 for three of the 25 targets
+listed in RUST_TARGETS in utils/update-rust, so
+core::sync::atomic::AtomicU64 and AtomicI64 simply do not exist there:
 
-Best regards,
+  $ rustc --print cfg --target <target> | grep target_has_atomic
+  armv5te-unknown-linux-gnueabi     "16" "32" "8" "ptr"
+  armv5te-unknown-linux-musleabi    "16" "32" "8" "ptr"
+  powerpc-unknown-linux-gnu         "16" "32" "8" "ptr"
 
-Thomas Petazzoni
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+Every other supported target, including armv6, armv7, aarch64, all the
+x86 variants, riscv64, s390x, sparc64 and both 64-bit powerpcs, has
+them, e.g.:
+
+  arm-unknown-linux-gnueabi         "16" "32" "64" "8" "ptr"
+  armv7-unknown-linux-gnueabihf     "16" "32" "64" "8" "ptr"
+
+A crate that uses 64-bit atomics without a cfg(target_has_atomic = "64")
+guard therefore fails to build on those three targets with:
+
+  error[E0432]: unresolved import `std::sync::atomic::AtomicU64`
+     |
+     |         atomic::{AtomicU64, AtomicU8, AtomicUsize, Ordering},
+     |                  ^^^^^^^^^ no `AtomicU64` in `sync::atomic`
+
+This has been hit at least twice already: by package/dust, worked around
+in commit 3abc3b97bad9 ("package/dust: bump to version 1.1.2") by moving
+to a release in which upstream had added the guard and by package/dtui,
+which has no such release available and had to open-code the affected
+architectures instead.
+
+It is likely to keep recurring: infra.basetest.BASIC_TOOLCHAIN_CONFIG
+builds with BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV5_EABI_GLIBC_STABLE, so
+every runtime test that does not override the toolchain compiles for
+armv5te, one of the three affected targets. That is exactly how the two
+failures above were found.
+
+Add a hidden symbol so packages can express this constraint once, rather
+than each open-coding BR2_ARM_CPU_ARMV5 and BR2_powerpc and needing to
+update whenever rust gains or changes a target.
+
+Note that armv5te and 32-bit powerpc are only supported by rust for
+glibc and musl, so the uclibc variants of those architectures are
+already excluded by BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS.
+
+Signed-off-by: Christopher Obbard <chris.obbard@oss.qualcomm.com>
+Reviewed-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/rustc/Config.in.host | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
+
+diff --git a/package/rustc/Config.in.host b/package/rustc/Config.in.host
+index 9cd912fc74..6130b73921 100644
+--- a/package/rustc/Config.in.host
++++ b/package/rustc/Config.in.host
+@@ -112,6 +112,22 @@ config BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
+ 	depends on BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_USES_MUSL
+ 	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
+ 
++# Not all the targets above provide 64-bit atomics: rustc sets
++# max_atomic_width = 32 for armv5te-unknown-linux-{gnu,musl}eabi and for
++# powerpc-unknown-linux-gnu, so core::sync::atomic::{AtomicU64,AtomicI64}
++# do not exist there. This can be checked with:
++#   rustc --print cfg --target <target> | grep target_has_atomic
++# Target rust packages whose crates use 64-bit atomics unconditionally,
++# i.e. without a cfg(target_has_atomic = "64") guard, should depend on
++# this option.
++config BR2_PACKAGE_HOST_RUSTC_TARGET_HAS_ATOMIC_U64
++	bool
++	# Excludes armv5te-unknown-linux-{gnu,musl}eabi and
++	# powerpc-unknown-linux-gnu. BR2_powerpc is 32-bit only:
++	# BR2_powerpc64 and BR2_powerpc64le are separate symbols, both
++	# selecting BR2_ARCH_IS_64, and are not affected.
++	default y if !BR2_ARM_CPU_ARMV5 && !BR2_powerpc
++
+ config BR2_PACKAGE_HOST_RUSTC_ARCH
+ 	string
+ 	default "armv5te" if BR2_ARM_CPU_ARMV5
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
