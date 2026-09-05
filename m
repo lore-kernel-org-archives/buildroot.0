@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 225E1C624D3
-	for <buildroot@archiver.kernel.org>; Sat,  5 Sep 2026 17:07:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C664C624D6
+	for <buildroot@archiver.kernel.org>; Sat,  5 Sep 2026 17:07:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 669E560631;
-	Sat,  5 Sep 2026 17:07:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1FF8540A66;
+	Sat,  5 Sep 2026 17:07:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kRCJ1V51AcaG; Sat,  5 Sep 2026 17:07:11 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 355A06063A
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1788628031;
-	b=SL+pTS+fgz/V5ND709sJRzBPWuGI/X4X26wFpEyljox/jLpOcpU2FTkGG6mgrIUbezwE
-	 Eh/s4ETWCJZ5Evwr/1W5pBxgSnvbj/PtClaZWzzHR1RmnFtiMP8NtnJkR+xkdhZ+3nXMk
-	 mNZ5trfjINbS7EzurLzB6jrBmo9F9rM1+uzepeUsbymbsE+O9bM2ICRwTaj7KB+Q9ng6E
-	 U8nlUwDe2intQrghNu8JvOsb+SM9wWhDhUb5ZpACUyF67SGW8nAjewYXItzDQFhQH/KxI
-	 8TC55/5G+MlSqRUUnVcbVc5U6lVQEc5gnpQxY9u5Ok1aIyjaWlR9tTxaIxOn8L6l/Ww==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VLgHp_wtMeMd; Sat,  5 Sep 2026 17:07:13 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 3CFF940B54
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1788628033;
+	b=f9zZn0T19HLbhmiJxH5/lUWoElo8+D4CrroOFdnBYuatnuJqdoYfAduGY+/0uxpHOqLS
+	 IOJqBTGhm+kzPlSEQpR775do4IkNUblang5kUb2tfHtkXHlsUTMn5tPa/bJbRXp0kOyVf
+	 x6DqalhNDRJwAoJi/5PFsqN8d55wkRF8/T0a1ELXfAQcqTZxfjXvmUqEEuFV6pJxH5iMl
+	 mmUWhATREpjku3S09FQloUYO9whmGHRMk4jiq9XU97fEdKfpq7CuzFCaDNAcAYggitFN8
+	 3Dz1PrKZ9F26ymKdlTpKDgEMtDZD9uWaTly92pVPMdWW2xqpCBDTnceWD6PiCpqNTMg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1788628031;
+	c=relaxed/relaxed; t=1788628033;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,75 +30,75 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=TP5VRXBOPus1Uyc2Xe0sAZCQRETJiH8tnl62xGRXbU4=;
-	b=Du9em1UswY7H6PIF05eL+nqRScMegqzxjI6VOUNGE8M2JfBf3PVAkbcpkmOxPLpeFWjt
-	 Qn19yUFK74OFGJlOFlxt5iwRTpQTDhF+TNFg7NUQnzXoIZHVCcFnfRNSFwfTYt4ZSl5LU
-	 uiZvl2LtSXSxvToDfyiGGUlZMk59uX05K1tt//FTRH2xSquUxugtXmttXQCosJmm7sci/
-	 H1BGoD+FByVvPeJQXU0TO2gceO9ceyhbstEmiNFiHrDuC2ybq5itmm5uTSWgT0HYZhsJY
-	 2dUIoQWgAm5jV5MdqnB/hgE1NGShnDSyWYkLXwwfMI/SNr6zEJ+On+/8l6FMqrp3mPw==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	bh=tV3GVvisMJ3BeLSHYkjJ+eBuaW9XBtE6uQRj6XG/7dQ=;
+	b=dwXUpAlcuIT9l7TbfCwX1POzjPHgqSktuDmMFqWpz8pB6JY7mtJiglB3+KyqZfd9q0RR
+	 /JrksMuVJfSYqVAqiM6i/CVG62dm5JvWiBDGeBergLuq3CLt9QWsvPfsAslGVUzD2qBN9
+	 zpJ3avpsGTUqLoYieMjcJBM76ueH85Q3dckUwcob3GCCmNZxQa7IjuSggpYsRgClzZuIZ
+	 uaadZ+aXGqt1bIKGx8Sb9HGKUczpGzcJwArgzGJAYh8hfYgxEOm8zVESsk8bnLTA2eG17
+	 d4NCJzw4AtRF1c+OKP5Wxiy3OhYqdm+W1K94YWdGF799jJeuKmqCkRie7pchgZtktLQ==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1788628031;
-	bh=TP5VRXBOPus1Uyc2Xe0sAZCQRETJiH8tnl62xGRXbU4=;
+	s=default; t=1788628033;
+	bh=tV3GVvisMJ3BeLSHYkjJ+eBuaW9XBtE6uQRj6XG/7dQ=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=X0L4fleAWa1fcb21HmALCiRpOXgtDlfd39PbGeeHLIgPSelToL3x75m01Mb85k8qG
-	 qmtu9jV3qUaV4MNEbO6lo/49AUyafpHq48gIfwdMLaXfrauaG12JaqT980P0xiSuWc
-	 yPshFc8WuOJ/P2fThiCgX0aqlLeKJdo4wwujUSV8jdYot6pB0XlvKAn08EM9swh7mC
-	 wE5tRzWGWhh4NvJuYlF2MSwD9KFGh+wVk0UOmpczvxCYs6O42+CtoXdHUbq/y1oMED
-	 b5hXgYmqsB9ueCpb9j0DO39uKmPc5Zk7Aib5ZGNLfCp9uawxM6WcZVHqQSNHu8GTME
-	 iqFWF0QPrF34A==
+	b=MOmzlaGdv3ZZKF+VMDeAPaEUqAcVEK6G7Cx+O7cB7SFbZM7RZAzl3tBVlzZIydK7t
+	 +l5RqUCGURnpxTG3oi6+pKdlR9ylbxhTQE5XYrKYMG7VYShGBLGUR5WSdg5PD7OhSM
+	 DXaYoUbKUPZNMeSvbW/HjQ+4OOuuzC76V7+67cWAGfjMO+2w0cdFpH6lIjBAa4J1g5
+	 xnk2n1GqJQmQ9Dv1nA2kW04oCHpPVcnSmi8nFhc5ntX6gCCy5AkIf6RGWIK28UPSbt
+	 73+D/F0bRgL9P1wkEEmT1WIK052LK2vuM4ARJLw3Ampmhoh+Qv8aocdDaeyVooRthj
+	 iK8ZPVyhJAlSw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 355A06063A;
-	Sat,  5 Sep 2026 17:07:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3CFF940B54;
+	Sat,  5 Sep 2026 17:07:13 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 2B0171F2B
+ by lists1.osuosl.org (Postfix) with ESMTP id 2EA2F1F2C
  for <buildroot@buildroot.org>; Sat,  5 Sep 2026 17:07:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0CB51810B3
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1038580FFD
  for <buildroot@buildroot.org>; Sat,  5 Sep 2026 17:07:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bGVU8upnPIlb for <buildroot@buildroot.org>;
+ id byxYZ1a0p9HU for <buildroot@buildroot.org>;
  Sat,  5 Sep 2026 17:07:05 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org E944080FFD
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1788628024;
- b=AFKur0f97cjcgk6j0B36JvOU9HTCCOi6la0XZ/4zwD7GKThFvsEsnwL3V8AxLDwIhyDa
- gtzU/dSH1m3wswtt6tOy/jDa/Dmn0ihq7oicosc5smD+CGPehnFbU9sNGbxq8Uy5jAiws
- Jt6SNEAIZo4Hqu2kV7SizQTfNouOPHxFg0djI7tjwgWYgZtcz2kr5rTMqI4zX9LAVirQN
- SOCRG2fvRCqZfcBHoj/47qaN9PzuWF49RW312ETDiNX6Oi263B7gdJFqs7W+UFjcr+DXZ
- 3h7vdDH7OysxvSjDWf4SWcf/j3cuF+cuNcpbz2MfuZcuxqTRRqLO74+yziCxi5oadIQ==
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 09D9581097
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1788628025;
+ b=eEuBb67tt+lKZbjizgMLmlNI+B+GeYWob2p52+eOORm9MFDN4Cg5lpEcP6KxQQ/fXPLL
+ oaiAMvKnPY94HsLZQ4903TVnUQN+6arm9bf0kd3RGzZjo9k4G7vqAFUHCqiyXa04QGKYR
+ c0UXJJAG+Cp2wlx7N/brDDzItqq/mbqh+vnLZS1mO55wHuWITcHosJRbRp4OQtacq79pt
+ Lz/UwWKcD5rqIgmJxRzr2Uy7Xqu6XqT0umhdV73nMyWEyp29d5Sa0NzaX8C6gmFrdkoPN
+ XvOTtmH7VLp+vuVqJ4i0wn4tANaL042lekTQhyDiopT5HCeWec2WYFGC4XH/PlUTiew==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1788628024;
+ c=relaxed/relaxed; t=1788628025;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=t/PMOqH/XGE8bKKx33X3iUfeLozzJSY7ijkFVvbEt0k=;
- b=lSXQTs3RXP1bKFVJ2+4Du3m10cr5t9Qu3SmUhNWiGuzX89assrFgeWkRHPDAEhy/RkxD
- fVEruHKosHuZQwxgMXOCeKv+B8u6PpwSPCDmuFh9ckALuZO4FY4H1UJaEitjB2b41nXFg
- 1m/qLrXeZq6TvpbBKp0HSqMxPrux9T/uBLncLbLbQA8/CD2R+etpM2C/AqbdoAnuM5RwJ
- dum9wZOGw3RmtvF6D94g40eToACG6n/qWfwdflq7WFg+luX5Z9ibmV5S4VzX+fKjQQyyM
- YkVTUlm4EjACmd+xBa+B+1vUbuyThU12LweF+ZS3VM4ZZhNaRz1ltPkg/qAP3hQqEoA==
+ bh=WpLFEsJsVWjwXK0oiwRxjZHd1GKwBONW3gjErBLAFEQ=;
+ b=FYEQ7vp9iJOtd2K+7g2PPrAx7bYC2dvfKYYAAzsb68kLzw/vZzv6wCdkgU2m6xX6qZNZ
+ WQGP6miKZRLuAUEV4HPV6YX/rgSHKtCUBtne+P3pLuzBt6HHm6f+y2QT3y/0QEmUXpC1D
+ iTTYt+M16A94UHYf0Ufj6Vdt+w8aDPnnmnM18r260KWZUI5+B/JvNtQL+GYRrl4YEsDnq
+ zeCdYssePCogPlLHgs8HDUvlUnwwC3KASpCbyjWRWiZHGxUyOniBof0l6mXzo85WiaK1/
+ dcTAxNQTbpqyaiDCXvqs9/vs+vcJKZqHITZ4BpjtHkz5ETC2ucOC9bAMyuaoMrAWGkw==
 ARC-Authentication-Results: i=1; smtp1.osuosl.org;
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E944080FFD
- for <buildroot@buildroot.org>; Sat,  5 Sep 2026 17:07:04 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 09D9581097
+ for <buildroot@buildroot.org>; Sat,  5 Sep 2026 17:07:05 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DD2EB95263; Sat,  5 Sep 2026 17:06:03 +0000 (UTC)
+ id E7E7095261; Sat,  5 Sep 2026 17:06:03 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Sat, 5 Sep 2026 18:27:45 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: bdfdd430ae1957e309602e3360775c486a17e4b3
-X-Git-Newrev: c3e961b5af1f81917589e18732e157dfff0ca969
+X-Git-Oldrev: c3e961b5af1f81917589e18732e157dfff0ca969
+X-Git-Newrev: a0db52966bf06f2ce2d0681a5f76eacfe52ba5ac
 X-Patchwork-Hint: ignore
-Message-Id: <20260905170603.DD2EB95263@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/lua-lrexlib-pcre2: bump to version
- 2.9.4
+Message-Id: <20260905170603.E7E7095261@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/lua-std-debug: bump to version
+ 1.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -118,43 +118,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/c3e961b5af1f81917589e18732e157dfff0ca969
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/a0db52966bf06f2ce2d0681a5f76eacfe52ba5ac
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-diff LICENSE: update copyright years
-
-see changelog on https://github.com/rrthomas/lrexlib/blob/rel-2-9-4/NEWS
+diff LICENSE.md: update copyright years
+    -Copyright (C) 2002-2018 `std._debug` authors
+    +Copyright (C) 2002-2026 `std._debug` authors
 
 Signed-off-by: Francois Perrad <francois.perrad.86@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/lua-lrexlib-pcre2/lua-lrexlib-pcre2.hash | 4 ++--
- package/lua-lrexlib-pcre2/lua-lrexlib-pcre2.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/lua-std-debug/lua-std-debug.hash | 6 +++---
+ package/lua-std-debug/lua-std-debug.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/lua-lrexlib-pcre2/lua-lrexlib-pcre2.hash b/package/lua-lrexlib-pcre2/lua-lrexlib-pcre2.hash
-index 090b83d48a..13ab6fb803 100644
---- a/package/lua-lrexlib-pcre2/lua-lrexlib-pcre2.hash
-+++ b/package/lua-lrexlib-pcre2/lua-lrexlib-pcre2.hash
+diff --git a/package/lua-std-debug/lua-std-debug.hash b/package/lua-std-debug/lua-std-debug.hash
+index 8e4bc69f20..c948df6209 100644
+--- a/package/lua-std-debug/lua-std-debug.hash
++++ b/package/lua-std-debug/lua-std-debug.hash
 @@ -1,3 +1,3 @@
- # computed by luarocks/buildroot
--sha256  9bb1cb2f307eb70d66fdab499864de732c891aace0ceb6a338194e2e6631b9c3  lrexlib-pcre2-2.9.2-1.src.rock
--sha256  067992fa7c5866e01d6c8fe93dfa1e1456a6ac81fa59ccdc72f5adcd6e5b3690  lrexlib/LICENSE
-+sha256  d41d736a309b14fed859ed4d3a49de89ef8f6565a7143570ed0cf1ccdbaebf29  lrexlib-pcre2-2.9.4-1.src.rock
-+sha256  c1f071c55958bc56292706c46eaae7a58f6876dfd8ee125b33f7db0700883403  lrexlib/LICENSE
-diff --git a/package/lua-lrexlib-pcre2/lua-lrexlib-pcre2.mk b/package/lua-lrexlib-pcre2/lua-lrexlib-pcre2.mk
-index 3d0c3c57fc..40ce5f6ffe 100644
---- a/package/lua-lrexlib-pcre2/lua-lrexlib-pcre2.mk
-+++ b/package/lua-lrexlib-pcre2/lua-lrexlib-pcre2.mk
+-# Locally calculated
+-sha256  7f6b84283d4b78dafee17e7765dd5f1f8e75c3314169977f4dda0e7873616ce2  std._debug-1.0.1-1.src.rock
+-sha256  034abdbbe9a13899c813509776d1e04af81bc58c2982b704c8b3663549504a31  _debug-1.0.1/LICENSE.md
++# computed by luarocks/buildroot
++sha256  7f767897257e7d25b6af5b45a53acb56b34181d452f831d48634db20a091f15d  std._debug-1.1.0-1.src.rock
++sha256  6f8eceed4659fdc39ceef192458a72a05281e429b6028aed7408f26a9d6c1aa8  _debug-1.1.0/LICENSE.md
+diff --git a/package/lua-std-debug/lua-std-debug.mk b/package/lua-std-debug/lua-std-debug.mk
+index e044d6cb4b..55ed6d20ea 100644
+--- a/package/lua-std-debug/lua-std-debug.mk
++++ b/package/lua-std-debug/lua-std-debug.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LUA_LREXLIB_PCRE2_VERSION = 2.9.2-1
-+LUA_LREXLIB_PCRE2_VERSION = 2.9.4-1
- LUA_LREXLIB_PCRE2_NAME_UPSTREAM = Lrexlib-PCRE2
- LUA_LREXLIB_PCRE2_SUBDIR = lrexlib
- LUA_LREXLIB_PCRE2_LICENSE = MIT
+-LUA_STD_DEBUG_VERSION_UPSTREAM = 1.0.1
++LUA_STD_DEBUG_VERSION_UPSTREAM = 1.1.0
+ LUA_STD_DEBUG_VERSION = $(LUA_STD_DEBUG_VERSION_UPSTREAM)-1
+ LUA_STD_DEBUG_NAME_UPSTREAM = std._debug
+ LUA_STD_DEBUG_SUBDIR = _debug-$(LUA_STD_DEBUG_VERSION_UPSTREAM)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
