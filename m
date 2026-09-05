@@ -1,129 +1,130 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8CEE4C624DB
-	for <buildroot@archiver.kernel.org>; Sat,  5 Sep 2026 06:03:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9AA48C624D6
+	for <buildroot@archiver.kernel.org>; Sat,  5 Sep 2026 06:21:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 75F2260BFF;
-	Sat,  5 Sep 2026 06:03:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3C91C40BED;
+	Sat,  5 Sep 2026 06:21:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PcZhDSj_Pk39; Sat,  5 Sep 2026 06:03:11 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 7BA3F60BED
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1788588191;
-	b=R7fjNRAkxHBE5sdLBsI8DNPca8n4F1UpcGwd5XrbyelKruVgCgqc3yPpQqb4GskSth7D
-	 R9ztPBmWJb33OqcydeOvMesCNYWfyGKNRWBujg2eo5TURPKy4p3mqt0kKzjrwjyn3Kuh4
-	 FbRIRESLs/R4VDcxE5O5+sjEjwCNMxVzkzgijT6qnxa3vZpeFkZ+pyx+I1ArUZQwNR4/a
-	 z2yhZdrERq1GlAcOMUrUdTgn2v0napwCZpU2mul86fXkCoEQEX427MwBRJMsqjYh7qe0Z
-	 YZldxduSfnNs0FnlKhiD33x4P6ZLMZDvmaa+h+D1HLNwOL/CzD3OvY5c7GheDm6SKXg==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GY27Eud6h3BW; Sat,  5 Sep 2026 06:21:27 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 3BA3B40BF1
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1788589287;
+	b=E511qGWue5H61jikcK7cdYK/s+0WGm1D2DYi12tCfGJX4jydYVS6t0HhbrWvXuVPa5Zg
+	 SDnn+85TcvGIRsEw/J7h4dNzilskd0hRYjLltjIS7QZ5i3G0Yg1LQMfwwcT5pNxoz/NFg
+	 e9zLmLQ+7vVsZ2J+Mck2vQUBvARXnMFAwrx34Gj8oMss76zR3otM/yDCR4dAq3xYsBKia
+	 S6bfqKNenYmTnN7useHyUk2Ln+VZeMiQU1xlbaZVdOcGIdhhkt1lyg4LiuceWoNKy+AWP
+	 2m8Mx0sD1Qm4JnojERuc0iBsSgGO7I/Aob5FdKaEbRrpvUD6QCVkmgsrpOvZ/dPeWhQ==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1788588191;
+	c=relaxed/relaxed; t=1788589287;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
-	 DKIM-Signature:Received:Received:From:To:Date:Message-ID:X-Mailer:
+	 DKIM-Signature:Received:Received:From:To:Cc:Date:Message-ID:X-Mailer:
 	 MIME-Version:X-Spamd-Bar:Subject:X-BeenThere:X-Mailman-Version:
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:Content-Type:Content-Transfer-Encoding:Errors-To:
 	 Sender;
-	bh=5nEhQbCuNxvR6jiHmW8ByYhNQkdcc4FdhZwlOEGOuSQ=;
-	b=I72YAiLQTIp8x39CKhHY1XOG1IbM4/DM6JI5wcNevCAzSAmhK6/EJ2WjZ4EvwiFCRbqL
-	 8rAxQ9suu6pFDtp+DqeObQ6HD8bfqykD15MUvX9ON1xz+VoHlchsqF7F+taCQKes/8mxd
-	 BWgQeL9M3lU6VV35i/PMLZXkwiujacJELYeAfcJGx5R8OhIsbjAwoUUq9n/MhJYX9Bqbg
-	 DBmUFd4GQVFKDVZZfbKZisff1uF+Q1+0s8BJ7YoowLAufcq2vPAu9arLrusuGxEApgqrx
-	 w671Nu4rAtww4f4GXxwK9vyaT/i6usBZeT72Rutut951nv8IyU0sagzMFJUIifLgiPA==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	bh=MPfR3x/Hr1iKeNw7NtyLIeuVUsJN1GgjS2WxM6xgyZ4=;
+	b=HMrX8ftZsIYBWWbJwBkqbjzKJ5FjMsmPnYMjwJh8zh8TqV0nHMlohVRg9x8wqpnY2q7t
+	 7VdpKA6zg4caKgiHAAliRLPnRb9QmSKeqijUUWFu08vGvoKkeO7OK+a5/mA6aDz6U/ZB1
+	 M71V+JqOmV3X4rgl6XQ7ShMnif1OYGq371G4YGp7k0Wa6N+wLV9IDsFkA35EtRGY+LWvH
+	 MqOPeEJmIKa5IUxcJyr5YYJ3YMu6fHzh96N+GARc8wRuPBzciby0vLxsxokZEojraKQL4
+	 uMGb7RzRvKRjn+OkCTiScdmLFxIvM8aGogN7dJb5kvuav2QOzSlkxajHGqsoPBVIXzg==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1788588191;
-	bh=5nEhQbCuNxvR6jiHmW8ByYhNQkdcc4FdhZwlOEGOuSQ=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	s=default; t=1788589287;
+	bh=MPfR3x/Hr1iKeNw7NtyLIeuVUsJN1GgjS2WxM6xgyZ4=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=PO3Vc6it7O9siJmEKRYDhOLRfhRiXH+KIhrkX5kshAPwssRO2KTjQ34CFpz7N+A8Y
-	 7D8LXLTpRdlJKuM0OkuHWQA+94wDGbh1zolTgQ/49TbO+O2UkZxkiGEwh1kdlY7gsn
-	 fE9XGgC7PKYJ/E5Tb1Dx+NZbKsRrwt66D2WVRAac4wrmtxJ5Am39wAvaN/wsFX5bhA
-	 VJ/kUv7vxyNTyJG7yeC0kgQVpwHjroHc393SoFWq/DJrz/d9K1w0tnRIP5gY8aD7N/
-	 GGCmtFRBZ40pQLRUxz6FECQRfwre70QGltw1d/b6rFc3x5Mu268hatrHAEK+WryTZ5
-	 Mtt6+naKhkOZg==
+	b=VlbypJSfJsOa7KKcRzM8LJLm5tgP6SeTGsvMLcvu25t7cWHjD+q73sJlK54WkYM18
+	 tHfbfRlY64GI/wj2VR7rEnXDUXqw+y0wBC7i8NlSV4tVvSf4SqWGwUPJ2sNUD7XcC2
+	 K4vUz+U6/2aXtWcgHBb3zbBwJIh4CZLFxjZMS+aclNS7dz8IsYu/JBTTcGiw8pWdqe
+	 /h4bIyaoHiAgkYMmGVm4twERv4RwHa/mRCVgxydLZkWZwQqbBbxydET6cOfzPqg3H3
+	 BuIYlkBHPmY3l8JPW4nKAr28K9ava+kqsXCj8io0JlYLBc4U9hKBZwlv9T4/CqTopP
+	 XvY6T20GB60+g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7BA3F60BED;
-	Sat,  5 Sep 2026 06:03:11 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 7B053230
- for <buildroot@buildroot.org>; Sat,  5 Sep 2026 06:03:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3BA3B40BF1;
+	Sat,  5 Sep 2026 06:21:27 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9F1B69CF
+ for <buildroot@buildroot.org>; Sat,  5 Sep 2026 06:21:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6CDA240C89
- for <buildroot@buildroot.org>; Sat,  5 Sep 2026 06:03:09 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8FEA680D62
+ for <buildroot@buildroot.org>; Sat,  5 Sep 2026 06:21:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id N5VT2pYspeC3 for <buildroot@buildroot.org>;
- Sat,  5 Sep 2026 06:03:08 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 9977A40C87
-Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1788588188;
- b=NXjUOW4NBYh70Uo/lEHj5VWxQtsBb81HJ5XGBOHc5UUfFAtyqS6JjyNCT8yUXQ9doA6J
- yAzxLVOvqJoB9wtGpKJ3g6XqZPZh/JIBS0GelmNu8XVlttAsJR5iPcJgSJTcfzlv0IVo8
- 2QlxWO1HfBxgcd+RePotmzAF++VAcPJDLSTpgHlO6nj2WfPl27MdltrR4Zx3cKLwWwVQy
- SiM98jy/URvIDIInu6n6AWmeA9OdRxCMHb+jPYqwNB0obL9Jmv1GYdBill4xmPSxjf7rh
- SWev014NMskFwZG2w4QMlKMiZXQY4otmIcGfG2+n4tQuIJlupMGjFBmeiyQugsiZp0g==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id D3FrX_EdPg1t for <buildroot@buildroot.org>;
+ Sat,  5 Sep 2026 06:21:24 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org C1A77810E7
+Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1788589284;
+ b=rkmf7oTiaKIFPB1dAswwgFVwvxrjCRlL728WWtBIkPgpOCaIrUn1qvFBUpgqtcJP63xj
+ MseGm5iemrmjJGg6iCBSXgXFwb4jy8yQH9HFpUMaJ0Ex80/bRx6ulJE8sB9kA5o3ZOYoY
+ +BZABtRBMTydfu8gXgYfFfKS3A+aMjpYrJVIl+oGWZlyNy18okYXIMjC5Ns0kXbu0iqhj
+ 2WKbNJfPUivjJMHuU74YTRHeBKs7CBOuTHfuCoQHGvi5U5fqGw6CrRhy1JuMB+ICY5q2F
+ bBANg06S+ovAtFtylw19LE2svYVm1c8Qc7WvSf21Rzx8CKbVHhq188JMk4q0sqH1DLA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1788588188;
- h=Received-SPF:DKIM-Signature:Received:Received:From:To:Subject:Date:
- Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding:
+ c=relaxed/relaxed; t=1788589284;
+ h=Received-SPF:DKIM-Signature:Received:Received:From:To:Cc:Subject:
+ Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding:
  X-Spam-Score:X-Spamd-Bar;
- bh=ca/XbFEXwHiTn8ZhWz845FHYqQpICHT/8czjXIsiLzI=;
- b=IdQ+E315xjbvjazSaYxo03zAAzryiCL1Rpja3k/SeYo8CvmP2H5e1V3I10FsBALLPpTy
- xX8ho5w7knek7e8794NADsOyIwLUHZKUMKUfz8PUxzNf67hMHvEV0uQ/RIJRsckpmtUDr
- D/VFht8DwDmcQP4vqtpw+gs4ye1avhX0S9vWgnTptLmMFXPgoE2v5DbJ2y83sobkr9nhi
- RXzckIxOJX5nO0eye2nLJe3E6fpayJ4mnRxC5nYtWsD103JGWMcMTcZ52QuhVzbMq9G2v
- BXRNOctTRedOdX9in9woW/N2M9wbHpBPUxfC6wccA8BP4g9BW7E3cPkY6osmVo+flFw==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org;
+ bh=uK03eYI8HDLQdKwVywCI0uCZGPYDkwyTu6nJLTVxsTM=;
+ b=R0CGJy0cBgLNp7mX7qXLsjFNlsu6e0h5H2jceFl+A1dtwSLinnLFYcH5V5CxaNx8d36O
+ jumuxnNNP9rCDks8AehIjoFSxN1k81Ds7t44f8JOdgJ9stqruUCrubn4Zz9IEWjjjIliX
+ ub0IfZxI41JLjXGJjgtsqyQv8pPGdzU5hpdgjFk1PLozBgGMdDe8zQSoaWp1wkbjgzGmr
+ JnoVr+RLsSVUqc3dH9mH4ov1BgZioS2C70OZYE1ZQJ31EsIA1V8BBdTND6fdKW1RGqbYL
+ Iiea6DT/0OU4C0h37yviqO2weZR0oS4BH7JfFEq1eE3cLlo9vmAcsttuAvdFn8sA96Q==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org;
  dmarc=pass header.from=kuhls.net; 
  dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=SdtehP9s; 
+ header.s=kas202605290044 header.b=BnhVZ9aM; 
  arc=none smtp.remote-ip=85.13.140.57
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-Authentication-Results: smtp4.osuosl.org;
+Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=kuhls.net
-Authentication-Results: smtp4.osuosl.org; dkim=pass (2048-bit key,
+Authentication-Results: smtp1.osuosl.org; dkim=pass (2048-bit key,
  unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=SdtehP9s
+ header.s=kas202605290044 header.b=BnhVZ9aM
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9977A40C87
- for <buildroot@buildroot.org>; Sat,  5 Sep 2026 06:03:07 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C1A77810E7
+ for <buildroot@buildroot.org>; Sat,  5 Sep 2026 06:21:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
- s=kas202605290044; t=1788588168;
- bh=ca/XbFEXwHiTn8ZhWz845FHYqQpICHT/8czjXIsiLzI=;
- h=From:To:Subject:Date:From;
- b=SdtehP9sERuyBnu9Txi1ZzcBH0YLMCpuUo5lEdmfDTu9UPX7OS24s//LP+Eat0f3t
- c08cRspoz1Aiemw1RbLFBDLFf2ZXwsuImyPjzC/TOa16HAbtgT9zUOv42rUAttsKTX
- /wcMFg2FHmXx5Yq1rXW1yZIHAMb9Hkr8nfoF6rqOrnvxGXJC66b/fzx2HV68paU0YZ
- SCQoSO4rLpLoInnbkaIk+bCiPG4sTTGZjHxyifuNRpS9rBxFGRrZplo7u2au/FoZ8w
- cOIH+d+jcQqaQnNFHdm3c4SNwy05RcIxjlxNzuBs4HUw5oAcftt2NN5Cprq5RwMznt
- s4yIDQZYpS/ag==
+ s=kas202605290044; t=1788589281;
+ bh=uK03eYI8HDLQdKwVywCI0uCZGPYDkwyTu6nJLTVxsTM=;
+ h=From:To:Cc:Subject:Date:From;
+ b=BnhVZ9aMwZsAtIaGMkGxQ2cbyla96Ia7QVqEDgXs6OYRwNIOTL0DATB5VLRvV39VN
+ J63CfERcNMIuj6VFDLM1AIS96BwRrISGgAdz6PqGxJw/qxnUXG9AnWTKDnJAHvJwHg
+ zGY1Cgzlw0NtEgPmPVVDVjea5eYlp8Zzdyq2+b0o5nYKZkInDGNOYlH5sDm9TmdJ26
+ nb0hzttbQ6UC4vhcabI/UTL0cY1BBsSTbROzatUQC9pUMLFHXCOr53x36ppeAEUbzb
+ Isth+1IXZHL6daHJRWN9qaPpoPqesvh8towhuJjvNEtQOOp+9MxFfPH3dtCKS8b/Ct
+ oLcvZTVuhCZcA==
 Received: from fli4l.lan.fli4l (p5b3a03a0.dip0.t-ipconnect.de [91.58.3.160])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id D7FE9A4C2F20
- for <buildroot@buildroot.org>; Sat,  5 Sep 2026 08:02:48 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:35818)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id EABE8A4C193B;
+ Sat,  5 Sep 2026 08:21:20 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:57392)
  by fli4l.lan.fli4l with esmtp (Exim 4.100)
- (envelope-from <bernd@kuhls.net>) id 1x2jUG-0000000078N-1Bbg
- for buildroot@buildroot.org; Sat, 05 Sep 2026 06:02:48 +0000
+ (envelope-from <bernd@kuhls.net>) id 1x2jmC-000000001wM-2gUE;
+ Sat, 05 Sep 2026 06:21:20 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat,  5 Sep 2026 08:02:47 +0200
-Message-ID: <20260905060248.332445-1-bernd@kuhls.net>
+Cc: Pierre-Jean Texier <texier.pj2@gmail.com>
+Date: Sat,  5 Sep 2026 08:21:20 +0200
+Message-ID: <20260905062120.377049-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Spamd-Bar: ++++
-Subject: [Buildroot] [PATCH 1/2] package/intel-mediadriver: bump version to
- 26.3.3
+X-Spamd-Bar: /
+Subject: [Buildroot] [PATCH 1/1] package/libxml2: security bump version to
+ 2.15.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -140,40 +141,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/intel/media-driver/releases/tag/intel-media-26.3.3
-https://github.com/intel/media-driver/releases/tag/intel-media-26.3.2
+https://download.gnome.org/sources/libxml2/2.15/libxml2-2.15.4.news
+
+Fixes the following security issues:
+
+- xmlregexp: Prevent out-of-bounds read in NXT macro
+- fix: add missing overflow checks in dict.c, uri.c, and valid.c
+- xmlregexp: Calc string length after null checking
+- xpointer: Check overflow in xmlXPtrEvalXPtrPart
+- xmlIO: Check for int overflow before calling writecallback
+- fix(xinclude): propagate parseFlags in xmlXIncludeProcess and
+  xmlXIncludeProcessTree
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
-Series passed Gitlab pipelines:
-https://gitlab.com/bkuhls/buildroot/-/commits/8916a0a9433c6954a513445a1f29b8b2335bdf54
+Gitlab pipelines passed:
+https://gitlab.com/bkuhls/buildroot/-/commits/f81b17dfe4e6a1093d390aaa6e7f910687ced420
 
- package/intel-mediadriver/intel-mediadriver.hash | 2 +-
- package/intel-mediadriver/intel-mediadriver.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libxml2/libxml2.hash | 4 ++--
+ package/libxml2/libxml2.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/intel-mediadriver/intel-mediadriver.hash b/package/intel-mediadriver/intel-mediadriver.hash
-index 0392a45a2a..3f4486aa0f 100644
---- a/package/intel-mediadriver/intel-mediadriver.hash
-+++ b/package/intel-mediadriver/intel-mediadriver.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  eb8351e2ac9c1007a6489f3ef53907a464bec5e4fb2a1030f5b2b8fad81cc01a  intel-media-26.3.1.tar.gz
-+sha256  bbe4deb0d2f72e5c58adaf17f87b7a11bf639446d99bf4193a116d0588647a97  intel-media-26.3.3.tar.gz
- sha256  74979d5aaee78b8da82e3aafd415a216b6131dfff6d95d6930927c8a4e3bded3  LICENSE.md
-diff --git a/package/intel-mediadriver/intel-mediadriver.mk b/package/intel-mediadriver/intel-mediadriver.mk
-index 4810bb6ebc..f1a6dde392 100644
---- a/package/intel-mediadriver/intel-mediadriver.mk
-+++ b/package/intel-mediadriver/intel-mediadriver.mk
-@@ -6,7 +6,7 @@
+diff --git a/package/libxml2/libxml2.hash b/package/libxml2/libxml2.hash
+index 849d70cbb5..d21fa53c08 100644
+--- a/package/libxml2/libxml2.hash
++++ b/package/libxml2/libxml2.hash
+@@ -1,4 +1,4 @@
+-# From https://download.gnome.org/sources/libxml2/2.15/libxml2-2.15.3.sha256sum
+-sha256  78262a6e7ac170d6528ebfe2efccdf220191a5af6a6cd61ea4a9a9a5042c7a07  libxml2-2.15.3.tar.xz
++# From https://download.gnome.org/sources/libxml2/2.15/libxml2-2.15.4.sha256sum
++sha256  98087fd181d9070724f3fbc65c7377db03038eb92bd882374daff44940138821  libxml2-2.15.4.tar.xz
+ # License files, locally calculated
+ sha256  5d4873884a890122a4b9b20ad56ac6f7da1d796a5bfcf04a427970ac96217626  Copyright
+diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
+index c1b5c4033c..3ca57f1d37 100644
+--- a/package/libxml2/libxml2.mk
++++ b/package/libxml2/libxml2.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- # based on https://software.intel.com/en-us/articles/build-and-debug-open-source-media-stack
- 
--INTEL_MEDIADRIVER_VERSION = 26.3.1
-+INTEL_MEDIADRIVER_VERSION = 26.3.3
- INTEL_MEDIADRIVER_SITE = https://github.com/intel/media-driver/archive
- INTEL_MEDIADRIVER_SOURCE= intel-media-$(INTEL_MEDIADRIVER_VERSION).tar.gz
- INTEL_MEDIADRIVER_LICENSE = MIT, BSD-3-Clause
+ LIBXML2_VERSION_MAJOR = 2.15
+-LIBXML2_VERSION = $(LIBXML2_VERSION_MAJOR).3
++LIBXML2_VERSION = $(LIBXML2_VERSION_MAJOR).4
+ LIBXML2_SOURCE = libxml2-$(LIBXML2_VERSION).tar.xz
+ LIBXML2_SITE = \
+ 	https://download.gnome.org/sources/libxml2/$(LIBXML2_VERSION_MAJOR)
 -- 
 2.47.3
 
