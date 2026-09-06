@@ -4,121 +4,100 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7AFECC79F99
-	for <buildroot@archiver.kernel.org>; Sun,  6 Sep 2026 06:38:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54319C79F85
+	for <buildroot@archiver.kernel.org>; Sun,  6 Sep 2026 09:03:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C0D1C80C06;
-	Sun,  6 Sep 2026 06:38:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A29E680D09;
+	Sun,  6 Sep 2026 09:03:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GvoRSyJc0Aiz; Sun,  6 Sep 2026 06:38:45 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org C7A3D80BAE
+ id OzzNwctJP6zT; Sun,  6 Sep 2026 09:03:21 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 8662980D2C
 Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1788676724;
-	b=QCQitPh3ZQBR5Ixdkxj9krlS+yQGaBfA77lE6LTJYm4V77cqr3nhULua0amOIcUG7E3B
-	 7nJ9L6P0yVcnH7nivHtB2OjVqEcRKFl3E7QtCmXqWHhPbGX9rAtmArVjohmgKb1i7jB4U
-	 L3wsEGKrVyI+Pb680/psAaRz1w5/XmmpjHAjJ5+kGhA4OG+PlgscF507+Q16i+p/asQ0P
-	 U4GhmtAnkxSVIf0I7OBO/K1nTbIjhYj4ehY3VQZ2a2NB9x+PPCJ5Nbf1KgOIc0eI4osDe
-	 Jq8ceAOifweUO2z2bPRMj3EW6fGjZnQXzrsiKocB7ZZjEzZQqNYceeH4dQZ1/rswjQw==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1788685401;
+	b=rB2ssaYA5dmTxhUJkqx6weksEYJT0CrUXCPyz4Wmq5lfPOAyd1aENRT1XeL59KIorn0w
+	 d8+gVsPZyjQCE5XXSdHOTTcMz9BRxyoHhx9sCnY0ODs79t2ZlHFamhg9BSsXl/H7yzcLu
+	 u0zgnwdrwPgHaSw4XhkmMCKPFb/EQKWKPLD++2eHQn0J83k1dE7/uWQGq5EyIa7AchYJD
+	 XImTdI6kdQXy10aAoLDf21tg3n4e8Op4wLT6MigyABfGNMA0FT4LcEquCHBJZ/uCEu7K3
+	 sWp9jyTFuVxjM941IQ9r5U2mvgAV6ySL7/2mIx+UqPmVXsHdnsmikrL8sxxc5XKU00Q==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1788676724;
+	c=relaxed/relaxed; t=1788685401;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
-	 DKIM-Signature:Received:MIME-Version:Date:From:To:Cc:In-Reply-To:
-	 References:Message-ID:X-Sender:X-Virus-Scanned:X-Virus-Status:Subject:
-	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:
-	 Content-Transfer-Encoding:Content-Type:Errors-To:Sender;
-	bh=RRbxuxCEncebVcT3hGA4qLEXdJq27qgsylg56kRIEZU=;
-	b=pVtxkPHjhs5kHvGrD34uc3MvozHsuyI4afaYPE4jl76kBmtCfwsO2E8m8KPN2UvvXBIE
-	 g8mZFvO9J8QH2brHz+cJNI9KNWQQ9JsuEBaDToN+qrubJFptlPWLZkava72Bw26PiLfdH
-	 tmoxarommMWE7IVL3b4A2qXQYzbw2AKA9oPxyxmH7IZMWwofFockhEOAFthgDs7pfVaJj
-	 VVrXk0XWw4EbrR2VNQW3gcunMKaSrYlZBSBn1W1b8PbFHz54PyoVaCeOedo++rDr9iMZJ
-	 LIw+RsUGXRt9kSgR2y6CH0GBIu69b+AQnTvHrj98qS3cIsX/7JHSbU0heAS2i2P/tbg==
+	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
+	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
+	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
+	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
+	 Sender;
+	bh=pFIrOXwQuNRAFHkK25qXtyRf5LNPjtVBv2sqUSG9jXo=;
+	b=SQ1fcShQZfJWhx2xGQMxk1WJITvM3qasBg+JGKduMVVlINhYb7D9NbTTGBrv+fusvHto
+	 dcf7wYMS6B/llQFczdNZfDeFR6i5WXttAIsMeDhBwBn4U7EnXp9c6dCRhOrJn6NmvNejX
+	 u8sM4fWsmrSlYUQMb0MKGzm+VORmKtrQqcnq5qg62s8lBHA13wby/sOUutUTTWEmwPe1y
+	 K/9CwdPoVw+aRmQ6dIjXMSQKlLJzetLbLYvUje6w4z1XlNNkF1PFzu5KYT7tyIn8eANc7
+	 8U8h9KSq4ZbDwAw/9pVdO5ELbvjBMUmbY+bJxCnkfBIRU5m4KQowcKYS3edPeajPf7g==
 ARC-Authentication-Results: i=2; smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1788676724;
-	bh=RRbxuxCEncebVcT3hGA4qLEXdJq27qgsylg56kRIEZU=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=AaAKkruD+Ucgy6EA5AZKhQuk7RtL0RXcehwHzC3GK05NdcMzxSGXYhWRExsvPzi/w
-	 k0Un+TE2XeQEIivsxib4BQkDpuUMM5lOP85Bm3KbhM7f/xIuOjAg/sqAGvYiOuZJJZ
-	 Wjh9x2Uhip02GJUNjBIfLQc8gVtsWilaJytqS0kgDkAvVmxRBEno1VLGC1VZx7mFgd
-	 D8+CMIqrMaa/RNbFEvOFOf0bGvaqYRkov4znIyILCW98YThNl3/YoFcVuM2ai8nhhM
-	 YhrTY3+3XauKK80uvEeFgaM1S3Nq6bjJNiAke/opW5GjUnaF+C+PobcWZQke+yXNGg
-	 JzN58JaR4kSjQ==
+	s=default; t=1788685401;
+	bh=pFIrOXwQuNRAFHkK25qXtyRf5LNPjtVBv2sqUSG9jXo=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=Ie85yvPf0wKUNhhOeIMKsvgP7kFn9zTbPIrgY6E99OwradR82UnuaS77qkBQvNmQr
+	 di623MPCpQu6KlhczVq/I1e+gVQhp6poL3Jhcj+IAeUP50ZBKRzG+fc2Oah29X3dBC
+	 wRDpgNXbcJds3OslW/UOqMW+qJ72PXYJDfzMm+mCVENdiP0hX5z4r//tVrwSo+VgCT
+	 6aszUYOyn9QOAOijpp23bxWjvQ3ASDrdQQ+yKBlZnAgOVr5YSqo1OQob6h2sMKAm2W
+	 xpGhLDhW25DQl9X5Tb/eCbI/0yGxrCOkkMyeSqTyDhaKPwfiRlLxyThp7KmdXAZnHT
+	 IUtvUJc4CBnVQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C7A3D80BAE;
-	Sun,  6 Sep 2026 06:38:44 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id ECA6F72C
- for <buildroot@buildroot.org>; Sun,  6 Sep 2026 06:38:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8662980D2C;
+	Sun,  6 Sep 2026 09:03:21 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 38AF972C
+ for <buildroot@buildroot.org>; Sun,  6 Sep 2026 09:03:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DE543605D6
- for <buildroot@buildroot.org>; Sun,  6 Sep 2026 06:38:42 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 257B44008B
+ for <buildroot@buildroot.org>; Sun,  6 Sep 2026 09:03:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yMvOjBSn1UnS for <buildroot@buildroot.org>;
- Sun,  6 Sep 2026 06:38:41 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 3EB6F605D5
-Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=176.9.89.163
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1788676721;
- b=hCCOctHa1dXpacUv4jGEtsJCs+5rwEwyHawDNE9zlu1xN4aySQB9Mc8mzei2yivYsA6x
- eVBib/BE84Muziw+vm8kG/0yEqoWwlr6NTQqsDS93Q1WNdggOjtWC3q3i/4+fKXRY0vNH
- JREUgaXPisn1vmOg1lFTeqaYL5QqsspJTIKW0ROBS0c3zuurxsA88h+Xj7cz66YVROmm/
- ru1BIYARFZUJ5aGLGI8DDv1qaYReFOgX3PbL+wW6GZnRgc2r7LL/kFLyfLcNs9/GrJfXF
- ZE9IdCVDIc7Qk+SJybEaYoZ3dldd4eyGoXlH5S2L6ZlRk1O0QnWZoe0yxuARGWmliQg==
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TgmNPTvzVX7g for <buildroot@buildroot.org>;
+ Sun,  6 Sep 2026 09:03:17 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org BA7214007B
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1788685397;
+ b=cjDNP/wOBCLyMIVSYz5CXqkoGchPP36Lgr45qBT11ZZ+XH91Mu/2Xa5LXOEkWk8u74CT
+ che0BAj4yTeKkojJLrsTRb8Y0cj0LmMMLaXA04gZLAQBJrJb6t82vL+EUPZbNHy5QkiqQ
+ Y1wf/dtt20Msru08Q+hE+e/uYS/dbUJ3MJrgYoHdlYPiwncUFKS5GNRuxEuBgqP30ZIVd
+ DTv2brUsMtHDbHO4WA+jQpqvMN6jIPbZGSD03Fov9nTMlR2CYJyxLxl/2LD3QO7N6PUZQ
+ CFqbS+9PcC1kdefa04aN2Dmaop/QKryzFR6RcWqVAKR3NfZqKLepIZF5QRjQAKesgDw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1788676721;
- h=Received-SPF:DKIM-Signature:Received:MIME-Version:Date:From:To:Cc:
- Subject:In-Reply-To:References:Message-ID:X-Sender:Content-Type:
- Content-Transfer-Encoding:X-Virus-Scanned:X-Virus-Status;
- bh=yd/jgkVLykEVTvXfPqEqXavVLovninLL5Mqlrzxywoc=;
- b=iXzglWe/J32zXAMFMFTeIsgsvTPA7WmTJVIMxqhGIMemArkWnshGKD2+HT6T+P8/jvoB
- US8KsWIGoHz4ZQ91+Xu4MOqwljT9vDxRNb/olQfBTeK6ehwgDXpgYLmHe4Zsl8us80klb
- iw+uBAG+8szcwj61ctbyysBCf5CEgsLs/1bw9W3xJerv6iCOgWAg2BCdh7COFK1ptiIUg
- Cv13s2CrzhlODtq74l+f9sM9EhbffbUVRJmN4pJOijX0jRsNZZeqxFX7cnCToL0iPVrQu
- qXAsl4sjv7dREI8gxS/pc+bsxRwA25uqrJTBhv027G7ntW7BKQ5XZbBbpiGRFl7Rizg==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org;
- dmarc=none header.from=umbiko.net; 
- dkim=pass header.d=umbiko.net header.i=@umbiko.net header.a=rsa-sha256
- header.s=mail header.b=RSi4mBKF; 
- arc=none smtp.remote-ip=176.9.89.163
-Received-SPF: None (mailfrom) identity=mailfrom; client-ip=176.9.89.163;
- helo=serv15.avernis.de; envelope-from=br025@umbiko.net; receiver=<UNKNOWN> 
-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none) header.from=umbiko.net
-Authentication-Results: smtp3.osuosl.org; dkim=pass (1024-bit key,
- unprotected) header.d=umbiko.net header.i=@umbiko.net header.a=rsa-sha256
- header.s=mail header.b=RSi4mBKF
-Received: from serv15.avernis.de (serv15.avernis.de [176.9.89.163])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3EB6F605D5
- for <buildroot@buildroot.org>; Sun,  6 Sep 2026 06:38:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=umbiko.net; s=mail;
- t=1788676716; bh=zCXqXedz7zIJKlMI4LcKKtGwssOSfd1VLK4b385WnMc=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References;
- b=RSi4mBKFAkMbA1ezun0/GNXlKOVChKkoBmaDzjLXXtUVdkbOmiMlmQGENnmU5efOL
- Zw59UaCyVoCIh8M6oaYTR2xQbDvAfiRUx/5vp5SzzXfOAT7FSW+8bTiZGsLaJSTLok
- RdwVXDr21LaQXTQc5eyiUlaXJuTF1X+RRpNnSl0I=
-Received: by serv15.avernis.de (Postfix) with ESMTPSA id D9DF4BDE4A43;
- Sun, 06 Sep 2026 08:38:35 +0200 (CEST)
-MIME-Version: 1.0
-Date: Sun, 06 Sep 2026 06:38:35 +0000
-From: Andreas Ziegler <br025@umbiko.net>
-To: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-Cc: buildroot <buildroot@buildroot.org>
-In-Reply-To: <mailman.5079.1788156070.3179391.buildroot@buildroot.org>
-References: <mailman.5079.1788156070.3179391.buildroot@buildroot.org>
-Message-ID: <34552847fb90ca9185ea014f3743a89f@umbiko.net>
-X-Sender: br025@umbiko.net
-X-Virus-Scanned: clamav-milter 1.4.3 at serv15.avernis.de
-X-Virus-Status: Clean
-Subject: Re: [Buildroot] [PATCH 1/2] boot/syslinux: Bump to 6.04-pre2
+ c=relaxed/relaxed; t=1788685397;
+ h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
+ X-Git-Newrev:X-Patchwork-Hint:Message-Id;
+ bh=uxZ8UmS2FPETo0ypv35CkdcQiIWKaEO5DIOqfRRuM1c=;
+ b=e/ijXtM9+ERt6YulR2KcugoIRxOQRpyTeYLT9ksJdx4eHxGTPcDvCl1osnHbSRwPbVJB
+ /f6Dq17pAaufeH5hhiO4CyyFj+tGlLKWYFop7+510GlAT0O5iWekZdzlmMnlxy1HBhan1
+ d3XdwuQLLA/jKtk1pDIEQsp4yVibr90qJ8rOtlf5PMVgOZR46kqhhGH+4HkeRd9txbpvZ
+ hCJuT1esdPjdIXLzSTt226ZQwnLGvs729QxIpA37+Q9eRSFFItnDyQf+4365z+dBlUGC0
+ muzWbZFa1jLCQgxWTvOvyziMNd92/U4KLveunpZtRs+1Cdkq/PEeMBEUnnWD3FYoTcQ==
+ARC-Authentication-Results: i=1; smtp2.osuosl.org;
+ arc=none smtp.remote-ip=140.211.167.122
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id BA7214007B
+ for <buildroot@buildroot.org>; Sun,  6 Sep 2026 09:03:17 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 4AD13952B4; Sun,  6 Sep 2026 09:02:16 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 6 Sep 2026 10:52:15 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 9c6eed9ec03431079780ad9dac8dfb53c1ae3691
+X-Git-Newrev: c5c0a76751a7e9ba1a8816da68218db9e1379eb9
+X-Patchwork-Hint: ignore
+Message-Id: <20260906090216.4AD13952B4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/weston: bump version to 16.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -130,91 +109,217 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============3511791445424907049=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Alexander,
+--===============3511791445424907049==
+Content-Type: text/plain
 
-sorr, forgot to mention that this is a BIOS build.
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/c5c0a76751a7e9ba1a8816da68218db9e1379eb9
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-On 2026-08-30 20:19, Alexander Sverdlin wrote:
+Release announce:
+https://lore.freedesktop.org/wayland-devel/alXq76OX4dVWoP3M@xpredator/T/#u
 
-<...>
+Removed already-deprecated config options:
+  * 'deprecated-backend-drm-screencast-vaapi' [1].
+  * 'deprecated-shell-fullscreen' [2].
+  * 'deprecated-screenshare' [3].
 
->  ...bios-Fix-alignment-change-with-gcc-5.patch |  82 ---
->  ...Use-the-host-toolchain-for-prepcore.patch} |   8 +-
->  ...-Disable-PIE-to-avoid-FTBFS-on-amd64.patch |  30 -
->  ...nux-Use-the-host-toolchain-to-build.patch} |   0
->  ...-binutils-note-gnu-property-section.patch} |   0
->  ...sk-Force-ld-output-format-to-32-bits.patch |  32 -
->  ...0004-efi-main.c-include-efisetjmp.h.patch} |   0
->  ...tils-Use-the-host-toolchain-to-build.patch |  60 --
->  ...ition-is-now-part-of-the-exports-of-.patch |  37 --
->  ...ump-calls-to-fit-the-new-declaration.patch |  37 --
->  ...per-build-it-with-the-host-toolchain.patch |  32 -
->  ...-try-to-guess-the-sections-alignment.patch | 295 ---------
->  ...10-core-Clean-up-the-i386-bios-build.patch | 622 ------------------
->  ...-sysmacros-h-for-major-minor-makedev.patch |  34 -
->  ...multiple-definition-of-symbol-errors.patch |  25 +-
->  boot/syslinux/syslinux.hash                   |   3 +-
->  boot/syslinux/syslinux.mk                     |   6 +-
->  17 files changed, 12 insertions(+), 1291 deletions(-)
->  delete mode 100644 
-> boot/syslinux/0001-bios-Fix-alignment-change-with-gcc-5.patch
->  rename 
-> boot/syslinux/{0005-lzo-Use-the-host-toolchain-for-prepcore.patch => 
-> 0001-lzo-Use-the-host-toolchain-for-prepcore.patch} (84%)
->  delete mode 100644 
-> boot/syslinux/0002-Disable-PIE-to-avoid-FTBFS-on-amd64.patch
->  rename 
-> boot/syslinux/{0011-extlinux-Use-the-host-toolchain-to-build.patch => 
-> 0002-extlinux-Use-the-host-toolchain-to-build.patch} (100%)
->  rename 
-> boot/syslinux/{0014-Fix-build-with-binutils-note-gnu-property-section.patch 
-> => 0003-Fix-build-with-binutils-note-gnu-property-section.patch} (100%)
->  delete mode 100644 
-> boot/syslinux/0003-memdisk-Force-ld-output-format-to-32-bits.patch
->  rename boot/syslinux/{0015-efi-main.c-include-efisetjmp.h.patch => 
-> 0004-efi-main.c-include-efisetjmp.h.patch} (100%)
->  delete mode 100644 
-> boot/syslinux/0004-utils-Use-the-host-toolchain-to-build.patch
->  delete mode 100644 
-> boot/syslinux/0006-The-VPrint-definition-is-now-part-of-the-exports-of-.patch
->  delete mode 100644 
-> boot/syslinux/0007-Update-the-longjump-calls-to-fit-the-new-declaration.patch
->  delete mode 100644 
-> boot/syslinux/0008-efi-wrapper-build-it-with-the-host-toolchain.patch
->  delete mode 100644 
-> boot/syslinux/0009-bios-Don-t-try-to-guess-the-sections-alignment.patch
->  delete mode 100644 
-> boot/syslinux/0010-core-Clean-up-the-i386-bios-build.patch
->  delete mode 100644 
-> boot/syslinux/0012-pull-in-sys-sysmacros-h-for-major-minor-makedev.patch
+The 'pipewire' and 'remoting' plugins has been deprecated in [4].
+They have already been removed in the main development branch in
+upstream commit [5] and [6] (not yet in this version 16.0.0).
 
-Patch 0013 needs to be adapted to the new directory layout ($(ARCH)):
+This commit removes the "remoting" option (rather than changing it to
+"deprecated-remoting") because Buildroot was not enabling this option
+and this deprecated option is now disabled by default.
 
-@@ -203,6 +203,11 @@ CORELIBOBJS = \
-  	$(LIBENTRY_OBJS) \
-  	$(LIBMODULE_OBJS)
+This commit also removes the "pipewire" option (rather than changing
+it to "deprecated-pipewire"). The commit log of [4] says the
+replacement is the "pipewire-backend" option, which is already used
+in Buildroot.
 
-+ifndef EFI_BUILD
-+# For EFI, these are part of gnu-efi
-+CORELIBOBJS += $(ARCH)/setjmp.o memcpy.o memset.o
-+endif
+Tested on STM32MP157C-DK2.
+
+[1] https://gitlab.freedesktop.org/wayland/weston/-/commit/7c3e3d754404453483ffb362be8ab8afb89d3eb2
+[2] https://gitlab.freedesktop.org/wayland/weston/-/commit/29b740ffee98236c5ccb93c09d750b07d37fb8fd
+[3] https://gitlab.freedesktop.org/wayland/weston/-/commit/3bd77f781766abaf8aa9fe55d4f9b98c03e29e42
+[4] https://gitlab.freedesktop.org/wayland/weston/-/commit/ec74bd040389291f0b8d3162506560a8adae31a4
+[5] https://gitlab.freedesktop.org/wayland/weston/-/commit/4606c49d2851a99064cae5e93fe9f464db3a2c58
+[6] https://gitlab.freedesktop.org/wayland/weston/-/commit/d587dfea5bf4816afdb0b7f4c9835956250ab395
+
+Signed-off-by: Raphaël Gallais-Pou <rgallaispou@gmail.com>
+[Julien:
+ - update link in hash file comment
+ - add removed options in Config.in.legacy
+ - add back package patch which is not included in release
+ - reword commit log (fix and add links to upstream commits)
+]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ Config.in.legacy           | 14 ++++++++++++++
+ package/weston/Config.in   |  9 ---------
+ package/weston/weston.hash |  6 +++---
+ package/weston/weston.mk   | 27 +++------------------------
+ 4 files changed, 20 insertions(+), 36 deletions(-)
+
+diff --git a/Config.in.legacy b/Config.in.legacy
+index aeb9b9676e..6975f1f15f 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -144,6 +144,20 @@ endif
+ 
+ ###############################################################################
+ 
++comment "Legacy options removed in 2026.11"
 +
-  LDFLAGS	= -m elf_$(ARCH) --hash-style=gnu -T 
-$(com32)/lib/$(ARCH)/elf.ld
++config BR2_PACKAGE_WESTON_SCREENSHARE
++	bool "weston screenshare option removed"
++	select BR2_LEGACY
++	help
++	  Weston screenshare option was removed in v16.0.0.
++
++config BR2_PACKAGE_WESTON_SHELL_FULLSCREEN
++	bool "weston fullscreen shell removed"
++	select BR2_LEGACY
++	help
++	  Weston fullscreen shell option was removed in v16.0.0.
++
+ comment "Legacy options removed in 2026.08"
+ 
+ config BR2_PACKAGE_FLUIDSYNTH_SDL2
+diff --git a/package/weston/Config.in b/package/weston/Config.in
+index abd996482a..dcb5c7544e 100644
+--- a/package/weston/Config.in
++++ b/package/weston/Config.in
+@@ -164,11 +164,6 @@ config BR2_PACKAGE_WESTON_SHELL_DESKTOP
+ 	bool "desktop shell"
+ 	default y
+ 
+-config BR2_PACKAGE_WESTON_SHELL_FULLSCREEN
+-	bool "fullscreen shell"
+-	default y
+-	select BR2_PACKAGE_WESTON_HAS_SHELL
+-
+ config BR2_PACKAGE_WESTON_SHELL_IVI
+ 	bool "ivi shell"
+ 	default y
+@@ -188,10 +183,6 @@ config BR2_PACKAGE_WESTON_SHELL_LUA
+ comment "lua shell needs a Lua >= 5.4"
+ 	depends on !BR2_PACKAGE_LUA_5_4
+ 
+-config BR2_PACKAGE_WESTON_SCREENSHARE
+-	bool "screenshare"
+-	default y
+-
+ config BR2_PACKAGE_WESTON_SIMPLE_CLIENTS
+ 	bool "simple clients"
+ 	help
+diff --git a/package/weston/weston.hash b/package/weston/weston.hash
+index b002942696..e8d11ca64c 100644
+--- a/package/weston/weston.hash
++++ b/package/weston/weston.hash
+@@ -1,4 +1,4 @@
+-# From https://lore.freedesktop.org/wayland-devel/aespQ3LKAOy5O3Hx@xpredator/T/#u
+-sha256  551d039bfb0c837ba5a4d027cdb8ee16bded0eedb789821f8025d8a64b791f6d  weston-15.0.1.tar.xz
+-sha512  555731ddfaf7e3ef9bf43be682e20338ee207b434a72011b730c9b0ebde4daeaeb9cc9d09a707c32798f0184a55144f64e818551efe7e71413876e45e3cb3523  weston-15.0.1.tar.xz
++# From https://lore.freedesktop.org/wayland-devel/alXq76OX4dVWoP3M@xpredator/T/#u
++sha256  dfb32e2bccabda957b94a8d0ec6075acd18c71c87ebc543ee3e618d294ca0f7f  weston-16.0.0.tar.xz
++sha512  23b7a1138833f8aacc57758231d14c2f1bc9ec20ad2fef125ffffb8d63853968e8a8ed2d8bbf6ad1600d7f40358a705ca24838a683e01b1c84279cf8ae1cfe48  weston-16.0.0.tar.xz
+ sha256  fdb65868f65d0fbdb05c2d3b779e10ce9969fa0c4b9262ba4f260e87086ab860  COPYING
+diff --git a/package/weston/weston.mk b/package/weston/weston.mk
+index 5caf5903d1..522365e06e 100644
+--- a/package/weston/weston.mk
++++ b/package/weston/weston.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WESTON_VERSION = 15.0.1
++WESTON_VERSION = 16.0.0
+ WESTON_SITE = https://gitlab.freedesktop.org/wayland/weston/-/releases/$(WESTON_VERSION)/downloads
+ WESTON_SOURCE = weston-$(WESTON_VERSION).tar.xz
+ WESTON_LICENSE = MIT
+@@ -18,7 +18,6 @@ WESTON_DEPENDENCIES = host-pkgconf wayland wayland-protocols \
+ 
+ WESTON_CONF_OPTS = \
+ 	-Ddoc=false \
+-	-Dremoting=false \
+ 	-Dbackend-vnc=false \
+ 	-Dtools=calibrator,debug,info,terminal,touch-calibrator
+ 
+@@ -58,15 +57,14 @@ ifeq ($(BR2_PACKAGE_WESTON_SIMPLE_CLIENTS),y)
+ WESTON_SIMPLE_CLIENTS += dmabuf-egl dmabuf-feedback egl
+ endif
+ ifeq ($(BR2_PACKAGE_PIPEWIRE)$(BR2_PACKAGE_WESTON_DRM),yy)
+-WESTON_CONF_OPTS += -Dpipewire=true -Dbackend-pipewire=true
++WESTON_CONF_OPTS += -Dbackend-pipewire=true
+ WESTON_DEPENDENCIES += pipewire
+ else
+-WESTON_CONF_OPTS += -Dpipewire=false -Dbackend-pipewire=false
++WESTON_CONF_OPTS += -Dbackend-pipewire=false
+ endif
+ else
+ WESTON_CONF_OPTS += \
+ 	-Drenderer-gl=false \
+-	-Dpipewire=false \
+ 	-Dbackend-pipewire=false
+ endif
+ 
+@@ -121,13 +119,6 @@ else
+ WESTON_CONF_OPTS += -Dxwayland=false
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LIBVA),y)
+-WESTON_CONF_OPTS += -Ddeprecated-backend-drm-screencast-vaapi=true
+-WESTON_DEPENDENCIES += libva
+-else
+-WESTON_CONF_OPTS += -Ddeprecated-backend-drm-screencast-vaapi=false
+-endif
+-
+ ifeq ($(BR2_PACKAGE_LCMS2),y)
+ WESTON_CONF_OPTS += -Dcolor-management-lcms=true
+ WESTON_DEPENDENCIES += lcms2
+@@ -155,12 +146,6 @@ else
+ WESTON_CONF_OPTS += -Dshell-desktop=false
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_WESTON_SHELL_FULLSCREEN),y)
+-WESTON_CONF_OPTS += -Ddeprecated-shell-fullscreen=true
+-else
+-WESTON_CONF_OPTS += -Ddeprecated-shell-fullscreen=false
+-endif
+-
+ ifeq ($(BR2_PACKAGE_WESTON_SHELL_IVI),y)
+ WESTON_CONF_OPTS += -Dshell-ivi=true
+ else
+@@ -180,12 +165,6 @@ else
+ WESTON_CONF_OPTS += -Dshell-lua=false
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_WESTON_SCREENSHARE),y)
+-WESTON_CONF_OPTS += -Ddeprecated-screenshare=true
+-else
+-WESTON_CONF_OPTS += -Ddeprecated-screenshare=false
+-endif
+-
+ ifeq ($(BR2_PACKAGE_WESTON_DEMO_CLIENTS),y)
+ WESTON_CONF_OPTS += -Ddemo-clients=true
+ WESTON_DEPENDENCIES += pango
 
-  .SUFFIXES: .c .o .a .so .lo .i .S .s .ls .ss .lss
+--===============3511791445424907049==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-
-<...>
-
-Kind regards,
-Andreas
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3511791445424907049==--
