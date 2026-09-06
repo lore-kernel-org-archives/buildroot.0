@@ -4,118 +4,105 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 959E1C79F99
-	for <buildroot@archiver.kernel.org>; Sun,  6 Sep 2026 21:16:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A15DAC79F8C
+	for <buildroot@archiver.kernel.org>; Sun,  6 Sep 2026 21:53:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5FDA94057C;
-	Sun,  6 Sep 2026 21:15:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 259FE40564;
+	Sun,  6 Sep 2026 21:53:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tWq-4HrQ3Tcq; Sun,  6 Sep 2026 21:15:55 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 5DF6F40514
+ id yED50386z9Tb; Sun,  6 Sep 2026 21:53:26 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 14BF04056A
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1788729355;
-	b=fTGIMiBSaDvv5ZahR3q2AmxsfzcJOp5+ztiK7y6BOE1pUZHWfvwACd5tPRArInP/pLQJ
-	 +A95JbOHa54njaW61aD3ZH23PR5aezmzlRNyCzRFS+SRuhF21ixaIIQ6P+7vU5gVOlTuT
-	 10N7fBBpsBqBsC93wGUKCLzpoKyBvWlOX1syBYVVqucWEliJ3j2XtWRDqJ5lJOKmLmO3u
-	 0ww79OQ+2g3vJTOfusE6cy5/6kzapMGB9Tj5l/nJlIvVDpa4aDAqJ8q3wNRl6Mn0NmpDU
-	 Pd46jV3hDf61BB01PeQMcwK+dyzNxbdIyXnc1cwfrTVLnj9yCaRz7Cu/dLSOYsFGTyQ==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1788731606;
+	b=hX+FBcdzYQ6xDKsuFGyXR04LA0arHBEx40jXk7SeuMvJ/7OOnb6zzQhYjEgyXJOZJunc
+	 haJ+wX5GeOtQ/aa2cqd4ppseUvytT+OqeAt6T4tSpHa+76pnXWasHhSnVPEgbd4pgXBM4
+	 IjwkSwe1rsIjuA4/B5/JlZJw2hFlVWVVbadWVAtkc59UbV2/kzmGk5twM8sQU3bPALpOV
+	 6ti3JwTdGVnrhiqiRvtnhZtuomY7lYVy0KcPbZ64hG0ant1KqFm12+9WFRC050gDIGG1n
+	 IR5gALn8YZqbxc9ylEVy7y6CKuG7XIQ/GSZLY7qL8cToiVFv+3hGtDMqHvSw7JN55YQ==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1788729355;
+	c=relaxed/relaxed; t=1788731606;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 Received:Received:Date:To:Cc:Message-ID:References:MIME-Version:
-	 Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version:Subject:
-	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=m+aSgtlXau0vHLKjWiihWnnF1HRqwpwx4kKMx9X6Zwg=;
-	b=cbnH4NKl2lc50NBkrVjbagDaPNdaqWX2TR7yI5E1f0tCFdzkf+XvtL1hSMvso5ENddCT
-	 NlUlO5r8D4dO7/fMyUgKj5qe7j/nRbgD84vCsHZrpLaHOhAbBnaIXQFKiyNI8tYqXdC8g
-	 37meQSGTnjKY82ARGkaKfwQ3cuK+GuvaTb0AKuhkXREeBSsqmrnsXC1NEdIjV8q/7fhaR
-	 BHROhf9/uf405hLO4PqPhBWV3UX2idaRKs6hzecdQnGs6VDRZ7C2h1yV1IiqtUMKeKLIF
-	 F72iQkAvycFwNwoDUqzwwNNwDnWR0+lUl0qhXJewCNjyAEczq7A46f9l2Ls7zyIoykQ==
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:To:
+	 Cc:Date:Message-ID:X-Mailer:MIME-Version:Subject:X-BeenThere:
+	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:Content-Type:
+	 Content-Transfer-Encoding:Errors-To:Sender;
+	bh=3c4KUexvLtO2CYFCPRaFKy0jUQRZVUJdCJxErybcqZY=;
+	b=e6/kbNCbnXrEa1EDmtXUUlcUBAn/a10dZo5nx1L69fqw7/N2Xvxmhh9ep4xkVOXKGK0C
+	 EnUFRVUuCEYSo9wDSOek2ESjTyHM8DyiDwLi4e0oScpx3cF72GeyGcni9ftmUHnFQCmpO
+	 MFcyNjhYep755ZOT85spVHTls+FqVUpqcQ44YdPtsdJD4Kfq6y/Rdawhrn3Fkh8DkrvH9
+	 Kie24bWe6HLgI7ujbfLD5v/OkTJS4cuV2e9hNTK2HDoWfIMB/+91yzgJ7Z6cmxIXzeMIb
+	 To+K2khdN5jD/i7szG0hAAkSTJ4HdBAYIsaR2S2chawEoGIZVoX4WD1RhvKXLc5cQRw==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1788729355;
-	bh=m+aSgtlXau0vHLKjWiihWnnF1HRqwpwx4kKMx9X6Zwg=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=hYd+vCgrxFDsOgVX12sBkwAZPmaPeYO3kZguVvNafieLgym/pO7jeAHslDRNzp2oo
-	 XzfZjT7/f6NanvGgInPGOcJ6GOdfHKNgh9lHQjjbr5NP41PkuL3VAo97ab+tVdJGbi
-	 j/hB0o/s3LzbLW/kJywWwwQ3sB1Tsg6uSAupm/7THqYCXfZEirNkEORp+FbUVFZKem
-	 f80UusZzxxmXGsPqShwRhs0NSM1T31YS2lIPJCck04fLo3gu1IfvueIUbIu5uGXlDY
-	 C1o8QPVhCtAEnDoDP/VHhI8ay+Eo26I8JWEShloT5JTxC/KoEkDu28StgFbIRK586N
-	 GKnYDhwfFMtUw==
+	s=default; t=1788731606;
+	bh=3c4KUexvLtO2CYFCPRaFKy0jUQRZVUJdCJxErybcqZY=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=EIaJT9Ikio6svOPdkVEOBxDOFYE3xj9zmP8nUwrFxD7cXEAfASCdCHLphqnHvf0d1
+	 BK7dJm0AQu/Skfje7KXnLHCYZMzVENidYQ4EXwlGXPZ5yHPZ6oSX1K+I/25THQdG+f
+	 b1TNyT3xbjqGNGXnS3L63dDkJjXHfeEpdoTuEtuZQqvkS+QG/rYAj78VrEF8lhX4nV
+	 s2vxlhulVogiXjmOo2jIvKijr+jwFI1eMGe7CIXdWXp8uFkAGOzbTStA3S4lwafOs/
+	 MYPO0fzXkm8dm9t3sfIg1sLSiojQwdokUXflQnZ+Ppy2+2vUWLJeL5872ZPg0eeqxW
+	 0YkxeshYrAHgQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5DF6F40514;
-	Sun,  6 Sep 2026 21:15:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 14BF04056A;
+	Sun,  6 Sep 2026 21:53:26 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id B755C388
- for <buildroot@buildroot.org>; Sun,  6 Sep 2026 21:15:53 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id C59DB118
+ for <buildroot@buildroot.org>; Sun,  6 Sep 2026 21:53:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A91CE605E9
- for <buildroot@buildroot.org>; Sun,  6 Sep 2026 21:15:53 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id DD90A60608
+ for <buildroot@buildroot.org>; Sun,  6 Sep 2026 21:53:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QnYWT2CllWVE for <buildroot@buildroot.org>;
- Sun,  6 Sep 2026 21:15:51 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 95097605C7
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1788729351;
- b=VxgZqF34iELHgYg4O9hTcRA21Vdr+AqdOlNy2D3m4du2NGFk4EfaWmFhxG43aTT3Z1Cn
- rARcdPj/AqPCBYSTgWlQj1Ta7+crnfzod9DxRhHa1qw3I5hgJIrxOE4wAP8mnsfFhT5xw
- nkHMyxtyj86ZipSpAobK5CGmZ/HnndHKW1Eu6fShjG70yyLNj6gE3f7H/6wGOY0KQaeOJ
- evNHSCQP3xN0EawyMXkvf6FrN3I2QVFsBAeP8RM/t2a+c8njxgpezA6D5ehwVafKJJasL
- lkxqkHuldd8/giaLgX/z6wSGK3sdvDKzpwR6aC4HT2G8Opju6XMCGfZDjLt0R1bemfg==
+ id ZykBKbFD3eL4 for <buildroot@buildroot.org>;
+ Sun,  6 Sep 2026 21:53:07 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 30CC8605E9
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1788731587;
+ b=jfIf+wR6+c/WFUqRwhMukuPGTpiQYN4Ct1I+ojnlp8KLp4qH5gOi0S/+M94Ta/mIkGdr
+ qnoyFWAGzlrJWNcvzAR+VDMCeqE0zEPaAWDCJMywnL83TYUYDl36c2Wsx7eCD/RnKHDiV
+ mUmPgG+eQ1vYMQUFlnr1OkluHV96gWeGzZI4GGHwKDuNYaER9/mntsjNuveB4koB4EFgy
+ nz8TQQGkS4vHZTy1ad4OCiL2RD37vMMXJH5Wud/VQ18ALzgE8d+4jouEMzAUyEiG7cjFh
+ X6pQkZeh1UNrvpn4ux2WlQXRH+jez4OdAgqUonV0OG3tOM9g8t2fTtEapa8KFimTiMA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1788729351;
- h=Received-SPF:Received:Received:Received:DKIM-Signature:Date:From:To:
- Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
- Content-Disposition:Content-Transfer-Encoding:In-Reply-To:
- X-Last-TLS-Session-Version;
- bh=49ijh17AyP+635QqzLV4I0FXpnpceuD488Jxk+0RNOE=;
- b=JqtjUBTBcjBGGc9xD3QC0hpGkB+eTTJnthFM2jPK69BLNJGzhKoUaC3b0dnxTHUg5L6B
- KSWmrQdyz1rLefNgXwx5VcXht8Gt3xrezNsTXIhINkCeH0gJTEaBFtkBqpatqGyUxG0Lt
- udkR/z2a850rtlbvk2eW3B86tI14dmaMk/CHWD/uBNUwqgqo80QkkL5f7NxSfy0hmPQq4
- 6BQdmxGBe5S5zDSdqeJMQuA+AHJlolNl1rJFQQ6LmXz/32ZV6ZEtFRA7x2KJUDL94AF7t
- cRgaKr0dDrnhmELI988dWuH3+aB5vRDE4ze1BJ2wC3H0a8LMx3DCW39ahjDjM1RMvJA==
+ c=relaxed/relaxed; t=1788731587;
+ h=Received-SPF:Received:DKIM-Signature:From:To:Cc:Subject:Date:
+ Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+ bh=ioSftGC+VuDsCptVY9vZLwWrPTEdzkKxVgfOSjl5Psk=;
+ b=bokEarSqf4SxyQ6M0GWcjkzQykADRsLYJAaE6YIqqyOnZ5MMOmdi2UNwjzw/oYeJ/8LS
+ LBW6N7NuqUR5SOnomwyrYdruRCFDEEVY9QYPuLaC6e3/B2kvh0zwgzujZnrH5qVlhZsoR
+ R1NqRvTCLclGnnAROS/pnYbJRhYa+1AOhXz7If3yi0slrIscv0Bm6xXAYfm0qzMNaU3Ps
+ OKmoIiLRsBqwKLaLlfcfHdRYuhblJNLFVvaDBb5tJkEFLo9z0SPFM4Iq5G2p8D4Q2cU3j
+ wxcRYok9gscUO4W69hO3XQlp+qrqX/AL8+p32S6/zEOJ3uG4Mk6tQI18O46zlVQ+5kw==
 ARC-Authentication-Results: i=1; smtp3.osuosl.org;
- dmarc=pass header.from=bootlin.com; 
- dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=Cfd6KkVb; 
- arc=none smtp.remote-ip=185.246.85.4
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
- helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 95097605C7
- for <buildroot@buildroot.org>; Sun,  6 Sep 2026 21:15:50 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-03.galae.net (Postfix) with ESMTPS id B1E734E414D7
- for <buildroot@buildroot.org>; Sun,  6 Sep 2026 21:15:47 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 70B7760288;
- Sun,  6 Sep 2026 21:15:47 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id C5BA111C79FF0; 
- Sun,  6 Sep 2026 23:15:40 +0200 (CEST)
-Date: Sun, 6 Sep 2026 23:15:39 +0200
-To: Joseph Kogut <joseph@anodize.com>
-Cc: buildroot@buildroot.org, joseph.kogut@gmail.com
-Message-ID: <ap3Xvv4F7Mgi3mve@windsurf>
-References: <20260818-passt-20260728-v1-0-aa8bc1ce2c5a@anodize.com>
- <20260818-passt-20260728-v1-2-aa8bc1ce2c5a@anodize.com>
+ dmarc=pass header.from=free.fr; 
+ dkim=pass header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=Qdb4WNg+; 
+ arc=none smtp.remote-ip=212.27.42.5
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 30CC8605E9
+ for <buildroot@buildroot.org>; Sun,  6 Sep 2026 21:53:04 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:1065:2100:52d9:65fe:2df3:c492])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id 1E8A15FF95;
+ Sun,  6 Sep 2026 23:53:01 +0200 (CEST)
+To: buildroot@buildroot.org
+Cc: Julien Olivain <ju.o@free.fr>
+Date: Sun,  6 Sep 2026 23:52:52 +0200
+Message-ID: <20260906215252.499931-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.55.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20260818-passt-20260728-v1-2-aa8bc1ce2c5a@anodize.com>
-X-Last-TLS-Session-Version: TLSv1.3
-Subject: Re: [Buildroot] [PATCH 2/2] package/passt: bump to version
- 2026_07_28.f8df3f1
+Subject: [Buildroot] [PATCH 1/1] support/testing: test_squid: new runtime
+ test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -127,45 +114,111 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gSm9zZXBoLAoKT24gVHVlLCBBdWcgMTgsIDIwMjYgYXQgMDE6NTU6MzRQTSAtMDcwMCwg
-Sm9zZXBoIEtvZ3V0IHdyb3RlOgo+IFNpZ25lZC1vZmYtYnk6IEpvc2VwaCBLb2d1dCA8am9zZXBo
-QGFub2RpemUuY29tPgo+IC0tLQo+ICBwYWNrYWdlL3Bhc3N0L3Bhc3N0Lmhhc2ggfCAyICstCj4g
-IHBhY2thZ2UvcGFzc3QvcGFzc3QubWsgICB8IDIgKy0KPiAgMiBmaWxlcyBjaGFuZ2VkLCAyIGlu
-c2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pCgpUaGFua3MgZm9yIHRoaXMgcGF0Y2guIFdpdGgg
-dGhpcyB2ZXJzaW9uIGJ1bXAsIHRoZSBidWlsZCBmYWlscyB3aXRoOgoKaXNvbGF0aW9uLmM6IElu
-IGZ1bmN0aW9uIOKAmGlzb2xhdGVfZmRz4oCZOgppc29sYXRpb24uYzoyNzc6MTM6IGVycm9yOiBp
-bXBsaWNpdCBkZWNsYXJhdGlvbiBvZiBmdW5jdGlvbiDigJhjbG9zZV9yYW5nZeKAmTsgZGlkIHlv
-dSBtZWFuIOKAmFNZU19jbG9zZV9yYW5nZeKAmT8gWy1XaW1wbGljaXQtZnVuY3Rpb24tZGVjbGFy
-YXRpb25dCiAgMjc3IHwgICAgICAgICBpZiAoY2xvc2VfcmFuZ2UoY2xvc2VfZnJvbSwgfjBVLCBD
-TE9TRV9SQU5HRV9VTlNIQVJFKSkgewogICAgICB8ICAgICAgICAgICAgIF5+fn5+fn5+fn5+CiAg
-ICAgIHwgICAgICAgICAgICAgU1lTX2Nsb3NlX3JhbmdlCmlzb2xhdGlvbi5jOjI3Nzo0MjogZXJy
-b3I6IOKAmENMT1NFX1JBTkdFX1VOU0hBUkXigJkgdW5kZWNsYXJlZCAoZmlyc3QgdXNlIGluIHRo
-aXMgZnVuY3Rpb24pCiAgMjc3IHwgICAgICAgICBpZiAoY2xvc2VfcmFuZ2UoY2xvc2VfZnJvbSwg
-fjBVLCBDTE9TRV9SQU5HRV9VTlNIQVJFKSkgewogICAgICB8ICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgXn5+fn5+fn5+fn5+fn5+fn5+fgppc29sYXRpb24uYzoyNzc6
-NDI6IG5vdGU6IGVhY2ggdW5kZWNsYXJlZCBpZGVudGlmaWVyIGlzIHJlcG9ydGVkIG9ubHkgb25j
-ZSBmb3IgZWFjaCBmdW5jdGlvbiBpdCBhcHBlYXJzIGluCm1ha2VbMV06ICoqKiBbTWFrZWZpbGU6
-MTAzOiBwYXNzdF0gRXJyb3IgMQptYWtlWzFdOiBMZWF2aW5nIGRpcmVjdG9yeSAnL2hvbWUvdGhv
-bWFzL3Byb2pldHMvYnVpbGRyb290L291dHB1dC9idWlsZC9wYXNzdC0yMDI2XzA3XzI4LmY4ZGYz
-ZjEnCm1ha2U6ICoqKiBbcGFja2FnZS9wa2ctZ2VuZXJpYy5tazoyNzM6IC9ob21lL3Rob21hcy9w
-cm9qZXRzL2J1aWxkcm9vdC9vdXRwdXQvYnVpbGQvcGFzc3QtMjAyNl8wN18yOC5mOGRmM2YxLy5z
-dGFtcF9idWlsdF0gRXJyb3IgMgoKV2l0aCB0aGUgZm9sbG93aW5nIGNvbmZpZ3VyYXRpb246CgpC
-UjJfYWFyY2g2ND15CkJSMl9UT09MQ0hBSU5fRVhURVJOQUw9eQpCUjJfVE9PTENIQUlOX0VYVEVS
-TkFMX0JPT1RMSU49eQpCUjJfVE9PTENIQUlOX0VYVEVSTkFMX0JPT1RMSU5fQUFSQ0g2NF9NVVNM
-X0JMRUVESU5HX0VER0U9eQpCUjJfSU5JVF9OT05FPXkKQlIyX1NZU1RFTV9CSU5fU0hfTk9ORT15
-CiMgQlIyX1BBQ0tBR0VfQlVTWUJPWCBpcyBub3Qgc2V0CkJSMl9QQUNLQUdFX1BPRE1BTj15CiMg
-QlIyX1RBUkdFVF9ST09URlNfVEFSIGlzIG5vdCBzZXQKCk5vdGUgdGhhdCBJIGRpZG4ndCB0cnkg
-X2JlZm9yZV8gdGhlIGJ1bXAsIHNvIEkgYW0gbm90IDEwMCUgc3VyZSB0aGUKYnVpbGQgaXNzdWUg
-aXMgY2F1c2VkIGJ5IHRoZSBidW1wLgoKQ291bGQgeW91IGhhdmUgYSBsb29rPwoKVGhhbmtzIQoK
-VGhvbWFzCi0tIApUaG9tYXMgUGV0YXp6b25pLCBjby1vd25lciBhbmQgQ0VPLCBCb290bGluCkVt
-YmVkZGVkIExpbnV4IGFuZCBLZXJuZWwgZW5naW5lZXJpbmcgYW5kIHRyYWluaW5nCmh0dHBzOi8v
-Ym9vdGxpbi5jb20KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczov
-L2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+Patch tested in:
+https://gitlab.com/jolivain/buildroot/-/jobs/16334532501
+---
+ DEVELOPERS                                  |  1 +
+ support/testing/tests/package/test_squid.py | 66 +++++++++++++++++++++
+ 2 files changed, 67 insertions(+)
+ create mode 100644 support/testing/tests/package/test_squid.py
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 1fd93b1de5..5b88bb445a 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2042,6 +2042,7 @@ F:	support/testing/tests/package/test_sed.py
+ F:	support/testing/tests/package/test_socat.py
+ F:	support/testing/tests/package/test_sox.py
+ F:	support/testing/tests/package/test_sqlite.py
++F:	support/testing/tests/package/test_squid.py
+ F:	support/testing/tests/package/test_strace.py
+ F:	support/testing/tests/package/test_stress_ng.py
+ F:	support/testing/tests/package/test_swipl.py
+diff --git a/support/testing/tests/package/test_squid.py b/support/testing/tests/package/test_squid.py
+new file mode 100644
+index 0000000000..02593b13e9
+--- /dev/null
++++ b/support/testing/tests/package/test_squid.py
+@@ -0,0 +1,66 @@
++import os
++import time
++
++import infra.basetest
++
++
++class TestSquid(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++        """
++        BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
++        BR2_PACKAGE_LIGHTTPD=y
++        BR2_PACKAGE_SQUID=y
++        BR2_PACKAGE_WGET=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def test_run(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=["-initrd", cpio_file])
++        self.emulator.login()
++
++        msg = "Hello Buildroot!"
++        fname = "file.txt"
++
++        # We check the program can run.
++        self.assertRunOk("squid --version")
++
++        # We create a file to serve over http.
++        self.assertRunOk(f"echo '{msg}' > /var/www/{fname}")
++
++        # We download the test file through the proxy.
++        proxy = "http://127.0.0.1:3128"
++        url = f"http://localhost/{fname}"
++        cmd = f"wget --progress=dot -e http_proxy={proxy} {url}"
++        # The squid server can take some time to start. Depending the
++        # load of the test controller, this can take a variable amount
++        # of time. We attempt several time before failing.
++        for attempt in range(15):
++            time.sleep(5)
++
++            _, ret = self.emulator.run(cmd)
++            if ret == 0:
++                break
++            # wget exit with status code 4 in case of a network error.
++            # Since we are waiting for the proxy server to be ready,
++            # we only expect this kind of error. We fail for other
++            # types of error.
++            self.assertEqual(ret, 4)
++        else:
++            self.fail("Timeout while waiting for squid to be ready.")
++
++        # We check the downloaded file has the expected content.
++        cmd = f"cat {fname}"
++        out, ret = self.emulator.run(cmd)
++        self.assertEqual(ret, 0)
++        self.assertEqual(out[0], msg)
++
++        # We also check the squid proxy logged the access.
++        cmd = "cat /var/log/squid/access.log"
++        out, ret = self.emulator.run(cmd)
++        self.assertEqual(ret, 0)
++        log_str = f"GET {url}"
++        self.assertIn(log_str, "\n".join(out))
+-- 
+2.55.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
