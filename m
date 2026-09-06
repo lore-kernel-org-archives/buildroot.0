@@ -4,100 +4,126 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54319C79F85
-	for <buildroot@archiver.kernel.org>; Sun,  6 Sep 2026 09:03:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BFBBC79F85
+	for <buildroot@archiver.kernel.org>; Sun,  6 Sep 2026 09:10:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A29E680D09;
-	Sun,  6 Sep 2026 09:03:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6D8D180DCA;
+	Sun,  6 Sep 2026 09:09:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OzzNwctJP6zT; Sun,  6 Sep 2026 09:03:21 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 8662980D2C
+ id JvoH1tD6AuZu; Sun,  6 Sep 2026 09:09:57 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 2BB6E80D9C
 Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1788685401;
-	b=rB2ssaYA5dmTxhUJkqx6weksEYJT0CrUXCPyz4Wmq5lfPOAyd1aENRT1XeL59KIorn0w
-	 d8+gVsPZyjQCE5XXSdHOTTcMz9BRxyoHhx9sCnY0ODs79t2ZlHFamhg9BSsXl/H7yzcLu
-	 u0zgnwdrwPgHaSw4XhkmMCKPFb/EQKWKPLD++2eHQn0J83k1dE7/uWQGq5EyIa7AchYJD
-	 XImTdI6kdQXy10aAoLDf21tg3n4e8Op4wLT6MigyABfGNMA0FT4LcEquCHBJZ/uCEu7K3
-	 sWp9jyTFuVxjM941IQ9r5U2mvgAV6ySL7/2mIx+UqPmVXsHdnsmikrL8sxxc5XKU00Q==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1788685797;
+	b=gXbH+pd9cmaLRuLPCXP2dXdicS8nRofnseyy3Xjq0+mmje6rbHS0wv6g0q6LZZ8PTDOD
+	 j1QcoH1rDIiNPA79c0S9+PMTWFhvCI14j6OGAx5AP0UaN/bdJTLkAgFDGOOPCKYUdAyhz
+	 03I08tZFrBwRfBJQm9/vTYI4BEo8qw0bqIioBhY9n+FwfaTyfARWjrjw/FgCcpQ887PMR
+	 1sKZ+BW9aq9AN9v0aP8dUMB6IIvcO2BlngGhgwDm4uiRv3VXDoegcEDYcbNHpcWMT66Pu
+	 ThewyfEafKWRaoOSwMe5goysgUeTgZOan0xCcVd9pa1wH9nnVZYzk06syLwqI6YHbIw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1788685401;
+	c=relaxed/relaxed; t=1788685797;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
-	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
-	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
+	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
+	 DKIM-Signature:Received:Received:From:To:Cc:Date:Message-ID:X-Mailer:
+	 MIME-Version:X-Spamd-Bar:Subject:X-BeenThere:X-Mailman-Version:
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
+	 List-Subscribe:Content-Type:Content-Transfer-Encoding:Errors-To:
 	 Sender;
-	bh=pFIrOXwQuNRAFHkK25qXtyRf5LNPjtVBv2sqUSG9jXo=;
-	b=SQ1fcShQZfJWhx2xGQMxk1WJITvM3qasBg+JGKduMVVlINhYb7D9NbTTGBrv+fusvHto
-	 dcf7wYMS6B/llQFczdNZfDeFR6i5WXttAIsMeDhBwBn4U7EnXp9c6dCRhOrJn6NmvNejX
-	 u8sM4fWsmrSlYUQMb0MKGzm+VORmKtrQqcnq5qg62s8lBHA13wby/sOUutUTTWEmwPe1y
-	 K/9CwdPoVw+aRmQ6dIjXMSQKlLJzetLbLYvUje6w4z1XlNNkF1PFzu5KYT7tyIn8eANc7
-	 8U8h9KSq4ZbDwAw/9pVdO5ELbvjBMUmbY+bJxCnkfBIRU5m4KQowcKYS3edPeajPf7g==
+	bh=yc1eU9zdG/vWQfs5Je8qgQvuV8lBrZ3txD0BbqXkU5c=;
+	b=etUw+1AYY5VIN+7U2C1i3XtjF5N4kgB7YNgcved9kg7AIOIIKXmceMCVnHx7PGASHf5v
+	 2g18GBPclBuYUaZKQjw/7DvK8qjOQMXLEpip3Zd5faanqe9wPNhFy9Ee9B/d86EFgKnlE
+	 yoF7whh/2XFyHXgE8WKa64Nn0pnqQInW3lAPp7Hgh2A7R3B8Pl94/7hDTQXgwOv1HSgV1
+	 QQoakhc5/AxLxIklyTeCJPgzcXe71Jf0WAtDJ0ty9xxIsaVl11NrFN/riSqLtw7wvjyVT
+	 LmNP8VdRIsIDMIaHLOLhzjDcgb7O9DMaLXVYPRpN3vSjmEMsxovQ6IIR0iIJZvUsBhw==
 ARC-Authentication-Results: i=2; smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1788685401;
-	bh=pFIrOXwQuNRAFHkK25qXtyRf5LNPjtVBv2sqUSG9jXo=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Ie85yvPf0wKUNhhOeIMKsvgP7kFn9zTbPIrgY6E99OwradR82UnuaS77qkBQvNmQr
-	 di623MPCpQu6KlhczVq/I1e+gVQhp6poL3Jhcj+IAeUP50ZBKRzG+fc2Oah29X3dBC
-	 wRDpgNXbcJds3OslW/UOqMW+qJ72PXYJDfzMm+mCVENdiP0hX5z4r//tVrwSo+VgCT
-	 6aszUYOyn9QOAOijpp23bxWjvQ3ASDrdQQ+yKBlZnAgOVr5YSqo1OQob6h2sMKAm2W
-	 xpGhLDhW25DQl9X5Tb/eCbI/0yGxrCOkkMyeSqTyDhaKPwfiRlLxyThp7KmdXAZnHT
-	 IUtvUJc4CBnVQ==
+	s=default; t=1788685797;
+	bh=yc1eU9zdG/vWQfs5Je8qgQvuV8lBrZ3txD0BbqXkU5c=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=GuEsrJmZH9iWtblBi2HFKjsdgRww8DRXNuNgQw/JlVK6qs2NueJF/msTgh6IRAHkF
+	 a9g4hZvRunM6xawr7RqfiMXOTspd42e6180EkyL670ZoGrTJBky+UdUhMdyR3myQVc
+	 o2si6U176QfzCDG00LnQWIcDIHeFtcCEDG7IoURF/T1Olowv404Bek8jG/6FWbloyp
+	 xGg0qguWy1fMsC3A6S7ZCkFZ2oFsEVaRP6e7BquZX4RAVJXOBfPDCB2O4+YpA55r2l
+	 jXIee620BFjwiMx03ZPupTeDHhPMbkF1NoLDKswEqOdLFMF6IKaf61UarZ8ZdxR4Sb
+	 BVSRjkV8XbPaA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8662980D2C;
-	Sun,  6 Sep 2026 09:03:21 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 38AF972C
- for <buildroot@buildroot.org>; Sun,  6 Sep 2026 09:03:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2BB6E80D9C;
+	Sun,  6 Sep 2026 09:09:57 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 40BA272C
+ for <buildroot@buildroot.org>; Sun,  6 Sep 2026 09:09:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 257B44008B
- for <buildroot@buildroot.org>; Sun,  6 Sep 2026 09:03:19 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 26350605FF
+ for <buildroot@buildroot.org>; Sun,  6 Sep 2026 09:09:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TgmNPTvzVX7g for <buildroot@buildroot.org>;
- Sun,  6 Sep 2026 09:03:17 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org BA7214007B
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1788685397;
- b=cjDNP/wOBCLyMIVSYz5CXqkoGchPP36Lgr45qBT11ZZ+XH91Mu/2Xa5LXOEkWk8u74CT
- che0BAj4yTeKkojJLrsTRb8Y0cj0LmMMLaXA04gZLAQBJrJb6t82vL+EUPZbNHy5QkiqQ
- Y1wf/dtt20Msru08Q+hE+e/uYS/dbUJ3MJrgYoHdlYPiwncUFKS5GNRuxEuBgqP30ZIVd
- DTv2brUsMtHDbHO4WA+jQpqvMN6jIPbZGSD03Fov9nTMlR2CYJyxLxl/2LD3QO7N6PUZQ
- CFqbS+9PcC1kdefa04aN2Dmaop/QKryzFR6RcWqVAKR3NfZqKLepIZF5QRjQAKesgDw==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id R4kvWm3Iwvfv for <buildroot@buildroot.org>;
+ Sun,  6 Sep 2026 09:09:53 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org A5577605E5
+Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1788685793;
+ b=PwR+FbSyX/LklIBbtH+uxCO2clsGuASSRsOxuJMZHpFQlg8zX4oPdLAuTbE0KD+PnK+O
+ E8Zb+wMIRwARvTjPJWBRwsltbP0eIpF0stDZBYz1uk/kt8gRR6nTCpq/pUACDGBokv5qC
+ qcsbxKIVpMyV+Fol9jnNEwt8KP46TXIHdhOrzXjPxZVehVu0hIkOKQbhW5Wn2OHt5oXbR
+ RzhhyH7I5/+1ZtSQmmfRRMcW0Z1TOY7mqeA8q7QCB7K26Xzl0B4vPUlR++nbjhunO5Eai
+ 83qFxzZUSgBT1Gl0aZy2zd0jaEFHoZb6cIc0najOU1qWp/buz+hIQZPof1Q5lSJUK6g==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1788685397;
- h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
- X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=uxZ8UmS2FPETo0ypv35CkdcQiIWKaEO5DIOqfRRuM1c=;
- b=e/ijXtM9+ERt6YulR2KcugoIRxOQRpyTeYLT9ksJdx4eHxGTPcDvCl1osnHbSRwPbVJB
- /f6Dq17pAaufeH5hhiO4CyyFj+tGlLKWYFop7+510GlAT0O5iWekZdzlmMnlxy1HBhan1
- d3XdwuQLLA/jKtk1pDIEQsp4yVibr90qJ8rOtlf5PMVgOZR46kqhhGH+4HkeRd9txbpvZ
- hCJuT1esdPjdIXLzSTt226ZQwnLGvs729QxIpA37+Q9eRSFFItnDyQf+4365z+dBlUGC0
- muzWbZFa1jLCQgxWTvOvyziMNd92/U4KLveunpZtRs+1Cdkq/PEeMBEUnnWD3FYoTcQ==
-ARC-Authentication-Results: i=1; smtp2.osuosl.org;
- arc=none smtp.remote-ip=140.211.167.122
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id BA7214007B
- for <buildroot@buildroot.org>; Sun,  6 Sep 2026 09:03:17 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4AD13952B4; Sun,  6 Sep 2026 09:02:16 +0000 (UTC)
+ c=relaxed/relaxed; t=1788685793;
+ h=Received-SPF:DKIM-Signature:Received:Received:From:To:Cc:Subject:
+ Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding:
+ X-Spam-Score:X-Spamd-Bar;
+ bh=+KCUhYElY/OLsSZ72/Eve467KUL1eThE9Kugt+3a8eU=;
+ b=BBh1Lj2FLNj7nhKvXBGQBXsYRf8T9GHXR4bQYi8V/TTLq4Lnlvkcu2MZ8ERy8o5ptMQb
+ S3jkruFWYhD48cyWMZmyiug7AOYVz0IxCymkDg5+HpSeUgB+3jM9UUe3yUiOjGoO8xQVo
+ spEnlDevbNi6FuymLE+Wh3nE267InjfY4aW0493rsZdKWDaQVW7l8cExoO/Ud2m2dFqsm
+ TapJaWuiX9IwiAI5J38+Zt2D+pRTU5ZO7MkGH/pLcBYjtcpZzcoayu5GZSIGhrmPuCbdJ
+ Z6V+FXpKldiTFzIK2GGzTEhl9YMrNvW8BazfpyuNN4SYxta0sDJo4mf4tsNZeaRcF6g==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org;
+ dmarc=pass header.from=kuhls.net; 
+ dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202605290044 header.b=byFK8H+w; 
+ arc=none smtp.remote-ip=85.13.140.57
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none) header.from=kuhls.net
+Authentication-Results: smtp3.osuosl.org; dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202605290044 header.b=byFK8H+w
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A5577605E5
+ for <buildroot@buildroot.org>; Sun,  6 Sep 2026 09:09:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
+ s=kas202605290044; t=1788685789;
+ bh=+KCUhYElY/OLsSZ72/Eve467KUL1eThE9Kugt+3a8eU=;
+ h=From:To:Cc:Subject:Date:From;
+ b=byFK8H+wheMjXMix+pVe5/FdUkfkIQ96/xvtrLMYhd+19og//7MKU574ZxuV6lRwV
+ gHijS4nNnjcNyE3PASrb7aIZj8JhvgxEUqC2IUcjhPAz5eVzb8iLgfibaKO1qyu2lX
+ WskY4cnTZxZFkBOXYawuWMh2e7R+fRCZTlnzGOP5lXba/qYpjGuhVpEH2z8/VtRu/S
+ vY7oMBCZDWQpktQ+W4xl9XpNM9qP/bxzMdbzB5jM582IqgDn7vCOwiXueETwTs8dCl
+ ngT7+2zpq+t0qoNw1Z3jnY1Tlkr5nbJ9gUaYHJFNyRN38LRNhRBOqrCASgfG619R8n
+ VO7BwqXjSRm5A==
+Received: from fli4l.lan.fli4l (p5b3a03a0.dip0.t-ipconnect.de [91.58.3.160])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id E3521A4C2E17;
+ Sun,  6 Sep 2026 11:09:48 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:43010)
+ by fli4l.lan.fli4l with esmtp (Exim 4.100)
+ (envelope-from <bernd@kuhls.net>) id 1x38sm-000000000Xo-1wjq;
+ Sun, 06 Sep 2026 09:09:48 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sun, 6 Sep 2026 10:52:15 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9c6eed9ec03431079780ad9dac8dfb53c1ae3691
-X-Git-Newrev: c5c0a76751a7e9ba1a8816da68218db9e1379eb9
-X-Patchwork-Hint: ignore
-Message-Id: <20260906090216.4AD13952B4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/weston: bump version to 16.0.0
+Cc: David Bender <codehero@gmail.com>
+Date: Sun,  6 Sep 2026 11:09:48 +0200
+Message-ID: <20260906090948.3583566-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
+MIME-Version: 1.0
+X-Spamd-Bar: -
+Subject: [Buildroot] [PATCH 1/1] package/openldap: bump version to 2.6.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -109,217 +135,77 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3511791445424907049=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3511791445424907049==
-Content-Type: text/plain
+https://github.com/openldap/openldap/blob/OPENLDAP_REL_ENG_2_6_14/CHANGES
+https://www.openldap.org/software/release/changes_lts.html
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/c5c0a76751a7e9ba1a8816da68218db9e1379eb9
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+Rebased patch 0001.
 
-Release announce:
-https://lore.freedesktop.org/wayland-devel/alXq76OX4dVWoP3M@xpredator/T/#u
-
-Removed already-deprecated config options:
-  * 'deprecated-backend-drm-screencast-vaapi' [1].
-  * 'deprecated-shell-fullscreen' [2].
-  * 'deprecated-screenshare' [3].
-
-The 'pipewire' and 'remoting' plugins has been deprecated in [4].
-They have already been removed in the main development branch in
-upstream commit [5] and [6] (not yet in this version 16.0.0).
-
-This commit removes the "remoting" option (rather than changing it to
-"deprecated-remoting") because Buildroot was not enabling this option
-and this deprecated option is now disabled by default.
-
-This commit also removes the "pipewire" option (rather than changing
-it to "deprecated-pipewire"). The commit log of [4] says the
-replacement is the "pipewire-backend" option, which is already used
-in Buildroot.
-
-Tested on STM32MP157C-DK2.
-
-[1] https://gitlab.freedesktop.org/wayland/weston/-/commit/7c3e3d754404453483ffb362be8ab8afb89d3eb2
-[2] https://gitlab.freedesktop.org/wayland/weston/-/commit/29b740ffee98236c5ccb93c09d750b07d37fb8fd
-[3] https://gitlab.freedesktop.org/wayland/weston/-/commit/3bd77f781766abaf8aa9fe55d4f9b98c03e29e42
-[4] https://gitlab.freedesktop.org/wayland/weston/-/commit/ec74bd040389291f0b8d3162506560a8adae31a4
-[5] https://gitlab.freedesktop.org/wayland/weston/-/commit/4606c49d2851a99064cae5e93fe9f464db3a2c58
-[6] https://gitlab.freedesktop.org/wayland/weston/-/commit/d587dfea5bf4816afdb0b7f4c9835956250ab395
-
-Signed-off-by: Raphaël Gallais-Pou <rgallaispou@gmail.com>
-[Julien:
- - update link in hash file comment
- - add removed options in Config.in.legacy
- - add back package patch which is not included in release
- - reword commit log (fix and add links to upstream commits)
-]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- Config.in.legacy           | 14 ++++++++++++++
- package/weston/Config.in   |  9 ---------
- package/weston/weston.hash |  6 +++---
- package/weston/weston.mk   | 27 +++------------------------
- 4 files changed, 20 insertions(+), 36 deletions(-)
+Gitlab pipelines passed:
+https://gitlab.com/bkuhls/buildroot/-/commits/5e6dcd65169998a1ad986e3912a9ab0501f63504
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index aeb9b9676e..6975f1f15f 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -144,6 +144,20 @@ endif
+ package/openldap/0001-fix-bignum.patch | 4 ++--
+ package/openldap/openldap.hash         | 4 ++--
+ package/openldap/openldap.mk           | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/package/openldap/0001-fix-bignum.patch b/package/openldap/0001-fix-bignum.patch
+index 1c71cd3165..33224356b4 100644
+--- a/package/openldap/0001-fix-bignum.patch
++++ b/package/openldap/0001-fix-bignum.patch
+@@ -11,7 +11,7 @@ So, keep the check for the bignum header, but check against ol_link_tls
+ which means that openssl is enabled when we find the bignum headers.
  
- ###############################################################################
+ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-[Bernd: rebased for 2.6.13]
++[Bernd: rebased for 2.6.14]
+ Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
  
-+comment "Legacy options removed in 2026.11"
-+
-+config BR2_PACKAGE_WESTON_SCREENSHARE
-+	bool "weston screenshare option removed"
-+	select BR2_LEGACY
-+	help
-+	  Weston screenshare option was removed in v16.0.0.
-+
-+config BR2_PACKAGE_WESTON_SHELL_FULLSCREEN
-+	bool "weston fullscreen shell removed"
-+	select BR2_LEGACY
-+	help
-+	  Weston fullscreen shell option was removed in v16.0.0.
-+
- comment "Legacy options removed in 2026.08"
- 
- config BR2_PACKAGE_FLUIDSYNTH_SDL2
-diff --git a/package/weston/Config.in b/package/weston/Config.in
-index abd996482a..dcb5c7544e 100644
---- a/package/weston/Config.in
-+++ b/package/weston/Config.in
-@@ -164,11 +164,6 @@ config BR2_PACKAGE_WESTON_SHELL_DESKTOP
- 	bool "desktop shell"
- 	default y
- 
--config BR2_PACKAGE_WESTON_SHELL_FULLSCREEN
--	bool "fullscreen shell"
--	default y
--	select BR2_PACKAGE_WESTON_HAS_SHELL
--
- config BR2_PACKAGE_WESTON_SHELL_IVI
- 	bool "ivi shell"
- 	default y
-@@ -188,10 +183,6 @@ config BR2_PACKAGE_WESTON_SHELL_LUA
- comment "lua shell needs a Lua >= 5.4"
- 	depends on !BR2_PACKAGE_LUA_5_4
- 
--config BR2_PACKAGE_WESTON_SCREENSHARE
--	bool "screenshare"
--	default y
--
- config BR2_PACKAGE_WESTON_SIMPLE_CLIENTS
- 	bool "simple clients"
- 	help
-diff --git a/package/weston/weston.hash b/package/weston/weston.hash
-index b002942696..e8d11ca64c 100644
---- a/package/weston/weston.hash
-+++ b/package/weston/weston.hash
-@@ -1,4 +1,4 @@
--# From https://lore.freedesktop.org/wayland-devel/aespQ3LKAOy5O3Hx@xpredator/T/#u
--sha256  551d039bfb0c837ba5a4d027cdb8ee16bded0eedb789821f8025d8a64b791f6d  weston-15.0.1.tar.xz
--sha512  555731ddfaf7e3ef9bf43be682e20338ee207b434a72011b730c9b0ebde4daeaeb9cc9d09a707c32798f0184a55144f64e818551efe7e71413876e45e3cb3523  weston-15.0.1.tar.xz
-+# From https://lore.freedesktop.org/wayland-devel/alXq76OX4dVWoP3M@xpredator/T/#u
-+sha256  dfb32e2bccabda957b94a8d0ec6075acd18c71c87ebc543ee3e618d294ca0f7f  weston-16.0.0.tar.xz
-+sha512  23b7a1138833f8aacc57758231d14c2f1bc9ec20ad2fef125ffffb8d63853968e8a8ed2d8bbf6ad1600d7f40358a705ca24838a683e01b1c84279cf8ae1cfe48  weston-16.0.0.tar.xz
- sha256  fdb65868f65d0fbdb05c2d3b779e10ce9969fa0c4b9262ba4f260e87086ab860  COPYING
-diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index 5caf5903d1..522365e06e 100644
---- a/package/weston/weston.mk
-+++ b/package/weston/weston.mk
+ diff -durN openldap-2.4.40.orig/configure openldap-2.4.40/configure
+@@ -28,7 +28,7 @@ diff -durN openldap-2.4.40.orig/configure openldap-2.4.40/configure
+  printf "%s\n" "#define USE_MP_BIGNUM 1" >>confdefs.h
+ --- openldap-2.5.15.orig/configure.ac	2023-10-23 11:03:46.292215101 +0200
+ +++ openldap-2.5.16/configure.ac	2023-10-23 11:05:07.245355497 +0200
+-@@ -2327,7 +2327,7 @@
++@@ -2328,7 +2328,7 @@
+  	AC_CHECK_HEADERS(openssl/crypto.h)
+  	if test "$ac_cv_header_openssl_bn_h" = "yes" &&
+  		test "$ac_cv_header_openssl_crypto_h" = "yes" &&
+diff --git a/package/openldap/openldap.hash b/package/openldap/openldap.hash
+index de2fee536f..0ee1152a75 100644
+--- a/package/openldap/openldap.hash
++++ b/package/openldap/openldap.hash
+@@ -1,5 +1,5 @@
+ # Verified by locally checking against the SHA3-512 hash available in
+-# https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.6.13.sha3-512
++# https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.6.14.sha3-512
+ # Locally computed
+-sha256  d693b49517a42efb85a1a364a310aed16a53d428d1b46c0d31ef3fba78fcb656  openldap-2.6.13.tgz
++sha256  806dcd21d366428187fba3278da773d5930f774852c9e92517f950d585f19107  openldap-2.6.14.tgz
+ sha256  310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
+diff --git a/package/openldap/openldap.mk b/package/openldap/openldap.mk
+index 6d30a22f54..b29cd384ef 100644
+--- a/package/openldap/openldap.mk
++++ b/package/openldap/openldap.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WESTON_VERSION = 15.0.1
-+WESTON_VERSION = 16.0.0
- WESTON_SITE = https://gitlab.freedesktop.org/wayland/weston/-/releases/$(WESTON_VERSION)/downloads
- WESTON_SOURCE = weston-$(WESTON_VERSION).tar.xz
- WESTON_LICENSE = MIT
-@@ -18,7 +18,6 @@ WESTON_DEPENDENCIES = host-pkgconf wayland wayland-protocols \
- 
- WESTON_CONF_OPTS = \
- 	-Ddoc=false \
--	-Dremoting=false \
- 	-Dbackend-vnc=false \
- 	-Dtools=calibrator,debug,info,terminal,touch-calibrator
- 
-@@ -58,15 +57,14 @@ ifeq ($(BR2_PACKAGE_WESTON_SIMPLE_CLIENTS),y)
- WESTON_SIMPLE_CLIENTS += dmabuf-egl dmabuf-feedback egl
- endif
- ifeq ($(BR2_PACKAGE_PIPEWIRE)$(BR2_PACKAGE_WESTON_DRM),yy)
--WESTON_CONF_OPTS += -Dpipewire=true -Dbackend-pipewire=true
-+WESTON_CONF_OPTS += -Dbackend-pipewire=true
- WESTON_DEPENDENCIES += pipewire
- else
--WESTON_CONF_OPTS += -Dpipewire=false -Dbackend-pipewire=false
-+WESTON_CONF_OPTS += -Dbackend-pipewire=false
- endif
- else
- WESTON_CONF_OPTS += \
- 	-Drenderer-gl=false \
--	-Dpipewire=false \
- 	-Dbackend-pipewire=false
- endif
- 
-@@ -121,13 +119,6 @@ else
- WESTON_CONF_OPTS += -Dxwayland=false
- endif
- 
--ifeq ($(BR2_PACKAGE_LIBVA),y)
--WESTON_CONF_OPTS += -Ddeprecated-backend-drm-screencast-vaapi=true
--WESTON_DEPENDENCIES += libva
--else
--WESTON_CONF_OPTS += -Ddeprecated-backend-drm-screencast-vaapi=false
--endif
--
- ifeq ($(BR2_PACKAGE_LCMS2),y)
- WESTON_CONF_OPTS += -Dcolor-management-lcms=true
- WESTON_DEPENDENCIES += lcms2
-@@ -155,12 +146,6 @@ else
- WESTON_CONF_OPTS += -Dshell-desktop=false
- endif
- 
--ifeq ($(BR2_PACKAGE_WESTON_SHELL_FULLSCREEN),y)
--WESTON_CONF_OPTS += -Ddeprecated-shell-fullscreen=true
--else
--WESTON_CONF_OPTS += -Ddeprecated-shell-fullscreen=false
--endif
--
- ifeq ($(BR2_PACKAGE_WESTON_SHELL_IVI),y)
- WESTON_CONF_OPTS += -Dshell-ivi=true
- else
-@@ -180,12 +165,6 @@ else
- WESTON_CONF_OPTS += -Dshell-lua=false
- endif
- 
--ifeq ($(BR2_PACKAGE_WESTON_SCREENSHARE),y)
--WESTON_CONF_OPTS += -Ddeprecated-screenshare=true
--else
--WESTON_CONF_OPTS += -Ddeprecated-screenshare=false
--endif
--
- ifeq ($(BR2_PACKAGE_WESTON_DEMO_CLIENTS),y)
- WESTON_CONF_OPTS += -Ddemo-clients=true
- WESTON_DEPENDENCIES += pango
-
---===============3511791445424907049==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+-OPENLDAP_VERSION = 2.6.13
++OPENLDAP_VERSION = 2.6.14
+ OPENLDAP_SOURCE = openldap-$(OPENLDAP_VERSION).tgz
+ OPENLDAP_SITE = https://www.openldap.org/software/download/OpenLDAP/openldap-release
+ OPENLDAP_LICENSE = OpenLDAP Public License
+-- 
+2.47.3
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============3511791445424907049==--
