@@ -1,121 +1,130 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0748C79F89
-	for <buildroot@archiver.kernel.org>; Mon,  7 Sep 2026 13:48:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 704AEC79FA1
+	for <buildroot@archiver.kernel.org>; Mon,  7 Sep 2026 15:52:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7D3754058B;
-	Mon,  7 Sep 2026 13:48:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DEB7F60688;
+	Mon,  7 Sep 2026 15:52:55 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id T8GaqNdtcwjV; Mon,  7 Sep 2026 15:52:51 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 4E80260662
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1788796371;
+	b=tI9DAoP9qIvvYZacS++thKfxQMkD9Xobo+j81w1fCq6eZVGB093+5XSf6P/yNriEKzUl
+	 e4aZFQ278LW6S0abzMOOUFyZn+BKDrhQD9oZgiI7b7IosnNvqZfHLew+HYjP/YTDDBpvg
+	 CyUkwqiF/cMQ08Lg2TMgpNI1M9m6vuoMAP265ii/DGbKrbc0wTb1FBUXWmnOrq55LVBbD
+	 BboBKvzUtikfWbTTIjaJVpfLarhfuxRRAOdnQukfwkOpF9S8HeYwiMt2ipqTrux4HkBAo
+	 ZBLUigpkDwt/AVwiRCC0JrMhkNs/2Xaatwp8mEgyyHgKcIoopGgjUs1iHwCGfaePnzw==
+ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
+	c=relaxed/relaxed; t=1788796371;
+	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
+	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
+	 DKIM-Signature:Received:Received:From:To:Cc:Date:Message-ID:X-Mailer:
+	 MIME-Version:X-Spamd-Bar:Subject:X-BeenThere:X-Mailman-Version:
+	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:Content-Type:Content-Transfer-Encoding:Errors-To:
+	 Sender;
+	bh=A9N0DxEmPWYmYCIpVDOn85cratcwoeVsp4xW1We3OmA=;
+	b=DHxdSqPsG5CuOhuzrWPlxpriUXOhqWfPi9Nnxu0YyvCAcikgEkDhCRHHSQtZSE0nrEFn
+	 pdyupnv17D0fKo+rudPGwP/VNkGZ8W0kbwMjLoI0J7AXBMsbFwjQbkE4Gg18ijJcROToS
+	 kjxyYv/a6oiJQoPmrYge0mFJUuE9MKrVkko7u0N/Z/S8t4i62Xa8jzU4woZNvCnC/QmLm
+	 nvbgGM/yJkA+YD6CAAzM0omFeGCEjdb8P0LlZGQmwo7T5vHhGii8D8x6UkMkEgiMkEY1z
+	 OHW0Tvzg21/jcPZCUkIXw2JTh2DrKdysgm5fXesVPSeqNbkDFM+7gs6rw8fGe5nd3AA==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1788796371;
+	bh=A9N0DxEmPWYmYCIpVDOn85cratcwoeVsp4xW1We3OmA=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=MXRuuqb3u8z2fIa//fTilrmmWrYk3c6BG9UUKFedRIlyFVBnbeYGQrnkZr9EdO6in
+	 igkO/8tH/zA7n/8S9ugYmanTDoilarHyYeOg0sjzxB+IPud8fvBZKSWGYuhG/kcFAz
+	 GKjbJWo/YIkLPQ3hfFDU8E0FQcQN69+45S49hOtL1gb0sVxeYBRD5spiJh1v0eBTXX
+	 q40Q7uZDmzxa1aYscUDcK2X48kvLbBKndqdx8k8lkFfF/enAyVwkXhSlC+LNFLkblL
+	 VHb2dTUqhwDdTiDCl2f/mL7RJx5hXeuLntbfkbyBuKl8DFSzWIMHa3+rk4vGhYmlE4
+	 0sRRVqLp1nVXw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4E80260662;
+	Mon,  7 Sep 2026 15:52:51 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 68CEFA48
+ for <buildroot@buildroot.org>; Mon,  7 Sep 2026 15:52:50 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4E6A240547
+ for <buildroot@buildroot.org>; Mon,  7 Sep 2026 15:52:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bCPCKr24h9di; Mon,  7 Sep 2026 13:48:01 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 614C040552
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1788788879;
-	b=AZ8vxJr2AXPeJ4E4Ye+lkHksaa4I1yLTSwlgn1vGEYgzpYMSFvGIUdPKLQ15a8TwxO/A
-	 n9ZI3UzlR8bcTP4VPfjt5cDF8p6YhjfPPaO9MQfa9xWJ54hnRI3qAOUe9J++fOdrrlCZ2
-	 UUCb37ChGjebA1/C7/urSiFSdrWKVw4DREeqZsBOkDPZK2qiwMh4teesXG+yanbBLPI9f
-	 zaA4WACTQHm+zK1282lQjfX65N6POJl+XJREAbbYWJapH+/bOCdFnAfgavb1O4MeUxUP5
-	 8IOGI1lNyXfgGAhvrctQlqzC/eC4romt3fNP0KTuTQKWmJe4rdT719mdi6POAZPEQWg==
-ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1788788879;
-	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 Received:Received:Date:MIME-Version:Message-Id:References:In-Reply-To:
-	 To:Cc:X-Mailer:X-Last-TLS-Session-Version:Subject:X-BeenThere:
-	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:Content-Type:
-	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=RoJpM678tkjLpRXQ7gScu5iFWJrweVmwbSXpaBNewNg=;
-	b=V1cyyIVwaYW97T4zYyGPuy3Y8bFPQ1XDqH9y6ksE5ZYVjgdXRT9bNSFVPzES8Z8wQKFx
-	 1Ml5Vx7cGHFJqSb3luA1nslkIH++r6OmzCSYLdzYT7Q/taLG7GZ0tQYf9CLEFYi0Hrsua
-	 aunYB7yynbh08sZA3HvlsEL3/C6x0TfkbZHK60RSNEkHvlligXccm48OF4FHrD31V75bE
-	 Phnxf8D6Ngk9Iun9LM3xBtdmdJQtHJRMJKp8CO8WfRB7TD54WGcRxsNQMlZQcA7klysUY
-	 fUiWc2jQISZOGBdEsEn1qJfRl9kRgRVaCETZNwUqSEckCvOKRL7s+t07X9ZyocX9tIw==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1788788879;
-	bh=RoJpM678tkjLpRXQ7gScu5iFWJrweVmwbSXpaBNewNg=;
-	h=Date:References:In-Reply-To:To:Cc:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=ZhIS3UE3FsOb8jna9HYEFPtbZ8T7Ucr0NEOLeF/yyDf/0lUYSncJBTzSDcjsHQn19
-	 sIRvOnqdJM8RKRZctGVhPnRhAusEjX3lZayHvwYZMSzFaJ+4XUeiNzkFp7Pc1bKOdY
-	 AGWoTI+zI9tqgwh+HNYsP6wxfQg+iI9hepvI2ph3dws4NNuhlUFcNFQfz0tFQrseIr
-	 38y4zrdHuSjgeDSHn0PkJXC1Q2v06cAC6B3FIWrZYmNISNCNbSqHXV2G1U6LB6vgDp
-	 /k1Vh68+/Tr42TS109Xqh0V6PIis5H04V6y17oBPFYpbAxEYeYB2pkMnfjPtGpImDH
-	 DUw653M5xm+Rg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 614C040552;
-	Mon,  7 Sep 2026 13:47:59 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 06AFC29B
- for <buildroot@buildroot.org>; Mon,  7 Sep 2026 13:47:55 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id ECE9C40106
- for <buildroot@buildroot.org>; Mon,  7 Sep 2026 13:47:54 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9FhqVF0CIqSh for <buildroot@buildroot.org>;
- Mon,  7 Sep 2026 13:47:53 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org 729AE40067
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1788788872;
- b=j23SImUZILMusoYd/Mz1EHgrnkRS0klkrloWlpAwolWJOD9ZhV4+qF7iBwIxYg0gTIv5
- vHxg/AbOigIooggkXqwlE3/3bt/ww6dcLM87VyuQq2DBYkcsjkcyHibeo81JvG1NGzGya
- tV+rmyy/N0TWhy+ryyaTovtgXllFJ4ynNcpYuBCqBXI2PdN5Od/33VZ++mFUjQtT0qbt0
- HYN+2CYx5fqrnVOyKexOOwNkb8eAkIbw8R0DGL8FavuFddUTIJkpoVAywdikiY4E2og0b
- DctQ/2hQ2Dyk1C0xfa0UISYMYkX0yrDCHkDM3++C+sxH+yFHrjlsXvLaKABv4tTD0Ag==
+ id oMu5Tedr9mwS for <buildroot@buildroot.org>;
+ Mon,  7 Sep 2026 15:52:48 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org AE35F40545
+Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1788796368;
+ b=AIKL1P+GYXKR7rASC9QCqMab0aQ9FJ3RmaaMU8SsQhiMK1feeArIijo3jfVLZJZLCb9t
+ PIIbvpRGFZQP0MysPvdCs3zolekL9/9R+qV33tDydAkj0sksZ9JE6v6u+ukv/CQF/Pv0P
+ 6zSSybwY4bOmDJ7zjX0OYZW4Qk1xrva7dblY+bfF/MXDxFoX4D7V9qCzZiRdPbMfWL0t5
+ 2S+kEtNZEPTZWwUa3GjD/pmSQ56+mRIChTXBsJX+vSCrUnVnds6HM6rKYEJA7H7dgMUD7
+ aZW8JpQqO1p0C2TeNygqrSP1S/9lx4Ms53cTO7KraZMLRxEVR8S2wLzFXQL8sI/eexA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1788788872;
- h=Received-SPF:Received:Received:Received:DKIM-Signature:From:Date:
- Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:
- Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
- X-Last-TLS-Session-Version;
- bh=Ke4lZ+teV55lL5XdVX876SoVoQBmTLtNOLaZT/i7ii4=;
- b=l13YStNH1a35ggShVjRwC+4UdLoGpR6BkUL1Lz58mWvuA07Vbwe47LTK3thgj7yLe2tp
- /Ji1o4eKscqIJ744bOiBPrPbpJtRBRhmhwmTQs5GkhWGXdWLOQys/szYa/ZsG5RzvUehZ
- 0ukZEeEOXzOJQhD0/10AdJvzSXUfcC2QTIk8iP8acntsL14ZbI8nvI7Hr3wAhcbsfX5IO
- 0oV0f3D3nVMvod8Bwy0JLRjztXvo/ONh6TifqoqEMhYo9a03z9FUkDy6WRMGTeSmeQ9XL
- J+ze4XZ2qaMvNqrMQcZde7vWqDSvWtrNIP+CgPLjm+6kiScrsBVYGz64Mno0MkJzKPw==
-ARC-Authentication-Results: i=1; smtp2.osuosl.org;
- dmarc=pass header.from=bootlin.com; 
- dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b="j/BW+Wab"; 
- arc=none smtp.remote-ip=185.246.84.56
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
- helo=smtpout-02.galae.net; envelope-from=alexis.lothore@bootlin.com;
- receiver=<UNKNOWN> 
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 729AE40067
- for <buildroot@buildroot.org>; Mon,  7 Sep 2026 13:47:51 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-02.galae.net (Postfix) with ESMTPS id 9D3C31A1A3B
- for <buildroot@buildroot.org>; Mon,  7 Sep 2026 13:47:49 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 6B41860383
- for <buildroot@buildroot.org>; Mon,  7 Sep 2026 13:47:49 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id BC75A11C7AF1E; 
- Mon,  7 Sep 2026 15:47:48 +0200 (CEST)
-Date: Mon, 07 Sep 2026 15:47:36 +0200
-MIME-Version: 1.0
-Message-Id: <20260907-fix_openscap-v2-1-28f8f6ee3248@bootlin.com>
-References: <20260907-fix_openscap-v2-0-28f8f6ee3248@bootlin.com>
-In-Reply-To: <20260907-fix_openscap-v2-0-28f8f6ee3248@bootlin.com>
+ c=relaxed/relaxed; t=1788796368;
+ h=Received-SPF:DKIM-Signature:Received:Received:From:To:Cc:Subject:
+ Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding:
+ X-Spam-Score:X-Spamd-Bar;
+ bh=miB+y6J1v41cojXiw9yrBP6ShL9OPVrkeAfNbi9fAOg=;
+ b=hznjgzNxhU3CDQPJJSZI1vcfTsjp1kNwR9omTZtKDK/pgRBLZ21s2mIbvI8x+HVaEA2o
+ vaD7C4NP/WoIrkLGJ2nN9lEptIhM8rNafGA0GAjje5hrw5UCKUyI+VCyrqvAGLYKRSBEh
+ JpvzuDpyE6DhZVbsuKNaPiWLU1eyaCJPdQwMMcayt9PK6yVXlGrFdvpOz+vU0lWnQaNVa
+ O9Urdhm81JCBVaHXiZWx5umN3wK7AauhaHzsVthxzwIlGdDNOX+qWlfpH6lk/TtiCW7Vn
+ vp2vjlMuBmarmUWKfvsSenTq3X8Rr9LSgE/QmN6BsjYQHrJd8oPiWBDMScEywSAMUoQ==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org;
+ dmarc=pass header.from=kuhls.net; 
+ dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202605290044 header.b=Q4N9g2Eg; 
+ arc=none smtp.remote-ip=85.13.140.57
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none) header.from=kuhls.net
+Authentication-Results: smtp4.osuosl.org; dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202605290044 header.b=Q4N9g2Eg
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id AE35F40545
+ for <buildroot@buildroot.org>; Mon,  7 Sep 2026 15:52:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
+ s=kas202605290044; t=1788796361;
+ bh=miB+y6J1v41cojXiw9yrBP6ShL9OPVrkeAfNbi9fAOg=;
+ h=From:To:Cc:Subject:Date:From;
+ b=Q4N9g2Egqragg16SLt/9g21imIP4u34CDYkvW3Tc2SNVrzdLD7Ml1I/BpjW8d4bMW
+ mOPFn6MJ7ebVpGcklI+VvwvBPPti+PJygBBbe/mJ03ARNSSuvvLcmbQQV84u8+IHdp
+ pHMXKomG3kaPdqHp9pf+wjba9v3o+IM7zgr0+qoxNGzfZJslfmrTDmpLJrpCyWYeV9
+ ayg+X07tzz9bD6Hlv+Ik8nrJmifR8Ky2EqKG5PK7DahPIM+DjSj41qTi8ruMPB9afp
+ LmELZfrWAqQ/5xgJD3FB7ZSaOgSpXGRn/aSpZbp/golTnGspjXh0BZKFmbwKDUZgzG
+ keAZGkOdZX7Aw==
+Received: from fli4l.lan.fli4l (p54a1bccf.dip0.t-ipconnect.de [84.161.188.207])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id C4FBEA4C38E6;
+ Mon,  7 Sep 2026 17:52:41 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:36916)
+ by fli4l.lan.fli4l with esmtp (Exim 4.100)
+ (envelope-from <bernd@kuhls.net>) id 1x3beD-0000000014C-1lV2;
+ Mon, 07 Sep 2026 15:52:41 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-X-Mailer: b4 0.15.2
-X-Last-TLS-Session-Version: TLSv1.3
-Subject: [Buildroot] [PATCH v2 1/2] package: openscap: fix build failure
- when crypto backend is not gcrypt
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Mon,  7 Sep 2026 17:52:41 +0200
+Message-ID: <20260907155241.3755621-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
+MIME-Version: 1.0
+X-Spamd-Bar: /
+Subject: [Buildroot] [PATCH v2 1/1] package/{rust,
+ rust-bin}: bump version to 1.98.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -127,169 +136,229 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: =?utf-8?q?Alexis_Lothor=C3=A9_via_buildroot?= <buildroot@buildroot.org>
-Reply-To: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-V2hlbiBlbmFibGluZyB0aGUgb3BlbnNjYXAgcGFja2FnZSBhbmQgdGhlIGxpYm5zcyBsaWJyYXJ5
-IF9idXQgbm90XwpsaWJnY3J5cHQsIHRoZSBidWlsZCBjYW4gZmFpbCBvbiB0aGUgZm9sbG93aW5n
-IGVycm9yOgoKICAuLi9zcmMvbGlib3BlbnNjYXAuc28uMzMuMS4zOiB1bmRlZmluZWQgcmVmZXJl
-bmNlIHRvIGBjcmFwaV9pbml0JwoKVGhlIGlzc3VlIGlzIGR1ZSB0byB0aGUgZmFjdCB0aGF0IHRo
-ZSBjb3JyZXNwb25kaW5nIE1ha2VmaWxlCnN5c3RlbWF0aWNhbGx5IGZvcmNlcyAtRFdJVEhfQ1JZ
-UFRPPWdjcnlwdDogb3BlbnNjYXAgQ01ha2UKaW5zdHJ1bWVudGF0aW9uIHRoZW4gc2VhcmNoZXMg
-b25seSB0aGlzIGJhY2tlbmQsIGZhaWxzIHRvIGZpbmQgaXQsCmFzc3VtZXMgdGhhdCBubyBjcnlw
-dG8gYmFja2VuZCBpcyBhdmFpbGFibGUsIGFuZCBzbyBkb2VzIG5vdCBpbmNsdWRlIHRoZQpjcmFw
-aV9vYmplY3QgaW4gdGhlIGZpbmFsIGxpbmsgc3RlcC4KCkNvbW1pdCA3Yzg1ZjNhZGY0YTggKCJw
-YWNrYWdlL29wZW5zY2FwOiBuZXcgcGFja2FnZSIpIHRvb2sgaW50byBhY2NvdW50CnRoZSBmYWN0
-IHRoYXQgb3BlbnNjYXAgaXNuJ3QgY3VycmVudGx5IGFibGUgdG8gYnVpbGQgaWYgbm8gY3J5cHRv
-IGJhY2tlbmQKaXMgcHJvdmlkZWQgKHNlZSBbMF0pLCBhbmQgc28gbWFkZSBzdXJlIHRvIGZvcmNl
-IGxpYmdjcnlwdCBpbmNsdXNpb24gaWYKbGlibnNzIGlzIG5vdCBpbmNsdWRlZC4gU2luY2UgdGhl
-biwgdHdvIGZpeGVzIChbMV0gYW5kIFsyXSkgaGF2ZSBiZWVuCmludGVncmF0ZWQgdXBzdHJlYW0g
-dG8gYWxsb3cgYnVpbGRpbmcgb3BlbnNjYXAgd2l0aCBhbnkgYmFja2VuZC4KCkRvIG5vdCBzeXN0
-ZW1hdGljYWxseSBlbmZvcmNlIGxpYmdjcnlwdCBhbnltb3JlIHRocm91Z2ggV0lUSF9DUllQVE86
-CnJhdGhlciB0aGFuIHRlc3RpbmcgbnNzIHByZXNlbmNlLCBhbmQgZmFsbGluZyBiYWNrIHRvIGxp
-YmdjcnlwdCwgYWxsb3cKYm90aCB0byBiZSBhYnNlbnQsIGFuZCBzbyByZWxheCB0aGUgbGliZ2Ny
-eXB0IGRlcGVuZGVuY3kgdG8gbWFrZSBpdApvcHRpb25hbCBhcyB3ZWxsLiBCcmluZyB0aGUgdHdv
-IHVwc3RyZWFtIHBhdGNoZXMgYWxsb3dpbmcgb3BlbnNjYXAgYnVpbGQKd2l0aG91dCBhbnkgY3J5
-cHRvIGJhY2tlbmQuICBUaG9zZSBwYXRjaGVzIGNhbiBiZSBkcm9wcGVkIG9uY2Ugb3BlbnNjYXAK
-djEuNC41IGlzIHJlbGVhc2VkLgoKWzBdIGh0dHBzOi8vZ2l0aHViLmNvbS9PcGVuU0NBUC9vcGVu
-c2NhcC9pc3N1ZXMvMjMxMApbMV0gaHR0cHM6Ly9naXRodWIuY29tL09wZW5TQ0FQL29wZW5zY2Fw
-L2NvbW1pdC9kMTJkODIwYTk0OTNiMGEwZWUxYWQ0YjBhZWFhODdkYTI4YWEwMDgwClsyXSBodHRw
-czovL2dpdGh1Yi5jb20vT3BlblNDQVAvb3BlbnNjYXAvY29tbWl0LzViODU4ZDE3ODZjMDI1Y2Jk
-NTBkZmMyODRiMjUyYzNlZTZkZDk5ZGMKCkZpeGVzOiBodHRwczovL2F1dG9idWlsZC5idWlsZHJv
-b3Qub3JnL3Jlc3VsdHMvNGM5MDVjMWIwZWUzODQxNDljM2Q4NWU4ZjJlYmYwYWYzYTEyYzJhZC8K
-U2lnbmVkLW9mZi1ieTogQWxleGlzIExvdGhvcsOpIDxhbGV4aXMubG90aG9yZUBib290bGluLmNv
-bT4KLS0tCiAuLi4vMDAwMS1GaXgtYnVpbGQtd2l0aG91dC1jcnlwdG8tc3VwcG9ydC5wYXRjaCAg
-ICB8IDU3ICsrKysrKysrKysrKysrKysrKysrKysKIC4uLmdjcnlwdC1jbWFrZS12YXJpYWJsZXMt
-aWYtZ2NyeXB0LWlzLW5vdC1mLnBhdGNoIHwgNTAgKysrKysrKysrKysrKysrKysrKwogcGFja2Fn
-ZS9vcGVuc2NhcC9Db25maWcuaW4gICAgICAgICAgICAgICAgICAgICAgICAgfCAgNSAtLQogcGFj
-a2FnZS9vcGVuc2NhcC9vcGVuc2NhcC5tayAgICAgICAgICAgICAgICAgICAgICAgfCAgOSArKy0t
-CiA0IGZpbGVzIGNoYW5nZWQsIDExMCBpbnNlcnRpb25zKCspLCAxMSBkZWxldGlvbnMoLSkKCmRp
-ZmYgLS1naXQgYS9wYWNrYWdlL29wZW5zY2FwLzAwMDEtRml4LWJ1aWxkLXdpdGhvdXQtY3J5cHRv
-LXN1cHBvcnQucGF0Y2ggYi9wYWNrYWdlL29wZW5zY2FwLzAwMDEtRml4LWJ1aWxkLXdpdGhvdXQt
-Y3J5cHRvLXN1cHBvcnQucGF0Y2gKbmV3IGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggMDAwMDAwMDAw
-MDAwLi45N2RhNjBmMDMyYTMKLS0tIC9kZXYvbnVsbAorKysgYi9wYWNrYWdlL29wZW5zY2FwLzAw
-MDEtRml4LWJ1aWxkLXdpdGhvdXQtY3J5cHRvLXN1cHBvcnQucGF0Y2gKQEAgLTAsMCArMSw1NyBA
-QAorRnJvbSBkMTJkODIwYTk0OTNiMGEwZWUxYWQ0YjBhZWFhODdkYTI4YWEwMDgwIE1vbiBTZXAg
-MTcgMDA6MDA6MDAgMjAwMQorRnJvbTogRWxqZWVzIDx5dXJ5dHVtYW5vdi5yQHlhbmRleC5ydT4K
-K0RhdGU6IE1vbiwgMjcgSnVsIDIwMjYgMDY6NTc6MzggKzAzMDAKK1N1YmplY3Q6IFtQQVRDSF0g
-Rml4IGJ1aWxkIHdpdGhvdXQgY3J5cHRvIHN1cHBvcnQKKworVXBzdHJlYW06IGh0dHBzOi8vZ2l0
-aHViLmNvbS9PcGVuU0NBUC9vcGVuc2NhcC9jb21taXQvZDEyZDgyMGE5NDkzYjBhMGVlMWFkNGIw
-YWVhYTg3ZGEyOGFhMDA4MAorU2lnbmVkLW9mZi1ieTogQWxleGlzIExvdGhvcsOpIDxhbGV4aXMu
-bG90aG9yZUBib290bGluLmNvbT4KKy0tLQorIHNyYy9DTWFrZUxpc3RzLnR4dCAgICAgICAgICAg
-ICAgICAgICB8IDIgKy0KKyBzcmMvT1ZBTC9wcm9iZXMvQ01ha2VMaXN0cy50eHQgICAgICAgfCAy
-ICstCisgc3JjL09WQUwvcHJvYmVzL2NyYXBpL0NNYWtlTGlzdHMudHh0IHwgNyArKysrKystCisg
-MyBmaWxlcyBjaGFuZ2VkLCA4IGluc2VydGlvbnMoKyksIDMgZGVsZXRpb25zKC0pCisKK2RpZmYg
-LS1naXQgYS9zcmMvQ01ha2VMaXN0cy50eHQgYi9zcmMvQ01ha2VMaXN0cy50eHQKK2luZGV4IDVk
-NTliZjNmMDM2Zi4uZjMxY2U4MDQwZTBhIDEwMDY0NAorLS0tIGEvc3JjL0NNYWtlTGlzdHMudHh0
-CisrKysgYi9zcmMvQ01ha2VMaXN0cy50eHQKK0BAIC01OSw3ICs1OSw3IEBAIGlmIChFTkFCTEVf
-UFJPQkVTKQorIAkJKQorIAllbmRpZigpCisgZW5kaWYoKQorLWlmIChIQVZFX01NQU5fSCBBTkQg
-KEdDUllQVF9GT1VORCBPUiBOU1NfRk9VTkQpKQorK2lmIChIQVZFX01NQU5fSCkKKyAJbGlzdChB
-UFBFTkQgT0JKRUNUU19UT19MSU5LX0FHQUlOU1QKKyAJCSQ8VEFSR0VUX09CSkVDVFM6Y3JhcGlf
-b2JqZWN0PgorIAkpCitkaWZmIC0tZ2l0IGEvc3JjL09WQUwvcHJvYmVzL0NNYWtlTGlzdHMudHh0
-IGIvc3JjL09WQUwvcHJvYmVzL0NNYWtlTGlzdHMudHh0CitpbmRleCBlNTA1OTA4ZjU4NDIuLjI1
-ZTNjYTU2YTBjMyAxMDA2NDQKKy0tLSBhL3NyYy9PVkFML3Byb2Jlcy9DTWFrZUxpc3RzLnR4dAor
-KysrIGIvc3JjL09WQUwvcHJvYmVzL0NNYWtlTGlzdHMudHh0CitAQCAtMSw3ICsxLDcgQEAKKyBh
-ZGRfc3ViZGlyZWN0b3J5KCJTRUFQIikKKyBhZGRfc3ViZGlyZWN0b3J5KCJwcm9iZSIpCisgCist
-aWYgKEhBVkVfTU1BTl9IIEFORCBDUllQVE9fRk9VTkQpCisraWYgKEhBVkVfTU1BTl9IKQorIAlh
-ZGRfc3ViZGlyZWN0b3J5KCJjcmFwaSIpCisgZW5kaWYoKQorIAorZGlmZiAtLWdpdCBhL3NyYy9P
-VkFML3Byb2Jlcy9jcmFwaS9DTWFrZUxpc3RzLnR4dCBiL3NyYy9PVkFML3Byb2Jlcy9jcmFwaS9D
-TWFrZUxpc3RzLnR4dAoraW5kZXggMWYzZTVhOTYzYmJmLi4zZmI2ZjEyM2M4ZDYgMTAwNjQ0Cist
-LS0gYS9zcmMvT1ZBTC9wcm9iZXMvY3JhcGkvQ01ha2VMaXN0cy50eHQKKysrKyBiL3NyYy9PVkFM
-L3Byb2Jlcy9jcmFwaS9DTWFrZUxpc3RzLnR4dAorQEAgLTEsNCArMSw5IEBACistZmlsZShHTE9C
-X1JFQ1VSU0UgQ1JBUElfU09VUkNFUyAiKi5jIikKKytpZiAoQ1JZUFRPX0ZPVU5EKQorKwlmaWxl
-KEdMT0JfUkVDVVJTRSBDUkFQSV9TT1VSQ0VTICIqLmMiKQorK2Vsc2UoKQorKwkjIGNyYXBpX2lu
-aXQgaGFzIGEgbm8tb3AgaW1wbGVtZW50YXRpb24gZm9yIGJ1aWxkcyB3aXRob3V0IGEgZGlnZXN0
-IGJhY2tlbmQuCisrCXNldChDUkFQSV9TT1VSQ0VTICJjcmFwaS5jIikKKytlbmRpZigpCisgZmls
-ZShHTE9CX1JFQ1VSU0UgQ1JBUElfSEVBREVSUyAiKi5oIikKKyAKKyBhZGRfbGlicmFyeShjcmFw
-aV9vYmplY3QgT0JKRUNUICR7Q1JBUElfU09VUkNFU30gJHtDUkFQSV9IRUFERVJTfSkKKy0tIAor
-Mi41NS4wCisKZGlmZiAtLWdpdCBhL3BhY2thZ2Uvb3BlbnNjYXAvMDAwMi1Eby1ub3QtdXNlLWdj
-cnlwdC1jbWFrZS12YXJpYWJsZXMtaWYtZ2NyeXB0LWlzLW5vdC1mLnBhdGNoIGIvcGFja2FnZS9v
-cGVuc2NhcC8wMDAyLURvLW5vdC11c2UtZ2NyeXB0LWNtYWtlLXZhcmlhYmxlcy1pZi1nY3J5cHQt
-aXMtbm90LWYucGF0Y2gKbmV3IGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggMDAwMDAwMDAwMDAwLi5k
-NGQzYmQyZDE2NTMKLS0tIC9kZXYvbnVsbAorKysgYi9wYWNrYWdlL29wZW5zY2FwLzAwMDItRG8t
-bm90LXVzZS1nY3J5cHQtY21ha2UtdmFyaWFibGVzLWlmLWdjcnlwdC1pcy1ub3QtZi5wYXRjaApA
-QCAtMCwwICsxLDUwIEBACitGcm9tIDViODU4ZDE3ODZjMDI1Y2JkNTBkZmMyODRiMjUyYzNlZTZk
-ZDk5ZGMgTW9uIFNlcCAxNyAwMDowMDowMCAyMDAxCitGcm9tOiA9P1VURi04P3E/QWxleGlzPTIw
-TG90aG9yPUMzPUE5Pz0gPGFsZXhpcy5sb3Rob3JlQGJvb3RsaW4uY29tPgorRGF0ZTogVHVlLCAx
-OCBBdWcgMjAyNiAwOTozODowNSArMDIwMAorU3ViamVjdDogW1BBVENIXSBEbyBub3QgdXNlIGdj
-cnlwdCBjbWFrZSB2YXJpYWJsZXMgaWYgZ2NyeXB0IGlzIG5vdCBmb3VuZAorTUlNRS1WZXJzaW9u
-OiAxLjAKK0NvbnRlbnQtVHlwZTogdGV4dC9wbGFpbjsgY2hhcnNldD1VVEYtOAorQ29udGVudC1U
-cmFuc2Zlci1FbmNvZGluZzogOGJpdAorCitDb21taXQgZDEyZDgyMGE5NDkzICgiRml4IGJ1aWxk
-IHdpdGhvdXQgY3J5cHRvIHN1cHBvcnQiKSBlbmFibGVkCitidWlsZGluZyB0aGUgY3JhcGkgbGli
-cmFyeSB3aXRob3V0IGEgY3J5cHRvIGJhY2tlbmQsIGJ1dCBsZWZ0IHRoZQordGFyZ2V0X2luY2x1
-ZGVfZGlyZWN0b3JpZXMgYW5kIHRhcmdldF9jb21waWxlX2RlZmluaXRpb25zIGNhbGxzCit1bmd1
-YXJkZWQuIFdoZW4gbm8gY3J5cHRvIGxpYnJhcnkgaXMgYXZhaWxhYmxlLCB0aGUgR0NyeXB0IGZp
-bmQgbW9kdWxlCitsZWF2ZXMgR0NSWVBUX0lOQ0xVREVfRElSUyB1bnNldCwgc28gQ01ha2UgZmFp
-bHMgYXQgdGhlIGdlbmVyYXRlIHN0ZXAKK3dpdGg6CisKKyAgQ01ha2UgRXJyb3I6IFRoZSBmb2xs
-b3dpbmcgdmFyaWFibGVzIGFyZSB1c2VkIGluIHRoaXMgcHJvamVjdCwgYnV0CisgIHRoZXkgYXJl
-IHNldCB0byBOT1RGT1VORDogR0NSWVBUX0lOQ0xVREVfRElSCisKK1RoZSB0ZXN0IGNvbW1hbmQg
-cHJvdmlkZWQgYXQgdGhpcyB0aW1lIG1hZGUgdGhlIGJ1aWxkIHN1Y2Nlc3NmdWwgYmVjYXVzZQor
-aXQgcHJvdmlkZWQgLURDTUFLRV9ESVNBQkxFX0ZJTkRfUEFDS0FHRV9HQ3J5cHQ9VFJVRSwgYnV0
-IGlmIG5vIGNyeXB0bworYmFja2VuZCBpcyBwcm92aWRlZCwgaXQgZG9lcyBub3QgbWFrZSBzZW5z
-ZSB0byBwcm92aWRlIHRob3NlIGNtYWtlCitjb25maWd1cmF0aW9uIG9wdGlvbnMgcHJldmVudGlu
-ZyBkZXBlbmRlbmN5IHNlYXJjaCBtYW51YWxseS4KKworR3VhcmQgYm90aCBjYWxscyB3aXRoIGEg
-Q1JZUFRPX0ZPVU5EIGNoZWNrIHNvIHRoZXkgYXJlIG9ubHkgYXBwbGllZCB3aGVuCithbiBhY3R1
-YWwgZGlnZXN0IGJhY2tlbmQgaXMgcHJlc2VudCwgZXZlbiB3aXRob3V0IHByb3ZpZGluZworLURD
-TUFLRV9ESVNBQkxFX0ZJTkRfUEFDS0FHRV9mb28KKworVXBzdHJlYW06IGh0dHBzOi8vZ2l0aHVi
-LmNvbS9PcGVuU0NBUC9vcGVuc2NhcC9jb21taXQvNWI4NThkMTc4NmMwMjVjYmQ1MGRmYzI4NGIy
-NTJjM2VlNmRkOTlkYworU2lnbmVkLW9mZi1ieTogQWxleGlzIExvdGhvcsOpIDxhbGV4aXMubG90
-aG9yZUBib290bGluLmNvbT4KKy0tLQorIHNyYy9PVkFML3Byb2Jlcy9jcmFwaS9DTWFrZUxpc3Rz
-LnR4dCB8IDYgKysrKy0tCisgMSBmaWxlIGNoYW5nZWQsIDQgaW5zZXJ0aW9ucygrKSwgMiBkZWxl
-dGlvbnMoLSkKKworZGlmZiAtLWdpdCBhL3NyYy9PVkFML3Byb2Jlcy9jcmFwaS9DTWFrZUxpc3Rz
-LnR4dCBiL3NyYy9PVkFML3Byb2Jlcy9jcmFwaS9DTWFrZUxpc3RzLnR4dAoraW5kZXggM2ZiNmYx
-MjNjOGQ2Li44OGNiOTE2YjZkOTYgMTAwNjQ0CistLS0gYS9zcmMvT1ZBTC9wcm9iZXMvY3JhcGkv
-Q01ha2VMaXN0cy50eHQKKysrKyBiL3NyYy9PVkFML3Byb2Jlcy9jcmFwaS9DTWFrZUxpc3RzLnR4
-dAorQEAgLTgsNSArOCw3IEBAIGZpbGUoR0xPQl9SRUNVUlNFIENSQVBJX0hFQURFUlMgIiouaCIp
-CisgCisgYWRkX2xpYnJhcnkoY3JhcGlfb2JqZWN0IE9CSkVDVCAke0NSQVBJX1NPVVJDRVN9ICR7
-Q1JBUElfSEVBREVSU30pCisgc2V0X29zY2FwX2dlbmVyaWNfcHJvcGVydGllcyhjcmFwaV9vYmpl
-Y3QpCistdGFyZ2V0X2luY2x1ZGVfZGlyZWN0b3JpZXMoY3JhcGlfb2JqZWN0IFBVQkxJQyAke05T
-U19JTkNMVURFX0RJUlN9ICR7R0NSWVBUX0lOQ0xVREVfRElSU30pCistdGFyZ2V0X2NvbXBpbGVf
-ZGVmaW5pdGlvbnMoY3JhcGlfb2JqZWN0IFBVQkxJQyAke0dDUllQVF9ERUZJTklUSU9OU30pCisr
-aWYgKENSWVBUT19GT1VORCkKKysJdGFyZ2V0X2luY2x1ZGVfZGlyZWN0b3JpZXMoY3JhcGlfb2Jq
-ZWN0IFBVQkxJQyAke05TU19JTkNMVURFX0RJUlN9ICR7R0NSWVBUX0lOQ0xVREVfRElSU30pCisr
-CXRhcmdldF9jb21waWxlX2RlZmluaXRpb25zKGNyYXBpX29iamVjdCBQVUJMSUMgJHtHQ1JZUFRf
-REVGSU5JVElPTlN9KQorK2VuZGlmKCkKKy0tIAorMi41NS4wCisKZGlmZiAtLWdpdCBhL3BhY2th
-Z2Uvb3BlbnNjYXAvQ29uZmlnLmluIGIvcGFja2FnZS9vcGVuc2NhcC9Db25maWcuaW4KaW5kZXgg
-MDFjNjI4MTk0Y2M2Li40NTkwNDYyMjg0OGIgMTAwNjQ0Ci0tLSBhL3BhY2thZ2Uvb3BlbnNjYXAv
-Q29uZmlnLmluCisrKyBiL3BhY2thZ2Uvb3BlbnNjYXAvQ29uZmlnLmluCkBAIC0xLDEyICsxLDgg
-QEAKIGNvbmZpZyBCUjJfUEFDS0FHRV9PUEVOU0NBUAogCWJvb2wgIm9wZW5zY2FwIgotCWRlcGVu
-ZHMgb24gQlIyX1BBQ0tBR0VfTElCR1BHX0VSUk9SX0FSQ0hfU1VQUE9SVFMgICMgbGliZ2NyeXB0
-CiAJZGVwZW5kcyBvbiAhQlIyX1NUQVRJQ19MSUJTICMgZGxmY24uaAogCWRlcGVuZHMgb24gQlIy
-X1RPT0xDSEFJTl9IQVNfVEhSRUFEU19OUFRMCiAJc2VsZWN0IEJSMl9QQUNLQUdFX0xJQkNVUkwK
-LQkjIEluIHRoZW9yeSBzaG91bGQgYnVpbGQgd2l0aG91dCBjcnlwdG8sIGJ1dCBpbiBwcmFjdGlj
-ZSBpdAotCSMgZG9lc24ndDogaHR0cHM6Ly9naXRodWIuY29tL09wZW5TQ0FQL29wZW5zY2FwL2lz
-c3Vlcy8yMzEwCi0Jc2VsZWN0IEJSMl9QQUNLQUdFX0xJQkdDUllQVCBpZiAhQlIyX1BBQ0tBR0Vf
-TElCTlNTCiAJc2VsZWN0IEJSMl9QQUNLQUdFX0xJQlhNTDIKIAlzZWxlY3QgQlIyX1BBQ0tBR0Vf
-TElCWFNMVAogCXNlbGVjdCBCUjJfUEFDS0FHRV9MSUJYTUxTRUMxCkBAIC0yMCw1ICsxNiw0IEBA
-IGNvbmZpZyBCUjJfUEFDS0FHRV9PUEVOU0NBUAogCSAgaHR0cHM6Ly9naXRodWIuY29tL09wZW5T
-Q0FQL29wZW5zY2FwCiAKIGNvbW1lbnQgIm9wZW5zY2FwIG5lZWRzIGEgdG9vbGNoYWluIHcvIGR5
-bmFtaWMgbGlicmFyeSwgTlBUTCIKLQlkZXBlbmRzIG9uIEJSMl9QQUNLQUdFX0xJQkdQR19FUlJP
-Ul9BUkNIX1NVUFBPUlRTCiAJZGVwZW5kcyBvbiBCUjJfU1RBVElDX0xJQlMgfHwgIUJSMl9UT09M
-Q0hBSU5fSEFTX1RIUkVBRFNfTlBUTApkaWZmIC0tZ2l0IGEvcGFja2FnZS9vcGVuc2NhcC9vcGVu
-c2NhcC5tayBiL3BhY2thZ2Uvb3BlbnNjYXAvb3BlbnNjYXAubWsKaW5kZXggN2RhMzhkZjM0NWI0
-Li42ZmJlMDk3NzE4NjMgMTAwNjQ0Ci0tLSBhL3BhY2thZ2Uvb3BlbnNjYXAvb3BlbnNjYXAubWsK
-KysrIGIvcGFja2FnZS9vcGVuc2NhcC9vcGVuc2NhcC5tawpAQCAtMjIsNyArMjIsNiBAQCBPUEVO
-U0NBUF9ERVBFTkRFTkNJRVMgPSBcCiBIT1NUX09QRU5TQ0FQX0RFUEVOREVOQ0lFUyA9IFwKIAlo
-b3N0LXBrZ2NvbmYgXAogCWhvc3QtbGliY3VybCBcCi0JaG9zdC1saWJnY3J5cHQgXAogCWhvc3Qt
-bGlieG1sMiBcCiAJaG9zdC1saWJ4bWxzZWMxIFwKIAlob3N0LWxpYnhzbHQgXApAQCAtMzYsNyAr
-MzUsNiBAQCBPUEVOU0NBUF9DT05GX09QVFMgPSBcCiAJLURFTkFCTEVfT1NDQVBfVVRJTF9WTT1P
-RkYgXAogCS1ERU5BQkxFX1BST0JFU19XSU5ET1dTPU9GRiBcCiAJLURFTkFCTEVfVEVTVFM9T0ZG
-IFwKLQktRFdJVEhfQ1JZUFRPPWdjcnlwdCBcCiAJLURFTkFCTEVfUFlUSE9OMz1PRkYKIAogSE9T
-VF9PUEVOU0NBUF9DT05GX09QVFMgPSBcCkBAIC00Nyw3ICs0NSw2IEBAIEhPU1RfT1BFTlNDQVBf
-Q09ORl9PUFRTID0gXAogCS1ERU5BQkxFX09TQ0FQX1VUSUxfVk09T0ZGIFwKIAktREVOQUJMRV9Q
-Uk9CRVNfV0lORE9XUz1PRkYgXAogCS1ERU5BQkxFX1RFU1RTPU9GRiBcCi0JLURXSVRIX0NSWVBU
-Tz1nY3J5cHQgXAogCS1ERU5BQkxFX1BZVEhPTjM9T0ZGCiAKIGlmZXEgKCQoQlIyX1BBQ0tBR0Vf
-QUNMKSx5KQpAQCAtNjAsMTAgKzU3LDEwIEBAIGVuZGlmCiAKIGlmZXEgKCQoQlIyX1BBQ0tBR0Vf
-TElCR0NSWVBUKSx5KQogT1BFTlNDQVBfREVQRU5ERU5DSUVTICs9IGxpYmdjcnlwdAotZW5kaWYK
-LQotaWZlcSAoJChCUjJfUEFDS0FHRV9MSUJOU1MpLHkpCitPUEVOU0NBUF9DT05GX09QVFMgKz0g
-LURXSVRIX0NSWVBUTz1nY3J5cHQKK2Vsc2UgaWZlcSAoJChCUjJfUEFDS0FHRV9MSUJOU1MpLHkp
-CiBPUEVOU0NBUF9ERVBFTkRFTkNJRVMgKz0gbGlibnNzCitPUEVOU0NBUF9DT05GX09QVFMgKz0g
-LURXSVRIX0NSWVBUTz1uc3MKIGVuZGlmCiAKIGlmbmVxICgkKEJSMl9UT09MQ0hBSU5fVVNFU19H
-TElCQykseSkKCi0tIAoyLjU1LjAKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5v
-cmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290
-Cg==
+https://blog.rust-lang.org/2026/09/03/Rust-1.98.1/
+https://blog.rust-lang.org/2026/08/20/Rust-1.98.0/
+
+Disable the new option compress-debuginfo, introduced in version 1.98.0
+https://github.com/rust-lang/rust/commit/65f06572fb81da89a1a87373aa3e6128060210c1
+
+to disable a build error reported by Julien:
+https://lists.buildroot.org/pipermail/buildroot/2026-September/808960.html
+
+rust-lld: error: --compress-debug-sections: LLVM was not built with
+LLVM_ENABLE_ZLIB or did not find zlib at build time
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+v2: fixed LLVM_ENABLE_ZLIB build error reported by Julien
+
+ package/rust-bin/rust-bin.hash | 132 ++++++++++++++++-----------------
+ package/rust-bin/rust-bin.mk   |   2 +-
+ package/rust/rust.hash         |   4 +-
+ package/rust/rust.mk           |   3 +-
+ 4 files changed, 71 insertions(+), 70 deletions(-)
+
+diff --git a/package/rust-bin/rust-bin.hash b/package/rust-bin/rust-bin.hash
+index 7a8ad8323e..58aca986e0 100644
+--- a/package/rust-bin/rust-bin.hash
++++ b/package/rust-bin/rust-bin.hash
+@@ -1,72 +1,72 @@
+ # Generated with utils/update-rust
+ # Do not edit manually
+ 
+-# From https://static.rust-lang.org/dist/rust-1.97.1-aarch64-unknown-linux-gnu.tar.xz.sha256
+-sha256  9a7a2c336b4787f1b72f6bab7c35d5b7af2fd03cbd39b4fc721466a70d402a7d  rust-1.97.1-aarch64-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-1.97.1-i686-unknown-linux-gnu.tar.xz.sha256
+-sha256  1687b56e6e7585dea809ab7b82d93f35417f3760a76c3d0d7f6dec252ff1751b  rust-1.97.1-i686-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-1.97.1-powerpc-unknown-linux-gnu.tar.xz.sha256
+-sha256  20ab44739bfab46765ca81b34450e5330bf28b0ae57ac8936eb27f40ec9edb7a  rust-1.97.1-powerpc-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-1.97.1-powerpc64-unknown-linux-gnu.tar.xz.sha256
+-sha256  fd6351ec454acceaf240710db5ba79e5613621597cb204273cc8364ab61c65c9  rust-1.97.1-powerpc64-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-1.97.1-powerpc64le-unknown-linux-gnu.tar.xz.sha256
+-sha256  d27b74ae1e480f006847240816198854cac3f9d5c87162aa7f36743049ea90dd  rust-1.97.1-powerpc64le-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-1.97.1-riscv64gc-unknown-linux-gnu.tar.xz.sha256
+-sha256  2982687edabf8582b21a5497fed8dd5287a24afdb836a64b206959cea81ab947  rust-1.97.1-riscv64gc-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-1.97.1-s390x-unknown-linux-gnu.tar.xz.sha256
+-sha256  681058956b17bec84f97636e28ebc740252bfa92e0856c9289efedf5d475ad84  rust-1.97.1-s390x-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-1.97.1-x86_64-unknown-linux-gnu.tar.xz.sha256
+-sha256  88f28fa9af20594179f85d6df67078dfd6fa93e2f6da5e1e9b0ac4997988ca4f  rust-1.97.1-x86_64-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.97.1-aarch64-unknown-linux-gnu.tar.xz.sha256
+-sha256  46aed8e63186350004d8ec6afca798811e6530b514352e5a8a26f3dc4939b3be  rust-std-1.97.1-aarch64-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.97.1-aarch64-unknown-linux-musl.tar.xz.sha256
+-sha256  49ff0879d94e2e8e86d5e85eb15a9215943e8c78b51363d6553443598cab5d31  rust-std-1.97.1-aarch64-unknown-linux-musl.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.97.1-arm-unknown-linux-gnueabi.tar.xz.sha256
+-sha256  848e297b012f317024ec4fd29da09f19a5a5b218b0c82b1fd4d6e01d41887d7f  rust-std-1.97.1-arm-unknown-linux-gnueabi.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.97.1-arm-unknown-linux-gnueabihf.tar.xz.sha256
+-sha256  5b1a03e3f6b021b2bc288a98011e1174a527922dbf4ece64d299472cf87b9cac  rust-std-1.97.1-arm-unknown-linux-gnueabihf.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.97.1-arm-unknown-linux-musleabi.tar.xz.sha256
+-sha256  b34c41e16da76fedd643bbd85a97e0f98f09bc84da06c981822499e0fa47565b  rust-std-1.97.1-arm-unknown-linux-musleabi.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.97.1-arm-unknown-linux-musleabihf.tar.xz.sha256
+-sha256  5ed275942f32c7b0250e2a6949a2e57ac99ce2b8ca53f616792f52b7b9345663  rust-std-1.97.1-arm-unknown-linux-musleabihf.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.97.1-armv5te-unknown-linux-gnueabi.tar.xz.sha256
+-sha256  e97e1be61ce41ccba61cc9cfa7366772f5ef8ebefa3cc2e62ee4affcd1eaa7f8  rust-std-1.97.1-armv5te-unknown-linux-gnueabi.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.97.1-armv5te-unknown-linux-musleabi.tar.xz.sha256
+-sha256  7b1691c9c29a04a97a287354cc077261b3cbc8a28e2f5d4e26cdbfc27bafbb67  rust-std-1.97.1-armv5te-unknown-linux-musleabi.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.97.1-armv7-unknown-linux-gnueabi.tar.xz.sha256
+-sha256  0913df53a3dcd90aa86c58bd9cbea91cce98c5d5db4c06e18ff1fdc55b957f12  rust-std-1.97.1-armv7-unknown-linux-gnueabi.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.97.1-armv7-unknown-linux-gnueabihf.tar.xz.sha256
+-sha256  3823992fb0b7cb172b4a9eb8f03662013911ff00e1adb94e4c5fa00e4bd15686  rust-std-1.97.1-armv7-unknown-linux-gnueabihf.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.97.1-armv7-unknown-linux-musleabi.tar.xz.sha256
+-sha256  ad50b2c455548ca7a7660251a6b8ea09156182583204053da9ea000b50723ab6  rust-std-1.97.1-armv7-unknown-linux-musleabi.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.97.1-armv7-unknown-linux-musleabihf.tar.xz.sha256
+-sha256  7410ad19adb666624ffde8240353e3960b2c6cdbe2d3203f4615220db4b4ef1c  rust-std-1.97.1-armv7-unknown-linux-musleabihf.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.97.1-i586-unknown-linux-gnu.tar.xz.sha256
+-sha256  a3090f555a9c3fd91d3c8b73152eee007fa348d20a8d026ea577a467acf5e7c7  rust-std-1.97.1-i586-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.97.1-i586-unknown-linux-musl.tar.xz.sha256
+-sha256  31c8d12d96574b82d10254e45bae9eb8784c95b72820217465247aa100cb1029  rust-std-1.97.1-i586-unknown-linux-musl.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.97.1-i686-unknown-linux-gnu.tar.xz.sha256
+-sha256  7f4be0697e96dd81f75f66f0e25a51d595223e7c58af6675810f066cab6ef584  rust-std-1.97.1-i686-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.97.1-i686-unknown-linux-musl.tar.xz.sha256
+-sha256  124b0afba7413ba39e3051e2d4d819a74a5ffe91f40371e09c8fb8ec05e9c6f8  rust-std-1.97.1-i686-unknown-linux-musl.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.97.1-powerpc-unknown-linux-gnu.tar.xz.sha256
+-sha256  9c3286cc2aab1868f693cd458d5d7bf8c307aaf8809e9a2dddbfc31ece94629f  rust-std-1.97.1-powerpc-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.97.1-powerpc64-unknown-linux-gnu.tar.xz.sha256
+-sha256  58675598a59db1524e934a27f279b6669d65e91f53675d022fd5e32046c2742c  rust-std-1.97.1-powerpc64-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.97.1-powerpc64le-unknown-linux-gnu.tar.xz.sha256
+-sha256  ab2fb5c9dd7d3a0987c97c9f56732d013a11796fcd1510651570ae2fcc512bb2  rust-std-1.97.1-powerpc64le-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.97.1-riscv64gc-unknown-linux-gnu.tar.xz.sha256
+-sha256  5cec88477a70fe83c10a12efd6bdad1b0f8dd4c1ebba1e427f00c69666c5b6f9  rust-std-1.97.1-riscv64gc-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.97.1-riscv64gc-unknown-linux-musl.tar.xz.sha256
+-sha256  3d4b7ca701a24e092f9256c9d68e117d9a7563dbb49013946763077f4f49d66b  rust-std-1.97.1-riscv64gc-unknown-linux-musl.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.97.1-s390x-unknown-linux-gnu.tar.xz.sha256
+-sha256  6c6b2b285225f3551250bd4c5e05293a0839fc18d1625c545b81fbea9f82c31b  rust-std-1.97.1-s390x-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.97.1-sparc64-unknown-linux-gnu.tar.xz.sha256
+-sha256  be689309aae0247e0a58a87b6ed69c28573ec5ec3f56766cb8b0b3066a3a0a70  rust-std-1.97.1-sparc64-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.97.1-x86_64-unknown-linux-gnu.tar.xz.sha256
+-sha256  1c1e704ae80126b7de34f72ea2825f7fd01736dec20732faed47374b95282fba  rust-std-1.97.1-x86_64-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.97.1-x86_64-unknown-linux-musl.tar.xz.sha256
+-sha256  51d83178680556f73a5fa8ad865b76a1ff541867445c00fc65dc67246bc2de66  rust-std-1.97.1-x86_64-unknown-linux-musl.tar.xz
++# From https://static.rust-lang.org/dist/rust-1.98.1-aarch64-unknown-linux-gnu.tar.xz.sha256
++sha256  0b514a8cc1cbcd939bff0f151661fe58b6ea5c7a7f645a5098c69e32e8c1e0a2  rust-1.98.1-aarch64-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-1.98.1-i686-unknown-linux-gnu.tar.xz.sha256
++sha256  51733c05e0f784825aab7391761199eb090456b2e95e45420c544eb25eaee3ba  rust-1.98.1-i686-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-1.98.1-powerpc-unknown-linux-gnu.tar.xz.sha256
++sha256  93f2a12d19de1ebcb3373fb6acafcf01218ea77e920014e3e7edfd5e0345ec2c  rust-1.98.1-powerpc-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-1.98.1-powerpc64-unknown-linux-gnu.tar.xz.sha256
++sha256  2086a3b53bbb40670cbbcd436858279c800c0579ea2588a294d0219775de9ea3  rust-1.98.1-powerpc64-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-1.98.1-powerpc64le-unknown-linux-gnu.tar.xz.sha256
++sha256  06871396a06f61f2d72f57b5ed31a0da69e8185af3989d2efb2665c6e982c062  rust-1.98.1-powerpc64le-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-1.98.1-riscv64gc-unknown-linux-gnu.tar.xz.sha256
++sha256  61a9cbf434ed16982cbd6269cd441f9640ac34ed73ced92f4867bc0ce507dab7  rust-1.98.1-riscv64gc-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-1.98.1-s390x-unknown-linux-gnu.tar.xz.sha256
++sha256  78b8c29bf499cc9d339f470bf10bb9e70d4f8b97498e68ac87bdc9c90ca76270  rust-1.98.1-s390x-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-1.98.1-x86_64-unknown-linux-gnu.tar.xz.sha256
++sha256  5326b36c53de11d148c8f8dab6553a3d1006c2cfd32123683073fad3c302605b  rust-1.98.1-x86_64-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.98.1-aarch64-unknown-linux-gnu.tar.xz.sha256
++sha256  9bf796a6ec5b004813ebd0b650775a7c6a4f3aae97ad362ae294798dca4f3b23  rust-std-1.98.1-aarch64-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.98.1-aarch64-unknown-linux-musl.tar.xz.sha256
++sha256  7e0ad2e67817f224b7a6331e48d6397303fc050edaccf81784ed786ffddc884a  rust-std-1.98.1-aarch64-unknown-linux-musl.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.98.1-arm-unknown-linux-gnueabi.tar.xz.sha256
++sha256  64c797743abbac368bed5b68150ed839501bf00e82340331b01d7689333687e9  rust-std-1.98.1-arm-unknown-linux-gnueabi.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.98.1-arm-unknown-linux-gnueabihf.tar.xz.sha256
++sha256  27505e4a2be7e159da17afd162f3a976fd9652bd4e5faea291b63ad06f9d9475  rust-std-1.98.1-arm-unknown-linux-gnueabihf.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.98.1-arm-unknown-linux-musleabi.tar.xz.sha256
++sha256  86caa709606dfb02d0878360d068bb7fb5b92d4d97789f19f67156e866ae86a5  rust-std-1.98.1-arm-unknown-linux-musleabi.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.98.1-arm-unknown-linux-musleabihf.tar.xz.sha256
++sha256  0fd4c0cbf803a135b57a0b079c5149c5ee0e45106230f30d225e459cbd19fc6e  rust-std-1.98.1-arm-unknown-linux-musleabihf.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.98.1-armv5te-unknown-linux-gnueabi.tar.xz.sha256
++sha256  0596abc69b2cb67984719b36fcb3cccd16d88db8c0584edd0e9a6d2f06c40c18  rust-std-1.98.1-armv5te-unknown-linux-gnueabi.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.98.1-armv5te-unknown-linux-musleabi.tar.xz.sha256
++sha256  c4c6deb687f91219cbbf6c280414a14aa826046b5d3ade60ff84620842a359a2  rust-std-1.98.1-armv5te-unknown-linux-musleabi.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.98.1-armv7-unknown-linux-gnueabi.tar.xz.sha256
++sha256  95bc80c6257ae135bdc3606629807f21ee53f6cfa18911ceb1d486cd82b4a13a  rust-std-1.98.1-armv7-unknown-linux-gnueabi.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.98.1-armv7-unknown-linux-gnueabihf.tar.xz.sha256
++sha256  0685de03c96ae65212b519d98116ad581c7ef46ca24acad1364895b7907d71be  rust-std-1.98.1-armv7-unknown-linux-gnueabihf.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.98.1-armv7-unknown-linux-musleabi.tar.xz.sha256
++sha256  3c139a8912e5a8fcb69f1cd6ddeb4906da14eb26a443ffe0db33994dd4432fcc  rust-std-1.98.1-armv7-unknown-linux-musleabi.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.98.1-armv7-unknown-linux-musleabihf.tar.xz.sha256
++sha256  dd0efa4210a6da6350a6b05d8ffa43eae4baecf2397cc00a3b028bdf56cdb1ce  rust-std-1.98.1-armv7-unknown-linux-musleabihf.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.98.1-i586-unknown-linux-gnu.tar.xz.sha256
++sha256  593943398099aa1b15ab0eb6b0bb138434915e81f7ece68ed8e0aec730125726  rust-std-1.98.1-i586-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.98.1-i586-unknown-linux-musl.tar.xz.sha256
++sha256  3577040cb98e9484fd2854aa9a9978c1fb7dc15c0b4059412d86484c1bcad8b8  rust-std-1.98.1-i586-unknown-linux-musl.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.98.1-i686-unknown-linux-gnu.tar.xz.sha256
++sha256  69f2f0fbc3b71aebd4aef7ff00f31e00944e1528a49287cc4b256334bdc0ec3f  rust-std-1.98.1-i686-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.98.1-i686-unknown-linux-musl.tar.xz.sha256
++sha256  c1b066d393bf15bcdf823388b4358b5d339fe064cc48c8a08e1b7ff6f41abcf3  rust-std-1.98.1-i686-unknown-linux-musl.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.98.1-powerpc-unknown-linux-gnu.tar.xz.sha256
++sha256  765135d825fcbd03974e033f58cd3f3a0da70a42d6aee600e83db88bc6e3bad6  rust-std-1.98.1-powerpc-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.98.1-powerpc64-unknown-linux-gnu.tar.xz.sha256
++sha256  f23c066e7bba9d2216e41b6add0cb429c7cb7f90b449918c5370fbcb88b0dd88  rust-std-1.98.1-powerpc64-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.98.1-powerpc64le-unknown-linux-gnu.tar.xz.sha256
++sha256  8353a10f4195abdcff6391ca5af8add6bf699f872efe0b289932613405fa62b6  rust-std-1.98.1-powerpc64le-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.98.1-riscv64gc-unknown-linux-gnu.tar.xz.sha256
++sha256  bcbd81e49d72e6907c92ce7d1ba5b25b02bbd85f94cb21567c931aad1d3e3ab7  rust-std-1.98.1-riscv64gc-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.98.1-riscv64gc-unknown-linux-musl.tar.xz.sha256
++sha256  4144e47bb60bbc3172345095ad4e5e7ea7dc28c9b900eab888a4a5944f34d157  rust-std-1.98.1-riscv64gc-unknown-linux-musl.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.98.1-s390x-unknown-linux-gnu.tar.xz.sha256
++sha256  2b17f570083cc6dac5c3bdb762e64f75813f62e3668c5dfaefee546d10380d4b  rust-std-1.98.1-s390x-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.98.1-sparc64-unknown-linux-gnu.tar.xz.sha256
++sha256  91a541a9fd6d276f9782e8657f3163f5e71b76616536b6156d685b60298cd4ab  rust-std-1.98.1-sparc64-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.98.1-x86_64-unknown-linux-gnu.tar.xz.sha256
++sha256  fa3ff450172a16c026944030230c5069947af93c728d9179971d44e5e0cfb561  rust-std-1.98.1-x86_64-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.98.1-x86_64-unknown-linux-musl.tar.xz.sha256
++sha256  bd9f35880de21dab0e387e84009c00001ae7836a4ba565cb16823f13f75f325f  rust-std-1.98.1-x86_64-unknown-linux-musl.tar.xz
+ # Locally generated
+ sha256  62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a  LICENSE-APACHE
+ sha256  b71bd43a069ca0641a9ecfe585ca7b3c53b5cc1608f8b68321168698e28b5ea1  LICENSE-MIT
+diff --git a/package/rust-bin/rust-bin.mk b/package/rust-bin/rust-bin.mk
+index 5a8279703d..c5215b6c4f 100644
+--- a/package/rust-bin/rust-bin.mk
++++ b/package/rust-bin/rust-bin.mk
+@@ -6,7 +6,7 @@
+ 
+ # When updating this version, check whether support/download/cargo-post-process
+ # still generates the same archives.
+-RUST_BIN_VERSION = 1.97.1
++RUST_BIN_VERSION = 1.98.1
+ RUST_BIN_SITE = https://static.rust-lang.org/dist
+ RUST_BIN_LICENSE = Apache-2.0 or MIT
+ RUST_BIN_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
+diff --git a/package/rust/rust.hash b/package/rust/rust.hash
+index d3cad8bfab..006d7566c3 100644
+--- a/package/rust/rust.hash
++++ b/package/rust/rust.hash
+@@ -1,8 +1,8 @@
+ # Generated with utils/update-rust
+ # Do not edit manually
+ 
+-# From https://static.rust-lang.org/dist/rustc-1.97.1-src.tar.xz.sha256
+-sha256  0ed06fdaffd4722a7702e0b4eebfafc897ab8f513e8e1b247cdd7e5c6df6ded2  rustc-1.97.1-src.tar.xz
++# From https://static.rust-lang.org/dist/rustc-1.98.1-src.tar.xz.sha256
++sha256  be1816e7f6c40abb90245ad6e024bed2a7e88d7dda4561e4d5470207df616b9f  rustc-1.98.1-src.tar.xz
+ # Locally generated
+ sha256  62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a  LICENSE-APACHE
+ sha256  b71bd43a069ca0641a9ecfe585ca7b3c53b5cc1608f8b68321168698e28b5ea1  LICENSE-MIT
+diff --git a/package/rust/rust.mk b/package/rust/rust.mk
+index 890df4e2cf..f621cdec9e 100644
+--- a/package/rust/rust.mk
++++ b/package/rust/rust.mk
+@@ -6,7 +6,7 @@
+ 
+ # When updating this version, check whether support/download/cargo-post-process
+ # still generates the same archives.
+-RUST_VERSION = 1.97.1
++RUST_VERSION = 1.98.1
+ RUST_SOURCE = rustc-$(RUST_VERSION)-src.tar.xz
+ RUST_SITE = https://static.rust-lang.org/dist
+ RUST_LICENSE = Apache-2.0 or MIT
+@@ -47,6 +47,7 @@ define HOST_RUST_CONFIGURE_CMDS
+ 		echo '[rust]'; \
+ 		echo 'channel = "stable"'; \
+ 		echo 'musl-root = "$(STAGING_DIR)"' ; \
++		echo 'compress-debuginfo = "off"'; \
+ 		echo '[target.$(RUSTC_TARGET_NAME)]'; \
+ 		echo 'cc = "$(TARGET_CROSS)gcc"'; \
+ 		echo '[llvm]'; \
+-- 
+2.47.3
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
