@@ -4,113 +4,100 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7EFBC79F99
-	for <buildroot@archiver.kernel.org>; Mon,  7 Sep 2026 18:38:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7192C79FA0
+	for <buildroot@archiver.kernel.org>; Mon,  7 Sep 2026 18:43:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8844660688;
-	Mon,  7 Sep 2026 18:38:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 537F960662;
+	Mon,  7 Sep 2026 18:43:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LLS8YxIbEBby; Mon,  7 Sep 2026 18:38:53 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org A13B660662
+ id gAKWiBTnPunQ; Mon,  7 Sep 2026 18:43:16 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 53B376066D
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1788806333;
-	b=ABfCXSNO1VuAdHesoaWGf5hqgv1TJ/0IGy0+IC5KulbVbb82dqOjc4XiKa2AKJOsU7WI
-	 JmeXUxcmOgg0KUM2aegqkErY+EYdR9zpsPru+RP0v0KLqvZlM4tKhBGkNZvVsKPyl29jd
-	 FC44PvUeJqAaM+akOHQSTl+SiecOmPdH7e2Nxjs1yNZJ+rlL781us3k4nTQ30FUxvWPL+
-	 oyYtFlCapARbZYzbgJ6xUgJ8gCkah981kS+RwO4KtGeY7QG/IeFVLLFowxe2YNOgVWZcr
-	 IPniFrUIXMARyBZCwEGxqb9CsQtT0gUPXHvUqLUUdspuzmE6qoAs1sMTTVKdwreTreQ==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1788806596;
+	b=nmleQ44kMDMnHjnr2xDC9cBovSrL+9mY/7etfB/eEqI9ilNybovQiYy0EtwDShmtKZOX
+	 UBPdhjC3ByCdyiLqwSWOUeIYQ2kJzc21JD/Z2Q6XHmPpudO7H+SOsH6ZfIsgvJCf8JYsQ
+	 8gjDn+GRfmwk9jD9ZmI8kt8WKRx55qqvfAiKzdNXxhpnEOsSo2WdZxbnLAXWGh5LrY0oc
+	 /axPdoZcySAN9BPEmaXzgSELi/n5j7IDro+69mSTnGtvdtfux8DPqXcVFbHEW+0hBFDUE
+	 a6PB5LHUZCx+tZ/KWYqzbFgvtvp+/b2bszH4txaFVAxhzW8rnNfELPW2MUmFAcWiK0w==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1788806333;
+	c=relaxed/relaxed; t=1788806596;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 Received:MIME-Version:Date:To:Cc:In-Reply-To:References:User-Agent:
-	 Message-ID:X-Sender:Subject:X-BeenThere:X-Mailman-Version:Precedence:
-	 List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:From:Reply-To:Content-Transfer-Encoding:Content-Type:
-	 Errors-To:Sender;
-	bh=fI6IYZksfX/an+Ly+R07c8QFdnZDw8hkQPtyWyZxUbI=;
-	b=o2mENarf6F9kg4/HFKwC7k8P/J386wuEeXrQ2B4Zjm75FIOsyGz3TQIjKCCFvTFvqCYt
-	 qAmyG6FbePYthKllgug0HW0hDxdSyP1GlonISmXoG8HOSJ70P28djG9dUUR8aPAYs+Zua
-	 7ZDbPa/+JRD4Lwl3uSvH8a///MDRDpjdEjuQqVarBXlImxFsR0QuDEqFZPGlxQf28Dh9/
-	 eTiiDMIyjoZ70aacV9AkbvkoFfBNXAg26yAaAiln6DTOU6EdViruglpbo88YxMMu8Enir
-	 ob/Wz+CelzStPHDGkCH4w3JKvpJuh5xEAQy9U+ksqvasx2g8GMSjwlwhmTXo1UWxCrg==
+	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
+	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
+	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
+	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
+	 Sender;
+	bh=UeZJL8K0sZ4k4/E9x5SwEmQfzeUfIilu49CtEPigFtc=;
+	b=jYsvQQiRAaAqZgl0MHUwELVEZ563gFZkOWdcFSEQH5xRh9XvLFX0POYTK/pYh/XhAfTW
+	 6MLDqANoeVVQ7Ibm4unxbBN8aaKH58hLsFv/d0yM8Er2vBV3DZCi7jzgx63IY5qIkoOEC
+	 segLO4u8Gzq5D5P04y3KQxKCodUwWRCZde42dymVnyuQmu2GmAhuxYakRN49aMu4Ou0A/
+	 1TdyEi1wbs3Sj098mX0IbHJ4jA822gXk7p6AjnzrNMzmFfW0JLqG88CINZm/JzQ5vY/ex
+	 5nCipRMeJosXUTttyDHvZbq3PEz21RqkbGZHF3sVWtZVA4CuNl/fmfVmuZdEsNM24RQ==
 ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1788806333;
-	bh=fI6IYZksfX/an+Ly+R07c8QFdnZDw8hkQPtyWyZxUbI=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=qZ82HQvmwenRRNr5PGlC/U4gwXFwvpuupdO3XiqFKMhLYrZcIUsQy2cPio+CnSkHe
-	 D1IXjj6QA9ymF860D8Z/DZ9rcLDKAU2P2sAYxWpcaU3Uj29yAaVIYhoiYS13sAGHJI
-	 DkPJ7TDrpuXhbnICd14Nox6SLJLvyUIJsM3gEyjzhZZDQoDKQsjBPziNGbjDR9EikX
-	 bLSb4v7fVt60+OXIzNbrAIyMXIIc26Lt1LVzTGCA2bdBpHSvkWvTYe3w1q2TT/tYSG
-	 +yW+xmfRpIzro0b7ro5KMd/S57kI3BRCc8eAceOQm6JP7n/jR0vUgHarrfYRuSddtQ
-	 5QkqxKssPCWqw==
+	s=default; t=1788806596;
+	bh=UeZJL8K0sZ4k4/E9x5SwEmQfzeUfIilu49CtEPigFtc=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=baFQq453p/Y9h4XZT7h+GKPX7F5l1XisRe+dN2uRguneinByyJLi2zRf5RJWmo9Sw
+	 dhzcXxHSCZHDlGB590gHBVzLqV0zF0lJanxEmh6ivQLv+YWpTVIAchOlC0G1xpFh2s
+	 ALhiZBXI7ywpL1ol8nklkgoyIaQ9qNZ70Fy+a596IjVvAAumWmUnRsbwhMs8m8mJc2
+	 U0+8vrmpKDj/l9WMotj7Za8LHLq7uWzcHqy9UJsrqjAiDnL2Ag3zs9lRE3OMR0oWsJ
+	 CljBdbmNYIwQwpS34iecrHZQgY14CdxhTNLHxStHWaXIoYZ4rItKY4ifAKxORE1qM+
+	 NR5m/xUqY8x3w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A13B660662;
-	Mon,  7 Sep 2026 18:38:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 53B376066D;
+	Mon,  7 Sep 2026 18:43:16 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id BD9499CF
- for <buildroot@buildroot.org>; Mon,  7 Sep 2026 18:38:51 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 896679CF
+ for <buildroot@buildroot.org>; Mon,  7 Sep 2026 18:43:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BB31D60662
- for <buildroot@buildroot.org>; Mon,  7 Sep 2026 18:38:51 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7009D6066D
+ for <buildroot@buildroot.org>; Mon,  7 Sep 2026 18:43:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OHL-SdBZMH0M for <buildroot@buildroot.org>;
- Mon,  7 Sep 2026 18:38:51 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 9B4D6605F5
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1788806331;
- b=n93g7RZYiZsS6bn6mnM8ABgKSpHHqEDe9GRr2TZR9GHWCvYM+xxmspyT94NAOJo4Yr5A
- FnQ+3+/05OTUbRs6/P4k3/v1u+ELEhmCYWMNQYaGOcWjfpBlNCTIiGrR6faxbQ9PNCN4w
- peG8ejgTBlifbzZStdBhdJd1EZZq/BGzinGtITE5EzBhx9W9t6MUixiU4I4BD81jKA8iz
- hQMW4Fhmcjagkg5Yl95m8/nLLACG5y3eyBdAWmvMUeYn9nj6BvRyICgD89fApdGvzFZLI
- xbvZQA+ZSR495e66fWDhx67nQy7GWjv0PDamD8h+CtCJOKfoCMzTI+qLGT123l9Vqvg==
+ id HzJYlmpAnclb for <buildroot@buildroot.org>;
+ Mon,  7 Sep 2026 18:43:14 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 6848C60662
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1788806594;
+ b=ptJoiNRV2p1nwd8O4DoSKr9TFTncBLnUEQEHpKisHSC3IsDHc+hzyMgP/x8DCHidACCq
+ iRmO6UAiV7Fwp2g50+CXXY9zf7AvkVyktfdBO4DmjDsSUlVWLN1TDz9m9d5x4iSQJRevv
+ xYAhKXrvZMMHI4xP/EifI3aWEpIcQOctQln2wiAT1uj5NzRCvJRmBoa9jOVcFki8ys7kd
+ Zey4tABQiutU+/ff4lo7kuKo8FwOH3WU+90mkHF7+hj2oXWrr1kOdMBhSEK9F0JA0Xa3j
+ qP1w7IgqD26JQKltkZ/bmlZHqH3OOqf9glgU2eDBqk2dlzFkFufVdlGXfz9BXWcl6tw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1788806331;
- h=Received-SPF:Received:DKIM-Signature:Received:MIME-Version:Date:From:
- To:Cc:Subject:In-Reply-To:References:User-Agent:Message-ID:X-Sender:
- Content-Type:Content-Transfer-Encoding;
- bh=Cmp9c87OpzANh5Ec9pBlmNil9hJtUt8B5lYXkQQbx4Y=;
- b=cH5SvJZsDSgF6bg13pZtHBPcoIORe7jxtZGrBfJcQWOw3RNOHoxs1S3FD00dU1RgAGQ0
- A/wF7WYTLGK6pt6Ye5DPr8VWWGadEo653oRNQ3AJtFrJxLzo92T4rBJj94JHKMykELo26
- gnujIuaR9R6GLvDjjHMJCaJQEAW5wvs+6MvqGwFEiNz/xN6m+2KRCLQk3zK4sIVKIo0jm
- lcEGPacMBPbIEUbKKMbrHodG1Teodae96mmWYwsKJJ+j2oKo/lW+FOiWAjhKqLyKNRJ2C
- vJs3hUui7Z64lL04HDmWUAleNgftz3YxBwrhrdIBh4aUn1Gl+N9XFdXfrAlGfMVSJ0g==
+ c=relaxed/relaxed; t=1788806594;
+ h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
+ X-Git-Newrev:X-Patchwork-Hint:Message-Id;
+ bh=LyNISf6i1xzKiZp8LSgcG/pq1moh4v0b5HMBSS9Npvk=;
+ b=EXmmG4DGoSdo6O1rnzaV0w8Zxly7W3SH32zfcksR8UROafotlB2FeTV/eZ/7BU2fe6oC
+ I+5sHL3ECIboOi8CbdafmPHvRta4oMA4hXK1KN0nHA4fBQ39eOdLWHC6Im755a96EmT3Z
+ 8Kl1vgFL1ENzYa/tIupCisK9UxHsyYRLhur3jwQllH0rbMzHrcszYw3YwhFjXLMGBot2x
+ RAFUkLii67+fNm9wjofXQmdTvgoUbp+KhM8B0yboJrIWK4yqGq9Mtjvidi9Of4+1nmCPE
+ 8AeJlo9WQpiLRFhgw3sprmPEtT774Yy7uwhUqkmxpgcSwMteZrXDX4eCPIam7Kf+mHQ==
 ARC-Authentication-Results: i=1; smtp3.osuosl.org;
- dmarc=pass header.from=free.fr; 
- dkim=pass header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=CzuRcCfW; 
- arc=none smtp.remote-ip="2a01:e0c:1:1599::11"
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 9B4D6605F5
- for <buildroot@buildroot.org>; Mon,  7 Sep 2026 18:38:50 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id B38F52003D0;
- Mon,  7 Sep 2026 20:38:46 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Mon, 07 Sep 2026 20:38:46 +0200
-MIME-Version: 1.0
-Date: Mon, 07 Sep 2026 20:38:46 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20260907173925.3802484-1-bernd@kuhls.net>
-References: <20260907173925.3802484-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.19
-Message-ID: <372e8db913300e6828ee1dee107f20a8@free.fr>
-X-Sender: ju.o@free.fr
-Subject: Re: [Buildroot] [PATCH 1/1] {linux, linux-headers}: bump 6.12.x,
- 6.18.x, 7.2.x series
+ arc=none smtp.remote-ip=140.211.167.122
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6848C60662
+ for <buildroot@buildroot.org>; Mon,  7 Sep 2026 18:43:14 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 3B44B95440; Mon,  7 Sep 2026 18:42:12 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 7 Sep 2026 20:41:20 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: b69d0b3a9c05d2ad256d9abad14bdbfc656b6d53
+X-Git-Newrev: 325912fa2bf2c1698247826dd3756e5ffb5ebf68
+X-Patchwork-Hint: ignore
+Message-Id: <20260907184212.3B44B95440@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/strace: fix build with uclibc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -124,21 +111,86 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============1202562406690878162=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 07/09/2026 19:39, Bernd Kuhls wrote:
-> Update the latest kernel releases to:
->  - 6.12.108 -> 6.12.109
->  - 6.18.49 -> 6.18.50
->  - 7.2.3 -> 7.2.4
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+--===============1202562406690878162==
+Content-Type: text/plain
 
-Applied to master, thanks.
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/325912fa2bf2c1698247826dd3756e5ffb5ebf68
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+
+Commit a1e25fe7051 ("package/strace: bump version to 7.2") breaks strace
+build with uclibc because of missing header. Add a patch to fix that.
+
+Fixes:
+https://autobuild.buildroot.org/results/054705652027d990fb1b418ed4a3c129fb0cdfe3/
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ .../strace/0001-defs.h-fix-build-with-uClibc.patch | 41 ++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
+
+diff --git a/package/strace/0001-defs.h-fix-build-with-uClibc.patch b/package/strace/0001-defs.h-fix-build-with-uClibc.patch
+new file mode 100644
+index 0000000000..120121a499
+--- /dev/null
++++ b/package/strace/0001-defs.h-fix-build-with-uClibc.patch
+@@ -0,0 +1,41 @@
++From 1fd644054b06189871502b3fc02f98d97060125e Mon Sep 17 00:00:00 2001
++Message-ID: <1fd644054b06189871502b3fc02f98d97060125e.1788801670.git.baruch@tkos.co.il>
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Mon, 7 Sep 2026 20:11:51 +0300
++Subject: [PATCH] defs.h: fix build with uClibc
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Commit ee5459531280f ("open: refactor sprint_open_modes64 to support
++multiple xlat tables") added a reference to va_list, but did not add the
++required header. This breaks build with uClibc:
++
++In file included from bjm.c:12:
++defs.h:1060:53: error: unknown type name ‘va_list’
++ 1060 |                                    enum xlat_style, va_list xlats);
++      |                                                     ^~~~~~~
++
++Include stdarg.h to fix the build.
++
++Upstream: https://github.com/strace/strace/pull/420
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++ src/defs.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/defs.h b/src/defs.h
++index 91aa32c085fe..3cdae04d19f2 100644
++--- a/src/defs.h
+++++ b/src/defs.h
++@@ -24,6 +24,7 @@
++ # include <unistd.h>
++ # include <stdlib.h>
++ # include <stdio.h>
+++# include <stdarg.h>
++ /* Open-coding isprint(ch) et al proved more efficient than calling
++  * generalized libc interface. We don't *want* to do non-ASCII anyway.
++  */
++-- 
++2.53.0
++
+
+--===============1202562406690878162==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1202562406690878162==--
