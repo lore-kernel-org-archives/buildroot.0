@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B85EAC79FB6
-	for <buildroot@archiver.kernel.org>; Wed,  9 Sep 2026 13:46:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51B39C79FBB
+	for <buildroot@archiver.kernel.org>; Wed,  9 Sep 2026 13:47:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 582E66078C;
-	Wed,  9 Sep 2026 13:46:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5BD10607A5;
+	Wed,  9 Sep 2026 13:47:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JWm0lR6-UsRZ; Wed,  9 Sep 2026 13:46:57 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 8E0DB60769
+ id 6c2s_hR5LD_Y; Wed,  9 Sep 2026 13:47:00 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 84A86607A0
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1788961617;
-	b=m9cf/g0RsgJgpMM07uPuZmHnVYyYcs2T4C7bx6+RLZ2w+DtKHPPFkXmUFSe13xKubOa1
-	 f8l37LX36KMT7ngCRFZJBpT48i6a/HiZbYKKRvuOPlXw9p9bQ0OydkR0JLeiDBA3vUk7X
-	 h0HmjQlR6OPqoCd4VwmRx2CTVjqlo32yhttLTFpBh1OSfKN41yh+/rEgqrw8bUve3h6Si
-	 cYWI4v4+YqnOtBjTZhE/PVBI+WpjSI/ZnCljdQSzdTZ5AzlIJip+moLbKQkvQaA+3roV1
-	 3BJVieB+mDRtw0JOPeM3B26ZiBbAmqjllSiJXfMGTKRpbr6Zq6KsGDDJ22AbjI5XoMQ==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1788961620;
+	b=fMN7EuAB5LoMjh4aoP/IeHqW9OXRTp7VGrHmXUldfB6FBsLag7YN1l4X93pcHTg8PMfn
+	 UyEf0u00Yb+L197/2IY7HaBaUV1JTRyk7+tkjGSWHCbm9YQhtbc7W9Poab4RGeEnsnZvb
+	 fJEaBF/YS95c5veKrE3qrAEqKYQ86LmIOLinxXdwFymTBnADWGcqyX+bPsbKDH8p4wr6o
+	 FbAir+W8ePSVaWBeqGoMevLWBA/IbCvrlwk1fCrwF7mowsCE7aE5k8CB59gP7MUnWNOq/
+	 tkwMj63cCmNF4B9kHQ7Ug00Tj62Qvm/rRoSoSUuQQXjb4rPHrfsu5Cl4GuyLlUA7SdA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1788961617;
+	c=relaxed/relaxed; t=1788961620;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,74 +30,75 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=PTBKk0DBZCD8AIK3NKV9F/JTeFDB85BpNeBCaodJuWE=;
-	b=qd3sMcG793ANsnpet/UEq8UCu11QaUeXPl3syCWHXwXf1yBxw1/vk5D6zIyqRCZwPfRx
-	 7S+bYnLaUHZ3b/fQAl4+NfmuNAIGZNZVKDFbm3qEN+T56fwGtaPmg9o8i2DH3Fy6zDb8x
-	 lGqszt9S9LziO8Y9+fN7Wk2bKUdYfHPUvS/tsKRFY8/evP8nPBmT4drzVlhlv63CpOiqt
-	 NfDfx4KreN4EqUbiXvC5re42dyD2ZsIlWG3i9z4yU7NzyIU8BuL2UEVCzgmFkj1kcHb+F
-	 Bgu3C0ERVkN0r/Oo2crzYhs0m4YiWkGRfhQqqhj5/tWZLn7hyGsXrggRJ4IH2lNZ9YA==
+	bh=O28rmzQ7HreZhAxw6+E0BjtHibU1vcse+QpHmFALk78=;
+	b=fcyKYzMN1wYhEz2+JaSN1gFjl+hObXeGxifCX0duqUNNACM5Atu/0QkzUyChZle/e/Zs
+	 4oROfElvTcEZU726nPB2f1OVzlyr4IYxSCZg7T7NoRL1BcCUpA6RffO+UtpLovTIcDD07
+	 SOmbc+4HLuLJTeweqYn1DnW4sK3UAJZ1YpiQbirLIV3KKmGrMnpn+cjUjzww5ne7f3EXp
+	 br55UuTa625Y2reIsfbIG4ru035ofma/b/eW2H+MsL8qUoxlEzWFFlxhGVJydPXqnkML7
+	 KILNyDD/nf0j76tyNGOWn3ggMglVAnX3ICzJ3dEGEMSWFLIgcYFBLeHO3YTCGI5DAZA==
 ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1788961617;
-	bh=PTBKk0DBZCD8AIK3NKV9F/JTeFDB85BpNeBCaodJuWE=;
+	s=default; t=1788961620;
+	bh=O28rmzQ7HreZhAxw6+E0BjtHibU1vcse+QpHmFALk78=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=ImDFGo1kmdH10l/aH1k+tv29UGjTEDM3oFj+SdbbnRDj+XbnQGNSRe4pFABMVxjE6
-	 CzOFgwZCjd5HBad5SLPxcMNi8bWobPLYaUS8C39GhgoiEDDexBXFuaw8xvTOMGDzmw
-	 283XRpjuHMrLtbtrZ4/Z+Albz76drxD1rBs6hxPd4UBXn4C4eif8i2ZrLZoIrPeKuN
-	 5DjPFPPnjTEkwatKSrR1dJQyOvGKK+z/5F69rilkmjNcaBaDHJNkqOgXPAyO7YYVmx
-	 ToJNpnvpievcVKTvA/aBFnEYf4FKZSWWLdc1us1Q5Xo/WEc45GtM6mv4rMHxf8p/UB
-	 woRoT8JwhZJIw==
+	b=OLoOP85vcS5ZNyaMDUDILRpOoVXWoDQv9wWB8CEMF+uH4ZpDZ+11HjtdhXQIfM1p/
+	 NeVRFDPuuB9O14Xt87GI358TpQtMMzTTQvp3aeBOZqvrqKbu0u01xlMFfEnDDIGOtW
+	 6rvlGDhxf+7e+ingBTUNthR+s+2scSQ4iulYRWLMKOiKbV0+88+A1zgXEXT4I5KzGr
+	 HV/EecSL40c5vQoIbkGPDsrXOVhHPr6/2X9QI1zPvgXho8EVVw2pnZVv/SXKD8XWuD
+	 9Z6B3v4ApRIbfrLBH0n549KnClwcvL7m5/kV7ov7xchaHJexhx2/UDKK6pV4pwsdPN
+	 i+ajhzYkiDnnQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8E0DB60769;
-	Wed,  9 Sep 2026 13:46:57 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 5B3174CC
+	by smtp3.osuosl.org (Postfix) with ESMTP id 84A86607A0;
+	Wed,  9 Sep 2026 13:47:00 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id CDF433AF
  for <buildroot@buildroot.org>; Wed,  9 Sep 2026 13:46:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4CCE34071F
+ by smtp3.osuosl.org (Postfix) with ESMTP id B34BA60769
  for <buildroot@buildroot.org>; Wed,  9 Sep 2026 13:46:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fVIyDCEW-xyo for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qG3KH9bya0oZ for <buildroot@buildroot.org>;
  Wed,  9 Sep 2026 13:46:55 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 76C81406E1
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 78CD260756
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1788961615;
- b=LOQuRC1jqYL5yMCaTy67OJOwtryhdqqCXymKGUhv80ig8yEwYPtJdyo3/4RBEep4yZas
- DoYyoDkIRn8BGqvqmBiuKF1ccGpsB+v/em+MoXrhY5kz1bdhsEYoXvV3UB8UnkfyTyhFr
- JYHBUVvgc0G5C1n26c0I1b3VHvXp9548dgVh0s9nPVwNgOsI0gx/UwIXFcTuxy69IX+Z9
- g+sgmO0nIlWQgBFpXGHJQDT5tE020fWqQTK22pX7jjO3aPIzQ3uJCaeAMNxiUyQkU0XuR
- 70jeKXUo28TseUmHzwiErY/57eegNC89fYPVLV4drWdoUfraXeY7GzoyyPDRrL/nS1A==
+ b=B71KtcpowuImsOCjcE4QdNwAUxWVitBco6AErViIz/6wW7SB0U+H/cw7vljDCb3I4Gmr
+ rLwO1C/WJPqw5PbU0nOsodVKrltACncGvJJmyrmib4hneJ9QFzNbPSPFU7LB2AO7iawg/
+ mOnzFeHwYkIYEziGcxqaWbT9I+tvPjgKlhq36lM81VsRMDOLN7dYc2kX8ozRVHm5nLxa8
+ G30673K8l9VJN5VIwMzjMM5sKxC/AJ2Nuvr2cyLwGFqQyiAtLOIR+kVTSPJyD6saC6Ggx
+ zj3psSbNsTfwQhVlTj8O+o3WR3Z3fvQEvzH+NmbmS2q0+OM8vU5koc2IqxyiuNxQsYg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1788961615;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=we8cll9E37b8hHpqiVHhRrCHpzT0vdcQsbDLdAMpZK0=;
- b=lmeymcanhKIxGBCxaUteJpgz0jVZLQWV9+Il0C1LZVh8duNrdJd/lbtz3YmAJ/bRMZgz
- mOqVwjQlSoTVaD4Ijy54Ke4WPdQC3SlslSyR8dfMWRiey/OIPEraUvu7frgyEyGGjFXxQ
- zTOEc3BNDcomJRIoUf6mwkBvp9EdP6olawdqB5JSp2hotJR0MoAiBnNv9naoVz8GV/NFX
- t0DoJcDtpp2YRuK3m/LiZsw4ULwjdsjtR3uOOgh6MnzWm2dsx12Rij5nbdsYksia6rDEx
- Bw8TF2dVJCoexAjyIp5DsXySWKHo4haLQMVwdsaOE3f/1+9y9dHJt+1rCnACt2V9sdQ==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org;
+ bh=Wv/zjaO0e/0Oa/MrJZnrn7igNn6vMsgzA1/BJY8ympE=;
+ b=rKTmeuqb6ddwWOWeGbcwNZzvuREVxstY+L4jgQT8XMJauUlzJcgbQ+Ys7UdqimIi5Mn2
+ 35+OJ1ra0QlYZqUxIQr+nYcoXVo8CZ2HSWViNoSEU5flmrsxANvtWeRosw5TRfe3KvJgj
+ /27MhXFkXaTrTno+fVLIqwsaitOUfOQN1lzjREhQeLW6ICxWDRULU069ORZOtMGNkpYSF
+ +uZHu1pHCGlsrUp+ivsLma+sF6LUjBb5joYRV3MYOB4VjKGDiktyJohxGTpueMcqUNXw1
+ k1OlfRt0Ac+Nqw85RkcZASZ0Z4qrgaoS9JD4hK0OrOdIc5Wccq0jhIeLSxKnOaAuOJw==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org;
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 76C81406E1
+ by smtp3.osuosl.org (Postfix) with ESMTP id 78CD260756
  for <buildroot@buildroot.org>; Wed,  9 Sep 2026 13:46:55 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 87646954D1; Wed,  9 Sep 2026 13:45:52 +0000 (UTC)
+ id 7D88A954D0; Wed,  9 Sep 2026 13:45:52 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 9 Sep 2026 15:46:00 +0200
+Date: Wed, 9 Sep 2026 15:45:59 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5b076d3755ffc9865806bdf19efa99c5e70d3b03
-X-Git-Newrev: 2d71c874d2605c5d2f66fb69a3fd8c8110cebc77
+X-Git-Oldrev: a6bb4d52c0f5bbd6fe27f023ecdf2326cc0f03ff
+X-Git-Newrev: 5b076d3755ffc9865806bdf19efa99c5e70d3b03
 X-Patchwork-Hint: ignore
-Message-Id: <20260909134552.87646954D1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/i2pd: bump version to 2.61.0
+Message-Id: <20260909134552.7D88A954D0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/i2pd: needs chacha support in
+ libopenssl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -117,42 +118,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/2d71c874d2605c5d2f66fb69a3fd8c8110cebc77
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/5b076d3755ffc9865806bdf19efa99c5e70d3b03
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-https://github.com/PurpleI2P/i2pd/blob/2.61.0/ChangeLog
+/home/thomas/autobuild/instance-2/output-1/build/i2pd-2.59.0/libi2pd/Crypto.cpp:661:49:
+ error: 'EVP_chacha20_poly1305' was not declared in this scope; did you
+ mean 'SN_chacha20_poly1305'?
+
+The code was added upstream in 2018:
+https://github.com/PurpleI2P/i2pd/commit/58c92b8405f5da687734c1b0d6f7ec63dbb2d3b0
+
+The build error could be reproduced with i2pd version 2.22.0 added to
+buildroot with commit 1035e80aaa7492fec12cbc2fc5faa9bf32ef1cf3 so a
+backport to LTS branches should be considered.
+
+Fixes:
+https://autobuild.buildroot.net/results/bd8/bd8616f04df2e1b9e18d1e16921979a852bd566f/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/i2pd/i2pd.hash | 4 ++--
- package/i2pd/i2pd.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/i2pd/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/i2pd/i2pd.hash b/package/i2pd/i2pd.hash
-index 0d7755b585..05602226cf 100644
---- a/package/i2pd/i2pd.hash
-+++ b/package/i2pd/i2pd.hash
-@@ -1,4 +1,4 @@
--# From https://github.com/PurpleI2P/i2pd/releases/download/2.59.0/SHA512SUMS
--sha512  5fa4365eaa6fbc0e448732d3c96b867e27db21927727aeb9df8241d56fea08561028a7b6d51ba7fa1141d53c95b848108806edb9f420c2ebbed85f627f045af7  i2pd-2.59.0.tar.gz
-+# From https://github.com/PurpleI2P/i2pd/releases/download/2.61.0/SHA512SUMS
-+sha512  d88bcb4d4879b8c2399f03f30f360a4121e20659665eda90d46495bf036666e99a05666acc6abd4b67294e5c7d61fdf0d867789e85316dc5338a5c5ee79811c5  i2pd-2.61.0.tar.gz
- # Locally computed:
- sha256  eb5ac2a5ede8cd6bed9e6d93ad943119a73bfaba378f21bafa307f9b026b2034  LICENSE
-diff --git a/package/i2pd/i2pd.mk b/package/i2pd/i2pd.mk
-index ac0348c24a..aa0b4fc394 100644
---- a/package/i2pd/i2pd.mk
-+++ b/package/i2pd/i2pd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--I2PD_VERSION = 2.59.0
-+I2PD_VERSION = 2.61.0
- I2PD_SITE = $(call github,PurpleI2P,i2pd,$(I2PD_VERSION))
- I2PD_LICENSE = BSD-3-Clause
- I2PD_LICENSE_FILES = LICENSE
+diff --git a/package/i2pd/Config.in b/package/i2pd/Config.in
+index fc2f3b9367..563f165574 100644
+--- a/package/i2pd/Config.in
++++ b/package/i2pd/Config.in
+@@ -12,6 +12,7 @@ config BR2_PACKAGE_I2PD
+ 	select BR2_PACKAGE_BOOST_FILESYSTEM
+ 	select BR2_PACKAGE_BOOST_PROGRAM_OPTIONS
+ 	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_LIBOPENSSL_ENABLE_CHACHA if BR2_PACKAGE_LIBOPENSSL
+ 	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  i2pd (I2P Daemon) is a full-featured C++ implementation of I2P
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
