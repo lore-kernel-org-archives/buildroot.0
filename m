@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AA5B3C79FB6
-	for <buildroot@archiver.kernel.org>; Wed,  9 Sep 2026 14:55:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F912C79FB7
+	for <buildroot@archiver.kernel.org>; Wed,  9 Sep 2026 15:01:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5D9F74077F;
-	Wed,  9 Sep 2026 14:55:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2EF12605F8;
+	Wed,  9 Sep 2026 15:01:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zQOptHbjINQP; Wed,  9 Sep 2026 14:55:29 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 76EC040766
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1788965729;
-	b=kTm31kn32xx9uoey6Eo2Q64jKzncwLN1FgHiOvi1Uol2soJyd6X6XjDbj0EYKGxb6vRu
-	 DQoKD+6Xii2UTqlH9zNXgz4jmj4NCSCtEFTsLYnEiG9Dj/dWR4THebdJFac6dr+l0B0BZ
-	 PuHlAFM70GJQmOC1p0rebU7dAca4wWU3TWmq2kjbNsnqv7mIURS2IQjfaJNgeDsdorAt7
-	 6ZUt1N1N3s1xp6XISggf56ac7/sG/5B6V2Xr3hSoVD038KmgI47wPZrfB5PTb4F75uJFV
-	 WChau/mbPVjY3DjtWveIFxEiyArbKIxC9GiKInSqgx3MFvY3Tk37qBoIKu47ZBulH8Q==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 74X4m5133Y1d; Wed,  9 Sep 2026 15:01:45 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 3923760773
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1788966105;
+	b=PaBx3njCpmm/cI6huWh73+d/huwvEEaW80EQOMFJqBz4L3k5ID4VwOoPsLLUSk1EbZLd
+	 5/JR1wfzYMCrygCYQzv1L3iF9Eq7Du41bAcYTi1OwianrV4hUJFKuSwfB15z9g0LKl+M9
+	 rA1is64DuFq3Z+GOjE7f/S6xkf83REnNlK27PKM7F58A4TFKeLfHfxMJ9FRmfTR2sVE/g
+	 Tr9nKvz/Y/R8W0245VGSRQ+Ha7eTR9ObEbTXhdov9z8KJn7IARw1dly7xJLWrlHBG2fvD
+	 qxhJreDee87w8dLo/CztgWiv/ePyLJBLQaudWkjKHMViAH3ssvwFpctGWcYyEpwJW0w==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1788965729;
+	c=relaxed/relaxed; t=1788966105;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,74 +30,74 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=M3Rx2ltKcDgFWck8dwwWQRTfQIe5HraRO9k35/r/5+k=;
-	b=cr35x5e3szGMHYeSfM9fEuWDSza4ZMOj2BIIBRJiY6R2D+58YLPxiMmMerzV2Quiu9+m
-	 2v3GyP9u+yjTEYSVEaLRL1xVF4oCxE76M2tGigjzdGGJG1iyhKhQgL4IcgmNgBkC/LsWN
-	 UKLWlx2udxBPz6sLC9AJLvCSuGKP99+nKk5XjclZwj4hqWqBEX4FF7kICWulkSz+1P4x+
-	 tu3WSReaznxuFhzaQL6Fjy5q/hbQvI3hYPs0YYauD0ZUO4uLIxTDE+TbGFbdHk1h23ECQ
-	 FIwunJlmRxm3hOlVY6wuOAQRmxCDGtvNfQ5Wlst0rcpf0H4v6uiPQUWs6CBqrdMjn0A==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	bh=XY+PETwf77xdA90uiC0diFJk/R93gC7z5EKCj9MIjOk=;
+	b=V7UQhJSSoW4P/wVBb6GpuIOCbib2VHVQ2R+jg57SoMtE4T1JPUDSmuPnPn5LHOurL1Js
+	 0MH0EMMhu0ELrp995d9Bftqax1GlTrpptlGERJt7y7ECCtjyXoVmafMnr9/eEntkfua6z
+	 9rCDF311MaiZoF7MBi4VunRgD6hp7413jZWwAshdbSSJLe2NXeZqKUTB3bGQzq3qbx/BE
+	 G4NSJifo38O6XdS1nAi9AfMQJrvyiMmvwXi85enwcB4kCQdTBcLwFBUkIMTr3Yy81s0Fy
+	 Pj68b21uGtCeveo7Gl15MF9rTriEvY9sXmvKJYWBnDdjX6Nvy/Sq5iwWe6IDBNGVA1w==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1788965729;
-	bh=M3Rx2ltKcDgFWck8dwwWQRTfQIe5HraRO9k35/r/5+k=;
+	s=default; t=1788966105;
+	bh=XY+PETwf77xdA90uiC0diFJk/R93gC7z5EKCj9MIjOk=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=DesACBRBuo1Qs4VgC4GdH0Q4IaSwaaj4zsBs4uaY5t+6KSxbK+lKUbv4pp/aEx2ML
-	 8I4nMMFy7iphamgXD1lxbJnuEJtOQqYvcqCVMwG1n4B+v2XRbm8AU22hC1w1vJjU7O
-	 2ke6wu3cgV2U7m7OFmn8veJPSe9STdvMEjDAiIMMwTTGkzVqAlz0YZ9AwmIbb1yLFR
-	 31/lvg9YzDtwzRDOzH7qoxLLM7U5/3CsDtfV9S7PZ0mLNlrQ11WiAjxxRXXYRNI/fF
-	 GKaDmjSBA9oTHth02eeVQBlDURdHRHlhXtkH4liM1S6RZwnznMX2ZDVeg6Yu4cnDVH
-	 VCdwubFfSIkgw==
+	b=oJ4yZFyruIDDC9I0KUFsQ9M+9AtMbqRvqnmpGRQA5bSFVaMFHQT56FnZtqz2+pFHO
+	 yac4xZ6i/Edm3OPvS7fcqRKIUEI+9AOwDihqlLGacHOEUjG0Z1qH+DFgWiENOedWP/
+	 EO5fBkC4aVNjil7QfXq90fwaxjyvKUAa5nM0LUKJ6G/NtAfqzne2uqoqnWDJIcQNIf
+	 KR1KmvFdRDIVl6c9hta4o9JeCSbNviZZWAUWgG/b6CWse+ZelV0gZ/Xn3hRnlNMUQM
+	 meb/3viP495CIpXkepzTLoyhpwhXvh4SaOm0OxSDh7cmsa097zlxbdxAEexlq9VCCG
+	 lrxN85agumOnw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 76EC040766;
-	Wed,  9 Sep 2026 14:55:29 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 47756432
- for <buildroot@buildroot.org>; Wed,  9 Sep 2026 14:55:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3923760773;
+	Wed,  9 Sep 2026 15:01:45 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6B8AB2E3
+ for <buildroot@buildroot.org>; Wed,  9 Sep 2026 15:01:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2D65B4020C
- for <buildroot@buildroot.org>; Wed,  9 Sep 2026 14:55:28 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 69029406FA
+ for <buildroot@buildroot.org>; Wed,  9 Sep 2026 15:01:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id woL_jI1ohSGQ for <buildroot@buildroot.org>;
- Wed,  9 Sep 2026 14:55:27 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org 56B5C401EE
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1788965727;
- b=VS8/IXXRyyyvG572AlEHt/dqVOQWRndJ4+GY9a6k2FcHcVNgiff3yqk26lUYMEgYYZ5A
- qP17BzZdCiVM1YZqM0qpUm9t6ut83YaMnUDBD9BG86B29QW5bocZ69zTgsCP1HkgtyLQl
- peAhFnhZwxSAzZ+RPqJWwVQOcoI6vR23qKjkKXvkKY7tGV8En08+p9SO+5iMTNV75MjUq
- ka9AA7y3qUNInT+UXVNtGV7QbMDSJR4/AaGj9Qsn8PcgIYBokii9wG7huMTHYCwrnwpa1
- Xw7OYi6up+Mn9j23N7oTkg4I5JbS150euhqaaRl4/vMkUiFc1J0NdIdvPZ1Rizy1eVw==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dFguDVe1EZWW for <buildroot@buildroot.org>;
+ Wed,  9 Sep 2026 15:01:42 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org AFD5F40663
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1788966102;
+ b=MOQ0J3oKKj41hikAiER7vmMslEr+ypZmam0cX8nTOPcORHsKfyjSkeiU6s+Bw7LYjAZs
+ b01to5+sWkdSd7sMRwgh3xK1YsevG44s0bjIJf4glw/YBVum2QRwSjjRtbPs0Z0prDfx7
+ 3PLBnueBTiDwaOJmOWWbbpnn0cY3nXeGCu7uqhbf4ob59+Yt+drzNI42N6UB8i41OpwAf
+ E00eCTaXpruHVMRY4gLfAtFYDeAkNnnnEq2m/JKa1bXSVoLIieeWhhRYl5fHxl67JQvf5
+ +FnA25dRZjaLCqs9UkmW+XWp6BdzMN3IGJwSEgLjvMxy3Zj9Hw5nDdqTdn8PcqHENsA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1788965727;
+ c=relaxed/relaxed; t=1788966102;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=neh9LjVJzbYtitap9n9NxbIYEqFKIixLmqayggACDIQ=;
- b=QT7oq4km4H5bNsPPXIshA+eRcvsjpZA0iDAJ4TL16dI3zOo8Lgt9vRGUbvP2hyt7gwNi
- R06MkVU9ofAH9bcI2t+HAQkkLQ9bXHMFaIAXSMmcK2u2W/2Fm6qxZ6PwKdrcCPxZXyTXQ
- EHdOmfhn6BjUwXWQZF1h1Clsp9tayeiF6MOdNjUzeulpjX05uClfuySF4pMbItPPTW83v
- UQEUBxMaLPWSvuJp8M6f5U+ZESRUM/aVyqglfOsElO8Ec+AplmkhGNsQh7q2hADc2r3EP
- hQ50epDyTkoLbi9YE8xcKR10N+DhjlqKPif53Dm6W0iwE7v2KcRJPkn7T+5eJt2dV4A==
-ARC-Authentication-Results: i=1; smtp2.osuosl.org;
+ bh=/3mGbapgK42QzN5gRHFBcqzRi2L706zT9mBDHOS6i+E=;
+ b=fSgi36RHm4Vh4JaGmdKtQAoCzg0De0IkPCdRs9xMp73DHs1wEHw5SNDeZztSYtwIUG/o
+ DNixaeAgFufPhaqvQOV3iGyPlocXaunuWeDvRnzdBQnrpnV1IUu0GpehS0cdXPgOdteMX
+ 6SoVVjPZXPJ+IHTQZv0BrHBMs/xhv8OJuih6uIEopmdj0gHElCKkNFsFH5+X7vhj8Appc
+ SJ9c8Mc/Q3Hcch3z6Jmtj0CKhgBrWU52VnCJVkDC3EiwkXoV+bswI/rhft2Mnu9x1+5h8
+ tqG0rJ6jt6BFHbtNgaoQl1rsoinTC3wPLT9+S0h34IesCSmoqvUH5uUyjckWUudQM+w==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org;
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 56B5C401EE
- for <buildroot@buildroot.org>; Wed,  9 Sep 2026 14:55:27 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id AFD5F40663
+ for <buildroot@buildroot.org>; Wed,  9 Sep 2026 15:01:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4FFCB954D9; Wed,  9 Sep 2026 14:54:24 +0000 (UTC)
+ id B84F0954D9; Wed,  9 Sep 2026 15:00:39 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 9 Sep 2026 16:50:45 +0200
+Date: Wed, 9 Sep 2026 17:00:43 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2d71c874d2605c5d2f66fb69a3fd8c8110cebc77
-X-Git-Newrev: 36fa003547306899347c39d3955ef8f704baf660
+X-Git-Oldrev: 36fa003547306899347c39d3955ef8f704baf660
+X-Git-Newrev: 2ffcb1e181b5de9afa4efa76f2548f8adbc2a088
 X-Patchwork-Hint: ignore
-Message-Id: <20260909145424.4FFCB954D9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/nettest: new package
+Message-Id: <20260909150039.B84F0954D9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mini-snmpd: bump to version 2.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -117,95 +117,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/36fa003547306899347c39d3955ef8f704baf660
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/2ffcb1e181b5de9afa4efa76f2548f8adbc2a088
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-nettest measures download and upload throughput, latency, jitter and
-packet loss using the RMBT protocol. The same binary runs as either the
-client or the measurement server it tests against.
+Fixes:
+- Reassemble SNMP requests split across TCP segments, and drop
+  over-large messages, by Noam Rathaus
+- Fix encoded-length accounting for decoded OIDs, by Noam Rathaus
+- Zero-fill memory from the internal `allocate()` helper
+- Build the interface trap OIDs without a run-time format string
+- Avoid needless variable shadowing under `-Wshadow`
 
-Written in Rust with no native library dependencies: the target binary
-links only libc, libm and libgcc_s, and is fully static when built
-against musl.
-
-Signed-off-by: Bogdan Radulescu <bogdan@nimblex.net>
+Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                   |  1 +
- package/Config.in            |  1 +
- package/nettest/Config.in    | 11 +++++++++++
- package/nettest/nettest.hash |  3 +++
- package/nettest/nettest.mk   | 12 ++++++++++++
- 5 files changed, 28 insertions(+)
+ package/mini-snmpd/mini-snmpd.hash | 4 ++--
+ package/mini-snmpd/mini-snmpd.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 1fd93b1de5..97eb2d9cac 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -564,6 +564,7 @@ F:	package/libgpiod2/
- N:	Bogdan Radulescu <bogdan@nimblex.net>
- F:	package/iftop/
- F:	package/ncdu/
-+F:	package/nettest/
+diff --git a/package/mini-snmpd/mini-snmpd.hash b/package/mini-snmpd/mini-snmpd.hash
+index d1e8f51f8e..937de891ad 100644
+--- a/package/mini-snmpd/mini-snmpd.hash
++++ b/package/mini-snmpd/mini-snmpd.hash
+@@ -1,4 +1,4 @@
+-# sha256 from https://github.com/troglobit/mini-snmpd/releases/tag/v2.0
+-sha256  851acf49a1a36356664af0a7a040fa31f75403eb26e03627eba188ee15d4854c  mini-snmpd-2.0.tar.gz
++# sha256 from https://github.com/troglobit/mini-snmpd/releases/tag/v2.1
++sha256  2f9936e4c62d1469a13e43611001b6ac36901ddb9809e3c7cb2297830615a6a1  mini-snmpd-2.1.tar.gz
+ # Locally calculated
+ sha256  8a43b895972a24567297f44f35dab0f5f9ed3b7db6dac0bf6094075b27ab9d56  COPYING
+diff --git a/package/mini-snmpd/mini-snmpd.mk b/package/mini-snmpd/mini-snmpd.mk
+index 9873ad2dee..157aabfb53 100644
+--- a/package/mini-snmpd/mini-snmpd.mk
++++ b/package/mini-snmpd/mini-snmpd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- N:	Brandon Maier <brandon.maier@collins.com>
- F:	board/freescale/ls1046a-frwy/
-diff --git a/package/Config.in b/package/Config.in
-index 307f7ce86a..243b390d1c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2559,6 +2559,7 @@ endif
- 	source "package/nethogs/Config.in"
- 	source "package/netplug/Config.in"
- 	source "package/netsnmp/Config.in"
-+	source "package/nettest/Config.in"
- 	source "package/network-manager/Config.in"
- 	source "package/network-manager-openvpn/Config.in"
- 	source "package/networkd-dispatcher/Config.in"
-diff --git a/package/nettest/Config.in b/package/nettest/Config.in
-new file mode 100644
-index 0000000000..0ec4dcdc4a
---- /dev/null
-+++ b/package/nettest/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_NETTEST
-+	bool "nettest"
-+	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
-+	select BR2_PACKAGE_HOST_RUSTC
-+	help
-+	  nettest measures download and upload throughput, latency,
-+	  jitter and packet loss using the RMBT protocol. The same
-+	  binary runs as either the client or the measurement server
-+	  it tests against.
-+
-+	  https://github.com/specure/nettest
-diff --git a/package/nettest/nettest.hash b/package/nettest/nettest.hash
-new file mode 100644
-index 0000000000..eaafe15ea3
---- /dev/null
-+++ b/package/nettest/nettest.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  13dd03c8853f7eb9a4dd20b9deedbfa7cd7efbc59a175bd3bb1f0c4d1126e238  nettest-2.1.3-cargo6.tar.gz
-+sha256  6523fc0e74e4774f105b0ee86a8187952337db6231f1a1817316174e241344ff  LICENSE.txt
-diff --git a/package/nettest/nettest.mk b/package/nettest/nettest.mk
-new file mode 100644
-index 0000000000..d7ca986434
---- /dev/null
-+++ b/package/nettest/nettest.mk
-@@ -0,0 +1,12 @@
-+################################################################################
-+#
-+# nettest
-+#
-+################################################################################
-+
-+NETTEST_VERSION = 2.1.3
-+NETTEST_SITE = $(call github,specure,nettest,v$(NETTEST_VERSION))
-+NETTEST_LICENSE = Apache-2.0
-+NETTEST_LICENSE_FILES = LICENSE.txt
-+
-+$(eval $(cargo-package))
+-MINI_SNMPD_VERSION = 2.0
++MINI_SNMPD_VERSION = 2.1
+ MINI_SNMPD_SITE = https://github.com/troglobit/mini-snmpd/releases/download/v$(MINI_SNMPD_VERSION)
+ MINI_SNMPD_LICENSE = GPL-2.0
+ MINI_SNMPD_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
