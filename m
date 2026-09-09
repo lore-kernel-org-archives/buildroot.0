@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A98EC79FBE
-	for <buildroot@archiver.kernel.org>; Wed,  9 Sep 2026 12:39:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A378CC79FB9
+	for <buildroot@archiver.kernel.org>; Wed,  9 Sep 2026 12:39:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 89F7260790;
-	Wed,  9 Sep 2026 12:39:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5268F40651;
+	Wed,  9 Sep 2026 12:39:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id S1ka2OhS4YKI; Wed,  9 Sep 2026 12:39:41 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org ADB736078C
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1788957581;
-	b=XKsoJHVLJzO0m41ADyRRi3XtDsT4RXMRjoGaawCY4+WVVYPxQ4xmjOeonOnVEq7cVpA4
-	 rIoEUY0Pljb2JqV6RMvei4zkWoPo+h1bkJ+F22ejW2bzRN2sAZO22GA7BCkoCa4XBlfk/
-	 cKEeIvY0iB3VmE4K1waKgm0LWvLiMPOnn1BswZzbUF6dcB5d32qsdqdy9d/IMl/cqXcef
-	 5TJ7TB6wI4r+LKG91i1NFbrXo+gMMLSqj94HhdBDhbqAA3SKvZ9Z+7pwLIdIO826Qm1ZY
-	 LtJK/2sP1MXW10hpDshx474qEnx/xxSSrMpC3SDU1qUBCRLxxbdLXHudWzcyprJudLQ==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HzRKij4Ujt97; Wed,  9 Sep 2026 12:39:44 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 5FAE14057C
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1788957584;
+	b=A2o2tDiFYh/MQh+X62j9jS69KErnctZHHLqedN5dNA+cP5KuZDyYZDMdYXyDOACBWPbT
+	 +b/a87aUZVSJI6cjwbNDJKxi7ucHbWKyZ7yTyry9OvFvgsTRzB4YBKARjZ5l9eVskHgh6
+	 DX1TNHbCF1ebyrGySGjiPY4iS/m8NmO5Bwi/nLL6/9GvvERW/e94joS06VzFf9FafhaUi
+	 9AzAl7NIF4aHt8zI0xGKj0YSJDJEnBRYUO0Z9lsjIqeSnPBuAVKb2J7ZFhtcAU2x8uoAY
+	 hoePVzHxowfuZRk6g5vA+bm/eSr/p4lIlMEAYQdGcBO0Y9xvtZS7zyoD7Fedg0Hxkng==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1788957581;
+	c=relaxed/relaxed; t=1788957584;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -32,136 +32,138 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:Content-Type:Content-Transfer-Encoding:Errors-To:
 	 Sender;
-	bh=p5nkDcljFN7rf6njsUup+ddkHHjkJ8H7ron4ICVxSDc=;
-	b=g3TD+i68rfgw1A6ZZS9/mU8ZXRQiFKE/5BNxzDZEipL4h4TZrWmg/R2yADtN/PU0V4sr
-	 JyVvsJz2Epz1lcaisIZQE4SMiAgYHQwjmQBl6nZcHeCKVI6He3iYnVpozF4C6fH3sQ0zK
-	 JmUBuxS8eAzXdJijuZYL2n27Gpf8w6sVHA1ibjxuwutqaEpXng1GjdP9pPSBso+iznTqX
-	 Z0eA/SHEhyAacWmgCDorJhhSalny2BDCK7b+aKUqVFs8dOhGh/XiTXxXdW7TAsUpVBQLx
-	 yR4FBZA0cNYkefxur75Rp75kJYsZXUTakRJUHTVyli1lTaQjyxrI1Q/3+A6pBzz9fRA==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	bh=lGoN4N5FCo82DbjC/Y1dRIGAHcBD9m+61iy7oulYnuw=;
+	b=Lsa0BeRy0xhUwBEX8JzpOLwnu4zF4r5i3Ok0tdiPGFLN3pIYjvj+Ta4V/ARuX1cGYJKT
+	 X9i+3KzktNUxw80Gx3Rszh9tHvtCb0UKZVJx07ueLIshygAAiL6uMnmAOznQBFZSrOwzs
+	 IW0LL2khczY64CINbjggj7+tohXUeSp9EJFVyx+zpUPUAsYRqrXESZWjdihmQI/LDCN4T
+	 g1cqfUKVJI7bwK8ZzOoP0e9/Dy75MJ1JOarbWvRXnbD2JnuBXBo17tgYjnMInr/93WuJ1
+	 z/mWPHpaJ2+/76OYmFCQ6ZWT0GJ9/0waU+tGbqK4Tnn1AQM2UctWImVY9yJw8NHL3Uw==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; dmarc=none header.from=thewebers.ws;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=fuxfQsis;
+	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1788957581;
-	bh=p5nkDcljFN7rf6njsUup+ddkHHjkJ8H7ron4ICVxSDc=;
+	s=default; t=1788957584;
+	bh=lGoN4N5FCo82DbjC/Y1dRIGAHcBD9m+61iy7oulYnuw=;
 	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=nwL3bKEmZ8yL+x+ND2bP9zkMMiXjCmoUnRZqu+5RiIY0xVG4Q2eLBZQY10ck7TLzy
-	 yKDmKR77VV8Wn33NBHEBK/29hnY0NrLBJ3DHtFKGfck/kcieUmYMTWyOs+ihC3EP5V
-	 9cADy5ksVfiTQxYBJ1co26f5iBHNR9B+GFCQ0tX/hefZV8H2Qkm2rCs0L1m7mK/oAh
-	 q+olOOfVkSLEhhnjnBwep1ERvcQT0lboJaiFzIEVSV7z0VpqsT3lhbIzqFYMLVyrd1
-	 /+HQknU9SARx4VWY68muH8qS1thWkOiStlIBVwn3D1sxIv+q8xy1ptZsb7nVKOnvxu
-	 8yn15NvpNJCOw==
+	b=apqe4v2/phFcL4H2//r9GcH49AEoTC4TRK5uqB6ZA+tlVwM+g4JQNSm+WqgGeEXZp
+	 p+yFZNRdxPOLNXv+QtfB2JZ5Q6t2jRQn/ouDX1p5NAF3dZjpEN79/ErAqFTLJRkTRX
+	 CttyLLP37zu5nW9MwaxA4QJHJt7arfjlXCJra0B6uXLyl54T7qdPLoA11eeIC2KJbx
+	 pAIIlo77IQ1Drq0bEwED0wR2T3lZgG6/cy+f4x67ZolETHm3zE0OzY8/QV0XBBnrFG
+	 UeEDyCCpSTtHC3k7DugxTcGV3YfTokmHYUAm3fz66EivPbWofK8X9d3Ab+KlZRUOiQ
+	 cV3J12J81HD1g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ADB736078C;
-	Wed,  9 Sep 2026 12:39:41 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id B32782E3
- for <buildroot@buildroot.org>; Wed,  9 Sep 2026 12:39:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5FAE14057C;
+	Wed,  9 Sep 2026 12:39:44 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id C31DB4CC
+ for <buildroot@buildroot.org>; Wed,  9 Sep 2026 12:39:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A4F2480D83
- for <buildroot@buildroot.org>; Wed,  9 Sep 2026 12:39:40 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A9977404DC
+ for <buildroot@buildroot.org>; Wed,  9 Sep 2026 12:39:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GjAEBkt49GzY for <buildroot@buildroot.org>;
- Wed,  9 Sep 2026 12:39:39 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 7C6CB80C25
-Authentication-Results: smtp1.osuosl.org;
- arc=none smtp.remote-ip="2607:f8b0:4864:20::230"
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1788957579;
- b=Tqu5UHt9Xmeqh85Gr5r9Xb82KF4NNNgu//3X34movmwYCILl28W/DJ/LmyBIIMz5/dVl
- Nt41L6YkBEUOclLDhwPaMZJ0+r9SgFHXK7JV5S55PyyOyssk1lcWOKxUAIxjLmD24u6Wa
- 0xhqCmQKJ2KRzs0Fq5ZRTf3z4uDqN0/QUblyMN4S8o5q3SrwHru31K/i0YyjxMsX8fdqk
- RpLX4kpk8WCs6rZ9B0EVkWpm24G8B2NdT0RdLgueVTQPymPIlRvRbsoNn473dRV901MAB
- W400dn6TLGrvHDR1qCYCl5W2JBZVc9X71QEn8IPDL7Vn+xIn2RKkyBUxNHQ6vokEBMQ==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id d3VprO5yf_oe for <buildroot@buildroot.org>;
+ Wed,  9 Sep 2026 12:39:42 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org A415940595
+Authentication-Results: smtp4.osuosl.org;
+ arc=none smtp.remote-ip="2607:f8b0:4864:20::22f"
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1788957582;
+ b=L84ajYWiZrqbYaWi7DIgfK2fz3fZ5hWk7Rxki+1dIHlH47fbFHWjLfgcOvJjPc0oxw/J
+ yA2Hm4LWit0yaM+/q005YpfyIjtyc2+d/8+FR+FiMeTZTryGcG0/nXKOCBKNVNS0aNInM
+ C2E6z13VmGJvL5mbbvo+ecYlpcAhsVWJKI2yYD2VIQoDZg8G6Y1mENAwTIStqGBxaLvkx
+ djMNfK/gwN8+0f8rrmI2S9i+W3M6eA/oUUnBSbOLPU6l+JJQnG0pm3/XrW89pgQOM4A/L
+ fq7q+RSXqGUceTfS2+2mXKBaFLeIunslSeUPqlpqdC7zT2tXbmpUKMoF9E5mPaZv2jw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1788957579;
+ c=relaxed/relaxed; t=1788957582;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
  X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Sender:From:To:Cc:
  Subject:Date:Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding;
- bh=X89k4L++ReUu3TNEmRjTEtnJ/PNRHtj4ynF8SK/oj30=;
- b=GJdeGshmGv510ms9K6XJZfF4YNdB+hBmxRBgkViVNHJeq7BlUe7NXbC9kc/4G9yTTMfI
- Ssu7r8jz5bByHd7E2R1CoQQj3hB6MePp+YxhYjzCoBlv/6EWq3jJnBUhhiFHZLeW8FQ2O
- HivXRl+ihWRISHz1rM9AHFc3qPJqP4UqNKJGjmyZYGstm6M5F0Iia1uqbJKq8KXIvfX4l
- LnVqbDM7xyymoLJ0nMb3did9khe8REt3aRg7JyBpMlpDbmtWXD8BZiHT7zvC1ps1rVCKd
- ZolqiZNeCQLbXpnLEV6QAgSHYVuVB56ct1GmG5FIuojg1xX9evrGVAzB1u44OQkMNdA==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org;
+ bh=yaZ5DKWBbiIrekA3ZLn3zHrkXq2I7M3FxXU3TZndDKs=;
+ b=O+ZcBkQrX6vFL5SEq9WeKrJxPaDAUGugoXbDUt2LAUz9HA1xbuK7/foELBl16whD5ght
+ PRB9W0ex+26NOlE4tZ7pSLhnU5L+CIQutF8/AiDEWtJeaIueszLyI4LWT+Try2sqzHBIj
+ ZuXUnJZDtM61SbKC258bIGRAkQ2ABnKi4FwUP5SPSMFCfrmXNF0NXeJMEMX67C05nf+sZ
+ C6WY7IlvM6T/CsrSgKfLh+ZqiJfIGiZ5z2vv/k5QZugB0e+E4XRdmEbBv2yFXJ1zgkzLc
+ N2725wWOX3WxYdOzkwZqPmWYIX8GXNsipDgEg1Hrw7CGS3X69Chb7tBkonDooDhDKwQ==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org;
  dmarc=none header.from=thewebers.ws; 
  dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20251104 header.b=h0Uzj+wd; 
- arc=none smtp.remote-ip="2607:f8b0:4864:20::230"
+ header.s=20251104 header.b=fuxfQsis; 
+ arc=none smtp.remote-ip="2607:f8b0:4864:20::22f"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::230; helo=mail-oi1-x230.google.com;
+ client-ip=2607:f8b0:4864:20::22f; helo=mail-oi1-x22f.google.com;
  envelope-from=matthew.l.weber@gmail.com; receiver=<UNKNOWN> 
-Authentication-Results: smtp1.osuosl.org;
+Authentication-Results: smtp4.osuosl.org;
  dmarc=none (p=none dis=none) header.from=thewebers.ws
-Authentication-Results: smtp1.osuosl.org;
+Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20251104 header.b=h0Uzj+wd
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com
- [IPv6:2607:f8b0:4864:20::230])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7C6CB80C25
- for <buildroot@buildroot.org>; Wed,  9 Sep 2026 12:39:38 +0000 (UTC)
-Received: by mail-oi1-x230.google.com with SMTP id
- 5614622812f47-4a4cb36ae00so4326928b6e.0
- for <buildroot@buildroot.org>; Wed, 09 Sep 2026 05:39:38 -0700 (PDT)
+ header.a=rsa-sha256 header.s=20251104 header.b=fuxfQsis
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com
+ [IPv6:2607:f8b0:4864:20::22f])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A415940595
+ for <buildroot@buildroot.org>; Wed,  9 Sep 2026 12:39:42 +0000 (UTC)
+Received: by mail-oi1-x22f.google.com with SMTP id
+ 5614622812f47-4be497b8367so1170367b6e.2
+ for <buildroot@buildroot.org>; Wed, 09 Sep 2026 05:39:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1788957578; x=1789562378; darn=buildroot.org;
+ d=gmail.com; s=20251104; t=1788957581; x=1789562381; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
  :message-id:reply-to:content-type;
- bh=X89k4L++ReUu3TNEmRjTEtnJ/PNRHtj4ynF8SK/oj30=;
- b=h0Uzj+wdCfXdNm6Jny4xVo43/c683YMjKFev2hyhPu4OxDQxZS6H9bu4cqjMf8JHMd
- LBfhorpwY5vhjaOcCoRJ8VFnz4n6QwIzdrHcoKyGRBcoVmYdCM6a+fYzf1QmGW7oQuA2
- ahbeqncuibvio0V819kixQKtq8OVJi9Pym6YIbJGEA2g5NQbPFOuMmhBdFETe2Zmyt3L
- JZUgoioFAIzNa7eIapyFm96FOQetxkYZO3lLrUXiNeeoB+FUjEjXUzWjtxTTSFFeqEJY
- Du1cthtwljnpYFb5CPfpqe0ColUgTSd+VUPRMox1HHh8pywvU8GmPOnLasGG9aJ7ngb4
- 9b6g==
+ bh=yaZ5DKWBbiIrekA3ZLn3zHrkXq2I7M3FxXU3TZndDKs=;
+ b=fuxfQsisWEsAKTlSu2sTIkyMVrnpjd7WaZxiJ8DsFr9RqzspMYHw6gmV2079h8MFBh
+ Uw4aphFKg/sfkVVpOLWpkUtb+ftFwpW4hJjLvbDNcuoJt5vhpCJ+8xBo9j0gp+XL2hMe
+ 4FDPD6kx6ei2J+0ZHgS1nZuwi7VQH7xCygC0oJjALtpzq27MhIYbAC6wxK8Ez0JdUx0V
+ 0657s2oBqsRF9sk5lYXURjQ1TGig2dcpLRFZYBQqM1pgwoDBZuThQ9k5GNgyut6Zc/nR
+ hj9pqpPgXudYvZPx8fCBOSHOaqjhN1HjJKUFM6K9bJIOGVFrk3sS1TTDYNuq9tS8MHoo
+ fn/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1788957578; x=1789562378;
+ d=1e100.net; s=20251104; t=1788957581; x=1789562381;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:x-gm-gg
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
  :content-type;
- bh=X89k4L++ReUu3TNEmRjTEtnJ/PNRHtj4ynF8SK/oj30=;
- b=sZcWcA5t+BYnkYgunhXkwTqg9bm8FOfDGVKXqKInWG2XezojqCiMrO1q71s8Z3iqx+
- k9foVozgltOG8k9Jgqjze/RK12rNHYkI8uLZbyasYf8pUhLt+h8fWLS+YBoDBxGY2WTd
- 0C8wsTAl+bHoTeLQsiLpI+7VQj0ds+bHKsnhgO4GoZyC4gGA7gFI/9HIQdUlX2FwZBN9
- t/eYM70D2PTOL9Co6p4WslraTM12tb0O78BnjOeDbrMFwSO0RfV8tpLqa8psCzTfkptU
- S9Fz9Z8jkt6gt2U05825F5LcPGCJ1BFlC1eVDu4OZLLKbf8LDPhBIf22avshwbs/huvx
- kJ4A==
-X-Gm-Message-State: AFuF++nr90ZF60webI9LVkZSl3oBOS1WZySiVm4hnJouLgnjCsKLWbmg
- pCilnMJ3zfsduCJslt0NZp24CGS0rB81VVZOog19HBG9Xev77k4afBipTorsdw==
-X-Gm-Gg: AYBFou2U5g2TR0n+zSz5cLJMBO8nAJsAz2YpHB10zPNsTcprYIOYFqKuUuwEyblW/HL
- 61Zd2UTEOY2bvsZkXZwsMp78oCdeeTsFzvyQ1TkgbJXmmkYOcGAqdQP/RqvXlimMpS92RuBI/Ni
- 1vHAWyYlGsxnKVmF/21uZ3oKVtXey/sUc4uV7E0jKrvELWVVeNrNfhSTuAh1CgluH78BCaGeYxK
- WkgaK+hUyNtprAfD2zmMw4LWsBzw91PX/c3pDpU1YrRCnR5o8MACvMznTfQOzRvwmfPW4AspSkV
- sBMfhxBM0BQmfcUS33ECEcD382qGG+C1otPPrbMGcGKsLhsSCCpwfyzx4fwIuvdsVRb79Yr5PO8
- Inf4VOdpVebdNeeg+DIJ0RQRWHhkNOczA6ZFWuOL1b96x5+qZfAP9xBz7pgGWdMZkI6mnEV9Hia
- 4c+xCb7Od8o8lS3kwBrXGtVv+s9J4EhM2NQsuv9AZuAnrNFUHhJDu/OcJD9AArmAxfZ2E7p463c
- ya6nJ0fSBcWrrFn+7ENK3gxBsGaavk0slpAJaqT
-X-Received: by 2002:a05:6808:6d90:b0:485:48da:133d with SMTP id
- 5614622812f47-4b9621b00f7mr17672954b6e.10.1788957577860; 
- Wed, 09 Sep 2026 05:39:37 -0700 (PDT)
+ bh=yaZ5DKWBbiIrekA3ZLn3zHrkXq2I7M3FxXU3TZndDKs=;
+ b=YWJmj6sdLA4e+WEamhYgmcmWl7LxLB8SADGdbOFMlPNRWxZK3vxM4deDNh+1TrYKH7
+ Rjkad77MeGowZQgCcedh8R4eCSXEW4MY3F0vFHPjiXRAkhJEw4r5S5neuhZ4GYfB0SYS
+ Hjp1RaHkg2orX1K67D/GP2yejiLJD1WIx+35wVgCM+YB5gkRA/K7gzNE9/BMc7xvxrHi
+ 5Gq65P1HMWc48t/VDYB6h/rpdXPDh04hE0L4nsl3eUXS3U3Gq+2zftAXC42zOuAOMXpK
+ io1zJC5+KtZwTWS4jkL+HGWn22tQtoGto0m3hllB/arLkdCXMBrli3O7hqcEQrTYMlb3
+ QqyA==
+X-Gm-Message-State: AFuF++lO5fTSl7nLj1eEXH1U32w5H9fXhey5w6xNfRx5vabTCj1WnmR/
+ NFnc2J7y1fRgk8e6CiHG6AG2qbiev++f7Njw3s8NubJAGa3NKV6VY58yBH23ow==
+X-Gm-Gg: AYBFou34JFEl/WB7+enY0wyfLevsu8QOZgs22x0HkFyPBQUUyGhGZfhYBbIKOpLyEtg
+ +ggZ8iipAHyznEh0mwlFqmY86SOXu67d5eJJ4q+gG0JJelPl6p9zUWMbDuTDlpf5L6khvlGGb4C
+ Bk9ScESLK2loHN7ITQh6wuqIbQn77wsX8s6Ck1Xy4kDV32iWNZoHBwEXlEtTbYyOJsExroDWlzh
+ QQoDEJjkNv7F03DeN8MY+aHcOX6eRjWHxbh0l/f9dfZ01A/3QkmY3MYs1Lj5/YE2Wz2Au5XSRxA
+ eDtIEf7JraWV01lGZN9Ph7Ao6xlGF3go80c5/6jCsODXJAybmif+iphR5Iz0ay62R1nEuyLceVX
+ fvvgTXL6f50Z1HFTZtzhy6QXCv4uhf/twoYKrIgbhoHxC72ukQHTY1PkPnj6IALLkThSSe2M21t
+ eQ96TH+kinBdGrlun158hCm5GBWiuzkXvACGVUlyOb59DYYz66QxkNufXUoLVIssf8lKK+64fPX
+ 6HC24AevgeylLS2L+usH/RUScGKwvccxMgAMaIDCA+9oUI/EwA=
+X-Received: by 2002:a05:6808:159f:b0:4b3:18c8:d387 with SMTP id
+ 5614622812f47-4b960ead82amr27059645b6e.12.1788957581025; 
+ Wed, 09 Sep 2026 05:39:41 -0700 (PDT)
 Received: from penguin.lxd (138-28-90-168.fttx.imoncommunications.net.
  [138.28.90.168]) by smtp.gmail.com with ESMTPSA id
- 5614622812f47-4b971c8ed6asm16218585b6e.17.2026.09.09.05.39.34
+ 5614622812f47-4b971c8ed6asm16218585b6e.17.2026.09.09.05.39.38
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 09 Sep 2026 05:39:36 -0700 (PDT)
+ Wed, 09 Sep 2026 05:39:40 -0700 (PDT)
 From: Matthew Weber <matt@thewebers.ws>
 To: buildroot@buildroot.org
 Cc: thomas.petazzoni@bootlin.com, yann.morin.1998@free.fr,
  Matthew Weber <matt@thewebers.ws>
-Date: Wed,  9 Sep 2026 07:39:23 -0500
-Message-Id: <20260909123925.29971-2-matt@thewebers.ws>
+Date: Wed,  9 Sep 2026 07:39:24 -0500
+Message-Id: <20260909123925.29971-3-matt@thewebers.ws>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20260909123925.29971-1-matt@thewebers.ws>
 References: <20260909123925.29971-1-matt@thewebers.ws>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2/4] support/scripts/check-host-bins: report
- RPATH errors after library errors
+Subject: [Buildroot] [PATCH 3/4] support/scripts/check-host-bins: skip RPATH
+ check for missing libraries
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -178,9 +180,9 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The missing-library check sets the overall error status before the RPATH
-check. Use a separate flag for the RPATH diagnostic header so both errors are
-reported when applicable.
+An ELF with only non-toolchain dependencies absent from HOST_DIR cannot use an
+RPATH to find them. Report those missing dependencies, but skip the misleading
+RPATH diagnostic.
 
 Assisted-by: GitHub Copilot [VS Code]
 Signed-off-by: Matthew Weber <matt@thewebers.ws>
@@ -191,47 +193,55 @@ https://patchwork.ozlabs.org/project/buildroot/list/?series=520240
 The test script is available at:
 https://gist.github.com/matthew-l-weber/34fae15a4319a81462961eadf0e31164
 
-While exercising v3's missing-library check, a mixed dependency case exposed
-that it sets the shared error status before the RPATH diagnostic is emitted.
-The existing header guard then suppresses the RPATH header.
+While exercising v3's missing-library check, an ELF with only external
+non-toolchain dependencies was reported as both missing a library and missing
+an RPATH. Since no relevant library exists in HOST_DIR, the latter diagnostic
+is misleading.
 
-Test 3k creates a binary with two non-toolchain dependencies. One is placed
-in the synthetic HOST_DIR/lib, while the other remains absent, and the binary
-uses an invalid RPATH. It verifies that check-host-bins emits both the
-missing-library diagnostic and a separate RPATH diagnostic header.
+Test 3h places /bin/ls in a synthetic HOST_DIR without its non-toolchain
+dependencies. It verifies that check-host-bins reports the missing library
+but does not also report an RPATH error when there is no HOST_DIR library to
+locate.
 
- support/scripts/check-host-bins | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+Test 3l builds a binary with its non-toolchain dependency installed in the
+synthetic HOST_DIR/lib but an invalid RPATH. It verifies that this valid
+RPATH-check case still reports the RPATH diagnostic and not a missing-library
+error.
+
+ support/scripts/check-host-bins | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
 diff --git a/support/scripts/check-host-bins b/support/scripts/check-host-bins
-index cddf6a08b2..5233f6cd1d 100755
+index 5233f6cd1d..7e9b51cd4c 100755
 --- a/support/scripts/check-host-bins
 +++ b/support/scripts/check-host-bins
-@@ -12,12 +12,13 @@ main() {
-     local pkg="${1}"
-     local hostdir="${2}"
-     local perpackagedir="${3}"
--    local file ret
-+    local file ret rpath_hdr missing_libs
- 
-     # Remove duplicate and trailing '/' for proper match
-     hostdir="$( sed -r -e 's:/+:/:g; s:/$::;' <<<"${hostdir}" )"
- 
-     ret=0
-+    rpath_hdr=0
-     while read -r file; do
-         is_elf "${file}" || continue
-         elf_needs_rpath "${file}" "${hostdir}" || continue
-@@ -30,7 +31,8 @@ main() {
+@@ -30,6 +30,7 @@ main() {
+             # shellcheck disable=SC2086 # we need the word splitting
              printf '  - %s\n' ${missing_libs}
          fi
++        any_lib_in_hostdir "${file}" "${hostdir}" || continue
          check_elf_has_rpath "${file}" "${hostdir}" "${perpackagedir}" && continue
--        if [ ${ret} -eq 0 ]; then
-+        if [ ${rpath_hdr} -eq 0 ]; then
-+            rpath_hdr=1
-             ret=1
-             printf "***\n"
-             printf "*** ERROR: package %s installs executables without proper RPATH:\n" "${pkg}"
+         if [ ${rpath_hdr} -eq 0 ]; then
+             rpath_hdr=1
+@@ -111,6 +112,18 @@ get_libs() {
+             )
+ }
+ 
++any_lib_in_hostdir() {
++    local file="${1}"
++    local hostdir="${2}"
++    local lib
++
++    while IFS= read -r lib; do
++        [ -e "${hostdir}/lib/${lib}" ] && return 0
++    done < <( get_libs "${file}" )
++
++    return 1
++}
++
+ # This function checks whether at least one of the RPATH of the given
+ # ELF executable (first argument) properly points to the host library
+ # directory (second argument), either through an absolute RPATH or a
 -- 
 2.39.5
 
