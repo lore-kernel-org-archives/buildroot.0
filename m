@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4363C79FBB
-	for <buildroot@archiver.kernel.org>; Thu, 10 Sep 2026 23:02:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF714C88E41
+	for <buildroot@archiver.kernel.org>; Thu, 10 Sep 2026 23:06:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4BF05811CD;
-	Thu, 10 Sep 2026 23:02:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5336180827;
+	Thu, 10 Sep 2026 23:06:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sG9OskKwITe5; Thu, 10 Sep 2026 23:02:21 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org BEFF5811C5
+ id wO4FQ8nkdzBp; Thu, 10 Sep 2026 23:06:27 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 69280807EB
 Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789081341;
-	b=Go+eBIN1u43RybHnmhimCVYDrU9LdutOpCS+6lDyou0jEsdeA1zBsBod80pe8klveN8O
-	 k330bq+YR02ni+KNeAM5JHHSM26aGcrweKNGCr+mF6U/lHcKg6Y3j4lWvn3iTebWBqDd3
-	 R9jH96W+Hb6tKcl+NaDOaSAmsrxGs94DVlpAnX2tYQy4bKX6Q5Q043mMilpL9hoSqBbuP
-	 WZMfJaa27RvtUm9AykRxS+LPvsANjqbjf4hlw1DSXZY1AephlHtJ/6VocPyfgRnUdA6aY
-	 1NNnOynYCYLiPA2MfJYjaUzoJQm9ClPhrA5A92oQ/kl5H1HyCR4eJ8EafTpcJl9nHuQ==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789081587;
+	b=sp77Nj3qiXHLy69dy1wdq+KZ82GynsU6fkQbOEuInFMUOmbwDsEqffAaD+TTHzWwjFWe
+	 L+kh6fDz/nraG2x3rB5Xmlvi0YX7C8leMjwBeTAxmcKXwMDJ2kLKCZpKuoQRb1FABdyDR
+	 2/ZGx8AEQLhz+WtxNBX3JD/72PJuyHwsstcAp3Ud4rZaWPqYkoEA4tMoWGNAdj46/xHHQ
+	 VUHQg1Key3V62AGJpaEbJ6jvjfBFKIhATkUwbE4cx9RnhACfY3NkD8TRhQZ5Qfp7RM4nO
+	 O4Ay1sgNPDWC61aqOeiieUTKvLHN8S8o9V106sSgESLnkQlfCk/cfozfhWNprWObqqQ==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789081341;
+	c=relaxed/relaxed; t=1789081587;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
@@ -30,96 +30,96 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 MIME-Version:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=pwj48BaPgwc9Z4/wAJLejXMgM9BIaqLx9GEOh9gmwIc=;
-	b=IUBD1SsHc/VzAjGt8WeIGgRuh6Mb3kJOWk6EJ0r8WlqEJN1RXU/44r2B2Pp+c5UBFH94
-	 RcOfBLFbKb3KGVYQiQKT1OrTKe0eRr+IxarD1YeRGqRueCbJek02fbv7zz9o9OYQIDV8i
-	 9/P+2XIv2pw4bxFKX1ouIaBGLIHi31RJns02UaU7CATJmZ4n1I3iSxZ0EOLFAP+cEpoVJ
-	 qqD956MifkS1ywmnQJ0rAYo6ia5WsVIzFnl0NRWryuVqA7Bi0xUCqeYU5tyR8bpzMid3v
-	 a7hQ8JtfPc2+KmlaHsvR0KBlWC4f8yfo6Qhnxw1ErH9ZkdkAEEV73he7GeAvyrNfrwA==
+	bh=yMiiPPj6tFIyRVNbi2TWD0FVYXWOW51bcElsaktBldQ=;
+	b=dGO5kq6J40ETlPvpOzRYjdc5jGuYZfQt3qN4ucNvx/V46qUEMYMq2bsIIOzkncNtkhfR
+	 OD3lXhLCllLzptyPyew7k7MCcSgNY+Cr3X4CdITH6XyfDl20/Nn0w+f+S2/2yP6g3owuk
+	 2aoPg7v1iffeYtcIYkwOj+d99svV2iuTeMqcVevkslUZu8rFJVVtckNrsKUbQa/GXNmCv
+	 tPGKe+EUnOpoCk/TedhvrG7+L1/IIPSS8A9Jih/ExA8Li3tzwd27zclArlj+6qER0/Ab4
+	 9jMknosrRG+igH0wTuyUq5WsE43LLz5ke8Cf7tHU00AOg+39DelayXGaaUJgTSWnL1Q==
 ARC-Authentication-Results: i=2; smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789081341;
-	bh=pwj48BaPgwc9Z4/wAJLejXMgM9BIaqLx9GEOh9gmwIc=;
+	s=default; t=1789081587;
+	bh=yMiiPPj6tFIyRVNbi2TWD0FVYXWOW51bcElsaktBldQ=;
 	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=rFtGUohUI7O5I+9jhOPGE+qWMTDT45Qmq79u8r3uE2dQdbGaufaAVqhga+fgn4E2w
-	 hvx+R0Jvi1AQlwQp4Nrri34LhWGsX12vRqskLVu9fwcD0z3SM8zL3G38/reNRsoa54
-	 FtdXxO+Pc7Urbidgp/Q1oiNEzHk4lor+MXNRGfOW+k0Tlg38WyFBD+/uy9tb4PKYRE
-	 DakOV2gwFz1J/Dq02gdTZd0TMkSlw8B/MyXGuLbi+R/A7J5O7WjJLyoJ1xZcL6jI3c
-	 +Viy9gSLnVVhQp6TvVH2WCZdG9HcM3qLM7BeDugE6ryb49pZnEK9esLv41/u+8EJzu
-	 4+8uTu/Oo4BKg==
+	b=c0fkpqqBNF/lkbBpyK9UNLV9hBiwISQvmk+Nzhr8+goKzkrZTwj08rCFKgD+YsFnB
+	 B1bXkPoj+9Xd0W8sWwyhBaYNlmBXcB6aiTCIuVDIeWPh7tyknGfwQZMfp2NY3ulJPr
+	 +RKOd2G1FDURmcElk+Yt9ymRSTCJSVhKeYP6Rr3w2LW+HURVqSPWWwcxp5v/SFT9u4
+	 oNEJM6bOFl6i3MdhC0RwYOdEXbjWBCnciGKvjdMGdr2kYnQPl2mxjzZ7xVUutPo9e1
+	 hSNt237nE5RoECmkcY/zPoEG5C3eJ26T5wKUXYUTfIxFDuFqpXwfFz3mFCjIh9qqkv
+	 VQT3u87YBZOUA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BEFF5811C5;
-	Thu, 10 Sep 2026 23:02:21 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 6F06C362
- for <buildroot@buildroot.org>; Thu, 10 Sep 2026 23:02:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 69280807EB;
+	Thu, 10 Sep 2026 23:06:27 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 204F6362
+ for <buildroot@buildroot.org>; Thu, 10 Sep 2026 23:06:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5503960805
- for <buildroot@buildroot.org>; Thu, 10 Sep 2026 23:02:19 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 06A1D40264
+ for <buildroot@buildroot.org>; Thu, 10 Sep 2026 23:06:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CrpCbisFvekt for <buildroot@buildroot.org>;
- Thu, 10 Sep 2026 23:02:17 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 04DC5607FF
-Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=213.97.179.56
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789081337;
- b=lQhQevXhu3l6/Kt/RDHfV+n1nKstzpT8Y0hTQMYVpyniHJyD7gc45oTaZj5Ja02IYKyn
- GESl8mRKeHEpOqmCMl+2z4EIQOWq7L+q16nQecglx7Z46QNj10jmQM4PgGQ0TK2nkTy1V
- 5zbea0HFfmt1afHhtvY1eHLS2agNip3/uGuxqrSTUDEv9eoqrE1yeKFgIiDPLj/FRHRL4
- 5UT9yKPAKs675RwhIXWTTiNiwLfwL/Xig5zP8OZeLFJLbx2xzXSPX2r/ZtmjRVtjE/nI5
- 33r3OHk3GmZqNE+/iDHd4efB+hL1bCzdfmp8br7x3IBnM4NlWN3wKsIq729gu2KfSYQ==
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 45yS7h_MjU3O for <buildroot@buildroot.org>;
+ Thu, 10 Sep 2026 23:06:24 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org A58C74025D
+Authentication-Results: smtp2.osuosl.org; arc=none smtp.remote-ip=213.97.179.56
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789081584;
+ b=Mu6uon72sHfyHBTDxmUnmC5qe4OaXGpRoZFyWDcruix5917KLJfhFqiGFKWewfTnAsQm
+ wckpByQU7eDbHNNE8e7BBsiTAp5yT/MtzwBpgwp8RLUEquoLEC6/LrI8UEhVT9yMYfgvV
+ GCay9Lw44CFckA0yUEXAlWt5HnnqFJgwSOOmxTei9Im7PkbtBVVGAQ0GhV4OugSqj7Kap
+ iPewGyj9R20hkQSERRY3XA1IOUIrf/8fh8XQmUuAi0D2iz+41W++Fcw3MpcOgVsEKp2EA
+ srmRAVX0b5FGdLLk3VsGvQ9aF8Ih47AOqqFXQ7BlyVn8vtdRXwFVkLFsjPg6bua/heg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1789081337;
+ c=relaxed/relaxed; t=1789081584;
  h=Received-SPF:DKIM-Signature:Received:Received:From:To:Cc:Subject:
  Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
- bh=SX64XNvIE53ZHGp2lgButNqyYtreabq1a+cHiTBG30c=;
- b=Ti5mD33e+jWsxsZm0BZX6DDM5iWih19JWhcLh63qaG1HKfnCjYdKUrefJ9R2LkwPhKEb
- NaCmnu1C1oGRYiJH6IHdMpbUz4rT4iBPrVGfkIFslS32eJs9N8sZzJaUmr+SwYwVlhaUK
- P2NEuHGoYVessvEdQORZmHCClGXDADyv9kTdlETRvCSXt2FEOVRpssQyV9K1PXLVu9+lC
- hITeHA+cu0znerCvQTUjCC8Op6Q/VnyVxYbemMFR3q7CbvyGaQejC8F87RsRBV0Z+WgP4
- amt8BFGoDMJrA+Flgj4AM2yB4nejEJKuxXh7w6pKJunQVEHOA0RR2Bux2EGsQAiiasg==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org;
+ bh=a2YVPFxZVGvKL99ZSPFH+Z6Hv9IoG0qbilnZpCdd7yo=;
+ b=H0N548wmnnxB6Unj2mA2pHa62DQ+Pi3X0VgR3x9tY7HTXWkQQGyiksxy7kM1P5UDPknT
+ z0qmUP+M3np2QGAH5tIR59ulyR6G3pDiGCOsk6F1K2XiSAtCo4NJN8HmDgxq1FWsO4YZt
+ hYP/gJHTvacP6lWkizGCKOlAZ2kvKrH16DvUo6dc3hZknweGfYG45e5sO9frZzt9p44a+
+ bh3bPRkwhDFN1lztX1e5eFZq4SyQNTW7j0vEqfbizNcEl7gTL+sgfBLy6xEihzO+BBvSB
+ eUErfY4OZRRTglDhoYjnN0liolR2hxHEH5yRY8Ii/3UQbMVjjhsGR2/Fy4aymMm13Xw==
+ARC-Authentication-Results: i=1; smtp2.osuosl.org;
  dmarc=pass header.from=igalia.com; 
  dkim=pass header.d=igalia.com header.i=@igalia.com header.a=rsa-sha256
- header.s=20170329 header.b="a/jRWIdD"; 
+ header.s=20170329 header.b=U2yFOCwF; 
  arc=none smtp.remote-ip=213.97.179.56
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=213.97.179.56;
  helo=fanzine2.igalia.com; envelope-from=aperez@igalia.com; receiver=<UNKNOWN> 
-Authentication-Results: smtp3.osuosl.org;
+Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=igalia.com
-Authentication-Results: smtp3.osuosl.org; dkim=pass (2048-bit key,
+Authentication-Results: smtp2.osuosl.org; dkim=pass (2048-bit key,
  unprotected) header.d=igalia.com header.i=@igalia.com header.a=rsa-sha256
- header.s=20170329 header.b=a/jRWIdD
+ header.s=20170329 header.b=U2yFOCwF
 Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 04DC5607FF
- for <buildroot@buildroot.org>; Thu, 10 Sep 2026 23:02:11 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A58C74025D
+ for <buildroot@buildroot.org>; Thu, 10 Sep 2026 23:06:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com; 
  s=20170329;
  h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:
- Cc:To:From:From:Reply-To; bh=SX64XNvIE53ZHGp2lgButNqyYtreabq1a+cHiTBG30c=; b=
- a/jRWIdDlAw6kRhwnYBOgjxepe0b3BZtEJpVFtnqhJRO+KU0zDdb0Zwi7zGT9eQJo6Oxocv/XP092
- GfgiDkPOCq+UEu5FcQo2QiA9IG4k3J3Jj1cjL3G/w15kgrZgYvYptFmehe42EcOKYjBDHx08w6oLb
- lGl2hSyb3bF9NCLewF0OLKeLlo6euH7jOWm5Y5gGgy1f1gkxB0sZfyYmoTaOYw2ae7QMGAOI23IY2
- 2WVektjqv0jtUklcdXIm0wde9Ch+MrY5it9vBmBfbJ0yT2q23Tqk+wt2RuZHn+AuKFYKYXQk+boe2
- VFX0yGgm0Wr3WSR7Fa+RcOLLKWItmbckOA==;
+ Cc:To:From:From:Reply-To; bh=a2YVPFxZVGvKL99ZSPFH+Z6Hv9IoG0qbilnZpCdd7yo=; b=
+ U2yFOCwFHM5arj2zD2kJjL9YNOqSZPlyoeEja59fWgFS7u9JLj1VBmYtbadqNrQBrGMrNp8lXbdfT
+ TPnPoy1D0D5lnLr5Z8ArNyQDAE/17685bOxfILQGqKgjDT2kY/K73XdzPU0iJCZ9aKqaIiRojSN9D
+ zcqxldL2nFDBw46kOnmeQpLwO9GEIIwDWFlO+kC8v4anNh1ikXrl5TiROlJagH6xzV8RzHKPpQKBQ
+ 7AEXL+/TH4DDy5MR0R5DU0EO1EVRMrbWWAp12dZh+/aEjIN6I1FGI4LBbabd5WpSilHvCrWF9QIBH
+ kMQCsmVksXUHv2u6Jq8uI/uK/9LFyBx++A==;
 Received: from 68.171.94.90.dynamic.jazztel.es ([90.94.171.68] helo=kodama)
  by fanzine2.igalia.com with esmtpsa 
  (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
- id 1x4nmR-000PGQ-PZ; Fri, 11 Sep 2026 01:02:07 +0200
+ id 1x4nqX-000PLw-H4; Fri, 11 Sep 2026 01:06:21 +0200
 Received: from localhost (kodama [local])
- by kodama (OpenSMTPD) with ESMTPA id 42cdaf28;
- Thu, 10 Sep 2026 23:02:07 +0000 (UTC)
+ by kodama (OpenSMTPD) with ESMTPA id 0887a0f5;
+ Thu, 10 Sep 2026 23:06:21 +0000 (UTC)
 From: Adrian Perez de Castro <aperez@igalia.com>
 To: buildroot@buildroot.org
 Cc: Adrian Perez de Castro <aperez@igalia.com>
-Date: Fri, 11 Sep 2026 01:02:05 +0200
-Message-ID: <20260910230207.1934197-1-aperez@igalia.com>
+Date: Fri, 11 Sep 2026 01:06:19 +0200
+Message-ID: <20260910230621.1936231-1-aperez@igalia.com>
 X-Mailer: git-send-email 2.55.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/cage: bump to version 0.3.1
+Subject: [Buildroot] [PATCH] package/wlroots: bump to version 0.20.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -136,41 +136,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This minor release fixes a crash that could happen when a surface
-requests to be fullscreened right away during startup. Release notes:
+Both .1 and .2 have been minor bugfix releases. Changelog:
 
-  https://github.com/cage-kiosk/cage/releases/tag/v0.3.1
+  https://gitlab.freedesktop.org/wlroots/wlroots/-/tags/0.20.2
+  https://gitlab.freedesktop.org/wlroots/wlroots/-/tags/0.20.1
 
 Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 ---
- package/cage/cage.hash | 2 +-
- package/cage/cage.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/wlroots/wlroots.hash | 4 ++--
+ package/wlroots/wlroots.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/cage/cage.hash b/package/cage/cage.hash
-index 4b05602822..34585cda28 100644
---- a/package/cage/cage.hash
-+++ b/package/cage/cage.hash
-@@ -1,5 +1,5 @@
- # Locally computed, after checking PGP signature
--sha256  cd2510f83bef3e08e660d99492ca7761b218ecb53ee01cdbbeee3d6aabc7734e  cage-0.3.0.tar.gz
-+sha256  edafc173b6f56a3e1564933e272a54aaa9fe158d330e6a415d57b44ab880fe2b  cage-0.3.1.tar.gz
+diff --git a/package/wlroots/wlroots.hash b/package/wlroots/wlroots.hash
+index cd1b83e6e4..aea272b12b 100644
+--- a/package/wlroots/wlroots.hash
++++ b/package/wlroots/wlroots.hash
+@@ -1,7 +1,7 @@
+ # Locally calculated after checking pgp signature
+-# https://gitlab.freedesktop.org/wlroots/wlroots/-/releases/0.20.0/downloads/wlroots-0.20.0.tar.gz.sig
++# https://gitlab.freedesktop.org/wlroots/wlroots/-/releases/0.20.2/downloads/wlroots-0.20.2.tar.gz.sig
+ # with key 34FF9526CFEF0E97A340E2E40FDE7BE0E88F5E48 "emersion <contact@emersion.fr>"
+-sha256  33f52414e1b280839aeb70786f0ae2c9f54e27ad4873108d86270a2f89c4934b  wlroots-0.20.0.tar.gz
++sha256  80c567d2ed4efb2cfa6b077f22c7a710d9c78ba4e185a75e8694001114af0733  wlroots-0.20.2.tar.gz
  
  # Hashes for license files:
- sha256  e117104073335dbaf78596fb1bedf89dda63c71f60f0b665947b2d369c77ecee  LICENSE
-diff --git a/package/cage/cage.mk b/package/cage/cage.mk
-index 4495c59b4f..4372c4667c 100644
---- a/package/cage/cage.mk
-+++ b/package/cage/cage.mk
+ sha256  35d427c043dcafe8893b9e7247348f599847c81d9a067703587c80707f3d58df  LICENSE
+diff --git a/package/wlroots/wlroots.mk b/package/wlroots/wlroots.mk
+index 5ce634d402..cae2ff0c5d 100644
+--- a/package/wlroots/wlroots.mk
++++ b/package/wlroots/wlroots.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CAGE_VERSION = 0.3.0
-+CAGE_VERSION = 0.3.1
- CAGE_SITE = https://github.com/cage-kiosk/cage/releases/download/v$(CAGE_VERSION)
- CAGE_LICENSE = MIT
- CAGE_LICENSE_FILES = LICENSE
+-WLROOTS_VERSION = 0.20.0
++WLROOTS_VERSION = 0.20.2
+ WLROOTS_SITE = https://gitlab.freedesktop.org/wlroots/wlroots/-/releases/$(WLROOTS_VERSION)/downloads
+ WLROOTS_LICENSE = MIT
+ WLROOTS_LICENSE_FILES = LICENSE
 -- 
 2.55.0
 
