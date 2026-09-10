@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 413A1C79FBB
-	for <buildroot@archiver.kernel.org>; Thu, 10 Sep 2026 20:11:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2CF3DC88E41
+	for <buildroot@archiver.kernel.org>; Thu, 10 Sep 2026 20:38:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D5A15811BF;
-	Thu, 10 Sep 2026 20:11:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D87088107D;
+	Thu, 10 Sep 2026 20:38:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id z9z1jpv_aLwp; Thu, 10 Sep 2026 20:11:14 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org D5B02811C6
+ id ka6xSU_ISJgN; Thu, 10 Sep 2026 20:38:26 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org F074581004
 Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789071074;
-	b=FVOmDCgmFlYojUx1Qb46wRiLu/5LknaHgEtSykofm3rUwq0SUP2LTJpfGaNzwID3+v/W
-	 MfIzd94J/gyQmseeKp+HvZOv9EJ0nyrWZUQAa4C8Xjq8vWewTlMiKKxe1+a8PNcSoMs06
-	 DrZGKLacl93SFyMe77PSia5Qh9LV3b2wJ2m9YKxxOtT5bNs7BblcQNoOvmIIi52gksPnU
-	 26xJ9J9I1cwf6Dn3lbkv2TVuO4bffQWTS2Z/VJODYoXZZ5sRRyZS0V3rPmmMT9Gqurws8
-	 ivpkS3HZVV1SviMtIAp677fz4BkPNj4aJXGa8rVERTStjIp0073eB7Yb0niU030rETQ==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789072706;
+	b=qoa4J3fUeJJ+QnuKHpC3ETBUrZuv+huZjJFDNDq/FPc066K8JMrXKQsJQ0a2HR4Bl4u3
+	 M3N7ZKsN8QYi5sRNmeWKgsmbeJZQRLeB46+fItsgRL+q4LMxdKzlLPwXIjsz58NKEqWbm
+	 rgt7J4DLE1Dd+UeC3h4/LIOd+jNMw26mJXaXEOJxHjBKbYCjWMHdZ1eevP9rQqpJYPqqB
+	 xdkpKiXVHZsV5IExPqLMpYzZl/Piiz/KRBNxyU0mLzknc5C6/DP5Hq1+8kUCZlAEAuKxO
+	 OuiVv8y5N3LsmKr2oNO60PdV2+gtR4lQPu1ghMZMt7WPLR6h8u0Sm5pNCM1OOwtaI2w==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789071074;
+	c=relaxed/relaxed; t=1789072706;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
@@ -31,100 +31,98 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:Content-Type:Content-Transfer-Encoding:Errors-To:
 	 Sender;
-	bh=4bgrc006DPdj2DGrMLu9aDyMA2VLuX+z0ABcQZ90tTc=;
-	b=FKdAJfaud0Xl6GOD5BQv91MnfStqeskdgMyiMrTzunXOPyGiiBg9gSjHa1Ki4HGReb6N
-	 bnV+GrLTKQwrchsN95exg4AuGYMLnlodZ40/r8/590n3+uto7A339+lDaodMKsXEhy9Tt
-	 RC4jsIL5m5jNFqLYamLJJfsON68hRXEYOiSKuGimBRp/T+BxNv08vhNcqHJ+bgK/KRowQ
-	 Ms0eGr/2wuEvJCNXBy3N3UPNSh2tRbMlJFY9Tkpxt/PDUUYOErEbZXm850LlMIc6uVlX3
-	 X5F5JcWgwqz5sa9D6lm9Gu38bG9Esd9q1D6kdJBB5k2KlBuiCJUx+/L2U596X8v6hLA==
-ARC-Authentication-Results: i=2; smtp1.osuosl.org; dmarc=pass header.from=kuhls.net;
-	dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256 header.s=kas202605290044 header.b="Es/XPH89";
-	arc=fail smtp.remote-ip=140.211.166.142
+	bh=g9rKKgL05ADT/M+tXs8WbO02hPC78FKnREeBVeYDvhY=;
+	b=LX3313bIBMJcPLy4HlsqOHx6sLO28ZDzeBM4YiCX2iE3ZPJVFMuYGZcr39v1ht/8cYKj
+	 MY+TNOvKELwbjTP5a2WW2iNSZijLGYuVicNLTnbfykQXDAN2f2wUt/gYznPFqFJo/xMol
+	 gTsDIHFJEbBHchVt59WcdFx/AVd/DyJmQ7XtZrq83ItuAOBOrjwo+nlfiubiQCOC2sHWJ
+	 goQQ4kDa9cYih8zqSfkuam7vIoEi5uKB8BtgCClLjrqe49DL65nGFmll/5/8VW8GV1gny
+	 dVWBRQvA7HcNkP2zxmG8SAQ0F8ZdxES+0V4yVooITejl+qcBDncOSDsyCxrY9ghj8Ng==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789071073;
-	bh=4bgrc006DPdj2DGrMLu9aDyMA2VLuX+z0ABcQZ90tTc=;
+	s=default; t=1789072706;
+	bh=g9rKKgL05ADT/M+tXs8WbO02hPC78FKnREeBVeYDvhY=;
 	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=NlHFJA9pnI5DxJqyjMCEunq0R4vZQHSufJX6qCh/L1dKdxN3CzLuE8XWAY7WgcWja
-	 LfQFu2AX4VIQ1cHXOMwm+RZNph6Bd+pNFFME9543OXAZyhOxeLuPxEmn9ozUs549mL
-	 10AEpjwBiFA2xcjosLsoSOXuUAbdqLvMjfAAiRD8sB7D1RVWU3KQAgZtsONGmtrJBd
-	 z9qpUafLUevxd647MnOjsudVIBo9kjrYltw2g4KNP+9Se5YJ9KZuQz3kLtyaZds2kO
-	 XXS1WqaBnySmH1s4l5279Qo8g08VKKnP1FIu7afvx4XkBYqCjBV1sKpO3UNfsDcE2Y
-	 igTkfWJyrPHtg==
+	b=bQpJJpfr9qvE88v/a0Fmk9DHnx/6qNhaE6XjuLM12xiYw7sdvDaNDL03ps4Pfsjjp
+	 UKv4kdk6SepIKWbWuJftpZZ+TolevDEQSNqk0xIPwccWhVfkgO2qr/cnB5MNDRA/Ol
+	 zPjgY6pVRIV9GWrOr9CM0QUOC5PTZqr+7THpTAcwFCw+bSf6+Hlyh6B9/DS9NYnbtE
+	 KrOo10pwQ7szH4c7hy0zHZrC5e7dKil8pqO8KAePikew7zvbdyw7uvgJqUJKNRKh12
+	 UBVbWkkxTtdIGwkcLtuXf8vGIyz/gm5DOi8Gh4hlyzJY8GYflvVkCQVGnTdIXxEDS8
+	 XvwJNrgZ8KYpQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D5B02811C6;
-	Thu, 10 Sep 2026 20:11:13 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id AA08514D
- for <buildroot@buildroot.org>; Thu, 10 Sep 2026 20:11:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F074581004;
+	Thu, 10 Sep 2026 20:38:25 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4C350362
+ for <buildroot@buildroot.org>; Thu, 10 Sep 2026 20:38:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8F35A811C6
- for <buildroot@buildroot.org>; Thu, 10 Sep 2026 20:11:12 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 31B2940B8A
+ for <buildroot@buildroot.org>; Thu, 10 Sep 2026 20:38:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PHDMLI4MRl_y for <buildroot@buildroot.org>;
- Thu, 10 Sep 2026 20:11:11 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 4D5C8811BF
-Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789071071;
- b=cICeMu328N6zEUmFP32u2h+LMjJFTdX9YUj6kKngwc+XhqGSR8C4of27seiK2LqaF+9C
- Q8/EXLc/iE2+D300VXxRIJZiALG7+7lRv+ZZfkmlyOncK7wOJUpTcUFQ8Fn/hXohji8a2
- 88iyACPizXAlgL989DozRUcPA+2VJkG83l8UBHfgw1b0hb1XV9+JUsikqGPJktKWNUOY/
- 2JzGvR3Sc05jHgt7mSQS+yWbsCJqy6ih2REQAm6zV3we3oVViSgSn8YkJ6cjSvs/ZFGK2
- CWTUi8MEqCgs/GfXfUS1eEfcorNLxslkAniJj+igqsNIo8S9v2wIxAlFuXBXtduoOtA==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id BymFhMcDBqWN for <buildroot@buildroot.org>;
+ Thu, 10 Sep 2026 20:38:23 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 68BAB40B85
+Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789072703;
+ b=WByzDmf5Vihy18MTI+xcc37z4o4v6rPhdskpwF1DkfqXY0bgW4euEwL2jSrLOTQSbGyJ
+ OV94pRTNqgRwNDiho8O65z8EwY/3egUMvSTE98IQX3n2IBcoHUmRG04tGOWp+vQO6pQb0
+ 2vqr7HIhjrCy/AUF3qwa3wBL5gAQWc6OWLJSCJjMFd7pFzPz5mc3TOp3Fkpk6Im0JMDFp
+ RSeveYTSyAXU3YxixwopDSDRUNcSaoJEAu5aMNJvxmIjR26kjRYXjmJ9KhyzX47/i/Px0
+ PqltAbXsCVtVzDn/rMMypWfk6M19GOhrAmSF9kx3UjcES3FqsxxBBFq6W3ZWrzA7Rwg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1789071071;
+ c=relaxed/relaxed; t=1789072703;
  h=Received-SPF:DKIM-Signature:Received:Received:From:To:Subject:Date:
- Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding:
- X-Spam-Score:X-Spamd-Bar;
- bh=HRnwh3K9KxbosaXtRMcTpvxe28uqibB1LTyat1crB6w=;
- b=VRIpBCRYcZIvSxZyHrQN/j55l3yRlvhKChl3l9ie41g+XxdhoV8VC8lM9sxWVGcS92jS
- 7XmS4J6BcMT7VQlae6NLXUtp5WD8VEFI/qZ8WSjtz1XQxh+4Tr+QMXWEVGE7I38WUHcDL
- e7DPuISNthDuMoIiWCfRXzCrDNqCiDYFgUxEGwLCNMwb4k017JjwbtxjY8rzRZE65NX1g
- Ix5FkMrMe/kGZ4sdKkjrKvKXGaHrdZP6MEKqf71zsw5mXHqNAb3cBFTAgmtS3fFo/un2z
- OpfRt5kz2hfGbohgkTlOCPxq+bF7OqyvZbIQV45nxyHjNF7gXYGexX/ZIHk0xDMkUEQ==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org;
+ Message-ID:X-Mailer:MIME-Version:Content-Type:
+ Content-Transfer-Encoding:X-Spam-Score:X-Spamd-Bar;
+ bh=mtB5xGWv90EEgaTXoZBTp2U1wMoHXtrTpJelbE2Z+m0=;
+ b=h67NsIPC0mz+f9aO5ZGXHmVBWEm0A5DqXQGfDdEoO9+Dib6ZWpZq7fMc94cDeA3kFzui
+ dQyNYaGG/Y/nRIa7ukSuSS86zj0vD9SDJI3V8A122Cq6gMkg4ko9HAAeZBjcl11kZwBIl
+ lel91AKe4EqwzRsjwGV2ZpmktOIbPbn3A3qJm5F9iTIF+n7QRVQs5YeAhTkACfhVHHqw4
+ 8Oov9b5CaTcCFqbvKBPfYM31Y09TiWDdQt7BIyKmwt9YMTPsDnH+Ue/oQZoYkwmdmAPHE
+ Y8E/bIosP0BynpFSmNChHiMYW6C2ylSAuC/jJ+AhWbWRwOAh14aMaIfvoILyzzB9NMw==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org;
  dmarc=pass header.from=kuhls.net; 
  dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b="Es/XPH89"; 
+ header.s=kas202605290044 header.b=jpvxejim; 
  arc=none smtp.remote-ip=85.13.140.57
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-Authentication-Results: smtp1.osuosl.org;
+Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=kuhls.net
-Authentication-Results: smtp1.osuosl.org; dkim=pass (2048-bit key,
+Authentication-Results: smtp4.osuosl.org; dkim=pass (2048-bit key,
  unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=Es/XPH89
+ header.s=kas202605290044 header.b=jpvxejim
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4D5C8811BF
- for <buildroot@buildroot.org>; Thu, 10 Sep 2026 20:11:09 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 68BAB40B85
+ for <buildroot@buildroot.org>; Thu, 10 Sep 2026 20:38:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
- s=kas202605290044; t=1789071066;
- bh=HRnwh3K9KxbosaXtRMcTpvxe28uqibB1LTyat1crB6w=;
+ s=kas202605290044; t=1789072699;
+ bh=mtB5xGWv90EEgaTXoZBTp2U1wMoHXtrTpJelbE2Z+m0=;
  h=From:To:Subject:Date:From;
- b=Es/XPH89u2y5n+LNzcgJ2yw5keNjpx/Zh72dn6u3hR+j1XKGLhhSpg4A59bDGo/0K
- QQFDEmUgK63aMFrOsFV5qiK3As5wYvC9zYVntl8TNSoD3VBp8n9nyrPHZt6eqGupHY
- oFTgpJYkELzoBXI4etkla7gSut97ddgbMFKRWSJ7B8UHf9Z2Fpty4YvlkJ70PXAUXn
- 0idQSoga5CaXvYTYK/uGhohrG5Y/LBxXc0ELIjlpevLQU5i7wQTYBSd/0INcDONdFz
- LkHPJ1TZdOgs0Bf0UMltubpi2WUBZEIMfNxxAHtuEEctDt0/+DUMUsQo5OYx/kIrPk
- OyFjrKEZB5hkQ==
+ b=jpvxejimwQmnSiEc4XQ7fDEyRDWoWUEKpLlHAMJzrTT8zyvhRYwTfjT2y+b4kc65F
+ 3GDkbY3V3sSULLEk0dkvzuNuKEsvwOdMtczpbnKzhkQe9uXOiWTKBowuXhYrbsaEAt
+ NrQ4UVHegXlarbtCRSvy2B/NoNNc362zdbAPRwzvBQs8C8ZKtecpJTT9NbYGOMCDT/
+ 1m9xqdPBx6DpYYzoOOnhcL5DtDL4p+elC1wvkRotpEoB7q2kpHrc1YsxKh5nU2PHxA
+ PJiSkGVBc7aWzufelW4pCdlZOoTzRyuaq2/e2sqQvzwgjnIdpQw7IH3G649TMULe7g
+ y0X8iZbvdEPwQ==
 Received: from fli4l.lan.fli4l (p5b3a0da7.dip0.t-ipconnect.de [91.58.13.167])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 29D9AA4C3C0C
- for <buildroot@buildroot.org>; Thu, 10 Sep 2026 22:11:06 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:52014)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 2896AA4C0E1B
+ for <buildroot@buildroot.org>; Thu, 10 Sep 2026 22:38:19 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:38016)
  by fli4l.lan.fli4l with esmtp (Exim 4.100)
- (envelope-from <bernd@kuhls.net>) id 1x4l6v-000000004ur-34Jw
- for buildroot@buildroot.org; Thu, 10 Sep 2026 20:11:05 +0000
+ (envelope-from <bernd@kuhls.net>) id 1x4lXG-000000001Zh-2yeT
+ for buildroot@buildroot.org; Thu, 10 Sep 2026 20:38:18 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Thu, 10 Sep 2026 22:11:05 +0200
-Message-ID: <20260910201105.2543208-1-bernd@kuhls.net>
+Date: Thu, 10 Sep 2026 22:38:18 +0200
+Message-ID: <20260910203818.2550925-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
 X-Spamd-Bar: /
-Subject: [Buildroot] [PATCH 1/1] package/xz: security bump version to 5.8.4
+Subject: [Buildroot] [PATCH 1/1] package/samba4: bump version to 4.24.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -136,59 +134,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/tukaani-project/xz/releases/tag/v5.8.4
-
-- lzma_alone_decoder(), lzma_lzip_decoder(),
-  lzma_auto_decoder(), and lzma_microlzma_decoder(): Fix an
-  invalid memory access after memory allocation has failed and
-  the application reinitializes the existing decoder to decode
-  a different file. This bug could at least result in a crash.
-  This is tracked as GHSA-5qpq-xqfv-j9pg. CVE number is pending.
-  (Also in v5.2, v5.4, and v5.6.)
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
-Gitlab pipelines passed:
-https://gitlab.com/bkuhls/buildroot/-/commits/d8ad85198932bc421166413ecf9cc821917c56a9
-
- package/xz/xz.hash | 4 ++--
- package/xz/xz.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/xz/xz.hash b/package/xz/xz.hash
-index 488a3d55dc..270ac748db 100644
---- a/package/xz/xz.hash
-+++ b/package/xz/xz.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/tukaani-project/xz/releases/tag/v5.8.3
--sha256  33bf69c0d6c698e83a68f77e6c1f465778e418ca0b3d59860d3ab446f4ac99a6  xz-5.8.3.tar.bz2
-+# From https://github.com/tukaani-project/xz/releases/tag/v5.8.4
-+sha256  3340ae48f88665abc78d71dc43446fb3f7e70b48fd59844ac0e14958cef6e00b  xz-5.8.4.tar.bz2
- 
- # Hash for license files
- sha256  616a3ad264ce29b8f1cb97e53037b139d406899ca8d1f799651e17bfa09830b8  COPYING
-diff --git a/package/xz/xz.mk b/package/xz/xz.mk
-index 056c168057..c3232966ee 100644
---- a/package/xz/xz.mk
-+++ b/package/xz/xz.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XZ_VERSION = 5.8.3
-+XZ_VERSION = 5.8.4
- XZ_SOURCE = xz-$(XZ_VERSION).tar.bz2
- XZ_SITE = https://github.com/tukaani-project/xz/releases/download/v$(XZ_VERSION)
- XZ_INSTALL_STAGING = YES
--- 
-2.47.3
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+aHR0cHM6Ly93d3cuc2FtYmEub3JnL3NhbWJhL2hpc3Rvcnkvc2FtYmEtNC4yNC43Lmh0bWwKClNp
+Z25lZC1vZmYtYnk6IEJlcm5kIEt1aGxzIDxiZXJuZEBrdWhscy5uZXQ+Ci0tLQpPbiBBdWcsIDE1
+dGgsIHRoZSBHaXRsYWIgcGlwZWxpbmVzIHBhc3NlZCBidWlsZGluZyA0LjI0LjY6Cmh0dHBzOi8v
+Z2l0bGFiLmNvbS9ia3VobHMvYnVpbGRyb290Ly0vY29tbWl0cy9kOTQ1NDc1ZjdlZmYwZTM3MjJm
+ZGJmYTY4MjQ3MDMxZDgzZjEyMjEwCgpUaGUgc2FtZSB2ZXJzaW9uIGlzIGJyb2tlbiBhcyBvZiBT
+ZXAsIDEwdGg6Cmh0dHBzOi8vZ2l0bGFiLmNvbS9ia3VobHMvYnVpbGRyb290Ly0vY29tbWl0cy9k
+MmRlYTEzZjU5ZWQ1YzI3NjAxY2E0ODBjNDlkNzdiZDY0ZjdmMDI2Cgpib290bGluLW02OGstNjgw
+NDAtdWNsaWJjOgouLi8uLi9saWIvdXRpbC90aW1lLmM6IEluIGZ1bmN0aW9uIOKAmHB1c2hfZG9z
+X2RhdGUz4oCZOgouLi8uLi9saWIvdXRpbC90aW1lLmM6MjU5OjE6IGludGVybmFsIGNvbXBpbGVy
+IGVycm9yOiBTZWdtZW50YXRpb24gZmF1bHQKCmJvb3RsaW4tcG93ZXJwYy1lNTAwbWMtdWNsaWJj
+Ogpzc3AtbG9jYWwuYzooLnRleHQudW5saWtlbHkrMHgyMCk6IHVuZGVmaW5lZCByZWZlcmVuY2Ug
+dG8gYF9fc3RhY2tfY2hrX2ZhaWwnCgpUaGlzIHZlcnNpb24gYnVtcCBzaG93cyB0aGUgc2FtZSBl
+cnJvcnMgc28gdGhpcyBidW1wIGRvZXMgbm90IGludHJvZHVjZQpuZXcgYnVpbGQgZXJyb3JzOgpo
+dHRwczovL2dpdGxhYi5jb20vYmt1aGxzL2J1aWxkcm9vdC8tL2NvbW1pdHMvYTM1YzA1ZDM1ODdl
+NGI0YjBiNTA4Mzk1NTE4YmZjMWU5YTgzYmY2YgoKIHBhY2thZ2Uvc2FtYmE0L3NhbWJhNC5oYXNo
+IHwgNCArKy0tCiBwYWNrYWdlL3NhbWJhNC9zYW1iYTQubWsgICB8IDIgKy0KIDIgZmlsZXMgY2hh
+bmdlZCwgMyBpbnNlcnRpb25zKCspLCAzIGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL3BhY2th
+Z2Uvc2FtYmE0L3NhbWJhNC5oYXNoIGIvcGFja2FnZS9zYW1iYTQvc2FtYmE0Lmhhc2gKaW5kZXgg
+OWZjY2M5YmY1ZS4uZDYyZTMyNWY4MiAxMDA2NDQKLS0tIGEvcGFja2FnZS9zYW1iYTQvc2FtYmE0
+Lmhhc2gKKysrIGIvcGFja2FnZS9zYW1iYTQvc2FtYmE0Lmhhc2gKQEAgLTEsNCArMSw0IEBACiAj
+IExvY2FsbHkgY2FsY3VsYXRlZCBhZnRlciBjaGVja2luZyBwZ3Agc2lnbmF0dXJlCi0jIGh0dHBz
+Oi8vZG93bmxvYWQuc2FtYmEub3JnL3B1Yi9zYW1iYS9zdGFibGUvc2FtYmEtNC4yNC42LnRhci5h
+c2MKLXNoYTI1NiAgODEwY2M5NTVhY2IzNjdlOWJkZTU1NmRjY2ZiNTBkYjE3N2EwMmI3YzU1M2Fh
+MTYyOWEwYjkwNWZhNzYxNjI2NyAgc2FtYmEtNC4yNC42LnRhci5negorIyBodHRwczovL2Rvd25s
+b2FkLnNhbWJhLm9yZy9wdWIvc2FtYmEvc3RhYmxlL3NhbWJhLTQuMjQuNy50YXIuYXNjCitzaGEy
+NTYgIDQ1Yjc3NDdhNDc0NTJlZmYyYjIxNTlhNDRjYzYzZWI0MzY5MGQzMzlmZDEwNjkwODhlMDIz
+YTAxNWZlZDA2YzcgIHNhbWJhLTQuMjQuNy50YXIuZ3oKIHNoYTI1NiAgOGNlYjRiOWVlNWFkZWRk
+ZTQ3YjMxZTk3NWMxZDkwYzczYWQyN2I2YjE2NWExZGNkODBjN2M1NDVlYjY1YjkwMyAgQ09QWUlO
+RwpkaWZmIC0tZ2l0IGEvcGFja2FnZS9zYW1iYTQvc2FtYmE0Lm1rIGIvcGFja2FnZS9zYW1iYTQv
+c2FtYmE0Lm1rCmluZGV4IDYyOTFjYjI5YjkuLmE5ZTE1NzdlMjYgMTAwNjQ0Ci0tLSBhL3BhY2th
+Z2Uvc2FtYmE0L3NhbWJhNC5taworKysgYi9wYWNrYWdlL3NhbWJhNC9zYW1iYTQubWsKQEAgLTQs
+NyArNCw3IEBACiAjCiAjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwogCi1TQU1CQTRfVkVSU0lPTiA9
+IDQuMjQuNgorU0FNQkE0X1ZFUlNJT04gPSA0LjI0LjcKIFNBTUJBNF9TSVRFID0gaHR0cHM6Ly9k
+b3dubG9hZC5zYW1iYS5vcmcvcHViL3NhbWJhL3N0YWJsZQogU0FNQkE0X1NPVVJDRSA9IHNhbWJh
+LSQoU0FNQkE0X1ZFUlNJT04pLnRhci5negogU0FNQkE0X0lOU1RBTExfU1RBR0lORyA9IFlFUwot
+LSAKMi40Ny4zCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+XwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8v
+bGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
