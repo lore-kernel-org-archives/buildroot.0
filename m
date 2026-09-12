@@ -1,179 +1,103 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32396C79FB6
-	for <buildroot@archiver.kernel.org>; Sat, 12 Sep 2026 08:50:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96297C88E56
+	for <buildroot@archiver.kernel.org>; Sat, 12 Sep 2026 09:14:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D9C4440792;
-	Sat, 12 Sep 2026 08:50:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3D7B380A8A;
+	Sat, 12 Sep 2026 09:14:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6QXuZ9yDXu9H; Sat, 12 Sep 2026 08:50:42 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org A14A040793
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=3; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789203042;
-	b=I14A0Vc/ZKrq6sfDUpapNFhP7MavddAusZR5Mbg5D455sD1XIxeCXpX/0MKtqVYvw+RG
-	 Q2XpgC+HwGqCl+R5K9fW6mc+kgi3fWTU7EYw+9aybGowNk2hGAM1Rm7cV9Fsh3oWvu05q
-	 huoKpfpA6ahkIYtiUuL7ShSh7+JryDoZEJGLEwRVP2k/UaeunLx8+vSR61dWwq8Ia8NAX
-	 RbShnc3S17DD96vjCfe8Ub4xpOVbX2SaOP3+P37+mWYoo0d6OHaOND9eT5DpA3g1uGdi4
-	 VMsCeZ3wCA86jIIAMwTyW4+oW5lI8Dtfzm+1G/d2yMl6x/1XiXYrSLum2AbN/BpuOdQ==
-ARC-Message-Signature: i=3; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789203042;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZXiTrvsa1JZD; Sat, 12 Sep 2026 09:14:28 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 0D78E80E26
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789204468;
+	b=YDpKL8ZIgHgHdC8+sNkJqS/N0dKRwnBEFOOm1nPEnsFepv+qD5r76R3SoPtwL9QTQP0e
+	 QXEku+4073SkS6ZIe25jnAM5YCKx6SMep4z/RG8s8dEM+jyctt3nCNgF/GD+LpTsH3Rwt
+	 doRNWqgjzIuumaIVDqrjzizw9DQqc1XZruVDeJaGPfFiiIT80JYlF4u2uY1eRcVNFSknU
+	 ow1nsVrxHche+dbtgsyKIc2NTbPBjbrDzDxGsnFLqulo6fvV5X6ENXPWVcWCTuYirc3FG
+	 eKEroXIVkznk9ql/Jl7D3i0tYvw10R7wWXnEkPvYUjsV9rYehIN+K6Ber7XhmRy/D3g==
+ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
+	c=relaxed/relaxed; t=1789204468;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
-	 X-Received:MIME-Version:References:In-Reply-To:From:Date:
-	 X-Gm-Features:Message-ID:To:Cc:Subject:X-BeenThere:X-Mailman-Version:
+	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
+	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
+	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:Content-Type:Errors-To:Sender;
-	bh=HxOfzdOGSrGUAX/gtp9RiEvfEAZ/BcV94YUa4i2DMo0=;
-	b=VcPujVa+0uGg9nQZl6wsJZWBBYMIu5+hDNFi9M6JTfb4tUdTpRKGrBVMMMjNp1VfeGUw
-	 3BXGZuGHEyLdh5H8UNTmFXY4xAwznCwv8Zb8sQ7UuIrHWJvTYorxwPTYkOKzFb2rnHH8w
-	 yFodz9LncT03bCWyW2OAwsej1wvPA7wcJsR3kCSl0ldiiztBKBA+9e/P81EOdKfqhhHZ+
-	 xNQ+ROeAR16fIJ1zF1GbFW3OMIiygk+xx7BLgnSy5CtOdyhNucOHG6niofqbWPrO9sefi
-	 /vATm90D/xVWcN11QhgX+53l1eta9+MQe57dSQ3qXW+OKa0jNcXCyhNSOLo6r+VPDxg==
-ARC-Authentication-Results: i=3; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:Errors-To:Sender;
+	bh=ZuXRode8yMT/0O1ROmSvGeNqLEvn2j/yFGEc8PbO/1k=;
+	b=Ei1Hcoy7PZAZkTHL9tOH0Q275YsIjbNoHAC5muMmxwZAKC9B7MJozLf7Nt7w2AjfSh6w
+	 LyJLrRXa7BT5MSbUXW0Uwa59qn613JgRHHfloW7npuiJ2d3ndL6okKeqtWDf67+5r+O0l
+	 finMHup4S28V1f592a4B3+hBhgzbxfCr1f0rUwFsY2SyRObuTSek1iBugy7T/m3ee0CUH
+	 GNIE+OKn1L6OzXjmlWeTqwFPKquTbYI26qyaYs18yWgvDDnFMK5ATc1yF5GeJhcFGj5FM
+	 LagbWuD6benH7MWKtqtaVYrUuj+z4Kgv8T1Mk8ZFV7HP0gx+X38LAFH1f0nRE5XZsAg==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789203042;
-	bh=HxOfzdOGSrGUAX/gtp9RiEvfEAZ/BcV94YUa4i2DMo0=;
-	h=References:In-Reply-To:From:Date:To:Cc:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=agCApUS79xd8M4aDvBkniOoXQB5GGXA7QUTQSQ3Dsj8BmUzhKuQCnaJxFLkKngtn1
-	 TAX5faoSs4rQnctcbw9J1Ar5cb+Ai3yynQDsm0IQimmTkAUa57gbooCfg53KgwptDK
-	 o+qugQ1rDtFuipfiFhxm+/bDB0x5vH30VBnQDX0Jb1yW9mp36HJUZnfzgVIl/48S/L
-	 RrSl0GOEO/4Z5mfmATl7Yd3Snptv5vxQeIVqbek4NFwdYMy3zLocQyZ0LDoqydXKDt
-	 4c6qmlgv0SnTXcT+eD7xWuhaaTlIMvbg+W/1IT7M7nG4R9Uv3dESFtDnEPlwX3CN/5
-	 eDseKREdjGlvg==
+	s=default; t=1789204468;
+	bh=ZuXRode8yMT/0O1ROmSvGeNqLEvn2j/yFGEc8PbO/1k=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=eWZGCsJZZwmRVnGyK+QdWuwMBsTC4jNQGRb8k7NbQTd6aqb/P/SEvBVUELy/s7Hrw
+	 /5I1u4ZPeiadYbZ1jAV3AB/1eczO9rF9s5ZFpW98985Jm1f1rGVqwAofNeEs7NYn2E
+	 xksDA8jzXq35dmJ5cpBQ6POuvCgQofVOd3/jcEZc1/0/QN/smqPFSJK4Jeg0dlWQLS
+	 d6zT55AyYDpfYplYk5BzMSeVE3dOzMWFp9OribxBGwKADlRNgf+F8bgeUDi2R8MtZT
+	 8o/gY4E5t476Z2NjZNHgeKFECPx68VpQ1pfPVvpTTHxTgtDlGmcwOXQfcmr7qYl+kb
+	 cno2MGwrrgn5w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A14A040793;
-	Sat, 12 Sep 2026 08:50:42 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id A501732F
- for <buildroot@buildroot.org>; Sat, 12 Sep 2026 08:50:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0D78E80E26;
+	Sat, 12 Sep 2026 09:14:28 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5A87549D
+ for <buildroot@buildroot.org>; Sat, 12 Sep 2026 09:14:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 90636400E4
- for <buildroot@buildroot.org>; Sat, 12 Sep 2026 08:50:38 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4927580E26
+ for <buildroot@buildroot.org>; Sat, 12 Sep 2026 09:14:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id D8qcJIhTjqRE for <buildroot@buildroot.org>;
- Sat, 12 Sep 2026 08:50:37 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org 5471A40076
-Authentication-Results: smtp2.osuosl.org; arc=pass header.oldest-pass=0
- smtp.remote-ip="2a00:1450:4864:39::10"
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=pass; t=1789203037;
- b=DIklgATdMLnBbl+g2Df3wKH/Ukx/iSUTr1uaxFFi7xqCZxz9/UmNcGzIgxYp60bdHWoz
- OTxdahcqgyKVkxhBekHVszfiRhY74FhcKlWaUA9gENM71r401+KN0/SwV870L+mbCylls
- SS5JhSB2+22PrxHf7mRLUc3fe4o/XAnsEceYnsoXvEauLlau/5SSRsRwH6imfyCt8aL+u
- Kv93AMN5PqzHDjlxjOWzU1kni+UniI8jN8N7x6YrxyIWD9NM6eUnNMNaXXnX8CUK+cbM9
- 2t1ioQiQAezOr8Ml/UC6n2BXe9pRs3Z0y+K54EiRPxxuaKQ6Lg90qRfFj2+dKuTiy1g==
-ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1789203037;
- h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
- X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:References:
- In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:
- Content-Type;
- bh=KsQar1IGYLDUhVSkhlGltsvXg4yHni5Hsca4wc1u/ls=;
- b=YdU7BvYX2YGdHzTMAVNLQO8DLZ5E7fvR/RUPNyNTcL7A/67Dy9e1EtGTKBMZGa2A9qES
- 8ZaOwfgocsfuoDaIkKcNf3zto2nBx8thSPr/gPzyl5O7wd7PRCMLzjO9CC0F2Sg8Z/DcQ
- bAFDEIBhwRUL7kNNin0B/xlhv4fbAEQ4RiHoWwH20YoswWSOlkEeay5svoUcfipjRhAsE
- hHF6DRPfvy4Daqt+4trEO3DJaOUDWy3ZN017AmvFKshYducRx8xYSlTRD0UDDPEBmIqQr
- 9qzD5EqaSujwaEV6JCpg0ZuTez3W8pQ4GVgsEj3Q5ruLdErlxdCC9NgmnyYqbZkV24g==
-ARC-Authentication-Results: i=2; smtp2.osuosl.org;
- dmarc=pass header.from=gmail.com; 
- dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20251104 header.b=Xe5WJnyo; 
- arc=pass header.oldest-pass=0 smtp.remote-ip="2a00:1450:4864:39::10"
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:39::10; helo=mail-ua2-x10.google.com;
- envelope-from=francois.perrad.86@gmail.com; receiver=<UNKNOWN> 
-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20251104 header.b=Xe5WJnyo
-Received: from mail-ua2-x10.google.com (mail-ua2-x10.google.com
- [IPv6:2a00:1450:4864:39::10])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5471A40076
- for <buildroot@buildroot.org>; Sat, 12 Sep 2026 08:50:37 +0000 (UTC)
-Received: by mail-ua2-x10.google.com with SMTP id
- a1e0cc1a2514c-97e7c72bfe9so50178241.2
- for <buildroot@buildroot.org>; Sat, 12 Sep 2026 01:50:37 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1789203036; cv=none;
- d=google.com; s=arc-20260327;
- b=KhX9/G9SHkgcuVPx2VPuys4AH0133khCBKEzx+rg090A5d93K4yynty/QZG2dFTjGW
- OPxTU7ouekfKTgEaFuJTyMcW5KIxSZ+l3WgXEtDt0xW5+JCSFL5xW9S/R3HeIr/TLSmR
- /j7ohGipkjzR292GqlWvI5onQmNyQZdRJwcwjayg998btX5EcsDp8nqd83wzsqpsJe9C
- B6QYJLETc7TkKRF3psbOylzOiTTxNstVbGirELNEUfgzpYCFc33zksGkuW8GumCpdW15
- 77d2f+a+abtqzllYtfiMbWiY3CaFAiDf7j04vxuEj17RWzGxKRoq+BG54AdXhJIRF7Qj
- wLfg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com;
- s=arc-20260327; 
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:dkim-signature;
- bh=KsQar1IGYLDUhVSkhlGltsvXg4yHni5Hsca4wc1u/ls=;
- fh=oysysEuf99awDJNXnO4HjS2bdltGM4EElFMAZMizmeo=;
- b=bkrAXyeijeQJuJxrHTKPAC+EbBduwaqjkQmpbGgk945ceY3jYQcFbLRAFcJqvZL0X6
- B/ml+XE5yAgprPKOYGTohDfLqEi3eUvFba+nn/JSK0iNwpCldSToSUT7QOWdbWjh32OY
- zNdhsDWx1shZb0LBW2MyJG4qIuaJ1olkBO2ReHBlMPBPg0GS+MECPYuHccYRUt2QmbX/
- 7bVrVoogpdyPKZWPX58dE0B94HXkDGgsKbSfju2Xuu7ByxVb9cMmmtLzgnFfMt2SuvIS
- MF2Z64vUywwVK0GG8MrITPr4mNt3K63QooYeiv6dHxBFfWRVjULhc29mcM2tR/2E/BEg
- H0yA==; darn=buildroot.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1789203036; x=1789807836; darn=buildroot.org;
- h=content-type:cc:to:subject:message-id:date:from:in-reply-to
- :references:mime-version:from:to:cc:subject:date:message-id:reply-to
- :content-type; bh=KsQar1IGYLDUhVSkhlGltsvXg4yHni5Hsca4wc1u/ls=;
- b=Xe5WJnyoNJjO7sxOeUFYZ9oZIm061E1F9DOfUzC7LUE3FY9s6NevYL8gUfP0xuvfh7
- eWBLBzrbmt9MGVeD7/o/GaBAhZL7Mk3Q04oJ+nH8SP2l9FbOXaRlYDtADyHu8LSamUj2
- LzbuevBS0jdmqVboTw8pR5uOl0tIGxQUhhlmrJtf8N0B5+P7Zq9ZtAszYD3jiWF7fX4N
- pUvXLsuSTE29f1GBV3AfUmclLbfVAKK+jgY5ZSQnD3xo3Oy3UdrD5+DRPvf+vDeMrFWZ
- qSODH0IfhYeb/+J/sSlupfTpIPOhHrRQuWMZb6NwDrdRdBTdevM19JQJGNQq3vKF8lWh
- SSRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1789203036; x=1789807836;
- h=content-type:cc:to:subject:message-id:date:from:in-reply-to
- :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to:content-type;
- bh=KsQar1IGYLDUhVSkhlGltsvXg4yHni5Hsca4wc1u/ls=;
- b=dPGew/WS8v6BfWqQodE36Kryx5UGDf6xPbQ3okrdmvdDt58t20H47Lwic71RDrnr28
- VxqJ4g3YZ0iLP2GhGnZnpYavcIYwYPVFHakz0HkMg8pnrIX9ZsnJuL23/WWUC2wyWpqS
- qdCBR1xqoZruEGBEVUsacGzRtlSZuxy2+/ahNpcHyR3G6uakvHHimuROFgChYXjfY5Pd
- cfb3RzEimz45LT7NgU5LOX7V7tZ4NIU/KPAc9+guwJtMUiMY2Cmr+NrxnZ1grDSVfUzu
- CCFrdRfHAQM4tRCDxmP/O0F5BT1QiPG6RXN31QldkwtiTLmA1XjH4gt3yKSto4PBEqIH
- 0lww==
-X-Gm-Message-State: AFuF++lU6avlB1DwhT4bBoUfnEiYL2FvcBcRlxAPZPG5XDZdZyG/ssGJ
- ynY8QLVktaPPubq8HaZSaDw2UPj9z8MyqG/zjx4XfPsP8CP1mWDEb+xF05GcRXoIFoM+cwN7KuK
- oQzTPCiAAWHe6VNtxyVM2VbZ41r1TJcpLlGUZ
-X-Gm-Gg: AYBFou0v/B247T40XtLXyiRsCVZIkMqYlCE7VnUyyDhIZR+iWwqvo9bPGMo7PimFoAz
- XNAyr36zZQfcTr4vJIBcEdSysFm+NqvAdvHhnwLckcX0ysEc3wGMdM8MMW5pt/j8Of6TrDfvFdd
- m3ACexhBpgMyd/CuixGqzkWEAHByXSYLQFE3XvioEAXLpJaK9+45nkmP0GDBbEstKjpaUxl36Cq
- drqxIIf4OKUw5YuZRQ0QXEekMPBOvItYhNl9CB2f9QhRSHlRDpZ43MyyNt2ceKC2sNlgd8a8oZf
- bcxUTzfO8huAWKUMcyJuiwabJGz6y20Q8cMLkZWSTXCFFFGqHl5sq7C5Rn5m6+UKN9DwFSC9NiI
- rtPA7yiUe+FHc05eEgVgVWd9XsA==
-X-Received: by 2002:a05:6102:5814:b0:782:de7b:eead with SMTP id
- ada2fe7eead31-795a64b4ed1mr1363366137.1.1789203035597; Sat, 12 Sep 2026
- 01:50:35 -0700 (PDT)
-MIME-Version: 1.0
-References: <20260911222701.1047300-1-bernd@kuhls.net>
-In-Reply-To: <20260911222701.1047300-1-bernd@kuhls.net>
-From: =?UTF-8?Q?Fran=C3=A7ois_PERRAD?= <francois.perrad.86@gmail.com>
-Date: Sat, 12 Sep 2026 10:50:24 +0200
-X-Gm-Features: AcwNN1WSHHd7VY9YRy9S6qpB8xvkf2pJPGo_CZlbJfsHPSzneG8_V2-RpAZf98E
-Message-ID: <CAMTop892cHK0JC+v-GFDMNbqH=-FNfWZZE4QFW7nJfD6mMjFyw@mail.gmail.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wNlaO-WNWMwQ for <buildroot@buildroot.org>;
+ Sat, 12 Sep 2026 09:14:26 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 0872D80A8A
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789204466;
+ b=L+tmCHThbDY+UnDkFjKoC//8mG5ZJbJtOl9w3iS54+4HLG0an743qMg+BURhzVGMR0B9
+ Vjk6vHnzqJN1PgiJrJcSuXitSSFIWkRYCRwURc2ayc653KOIFuoMGYCYPBNUMU/7KTp3H
+ PBcaXwwWRHdCOffqX7X4+Po7DYjyC9zRqxrxFH3zyiSrbH2OQPdljULS46ZP7cQu1wuqC
+ 12NA/+n+6M6QVlpYZYCK5BCRfzjqPxNQlgj+y9xGzKJmSGJ6FOlKhiQyX7BzIn6b7IrcV
+ vjvTGpgtQ67w5VyEj94nohtqLyX4P7oIcJ6NX9K/Nx6JVH0ASJJBEV/c7GtngNydPdQ==
+ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
+ c=relaxed/relaxed; t=1789204466;
+ h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
+ X-Git-Newrev:X-Patchwork-Hint:Message-Id;
+ bh=jb8rte4TAGKJqgEVrcMyTaL4AiRjKMkfAKuGenLKYdY=;
+ b=WpTs+KdU+AxAnrPvEMjn83reY4xrbG1Y8Eu/9QasIZPXDUwtK9KgAW/bm6k/S+zC3v5C
+ 2W6STxOT4lf0FNTgJT1vC/u4LIY2r9yk9q2UXepIZcbzP2FUnU+NKS+hyNWAw8TxwoVQl
+ 18UyNG0/JZpCL1CE3L9LBJVKgAfAJD89kBJL1V7EW7QchABZDVjcu+HVcDgwm8qzvP2aa
+ QI/52VjmvmZqZ2Ee+LzbYzdmUFgcHjEG46e8vz2RMN6OWA+8r63B4L0JabSGpAcQFcxdB
+ /1ImyB95TdLgc6O8L5tBjzZNIykh+QctdYtGU781TfbHctjd7u2AU+z3itrVipV8jKQ==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org;
+ arc=none smtp.remote-ip=140.211.167.122
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0872D80A8A
+ for <buildroot@buildroot.org>; Sat, 12 Sep 2026 09:14:26 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id AEA2E934E9; Sat, 12 Sep 2026 09:13:21 +0000 (UTC)
 To: buildroot@buildroot.org
-Cc: Marcin Niestroj <m.niestroj@grinn-global.com>,
- Bernd Kuhls <bernd@kuhls.net>
-Subject: Re: [Buildroot] [PATCH 1/1] package/luaossl: bump version to
- 20260910
+Date: Sat, 12 Sep 2026 11:13:27 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 9a1c11c9971b454b3b38c4eb111ac5e42a15cf1c
+X-Git-Newrev: dc1f1818d9e603b67164c20ae8dfe423e14abc4f
+X-Patchwork-Hint: ignore
+Message-Id: <20260912091321.AEA2E934E9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libnss: bump version to 3.129
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -185,163 +109,179 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============4269790563123997907=="
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4269790563123997907==
-Content-Type: multipart/alternative; boundary="0000000000005e2fcd065b454bf0"
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/dc1f1818d9e603b67164c20ae8dfe423e14abc4f
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
---0000000000005e2fcd065b454bf0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Drop local patch that has been upstreamed.
 
-Le sam. 12 sept. 2026 =C3=A0 00:27, Bernd Kuhls <bernd@kuhls.net> a =C3=A9c=
-rit :
+For release notes since 3.127, see:
+https://hg-edge.mozilla.org/projects/nss/file/NSS_3_128_RTM/doc/src/releases/nss_3_128.md
+https://hg-edge.mozilla.org/projects/nss/file/NSS_3_129_RTM/doc/src/releases/nss_3_129.md
 
-> https://github.com/wahern/luaossl/releases/tag/rel-20260910
->
-> Updated license hash due to copyright year bump:
->
-> https://github.com/wahern/luaossl/commit/efaf49dc352c221f518305348bdbf89d=
-b873d6e3
->
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
->
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+[Julien: add link to 3.128 release notes in commit log]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ ...-Fix-build-failure-due-to-missing-gcm-stu.patch | 116 ---------------------
+ package/libnss/libnss.hash                         |   4 +-
+ package/libnss/libnss.mk                           |   2 +-
+ 3 files changed, 3 insertions(+), 119 deletions(-)
 
-Acked-by: Francois Perrad <francois.perrad.86@gmail.com>
-
-
-> ---
-> Gitlab pipelines passed:
->
-> https://gitlab.com/bkuhls/buildroot/-/commits/5e83ac0461c070e9f5f85a51867=
-c0962aa826a74
->
->  package/luaossl/luaossl.hash | 4 ++--
->  package/luaossl/luaossl.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/package/luaossl/luaossl.hash b/package/luaossl/luaossl.hash
-> index 734c916f5a..36f1046f07 100644
-> --- a/package/luaossl/luaossl.hash
-> +++ b/package/luaossl/luaossl.hash
-> @@ -1,3 +1,3 @@
->  # computed by luarocks/buildroot
-> -sha256  19cfc635dd804bde649a8db1ffae01e5fc0cdfac2630fb73c617fe6d8a0bfd30
-> luaossl-20250929-0.src.rock
-> -sha256  421c26c8788c46fd59e4dbfe5bf8eab6c21e37ce3ca8cb44dfff5dc179098756
-> luaossl-rel-20250929/LICENSE
-> +sha256  22ad2d0e3d12a9376c3d06a000a1af70c45ed181ae581556759e55f637ff371d
-> luaossl-20260910-0.src.rock
-> +sha256  277af5901eb8ae8b0e39fec050e858abd23ebf698147e3567df7518928c5cc2d
-> luaossl-rel-20260910/LICENSE
-> diff --git a/package/luaossl/luaossl.mk b/package/luaossl/luaossl.mk
-> index 079d1e0ca4..e1a2806c80 100644
-> --- a/package/luaossl/luaossl.mk
-> +++ b/package/luaossl/luaossl.mk
-> @@ -4,7 +4,7 @@
->  #
->
->  ########################################################################=
-########
->
-> -LUAOSSL_VERSION_UPSTREAM =3D 20250929
-> +LUAOSSL_VERSION_UPSTREAM =3D 20260910
->  LUAOSSL_VERSION =3D $(LUAOSSL_VERSION_UPSTREAM)-0
->  LUAOSSL_SUBDIR =3D luaossl-rel-$(LUAOSSL_VERSION_UPSTREAM)
->  LUAOSSL_LICENSE =3D MIT
-> --
-> 2.47.3
->
->
-
---0000000000005e2fcd065b454bf0
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote g=
-mail_quote_container"><div dir=3D"ltr" class=3D"gmail_attr">Le=C2=A0sam. 12=
- sept. 2026 =C3=A0=C2=A000:27, Bernd Kuhls &lt;<a href=3D"mailto:bernd@kuhl=
-s.net">bernd@kuhls.net</a>&gt; a =C3=A9crit=C2=A0:<br></div><blockquote cla=
-ss=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid =
-rgb(204,204,204);padding-left:1ex"><a href=3D"https://github.com/wahern/lua=
-ossl/releases/tag/rel-20260910" rel=3D"noreferrer" target=3D"_blank">https:=
-//github.com/wahern/luaossl/releases/tag/rel-20260910</a><br>
-<br>
-Updated license hash due to copyright year bump:<br>
-<a href=3D"https://github.com/wahern/luaossl/commit/efaf49dc352c221f5183053=
-48bdbf89db873d6e3" rel=3D"noreferrer" target=3D"_blank">https://github.com/=
-wahern/luaossl/commit/efaf49dc352c221f518305348bdbf89db873d6e3</a><br>
-<br>
-Signed-off-by: Bernd Kuhls &lt;<a href=3D"mailto:bernd@kuhls.net" target=3D=
-"_blank">bernd@kuhls.net</a>&gt;<br></blockquote><div><br></div><div><span =
-class=3D"gmail-term">Acked-by:=C2=A0</span>Francois Perrad &lt;<a href=3D"m=
-ailto:francois.perrad.86@gmail.com" target=3D"_blank">francois.perrad.86@gm=
-ail.com</a>&gt;</div><div>=C2=A0</div><blockquote class=3D"gmail_quote" sty=
-le=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);paddi=
-ng-left:1ex">
----<br>
-Gitlab pipelines passed:<br>
-<a href=3D"https://gitlab.com/bkuhls/buildroot/-/commits/5e83ac0461c070e9f5=
-f85a51867c0962aa826a74" rel=3D"noreferrer" target=3D"_blank">https://gitlab=
-.com/bkuhls/buildroot/-/commits/5e83ac0461c070e9f5f85a51867c0962aa826a74</a=
-><br>
-<br>
-=C2=A0package/luaossl/luaossl.hash | 4 ++--<br>
-=C2=A0package/luaossl/<a href=3D"http://luaossl.mk" rel=3D"noreferrer" targ=
-et=3D"_blank">luaossl.mk</a>=C2=A0 =C2=A0| 2 +-<br>
-=C2=A02 files changed, 3 insertions(+), 3 deletions(-)<br>
-<br>
-diff --git a/package/luaossl/luaossl.hash b/package/luaossl/luaossl.hash<br=
->
-index 734c916f5a..36f1046f07 100644<br>
---- a/package/luaossl/luaossl.hash<br>
-+++ b/package/luaossl/luaossl.hash<br>
-@@ -1,3 +1,3 @@<br>
-=C2=A0# computed by luarocks/buildroot<br>
--sha256=C2=A0 19cfc635dd804bde649a8db1ffae01e5fc0cdfac2630fb73c617fe6d8a0bf=
-d30=C2=A0 luaossl-20250929-0.src.rock<br>
--sha256=C2=A0 421c26c8788c46fd59e4dbfe5bf8eab6c21e37ce3ca8cb44dfff5dc179098=
-756=C2=A0 luaossl-rel-20250929/LICENSE<br>
-+sha256=C2=A0 22ad2d0e3d12a9376c3d06a000a1af70c45ed181ae581556759e55f637ff3=
-71d=C2=A0 luaossl-20260910-0.src.rock<br>
-+sha256=C2=A0 277af5901eb8ae8b0e39fec050e858abd23ebf698147e3567df7518928c5c=
-c2d=C2=A0 luaossl-rel-20260910/LICENSE<br>
-diff --git a/package/luaossl/<a href=3D"http://luaossl.mk" rel=3D"noreferre=
-r" target=3D"_blank">luaossl.mk</a> b/package/luaossl/<a href=3D"http://lua=
-ossl.mk" rel=3D"noreferrer" target=3D"_blank">luaossl.mk</a><br>
-index 079d1e0ca4..e1a2806c80 100644<br>
---- a/package/luaossl/<a href=3D"http://luaossl.mk" rel=3D"noreferrer" targ=
-et=3D"_blank">luaossl.mk</a><br>
-+++ b/package/luaossl/<a href=3D"http://luaossl.mk" rel=3D"noreferrer" targ=
-et=3D"_blank">luaossl.mk</a><br>
-@@ -4,7 +4,7 @@<br>
-=C2=A0#<br>
-=C2=A0#####################################################################=
-###########<br>
-<br>
--LUAOSSL_VERSION_UPSTREAM =3D 20250929<br>
-+LUAOSSL_VERSION_UPSTREAM =3D 20260910<br>
-=C2=A0LUAOSSL_VERSION =3D $(LUAOSSL_VERSION_UPSTREAM)-0<br>
-=C2=A0LUAOSSL_SUBDIR =3D luaossl-rel-$(LUAOSSL_VERSION_UPSTREAM)<br>
-=C2=A0LUAOSSL_LICENSE =3D MIT<br>
--- <br>
-2.47.3<br>
-<br>
-</blockquote></div></div>
-
---0000000000005e2fcd065b454bf0--
-
---===============4269790563123997907==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/package/libnss/0002-Bug-2027768-Fix-build-failure-due-to-missing-gcm-stu.patch b/package/libnss/0002-Bug-2027768-Fix-build-failure-due-to-missing-gcm-stu.patch
+deleted file mode 100644
+index f2c48c8fee..0000000000
+--- a/package/libnss/0002-Bug-2027768-Fix-build-failure-due-to-missing-gcm-stu.patch
++++ /dev/null
+@@ -1,116 +0,0 @@
+-From 897ebeb9c38d4dc4844f5f414db5aaa17c261eee Mon Sep 17 00:00:00 2001
+-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+-Date: Mon, 30 Mar 2026 17:06:14 +0200
+-Subject: [PATCH] Bug 2027768 - Fix build failure due to missing gcm stubs if
+- on big endian
+-
+-Building gcm on Big Endian architectures lead to linking failure due to
+-missing gcm stubs. This is because those stubs are guarded by
+-DHAVE_PLATFORM_GHASH that at the moment is defined for every architecture
+-that provides acceleration. But at the moment we can also build without
+-acceleration but DHAVE_PLATFORM_GHASH is defined in any case.
+-So let's add to coreconf/Linux.mk a runtime test to find out which
+-endianness toolchain is by setting the new introduced LITTLE_ENDIAN
+-variable. And later on, in lib/freebl/Makefile let's guard
+-DHAVE_PLATFORM_GHASH definition depending on LITTLE_ENDIAN VARIABLE.
+-
+-Upstream: https://bugzilla.mozilla.org/show_bug.cgi?id=2027768
+-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+-[Giulio: rebased to version 3.127]
+----
+- nss/coreconf/Linux.mk   |  8 ++++++++
+- nss/lib/freebl/Makefile | 28 ++++++++++++++++++++++------
+- 2 files changed, 30 insertions(+), 6 deletions(-)
+-
+-diff --git a/coreconf/Linux.mk b/coreconf/Linux.mk
+-index dcb432415f..cf1f62378d 100644
+---- a/nss/coreconf/Linux.mk
+-+++ b/nss/coreconf/Linux.mk
+-@@ -188,6 +188,14 @@ endif
+- endif
+- endif
+- 
+-+# Test toolchain for endianness and set LITTLE_ENDIAN variable accordingly
+-+ENDIANNESS := $(shell echo | $(CC) -dM -E - | grep __BYTE_ORDER__)
+-+ifeq ($(findstring __ORDER_LITTLE_ENDIAN__,$(ENDIANNESS)),__ORDER_LITTLE_ENDIAN__)
+-+    LITTLE_ENDIAN := 1
+-+else
+-+    LITTLE_ENDIAN := 0
+-+endif
+-+
+- USE_SYSTEM_ZLIB = 1
+- ZLIB_LIBS = -lz
+- 
+-diff --git a/lib/freebl/Makefile b/lib/freebl/Makefile
+-index 0ab50b093a..21c3cf62d8 100644
+---- a/nss/lib/freebl/Makefile
+-+++ b/nss/lib/freebl/Makefile
+-@@ -112,7 +112,10 @@ endif
+- # NSS_X64 means the target is a 64-bits 64 CPU architecture
+- # NSS_X86_OR_X64 means the target is either x86 or x64
+- ifeq (,$(filter-out i386 x386 x86 x86_64,$(CPU_ARCH)))
+--        DEFINES += -DNSS_X86_OR_X64 -DHAVE_PLATFORM_GHASH
+-+        DEFINES += -DNSS_X86_OR_X64
+-+        ifeq ($(LITTLE_ENDIAN),1)
+-+            DEFINES += -DHAVE_PLATFORM_GHASH
+-+        endif
+-         EXTRA_SRCS += ghash-x86.c aes-x86.c
+- $(OBJDIR)/ghash-x86.o: CFLAGS += -mpclmul -maes
+- $(OBJDIR)/aes-x86.o: CFLAGS += -mpclmul -maes
+-@@ -138,7 +141,10 @@ endif
+- endif
+- ifeq ($(CPU_ARCH),aarch64)
+-     ifdef CC_IS_CLANG
+--        DEFINES += -DUSE_HW_AES -DUSE_HW_SHA1 -DUSE_HW_SHA2 -DHAVE_PLATFORM_GHASH
+-+        DEFINES += -DUSE_HW_AES -DUSE_HW_SHA1 -DUSE_HW_SHA2
+-+        ifeq ($(LITTLE_ENDIAN),1)
+-+            DEFINES += -DHAVE_PLATFORM_GHASH
+-+        endif
+-         EXTRA_SRCS += aes-armv8.c ghash-aarch64.c sha1-armv8.c sha256-armv8.c
+-     else ifeq (1,$(CC_IS_GCC))
+-         # GCC versions older than 4.9 don't support ARM AES. The check
+-@@ -146,11 +152,17 @@ ifeq ($(CPU_ARCH),aarch64)
+-         # and then rejects any major versions prior to 5. Note that
+-         # there has been no GCC 4.10, as it was renamed to GCC 5.
+-         ifneq (,$(filter 4.9,$(word 1,$(GCC_VERSION)).$(word 2,$(GCC_VERSION))))
+--            DEFINES += -DUSE_HW_AES -DUSE_HW_SHA1 -DUSE_HW_SHA2 -DHAVE_PLATFORM_GHASH
+-+            DEFINES += -DUSE_HW_AES -DUSE_HW_SHA1 -DUSE_HW_SHA2
+-+            ifeq ($(LITTLE_ENDIAN),1)
+-+                DEFINES += -DHAVE_PLATFORM_GHASH
+-+            endif
+-             EXTRA_SRCS += aes-armv8.c ghash-aarch64.c sha1-armv8.c sha256-armv8.c
+-         endif
+-         ifeq (,$(filter 0 1 2 3 4,$(word 1,$(GCC_VERSION))))
+--            DEFINES += -DUSE_HW_AES -DUSE_HW_SHA1 -DUSE_HW_SHA2 -DHAVE_PLATFORM_GHASH
+-+            DEFINES += -DUSE_HW_AES -DUSE_HW_SHA1 -DUSE_HW_SHA2
+-+            ifeq ($(LITTLE_ENDIAN),1)
+-+                DEFINES += -DHAVE_PLATFORM_GHASH
+-+            endif
+-             EXTRA_SRCS += aes-armv8.c ghash-aarch64.c sha1-armv8.c sha256-armv8.c
+-         endif
+-     endif
+-@@ -183,7 +195,9 @@ ifeq ($(CPU_ARCH),aarch64)
+- endif
+- ifeq ($(CPU_ARCH),arm)
+- ifndef NSS_DISABLE_ARM32_NEON
+--    DEFINES += -DHAVE_PLATFORM_GHASH
+-+    ifeq ($(LITTLE_ENDIAN),1)
+-+        DEFINES += -DHAVE_PLATFORM_GHASH
+-+    endif
+-     EXTRA_SRCS += ghash-arm32-neon.c
+- endif
+-     ifdef CC_IS_CLANG
+-@@ -316,7 +330,9 @@ ifeq ($(CPU_ARCH),arm)
+-     MPI_SRCS += mpi_arm.c
+- endif
+- ifeq ($(CPU_ARCH),ppc)
+--    DEFINES += -DHAVE_PLATFORM_GHASH
+-+    ifeq ($(LITTLE_ENDIAN),1)
+-+        DEFINES += -DHAVE_PLATFORM_GHASH
+-+    endif
+-     EXTRA_SRCS += ghash-ppc.c
+- ifdef USE_64
+-     DEFINES += -DNSS_NO_INIT_SUPPORT
+--- 
+-2.47.3
+-
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index b87c3376b4..1851b1e5fd 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_127_RTM/src/SHA256SUMS
+-sha256  5a899cad21ae2c9d3c5132de79726eda8df3b7fdf18eeb239fc544d43b87338b  nss-3.127.tar.gz
++# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_129_RTM/src/SHA256SUMS
++sha256  38baa3b0a18a3f674843473b549753c96419a0151abd1e7a9b214ce0493d0785  nss-3.129.tar.gz
+ # Locally calculated
+ sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index 734376f61b..42021503f7 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBNSS_VERSION = 3.127
++LIBNSS_VERSION = 3.129
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4269790563123997907==--
