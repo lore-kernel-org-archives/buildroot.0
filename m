@@ -4,100 +4,113 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C702C79FB6
-	for <buildroot@archiver.kernel.org>; Sat, 12 Sep 2026 13:27:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3913BC88E53
+	for <buildroot@archiver.kernel.org>; Sat, 12 Sep 2026 13:28:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C814E40730;
-	Sat, 12 Sep 2026 13:27:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 03F3940723;
+	Sat, 12 Sep 2026 13:28:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id G68LewtaYy-g; Sat, 12 Sep 2026 13:27:55 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org DB5AA40723
+ id kj3FsUtyozPO; Sat, 12 Sep 2026 13:28:11 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 11C094072E
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789219675;
-	b=mLpcLl7xPLOt24u2BKed9J4UJOYMg5SOur7Vfz/ZKh8fcYUjzgA9p5Dd6p8bmU12WEXU
-	 nozomEFO0w11ZnawQtsuBNCP6+3tbKeiyBosVZKUJ7DfdZwje6KRwYFURM/DJiVJrueOM
-	 QP4O4sv2R8Ys4mKL0xlMW1vtQbTfBlKGlRA9yzJRCTSzcLYQTuXAKTQakLhxEYZ031H/1
-	 ZUTDLbKq6iE5e3m3ZmJrh42bsFrSJ/NtuXRlH4MQ5M1SKclOJ5Eq5QJ/1qe6+iyl5Y3CJ
-	 ZhYn3iq1rQHajhtCfEAFsEHp4YdLXMn1xs9EGbTd1LUqvaBfjFdkQya7jlBkdiLnDtw==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789219691;
+	b=ZIrWHAhHlHN+/AOxGAp0i8Ws+0ZirRmRxGYQrQzlJ61jK4P7sJDpS/Pubn4lA7RdIdM4
+	 trC+FtY91DNz4X63HQBYVAIRjWcKuBnVWRvfj7JAOU275Pysz4lwalqUaa6GwBwBGYRxy
+	 F3dN/17YKzZg/3/yt2tAM+RhcNl83VlbemkMGr3cwSQ44wjB8VqM6cl6/MDP7Tlhf6KQA
+	 MXbl/OnIgRkkb35P4giv6+ZkfpaXxNbelfEaBpP8amBtYoWuVDiLvDjNmn/0cpijBtNoM
+	 R5zqAA6n2++W3iBQt59rWJPzY8AXULYSOEoICv8WbRkoa52gX5rD0evAtJhe071Fr1A==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789219675;
+	c=relaxed/relaxed; t=1789219691;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
-	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
-	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
-	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=6lJEk1LCtxhaVL5rGDWtGWNCYs5kepSSLFi6uFAdGAI=;
-	b=WLHK0b3ur3+A7FXBnsuoJtlLkfo8azutEyNODg03c8yDJRaYXgpWZDh5jYnx6y5VzIh8
-	 vn8u+0spNFn5rDuZlrfX5LyfsLcT1zv968wEd68q7fcDbw4p8Xw3EBslsjt9TFVQo1+hK
-	 hEYKyDiCwZrE4A4fJ3BHxm8ngq96SdemiDrIuk3RHavg/pfVsekrTqnkZMUN49NEEvcPN
-	 ttdnxPYj56izSrmLMYXFPEFkjsof4xOmlyg9f6QpvnxG4yLUIQv+a0TsGnmLCf6Nrfhvi
-	 NN07oQ0LHSXyPQKglOPUJwXRxpgWa9H25n/8CMn/B9ECMS56rVFxCPp276zMCNFy/Zw==
+	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 Received:MIME-Version:Date:To:Cc:In-Reply-To:References:User-Agent:
+	 Message-ID:X-Sender:Subject:X-BeenThere:X-Mailman-Version:Precedence:
+	 List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:Content-Transfer-Encoding:Content-Type:
+	 Errors-To:Sender;
+	bh=f2q1AVN4L06k0d5px+UnI8gmgB1a6+iJDfmHxOgLgUY=;
+	b=fAQVlO3Q8BXwJ+isXJeSDq70zyLO1VD6B3XzXyd+qfJ10dJ0h/2ns3nx/ExJgh4bEPu3
+	 4p1B0bkzD3UUQRN0HNYq8KQtSOSGHRqxtgx5pUTkUAMqpzikutSOxdOMxBh4/EDjNUtMw
+	 l+PxXHsSQ2FkBef+cUY5QjWnPXOka6y5P49ISVphSBXMVynMnojUsKnB1wT3aZVIsrx8O
+	 bGWgMTS3RiXhaw23WJTwSf+KFrH8TjVvi5eDWY6oClRtPJ+dg1hdM7VtTBIZA0D0JC8+y
+	 UAiz82VQMyCL89XWuJMB2jGznQvxNvNGSoujrDw8MLJQSFV8BH68KOGMEo/QkvJo0Ig==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789219674;
-	bh=6lJEk1LCtxhaVL5rGDWtGWNCYs5kepSSLFi6uFAdGAI=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=X534+AGqdZycRBlTwt5tITYATr//imwXUgmaR1wyrX5rYcQPbeQGn6kH1z3lQ8PQi
-	 pfgGwFq0P1Lz42a6DCXQjU/zgj9OezYGajfhXPmWSAl2l/jU5mrRDj7rNUye1BJu5+
-	 cdjLRnwQLPx4QR+8Ljc4SeY74f25J/HIjLcAMwrriZk1gSkOriQhfHy2Hm1bScMESV
-	 0B9SvBTIr2bKnr6Gih/u7EryETCjuoGWQOg90u5ZdPLVG+SldiXFeiZnE/K3UVO0Z8
-	 4SLB7Y2fkMLzWPXEJ+966yjkO2yPhQSAPPdNx2hb1aIYk+BO7cOGs62S4Wa2/Z68bM
-	 dCaznI0QBVmhQ==
+	s=default; t=1789219691;
+	bh=f2q1AVN4L06k0d5px+UnI8gmgB1a6+iJDfmHxOgLgUY=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=mbjfQQ/xAFHUAPt1n89X5Hcvn7qGB0/ENrgTkeDEBzkGVZi8+U5EqgsFpBHDwAuyE
+	 A5IczK/f7dFF/Fri0fxBqmN6p0tsgdVcrh+TCeabLYY4J4Gqh87rAWRDjUr5xMR6XG
+	 PbPrNyLt91ptic8CCAw2D3i5nTE6hQCteGOr8r5dVVtpofUvvXlJ7R/csedi51DdTC
+	 /ByvZgghn44W2A8Aebzx2RtCI8/NbVuNKvtvQF49rZEkvGbXZU3mUAQb+gQBfItvIS
+	 Q3xEdydV1bfsxuFa/H38B+UBDWgCfKIP8sSLfmdEtx4Tz00U6Mjm142xptHxHzz8rn
+	 u9kWZ+n7Xw3jQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DB5AA40723;
-	Sat, 12 Sep 2026 13:27:54 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 818AC701
- for <buildroot@buildroot.org>; Sat, 12 Sep 2026 13:27:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 11C094072E;
+	Sat, 12 Sep 2026 13:28:11 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id EBD5023F
+ for <buildroot@buildroot.org>; Sat, 12 Sep 2026 13:28:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6746540723
- for <buildroot@buildroot.org>; Sat, 12 Sep 2026 13:27:53 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D286E40068
+ for <buildroot@buildroot.org>; Sat, 12 Sep 2026 13:28:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xmKWXcCqlmkW for <buildroot@buildroot.org>;
- Sat, 12 Sep 2026 13:27:52 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 522CC40624
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789219672;
- b=fyDyNEWfKM2zOBNdvlhGkHEy8XUE7VlIUpO7BskEBpvPEjXl68kLmuoVqgnmV0Y/XaCh
- ocHta+7SRA+4GxtXGwbJ2Q5cYRdALJfp2FAMSF4tKxNnpchWUkQY+wfOnVr1wgloyDaIU
- b91ESi7gZenAkcMx4GeLU+spfyASnTBH6JdBMmRirKrQPd7qOWWhO8vA1iypAtt+mRhf2
- R0roUiYlwYJYmqL7CKQu25JZDDsDy48HK5PTXgruG4NTGoNRbnfAZK9vHVnAnv6SFacQ6
- YJCaDEZmgpcL1uxXtLl1sS8Fh2z/FTztQVUU6uHx8MDz3Q7mde/Ek6Z1TE6apwer2Og==
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TpvmaYFd1K_N for <buildroot@buildroot.org>;
+ Sat, 12 Sep 2026 13:28:08 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org 7C303400BA
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789219688;
+ b=jfcEp+IdLU46wWId2ikaMt8mA4xavaXGTgn5hRzsn9TcuW+F7IZfFVn+62oRyA7LNQsW
+ pmCriOyPxkTOcIPwFSaTG3YlOqpmi9ATRCNIHqfULNgNqy7Hgw1HTAhyQadddKghxdnez
+ PMnqVzvSY2qciqFTo7rVa5fZA+RN2l8nIuHaO439chXHNPG7yZHi91kaZbd6QD0EZ8dLF
+ Qy0MUNPxhR2f+o6pabWmaN850+BDx/r2qGTS/PIdnRgiqdbRCt/8ch20QwXFzWC7NW2DC
+ 3jHCsFK7slqnjYArSV+7ZWDwzlbjXAtgK2SP2+NS89+hf0hFVtKoQm4o4+ZRcC/LO0Q==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1789219672;
- h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
- X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=9eQoy2Crkct7cCk4YQ2s+MtVh9lF8DvNcNz2QZDpr4k=;
- b=CyfyJ/dteeVA1sqBnJPmivDcwx+9S+O/6n6PrLC0Ghcp+qQSP6nv12DC5pQXuLy0YQk8
- jssVwVOSRw80084np1qWMW1fZ398f72W5VCCjxFu3RKz/hal4HbPnSVW4nZNX87Ty/27G
- sa9FhDrqKugeFZVS2AVoS0Xwr0ka9wpNsCKDkDw8VuDOCtVF9xeggVV05Z6jHetXNhVRI
- JSLLmH1wbj3440kJumScXfyZ8zAH8Ptv+crhxvxHxDgAW9V+Of/7hTWpuA4gPutVlwweA
- 4MLVZoBK/PjIOuVd3BLvCrBU4d4wXYZbautlg7TWP1st2cBZYBKnX+5k+vJirts4yJQ==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org;
- arc=none smtp.remote-ip=140.211.167.122
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 522CC40624
- for <buildroot@buildroot.org>; Sat, 12 Sep 2026 13:27:52 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E4DFA956C9; Sat, 12 Sep 2026 13:26:47 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 12 Sep 2026 15:18:40 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 667c8bda321cbeaca9004ffb88a6282a0909e9b6
-X-Git-Newrev: ceaf9e557df142bdf771ffdc102ee5a00443bd2b
-X-Patchwork-Hint: ignore
-Message-Id: <20260912132647.E4DFA956C9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libcdio: bump version to 2.4.0
+ c=relaxed/relaxed; t=1789219688;
+ h=Received-SPF:Received:DKIM-Signature:Received:MIME-Version:Date:From:
+ To:Cc:Subject:In-Reply-To:References:User-Agent:Message-ID:X-Sender:
+ Content-Type:Content-Transfer-Encoding;
+ bh=7M4hxstn/yZ4rpfuucn4HzpgAZXdF/t9dsKK6s0C1mg=;
+ b=nEn30iIQo9BIQKJo4jlcBb5tAa1+TgfDT+gQ8cJImZVfkEmKoIqChtra7z1ZKIq6sC6v
+ jbbqlOfiShD9oOYYanQwCIEkaMNdEk9Z/aKZhKqOXk5DhHrhIbFdMpX7830hvPHPc/P/e
+ CXAj6dqky9mWCy6glAZ4u9SHzaPyaiHhjOjFlQzrX2hb0BAJ4AM/BbTXRGLRRznXjD1bl
+ ebNS4DNK4HTzDkxbvuz0AnX32hwdR4qyb/r3V3eUWKM2uHRtYVgpj5Zd+zbzwQczhOxuY
+ Mw6FrontQyGTuMC7hF4DmshA5dgkTiTj3VIIcZzhvj6ZpX0dvidx5K5DBSZ6vctkL6g==
+ARC-Authentication-Results: i=1; smtp2.osuosl.org;
+ dmarc=pass header.from=free.fr; 
+ dkim=pass header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=WP1x8UM+; 
+ arc=none smtp.remote-ip="2a01:e0c:1:1599::12"
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7C303400BA
+ for <buildroot@buildroot.org>; Sat, 12 Sep 2026 13:28:07 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id D5E1113F879;
+ Sat, 12 Sep 2026 15:28:04 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 12 Sep 2026 15:28:04 +0200
+MIME-Version: 1.0
+Date: Sat, 12 Sep 2026 15:28:04 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20260912120557.2548002-1-bernd@kuhls.net>
+References: <20260912120557.2548002-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.19
+Message-ID: <1d746c1def2f4936da0b491abc4d3618@free.fr>
+X-Sender: ju.o@free.fr
+Subject: Re: [Buildroot] [PATCH v2 1/1] package/libcdio: bump version to
+ 2.4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -111,60 +124,21 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/ceaf9e557df142bdf771ffdc102ee5a00443bd2b
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 12/09/2026 14:05, Bernd Kuhls wrote:
+> https://github.com/libcdio/libcdio/releases/tag/2.4.0
+> 
+> Disable the configure detection of help2man to fix a build error on
+> Fedora 44 hosts:
+> https://lists.buildroot.org/pipermail/buildroot/2026-September/809202.html
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-https://github.com/libcdio/libcdio/releases/tag/2.4.0
-
-Disable the configure detection of help2man to fix a build error on
-Fedora 44 hosts:
-https://lists.buildroot.org/pipermail/buildroot/2026-September/809202.html
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/libcdio/libcdio.hash | 4 ++--
- package/libcdio/libcdio.mk   | 3 ++-
- 2 files changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/package/libcdio/libcdio.hash b/package/libcdio/libcdio.hash
-index 4c15b53e38..821f949b98 100644
---- a/package/libcdio/libcdio.hash
-+++ b/package/libcdio/libcdio.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/libcdio/libcdio/releases/tag/2.3.0
--sha256  53e83d284667535a767fd2d31edad1a6701591960459df373a10f1f21e80a7ed  libcdio-2.3.0.tar.bz2
-+# From https://github.com/libcdio/libcdio/releases/tag/2.4.0
-+sha256  8e6a305f81e45a78b41ce696d34497cc208d97075469d7304c11a6d44bf006ac  libcdio-2.4.0.tar.bz2
- 
- # Hash for license file:
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/libcdio/libcdio.mk b/package/libcdio/libcdio.mk
-index d5238e3aca..fca52e4f52 100644
---- a/package/libcdio/libcdio.mk
-+++ b/package/libcdio/libcdio.mk
-@@ -4,13 +4,14 @@
- #
- ################################################################################
- 
--LIBCDIO_VERSION = 2.3.0
-+LIBCDIO_VERSION = 2.4.0
- LIBCDIO_SOURCE = libcdio-$(LIBCDIO_VERSION).tar.bz2
- LIBCDIO_SITE = https://github.com/libcdio/libcdio/releases/download/$(LIBCDIO_VERSION)
- LIBCDIO_INSTALL_STAGING = YES
- LIBCDIO_LICENSE = GPL-3.0+
- LIBCDIO_LICENSE_FILES = COPYING
- LIBCDIO_CPE_ID_VENDOR = gnu
-+LIBCDIO_CONF_ENV = ac_cv_path_HELP2MAN=""
- LIBCDIO_CONF_OPTS = --disable-example-progs --disable-cddb
- LIBCDIO_DEPENDENCIES = host-pkgconf
- 
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
