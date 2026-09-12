@@ -4,103 +4,176 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06473C88E56
-	for <buildroot@archiver.kernel.org>; Sat, 12 Sep 2026 07:40:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32396C79FB6
+	for <buildroot@archiver.kernel.org>; Sat, 12 Sep 2026 08:50:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C26F8406FC;
-	Sat, 12 Sep 2026 07:40:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D9C4440792;
+	Sat, 12 Sep 2026 08:50:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hfBzdNEun0mM; Sat, 12 Sep 2026 07:40:37 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 8E4AF407BB
+ id 6QXuZ9yDXu9H; Sat, 12 Sep 2026 08:50:42 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org A14A040793
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789198837;
-	b=GuLycJXOpyCsxQLy8Ndd4vMMv64gAZVMQ30u0MiB1qZ9Cah+2+6r4v27I1WAaVscKiGS
-	 plXiruwF/0rHQFPi+dgX6BfupH4PEfwS2aDrTG3AI+auTGPP9bk8tEzgiXSxT19Qni/8m
-	 lb6sAIdxn6UwT1uEOq5/n5Fd4hn3ibADJ8OJyjptYpEJOxaN5U/aCHHlYCa3l+wSYVCye
-	 OrDgUk1lWr2Bp5KRc8t6Ct+y2iOcFUQ+H6TRWPf/5L0MjQfuyQ569md057UkWh9bYeui2
-	 EiXFpW1drhsOomVrjEJeHZADB9fBuf6Vv4rB57FyHgXPxGNFcYK1EoPH8Uet5gRDTYw==
-ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789198837;
+ARC-Seal: i=3; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789203042;
+	b=I14A0Vc/ZKrq6sfDUpapNFhP7MavddAusZR5Mbg5D455sD1XIxeCXpX/0MKtqVYvw+RG
+	 Q2XpgC+HwGqCl+R5K9fW6mc+kgi3fWTU7EYw+9aybGowNk2hGAM1Rm7cV9Fsh3oWvu05q
+	 huoKpfpA6ahkIYtiUuL7ShSh7+JryDoZEJGLEwRVP2k/UaeunLx8+vSR61dWwq8Ia8NAX
+	 RbShnc3S17DD96vjCfe8Ub4xpOVbX2SaOP3+P37+mWYoo0d6OHaOND9eT5DpA3g1uGdi4
+	 VMsCeZ3wCA86jIIAMwTyW4+oW5lI8Dtfzm+1G/d2yMl6x/1XiXYrSLum2AbN/BpuOdQ==
+ARC-Message-Signature: i=3; d=osuosl.org; s=arc; a=rsa-sha256;
+	c=relaxed/relaxed; t=1789203042;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
-	 Received:From:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
-	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
+	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
+	 X-Received:MIME-Version:References:In-Reply-To:From:Date:
+	 X-Gm-Features:Message-ID:To:Cc:Subject:X-BeenThere:X-Mailman-Version:
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:MIME-Version:Content-Type:Errors-To:Sender;
-	bh=b7v2cPWowBgoMGCkIS42TjVjMQObVhyYEOpkn/zgSnU=;
-	b=tB7zg8vJ+dGkRsxgOTssz2Jplbto9mGWFs6j6C9tmlPTZuYxHhK0AWqpzLD/KxXrEiem
-	 Z07zDOBc5MXYSSbZSb02eNJLYi44n0mbzLPPNLmFSiWcVcIG0nbgYpBgnHMrB4gvpzVM6
-	 ioqfJcCC/j5uREmu9Kcf+Kx7mGpbb4m8He9CPRoHeiKrZizHDAfAMNo87dzq9AB/K2TWD
-	 j0n8l7Yop3XI3lX6/SnatDnFCWVodZHSW9RKdDnoS/zNpf4ZGHrUIi5C7sMmqNN0KNEVJ
-	 TkPIi6FuYBIdtd7E9/Lrc1qguo6fECIBGx1LMB47+y64BuVA80SjPlHegxdn9qBYWew==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	 List-Subscribe:Content-Type:Errors-To:Sender;
+	bh=HxOfzdOGSrGUAX/gtp9RiEvfEAZ/BcV94YUa4i2DMo0=;
+	b=VcPujVa+0uGg9nQZl6wsJZWBBYMIu5+hDNFi9M6JTfb4tUdTpRKGrBVMMMjNp1VfeGUw
+	 3BXGZuGHEyLdh5H8UNTmFXY4xAwznCwv8Zb8sQ7UuIrHWJvTYorxwPTYkOKzFb2rnHH8w
+	 yFodz9LncT03bCWyW2OAwsej1wvPA7wcJsR3kCSl0ldiiztBKBA+9e/P81EOdKfqhhHZ+
+	 xNQ+ROeAR16fIJ1zF1GbFW3OMIiygk+xx7BLgnSy5CtOdyhNucOHG6niofqbWPrO9sefi
+	 /vATm90D/xVWcN11QhgX+53l1eta9+MQe57dSQ3qXW+OKa0jNcXCyhNSOLo6r+VPDxg==
+ARC-Authentication-Results: i=3; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789198837;
-	bh=b7v2cPWowBgoMGCkIS42TjVjMQObVhyYEOpkn/zgSnU=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=oozd11ukxv2qbnOukdDqjLm6nV9yMIvxjZYWuheWm0Rul/roFrCOiyu5n1A65kowV
-	 N8WpVu9g4By4eyGzB6f/IWa846OFNCbgnAHSjLifSQm9ZrZZ45NReNjB1o1v7f4pY8
-	 sR1Zr+fIH50WnyT9iMohyVVZC2gQxns0YxUTG3d5vVc6FH8qNx/Ph7qVPhygPWI4Md
-	 3zlNUVqhEj8PSv3w0jD4P5lCvsJh5N/oyT58n2+wBH/hEpNykxq8U3i7VKr+7R4fIb
-	 csFP+CzMjljnKkrhhPROxC52h3Ipw6jLDJf9mis5MPua9DU5oBzDjY0zpku/EVn68B
-	 NKbm5gLGNlLQQ==
+	s=default; t=1789203042;
+	bh=HxOfzdOGSrGUAX/gtp9RiEvfEAZ/BcV94YUa4i2DMo0=;
+	h=References:In-Reply-To:From:Date:To:Cc:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=agCApUS79xd8M4aDvBkniOoXQB5GGXA7QUTQSQ3Dsj8BmUzhKuQCnaJxFLkKngtn1
+	 TAX5faoSs4rQnctcbw9J1Ar5cb+Ai3yynQDsm0IQimmTkAUa57gbooCfg53KgwptDK
+	 o+qugQ1rDtFuipfiFhxm+/bDB0x5vH30VBnQDX0Jb1yW9mp36HJUZnfzgVIl/48S/L
+	 RrSl0GOEO/4Z5mfmATl7Yd3Snptv5vxQeIVqbek4NFwdYMy3zLocQyZ0LDoqydXKDt
+	 4c6qmlgv0SnTXcT+eD7xWuhaaTlIMvbg+W/1IT7M7nG4R9Uv3dESFtDnEPlwX3CN/5
+	 eDseKREdjGlvg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8E4AF407BB;
-	Sat, 12 Sep 2026 07:40:37 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 476B47AB
- for <buildroot@buildroot.org>; Sat, 12 Sep 2026 07:40:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A14A040793;
+	Sat, 12 Sep 2026 08:50:42 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id A501732F
+ for <buildroot@buildroot.org>; Sat, 12 Sep 2026 08:50:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3927680ECC
- for <buildroot@buildroot.org>; Sat, 12 Sep 2026 07:40:31 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 90636400E4
+ for <buildroot@buildroot.org>; Sat, 12 Sep 2026 08:50:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ojxNRLpY3DqQ for <buildroot@buildroot.org>;
- Sat, 12 Sep 2026 07:40:30 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 4569580EC1
-Authentication-Results: smtp1.osuosl.org;
- arc=none smtp.remote-ip=140.211.167.122
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789198830;
- b=OagROZ8i4aaNrlIAIIkCH+xSf66RaYMBar3/5K+kHy092cRFwBdF9Hy7i4jqIQy/tQ27
- H1oKksNs7E2zqzfav12Gg2egZRyBlHDdY/RhrqCo/joG6ixHaBZkORXtGg6cKRF93PzsV
- SIPLNfoulMKwSh+60VqOQ/1eAQ2hw984C9UVu44hk7dcqU0Hl7LTJPotW4aHrysf2SxQI
- OqndIh6wCKXQWICOQHvCh9AmfXpg/q2J1b/VISatA4WrIZl6OR2mXleoYQVit3lxMhpVU
- V+sEVZBeRVeNcVWvCdRE084Mluxe+wVuW7p8LASUkgDWOhgQSRw4ImR/tIEtWYYH7Iw==
-ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1789198830;
- h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
- X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=XUg+LBX6710hW+pBhKae8d/DS3fqO6g3HdHGanMfnhA=;
- b=CzF41cVYT9O6XP2zJW8MA1wMgdfiCSL5NFQAdnmDR+dGoNiGEi2rAqVv1zcrrGBHZGax
- xXWZLZJLudHRPfyvEMUD5p3CE0t7eodds4LWQUdCrX9+CGm1jtHCbKgmJmpvZpMqBQsVt
- 22bjxmpaxHx71D6iBijTug8bX9SQ8In2rcnVBJ0+h4vFDdRozqfYJDtSfrPiN5jAJXYXe
- PIXeMcpXztMNvsV2toInzez6OrOgXAnbjs3ygVMdU7eIFitjp0HaU1PiQL0jm/ggQBKS4
- cUMobMoJembWvgh7iflkRhoALj7A+070UTtmJSDH4PDShSC4biz97oMK/znfWCgNdlA==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org;
- arc=none smtp.remote-ip=140.211.167.122
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4569580EC1
- for <buildroot@buildroot.org>; Sat, 12 Sep 2026 07:40:30 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D8F0A8D275; Sat, 12 Sep 2026 07:39:25 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id D8qcJIhTjqRE for <buildroot@buildroot.org>;
+ Sat, 12 Sep 2026 08:50:37 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org 5471A40076
+Authentication-Results: smtp2.osuosl.org; arc=pass header.oldest-pass=0
+ smtp.remote-ip="2a00:1450:4864:39::10"
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=pass; t=1789203037;
+ b=DIklgATdMLnBbl+g2Df3wKH/Ukx/iSUTr1uaxFFi7xqCZxz9/UmNcGzIgxYp60bdHWoz
+ OTxdahcqgyKVkxhBekHVszfiRhY74FhcKlWaUA9gENM71r401+KN0/SwV870L+mbCylls
+ SS5JhSB2+22PrxHf7mRLUc3fe4o/XAnsEceYnsoXvEauLlau/5SSRsRwH6imfyCt8aL+u
+ Kv93AMN5PqzHDjlxjOWzU1kni+UniI8jN8N7x6YrxyIWD9NM6eUnNMNaXXnX8CUK+cbM9
+ 2t1ioQiQAezOr8Ml/UC6n2BXe9pRs3Z0y+K54EiRPxxuaKQ6Lg90qRfFj2+dKuTiy1g==
+ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
+ c=relaxed/relaxed; t=1789203037;
+ h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
+ X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:References:
+ In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:
+ Content-Type;
+ bh=KsQar1IGYLDUhVSkhlGltsvXg4yHni5Hsca4wc1u/ls=;
+ b=YdU7BvYX2YGdHzTMAVNLQO8DLZ5E7fvR/RUPNyNTcL7A/67Dy9e1EtGTKBMZGa2A9qES
+ 8ZaOwfgocsfuoDaIkKcNf3zto2nBx8thSPr/gPzyl5O7wd7PRCMLzjO9CC0F2Sg8Z/DcQ
+ bAFDEIBhwRUL7kNNin0B/xlhv4fbAEQ4RiHoWwH20YoswWSOlkEeay5svoUcfipjRhAsE
+ hHF6DRPfvy4Daqt+4trEO3DJaOUDWy3ZN017AmvFKshYducRx8xYSlTRD0UDDPEBmIqQr
+ 9qzD5EqaSujwaEV6JCpg0ZuTez3W8pQ4GVgsEj3Q5ruLdErlxdCC9NgmnyYqbZkV24g==
+ARC-Authentication-Results: i=2; smtp2.osuosl.org;
+ dmarc=pass header.from=gmail.com; 
+ dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20251104 header.b=Xe5WJnyo; 
+ arc=pass header.oldest-pass=0 smtp.remote-ip="2a00:1450:4864:39::10"
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:39::10; helo=mail-ua2-x10.google.com;
+ envelope-from=francois.perrad.86@gmail.com; receiver=<UNKNOWN> 
+Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20251104 header.b=Xe5WJnyo
+Received: from mail-ua2-x10.google.com (mail-ua2-x10.google.com
+ [IPv6:2a00:1450:4864:39::10])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5471A40076
+ for <buildroot@buildroot.org>; Sat, 12 Sep 2026 08:50:37 +0000 (UTC)
+Received: by mail-ua2-x10.google.com with SMTP id
+ a1e0cc1a2514c-97e7c72bfe9so50178241.2
+ for <buildroot@buildroot.org>; Sat, 12 Sep 2026 01:50:37 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1789203036; cv=none;
+ d=google.com; s=arc-20260327;
+ b=KhX9/G9SHkgcuVPx2VPuys4AH0133khCBKEzx+rg090A5d93K4yynty/QZG2dFTjGW
+ OPxTU7ouekfKTgEaFuJTyMcW5KIxSZ+l3WgXEtDt0xW5+JCSFL5xW9S/R3HeIr/TLSmR
+ /j7ohGipkjzR292GqlWvI5onQmNyQZdRJwcwjayg998btX5EcsDp8nqd83wzsqpsJe9C
+ B6QYJLETc7TkKRF3psbOylzOiTTxNstVbGirELNEUfgzpYCFc33zksGkuW8GumCpdW15
+ 77d2f+a+abtqzllYtfiMbWiY3CaFAiDf7j04vxuEj17RWzGxKRoq+BG54AdXhJIRF7Qj
+ wLfg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com;
+ s=arc-20260327; 
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:dkim-signature;
+ bh=KsQar1IGYLDUhVSkhlGltsvXg4yHni5Hsca4wc1u/ls=;
+ fh=oysysEuf99awDJNXnO4HjS2bdltGM4EElFMAZMizmeo=;
+ b=bkrAXyeijeQJuJxrHTKPAC+EbBduwaqjkQmpbGgk945ceY3jYQcFbLRAFcJqvZL0X6
+ B/ml+XE5yAgprPKOYGTohDfLqEi3eUvFba+nn/JSK0iNwpCldSToSUT7QOWdbWjh32OY
+ zNdhsDWx1shZb0LBW2MyJG4qIuaJ1olkBO2ReHBlMPBPg0GS+MECPYuHccYRUt2QmbX/
+ 7bVrVoogpdyPKZWPX58dE0B94HXkDGgsKbSfju2Xuu7ByxVb9cMmmtLzgnFfMt2SuvIS
+ MF2Z64vUywwVK0GG8MrITPr4mNt3K63QooYeiv6dHxBFfWRVjULhc29mcM2tR/2E/BEg
+ H0yA==; darn=buildroot.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20251104; t=1789203036; x=1789807836; darn=buildroot.org;
+ h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+ :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+ :content-type; bh=KsQar1IGYLDUhVSkhlGltsvXg4yHni5Hsca4wc1u/ls=;
+ b=Xe5WJnyoNJjO7sxOeUFYZ9oZIm061E1F9DOfUzC7LUE3FY9s6NevYL8gUfP0xuvfh7
+ eWBLBzrbmt9MGVeD7/o/GaBAhZL7Mk3Q04oJ+nH8SP2l9FbOXaRlYDtADyHu8LSamUj2
+ LzbuevBS0jdmqVboTw8pR5uOl0tIGxQUhhlmrJtf8N0B5+P7Zq9ZtAszYD3jiWF7fX4N
+ pUvXLsuSTE29f1GBV3AfUmclLbfVAKK+jgY5ZSQnD3xo3Oy3UdrD5+DRPvf+vDeMrFWZ
+ qSODH0IfhYeb/+J/sSlupfTpIPOhHrRQuWMZb6NwDrdRdBTdevM19JQJGNQq3vKF8lWh
+ SSRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20251104; t=1789203036; x=1789807836;
+ h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+ :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to:content-type;
+ bh=KsQar1IGYLDUhVSkhlGltsvXg4yHni5Hsca4wc1u/ls=;
+ b=dPGew/WS8v6BfWqQodE36Kryx5UGDf6xPbQ3okrdmvdDt58t20H47Lwic71RDrnr28
+ VxqJ4g3YZ0iLP2GhGnZnpYavcIYwYPVFHakz0HkMg8pnrIX9ZsnJuL23/WWUC2wyWpqS
+ qdCBR1xqoZruEGBEVUsacGzRtlSZuxy2+/ahNpcHyR3G6uakvHHimuROFgChYXjfY5Pd
+ cfb3RzEimz45LT7NgU5LOX7V7tZ4NIU/KPAc9+guwJtMUiMY2Cmr+NrxnZ1grDSVfUzu
+ CCFrdRfHAQM4tRCDxmP/O0F5BT1QiPG6RXN31QldkwtiTLmA1XjH4gt3yKSto4PBEqIH
+ 0lww==
+X-Gm-Message-State: AFuF++lU6avlB1DwhT4bBoUfnEiYL2FvcBcRlxAPZPG5XDZdZyG/ssGJ
+ ynY8QLVktaPPubq8HaZSaDw2UPj9z8MyqG/zjx4XfPsP8CP1mWDEb+xF05GcRXoIFoM+cwN7KuK
+ oQzTPCiAAWHe6VNtxyVM2VbZ41r1TJcpLlGUZ
+X-Gm-Gg: AYBFou0v/B247T40XtLXyiRsCVZIkMqYlCE7VnUyyDhIZR+iWwqvo9bPGMo7PimFoAz
+ XNAyr36zZQfcTr4vJIBcEdSysFm+NqvAdvHhnwLckcX0ysEc3wGMdM8MMW5pt/j8Of6TrDfvFdd
+ m3ACexhBpgMyd/CuixGqzkWEAHByXSYLQFE3XvioEAXLpJaK9+45nkmP0GDBbEstKjpaUxl36Cq
+ drqxIIf4OKUw5YuZRQ0QXEekMPBOvItYhNl9CB2f9QhRSHlRDpZ43MyyNt2ceKC2sNlgd8a8oZf
+ bcxUTzfO8huAWKUMcyJuiwabJGz6y20Q8cMLkZWSTXCFFFGqHl5sq7C5Rn5m6+UKN9DwFSC9NiI
+ rtPA7yiUe+FHc05eEgVgVWd9XsA==
+X-Received: by 2002:a05:6102:5814:b0:782:de7b:eead with SMTP id
+ ada2fe7eead31-795a64b4ed1mr1363366137.1.1789203035597; Sat, 12 Sep 2026
+ 01:50:35 -0700 (PDT)
+MIME-Version: 1.0
+References: <20260911222701.1047300-1-bernd@kuhls.net>
+In-Reply-To: <20260911222701.1047300-1-bernd@kuhls.net>
+From: =?UTF-8?Q?Fran=C3=A7ois_PERRAD?= <francois.perrad.86@gmail.com>
+Date: Sat, 12 Sep 2026 10:50:24 +0200
+X-Gm-Features: AcwNN1WSHHd7VY9YRy9S6qpB8xvkf2pJPGo_CZlbJfsHPSzneG8_V2-RpAZf98E
+Message-ID: <CAMTop892cHK0JC+v-GFDMNbqH=-FNfWZZE4QFW7nJfD6mMjFyw@mail.gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 12 Sep 2026 09:38:01 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5c9fbf7efe606d9c34533871d925fc0d16364e7a
-X-Git-Newrev: 8af3e34fd4a085ea7c25291e50d81fa1a69d9eaf
-X-Patchwork-Hint: ignore
-Message-Id: <20260912073925.D8F0A8D275@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/freeradius-server: bump version to
- 3.2.10
+Cc: Marcin Niestroj <m.niestroj@grinn-global.com>,
+ Bernd Kuhls <bernd@kuhls.net>
+Subject: Re: [Buildroot] [PATCH 1/1] package/luaossl: bump version to
+ 20260910
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -112,206 +185,155 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3388484590374255298=="
+Content-Type: multipart/mixed; boundary="===============4269790563123997907=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3388484590374255298==
-Content-Type: text/plain
+--===============4269790563123997907==
+Content-Type: multipart/alternative; boundary="0000000000005e2fcd065b454bf0"
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/8af3e34fd4a085ea7c25291e50d81fa1a69d9eaf
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+--0000000000005e2fcd065b454bf0
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Removed patch 0004 due to upstream commit:
-https://github.com/FreeRADIUS/freeradius-server/commit/60d60eed118b3655aea1922b1442bcbe8c9b6270
-which removes the patched code part.
+Le sam. 12 sept. 2026 =C3=A0 00:27, Bernd Kuhls <bernd@kuhls.net> a =C3=A9c=
+rit :
 
-Added new patch 0004 to fix build errors resulting from the commit
-mentioned above.
+> https://github.com/wahern/luaossl/releases/tag/rel-20260910
+>
+> Updated license hash due to copyright year bump:
+>
+> https://github.com/wahern/luaossl/commit/efaf49dc352c221f518305348bdbf89d=
+b873d6e3
+>
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+>
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...-error-for-expansion-of-macro-in-thread.h.patch | 66 ---------------------
- .../0004-fix-threads-h-pthread-fallback.patch      | 69 ++++++++++++++++++++++
- package/freeradius-server/freeradius-server.hash   |  4 +-
- package/freeradius-server/freeradius-server.mk     |  2 +-
- 4 files changed, 72 insertions(+), 69 deletions(-)
+Acked-by: Francois Perrad <francois.perrad.86@gmail.com>
 
-diff --git a/package/freeradius-server/0004-fix-error-for-expansion-of-macro-in-thread.h.patch b/package/freeradius-server/0004-fix-error-for-expansion-of-macro-in-thread.h.patch
-deleted file mode 100644
-index 00eb63c0f2..0000000000
---- a/package/freeradius-server/0004-fix-error-for-expansion-of-macro-in-thread.h.patch
-+++ /dev/null
-@@ -1,66 +0,0 @@
--From dae3b7c53171dfeacce91e0da1c8bd4e4166352e Mon Sep 17 00:00:00 2001
--From: Yi Zhao <yi.zhao@windriver.com>
--Date: Wed, 18 Jan 2017 14:59:39 +0800
--Subject: [PATCH] fix error for expansion of macro in thread.h
--
--The parameter declaration is missing in expansion of macro
--which cause the build error:
--| In file included from src/freeradius-devel/libradius.h:80:0,
--|                  from src/lib/log.c:26:
--| src/lib/log.c: In function '__fr_thread_local_destroy_fr_strerror_buffer':
--| src/lib/log.c:37:31: error: 'fr_strerror_buffer' undeclared (first use in this function)
--|  fr_thread_local_setup(char *, fr_strerror_buffer) /* macro */
--|                                ^
--
--Add the missing declaration in macro.
--
--Upstream-Status: Pending
--
--Signed-off-by: Yi Zhao <yi.zhao@windriver.com>
--
--Fetch from: http://cgit.openembedded.org/meta-openembedded/tree/meta-networking/recipes-connectivity/freeradius/files
--Signed-off-by: David Gouarin <david.gouarin@thalesgroup.com>
--Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
--Upstream: N/A, code has changed
-----
-- src/include/threads.h | 10 +++++-----
-- 1 file changed, 5 insertions(+), 5 deletions(-)
--
--diff --git a/src/include/threads.h b/src/include/threads.h
--index e36d81dac0..2bcb6aadcb 100644
----- a/src/include/threads.h
--+++ b/src/include/threads.h
--@@ -89,7 +89,7 @@ static _t __fr_thread_local_init_##_n(pthread_destructor_t func)\
-- #  define fr_thread_local_get(_n) _n
-- #elif defined(HAVE_PTHREAD_H)
-- #  include <pthread.h>
---#  define fr_thread_local_setup(_t, _n) \
--+#  define fr_thread_local_setup(_t, _n) static __thread _t _n;\
-- static pthread_key_t __fr_thread_local_key_##_n;\
-- static pthread_once_t __fr_thread_local_once_##_n = PTHREAD_ONCE_INIT;\
-- static pthread_destructor_t __fr_thread_local_destructor_##_n = NULL;\
--@@ -100,17 +100,17 @@ static void __fr_thread_local_destroy_##_n(UNUSED void *unused)\
-- static void __fr_thread_local_key_init_##_n(void)\
-- {\
-- 	(void) pthread_key_create(&__fr_thread_local_key_##_n, __fr_thread_local_destroy_##_n);\
---	(void) pthread_setspecific(__fr_thread_local_key_##_n, &(_n));\
-- }\
-- static _t __fr_thread_local_init_##_n(pthread_destructor_t func)\
-- {\
-- 	__fr_thread_local_destructor_##_n = func;\
-- 	if (_n) return _n; \
-- 	(void) pthread_once(&__fr_thread_local_once_##_n, __fr_thread_local_key_init_##_n);\
--+	(void) pthread_setspecific(__fr_thread_local_key_##_n, &(_n));\
-- 	return _n;\
-- }
---#  define fr_thread_local_init(_n, _f)			__fr_thread_local_init_##_n(_f)
---#  define fr_thread_local_set(_n, _v)			__fr_thread_local_set_##_n(_v)
---#  define fr_thread_local_get(_n)			__fr_thread_local_get_##_n()
--+#  define fr_thread_local_init(_n, _f)	__fr_thread_local_init_##_n(_f)
--+#  define fr_thread_local_set(_n, _v) ((int)!((_n = _v) || 1))
--+#  define fr_thread_local_get(_n) _n
-- #endif
-- #endif
---- 
--2.17.1
--
-diff --git a/package/freeradius-server/0004-fix-threads-h-pthread-fallback.patch b/package/freeradius-server/0004-fix-threads-h-pthread-fallback.patch
-new file mode 100644
-index 0000000000..f80dcbe997
---- /dev/null
-+++ b/package/freeradius-server/0004-fix-threads-h-pthread-fallback.patch
-@@ -0,0 +1,69 @@
-+From: Josip Stjepanović <jstjep00@gmail.com>
-+Subject: [PATCH] fix build failure in HAVE_PTHREAD_H fallback of threads.h
-+
-+Upstream 3.2.10 only implemented the `defined(__THREAD)` branch of the
-+thread-local-storage macros (used when the compiler supports the
-+`__thread` storage class, detected via TLS_STORAGE_CLASS). The
-+remaining `defined(HAVE_PTHREAD_H)` fallback branch, taken when no
-+compiler TLS support is detected but pthreads are available (as
-+happens on some aarch64/musl toolchains), was left as `#error
-+unsupported`, breaking the build.
-+
-+This mirrors the previously dropped
-+003-freeradius-fix-error-for-expansion-of-macro.patch implementation
-+for the `__THREAD` branch into the `HAVE_PTHREAD_H` branch, and adds
-+the `if (_n) return _n;` early-return guard to both so
-+`fr_thread_local_init()` does not re-run `pthread_once`/
-+`pthread_setspecific` on every call.
-+
-+Reported-by: BKPepe <https://github.com/openwrt/packages/pull/29842#issuecomment-4859328263>
-+Patch-by: vortexilation <https://github.com/openwrt/packages/pull/29842#issuecomment-4859798519>
-+
-+Upstream: https://github.com/FreeRADIUS/freeradius-server/issues/5890
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+
-+--- a/src/include/threads.h
-++++ b/src/include/threads.h
-+@@ -82,7 +82,8 @@ static void __fr_thread_local_key_init_##_n(void)\
-+ static _t __fr_thread_local_init_##_n(pthread_destructor_t func)\
-+ {\
-+ 	__fr_thread_local_destructor_##_n = func;\
-+-	(void) pthread_once(&__fr_thread_local_once_##_n, __fr_thread_local_key_init_##_n); \
-++	if (_n) return _n; \
-++	(void) pthread_once(&__fr_thread_local_once_##_n, __fr_thread_local_key_init_##_n);\
-+ 	(void) pthread_setspecific(__fr_thread_local_key_##_n, &(_n));\
-+ 	return _n;\
-+ }
-+@@ -90,6 +91,29 @@ static _t __fr_thread_local_init_##_n(pthread_destructor_t func)\
-+ #  define fr_thread_local_set(_n, _v) ((int)!((_n = _v) || 1))
-+ #  define fr_thread_local_get(_n) _n
-+ #elif defined(HAVE_PTHREAD_H)
-+-#error unsupported
-++#  include <pthread.h>
-++#  define fr_thread_local_setup(_t, _n) static __thread _t _n;\
-++static pthread_key_t __fr_thread_local_key_##_n;\
-++static pthread_once_t __fr_thread_local_once_##_n = PTHREAD_ONCE_INIT;\
-++static pthread_destructor_t __fr_thread_local_destructor_##_n = NULL;\
-++static void __fr_thread_local_destroy_##_n(UNUSED void *unused)\
-++{\
-++	__fr_thread_local_destructor_##_n(_n);\
-++}\
-++static void __fr_thread_local_key_init_##_n(void)\
-++{\
-++	(void) pthread_key_create(&__fr_thread_local_key_##_n, __fr_thread_local_destroy_##_n);\
-++}\
-++static _t __fr_thread_local_init_##_n(pthread_destructor_t func)\
-++{\
-++	__fr_thread_local_destructor_##_n = func;\
-++	if (_n) return _n; \
-++	(void) pthread_once(&__fr_thread_local_once_##_n, __fr_thread_local_key_init_##_n);\
-++	(void) pthread_setspecific(__fr_thread_local_key_##_n, &(_n));\
-++	return _n;\
-++}
-++#  define fr_thread_local_init(_n, _f)	__fr_thread_local_init_##_n(_f)
-++#  define fr_thread_local_set(_n, _v) ((int)!((_n = _v) || 1))
-++#  define fr_thread_local_get(_n) _n
-+ #endif
-+ #endif
-diff --git a/package/freeradius-server/freeradius-server.hash b/package/freeradius-server/freeradius-server.hash
-index b90aa4b657..73c0180a2f 100644
---- a/package/freeradius-server/freeradius-server.hash
-+++ b/package/freeradius-server/freeradius-server.hash
-@@ -1,4 +1,4 @@
- # Locally computed, after checking
--# https://freeradius.org/ftp/pub/freeradius/freeradius-server-3.2.8.tar.bz2.sig
--sha256  2c6483baeba65f939734473fafa31c4f727e8e139dd884563121412b6aba681b  freeradius-server-3.2.8.tar.bz2
-+# https://freeradius.org/ftp/pub/freeradius/freeradius-server-3.2.10.tar.bz2.sig
-+sha256  e30ce4b071ad4b48e7eb0c34c66324a32c2548cfc067900941a90f017dc174e3  freeradius-server-3.2.10.tar.bz2
- sha256  0a0e46014fc2efd5144a30359c0e6e1ea9fa3dd407d3318204150efd7b4caf6a  COPYRIGHT
-diff --git a/package/freeradius-server/freeradius-server.mk b/package/freeradius-server/freeradius-server.mk
-index 80ace1c130..2ac6480934 100644
---- a/package/freeradius-server/freeradius-server.mk
-+++ b/package/freeradius-server/freeradius-server.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FREERADIUS_SERVER_VERSION = 3.2.8
-+FREERADIUS_SERVER_VERSION = 3.2.10
- FREERADIUS_SERVER_SOURCE = \
- 	freeradius-server-$(FREERADIUS_SERVER_VERSION).tar.bz2
- FREERADIUS_SERVER_SITE = https://freeradius.org/ftp/pub/freeradius
 
---===============3388484590374255298==
+> ---
+> Gitlab pipelines passed:
+>
+> https://gitlab.com/bkuhls/buildroot/-/commits/5e83ac0461c070e9f5f85a51867=
+c0962aa826a74
+>
+>  package/luaossl/luaossl.hash | 4 ++--
+>  package/luaossl/luaossl.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/package/luaossl/luaossl.hash b/package/luaossl/luaossl.hash
+> index 734c916f5a..36f1046f07 100644
+> --- a/package/luaossl/luaossl.hash
+> +++ b/package/luaossl/luaossl.hash
+> @@ -1,3 +1,3 @@
+>  # computed by luarocks/buildroot
+> -sha256  19cfc635dd804bde649a8db1ffae01e5fc0cdfac2630fb73c617fe6d8a0bfd30
+> luaossl-20250929-0.src.rock
+> -sha256  421c26c8788c46fd59e4dbfe5bf8eab6c21e37ce3ca8cb44dfff5dc179098756
+> luaossl-rel-20250929/LICENSE
+> +sha256  22ad2d0e3d12a9376c3d06a000a1af70c45ed181ae581556759e55f637ff371d
+> luaossl-20260910-0.src.rock
+> +sha256  277af5901eb8ae8b0e39fec050e858abd23ebf698147e3567df7518928c5cc2d
+> luaossl-rel-20260910/LICENSE
+> diff --git a/package/luaossl/luaossl.mk b/package/luaossl/luaossl.mk
+> index 079d1e0ca4..e1a2806c80 100644
+> --- a/package/luaossl/luaossl.mk
+> +++ b/package/luaossl/luaossl.mk
+> @@ -4,7 +4,7 @@
+>  #
+>
+>  ########################################################################=
+########
+>
+> -LUAOSSL_VERSION_UPSTREAM =3D 20250929
+> +LUAOSSL_VERSION_UPSTREAM =3D 20260910
+>  LUAOSSL_VERSION =3D $(LUAOSSL_VERSION_UPSTREAM)-0
+>  LUAOSSL_SUBDIR =3D luaossl-rel-$(LUAOSSL_VERSION_UPSTREAM)
+>  LUAOSSL_LICENSE =3D MIT
+> --
+> 2.47.3
+>
+>
+
+--0000000000005e2fcd065b454bf0
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote g=
+mail_quote_container"><div dir=3D"ltr" class=3D"gmail_attr">Le=C2=A0sam. 12=
+ sept. 2026 =C3=A0=C2=A000:27, Bernd Kuhls &lt;<a href=3D"mailto:bernd@kuhl=
+s.net">bernd@kuhls.net</a>&gt; a =C3=A9crit=C2=A0:<br></div><blockquote cla=
+ss=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid =
+rgb(204,204,204);padding-left:1ex"><a href=3D"https://github.com/wahern/lua=
+ossl/releases/tag/rel-20260910" rel=3D"noreferrer" target=3D"_blank">https:=
+//github.com/wahern/luaossl/releases/tag/rel-20260910</a><br>
+<br>
+Updated license hash due to copyright year bump:<br>
+<a href=3D"https://github.com/wahern/luaossl/commit/efaf49dc352c221f5183053=
+48bdbf89db873d6e3" rel=3D"noreferrer" target=3D"_blank">https://github.com/=
+wahern/luaossl/commit/efaf49dc352c221f518305348bdbf89db873d6e3</a><br>
+<br>
+Signed-off-by: Bernd Kuhls &lt;<a href=3D"mailto:bernd@kuhls.net" target=3D=
+"_blank">bernd@kuhls.net</a>&gt;<br></blockquote><div><br></div><div><span =
+class=3D"gmail-term">Acked-by:=C2=A0</span>Francois Perrad &lt;<a href=3D"m=
+ailto:francois.perrad.86@gmail.com" target=3D"_blank">francois.perrad.86@gm=
+ail.com</a>&gt;</div><div>=C2=A0</div><blockquote class=3D"gmail_quote" sty=
+le=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);paddi=
+ng-left:1ex">
+---<br>
+Gitlab pipelines passed:<br>
+<a href=3D"https://gitlab.com/bkuhls/buildroot/-/commits/5e83ac0461c070e9f5=
+f85a51867c0962aa826a74" rel=3D"noreferrer" target=3D"_blank">https://gitlab=
+.com/bkuhls/buildroot/-/commits/5e83ac0461c070e9f5f85a51867c0962aa826a74</a=
+><br>
+<br>
+=C2=A0package/luaossl/luaossl.hash | 4 ++--<br>
+=C2=A0package/luaossl/<a href=3D"http://luaossl.mk" rel=3D"noreferrer" targ=
+et=3D"_blank">luaossl.mk</a>=C2=A0 =C2=A0| 2 +-<br>
+=C2=A02 files changed, 3 insertions(+), 3 deletions(-)<br>
+<br>
+diff --git a/package/luaossl/luaossl.hash b/package/luaossl/luaossl.hash<br=
+>
+index 734c916f5a..36f1046f07 100644<br>
+--- a/package/luaossl/luaossl.hash<br>
++++ b/package/luaossl/luaossl.hash<br>
+@@ -1,3 +1,3 @@<br>
+=C2=A0# computed by luarocks/buildroot<br>
+-sha256=C2=A0 19cfc635dd804bde649a8db1ffae01e5fc0cdfac2630fb73c617fe6d8a0bf=
+d30=C2=A0 luaossl-20250929-0.src.rock<br>
+-sha256=C2=A0 421c26c8788c46fd59e4dbfe5bf8eab6c21e37ce3ca8cb44dfff5dc179098=
+756=C2=A0 luaossl-rel-20250929/LICENSE<br>
++sha256=C2=A0 22ad2d0e3d12a9376c3d06a000a1af70c45ed181ae581556759e55f637ff3=
+71d=C2=A0 luaossl-20260910-0.src.rock<br>
++sha256=C2=A0 277af5901eb8ae8b0e39fec050e858abd23ebf698147e3567df7518928c5c=
+c2d=C2=A0 luaossl-rel-20260910/LICENSE<br>
+diff --git a/package/luaossl/<a href=3D"http://luaossl.mk" rel=3D"noreferre=
+r" target=3D"_blank">luaossl.mk</a> b/package/luaossl/<a href=3D"http://lua=
+ossl.mk" rel=3D"noreferrer" target=3D"_blank">luaossl.mk</a><br>
+index 079d1e0ca4..e1a2806c80 100644<br>
+--- a/package/luaossl/<a href=3D"http://luaossl.mk" rel=3D"noreferrer" targ=
+et=3D"_blank">luaossl.mk</a><br>
++++ b/package/luaossl/<a href=3D"http://luaossl.mk" rel=3D"noreferrer" targ=
+et=3D"_blank">luaossl.mk</a><br>
+@@ -4,7 +4,7 @@<br>
+=C2=A0#<br>
+=C2=A0#####################################################################=
+###########<br>
+<br>
+-LUAOSSL_VERSION_UPSTREAM =3D 20250929<br>
++LUAOSSL_VERSION_UPSTREAM =3D 20260910<br>
+=C2=A0LUAOSSL_VERSION =3D $(LUAOSSL_VERSION_UPSTREAM)-0<br>
+=C2=A0LUAOSSL_SUBDIR =3D luaossl-rel-$(LUAOSSL_VERSION_UPSTREAM)<br>
+=C2=A0LUAOSSL_LICENSE =3D MIT<br>
+-- <br>
+2.47.3<br>
+<br>
+</blockquote></div></div>
+
+--0000000000005e2fcd065b454bf0--
+
+--===============4269790563123997907==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -322,4 +344,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============3388484590374255298==--
+--===============4269790563123997907==--
