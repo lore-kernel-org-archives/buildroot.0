@@ -4,154 +4,104 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3EF80C88E50
-	for <buildroot@archiver.kernel.org>; Sat, 12 Sep 2026 03:28:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C561AC79FB6
+	for <buildroot@archiver.kernel.org>; Sat, 12 Sep 2026 06:31:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B4848407C5;
-	Sat, 12 Sep 2026 03:28:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 48F7C407CD;
+	Sat, 12 Sep 2026 06:31:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cOeZoAKM4Abx; Sat, 12 Sep 2026 03:28:38 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 7782F407D6
+ id TeqFPFCqoKrG; Sat, 12 Sep 2026 06:31:34 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 2DF2F407A1
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789183718;
-	b=aocdqFnoeJRAIDSqQwScaUOSUTil/EFkhraYgu1gIH2zYAqubRaUT/wBqFDu/zJyd5U5
-	 WHmw56GVCUtfaDxZanZz+1MDk5rd/RV1D38msqo8rxGZk+jPkSQHkU7hD1mOG8IPczMLs
-	 Bs56EgwWP+lmZAN1HVW3HEUhl1eC4Doe9wGfdWOGlXgCUy82WVVH0/WENmoicJBI127xX
-	 Vk+1qxzVmZtsxtP/BFoA6hZH9ar7Uy9+uEXer64nWYGXhiTEd8QBIYX3xXOfYxJRqIsVm
-	 n9Q1YGr17xmYaZQGsgP3apH31Vps39g213GA644QhcmJZnrZQzI/FYAGxLIWf20+5IQ==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789194694;
+	b=ArNZUSaX+UOHqVSZGQVnrZ6Lwd/m3ad/vUWIbe4VCHEyBn8sr7IWH5oADOWd9UzOotDX
+	 G3r5qiWoLr3flaWMJuXR4H0oyA+fhSTjh35dGbBc2LxS0WY3+XaR0jn2NOXCu41vgq0U0
+	 X15RWyfe/1cKCIvHhRknqOdsfjQA/igtWbAMBzi201yTw5vVcm2lmplGVc/YGK6GOI1us
+	 9hgwiAAgxcVTR0QeiQx1r4AVfDNW+o/OkxzfL4v8HjGRzAG+m1rvcnDtcQoXEi+aJ7Yyc
+	 9emIMLIJDcTOSShII33Nc+GR0M3YGCQJocF0d29O/xeXkOLZ65GddI3iBvMYL0yhfLw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789183718;
+	c=relaxed/relaxed; t=1789194694;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
-	 X-Received:Received:Message-ID:MIME-Version:To:From:Date:Subject:
+	 X-Spam-Status:Received:ARC-Filter:X-Greylist:Received-SPF:Received:
+	 Date:To:Message-ID:Feedback-ID:X-Pm-Message-ID:MIME-Version:Subject:
 	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:Content-Type:
-	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=+t15WuuvmFrS63sW/VHMe9da1dMbwFebLPaBaVNaz44=;
-	b=e8OEPSDTRx5OYEb1b2rm0SdT/Bwha5jVcPtBXr9ilhcAnTaqWcLDZqwKdGF/CuORZcVH
-	 X/B3uRJEmNCoCwp1rKdq/3wbPDuJmNF0w1VyTssYNmeIDZGDQ+v2wtiZREfydt7YNxQZQ
-	 H7MjAfOYCHwIPBMn4Lw/GuslWw+UJiGi4ANdZADRRkfgKrPF4PzvFNHlzwd0260BWlYx8
-	 hN7Cg542GWh3cVaJ6X+lSk9Af1P1iTBpCktJlFIVgeZ2IgMon643ZqT5oXWvDQXoBJ1J6
-	 8HIUFCzhbRZ6xBT3q4WrEWdYbtabvTWvs4MduNE4KSPPXM71tGCQbKrnSB4hJeRfscA==
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
+	bh=Aken9WVQ8a4nvNuBGemulBaRAmDjnn7n+Ul9ive/mwQ=;
+	b=jqSzkI7/nCUKRHfiWt5JgBAc7cVxUy1xISFf4/2r3HtJf59xsoH+REQJmjteqtd44QMl
+	 bRU9feRk0ZwJmlQ10b/SYfpdZ1Gai3ySveY/IH6GNTyA4Kx1EmcuVnPhHJS/MDcbGDN2a
+	 yRRgJ/MQBHuCFPrq/9HzTsYR1MlNCU+4iqH9tLs7yH4mtmoyKJMHBEZTAZz6lxj7eybPi
+	 na4ZNb9wX039RhjEqiDOGGZojZJfHNevC1ErgIPbDVmlh8Sqk3fSni34bwp/mHXTokdeS
+	 tLpPu1H5G9Ei+e+/oWxEQmEb/NJd9OOrWa2FnDjleBkiZGFAQaT1SGriDSFMdq7AR0Q==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789183718;
-	bh=+t15WuuvmFrS63sW/VHMe9da1dMbwFebLPaBaVNaz44=;
-	h=To:From:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=C9EvQ55BN8Akg8O2wSymmDGG++1GXDgIEY4tItFM5d6TxO3Oto0zaO7WeUOAypgQ3
-	 nchstJxNW/y4THjj8pijRyExfwUkPoHrpHw6otOED5MiXSFQHdNYX2BFmp8xssTfVi
-	 9SGPgfCCsYQJkulR1ZbLWO9Fk+pFxH4PEvf65I4owSh8lJNNQzl6yNFAOuNoZIgzHj
-	 /75OfveVR4koA+gAn+AECKICiz3IS/JFamdWJBRZWfeV09UvzUljxyMjJMitBHhIRU
-	 1We8sO9sTLALRtL41DUHMT2ozlaZp2iw2W+P3J3W+ka5Fddi1L2zFlyaS0W3hBQP17
-	 D2i5vtrqQVrpg==
+	s=default; t=1789194694;
+	bh=Aken9WVQ8a4nvNuBGemulBaRAmDjnn7n+Ul9ive/mwQ=;
+	h=Date:To:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=jJ+yhLUYDUzUn0equ6ajPzWVjhNfxUqowERDkGPsL865m5944skSOA3el0IIhGJif
+	 cEVAjJL//T3wMTtBIg6FROFEt3KRzBJXe5zQWDBMOA+rnK4TnsI1gnFmT43G4Vecq+
+	 vD10QrC7zt/pI5dv+wK1xNxA62xtxaGVcD/f+BvC0lMLjtH/5GP3uujRjQEy4JJi5n
+	 iEJsnsk245mK2Ce9UiPFN5J1n/zPmWVwqCheIjtXzo+eBHR3QxksJVKViKEYJ+GNbA
+	 N6qoaca962O39VQ0/mLRVbZpW/aoB7ydIWsm9FNFxtCIwu46MYsrLnhKqOjN3RO37c
+	 7lC2RKbAbtPKg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7782F407D6;
-	Sat, 12 Sep 2026 03:28:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2DF2F407A1;
+	Sat, 12 Sep 2026 06:31:34 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id B1E322E3
- for <buildroot@buildroot.org>; Sat, 12 Sep 2026 03:28:34 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id C6679701
+ for <buildroot@buildroot.org>; Sat, 12 Sep 2026 06:31:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A358C80E43
- for <buildroot@buildroot.org>; Sat, 12 Sep 2026 03:28:34 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id AB73680EC6
+ for <buildroot@buildroot.org>; Sat, 12 Sep 2026 06:31:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bdlsL00wSx79 for <buildroot@buildroot.org>;
- Sat, 12 Sep 2026 03:28:33 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 436B980E36
-Authentication-Results: smtp1.osuosl.org;
- arc=none smtp.remote-ip="2a00:1450:4864:31::10"
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789183713;
- b=eMBifHkqQuZtY7sr5c2OB+e1/MFLKkZprheG7GJ5xhZe8YUndKrteHUcW2HxsmWV3GoB
- uNEtfhJNVdTVyQCG3uK/p8FicNu74XHsmuU0ts60ojbefWm+pI20LdK2IUqG3s7hip6y3
- NWCDcrZiGBMMgOexr18ZnzoRLL9+5/kMLabur9Zau8z5bz1qWkIT+SlrvYG2zf5mYoNU9
- +WsGoXnsi+BbnwsXadJ4yYt3pS/ffACG/Cn8iiA+r+syclS1b8v22Izi3niWCh9KabIJT
- S9AT4KRFaPUtDnJNtFzi7DEFG/17kIYoTYHyGAL/kZdukotxX2VBHbxswjmq6x/XLfg==
+ id 4TgfBl7dsQ6E for <buildroot@buildroot.org>;
+ Sat, 12 Sep 2026 06:31:30 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 9E3BA80E3F
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789194690;
+ b=UpFtra9L6f6nQZZAT21bM4zUcKAw8yNzD2828Y4ej+coGkqhkRfeANS35Jvuk1oLwkyc
+ v86bh+hKhdzkH6HmB1+C0Sppv+GDGlf0F4o1OmP/FYYg7Hs1Lk7+n7xoXgOPwgHTcHuuk
+ 0qj+MMWg+2HOfTea5Z1mN6tNBeng1WyAF6Aq6xwI3nFm8sXtCBkbKXiNBX+NLucDQXhTa
+ i+/gznob9X5HTp48AGf8zVPPhUdaEN4NAuxZt3eCNJDWnVyeSR6oxJ1MZO6Rwxf+gr202
+ OU1Dg88d7qq52PUS8USP1Y602u7Y3nQINWm5LugreEvU1qrjdsYeDbozg7C2w07MiZQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1789183713;
- h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
- X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Message-ID:
- Content-Type:MIME-Version:Content-Transfer-Encoding:Subject:To:From:
- Date; bh=MSun7S0JVFLnKpx7pfmW5VSABN7aAwQ9SIlczmZ3H6k=;
- b=oAOcCDdN8ys83J/Aq06WD9OtOSn5IpT8+ArocoK1I9orWjGcEl30jk0ZVQUO+lfAzGZO
- V7etgHV2iG37YhaXdmEFgOMzLeAHSs60a/a5OmIbvo9pNRSdUol9bE4+ULW+G3jgkc4Iz
- cVNss/iApoQXpS34vUaf9CSzRgU2Xy/i5Qm1gwtigjrYUSnF68hk1aHgfpt7rnP8QQELf
- EwqNXzdXDNecXd3HB+iWtcLHsslcI243Ambrorc+aGgCf6TGd4xfqfnsNMYMNgOjqI51l
- m9Y62siViiqzGgLQlh0keaA52Wzx4YMY7/llaB6PCQjHtS/UKHs+LZg3hHxx2C5JS9A==
+ c=relaxed/relaxed; t=1789194690;
+ h=X-Greylist:Received-SPF:DKIM-Signature:Date:To:From:Subject:
+ Message-ID:Feedback-ID:X-Pm-Message-ID:MIME-Version:Content-Type:
+ Content-Transfer-Encoding;
+ bh=jxr631ThYlw8C1Y8v9aN8+WL9somgWiv+AtuYM3T3VI=;
+ b=gdQHkhUJuEhH5BIGETinRHlQYjfZJxvnO6FuvZug9O+ImS0+Uyk+b3jYjHHO5m8dg2dS
+ 1lCb7ZKfRrhK6FQ5nBVa1xqY5shZljfXaWjcfgnSW4b3SMaZkLyMQFL0dxFIGKzsdzF/K
+ E+azT/nRot+CGEIFw/APaaqsBFsDYSYNn4SlwE/YhQ15qyvI5A0bWeUYn7G2Qf07ABKtK
+ YYB5KAzbH5NeAaIeyGqbx4Zq1wP9RPhmSLTIpx4e5A4ew559uApySJhmXc4arLfyw+GMJ
+ uy8hXcya0EVzka+k/DGF1rcrq6qiBw0LWccCG2eF3Hvsoy+MpkHlgub1FI67ngNh+tQ==
 ARC-Authentication-Results: i=1; smtp1.osuosl.org;
- dmarc=pass header.from=gmail.com; 
- dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20251104 header.b=rq9JgDmM; 
- arc=none smtp.remote-ip="2a00:1450:4864:31::10"
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:31::10; helo=mail-wm2-x10.google.com;
- envelope-from=buildroot.notifications@gmail.com; receiver=<UNKNOWN> 
-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp1.osuosl.org; dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20251104 header.b=rq9JgDmM
-Received: from mail-wm2-x10.google.com (mail-wm2-x10.google.com
- [IPv6:2a00:1450:4864:31::10])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 436B980E36
- for <buildroot@buildroot.org>; Sat, 12 Sep 2026 03:28:32 +0000 (UTC)
-Received: by mail-wm2-x10.google.com with SMTP id
- 5b1f17b1804b1-49ccff31419so1585885e9.3
- for <buildroot@buildroot.org>; Fri, 11 Sep 2026 20:28:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1789183711; x=1789788511; darn=buildroot.org;
- h=date:from:to:subject:content-transfer-encoding:mime-version
- :content-type:message-id:from:to:cc:subject:date:message-id:reply-to
- :content-type; bh=MSun7S0JVFLnKpx7pfmW5VSABN7aAwQ9SIlczmZ3H6k=;
- b=rq9JgDmM8kTmqonRTBOLfQcMulpv/vcmEhTRGbGGcrFifB+fDC+4FKZVSalf2JWSn0
- MuyW5FnTFIkfwKB3niSgWj4NF83yrV8ST7LGYY3eWbF7GUM7cNHj0CC9BTirXGrNj8F5
- Alxv5ovkioSmj1hTLQHA4YIQ7KTO7E82pg6Tvi8iKeMiuyUqc1Z0yYBRuo9Mx8GtpBdA
- jWmiXW4LG5rLpY9cXOaBdxwYhnJby22hHlmW94UopDPsRdbCuZLa7vfpDdD7KTvDhiP/
- DYQtD6HlJS/sfoifP9WTE369BsnB0GVhW2HRVZoc0T0JaXkBX+Ls5t7ewLX/rekSmqNM
- 2jbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1789183711; x=1789788511;
- h=date:from:to:subject:content-transfer-encoding:mime-version
- :content-type:message-id:x-gm-gg:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to:content-type;
- bh=MSun7S0JVFLnKpx7pfmW5VSABN7aAwQ9SIlczmZ3H6k=;
- b=fsBeCcEPXOFyFSUqISPV5od6lbqTT/V6JWkv3wWGPzxPvUiMD4V4nCty1DUFKl79/A
- aKCFVvCBDvyEA6pGhUsqEsC/cDJS8YiGpS/rIm2uUUNzpZN3xHKtEC8xMGQwn0uhqH9U
- nZpJPd1h/C98ztMB1Ha0RvSrQNBFcUekWcAjVgZOeiq9SWHF/wQ9F1AJbsgQAY49vDPL
- tnwCAMwkW7Etb+JsuSPu+v5GAeFvMnXeX8iyFJzUh8ctXP+09u/vHMXanC9IGVrd6lvi
- 6MVN5QOQqPx7t0FpGanmG7kFzS/FQHKTc+92Fb1VnFjTgjFOhCyUqk242kT6YlwsrkQm
- QXog==
-X-Gm-Message-State: AFuF++nar37ftVTm7+JSMcvLW++FUGYQzhUBY32wioiCEtRkgCLRZELO
- pk+rW4x5MBRdtwFqqqb0bY1oGAP9ff6tqTrhwWic4KfTg+26zNxenUr4JOAvY0O3
-X-Gm-Gg: AYBFou2x1d8F/WiA9NynDEt8Wai60rvEo3BsvteNo/A1judwoOhWmqXT9FiDYvEfOjB
- Avobtf3//+xjRLEqOIlzKObiuFma5KgQUtp6oupStfDHeSn2NVBRkHIMFvzByHxPeU4XKu4AfFh
- td3ZfGT8W2PZGltH3asQIXUpj6++/40Jg3NXa65rNg/fP+Pru5jO03fA+kj+aCOOBAX+2T/1/WT
- BBkjvdP3nuumI+2eVy0DyNZrDNeXzgWQH3diUE1g8+fbnzTAsODwEmypdrfeX9nFHUvigW7oTRQ
- GjgfMdZeCEsHXMTcQDGUPZ2jomo6RfVtq1QZskAG+Nc77TsphkTTUOxPYjwz8qwEpSt2P/34oPX
- AKuraaA+T+/etRo8kJGOas9/bFsmQ7zbTBu427mKPK4Mc3+N1XrWAg/0HsF0fgdsuCCeZSuoW/7
- 6e3MffZBsMUk+znhD3YCMKx+M4kGAEPvIYZtLY2PhaEps+AlJiDAECGT0MpxHjkRNgBFQ3aS+O2
- L88lX/KpC82
-X-Received: by 2002:a05:600c:3501:b0:499:7219:122f with SMTP id
- 5b1f17b1804b1-49e6caa72c4mr8484885e9.4.1789183710556; 
- Fri, 11 Sep 2026 20:28:30 -0700 (PDT)
-Received: from [138.201.205.61] ([2a01:4f8:173:1526::2])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-49e63c9a7c9sm166488645e9.13.2026.09.11.20.28.30
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 11 Sep 2026 20:28:30 -0700 (PDT)
-Message-ID: <6aa4c6de.dea6c963.32655e.2583@mx.google.com>
+ dmarc=pass header.from=bitheadtech.com; 
+ dkim=pass header.d=bitheadtech.com header.i=@bitheadtech.com
+ header.a=rsa-sha256 header.s=protonmail2 header.b=hYh1lSmu; 
+ arc=none smtp.remote-ip=185.70.43.20
+X-Greylist: delayed 56291 seconds by postgrey-1.37 at util1.osuosl.org;
+ Sat, 12 Sep 2026 06:31:28 UTC
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.70.43.20;
+ helo=mail-4320.protonmail.ch; envelope-from=darryln@bitheadtech.com;
+ receiver=<UNKNOWN> 
+Received: from mail-4320.protonmail.ch (mail-4320.protonmail.ch [185.70.43.20])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9E3BA80E3F
+ for <buildroot@buildroot.org>; Sat, 12 Sep 2026 06:31:28 +0000 (UTC)
+Date: Sat, 12 Sep 2026 06:31:19 +0000
+To: "buildroot@buildroot.org" <buildroot@buildroot.org>
+Message-ID: <AHK_6fFknkWnG3Iz8WZKEwD9_rVgqsUOgjqu-wpOl5DtVm_vQCm5eS4SILy34w4HfScRe8KDAWio4n1XGnID82uMrtIrQeNPK1HPWE68Beo=@bitheadtech.com>
+Feedback-ID: 33277121:user:proton
+X-Pm-Message-ID: d15f6cb103688e6b26032f3907e3d49406a6a553
 MIME-Version: 1.0
-To: buildroot@buildroot.org
-From: Buildroot Notifications <buildroot.notifications@gmail.com>
-Date: Sat, 12 Sep 2026 03:28:30 -0000
-Subject: [Buildroot] [autobuild.buildroot.org] Daily results for 2026-09-11
+Subject: [Buildroot] [PATCH] package/am33x-cm3: fix gcc c23 keyword error,
+ update TI git repo url
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -163,139 +113,68 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Darryl Newberry via buildroot <buildroot@buildroot.org>
+Reply-To: Darryl Newberry <darryln@bitheadtech.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
 
-Autobuild statistics for 2026-09-11
-===================================
+From 8a1c59ebfd9ac455c2c72f6fad2af90e60877417 Mon Sep 17 00:00:00 2001
+From: Darryl N <darryln@bitheadtech.com>
+Date: Sat, 12 Sep 2026 02:15:23 -0400
+Subject: [PATCH] package/am33x-cm3: fix gcc c23 keyword error, update TI git repo url
 
-      branch |  OK | NOK | TIM | TOT |
-  2025.02.x  |  4  |  3  |  0  |  7  |
-  2026.05.x  |  3  |  2  |  0  |  5  |
-  2026.08.x  |  1  |  1  |  0  |  2  |
-    master   | 24  | 30  |  0  | 54  |
+---
+ .../0005-Makefile-add-std-gnu11.patch         | 25 +++++++++++++++++++
+ package/am33x-cm3/Config.in                   |  2 +-
+ 2 files changed, 26 insertions(+), 1 deletion(-)
+ create mode 100644 package/am33x-cm3/0005-Makefile-add-std-gnu11.patch
 
-Classification of failures by reason for master
------------------------------------------------
+diff --git a/package/am33x-cm3/0005-Makefile-add-std-gnu11.patch b/package/am33x-cm3/0005-Makefile-add-std-gnu11.patch
+new file mode 100644
+index 0000000000..ce007a8f33
+--- /dev/null
++++ b/package/am33x-cm3/0005-Makefile-add-std-gnu11.patch
+@@ -0,0 +1,25 @@
++From 9a205026596690853bdefe1ca48d84900965c5aa Mon Sep 17 00:00:00 2001
++From: Darryl N <darryln@bitheadtech.com>
++Date: Sat, 12 Sep 2026 01:13:12 -0400
++Subject: [PATCH] patch
++
++---
++ Makefile | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/Makefile b/Makefile
++index b4869c494593..602d53c4b82d 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -17,7 +17,7 @@ CFLAGS =-march=armv7-m -mcpu=cortex-m3 -mthumb -nostdlib -ffreestanding -Wall -W
++ -Werror-implicit-function-declaration -Wstrict-prototypes \
++ -Wdeclaration-after-statement -fno-delete-null-pointer-checks \
++ -Wempty-body -fno-strict-overflow -fno-stack-protector \
++- -fno-pie -fno-builtin -g -I$(INCLUDES) -O2 -MD
+++ -fno-pie -fno-builtin -std=gnu11 -g -I$(INCLUDES) -O2 -MD
++ LDFLAGS =-nostartfiles -fno-exceptions -Tfirmware.ld
++
++ EXECUTABLE=am335x-pm-firmware.elf
++--
++2.47.3
++
+diff --git a/package/am33x-cm3/Config.in b/package/am33x-cm3/Config.in
+index d33dfaa613..d4adc9eb9d 100644
+--- a/package/am33x-cm3/Config.in
++++ b/package/am33x-cm3/Config.in
+@@ -5,4 +5,4 @@ config BR2_PACKAGE_AM33X_CM3
+  help
+   Cortex-M3 binary blob for suspend-resume on am335x
 
-                  ffmpeg-6.1.5 | 2 
-           gumbo-parser-0.13.2 | 2 
-               linux-pam-1.7.2 | 2 
-                    sbctl-0.18 | 2 
-                       unknown | 2 
-                 aichat-0.30.0 | 1 
-             alsa-lib-1.2.16.1 | 1 
-                  dpdk-25.11.2 | 1 
-              e2fsprogs-1.47.4 | 1 
-        edk2-edk2-stable202602 | 1 
-                      fio-3.42 | 1 
-                flannel-0.26.0 | 1 
-glibc-2.44-40-g30950ce64dbc... | 1 
-  gobject-introspection-1.86.0 | 1 
-                   gvfs-1.57.2 | 1 
-                host-lzip-1.25 | 1 
-           libsoundtouch-2.4.1 | 1 
-                libsoup3-3.6.6 | 1 
-                  mender-3.5.3 | 1 
-    python-cryptography-48.0.0 | 1 
-            python-iwlib-1.7.0 | 1 
-rtl8723ds-122a574f780da32bb... | 1 
-                 systemd-258.7 | 1 
-               tcf-agent-1.8.0 | 1 
-                 zabbix-7.2.13 | 1 
-
-
-Detail of failures for master
------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-   armeb     |         aichat-0.30.0          | NOK | https://autobuild.buildroot.org/results/e3f1cf4af0197d853895fa00ee4ff132613c6d5c |     
-    i686     |       alsa-lib-1.2.16.1        | NOK | https://autobuild.buildroot.org/results/26dd4d9949805b71e69fe25ac3c6f2b76ab477d7 |     
-  aarch64    |          dpdk-25.11.2          | NOK | https://autobuild.buildroot.org/results/5c7079e158d6ead5a099433ed1ea3d4a07e19e91 |     
-    i686     |        e2fsprogs-1.47.4        | NOK | https://autobuild.buildroot.org/results/a57ba1feaf1bffb2fe56262e3e33729247f32de6 | ORPH
-   x86_64    |     edk2-edk2-stable202602     | NOK | https://autobuild.buildroot.org/results/65968f00ddcf92ae41ff7fef9214bd1ac7b6ac9e |     
-    i686     |          ffmpeg-6.1.5          | NOK | https://autobuild.buildroot.org/results/6bf20b6f48e634f276d38dadf37bf74971fb878b |     
-    i686     |          ffmpeg-6.1.5          | NOK | https://autobuild.buildroot.org/results/73292b621f85eb0669eee5a4e7c374b57b0de6b5 |     
-powerpc64le  |            fio-3.42            | NOK | https://autobuild.buildroot.org/results/ad9686498dd073ec403669f2315c356af2b4a7f4 |     
-    i686     |         flannel-0.26.0         | NOK | https://autobuild.buildroot.org/results/0d09cf7b415758edbda8c3baa3fcdd357980745b |     
-    hppa     | glibc-2.44-40-g30950ce64dbc... | NOK | https://autobuild.buildroot.org/results/641fce713b4c455dd220acbfcc4ab1690e3b8665 |     
-    i686     |  gobject-introspection-1.86.0  | NOK | https://autobuild.buildroot.org/results/0230ab384cea50bcc9b510a423d223f9b92c592f | ORPH
-   mips64    |      gumbo-parser-0.13.2       | NOK | https://autobuild.buildroot.org/results/8172ba794d3f5a9229d95cb4d5a9ffd8288f4f60 |     
-powerpc64le  |      gumbo-parser-0.13.2       | NOK | https://autobuild.buildroot.org/results/8cb78aab718768501958ea4356a688ecc3d8c558 |     
-    i686     |          gvfs-1.57.2           | NOK | https://autobuild.buildroot.org/results/2a0348e1a459003bfa185b938c3534073ab3be0f | ORPH
-    i686     |         host-lzip-1.25         | NOK | https://autobuild.buildroot.org/results/c23cc0fd9a1d03d036c26f49c77291c962e8d1f9 | ORPH
-    i686     |      libsoundtouch-2.4.1       | NOK | https://autobuild.buildroot.org/results/644b6410a8a6de60002895854c122dc92076e4f7 |     
-    i686     |         libsoup3-3.6.6         | NOK | https://autobuild.buildroot.org/results/b799afbe5596e8677bc120179c0f5b4277757e22 |     
-    i686     |        linux-pam-1.7.2         | NOK | https://autobuild.buildroot.org/results/927a3aec442c6d112987c00d2935a6d40a2ed6ca | ORPH
-    i686     |        linux-pam-1.7.2         | NOK | https://autobuild.buildroot.org/results/d8e91fce2c04850e00a118091c700014a107d6d5 | ORPH
-  riscv64    |          mender-3.5.3          | NOK | https://autobuild.buildroot.org/results/4883e241e135b26dd7e6ab9ac22a226f8dee8ce0 |     
-    i686     |   python-cryptography-48.0.0   | NOK | https://autobuild.buildroot.org/results/0ec14c3a05aaeaada4ad004c053154a8066efd1d |     
-    i686     |       python-iwlib-1.7.0       | NOK | https://autobuild.buildroot.org/results/d9ff8564f2e5bc8d5b004ed21b1cacc9804c7cdf |     
-    i686     | rtl8723ds-122a574f780da32bb... | NOK | https://autobuild.buildroot.org/results/1dd4d422ff2566f6489d047fbaf4f21a3364d77f |     
-    i686     |           sbctl-0.18           | NOK | https://autobuild.buildroot.org/results/c20f4073830be0c86e6610deb40f2fae0dab622f | ORPH
-  riscv64    |           sbctl-0.18           | NOK | https://autobuild.buildroot.org/results/53d41bd72e805ef14d832ccbb9b4b2ba40d995db | ORPH
-    i686     |         systemd-258.7          | NOK | https://autobuild.buildroot.org/results/29065f15ea27df6b2cd42e9460e6194501e5fa8d |     
-    i686     |        tcf-agent-1.8.0         | NOK | https://autobuild.buildroot.org/results/4c05eae4e789c82a110a50c7832a92da58fe750d |     
-    arm      |            unknown             | NOK | https://autobuild.buildroot.org/results/3a6216fac46a8543b77eda53fcd80753167763be |     
-   x86_64    |            unknown             | NOK | https://autobuild.buildroot.org/results/a38bcd2705b8f09f441a234c6e41952165778758 |     
-    i686     |         zabbix-7.2.13          | NOK | https://autobuild.buildroot.org/results/aa778337a7fdc439a54d2d5d0af7cd67e7e444fd |     
-
-
-Classification of failures by reason for 2026.08.x
---------------------------------------------------
-
-                    szip-2.1.1 | 1 
-
-
-Detail of failures for 2026.08.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    i686     |           szip-2.1.1           | NOK | https://autobuild.buildroot.org/results/8934db6d452573524009b619a90a8ddb8d3f8b08 |     
-
-
-Classification of failures by reason for 2026.05.x
---------------------------------------------------
-
-            jpeg-turbo-3.1.4.1 | 2 
-
-
-Detail of failures for 2026.05.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    i686     |       jpeg-turbo-3.1.4.1       | NOK | https://autobuild.buildroot.org/results/aad24dbadb15674c63ab933503e64a486d47f6be |     
-    i586     |       jpeg-turbo-3.1.4.1       | NOK | https://autobuild.buildroot.org/results/eea05d04be7dc3b3470336a423cdd53912752bc8 |     
-
-
-Classification of failures by reason for 2025.02.x
---------------------------------------------------
-
-            host-go-src-1.26.6 | 1 
-   openvmtools-11.3.5-18557794 | 1 
-                       unknown | 1 
-
-
-Detail of failures for 2025.02.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    i686     |       host-go-src-1.26.6       | NOK | https://autobuild.buildroot.org/results/85793c3b19819011436f3cf7a353b1b8b41b49b1 |     
-    i686     |  openvmtools-11.3.5-18557794   | NOK | https://autobuild.buildroot.org/results/ed3deda2a1c1240303ef2438156c8dc09b16ad96 |     
-    i686     |            unknown             | NOK | https://autobuild.buildroot.org/results/0e605cf4d21c0b8a1c5cead3578cbd5f6fe36874 |     
-
-
-
--- 
-https://autobuild.buildroot.org
+-  http://arago-project.org/git/projects/am33x-cm3.git
++  https://git.ti.com/git/processor-firmware/ti-amx3-cm3-pm-firmware.git
+--
+2.47.3
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
