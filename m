@@ -1,103 +1,116 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26544C88E53
-	for <buildroot@archiver.kernel.org>; Sat, 12 Sep 2026 13:09:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7818AC79FB6
+	for <buildroot@archiver.kernel.org>; Sat, 12 Sep 2026 13:09:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5673540729;
-	Sat, 12 Sep 2026 13:09:09 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 45HZa14olHO6; Sat, 12 Sep 2026 13:09:07 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 6AE75406E7
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789218547;
-	b=q4vfwtyc7pLxfYktSW6CNDHpe0j5ZfcK2+dGme+7P741XffGmimGEBa/bTX8mtUkzceW
-	 KwIjWADgY/gyq0U+7UMV6EgV0ZUH3rabjQdJSP0wDBjnp60Hp57xk0KhkECzKHtniGfFk
-	 k8JR2rDU6FzQcfLzXtaW/cV23Zg7BObZQkvWX5HoSEcqoNWOGexUF7Nwz661FWPgiqzgS
-	 ncNjuPlwhsz+wdz2B5SqyUy8JxIYnIha7NCBoq/o2u/MPc2StiLY4OCdyXUeoXZhGY1hS
-	 EyQkvGroKQHVWoViProEoXIj4PMgxxKfo1HaF8JwMRZAh/8qq6ZQVMnriH33Euxtf8w==
-ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789218547;
-	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
-	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
-	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
-	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=gkoqpVhqnm1wcCJXkNXktemi32Xz5b4xuFujA0hQokw=;
-	b=RB7xEpqsFz/4yz0Wqu+LLuaFOYHKHxZpcnSZpP89dfBDq8Qext7VifWpPf9Vcy7ERPRN
-	 +242seUcEA5X1Eq8uoBZ2OKkDF/PQeb08RDKmSuksSWJKEmsOwZWt3spqWFZYnO1jsTW1
-	 WdWLSxrpjEdvN7SK/0SDF3rZLq5rZVk4vZfj1CGM3lGsQt10QZsmZywZ90ggoPuDiVXpF
-	 3nU5lV+R9WRoW/WDw2BNalFtVYboWZA9xD2MatR7nNsrXh8KErSNtPssx6OKwZ2iHncDG
-	 nUSBACgtr4IKBqHr/TsQJTI4GUXNcdCN3w99fk5zJLTJd5Fzj46e1tjw0x1dNLaswGg==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789218547;
-	bh=gkoqpVhqnm1wcCJXkNXktemi32Xz5b4xuFujA0hQokw=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=U1+eNEJEAE3h7rc1dDhfDH+J75G1kvR7jTXIq6Zvkt7rapN/O6IFfo3FyO+pFmkt3
-	 tT9QSYqPIsd1gMt9Xg/oPhiDH6mbRnF09dBQXMSay4DOj6OFlmm/GTPTnDgDS0Q+IF
-	 7O6z6L5UzQ48BQkJtPghfSUaAUE7HsZuDcLiZQi5DWat3uW/mLaSTwcmt6K+69mvtL
-	 W7z9vyRWmmUFgko1MJT1s166y3mYyy+IaoZbXgxXrxUpuektggGBrtvYjqXxVjkVVa
-	 r7t2m8W4kJCdA63WPggd8g4ViqNpnQuY/HYM0k3PBQDW3bDeWXM/lCoF5dRtxINzgC
-	 X47f71UUFT3bA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6AE75406E7;
-	Sat, 12 Sep 2026 13:09:07 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 10061EB
- for <buildroot@buildroot.org>; Sat, 12 Sep 2026 13:09:06 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0D08A80D88
- for <buildroot@buildroot.org>; Sat, 12 Sep 2026 13:09:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 18D1C80D7F;
+	Sat, 12 Sep 2026 13:09:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id k-WJ1lLPCkwD for <buildroot@buildroot.org>;
- Sat, 12 Sep 2026 13:09:04 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org AE14880D7F
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789218544;
- b=ZPT8ZICtdmldvcOTylZhq05jRg8kzhIpGu6XZ9aImtXPeMfxgNgfr0CFPQnoIXr60Fa/
- AS6zrJDnf+9LEiXf6QqJ21OsTm6uD9TT8GwpS1crJU80c9klzGadafZUfTHE0cOQDhtB9
- E6GLmbMvzoqX0VjrxBRk3AH4jweNEJ63VD+ZMKvnX7KNZt4TJ0UMjnEd9OSElnQz7qnqC
- vZWI+SDDY4Oyo6gI0ELoEIYaWyqsiUOxakETSwrlSYgM5YSGAo/Da+oNycZ5fMsz1YLb+
- 40YN0apC4BJT5r9393drGQKWoJGVtIJL7QVynNuKzPMPH/MzfurjD2JIb3sbFNd9Q5g==
+ id SHSG3ODigNFV; Sat, 12 Sep 2026 13:09:22 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org EF94780D88
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789218562;
+	b=MVFogoh7C7gCNm0Esf/mIjY0ypkSuD/mhMQWUroO+7EQE6wg3/zsxWDs4C3Q2mdYw/lx
+	 kbfo98gP/gKS7gQGx1tPNdzccrr+2JxUFBHbTx+sKtr/5mGAcdDumkVmAYbuV+RoaqjF+
+	 xAT68dkqbeD+yBCkEnalVQkmyQjJso2Rr2Kt07F7oWJgPaHl1ypLLkMjmJWoQBMUR1X0Q
+	 rZ9KBnruf8zkfBuwYnPDsPOn0TiUsUu2XHSmRS7MmWlD6h0ShuoW2FBR7Pyf0l1hgw06g
+	 9yXLiI75VuSakPGjT+iKfbvdIPc3WT0rIesNXlOXpVM1vFwpYVkk8u+IvJp87dAa3TQ==
+ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
+	c=relaxed/relaxed; t=1789218562;
+	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
+	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 Received:MIME-Version:Date:To:Cc:In-Reply-To:References:User-Agent:
+	 Message-ID:X-Sender:Subject:X-BeenThere:X-Mailman-Version:Precedence:
+	 List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:Content-Transfer-Encoding:Content-Type:
+	 Errors-To:Sender;
+	bh=QYH7OGu82B2bTHU5gEnqqmZCo9qdeOCX73AvGn61scU=;
+	b=ZmXeo8YseYuf6PGgIe2JFNOPRXhOO2Fz4nwkIRxlychU8ULdhxK0pYDkrmoJukymLGsY
+	 c4mUFMOtpdR54z1CLHo/cL9PniurrqVmY1R5Isd+kRxruenKqcso3VoTmy+eIY26ynsDH
+	 fYoUgQs48FormWtcuN1Tc/3j75K64lNP4+sPnJKC8L2OYZY17HoAv8xJk8G3C/JsWZjJa
+	 wlzOgdXp60f6TT7Wp8H8/wPqd4BGWHdQ59JnS36jioKWkWZWXNPMP8pn+bxq0n1HsUBOx
+	 EH7s+8wu1iJzfuLbHkWDM8Lmw8m4lUIXvax9WgPCw3rAVlru68wMhgAylTj/H2PdLgw==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1789218562;
+	bh=QYH7OGu82B2bTHU5gEnqqmZCo9qdeOCX73AvGn61scU=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=qbxaEeJCQP/fvVFP7ZNf+QtPiSgl+z7pl8ypHSrH1M8ia+S6rURopgOn9zM35a0Jq
+	 qMm7vQDbYMl7dFQtiZAKndGoVsiA7M29RGksKOq50oLMxBCmQVg/6QNqITu0yE9Z5y
+	 YaSt9paqMkZZj3reO6kMrGZq9gYMO9BtZXLrBJA6iz+ujPl/484OLbDzFAprsjtQhJ
+	 qwi0rNVidTW/TRYSYaigor4I6zEh3ZTZ50m0mjcyxTngiMzP7RHF+qZvrCyZzgdMP6
+	 8ax5emET9NhMLkgIaxlWpwk1BddEmrUSVHmnpaHwzbtqtP5Bct1SM6zwOJQpYY7LMj
+	 VE9G5DOq5wnFg==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id EF94780D88;
+	Sat, 12 Sep 2026 13:09:21 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 61E81EB
+ for <buildroot@buildroot.org>; Sat, 12 Sep 2026 13:09:19 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4D61C80D88
+ for <buildroot@buildroot.org>; Sat, 12 Sep 2026 13:09:19 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Xo5HqnwoxVBl for <buildroot@buildroot.org>;
+ Sat, 12 Sep 2026 13:09:18 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org F18FF80D7F
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789218558;
+ b=OUUyw+shVRgMNUEnll6pFH81YmCIzu4oy6FLwPJMZWoKtfNs2lYZaxUEmvUh2jq4zQO3
+ X7Zv8r0i5M2IyikTzeCZIlgvq2I8aSbuXAPSMJJ3YSsUNSFvjx+CC36FtaPHWp022o/iK
+ P8VIQMxVfDn5w+nV3rYclXhQHKlsLmkM+s4GcwobtVkssFaJm5qmW7BDpFRzIbXCJxKRP
+ 0fN8oCsodbgCqjkOmrNejQ4x0Ka7vMpD6//eZE+4vICUPxLw66pB9OT8JhS/8e2EpXMGd
+ azX1+jjtiOfk2eJIixwj3JpP9gZuGPNsJlnmHrP4u35EjrhENeJvPPNgpuGWrjrVrxg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1789218544;
- h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
- X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=M8AOqfGuFFh3dlTPYBCfQdEYlu3IeyX7lBMH3vzQV5o=;
- b=OAnv3xIXB6DxpKPn0bKAd0fb9tvJ3q+VPQ8XkGd1mdfEiqNrHcV7F3WKZZsGLToUP8oo
- YrZyckxamlkWWSGrEFwYoszjYMWlOFCZIlKKiZpoE8qPYfPIkolWZKKb5I3tmoaSQMS7I
- hyWlf41wt9xjkVbNghIiYT8TvPhzHIbtpCUWE21n2q7dNgLvDomc/ry6iMq0y17+r0yEo
- if9rOz/+SkcVFmyEKSgNfhwPRJ5GeZoGGEpfmhj1c7Pu+IoDHbKXzmKlb4dp5WXGm2Xpo
- EHY4j1QZBvOgJPmI/Rm5ku0JckXpBEvIxwg5IXhFnyVNRrWc6eazDmaOgLj7YoA24/A==
+ c=relaxed/relaxed; t=1789218558;
+ h=Received-SPF:Received:DKIM-Signature:Received:MIME-Version:Date:From:
+ To:Cc:Subject:In-Reply-To:References:User-Agent:Message-ID:X-Sender:
+ Content-Type:Content-Transfer-Encoding;
+ bh=g83K98I+akZ1GvSGYtnDbsEnN+zUUd6+32KMcceU1H4=;
+ b=aJ993OV6q3DQv/SwAPfWD72nAzHap4FWbDcusHSzwYs81j/UgvYqf+sTSQp97kT+DT5u
+ R4PA/O+09OypZ9jSBp3qMDxDSJRBM3TtePqz22yEpeJoq+F89Lk7POkbb8tGro+6hNT6K
+ zfeNJQsrUkEpDKdvNs/9Pg1Mhxc2qrkii1yew8pJTDkaFTYNa71QKC0dSqoCp61xPS21h
+ 3XQ/1OVfAyFJzi9KIz145guEU08oPRFm2t8iy5f1w8jp3ctEEeTmVVLD0PgI2vZvxakNW
+ zDJUG43IYIYfJGGATQKm1GKU24hDwZB1051mHiY1H6KxsRU3BD4szAMM7n6XxQAho2w==
 ARC-Authentication-Results: i=1; smtp1.osuosl.org;
- arc=none smtp.remote-ip=140.211.167.122
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id AE14880D7F
- for <buildroot@buildroot.org>; Sat, 12 Sep 2026 13:09:04 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4FF73955F4; Sat, 12 Sep 2026 13:08:00 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 12 Sep 2026 15:04:18 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c527520f07168e447652c5c0ee42fcd9a551693c
-X-Git-Newrev: ee5c69065eb3152b45e6d9f41550af23678b4eb9
-X-Patchwork-Hint: ignore
-Message-Id: <20260912130800.4FF73955F4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/sentry-cli: bump version to 3.7.0
+ dmarc=pass header.from=free.fr; 
+ dkim=pass header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=ZyfoqaPy; 
+ arc=none smtp.remote-ip="2a01:e0c:1:1599::14"
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id F18FF80D7F
+ for <buildroot@buildroot.org>; Sat, 12 Sep 2026 13:09:17 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id F36AC6013C;
+ Sat, 12 Sep 2026 15:09:10 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 12 Sep 2026 15:09:10 +0200
+MIME-Version: 1.0
+Date: Sat, 12 Sep 2026 15:09:10 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org, Joseph Kogut <joseph.kogut@gmail.com>
+In-Reply-To: <20260904171031.194697-1-bernd@kuhls.net>
+References: <20260904171031.194697-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.19
+Message-ID: <38f9763482279d00c26e12395a093f1c@free.fr>
+X-Sender: ju.o@free.fr
+Subject: Re: [Buildroot] [PATCH 1/1] package/sentry-cli: bump version to
+ 3.7.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -111,129 +124,27 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/ee5c69065eb3152b45e6d9f41550af23678b4eb9
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 04/09/2026 19:10, Bernd Kuhls wrote:
+> https://github.com/getsentry/sentry-cli/blob/3.7.0/CHANGELOG.md
+> 
+> Removed patch which is not needed anymore.
+> 
+> Updated license hash due to upstream commits:
+> 
+> copyright year bump:
+> https://github.com/getsentry/sentry-cli/commit/734fa8cddc8308133d6f807cec01a9e5e668aba8
+> 
+> switch to FSL-1.1-MIT license:
+> https://github.com/getsentry/sentry-cli/commit/3ed4ada174945c83702350ceb83944651f1d8ff2
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-https://github.com/getsentry/sentry-cli/blob/3.7.0/CHANGELOG.md
-
-Removed patch which is not needed anymore.
-
-Updated license hash due to upstream commits:
-
-copyright year bump:
-https://github.com/getsentry/sentry-cli/commit/734fa8cddc8308133d6f807cec01a9e5e668aba8
-
-switch to FSL-1.1-MIT license:
-https://github.com/getsentry/sentry-cli/commit/3ed4ada174945c83702350ceb83944651f1d8ff2
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- ...1-Disable-SSL-support-for-the-curl-module.patch | 62 ----------------------
- package/sentry-cli/sentry-cli.hash                 |  4 +-
- package/sentry-cli/sentry-cli.mk                   |  4 +-
- 3 files changed, 4 insertions(+), 66 deletions(-)
-
-diff --git a/package/sentry-cli/0001-Disable-SSL-support-for-the-curl-module.patch b/package/sentry-cli/0001-Disable-SSL-support-for-the-curl-module.patch
-deleted file mode 100644
-index 819d8016ae..0000000000
---- a/package/sentry-cli/0001-Disable-SSL-support-for-the-curl-module.patch
-+++ /dev/null
-@@ -1,62 +0,0 @@
--From 5b4179af15b435a476c006260718d4f6e22ea2ab Mon Sep 17 00:00:00 2001
--From: Bernd Kuhls <bernd@kuhls.net>
--Date: Mon, 31 Jul 2023 22:34:04 +0200
--Subject: [PATCH] Disable SSL support for the curl module
--
--Fixes build with OpenSSL v3.
--
--Downloaded Cargo.toml patch from
--https://cgit.freebsd.org/ports/tree/devel/sentry-cli/files/patch-Cargo.toml
--
--Upstream: https://github.com/getsentry/sentry-cli/issues/1706
--
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-----
-- Cargo.lock | 10 ----------
-- Cargo.toml |  2 +-
-- 2 files changed, 1 insertion(+), 11 deletions(-)
--
--diff --git a/Cargo.lock b/Cargo.lock
--index e5031db..7357215 100644
----- a/Cargo.lock
--+++ b/Cargo.lock
--@@ -1521,15 +1521,6 @@ version = "0.1.5"
-- source = "registry+https://github.com/rust-lang/crates.io-index"
-- checksum = "ff011a302c396a5197692431fc1948019154afc178baf7d8e37367442a4601cf"
-- 
---[[package]]
---name = "openssl-src"
---version = "111.25.0+1.1.1t"
---source = "registry+https://github.com/rust-lang/crates.io-index"
---checksum = "3173cd3626c43e3854b1b727422a276e568d9ec5fe8cec197822cf52cfb743d6"
---dependencies = [
--- "cc",
---]
---
-- [[package]]
-- name = "openssl-sys"
-- version = "0.9.80"
--@@ -1539,7 +1530,6 @@ dependencies = [
--  "autocfg",
--  "cc",
--  "libc",
--- "openssl-src",
--  "pkg-config",
--  "vcpkg",
-- ]
--diff --git a/Cargo.toml b/Cargo.toml
--index c8c9ca9..117e77d 100644
----- a/Cargo.toml
--+++ b/Cargo.toml
--@@ -25,7 +25,7 @@ clap = { version = "4.1.6", default-features = false, features = [
--   "error-context",
-- ] }
-- console = "0.15.5"
---curl = { version = "0.4.44", features = ["static-curl", "static-ssl"] }
--+curl = { version = "0.4.44" }
-- dirs = "4.0.0"
-- dotenv = "0.15.0"
-- elementtree = "1.2.3"
---- 
--2.39.2
--
-diff --git a/package/sentry-cli/sentry-cli.hash b/package/sentry-cli/sentry-cli.hash
-index 0b1ef402e1..af50304475 100644
---- a/package/sentry-cli/sentry-cli.hash
-+++ b/package/sentry-cli/sentry-cli.hash
-@@ -1,3 +1,3 @@
- # locally calculated
--sha256  19d62065788c0b72d54875e834462f444204fcae99fe76f69a836cc17a7a0935  sentry-cli-2.20.3-cargo6.tar.gz
--sha256  9503def7b54ceb6e3cd182fd59bc05d3a30d7eae481e65aaba4b495133c83c14  LICENSE
-+sha256  bf37c6beeebd1b1d7302e61653083f4d7bcfdb6ef7a8081d42b0bcd8ea2e677a  sentry-cli-3.7.0-cargo6.tar.gz
-+sha256  f8171b7a645bca1eff1e69f911dc4c1fa93bf92a2f7d4d7fa24b4b7660c33041  LICENSE
-diff --git a/package/sentry-cli/sentry-cli.mk b/package/sentry-cli/sentry-cli.mk
-index 3ddf5e44fc..ff49f479a8 100644
---- a/package/sentry-cli/sentry-cli.mk
-+++ b/package/sentry-cli/sentry-cli.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--SENTRY_CLI_VERSION = 2.20.3
-+SENTRY_CLI_VERSION = 3.7.0
- SENTRY_CLI_SITE = $(call github,getsentry,sentry-cli,$(SENTRY_CLI_VERSION))
--SENTRY_CLI_LICENSE = BSD-3-clause
-+SENTRY_CLI_LICENSE = FSL-1.1-MIT
- SENTRY_CLI_LICENSE_FILES = LICENSE
- 
- HOST_SENTRY_CLI_DEPENDENCIES = host-pkgconf host-openssl host-zlib
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
