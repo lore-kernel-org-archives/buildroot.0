@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B5D4C88E56
-	for <buildroot@archiver.kernel.org>; Sat, 12 Sep 2026 21:01:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E1A2C88E53
+	for <buildroot@archiver.kernel.org>; Sat, 12 Sep 2026 21:01:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9C4DD40698;
-	Sat, 12 Sep 2026 21:01:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 09DF680E58;
+	Sat, 12 Sep 2026 21:01:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8nXPg0lRDDQR; Sat, 12 Sep 2026 21:01:02 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org E40D6405FB
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789246862;
-	b=Q20r41m9lsocfYdmMH7fhS04N11UGcoEAJVjxz4qSwTRxxVqHAyRG9CNGmXbHyBxhLpx
-	 mqI8tLjRGC6o9WM6dVVhxNsfWXUP8+pf2Bew6JAhQZzrKFXU66ImWSNhwXixZpBkqc/yM
-	 yoNximKe05tL0Ekz/TX8emTDO+J4WhDLXl437sPchQ3o9WtDZ/B99J7jqR+VUiJ9usmMe
-	 wnk4gl5HpA9Y93SLzuTo9Lf6FzGpffJ1IDTKk/lGYehI0bTgpZM8dkwhjn9dKus+Mtysw
-	 p3jFe/dkAETLT7qa9hJQ+6QoabibyLaGFs2/JfJ10rcbmWcfHVPP2+n2jn3wx9u47yw==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Q8gfMMqFMHbc; Sat, 12 Sep 2026 21:01:30 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 1EC2180E4E
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789246890;
+	b=rq2kJ9Si8BEnt2+bGuZwS3464a3k/mrkRX+VcQ5M5X9FUF6+CyjlD6+CLciGN2rBqeSR
+	 RRVHMGi3X6bYUrYxsT32+xTUv8hqDo7TyONLMSfaWwuImnD0gEbBuBUWS4rXeJSz4zL3p
+	 ECEY3CEjcDsinE0fuHtTnBQuSUD57dXD/L3tPYvFABqXdHotAfXUKNdT8apBHnbWSZvmd
+	 Gm1PW0PU9d6NGBVm4smJhrVmPdExbMWQw23i34itJ/c4G/vEfu7fbmNcXS2O8rNyzwROz
+	 wv9IA0Xszg0VoW8cEOV6EDoE0e+VSKDNs6FB+WUDAyCRQp1yZ8B3dlXjE6IDOD02nwQ==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789246862;
+	c=relaxed/relaxed; t=1789246890;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -31,86 +31,87 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:Content-Type:Content-Transfer-Encoding:
 	 Errors-To:Sender;
-	bh=WWLPApwtYvCHFbSW8mFRFEUTF3V9XQf1ktxB6OP8wn4=;
-	b=bchwZFj5ocYTKFY02HG9rkzV9Vot+EIAG7b3WjbjL1EHZmzKhpdGRSVN/7C4PFhMsu0t
-	 VXOztECfpxSBFgIjIEXokaHaYFZ5VXPTbAyTZhXoycABVNCjXUo3MhfgnudBqUegCXvBM
-	 TsGFc22eaS+uLDrdVlMomlXHhyEPvuE/9YBMjhD5I3/2VW2sztFhyh9KaYHqI1smteu3R
-	 YQfNwAbwL/vXzX8qpTAOsM3mOTtd1ciGZT6CF/P8/Eiv/KeuYI7C6/PhHpxepmKVCWPTU
-	 TynO0LbflQoidRCfk+24BJKdlMO1/u6m05cZ2McPqXEi/ExwWPqCYEiL6Srp6vLgqwA==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	bh=XtAvVYl79ouj2cekaoCR4Az9/diGkLV9ctMPMdd8vys=;
+	b=QKnGvxJekgSgTQS+lHjdg0a7fPUokB6zs3hl1APK6SjPrIXbCwsvu87GmqnjUHj3dl+w
+	 zumEm12SNGIzX6c+M380/dRt0qOMGvWhfgQL8992O/pH8vQqvpFREj5GdyE61L9xhURHc
+	 +O2IQknQtiG2MiasKOGytUK+8G2VH38PDNxY/7+M0GGxip2w7xFrpjBu6i9Tm4BLd/5oL
+	 Kqg9FPWUxLiTBIz/92uTtZzD4zIWT0ELk3GcT8TnysiVkGVs2kseKYkhfwwfn+ROJBpaH
+	 +fH3QjKE/9DnPjTIjSwFs9V5MY5zJfN+YGuu6m2NhxPtHU7iOcKqlNHT1WnYpTcMdGA==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789246862;
-	bh=WWLPApwtYvCHFbSW8mFRFEUTF3V9XQf1ktxB6OP8wn4=;
+	s=default; t=1789246890;
+	bh=XtAvVYl79ouj2cekaoCR4Az9/diGkLV9ctMPMdd8vys=;
 	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=fe8Yy/LTj+5MGCZTYT50/rlRk1B7VYp93Ys2EQwTd+JWiLkS0BmT5GkZUyXUvN2C6
-	 W/UjpvFmR/Co5bGfHeNlv/XAN2RoJVxlLRAy8klR/3sNTXg/re/vy0BQ0dilQEMPjE
-	 V/mWauImgDczVhZVvGxI2LE7BXzcQNVG7GVslNOKiQP2YDA/V2NBc2GydXzss2MYBs
-	 U9CUPFvbl0mNiB7g9UJsXdVcAbbuLNpCQKz/h301qtbJqpEAzq0ogtuwBWkaG5fVJf
-	 jJvYdEcFnsWoXLHcgBJ5isx90s1w4aJ5NXsT5bLgc5PzzIDQcHAorOt45beC4B0YDN
-	 TuPOtKgTAki8w==
+	b=YWE6QRYB5ieFLTQR6ChREp92ohBKEWM2Hn5JimrNgL+LDIwF+lD2pE+9LQ+S9YMHI
+	 VG7TThmZwAee4FNBSTE36uddQmzo961uq11VEOh3xAB+F8uvtwoIASamLTxv2o5/Rx
+	 wTtBjppRXvWC9vA+OoKzgrAjVVBPvEutEOCcSMeWxNvTPNbXAMg07DyZo+LJpkBQ3I
+	 ebPr8rPKbXw92aMNQFnU0LxuxEbRZl6bAKDAPWxavqQwGm/kynflJRRx2vNq+QrrH8
+	 ZfUUC0RPf4SDbUI2t/TZbxl6oQKJFBzCEbfBASc0WxMPS71F0HU5fgXFoEFWZrK0AW
+	 GqEnCsl9onrAg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E40D6405FB;
-	Sat, 12 Sep 2026 21:01:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1EC2180E4E;
+	Sat, 12 Sep 2026 21:01:30 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id A2C3B2D0
- for <buildroot@buildroot.org>; Sat, 12 Sep 2026 21:01:00 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 3E9042E3
+ for <buildroot@buildroot.org>; Sat, 12 Sep 2026 21:01:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8BA5F80E4E
- for <buildroot@buildroot.org>; Sat, 12 Sep 2026 21:01:00 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 306D780E4E
+ for <buildroot@buildroot.org>; Sat, 12 Sep 2026 21:01:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qw4vO7DHFZRV for <buildroot@buildroot.org>;
- Sat, 12 Sep 2026 21:00:59 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 2A0B180E3F
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789246859;
- b=prvsZ6a36w7qpSNjDaxjGyb29AKK9nu1pFYhRmx/CkK9fUW8Hjmk6NGx+RhROWXqgdEL
- 4XYNJXJN3odY3ss6k0q+BpwJ3RIKQ+XHEMNznMLKyId71SJMGYApc1PV4faaPNKHrXIe0
- SPs+ZBUu409BYjJWH5dPMKshsZsoGd5D0IC0HbelkOjegK6/4gqkmJAYcaDPe+WSuCrx1
- ZLlfUawcGDzZj+fs40yTpvmhVpxjmtDv0e95EwuycOQw5xTkQDoABetLDQb8flpmmeUbe
- GUJoV3UbTKgEr6bpSOSZ2D5zxGk1ckD/cSIyVVziFTOfgTBjQmPKfiw1rcdivdON08w==
+ id aQIOQmLXE3Jp for <buildroot@buildroot.org>;
+ Sat, 12 Sep 2026 21:01:25 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 70AA180E0D
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789246885;
+ b=C/knpEfI6sWiw1BTAg2RXkQMy/lRV5EB2c3Q5wb3yeuw/iR0lKeuQpXZWChCqLVRBJTa
+ LsFh87fmvrSVzqzug4STbmtz0s4gX3vkGvgn7FphYm6sEUp8OxihAizcaipnly+OV0kAS
+ ykDVXRW0plQBo5g+fG2SezFCVQuJx0yuq3vptHbj0QviDkqT64sBqa8O7riDqs0wRR/RY
+ 3LEed3MIneT927BlIqONRHlr5szvGOi3skL0ZM1Whq0eLZB5FocqeucxJ1Fj3h+CXNbkk
+ 9yfzSfuRmFjqy2ouFD3yZSOFMfnTts/XrmuEXRaEjGc7ss4nXJ+RNMrTZTOBIQbkkEA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1789246859;
+ c=relaxed/relaxed; t=1789246885;
  h=Received-SPF:Received:Received:Received:DKIM-Signature:From:To:Cc:
  Subject:Date:Message-ID:X-Mailer:MIME-Version:
  Content-Transfer-Encoding:X-Last-TLS-Session-Version;
- bh=B3zjoLNzaPd6oYtl8hNzq/i+zVfqGM/k86MdQcRbBQM=;
- b=UQ/B/HSh1LJQigPxj23u2SDUZt6BGWuKJmPLGrCT7H6M5ZWUIXH585IJ0IDKoetwEbs0
- s+sbDK4rIwoulGHwBdn5oOZYVd9fJPdL4oZlFPElA8rzXBmD5IAjiKKzDnSio8tBsj7Qt
- FFXa5b7399+ps4sd0yAG18ZNYDGHgiHV668O5yyOMvg8vwm2IG/mv1FVLa29mezIQAWT+
- e2Z3y6aqLmEBX4EOCWtg9UfyE+z6BrgzK6mUr1O2Ie9ArsP8RJJhGg1iYK81gCwHHi8yK
- 0gkuB5lOhKwXSqFs8MCXaRcj6FTLQQoAdwnVn+jMNREtCal8v1CXjkx9yesI6M9L/eQ==
+ bh=VHsHmwBolSx8ITmFE/s+S4jtKicmpJQWMQF7j8vcx+Y=;
+ b=tNi/1vdKEcexIclseiH1oKOD72phO23UNh6QI+zwkRtWT/mDEzkikoRpHM/2bwqwvBQK
+ 3Z4UhlNaRNuWv6XqS5wQ9akMFHZNdHdDZjFVNrjD/zyBYy5VRxryY6WAK9ikP3NZb2pkA
+ ccgdxY5MmJ7c+1qU02WmyFMtCCIic4f81gipcebSIAIApJD8Eie0yPGhEcLd72fNZwOWj
+ QdChpksVt3+vAvKukt0iPkzkT+FsapWqJgcGDoq/LLendwiUuOXTBPYdyNhQ31GkgIe6a
+ rwtvhYnOJMVWHMCGUKkrpAYKWGgbZ2j0k809c/P6Ef8HeuuMXcqYDXlpnTKS6kSIKYA==
 ARC-Authentication-Results: i=1; smtp1.osuosl.org;
  dmarc=pass header.from=bootlin.com; 
  dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=dE8KlU6U; 
+ header.s=dkim header.b=ZpgxxDez; 
  arc=none smtp.remote-ip=185.171.202.116
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
  helo=smtpout-04.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
 Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2A0B180E3F
- for <buildroot@buildroot.org>; Sat, 12 Sep 2026 21:00:57 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 70AA180E0D
+ for <buildroot@buildroot.org>; Sat, 12 Sep 2026 21:01:25 +0000 (UTC)
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-04.galae.net (Postfix) with ESMTPS id D7177C63449
- for <buildroot@buildroot.org>; Sat, 12 Sep 2026 21:01:36 +0000 (UTC)
+ by smtpout-04.galae.net (Postfix) with ESMTPS id 28D21C63448;
+ Sat, 12 Sep 2026 21:02:06 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 790BC60580;
- Sat, 12 Sep 2026 21:00:54 +0000 (UTC)
+ by smtpout-01.galae.net (Postfix) with ESMTPS id C590A60580;
+ Sat, 12 Sep 2026 21:01:23 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 5F63511C7AFA9; 
- Sat, 12 Sep 2026 23:00:49 +0200 (CEST)
+ with ESMTPSA id C268911C7AFA9; 
+ Sat, 12 Sep 2026 23:01:18 +0200 (CEST)
 To: buildroot@buildroot.org
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Andreas Ziegler <br025@umbiko.net>
-Date: Sat, 12 Sep 2026 23:00:46 +0200
-Message-ID: <20260912210046.1550198-1-thomas.petazzoni@bootlin.com>
+ Romain Naour <romain.naour@gmail.com>
+Date: Sat, 12 Sep 2026 23:01:16 +0200
+Message-ID: <20260912210117.1550341-1-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.55.0
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
-Subject: [Buildroot] [PATCH] package/mpd: enable smb support on uClibc
+Subject: [Buildroot] [PATCH] package/bcc: propagate missing dependency from
+ clang
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -129,55 +130,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-samba4 is available on !musl, but samba support in mpd is available
-only with glibc. Turns out that samba support in mpd builds just fine
-with uClibc-ng, and that samba4 no longer needs native RPC support: it
-can use libtirpc when needed (it's handled in the samba4 package
-itself).
+Since bcc was introduced in commit
+146498d13c487e8f43d6725e343eae4474147695, it lacked a dependency
+propagation from clang for BR2_TOOLCHAIN_HAS_GCC_BUG_64735, this
+commit fixes this mistake.
 
-Tested with the following defconfig:
-
-BR2_aarch64=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_UCLIBC_BLEEDING_EDGE=y
-BR2_PACKAGE_MPD=y
-BR2_PACKAGE_MPD_LIBSMBCLIENT=y
-
+Fixes: 146498d13c487e8f43d6725e343eae4474147695 ("package/bcc: new package")
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mpd/Config.in | 15 ++++++++-------
- 1 file changed, 8 insertions(+), 7 deletions(-)
+ package/bcc/Config.in | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-index 1b6815e904..831cbe933d 100644
---- a/package/mpd/Config.in
-+++ b/package/mpd/Config.in
-@@ -226,16 +226,17 @@ config BR2_PACKAGE_MPD_LIBNFS
- comment "nfs support needs a toolchain w/ threads support"
- 	depends on !(BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_HAS_NATIVE_RPC)
- 
--comment "samba support needs a glibc toolchain w/ dynamic library, RPC"
--	depends on !BR2_TOOLCHAIN_USES_GLIBC || BR2_STATIC_LIBS || \
--		!BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+comment "samba support needs a glibc or uclibc toolchain w/ dynamic library, NPTL"
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-+	depends on BR2_TOOLCHAIN_USES_MUSL || BR2_STATIC_LIBS || \
-+		!BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 
- config BR2_PACKAGE_MPD_LIBSMBCLIENT
- 	bool "samba"
--	depends on BR2_TOOLCHAIN_USES_GLIBC
--	depends on !BR2_STATIC_LIBS
--	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
--	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-+	depends on !BR2_TOOLCHAIN_USES_MUSL # samba4
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # samba4
-+	depends on !BR2_STATIC_LIBS # samba4
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # samba4
- 	select BR2_PACKAGE_SAMBA4
- 	help
- 	  Enable Samba support.
+diff --git a/package/bcc/Config.in b/package/bcc/Config.in
+index bf46f07d93..9f3907b9be 100644
+--- a/package/bcc/Config.in
++++ b/package/bcc/Config.in
+@@ -9,6 +9,7 @@ config BR2_PACKAGE_BCC
+ 	depends on BR2_USE_WCHAR # clang, python3
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # clang, python3
+ 	depends on !BR2_STATIC_LIBS # clang, python3
++	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # clang, llvm
+ 	select BR2_PACKAGE_CLANG
+ 	select BR2_PACKAGE_ELFUTILS
+ 	select BR2_PACKAGE_FLEX # needs FlexLexer.h
+@@ -48,3 +49,8 @@ comment "bcc needs a glibc toolchain, C++, wchar, threads, dynamic libs, gcc >=
+ 		|| !BR2_USE_WCHAR \
+ 		|| !BR2_TOOLCHAIN_HAS_THREADS \
+ 		|| BR2_STATIC_LIBS
++
++comment "bcc needs a toolchain not affected by GCC bug 64735"
++	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
++	depends on BR2_USE_MMU
++	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
 -- 
 2.55.0
 
