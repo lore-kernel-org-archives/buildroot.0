@@ -1,104 +1,117 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0CBD5C88E56
-	for <buildroot@archiver.kernel.org>; Sun, 13 Sep 2026 08:45:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75A17C88E56
+	for <buildroot@archiver.kernel.org>; Sun, 13 Sep 2026 08:46:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C0FE180D96;
-	Sun, 13 Sep 2026 08:45:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2D9DC4069F;
+	Sun, 13 Sep 2026 08:46:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Um745NUcFz3M; Sun, 13 Sep 2026 08:45:52 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org C673E80E48
-Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789289151;
-	b=VAMFFUZdEahOO/z1D7bBPKEGFeHrWn6VIYygNFIQWA/3+UDOJxVckv9FaMUXES1rSF6i
-	 8oVVVAAK6mLSHZJOdOB0+M+4apvw+vaLMVgctjJUMcVtc1B6bq0po+o2by20JcazlUEWA
-	 F4XALXTZDZOkbdUX3gDg96qT3XoFth8FkYX4yb8meIDyscm9iHUt2UEFBBp2mQ9a6wUaV
-	 07eLgAuuEJxT5efY78+hmgVPAp5Hmg4oS52N1cgzASXjA8hkkcA9C9W1gxjwYKR4D/YQp
-	 /VoYrzlS0CcpoEkPXbPgcDoQJ7yH+1ft+prtJZsOZFP6FvTr+Bho9rE54eMaTNrzLJA==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id M05FQg1AECLD; Sun, 13 Sep 2026 08:46:18 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 41B3C40685
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789289178;
+	b=TvHIDEnUKlEpEPzFa+Ed2YpZj2O1y4130cZA7sN7nugV5i1WGkJPz17YfoK3NUmYkZ6o
+	 a/Q26I23u/VuwrYWRc9nY9atuTr+SAz151exJyxVfRRu9JbwyzR72ZDQ+vAYMLqPrQwcX
+	 MgrEwzGHtJN2AkVwYK8toiMvr2pnDziLsRSWGE2ugjfSgcgr7sgMarO94+fy0M9zG1Ezk
+	 kFxK+b9AdBBsqJwlBdN2WV4IlUaw9KCseULqCWa38Kms2fVLmDgwIJC3MD4guLlVtp4qn
+	 oFLdXbiCZ8YR2B14CfklA7GW39J8sTR421YAU5dT0bJuu74ADhvtbkyqtH0R3JIgicA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789289151;
+	c=relaxed/relaxed; t=1789289178;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
-	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
-	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
-	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=44qjMjrm8fDnLl/rOxwX+8ryW0JTV6YuWT1rswvYDdc=;
-	b=Dqm4/5Rz6rO8YlgJXkg/vOQ8HDowE7gX0EkfpJ5tuzupUbKS9SkEp4zJXx3dn6Mi7Dl+
-	 496qGP12R8S3fy5SHAtrrvHVzYzHZ77y2h6BxlMkEiCoQIFuTdZPl0+DRSgYPY2XJlxCm
-	 V3b6DUcsrNN0xZBVkwCZDTX6M4tV8TXmxgRwONwOG9W/MDIqUQeB16KyAh8+VSulf4DQo
-	 koFKYZLI11OaLr+/ZLbC7v162LrKGy/01kx3AWrslLASqbsChGZ8oprrq+q1t6FdHD+Jq
-	 rLdgzmacJs4XYFWlj7ZP94N2LdND42yS4wdKTlo8ZSG/+V5zZ1xz038Cs4MMtbCcLtA==
-ARC-Authentication-Results: i=2; smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 Received:MIME-Version:Date:To:Cc:In-Reply-To:References:User-Agent:
+	 Message-ID:X-Sender:Subject:X-BeenThere:X-Mailman-Version:Precedence:
+	 List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:Content-Transfer-Encoding:Content-Type:
+	 Errors-To:Sender;
+	bh=R5Ap/1CkWK2crwwYd2VaHLnrXd44trM97P7at4WJVpY=;
+	b=ZH/4y1mTZzPFiw9XoptfwJvNw6L+fM97FlxVFDGRIoJnDjVihvtObWGnBEdXpEOyvQF6
+	 fbpEGVMr2Df580pklCp3hWS4GCz00CJNR6xPCf6LCuNQI2EIrS50cA8/gpVmo1w23BEnK
+	 2s2rnbgqrK9cDF6TjMT7qH1XifBxHnugr1LO7xPDePhkCtD7Tz7gfHMRRtvwHufEFQ4qD
+	 SnLBuqmFtg4lk/0vYDxoZtVgMBx8aFbobTtLd/EaZTYBFvtn5zQnvbGuVR0hTzw91ytCB
+	 A0sWF0iMjC3R2MtABiaDkI+uFmQ1bu0N595s17TsuCZbQ3XzE0fyIH8zX4TvierQh5A==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789289151;
-	bh=44qjMjrm8fDnLl/rOxwX+8ryW0JTV6YuWT1rswvYDdc=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=m4SUSKz7SSbwzexs0kyl0lhLJq+jz0m3W8TowFTeLpm2XG4xRaOOaomZNb/TuBRyC
-	 KXbv6XtMUuzga0CAKfMow5yv92CstUT2E+EDmFW65KOqTwEVB+25lq/4G3x7xdgUVr
-	 yPRlclAE+OnJ1mOeyZ+xkO6i69dF6mo3KvvwIhurLJf4teUJm+N6pYgwcaP8xw368f
-	 QGgF3QHHXOLaYeMbod9wjmmL4bhlwSlCBRzk87gK1N1iZ/utZuEs05SEXNrvmJqfVW
-	 wevgonGPg8UrGLaDIW2a4GhEDc4N61w3gHRAOp+/2uz1Ee0UQvOVickp67TEItBakf
-	 G4tULmSD10NRA==
+	s=default; t=1789289178;
+	bh=R5Ap/1CkWK2crwwYd2VaHLnrXd44trM97P7at4WJVpY=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=GcJZG3wIYgMPs5p8YF7JS6MsvuAI4ItAT91owJMh+2VaNxSs9BD81Lw+HOiFcB2SR
+	 mXNovjeqd7Ak+naqE/sU/s/1+5dGKspOxiJOsDb+ad0apuexq6O8j3AsMs3D5phCDM
+	 ZTxqhL4bOL/mYq6rJ2MqxjXXaogEe1jMk3fGgVLuWyoQ1k7vWcETvGjBvttQxlUQV9
+	 BSOq+6srJLTq72Py0Td7LgxSnHaIRJKztWDu11Rkpug+2wk0tBE/5KQ5EbZWvSfD9v
+	 GHh+QmFB9xer6BXqqoVzWZFabGHPcv3MuL12TNBRvK2Rz1vjjXFYNSQ9IA4GCBuCle
+	 1YBFnyb4o8XcA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C673E80E48;
-	Sun, 13 Sep 2026 08:45:51 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 5C83223F
- for <buildroot@buildroot.org>; Sun, 13 Sep 2026 08:45:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 41B3C40685;
+	Sun, 13 Sep 2026 08:46:18 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0010E701
+ for <buildroot@buildroot.org>; Sun, 13 Sep 2026 08:46:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 434BF40049
- for <buildroot@buildroot.org>; Sun, 13 Sep 2026 08:45:49 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id DAD9340685
+ for <buildroot@buildroot.org>; Sun, 13 Sep 2026 08:46:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QVzVUzibQzaa for <buildroot@buildroot.org>;
- Sun, 13 Sep 2026 08:45:48 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org 821B1400BA
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789289148;
- b=iDFSQSO/fo7Z60dGMVZB+Av17mXQn8atADwqpF8+lj5SpIaFqpARG85GIxN9361h10a+
- wfDNDPrIKn5jPMxmcVsaUUQ3ufvuVm5gO6sF37GRn14GDS8fHkgR0wo4yEs0BWJrz6J1M
- KAyZ6Y9bF0ixS9gIX5smASUuqeFH9gGZuj+di4U1+mZCZ8LBsOhERdy2VKbMcf9UpSkQ1
- ZzUux0qQgMvXSMB9aBGodNNNZBUrlDGiNThWqEEeRS1gr3m+VgNrPOHUe+ROWR1pwaLuu
- 4jLbUnCHBei1AUjOnurpoFiSadf3pzQhG4BlSntbbp9z+C2NAexDDK5MeYfe9LZJV0g==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id BTH8C5bPGe91 for <buildroot@buildroot.org>;
+ Sun, 13 Sep 2026 08:46:16 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 33AD84064C
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789289176;
+ b=TrUZeZamRtgmzkeDD5ESWYN5sdYbZvjbH33DHgmFBODrfdAnqDbhe6d6R/LQrSVGh+/g
+ xVhkCkkNaNTf5Y6T/w3OAT7Ukw/0CIQ78UBGy2eew8TS0siu8EYUCmnVW+SrMM6t1m43o
+ 34Km0lbvIttlidxfsPz69o2CyU5gZP1yjmVsiyOvPY7ZW/a0RtIimE6GU1M8EUnS5sWyR
+ yWwmhPpj1n4cnyQsm6gOddBvFbaYeyBehQ4TSeqqeu06DGBqFBNVu/hHRlX4u/gkktYoD
+ zNIlDH4spfkRxvi7bNR2qo8qFUzs3epeMQGYWYB0eROBvpxdKeOidhvxrx9dem9KCiQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1789289148;
- h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
- X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=meeya25qvxKQ7QTcGl/Th4mp0MC7xL8e9+a/dfNtwSU=;
- b=kvu/nFr3fThChpPkmlmreUJsFzdxur0lenD9l+yfxFIW9ARzlBxyVQfsgVNVmnM4df0l
- /wZ9PQ7tpJEgtaQTkSBAC6B1sODCjQ9RF6pFiwAe6IUwrQuP0+M1R+Qo1Da7nEDb5M+HY
- iHGpTkfQUDa34O1AOdMckXEQ7ttIbx5y13K36zEWg7HWbw41ft/VV27c+qPqQKMPhajxS
- Yizu2I/Dd749bQxaOUTlDytZRDTqBH360fItZ8V9htbb5lWn87X+6LRhiYmPQdFUJVb0o
- n6+QK9G0A771COrdDo+v+t+w6dmINLejpz3ozmABEQiskCXTukzmvlx4ceprXT8B2Vg==
-ARC-Authentication-Results: i=1; smtp2.osuosl.org;
- arc=none smtp.remote-ip=140.211.167.122
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 821B1400BA
- for <buildroot@buildroot.org>; Sun, 13 Sep 2026 08:45:48 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9456695B1F; Sun, 13 Sep 2026 08:44:43 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 13 Sep 2026 10:43:07 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 548904619c6498edc3a522d2a20dbb4179a206c0
-X-Git-Newrev: 74dab034953e4546b63c9c280428e59fb144488b
-X-Patchwork-Hint: ignore
-Message-Id: <20260913084443.9456695B1F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-grpcio-reflection: add
- missing BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS dependency
+ c=relaxed/relaxed; t=1789289176;
+ h=Received-SPF:Received:DKIM-Signature:Received:MIME-Version:Date:From:
+ To:Cc:Subject:In-Reply-To:References:User-Agent:Message-ID:X-Sender:
+ Content-Type:Content-Transfer-Encoding;
+ bh=SxtYp1PKIrCJ2dd0O2tHSwFXwI3dCg4Y8MU1v+dw9ho=;
+ b=fI0pHJEHpghYiAVT7nq5dupHZeSR79Y7EhqspkTkhanLDK6q53U2tqQN1+YTc+jH/54m
+ 0QdLQDjpndIY51l9vtFVfVwKiSlF+35w0wsRv4FjphefNjSffAJ3Z2wcWLUEbyaZ3eB5B
+ vgCBf57SOEX/rsAQYyw3gVQGsqa5YGwmjW+ALRXrlfRcQlg+K2fFRE9UDC10UAjwL5H09
+ 1lCQm4maKsNQuuT1Hc/0YTjO9mWlJ0JS4i/7sVeItuneulKsiEk5K5g4K4zCF6KJM/tox
+ /hOueyHAwo2CSEWGEyTBvKi4rfamGh7rXgYtkWCCf2oqUaOwShvUwcmDCs0kBvteaYw==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org;
+ dmarc=pass header.from=free.fr; 
+ dkim=pass header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=NTf4Gqd5; 
+ arc=none smtp.remote-ip=212.27.42.6
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 33AD84064C
+ for <buildroot@buildroot.org>; Sun, 13 Sep 2026 08:46:15 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id 834FB78035E;
+ Sun, 13 Sep 2026 10:46:11 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 13 Sep 2026 10:46:11 +0200
+MIME-Version: 1.0
+Date: Sun, 13 Sep 2026 10:46:11 +0200
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org, James Hilliard <james.hilliard1@gmail.com>
+In-Reply-To: <20260912210910.1553765-1-thomas.petazzoni@bootlin.com>
+References: <20260912210910.1553765-1-thomas.petazzoni@bootlin.com>
+User-Agent: Webmail Free/1.6.19
+Message-ID: <ebe1b221489e60953b18b9dd26351e78@free.fr>
+X-Sender: ju.o@free.fr
+Subject: Re: [Buildroot] [PATCH 1/2]
+ package/python-googleapis-common-protos: add missing
+ BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -112,38 +125,21 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/74dab034953e4546b63c9c280428e59fb144488b
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 12/09/2026 23:09, Thomas Petazzoni via buildroot wrote:
+> BR2_PACKAGE_PYTHON_GOOGLEAPIS_COMMON_PROTOS selects
+> BR2_PACKAGE_PYTHON_PROTOBUF but did not propagate
+> BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS.
+> 
+> Fixes: d37766a886a8dc3d49d45e14955411700a5efd26 
+> ("package/python-googleapis-common-protos: new package")
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-BR2_PACKAGE_PYTHON_GRPCIO_REFLECTION selects
-BR2_PACKAGE_PYTHON_PROTOBUF, but forgot to replicate "depends on
-BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS".
-
-Fixes: 3217fedcb8c8006809c1a3d214c97597677a07fd ("package/python-grpcio-reflection: new package")
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/python-grpcio-reflection/Config.in | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/python-grpcio-reflection/Config.in b/package/python-grpcio-reflection/Config.in
-index a0ca35c286..1e35c82a9d 100644
---- a/package/python-grpcio-reflection/Config.in
-+++ b/package/python-grpcio-reflection/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_PYTHON_GRPCIO_REFLECTION
- 	bool "python-grpcio-reflection"
- 	depends on BR2_PACKAGE_PYTHON_GRPCIO_ARCH_SUPPORTS # python-grpcio
-+	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS # python-protobuf
- 	depends on BR2_INSTALL_LIBSTDCPP # python-grpcio
- 	select BR2_PACKAGE_PYTHON_GRPCIO # runtime
- 	select BR2_PACKAGE_PYTHON_PROTOBUF # runtime
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
