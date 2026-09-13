@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 802FBC88E63
-	for <buildroot@archiver.kernel.org>; Sun, 13 Sep 2026 19:34:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 401FAC88E65
+	for <buildroot@archiver.kernel.org>; Sun, 13 Sep 2026 19:34:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CD4C780CFE;
-	Sun, 13 Sep 2026 19:34:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B6A1A40533;
+	Sun, 13 Sep 2026 19:34:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id t-F8tucAdNTx; Sun, 13 Sep 2026 19:34:22 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 7D8A580CEE
-Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789328062;
-	b=sTjiaczJO5pZI1+sZlhGyilazvTGaa8HqxEVir4n/WrhRzmq6NrRTBO/39YxsLxTvcte
-	 MKUEDWhMon4apjRBmM1aA1F5vr5VPmyhi6SheL5Oh2W7E/OCkkDvM5muAuipZxs1LfBKS
-	 TIq66RmbC7Uk5gelEnWxw0VWkuzGeTx/hk1t9rZxPk1LgIcBAVy7MUpbEIpUgSN+g6a98
-	 /3uojV7q8AaCEiF54+OQI4x8B1lDz4dj4fuL8J0GyLTC759KdcQGH3Bj1H9ZrsWh7w+Bu
-	 199kLOsTrD9I8YvzmeDXHWBSMo37FAPuiaq2v0Nt7g15E8gyncczREYpCoRSMhWWCgQ==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TERD_z7i7lRX; Sun, 13 Sep 2026 19:34:26 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org C5C24405A4
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789328065;
+	b=SQ6FhESY9L/JYb0rJhszs7j5ShZFwFxOUhDhcFYRyfvIeK9NGpKwVcxadYIwdA1nugTw
+	 eIA3CmVUAHshbd2sabnp0mFpK8U8qyJ3JmWMmF+NNDbPdymeJvYn7OahWaYe2keGE7ek6
+	 bY/y8RAuRNXMyMjC84jEKNWN44tItBS4ZJw4GMQpyAkj8WzfKAaJg5l3j9Y6QXxohsydf
+	 qxSwWlWlOSl3TOXFaQuWAl8NymB137Hrlqow5m8lzposXIDYcJ9Lb7CLSIQ59uN70ivdO
+	 bFWqTR97WOvIuYV/m2T3ugn8CQ3Jk4BvuGl2sOm85iS8pja8TqnwNwlDSoTtR5tS9cA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789328062;
+	c=relaxed/relaxed; t=1789328065;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,75 +30,75 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=YhUpKZCRvOjH5yukUs8tEAJZkhuCO29x9oJH12rs6wY=;
-	b=iuKrdQMd3IVKwRfvXF4KX/in+zJV9PhHIAcGW7hb7Lz1w81XF7qnwumysatE3APTdiWf
-	 zrqDlGd8kjvrGzPaAoz4mobhbXgTKhURBnCfbRHv0V0wk8Z004dpDUEK5BPHg2+VNeAzw
-	 zdcjmBlRojHjEdjZil+jW0eU4P2BMvbiaqe+J6fQ+WojNfBwk8Uw9zY134FRU85Rf4w+N
-	 H/U7GYDYWnns91edD3Sd1VQ03SPQ7gE92tMem/viLLoTuaNZyY0xWya2Oer4S7TWKKcaO
-	 zoTbaeiNGa8bGkmEJSYmN+woO1EmgH3TP8+LO5eVbmWdDlGNqDlZ1COMsZag/uwUl8g==
-ARC-Authentication-Results: i=2; smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	bh=uIh69vckwOsidPxBLLcIbirOzl1qhe0sPGf/BlL4C74=;
+	b=hidIIC2y5fbyAldylGPbbvysb6O4M197ctwSZ+Yjp44IjBZ7o0+2i4zH0+TVPTSX8iNe
+	 xaSoGbPqEjf9ic+XcrLD3W0JhPFNVOobOXG8WHg4f/VrGEqdKvvoFyaZB0E17/HUVB2X2
+	 MrXhW9Gn76wK1n7uod+yVsiT5oUKhi4isZg/zIYu+As7bDmo5vol9Ckjm1kCxL4+eEWXq
+	 1tNUJboPk8NWfizINNJ3UGYOp+mjc1RRFgxCAKYMHFZLIGYj3nz3hbkaQOx9Mtv54WElP
+	 Nndy6bqDYoSKaQoYny7NyeWIJloH3n9fsLkvlmptLSCFETLjP+JPVpIBFl5/7AejyaQ==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789328062;
-	bh=YhUpKZCRvOjH5yukUs8tEAJZkhuCO29x9oJH12rs6wY=;
+	s=default; t=1789328065;
+	bh=uIh69vckwOsidPxBLLcIbirOzl1qhe0sPGf/BlL4C74=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=FEQP3Ho5QqtozRqJdkElSBSVubCfyMa4fg4JP2ogF/BpCvIlnILJOCSAmHGuuC4jx
-	 7rX7Nd9ZOhQ2W7kGzki7k+LR6TYLq3C8NBxWXaTtB23/+Emb9Q6TMnDCGoVtYBOf1U
-	 Ess1mG4HjN7kJuNrbHXGhPjxPW+BOuMCT68RS6gZv7kpJXgrgRJdpgd9wafcFGKCG0
-	 ABl3o/gKLI08UQc/UCP9Qj2+GCB561SpjYnN3fJ3GfUFavv19ykmjkqmpirWPa3V9U
-	 ZXin2OmywJhofLavh2Vs8BTD8I6D2smraPnonm5FPR0x5GMc9OMwOQIOARecZ301Hd
-	 vZGLUwazCkFvg==
+	b=SJijMlhI/5PC/v1A9HtPQQgIq6mf6A6tt/REAOQEPSpaghioByqis4O8HeYnG/Fm2
+	 VvlIa6meDu142pqk8cABakPhY1DnXefp2cmXJc80WzyC5wlfjkzjWSayhgeD9WBuwa
+	 EiEm12FPXQXRHmv1orO3TKyDtpgi5a+zEDVTXGKSbfIr0q8C+din11SZ0tajw+8luB
+	 4vfQgJOhckL1P1r0+Ynq4fpG4LN1i+mnYtygp+rGJfJOeDbF5HzVAWA6I0b/GHZYBg
+	 w34vptNF/xezw5CUNjYGmS5F8Xxg790omyG5NpxrDZR6Hyj+N2Wwv1jFy4YjqukqH9
+	 0DToOFigNvGKA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7D8A580CEE;
-	Sun, 13 Sep 2026 19:34:22 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 4A39B224
+	by smtp4.osuosl.org (Postfix) with ESMTP id C5C24405A4;
+	Sun, 13 Sep 2026 19:34:25 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5EE0F49D
  for <buildroot@buildroot.org>; Sun, 13 Sep 2026 19:34:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 37836405A9
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4B1B680CF0
  for <buildroot@buildroot.org>; Sun, 13 Sep 2026 19:34:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id M4AoNU9CfBes for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id w1MBlnAb_mAS for <buildroot@buildroot.org>;
  Sun, 13 Sep 2026 19:34:20 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 4B56D40533
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 6103080A82
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789328060;
- b=SZ7p1e7qMkbEUyekWX76/MaKl0NKZOPj51S6SffFoI/MOFjhi5Pg6lCMeVEU81eq0R7i
- tjeEe1eieMiisbyIr7pp9HQLFZSi9mdMMfnATUIQyZ01qs0hHjteyrkU0ICnYmsg6Naod
- GJ978m+3pe4wYR02/hzta1D+lMjcU5+TccToW+bLnKjgK1SlFDtocNarZLlGMRkpjLjnL
- hq+fSQc9edr+qemdqGADIfmqLxnzdplTeG0JIfJX3+U7+L4mX8csJevyLK69XVxzzjkMS
- vmGXpi/y8NWECBgspH4WluCf7oUMjjxO1+lBXluAagP3I0PoHOQEE0mKwfnWXk30W5Q==
+ b=drUDzOX5NBIUMqAGGybmzisdHFvUtMh14lgYX9DM2tr/ZsvR7g9E/Qliyi5zIpKcGCw+
+ 0EiEYeB2cHG0o4anYfU74jLgddp2G0Dw8VbADHnl8s9Rd5qqKtnQKpE0BzbVd/WDtY81N
+ FfxKaMgEGEJ/t4WfDeF1C9BPUTUIFyEtdlWSxdULc6pEmOKkovXJU0gxYArlMelteW4Ga
+ VXFk9NMAxE+H0Wlb2es+btBMO5P2LWwPtMCzLHF4h5RmxqLet7LGBAAfftt4f2Bbcpob6
+ 5JK+EAmn02cSrYoztxXS7PBJZ8OUaGwcVajN9AoKTe58JPbGPoi1xuM1j67VeP1A0zQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1789328060;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=04JFpZw+0NpQLRyxa7kCwGxeWDp/aYxXmifXU9VC6C8=;
- b=s8YLEAAJXCZJNG1kZH/cmOCmRMSehWqLF+XQWCqlSg4CGXxf17QPJijNpeLbvGmLZ8+N
- J0rhPuWCUxKaOorm0kIFyt705bN8j0Opb+24hpYWj+AZ46QKwY9abpoHfc4rF4SYChxeJ
- xFhC091Yh3p9p7qITEDObgHZoj7GymYYxjNbUXU4i+6mDrnNNvK8GzhSUZgSdJiq7OL+z
- YjQSaU3kLZwy/WX7uEeNmVv1kfH5Aj0gIVnS3OctF/4jpAGnwoA3DmrieO4TMPKp94RxO
- P/6+/jxj8YQEA9cpKDr7QtyydYvvESbdEsBcyF0RMXIID9ykeds/XHW1lkqObmZopdw==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org;
+ bh=Z5aaHMnH7vEbLMQ0SMnZdHsOE04I9WyEey3cPtfihq8=;
+ b=rBIsfKMz4oiI6sAKeVpiWhB8f7WVOYlU3JQTi98F0OwgG7FtPmAlip+la80gIIfsN9AO
+ ikypPZqV9Py+Ov6rDESfJ5GvFhaIVf/PCcq0P7flqN91eL84zUs2dP2AWuNCJSE0A+PWb
+ vKDL8oZHjf+3NfL1gAk5qT7LEFoD5zVhmeVG/EA5qUgH8GhlyH2KOda7LOgdmVZUBSPbs
+ LQHeHL6eJueH3JgRExksWmwFPEGx7usBkITZrm8aPi2PSp2pF4ZUnmVEdWv0XeG1v0zYE
+ ZZF8suJaEV1KpOyOZWWcjl+bPU89BYJDaUzwJORnHzuFU1fDCCGk5nqeVTPRe8r6SdA==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org;
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4B56D40533
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6103080A82
  for <buildroot@buildroot.org>; Sun, 13 Sep 2026 19:34:20 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3E6BC95C6F; Sun, 13 Sep 2026 19:33:15 +0000 (UTC)
+ id 5900795C72; Sun, 13 Sep 2026 19:33:15 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 13 Sep 2026 21:23:06 +0200
+Date: Sun, 13 Sep 2026 21:23:23 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 43558e103b50bfaad42f8d265ad971479de42af8
-X-Git-Newrev: aff091c39dd49c418edc406879c03dd2eb0cdf8f
+X-Git-Oldrev: f077ba9e67566a6855148ffa732c06d63db0622f
+X-Git-Newrev: e96b7a0ef203ef2937a6fffe8bd9d8f3a9b58cb6
 X-Patchwork-Hint: ignore
-Message-Id: <20260913193315.3E6BC95C6F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/pulseview: add missing 'select
- BR2_PACKAGE_QT5GUI'
+Message-Id: <20260913193315.5900795C72@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/usbguard: fix gcc version
+ dependency after libabseil-cpp bump
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -118,36 +118,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/aff091c39dd49c418edc406879c03dd2eb0cdf8f
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/e96b7a0ef203ef2937a6fffe8bd9d8f3a9b58cb6
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-BR2_PACKAGE_PULSEVIEW selects BR2_PACKAGE_QT5BASE_PNG and
-BR2_PACKAGE_QT5BASE_WIDGETS, which both depend on
-BR2_PACKAGE_QT5BASE_GUI. It ends working because we also select
-BR2_PACKAGE_QT5SVG, which selects BR2_PACKAGE_QT5BASE_GUI, so there is
-no bug, but it's bit inconsistent to select sub-options that have a
-"depends on" without selecting the option they depend on.
+In commit
+76241e89e1fa7a7b46e23d0a22c3d4fc11a2475c ("package/libabseil-cpp: bump
+to version 20260817.0"), libabseil-cpp was bumped, which required the
+gcc >= 8.x dependency to be upgraded to a gcc >= 10.x dependency. This
+was properly done in package/protobuf as part of this commit, as
+protobuf is a reverse dependency of libabseil-cpp.
 
-This not a bug fix, it has no functional implication.
+However, usbguard, which is a reverse dependency of protobuf, was
+forgotten, and it no longer carries the correct gcc dependency.
 
+This commit fixes this issue.
+
+Fixes: 76241e89e1fa7a7b46e23d0a22c3d4fc11a2475c ("package/libabseil-cpp: bump to version 20260817.0")
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/pulseview/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/usbguard/Config.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/pulseview/Config.in b/package/pulseview/Config.in
-index b1f9dc25d7..b9dbd88c28 100644
---- a/package/pulseview/Config.in
-+++ b/package/pulseview/Config.in
-@@ -17,6 +17,7 @@ config BR2_PACKAGE_PULSEVIEW
- 	select BR2_PACKAGE_LIBSIGROKCXX
- 	select BR2_PACKAGE_QT5
- 	select BR2_PACKAGE_QT5BASE
-+	select BR2_PACKAGE_QT5BASE_GUI
- 	select BR2_PACKAGE_QT5BASE_PNG
- 	select BR2_PACKAGE_QT5BASE_WIDGETS
- 	select BR2_PACKAGE_QT5SVG
+diff --git a/package/usbguard/Config.in b/package/usbguard/Config.in
+index 254209ff64..b71333aed9 100644
+--- a/package/usbguard/Config.in
++++ b/package/usbguard/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_USBGUARD
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
+ 	depends on BR2_INSTALL_LIBSTDCPP # protobuf
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libqb, protobuf
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # protobuf, C++17 filesystem
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_10 # protobuf
+ 	depends on !BR2_STATIC_LIBS # libqb, protobuf
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::future
+ 	select BR2_PACKAGE_PROTOBUF
+@@ -18,9 +18,9 @@ config BR2_PACKAGE_USBGUARD
+ 
+ 	  https://usbguard.github.io/
+ 
+-comment "usbguard needs a toolchain w/ C++, threads, dynamic library, gcc >= 8"
++comment "usbguard needs a toolchain w/ C++, threads, dynamic library, gcc >= 10"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
+-		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_8
++		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_10
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+ 
+ comment "usbguard needs a toolchain not affected by GCC bug 64735"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
