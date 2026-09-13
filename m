@@ -4,114 +4,102 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9DF6BC88E40
-	for <buildroot@archiver.kernel.org>; Sun, 13 Sep 2026 07:44:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D16EFC88E40
+	for <buildroot@archiver.kernel.org>; Sun, 13 Sep 2026 07:49:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 691C080E16;
-	Sun, 13 Sep 2026 07:44:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6319A80D88;
+	Sun, 13 Sep 2026 07:49:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id O2Udbsz-s5z0; Sun, 13 Sep 2026 07:44:20 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 3749D80E19
+ id hO3OHXDWZFSe; Sun, 13 Sep 2026 07:49:31 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 557EF80DD1
 Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789285460;
-	b=ni6KWcBcCREMCa0qkIVvPw3ATUpVOunBbGpMORSanWnSso+KUa2oCVQNNfqhIApr2769
-	 7qPU9pjwqX36O2IYuKxIU5oDkFMIqnhKc9yoOuZ/KOilBoKt2CB5j8L9yWgQEZVtVyQLW
-	 GUDaONS2Vop9Ta6oEkD2JeUX6dxY5TumZ6SSc5ZxlWA9NRVOui52DfRKDHgegq57SV4wv
-	 ul2CXELFPO+zgRF/f6a2HVIv687MD/56bteQDNyxn3LjnUhpnRh5DZ41JESb5RtZhb9ug
-	 DjNieHN/dShHbYXlf+aAJ/5k0U4KqhhHUDXLTEDcH5366DouJi/RBTyqMAtyFOo5TPw==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789285771;
+	b=kvAX5HVLhc8BEDrIHKdGHgkggQLkQd4A/0WbfqaOnI/c218tobHXKSHye9DU/ZhX0Vto
+	 Br5y2XaogFNAEX+V2Sa5cJwJfzJzqsh+1aC3dioImvE/zA98vMA8sFO4+CvaHKViFUv0R
+	 bZbKbYxQU6IRW+JKGYVde9ARZ6A8pzzyUwPBt7EdahG0tR0ng9/B5vL9zhHr1HDj/yMP5
+	 AzKXAt10mTHYtpDGGh/CpnYWEA0W3e1xhpmsijDhWLDPZqTL39fL7eqlDIp2Er/0ESruu
+	 x6bXG//O3LOio8xwS6L5FooOdTT+3R+gJWtJNg29yD03riB+j72FO5/e1GH0nqrFuWw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789285460;
+	c=relaxed/relaxed; t=1789285771;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 Received:MIME-Version:Date:To:Cc:In-Reply-To:References:User-Agent:
-	 Message-ID:X-Sender:Subject:X-BeenThere:X-Mailman-Version:Precedence:
-	 List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:From:Reply-To:Content-Transfer-Encoding:Content-Type:
-	 Errors-To:Sender;
-	bh=DqoPVUXCopi9/j/vRQNI8t4+ti5mGRuYEssUpEAs84Q=;
-	b=NqWC0rjwWPfUpimZ65UDc2UPVufb85dG98H4mFEBnL6oeUoqTNuuWJ4LFc40XRLAM4FS
-	 kSg5W6Vj7uOCZwooMBzlffhcq4JhNfDoiaRiE9+2sJry6qOqQFGMyYVgIVEFnSo22vd91
-	 XXHtaA/Vu+5TvVQRUxjqWKJwpufLhWNcpbhr4B0XAKHNwFkHjgZD/yJmt9ZDgY/RCPPEJ
-	 CQPTzT1LiE/upTROQbcI7irxnDYkx7u+Qwbq6KNOvVNH0Rp9R57V3JSapQf8u+9QHuigV
-	 8cQq2zlDktMgIgTUY0vNue2Y88bRlDiQJcsl4zMBhhSuyOpUieuvU3mPuTwAuPHHs2w==
+	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
+	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
+	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
+	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:Errors-To:Sender;
+	bh=UfCavAGpiQr1hvKFjDnghz6Bboqf47w8DXixOA6C9Ts=;
+	b=X3XX3PNiSi413D3erHmCnXudQdkW1ht8DI/fN5JsItR4s+aroK0wrwzvE2fhhwT5CnKY
+	 PNvVh1eDYvroTSQ5oG+utER7PEy8dg3oqOS1fBN7nG1bcYrfLTBsgQN5fLQ5lhks/IUcl
+	 VjVyufQZUvmsGNY6XSiaCVd5vD8VEsguAy6vlQor1eJqy8cmqFM8p54nXNl7+fLN5nrRI
+	 eEbeCMHBvlCdH8qbEzGNf25pn340obmtN47MJ/J94DYVCYltR+hqyqM26GA4ZFZjR4FUF
+	 uxR7ATDZuI9ngDGuf/d7S1RPgCL7aAPZOiCodqS94+0nUb77SS0HtJhnRzrIuIBbqQA==
 ARC-Authentication-Results: i=2; smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789285460;
-	bh=DqoPVUXCopi9/j/vRQNI8t4+ti5mGRuYEssUpEAs84Q=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=mi1qTRcDHdNHYwNynXjggDZFhtz9fTUej5D0DHPYKJPSPwPSaO++DY/JCvbaqG1oS
-	 fxxoWBNZ3uLh7xdo7IYsYt50Yh7OpPeqbd0Yn3fHRf/BeUDloFEQjiIHDv45xoucjX
-	 FWSiomhJN9gE9JjFysCU4oZMLKgtcXgzFtrXwA8PDs04F3lOLKqJ/zRtvNssbkHtHJ
-	 44kwTbx3fPkQH7LRSjsF1B7ZIcF69xRzGNCFAjEAFBO3XC22lMYNe5XFMLtJ5BKOxP
-	 KoWw69/rCjZrKuU5iOzf3kjISAj3TS1nLOzGpjdhhKIdAs1wP9h2RbD4//Fe/d7Gtn
-	 qPEio1mlIls9w==
+	s=default; t=1789285771;
+	bh=UfCavAGpiQr1hvKFjDnghz6Bboqf47w8DXixOA6C9Ts=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=dRdUHT1HipYrGqYJ3bRDx2scHrQxrD4zl8JpkUNOiGfeyZq3iO1k065uGWBPhfr6e
+	 Ky1TnexTD7OUxb//257p+efxDPBhFqmIkMAvBm5jYY5MrsUgfD4zbu3vzzOBbvGBYQ
+	 zuhZ+BD9U+QpNuz8SamLkK28VVeLu0g1eQIWGCJvvf+DIkiXiNQNMdjMfzWibXql+e
+	 WDx9ROm/D2yLitSk5hYrNai1xOxSMuKy603xIG/smZCM8v9+QJfcSQXpTAw2qgfP+q
+	 xGPb7q3b4n1p3UN7h2luhcEJPV8hu4cKlZv4G0FUx0fB7mZMoDY3q1suv3V2TTESJA
+	 ZQ2xwXrS47l0Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3749D80E19;
-	Sun, 13 Sep 2026 07:44:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 557EF80DD1;
+	Sun, 13 Sep 2026 07:49:31 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id ADE1A32F
- for <buildroot@buildroot.org>; Sun, 13 Sep 2026 07:44:18 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id F3E992E3
+ for <buildroot@buildroot.org>; Sun, 13 Sep 2026 07:49:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 93E44400BA
- for <buildroot@buildroot.org>; Sun, 13 Sep 2026 07:44:18 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E5D92400BA
+ for <buildroot@buildroot.org>; Sun, 13 Sep 2026 07:49:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id srgThNF44AIW for <buildroot@buildroot.org>;
- Sun, 13 Sep 2026 07:44:17 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org 21EEA40022
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789285457;
- b=GSUXdbYC68uzW6/c32f3ePvUG2JmptsFyPg7/atoa0vW5y6pzWjvzhEEMJ8E7rURsT0A
- w/w8XKM3GShOdAiWxz2wv4515831pkMpACC644Qh9sQwXLhVf2EubPgOQU772oths0aM1
- sRHTZnEUWBm7YUiTrvqd35BOoYt1NmZiH6SVD658tzd12+rnIWI5gwSMBF67js4WmvhVB
- 05UVk5KzBK4Y3oBiTxpzALts/6NQ2x7SFEvVUXWKXox85oaa9eYxDsJtL8VQuQmKe7/2Y
- 2Bnnyj+wJOygBuzSFeaRbQrd09+6qTNSKgy4umxYrrheJsVZBnkHMsP5NAmFXSdx9UQ==
+ id s_uTvY9JRYh7 for <buildroot@buildroot.org>;
+ Sun, 13 Sep 2026 07:49:29 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org 040EE40022
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789285769;
+ b=AmIWgGiC4jNUM9GQNVgrq60DhR2GpzaqYDiw1yQVlTk9Euo6ppSPDdBwRrG6eeeyVVz3
+ 030I3+cLgMXrS+gJzfdX2xCy1eHhop/cyH1JsW+XEcuraBg509aeisXK9yAkzn0jqR/jb
+ hicG3b54N1nJrm3U+ZSkuNmtgUw04iG5e/Xf5NKvUClGWwFIsRNTZ5PlhaV9nxszSVph9
+ dWvRpW+cYyI1ajc9FYytyjDnGQ+RmBnYPh2GvnFA+TMulkzaIzoqXO3anZxhgqLzgHSe+
+ TfdtXaAnLyrt7dAe4bfRweRNQebPhfZeI0grOTfNgp7vZ6M5tI1rgq4xPrpRnqDcejw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1789285457;
- h=Received-SPF:Received:DKIM-Signature:Received:MIME-Version:Date:From:
- To:Cc:Subject:In-Reply-To:References:User-Agent:Message-ID:X-Sender:
- Content-Type:Content-Transfer-Encoding;
- bh=q7EMPlLPOLIL1VhHq39+8PczXy8c672kKgrRp0bSIE8=;
- b=kXECew/D5iNOTGRbkobZWJoZptORASnhYFrIO2BE2havj/j2HX0QepoZK1uFKCE4Oh17
- ZNiV8/LAkjd0Ea7lrm65Fb9KC64HoPujMzDwtAQMz/iwqDU6dUQldlcuqDdraqUosZI52
- Ds085zFB9FQshuCuyztQE67za7Ehijl2zLvFYyc1Lqmq6aBcHQOpPHQ+geyGUNiF2Vd8E
- vlrDvkSaTWroIq0foEutpY496/E1CvYpWf8MuiXyIghOs1hx9VOz2xU1VizHPWcj1rCro
- PdzJj5p3Bb5f4U6MKCKo7S6WnAYN/ODeKoez1FJl6XJ4l+HbNF+KXqfli+4ITequ/Xg==
+ c=relaxed/relaxed; t=1789285769;
+ h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
+ X-Git-Newrev:X-Patchwork-Hint:Message-Id;
+ bh=2C+NltvwRJTHNMAliNVO1rpLzzvPqH25hUVi4hRFLZc=;
+ b=QBSl71WTb0kbp+fzIZmG5QNe5wRRRc237qA86MGUdE+cbH6ZAPs+90dDJnUld0DQA++u
+ QD43JBdPMUPdxZiRusFQ4RS5DaDsgoZcCekhfvNLTHPWPwQbaIWA06MXg9EFE0SuoBnmP
+ EgvJsHProUtA3rJCGGlYz1rTgYujV1NUJaCfSFWsYSx1jfzkvfA87OSwWTvN7+f/ZAL4a
+ 9XKXZa3X2p/Uc4bvX6E8ZylqmREInMC2CyawvjaHPBydPBm4ltrZ7OhDUVgEP9140YdE7
+ RTyvNLT/g3zwEesppLPg+++7U49x0PiwqVt5v8vEBzU3jzK+l2bd5SeahUBpNrTcVow==
 ARC-Authentication-Results: i=1; smtp2.osuosl.org;
- dmarc=pass header.from=free.fr; 
- dkim=pass header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=APL0Oe80; 
- arc=none smtp.remote-ip="2a01:e0c:1:1599::10"
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 21EEA40022
- for <buildroot@buildroot.org>; Sun, 13 Sep 2026 07:44:16 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPA id A9E88B0054C;
- Sun, 13 Sep 2026 09:44:12 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 13 Sep 2026 09:44:12 +0200
-MIME-Version: 1.0
-Date: Sun, 13 Sep 2026 09:44:12 +0200
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org, =?UTF-8?Q?Alexis_Lothor=C3=A9?=
- <alexis.lothore@bootlin.com>
-In-Reply-To: <20260911063053.795160-1-thomas.petazzoni@bootlin.com>
-References: <20260911063053.795160-1-thomas.petazzoni@bootlin.com>
-User-Agent: Webmail Free/1.6.19
-Message-ID: <fd67340cdca90c98ec9833f851530b6b@free.fr>
-X-Sender: ju.o@free.fr
-Subject: Re: [Buildroot] [PATCH] package/openscap: propagate dependencies of
- libxmlsec1 after bump
+ arc=none smtp.remote-ip=140.211.167.122
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 040EE40022
+ for <buildroot@buildroot.org>; Sun, 13 Sep 2026 07:49:28 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 20C178D3F2; Sun, 13 Sep 2026 07:48:24 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 13 Sep 2026 09:47:14 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 36b2b3f561541da00f62b6714985ccb34ae9e20b
+X-Git-Newrev: 71d3ffd3727f44331c7a330a9b687f503852e839
+X-Patchwork-Hint: ignore
+Message-Id: <20260913074824.20C178D3F2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/go: use
+ BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS in
+ BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -125,30 +113,62 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gMTEvMDkvMjAyNiAwODozMCwgVGhvbWFzIFBldGF6em9uaSB2aWEgYnVpbGRyb290IHdyb3Rl
-Ogo+IEluIGNvbW1pdAo+IGZlZjljYWQxZmU4NGI0MzY2ZTcwNWFkYjAzNDcwZTEyMTk5ZmZkMjUg
-KCJwYWNrYWdlL2xpYnhtbHNlYzE6IGJ1bXAKPiB2ZXJzaW9uIHRvIDEuMy4xMiIpLCBsaWJ4bWxz
-ZWMxIHdhcyBidW1wZWQsIGFuZCBhbG9uZ3NpZGUgc29tZQo+IGFkZGl0aW9uYWwgImRlcGVuZHMg
-b24iIHdlcmUgYWRkZWQuCj4gCj4gSG93ZXZlciwgdGhlc2UgbmV3ICJkZXBlbmRzIG9uIiB3ZXJl
-IG5vdCBwcm9wYWdhdGUgdG8gcmV2ZXJzZQo+IGRlcGVuZGVuY2llcyBvZiBsaWJ4bWxzZWMxLCBp
-LmUuIG9wZW5zY2FwLCBjYXVzaW5nIEtjb25maWcgd2FybmluZ3M6Cj4gCj4gV0FSTklORzogdW5t
-ZXQgZGlyZWN0IGRlcGVuZGVuY2llcyBkZXRlY3RlZCBmb3IgQlIyX1BBQ0tBR0VfTElCWE1MU0VD
-MQo+ICAgRGVwZW5kcyBvbiBbbl06IEJSMl9UT09MQ0hBSU5fR0NDX0FUX0xFQVNUXzcgWz1uXSAm
-JiAKPiBCUjJfVE9PTENIQUlOX0hBU19BVE9NSUMgWz1uXQo+ICAgU2VsZWN0ZWQgYnkgW3ldOgo+
-ICAgLSBCUjJfUEFDS0FHRV9PUEVOU0NBUCBbPXldICYmIEJSMl9QQUNLQUdFX0xJQkdQR19FUlJP
-Ul9BUkNIX1NVUFBPUlRTIAo+IFs9eV0gJiYgIUJSMl9TVEFUSUNfTElCUyBbPW5dICYmIEJSMl9U
-T09MQ0hBSU5fSEFTX1RIUkVBRFNfTlBUTCBbPXldCj4gCj4gYW5kIHBvdGVudGlhbGx5IHNvbWUg
-YnVpbGQgaXNzdWVzLCBldmVuIHRob3VnaCB3ZSBkaWRuJ3QgY2hlY2sgaW4gdGhlCj4gYXV0b2J1
-aWxkZXJzIGZvciBwb3RlbnRpYWwgZmFpbHVyZXMuCj4gCj4gVGhpcyBjb21taXQgZml4ZXMgdGhh
-dCBieSBwcm9wZXJseSBwcm9wYWdhdGluZyB0aGUgbmV3IGRlcGVuZGVuY2llcy4KPiAKPiBDYzog
-QWxleGlzIExvdGhvcsOpIDxhbGV4aXMubG90aG9yZUBib290bGluLmNvbT4KPiBDYzogSnVsaWVu
-IE9saXZhaW4gPGp1Lm9AZnJlZS5mcj4KPiBTaWduZWQtb2ZmLWJ5OiBUaG9tYXMgUGV0YXp6b25p
-IDx0aG9tYXMucGV0YXp6b25pQGJvb3RsaW4uY29tPgoKQXBwbGllZCB0byBtYXN0ZXIsIHRoYW5r
-cy4KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRy
-b290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1
-aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/71d3ffd3727f44331c7a330a9b687f503852e839
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+
+BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS redefines the conditions to
+determine if a host go compiler is available for the current host
+architecture. Instead, make it explicit that those conditions are the
+same by re-using BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS.
+
+No functional change.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/go/Config.in.host | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/package/go/Config.in.host b/package/go/Config.in.host
+index 79950983c1..47c7e5d075 100644
+--- a/package/go/Config.in.host
++++ b/package/go/Config.in.host
+@@ -1,8 +1,14 @@
++# Host go packages should depend on BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS
++config BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS
++	bool
++	default y
++	depends on BR2_PACKAGE_HOST_GO_BOOTSTRAP_STAGE5_ARCH_SUPPORTS || BR2_PACKAGE_HOST_GO_BIN_HOST_ARCH_SUPPORTS
++
+ # Target go packages should depend on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+ config BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+ 	bool
+ 	default y
+-	depends on BR2_PACKAGE_HOST_GO_BOOTSTRAP_STAGE5_ARCH_SUPPORTS || BR2_PACKAGE_HOST_GO_BIN_HOST_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS
+ 	# See https://go.dev/doc/install/source#environment
+ 	# See src/go/build/syslist.go for the list of supported architectures
+ 	depends on (BR2_arm && BR2_TOOLCHAIN_SUPPORTS_PIE) || BR2_aarch64 \
+@@ -30,12 +36,6 @@ config BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
+ 	# cgo supports uses threads
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 
+-# Host go packages should depend on BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS
+-config BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS
+-	bool
+-	default y
+-	depends on BR2_PACKAGE_HOST_GO_BOOTSTRAP_STAGE5_ARCH_SUPPORTS || BR2_PACKAGE_HOST_GO_BIN_HOST_ARCH_SUPPORTS
+-
+ # CGO linking for the host. Since we use the same compiler for target
+ # and host, if the target can't do CGO linking, then the host can't.
+ # But if the target is not supported by Go, then the host can do CGO
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
