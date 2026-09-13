@@ -1,130 +1,103 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94CBBC88E65
-	for <buildroot@archiver.kernel.org>; Sun, 13 Sep 2026 12:35:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D623DC88E65
+	for <buildroot@archiver.kernel.org>; Sun, 13 Sep 2026 12:45:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4579E4057A;
-	Sun, 13 Sep 2026 12:35:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6F853605F3;
+	Sun, 13 Sep 2026 12:45:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RpXqypWZZH5K; Sun, 13 Sep 2026 12:35:25 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 1BC5A40523
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789302925;
-	b=pIfwBk9GFj7yAyR0Hmng6+APMuYrg+6VNomm7HQ9lmbb5KHoi9fNTjNj91l449SOu+n6
-	 8C7LbJx6MN7xo6bxYy2eKU1pb6j6/qJeHV4zB00QGwYWcClkgnSwQsGQ749l5YMO+bxzQ
-	 lqJqgKkFuYIbblP4noKaV2P05HUK6wN0LgTx0o6h8Lwq4RYRxedK0P8G6KvrMa7YM+2P+
-	 nVnFJBDzu4g6hzML2EeIQ8QjVy4suWGbcrmB9VCmMpRtEjuSDFDk/u35UrPOkd6+dlEur
-	 DMNZ+CwT5i1aMYW4QP31OIbAn53al6fU79TRJm5En9Uj6eRQbUl30+4yFV6RxBSSA1w==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zuERADtu2jOf; Sun, 13 Sep 2026 12:45:24 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 48BFA60601
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789303524;
+	b=E3vqhQ0QDdgv3au/LD4zCAwTlF5QkD2Hm5WwBng4WN+/TMVsunjNls5l6RP+ITNPYZPF
+	 2pKDSjhJpP2ff20JjRzWXOPAsrlMWFFyLSLmfLg7NysleWPTo3THuKbGlj++a8/nrD0F2
+	 PlLqHo8Gx8Ws0wI1yfOanpVDCL1pFW3xOsZRt7clYEV3rgS8uTrA9ISE+PVcf9ROaBMNo
+	 aoXipLPspBjgfI87XQsLbh2bXdF90wGmGraJmKT3X6jA2JCRXVgju7o2EXH8Hc3H5eGnt
+	 xz+DTAtmK/AGciXbog/5uas7N0vwB7kP8XNSMjFNAa66xjH7k1jXfMm0oQRgsDMZUEA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789302925;
+	c=relaxed/relaxed; t=1789303524;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
-	 DKIM-Signature:Received:Received:From:To:Date:Message-ID:X-Mailer:
-	 MIME-Version:X-Spamd-Bar:Subject:X-BeenThere:X-Mailman-Version:
+	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
+	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
+	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:Content-Type:Content-Transfer-Encoding:Errors-To:
-	 Sender;
-	bh=Ofj3m7pKK7xN/PXqXJkc4/X03e18205bDve+6WimUco=;
-	b=Ptux0S52pPlk+yPFjpuCds6WXMQCxCDKbqm5lGngx6ed317IyEbfk+C8Xoan1UtzSh6u
-	 N0iIX1Vzp+w8QTEnCvAZb1bdJ8aPsr/MD8qsygVBPNbIlfj9xt75MfhpwPzK6ckzeUR9C
-	 wy5f72VsOTupd4UWSA09Ujp43/suSLDvxAwRShfvTH61Qv+IWOgoH/DwUP0Qn0VT6IGwd
-	 P7th1ZYRrJXd4sykPobl+k70qGPH2lwryvPXSZk2WzhdRTu65bQKUCtgF8RpF026gqlzR
-	 HCtVUEeo3V0dbWNfdYMik8VQR1ljJQ1eii/+UYkfAwQlz8myXdKPRXLfrSz/pio9lmg==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; dmarc=pass header.from=kuhls.net;
-	dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256 header.s=kas202605290044 header.b=bnIlW5QQ;
-	arc=fail smtp.remote-ip=140.211.166.142
+	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:Errors-To:Sender;
+	bh=T9Kxnv8y0npYNpLYS4IB5ry8Uwk1+DUb6+o6FR90UVY=;
+	b=sUleFfZfV+RdJFA6No/w8TQcB08LjH1ns4XgiPCf7uAXljgeJ2eRTK7amd6blpePsIOF
+	 9ynRzTB6mS4zrG1trhcJOFXYQBwPEh4vZBOus8N8m8mTzHSKqs/QvqojCL9cn4NXPUCOm
+	 su1zWzIFtCySFup9fbxkZdFqbM6fKDAceYni32IIVEhu5tKXTjgsFXctNl6/wmL/yOzGg
+	 Q5qXFWKYQ4fpHkjdtp+pez/MHNJIDdRm0AKdexiVWrsXeBuC/NU7+1KWkpx2qu175bjKU
+	 1xgjoqPH5Cqyu+Rqm828rYprRPmet+dfc+j66ROglNOov8IyO3ckBXHi2+f0j0M3ZaA==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789302925;
-	bh=Ofj3m7pKK7xN/PXqXJkc4/X03e18205bDve+6WimUco=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=i/esd1ufExtK6X8PgNyiRzBAraqNUA2Er/VEOa1ZWUckIS3nKw1KyNcsBX17AN4LP
-	 MPZkNHD3Y7yKJQK6/OjMs/WcVmurX0cwZ5XR3V1Uqr2LAdu4JQD7IZx+Kpm0ZMNdtM
-	 wvYpwdyTdhvenfTkx+ppjYqcMAh9d9o0YQvTKpVuPqZ+LM1IaM6baDKRRRl6e7Cf3e
-	 GvQaD3CpjPiTsuRSmJXehHXDyX93PdjlY4Xq5FZfu8e0fDP5qYqHUvjFrwglS0gcXj
-	 XzaFTtGMhmdHXqQsV5EbvHYSrmQRXgPeSdpK5PognPMC184X0GS0+Q7XgWc5aliqTt
-	 3FlZ1M3HJv5lw==
+	s=default; t=1789303524;
+	bh=T9Kxnv8y0npYNpLYS4IB5ry8Uwk1+DUb6+o6FR90UVY=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=sl5BkzOHWAtO4yw4L2Xk+EMzeFrZl/PVmgy8oKFfPoehZs5AZEMVPCC/ucXYOVzuO
+	 GCVVuzKuG7yUGiPZkAOR5y5n7HAMbtov/0xtEEKYcpkuCkBQDGkDZWPGfwsEtsEcd3
+	 Vje9BLKGvkpKigdB25YeIQtUs+xzr4jRheOPbWyT3vvWrg07S8k5dB52xIs1FHVdHo
+	 OJP094d19RX/Zs9FqSUj/9YDCmCE4X1ROE+zrtdA5aIMITZTmChf0L/7dE4uON5lHc
+	 9RQMP6QbHpU1kh5H9z1Bc3GRO8B7JquX0IguZaeVIQU/YdQNOmA76+j7f7RSaGsZae
+	 jTmWGY4sFRVtg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1BC5A40523;
-	Sun, 13 Sep 2026 12:35:25 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 7F9B324D
- for <buildroot@buildroot.org>; Sun, 13 Sep 2026 12:35:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 48BFA60601;
+	Sun, 13 Sep 2026 12:45:24 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 09EC3362
+ for <buildroot@buildroot.org>; Sun, 13 Sep 2026 12:45:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 65A6E40523
- for <buildroot@buildroot.org>; Sun, 13 Sep 2026 12:35:23 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E41EB60601
+ for <buildroot@buildroot.org>; Sun, 13 Sep 2026 12:45:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4kt9MgEsjCnw for <buildroot@buildroot.org>;
- Sun, 13 Sep 2026 12:35:22 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org A92FF40505
-Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789302922;
- b=V+UKfhJMuZAXKoPA75VgQs3yQqxkJ2gkImxdnf1kJK6eF77pX5aZrQbZiEka9qCBTWzB
- gIjtfS0uievn1YdmYIpZoXkYIBTHfO6g9XNRyEJu+3lLQ/4G3kAniowu+K6PxCQbjlRmj
- U4PXzzf6VkGOtYv1Elf1PIpVxUBz87mbp0bYRgEkSpFxazydYLGC44IacC0RjwRhc8lXX
- 1yV07W8YKUOVVZgBklONfzz2ZBZ60EHAT+5JyHUa3XQjhjDEZHUghpVPe8I+Nmwcnnya/
- 3QPQDFHFWZA4RZjtW8YrQpzJStGD/UDfsN1/Vlu4Enl18Nu9/VU1wPVA2zQvsqn/fwA==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pGyxHv7Mn9r4 for <buildroot@buildroot.org>;
+ Sun, 13 Sep 2026 12:45:20 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org C7AD960600
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789303520;
+ b=rmheukPAViddeLn1i2GrGDeyvescAbwEZNYyQ4YLvIqj0kcD2SrMSTg5EhJrHhpUvHj5
+ hNaUspaW3tS6hyFY+LrV0zo8Ve2q22iuVAsivmObkA1JbIaUrzj7t2+stsBa5wzWgsaAN
+ l7rp5l7nSIoApC0BzpcUK+T4zgUafUn7Ko/08ZpM65VY5/c+3KL0DviKy21oH6qK5X80C
+ JjpgXbqrSNG4vAeUFTpssUln4mvMe0Y0j6Wyl2BhdijXGWWeot/OO8vzCbjKOurntGJfk
+ KhOpobVhz44djv/za9stqUGNeJoGI4uN6guWeXHrZa8E/ooMYgr2wRRMY3aIWlyQjCg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1789302922;
- h=Received-SPF:DKIM-Signature:Received:Received:From:To:Cc:Subject:
- Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding:
- X-Spam-Score:X-Spamd-Bar;
- bh=m905ue5f6mfXYv6WmeB1eW16yhM8QqmRPZj61avjkgo=;
- b=MFD0EuefeoI4uvRYQgZnCB9ZbMhGF4CLWW4qiHulaKte8kpBHLKy2M8bu9kf2MsFDEqh
- ypySuZwPnma1NCGQ7PCJ+pETxs1vaFHVjePGjxKrwEMpHb6DVQreL2x4o3CBlGY07SP5e
- HdccSMbRXD2J6Wjy2W0vtSoS4vuwk8P/Dr632ncUxizSzissmDAGgQ/02w3xx3fNechi6
- ZYDDKXdFzF/UCORjdSnsynYsu+ONt9HJE98+lBM0CnAyBoKAd7pbESLcEV/nPNFBMnFtr
- zOQ6qa4ExE85py0pnVapjL7iIFhM0IUW8DIvvQLZOTb1NHDJ3dXXJ8wnKU5h4blvRPQ==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org;
- dmarc=pass header.from=kuhls.net; 
- dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=bnIlW5QQ; 
- arc=none smtp.remote-ip=85.13.140.57
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none) header.from=kuhls.net
-Authentication-Results: smtp4.osuosl.org; dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=bnIlW5QQ
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A92FF40505
- for <buildroot@buildroot.org>; Sun, 13 Sep 2026 12:35:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
- s=kas202605290044; t=1789302903;
- bh=m905ue5f6mfXYv6WmeB1eW16yhM8QqmRPZj61avjkgo=;
- h=From:To:Cc:Subject:Date:From;
- b=bnIlW5QQV0TdqC+NwfGEfghR0QgfAq7dL5qc7/TAEKSyhEA/2HBUr4w/+mDOIzpPJ
- Gj1v2mhxx+S+e8g43bZGoBZvu4IdNZURo1JQN+0Iq/fCxlsNLrmyd0PQXpJgiCkLWQ
- o3gQhwTR0eas6F+jI7abZrvriw3TxZ8fVVkiSiJjpLXx3trypPmQwCi0FAipe7qlZi
- 79G/aSK4W5J0NgwhxN3Ei8NX3EPRLe+S4leKZ5SoXjSO3Lus2NEXn5ZQ+Lly5CxZMq
- StxSfGEO9r8LVHAqpvq7z/8mDH+ch15WXDM+CnPX7PN2kqxsGzO3A8UI8NnRj0jhXr
- vaK8dvF7XUyjQ==
-Received: from fli4l.lan.fli4l (p54a1b732.dip0.t-ipconnect.de [84.161.183.50])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id EAE6BA4C3435;
- Sun, 13 Sep 2026 14:35:02 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:45812)
- by fli4l.lan.fli4l with esmtp (Exim 4.100)
- (envelope-from <bernd@kuhls.net>) id 1x5jQE-000000000Db-2U3G;
- Sun, 13 Sep 2026 12:35:02 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+ c=relaxed/relaxed; t=1789303520;
+ h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
+ X-Git-Newrev:X-Patchwork-Hint:Message-Id;
+ bh=sBxZKEG453WeqSdRwfkCEFtvznuUwD1aif3HWhGy73o=;
+ b=STgVyPA0YLgW2uHG5lGail45XxJmUeK8L7zYRCbTYco3pk+dV8tZcPNn/IcrsRPgK294
+ aUaAV2NVB4jc4lepGgrNfqWMTpe6/T/X6Z8dUvXl85zv26HdsErEv0AoZARUOGnZrOWZu
+ eeMnECj+OiHPO0S180OeT0Ms889cBclmmdkVztnK3apwj8ef0pNP0R7yKdNdj/nt4Nlf0
+ MK8W6VQcDE3lOiBveRObH0xASNKNjamTtDHkdWOneTWIRQBn3MdG7nJxYFPTKHr58hOeK
+ BGWAGRcabgr91GlgpoAdvYdGMIFoR9indFAKF9fjbCa+8dpptaTKFJ2GeKrPUFzN9Kg==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org;
+ arc=none smtp.remote-ip=140.211.167.122
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id C7AD960600
+ for <buildroot@buildroot.org>; Sun, 13 Sep 2026 12:45:20 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id C894995BDD; Sun, 13 Sep 2026 12:44:15 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 13 Sep 2026 14:35:01 +0200
-Message-ID: <20260913123502.1315716-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
-MIME-Version: 1.0
-X-Spamd-Bar: /
-Subject: [Buildroot] [PATCH 1/2] package/asterisk: bump bundled pjsip to 2.17
+Date: Sun, 13 Sep 2026 14:28:09 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 6dc29e431fb4105692cce08ed48eba2fe4a6e03e
+X-Git-Newrev: 0aeecbb88949b1ca0a4768750d9ddecdaba7dc3d
+X-Patchwork-Hint: ignore
+Message-Id: <20260913124415.C894995BDD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/atf: bump to version 0.25
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -136,77 +109,144 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Buildroot commit 7f48325de69ddaed921572edad875694a8154419 bumped the
-asterisk package from 22.9.0 to 22.10.1.
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/0aeecbb88949b1ca0a4768750d9ddecdaba7dc3d
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-This bump includes upstream commit
-https://github.com/asterisk/asterisk/commit/5d543ad80ce6ad8a697cbd6c1938565047d26a99
-which bumped the bundled pjsip package to 2.17.
+The removed patch has been merged [1].
 
-To allow offline builds we download the pjsip tarball so we need to keep
-the version numbers in sync.
+Since version 0.24, a C++20 compiler is required [2], so add a
+dependency on gcc >= 10 and propagate it to kyua, which selects atf.
 
-The autobuilders logs show a download process:
-https://autobuild.buildroot.net/results/400/400e53158f11926446c11d22681eb8a9430caf1d/build-end.log
+Release notes:
+https://github.com/freebsd/atf/releases/tag/atf-0.25
+https://github.com/freebsd/atf/releases/tag/atf-0.24
 
-checking for embedded pjproject (may have to download)... configuring
-[pjproject]  Downloading https://raw.githubusercontent.com/asterisk/third-party/master/pjproject/2.17/pjproject-2.17.tar.bz2 to
-               /home/autobuild/autobuild/instance-3/dl/asterisk/pjproject-2.17.tar.bz2
-[pjproject]  Verifying /home/autobuild/autobuild/instance-3/dl/asterisk/pjproject-2.17.tar.bz2
-
-where the tarball was once stored in the configured download directory:
-
-  --with-download-cache=$(ASTERISK_DL_DIR)
-
-to be used during later autobuilder runs.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+[1] https://github.com/freebsd/atf/commit/67e7d350a15aff88c151b1fc838dac83d35be955
+[2] https://github.com/freebsd/atf/commit/35134a317cdb486b4e7c0cdff20d1084d06159de
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+[Julien: add link to v0.24 release notes]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/asterisk/asterisk.hash | 2 +-
- package/asterisk/asterisk.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ .../atf/0001-atf-check.cpp-include-time.h.patch    | 33 ----------------------
+ package/atf/Config.in                              |  5 ++--
+ package/atf/atf.hash                               |  2 +-
+ package/atf/atf.mk                                 |  2 +-
+ package/kyua/Config.in                             |  6 ++--
+ 5 files changed, 9 insertions(+), 39 deletions(-)
 
-diff --git a/package/asterisk/asterisk.hash b/package/asterisk/asterisk.hash
-index 35aa1282e8..1bd76ef865 100644
---- a/package/asterisk/asterisk.hash
-+++ b/package/asterisk/asterisk.hash
-@@ -2,7 +2,7 @@
- sha256  373c98f4d4a1b923b42def0aee03f4e36aca9d1c244a8eeda646da8a97f89663  asterisk-22.10.1.tar.gz
+diff --git a/package/atf/0001-atf-check.cpp-include-time.h.patch b/package/atf/0001-atf-check.cpp-include-time.h.patch
+deleted file mode 100644
+index 359172c0e6..0000000000
+--- a/package/atf/0001-atf-check.cpp-include-time.h.patch
++++ /dev/null
+@@ -1,33 +0,0 @@
+-From 67e7d350a15aff88c151b1fc838dac83d35be955 Mon Sep 17 00:00:00 2001
+-From: Bernd Kuhls <bernd@kuhls.net>
+-Date: Sat, 22 Nov 2025 23:47:41 +0100
+-Subject: [PATCH] atf-check.cpp: include time.h
+-
+-Fixes build error with gcc 14 as reported by the buildroot autobuilders:
+-https://autobuild.buildroot.net/results/41b/41b25ee8e66e34323eca011e4b5fe479ece9ed76/build-end.log
+-
+-atf-sh/atf-check.cpp: In function 'useconds_t get_monotonic_useconds()':
+-atf-sh/atf-check.cpp:183:24: error: 'CLOCK_MONOTONIC' was not declared in this scope
+-
+-Upstream: https://github.com/freebsd/atf/commit/67e7d350a15aff88c151b1fc838dac83d35be955
+-
+-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+----
+- atf-sh/atf-check.cpp | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/atf-sh/atf-check.cpp b/atf-sh/atf-check.cpp
+-index 1354e3a..94da413 100644
+---- a/atf-sh/atf-check.cpp
+-+++ b/atf-sh/atf-check.cpp
+-@@ -30,6 +30,7 @@ extern "C" {
+- #include <limits.h>
+- #include <signal.h>
+- #include <stdint.h>
+-+#include <time.h>
+- #include <unistd.h>
+- }
+- 
+--- 
+-2.47.3
+-
+diff --git a/package/atf/Config.in b/package/atf/Config.in
+index 800b488945..91e7364000 100644
+--- a/package/atf/Config.in
++++ b/package/atf/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_ATF
+ 	bool "atf"
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_10 # C++20
+ 	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  ATF, or Automated Testing Framework, is a collection of
+@@ -8,6 +9,6 @@ config BR2_PACKAGE_ATF
  
+ 	  https://github.com/freebsd/atf
+ 
+-comment "atf needs a toolchain w/ C++"
+-	depends on !BR2_INSTALL_LIBSTDCPP
++comment "atf needs a toolchain w/ C++, gcc >= 10"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_10
+ 	depends on BR2_USE_MMU
+diff --git a/package/atf/atf.hash b/package/atf/atf.hash
+index 6cd2323ab0..f979b8b052 100644
+--- a/package/atf/atf.hash
++++ b/package/atf/atf.hash
+@@ -1,3 +1,3 @@
  # Locally computed
--sha256  633c3dc34ffb21af8ac9ee160245c9c174379391e35cace1b6c9f516a260f683  pjproject-2.16.tar.bz2
-+sha256  04b2eb1f0f01aa0ad1945b167171843448a51aa6b7c3e806496d434f13a112b7  pjproject-2.17.tar.bz2
- sha256  6775095bcd417d375faddc1f17cdd7706ad8aa9b9b02404990c4b0ee218ee379  libjwt-1.15.3.tar.gz
+-sha256  a64e2427d021297f25b3f2e1798f8ec4dc3061ffb01a1cd3f66cc4cee486b10f  atf-0.23.tar.gz
++sha256  a52be96b5565733e71df8d0ecc8a4255a495e45183de7e3657491e0a8069423f  atf-0.25.tar.gz
+ sha256  2a15172ddf6386297734c9800c899e6e8dc16c5a03931dcf95a9ab321a24cfe4  COPYING
+diff --git a/package/atf/atf.mk b/package/atf/atf.mk
+index 91d2fb5567..a49d32692d 100644
+--- a/package/atf/atf.mk
++++ b/package/atf/atf.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # sha1 from: http://downloads.asterisk.org/pub/telephony/sounds/releases
-diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
-index b6b40645ee..8d03f2bdde 100644
---- a/package/asterisk/asterisk.mk
-+++ b/package/asterisk/asterisk.mk
-@@ -12,13 +12,13 @@ ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
- # compilation with the external pjsip produces a non-working asterisk, which
- # segfaults. The reason behind this is unclear.
- # https://github.com/asterisk/asterisk/issues/671
--ASTERISK_PJSIP_URL = https://raw.githubusercontent.com/asterisk/third-party/master/pjproject/2.16/
-+ASTERISK_PJSIP_URL = https://raw.githubusercontent.com/asterisk/third-party/master/pjproject/2.17/
- ASTERISK_LIBJWT_URL = https://raw.githubusercontent.com/asterisk/third-party/master/libjwt/1.15.3/
- ASTERISK_SOUNDS_BASE_URL = http://downloads.asterisk.org/pub/telephony/sounds/releases
- ASTERISK_EXTRA_DOWNLOADS = \
- 	$(ASTERISK_SOUNDS_BASE_URL)/asterisk-core-sounds-en-gsm-1.6.1.tar.gz \
- 	$(ASTERISK_SOUNDS_BASE_URL)/asterisk-moh-opsound-wav-2.03.tar.gz \
--	$(ASTERISK_PJSIP_URL)/pjproject-2.16.tar.bz2 \
-+	$(ASTERISK_PJSIP_URL)/pjproject-2.17.tar.bz2 \
- 	$(ASTERISK_LIBJWT_URL)/libjwt-1.15.3.tar.gz
+-ATF_VERSION = 0.23
++ATF_VERSION = 0.25
+ ATF_SITE = https://github.com/freebsd/atf/releases/download/atf-$(ATF_VERSION)
+ ATF_INSTALL_STAGING = YES
+ ATF_LICENSE = BSD-2-Clause, BSD-3-Clause
+diff --git a/package/kyua/Config.in b/package/kyua/Config.in
+index 4fc5e098ad..925c42ed65 100644
+--- a/package/kyua/Config.in
++++ b/package/kyua/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_KYUA
+ 	bool "kyua"
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_10 # atf
+ 	depends on BR2_PACKAGE_HAS_LUAINTERPRETER # lutok
+ 	depends on !BR2_PACKAGE_LUAJIT # lutok
+ 	depends on !BR2_STATIC_LIBS # lutok
+@@ -17,7 +18,8 @@ config BR2_PACKAGE_KYUA
  
- ASTERISK_LICENSE = GPL-2.0, BSD-3-Clause (SHA1, resample), BSD-4-Clause (db1-ast)
--- 
-2.47.3
-
+ 	  https://github.com/jmmv/kyua
+ 
+-comment "kyua needs a toolchain w/ C++, dynamic library and full Lua"
+-	depends on !BR2_INSTALL_LIBSTDCPP || BR2_PACKAGE_LUAJIT || BR2_STATIC_LIBS
++comment "kyua needs a toolchain w/ C++, dynamic library, full Lua, gcc >= 10"
++	depends on !BR2_INSTALL_LIBSTDCPP || BR2_PACKAGE_LUAJIT || \
++		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_10
+ 	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
+ 	depends on BR2_USE_MMU
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
