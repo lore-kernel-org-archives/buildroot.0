@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF07DC88E56
-	for <buildroot@archiver.kernel.org>; Sun, 13 Sep 2026 12:07:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69F7BC88E56
+	for <buildroot@archiver.kernel.org>; Sun, 13 Sep 2026 12:16:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7C4AD60624;
-	Sun, 13 Sep 2026 12:07:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D70CA405F4;
+	Sun, 13 Sep 2026 12:16:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WAbBSI8_xHQn; Sun, 13 Sep 2026 12:07:39 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 1326C60614
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789301259;
-	b=mLyOJDo4P6PI7ZoIW7L0idiPTDrUFpFf3GQpm2qIWKgoeAJXBqQKUMc7KtI+bRgZyzr8
-	 V4PpWsnMybdpjgIftvxCBgiwSLkoPOza7zyc3LE3PrXoVc6nZzjZkfUq9aX5Ac4bd3R8K
-	 dWrcKmEw9vcbYNVwx0yUzaD2APEuONiCxQWbD3AXxgx7Qff0PCUMBkXC/oepjIgxL8vn1
-	 +mpoZ5fDcOtoVrOJZceeW9C/pPWDVM0s8bioBk72qm0ivvoKxEqvXuE5smumyozPZ5Uv3
-	 vR9FeHo9hEfrQDhVSrlFNNUGaLNVJxO/VfYRJvS8cYap9gDe4tLr/dnDOoYVkMvQ8RA==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QQq3x5q7ilmq; Sun, 13 Sep 2026 12:16:39 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 0885F40608
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789301799;
+	b=ZUmSxRzmgM6D4i/F71i0ptcItGn7hXq05m0KeFvUzI/USItUJZqlxJ+/K0w8SIRvjBOo
+	 15R/mDL5RQr5HLD5vPX5/0uCokvH2p6QpOs/cB/t61wuLZpdeKG8YhVLc+OsnInR6iKd2
+	 iomuJEEewrHRrzALgSsQRCX1PzwnRKvN2kEqMAzpGE3UOKoHHXkpXRkpXMNM1qvoQ2QbF
+	 CmOxR/5XZCCiMhkEYsM23P0obmKA81sic6ojr2YLsVrZN7UZz0aJtsWcyjyJ/kV1Iax24
+	 +B2ZiDzKqynDtuB0fQ5UdskMyLh084kPufKoNN3ly1rDQGWOyqbHYY16XaFrrjZQMCA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789301259;
+	c=relaxed/relaxed; t=1789301799;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -31,87 +31,87 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:Content-Type:Content-Transfer-Encoding:
 	 Errors-To:Sender;
-	bh=znY9w2vbSJwONQN+fPB9a6s1Am7Qnd+YbfvCY5eDUf0=;
-	b=gAGhiaFSHMEWrbhbzs7VBKSf/PysbP7osqLrudio70zUjvcZeASh5fI7AtNFjBltnMzs
-	 NpIX46hB61wfxdB7+7L8gng9I9t6q7S+hm2ETFgMqyruueOdekGmKOkwViW/HnrJH+zwf
-	 lpPMa0WnLFK1G3XFLnNnMGforcW+sTpVSReEhJaIeLzq6O03WJ0TpKrVsHwjr5h6b1olg
-	 f7OOGCjPUQ6HlAR8Ok49Df4M9nCuyXTF/gU2+KSQ98zX18rMRVe02klfttQpugSVI0955
-	 I95Ig+kdNquDtQOMYp+Vf3+ijXO2ig5xW/L0KTp8hi0bupvonXtX4L+xDIdV98Zxzww==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	bh=0VtxjwJ/44RoWVlu6AhQgt+uGeRsF8ZICQ0kOZQ9Gbw=;
+	b=avQOhalQtP6ldt+L+L6K9wqgg1U1vf8RYPVwCqVpNrjUGkuCBqsBxXk2GhdFCvcFri7W
+	 pz3hGdoGt3jAKs5PQI/iM++4xdOWhyOXKQjhghZv725+Q7nGBGf4ubhzE2bJdjvkbq7Ci
+	 WynDm0faIQq94uGq+Tlzic23/DCSz9UdncX58tc2wKSTxDOXG6o5jMYwWRzAjMmE9FRYd
+	 V4q1mrJ9dRfKiQhDSvcsJ+CRvfOl8r3r9Xhj+EfQxEvBS4Xuqq1dX0sWSeMHXGLV9oTKd
+	 s58yd5SmT+fCS4qXjLjidIxO76U04w384w5a5imlSml5ySYIabZ39zffxzi4htdcghQ==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789301259;
-	bh=znY9w2vbSJwONQN+fPB9a6s1Am7Qnd+YbfvCY5eDUf0=;
+	s=default; t=1789301799;
+	bh=0VtxjwJ/44RoWVlu6AhQgt+uGeRsF8ZICQ0kOZQ9Gbw=;
 	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=kMe6/f2fdyVNMZIhRgNnOexLGFrX52XWnuwvLmRg48S0ZEALv0A9ld/DwQb2rLeq7
-	 +9kmY4MPkk9/94sTd5gDMQ1yvVhs77uGGBEbOCbT5RlyPVfHoIx//jGksQ4TXC/Oi5
-	 HQzED3/krg0ls1WNoFG+Jr2nznnP6y0dw+H7GtkafdUcMLFkD3VSezEanWpkMuDj3+
-	 BwGndnwgz2XUKaJun8e7zsNFyXXWIpQZp3d7vGEeZyc5GoKcC8UEN3aVPrzjF3pnw1
-	 ELkBTbBUI9mnSwydYo5mSY89ZKUmEIi2HKxmqjdWw8yZHYEOoUPgzDLeC3e9GLggU0
-	 OcOXbWrUWRKag==
+	b=FOpFBAvXUt3qgpfHVtN8zOt/BcTf+glCVGJ3octIo3CwuvNIxwkXx85txXNgKj8F3
+	 ++FZEurmUUuk8Ub6QdLPvUL0aDi3WN5fIHa3KIcT9A6Nxkff8uhg93HzuGU9fJikFx
+	 T+E8TBUqm/4dFHWK0+UcJpel/JvwjOivtjKM6It0w5VBeqrSpFsH3sv3exMf8vtVBA
+	 th7cSeazsNSJWgp0TJrLm5KOZbsPU1zy8s3VQbjdufS/ddBwXsgEd9DUT7Pw7ouHPY
+	 sDilJxLIuik6efvaiI5YailTD28rzMm8Jm69Qf0jx4twdD+bJUCj40o1E3c3ANZwSD
+	 eT8vYeuYdrjrQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1326C60614;
-	Sun, 13 Sep 2026 12:07:39 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id AD1102D0
- for <buildroot@buildroot.org>; Sun, 13 Sep 2026 12:07:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0885F40608;
+	Sun, 13 Sep 2026 12:16:39 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 653E52D0
+ for <buildroot@buildroot.org>; Sun, 13 Sep 2026 12:16:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9F087400AB
- for <buildroot@buildroot.org>; Sun, 13 Sep 2026 12:07:37 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4B4BB40608
+ for <buildroot@buildroot.org>; Sun, 13 Sep 2026 12:16:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TxtoSMUMsMcx for <buildroot@buildroot.org>;
- Sun, 13 Sep 2026 12:07:36 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org 3BD6A40022
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789301256;
- b=bx3wCudcPkafuSgxGWUyIr9FD8gtQ1CHQCK0reDjli0pgu1ladrDlJQDp/6b1JnsnUGK
- XlUu1NvuStSsX6TTt9n3BHFiWfMCuA7jHd3PC7tj/vI99m1AbjlvfX4rzLMn8jVQ3sBeZ
- oL+EGfWauuo2WS/uONAtQ3qgTnepjl43QnVkBynWwQcsNwf5qVAq+u8Uiq22X6Mb4CT0a
- rESZZkVrtRsdkCEmsbLqB/oFFffxRN1VvImBEyGh4LT+tw8p8+gQv2dTXJowIq+I5/1wE
- /bQymCsYdzva2M1AzAtURKZXo9+8iwDDNxenHGaVlweZD58iiaKWPOqFLamedr/7TsA==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dmKxTev9_dgO for <buildroot@buildroot.org>;
+ Sun, 13 Sep 2026 12:16:37 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 6AE87405F4
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789301796;
+ b=mWiLTvJr6oP5VLdVW76TqVFLNHoZH1mRxqiWSmSG3oXT8a54/7aPpL5wkmA1W3Gel4E3
+ JMauXozsfqXIy69If+ESKLjRfvc0QEh7EQzOG/pvm6kx6Lzyh7D5UIZPJl+TP1gcnndAP
+ T9y4vrLpQ+zpArghvVZkLHnArWisE5hE3qMD6pJ/wOHkZIr35YuYSEwd+5rHGNTXNs+NV
+ 5Yh2UevMecXVu738aDSamqH/LnbRDzgUxvognSj+6mueil5PYgA9GDjSVDdNAc7WP6cX+
+ 2CSAEOd+qv7iigdjHgApXKCBHXxaoigUJ8hPLEPmw0/kmCMFTAz8IizBzrrFqcA+GkQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1789301256;
+ c=relaxed/relaxed; t=1789301796;
  h=Received-SPF:Received:Received:Received:DKIM-Signature:From:To:Cc:
  Subject:Date:Message-ID:X-Mailer:MIME-Version:
  Content-Transfer-Encoding:X-Last-TLS-Session-Version;
- bh=DMMnQyTtd9Bdo1MbkVLB7AlA6OOiRRmgAaFcJz0sOKg=;
- b=a2kXba560J4TvM7d+qSd50XKqIQYNWcMgqE8Ki5+WZHqpUKeEfrUPLcQlxNQWPkBXek3
- 4PYDPn0K+qOXXsDYRAOye+oeczviiKIr/4m4Wakymv6DielfrWt+DbAbGE+YW3pRMNzfM
- /tpi9IBn0h30Tsx2LalbvCSfoyI6k19TthmCjP2pzwpc/DIvSjVUfmY0nQZXrF/7abn57
- jwUUON4lYmK+zGshcMSjCNE/ukTRSrqMSndqchzB2lEmVslM4Q8HYtM8G7uTN9aSDGzAC
- ZGkqAfBhnQGPv6U5b0bv0iq9aeG7vcBDWfM6m27IDNIWIT/QWaDymSNvhF+9Iecb9jg==
-ARC-Authentication-Results: i=1; smtp2.osuosl.org;
+ bh=NVoMQPdjjLxIFC8kZLCxwGcqSmKasdbTt75Dvb2XR7g=;
+ b=CRyL9VoQZofPK6IlTSVO+5mTdUXT5ZTeaOtmk4lk8369kYlton0bvJXjwqxm5P3d7ee2
+ JZZFK75K0+N7mGuGqLC0LwEtZz6PUyAWYcbm07JIbsKjPJ8E+4bagW/pvypSACkKVKb7l
+ BcTnQzYhxi5UrqNA85LMS1ddng/7k9rR9SdS5/4fY8AufEk8CW+69DM9CnHC5RH3uuRIy
+ YeWxcFkJFLvb3u2Yhbi8GIN10Wei3XTSpqvVvT2DudlBSgOemuRMefjcGGvll6MMoICe4
+ k3mpIIzMXZdwws6RoRcLt1j2lFUjJ40sL4ShI4FKesD2XpCEL5yEKuXIbd5/6kpWlGA==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org;
  dmarc=pass header.from=bootlin.com; 
  dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=GTo4Fpzl; 
- arc=none smtp.remote-ip=185.171.202.116
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
- helo=smtpout-04.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ header.s=dkim header.b=xH5baH+L; 
+ arc=none smtp.remote-ip=185.246.85.4
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
+ helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3BD6A40022
- for <buildroot@buildroot.org>; Sun, 13 Sep 2026 12:07:35 +0000 (UTC)
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6AE87405F4
+ for <buildroot@buildroot.org>; Sun, 13 Sep 2026 12:16:35 +0000 (UTC)
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-04.galae.net (Postfix) with ESMTPS id C435CC63451
- for <buildroot@buildroot.org>; Sun, 13 Sep 2026 12:08:14 +0000 (UTC)
+ by smtpout-03.galae.net (Postfix) with ESMTPS id F2BA74E404A0
+ for <buildroot@buildroot.org>; Sun, 13 Sep 2026 12:16:32 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 053D460435;
- Sun, 13 Sep 2026 12:07:32 +0000 (UTC)
+ by smtpout-01.galae.net (Postfix) with ESMTPS id A165060435;
+ Sun, 13 Sep 2026 12:16:32 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 9238B11C78D5A; 
- Sun, 13 Sep 2026 14:07:30 +0200 (CEST)
+ with ESMTPSA id 5E7B011C78D5A; 
+ Sun, 13 Sep 2026 14:16:31 +0200 (CEST)
 To: buildroot@buildroot.org
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  Bernd Kuhls <bernd@kuhls.net>
-Date: Sun, 13 Sep 2026 14:07:28 +0200
-Message-ID: <20260913120729.1647806-1-thomas.petazzoni@bootlin.com>
+Date: Sun, 13 Sep 2026 14:16:28 +0200
+Message-ID: <20260913121629.1650246-1-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.55.0
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
-Subject: [Buildroot] [PATCH] package/kodi: propagate mariadb dependencies to
- BR2_PACKAGE_KODI_MYSQL
+Subject: [Buildroot] [PATCH] package/kodi: fix definition of
+ BR2_PACKAGE_KODI_ARCH_SUPPORTS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -130,40 +130,64 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Even though kodi itself has architecture dependencies (expressed
-through BR2_PACKAGE_KODI_ARCH_SUPPORTS, the option
-BR2_PACKAGE_KODI_MYSQL selects BR2_PACKAGE_MARIADB, which has its own
-architecture dependencies as well. Make sure to propagate those to
-BR2_PACKAGE_KODI_MYSQL, which doesn't require adding a Config.in
-comment as these are purely architecture dependencies.
+The definition of BR2_PACKAGE_KODI_ARCH_SUPPORTS is incorrect, it
+goes like this:
 
-We haven't replicate all dependencies of BR2_PACKAGE_MARIADB because
-all the others are covered by the top-level BR2_PACKAGE_KODI, and
-propagating them would require adding a Config.in comment for
-BR2_PACKAGE_KODI_MYSQL.
+ 	bool
+	default y if BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
+	default y if BR2_PACKAGE_HOST_OPENJDK_BIN_ARCH_SUPPORTS
 
+so it means it would be "y" if either
+BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS *OR*
+BR2_PACKAGE_HOST_OPENJDK_BIN_ARCH_SUPPORTS is true. While clearly what
+we need is for both to be true: ffmpeg should be available for the
+target architecture, and openjdk should be available for the host
+architecture.
+
+One option was to change to:
+
+ 	bool
+	default y if BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS && BR2_PACKAGE_HOST_OPENJDK_BIN_ARCH_SUPPORTS
+
+Or:
+
+ 	bool
+	default y if BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
+	depends on BR2_PACKAGE_HOST_OPENJDK_BIN_ARCH_SUPPORTS
+
+But we preferred:
+
+ 	bool
+	default y
+	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
+	depends on BR2_PACKAGE_HOST_OPENJDK_BIN_ARCH_SUPPORTS
+
+Fixes: b6a2f494290d85a26798564992ddd1ac46c1a48d ("package/kodi: depend on host-openjdk-bin instead of selecting BR2_NEEDS_HOST_JAVA")
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
-We don't have a super clear/strong policy on whether dependencies need
-to be replicated to a sub-option when the package top-level option
-already has them. I haven't done so in this case, but if people feel
-like it should be done, I'll be happy to send an updated patch.
+Note: I have no strong opinion on the different options to express
+this "AND" dependency. So if people don't like the choice I've made in
+this commit, I'm happy to change to one of other options proposed in
+teh commit log.
 ---
- package/kodi/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/kodi/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 08a7caae2c..0b13136d82 100644
+index 0b13136d82..d64a6fee7e 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -202,6 +202,7 @@ comment "nfs support needs a toolchain w/ threads support"
- 
- config BR2_PACKAGE_KODI_MYSQL
- 	bool "mysql"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC || BR2_TOOLCHAIN_HAS_SYNC_8 # mariadb
- 	select BR2_PACKAGE_MARIADB
- 	help
- 	  Enable MySQL support
+@@ -1,7 +1,8 @@
+ config BR2_PACKAGE_KODI_ARCH_SUPPORTS
+ 	bool
+-	default y if BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
+-	default y if BR2_PACKAGE_HOST_OPENJDK_BIN_ARCH_SUPPORTS
++	default y
++	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_HOST_OPENJDK_BIN_ARCH_SUPPORTS
+ 	# i386: needs sse (see upstream PR 10351)
+ 	depends on !(BR2_i386 && !BR2_X86_CPU_HAS_SSE)
+ 	# m68k not supported upstream
 -- 
 2.55.0
 
