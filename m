@@ -1,133 +1,130 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7EC7DC88E56
-	for <buildroot@archiver.kernel.org>; Sun, 13 Sep 2026 12:35:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94CBBC88E65
+	for <buildroot@archiver.kernel.org>; Sun, 13 Sep 2026 12:35:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1C85880C3D;
-	Sun, 13 Sep 2026 12:35:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4579E4057A;
+	Sun, 13 Sep 2026 12:35:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4Bor_NY7K2nc; Sun, 13 Sep 2026 12:35:11 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org B5D2880BF1
-Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789302911;
-	b=WoTm2I9A3hyFdCQDZGqBwAohpw58i2IOlnYoD1qDaLr3ag6X7AGOzL4yz6rjzeaoRCyG
-	 uvHdJ9V8o93vaG2A9emIXmYEcVJgybAl3RmV9p/px96XGf1Ur7EF+x9QJUf1cNZXPOWFD
-	 APXCj5kzGUEemYfk33HRuPK5BVrjzkttbLzdJKz6LMvkJ/zsCbIa0ZhijI4dLZPA0VzW1
-	 VFazJ7BecPZJblyOOYfZQ29ZC6tkZLJMdAGvRb7Cf1GI6h9MMuUt9pTbMilyWf+orMBiI
-	 VZLFRaUPVyR8v6hWjVE7rKRIFGgedhVwOg2LDG++ckyk5a4lPBBd6eluSNg+LvJcTyg==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RpXqypWZZH5K; Sun, 13 Sep 2026 12:35:25 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 1BC5A40523
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789302925;
+	b=pIfwBk9GFj7yAyR0Hmng6+APMuYrg+6VNomm7HQ9lmbb5KHoi9fNTjNj91l449SOu+n6
+	 8C7LbJx6MN7xo6bxYy2eKU1pb6j6/qJeHV4zB00QGwYWcClkgnSwQsGQ749l5YMO+bxzQ
+	 lqJqgKkFuYIbblP4noKaV2P05HUK6wN0LgTx0o6h8Lwq4RYRxedK0P8G6KvrMa7YM+2P+
+	 nVnFJBDzu4g6hzML2EeIQ8QjVy4suWGbcrmB9VCmMpRtEjuSDFDk/u35UrPOkd6+dlEur
+	 DMNZ+CwT5i1aMYW4QP31OIbAn53al6fU79TRJm5En9Uj6eRQbUl30+4yFV6RxBSSA1w==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789302911;
+	c=relaxed/relaxed; t=1789302925;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
 	 DKIM-Signature:Received:Received:From:To:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:MIME-Version:X-Spamd-Bar:Subject:X-BeenThere:
-	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Content-Type:
-	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=ztjZ3QrEx4xnWYlMwH8ZAXI7XKtlbq8r0mpZPXTfg5A=;
-	b=IKiKbJtGTQxyXR+SccYFVIZ4N7fTAIvWvKqYckYjVYxvSfxv5IJhGlxU73nwCwGrDOCW
-	 FGAySrQDTF/+BZcL1D9hhFLgSoBtse9gFSM62gCPQOLFxXiCLLPL+s4qSQXUuc/4am7nJ
-	 DhqRDp1+dCwCBjT3O17/KOHGr/vjml4rscv6NlFiCM9pqXuoZ2J8KvSarKWSHkNUYdggC
-	 5wCXV81JYX915nxeaGlDzySIb4udc1oNq4tQR0vBdxOVDEjJg3l9MnJK3pacWGFbQ4EZJ
-	 sG1FbXow5h75BGrEBFr+nsPLy9y5oRnY80bpiq5aMm8V5UAJtUtu1ty44x3RS34Gd+w==
-ARC-Authentication-Results: i=2; smtp1.osuosl.org; dmarc=pass header.from=kuhls.net;
-	dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256 header.s=kas202605290044 header.b=IqQfIW1T;
+	 MIME-Version:X-Spamd-Bar:Subject:X-BeenThere:X-Mailman-Version:
+	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:Content-Type:Content-Transfer-Encoding:Errors-To:
+	 Sender;
+	bh=Ofj3m7pKK7xN/PXqXJkc4/X03e18205bDve+6WimUco=;
+	b=Ptux0S52pPlk+yPFjpuCds6WXMQCxCDKbqm5lGngx6ed317IyEbfk+C8Xoan1UtzSh6u
+	 N0iIX1Vzp+w8QTEnCvAZb1bdJ8aPsr/MD8qsygVBPNbIlfj9xt75MfhpwPzK6ckzeUR9C
+	 wy5f72VsOTupd4UWSA09Ujp43/suSLDvxAwRShfvTH61Qv+IWOgoH/DwUP0Qn0VT6IGwd
+	 P7th1ZYRrJXd4sykPobl+k70qGPH2lwryvPXSZk2WzhdRTu65bQKUCtgF8RpF026gqlzR
+	 HCtVUEeo3V0dbWNfdYMik8VQR1ljJQ1eii/+UYkfAwQlz8myXdKPRXLfrSz/pio9lmg==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; dmarc=pass header.from=kuhls.net;
+	dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256 header.s=kas202605290044 header.b=bnIlW5QQ;
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789302911;
-	bh=ztjZ3QrEx4xnWYlMwH8ZAXI7XKtlbq8r0mpZPXTfg5A=;
-	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=mf2sE6fZ6TiiZwAZpX2ajI1QJYCxiRoYfcn+QbYWL9rg4LiEkdTROAKM43PYVV5UG
-	 BxcpbOfMEpVMP7Ime4B2q7J4U++YUzM8xeyJbEGaRPprFBzoJckt6WKtKa+w1GSK+j
-	 Hakx1tGiA6pFyP7J6sRaofSKh9c3esvfXLrDcqevL8B8s1a0y7lUKhbsUTvDvJGcB8
-	 7fCKxyVkEre/oqKOh7ivYSiz3RZmQFKzf7VTkmDDy1zCWdrQgBn0xNo7v9QiUYzkoK
-	 RUn2tvWzVjkJBh6gT4A3ZWHiVIfcoZoAMzgCqgzY1gDMMzDl9w0djdwk/QaFjQhz9Y
-	 kzAACaM/FNdsw==
+	s=default; t=1789302925;
+	bh=Ofj3m7pKK7xN/PXqXJkc4/X03e18205bDve+6WimUco=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=i/esd1ufExtK6X8PgNyiRzBAraqNUA2Er/VEOa1ZWUckIS3nKw1KyNcsBX17AN4LP
+	 MPZkNHD3Y7yKJQK6/OjMs/WcVmurX0cwZ5XR3V1Uqr2LAdu4JQD7IZx+Kpm0ZMNdtM
+	 wvYpwdyTdhvenfTkx+ppjYqcMAh9d9o0YQvTKpVuPqZ+LM1IaM6baDKRRRl6e7Cf3e
+	 GvQaD3CpjPiTsuRSmJXehHXDyX93PdjlY4Xq5FZfu8e0fDP5qYqHUvjFrwglS0gcXj
+	 XzaFTtGMhmdHXqQsV5EbvHYSrmQRXgPeSdpK5PognPMC184X0GS0+Q7XgWc5aliqTt
+	 3FlZ1M3HJv5lw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B5D2880BF1;
-	Sun, 13 Sep 2026 12:35:11 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 3425A24D
- for <buildroot@buildroot.org>; Sun, 13 Sep 2026 12:35:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1BC5A40523;
+	Sun, 13 Sep 2026 12:35:25 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7F9B324D
+ for <buildroot@buildroot.org>; Sun, 13 Sep 2026 12:35:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 252F180BF1
- for <buildroot@buildroot.org>; Sun, 13 Sep 2026 12:35:10 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 65A6E40523
+ for <buildroot@buildroot.org>; Sun, 13 Sep 2026 12:35:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FJS8zuPlVvyu for <buildroot@buildroot.org>;
- Sun, 13 Sep 2026 12:35:08 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 6750880BEA
-Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789302908;
- b=ioTHS8Aei64fgTQlK7D9PBA7VCboska5A6qR2ctjY1/99zEkrAuQLlSCQ8Ku810eNAPS
- dom0RotiylG0Ldtae7aUWrb5IYVTMVf76MQt4ZpO2cFQ0OcoJVHhil4bo1AO2jcZO41oh
- 3Hc/t1SwvL21d1vFFaSqL3b3n3Ol9CWWo+tjP7Op0L+AqXCjASFaah758ta7pXBuQToNP
- FqqoGEpOWumia3V3YQSCnTNrmPkuQmpXa0cYYUe9xcQiK4hw9foe/cyDUxAyRRysrA0bW
- o6KwG0zeYfR6Xyx1IVPow69L15iK5ONgGZtKPFMH5VVOAxENY5EBWJ2X5Sk5PxIMqPg==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4kt9MgEsjCnw for <buildroot@buildroot.org>;
+ Sun, 13 Sep 2026 12:35:22 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org A92FF40505
+Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789302922;
+ b=V+UKfhJMuZAXKoPA75VgQs3yQqxkJ2gkImxdnf1kJK6eF77pX5aZrQbZiEka9qCBTWzB
+ gIjtfS0uievn1YdmYIpZoXkYIBTHfO6g9XNRyEJu+3lLQ/4G3kAniowu+K6PxCQbjlRmj
+ U4PXzzf6VkGOtYv1Elf1PIpVxUBz87mbp0bYRgEkSpFxazydYLGC44IacC0RjwRhc8lXX
+ 1yV07W8YKUOVVZgBklONfzz2ZBZ60EHAT+5JyHUa3XQjhjDEZHUghpVPe8I+Nmwcnnya/
+ 3QPQDFHFWZA4RZjtW8YrQpzJStGD/UDfsN1/Vlu4Enl18Nu9/VU1wPVA2zQvsqn/fwA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1789302908;
+ c=relaxed/relaxed; t=1789302922;
  h=Received-SPF:DKIM-Signature:Received:Received:From:To:Cc:Subject:
- Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
- Content-Transfer-Encoding:X-Spam-Score:X-Spamd-Bar;
- bh=87tFvmQZFHbzDUG0vLHctcR6dwF70RmL5AMEAoYmzUE=;
- b=U5jY7bVG3/muBFO7GvWQ3g1ew8ANOI2t91z3j9YxfHuRiYIiiL0rmEff2vzOwKfEAe2y
- eSI85cKYqpw1mH0DvB20HB8o4Cmq1+A028iMUzyM+nhR8O16VRNR0Q/2ivRvza7CpCcaD
- s0k7u769cn3MFRW1pGcAlgRmGLbvtKq9RxTxOZMbLmTILkqGgPmBFvWk/y2q6eOpmdX3j
- 4iHyjD4XPjKkfePnzWATt+eDAO3cfUq5JhVEe/ZYE1ME/CK0vGpV/zSAA+wlcb7TI8DyC
- MH5oETpkpsXVAsNh8t7+ryzYuAqjIMc1Qb3lCnlhQU1KClFTdZcWRy6VwukASdeer0g==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org;
+ Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding:
+ X-Spam-Score:X-Spamd-Bar;
+ bh=m905ue5f6mfXYv6WmeB1eW16yhM8QqmRPZj61avjkgo=;
+ b=MFD0EuefeoI4uvRYQgZnCB9ZbMhGF4CLWW4qiHulaKte8kpBHLKy2M8bu9kf2MsFDEqh
+ ypySuZwPnma1NCGQ7PCJ+pETxs1vaFHVjePGjxKrwEMpHb6DVQreL2x4o3CBlGY07SP5e
+ HdccSMbRXD2J6Wjy2W0vtSoS4vuwk8P/Dr632ncUxizSzissmDAGgQ/02w3xx3fNechi6
+ ZYDDKXdFzF/UCORjdSnsynYsu+ONt9HJE98+lBM0CnAyBoKAd7pbESLcEV/nPNFBMnFtr
+ zOQ6qa4ExE85py0pnVapjL7iIFhM0IUW8DIvvQLZOTb1NHDJ3dXXJ8wnKU5h4blvRPQ==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org;
  dmarc=pass header.from=kuhls.net; 
  dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=IqQfIW1T; 
+ header.s=kas202605290044 header.b=bnIlW5QQ; 
  arc=none smtp.remote-ip=85.13.140.57
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-Authentication-Results: smtp1.osuosl.org;
+Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=kuhls.net
-Authentication-Results: smtp1.osuosl.org; dkim=pass (2048-bit key,
+Authentication-Results: smtp4.osuosl.org; dkim=pass (2048-bit key,
  unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=IqQfIW1T
+ header.s=kas202605290044 header.b=bnIlW5QQ
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6750880BEA
- for <buildroot@buildroot.org>; Sun, 13 Sep 2026 12:35:06 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A92FF40505
+ for <buildroot@buildroot.org>; Sun, 13 Sep 2026 12:35:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
  s=kas202605290044; t=1789302903;
- bh=87tFvmQZFHbzDUG0vLHctcR6dwF70RmL5AMEAoYmzUE=;
- h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=IqQfIW1T99OtM23tV2hSNETYTKp0bU1dCRxFgxzaM2WJq+mQxnKRkPA1L0SxUVb2h
- rxKLpWPtb7iYw/fjfHiNKQXw3Hpd2UN/0yEJqu/y6Cms6xSKMlnhepFe8dGNWWe90U
- w7HEnYGtMdsFETHP9fmjrXGt+jIbmdJdC4fqVfs11nH6K72Uk8ejyaE4M4UomSpCcS
- gss5rX47p0nFGq5/HTycBEaC+us+grwxEvG40G1xNjUIpnr1gSciuV/PLi2hHfpoCC
- DBVLlOaR3mY37l77M5DVk/taAJn7S+NmE8OxFsOGDe+Gu0ZFmuFDNWdxP39w54fbNT
- Igu3yk6LZNcPg==
+ bh=m905ue5f6mfXYv6WmeB1eW16yhM8QqmRPZj61avjkgo=;
+ h=From:To:Cc:Subject:Date:From;
+ b=bnIlW5QQV0TdqC+NwfGEfghR0QgfAq7dL5qc7/TAEKSyhEA/2HBUr4w/+mDOIzpPJ
+ Gj1v2mhxx+S+e8g43bZGoBZvu4IdNZURo1JQN+0Iq/fCxlsNLrmyd0PQXpJgiCkLWQ
+ o3gQhwTR0eas6F+jI7abZrvriw3TxZ8fVVkiSiJjpLXx3trypPmQwCi0FAipe7qlZi
+ 79G/aSK4W5J0NgwhxN3Ei8NX3EPRLe+S4leKZ5SoXjSO3Lus2NEXn5ZQ+Lly5CxZMq
+ StxSfGEO9r8LVHAqpvq7z/8mDH+ch15WXDM+CnPX7PN2kqxsGzO3A8UI8NnRj0jhXr
+ vaK8dvF7XUyjQ==
 Received: from fli4l.lan.fli4l (p54a1b732.dip0.t-ipconnect.de [84.161.183.50])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id EBE2EA4C4130;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id EAE6BA4C3435;
  Sun, 13 Sep 2026 14:35:02 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:45812)
  by fli4l.lan.fli4l with esmtp (Exim 4.100)
- (envelope-from <bernd@kuhls.net>) id 1x5jQE-000000000Db-2vBG;
+ (envelope-from <bernd@kuhls.net>) id 1x5jQE-000000000Db-2U3G;
  Sun, 13 Sep 2026 12:35:02 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sun, 13 Sep 2026 14:35:02 +0200
-Message-ID: <20260913123502.1315716-2-bernd@kuhls.net>
+Date: Sun, 13 Sep 2026 14:35:01 +0200
+Message-ID: <20260913123502.1315716-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260913123502.1315716-1-bernd@kuhls.net>
-References: <20260913123502.1315716-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: --
-Subject: [Buildroot] [PATCH 2/2] package/asterisk: bump version to 22.11.0
+X-Spamd-Bar: /
+Subject: [Buildroot] [PATCH 1/2] package/asterisk: bump bundled pjsip to 2.17
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -144,64 +141,69 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://community.asterisk.org/t/asterisk-release-22-11-0/114073
+Buildroot commit 7f48325de69ddaed921572edad875694a8154419 bumped the
+asterisk package from 22.9.0 to 22.10.1.
 
-https://downloads.asterisk.org/pub/telephony/asterisk/releases/ChangeLog-22.11.0.html
-Security Advisories Resolved: 0
+This bump includes upstream commit
+https://github.com/asterisk/asterisk/commit/5d543ad80ce6ad8a697cbd6c1938565047d26a99
+which bumped the bundled pjsip package to 2.17.
 
-Switched to tarball provided by upstream.
+To allow offline builds we download the pjsip tarball so we need to keep
+the version numbers in sync.
+
+The autobuilders logs show a download process:
+https://autobuild.buildroot.net/results/400/400e53158f11926446c11d22681eb8a9430caf1d/build-end.log
+
+checking for embedded pjproject (may have to download)... configuring
+[pjproject]  Downloading https://raw.githubusercontent.com/asterisk/third-party/master/pjproject/2.17/pjproject-2.17.tar.bz2 to
+               /home/autobuild/autobuild/instance-3/dl/asterisk/pjproject-2.17.tar.bz2
+[pjproject]  Verifying /home/autobuild/autobuild/instance-3/dl/asterisk/pjproject-2.17.tar.bz2
+
+where the tarball was once stored in the configured download directory:
+
+  --with-download-cache=$(ASTERISK_DL_DIR)
+
+to be used during later autobuilder runs.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
-Series passed Gitlab pipelines:
-https://gitlab.com/bkuhls/buildroot/-/commits/886f17de375f8b5e23d012054e90d79ff4e49493
-
-with the exception of
-bootlin-x86-64-glibc/build/asterisk-22.11.0/.stamp_built
-https://gitlab.com/bkuhls/buildroot/-/jobs/16469877767
-
-caused by the well-known menuselect bug:
-https://lists.buildroot.org/pipermail/buildroot/2026-May/801432.html
-
-menuselect/menuselect: error while loading shared libraries:
- libxml2.so.16: cannot open shared object file:
- No such file or directory
-
-No new build errors are introduced by this series.
-
- package/asterisk/asterisk.hash | 4 ++--
+ package/asterisk/asterisk.hash | 2 +-
  package/asterisk/asterisk.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/package/asterisk/asterisk.hash b/package/asterisk/asterisk.hash
-index 1bd76ef865..de4da24559 100644
+index 35aa1282e8..1bd76ef865 100644
 --- a/package/asterisk/asterisk.hash
 +++ b/package/asterisk/asterisk.hash
-@@ -1,5 +1,5 @@
--# Locally computed
--sha256  373c98f4d4a1b923b42def0aee03f4e36aca9d1c244a8eeda646da8a97f89663  asterisk-22.10.1.tar.gz
-+# From https://github.com/asterisk/asterisk/releases/download/22.11.0/asterisk-22.11.0.sha256
-+sha256  3bd5ee040509a3d3cd9b1ba9520c18e6ec0a7e7981ca68c457dcd36ba3c54d94  asterisk-22.11.0.tar.gz
+@@ -2,7 +2,7 @@
+ sha256  373c98f4d4a1b923b42def0aee03f4e36aca9d1c244a8eeda646da8a97f89663  asterisk-22.10.1.tar.gz
  
  # Locally computed
- sha256  04b2eb1f0f01aa0ad1945b167171843448a51aa6b7c3e806496d434f13a112b7  pjproject-2.17.tar.bz2
+-sha256  633c3dc34ffb21af8ac9ee160245c9c174379391e35cace1b6c9f516a260f683  pjproject-2.16.tar.bz2
++sha256  04b2eb1f0f01aa0ad1945b167171843448a51aa6b7c3e806496d434f13a112b7  pjproject-2.17.tar.bz2
+ sha256  6775095bcd417d375faddc1f17cdd7706ad8aa9b9b02404990c4b0ee218ee379  libjwt-1.15.3.tar.gz
+ 
+ # sha1 from: http://downloads.asterisk.org/pub/telephony/sounds/releases
 diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
-index 8d03f2bdde..7c5fdbaaa4 100644
+index b6b40645ee..8d03f2bdde 100644
 --- a/package/asterisk/asterisk.mk
 +++ b/package/asterisk/asterisk.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--ASTERISK_VERSION = 22.10.1
-+ASTERISK_VERSION = 22.11.0
- # Use the github mirror: it's an official mirror maintained by Digium, and
- # provides tarballs, which the main Asterisk git tree (behind Gerrit) does not.
--ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
-+ASTERISK_SITE = https://github.com/asterisk/asterisk/releases/download/$(ASTERISK_VERSION)
- 
+@@ -12,13 +12,13 @@ ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
  # compilation with the external pjsip produces a non-working asterisk, which
  # segfaults. The reason behind this is unclear.
+ # https://github.com/asterisk/asterisk/issues/671
+-ASTERISK_PJSIP_URL = https://raw.githubusercontent.com/asterisk/third-party/master/pjproject/2.16/
++ASTERISK_PJSIP_URL = https://raw.githubusercontent.com/asterisk/third-party/master/pjproject/2.17/
+ ASTERISK_LIBJWT_URL = https://raw.githubusercontent.com/asterisk/third-party/master/libjwt/1.15.3/
+ ASTERISK_SOUNDS_BASE_URL = http://downloads.asterisk.org/pub/telephony/sounds/releases
+ ASTERISK_EXTRA_DOWNLOADS = \
+ 	$(ASTERISK_SOUNDS_BASE_URL)/asterisk-core-sounds-en-gsm-1.6.1.tar.gz \
+ 	$(ASTERISK_SOUNDS_BASE_URL)/asterisk-moh-opsound-wav-2.03.tar.gz \
+-	$(ASTERISK_PJSIP_URL)/pjproject-2.16.tar.bz2 \
++	$(ASTERISK_PJSIP_URL)/pjproject-2.17.tar.bz2 \
+ 	$(ASTERISK_LIBJWT_URL)/libjwt-1.15.3.tar.gz
+ 
+ ASTERISK_LICENSE = GPL-2.0, BSD-3-Clause (SHA1, resample), BSD-4-Clause (db1-ast)
 -- 
 2.47.3
 
