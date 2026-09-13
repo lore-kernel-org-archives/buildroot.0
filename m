@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E6E2C88E5C
-	for <buildroot@archiver.kernel.org>; Sun, 13 Sep 2026 20:01:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37D58C88E5C
+	for <buildroot@archiver.kernel.org>; Sun, 13 Sep 2026 20:01:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BB0AE4058E;
-	Sun, 13 Sep 2026 20:01:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 033D680CFE;
+	Sun, 13 Sep 2026 20:01:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KR1nqSeMX0Ad; Sun, 13 Sep 2026 20:01:35 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org CF4FA405A4
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789329694;
-	b=jLRQDRsyWQ6VsrkrXOw1dcfJpxhn2YIhur+tO5iBXImVjxiwlD+YrX4DuACteDqIVhYr
-	 /7BJcr3lnaZZVRuEWi/nFAAMP9CcWJIa2y+1KuaDSQmOW3qgyax1ZkT8+Zc/TnbBWgVDr
-	 eS2dalY1uiyli8W1BQbUZXXXwFCskqfG7YewtGKWPwoq6JOL3ra55UF4Exqzdxye4V3x6
-	 fgTJiCgyRkUL1ag2FlxlFLFUQdsBPQ8CtEw++OhSnuGjkIgqMpnk1Oidgedybwf+w3YEA
-	 8FBlFoQpmVQuN6rvnWWGZ5Q5Z8OlK91BRRvAWfA55ZB+ZvmWNgD5TNhaNNKvZEWJxbQ==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id MFqPkjvq_W3O; Sun, 13 Sep 2026 20:01:55 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 1D8EA80CEE
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789329715;
+	b=WQsCJBPBc534Y07vKX+Sj+0Wu4ckRtxlzczzfdjFGMBe2kRy+vcKOb7PUfRdIrxFOpxI
+	 7sSgyy2s2wP4OvCRb2LN2hOgyH85OxcyySSG341Z5Pl9fmQFKxpUh3UGgn/NNtc2e6GG3
+	 pp8DMpCYNXFmAFOPYwUnwr8nr8zc/hD9RmT/PYDxvhzmpZyykEO+be+RdE2jS6rk8+8W2
+	 AYdvwKRSCVUWdBrSOhbB5l6LbJvRDUBmEWYZi3iAido1VyA7P9VIi3IjtRiEUTvNQ7De9
+	 ZJaJLGtqge3xlSR2E0Z86v5tX/5u/1I3Tw3RlKc47FwmzmxIXDp2AtM8PoS++hKK7gg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789329694;
+	c=relaxed/relaxed; t=1789329715;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -31,86 +31,86 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:Content-Transfer-Encoding:Content-Type:
 	 Errors-To:Sender;
-	bh=OnCf2hPznlwS7t31BA1pHwt266elDzLjvwssuafTKe8=;
-	b=GwmGNr4xAgyEMaXkrJVNk6rdHIr3533whIjXdehL+OoMM5akxsq1oLfRMf0QQsex9tx9
-	 pufcBN4AgKoBsFzjozvvXG8kmok/mwyvsR+zfRNs9p7CmK4VPXe8kVJ1fytox3d7eTZos
-	 X6+41TZfFFgsVC06QCaRgB8lcDdpqB+a5JvDrB/FksnehHIb0qnDFeYKH4w6369IECxyQ
-	 3EbtZLHjO/SxN3R7Stw1iSL6jemwoc0XaB6YRxbDFxJ94PuM4mFvN+s8Hh9Dn3ItzByEk
-	 jCKQhs9umLPr2iiBsyRzCt0vpSN46Hr6If5Cpt6pdIYz40Rzbs8iR+fuvatou1//ZAA==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	bh=QrpqeTCTGonQUtga56moVFaAs3hVxw4T0+Lk9kg5QQI=;
+	b=S9ZjWDaYcuNRjWw/zSU64vJF9sCWE8Mw+zAsIMuC8V7dVPwmxHOC7eEGAgmDChik3Z2z
+	 aRMTkdyHG4Nuojt2NgX3YM/O26aikeS8CmXoLzOm+bkVqSbTfBwCeMFqophzJzZNFkudH
+	 DrT+m3vNjzNrw1AvonV3236bztaT/KtiSPeRkk2swlEYX6xFlY+Nmn/fduiC5JurXDppj
+	 zB7tSyh6GoN6QuDeScMC0v0dKiL8f9Yy/r6iwkuR9KIGKJNYfFK7JamEABHPKlx1/CmsI
+	 lWJGUdBFRLgncjO25XAXhRhfSKxARyPMTLqCZw+2M0ixLp0L7/KiayBUQViLNwdwQrA==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789329694;
-	bh=OnCf2hPznlwS7t31BA1pHwt266elDzLjvwssuafTKe8=;
+	s=default; t=1789329715;
+	bh=QrpqeTCTGonQUtga56moVFaAs3hVxw4T0+Lk9kg5QQI=;
 	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=TuJ6AjUvRdJdNAY7giz/xdD5cnvsmzFJPKKoi3Ch/ilTq0hOFXQWySB9gpKe2XWMi
-	 1yCe5011uZbkLByXajJvl9nh09Q52Iytpb2k7D3t23w/goRieuCILtDtdlNveZdZ30
-	 PMqnZ7WvSQSoaRdmH8nmvYfeG9XSfFj4i1M8MUGnmmUGHkPu49PbkbQiu1Q1xtQBD8
-	 aTjtfKh1bs84ooGOKxe/cBoAIfo5aM6XMF00fnCdbcu+LkDlcXJS4GOzkJPxonM05y
-	 L44wX6CbDfz8BcxVDMUp0y3RMqT2k1PYECUL0XbU03ZG7z79kLqViT0AmTI3OOVwPR
-	 BSfQ4OnQtiJYg==
+	b=Jp/64A6/6w9y9zUMXe/uwgU902x0MDTdc/IS4GsqQ+EwqWpZnE0WcyCqlHU1BNxOP
+	 N71dyyy0rK2eMUUX8p65BqrkjK+FHHggU0uFORBLlP/YijXnn1wJjtqbEDRIE1VQYY
+	 ilIQYKgfBYNNv1BMuEuU3kCEohKs+s1ObuXlh3VQOpj08myD/FgUdjzPGR1f3Neo0+
+	 BM4eaksbnKjzIfEte5hAO1EUjM42bmWSAdnRYDdUbAnnF/Wfr3z6dI11vioL7TIcT2
+	 zlGdYsZixv7NZwfKg3PnExj1g5eLDEWHd5w0zbo9+0NKMmjZcTy6ISR1WkAwrkvIpe
+	 rKKDFNlT/Pz3g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CF4FA405A4;
-	Sun, 13 Sep 2026 20:01:34 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 299C824D
- for <buildroot@buildroot.org>; Sun, 13 Sep 2026 20:01:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1D8EA80CEE;
+	Sun, 13 Sep 2026 20:01:55 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0339E29B
+ for <buildroot@buildroot.org>; Sun, 13 Sep 2026 20:01:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0EC054058E
- for <buildroot@buildroot.org>; Sun, 13 Sep 2026 20:01:33 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E950D40063
+ for <buildroot@buildroot.org>; Sun, 13 Sep 2026 20:01:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SfcvnrAT9k-1 for <buildroot@buildroot.org>;
- Sun, 13 Sep 2026 20:01:32 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 4E7CA4058B
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789329692;
- b=oGWseGnsJMztOrgYwWgW9/TQM8Pm0dkGMRChx6oac+XRhBWcyVNJWQGLifZMcQ1fjucb
- rYPOWfhm9ssajrTVzPB3yYvVgz7nrDPcWUnoI5vtOe8xjI8UY7ZpFPRCkbRD7PYe+ZR5z
- UTZuuKbFP3Nt+4B7wye9iTq6XMkPBAnJho609Ud1Pfv4A1g9vmrIdWQVtpcyVbLGgWpWX
- M0NBwR3O0Ait9CtMJrhG4HUr5xzr8wBw+5JY62j0Gw/MEocNEe5ivlk5kRPFwLJiWzXsO
- EiVy2rxcHOEQMx0Svjjej+c2/C6/6eb8cmNADxKP4SIe4ipYtyPkC9lHOurJfmhpY4w==
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id A_8haeTXxltZ for <buildroot@buildroot.org>;
+ Sun, 13 Sep 2026 20:01:52 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org 30CBE40022
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789329712;
+ b=i7CgZeYI9p4bmN0tmOfeBAApy37z+X7+sbx+HXEj9ySPxJZ/Al7ccCWj/Bq2PnJSKkdK
+ Uv4VURw5GlUimf3WVIfnMxAJMOnutUPobWXYQpEgykoAA67bNqSk9sT16LOYuybk4Q87w
+ SK2KwBBpg7Rgnx8k9h6zNr42PkRjU4lNKmuXXpRCubyZ4oY+ksm0G91ugqIaANZt/m7nV
+ 8E8GvZy6h2Fvfw1GKMZAopx1YrnccQd1qrnUv88eyvtfcz5/T871lxyaOWzZQaRqC5Cer
+ g1omb48iE7rutN5MICxSxqsRUnMxxZ0uenzL5sVGrujCnzix+4jJzDSzi9MplusvaWA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1789329692;
+ c=relaxed/relaxed; t=1789329712;
  h=Received-SPF:Received:DKIM-Signature:Received:MIME-Version:Date:From:
  To:Cc:Subject:In-Reply-To:References:User-Agent:Message-ID:X-Sender:
  Content-Type:Content-Transfer-Encoding;
- bh=QTZ2ngS4lQfLUgMU7AYWLeLcNsIgLwjTPuocwCqo6TM=;
- b=klp4L4GqN2xOi8XDpwlEK79jR2ZhLDEw8YIC4AuCFf5PTYm8aRGqJitK1oXBcu6YWSBw
- MCRJnxNGz37To4dxu/6F4jiqzv/cEvSyHtUu5fGWJU4R6rFf+C0F28E5g3iijanj9/80v
- KcAjhi0mKnZEiTX5+aA7RqISCG6rxt7Ga9/2EfSv3alxalhASOs6ZSdRANFOTd+sTTZnp
- X4XC8jJnFuLe7DuJ4UbpHJcIYcYTkklU4EfsvmRSOEi64Pg5DIXyV83buGGSSHEGgO6ID
- 5bR9jkcPv/bLdH706ynS9orbuIioLzenxKUhoZ6rolZsotk8MtAcvNwgn8Z3uHEqMuw==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org;
+ bh=A7qhxVX3UQ1Aiiz4FHNS+PLrpNixfhUyiHm/15lkQzE=;
+ b=dQTweSZ7JKRbQlx5vxAOfYBmtuPagTUtFQEvaYKPLZYVGwKWeM9pYBKwTgPs7FemQD8x
+ qnv5hhmK0OPn6qKlFL8v54UEGc8nJxq+3a3SEJkMfYRwGfMwvUOa5AB0GJF+cW32LD75p
+ MqHPolfrZiH9p7Wk7B8RMcTJ2chqz6p1XFNtKjpdIBRWwonDeTxxOFrJ8XeigLLo+gMCj
+ 1+yTSU5VBAqomPR3KUhSRLUPjiYnqlHSK0qWB3OJCgSMlp9/0EoPoKH0PEgzKTQwNDvNw
+ hzMDGzuznyYPU6+43dT6L6awp7aWhphc8n5CnFF+JvxQneZy4vnYa/B0vtEcJKxmZDA==
+ARC-Authentication-Results: i=1; smtp2.osuosl.org;
  dmarc=pass header.from=free.fr; 
  dkim=pass header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=TM5fXu4A; 
+ header.s=smtp-20201208 header.b=fl42KETg; 
  arc=none smtp.remote-ip=212.27.42.5
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
  helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
 Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4E7CA4058B
- for <buildroot@buildroot.org>; Sun, 13 Sep 2026 20:01:31 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 30CBE40022
+ for <buildroot@buildroot.org>; Sun, 13 Sep 2026 20:01:50 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
  (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id 2740660129;
- Sun, 13 Sep 2026 22:01:27 +0200 (CEST)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id 89B6F5FFAF;
+ Sun, 13 Sep 2026 22:01:45 +0200 (CEST)
 Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
  via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 13 Sep 2026 22:01:27 +0200
+ with HTTP (HTTP/1.0 POST); Sun, 13 Sep 2026 22:01:45 +0200
 MIME-Version: 1.0
-Date: Sun, 13 Sep 2026 22:01:27 +0200
+Date: Sun, 13 Sep 2026 22:01:45 +0200
 To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org, Bernd Kuhls <bernd@kuhls.net>
-In-Reply-To: <20260913194733.1725979-1-thomas.petazzoni@bootlin.com>
-References: <20260913194733.1725979-1-thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org, Christian Stewart <christian@aperture.us>
+In-Reply-To: <20260913194745.1726052-1-thomas.petazzoni@bootlin.com>
+References: <20260913194745.1726052-1-thomas.petazzoni@bootlin.com>
 User-Agent: Webmail Free/1.6.19
-Message-ID: <2689da3416d9c0d004b25468d257c5f3@free.fr>
+Message-ID: <4ec414288b2921d2b73d63e659113bc7@free.fr>
 X-Sender: ju.o@free.fr
-Subject: Re: [Buildroot] [PATCH] package/clamav: add missing
- BR2_TOOLCHAIN_HAS_SYNC_4 dependency
+Subject: Re: [Buildroot] [PATCH] package/mosh: bump gcc version requirement
+ due to protobuf
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -130,19 +130,20 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 On 13/09/2026 21:47, Thomas Petazzoni via buildroot wrote:
-> In commit 203725a46bc6b61ed7e4fdb3d76f62327d3e47fa ("package/clamav:
-> bump version to 1.0.1"), select BR2_PACKAGE_JSON_C was added to
-> BR2_PACKAGE_CLAMAV without propagating the BR2_TOOLCHAIN_HAS_SYNC_4
-> dependency from BR2_PACKAGE_JSON_C.
+> In commit
+> 76241e89e1fa7a7b46e23d0a22c3d4fc11a2475c ("package/libabseil-cpp: bump
+> to version 20260817.0"), libabseil-cpp was bumped, which required the
+> gcc >= 8.x dependency to be upgraded to a gcc >= 10.x dependency. This
+> was properly done in package/protobuf as part of this commit, as
+> protobuf is a reverse dependency of libabseil-cpp.
 > 
-> Since at the same time a dependency on
-> BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS was added to clamav and
-> Rust is not supported on the few architectures that don't have 4-byte
-> sync intrinsics, this has basically no effect, but ensure a correct
-> propagation of dependencies.
+> However, mosh, which is a reverse dependency of protobuf, was
+> forgotten, and it no longer carries the correct gcc dependency.
 > 
-> Fixes: 203725a46bc6b61ed7e4fdb3d76f62327d3e47fa ("package/clamav: bump 
-> version to 1.0.1")
+> This commit fixes this issue.
+> 
+> Fixes: 76241e89e1fa7a7b46e23d0a22c3d4fc11a2475c 
+> ("package/libabseil-cpp: bump to version 20260817.0")
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
 Applied to master, thanks.
