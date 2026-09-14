@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8FCFC88E73
-	for <buildroot@archiver.kernel.org>; Mon, 14 Sep 2026 19:47:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01558C88E73
+	for <buildroot@archiver.kernel.org>; Mon, 14 Sep 2026 19:47:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 529FC403C4;
-	Mon, 14 Sep 2026 19:47:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 11E1F4053D;
+	Mon, 14 Sep 2026 19:47:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vu57pbrfipjm; Mon, 14 Sep 2026 19:47:45 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 76EF8403EE
+ id JokbYTCI252F; Mon, 14 Sep 2026 19:47:47 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org AFC704052A
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789415265;
-	b=SMKEcj87RcNNi94Atzn8MsUJlXRQrzFokvTK/hjKRsnw+NmI7dQZwZy6+OQCJFeAFyeR
-	 FrUbu3FCbS8KWKtQLFq+F5sqCDSjx/+00KYEJ0ATHGcFuUFtyUAnQE8JFPd390KTjTKf1
-	 l74hzvrXdJcakvFBIGnNL1xfs4iXB7RaVoa+JY81F84X0uHug8VRwyxQEGSStxmcl59Hf
-	 Vw2ZJ2hxIKhwQdPVq86es7grAGA5hq9PW1HwkFxH2b3k9+himlBEFKenqkhSi+CnnIwPD
-	 /wHauCK7IZIOP169m5uLJwsowDrVWFYfGOIrBfr/VRD/R7EsW8gxTIt6xwnTdlGjkeg==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789415266;
+	b=IM0eHSsIDl/MustWLQnO9O/QNwg1PPfMKB4kBW1YQW6Yn/mTxdHVuFpOMD4hQW4OzrB+
+	 uS11eT6JLt3Fod72Ut/k+yYeiCcZErC3vntbd4OchvmCjX4mrU7Ya+97qZCZiVo5E+7SB
+	 9jH8Xq3wzBMRoqM18DelWW/FbOu0YLXIXNroVHDm2QYJFieQbSTPsMyIdJDNe2iE5RKTv
+	 wvbG+c15861mHgcsQVFjCKG3fjcoeuyWoVT2nSp4awM/SVXduNnbboYeLj9Iarh0H4m2g
+	 ZbjZ1i/trinD2PfVXp46MLrLVvmaSuRkiCrBM2K7dL0UgycxHNvrETu0v4DDoXcFK+Q==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789415265;
+	c=relaxed/relaxed; t=1789415266;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,75 +30,74 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=tIn/1Wg6EUBxMX62Y9CcDb514oFKEiJvmeeQBlM4fKA=;
-	b=LxArUjOMJdu5y85GhOCxOnPxs95Dr0sewcHCT4WjHMe/GZk2JwUgUK+cFbxK2QBdY2Li
-	 v/ZNzvNGZfUkYUeDffIZtbVDHAXBk3JtJaJI8s8jHRHafh7cnHbdsHp77OyYgZInQmVqH
-	 L28/gS6kS8VrBdRIZFppNfCs9dds6OsP5t/vwt97bvIM7uKIxXimJfpiz8z9rk+1FoCey
-	 iNctcbZu7SoSN/CfcgcsuYGI/dbZ/JlNR9uug7uh31u1UmP2W6GiB5214yntfEJjN8d1S
-	 XGd4T9zUaG3IqFLLBE0MdnwHEg452c/W1OKM+zBTLn0AWf/kkaT0gPqiO93WXjrHxKA==
+	bh=8hUBVfA/W+sSLWhzScUAWGImCv7mRcu0PJ+V2nTkpd4=;
+	b=su8wwouU+z4kMnSi0ReJR5aies4npUdjRNQBt+WBRYbZ29d+PWgnOJg6LlBGbR9jj7Fi
+	 GGuzP89fBpZFIjb4bkZfI6WOtmB19SD39KrmxSahNDRGS5ycnlynPSA441xbrwA1DZZ9O
+	 AdPt9nVtJYOstfsbPbVHiasEK8JWW+Y4YfJ++cqCCzkZVgnhv7y+Jo9JHBe+swSJWDevu
+	 wa8aVbATMNXoeYSJPIK2TyafUVWvCsm7rlumiSExJa17eo/7JcYk0zLJy9KVkGapAIUE7
+	 OLvS57XB4Oq2d/aCuSUGYVmac5jHIyIb7wr9qpMIaNzHf0qAJQ3UDaq+BMcJRJNzyEw==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789415265;
-	bh=tIn/1Wg6EUBxMX62Y9CcDb514oFKEiJvmeeQBlM4fKA=;
+	s=default; t=1789415266;
+	bh=8hUBVfA/W+sSLWhzScUAWGImCv7mRcu0PJ+V2nTkpd4=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=NnDpcDKKCcBB8NiDeBl6o/crUrFZq9/qgKwc9Hw2JD2QJyDvD9ra27faDgosQPviS
-	 HnyXsdH77L/BYbH95PPDTIFrR3QdY9ZuuUyJL9F7kdQXiAhJqX1QuRjapjPlh7quqV
-	 Z8qjHoZgf1RGFMyKLPxXlvPdnhI2RiMQI6ecFV+rP4G6RXMEHSSgazxYAsp4108tat
-	 yd1L8y5niIntLThgFFZry7Q0OXVgAerbu+4MkRacVhmFFXwHyko7wuCGAdPfvgfS+0
-	 wDfl+qzCUQT08lyGzphRmnJSPfvzF56ljmLOET05Ury+8R9W1s8cOiJNZyPvhHLZ+d
-	 2pd8BKFca1KDQ==
+	b=Cs5hicS363MbcvsJoJaizIfdwK6beBsJu997J5fKC1UtZY+hJ4Oj7V4fWUKMFU+I7
+	 qDEi56pyZx8+idFEnuHhElPASz622jux6LNPgLEcF+yKDnHCWX4WV3hwzmCN3xzmY/
+	 VeCHC9dX/7XO0AoutjYqBiphfjxcwXUpBqeIA2TrVyXCE7Mh+9JvTQSdNoaccKv3bj
+	 rdte0dI4Zo3rgWxRXAXJNxHs+mgU3Z/+O9FYGktqT7q4FRyDUePHVhElkqvt8ljprh
+	 40OBbMSnwbHx8Dbmecgik5iuBzLLvizMGjOgNwACCN08PoLr9MWWWK4mf/KzUGkwZm
+	 VdafKFcrcszeQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 76EF8403EE;
-	Mon, 14 Sep 2026 19:47:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AFC704052A;
+	Mon, 14 Sep 2026 19:47:46 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 08348465
+ by lists1.osuosl.org (Postfix) with ESMTP id 28AB9465
  for <buildroot@buildroot.org>; Mon, 14 Sep 2026 19:47:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E255140509
- for <buildroot@buildroot.org>; Mon, 14 Sep 2026 19:47:43 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1AA7B403C4
+ for <buildroot@buildroot.org>; Mon, 14 Sep 2026 19:47:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0r9dUwFVyfsc for <buildroot@buildroot.org>;
+ id 5jgdawkZ8wry for <buildroot@buildroot.org>;
  Mon, 14 Sep 2026 19:47:43 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 3EF5A403C4
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 52D8C403EE
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789415263;
- b=oxKvQKExAsgqAFcpVodaH/Gho7OC5P/MiTFPXFuYL0R55LpfXO3lsvzMGy5QNqiOgsGb
- +fssnyiado36VaBTcFAAdQBmflqIhJzdvfSOFgj/kx5sUKEH6GanUVJ7e/es8QGCP1eSV
- nIXK+fk/ao1jZK4SmB185HnlaVCOFBb8BlgcOhfikgsjWIjwNiwIAmY202e3bZYNP+XVg
- MseZhGfFBIoKYxaUwUbz9FL5/0QoD1TC2sDLsHA8ZgtbIZBajchJ7cMlPPvgIgTuo7DVp
- zd61xNdGYz/hf46fh5AkjMrNbrmxA05deMm/gkj2BpzjRTZlHBoqv7NT9vsh5SxQTEQ==
+ b=qiHlkFBmMUOs4ao8yQbmwk6FMhDLe9Pw1LVBNvvnOPOnTr7lJSZXKASYDGM7HewP9+ci
+ 98mnaW6DU9g/oepjMAmLOMvA0H9Vl0gq4TEQ3lcbBqX84AMM7cZMXdilWpYJFluRD/6UX
+ qiUSWJ0zAuM2aP+lWWo1C+1jWigl6xxHef4vf6z95OuCq0KrSI2Ut3gRJGHKEI+IpsvOK
+ pzcOp14FhNHMdn0nxQplG3CmW9RoqR9eAubO5VEJwMT0t7i59scS1VIcQIk9HdK5tv4W4
+ 8H2k1o4M+b5vjXtkhXy+gNJQo/HOyZs67X7WmJZzSj27F0Y7y1lW+BK8BSlRwcNS/fw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1789415263;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=kmjMDwl0lP/kh0+qoKB2L/LHc3l2y0XZ6Fod8gkC0F8=;
- b=jpZl94reWMnUyYfFxHiH6C+88dp8e6sSoePuJlKk8luxJz/MzncpOGt0TvNaDKz7fSpn
- j/iIcHHxE0MwfKeadPoQ+RmO4costZlPaMK82lM529TPlukqGka524JB7yegTjQ8Tl9KB
- 0nnhoDFGuBRKhibFk5RCfkjcEUxQ8k9lsuKvgR2FzE63tkZvk3E/FF/6hO0Xl0UUaI9Fm
- Nb4SM6Ss5SOvdF/ZVz/i10asx9OSJmeTgfELis8GExYKPE7OMNdyVm62HDGe4rTamb3Yq
- 3MbCIQiVrYl+hJ6tVUnqAd3JN8OiC2dVUwmhAL1LjywxdBqOvUZhkZFWJW8i8bhRHzQ==
+ bh=r8dXVcRTRWaWAVxdk9gFWC7SOCsD1MQjjDDmJ+2/2B0=;
+ b=DdkW5VOfTnV3HJT62jF17apymXYojYIutflIRGs0bYLfRqZRIRvqjaSnlE0yI1u/lqb2
+ vHKKGhvGHqQhehVyn/z91RPSgFVbXfkTgR3dn7JSfmtTC7iJuvrNA40bZOZN+TehPzloZ
+ DHxmv9QGa87tMg0jX2h1EXtHgP9It0arI0DqaopfyXBDMMmHYyxPn3Vq5DHuXdoxzfFLY
+ ZSz7mBi/ot5zCNChq/XA20JaGEt0VK3uK5ogDLldifsTSbJMj95FA+6OO87e7ZBZejJLQ
+ HSOzSyP17hrz5J4PxAorOzPd1ukKjl+MTnaSEUDolGGQsqPC48OuAB447gYJY4Lvk3A==
 ARC-Authentication-Results: i=1; smtp4.osuosl.org;
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3EF5A403C4
+ by smtp4.osuosl.org (Postfix) with ESMTP id 52D8C403EE
  for <buildroot@buildroot.org>; Mon, 14 Sep 2026 19:47:43 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B9B7795CB3; Mon, 14 Sep 2026 19:46:37 +0000 (UTC)
+ id C63EA95CB5; Mon, 14 Sep 2026 19:46:37 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 14 Sep 2026 21:33:58 +0200
+Date: Mon, 14 Sep 2026 21:36:27 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 21f18cd0124f994c736c034d79218a2c77735b31
-X-Git-Newrev: 03e4bebcd21a8d25c68f1b225498de5db10d8edc
+X-Git-Oldrev: 03e4bebcd21a8d25c68f1b225498de5db10d8edc
+X-Git-Newrev: 2fd1f6b629862f48e832d7e0379a7b48dc9eae42
 X-Patchwork-Hint: ignore
-Message-Id: <20260914194637.B9B7795CB3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/lldpd: security bump to version
- 1.0.22
+Message-Id: <20260914194637.C63EA95CB5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/lldpd: rework start script
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -118,53 +117,131 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/03e4bebcd21a8d25c68f1b225498de5db10d8edc
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/2fd1f6b629862f48e832d7e0379a7b48dc9eae42
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-https://github.com/lldpd/lldpd/releases/tag/1.0.22
-https://github.com/lldpd/lldpd/releases/tag/1.0.21
+check-package reports six warnings on S60lldpd: indentation with
+spaces, no DAEMON variable, and shellcheck complaints.
 
-Fixes CVE-2026-46433, an out-of-bound read access when removing the
-VLAN tag.  1.0.21 fixes path traversal vulnerabilities and arbitrary
-file deletion in the privileged process.
+The script also masks failures, the exit status of
+"[ $? = 0 ] && echo OK || echo FAIL" is the one of echo, so start and
+stop always return success.  Stopping does not wait for the daemon to
+exit either, so a restart can race the instance on its way out.
 
-GPG signature verified with key AEF2348766F371C689A7360095A42FE8353525F9,
-LICENSE hash unchanged.
+Rewrite it after package/busybox/S01syslogd, as the manual asks.  lldpd
+daemonizes and writes the PID file itself, but does not remove it on
+exit, so pass the PID file to both start-stop-daemon and the daemon and
+drop the stale file once the process is gone.  Also pick up arguments
+from /etc/default/lldpd and add the customary reload alias.
 
 Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+[Julien: remove .checkpackageignore entry to fix check-package error]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/lldpd/lldpd.hash | 6 +++---
- package/lldpd/lldpd.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ .checkpackageignore    |  1 -
+ package/lldpd/S60lldpd | 80 ++++++++++++++++++++++++++++++++++++--------------
+ 2 files changed, 58 insertions(+), 23 deletions(-)
 
-diff --git a/package/lldpd/lldpd.hash b/package/lldpd/lldpd.hash
-index f3cefe7b73..46f2b9b476 100644
---- a/package/lldpd/lldpd.hash
-+++ b/package/lldpd/lldpd.hash
-@@ -1,6 +1,6 @@
- # Locally computed after checking gpg key
--# https://media.luffy.cx/files/lldpd/lldpd-1.0.20.tar.gz.gpg
-+# https://media.luffy.cx/files/lldpd/lldpd-1.0.22.tar.gz.gpg
- # using key AEF2348766F371C689A7360095A42FE8353525F9
--# gpg --verify lldpd-1.0.20.tar.gz.gpg lldpd-1.0.20.tar.gz
--sha256  61b8cb22d4879e68f7825a2fb8e1e92abb4aba4773977cf0258bc32ed9f55450  lldpd-1.0.20.tar.gz
-+# gpg --verify lldpd-1.0.22.tar.gz.gpg lldpd-1.0.22.tar.gz
-+sha256  9587940ed2314a86774c5499f3dfb13a8eb86232a62d243a83a1f09886848e03  lldpd-1.0.22.tar.gz
- sha256  0e96a5aea65f16e2239231ce4ab90497f8bc3bb8fe6abe9299aade4726ff7c8d  LICENSE
-diff --git a/package/lldpd/lldpd.mk b/package/lldpd/lldpd.mk
-index a3015e9e7d..f0cbc7e436 100644
---- a/package/lldpd/lldpd.mk
-+++ b/package/lldpd/lldpd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 2fc8349f1e..32be4c93aa 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -550,7 +550,6 @@ package/lirc-tools/0001-plugins-devinput.c-fix-build-with-musl-1.2.0.patch lib_p
+ package/lirc-tools/0002-configure-add-disable-doc-option.patch lib_patch.Upstream
+ package/lirc-tools/S25lircd lib_sysv.Indent lib_sysv.Variables
+ package/live555/0001-Add-a-pkg-config-file-for-the-shared-libraries.patch lib_patch.Upstream
+-package/lldpd/S60lldpd Shellcheck lib_sysv.Indent lib_sysv.Variables
+ package/lm-sensors/0001-no-host-ldconfig.patch lib_patch.Upstream
+ package/lmbench/0001-scripts-build-use-bin-bash-as-shell.patch lib_patch.Upstream
+ package/lmbench/0002-src-Makefile-add-lmbench-to-list-of-executables.patch lib_patch.Upstream
+diff --git a/package/lldpd/S60lldpd b/package/lldpd/S60lldpd
+index 3dfa6c1aa1..79605c2f02 100644
+--- a/package/lldpd/S60lldpd
++++ b/package/lldpd/S60lldpd
+@@ -1,25 +1,61 @@
+ #!/bin/sh
+-#
+-# Controls lldpd.
+-#
  
--LLDPD_VERSION = 1.0.20
-+LLDPD_VERSION = 1.0.22
- LLDPD_SITE = https://media.luffy.cx/files/lldpd
- LLDPD_DEPENDENCIES = \
- 	$(if $(BR2_PACKAGE_CHECK),check) \
+-case $1 in
+-    start)
+-	printf "Starting lldpd: "
+-	start-stop-daemon -S -q -p /var/run/lldpd.pid --exec /usr/sbin/lldpd
+-	[ $? = 0 ] && echo "OK" || echo "FAIL"
+-	;;
+-    stop)
+-	printf "Stopping lldpd: "
+-	start-stop-daemon -K -q -p /var/run/lldpd.pid
+-	[ $? = 0 ] && echo "OK" || echo "FAIL"
+-	;;
+-    restart)
+-	$0 stop
+-	$0 start
+-	;;
+-    *)
+-	echo "Usage: $0 {start|stop|restart}"
+-	exit 1
+-	;;
++DAEMON="lldpd"
++PIDFILE="/var/run/$DAEMON.pid"
++
++LLDPD_ARGS=""
++
++# shellcheck source=/dev/null
++[ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
++
++# lldpd daemonizes and creates the PID file itself, so tell it where to
++# put it, but it does not remove it on exit.
++start() {
++	printf 'Starting %s: ' "$DAEMON"
++	# shellcheck disable=SC2086 # we need the word splitting
++	start-stop-daemon --start --pidfile "$PIDFILE" \
++		--exec "/usr/sbin/$DAEMON" \
++		-- -p "$PIDFILE" $LLDPD_ARGS
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
++stop() {
++	printf 'Stopping %s: ' "$DAEMON"
++	start-stop-daemon --stop --pidfile "$PIDFILE" \
++		--exec "/usr/sbin/$DAEMON"
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++		return "$status"
++	fi
++	while start-stop-daemon --stop --test --quiet --pidfile "$PIDFILE" \
++		--exec "/usr/sbin/$DAEMON"; do
++		sleep 0.1
++	done
++	rm -f "$PIDFILE"
++	return "$status"
++}
++
++restart() {
++	stop
++	start
++}
++
++case "$1" in
++	start|stop|restart)
++		"$1";;
++	reload)
++		# Restart, since there is no true "reload" feature.
++		restart;;
++	*)
++		echo "Usage: $0 {start|stop|restart|reload}"
++		exit 1
+ esac
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
