@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 397E4C88E77
-	for <buildroot@archiver.kernel.org>; Tue, 15 Sep 2026 17:31:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0D91C88E7D
+	for <buildroot@archiver.kernel.org>; Tue, 15 Sep 2026 17:31:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BB0B680986;
-	Tue, 15 Sep 2026 17:31:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 04CC780E6B;
+	Tue, 15 Sep 2026 17:31:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vNLuHbWZf2Yc; Tue, 15 Sep 2026 17:31:44 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 8E29180E44
+ id eyW8Xh87_AaN; Tue, 15 Sep 2026 17:31:48 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 3009780E82
 Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789493504;
-	b=MlnwiJi6/Sl67y42VDT0OfAVzYIJ/E1kfnm0BkGUN7K9Yzjs3h32MHhMW4/uVpMGn3Ll
-	 pao/rtsc3W1ri2Y94UhNyS32r59mJDttM5SoyZlPK/vCi4F3e4cd55qsMmLvDk7xLgiz3
-	 cj91i7mqe+4E+Kq/gyehP8XZ+Y9At1QiKnDMLcEKsOw4zib1mcUC2qRqupBwSMPWxFTbF
-	 rIyGI2KK3bKMwHX9urug55a85+tmt8JK4gAhj0jGtO+uxSX+4VCD8tkKXj/ZtLiIO0TD8
-	 HvzzB61Q2NXKYqpVB9tfQWrIqG+sni59cX1n1KmHCVgRH+HAAWPrD1XGGr+zclKILDA==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789493508;
+	b=Hs8F9QR+qBVIhUgW14YYk4uNAiY82ZkhQAYow1GltEcYMNZa6Oo9FonbSWsk2MHQgb8U
+	 unSEE7x4OBSyNKx+UB7MH0WnvZ/DNi85o0XiKwvt7ygos5tB0+ObHSYx0WQ0M2ChbRx5e
+	 fGgWWnYQThohMKx8Akmj8Hd0Lta+rgaXttVy/6oKctvS27V9IeT7zs7f/g5MVYQJY9Nd7
+	 XK/0DUl9AFHwB5tO/g537+O03r30pmB2BCOqokz/LPutS3tHOpJPxV8iuCx3dJQm5iKO+
+	 iDvOueXjCc/J5ijJkUh9piUeQWsfbmcqMgFK/P768Z/mITFiHvttHh7qykydPDJxlpQ==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789493504;
+	c=relaxed/relaxed; t=1789493508;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,75 +30,75 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=dW+iTiDDsm4b9zah5ONGvZ1hd0z4n8X3oX+QErTyOPE=;
-	b=BpEVzumnGSONErLma1tAWelNvtY9KLtL5G+RXc3ZIyTxOQod1h8LC0+vCGRClyVZm0qM
-	 zWOsCrw6nhAp/Nvw6TEDTdTuudxS+tSjpIwT0TlwWnqgJ3x0VPNfAeqls6Ik2GGxXaj0Z
-	 DPmWfsp6Dz8LzwvhVbntxbql+n4Wo8uMHkkdh/8EMDIPdZfF9HX5wjMBK1JFkoMHTjE/X
-	 2kjrKhSI2ftF8+TtCaYpXJXNo/Dy2fi9PebdOTsgNPi/0b6VjbQYRnU/5yr7KtJjtiPvN
-	 gCf4EHcb2X5X2XbdzyAzn8nvLATKohS3NBRdexnjQWxyNbRhIYuYs4GTdEovwJRxj6Q==
+	bh=27N8R5i5q9aF1+X3YgulQzUrI6b2onunVQOvYiPnSM4=;
+	b=V5NQ3GL7Uh1wcxV2rb/+4YSdgnsRuRddJc3JzPsE6Vwdg9ue/AxkzaEVTEB8gg8rvh+X
+	 +2GNeVMDaYESs9yi9cvFFiUR0ZjppnKHSNcHR//yYj05fdETJE5qtYigl4+OM49oPIz0X
+	 3nPO/u7hBIvxBu4VlcJ0x4O4W5yrr8GtqFFk+LgKXms5moJMgtT+G4ozMe65nGqiGFNpH
+	 8lSelBs+rujbH6TiX+bci3Bm+3HBngLxBqs/5gOLH0TBpWWMtGhJpynwJLjtc23+0wxZs
+	 kF30YpcL3tZVmwHM30TgodWBdtJ4lVaJx0cxZ5P96kofs4hQULtligEI0TxsfnIzz/g==
 ARC-Authentication-Results: i=2; smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789493504;
-	bh=dW+iTiDDsm4b9zah5ONGvZ1hd0z4n8X3oX+QErTyOPE=;
+	s=default; t=1789493508;
+	bh=27N8R5i5q9aF1+X3YgulQzUrI6b2onunVQOvYiPnSM4=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Kuwoj0xgDkXL+g7O5ljL1EtY7e1mUuL+B9+ttcupfYNIZLvb6CzD4RC4PkG7pwj54
-	 WjIlGcpez9g2KipBVAvN4+LbX0019pSCnoDSkQ1163DCE/7XM72fNTa5KFE/fBaG+N
-	 zLjrdSfIChPdz0bi68aw8cWpnitobxtNwBE//Qk6/jjRqBlgv4koASoqCj4XUg51qe
-	 TvTA3aEso6yF0S6SmAxcigwGjcyPcFcFkcZyGcXyCvrhtDC/Z6iqr3tezvPpYKP46f
-	 Y968/Zq7/S0M0ZyLBNhnRNjD3oo9kthd//OQNq8Hb3Xu4plI1E0JkKK71I43lETFD2
-	 ShJGUT/DsV6KQ==
+	b=S6fEFWnI3ZLuJpWELg6wr5yVJo7qXKoqM4Upiw+cQgFpd/OSQuDiYXtSnVvOjLU1m
+	 lUEQkG9ym16ATEdjWr/7naXmtyd5jq3AQA0su4S21vfdnwpdV6rbNDOPitUGfJCyB+
+	 32wBOFYemUuo6Ox7M6U4JLCv9cJKfkIb+5aETjFycL1ea593XHavePai8xHieO4n0Y
+	 45uz8ocSf+rpYXPqQMw5SQFC6CEinsP3Tjy1ULwpmRd7yNfJfYthoYXKF1Lus6/yu4
+	 jskQIGGXtvaVvWxrPVR6DhqiRsRNPinRwPtee0FLKVqbeT9FfiqkyMVRuETTxMKMBn
+	 L2FkcBNnCHsfA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8E29180E44;
-	Tue, 15 Sep 2026 17:31:44 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id B26F423F
- for <buildroot@buildroot.org>; Tue, 15 Sep 2026 17:31:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3009780E82;
+	Tue, 15 Sep 2026 17:31:48 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 01FAE23F
+ for <buildroot@buildroot.org>; Tue, 15 Sep 2026 17:31:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A48D46076C
+ by smtp2.osuosl.org (Postfix) with ESMTP id DC5F3400FF
  for <buildroot@buildroot.org>; Tue, 15 Sep 2026 17:31:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ifKFTvYGYbK4 for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hHJPVUoqihP4 for <buildroot@buildroot.org>;
  Tue, 15 Sep 2026 17:31:41 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 0803B6075E
+ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org 2D263400F3
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789493501;
- b=FekA0ioZ/O+QPleIlJ2zKA5UPcsDhqfg6moKBoE5BbxbYvfQ0qgqDyvb5MBa7QTJhPpN
- YmUkEWtxuq68WlPcAAM7flKdQfX4C6ykLCHguVObSnltK8b6bSa109A8VN/ATJXso45Ph
- 3xhUVp3rUG19PTRG1fpd5B0ztICG/eDI2/8u5sQu5JFTIr3K55q2v7QZqc/6nnrzO7Ylm
- HW+88xa0mpftjt5ECiGuzsPIt2RGTFbniUJXxJhhC5xc0Agfqsx3LkieDf6R9LWJzCUwG
- T1XVN5cV6nnTaSbjSbaBOF5ZInoE35y/BLm1S/VgeWE4baslgjaMhOKoHeDjQmsZfgw==
+ b=LXYNTu8GMquDZe6e8Bj/vtT9FNt7wJw7dlp1xSJxTUVuopdSr73neglRJFBzm0DI1pdD
+ IZf/iFTcmKrsRBpIe9LKTd8k5galQ/98G2Z1ne9gCzlU6U7YJfWcqvjBKP30UETB0IhXH
+ 5j4o1NiVY9Qfk9pVBfSVPDSFsvEUxZ6QR1PgKtUJgGij1PTYvSOP3v5eRSxm6zqXYH/WQ
+ DsvokzLdgD0mf83NkF8l6VbeuSeORDvsuyJmK60qv15Z3Edw0/qQeu0N25z5UfLorUY+V
+ I6N2DjrLSD2cD15MY/FgxCfBCws2cET92X7k6plvO2hKpiVCSk6sfr3h8kP9HaobOMA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1789493501;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=annFvkB7ldhAInWQcbZZMt8IWRtFsKeqc9zV9kuEKyw=;
- b=rXqcarR3i3omFiFOs20I5nFAw5TIF9PuDD6S5Rm9DY7nLr1C6TjL5Jwh1oekbMfvz2Bk
- CFO5Ps9J03GWg/ymB5VMVhN4a1X2an6s9WuSTZzDvoXZ/4vVPjgMX9VJEh2+CIIJK3f9N
- EhHYR08KHBoHHWXuHjnVZRf4QNRN0H36G3T/UIz5w57Dz3LdPD/F/VOqc3CeQbLu6NLpi
- cS3Rjh4VadN6hVSMg0vNV2EjhjrdqUrrx2E14FzoRRUdZUJrdt0Pc3+H0GUjX35Idn9DS
- NFyScF7G3RSOiCfj69uBLy6VwIl+N0xxMo60egeNLpwvoQ6vLHuq2aRfHyMm2dtxNVA==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org;
+ bh=DynvoqJKvs7YxTb9hWweCElRN1J4mDlrFzdo9w4MhUc=;
+ b=npqL0pg5GgiWTSlaMXnKI5q9lG7z+bhxUhEp/t5tUwuWvHL0jTc/aAzs3dy5O7/0u1Tz
+ XtQQVqdYRk5+6N8FOMPC1Ww5DGPFFRzq8afUguyshhtky0a67tneKixBi7qniICIYVKr+
+ qdNUwie3wLHSMl/d0IlJbClu9f8XRxyCVTn1xAFRRqcJ+N5rwLUkW/IZ3U/prKeD1MfqI
+ A87qhLIEszvrnbcyNIo0ssSiCySBChHdnewdfJfEjq+kUMre5E1jT/sLI8ob0R+0lCS2p
+ ochpJ0VtQfXbfpcw9rjXvIRg2bKrTKnwnDWZJ+gkelotmB/NCdbE2WO7S297qJzngxg==
+ARC-Authentication-Results: i=1; smtp2.osuosl.org;
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0803B6075E
- for <buildroot@buildroot.org>; Tue, 15 Sep 2026 17:31:40 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2D263400F3
+ for <buildroot@buildroot.org>; Tue, 15 Sep 2026 17:31:41 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 06CC78AA1C; Tue, 15 Sep 2026 17:30:35 +0000 (UTC)
+ id 29BF693590; Tue, 15 Sep 2026 17:30:35 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 15 Sep 2026 19:29:51 +0200
+Date: Tue, 15 Sep 2026 19:29:57 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3472fd59af13245a68f9ea2cdbbeb52fdd6abad4
-X-Git-Newrev: 6dad789282b9f48d3dbe799c40648a5459dfdc17
+X-Git-Oldrev: e62e06b19d635e06687650de0558ae257b05ccbb
+X-Git-Newrev: 22540e0d41382a8085af110462e2aea6508da4d5
 X-Patchwork-Hint: ignore
-Message-Id: <20260915173035.06CC78AA1C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ndctl: propagate !BR2_STATIC_LIBS
- dependency
+Message-Id: <20260915173035.29BF693590@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/glslsandbox: harmonize
+ BR2_PACKAGE_BUSYBOX_SHOW_OTHERS select
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -118,45 +118,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/6dad789282b9f48d3dbe799c40648a5459dfdc17
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/22540e0d41382a8085af110462e2aea6508da4d5
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-ndctl selects kmod and keyutils, both of which depend on
-!BR2_STATIC_LIBS, but this dependency was not propagated into ndctl
-when the package was introduced. This commit fixes this issue.
+BR2_PACKAGE_GLSLSANDBOX_PLAYER_SCRIPTS needs the full blown version of
+bash and coreutils, so it selects BR2_PACKAGE_BUSYBOX_SHOW_OTHERS, but
+it does so only if BR2_PACKAGE_BUSYBOX=y. Which kind of makes sense,
+but is not aligned with the vast majority of other places where
+BR2_PACKAGE_BUSYBOX_SHOW_OTHERS is selected, where
+BR2_PACKAGE_BUSYBOX_SHOW_OTHERS is selected unconditionally. Harmonize
+this with other packages.
 
-Fixes: 039c1ae13ec12f7cebddf86f37080d0a1fee28e6 ("package/ndctl: new package")
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/ndctl/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/glslsandbox-player/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/ndctl/Config.in b/package/ndctl/Config.in
-index 708871d693..79bae61ebb 100644
---- a/package/ndctl/Config.in
-+++ b/package/ndctl/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_NDCTL
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # json-c
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU
-+	depends on !BR2_STATIC_LIBS # kmod, keyutils
- 	select BR2_PACKAGE_INIPARSER
- 	select BR2_PACKAGE_JSON_C
- 	select BR2_PACKAGE_KEYUTILS
-@@ -19,9 +20,10 @@ config BR2_PACKAGE_NDCTL
- 
- 	  https://github.com/pmem/ndctl
- 
--comment "ndctl needs udev /dev management, a toolchain w/ threads, headers >= 5.10"
-+comment "ndctl needs udev /dev management, a toolchain w/ threads, headers >= 5.10, dynamic library"
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_PACKAGE_HAS_UDEV \
- 		|| !BR2_TOOLCHAIN_HAS_THREADS \
--		|| !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10
-+		|| !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10 \
-+		|| BR2_STATIC_LIBS
+diff --git a/package/glslsandbox-player/Config.in b/package/glslsandbox-player/Config.in
+index d2e146d827..04ca85f381 100644
+--- a/package/glslsandbox-player/Config.in
++++ b/package/glslsandbox-player/Config.in
+@@ -35,7 +35,7 @@ config BR2_PACKAGE_GLSLSANDBOX_PLAYER_SCRIPTS
+ 	depends on BR2_USE_MMU # bash, python3
+ 	depends on BR2_USE_WCHAR # python3
+ 	select BR2_PACKAGE_BASH # runtime
+-	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS if BR2_PACKAGE_BUSYBOX # bash
++	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # bash
+ 	select BR2_PACKAGE_COREUTILS # runtime (timeout)
+ 	select BR2_PACKAGE_LIBCURL_CURL # runtime
+ 	select BR2_PACKAGE_IMAGEMAGICK # runtime
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
