@@ -1,130 +1,104 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82CD0C88E75
-	for <buildroot@archiver.kernel.org>; Tue, 15 Sep 2026 12:49:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11D98C88E7F
+	for <buildroot@archiver.kernel.org>; Tue, 15 Sep 2026 16:32:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 99A2E80D1F;
-	Tue, 15 Sep 2026 12:49:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9651E40533;
+	Tue, 15 Sep 2026 16:32:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nerPEzw1nOrw; Tue, 15 Sep 2026 12:49:13 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 4D66F80CCA
-Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789476553;
-	b=fObuYtES8Rrj30MeATvXs9O+tdNQVa9m+PdvNPsIu+m/NZDFiEnHUcOahvs429hUWNF9
-	 Ekxqn4BhX6TYNK9Kq3zZ8QFxTpUIEJt2gineNdMTazc3FGUYoCG4p7JkxEHclHk7LRaKl
-	 saaIhtjLZJ662BDopdqPNqJl+TfU9qCcg/+RSEQHdJI3IB5QCiYiYHnL7c8ndZ9RcpPtV
-	 irEjpVSjKHqKys4FO2Ku/TqruW6JZrXabcTpAT9es/Q1wFQ0XLkmzkONj0dqVjLFicvug
-	 439dUsZYtk0uFsTpssjsoBOl0C4MKE68mlodcxCh9nyH6M7z9ARvXMqqLKKYy4AwHOg==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YKwXCzkW8VtR; Tue, 15 Sep 2026 16:32:34 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org BBC12404F8
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789489954;
+	b=thRyidLYSRcyNs+zST/Y2XUjCejKKsBONqUI6JUXlmZd/h+FbCP/CurSMogluyAkiJ31
+	 gRRaNZrcTiDG/HUXyQqFdiikNaMLuFFZhnEsyjCQ6TLCWqsTOEmJUv29ioIjBYyMoPtXw
+	 /TzvK5EUSNDiFBZda1hNv0oE32eKikqnzeBD652Wu9SqzYdmgtlDcjS3oufIw3XUUBBiS
+	 sin8orMcZktQDsjnkPipy/1GAi994XVY7AD/ne1g2+VRUkkV+bQwY7lAGxhAxk86tXez/
+	 /ykIYzOErIS8VOfPp2ahafJoHG/6XfA5e0dI9+QuaTp65pwcha20QK5It7/YL7f3psw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789476553;
+	c=relaxed/relaxed; t=1789489954;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
-	 DKIM-Signature:X-Alimail-AntiSpam:Received:From:To:Cc:Date:Message-ID:
-	 X-Mailer:In-Reply-To:References:MIME-Version:Subject:X-BeenThere:
-	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Content-Type:Errors-To:Sender;
-	bh=5X5rrXqvc+BWz8BGcVyCPRRLuv9AiHg920CLiidN1UY=;
-	b=Tay2KjkxIYo6a1zrFXagQn6XWcv7g1VR+2gneeRsMR9Ke/rDNhjwjgCypfA+BhAQAcqu
-	 4cEU5v5UrYEzNl6ZrJW7CGZLjz6B+b/AlL1VaGXJkf/CWwA/LPphC0zdlPENeJFrEAgQB
-	 np/ygQ1wTtuPCzT0k+pv/J9xKAlMkCbRLS1VSU8O8sJuvT8ONRnzhlQxdx6IzlMqKZvRa
-	 Pe0he9BB/Z3rKUtUvVUHhjnvMmsI/aX3UtJMjAYuvNzCV4+sliG1NK8eLGMDAvNQcgjCl
-	 gLJ4WY6fJCGCtzECtaB4WOKaG19LGbd4TEuCccA5QIMZpNUIDPJjJhsrK9aR1pozqrA==
-ARC-Authentication-Results: i=2; smtp1.osuosl.org; dmarc=pass header.from=linux.alibaba.com;
-	dkim=pass header.d=linux.alibaba.com header.i=@linux.alibaba.com header.a=rsa-sha256 header.s=default header.b=ojxEZdZs;
-	arc=fail smtp.remote-ip=140.211.166.142
+	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
+	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
+	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
+	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:Errors-To:Sender;
+	bh=eOLOFwKRGluHyOVQQlxJevUUA61I/NI3TrbF6dPAOLE=;
+	b=CFajb6eDzkKD0DODHcZ6heZzP/CjZ2Hd/fO8Q2OFxyE1K4AYYPoZ04iKrkj3XlohMfzV
+	 VIjW3mRUvp2LPFojEatnDg0uqaX0zYpi6+IR7oRmth2a6yp3/Fbi6ebYkflJDrQtwIN9s
+	 xX1RvGsUVJ3nxIkCWSIpTpnN1eFrz4RK2JchkSfvv5Y0zx8e3baVJ9EqMKdBFR37eM9PR
+	 5o3YP+Uoc+TsHcYZynPGI2ZbwosHI+pc9O54BmDxzJUruHcMa9WpQ4knckGZ4pf9SMwCl
+	 hXB4gNGg6vzAz7AQ0tkusgQsReXhb6yrTlBG5lAa7lBhX1hCVPFK9IoGtY9DLJYYN0Q==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789476553;
-	bh=5X5rrXqvc+BWz8BGcVyCPRRLuv9AiHg920CLiidN1UY=;
-	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=H7FC4KH3Omgmb+8vX3WC6pGx2L9iPgCDlM8u5QtsW73ve9ytbW38QuQYkZZcQ3TeT
-	 SilYk9w1IBcjHEQMAlA7xr5bpbOD2DkWlBLAzyom6TL3UHWg7kqmkIE1GGqQZZca29
-	 XZ4+6RRJPSnOonLhJ11rJj6MpyKc1HoOvAC1AyG+dIXDzAD7zStiKLRXoPuEtQKyeE
-	 BpdCeBzcn8CPVgFhggfFZvwY6A47FGabpsp4gfBVV9zzs39FJ7LaOspp4zz1CdfvsE
-	 Z7Sq8HiGSGllx2iYQXm3JlEZzWtSOa6b5XgCJzYp10tskw6HCZTSnCZkKmyaJNWuJw
-	 7PQ5cjqeMqQ2A==
+	s=default; t=1789489954;
+	bh=eOLOFwKRGluHyOVQQlxJevUUA61I/NI3TrbF6dPAOLE=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=mdju+PN/ah7eYehTW8AMKMX4KmvBQVolvCEb4UbmQOVgNvdMGlONFmejryB6uQmJP
+	 waHsB6hmrIG0Hh67yrzDPhHJHyNPTtUVkMpQ5b3bjqpCBXKZzhoBZ0eYA/MIveBd8o
+	 yasjnW3MNmIAQL3KqJ77RJuIZmAVoHO3kDYCgosT5uFyTuB7zxnv+M2pfFseXARyMO
+	 QJaV9byalopkqUWhaNS5xAHYevwvQ6HHlwe26ZNYsYeD4DheWnlBdXBt3BTg4KFgjH
+	 epTYJt2x+OKtz3ZpvwwJPTPriSfJqq5K4Kd5os1s08RbV4FQ6lGCxx9/PQ9vWG8j3a
+	 n8eRJA1SkwV3w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4D66F80CCA;
-	Tue, 15 Sep 2026 12:49:13 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 4E2CB259
- for <buildroot@buildroot.org>; Tue, 15 Sep 2026 12:49:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BBC12404F8;
+	Tue, 15 Sep 2026 16:32:34 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id BE9F82E3
+ for <buildroot@buildroot.org>; Tue, 15 Sep 2026 16:32:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3F84380CC3
- for <buildroot@buildroot.org>; Tue, 15 Sep 2026 12:49:11 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A4761404F8
+ for <buildroot@buildroot.org>; Tue, 15 Sep 2026 16:32:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id m_lGx-mJpNJV for <buildroot@buildroot.org>;
- Tue, 15 Sep 2026 12:49:10 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 7345D80C73
-Authentication-Results: smtp1.osuosl.org;
- arc=none smtp.remote-ip=115.124.30.133
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789476550;
- b=Ck71k+PpCqYXaBBX27Bag1cQlBEdJCKEyBIvWvAa7mEr+HzL581kXWPT28xLoX5GOZ4W
- z1EgBx/I2AshQRtuEW3/p0CXAQWhSw/1R8XTc5GPQeYJWVsuq52I0XRWVRCgUJT0SLggK
- uuwStRgFls77GbanZooKHXjvJeFvUjwgaVXLjZ5YJp1HN2w/gkToVFte0nceFiwJUmkDS
- XJXOMphK/FyrK/h7dp1dLUCkJfogerKHqfGEpd+UNrM67xut7blSa5rWIFkl//5h9Q/Z1
- l7/81ZeZCBXFsh5tKwHbRDyWC8jnein2pGhgJisyyw0qtbUdqZNb8t8YLPTQoc8X7qg==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 11QJ3DGfNCgs for <buildroot@buildroot.org>;
+ Tue, 15 Sep 2026 16:32:31 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org AB83C404F2
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789489951;
+ b=U5oGgbJ/D8W4TGZezxooJMvsXGXVnpLuroXQooJsuq/o2ZLBT1k2aiMLJGO+prP/HR+9
+ MDHfvMzKtp6Ze1IoZ6S3qxA4xlM7hJ/bzrqW/QPoOsC/G8+1C2/K9eI+K8axof1lT9qCP
+ iwVh5TATngmxbzVGXarWoERk+KpaOU5LEMcQQE+XPdU5RcRGhcDKUQOXwnuZPuEfSicNb
+ 24w8cDaIb2VqSjifwQA+lQzk4oeFiXxkOI6d4/VGA5+7WFuUfS47IehdFFdVF0urUd7lF
+ Ptycv7dVODLB9L2V/X6tAyX5xDQiKiVA8vGgiGbZFhKp91gASDIjzZKfY4ijNIgU7+w==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1789476550;
- h=Received-SPF:DKIM-Signature:X-Alimail-AntiSpam:Received:From:To:Cc:
- Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
- Content-Type:Content-Transfer-Encoding;
- bh=7uySF+WboW78B322/JM7ea3LzolBMKFCTjEz4s0k3h4=;
- b=XoQx5+unDyocliuxFvwsCLx+5LLmPfUuPxhRQwkWorUsbUV1BveznrpMh2I9SHX5mGmJ
- 7JUn7UTqAsEAHXQ6c7hUi+dHgtkRsXTRgkMBzHxXzGEIp5iSOW9A0KXHDNWuf+ZkzIJw4
- eCPI1OXvtE6nTs+HI0SecNSh8ffgNUaDL2zrOczuf7FqUTyc6pMtburPtA1XPvdLeY8UM
- kDEI+rdWmZHL4G700wO7FDqPpkK3Nd8CEspaSFGBpKeagjpIEF4Um0kFhGoalcT7BBeNn
- sgYEax21qy0/7Me92JbgMJxr76rV8Vm1mUpKlGCZHaTNfSLuUAU0z53S9RJnjplNl7w==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org;
- dmarc=pass header.from=linux.alibaba.com; 
- dkim=pass header.d=linux.alibaba.com header.i=@linux.alibaba.com
- header.a=rsa-sha256 header.s=default header.b=ojxEZdZs; 
- arc=none smtp.remote-ip=115.124.30.133
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=115.124.30.133;
- helo=out30-133.freemail.mail.aliyun.com;
- envelope-from=cp0613@linux.alibaba.com; receiver=<UNKNOWN> 
-Authentication-Results: smtp1.osuosl.org; dmarc=pass (p=none dis=none)
- header.from=linux.alibaba.com
-Authentication-Results: smtp1.osuosl.org; dkim=pass (1024-bit key,
- unprotected) header.d=linux.alibaba.com header.i=@linux.alibaba.com
- header.a=rsa-sha256 header.s=default header.b=ojxEZdZs
-Received: from out30-133.freemail.mail.aliyun.com
- (out30-133.freemail.mail.aliyun.com [115.124.30.133])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7345D80C73
- for <buildroot@buildroot.org>; Tue, 15 Sep 2026 12:48:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=linux.alibaba.com; s=default;
- t=1789476525; h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
- bh=7uySF+WboW78B322/JM7ea3LzolBMKFCTjEz4s0k3h4=;
- b=ojxEZdZsIRAuqiUSJPgdirGDjW6dmy/kw5RHjJc6JIT5Q0+QEp0v69CjOISalutJjvPzyRGrRMZgP/6oVar1esEpC/4NhOh6MmBqj3Aw/QnMfPPAwmssd4MdhSa4dWxbXgFMuxomX9IexNVnx6QE08zxX4rSB7cOCORsVkFoeqY=
-X-Alimail-AntiSpam: AC=PASS; BC=-1|-1; BR=01201311R701e4; CH=green; DM=||false|;
- DS=||; FP=0|-1|-1|-1|0|-1|-1|-1; HT=maildocker-contentspam033037026112;
- MF=cp0613@linux.alibaba.com; NM=1; PH=DS; RN=2; SR=0;
- TI=SMTPD_---0XB1irp3_1789476518; 
-Received: from DESKTOP-S9E58SO.localdomain(mailfrom:cp0613@linux.alibaba.com
- fp:SMTPD_---0XB1irp3_1789476518 cluster:ay36) by smtp.aliyun-inc.com;
- Tue, 15 Sep 2026 20:48:42 +0800
-From: Chen Pei <cp0613@linux.alibaba.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
-Date: Tue, 15 Sep 2026 20:48:27 +0800
-Message-ID: <20260915124000.0000001-cp0613@linux.alibaba.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260915122946.1953137-1-thomas.petazzoni@bootlin.com>
-References: <20260915122946.1953137-1-thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/2] package/ndctl: fix Config.in comment
+ c=relaxed/relaxed; t=1789489951;
+ h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
+ X-Git-Newrev:X-Patchwork-Hint:Message-Id;
+ bh=iwsvjHhHYi9AkUrKypwm6HKKwLQCdJC3WMrIjkgnSwc=;
+ b=cbA+xzmkoGe+1V6SOYAuRmpyt02wPTIvRdPj8C24HcF8Xvc8Hm9JepMhh6OrZpN/upqu
+ jJ/C232pgWhxy8Wfk0do9mD/1TBEvDe+GH/Lf2K87diXeyE90LGUf8r7i7rbgJ8eq28oQ
+ zBq/aaMCpz2pki73U3YXaz9g2zBt1Wbq1nfxnSUD7wZPbnyXjY8uXJ1p65pfowcVZe0Al
+ XIVvYXKeYKMQUNPnjJ3MmMSI8AFaYw8WOytgXCyWLmnEMQG6fxbUA3mrleWlwFPXAKxF5
+ ztxtfNGw8kgkEsPX1bVBFHXJCom1PSZumi6bI5G5ugN/AwDxDONaY6M47qGAmRSYbRw==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org;
+ arc=none smtp.remote-ip=140.211.167.122
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id AB83C404F2
+ for <buildroot@buildroot.org>; Tue, 15 Sep 2026 16:32:31 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id B519A95CD1; Tue, 15 Sep 2026 16:31:25 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 15 Sep 2026 18:28:42 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 2fd1f6b629862f48e832d7e0379a7b48dc9eae42
+X-Git-Newrev: b26324b6c0c6d88b6632bfbf0c35777c646d436f
+X-Patchwork-Hint: ignore
+Message-Id: <20260915163125.B519A95CD1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/linux-firmware: bump version to
+ 20260910
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -136,52 +110,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============4460691196548283389=="
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4460691196548283389==
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8bit
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/b26324b6c0c6d88b6632bfbf0c35777c646d436f
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Hi Thomas,
+Updated the hash of the WHENCE file, due to firmware additions and
+firmware changes, but no changes to the redistribution/licensing
+conditions.
 
-Thanks for the fixes. Both patches look good to me.
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/linux-firmware/linux-firmware.hash | 4 ++--
+ package/linux-firmware/linux-firmware.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-For the series:
-
-Reviewed-by: Chen Pei <cp0613@linux.alibaba.com>
-
-> On 15 Sep 2026, at 20:29, Thomas Petazzoni via buildroot
-> <buildroot@buildroot.org> wrote:
->
-> From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
->
-> ndctl selects kmod and keyutils, both of which depend on
-> !BR2_STATIC_LIBS, but this dependency was not propagated into ndctl
-> when the package was introduced. This commit fixes this issue.
->
-> Fixes: 039c1ae13ec12f7cebddf86f37080d0a1fee28e6 ("package/ndctl: new package")
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-I've confirmed that both kmod and keyutils carry `depends on
-!BR2_STATIC_LIBS`, so the propagation is indeed necessary. The fix is
-correct — the `|| BR2_STATIC_LIBS` in the comment's depends block is
-the right way to express "show this comment when static libs are
-enabled".
-
-Best regards,
-Chen
-
---===============4460691196548283389==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/package/linux-firmware/linux-firmware.hash b/package/linux-firmware/linux-firmware.hash
+index 103f4ecf7b..c9cb054689 100644
+--- a/package/linux-firmware/linux-firmware.hash
++++ b/package/linux-firmware/linux-firmware.hash
+@@ -1,5 +1,5 @@
+ # From https://mirrors.edge.kernel.org/pub/linux/kernel/firmware/sha256sums.asc
+-sha256  ac17c34fe73756926a961fbafadf8d8f07a3bd2dd2f4ea31a0fb5d50c714a49a  linux-firmware-20260810.tar.xz
++sha256  f3937ca282ba256242e2b6dbe523df8a80007d29ffd61f56d270190865492ea8  linux-firmware-20260910.tar.xz
+ 
+ # Hash for license files
+ sha256  8116433f4004fc0c24d72b3d9e497808b724aa0e5e1cd63fc1bf66b715b1e2e9  LICENSES/LICENCE.Abilis
+@@ -50,7 +50,7 @@ sha256  8542aeabf2761935122d693561e16766ce1bcc2b0d003204f9040b7d6d929f2e  LICENS
+ sha256  be904cd28cb292b80cdb6cf412ab0d9159d431671e987ad433c1f62e0988a9bc  LICENSES/LICENSE.qcom
+ sha256  fc6223d4bfe9f2f9e2eddc44b9fe5721d0caf49f01cb08d602906add686d8c6f  LICENSES/LICENSE.radeon
+ sha256  2bdd2e716f05d9737d3f9a20f9a3a3c0caee0e866100ddb0673f1178e42f92b9  LICENSES/LICENSE.sdma_firmware
+-sha256  7b828cc147af7a6cd397a9cd33c23eb95f7725b6bf96fa428261198eb93bbd75  WHENCE
++sha256  8bc466434be59e1c044cb3821b30b7328859ca250a451bb6c799ffb21ae47f2e  WHENCE
+ sha256  fa43e1b9a13b341a07adca9dbe73d0f9072d7966fdfe811c01f0dd2872d7309a  LICENSES/NOTICE.qcom
+ sha256  bef9c828e84f21e7835b4de7daf954a327e1ff777871b58e116039b684c0d604  LICENSES/LICENCE.e100
+ sha256  26b3c946f1f378ff25bb3bb7c365d108a2bc0bf08619e5e08bc0e4f9aaa6ee1e  LICENSES/LICENSE.xe
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index 6025436c84..c5749513c5 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LINUX_FIRMWARE_VERSION = 20260810
++LINUX_FIRMWARE_VERSION = 20260910
+ LINUX_FIRMWARE_SOURCE = linux-firmware-$(LINUX_FIRMWARE_VERSION).tar.xz
+ LINUX_FIRMWARE_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/firmware
+ LINUX_FIRMWARE_INSTALL_IMAGES = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4460691196548283389==--
