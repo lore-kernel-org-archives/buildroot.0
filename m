@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 612FEC88E75
-	for <buildroot@archiver.kernel.org>; Tue, 15 Sep 2026 10:21:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BFD65C88E53
+	for <buildroot@archiver.kernel.org>; Tue, 15 Sep 2026 10:42:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0FEE64050C;
-	Tue, 15 Sep 2026 10:21:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7169940586;
+	Tue, 15 Sep 2026 10:42:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1QczwhfiJ6vx; Tue, 15 Sep 2026 10:21:14 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 4CBBB4057E
+ id XqrC0utbJE79; Tue, 15 Sep 2026 10:42:28 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org DB37F40581
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=3; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789467674;
-	b=lzC9k2q/wynnOdXyyjkvDdq+96nRg7w39nq+VLWa85lk6jhL13TgVw/YR7qKcQUDr80u
-	 GEMBi3sqOqUZfZTsXMSMELHI6epJuGcNAs5NOmsn9XgJawUhLRNyk4TQ/MDVtqrhI9lzl
-	 RX+BNF8MKKGoijtLnNMCxme1K8nmjQqvbvdLV/pHDSmFTyIlX7D8TK3kPyBnUBoQlXSlV
-	 IVVlxXtBO0Oj1rEOZD7AT1Tk1nWjJz7Vn5SH02+72LjnfaxTB/EaC1SzzJ3FFzsW22w0k
-	 yTNg+T3FawQ1K8AVdGSuQwCRbOv95r5wPz3p+WFshnHF4v2YRvZZSViMYvlkqnxMTyA==
+ARC-Seal: i=3; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789468948;
+	b=CzXnC8WUEHImqyOKT7SIziU8z9Hyl3TZI8ddquSiW8bkhUTq0B4U2w9AObFfdTI7qdCw
+	 qtF8je11Tze//Nvx2sdEnnOD9TTliGCCqh9g5XzrO/lvPMk1Rgx0n3yHewUg6Ib43aTKe
+	 91hbQ/IIetdujY6lLWH/G4DySo0GDb2pEhT4/m6COHLqa4EBaMwWt6dRpV1U3M3lrfyTB
+	 0Qjb6XQMzeCvgV4JZy2p29LXt8pN43dcGtxBWWML5yGJsKGsE3T8pf4hvSnXrGwSYgofX
+	 9egZOQtLKbKDnYvkkER7YvohNoeFJNIA+zw86gouvqHs70/PSSh5aBnHTc2QI67qG7w==
 ARC-Message-Signature: i=3; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789467674;
+	c=relaxed/relaxed; t=1789468948;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -31,144 +31,143 @@ ARC-Message-Signature: i=3; d=osuosl.org; s=arc; a=rsa-sha256;
 	 X-Gm-Features:Message-ID:To:Cc:Subject:X-BeenThere:X-Mailman-Version:
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:Content-Type:Errors-To:Sender;
-	bh=dCq/dYr9z76fj9YSTGZl5OHwWa4FTLX2OgXT5aFlcXo=;
-	b=LblHuFSlOtmFJWJP+9vPbNUhjeI0GEHJnsGGSuYqFvK0j2GNrZWmaSUWSr4SOHQpWx3B
-	 VEmEWu8uvZWpk8xygyU48i0oa41/wEBYpUJkPa2ou3plreQSm/X5b7SdutZjlQP0Eb6Io
-	 BqdeaDykxGX/iT4pTdh1rhAvubX0NxogQ1Jj8Mq3aFmfIUKlWSiBiHIUUOWx6sQ0lUc1j
-	 VJIqAcmD/k65RhETsc0hVNUwwy0j/VQC046j8wFqF6gClGyH9JENIu/r1zvhsy8HXupIR
-	 7Mf0XHbMYUS7BlhmSUGqpvJstylJvPr3u38wI5cf7b8fmi6FVwa4JaO6eP/d4NOdORA==
-ARC-Authentication-Results: i=3; smtp4.osuosl.org; dmarc=pass header.from=amarulasolutions.com;
-	dkim=pass header.d=amarulasolutions.com header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google header.b=oike+tds;
-	arc=fail smtp.remote-ip=140.211.166.142
+	bh=zPaH3kQZTQdBeHStVw2mGV84bAP4nqat8UdeIUgwPl4=;
+	b=FdLbl9I297Ttnv0pBEM86vbsiFib6FLBYnWl1Lsjpq5y4BgeSNj8IYHA4zwPypeTKq3k
+	 Ll1WTE7D+RreKzRQWeUAT2Xe4asOA19e9QE8EOI1I1M8F49RQw4JfQotIHtlGfVoXn32o
+	 oRFmX1V0XUb+PGpdMQ1m8wBG84NY7ScLTKZY9TpY21MR+QgqwoNb3aeALZNWncZl3H37w
+	 V6ehxxB46JQ0RqSVIF7cbcojCrkEX1fSwBgkr6GSF9YapI8PAPnX+RR+Lh7Jm/TMKY0uz
+	 iQpwqJlNYEObgJbdnwxT/UDtPgB7gBJaVKEfoAaz58ViBlDALh6Wf9dM97deONQUtZg==
+ARC-Authentication-Results: i=3; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789467674;
-	bh=dCq/dYr9z76fj9YSTGZl5OHwWa4FTLX2OgXT5aFlcXo=;
+	s=default; t=1789468947;
+	bh=zPaH3kQZTQdBeHStVw2mGV84bAP4nqat8UdeIUgwPl4=;
 	h=References:In-Reply-To:From:Date:To:Cc:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=F0kq3pqG9+eWTHQPFK9OEWhEHscUmGuVbxi+2A3jL0FcBwBNCVqbYV6eCMCVtHNdW
-	 ar4Dk20vEiYwTMI4Qwss/YnBbuEYfdD5KsiQd+rytEzijeZX4paR3jXlrO4dRsqydp
-	 rTJ1UGffgAOmKhJ9gB5vkldLJmuYuYBOZWu+oy7FzA4+PPS3+jFzULuZKzKux8DmGk
-	 9hWXD1sS0c1Sh5oDnXecbE6+jKFWx23g7bZ35RNzc+yBZ4OYQMWR0ythYPu4utl6P3
-	 UBE+uk9hIpJfJfEsN2U2ghQvAZ/zMqCud74x3gUDjOS69EWG3EtphnfqhQ66nqf1n2
-	 y6PbTRioytC9Q==
+	b=EF432CSLMtDamOfm70weOWK6QtkBJioWaXGtjXX4oe4y071wizVQNcRTlhFHPYpmP
+	 DASXXX8nGXTIEhSnAlujVCPKGOKjoLtFBBHO8Tv0YGBrsW3rBTjUK8SWXX72OU3907
+	 j6VBtcJdBkBAYpj4h6cHUQs2zINLnp8KvTViU4lCcuYTuNCSVtCp/HgWg6KVpmRNgR
+	 g6dB/LVJu+/YLUHzgQKMbPMmEGBQBWJp1zLLLSBnomOYH+QftjwwfGhIKkWAZq5NnS
+	 GGeg87mofHArNScziDsH/OLEsyn/5NihGZb4teZQTT8nYfkot/lTXXpAIhUODO/E4q
+	 6L0zR/s1+jFoA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4CBBB4057E;
-	Tue, 15 Sep 2026 10:21:14 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id C9C22259
- for <buildroot@buildroot.org>; Tue, 15 Sep 2026 10:21:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DB37F40581;
+	Tue, 15 Sep 2026 10:42:27 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 08EA8259
+ for <buildroot@buildroot.org>; Tue, 15 Sep 2026 10:42:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BC38B4057E
- for <buildroot@buildroot.org>; Tue, 15 Sep 2026 10:21:12 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D924E60743
+ for <buildroot@buildroot.org>; Tue, 15 Sep 2026 10:42:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id G6EvxzGJGKj7 for <buildroot@buildroot.org>;
- Tue, 15 Sep 2026 10:21:07 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 546254050C
-Authentication-Results: smtp4.osuosl.org; arc=pass header.oldest-pass=0
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9Do0mIlwoKHk for <buildroot@buildroot.org>;
+ Tue, 15 Sep 2026 10:42:21 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 79F8E60731
+Authentication-Results: smtp3.osuosl.org; arc=pass header.oldest-pass=0
  smtp.remote-ip="2a00:1450:4864:34::10"
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=pass; t=1789467667;
- b=Mbs0qWI4wAUWvJiJ0MCBImUb/srr3co1c8nqWKONfzngh6hfRnanWnsB1IFqvkik24yc
- Hggm4ykeQkVAAVNpcDwVIZJD+AkqoiLlsujSXxQtKWymj6lDnRfgptPaqmtpvjiOqWV+Q
- CK5aqHbxe+CKTCZLr40JFu3PuBxxDyCTVmQnSGjY4Jk6i7pwGV7e3BQDDMrb/o8XWkZkL
- +bk1lCEG4N4B/91S8FlHbddQ8m2E6MokL02wQaZye6WFO0+S1pynT7FiRRKjqGJydRZGE
- ZSFLclX0VqaNM9l6Q46FUUPrrQtJHZHgLr/urbb0zou9PA6RUdpURnuhk/U+8VHiGvw==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=pass; t=1789468941;
+ b=KB1IqUcP1B9vpa5r7wL35q/HnXcnST4mmlUjmWlkKAL80AeyjStsuGjnNKOX6gOCETTO
+ p6UbMJAndhKG26s6tIIx//KF5XlwZKY3d/liCnjFhQqX1Fbp8D75Q3yzK6Ra1pDzYlhZV
+ 41NoHOG9nXAo2Q3qhEYyFwA5zkSEgL8AGYJ4tkIWOLupYgGfgsN51aqXqh5poEdnm+kpz
+ Z153Bi0vO7qxRkDSXu6NcGM6m5B37sefPTPzmTGFIxb9Bc3ZfPq7AaYnm77Fal0lLwoUY
+ QuNnxV+nrCXNW23RGmghQr5cP+szD/5I7lEWv4zlJxGKp8KF1EEhZObLepSOdNjyZLg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1789467667;
+ c=relaxed/relaxed; t=1789468941;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
  X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:References:
  In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:
  Content-Type;
- bh=pjtn0ANcAryRB1UxxD/GLATVfeMI6x/txled1P5mIw0=;
- b=fQsfwg4lPvzrexRE6fpsq7mFgNY1YOGQDeKSZpkgVc9myQpBssPxr6jJx9h+hLsXPp5F
- 0+ZXVgbiEFHOq4LPA5dCNSg2486mdnsTR02YxrfzpQWRaXDUXbveSWAke+AWrkoWckFDI
- 7LTFcHMDT2sJ0UhSgoWPx2L8G0vRkd9AfZAWEq6w8sQ5XLOWKwX22Hqc1Uk9Ve7UPzwKp
- PucztCxAQRzL/fPufWmeUYCWYShSD+R0hU5bjRPt3zexmU866zmrI2p4X5kMBxdZexxmR
- ATa9hFKWyuqZpJeImeVGvFrZN1zLj0JCn0Va9EH1HUhaPiF0rPcWi+xPCwaD6Y+1neQ==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org;
+ bh=YxPJgK/VCS6HvKhNW4UjdAnCRdFPTsh3JIWkjCDroAs=;
+ b=PU+SvosmYxsLskaX3JdHPR7PjPbOuAjRbmjQ7Y2aCP8FzK9OCGuwfuE/PArV6yzSJ24u
+ sP8F8+Z49WIzYl29Pzp35gqxHo5to4vlnbIgJv0ahYYJ1TRwJVCBlexDjujoAhIEH8oWu
+ upza+b1L/KxbWStpKYkQ8tD2dAJe1BK7iEO754NlbavKamTGS71oV1HKS7w6qyM+yY1tn
+ x9aYKHrxxaUw6r7kGd/vU25O51NzqK8GIpV7FPwMBl4Ju0Prd/3Y4PEpDtoBgTTV/qzCv
+ 9M2egiWhKWDWG90cOOkx9osDONBLzCrI8lNmtZMTYr0yusmDQGSPRPsZ3sKsz2o7bDQ==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org;
  dmarc=pass header.from=amarulasolutions.com; 
  dkim=pass header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=oike+tds; 
+ header.a=rsa-sha256 header.s=google header.b=BYvuQSHv; 
  arc=pass header.oldest-pass=0 smtp.remote-ip="2a00:1450:4864:34::10"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
  client-ip=2a00:1450:4864:34::10; helo=mail-ej2-x10.google.com;
  envelope-from=adam.duskett@amarulasolutions.com; receiver=<UNKNOWN> 
-Authentication-Results: smtp4.osuosl.org; dmarc=pass (p=none dis=none)
+Authentication-Results: smtp3.osuosl.org; dmarc=pass (p=none dis=none)
  header.from=amarulasolutions.com
-Authentication-Results: smtp4.osuosl.org; dkim=pass (1024-bit key,
+Authentication-Results: smtp3.osuosl.org; dkim=pass (1024-bit key,
  unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=oike+tds
+ header.a=rsa-sha256 header.s=google header.b=BYvuQSHv
 Received: from mail-ej2-x10.google.com (mail-ej2-x10.google.com
  [IPv6:2a00:1450:4864:34::10])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 546254050C
- for <buildroot@buildroot.org>; Tue, 15 Sep 2026 10:21:05 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 79F8E60731
+ for <buildroot@buildroot.org>; Tue, 15 Sep 2026 10:42:19 +0000 (UTC)
 Received: by mail-ej2-x10.google.com with SMTP id
- a640c23a62f3a-c29385fb97cso43642466b.3
- for <buildroot@buildroot.org>; Tue, 15 Sep 2026 03:21:05 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1789467664; cv=none;
+ a640c23a62f3a-c2939b2e4caso57220066b.2
+ for <buildroot@buildroot.org>; Tue, 15 Sep 2026 03:42:19 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1789468938; cv=none;
  d=google.com; s=arc-20260327;
- b=Pjngtbxr5/bjxmeTBPBmmnqMnXBhgJ/9oyOjnyuu5WGMy3HJKYyx311JRaEnimAVHw
- Ps8t4OB9ft2UW9CtxU3INFw2EtZpPDI5iIPFN1r6aDIKlwXjfHr/eGrtwUTD/yX6fm3A
- C/5o37gKKDAviNzRtefQTQdKtyZFS5VJuN9ikDZJ2GR9dXA/DkT5lN++dhsNRtGoEyaS
- 3UM171KqtjYwEuvo37arKaSG3a/pCdR13IvOzpyQxil93yHL1AGpCEPVmerI0a/NPofl
- eLOLZegnV150ZNDRxglkcHPT/HMP3+Dggbb7HK6CsFWH/VPqceefGHjvYU8fW43J45or
- yPTg==
+ b=CN0yHIw9u6kHRiPVUmVj4gSjSMOyd9fbnemyO5r2Hg6K9tWkURW0o/A/jtDXiR7+8Z
+ b2xxoMhk5DV5hlZ9EiFvmJBF0AKR6AGUvktUOgNwqH6ejpX3ka+rS0MjAPtliqyI2/xI
+ Tj8AJWQ1Y4CfS0G0Qm78GrNAga/axaRAhIOANW75RLGTKrMIKvHe8dv3ls0+sG0iVic5
+ 22BB7Dw/L6jK1qxrZPsWxO7vsXx3fC17nHUwpm1e84VoDlv9yAA8lPa3Ec1QGoGYXXSM
+ G4uqx5/xWcBfSTCy0BMVUi10nj2P/4UGC0/U51LG4Pnpn1QEjg/WXuRfYP4bXulYOXyo
+ gyfw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com;
  s=arc-20260327; 
  h=cc:to:subject:message-id:date:from:in-reply-to:references
  :mime-version:dkim-signature;
- bh=pjtn0ANcAryRB1UxxD/GLATVfeMI6x/txled1P5mIw0=;
+ bh=YxPJgK/VCS6HvKhNW4UjdAnCRdFPTsh3JIWkjCDroAs=;
  fh=v39vw1RVa+etVr36IJY6HNIwUwZAMQh/gk9zL4km/aA=;
- b=Hpadt5HuzSYR67bloWV0RtOUPaF++LmmqEkhjJpPkGafkzB5zD3MxnkxxHj6RNqSpA
- TlaK1212DrOoHN9RR/wmu89FPUtivPzv+mvCNfutndGnEPKKo56EuiJJUUyOpvJYQTyf
- O01EaSQJhY7RHLRUI3lC+RCjysJ7lnsYcg3NPxeuF2u6SkLW8tDBj4TfuLwjcC3FJUWS
- aABuTj5A9mDRyoDCWoSuLPSnKJwoy5emvvRo2dnEm4C2qgGT2X+S6ce26ATe1r7q0AIe
- cLwCB8AI0p4w1m5S4ex1fO/6c0xup/thmA2u3ASTiIiIN9s35d3H6nPDV3S0qOzlOH2q
- 2gdw==; darn=buildroot.org
+ b=gzP6JJv9WG/ntvw4sZx3bCBCevnf+S9YKuswTk0yDQripjreKiYS4Rry6tKVMTslgt
+ sADmvGhmeOsSp1gBCDOUwxub8HMcPJmt5s8rkwKvFmWmaAwK7f5EYA0TFWIJD8D8b1Bg
+ CFjxZ3UoXuNPtiYGGv1elPyc+HUxbQZcO1un6YKdhmfQJi5eFs+YbEvVMMNAog5Dy7BZ
+ ACCteNuiEJO7lhaTtt/JtFhYhzWlDMjD+6isxxiKpOzf1firT+PfVyXDxx2mvWeNd6+M
+ br/EXxEAAP6St02adx2LunmjWUHvfpOBLJ615Ao2rVzlOW1o1ytG6m3oRQKBIH5n7riT
+ eUbQ==; darn=buildroot.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1789467664; x=1790072464;
+ d=amarulasolutions.com; s=google; t=1789468938; x=1790073738;
  darn=buildroot.org; 
  h=content-type:cc:to:subject:message-id:date:from:in-reply-to
  :references:mime-version:from:to:cc:subject:date:message-id:reply-to
- :content-type; bh=pjtn0ANcAryRB1UxxD/GLATVfeMI6x/txled1P5mIw0=;
- b=oike+tdsmshnqNfDtpqRFWSq1int25iCZ0BYFVthsMxq/IhBlYmOI4G7gDZ0rroaii
- GGbGCOxXMb5I6qYvabnCyJV3AMm8zDR05GR4h1nxwmB9p4rffAcqYnn6X15JHj52l4dJ
- xG9Cd/XKByvskAB6MNjwCxsP79jtVYvRVwx24=
+ :content-type; bh=YxPJgK/VCS6HvKhNW4UjdAnCRdFPTsh3JIWkjCDroAs=;
+ b=BYvuQSHvu5Jjh1KqssWoQQgv3W3hIYFB07/K1d9krQzuEODUpZwvqZVnUEELyqVHW+
+ w+EORDJqq+a7w3vSvRs1mfiY8yzIFmSTycD1c1WWTKutQJVkNBJGekNNC0WHzkdZnPKj
+ w1RDasqngEGZME0v3+VAzA/Kc8e74AamUvnmQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1789467664; x=1790072464;
+ d=1e100.net; s=20260707; t=1789468938; x=1790073738;
  h=content-type:cc:to:subject:message-id:date:from:in-reply-to
  :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to:content-type;
- bh=pjtn0ANcAryRB1UxxD/GLATVfeMI6x/txled1P5mIw0=;
- b=VsdUW3ef+K1IRJG/6T566Xnn+H8PKfDC/DqvZ01Gztr87kx95rCGjXhN3uX9Vl02XV
- BfprKBDjfmUmp4OTjYHThSpDMRw6pIdEIVNpIR/0Gl9mr1geXONPwYB1spPfjCWR4/wW
- TVHkJFEG96OqMbt/tB00OplJywA5HKvRoTbHWRC2Gl/tJQlDUGFJCnSF9Ws0T/z03VyS
- 0Fs6/PaKDNkPEbmRRjqE2eAj/qNlkwQHWdeHDzYzgxmfOhu8dyFoA+spfjQW8bqMD3Tq
- PrXwG4Rv/qEwJDz9oUTF6bBv2EU5fTh7sMjappimvldwKwn+PV/7o06CTzfEhu/FWEiS
- NN0g==
-X-Gm-Message-State: AFuF++naiGPHzr6zrql5V8LI1h5ThvI7ZAQX03g8HAn8/7wazXTJadeS
- rqyKeGG01J7v678moSIelAutkKuV4bko5VobV0pMxKP2ZjNSDvqVbSHsBpTE8sfIaW/bnQCN0ye
- 0seXgDulFYNY8G1OzDJ+sOuOKH2MH0tZ+U01lBLkQFg==
-X-Gm-Gg: AYBFou3EIeJg1zfqYX186s5/i0ZvRLMtRZqxe5d1cR2Ol0IK3JrmYpJGReftOunW60/
- XfFdr9k8ZO00xUFmhb1t+DrA4NvTlQtqU+j2oBJO+GurluhMXLWR7DA0jeqh1gk49Sk65KIw7b7
- W5UhvZZjbjmAVP5XCrlWPkUbkTr7zSPVSLfRCD04B57IUovPWV5ldCOT+PAd6rakdrZZo9SnGKf
- 4xF8DSIYSkPf8kvvTBB7RlsAFewUBRA4CK7P1gKG9BMF6aiOwbwdSuAtLgmJdMJ2Ec87wHj3BMf
- 412ITPWKpEfoLGhsHmTkADgktu2ZJ813ljUl/YEhCqkr4Cw88tOX90uw+IZehUu1X3UsJz0GIP8
- K1i9QWvoMXCkhFYc2d/gVqd9Ej66+R6SQUl8nfwUZmOJC4A==
-X-Received: by 2002:a17:907:1c0c:b0:c16:1290:11a7 with SMTP id
- a640c23a62f3a-c29b83c2175mr524564966b.1.1789467662902; Tue, 15 Sep 2026
- 03:21:02 -0700 (PDT)
+ bh=YxPJgK/VCS6HvKhNW4UjdAnCRdFPTsh3JIWkjCDroAs=;
+ b=0O8Mpqa56656VloXM1loSlDT4VTNyvLw/LlH8cQfYcltB3WeS0Hyhy8Q2dXPY7uFjA
+ IEdlqA2ShNI4pNXBU9dfcbaPwJXqI0hkn1PFdEWIPshKELTf8ZijSqfx/cL3hTbZ8YrF
+ KA8/3QV7Dj7Mpfs+6EbSfckIjWLyZPnpbjdMPPTzfIEvWIQ6IMiZOWcu+PxQ38u1fn+j
+ a3SWlgyoD1bvRazPLATWI98+qZaiHmJ0ov0EK69s3q+1tHyy6GtB4WXbHyOwsMbPs7zO
+ VHVgO+x2hNYi6LTXbbdF71vbZZzL6Rti/HIbt4oyLiuYCUIroz6m/r0BbOGJNBQUBCuv
+ R/ug==
+X-Gm-Message-State: AFuF++lK3igbmxaTlwBzI9ll5XQ+uZqcVqDXtJI9q0XS9UZe32bvrBC2
+ BTzT/Xg0+qmLB5fGHU+/eeZkiF0JiZUIOXNfnirzRupJoVRzXbi2fTF24ebxc3w8WtSZ0t7fm+4
+ 6mSQNMIMDAN1Q6iAErStz4u34xAVxsOeTjV8al2ed/w==
+X-Gm-Gg: AYBFou0MILinO4zb2hX2uKzdjcfPI5d0f29HC6ym/8O6nq9aksSsl+hxsxMJNb7wYDT
+ zpFzCCLh7wL0m35+TsjsaiZLgKOzJp+mPZbrxkGtke4FWjbDajg4UfWuXlZz3FoC/WuwAHa712y
+ OID9sJ7uwgKquw+wivtS2R6tuGm3QzoCbo2FApy59UWqI46uAfd49gAlMsfR3725Dfz4EfZLWVn
+ 5rTutuTfR4hiu99KXDXN6MBkwvk9PPSlByFmATzRTFVHFqk/iabpz1T/dUa3RciYGBRScJq9Mdj
+ rRfCqY+LyVVziyh4nC25xf93WWA4Lo8W0bAeh9ekbnmDZxfyZm9qjryqizeHrw6rGPL65//rryN
+ HCS3bGzxJhwDRP6iy4ZHevc16VMzmUzT3acfs5tzDRWGLJQ==
+X-Received: by 2002:a17:907:7286:b0:c25:2fb5:e57c with SMTP id
+ a640c23a62f3a-c29b871b2dcmr475119766b.3.1789468936861; Tue, 15 Sep 2026
+ 03:42:16 -0700 (PDT)
 MIME-Version: 1.0
 References: <20260914210536.3378924-1-bernd@kuhls.net>
-In-Reply-To: <20260914210536.3378924-1-bernd@kuhls.net>
+ <CAHDQB6NOuBJQFmwXoiO06i32Rv2MP9wZwV2pH4iZs5w6FfsTFw@mail.gmail.com>
+In-Reply-To: <CAHDQB6NOuBJQFmwXoiO06i32Rv2MP9wZwV2pH4iZs5w6FfsTFw@mail.gmail.com>
 From: Adam Duskett <adam.duskett@amarulasolutions.com>
-Date: Tue, 15 Sep 2026 12:20:50 +0200
-X-Gm-Features: AcwNN1UPbvpLGTM92UFLeYxH2gb4LZBbqQhDAqcWIupyVSL1cAOvwej0WwdRXHk
-Message-ID: <CAHDQB6NOuBJQFmwXoiO06i32Rv2MP9wZwV2pH4iZs5w6FfsTFw@mail.gmail.com>
+Date: Tue, 15 Sep 2026 12:42:05 +0200
+X-Gm-Features: AcwNN1X2jvVKLLnKKNUxZ9ehu1HpAkpPEHT_UTybREocQ3OsGymC_HJ88jAbV4w
+Message-ID: <CAHDQB6P3UM3ZFe-BO=UMHMECM4nHBXZV+joioVdGN-qmus4f-Q@mail.gmail.com>
 To: Bernd Kuhls <bernd@kuhls.net>
 Cc: buildroot@buildroot.org, Angelo Compagnucci <angelo.compagnucci@gmail.com>
 Subject: Re: [Buildroot] [PATCH/RFC 1/1] Remove mender packages
@@ -183,2897 +182,3104 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============3427709601527839876=="
+Content-Type: multipart/mixed; boundary="===============7981039451664351683=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3427709601527839876==
-Content-Type: multipart/alternative; boundary="000000000000627d9b065b82e8ad"
+--===============7981039451664351683==
+Content-Type: multipart/alternative; boundary="000000000000519133065b833442"
 
---000000000000627d9b065b82e8ad
+--000000000000519133065b833442
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Bernd;
+The other option would be to apply the patch series and then I can submit a
+patch
+to bump the mender version to 5.1, but at this point, with the lack of
+response from the maintainers,
+and patch series being ignored for months at a time, if not forever, it's
+far easier for me to provide the
+packages in an external tree on the mender github.
 
-At this point I agree. I have submitted several patches to try and bring
-these packages, and especially
-mender itself up to C++, and the patch series are ignored.
 
-I maintain a branch with modern mender support located here:
-https://github.com/mendersoftware/buildroot-mender
+On Tue, 15 Sept 2026 at 12:20, Adam Duskett <
+adam.duskett@amarulasolutions.com> wrote:
 
-
-On Mon, 14 Sept 2026 at 23:05, Bernd Kuhls <bernd@kuhls.net> wrote:
-
-> Building the current mender version 3.5.3 with OpenSSL 4.0.2 is broken:
+> Hi Bernd;
 >
-> hostname.c: In function 'do_check_string':
-> hostname.c:248:15: error: invalid use of incomplete typedef 'ASN1_STRING'
-> {aka 'struct asn1_string_st'}
->   248 |         if (!a->data || !a->length)
->       |               ^~
-> hostname.c:248:27: error: invalid use of incomplete typedef 'ASN1_STRING'
-> {aka 'struct asn1_string_st'}
->   248 |         if (!a->data || !a->length)
->       |                           ^~
-> hostname.c:252:34: error: invalid use of incomplete typedef 'ASN1_STRING'
-> {aka 'struct asn1_string_st'}
->   252 |                 if (cmp_type !=3D a->type)
->       |                                  ^~
-> hostname.c:255:39: error: invalid use of incomplete typedef 'ASN1_STRING'
-> {aka 'struct asn1_string_st'}
->   255 |                         return equal(a->data, a->length, b, blen)=
-;
->       |                                       ^~
-> hostname.c:255:48: error: invalid use of incomplete typedef 'ASN1_STRING'
-> {aka 'struct asn1_string_st'}
->   255 |                         return equal(a->data, a->length, b, blen)=
-;
->       |                                                ^~
-> hostname.c:256:22: error: invalid use of incomplete typedef 'ASN1_STRING'
-> {aka 'struct asn1_string_st'}
->   256 |                 if (a->length =3D=3D (int)blen && !memcmp(a->data=
-, b,
-> blen))
->       |                      ^~
-> hostname.c:256:56: error: invalid use of incomplete typedef 'ASN1_STRING'
-> {aka 'struct asn1_string_st'}
->   256 |                 if (a->length =3D=3D (int)blen && !memcmp(a->data=
-, b,
-> blen))
->       |                                                        ^~
-> hostname.c: In function 'do_x509_check':
-> hostname.c:338:14: warning: assignment discards 'const' qualifier from
-> pointer target type [-Wdiscarded-qualifiers]
->   338 |         name =3D X509_get_subject_name(x);
->       |              ^
-> hostname.c:343:20: warning: assignment discards 'const' qualifier from
-> pointer target type [-Wdiscarded-qualifiers]
->   343 |                 ne =3D X509_NAME_get_entry(name, i);
->       |                    ^
-> hostname.c:344:21: warning: assignment discards 'const' qualifier from
-> pointer target type [-Wdiscarded-qualifiers]
->   344 |                 str =3D X509_NAME_ENTRY_get_data(ne);
->       |                     ^
+> At this point I agree. I have submitted several patches to try and bring
+> these packages, and especially
+> mender itself up to C++, and the patch series are ignored.
 >
-> shim.c: In function 'X_SSLv3_method':
-> shim.c:484:16: error: implicit declaration of function 'SSLv3_method'; di=
-d
-> you mean 'SSLv23_method'? [-Wimplicit-function-declaration]
->   484 |         return SSLv3_method();
->       |                ^~~~~~~~~~~~
->       |                SSLv23_method
-> shim.c:484:16: error: returning 'int' from a function with return type
-> 'const SSL_METHOD *' {aka 'const struct ssl_method_st *'} makes pointer
-> from integer without a cast [-Wint-conversion]
->   484 |         return SSLv3_method();
->       |                ^~~~~~~~~~~~~~
-> shim.c: In function 'X_TLSv1_method':
-> shim.c:491:16: error: implicit declaration of function 'TLSv1_method'; di=
-d
-> you mean 'X_TLSv1_method'? [-Wimplicit-function-declaration]
->   491 |         return TLSv1_method();
->       |                ^~~~~~~~~~~~
->       |                X_TLSv1_method
-> shim.c:491:16: error: returning 'int' from a function with return type
-> 'const SSL_METHOD *' {aka 'const struct ssl_method_st *'} makes pointer
-> from integer without a cast [-Wint-conversion]
->   491 |         return TLSv1_method();
->       |                ^~~~~~~~~~~~~~
-> shim.c: In function 'X_TLSv1_1_method':
-> shim.c:496:16: error: implicit declaration of function 'TLSv1_1_method';
-> did you mean 'X_TLSv1_1_method'? [-Wimplicit-function-declaration]
->   496 |         return TLSv1_1_method();
->       |                ^~~~~~~~~~~~~~
->       |                X_TLSv1_1_method
-> shim.c:496:16: error: returning 'int' from a function with return type
-> 'const SSL_METHOD *' {aka 'const struct ssl_method_st *'} makes pointer
-> from integer without a cast [-Wint-conversion]
->   496 |         return TLSv1_1_method();
->       |                ^~~~~~~~~~~~~~~~
-> shim.c: In function 'X_TLSv1_2_method':
-> shim.c:504:16: error: implicit declaration of function 'TLSv1_2_method';
-> did you mean 'X_TLSv1_2_method'? [-Wimplicit-function-declaration]
->   504 |         return TLSv1_2_method();
->       |                ^~~~~~~~~~~~~~
->       |                X_TLSv1_2_method
-> shim.c:504:16: error: returning 'int' from a function with return type
-> 'const SSL_METHOD *' {aka 'const struct ssl_method_st *'} makes pointer
-> from integer without a cast [-Wint-conversion]
->   504 |         return TLSv1_2_method();
->       |                ^~~~~~~~~~~~~~~~
+> I maintain a branch with modern mender support located here:
+> https://github.com/mendersoftware/buildroot-mender
 >
-> This error blocks the update to OpenSSL 4.0.2 in buildroot.
 >
-> Upstream rewrote the package in c++ in version 4.0 and will not provide
-> updates for the version used in buildroot:
+> On Mon, 14 Sept 2026 at 23:05, Bernd Kuhls <bernd@kuhls.net> wrote:
 >
-> https://hub.mender.io/t/mender-to-rewrite-client-using-c-and-retain-go-fo=
-r-its-backend/5332
->
-> https://gitlab.com/buildroot.org/buildroot/-/commit/67c6d1b12c430313c492d=
-c66b2280d447917feb5
->
-> To not block the OpenSSL bump we remove the mender package and its
-> dependencies.
->
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> Cc: Adam Duskett <adam.duskett@amarulasolutions.com>
-> Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-> ---
-> To start the discussion for a possible bump of OpenSSL to 4.0.2 I split
-> this patch from my local series because it is from my POV the biggest
-> obstacle, other packages have fewer to no dependencies and are not
-> (well) maintainted upstream.
->
-> This patch depends on
->
-> https://patchwork.buildroot.org/project/buildroot/patch/20260914192045.16=
-48017-1-bernd@kuhls.net/
-> from the Boost 1.92.0 series.
->
->  .checkpackageignore                           |   2 -
->  Config.in.legacy                              |  35 +++
->  DEVELOPERS                                    |   3 -
->  board/mender/x86_64/genimage-efi.cfg          |  43 ---
->  board/mender/x86_64/linux.config              |  64 -----
->  board/mender/x86_64/mender_grubenv_defines    |  25 --
->  board/mender/x86_64/overlay/etc/fstab         |   7 -
->  .../x86_64/overlay/etc/mender/mender.conf     |  11 -
->  board/mender/x86_64/post-build.sh             |  48 ----
->  board/mender/x86_64/post-image-efi.sh         |  92 -------
->  board/mender/x86_64/readme.txt                |  69 -----
->  configs/mender_x86_64_efi_defconfig           |  54 ----
->  package/Config.in                             |   4 -
->  package/Config.in.host                        |   1 -
->  package/mender-artifact/Config.in.host        |  19 --
->  package/mender-artifact/mender-artifact.hash  | 106 --------
->  package/mender-artifact/mender-artifact.mk    | 118 ---------
->  package/mender-connect/Config.in              |  34 ---
->  package/mender-connect/S43mender-connect      |  53 ----
->  package/mender-connect/mender-connect.hash    |  35 ---
->  package/mender-connect/mender-connect.mk      |  60 -----
->  package/mender-grubenv/Config.in              |  43 ---
->  package/mender-grubenv/mender-grubenv.hash    |   3 -
->  package/mender-grubenv/mender-grubenv.mk      |  90 -------
->  package/mender-update-modules/Config.in       | 250 ------------------
->  .../mender-update-modules.hash                |   3 -
->  .../mender-update-modules.mk                  |  77 ------
->  package/mender/Config.in                      |  45 ----
->  package/mender/S42mender                      |  44 ---
->  package/mender/device_type                    |   1 -
->  package/mender/mender-client.service          |  13 -
->  package/mender/mender.conf                    |  11 -
->  package/mender/mender.hash                    |  47 ----
->  package/mender/mender.mk                      | 110 --------
->  package/mender/readme.txt                     | 132 ---------
->  package/mender/server.crt                     |  22 --
->  support/testing/tests/package/test_mender.py  |  72 -----
->  .../tests/package/test_mender/post-build.sh   |  25 --
->  .../rootfs-overlay/etc/mender/artifact_info   |   1 -
->  .../rootfs-overlay/usr/bin/fw_printenv        |   6 -
->  40 files changed, 35 insertions(+), 1843 deletions(-)
->  delete mode 100644 board/mender/x86_64/genimage-efi.cfg
->  delete mode 100644 board/mender/x86_64/linux.config
->  delete mode 100644 board/mender/x86_64/mender_grubenv_defines
->  delete mode 100644 board/mender/x86_64/overlay/etc/fstab
->  delete mode 100644 board/mender/x86_64/overlay/etc/mender/mender.conf
->  delete mode 100755 board/mender/x86_64/post-build.sh
->  delete mode 100755 board/mender/x86_64/post-image-efi.sh
->  delete mode 100644 board/mender/x86_64/readme.txt
->  delete mode 100644 configs/mender_x86_64_efi_defconfig
->  delete mode 100644 package/mender-artifact/Config.in.host
->  delete mode 100644 package/mender-artifact/mender-artifact.hash
->  delete mode 100644 package/mender-artifact/mender-artifact.mk
->  delete mode 100644 package/mender-connect/Config.in
->  delete mode 100644 package/mender-connect/S43mender-connect
->  delete mode 100644 package/mender-connect/mender-connect.hash
->  delete mode 100644 package/mender-connect/mender-connect.mk
->  delete mode 100644 package/mender-grubenv/Config.in
->  delete mode 100644 package/mender-grubenv/mender-grubenv.hash
->  delete mode 100644 package/mender-grubenv/mender-grubenv.mk
->  delete mode 100644 package/mender-update-modules/Config.in
->  delete mode 100644
-> package/mender-update-modules/mender-update-modules.hash
->  delete mode 100644 package/mender-update-modules/mender-update-modules.m=
-k
->  delete mode 100644 package/mender/Config.in
->  delete mode 100644 package/mender/S42mender
->  delete mode 100644 package/mender/device_type
->  delete mode 100644 package/mender/mender-client.service
->  delete mode 100644 package/mender/mender.conf
->  delete mode 100644 package/mender/mender.hash
->  delete mode 100644 package/mender/mender.mk
->  delete mode 100644 package/mender/readme.txt
->  delete mode 100644 package/mender/server.crt
->  delete mode 100644 support/testing/tests/package/test_mender.py
->  delete mode 100755 support/testing/tests/package/test_mender/post-build.=
-sh
->  delete mode 100644
-> support/testing/tests/package/test_mender/rootfs-overlay/etc/mender/artif=
-act_info
->  delete mode 100755
-> support/testing/tests/package/test_mender/rootfs-overlay/usr/bin/fw_print=
-env
->
-> diff --git a/.checkpackageignore b/.checkpackageignore
-> index 2b61ff3bab..8e1cf9298d 100644
-> --- a/.checkpackageignore
-> +++ b/.checkpackageignore
-> @@ -103,7 +103,6 @@ configs/imx6ulpico_defconfig
-> lib_defconfig.ForceCheckHash
->  configs/imx7dpico_defconfig lib_defconfig.ForceCheckHash
->  configs/imx8mqevk_defconfig lib_defconfig.ForceCheckHash
->  configs/kontron_bl_imx8mm_defconfig lib_defconfig.ForceCheckHash
-> -configs/mender_x86_64_efi_defconfig lib_defconfig.ForceCheckHash
->  configs/microchip_sam9x60ek_mmc_defconfig lib_defconfig.ForceCheckHash
->  configs/microchip_sam9x60ek_mmc_dev_defconfig lib_defconfig.ForceCheckHa=
-sh
->  configs/microchip_sama5d27_wlsom1_ek_mmc_defconfig
-> lib_defconfig.ForceCheckHash
-> @@ -595,7 +594,6 @@ package/matchbox-startup-monitor/0001-true-false.patc=
+>> Building the current mender version 3.5.3 with OpenSSL 4.0.2 is broken:
+>>
+>> hostname.c: In function 'do_check_string':
+>> hostname.c:248:15: error: invalid use of incomplete typedef 'ASN1_STRING=
+'
+>> {aka 'struct asn1_string_st'}
+>>   248 |         if (!a->data || !a->length)
+>>       |               ^~
+>> hostname.c:248:27: error: invalid use of incomplete typedef 'ASN1_STRING=
+'
+>> {aka 'struct asn1_string_st'}
+>>   248 |         if (!a->data || !a->length)
+>>       |                           ^~
+>> hostname.c:252:34: error: invalid use of incomplete typedef 'ASN1_STRING=
+'
+>> {aka 'struct asn1_string_st'}
+>>   252 |                 if (cmp_type !=3D a->type)
+>>       |                                  ^~
+>> hostname.c:255:39: error: invalid use of incomplete typedef 'ASN1_STRING=
+'
+>> {aka 'struct asn1_string_st'}
+>>   255 |                         return equal(a->data, a->length, b, blen=
+);
+>>       |                                       ^~
+>> hostname.c:255:48: error: invalid use of incomplete typedef 'ASN1_STRING=
+'
+>> {aka 'struct asn1_string_st'}
+>>   255 |                         return equal(a->data, a->length, b, blen=
+);
+>>       |                                                ^~
+>> hostname.c:256:22: error: invalid use of incomplete typedef 'ASN1_STRING=
+'
+>> {aka 'struct asn1_string_st'}
+>>   256 |                 if (a->length =3D=3D (int)blen && !memcmp(a->dat=
+a, b,
+>> blen))
+>>       |                      ^~
+>> hostname.c:256:56: error: invalid use of incomplete typedef 'ASN1_STRING=
+'
+>> {aka 'struct asn1_string_st'}
+>>   256 |                 if (a->length =3D=3D (int)blen && !memcmp(a->dat=
+a, b,
+>> blen))
+>>       |                                                        ^~
+>> hostname.c: In function 'do_x509_check':
+>> hostname.c:338:14: warning: assignment discards 'const' qualifier from
+>> pointer target type [-Wdiscarded-qualifiers]
+>>   338 |         name =3D X509_get_subject_name(x);
+>>       |              ^
+>> hostname.c:343:20: warning: assignment discards 'const' qualifier from
+>> pointer target type [-Wdiscarded-qualifiers]
+>>   343 |                 ne =3D X509_NAME_get_entry(name, i);
+>>       |                    ^
+>> hostname.c:344:21: warning: assignment discards 'const' qualifier from
+>> pointer target type [-Wdiscarded-qualifiers]
+>>   344 |                 str =3D X509_NAME_ENTRY_get_data(ne);
+>>       |                     ^
+>>
+>> shim.c: In function 'X_SSLv3_method':
+>> shim.c:484:16: error: implicit declaration of function 'SSLv3_method';
+>> did you mean 'SSLv23_method'? [-Wimplicit-function-declaration]
+>>   484 |         return SSLv3_method();
+>>       |                ^~~~~~~~~~~~
+>>       |                SSLv23_method
+>> shim.c:484:16: error: returning 'int' from a function with return type
+>> 'const SSL_METHOD *' {aka 'const struct ssl_method_st *'} makes pointer
+>> from integer without a cast [-Wint-conversion]
+>>   484 |         return SSLv3_method();
+>>       |                ^~~~~~~~~~~~~~
+>> shim.c: In function 'X_TLSv1_method':
+>> shim.c:491:16: error: implicit declaration of function 'TLSv1_method';
+>> did you mean 'X_TLSv1_method'? [-Wimplicit-function-declaration]
+>>   491 |         return TLSv1_method();
+>>       |                ^~~~~~~~~~~~
+>>       |                X_TLSv1_method
+>> shim.c:491:16: error: returning 'int' from a function with return type
+>> 'const SSL_METHOD *' {aka 'const struct ssl_method_st *'} makes pointer
+>> from integer without a cast [-Wint-conversion]
+>>   491 |         return TLSv1_method();
+>>       |                ^~~~~~~~~~~~~~
+>> shim.c: In function 'X_TLSv1_1_method':
+>> shim.c:496:16: error: implicit declaration of function 'TLSv1_1_method';
+>> did you mean 'X_TLSv1_1_method'? [-Wimplicit-function-declaration]
+>>   496 |         return TLSv1_1_method();
+>>       |                ^~~~~~~~~~~~~~
+>>       |                X_TLSv1_1_method
+>> shim.c:496:16: error: returning 'int' from a function with return type
+>> 'const SSL_METHOD *' {aka 'const struct ssl_method_st *'} makes pointer
+>> from integer without a cast [-Wint-conversion]
+>>   496 |         return TLSv1_1_method();
+>>       |                ^~~~~~~~~~~~~~~~
+>> shim.c: In function 'X_TLSv1_2_method':
+>> shim.c:504:16: error: implicit declaration of function 'TLSv1_2_method';
+>> did you mean 'X_TLSv1_2_method'? [-Wimplicit-function-declaration]
+>>   504 |         return TLSv1_2_method();
+>>       |                ^~~~~~~~~~~~~~
+>>       |                X_TLSv1_2_method
+>> shim.c:504:16: error: returning 'int' from a function with return type
+>> 'const SSL_METHOD *' {aka 'const struct ssl_method_st *'} makes pointer
+>> from integer without a cast [-Wint-conversion]
+>>   504 |         return TLSv1_2_method();
+>>       |                ^~~~~~~~~~~~~~~~
+>>
+>> This error blocks the update to OpenSSL 4.0.2 in buildroot.
+>>
+>> Upstream rewrote the package in c++ in version 4.0 and will not provide
+>> updates for the version used in buildroot:
+>>
+>> https://hub.mender.io/t/mender-to-rewrite-client-using-c-and-retain-go-f=
+or-its-backend/5332
+>>
+>> https://gitlab.com/buildroot.org/buildroot/-/commit/67c6d1b12c430313c492=
+dc66b2280d447917feb5
+>>
+>> To not block the OpenSSL bump we remove the mender package and its
+>> dependencies.
+>>
+>> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+>> Cc: Adam Duskett <adam.duskett@amarulasolutions.com>
+>> Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+>> ---
+>> To start the discussion for a possible bump of OpenSSL to 4.0.2 I split
+>> this patch from my local series because it is from my POV the biggest
+>> obstacle, other packages have fewer to no dependencies and are not
+>> (well) maintainted upstream.
+>>
+>> This patch depends on
+>>
+>> https://patchwork.buildroot.org/project/buildroot/patch/20260914192045.1=
+648017-1-bernd@kuhls.net/
+>> from the Boost 1.92.0 series.
+>>
+>>  .checkpackageignore                           |   2 -
+>>  Config.in.legacy                              |  35 +++
+>>  DEVELOPERS                                    |   3 -
+>>  board/mender/x86_64/genimage-efi.cfg          |  43 ---
+>>  board/mender/x86_64/linux.config              |  64 -----
+>>  board/mender/x86_64/mender_grubenv_defines    |  25 --
+>>  board/mender/x86_64/overlay/etc/fstab         |   7 -
+>>  .../x86_64/overlay/etc/mender/mender.conf     |  11 -
+>>  board/mender/x86_64/post-build.sh             |  48 ----
+>>  board/mender/x86_64/post-image-efi.sh         |  92 -------
+>>  board/mender/x86_64/readme.txt                |  69 -----
+>>  configs/mender_x86_64_efi_defconfig           |  54 ----
+>>  package/Config.in                             |   4 -
+>>  package/Config.in.host                        |   1 -
+>>  package/mender-artifact/Config.in.host        |  19 --
+>>  package/mender-artifact/mender-artifact.hash  | 106 --------
+>>  package/mender-artifact/mender-artifact.mk    | 118 ---------
+>>  package/mender-connect/Config.in              |  34 ---
+>>  package/mender-connect/S43mender-connect      |  53 ----
+>>  package/mender-connect/mender-connect.hash    |  35 ---
+>>  package/mender-connect/mender-connect.mk      |  60 -----
+>>  package/mender-grubenv/Config.in              |  43 ---
+>>  package/mender-grubenv/mender-grubenv.hash    |   3 -
+>>  package/mender-grubenv/mender-grubenv.mk      |  90 -------
+>>  package/mender-update-modules/Config.in       | 250 ------------------
+>>  .../mender-update-modules.hash                |   3 -
+>>  .../mender-update-modules.mk                  |  77 ------
+>>  package/mender/Config.in                      |  45 ----
+>>  package/mender/S42mender                      |  44 ---
+>>  package/mender/device_type                    |   1 -
+>>  package/mender/mender-client.service          |  13 -
+>>  package/mender/mender.conf                    |  11 -
+>>  package/mender/mender.hash                    |  47 ----
+>>  package/mender/mender.mk                      | 110 --------
+>>  package/mender/readme.txt                     | 132 ---------
+>>  package/mender/server.crt                     |  22 --
+>>  support/testing/tests/package/test_mender.py  |  72 -----
+>>  .../tests/package/test_mender/post-build.sh   |  25 --
+>>  .../rootfs-overlay/etc/mender/artifact_info   |   1 -
+>>  .../rootfs-overlay/usr/bin/fw_printenv        |   6 -
+>>  40 files changed, 35 insertions(+), 1843 deletions(-)
+>>  delete mode 100644 board/mender/x86_64/genimage-efi.cfg
+>>  delete mode 100644 board/mender/x86_64/linux.config
+>>  delete mode 100644 board/mender/x86_64/mender_grubenv_defines
+>>  delete mode 100644 board/mender/x86_64/overlay/etc/fstab
+>>  delete mode 100644 board/mender/x86_64/overlay/etc/mender/mender.conf
+>>  delete mode 100755 board/mender/x86_64/post-build.sh
+>>  delete mode 100755 board/mender/x86_64/post-image-efi.sh
+>>  delete mode 100644 board/mender/x86_64/readme.txt
+>>  delete mode 100644 configs/mender_x86_64_efi_defconfig
+>>  delete mode 100644 package/mender-artifact/Config.in.host
+>>  delete mode 100644 package/mender-artifact/mender-artifact.hash
+>>  delete mode 100644 package/mender-artifact/mender-artifact.mk
+>>  delete mode 100644 package/mender-connect/Config.in
+>>  delete mode 100644 package/mender-connect/S43mender-connect
+>>  delete mode 100644 package/mender-connect/mender-connect.hash
+>>  delete mode 100644 package/mender-connect/mender-connect.mk
+>>  delete mode 100644 package/mender-grubenv/Config.in
+>>  delete mode 100644 package/mender-grubenv/mender-grubenv.hash
+>>  delete mode 100644 package/mender-grubenv/mender-grubenv.mk
+>>  delete mode 100644 package/mender-update-modules/Config.in
+>>  delete mode 100644
+>> package/mender-update-modules/mender-update-modules.hash
+>>  delete mode 100644 package/mender-update-modules/
+>> mender-update-modules.mk
+>>  delete mode 100644 package/mender/Config.in
+>>  delete mode 100644 package/mender/S42mender
+>>  delete mode 100644 package/mender/device_type
+>>  delete mode 100644 package/mender/mender-client.service
+>>  delete mode 100644 package/mender/mender.conf
+>>  delete mode 100644 package/mender/mender.hash
+>>  delete mode 100644 package/mender/mender.mk
+>>  delete mode 100644 package/mender/readme.txt
+>>  delete mode 100644 package/mender/server.crt
+>>  delete mode 100644 support/testing/tests/package/test_mender.py
+>>  delete mode 100755
+>> support/testing/tests/package/test_mender/post-build.sh
+>>  delete mode 100644
+>> support/testing/tests/package/test_mender/rootfs-overlay/etc/mender/arti=
+fact_info
+>>  delete mode 100755
+>> support/testing/tests/package/test_mender/rootfs-overlay/usr/bin/fw_prin=
+tenv
+>>
+>> diff --git a/.checkpackageignore b/.checkpackageignore
+>> index 2b61ff3bab..8e1cf9298d 100644
+>> --- a/.checkpackageignore
+>> +++ b/.checkpackageignore
+>> @@ -103,7 +103,6 @@ configs/imx6ulpico_defconfig
+>> lib_defconfig.ForceCheckHash
+>>  configs/imx7dpico_defconfig lib_defconfig.ForceCheckHash
+>>  configs/imx8mqevk_defconfig lib_defconfig.ForceCheckHash
+>>  configs/kontron_bl_imx8mm_defconfig lib_defconfig.ForceCheckHash
+>> -configs/mender_x86_64_efi_defconfig lib_defconfig.ForceCheckHash
+>>  configs/microchip_sam9x60ek_mmc_defconfig lib_defconfig.ForceCheckHash
+>>  configs/microchip_sam9x60ek_mmc_dev_defconfig
+>> lib_defconfig.ForceCheckHash
+>>  configs/microchip_sama5d27_wlsom1_ek_mmc_defconfig
+>> lib_defconfig.ForceCheckHash
+>> @@ -595,7 +594,6 @@
+>> package/matchbox-startup-monitor/0001-true-false.patch lib_patch.Upstrea=
+m
+>>  package/matchbox/0001-defaulttheme.patch lib_patch.Upstream
+>>  package/matchbox/0002-src-Fix-build-with-gcc-10.patch lib_patch.Upstrea=
+m
+>>  package/memstat/0001-PATH_MAX.patch lib_patch.Upstream
+>> -package/mender-connect/S43mender-connect Shellcheck
+>>  package/menu-cache/0001-Support-gcc10-compilation.patch
+>> lib_patch.Upstream
+>>  package/mesa3d-demos/0001-demos-makes-opengl-an-optional-component.patc=
 h
-> lib_patch.Upstream
->  package/matchbox/0001-defaulttheme.patch lib_patch.Upstream
->  package/matchbox/0002-src-Fix-build-with-gcc-10.patch lib_patch.Upstream
->  package/memstat/0001-PATH_MAX.patch lib_patch.Upstream
-> -package/mender-connect/S43mender-connect Shellcheck
->  package/menu-cache/0001-Support-gcc10-compilation.patch lib_patch.Upstre=
-am
->  package/mesa3d-demos/0001-demos-makes-opengl-an-optional-component.patch
-> lib_patch.Upstream
->  package/meson-tools/0001-amlbootenc-gxl-remove-non-std-C-convention-in-f=
-or.patch
-> lib_patch.Upstream
-> diff --git a/Config.in.legacy b/Config.in.legacy
-> index 4f5c91c0ec..f7008c76c7 100644
-> --- a/Config.in.legacy
-> +++ b/Config.in.legacy
-> @@ -146,6 +146,41 @@ endif
+>> lib_patch.Upstream
+>>  package/meson-tools/0001-amlbootenc-gxl-remove-non-std-C-convention-in-=
+for.patch
+>> lib_patch.Upstream
+>> diff --git a/Config.in.legacy b/Config.in.legacy
+>> index 4f5c91c0ec..f7008c76c7 100644
+>> --- a/Config.in.legacy
+>> +++ b/Config.in.legacy
+>> @@ -146,6 +146,41 @@ endif
+>>
+>>  comment "Legacy options removed in 2026.11"
+>>
+>> +config BR2_PACKAGE_MENDER
+>> +       bool "mender has been removed"
+>> +       select BR2_LEGACY
+>> +       help
+>> +         The mender packages have been removed because they are
+>> +         incompatible with OpenSSL >=3D 4.x
+>> +
+>> +config BR2_PACKAGE_MENDER_UPDATE_MODULES
+>> +       bool "mender-update-modules has been removed"
+>> +       select BR2_LEGACY
+>> +       help
+>> +         The mender packages have been removed because they are
+>> +         incompatible with OpenSSL >=3D 4.x
+>> +
+>> +config BR2_PACKAGE_MENDER_GRUBENV
+>> +       bool "mender-grubenv has been removed"
+>> +       select BR2_LEGACY
+>> +       help
+>> +         The mender packages have been removed because they are
+>> +         incompatible with OpenSSL >=3D 4.x
+>> +
+>> +config BR2_PACKAGE_MENDER_CONNECT
+>> +       bool "mender-connect has been removed"
+>> +       select BR2_LEGACY
+>> +       help
+>> +         The mender packages have been removed because they are
+>> +         incompatible with OpenSSL >=3D 4.x
+>> +
+>> +config BR2_PACKAGE_HOST_MENDER_ARTIFACT
+>> +       bool "host mender-artifact has been removed"
+>> +       select BR2_LEGACY
+>> +       help
+>> +         The mender packages have been removed because they are
+>> +         incompatible with OpenSSL >=3D 4.x
+>> +
+>>  config BR2_PACKAGE_LIBCPPRESTSDK
+>>         bool "libcpprestsdk has been removed"
+>>         select BR2_LEGACY
+>> diff --git a/DEVELOPERS b/DEVELOPERS
+>> index 97eb2d9cac..442a9c5b7a 100644
+>> --- a/DEVELOPERS
+>> +++ b/DEVELOPERS
+>> @@ -39,7 +39,6 @@ F:
+>> package/flutter-packages/flutter-rfw-local-example/
+>>  F:     package/flutter-pi/
+>>  F:     package/flutter-sdk-bin/
+>>  F:     package/ivi-homescreen/
+>> -F:     package/mender-update-modules/
+>>  F:     support/testing/tests/package/test_flutter.py
+>>
+>>  N:     Adam Heinrich <adam@adamh.cz>
+>> @@ -237,8 +236,6 @@ F:  package/jq/
+>>  F:     package/libapparmor/
+>>  F:     package/libb64/
+>>  F:     package/libdill/
+>> -F:     package/mender/
+>> -F:     package/mender-artifact/
+>>  F:     package/mono/
+>>  F:     package/mono-gtksharp3/
+>>  F:     package/monolite/
+>> diff --git a/board/mender/x86_64/genimage-efi.cfg
+>> b/board/mender/x86_64/genimage-efi.cfg
+>> deleted file mode 100644
+>> index 9c2723d8fb..0000000000
+>> --- a/board/mender/x86_64/genimage-efi.cfg
+>> +++ /dev/null
+>> @@ -1,43 +0,0 @@
+>> -image efi-part.vfat {
+>> -       vfat {
+>> -               file EFI {
+>> -                       image =3D "efi-part/EFI"
+>> -               }
+>> -               file grub-mender-grubenv {
+>> -                       image =3D "efi-part/grub-mender-grubenv"
+>> -               }
+>> -               file bzImage {
+>> -                       image =3D "bzImage"
+>> -               }
+>> -       }
+>> -
+>> -       size =3D 16M
+>> -}
+>> -
+>> -image disk.img {
+>> -       hdimage {
+>> -               partition-table-type =3D "gpt"
+>> -       }
+>> -
+>> -       partition boot {
+>> -               partition-type-uuid =3D U
+>> -               offset =3D 32K
+>> -               image =3D "efi-part.vfat"
+>> -               bootable =3D true
+>> -       }
+>> -
+>> -       partition roota {
+>> -               partition-type-uuid =3D 4F68BCE3-E8CD-4DB1-96E7-FBCAF984=
+B709
+>> -               image =3D "rootfs.ext2"
+>> -       }
+>> -
+>> -       partition rootb {
+>> -               partition-type-uuid =3D 4F68BCE3-E8CD-4DB1-96E7-FBCAF984=
+B709
+>> -               image =3D "rootfs.ext2"
+>> -       }
+>> -
+>> -       partition data {
+>> -               partition-type-uuid =3D L
+>> -               image =3D "data-part.ext4"
+>> -       }
+>> -}
+>> diff --git a/board/mender/x86_64/linux.config
+>> b/board/mender/x86_64/linux.config
+>> deleted file mode 100644
+>> index f17fc18edb..0000000000
+>> --- a/board/mender/x86_64/linux.config
+>> +++ /dev/null
+>> @@ -1,64 +0,0 @@
+>> -CONFIG_SYSVIPC=3Dy
+>> -CONFIG_SMP=3Dy
+>> -CONFIG_HYPERVISOR_GUEST=3Dy
+>> -CONFIG_PARAVIRT=3Dy
+>> -CONFIG_EFI=3Dy
+>> -CONFIG_MODULES=3Dy
+>> -CONFIG_MODULE_UNLOAD=3Dy
+>> -CONFIG_NET=3Dy
+>> -CONFIG_PACKET=3Dy
+>> -CONFIG_UNIX=3Dy
+>> -CONFIG_INET=3Dy
+>> -CONFIG_NETFILTER=3Dy
+>> -CONFIG_IP_NF_IPTABLES=3Dy
+>> -CONFIG_IP_NF_FILTER=3Dy
+>> -CONFIG_CFG80211=3Dm
+>> -CONFIG_CFG80211_WEXT=3Dy
+>> -CONFIG_MAC80211=3Dm
+>> -CONFIG_PCI=3Dy
+>> -CONFIG_DEVTMPFS=3Dy
+>> -CONFIG_DEVTMPFS_MOUNT=3Dy
+>> -CONFIG_VIRTIO_BLK=3Dy
+>> -CONFIG_BLK_DEV_SD=3Dy
+>> -CONFIG_SCSI_VIRTIO=3Dy
+>> -CONFIG_ATA=3Dy
+>> -CONFIG_NETDEVICES=3Dy
+>> -CONFIG_VIRTIO_NET=3Dy
+>> -CONFIG_ATH9K=3Dm
+>> -CONFIG_ATH9K_HTC=3Dm
+>> -CONFIG_CARL9170=3Dm
+>> -CONFIG_ATH10K=3Dm
+>> -CONFIG_RT2X00=3Dm
+>> -CONFIG_RT73USB=3Dm
+>> -CONFIG_RT2800USB=3Dm
+>> -CONFIG_RT2800USB_RT3573=3Dy
+>> -CONFIG_RT2800USB_RT53XX=3Dy
+>> -CONFIG_RT2800USB_RT55XX=3Dy
+>> -# CONFIG_RTL_CARDS is not set
+>> -CONFIG_RTL8XXXU=3Dm
+>> -CONFIG_INPUT_EVDEV=3Dy
+>> -CONFIG_SERIAL_8250=3Dy
+>> -CONFIG_SERIAL_8250_CONSOLE=3Dy
+>> -CONFIG_VIRTIO_CONSOLE=3Dy
+>> -CONFIG_HW_RANDOM_VIRTIO=3Dm
+>> -CONFIG_DRM=3Dy
+>> -CONFIG_DRM_VIRTIO_GPU=3Dy
+>> -CONFIG_FB_VESA=3Dy
+>> -CONFIG_SOUND=3Dy
+>> -CONFIG_SND=3Dy
+>> -CONFIG_USB=3Dy
+>> -CONFIG_USB_XHCI_HCD=3Dy
+>> -CONFIG_USB_EHCI_HCD=3Dy
+>> -CONFIG_USB_STORAGE=3Dy
+>> -CONFIG_VIRTIO_PCI=3Dy
+>> -CONFIG_VIRTIO_BALLOON=3Dy
+>> -CONFIG_VIRTIO_INPUT=3Dy
+>> -CONFIG_VIRTIO_MMIO=3Dy
+>> -CONFIG_VIRTIO_MMIO_CMDLINE_DEVICES=3Dy
+>> -CONFIG_EXT4_FS=3Dy
+>> -CONFIG_FUSE_FS=3Dy
+>> -CONFIG_VFAT_FS=3Dy
+>> -CONFIG_SQUASHFS=3Dy
+>> -CONFIG_NLS_CODEPAGE_437=3Dy
+>> -CONFIG_NLS_ISO8859_1=3Dy
+>> -CONFIG_UNWINDER_FRAME_POINTER=3Dy
+>> diff --git a/board/mender/x86_64/mender_grubenv_defines
+>> b/board/mender/x86_64/mender_grubenv_defines
+>> deleted file mode 100644
+>> index 77f68fe6b2..0000000000
+>> --- a/board/mender/x86_64/mender_grubenv_defines
+>> +++ /dev/null
+>> @@ -1,25 +0,0 @@
+>>
+>> -#######################################################################=
+#########
+>> -# Mandatory
+>>
+>> -#######################################################################=
+#########
+>> -# Warning: This file is an example and should be customized to fit your
+>> needs!
+>> -
+>> -# Partition index of root filesystem A
+>> -mender_rootfsa_part=3D2
+>> -
+>> -# Partition index of root filesystem B
+>> -mender_rootfsb_part=3D3
+>> -
+>> -# Device file corresponding to the root filesystem partitions, without
+>> index.
+>> -mender_kernel_root_base=3D/dev/vda
+>> -
+>> -# Name of the storage device containing root filesystem partitions in
+>> GRUB
+>> -# format.
+>> -mender_grub_storage_device=3Dhd0
+>> -
+>> -# Type of kernel (bzImage or zImage)
+>> -kernel_imagetype=3DbzImage
+>> -
+>> -# Type of initrd image.
+>> -# Note: An initrd image is not strictly necessary, and the system will
+>> boot and
+>> -#       update without a initrd image.
+>> -# initrd_imagetype=3Dinitrd.img
+>> diff --git a/board/mender/x86_64/overlay/etc/fstab
+>> b/board/mender/x86_64/overlay/etc/fstab
+>> deleted file mode 100644
+>> index 45a7ba0260..0000000000
+>> --- a/board/mender/x86_64/overlay/etc/fstab
+>> +++ /dev/null
+>> @@ -1,7 +0,0 @@
+>> -# <file system>     <mount pt>      <type>      <options>
+>>                <dump>  <pass>
+>> -/dev/root           /               ext4        rw,noauto
+>>                    0    1
+>> -/dev/vda1           /boot           vfat        defaults
+>>                     0    0
+>> -/dev/vda4           /var/lib/mender ext4        rw,relatime
+>>                    0    0
+>> -proc                /proc           proc        defaults
+>>                     0    0
+>> -devpts              /dev/pts        devpts
+>> defaults,gid=3D5,mode=3D620,ptmxmode=3D0666       0    0
+>> -sysfs               /sys            sysfs       defaults
+>>                     0    0
+>> diff --git a/board/mender/x86_64/overlay/etc/mender/mender.conf
+>> b/board/mender/x86_64/overlay/etc/mender/mender.conf
+>> deleted file mode 100644
+>> index 5f423fb2cb..0000000000
+>> --- a/board/mender/x86_64/overlay/etc/mender/mender.conf
+>> +++ /dev/null
+>> @@ -1,11 +0,0 @@
+>> -{
+>> -  "InventoryPollIntervalSeconds": 1800,
+>> -  "UpdatePollIntervalSeconds": 1800,
+>> -  "RetryPollIntervalSeconds": 300,
+>> -  "RootfsPartA": "/dev/vda2",
+>> -  "RootfsPartB": "/dev/vda3",
+>> -  "ServerCertificate": "/etc/mender/server.crt",
+>> -  "ServerURL": "https://docker.mender.io",
+>> -  "TenantToken": "dummy",
+>> -  "DeviceTypeFile": "/etc/mender/device_type"
+>> -}
+>> diff --git a/board/mender/x86_64/post-build.sh
+>> b/board/mender/x86_64/post-build.sh
+>> deleted file mode 100755
+>> index 9e909e9281..0000000000
+>> --- a/board/mender/x86_64/post-build.sh
+>> +++ /dev/null
+>> @@ -1,48 +0,0 @@
+>> -#!/usr/bin/env bash
+>> -set -e
+>> -DEVICE_TYPE=3D"buildroot-x86_64"
+>> -
+>> -parse_args() {
+>> -    local o O opts
+>> -    o=3D'a:o:d:'
+>> -    O=3D'artifact-name:,data-part-size:,device-type:'
+>> -    opts=3D"$(getopt -o "${o}" -l "${O}" -- "${@}")"
+>> -    eval set -- "${opts}"
+>> -    while [ ${#} -gt 0 ]; do
+>> -        case "${1}" in
+>> -        (-o|--data-part-size)
+>> -            # Ignored to have same options as other scripts
+>> -            shift 2
+>> -            ;;
+>> -        (-d|--device-type)
+>> -            DEVICE_TYPE=3D"${2}"; shift 2
+>> -            ;;
+>> -        (-a|--artifact-name)
+>> -            # Ignored to have same options as other scripts
+>> -            shift 2
+>> -            ;;
+>> -        (--)
+>> -            shift; break
+>> -            ;;
+>> -        esac
+>> -    done
+>> -}
+>> -
+>> -# Create a persistent directory to mount the data partition at.
+>> -mender_fixup() {
+>> -    pushd "${TARGET_DIR}"
+>> -    # The common paradigm is to have the persistent data volume at /dat=
+a
+>> for mender.
+>> -    if [[ ! -L data ]]; then
+>> -        ln -s var/lib/mender data
+>> -    fi
+>> -
+>> -    popd
+>> -}
+>> -
+>> -main() {
+>> -    parse_args "${@}"
+>> -    mender_fixup
+>> -    echo "device_type=3D${DEVICE_TYPE}" >
+>> "${TARGET_DIR}/etc/mender/device_type"
+>> -}
+>> -
+>> -main "${@}"
+>> diff --git a/board/mender/x86_64/post-image-efi.sh
+>> b/board/mender/x86_64/post-image-efi.sh
+>> deleted file mode 100755
+>> index a3e262f8fe..0000000000
+>> --- a/board/mender/x86_64/post-image-efi.sh
+>> +++ /dev/null
+>> @@ -1,92 +0,0 @@
+>> -#!/usr/bin/env bash
+>> -set -e
+>> -BOARD_DIR=3D"$(realpath "$(dirname "$0")")"
+>> -DATA_PART=3D"${BINARIES_DIR}"/data-part
+>> -DATA_PART_SIZE=3D"32M"
+>> -DEVICE_TYPE=3D"buildroot-x86_64"
+>> -ARTIFACT_NAME=3D"1.0"
+>> -
+>> -# Parse arguments.
+>> -parse_args() {
+>> -    local o O opts
+>> -    o=3D'a:o:d:'
+>> -    O=3D'artifact-name:,data-part-size:,device-type:'
+>> -    opts=3D"$(getopt -o "${o}" -l "${O}" -- "${@}")"
+>> -    eval set -- "${opts}"
+>> -    while [ ${#} -gt 0 ]; do
+>> -        case "${1}" in
+>> -        (-o|--data-part-size)
+>> -            DATA_PART_SIZE=3D"${2}"; shift 2
+>> -            ;;
+>> -        (-d|--device-type)
+>> -            DEVICE_TYPE=3D"${2}"; shift 2
+>> -            ;;
+>> -        (-a|--artifact-name)
+>> -            ARTIFACT_NAME=3D"${2}"; shift 2
+>> -            ;;
+>> -        (--)
+>> -            shift; break
+>> -            ;;
+>> -        esac
+>> -    done
+>> -}
+>> -
+>> -# Create the data partition
+>> -make_data_partition() {
+>> -    "${HOST_DIR}/sbin/mkfs.ext4" \
+>> -        -d "${DATA_PART}" \
+>> -        -F \
+>> -        -r 1 \
+>> -        -N 0 \
+>> -        -m 5 \
+>> -        -L "data" \
+>> -        "${BINARIES_DIR}/data-part.ext4" "${DATA_PART_SIZE}"
+>> -}
+>> -
+>> -# Generate a mender bootstrap artifact.
+>> -# See
+>> https://github.com/mendersoftware/mender/blob/3.5.3/Documentation/automa=
+tic-bootstrap-artifact.md
+>> -generate_mender_bootstrap_artifact()
+>> <https://github.com/mendersoftware/mender/blob/3.5.3/Documentation/autom=
+atic-bootstrap-artifact.md-generate_mender_bootstrap_artifact()>
+>> {
+>> -
+>> -  rm -rf "${DATA_PART}"
+>> -  mkdir -p "${DATA_PART}"
+>> -  img_checksum=3D$(sha256sum "${BINARIES_DIR}"/rootfs.ext4 |awk '{print
+>> $1}')
+>> -
+>> -  "${HOST_DIR}"/bin/mender-artifact \
+>> -    write bootstrap-artifact \
+>> -    --compression none \
+>> -    --artifact-name "${ARTIFACT_NAME}" \
+>> -    --device-type "${DEVICE_TYPE}" \
+>> -    --provides "rootfs-image.version:${ARTIFACT_NAME}" \
+>> -    --provides "rootfs-image.checksum:${img_checksum}" \
+>> -    --clears-provides "rootfs-image.*" \
+>> -    --output-path "${DATA_PART}"/bootstrap.mender \
+>> -    --version 3
+>> -}
+>> -
+>> -# Create a mender image.
+>> -generate_mender_image() {
+>> -    echo "Creating
+>> ${BINARIES_DIR}/${DEVICE_TYPE}-${ARTIFACT_NAME}.mender"
+>> -    "${HOST_DIR}/bin/mender-artifact" \
+>> -        write rootfs-image \
+>> -        --compression none \
+>> -        -t "${DEVICE_TYPE}" \
+>> -        -n "${BR2_VERSION}" \
+>> -        -f "${BINARIES_DIR}/rootfs.ext2" \
+>> -        -o "${BINARIES_DIR}/${DEVICE_TYPE}-${ARTIFACT_NAME}.mender"
+>> -}
+>> -
+>> -generate_image() {
+>> -    support/scripts/genimage.sh -c "${BOARD_DIR}/genimage-efi.cfg"
+>> -}
+>> -
+>> -# Main function.
+>> -main() {
+>> -    parse_args "${@}"
+>> -    generate_mender_bootstrap_artifact
+>> -    make_data_partition
+>> -    generate_image
+>> -    generate_mender_image
+>> -    exit $?
+>> -}
+>> -
+>> -main "${@}"
+>> diff --git a/board/mender/x86_64/readme.txt
+>> b/board/mender/x86_64/readme.txt
+>> deleted file mode 100644
+>> index 01a0254511..0000000000
+>> --- a/board/mender/x86_64/readme.txt
+>> +++ /dev/null
+>> @@ -1,69 +0,0 @@
+>> -Mender UEFI PC sample config
+>> -=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>> -
+>> -1. Build
+>> -
+>> -  $ make mender_x86_64_efi_defconfig
+>> -
+>> -  Add any additional packages required. Update the files in
+>> board/mender/x86_64
+>> -  and change /dev/vda to what is relevant for your platform: typically
+>> -  /dev/mmcblk0p for eMMC and /dev/sda for USB or SATA.
+>> -
+>> -  $ make
+>> -
+>> -2. Write the image
+>> -
+>> -  The build process will create a all-in-one image called disk.img in
+>> -  output/images.
+>> -
+>> -  Write the image to a pendrive:
+>> -
+>> -  $ dd if=3Doutput/images/disk.img of=3D/dev/sdX; sync
+>> -
+>> -  Once the process is complete, insert it into the target PC and boot.
+>> -
+>> -  Remember that if said PC has another boot device you might need to
+>> -  select this alternative for it to boot.
+>> -
+>> -  You might need to disable Secure Boot from the setup as well.
+>> -
+>> -3. Enjoy
+>> -
+>> -Emulation in qemu
+>> -=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D
+>> -
+>> -Run the emulation with:
+>> -
+>> -qemu-system-x86_64 \
+>> -    -M pc \
+>> -    -drive file=3Doutput/images/disk.img,if=3Dvirtio,format=3Draw \
+>> -    -net nic,model=3Dvirtio \
+>> -    -net user \
+>> -    -serial stdio \
+>> -    -bios </path/to/OVMF_CODE.fd>
+>> -
+>> -Note that </path/to/OVMF.fd> needs to point to a valid x86_64 UEFI
+>> -firmware image for qemu. It may be provided by your distribution as an
+>> -edk2 or OVMF package, in a path such as
+>> /usr/share/edk2/ovmf/OVMF_CODE.fd.
+>> -
+>> -Optional arguments:
+>> - - -enable-kvm to speed up qemu. This requires a loaded kvm module on
+>> the host
+>> -    system.
+>> - - Add -smp N to emulate an SMP system with N CPUs.
+>> -
+>> -The login prompt will appear in the serial window.
+>> -
+>> -Tested with QEMU 4.1.1 on Fedora 31
+>> -
+>> -Creating a mender-artifact
+>> -=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D
+>> -
+>> -The mender artifact is created in
+>> output/images/buildroot-x86_64-1.0.mender
+>> -
+>> -You may wish to change --artifact-name=3D1.0 to a name that best suits =
+your
+>> -particular needs, as this option changes the mender artifact name.
+>> -
+>> -Using mender
+>> -=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D
+>> -Please read the mender documentation at:
+>> -https://docs.mender.io
+>> diff --git a/configs/mender_x86_64_efi_defconfig
+>> b/configs/mender_x86_64_efi_defconfig
+>> deleted file mode 100644
+>> index 219f02839c..0000000000
+>> --- a/configs/mender_x86_64_efi_defconfig
+>> +++ /dev/null
+>> @@ -1,54 +0,0 @@
+>> -BR2_x86_64=3Dy
+>> -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=3Dy
+>> -BR2_INIT_SYSV=3Dy
+>> -BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=3Dy
+>> -BR2_TARGET_GENERIC_GETTY_PORT=3D"ttyS0"
+>> -BR2_ROOTFS_OVERLAY=3D"board/mender/x86_64/overlay"
+>> -BR2_ROOTFS_POST_BUILD_SCRIPT=3D"board/mender/x86_64/post-build.sh"
+>> -BR2_ROOTFS_POST_IMAGE_SCRIPT=3D"board/mender/x86_64/post-image-efi.sh"
+>> -BR2_ROOTFS_POST_SCRIPT_ARGS=3D"--data-part-size=3D32M
+>> --device-type=3Dbuildroot-x86_64 --artifact-name=3D1.0"
+>> -BR2_LINUX_KERNEL=3Dy
+>> -BR2_LINUX_KERNEL_CUSTOM_VERSION=3Dy
+>> -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE=3D"6.12.28"
+>> -BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=3Dy
+>> -BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE=3D"board/mender/x86_64/linux.config=
+"
+>> -BR2_LINUX_KERNEL_INSTALL_TARGET=3Dy
+>> -BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=3Dy
+>> -BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF=3Dy
+>> -BR2_PACKAGE_LINUX_FIRMWARE=3Dy
+>> -BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_9170=3Dy
+>> -BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_9271=3Dy
+>> -BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_3160=3Dy
+>> -BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_3168=3Dy
+>> -BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_5000=3Dy
+>> -BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_6000G2A=3Dy
+>> -BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_6000G2B=3Dy
+>> -BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_7260=3Dy
+>> -BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_7265D=3Dy
+>> -BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_8000C=3Dy
+>> -BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_8265=3Dy
+>> -BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT73=3Dy
+>> -BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT2XX=3Dy
+>> -BR2_PACKAGE_LINUX_FIRMWARE_RTL_81XX=3Dy
+>> -BR2_PACKAGE_LINUX_FIRMWARE_RTL_87XX=3Dy
+>> -BR2_PACKAGE_LINUX_FIRMWARE_RTL_88XX=3Dy
+>> -BR2_PACKAGE_LINUX_FIRMWARE_RTL_8169=3Dy
+>> -BR2_PACKAGE_ACPID=3Dy
+>> -BR2_PACKAGE_CONNMAN=3Dy
+>> -BR2_PACKAGE_CONNMAN_WIFI=3Dy
+>> -BR2_PACKAGE_CONNMAN_CLIENT=3Dy
+>> -BR2_PACKAGE_MENDER=3Dy
+>> -BR2_PACKAGE_MENDER_GRUBENV=3Dy
+>>
+>> -BR2_PACKAGE_MENDER_GRUBENV_DEFINES=3D"board/mender/x86_64/mender_gruben=
+v_defines"
+>> -BR2_TARGET_ROOTFS_EXT2=3Dy
+>> -BR2_TARGET_ROOTFS_EXT2_4=3Dy
+>> -BR2_TARGET_ROOTFS_EXT2_SIZE=3D"128M"
+>> -# BR2_TARGET_ROOTFS_TAR is not set
+>> -BR2_TARGET_GRUB2=3Dy
+>> -BR2_TARGET_GRUB2_X86_64_EFI=3Dy
+>> -BR2_TARGET_GRUB2_BUILTIN_MODULES_EFI=3D"boot linux ext2 fat squash4
+>> part_msdos part_gpt normal efi_gop loadenv hashsum echo halt gcry_sha256
+>> test regexp sleep"
+>> -BR2_TARGET_GRUB2_INSTALL_TOOLS=3Dy
+>> -BR2_PACKAGE_HOST_DOSFSTOOLS=3Dy
+>> -BR2_PACKAGE_HOST_GENIMAGE=3Dy
+>> -BR2_PACKAGE_HOST_MENDER_ARTIFACT=3Dy
+>> -BR2_PACKAGE_HOST_MTOOLS=3Dy
+>> diff --git a/package/Config.in b/package/Config.in
+>> index aa94d44eca..472e60bad0 100644
+>> --- a/package/Config.in
+>> +++ b/package/Config.in
+>> @@ -2849,10 +2849,6 @@ menu "System tools"
+>>         source "package/libvirt/Config.in"
+>>         source "package/lxc/Config.in"
+>>         source "package/makedumpfile/Config.in"
+>> -       source "package/mender/Config.in"
+>> -       source "package/mender-connect/Config.in"
+>> -       source "package/mender-grubenv/Config.in"
+>> -       source "package/mender-update-modules/Config.in"
+>>         source "package/mfoc/Config.in"
+>>         source "package/moby-buildkit/Config.in"
+>>         source "package/mokutil/Config.in"
+>> diff --git a/package/Config.in.host b/package/Config.in.host
+>> index 595caf9e7f..dfd9317e8a 100644
+>> --- a/package/Config.in.host
+>> +++ b/package/Config.in.host
+>> @@ -66,7 +66,6 @@ menu "Host utilities"
+>>         source "package/lpc3250loader/Config.in.host"
+>>         source "package/lttng-babeltrace/Config.in.host"
+>>         source "package/lzma-alone/Config.in.host"
+>> -       source "package/mender-artifact/Config.in.host"
+>>         source "package/meson-tools/Config.in.host"
+>>         source "package/mfgtools/Config.in.host"
+>>         source "package/microchip-hss-payload-generator/Config.in.host"
+>> diff --git a/package/mender-artifact/Config.in.host
+>> b/package/mender-artifact/Config.in.host
+>> deleted file mode 100644
+>> index 39353b23e7..0000000000
+>> --- a/package/mender-artifact/Config.in.host
+>> +++ /dev/null
+>> @@ -1,19 +0,0 @@
+>> -config BR2_PACKAGE_HOST_MENDER_ARTIFACT
+>> -       bool "host mender-artifact"
+>> -       depends on BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS
+>> -       select BR2_PACKAGE_HOST_GO
+>> -       help
+>> -         The mender-artifact tool is a CLI implementation of the
+>> -         Mender artifacts library.
+>> -
+>> -         A Mender artifact can be recognized by its .mender suffix.
+>> -         Mender artifacts can contain binaries, metadata, checksums,
+>> -         signatures and scripts that are used during a deployment.
+>> -         The artifact format acts as a wrapper, and uses the tar
+>> -         format to bundle several files into one.
+>> -
+>> -         In its simplest form, an artifact contains just a rootfs
+>> -         image, along with its checksum, id and device type
+>> -         compatibility.
+>> -
+>> -         https://github.com/mendersoftware/mender-artifact
+>> diff --git a/package/mender-artifact/mender-artifact.hash
+>> b/package/mender-artifact/mender-artifact.hash
+>> deleted file mode 100644
+>> index 5dffdbb7df..0000000000
+>> --- a/package/mender-artifact/mender-artifact.hash
+>> +++ /dev/null
+>> @@ -1,106 +0,0 @@
+>> -# Locally computed:
+>> -sha256
+>> c7002052028496f230c34ef6f0488bf5e8ca32b075b7a96555532fe928aed984
+>> mender-artifact-4.4.1-go2.tar.gz
+>> -sha256
+>> 0e7c48f6471ca81a2fce9e3f605dffeb0385afd4dc3b5eb7f4e86ece4aa9b068
+>> LIC_FILES_CHKSUM.sha256
+>> -
+>> -# License hash extracted from LIC_FILES_CHKSUM.sha256 using the
+>> -# following command:
+>> -#
+>> -#     sed '/^[A-Za-z0-9_]/s/^/sha256  /' LIC_FILES_CHKSUM.sha256
+>> -
+>> -# Apache 2.0 licenses.
+>> -sha256
+>> d7e8fd4ad05371007d60285c309ba7a7ce3e61029b843f949fbb9ec79dc9eb47  LICENS=
+E
+>> -sha256
+>> cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor=
+/
+>> github.com/minio/sha256-simd/LICENSE
+>> -sha256 <http://github.com/minio/sha256-simd/LICENSE-sha256>
+>> 132fb47b89947cd5f98e380186bc412af5561c70669d37d3a83b36f03a0ddae5  vendor=
+/
+>> github.com/mendersoftware/progressbar/LICENSE
+>> -sha256 <http://github.com/mendersoftware/progressbar/LICENSE-sha256>
+>> cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor=
+/
+>> google.golang.org/genproto/LICENSE
+>> -sha256 <http://google.golang.org/genproto/LICENSE-sha256>
+>> cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor=
+/
+>> google.golang.org/genproto/googleapis/api/LICENSE
+>> -sha256 <http://google.golang.org/genproto/googleapis/api/LICENSE-sha256=
 >
->  comment "Legacy options removed in 2026.11"
+>> cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor=
+/
+>> google.golang.org/genproto/googleapis/rpc/LICENSE
+>> -sha256 <http://google.golang.org/genproto/googleapis/rpc/LICENSE-sha256=
 >
-> +config BR2_PACKAGE_MENDER
-> +       bool "mender has been removed"
-> +       select BR2_LEGACY
-> +       help
-> +         The mender packages have been removed because they are
-> +         incompatible with OpenSSL >=3D 4.x
-> +
-> +config BR2_PACKAGE_MENDER_UPDATE_MODULES
-> +       bool "mender-update-modules has been removed"
-> +       select BR2_LEGACY
-> +       help
-> +         The mender packages have been removed because they are
-> +         incompatible with OpenSSL >=3D 4.x
-> +
-> +config BR2_PACKAGE_MENDER_GRUBENV
-> +       bool "mender-grubenv has been removed"
-> +       select BR2_LEGACY
-> +       help
-> +         The mender packages have been removed because they are
-> +         incompatible with OpenSSL >=3D 4.x
-> +
-> +config BR2_PACKAGE_MENDER_CONNECT
-> +       bool "mender-connect has been removed"
-> +       select BR2_LEGACY
-> +       help
-> +         The mender packages have been removed because they are
-> +         incompatible with OpenSSL >=3D 4.x
-> +
-> +config BR2_PACKAGE_HOST_MENDER_ARTIFACT
-> +       bool "host mender-artifact has been removed"
-> +       select BR2_LEGACY
-> +       help
-> +         The mender packages have been removed because they are
-> +         incompatible with OpenSSL >=3D 4.x
-> +
->  config BR2_PACKAGE_LIBCPPRESTSDK
->         bool "libcpprestsdk has been removed"
->         select BR2_LEGACY
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 97eb2d9cac..442a9c5b7a 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -39,7 +39,6 @@ F:    package/flutter-packages/flutter-rfw-local-exampl=
-e/
->  F:     package/flutter-pi/
->  F:     package/flutter-sdk-bin/
->  F:     package/ivi-homescreen/
-> -F:     package/mender-update-modules/
->  F:     support/testing/tests/package/test_flutter.py
->
->  N:     Adam Heinrich <adam@adamh.cz>
-> @@ -237,8 +236,6 @@ F:  package/jq/
->  F:     package/libapparmor/
->  F:     package/libb64/
->  F:     package/libdill/
-> -F:     package/mender/
-> -F:     package/mender-artifact/
->  F:     package/mono/
->  F:     package/mono-gtksharp3/
->  F:     package/monolite/
-> diff --git a/board/mender/x86_64/genimage-efi.cfg
-> b/board/mender/x86_64/genimage-efi.cfg
-> deleted file mode 100644
-> index 9c2723d8fb..0000000000
-> --- a/board/mender/x86_64/genimage-efi.cfg
-> +++ /dev/null
-> @@ -1,43 +0,0 @@
-> -image efi-part.vfat {
-> -       vfat {
-> -               file EFI {
-> -                       image =3D "efi-part/EFI"
-> -               }
-> -               file grub-mender-grubenv {
-> -                       image =3D "efi-part/grub-mender-grubenv"
-> -               }
-> -               file bzImage {
-> -                       image =3D "bzImage"
-> -               }
-> -       }
-> -
-> -       size =3D 16M
-> -}
-> -
-> -image disk.img {
-> -       hdimage {
-> -               partition-table-type =3D "gpt"
-> -       }
-> -
-> -       partition boot {
-> -               partition-type-uuid =3D U
-> -               offset =3D 32K
-> -               image =3D "efi-part.vfat"
-> -               bootable =3D true
-> -       }
-> -
-> -       partition roota {
-> -               partition-type-uuid =3D 4F68BCE3-E8CD-4DB1-96E7-FBCAF984B=
-709
-> -               image =3D "rootfs.ext2"
-> -       }
-> -
-> -       partition rootb {
-> -               partition-type-uuid =3D 4F68BCE3-E8CD-4DB1-96E7-FBCAF984B=
-709
-> -               image =3D "rootfs.ext2"
-> -       }
-> -
-> -       partition data {
-> -               partition-type-uuid =3D L
-> -               image =3D "data-part.ext4"
-> -       }
-> -}
-> diff --git a/board/mender/x86_64/linux.config
-> b/board/mender/x86_64/linux.config
-> deleted file mode 100644
-> index f17fc18edb..0000000000
-> --- a/board/mender/x86_64/linux.config
-> +++ /dev/null
-> @@ -1,64 +0,0 @@
-> -CONFIG_SYSVIPC=3Dy
-> -CONFIG_SMP=3Dy
-> -CONFIG_HYPERVISOR_GUEST=3Dy
-> -CONFIG_PARAVIRT=3Dy
-> -CONFIG_EFI=3Dy
-> -CONFIG_MODULES=3Dy
-> -CONFIG_MODULE_UNLOAD=3Dy
-> -CONFIG_NET=3Dy
-> -CONFIG_PACKET=3Dy
-> -CONFIG_UNIX=3Dy
-> -CONFIG_INET=3Dy
-> -CONFIG_NETFILTER=3Dy
-> -CONFIG_IP_NF_IPTABLES=3Dy
-> -CONFIG_IP_NF_FILTER=3Dy
-> -CONFIG_CFG80211=3Dm
-> -CONFIG_CFG80211_WEXT=3Dy
-> -CONFIG_MAC80211=3Dm
-> -CONFIG_PCI=3Dy
-> -CONFIG_DEVTMPFS=3Dy
-> -CONFIG_DEVTMPFS_MOUNT=3Dy
-> -CONFIG_VIRTIO_BLK=3Dy
-> -CONFIG_BLK_DEV_SD=3Dy
-> -CONFIG_SCSI_VIRTIO=3Dy
-> -CONFIG_ATA=3Dy
-> -CONFIG_NETDEVICES=3Dy
-> -CONFIG_VIRTIO_NET=3Dy
-> -CONFIG_ATH9K=3Dm
-> -CONFIG_ATH9K_HTC=3Dm
-> -CONFIG_CARL9170=3Dm
-> -CONFIG_ATH10K=3Dm
-> -CONFIG_RT2X00=3Dm
-> -CONFIG_RT73USB=3Dm
-> -CONFIG_RT2800USB=3Dm
-> -CONFIG_RT2800USB_RT3573=3Dy
-> -CONFIG_RT2800USB_RT53XX=3Dy
-> -CONFIG_RT2800USB_RT55XX=3Dy
-> -# CONFIG_RTL_CARDS is not set
-> -CONFIG_RTL8XXXU=3Dm
-> -CONFIG_INPUT_EVDEV=3Dy
-> -CONFIG_SERIAL_8250=3Dy
-> -CONFIG_SERIAL_8250_CONSOLE=3Dy
-> -CONFIG_VIRTIO_CONSOLE=3Dy
-> -CONFIG_HW_RANDOM_VIRTIO=3Dm
-> -CONFIG_DRM=3Dy
-> -CONFIG_DRM_VIRTIO_GPU=3Dy
-> -CONFIG_FB_VESA=3Dy
-> -CONFIG_SOUND=3Dy
-> -CONFIG_SND=3Dy
-> -CONFIG_USB=3Dy
-> -CONFIG_USB_XHCI_HCD=3Dy
-> -CONFIG_USB_EHCI_HCD=3Dy
-> -CONFIG_USB_STORAGE=3Dy
-> -CONFIG_VIRTIO_PCI=3Dy
-> -CONFIG_VIRTIO_BALLOON=3Dy
-> -CONFIG_VIRTIO_INPUT=3Dy
-> -CONFIG_VIRTIO_MMIO=3Dy
-> -CONFIG_VIRTIO_MMIO_CMDLINE_DEVICES=3Dy
-> -CONFIG_EXT4_FS=3Dy
-> -CONFIG_FUSE_FS=3Dy
-> -CONFIG_VFAT_FS=3Dy
-> -CONFIG_SQUASHFS=3Dy
-> -CONFIG_NLS_CODEPAGE_437=3Dy
-> -CONFIG_NLS_ISO8859_1=3Dy
-> -CONFIG_UNWINDER_FRAME_POINTER=3Dy
-> diff --git a/board/mender/x86_64/mender_grubenv_defines
-> b/board/mender/x86_64/mender_grubenv_defines
-> deleted file mode 100644
-> index 77f68fe6b2..0000000000
-> --- a/board/mender/x86_64/mender_grubenv_defines
-> +++ /dev/null
-> @@ -1,25 +0,0 @@
->
-> -########################################################################=
-########
-> -# Mandatory
->
-> -########################################################################=
-########
-> -# Warning: This file is an example and should be customized to fit your
-> needs!
-> -
-> -# Partition index of root filesystem A
-> -mender_rootfsa_part=3D2
-> -
-> -# Partition index of root filesystem B
-> -mender_rootfsb_part=3D3
-> -
-> -# Device file corresponding to the root filesystem partitions, without
-> index.
-> -mender_kernel_root_base=3D/dev/vda
-> -
-> -# Name of the storage device containing root filesystem partitions in GR=
-UB
-> -# format.
-> -mender_grub_storage_device=3Dhd0
-> -
-> -# Type of kernel (bzImage or zImage)
-> -kernel_imagetype=3DbzImage
-> -
-> -# Type of initrd image.
-> -# Note: An initrd image is not strictly necessary, and the system will
-> boot and
-> -#       update without a initrd image.
-> -# initrd_imagetype=3Dinitrd.img
-> diff --git a/board/mender/x86_64/overlay/etc/fstab
-> b/board/mender/x86_64/overlay/etc/fstab
-> deleted file mode 100644
-> index 45a7ba0260..0000000000
-> --- a/board/mender/x86_64/overlay/etc/fstab
-> +++ /dev/null
-> @@ -1,7 +0,0 @@
-> -# <file system>     <mount pt>      <type>      <options>
->                <dump>  <pass>
-> -/dev/root           /               ext4        rw,noauto
->                    0    1
-> -/dev/vda1           /boot           vfat        defaults
->                   0    0
-> -/dev/vda4           /var/lib/mender ext4        rw,relatime
->                    0    0
-> -proc                /proc           proc        defaults
->                   0    0
-> -devpts              /dev/pts        devpts
-> defaults,gid=3D5,mode=3D620,ptmxmode=3D0666       0    0
-> -sysfs               /sys            sysfs       defaults
->                   0    0
-> diff --git a/board/mender/x86_64/overlay/etc/mender/mender.conf
-> b/board/mender/x86_64/overlay/etc/mender/mender.conf
-> deleted file mode 100644
-> index 5f423fb2cb..0000000000
-> --- a/board/mender/x86_64/overlay/etc/mender/mender.conf
-> +++ /dev/null
-> @@ -1,11 +0,0 @@
-> -{
-> -  "InventoryPollIntervalSeconds": 1800,
-> -  "UpdatePollIntervalSeconds": 1800,
-> -  "RetryPollIntervalSeconds": 300,
-> -  "RootfsPartA": "/dev/vda2",
-> -  "RootfsPartB": "/dev/vda3",
-> -  "ServerCertificate": "/etc/mender/server.crt",
-> -  "ServerURL": "https://docker.mender.io",
-> -  "TenantToken": "dummy",
-> -  "DeviceTypeFile": "/etc/mender/device_type"
-> -}
-> diff --git a/board/mender/x86_64/post-build.sh
-> b/board/mender/x86_64/post-build.sh
-> deleted file mode 100755
-> index 9e909e9281..0000000000
-> --- a/board/mender/x86_64/post-build.sh
-> +++ /dev/null
-> @@ -1,48 +0,0 @@
-> -#!/usr/bin/env bash
-> -set -e
-> -DEVICE_TYPE=3D"buildroot-x86_64"
-> -
-> -parse_args() {
-> -    local o O opts
-> -    o=3D'a:o:d:'
-> -    O=3D'artifact-name:,data-part-size:,device-type:'
-> -    opts=3D"$(getopt -o "${o}" -l "${O}" -- "${@}")"
-> -    eval set -- "${opts}"
-> -    while [ ${#} -gt 0 ]; do
-> -        case "${1}" in
-> -        (-o|--data-part-size)
-> -            # Ignored to have same options as other scripts
-> -            shift 2
-> -            ;;
-> -        (-d|--device-type)
-> -            DEVICE_TYPE=3D"${2}"; shift 2
-> -            ;;
-> -        (-a|--artifact-name)
-> -            # Ignored to have same options as other scripts
-> -            shift 2
-> -            ;;
-> -        (--)
-> -            shift; break
-> -            ;;
-> -        esac
-> -    done
-> -}
-> -
-> -# Create a persistent directory to mount the data partition at.
-> -mender_fixup() {
-> -    pushd "${TARGET_DIR}"
-> -    # The common paradigm is to have the persistent data volume at /data
-> for mender.
-> -    if [[ ! -L data ]]; then
-> -        ln -s var/lib/mender data
-> -    fi
-> -
-> -    popd
-> -}
-> -
-> -main() {
-> -    parse_args "${@}"
-> -    mender_fixup
-> -    echo "device_type=3D${DEVICE_TYPE}" >
-> "${TARGET_DIR}/etc/mender/device_type"
-> -}
-> -
-> -main "${@}"
-> diff --git a/board/mender/x86_64/post-image-efi.sh
-> b/board/mender/x86_64/post-image-efi.sh
-> deleted file mode 100755
-> index a3e262f8fe..0000000000
-> --- a/board/mender/x86_64/post-image-efi.sh
-> +++ /dev/null
-> @@ -1,92 +0,0 @@
-> -#!/usr/bin/env bash
-> -set -e
-> -BOARD_DIR=3D"$(realpath "$(dirname "$0")")"
-> -DATA_PART=3D"${BINARIES_DIR}"/data-part
-> -DATA_PART_SIZE=3D"32M"
-> -DEVICE_TYPE=3D"buildroot-x86_64"
-> -ARTIFACT_NAME=3D"1.0"
-> -
-> -# Parse arguments.
-> -parse_args() {
-> -    local o O opts
-> -    o=3D'a:o:d:'
-> -    O=3D'artifact-name:,data-part-size:,device-type:'
-> -    opts=3D"$(getopt -o "${o}" -l "${O}" -- "${@}")"
-> -    eval set -- "${opts}"
-> -    while [ ${#} -gt 0 ]; do
-> -        case "${1}" in
-> -        (-o|--data-part-size)
-> -            DATA_PART_SIZE=3D"${2}"; shift 2
-> -            ;;
-> -        (-d|--device-type)
-> -            DEVICE_TYPE=3D"${2}"; shift 2
-> -            ;;
-> -        (-a|--artifact-name)
-> -            ARTIFACT_NAME=3D"${2}"; shift 2
-> -            ;;
-> -        (--)
-> -            shift; break
-> -            ;;
-> -        esac
-> -    done
-> -}
-> -
-> -# Create the data partition
-> -make_data_partition() {
-> -    "${HOST_DIR}/sbin/mkfs.ext4" \
-> -        -d "${DATA_PART}" \
-> -        -F \
-> -        -r 1 \
-> -        -N 0 \
-> -        -m 5 \
-> -        -L "data" \
-> -        "${BINARIES_DIR}/data-part.ext4" "${DATA_PART_SIZE}"
-> -}
-> -
-> -# Generate a mender bootstrap artifact.
-> -# See
-> https://github.com/mendersoftware/mender/blob/3.5.3/Documentation/automat=
-ic-bootstrap-artifact.md
-> -generate_mender_bootstrap_artifact()
-> <https://github.com/mendersoftware/mender/blob/3.5.3/Documentation/automa=
-tic-bootstrap-artifact.md-generate_mender_bootstrap_artifact()>
-> {
-> -
-> -  rm -rf "${DATA_PART}"
-> -  mkdir -p "${DATA_PART}"
-> -  img_checksum=3D$(sha256sum "${BINARIES_DIR}"/rootfs.ext4 |awk '{print
-> $1}')
-> -
-> -  "${HOST_DIR}"/bin/mender-artifact \
-> -    write bootstrap-artifact \
-> -    --compression none \
-> -    --artifact-name "${ARTIFACT_NAME}" \
-> -    --device-type "${DEVICE_TYPE}" \
-> -    --provides "rootfs-image.version:${ARTIFACT_NAME}" \
-> -    --provides "rootfs-image.checksum:${img_checksum}" \
-> -    --clears-provides "rootfs-image.*" \
-> -    --output-path "${DATA_PART}"/bootstrap.mender \
-> -    --version 3
-> -}
-> -
-> -# Create a mender image.
-> -generate_mender_image() {
-> -    echo "Creating ${BINARIES_DIR}/${DEVICE_TYPE}-${ARTIFACT_NAME}.mende=
-r"
-> -    "${HOST_DIR}/bin/mender-artifact" \
-> -        write rootfs-image \
-> -        --compression none \
-> -        -t "${DEVICE_TYPE}" \
-> -        -n "${BR2_VERSION}" \
-> -        -f "${BINARIES_DIR}/rootfs.ext2" \
-> -        -o "${BINARIES_DIR}/${DEVICE_TYPE}-${ARTIFACT_NAME}.mender"
-> -}
-> -
-> -generate_image() {
-> -    support/scripts/genimage.sh -c "${BOARD_DIR}/genimage-efi.cfg"
-> -}
-> -
-> -# Main function.
-> -main() {
-> -    parse_args "${@}"
-> -    generate_mender_bootstrap_artifact
-> -    make_data_partition
-> -    generate_image
-> -    generate_mender_image
-> -    exit $?
-> -}
-> -
-> -main "${@}"
-> diff --git a/board/mender/x86_64/readme.txt
-> b/board/mender/x86_64/readme.txt
-> deleted file mode 100644
-> index 01a0254511..0000000000
-> --- a/board/mender/x86_64/readme.txt
-> +++ /dev/null
-> @@ -1,69 +0,0 @@
-> -Mender UEFI PC sample config
-> -=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> -
-> -1. Build
-> -
-> -  $ make mender_x86_64_efi_defconfig
-> -
-> -  Add any additional packages required. Update the files in
-> board/mender/x86_64
-> -  and change /dev/vda to what is relevant for your platform: typically
-> -  /dev/mmcblk0p for eMMC and /dev/sda for USB or SATA.
-> -
-> -  $ make
-> -
-> -2. Write the image
-> -
-> -  The build process will create a all-in-one image called disk.img in
-> -  output/images.
-> -
-> -  Write the image to a pendrive:
-> -
-> -  $ dd if=3Doutput/images/disk.img of=3D/dev/sdX; sync
-> -
-> -  Once the process is complete, insert it into the target PC and boot.
-> -
-> -  Remember that if said PC has another boot device you might need to
-> -  select this alternative for it to boot.
-> -
-> -  You might need to disable Secure Boot from the setup as well.
-> -
-> -3. Enjoy
-> -
-> -Emulation in qemu
-> -=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> -
-> -Run the emulation with:
-> -
-> -qemu-system-x86_64 \
-> -    -M pc \
-> -    -drive file=3Doutput/images/disk.img,if=3Dvirtio,format=3Draw \
-> -    -net nic,model=3Dvirtio \
-> -    -net user \
-> -    -serial stdio \
-> -    -bios </path/to/OVMF_CODE.fd>
-> -
-> -Note that </path/to/OVMF.fd> needs to point to a valid x86_64 UEFI
-> -firmware image for qemu. It may be provided by your distribution as an
-> -edk2 or OVMF package, in a path such as /usr/share/edk2/ovmf/OVMF_CODE.f=
-d.
-> -
-> -Optional arguments:
-> - - -enable-kvm to speed up qemu. This requires a loaded kvm module on th=
-e
-> host
-> -    system.
-> - - Add -smp N to emulate an SMP system with N CPUs.
-> -
-> -The login prompt will appear in the serial window.
-> -
-> -Tested with QEMU 4.1.1 on Fedora 31
-> -
-> -Creating a mender-artifact
-> -=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> -
-> -The mender artifact is created in
-> output/images/buildroot-x86_64-1.0.mender
-> -
-> -You may wish to change --artifact-name=3D1.0 to a name that best suits y=
-our
-> -particular needs, as this option changes the mender artifact name.
-> -
-> -Using mender
-> -=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> -Please read the mender documentation at:
-> -https://docs.mender.io
-> diff --git a/configs/mender_x86_64_efi_defconfig
-> b/configs/mender_x86_64_efi_defconfig
-> deleted file mode 100644
-> index 219f02839c..0000000000
-> --- a/configs/mender_x86_64_efi_defconfig
-> +++ /dev/null
-> @@ -1,54 +0,0 @@
-> -BR2_x86_64=3Dy
-> -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=3Dy
-> -BR2_INIT_SYSV=3Dy
-> -BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=3Dy
-> -BR2_TARGET_GENERIC_GETTY_PORT=3D"ttyS0"
-> -BR2_ROOTFS_OVERLAY=3D"board/mender/x86_64/overlay"
-> -BR2_ROOTFS_POST_BUILD_SCRIPT=3D"board/mender/x86_64/post-build.sh"
-> -BR2_ROOTFS_POST_IMAGE_SCRIPT=3D"board/mender/x86_64/post-image-efi.sh"
-> -BR2_ROOTFS_POST_SCRIPT_ARGS=3D"--data-part-size=3D32M
-> --device-type=3Dbuildroot-x86_64 --artifact-name=3D1.0"
-> -BR2_LINUX_KERNEL=3Dy
-> -BR2_LINUX_KERNEL_CUSTOM_VERSION=3Dy
-> -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE=3D"6.12.28"
-> -BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=3Dy
-> -BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE=3D"board/mender/x86_64/linux.config"
-> -BR2_LINUX_KERNEL_INSTALL_TARGET=3Dy
-> -BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=3Dy
-> -BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF=3Dy
-> -BR2_PACKAGE_LINUX_FIRMWARE=3Dy
-> -BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_9170=3Dy
-> -BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_9271=3Dy
-> -BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_3160=3Dy
-> -BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_3168=3Dy
-> -BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_5000=3Dy
-> -BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_6000G2A=3Dy
-> -BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_6000G2B=3Dy
-> -BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_7260=3Dy
-> -BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_7265D=3Dy
-> -BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_8000C=3Dy
-> -BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_8265=3Dy
-> -BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT73=3Dy
-> -BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT2XX=3Dy
-> -BR2_PACKAGE_LINUX_FIRMWARE_RTL_81XX=3Dy
-> -BR2_PACKAGE_LINUX_FIRMWARE_RTL_87XX=3Dy
-> -BR2_PACKAGE_LINUX_FIRMWARE_RTL_88XX=3Dy
-> -BR2_PACKAGE_LINUX_FIRMWARE_RTL_8169=3Dy
-> -BR2_PACKAGE_ACPID=3Dy
-> -BR2_PACKAGE_CONNMAN=3Dy
-> -BR2_PACKAGE_CONNMAN_WIFI=3Dy
-> -BR2_PACKAGE_CONNMAN_CLIENT=3Dy
-> -BR2_PACKAGE_MENDER=3Dy
-> -BR2_PACKAGE_MENDER_GRUBENV=3Dy
->
-> -BR2_PACKAGE_MENDER_GRUBENV_DEFINES=3D"board/mender/x86_64/mender_grubenv=
-_defines"
-> -BR2_TARGET_ROOTFS_EXT2=3Dy
-> -BR2_TARGET_ROOTFS_EXT2_4=3Dy
-> -BR2_TARGET_ROOTFS_EXT2_SIZE=3D"128M"
-> -# BR2_TARGET_ROOTFS_TAR is not set
-> -BR2_TARGET_GRUB2=3Dy
-> -BR2_TARGET_GRUB2_X86_64_EFI=3Dy
-> -BR2_TARGET_GRUB2_BUILTIN_MODULES_EFI=3D"boot linux ext2 fat squash4
-> part_msdos part_gpt normal efi_gop loadenv hashsum echo halt gcry_sha256
-> test regexp sleep"
-> -BR2_TARGET_GRUB2_INSTALL_TOOLS=3Dy
-> -BR2_PACKAGE_HOST_DOSFSTOOLS=3Dy
-> -BR2_PACKAGE_HOST_GENIMAGE=3Dy
-> -BR2_PACKAGE_HOST_MENDER_ARTIFACT=3Dy
-> -BR2_PACKAGE_HOST_MTOOLS=3Dy
-> diff --git a/package/Config.in b/package/Config.in
-> index aa94d44eca..472e60bad0 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -2849,10 +2849,6 @@ menu "System tools"
->         source "package/libvirt/Config.in"
->         source "package/lxc/Config.in"
->         source "package/makedumpfile/Config.in"
-> -       source "package/mender/Config.in"
-> -       source "package/mender-connect/Config.in"
-> -       source "package/mender-grubenv/Config.in"
-> -       source "package/mender-update-modules/Config.in"
->         source "package/mfoc/Config.in"
->         source "package/moby-buildkit/Config.in"
->         source "package/mokutil/Config.in"
-> diff --git a/package/Config.in.host b/package/Config.in.host
-> index 595caf9e7f..dfd9317e8a 100644
-> --- a/package/Config.in.host
-> +++ b/package/Config.in.host
-> @@ -66,7 +66,6 @@ menu "Host utilities"
->         source "package/lpc3250loader/Config.in.host"
->         source "package/lttng-babeltrace/Config.in.host"
->         source "package/lzma-alone/Config.in.host"
-> -       source "package/mender-artifact/Config.in.host"
->         source "package/meson-tools/Config.in.host"
->         source "package/mfgtools/Config.in.host"
->         source "package/microchip-hss-payload-generator/Config.in.host"
-> diff --git a/package/mender-artifact/Config.in.host
-> b/package/mender-artifact/Config.in.host
-> deleted file mode 100644
-> index 39353b23e7..0000000000
-> --- a/package/mender-artifact/Config.in.host
-> +++ /dev/null
-> @@ -1,19 +0,0 @@
-> -config BR2_PACKAGE_HOST_MENDER_ARTIFACT
-> -       bool "host mender-artifact"
-> -       depends on BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS
-> -       select BR2_PACKAGE_HOST_GO
-> -       help
-> -         The mender-artifact tool is a CLI implementation of the
-> -         Mender artifacts library.
-> -
-> -         A Mender artifact can be recognized by its .mender suffix.
-> -         Mender artifacts can contain binaries, metadata, checksums,
-> -         signatures and scripts that are used during a deployment.
-> -         The artifact format acts as a wrapper, and uses the tar
-> -         format to bundle several files into one.
-> -
-> -         In its simplest form, an artifact contains just a rootfs
-> -         image, along with its checksum, id and device type
-> -         compatibility.
-> -
-> -         https://github.com/mendersoftware/mender-artifact
-> diff --git a/package/mender-artifact/mender-artifact.hash
-> b/package/mender-artifact/mender-artifact.hash
-> deleted file mode 100644
-> index 5dffdbb7df..0000000000
-> --- a/package/mender-artifact/mender-artifact.hash
-> +++ /dev/null
-> @@ -1,106 +0,0 @@
-> -# Locally computed:
-> -sha256  c7002052028496f230c34ef6f0488bf5e8ca32b075b7a96555532fe928aed984
-> mender-artifact-4.4.1-go2.tar.gz
-> -sha256  0e7c48f6471ca81a2fce9e3f605dffeb0385afd4dc3b5eb7f4e86ece4aa9b068
-> LIC_FILES_CHKSUM.sha256
-> -
-> -# License hash extracted from LIC_FILES_CHKSUM.sha256 using the
-> -# following command:
-> -#
-> -#     sed '/^[A-Za-z0-9_]/s/^/sha256  /' LIC_FILES_CHKSUM.sha256
-> -
-> -# Apache 2.0 licenses.
-> -sha256  d7e8fd4ad05371007d60285c309ba7a7ce3e61029b843f949fbb9ec79dc9eb47
-> LICENSE
-> -sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30
-> vendor/github.com/minio/sha256-simd/LICENSE
-> -sha256 <http://github.com/minio/sha256-simd/LICENSE-sha256>
-> 132fb47b89947cd5f98e380186bc412af5561c70669d37d3a83b36f03a0ddae5  vendor/
-> github.com/mendersoftware/progressbar/LICENSE
-> -sha256 <http://github.com/mendersoftware/progressbar/LICENSE-sha256>
-> cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/
-> google.golang.org/genproto/LICENSE
-> -sha256 <http://google.golang.org/genproto/LICENSE-sha256>
-> cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/
-> google.golang.org/genproto/googleapis/api/LICENSE
-> -sha256 <http://google.golang.org/genproto/googleapis/api/LICENSE-sha256>
-> cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/
-> google.golang.org/genproto/googleapis/rpc/LICENSE
-> -sha256 <http://google.golang.org/genproto/googleapis/rpc/LICENSE-sha256>
-> cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/
-> google.golang.org/grpc/LICENSE
-> -sha256 <http://google.golang.org/grpc/LICENSE-sha256>
-> cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/
-> cloud.google.com/go/kms/LICENSE
-> -sha256 <http://cloud.google.com/go/kms/LICENSE-sha256>
-> cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/
-> cloud.google.com/go/iam/LICENSE
-> -sha256 <http://cloud.google.com/go/iam/LICENSE-sha256>
-> cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/
-> cloud.google.com/go/compute/metadata/LICENSE
-> -sha256 <http://cloud.google.com/go/compute/metadata/LICENSE-sha256>
-> cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/
-> cloud.google.com/go/auth/LICENSE
-> -sha256 <http://cloud.google.com/go/auth/LICENSE-sha256>
-> cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/
-> cloud.google.com/go/auth/oauth2adapt/LICENSE
-> -sha256 <http://cloud.google.com/go/auth/oauth2adapt/LICENSE-sha256>
-> 73ba74dfaa520b49a401b5d21459a8523a146f3b7518a833eea5efa85130bf68  vendor/
-> github.com/mendersoftware/openssl/LICENSE
-> -sha256 <http://github.com/mendersoftware/openssl/LICENSE-sha256>
-> cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/
-> github.com/googleapis/enterprise-certificate-proxy/LICENSE
-> -sha256
-> <http://github.com/googleapis/enterprise-certificate-proxy/LICENSE-sha256=
->
-> dd26a7abddd02e2d0aba97805b31f248ef7835d9e10da289b22e3b8ab78b324d  vendor/
-> github.com/go-jose/go-jose/v3/json/LICENSE
-> -sha256 <http://github.com/go-jose/go-jose/v3/json/LICENSE-sha256>
-> cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/
-> github.com/go-jose/go-jose/v3/LICENSE
-> -sha256 <http://github.com/go-jose/go-jose/v3/LICENSE-sha256>
-> cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/
-> github.com/google/s2a-go/LICENSE.md
-> -sha256 <http://github.com/google/s2a-go/LICENSE.md-sha256>
-> c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  vendor/
-> github.com/Keyfactor/signserver-go-client-sdk/LICENSE
-> -sha256
-> <http://github.com/Keyfactor/signserver-go-client-sdk/LICENSE-sha256>
-> cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/
-> github.com/kylelemons/godebug/LICENSE
-> -sha256 <http://github.com/kylelemons/godebug/LICENSE-sha256>
-> c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  vendor/
-> go.opentelemetry.io/otel/trace/LICENSE
-> -sha256 <http://go.opentelemetry.io/otel/trace/LICENSE-sha256>
-> c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  vendor/
-> go.opentelemetry.io/otel/LICENSE
-> -sha256 <http://go.opentelemetry.io/otel/LICENSE-sha256>
-> c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  vendor/
-> go.opentelemetry.io/otel/metric/LICENSE
-> -sha256 <http://go.opentelemetry.io/otel/metric/LICENSE-sha256>
-> c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  vendor/
-> go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp/LICENSE
-> -sha256
-> <http://go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp/LIC=
-ENSE-sha256>
-> c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  vendor/
-> go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgr=
-pc/LICENSE
-> -sha256
-> <http://go.opentelemetry.io/contrib/instrumentation/google.golang.org/grp=
-c/otelgrpc/LICENSE-sha256>
-> c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  vendor/
-> go.opentelemetry.io/auto/sdk/LICENSE
-> -sha256 <http://go.opentelemetry.io/auto/sdk/LICENSE-sha256>
-> b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1  vendor/
-> github.com/go-logr/logr/LICENSE
-> -sha256 <http://github.com/go-logr/logr/LICENSE-sha256>
-> c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  vendor/
-> github.com/go-logr/stdr/LICENSE
-> -#
-> -# BSD 2 Clause licenses.
-> -sha256  8d427fd87bc9579ea368fde3d49f9ca22eac857f91a9dec7e3004bdfab7dee86
-> vendor/github.com/pkg/errors/LICENSE
-> -sha256 <http://github.com/pkg/errors/LICENSE-sha256>
-> 4801bb0c5d70b980b3e1f63d1d2df8d84fec22548e3d73f03a68df1fb808791f  vendor/
-> github.com/pkg/browser/LICENSE
-> -#
-> -# BSD 3 Clause licenses.
-> -sha256  2eb550be6801c1ea434feba53bf6d12e7c71c90253e0a9de4a4f46cf88b56477
-> vendor/github.com/pmezard/go-difflib/LICENSE
-> -sha256 <http://github.com/pmezard/go-difflib/LICENSE-sha256>
-> 911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad  vendor/
-> golang.org/x/sys/LICENSE
-> -sha256 <http://golang.org/x/sys/LICENSE-sha256>
-> 0d9e582ee4bff57bf1189c9e514e6da7ce277f9cd3bc2d488b22fbb39a6d87cf  vendor/
-> github.com/klauspost/compress/LICENSE
-> -sha256 <http://github.com/klauspost/compress/LICENSE-sha256>
-> 75e1ca97a84a9da6051dee0114333388216f2c4a5a028296b882ff3d57274735  vendor/
-> github.com/russross/blackfriday/v2/LICENSE.txt
-> -sha256  911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad
-> vendor/golang.org/x/net/LICENSE
-> -sha256 <http://golang.org/x/net/LICENSE-sha256>
-> 911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad  vendor/
-> golang.org/x/oauth2/LICENSE
-> -sha256 <http://golang.org/x/oauth2/LICENSE-sha256>
-> 911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad  vendor/
-> golang.org/x/text/LICENSE
-> -sha256 <http://golang.org/x/text/LICENSE-sha256>
-> 911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad  vendor/
-> golang.org/x/crypto/LICENSE
-> -sha256 <http://golang.org/x/crypto/LICENSE-sha256>
-> 911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad  vendor/
-> golang.org/x/time/LICENSE
-> -sha256 <http://golang.org/x/time/LICENSE-sha256>
-> 911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad  vendor/
-> golang.org/x/sync/LICENSE
-> -sha256 <http://golang.org/x/sync/LICENSE-sha256>
-> 110244b02140866ee37d17fa7449436a377ec3b85a481fbb208f4c87964382de  vendor/
-> google.golang.org/api/LICENSE
-> -sha256 <http://google.golang.org/api/LICENSE-sha256>
-> fc0a2f71df4e8f047902da53d1f85301be43e0f360fc167057a2d04658ed2ba9  vendor/
-> google.golang.org/api/internal/third_party/uritemplates/LICENSE
-> -sha256
-> <http://google.golang.org/api/internal/third_party/uritemplates/LICENSE-s=
-ha256>
-> 4835612df0098ca95f8e7d9e3bffcb02358d435dbb38057c844c99d7f725eb20  vendor/
-> google.golang.org/protobuf/LICENSE
-> -sha256 <http://google.golang.org/protobuf/LICENSE-sha256>
-> b95218cd9607855a6536384c0262922b30a0c2bf56e4ced790240f3a3bac4722  vendor/
-> github.com/googleapis/gax-go/v2/LICENSE
-> -sha256 <http://github.com/googleapis/gax-go/v2/LICENSE-sha256>
-> f69f157b0be75da373605dbc8bbf142e8924ee82d8f44f11bcaf351335bf98cf  vendor/
-> github.com/klauspost/compress/internal/snapref/LICENSE
-> -sha256
-> <http://github.com/klauspost/compress/internal/snapref/LICENSE-sha256>
-> 701cbcc144a7c865b072f27547e66ddbf17ac44a3bd21f71149ace02518f107c  vendor/
-> github.com/ulikunitz/xz/LICENSE
-> -sha256 <http://github.com/ulikunitz/xz/LICENSE-sha256>
-> 0a8d61ed3cbfd5312326e8126c31ce9c627a283adc99131b56896d29ada04b2d  vendor/
-> github.com/google/uuid/LICENSE
-> -#
-> -# ISC licenses.
-> -sha256  1b93a317849ee09d3d7e4f1d20c2b78ddb230b4becb12d7c224c927b9d470251
-> vendor/github.com/davecgh/go-spew/LICENSE
-> -sha256 <http://github.com/davecgh/go-spew/LICENSE-sha256>
-> 480be5fb1be03ff19fd71d863f453f16262e98d4e568f5bccfcb7aa3ccf8cf0d  vendor/
-> github.com/decred/dcrd/dcrec/secp256k1/v4/LICENSE
-> -#
-> -# MIT licenses.
-> -sha256  f8e536c1c7b695810427095dc85f5f80d44ff7c10535e8a9486cf393e2599189
-> vendor/github.com/stretchr/testify/LICENSE
-> -sha256 <http://github.com/stretchr/testify/LICENSE-sha256>
-> 2be6c75f36f3022ea015fea7b1b7135ce67d477ee721d0fc6c98678badb13b8b  vendor/
-> github.com/urfave/cli/LICENSE
-> -sha256 <http://github.com/urfave/cli/LICENSE-sha256>
-> 51a0c9ec7f8b7634181b8d4c03e5b5d204ac21d6e72f46c313973424664b2e6b  vendor/
-> github.com/sirupsen/logrus/LICENSE
-> -sha256 <http://github.com/sirupsen/logrus/LICENSE-sha256>
-> 7709cc030f078b17809884f92f33a2016944e1180312dc3f1371b02313d313ed  vendor/
-> github.com/klauspost/pgzip/LICENSE
-> -sha256 <http://github.com/klauspost/pgzip/LICENSE-sha256>
-> a55959c4e3e8917bfa857359bb641115336276a6cc97408fd8197e079fb18470  vendor/
-> github.com/cpuguy83/go-md2man/v2/LICENSE.md
-> -sha256 <http://github.com/cpuguy83/go-md2man/v2/LICENSE.md-sha256>
-> d18f6323b71b0b768bb5e9616e36da390fbd39369a81807cca352de4e4e6aa0b  vendor/
-> gopkg.in/yaml.v3/LICENSE
-> -sha256 <http://gopkg.in/yaml.v3/LICENSE-sha256>
-> 08eab1118c80885fa1fa6a6dd7303f65a379fcb3733e063d20d1bbc2c76e6fa1  vendor/
-> github.com/mattn/go-isatty/LICENSE
-> -sha256 <http://github.com/mattn/go-isatty/LICENSE-sha256>
-> 5d966570d7a442d4e969892860a914e542c97f262c873baee8f0aa48e1f40212  vendor/
-> github.com/klauspost/cpuid/v2/LICENSE
-> -sha256 <http://github.com/klauspost/cpuid/v2/LICENSE-sha256>
-> 22adc4abdece712a737573672f082fd61ac2b21df878efb87ffcff4354a07f26  vendor/
-> github.com/mitchellh/go-homedir/LICENSE
-> -sha256 <http://github.com/mitchellh/go-homedir/LICENSE-sha256>
-> 22adc4abdece712a737573672f082fd61ac2b21df878efb87ffcff4354a07f26  vendor/
-> github.com/mitchellh/mapstructure/LICENSE
-> -sha256 <http://github.com/mitchellh/mapstructure/LICENSE-sha256>
-> 38049e50b486f5394e40b786388f4a006401996e46c7c1cd18925afe7c3b4e34  vendor/
-> github.com/ryanuber/go-glob/LICENSE
-> -sha256 <http://github.com/ryanuber/go-glob/LICENSE-sha256>
-> 5c0476add4c38b55d0ed5ac11b85e00c38f26e1caee20dfe3ab58190103d1fbc  vendor/
-> github.com/cenkalti/backoff/v3/LICENSE
-> -sha256 <http://github.com/cenkalti/backoff/v3/LICENSE-sha256>
-> f566a9f97bacdaf00d9f21dd991e81dc11201c4e016c86b470799429a1c9a79c  vendor/
-> github.com/klauspost/compress/zstd/internal/xxhash/LICENSE.txt
-> -sha256  646f8936b8ddcd14e13e578ff6857e368780b0d1a4f6066bee89211923a373e2
-> vendor/github.com/Azure/azure-sdk-for-go/sdk/internal/LICENSE.txt
-> -sha256  646f8936b8ddcd14e13e578ff6857e368780b0d1a4f6066bee89211923a373e2
-> vendor/github.com/Azure/azure-sdk-for-go/sdk/azidentity/LICENSE.txt
-> -sha256  a096a435e19bb6b631da46992c011a39be563e97ce7366879ad516c772904632
-> vendor/
-> github.com/Azure/azure-sdk-for-go/sdk/security/keyvault/internal/LICENSE.=
-txt
-> -sha256  a096a435e19bb6b631da46992c011a39be563e97ce7366879ad516c772904632
-> vendor/
-> github.com/Azure/azure-sdk-for-go/sdk/security/keyvault/azkeys/LICENSE.tx=
+>> cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor=
+/
+>> google.golang.org/grpc/LICENSE
+>> -sha256 <http://google.golang.org/grpc/LICENSE-sha256>
+>> cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor=
+/
+>> cloud.google.com/go/kms/LICENSE
+>> -sha256 <http://cloud.google.com/go/kms/LICENSE-sha256>
+>> cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor=
+/
+>> cloud.google.com/go/iam/LICENSE
+>> -sha256 <http://cloud.google.com/go/iam/LICENSE-sha256>
+>> cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor=
+/
+>> cloud.google.com/go/compute/metadata/LICENSE
+>> -sha256 <http://cloud.google.com/go/compute/metadata/LICENSE-sha256>
+>> cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor=
+/
+>> cloud.google.com/go/auth/LICENSE
+>> -sha256 <http://cloud.google.com/go/auth/LICENSE-sha256>
+>> cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor=
+/
+>> cloud.google.com/go/auth/oauth2adapt/LICENSE
+>> -sha256 <http://cloud.google.com/go/auth/oauth2adapt/LICENSE-sha256>
+>> 73ba74dfaa520b49a401b5d21459a8523a146f3b7518a833eea5efa85130bf68  vendor=
+/
+>> github.com/mendersoftware/openssl/LICENSE
+>> -sha256 <http://github.com/mendersoftware/openssl/LICENSE-sha256>
+>> cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor=
+/
+>> github.com/googleapis/enterprise-certificate-proxy/LICENSE
+>> -sha256
+>> <http://github.com/googleapis/enterprise-certificate-proxy/LICENSE-sha25=
+6>
+>> dd26a7abddd02e2d0aba97805b31f248ef7835d9e10da289b22e3b8ab78b324d  vendor=
+/
+>> github.com/go-jose/go-jose/v3/json/LICENSE
+>> -sha256 <http://github.com/go-jose/go-jose/v3/json/LICENSE-sha256>
+>> cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor=
+/
+>> github.com/go-jose/go-jose/v3/LICENSE
+>> -sha256 <http://github.com/go-jose/go-jose/v3/LICENSE-sha256>
+>> cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor=
+/
+>> github.com/google/s2a-go/LICENSE.md
+>> -sha256 <http://github.com/google/s2a-go/LICENSE.md-sha256>
+>> c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  vendor=
+/
+>> github.com/Keyfactor/signserver-go-client-sdk/LICENSE
+>> -sha256
+>> <http://github.com/Keyfactor/signserver-go-client-sdk/LICENSE-sha256>
+>> cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor=
+/
+>> github.com/kylelemons/godebug/LICENSE
+>> -sha256 <http://github.com/kylelemons/godebug/LICENSE-sha256>
+>> c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  vendor=
+/
+>> go.opentelemetry.io/otel/trace/LICENSE
+>> -sha256 <http://go.opentelemetry.io/otel/trace/LICENSE-sha256>
+>> c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  vendor=
+/
+>> go.opentelemetry.io/otel/LICENSE
+>> -sha256 <http://go.opentelemetry.io/otel/LICENSE-sha256>
+>> c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  vendor=
+/
+>> go.opentelemetry.io/otel/metric/LICENSE
+>> -sha256 <http://go.opentelemetry.io/otel/metric/LICENSE-sha256>
+>> c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  vendor=
+/
+>> go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp/LICENSE
+>> -sha256
+>> <http://go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp/LI=
+CENSE-sha256>
+>> c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  vendor=
+/
+>> go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelg=
+rpc/LICENSE
+>> -sha256
+>> <http://go.opentelemetry.io/contrib/instrumentation/google.golang.org/gr=
+pc/otelgrpc/LICENSE-sha256>
+>> c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  vendor=
+/
+>> go.opentelemetry.io/auto/sdk/LICENSE
+>> -sha256 <http://go.opentelemetry.io/auto/sdk/LICENSE-sha256>
+>> b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1  vendor=
+/
+>> github.com/go-logr/logr/LICENSE
+>> -sha256 <http://github.com/go-logr/logr/LICENSE-sha256>
+>> c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  vendor=
+/
+>> github.com/go-logr/stdr/LICENSE
+>> -#
+>> -# BSD 2 Clause licenses.
+>> -sha256
+>> 8d427fd87bc9579ea368fde3d49f9ca22eac857f91a9dec7e3004bdfab7dee86  vendor=
+/
+>> github.com/pkg/errors/LICENSE
+>> -sha256 <http://github.com/pkg/errors/LICENSE-sha256>
+>> 4801bb0c5d70b980b3e1f63d1d2df8d84fec22548e3d73f03a68df1fb808791f  vendor=
+/
+>> github.com/pkg/browser/LICENSE
+>> -#
+>> -# BSD 3 Clause licenses.
+>> -sha256
+>> 2eb550be6801c1ea434feba53bf6d12e7c71c90253e0a9de4a4f46cf88b56477  vendor=
+/
+>> github.com/pmezard/go-difflib/LICENSE
+>> -sha256 <http://github.com/pmezard/go-difflib/LICENSE-sha256>
+>> 911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad  vendor=
+/
+>> golang.org/x/sys/LICENSE
+>> -sha256 <http://golang.org/x/sys/LICENSE-sha256>
+>> 0d9e582ee4bff57bf1189c9e514e6da7ce277f9cd3bc2d488b22fbb39a6d87cf  vendor=
+/
+>> github.com/klauspost/compress/LICENSE
+>> -sha256 <http://github.com/klauspost/compress/LICENSE-sha256>
+>> 75e1ca97a84a9da6051dee0114333388216f2c4a5a028296b882ff3d57274735  vendor=
+/
+>> github.com/russross/blackfriday/v2/LICENSE.txt
+>> -sha256
+>> 911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad  vendor=
+/
+>> golang.org/x/net/LICENSE
+>> -sha256 <http://golang.org/x/net/LICENSE-sha256>
+>> 911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad  vendor=
+/
+>> golang.org/x/oauth2/LICENSE
+>> -sha256 <http://golang.org/x/oauth2/LICENSE-sha256>
+>> 911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad  vendor=
+/
+>> golang.org/x/text/LICENSE
+>> -sha256 <http://golang.org/x/text/LICENSE-sha256>
+>> 911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad  vendor=
+/
+>> golang.org/x/crypto/LICENSE
+>> -sha256 <http://golang.org/x/crypto/LICENSE-sha256>
+>> 911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad  vendor=
+/
+>> golang.org/x/time/LICENSE
+>> -sha256 <http://golang.org/x/time/LICENSE-sha256>
+>> 911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad  vendor=
+/
+>> golang.org/x/sync/LICENSE
+>> -sha256 <http://golang.org/x/sync/LICENSE-sha256>
+>> 110244b02140866ee37d17fa7449436a377ec3b85a481fbb208f4c87964382de  vendor=
+/
+>> google.golang.org/api/LICENSE
+>> -sha256 <http://google.golang.org/api/LICENSE-sha256>
+>> fc0a2f71df4e8f047902da53d1f85301be43e0f360fc167057a2d04658ed2ba9  vendor=
+/
+>> google.golang.org/api/internal/third_party/uritemplates/LICENSE
+>> -sha256
+>> <http://google.golang.org/api/internal/third_party/uritemplates/LICENSE-=
+sha256>
+>> 4835612df0098ca95f8e7d9e3bffcb02358d435dbb38057c844c99d7f725eb20  vendor=
+/
+>> google.golang.org/protobuf/LICENSE
+>> -sha256 <http://google.golang.org/protobuf/LICENSE-sha256>
+>> b95218cd9607855a6536384c0262922b30a0c2bf56e4ced790240f3a3bac4722  vendor=
+/
+>> github.com/googleapis/gax-go/v2/LICENSE
+>> -sha256 <http://github.com/googleapis/gax-go/v2/LICENSE-sha256>
+>> f69f157b0be75da373605dbc8bbf142e8924ee82d8f44f11bcaf351335bf98cf  vendor=
+/
+>> github.com/klauspost/compress/internal/snapref/LICENSE
+>> -sha256
+>> <http://github.com/klauspost/compress/internal/snapref/LICENSE-sha256>
+>> 701cbcc144a7c865b072f27547e66ddbf17ac44a3bd21f71149ace02518f107c  vendor=
+/
+>> github.com/ulikunitz/xz/LICENSE
+>> -sha256 <http://github.com/ulikunitz/xz/LICENSE-sha256>
+>> 0a8d61ed3cbfd5312326e8126c31ce9c627a283adc99131b56896d29ada04b2d  vendor=
+/
+>> github.com/google/uuid/LICENSE
+>> -#
+>> -# ISC licenses.
+>> -sha256
+>> 1b93a317849ee09d3d7e4f1d20c2b78ddb230b4becb12d7c224c927b9d470251  vendor=
+/
+>> github.com/davecgh/go-spew/LICENSE
+>> -sha256 <http://github.com/davecgh/go-spew/LICENSE-sha256>
+>> 480be5fb1be03ff19fd71d863f453f16262e98d4e568f5bccfcb7aa3ccf8cf0d  vendor=
+/
+>> github.com/decred/dcrd/dcrec/secp256k1/v4/LICENSE
+>> -#
+>> -# MIT licenses.
+>> -sha256
+>> f8e536c1c7b695810427095dc85f5f80d44ff7c10535e8a9486cf393e2599189  vendor=
+/
+>> github.com/stretchr/testify/LICENSE
+>> -sha256 <http://github.com/stretchr/testify/LICENSE-sha256>
+>> 2be6c75f36f3022ea015fea7b1b7135ce67d477ee721d0fc6c98678badb13b8b  vendor=
+/
+>> github.com/urfave/cli/LICENSE
+>> -sha256 <http://github.com/urfave/cli/LICENSE-sha256>
+>> 51a0c9ec7f8b7634181b8d4c03e5b5d204ac21d6e72f46c313973424664b2e6b  vendor=
+/
+>> github.com/sirupsen/logrus/LICENSE
+>> -sha256 <http://github.com/sirupsen/logrus/LICENSE-sha256>
+>> 7709cc030f078b17809884f92f33a2016944e1180312dc3f1371b02313d313ed  vendor=
+/
+>> github.com/klauspost/pgzip/LICENSE
+>> -sha256 <http://github.com/klauspost/pgzip/LICENSE-sha256>
+>> a55959c4e3e8917bfa857359bb641115336276a6cc97408fd8197e079fb18470  vendor=
+/
+>> github.com/cpuguy83/go-md2man/v2/LICENSE.md
+>> -sha256 <http://github.com/cpuguy83/go-md2man/v2/LICENSE.md-sha256>
+>> d18f6323b71b0b768bb5e9616e36da390fbd39369a81807cca352de4e4e6aa0b  vendor=
+/
+>> gopkg.in/yaml.v3/LICENSE
+>> -sha256 <http://gopkg.in/yaml.v3/LICENSE-sha256>
+>> 08eab1118c80885fa1fa6a6dd7303f65a379fcb3733e063d20d1bbc2c76e6fa1  vendor=
+/
+>> github.com/mattn/go-isatty/LICENSE
+>> -sha256 <http://github.com/mattn/go-isatty/LICENSE-sha256>
+>> 5d966570d7a442d4e969892860a914e542c97f262c873baee8f0aa48e1f40212  vendor=
+/
+>> github.com/klauspost/cpuid/v2/LICENSE
+>> -sha256 <http://github.com/klauspost/cpuid/v2/LICENSE-sha256>
+>> 22adc4abdece712a737573672f082fd61ac2b21df878efb87ffcff4354a07f26  vendor=
+/
+>> github.com/mitchellh/go-homedir/LICENSE
+>> -sha256 <http://github.com/mitchellh/go-homedir/LICENSE-sha256>
+>> 22adc4abdece712a737573672f082fd61ac2b21df878efb87ffcff4354a07f26  vendor=
+/
+>> github.com/mitchellh/mapstructure/LICENSE
+>> -sha256 <http://github.com/mitchellh/mapstructure/LICENSE-sha256>
+>> 38049e50b486f5394e40b786388f4a006401996e46c7c1cd18925afe7c3b4e34  vendor=
+/
+>> github.com/ryanuber/go-glob/LICENSE
+>> -sha256 <http://github.com/ryanuber/go-glob/LICENSE-sha256>
+>> 5c0476add4c38b55d0ed5ac11b85e00c38f26e1caee20dfe3ab58190103d1fbc  vendor=
+/
+>> github.com/cenkalti/backoff/v3/LICENSE
+>> -sha256 <http://github.com/cenkalti/backoff/v3/LICENSE-sha256>
+>> f566a9f97bacdaf00d9f21dd991e81dc11201c4e016c86b470799429a1c9a79c  vendor=
+/
+>> github.com/klauspost/compress/zstd/internal/xxhash/LICENSE.txt
+>> -sha256
+>> 646f8936b8ddcd14e13e578ff6857e368780b0d1a4f6066bee89211923a373e2  vendor=
+/
+>> github.com/Azure/azure-sdk-for-go/sdk/internal/LICENSE.txt
+>> -sha256
+>> 646f8936b8ddcd14e13e578ff6857e368780b0d1a4f6066bee89211923a373e2  vendor=
+/
+>> github.com/Azure/azure-sdk-for-go/sdk/azidentity/LICENSE.txt
+>> -sha256
+>> a096a435e19bb6b631da46992c011a39be563e97ce7366879ad516c772904632  vendor=
+/
+>> github.com/Azure/azure-sdk-for-go/sdk/security/keyvault/internal/LICENSE=
+.txt
+>> -sha256
+>> a096a435e19bb6b631da46992c011a39be563e97ce7366879ad516c772904632  vendor=
+/
+>> github.com/Azure/azure-sdk-for-go/sdk/security/keyvault/azkeys/LICENSE.t=
+xt
+>> -sha256
+>> 646f8936b8ddcd14e13e578ff6857e368780b0d1a4f6066bee89211923a373e2  vendor=
+/
+>> github.com/Azure/azure-sdk-for-go/sdk/azcore/LICENSE.txt
+>> -sha256
+>> 9906940f61b1f0b533fa7d99baf55178b2808fbe113ea51dfbfad8572ccd5f2b  vendor=
+/
+>> github.com/AzureAD/microsoft-authentication-library-for-go/LICENSE
+>> -sha256
+>> <http://github.com/AzureAD/microsoft-authentication-library-for-go/LICEN=
+SE-sha256>
+>> a707cd425201945d57500566c47c74dc9fb8cd02ef91b9a761abddeb2401e6a7  vendor=
+/
+>> github.com/goccy/go-json/LICENSE
+>> -sha256 <http://github.com/goccy/go-json/LICENSE-sha256>
+>> fe26ca41577b9b2b4448050a24b25e5753af66b5d5945d5d36094e7790bfcb2f  vendor=
+/
+>> github.com/golang-jwt/jwt/v5/LICENSE
+>> -sha256 <http://github.com/golang-jwt/jwt/v5/LICENSE-sha256>
+>> d5c8d4935994cfcfbc53d12fe756b28316858736d6e0a61acaff5fe4a84fca12  vendor=
+/
+>> github.com/lestrrat-go/iter/LICENSE
+>> -sha256 <http://github.com/lestrrat-go/iter/LICENSE-sha256>
+>> b9b5b03485eb7446da7ecad22178664a53c7fcecceb74d69f905819a807d710e  vendor=
+/
+>> github.com/lestrrat-go/blackmagic/LICENSE
+>> -sha256 <http://github.com/lestrrat-go/blackmagic/LICENSE-sha256>
+>> e148deed982672627e875fe0cb03b9aa0d3e315e0f59992973c3c34dbcf5f322  vendor=
+/
+>> github.com/lestrrat-go/backoff/v2/LICENSE
+>> -sha256 <http://github.com/lestrrat-go/backoff/v2/LICENSE-sha256>
+>> d5c8d4935994cfcfbc53d12fe756b28316858736d6e0a61acaff5fe4a84fca12  vendor=
+/
+>> github.com/lestrrat-go/httpcc/LICENSE
+>> -sha256 <http://github.com/lestrrat-go/httpcc/LICENSE-sha256>
+>> b9b5b03485eb7446da7ecad22178664a53c7fcecceb74d69f905819a807d710e  vendor=
+/
+>> github.com/lestrrat-go/option/LICENSE
+>> -sha256 <http://github.com/lestrrat-go/option/LICENSE-sha256>
+>> 0c4868a07b1c2dbb67c75767b4f1b2936c392d02ca2c7ee9827cac1a9d60ab1d  vendor=
+/
+>> github.com/lestrrat-go/jwx/LICENSE
+>> -#
+>> -# MPL-2.0 licenses.
+>> -sha256
+>> 60222c28c1a7f6a92c7df98e5c5f4459e624e6e285e0b9b94467af5f6ab3343d  vendor=
+/
+>> github.com/hashicorp/go-secure-stdlib/strutil/LICENSE
+>> -sha256
+>> <http://github.com/hashicorp/go-secure-stdlib/strutil/LICENSE-sha256>
+>> 60222c28c1a7f6a92c7df98e5c5f4459e624e6e285e0b9b94467af5f6ab3343d  vendor=
+/
+>> github.com/hashicorp/go-secure-stdlib/parseutil/LICENSE
+>> -sha256
+>> <http://github.com/hashicorp/go-secure-stdlib/parseutil/LICENSE-sha256>
+>> bef1747eda88b9ed46e94830b0d978c3499dad5dfe38d364971760881901dadd  vendor=
+/
+>> github.com/hashicorp/errwrap/LICENSE
+>> -sha256 <http://github.com/hashicorp/errwrap/LICENSE-sha256>
+>> bef1747eda88b9ed46e94830b0d978c3499dad5dfe38d364971760881901dadd  vendor=
+/
+>> github.com/hashicorp/hcl/LICENSE
+>> -sha256 <http://github.com/hashicorp/hcl/LICENSE-sha256>
+>> 60222c28c1a7f6a92c7df98e5c5f4459e624e6e285e0b9b94467af5f6ab3343d  vendor=
+/
+>> github.com/hashicorp/go-cleanhttp/LICENSE
+>> -sha256 <http://github.com/hashicorp/go-cleanhttp/LICENSE-sha256>
+>> 60222c28c1a7f6a92c7df98e5c5f4459e624e6e285e0b9b94467af5f6ab3343d  vendor=
+/
+>> github.com/hashicorp/go-rootcerts/LICENSE
+>> -sha256 <http://github.com/hashicorp/go-rootcerts/LICENSE-sha256>
+>> d6b1a865f1c8c697d343bd4e0ce61025f91898486a1f00d727f32e8644af77d3  vendor=
+/
+>> github.com/hashicorp/go-retryablehttp/LICENSE
+>> -sha256 <http://github.com/hashicorp/go-retryablehttp/LICENSE-sha256>
+>> 1f256ecad192880510e84ad60474eab7589218784b9a50bc7ceee34c2b91f1d5  vendor=
+/
+>> github.com/hashicorp/go-sockaddr/LICENSE
+>> -sha256 <http://github.com/hashicorp/go-sockaddr/LICENSE-sha256>
+>> d6b1a865f1c8c697d343bd4e0ce61025f91898486a1f00d727f32e8644af77d3  vendor=
+/
+>> github.com/hashicorp/vault/api/LICENSE
+>> -sha256 <http://github.com/hashicorp/vault/api/LICENSE-sha256>
+>> a830016911a348a54e89bd54f2f8b0d8fffdeac20aecfba8e36ebbf38a03f5ff  vendor=
+/
+>> github.com/hashicorp/go-multierror/LICENSE
+>> -sha256 <http://github.com/hashicorp/go-multierror/LICENSE-sha256>
+>> 8108e14b5cb2b6bcd51583d3849ef0c2b5c4de61758256c20308bc70d1775dbb  vendor=
+/
+>> github.com/felixge/httpsnoop/LICENSE.txt
+>> diff --git a/package/mender-artifact/mender-artifact.mk
+>> b/package/mender-artifact/mender-artifact.mk
+>> deleted file mode 100644
+>> index 9f235b55bd..0000000000
+>> --- a/package/mender-artifact/mender-artifact.mk
+>> +++ /dev/null
+>> @@ -1,118 +0,0 @@
+>>
+>> -#######################################################################=
+#########
+>> -#
+>> -# host-mender-artifact
+>> -#
+>>
+>> -#######################################################################=
+#########
+>> -
+>> -HOST_MENDER_ARTIFACT_VERSION =3D 4.4.1
+>> -HOST_MENDER_ARTIFACT_SITE =3D $(call
+>> github,mendersoftware,mender-artifact,$(HOST_MENDER_ARTIFACT_VERSION))
+>> -HOST_MENDER_ARTIFACT_LICENSE =3D Apache2.0, BSD-2-Clause, BSD-3-Clause,
+>> ISC, MIT, MPL-2.0
+>> -# Vendor license paths generated with:
+>> -#    awk '{print $2}' LIC_FILES_CHKSUM.sha256 | grep vendor
+>> -HOST_MENDER_ARTIFACT_LICENSE_FILES =3D \
+>> -       LICENSE \
+>> -       LIC_FILES_CHKSUM.sha256 \
+>> -       vendor/github.com/minio/sha256-simd/LICENSE \
+>> -       vendor/github.com/mendersoftware/progressbar/LICENSE \
+>> -       vendor/google.golang.org/genproto/LICENSE \
+>> -       vendor/google.golang.org/genproto/googleapis/api/LICENSE \
+>> -       vendor/google.golang.org/genproto/googleapis/rpc/LICENSE \
+>> -       vendor/google.golang.org/grpc/LICENSE \
+>> -       vendor/cloud.google.com/go/kms/LICENSE \
+>> -       vendor/cloud.google.com/go/iam/LICENSE \
+>> -       vendor/cloud.google.com/go/compute/metadata/LICENSE \
+>> -       vendor/cloud.google.com/go/auth/LICENSE \
+>> -       vendor/cloud.google.com/go/auth/oauth2adapt/LICENSE \
+>> -       vendor/github.com/mendersoftware/openssl/LICENSE \
+>> -       vendor/github.com/googleapis/enterprise-certificate-proxy/LICENS=
+E
+>> \
+>> -       vendor/github.com/go-jose/go-jose/v3/json/LICENSE \
+>> -       vendor/github.com/go-jose/go-jose/v3/LICENSE \
+>> -       vendor/github.com/google/s2a-go/LICENSE.md \
+>> -       vendor/github.com/Keyfactor/signserver-go-client-sdk/LICENSE \
+>> -       vendor/github.com/kylelemons/godebug/LICENSE \
+>> -       vendor/go.opentelemetry.io/otel/trace/LICENSE \
+>> -       vendor/go.opentelemetry.io/otel/LICENSE \
+>> -       vendor/go.opentelemetry.io/otel/metric/LICENSE \
+>> -       vendor/
+>> go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp/LICENSE \
+>> -       vendor/
+>> go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelg=
+rpc/LICENSE
+>> \
+>> -       vendor/go.opentelemetry.io/auto/sdk/LICENSE \
+>> -       vendor/github.com/go-logr/logr/LICENSE \
+>> -       vendor/github.com/go-logr/stdr/LICENSE \
+>> -       vendor/github.com/pkg/errors/LICENSE \
+>> -       vendor/github.com/pkg/browser/LICENSE \
+>> -       vendor/github.com/pmezard/go-difflib/LICENSE \
+>> -       vendor/golang.org/x/sys/LICENSE \
+>> -       vendor/github.com/klauspost/compress/LICENSE \
+>> -       vendor/github.com/russross/blackfriday/v2/LICENSE.txt \
+>> -       vendor/golang.org/x/net/LICENSE \
+>> -       vendor/golang.org/x/oauth2/LICENSE \
+>> -       vendor/golang.org/x/text/LICENSE \
+>> -       vendor/golang.org/x/crypto/LICENSE \
+>> -       vendor/golang.org/x/time/LICENSE \
+>> -       vendor/golang.org/x/sync/LICENSE \
+>> -       vendor/google.golang.org/api/LICENSE \
+>> -       vendor/
+>> google.golang.org/api/internal/third_party/uritemplates/LICENSE \
+>> -       vendor/google.golang.org/protobuf/LICENSE \
+>> -       vendor/github.com/googleapis/gax-go/v2/LICENSE \
+>> -       vendor/github.com/klauspost/compress/internal/snapref/LICENSE \
+>> -       vendor/github.com/ulikunitz/xz/LICENSE \
+>> -       vendor/github.com/google/uuid/LICENSE \
+>> -       vendor/github.com/davecgh/go-spew/LICENSE \
+>> -       vendor/github.com/decred/dcrd/dcrec/secp256k1/v4/LICENSE \
+>> -       vendor/github.com/stretchr/testify/LICENSE \
+>> -       vendor/github.com/urfave/cli/LICENSE \
+>> -       vendor/github.com/sirupsen/logrus/LICENSE \
+>> -       vendor/github.com/klauspost/pgzip/LICENSE \
+>> -       vendor/github.com/cpuguy83/go-md2man/v2/LICENSE.md \
+>> -       vendor/gopkg.in/yaml.v3/LICENSE \
+>> -       vendor/github.com/mattn/go-isatty/LICENSE \
+>> -       vendor/github.com/klauspost/cpuid/v2/LICENSE \
+>> -       vendor/github.com/mitchellh/go-homedir/LICENSE \
+>> -       vendor/github.com/mitchellh/mapstructure/LICENSE \
+>> -       vendor/github.com/ryanuber/go-glob/LICENSE \
+>> -       vendor/github.com/cenkalti/backoff/v3/LICENSE \
+>> -       vendor/
+>> github.com/klauspost/compress/zstd/internal/xxhash/LICENSE.txt \
+>> -       vendor/github.com/Azure/azure-sdk-for-go/sdk/internal/LICENSE.tx=
 t
-> -sha256  646f8936b8ddcd14e13e578ff6857e368780b0d1a4f6066bee89211923a373e2
-> vendor/github.com/Azure/azure-sdk-for-go/sdk/azcore/LICENSE.txt
-> -sha256  9906940f61b1f0b533fa7d99baf55178b2808fbe113ea51dfbfad8572ccd5f2b
-> vendor/github.com/AzureAD/microsoft-authentication-library-for-go/LICENSE
-> -sha256
-> <http://github.com/AzureAD/microsoft-authentication-library-for-go/LICENS=
-E-sha256>
-> a707cd425201945d57500566c47c74dc9fb8cd02ef91b9a761abddeb2401e6a7  vendor/
-> github.com/goccy/go-json/LICENSE
-> -sha256 <http://github.com/goccy/go-json/LICENSE-sha256>
-> fe26ca41577b9b2b4448050a24b25e5753af66b5d5945d5d36094e7790bfcb2f  vendor/
-> github.com/golang-jwt/jwt/v5/LICENSE
-> -sha256 <http://github.com/golang-jwt/jwt/v5/LICENSE-sha256>
-> d5c8d4935994cfcfbc53d12fe756b28316858736d6e0a61acaff5fe4a84fca12  vendor/
-> github.com/lestrrat-go/iter/LICENSE
-> -sha256 <http://github.com/lestrrat-go/iter/LICENSE-sha256>
-> b9b5b03485eb7446da7ecad22178664a53c7fcecceb74d69f905819a807d710e  vendor/
-> github.com/lestrrat-go/blackmagic/LICENSE
-> -sha256 <http://github.com/lestrrat-go/blackmagic/LICENSE-sha256>
-> e148deed982672627e875fe0cb03b9aa0d3e315e0f59992973c3c34dbcf5f322  vendor/
-> github.com/lestrrat-go/backoff/v2/LICENSE
-> -sha256 <http://github.com/lestrrat-go/backoff/v2/LICENSE-sha256>
-> d5c8d4935994cfcfbc53d12fe756b28316858736d6e0a61acaff5fe4a84fca12  vendor/
-> github.com/lestrrat-go/httpcc/LICENSE
-> -sha256 <http://github.com/lestrrat-go/httpcc/LICENSE-sha256>
-> b9b5b03485eb7446da7ecad22178664a53c7fcecceb74d69f905819a807d710e  vendor/
-> github.com/lestrrat-go/option/LICENSE
-> -sha256 <http://github.com/lestrrat-go/option/LICENSE-sha256>
-> 0c4868a07b1c2dbb67c75767b4f1b2936c392d02ca2c7ee9827cac1a9d60ab1d  vendor/
-> github.com/lestrrat-go/jwx/LICENSE
-> -#
-> -# MPL-2.0 licenses.
-> -sha256  60222c28c1a7f6a92c7df98e5c5f4459e624e6e285e0b9b94467af5f6ab3343d
-> vendor/github.com/hashicorp/go-secure-stdlib/strutil/LICENSE
-> -sha256
-> <http://github.com/hashicorp/go-secure-stdlib/strutil/LICENSE-sha256>
-> 60222c28c1a7f6a92c7df98e5c5f4459e624e6e285e0b9b94467af5f6ab3343d  vendor/
-> github.com/hashicorp/go-secure-stdlib/parseutil/LICENSE
-> -sha256
-> <http://github.com/hashicorp/go-secure-stdlib/parseutil/LICENSE-sha256>
-> bef1747eda88b9ed46e94830b0d978c3499dad5dfe38d364971760881901dadd  vendor/
-> github.com/hashicorp/errwrap/LICENSE
-> -sha256 <http://github.com/hashicorp/errwrap/LICENSE-sha256>
-> bef1747eda88b9ed46e94830b0d978c3499dad5dfe38d364971760881901dadd  vendor/
-> github.com/hashicorp/hcl/LICENSE
-> -sha256 <http://github.com/hashicorp/hcl/LICENSE-sha256>
-> 60222c28c1a7f6a92c7df98e5c5f4459e624e6e285e0b9b94467af5f6ab3343d  vendor/
-> github.com/hashicorp/go-cleanhttp/LICENSE
-> -sha256 <http://github.com/hashicorp/go-cleanhttp/LICENSE-sha256>
-> 60222c28c1a7f6a92c7df98e5c5f4459e624e6e285e0b9b94467af5f6ab3343d  vendor/
-> github.com/hashicorp/go-rootcerts/LICENSE
-> -sha256 <http://github.com/hashicorp/go-rootcerts/LICENSE-sha256>
-> d6b1a865f1c8c697d343bd4e0ce61025f91898486a1f00d727f32e8644af77d3  vendor/
-> github.com/hashicorp/go-retryablehttp/LICENSE
-> -sha256 <http://github.com/hashicorp/go-retryablehttp/LICENSE-sha256>
-> 1f256ecad192880510e84ad60474eab7589218784b9a50bc7ceee34c2b91f1d5  vendor/
-> github.com/hashicorp/go-sockaddr/LICENSE
-> -sha256 <http://github.com/hashicorp/go-sockaddr/LICENSE-sha256>
-> d6b1a865f1c8c697d343bd4e0ce61025f91898486a1f00d727f32e8644af77d3  vendor/
-> github.com/hashicorp/vault/api/LICENSE
-> -sha256 <http://github.com/hashicorp/vault/api/LICENSE-sha256>
-> a830016911a348a54e89bd54f2f8b0d8fffdeac20aecfba8e36ebbf38a03f5ff  vendor/
-> github.com/hashicorp/go-multierror/LICENSE
-> -sha256 <http://github.com/hashicorp/go-multierror/LICENSE-sha256>
-> 8108e14b5cb2b6bcd51583d3849ef0c2b5c4de61758256c20308bc70d1775dbb  vendor/
-> github.com/felixge/httpsnoop/LICENSE.txt
-> diff --git a/package/mender-artifact/mender-artifact.mk
-> b/package/mender-artifact/mender-artifact.mk
-> deleted file mode 100644
-> index 9f235b55bd..0000000000
-> --- a/package/mender-artifact/mender-artifact.mk
-> +++ /dev/null
-> @@ -1,118 +0,0 @@
->
-> -########################################################################=
-########
-> -#
-> -# host-mender-artifact
-> -#
->
-> -########################################################################=
-########
-> -
-> -HOST_MENDER_ARTIFACT_VERSION =3D 4.4.1
-> -HOST_MENDER_ARTIFACT_SITE =3D $(call
-> github,mendersoftware,mender-artifact,$(HOST_MENDER_ARTIFACT_VERSION))
-> -HOST_MENDER_ARTIFACT_LICENSE =3D Apache2.0, BSD-2-Clause, BSD-3-Clause,
-> ISC, MIT, MPL-2.0
-> -# Vendor license paths generated with:
-> -#    awk '{print $2}' LIC_FILES_CHKSUM.sha256 | grep vendor
-> -HOST_MENDER_ARTIFACT_LICENSE_FILES =3D \
-> -       LICENSE \
-> -       LIC_FILES_CHKSUM.sha256 \
-> -       vendor/github.com/minio/sha256-simd/LICENSE \
-> -       vendor/github.com/mendersoftware/progressbar/LICENSE \
-> -       vendor/google.golang.org/genproto/LICENSE \
-> -       vendor/google.golang.org/genproto/googleapis/api/LICENSE \
-> -       vendor/google.golang.org/genproto/googleapis/rpc/LICENSE \
-> -       vendor/google.golang.org/grpc/LICENSE \
-> -       vendor/cloud.google.com/go/kms/LICENSE \
-> -       vendor/cloud.google.com/go/iam/LICENSE \
-> -       vendor/cloud.google.com/go/compute/metadata/LICENSE \
-> -       vendor/cloud.google.com/go/auth/LICENSE \
-> -       vendor/cloud.google.com/go/auth/oauth2adapt/LICENSE \
-> -       vendor/github.com/mendersoftware/openssl/LICENSE \
-> -       vendor/github.com/googleapis/enterprise-certificate-proxy/LICENSE
-> \
-> -       vendor/github.com/go-jose/go-jose/v3/json/LICENSE \
-> -       vendor/github.com/go-jose/go-jose/v3/LICENSE \
-> -       vendor/github.com/google/s2a-go/LICENSE.md \
-> -       vendor/github.com/Keyfactor/signserver-go-client-sdk/LICENSE \
-> -       vendor/github.com/kylelemons/godebug/LICENSE \
-> -       vendor/go.opentelemetry.io/otel/trace/LICENSE \
-> -       vendor/go.opentelemetry.io/otel/LICENSE \
-> -       vendor/go.opentelemetry.io/otel/metric/LICENSE \
-> -       vendor/
-> go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp/LICENSE \
-> -       vendor/
-> go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgr=
-pc/LICENSE
-> \
-> -       vendor/go.opentelemetry.io/auto/sdk/LICENSE \
-> -       vendor/github.com/go-logr/logr/LICENSE \
-> -       vendor/github.com/go-logr/stdr/LICENSE \
-> -       vendor/github.com/pkg/errors/LICENSE \
-> -       vendor/github.com/pkg/browser/LICENSE \
-> -       vendor/github.com/pmezard/go-difflib/LICENSE \
-> -       vendor/golang.org/x/sys/LICENSE \
-> -       vendor/github.com/klauspost/compress/LICENSE \
-> -       vendor/github.com/russross/blackfriday/v2/LICENSE.txt \
-> -       vendor/golang.org/x/net/LICENSE \
-> -       vendor/golang.org/x/oauth2/LICENSE \
-> -       vendor/golang.org/x/text/LICENSE \
-> -       vendor/golang.org/x/crypto/LICENSE \
-> -       vendor/golang.org/x/time/LICENSE \
-> -       vendor/golang.org/x/sync/LICENSE \
-> -       vendor/google.golang.org/api/LICENSE \
-> -       vendor/
-> google.golang.org/api/internal/third_party/uritemplates/LICENSE \
-> -       vendor/google.golang.org/protobuf/LICENSE \
-> -       vendor/github.com/googleapis/gax-go/v2/LICENSE \
-> -       vendor/github.com/klauspost/compress/internal/snapref/LICENSE \
-> -       vendor/github.com/ulikunitz/xz/LICENSE \
-> -       vendor/github.com/google/uuid/LICENSE \
-> -       vendor/github.com/davecgh/go-spew/LICENSE \
-> -       vendor/github.com/decred/dcrd/dcrec/secp256k1/v4/LICENSE \
-> -       vendor/github.com/stretchr/testify/LICENSE \
-> -       vendor/github.com/urfave/cli/LICENSE \
-> -       vendor/github.com/sirupsen/logrus/LICENSE \
-> -       vendor/github.com/klauspost/pgzip/LICENSE \
-> -       vendor/github.com/cpuguy83/go-md2man/v2/LICENSE.md \
-> -       vendor/gopkg.in/yaml.v3/LICENSE \
-> -       vendor/github.com/mattn/go-isatty/LICENSE \
-> -       vendor/github.com/klauspost/cpuid/v2/LICENSE \
-> -       vendor/github.com/mitchellh/go-homedir/LICENSE \
-> -       vendor/github.com/mitchellh/mapstructure/LICENSE \
-> -       vendor/github.com/ryanuber/go-glob/LICENSE \
-> -       vendor/github.com/cenkalti/backoff/v3/LICENSE \
-> -       vendor/
-> github.com/klauspost/compress/zstd/internal/xxhash/LICENSE.txt \
-> -       vendor/github.com/Azure/azure-sdk-for-go/sdk/internal/LICENSE.txt
-> \
-> -       vendor/
-> github.com/Azure/azure-sdk-for-go/sdk/azidentity/LICENSE.txt \
-> -       vendor/
-> github.com/Azure/azure-sdk-for-go/sdk/security/keyvault/internal/LICENSE.=
-txt
-> \
-> -       vendor/
-> github.com/Azure/azure-sdk-for-go/sdk/security/keyvault/azkeys/LICENSE.tx=
-t
-> \
-> -       vendor/github.com/Azure/azure-sdk-for-go/sdk/azcore/LICENSE.txt \
-> -       vendor/
-> github.com/AzureAD/microsoft-authentication-library-for-go/LICENSE \
-> -       vendor/github.com/goccy/go-json/LICENSE \
-> -       vendor/github.com/golang-jwt/jwt/v5/LICENSE \
-> -       vendor/github.com/lestrrat-go/iter/LICENSE \
-> -       vendor/github.com/lestrrat-go/blackmagic/LICENSE \
-> -       vendor/github.com/lestrrat-go/backoff/v2/LICENSE \
-> -       vendor/github.com/lestrrat-go/httpcc/LICENSE \
-> -       vendor/github.com/lestrrat-go/option/LICENSE \
-> -       vendor/github.com/lestrrat-go/jwx/LICENSE \
-> -       vendor/github.com/hashicorp/go-secure-stdlib/strutil/LICENSE \
-> -       vendor/github.com/hashicorp/go-secure-stdlib/parseutil/LICENSE \
-> -       vendor/github.com/hashicorp/errwrap/LICENSE \
-> -       vendor/github.com/hashicorp/hcl/LICENSE \
-> -       vendor/github.com/hashicorp/go-cleanhttp/LICENSE \
-> -       vendor/github.com/hashicorp/go-rootcerts/LICENSE \
-> -       vendor/github.com/hashicorp/go-retryablehttp/LICENSE \
-> -       vendor/github.com/hashicorp/go-sockaddr/LICENSE \
-> -       vendor/github.com/hashicorp/vault/api/LICENSE \
-> -       vendor/github.com/hashicorp/go-multierror/LICENSE \
-> -       vendor/github.com/felixge/httpsnoop/LICENSE.txt
-> -
-> -HOST_MENDER_ARTIFACT_DEPENDENCIES =3D host-pkgconf host-openssl host-xz
-> -
-> -ifeq ($(BR2_PACKAGE_HOST_ZSTD),y)
-> -HOST_MENDER_ARTIFACT_DEPENDENCIES +=3D host-zstd
-> -endif
-> -
-> -HOST_MENDER_ARTIFACT_GO_ENV +=3D \
-> -       PATH=3D$(BR_PATH) \
-> -       PKG_CONFIG=3D"$(PKG_CONFIG_HOST_BINARY)" \
-> -       PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=3D1 \
-> -       PKG_CONFIG_ALLOW_SYSTEM_LIBS=3D1 \
-> -
->  PKG_CONFIG_LIBDIR=3D"$(HOST_DIR)/lib/pkgconfig:$(HOST_DIR)/share/pkgconf=
-ig" \
-> -       PKG_CONFIG_PATH=3D"$(HOST_DIR)/lib/pkgconfig" \
-> -       PKG_CONFIG_SYSROOT_DIR=3D"/"
-> -
-> -HOST_MENDER_ARTIFACT_LDFLAGS =3D -X
-> github.com/mendersoftware/mender-artifact/cli.Version=3D$(HOST_MENDER_ART=
-IFACT_VERSION)
-> -
-> -$(eval $(host-golang-package))
-> diff --git a/package/mender-connect/Config.in
-> b/package/mender-connect/Config.in
-> deleted file mode 100644
-> index d478e468c2..0000000000
-> --- a/package/mender-connect/Config.in
-> +++ /dev/null
-> @@ -1,34 +0,0 @@
-> -config BR2_PACKAGE_MENDER_CONNECT
-> -       bool "mender-connect"
-> -       depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
-> -       depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
-> -       depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2, mender
-> -       depends on BR2_USE_WCHAR # libglib2 -> gettext
-> -       depends on BR2_USE_MMU # dbus -> fork()
-> -       select BR2_PACKAGE_DBUS # runtime
-> -       select BR2_PACKAGE_HOST_GO
-> -       select BR2_PACKAGE_LIBGLIB2
-> -       select BR2_PACKAGE_MENDER # runtime
-> -       select BR2_PACKAGE_OPENSSL
-> -       help
-> -         mender-connect is a daemon responsible for handling
-> -         bidirectional (websocket) communication with the Mender
-> -         server. The daemon is responsible for implementing a range of
-> -         troubleshooting features to the device as well as several
-> -         enhancement to the mender-client.
-> -
-> -         Mender Connect is loosely coupled with the Mender Client. The
-> -         main information passed between mender-client and
-> -         mender-connect is the device authorization status. Since only
-> -         accepted devices can interact with the Mender Server, the
-> -         Mender Client passes over DBus the authorization token which
-> -         Mender Connect uses to establish a Websocket connection to the
-> -         server.
-> -
-> -         https://github.com/mendersoftware/mender-connect
-> -
-> -comment "mender-connect needs a toolchain w/ threads, wchar"
-> -       depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
-> -       depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
-> -       depends on BR2_USE_MMU
-> -       depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
-> diff --git a/package/mender-connect/S43mender-connect
-> b/package/mender-connect/S43mender-connect
-> deleted file mode 100644
-> index 4cc21510c4..0000000000
-> --- a/package/mender-connect/S43mender-connect
-> +++ /dev/null
-> @@ -1,53 +0,0 @@
-> -#!/bin/sh
-> -DAEMON=3D"mender-connect"
-> -DAEMON_PATH=3D"/usr/bin/mender-connect"
-> -PIDFILE=3D"/var/run/${DAEMON}.pid"
-> -
-> -MENDER_CONNECT_ARGS=3D""
-> -
-> -# shellcheck source=3D/dev/null
-> -[ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
-> -
-> -start() {
-> -       printf 'Starting %s: ' "${DAEMON}"
-> -       umask 077
-> -       # shellcheck disable=3DSC2086 # we need the word splitting
-> -       start-stop-daemon -bmSqp "$PIDFILE" -x ${DAEMON_PATH} \
-> -               -- -daemon ${DAEMON_ARGS}
-> -       status=3D$?
-> -       if [ "$status" -eq 0 ]; then
-> -               echo "OK"
-> -       else
-> -               echo "FAIL"
-> -       fi
-> -       return "$status"
-> -}
-> -
-> -stop() {
-> -       printf 'Stopping %s: ' "${DAEMON}"
-> -       start-stop-daemon -K -q -p "$PIDFILE"
-> -       status=3D$?
-> -       if [ "$status" -eq 0 ]; then
-> -               echo "OK"
-> -       else
-> -               echo "FAIL"
-> -       fi
-> -       return "$status"
-> -}
-> -
-> -restart() {
-> -       stop
-> -       sleep 1
-> -       start
-> -}
-> -
-> -case "$1" in
-> -       start|stop|restart)
-> -               "$1";;
-> -       reload)
-> -               # Restart, since there is no true "reload" feature.
-> -               restart;;
-> -       *)
-> -               echo "Usage: $0 {start|stop|restart|reload}"
-> -               exit 1
-> -esac
-> diff --git a/package/mender-connect/mender-connect.hash
-> b/package/mender-connect/mender-connect.hash
-> deleted file mode 100644
-> index 2872bb467c..0000000000
-> --- a/package/mender-connect/mender-connect.hash
-> +++ /dev/null
-> @@ -1,35 +0,0 @@
-> -# Locally computed:
-> -sha256  b04331f447b9d21c5962d5aef2670f1de861e3065522a1b298af0904a8ee6400
-> mender-connect-3.0.0-go2.tar.gz
-> -sha256  420fd444caf5a39bc2db0ae2202c71451a8ea3900011547bd0fb22678aaa4ef6
-> LIC_FILES_CHKSUM.sha256
-> -
-> -# Vendor licenses
-> -# Generated with sed '/^[A-Za-z0-9_]/s/^/sha256  /'
-> LIC_FILES_CHKSUM.sha256
-> -
-> -#
-> -# Apache-2.0
-> -sha256  d7e8fd4ad05371007d60285c309ba7a7ce3e61029b843f949fbb9ec79dc9eb47
-> LICENSE
-> -sha256  a4e99d13c6cd0e4faf3867ae5c9815ff88cab3cefdefe0dc1ec9ac28b1152944
-> vendor/github.com/mendersoftware/go-lib-micro/LICENSE
-> -#
-> -# BSD-2-Clause
-> -sha256  8d427fd87bc9579ea368fde3d49f9ca22eac857f91a9dec7e3004bdfab7dee86
-> vendor/github.com/pkg/errors/LICENSE
-> -sha256 <http://github.com/pkg/errors/LICENSE-sha256>
-> 1530185dd39cdde7cb2f786a7a5fcf8bc34368b6ae73c15e72bafe88fd80b9a2  vendor/
-> github.com/vmihailenco/msgpack/v5/LICENSE
-> -sha256 <http://github.com/vmihailenco/msgpack/v5/LICENSE-sha256>
-> 0f02aac22084ef463aa5f42f566feeec6aa4c99653519744a8c25cb079da5b5d  vendor/
-> github.com/vmihailenco/tagparser/v2/LICENSE
-> -#
-> -# BSD-3-Clause
-> -sha256  2eb550be6801c1ea434feba53bf6d12e7c71c90253e0a9de4a4f46cf88b56477
-> vendor/github.com/pmezard/go-difflib/LICENSE
-> -sha256 <http://github.com/pmezard/go-difflib/LICENSE-sha256>
-> 2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/
-> golang.org/x/sys/LICENSE
-> -sha256 <http://golang.org/x/sys/LICENSE-sha256>
-> 2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/
-> golang.org/x/net/LICENSE
-> -sha256 <http://golang.org/x/net/LICENSE-sha256>
-> 0b77fdea862f869ef4f201ac5649bdbd38ccb055c7f6454dffae9e2adb4941c1  vendor/
-> github.com/gorilla/websocket/LICENSE
-> -#
-> -# ISC
-> -sha256  1b93a317849ee09d3d7e4f1d20c2b78ddb230b4becb12d7c224c927b9d470251
-> vendor/github.com/davecgh/go-spew/LICENSE
-> -#
-> -# MIT
-> -sha256  a2a1cea59d9c2d71908082f516f86bb560abf857646ecf69d70c121ead14aef4
-> vendor/github.com/creack/pty/LICENSE
-> -sha256 <http://github.com/creack/pty/LICENSE-sha256>
-> caa932df46551b53643952fe03b351d55db97be73b5393b986dcf6b05d3c416a  vendor/
-> github.com/go-ozzo/ozzo-validation/v4/LICENSE
-> -sha256 <http://github.com/go-ozzo/ozzo-validation/v4/LICENSE-sha256>
-> 92a328e1d5f3269b42e2ce32b4494eafdb3132f204a911c5c95cf3d8465490e4  vendor/
-> github.com/satori/go.uuid/LICENSE
-> -sha256 <http://github.com/satori/go.uuid/LICENSE-sha256>
-> 51a0c9ec7f8b7634181b8d4c03e5b5d204ac21d6e72f46c313973424664b2e6b  vendor/
-> github.com/sirupsen/logrus/LICENSE
-> -sha256 <http://github.com/sirupsen/logrus/LICENSE-sha256>
-> b2663894033a05fd80261176cd8da1d72546e25842d5c1abcc852ca23b6b61b0  vendor/
-> github.com/stretchr/objx/LICENSE
-> -sha256 <http://github.com/stretchr/objx/LICENSE-sha256>
-> f8e536c1c7b695810427095dc85f5f80d44ff7c10535e8a9486cf393e2599189  vendor/
-> github.com/stretchr/testify/LICENSE
-> -sha256 <http://github.com/stretchr/testify/LICENSE-sha256>
-> da277af11b85227490377fbcac6afccc68be560c4fff36ac05ca62de55345fd7  vendor/
-> github.com/urfave/cli/v2/LICENSE
-> -sha256 <http://github.com/urfave/cli/v2/LICENSE-sha256>
-> d18f6323b71b0b768bb5e9616e36da390fbd39369a81807cca352de4e4e6aa0b  vendor/
-> gopkg.in/yaml.v3/LICENSE
-> diff --git a/package/mender-connect/mender-connect.mk
-> b/package/mender-connect/mender-connect.mk
-> deleted file mode 100644
-> index 98fdfe16df..0000000000
-> --- a/package/mender-connect/mender-connect.mk
-> +++ /dev/null
-> @@ -1,60 +0,0 @@
->
-> -########################################################################=
-########
-> -#
-> -# mender-connect
-> -#
->
-> -########################################################################=
-########
-> -
-> -MENDER_CONNECT_VERSION =3D 3.0.0
-> -MENDER_CONNECT_SITE =3D $(call
-> github,mendersoftware,mender-connect,$(MENDER_CONNECT_VERSION))
-> -MENDER_CONNECT_LICENSE =3D Apache-2.0, BSD-2-Clause, BSD-3-Clause, ISC, =
-MIT
-> -
-> -# Vendor license paths generated with:
-> -#    awk '{print $2}' LIC_FILES_CHKSUM.sha256 | grep vendor
-> -MENDER_CONNECT_LICENSE_FILES =3D \
-> -       LIC_FILES_CHKSUM.sha256 \
-> -       LICENSE \
-> -       vendor/github.com/mendersoftware/go-lib-micro/LICENSE \
-> -       vendor/github.com/pkg/errors/LICENSE \
-> -       vendor/github.com/vmihailenco/msgpack/v5/LICENSE \
-> -       vendor/github.com/vmihailenco/tagparser/v2/LICENSE \
-> -       vendor/github.com/pmezard/go-difflib/LICENSE \
-> -       vendor/golang.org/x/sys/LICENSE \
-> -       vendor/golang.org/x/net/LICENSE \
-> -       vendor/github.com/gorilla/websocket/LICENSE \
-> -       vendor/github.com/davecgh/go-spew/LICENSE \
-> -       vendor/github.com/creack/pty/LICENSE \
-> -       vendor/github.com/go-ozzo/ozzo-validation/v4/LICENSE \
-> -       vendor/github.com/satori/go.uuid/LICENSE \
-> -       vendor/github.com/sirupsen/logrus/LICENSE \
-> -       vendor/github.com/stretchr/objx/LICENSE \
-> -       vendor/github.com/stretchr/testify/LICENSE \
-> -       vendor/github.com/urfave/cli/v2/LICENSE \
-> -       vendor/gopkg.in/yaml.v3/LICENSE
-> -
-> -MENDER_CONNECT_DEPENDENCIES =3D \
-> -       dbus \
-> -       libglib2 \
-> -       mender \
-> -       openssl
-> -
-> -MENDER_CONNECT_LDFLAGS =3D -X
-> github.com/mendersoftware/mender-connect/config.Version=3D$(MENDER_CONNEC=
-T_VERSION)
-> -
-> -define MENDER_CONNECT_INSTALL_CONFIG_FILES
-> -       $(INSTALL) -d -m 755 $(TARGET_DIR)/etc/mender
-> -
-> -       $(INSTALL) -D -m 0644 $(@D)/examples/mender-connect.conf \
-> -               $(TARGET_DIR)/etc/mender/mender-connect.conf
-> -endef
-> -MENDER_CONNECT_POST_INSTALL_TARGET_HOOKS +=3D
-> MENDER_CONNECT_INSTALL_CONFIG_FILES
-> -
-> -define MENDER_CONNECT_INSTALL_INIT_SYSTEMD
-> -       $(INSTALL) -D -m 0644 $(@D)/support/mender-connect.service \
-> -               $(TARGET_DIR)/usr/lib/systemd/system/mender-connect.servi=
-ce
-> -endef
-> -
-> -define MENDER_CONNECT_INSTALL_INIT_SYSV
-> -       $(INSTALL) -D -m 0755 $(MENDER_CONNECT_PKGDIR)/S43mender-connect =
+>> \
+>> -       vendor/
+>> github.com/Azure/azure-sdk-for-go/sdk/azidentity/LICENSE.txt \
+>> -       vendor/
+>> github.com/Azure/azure-sdk-for-go/sdk/security/keyvault/internal/LICENSE=
+.txt
+>> \
+>> -       vendor/
+>> github.com/Azure/azure-sdk-for-go/sdk/security/keyvault/azkeys/LICENSE.t=
+xt
+>> \
+>> -       vendor/github.com/Azure/azure-sdk-for-go/sdk/azcore/LICENSE.txt =
 \
-> -               $(TARGET_DIR)/etc/init.d/S43mender-connect
-> -endef
-> -
-> -$(eval $(golang-package))
-> diff --git a/package/mender-grubenv/Config.in
-> b/package/mender-grubenv/Config.in
-> deleted file mode 100644
-> index 8505458793 <(850)%20545-8793>..0000000000
-> --- a/package/mender-grubenv/Config.in
-> +++ /dev/null
-> @@ -1,43 +0,0 @@
-> -config BR2_PACKAGE_MENDER_GRUBENV
-> -       bool "mender-grubenv"
-> -       depends on BR2_TARGET_GRUB2_ARCH_SUPPORTS
-> -       depends on BR2_PACKAGE_MENDER # runtime
-> -       depends on BR2_TARGET_GRUB2
-> -       depends on !(BR2_TARGET_GRUB2_HAS_LEGACY_BOOT &&
-> BR2_TARGET_GRUB2_HAS_EFI_BOOT)
-> -       select BR2_PACKAGE_UTIL_LINUX
-> -       select BR2_PACKAGE_UTIL_LINUX_BINARIES # flock -w
-> -       help
-> -         Contains the boot scripts and tools used by Mender to
-> -         integrate with the GRUB bootloader.
-> -
-> -         The following Grub modules must be selected for this package:
-> -         loadenv hashsum echo halt gcry_sha256 test regexp
-> -
-> -         https://github.com/mendersoftware/grub-mender-grubenv
-> -
-> -if BR2_PACKAGE_MENDER_GRUBENV
-> -
-> -config BR2_PACKAGE_MENDER_GRUBENV_DEFINES
-> -       string "path to grubenv defines"
-> -       help
-> -         Specify a path to the mender grubenv defines file.
-> -         If no path is specified, the example file in the source
-> -         directory will be used.
-> -
-> -         The example file in the source directory sets the following:
-> -         mender_rootfsa_part=3D2
-> -         mender_rootfsb_part=3D3
-> -         mender_kernel_root_base=3D/dev/mmcblk0p
-> -         mender_grub_storage_device=3Dhd0
-> -         kernel_imagetype=3DbzImage
-> -
-> -endif
-> -
-> -comment "mender-grubenv needs a grub2 bootloader"
-> -       depends on BR2_TARGET_GRUB2_ARCH_SUPPORTS
-> -       depends on BR2_PACKAGE_MENDER
-> -       depends on !BR2_TARGET_GRUB2
-> -
-> -comment "mender-grubenv does not support both legacy and EFI grub2
-> bootloaders at the same time"
-> -       depends on BR2_PACKAGE_MENDER
-> -       depends on BR2_TARGET_GRUB2_HAS_LEGACY_BOOT &&
-> BR2_TARGET_GRUB2_HAS_EFI_BOOT
-> diff --git a/package/mender-grubenv/mender-grubenv.hash
-> b/package/mender-grubenv/mender-grubenv.hash
-> deleted file mode 100644
-> index 06456f6818..0000000000
-> --- a/package/mender-grubenv/mender-grubenv.hash
-> +++ /dev/null
-> @@ -1,3 +0,0 @@
-> -# Locally computed
-> -sha256  9200dfc8ce8d9e5fae13947857fec44961df87c5bee92f90e37049279a94fb6f
-> mender-grubenv-ddbc5cb054c7a8245c2d6c79eb4cb60ed0ec27e4.tar.gz
-> -sha256  d7e8fd4ad05371007d60285c309ba7a7ce3e61029b843f949fbb9ec79dc9eb47
-> LICENSE
-> diff --git a/package/mender-grubenv/mender-grubenv.mk
-> b/package/mender-grubenv/mender-grubenv.mk
-> deleted file mode 100644
-> index d93159802d..0000000000
-> --- a/package/mender-grubenv/mender-grubenv.mk
-> +++ /dev/null
-> @@ -1,90 +0,0 @@
->
-> -########################################################################=
-########
-> -#
-> -# mender-grubenv
-> -#
->
-> -########################################################################=
-########
-> -
-> -MENDER_GRUBENV_VERSION =3D ddbc5cb054c7a8245c2d6c79eb4cb60ed0ec27e4
-> -MENDER_GRUBENV_SITE =3D $(call
-> github,mendersoftware,grub-mender-grubenv,$(MENDER_GRUBENV_VERSION))
-> -MENDER_GRUBENV_LICENSE =3D Apache-2.0
-> -MENDER_GRUBENV_LICENSE_FILES =3D LICENSE
-> -# Grub2 must be built first so this package can overwrite the config fil=
-es
-> -# provided by grub.
-> -MENDER_GRUBENV_DEPENDENCIES =3D grub2 util-linux
-> -
-> -MENDER_GRUBENV_MAKE_ENV =3D \
-> -       $(TARGET_CONFIGURE_OPTS) \
-> -       $(TARGET_MAKE_ENV)
-> -
-> -MENDER_GRUBENV_DEFINES =3D \
-> -       $(or $(call qstrip,$(BR2_PACKAGE_MENDER_GRUBENV_DEFINES)),\
-> -               $(@D)/mender_grubenv_defines.example)
-> -
-> -# These grub modules must be built in for the grub scripts to work
-> properly.
-> -# Without them, the system will not boot.
-> -MENDER_GRUBENV_MANDATORY_MODULES =3D loadenv hashsum echo halt gcry_sha2=
-56
-> test regexp
-> -
-> -ifeq ($(BR2_TARGET_GRUB2_HAS_LEGACY_BOOT),y)
-> -MENDER_GRUBENV_MODULES_MISSING_PC =3D \
-> -       $(filter-out $(call
-> qstrip,$(BR2_TARGET_GRUB2_BUILTIN_MODULES_PC)),\
-> -               $(MENDER_GRUBENV_MANDATORY_MODULES))
-> -
-> -MENDER_GRUBENV_MAKE_ENV +=3D BOOT_DIR=3D/boot
-> -
-> -define MENDER_GRUBENV_INSTALL_I386_CFG
-> -       mkdir -p $(BINARIES_DIR)/boot-part/grub
-> -       cp -dpfr $(MENDER_GRUBENV_BUILDDIR)/mender_grub.cfg \
-> -               $(TARGET_DIR)/boot/grub/grub.cfg
-> -       cp -dpfr $(TARGET_DIR)/boot/grub/grub.cfg \
-> -               $(TARGET_DIR)/boot/grub-mender-grubenv \
-> -               $(BINARIES_DIR)/boot-part/
-> -endef
-> -MENDER_GRUBENV_TARGET_FINALIZE_HOOKS +=3D MENDER_GRUBENV_INSTALL_I386_CF=
-G
-> -endif # BR2_TARGET_GRUB2_HAS_LEGACY_BOOT
-> -
-> -ifeq ($(BR2_TARGET_GRUB2_HAS_EFI_BOOT),y)
-> -MENDER_GRUBENV_MODULES_MISSING_EFI =3D \
-> -       $(filter-out $(call
-> qstrip,$(BR2_TARGET_GRUB2_BUILTIN_MODULES_EFI)),\
-> -               $(MENDER_GRUBENV_MANDATORY_MODULES))
-> -
-> -MENDER_GRUBENV_MAKE_ENV +=3D BOOT_DIR=3D/boot/EFI/BOOT
-> -
-> -define MENDER_GRUBENV_INSTALL_EFI_CFG
-> -       mkdir -p $(BINARIES_DIR)/efi-part/EFI/BOOT
-> -       cp -dpfr $(MENDER_GRUBENV_BUILDDIR)/mender_grub.cfg \
-> -               $(TARGET_DIR)/boot/EFI/BOOT/grub.cfg
-> -       cp -dpfr $(TARGET_DIR)/boot/EFI/BOOT/grub.cfg \
-> -               $(BINARIES_DIR)/efi-part/EFI/BOOT
-> -       cp -dpfr $(TARGET_DIR)/boot/EFI/BOOT/grub-mender-grubenv \
-> -               $(BINARIES_DIR)/efi-part/
-> -endef
-> -MENDER_GRUBENV_TARGET_FINALIZE_HOOKS +=3D MENDER_GRUBENV_INSTALL_EFI_CFG
-> -endif # BR2_TARGET_GRUB2_HAS_EFI_BOOT
-> -
-> -ifeq ($(BR2_PACKAGE_MENDER_GRUBENV)$(BR_BUILDING),yy)
-> -ifneq ($(MENDER_GRUBENV_MODULES_MISSING_EFI),)
-> -$(error The following missing grub2 efi modules must be enabled for
-> mender-grubenv \
-> -       to work: $(MENDER_GRUBENV_MODULES_MISSING_EFI))
-> -endif
-> -ifneq ($(MENDER_GRUBENV_MODULES_MISSING_PC),)
-> -$(error The following missing grub2 pc modules must be enabled for
-> mender-grubenv \
-> -       to work: $(MENDER_GRUBENV_MODULES_MISSING_PC))
-> -endif
-> -endif
-> -
-> -define MENDER_GRUBENV_CONFIGURE_CMDS
-> -       $(INSTALL) -m 0644 $(MENDER_GRUBENV_DEFINES)
-> $(@D)/mender_grubenv_defines
-> -endef
-> -
-> -define MENDER_GRUBENV_BUILD_CMDS
-> -       $(MENDER_GRUBENV_MAKE_ENV) $(MAKE) -C $(@D)
-> -endef
-> -
-> -define MENDER_GRUBENV_INSTALL_TARGET_CMDS
-> -       $(MENDER_GRUBENV_MAKE_ENV) $(MAKE) DESTDIR=3D$(TARGET_DIR) -C $(@=
-D) \
-> -               install install-boot-env
-> -       # The grub-mender-grubenv-* utilities use this file to function.
-> -       echo 'ENV_DIR=3D/boot/grub-mender-grubenv' >
-> $(TARGET_DIR)/etc/mender_grubenv.config
-> -endef
-> -
-> -$(eval $(generic-package))
-> diff --git a/package/mender-update-modules/Config.in
-> b/package/mender-update-modules/Config.in
-> deleted file mode 100644
-> index 88e0805976..0000000000
-> --- a/package/mender-update-modules/Config.in
-> +++ /dev/null
-> @@ -1,250 +0,0 @@
-> -config BR2_PACKAGE_MENDER_UPDATE_MODULES
-> -       bool "mender-update-modules"
-> -       depends on BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS
-> -       depends on BR2_PACKAGE_MENDER
-> -       select BR2_PACKAGE_HOST_MENDER_ARTIFACT
-> -       help
-> -         community supported Update Modules. An Update Module is an
-> -         extension to the Mender client for supporting a new type of
-> -         software update, such as a package manager, container,
-> -         bootloader or even updates of nearby microcontrollers.
-> -         An Update Module can be tailored to a specific device or
-> -         environment (e.g. update a proprietary bootloader), or be
-> -         more general-purpose (e.g. install a set of .deb packages.).
-> -
-> -         https://github.com/mendersoftware/mender-update-modules
-> -
-> -if BR2_PACKAGE_MENDER_UPDATE_MODULES
-> -
-> -config BR2_PACKAGE_MENDER_UPDATE_MODULES_DFU
-> -       bool "DFU"
-> -       depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libusb
-> -       select BR2_PACKAGE_DFU_UTIL
-> -       help
-> -         The DFU Update Module is able to update peripheral devices
-> -         connected to the device running Mender.
-> -         Example use-cases:
-> -           - Deploy firmware updates to peripheral devices using the
-> -             USB Device Firmware Update (DFU) protocol
-> -
-> -
-> https://github.com/mendersoftware/mender-update-modules/tree/master/dfu
-> -
-> -config BR2_PACKAGE_MENDER_UPDATE_MODULES_DIR_OVERLAY
-> -       bool "dir-overlay"
-> -       help
-> -         The Directory Overlay Update Module installs a user defined
-> -         file tree structure into a given destination directory in the
-> -         target.
-> -
-> -         Before the deploy into the destination folder on the device,
-> -         the Update Module will take a backup copy of the current
-> -         contents, allowing restore of it using the rollback mechanism
-> -         of the Mender client if something goes wrong. The Update
-> -         Module will also delete the current installed content that was
-> -         previously installed using the same module, this means that
-> -         each deployment is self contained and there is no residues
-> -         left on the system from the previous deployment.
-> -
-> -         Example use-cases:
-> -           - Deploy root filesystem overlays
-> -
-> -
-> https://github.com/mendersoftware/mender-update-modules/tree/master/dir-o=
-verlay
-> -
-> -config BR2_PACKAGE_MENDER_UPDATE_MODULES_DIRTY
-> -       bool "dirty"
-> -       help
-> -         The dirty Update Module: modify your device state without
-> -         installing an artifact
-> -         Example use-cases:
-> -           - You have a specific action on the device that you want to
-> -             run multiple times
-> -
-> -           - You want to avoid re-creating artifacts just for the sake
-> -             of a new version/name
-> -
-> -           - You don't want the artifact the show up in the list of
-> -             installed artifacts
-> -
-> -           - The module will always fail the update process, which
-> -             means it can never be marked as installed. So it can be
-> -             attempted any number of times without having to recreate
-> -             newly versioned artifacts.
-> -
-> -
-> https://github.com/mendersoftware/mender-update-modules/tree/master/dirty
-> -
-> -config BR2_PACKAGE_MENDER_UPDATE_MODULES_DOCKER
-> -       bool "docker"
-> -       depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS #
-> docker-engine, docker-cli
-> -       depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS #
-> docker-engine, docker-cli
-> -       depends on BR2_TOOLCHAIN_HAS_THREADS # docker-engine, docker-cli
-> -       depends on !BR2_TOOLCHAIN_USES_UCLIBC # containerd -> runc
-> -       depends on BR2_USE_MMU # containerd
-> -       depends on !BR2_PACKAGE_CGROUPFS_MOUNT # docker-engine
-> -       depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS # libseccomp
-> -       depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_2 # docker-engine
-> -       select BR2_PACKAGE_DOCKER_ENGINE
-> -       select BR2_PACKAGE_DOCKER_CLI
-> -       select BR2_PACKAGE_JQ # runtime
-> -       help
-> -         The Docker Update Module handles the Docker images that shall
-> -         be running in the device. A deployment with this module will
-> -         stop all currently running Docker containers in the device,
-> -         and start new containers with the provided list of Docker
-> -         images in the Mender Artifact.
-> -
-> -         In case of an unforeseen error during the process, the module
-> -         will use the rollback mechanism of the Mender client to
-> -         restore the previously running Docker containers.
-> -
-> -
-> https://github.com/mendersoftware/mender-update-modules/tree/master/docke=
-r
-> -
-> -comment "docker support needs a glibc or musl toolchain w/ threads,
-> headers >=3D 5.2"
-> -       depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
-> -       depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
-> -       depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS
-> -       depends on !BR2_TOOLCHAIN_HAS_THREADS || \
-> -               BR2_TOOLCHAIN_USES_UCLIBC || \
-> -               !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_2
-> -       depends on BR2_USE_MMU
-> -
-> -config BR2_PACKAGE_MENDER_UPDATE_MODULES_IPK
-> -       bool "ipk"
-> -       depends on BR2_USE_MMU # opkg
-> -       depends on BR2_USE_WCHAR # opkg -> libarchive
-> -       select BR2_PACKAGE_OPKG
-> -       help
-> -         The IPK Update Module allows opkg-based packages to be
-> -         installed on a device
-> -
-> -         Example use-cases:
-> -           - Deploy any ipk package
-> -
-> -
-> https://github.com/mendersoftware/mender-update-modules/tree/master/ipk
-> -
-> -comment "ipk support needs a toolchain w/ wchar"
-> -       depends on BR2_USE_MMU
-> -       depends on !BR2_USE_WCHAR
-> -
-> -config BR2_PACKAGE_MENDER_UPDATE_MODULES_PODMAN
-> -       bool "podman"
-> -       depends on BR2_USE_MMU  # podman
-> -       depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS  # podman
-> -       depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS  # podman
-> -       depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS  # podman
-> -       depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS  # podman
-> -       depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14  # podman
-> -       depends on BR2_TOOLCHAIN_HAS_THREADS  # podman
-> -       depends on BR2_USE_WCHAR  # podman
-> -       select BR2_PACKAGE_JQ # runtime
-> -       select BR2_PACKAGE_PODMAN
-> -       help
-> -         The Podman Update Module handles the Podman container images
-> -         that shall be running on the target device. A deployment with
-> -         this module will stop all currently running Podman containers
-> -         on the device and start new containers based on the list of
-> -         Podman images provided in the Mender Artifact.
-> -
-> -         In case of any unforeseen error during the process, the module
-> -         will trigger the rollback mechanism of the Mender client to
-> -         restore the previously running Podman containers.
-> -
-> -
-> https://github.com/mendersoftware/mender-update-modules/tree/master/podma=
-n
-> -
-> -comment "podman support needs a toolchain w/ headers >=3D 4.14, threads,
-> wchar"
-> -       depends on BR2_USE_MMU
-> -       depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
-> -       depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
-> -       depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS
-> -       depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS
-> -       depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14 \
-> -               || !BR2_TOOLCHAIN_HAS_THREADS \
-> -               || !BR2_USE_WCHAR
-> -
-> -config BR2_PACKAGE_MENDER_UPDATE_MODULES_REBOOT
-> -       bool "reboot"
-> -       help
-> -         The reboot Update Module: reboot your device remotely.
-> -
-> -         Example use-cases:
-> -           - Something went wrong and you have to reboot your device
-> -             remotely, and all access to the device you have is Mender.
-> -
-> -
-> https://github.com/mendersoftware/mender-update-modules/tree/master/reboo=
-t
-> -
-> -config BR2_PACKAGE_MENDER_UPDATE_MODULES_ROOTFS_VERSION_CHECK
-> -       bool "rootfs version check"
-> -       depends on BR2_USE_WCHAR # python3
-> -       depends on BR2_USE_MMU # python3
-> -       depends on BR2_TOOLCHAIN_HAS_THREADS # python3
-> -       depends on !BR2_STATIC_LIBS # python3
-> -       select BR2_PACKAGE_PYTHON3 # runtime
-> -       help
-> -         The rootfs-version-check Update Module implements a full image
-> -         update with additional checks to protect against replay
-> -         attacks.
-> -
-> -         This is functionally equivalent to the built-in full image
-> -         update with an extra check to ensure the artifact name
-> -         follows a specific format and that installing "older" images
-> -         is rejected. For this reference implementaton, we simply use
-> -         a numeric identifier and ensure that it is larger than the
-> -         version installed. For actual device fleet use, you may need
-> -         to customize this based on your artifact naming scheme.
-> -
-> -         Example use-cases:
-> -           - Deploy root filesystem updates and ensure only newer
-> -             artifacts are installed
-> -
-> -
-> https://github.com/mendersoftware/mender-update-modules/tree/master/rootf=
-s-version-check
-> -
-> -comment "rootfs version check needs a toolchain w/ threads, dynamic
-> library, wchar"
-> -       depends on BR2_USE_MMU
-> -       depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
-> -               !BR2_USE_WCHAR
-> -
-> -config BR2_PACKAGE_MENDER_UPDATE_MODULES_RPM
-> -       bool "rpm"
-> -       depends on !BR2_STATIC_LIBS # dlfcn.h
-> -       depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-> -       depends on BR2_PACKAGE_LUA && !BR2_PACKAGE_LUA_5_1
-> -       depends on BR2_TOOLCHAIN_HAS_THREADS
-> -       select BR2_PACKAGE_RPM
-> -       help
-> -         The Rpm Update Module updates software on the device using
-> -         the native local package manager.
-> -
-> -         A Mender Artifact containing one or more software packages
-> -         is sent to the device, where the Update Module will call
-> -         the package manager to install them in alphabetical order.
-> -
-> -
-> https://github.com/mendersoftware/mender-update-modules/tree/master/rpm
-> -
-> -comment "rpm needs a toolchain w/ dynamic library, threads and lua >=3D =
-5.3"
-> -       depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS \
-> -               || !BR2_PACKAGE_LUA || BR2_PACKAGE_LUA_5_1
-> -       depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-> -
-> -config BR2_PACKAGE_MENDER_UPDATE_MODULES_SWU
-> -       bool "swupdate"
-> -       depends on !BR2_STATIC_LIBS
-> -       depends on BR2_TOOLCHAIN_HAS_SYNC_4 # swupdate
-> -       select BR2_PACKAGE_JQ # runtime
-> -       select BR2_PACKAGE_SWUPDATE
-> -       help
-> -         The SWU Update Module allows deploying an SWUpdate-based
-> -         artifact to the device.
-> -
-> -         Example use-cases:
-> -           - Extend an existing platform using SWUpdate with OTA.
-> -
-> -
-> https://github.com/mendersoftware/mender-update-modules/tree/master/swu
-> -
-> -comment "swupdate support needs a toolchain w/ dynamic library"
-> -       depends on BR2_TOOLCHAIN_HAS_SYNC_4
-> -       depends on BR2_STATIC_LIBS
-> -
-> -endif
-> -
-> -comment "mender-update-modules needs mender"
-> -       depends on BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS
-> -       depends on !BR2_PACKAGE_MENDER
-> diff --git a/package/mender-update-modules/mender-update-modules.hash
-> b/package/mender-update-modules/mender-update-modules.hash
-> deleted file mode 100644
-> index ec879f46a1..0000000000
-> --- a/package/mender-update-modules/mender-update-modules.hash
-> +++ /dev/null
-> @@ -1,3 +0,0 @@
-> -# Locally calculated
-> -sha256  4846f39abc254ad2ae2a9f3d5479b064bc1bae5034b9d276ebdb09d8c60f4541
-> mender-update-modules-d8c4683e6660af6c65069e10ee4b8ee50ec1af46.tar.gz
-> -sha256  d0f406b04e7901e6b4076bdf5fd20f9d7f04fc41681069fd8954413ac6295688
-> LICENSE
-> diff --git a/package/mender-update-modules/mender-update-modules.mk
-> b/package/mender-update-modules/mender-update-modules.mk
-> deleted file mode 100644
-> index 0024acc189..0000000000
-> --- a/package/mender-update-modules/mender-update-modules.mk
-> +++ /dev/null
-> @@ -1,77 +0,0 @@
->
-> -########################################################################=
-########
-> -#
-> -# mender-update-modules
-> -#
->
-> -########################################################################=
-########
-> -
-> -MENDER_UPDATE_MODULES_VERSION =3D d8c4683e6660af6c65069e10ee4b8ee50ec1af=
-46
-> -MENDER_UPDATE_MODULES_SITE =3D $(call
-> github,mendersoftware,mender-update-modules,$(MENDER_UPDATE_MODULES_VERSI=
-ON))
-> -MENDER_UPDATE_MODULES_LICENSE =3D Apache-2.0
-> -MENDER_UPDATE_MODULES_LICENSE_FILES =3D LICENSE
-> -MENDER_UPDATE_MODULES_DEPENDENCIES =3D host-mender-artifact mender
-> -
-> -MENDER_UPDATE_MODULES_MODULES =3D script
-> -
-> -ifeq ($(BR2_PACKAGE_MENDER_UPDATE_MODULES_DFU),y)
-> -MENDER_UPDATE_MODULES_MODULES +=3D dfu
-> -endif
-> -
-> -ifeq ($(BR2_PACKAGE_MENDER_UPDATE_MODULES_DIR_OVERLAY),y)
-> -MENDER_UPDATE_MODULES_MODULES +=3D dir-overlay
-> -endif
-> -
-> -ifeq ($(BR2_PACKAGE_MENDER_UPDATE_MODULES_DIRTY),y)
-> -MENDER_UPDATE_MODULES_MODULES +=3D dirty
-> -endif
-> -
-> -ifeq ($(BR2_PACKAGE_MENDER_UPDATE_MODULES_DOCKER),y)
-> -MENDER_UPDATE_MODULES_MODULES +=3D docker
-> -endif
-> -
-> -ifeq ($(BR2_PACKAGE_MENDER_UPDATE_MODULES_IPK),y)
-> -MENDER_UPDATE_MODULES_MODULES +=3D ipk
-> -endif
-> -
-> -ifeq ($(BR2_PACKAGE_MENDER_UPDATE_MODULES_PODMAN),y)
-> -MENDER_UPDATE_MODULES_MODULES +=3D podman
-> -endif
-> -
-> -ifeq ($(BR2_PACKAGE_MENDER_UPDATE_MODULES_REBOOT),y)
-> -MENDER_UPDATE_MODULES_MODULES +=3D reboot
-> -define MENDER_UPDATE_MODULES_INSTALL_MENDER_REBOOT_GEN
-> -       $(INSTALL) -D -m 0755 $(@D)/reboot/reboot-gen \
-> -               $(HOST_DIR)/bin/reboot-artifact-gen
-> -endef
-> -MENDER_UPDATE_MODULES_POST_INSTALL_TARGET_HOOKS +=3D
-> MENDER_UPDATE_MODULES_INSTALL_MENDER_REBOOT_GEN
-> -endif
-> -
-> -ifeq ($(BR2_PACKAGE_MENDER_UPDATE_MODULES_ROOTFS_VERSION_CHECK),y)
-> -MENDER_UPDATE_MODULES_DEPENDENCIES +=3D python3
-> -MENDER_UPDATE_MODULES_MODULES +=3D rootfs-version-check
-> -define MENDER_UPDATE_MODULES_INSTALL_MENDER_COMPARE_VERSIONS
-> -       $(INSTALL) -D -m 0755
-> $(@D)/rootfs-version-check/mender-compare-versions \
-> -               $(TARGET_DIR)/usr/bin/mender-compare-versions
-> -endef
-> -MENDER_UPDATE_MODULES_POST_INSTALL_TARGET_HOOKS +=3D
-> MENDER_UPDATE_MODULES_INSTALL_MENDER_COMPARE_VERSIONS
-> -endif
-> -
-> -ifeq ($(BR2_PACKAGE_MENDER_UPDATE_MODULES_RPM),y)
-> -MENDER_UPDATE_MODULES_MODULES +=3D rpm
-> -endif
-> -
-> -ifeq ($(BR2_PACKAGE_MENDER_UPDATE_MODULES_SWU),y)
-> -MENDER_UPDATE_MODULES_MODULES +=3D swu
-> -endif
-> -
-> -define MENDER_UPDATE_MODULES_INSTALL_TARGET_CMDS
-> -       $(foreach f,$(MENDER_UPDATE_MODULES_MODULES), \
-> -               $(INSTALL) -D -m 0775 $(@D)/$(f)/module/$(f) \
-> -                       $(TARGET_DIR)/usr/share/mender/modules/v3/$(f); \
-> -               if [ -d $(@D)/$(f)/module-artifact-gen ]; then \
-> -                       $(INSTALL) -D -m 0775
-> $(@D)/$(f)/module-artifact-gen/$(f)-artifact-gen \
-> -                               $(HOST_DIR)/bin/$(f)-artifact-gen; \
-> -               fi; \
-> -       )
-> -endef
-> -
-> -$(eval $(generic-package))
-> diff --git a/package/mender/Config.in b/package/mender/Config.in
-> deleted file mode 100644
-> index c9b9d0b757..0000000000
-> --- a/package/mender/Config.in
-> +++ /dev/null
-> @@ -1,45 +0,0 @@
-> -config BR2_PACKAGE_MENDER
-> -       bool "mender"
-> -       depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
-> -       depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
-> -       depends on BR2_TOOLCHAIN_HAS_THREADS
-> -       select BR2_PACKAGE_HOST_GO
-> -       select BR2_PACKAGE_OPENSSL
-> -       select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
-> -       select BR2_PACKAGE_LIBOPENSSL_ENGINES
-> -       select BR2_PACKAGE_LIBOPENSSL_ENABLE_MD4
-> -       select BR2_PACKAGE_LIBOPENSSL_ENABLE_RMD160
-> -       help
-> -         Mender is an open source over-the-air (OTA) software updater
-> -         for embedded Linux devices. Mender comprises a client
-> -         running at the embedded device, as well as a server that
-> -         manages deployments across many devices.
-> -
-> -         Notes:
-> -         For systems using uboot as the bootloader:
-> -           - uboot must have the mender uboot patches applied.
-> -           - uboot-tools must be selected.
-> -           - fw_printenv must be functional on the device.
-> -         The Mender Uboot patches are at:
-> -         https://github.com/mendersoftware/meta-mender/
-> -
-> -         For more information on Manual U-Boot integration, see:
-> -
-> https://docs.mender.io/2.6/system-updates-yocto-project/board-integration=
-/bootloader-support/u-boot/manual-u-boot-integration
-> -
-> -         For systems using Grub2 as the bootloader:
-> -           - Mender depends on the mender-grubenv package.
-> -           - The mender-grubenv package provides a fw_printenv script,
-> -             which is not compatible with the uboot-tools fw_printenv
-> -             script.
-> -
-> -         The mender project recommends using uboot to load Grub2 as a
-> -         secondary bootloader whenever possible. Using Grub2 as a
-> -         secondary bootloader prevents users from porting the patches
-> -         for uboot to each new device.
-> -
-> -         https://github.com/mendersoftware/mender
-> -
-> -comment "mender needs a toolchain w/ threads"
-> -       depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
-> -       depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
-> -       depends on !BR2_TOOLCHAIN_HAS_THREADS
-> diff --git a/package/mender/S42mender b/package/mender/S42mender
-> deleted file mode 100644
-> index 70116ed4eb..0000000000
-> --- a/package/mender/S42mender
-> +++ /dev/null
-> @@ -1,44 +0,0 @@
-> -#!/bin/sh
-> -#
-> -# Starts mender service.
-> -#
-> -DAEMON=3D"mender"
-> -DAEMON_PATH=3D"/usr/bin/mender"
-> -PIDFILE=3D"/var/run/${DAEMON}.pid"
-> -DAEMON_ARGS=3D"daemon"
-> -
-> -start() {
-> -       printf "Starting mender service: "
-> -       umask 077
-> -       start-stop-daemon -bmSqp "$PIDFILE" -x ${DAEMON_PATH} --
-> ${DAEMON_ARGS}
-> -       status=3D$?
-> -       [ "${status}" =3D 0 ] && echo "OK" || echo "FAIL"
-> -}
-> -
-> -stop() {
-> -       printf "Stopping mender service: "
-> -       start-stop-daemon -Kqp "$PIDFILE"
-> -       status=3D$?
-> -       [ "${status}" =3D 0 ] && echo "OK" || echo "FAIL"
-> -}
-> -restart() {
-> -       stop
-> -       start
-> -}
-> -
-> -case "$1" in
-> -       start)
-> -               start
-> -               ;;
-> -       stop)
-> -               stop
-> -               ;;
-> -       restart|reload)
-> -               restart
-> -               ;;
-> -       *)
-> -               echo "Usage: $0 {start|stop|reload|restart}"
-> -               exit 1
-> -esac
-> -
-> -exit $?
-> diff --git a/package/mender/device_type b/package/mender/device_type
-> deleted file mode 100644
-> index a097ef2b3a..0000000000
-> --- a/package/mender/device_type
-> +++ /dev/null
-> @@ -1 +0,0 @@
-> -device_type=3DBUILDROOT_DEVICE
-> diff --git a/package/mender/mender-client.service
-> b/package/mender/mender-client.service
-> deleted file mode 100644
-> index 47e439993c..0000000000
-> --- a/package/mender/mender-client.service
-> +++ /dev/null
-> @@ -1,13 +0,0 @@
-> -[Unit]
-> -Description=3DMender OTA update service
-> -After=3Dsystemd-resolved.service
-> -
-> -[Service]
-> -Type=3Didle
-> -User=3Droot
-> -Group=3Droot
-> -ExecStart=3D/usr/bin/mender daemon
-> -Restart=3Don-abort
-> -
-> -[Install]
-> -WantedBy=3Dmulti-user.target
-> diff --git a/package/mender/mender.conf b/package/mender/mender.conf
-> deleted file mode 100644
-> index 2393948f8e..0000000000
-> --- a/package/mender/mender.conf
-> +++ /dev/null
-> @@ -1,11 +0,0 @@
-> -{
-> -  "InventoryPollIntervalSeconds": 1800,
-> -  "UpdatePollIntervalSeconds": 1800,
-> -  "RetryPollIntervalSeconds": 300,
-> -  "RootfsPartA": "/dev/mmcblk0p2",
-> -  "RootfsPartB": "/dev/mmcblk0p3",
-> -  "DeviceTypeFile": "/var/lib/mender/device_type",
-> -  "ServerCertificate": "/etc/mender/server.crt",
-> -  "ServerURL": "https://docker.mender.io",
-> -  "TenantToken": "dummy"
-> -}
-> diff --git a/package/mender/mender.hash b/package/mender/mender.hash
-> deleted file mode 100644
-> index 17fe08c827..0000000000
-> --- a/package/mender/mender.hash
-> +++ /dev/null
-> @@ -1,47 +0,0 @@
-> -# Locally computed:
-> -sha256  35e369759b8d4f012153e538b5daf1e0cebe842205811e708332c5a092270ac5
-> mender-3.5.3-go2.tar.gz
-> -
-> -# Vendor licenses
-> -# Generated with sed '/^[A-Za-z0-9_]/s/^/sha256  /'
-> LIC_FILES_CHKSUM.sha256
-> -
-> -# Apache-2.0 license.
-> -sha256  d0f406b04e7901e6b4076bdf5fd20f9d7f04fc41681069fd8954413ac6295688
-> LICENSE
-> -sha256  52b2497ce07650b825015e80ca7a5d40c360c04c530234ca6d950b0f98bca23a
-> vendor/github.com/mendersoftware/mender-artifact/LICENSE
-> -sha256 <http://github.com/mendersoftware/mender-artifact/LICENSE-sha256>
-> 73ba74dfaa520b49a401b5d21459a8523a146f3b7518a833eea5efa85130bf68  vendor/
-> github.com/mendersoftware/openssl/LICENSE
-> -sha256 <http://github.com/mendersoftware/openssl/LICENSE-sha256>
-> cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/
-> github.com/minio/sha256-simd/LICENSE
-> -sha256 <http://github.com/minio/sha256-simd/LICENSE-sha256>
-> 8f5d89b47d7a05a199b77b7e0f362dad391d451ebda4ef48ba11c50c071564c7  vendor/
-> github.com/mendersoftware/progressbar/LICENSE
-> -#
-> -# BSD 2 Clause license.
-> -sha256  8d427fd87bc9579ea368fde3d49f9ca22eac857f91a9dec7e3004bdfab7dee86
-> vendor/github.com/pkg/errors/LICENSE
-> -sha256 <http://github.com/pkg/errors/LICENSE-sha256>
-> e4646a82a976369d7ae8f6ed5c11d35dc0af18433a8ccc24c85b459ad8b95128  vendor/
-> github.com/godbus/dbus/LICENSE
-> -sha256 <http://github.com/godbus/dbus/LICENSE-sha256>
-> 2be1b548b0387ca8948e1bb9434e709126904d15f622cc2d0d8e7f186e4d122d  vendor/
-> github.com/gorilla/websocket/LICENSE
-> -#
-> -# BSD 3 Clause license.
-> -sha256  0d9e582ee4bff57bf1189c9e514e6da7ce277f9cd3bc2d488b22fbb39a6d87cf
-> vendor/github.com/klauspost/compress/LICENSE
-> -sha256 <http://github.com/klauspost/compress/LICENSE-sha256>
-> 2eb550be6801c1ea434feba53bf6d12e7c71c90253e0a9de4a4f46cf88b56477  vendor/
-> github.com/pmezard/go-difflib/LICENSE
-> -sha256 <http://github.com/pmezard/go-difflib/LICENSE-sha256>
-> 2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/
-> golang.org/x/sys/LICENSE
-> -sha256 <http://golang.org/x/sys/LICENSE-sha256>
-> 0634b008cee55ca01f0888d2f5aba2d34e66c3f52c31a4e16a5d5d33d0c2a03e  vendor/
-> github.com/bmatsuo/lmdb-go/LICENSE.md
-> -sha256 <http://github.com/bmatsuo/lmdb-go/LICENSE.md-sha256>
-> 87640bc4df2ceb1559f268a3db1ba859ab780f7ba5b1b4545173d4680a3d918b  vendor/
-> github.com/remyoudompheng/go-liblzma/LICENSE
-> -sha256 <http://github.com/remyoudompheng/go-liblzma/LICENSE-sha256>
-> 2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/
-> golang.org/x/term/LICENSE
-> -#
-> -# ISC license.
-> -sha256  1b93a317849ee09d3d7e4f1d20c2b78ddb230b4becb12d7c224c927b9d470251
-> vendor/github.com/davecgh/go-spew/LICENSE
-> -#
-> -# MIT license.
-> -sha256  6d2de1cde19c4d2bd8bcd9aaa1d581f4cfa3db9cf71896140330eaa2f2687685
-> vendor/github.com/klauspost/pgzip/LICENSE
-> -sha256 <http://github.com/klauspost/pgzip/LICENSE-sha256>
-> f69f157b0be75da373605dbc8bbf142e8924ee82d8f44f11bcaf351335bf98cf  vendor/
-> github.com/klauspost/compress/internal/snapref/LICENSE
-> -sha256
-> <http://github.com/klauspost/compress/internal/snapref/LICENSE-sha256>
-> f566a9f97bacdaf00d9f21dd991e81dc11201c4e016c86b470799429a1c9a79c  vendor/
-> github.com/klauspost/compress/zstd/internal/xxhash/LICENSE.txt
-> -sha256  5d966570d7a442d4e969892860a914e542c97f262c873baee8f0aa48e1f40212
-> vendor/github.com/klauspost/cpuid/v2/LICENSE
-> -sha256 <http://github.com/klauspost/cpuid/v2/LICENSE-sha256>
-> 51a0c9ec7f8b7634181b8d4c03e5b5d204ac21d6e72f46c313973424664b2e6b  vendor/
-> github.com/sirupsen/logrus/LICENSE
-> -sha256 <http://github.com/sirupsen/logrus/LICENSE-sha256>
-> f8e536c1c7b695810427095dc85f5f80d44ff7c10535e8a9486cf393e2599189  vendor/
-> github.com/stretchr/testify/LICENSE
-> -sha256 <http://github.com/stretchr/testify/LICENSE-sha256>
-> ffa15bdce332058a03a1d923910864fb6e58bf6df66a0e3914284725b327183e  vendor/
-> github.com/ungerik/go-sysfs/LICENSE
-> -sha256 <http://github.com/ungerik/go-sysfs/LICENSE-sha256>
-> da277af11b85227490377fbcac6afccc68be560c4fff36ac05ca62de55345fd7  vendor/
-> github.com/urfave/cli/v2/LICENSE
-> -sha256 <http://github.com/urfave/cli/v2/LICENSE-sha256>
-> b2663894033a05fd80261176cd8da1d72546e25842d5c1abcc852ca23b6b61b0  vendor/
-> github.com/stretchr/objx/LICENSE
-> -sha256 <http://github.com/stretchr/objx/LICENSE-sha256>
-> d18f6323b71b0b768bb5e9616e36da390fbd39369a81807cca352de4e4e6aa0b  vendor/
-> gopkg.in/yaml.v3/LICENSE
-> -sha256 <http://gopkg.in/yaml.v3/LICENSE-sha256>
-> 08eab1118c80885fa1fa6a6dd7303f65a379fcb3733e063d20d1bbc2c76e6fa1  vendor/
-> github.com/mattn/go-isatty/LICENSE
-> -#
-> -# OpenLDAP Public License
-> -sha256  310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569
-> vendor/github.com/bmatsuo/lmdb-go/LICENSE.mdb.md
-> -
-> -# sha256 of all the vendor licenses combined
-> -sha256  86407bd98d5ea7fb0f09ab771c3333e975d06565b809a2dd95f864dc1e3a09b3
-> LIC_FILES_CHKSUM.sha256
-> diff --git a/package/mender/mender.mk b/package/mender/mender.mk
-> deleted file mode 100644
-> index 76dc28d547..0000000000
-> --- a/package/mender/mender.mk
-> +++ /dev/null
-> @@ -1,110 +0,0 @@
->
-> -########################################################################=
-########
-> -#
-> -# mender
-> -#
->
-> -########################################################################=
-########
-> -
-> -MENDER_VERSION =3D 3.5.3
-> -MENDER_SITE =3D $(call github,mendersoftware,mender,$(MENDER_VERSION))
-> -MENDER_LICENSE =3D Apache-2.0, BSD-2-Clause, BSD-3-Clause, ISC, MIT,
-> OLDAP-2.8
-> -MENDER_CPE_ID_VENDOR =3D northern.tech
-> -# CVE-2024-46948 only affects mender-server
-> -MENDER_IGNORE_CVES =3D CVE-2024-46948
-> -
-> -# Vendor license paths generated with:
-> -#    awk '{print $2}' LIC_FILES_CHKSUM.sha256 | grep vendor
-> -MENDER_LICENSE_FILES =3D \
-> -       LICENSE \
-> -       LIC_FILES_CHKSUM.sha256 \
-> -       vendor/github.com/mendersoftware/mender-artifact/LICENSE \
-> -       vendor/github.com/mendersoftware/openssl/LICENSE \
-> -       vendor/github.com/minio/sha256-simd/LICENSE \
-> -       vendor/github.com/mendersoftware/progressbar/LICENSE \
-> -       vendor/github.com/pkg/errors/LICENSE \
-> -       vendor/github.com/godbus/dbus/LICENSE \
-> -       vendor/github.com/gorilla/websocket/LICENSE \
-> -       vendor/github.com/klauspost/compress/LICENSE \
-> -       vendor/github.com/pmezard/go-difflib/LICENSE \
-> -       vendor/golang.org/x/sys/LICENSE \
-> -       vendor/github.com/bmatsuo/lmdb-go/LICENSE.md \
-> -       vendor/github.com/remyoudompheng/go-liblzma/LICENSE \
-> -       vendor/golang.org/x/term/LICENSE \
-> -       vendor/github.com/davecgh/go-spew/LICENSE \
-> -       vendor/github.com/klauspost/pgzip/LICENSE \
-> -       vendor/github.com/klauspost/compress/internal/snapref/LICENSE \
-> -       vendor/
-> github.com/klauspost/compress/zstd/internal/xxhash/LICENSE.txt \
-> -       vendor/github.com/klauspost/cpuid/v2/LICENSE \
-> -       vendor/github.com/sirupsen/logrus/LICENSE \
-> -       vendor/github.com/stretchr/testify/LICENSE \
-> -       vendor/github.com/ungerik/go-sysfs/LICENSE \
-> -       vendor/github.com/urfave/cli/v2/LICENSE \
-> -       vendor/github.com/stretchr/objx/LICENSE \
-> -       vendor/gopkg.in/yaml.v3/LICENSE \
-> -       vendor/github.com/mattn/go-isatty/LICENSE \
-> -       vendor/github.com/bmatsuo/lmdb-go/LICENSE.mdb.md
-> -
-> -MENDER_DEPENDENCIES =3D host-pkgconf openssl
-> -
-> -MENDER_LDFLAGS =3D -X
-> github.com/mendersoftware/mender/conf.Version=3D$(MENDER_VERSION)
-> -
-> -MENDER_UPDATE_MODULES_FILES =3D directory single-file
-> -
-> -define MENDER_INSTALL_CONFIG_FILES
-> -       $(INSTALL) -d -m 755 $(TARGET_DIR)/etc/mender/scripts
-> -       echo -n "3" > $(TARGET_DIR)/etc/mender/scripts/version
-> -
-> -       $(INSTALL) -D -m 0644 $(MENDER_PKGDIR)/mender.conf \
-> -               $(TARGET_DIR)/etc/mender/mender.conf
-> -       $(INSTALL) -D -m 0644 $(MENDER_PKGDIR)/server.crt \
-> -               $(TARGET_DIR)/etc/mender/server.crt
-> -
-> -       $(INSTALL) -D -m 0755 $(@D)/support/mender-device-identity \
-> -
->  $(TARGET_DIR)/usr/share/mender/identity/mender-device-identity
-> -       $(foreach f,bootloader-integration hostinfo network os
-> rootfs-type, \
-> -               $(INSTALL) -D -m 0755 $(@D)/support/mender-inventory-$(f)=
+>> -       vendor/
+>> github.com/AzureAD/microsoft-authentication-library-for-go/LICENSE \
+>> -       vendor/github.com/goccy/go-json/LICENSE \
+>> -       vendor/github.com/golang-jwt/jwt/v5/LICENSE \
+>> -       vendor/github.com/lestrrat-go/iter/LICENSE \
+>> -       vendor/github.com/lestrrat-go/blackmagic/LICENSE \
+>> -       vendor/github.com/lestrrat-go/backoff/v2/LICENSE \
+>> -       vendor/github.com/lestrrat-go/httpcc/LICENSE \
+>> -       vendor/github.com/lestrrat-go/option/LICENSE \
+>> -       vendor/github.com/lestrrat-go/jwx/LICENSE \
+>> -       vendor/github.com/hashicorp/go-secure-stdlib/strutil/LICENSE \
+>> -       vendor/github.com/hashicorp/go-secure-stdlib/parseutil/LICENSE \
+>> -       vendor/github.com/hashicorp/errwrap/LICENSE \
+>> -       vendor/github.com/hashicorp/hcl/LICENSE \
+>> -       vendor/github.com/hashicorp/go-cleanhttp/LICENSE \
+>> -       vendor/github.com/hashicorp/go-rootcerts/LICENSE \
+>> -       vendor/github.com/hashicorp/go-retryablehttp/LICENSE \
+>> -       vendor/github.com/hashicorp/go-sockaddr/LICENSE \
+>> -       vendor/github.com/hashicorp/vault/api/LICENSE \
+>> -       vendor/github.com/hashicorp/go-multierror/LICENSE \
+>> -       vendor/github.com/felixge/httpsnoop/LICENSE.txt
+>> -
+>> -HOST_MENDER_ARTIFACT_DEPENDENCIES =3D host-pkgconf host-openssl host-xz
+>> -
+>> -ifeq ($(BR2_PACKAGE_HOST_ZSTD),y)
+>> -HOST_MENDER_ARTIFACT_DEPENDENCIES +=3D host-zstd
+>> -endif
+>> -
+>> -HOST_MENDER_ARTIFACT_GO_ENV +=3D \
+>> -       PATH=3D$(BR_PATH) \
+>> -       PKG_CONFIG=3D"$(PKG_CONFIG_HOST_BINARY)" \
+>> -       PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=3D1 \
+>> -       PKG_CONFIG_ALLOW_SYSTEM_LIBS=3D1 \
+>> -
+>>  PKG_CONFIG_LIBDIR=3D"$(HOST_DIR)/lib/pkgconfig:$(HOST_DIR)/share/pkgcon=
+fig" \
+>> -       PKG_CONFIG_PATH=3D"$(HOST_DIR)/lib/pkgconfig" \
+>> -       PKG_CONFIG_SYSROOT_DIR=3D"/"
+>> -
+>> -HOST_MENDER_ARTIFACT_LDFLAGS =3D -X
+>> github.com/mendersoftware/mender-artifact/cli.Version=3D$(HOST_MENDER_AR=
+TIFACT_VERSION)
+>> -
+>> -$(eval $(host-golang-package))
+>> diff --git a/package/mender-connect/Config.in
+>> b/package/mender-connect/Config.in
+>> deleted file mode 100644
+>> index d478e468c2..0000000000
+>> --- a/package/mender-connect/Config.in
+>> +++ /dev/null
+>> @@ -1,34 +0,0 @@
+>> -config BR2_PACKAGE_MENDER_CONNECT
+>> -       bool "mender-connect"
+>> -       depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+>> -       depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
+>> -       depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2, mender
+>> -       depends on BR2_USE_WCHAR # libglib2 -> gettext
+>> -       depends on BR2_USE_MMU # dbus -> fork()
+>> -       select BR2_PACKAGE_DBUS # runtime
+>> -       select BR2_PACKAGE_HOST_GO
+>> -       select BR2_PACKAGE_LIBGLIB2
+>> -       select BR2_PACKAGE_MENDER # runtime
+>> -       select BR2_PACKAGE_OPENSSL
+>> -       help
+>> -         mender-connect is a daemon responsible for handling
+>> -         bidirectional (websocket) communication with the Mender
+>> -         server. The daemon is responsible for implementing a range of
+>> -         troubleshooting features to the device as well as several
+>> -         enhancement to the mender-client.
+>> -
+>> -         Mender Connect is loosely coupled with the Mender Client. The
+>> -         main information passed between mender-client and
+>> -         mender-connect is the device authorization status. Since only
+>> -         accepted devices can interact with the Mender Server, the
+>> -         Mender Client passes over DBus the authorization token which
+>> -         Mender Connect uses to establish a Websocket connection to the
+>> -         server.
+>> -
+>> -         https://github.com/mendersoftware/mender-connect
+>> -
+>> -comment "mender-connect needs a toolchain w/ threads, wchar"
+>> -       depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+>> -       depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
+>> -       depends on BR2_USE_MMU
+>> -       depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
+>> diff --git a/package/mender-connect/S43mender-connect
+>> b/package/mender-connect/S43mender-connect
+>> deleted file mode 100644
+>> index 4cc21510c4..0000000000
+>> --- a/package/mender-connect/S43mender-connect
+>> +++ /dev/null
+>> @@ -1,53 +0,0 @@
+>> -#!/bin/sh
+>> -DAEMON=3D"mender-connect"
+>> -DAEMON_PATH=3D"/usr/bin/mender-connect"
+>> -PIDFILE=3D"/var/run/${DAEMON}.pid"
+>> -
+>> -MENDER_CONNECT_ARGS=3D""
+>> -
+>> -# shellcheck source=3D/dev/null
+>> -[ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
+>> -
+>> -start() {
+>> -       printf 'Starting %s: ' "${DAEMON}"
+>> -       umask 077
+>> -       # shellcheck disable=3DSC2086 # we need the word splitting
+>> -       start-stop-daemon -bmSqp "$PIDFILE" -x ${DAEMON_PATH} \
+>> -               -- -daemon ${DAEMON_ARGS}
+>> -       status=3D$?
+>> -       if [ "$status" -eq 0 ]; then
+>> -               echo "OK"
+>> -       else
+>> -               echo "FAIL"
+>> -       fi
+>> -       return "$status"
+>> -}
+>> -
+>> -stop() {
+>> -       printf 'Stopping %s: ' "${DAEMON}"
+>> -       start-stop-daemon -K -q -p "$PIDFILE"
+>> -       status=3D$?
+>> -       if [ "$status" -eq 0 ]; then
+>> -               echo "OK"
+>> -       else
+>> -               echo "FAIL"
+>> -       fi
+>> -       return "$status"
+>> -}
+>> -
+>> -restart() {
+>> -       stop
+>> -       sleep 1
+>> -       start
+>> -}
+>> -
+>> -case "$1" in
+>> -       start|stop|restart)
+>> -               "$1";;
+>> -       reload)
+>> -               # Restart, since there is no true "reload" feature.
+>> -               restart;;
+>> -       *)
+>> -               echo "Usage: $0 {start|stop|restart|reload}"
+>> -               exit 1
+>> -esac
+>> diff --git a/package/mender-connect/mender-connect.hash
+>> b/package/mender-connect/mender-connect.hash
+>> deleted file mode 100644
+>> index 2872bb467c..0000000000
+>> --- a/package/mender-connect/mender-connect.hash
+>> +++ /dev/null
+>> @@ -1,35 +0,0 @@
+>> -# Locally computed:
+>> -sha256
+>> b04331f447b9d21c5962d5aef2670f1de861e3065522a1b298af0904a8ee6400
+>> mender-connect-3.0.0-go2.tar.gz
+>> -sha256
+>> 420fd444caf5a39bc2db0ae2202c71451a8ea3900011547bd0fb22678aaa4ef6
+>> LIC_FILES_CHKSUM.sha256
+>> -
+>> -# Vendor licenses
+>> -# Generated with sed '/^[A-Za-z0-9_]/s/^/sha256  /'
+>> LIC_FILES_CHKSUM.sha256
+>> -
+>> -#
+>> -# Apache-2.0
+>> -sha256
+>> d7e8fd4ad05371007d60285c309ba7a7ce3e61029b843f949fbb9ec79dc9eb47  LICENS=
+E
+>> -sha256
+>> a4e99d13c6cd0e4faf3867ae5c9815ff88cab3cefdefe0dc1ec9ac28b1152944  vendor=
+/
+>> github.com/mendersoftware/go-lib-micro/LICENSE
+>> -#
+>> -# BSD-2-Clause
+>> -sha256
+>> 8d427fd87bc9579ea368fde3d49f9ca22eac857f91a9dec7e3004bdfab7dee86  vendor=
+/
+>> github.com/pkg/errors/LICENSE
+>> -sha256 <http://github.com/pkg/errors/LICENSE-sha256>
+>> 1530185dd39cdde7cb2f786a7a5fcf8bc34368b6ae73c15e72bafe88fd80b9a2  vendor=
+/
+>> github.com/vmihailenco/msgpack/v5/LICENSE
+>> -sha256 <http://github.com/vmihailenco/msgpack/v5/LICENSE-sha256>
+>> 0f02aac22084ef463aa5f42f566feeec6aa4c99653519744a8c25cb079da5b5d  vendor=
+/
+>> github.com/vmihailenco/tagparser/v2/LICENSE
+>> -#
+>> -# BSD-3-Clause
+>> -sha256
+>> 2eb550be6801c1ea434feba53bf6d12e7c71c90253e0a9de4a4f46cf88b56477  vendor=
+/
+>> github.com/pmezard/go-difflib/LICENSE
+>> -sha256 <http://github.com/pmezard/go-difflib/LICENSE-sha256>
+>> 2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor=
+/
+>> golang.org/x/sys/LICENSE
+>> -sha256 <http://golang.org/x/sys/LICENSE-sha256>
+>> 2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor=
+/
+>> golang.org/x/net/LICENSE
+>> -sha256 <http://golang.org/x/net/LICENSE-sha256>
+>> 0b77fdea862f869ef4f201ac5649bdbd38ccb055c7f6454dffae9e2adb4941c1  vendor=
+/
+>> github.com/gorilla/websocket/LICENSE
+>> -#
+>> -# ISC
+>> -sha256
+>> 1b93a317849ee09d3d7e4f1d20c2b78ddb230b4becb12d7c224c927b9d470251  vendor=
+/
+>> github.com/davecgh/go-spew/LICENSE
+>> -#
+>> -# MIT
+>> -sha256
+>> a2a1cea59d9c2d71908082f516f86bb560abf857646ecf69d70c121ead14aef4  vendor=
+/
+>> github.com/creack/pty/LICENSE
+>> -sha256 <http://github.com/creack/pty/LICENSE-sha256>
+>> caa932df46551b53643952fe03b351d55db97be73b5393b986dcf6b05d3c416a  vendor=
+/
+>> github.com/go-ozzo/ozzo-validation/v4/LICENSE
+>> -sha256 <http://github.com/go-ozzo/ozzo-validation/v4/LICENSE-sha256>
+>> 92a328e1d5f3269b42e2ce32b4494eafdb3132f204a911c5c95cf3d8465490e4  vendor=
+/
+>> github.com/satori/go.uuid/LICENSE
+>> -sha256 <http://github.com/satori/go.uuid/LICENSE-sha256>
+>> 51a0c9ec7f8b7634181b8d4c03e5b5d204ac21d6e72f46c313973424664b2e6b  vendor=
+/
+>> github.com/sirupsen/logrus/LICENSE
+>> -sha256 <http://github.com/sirupsen/logrus/LICENSE-sha256>
+>> b2663894033a05fd80261176cd8da1d72546e25842d5c1abcc852ca23b6b61b0  vendor=
+/
+>> github.com/stretchr/objx/LICENSE
+>> -sha256 <http://github.com/stretchr/objx/LICENSE-sha256>
+>> f8e536c1c7b695810427095dc85f5f80d44ff7c10535e8a9486cf393e2599189  vendor=
+/
+>> github.com/stretchr/testify/LICENSE
+>> -sha256 <http://github.com/stretchr/testify/LICENSE-sha256>
+>> da277af11b85227490377fbcac6afccc68be560c4fff36ac05ca62de55345fd7  vendor=
+/
+>> github.com/urfave/cli/v2/LICENSE
+>> -sha256 <http://github.com/urfave/cli/v2/LICENSE-sha256>
+>> d18f6323b71b0b768bb5e9616e36da390fbd39369a81807cca352de4e4e6aa0b  vendor=
+/
+>> gopkg.in/yaml.v3/LICENSE
+>> diff --git a/package/mender-connect/mender-connect.mk
+>> b/package/mender-connect/mender-connect.mk
+>> deleted file mode 100644
+>> index 98fdfe16df..0000000000
+>> --- a/package/mender-connect/mender-connect.mk
+>> +++ /dev/null
+>> @@ -1,60 +0,0 @@
+>>
+>> -#######################################################################=
+#########
+>> -#
+>> -# mender-connect
+>> -#
+>>
+>> -#######################################################################=
+#########
+>> -
+>> -MENDER_CONNECT_VERSION =3D 3.0.0
+>> -MENDER_CONNECT_SITE =3D $(call
+>> github,mendersoftware,mender-connect,$(MENDER_CONNECT_VERSION))
+>> -MENDER_CONNECT_LICENSE =3D Apache-2.0, BSD-2-Clause, BSD-3-Clause, ISC,=
+ MIT
+>> -
+>> -# Vendor license paths generated with:
+>> -#    awk '{print $2}' LIC_FILES_CHKSUM.sha256 | grep vendor
+>> -MENDER_CONNECT_LICENSE_FILES =3D \
+>> -       LIC_FILES_CHKSUM.sha256 \
+>> -       LICENSE \
+>> -       vendor/github.com/mendersoftware/go-lib-micro/LICENSE \
+>> -       vendor/github.com/pkg/errors/LICENSE \
+>> -       vendor/github.com/vmihailenco/msgpack/v5/LICENSE \
+>> -       vendor/github.com/vmihailenco/tagparser/v2/LICENSE \
+>> -       vendor/github.com/pmezard/go-difflib/LICENSE \
+>> -       vendor/golang.org/x/sys/LICENSE \
+>> -       vendor/golang.org/x/net/LICENSE \
+>> -       vendor/github.com/gorilla/websocket/LICENSE \
+>> -       vendor/github.com/davecgh/go-spew/LICENSE \
+>> -       vendor/github.com/creack/pty/LICENSE \
+>> -       vendor/github.com/go-ozzo/ozzo-validation/v4/LICENSE \
+>> -       vendor/github.com/satori/go.uuid/LICENSE \
+>> -       vendor/github.com/sirupsen/logrus/LICENSE \
+>> -       vendor/github.com/stretchr/objx/LICENSE \
+>> -       vendor/github.com/stretchr/testify/LICENSE \
+>> -       vendor/github.com/urfave/cli/v2/LICENSE \
+>> -       vendor/gopkg.in/yaml.v3/LICENSE
+>> -
+>> -MENDER_CONNECT_DEPENDENCIES =3D \
+>> -       dbus \
+>> -       libglib2 \
+>> -       mender \
+>> -       openssl
+>> -
+>> -MENDER_CONNECT_LDFLAGS =3D -X
+>> github.com/mendersoftware/mender-connect/config.Version=3D$(MENDER_CONNE=
+CT_VERSION)
+>> -
+>> -define MENDER_CONNECT_INSTALL_CONFIG_FILES
+>> -       $(INSTALL) -d -m 755 $(TARGET_DIR)/etc/mender
+>> -
+>> -       $(INSTALL) -D -m 0644 $(@D)/examples/mender-connect.conf \
+>> -               $(TARGET_DIR)/etc/mender/mender-connect.conf
+>> -endef
+>> -MENDER_CONNECT_POST_INSTALL_TARGET_HOOKS +=3D
+>> MENDER_CONNECT_INSTALL_CONFIG_FILES
+>> -
+>> -define MENDER_CONNECT_INSTALL_INIT_SYSTEMD
+>> -       $(INSTALL) -D -m 0644 $(@D)/support/mender-connect.service \
+>> -
+>>  $(TARGET_DIR)/usr/lib/systemd/system/mender-connect.service
+>> -endef
+>> -
+>> -define MENDER_CONNECT_INSTALL_INIT_SYSV
+>> -       $(INSTALL) -D -m 0755 $(MENDER_CONNECT_PKGDIR)/S43mender-connect=
  \
-> -
->  $(TARGET_DIR)/usr/share/mender/inventory/mender-inventory-$(f)
-> -       )
-> -
-> -       $(INSTALL) -D -m 0755 $(MENDER_PKGDIR)/device_type \
-> -                       $(TARGET_DIR)/etc/mender/device_type
-> -
-> -       mkdir -p $(TARGET_DIR)/var/lib/mender
-> -       $(foreach f,$(MENDER_UPDATE_MODULES_FILES), \
-> -               $(INSTALL) -D -m 0755 $(@D)/support/modules/$(notdir $(f)=
+>> -               $(TARGET_DIR)/etc/init.d/S43mender-connect
+>> -endef
+>> -
+>> -$(eval $(golang-package))
+>> diff --git a/package/mender-grubenv/Config.in
+>> b/package/mender-grubenv/Config.in
+>> deleted file mode 100644
+>> index 8505458793 <(850)%20545-8793>..0000000000
+>> --- a/package/mender-grubenv/Config.in
+>> +++ /dev/null
+>> @@ -1,43 +0,0 @@
+>> -config BR2_PACKAGE_MENDER_GRUBENV
+>> -       bool "mender-grubenv"
+>> -       depends on BR2_TARGET_GRUB2_ARCH_SUPPORTS
+>> -       depends on BR2_PACKAGE_MENDER # runtime
+>> -       depends on BR2_TARGET_GRUB2
+>> -       depends on !(BR2_TARGET_GRUB2_HAS_LEGACY_BOOT &&
+>> BR2_TARGET_GRUB2_HAS_EFI_BOOT)
+>> -       select BR2_PACKAGE_UTIL_LINUX
+>> -       select BR2_PACKAGE_UTIL_LINUX_BINARIES # flock -w
+>> -       help
+>> -         Contains the boot scripts and tools used by Mender to
+>> -         integrate with the GRUB bootloader.
+>> -
+>> -         The following Grub modules must be selected for this package:
+>> -         loadenv hashsum echo halt gcry_sha256 test regexp
+>> -
+>> -         https://github.com/mendersoftware/grub-mender-grubenv
+>> -
+>> -if BR2_PACKAGE_MENDER_GRUBENV
+>> -
+>> -config BR2_PACKAGE_MENDER_GRUBENV_DEFINES
+>> -       string "path to grubenv defines"
+>> -       help
+>> -         Specify a path to the mender grubenv defines file.
+>> -         If no path is specified, the example file in the source
+>> -         directory will be used.
+>> -
+>> -         The example file in the source directory sets the following:
+>> -         mender_rootfsa_part=3D2
+>> -         mender_rootfsb_part=3D3
+>> -         mender_kernel_root_base=3D/dev/mmcblk0p
+>> -         mender_grub_storage_device=3Dhd0
+>> -         kernel_imagetype=3DbzImage
+>> -
+>> -endif
+>> -
+>> -comment "mender-grubenv needs a grub2 bootloader"
+>> -       depends on BR2_TARGET_GRUB2_ARCH_SUPPORTS
+>> -       depends on BR2_PACKAGE_MENDER
+>> -       depends on !BR2_TARGET_GRUB2
+>> -
+>> -comment "mender-grubenv does not support both legacy and EFI grub2
+>> bootloaders at the same time"
+>> -       depends on BR2_PACKAGE_MENDER
+>> -       depends on BR2_TARGET_GRUB2_HAS_LEGACY_BOOT &&
+>> BR2_TARGET_GRUB2_HAS_EFI_BOOT
+>> diff --git a/package/mender-grubenv/mender-grubenv.hash
+>> b/package/mender-grubenv/mender-grubenv.hash
+>> deleted file mode 100644
+>> index 06456f6818..0000000000
+>> --- a/package/mender-grubenv/mender-grubenv.hash
+>> +++ /dev/null
+>> @@ -1,3 +0,0 @@
+>> -# Locally computed
+>> -sha256
+>> 9200dfc8ce8d9e5fae13947857fec44961df87c5bee92f90e37049279a94fb6f
+>> mender-grubenv-ddbc5cb054c7a8245c2d6c79eb4cb60ed0ec27e4.tar.gz
+>> -sha256
+>> d7e8fd4ad05371007d60285c309ba7a7ce3e61029b843f949fbb9ec79dc9eb47  LICENS=
+E
+>> diff --git a/package/mender-grubenv/mender-grubenv.mk
+>> b/package/mender-grubenv/mender-grubenv.mk
+>> deleted file mode 100644
+>> index d93159802d..0000000000
+>> --- a/package/mender-grubenv/mender-grubenv.mk
+>> +++ /dev/null
+>> @@ -1,90 +0,0 @@
+>>
+>> -#######################################################################=
+#########
+>> -#
+>> -# mender-grubenv
+>> -#
+>>
+>> -#######################################################################=
+#########
+>> -
+>> -MENDER_GRUBENV_VERSION =3D ddbc5cb054c7a8245c2d6c79eb4cb60ed0ec27e4
+>> -MENDER_GRUBENV_SITE =3D $(call
+>> github,mendersoftware,grub-mender-grubenv,$(MENDER_GRUBENV_VERSION))
+>> -MENDER_GRUBENV_LICENSE =3D Apache-2.0
+>> -MENDER_GRUBENV_LICENSE_FILES =3D LICENSE
+>> -# Grub2 must be built first so this package can overwrite the config
+>> files
+>> -# provided by grub.
+>> -MENDER_GRUBENV_DEPENDENCIES =3D grub2 util-linux
+>> -
+>> -MENDER_GRUBENV_MAKE_ENV =3D \
+>> -       $(TARGET_CONFIGURE_OPTS) \
+>> -       $(TARGET_MAKE_ENV)
+>> -
+>> -MENDER_GRUBENV_DEFINES =3D \
+>> -       $(or $(call qstrip,$(BR2_PACKAGE_MENDER_GRUBENV_DEFINES)),\
+>> -               $(@D)/mender_grubenv_defines.example)
+>> -
+>> -# These grub modules must be built in for the grub scripts to work
+>> properly.
+>> -# Without them, the system will not boot.
+>> -MENDER_GRUBENV_MANDATORY_MODULES =3D loadenv hashsum echo halt gcry_sha=
+256
+>> test regexp
+>> -
+>> -ifeq ($(BR2_TARGET_GRUB2_HAS_LEGACY_BOOT),y)
+>> -MENDER_GRUBENV_MODULES_MISSING_PC =3D \
+>> -       $(filter-out $(call
+>> qstrip,$(BR2_TARGET_GRUB2_BUILTIN_MODULES_PC)),\
+>> -               $(MENDER_GRUBENV_MANDATORY_MODULES))
+>> -
+>> -MENDER_GRUBENV_MAKE_ENV +=3D BOOT_DIR=3D/boot
+>> -
+>> -define MENDER_GRUBENV_INSTALL_I386_CFG
+>> -       mkdir -p $(BINARIES_DIR)/boot-part/grub
+>> -       cp -dpfr $(MENDER_GRUBENV_BUILDDIR)/mender_grub.cfg \
+>> -               $(TARGET_DIR)/boot/grub/grub.cfg
+>> -       cp -dpfr $(TARGET_DIR)/boot/grub/grub.cfg \
+>> -               $(TARGET_DIR)/boot/grub-mender-grubenv \
+>> -               $(BINARIES_DIR)/boot-part/
+>> -endef
+>> -MENDER_GRUBENV_TARGET_FINALIZE_HOOKS +=3D MENDER_GRUBENV_INSTALL_I386_C=
+FG
+>> -endif # BR2_TARGET_GRUB2_HAS_LEGACY_BOOT
+>> -
+>> -ifeq ($(BR2_TARGET_GRUB2_HAS_EFI_BOOT),y)
+>> -MENDER_GRUBENV_MODULES_MISSING_EFI =3D \
+>> -       $(filter-out $(call
+>> qstrip,$(BR2_TARGET_GRUB2_BUILTIN_MODULES_EFI)),\
+>> -               $(MENDER_GRUBENV_MANDATORY_MODULES))
+>> -
+>> -MENDER_GRUBENV_MAKE_ENV +=3D BOOT_DIR=3D/boot/EFI/BOOT
+>> -
+>> -define MENDER_GRUBENV_INSTALL_EFI_CFG
+>> -       mkdir -p $(BINARIES_DIR)/efi-part/EFI/BOOT
+>> -       cp -dpfr $(MENDER_GRUBENV_BUILDDIR)/mender_grub.cfg \
+>> -               $(TARGET_DIR)/boot/EFI/BOOT/grub.cfg
+>> -       cp -dpfr $(TARGET_DIR)/boot/EFI/BOOT/grub.cfg \
+>> -               $(BINARIES_DIR)/efi-part/EFI/BOOT
+>> -       cp -dpfr $(TARGET_DIR)/boot/EFI/BOOT/grub-mender-grubenv \
+>> -               $(BINARIES_DIR)/efi-part/
+>> -endef
+>> -MENDER_GRUBENV_TARGET_FINALIZE_HOOKS +=3D MENDER_GRUBENV_INSTALL_EFI_CF=
+G
+>> -endif # BR2_TARGET_GRUB2_HAS_EFI_BOOT
+>> -
+>> -ifeq ($(BR2_PACKAGE_MENDER_GRUBENV)$(BR_BUILDING),yy)
+>> -ifneq ($(MENDER_GRUBENV_MODULES_MISSING_EFI),)
+>> -$(error The following missing grub2 efi modules must be enabled for
+>> mender-grubenv \
+>> -       to work: $(MENDER_GRUBENV_MODULES_MISSING_EFI))
+>> -endif
+>> -ifneq ($(MENDER_GRUBENV_MODULES_MISSING_PC),)
+>> -$(error The following missing grub2 pc modules must be enabled for
+>> mender-grubenv \
+>> -       to work: $(MENDER_GRUBENV_MODULES_MISSING_PC))
+>> -endif
+>> -endif
+>> -
+>> -define MENDER_GRUBENV_CONFIGURE_CMDS
+>> -       $(INSTALL) -m 0644 $(MENDER_GRUBENV_DEFINES)
+>> $(@D)/mender_grubenv_defines
+>> -endef
+>> -
+>> -define MENDER_GRUBENV_BUILD_CMDS
+>> -       $(MENDER_GRUBENV_MAKE_ENV) $(MAKE) -C $(@D)
+>> -endef
+>> -
+>> -define MENDER_GRUBENV_INSTALL_TARGET_CMDS
+>> -       $(MENDER_GRUBENV_MAKE_ENV) $(MAKE) DESTDIR=3D$(TARGET_DIR) -C $(=
+@D)
+>> \
+>> -               install install-boot-env
+>> -       # The grub-mender-grubenv-* utilities use this file to function.
+>> -       echo 'ENV_DIR=3D/boot/grub-mender-grubenv' >
+>> $(TARGET_DIR)/etc/mender_grubenv.config
+>> -endef
+>> -
+>> -$(eval $(generic-package))
+>> diff --git a/package/mender-update-modules/Config.in
+>> b/package/mender-update-modules/Config.in
+>> deleted file mode 100644
+>> index 88e0805976..0000000000
+>> --- a/package/mender-update-modules/Config.in
+>> +++ /dev/null
+>> @@ -1,250 +0,0 @@
+>> -config BR2_PACKAGE_MENDER_UPDATE_MODULES
+>> -       bool "mender-update-modules"
+>> -       depends on BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS
+>> -       depends on BR2_PACKAGE_MENDER
+>> -       select BR2_PACKAGE_HOST_MENDER_ARTIFACT
+>> -       help
+>> -         community supported Update Modules. An Update Module is an
+>> -         extension to the Mender client for supporting a new type of
+>> -         software update, such as a package manager, container,
+>> -         bootloader or even updates of nearby microcontrollers.
+>> -         An Update Module can be tailored to a specific device or
+>> -         environment (e.g. update a proprietary bootloader), or be
+>> -         more general-purpose (e.g. install a set of .deb packages.).
+>> -
+>> -         https://github.com/mendersoftware/mender-update-modules
+>> -
+>> -if BR2_PACKAGE_MENDER_UPDATE_MODULES
+>> -
+>> -config BR2_PACKAGE_MENDER_UPDATE_MODULES_DFU
+>> -       bool "DFU"
+>> -       depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libusb
+>> -       select BR2_PACKAGE_DFU_UTIL
+>> -       help
+>> -         The DFU Update Module is able to update peripheral devices
+>> -         connected to the device running Mender.
+>> -         Example use-cases:
+>> -           - Deploy firmware updates to peripheral devices using the
+>> -             USB Device Firmware Update (DFU) protocol
+>> -
+>> -
+>> https://github.com/mendersoftware/mender-update-modules/tree/master/dfu
+>> -
+>> -config BR2_PACKAGE_MENDER_UPDATE_MODULES_DIR_OVERLAY
+>> -       bool "dir-overlay"
+>> -       help
+>> -         The Directory Overlay Update Module installs a user defined
+>> -         file tree structure into a given destination directory in the
+>> -         target.
+>> -
+>> -         Before the deploy into the destination folder on the device,
+>> -         the Update Module will take a backup copy of the current
+>> -         contents, allowing restore of it using the rollback mechanism
+>> -         of the Mender client if something goes wrong. The Update
+>> -         Module will also delete the current installed content that was
+>> -         previously installed using the same module, this means that
+>> -         each deployment is self contained and there is no residues
+>> -         left on the system from the previous deployment.
+>> -
+>> -         Example use-cases:
+>> -           - Deploy root filesystem overlays
+>> -
+>> -
+>> https://github.com/mendersoftware/mender-update-modules/tree/master/dir-=
+overlay
+>> -
+>> -config BR2_PACKAGE_MENDER_UPDATE_MODULES_DIRTY
+>> -       bool "dirty"
+>> -       help
+>> -         The dirty Update Module: modify your device state without
+>> -         installing an artifact
+>> -         Example use-cases:
+>> -           - You have a specific action on the device that you want to
+>> -             run multiple times
+>> -
+>> -           - You want to avoid re-creating artifacts just for the sake
+>> -             of a new version/name
+>> -
+>> -           - You don't want the artifact the show up in the list of
+>> -             installed artifacts
+>> -
+>> -           - The module will always fail the update process, which
+>> -             means it can never be marked as installed. So it can be
+>> -             attempted any number of times without having to recreate
+>> -             newly versioned artifacts.
+>> -
+>> -
+>> https://github.com/mendersoftware/mender-update-modules/tree/master/dirt=
+y
+>> -
+>> -config BR2_PACKAGE_MENDER_UPDATE_MODULES_DOCKER
+>> -       bool "docker"
+>> -       depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS #
+>> docker-engine, docker-cli
+>> -       depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS #
+>> docker-engine, docker-cli
+>> -       depends on BR2_TOOLCHAIN_HAS_THREADS # docker-engine, docker-cli
+>> -       depends on !BR2_TOOLCHAIN_USES_UCLIBC # containerd -> runc
+>> -       depends on BR2_USE_MMU # containerd
+>> -       depends on !BR2_PACKAGE_CGROUPFS_MOUNT # docker-engine
+>> -       depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS # libseccomp
+>> -       depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_2 # docker-engine
+>> -       select BR2_PACKAGE_DOCKER_ENGINE
+>> -       select BR2_PACKAGE_DOCKER_CLI
+>> -       select BR2_PACKAGE_JQ # runtime
+>> -       help
+>> -         The Docker Update Module handles the Docker images that shall
+>> -         be running in the device. A deployment with this module will
+>> -         stop all currently running Docker containers in the device,
+>> -         and start new containers with the provided list of Docker
+>> -         images in the Mender Artifact.
+>> -
+>> -         In case of an unforeseen error during the process, the module
+>> -         will use the rollback mechanism of the Mender client to
+>> -         restore the previously running Docker containers.
+>> -
+>> -
+>> https://github.com/mendersoftware/mender-update-modules/tree/master/dock=
+er
+>> -
+>> -comment "docker support needs a glibc or musl toolchain w/ threads,
+>> headers >=3D 5.2"
+>> -       depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+>> -       depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
+>> -       depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS
+>> -       depends on !BR2_TOOLCHAIN_HAS_THREADS || \
+>> -               BR2_TOOLCHAIN_USES_UCLIBC || \
+>> -               !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_2
+>> -       depends on BR2_USE_MMU
+>> -
+>> -config BR2_PACKAGE_MENDER_UPDATE_MODULES_IPK
+>> -       bool "ipk"
+>> -       depends on BR2_USE_MMU # opkg
+>> -       depends on BR2_USE_WCHAR # opkg -> libarchive
+>> -       select BR2_PACKAGE_OPKG
+>> -       help
+>> -         The IPK Update Module allows opkg-based packages to be
+>> -         installed on a device
+>> -
+>> -         Example use-cases:
+>> -           - Deploy any ipk package
+>> -
+>> -
+>> https://github.com/mendersoftware/mender-update-modules/tree/master/ipk
+>> -
+>> -comment "ipk support needs a toolchain w/ wchar"
+>> -       depends on BR2_USE_MMU
+>> -       depends on !BR2_USE_WCHAR
+>> -
+>> -config BR2_PACKAGE_MENDER_UPDATE_MODULES_PODMAN
+>> -       bool "podman"
+>> -       depends on BR2_USE_MMU  # podman
+>> -       depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS  # podman
+>> -       depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS  # podman
+>> -       depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS  # podman
+>> -       depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS  # podman
+>> -       depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14  # podman
+>> -       depends on BR2_TOOLCHAIN_HAS_THREADS  # podman
+>> -       depends on BR2_USE_WCHAR  # podman
+>> -       select BR2_PACKAGE_JQ # runtime
+>> -       select BR2_PACKAGE_PODMAN
+>> -       help
+>> -         The Podman Update Module handles the Podman container images
+>> -         that shall be running on the target device. A deployment with
+>> -         this module will stop all currently running Podman containers
+>> -         on the device and start new containers based on the list of
+>> -         Podman images provided in the Mender Artifact.
+>> -
+>> -         In case of any unforeseen error during the process, the module
+>> -         will trigger the rollback mechanism of the Mender client to
+>> -         restore the previously running Podman containers.
+>> -
+>> -
+>> https://github.com/mendersoftware/mender-update-modules/tree/master/podm=
+an
+>> -
+>> -comment "podman support needs a toolchain w/ headers >=3D 4.14, threads=
+,
+>> wchar"
+>> -       depends on BR2_USE_MMU
+>> -       depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+>> -       depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
+>> -       depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS
+>> -       depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS
+>> -       depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14 \
+>> -               || !BR2_TOOLCHAIN_HAS_THREADS \
+>> -               || !BR2_USE_WCHAR
+>> -
+>> -config BR2_PACKAGE_MENDER_UPDATE_MODULES_REBOOT
+>> -       bool "reboot"
+>> -       help
+>> -         The reboot Update Module: reboot your device remotely.
+>> -
+>> -         Example use-cases:
+>> -           - Something went wrong and you have to reboot your device
+>> -             remotely, and all access to the device you have is Mender.
+>> -
+>> -
+>> https://github.com/mendersoftware/mender-update-modules/tree/master/rebo=
+ot
+>> -
+>> -config BR2_PACKAGE_MENDER_UPDATE_MODULES_ROOTFS_VERSION_CHECK
+>> -       bool "rootfs version check"
+>> -       depends on BR2_USE_WCHAR # python3
+>> -       depends on BR2_USE_MMU # python3
+>> -       depends on BR2_TOOLCHAIN_HAS_THREADS # python3
+>> -       depends on !BR2_STATIC_LIBS # python3
+>> -       select BR2_PACKAGE_PYTHON3 # runtime
+>> -       help
+>> -         The rootfs-version-check Update Module implements a full image
+>> -         update with additional checks to protect against replay
+>> -         attacks.
+>> -
+>> -         This is functionally equivalent to the built-in full image
+>> -         update with an extra check to ensure the artifact name
+>> -         follows a specific format and that installing "older" images
+>> -         is rejected. For this reference implementaton, we simply use
+>> -         a numeric identifier and ensure that it is larger than the
+>> -         version installed. For actual device fleet use, you may need
+>> -         to customize this based on your artifact naming scheme.
+>> -
+>> -         Example use-cases:
+>> -           - Deploy root filesystem updates and ensure only newer
+>> -             artifacts are installed
+>> -
+>> -
+>> https://github.com/mendersoftware/mender-update-modules/tree/master/root=
+fs-version-check
+>> -
+>> -comment "rootfs version check needs a toolchain w/ threads, dynamic
+>> library, wchar"
+>> -       depends on BR2_USE_MMU
+>> -       depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
+>> -               !BR2_USE_WCHAR
+>> -
+>> -config BR2_PACKAGE_MENDER_UPDATE_MODULES_RPM
+>> -       bool "rpm"
+>> -       depends on !BR2_STATIC_LIBS # dlfcn.h
+>> -       depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+>> -       depends on BR2_PACKAGE_LUA && !BR2_PACKAGE_LUA_5_1
+>> -       depends on BR2_TOOLCHAIN_HAS_THREADS
+>> -       select BR2_PACKAGE_RPM
+>> -       help
+>> -         The Rpm Update Module updates software on the device using
+>> -         the native local package manager.
+>> -
+>> -         A Mender Artifact containing one or more software packages
+>> -         is sent to the device, where the Update Module will call
+>> -         the package manager to install them in alphabetical order.
+>> -
+>> -
+>> https://github.com/mendersoftware/mender-update-modules/tree/master/rpm
+>> -
+>> -comment "rpm needs a toolchain w/ dynamic library, threads and lua >=3D
+>> 5.3"
+>> -       depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS \
+>> -               || !BR2_PACKAGE_LUA || BR2_PACKAGE_LUA_5_1
+>> -       depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+>> -
+>> -config BR2_PACKAGE_MENDER_UPDATE_MODULES_SWU
+>> -       bool "swupdate"
+>> -       depends on !BR2_STATIC_LIBS
+>> -       depends on BR2_TOOLCHAIN_HAS_SYNC_4 # swupdate
+>> -       select BR2_PACKAGE_JQ # runtime
+>> -       select BR2_PACKAGE_SWUPDATE
+>> -       help
+>> -         The SWU Update Module allows deploying an SWUpdate-based
+>> -         artifact to the device.
+>> -
+>> -         Example use-cases:
+>> -           - Extend an existing platform using SWUpdate with OTA.
+>> -
+>> -
+>> https://github.com/mendersoftware/mender-update-modules/tree/master/swu
+>> -
+>> -comment "swupdate support needs a toolchain w/ dynamic library"
+>> -       depends on BR2_TOOLCHAIN_HAS_SYNC_4
+>> -       depends on BR2_STATIC_LIBS
+>> -
+>> -endif
+>> -
+>> -comment "mender-update-modules needs mender"
+>> -       depends on BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS
+>> -       depends on !BR2_PACKAGE_MENDER
+>> diff --git a/package/mender-update-modules/mender-update-modules.hash
+>> b/package/mender-update-modules/mender-update-modules.hash
+>> deleted file mode 100644
+>> index ec879f46a1..0000000000
+>> --- a/package/mender-update-modules/mender-update-modules.hash
+>> +++ /dev/null
+>> @@ -1,3 +0,0 @@
+>> -# Locally calculated
+>> -sha256
+>> 4846f39abc254ad2ae2a9f3d5479b064bc1bae5034b9d276ebdb09d8c60f4541
+>> mender-update-modules-d8c4683e6660af6c65069e10ee4b8ee50ec1af46.tar.gz
+>> -sha256
+>> d0f406b04e7901e6b4076bdf5fd20f9d7f04fc41681069fd8954413ac6295688  LICENS=
+E
+>> diff --git a/package/mender-update-modules/mender-update-modules.mk
+>> b/package/mender-update-modules/mender-update-modules.mk
+>> deleted file mode 100644
+>> index 0024acc189..0000000000
+>> --- a/package/mender-update-modules/mender-update-modules.mk
+>> +++ /dev/null
+>> @@ -1,77 +0,0 @@
+>>
+>> -#######################################################################=
+#########
+>> -#
+>> -# mender-update-modules
+>> -#
+>>
+>> -#######################################################################=
+#########
+>> -
+>> -MENDER_UPDATE_MODULES_VERSION =3D d8c4683e6660af6c65069e10ee4b8ee50ec1a=
+f46
+>> -MENDER_UPDATE_MODULES_SITE =3D $(call
+>> github,mendersoftware,mender-update-modules,$(MENDER_UPDATE_MODULES_VERS=
+ION))
+>> -MENDER_UPDATE_MODULES_LICENSE =3D Apache-2.0
+>> -MENDER_UPDATE_MODULES_LICENSE_FILES =3D LICENSE
+>> -MENDER_UPDATE_MODULES_DEPENDENCIES =3D host-mender-artifact mender
+>> -
+>> -MENDER_UPDATE_MODULES_MODULES =3D script
+>> -
+>> -ifeq ($(BR2_PACKAGE_MENDER_UPDATE_MODULES_DFU),y)
+>> -MENDER_UPDATE_MODULES_MODULES +=3D dfu
+>> -endif
+>> -
+>> -ifeq ($(BR2_PACKAGE_MENDER_UPDATE_MODULES_DIR_OVERLAY),y)
+>> -MENDER_UPDATE_MODULES_MODULES +=3D dir-overlay
+>> -endif
+>> -
+>> -ifeq ($(BR2_PACKAGE_MENDER_UPDATE_MODULES_DIRTY),y)
+>> -MENDER_UPDATE_MODULES_MODULES +=3D dirty
+>> -endif
+>> -
+>> -ifeq ($(BR2_PACKAGE_MENDER_UPDATE_MODULES_DOCKER),y)
+>> -MENDER_UPDATE_MODULES_MODULES +=3D docker
+>> -endif
+>> -
+>> -ifeq ($(BR2_PACKAGE_MENDER_UPDATE_MODULES_IPK),y)
+>> -MENDER_UPDATE_MODULES_MODULES +=3D ipk
+>> -endif
+>> -
+>> -ifeq ($(BR2_PACKAGE_MENDER_UPDATE_MODULES_PODMAN),y)
+>> -MENDER_UPDATE_MODULES_MODULES +=3D podman
+>> -endif
+>> -
+>> -ifeq ($(BR2_PACKAGE_MENDER_UPDATE_MODULES_REBOOT),y)
+>> -MENDER_UPDATE_MODULES_MODULES +=3D reboot
+>> -define MENDER_UPDATE_MODULES_INSTALL_MENDER_REBOOT_GEN
+>> -       $(INSTALL) -D -m 0755 $(@D)/reboot/reboot-gen \
+>> -               $(HOST_DIR)/bin/reboot-artifact-gen
+>> -endef
+>> -MENDER_UPDATE_MODULES_POST_INSTALL_TARGET_HOOKS +=3D
+>> MENDER_UPDATE_MODULES_INSTALL_MENDER_REBOOT_GEN
+>> -endif
+>> -
+>> -ifeq ($(BR2_PACKAGE_MENDER_UPDATE_MODULES_ROOTFS_VERSION_CHECK),y)
+>> -MENDER_UPDATE_MODULES_DEPENDENCIES +=3D python3
+>> -MENDER_UPDATE_MODULES_MODULES +=3D rootfs-version-check
+>> -define MENDER_UPDATE_MODULES_INSTALL_MENDER_COMPARE_VERSIONS
+>> -       $(INSTALL) -D -m 0755
+>> $(@D)/rootfs-version-check/mender-compare-versions \
+>> -               $(TARGET_DIR)/usr/bin/mender-compare-versions
+>> -endef
+>> -MENDER_UPDATE_MODULES_POST_INSTALL_TARGET_HOOKS +=3D
+>> MENDER_UPDATE_MODULES_INSTALL_MENDER_COMPARE_VERSIONS
+>> -endif
+>> -
+>> -ifeq ($(BR2_PACKAGE_MENDER_UPDATE_MODULES_RPM),y)
+>> -MENDER_UPDATE_MODULES_MODULES +=3D rpm
+>> -endif
+>> -
+>> -ifeq ($(BR2_PACKAGE_MENDER_UPDATE_MODULES_SWU),y)
+>> -MENDER_UPDATE_MODULES_MODULES +=3D swu
+>> -endif
+>> -
+>> -define MENDER_UPDATE_MODULES_INSTALL_TARGET_CMDS
+>> -       $(foreach f,$(MENDER_UPDATE_MODULES_MODULES), \
+>> -               $(INSTALL) -D -m 0775 $(@D)/$(f)/module/$(f) \
+>> -                       $(TARGET_DIR)/usr/share/mender/modules/v3/$(f); =
+\
+>> -               if [ -d $(@D)/$(f)/module-artifact-gen ]; then \
+>> -                       $(INSTALL) -D -m 0775
+>> $(@D)/$(f)/module-artifact-gen/$(f)-artifact-gen \
+>> -                               $(HOST_DIR)/bin/$(f)-artifact-gen; \
+>> -               fi; \
+>> -       )
+>> -endef
+>> -
+>> -$(eval $(generic-package))
+>> diff --git a/package/mender/Config.in b/package/mender/Config.in
+>> deleted file mode 100644
+>> index c9b9d0b757..0000000000
+>> --- a/package/mender/Config.in
+>> +++ /dev/null
+>> @@ -1,45 +0,0 @@
+>> -config BR2_PACKAGE_MENDER
+>> -       bool "mender"
+>> -       depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+>> -       depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
+>> -       depends on BR2_TOOLCHAIN_HAS_THREADS
+>> -       select BR2_PACKAGE_HOST_GO
+>> -       select BR2_PACKAGE_OPENSSL
+>> -       select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
+>> -       select BR2_PACKAGE_LIBOPENSSL_ENGINES
+>> -       select BR2_PACKAGE_LIBOPENSSL_ENABLE_MD4
+>> -       select BR2_PACKAGE_LIBOPENSSL_ENABLE_RMD160
+>> -       help
+>> -         Mender is an open source over-the-air (OTA) software updater
+>> -         for embedded Linux devices. Mender comprises a client
+>> -         running at the embedded device, as well as a server that
+>> -         manages deployments across many devices.
+>> -
+>> -         Notes:
+>> -         For systems using uboot as the bootloader:
+>> -           - uboot must have the mender uboot patches applied.
+>> -           - uboot-tools must be selected.
+>> -           - fw_printenv must be functional on the device.
+>> -         The Mender Uboot patches are at:
+>> -         https://github.com/mendersoftware/meta-mender/
+>> -
+>> -         For more information on Manual U-Boot integration, see:
+>> -
+>> https://docs.mender.io/2.6/system-updates-yocto-project/board-integratio=
+n/bootloader-support/u-boot/manual-u-boot-integration
+>> -
+>> -         For systems using Grub2 as the bootloader:
+>> -           - Mender depends on the mender-grubenv package.
+>> -           - The mender-grubenv package provides a fw_printenv script,
+>> -             which is not compatible with the uboot-tools fw_printenv
+>> -             script.
+>> -
+>> -         The mender project recommends using uboot to load Grub2 as a
+>> -         secondary bootloader whenever possible. Using Grub2 as a
+>> -         secondary bootloader prevents users from porting the patches
+>> -         for uboot to each new device.
+>> -
+>> -         https://github.com/mendersoftware/mender
+>> -
+>> -comment "mender needs a toolchain w/ threads"
+>> -       depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+>> -       depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
+>> -       depends on !BR2_TOOLCHAIN_HAS_THREADS
+>> diff --git a/package/mender/S42mender b/package/mender/S42mender
+>> deleted file mode 100644
+>> index 70116ed4eb..0000000000
+>> --- a/package/mender/S42mender
+>> +++ /dev/null
+>> @@ -1,44 +0,0 @@
+>> -#!/bin/sh
+>> -#
+>> -# Starts mender service.
+>> -#
+>> -DAEMON=3D"mender"
+>> -DAEMON_PATH=3D"/usr/bin/mender"
+>> -PIDFILE=3D"/var/run/${DAEMON}.pid"
+>> -DAEMON_ARGS=3D"daemon"
+>> -
+>> -start() {
+>> -       printf "Starting mender service: "
+>> -       umask 077
+>> -       start-stop-daemon -bmSqp "$PIDFILE" -x ${DAEMON_PATH} --
+>> ${DAEMON_ARGS}
+>> -       status=3D$?
+>> -       [ "${status}" =3D 0 ] && echo "OK" || echo "FAIL"
+>> -}
+>> -
+>> -stop() {
+>> -       printf "Stopping mender service: "
+>> -       start-stop-daemon -Kqp "$PIDFILE"
+>> -       status=3D$?
+>> -       [ "${status}" =3D 0 ] && echo "OK" || echo "FAIL"
+>> -}
+>> -restart() {
+>> -       stop
+>> -       start
+>> -}
+>> -
+>> -case "$1" in
+>> -       start)
+>> -               start
+>> -               ;;
+>> -       stop)
+>> -               stop
+>> -               ;;
+>> -       restart|reload)
+>> -               restart
+>> -               ;;
+>> -       *)
+>> -               echo "Usage: $0 {start|stop|reload|restart}"
+>> -               exit 1
+>> -esac
+>> -
+>> -exit $?
+>> diff --git a/package/mender/device_type b/package/mender/device_type
+>> deleted file mode 100644
+>> index a097ef2b3a..0000000000
+>> --- a/package/mender/device_type
+>> +++ /dev/null
+>> @@ -1 +0,0 @@
+>> -device_type=3DBUILDROOT_DEVICE
+>> diff --git a/package/mender/mender-client.service
+>> b/package/mender/mender-client.service
+>> deleted file mode 100644
+>> index 47e439993c..0000000000
+>> --- a/package/mender/mender-client.service
+>> +++ /dev/null
+>> @@ -1,13 +0,0 @@
+>> -[Unit]
+>> -Description=3DMender OTA update service
+>> -After=3Dsystemd-resolved.service
+>> -
+>> -[Service]
+>> -Type=3Didle
+>> -User=3Droot
+>> -Group=3Droot
+>> -ExecStart=3D/usr/bin/mender daemon
+>> -Restart=3Don-abort
+>> -
+>> -[Install]
+>> -WantedBy=3Dmulti-user.target
+>> diff --git a/package/mender/mender.conf b/package/mender/mender.conf
+>> deleted file mode 100644
+>> index 2393948f8e..0000000000
+>> --- a/package/mender/mender.conf
+>> +++ /dev/null
+>> @@ -1,11 +0,0 @@
+>> -{
+>> -  "InventoryPollIntervalSeconds": 1800,
+>> -  "UpdatePollIntervalSeconds": 1800,
+>> -  "RetryPollIntervalSeconds": 300,
+>> -  "RootfsPartA": "/dev/mmcblk0p2",
+>> -  "RootfsPartB": "/dev/mmcblk0p3",
+>> -  "DeviceTypeFile": "/var/lib/mender/device_type",
+>> -  "ServerCertificate": "/etc/mender/server.crt",
+>> -  "ServerURL": "https://docker.mender.io",
+>> -  "TenantToken": "dummy"
+>> -}
+>> diff --git a/package/mender/mender.hash b/package/mender/mender.hash
+>> deleted file mode 100644
+>> index 17fe08c827..0000000000
+>> --- a/package/mender/mender.hash
+>> +++ /dev/null
+>> @@ -1,47 +0,0 @@
+>> -# Locally computed:
+>> -sha256
+>> 35e369759b8d4f012153e538b5daf1e0cebe842205811e708332c5a092270ac5
+>> mender-3.5.3-go2.tar.gz
+>> -
+>> -# Vendor licenses
+>> -# Generated with sed '/^[A-Za-z0-9_]/s/^/sha256  /'
+>> LIC_FILES_CHKSUM.sha256
+>> -
+>> -# Apache-2.0 license.
+>> -sha256
+>> d0f406b04e7901e6b4076bdf5fd20f9d7f04fc41681069fd8954413ac6295688  LICENS=
+E
+>> -sha256
+>> 52b2497ce07650b825015e80ca7a5d40c360c04c530234ca6d950b0f98bca23a  vendor=
+/
+>> github.com/mendersoftware/mender-artifact/LICENSE
+>> -sha256 <http://github.com/mendersoftware/mender-artifact/LICENSE-sha256=
+>
+>> 73ba74dfaa520b49a401b5d21459a8523a146f3b7518a833eea5efa85130bf68  vendor=
+/
+>> github.com/mendersoftware/openssl/LICENSE
+>> -sha256 <http://github.com/mendersoftware/openssl/LICENSE-sha256>
+>> cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor=
+/
+>> github.com/minio/sha256-simd/LICENSE
+>> -sha256 <http://github.com/minio/sha256-simd/LICENSE-sha256>
+>> 8f5d89b47d7a05a199b77b7e0f362dad391d451ebda4ef48ba11c50c071564c7  vendor=
+/
+>> github.com/mendersoftware/progressbar/LICENSE
+>> -#
+>> -# BSD 2 Clause license.
+>> -sha256
+>> 8d427fd87bc9579ea368fde3d49f9ca22eac857f91a9dec7e3004bdfab7dee86  vendor=
+/
+>> github.com/pkg/errors/LICENSE
+>> -sha256 <http://github.com/pkg/errors/LICENSE-sha256>
+>> e4646a82a976369d7ae8f6ed5c11d35dc0af18433a8ccc24c85b459ad8b95128  vendor=
+/
+>> github.com/godbus/dbus/LICENSE
+>> -sha256 <http://github.com/godbus/dbus/LICENSE-sha256>
+>> 2be1b548b0387ca8948e1bb9434e709126904d15f622cc2d0d8e7f186e4d122d  vendor=
+/
+>> github.com/gorilla/websocket/LICENSE
+>> -#
+>> -# BSD 3 Clause license.
+>> -sha256
+>> 0d9e582ee4bff57bf1189c9e514e6da7ce277f9cd3bc2d488b22fbb39a6d87cf  vendor=
+/
+>> github.com/klauspost/compress/LICENSE
+>> -sha256 <http://github.com/klauspost/compress/LICENSE-sha256>
+>> 2eb550be6801c1ea434feba53bf6d12e7c71c90253e0a9de4a4f46cf88b56477  vendor=
+/
+>> github.com/pmezard/go-difflib/LICENSE
+>> -sha256 <http://github.com/pmezard/go-difflib/LICENSE-sha256>
+>> 2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor=
+/
+>> golang.org/x/sys/LICENSE
+>> -sha256 <http://golang.org/x/sys/LICENSE-sha256>
+>> 0634b008cee55ca01f0888d2f5aba2d34e66c3f52c31a4e16a5d5d33d0c2a03e  vendor=
+/
+>> github.com/bmatsuo/lmdb-go/LICENSE.md
+>> -sha256 <http://github.com/bmatsuo/lmdb-go/LICENSE.md-sha256>
+>> 87640bc4df2ceb1559f268a3db1ba859ab780f7ba5b1b4545173d4680a3d918b  vendor=
+/
+>> github.com/remyoudompheng/go-liblzma/LICENSE
+>> -sha256 <http://github.com/remyoudompheng/go-liblzma/LICENSE-sha256>
+>> 2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor=
+/
+>> golang.org/x/term/LICENSE
+>> -#
+>> -# ISC license.
+>> -sha256
+>> 1b93a317849ee09d3d7e4f1d20c2b78ddb230b4becb12d7c224c927b9d470251  vendor=
+/
+>> github.com/davecgh/go-spew/LICENSE
+>> -#
+>> -# MIT license.
+>> -sha256
+>> 6d2de1cde19c4d2bd8bcd9aaa1d581f4cfa3db9cf71896140330eaa2f2687685  vendor=
+/
+>> github.com/klauspost/pgzip/LICENSE
+>> -sha256 <http://github.com/klauspost/pgzip/LICENSE-sha256>
+>> f69f157b0be75da373605dbc8bbf142e8924ee82d8f44f11bcaf351335bf98cf  vendor=
+/
+>> github.com/klauspost/compress/internal/snapref/LICENSE
+>> -sha256
+>> <http://github.com/klauspost/compress/internal/snapref/LICENSE-sha256>
+>> f566a9f97bacdaf00d9f21dd991e81dc11201c4e016c86b470799429a1c9a79c  vendor=
+/
+>> github.com/klauspost/compress/zstd/internal/xxhash/LICENSE.txt
+>> -sha256
+>> 5d966570d7a442d4e969892860a914e542c97f262c873baee8f0aa48e1f40212  vendor=
+/
+>> github.com/klauspost/cpuid/v2/LICENSE
+>> -sha256 <http://github.com/klauspost/cpuid/v2/LICENSE-sha256>
+>> 51a0c9ec7f8b7634181b8d4c03e5b5d204ac21d6e72f46c313973424664b2e6b  vendor=
+/
+>> github.com/sirupsen/logrus/LICENSE
+>> -sha256 <http://github.com/sirupsen/logrus/LICENSE-sha256>
+>> f8e536c1c7b695810427095dc85f5f80d44ff7c10535e8a9486cf393e2599189  vendor=
+/
+>> github.com/stretchr/testify/LICENSE
+>> -sha256 <http://github.com/stretchr/testify/LICENSE-sha256>
+>> ffa15bdce332058a03a1d923910864fb6e58bf6df66a0e3914284725b327183e  vendor=
+/
+>> github.com/ungerik/go-sysfs/LICENSE
+>> -sha256 <http://github.com/ungerik/go-sysfs/LICENSE-sha256>
+>> da277af11b85227490377fbcac6afccc68be560c4fff36ac05ca62de55345fd7  vendor=
+/
+>> github.com/urfave/cli/v2/LICENSE
+>> -sha256 <http://github.com/urfave/cli/v2/LICENSE-sha256>
+>> b2663894033a05fd80261176cd8da1d72546e25842d5c1abcc852ca23b6b61b0  vendor=
+/
+>> github.com/stretchr/objx/LICENSE
+>> -sha256 <http://github.com/stretchr/objx/LICENSE-sha256>
+>> d18f6323b71b0b768bb5e9616e36da390fbd39369a81807cca352de4e4e6aa0b  vendor=
+/
+>> gopkg.in/yaml.v3/LICENSE
+>> -sha256 <http://gopkg.in/yaml.v3/LICENSE-sha256>
+>> 08eab1118c80885fa1fa6a6dd7303f65a379fcb3733e063d20d1bbc2c76e6fa1  vendor=
+/
+>> github.com/mattn/go-isatty/LICENSE
+>> -#
+>> -# OpenLDAP Public License
+>> -sha256
+>> 310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  vendor=
+/
+>> github.com/bmatsuo/lmdb-go/LICENSE.mdb.md
+>> -
+>> -# sha256 of all the vendor licenses combined
+>> -sha256
+>> 86407bd98d5ea7fb0f09ab771c3333e975d06565b809a2dd95f864dc1e3a09b3
+>> LIC_FILES_CHKSUM.sha256
+>> diff --git a/package/mender/mender.mk b/package/mender/mender.mk
+>> deleted file mode 100644
+>> index 76dc28d547..0000000000
+>> --- a/package/mender/mender.mk
+>> +++ /dev/null
+>> @@ -1,110 +0,0 @@
+>>
+>> -#######################################################################=
+#########
+>> -#
+>> -# mender
+>> -#
+>>
+>> -#######################################################################=
+#########
+>> -
+>> -MENDER_VERSION =3D 3.5.3
+>> -MENDER_SITE =3D $(call github,mendersoftware,mender,$(MENDER_VERSION))
+>> -MENDER_LICENSE =3D Apache-2.0, BSD-2-Clause, BSD-3-Clause, ISC, MIT,
+>> OLDAP-2.8
+>> -MENDER_CPE_ID_VENDOR =3D northern.tech
+>> -# CVE-2024-46948 only affects mender-server
+>> -MENDER_IGNORE_CVES =3D CVE-2024-46948
+>> -
+>> -# Vendor license paths generated with:
+>> -#    awk '{print $2}' LIC_FILES_CHKSUM.sha256 | grep vendor
+>> -MENDER_LICENSE_FILES =3D \
+>> -       LICENSE \
+>> -       LIC_FILES_CHKSUM.sha256 \
+>> -       vendor/github.com/mendersoftware/mender-artifact/LICENSE \
+>> -       vendor/github.com/mendersoftware/openssl/LICENSE \
+>> -       vendor/github.com/minio/sha256-simd/LICENSE \
+>> -       vendor/github.com/mendersoftware/progressbar/LICENSE \
+>> -       vendor/github.com/pkg/errors/LICENSE \
+>> -       vendor/github.com/godbus/dbus/LICENSE \
+>> -       vendor/github.com/gorilla/websocket/LICENSE \
+>> -       vendor/github.com/klauspost/compress/LICENSE \
+>> -       vendor/github.com/pmezard/go-difflib/LICENSE \
+>> -       vendor/golang.org/x/sys/LICENSE \
+>> -       vendor/github.com/bmatsuo/lmdb-go/LICENSE.md \
+>> -       vendor/github.com/remyoudompheng/go-liblzma/LICENSE \
+>> -       vendor/golang.org/x/term/LICENSE \
+>> -       vendor/github.com/davecgh/go-spew/LICENSE \
+>> -       vendor/github.com/klauspost/pgzip/LICENSE \
+>> -       vendor/github.com/klauspost/compress/internal/snapref/LICENSE \
+>> -       vendor/
+>> github.com/klauspost/compress/zstd/internal/xxhash/LICENSE.txt \
+>> -       vendor/github.com/klauspost/cpuid/v2/LICENSE \
+>> -       vendor/github.com/sirupsen/logrus/LICENSE \
+>> -       vendor/github.com/stretchr/testify/LICENSE \
+>> -       vendor/github.com/ungerik/go-sysfs/LICENSE \
+>> -       vendor/github.com/urfave/cli/v2/LICENSE \
+>> -       vendor/github.com/stretchr/objx/LICENSE \
+>> -       vendor/gopkg.in/yaml.v3/LICENSE \
+>> -       vendor/github.com/mattn/go-isatty/LICENSE \
+>> -       vendor/github.com/bmatsuo/lmdb-go/LICENSE.mdb.md
+>> -
+>> -MENDER_DEPENDENCIES =3D host-pkgconf openssl
+>> -
+>> -MENDER_LDFLAGS =3D -X
+>> github.com/mendersoftware/mender/conf.Version=3D$(MENDER_VERSION)
+>> -
+>> -MENDER_UPDATE_MODULES_FILES =3D directory single-file
+>> -
+>> -define MENDER_INSTALL_CONFIG_FILES
+>> -       $(INSTALL) -d -m 755 $(TARGET_DIR)/etc/mender/scripts
+>> -       echo -n "3" > $(TARGET_DIR)/etc/mender/scripts/version
+>> -
+>> -       $(INSTALL) -D -m 0644 $(MENDER_PKGDIR)/mender.conf \
+>> -               $(TARGET_DIR)/etc/mender/mender.conf
+>> -       $(INSTALL) -D -m 0644 $(MENDER_PKGDIR)/server.crt \
+>> -               $(TARGET_DIR)/etc/mender/server.crt
+>> -
+>> -       $(INSTALL) -D -m 0755 $(@D)/support/mender-device-identity \
+>> -
+>>  $(TARGET_DIR)/usr/share/mender/identity/mender-device-identity
+>> -       $(foreach f,bootloader-integration hostinfo network os
+>> rootfs-type, \
+>> -               $(INSTALL) -D -m 0755 $(@D)/support/mender-inventory-$(f=
 )
-> \
-> -                       $(TARGET_DIR)/usr/share/mender/modules/v3/$(notdi=
-r
-> $(f))
-> -       )
-> -endef
-> -
-> -MENDER_POST_INSTALL_TARGET_HOOKS +=3D MENDER_INSTALL_CONFIG_FILES
-> -
-> -ifeq ($(BR2_PACKAGE_XZ),y)
-> -MENDER_DEPENDENCIES +=3D xz
-> -else
-> -MENDER_TAGS +=3D nolzma
-> -endif
-> -
-> -ifeq ($(BR2_PACKAGE_DBUS)$(BR2_PACKAGE_LIBGLIB2),yy)
-> -MENDER_DEPENDENCIES +=3D libglib2
-> -define MENDER_INSTALL_DBUS_AUTHENTICATION_MANAGER_CONF
-> -       $(INSTALL) -D -m 0755
-> $(@D)/support/dbus/io.mender.AuthenticationManager.conf \
-> -
->  $(TARGET_DIR)/etc/dbus-1/system.d/io.mender.AuthenticationManager.conf
-> -
-> -       $(INSTALL) -D -m 0755
-> $(@D)/support/dbus/io.mender.UpdateManager.conf \
-> -
->  $(TARGET_DIR)/etc/dbus-1/system.d/io.mender.UpdateManager.conf
-> -endef
-> -MENDER_POST_INSTALL_TARGET_HOOKS +=3D
-> MENDER_INSTALL_DBUS_AUTHENTICATION_MANAGER_CONF
-> -else
-> -MENDER_TAGS +=3D nodbus
-> -endif
-> -
-> -define MENDER_INSTALL_INIT_SYSTEMD
-> -       $(INSTALL) -D -m 0644 $(MENDER_PKGDIR)/mender-client.service \
-> -               $(TARGET_DIR)/usr/lib/systemd/system/mender-client.servic=
-e
-> -endef
-> -
-> -define MENDER_INSTALL_INIT_SYSV
-> -       $(INSTALL) -D -m 755 $(MENDER_PKGDIR)/S42mender \
-> -               $(TARGET_DIR)/etc/init.d/S42mender
-> -endef
-> -
-> -$(eval $(golang-package))
-> diff --git a/package/mender/readme.txt b/package/mender/readme.txt
-> deleted file mode 100644
-> index 56d6204583..0000000000
-> --- a/package/mender/readme.txt
-> +++ /dev/null
-> @@ -1,132 +0,0 @@
-> -=3D=3D=3D Notes on using Mender on Buildroot
-> -=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> -
-> -Mender is an open source over-the-air (OTA) software updater for
-> -embedded Linux devices. Mender comprises a client running at the
-> -embedded device, as well as a server that manages deployments across
-> -many devices. There is also various tooling around the Mender project,
-> -such as 'mender-artifact' which is used to create Mender Artifacts
-> -that are compatible with the Mender client and server.
-> -
-> -Mender aims to address this challenge with a robust and easy to use
-> -updater for embedded Linux devices, which is open source and available
-> -to anyone.
-> -
-> -Robustness is ensured with atomic image-based deployments using a dual
-> -A/B rootfs partition layout. This makes it always possible to roll
-> -back to a working state, even when losing power at any time during the
-> -update process.
-> -
-> -The official documentation is a good resource to get an in depth
-> -understanding of how Mender works:
-> -
-> -    https://docs.mender.io
-> -
-> -In Buildroot the following packages are provided:
-> -
-> -- BR2_PACKAGE_MENDER
-> -    - This will install the client on target rootfs
-> -- BR2_PACKAGE_HOST_MENDER_ARTIFACT
-> -    - This will install the 'mender-artifact' tool in host rootfs.
-> -- BR2_PACKAGE_MENDER_CONNECT
-> -    - This installs a client that allows for remote terminal access
-> -      to mender clients registered on a mender server.
-> -- BR2_PACKAGE_MENDER_GRUBENV
-> -    - This package provides boot scripts to integrate mender into grub.
-> -      Mender recommends every client to use this package, including boar=
-ds
-> -      using uboot as the primary bootloader.
-> -
-> -To fully utilize atomic image-based deployments using the A/B update
-> -strategy, additional integration is required in the bootloader. This
-> -integration is board specific.
-> -
-> -Currently supported bootloaders are GRUB and U-boot. Buildroot provides
-> -a reference integration at board/mender/x86_64/ using the
-> -mender_x86_64_efi_defconfig file.
-> -
-> -Additional support and integrations are found at:
-> -
-> -    https://github.com/mendersoftware/buildroot-mender
-> -
-> -Default configurations files
-> -----------------------------
-> -
-> -Buildroot comes with a default configuration and there a couple of
-> -files that need your attention:
-> -
-> -- /etc/mender/mender.conf
-> -    - main configuration file for the Mender client
-> -    -
-> https://docs.mender.io/client-installation/configuration/configuration-op=
-tions
-> -
-> -- /var/lib/mender/device_type
-> -    - A string that defines the type of device
-> -
-> -Mender server configuration
-> ----------------------------
-> -
-> -The Mender server can be setup in different ways, and how you
-> -configure the Mender client differs slightly depending on which server
-> -environment is used.
-> -
-> -- Mender demo environment
-> -
-> -This is if you have followed the Getting started documentation where
-> -you launch a Mender server locally and to configure your environment
-> -to connect to this local server you need to provide the IP address of
-> -the server on the local network.
-> -
-> -By default the demo environment will connect to 'docker.mender.io' and
-> -'s3.docker.mender.io' and we need to make sure that these are resolved
-> -to the local IP address of the running server by adding the following
-> -entry to '/etc/hosts'
-> -
-> -    <ip address of demo environment> docker.mender.io s3.docker.mender.i=
-o
-> -
-> -This is required because the communication between client and server
-> -is utilizing TLS and the provided demo server certificate (server.crt)
-> -is only valid for 'docker.mender.io' and 's3.docker.mender.io'
-> -domains.
-> -
-> -- Hosted Mender
-> -
-> -To authenticate the Mender client with the Hosted Mender server you
-> -need a tenant token.
-> -
-> -To get your tenant token:
-> -
-> -- log in to https://hosted.mender.io
-> -- click your email at the top right and then =E2=80=9CMy organization=E2=
-=80=9D
-> -- press the =E2=80=9CCOPY TO CLIPBOARD=E2=80=9D
-> -- assign content of clipboard to TenantToken
-> -
-> -Example mender.conf options for Hosted Mender:
-> -
-> -    {
-> -      ...
-> -      "ServerURL": "https://hosted.mender.io",
-> -      "TenantToken": "<paste tenant token here>"
-> -      ...
-> -    }
-> -
-> -
-> -Creating Mender Artifacts
-> --------------------------
-> -
-> -To create Mender Artifacts based on Buildroot build output you must
-> -include BR2_PACKAGE_HOST_MENDER_ARTIFACT in your configuration, and
-> -then you would typically create the Mender Artifact in a post image
-> -script (BR2_ROOTFS_POST_IMAGE_SCRIPT). See the generate_mender_image
-> -method in board/mender/x86_64/post-image-efi.sh for a working example.
-> -
-> -Additionally, mender requires a bootstrap.mender file which is also
-> -generated using the host-mender-artifact package. See the
-> -generate_mender_bootstrap_artifact method in
-> -board/mender/x86_64/post-image-efi.sh for an example
-> -
-> -Configuring Mender with certificates
-> -------------------------------------
-> -
-> -Mender uses TLS to communicate with the management server, and if you
-> -use a CA-signed certificate on the server, you must include
-> -BR2_PACKAGE_CA_CERTIFICATES in your configuration to authenticate TLS
-> -connections.
-> diff --git a/package/mender/server.crt b/package/mender/server.crt
-> deleted file mode 100644
-> index 79a57e15e7..0000000000
-> --- a/package/mender/server.crt
-> +++ /dev/null
-> @@ -1,22 +0,0 @@
-> ------BEGIN CERTIFICATE-----
-> -MIIBfTCCASOgAwIBAgIJAJOS76a0qWuZMAoGCCqGSM49BAMCMBsxGTAXBgNVBAMM
-> -EGRvY2tlci5tZW5kZXIuaW8wHhcNMTYxMjE0MTk1MjQ2WhcNMjYxMjEyMTk1MjQ2
-> -WjAbMRkwFwYDVQQDDBBkb2NrZXIubWVuZGVyLmlvMFkwEwYHKoZIzj0CAQYIKoZI
-> -zj0DAQcDQgAE7AVYis6MWGPGQYU1/tlLEnskRifDIhvkRb8Y4nQPekRkLkiBYYT3
-> -iJ46wHrnejbHaLstU9GRdKWOmOuU6HGdO6NQME4wHQYDVR0OBBYEFGOIU4q++Vz8
-> -9HuT1jg9V+wFeJcyMB8GA1UdIwQYMBaAFGOIU4q++Vz89HuT1jg9V+wFeJcyMAwG
-> -A1UdEwQFMAMBAf8wCgYIKoZIzj0EAwIDSAAwRQIhAPLnEeWPNeN7eDCEYRitBfyO
-> -X1yf2kzOm4ohBE5GY9gzAiBCq7HOSkzQDkelmQCCCpGXf/UwYNgQJjSoeGfk0j1a
-> -TQ=3D=3D
-> ------END CERTIFICATE-----
-> ------BEGIN CERTIFICATE-----
-> -MIIBhDCCASmgAwIBAgIJALQrf4QDot4IMAoGCCqGSM49BAMCMB4xHDAaBgNVBAMM
-> -E3MzLmRvY2tlci5tZW5kZXIuaW8wHhcNMTYxMjE0MTk1MjQ2WhcNMjYxMjEyMTk1
-> -MjQ2WjAeMRwwGgYDVQQDDBNzMy5kb2NrZXIubWVuZGVyLmlvMFkwEwYHKoZIzj0C
-> -AQYIKoZIzj0DAQcDQgAEEc/Y3T+l3DvINePkpvVZORMIdHVs29jgsl48ia7z/NRX
-> -HlKtKxVGJyFN5Y7sBZeLgBYH3F4Bo3KfmxI7ad0tI6NQME4wHQYDVR0OBBYEFIUm
-> -cip00QZYpe4ULflbGNJan+Y9MB8GA1UdIwQYMBaAFIUmcip00QZYpe4ULflbGNJa
-> -n+Y9MAwGA1UdEwQFMAMBAf8wCgYIKoZIzj0EAwIDSQAwRgIhANHij9VZBDHOUPaC
-> -pFiagnWnYL2HBR72W1xTKQbrLLTXAiEAvpwA4HzSnGmLd3010+jqQuMRHArN5WaX
-> -h0fy7niBbIQ=3D
-> ------END CERTIFICATE-----
-> diff --git a/support/testing/tests/package/test_mender.py
-> b/support/testing/tests/package/test_mender.py
-> deleted file mode 100644
-> index 14440c9527..0000000000
-> --- a/support/testing/tests/package/test_mender.py
-> +++ /dev/null
-> @@ -1,72 +0,0 @@
-> -import os
-> -
-> -import infra.basetest
-> -
-> -
-> -class TestMenderInfra(infra.basetest.BRTest):
-> -    config =3D infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-> -             """
-> -             BR2_PACKAGE_MENDER=3Dy
-> -             BR2_PACKAGE_HOST_MENDER_ARTIFACT=3Dy
-> -             BR2_TARGET_ROOTFS_CPIO=3Dy
-> -             BR2_ROOTFS_POST_BUILD_SCRIPT=3D"{}"
-> -             BR2_ROOTFS_OVERLAY=3D"{}"
-> -             """.format(
-> -
->  infra.filepath("tests/package/test_mender/post-build.sh"),
-> -                 # overlay to add a fake 'fw_printenv', used by Mender
-> -
->  infra.filepath("tests/package/test_mender/rootfs-overlay"))
-> -
-> -    def base_test_run(self):
-> -        cpio_file =3D os.path.join(self.builddir, "images", "rootfs.cpio=
-")
-> -        self.emulator.boot(arch=3D"armv5", kernel=3D"builtin",
-> -                           options=3D["-initrd", cpio_file])
-> -        self.emulator.login()
-> -
-> -    def run_mender_test(self):
-> -        self.assertRunOk("ps aux | egrep [m]ender")
-> -
-> -        # Check if a simple Mender command is correctly executed
-> -        self.assertRunOk("mender -log-level debug show-artifact")
-> -        self.assertRunOk("mender -log-level debug show-artifact | grep
-> 'RUNTIME_TEST_ARTIFACT_NAME'")
-> -        cmd =3D "mender show-artifact 2>&1 | grep -i 'err'"  # Check if =
-no
-> 'error' among the traces
-> -        _, exit_code =3D self.emulator.run(cmd)
-> -        self.assertEqual(exit_code, 1)
-> -
-> -
-> -class TestMenderRW(TestMenderInfra):
-> -    def test_run(self):
-> -        TestMenderInfra.base_test_run(self)
-> -
-> -        # Check if the Daemon is running
-> -        self.assertRunOk("ls /var/run/mender.pid")
-> -        self.run_mender_test()
-> -
-> -
-> -class TestMenderRO(TestMenderInfra):
-> -    config =3D \
-> -        """
-> -        {}
-> -        # BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is not set
-> -        """.format(TestMenderInfra.config)
-> -
-> -    def test_run(self):
-> -        TestMenderInfra.base_test_run(self)
-> -
-> -        # Check if the Daemon is running
-> -        self.assertRunOk("ls /var/run/mender.pid")
-> -        self.run_mender_test()
-> -
-> -
-> -# gitlab-runner: large
-> -class TestMenderSystemd(TestMenderInfra):
-> -    config =3D \
-> -        """
-> -        {}
-> -        BR2_INIT_SYSTEMD=3Dy
-> -        """.format(TestMenderInfra.config)
-> -
-> -    def test_run(self):
-> -        TestMenderInfra.base_test_run(self)
-> -        output, _ =3D self.emulator.run("systemctl is-active mender-clie=
-nt")
-> -        self.assertEqual(output[0], "active")
-> -        self.run_mender_test()
-> diff --git a/support/testing/tests/package/test_mender/post-build.sh
-> b/support/testing/tests/package/test_mender/post-build.sh
-> deleted file mode 100755
-> index 1afa231082..0000000000
-> --- a/support/testing/tests/package/test_mender/post-build.sh
-> +++ /dev/null
-> @@ -1,25 +0,0 @@
-> -#!/usr/bin/env bash
-> -set -e
-> -DEVICE_TYPE=3D"buildroot-arm"
-> -ARTIFACT_NAME=3D"RUNTIME_TEST_ARTIFACT_NAME"
-> -
-> -generate_mender_bootstrap_artifact() {
-> -  "${HOST_DIR}"/bin/mender-artifact \
-> -    write bootstrap-artifact \
-> -    --artifact-name "${ARTIFACT_NAME}" \
-> -    --device-type "${DEVICE_TYPE}" \
-> -    --provides "rootfs-image.version:${ARTIFACT_NAME}" \
-> -    --clears-provides "rootfs-image.*" \
-> -    --output-path "${TARGET_DIR}"/var/lib/mender/bootstrap.mender \
-> -    --version 3
-> -}
-> -
-> -function mender_fixup() {
-> -  rm -rf "${TARGET_DIR}"/var/lib/mender
-> -  mkdir -p "${TARGET_DIR}"/var/lib/mender
-> -  echo "device_type=3D${DEVICE_TYPE}" >
-> "${TARGET_DIR}"/var/lib/mender/device_type
-> -
-> -}
-> -
-> -mender_fixup
-> -generate_mender_bootstrap_artifact
-> diff --git
-> a/support/testing/tests/package/test_mender/rootfs-overlay/etc/mender/art=
-ifact_info
-> b/support/testing/tests/package/test_mender/rootfs-overlay/etc/mender/art=
-ifact_info
-> deleted file mode 100644
-> index 4d54b8f89c..0000000000
-> ---
-> a/support/testing/tests/package/test_mender/rootfs-overlay/etc/mender/art=
-ifact_info
-> +++ /dev/null
-> @@ -1 +0,0 @@
-> -artifact_name=3DRUNTIME_TEST_ARTIFACT_NAME
-> diff --git
-> a/support/testing/tests/package/test_mender/rootfs-overlay/usr/bin/fw_pri=
-ntenv
-> b/support/testing/tests/package/test_mender/rootfs-overlay/usr/bin/fw_pri=
-ntenv
-> deleted file mode 100755
-> index c002a0f2b8..0000000000
-> ---
-> a/support/testing/tests/package/test_mender/rootfs-overlay/usr/bin/fw_pri=
-ntenv
-> +++ /dev/null
-> @@ -1,6 +0,0 @@
-> -#!/bin/sh
-> -
-> -# Fake 'fw_printenv' because UBoot is not installed: print some plausibl=
-e
-> 'key-value'
-> -echo "bootcount=3D0"
-> -echo "mender_boot_part=3Drootfs"
-> -echo "upgrade_available=3D0"
-> --
-> 2.47.3
->
->
+>> \
+>> -
+>>  $(TARGET_DIR)/usr/share/mender/inventory/mender-inventory-$(f)
+>> -       )
+>> -
+>> -       $(INSTALL) -D -m 0755 $(MENDER_PKGDIR)/device_type \
+>> -                       $(TARGET_DIR)/etc/mender/device_type
+>> -
+>> -       mkdir -p $(TARGET_DIR)/var/lib/mender
+>> -       $(foreach f,$(MENDER_UPDATE_MODULES_FILES), \
+>> -               $(INSTALL) -D -m 0755 $(@D)/support/modules/$(notdir
+>> $(f)) \
+>> -
+>>  $(TARGET_DIR)/usr/share/mender/modules/v3/$(notdir $(f))
+>> -       )
+>> -endef
+>> -
+>> -MENDER_POST_INSTALL_TARGET_HOOKS +=3D MENDER_INSTALL_CONFIG_FILES
+>> -
+>> -ifeq ($(BR2_PACKAGE_XZ),y)
+>> -MENDER_DEPENDENCIES +=3D xz
+>> -else
+>> -MENDER_TAGS +=3D nolzma
+>> -endif
+>> -
+>> -ifeq ($(BR2_PACKAGE_DBUS)$(BR2_PACKAGE_LIBGLIB2),yy)
+>> -MENDER_DEPENDENCIES +=3D libglib2
+>> -define MENDER_INSTALL_DBUS_AUTHENTICATION_MANAGER_CONF
+>> -       $(INSTALL) -D -m 0755
+>> $(@D)/support/dbus/io.mender.AuthenticationManager.conf \
+>> -
+>>  $(TARGET_DIR)/etc/dbus-1/system.d/io.mender.AuthenticationManager.conf
+>> -
+>> -       $(INSTALL) -D -m 0755
+>> $(@D)/support/dbus/io.mender.UpdateManager.conf \
+>> -
+>>  $(TARGET_DIR)/etc/dbus-1/system.d/io.mender.UpdateManager.conf
+>> -endef
+>> -MENDER_POST_INSTALL_TARGET_HOOKS +=3D
+>> MENDER_INSTALL_DBUS_AUTHENTICATION_MANAGER_CONF
+>> -else
+>> -MENDER_TAGS +=3D nodbus
+>> -endif
+>> -
+>> -define MENDER_INSTALL_INIT_SYSTEMD
+>> -       $(INSTALL) -D -m 0644 $(MENDER_PKGDIR)/mender-client.service \
+>> -               $(TARGET_DIR)/usr/lib/systemd/system/mender-client.servi=
+ce
+>> -endef
+>> -
+>> -define MENDER_INSTALL_INIT_SYSV
+>> -       $(INSTALL) -D -m 755 $(MENDER_PKGDIR)/S42mender \
+>> -               $(TARGET_DIR)/etc/init.d/S42mender
+>> -endef
+>> -
+>> -$(eval $(golang-package))
+>> diff --git a/package/mender/readme.txt b/package/mender/readme.txt
+>> deleted file mode 100644
+>> index 56d6204583..0000000000
+>> --- a/package/mender/readme.txt
+>> +++ /dev/null
+>> @@ -1,132 +0,0 @@
+>> -=3D=3D=3D Notes on using Mender on Buildroot
+>> -=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>> -
+>> -Mender is an open source over-the-air (OTA) software updater for
+>> -embedded Linux devices. Mender comprises a client running at the
+>> -embedded device, as well as a server that manages deployments across
+>> -many devices. There is also various tooling around the Mender project,
+>> -such as 'mender-artifact' which is used to create Mender Artifacts
+>> -that are compatible with the Mender client and server.
+>> -
+>> -Mender aims to address this challenge with a robust and easy to use
+>> -updater for embedded Linux devices, which is open source and available
+>> -to anyone.
+>> -
+>> -Robustness is ensured with atomic image-based deployments using a dual
+>> -A/B rootfs partition layout. This makes it always possible to roll
+>> -back to a working state, even when losing power at any time during the
+>> -update process.
+>> -
+>> -The official documentation is a good resource to get an in depth
+>> -understanding of how Mender works:
+>> -
+>> -    https://docs.mender.io
+>> -
+>> -In Buildroot the following packages are provided:
+>> -
+>> -- BR2_PACKAGE_MENDER
+>> -    - This will install the client on target rootfs
+>> -- BR2_PACKAGE_HOST_MENDER_ARTIFACT
+>> -    - This will install the 'mender-artifact' tool in host rootfs.
+>> -- BR2_PACKAGE_MENDER_CONNECT
+>> -    - This installs a client that allows for remote terminal access
+>> -      to mender clients registered on a mender server.
+>> -- BR2_PACKAGE_MENDER_GRUBENV
+>> -    - This package provides boot scripts to integrate mender into grub.
+>> -      Mender recommends every client to use this package, including
+>> boards
+>> -      using uboot as the primary bootloader.
+>> -
+>> -To fully utilize atomic image-based deployments using the A/B update
+>> -strategy, additional integration is required in the bootloader. This
+>> -integration is board specific.
+>> -
+>> -Currently supported bootloaders are GRUB and U-boot. Buildroot provides
+>> -a reference integration at board/mender/x86_64/ using the
+>> -mender_x86_64_efi_defconfig file.
+>> -
+>> -Additional support and integrations are found at:
+>> -
+>> -    https://github.com/mendersoftware/buildroot-mender
+>> -
+>> -Default configurations files
+>> -----------------------------
+>> -
+>> -Buildroot comes with a default configuration and there a couple of
+>> -files that need your attention:
+>> -
+>> -- /etc/mender/mender.conf
+>> -    - main configuration file for the Mender client
+>> -    -
+>> https://docs.mender.io/client-installation/configuration/configuration-o=
+ptions
+>> -
+>> -- /var/lib/mender/device_type
+>> -    - A string that defines the type of device
+>> -
+>> -Mender server configuration
+>> ----------------------------
+>> -
+>> -The Mender server can be setup in different ways, and how you
+>> -configure the Mender client differs slightly depending on which server
+>> -environment is used.
+>> -
+>> -- Mender demo environment
+>> -
+>> -This is if you have followed the Getting started documentation where
+>> -you launch a Mender server locally and to configure your environment
+>> -to connect to this local server you need to provide the IP address of
+>> -the server on the local network.
+>> -
+>> -By default the demo environment will connect to 'docker.mender.io' and
+>> -'s3.docker.mender.io' and we need to make sure that these are resolved
+>> -to the local IP address of the running server by adding the following
+>> -entry to '/etc/hosts'
+>> -
+>> -    <ip address of demo environment> docker.mender.io
+>> s3.docker.mender.io
+>> -
+>> -This is required because the communication between client and server
+>> -is utilizing TLS and the provided demo server certificate (server.crt)
+>> -is only valid for 'docker.mender.io' and 's3.docker.mender.io'
+>> -domains.
+>> -
+>> -- Hosted Mender
+>> -
+>> -To authenticate the Mender client with the Hosted Mender server you
+>> -need a tenant token.
+>> -
+>> -To get your tenant token:
+>> -
+>> -- log in to https://hosted.mender.io
+>> -- click your email at the top right and then =E2=80=9CMy organization=
+=E2=80=9D
+>> -- press the =E2=80=9CCOPY TO CLIPBOARD=E2=80=9D
+>> -- assign content of clipboard to TenantToken
+>> -
+>> -Example mender.conf options for Hosted Mender:
+>> -
+>> -    {
+>> -      ...
+>> -      "ServerURL": "https://hosted.mender.io",
+>> -      "TenantToken": "<paste tenant token here>"
+>> -      ...
+>> -    }
+>> -
+>> -
+>> -Creating Mender Artifacts
+>> --------------------------
+>> -
+>> -To create Mender Artifacts based on Buildroot build output you must
+>> -include BR2_PACKAGE_HOST_MENDER_ARTIFACT in your configuration, and
+>> -then you would typically create the Mender Artifact in a post image
+>> -script (BR2_ROOTFS_POST_IMAGE_SCRIPT). See the generate_mender_image
+>> -method in board/mender/x86_64/post-image-efi.sh for a working example.
+>> -
+>> -Additionally, mender requires a bootstrap.mender file which is also
+>> -generated using the host-mender-artifact package. See the
+>> -generate_mender_bootstrap_artifact method in
+>> -board/mender/x86_64/post-image-efi.sh for an example
+>> -
+>> -Configuring Mender with certificates
+>> -------------------------------------
+>> -
+>> -Mender uses TLS to communicate with the management server, and if you
+>> -use a CA-signed certificate on the server, you must include
+>> -BR2_PACKAGE_CA_CERTIFICATES in your configuration to authenticate TLS
+>> -connections.
+>> diff --git a/package/mender/server.crt b/package/mender/server.crt
+>> deleted file mode 100644
+>> index 79a57e15e7..0000000000
+>> --- a/package/mender/server.crt
+>> +++ /dev/null
+>> @@ -1,22 +0,0 @@
+>> ------BEGIN CERTIFICATE-----
+>> -MIIBfTCCASOgAwIBAgIJAJOS76a0qWuZMAoGCCqGSM49BAMCMBsxGTAXBgNVBAMM
+>> -EGRvY2tlci5tZW5kZXIuaW8wHhcNMTYxMjE0MTk1MjQ2WhcNMjYxMjEyMTk1MjQ2
+>> -WjAbMRkwFwYDVQQDDBBkb2NrZXIubWVuZGVyLmlvMFkwEwYHKoZIzj0CAQYIKoZI
+>> -zj0DAQcDQgAE7AVYis6MWGPGQYU1/tlLEnskRifDIhvkRb8Y4nQPekRkLkiBYYT3
+>> -iJ46wHrnejbHaLstU9GRdKWOmOuU6HGdO6NQME4wHQYDVR0OBBYEFGOIU4q++Vz8
+>> -9HuT1jg9V+wFeJcyMB8GA1UdIwQYMBaAFGOIU4q++Vz89HuT1jg9V+wFeJcyMAwG
+>> -A1UdEwQFMAMBAf8wCgYIKoZIzj0EAwIDSAAwRQIhAPLnEeWPNeN7eDCEYRitBfyO
+>> -X1yf2kzOm4ohBE5GY9gzAiBCq7HOSkzQDkelmQCCCpGXf/UwYNgQJjSoeGfk0j1a
+>> -TQ=3D=3D
+>> ------END CERTIFICATE-----
+>> ------BEGIN CERTIFICATE-----
+>> -MIIBhDCCASmgAwIBAgIJALQrf4QDot4IMAoGCCqGSM49BAMCMB4xHDAaBgNVBAMM
+>> -E3MzLmRvY2tlci5tZW5kZXIuaW8wHhcNMTYxMjE0MTk1MjQ2WhcNMjYxMjEyMTk1
+>> -MjQ2WjAeMRwwGgYDVQQDDBNzMy5kb2NrZXIubWVuZGVyLmlvMFkwEwYHKoZIzj0C
+>> -AQYIKoZIzj0DAQcDQgAEEc/Y3T+l3DvINePkpvVZORMIdHVs29jgsl48ia7z/NRX
+>> -HlKtKxVGJyFN5Y7sBZeLgBYH3F4Bo3KfmxI7ad0tI6NQME4wHQYDVR0OBBYEFIUm
+>> -cip00QZYpe4ULflbGNJan+Y9MB8GA1UdIwQYMBaAFIUmcip00QZYpe4ULflbGNJa
+>> -n+Y9MAwGA1UdEwQFMAMBAf8wCgYIKoZIzj0EAwIDSQAwRgIhANHij9VZBDHOUPaC
+>> -pFiagnWnYL2HBR72W1xTKQbrLLTXAiEAvpwA4HzSnGmLd3010+jqQuMRHArN5WaX
+>> -h0fy7niBbIQ=3D
+>> ------END CERTIFICATE-----
+>> diff --git a/support/testing/tests/package/test_mender.py
+>> b/support/testing/tests/package/test_mender.py
+>> deleted file mode 100644
+>> index 14440c9527..0000000000
+>> --- a/support/testing/tests/package/test_mender.py
+>> +++ /dev/null
+>> @@ -1,72 +0,0 @@
+>> -import os
+>> -
+>> -import infra.basetest
+>> -
+>> -
+>> -class TestMenderInfra(infra.basetest.BRTest):
+>> -    config =3D infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
+>> -             """
+>> -             BR2_PACKAGE_MENDER=3Dy
+>> -             BR2_PACKAGE_HOST_MENDER_ARTIFACT=3Dy
+>> -             BR2_TARGET_ROOTFS_CPIO=3Dy
+>> -             BR2_ROOTFS_POST_BUILD_SCRIPT=3D"{}"
+>> -             BR2_ROOTFS_OVERLAY=3D"{}"
+>> -             """.format(
+>> -
+>>  infra.filepath("tests/package/test_mender/post-build.sh"),
+>> -                 # overlay to add a fake 'fw_printenv', used by Mender
+>> -
+>>  infra.filepath("tests/package/test_mender/rootfs-overlay"))
+>> -
+>> -    def base_test_run(self):
+>> -        cpio_file =3D os.path.join(self.builddir, "images", "rootfs.cpi=
+o")
+>> -        self.emulator.boot(arch=3D"armv5", kernel=3D"builtin",
+>> -                           options=3D["-initrd", cpio_file])
+>> -        self.emulator.login()
+>> -
+>> -    def run_mender_test(self):
+>> -        self.assertRunOk("ps aux | egrep [m]ender")
+>> -
+>> -        # Check if a simple Mender command is correctly executed
+>> -        self.assertRunOk("mender -log-level debug show-artifact")
+>> -        self.assertRunOk("mender -log-level debug show-artifact | grep
+>> 'RUNTIME_TEST_ARTIFACT_NAME'")
+>> -        cmd =3D "mender show-artifact 2>&1 | grep -i 'err'"  # Check if=
+ no
+>> 'error' among the traces
+>> -        _, exit_code =3D self.emulator.run(cmd)
+>> -        self.assertEqual(exit_code, 1)
+>> -
+>> -
+>> -class TestMenderRW(TestMenderInfra):
+>> -    def test_run(self):
+>> -        TestMenderInfra.base_test_run(self)
+>> -
+>> -        # Check if the Daemon is running
+>> -        self.assertRunOk("ls /var/run/mender.pid")
+>> -        self.run_mender_test()
+>> -
+>> -
+>> -class TestMenderRO(TestMenderInfra):
+>> -    config =3D \
+>> -        """
+>> -        {}
+>> -        # BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is not set
+>> -        """.format(TestMenderInfra.config)
+>> -
+>> -    def test_run(self):
+>> -        TestMenderInfra.base_test_run(self)
+>> -
+>> -        # Check if the Daemon is running
+>> -        self.assertRunOk("ls /var/run/mender.pid")
+>> -        self.run_mender_test()
+>> -
+>> -
+>> -# gitlab-runner: large
+>> -class TestMenderSystemd(TestMenderInfra):
+>> -    config =3D \
+>> -        """
+>> -        {}
+>> -        BR2_INIT_SYSTEMD=3Dy
+>> -        """.format(TestMenderInfra.config)
+>> -
+>> -    def test_run(self):
+>> -        TestMenderInfra.base_test_run(self)
+>> -        output, _ =3D self.emulator.run("systemctl is-active
+>> mender-client")
+>> -        self.assertEqual(output[0], "active")
+>> -        self.run_mender_test()
+>> diff --git a/support/testing/tests/package/test_mender/post-build.sh
+>> b/support/testing/tests/package/test_mender/post-build.sh
+>> deleted file mode 100755
+>> index 1afa231082..0000000000
+>> --- a/support/testing/tests/package/test_mender/post-build.sh
+>> +++ /dev/null
+>> @@ -1,25 +0,0 @@
+>> -#!/usr/bin/env bash
+>> -set -e
+>> -DEVICE_TYPE=3D"buildroot-arm"
+>> -ARTIFACT_NAME=3D"RUNTIME_TEST_ARTIFACT_NAME"
+>> -
+>> -generate_mender_bootstrap_artifact() {
+>> -  "${HOST_DIR}"/bin/mender-artifact \
+>> -    write bootstrap-artifact \
+>> -    --artifact-name "${ARTIFACT_NAME}" \
+>> -    --device-type "${DEVICE_TYPE}" \
+>> -    --provides "rootfs-image.version:${ARTIFACT_NAME}" \
+>> -    --clears-provides "rootfs-image.*" \
+>> -    --output-path "${TARGET_DIR}"/var/lib/mender/bootstrap.mender \
+>> -    --version 3
+>> -}
+>> -
+>> -function mender_fixup() {
+>> -  rm -rf "${TARGET_DIR}"/var/lib/mender
+>> -  mkdir -p "${TARGET_DIR}"/var/lib/mender
+>> -  echo "device_type=3D${DEVICE_TYPE}" >
+>> "${TARGET_DIR}"/var/lib/mender/device_type
+>> -
+>> -}
+>> -
+>> -mender_fixup
+>> -generate_mender_bootstrap_artifact
+>> diff --git
+>> a/support/testing/tests/package/test_mender/rootfs-overlay/etc/mender/ar=
+tifact_info
+>> b/support/testing/tests/package/test_mender/rootfs-overlay/etc/mender/ar=
+tifact_info
+>> deleted file mode 100644
+>> index 4d54b8f89c..0000000000
+>> ---
+>> a/support/testing/tests/package/test_mender/rootfs-overlay/etc/mender/ar=
+tifact_info
+>> +++ /dev/null
+>> @@ -1 +0,0 @@
+>> -artifact_name=3DRUNTIME_TEST_ARTIFACT_NAME
+>> diff --git
+>> a/support/testing/tests/package/test_mender/rootfs-overlay/usr/bin/fw_pr=
+intenv
+>> b/support/testing/tests/package/test_mender/rootfs-overlay/usr/bin/fw_pr=
+intenv
+>> deleted file mode 100755
+>> index c002a0f2b8..0000000000
+>> ---
+>> a/support/testing/tests/package/test_mender/rootfs-overlay/usr/bin/fw_pr=
+intenv
+>> +++ /dev/null
+>> @@ -1,6 +0,0 @@
+>> -#!/bin/sh
+>> -
+>> -# Fake 'fw_printenv' because UBoot is not installed: print some
+>> plausible 'key-value'
+>> -echo "bootcount=3D0"
+>> -echo "mender_boot_part=3Drootfs"
+>> -echo "upgrade_available=3D0"
+>> --
+>> 2.47.3
+>>
+>>
 
---000000000000627d9b065b82e8ad
+--000000000000519133065b833442
 Content-Type: text/html; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-<div dir=3D"ltr"><div>Hi Bernd;</div><div><br></div><div>At this point I ag=
-ree. I have submitted several patches to try and bring these packages, and =
-especially</div><div>mender itself up to C++, and the patch series are igno=
-red.=C2=A0</div><div><br></div><div>I maintain a branch with modern mender =
-support located here:</div><div><a href=3D"https://github.com/mendersoftwar=
-e/buildroot-mender">https://github.com/mendersoftware/buildroot-mender</a><=
-/div><div><br></div></div><br><div class=3D"gmail_quote gmail_quote_contain=
-er"><div dir=3D"ltr" class=3D"gmail_attr">On Mon, 14 Sept 2026 at 23:05, Be=
-rnd Kuhls &lt;<a href=3D"mailto:bernd@kuhls.net">bernd@kuhls.net</a>&gt; wr=
-ote:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px=
- 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">Building th=
-e current mender version 3.5.3 with OpenSSL 4.0.2 is broken:<br>
+<div dir=3D"ltr"><div>The other option would be to apply the patch series a=
+nd then I can submit a patch</div><div>to bump the mender version to 5.1, b=
+ut at this point, with the lack of response from the maintainers,</div><div=
+>and patch series being ignored for months at a time, if not forever, it&#3=
+9;s far easier for me to provide the</div><div>packages in an external tree=
+ on the mender github.</div><div><br></div></div><br><div class=3D"gmail_qu=
+ote gmail_quote_container"><div dir=3D"ltr" class=3D"gmail_attr">On Tue, 15=
+ Sept 2026 at 12:20, Adam Duskett &lt;<a href=3D"mailto:adam.duskett@amarul=
+asolutions.com">adam.duskett@amarulasolutions.com</a>&gt; wrote:<br></div><=
+blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-l=
+eft:1px solid rgb(204,204,204);padding-left:1ex"><div dir=3D"ltr"><div>Hi B=
+ernd;</div><div><br></div><div>At this point I agree. I have submitted seve=
+ral patches to try and bring these packages, and especially</div><div>mende=
+r itself up to C++, and the patch series are ignored.=C2=A0</div><div><br><=
+/div><div>I maintain a branch with modern mender support located here:</div=
+><div><a href=3D"https://github.com/mendersoftware/buildroot-mender" target=
+=3D"_blank">https://github.com/mendersoftware/buildroot-mender</a></div><di=
+v><br></div></div><br><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"=
+gmail_attr">On Mon, 14 Sept 2026 at 23:05, Bernd Kuhls &lt;<a href=3D"mailt=
+o:bernd@kuhls.net" target=3D"_blank">bernd@kuhls.net</a>&gt; wrote:<br></di=
+v><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;borde=
+r-left:1px solid rgb(204,204,204);padding-left:1ex">Building the current me=
+nder version 3.5.3 with OpenSSL 4.0.2 is broken:<br>
 <br>
 hostname.c: In function &#39;do_check_string&#39;:<br>
 hostname.c:248:15: error: invalid use of incomplete typedef &#39;ASN1_STRIN=
@@ -6749,10 +6955,11 @@ ausible &#39;key-value&#39;<br>
 2.47.3<br>
 <br>
 </blockquote></div>
+</blockquote></div>
 
---000000000000627d9b065b82e8ad--
+--000000000000519133065b833442--
 
---===============3427709601527839876==
+--===============7981039451664351683==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -6763,4 +6970,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============3427709601527839876==--
+--===============7981039451664351683==--
