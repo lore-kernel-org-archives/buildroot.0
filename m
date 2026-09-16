@@ -1,145 +1,134 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AA2D8C982C9
-	for <buildroot@archiver.kernel.org>; Wed, 16 Sep 2026 15:35:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39120C982D0
+	for <buildroot@archiver.kernel.org>; Wed, 16 Sep 2026 16:52:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2F62880EBB;
-	Wed, 16 Sep 2026 15:35:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C3B4B60811;
+	Wed, 16 Sep 2026 16:52:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4Wx1pCJ_YhsR; Wed, 16 Sep 2026 15:35:21 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 0145080EB2
-Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789572921;
-	b=pSZiohbnHUZ1COh8K7OZ0IK/tZokqYFi3pVzSUZIbNvR/D4wMGIX86do2NR7fRiwO0Q2
-	 B9gMDWiRGbEnNhG3/LIEMSp4FVUctjy/wm9m0P3dieG+pDEcFdr6yv/LgXhP2WOAJh+lR
-	 ZIoQn9FIE/eZyifBFc9TC/OWIzsMQV24ILiPFcyQ5kKOxogBsSrUAsO9cCHGBm6t2RDkW
-	 xvNLxu1H0E2XVMsegAU6PL67b+Q3zLnQwot5s0Bx7jdjGCGqsY3CESmOa72vYORCSnS0v
-	 CddIFGCDmD35fBFJn0wAel7M65zWsNncNi17IV7vw5umM4hZ18B+dWUY5iaGrVQHoxQ==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JX-nT9ex09Mo; Wed, 16 Sep 2026 16:52:40 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org CB8C2607BE
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789577559;
+	b=mx59FNMaiotOU/CPq546z5FDBx/t6+MFmV3W3OdJ5xmaQGuqcaQnV5k4kVnNonCreOTI
+	 Vw5eWxZf/8eT5MwVfIYcuH2SabIKDGiea/PsdHvixmlaFv9I/Alx8sxeYqmsTsvH04Tb+
+	 NCGZjYdymRF1241z/Jm5nHKH0Uaza95jOuxFAS3l4S7S4GRRsTFtAn2CYi1prpB6YKegi
+	 6W2AYsQ4M2QN+M+ex8buep/1CaiXc3CX8br61/Uv3a//zIypDeTPgIgGADhPWvOjnyvu9
+	 GRWJ1eFKGL8X4J7zxJElUlnjhQ7Hc5ygTAbeCYhmd6B27z1T4w3X0SvQ6Nzuxm6lcNw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789572921;
+	c=relaxed/relaxed; t=1789577559;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:X-Greylist:Received-SPF:Received:
-	 Received:Received:Received:X-OVh-ClientIp:From:To:Date:Message-ID:
-	 X-Mailer:MIME-Version:x-ovh-tracer-id:X-VR-SPAMSTATE:X-VR-SPAMSCORE:
-	 X-VR-SPAMCAUSE:DKIM-Signature:Subject:X-BeenThere:X-Mailman-Version:
-	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:Cc:Content-Type:Content-Transfer-Encoding:Errors-To:
-	 Sender;
-	bh=gtoOFVDlnLPmdIZ7YtwFwPL+1XXdxDMBA8iXmekn3j0=;
-	b=XrFd2G8Cm0jw4UonK23TaU9tuLdPec40C9P5GSKrE6ei4lhN7pKqnNxG4Ltew+JlX0Iw
-	 E37PaukQWWeqEcmogsvnpvctM06p2BUq29LvCOt9ti2+NbqkDh9kDGCJDnedxJVQhZq6y
-	 UzSdTkgbo3Mqw5t7Ym8OcZEHHLQKH1r3v+rXRjIzOxBGLzObQlSWU7ceGLDHo8i3C6+uP
-	 TvWzKa32MPVBRQWaG1FI6W4wFIgKxMPahYtHvtxzy9AgPq8UMxZqc8RWJ6rdP6GRYEYzk
-	 rcKi5rRfqSvYp8dkfC4jUh/+RQMhO3F/t0+g50WG6uD+F5ijKUp367I5+BqKvB5qT/Q==
-ARC-Authentication-Results: i=2; smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	 Received:DKIM-Signature:Date:From:To:Cc:Message-ID:References:
+	 MIME-Version:Content-Disposition:In-Reply-To:Subject:X-BeenThere:
+	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:Content-Type:
+	 Content-Transfer-Encoding:Errors-To:Sender;
+	bh=Qh/JKp6UUgrrrVrY1XrA23l6dhbeT3rLKIAR70nrcK4=;
+	b=OlQjk0H8F+iXCHvFgLiFlzH5M4Q9urwqQyVZAaDB+tMv8p5bI9KF3Un0DMmdw/bfVcya
+	 c7InS26Al6cqFm/UA7OQ/mZsPF4OztwiEtFsTRgXCwS95/GmGhqAJ+o6DwP+vrFvpCGjK
+	 UxaAhG8oyVjGBL+rfVQ3/jv0YbntWPyQjgQ1dNOGrnKvJguTdF7bzQFhmccWRNyM5jmvb
+	 d9k5LakR8Hibj3ZdDOKr8nrLmDh18Wcknzh0btGWFQiuaj5sXzJdb8OybInG0l57ZhXgh
+	 8gY65HKVK7YuR7p0DLzbuhsZPUDYZn1rASJ1UG1lmFJAEAAj4xBKR96A0AKKxJaLB8A==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; dmarc=pass header.from=ideasonboard.com;
+	dkim=pass header.d=ideasonboard.com header.i=@ideasonboard.com header.a=rsa-sha256 header.s=mail header.b="kEXAk/n5";
+	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789572921;
-	bh=gtoOFVDlnLPmdIZ7YtwFwPL+1XXdxDMBA8iXmekn3j0=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Cc:From;
-	b=eyCIAHR+1Md4cQ+PfKwB1MTKlOBAOOLBMt5Kth723y35RWD8T1nRfQdKNQKZpptZl
-	 xL6fbKL26lhYMJoFRT7ZL7CXWJjoKD3BEhKkfZwA4TLh/9/fQEbQdbi1qe00alS1YL
-	 CK/1GiWmcP/1qPoV6oNjGuewjYTxJrwSSr2+ABG6V4DuIIad+T3OGMXLEEtG1TDEFB
-	 0hVvaruNQ8sIngKS5C/+gYxjHLu2zETfK4GVoYHzBp3DE4Rojo94qFELpG2pxzW5bJ
-	 lmQDq97SzyaxAIp5+9BsxkzZfd8aNSp+QRCbE+8LkssXBvpIe6hS9gXCiAxfHQgVO1
-	 KJ/asEeTgQjRg==
+	s=default; t=1789577559;
+	bh=Qh/JKp6UUgrrrVrY1XrA23l6dhbeT3rLKIAR70nrcK4=;
+	h=Date:From:To:Cc:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=Bg4k/9EA6Hb21UlPGh98rAFeQO5/G7CO5gHhkIqEGi4PFj9gyf83Q5ZVOVBm8d6aE
+	 QkEiVyrGJwv3TBmOoRq7LWz2i+Xudoaf1fT7XjuEd/RyowDBtZcMi6VqFYKeOBlBwI
+	 7CZ0WAr+fvBN6l6dPXBz7xAP9oB4fRN5p8SLub0OuEocatiOxXBHwnQcLqFNwxEPY+
+	 Sj6RxW90fAhgKUJgz4j5JfFOBGcq94Gpr4oCKiO7OnTRWgFmk5ZmK037Ow13EKNh7a
+	 Xny9TLzNhbC4byFkKKQNjUjvPg8NaXOiTD2qPJVLtag4eGWIDtnJ4XXXkuXWzRv1XT
+	 l8cCLQ/rRrEnA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0145080EB2;
-	Wed, 16 Sep 2026 15:35:21 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id E0AAF422
- for <buildroot@buildroot.org>; Wed, 16 Sep 2026 15:35:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CB8C2607BE;
+	Wed, 16 Sep 2026 16:52:39 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id D3E9E388
+ for <buildroot@buildroot.org>; Wed, 16 Sep 2026 16:52:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DE1DA40639
- for <buildroot@buildroot.org>; Wed, 16 Sep 2026 15:35:19 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id BA3D0607BE
+ for <buildroot@buildroot.org>; Wed, 16 Sep 2026 16:52:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EvQUfIpXXXgG for <buildroot@buildroot.org>;
- Wed, 16 Sep 2026 15:35:18 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 1E2A84029D
-Authentication-Results: smtp4.osuosl.org;
- arc=none smtp.remote-ip=188.165.33.112
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789572918;
- b=qLEt/iUviVbLUVluqDOYgxZjOJV5IGdJD3rAnhOTxY7hKJ+mKad+CgjEoQpwonGZdcSZ
- emIEbk3i+sWiKoDrKwDqow5StU0/4BWmzsmBXQXF5jTkrjUHOBQHt9t6kwRERYSWKS6h3
- xf0TRsliM7q7qJ0G8ruN+ck8AYlJoQ486GAiYuCNNxndwvxlaTQITzDcr2MBZ/9gPHVYr
- rMtCHJRhFmnUX7gg4NeP2UDLzT0BHL3ttTnptVcHaNZh34SpNgl4DfaClW+0t9731io+t
- rl8wwdMNZu1eH+TNsDKul/6d/vBGVSF7ZA8/nrbQ9zGo/mt+sSEXQaVd9PNcl0Zppcg==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GtLEQD8nbhEs for <buildroot@buildroot.org>;
+ Wed, 16 Sep 2026 16:52:37 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 02789607B7
+Authentication-Results: smtp3.osuosl.org;
+ arc=none smtp.remote-ip=213.167.242.64
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789577557;
+ b=aa02uglQf4iAiHZAMmjlLSSp6q2A92IAeb3cN+syzTJO3iCeQylcWSV83gQbFG+n3EW1
+ EmOEK4Wg42OqK8yvBeU++Ru0XQy+V3sikwOIMyEYPH/aZ8jUcqEsTD6EeHxNS0C2T2jkM
+ z1lstLgt924nYILshKvbQMMMfDEIFkzue7URK65PMsm+dZDi2GADyHuZJ/50ib0Vy5kEc
+ 4MyKYzDqS6+5thARi3AsVXeBlWKZK1Ubx68V9Vdk1GuPCPYItGdyae3/H1JBTCTugjajc
+ ZF0sspY4uXykK0o9NILVD5kAVGDBBdfq8Ym5j5XpB02wuRYCKAyKCZ5seUADpKvYHww==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1789572918;
- h=X-Greylist:Received-SPF:Received:Received:Received:X-OVh-ClientIp:
- From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
- Content-Transfer-Encoding:x-ovh-tracer-id:X-VR-SPAMSTATE:
- X-VR-SPAMSCORE:X-VR-SPAMCAUSE:DKIM-Signature;
- bh=7Lw3EtR/Fb/VRFVw5/iIB8OHuAL4I5dcJd1tiv3XX1Y=;
- b=LC1miwV/WmrE50zRZcjP7rl5cYzd2xf25sPN/9vWI+gjoyZdLVtEJnJJGJGLTJrnYy/p
- gh/j46hhFgSL6OSWE3YCkwKBUidwFt6V+Gb9GjnsmuCLAn8bWkhNhMTXMGUoHjg67qIGD
- ZOvSNlIbpBs8LHCicFq1zRwnAwS09bj0VuM643VvD6ADPeV0Lbf/YCDMfCIamFSdgwEiZ
- 6eEda4pLuS+swcLSbJ+UCiYjYQG9Yg0UguMZ+Peuz6wb5/dUtQXBTGnq4jYyX4++d+IEr
- /cBwqMgLNrC803PwCWx5jfhY3pD3+TkSZ5Frl5UwXCkNnZDAS33isC6zQB6Xz19nIDg==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org;
- dmarc=pass header.from=quimesis.be; 
- dkim=pass header.d=quimesis.be header.i=@quimesis.be header.a=rsa-sha256
- header.s=ovhmo1685834-selector1 header.b=IsUFcQgM; 
- arc=none smtp.remote-ip=188.165.33.112
-X-Greylist: delayed 8784 seconds by postgrey-1.37 at util1.osuosl.org;
- Wed, 16 Sep 2026 15:35:15 UTC
-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none) header.from=quimesis.be
-Authentication-Results: smtp4.osuosl.org; dkim=pass (2048-bit key,
- unprotected) header.d=quimesis.be header.i=@quimesis.be header.a=rsa-sha256
- header.s=ovhmo1685834-selector1 header.b=IsUFcQgM
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=188.165.33.112;
- helo=8.mo584.mail-out.ovh.net; envelope-from=antoine.gennart@quimesis.be;
- receiver=<UNKNOWN> 
-Received: from 8.mo584.mail-out.ovh.net (8.mo584.mail-out.ovh.net
- [188.165.33.112])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1E2A84029D
- for <buildroot@buildroot.org>; Wed, 16 Sep 2026 15:35:14 +0000 (UTC)
-Received: from director6.ghost.mail-out.ovh.net (unknown [10.109.231.120])
- by mo584.mail-out.ovh.net (Postfix) with ESMTP id 4hlFw24Djzz8TC3
- for <buildroot@buildroot.org>; Wed, 16 Sep 2026 10:47:46 +0000 (UTC)
-Received: from ghost-submission-c7b579475-lgtsl (unknown [10.111.182.240])
- by director6.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 63D19801F7;
- Wed, 16 Sep 2026 10:47:46 +0000 (UTC)
-Received: from quimesis.be ([37.59.142.106])
- by ghost-submission-c7b579475-lgtsl with ESMTPSA
- id oUWmBdJzqmr2VzkAok4Mmg
- (envelope-from <antoine.gennart@quimesis.be>); Wed, 16 Sep 2026 10:47:46 +0000
-Authentication-Results: garm.ovh; auth=pass
- (GARM-106R006ae8a0c2c-330b-4926-9575-9eefe877f348,
- 5FEBD7DEB569A611C946051BA325CD8A23A91D25)
- smtp.auth=antoine.gennart@quimesis.be
-X-OVh-ClientIp: 77.72.238.202
-From: agennart <antoine.gennart@quimesis.be>
-To: buildroot@buildroot.org
-Date: Wed, 16 Sep 2026 12:47:37 +0200
-Message-ID: <20260916104739.853249-1-antoine.gennart@quimesis.be>
-X-Mailer: git-send-email 2.53.0
+ c=relaxed/relaxed; t=1789577557;
+ h=X-Greylist:Received-SPF:Received:DKIM-Signature:Date:From:To:Cc:
+ Subject:Message-ID:References:MIME-Version:Content-Type:
+ Content-Disposition:In-Reply-To;
+ bh=yyBXoCPmuYa5Cz3eKKIKPh5qnECO9ZtYq8uhi3x2oVY=;
+ b=kWZUJofwTfAkZOX/1CRmzjK+Ymhk5lNtJJriPCxsnBQmkXynonGx8kVjQRE7sltv6Xh4
+ dMiur9elsk4GgGDeRk1X2xCpwwK+SzTIC7K4ovK9gPjuY+Yc0awQsNnrHbJxi880LdhCh
+ oVaLcRnivqVKapiKyotUyczB6wHPTPIj12Uxxdsf0zgZfvQDqWObxn/HhyyvLK/FJwDD/
+ d6mdGf6hXETjXNEBpxcv/wuavhfL7pfZF2TVMawGSbQRRQU9Q+8Jc2JFCzEwtKHx0roUY
+ ugaZoC/xQblpFHaROJc3/YTq4xrRVWuqUJGIsygaWUCi7ZlAdQSo2qRr+H8m/52SxiQ==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org;
+ dmarc=pass header.from=ideasonboard.com; 
+ dkim=pass header.d=ideasonboard.com header.i=@ideasonboard.com
+ header.a=rsa-sha256 header.s=mail header.b="kEXAk/n5"; 
+ arc=none smtp.remote-ip=213.167.242.64
+X-Greylist: delayed 515 seconds by postgrey-1.37 at util1.osuosl.org;
+ Wed, 16 Sep 2026 16:52:36 UTC
+Authentication-Results: smtp3.osuosl.org; dmarc=pass (p=none dis=none)
+ header.from=ideasonboard.com
+Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com
+ header.a=rsa-sha256 header.s=mail header.b=kEXAk/n5
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=213.167.242.64;
+ helo=perceval.ideasonboard.com;
+ envelope-from=laurent.pinchart@ideasonboard.com; receiver=<UNKNOWN> 
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com
+ [213.167.242.64])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 02789607B7
+ for <buildroot@buildroot.org>; Wed, 16 Sep 2026 16:52:36 +0000 (UTC)
+Received: from killaraus.ideasonboard.com
+ (2001-14ba-70f3-e800--a06.rev.dnainternet.fi [IPv6:2001:14ba:70f3:e800::a06])
+ by perceval.ideasonboard.com (Postfix) with ESMTPSA id DD3DD558;
+ Wed, 16 Sep 2026 18:42:15 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+ s=mail; t=1789576936;
+ bh=DWk2LmKu8VPTOn0RFizDZNftVGwhYsQ7i5WqYqblyh4=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=kEXAk/n5/InihrVkJWPtx6T8YeCtLscaVKCGUm/sQi1q//mO4DgzrlIpVjuxP/1iN
+ uYwaNmZ0AngKg9L2nf/5i6TgcekIqrdVDHaChqYCoRz0wma/9MFH1R2DCPpxkfeT3o
+ tU1U0kljghstCUMQqFgZnIk8VoZ1JuK1GO1U4yug=
+Date: Wed, 16 Sep 2026 19:43:55 +0300
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Paul Elder <paul.elder@ideasonboard.com>
+Cc: buildroot@buildroot.org, sakari.ailus@iki.fi,
+ Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Message-ID: <20260916164355.GA191870@killaraus.ideasonboard.com>
+References: <20260916090705.2796356-1-paul.elder@ideasonboard.com>
 MIME-Version: 1.0
-x-ovh-tracer-id: 8345733062614978518
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: dmFkZTFlciSem+Hb0uuDHoScoNwWOmeC7oRyOGczghr1chTaT5Sv0zqxgTDc+mYXjVmsMBQGDBW8o94PEDGguiKQC5ePtlA/P5W7Ws4pOt5zSYR71PZu2djQtnI16Wm/T+FYRug+JeV6TNDCTVVNT1lnfQbXKQ2R+Vfpwl0gjhDvy/p3LOdmaXWsJsxnIOaRC0EiLrIMsuYXS1Vblzhyy9idhIsXL9A6G2fZijnOBdicPFByi9BPS2J8i4r3Rz98IVxtWLWrzLQFUpNzNmvgMYRW0a4WwyuqGxGl9KV8LDlaZ9aDkBsFkMV9F2TYWMr9xMtd8wLjQ/7/3YP1Qd4hfBWGTlZ0st4L6vjsN6uwm7hoTy35U15bLlqDQwiUphB3BWxiYBFPstXMonCbhBABF7st5TZkKaErclHSBXBv8qNNNF481UNQPFf3xN2W3CEnT9kW3/hDWhQSVhBsA464bIfa1J35wXB198qtLI3Unhy+F2mf5una2Zx89t3PZCc6KFUH0ckxT+mTF/R+HFi6sfT1b31pzKH4Q6Bot96wU7KxKTR7t11jQX3Vq349SRJL6wYz2X3qX1c8phOV5UdeB+ymr9+x2hOdAbVE0RKkwGSkxrJust0loFyck5QWDK85mLMwo0bExIr8Bs0Qf9lGv0BpYWMEjc7LbC/8He/OOYK1anVgOw
-DKIM-Signature: a=rsa-sha256; bh=7Lw3EtR/Fb/VRFVw5/iIB8OHuAL4I5dcJd1tiv3XX1Y=; 
- c=relaxed/relaxed; d=quimesis.be; h=From;
- s=ovhmo1685834-selector1; t=1789555666; v=1;
- b=IsUFcQgMDecJAKMfu07iLsG9KvEwCAs3aZoLLkzCm0gEz0E47/Cc7anIZhBdyUssEa/6qaVQ
- +XLed2qg6IwmrQ+/vfYC/FcxJPMERy9foOwSE+ZsNsXkaenRqM3uvG88OWcA9ouzDxVVAt+Uuti
- reXfgvxnADjOmRb8h82m1P/J9VFhpIM34hSIAr/ewZuja7fBDv00BRp6tEskt9Z0bxzBp7ykiZz
- Kq6kCVbq9WThZOZy6XIJA6hj1wa45wO4dTaaeSgm1DovJhRnUkc+I/qkViCbIqTELCa+glD2eEh
- Igzn/BCajGY1FbGI2rOGGlt0GiUCUqKXEV7m2g+v14ufQ==
-Subject: [Buildroot] [PATCH 1/2] package/nxp-mwifiex: bump version to
- lf-6.18.20_2.0.0
+Content-Disposition: inline
+In-Reply-To: <20260916090705.2796356-1-paul.elder@ideasonboard.com>
+Subject: Re: [Buildroot] [PATCH] package/raw2rgbpnm: Add package for
+ raw2rgbpnm
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -151,51 +140,94 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: agennart <antoine.gennart@quimesis.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The previous version fails to build with Linux 6.13 and newer because
-mlinux/moal_main.h includes the removed net/lib80211.h header.
+Hi Paul,
 
-The header was removed by Linux commit 02f220b52670 ("wifi:
-ipw2x00/lib80211: move remaining lib80211 into libipw").
+Thank you for the patch.
 
-The new NXP release skips this obsolete header for kernels newer
-than 6.12.12 and includes the corresponding Linux 6.13 cfg80211 API
-compatibility fixes.
----
- package/nxp-mwifiex/nxp-mwifiex.hash | 2 +-
- package/nxp-mwifiex/nxp-mwifiex.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Wed, Sep 16, 2026 at 06:07:04PM +0900, Paul Elder wrote:
+> Add package for raw2rgbpnm. It is a tool for converting raw images to
+> RGB PNM. While the original repo is at:
+> https://git.retiisi.eu/?p=~sailus/raw2rgbpnm.git
+> A mirror is hosted on freedesktop:
+> https://gitlab.freedesktop.org/camera/raw2rgbpnm
+> so use that instead.
+> 
+> As the build is simple and has no dependencies nor releases, use the
+> master branch for the version.
 
-diff --git a/package/nxp-mwifiex/nxp-mwifiex.hash b/package/nxp-mwifiex/nxp-mwifiex.hash
-index 559e89cb37..662f6c27bd 100644
---- a/package/nxp-mwifiex/nxp-mwifiex.hash
-+++ b/package/nxp-mwifiex/nxp-mwifiex.hash
-@@ -1,3 +1,3 @@
- # locally computed
--sha256  dcffe6c48babf7db82aac4704b056cffc06a1f80008cd9c23ab0479fc890ba99  nxp-mwifiex-lf-6.6.52_2.2.0.tar.gz
-+sha256  cbbfcd497e85d6da8a29d28209baa924102b31dce8a299aadbcb8f530506b2dc  nxp-mwifiex-lf-6.18.20_2.0.0.tar.gz
- sha256  67d461bc478d220fcdf99c59d8ea17fffbd1881718281aa4947eb608fcd568bb  LICENSE
-diff --git a/package/nxp-mwifiex/nxp-mwifiex.mk b/package/nxp-mwifiex/nxp-mwifiex.mk
-index 46678a2c91..7e29e2e5c1 100644
---- a/package/nxp-mwifiex/nxp-mwifiex.mk
-+++ b/package/nxp-mwifiex/nxp-mwifiex.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NXP_MWIFIEX_VERSION = lf-6.6.52_2.2.0
-+NXP_MWIFIEX_VERSION = lf-6.18.20_2.0.0
- NXP_MWIFIEX_SITE = $(call github,nxp-imx,mwifiex,$(NXP_MWIFIEX_VERSION))
- NXP_MWIFIEX_LICENSE = GPL-2.0
- NXP_MWIFIEX_LICENSE_FILES = LICENSE
+I don't know what buildroot's policy is with this, but using the master
+branch will make builds non-reproducible. I would instead use the commit
+ID of the current master branch head. It can be updated in future
+buildroot releases.
+
+> Signed-off-by: Paul Elder <paul.elder@ideasonboard.com>
+> 
+> ---
+> This patch is based on 2026.08.
+> ---
+>  package/Config.in                |  1 +
+>  package/raw2rgbpnm/Config.in     |  6 ++++++
+>  package/raw2rgbpnm/raw2rgbpnm.mk | 16 ++++++++++++++++
+>  3 files changed, 23 insertions(+)
+>  create mode 100644 package/raw2rgbpnm/Config.in
+>  create mode 100644 package/raw2rgbpnm/raw2rgbpnm.mk
+> 
+> diff --git a/package/Config.in b/package/Config.in
+> index 6058800682b4..6d9daeadafec 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -195,6 +195,7 @@ menu "Development tools"
+>  	source "package/mawk/Config.in"
+>  	source "package/patch/Config.in"
+>  	source "package/pkgconf/Config.in"
+> +	source "package/raw2rgbpnm/Config.in"
+>  	source "package/ripgrep/Config.in"
+>  	source "package/sed/Config.in"
+>  	source "package/subversion/Config.in"
+> diff --git a/package/raw2rgbpnm/Config.in b/package/raw2rgbpnm/Config.in
+> new file mode 100644
+> index 000000000000..3d8f36459f4e
+> --- /dev/null
+> +++ b/package/raw2rgbpnm/Config.in
+> @@ -0,0 +1,6 @@
+> +config BR2_PACKAGE_RAW2RGBPNM
+> +	bool "raw2rgbpnm"
+> +	help
+> +	  Convert raw bayer images to RGB PNM for easier viewing
+> +
+> +	  https://gitlab.freedesktop.org/camera/raw2rgbpnm
+> diff --git a/package/raw2rgbpnm/raw2rgbpnm.mk b/package/raw2rgbpnm/raw2rgbpnm.mk
+> new file mode 100644
+> index 000000000000..275fe6f32be3
+> --- /dev/null
+> +++ b/package/raw2rgbpnm/raw2rgbpnm.mk
+> @@ -0,0 +1,16 @@
+> +################################################################################
+> +#
+> +# raw2rgbpnm
+> +#
+> +################################################################################
+> +
+> +RAW2RGBPNM_SITE = https://gitlab.freedesktop.org/camera/raw2rgbpnm
+> +RAW2RGBPNM_SITE_METHOD = git
+> +RAW2RGBPNM_VERSION = master
+> +
+> +RAW2RGBPNM_LICENSE = GPL-2.0
+> +RAW2RGBPNM_LICENSE_FILES = LICENSE
+> +
+> +RAW2RGBPNM_INSTALL_TARGET = YES
+> +
+> +$(eval $(meson-package))
+
 -- 
-2.53.0
+Regards,
 
+Laurent Pinchart
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
