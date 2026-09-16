@@ -1,119 +1,104 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C02BDC982C1
-	for <buildroot@archiver.kernel.org>; Wed, 16 Sep 2026 21:33:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0BDB6C982C9
+	for <buildroot@archiver.kernel.org>; Wed, 16 Sep 2026 21:34:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 88BE44072F;
-	Wed, 16 Sep 2026 21:33:52 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CCZ9ko_Lo0Bt; Wed, 16 Sep 2026 21:33:51 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 643CC406D2
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789594431;
-	b=cQbVcf9v+nr2YFQOADDCWDpdV3Sc9eYNJdfYp5B5SpAdyxGSzT30P2oBWy+elpAmjtV0
-	 MUip6m/AXDl6CTITj5hqgI/XothD6bXdXoz1dLlDvdmVmhjhUufTmLpIqDLqETO4l4W6T
-	 1TJetflOzp2UrRv7WMeGYrSqC4S3E/mWLN7V1pxbIBxWoZ6lYmFhFU0Ta1CYPW+6tSIBe
-	 awAhL9Z+7ycFe3pXasJO2lOQdJVCORd/uAwO9NcMypyu9r02LDauVXj0RQ4JkE+dyaJwY
-	 3LICmWLlOtqt66LfMlpEnRQNEoiQJMYtYpNXwaIN9NwPyBg5676cpUWrqQZW5DI3Gew==
-ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789594431;
-	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 Received:Received:Date:To:Cc:Message-ID:References:MIME-Version:
-	 Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version:Subject:
-	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=M7gOLU1BK40zzvg8O8ENfBhkNRCtUN4aYXW5TW1Orws=;
-	b=tUzN2M14Iluhy8v30uGBlOJOIJSRU9gAcrRy6B8gPbwI86iuEE3Zs3Ax8t38vU3pJ/If
-	 KDvr1hbc1+dFMZPA4PyW6soP1UGu67mDHI/hpYdHXF2GXPNr4X+zstyTXCjwsIFdN4HWt
-	 1PQ87YsjrCHdWXyKWQ00KzFIgy2rmytr5ZXsNcCgkyVgFjW0B5fStTwb2vLiEOBVLAbJT
-	 bpmFrM9kbRpRPsXP7Bh6W6kXqT3zASEYtBJ46me2M0eB4gi1jphxLyoicKNqm9nZ1jPii
-	 qiA8dRTdlmmdz/vM4y64AHWKXgg/yFWDp5pHCczTrc/EapxFvdgBwnwxKFow9hwwHjA==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789594431;
-	bh=M7gOLU1BK40zzvg8O8ENfBhkNRCtUN4aYXW5TW1Orws=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=CoCe+6uM7WnG+YhSmRBHCRV+wumeFJBB4z3JB72djDt4dytiWjUp/YdHzuFco+A/D
-	 HIp2yjxzcMyTICgHksyOT3GNQeAHtYmHuGWqkZCuXqJNh0Tfc5aQGZLlGzUlxy8JmP
-	 fX31S+poSzHxG49GVaiVrijE2IblHPznzCXBn2xCgDNTt6X4vkvwtcoVymrMzniJN5
-	 0kYBhTn1Di8K/VUKElY60pikWsNGibzWCKSp8hkFK+6ADawkNxATvJAgEdUMv3AGCm
-	 2JcioTujSYqCenSgWdGag1GuBXpnB6uZ6B4vIpKA2UFZ6wGtlhUm/2GNbsi1LZxUD+
-	 KGDCy59mfCyNA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 643CC406D2;
-	Wed, 16 Sep 2026 21:33:51 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id B05642E3
- for <buildroot@buildroot.org>; Wed, 16 Sep 2026 21:33:49 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A1F9680A5A
- for <buildroot@buildroot.org>; Wed, 16 Sep 2026 21:33:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B1FBB80DEB;
+	Wed, 16 Sep 2026 21:34:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eV7B-DDbtJwg for <buildroot@buildroot.org>;
- Wed, 16 Sep 2026 21:33:48 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 5049A80A54
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789594428;
- b=aJ/W0vUAzdOJdAtNNMX1eLUIXNTnLpB3fPtow6HNRkVW0JE+A2Zag0bD4locH+9siesK
- wPfIRJwfg87sorWVZZSxQADFDnA60G4s727LLShkvCuRMLZ6qih9pp4H7BYHw473KWdm6
- RrmJ1Ji/bpdnhNBk86O2IEGBwEneO0hDu56yggLbKYfSJd6VbjFLdKX0bI5/bJA4PxNmx
- VyN2oNn+WUigm5/OUZHqqd39Ivw/d6ulGPbAdMM65ho0VQLaxKk0F6XmHXCCdGbIaum2F
- gIdBBP9hZMpiejRBeRkbSzet3rtxhFXFTX5Tcgl386YNBxCM2E7EEizmB4bafw6Fvpw==
+ id 26flsP8BdQIU; Wed, 16 Sep 2026 21:34:45 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org D82FF80C1E
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789594485;
+	b=U8A+e/4PtnKRwfqFIz3JwwP6JzSADd32za9vsvY97s3211cxPR0/CndBatE/vm6cTx6/
+	 iyCmFrjcDEI3fdE2lNEQvCcm8DgDHdbsytjXjp2lH/RlkxW29ul/82ouw4YKtSHgRUOeu
+	 WIrxKtsrfiiLdmApnayEKb9F4slGjI6Hn4NFcI/KsB2kDZDqe6WtT70tG9XuIPd8m5Nxq
+	 5ceKuLBWAsYZmwI4RIYxBeS6R15dP+6Ugq6wU6zNoMI6xb0jEgfMASNw+9KzfoC9ycD7D
+	 W6l3J6MPDn25tOGeU7ONGLKkBMO1/m45ZCaG58IYnnj+ENsp8hTFyu0t8ObXGDpBSmA==
+ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
+	c=relaxed/relaxed; t=1789594485;
+	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
+	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
+	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
+	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
+	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
+	 Sender;
+	bh=SJfSJV8p49YUX5VJdgOHOrEJ5hNVmDdKqW48laUPVDQ=;
+	b=qiO9ZaP7BCB1FC4xNqG18dIimVsC07CrdIwSzDXERefUxRXN63iQlqND76/ctrxhhvhl
+	 zxc3i5x7iK9giIPts7z+nImbSS3tbnzqxRGUeAoZNIvDeyLg52tXFGC2s8pX16P16nFbb
+	 1LAh0EpAj+K6aIQuCYIdeHl1d9Urc1Kq9yH3ikSGu31WUVOO8/8RH6+aSDbDDjVzytWuO
+	 Q1ngGqO+7GRlMiqxRbhja3He5je4xTAh8MqWmwkx/RF2ofoV+VpiUtidGSjF+4rbBHop/
+	 QvvEy9PGrmF18tfefUh1j7ICzszpL0fmN5Pvb515d0xJxPtslwdrQPD96AG/Q2S0cLg==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1789594484;
+	bh=SJfSJV8p49YUX5VJdgOHOrEJ5hNVmDdKqW48laUPVDQ=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=Qp6jqHqmW7E+iSLvv6o+K+S0Nm/3S3OhQJov5TqQ2xxxlJtBQGDCqXvk9blwOiJy4
+	 pi0FC5gBYci+MzULxPwK6fpWC0fhEb2eTodcUVIhLPYWYPL7jXSQ5CrOvOw+qDpx5s
+	 BjgUsS4gu9AUTcA/khnPHJV9zMSlYiAM6jQeeJFNQhmaToHJsrZDbHKCxUy1gXG+gg
+	 PLiwpn8qHl+laVPLU5GzxlGPVu2K+21/2LfwO7emtOWeEE2dRGB3xXj/48MtK7b+dP
+	 gkvLo6p+Fzjr0EPDS8nXQ+F8DDmHYvdrzScLknFy50lYHIWqIhAVKHDBaW6DLoegLv
+	 K/lhVjVXV1VyQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id D82FF80C1E;
+	Wed, 16 Sep 2026 21:34:44 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9FD952EB
+ for <buildroot@buildroot.org>; Wed, 16 Sep 2026 21:34:43 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 85E4F80C1E
+ for <buildroot@buildroot.org>; Wed, 16 Sep 2026 21:34:43 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3tPXH7yRoHZQ for <buildroot@buildroot.org>;
+ Wed, 16 Sep 2026 21:34:42 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org C89A280ADE
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789594482;
+ b=Kz03qHhspC1r3z0qXHbqewl7l915rMUM1Yguf9/KPXfhKX6ri1Vdz/ykwCXrGao7lY7l
+ ZD7ZxZ61xcnA7dMnPNgWNQpXa6iWsIeXYCul8+GF7ALw+BAV9/FcPmGA5HbZVqsQYz4cO
+ EgVEDD3ZWOf1W3xbSvO5pBkDVqknCkRfPUSJE8RVlbQq+REQ6PmVvcyi2nIcnuYhZgydt
+ ETOM9jKo4DUI/DTxs3Sevt6SC7dzzDiK2728EP4DwUDS9d20YVmNP0orlS5ebJKfQNRjU
+ 9eDm/lEvHIoLzpaB0tOS66EpQYdxi+yq8gpC+abrNUMkt6WWvlPc0ujOvR8isWlhz/w==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1789594428;
- h=Received-SPF:Received:Received:Received:DKIM-Signature:Date:From:To:
- Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
- Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version;
- bh=Rdp3R28LHoruYFKYY5NqkrDl1C1NtSVjSHgBK/JbWB4=;
- b=OD5/P+LzMtQ0Sga9oeOzCGz6tvqlamL4uu/toGlSPfJ99mub3SmkrbM1cz+dsc/sxFIa
- MkQydzhFOG6WyhIPeXpam0HaiNnpMsfFXJWu/bHFiEc7MS/YxNpqwNTg4WFUr+TBqD9tI
- 1IzRfOSKPvPAA3OmlePd15nadgfbBwZFzyy7YZDRgZbTgxW4C3Wx6XFkpAlNq0UPeVMpD
- 8Lt+0eHtzPEw3ltGak4NrHE2utfZ1bjjHNl5FuLvCVU6MBzjzDEyLQHGcPFmUJnA1NOjb
- /jsjddsJpJqwGOeMGba0lpxVzS0/RUJy8xWupDDfxKNZPvfA9WEjBwD9ZN1n9TzkbVA==
+ c=relaxed/relaxed; t=1789594482;
+ h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
+ X-Git-Newrev:X-Patchwork-Hint:Message-Id;
+ bh=xknlUN3CyDLJkRoaV1wFzji5Dt9mpxDXMwy4e2FHhdU=;
+ b=KsLhWJF1gOYFB428Rij39CETQ7/8NMEfkwWxuC74ut1JpF6Irp948SU7HYRcXF7a2/0N
+ CLgpEHUjOHnohmbsgaUrXS98+ygjD+kYv4XRTTjpluMjSLxyrPDuGkDBi1KpwX2d03gSN
+ 2LIiJcHZNh+RIVq2N8IyoqX0xWZuyjjmgfWCCpKjXQ7/zGECiug7e0KMszfS0/46Q7csz
+ 7G2iqNKiYP4M3b1rHzhhmFbc0i0C/0xX4FAY5hKHEWDNah7UtHFYF2uNP+pyHETtY3QDn
+ YJxlZ8vJv4Dh7kRFPr29TxMH3G6gPvp19nn4rXqAyQXqqJchy5M+b/oCVcFoiCe/o3A==
 ARC-Authentication-Results: i=1; smtp1.osuosl.org;
- dmarc=pass header.from=bootlin.com; 
- dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=EKcKVNDG; 
- arc=none smtp.remote-ip=185.246.85.4
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
- helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ arc=none smtp.remote-ip=140.211.167.122
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5049A80A54
- for <buildroot@buildroot.org>; Wed, 16 Sep 2026 21:33:47 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-03.galae.net (Postfix) with ESMTPS id E18784E40754;
- Wed, 16 Sep 2026 21:33:44 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 9B34160337;
- Wed, 16 Sep 2026 21:33:44 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id BFE3A11C79AB4; 
- Wed, 16 Sep 2026 23:33:39 +0200 (CEST)
-Date: Wed, 16 Sep 2026 23:33:38 +0200
-To: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-Cc: buildroot@buildroot.org
-Message-ID: <aqsKYN1FrDn93tGu@windsurf>
-References: <20260830180717.96967-1-alexander.sverdlin@gmail.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20260830180717.96967-1-alexander.sverdlin@gmail.com>
-X-Last-TLS-Session-Version: TLSv1.3
-Subject: Re: [Buildroot] [PATCH] package/civetweb: fix underlinked shared
- library
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id C89A280ADE
+ for <buildroot@buildroot.org>; Wed, 16 Sep 2026 21:34:42 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 43DB196B2F; Wed, 16 Sep 2026 21:33:36 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 16 Sep 2026 23:34:08 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 9f3797e342095235636304364d79d3f5c957087a
+X-Git-Newrev: b7cfa2371bc1ebe83ea1c74db7fa45f360a2138a
+X-Patchwork-Hint: ignore
+Message-Id: <20260916213336.43DB196B2F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/fcft: use release tarball instead
+ of archive
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -127,74 +112,70 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============2817401423316416166=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Alexander,
+--===============2817401423316416166==
+Content-Type: text/plain
 
-On Sun, Aug 30, 2026 at 08:07:13PM +0200, Alexander Sverdlin wrote:
-> The install steps re-link libcivetweb.so but do not pass LIBS, so the link
-> falls back to the upstream Makefile defaults and loses the OpenSSL flags
-> added by the package. The correctly linked library produced by the build
-> step is then overwritten by an underlinked one, leaving SSL_CTX_free,
-> EVP_Digest and friends undefined and breaking any package linking against
-> -lcivetweb.
-> 
-> Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/b7cfa2371bc1ebe83ea1c74db7fa45f360a2138a
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Thanks a lot for your patch. Do you have a defconfig that reproduces
-the issue? The only in-tree user of civetweb is rsyslog, so I built:
+Codeberg has changed the way it generate hashes for at least some of
+the generated tarballs (see [1]).
 
-BR2_aarch64=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
-BR2_PACKAGE_OPENSSL=y
-BR2_PACKAGE_CIVETWEB=y
-BR2_PACKAGE_CIVETWEB_LIB=y
-BR2_PACKAGE_RSYSLOG=y
+This change affects tarballs generated by Codeberg, but not release
+artifacts.
+fcft turns out to have a proper release available, so use it.
 
-which builds fine. However, I agree that libcivetweb.so.1.16.0 uses
-SSL symbols but is not linked against libcrypto.
+[1]: https://codeberg.org/Codeberg/Community/issues/2861
 
-What's mostly missing from your commit is an indication of what
-introduced the problem. Is this a recent issue? Does it exist since
-civetweb was added in Buildroot?
+Fixes:
 
-Or perhaps since LIBS was started being used in commit
-3cf5b3019118cdc980666d7a1ccfd29f658d0261 ?
+  https://autobuild.buildroot.net/results/6792109a982924f4cf2b8bcc9a2ac7c12f5ddc55/
 
->  package/civetweb/civetweb.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/civetweb/civetweb.mk b/package/civetweb/civetweb.mk
-> index af221e9133..4fdd94ecc7 100644
-> --- a/package/civetweb/civetweb.mk
-> +++ b/package/civetweb/civetweb.mk
-> @@ -93,7 +93,7 @@ define CIVETWEB_INSTALL_STAGING_CMDS
->  		PREFIX="$(STAGING_DIR)/usr" \
->  		$(CIVETWEB_INSTALL_OPTS) \
->  		$(CIVETWEB_CONF_OPTS) \
-> -		COPT='$(CIVETWEB_COPT)'
-> +		COPT='$(CIVETWEB_COPT)' LIBS="$(CIVETWEB_LIBS)"
+Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/fcft/fcft.hash | 2 +-
+ package/fcft/fcft.mk   | 3 +--
+ 2 files changed, 2 insertions(+), 3 deletions(-)
 
-And I assume fixing the build system so that it doesn't re-link at
-install time is not doable? :-)
+diff --git a/package/fcft/fcft.hash b/package/fcft/fcft.hash
+index f5a499edcc..0a4c633f24 100644
+--- a/package/fcft/fcft.hash
++++ b/package/fcft/fcft.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  79e52aaafc0b57fa2b68ed6127de13e98318050399a939691b8ca30d44d48591  3.3.2.tar.gz
++sha256  8dffe750027618e01dd4e6bc9aa9c889033c7abe4a661e9294192b58b4556264  fcft-3.3.2.tar.gz
+ sha256  d534a23a31500a0ac958d9634b84f532bd73ff1aca1bb8f7debbcbebc16ff39a  LICENSE
+diff --git a/package/fcft/fcft.mk b/package/fcft/fcft.mk
+index b9ce43b454..40b2d45a8f 100644
+--- a/package/fcft/fcft.mk
++++ b/package/fcft/fcft.mk
+@@ -5,8 +5,7 @@
+ ################################################################################
+ 
+ FCFT_VERSION = 3.3.2
+-FCFT_SOURCE = $(FCFT_VERSION).tar.gz
+-FCFT_SITE = https://codeberg.org/dnkl/fcft/archive
++FCFT_SITE = https://codeberg.org/dnkl/fcft/releases/download/$(FCFT_VERSION)
+ FCFT_LICENSE = MIT
+ FCFT_LICENSE_FILES = LICENSE
+ FCFT_INSTALL_STAGING = YES
 
-Small nit: for me "underlinked" is a bit hard to understand. Perhaps
-"fix linking against dependant shared libraries" or something like
-that?
+--===============2817401423316416166==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============2817401423316416166==--
