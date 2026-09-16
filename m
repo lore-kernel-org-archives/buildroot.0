@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AEC13C982C9
-	for <buildroot@archiver.kernel.org>; Wed, 16 Sep 2026 21:15:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92FDCC982C1
+	for <buildroot@archiver.kernel.org>; Wed, 16 Sep 2026 21:20:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7181740729;
-	Wed, 16 Sep 2026 21:15:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 53D78406A0;
+	Wed, 16 Sep 2026 21:20:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RAdETtpF2i-1; Wed, 16 Sep 2026 21:15:07 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 95D9F40434
+ id BM8czkFBDu3z; Wed, 16 Sep 2026 21:20:25 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 244A2406D2
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789593307;
-	b=OpkUuBMuZdBgEvPF4VdkEOBcIB3lTGTaaUrACMgBc7JXdvTf0KhSSzLvs0hkaAsaoG39
-	 Jayxrg6Ej9K+RS28u6dG1fRW8OOK6LyKOWqK5pguJepEOHHadajj5k0Gc0TxGR5KXiCWr
-	 Ozizr/nxlY2Q589QVlVWuZwSnhZJRCmxCwVlvprfRbBNJJMYBCkLMXXFf8lrlm5RkvAS6
-	 1p5wKF7DEAi5mQfyUjJWgM8xzRyrJnzpNI3lSi+EsERS+Ls1nkC/ykSjYpMD6JMpc0M6N
-	 xgwYDRV/qPH6oLerEr2In5qpDrddHaX2nl6fe7fU8YmK9lf9YnYhHe55S88duekYcVA==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789593625;
+	b=Tgf78TO7OC3GVRql9Fw/4axqNV8j3etKSSI4yEFcXgkqHfX22S3CkI3IMi/bFtzZ0nVC
+	 i5al7Thb8Hv8D5wfmILrmOmGCWUcxf37hseNiHkSH7KsKf0E5sv6wtltpK6PVyauQjG28
+	 Qu7wtfB/uGoQF1v7qLzczo58AqMjtkpV+JUhx5tHUHXUAVxuaeoxjiITavZ7Hq8aZfouj
+	 3ExIju3o6YxkJJu/LDUaVCAEROzJUOC0Ox3+MFBXR44tHWn4BH2hEQetYXZNuM1w1VM/v
+	 DEDnZB3Y3QBpEtTpV12t3jExRK9mZi0X0df77MFbTq0xVYtB982V9jGI49R2/TNdTfA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789593307;
+	c=relaxed/relaxed; t=1789593625;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -31,89 +31,88 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
 	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=2a11uzx4cmre20XfbsXg2e8ycmCRPYVTTpUR4wVFSO0=;
-	b=TCRvo9tW9styHyKQmW0o8P5+ao+t6ebZn7sxBo473Vk0w/Z7w8P2JNZMDbP+PAbVr4W4
-	 YLJc0uc/tqml6r5epi7Xiuz+miRQQWVePaKmtxSJuIWJq5pm5qiNm3/EjMzo/b7V7KRpP
-	 Um66eYFGh8VmNWNgKWTTadQuuPJpNN+bZVHb29RrneWS9zAfti87+cmsQv3P8V5/qudUd
-	 IoaTXTPrXcs0qbeTKc4UcGQD8J1z+vGa1XHnMGNlwCIqj7Sqr6Zei3aeqg38JSU7rqUNO
-	 8xTot6rwnXUbYmLrzQ/elfngjUDTGwot4nlUZGIGiwegZkiR1ybUL3CjVYEX7HvZTng==
+	bh=lXUhCYHla/unvavZ0bbPoD9onMWf69ccjFdr9vM5QBM=;
+	b=mwVePt54TabmgcDBK/4PSgSHrEQ6K3GhRli8j/FuKvoOLD+zypU/61SVrW7caWqnDavL
+	 2LVja1CWWdHIE7CxL4vK3zx5pjJjXc+/EqG6637a2FHOYhyr9dn80b7HQkCMS+vdJc+q+
+	 UUQWM4FHxsXWYQrQtX5MlIuAmTNSNx/uB514oSey+aqXkX17xBBeKmUuH7ay1iGepcm6F
+	 MGTaDi7w68roqIJ1OikEMCYlTTQL5GaqsTYR699RvK0WAgFlcFKim8CHCpKDZm+hmJLOG
+	 YodeyxhvgR0b4tAg7v7brJD6MxpJlBo0KRBX+vrsotm7l475ihhUjz3764mnAVllYUQ==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789593307;
-	bh=2a11uzx4cmre20XfbsXg2e8ycmCRPYVTTpUR4wVFSO0=;
+	s=default; t=1789593625;
+	bh=lXUhCYHla/unvavZ0bbPoD9onMWf69ccjFdr9vM5QBM=;
 	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=BpUYgsZMr5pQsz+SaTWEctzKSZigTYEgmj/bkt3iW1eoumqgUQTSbCiIwhXMOlQzA
-	 h98aewQA5+p/U4f/bsdimMLsDklDWkP8cir9F3x8etHa8q+IWlaFGtuXyWnivUFsJ+
-	 LGfVDjpwXg2NiT5vd+oCG92pLrEgByWEzTgm5z0h/LO1l9hMdT+8GgrHEwCw1lhcph
-	 B/yZpWSnaoqxxCUmC8dB6HHIz9Qg3+nm/cpopym3xQyVLgYIIW8io5mSVkNL1LnfWp
-	 NM21qpXedlo2KSUMYIBte5NGGYboInxYXPObdelq5UD+FNWYxqPVq7IeFWbTnbKOrh
-	 i+MO9934HHP1g==
+	b=OsKGxd8PoJAsqIpJQOXy5w32R/mph1eNfHN6NWc5fBoYtuZoikbtvjECFl8VhYBaK
+	 7Sz4+9gTaDdSTCCiZ1Mu/xZwQW9xnIalqjOBhugqaxMn+Cja27kcoQ8Y+TiVH4Pd6u
+	 K6+wcmqM52d3oxumwIq1gtsb/Hk5qKzw3yiF3aEQBH4wv6OVkYZNxOFpRKTaPKlnaS
+	 egJhmI6Mume3AhqucEUtM+V9bDmItaIL5rNRZW11u7hsn+sqNbvJSMnGK0NSjFKgyJ
+	 LlymEmjgtExnlJN5jpO+Pf2jOEutYetA96yzPwLLtAU/2lTS0iOM3f7/AAIGjOKXm5
+	 vguuR4QkwbzPw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 95D9F40434;
-	Wed, 16 Sep 2026 21:15:07 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id D88EE2E3
- for <buildroot@buildroot.org>; Wed, 16 Sep 2026 21:15:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 244A2406D2;
+	Wed, 16 Sep 2026 21:20:25 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id CA4CB13D
+ for <buildroot@buildroot.org>; Wed, 16 Sep 2026 21:20:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CA159400B0
- for <buildroot@buildroot.org>; Wed, 16 Sep 2026 21:15:05 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id BBCDC80DD6
+ for <buildroot@buildroot.org>; Wed, 16 Sep 2026 21:20:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lsDfk_vC6yKA for <buildroot@buildroot.org>;
- Wed, 16 Sep 2026 21:15:04 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org 88FF340081
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789593304;
- b=O3Wkzptv5JJsfRo1Zb1qIPBaZL2BlJFPy7JUGULBfP3Lijv9zT4Ksxa2hmC7tYSQeOeI
- brF84lmFiVE44wt3zt4XUYC6OEawLu9UmCUZp+svaGIxxu81b7qUxc62T3VkYALmh8ZrY
- jeigiqlHrsqQboyu8ijJKE2VWca3vO22L+Pvp4kXMK86W3dMJvWW6T5D7CsVgRUQRuAfd
- WYOeIB++QtgpvKOd3w8NQ4oB0DaroiLPc3V3EylPVTmrS4a/k921++tgYzVy4f8E9EpgQ
- XOQUJ5XTkNDd7NJlUQopsi4tWpMgJJ5RRjtU4uDXOgCavk9TF5gmmy35s2p/GiZciag==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UsHm2T0_UnEL for <buildroot@buildroot.org>;
+ Wed, 16 Sep 2026 21:20:22 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 66A0680DD3
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789593622;
+ b=nXAAoMq3TfG62oPI18k91mZAlmwqcd7dyCwZ0wr58oUWVfNv3JCjWg27snvtys7lIHRw
+ lsUIvcO2ZjqqugiwfOLnjk6STghOHzFeiAZb1tv7HkLcLxxkZ2mS6YfEOr7gqPAB0EdnS
+ EpbPG/oKedDhzGz88Dyc7O9MLnVzyUd7rOrew1Q+KJhjPFNv6UMEflhxRQyNJkDdPE85V
+ VUPWc9GZIo668GCOEzrPwXcjW75xzELjxemp+a9XabVXFiiblgSidpaNCfIR29lswCdkG
+ F3KBUH4oPW97jqB46U3XRURpmJ/5f3KpygbXNgufsEJHYA9Kt/lrKlHYpD+5uGUjZrw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1789593304;
+ c=relaxed/relaxed; t=1789593622;
  h=Received-SPF:Received:Received:Received:DKIM-Signature:Date:From:To:
  Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
  Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version;
- bh=ZsM+a2yf8HiW7kGkisxAp1cilYYREbaXqR72jceAS2A=;
- b=eox42dTeA5LBKRdjouct+V8fIlSWhCgY6NJYe7MPCR6EDwv8A7cvEcN7ghiAT4gQ8aaJ
- Nk4UfpjDXLiMEt3GQxCJVVZPOwyJcgP69whuRoyigKbjt1pQuY0qzMTSy9H/7p577d4Gp
- 8Rwj+vuP2oQerrtZUCeJCO9Zjr/cyylJgQJy6He7bDWKNZnmKJ8AMUDTG5BMj9vAGRbgt
- 4k/uMc0txHbu9R6q6s6oiADzvX88aHPoCGrDG6ylZaDCMn3dZMT2PNbgdxcmIRUjd8te4
- SG84vksr0dPfgYh9iNELVTomSWJp3s1Js2imqXJepwrTEvX/1rKJvkLkD1ooQgWn/rw==
-ARC-Authentication-Results: i=1; smtp2.osuosl.org;
+ bh=rer6aUDH/IHpewV/RQE1TdGnPJ9G7B6s7I8SBIcH9/A=;
+ b=kP6vLmGJVSmyljDKBS/xSFxJ1RchsWjb6B915EQ5y2tAxnjjMdM1TFHOnAkUZJwmd3Zo
+ qxHK/FcqP9UEealJvQljZUjRm+NJS/1M/c2bjPEQtlvlSbFkFKq/HrBvjf7Pgh+ZZi08U
+ UxlZyygAYyfkZXgSmmmaayvRVNosVXSHxWJGF8g3c9dlTkWSxk6Lt180joq9CEbt3fqGt
+ NCrevKkcWa3dSH7Lim9fc1UCuo48K/tnEVfDovYRogLQukMtcViK6rS+hNTb8eVN9z+Nb
+ GV9y2nQp3gs2JMkFNv8a7cwpG4FgWL6Z2kNi7jHceIfGS6xXfJujvybZDMQmtneLwWg==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org;
  dmarc=pass header.from=bootlin.com; 
  dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=bWCpqNhg; 
- arc=none smtp.remote-ip=185.246.85.4
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
- helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ header.s=dkim header.b=BTg70mbX; 
+ arc=none smtp.remote-ip=185.246.84.56
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
+ helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 88FF340081
- for <buildroot@buildroot.org>; Wed, 16 Sep 2026 21:15:03 +0000 (UTC)
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 66A0680DD3
+ for <buildroot@buildroot.org>; Wed, 16 Sep 2026 21:20:21 +0000 (UTC)
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-03.galae.net (Postfix) with ESMTPS id 5B54E4E40754
- for <buildroot@buildroot.org>; Wed, 16 Sep 2026 21:15:01 +0000 (UTC)
+ by smtpout-02.galae.net (Postfix) with ESMTPS id 3BA251A0903
+ for <buildroot@buildroot.org>; Wed, 16 Sep 2026 21:20:19 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 13AC360337;
- Wed, 16 Sep 2026 21:15:01 +0000 (UTC)
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 0969D60337;
+ Wed, 16 Sep 2026 21:20:19 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 5A30E11C79EA0; 
- Wed, 16 Sep 2026 23:14:56 +0200 (CEST)
-Date: Wed, 16 Sep 2026 23:14:55 +0200
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+ with ESMTPSA id 0609011C79EA0; 
+ Wed, 16 Sep 2026 23:20:13 +0200 (CEST)
+Date: Wed, 16 Sep 2026 23:20:13 +0200
+To: Alexander Shirokov <shirokovalexs@gmail.com>
 Cc: buildroot@buildroot.org
-Message-ID: <aqsGt3LbPWJgtUpB@windsurf>
-References: <20260104220221.39077-1-giulio.benetti@benettiengineering.com>
+Message-ID: <aqsHJwIBte5JUy6M@windsurf>
+References: <20260907194602.1646514-1-shirokovalexs@gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20260104220221.39077-1-giulio.benetti@benettiengineering.com>
+In-Reply-To: <20260907194602.1646514-1-shirokovalexs@gmail.com>
 X-Last-TLS-Session-Version: TLSv1.3
-Subject: Re: [Buildroot] [PATCH] package/rtl8812au-aircrack-ng: fix build
- failure with powerpc
+Subject: Re: [Buildroot] [PATCH 1/1] package/nnn: bump to version 5.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -132,26 +131,97 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, Jan 04, 2026 at 11:02:21PM +0100, Giulio Benetti wrote:
-> Not all Linux defconfigs have CONFIG_INET enabled and this results in:
->   LD [M]  88XXau.o
->   MODPOST Module.symvers
-> ERROR: modpost: "register_inetaddr_notifier" [88XXau.ko] undefined!
-> ERROR: modpost: "unregister_inetaddr_notifier" [88XXau.ko] undefined!
-> 
-> So let's add CONFIG_INET to LINUX_CONFIG_FIXUPS.
-> 
-> Fixes:
-> https://autobuild.buildroot.org/results/6b4f17518e049a91a36be74c78cb8cde89b73bb3/
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Hello,
 
-I've researched which commit introduced the issue, and amended the
-commit message accordingly. Applied to master with those changes.
+Thanks for your patch! A number of questions/comments below.
 
-Thanks!
+On Mon, Sep 07, 2026 at 09:45:37PM +0200, Alexander Shirokov wrote:
+> This commit updates the package version to 5.3.
+> 
+> Changelog: https://github.com/jarun/nnn/blob/v5.3/CHANGELOG
+> 
+> It also brings some improvements.
+> 
+> 1. Adds libatomic dependency, as the library is required since commit
+> 7ce4913bc39bc3b34a0e2c3de7153fb09d489152.
 
-Thomas Petazzoni
+Is this upstream commit part of this version bump 5.1 -> 5.3, or did
+it already exist?
+
+> 
+> 2. Adds a dependency on BR2_TOOLCHAIN_HAS_THREADS to prevent failures
+> in test-pkg.
+
+Is this new dependency needed because of the version bump, or was it
+already needed with version 5.1?
+
+If some of those topics are independent from the version bump, they
+should be in a separate commit.
+
+
+> config BR2_PACKAGE_NNN
+> 	bool "nnn"
+> 	depends on BR2_USE_MMU # fork
+>+	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+>+	depends on BR2_TOOLCHAIN_HAS_THREADS
+
+This needs an update of the Config.in comment:
+
+comment "nnn needs a toolchain with wchar"
+        depends on BR2_USE_MMU # fork
+        depends on !BR2_USE_WCHAR
+
+should become:
+
+comment "nnn needs a toolchain with wchar, threads"
+        depends on BR2_USE_MMU # fork
+	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+        depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+
+>  ################################################################################
+>  
+> -NNN_VERSION = 5.1
+> +NNN_VERSION = 5.3
+>  NNN_LICENSE = BSD-2-Clause
+>  NNN_LICENSE_FILES = LICENSE
+>  NNN_SITE = $(call github,jarun,nnn,v$(NNN_VERSION))
+> @@ -15,10 +15,12 @@ NNN_MAKE_FLAGS = \
+>  	CFLAGS_OPTIMIZATION= \
+>  	PREFIX=/usr
+>  
+> +# Must be passed in env so it can be appended to by the Makefile
+> +NNN_MAKE_ENV += LDLIBS="-latomic"
+
+Should be conditional on BR2_TOOLCHAIN_HAS_LIBATOMIC.
+
+>  ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),)
+>  NNN_DEPENDENCIES += musl-fts
+> -# Must be passed in env so it can be appended to by the Makefile
+> -NNN_MAKE_ENV += LDLIBS="-lfts"
+> +NNN_MAKE_ENV += LDLIBS="-lfts -latomic"
+
+We want to avoid duplicating this.
+
+>  endif
+
+So probably:
+
+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+NNN_LDLIBS = -latomic
+endif
+
+ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),)
+NNN_DEPENDENCIES += musl-fts
+NNN_LDLIBS += -lfts
+endif
+
+NNN_MAKE_ENV += LDLIBS="$(NNN_LDLIBS)"
+
+Could you have a look at sending a new version?
+
+Thanks a lot!
+
+Thomas
 -- 
 Thomas Petazzoni, co-owner and CEO, Bootlin
 Embedded Linux and Kernel engineering and training
