@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6E1FC982DA
-	for <buildroot@archiver.kernel.org>; Fri, 18 Sep 2026 13:07:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E217FC982DA
+	for <buildroot@archiver.kernel.org>; Fri, 18 Sep 2026 13:07:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7991160DA3;
-	Fri, 18 Sep 2026 13:07:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A79DD60DFB;
+	Fri, 18 Sep 2026 13:07:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lP2bnWAlVJdo; Fri, 18 Sep 2026 13:07:29 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 6FFE060DD5
+ id V2XDY9IbuAPa; Fri, 18 Sep 2026 13:07:33 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org C7AA360DD3
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789736849;
-	b=JwE72IQ9t+UDFsX4UUQIJZnYOoLZpwvkkiS+EdcJkllWV4A+eEZ1MmkRK/lGTRNhgmSo
-	 wPMVuJ66IfbGFPIoRspynVBUw80QgYjpjZljVkLA0mHmpYnTbyxIPAYTcnT/6lAwZ/oVS
-	 JecYCF3OcmRcEXEJddfiF33wX767W96eF+1hvz8MGXMUzYsxcngbaP9wavmFLyZ5nCyby
-	 ZJVz/V6lQl0ohNaMn/te4hnoROGTKPEOOWcZ0grTSeMqpQRjkB055zVWKwA57BPm1Dc0M
-	 z33ZV+M6E32g9W3US9dRiOom8RNd+T1H64jtFAbjZaXau02tPS+a27qfDkKayq8+RYg==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789736852;
+	b=IVHBJsKIWvaEP7Unr43rR7m5IMoJKnN6cH3xyjXEVR2mKCNTVzvsfXvrYWsc3eQqI45N
+	 zamsc2SeZDqPkAJyA4ncyc4478Nts6Xp+Y9VHDLIRLv/z/4J/hO/JjuKVgvOt22vdkyQL
+	 ZP36+0y/A7MjtS/LAx/BpvlslqnVi4AcIie1bVOFxgMEzNwH1RLepUtG6nylVbngjudiB
+	 vyiMuaWair1uTKdCDhgSHd2pcUv9MPUUwhRUgWx+fk7Miijc6EfCVyWbLeYt2TuSSUuPU
+	 OaFyNCzU81n5VG6vr6bue1DXOTjiDCXk0sbgE7JbKX2LJdouxenofo9Wj8oOKhq0YgA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789736849;
+	c=relaxed/relaxed; t=1789736852;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,75 +30,75 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=Wodokn/EaRIgOe35MfFw2pWxF0z0EBjAkv55W4CfqTo=;
-	b=QeswXdO3cVNUXieVUR+WIL+dCb/QSjIyK+24T1nuNuk9Ell6TTxvpePwgAWh2gSjRTZi
-	 z8ujzMmV0F2TdY8gnvZIjfDNNsY8Shi3H9k8e51nytonhx7VWQV4t4b3WHmg2Jf0l6CPW
-	 bMulDG1icw9ViBkRG+ILpu7/yCWihBIMPYnsfhOPj7zrbVq3Re0jY+wNwgvAUqNuytpPk
-	 p4MsOnYvgxGiBl0A31iNirrKGAUYK/R5hqxrE2sygSUXc8WZLKX7Ca+XN8vwLxXwV0cU4
-	 ssgWAcJ1jlqb2aTGzMKcPknOchLApXXEnmQPRNABRaAY2cPtkBy/1iQS6FU+EunZmYQ==
+	bh=sC74yfRuiZhj2Xeiu07i0CUWBg79iNBcHBQNcy6zYH8=;
+	b=NuAusbDOvELhVZ6JTe4ouZHms/SzvPfNeey7BXcYHyA2VaMmHLHfISXIo2FVUPPW5Trm
+	 rdpuIX5JU/3mq8fxjcJSIFg4WiI6AFSSAuEWNIvRrNVf7C7el7a+810k4bSI1KyEHSpWo
+	 qtwMogSGSALL2X2szF6cPc51poZiUMT4Ryh21VX4GtQggt0/zbEQ6UEwYa7PvkercV4YK
+	 5o7c2Dk5rxMDOtquDUxeI13ptXe34jTMo2QwVZr5RNpICle1AP2VJpXXsZDWOG+Mak0x+
+	 7FFoZFzuME0l6xDkFclInJAy8BL7LMrefu59sgYbuMK3HLiptcz+Zyz6VShfGM2o/Kg==
 ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789736849;
-	bh=Wodokn/EaRIgOe35MfFw2pWxF0z0EBjAkv55W4CfqTo=;
+	s=default; t=1789736852;
+	bh=sC74yfRuiZhj2Xeiu07i0CUWBg79iNBcHBQNcy6zYH8=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=VHxYgra08f6DITqKgWfbkI6gWaSM9L7qqNaPiQanOoSiD5aJxxEszVU+zkKhsO2sb
-	 RyutEHIVCnbvLhJhEfSQL2/KA3hTQVWBg49pxbiGzpZ2KjVcCqFFarkKZ757CIcAgZ
-	 Q49W7//orI53vQcmKyV7fNEdfHQzb9h0zkTU+Oq4bIGBNrSa0r/AqsGhkItG+j9igu
-	 wxBMvaL4aVKM2BJnxaw0QVYE2dKwupyt01gvPw9rWolvE5SvOTud6MHhkjomt/MObX
-	 tyCM7T43HazAMdXZmho+mGJmFd37+a2rGoxzwkCKR1JeVnTaym3W9SawXw+cEo4xzl
-	 30EH6+TcvEuPQ==
+	b=ok+xi/HAIWWcJkF+6GKCoUr9AiK0/IIr4k5yvFWrnicvQ4xyA0lrD5hBTF8SQrbIy
+	 /Fhi1xBwKluYRZAR+DdsDeRpvxaN/RsPcbmuuod7vElM0p2RqORwZ057zHTk+DlN5A
+	 m3GtdAvfJYus4L+LL9V+H/XZ0gp5gHg6wVwiiCe/RnXmav4uvzo/AgBwho4GgrkggF
+	 i4KgRsNn6fVMRbgZpD9T+6DUgtmcugJekQFLfHKaB5Jyqr1IE/9nQeP9Fz8i+1KRFw
+	 k5n/mOznYS8e9Zbk2sRbn1dpQjmHzabQoi0vqd7gBc5vlw5CYZHyMIbGVvdEJQbYbJ
+	 PYvXjOD0Ha5+Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6FFE060DD5;
-	Fri, 18 Sep 2026 13:07:29 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 44ED9DC9
+	by smtp3.osuosl.org (Postfix) with ESMTP id C7AA360DD3;
+	Fri, 18 Sep 2026 13:07:32 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4FB6D1FC8
  for <buildroot@buildroot.org>; Fri, 18 Sep 2026 13:06:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3651E8124D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 364A840B90
  for <buildroot@buildroot.org>; Fri, 18 Sep 2026 13:06:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PwIPdZAqyUXl for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TiCROh84ev_m for <buildroot@buildroot.org>;
  Fri, 18 Sep 2026 13:06:52 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 928BD81292
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 78E3240B9E
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789736812;
- b=lRowAkDrGk+XhWQQkHF9+qKFoT67FnoNaK1sVN7FbNlcz4Kg1355jzFBc/EEVBfv5idk
- 4i/s9ZA0QgdCRnafiicSZTZoiOGY4Xrt0RGUKckTR9rWk93ze/VSEUocWq2WoBzYAiznl
- Idu0U0B4+ny8vwOdkO4pazZbZfHSKMNgmilIsUOH0jX4kXikIpsaVNihN+JeoVEyx+pOz
- 3N8pePpE46uaWH2s4QCxaUkGDkIgSUMIF0KjM+OVF5ajsl6vKIZH+Uo8EfM7pcOp+2Ylr
- 1VscOqkpxGNqi7SfvC/Uv+g5R7n9bfRBKE0+9aXqHsEkl0pJj+x5VtXjFp0b2p8BzYw==
+ b=Vdu+10U+QrnnZzssnRWN9uqjptvM9/225/qDk6v/rEmyXdufEpnFAqMa1vBupR6fsD7i
+ eGuu1lnXGpwYLXoQG8Q+MDDXZY5k/lfHboH2i1GZpdq/tpfy9yeB0Wtp+hkZvL3skB+ph
+ 7tOKvqtlIYlbrnLOPPbre1a8QqpPNfwGCCKXSFyyM0/9svbzZSTbdLc40bPjA7Hwp04d+
+ yjOnmt0dp92X1+jBZoW3cs0s1Pwt325py0SJqVflW0O1jcQOz0f8WNlfGqJmCFFQCmiMq
+ w3qxRuFdQ9n7HUv2LDzzwsSmo217PpuQbI0ZdTEakb0iLzWKiYqKzIYFg4ykWe1762w==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1789736812;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=rI7udFI53QNV0ysu1qFt/JJDzNVIeJ3Usz2lvsOOH0c=;
- b=EOdydQVwKA486kDswr7Ep5v6Y62sZ6FZ0Ho2a6/+6QpCp+CAMXbOZ5K3rYPLAuvMyd7l
- i6FdovkyZ3J2KCESRV2E2DyyfmBkWCXayR8Yrzz6cyh7cX0EuYPlMhYg8duGwcJ2Ro8qF
- 2L575nvOCVPN/82hZlxTXQh5cvRcpNVGMELbp6XH4MTjDkxjDh8JP5Y8VistuD88HRvme
- HMRgluAOYwH+uQ8KpJtvnwCBrcTFwu1X3UWsCQkCUASbryYA5dGN5wZ9uWHNrZeABPzu1
- sz2/MpDEvX1iAUV7vZfyA+0OhQ2SoDnIUFOKFuE6+MddOKRfbLXvoXI3JO2PHx40+nQ==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org;
+ bh=bvRt9rmPmxFNYwuZl1iHg8vdMUybVaW+Th1zVB2A2y4=;
+ b=dihpXxV0YDeBHWSE+GY1E9yRTbKXuwX3XOe4I0WqXhmAHb0h+tIta4GxB2EUr8aawazm
+ BTpdOqAKmLtFZOtAASCQsD2xeddqX6h+kEPDTp6Zz3haHdEP2WtVMCk/AfHhemLo2J1Kk
+ XDYY7Rm2Njkj+W763QSw9s31AQBKqCU6A/8XxC+ICUr0bIOWiniuEuprZx/k0/U2dkmPh
+ iJLL5EwUsVtuM/e6Ci4PidwqlzjM8t7yOxLPi8mbRXAhea2A/zJqGtk/ZW/Uu4EZbUeXI
+ kfTXKYIO2TiddfCcofqeT7SDNfJjBY2nzPsGvXtX3lP7h8o7sPWr5h4FJzkgcKQOiYw==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org;
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 928BD81292
+ by smtp4.osuosl.org (Postfix) with ESMTP id 78E3240B9E
  for <buildroot@buildroot.org>; Fri, 18 Sep 2026 13:06:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4B8B1976A0; Fri, 18 Sep 2026 13:05:45 +0000 (UTC)
+ id 320999718A; Fri, 18 Sep 2026 13:05:45 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 16 Sep 2026 12:21:34 +0200
+Date: Wed, 16 Sep 2026 12:19:26 +0200
 X-Git-Refname: refs/heads/2026.08.x
-X-Git-Oldrev: 94830507f8812dfa072f1b2003537bcb9608f549
-X-Git-Newrev: 3e0083751f834fc1edb84ff4cbefb2c625c10bfc
+X-Git-Oldrev: b65a2ca6efd75f8af99ea6caa2ed9b0cfb3f8c64
+X-Git-Newrev: d0f4c12dd1f9540deb5d05eb0d40d46cc795804c
 X-Patchwork-Hint: ignore
-Message-Id: <20260918130545.4B8B1976A0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.08.x] package/webkit: fix
- kernel headers dependency due to seccomp select
+Message-Id: <20260918130545.320999718A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.08.x] package/ivi-homescreen:
+ add missing BR2_USE_MMU dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -118,51 +118,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/3e0083751f834fc1edb84ff4cbefb2c625c10bfc
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d0f4c12dd1f9540deb5d05eb0d40d46cc795804c
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.08.x
 
-In commit
-0e2c958e053fae6e33bc7ca230ac4326a6ac5aaa ("package/libseccomp: bump to
-version 2.5.3"), the kernel headers dependency of seccomp was bumped
-from 3.12 to 3.17, but BR2_PACKAGE_WEBKITGTK_SANDBOX, which is a
-reverse dependency of BR2_PACKAGE_LIBSECCOMP was forgotten.
+- BR2_PACKAGE_IVI_HOMESCREEN_AUDIO_PLAYERS selects gstreamer1, which
+  has a depends on BR2_USE_MMU, but does not propagate it
 
-This commit fixes this inconsistency.
+- BR2_PACKAGE_IVI_HOMESCREEN_FLUTTER_SECURE_STORAGE_PLUGIN selects
+  libsecret, which has a depends on BR2_USE_MMU, but does not propagate
+  it
 
-Fixes: 0e2c958e053fae6e33bc7ca230ac4326a6ac5aaa ("package/libseccomp: bump to version 2.5.3")
+In practice there is no problem since ivi-homescreen depends on glibc,
+and glibc doesn't support any noMMU architecture. But just by walking
+the chain of option dependencies, this is not something that is
+theoretically guaranteed (making automated verification of
+dependencies difficult).
+
+The other "depends on" from gstreamer1 and libsecret, BR2_USE_WCHAR
+and BR2_TOOLCHAIN_HAS_THREADS are on the other hand already handled by
+the top-level BR2_PACKAGE_IVI_HOMESCREEN option, so there is no
+ambiguity.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit ef92929504e842a1798128988eeb4d959a1a8931)
+(cherry picked from commit 90aeea08bb685ac38b74799d830aff4023698cd0)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/webkitgtk/Config.in | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/ivi-homescreen/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
-index 3a4c3ed792..cfb05fd0d3 100644
---- a/package/webkitgtk/Config.in
-+++ b/package/webkitgtk/Config.in
-@@ -87,7 +87,7 @@ config BR2_PACKAGE_WEBKITGTK_WAYLAND
- config BR2_PACKAGE_WEBKITGTK_SANDBOX
- 	bool "sandboxing support"
- 	depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS # libseccomp
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 # libseccomp
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # libseccomp
- 	select BR2_PACKAGE_BUBBLEWRAP # runtime
- 	select BR2_PACKAGE_XDG_DBUS_PROXY # runtime
- 	select BR2_PACKAGE_LIBSECCOMP
-@@ -95,9 +95,9 @@ config BR2_PACKAGE_WEBKITGTK_SANDBOX
- 	  Enable sandboxing of the processes used for network operation,
- 	  disk access, and Web content rendering.
+diff --git a/package/ivi-homescreen/Config.in b/package/ivi-homescreen/Config.in
+index a4f5f6835f..d7cc4ce04e 100644
+--- a/package/ivi-homescreen/Config.in
++++ b/package/ivi-homescreen/Config.in
+@@ -187,6 +187,7 @@ config BR2_PACKAGE_IVI_HOMESCREEN_TEXT_INPUT_PLUGIN
+ comment "plugins with external dependencies"
+ config BR2_PACKAGE_IVI_HOMESCREEN_AUDIO_PLAYERS
+ 	bool "Audio Players"
++	depends on BR2_USE_MMU # gstreamer1
+ 	select BR2_PACKAGE_GSTREAMER1
+ 	select BR2_PACKAGE_GST1_PLUGINS_BASE
+ 	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_ALSA
+@@ -201,6 +202,7 @@ config BR2_PACKAGE_IVI_HOMESCREEN_AUDIO_PLAYERS
  
--comment "sandboxing support needs a toolchain w/ headers >= 3.12"
-+comment "sandboxing support needs a toolchain w/ headers >= 3.17"
- 	depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS
--	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
- 
- config BR2_PACKAGE_WEBKITGTK_HTTPS
- 	bool "HTTPS support"
+ config BR2_PACKAGE_IVI_HOMESCREEN_FLUTTER_SECURE_STORAGE_PLUGIN
+ 	bool "Flutter Secure Storage"
++	depends on BR2_USE_MMU # libsecret
+ 	select BR2_PACKAGE_LIBSECRET
+ 	help
+ 	  Store data in secure storage
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
