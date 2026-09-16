@@ -1,106 +1,161 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03BEBC88E77
-	for <buildroot@archiver.kernel.org>; Wed, 16 Sep 2026 06:52:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D59CBC88E77
+	for <buildroot@archiver.kernel.org>; Wed, 16 Sep 2026 07:42:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BD42D806BA;
-	Wed, 16 Sep 2026 06:52:20 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GteHB8W82GTj; Wed, 16 Sep 2026 06:52:20 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org C100280790
-Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789541539;
-	b=oVwxHvSQHcqOuE6U/uFNtzlHx9aOHHIX6pnq5t5K/PLZKSaOW9snP7EqdLLEpP9epQW9
-	 JnrZ+qYdKUlt1RSiEXR2+FsKo6SpL4cj1V4jWQgfJ5ZY7C6E3Vbc07wyKHh7XamPjwPKT
-	 IOZMRZmqfHO7Ytra4xdc53xouDGtKCtSVECFZXpIbVbdkCSWp2DhgfgghNT6oaaMPQbM3
-	 fEdzLQV2BCEFAJtJyYNV9Tigr4CE/WR6B2Esw+6b2DKqG+c78HMQU4YceGUs7QWGC5/Ke
-	 07YyRGKDqfs0NcC8oM3IeFmsbsiDj8XSSdADMBsm4RykP6aQArnXc15QhvTCU043vGQ==
-ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789541539;
-	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
-	 Received:From:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
-	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
-	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:MIME-Version:Content-Type:Errors-To:Sender;
-	bh=0BTDooC1duKpbscR/iYtBtSS/00WVq6qDI3UIf14o2M=;
-	b=mBEKGY583jQPDS+I+O9zUjG5CC5xe6tIAMjMIjOnxSHr4O9mcmkYwSZfciDFfQnLMALx
-	 RSsM3FaXTSb/9iWTcCs22rjb/Ls9OTYTvOH7kzQVrSIzm2mra9shYuwsq4dAkcu3tlDVQ
-	 iDuGXoFXbAmPp6V9DIOYEZX6in5UJYCjMr63sP6LceA17ZzlFgiUBwsGM1TBzj9hQq7sG
-	 QkSf0qPpa28qJCEBofC2u9I8Ok053VzBFmk0ak0Vpl0LUui0HOjYyBTUhrrehHu9nn1Ye
-	 32Tz+DsLhF4TjeTBX+A8CsPBirMB85HW9QEsfv7xYV8pU9/R3NUzf+Ch6beOGEKOW8w==
-ARC-Authentication-Results: i=2; smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789541539;
-	bh=0BTDooC1duKpbscR/iYtBtSS/00WVq6qDI3UIf14o2M=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=SDl5i7xEy3nQf+7FuoBO0Wlgz0IF1jMQ4VsXJQUlWbk2E2r5/alnFT2ZkBKV74co8
-	 lH6JaXWyR5STRiQjvqF04NEbofX5heLc9WsSXnl8zGbgCrpz/7VYGi269iNq9xg8h7
-	 O3u42ivIszdGoIIF1UwWytKw5pF/BTjcXNKYrUhZOaLgAMg8GKA6uQ/5BundGhC+jE
-	 1l7VvOAquuYRmmyWj6rQV+IPY9C3m24vn8s62KwIB+obFyv5kSexmb+3FTkE8mvsyX
-	 lxLwuRytnCt7rPVwbCDxgGLSKZf7AST25WxvBmBhnTU+fPtnNeQ9aiweVicDJpVeqX
-	 sNaRyojRLerrg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C100280790;
-	Wed, 16 Sep 2026 06:52:19 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 9F4BC3AF
- for <buildroot@buildroot.org>; Wed, 16 Sep 2026 06:52:18 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8579E60689
- for <buildroot@buildroot.org>; Wed, 16 Sep 2026 06:52:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 652246062A;
+	Wed, 16 Sep 2026 07:42:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2zh0dL7E9F8P for <buildroot@buildroot.org>;
- Wed, 16 Sep 2026 06:52:17 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org D2756605E6
-Authentication-Results: smtp3.osuosl.org;
- arc=none smtp.remote-ip=140.211.167.122
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789541537;
- b=BvJN/GHkhKUSIcyQzhf7O8OT/6sVyCY9djbVdFU5xyEWHOdyZJd5AXkW0C4LU0It1BgW
- 62HlL9SfbVpW71ohoPDDBga8HAikYVss6ZB72osbVpCZpj8gxQrK/tmQrwefhfMNDPnP9
- T0zMkhdRR6U/DicINme6a1g89/IVIVZlg5I5reaPoMNrqKmNSMZKpn4qr7p6C59oahnh3
- d2JkSQxn2oRXwI9nzuyxYLJNL2tBlSqbLo34c1h7ZhcBs831TO+jVN7IrNaadw7b2eUc9
- dYJIorvOTT9mDc8Idf/0JTkPfzdDf6h1ePqM/HzMbs28efudTUYd1gY5TfPqNgJQoKA==
+ id jUQzNbX6C7fg; Wed, 16 Sep 2026 07:42:36 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 88CB6607C7
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789544556;
+	b=WSvZeSJOriInFPNb93yPUfE4A75SuCCef+L+BtiX3g9v5GZJMCJEdVukyzsM6TpUB7Zl
+	 eSz22xqnxdrTBAZ0ztNWfZ6qnhWkHQWF3LyNXlcSEhV+jn5xIKEvFSPsoIoC95pnMSNx8
+	 W8YQNAe+9VyuDzx+AMAXJcGrWtQNQ0I3F+yV/eXewmQF6LW2gkRqpG503RZjUzdQTSsme
+	 dExbbALdViPFvXv2H4fx+xut2zld+dVtOmuIxaq047reXjwN3n0iK5Mjrvtm3XWv5nui9
+	 M37f+rSCcstJVk8aYEQ+p6edSU+Q33LwqZn3Cpc0B4r/++rfMCorNLYatxT9hvGeQLQ==
+ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
+	c=relaxed/relaxed; t=1789544556;
+	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
+	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
+	 X-Received:Received:From:To:Cc:Date:Message-ID:X-Mailer:MIME-Version:
+	 Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
+	bh=YGETSkMiovuDoXO3/KnslOZ59MxgD64oPWOBUuW13kk=;
+	b=TMV9BQGyOffJbQqkkdOn8RsPM9XG6SSD+SMp6OvNgjU+0nU6OepHvsCwzUx8PYjDJSAt
+	 aGM751sU8o8BT4qhQrGgUwueD4T51m1ytNv4qEni3y7zQuKYJy/fbY4dsaBIXU553YY8b
+	 ZAl9MdeH0Qu2Lhdzw7dnq54e2QfFaEToiAnB2VcheB2i9q1BFcMRr5pOkZ1Za5T0sPn/v
+	 WMzNxnLvf3U3VP7cHR8h1+TMn4NGEmzEw8TyINE+1UtuatgwgatqxsAbMkv6KbOc7MU8e
+	 xwUvEi1wihzJAyylaYuzu5rfDqfIBkzJgWUaWuEaXWPkydHgOYAgACdbL6E8h3MrZgw==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1789544556;
+	bh=YGETSkMiovuDoXO3/KnslOZ59MxgD64oPWOBUuW13kk=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=P/hhDNr+BUAOogjtuljVjhIyXqa+ylRh0tE/IWPQRJskKqalHtuweTxdojCQ4jLyM
+	 ENjrsLMhTMDMxs2p2NwGwfToAYU4cQGolVMkLAcr7P3CvdFMLe8Hwd/Hp9TJJTHpUD
+	 w3y1K4mx56jxo9iCYvxurlSCn+D2j1K1ad/4ZG4eipW+sg0RTXyUnSPy1O/YvCaYgK
+	 yjfjpcujc399o89hJuRj+6vCwDAzjyWWuyELgJI5q/NqzMYTcuaKkb+OQk7hWjDb52
+	 87eXiuv1sPlR95zBJsQf4fkxb0UQ14hORPvEQ712g+ITcjE4jaqYHt8hu/XhElqchr
+	 S6umoR9XWumRQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 88CB6607C7;
+	Wed, 16 Sep 2026 07:42:36 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 045D529B
+ for <buildroot@buildroot.org>; Wed, 16 Sep 2026 07:42:35 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id E99FC808E7
+ for <buildroot@buildroot.org>; Wed, 16 Sep 2026 07:42:34 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id c2eBsZNbHmNB for <buildroot@buildroot.org>;
+ Wed, 16 Sep 2026 07:42:34 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 86DE9808C8
+Authentication-Results: smtp1.osuosl.org;
+ arc=none smtp.remote-ip="2a00:1450:4864:30::10"
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789544554;
+ b=DedHVXymOg8/oLqgJZ3ohXuqCp+aIxlS8obXgsqenqULHSlJDkV0BnZRxiTjGN4j/SOO
+ fm7LnSBXUQITdF68+2ytGHk7myR3DkZEL4XBzkGaajfZ2mQQhQJjHjJYBEQpHv4yuwW6K
+ 3QaAIWDufIOqKjXjmUuyybSTj0lutYUjn00mJzQ7SnRVdeykUKBuVkGwYnTdPESFUltAD
+ Fj8fFrgfF+r7y4GZneFLOOfjLQTPfXNuKHMTUEsZQ4YMIeJ8ew+NzzrJW8neI+FKZC/VT
+ 5z6lojWEY120v6L/PU4KLyufgvK3US/hturNELU4pVtQpDbEs8YHjAXleTUwifpFb4Q==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1789541537;
- h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
- X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=1+CBu4s41Qr/tCalf5afzRnrKwlqJTNC5d0/Ib3ZoTE=;
- b=dv+Q1wckuXV1QtBFEORdRrM9WyQGQbA2RExymhVAb7b3Y3QZRm435/hIKKvlwk+ev8/h
- 31l9HyUCtrSTg5S11dwRlpuQjJJuqCL9kAEfBQGRi/Ie53b9ms4jtW5aNbuH53cYqn93z
- PzVeTb5xAfgVw0MDmV5C7dgRqUrtaayYLzgTX8rGgeCYyn11pkp4zr0qG8YEpiZF9LP3g
- 8aAIT18otQc4jCyV8h2LlFbqHxi+iYsheZUPtyXk0zEUVI35R5qR7Mu8OyylQ2WpWR+Dx
- 0nh0HAUWkJJIe+U0v83knHgndDAxQY2MLmjFNCv0IM5ZjBM2DLn13MMCoKpXP2PGVLw==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org;
- arc=none smtp.remote-ip=140.211.167.122
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D2756605E6
- for <buildroot@buildroot.org>; Wed, 16 Sep 2026 06:52:17 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9793695CC9; Wed, 16 Sep 2026 06:51:11 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ c=relaxed/relaxed; t=1789544554;
+ h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
+ X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+ Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+ bh=IVpRvSb97NZ+eCrQor3K0rIMmU0dKP4/rhrG6VNgjK0=;
+ b=SQg+ikHgwlrUAhbTStg9wcnt55FQIyi1cByW5byyKMv01s3oMdde/t2YKNBwQMsk/MVV
+ Teesr5m/T0UM1JYC95TfMDxk7GJQxwx3iZQU+wK9tvzxVsKhsQfKvCRrPDdOLKOV+K9hr
+ sEbI11b9Mx+yUz8OLaQwMta/eYQ09Qn3XsigzDfXuMr5XXBbHsfkWiEeMzv/QzG8pmWHv
+ UVMTeC8D7UWBjhA+pBbmiqxYTyIooBxvVnc8kkuUO+GJ9kBL7NZOmFuSdpmk1eD5qxsWX
+ NEOxgo+X3AnheLa7ePq0Z/0e7j4UKYbVqPnebr5w+PL5uYYkHCunMlsUtXkOycE7DUw==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org;
+ dmarc=pass header.from=amarulasolutions.com; 
+ dkim=pass header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=rJdEThEA; 
+ arc=none smtp.remote-ip="2a00:1450:4864:30::10"
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:30::10; helo=mail-wr2-x10.google.com;
+ envelope-from=andrea.ricchi@amarulasolutions.com; receiver=<UNKNOWN> 
+Authentication-Results: smtp1.osuosl.org; dmarc=pass (p=none dis=none)
+ header.from=amarulasolutions.com
+Authentication-Results: smtp1.osuosl.org; dkim=pass (1024-bit key,
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=rJdEThEA
+Received: from mail-wr2-x10.google.com (mail-wr2-x10.google.com
+ [IPv6:2a00:1450:4864:30::10])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 86DE9808C8
+ for <buildroot@buildroot.org>; Wed, 16 Sep 2026 07:42:32 +0000 (UTC)
+Received: by mail-wr2-x10.google.com with SMTP id
+ ffacd0b85a97d-4834977ae75so257098f8f.3
+ for <buildroot@buildroot.org>; Wed, 16 Sep 2026 00:42:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amarulasolutions.com; s=google; t=1789544551; x=1790149351;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+ bh=IVpRvSb97NZ+eCrQor3K0rIMmU0dKP4/rhrG6VNgjK0=;
+ b=rJdEThEAg6rYRIQJXmfDRW/Obf/UR9i7eM/rjqI2UMumZNZ7mECTUdUjxPUo9Uj477
+ AzD/6fAMyRH4mPoRiTA1ul/FO186+wjs/BT0wL6pKS//OoimvHyxEjv54RU3CbtX3CPF
+ gnldAumGmIvhoNR5vkuitjlyoAVU8jPkBIrYI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20260707; t=1789544551; x=1790149351;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to:content-type;
+ bh=IVpRvSb97NZ+eCrQor3K0rIMmU0dKP4/rhrG6VNgjK0=;
+ b=lsz2oWIYFs/fm24gaWS/mnZoMxRo2SMYO/nwpQAE0BOwzixp48z9KpaWlQG808UVlA
+ NN7DSafJZOY5iLSRKbF0jESqKUuJ4FyHRjaJzb9UfpSV1PgYoR26n6ly1rE5gRatVm/L
+ Sd1zASbf9q9gVvlgcCobzxB4oymNzS3BN5hj4cigPDaZYh0Gx4PZc5PtpKJ6S4azYO/G
+ Z2/uuNs+iQEiZYT4OwVdt0cw3K63v5BQmOJFdH5JaswRop4YwpRs6/Z7+CNyn4b0CgF9
+ 4JJdIKXQtRCTTjP+a5Ztc4drxfPMjXE0KATSeqosW0DHbB0QKpGdokZU/DFU4CUKsyJr
+ L4lg==
+X-Gm-Message-State: AFuF++nchPaAh/6sNou0DwgiSb1NLUXVyWnRXFiQpGcGOSIYDhJrEtQ0
+ ia3OfKD4LS1HR3BEWLzOYvEC8KR0E8iNgeT/dF3DKRPK86EcC9BH1Re7rc+86wltId68lml+p84
+ qnusTKoA=
+X-Gm-Gg: AYBFou13BHaAtm5GayEsPNwkqLx84fHCtsrZPRYQ8WmsilPyt7juSY077GI4DiakuGb
+ wTSUhqJUlBrNW0QpnA4pTXdJorW+Zuq64z86J5bZad+l4PhgEvoscDDKm8Frc7t9BnlWUlm3qIq
+ DruEfIJVNHaCZ19qoqtlWcqFFCt2QcOP5N/YCdPx838d6gRpNhvIG7tcpnnPOxz1IyE49bqZM1G
+ +wY64pSGoZiAXoj175xhMzguXCt9iCdwpgcKtEuQvkzM5707Ja5tckX2+0mhhrK457IebGsMbms
+ n0+ggP4fGxuSpGVl4kUKpNGwJye92HJuwVhZh2HmrHY8lou00d/CVf0YK4uVZpvtVrHOEL7r57/
+ gSN18ymfacXOcXgfaHa8pqhM/duU43nosxHx4Dr831EJJyH+OaNyHKKEcwWpH1ZGNf4tm6PQJM5
+ xJ4YRBticYlNWAB/YZcsv3v+THNLosMZMHDJEhcjqaVA66cCX5aLZ0ktMGRFquqo6vgSshE0Dhw
+ sc/zQguOHx/zE7GAxnHtKEcxn9WOQCwb+xEb/oGEuQqX/HhQaGbAn0IT6oTX25z01sAmTQ8ACPd
+ gWghZDWXM3Ssa4tCn9ULaSxvohUN5cIpB8VuxSOezYwcSGn0V5lYZ2x8KY8pcNvbrVz4ioT7jK1
+ apduHT0DP632QbEDLPzKszsvJ8ctjTMWhCCf4cPC6cXM6XlPEfM/J4w==
+X-Received: by 2002:a05:6000:654:b0:487:72f:fb42 with SMTP id
+ ffacd0b85a97d-4870cf29d90mr3179626f8f.14.1789544550914; 
+ Wed, 16 Sep 2026 00:42:30 -0700 (PDT)
+Received: from rcc-ThinkPad-P14s-Gen-5.homenet.telecomitalia.it
+ (host-87-14-44-139.retail.telecomitalia.it. [87.14.44.139])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-4870bf1f98csm4713663f8f.11.2026.09.16.00.42.29
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 16 Sep 2026 00:42:30 -0700 (PDT)
+From: Andrea Ricchi <andrea.ricchi@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Wed, 16 Sep 2026 08:51:53 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 05021d4075ee14b5fb177c6435b3625323b55ef4
-X-Git-Newrev: f63e5724327c890c0e5713fc102a4da1e302c587
-X-Patchwork-Hint: ignore
-Message-Id: <20260916065111.9793695CC9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/xen: fix build error when
- BR2_PACKAGE_XEN_TOOLS not enabled
+Cc: Andrea Ricchi <andrea.ricchi@amarulasolutions.com>,
+ Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Wed, 16 Sep 2026 09:42:18 +0200
+Message-ID: <20260916074218.29706-1-andrea.ricchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.53.0
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH 1/1] package/cutekeyboard: bump version to 1.7.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -112,122 +167,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2447433546876231591=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2447433546876231591==
-Content-Type: text/plain
+Release notes: https://github.com/amarula/cutekeyboard/releases/tag/v1.7.0
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/f63e5724327c890c0e5713fc102a4da1e302c587
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
-
-The 0002-Update-linker-flags.patch assumes that the qemu-xen files are included
-in the xen source tree. However, if BR2_PACKAGE_XEN_TOOLS is not enabled, the
-qemu-xen dependency will not be handled and the patch will fail to apply with
-the following error.
-
-Fixes: build error below
-Applying 0002-Update-linker-flags.patch using patch:
-patching file tools/Makefile
-Hunk #1 succeeded at 36 (offset -1 lines).
-Hunk #2 succeeded at 185 (offset -8 lines).
-can't find file to patch at input line 76
-Perhaps you used the wrong -p or --strip option?
-The text leading up to this was:
---------------------------
-|diff --git a/tools/qemu-xen/include/hw/xen/xen_native.h b/tools/qemu-xen/include/hw/xen/xen_native.h
-|index 6bcc83ba..2590904e 100644
-|--- a/tools/qemu-xen/include/hw/xen/xen_native.h
-|+++ b/tools/qemu-xen/include/hw/xen/xen_native.h
---------------------------
-No file to patch.  Skipping patch.
-1 out of 1 hunk ignored
-make: *** [package/pkg-generic.mk:239: output/build/xen-4.21.1/.stamp_patched] Error 1
-
-To avoid making BR2_PACKAGE_XEN_TOOLS a required option, fix the
-0002-Update-linker-flags.patch so that modifying source from the qemu-xen
-package is no longer included.
-
-Instead of patching qemu-xen, a better solution is undefining the
-__XEN_INTERFACE_VERSION__ from the qemu-xen package.
-
-To test:
-BR2_aarch64=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
-BR2_PACKAGE_XEN=y
- # BR2_PACKAGE_XEN_TOOLS is not set
-
-Signed-off-by: Neal Frager <neal.frager@amd.com>
-Tested-by: Matt Weber <matt@thewebers.ws>
-Reviewed-by: Stewart Hildebrand <stewart.hildebrand@amd.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Andrea Ricchi <andrea.ricchi@amarulasolutions.com>
 ---
- package/xen/0002-Update-linker-flags.patch | 16 +---------------
- package/xen/xen.mk                         |  3 ++-
- 2 files changed, 3 insertions(+), 16 deletions(-)
+ package/cutekeyboard/cutekeyboard.hash | 2 +-
+ package/cutekeyboard/cutekeyboard.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/xen/0002-Update-linker-flags.patch b/package/xen/0002-Update-linker-flags.patch
-index ac02722781..3ba678cd9b 100644
---- a/package/xen/0002-Update-linker-flags.patch
-+++ b/package/xen/0002-Update-linker-flags.patch
-@@ -16,8 +16,7 @@ Upstream: Buildroot specific. This is a temporary patch for an intermediate bump
- Signed-off-by: Vincent Stehlé <vincent.stehle@arm.com>
- ---
-  tools/Makefile                              | 29 ++++++++++++++++++++-
-- tools/qemu-xen/include/hw/xen/xen_native.h |  2 +-
-- 2 files changed, 29 insertions(+), 2 deletions(-)
-+ 1 file changed, 28 insertions(+), 1 deletions(-)
+diff --git a/package/cutekeyboard/cutekeyboard.hash b/package/cutekeyboard/cutekeyboard.hash
+index acd2017056..9472bcf00f 100644
+--- a/package/cutekeyboard/cutekeyboard.hash
++++ b/package/cutekeyboard/cutekeyboard.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  5e00ab346038e41e11662016b56c4e95fa08e7efeb7ca61aeab5b863a0bb7300  cutekeyboard-1.6.0.tar.gz
++sha256  50029bb5219eb72a4e89435f157235ec541c546ec82e1d5ed8056af27c48362a  cutekeyboard-1.7.0.tar.gz
+ sha256  bdde6ec2ae2686623c0bb414bfb8bd731b314beff2264c602116ea60dd65964d  LICENSE
+diff --git a/package/cutekeyboard/cutekeyboard.mk b/package/cutekeyboard/cutekeyboard.mk
+index 12a6573d52..2b0f5a9f2c 100644
+--- a/package/cutekeyboard/cutekeyboard.mk
++++ b/package/cutekeyboard/cutekeyboard.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- diff --git a/tools/Makefile b/tools/Makefile
- index a9a3196e..5d289651 100644
-@@ -69,19 +68,6 @@ index a9a3196e..5d289651 100644
-  		--bindir=$(LIBEXEC_BIN) \
-  		--datadir=$(SHAREDIR)/qemu-xen \
-  		--localstatedir=$(localstatedir) \
--diff --git a/tools/qemu-xen/include/hw/xen/xen_native.h b/tools/qemu-xen/include/hw/xen/xen_native.h
--index 6bcc83ba..2590904e 100644
----- a/tools/qemu-xen/include/hw/xen/xen_native.h
--+++ b/tools/qemu-xen/include/hw/xen/xen_native.h
--@@ -2,7 +2,7 @@
-- #define QEMU_HW_XEN_NATIVE_H
-- 
-- #ifdef __XEN_INTERFACE_VERSION__
---#error In Xen native files, include xen_native.h before other Xen headers
--+#warning In Xen native files, include xen_native.h before other Xen headers
-- #endif
-- 
-- /*
- -- 
- 2.51.0
- 
-diff --git a/package/xen/xen.mk b/package/xen/xen.mk
-index 75252d1123..bddfdbba38 100644
---- a/package/xen/xen.mk
-+++ b/package/xen/xen.mk
-@@ -40,7 +40,8 @@ XEN_MAKE_ENV = \
- 	CROSS_COMPILE=$(TARGET_CROSS) \
- 	HOST_EXTRACFLAGS="-Wno-error" \
- 	XEN_HAS_CHECKPOLICY=n \
--	$(TARGET_CONFIGURE_OPTS)
-+	$(TARGET_CONFIGURE_OPTS) \
-+	EXTRA_CFLAGS_QEMU_XEN="-U__XEN_INTERFACE_VERSION__"
- 
- ifeq ($(BR2_PACKAGE_XEN_HYPERVISOR),y)
- XEN_MAKE_OPTS += dist-xen
-
---===============2447433546876231591==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+-CUTEKEYBOARD_VERSION = 1.6.0
++CUTEKEYBOARD_VERSION = 1.7.0
+ CUTEKEYBOARD_SITE = $(call github,amarula,cutekeyboard,v$(CUTEKEYBOARD_VERSION))
+ CUTEKEYBOARD_DEPENDENCIES = qt5declarative qt5quickcontrols2
+ CUTEKEYBOARD_INSTALL_STAGING = YES
+-- 
+2.53.0
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============2447433546876231591==--
