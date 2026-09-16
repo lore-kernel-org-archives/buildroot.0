@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 770A9C982D8
-	for <buildroot@archiver.kernel.org>; Fri, 18 Sep 2026 13:07:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC271C982DA
+	for <buildroot@archiver.kernel.org>; Fri, 18 Sep 2026 13:07:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4217D40BFA;
-	Fri, 18 Sep 2026 13:07:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5522C60ECC;
+	Fri, 18 Sep 2026 13:07:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id o2Wx54K20u8R; Fri, 18 Sep 2026 13:07:52 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 104BC40CE9
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789736872;
-	b=M927IaJZci0fX8FigW+abbo2YKw2vgJpJZgQhHPv4FreWVZcB1nln4MY6uU+Vm4PSR5V
-	 eYo3I4hWMTJsC3AUQQZaBIgQdME9L47xm0Jb2K6CSOdJIF7NVBHe0FtxT+7vyLWMe7gfI
-	 zU3lHksXold0bZHqgdCYmkb19DULurbRUjjsDoPotNJ+oEa6bKPFKG8c+O/+wr2tABis1
-	 n2Aly+XGp8+1QK5VdjlDsrCow23OvWgSWXGH/3f53r94GhbOcB1DhirUeoNSYeYshs6cV
-	 AIbdPbn8BvitrJGf6uRUWQ1zED36X6+J7JG4pD3PNPV8fh182hdos6jbvsoVR+LHXFA==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hz-5iSQGRuQ0; Fri, 18 Sep 2026 13:07:55 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org EFE1560E0A
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789736875;
+	b=JiEAxKEJoBeA412ASRe/X3gm9OmVqgtPYvR+wg1O9UlY4A5zII14M2zBMYYJ6X6M1eSC
+	 lv3tRnEGKhA2UM0HiQomVX1BoGq5iBWpGjYGBg7IeeP3L/9fnZV96UbIBrvOXW4zmgQ2G
+	 wGt4B5zauqLjPzPFui4wkz+rNO5QlJicuetXhfJqJtI0DZtWW+243ayF0KRXbwk27zSXW
+	 rk/yj0Zjsu3EJVjOygslADP/SakBmtXM95UBYDC8r6xuiCuc8Yq6CqT4BaMPBaXxluytw
+	 ugv058AjYgsAs1DOpOF/140U5T4ky9ebJ5O2NVZrfIvwzyd7LipiHPG5xI4idsE7Hjg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789736872;
+	c=relaxed/relaxed; t=1789736875;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,75 +30,75 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=hI75UDY0dXclbpIUMtnavIBysKYUr1UiQgkrElToILg=;
-	b=fDywgSnbyi5r0NnxpXHp07FOAAFONeAR9TrfSLty7tNLtdic7SBCisKOacgfzCH1f6qC
-	 Z62qSsrcZNe+04aX6O3330uCYpN00oiOMt2M3LYzO8QskpFF6tiFVzrJSuDKnDVa3rSnK
-	 Q//qYqiamp4xlLRzKDovigjb9CNj9ezMkizyLktxnIiyku1jxQXId+66k5N9zc3g/0yNG
-	 /pLfr5LINKYb07SVyhN96fYHqUKU150ZSNlGtei8rpw2dSxrQwK0kJXPBAmpaOGOrA5Ww
-	 IS95LvUhzgjVbMqbmfuVEM6/VqGttRnp9DvswAmqYBaDNmhcDGVjhOJHklDdht+UNlQ==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	bh=tM9/1XzdtuiaYXptkYD17AG1YXmpbGIV2Zdg3FWdj2E=;
+	b=baOYp30rz4Rj461mDrSNAJlTbisHTXjFhigU5oidET5mnzwM+fSL1HilfOMz/0fTfyRf
+	 U8MWiai69FL+BzsHon46Bpz+eIx5Pdbx5ErnLP4ZvvBuiFUsoNcMiuSIrRn+r4c2HKE9K
+	 iqCoagqWvjNJe0CNIDOA02knSwwu7mZV/iU+lPlMk8+VJvlIFWcH8IUg9HmoRCb/SE39x
+	 4y5Gxv446Obvp23WkIvPEPVqtti/aE7jt/6Nl1sePqRtASf+wNfAEVJmVuIyw/QZsoANm
+	 DwIW2wpL+5poHtZ7PGE+oDWsS1uwB5vzwAuwccUko6O0cFsmbyO9Vg8dCWmwguqIK1g==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789736872;
-	bh=hI75UDY0dXclbpIUMtnavIBysKYUr1UiQgkrElToILg=;
+	s=default; t=1789736875;
+	bh=tM9/1XzdtuiaYXptkYD17AG1YXmpbGIV2Zdg3FWdj2E=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=On+bKQfq+Yb3GB6JkdNB/mv13VyYqVZchkXmmINRvxyxXeBwA2AyUjlpzW2elr6E4
-	 E1AVwAtvRm4P/Rx1UcVdIoUOiVCcX7qNmV8mSA5SK2m2x1dK3YQMuwKarkDIqs3A63
-	 ID5sQvKnOEJG4OYYzQ9YxyP5YbEp2ZxXZKPj6/EjTfeVN2VSCcgwOfVYYt6y7CF4jX
-	 VFjJYLCHOvlfy2vsL5M3sNFwWRHsssK8d1MvoRXg+ReBKX+ltld2AaqelqsZjMaxpP
-	 hVG8o7JfwfaF2zg1Amq6x6sHsPzY27XGrqxURmEFyjn7FIU91/VgDZDwmgCn8h2lIc
-	 5N/UnoffBW+9g==
+	b=jGjP+Xan9uSEK/meOksyry2/SCXnNO/k1oLy4nSo1+SpzLHENOGQEUxiK8wzndMId
+	 WcI9Ad38ovqnTQ5QDQrgscrDN+HHIqVLhfyGcoHWhcGMJz2X/+p+YexXmcZHFMkjn8
+	 btFbWwhHPADll8gL+gSTV9KkbNQh95x6ggfBXNvyFIBUgqsrIb29veHNWqAXSgOL2y
+	 kih9gk2RpKm/mwuqKlQ63/EMEJ78PVsFDT6zIJJIrwqTskO8frCTkEbWRhpuKnUbtp
+	 vjeP+TBoxjRWvb9Vjn7dMg+05lbbyHOJ4i63sgDUszhHf+xGCqFRAdarbHW9KRDFi3
+	 R2km6B0WxZpsQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 104BC40CE9;
-	Fri, 18 Sep 2026 13:07:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EFE1560E0A;
+	Fri, 18 Sep 2026 13:07:54 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 27F8CB0C
+ by lists1.osuosl.org (Postfix) with ESMTP id 347F6224
  for <buildroot@buildroot.org>; Fri, 18 Sep 2026 13:06:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 248BD60DA1
+ by smtp3.osuosl.org (Postfix) with ESMTP id 276D060DA8
  for <buildroot@buildroot.org>; Fri, 18 Sep 2026 13:06:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id muNJvVxYgxWZ for <buildroot@buildroot.org>;
+ id DQDeN2vx-ERz for <buildroot@buildroot.org>;
  Fri, 18 Sep 2026 13:06:52 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 409AD60E21
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 6943A60D77
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789736812;
- b=R3Aazm0kn2NOQMzmzpQs7ajUjFzdQFmL6mFM4smfM3VdTZwln21iaA6F5Y78al3rWm8U
- R+OiFrEO25FCBZVCSiAc6L2Mw5SVZaMNa5ZJz6D4nKShwouXZPNuIP1B+7P85Uz0Dk6kk
- ZAylbjCGUGJP9WdvtfMKgsiweJ4bTMkQOeYv99qkDCvsMzFaF7eKDhlsDaSVJLMFrzeuK
- z6vKuyAJbq+5JqDVFtSiPfzIBF96GJbmb2ONgkqdTUl6A8I5PRYKb3/Lx9rJBEbX2Ccxy
- eSBdGWlBHIFN2mGWXkf5hZMh56VGadn18rfH+dV3NsFPZAOYDOBRXhGAHp+jUKEG69A==
+ b=WkcrP5XsVdOJQIOlYFngNtWC3s2yjNOpAvzyh5SwUzp75wqNA+0iWoS1r2mAnFfH8vyH
+ wDo0wwIdc4S3xMZ3ZsS1ePwKHd69D6r5tEi8B59Ra6aTuBcsLF4GBDM8PNUDOtRTtxsIx
+ HU0cyLqPpCDCWs4q7wnYV0JUXcRx80EBo9U5ZvxxWe8g7mXc13UP3QA7TPRabAoNM+eaG
+ ScSMP+DxU2YlohhVFFMyWkWcsJQIU/zbt/QNsRhwx/dn73UJii4zco4qZ6GsZtsXuXgg2
+ WOnQB/di1zu8I8hHgq0mHVu9YlIzKEhahbIlpyisb1i9NuWVe5ZmO+dTbVnRPMNxAWg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1789736812;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=/Cda7JYKgNXQ4hIZTdeBeCjnNbg05XHhgFac2s7oRnc=;
- b=C0tC37hhBe0Z7uUNWJuNLpEfPg/QfMqMltcmKB2uUTZjLcKK9CyANJzTkF2cohq9HeHN
- MmU5WRclDgfH9x71OjbXDDarpfXRNdQ9u8A52bnAb9eGp8qY+1N9lRNo030XPbMv1ndnS
- OlSlodUXkeEtG9YcfrtVCTzuy0HwpvFd5+XwufttbmITONoNZN/+PxSvt/Qlac85Zvh9u
- XuJh6SyfySPlhzWdH+KKpLf7ia6/CUGQe8eJ0RnscENie34kWOgPbtZermtBSX7IEIxSK
- 5p7c3snr6+sIte8rygSB8fMbaI8DDYnG9uv2QRD/8XDrE3j/phlvvP8cIKxqqOc2Ggw==
+ bh=Fq0RmAaULthK5n+RxQPY2DdaOJG2zYZJur4KxcG8SbI=;
+ b=KYIWXdC1BQqf9V1bc3lrF7K2culH9iWZAp9QCn1TUIaMOQxSAl+WnfZ2jylhYSzU1YG2
+ UeyIv3wp+6Oy4JQHSAAN1kr4NjX+YIoX714813hD5iVV9lGh82Wc3pYrUa6lHYjzdjU89
+ 4Oep2Lpo3J3hwYcuzcnZ4d5rrj3+pgOm4tXhenO8C96Vj+yrffNW5LgNDgC7tjLV+1gPP
+ QVm7SJkIX5OWTeWA98e5UM1KCpBA3WwSUITMbCxVq5WfxXxP6sycVHO66dmTvHBBdJub5
+ c2JSLMrhxpgN7Yj6wGLx3F4423h2Qwbi9JKaNGWjpTyfy98LuFGtE04UdYxT9xVWGug==
 ARC-Authentication-Results: i=1; smtp3.osuosl.org;
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 409AD60E21
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6943A60D77
  for <buildroot@buildroot.org>; Fri, 18 Sep 2026 13:06:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EDAA89718A; Fri, 18 Sep 2026 13:05:44 +0000 (UTC)
+ id 2252197698; Fri, 18 Sep 2026 13:05:45 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 16 Sep 2026 12:05:30 +0200
+Date: Wed, 16 Sep 2026 12:13:25 +0200
 X-Git-Refname: refs/heads/2026.08.x
-X-Git-Oldrev: dbf1a06be76ecd6aed07e066c63b467b4a27494d
-X-Git-Newrev: 31e728d32a057c71622e7347e427c1a3b3b63ee7
+X-Git-Oldrev: 7cc8e496a245ec182a042b29a6df56647711e065
+X-Git-Newrev: b1661d3ac4409d75bac589aa080e3328f122e643
 X-Patchwork-Hint: ignore
-Message-Id: <20260918130544.EDAA89718A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.08.x] package/*/Config.in:
- harmonize select of BR2_PACKAGE_ARGP_STANDALONE
+Message-Id: <20260918130545.2252197698@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.08.x] package/znc: security
+ bump version to 1.10.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -118,207 +118,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/31e728d32a057c71622e7347e427c1a3b3b63ee7
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/b1661d3ac4409d75bac589aa080e3328f122e643
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.08.x
 
-BR2_PACKAGE_ARGP_STANDALONE is defined as follows:
+https://github.com/znc/znc/blob/znc-1.10.3/ChangeLog.md
+https://wiki.znc.in/ChangeLog/1.10.3
 
-config BR2_PACKAGE_ARGP_STANDALONE
-	depends on !BR2_TOOLCHAIN_USES_GLIBC
+Fixes CVE-2020-11022, CVE-2020-11023, CVE-2026-82373 & CVE-2026-82374.
 
-Some packages did:
+Updated _SITE according to
+https://wiki.znc.in/index.php?title=ZNC&diff=3493&oldid=3460
 
-	select BR2_PACKAGE_ARGP_STANDALONE if !BR2_TOOLCHAIN_USES_GLIBC
-
-while a number of others did:
-
-	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
-
-This commit harmonizes the situation, by settling on the first
-solution ("if !BR2_TOOLCHAIN_USES_GLIBC") as it matches how
-BR2_PACKAGE_ARGP_STANDALONE is defined in the first place.
-
-No functional change.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 1799bf3680e3f50ff50b299d64c3c8ce533cf038)
+(cherry picked from commit 43558e103b50bfaad42f8d265ad971479de42af8)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/bcusdk/Config.in      | 2 +-
- package/cpio/Config.in        | 2 +-
- package/cryptsetup/Config.in  | 3 +--
- package/freeipmi/Config.in    | 2 +-
- package/iucode-tool/Config.in | 3 +--
- package/libuio/Config.in      | 2 +-
- package/libv4l/Config.in      | 2 +-
- package/linknx/Config.in      | 3 +--
- package/rasdaemon/Config.in   | 2 +-
- package/rng-tools/Config.in   | 2 +-
- package/uftrace/Config.in     | 4 +---
- package/zchunk/Config.in      | 2 +-
- 12 files changed, 12 insertions(+), 17 deletions(-)
+ package/znc/znc.hash | 2 +-
+ package/znc/znc.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/bcusdk/Config.in b/package/bcusdk/Config.in
-index 8f9330e0d1..7131577eb2 100644
---- a/package/bcusdk/Config.in
-+++ b/package/bcusdk/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_BCUSDK
- 	depends on BR2_USE_MMU # libpthsem
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	select BR2_PACKAGE_LIBPTHSEM
--	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
-+	select BR2_PACKAGE_ARGP_STANDALONE if !BR2_TOOLCHAIN_USES_GLIBC
- 	help
- 	  A free development environment for the Bus Coupling Units of
- 	  the European Installation Bus.
-diff --git a/package/cpio/Config.in b/package/cpio/Config.in
-index 3ef0402c3b..f3637746d3 100644
---- a/package/cpio/Config.in
-+++ b/package/cpio/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_CPIO
- 	bool "cpio"
- 	depends on BR2_USE_WCHAR
- 	# Need argp.h support
--	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
-+	select BR2_PACKAGE_ARGP_STANDALONE if !BR2_TOOLCHAIN_USES_GLIBC
- 	help
- 	  cpio archive utility for creation and extraction.
+diff --git a/package/znc/znc.hash b/package/znc/znc.hash
+index 128c84850c..08cefa6a47 100644
+--- a/package/znc/znc.hash
++++ b/package/znc/znc.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  5b7561f3b100234d58ae4946eac0262ab305d275c094e64ae723e45d07be08ab  znc-1.10.2.tar.gz
++sha256  68f3f6641b480c041010c5596e1234043e05c9137eda06233845017603095f5b  znc-1.10.3.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/znc/znc.mk b/package/znc/znc.mk
+index 7ddfd64715..1144762469 100644
+--- a/package/znc/znc.mk
++++ b/package/znc/znc.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
-diff --git a/package/cryptsetup/Config.in b/package/cryptsetup/Config.in
-index 00424af8b8..50fa2540ad 100644
---- a/package/cryptsetup/Config.in
-+++ b/package/cryptsetup/Config.in
-@@ -3,8 +3,7 @@ config BR2_PACKAGE_CRYPTSETUP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # lvm2
- 	depends on BR2_USE_MMU # lvm2, libargon2
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # json-c
--	select BR2_PACKAGE_ARGP_STANDALONE if BR2_PACKAGE_LIBSSH && \
--		(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL)
-+	select BR2_PACKAGE_ARGP_STANDALONE if BR2_PACKAGE_LIBSSH && !BR2_TOOLCHAIN_USES_GLIBC
- 	select BR2_PACKAGE_POPT
- 	select BR2_PACKAGE_LVM2
- 	select BR2_PACKAGE_UTIL_LINUX
-diff --git a/package/freeipmi/Config.in b/package/freeipmi/Config.in
-index 8ef2e137fa..d4fda0e2f8 100644
---- a/package/freeipmi/Config.in
-+++ b/package/freeipmi/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_FREEIPMI
- 	bool "freeipmi"
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
-+	select BR2_PACKAGE_ARGP_STANDALONE if !BR2_TOOLCHAIN_USES_GLIBC
- 	help
- 	  FreeIPMI provides in-band and out-of-band IPMI software based
- 	  on the IPMI v1.5/2.0 specification.
-diff --git a/package/iucode-tool/Config.in b/package/iucode-tool/Config.in
-index f9f2521a42..d9c1120c68 100644
---- a/package/iucode-tool/Config.in
-+++ b/package/iucode-tool/Config.in
-@@ -3,8 +3,7 @@ config BR2_PACKAGE_IUCODE_TOOL
- 	depends on BR2_x86_64 || BR2_i386
- 	select BR2_PACKAGE_INTEL_MICROCODE
- 	select BR2_PACKAGE_INTEL_MICROCODE_INSTALL_TARGET
--	select BR2_PACKAGE_ARGP_STANDALONE \
--	       if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
-+	select BR2_PACKAGE_ARGP_STANDALONE if !BR2_TOOLCHAIN_USES_GLIBC
- 	help
- 	  Intel processor microcode tool
- 
-diff --git a/package/libuio/Config.in b/package/libuio/Config.in
-index 97be1e3d57..6483cf7018 100644
---- a/package/libuio/Config.in
-+++ b/package/libuio/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_LIBUIO
- 	bool "libuio"
--	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
-+	select BR2_PACKAGE_ARGP_STANDALONE if !BR2_TOOLCHAIN_USES_GLIBC
- 	help
- 	  libuio is a light-weight C programming library to handle UIO
- 	  (Userspace I/O) device discovery and binding task.
-diff --git a/package/libv4l/Config.in b/package/libv4l/Config.in
-index c88f280c3b..5d82fd59ba 100644
---- a/package/libv4l/Config.in
-+++ b/package/libv4l/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_LIBV4L
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # media headers
--	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
-+	select BR2_PACKAGE_ARGP_STANDALONE if !BR2_TOOLCHAIN_USES_GLIBC
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 	help
- 	  libv4l is a collection of libraries which adds a thin
-diff --git a/package/linknx/Config.in b/package/linknx/Config.in
-index 3b62ce2f95..1cc5248df4 100644
---- a/package/linknx/Config.in
-+++ b/package/linknx/Config.in
-@@ -3,8 +3,7 @@ config BR2_PACKAGE_LINKNX
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_MMU # libpthsem
- 	select BR2_PACKAGE_LIBPTHSEM
--	select BR2_PACKAGE_ARGP_STANDALONE \
--	       if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
-+	select BR2_PACKAGE_ARGP_STANDALONE if !BR2_TOOLCHAIN_USES_GLIBC
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 	help
- 	  Linknx is an automation platform providing high level
-diff --git a/package/rasdaemon/Config.in b/package/rasdaemon/Config.in
-index 64ae4a8263..5e66bb55f7 100644
---- a/package/rasdaemon/Config.in
-+++ b/package/rasdaemon/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_RASDAEMON
- 	depends on !BR2_STATIC_LIBS # libtraceevent
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_LIBTRACEEVENT
--	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
-+	select BR2_PACKAGE_ARGP_STANDALONE if !BR2_TOOLCHAIN_USES_GLIBC
- 	help
- 	  rasdaemon is a tool that collects all hardware error events
- 	  reported by the Linux Kernel from several sources (EDAC, MCE
-diff --git a/package/rng-tools/Config.in b/package/rng-tools/Config.in
-index 7f08fa25fb..cb4034697a 100644
---- a/package/rng-tools/Config.in
-+++ b/package/rng-tools/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_RNG_TOOLS
- 	# pthread_setaffinity_np
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on BR2_USE_MMU # libcap
--	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
-+	select BR2_PACKAGE_ARGP_STANDALONE if !BR2_TOOLCHAIN_USES_GLIBC
- 	select BR2_PACKAGE_LIBCAP
- 	select BR2_PACKAGE_OPENSSL
- 	help
-diff --git a/package/uftrace/Config.in b/package/uftrace/Config.in
-index 8f8c5d25fd..6ec2761fa8 100644
---- a/package/uftrace/Config.in
-+++ b/package/uftrace/Config.in
-@@ -10,9 +10,7 @@ config BR2_PACKAGE_UFTRACE
- 	depends on BR2_PACKAGE_UFTRACE_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # pthread_setname_np()
- 	depends on !BR2_STATIC_LIBS
--	select BR2_PACKAGE_ARGP_STANDALONE if \
--	       BR2_TOOLCHAIN_USES_UCLIBC || \
--	       BR2_TOOLCHAIN_USES_MUSL
-+	select BR2_PACKAGE_ARGP_STANDALONE if !BR2_TOOLCHAIN_USES_GLIBC
- 	help
- 	  The uftrace tool is to trace and analyze execution of a
- 	  program written in C/C++. It was heavily inspired by the
-diff --git a/package/zchunk/Config.in b/package/zchunk/Config.in
-index 11463dd4bd..2f80c25a8a 100644
---- a/package/zchunk/Config.in
-+++ b/package/zchunk/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_ZCHUNK
- 	bool "zchunk"
- 	depends on BR2_USE_MMU # fork()
--	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
-+	select BR2_PACKAGE_ARGP_STANDALONE if !BR2_TOOLCHAIN_USES_GLIBC
- 	help
- 	  A file format designed for highly efficient deltas while
- 	  maintaining good compression.
+-ZNC_VERSION = 1.10.2
+-ZNC_SITE = http://znc.in/releases/archive
++ZNC_VERSION = 1.10.3
++ZNC_SITE = https://files.asokolov.org
+ ZNC_LICENSE = Apache-2.0
+ ZNC_LICENSE_FILES = LICENSE
+ ZNC_CPE_ID_VENDOR = znc
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
