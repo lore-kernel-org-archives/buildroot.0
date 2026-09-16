@@ -1,131 +1,203 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E655BC88E77
-	for <buildroot@archiver.kernel.org>; Wed, 16 Sep 2026 08:56:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E161C88E77
+	for <buildroot@archiver.kernel.org>; Wed, 16 Sep 2026 11:09:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 936AB80A9B;
-	Wed, 16 Sep 2026 08:56:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 43DFE607FC;
+	Wed, 16 Sep 2026 11:09:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6IHqlHdwMjsv; Wed, 16 Sep 2026 08:56:57 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 1C53780AC8
-Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789549017;
-	b=Uimg9YlbfYgenJxwR25aRJAGDHYMxUPIuBwKRAdYOroS6Jos34EuLp/zRVdoJNsZx0vW
-	 hQs4Ad6mkAs1REwPI+EG793pG8YkBF4YFtZx6k4xujwru0nBAo+4Et14pdlC0YyPHmb4a
-	 KNEOj3gOY3Bw5Fe53AX3hgTaUldrf9rASmnDWG+WONZ/iNZzB0l9xd4wQPqkdOXNszQ6z
-	 y1Lu2ri13epJlmHYS+IqgKOoxQCDIvxBC2zf9qI2/pirkgQl/ronDVNa/QCjOEWcNBDjc
-	 vO9mSuiimQrsKNQOjCk6Ipq1gxoFMwSU4Z0zveRKV57YVChynwvgQnhH5va2+S1vdmg==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JLCiZiixinBq; Wed, 16 Sep 2026 11:09:29 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 4C636607EF
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789556969;
+	b=oZIdAIrTK05MGvrCAe0dQIdRXj42Pv/75nGd3cYjli+zWi/ZMqdhCaryYPCF+KxDDrIg
+	 ByeyCmt6TUNR3zObLQGD3XN2diWU1RL1BXvevzUzKbBvpgpno6YQMNLo7CpyO6mXzwtte
+	 IGsFYxtakxZ8xD8W7I/L9WkhXX56Tn5sxZxlH7wdHhuz+zr82kXGEp9AEl6iIpDTMVEwh
+	 nxrKRz44M/i+nvqXa9r3/FtzCUpeS7RYMtYVBVBRlLdQMMEOv5OEg84oMxOZn6tjvrAFj
+	 vJTIHWuYSHxk0LkgGUM/hS+DbBLdE3Xd/dhIpTWlWDTnZE7wP3AL18DE5nn+9D79Tnw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789549017;
+	c=relaxed/relaxed; t=1789556969;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
-	 DKIM-Signature:Received:Received:From:To:Cc:Date:Message-ID:X-Mailer:
-	 MIME-Version:X-Spamd-Bar:Subject:X-BeenThere:X-Mailman-Version:
+	 X-UI-Sender-Class:Received:To:Date:Message-ID:X-Mailer:MIME-Version:
+	 X-Provags-ID:UI-OutboundReport:Subject:X-BeenThere:X-Mailman-Version:
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:Content-Type:Content-Transfer-Encoding:Errors-To:
-	 Sender;
-	bh=1fzdn2gVlna7+Prehdn2bZu3gPgf28IiKzO0dCArMQk=;
-	b=ZwTstvr/UXZ8rdPEBQWDshK/dVNqQsHQe4wICeetzLxw+QwXGk8Ll+C9u47LZOApTBKI
-	 k/lVKLxD0WSwBxOxYBThvmF0jKiumEuL1Tj+ugbqGagzjXcdcPzeiYvuLfk5R4cTOr12f
-	 0pBFV+gCZdu03HqNM5MaYaJK2J1fRZFC1BsfhZsvBi3SjMpRej04VXQe6ZcgnauTuPlpr
-	 HZvejf0qXWGb3VduOgCZzg6W/i7n4D4zTuuZA648qxq+ZrQtRqWrTjzMDjZYswhrMP4GA
-	 r1Xb+NILX68S5Qf+KAeQ4/5hPLRQZX7esSeDblBN0vn0YDxUSMdJEYq5VoWdiDzA5Bg==
-ARC-Authentication-Results: i=2; smtp1.osuosl.org; dmarc=pass header.from=kuhls.net;
-	dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256 header.s=kas202605290044 header.b=fuAmqnzI;
-	arc=fail smtp.remote-ip=140.211.166.142
+	 List-Subscribe:From:Reply-To:Cc:Content-Type:
+	 Content-Transfer-Encoding:Errors-To:Sender;
+	bh=yzdLWS8vahmWUNRzlV0Fxik6WMDoWxje1kDFdBe4AxA=;
+	b=ZXMIntR2ciy7/zFPbglPNaWTHwIgf9eJLpbJMXtee3aztO6JlwX3R3fsbze6qveqGZ2S
+	 Ma8LD/Tjxg4PLv80A7Aw366PwmWC0S68r9lpNeRsILZGUUDdm4xTE69lXKhiUjIXn2ZMC
+	 /5qtkO5SITjjquRh3+9Mqu3z4Te/rlHZcv4zzAb7c+rjHVBQqz3+hTgP73jG/tovojj8z
+	 pOLYhklFDKDi/zeiB2LjMJwrkIKLg1JePSY5ZXEfYD2LpjYwvqPSicwYro21FX+hKMdQe
+	 ENmnboKhDs/TQOeaoMe8+5qxIwbuw55ymZfLhvZXLuqcJfOGoDMQbtZ24HT17GQkfZA==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789549017;
-	bh=1fzdn2gVlna7+Prehdn2bZu3gPgf28IiKzO0dCArMQk=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=Z+mbfFhv/FrDULxDwzvIbzCpJMA2CkwmPMKy6rSdublDjxu3ilApT0Gju+cRLRwlK
-	 +zFIDyL8fpVt2UH2Gp9Vh7qjLT/ZiVoBt5ql802URDGHufOwqPXqSUneo3tgZ+KPA8
-	 BJTzAop7+uWbonpN2Q1exFG94779dtKHkXAI9Dck8UFicep+UctnQcSneeNngvzeWC
-	 kfKwFnX0/MB8BDwXvdfGMv16mXFGOoQXIpOkicOWOgau5HAh/SEM2SSsQ2RSD4xfml
-	 PMBT4A+bUDQvEy7oKmegPUCn7PJ+Xartd3EgL7gvEWUc6poZbWcBRbhvyhxmV0ZWVZ
-	 j6P7keF7HEteg==
+	s=default; t=1789556969;
+	bh=yzdLWS8vahmWUNRzlV0Fxik6WMDoWxje1kDFdBe4AxA=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
+	b=cL0Ff/KC1vRzT1WR7nmVl43Ju6dnzCdCuUziTzoX2p5woqkDq/vLlL0j3dizSkNVr
+	 E11uake1tnywQFmjspUT+8B6zTue+CAa3X2cv+z8rDf9Na6nSUc1dw+EWlxwdl4aXA
+	 8HwlCilNjYnCl9IjJLK4mBGvBS57f4ETX9/7QroW+Gg7cv+Pj40PAbk8vhqpQaRmMi
+	 ISiwyF4Dns5qNSX/UkazfTS8H85gQXB5i9cq1AyDkAyYp0TByGTfFG1wmoczYHVmna
+	 1RZ5qpw8q/SShfrGgUOV1BxD9+/uSvOXDmjPKDXP8GvxulWOnv3kH6zMCDV0+K+q3i
+	 JlOZdT3mGHNYQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1C53780AC8;
-	Wed, 16 Sep 2026 08:56:57 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id AE89E23F
- for <buildroot@buildroot.org>; Wed, 16 Sep 2026 08:56:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4C636607EF;
+	Wed, 16 Sep 2026 11:09:29 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id C242B2E3
+ for <buildroot@buildroot.org>; Wed, 16 Sep 2026 11:09:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 94A2A80A9B
- for <buildroot@buildroot.org>; Wed, 16 Sep 2026 08:56:55 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id BF99380DF6
+ for <buildroot@buildroot.org>; Wed, 16 Sep 2026 11:09:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GLffG_Pv2xSl for <buildroot@buildroot.org>;
- Wed, 16 Sep 2026 08:56:54 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 113A480AC8
-Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789549014;
- b=T/gq2bZ9uSGlGzPQhzNW+c78M4qO1i2otq8NpW5+ZnH38FFMFjhC/EcYg6Cn/ABXDWwK
- zMOnPTlfRuabFQdS4KTxJP4oNDXzpe89YWgXe3G/VOXXkm2/+I2BZB6WiTGyyWTNx8bG0
- Qtf2zEL22NSPp0ldnqbuvmNx/x8nEFQvhFxMEoxVLpB9WzbHD4v2RJIUKIbUXUk5VakPh
- gFhZYVB+zmrqbeeRhuxoJU1v6igYfzbFFcbgdiAol1+Ym1IMBFMmzBU0rZQKAOoDICGh2
- JnVXUVZBZ2Cjd8ZdoJ4INDOuI+uQaE8dIztPfzAaObMfeDavx2V16McbA3WExJnij5g==
+ id nrxOYU_UppoF for <buildroot@buildroot.org>;
+ Wed, 16 Sep 2026 11:09:27 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 4870080C8E
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789556967;
+ b=XFwPgXWkqhyWcIoswYztYAPEPuYwm3YLQe5xtfYPE+mlMKb5APIII41cwHDvaVrepEgG
+ r/pXLXz7gH8QyLIbuSSovdjJDTzxhv1gPZauV/FJm+TV0XDb7r3COsskW9RkUEjoNS1S1
+ SPp3vfOw1gU/T8860m0s+oGXQ0Km2Bx43fMvoeDFB4OnH09pRE065MQaQe8Jr1QKRPjA3
+ fW9SAscbgy6ED+Jcm01jyxYqRThLVG4GI+XsUJ6nsl6MERHPFf6PDawjYehDj+XinnF7Y
+ yvTRhK2DCrJqH94eo25jYoauAv5yW5OiQFn0avL9CbJko7hUwlpbKgs8mZds0fD59Aw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1789549014;
- h=Received-SPF:DKIM-Signature:Received:Received:From:To:Cc:Subject:
- Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding:
- X-Spam-Score:X-Spamd-Bar;
- bh=labI7YrBdVamISlowbxO5kZQi0zaNdBXRjlC/4jvHoU=;
- b=Nag9udx9uSsRABX4Uiaa9v2O45CDKudeQn4kjKmEL346M+rv3n24NGtram0aRal0mnqp
- qEVqAekAbVtsOd/r2bF4yVdM4znI9TZsfpLFKSqAF71KhoGsv1NlH86xapNFAIFkBY4AU
- CUt7nmHt4kpTaF0eCOGf7LX5yeaIDRCYQY0lenylb4F2bNBt/ucJfpcKjF4T4LmfIPT2l
- MhlO6/vj2YK93pIHVPlQx0DkbXpvOhPGc0xZjy5Jxxc7d7YudkMuWIgVjxvkVfNY9Oo3T
- lQ6kOow50Bqp1M5kDgU8vDIYWGON+6bnKK8YmnuWKHZHoOdxEl81w8lRGLulhKDOxdQ==
+ c=relaxed/relaxed; t=1789556967;
+ h=Received-SPF:DKIM-Signature:X-UI-Sender-Class:Received:From:To:Cc:
+ Subject:Date:Message-ID:X-Mailer:MIME-Version:
+ Content-Transfer-Encoding:X-Provags-ID:X-Spam-Flag:UI-OutboundReport;
+ bh=N/qaYQkSVtOdvRTY1+69WVXY+4Wt/CMIfo37HH1JqRw=;
+ b=bL4D0mdmEeN472YtdRHkBwAOiGXgjrFR2bJ2dwZMThvqS2DC1JZOsrXK9WhU/mBiBdCb
+ zZc8TTDfEW7388UmgZlKS7eSC9MGz2nBBEI889/03ASeEHoMmTci2aaUxgLRw8tmthQll
+ azoVma1djCfJ0DBTgUcIKIu9XBfoPzkUHURPqVZr7xFFdePKlC+Ig8mWQMNlhfY/FwSQ8
+ dgUn7Lg9xRdRrZEySNtwSIuXgS5JYXWKvEdCUlLI5z9h8D3KmbIweMCakuUU+hTyO6PvB
+ CC4ClTS4iBGMXPwX7yYtCmuQbp8EUk3ivhjbjoFSKrFAdc9LQzcOg2xBI7Qim1G3BsA==
 ARC-Authentication-Results: i=1; smtp1.osuosl.org;
- dmarc=pass header.from=kuhls.net; 
- dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=fuAmqnzI; 
- arc=none smtp.remote-ip=85.13.140.57
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none) header.from=kuhls.net
-Authentication-Results: smtp1.osuosl.org; dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=fuAmqnzI
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 113A480AC8
- for <buildroot@buildroot.org>; Wed, 16 Sep 2026 08:56:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
- s=kas202605290044; t=1789549009;
- bh=labI7YrBdVamISlowbxO5kZQi0zaNdBXRjlC/4jvHoU=;
- h=From:To:Cc:Subject:Date:From;
- b=fuAmqnzIlUSOJrKHsX6VWdkbm0H/bC6+9F4B8sgppCd+2mnlBJajtYRdnSrho9j9A
- uOLtxQknl3PcMWkoJYL1B3CXvdgcU83ovq7eWjVTWqX+pqGik8VPPZWkerdOLKYXBo
- PZYgSeOS2X+edbKzNTN9iVqzcYHcGYcRIkYR6Eq4bgYa6zHHCTTdZbSftmJ6Gjk0v3
- ocfPoCimLobYVQqTLmO5wpV9m+QqXtmamsSWYgHajBWfr4ivQWCCjJylW8gODY5ToS
- 5HBm4MzlGXkdeG/htBWnfUsSSqYEzaLw9AG8/AChFK4DXNIDeY/2Bz6N186NZYH66h
- IrRPpiEuIYLrw==
-Received: from fli4l.lan.fli4l (p5b3a0ed0.dip0.t-ipconnect.de [91.58.14.208])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 509B7A4C42BC;
- Wed, 16 Sep 2026 10:56:49 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:35622)
- by fli4l.lan.fli4l with esmtp (Exim 4.100)
- (envelope-from <bernd@kuhls.net>) id 1x6lRg-000000005BL-0omD;
- Wed, 16 Sep 2026 08:56:48 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+ dmarc=pass header.from=gmx.de; 
+ dkim=pass header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
+ header.s=s31663417 header.b=EiIMJ5z1; 
+ arc=none smtp.remote-ip=212.227.17.22
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.22;
+ helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4870080C8E
+ for <buildroot@buildroot.org>; Wed, 16 Sep 2026 11:09:25 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from client.hidden.invalid by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MtfNf-1wntHy2pnr-00vKD2; Wed, 16
+ Sep 2026 13:09:21 +0200
 To: buildroot@buildroot.org
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Wed, 16 Sep 2026 10:56:48 +0200
-Message-ID: <20260916085648.1131241-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
+Date: Wed, 16 Sep 2026 13:09:10 +0200
+Message-ID: <20260916110912.265693-1-fiona.klute@gmx.de>
+X-Mailer: git-send-email 2.55.0
 MIME-Version: 1.0
-X-Spamd-Bar: --
-Subject: [Buildroot] [PATCH 1/1] package/jemalloc: Fix build with gcc 16.x
+X-Provags-ID: V03:K1:CjgOzW473Q8jcT2oVSDBVgCYOsbuIDdn9RchLaJdXe8BZAbRp1B
+ bfVrR6D3zNuK4NtpbI/dG0b7qU/SuGLvm7KBjuKLkTQiAniUs2KH35KtKfd+SqJEPtoCOeA
+ V9O3/S1vmJez+VPDQoIpcq9LRWpJengAsoOlVNoui3SfO1O9qZLmsZO+jLGjcWBHgbE/t8u
+ Wbr6pT57+vNqluOfLFAjQ==
+UI-OutboundReport: notjunk:1;M01:P0:kejRqGAM2xk=;udsLIym6ty1B4qPZy2zWFo6TnkF
+ +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
+ f9rP
+Subject: [Buildroot] [PATCH v2 1/3] fs/common.mk: add optional hook to build
+ a verity hash tree
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -137,202 +209,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Fiona Klute via buildroot <buildroot@buildroot.org>
+Reply-To: Fiona Klute <fiona.klute@gmx.de>
+Cc: "Fiona Klute \(othermo GmbH\)" <fiona.klute@gmx.de>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes:
-https://autobuild.buildroot.net/results/6fb/6fbebb76cb0e6cafabad0890b8df226e9358a6c3/
+From: "Fiona Klute (othermo GmbH)" <fiona.klute@gmx.de>
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Using dm-verity may be useful for any read-only filesystem read from a
+block device, the new hook will build the required hash tree if
+enabled by a per-filesystem config option. The config option for extra
+arguments allows users to override veritysetup defaults, e.g. to set
+a fixed hash algorithm.
+
+Signed-off-by: Fiona Klute (othermo GmbH) <fiona.klute@gmx.de>
 ---
- .../0001-Replace-std-__throw_bad_alloc.patch  | 160 ++++++++++++++++++
- package/jemalloc/jemalloc.mk                  |   2 +
- 2 files changed, 162 insertions(+)
- create mode 100644 package/jemalloc/0001-Replace-std-__throw_bad_alloc.patch
+Changes v1 -> v2:
+* add _VERITY_EXTRA_ARGS to allow users to override veritysetup defaults
 
-diff --git a/package/jemalloc/0001-Replace-std-__throw_bad_alloc.patch b/package/jemalloc/0001-Replace-std-__throw_bad_alloc.patch
-new file mode 100644
-index 0000000000..6bb61ba117
---- /dev/null
-+++ b/package/jemalloc/0001-Replace-std-__throw_bad_alloc.patch
-@@ -0,0 +1,160 @@
-+From 1a15fe33a48c52bfe26ea83e49f0d317a47da3ea Mon Sep 17 00:00:00 2001
-+From: lexprfuncall <cshapiro@meta.com>
-+Date: Mon, 27 Apr 2026 11:50:27 -0700
-+Subject: [PATCH] Replace std::__throw_bad_alloc call with standard C++ (#2900)
-+
-+* Replace std::__throw_bad_alloc call with standard C++
-+
-+Since December of 2025, std::__throw_bad_alloc is no longer visible
-+through #include <new> causing jemalloc build failures with gcc 16.
-+As far as I can tell, all std::__throw_bad_alloc did was arrange to
-+raise a std::bad_alloc exception if exceptions are enabled.  I am not
-+sure whether its usage was truly meaningful in jemalloc since the call
-+is wrapped in a try catch and any usage of try catch is considered an
-+error when compiling with -fno-exceptions on gcc, at least.
-+
-+This change adds a check to configure.ac that determines whether
-+exceptions are enabled by compiling a simple try catch that raises a
-+std::bad_alloc exception.  If that test succeeds, the macro
-+JEMALLOC_HAVE_CXX_EXCEPTIONS is defined, and jemalloc will raise an
-+exception.  Otherwise, we call std::terminate() to abort.
-+
-+This was tested on FreeBSD with the gcc16 port with and without exceptions
-+enabled.
-+
-+* Replace std::set_new_handler calls with std::get_new_handler
-+
-+Previously, std::set_new_handler was used as a workaround for
-+compilers with only partial support for C++11.  Now that C++14 is a
-+requirement to enable C++ support, we can assume std::get_new_handler
-+is available.
-+
-+Upstream: https://github.com/jemalloc/jemalloc/commit/1a15fe33a48c52bfe26ea83e49f0d317a47da3ea
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ Makefile.in                                   |  6 +++--
-+ configure.ac                                  | 23 +++++++++++++++++
-+ .../internal/jemalloc_internal_defs.h.in      |  3 +++
-+ src/jemalloc_cpp.cpp                          | 25 ++++++++++---------
-+ 4 files changed, 43 insertions(+), 14 deletions(-)
-+
-+diff --git a/Makefile.in b/Makefile.in
-+index a93048d7b8..1f9d14f1f2 100644
-+--- a/Makefile.in
-++++ b/Makefile.in
-+@@ -337,9 +337,11 @@ TESTS_INTEGRATION += \
-+ endif
-+ ifeq (@enable_cxx@, 1)
-+ CPP_SRCS := $(srcroot)src/jemalloc_cpp.cpp
-+-TESTS_INTEGRATION_CPP := $(srcroot)test/integration/cpp/basic.cpp \
-+-	$(srcroot)test/integration/cpp/infallible_new_true.cpp \
-++TESTS_INTEGRATION_CPP := $(srcroot)test/integration/cpp/basic.cpp
-++ifeq (@enable_cxx_exceptions@, 1)
-++TESTS_INTEGRATION_CPP += $(srcroot)test/integration/cpp/infallible_new_true.cpp \
-+ 	$(srcroot)test/integration/cpp/infallible_new_false.cpp
-++endif
-+ else
-+ CPP_SRCS :=
-+ TESTS_INTEGRATION_CPP :=
-+diff --git a/configure.ac b/configure.ac
-+index 321a729012..d151829832 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -374,7 +374,30 @@ fi
-+ if test "x$enable_cxx" = "x1"; then
-+   AC_DEFINE([JEMALLOC_ENABLE_CXX], [ ], [ ])
-+ fi
-++if test "x$enable_cxx" = "x1"; then
-++  dnl Now check whether the C++ compiler has exceptions enabled.
-++  AC_LANG_PUSH([C++])
-++  SAVED_CXXFLAGS="${CXXFLAGS}"
-++  CXXFLAGS="${CXXFLAGS} ${EXTRA_CXXFLAGS}"
-++  JE_COMPILABLE([C++ exception support], [
-++#include <new>
-++], [
-++	try {
-++		throw std::bad_alloc();
-++	} catch (const std::bad_alloc &) {
-++	}
-++], [je_cv_cxx_exceptions])
-++  CXXFLAGS="${SAVED_CXXFLAGS}"
-++  AC_LANG_POP([C++])
-++  if test "x${je_cv_cxx_exceptions}" = "xyes" ; then
-++    AC_DEFINE([JEMALLOC_HAVE_CXX_EXCEPTIONS], [ ], [ ])
-++    enable_cxx_exceptions="1"
-++  else
-++    enable_cxx_exceptions="0"
-++  fi
-++fi
-+ AC_SUBST([enable_cxx])
-++AC_SUBST([enable_cxx_exceptions])
-+ AC_SUBST([CONFIGURE_CXXFLAGS])
-+ AC_SUBST([SPECIFIED_CXXFLAGS])
-+ AC_SUBST([EXTRA_CXXFLAGS])
-+diff --git a/include/jemalloc/internal/jemalloc_internal_defs.h.in b/include/jemalloc/internal/jemalloc_internal_defs.h.in
-+index 31ae2e8ed2..54d4da2032 100644
-+--- a/include/jemalloc/internal/jemalloc_internal_defs.h.in
-++++ b/include/jemalloc/internal/jemalloc_internal_defs.h.in
-+@@ -465,6 +465,9 @@
-+ /* Is C++ support being built? */
-+ #undef JEMALLOC_ENABLE_CXX
-+ 
-++/* Are C++ exceptions enabled? */
-++#undef JEMALLOC_HAVE_CXX_EXCEPTIONS
-++
-+ /* Performs additional size checks when defined. */
-+ #undef JEMALLOC_OPT_SIZE_CHECKS
-+ 
-+diff --git a/src/jemalloc_cpp.cpp b/src/jemalloc_cpp.cpp
-+index 4e838d3b51..ac109bb28e 100644
-+--- a/src/jemalloc_cpp.cpp
-++++ b/src/jemalloc_cpp.cpp
-+@@ -1,4 +1,4 @@
-+-#include <mutex>
-++#include <exception>
-+ #include <new>
-+ // NOLINTBEGIN(misc-use-anonymous-namespace)
-+ 
-+@@ -78,29 +78,30 @@ handleOOM(std::size_t size, bool nothrow) {
-+ 	void *ptr = nullptr;
-+ 
-+ 	while (ptr == nullptr) {
-+-		std::new_handler handler;
-+-		// GCC-4.8 and clang 4.0 do not have std::get_new_handler.
-+-		{
-+-			static std::mutex           mtx;
-+-			std::lock_guard<std::mutex> lock(mtx);
-+-
-+-			handler = std::set_new_handler(nullptr);
-+-			std::set_new_handler(handler);
-+-		}
-++		std::new_handler handler = std::get_new_handler();
-+ 		if (handler == nullptr)
-+ 			break;
-+ 
-++#ifdef JEMALLOC_HAVE_CXX_EXCEPTIONS
-+ 		try {
-+ 			handler();
-+ 		} catch (const std::bad_alloc &) {
-+ 			break;
-+ 		}
-++#else
-++		handler();
-++#endif
-+ 
-+ 		ptr = je_malloc(size);
-+ 	}
-+ 
-+-	if (ptr == nullptr && !nothrow)
-+-		std::__throw_bad_alloc();
-++	if (ptr == nullptr && !nothrow) {
-++#ifdef JEMALLOC_HAVE_CXX_EXCEPTIONS
-++		throw std::bad_alloc();
-++#else
-++		std::terminate();
-++#endif
-++	}
-+ 	return ptr;
-+ }
-+ 
-diff --git a/package/jemalloc/jemalloc.mk b/package/jemalloc/jemalloc.mk
-index 61045c50d5..8ac661b9d5 100644
---- a/package/jemalloc/jemalloc.mk
-+++ b/package/jemalloc/jemalloc.mk
-@@ -9,6 +9,8 @@ JEMALLOC_SOURCE = jemalloc-$(JEMALLOC_VERSION).tar.bz2
- JEMALLOC_SITE = https://github.com/jemalloc/jemalloc/releases/download/$(JEMALLOC_VERSION)
- JEMALLOC_LICENSE = BSD-2-Clause
- JEMALLOC_LICENSE_FILES = COPYING
-+# 0001-Replace-std-__throw_bad_alloc.patch
-+JEMALLOC_AUTORECONF = YES
- JEMALLOC_INSTALL_STAGING = YES
- JEMALLOC_CONFIG_SCRIPTS = jemalloc-config
+ fs/common.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/fs/common.mk b/fs/common.mk
+index 2f3f8bcc7e..d51d82b0bb 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -215,6 +215,15 @@ TARGETS_ROOTFS += rootfs-$(1)
+ PACKAGES += $$(filter-out rootfs-%,$$(ROOTFS_$(2)_FINAL_RECURSIVE_DEPENDENCIES))
+ endif
  
++ifeq ($$(BR2_TARGET_ROOTFS_$(2)_VERITY),y)
++ROOTFS_$(2)_DEPENDENCIES += host-cryptsetup
++define ROOTFS_$(2)_VERITY_FORMAT
++	@$$(call MESSAGE,"Generating verity hash tree $$(@F).verity")
++	$(HOST_DIR)/sbin/veritysetup format --root-hash-file $$@.verity.root-hash $$(call qstrip,$$(BR2_TARGET_ROOTFS_$(2)_VERITY_EXTRA_ARGS)) $$@ $$@.verity
++endef
++ROOTFS_$(2)_POST_GEN_HOOKS += ROOTFS_$(2)_VERITY_FORMAT
++endif
++
+ # Check for legacy POST_TARGETS rules
+ ifneq ($$(ROOTFS_$(2)_POST_TARGETS),)
+ $$(error Filesystem $(1) uses post-target rules, which are no longer supported.\
 -- 
-2.47.3
+2.55.0
 
 _______________________________________________
 buildroot mailing list
