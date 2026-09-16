@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA1DFC982D8
-	for <buildroot@archiver.kernel.org>; Fri, 18 Sep 2026 13:07:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0AECC982DA
+	for <buildroot@archiver.kernel.org>; Fri, 18 Sep 2026 13:07:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7595060E38;
-	Fri, 18 Sep 2026 13:07:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8E9F960E2D;
+	Fri, 18 Sep 2026 13:07:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YeD7FJmhRIH7; Fri, 18 Sep 2026 13:07:03 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 90DEC60DD4
+ id e_rgZOjJOtx6; Fri, 18 Sep 2026 13:07:08 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 8CFB260E37
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789736823;
-	b=qC2qU8oYkCKiPyPRnRp6Z3OnKwJuoPpDUCcJTGxhYF8NJajh9brtFoFtMWH+I28OSpMR
-	 D8vszYdrxUJQ/eaBotOFmd24rX2CLLVRckslzv9eoD4+fYsPrEfvu3S710iX+AVPU8mXW
-	 WS5Zq5UMDfI0vtRj8J9IYxJwZZJydFhp4+XVzUshAz7tZo+3q6gMqMyWPw5sNsPutP49x
-	 YTZweG1lG929KUvQxO5HmBo0E4fsD5b8wc5brzec5GcpnpOwKqnpdsll5EoUb000Xzsyw
-	 zJxmpQ7tfUf6M9ZChbR+aTdlEdCBHJo/xXYMhC+4F+VeWN8SQ87X4/XgJrG4jfZAbrg==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789736828;
+	b=GvR0J5QdbmMHNfGkoSjwHqXAUNYHFqL38JYQbW/D9xL62aHp0x8tDXVba0Wg+k/xNbut
+	 oh1N0JH55ffrMaYBsYjYrQrZ6Lv+GxmRmu+iof1CI+cvrmpWfO/uSrXRJsR4xgE3wGYJ8
+	 bpX+AWgcVNaMzGEDgMlnxXQGWSpFLXuCsNb1zfY12ue9KfU2gtWTmgrTbjbiVNvZAZVqM
+	 5QLgU3vVi9zBdphaz7sdiuXXvmglFHneng5/IAejehdFfQoVav0j80jUv6J1WQU09JY2z
+	 miCYqFIXxkj2fdUWnY2g1qwvcmGzA6kLn4616ES2+vq3JUXG2xeXb7qz1HHITjjmXRQ==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789736823;
+	c=relaxed/relaxed; t=1789736828;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,75 +30,75 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=CG3oTF0V7fa8aujPrnn+p/QVbpwnfomJHzx+oj7Q1+I=;
-	b=lKF6mcD4nK66nrPId3JeU3Au7T+prcpaOYjpj8CDIaDZAb4D0Hy+c4mPdBJVRSsXdA2r
-	 h4SAQ++L3fMBJfKgGrBSULWiDOso11SbdSjJJv7ezKlbSh18UNLNkP93rFiFVj9F5aQQW
-	 kctReQVZfr+B3RPUeBuwYpmmXdy5Lj1c3rhunQrS1Rw+KbSl11wnyaFt+coJ0j5k5tLAQ
-	 QiSfGIHgPlKmr0JOQ3iMTlXNSnE+fIveZxr56HLBHBFOZUTcNC2JrYFz/wxt5u0C01ALv
-	 7C4P8FwSrSu7S4Ts9NsrDj2xjmelGkSag1fSneG6kC1YtfZ9p3B9kTwuQvdhnp5JWpg==
+	bh=6UTpZEjjBozhB2+Vd35ujmanY8Ci306pWu7AWQTDp/g=;
+	b=AbzgSLtAxkHr+hC/OgcpEgIevkik6igXLoWE7Y+8EkqDHM8f79WYufnss8gl76ax/F/Q
+	 QskQsfiVVQZu31S2mvThByAzNsn61myXUo7YebA9OSaQTT4E8GFUHcC8mIO1iIwiK1qwk
+	 iY02ituzhiW+ombSgzpC7RRtXfBBvNPlspuOCD8J8J329j8WaiTlZsTqEHfRar4FBzImV
+	 UdKEpB+VrBHSSxsxr28SCE1uJBpBw9pKIWrAO1yHHQ9xek5f+4Rt2VuB9JNuga6eDhZsJ
+	 PFi7is4htcyEW0MTZYE7wmOKjaaPPwvIKhdfdeJT8Zf/okK1HKLOMGfdURBi0jCMrRw==
 ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789736823;
-	bh=CG3oTF0V7fa8aujPrnn+p/QVbpwnfomJHzx+oj7Q1+I=;
+	s=default; t=1789736828;
+	bh=6UTpZEjjBozhB2+Vd35ujmanY8Ci306pWu7AWQTDp/g=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=l9kKHepNIF6t9ufnGbJSgyb8/K2i2h1cE2o7K39j3Xb4ejOsFQlmrbupfw+vhUBp3
-	 uBgQiknADBTFcoQ3Xl+4t/YEqOFNtd2R5CPz3iCD4H7M3BjaWg78lL9W7lfnKRKkwU
-	 tX9cQ5jluXNL5twbrjXeder7//L5fpY67iDUx0ETzaLHBkUs0oE1qK1oRI6/k2+ByO
-	 IViveDRyywGxYo9EiDaHUOSDqj2+C5gaT9P3cVA7BoGzBOnAyVOtkGReC+RNquLeiL
-	 EF5ozJBuXgCJ3lMx/fbD59t9mXl3gHggY/NGhsfeGh0hh2dsZZ1kEm+7xEW297KP5V
-	 Dgg+WV4h5fisg==
+	b=TONd5LvtqNUxojGc+ve9QWY8hWUleFurr+PPGY7W5XTIFcoTsJgVuJhXrZn5M5U3C
+	 h7AEK9SYATmc2LneLhAJl6uiTi/MHmDWN/tSN+S4/Ms4ZGGSdI0kfvWKjijF4XflA9
+	 LAD5dONjmjZkMnI1UuVusIv5ILD+5hG8kAclYwfEiqB1fe5MZQ90uRZE8tsEYx3W4e
+	 Hb916Fld2ukFOBsyJBIUWZBdrR/XOaBrXdAvY0D5qKX/A6PlCO4RXBh8e/14uRNXk0
+	 9qdYF7e249R/0noZioButqOO9hbVvTsmCFlM1lHKrTvuC8VVCiQZIaB1G+vEjZaYkM
+	 JvaGU0L0EXPfA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 90DEC60DD4;
-	Fri, 18 Sep 2026 13:07:03 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 98164B0C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8CFB260E37;
+	Fri, 18 Sep 2026 13:07:08 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id BD4E542D
  for <buildroot@buildroot.org>; Fri, 18 Sep 2026 13:06:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7BB3340BFF
+ by smtp4.osuosl.org (Postfix) with ESMTP id AE2C240B79
  for <buildroot@buildroot.org>; Fri, 18 Sep 2026 13:06:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ADTs_r1Dxqka for <buildroot@buildroot.org>;
+ id QPa8RtLJ83Fu for <buildroot@buildroot.org>;
  Fri, 18 Sep 2026 13:06:51 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org BF31E40BF3
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org D945D40BFA
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789736811;
- b=sOlcIYVtpi5+mUTcw/gnQuKhsrmifgoY6bsmf/LemjpXf/h39zMMHnMvc+L3qpj2ePvf
- 1sPdzfW8n4uxw8Gw75gzqX8Mmr1yzcQwVBQB50m4M/sGcuo8ATKJiLSFhhbJ4CMyrmo9m
- 26Y0Anb4dNFh2xW907K2MYXSJrVbhJyVcVEwaXkVfn8MCD+WTLPYeqpwBFysY65KWvPMz
- F8SWCWYJt/TNR78pI3R5Y/lFfu3Rn8NdglDR9hw40NWaoTeE45ANEIMD9/ctJPXdMSuOr
- mp3wlYjXyKUZEJWqnNd51h9bFRqgNaAzR0hTPwxfLxpt+qiwZUO37ozjGkFm3Zf9Mbw==
+ b=AouKPI4h0C68NK/Jwz/PIsfi9q20uIsEhyUrwJdla1NmbRLrbQJMJK9r7NF1oPY14tHC
+ mMnnKfOSlqKN1VWCL/tRkEMzJtXvw4bPqLyfrm+UAiqTXlmEuizrHWovxj3UYta9Vzw3+
+ BBqCkLTryNypF1u2/SyOTRNin2rZyX8AwBC/57gvoKnSU+sDbokyiPImXX+LGD5W/tGRt
+ C4alg8pGncui+wLCN8dExJjIjVR1kdyiKCZICWjIDZxTJzwtDkaraf6B2RHCaQapmpB4K
+ DhTnFMsoc/+JtF0PjMvO0u/zRm6sPOkirtXEbUWMt6LtRNiUE9ZQohDlNnK/inE0I6A==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1789736811;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=Ke13w5E+LsmFI5rhOPQ+aI/TZt68lx9rYX7m2aH13EQ=;
- b=Zp9AQPpga+qpMVBCKOOo4e8DlZa/EuQrT8ITJq7q/fDV0zBBz6L+dLLGuxV7RQ9IT238
- dinsHg+2srtQmmTqDpdpS9IdyTn7XFpzeRTJQFCg3sGpXa8mYq+FKs47K7UpBrUuPVM8v
- 7/dhLMPm3FdTKiY/Id/YvSVTY4k+K4hMuZrsluOWY8pWGMdtVB5QCc8s2Npk1uTFFC31H
- UuEviDYbtZRpjUo5JVDtTT1vIv7EPtjfwbjXaj828dr9FjuQrCiMEbQBvq9MxtbIHic+j
- qv3Yar8fdO82wYZ8j/3mIpnOAPOife+sU2xygxJo92h4RJ1nYI6FP1Bib0m1pjCTzxA==
+ bh=S9b/b92/5VEDONcbBBbIyNBon+tX5tTTFC3orQ14CBs=;
+ b=mYjGR9Z26zvHFHpW3Xosv4naO3Rm5BdgQNxWTaqpdj3baeYhMSds/KSZY4YUNxJ4sqG9
+ vtWINYUyMJD++mVDOovveWmKrEP8CctGD2twa7DY2KqojOpxkYoYSsayi0r2+oPX40A4d
+ YDfNA71RMBaS3gGfVT112JXam6iXsw7SLZL86dSKa1CsKWt5fvwneFxJZ+lhSsFut3KWc
+ Pghvo4Rfq+HYPowy0GdtETlY5z0ocfDMDTgnDZMTkc6c/L/gW/e5Df4DDyhcflISr31J/
+ hl2Ko1A3j2OewMQhm/I3hMS3luONMYyz49RsVEF4q+L+P69rs/sdQJ9f7uwR9KJGgXQ==
 ARC-Authentication-Results: i=1; smtp4.osuosl.org;
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id BF31E40BF3
+ by smtp4.osuosl.org (Postfix) with ESMTP id D945D40BFA
  for <buildroot@buildroot.org>; Fri, 18 Sep 2026 13:06:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 785A497698; Fri, 18 Sep 2026 13:05:44 +0000 (UTC)
+ id 925FF97698; Fri, 18 Sep 2026 13:05:44 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 16 Sep 2026 11:46:11 +0200
+Date: Wed, 16 Sep 2026 11:55:30 +0200
 X-Git-Refname: refs/heads/2026.08.x
-X-Git-Oldrev: bc4357219a4974dd82987abae1dede95adf3e986
-X-Git-Newrev: 1b3642b460a5e2e8768ce9dc1a18e65d71a039b7
+X-Git-Oldrev: 00bec472c7923482564dbba73af45b3a7d98bb39
+X-Git-Newrev: f9517379d1ab5832350ad0458af2428491e1eb23
 X-Patchwork-Hint: ignore
-Message-Id: <20260918130544.785A497698@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.08.x] package/xz: security bump
- version to 5.8.4
+Message-Id: <20260918130544.925FF97698@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.08.x] package/xdg-dbus-proxy:
+ security bump to verssion 0.1.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -118,53 +118,52 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/1b3642b460a5e2e8768ce9dc1a18e65d71a039b7
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/f9517379d1ab5832350ad0458af2428491e1eb23
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.08.x
 
-https://github.com/tukaani-project/xz/releases/tag/v5.8.4
+Fixes and issue that caused broadcast messages to skip some checks.
+Release notes:
 
-- lzma_alone_decoder(), lzma_lzip_decoder(),
-  lzma_auto_decoder(), and lzma_microlzma_decoder(): Fix an
-  invalid memory access after memory allocation has failed and
-  the application reinitializes the existing decoder to decode
-  a different file. This bug could at least result in a crash.
-  This is tracked as GHSA-5qpq-xqfv-j9pg. CVE number is pending.
-  (Also in v5.2, v5.4, and v5.6.)
+  https://github.com/flatpak/xdg-dbus-proxy/releases/tag/0.1.8
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 6f125a653038c9460b515b1f0d4c8c4be37d88c3)
+Fixes:
+https://github.com/flatpak/xdg-dbus-proxy/security/advisories/GHSA-r7hp-698j-2h6c
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+[Julien: add link to GHSA]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 51b366290b780a6c5f9e09f8e84bf5749d2022b2)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/xz/xz.hash | 4 ++--
- package/xz/xz.mk   | 2 +-
+ package/xdg-dbus-proxy/xdg-dbus-proxy.hash | 4 ++--
+ package/xdg-dbus-proxy/xdg-dbus-proxy.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/xz/xz.hash b/package/xz/xz.hash
-index 488a3d55dc..270ac748db 100644
---- a/package/xz/xz.hash
-+++ b/package/xz/xz.hash
+diff --git a/package/xdg-dbus-proxy/xdg-dbus-proxy.hash b/package/xdg-dbus-proxy/xdg-dbus-proxy.hash
+index e5be1f0cd3..bbc1762acb 100644
+--- a/package/xdg-dbus-proxy/xdg-dbus-proxy.hash
++++ b/package/xdg-dbus-proxy/xdg-dbus-proxy.hash
 @@ -1,5 +1,5 @@
--# From https://github.com/tukaani-project/xz/releases/tag/v5.8.3
--sha256  33bf69c0d6c698e83a68f77e6c1f465778e418ca0b3d59860d3ab446f4ac99a6  xz-5.8.3.tar.bz2
-+# From https://github.com/tukaani-project/xz/releases/tag/v5.8.4
-+sha256  3340ae48f88665abc78d71dc43446fb3f7e70b48fd59844ac0e14958cef6e00b  xz-5.8.4.tar.bz2
+-# From https://github.com/flatpak/xdg-dbus-proxy/releases/tag/0.1.7
+-sha256  3ad3d27ba574e178acb5e4d438ba36ace25e3564f899c36f31c56f82c7adbbe7  xdg-dbus-proxy-0.1.7.tar.xz
++# From https://github.com/flatpak/xdg-dbus-proxy/releases/tag/0.1.8
++sha256  b6630bd24f8161b0e2546d2acbb014a3b3249f5c0d75f2a863ade898b9034d3d  xdg-dbus-proxy-0.1.8.tar.xz
  
- # Hash for license files
- sha256  616a3ad264ce29b8f1cb97e53037b139d406899ca8d1f799651e17bfa09830b8  COPYING
-diff --git a/package/xz/xz.mk b/package/xz/xz.mk
-index 056c168057..c3232966ee 100644
---- a/package/xz/xz.mk
-+++ b/package/xz/xz.mk
+ # Hash for license files:
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/xdg-dbus-proxy/xdg-dbus-proxy.mk b/package/xdg-dbus-proxy/xdg-dbus-proxy.mk
+index 6c3ef5c9d4..7f9fe16f28 100644
+--- a/package/xdg-dbus-proxy/xdg-dbus-proxy.mk
++++ b/package/xdg-dbus-proxy/xdg-dbus-proxy.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XZ_VERSION = 5.8.3
-+XZ_VERSION = 5.8.4
- XZ_SOURCE = xz-$(XZ_VERSION).tar.bz2
- XZ_SITE = https://github.com/tukaani-project/xz/releases/download/v$(XZ_VERSION)
- XZ_INSTALL_STAGING = YES
+-XDG_DBUS_PROXY_VERSION = 0.1.7
++XDG_DBUS_PROXY_VERSION = 0.1.8
+ XDG_DBUS_PROXY_SITE = https://github.com/flatpak/xdg-dbus-proxy/releases/download/$(XDG_DBUS_PROXY_VERSION)
+ XDG_DBUS_PROXY_SOURCE = xdg-dbus-proxy-$(XDG_DBUS_PROXY_VERSION).tar.xz
+ XDG_DBUS_PROXY_DEPENDENCIES = host-pkgconf libglib2
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
