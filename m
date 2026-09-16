@@ -4,117 +4,101 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1197CC982C9
-	for <buildroot@archiver.kernel.org>; Wed, 16 Sep 2026 21:37:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1896C982C1
+	for <buildroot@archiver.kernel.org>; Wed, 16 Sep 2026 21:42:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B948E403F8;
-	Wed, 16 Sep 2026 21:37:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 25CDE401EE;
+	Wed, 16 Sep 2026 21:42:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PtVJJO0WQTIJ; Wed, 16 Sep 2026 21:37:34 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org C11E1403E8
+ id bKN0oM8Et7jK; Wed, 16 Sep 2026 21:42:18 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 4601C403EB
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789594654;
-	b=rpuq+bN8fLTaZHLTiLbr7v7N6iaM/IqRrSCswYR+3gZiJdqZVLh/6ls4Om/+DPhmT/E/
-	 x6Bf7GbYI4RWcYVmU25DyfvA9HDNUEHZ0IzqNTiEFuS1Z0O2QCxNVNEgNmIVXRC6PZeFx
-	 TZssEpEDmDNebGz1inMuNM2k3oi3LVSXRsUC01EzyW6xvwG2jw3KW8comevbjiu3HStbK
-	 ZZIcDtHnLVU1CzNmBFXQo8goyjCJfsl6hUvCANHet23EE6QcNEgDjXbbAgfcPM88X/ZF9
-	 Y03x0ULx5uDHwhoIG1msCpPbfJcxtUFxELjL7xjqt0svWDwRLtoi9dOFirzv8MbuH+Q==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789594938;
+	b=UHJPhOdBfte/uvn3a/i6lQVTF/tN/OCfHIqlSuctXyW6864xYuF2zhRORnD2vN7YpWXY
+	 cwJnUKF27/CRUffB+EEiEEn6TkIZFMBaZpGa8mfzGJxJAWAD1KEI5d651FJks8951Qebx
+	 TiKpHGYYyXARHwuPLg75c2jTCwYI8ybIzKRvpZD3lsUCywDDGGYw12IlXBPatcq3X6oWs
+	 udmdmOqJXZTqMzJ1SRKuy61joy1V7GdbjG1kK2ucv47nSAo8gf79rNwJZOlV5Pf1eSb6c
+	 o1bne+zI0Hpk6T9rduMNV57UXHswBdeS3DYfV5Qw5nD6QH7s1fpJzGlc0QS5MgpuNyQ==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789594654;
+	c=relaxed/relaxed; t=1789594938;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 Received:Received:Date:To:Message-ID:References:MIME-Version:
-	 Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version:Subject:
-	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
-	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=gsEpqD5hi5L5ejEdr/xuWlMBbdzrhtRJ+Ie/ABk2fQ4=;
-	b=tDG/t6+pZeNo+poZtCvYSTiOKrC83dUuJXxaeC6xg6Nn5fpaIDBPDjJrMQ6vg1NaDULI
-	 ZF9JGlaLMjahZOPTUS4xH3rXr38OLAMnBfa3N9duI4KjHIA/ne41DDpsr9IazZCWWE1mX
-	 qJXdpYyvcSIyUqFQ9+DYOZxtWe2sKL0CrxXJZ+/otdyfV0EnDRcbrcr2PNIm3leDHuOri
-	 HkO4oGfn2Ajv5atj/jKyLCtaud3pKQ+3Q++tOkcfAF5ek3GRaKhl2TZPzq5xpbQfrAK+S
-	 eG9eprjPCngyAqX5hbQq21dQ7GkBEcwKxnDp/DbnDAxKbp3GHrdH/czh7EIxz975jxA==
+	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
+	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
+	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
+	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:Errors-To:Sender;
+	bh=ig/1Dghl/yM5+l6iOAOo16ePtR33W9NitBQRom0Zjh4=;
+	b=JGnHHAqBcP5Y1FiJ2sungXeuZLz4KDxUgL5/PqA/phU5R/UgaXvpchYUGCdzhuZ12wqN
+	 Vf5pPUYs98RfpnG17fmO1fYMMjZLm6km2OOlbaQsj9jdOkqdPY5x8TC7KCkT8KOzkwqkd
+	 FB+5MAsmzHzf272iFVLv66DalvjxQ20W4VddlGkuWC+MMoTnJGFB9WCo8L6qMeiw+4V/2
+	 dj+Wo5JEpOwjSnR7ZmWUIj6NxuoednDTshay9LPNQeHzpzFa00jXTYjwzZqDitRbOmJZu
+	 gyg5kc73d721vz+f//xE8uLTjnayaIgK8VvUpv+GpanpxJwEseqtoogDxqvkra8hcOQ==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789594654;
-	bh=gsEpqD5hi5L5ejEdr/xuWlMBbdzrhtRJ+Ie/ABk2fQ4=;
-	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
-	 From;
-	b=Kh9N53xFnEQ30eoZUXHpIPZRRGX0EQ9/chSLednLei5bkfx9wb0yGVOaMgP2Ox03H
-	 Wn50MYmz7Flnx9imJECXImiiDk099bG7EYWD11lbHB7ulTlyjuOEpRWOCaRJaXKRMe
-	 ADG0qRs3STPKoW8HXSSbUgjiVatE5wRA58Io3gvOVAokvWvFRPCwcP+UkFhlvp2Kyb
-	 7XYZMn2ppwGx4svl4sRxlts2OqkGx9eKWUSD+QaAOlZBd+hWE8W2AJwaLo7xWKQYCv
-	 m5bN+He5FwsinBy5seDYo442GltlMTU18hyiBzgkwtXNTVBmUS6sWV5xNDg/x5sY4q
-	 cUdvjKH3X//Zw==
+	s=default; t=1789594938;
+	bh=ig/1Dghl/yM5+l6iOAOo16ePtR33W9NitBQRom0Zjh4=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=aX9QSGbkz85DaE99r7jlmC9C5btMl4u7Fg4RWwxyaEoZav/ufJ8oyrMKDsHP1aNLM
+	 /OGfYY7zt/9oFO6yijWqlFh69j7ZWne+zQbWHhze1teqfO5YX43P4PKR5UwAxSJvlh
+	 CL8nHq480V5rmj6soa76Ku++ddobW4Y4edfhCSSA9hFq9QcgV83LbeY6PICL3n5Egi
+	 /IlEhRxTJimir7ADIjLPmjzDIOVqV9l5sMApioLjB4yFBiM8IgNKuZ/dSVbNXe3DVA
+	 gE7sTf3HiFq5knlziAupnEpfnTq9CNs0L6bFyfM8rveNwythhN+jWcWvZWzGVd4O6g
+	 OTHj0c5WY04lg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C11E1403E8;
-	Wed, 16 Sep 2026 21:37:34 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 6707A24D
- for <buildroot@buildroot.org>; Wed, 16 Sep 2026 21:37:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4601C403EB;
+	Wed, 16 Sep 2026 21:42:18 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id A59FA2EB
+ for <buildroot@buildroot.org>; Wed, 16 Sep 2026 21:42:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 58B0B403E8
- for <buildroot@buildroot.org>; Wed, 16 Sep 2026 21:37:33 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A280A6062D
+ for <buildroot@buildroot.org>; Wed, 16 Sep 2026 21:42:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vxthCmEzYUm2 for <buildroot@buildroot.org>;
- Wed, 16 Sep 2026 21:37:32 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 70AB7403E1
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789594652;
- b=FcN7uiX4FPe8wxzy/0aku6ZTTSXMt5JBjYUHvoIl07N9FLiwYSR3BxJ9b7k67BVuPqvJ
- p4yenYX/muVnWk9HD1AdrKr1apDd0AFqGaGW5mSJECRxySw4CWtmlYs81KZvSk6psZwlf
- 0LEnnNmykQqESUTP39bCrvvvGcJFHCOPAoAsMzr1J3nI8XUM6xI74+5Mx+BrOkj6Q+irM
- EzPGadBr0JP4RvvlnLsL8Pa/t48D6Y9TZxNWGC2Cd0woyCeswl5s4lVodhjUe1R6FkgSQ
- LgXcg5x8cQ6BprkwigHeSdIPBIv/seUUg1e/qeslyGZiWuAZcHnTlBECwMS36MylZvw==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XdYzE5sfXJpJ for <buildroot@buildroot.org>;
+ Wed, 16 Sep 2026 21:42:16 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org E598460629
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789594935;
+ b=bofA19/dUjc+VoNxxhQ9Hd+k2ntdTvX5NvZjPUKHfw06vQOkPc3j/0IIrNYgXVM4hw3l
+ kX8kTthLfBUtxeGjccvdyJJPpBeKi4cp7IdC4yCuEI2iX7nXK1n2XdCW15HsalFKGKUeR
+ HeLLS418nNSLCIP7wrxm5MqG9x9jDCe40xgNiTxD5FBM13dt2Q+ft9dfOZk3iykVs0g+c
+ zyroMmPmKMhchmlptXB5fTjmMRlbMsHDtfRxn6ll4Jn8WmbwqAwKAMKKX8ySRutFhCR0/
+ 2YTWDPzIrDc6rz2YxZ2t//5G5o0aNoM4GoVwuyXIN6A8D7QQNdacpEIaV2KMiyqGMCw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1789594652;
- h=Received-SPF:Received:Received:Received:DKIM-Signature:Date:From:To:
- Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
- Content-Disposition:Content-Transfer-Encoding:In-Reply-To:
- X-Last-TLS-Session-Version;
- bh=PmXmY69mhKxU/v8WIpAWqkSa/1j4rX1CqaY7wxShvs0=;
- b=O8wagh/NVlkXrhGf6mtOLM+Rp9m+QIbGQ1sZP29TukdS+hDv13S+tWe3pEYBGmsxAqvh
- e3yxwP31S8uDNYM8zglEs/6lU3fN/RW2nrA5xPp7Anqh0Io1oSC5K7gLpnbgnbPLJYymj
- 6rslPk6iEvXGhqF2LJ2sE6AWtfRmymBCCK0jT27FeRrBgl8Mn4KXpW8sdPoP6V5RbrS7v
- 8rI8O/zEZKSpXQH8wnLaL1IQxXHIdoUfHdjqw0Q5sAg+/niDuSnyIAm3XHILw+7QLGWVG
- FZu6mh8jVoXsIiDtgVw4cl9SUvWoR3lXvTzrmBYn6Bdbid8Bfnb432rg62ABQy9l2GA==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org;
- dmarc=pass header.from=bootlin.com; 
- dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b="E5ckDL1/"; 
- arc=none smtp.remote-ip=185.171.202.116
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
- helo=smtpout-04.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ c=relaxed/relaxed; t=1789594935;
+ h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
+ X-Git-Newrev:X-Patchwork-Hint:Message-Id;
+ bh=f1zzQsT7+LE/pD4yY/el+HpujKmWTJx1TkPIkOagAuI=;
+ b=jd3/vZ5Xnqoyf7K5dTVoPmczMV0YwvNml1/AfaSYX0tqRuC6qr4Xu9PbSQnBUGVWMbBm
+ +R0pjE427FqgC+MtgIRcFMHaHymwaPdNRDOhAbWjnZMJSI4THaPcZOuMA74eyWx/13t0n
+ tnar2fUMfSdcD9hY0fkjXpw3VY9ts9y5z2rUoiQq7ERd7YeeLz2M90VEpumm5H85dQtB4
+ nQ4ljFwTrODezCJJgPq9kOjE5P2tx9XRT52YZyic1LUHzkbIdrm2n0fNLx+eG07bzSulW
+ UZTmEmfvW371SoYID5Fa6O1AkyqogLHZ2tPC6xwWPAtpi9vvYHMR9XclOw2XbvTZaRQ==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org;
+ arc=none smtp.remote-ip=140.211.167.122
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 70AB7403E1
- for <buildroot@buildroot.org>; Wed, 16 Sep 2026 21:37:32 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-04.galae.net (Postfix) with ESMTPS id 4621DC5CD6B;
- Wed, 16 Sep 2026 21:38:14 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 0E09860337;
- Wed, 16 Sep 2026 21:37:30 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 1F50511C79AB4; 
- Wed, 16 Sep 2026 23:37:23 +0200 (CEST)
-Date: Wed, 16 Sep 2026 23:37:23 +0200
-To: =?utf-8?B?UmFwaGHDq2wgTcOpbG90dGU=?= <raphael.melotte@mind.be>
-Message-ID: <aqsLoHzcU6UWyYGg@windsurf>
-References: <20260820105705.1502630-1-raphael.melotte@mind.be>
- <20260820105705.1502630-2-raphael.melotte@mind.be>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20260820105705.1502630-2-raphael.melotte@mind.be>
-X-Last-TLS-Session-Version: TLSv1.3
-Subject: Re: [Buildroot] [PATCH 2/3] package/gumbo-parser: update hash
- following Codeberg changes
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id E598460629
+ for <buildroot@buildroot.org>; Wed, 16 Sep 2026 21:42:15 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 5DF2296B39; Wed, 16 Sep 2026 21:41:09 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 16 Sep 2026 23:41:48 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: b7cfa2371bc1ebe83ea1c74db7fa45f360a2138a
+X-Git-Newrev: a7acedfeeb22007cd919330cda8c324e2e3dac5e
+X-Patchwork-Hint: ignore
+Message-Id: <20260916214109.5DF2296B39@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/cups: install D-Bus config file
+ cups.conf
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -128,69 +112,42 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org, Julien Olivain <ju.o@free.fr>, arnout@rnout.be,
- romain.naour@smile.fr, Fiona Klute <fiona.klute@gmx.de>,
- Marcus Hoffmann <bubu@bubu1.eu>
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/a7acedfeeb22007cd919330cda8c324e2e3dac5e
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Adding a number of other Buildroot maintainers in Cc.
+When CUPS is built with D-Bus enabled,
+install cups.conf under /usr/share/dbus-1/system.d
+as it already happens in other packages that have D-Bus configs
+e.g. dnsmasq, wpa_supplicant etc.
 
-On Thu, Aug 20, 2026 at 12:57:00PM +0200, Rapha=EBl M=E9lotte via buildroot=
- wrote:
-> Codeberg has changed the way it generate hashes for at least some of
-> the generated tarballs (see [1]).
-> =
+Signed-off-by: Andreas Vida <andreas.vida@ginzinger.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/cups/cups.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-> Since it only affects a small number of packages for us (3 on master)
-> and the upstream discussion seems to consider it a "one time change",
-> just update the hash to match the new one.
-> =
-
-> [1]: https://codeberg.org/Codeberg/Community/issues/2861
-> =
-
-> Signed-off-by: Rapha=EBl M=E9lotte <raphael.melotte@mind.be>
-> ---
->  package/gumbo-parser/gumbo-parser.hash | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> =
-
-> diff --git a/package/gumbo-parser/gumbo-parser.hash b/package/gumbo-parse=
-r/gumbo-parser.hash
-> index b8809d4db9..8e0dd91629 100644
-> --- a/package/gumbo-parser/gumbo-parser.hash
-> +++ b/package/gumbo-parser/gumbo-parser.hash
-> @@ -1,5 +1,5 @@
->  # Locally computed:
-> -sha256  dbdc159dc8e5c6f3f254e50bce689dd9e439064ff06c165d5653410a5714ab66=
-  0.13.2.tar.gz
-> +sha256  90bea83283760339da194fb90112a532854c13cd1eabdabc7ef7a4dede1dbc9d=
-  0.13.2.tar.gz
-
-Unfortunately I don't think we can do that. sources.buildroot.net has
-most likely cached the previous version of the tarball.
-
-Has this package published a new release so that we can do the bump +
-hash chance at the same time?
-
-Otherwise, is there a trick we could use to generate a different
-filename?
-
-Same applies to PATCH 3/3 in your series.
-
-Thanks!
-
-Thomas
--- =
-
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/cups/cups.mk b/package/cups/cups.mk
+index 0df4f411bb..3e85a2eecf 100644
+--- a/package/cups/cups.mk
++++ b/package/cups/cups.mk
+@@ -45,6 +45,11 @@ endif
+ ifeq ($(BR2_PACKAGE_DBUS),y)
+ CUPS_CONF_OPTS += --enable-dbus
+ CUPS_DEPENDENCIES += dbus
++define CUPS_INSTALL_DBUS
++	$(INSTALL) -m 0644 -D $(@D)/desktop/cups.conf \
++		$(TARGET_DIR)/usr/share/dbus-1/system.d/cups.conf
++endef
++CUPS_POST_INSTALL_TARGET_HOOKS += CUPS_INSTALL_DBUS
+ else
+ CUPS_CONF_OPTS += --disable-dbus
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
