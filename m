@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DBEDC982C1
-	for <buildroot@archiver.kernel.org>; Wed, 16 Sep 2026 21:23:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1273BC982C9
+	for <buildroot@archiver.kernel.org>; Wed, 16 Sep 2026 21:27:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F3A6E4040C;
-	Wed, 16 Sep 2026 21:23:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CE955406A0;
+	Wed, 16 Sep 2026 21:27:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7MmWEkIXzDPh; Wed, 16 Sep 2026 21:23:01 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 23E7F40411
+ id QbpgfV_BAJB8; Wed, 16 Sep 2026 21:27:02 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org C02CF406D2
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789593781;
-	b=bfr4m+SF+BUDUFHu+1xScRDR7zWfai3Q5gKcRD129vyygWzjTz4yDUaBa4vDcyIl1eN/
-	 g1vt7T743MN9XBDvLIXSTzBlBibGRQjl1HAjCvqAVgklzqpQyFVDtm7PL2poGwoKJFM62
-	 M2t/yP0nPSqmd5qD2S403MnOxeZIM2QrH+JhPvQaqpJHr/n/Rq/032qcBGYu9Z+BJZ7XG
-	 zcvGvH3zQkHQGjLoG8FNQCvpa5KaHunJ1QIJtSf03AOPC0jxE0S2T+TUcMuLzKWnQLKAr
-	 Uv9sIX4QdKqE7V1g/OeipXYbTf/zwtN0QSZjbMJ37WKIcXQfET1WRSY8hxev6oCLHyQ==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789594022;
+	b=broDKJPTu3J4wBWxgJvYWd+tg2dRsOhQ4cZmvea9UnycTFonPH6gpid62bZYke/uNnNh
+	 A8tZd/JEAQ6QrXqsbj/CK/awV0/ERr3o0yzssEKh2mAo5S30V+mXijozZcxYFJwngxpa4
+	 C3qDZt6SIvK3rePNms5nV4Q0tGlHwsXyVkGMhZjKY/NCgwWp10FFzeaCSfRoIeZJe6mFM
+	 R02i/eXZZ4WLo22sORd21/G0krEYiWONeYSTcOHvCocTbTa1+cJvoIhcxWyg488tmEnNi
+	 bPH6kfSlIi/Ecvqbaj+WO2qoBsuyDajtm53ggSYbPFi2vnn4L16J3ksJgjI3NgfRhvA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789593781;
+	c=relaxed/relaxed; t=1789594022;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -31,90 +31,89 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
 	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=HgLeyQnfMagM9ZIEm6YxDDV1WRQ50Xy5pmY1304c0os=;
-	b=f+NzZCm3E31AIkVxcnoAS85C/tQomVdvD3IHlwSlad5hFrfAP27bdbuIqKsdetbz2tTE
-	 91LKyTACLOA7t3fHEcYjV8cwQbyxv2K38fTl7VRg7bV0/Er6QKAsflz8gFtdyEaAIMzkl
-	 JdmHLME4kTgcFK9f0hwq1JPljCThNsGYuIYLBxLT5LS+O71oHKFaztuiFCwy4ISc1Q6VF
-	 Bo3mdLOezZnZ1tlnSn0nbAi1aBjeuRvDMv6FC+9IRzPztSyrfTlajpiO+m+jpxFVIHZHp
-	 CoA1alBHyOrujfxT4mn0PLmsXCZQZ3tjgDGsH+pTByp5UXsYo0tyhlEBZ8xXLwyVlbA==
+	bh=qTVNWrGWNZjPKGUvfIbl4ki+pZbNBmlFT/2JlhvF5tQ=;
+	b=Pq8agNGUNzU4R2YVLKm09lia+r/QPjD6z6ZLEa0leNcdnZBPG7kUo3y15a8ylK0oR2Lz
+	 fxR68SFIjdPKimj2pete9QXFC0VB39rLnL1AkUkriBmFpKuwWhl6i4TQgUtWUK09v9NlA
+	 BP0h4stcRg/jaSiaogHZCZqkVBFPFCTTux1uXxq1G/o24sWWzeqYLtKEHvveQm6gBBuqY
+	 OhHFPecY01XzGiIdTkak1+55kcnnkHixTvIGY1FH3T7bCZNirsKcaHa91QCkDXwb4VuPf
+	 G2OwLXNgDDvr1ZBLfiizjKd6Tmz65f6Mg5RP1LtcZTEB9Vwqt+EBm/podoP4Q1ykBSA==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789593781;
-	bh=HgLeyQnfMagM9ZIEm6YxDDV1WRQ50Xy5pmY1304c0os=;
+	s=default; t=1789594022;
+	bh=qTVNWrGWNZjPKGUvfIbl4ki+pZbNBmlFT/2JlhvF5tQ=;
 	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=Vqq3/GDFaL4nw6pqjTUMmLjwo6Yt3j+Mcr8HoLjDTLRiUZnMjwh6z0ZATQcc1YYU1
-	 CLbMhKvCz/+ttUkmNLqp16/FTfb4vCOF9PGh8XJYaPDYePD+IOiAfSkQ7eiUXdCDOS
-	 ybYAYx4q8gWWPGFk3MH9Pwpa8MkWNSEaEkWOjBXSrZ3TvXRjwR33ZeXcA0tQ7FewfO
-	 iighAkOsY4AkAD4vQqrNJKylvK7FzmloZlffHxh1vBrPtMgKVgjzhataNuj6mKqCu3
-	 A21Vt2zE6k/3pCH8QZUx2IxKo/NNpuBNFZLBPR1goWlqT3x9Yd39X5fg0Ts+7UZ1pw
-	 YReO4MD0KyD+w==
+	b=Y9oVcMyOZWURRFjQNfIzXwzBxhEzoORPPeea15XlQxmDnc2dhVCsbRGbMc8FfDaSY
+	 1X2C8QE3rYXdPFR5e67dCpgQSC5J2g3FBpfGNRuLRXyZWstcMJX/MnKTOe+GSu0TGo
+	 0Dku1pmaHwO4jaDhvGtjtosHhq4T3Nw+BYuEghKb1Eb7boVNJL+X78GkCaTxGXWm9Z
+	 cnKyrbHxN7y7XujyrTfNFDucqXW4i8q1Q+bn2OJkp1m7LV9gyJh2a1yIi3ktAS5gNZ
+	 rOW2DO9PKFtKSuH7GetunJZnWhDTfILuT9NtmMeyrXJdewcRfD/a7A7uK0aRje5PdO
+	 dk2882Wd1k9+Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 23E7F40411;
-	Wed, 16 Sep 2026 21:23:01 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 2D01B2E3
- for <buildroot@buildroot.org>; Wed, 16 Sep 2026 21:23:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C02CF406D2;
+	Wed, 16 Sep 2026 21:27:02 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0A7A22EB
+ for <buildroot@buildroot.org>; Wed, 16 Sep 2026 21:27:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 137A740411
- for <buildroot@buildroot.org>; Wed, 16 Sep 2026 21:23:00 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id F06086061C
+ for <buildroot@buildroot.org>; Wed, 16 Sep 2026 21:27:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RJQZjcN-3d4l for <buildroot@buildroot.org>;
- Wed, 16 Sep 2026 21:22:59 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 2FA824040C
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789593779;
- b=AvcvST3Lj6gdemGX9TlD2nUlVunJMvniJDEHldM8+c4p4B6vk6nDS5suhWa/gu2DcCpv
- m93SPrDi9+QfstebSiFeu0uY6nL1LxR5k02h4sMpSKb3xSxlISyofQmwRa5eyxgY7596m
- I9WRD8pCtlmoeGHipa/jgjwdEqyvf0yPqOsQIhxRLfVCbjhsZPwZO6FMhgtAdlj+j5xeN
- XOR6oLyKMJGOupTiVUeY9q/6bOECgRzL8g0QaH5ISOljdLaUhEuP4RHhKojQUxdfUL/ja
- PBev17zcTH8X+8b1kaND4ioH2UPwYL/tqmFKCsc1iWLswRREU7IGSuV1UoTat8vZWOA==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id t4nBJoK6_PO7 for <buildroot@buildroot.org>;
+ Wed, 16 Sep 2026 21:27:01 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 99F43605D6
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789594020;
+ b=pOsSYnIc1hfCOsuBuzHGzHSaZxD7GnMzstdTiqlGAVih0a7vxiHVEmlzxtIPYqAPzZS6
+ 6ebqvn8PK1GnxTU4i1AV6gz6NDZO91qt+XBAht5cvubUTMkPpfXjMnl/3jMxYE2hHYZgm
+ XhCSohTWQUPRf9Q6SoQi7iJaf1wgjfKojMckA4SJUTxmYq3oxd1we5NQRgD6aYM8k2Vco
+ MbZ8w1dZNA/iYv1JPHTqacyAS1Dw9HImo3pTIat/t13Ezw/JH7+mP0/CMn19JfCo9NS3W
+ dJfnAdXcVWFqSYj1Zy7/z7zRfO34NXXXV1HWiywXGxMVtBTlw1+NXxeVVotwBUPdSiw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1789593779;
+ c=relaxed/relaxed; t=1789594020;
  h=Received-SPF:Received:Received:Received:DKIM-Signature:Date:From:To:
  Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
  Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version;
- bh=mhoJ8w0hFBAFkQ8qf3cl7ZFJ91wZN3IE4bpNqiStTH4=;
- b=lfNYjsjrkfdiumCnlcICsnm8cw7sSejpafR3yYWd0ptbTWh+0nyj63qVR5hjpKx+dI5d
- dzp7VfgLg5KFudf7kNtTKv6rbpr/I20q9ja5X9POb6s+zo68IKRLGaw39E8MH0+ojJV2k
- cJmlWKRpNiaOh0bIbRrd7M5xeQNo9uCrc41hevVrSO5PsToYNC8QIuqMpLtmZe9LPweCw
- BWua4mvdxJNaB6tL2QvSMMtB6I+XAzNNRRX83V9ns7yTLZPeo8TQWpcYDtTBy8XB+a3eG
- aseCL+QDfJDyrHiuOimRfCeaU9GQRhQQRaadzQlnqPdC4PiCaCb2CeGc8v/4Xpsw05g==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org;
+ bh=J6fp+Ppk9BWwd4Sieyvtfe7V584ZcfMEqOkSGRX5EK8=;
+ b=Wd0EziXpKXmblRw4Ct0kXqgAIzTSo4hQkWoSBzaT9zqTCOe04XZyucnSEHQvbyhIPuom
+ mQD1SjT48Pkj+zl1fyC3K3NTx0PXOHUaFI2qnlu06kchZ/W7eDeJnXbpW8mwRJsSSY2A2
+ 4+R9cVAAixB5IDlMK10rTSCsUE2aCE2wlmQUgpFMwcwQq6rsugdznMWwyvJEtmITemltJ
+ awS4vWhlLpVAYDTYLpdiK53n1gK81w14qNHQdHWDjzXlycXWRvpL1zCe0vjaB5vfYoxqk
+ J4shvBCRt1efmyfcTq6aNhmrRKsL2lV+n2uw39+Zd93auIjdl0Bqxant4CoZehNYbFg==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org;
  dmarc=pass header.from=bootlin.com; 
  dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=McOsEpM1; 
- arc=none smtp.remote-ip=185.246.84.56
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
- helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ header.s=dkim header.b=pXPmoszZ; 
+ arc=none smtp.remote-ip=185.246.85.4
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
+ helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2FA824040C
- for <buildroot@buildroot.org>; Wed, 16 Sep 2026 21:22:58 +0000 (UTC)
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 99F43605D6
+ for <buildroot@buildroot.org>; Wed, 16 Sep 2026 21:26:59 +0000 (UTC)
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-02.galae.net (Postfix) with ESMTPS id 013291A0903;
- Wed, 16 Sep 2026 21:22:57 +0000 (UTC)
+ by smtpout-03.galae.net (Postfix) with ESMTPS id 376554E40708
+ for <buildroot@buildroot.org>; Wed, 16 Sep 2026 21:26:57 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id BAD6E60337;
- Wed, 16 Sep 2026 21:22:56 +0000 (UTC)
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 9BA3960337;
+ Wed, 16 Sep 2026 21:26:56 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 02BCD11C79AB4; 
- Wed, 16 Sep 2026 23:22:51 +0200 (CEST)
-Date: Wed, 16 Sep 2026 23:22:51 +0200
-To: agennart <antoine.gennart@quimesis.be>
-Cc: buildroot@buildroot.org
-Message-ID: <aqsIPwc1ZeVxBlb4@windsurf>
-References: <20260916130840.881186-1-antoine.gennart@quimesis.be>
- <20260916130840.881186-2-antoine.gennart@quimesis.be>
+ with ESMTPSA id 8550411C79C1A; 
+ Wed, 16 Sep 2026 23:26:51 +0200 (CEST)
+Date: Wed, 16 Sep 2026 23:26:50 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org, Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <aqsJiM15FhYI3qt2@windsurf>
+References: <20260906165149.1035063-1-bernd@kuhls.net>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20260916130840.881186-2-antoine.gennart@quimesis.be>
+In-Reply-To: <20260906165149.1035063-1-bernd@kuhls.net>
 X-Last-TLS-Session-Version: TLSv1.3
-Subject: Re: [Buildroot] [PATCH 2/2] package/nxp-bt-wifi-firmware: add IW610
- USB support
+Subject: Re: [Buildroot] [PATCH 1/2] package/boinc: fix build error with
+ uClibc-ng
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -133,32 +132,13 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
-
-Ah, here is your PATCH 2/2 :-)
-
-On Wed, Sep 16, 2026 at 03:08:39PM +0200, agennart wrote:
-> The IW610 module is also available with a USB host interface, while the
-> current package only supports its SDIO firmware.
+On Sun, Sep 06, 2026 at 06:51:48PM +0200, Bernd Kuhls wrote:
+> Fixes:
+> https://autobuild.buildroot.net/results/f10/f1015559e37d73403c396ee883d9a73fd167b9dd/
 > 
-> Bump the firmware release to lf-6.18.20_2.0.0, which
-> provides the FwImage_IW610_USB firmware, and add a dedicated
-> BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_IW610_USB option.
-> 
-> The new release also moves firmware files out of the nxp/ directory
-> and no longer provides 8801 or 8997 firmware. Update the installation
-> paths, make the existing IW610 option explicitly SDIO, and retain legacy
-> configuration handling for removed or renamed options.
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Need a Signed-off-by line, and a From: line properly formatted.
-
-But I'm concerned about firmware files having disappeared
-entirely. What do we propose to the people who do have 8801 or 8997
-devices? I mean NXP might decide they don't care about those people,
-but those people might still have HW in the field that uses those
-devices. Should we still support the old NXP firmware release to
-provide an option to those people? Or are those firmware files dropped
-because 8801 and 8897 were never sold on the market?
+Thanks, but when was this issue introduced?
 
 Best regards,
 
