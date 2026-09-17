@@ -4,118 +4,100 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD760C982C1
-	for <buildroot@archiver.kernel.org>; Thu, 17 Sep 2026 07:26:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE4F1C982C1
+	for <buildroot@archiver.kernel.org>; Thu, 17 Sep 2026 07:40:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 710D660839;
-	Thu, 17 Sep 2026 07:26:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9344A60807;
+	Thu, 17 Sep 2026 07:40:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tFWNh5MoZAqw; Thu, 17 Sep 2026 07:26:55 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 426AC60659
+ id WGqcg0O95PZk; Thu, 17 Sep 2026 07:40:31 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org ADA54605D5
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789630015;
-	b=D32XrUvo85YprgXMm6aB4xkdFT4RlSKWAZwop+Swt4kAC0bPOEHYUV3ToHaRi6ydUZsZ
-	 zWeq1EoJK7y0zbF3oZWENausUUPUX3ozfqXAY9yfUwOaCar/kPdpOqC9iCewvF27KVk06
-	 mfF43cGKvSUbpD8+n2V4d0Io5QiwiJM9nyFDvm+7hxLD8tgXFyg85StyD/n/BKPPgebTk
-	 sKErn6/EYKJI2zwZIv8UGH4gUUwDX9KqYLWZba35asxvLCdedxFsA/rnjkECVSueflXvR
-	 o2y3DnM0lxPsRGsI5EHUjlYFMst//37zXwx+YgSRdD3CgNsf4X5pALZdDaN6hAQgU+w==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789630831;
+	b=aRq9UKeszj2v3SYZ3EkgPUo6/8eAAT3cbf4DfhVBnbt/84HcDCyI7de2XOd2rSWZa2Ea
+	 efTRpZdidF46DN37I1boa/ermc1uhZ8HDIh32nNcP4e55OjBtX7mC/sEf93BIQomx8HNp
+	 H//b2d27cdZK9LeS9wS6mhvtOBagcTSAhmqRxeK8nBgXf3rgeYDZkV6NtCedThE21ueIQ
+	 oXHz2K9xAkQySUCmyEwJ9J9bmELimClrIDLQ/Dq3RBK3JSMhpgl/sBP2dZDev9PEWRw+D
+	 d0hCPWVNi3gqRg3dIYrI8pE8GubjF2Df1RaY+etpy+qoNJ0TUiqxy7ne6m4GQFR5Izg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789630015;
+	c=relaxed/relaxed; t=1789630831;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 Received:Received:Date:To:Cc:Message-ID:References:MIME-Version:
-	 Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version:Subject:
-	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=7RY1GxDYZEBjDEPYFur97/yr1omSPjBB8RIUnjH9gJ0=;
-	b=qCvQ/lmhX1BMDqotTcXYlZnsRZmNY3ji1BNdrqkkfjE7FzIEwvJDpqU/Hec4LTuf5nwm
-	 2gwp8q34ezH05e883hXT6NkA7FPrsYBmWMeNS5SH5p1R7IOyBqzpO+5UhbJIwoKXhk/Q/
-	 apIflMAnBoIRWDfmtI89iCMJ1Iqf/G+lebe1/Fjp8+uXrs2yugGakeRsFu0f8G56nRFB2
-	 A2beYu6LaKcQPO+hp1H360bIyDXcdUPJ7rrBki8+1h6niyemMHJf5fWeMbtLwyAZq2/Ko
-	 bUZMvBhUtRzLrmuI+t1XnR/98ZsDFTGhCposBGw5pK1n3X4C7tFWTG1U0WRXEyiHIMg==
+	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
+	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
+	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
+	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:Errors-To:Sender;
+	bh=XlP1RCtf2qOlo/296QsBB5SIn4gHgGb+pAKstRcYmEw=;
+	b=IklnU9yZrjeH8mpdL5bELXUrLuhaFNPuge7THJo95jgmpZKZ3lzgLfMd9IrDLrGB6H/q
+	 fx/Os9pTahLz4dFkt2cRtvQ95osW7oApJ73MkFkBwdBBKSdkQJuGG9pYLXMQVEj7w/a08
+	 Iu5NMFLQvGDiOum/W36bkBL0VBMVlDXSvbkzSb99ISLhm0Q+HS42/12GFMt0mnRrSHFgZ
+	 m+tM0T+70i2cbFDcPmNxg+keAY1UO+4DYnB7jlJNxgvHHc2Mncrcolf7FTmuhJqXYuw3L
+	 f30A+VYimktJOapSwULN86Mcogfdbge9Jal9+rdzQybUbUF/NyLaaiuAYCN7blqhQPg==
 ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789630015;
-	bh=7RY1GxDYZEBjDEPYFur97/yr1omSPjBB8RIUnjH9gJ0=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=ltPzoJEPdRjeZAcd+MlIHN4MAMg6PHUgCbQ0r9091jpy1dhnUuPOF3MTkrGG/qOjq
-	 KPdrjuNBfkPAfdmrpCBiXxLekqGuX4A39jTFkD+Av8J5clzsjCTDm40RuJEFr0jnXD
-	 +UHBLbxBEUkZZ6gl9SFSqdMRVwBYNtK36WHM0O8Dk6ZHi31cTZdADtW2vzki6Ckx/s
-	 Jcsa+FNVwfA+M9Pq2F8F/j/9UJUoCe38WT1GCR8L8HT6VG5w17XQbAbQOmqlHBPnq5
-	 HusDuXtH0H3Tg9VICdpcKnL2PVuZUNpiBK30C04IHPNMVL3F9cFgv3Wfv4csyWpHU+
-	 Zol9pu/vHAIvw==
+	s=default; t=1789630831;
+	bh=XlP1RCtf2qOlo/296QsBB5SIn4gHgGb+pAKstRcYmEw=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=F40LOJfzoCly8TsHJyi8CICcRXE+tttpeyP3TzaryYFf8WkvR9R7GOMYji6AHM44G
+	 MXvv3Xq355B1Fk/elUipZolc2TgD7/An0uSSmaGejr3YUS1xmxKdiUQU2wH6Celejd
+	 B9+6wmqrIPSGGzOI1ajwduR6tnw2FNsu0Q0kccbDYA3BBFdo3FhP35Tv1HwJS0cvV0
+	 zlMBRzOSCodoN7jEeJiHff0xb4gqx1iSQa3H8jFNx31Fz6/VrGJWRH8X9Bhwk5FEpp
+	 Nx4n6sTcNV8TkDusGeV+TXEUdC7crDmuHAGpngQHx9EnxvZsyoA/+S2gBVS3R+p8q7
+	 IPvsiUlvTKJbQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 426AC60659;
-	Thu, 17 Sep 2026 07:26:55 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id C167424D
- for <buildroot@buildroot.org>; Thu, 17 Sep 2026 07:26:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id ADA54605D5;
+	Thu, 17 Sep 2026 07:40:31 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id CBD13422
+ for <buildroot@buildroot.org>; Thu, 17 Sep 2026 07:40:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3BB9B40793
- for <buildroot@buildroot.org>; Thu, 17 Sep 2026 07:26:53 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id BDB5E400F6
+ for <buildroot@buildroot.org>; Thu, 17 Sep 2026 07:40:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id M_SGiuwLP73g for <buildroot@buildroot.org>;
- Thu, 17 Sep 2026 07:26:52 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 3246B40782
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789630012;
- b=VWxdWTJg02aDSgHqu02RswLesJfKfDzD2K4gtrT6HH0Y86X2C+LNQY66Z1EAMr+EqKJI
- 9EDdtZ4fYtJqFnVxqTE+k7N6vBwlftN0GOqwTTkbfN1258bTNFUK5IPpvZ9CPWFSh+tcZ
- 47x5cVRQWhKYLxNXgxkhQjymLGxNqxmQaf3bKkZ7QMghmNAcLaq2IvZOpufztqujm8fzf
- 08NmrO0no49VuyFzn2jlIaesNTVqELjMJQ7AUthe+pLsORE6bFz2xAIhtZOwqjNzsJieZ
- mJRqOuWYW3/7E7Y3qzTcE7g3a9+/jC7jMLT+ljDhJzYULuLjTqQLyPD1TIN1uvlBR5w==
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7m5Mvd3PjGLH for <buildroot@buildroot.org>;
+ Thu, 17 Sep 2026 07:40:29 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org 1611A400F3
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789630829;
+ b=kKGSa6lOJvqCsFfF1OoX4unrkPNPkZ1K/2Unvmu0rNYunubNOTpjh2FgdiNMGQrWCYey
+ cDk/+R3UR4VmtiGY3TossJmC+0zXodonygSjiEMhPO3atxRp8Kqfj2fD/M2jr1Zaxca4a
+ l9HkR3oBHnjsyEM1wowgkZnityIpJ4CBUIzzuK37aP3nvJKHiQklEzq0yi0AQu5FOWQRH
+ iS8ckYcuZ/g35ZfL0ylAbh9gauo7hpPUB6AfWwFwsRI3UW0OUh6bLKozALzjF4wdMYBT9
+ Riz/XGVdVwIyyFFDcQ62DGfV/Up/2cR4z0bv7Cy9imfWDm9hQ64Bp206e6I7Jv0puHw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1789630012;
- h=Received-SPF:Received:Received:Received:DKIM-Signature:Date:From:To:
- Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
- Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version;
- bh=m6ya2rAMV2R2/BU4BxFWRYsXDfFTkuaRbxphj5fN8+8=;
- b=Ze6M2X3+bCdDDJsHJTkro8isQvhXcA26R9QnvnlScVIzD9w9vbWh6f9jjPbRkJoGimzO
- bATnN7KuczjQaTugPNYHJxxG0qpppTw6HHAUOzJfvxTP/wDiKYoWLAh38drm8T4/2Wk9+
- 6KDZFI7Pkx+0ftwGZNn9Z+frbA7ZY+c//ICV1gRCV6blEFAQks9+seSj7wGpHSH6QEM3s
- Tu/i9YlPtuIkQcGb/9fBxdQ1vYHcBdsbd0HgZxQJMUGGZzvWYXSPB5H0meEEYlNBmnhWQ
- wstkGlReq9TPAdYV9Vq8CynWDdGCMMw2K3chJ7MQAUD8VnxJ4UFoajZtRV1fFilQ/Yw==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org;
- dmarc=pass header.from=bootlin.com; 
- dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=a7YspwYJ; 
- arc=none smtp.remote-ip=185.171.202.116
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
- helo=smtpout-04.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ c=relaxed/relaxed; t=1789630829;
+ h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
+ X-Git-Newrev:X-Patchwork-Hint:Message-Id;
+ bh=5ko/Yg2/HMlXguQryJaFU6R9ns7f1qhetLZK4XDdYMM=;
+ b=HoR/3NcsKewsU2gcVqWZin9aOOS/f2BdCkV6diZwsGQxG0F42xoRK/BwzZARZd2wn1aC
+ Fo4sSULqARBjFETrw2zT5vYB/i+HwFA3FqPYtECz4J6zZyqHfgdoZ/IwvCNF8Wn3USi1F
+ LJavIqs1FppGAHMItSAyYXdnH0B5dASL95XIu89gm1n67cF2vqfZAsYW4KFBxNaDPGqC0
+ PxvwqBAbCU7po4bJTOp09BTLvbWzPHo0K/iFmUFfCPrNDKuPhJujw/yrkNAI/kT9xLKY8
+ ZMeKcW7T++ZZbURHMXuBbg6X/jjIebXNMhkr21PmiNDBC8I4Q6MHU6dn60cPW/OXyiQ==
+ARC-Authentication-Results: i=1; smtp2.osuosl.org;
+ arc=none smtp.remote-ip=140.211.167.122
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3246B40782
- for <buildroot@buildroot.org>; Thu, 17 Sep 2026 07:26:51 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-04.galae.net (Postfix) with ESMTPS id DCE1DC5CD71;
- Thu, 17 Sep 2026 07:27:33 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 911755FAA3;
- Thu, 17 Sep 2026 07:26:49 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id B86BD11C7A20E; 
- Thu, 17 Sep 2026 09:26:48 +0200 (CEST)
-Date: Thu, 17 Sep 2026 09:26:48 +0200
-To: Yegor Yefremov <yegorslists@googlemail.com>
-Cc: buildroot@buildroot.org, Romain Naour <romain.naour@gmail.com>
-Message-ID: <aquV1bdJfyJ04l6h@windsurf>
-References: <20260914092612.1283030-1-yegorslists@gmail.com>
- <aqrl-vOwcHy1wpBs@windsurf>
- <CAGm1_kux2mRrdnvkcX=y2vB=Hb3-UxkjCu-F67L2_2-N3cs-tg@mail.gmail.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <CAGm1_kux2mRrdnvkcX=y2vB=Hb3-UxkjCu-F67L2_2-N3cs-tg@mail.gmail.com>
-X-Last-TLS-Session-Version: TLSv1.3
-Subject: Re: [Buildroot] [PATCH] package/qemu: host-qemu does not support
- AVX512 CPUs
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1611A400F3
+ for <buildroot@buildroot.org>; Thu, 17 Sep 2026 07:40:29 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 5E37F960DC; Thu, 17 Sep 2026 07:39:22 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 17 Sep 2026 08:37:52 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: b016989c61340b528a09599694b86000b98efc56
+X-Git-Newrev: e38f9b9f969754b15996829abc95868456e3ee8e
+X-Patchwork-Hint: ignore
+Message-Id: <20260917073922.5E37F960DC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/broot: bump to version 1.60.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -129,98 +111,46 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Yegor,
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/e38f9b9f969754b15996829abc95868456e3ee8e
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-On Thu, Sep 17, 2026 at 08:56:46AM +0200, Yegor Yefremov wrote:
+Changelog: https://github.com/Canop/broot/blob/v1.60.1/CHANGELOG.md
 
->  No, I don't think it does anymore, and I believe it can simply be dropped.
-> 
->   1. The exclusion comes from commit 1f7efaf89f03 ("package/qemu: do not
->   support x86_steamroller or x86_core_avx2", Feb 2020), i.e. from the Qemu
->   4.2 era, when TCG had no AVX support at all. Since Qemu 7.2, TCG
->   implements AVX, AVX2, F16C, FMA3 and VAES. In Qemu 11.0.0,
->   target/i386/cpu.c:
-> 
->     #define TCG_EXT_FEATURES (... | CPUID_EXT_AVX | CPUID_EXT_F16C | \
->               CPUID_EXT_FMA | ...)
->     #define TCG_7_0_EBX_FEATURES (... | CPUID_7_0_EBX_BMI1 | \
->               CPUID_7_0_EBX_BMI2 | CPUID_7_0_EBX_AVX2 | ...)
-> 
->   which covers everything -march=core-avx2 can generate.
+Signed-off-by: Alexander Shirokov <shirokovalexs@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/broot/broot.hash | 2 +-
+ package/broot/broot.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Cool!
-
->   2. You are right that core-avx2 and haswell are equivalent: gcc's
->   core-avx2 is a deprecated alias for haswell, and "gcc -march=core-avx2
->   -Q --help=target" yields exactly the same feature bits as
-
-TIL about "gcc -march=core-avx2 -Q --help=target", nice!
-
->   -march=haswell. In arch/Config.in.x86 both also select the very same
->   BR2_X86_CPU_HAS_* symbols. So excluding one and not the other never
->   made much sense. The same applies to broadwell, skylake, zen*,
->   x86-64-v3, ..., which all enable AVX2 and were never excluded - and
->   they do build fine on the autobuilders, which is another hint that
->   AVX2 is not the problem.
-
-ACK.
-
->   3. The steamroller exclusion, however, is still needed - but it is
->   incomplete. steamroller is bdver3, and what TCG cannot emulate there is
->   not AVX, but XOP/FMA4/TBM/LWP. Qemu 11.0.0 has:
-> 
->     #define TCG_EXT3_FEATURES (CPUID_EXT3_LAHF_LM | CPUID_EXT3_SVM | \
->               CPUID_EXT3_CR8LEG | CPUID_EXT3_ABM | CPUID_EXT3_SSE4A  | \
->               CPUID_EXT3_3DNOWPREFETCH | CPUID_EXT3_KERNEL_FEATURES | \
->               CPUID_EXT3_CMP_LEG)
-> 
->   CPUID_EXT3_XOP, CPUID_EXT3_FMA4, CPUID_EXT3_TBM and CPUID_EXT3_LWP are
->   defined in target/i386/cpu.h, but are deliberately not part of that
->   mask.
-> 
->   And the whole Bulldozer family is affected, not only steamroller
->   (checked with gcc -march=<variant> -Q --help=target):
-> 
->     bdver1 (bulldozer):   XOP, FMA4, LWP
->     bdver2 (piledriver):  XOP, FMA4, TBM, LWP
->     bdver3 (steamroller): XOP, FMA4, TBM, LWP
->     bdver4 (excavator):   XOP, FMA4, TBM, LWP (and AVX2)
-> 
->   So BR2_x86_bulldozer, BR2_x86_piledriver and BR2_x86_excavator ought to
->   be excluded as well.
-> 
->   If you agree, I'll send a follow-up patch that:
-> 
->    - drops the !BR2_x86_core_avx2 dependency,
->    - adds a hidden BR2_X86_CPU_HAS_XOP symbol in arch/Config.in.x86,
->      selected by the four bdver variants, and replaces
->      !BR2_x86_steamroller with !BR2_X86_CPU_HAS_XOP in
->      BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS - i.e. the same pattern as the
->      existing BR2_X86_CPU_HAS_AVX512 dependency.
-
-This looks perfect!
-
->   If you'd rather not add a new BR2_X86_CPU_HAS_* symbol for a single
->   user, I can just list the four variants explicitly instead.
-
-I think adding BR2_X86_CPU_HAS_XOP is better, even if it has a single
-user. Indeed, it makes it explicit what is the feature that isn't
-implemented by Qemu.
-
-Thanks a lot for this very thorough answer!
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/broot/broot.hash b/package/broot/broot.hash
+index d883337d9d..1f45965fd5 100644
+--- a/package/broot/broot.hash
++++ b/package/broot/broot.hash
+@@ -1,3 +1,3 @@
+ # Locally generated
+-sha256  c7ff621324c799976d52becd7d0c24aad6f991b10421303884065305d4c00a1a  broot-1.60.0-cargo6.tar.gz
++sha256  6daf2a7381fdbce5acc08261c2899304b4a1efa7c33623e456b8c45853cdb7a0  broot-1.60.1-cargo6.tar.gz
+ sha256  89461664ce2aee7d80ea8fba7118fe7abd490d76ba435cf1d81d3128e060711f  LICENSE
+diff --git a/package/broot/broot.mk b/package/broot/broot.mk
+index c4cdce2e51..1467f55279 100644
+--- a/package/broot/broot.mk
++++ b/package/broot/broot.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BROOT_VERSION = 1.60.0
++BROOT_VERSION = 1.60.1
+ BROOT_SITE = $(call github,Canop,broot,v$(BROOT_VERSION))
+ BROOT_LICENSE = MIT
+ BROOT_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
