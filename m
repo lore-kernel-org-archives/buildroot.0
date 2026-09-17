@@ -1,145 +1,141 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1627C982D0
-	for <buildroot@archiver.kernel.org>; Thu, 17 Sep 2026 09:45:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04144C982CF
+	for <buildroot@archiver.kernel.org>; Thu, 17 Sep 2026 11:38:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8046840475;
-	Thu, 17 Sep 2026 09:45:11 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id o6u_EDu-uE8v; Thu, 17 Sep 2026 09:45:10 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 4CEFF4076D
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789638310;
-	b=krikFXNSPo4ULgOuqzdBjfkPCVim8wXCymxhw/AqCKkH6pv0o0qdMjnQn+hcnk0QJDyT
-	 Q/oIxBT7Cz0OQ+9AIASTxRWn33wQ6gopUCuEFjYSdZs3TRY9H0wO67XtsrAE4yyI1pfru
-	 BF+ldTiFQ/g+hVjDwutZc9OqTN4Nc0V0lKQUxoq746e/54MZ+oiqYYje3eQ9A4jY7cRRH
-	 speAILVL0LuYKV6qCUBvqa1jzrpKwDY1LoYB3/A1RT00qjySzTjJr8WK56BVHBR0zmuya
-	 JBNXgTOiK0O1jRhCDO5eTghrmkux3AgxyS9mjxlVesVmy10iYUXuQ3iEI8g9Qsak1qg==
-ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789638310;
-	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 Received:Received:X-OVh-ClientIp:From:To:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:MIME-Version:x-ovh-tracer-id:X-VR-SPAMSTATE:
-	 X-VR-SPAMSCORE:X-VR-SPAMCAUSE:DKIM-Signature:Subject:X-BeenThere:
-	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Cc:Content-Type:
-	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=y9QApnl24kgQhAXEHvum/ygBc72Pg1nU1p1C/ljkOsE=;
-	b=cymXmmxbrq+KSCClYg7Gq75Nw5QyEaM1Uy4gRUHR6ko1S9P3gglPDsbzPjxL984hgNNk
-	 YOWjfBhcBxW4cGJp5DUth2qw5WWFkNvAaw4iFZ0pMvOLhiVjNJY0ysFl909uyoFdVfAgn
-	 WTxDkMYyH+SJ5KrpfTiwhgXvjETldfOzyjjOJR8gb9HklSakVKxw2MdtJBXkoA7Y3UTxN
-	 puDv6B+OaiuupDXEGg1a1lAcHsSailoxnU1nrzeMe1p2rpJzxx6EiXZA7lCXadJt9xgkO
-	 eXWaellXHY4JbTvUAGqJPb8Sv6tBnZG1fuVLEx2XHWTYVt1dzQSFlnwW4wPEt8xD4kA==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789638310;
-	bh=y9QApnl24kgQhAXEHvum/ygBc72Pg1nU1p1C/ljkOsE=;
-	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 Cc:From;
-	b=kY0NP7TS50EitGnEfLvGaNwGcph/q049KRmNCNOcZM+/e7QmwwqGzbu5lxSHgX2eu
-	 5dzKi9yhSJ2XVL9/u34HwmPMnSEQ2aVMf4k/MkaOgsZw/TV7fMfxplOzvKloqK8p2H
-	 R7YN/kQLUB4nKEPjDW8D2iAERs7shI5M9V80vZRqcBxu+wOvuV5IdF///AVSQJPH9b
-	 6nt3PlBsnYDmVuSNf9CgUMSwCQQm2Rj6y5me5237Xpx/JQbHQvtLoYuT2NNg88QXxJ
-	 UpIIHZmQbBQiSrRMbNeen4cJns/mSWqoT+j0qOHsHVzB1RiavFHtgK/RIDuHLijNb3
-	 o5i3xr8L/2vjg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4CEFF4076D;
-	Thu, 17 Sep 2026 09:45:10 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id B2ADA13D
- for <buildroot@buildroot.org>; Thu, 17 Sep 2026 09:45:08 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 989F280EF1
- for <buildroot@buildroot.org>; Thu, 17 Sep 2026 09:45:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A445B80F7D;
+	Thu, 17 Sep 2026 11:38:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jk_vU9qCYRWT for <buildroot@buildroot.org>;
- Thu, 17 Sep 2026 09:45:07 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org CA6E080E97
-Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=46.105.40.176
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789638307;
- b=Jygzatv3KKZK/muyY798YUjQIGRrd1dNPZP1IndQyqwsd8tm3U0Tm+TeBqGMQN9zqSLJ
- fRGbFlTPBvk5l7+xrAFnItyAWPWAU7ZatyJs3N8mBPmKCQ9cqbkzsPxtXvswtKRY52csm
- gtcB7dcz+fjz6K9Z9eGSEddXD2tprF6fiyWcZgtsqj3BYjXvg3kU8VADuzmnaV/qD9Faa
- SEyeoakywxQ1CK7JMT0ue8O3lukvDE8XugOU3RARcf0grnkOGLrM90puHm8LhnkjLgTtG
- /GI8JNPTzOZwHZZbPnveRX5y84opN5cLOgriCH3NuQlbmpJIEyzzxIu14FFghiJmRow==
+ id BLVLF6r3Hb6f; Thu, 17 Sep 2026 11:38:08 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 4BEC880EB6
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789645088;
+	b=NbRrJWPOGZppoJMfyNF/ETPBvHTLyELHs+oPxWlBIZr4pcY+8cydITf/0rxb5kfSyiNo
+	 j0KIw0n/3rUxFuKFjgQTpiFKkw+fvQJrH2nlMP7Ug9kv2j6QIVl+1dB0eJ5MEpG8RvILS
+	 P2zq7fTqvSk8JL9F2T0ltbVoqoKOWSr5BAb+mhWF1LLgpLccQzAr6akv4OsDtofcg1UY1
+	 OgIqNu4bW0BJlQ9d7iVytAOvIE/GZ10Qq5c84ky6gClDFNQK/rM9NiEysW7JL2UgUiSWw
+	 da2Tz+q2cMAwNPB+jifjZPesyX9gw1r7SB8TvP/WQzVcsKqm0ZA90GLkZQwXeyjAZiw==
+ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
+	c=relaxed/relaxed; t=1789645088;
+	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
+	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 Received:X-Google-Original-From:To:Date:Message-Id:X-Mailer:
+	 MIME-Version:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
+	 Reply-To:Cc:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
+	bh=g2ZTXtJd0Ov6zQ+qhPbUyvZBLCfEcmar7IhJ5kyOAOk=;
+	b=ByKloXwqF/zWSy45VnGtTZAdbFa30KrORiviTHMZBYVYrlFKsICiEano3kACCWiuGCyP
+	 5atolQh1yvqp7ZDtBNNb6sIf29QzB1rYABLuJpQ9vpL1skbQPZHWz25WPduiWJo0tZjL/
+	 XyT0vcaCWNc+QdLbhXL6J57MJnonifsG2n75XcIor2IhUOGdpFOEy19OJ1vYzd4ssybY2
+	 uwNkvG2FE0uWUZSotOkRxGmp3tfG1x2l5Dw7RDz/N/5rK8r8JvRoVZCqfxcFPsCSTcP8g
+	 XY54V2+y6Pq+tGX4hsK//YFsPr/7tGwpaapRLoNmMi1Up3HnwjHTf5IBvce2XkzdsOQ==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1789645088;
+	bh=g2ZTXtJd0Ov6zQ+qhPbUyvZBLCfEcmar7IhJ5kyOAOk=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
+	b=A6pP4jmNt/NuqeXG4e1mN3I3W9leGe71vRb25UAHD7O7Q7O8QBUBDJYvfVFH120M7
+	 6nN5s++15k69iJBE5uj4+/EynajQUFUD6bAs3VwqJzwPTrTwXlgZiKhN7n1APckRAh
+	 3G7cWoWozMHIQmPTRAWREl3aAI+5h0y2LVxJo9EP28TE0NdWkpC4AEAUtqPhEUYfai
+	 wTa8vw717mpP3jWh8SPHepk0dJAVEecgHV7iKZSWM5dHfKzpeo9lAhyG1WQmAi2m2k
+	 xqYjaeAImmjH5LWu9PYe4xEaAKcoypgt4vk+Fg9wTeGE1xVtQBsJVAcC6B/vd890qs
+	 SBKyo3feuHTkQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4BEC880EB6;
+	Thu, 17 Sep 2026 11:38:08 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 340F5465
+ for <buildroot@buildroot.org>; Thu, 17 Sep 2026 11:38:07 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1A2A54027C
+ for <buildroot@buildroot.org>; Thu, 17 Sep 2026 11:38:07 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zMZZeWNSbyro for <buildroot@buildroot.org>;
+ Thu, 17 Sep 2026 11:38:05 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org 6347340050
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789645085;
+ b=Py2Ei08o+v1VXg+mu4rx/PKZB+g51dwRDlkAJUhM8zV6IzplMZ1xnS8z/BM0S18QbwPT
+ UkCNZLrQN7KJEimZ1ykRB/R6tw39+bSTkejYBnMRyvZorQUiS2/jM5QN41ySWt8dXO0e3
+ QSGcpRs+mej079/cbutlsgAPlyYNnKyPvCAiceiUeSOw5iINGcFqor0leF4Y76pkkf3V/
+ unMaTExN9dm74cJh9QqyvrpbKARatC9Z64Kqh4X4hPBDeSNjRiY6oSXdi4N1RgaDVUq5j
+ q2zN8P0t80dXqFqUSJUDi0HX4MRmTA46y4giU9ibaN1MJCLkUO+73EteU7L9ffE5Frg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1789638307;
- h=Received-SPF:Received:Received:Received:X-OVh-ClientIp:From:To:Cc:
- Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
- Content-Transfer-Encoding:x-ovh-tracer-id:X-VR-SPAMSTATE:
- X-VR-SPAMSCORE:X-VR-SPAMCAUSE:DKIM-Signature;
- bh=WUlcSNFHuy4eeQoxfvgKh3bU+E94l8hPanoQzzXpjAs=;
- b=TOyKj5gB3GdpS289aAM7i+dADTdJozrCkNQvNbqsJ/aAXnRkMwzcgsq2q7Wo+LYNJ3W3
- /kiCQfFoC0s81je9VDtN14vqyK18qKLP3zDpXz0l1LvDV4ZxJrLodb1Pvaxl/+Xm5LoAU
- otE2sSlRlOQtqGh5pHDgWwPTrwP8gmqjiHbfcSv4uf9LOYwQCnr7vaNHB2r3NIiepZ1/w
- kwdOxCnlDT1U3BcXu7twS9gab/skjxKh/7N4hGrwtRkfW8Ar2aIqxKMeQqD2JwaZ6DLrX
- cDRfLuP4vwZgnt5rWgQ63f4zA0gmEFdSr7PRpPSen1EnGQxTSslatvA1QANz/2uf9QA==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org;
- dmarc=pass header.from=quimesis.be; 
- dkim=pass header.d=quimesis.be header.i=@quimesis.be header.a=rsa-sha256
- header.s=ovhmo1685834-selector1 header.b=IgTa5SHl; 
- arc=none smtp.remote-ip=46.105.40.176
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=46.105.40.176;
- helo=9.mo584.mail-out.ovh.net; envelope-from=antoine.gennart@quimesis.be;
- receiver=<UNKNOWN> 
-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none) header.from=quimesis.be
-Authentication-Results: smtp1.osuosl.org; dkim=pass (2048-bit key,
- unprotected) header.d=quimesis.be header.i=@quimesis.be header.a=rsa-sha256
- header.s=ovhmo1685834-selector1 header.b=IgTa5SHl
-Received: from 9.mo584.mail-out.ovh.net (9.mo584.mail-out.ovh.net
- [46.105.40.176])
- by smtp1.osuosl.org (Postfix) with ESMTPS id CA6E080E97
- for <buildroot@buildroot.org>; Thu, 17 Sep 2026 09:45:05 +0000 (UTC)
-Received: from director8.ghost.mail-out.ovh.net (unknown [10.110.37.167])
- by mo584.mail-out.ovh.net (Postfix) with ESMTP id 4hlrL74fsZz8VCZ
- for <buildroot@buildroot.org>; Thu, 17 Sep 2026 09:38:55 +0000 (UTC)
-Received: from ghost-submission-c7b579475-z2xfn (unknown [10.111.182.237])
- by director8.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 5757CC0075;
- Thu, 17 Sep 2026 09:38:55 +0000 (UTC)
-Received: from quimesis.be ([37.59.142.110])
- by ghost-submission-c7b579475-z2xfn with ESMTPSA
- id cFDRCy21q2prYzsAFSJ44g:T2
- (envelope-from <antoine.gennart@quimesis.be>); Thu, 17 Sep 2026 09:38:55 +0000
-Authentication-Results: garm.ovh; auth=pass
- (GARM-110S004a0eb8616-9221-47cc-a862-5afdbf354441,
- 8A94A716474959CFB9616324D37364D589FF58DE)
- smtp.auth=antoine.gennart@quimesis.be
-X-OVh-ClientIp: 81.245.109.59
-From: Antoine Gennart <antoine.gennart@quimesis.be>
+ c=relaxed/relaxed; t=1789645085;
+ h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
+ X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:
+ X-Google-Original-From:To:Cc:Subject:Date:Message-Id:X-Mailer:
+ MIME-Version:Content-Transfer-Encoding;
+ bh=ObD3JlX0G08o1ym+wbWruhkdQlKc+ET1Sy8W8t9hAek=;
+ b=d0klT6b3GBgYUS8ltJCO07K7iUsK19vIC+1+sSZLyM+6vbvJeS20OJEONVszjBIPVDNU
+ WpwefFoAk2AgdA/0c/rUh7zd+fBKyMUDBj1z0nJ6OYot7sC3OUOrOz4I2A38MxkuxntXO
+ T3F8A1wJFh+wRPSeCv0QW/uztIFroDPYyb3yIdGZHvxj6B+E15w/qmSn5uzC41COhX5kK
+ C2V/pZBX0/Rs6BnGZaCWshaKvb06TBds8JvvOZQDI4i4LLYGt9KhfN+3B6ztMukh6HwFV
+ LL1npBHsL7wJH3N6KOwf7po7eCFGQkYU/2dFf6CNEWocZzzTybAj1Y0FVQkfwYkTK3A==
+ARC-Authentication-Results: i=1; smtp2.osuosl.org;
+ dmarc=pass header.from=googlemail.com; 
+ dkim=pass header.d=googlemail.com header.i=@googlemail.com header.a=rsa-sha256
+ header.s=20251104 header.b=TrCXfQHz; 
+ arc=none smtp.remote-ip="2a00:1450:4864:33::1c"
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:33::1c; helo=mail-ed2-x1c.google.com;
+ envelope-from=yegorslists@googlemail.com; receiver=<UNKNOWN> 
+Received: from mail-ed2-x1c.google.com (mail-ed2-x1c.google.com
+ [IPv6:2a00:1450:4864:33::1c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6347340050
+ for <buildroot@buildroot.org>; Thu, 17 Sep 2026 11:38:04 +0000 (UTC)
+Received: by mail-ed2-x1c.google.com with SMTP id
+ 4fb4d7f45d1cf-6a9984f9adcso1180042a12.0
+ for <buildroot@buildroot.org>; Thu, 17 Sep 2026 04:38:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20260707; t=1789645083; x=1790249883;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to:content-type;
+ bh=ObD3JlX0G08o1ym+wbWruhkdQlKc+ET1Sy8W8t9hAek=;
+ b=XJOw46XypxMbsshZ5jw786y9I1cFfqL0hxwFB2FE5yRtLSicSs5C6WrY+Ok1I2XbP+
+ BHoiOVovMYWiJwOP//Mr2+IJGvmWa4I6TDDCk2OTLXs8XEUdlLbYltq4+wWd1pVoZS4a
+ fht9FEUMJbKzCr/NXzwdMhd46jOgo89DOVCyocnfY9VR+YmHoVoJCgCu0zl0ofRKpBD9
+ jXfc5oGUcEVaNKZqBKJKhxm8oQ1NyhSENZm1/+GWdxTSH9ubar9xq2Pg/E2vHhEUMjKF
+ gdoahrR4P6Xxkjfl1bzyY7wllMZYSKjP8zIczEf2sG7QSuEOefef+6V+GCTGx203zo68
+ rsuQ==
+X-Gm-Message-State: AFuF++l4Fvc9p/yJYbLalB68iMJB9zY/h9GiXvob+u8tTBlG7Qy8LGyP
+ LfofZONqwuiSdRPz6XWUcFS1Xkt6+2DqbaBJ5AbdNb79XOYcmGVFsZPPSYKbjw==
+X-Gm-Gg: AYBFou39qnmuKpg8cTtaa+Ym51UTbNww7fyJVXCLCOJN7dzfAYWlaKL1YQcCoGBZWOa
+ l97KzWb+HalH16bPT6QJr0Fm4QFuCe/FjI5htDqmtHaOQdJ+B9VHsRwkNYP6rZQBWarkjZaAf7N
+ 115pflhVpnEFZRS+nQS7uHUWBvLkqXPSVybMtqrjajk2ffks/n3Y/yQBcUroLa22dz/yZCI+MYQ
+ YFUtdQ0j5hR3Rc3DYjefjjxeX+m4umQXW0FgI04egl9YCYYeOguUD0hJ+avgM3JydFf2FD+pJnA
+ 8iEfjfzMy0j1+vkExkTCXa+T//RDBqRgmkrdideH/Bqz5dub7RDBB8+Su60ycWr/VMBuyqQZhF2
+ AhlanLj9Ue2pj43vnKONvHTZf8bu1PB+tssfmcy29dYNelr6eEP1+cskrumB2SFYxCu1ShsBkKm
+ a4lyMXQ+Fz2C5bt2rcZRPAlEbc/C6ZH0O0qeECElAattEgkIv/sYaXZYA0+7MBFQjXR8PTuTCTf
+ XiN0lFAavtvcco/3mE56RJ6yfeG8vKDXje7nsUME1caEdsNhzqv18zHnQ==
+X-Received: by 2002:a05:6402:3808:b0:6a7:ea53:f622 with SMTP id
+ 4fb4d7f45d1cf-6aa2242936fmr4698019a12.33.1789645082579; 
+ Thu, 17 Sep 2026 04:38:02 -0700 (PDT)
+Received: from development2.visionsystems.local (mail.visionsystems.de.
+ [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
+ 4fb4d7f45d1cf-6aa1cfe037esm3687101a12.1.2026.09.17.04.38.02
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 17 Sep 2026 04:38:02 -0700 (PDT)
+X-Google-Original-From: Yegor Yefremov <yegorslists@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu, 17 Sep 2026 11:38:48 +0200
-Message-ID: <20260917093849.2095768-2-antoine.gennart@quimesis.be>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260917093849.2095768-1-antoine.gennart@quimesis.be>
-References: <20260917093849.2095768-1-antoine.gennart@quimesis.be>
+Date: Thu, 17 Sep 2026 13:37:18 +0200
+Message-Id: <20260917113720.1297345-1-yegorslists@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-x-ovh-tracer-id: 13055653846874263510
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: dmFkZTEEE/3+VB2ok3vJIcNdSt/euPBQZpOckG+o7beqrNbb3yIgvjiSkiqiYmUtlC7v5l0qFYFnpuBUllUVwyun1pKLnL8mjU1/h5+6VDhQl1mlOLwV+9g5kO5vPFYg1azAkH1AJ/8IMXFvGkmHqIm+MrTyaf8lOkWL7DSDqyfpdQNwibIPz8m7YctwSbMi7dyLuRewC8Z1xU9kmt3mW7jlqfA7FDA+/pCk7idwverNKVO8QzjB47MhSxAzShcys3nllhuLAcDrDZYBL5HZvVDNXc2PEHSP2ae67vx3aWgHb5fbA8/+Noe0/6qiPJpXD+jdPDhJ3cqAKDvhNaf460J6XXrIgWrnZ01E50rQxhuNU7PDihlbi8snreOMhrGvnd50i3rNEPEY0jZHZ/WlcVqbGcpqBtxvgLnD6zSVTFsY6MHL94hyQSoEw2evg67kpBgQoUo9hArC3mFxG7V6G+J1X9BOMidy+gR6N677AniUrzzlD1irJ2T3pnaB15dj2Uz4wgRIgkLY3qyIA6spdBZ4ro5g8AzvtjXaCr8amJoSMswp0w7xAwFT0LltxxWJYlsI2nM9iUzAIpkh/fQ8Itk37IA6QP/k6JZMM04/+XovvX8qFXcy0dcvWpnZHgRIjCpTq6+2rGi90rS3dgsNNGXokern9QuXfBpzfzssK2mYj1qOmg
-DKIM-Signature: a=rsa-sha256; bh=WUlcSNFHuy4eeQoxfvgKh3bU+E94l8hPanoQzzXpjAs=; 
- c=relaxed/relaxed; d=quimesis.be; h=From;
- s=ovhmo1685834-selector1; t=1789637935; v=1;
- b=IgTa5SHlBET4dEpFWFJEgBoIuPwMh/doJh7RJWFIzy0OV6UkNnu631wiplH9bVCsiW4ygxkn
- MFe0N8L/ABAeGCGURujWxhJbLBagLlwiLQEyL+M0wk8mKmlxD84rfbNp8A78noLUjEf2Hhr/4xx
- qwz5S183yD1knmiTjo426ecVUDft/l6kyQDTvEQ1RRRQht2yeEyIyqFY0b59WFGf2o3TWxxhpfv
- K2EordYZGcGn5LA41rBO+Sp9JxYrRbaLG85WwU3lk+RhhwZo/zvB1NMd3Kam1cXebhNDaRQkAct
- 39i2kJQoyZ0uu5HWzlvqDxIKA/3mL2MVasGG/9w+OA3/w==
-Subject: [Buildroot] [PATCH 2/2] package/nxp-bt-wifi-firmware: add IW610 USB
- support
+Subject: [Buildroot] [PATCH v2 0/2] package/{libabseil-cpp,
+ python-grpcio}: disable for the MIPS n32 ABI
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -151,192 +147,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: agennart <antoine.gennart@quimesis.be>
+From: Yegor Yefremov via buildroot <buildroot@buildroot.org>
+Reply-To: Yegor Yefremov <yegorslists@googlemail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: agennart <antoine.gennart@quimesis.be>
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-The IW610 module is also available with a USB host interface, while the
-current package only supports its SDIO firmware.
+This is a v2 of "package/python-grpcio: disable for the MIPS n32 ABI":
 
-Bump the firmware release to lf-6.18.20_2.0.0, which
-provides the FwImage_IW610_USB firmware, and add a dedicated
-BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_IW610_USB option.
+  https://patchwork.buildroot.org/project/buildroot/patch/20260908093538.2715153-1-yegorslists@gmail.com/
 
-The new release also moves firmware files out of the nxp/ directory
-and no longer provides 8801 or 8997 firmware. Update the installation
-paths, make the existing IW610 option explicitly SDIO, and retain legacy
-configuration handling for removed or renamed options.
+Changes v1 -> v2 (after Thomas' review):
 
-Signed-off-by: Antoine Gennart <antoine.gennart@quimesis.be>
----
- Config.in.legacy                              | 36 +++++++++++++++++++
- package/nxp-bt-wifi-firmware/Config.in        | 32 ++++-------------
- .../nxp-bt-wifi-firmware.hash                 |  2 +-
- .../nxp-bt-wifi-firmware.mk                   | 16 ++++-----
- 4 files changed, 50 insertions(+), 36 deletions(-)
+ - Added PATCH 1/2 fixing libabseil-cpp itself, which has exactly the
+   same problem. This automatically propagates to grpc, protobuf, re2,
+   webrtc-audio-processing, sysdig, falcosecurity-libs, collectd and
+   gst1-plugins-bad, which all already depend on
+   BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS.
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 6c222c0e57..565f100e57 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,42 @@ endif
- 
- comment "Legacy options removed in 2026.11"
- 
-+config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_8801
-+	bool "nxp-bt-wifi-firmware 8801 support removed"
-+	select BR2_LEGACY
-+	help
-+	  The 8801 firmware is no longer available in the selected NXP
-+	  firmware release.
-+
-+config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_8997
-+	bool "nxp-bt-wifi-firmware 8997 support removed"
-+	select BR2_LEGACY
-+	help
-+	  The 8997 firmware is no longer available in the selected NXP
-+	  firmware release.
-+
-+config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_8997_SD
-+	bool "nxp-bt-wifi-firmware 8997 SD support removed"
-+	select BR2_LEGACY
-+	help
-+	  The 8997 firmware is no longer available in the selected NXP
-+	  firmware release.
-+
-+config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_8997_PCIE
-+	bool "nxp-bt-wifi-firmware 8997 PCIe support removed"
-+	select BR2_LEGACY
-+	help
-+	  The 8997 firmware is no longer available in the selected NXP
-+	  firmware release.
-+
-+config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_IW610
-+	bool "nxp-bt-wifi-firmware IW610 option renamed"
-+	select BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_IW610_SD
-+	select BR2_LEGACY
-+	help
-+	  The IW610 firmware option was renamed to distinguish SD and
-+	  USB interfaces.
-+
- config BR2_BINUTILS_VERSION_2_44_X
- 	bool "binutils 2.44 has been removed"
- 	select BR2_LEGACY
-diff --git a/package/nxp-bt-wifi-firmware/Config.in b/package/nxp-bt-wifi-firmware/Config.in
-index c707cd05cd..9fe79fa7d6 100644
---- a/package/nxp-bt-wifi-firmware/Config.in
-+++ b/package/nxp-bt-wifi-firmware/Config.in
-@@ -7,36 +7,11 @@ config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE
- 
- if BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE
- 
--config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_8801
--	bool "8801 (SD)"
--	help
--	  NXP 8801 module firmware files.
--
- config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_8987
- 	bool "8987 (SD)"
- 	help
- 	  NXP 8987 module firmware files.
- 
--config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_8997
--	bool "8997"
--	help
--	  NXP 8997 module firmware files.
--
--if BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_8997
--
--choice
--	prompt "8997 WiFi interface"
--
--config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_8997_SD
--	bool "SD"
--
--config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_8997_PCIE
--	bool "PCIe"
--
--endchoice
--
--endif
--
- config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_9098
- 	bool "9098"
- 	help
-@@ -62,11 +37,16 @@ config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_IW416
- 	help
- 	  NXP IW416 module firmware files.
- 
--config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_IW610
-+config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_IW610_SD
- 	bool "IW610 (SD)"
- 	help
- 	  NXP IW610 module firmware files.
- 
-+config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_IW610_USB
-+	bool "IW610 (USB)"
-+	help
-+	  NXP IW610 module firmware files.
-+
- config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_IW612
- 	bool "IW612 (SD)"
- 	help
-diff --git a/package/nxp-bt-wifi-firmware/nxp-bt-wifi-firmware.hash b/package/nxp-bt-wifi-firmware/nxp-bt-wifi-firmware.hash
-index 60e1be03da..3becca37ec 100644
---- a/package/nxp-bt-wifi-firmware/nxp-bt-wifi-firmware.hash
-+++ b/package/nxp-bt-wifi-firmware/nxp-bt-wifi-firmware.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  444351eba2669772a0f62aadbff92b46adb370dcd5228f12e4f5ae2b58554951  nxp-bt-wifi-firmware-lf-6.6.52_2.2.0.tar.gz
-+sha256  549b3e666e9203f2a752545c10dd391c36ee751e140fa33013ea74739088f1e5  nxp-bt-wifi-firmware-lf-6.18.20_2.0.0.tar.gz
- sha256  601fa790c5b4d03579bd182fb4d65a6f329a32faf49db22f98e4608221e861f7  LICENSE.txt
-diff --git a/package/nxp-bt-wifi-firmware/nxp-bt-wifi-firmware.mk b/package/nxp-bt-wifi-firmware/nxp-bt-wifi-firmware.mk
-index f0440ce32a..74fa21ac18 100644
---- a/package/nxp-bt-wifi-firmware/nxp-bt-wifi-firmware.mk
-+++ b/package/nxp-bt-wifi-firmware/nxp-bt-wifi-firmware.mk
-@@ -4,29 +4,27 @@
- #
- ################################################################################
- 
--NXP_BT_WIFI_FIRMWARE_VERSION = lf-6.6.52_2.2.0
-+NXP_BT_WIFI_FIRMWARE_VERSION = lf-6.18.20_2.0.0
- NXP_BT_WIFI_FIRMWARE_SITE = $(call github,nxp-imx,imx-firmware,$(NXP_BT_WIFI_FIRMWARE_VERSION))
- NXP_BT_WIFI_FIRMWARE_LICENSE = NXP Software License Agreement
- NXP_BT_WIFI_FIRMWARE_LICENSE_FILES = LICENSE.txt
- NXP_BT_WIFI_FIRMWARE_REDISTRIBUTE = NO
- 
--NXP_BT_WIFI_FIRMWARE_FILES_$(BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_8801) += FwImage_8801_SD
--NXP_BT_WIFI_FIRMWARE_FILES_$(BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_8987) += FwImage_8987
--NXP_BT_WIFI_FIRMWARE_FILES_$(BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_8997_SD) += FwImage_8997_SD
--NXP_BT_WIFI_FIRMWARE_FILES_$(BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_8997_PCIE) += FwImage_8997
-+NXP_BT_WIFI_FIRMWARE_FILES_$(BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_8987) += FwImage_8987_SD
- NXP_BT_WIFI_FIRMWARE_FILES_$(BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_9098_SD) += FwImage_9098_SD
- NXP_BT_WIFI_FIRMWARE_FILES_$(BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_9098_PCIE) += FwImage_9098_PCIE
- NXP_BT_WIFI_FIRMWARE_FILES_$(BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_IW416) += FwImage_IW416_SD
--NXP_BT_WIFI_FIRMWARE_FILES_$(BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_IW610) += FwImage_IW610_SD
-+NXP_BT_WIFI_FIRMWARE_FILES_$(BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_IW610_SD) += FwImage_IW610_SD
-+NXP_BT_WIFI_FIRMWARE_FILES_$(BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_IW610_USB) += FwImage_IW610_USB
- NXP_BT_WIFI_FIRMWARE_FILES_$(BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_IW612) += FwImage_IW612_SD
- 
- define NXP_BT_WIFI_FIRMWARE_INSTALL_TARGET_CMDS
--	$(INSTALL) -m 0644 -D $(@D)/nxp/wifi_mod_para.conf \
-+	$(INSTALL) -m 0644 -D $(@D)/wifi_mod_para.conf \
- 		$(TARGET_DIR)/lib/firmware/nxp/wifi_mod_para.conf
--	$(INSTALL) -m 0644 -D $(@D)/nxp/mfguart/helper_uart_3000000.bin \
-+	$(INSTALL) -m 0644 -D $(@D)/mfguart/helper_uart_3000000.bin \
- 		$(TARGET_DIR)/lib/firmware/nxp/helper_uart_3000000.bin
- 	$(foreach f,$(NXP_BT_WIFI_FIRMWARE_FILES_y), \
--		$(INSTALL) -m 0644 -D $(@D)/nxp/$(f)/* $(TARGET_DIR)/lib/firmware/nxp/
-+		$(INSTALL) -m 0644 -D $(@D)/$(f)/* $(TARGET_DIR)/lib/firmware/nxp/
- 	)
- endef
- 
+ - Added the Fixes: tags (commit + autobuild result) to both patches.
+
+ - Documented since when the problem exists, with autobuild links on the
+   maintained branches, so that the LTS maintainers can decide about
+   backports. Short version: both are broken since mips64 was first
+   allowed, and both still need a backport to 2025.02.x; libabseil-cpp
+   also to 2026.02.x.
+
+ - Answered in the python-grpcio commit log why the Buildroot-provided
+   abseil cannot be used instead of the bundled one: grpcio's
+   GRPC_PYTHON_BUILD_SYSTEM_ABSL hardcodes /usr/include and globs
+   /usr/lib*/libabsl_*.so, so it is unusable when cross-compiling, and
+   it would not help here anyway since Buildroot's abseil has the same
+   limitation.
+
+Note that n32 is the default ABI for BR2_mips64/BR2_mips64el, so this
+covers the default mips64 autobuilder configurations. All in-tree mips64
+defconfigs use n64 and are unaffected.
+
+Tested with olddefconfig on mips64el n32 (both packages and their reverse
+dependencies disappear), mips64el n64 and x86_64 (both still selectable).
+
+Yegor Yefremov (2):
+  package/libabseil-cpp: disable for the MIPS n32 ABI
+  package/python-grpcio: disable for the MIPS n32 ABI
+
+ package/libabseil-cpp/Config.in | 4 ++++
+ package/python-grpcio/Config.in | 5 +++++
+ 2 files changed, 9 insertions(+)
+
 -- 
-2.53.0
+2.34.1
 
 _______________________________________________
 buildroot mailing list
