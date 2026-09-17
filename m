@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29443C982C1
-	for <buildroot@archiver.kernel.org>; Thu, 17 Sep 2026 07:55:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6081AC982C1
+	for <buildroot@archiver.kernel.org>; Thu, 17 Sep 2026 07:57:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E996A80EE6;
-	Thu, 17 Sep 2026 07:55:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 59BCC60830;
+	Thu, 17 Sep 2026 07:57:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2BZMj72-hj_D; Thu, 17 Sep 2026 07:55:48 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 19EF18096A
-Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789631748;
-	b=gjkUbEkZFx3Jn6ZeLdwbVLn9RsihUKV6Mgahp91ESuyw0w2pWigV1xAs6govbXpqUh59
-	 o1P634VCYPp6yJYyBb6G0E/CMTjD8SxT1mk/x1bKJfnMbj9o5hoOD13bkkhWa6j9q0Gmg
-	 dkzxi5OPPH993w4uxtZbouJUnHk4WUjUGnxMobJlyas330QxG1oBfa0Pr1NrTDE3GbFmO
-	 Mo8im45wFkZ1KUB1gvtYaYmaN12ckYb+i4xnYK5lkxt4Je0X6Zp/OoR70O6Aoy0fkrh6Y
-	 C0K6TVxtOk6Cqm1kd5bFV0aAESkUQMTmwP+viy12jTWy6sDhgdPjbB+8oyhhfuVB/WQ==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9L07Hubk1DRa; Thu, 17 Sep 2026 07:57:14 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org A77FE60659
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789631834;
+	b=OhJu2+tg6M/VzApax2SLIDqNfCzXfYsET7UlEr9sHpywllamAQyoWAedr5XEXrtm9tfE
+	 bwS1arVqgHA9bO4zbzzNNtjsfL44jlvSMuE5Zr4Vz/U7Viw3Sur2r1tsQRivJCDjLi3LM
+	 qNuUe01eJZ6zCVvR155ho0D70e6Q8W3gYDTPMY5ayK6VMHsbkn/Ut9tA6S/Y9pOmRDOoJ
+	 +fiZQ1gRGPzkG7cwE40Ubsp6JAwA+GRNKX7S9oL6rgOkKBDKPSng/iN8X95IyL6UAp+gB
+	 hkUfrX/itV7XXcC6biRC37TJPN310HgUaDsrfqSidbsarhxN0bZj5iTD5JO5Y+sDatw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789631748;
+	c=relaxed/relaxed; t=1789631834;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -31,88 +31,88 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
 	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=6Wd7JDjZkB1temfVScww3KByygGYfmUWkWah5FZYNug=;
-	b=NDeVMw5z2YKkKvphwc8wBujC7NiNmnz+vuHzaJZW2PB1LVcOtyoVt5YoWKrRHefHLmT0
-	 w7FuzQniUJDaGrJHF9gF65wqHus86LXsGe1J5ODFKYXHm/EPEShJfG7pMIkJaRO2o9Hue
-	 6hPz6GL9GFVyRNItCBczFgZFQJp/lSHsho0U3bIQrWeS9ZJaxDhfPD4jG7U3PwrWRDp3i
-	 UC8VH/9apYQV5XGjevEawMsVS+ro7DmYmH7loaOoi4mH1+NdY9i/LFFOxkv2crpW9E+ot
-	 R35fwGbwjYSsSA7y29MlobGqzdhfJ/eibPSkX1uyzXqDNMiq1jAf9SV1gRtgg3ahcbQ==
-ARC-Authentication-Results: i=2; smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	bh=7BEX1B6eq89xUPYO3J7quy3Mz0hw/sgXRi+32HJIxzs=;
+	b=Jef/zzQaFAEgt2DX/07iAQ6teAHNOvIExYESrCl3UDcNrS2YV4ZU1iFKnvailQt4Zwra
+	 5H5s7CxO60OPFXGTZtIcNVMwy4ghrdogHhHpvmjdlrRcRxKgfXpxFcJO3pz0N10XPvXjq
+	 DAXlAZyeFM4DAlgxtF5QB/0VW4hQto0Sh9XIS+h/8XYI9K6qH4toO0Kx96jur28shWQuT
+	 WAwLn74CaYeZGOx2p9vgsY8w6X86VgyZBFnmU++ICB0GQ0cH+LWynIOQl3OXVa2aQRTxN
+	 X8vYJ1u6GEBR4cXnfbWZfXfXT3dDlSvbf7S9WNkHmvI5XdNCiAYACpz8KpnJASLBVsw==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789631748;
-	bh=6Wd7JDjZkB1temfVScww3KByygGYfmUWkWah5FZYNug=;
+	s=default; t=1789631834;
+	bh=7BEX1B6eq89xUPYO3J7quy3Mz0hw/sgXRi+32HJIxzs=;
 	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=lMHzVFjiUinDiJIpI5PSblwjiH0DawvcTpsPCTD10hzTFSVrabVW5UislhQZVJUC3
-	 +fOxTW4trkTPOYLJYwOeHa3pJ2ZpVnrdKjji5//wCbsUZOTWQGaaxdOUYOla7Pp0/A
-	 9mbhcbIaj5X259HJmJ+RpFiyAIlG24cyFu+An70XqLp6ssVibU8Fxn2MfJ8pp0k7eL
-	 K4U6t/XkcWZ83DNyEmMvwzyGk6hZ2NmqFazVraYWuraNdQFAzA26RvLO7MFIN+ZX2A
-	 KrcsLXZALqoL2Pld49PHoKWAIHjfn8mzZuutiEYXCeb06F6L3rhluA2twmQYYJI6nB
-	 OoyHYVMi00Dvw==
+	b=GP/KIk0JHr2oV8POrbNXqS6ZBpqQthJqebJiut1xHKzIZ6Fe/CbSURZ2BB76A7iKy
+	 eolGNcLXISx/coFOtxdOcDWvtkkH8fSAtrc6IlkogPaxz6CSEfXxlz/XJHYpAXDw9q
+	 04EIuBs64jhpkw+y92hvO70EQjdwGWsHy64qo7eqlkZz1cpLrMr78fFus9q6kRbyG2
+	 gQXoItE+ovGd75AeIhJiSFELTHTVXOG6IaesTH9v2m/oBkNXO/PbB8C1ypUU6eS3x8
+	 n+zNtH4kxPPGdNJnVcOf7xRqywhoUvdjHFLttosm4eDgUkdfwBeYyofMDMjI5HX/vr
+	 tuUQVuFRobElg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 19EF18096A;
-	Thu, 17 Sep 2026 07:55:48 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 960112EB
- for <buildroot@buildroot.org>; Thu, 17 Sep 2026 07:55:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A77FE60659;
+	Thu, 17 Sep 2026 07:57:14 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0ED3529B
+ for <buildroot@buildroot.org>; Thu, 17 Sep 2026 07:57:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 878238096A
- for <buildroot@buildroot.org>; Thu, 17 Sep 2026 07:55:47 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id F0070400F6
+ for <buildroot@buildroot.org>; Thu, 17 Sep 2026 07:57:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IwromJmKrxdU for <buildroot@buildroot.org>;
- Thu, 17 Sep 2026 07:55:46 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org F2FF2808D8
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789631746;
- b=nEDJYmd7oGB7L9pQbexAP0p13zWewxnhzWIKzD58sMzMgYxHjBcUB/WzERH2olR2lAXA
- AsRuy+3wY9/0P9JTWoslyVLYd3g8myhUUtXescVOcBub+t23E7ykg+ip/12eo64M7rUVR
- iD2f1v2ug3+O9D4adqJ3D0pZD+SUis+1XKUsXEb02jEDRcWMKROKhlJG6bYq/n3Bjrath
- JZoLjL8Ukil0NDQOUA+bt/UkhdKxZ9I1CM5B8zE7pksUZIKBl5jzRIA4KDvSoMi1wo6yR
- gN5beM7tYCFANCR3fsNH2CEzlI2lAIiSEMLOo2CBk1jIgz786Ojngy3L/DN1Q3PWO+w==
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id S3cfQkcy77eW for <buildroot@buildroot.org>;
+ Thu, 17 Sep 2026 07:57:11 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org 65A4E400F3
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789631831;
+ b=bPqCRqIaRSKjTXCJq3JZhw/Z7qJXcjBtDKg330LJ9Mnsz/rwL6249obxkL/E9kHQdqn+
+ temeaZYZZ7XMj7wswR+TmbgYghqlrDmxObyb+CUceqwc565y+2ALV2KHQRzMlRHzLNd61
+ XH3gtFhxBUW+EwOESv5bAhhH739JPvT5an2oRd1Srnn4QTD49D9bo87jvRdlc+DCC9Ahu
+ wk+i9nx/AJMD4NC2fpDFHq4SG7CHU3mYIfcF4BqhCzYSW5V9+26Q0hqclDCbRppOsM9ph
+ cHvnU4uOlVU4Soru64yYNsJUpMctNxIfWPPkwCC1TkQq/rAsRZ3fqt/ejpzjsD+Aezg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1789631746;
+ c=relaxed/relaxed; t=1789631831;
  h=Received-SPF:Received:Received:Received:DKIM-Signature:Date:From:To:
  Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
  Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version;
- bh=Nh0wTqNoh7sIoMeGOMERpxPKFaQC1ofBYXCk6VhH8Uo=;
- b=gIzuD0TAOII+2BdX1+vWaFi0c35qfsaCe1BGDUkss+upWVrLDBt8H3cTqz3WAKpmsBpD
- l9N9LNrbLiuVK0JMJnhcqOBnfUatbOg/1Y59rgCEwJXEq7CqOH7T3zU54S5O91mn3nBqr
- kqMVedqIs7NHXI+/YRR8BQJkerYMZZdr0MOuYhYLBtza6wTIEPPWFnVtRB285u42qCmkO
- cQlhszfGhKsY1+mAq/PZKYkVfVPCrz1cbqGqHIa3fXj+Ltqqem4nt9OHqIOx8oZxyzxv1
- GPgKptlKGtFrAba4ltOCDaRXkw4p2kzsHbkYAFDQ7C4Iy9YuKIEBHh2o/PKP1YZzB5Q==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org;
+ bh=ymH+R3+57Hb6+wzvwvHQjtGRcuGfeEw5KHK9Zvf+MZU=;
+ b=RlzWLlOmblVdVYXux8FxFzBYNq5kD7Db5l5WuZKN5VdlMGFp+n7TJcTS04KSZA91k/Ow
+ RbWry6WHCYRXpgyy9C3rbmNHjI2hoXowERnqE8AqweYanRvO7E+lWpnpeQ0yflk4MEIFC
+ gAFfke4zkS9r3lgnZfK5XjVXe8OB07uccqC4m4tVLE+90AB1ho+ULQ5e7uHYeX2MGN6ck
+ MNa2d/IyOIIovjtlB8cCr/VX5sATomDGk/irzAP9oU0gJXlbd/kMa3rrjius17kFh9MiO
+ XsphHxv5QcdP+lvKIXDlTuHdU/3d18jBt2Dm9DrOObwnpbovEaUd/bAZMM4GKho+txA==
+ARC-Authentication-Results: i=1; smtp2.osuosl.org;
  dmarc=pass header.from=bootlin.com; 
  dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=A+FHl9kO; 
- arc=none smtp.remote-ip=185.171.202.116
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
- helo=smtpout-04.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ header.s=dkim header.b=QF625gXn; 
+ arc=none smtp.remote-ip=185.246.84.56
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
+ helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
- by smtp1.osuosl.org (Postfix) with ESMTPS id F2FF2808D8
- for <buildroot@buildroot.org>; Thu, 17 Sep 2026 07:55:44 +0000 (UTC)
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 65A4E400F3
+ for <buildroot@buildroot.org>; Thu, 17 Sep 2026 07:57:09 +0000 (UTC)
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-04.galae.net (Postfix) with ESMTPS id D373EC63440;
- Thu, 17 Sep 2026 07:56:26 +0000 (UTC)
+ by smtpout-02.galae.net (Postfix) with ESMTPS id 8BB4C1A090E;
+ Thu, 17 Sep 2026 07:57:07 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 8AFD25FAA3;
- Thu, 17 Sep 2026 07:55:42 +0000 (UTC)
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 6002C5FAA3;
+ Thu, 17 Sep 2026 07:57:07 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id BDD2E11C7A20E; 
- Thu, 17 Sep 2026 09:55:41 +0200 (CEST)
-Date: Thu, 17 Sep 2026 09:55:41 +0200
+ with ESMTPSA id 9C59511C7B062; 
+ Thu, 17 Sep 2026 09:57:06 +0200 (CEST)
+Date: Thu, 17 Sep 2026 09:57:06 +0200
 To: Waldemar Brodkorb <wbx@openadk.org>
 Cc: buildroot@buildroot.org
-Message-ID: <aqucwrwMlEvUBdCO@windsurf>
-References: <aqZWRD3zV37x5UzL@waldemar-brodkorb.de>
+Message-ID: <aqudBuB_ah9WcU9E@windsurf>
+References: <aqZWi-3XxmbWmJbA@waldemar-brodkorb.de>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <aqZWRD3zV37x5UzL@waldemar-brodkorb.de>
+In-Reply-To: <aqZWi-3XxmbWmJbA@waldemar-brodkorb.de>
 X-Last-TLS-Session-Version: TLSv1.3
-Subject: Re: [Buildroot] [PATCH] package/nim: new package
+Subject: Re: [Buildroot] [PATCH] package/chawan: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -131,48 +131,58 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, Sep 13, 2026 at 09:52:36AM +0200, Waldemar Brodkorb wrote:
-> Nim is a statically typed compiled systems programming language. It
-> combines successful concepts from mature languages like Python, Ada and
-> Modula. See https://nim-lang.org/ for more information.
+Hello,
+
+On Sun, Sep 13, 2026 at 09:53:47AM +0200, Waldemar Brodkorb wrote:
+> Chawan is a text-mode web browser and pager for Unix-like systems, with
+> a focus on implementing modern web standards while remaining
+> self-contained, easy to understand and extensible.
 > 
-> This is a host-only package required for the new chawan package.
+> It includes functionality such as CSS, inline images inside the
+> terminal, and JavaScript through a small, independent browser engine.
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 
-Then this should be in a series together with the chawan patch.
+The AI-driven review reported by Gullient Dowan made valid
+comments. On additional comment below.
 
-> diff --git a/package/nim/nim.hash b/package/nim/nim.hash
-> new file mode 100644
-> index 0000000000..c455ab91a9
-> --- /dev/null
-> +++ b/package/nim/nim.hash
-> @@ -0,0 +1,3 @@
-> +# Locally computed
-> +sha256  2639a06a5ea7a7fcf57df1e7e1ef4d1b2bee58c7ac9bd00dbd2aa5bea1e5a56a  nim-2.2.12.tar.xz
-> +sha256  1ef33f7376a2e4b4c090fcaa42d8a206c19bc70d8d816665ff983bc14c5fe159  copying.txt
-> diff --git a/package/nim/nim.mk b/package/nim/nim.mk
-> new file mode 100644
-> index 0000000000..b9a83e4939
-> --- /dev/null
-> +++ b/package/nim/nim.mk
-> @@ -0,0 +1,22 @@
-> +################################################################################
-> +#
-> +# nim
-> +#
-> +################################################################################
+> +CHAWAN_VERSION = 0.4.4
+> +CHAWAN_SITE = https://git.sr.ht/~bptato/chawan/archive
+> +CHAWAN_SOURCE = v$(CHAWAN_VERSION).tar.gz
+> +CHAWAN_LICENSE = Public Domain
+> +CHAWAN_LICENSE_FILES = UNLICENSE
 > +
-> +NIM_VERSION = 2.2.12
-> +NIM_SITE = https://github.com/nim-lang/nightlies/releases/download/2026-09-08-version-2-2-8e8fbf60693418dc95bb0d762fd660231d08a583/
-> +NIM_SOURCE = nim-$(NIM_VERSION).tar.xz
-> +NIM_LICENSE = MIT
-> +NIM_LICENSE_FILES = copying.txt
+> +CHAWAN_DEPENDENCIES = host-nim brotli libssh2 openssl
 > +
-> +define HOST_NIM_BUILD_CMDS
-> +	($(HOST_MAKE_ENV) cd $(@D) && ./build.sh)
+> +ifeq ($(BR2_aarch64),y)
+> +CHAWAN_TARGET_ARCH = arm64
+> +else ifeq ($(BR2_x86_64),y)
+> +CHAWAN_TARGET_ARCH = amd64
+> +else
+> +CHAWAN_TARGET_ARCH = $(BR2_ARCH)
+> +endif
+> +
+> +TARGET_CONFIGURE_OPTS += \
+> +			 FLAGS="--os=linux \
+> +			 --cpu:$(CHAWAN_TARGET_ARCH) \
+> +			 --gcc.exe:$(TARGET_CROSS)gcc \
+> +			 --gcc.linkerexe:$(TARGET_CROSS)gcc" \
+> +			 PREFIX="/usr"
+> +
+> +define CHAWAN_BUILD_CMDS
+> +	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) all
 
-Surrounding parenthesis are not needed.
+Pass $(TARGET_MAKE_ENV) in the environment.
 
-Otherwise, looks good to me.
+> +endef
+> +
+> +define CHAWAN_INSTALL_TARGET_CMDS
+> +	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
+> +		DESTDIR=$(TARGET_DIR) install
+
+Same.
+
+Thanks!
 
 Thomas
 -- 
