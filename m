@@ -4,164 +4,251 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0401EC982D9
-	for <buildroot@archiver.kernel.org>; Thu, 17 Sep 2026 20:43:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C9C3C982D0
+	for <buildroot@archiver.kernel.org>; Thu, 17 Sep 2026 20:44:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 76B798114E;
-	Thu, 17 Sep 2026 20:43:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 64D6681125;
+	Thu, 17 Sep 2026 20:44:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id chpAIZbFA5al; Thu, 17 Sep 2026 20:43:06 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org B539E81109
+ id fqD4dz98NmTJ; Thu, 17 Sep 2026 20:44:03 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 616258110C
 Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789677786;
-	b=eFubHsOhzE0siHhiEaLVTfjK9iWuKsYtowlxbOs6Lx1UF1P566gRSZNu8WMldW6Q8AVe
-	 GLPBWKtx+j+gTqYFlati+7d9zfm7118DDZHMMCliDSe6vPqCJyMvruVNTOF9MpMJdNT/R
-	 c63bgXA7yOxpxOw8yMI7GDRli3PhMxyAqtjpgXw6tW3E1rJj7QssphBHsua5NsFWBiM6X
-	 1uNS/9nVxpL4I/zGmkx/G313iGLh0JbUkADWRxqpyQnO2lgb3rsl4C+eyt5rRrqeGm+lk
-	 1lkwbArKyWvLjaYm7tK+ZeCueVN4m6mMK1mMHCqdNdR6X+oQvYz5IIs2FZGbolHSI7A==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789677843;
+	b=OGpEu0KZHGfIfoC/h0Has+Nvo4uI0vJZXF0/ZbrXFqrqe0z/VSgFSEh8KNjsr+rBTZj3
+	 fTPQ1PXEVdb6SDj00Mruo9IqjYzmF+3p4uo1uxExanQOnXHIci0Fl8NktxDxbPFNdJbPZ
+	 /6NKxNSSAZmdXMd7iFGl/2H6s5aogTpW5jpSqimQZUeQie/Li59HqRZHDYgHDfjDGgO0R
+	 GfugQaVxHOPjfwUFbE1AiQTQF3lLusIliDJ8K6n7PR8hmntwr2QDm+ul0D875Ov+Q3KQ6
+	 X+S1MxbGKpnY118O8HhRi/212bVkzrSMG2oNVCv0r2n2zFkVDnRgYFox40Iu/3I5qAg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789677786;
+	c=relaxed/relaxed; t=1789677843;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
-	 X-Received:Received:From:Date:MIME-Version:Message-Id:References:
-	 In-Reply-To:To:Cc:X-Mailer:Subject:X-BeenThere:X-Mailman-Version:
-	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:Content-Type:Content-Transfer-Encoding:Errors-To:
-	 Sender;
-	bh=LX7hA22Gsf6Rt61yJbW8cxHif8M/+Bf9jrREjq3qmfc=;
-	b=AL1k4oWgdULV5Tugqmq+KK8pBQaOvcmLp0xd9/YnIbbIJEveAGonWILMQf+Pkp6LnqcM
-	 ysFute/TzwKfP7L4fVTQI3Ry+uwB8U78nJYXfSMn6Q6IfgeOu6YWaI5jEHdhSzingiVXu
-	 bsvn9nDy3cl0dOJcfxHOVNMzaB/H+x4gCNXsebfD6Zm6EQ6thpEd00bS+IaXHHHTBF0D7
-	 SDVLEuYJTchciJA/eWUmZO/PvmT2f2JAZ2omzbkduMGRzVa0ZugxapTjESeuWZ4tmHVw9
-	 wcJn69iTRenHIh1x6CgcnMj7T+MZHaFm3IjKxfwaBr9GGDdvUj4dspsS17SQDvqWzAQ==
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
+	 X-UI-Sender-Class:Received:Message-ID:Date:MIME-Version:User-Agent:To:
+	 Cc:References:Content-Language:Autocrypt:In-Reply-To:X-Provags-ID:
+	 UI-OutboundReport:Subject:X-BeenThere:X-Mailman-Version:Precedence:
+	 List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:Content-Transfer-Encoding:Content-Type:
+	 Errors-To:Sender;
+	bh=/7bCKeKdLe0YklYm1UzrpUYZ3GYIvPCHOedzb3fL2rY=;
+	b=McxShQvY3V2qDwRbN7Lb9b5lbqDIrBN4wMSJ5J5Ew+oJz6+ULT4ryiZgtUY+RSJA7Mb5
+	 z68QY//dluUIpvkUXeRATIAgcN79/RWiQiICGoNy8Ll1u/H+/GI0vfmEyFpEnFGLkOS4g
+	 PpqTNYMqp2kcoQGIHaRfKAcRxCL98RhIeopoUZmoSzG2tOHPNTRPjmAggYTSZFrHQjdwh
+	 tNkcJpFWoX4cEHe90l5Oa18T9NofzCw4PRK1D+v2KCVHU9SNMsHqSLaBzlf4rAd7tVdJO
+	 8B5NtFB2tPotQZSI8px2GHHLXrJ8g69c+ZaYZKMDJ+NRhhLEViXgaK7AVZ8Q4f6cD5Q==
 ARC-Authentication-Results: i=2; smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789677786;
-	bh=LX7hA22Gsf6Rt61yJbW8cxHif8M/+Bf9jrREjq3qmfc=;
-	h=From:Date:References:In-Reply-To:To:Cc:Subject:List-Id:
+	s=default; t=1789677843;
+	bh=/7bCKeKdLe0YklYm1UzrpUYZ3GYIvPCHOedzb3fL2rY=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=T/GQ8CC6g1l5RXGU4CXwesdDM0wFG0PgSTbbzn0Hv50poIleswaRyKUAfXkMDq9Vu
-	 oSXg2agnca3S3522i94pzT+SdkIdcsUE+byQfbygLjY42Llrj1+kJnX8KeZIM3Ics8
-	 yRZ8V7qdmmvedlnzkuyeYFZ1wR5gbREf7DQu2RjRL5frRXopnaTnn96JqmFjXXkHH3
-	 u0/CvA41x6ALn7jXi/NrIvTJd52MiT+usJ3qffYAVIkVouSc0sKov2xqP9XFlMfSeP
-	 /xSh0ep2v7n0NYUR6WCVK/eyVZzoSMYVZ0qmMeWlVw61gBe0pgh7cuXtlQNDoCc3qM
-	 wkcspuIktkmpg==
+	 From:Reply-To:From;
+	b=Wm7M1JzgtV9yzPacStOJjP07NbrWOP8AhH3HIU0yq0hTQYn8lSQKNGG8r7spy6ZCG
+	 p9uqG30lzR2LvvZsLALHm0voCASngrNk0rcpybtVaY7+bjl5dIKZ7EVW8TnktJQ9U6
+	 jTCFOun0/dDVSXTBNnSFXTCa543vdbT1GjrYh5GnhqPy9BBiAI8ZA8G4Zd4J2Zji2u
+	 Ui3onoQ3dKAQBmAj3BdPPT1ckQd8laUeTDQKKd2zisRGpqKNZ3lHzmYlU0m3NeNpM4
+	 AVNAMLb9V11cqqamKvi8Zj5SuXNaAiua5kPV5vKecPMZMBjQom943P5TaNIhQZA9Mc
+	 XJBzMeVNGtKwQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B539E81109;
-	Thu, 17 Sep 2026 20:43:06 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 04A81362
- for <buildroot@buildroot.org>; Thu, 17 Sep 2026 20:43:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 616258110C;
+	Thu, 17 Sep 2026 20:44:03 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0DBFB362
+ for <buildroot@buildroot.org>; Thu, 17 Sep 2026 20:44:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EAB6B40849
- for <buildroot@buildroot.org>; Thu, 17 Sep 2026 20:43:04 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id F3CF260807
+ for <buildroot@buildroot.org>; Thu, 17 Sep 2026 20:44:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hEFoWwVdwMfY for <buildroot@buildroot.org>;
- Thu, 17 Sep 2026 20:43:03 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 0101840839
-Authentication-Results: smtp4.osuosl.org;
- arc=none smtp.remote-ip="2a00:1450:4864:31::10"
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789677783;
- b=cKy6HsanYdhjpcZPVBExBlLNBALWXvQAraQ2EUoEkN5uHb/PC0NWdM5mYosFvY7oECTC
- s0CHmuqSJgVf4XQhLDdkBFwPSFDPAjzDdTKWVYbwfYWl3ONCSWAmYIVaGYMbVha3FgeD6
- Wmvyg+DwBmEuohXOCixMjQs7dqEeUGF8NsIZd4Qe6NJofno38DLbuo1OEfQTlh7kHqmIx
- TEv/SfZtZ0gBxzj7y3qO7p7Ju9XtvVQtckwaAdklpKV+tR79MigzPIHBy9hJD0HE8TuAg
- urFifasrMd7RBm05KDi93kF3EYUZ7eTgdonKeLuPwA9aqAlMRAORNaT4lWEDmZTT12A==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wdP1TNzYdwuU for <buildroot@buildroot.org>;
+ Thu, 17 Sep 2026 20:44:01 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 2F1EA60852
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789677840;
+ b=Aq5m2E7s1i08k9ZUkCXdf4Y+zCUiQ5DUazdfLPYTw98GO1whf5w/hYpshtDiB8gDHWBb
+ 7AXJUf+Exq02YywPyMjv44m3q+GGsGXmNrk3R+0FmQZsVMgG8VVJUqyjmcNlnJzIrfROU
+ f7Q6v/7sEgC1fgsDvzik8MKzHHuSJW1m6v49Y9O5JGKzrV5YMswkGQIrIW27sP96hmaJI
+ W1Cd3EHLTF7TSru92HcHvYCrLjViRMtrri2ps68g4aELL8a5R0eGVAtblPJJW03Z3pcHV
+ U60qfVlIjw3bulv5VT4dSckTkYSGHSLUKUCSOnWov0hvyEUJShUu79sIZ8et8GzUk9Q==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1789677783;
- h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
- X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:Date:Subject:
- MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:
- References:In-Reply-To:To:Cc:X-Mailer;
- bh=Wf61r/I9uDTelckYRrZf5JBLGAOt+D7daHwPsIx+Fxg=;
- b=cA5D+spkGVkFtUCt/oc9in7Vokhs1DCtlVUHhCYTxHYh/TwpXmFwyhNv/Hj/0yWbF5sv
- 0HyQ0o1UsCm/I4aL4tuT6khH57XdhWkrEuQdc998oqGQje68M0N5q6FJ0ifppqY0Ht6HO
- MBnJ+qdHiVXwe0rp9I3UTBlRDDOJL7g+vb67l4qv7qWAosm7dV1yuurH8KhzW9bB15KX4
- ugLyPJwSxfedMuErXvbEp6ILKAjJjvGtSqCvD0qvWya9uWDsj9pd4OPBkBjvBGV/L4/HV
- OIgqmbJdDbRjKw2LDu7+bcISJtYrYUTEWXdgQM6mykmeWQZ8YlDFcwUm853NE6AfzQQ==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org;
- dmarc=pass header.from=gmail.com; 
- dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20251104 header.b=W49x1Mqh; 
- arc=none smtp.remote-ip="2a00:1450:4864:31::10"
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:31::10; helo=mail-wm2-x10.google.com;
- envelope-from=fractalclone@gmail.com; receiver=<UNKNOWN> 
-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20251104 header.b=W49x1Mqh
-Received: from mail-wm2-x10.google.com (mail-wm2-x10.google.com
- [IPv6:2a00:1450:4864:31::10])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0101840839
- for <buildroot@buildroot.org>; Thu, 17 Sep 2026 20:43:01 +0000 (UTC)
-Received: by mail-wm2-x10.google.com with SMTP id
- 5b1f17b1804b1-49cd4ba9f68so778215e9.1
- for <buildroot@buildroot.org>; Thu, 17 Sep 2026 13:43:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1789677780; x=1790282580; darn=buildroot.org;
- h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
- :content-type:mime-version:subject:date:from:from:to:cc:subject:date
- :message-id:reply-to:content-type;
- bh=Wf61r/I9uDTelckYRrZf5JBLGAOt+D7daHwPsIx+Fxg=;
- b=W49x1MqhDl58uqoOMbHu5DbwOh0pMuON+VMaQ9wJh8h1PxIlEhB3/QCQG1SKsjf+XI
- 7dKhIZJAzZ11kc/FA0KONb2pEYas8/UQUuo9dntOO4RDPHnUWgd33Jc+jl5J1CnBnNHF
- zYmnEwmHke+BpMtMRxE0wsHv8U0LbNQJSGvDBxFKw3gjeJZXS2blzVHvsCiSdtA+BQu4
- 6FO7NsxNpZaIu6/9eUDyPSK9628xpxBq0/69zFOFN+NMPmR25QFs4AwdmtJHkJa/IhOK
- amfBx4DYfY7xYIYwNHBIiunrY7SkEAtbbR0EcUPtKIAnFI/x9hewcjmOTiCDDJ7ErAQW
- 5amQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1789677780; x=1790282580;
- h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
- :content-type:mime-version:subject:date:from:x-gm-gg
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
- :content-type;
- bh=Wf61r/I9uDTelckYRrZf5JBLGAOt+D7daHwPsIx+Fxg=;
- b=tjJGOSr+ZpAEyJUP12XFEHVufm7/V12Inv/yBxgGNO0SjVjO+mRo23P1b4Fe9c1Xyp
- RkwIf6tmum34dqf7viKAOMiu2yaSebgCNay7J1T1pCBoSR2WSNhBbdIfADNTefieJTs8
- KJvZYbSB1hZnJnqUznknrISb3idCAm8+8vuPogkKDCiiQ+wDHdgC3X15QBLWZLo44oqg
- REWr+qu35Qyn2Z3tDFzF0XvMeCp8DOOI+H/JBelspmY2cleaW1CIPHUVwjmRyfz2c8Ky
- Zb5JvZKe6rBwSFnEubVg35TuaSnRQ7+oB668xdKXCsBadgai9KDVaGi5Eb28yN9t0pPx
- hWvQ==
-X-Gm-Message-State: AFuF++ktAFU0GyBOJ7kksltu4ySXbzi0bzD8dHVQ6V1Gwb+yeu+kFR6U
- duNnFjpNVxZsnWRW/ZdAPpDdSYP12TSBgF2ksoQHHWC2SB1DHnq+7A3wMRs8xIwX
-X-Gm-Gg: AYBFou2pzvHeQIqj1EBCW0ykC2t9ViNvOft5jZTs1xdlCtBqTp0NF/uX2a8xMtydQK7
- 1Fgs2a7lz1MfWFMym4Z/HVfVYgcf35bAVp0tM4eRnhyxh8KxcCzyb4C37x2x4xkcKZ7GCtIkJl9
- oBEb6mWVP8xhNcekv+ritBLNk1VSXRk5xDxIUdQcXFS3ihd2KSF+FOzjrnfdG5QevWelwzZybD8
- ndLiWkitW2TNdGB4E2zMVm7MptcJGvI4dE8SRuSDgXweM0Ab/Gm5xRzxabEqy3JjabADBV4JiEy
- FmyWn8blp2fhcKdIs+LhH7iseV7kAFsthcrJ9iiL1W4Nm68J2Yak3OmM6Buryxt3/8KnQ5irh3p
- iAqS212rMc66dPlfPPGzC7iNOinEHdR8cZmzLSbLWT6GRgpMuSGLlBzuRtQ75wtVnTPp245zbUd
- 7D1r/JSO2XUdBTg+bX314VAofvaYoeyVWyPUBT5vSfZ2HaRn58naenzNFEwB54SHAIl5bThM0o1
- 7uE9w==
-X-Received: by 2002:a05:600c:37ce:b0:49e:799a:8952 with SMTP id
- 5b1f17b1804b1-49fc5743c81mr1256795e9.26.1789677779576; 
- Thu, 17 Sep 2026 13:42:59 -0700 (PDT)
-Received: from [192.168.1.138] ([139.47.34.204])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-49fbd2563ccsm126681465e9.13.2026.09.17.13.42.58
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 17 Sep 2026 13:42:58 -0700 (PDT)
-From: Jean-Paul Etienne <fractalclone@gmail.com>
-Date: Thu, 17 Sep 2026 22:42:46 +0200
+ c=relaxed/relaxed; t=1789677840;
+ h=Received-SPF:DKIM-Signature:X-UI-Sender-Class:Received:Message-ID:
+ Date:MIME-Version:User-Agent:Subject:To:Cc:References:
+ Content-Language:From:Autocrypt:In-Reply-To:Content-Type:
+ Content-Transfer-Encoding:X-Provags-ID:X-Spam-Flag:UI-OutboundReport;
+ bh=9ELZfSWtYy8luAV6CJX1nUQYYxRNIDjiIIWPN4eeL4I=;
+ b=IFn+BiGSl6oSuOZq4fxaWKPViPS2e54YJq+4IPTvYU5CYzDaGcS0NO+HVxeGvAov/Iue
+ ihB41KEbYnL0bT4c/OTBzJWgivw8iLHHS5icSHn0vTxb3MWSBSVYuER8LftUZlPHKocHF
+ j4D63JVvW8VP9wFcWPlId45JJDRykGIkyHEik+UpfuyK4SjffdCD8SXCHr52zdHb1rx1S
+ iC0Q+26P9EPjBq3qEEXQrxc1h5tNhavVpaOXZid1ij/DFd/CNjCC3sjJLvPMrVQtkEV6c
+ 5tGdbt5gOeE1QtCyogrHRNCbG2/nr3niB155DUdItpWcjjTmPruXR3CqFmIkPj/FImA==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org;
+ dmarc=pass header.from=gmx.de; 
+ dkim=pass header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
+ header.s=s31663417 header.b="EzzQEo/c"; 
+ arc=none smtp.remote-ip=212.227.15.18
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.18;
+ helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2F1EA60852
+ for <buildroot@buildroot.org>; Thu, 17 Sep 2026 20:43:59 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from client.hidden.invalid by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MvsEn-1wpVQG0mjX-00v5ZN; Thu, 17
+ Sep 2026 22:43:51 +0200
+Message-ID: <cdba324c-c923-4d60-9f68-0d3717189078@gmx.de>
+Date: Thu, 17 Sep 2026 22:43:50 +0200
 MIME-Version: 1.0
-Message-Id: <20260917-rock-pi-4b-v1-3-a1da4ee05567@gmail.com>
-References: <20260917-rock-pi-4b-v1-0-a1da4ee05567@gmail.com>
-In-Reply-To: <20260917-rock-pi-4b-v1-0-a1da4ee05567@gmail.com>
-To: buildroot@buildroot.org
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- Jean-Paul Etienne <fractalclone@gmail.com>
-X-Mailer: b4 0.16.0
-Subject: [Buildroot] [PATCH 3/3] configs/rock4b_defconfig: add support for
- Radxa ROCK-PI 4B board
+User-Agent: Mozilla Thunderbird
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ agennart <antoine.gennart@quimesis.be>
+Cc: buildroot@buildroot.org
+References: <20260917070632.1930848-1-antoine.gennart@quimesis.be>
+ <aquxRk4m83QOof4l@windsurf>
+Content-Language: en-US, de-DE-1901, de-DE
+Autocrypt: addr=fiona.klute@gmx.de; keydata=
+ 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
+In-Reply-To: <aquxRk4m83QOof4l@windsurf>
+X-Provags-ID: V03:K1:NXpOS5WF+sWWybUmS1Nfmg/epCYduxJyU+Lh5Q3GEtrpHwa0E6P
+ f+9mDs5RKGRKC0fOCLOKyNZgl/+AlZ+fcKVgPsv5xwnbpRdNdsR8Ao1ulCcpGSfWs0snCc+
+ zZ1xZ7SjyAm9OO2CD5Fw6yKQ8nwz0pdfh/fBCKaf3WQCxJBmvtyivutGSjicQ3PCkH4Cxz0
+ yLDAIYqVRIo22XhYWm1lw==
+UI-OutboundReport: notjunk:1;M01:P0:sVM7uY4aDrw=;DVSt3dnnXMKN10ncTXFsJcFpVI6
+ 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
+ +ate7q6jkVFhv
+Subject: Re: [Buildroot] [PATCH 1/2] package/nxp-mwifiex: bump version to
+ lf-6.18.20_2.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -173,519 +260,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
+From: Fiona Klute via buildroot <buildroot@buildroot.org>
+Reply-To: Fiona Klute <fiona.klute@gmx.de>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add board config to support the Radxa ROCK-PI 4B board
-with working WiFi, bluetooth and ethernet.
+Am 17.09.26 um 11:22 schrieb Thomas Petazzoni via buildroot:
+> Hello,
+> 
+> On Thu, Sep 17, 2026 at 09:06:30AM +0200, agennart wrote:
+>> The previous version fails to build with Linux 6.13 and newer because
+>> mlinux/moal_main.h includes the removed net/lib80211.h header.
+>>
+>> The header was removed by Linux commit 02f220b52670 ("wifi:
+>> ipw2x00/lib80211: move remaining lib80211 into libipw").
+>>
+>> The new NXP release skips this obsolete header for kernels newer
+>> than 6.12.12 and includes the corresponding Linux 6.13 cfg80211 API
+>> compatibility fixes.
+>>
+>> Signed-off-by: agennart <antoine.gennart@quimesis.be>
+> 
+> Sorry to be annoying, but could you fix your From and Signed-off-by to
+> use your first name / last name?
+> 
+> When I apply your patch, I have:
+> 
+> WARNING: Author is a single name: "agennart"
+While that is a reasonable complaint in this case (as the mail address 
+shows), I have to point out that the warning is questionable in itself: 
+The given name/family name split is far from universal around the world. 
+See e.g. the W3C guidance on handling personal names [1]:
 
-Signed-off-by: Jean-Paul Etienne <fractalclone@gmail.com>
----
- DEVELOPERS                                         |   2 +
- board/radxa/rock4b/extlinux.conf                   |   4 +
- board/radxa/rock4b/genimage.cfg                    |  22 +++++
- board/radxa/rock4b/linux.fragment                  |   6 ++
- .../rock4b/overlay/etc/modprobe.d/brcmfmac.conf    |   4 +
- .../rock4b/overlay/etc/network/if-down.d/wpacli    |   1 +
- .../rock4b/overlay/etc/network/if-up.d/wpacli      |  50 +++++++++++
- board/radxa/rock4b/overlay/etc/network/interfaces  |   9 ++
- board/radxa/rock4b/overlay/etc/wpa_supplicant.conf |   3 +
- .../overlay/etc/wpa_supplicant/wpa_action.sh       |  20 +++++
- .../lib/firmware/brcm/brcmfmac43456-sdio.clm_blob  | Bin 0 -> 7163 bytes
- .../patches/linux-headers/linux-headers.hash       |   1 +
- board/radxa/rock4b/patches/linux/linux.hash        |   2 +
- board/radxa/rock4b/patches/uboot/uboot.hash        |   2 +
- board/radxa/rock4b/post-build.sh                   |   9 ++
- board/radxa/rock4b/readme.txt                      |  93 +++++++++++++++++++++
- configs/rock4b_defconfig                           |  62 ++++++++++++++
- 17 files changed, 290 insertions(+)
+> Similarly, *don't require that people supply a family name.* In
+> cultures such as parts of Southern India, Malaysia and Indonesia, a
+> large number of people have names that consist of a given name only,
+> with no patronym. If you require family names, you may create
+> significant problems in these cultures, as users enter garbage data
+> like "." or "Mr." in the family name field just to escape the form.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 2fd4c6e26f..04505b8e96 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1617,6 +1617,8 @@ N:	Jean Burgat <jeanburgat33@gmail.com>
- F:	package/openfpgaloader/
- 
- N:	Jean-Paul Etienne <fractalclone@gmail.com>
-+F:	board/radxa/rock4b
-+F:	configs/rock4b_defconfig
- F:	package/brcmfmac_sdio-firmware
- F:	package/rockchip-rkdeveloptool
- 
-diff --git a/board/radxa/rock4b/extlinux.conf b/board/radxa/rock4b/extlinux.conf
-new file mode 100644
-index 0000000000..a0af1ea610
---- /dev/null
-+++ b/board/radxa/rock4b/extlinux.conf
-@@ -0,0 +1,4 @@
-+label Radxa ROCK-PI 4B Linux
-+  kernel /boot/Image
-+  devicetree /boot/rk3399-rock-pi-4b.dtb
-+  append root=/dev/mmcblk1p1 rw rootfstype=ext4 earlycon rootwait
-diff --git a/board/radxa/rock4b/genimage.cfg b/board/radxa/rock4b/genimage.cfg
-new file mode 100644
-index 0000000000..966c869273
---- /dev/null
-+++ b/board/radxa/rock4b/genimage.cfg
-@@ -0,0 +1,22 @@
-+image sdcard.img {
-+	hdimage {
-+	}
-+
-+	partition u-boot-tpl-spl-dtb {
-+		in-partition-table = "no"
-+		image = "idbloader.img"
-+		offset = 32K
-+	}
-+
-+	partition u-boot-dtb {
-+		in-partition-table = "no"
-+		image = "u-boot.itb"
-+		offset = 8M
-+		size = 30M
-+	}
-+
-+	partition rootfs {
-+		partition-type = 0x83
-+		image = "rootfs.ext4"
-+	}
-+}
-diff --git a/board/radxa/rock4b/linux.fragment b/board/radxa/rock4b/linux.fragment
-new file mode 100644
-index 0000000000..ce4b11de27
---- /dev/null
-+++ b/board/radxa/rock4b/linux.fragment
-@@ -0,0 +1,6 @@
-+#
-+# Disable the generic GPIO reset driver as it conflicts with
-+# the reset-gpios of sdio bus controlling the wifi chip
-+#
-+
-+# CONFIG_RESET_GPIO is not set
-diff --git a/board/radxa/rock4b/overlay/etc/modprobe.d/brcmfmac.conf b/board/radxa/rock4b/overlay/etc/modprobe.d/brcmfmac.conf
-new file mode 100644
-index 0000000000..c997473bd5
---- /dev/null
-+++ b/board/radxa/rock4b/overlay/etc/modprobe.d/brcmfmac.conf
-@@ -0,0 +1,4 @@
-+# Disable Broadcom Frame Aggregation Feature
-+# to fix authentication timeout problem for WiFi
-+
-+options brcmfmac feature_disable=0x2000
-diff --git a/board/radxa/rock4b/overlay/etc/network/if-down.d/wpacli b/board/radxa/rock4b/overlay/etc/network/if-down.d/wpacli
-new file mode 120000
-index 0000000000..340f3ef9e6
---- /dev/null
-+++ b/board/radxa/rock4b/overlay/etc/network/if-down.d/wpacli
-@@ -0,0 +1 @@
-+../if-up.d/wpacli
-\ No newline at end of file
-diff --git a/board/radxa/rock4b/overlay/etc/network/if-up.d/wpacli b/board/radxa/rock4b/overlay/etc/network/if-up.d/wpacli
-new file mode 100755
-index 0000000000..983d84fc1e
---- /dev/null
-+++ b/board/radxa/rock4b/overlay/etc/network/if-up.d/wpacli
-@@ -0,0 +1,50 @@
-+#!/bin/sh
-+
-+START_TRIES=3
-+WPA_CLI_BIN="/usr/sbin/wpa_cli"
-+WPA_ACTION_SCRIPT="/etc/wpa_supplicant/wpa_action.sh"
-+
-+# Run this script only for interfaces which have wpa-conf option
-+[ -z "$IF_WPA_CONF" ] && exit 0
-+
-+if [ -n "$IF_WPA_IFACE" ]; then
-+	WPA_IFACE="$IF_WPA_IFACE"
-+else
-+	WPA_IFACE="$IFACE"
-+fi
-+
-+start_wpa_cli() {
-+	count=0
-+	while [ $count -lt $START_TRIES ]
-+	do
-+		[ -n "$(pidof wpa_supplicant)" ] && break
-+		count=$((count + 1))
-+		sleep 0.5
-+	done
-+
-+	[ $count -eq $START_TRIES ] && return
-+
-+	sleep 0.5
-+	$WPA_CLI_BIN -i "$WPA_IFACE" -a /etc/wpa_supplicant/wpa_action.sh -B
-+}
-+
-+case "$MODE" in
-+	start)
-+		case "$PHASE" in
-+			post-up)
-+				start_wpa_cli&
-+				;;
-+		esac
-+		;;
-+
-+	stop)
-+		case "$PHASE" in
-+			pre-down)
-+				killall -q wpa_cli
-+				$WPA_ACTION_SCRIPT "$WPA_IFACE" "DISCONNECTED"
-+				;;
-+		esac
-+		;;
-+esac
-+
-+exit 0
-diff --git a/board/radxa/rock4b/overlay/etc/network/interfaces b/board/radxa/rock4b/overlay/etc/network/interfaces
-new file mode 100644
-index 0000000000..1646408d8f
---- /dev/null
-+++ b/board/radxa/rock4b/overlay/etc/network/interfaces
-@@ -0,0 +1,9 @@
-+auto lo
-+iface lo inet loopback
-+
-+auto eth0
-+iface eth0 inet dhcp
-+
-+auto wlan0
-+iface wlan0 inet manual
-+wpa-conf /etc/wpa_supplicant.conf
-diff --git a/board/radxa/rock4b/overlay/etc/wpa_supplicant.conf b/board/radxa/rock4b/overlay/etc/wpa_supplicant.conf
-new file mode 100644
-index 0000000000..535d0a491b
---- /dev/null
-+++ b/board/radxa/rock4b/overlay/etc/wpa_supplicant.conf
-@@ -0,0 +1,3 @@
-+ctrl_interface=/var/run/wpa_supplicant
-+ap_scan=1
-+update_config=1
-diff --git a/board/radxa/rock4b/overlay/etc/wpa_supplicant/wpa_action.sh b/board/radxa/rock4b/overlay/etc/wpa_supplicant/wpa_action.sh
-new file mode 100755
-index 0000000000..6d45f46e66
---- /dev/null
-+++ b/board/radxa/rock4b/overlay/etc/wpa_supplicant/wpa_action.sh
-@@ -0,0 +1,20 @@
-+#!/bin/sh
-+
-+INTERFACE=$1
-+ACTION=$2
-+UDHCPC_PID_FILE="/var/run/udhcpc.$INTERFACE.pid"
-+
-+kill_udhcpc() {
-+	[ -f "$UDHCPC_PID_FILE" ] || return
-+	kill "$(cat "$UDHCPC_PID_FILE")" 1>/dev/null 2>&1
-+}
-+
-+if [ "$ACTION" = "CONNECTED" ]
-+then
-+	kill_udhcpc
-+	udhcpc -i "$INTERFACE" -b -R -p "$UDHCPC_PID_FILE"
-+elif [ "$ACTION" = "DISCONNECTED" ]
-+then
-+	kill_udhcpc
-+	ifconfig "$INTERFACE" 0.0.0.0
-+fi
-diff --git a/board/radxa/rock4b/overlay/lib/firmware/brcm/brcmfmac43456-sdio.clm_blob b/board/radxa/rock4b/overlay/lib/firmware/brcm/brcmfmac43456-sdio.clm_blob
-new file mode 100644
-index 0000000000000000000000000000000000000000..36b8652655e5bf1704cc3471eba91f7e836d9b05
-GIT binary patch
-literal 7163
-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
-AS^xk5
+I actually know someone personally who's affected by that, she ended up 
+basically making up a family name to satisfy all sorts of forms. Of 
+course Git doesn't stop anyone from making commits unless they specify a 
+family name, but constant warnings must be annoying.
 
-literal 0
-HcmV?d00001
+Do you know where the warning comes from? I can't find the error message 
+in Git or Buildroot.
 
-diff --git a/board/radxa/rock4b/patches/linux-headers/linux-headers.hash b/board/radxa/rock4b/patches/linux-headers/linux-headers.hash
-new file mode 120000
-index 0000000000..5808d92afe
---- /dev/null
-+++ b/board/radxa/rock4b/patches/linux-headers/linux-headers.hash
-@@ -0,0 +1 @@
-+../linux/linux.hash
-\ No newline at end of file
-diff --git a/board/radxa/rock4b/patches/linux/linux.hash b/board/radxa/rock4b/patches/linux/linux.hash
-new file mode 100644
-index 0000000000..f83883b936
---- /dev/null
-+++ b/board/radxa/rock4b/patches/linux/linux.hash
-@@ -0,0 +1,2 @@
-+# From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
-+sha256  37f0c5d5c242c1d604e87d48f08795e861a5a85f725b4ca11d0a538f12ff8cff  linux-6.18.8.tar.xz
-diff --git a/board/radxa/rock4b/patches/uboot/uboot.hash b/board/radxa/rock4b/patches/uboot/uboot.hash
-new file mode 100644
-index 0000000000..b6a925ea4e
---- /dev/null
-+++ b/board/radxa/rock4b/patches/uboot/uboot.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  b60d5865cefdbc75da8da4156c56c458e00de75a49b80c1a2e58a96e30ad0d54  u-boot-2026.01.tar.bz2
-diff --git a/board/radxa/rock4b/post-build.sh b/board/radxa/rock4b/post-build.sh
-new file mode 100755
-index 0000000000..5b50e1ef81
---- /dev/null
-+++ b/board/radxa/rock4b/post-build.sh
-@@ -0,0 +1,9 @@
-+#!/bin/sh
-+
-+BOARD_DIR="$(dirname "$0")"
-+
-+install -m 0644 -D "$BOARD_DIR"/extlinux.conf "$TARGET_DIR"/boot/extlinux/extlinux.conf
-+
-+# Append debugfs in fstab if not present
-+grep -F -q "debugfs" "$TARGET_DIR"/etc/fstab || \
-+	echo "none	/sys/kernel/debug  debugfs  defaults  0  0" >> "$TARGET_DIR"/etc/fstab
-diff --git a/board/radxa/rock4b/readme.txt b/board/radxa/rock4b/readme.txt
-new file mode 100644
-index 0000000000..a6a7d5c7c1
---- /dev/null
-+++ b/board/radxa/rock4b/readme.txt
-@@ -0,0 +1,93 @@
-+Intro
-+=====
-+
-+This default configuration will allow you to start experimenting with the
-+buildroot environment for the Radxa ROCK 4B. With the current configuration
-+it will bring-up the board, and allow access through the serial console or
-+via ssh if the board is plugged via ethernet port or has WiFi network configured.
-+
-+Radxa ROCK 4B link:
-+https://radxa.com/products/rock4/4b
-+
-+Documentation link:
-+https://docs.radxa.com/en/rock4/rock4ab-se
-+
-+GPIO Interface link:
-+https://docs.radxa.com/en/rock4/rock4ab-se/hardware-design/hardware-interface?model=ROCK+4B
-+
-+This configuration uses mainline ATF, U-Boot and kernel.
-+
-+How to build
-+============
-+
-+    $ make rock4b_defconfig
-+    $ make
-+
-+How to write the SD card
-+========================
-+
-+Once the build process is finished you will have an image called "sdcard.img"
-+in the output/images/ directory.
-+
-+Copy the bootable "sdcard.img" onto an SD card with "dd":
-+
-+  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
-+  $ sudo sync
-+
-+Insert the micro SD card in your Radxa ROCK 4B and power it up. The console
-+is available on UART2 on the GPIO connector, 1500000bps 8N1.
-+
-+How to flash the board eMMC
-+===========================
-+
-+Before building the sdcard.img for use on the board eMMC, you'll have to
-+edit the board/radxa/rock4b/extlinux.conf file with root=/dev/mmcblk0p1
-+
-+Once the build process is done, flashing the sdcard.img on the board
-+eMMC is achieved using the rkdeveloptool tool found in output/host/bin/
-+as follows:
-+1) Download the Flash loader binary for the board from the following link:
-+   https://github.com/radxa/rkbin/blob/9840e87723eef7c41235b89af8c049c1bcd3d133/bin/rk33/rk3399_loader_spinor_v1.15.114.bin
-+
-+2) Follow the process given in the following link to start the board in Maskrom
-+   https://docs.radxa.com/en/rock4/rock4ab-se/low-level-dev/maskrom/linux?model=Without+onboard+eMMC
-+
-+2) Once done, use the rkdeveloptool tool load the Flash loader binary onto the board as follows:
-+   $ sudo ./output/host/bin/rkdeveloptool db PATH_TO_LOADER/rk3399_loader_spinor_v1.15.114.bin
-+
-+2) Once done, use the rkdeveloptool tool to flash the sdcard.img on the eMMC as follows:
-+
-+   $ sudo ./output/host/bin/rkdeveloptool wl 0 output/images/sdcard.img
-+
-+3) Once done reboot as follows:
-+
-+   $ sudo ./output/host/bin/rkdeveloptool rd
-+
-+
-+How to setup WiFi config via console
-+=====================================
-+Once logged in do the following to setup the WiFi config:
-+
-+  $ wpa_cli
-+
-+  This will run the wpa_cli command in interactive mode.
-+  Once wpa_cli has started do the following:
-+
-+  > add_network
-+
-+  This will create a network entry and will return its index
-+  The following commands assumes index 0 is returned
-+
-+  > set_network 0 ssid "MY_SSID"
-+  > set_network 0 psk "MY_PASSPHARSE"
-+  > enable_network 0
-+  > save_config
-+  > quit
-+
-+  As the configuration include mdns, you can access the board
-+  over your local network using the name rock-4b.local,
-+  for example:
-+
-+  $ ping -c 1 rock-4b.local
-+  PING rock-4b.local (192.168.1.5) 56(84) bytes of data.
-+  64 bytes from 192.168.1.5: icmp_seq=1 ttl=64 time=8.48 ms
-diff --git a/configs/rock4b_defconfig b/configs/rock4b_defconfig
-new file mode 100644
-index 0000000000..c2f99b7df2
---- /dev/null
-+++ b/configs/rock4b_defconfig
-@@ -0,0 +1,62 @@
-+BR2_aarch64=y
-+BR2_cortex_a72_a53=y
-+BR2_TOOLCHAIN_EXTERNAL=y
-+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
-+BR2_GLOBAL_PATCH_DIR="board/radxa/rock4b/patches"
-+BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
-+BR2_TARGET_GENERIC_HOSTNAME="rock-4b"
-+BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for Radxa ROCK-PI 4B"
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
-+BR2_ROOTFS_OVERLAY="board/radxa/rock4b/overlay"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/radxa/rock4b/post-build.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/radxa/rock4b/genimage.cfg"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.8"
-+BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/radxa/rock4b/linux.fragment"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="rockchip/rk3399-rock-pi-4b"
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="512M"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_LTS_2_12_VERSION=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="rk3399"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES=""
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_ARM32_TOOLCHAIN=y
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2026.01"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="rock-pi-4-rk3399"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-+BR2_TARGET_UBOOT_NEEDS_PYELFTOOLS=y
-+BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-+BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
-+BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
-+BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF=y
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
-+BR2_TARGET_UBOOT_SPL=y
-+BR2_TARGET_UBOOT_SPL_NAME="idbloader.img"
-+BR2_PACKAGE_BLUEZ_TOOLS=y
-+BR2_PACKAGE_BLUEZ5_UTILS=y
-+BR2_PACKAGE_BLUEZ5_UTILS_CLIENT=y
-+BR2_PACKAGE_BRCMFMAC_SDIO_FIRMWARE=y
-+BR2_PACKAGE_IW=y
-+BR2_PACKAGE_MDNSD=y
-+BR2_PACKAGE_OPENSSH=y
-+BR2_PACKAGE_WIRELESS_REGDB=y
-+BR2_PACKAGE_WIRELESS_TOOLS=y
-+BR2_PACKAGE_WIRELESS_TOOLS_LIB=y
-+BR2_PACKAGE_WPA_SUPPLICANT=y
-+BR2_PACKAGE_WPA_SUPPLICANT_CLI=y
-+BR2_PACKAGE_WPA_SUPPLICANT_AUTOSCAN=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_ROCKCHIP_RKDEVELOPTOOL=y
+Best regards,
+Fiona
 
--- 
-2.55.0
 
+[1] https://www.w3.org/International/questions/qa-personal-names.en
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
