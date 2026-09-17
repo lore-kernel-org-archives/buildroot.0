@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE4F1C982C1
-	for <buildroot@archiver.kernel.org>; Thu, 17 Sep 2026 07:40:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 245FAC88E72
+	for <buildroot@archiver.kernel.org>; Thu, 17 Sep 2026 07:40:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9344A60807;
-	Thu, 17 Sep 2026 07:40:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C6AA480EDE;
+	Thu, 17 Sep 2026 07:40:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WGqcg0O95PZk; Thu, 17 Sep 2026 07:40:31 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org ADA54605D5
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789630831;
-	b=aRq9UKeszj2v3SYZ3EkgPUo6/8eAAT3cbf4DfhVBnbt/84HcDCyI7de2XOd2rSWZa2Ea
-	 efTRpZdidF46DN37I1boa/ermc1uhZ8HDIh32nNcP4e55OjBtX7mC/sEf93BIQomx8HNp
-	 H//b2d27cdZK9LeS9wS6mhvtOBagcTSAhmqRxeK8nBgXf3rgeYDZkV6NtCedThE21ueIQ
-	 oXHz2K9xAkQySUCmyEwJ9J9bmELimClrIDLQ/Dq3RBK3JSMhpgl/sBP2dZDev9PEWRw+D
-	 d0hCPWVNi3gqRg3dIYrI8pE8GubjF2Df1RaY+etpy+qoNJ0TUiqxy7ne6m4GQFR5Izg==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pJgkzoMT0uWX; Thu, 17 Sep 2026 07:40:33 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org E6C0280EDA
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789630833;
+	b=TU9L2ma0i0RY02U3Aa04nLsBiymgpJrEAnQjBUwlRVeAWSPBObCH8Li8fN0KzSfV2Wah
+	 fcN++YgW2o91lh7hOt8EnXrD18mdRBYI822vmEiKPoAmFNPVdHwBV+TPAhMSF+kwD/Rk1
+	 1HuynjdhT2i4/bCbvoSv4BRaeHRe/tXLHbFtzpu41Mm/eoNjKBMyRMznyyiJPbbrI0ksI
+	 wywgFN8N5dTxpvN9fcUtN8Rew/nXv6zhduK63ZP2A2NoBCN/+O1Qod1OwLSa5n2TO6Jm3
+	 XwZnQLOT0k8Um6GIKTgEwWdzyTN8amoP3kLUIO4HfZ4hA+u3cGQwUw9qlyiGRU8dX1A==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789630831;
+	c=relaxed/relaxed; t=1789630833;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,74 +30,75 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=XlP1RCtf2qOlo/296QsBB5SIn4gHgGb+pAKstRcYmEw=;
-	b=IklnU9yZrjeH8mpdL5bELXUrLuhaFNPuge7THJo95jgmpZKZ3lzgLfMd9IrDLrGB6H/q
-	 fx/Os9pTahLz4dFkt2cRtvQ95osW7oApJ73MkFkBwdBBKSdkQJuGG9pYLXMQVEj7w/a08
-	 Iu5NMFLQvGDiOum/W36bkBL0VBMVlDXSvbkzSb99ISLhm0Q+HS42/12GFMt0mnRrSHFgZ
-	 m+tM0T+70i2cbFDcPmNxg+keAY1UO+4DYnB7jlJNxgvHHc2Mncrcolf7FTmuhJqXYuw3L
-	 f30A+VYimktJOapSwULN86Mcogfdbge9Jal9+rdzQybUbUF/NyLaaiuAYCN7blqhQPg==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	bh=6pgqcD0KRSn6AGweF8y7Legcex8uy0cIn9yBX0gjjmE=;
+	b=I+Dva7FfGMGBA4SMX1bq9+GLtWoXlufF56McNbyiSatsf1s0aTz7jy126aLqhAYGq+2f
+	 Y9G4Y+4aMZ+lcdNwPKfsTvbDGprxHiQKzhWvgcltcDI1un9c4zUfxl+l+qgrO31kumePx
+	 7tl9gy/TH7NuiZ7/TpyWZQwcp48HtKTYHn/1vAy/KyFp4XJ1fVzoC1/0cf24QZtrywlb+
+	 28G0t/uWfjLbnLf886aajtB4OQjWaZqyuWCjFMDimSliwZmg+LWUoXRp45DjFWYCtn+O0
+	 N9CV5Ap07Smo7symaRIymCYg53nnrQZCEkk9fvwK0ne3+h/GrfDrvYLz7Ecw1PQJsxw==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789630831;
-	bh=XlP1RCtf2qOlo/296QsBB5SIn4gHgGb+pAKstRcYmEw=;
+	s=default; t=1789630833;
+	bh=6pgqcD0KRSn6AGweF8y7Legcex8uy0cIn9yBX0gjjmE=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=F40LOJfzoCly8TsHJyi8CICcRXE+tttpeyP3TzaryYFf8WkvR9R7GOMYji6AHM44G
-	 MXvv3Xq355B1Fk/elUipZolc2TgD7/An0uSSmaGejr3YUS1xmxKdiUQU2wH6Celejd
-	 B9+6wmqrIPSGGzOI1ajwduR6tnw2FNsu0Q0kccbDYA3BBFdo3FhP35Tv1HwJS0cvV0
-	 zlMBRzOSCodoN7jEeJiHff0xb4gqx1iSQa3H8jFNx31Fz6/VrGJWRH8X9Bhwk5FEpp
-	 Nx4n6sTcNV8TkDusGeV+TXEUdC7crDmuHAGpngQHx9EnxvZsyoA/+S2gBVS3R+p8q7
-	 IPvsiUlvTKJbQ==
+	b=HEFROVS0dNF0UYsxS4H9Brvvgo45OGwDyk/MlC1J3Tkt5LBfrdAKe+zQdVHLqIL0e
+	 P2JzRH0EhG4xheY+A7twKyk9fE6qMUK2eZktbcEZhTa8H6yIlz1aGUzRjt9ypI9rEd
+	 McpWqYAfxsCZPr7vwpBEeEh/XTA4hwWYET/K7EiE6MWzv3rkBqSfRpdZCnhThGQ2Jp
+	 d2Vo9gPad+enmJCU7+bMJQPW+7ERHQ9xXXLvKbUxPGekiek3ta/7ICNDkQSXlSxvk9
+	 5nI1tpsLAwoppkGwtYcMpFe7sSWKMiUzdf5bfUZwTdW1DMV+/+ubieCh3RzyiFIweH
+	 x4y+E7zcHSYeg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ADA54605D5;
-	Thu, 17 Sep 2026 07:40:31 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id CBD13422
- for <buildroot@buildroot.org>; Thu, 17 Sep 2026 07:40:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E6C0280EDA;
+	Thu, 17 Sep 2026 07:40:32 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0B526422
+ for <buildroot@buildroot.org>; Thu, 17 Sep 2026 07:40:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BDB5E400F6
+ by smtp1.osuosl.org (Postfix) with ESMTP id F123F80EDA
  for <buildroot@buildroot.org>; Thu, 17 Sep 2026 07:40:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7m5Mvd3PjGLH for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9Jq6dDVGCSWp for <buildroot@buildroot.org>;
  Thu, 17 Sep 2026 07:40:29 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org 1611A400F3
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 18E5B80ED8
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789630829;
- b=kKGSa6lOJvqCsFfF1OoX4unrkPNPkZ1K/2Unvmu0rNYunubNOTpjh2FgdiNMGQrWCYey
- cDk/+R3UR4VmtiGY3TossJmC+0zXodonygSjiEMhPO3atxRp8Kqfj2fD/M2jr1Zaxca4a
- l9HkR3oBHnjsyEM1wowgkZnityIpJ4CBUIzzuK37aP3nvJKHiQklEzq0yi0AQu5FOWQRH
- iS8ckYcuZ/g35ZfL0ylAbh9gauo7hpPUB6AfWwFwsRI3UW0OUh6bLKozALzjF4wdMYBT9
- Riz/XGVdVwIyyFFDcQ62DGfV/Up/2cR4z0bv7Cy9imfWDm9hQ64Bp206e6I7Jv0puHw==
+ b=NP9G8NsFSRFPqKpcaCrQW9ujI99/aFtBPstBVDtzxDo6q5nmaGi6uEmJ2jLyWI+O2hNp
+ Kjo7bc5igNEWQxo/0pPHT/aXZdRdWVnKvxqb/i/+74zZV7w892zXo3x4/Kwu1p5mg2eiv
+ khe9BCB6cLxu5o2KkiydQYLblv1fe1rrfZpwNkd6CAolyZ7vTz6pIkZk6aqsi14Bh+QNa
+ X7QVxIDe2ionrodVDY19+Ss1rGdPAM3IhV1pGLA/dTuHjy1CK7ayjuf3iBn5bZxu5lwt5
+ VFtiRGaJjhomfT7j51bafyFMD2lxXG4vCJC4OkK5qVjLa6U3BsGnLcvAHle9ypNkl7g==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1789630829;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=5ko/Yg2/HMlXguQryJaFU6R9ns7f1qhetLZK4XDdYMM=;
- b=HoR/3NcsKewsU2gcVqWZin9aOOS/f2BdCkV6diZwsGQxG0F42xoRK/BwzZARZd2wn1aC
- Fo4sSULqARBjFETrw2zT5vYB/i+HwFA3FqPYtECz4J6zZyqHfgdoZ/IwvCNF8Wn3USi1F
- LJavIqs1FppGAHMItSAyYXdnH0B5dASL95XIu89gm1n67cF2vqfZAsYW4KFBxNaDPGqC0
- PxvwqBAbCU7po4bJTOp09BTLvbWzPHo0K/iFmUFfCPrNDKuPhJujw/yrkNAI/kT9xLKY8
- ZMeKcW7T++ZZbURHMXuBbg6X/jjIebXNMhkr21PmiNDBC8I4Q6MHU6dn60cPW/OXyiQ==
-ARC-Authentication-Results: i=1; smtp2.osuosl.org;
+ bh=Z3TPC+gu14dYwQfLDfrfla4pflep65sKATPCFPs1IEI=;
+ b=FN4qf/Bs9p4n18jjqf8Rh2VvTK4DueVcZboPqchiNkMGMMvBcRcnIZ4RH8ze9aByn1VG
+ l8DLCYvJRL7aVtHBfiHpeDp1fj28dzFnidJqiJt2gaY6dwDYjqynz9d5Ov/QFtRfqJzKY
+ en51bPaefjoIIykZcdzKz1zlj0u/FW04SS6ZSGt3MrHZPvTkgqGx9nuyI7QTamZFS7lAz
+ bNqOCrbx3bUw0bHy648TnRW/iYZOVqp4Nx03JuSlEBNsBvWtc7/tClEWaFVJQ3EL6XCpc
+ Y573KM71b2aK/S2M/QqpwP8lhEfPKaPZ3APIBKUqiOlcYDqzNnrvc/HjWjqTSizSDfw==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org;
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1611A400F3
+ by smtp1.osuosl.org (Postfix) with ESMTP id 18E5B80ED8
  for <buildroot@buildroot.org>; Thu, 17 Sep 2026 07:40:29 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5E37F960DC; Thu, 17 Sep 2026 07:39:22 +0000 (UTC)
+ id 51A348CA04; Thu, 17 Sep 2026 07:39:22 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 17 Sep 2026 08:37:52 +0200
+Date: Thu, 17 Sep 2026 08:36:15 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b016989c61340b528a09599694b86000b98efc56
-X-Git-Newrev: e38f9b9f969754b15996829abc95868456e3ee8e
+X-Git-Oldrev: ea18394dd71f2deb21792918500b1928e96177b0
+X-Git-Newrev: b016989c61340b528a09599694b86000b98efc56
 X-Patchwork-Hint: ignore
-Message-Id: <20260917073922.5E37F960DC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/broot: bump to version 1.60.1
+Message-Id: <20260917073922.51A348CA04@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ibm-sw-tpm2: fix build with
+ gcc-15.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -117,40 +118,102 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/e38f9b9f969754b15996829abc95868456e3ee8e
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/b016989c61340b528a09599694b86000b98efc56
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Changelog: https://github.com/Canop/broot/blob/v1.60.1/CHANGELOG.md
+Fixes:
+https://autobuild.buildroot.net/results/d43/d4364f6e3636c696471bf8cba6d308439130e53a/
 
-Signed-off-by: Alexander Shirokov <shirokovalexs@gmail.com>
+In function 'MakeIv',
+    inlined from 'TestSymmetricAlgorithm' at AlgorithmTests.c:197:25:
+AlgorithmTests.c:181:23: error: writing 32 bytes into a region of size
+ 16 [-Werror=stringop-overflow=]
+
+The build error occurs with gcc 15.x on some platforms, gcc 14.x is not
+affected.
+
+These defconfigs build without this patch:
+
+BR2_x86_64=y
+BR2_GCC_VERSION_14_X=y
+BR2_PACKAGE_IBM_SW_TPM2=y
+
+BR2_x86_64=y
+BR2_x86_x86_64_v4=y
+BR2_GCC_VERSION_14_X=y
+BR2_PACKAGE_IBM_SW_TPM2=y
+
+BR2_x86_64=y
+BR2_PACKAGE_IBM_SW_TPM2=y
+
+This gcc-15 based defconfig is broken:
+
+BR2_x86_64=y
+BR2_x86_x86_64_v4=y
+BR2_PACKAGE_IBM_SW_TPM2=y
+
+The build error is not related to the recent bump of the package from
+rev183-2024-03-27 to rev183-2026-08-26 because no changes were committed
+upstream to AlgorithmTests.c since rev183-2024-03-27:
+https://github.com/kgoldman/ibmswtpm2/commits/master/src/AlgorithmTests.c
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/broot/broot.hash | 2 +-
- package/broot/broot.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...-GCC-15-stringop-overflow-error-in-MakeIv.patch | 45 ++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
 
-diff --git a/package/broot/broot.hash b/package/broot/broot.hash
-index d883337d9d..1f45965fd5 100644
---- a/package/broot/broot.hash
-+++ b/package/broot/broot.hash
-@@ -1,3 +1,3 @@
- # Locally generated
--sha256  c7ff621324c799976d52becd7d0c24aad6f991b10421303884065305d4c00a1a  broot-1.60.0-cargo6.tar.gz
-+sha256  6daf2a7381fdbce5acc08261c2899304b4a1efa7c33623e456b8c45853cdb7a0  broot-1.60.1-cargo6.tar.gz
- sha256  89461664ce2aee7d80ea8fba7118fe7abd490d76ba435cf1d81d3128e060711f  LICENSE
-diff --git a/package/broot/broot.mk b/package/broot/broot.mk
-index c4cdce2e51..1467f55279 100644
---- a/package/broot/broot.mk
-+++ b/package/broot/broot.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BROOT_VERSION = 1.60.0
-+BROOT_VERSION = 1.60.1
- BROOT_SITE = $(call github,Canop,broot,v$(BROOT_VERSION))
- BROOT_LICENSE = MIT
- BROOT_LICENSE_FILES = LICENSE
+diff --git a/package/ibm-sw-tpm2/0003-tpm2-fix-GCC-15-stringop-overflow-error-in-MakeIv.patch b/package/ibm-sw-tpm2/0003-tpm2-fix-GCC-15-stringop-overflow-error-in-MakeIv.patch
+new file mode 100644
+index 0000000000..9b22522b36
+--- /dev/null
++++ b/package/ibm-sw-tpm2/0003-tpm2-fix-GCC-15-stringop-overflow-error-in-MakeIv.patch
+@@ -0,0 +1,45 @@
++From b35faee1224f5bccf759464e69f724a03421c8a9 Mon Sep 17 00:00:00 2001
++From: Arthur Gautier <arthur.gautier@arista.com>
++Date: Tue, 9 Jun 2026 21:52:07 -0700
++Subject: [PATCH] tpm2: fix GCC 15 stringop-overflow error in MakeIv
++
++When compiling with GCC 15 using `CFLAGS=-march=x86-64-v4`, the compiler's
++aggressively optimized vectorizer triggers a false-positive
++-Wstringop-overflow error. Because x86-64-v4 enables wide AVX-512 registers,
++the compiler misinterprets the loop unrolling and warns that a 64-byte
++vector write is overflowing the destination buffer:
++```
++  tpm2/TPMCmd/tpm/src/crypt/AlgorithmTests.c:158:17: error:
++  writing 64 bytes into a region of size 15 [-Werror=stringop-overflow=]
++    158 |             *iv = i;
++```
++
++This fixes the warning by marking the `iv` output pointer parameter as
++`volatile`. This inhibits the over-aggressive loop vectorization on this
++specific buffer, silencing the compiler error without changing the
++underlying logic.
++
++Signed-off-by: Arthur Gautier <arthur.gautier@arista.com>
++
++Source: https://github.com/stefanberger/libtpms/commit/2d9b00c4e42677cd0a9b67344f4d873ddc409a21
++Upstream: https://github.com/kgoldman/ibmswtpm2/pull/25
++
++[Bernd: rebased for ibm-sw-tpm2 package]
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ src/AlgorithmTests.c | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/src/AlgorithmTests.c b/src/AlgorithmTests.c
++index e8549adca..28d8e780a 100644
++--- a/src/AlgorithmTests.c
+++++ b/src/AlgorithmTests.c
++@@ -162,7 +162,7 @@
++ // Internal function to make the appropriate IV depending on the mode.
++ static UINT32 MakeIv(TPM_ALG_ID mode,  // IN: symmetric mode
++ 		     UINT32     size,  // IN: block size of the algorithm
++-		     BYTE*      iv     // OUT: IV to fill in
+++		     volatile BYTE*      iv     // OUT: IV to fill in
++ 		     )
++ {
++     BYTE i;
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
