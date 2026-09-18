@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21E8AC982DA
-	for <buildroot@archiver.kernel.org>; Fri, 18 Sep 2026 13:06:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 620FAC982DC
+	for <buildroot@archiver.kernel.org>; Fri, 18 Sep 2026 13:06:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EBE0940BB6;
-	Fri, 18 Sep 2026 13:06:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1D6EC60DE5;
+	Fri, 18 Sep 2026 13:06:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZAnTRG6pmfSR; Fri, 18 Sep 2026 13:06:33 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 12BB240BC4
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789736793;
-	b=EDdhfmN0PWw4OddAyHLmi+Utg9yhGcYoLv6XtWHbnZs0QC5O3pZ2ah4/xa7/2gKWciLm
-	 ugc2Cyt7Pxaf7kChSctD8ukgX2UbWAAhjfh/bsY+MpnimvBVCxmquQEBhZlwUwwEDae5l
-	 ehPy5tryVxbPCTerBZQBAz0CAd4UxlYq14/oJbAf8XyOMaQig09PFDpDTavUFW7rehPp0
-	 4qlrbY80UTB1bEtTVzuS8SvyGeHtLmdWTXEkjaYntz3MTAiTI5SRM7wXawhcA8ttLLzle
-	 glPrVuD3/cWvlhCpD55+F41se8U4tq3S3Lr886+d3FyLfELVjNgQe5OYpcY9rMo80Mg==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vnNsTcCzq5fB; Fri, 18 Sep 2026 13:06:39 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 45FB760DA5
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789736799;
+	b=mnfMSz47KTNNu/wz4UNbCxvtOz0p1w4E0KqMZ7GhZg3Ewx1Z7LujMoaDV5wfys1PWChV
+	 SZve7yh657tDWfCYBk37G8zICWpHCpABwZSDRDrgOQvv750OQjfFnp104/XnGz5pdotpI
+	 Xkve2o3EAi69vcnRXskGx+k3qdQpwLOlN7jyl9N07azZkp2p6t2IVlBVoFwP1HPKkpY9u
+	 8I/IQBNHpoC95v8AuXDWmEUCRk/RIfzgzP4ol6/DkZ8Dp4jL2hIf8hUm1RJ/SaXFX5yo1
+	 xPd04Et/Vj5n7fSGqcZPRc9sbHfMR+YQINm2dchxvxfAQvfqWZHji6efwFRGNWQ1xwQ==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789736793;
+	c=relaxed/relaxed; t=1789736799;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,75 +30,75 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=ch4QVQT4NXBSs99oObZ+P904+i7NLl4tZFMcoggnyyA=;
-	b=kauYZ0NMUS1xK3O3Q6y3pvrP6CAIwj01+YkJ5W7F+LLapkuS9hi4aEQ8UWq5G6ub9/NY
-	 OsGhWzYFRcHJlKvpfLwZe7y3u6v3u1lOE/mJuP9BfBymA40XWUGxkhTYPwW4x10awk+G4
-	 u2A4FMLPTOexMGyqeCcTHcNG7YuBWdbVbYINMpKnDHudBNiAtlPm7OtSJHkF13SdTbPLQ
-	 uVA85ldzQJAIJ2Q+ljHlIhPtTP6VXAE/7lyDGHjVhGhL2Ns0OK3LWb7wQxZm7AJSkJwAm
-	 4qGHGwJDgIQDhATuo8kIPhYSlATHhE0RWff7jV1JEClsFi++sBP8WnpVJ9evd77QqWA==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	bh=T4L4qhYmHNUkPKmIYKLL4+AzRiQRRfHjkjOuPzQxgac=;
+	b=Y2fahNqbsuB780uzNg6GJXjvlzYV2IbgaqSmW/gkENPpPePTALOZZOXQIBMWDgQngWjn
+	 aOGdYw9joBwYvBIjB5zGG9Swo2UtJ5gYUG9BJY28ukfyrMPfUHeK9LHkCEJYj3qtKzAjg
+	 fj6Vqk6ouKkP0JfDRj3NRJagt33qxYEvfi/MJHhiWkYpxFWKrftHUH7EiLD17zO3HzMbu
+	 7sakwNI4ltZ0azUzkel0l9GZeot1YeOvXPCq4rKdhLXKo2cX9nBKDZ0ZoWoAtrkzTZcqY
+	 llXc1UXTYLp+ogr2FWV18iM8z1rJqae8JA1h0y7zpimmPcublHDUv4xe86V+x4/iA/g==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789736793;
-	bh=ch4QVQT4NXBSs99oObZ+P904+i7NLl4tZFMcoggnyyA=;
+	s=default; t=1789736799;
+	bh=T4L4qhYmHNUkPKmIYKLL4+AzRiQRRfHjkjOuPzQxgac=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=YiREHRZu1v1991MRhHbNmPI2FPxnsvDIWn8GcqofkF2bD3Lo5+z0yOOKambtQVz7z
-	 gB5AkMF9nV3oyvXedbZRWwRGKry2uCj5dCA+uo8OCgo7ZHhAlwxwIRdP81bkWic2gz
-	 s5LyeU97TJnDveQ/20I3PKeETYXAuO7M6pq6p3cIoOwvGenx0d8TPw7DbYsMV9xY1u
-	 hMNiARSL+LbMSOi/ab0elOaHqaEvd6WcWofjbLXV0nxTSu+5zy20XikW94iJdFiEja
-	 dSJeasOL8NeglXy+pp1r+QxkBR3JgOrxCNWJgay1VQYmoY2hBqI9CyvlOxgd+XnqbK
-	 iEd/d9G9H+pSQ==
+	b=OOe/+cCqx+3EnGJe1ORZ8In4W93R6jIWNELXVsZqBTrwzBZl5ypNYFhf0b5ADwOEJ
+	 EXZpCC2dxWQB9eAB7qdeKV/fMgPTfZEz4l/lOQzRxd+6IhlW3xKblnpIi6/xxknpa8
+	 pCqVPEprfjGGEy+e1bMLs42BiWGKtKHy9K/hZUiiVT/JNsd+gNkADplPmJ96rJF+W1
+	 PAfR5GbDMeIcaFbvUGEyFN3Uyh3jEedrpFwTkqRTx5k2dA8WItrasaX/0yamNA7ESF
+	 tekhSA0GnLm4tOOtjvXgszn5mPr4SiI00eWBUjuxeBI+ULbNVpG4dpqfA1LcsN2xoW
+	 EjX9418Ey2R1w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 12BB240BC4;
-	Fri, 18 Sep 2026 13:06:33 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 334A143A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 45FB760DA5;
+	Fri, 18 Sep 2026 13:06:39 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 38AD220D8
  for <buildroot@buildroot.org>; Fri, 18 Sep 2026 13:05:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2566840B70
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2832760D67
  for <buildroot@buildroot.org>; Fri, 18 Sep 2026 13:05:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8m0lUYz2JWPz for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NzB0TkSsvwqB for <buildroot@buildroot.org>;
  Fri, 18 Sep 2026 13:05:48 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 2999440B92
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 00FFA60D76
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789736748;
- b=pYMuJsPSVfBs7xmbI8iOnTLWlvaHiupWAUjfWtXuUoe+sdRSYBuiGwqvnxHhjTCCnj6p
- 5H154o0YwQoXs/gJvOuKofQsC7kxi06vH3zdduKh/NZam9p4wH5txYzX1SPJcQlOuQfrI
- TAqQ81238Vlwmq3ZJhxS4HdW1sUda4yq7ectmXhPe7+VFA9t6s01X7aelRP0qhujtRW88
- +NtPNEb9U0t5moksKnlMEiiLvX5mQI9RsJM5dRm/7fd69AfjG1m1BZkhBxGZpzZgjhywR
- roaqRPBxJLU80dZAuoR+rqUi5RD6FgBX5amcoJG6SGiJniLCDGD4P24zzR1hkJ2nb7A==
+ b=sXnYzTDuO80DqiAUPrFZ7iRZNSWO1Ky+CTR6p+X+aF3M70GFYfX9zh1CCvQbsFsGFcJr
+ F7FY7zPYksBo/unwg+Y5MMbmQZZOdfYDcwapeAI6ojVbMltQ+bYro57HYDYSuj/gIlfky
+ jSisvswHbtRNX8D7hpLpSqH5Hk9waSSqf058iQzYe8lEBPhAb71q4Lj7GbmJmXUrEIo+q
+ lUWx1khMUtgyueIPLpBa5wYJrkQ0JQjbrefdIAH1VECLSvKDm3XexBiTXgcrzlGBjcQsl
+ eGd8+HFOfXPMLG4tOHMo73KR16ZSzx8EFvBWT9M6RxN6DUFhjFkUh/mfA1M1pkI8dpw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1789736748;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=13OUAFXo9Q2dET5FBD0KwuJFMNTsPRkuVij7VVy8H84=;
- b=AjD4HFJEsbyXUit6qwySjPBmckCa3lXwW3YIohwi83lthIy5cPTPiGOwIPg0IAXo78j7
- 87tmytRQRzMHa3VcV4xjImp9qRd0lfjQV37BodVh+1fiVIiM6QNDtQzg4y2/ItOmt2K2r
- +rUoOugI2L7xjYzd5vmw6n24A7u4ze6pusTKJgNbcvVPgCnG45XWuSfILwVUBEU1dKK1+
- G2nHR67gr/t8kmUf99uGIjXR5bUrFed+tUqgTnKWn4bTG+IgTPo2/UHDHZ+VjSu3gPNlS
- BnMWliSCAFzTHYjjvE2EsB5AvPRlDq7UBr2sKwy+AVqSbXUkEAm42yVcFpqKvcuw8pw==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org;
+ bh=w2Sja987XNlQt7qPhwp17obR48R9AKNh6bGuvmzzbCg=;
+ b=EHvP6LxJafjAXAIEcrMpJxlZI17baqohWtQQFIQJ1/nUBmP+LZ3mEOgaJbPARSrPMy1w
+ Hc0Oc/jXxrlnGV/uRcAq3b01us5uDFQ/lsoDEZke+PXYtWdXpcTaYeXw6jq7rhKvy+a2N
+ jkvGS4+jnXW8CZlTfhh3qzRAYfLet16W+48ABNwRG9gLyin0LGST1IvDlRdq77dsG3GVY
+ YlFD4xbZinQwf1Ny113ncpkG/iAX1LwZEWS7GkGRajQc789gdTbdAUgDtAgOXj++lVmN3
+ VcaypIgyb5FmnNBm5fOSsCu+47i7yOLGveIHhoGGKDoSKU5G/J9XZKG+JyCXhya+kVQ==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org;
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2999440B92
+ by smtp3.osuosl.org (Postfix) with ESMTP id 00FFA60D76
  for <buildroot@buildroot.org>; Fri, 18 Sep 2026 13:05:48 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D6E8997698; Fri, 18 Sep 2026 13:04:40 +0000 (UTC)
+ id AE4AA9718A; Fri, 18 Sep 2026 13:04:40 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 18 Sep 2026 11:19:38 +0200
+Date: Fri, 18 Sep 2026 11:19:26 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: d667e4e7a6065e5d9a364bfc3c3b226d4f2ee690
-X-Git-Newrev: 51a16f40def0504bec8a8ded1701136db7bc69eb
+X-Git-Oldrev: 84ef784c425b7f1a63edcf1a874acc528437c8ef
+X-Git-Newrev: 215f018aecfbdac512c3f4cd184e162d902931e5
 X-Patchwork-Hint: ignore
-Message-Id: <20260918130440.D6E8997698@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/clamav: add
- missing BR2_TOOLCHAIN_HAS_SYNC_4 dependency
+Message-Id: <20260918130440.AE4AA9718A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/qt5cinex: add
+ missing select BR2_PACKAGE_QT5BASE_GUI
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -118,46 +118,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/51a16f40def0504bec8a8ded1701136db7bc69eb
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/215f018aecfbdac512c3f4cd184e162d902931e5
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-In commit 203725a46bc6b61ed7e4fdb3d76f62327d3e47fa ("package/clamav:
-bump version to 1.0.1"), select BR2_PACKAGE_JSON_C was added to
-BR2_PACKAGE_CLAMAV without propagating the BR2_TOOLCHAIN_HAS_SYNC_4
-dependency from BR2_PACKAGE_JSON_C.
+BR2_PACKAGE_QT5CINEX selects BR2_PACKAGE_QT5BASE_PNG,
+BR2_PACKAGE_QT5BASE_WIDGETS and BR2_PACKAGE_QT5BASE_EGLFS, which are
+all sub-options of BR2_PACKAGE_QT5BASE_GUI, but we don't explicitly
+selects BR2_PACKAGE_QT5BASE_GUI.
 
-Since at the same time a dependency on
-BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS was added to clamav and
-Rust is not supported on the few architectures that don't have 4-byte
-sync intrinsics, this has basically no effect, but ensure a correct
-propagation of dependencies.
+It turns out that things work because the package selects
+BR2_PACKAGE_QT5GRAPHICALEFFECTS, which selects
+BR2_PACKAGE_QT5DECLARATIVE_QUICK, which selects
+BR2_PACKAGE_QT5BASE_GUI, but that is rather non-obvious, and it makes
+more sense for BR2_PACKAGE_QT5CINEX to directly select
+BR2_PACKAGE_QT5BASE_GUI if it also selects sub-options of it.
 
-Fixes: 203725a46bc6b61ed7e4fdb3d76f62327d3e47fa ("package/clamav: bump version to 1.0.1")
+No functional change.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 39b840beef568ab7e671e9145d186b5c993a1b07)
+(cherry picked from commit f077ba9e67566a6855148ffa732c06d63db0622f)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/clamav/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/qt5cinex/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/clamav/Config.in b/package/clamav/Config.in
-index ae5cad036a..482e64a542 100644
---- a/package/clamav/Config.in
-+++ b/package/clamav/Config.in
-@@ -6,6 +6,7 @@ config BR2_PACKAGE_CLAMAV
- 	depends on BR2_USE_MMU # fork()
- 	depends on !BR2_STATIC_LIBS # dlopen
- 	depends on BR2_USE_WCHAR
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # json-c
- 	select BR2_PACKAGE_BZIP2
- 	select BR2_PACKAGE_HOST_RUSTC
- 	select BR2_PACKAGE_JSON_C
-@@ -28,3 +29,4 @@ comment "clamav needs a toolchain w/ C++, dynamic library, threads, wchar"
- 		|| !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
- 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
- 	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+diff --git a/package/qt5cinex/Config.in b/package/qt5cinex/Config.in
+index 8dbf484267..d831af5a79 100644
+--- a/package/qt5cinex/Config.in
++++ b/package/qt5cinex/Config.in
+@@ -12,6 +12,7 @@ config BR2_PACKAGE_QT5CINEX
+ 	# dependency.
+ 	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
+ 	select BR2_PACKAGE_QT5BASE_NETWORK
++	select BR2_PACKAGE_QT5BASE_GUI
+ 	select BR2_PACKAGE_QT5BASE_PNG
+ 	select BR2_PACKAGE_QT5BASE_WIDGETS
+ 	select BR2_PACKAGE_QT5BASE_EGLFS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
