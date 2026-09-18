@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49436C982D8
-	for <buildroot@archiver.kernel.org>; Fri, 18 Sep 2026 18:42:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18A63C982D7
+	for <buildroot@archiver.kernel.org>; Fri, 18 Sep 2026 18:42:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 151FE605E5;
-	Fri, 18 Sep 2026 18:42:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D5D6860617;
+	Fri, 18 Sep 2026 18:42:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jstfbVMbiDfl; Fri, 18 Sep 2026 18:42:39 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 0548460617
+ id mrh2DgZZUQua; Fri, 18 Sep 2026 18:42:52 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org D409160D77
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789756959;
-	b=SNUWqf/1dB3U/dRdB0bt17mUhxSWSdUHXgrGC2Pus8Rq4QJFvQSYRBgHyDhGwhqDBW3y
-	 1GN+wVXHyD67P1lpgIrxGeRWxqKMMksFlReJhPCq7dL/uNKtq5sJwZuoaFndf1mVvXt66
-	 UkGqfuRF6u0sFyc06j6AVY3vdFsGvNSNcsfd+r2OjYNVQabALV1ssJFRXbJYqMNea9hzZ
-	 EJ4X2ftDaVvtbb0SgbgKrZbnbjkpCa5nBGB0BzxIlxkZpBSkoQOXbhHi/abNlM9fq84Y9
-	 MxqYu2YNEACNgrfBS7uaRg0/gZQkCfoj/O2gJayYRbQQj0zkIoY6dAik4HjArOliVhQ==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789756972;
+	b=eDGItRle3KSfSTmm0vPUVCoOO/smYmm1+sn9yxxuO9n5kjG5IL/lL/0IP5HbpCbNsb5d
+	 UXZnaYC0gkIUpqrsvZeTmdRsKeuTjvVFagVuTvbASWz7Bpl5rHQzsGSnc2oECpHhue/ki
+	 AayIfJQz8tTCuTkdc8I0lh9Pja8RdBHe7V+Z+WJiseeGraonCmCiOqrcOVbCKr0CybEx+
+	 JxzF7Fdc4EukP/2/W7LicVaLcp8l/XtMcE0jC3poYpKiDGdnocnkv+WASkqWaMLFaJdUJ
+	 XV9Cg39+CDpxnx1pU6anzsounVg9QWOMKniYRmJ4Bd02TwuyEh9bDSyy0F36lrvXA/g==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789756959;
+	c=relaxed/relaxed; t=1789756972;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
@@ -31,103 +31,105 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:Cc:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=ExL+7Y48dBKx0gmxSR0D/PsIy7izUXGkcHWCWJVY6Pk=;
-	b=aSffXZgRLfEsefpnDWS97tIsnTyQvukA7He7SbXZiriB7naZeYhnY8Pw4x5utNMV1SuB
-	 c8augWTjgIeDUtq4VHoDds3eLZgN0owiXo27LBFPJj/8LEhen0uev/VaGgrbq8ntBVcv7
-	 uA4y508ic2VEJ7Q6KpIr+c27p8oysRk+V268r+WKbYXZOmJmqFQGRiFQ4L+cLPHicU4XB
-	 jIjdvAs6NxQANTIGFDDT/wDKnyXxcjM+EN6hbk4yiHkOcX8ebfZhzqL6YUbafPjMQlw9j
-	 /9Hn2p3Z/0kkHUoXvwTEOylLvqjSPljE9oPecvk1Jz5au0NQR1g9QnSqaGTaLU3967A==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	bh=qCdFzGBgjNjx5OnWHGS8EJFFgpMTv6rG6dF27lWgeto=;
+	b=NwzJiHkihKsmXEcthxVkPlZuSD/ma7LGw5NJUZ5iwhX68Fa4dtcGeZi8BqnzcrM3li/b
+	 aqiMTRbNABGyXsW8T3CwIz+LcGR6nG858E4nYjOKsBhSmOKHLQxSI9ykYCiGS3W58gAgg
+	 Z4XYvnvk6fB9ewObr/EesIPXwIfK4DKrcW8hVDKkpxCLZSG/JCV5nWKyk2Q3gDVajUqhy
+	 gJIb8eZVpYGt3NBXAfeyBvKk74z1v+BU5WSqVWnMOMklIL2zVCvF4Hig2jB9Fi+gMV8od
+	 vbcG9yjrC62agc1bEijfDhXOZ2JZttVBtZE72mJ26v35Az8DbVFh/J9fP75b39MlCKA==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; dmarc=pass header.from=kuhls.net;
+	dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256 header.s=kas202605290044 header.b=JiBgYIZe;
+	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789756959;
-	bh=ExL+7Y48dBKx0gmxSR0D/PsIy7izUXGkcHWCWJVY6Pk=;
+	s=default; t=1789756971;
+	bh=qCdFzGBgjNjx5OnWHGS8EJFFgpMTv6rG6dF27lWgeto=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=OaQlMhegthtxCXx//N1HtE8itfCwfHrsGLOc0/26o7rG51H7ChfVCoDSx2AwphHum
-	 dP49rl4vTafz5UIOLTlnxf6YIA9cGbQMIVzj8G8IRJ6dbFkHxn3vghX4KAJnnNG51r
-	 Y1xkiwC6Za30SbgwwIdiVz1Z23Dqnm+qC3Mm8a95Xz+xbZGJyVlgleNJsj0IF3hoJR
-	 +YcYAkDE20Be98Ls1Odeevns6M6iMpKda93arG11GEA6WAaquD5u2OeNxBOmi0aCur
-	 Fhb/u6lkcRKCnCtUAsVLrZOK4ofibvpErcTGJeXXon+dGIaB8mXmHXgHJQ6HfclyZi
-	 u31c+DI+vZmVw==
+	b=JGhszSvn/LNUsL+Vfy5IFjc45/WJXChV7AmtLO3rYhTLAP+TMYRbvIZOHZMGqtc00
+	 gRhKA8rEQbF0r2KPz06DEdbH1IrUhG/pRcP7yHvYdXtJxPrOd7koC5f4T5WM4CLAED
+	 oQByCxydS8Jh/sre/tA6kIa9YF/Lndg/021CGPquCz/mPl/85PPh0+pfFcHfOkj8dS
+	 Bkbotnhip82g5ph5E2lAFx+/kf9hZ/nzYzxUcYdIWLOcil2FKW+EWQwuu/oZGpb4ZW
+	 zFOarCiXdDD8nz5MSUPsEiXuFviK3JOdwB/XjxM6ExKg2bT6IG6EZBV10gzqKczMWi
+	 Oqj4N/mRKPCMA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0548460617;
-	Fri, 18 Sep 2026 18:42:39 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 9D73D237
- for <buildroot@buildroot.org>; Fri, 18 Sep 2026 18:42:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D409160D77;
+	Fri, 18 Sep 2026 18:42:51 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 81CC925B
+ for <buildroot@buildroot.org>; Fri, 18 Sep 2026 18:42:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 833C38126A
- for <buildroot@buildroot.org>; Fri, 18 Sep 2026 18:42:37 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7400660617
+ for <buildroot@buildroot.org>; Fri, 18 Sep 2026 18:42:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2n_hZUL47-3d for <buildroot@buildroot.org>;
- Fri, 18 Sep 2026 18:42:36 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 6DD8781265
-Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789756956;
- b=QA78FRT2R7Z2v6DHCTsqpDiEBTP5r3QDJg2x9vKMB5U9WhZtSSItc3pCDMRvr9EtNzXi
- DPQOWBegRL2FxlIcsDvLr5yAoYXmuLNAoJIX1UiGbT/C9GNEurkd1rHShAOPx4PMsQdmZ
- CHZKNqWNhQnPHz4O+rCzD3FJj5lpVjN7QLwlc3HT47OOLmgFf50tjIBUEzaY3772a0lfE
- LgOOMFN44+X8JZwo3xTmSdAY4oFi3+z+o7KGdfPc9g+apV2s2UW4eND+oJ+dGTqMZcWnn
- eJcnRqNgyww0azEAhUidlvJrGMKz6WTM246PqLZ+37qGDm3hA0gUbGLgciMLwUEAwtw==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jN8xqlGKkbwN for <buildroot@buildroot.org>;
+ Fri, 18 Sep 2026 18:42:49 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 1F05260D77
+Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789756969;
+ b=QhClxpl4UY7vchDNac43B+hnsK1w9wsSmd0KkfkSohczPG4nwP8SOg77ImJB9xGJpRaq
+ C/a1ZCPZP8khdUXikTBldA3xWZJo1lNPAsKaM4KJuoGVqau9TP6/AkZ9793/DIL/67qXg
+ UKU21/Mt48wVcqx/U9oC6yTme9OJF7Epvq+kBrplazwXa9hpyb+SmH09peAOv17j0TcDy
+ xtirsiKspuvmie6Z009yez0eFOLX1K0JmhR/wUNs72R6uwcmK8EGefXuWfu4U69FkD+nZ
+ meRer9OOVPro/M+wUW8Pxvb+vHeAbNg0Un4ss0lCs1I4G6gLWatva6unjnos2bsv34A==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1789756956;
+ c=relaxed/relaxed; t=1789756969;
  h=Received-SPF:DKIM-Signature:X-KAS-Sym:Received:Received:From:To:Cc:
  Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding:X-Spam-Score:X-Spamd-Bar;
- bh=Q4qXDq7MWqLx5tVwg6jkJ6QLugU3s8fDUmEwox9gutw=;
- b=LW8VnsKRyNS78nu3hsyZ8APWYxIWZ811q5+vRN3peG5lJsSSotgrOkh1AnWUTebmfMqH
- 9o+10l22aOt/QjRLs3RnEruyApOJW6r5kOIyj2VYgF3Rc11oCeUJtV9f2y13DoHC18Heu
- GWodygI1jtUSDUiRuFdDgPoPotbM113XlsYEiHxN8GLLDdAlRoxVS8Kb0sTgD1myHaWOW
- dnJ4HdLH/cr3WYGPV2HB78ce+qdEw3mYoplmtxRzrsQtwxRPaCULSfomOFZqHqG7fUd/c
- hFrRpZkjCoat16q0VC0Sh0Pj2UmsCt5b8orMYIrIW+Ziwn3WcXGjDgD7CJdCciSBEiQ==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org;
+ bh=D4k8yf/8pK4OUbN3OQFnfOU/dhlo4EPdKG5PXCqyHfo=;
+ b=NiloQN2oGPuI52iecHrKOzJM45R54dP+fnMdiMAp2qYY+2mFL2hVjl8cCALiz4XHaavi
+ POVXU/mKUQO0Jf9U/zWk1HiyC4GwI0rSB8IkG/n573JA9MTn9vkQU7Tfb0Kkw627tXnKN
+ 8odvMbZkdwLlQAZYbWRC+DWBzsvcEh6879Jf0/XW65HOLWYZylYLcU5cdx62ZgZ2Bil5b
+ 64r5QwSqs+hF1DnMCMRPv87UDw0ZJv/9a2y1sK5SSqb6dhizOnW7KQ4RhzaEBFm3VWNct
+ bRCVfMMicvfGuACOJnQbEBde6STJtxQoiRcoxlPu1+Ss78E2XlapJoELbW0cMk6akAA==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org;
  dmarc=pass header.from=kuhls.net; 
  dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=f62NRtWq; 
+ header.s=kas202605290044 header.b=JiBgYIZe; 
  arc=none smtp.remote-ip=85.13.140.57
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-Authentication-Results: smtp1.osuosl.org;
+Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=kuhls.net
-Authentication-Results: smtp1.osuosl.org;
+Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202605290044 header.b=f62NRtWq
+ header.a=rsa-sha256 header.s=kas202605290044 header.b=JiBgYIZe
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6DD8781265
- for <buildroot@buildroot.org>; Fri, 18 Sep 2026 18:42:35 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1F05260D77
+ for <buildroot@buildroot.org>; Fri, 18 Sep 2026 18:42:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
  s=kas202605290044; t=1789756904;
- bh=Q4qXDq7MWqLx5tVwg6jkJ6QLugU3s8fDUmEwox9gutw=;
+ bh=D4k8yf/8pK4OUbN3OQFnfOU/dhlo4EPdKG5PXCqyHfo=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=f62NRtWq5Vxn+Nrzp0kuh2q1RAJf5TNWCdwq1htbDlPv5DOeGdDuaU2n3qGd3oIYH
- 9NYankBPT7slE9/53uYVahqYY/pPteJhCjtOhCcAl6BKsNoS1VE4bFTLARTuBqBZL2
- SBIvr9qOHBnYox8e7xdYtOZeqR4DJoxr6K692+irjCsODR21GtJCJt8a+vvf/yU2PT
- e2nEVLMdew2Tni7D15boAC55SbWYKk+gFkyt6+4dk7D5dSEro/o5N1vXkvwSIttjon
- S7qJ3blRxtZ23NJJqyvxHSlabQio8yBA+6J86tqApxC6UMjDzZp0kCZ89L54tyeq5L
- 1XfUWiFcQk5gA==
-X-KAS-Sym: v3:f51bdf72230551df:lkseH4ZbqNj6+SWeyhXOROAVDVA4wctn5GqYnvj392NxznN0rSxqdWBYYBdhITxI14gBE1k+pJkBIChL3/t/lCKYI3GtmdM3wrKpFumwg08Wm/sNokIQQ6E7zEBL3K1/hdJasLCtPFWYZLZ4DnysL3d4pK5HKpKudG9dMfXruRPXYqC+sKlv7VCmjdbM67WcbSYib/I5z3KXlTx93kwxaIjh7oHXDaIgSs3BBwdUhzwgu27GIhhGPs84OFj8HKUhaehmsatqjfsuhHQOPWGzMJyclLrqdN8RENcGlb3kAp1RNMG5gE4Srsk7d6rPHzd5pP0v2pHDKySwyfSJf2xgPw==:6tJOqpvrt+d4WHuzDONlKz2K5+UMlqZCthQ1usxDGsoC02Twlo/S4/teUsaMYWzSOZeoyMoN4zDvslcsHjrRCo1qWkNtDU6JuQwEvFTF3jZ7db+mFHa4yTHsyypvR6wyHjVsDHQkH1zVPvhnSztCYtKcBjUOHOMEAVIqRUDSnjroOSWjBOOO2UKL2WXtB827T2PPW+Tl2yBmLkJ1CbKmiJGE5NoU5MPHxij9/np7A6nzpzD3E6UW+DmNJ5oYx743IV+uQhMz0oCsdM4MN6Y8cPftIczS3ytH+TaErv39uRDVbKIVUMm43M4/Jo5xIDgOgmkXzQEe3BT53sp38hSaTgt+oMI5qWCJMl92qXVGERrV7FaO1ey8BE1nwyHmlKDolKFa9j6CLMQMQPYJkHlbyzNOukxri33vtBomZWKPbyCh1URfZMNZpPPndmp1dIBtkZo9z/RdfMaWMw0KNPgTgA0EpB+IOkEnDHeVkaMiMZORJc/h8Kh479aZa4EATJ0gGs+xCcHHLRhEebG2qLicWpGZWv9sapJWpVukenWVkU73Jgn1WuOrx1fs2VLQ5Wn/tv5nMdWBtUUl70jDXbnVDZhJUV4qS6k+Rt4NlYTYVsYWf5
- ydeHFLnNmkpkPePgnc835Y7ilNIwJChQAqlbjb67d/T7VrAzRj27f12It4s+qV7U2CP5ddoGU=
+ b=JiBgYIZeRqRwqPqq4EEp1O30IWQX6ZCXYCT79PxxsMA0mD9M/E4v1PrL0+0pG6BrV
+ JEydZadGQlaXH2vlDYNxrCzdrYd2mnWQpvOed9yfE0cMi3IVBlowXJ1fIPv1voL40u
+ AVDbUdzwzZP2uB1ygYfGHMJa6FYnTqg1QXIZeqyYrbGOak2NRGQVmT3COtavMjVL47
+ ODFUH0G1bta71l6fUSl7yTjjZbE0WWEQBVbmaH/G6Ory6eoUD0BrCCd0F1ldK1/2wg
+ njFzDoWmkK8G1lGD++RUdJTgS2i+M4Z8LhXf4VAtMeoWsgtp9CwAxJSW+0tSGyvToa
+ MkVN436VdKf8Q==
+X-KAS-Sym: v3:f51bdf72230551df:lkseH4ZbqNj6+SWeyhXOROAVDVA4wctn5GqYnvj392NxznN0rSxqdWBYYBdhITxI14gBE1k+pJkBIChL3/t/lCKYI3GtmdM3wrKpFumwg08Wm/sNokIQQ6E7zEBL3K1/hdJasLCtPFWYZLZ4DnysL3d4pK5HKpKudG9dMfXruRPXYqC+sKlv7VCmjdbM67WcbSYib/I5z3KXlTx93kwxaIjh7oHXDaIgSs3BBwdUhzwgu27GIhhGPs84OFj8HKUhaehmsatqjfsuhHQOPWGzMJyclLrqdN8RENcGlb3kAp1RNMG5gE4Srsk7d6rPHzd5pP0v2pHDKySwyfSJf2xgPw==:Xyk8bY/5GWypfzOkn8DmONqlxnEK4kyHR/oqAlCMqA0S0aPDEnqoF0+tuznx0okSK7AFxchvomC5vRiulr8liusR3HMRLnjenHZ1Evyjjqs3uz5kiVcp1Lm8xyzV0i7jew6VMqfEIb8tlRM17evfsBsgTeVMNoFgRmFuSn621yRYws446UM7txV9clHjC6NvJOJBIkuuDyVQMKkbSA9bP8qAYLbxzlIzhlhv2WvNPkbxbCisg/oZ003B5TYXkt/YQOHizFZXeVnB1vZAlB2DTelbgiuZe+fR+WfTav17bcY5BV2OAFyKyrESd6he9CfeqOsFbFJiMznmsAEaQOfO1AKwePkKbowuBDmP60S3dTnuAeGr2C9FR/xTNPWsLFe2T6p0reENtK9yDLnao82UnOPVQYAWD9B4gvyWcbRR7m+Ltjavje7vtE0885xZFMpVFYuqPgiaLONQq8ExB0XchMd+MCVpSITMmQQ1uXxQ/0BEwZh+ETgo7cSHzF7H3qRglOp43dsO35oyPxZGT7K9jXZOQq4qV3HHdzDruGtzP7AhZgK1TffrHGdz8/4UFx1VfdmTmBHwbIN/5VXnyfv95ObEIGQZTxZANb0Fv/RrdqXh09
+ llY6eLVj3uCU5AhYYIPCiWYiuJdui+fEH6C0slJAMYb8rl6i3DWXNCna+RvnGehRrpVeLRTgqpFWBfVv+20D1JsoeehCjKiHcQm3EhDQ5BNrzUlJarEA==
 Received: from fli4l.lan.fli4l (p54a1b276.dip0.t-ipconnect.de [84.161.178.118])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 1D95AA4C46BB;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 42251A4C46F0;
  Fri, 18 Sep 2026 20:41:44 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:59900)
  by fli4l.lan.fli4l with esmtp (Exim 4.100.1)
- (envelope-from <bernd@kuhls.net>) id 1x7dWp-000000007cB-1zfI;
+ (envelope-from <bernd@kuhls.net>) id 1x7dWp-000000007cB-2fAL;
  Fri, 18 Sep 2026 18:41:43 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Fri, 18 Sep 2026 20:40:26 +0200
-Message-ID: <20260918184140.3631274-5-bernd@kuhls.net>
+Date: Fri, 18 Sep 2026 20:40:27 +0200
+Message-ID: <20260918184140.3631274-6-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260918184140.3631274-1-bernd@kuhls.net>
 References: <20260918184140.3631274-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: -
-Subject: [Buildroot] [PATCH 04/77] package/qt5/qt5opcua: remove package
+X-Spamd-Bar: /
+Subject: [Buildroot] [PATCH 05/77] package/qt5/qt5knx: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -143,6 +145,7 @@ Cc: Koen Martens <gmc@sonologic.nl>,
  Aleksandr Makarov <aleksandr.o.makarov@gmail.com>,
  Marcin Bis <marcin@bis.org.pl>, Robert Rose <robertroyrose@gmail.com>,
  Yair Ben Avraham <yairba@protonmail.com>,
+ Angelo Compagnucci <angelo.compagnucci@gmail.com>,
  Marcin Niestroj <m.niestroj@grinn-global.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  =?UTF-8?q?C=C3=A9dric=20Ch=C3=A9pied?= <cedric.chepied@gmail.com>,
@@ -174,139 +177,127 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Build is broken with the upcoming bump of OpenSSL to 4.0.2:
 
-x509/openssl_symbols.cpp: In function 'QDateTime q_getTimeFromASN1(const ASN1_TIME*)':
-x509/openssl_symbols.cpp:1244:31: error: invalid use of incomplete type 'const ASN1_TIME' {aka 'const struct asn1_string_st'}
- 1244 |     size_t lTimeLength = aTime->length;
+ssl/qsslsocket_openssl_symbols.cpp: In function 'QDateTime QKnxPrivate::q_getTimeFromASN1(const ASN1_TIME*)':
+ssl/qsslsocket_openssl_symbols.cpp:1352:31: error: invalid use of incomplete type 'const ASN1_TIME' {aka 'const struct asn1_string_st'}
+ 1352 |     size_t lTimeLength = aTime->length;
 
-x509/openssl_symbols.cpp:1245:35: error: invalid use of incomplete type 'const ASN1_TIME' {aka 'const struct asn1_string_st'}
- 1245 |     char *pString = (char *) aTime->data;
+ssl/qsslsocket_openssl_symbols.cpp:1353:35: error: invalid use of incomplete type 'const ASN1_TIME' {aka 'const struct asn1_string_st'}
+ 1353 |     char *pString = (char *) aTime->data;
 
-x509/openssl_symbols.cpp:1247:14: error: invalid use of incomplete type 'const ASN1_TIME' {aka 'const struct asn1_string_st'}
- 1247 |     if (aTime->type == V_ASN1_UTCTIME) {
+ssl/qsslsocket_openssl_symbols.cpp:1355:14: error: invalid use of incomplete type 'const ASN1_TIME' {aka 'const struct asn1_string_st'}
+ 1355 |     if (aTime->type == V_ASN1_UTCTIME) {
 
-x509/openssl_symbols.cpp:1307:21: error: invalid use of incomplete type 'const ASN1_TIME' {aka 'const struct asn1_string_st'}
- 1307 |     } else if (aTime->type == V_ASN1_GENERALIZEDTIME) {
+ssl/qsslsocket_openssl_symbols.cpp:1415:21: error: invalid use of incomplete type 'const ASN1_TIME' {aka 'const struct asn1_string_st'}
+ 1415 |     } else if (aTime->type == V_ASN1_GENERALIZEDTIME) {
 
-and mbed TLS since it was bumped from 2.28.10 to 3.6.3.1 with buildroot
-commit 3481a9643fc7223e400ed877f08ade34d44e6b78 as seen by the
-autobuilders.
-
-The last release of the 5.x series dates back to 2020:
-https://github.com/qt/qtopcua/releases/tag/v5.15.2
-
-Fixes:
-https://autobuild.buildroot.net/results/1f0/1f06b1efdde65fcd99ff79a63ed01b749788dec8/
+Last update of the package dates back to 2020:
+https://github.com/qt/qtknx/branches/all
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Cc: Andreas Naumann <dev@andin.de>
+Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 ---
- Config.in.legacy                   |  7 +++++++
- DEVELOPERS                         |  1 -
- package/qt5/Config.in              |  1 -
- package/qt5/qt5opcua/Config.in     |  9 ---------
- package/qt5/qt5opcua/qt5opcua.hash | 10 ----------
- package/qt5/qt5opcua/qt5opcua.mk   | 19 -------------------
- 6 files changed, 7 insertions(+), 40 deletions(-)
- delete mode 100644 package/qt5/qt5opcua/Config.in
- delete mode 100644 package/qt5/qt5opcua/qt5opcua.hash
- delete mode 100644 package/qt5/qt5opcua/qt5opcua.mk
+ Config.in.legacy               |  7 +++++++
+ DEVELOPERS                     |  1 -
+ package/qt5/Config.in          |  1 -
+ package/qt5/qt5knx/Config.in   | 12 ------------
+ package/qt5/qt5knx/qt5knx.hash |  6 ------
+ package/qt5/qt5knx/qt5knx.mk   | 15 ---------------
+ 6 files changed, 7 insertions(+), 35 deletions(-)
+ delete mode 100644 package/qt5/qt5knx/Config.in
+ delete mode 100644 package/qt5/qt5knx/qt5knx.hash
+ delete mode 100644 package/qt5/qt5knx/qt5knx.mk
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index e20e564af5..06d06110cc 100644
+index 06d06110cc..e6c4361bb9 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -146,6 +146,13 @@ endif
  
  comment "Legacy options removed in 2026.11"
  
-+config BR2_PACKAGE_QT5OPCUA
-+	bool "qt5opcua has been removed"
++config BR2_PACKAGE_QT5KNX
++	bool "qt5knx has been removed"
 +	select BR2_LEGACY
 +	help
-+	  The qt5opcua package has been removed because it is
-+	  incompatible with OpenSSL >= 4.x and mbed TLS 3.x
++	  The qt5knx package has been removed because it is
++	  incompatible with OpenSSL >= 4.x
 +
- config BR2_PACKAGE_HEIRLOOM_MAILX
- 	bool "heirloom-mailx has been removed"
+ config BR2_PACKAGE_QT5OPCUA
+ 	bool "qt5opcua has been removed"
  	select BR2_LEGACY
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 9c543ee8d6..b5c7705a5f 100644
+index b5c7705a5f..954279b8a1 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -199,7 +199,6 @@ N:	Andreas Naumann <dev@andin.de>
- F:	package/evemu/
- F:	package/libevdev/
- F:	package/pkg-qmake.mk
--F:	package/qt5/qt5opcua/
- F:	package/qt6/qt6opcua/
- 
- N:	Andreas Ziegler <br025@umbiko.net>
+@@ -247,7 +247,6 @@ F:	package/python-spidev/
+ F:	package/python-web2py/
+ F:	package/qpdf/
+ F:	package/qt5/qt5coap/
+-F:	package/qt5/qt5knx/
+ F:	package/qt5/qt5mqtt/
+ F:	package/rtl8723ds/
+ F:	package/rtl8723ds-bt/
 diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-index f1b16ff39b..f5245e723a 100644
+index f5245e723a..8b4903a5ab 100644
 --- a/package/qt5/Config.in
 +++ b/package/qt5/Config.in
-@@ -49,7 +49,6 @@ source "package/qt5/qt5location/Config.in"
+@@ -44,7 +44,6 @@ source "package/qt5/qt5doc/Config.in"
+ source "package/qt5/qt5enginio/Config.in"
+ source "package/qt5/qt5graphicaleffects/Config.in"
+ source "package/qt5/qt5imageformats/Config.in"
+-source "package/qt5/qt5knx/Config.in"
+ source "package/qt5/qt5location/Config.in"
  source "package/qt5/qt5lottie/Config.in"
  source "package/qt5/qt5mqtt/Config.in"
- source "package/qt5/qt5multimedia/Config.in"
--source "package/qt5/qt5opcua/Config.in"
- source "package/qt5/qt5quickcontrols/Config.in"
- source "package/qt5/qt5quickcontrols2/Config.in"
- source "package/qt5/qt5quicktimeline/Config.in"
-diff --git a/package/qt5/qt5opcua/Config.in b/package/qt5/qt5opcua/Config.in
+diff --git a/package/qt5/qt5knx/Config.in b/package/qt5/qt5knx/Config.in
 deleted file mode 100644
-index 2b0ba37af3..0000000000
---- a/package/qt5/qt5opcua/Config.in
+index 991e93c8cb..0000000000
+--- a/package/qt5/qt5knx/Config.in
 +++ /dev/null
-@@ -1,9 +0,0 @@
--config BR2_PACKAGE_QT5OPCUA
--	bool "qt5opcua"
--	depends on BR2_PACKAGE_QT5
+@@ -1,12 +0,0 @@
+-config BR2_PACKAGE_QT5KNX
+-	bool "qt5knx"
 -	help
 -	  Qt is a cross-platform application and UI framework for
 -	  developers using C++.
 -
--	  The Qt OPC UA module implements a Qt API to interact with
--	  OPC UA on top of a 3rd party OPC UA stack.
-diff --git a/package/qt5/qt5opcua/qt5opcua.hash b/package/qt5/qt5opcua/qt5opcua.hash
+-	  The Qt KNX module implements the client side of a connection
+-	  between a client and a KNXnet/IP server. This connection
+-	  can be used to send messages to the KNX bus and to control
+-	  the functionalities of the KNX devices.
+-
+-	  https://doc.qt.io/QtKNX/index.html
+diff --git a/package/qt5/qt5knx/qt5knx.hash b/package/qt5/qt5knx/qt5knx.hash
 deleted file mode 100644
-index a325653f80..0000000000
---- a/package/qt5/qt5opcua/qt5opcua.hash
+index 2600a739bc..0000000000
+--- a/package/qt5/qt5knx/qt5knx.hash
 +++ /dev/null
-@@ -1,10 +0,0 @@
+@@ -1,6 +0,0 @@
 -# Hash locally calculated
--sha256  fa8e0e87aae6f321aecac2605e6ac1b858ba1ed4db3c4a78a193eb7b547ab224  qt5opcua-5.15.2-git4.tar.gz
+-sha256  1648bd6d7e5d8fc91aaa6db1bf9d2744d0385a087ba78a00080f99f1d5027c8b  qt5knx-5.15.2-git4.tar.gz
 -
 -# Hashes for license files:
--sha256  d93cc415382f0013088fa276d9cf82373badf244c78220a926f15ee46f0fe3c4  LICENSE-CC0
--sha256  f827ad079686ba92cc94811e35492d0e8966f704008b6da9eeda0b659fb58a8d  LICENSE.FDL
 -sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE.GPL3
 -sha256  0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652  LICENSE.GPL3-EXCEPT
--sha256  6c3f3c31b93985f1b93bfbb35fb609d37281697d0efc220c9f91cf4b59eaabde  LICENSE.GPLv2
--sha256  75d800e60c8d58c2e7f0338e8552ea6123a9ce7e5dd8e1cdf2095e013b737488  LICENSE.LGPLv3
-diff --git a/package/qt5/qt5opcua/qt5opcua.mk b/package/qt5/qt5opcua/qt5opcua.mk
+diff --git a/package/qt5/qt5knx/qt5knx.mk b/package/qt5/qt5knx/qt5knx.mk
 deleted file mode 100644
-index ef51abddf8..0000000000
---- a/package/qt5/qt5opcua/qt5opcua.mk
+index 91b99aaa87..0000000000
+--- a/package/qt5/qt5knx/qt5knx.mk
 +++ /dev/null
-@@ -1,19 +0,0 @@
+@@ -1,15 +0,0 @@
 -################################################################################
 -#
--# qt5opcua
+-# qt5knx
 -#
 -################################################################################
 -
--QT5OPCUA_VERSION = 5.15.2
--QT5OPCUA_SITE = https://code.qt.io/qt/qtopcua.git
--QT5OPCUA_SITE_METHOD = git
--QT5OPCUA_INSTALL_STAGING = YES
--QT5OPCUA_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDL-1.3 (docs) CC0-1.0
--QT5OPCUA_LICENSE_FILES = LICENSE.GPLv2 LICENSE.GPL3 LICENSE.GPL3-EXCEPT LICENSE.LGPLv3 LICENSE.FDL LICENSE-CC0
--QT5OPCUA_SYNC_QT_HEADERS = YES
--
--ifeq ($(BR2_PACKAGE_MBEDTLS),y)
--QT5OPCUA_DEPENDENCIES += mbedtls
--endif
+-QT5KNX_VERSION = 5.15.2
+-QT5KNX_SITE = https://code.qt.io/qt/qtknx.git
+-QT5KNX_SITE_METHOD = git
+-QT5KNX_INSTALL_STAGING = YES
+-QT5KNX_LICENSE = GPL-3.0 with exception
+-QT5KNX_LICENSE_FILES = LICENSE.GPL3 LICENSE.GPL3-EXCEPT
+-QT5KNX_SYNC_QT_HEADERS = YES
 -
 -$(eval $(qmake-package))
 -- 
