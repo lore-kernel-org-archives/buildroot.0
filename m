@@ -1,103 +1,118 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2CD1C982D7
-	for <buildroot@archiver.kernel.org>; Fri, 18 Sep 2026 20:25:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26C15C982DD
+	for <buildroot@archiver.kernel.org>; Fri, 18 Sep 2026 20:27:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7DA33812BF;
-	Fri, 18 Sep 2026 20:25:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CF12960BB7;
+	Fri, 18 Sep 2026 20:27:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kKjlZ3M4fEMG; Fri, 18 Sep 2026 20:25:31 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 0FB13812DF
-Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789763131;
-	b=bkuePv3bIq9zm2fhmCzpwNE/C2p8n+bgojozPhOk8Mmn1tlA6CSQj5ySjnPU6JqS5805
-	 q//J+mlQLZXgayk9hZN/K48i0lROD1HtgpNZhxDF0InOjA5BQz8vpf2mvPBEm5/FXcWNu
-	 XoYEnux3lNzhnOLA1Fh1r+jWt6pAW7o6PxvPpRyXWGyubYYyw+YeqRHR1jxFHvZX0MgPP
-	 y0CgEnOU2oLMoAmdBKxt+PXL62Tjo9wKXr3/YhJbMLz+QAFRj0dUWY77shPl8cdndC/zo
-	 F1QiUNHFV9lad50Fy+UOTAeCWLzSWWInjDlUPZNtRtc4o8IWJ4K7dCrcpxdqZMYg+zw==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aJ_D_XU1ZLwj; Fri, 18 Sep 2026 20:27:37 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 93F3160BF7
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789763257;
+	b=BKZStfMdFS1cZUZN4zQSwhHuDxdd3EcF/1A4SBxQpbSP7gpfW6KZmUIUTcIswYvY5MYn
+	 Evt8VJ+h4RUHhs+V6I95fFQe6uB2ll4Waqpw7OS8pZ45tBrgzIi/OUbG0CnSMa9v5gvsv
+	 QXH3zq0nSv3u+v6/XV4WEW1UCoTJnazRPZzPDlVma7bKj7/a3V2Mpqnen+Gbmbd8eGXoL
+	 1y3U5lhNUMoiKlg8gE4cxmkql8QXCwMH0bJsSBitc4pL/8bwH4gexzejQZjBKCY50dou+
+	 i9TSjS8YJH8hogm+a8A/4V/7tjaepM+xtR/SHMROKix6roJn12QIIxUIkcZzas+XSRQ==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789763131;
+	c=relaxed/relaxed; t=1789763257;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
-	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
-	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
-	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=ZIIACh+atmnQZ3MAjEngg+6A7cu7luJpVZEVLWQesWs=;
-	b=otqtTOU4dprNXe3VrjIHS/B9wbeqLoao8jk2PKzPJS9nyP10uo7bAK+4LR1bb2wzJDVg
-	 1W+5BN90AjkprZTvASDbxzCtpMwoLXGit6SaGr/FEp+HGpSir0u3HrpRtinCNWygAL9y4
-	 s5TufK//sAOI1r3i7TknYx7BLlQuzkdjZh3ob1PCGehkKkBWIpAFTSbXWO/r8viADuJ1F
-	 +T/YiZLYLZlrgs/3XyOApGPFWXf61mhcgGmgoEQGiXATTGIk+Um/YSmK+rqWOzixv4CsW
-	 MPRxTHydg+0TpKmiHEjZ0LOc1n4oxQe1u3IoMLCzGoJPQovmHEbWZ4mNJ/MC9qp4Ijw==
-ARC-Authentication-Results: i=2; smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 Received:Received:Date:To:Cc:Message-ID:References:MIME-Version:
+	 Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version:Subject:
+	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
+	bh=MYdasYa5Wc0mFl4CHuzhHaqzF+kagbc1ed9hBA7oESc=;
+	b=N5GDRSm8d+Umm7vyVZm2oq5bTL/urlJThk+3grPTf48F2ujFgMEFUkQrRrfV7mn8o3cv
+	 05T6ired8LsgX2/z5aW3xzLkssu1EuJdL7kPjiPn/kzDKyHIe2usnS0BOhBzdXsJwDYC5
+	 65taZ2DvFmDaEKQQDYSLXMDIfJedTJaWF10aUS93J9ynPuauHpCpMjDa54J5KrW796uYX
+	 y7VcphlO/vAgLEAoCd0J9C9R2e+uIObjhnboIWINEGHk3O/LWzP4LRp0FBW1Lumez127I
+	 nXoJYbIgtkOGGl2ereB7lBX85tA5nFnQpmy7mIuhKFM1ln/P35GZYJk0EDGYyYZM4DQ==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789763131;
-	bh=ZIIACh+atmnQZ3MAjEngg+6A7cu7luJpVZEVLWQesWs=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=mHdrLn86ivLW25MaNLftZKYMp/z9Gz4D6on4Yoxut9sLu0CD2w9J4w9zmhhMnzWtD
-	 F62i8EPyPLY++S/n3G3iRMP5n85BC07tJIZqeySqOweaRmalSHvuqYLzwJjZ1QoImB
-	 mckz8gSW5+5jmbaddBSHrWQ3fw8tHAB+ni5grqnmkEmnAyoAwj1LwN5ZxmB81JPg+J
-	 2JOU26ToFsm20Q5X8pn3g/eBG2As9JXpJU8VXaG7L3lHKjG5a3A7qJganfgwzsUYTf
-	 UwBQ0PHzK0gbDM/DpVaXWm4ZlLav27+hHWq/7e0GCBsCrfbKXLHoDlZT4b5FhhCAVq
-	 f5NRo2lxUacuQ==
+	s=default; t=1789763257;
+	bh=MYdasYa5Wc0mFl4CHuzhHaqzF+kagbc1ed9hBA7oESc=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=LTwHfCsYbfANeAyIeRP2eF+GCvr6+PrBxtmhML5FfcwGPXFijcagyvBT4DAVqxAUE
+	 qw4Jn9PJQ+tBFLCsyzHTttbZ4M7XJrTcLq0hJsF1LYAdvtd/4TGgPQLVikljCznpY4
+	 vzz9Zk2LipTA+ZC92fK22rmNZRjMOm0kYmtSiItKIL49qqQYYJ52UrIxvrsco7vvnk
+	 uIeIiU0ElZc2R5JccvquyY+81Dod+gPkyeF9rzhqbsd7/gB1npd2867aUBePniVmpr
+	 Rvp/LcIn8+QmUZQKY7LNxeZ7PbPcnq+yXtYOJtTmzwlguQFVmKRciEPQeMfX0d39SC
+	 Zkp47bV5/tKOA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0FB13812DF;
-	Fri, 18 Sep 2026 20:25:31 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 1CB403B9
- for <buildroot@buildroot.org>; Fri, 18 Sep 2026 20:25:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 93F3160BF7;
+	Fri, 18 Sep 2026 20:27:37 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3A50F13D
+ for <buildroot@buildroot.org>; Fri, 18 Sep 2026 20:27:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0EC524006F
- for <buildroot@buildroot.org>; Fri, 18 Sep 2026 20:25:29 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2CA6640022
+ for <buildroot@buildroot.org>; Fri, 18 Sep 2026 20:27:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5UKfNqBcO3XM for <buildroot@buildroot.org>;
- Fri, 18 Sep 2026 20:25:28 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org 5274840022
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789763128;
- b=O/Rn/iROvEddAhinW69d0uQNrKJFBQkZ6hMt5jd3UWu5Y/KUjwCkrQN9eU26HCH7NhKQ
- Z5g88y6xXBpejw2RxgiQDj8rTh9wY38UheADt3Sy/6EfEbhsQ9KWpr7efhymIgTVRu+YP
- /MJXRhFmivtQpDPpIRpKkpRq/d8WztKcSE/JxF920i4HwpXQbRJeNSsuh3VZb95v9Rhcp
- tIVWjkTesr9mkUoiH1FS24EzGuVlRAZAwqDoIpXDl07ps9dhQIywiYG1w+bxPMvpBtesg
- 3QgGGJjFDkqgghAs9KSSmh4Gqo378DXw7DFxpbKO325UVf6CivCv5XJMhJ112CC/P7Q==
+ id H1UxBwS4ybgQ for <buildroot@buildroot.org>;
+ Fri, 18 Sep 2026 20:27:35 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org AA0674006F
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789763254;
+ b=ON9KPFzUz4YZlcxeomq/oQlgVJT6B4CY1H1r5vXDx0K/yWyQS6uFRttcMfQDeaPBxxJq
+ AinPc8Qn/Y3c1+SHRlvkD7x8Dhyu5G0gxw4yBLcaiSgpuRR4uEkmYqHFmAUicQorhW0LB
+ QdfRUhx0bjvb5bQrlo3Hs0zF0JvEzMofBUuXwHe+ztdMJg7o+ngQiQ+IkC3rHfyhsivjm
+ Cb6DIsAp2dQ93w7PqJXp6EtTIi3FAUVTuINWPoTg9l01sMsD34yE5cYcW2FMqQLTfucVw
+ 5c+oi/fuVNYnRfspCAxYHnvKlaRBfmEG6inUqbh3fQLvXgyu6NAdAR1g2Er0wN373Iw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1789763128;
- h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
- X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=HCqlNJcHiusC5jV45AO2vzJYyuMGAi3aPPkEodtmGL4=;
- b=E3PVvn1oool5ZlnwXbFSng3u71BTVjUoc7aMohSxJq67uS7E5/1AlfQIaF0sFZXmhf1N
- VeO3ASpKfe1h302RTyudQqsX0mfrc9hshSuR1ZYhqBx8UI5/0WzaurBC6yYdDxwYv8/Sp
- Ns+Ixlvj6hoHvlyXJJigAdsrafcJu6sMskQ+AhlA042WhObWMn3cLfzXvuPSAOWarO6qv
- uvye9uhnS9ZzWpKnkQjO33ui0fT4hZakCNGKQE+X0ORcUF2GwlZWA5dXbKwix/w2BRXAh
- KjSVyuj7m0WZ0dopsJ7oeEXDUygr72ldaxz9BMlACKqfMZySVpdPAS1lyJOYrDvj1JQ==
+ c=relaxed/relaxed; t=1789763254;
+ h=Received-SPF:Received:Received:Received:DKIM-Signature:Date:From:To:
+ Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+ Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version;
+ bh=eFtLCPX8msKLzDrOnaUBOUAjdHKZjn6cQocUbeMVWRQ=;
+ b=PNzPBZHwGw6RL03CRpOug5yk1HcBkcrYRUQjpwE3OzR7H0Ttjzf2b2WYkv27CbJDU+rl
+ Y6MTTj7ry5TDB3kAeryFEcsORNlOs6ksLU2kSxiuOmm4p/uvC54S1zxnj3oNVJOGkIVoK
+ C+72VdM1TP2lvyyZ+y12kW7sQg63MYnGdcRSIXRm/L06KSiwjWZT7rtSJkYuzkGb++Wcu
+ i66CrwIO3nqDrY3iR3S8HEj0goPn0vRTP7CXt0qy+FjCgqz10IZRdP2egLMmUVW7Gx1p/
+ NVTl11kUzi1h+0VWzxkzOpRbveYd0ZSV0P5T2xnFFddUKA5KRtNs7+tkwBPjJpuwdSw==
 ARC-Authentication-Results: i=1; smtp2.osuosl.org;
- arc=none smtp.remote-ip=140.211.167.122
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ dmarc=pass header.from=bootlin.com; 
+ dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=dkim header.b=s0hC5KgG; 
+ arc=none smtp.remote-ip=185.246.85.4
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
+ helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5274840022
- for <buildroot@buildroot.org>; Fri, 18 Sep 2026 20:25:28 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AEC7C976A4; Fri, 18 Sep 2026 20:24:20 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 18 Sep 2026 22:25:07 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f8a1acdb6c300b32c4b29a9b41e9cafbd1389962
-X-Git-Newrev: a4346a385811e3ef2ba209ded9a604f1cd7f38fb
-X-Patchwork-Hint: ignore
-Message-Id: <20260918202420.AEC7C976A4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mali-t76x: add missing license
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id AA0674006F
+ for <buildroot@buildroot.org>; Fri, 18 Sep 2026 20:27:32 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-03.galae.net (Postfix) with ESMTPS id 576AC4E40885;
+ Fri, 18 Sep 2026 20:27:30 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id DFE5060649;
+ Fri, 18 Sep 2026 20:27:29 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id D7D4810329075; 
+ Fri, 18 Sep 2026 22:27:24 +0200 (CEST)
+Date: Fri, 18 Sep 2026 22:27:23 +0200
+To: Sebastian Michel <sebastian.michel@oss.othermo.de>
+Cc: buildroot@buildroot.org
+Message-ID: <aq2eM8i4IYzeoV9B@windsurf>
+References: <20260825073605.68465-1-sebastian.michel@oss.othermo.de>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20260825073605.68465-1-sebastian.michel@oss.othermo.de>
+X-Last-TLS-Session-Version: TLSv1.3
+Subject: Re: [Buildroot] [PATCH] package/mali-t76x: add missing license
  information
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -112,60 +127,79 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/a4346a385811e3ef2ba209ded9a604f1cd7f38fb
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On Tue, Aug 25, 2026 at 09:36:05AM +0200, Sebastian Michel wrote:
+> Added MALI_T76X_STRIP_COMPONENTS = 0 as tar archive follows nonstandard layout with license file being in the topmost directory
+> 
+> Signed-off-by: Sebastian Michel <sebastian.michel@oss.othermo.de>
+> ---
+>  package/mali-t76x/mali-t76x.hash | 1 +
+>  package/mali-t76x/mali-t76x.mk   | 9 +++++++--
+>  2 files changed, 8 insertions(+), 2 deletions(-)
 
-Added MALI_T76X_STRIP_COMPONENTS = 0 as tar archive follows nonstandard layout with license file being in the topmost directory
+Thanks for your patch. I've applied (after doing minor changes, see
+below).
 
-Signed-off-by: Sebastian Michel <sebastian.michel@oss.othermo.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/mali-t76x/mali-t76x.hash | 1 +
- package/mali-t76x/mali-t76x.mk   | 8 ++++++--
- 2 files changed, 7 insertions(+), 2 deletions(-)
+One question though: are you actually using this package?
 
-diff --git a/package/mali-t76x/mali-t76x.hash b/package/mali-t76x/mali-t76x.hash
-index a754b98074..61671eda29 100644
---- a/package/mali-t76x/mali-t76x.hash
-+++ b/package/mali-t76x/mali-t76x.hash
-@@ -1,2 +1,3 @@
- # Locally computed:
- sha256  5a0b00438edc8066b374481d3332a43c07ec2bd3bc73265983a968970f754902  mali-t76x_r5p0-06rel0_linux_1+fbdev.tar.gz
-+sha256  b0ca7cedaf4f604a1c863ea71f741d6ca1474aebac7e606ec43d725b3c74cc63  END_USER_LICENCE_AGREEMENT.txt
-diff --git a/package/mali-t76x/mali-t76x.mk b/package/mali-t76x/mali-t76x.mk
-index 387685c033..113c541a91 100644
---- a/package/mali-t76x/mali-t76x.mk
-+++ b/package/mali-t76x/mali-t76x.mk
-@@ -10,9 +10,13 @@ MALI_T76X_SITE = http://malideveloper.arm.com/downloads/drivers/binary/$(MALI_T7
- MALI_T76X_DEPENDENCIES = mesa3d-headers
- MALI_T76X_INSTALL_STAGING = YES
- MALI_T76X_PROVIDES = libegl libgles
-+MALI_T76X_LICENSE = ARM Mali GPU EULA
-+MALI_T76X_LICENSE_FILES = END_USER_LICENCE_AGREEMENT.txt
-+MALI_T76X_REDISTRIBUTE = NO
-+MALI_T76X_STRIP_COMPONENTS = 0
- 
- define MALI_T76X_INSTALL_STAGING_CMDS
--	$(INSTALL) -m 755 $(@D)/*.so $(STAGING_DIR)/usr/lib/
-+	$(INSTALL) -m 755 $(@D)/fbdev/*.so $(STAGING_DIR)/usr/lib/
- 
- 	$(INSTALL) -D -m 0644 package/mali-t76x/egl.pc \
- 		$(STAGING_DIR)/usr/lib/pkgconfig/egl.pc
-@@ -21,7 +25,7 @@ define MALI_T76X_INSTALL_STAGING_CMDS
- endef
- 
- define MALI_T76X_INSTALL_TARGET_CMDS
--	$(INSTALL) -m 755 $(@D)/*.so $(TARGET_DIR)/usr/lib/
-+	$(INSTALL) -m 755 $(@D)/fbdev/*.so $(TARGET_DIR)/usr/lib/
- endef
- 
- $(eval $(generic-package))
+Indeed, its upstream site is dead:
+
+Failed to resolve 'malideveloper.arm.com' (Name or service not known)
+Failed to connect: Connect error
+
+so we're always falling back to the backup copy on
+sources.buildroot.net.
+
+> diff --git a/package/mali-t76x/mali-t76x.hash b/package/mali-t76x/mali-t76x.hash
+> index a754b98074..751d0e7bf2 100644
+> --- a/package/mali-t76x/mali-t76x.hash
+> +++ b/package/mali-t76x/mali-t76x.hash
+> @@ -1,2 +1,3 @@
+>  # Locally computed:
+>  sha256  5a0b00438edc8066b374481d3332a43c07ec2bd3bc73265983a968970f754902  mali-t76x_r5p0-06rel0_linux_1+fbdev.tar.gz
+> +sha256  b0ca7cedaf4f604a1c863ea71f741d6ca1474aebac7e606ec43d725b3c74cc63  END_USER_LICENCE_AGREEMENT.txt
+> \ No newline at end of file
+
+This lack of newline was causing a check-package warning:
+
+WARNING: package/mali-t76x/mali-t76x.hash:3: missing newline at end of file
+
+> diff --git a/package/mali-t76x/mali-t76x.mk b/package/mali-t76x/mali-t76x.mk
+> index 387685c033..05d7d4812c 100644
+> --- a/package/mali-t76x/mali-t76x.mk
+> +++ b/package/mali-t76x/mali-t76x.mk
+> @@ -10,9 +10,14 @@ MALI_T76X_SITE = http://malideveloper.arm.com/downloads/drivers/binary/$(MALI_T7
+>  MALI_T76X_DEPENDENCIES = mesa3d-headers
+>  MALI_T76X_INSTALL_STAGING = YES
+>  MALI_T76X_PROVIDES = libegl libgles
+> +MALI_T76X_LICENSE = ARM Mali GPU EULA (LES-PRE-20376)
+
+The (LES-PRE-20376) information seemed pretty useless (not
+informative), so I dropped it. Did you have a specific reason to
+include it?
+
+> +MALI_T76X_LICENSE_FILES = END_USER_LICENCE_AGREEMENT.txt
+> +MALI_T76X_REDISTRIBUTE = NO
+> +MALI_T76X_STRIP_COMPONENTS = 0
+> +
+>
+
+These two consecutive newlines caused the following check-package
+warning:
+
+WARNING: package/mali-t76x/mali-t76x.mk:18: consecutive empty lines
+
+Applied with those issues fixed. Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
