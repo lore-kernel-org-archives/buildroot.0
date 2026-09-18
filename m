@@ -1,104 +1,125 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6B15C982DD
-	for <buildroot@archiver.kernel.org>; Fri, 18 Sep 2026 19:54:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96E05C982D7
+	for <buildroot@archiver.kernel.org>; Fri, 18 Sep 2026 19:55:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 73F8481327;
-	Fri, 18 Sep 2026 19:54:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5923C60EE4;
+	Fri, 18 Sep 2026 19:55:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VoukrukweeXR; Fri, 18 Sep 2026 19:54:53 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 4E035812FF
-Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789761293;
-	b=GI22BN43WqytiwiqnVnTMdG9YXpZqRZlKkRZuVaTrQNnR7JlFXBPOTzR6aOR0BSdahSl
-	 c4xdJIWf6o5TWglNc2NVay5DJr3bApvvi4oED5kVZKyjQtTwozLHspaTPVJ5fg7r6UyDz
-	 fqmcQfzZpZq91nDV1jbX8lctZeobrmvUOfFkfRW2kzmTa/sci9UdvSSuStNjQFahXRWGQ
-	 hPIiaMNGEOfuaOS6tDR8LcY3LxDAatgpfPD/14kwYalvpaPB8KKfrONKc0+m/Jp+Klc3N
-	 8CDfRbdymDvFfha1F+tBBk2gEC/3BYl+2w30Gjp56bFQ+XgR1+c0pULv9ErHSqpGFww==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id skBcuPE34jaN; Fri, 18 Sep 2026 19:55:20 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org AA25660ED7
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789761320;
+	b=krh0LGrrjUip6yHCQYHr4nXcgudCMpWJ9oecE5IQO0kBT0RbDkkvMFd0TPXsQxn6B99+
+	 2dDw2C0mErEnYhu1t8c4w8pr0HK3//i8a2ur5EJJxCfBf7yJj31Q5BU3X7jHF3xbrItxa
+	 lCxxEJLq0uW6MV7+DoyhXCPz7s1ZcDGcUx/YSa0BqWYS6ZURx+aGPsbPVtR+zb49x58D7
+	 aR3R4EaV3wueoIDn1sTIKdk9rWw8xXbElsEk2OdzW6V6NANR1yR0s3T9cK6Iegmrkw3NO
+	 Gn9S6+SSC0ivwUY/ktQ0LCMT6up3qvloKeRJgl9sZSfyWZyVM22cBCIxTJEUMucaU+g==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789761293;
+	c=relaxed/relaxed; t=1789761320;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
-	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
-	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
-	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=neu/Fomv4F7rtQFUQE3H23mD9VqU7Ycw+IyBOwk4aQA=;
-	b=oZQLWjKmyPFB7oBfA8ZhT75lBlGfphju/aM5d6R8PQW5WGzjQE21Ur4Q3AVz1j37pjmH
-	 EkEyJAdGczxEmQo0/b70ifpol7DknZ1KROUApF08n+Zxpl+bV//gtR1n4GrCdm8tidlw1
-	 Wc6Qn2g7SJlucg0bFGda8kuSIcKtLD8lHOfrgQ6O9MbexfUeN4JxxJCF+SWPFCSe2XSZD
-	 pmVgRL9zWKF+wNlrvydH/8fSxjN2iy7d9j2KL3pK8xhwwNMDZoYVELujl/4J7KnnU7J2V
-	 NasQP2LGm2Loz9sXug05Da83+3UVH3GP5Y90b+21vAYSz7KRtQYmDDevQ9d5pbq7hdQ==
-ARC-Authentication-Results: i=2; smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 Received:Received:Date:To:Cc:Message-ID:References:MIME-Version:
+	 Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version:Subject:
+	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
+	bh=blz7zsdgpmZ+yBQ9eUD3+4M+Z9ZoaY2ghFxbfuKFatA=;
+	b=sMUAlzh1XotVPZ9d3nW9yFQur4L+5fPEQPQxWdq4ohIV0t14yG03DHtdpkFa+XtRDBN+
+	 iuoT+1ggnwRAsxJHcFxh5wcpW8yoqMuEgBbu3+dO9hf57xd8M+LPqiqwmeFAW2uU77zMk
+	 EmD4ieoxXyK5RGT1+sxrlQbmH/cvj/N0EayPlYES99ehndwMpO+qfIDDTkZMXPc6Onuqx
+	 W8Ja4Z+uc2Zws7sAYmj8djFE2w4z0nSkG2LeHu4/EghlH+FXjbovBy/VyCrPZwuQhPF2P
+	 7PA2KOiyemjN9he89Ib/wd4/3IMB6brexGnNF5HT+lmtWuYZOx++qSHWUsJYOI/7XHg==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789761293;
-	bh=neu/Fomv4F7rtQFUQE3H23mD9VqU7Ycw+IyBOwk4aQA=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Rdtu5WOtN7NpzwntC4vZgutsQumBiyR2DFz5OniE9XmH7GKn4lt824rdkkiyOODKJ
-	 vmyeQM5JbSR3PYy/qsVKQ3LTG/qBv/2QEflqmi8iDt06YJNFj7OvGZUbESU2W2jVpw
-	 leS40tI/I8baJb0gLMS1JNKaf/TBf8DTPYIXsSwZZivkt6zVNbplbLnzJdqWBF30vI
-	 Z/plD8/EQXUveIA169aBWT+5xnzJehq7M/SttrU7PCLIzG/AFgWZN9noGsNCMAezVn
-	 XZSJjzJcYoCIgXwQp/kPBua9NuaZnPdaE4nrBzba5EHDt7aRvedNA7Q/WrwqrnPlpL
-	 XVe6rUIY7kt/g==
+	s=default; t=1789761320;
+	bh=blz7zsdgpmZ+yBQ9eUD3+4M+Z9ZoaY2ghFxbfuKFatA=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=hV4VxeZaXttLgq6Kk9YgS92NJHWiyGd7rOJ07swHsXFoU93haOEUoYxBU+9x7WWl/
+	 uZBfZd60WNygTiWD8Oes6ha8hW2IWf79LCcWOzBsm5wii7PGgysFi6DLeOC3D5n0Je
+	 5DrL+juhVSra6nQP4IszDeG3HuAGN1fEew7331fktdMJchSje0TL8CJvID07YubO5r
+	 ucYvbIUOqUz7jMdSgv2JKQi5VOO1Up5s+sWGtl1RyUwir1QN4/bb2XJa1kLQTD68zf
+	 Qqtn0F1Is+HTEqcOz3Jgz1ySX3PKe32UYkfIAPL3TOS7xw0R8Pnabxt9m/aV1BVzJ7
+	 Y/MwFx81F8/fA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4E035812FF;
-	Fri, 18 Sep 2026 19:54:53 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 8175B42D
- for <buildroot@buildroot.org>; Fri, 18 Sep 2026 19:54:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AA25660ED7;
+	Fri, 18 Sep 2026 19:55:20 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3FDF613D
+ for <buildroot@buildroot.org>; Fri, 18 Sep 2026 19:55:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6740081301
- for <buildroot@buildroot.org>; Fri, 18 Sep 2026 19:54:42 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 267AF400FC
+ for <buildroot@buildroot.org>; Fri, 18 Sep 2026 19:55:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 70z1EiT6xYyf for <buildroot@buildroot.org>;
- Fri, 18 Sep 2026 19:54:41 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 796BE812FF
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789761281;
- b=W7e0FwQ81DTWXuIUfOWjWadrF9SkJQekd0PttxjRJmpLvg8nQLyC9qtacVT+CVN0s80M
- gwooiJN7Es8xEjByBlESdGCitdPCkR2xbYqw5q+SMM3GKp+VHzUziZvSZrFNPBI/dLrE7
- 9f8WTtgnFQSLOkMRe6n+oDToVUmSoV1rALmOXa3SNf/usKRNsiKgpgQmWzvL52TIKYG1x
- DKP+nhZUQa1HYstV/sRDg7IXLgYUC3I1YSek9+N8ThzsXTOu7IIGqy96d7RYEttwZgETA
- +n4ikKjo9zChpkEPVUDBh96c1ZDBiMwMzS1zdp5qNi8lJlz0YcbFolbEcvaR1ccnIcA==
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bRcb-dbG4YNn for <buildroot@buildroot.org>;
+ Fri, 18 Sep 2026 19:55:18 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org A3B214006F
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789761317;
+ b=g3mR/O9udRxnWayx4WscjfTcl68oOes/gWGLfR19dtO2r+2wijs+EtbiMS0kBNYxqubi
+ DNT9BA1KNfEtYYT0m44sjDWecBzv2SwDoChumxIYukGb7iJ/C74t4jdCxcngfckFEIHCJ
+ +NBKfONAtltoCxynnkkgcsl1/xofJcmL2aZmfp9cZ4uknh7kzBP52n4PlnONkn6ArGYX2
+ /xp8P43tO0Sa8KSoa0xRsBtftCxhGumuWBunvaAMq7jdldNRum66P1uUh88hv4RCVybUu
+ MmQWz5kxYqzYeaqUOv5CCbUCsKw6rLAMHZZkL1EjVYYV2OVpknWCMut7xHK9BIApoeQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1789761281;
- h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
- X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=swue6lko2THnucN455G94NgQb/W3GXDx4crRX6x0aMQ=;
- b=kPTazG1aItvmCijybIwzIW/QxmmY85eCcqRMuDhnrGd7vabf6FHfXYo/XZiE4yEteS9H
- F+bOGLNy0DPAwK6sG27ahNFhUHhu7cwPEsorrfJVuj/n5jcfSWJTH15sFToFa+POdvna9
- FLU7sUGQr+Qa5wLfj3IBAbMI8Ousa7WaFY9aUFZPVJ6ohwB7dtdJKa8QROLGWfNB6XLfN
- CGz/30VdsJJHXqR2Par8zlX1ZFKnhg9YZbgj8ZZMkrCbIspJRMpXFwWHjcLMLZUnChppb
- G3IkBAqfxkyBhCFwjyazp3AnofoaQt2uURCCKNiBiufpGqEZHm8h5+uPRr5rEn6vKFw==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org;
- arc=none smtp.remote-ip=140.211.167.122
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ c=relaxed/relaxed; t=1789761317;
+ h=Received-SPF:Received:Received:Received:DKIM-Signature:Date:From:To:
+ Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+ Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version;
+ bh=1S3kjNTzUrLxOwab8A98NjJvrpAW8wylRhhZzlJgjQo=;
+ b=rww854XGzoR9J6MMkI6mvDoGb/YGYC7yuBo1B7DXax0A2wLQcV34Ge+3GbTOKe8sGoaq
+ FuwQquhyc0yoUvjEwhA7nVvs5AeB8x5fB9MjOyZDTbC6ruFtcYeUxZJhS3ZrZWav7PXGE
+ JCyykLHs/eNc/xo2Levnh3QCX2+aovXwcRPcAfVzLejIp+UzCU01AktfXEC9l2PWAdNR2
+ Bql/+lp0Cadvl7faoASTm69eHQMusW9VhvF39lSuLh0HUoksic+ehwr8yr/yT8sy9q719
+ GtMJjcVGX1u78A0va4EO9oYbRRBRlL+CRGxuQ4LUVt9ng3IzNDldLAXLvmPDcufmb+g==
+ARC-Authentication-Results: i=1; smtp2.osuosl.org;
+ dmarc=pass header.from=bootlin.com; 
+ dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=dkim header.b=wr7dSQJd; 
+ arc=none smtp.remote-ip=185.171.202.116
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
+ helo=smtpout-04.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 796BE812FF
- for <buildroot@buildroot.org>; Fri, 18 Sep 2026 19:54:41 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 01ED295C6E; Fri, 18 Sep 2026 19:53:34 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 18 Sep 2026 21:52:53 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9aeb5f6f5c50baf7e02248b58c98efc562554b6b
-X-Git-Newrev: 46d379207dd2132f00f89f689284e6e18592bd33
-X-Patchwork-Hint: ignore
-Message-Id: <20260918195334.01ED295C6E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libcec: fix build with swig >=
- 4.5.0
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A3B214006F
+ for <buildroot@buildroot.org>; Fri, 18 Sep 2026 19:55:17 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-04.galae.net (Postfix) with ESMTPS id 08B53C5846F;
+ Fri, 18 Sep 2026 19:56:00 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 1203E60649;
+ Fri, 18 Sep 2026 19:55:15 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 88B7010329075; 
+ Fri, 18 Sep 2026 21:55:08 +0200 (CEST)
+Date: Fri, 18 Sep 2026 21:55:08 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org, Marcus Folkesson <marcus.folkesson@gmail.com>, 
+ Antoine Tenart <atenart@kernel.org>,
+ Angelo Compagnucci <angelo.compagnucci@gmail.com>, 
+ Daniel Sangue <daniel.sangue@sangue.ch>,
+ James Hilliard <james.hilliard1@gmail.com>, 
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Pierre Floury <pierre.floury@gmail.com>
+Message-ID: <aq2XFK-4lZE5YlQm@windsurf>
+References: <20260905122040.2054789-1-bernd@kuhls.net>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20260905122040.2054789-1-bernd@kuhls.net>
+X-Last-TLS-Session-Version: TLSv1.3
+Subject: Re: [Buildroot] [PATCH 1/7] package/{,
+ lib}apparmor: bump to version 4.1.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -112,181 +133,33 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/46d379207dd2132f00f89f689284e6e18592bd33
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On Sat, Sep 05, 2026 at 02:20:33PM +0200, Bernd Kuhls wrote:
+> https://gitlab.com/apparmor/apparmor/-/wikis/Release_Notes_4.1.8
+> https://gitlab.com/apparmor/apparmor/-/wikis/Release_Notes_4.1.7
+> https://gitlab.com/apparmor/apparmor/-/wikis/Release_Notes_4.1.6
+> https://gitlab.com/apparmor/apparmor/-/wikis/Release_Notes_4.1.5
+> https://gitlab.com/apparmor/apparmor/-/wikis/Release_Notes_4.1.4
+> https://gitlab.com/apparmor/apparmor/-/wikis/Release_Notes_4.1.3
+> https://gitlab.com/apparmor/apparmor/-/wikis/Release_Notes_4.1.2
+> 
+> Switched tarballs to bz2.
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Patch 0002 fixes the build with swig >= 4.5.0.
-Patch 0001 is needed to cleanly apply patch 0002.
+Series applied to master, thanks!
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...n-strDeviceLanguage-accepts-3-char-ISO-co.patch | 66 ++++++++++++++++++
- ...-the-Python-wrapper-against-SWIG-4.5-whic.patch | 78 ++++++++++++++++++++++
- 2 files changed, 144 insertions(+)
+Best regards,
 
-diff --git a/package/libcec/0001-fixed-Python-strDeviceLanguage-accepts-3-char-ISO-co.patch b/package/libcec/0001-fixed-Python-strDeviceLanguage-accepts-3-char-ISO-co.patch
-new file mode 100644
-index 0000000000..e2a86e1f7e
---- /dev/null
-+++ b/package/libcec/0001-fixed-Python-strDeviceLanguage-accepts-3-char-ISO-co.patch
-@@ -0,0 +1,66 @@
-+From f53490e23037f17b68043f5e1ff2f4378d227d56 Mon Sep 17 00:00:00 2001
-+From: Lars Op den Kamp <lars@opdenkamp.eu>
-+Date: Mon, 13 Jul 2026 15:24:27 +0200
-+Subject: [PATCH] fixed: Python strDeviceLanguage accepts 3-char ISO codes
-+ (SWIG char[3] typemap)
-+
-+The SWIG default char[ANY] setter uses SWIG_AsCharArray, which reserves a
-+byte for a NUL terminator. strDeviceLanguage is a raw, non-terminated
-+char[3] holding a 3-character ISO 639-2 code, so a valid 3-char value needs
-+4 bytes and overflowed the buffer, raising a TypeError; only 2-char codes
-+fit. Add member-name-scoped in/memberin typemaps that copy the raw bytes
-+(str or bytes) so 3-char codes assign correctly. Scoped by name so the
-+NUL-terminated strDeviceName keeps the default behaviour.
-+
-+Upstream: https://github.com/Pulse-Eight/libcec/commit/f53490e23037f17b68043f5e1ff2f4378d227d56
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ src/libcec/libcec.i | 31 +++++++++++++++++++++++++++++++
-+ 1 file changed, 31 insertions(+)
-+
-+diff --git a/src/libcec/libcec.i b/src/libcec/libcec.i
-+index a01f9afc..520ff7af 100644
-+--- a/src/libcec/libcec.i
-++++ b/src/libcec/libcec.i
-+@@ -15,6 +15,37 @@
-+   $result = PyString_FromString($1.name);
-+ }
-+ 
-++/////// libcec_configuration::strDeviceLanguage ///////
-++// strDeviceLanguage is a raw, fixed-size char[3] that is NOT NUL-terminated (a
-++// 3-character ISO 639-2 code). SWIG's default char[ANY] setter reserves a byte
-++// for a terminator, so a valid 3-char code needs 4 bytes and overflows the
-++// buffer, raising a TypeError; only 2-char codes fit. Copy the raw bytes
-++// instead (accepting str or bytes), scoped to this member by name so the
-++// NUL-terminated strDeviceName keeps the default behaviour.
-++%typemap(in) char strDeviceLanguage[ANY] (char temp[$1_dim0]) {
-++  char *cptr = 0; size_t csize = 0; int alloc = SWIG_OLDOBJ;
-++  int res = SWIG_AsCharPtrAndSize($input, &cptr, &csize, &alloc);
-++  if (!SWIG_IsOK(res)) {
-++    %argument_fail(res, "char [$1_dim0]", $symname, $argnum);
-++  }
-++  {
-++    /* csize counts the trailing NUL; strDeviceLanguage stores no terminator */
-++    size_t slen = (csize > 0) ? csize - 1 : 0;
-++    if (slen > (size_t)($1_dim0)) {
-++      if (alloc == SWIG_NEWOBJ) %delete_array(cptr);
-++      %argument_fail(SWIG_ValueError, "char [$1_dim0]", $symname, $argnum);
-++    }
-++    memset(temp, 0, $1_dim0);
-++    if (slen) memcpy(temp, cptr, slen);
-++  }
-++  $1 = temp;
-++  if (alloc == SWIG_NEWOBJ) %delete_array(cptr);
-++}
-++
-++%typemap(memberin) char strDeviceLanguage[ANY] {
-++  memcpy($1, $input, $1_dim0 * sizeof(char));
-++}
-++
-+ /////// replace operator[]() ///////
-+ 
-+ // CEC::cec_datapacket::operator[]()
-+-- 
-+2.47.3
-+
-diff --git a/package/libcec/0002-fixed-build-the-Python-wrapper-against-SWIG-4.5-whic.patch b/package/libcec/0002-fixed-build-the-Python-wrapper-against-SWIG-4.5-whic.patch
-new file mode 100644
-index 0000000000..351091e17d
---- /dev/null
-+++ b/package/libcec/0002-fixed-build-the-Python-wrapper-against-SWIG-4.5-whic.patch
-@@ -0,0 +1,78 @@
-+From 55f3443559b0b32a1d7194e424727575faf6f7d4 Mon Sep 17 00:00:00 2001
-+From: Lars Op den Kamp <lars@opdenkamp.eu>
-+Date: Fri, 31 Jul 2026 14:46:27 +0200
-+Subject: [PATCH] fixed: build the Python wrapper against SWIG 4.5, which
-+ removed the Python 2 compatibility macros
-+
-+SWIG 4.5 dropped the PyInt_*/PyString_* macros that pyhead.swg used to define
-+for user typemaps. Two places here relied on them.
-+
-+The callback return handling keeps a PY_MAJOR_VERSION guard rather than moving
-+to the Python 3 API outright, because the x86 Windows build still targets
-+Python 2 for the EventGhost plugin. A Python 2 int is a PyIntObject, not a
-+PyLongObject, so an unguarded PyLong_Check would compile there and then
-+silently read every commandHandler and menuStateChanged return value as 0 - the
-+one thing those callbacks exist to report. SWIG never reads SwigHelper.h, so
-+the C preprocessor makes the choice and the file is SWIG-version independent.
-+
-+The cec_osd_name out-typemap is deleted rather than fixed, because it is dead:
-+GetDeviceOSDName returns std::string, and cec_osd_name only survives as an out
-+parameter in the C API, which is not wrapped. It could not have compiled if it
-+ever did fire - cec_osd_name is a typedef for char[14], so the $1.name it
-+dereferences has no member to name. Removing it leaves the generated wrapper
-+byte-for-byte identical.
-+
-+Verified by preprocessing SwigHelper.h against both Python 3.10 and Python 2.7:
-+Python 3 resolves to PyObject_CallObject/PyLong_AsLong with no removed macro
-+surviving anywhere, Python 2 to PyEval_CallObject/PyInt_AsLong.
-+
-+closes #726
-+
-+Upstream: https://github.com/Pulse-Eight/libcec/commit/55f3443559b0b32a1d7194e424727575faf6f7d4
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ src/libcec/SwigHelper.h | 9 +++++++++
-+ src/libcec/libcec.i     | 4 ----
-+ 2 files changed, 9 insertions(+), 4 deletions(-)
-+
-+diff --git a/src/libcec/SwigHelper.h b/src/libcec/SwigHelper.h
-+index 3c40fc87..0752acb2 100644
-+--- a/src/libcec/SwigHelper.h
-++++ b/src/libcec/SwigHelper.h
-+@@ -137,8 +137,17 @@ namespace CEC
-+           Py_DECREF(arglist);
-+         if (!!result)
-+         {
-++          /** SWIG 4.5 removed the PyInt_* compatibility macros it used to define
-++              for Python 3, so call the version-appropriate API directly. Note that
-++              a Python 2 int is a PyIntObject, not a PyLongObject, so PyLong_Check
-++              would silently reject it there. */
-++          #if (PY_MAJOR_VERSION < 3)
-+           if (PyInt_Check(result))
-+             retval = (int)PyInt_AsLong(result);
-++          #else // (PY_MAJOR_VERSION >= 3)
-++          if (PyLong_Check(result))
-++            retval = (int)PyLong_AsLong(result);
-++          #endif
-+           Py_XDECREF(result);
-+         }
-+       }
-+diff --git a/src/libcec/libcec.i b/src/libcec/libcec.i
-+index 520ff7af..0d757aa1 100644
-+--- a/src/libcec/libcec.i
-++++ b/src/libcec/libcec.i
-+@@ -11,10 +11,6 @@
-+ 
-+ %ignore *::operator=;
-+ 
-+-%typemap(out) CEC::cec_osd_name {
-+-  $result = PyString_FromString($1.name);
-+-}
-+-
-+ /////// libcec_configuration::strDeviceLanguage ///////
-+ // strDeviceLanguage is a raw, fixed-size char[3] that is NOT NUL-terminated (a
-+ // 3-character ISO 639-2 code). SWIG's default char[ANY] setter reserves a byte
-+-- 
-+2.47.3
-+
+Thomas Petazzoni
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
