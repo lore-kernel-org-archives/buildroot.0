@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1FEA5C982DF
-	for <buildroot@archiver.kernel.org>; Fri, 18 Sep 2026 19:35:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33D79C982D7
+	for <buildroot@archiver.kernel.org>; Fri, 18 Sep 2026 19:35:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C7EFB81330;
-	Fri, 18 Sep 2026 19:35:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F380760EBF;
+	Fri, 18 Sep 2026 19:35:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IMSkFQ2bjmI5; Fri, 18 Sep 2026 19:35:44 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org D210B81332
-Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789760144;
-	b=hyWqxeGmBIGmRb1CNcfoGzUjf95U21KGZ6/q0gipETCQwbd2NN/ZEvsdxObq/SwIyNlq
-	 Ao/9q3ZAZzJE+tdER8/QluEJyE2xxTjDwTbGOs1HeyxYbsADo/zleTBDgTgYPvvq+pmbp
-	 ++24DV3V6CZJ2pU15JU3zn/x6OkRlz7J2CUskwtf8rDNTM6hd3rPyxE2LbvofVpMwplRr
-	 NvQTevnWplC1fPbEIRSA4rz2XLD7bAAKLvNOVgxBv5Sr+5skmerzhvRDYFq4H6ZsbXTGT
-	 VYpGDTqMoHPZ4rwvogtP7h5RbzE8a3n49IDtoUET1SKHEF5j7VbaykyzGaHgnUxGdRA==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eHmPObCMNrIc; Fri, 18 Sep 2026 19:35:45 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 2677F60EB7
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789760145;
+	b=Nli5TBHJzguN8T4c7K6Q8+w7hA95EHOgiYWVTJkKc2hTIBlHLB6ol/tZP98JxtIRFt43
+	 CfnJghmuCqT6GzzhkfAlgMwZdMnhlzY34+Y+gp3llxwOTYeTt5/cFl3IS5eNCjS9dG1VQ
+	 RNi90jsaVlcaPAGmwCD/C1SRgZmY33n1GRT2/M7EmzhR5FUEU2TPdBUUWJmJ1Y036oKIK
+	 x2Ap/3kUnlKPc6khnadWqBJWzhzcWIgSLKWEXZD5nOEupLey0YYCY4z9JXsiEN1+sAS+l
+	 nHLe8GrYOMms8bUZcL84Hrv38UukOhR3J5oLFSQUU+SBMzx+LSYmEMJPMkR2ZVmbhSg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789760144;
+	c=relaxed/relaxed; t=1789760145;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,75 +30,75 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=dj2yNsAeRaSFix26h4TjhBBe5PO3JrvVyFzrINz4DoQ=;
-	b=M0kTLtio1uMFeNFtVPbUcShQqZUjehJ5pSAN0vB4D4z66ALCn5jKDvFJ8W1JfM0vIQFC
-	 rQkH/VfWVGFfTpOGJWQoKakUiGPcMQom9sWPFhclrN7s5if7cSqv/BWZX+KNGbC8Qxhn/
-	 lOJmj/HbtDaRKM58I2DlKqkMawV1xKHIzMvL2JKkCJzaM01xM8Av7tQtisTdFh1vc9s2G
-	 4yYfYVzzt42l/Q4p88jW00e46FflE6mqh7Uu6vFvNtalxzyfx74xMbf5Mzt4z8OG/fwrk
-	 iWt1tln39vHZRXTxCHbfR6wTWgcDRvqWfF8Fz2CE/s4ZI7M40ZfZp/GcuYnSrptVfYg==
-ARC-Authentication-Results: i=2; smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	bh=eh/YxoxS6c5/EgpEh8Y1VoSfXzpZazw0q8tcc7AY5MY=;
+	b=kUmN6PPq22E7AtTvOaopXmtYlx2ETJTQYDV4R/DiqkiP3LEwfzstsj67xBn3WaqnB1WO
+	 FAtbb0GAxob2li31j59FdmJkR2ICPO4n8/yY5pimedU8qdXAcYaZp70R5OWSvmMdr7+HF
+	 O/AUI7XaklpjVBEPZg7m3H81+q8ASypG0HVBvKZp7Zps6agl6/uNwUpYQbxZLixo+CLRc
+	 JSqlDzVSDxgTbINxH1OEfetCag9XxE/XP4Hb5Jchnch0fsRYNvc0/HRLbF6abXPvB4b+F
+	 gQFF17nhHNwhz7Da5Gw3lrN2GRywUW91lYpMM0WR+MJVVoF61TcEUUySl1wfATzWPhA==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789760143;
-	bh=dj2yNsAeRaSFix26h4TjhBBe5PO3JrvVyFzrINz4DoQ=;
+	s=default; t=1789760145;
+	bh=eh/YxoxS6c5/EgpEh8Y1VoSfXzpZazw0q8tcc7AY5MY=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=c2HNL8t9cM9/T+Vc0innB7U/kShwkhaG46SRE/VhxZ/gOToM59HS43+MdIIVDXXBO
-	 MbGvWOZOMYTaJ/vBVSELvkhuTMIm0pFxK0uVhFpiDS4za4GU7aKFxCBkZEpk4GyYui
-	 usDnXXwK1yARckxBYWM7qixuF17h5W4D3VQxiLNJW9+tPgYTsKHob8mGEOCauMyraY
-	 z/6WxqqKiOUTKPmIJX3sUeuIumJtE5n6mTX0wAhw5rsH70QYyuDxVPgLvwNDZm0wRn
-	 W9mdJH+32PQvRDj+J2rGPdckYdwRRbd1HA1Jt+HrY4aX445mM9A1kx5MDXqtev5RHx
-	 4uxBEGt8nLs6w==
+	b=jhXdJlhpp8Kqf/kWry5r3U4EbRzzwrF3qjHCeiIn3TdHmXs/Y+kKIb8EfB6aya0xw
+	 9fvj45EAjTLLbNHs+dKlH8SBZXJAofNDAKniJoNEVKmK9glXGcTarMkezdH0voHtlw
+	 Xf9I0wk3v9stsSfzkge2D0k0StoQ/dEcWawjT8sGv66TgnaAjbDuxXlnN+XjJG73LD
+	 gMJ6bucLbvMC5zNR62jkdfY7OODk/4ymX/M5zpgoP+uzmKTTQFYHWETyzb5sMbbpJJ
+	 53Yu+QVFuq10JPfPQulVcqq2uKjx1ZSITWy8c9yA9Hw2ZhyZIqdIHB9J7jbKdlkhyC
+	 SSt6LTeoBp1ug==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D210B81332;
-	Fri, 18 Sep 2026 19:35:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2677F60EB7;
+	Fri, 18 Sep 2026 19:35:45 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 94498784
+ by lists1.osuosl.org (Postfix) with ESMTP id DC16413D
  for <buildroot@buildroot.org>; Fri, 18 Sep 2026 19:35:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 77C2960E16
+ by smtp3.osuosl.org (Postfix) with ESMTP id D9FF260E02
  for <buildroot@buildroot.org>; Fri, 18 Sep 2026 19:35:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QlQEanuyi56F for <buildroot@buildroot.org>;
- Fri, 18 Sep 2026 19:35:32 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 85A1D60E02
+ id 3XwYrri3fOnZ for <buildroot@buildroot.org>;
+ Fri, 18 Sep 2026 19:35:33 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org D77EE60E30
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789760132;
- b=nsUVmHpWRQsuBvVBZ56b+2DatTmS2utTHnGjqDu1X26mYIQ2SoIgP3yAPcko9gUltrlr
- D74/wiRVE8mJ+1G0EbNLREyp0UDP20xc0yQpre/d+SuV5M6ErU4B6QjDpus7bDZDkgaXq
- N3A6sGNTc004Dc8QU3/GpYhZjFF5jy83usi1bCtxgg99p4u2+zYn8r2WOFLixhmc7e66E
- fhy2Y8tC8//qa/5mHgk2WNKGD/0hhlBd5vlU/LJtqgwaHf/WCRwsZozsEY7nMO4ldjXdV
- JRqaekd9B4OSRulPFzBhX+pEHMYvfcDEpnhBYadGOgJHDhHRvmFsaXCpr3CZNjfX6Mg==
+ b=sOTdDyPibhhi7KXE7oeDVeYYYHiQPGij6I5pTnhc94KxN8tSqiNsTeZ+XaXTEt1NwtY0
+ F+e4zE5gVPgKMK28uwIK6x119ZoRtYGd6e6yLsh9WUS/qyW88apKXNcS3yoS9QvW/sXuc
+ p75ATi8XDkAEUQTq00Mu14RIRDrU2aqnOVgWik2PvofQacXqyrFoU3SQhO8WMY3pjggIl
+ rAB7d3eARAoj25HJ78AYLps17w1pFar96kpjnQKEZKX34WEDWX0Y2cvLpFs9lpEwnLJyn
+ 4CSDPVLylD3fhm0bUtq7ha1sjXv0c8lvW+SPuN1MAKkX32ydZypRbaRQ2/UpM5nc4Fw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1789760132;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=s5hmL6F8upzTAOVFqF23uDth191l6EhDZTAHtZ08zDc=;
- b=r8bJGlsU2z4p8O1QmRBUomkiY2kOWg+4dktILskmGxvSQTTcDkxiyPv8lcuOkaC4/4k0
- gauretHEEQBM7TgXnZKOP1aglUmsGYNRMMkaOtn7/fglnRR8Kb1aV55yS1VsxqG1WDByJ
- AlwekF0LpQWSIKEYrUid0v+QcK0V92FHUGbQsRBdGsncjH6cqvWjukpj1JFQDVh/CXWSV
- JKtOQbgcfUuaH4RWZbvePGdlT1ZP7pD7U8/1PuIDiyJC85N5NXB5LlRI9/2JBFJhESFcf
- rrsl4zaAdpdvhn3+3GcP8pGK0aYVu6++08TmHT6El1hhF3V2JJ0cHPn0+sAeaAV3EBw==
+ bh=ul6HOphP3h7UxHXEGPjuuBQSSCfO0ViTpaqMkm4MzFs=;
+ b=iDk+Ls2sAXMIKZZYxtofdh9S2VqAFBh4sgNtzpO/DF0q4r3zD1V4qIDbrZF+3Gmt4to1
+ JlTLjLvsSK7ygfiPPIMPVopf/AZg2QYjcaVrPNd2MSwQGzpssAt1eryZs2MsARhbOmsXz
+ vLIsbO462yI5pKCBtpKDasy148BzvQWApzboFXauZBFTQT/yJtp67GdXEsz13OtieU8Bt
+ VzteDjUX/9+rg2JHaCK1KS39/V6XrdS/FK8gU4daTTnWWI6kL4zGNNTvrkIs3xmTPvYyM
+ m3T09hWwX5/+YB4MOFkG6lvvjXsseC/S6cgCQvGZmsYG/c5SSqlc6YvDsWpfcDFsD6w==
 ARC-Authentication-Results: i=1; smtp3.osuosl.org;
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 85A1D60E02
+ by smtp3.osuosl.org (Postfix) with ESMTP id D77EE60E30
  for <buildroot@buildroot.org>; Fri, 18 Sep 2026 19:35:32 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1B6EB976A8; Fri, 18 Sep 2026 19:34:25 +0000 (UTC)
+ id 4B109976B0; Fri, 18 Sep 2026 19:34:25 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 18 Sep 2026 21:25:09 +0200
+Date: Fri, 18 Sep 2026 21:25:36 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 93282f76a535ce54e9a853c72c01152a2c3a6805
-X-Git-Newrev: 56cdcb8206f266fb944f327830db881ce1f7bee2
+X-Git-Oldrev: c6986e6d2e284604bcac43bf9dfd79f3d028ef6d
+X-Git-Newrev: fbb9739dd8012bbd33098a05b6eae91ff13ce71f
 X-Patchwork-Hint: ignore
-Message-Id: <20260918193425.1B6EB976A8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/opencv4: update gcc version
- dependency related to protobuf
+Message-Id: <20260918193425.4B109976B0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gnuradio: show Config.in comment
+ only when needed
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -118,106 +118,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/56cdcb8206f266fb944f327830db881ce1f7bee2
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/fbb9739dd8012bbd33098a05b6eae91ff13ce71f
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Another instance of libaseil-cpp requiring gcc >= 10, which means
-protobuf needs >= 10, and that wasn't propagated to all reverse
-dependencies of protobuf, in this commit: opencv4.
+The comment about the toolchain requirements to have Python support in
+gnuradio is always displayed, even if architecture requirements are
+not met and if Python is not enabled. For the latter: the option
+BR2_PACKAGE_GNURADIO_PYTHON also depends on python, so it makes sense
+for the Config.in comment to also depend on it.
 
-Fixes: 76241e89e1fa7a7b46e23d0a22c3d4fc11a2475c ("package/libabseil-cpp: bump to version 20260817.0")
+Fixes: 7a546b87d5b8781b03f3ba5d311d61f4169ee899 ("package/python-numpy: add reverse dependency on packages using python-numpy")
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/opencv4/Config.in | 24 ++++++++++++------------
- 1 file changed, 12 insertions(+), 12 deletions(-)
+ package/gnuradio/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/opencv4/Config.in b/package/opencv4/Config.in
-index e4a15f742b..10b2c54b70 100644
---- a/package/opencv4/Config.in
-+++ b/package/opencv4/Config.in
-@@ -34,16 +34,16 @@ config BR2_PACKAGE_OPENCV4_LIB_DNN
- 	# dnn needs fenv.h which is not provided by uclibc
- 	depends on !BR2_TOOLCHAIN_USES_UCLIBC
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_10
- 	select BR2_PACKAGE_OPENCV4_WITH_PROTOBUF
- 	help
- 	  Include opencv_dnn (Deep Neural Networks) module into the
- 	  OpenCV build.
+diff --git a/package/gnuradio/Config.in b/package/gnuradio/Config.in
+index e87275de4d..0e8dc66dc4 100644
+--- a/package/gnuradio/Config.in
++++ b/package/gnuradio/Config.in
+@@ -89,6 +89,8 @@ config BR2_PACKAGE_GNURADIO_PYTHON
+ 	  Enable python component
  
--comment "dnn needs a glibc or musl toolchain, gcc >= 8"
-+comment "dnn needs a glibc or musl toolchain, gcc >= 10"
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_USES_UCLIBC || \
--		!BR2_HOST_GCC_AT_LEAST_8
-+		!BR2_HOST_GCC_AT_LEAST_10
+ comment "python support needs a glibc or musl toolchain w/ gcc >= 9, host gcc >= 9"
++	depends on BR2_PACKAGE_PYTHON3
++	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
+ 	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_9 || !BR2_HOST_GCC_AT_LEAST_9 || \
+ 		!(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
  
- config BR2_PACKAGE_OPENCV4_LIB_FEATURES2D
- 	bool "features2d"
-@@ -147,7 +147,7 @@ config BR2_PACKAGE_OPENCV4_LIB_OBJDETECT
- 	bool "objdetect"
- 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # dnn support
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # dnn support
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # dnn support
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_10 # dnn support
- 	# opencv_core dependency is already enabled
- 	select BR2_PACKAGE_OPENCV4_LIB_CALIB3D
- 	select BR2_PACKAGE_OPENCV4_LIB_DNN
-@@ -157,10 +157,10 @@ config BR2_PACKAGE_OPENCV4_LIB_OBJDETECT
- 	  Include opencv_objdetect (object detection) module into the
- 	  OpenCV build.
- 
--comment "objdetect needs a glibc or musl toolchain w/ gcc 8"
-+comment "objdetect needs a glibc or musl toolchain w/ gcc 10"
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_USES_UCLIBC || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_8
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_10
- 
- config BR2_PACKAGE_OPENCV4_LIB_PHOTO
- 	bool "photo"
-@@ -198,7 +198,7 @@ config BR2_PACKAGE_OPENCV4_LIB_SHAPE
- config BR2_PACKAGE_OPENCV4_LIB_STITCHING
- 	bool "stitching"
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # objdetect
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # objdetect
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_10 # objdetect
- 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # objdetect
- 	select BR2_PACKAGE_OPENCV4_LIB_CALIB3D
- 	select BR2_PACKAGE_OPENCV4_LIB_FEATURES2D
-@@ -208,10 +208,10 @@ config BR2_PACKAGE_OPENCV4_LIB_STITCHING
- 	  Include opencv_stitching (images stitching) module into the
- 	  OpenCV build.
- 
--comment "stitching needs a glibc or musl toolchain w/ gcc >= 8"
-+comment "stitching needs a glibc or musl toolchain w/ gcc >= 10"
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_USES_UCLIBC || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_8
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_10
- 
- config BR2_PACKAGE_OPENCV4_LIB_SUPERRES
- 	bool "superres"
-@@ -329,14 +329,14 @@ config BR2_PACKAGE_OPENCV4_WITH_PNG
- config BR2_PACKAGE_OPENCV4_WITH_PROTOBUF
- 	bool "protobuf support"
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # protobuf
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_10 # protobuf
- 	select BR2_PACKAGE_PROTOBUF
- 	help
- 	  Use shared protobuf from the target system.
- 
--comment "protobuf support needs a toolchain w/ gcc >= 8"
-+comment "protobuf support needs a toolchain w/ gcc >= 10"
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
--	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_8
-+	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_10
- 
- config BR2_PACKAGE_OPENCV4_WITH_TBB
- 	bool "tbb support"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
