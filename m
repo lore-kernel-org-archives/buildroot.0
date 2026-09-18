@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6781C982D8
-	for <buildroot@archiver.kernel.org>; Fri, 18 Sep 2026 18:53:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C67B2C982D8
+	for <buildroot@archiver.kernel.org>; Fri, 18 Sep 2026 18:53:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8C18240BA2;
-	Fri, 18 Sep 2026 18:53:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8F12D60E60;
+	Fri, 18 Sep 2026 18:53:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mMXVgi3NfBWv; Fri, 18 Sep 2026 18:53:29 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org B5ADD40BC5
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789757609;
-	b=YxM3TvIm+V1t+gQ6GbPN4OmpnYx6NIJM9lNB/4ZeVDsoLK4Mnwt110htImd1vmIb5IQr
-	 iZEkoyHNVdHUfyGgorL/6Sro5LaRz7BWWT23SZpSXeV6qas+TVVPVh6GMJO0PcsxRYWlz
-	 9iwypiIg8SoJOGiZ7AcQoifV9qNyAQ88JPcJZh4y80QCmheP7PgSWMPIHwPBCd2+flHQC
-	 PRR+BD4+Q+lKAlYiVhVbpP8ELtxN3NPA/GyytpLMsheibWAAEkvIpUAjub1E1Lu/NkwxT
-	 ciJxlby4jGrPhSJBaL9VNSzrAIw+gyKAugsY1JZMiGxpql+iXfE0v6PcxyprNUh/Gnw==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id mTqcqxJyUjNN; Fri, 18 Sep 2026 18:53:43 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 1AC5760E64
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789757623;
+	b=gHRlENcQlv7pGuFZnFujK0AHiNJh1ClvPRnPRy8guE0IMzyr1bK7I1Sw//NNXWZ1CS0z
+	 7zDuFNpLLRjLJQPa810xDvUN89L1wU0WDGk2mImMn5JSiKhvMQG72YgDTckC5AiEpsCz8
+	 LD07i6EZdkU5C/HSuUlqvYZc4pXWZ1ua8lLsvl4OZN+Q3Odp4cKyjlRjzk3+bJRkseIYN
+	 xLikLJk/syUw0v2lS31cgpZMGIbHWpL4r6KWvG8112Ra/zpZpcRTpEJ1Z+YSloCFsN2FH
+	 fTx3Y9X/VLyBTqAUeh8fix9W3ACa5SaypCMUMTKaWzdkkbmnE4QPfwF3zZOP3EPYlpg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789757609;
+	c=relaxed/relaxed; t=1789757623;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
@@ -31,104 +31,103 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:Cc:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=N1Ooo2eMWikPMS1dnP0bpJolKTg9wBTi45ZmIQE3gFw=;
-	b=YAjUord4wVP9N7q/G4VsUPfUN0/zca4+TzeorpbCMqJ67DOOZo15cKuoVPyYMpIAeGy5
-	 kUEvwp4j9xagSgd/ccVKwdeqUyWIjNymqlgs0kMLP0cYDTu1g0IyrVoNrF8VrGUSj2hYz
-	 T5Fc4/IQzhEvdZW16/2J8wXkugt77CjN95vosbHXg/i8htgs/AoQbv/13lGVhaovSmjdN
-	 y7bekB9ITabqBbxz9+AT2dLU/psiDwoHXsZgL29YeJVI5lFoW5K6eiA/Yd6hn2ICq5YCO
-	 Juo8EcF5lXq9qpFA1u/5tqORlZV1NJM34YK+Z6yfQB4Ww4gZ+yd7jY/e0y2OGKGFAnA==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	bh=b9zc2FRgCwvtPufGvhXGNQGhBqh2le0NTMAIVT70MEQ=;
+	b=abIQkv61RKKUm0blK4bxBULPYw/DHdoF9QjFnmIvU2+P9kcBwT8AIJ8IwXjZdSg86y9T
+	 XTQ5s287UyBRmvWx8wiDL5uKUqe73FFRLskqiufl8MhODJnOp/Eut+gPUnbY1qDqwLum5
+	 fNDriF1aVuW+zs98AwmT5jWM59tlADf4MZquOjWl2RpI7li7BpB7E0sXrI65Q1ARR3nLK
+	 gjZOWORI+JJiqfCCSyAMQsUznZcWNXjYgf7vANAP7CH9BvQds9VqK6gG470DAnWc2HSbI
+	 5xH2K66kOQ8vkcfBOfFPmuwXwVGxouupEUdPyyvgElpUT7Qg7IOST+79E67DlHtgceg==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789757609;
-	bh=N1Ooo2eMWikPMS1dnP0bpJolKTg9wBTi45ZmIQE3gFw=;
+	s=default; t=1789757623;
+	bh=b9zc2FRgCwvtPufGvhXGNQGhBqh2le0NTMAIVT70MEQ=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=SoHbJ4WJuC/jxf3Oc1mEjn81HHJ5Y4WPLb1o8P+0UILDNKNZazsyTVrIA9LTrdhDH
-	 qClbroiFI8VIEbMQaTr0HKpTTCiXLhwpPCHrhMneh+rl6Lk8/LmgWZpmYia/FVSG0I
-	 6mm5Q+p/PHj6iuIkZFB/YJ5hayziFsLx16SqAsyrsed55Qn7XBdx6lx5OdwST3APLw
-	 GodVNQ8JVAotI8abA4BVJzx3gix95UqoeNuO5jBSV7DGkueN8c7hepP551X3glBbkA
-	 h0YeoJwe4NKrnyj3EKOVs5Cl53wEUQwe2I7ox1LEssx/FTBuRyauu4YpqXrT0LjAVB
-	 3DO3Q7Iw/4h+g==
+	b=WY95UEnAde12cJ8bAL1uDNvfzqe/MuSQzjiHwoQ3wI/rcKxgZoP66hHZThw6xG9De
+	 MnqbOxLV8a9OvXsnvfCP/g6KYIYgrk9bPKCva4nqgx+6iBjq7JdUI9dhxLL2C9zICK
+	 fEYRaLtkIrmOqq8xgJbONsH3Ee8Am7gWI/yD0QwTTAvoXDWXh09C4v7SRb4mRKX0iJ
+	 f9xS1wY0nnIBrv6NI4z4eHLwGGIbIUyj28ZDZ+8a0aW+QLFQYvX1SbU3CwsLXwtmCq
+	 oM/nOvfrBiTiAZpB0y/shIkqXnBtBZ7l1TGtDv6X5uTvby1rALV1ABWdtoVMPsEap0
+	 h/pwbv4eV6RbA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B5ADD40BC5;
-	Fri, 18 Sep 2026 18:53:29 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id A1BD8237
- for <buildroot@buildroot.org>; Fri, 18 Sep 2026 18:53:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1AC5760E64;
+	Fri, 18 Sep 2026 18:53:43 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id E4C2E237
+ for <buildroot@buildroot.org>; Fri, 18 Sep 2026 18:53:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 88A98400AB
- for <buildroot@buildroot.org>; Fri, 18 Sep 2026 18:53:28 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D665C40CE7
+ for <buildroot@buildroot.org>; Fri, 18 Sep 2026 18:53:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HW4FnC3eAwMh for <buildroot@buildroot.org>;
- Fri, 18 Sep 2026 18:53:27 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org 95E0D4006F
-Authentication-Results: smtp2.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789757607;
- b=aDaJmd3/X50PJmVGTQ59nVxEt3cJ2ds51jX6kSVDSipFBs46bjnu4tTZ9hX9IpT0+CoL
- HZUl1p0hSh8/S3a+yGRUyPQlIqL9+Zm/WItVVVwKFexU5fXC0LkIAW1iIt6EuCsIbGAbQ
- gfJAfPNd8iakrU1+VG1vHfzAFE7OZZvLX7LYKKc1laPzWzfnKcJ7cQ4N1ezFBcHZIIAvW
- SF/sMR1jy1yuExxXXuIph0fwO9LtvnSDUjmEwA/BLKZyCHPkDzEmcME3JL/byKTZr6Ya/
- PLqdHAjbBo2gnelV32D6b4J18tgEIPVoAxnomWONJXwKisvLd0oBz11R1PcLHwZxq5g==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DPgnviyX3rer for <buildroot@buildroot.org>;
+ Fri, 18 Sep 2026 18:53:40 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 53C9340BA2
+Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789757620;
+ b=GVh3+j+XGteYW1eZUSYkrULtzUmLDjDhY4OyRe5Rdwq1/IGzd7zpyWaT10QxfjFlr4qp
+ DCYbXUl4lvDm7sVoJ6myCTpc9cm6pvZhatAB4aNKfK786erF5HB71ZLq1l3xdJwqnMbhy
+ AowJKMoYswGMlfgDIFrb4EaIWPCkriVHFsm9Z5jcAYlaG0ViGWVM792jNiOVk7K9Zopx2
+ 9XJE0XOzRIZD69aOc3FA6JoKGzi23azALUAW5Rtm98DpttbDNO/zz2G3Z6wd+cppkH8Tz
+ tAh/gsv1W69lQqb00tS0VaigIEMndFtOo3ZA+kdfP0rHEnnkpi4HId7HDAjdcr0FXXw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1789757607;
+ c=relaxed/relaxed; t=1789757620;
  h=Received-SPF:DKIM-Signature:X-KAS-Sym:Received:Received:From:To:Cc:
  Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding:X-Spam-Score:X-Spamd-Bar;
- bh=fYOWmFJrVr4kJoUPLuonOunRH2BcKGJxc9WTvhOShkU=;
- b=jcjpSk+IZFqiDJZxCkurScaNtEn6oQDob6Ksrw9egXR2J33wUH2Zizt83gQH9yE15ia9
- rcvQ+YTi9CfrBWdJhxuoiMuMAU3GmOW1bQW/aYBLNTzreZ7s6dE3URtPrg5KsKo+twVeo
- gbPb6mNNPGyfZ/Oh22U0SKwrDTAcrQCu8+sG1kj2nLwQdxS0lBbd6NrUtyBSiQiVPrw4Q
- m/ZXG3zj8ehTOG/FT2Vxd/kr9M3aRbbOpINdPfONIRANMupPE2ASwEnZIfe7wLFK6j0BX
- cpyz0q/ZICKwrOSte37SlcZhc1DIqk0gQYtQ3R42FF5x5yyvr7xaNa325cj+3FVj6Sg==
-ARC-Authentication-Results: i=1; smtp2.osuosl.org;
+ bh=yg2z97YeOEumuaymd9fRIxcsWLELvqjxQZqPNf0LMks=;
+ b=osg3h+g/442jOiOLk/0n8VgnJ2coxnnrxN+Z+aApul3wMI6JEAGNfYQwVpmuoReaH1UU
+ 1GVDxG/vVmo0hlhcfBiupZrFY0P2e/NRIVvNGm3zto+vEHJ+AIUK8LKHqRI+GVhNf+cOe
+ Xp61zkYzYaPWuxQ2UkqjMoOhWKa6pFLFGRG9/MEvLsYAhhSQiWll2Z7MJcS5Q63NXqU7u
+ n9EHSp98F3WKC0Z76Kdvrt6Mictz/lN4PNOPpotpbW4Jr9wTKRAuPj9pIKkYGCYPiFpeA
+ sc/OoxO1FnU6oASO2nvWkvjCRNj3c+1BpiSa8KkwmhQhpE78oE51a4J/0MCAwaCqFWg==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org;
  dmarc=pass header.from=kuhls.net; 
  dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=PbAoZW92; 
+ header.s=kas202605290044 header.b=cKc1okG3; 
  arc=none smtp.remote-ip=85.13.140.57
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-Authentication-Results: smtp2.osuosl.org;
+Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=kuhls.net
-Authentication-Results: smtp2.osuosl.org;
+Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202605290044 header.b=PbAoZW92
+ header.a=rsa-sha256 header.s=kas202605290044 header.b=cKc1okG3
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 95E0D4006F
- for <buildroot@buildroot.org>; Fri, 18 Sep 2026 18:53:27 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 53C9340BA2
+ for <buildroot@buildroot.org>; Fri, 18 Sep 2026 18:53:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
- s=kas202605290044; t=1789756940;
- bh=fYOWmFJrVr4kJoUPLuonOunRH2BcKGJxc9WTvhOShkU=;
+ s=kas202605290044; t=1789756939;
+ bh=yg2z97YeOEumuaymd9fRIxcsWLELvqjxQZqPNf0LMks=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=PbAoZW92f0bazgsysc2xheU7eXH1JIxOI73cp1U5rksBrC2cj7X4md7jnbdqs4IBv
- /gfOaZfGfegBUS9A99UJyezRUuG0oGhwVOg4DOdA8zA0I4AvG+JFVZE0S0qKE37dtZ
- tW/rPfZFObsd/E/elNBAhfMVt5WaSPVugTd+5pJSLJ/r5H5ozNGQG/imPmCFWTDW38
- 0zONzIWnic9aYzu5L+bYWpWN5m9liBRPVAE/RBf/UBBCsx6LRFHw7oSqPQKwWSVKXt
- MK05NTNkrspiLYxqr9O/2wk15kbgnI+myw15giPGIKhBGEB1m/XqN/KJC0eSFAIsOP
- YYZ3Ibz+qgVjQ==
-X-KAS-Sym: v3:f51bdf72230551df:lkseH4ZbqNj6+SWeyhXOROAVDVA4wctn5GqYnvj392NxznN0rSxqdWBYYBdhITxI14gBE1k+pJkBIChL3/t/lCKYI3GtmdM3wrKpFumwg08Wm/sNokIQQ6E7zEBL3K1/hdJasLCtPFWYZLZ4DnysL3d4pK5HKpKudG9dMfXruRPXYqC+sKlv7VCmjdbM67WcbSYib/I5z3KXlTx93kwxaIjh7oHXDaIgSs3BBwdUhzwgu27GIhhGPs84OFj8HKUhaehmsatqjfsuhHQOPWGzMJyclLrqdN8RENcGlb3kAp1RNMG5gE4Srsk7d6rPHzd5pP0v2pHDKySwyfSJf2xgPw==:U85Ajt5A8FYKaY1Z7ukiQq9N4adNw4foUr3RNHpUURA3TKnp5WZ8Vs+B+1PPG0OVhaP0j48hf3wEOmHsmx5UqEFXuByviLDdV0Abm5cz6QTLpPU7lfVtmr2fO8qK5SG/TMH3nkF+3A09q6yuzSoL/qGRO/TSWP7bwcTSwgmKMOAL4/ipzzL4HpZ12z6loMt6WlZ/V/FBRXl+hbJrYoVQYDgL/jaCFu5Sg2O2637yygLlYUAIrxJ+onrNh6fOa/W/7ZN2gxVfsFgjiXvL8ybuUkyM9+4O0dODFk6q6cjxtBy4Ds1lTolgykOFZjLe+yDxbq946/X+A5msNhQLSKaJWoe+S7dKFP1CJCg018YSUBu2vJFQvNB1e8iaRHoEN0iOt2oU+j3HhTVHbR0i6i/kH6mPK7wJpTfrfCNSiOiFzLSKh5a1kFABNlf3+R3+aN7rjvLe3pbeXzLmDn+GaIui1XfqirjHfZp3snLOZpDdTt2XwabRmSHlVqLt19IKd9sQrifChEQW4pIPw4rByq1mpBGC9nd8Ajwz18mEjFV2BCkyWNLd+aJZgHMiuUusAf8ym4m4LGn8VRYwMlSK4NxIM7Pa6C0L4+ApOV/FqBZYUl+rXw
- PDPNLCr3SIQJd2Mfi7QSFvFgfmJPTvMD8f0GPl9PaPNWGCelKzn12AfVycPUrMk0y72nXTIACx
+ b=cKc1okG3ekRlG73/twzng+NJjsylJ234uTO9kH3wuM2UcZCHKHr3xLuGxqn+exEgH
+ GcPtYJyG8BOGaGOAh3wiKSfCGG3mX4Osq+tClODSbOrltsAJn+h2yM7tBvb5548qdW
+ irCk6u/NPu9Y8RrskDHmrVG8QfNe7+V3Cbnt5AnNYAwHdJH0NHh8cXM0CMkAY0DcbT
+ t6A261XD9gakR6C4A08EJ1Qs4ASCw4Uwml5sD0dJvL1++KMzz0EG+Ccto3Ym/rLwfx
+ O79DYbck2jBmpGSsZPCUbi1vkVcTx8KM3pP2fvMuvNOGTn/AncviaTn5+6Wr97zSOv
+ onZk8d4ilHBeg==
+X-KAS-Sym: v3:f51bdf72230551df:lkseH4ZbqNj6+SWeyhXOROAVDVA4wctn5GqYnvj392NxznN0rSxqdWBYYBdhITxI14gBE1k+pJkBIChL3/t/lCKYI3GtmdM3wrKpFumwg08Wm/sNokIQQ6E7zEBL3K1/hdJasLCtPFWYZLZ4DnysL3d4pK5HKpKudG9dMfXruRPXYqC+sKlv7VCmjdbM67WcbSYib/I5z3KXlTx93kwxaIjh7oHXDaIgSs3BBwdUhzwgu27GIhhGPs84OFj8HKUhaehmsatqjfsuhHQOPWGzMJyclLrqdN8RENcGlb3kAp1RNMG5gE4Srsk7d6rPHzd5pP0v2pHDKySwyfSJf2xgPw==:3ctrynamKAs4rqaYxOTSIt0PXxpF6xkXs/5JB6pVC4e6WblP1AIw1R0Wlq5+WfwQXovkaTMH3IUFgoCT+X2X0WVIV6DhDxdXkPlNrNv8+/VsdAmxBPhMCbZzusFNmK+xTJF5hnn+dhL5HG7UofENKtVrfMKuRx9eZ8FWxGNX+ZvEmnvV3cbBUR2fUpGF3b5++kdBIEWx5bs9zfNm1sDKLjCDJwFgufx7BfYTqqtVGgwus5k92+NTZ9kWfrp1jLsXGOfWvsapYHlvciMjvkpjGN/3NKWDftPcqoQqb2uU6J0lrhmM2bFrFmn0NXzFgihz3ZMOxMfLh5NVbxAVh3hAqTVf39ng1BdsX/uz+R4wJcZaVqdLpwm3ioW/cwhJPJmS5VUnGfn5mTz1+kB/QMLouvdeqZOkKkxTzyEjMGQZh7Ly1pDZsfzfMIK8Ve5rabLmYF6IFvlPDbydGIN5vJ4E6tdwaHtijp6P0vauOop2EX8WypL69NOooUHpzsDW6udKdzPz8hZK9CQdfci3FRGOSY2dyCFFJRZY+WKNkVc9+Qc2xcczjIMqDb2Kbuw34EKCZzgbVDehVYHaW1QxTZXovk3Q9muYJLIblfKLkjxp8cDqLE
+ FwqjT2G8dOwXD2RUbbhhPFE8VgHTNY65Y1oAJ6nNXKXJgw0hxpEzjcV7dGY7R1WL8tARZuKbwc
 Received: from fli4l.lan.fli4l (p54a1b276.dip0.t-ipconnect.de [84.161.178.118])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 42239A4C473A;
- Fri, 18 Sep 2026 20:42:20 +0200 (CEST)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id C5424A4C4739;
+ Fri, 18 Sep 2026 20:42:19 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:59900)
  by fli4l.lan.fli4l with esmtp (Exim 4.100.1)
- (envelope-from <bernd@kuhls.net>) id 1x7dWw-000000007cB-14hv;
+ (envelope-from <bernd@kuhls.net>) id 1x7dWv-000000007cB-40q6;
  Fri, 18 Sep 2026 18:41:50 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Fri, 18 Sep 2026 20:41:04 +0200
-Message-ID: <20260918184140.3631274-43-bernd@kuhls.net>
+Date: Fri, 18 Sep 2026 20:41:03 +0200
+Message-ID: <20260918184140.3631274-42-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260918184140.3631274-1-bernd@kuhls.net>
 References: <20260918184140.3631274-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Spamd-Bar: -
-Subject: [Buildroot] [PATCH 42/77] package/ibm-sw-tpm2: Fix build with
- OpenSSL 4.{0, 1}
+Subject: [Buildroot] [PATCH 41/77] package/grpc: Fix build with OpenSSL 4.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -175,44 +174,343 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- .../0002-tpm-Update-to-OpenSSL-4.1.patch      | 28 +++++++++++++++++++
- 1 file changed, 28 insertions(+)
- create mode 100644 package/ibm-sw-tpm2/0002-tpm-Update-to-OpenSSL-4.1.patch
+ .../grpc/0003-Add-support-for-OpenSSL-4.patch | 327 ++++++++++++++++++
+ 1 file changed, 327 insertions(+)
+ create mode 100644 package/grpc/0003-Add-support-for-OpenSSL-4.patch
 
-diff --git a/package/ibm-sw-tpm2/0002-tpm-Update-to-OpenSSL-4.1.patch b/package/ibm-sw-tpm2/0002-tpm-Update-to-OpenSSL-4.1.patch
+diff --git a/package/grpc/0003-Add-support-for-OpenSSL-4.patch b/package/grpc/0003-Add-support-for-OpenSSL-4.patch
 new file mode 100644
-index 0000000000..3b4e3d815e
+index 0000000000..cc517a2461
 --- /dev/null
-+++ b/package/ibm-sw-tpm2/0002-tpm-Update-to-OpenSSL-4.1.patch
-@@ -0,0 +1,28 @@
-+From 66921ee5ba05ffb92700b00f17cf1e8b75522aee Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd@kuhls.net>
-+Date: Sun, 13 Sep 2026 11:11:24 +0200
-+Subject: [PATCH] tpm: Update to OpenSSL 4.1
++++ b/package/grpc/0003-Add-support-for-OpenSSL-4.patch
+@@ -0,0 +1,327 @@
++From fb056ab0bb3ed003febe82f069ff41514288a4f3 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Bj=C3=B6rn=20Svensson?= <bjorn.a.svensson@est.tech>
++Date: Mon, 31 Aug 2026 09:52:46 -0700
++Subject: [PATCH] [OpenSSL] Add support for OpenSSL 4 (#41932)
 +
-+Upstream: https://github.com/kgoldman/ibmswtpm2/pull/24
++OpenSSL 4.0 removes several deprecated APIs and changes return types of various getter functions to `const`.
++This PR fixes all affected code in gRPC's SSL transport layer, credentials, and tests.
++
++To handle the `const` return type differences across OpenSSL versions without version-specific `#if` guards at every call site, `auto*` is used to let the compiler deduce the correct type.
++Where downstream serialization and copy functions (`i2d_X509_NAME`, `i2d_ASN1_OCTET_STRING`, `X509_NAME_dup`) have not yet been constified, `const_cast` is used at the call site to bridge the gap. These functions only read the data, so the cast is safe.
++
++Tested by building and running SSL tests against BoringSSL and OpenSSL 1.0.2u, 1.1.1w, 3.0.13, and 4.0.0.
++Each commit message in this PR has some more details.
++
++RELEASE NOTES:
++
++* Add OpenSSL 4.0 compatibility.
++
++Closes #41932
++
++COPYBARA_INTEGRATE_REVIEW=https://github.com/grpc/grpc/pull/41932 from Nordix:openssl4 c2edc3d46ab7e87ced5d9d95710885a8a8c7a3e2
++PiperOrigin-RevId: 973935241
++
++Upstream: https://github.com/grpc/grpc/commit/fb056ab0bb3ed003febe82f069ff41514288a4f3
 +
 +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 +---
-+ src/BnToOsslMath.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ .../call/external/aws_request_signer.cc       | 16 ++++++++++
++ .../transport/tls/grpc_tls_crl_provider.cc    |  4 +--
++ src/core/tsi/ssl_transport_security.cc        | 32 +++++++++++++------
++ src/core/tsi/ssl_transport_security_utils.cc  | 14 ++++----
++ test/core/handshake/client_ssl.cc             |  4 ++-
++ test/core/handshake/server_ssl_common.cc      |  4 ++-
++ test/core/tsi/ssl_transport_security_test.cc  | 10 ++++++
++ 7 files changed, 65 insertions(+), 19 deletions(-)
 +
-+diff --git a/src/BnToOsslMath.h b/src/BnToOsslMath.h
-+index 731957e..345d29f 100644
-+--- a/src/BnToOsslMath.h
-++++ b/src/BnToOsslMath.h
-+@@ -77,7 +77,7 @@
-+ #include <openssl/ec.h>
-+ #include <openssl/bn.h>
++diff --git a/src/core/credentials/call/external/aws_request_signer.cc b/src/core/credentials/call/external/aws_request_signer.cc
++index f7fb7a25b1d0b..d3f506d095abf 100644
++--- a/src/core/credentials/call/external/aws_request_signer.cc
+++++ b/src/core/credentials/call/external/aws_request_signer.cc
++@@ -18,12 +18,15 @@
++ #include <grpc/support/port_platform.h>
++ #include <openssl/crypto.h>
++ #include <openssl/evp.h>
+++#if OPENSSL_VERSION_NUMBER < 0x30000000L
++ #include <openssl/hmac.h>
+++#endif
++ #include <openssl/sha.h>
 + 
-+-#if OPENSSL_VERSION_NUMBER >= 0x30600ff0L
-++#if OPENSSL_VERSION_NUMBER >= 0x40100ff0L
-+ // Check the bignum_st definition against the one below and either update the
-+ // version check or provide the new definition for this version.
-+ #  error Untested OpenSSL version
-+-- 
-+2.47.3
-+
++ #include <utility>
++ #include <vector>
++ 
+++#include "src/core/util/grpc_check.h"
++ #include "absl/status/statusor.h"
++ #include "absl/strings/ascii.h"
++ #include "absl/strings/escaping.h"
++@@ -41,6 +44,7 @@ namespace {
++ 
++ #if OPENSSL_VERSION_NUMBER >= 0x30000000L
++ const char kSha256[] = "SHA256";
+++const char kHmacName[] = "HMAC";
++ #endif
++ const char kAlgorithm[] = "AWS4-HMAC-SHA256";
++ const char kDateFormat[] = "%a, %d %b %E4Y %H:%M:%S %Z";
++@@ -67,12 +71,24 @@ std::string SHA256Hex(const std::string& str) {
++ }
++ 
++ std::string HMAC(const std::string& key, const std::string& msg) {
+++#if OPENSSL_VERSION_NUMBER < 0x30000000L
++   unsigned int len;
++   unsigned char digest[EVP_MAX_MD_SIZE];
++   HMAC(EVP_sha256(), key.c_str(), key.length(),
++        reinterpret_cast<const unsigned char*>(msg.c_str()), msg.length(),
++        digest, &len);
++   return std::string(digest, digest + len);
+++#else
+++  size_t len = 0;
+++  unsigned char digest[EVP_MAX_MD_SIZE];
+++  GRPC_CHECK_NE(EVP_Q_mac(nullptr, kHmacName, nullptr, kSha256, nullptr,
+++                          reinterpret_cast<const unsigned char*>(key.c_str()),
+++                          key.length(),
+++                          reinterpret_cast<const unsigned char*>(msg.c_str()),
+++                          msg.length(), digest, sizeof(digest), &len),
+++                nullptr);
+++  return std::string(digest, digest + len);
+++#endif
++ }
++ 
++ }  // namespace
++diff --git a/src/core/credentials/transport/tls/grpc_tls_crl_provider.cc b/src/core/credentials/transport/tls/grpc_tls_crl_provider.cc
++index 5e24c18ee6127..dc95ba8457121 100644
++--- a/src/core/credentials/transport/tls/grpc_tls_crl_provider.cc
+++++ b/src/core/credentials/transport/tls/grpc_tls_crl_provider.cc
++@@ -56,12 +56,12 @@ absl::StatusOr<std::string> IssuerFromCrl(X509_CRL* crl) {
++   if (crl == nullptr) {
++     return absl::InvalidArgumentError("crl cannot be null");
++   }
++-  X509_NAME* issuer = X509_CRL_get_issuer(crl);
+++  auto* issuer = X509_CRL_get_issuer(crl);
++   if (issuer == nullptr) {
++     return absl::InvalidArgumentError("crl cannot have null issuer");
++   }
++   unsigned char* buf = nullptr;
++-  int len = i2d_X509_NAME(issuer, &buf);
+++  int len = i2d_X509_NAME(const_cast<X509_NAME*>(issuer), &buf);
++   if (len < 0 || buf == nullptr) {
++     return absl::InvalidArgumentError("crl cannot have null issuer");
++   }
++diff --git a/src/core/tsi/ssl_transport_security.cc b/src/core/tsi/ssl_transport_security.cc
++index 6c1f20ebb5374..29ec47eeeef41 100644
++--- a/src/core/tsi/ssl_transport_security.cc
+++++ b/src/core/tsi/ssl_transport_security.cc
++@@ -49,7 +49,9 @@
++ #include <grpc/support/thd_id.h>
++ #include <openssl/bio.h>
++ #include <openssl/crypto.h>  // For OPENSSL_free
+++#if !defined(OPENSSL_NO_ENGINE)
++ #include <openssl/engine.h>
+++#endif
++ #include <openssl/err.h>
++ #include <openssl/ssl.h>
++ #include <openssl/tls1.h>
++@@ -1021,9 +1023,7 @@ static int looks_like_ip_address(absl::string_view name) {
++ static tsi_result ssl_get_x509_common_name(X509* cert, unsigned char** utf8,
++                                            size_t* utf8_size) {
++   int common_name_index = -1;
++-  X509_NAME_ENTRY* common_name_entry = nullptr;
++-  ASN1_STRING* common_name_asn1 = nullptr;
++-  X509_NAME* subject_name = X509_get_subject_name(cert);
+++  auto* subject_name = X509_get_subject_name(cert);
++   int utf8_returned_size = 0;
++   if (subject_name == nullptr) {
++     VLOG(2) << "Could not get subject name from certificate.";
++@@ -1035,12 +1035,13 @@ static tsi_result ssl_get_x509_common_name(X509* cert, unsigned char** utf8,
++     VLOG(2) << "Could not get common name of subject from certificate.";
++     return TSI_NOT_FOUND;
++   }
++-  common_name_entry = X509_NAME_get_entry(subject_name, common_name_index);
+++  auto* common_name_entry =
+++      X509_NAME_get_entry(subject_name, common_name_index);
++   if (common_name_entry == nullptr) {
++     LOG(ERROR) << "Could not get common name entry from certificate.";
++     return TSI_INTERNAL_ERROR;
++   }
++-  common_name_asn1 = X509_NAME_ENTRY_get_data(common_name_entry);
+++  auto* common_name_asn1 = X509_NAME_ENTRY_get_data(common_name_entry);
++   if (common_name_asn1 == nullptr) {
++     LOG(ERROR) << "Could not get common name entry asn1 from certificate.";
++     return TSI_INTERNAL_ERROR;
++@@ -1081,7 +1082,7 @@ static tsi_result peer_property_from_x509_common_name(
++ static tsi_result peer_property_from_x509_subject(X509* cert,
++                                                   tsi_peer_property* property,
++                                                   bool is_verified_root_cert) {
++-  X509_NAME* subject_name = X509_get_subject_name(cert);
+++  auto* subject_name = X509_get_subject_name(cert);
++   if (subject_name == nullptr) {
++     GRPC_TRACE_LOG(tsi, INFO) << "Could not get subject name from certificate.";
++     return TSI_NOT_FOUND;
++@@ -1177,17 +1178,30 @@ static tsi_result add_subject_alt_names_properties_to_peer(
++       char ntop_buf[INET6_ADDRSTRLEN];
++       int af;
++ 
+++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+++      if (ASN1_STRING_length(subject_alt_name->d.iPAddress) == 4) {
+++        af = AF_INET;
+++      } else if (ASN1_STRING_length(subject_alt_name->d.iPAddress) == 16) {
+++        af = AF_INET6;
+++#else
++       if (subject_alt_name->d.iPAddress->length == 4) {
++         af = AF_INET;
++       } else if (subject_alt_name->d.iPAddress->length == 16) {
++         af = AF_INET6;
+++#endif
++       } else {
++         LOG(ERROR) << "SAN IP Address contained invalid IP";
++         result = TSI_INTERNAL_ERROR;
++         break;
++       }
+++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+++      const char* name =
+++          inet_ntop(af, ASN1_STRING_get0_data(subject_alt_name->d.iPAddress),
+++                    ntop_buf, INET6_ADDRSTRLEN);
+++#else
++       const char* name = inet_ntop(af, subject_alt_name->d.iPAddress->data,
++                                    ntop_buf, INET6_ADDRSTRLEN);
+++#endif
++       if (name == nullptr) {
++         LOG(ERROR) << "Could not get IP string from asn1 octet.";
++         result = TSI_INTERNAL_ERROR;
++@@ -1472,13 +1486,13 @@ static tsi_result x509_store_load_certs(X509_STORE* cert_store,
++       break;  // We're at the end of stream.
++     }
++     if (root_names != nullptr) {
++-      root_name = X509_get_subject_name(root);
++-      if (root_name == nullptr) {
+++      auto* root_subject = X509_get_subject_name(root);
+++      if (root_subject == nullptr) {
++         LOG(ERROR) << "Could not get name from root certificate.";
++         result = TSI_INVALID_ARGUMENT;
++         break;
++       }
++-      root_name = X509_NAME_dup(root_name);
+++      root_name = X509_NAME_dup(const_cast<X509_NAME*>(root_subject));
++       if (root_name == nullptr) {
++         result = TSI_OUT_OF_RESOURCES;
++         break;
++diff --git a/src/core/tsi/ssl_transport_security_utils.cc b/src/core/tsi/ssl_transport_security_utils.cc
++index 7318bc3f78057..9bf292821565c 100644
++--- a/src/core/tsi/ssl_transport_security_utils.cc
+++++ b/src/core/tsi/ssl_transport_security_utils.cc
++@@ -282,11 +282,11 @@ bool VerifyCrlCertIssuerNamesMatch(X509_CRL* crl, X509* cert) {
++   if (cert == nullptr || crl == nullptr) {
++     return false;
++   }
++-  X509_NAME* cert_issuer_name = X509_get_issuer_name(cert);
+++  auto* cert_issuer_name = X509_get_issuer_name(cert);
++   if (cert_issuer_name == nullptr) {
++     return false;
++   }
++-  X509_NAME* crl_issuer_name = X509_CRL_get_issuer(crl);
+++  auto* crl_issuer_name = X509_CRL_get_issuer(crl);
++   if (crl_issuer_name == nullptr) {
++     return false;
++   }
++@@ -317,9 +317,9 @@ absl::StatusOr<std::string> IssuerFromCert(X509* cert) {
++   if (cert == nullptr) {
++     return absl::InvalidArgumentError("cert cannot be null");
++   }
++-  X509_NAME* issuer = X509_get_issuer_name(cert);
+++  auto* issuer = X509_get_issuer_name(cert);
++   unsigned char* buf = nullptr;
++-  int len = i2d_X509_NAME(issuer, &buf);
+++  int len = i2d_X509_NAME(const_cast<X509_NAME*>(issuer), &buf);
++   if (len < 0 || buf == nullptr) {
++     return absl::InvalidArgumentError("could not read issuer name from cert");
++   }
++@@ -339,7 +339,8 @@ absl::StatusOr<std::string> AkidFromCertificate(X509* cert) {
++     if (X509_get_ext_by_NID(cert, NID_authority_key_identifier, j) != -1) {
++       return absl::InvalidArgumentError("Could not get AKID from certificate.");
++     }
++-    akid = X509_EXTENSION_get_data(X509_get_ext(cert, j));
+++    akid = const_cast<ASN1_OCTET_STRING*>(
+++        X509_EXTENSION_get_data(X509_get_ext(cert, j)));
++   } else {
++     return absl::InvalidArgumentError("Could not get AKID from certificate.");
++   }
++@@ -364,7 +365,8 @@ absl::StatusOr<std::string> AkidFromCrl(X509_CRL* crl) {
++     if (X509_CRL_get_ext_by_NID(crl, NID_authority_key_identifier, j) != -1) {
++       return absl::InvalidArgumentError("Could not get AKID from crl.");
++     }
++-    akid = X509_EXTENSION_get_data(X509_CRL_get_ext(crl, j));
+++    akid = const_cast<ASN1_OCTET_STRING*>(
+++        X509_EXTENSION_get_data(X509_CRL_get_ext(crl, j)));
++   } else {
++     return absl::InvalidArgumentError("Could not get AKID from crl.");
++   }
++diff --git a/test/core/handshake/client_ssl.cc b/test/core/handshake/client_ssl.cc
++index 1952c6055094f..c985c0de926f1 100644
++--- a/test/core/handshake/client_ssl.cc
+++++ b/test/core/handshake/client_ssl.cc
++@@ -197,13 +197,15 @@ static void server_thread(void* arg) {
++   OpenSSL_add_ssl_algorithms();
++   args->ssl_library_info->Notify();
++ 
++-  const SSL_METHOD* method = TLSv1_2_server_method();
+++  const SSL_METHOD* method = TLS_server_method();
++   SSL_CTX* ctx = SSL_CTX_new(method);
++   if (!ctx) {
++     perror("Unable to create SSL context");
++     ERR_print_errors_fp(stderr);
++     abort();
++   }
+++  SSL_CTX_set_min_proto_version(ctx, TLS1_2_VERSION);
+++  SSL_CTX_set_max_proto_version(ctx, TLS1_2_VERSION);
++ 
++   // Load key pair.
++   if (SSL_CTX_use_certificate_file(ctx, SSL_CERT_PATH, SSL_FILETYPE_PEM) < 0) {
++diff --git a/test/core/handshake/server_ssl_common.cc b/test/core/handshake/server_ssl_common.cc
++index ece1b6f50109e..7cb8f95e578f3 100644
++--- a/test/core/handshake/server_ssl_common.cc
+++++ b/test/core/handshake/server_ssl_common.cc
++@@ -187,13 +187,15 @@ bool server_ssl_test(const char* alpn_list[], unsigned int alpn_list_len,
++   // server port.
++   s.Await();
++ 
++-  const SSL_METHOD* method = TLSv1_2_client_method();
+++  const SSL_METHOD* method = TLS_client_method();
++   SSL_CTX* ctx = SSL_CTX_new(method);
++   if (!ctx) {
++     perror("Unable to create SSL context");
++     ERR_print_errors_fp(stderr);
++     abort();
++   }
+++  SSL_CTX_set_min_proto_version(ctx, TLS1_2_VERSION);
+++  SSL_CTX_set_max_proto_version(ctx, TLS1_2_VERSION);
++ 
++   // Load key pair.
++   if (SSL_CTX_use_certificate_file(ctx, SSL_CERT_PATH, SSL_FILETYPE_PEM) < 0) {
++diff --git a/test/core/tsi/ssl_transport_security_test.cc b/test/core/tsi/ssl_transport_security_test.cc
++index 806495f87ccca..8c3f4677495ec 100644
++--- a/test/core/tsi/ssl_transport_security_test.cc
+++++ b/test/core/tsi/ssl_transport_security_test.cc
++@@ -23,6 +23,7 @@
++ #include <grpc/support/string_util.h>
++ #include <openssl/crypto.h>
++ #include <openssl/err.h>
+++#include <openssl/evp.h>
++ #include <openssl/pem.h>
++ #include <stdbool.h>
++ #include <stdio.h>
++@@ -985,7 +986,16 @@ TEST_P(SslTransportSecurityTest, DoRoundTripForAllConfigs) {
++ TEST_P(SslTransportSecurityTest, DoRoundTripWithErrorOnStack) {
++   // Invoke an SSL function that causes an error, and ensure the error
++   // makes it to the stack.
+++#if OPENSSL_VERSION_NUMBER < 0x30000000L
++   ASSERT_FALSE(EC_KEY_new_by_curve_name(NID_rsa));
+++#else
+++  // Use EVP_PKEY_CTX with an invalid operation to push an error.
+++  EVP_PKEY_CTX* err_ctx = EVP_PKEY_CTX_new_id(EVP_PKEY_RSA, nullptr);
+++  ASSERT_NE(err_ctx, nullptr);
+++  // Calling sign_init without a key will fail and push an error.
+++  ASSERT_LE(EVP_PKEY_sign_init(err_ctx), 0);
+++  EVP_PKEY_CTX_free(err_ctx);
+++#endif
++   ASSERT_NE(ERR_peek_error(), 0);
++   SetUpSslFixture(/*tls_version=*/std::get<0>(GetParam()),
++                   /*send_client_ca_list=*/std::get<1>(GetParam()));
 -- 
 2.47.3
 
