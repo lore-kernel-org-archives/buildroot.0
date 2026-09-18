@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5619FC982D7
-	for <buildroot@archiver.kernel.org>; Fri, 18 Sep 2026 19:38:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 189B9C982D7
+	for <buildroot@archiver.kernel.org>; Fri, 18 Sep 2026 19:39:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 189C781327;
-	Fri, 18 Sep 2026 19:38:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D740360E72;
+	Fri, 18 Sep 2026 19:39:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id K1t0l4WQdCBC; Fri, 18 Sep 2026 19:38:37 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 4D07381325
-Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789760317;
-	b=lBz4humP4Pqoxj953S7qNuBUYuN83KqC0/eypIVft72pfkV8u8AX48yRYVsMTrOhJuaK
-	 GKBcdhxTiOYF4sk7Nw0BjnR6bn7MyVO8/qzXq3qd1v0ZkKBSoBrNWI9IofAIhQoMkTyJp
-	 SF7mwEs6YQFhSpbdN4RQ1W1qxzmjPrGNjBJesuCg5/MG42Iv6bu1qWg0jvP99JZsW/G7V
-	 nn/9wgK7uvCeyKfj6pgMmJmmBdK3IaxGLcg9730Nl+Z955bxdOJPItcsq3FgJyYf0uqZC
-	 MqCzjqszYvHsumwz2gQ1V1mGmz7To4bV2cNYJsG+OLHcJL7G8GKGZM+xeVr1RhXprBA==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id EzedBZp3CKgw; Fri, 18 Sep 2026 19:39:05 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org E08F160EB2
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789760345;
+	b=Ir9f2/Mvg3OBoxX8fy0pTmqHFrSee0LLA5nHVzulRIfOO/9gRwhvYTsMfl2shMuiSU8I
+	 doOViLHlbklBiLXDvSdLG3ddtR4d91V8Z/G+GOeWX7ahwN2QkYcTLyjEOQ7/SS+Gfe8o/
+	 XVBO3isWiLDShu8WATGYOJZkUbpS/mDXod+SkRzDAE4c8b/z63e3CO17hU3wNfgul+f+z
+	 sClakN9pXht5TG5mfRWDr1uIkbfF7r6960kekxGHcgxds2t4Rnc9TGsvQP85eB5VCTdGy
+	 /JCYi7L+OH29jgjCZfx4HvtDbNmVcLMfCKiboe3GXy/vF5to08YS6uTAaM5/V1aXaAA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789760317;
+	c=relaxed/relaxed; t=1789760345;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -31,87 +31,86 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:Content-Transfer-Encoding:Content-Type:
 	 Errors-To:Sender;
-	bh=mHu7QtfQF40gcvXz9Yw2aII8g70qykO/FsXLQs7KeAU=;
-	b=JggI506Q3e5tL6FL8bj2wEUG48LlcU6ul0h+CiAUmeaFblcHYqFSpf8QJSLdNXI/qwJb
-	 gjiXMVO3EG55g+/tbIqHjLrBWkI1YPmOJYt56PlsDJ11I/YPGDk9FFOczeik81NpLLmvz
-	 GXYYFqrTxUBgffZgiLdCqZdOmkyR9MdfO0ANDiLcmpDiVEXGUMVK2lF7htDvopy2NdYtC
-	 WOOO+K8TiEspRewG1isNTYdSz2OvD31UYGF3tvpVsW3V7PGUishjhBSuJIk/ef582xKXy
-	 Zp9fXdN+IC+cMdRvSMnbaVpzYJep9Djs3J5Br6YEM2SewF9ad5poArwaj2BomdQTLGQ==
-ARC-Authentication-Results: i=2; smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	bh=OHenco4XmrsAp71anqpVHMhux1iirALUyx1NVftvnUk=;
+	b=lXh7S83rNAi8WDm9dmFSk21XffOXDB2CKeeTuRNW6XvEs5fFQ/7g3bFfoIt/Jvq6/67z
+	 LaldgvSyL5zXVqOA8BQ7Ufdk+sE6rmHOsXtL+3hBKTSY7bl6b0z7fhZVYJ6cEjEt2OCTg
+	 5KMXqpuOlH8P9378gxM9UXwcZ6qtwA9KFmMRHJoO+2SM8GCnu2zzqLbe90H73oDs4L0IW
+	 H+QcBdzUpt/rc0PNLL8ExeLr0tlgM9L8VWuxpKQepKsLABitVTkwEBpxFHsbI8yVRRa6w
+	 7ohblfwnq+TqN8h/l/eAV1C8FmCcUMau/zXqzg6AaIG1WpxiqdWi5k8ZoPEJtMk/BCA==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789760317;
-	bh=mHu7QtfQF40gcvXz9Yw2aII8g70qykO/FsXLQs7KeAU=;
+	s=default; t=1789760345;
+	bh=OHenco4XmrsAp71anqpVHMhux1iirALUyx1NVftvnUk=;
 	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=CwP4CnuCCgAy2ehRTCSaYE5CoP95SJ0oPPpj1wKbxVRWmdOGwIjtZt5IrhXGsXDqt
-	 NLXnhn0TTsQCuwKD3nF1hG50l7Dtt7+BUIL09YM6EYK9TCNL+JnSdo13MKJpyC6Pv0
-	 w22JUBrt73wraRXyb6qaJVZJh3f9EJ1p1KeRkmjmoUyYTMnB9MBL4PfLD3FJItKCfJ
-	 xvGYFCF2RERIqbIoT9mZd7H9qSBHRn9PDRsNY4ZTn97g3oRHPNCI/EA7tgaW2godLH
-	 O0r7Bz6nDzOu5WLPxU62VRRSRHrHp3qETl6d0QAWGUfQQalKMnl4du4BA054V3YGnP
-	 WJJ+2Doy9ncEA==
+	b=FyVSaH8GbswePP9KdnHf1zLm2ykWetmISRiCA17rt/TJ6X/fKjT426jA9ZnVVDPWO
+	 VXCLrYuTAmRIBJzypXXHWi6s4DQCuxawbAXFfbRoiw7T4NgCxEIMYqjwJ3XE+a23V0
+	 6rOM8n2pk0o4hxfIMwIijs6o4EJ23w75oeM9XZAwWpUzM686rr4D9dgYR6VC9nre2Z
+	 Jxm80OBMxTk1rzBKiDTVyCxF6lPn45RAXn4GSSHPJPQDkeNQdk28+WNvb5jHMC2udP
+	 IbltL3+6Yf4rbHBYNn/Lc0gK35aA4KUPJC3akVCJb1jBNxf7X1TG8Ho8vWumNJYHPq
+	 sIYsJeWdnA+CQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4D07381325;
-	Fri, 18 Sep 2026 19:38:37 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id D3C0D3B9
- for <buildroot@buildroot.org>; Fri, 18 Sep 2026 19:38:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E08F160EB2;
+	Fri, 18 Sep 2026 19:39:04 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id C53B125B
+ for <buildroot@buildroot.org>; Fri, 18 Sep 2026 19:39:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B950660E72
- for <buildroot@buildroot.org>; Fri, 18 Sep 2026 19:38:35 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id ABE3C81325
+ for <buildroot@buildroot.org>; Fri, 18 Sep 2026 19:39:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HLv_8jWkPl0E for <buildroot@buildroot.org>;
- Fri, 18 Sep 2026 19:38:35 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 0F9FF60E0B
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789760315;
- b=ADOZKuinVi1fVFpUL+lEAYH2Q1J8o8j+dj9nlJk+7vYUt5Wjw2UeYqKs4wwBYQvoQt6B
- KS8v7/3ssQruowlQlVLrVaQA7ykmKwTn5nKaJvV76BHs7gSCwFcT58Dtp6vKWkefejFCP
- NYClTcVQrpvRfoQezXwSopm6+2fG++DhBhlcvmq51cvF0D8qOL9rHVlwiVMd03cs5SJaP
- yygGR/4th5EXCL1oCgKGTLhT0EmYP5qNFEUkms2Zw38/kd1QunPj0CHPPoz8q4zHVgGo3
- 3W+MNI2zNUTyeqrHWqKeo+/0h1yTZ4iwymXGUq0OuFUEf8zTeEJwHvXh6okAko7ddoQ==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vUeZWhkteQBP for <buildroot@buildroot.org>;
+ Fri, 18 Sep 2026 19:39:03 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org C690081330
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789760343;
+ b=cAyrEe8d+ps7PYA3KHamM7TU4ix2ne1DG1McB79ho0+LAjdiCd0FZsepaOi7tVunP9p6
+ GtYQedYfy9DSA9Wo4g4GerZAyPAaFRO6hLHb/0lebzs2O4HUCTKBprUSeR6zv9OExx5K/
+ RmRMi7fFiveCJxw2j5COcVCYhvyXszw18zZWg0Z+FdsZiCnVuJkp7KjHMWl0Njj8Df+Pq
+ vDAjGNPzzIlCJA4M8jkQM7pwbPvV3AAvxDxGxUFF2nvWasnbGQ6s9Lq9rRfZqBxdRqLgE
+ UxweqDl5UN616bnYSQ00yj9J5D3LPupax4uGmFv5fB8JALAS1QiP/1PrsjV5YIaaM2A==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1789760315;
+ c=relaxed/relaxed; t=1789760343;
  h=Received-SPF:Received:DKIM-Signature:Received:MIME-Version:Date:From:
  To:Cc:Subject:In-Reply-To:References:User-Agent:Message-ID:X-Sender:
  Content-Type:Content-Transfer-Encoding;
- bh=MVP2Y/ieZcNN6RHAeCWDsV3ao6zk8IHBdR8kBgABnWI=;
- b=ZhgKHCdfr/P6ExgJclXLfhhH4BdLajwEPa/CQ64V4kMCS8nN268V8JZaMZUSJar6U4q8
- 7ohwdw/x0mYXCMt2RRGOS2ndgtfSmheTY2b0/DrBZYKVVxF5AD1CVhxeP4dJncRJX5+ek
- oeb/Jr1iU158L/7tMFKJ/l1SES5pJatjOlfZejDnpHs/+OU0ZHUnXTpxOkLNNr7j55wDM
- knWoDqE2i3etCvZYyRJjewfE71hpmntFlf7s7WFTu169+6Byud9ypWZBmlHfNj+88e4jL
- ZNMkR36puIQpEJus0smjEYnIQRYaTNO5j+dttxaxn9p4JYoe83hA8mocZJfn1ydFtnA==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org;
+ bh=sFB1lrrD5XI9oRR+278DbLmwlm5mx4RfyVXkxXGFc4E=;
+ b=JPkxqT4Ysu6lM2gLD5hP5HT5n5Rya9CmMM28tkS6hnKTf08/R0DCLqYFT28FrWlGclsw
+ /aK02qdDGSGpfVAwYWlt1GsKrCvrSxMnL5apj42GMb5WESTrPzf+TW7EjilCzIxr0VQW/
+ D9PYoSb5xPMUT2GHYzasuqXNF5GEXnuyDNLTQrKe+ZrRWDg0c8GX+uq8xZnFeKLVQul00
+ Z6ha0fFxV1uIjAaBmgLKEhzwsyppIpUwi4PocPqyrKtTe82UJ0dlzfZCNldog8xvmsa26
+ 6jx0Io3LFL8O8WDQlkf9dIBTqR8oSf5AAx8X9K0oTnoWxgKCPfFSzXZrBZwoPdFBoBA==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org;
  dmarc=pass header.from=free.fr; 
  dkim=pass header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=QEbKAqnR; 
- arc=none smtp.remote-ip="2a01:e0c:1:1599::15"
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::15;
- helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0F9FF60E0B
- for <buildroot@buildroot.org>; Fri, 18 Sep 2026 19:38:34 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
+ header.s=smtp-20201208 header.b=dpwfEmMD; 
+ arc=none smtp.remote-ip="2a01:e0c:1:1599::11"
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C690081330
+ for <buildroot@buildroot.org>; Fri, 18 Sep 2026 19:39:01 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
  (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPA id D0261780389;
- Fri, 18 Sep 2026 21:38:30 +0200 (CEST)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id 4DC812003DD;
+ Fri, 18 Sep 2026 21:38:59 +0200 (CEST)
 Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
  via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 18 Sep 2026 21:38:30 +0200
+ with HTTP (HTTP/1.0 POST); Fri, 18 Sep 2026 21:38:59 +0200
 MIME-Version: 1.0
-Date: Fri, 18 Sep 2026 21:38:30 +0200
+Date: Fri, 18 Sep 2026 21:38:59 +0200
 To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org, Gwenhael Goavec-Merou
- <gwenhael.goavec-merou@trabucayre.com>
-In-Reply-To: <20260915221110.2037230-1-thomas.petazzoni@bootlin.com>
-References: <20260915221110.2037230-1-thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20260918132135.146448-1-thomas.petazzoni@bootlin.com>
+References: <20260918132135.146448-1-thomas.petazzoni@bootlin.com>
 User-Agent: Webmail Free/1.6.19
-Message-ID: <b0c130f5f443dd756322dc4ec9b55464@free.fr>
+Message-ID: <bb7d4c0fbd61302a89bb153a73c1b1f4@free.fr>
 X-Sender: ju.o@free.fr
-Subject: Re: [Buildroot] [PATCH 1/2] package/gnuradio: fix dependencies of
- BR2_PACKAGE_GNURADIO_PYTHON
+Subject: Re: [Buildroot] [PATCH] package/screen: install screenrc without
+ executable rights
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -130,20 +129,16 @@ Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 16/09/2026 00:11, Thomas Petazzoni via buildroot wrote:
-> BR2_PACKAGE_GNURADIO_PYTHON selects BR2_PACKAGE_PYTHON_NUMPY, so it
-> should inherit its dependencies, but BR2_TOOLCHAIN_GCC_AT_LEAST_9 was
-> forgotten in commit 8b3993178d0ffae312d7dd0df70d30d1d3d88873, when
-> python-numpy got this gcc >= 9 dependency added.
+On 18/09/2026 15:21, Thomas Petazzoni via buildroot wrote:
+> There is no reason to install a configuration file in /etc with
+> executable rights.
 > 
-> Note that the existing BR2_HOST_GCC_AT_LEAST_9 dependency is correct:
-> it is there because gnuradio needs host-python-numpy at build time.
-> 
-> Fixes: 8b3993178d0ffae312d7dd0df70d30d1d3d88873 ("package/python-numpy: 
-> needs gcc >= 9")
+> Fixes: https://gitlab.com/buildroot.org/buildroot/-/work_items/174
+> Fixes: 98873717c2654e27ce069c44e9b5dbe3383c0f97 ("screen: enable 
+> terminfo and install screenrc")
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-Series applied to master, thanks.
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
