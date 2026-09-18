@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CC88FC982D7
-	for <buildroot@archiver.kernel.org>; Fri, 18 Sep 2026 18:44:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C89EAC982D8
+	for <buildroot@archiver.kernel.org>; Fri, 18 Sep 2026 18:44:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 99F2140B94;
-	Fri, 18 Sep 2026 18:44:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9188B60DDF;
+	Fri, 18 Sep 2026 18:44:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mx64ghHZCGR0; Fri, 18 Sep 2026 18:44:46 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 6043040B95
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789757086;
-	b=r7XsNXdlJQs2A0Uy2xooQ1QVbDsrxdWpJ8OG5FMwoeZf3bN7Is6rp6VDD7uwALX62qz5
-	 SxB45EyDK65mhplBO1WwcdTbTgceyuZnwUByAxyzakukHwovVnRVGPYFgOFYYLFpsKVyl
-	 IJuF2+sjCF5bjHhmPYkJqk/vLG1DxPp5TYk4EAPjxsJSxpMBTspjRExje2cLBwCrLsIml
-	 tn/jSzRg62vII3Yg0SWT54nM2aLy/KN8PBPtADX6gRhWX/KCEQMDPpJtFfPXlyauQHt1l
-	 9fxEe769434Rb3h02wMuRzoj33oVZatN1s/T4nQXZn68i29fmr2VRHeEXxNI1aO5K4Q==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 44AJzsWXnybw; Fri, 18 Sep 2026 18:44:57 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org A51FA6064F
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789757097;
+	b=CDU2w6ApD+Pvu+kijC1b6kwGD14I2CWWvswG9nNQ5ZSPSzve85j9guhZhgY6od6p2pDR
+	 ph3guOKKf31Qn6b4mfI8xLAFcqISzjCPO/VjWawWCQxx1syFL8Nu9O44O6hCZQrDwKbXw
+	 S0ZIdUk+fPgQczf3amzgKHrrYbWcdSern2bmTj+8/6I78aizB0wEQHHhBn8tOLNvUAbHh
+	 gLslNtW40EWLQRk++p0BTYCiZFR7IgZzeUqQim+PbfobjFcrQa13n1RAFBMZCVP9CghQa
+	 1jukH2Gy1aW6sYeOygc6uY3G4iWYKkumlttV9bi+UkVG2Yutbwa/9ia7E1zIgvLyBzw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789757086;
+	c=relaxed/relaxed; t=1789757097;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
@@ -31,103 +31,104 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:Cc:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=3xyxS4KVKC2dfn+U11gKXOa/roedThs/bBVHqM71UBU=;
-	b=rOBN8aDv4zkp1qKvottypDe8zHdv+3C7fo9ZWRH9/TwPtXEI+T3mcXa+19yicrTZHD0F
-	 qLxe7IoafQyngD0vxFtiQmK4RywD3CWO8HEYNbBPQYZybJvc+GK4fzcg7GMmTydxAqaRa
-	 j1BHJgSi4VvQANxSwdDYTqbcRn5+KAkf/5jWpZbtv9CUVs+CLovEilihke4tk1cAxG04a
-	 jXDE4zUp1cIbmwUFr8txuejTk1oJMH+yc3otNB2R7lAdgfTWa94opSlgvzrE9ujTOX57q
-	 Gk04WWThhG71tfmk418rlZepKKO+wmpdAofj0+fdglficHppEcV0TiD31G02q2wFIUQ==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	bh=aFic8FrKzANVAxKz+PnWbFrRrNGYGlBPUJ+llmnKNx0=;
+	b=JlzDjlvBKzCUKyWr+25JJiRuU5ChCxhjji58BXgLKGtQ3Cz4/Z3LKsaml60urX3bM2LF
+	 57yvwrwliqpAmlLkxbngOoqrXGoJcHupXCso5rHk7e75WkqBRgUyc82QFsm+7FHC8DkE2
+	 H73EgBFhbDrecE851gXY9AGkWEAGyx9vesSj6WElAwLJieRM/mnXH0EdMqZsOzTGriClp
+	 p1T9ZOA0wRrCNK1Pe260A1I1J4GSvVqbIVGHjNsp5+DiHmQjwG8Bd07azD5UIGC6Mo5IT
+	 mosG9y61+voUMX2vk3cH7HnrI4f9iSOyo2D/qv5X46+tj98oVS9nBOkt8/iqHMhUHsg==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789757086;
-	bh=3xyxS4KVKC2dfn+U11gKXOa/roedThs/bBVHqM71UBU=;
+	s=default; t=1789757097;
+	bh=aFic8FrKzANVAxKz+PnWbFrRrNGYGlBPUJ+llmnKNx0=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=r4baOvSghQ+CPWG1KRH8QIAh/p4I1obdn4wBZIVR05VoeK3fSmY8dzyXdxKdVjN2V
-	 WVZDwXXJq+PjuB1Tw8+BLROdRbDSjAsFMCcvcT6226X7qBv1NWQ3eXuv5ypf9JckmI
-	 8RwBQktX3ew53hJdBpxxo7dXIXwMC3GCTdzR6FKh/DGM1cl+W0QqnOMpYkjWE/N4r4
-	 DXBCv0ei/OiDQeN+qhsjNPsMleLjyaEcMFqATVDaxAvQuEIpr9VLm9eMWAZyBnTCDD
-	 MvZbMtHBDEOLrGNIK0LeszcCCoCM1O/e7Tf+TqtKOX3iepYjlUWvDvOkcTxtdpKRAn
-	 haPEqpfeHWFwA==
+	b=mdRSeYB+W+mJHNoVtWNtRsKH+GEeZWIXZikw1HEuTpOlpQl+UmsIea7IvhfvlXrxU
+	 nWZ0rzpIcVJfs8v+bOO0OSdwsPgowLOkn/rGmvNBj1wlVilhr/V24vLSRWImr85Rgb
+	 +a8qpx6Is8JnLre7vo2lMbVBMqoBUduu+5ln7ouJdi2d2Qxv+ohHWPmGY1mG2jJfAh
+	 8dn7IF3YanNgxYXJYYBzR+JeXP50ylMCs0bCuSi9bJURvFsqChmti1sjVq6vHPcYVH
+	 OqeANFHNqzWouk9e2ZmADidSt7/RYeLyoUahyLaXHrngHLzAfiWxWPhGuVxOcUKAR/
+	 5S9aegfLng2kA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6043040B95;
-	Fri, 18 Sep 2026 18:44:46 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 451B713D
- for <buildroot@buildroot.org>; Fri, 18 Sep 2026 18:44:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A51FA6064F;
+	Fri, 18 Sep 2026 18:44:57 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 770E413D
+ for <buildroot@buildroot.org>; Fri, 18 Sep 2026 18:44:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 36E676064F
- for <buildroot@buildroot.org>; Fri, 18 Sep 2026 18:44:44 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5D13D812D5
+ for <buildroot@buildroot.org>; Fri, 18 Sep 2026 18:44:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BUrI0Dth97tU for <buildroot@buildroot.org>;
- Fri, 18 Sep 2026 18:44:43 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org EEF5F60617
-Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789757083;
- b=NDQJ4g1hUrnOwCO82/vT+kE0pdXn2bPyALr/U962TwkL4hQwIl/FINNg8bFcIkF9+3yQ
- GrDyf/WjgHQcd8Wi6IGXcdvFi1ExkiSy8R3p0n4/OMT6vvTB0jy+6Lsm0Ya3rMkZ9yMYk
- fjRcjZBb6XNrK8D6F5vbGZulmCp9E74kWPkIiJZO7Hf9jFner3YZg7wRTrEnF12YiBR+8
- Zt760i5kjt/+aBspginpGNbheqdAQUt+xG2WdM2pjanAhySi8LI/9NDcPhCHGrqNX0te/
- jfDMv7UwdTOu4z/Jlof7JuiwyQI8EbtsJN+utGefLD8PeAQnZj9fkaAplAjHl4tpLnQ==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id MR_G_GYbCpPS for <buildroot@buildroot.org>;
+ Fri, 18 Sep 2026 18:44:55 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 73821812C4
+Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789757095;
+ b=LLosnX7kMvbDZQRKIUGDxiBIK7zCsPFgVw0KA5zRhbuOZv3101w/mlypJ3+a2l+ym6h9
+ NLv2cYIGQZS22wZ2jCft08W15TLzUU4Qtsj8f5QBFcCuKPVqZ37gu4VEz1DU9DE00y+DR
+ Zgf2zJPR3bZ0wQG5ojUmZmoaZKTp1bpD/cT5wgx7L5NGyhsH8WwCKGzpVqO3CkM7LplFI
+ 4bo7O2StSx4VffiXO/jtBI1e0zAhzUBjgNRBtuuU2mVdwh/9k3/CRAKED9BlTBOEbTScv
+ UaH4bL7dp9JvU/ryjr5Cqa0oCc8GqLlemDU36o+fnAZ/xEVOWHT+h4YL2fUPqDWLHZg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1789757083;
+ c=relaxed/relaxed; t=1789757095;
  h=Received-SPF:DKIM-Signature:X-KAS-Sym:Received:Received:From:To:Cc:
  Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding:X-Spam-Score:X-Spamd-Bar;
- bh=CNy5zAhLaDCklTE51x8aKkyjsnEZxLRHE81bxb6+JjY=;
- b=bziQbuPhoXgxvdfEVfggjt5C3h4X2DgJcEO8Yaov0+paewHiHcM1WTO93V83DVqBCK/e
- 8XJ8v2vjQXlK11h1noPfHW23jh3keuX4ONVG3w7f4XhKZCns5zXJa+rlOkikivwBVeIwP
- s/3zUmTH/otbcjqHzooQqR8Op5F5jY/bZc8VoIfVIaXkCCCU7qYmx9qzgBLBVLQVwBsjb
- 9BwSkNdm7tIMJTIwleIXxsBk2abxNB4yyhrZ5e5I+AOYkoeXRrUReZHHQ9mF+rwVZrwCa
- zi3F4Ws5eXMmIQmpFckUAhZvHSBCamhKfI86Ca4fub6GzZqje6BELElAbC4xC8PVj6Q==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org;
+ bh=5PkZeO3UEe0e8x7VCsoB+XcXnDewbRTw7cY+TxHD+ZI=;
+ b=bmIGeQXZkVTS+EXQXQ3hUVfsS0YNEGp/mC4bsrHFjZhosC+2JjcVnj0nHYjj5ksKiJF9
+ g97r7TZcTtYSEBWgiromCbBiJ68Nmbmgpl1w1djFoE+DNiqDs8bEdDw8lOK4YGfs0D+e3
+ oPfsyXhakeVVkHY93HQgvZyUKbHCZm/NQI7scSavjW1CMQB72YhcVGbfaoyLLLtKt3aM3
+ ivLV5OaxXE9TGYYrYXxXgDzHi+yQlM0lwsVjKTDNxbfYUIv32EKyPuj5jqeFsUfz9yC/h
+ 4FUELuPXu/yEKkE5iWxBwh+8vLw61HCUwlhnpa7tfOJk4NKd1L8y2CqlC9QeRPJciQA==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org;
  dmarc=pass header.from=kuhls.net; 
  dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=iFIPhUgT; 
+ header.s=kas202605290044 header.b="Nky6Lt/K"; 
  arc=none smtp.remote-ip=85.13.140.57
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-Authentication-Results: smtp3.osuosl.org;
+Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=kuhls.net
-Authentication-Results: smtp3.osuosl.org;
+Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202605290044 header.b=iFIPhUgT
+ header.a=rsa-sha256 header.s=kas202605290044 header.b=Nky6Lt/K
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id EEF5F60617
- for <buildroot@buildroot.org>; Fri, 18 Sep 2026 18:44:42 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 73821812C4
+ for <buildroot@buildroot.org>; Fri, 18 Sep 2026 18:44:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
  s=kas202605290044; t=1789756906;
- bh=CNy5zAhLaDCklTE51x8aKkyjsnEZxLRHE81bxb6+JjY=;
+ bh=5PkZeO3UEe0e8x7VCsoB+XcXnDewbRTw7cY+TxHD+ZI=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=iFIPhUgT4VWBk3cao/BycGJG1uKuS6O0xfejpR1m+fcXks3oxyhwskXxwCa8rqqlM
- gCuZiTKN+XAh3GlVqsRbsf4opbhP30qy15FaoLHk8mqIEtbXGyGwOacYNSxarH0XnF
- 0XAsO5Y8XIj+FxNf+ySih7ADhDAFMNsydz8VZQ06cCWxLGUQdNj96Vg5JNC6VKSKAD
- bL+LBlP7OuDu11V6f8aUEfyBFJiZh66gDnO+hDo1lvVznTi9vM0VNplPlEtjgITMpD
- c21yIJdZr4osoITndm4e6+sXSOi5RBARBC9gyaNX6X4sYJZBX+vLeAzQhQXX2pPZad
- kcmVazPU0YdbQ==
-X-KAS-Sym: v3:f51bdf72230551df:lkseH4ZbqNj6+SWeyhXOROAVDVA4wctn5GqYnvj392NxznN0rSxqdWBYYBdhITxI14gBE1k+pJkBIChL3/t/lCKYI3GtmdM3wrKpFumwg08Wm/sNokIQQ6E7zEBL3K1/hdJasLCtPFWYZLZ4DnysL3d4pK5HKpKudG9dMfXruRPXYqC+sKlv7VCmjdbM67WcbSYib/I5z3KXlTx93kwxaIjh7oHXDaIgSs3BBwdUhzwgu27GIhhGPs84OFj8HKUhaehmsatqjfsuhHQOPWGzMJyclLrqdN8RENcGlb3kAp1RNMG5gE4Srsk7d6rPHzd5pP0v2pHDKySwyfSJf2xgPw==:fOYzLSpWdAhY56tiYiWXh3vDUP3qgCY1CLG9U3Ip3uU1sDMT85UdDjy7fdrKvqyJ/6I5i67RxYAjbzoeES57ZuqFU1TkHXeRlHyOLDSiptHNs/nUUJ40bTAc1oRb3FfP7yclyWFGQvgOvfLCKbsDE7JBYk/wSqjFcsOHNFu7QbBrRU4mCKj2JwY1GZ5NBkZcZ4fmnSnF8WyufB9Xw+xVnYjj8EfAv6pJB7pp0d9VYG2vzQlpROa+Twvjj+ydd5QDRNygztRjcKqp8L9MUj6RFaVZDr6I9G/vKkqZlK6UNQl99ZXpa34OIYsoo9avxhjw4QZYG1Ja3/X81cDJ3wew2A+W81+j4/VfxH1JLozgwpTStcFP856SSF5S0F4LJ1L5B6xQmugrvPTb3f2Cpzv0nxF8sra1affD49kWnzaI1n0Swkpca1BoQKZbxx9R72zerzX7FlcmXR/qVQe0wsUa7i2BW5zccRphaqwnaaUU5IyGCFFIhYWF5RjRMyxg+F5RGG10vnX2p72CqX6KKiNCJD4+Chv9guk9MMzwU3+vK16xMAbtOpOKrgeKiWZeUMA63UKt2G0+OcEv6ogkVp+TvcWYjifhDg0EzFCz163HJt+t78
- /8Tnx4yik/q1YlKc5UK719w2MFxm1Dw2D805PBFe6kSYopk/LShjB4rNaUrgimg17+pwtAIgF+
+ b=Nky6Lt/KgiGBb2bbSsjtkLA2G5VveK62vbTdenrGvvEFBrTW9MEzlqbGZxuY6FaCb
+ nRsFAUV+UNS0Aaicd0erO6mOhwP1Z/sHUaLzScKemBjH4t4tJrXmc0kTnJPcMNfbsE
+ yNbBsMqTtIm+KSn47OA1DY3DRDDbF6yTUzesNA3MwwuHTSmkAGQ9BXh0smGRi7lDaR
+ AVxhWtkn0VY3593xxuRq7Jr4qENFchKQ0Yde5+G6gQEVuNSessY8atqTbCLWyzL6rK
+ 07wu0xJ59ZxSVJEvdDFhkLaEcCvDTzeQ5RnnOEh3+ow3mSq5yN2GKl4Ot+pejzhgfe
+ hRP5TsdAyCEJg==
+X-KAS-Sym: v3:f51bdf72230551df:lkseH4ZbqNj6+SWeyhXOROAVDVA4wctn5GqYnvj392NxznN0rSxqdWBYYBdhITxI14gBE1k+pJkBIChL3/t/lCKYI3GtmdM3wrKpFumwg08Wm/sNokIQQ6E7zEBL3K1/hdJasLCtPFWYZLZ4DnysL3d4pK5HKpKudG9dMfXruRPXYqC+sKlv7VCmjdbM67WcbSYib/I5z3KXlTx93kwxaIjh7oHXDaIgSs3BBwdUhzwgu27GIhhGPs84OFj8HKUhaehmsatqjfsuhHQOPWGzMJyclLrqdN8RENcGlb3kAp1RNMG5gE4Srsk7d6rPHzd5pP0v2pHDKySwyfSJf2xgPw==:UGPZDHK0wGmBwOjkCmhWijPmuczhbCQGXHFAQw9goM0vqjMsUUzMzbkrtHx3QBZ8g4fUsBakVhgRM7q+XdZJZ2moFQ5/yqYmCplTVK1mduhw5A0s3N2NtemOgkbE0O4aM93+BDzum2CbtZmwRyu2sSbslZbClQP9t1LtQGREygUjekCf/PZZqZKSNNsNVjfFICIzQu9S+Z/5+Cy8RaEegkBoaFQHlD10Bp69kQ6Oj/WQ1VUi3sAgxSJKzOLqNP0ZEXbS7gm0hi8uyEYkVHhZ1Gnsw0rDYbvPY8KBljQXmfdF+FDzg7Q+4njqs3Mg6eifi6v//qOHGoDuiQtAVvEBsu04FdyBYNEZ0lLnLvr6/Uuxh8jitW4dhcBs3gitUw3FLwhDwQUgc855Dn2N3MoHt6vYbPgObiuS9CvPrGpQUo4zswhb8oTYM7jX7dFHIxE8I6tcpHlEv4ykO1wsZbH73H0a277hzko5bST8Ir2pjygyiKjzDKhM9hWH31sUuhztbM+6bAY7NOvMVm3FmjGCu2D51Qv0lbm7owQ7N9Xeqh20W58rEWNSMfS2pS4JmQqw0KEK+6kOLdMjyt9KZSZQd+nIUotoSdvAMnBKO0VBduj5MN
+ KxgZqOgqEXxAB6A7WE39msk0ADGTYU/vxTR/NSHLTwccBLh37nm9r2FOHh/HM2eHWIbPoMZ+CW
 Received: from fli4l.lan.fli4l (p54a1b276.dip0.t-ipconnect.de [84.161.178.118])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 5347DA4C4707;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 6DFD9A4C4708;
  Fri, 18 Sep 2026 20:41:46 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:59900)
  by fli4l.lan.fli4l with esmtp (Exim 4.100.1)
- (envelope-from <bernd@kuhls.net>) id 1x7dWr-000000007cB-2o3v;
+ (envelope-from <bernd@kuhls.net>) id 1x7dWr-000000007cB-3cNi;
  Fri, 18 Sep 2026 18:41:45 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Fri, 18 Sep 2026 20:40:36 +0200
-Message-ID: <20260918184140.3631274-15-bernd@kuhls.net>
+Date: Fri, 18 Sep 2026 20:40:37 +0200
+Message-ID: <20260918184140.3631274-16-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260918184140.3631274-1-bernd@kuhls.net>
 References: <20260918184140.3631274-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Spamd-Bar: -
-Subject: [Buildroot] [PATCH 14/77] package/ibrcommon: update patches
+Subject: [Buildroot] [PATCH 15/77] package/ibrcommon: Fix build with OpenSSL
+ 4.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -172,177 +173,60 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Replaced patch 0001 with an upstream commit.
-
-Added Upstream: tags to patches 0002 & 0003.
-
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- .checkpackageignore                           |  3 -
- ...mplyfied-POSIX-method-to-get-the-bas.patch | 46 ++++++++++++++++
- ...File.cpp-support-POSIX-basename-call.patch | 55 -------------------
- ...-added-openssl-1.1-compatibility-264.patch |  3 +-
- ...sl-gcm-fix-static-build-with-openssl.patch |  3 +-
- 5 files changed, 49 insertions(+), 61 deletions(-)
- create mode 100644 package/ibrcommon/0001-ibrcommon-Use-simplyfied-POSIX-method-to-get-the-bas.patch
- delete mode 100644 package/ibrcommon/0001-ibrcommon-data-File.cpp-support-POSIX-basename-call.patch
+ ...ion-without-deprecated-OpenSSL-1.1-A.patch | 42 +++++++++++++++++++
+ 1 file changed, 42 insertions(+)
+ create mode 100644 package/ibrcommon/0004-ssl-Fix-compilation-without-deprecated-OpenSSL-1.1-A.patch
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 04717ed2af..6e445434c6 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -401,9 +401,6 @@ package/hplip/0001-build-use-pkg-config-to-discover-libusb.patch lib_patch.Upstr
- package/hplip/0002-configure.in-fix-AM_INIT_AUTOMAKE-call.patch lib_patch.Upstream
- package/i2pd/S99i2pd Shellcheck lib_sysv.Indent lib_sysv.Variables
- package/i7z/0001-fix-build-with-gcc-10.patch lib_patch.Upstream
--package/ibrcommon/0001-ibrcommon-data-File.cpp-support-POSIX-basename-call.patch lib_patch.Upstream
--package/ibrcommon/0002-ibrcommon-added-openssl-1.1-compatibility-264.patch lib_patch.Upstream
--package/ibrcommon/0003-ibrcommon-ssl-gcm-fix-static-build-with-openssl.patch lib_patch.Upstream
- package/icu/0001-dont-build-static-dynamic-twice.patch lib_patch.Upstream
- package/icu/0002-link-icudata-as-data-only.patch lib_patch.Upstream
- package/icu/0003-fix-static-linking-with-icu-uc.patch lib_patch.Upstream
-diff --git a/package/ibrcommon/0001-ibrcommon-Use-simplyfied-POSIX-method-to-get-the-bas.patch b/package/ibrcommon/0001-ibrcommon-Use-simplyfied-POSIX-method-to-get-the-bas.patch
+diff --git a/package/ibrcommon/0004-ssl-Fix-compilation-without-deprecated-OpenSSL-1.1-A.patch b/package/ibrcommon/0004-ssl-Fix-compilation-without-deprecated-OpenSSL-1.1-A.patch
 new file mode 100644
-index 0000000000..e52981b38b
+index 0000000000..8a8b21ce7e
 --- /dev/null
-+++ b/package/ibrcommon/0001-ibrcommon-Use-simplyfied-POSIX-method-to-get-the-bas.patch
-@@ -0,0 +1,46 @@
-+From fcea9d27f5153c8da77ebab956f75eaa1fd48836 Mon Sep 17 00:00:00 2001
-+From: Johannes Morgenroth <jm@m-network.de>
-+Date: Sun, 20 Dec 2015 12:51:53 +0100
-+Subject: [PATCH] ibrcommon: Use simplyfied POSIX method to get the basename
++++ b/package/ibrcommon/0004-ssl-Fix-compilation-without-deprecated-OpenSSL-1.1-A.patch
+@@ -0,0 +1,42 @@
++From 073a1b779826d1e1bbf473ba45db3ac1e273efce Mon Sep 17 00:00:00 2001
++From: Rosen Penev <rosenp@gmail.com>
++Date: Tue, 27 Nov 2018 10:18:37 -0800
++Subject: [PATCH] ssl: Fix compilation without deprecated OpenSSL 1.1 APIs
 +
-+Upstream: https://github.com/ibrdtn/ibrdtn/commit/fcea9d27f5153c8da77ebab956f75eaa1fd48836
++Upstream: https://github.com/morgenroth/ibrdtn/commit/073a1b779826d1e1bbf473ba45db3ac1e273efce
 +
 +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 +---
-+ ibrcommon/data/File.cpp | 12 +-----------
-+ 1 file changed, 1 insertion(+), 11 deletions(-)
++ ibrcommon/ssl/TLSStream.cpp | 6 ++++++
++ 1 file changed, 6 insertions(+)
 +
-+diff --git a/ibrcommon/data/File.cpp b/ibrcommon/data/File.cpp
-+index 31af4ae7..5f8e24e3 100644
-+--- a/ibrcommon/data/File.cpp
-++++ b/ibrcommon/data/File.cpp
-+@@ -34,10 +34,7 @@
-+ #include <cstring>
-+ #include <cerrno>
-+ #include <fstream>
-+-
-+-#if !defined(HAVE_FEATURES_H) || defined(ANDROID)
-+ #include <libgen.h>
-+-#endif
++diff --git a/ibrcommon/ssl/TLSStream.cpp b/ibrcommon/ssl/TLSStream.cpp
++index b18b43c3..e336db55 100644
++--- a/ibrcommon/ssl/TLSStream.cpp
+++++ b/ibrcommon/ssl/TLSStream.cpp
++@@ -259,16 +259,22 @@ namespace ibrcommon
++ 		/* openssl initialization */
++ 		/* the if block is needed because SSL_library_init() is not reentrant */
++ 		if(!_SSL_initialized){
+++#if OPENSSL_VERSION_NUMBER < 0x10100000L
++ 			SSL_load_error_strings();
++ 			SSL_library_init();
++ 			ERR_load_BIO_strings();
++ 			ERR_load_SSL_strings();
+++#endif
++ 			_SSL_initialized = true;
++ 		}
 + 
-+ #ifdef __WIN32__
-+ #include <io.h>
-+@@ -225,14 +222,7 @@ namespace ibrcommon
 + 
-+ 	std::string File::getBasename() const
-+ 	{
-+-#if !defined(ANDROID) && defined(HAVE_FEATURES_H)
-+-		return std::string(basename(_path.c_str()));
-+-#else
-+-		char path[_path.length()+1];
-+-		::memcpy(&path, _path.c_str(), _path.length()+1);
-+-
-+-		return std::string(basename(path));
-+-#endif
-++		return std::string(basename((char*)_path.c_str()));
-+ 	}
-+ 
-+ 	File File::get(const std::string &filename) const
++ 		/* create ssl context and throw exception if it fails */
+++#if OPENSSL_VERSION_NUMBER < 0x10100000L
++ 		_ssl_ctx = SSL_CTX_new(TLSv1_method());
+++#else
+++		_ssl_ctx = SSL_CTX_new(TLS_method());
+++#endif
++ 		if(!_ssl_ctx){
++ 			char err_buf[ERR_BUF_SIZE];
++ 			ERR_error_string_n(ERR_get_error(), err_buf, ERR_BUF_SIZE);
 +-- 
 +2.47.3
 +
-diff --git a/package/ibrcommon/0001-ibrcommon-data-File.cpp-support-POSIX-basename-call.patch b/package/ibrcommon/0001-ibrcommon-data-File.cpp-support-POSIX-basename-call.patch
-deleted file mode 100644
-index 5cd302c979..0000000000
---- a/package/ibrcommon/0001-ibrcommon-data-File.cpp-support-POSIX-basename-call.patch
-+++ /dev/null
-@@ -1,55 +0,0 @@
--From d667b13a87cf3207599a19eb981a893a1d7a67ee Mon Sep 17 00:00:00 2001
--From: Brendan Heading <brendanheading@gmail.com>
--Date: Mon, 14 Sep 2015 23:25:52 +0100
--Subject: [PATCH] ibrcommon/data/File.cpp: support POSIX basename call
--
--Firstly, and somewhat strangely, musl chooses not to provide a basename(3)
--prototype within <string.h> whenever __cplusplus is defined. This can be
--solved by including the <libgen.h> header defined by POSIX 1003.1 whenever
--__GLIBC__ is not defined.
--
--However, this leads to a second problem. POSIX defines the function as
--char* basename(char*) and this is the only version supported by musl.
--However, the std::string.cstr() method returns a const char*.
--
--POSIX says that the string parameter can be modified. However the GNU
--implementation never modifies it. glibc therefore supports an extension
--when compiling under C++ by also supplying
--const char* basename(const char*). This extension is not present on musl
--which is the cause of the failure.
--
--The solution is reasonably straightforward; test if __GLIBC__ is defined
--before calling basename. If not, use the fallback already provided for
--other platforms whereby basename() is called on a temporary copy.
--
--Signed-off-by: Brendan Heading <brendanheading@gmail.com>
--Upstream-status: pending
-----
-- ibrcommon/data/File.cpp | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/ibrcommon/data/File.cpp b/ibrcommon/data/File.cpp
--index 31af4ae..68e9b4f 100644
----- a/ibrcommon/data/File.cpp
--+++ b/ibrcommon/data/File.cpp
--@@ -35,7 +35,7 @@
-- #include <cerrno>
-- #include <fstream>
-- 
---#if !defined(HAVE_FEATURES_H) || defined(ANDROID)
--+#if !defined(HAVE_FEATURES_H) || !defined(__GLIBC__) || defined(ANDROID)
-- #include <libgen.h>
-- #endif
-- 
--@@ -225,7 +225,7 @@ namespace ibrcommon
-- 
-- 	std::string File::getBasename() const
-- 	{
---#if !defined(ANDROID) && defined(HAVE_FEATURES_H)
--+#if !defined(ANDROID) && defined(HAVE_FEATURES_H) && defined(__GLIBC__)
-- 		return std::string(basename(_path.c_str()));
-- #else
-- 		char path[_path.length()+1];
---- 
--2.4.3
--
-diff --git a/package/ibrcommon/0002-ibrcommon-added-openssl-1.1-compatibility-264.patch b/package/ibrcommon/0002-ibrcommon-added-openssl-1.1-compatibility-264.patch
-index 90e5147f54..8e890de965 100644
---- a/package/ibrcommon/0002-ibrcommon-added-openssl-1.1-compatibility-264.patch
-+++ b/package/ibrcommon/0002-ibrcommon-added-openssl-1.1-compatibility-264.patch
-@@ -5,8 +5,7 @@ Subject: [PATCH] ibrcommon: added openssl 1.1 compatibility (#264)
- 
- This patch adds compatibility to openssl 1.1.0.
- 
--Backported from master branch:
--https://github.com/ibrdtn/ibrdtn/commit/a801d10a081e3130e24042256a43190c9eb6c112
-+Upstream: https://github.com/ibrdtn/ibrdtn/commit/a801d10a081e3130e24042256a43190c9eb6c112
- 
- Signed-off-by: Eneas U de Queiroz <cote2004-github@yahoo.com>
- Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-diff --git a/package/ibrcommon/0003-ibrcommon-ssl-gcm-fix-static-build-with-openssl.patch b/package/ibrcommon/0003-ibrcommon-ssl-gcm-fix-static-build-with-openssl.patch
-index c55b227c0c..2045b8cbab 100644
---- a/package/ibrcommon/0003-ibrcommon-ssl-gcm-fix-static-build-with-openssl.patch
-+++ b/package/ibrcommon/0003-ibrcommon-ssl-gcm-fix-static-build-with-openssl.patch
-@@ -15,8 +15,9 @@ Makefile:560: recipe for target 'dtnd' failed
- Fixes:
-  - http://autobuild.buildroot.org/results/1d3b4b6cf043a3e185ce758b617a0a18c3d36cdb
- 
-+Upstream: https://github.com/ibrdtn/ibrdtn/commit/103bab3d4759e56b7e46cb9848e64037cd666911
-+
- Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/ibrdtn/ibrdtn/pull/269]
- ---
-  ibrcommon/ibrcommon/ssl/gcm/gcm.cpp      | 10 +++++-----
-  ibrcommon/ibrcommon/ssl/gcm/gf128mul.cpp |  2 +-
 -- 
 2.47.3
 
