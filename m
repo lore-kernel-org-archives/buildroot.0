@@ -1,120 +1,104 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2AECFC982D7
-	for <buildroot@archiver.kernel.org>; Fri, 18 Sep 2026 19:51:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 088BCC982D7
+	for <buildroot@archiver.kernel.org>; Fri, 18 Sep 2026 19:54:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7237360ED5;
-	Fri, 18 Sep 2026 19:51:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B6581812E8;
+	Fri, 18 Sep 2026 19:54:44 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id EhGKTJwPmAmK; Fri, 18 Sep 2026 19:54:44 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org BC425812FF
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789761283;
+	b=N/jFviw0yw+LnHBl8/+ni+GregCW1ZG/zd5b+i7JLK9O1UKnApOctYto4XkQMLxLCJJN
+	 w1Q8BeZZv4UM4Khg2+zv6AhfqoYOZQtaHMx88+YlR50ngMQk9RiYxzZVwf7sppy0jXqj5
+	 eq1AouurN8vuVIcgq0LNDjkx8C5tnE/WjUyxUaW8LKD1NtVPTsr2g3biuO4WXjYp3SybM
+	 2WFB22yJqeiU0k80Y28V6o5Sqex8XiLHozhXOkBGbxZExKYCUTgr6nLNgFk/XSbCAaypG
+	 wcaiZrwqSQX/RnSvfx9HbNn8YD1mDrUX2tHQndaSD4kJRD1mquc5y2JXBvgezaOu7Tg==
+ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
+	c=relaxed/relaxed; t=1789761283;
+	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
+	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
+	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
+	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
+	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
+	 Sender;
+	bh=iOSGo3EPe8dpDDSlu/8dUfKqsQ8wlZRY42xi49HCerc=;
+	b=ibuxvRRc4PBWt7A2rsHEM5w4rnH7TJPK8P6FYqlNUEIRrUlTEJ/eQL5IFOrdemtqR8FS
+	 VZ0U8m5Dp1C/s/PcCwHNVwNC21cSSVMTl3jknztO/7+9HaUE2Ejtl0DJtat81hqPohog7
+	 4xTahMuofRALI4ebbKVduQDiLyo1LjUae61MNPSGEvRCtFraaooxYR7O5RFqrXYV9uN72
+	 XsIuCSsE+iQTTTUBX4iZ+MmYtCRX6wgDudeqst6VkeJ0fMX6yv5CwWQbvRsQADuxaUUhl
+	 BMi0KCYuxx/A/IrqlH3j2CL/Wu8A3Pv5PSl/hL2tRp11+hVi/MOjZj55v4VFH3W9KeA==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1789761283;
+	bh=iOSGo3EPe8dpDDSlu/8dUfKqsQ8wlZRY42xi49HCerc=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=mk1/P3NVTftwnEIH6mAl/TuGFZJCUlw7Yl5yNQWqydest1VUOZi08N7cinalhvERP
+	 +GgwgySbDHFVxm0X397LF/+FXLvtU50/P72nqBO42vQoCA43lVW9nxRXDRdE4B8xaI
+	 l8v0lPNatLs0wVLDgQUXeIJV3vUp1pfl1tkOlzYZia/ywkt9k+pRDWwjwAdUURVz9j
+	 h/42IZzkdqS3b5iiMxpaRwmoXPTJuoZxKGdQXwtrp/4yOa2WmNKDolnGEMgpJ4U7xB
+	 0O88HvoVYDB/ao1fXXPDoV/ruGaW49KWIZ4fRpFE2OxGfwVMyGYJXqFV0+3IJgZ/p6
+	 xSpA2mqOCuqkA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id BC425812FF;
+	Fri, 18 Sep 2026 19:54:43 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 351CC25B
+ for <buildroot@buildroot.org>; Fri, 18 Sep 2026 19:54:42 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1B91D60EB8
+ for <buildroot@buildroot.org>; Fri, 18 Sep 2026 19:54:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oYsMpGTIgtlc; Fri, 18 Sep 2026 19:51:13 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 27CF060E9C
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789761073;
-	b=FBsGaAtoDobU4ux+VupXuIK3R5BIrkFSHXTPMZ+aeJv26qKOEbq8QfLoxYzJuYt6W4fD
-	 zIqGdYvdiyCzDno/RiHyC31+w8Zzak9j1kWFjsa62/9l9vYlSuVKcbf6xK+ACq5YA8XiE
-	 Pyz2yr321a7jogiHgVcgC5h6UlXd9iidjaH8zEIJgj7ZUHcXxOIpnXFnWviIB9kYOGvMk
-	 K3nUhXCBpQuoh5fw1QrrxXydB1SMJ6dn6lV3F9kNqa6LpXpLbcqltUvusw+m47+9lU7Ni
-	 Nykw3U5ZVcTS+3FG8laUfYdoMOeNrfISPdB817UqJQnF3+VGBTzjQb7DYw1A4z3dlLA==
-ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789761073;
-	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 Received:Received:Date:To:Cc:Message-ID:References:MIME-Version:
-	 Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version:Subject:
-	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=nQcebcwUNIksPc9Ibbp7cPVqOotgSwWNFnji8KJ37sM=;
-	b=JCFslvCeub9s3oDVqvhBBGkJNl42JzQPpi9tz/UvgY10/mNGg0ipe6xGDJ53B326RxeM
-	 XJ0jqVWy/hJsFxN1FpPvPax8M8v9x988KlFDBGCdglQ8JwpkYT7Ln6tkn09FNd6G3nEgO
-	 5fvYd7Y+M/Ie+uu2Br7Gz+gYta36cEvfXI3UxCLUN7ut1VEMTVjyoI8eNRrNN9VIgsgGV
-	 l8nL8Uxii2hsdmxmqqK+uAd+X/2FKzAo6+4EEjlKWXYx8tTex116ZUx/Lo7eJ/zIuOzce
-	 LyRDTbwjxg/IsqcdIWxQPjLBFT4ZznkNBNHbIcRbcj6d2FLXkw+tQNq6CM0ScMQROsQ==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789761073;
-	bh=nQcebcwUNIksPc9Ibbp7cPVqOotgSwWNFnji8KJ37sM=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=BD7LUkzHrcwb1bi0GTzDVACgpo+zCBNG/LFzCdXpWj5fQ7D6HhxKZuK8D4584AUB/
-	 fyzVQ3EOagjrd/ZyCzpFS/ia3FO+lm7cnM6o+yfy0MaqA6x4zJA2rz50Bp0pqM9Ay2
-	 mb0VOHhi9Dozw8lD1SuhtpcuRP2MCRCld1uUGKCN1/MsNC2oweZsitVcvCCV7gyDZA
-	 eDMVstEJbVs3f7PPGK5yIw2KGwJI55CqBloRLTFDYCXwzb9zzS6VqZJ2t7KBrn7dL1
-	 hCHrm/qlwakPUZwXLL2gVhNV7OERxsu8ws5sGsm+PigU4nnyaEg7u2fkIqZnQgZ4Ty
-	 zF3b5rIJCkWOg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 27CF060E9C;
-	Fri, 18 Sep 2026 19:51:13 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id AA7FD3B9
- for <buildroot@buildroot.org>; Fri, 18 Sep 2026 19:51:11 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8D4BF40C8E
- for <buildroot@buildroot.org>; Fri, 18 Sep 2026 19:51:11 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id onwOxgmE8XTo for <buildroot@buildroot.org>;
- Fri, 18 Sep 2026 19:51:10 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org E08C640C8D
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789761070;
- b=a9fYlxPfMmeCyJBnwaSa+F9BkV6a3kMI1LQOyy8n5StBNoXRzVee+uDj97vcXPa/IxUc
- HmvyMRi/fInjn8ST55WZnDLHaM68uJgGUpW4WcSi9fJ0yku+7KEVeeHuG5ZEh1GR5lwmi
- Lwy+KlbpjZhFMpPE05ZrQ0oB0Tq/2/20KMgf/EnhH8wfzRrjqMZr3mZshyt6HTtQM3l17
- 8W3SLuPMxR6Xx2X/FFMWQzRdWpsPXrTQA9prQdrlDzcRQ+7ga3ZLJrT//HzReIMffVC5e
- m30OKlbzaYASZ/oOGep/17dSxPXDyp19AJ9iehUoy7CEPsKHRqk2Wwv3i8UFVT82xwA==
+ id YJypNVBLvIIO for <buildroot@buildroot.org>;
+ Fri, 18 Sep 2026 19:54:41 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 65A5F60DC5
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789761281;
+ b=tFSoPxSrnfkCSWHDSB4xxyQo5rzhPbltjC7qVTNtgKdCL2crrqGAHRsE+HxE9Huu8B+4
+ y34hQmwZyw3T/2IUM6NNDJb9OSs6pokyhJwkSGtFiPi3U1Spy1ybjUonPKNkf6uFRXQZi
+ WpRyQS+y4hbIYQdnYgidrnDNjWt/c2tjoC+1FJIHgrpRhp1hKnBAqG+N0S3RNwtG+4FuJ
+ Ks6DB7VP+P0rDqRJMVr+ljCk9KWo9dNZrVX+zK5I/UNc5eTuW3P6BIxfWqGXKWYChczJD
+ hWCZWCQ22q40IRGEKxqpEA+4C08NwPaT8svCYVyvb4yGzotAsFehe0nGcpNiNpfqTsg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1789761070;
- h=Received-SPF:Received:Received:Received:DKIM-Signature:Date:From:To:
- Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
- Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version;
- bh=fykrDGdwIrIptl7YkhvKeAihEnMQgHgSUHaannxF95w=;
- b=rtqcvruRSAvC+Ii2p1j7uBc/LzVACDjPGGcG42sErMkH0qLgej6ZCevIRZUU8XWJQKYI
- UI7jnmJf8NkRGu7GjwYypGUHXujWumv8SIYUvT04hGoWJKw3vu3azBGW31/1qYTagwQhY
- CNVNQ/HxaFUu5Jp8Ks8TXS/5l8qb4edEQXffM56/40+6hSKeqy3n2PU1AXqtMzO5iOnMd
- 5YdP3s7wNuS6eKDoVXU4cYI5cn8hhlunVItcBkeUR1f17hByLlE0yhUL+PZiif+vCkSiK
- fUxwKG/OSBIn7mWbKmLD6v3YulFA4eTB02oWAKb+vyQl500cax509n4P5vE+SyKzUqQ==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org;
- dmarc=pass header.from=bootlin.com; 
- dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=r9W7O6jR; 
- arc=none smtp.remote-ip=185.246.85.4
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
- helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ c=relaxed/relaxed; t=1789761281;
+ h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
+ X-Git-Newrev:X-Patchwork-Hint:Message-Id;
+ bh=mL3AiBBqMVyejHZsXH893YLZh7JEjJakYp1TIhfHjJ0=;
+ b=ryLwm/FCQR3s/wDxwCI7rDOsJ6Zpmz1FL9ohuBkRxdoIaITn3As87wX1a1j00RgrjpK6
+ pP9qERMK33zcqoPdrdDwz0yOIPWlQl/GP70LrhysEOl8NDsQFlgrlRJxpXw8PgL7nNfap
+ FoDZ6Kq3wIsw4MDeF4VUvVB1yaImYQ2IQWhQqeMJKsW+3emNhl3s+eBNPqyooTpQmhy8D
+ TtVvl5AGb1P2R2CxtPG9nby7d7S1CVjqhMM41S4b4Cuxf7NaKKz/8bcPjjX5aSUqbEIjk
+ AzC18yMPXs2sZzE9uLiZbU8Phu2huIQXqRZND0ZtfHanE6bLzflTTHzo3K1IVcm5A2w==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org;
+ arc=none smtp.remote-ip=140.211.167.122
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E08C640C8D
- for <buildroot@buildroot.org>; Fri, 18 Sep 2026 19:51:08 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-03.galae.net (Postfix) with ESMTPS id 7A4D74E4087E;
- Fri, 18 Sep 2026 19:51:06 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 3589560649;
- Fri, 18 Sep 2026 19:51:06 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id C437410329075; 
- Fri, 18 Sep 2026 21:51:00 +0200 (CEST)
-Date: Fri, 18 Sep 2026 21:50:59 +0200
-To: yegorslists@googlemail.com
-Cc: buildroot@buildroot.org, Bernd Kuhls <bernd@kuhls.net>, 
- Will Newton <will.newton@gmail.com>
-Message-ID: <aq2VV4mwPo83xmnL@windsurf>
-References: <20260901114951.2675876-1-yegorslists@googlemail.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20260901114951.2675876-1-yegorslists@googlemail.com>
-X-Last-TLS-Session-Version: TLSv1.3
-Subject: Re: [Buildroot] [PATCH v2] package/libmicrohttpd: ignore
- CVE-2025-59777 and CVE-2025-62689
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 65A5F60DC5
+ for <buildroot@buildroot.org>; Fri, 18 Sep 2026 19:54:41 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id EAA94976A8; Fri, 18 Sep 2026 19:53:33 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 18 Sep 2026 21:52:36 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 591e6b9981169bbefde7b5e486b0e83f16a26808
+X-Git-Newrev: 9aeb5f6f5c50baf7e02248b58c98efc562554b6b
+X-Patchwork-Hint: ignore
+Message-Id: <20260918195333.EAA94976A8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libselinux: fix build with swig >=
+ 4.5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -128,62 +112,100 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============3176629084020437336=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Yegor,
+--===============3176629084020437336==
+Content-Type: text/plain
 
-On Tue, Sep 01, 2026 at 01:49:51PM +0200, yegorslists--- via buildroot wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> Both CVEs affect the experimental WebSocket helper library
-> (src/microhttpd_ws, installed as libmicrohttpd_ws.so), as stated in the
-> originating JPCERT/CC advisory JVN76719218:
-> 
->   "The vulnerability exists in libmicrohttpd_ws.so, which is generated
->    when building with the --enable-experimental option."
-> 
-> That directory is guarded by AM_CONDITIONAL([HAVE_EXPERIMENTAL]) in
-> src/Makefile.am, and --enable-experimental defaults to "no". Buildroot
-> never passes it, so no Buildroot version has ever built the vulnerable
-> code. Upstream removed the module outright in commit
-> ff13abc1c1d7d2b30d69d5c0bd4a237e1801c50b ("remove broken experimental
-> code", 13651 deletions), first released in 1.0.3.
-> 
-> An ignore is needed rather than a version bump, because the NVD entries
-> for both CVEs share a single CPE match criteria that encodes the affected
-> range as
-> 
->   cpe:2.3:a:gnu:libmicrohttpd:*:*:*:*:*:*:*:*, versionEndExcluding 2025-09-16
-> 
-> i.e. the author date of the fix commit instead of a version number. Since
-> support/scripts/cve.py compares versions using LooseVersion, every 1.0.x
-> version evaluates as smaller than "2025-09-16" and is reported as
-> affected, no matter how far the package gets bumped.
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/9aeb5f6f5c50baf7e02248b58c98efc562554b6b
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Thanks a lot, but this is not the right fix I'm afraid. The right fix
-is to send an e-mail to NVD at cpe_dictionary@nist.gov to ask them to
-update the CVE entry. They are responsive. You just need to explain
-very clearly which commit fixed the vulnerability, in which release it
-was integrated, and they will fix the CVE description.
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Tested-by: Fiona Klute <fiona.klute@gmx.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...Replace-PyString_FromString-with-PyUnicod.patch | 60 ++++++++++++++++++++++
+ 1 file changed, 60 insertions(+)
 
-Once this is done, we can potentially accept as a temporary measure to
-add those IGNORE_CVES entry.
+diff --git a/package/libselinux/0003-libselinux-Replace-PyString_FromString-with-PyUnicod.patch b/package/libselinux/0003-libselinux-Replace-PyString_FromString-with-PyUnicod.patch
+new file mode 100644
+index 0000000000..a503a9cff4
+--- /dev/null
++++ b/package/libselinux/0003-libselinux-Replace-PyString_FromString-with-PyUnicod.patch
+@@ -0,0 +1,60 @@
++From fb518ff492cd6a286f35b415cbd7fd0f6e3faedb Mon Sep 17 00:00:00 2001
++From: Petr Lautrbach <lautrbach@redhat.com>
++Date: Thu, 6 Aug 2026 16:30:44 +0200
++Subject: [PATCH] libselinux: Replace PyString_FromString with
++ PyUnicode_FromString for SWIG 4.5.0 compatibility
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++SWIG 4.5.0 removed Python 2 C API compatibility macros (PyInt_*,
++PyString_*, SWIG_Python_str_*) from its runtime header pyhead.swg.
++These macros previously mapped deprecated Python 2 C API names to their
++Python 3 equivalents.
++
++Fixes: https://github.com/SELinuxProject/selinux/issues/538
++Authored-by: Jitka Plesníková <jplesnik@redhat.com>
++Signed-off-by: Petr Lautrbach <lautrbach@redhat.com>
++Acked-by: Stephen Smalley <stephen.smalley.work@gmail.com>
++
++Upstream: https://github.com/SELinuxProject/selinux/commit/fb518ff492cd6a286f35b415cbd7fd0f6e3faedb
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ src/selinuxswig_python.i | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/src/selinuxswig_python.i b/src/selinuxswig_python.i
++index c8c08a40..74d923e4 100644
++--- a/src/selinuxswig_python.i
+++++ b/src/selinuxswig_python.i
++@@ -69,7 +69,7 @@ def install(src, dest):
++ 	PyObject* list = PyList_New(*$2);
++ 	int i;
++ 	for (i = 0; i < *$2; i++) {
++-		PyList_SetItem(list, i, PyString_FromString((*$1)[i]));
+++		PyList_SetItem(list, i, PyUnicode_FromString((*$1)[i]));
++ 	}
++ 	$result = SWIG_AppendOutput($result, list);
++ }
++@@ -123,7 +123,7 @@ def install(src, dest):
++ 			len++;
++ 		plist = PyList_New(len);
++ 		for (i = 0; i < len; i++) {
++-			PyList_SetItem(plist, i, PyString_FromString((*$1)[i]));
+++			PyList_SetItem(plist, i, PyUnicode_FromString((*$1)[i]));
++ 		}
++ 	} else {
++ 		plist = PyList_New(0);
++@@ -140,7 +140,7 @@ def install(src, dest):
++ 	if (*$1) {
++ 		plist = PyList_New(result);
++ 		for (i = 0; i < result; i++) {
++-			PyList_SetItem(plist, i, PyString_FromString((*$1)[i]));
+++			PyList_SetItem(plist, i, PyUnicode_FromString((*$1)[i]));
++ 		}
++ 	} else {
++ 		plist = PyList_New(0);
++-- 
++2.47.3
++
 
-The way I see this is like patches: if you don't "upstream" the fix of
-the CVE metadata, then we will have to keep those IGNORE_CVES entries
-forever, which is not desirable.
+--===============3176629084020437336==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3176629084020437336==--
