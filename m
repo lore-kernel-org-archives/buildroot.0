@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17B0BC982D7
-	for <buildroot@archiver.kernel.org>; Fri, 18 Sep 2026 18:49:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 537D6C982D8
+	for <buildroot@archiver.kernel.org>; Fri, 18 Sep 2026 18:49:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E263460E36;
-	Fri, 18 Sep 2026 18:49:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2A76540CCA;
+	Fri, 18 Sep 2026 18:49:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4wIx0VJPgTPu; Fri, 18 Sep 2026 18:49:29 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org DAC9760E2E
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789757369;
-	b=iPI83VppsCoBr5f3nhoq62OxfxIH20gIB90hrMzkfRi8YYDWiQjm0hFigcySBsS0Fyim
-	 wZMH1i7kF/WJ/HmH3Y599dhMiZt1pPT2O8SpB1SaGb1tHyD8THP35yrVjYdoqYifZG6k4
-	 naSiPDE6H2a6eIjKSP4Vw/joGaVQwTxFRzg7+NFlNPvJ108g0ObhSnBwbOhximRNs7XMz
-	 Nm8IOLfBPmlNeoVN5uHr3SD0eoi8d0xxBJ+m2OiU75XCDuIHb4RDyFLnqWIBcC9P4Z2h+
-	 VGedxZvDmp236uQfhNJ27vr2Ybq2iZKTB+c03PCiuX7F89JqLu/YVz12eRyar7h8XYg==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id du6tDBx4gaIh; Fri, 18 Sep 2026 18:49:44 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 4598240CC4
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789757382;
+	b=YyHtScf4Y4U2DPGKCKa73yVcCUmDEuUmCvi3pZRws1ucYEazK+3x+ud7UtX27ro5ozho
+	 Ru19XcbeMT1hygC+yy/XdDyQ6mwGBBZlEMIFhw2HYKdzRFSWCAbHOROmH2DSFUwbhofGG
+	 rPXlpokeUQsjQpbnjbrN3EmjpFqDPuFvkdnTXjR6qPiO93lybVO4PXl+V1/EkF105y+w8
+	 z1GJh3AlGI3uQRkgkpiyPUDoG0FIdBcgWZFHNOBecnI4Cw2bh//kJCJyH3PA1IerBxPj7
+	 pRp4lP6X25YMKE6uiVumbnia7hHdSPo2vRhS0NtTqZqDCkbLnkgem8qVJ7uk9nxrZzA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789757369;
+	c=relaxed/relaxed; t=1789757382;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
@@ -31,106 +31,106 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:Cc:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=RwouC8oetP7vsvfURG7Q1NwSRKlwU0GH7QujeKkejDM=;
-	b=pMpYW0fAyW3PE7xY6PCZi0Q3RxtQcyG+qo+L+I1NwBdp/tF4P8lICqzqT9vrqbX1t5o0
-	 QSaN+dkjHDpG5WEE1YhKbNaLaR8A7bh1+WWpK/C8YC3UG+YeT4vPc6PRwqt0lbkzP8iEF
-	 OZKAeu4Z2fJk4UWeKdW2vRNfFCmuWUWMOIUwfagl3x1/uiBCi9oapual6gOUZQuH4a+8J
-	 gdwh4KrMRkCJJIhtXpV4UQfXiBzFPOQ5NJRXFt2ulRBh1/10AqxSomjT+Z9QeUyx+n7+g
-	 SrlzPOU3EcUJNo+4Xs9GaDJKbByJRXeAxs68wTUfDYaod1y4iCA/L+fFCGJtvwnp/7A==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; dmarc=pass header.from=kuhls.net;
-	dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256 header.s=kas202605290044 header.b=dsWAOtYy;
+	bh=ml+Xwy1CX6Nq/4TlQDctN8ywTY0hQCiRmKKF+Gp2MNw=;
+	b=fECG4jbVEa3rmqme4iHHJitd9dR8lNDRHGp1dYhF5hliTj7D6yT2iW2RWG1GhzJEVHaX
+	 5pwT+d/TtntENUbrxmHeSKvofxDcOyvrrOIGR/JIdcOYaV2oM9A7n9WoeeETUoORSGwtH
+	 MrZCE7dS0QP6gZBCYfzKlApN4nVE80deGnvMt+YfpHRJBeiVLzD3ZBS0ilEPLoQYsixpT
+	 r6B6aisdqnHOuyGiz0W+xKeVFV7vEDHf1rEUZjTAi5VAIO8R11E/aV6pK4BprC8JWD7et
+	 MVlBEJ/uwC/CDe+VRXi9GaWYaSDGhsp5DF8wZew/RbKBtf0I6F6YHRafbqSzBC2zQTg==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; dmarc=pass header.from=kuhls.net;
+	dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256 header.s=kas202605290044 header.b=YfNfuZFL;
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789757368;
-	bh=RwouC8oetP7vsvfURG7Q1NwSRKlwU0GH7QujeKkejDM=;
+	s=default; t=1789757382;
+	bh=ml+Xwy1CX6Nq/4TlQDctN8ywTY0hQCiRmKKF+Gp2MNw=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=J6VkYfUzuRMwfW5vC3ayNa1yKRumRwqxpAUAn9w64QtnNGiUwIkTjpXmPnH3XK8s7
-	 VluyuMtCj4wV3mh5IV5+4aU+KPebB7vjkzIH0Ku2R1UPew4bQhsnDUP74KRUiJjfSN
-	 WJRAxRak804dT8Tb/aglZXQX8tmaW272MYYTG80hN25V60KrT4XX1upzv7qzLLWmls
-	 BIaWzKCHeQw6rDRJsCrXyA7J8T0NxVS89H87WpDH/Tfewszg9YSNG0+maJqppgbzOt
-	 ZAmfRGHSomUYOafAjF6oRFxub+F7xl7L8D2KBw1udybAOEc02Ha61z3h9yLc4R3Nk4
-	 VwxvBFwBqWHSw==
+	b=Cnx8Vp8+KrjXGNk6qRgGBbB14f9RjjxczdompuQDmyC0HmTmyDy/KwS+RxkMhkSH5
+	 Ffzermd7BywbRuG8ROrt03YuqRtMDEQpfbLmGjOxKrdpBRELMnbSY9/jE4v4mRM4Wa
+	 bge+zQgZdMV3Qd2IhJ8DT5TAtp6CLD/jDvebjYJTha0w6ptG6xPxW679o/96J9+EAq
+	 9OWQNKmRMqIbjzIAg8c7TMdPkKykX71FSrFXHI7q6EhAhyPfTd0y9qxoN19M1+BXQ5
+	 zWzExcUri9khFplOr1+RDrz3BW8o3UY8A8fav6LTwSpUg9tlBjwE1mqmlqrCT2+fzb
+	 526K1O038Xqzg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DAC9760E2E;
-	Fri, 18 Sep 2026 18:49:28 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id D25C93B9
- for <buildroot@buildroot.org>; Fri, 18 Sep 2026 18:49:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4598240CC4;
+	Fri, 18 Sep 2026 18:49:42 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7866E3B9
+ for <buildroot@buildroot.org>; Fri, 18 Sep 2026 18:49:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C443460E2E
- for <buildroot@buildroot.org>; Fri, 18 Sep 2026 18:49:27 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5EE2E40CC4
+ for <buildroot@buildroot.org>; Fri, 18 Sep 2026 18:49:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RQTnnM5vYbUC for <buildroot@buildroot.org>;
- Fri, 18 Sep 2026 18:49:27 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org DD70960E25
-Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789757367;
- b=P3fV403ipgPjaYyfUNc6XWzDjDXGEDGeEYinkjY3j+n9X0aXnjLMys04g8kG14ch5+wZ
- dKZNsiBjxnoo8SgTA6PZJ3NHKhENytUWZJaX+Cl9pL+NCKhDrfo1Qnf8vzxVwhge2bfjE
- voWs2lXSk4P8eainzEgU+dNWNML5eZ4P/1zpzxPnY2O03Rtg3L0OiVTGIxpwHiq9qU8pQ
- qLYo7Pj42l1Mb5QnU5Np10Y+gfIQ4/92XO8yBsH9EVbu77WwrJCMByffGDP4kwZB1vaRf
- XkdqwBdy9GBCTXRYfjednJ9KNxULPL0IEJaJ1UC0seAQgfh0hZ2t8tn+/V4Uye4dIIw==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Jgq352COcdVJ for <buildroot@buildroot.org>;
+ Fri, 18 Sep 2026 18:49:39 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 8E7E340AE1
+Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789757379;
+ b=TozKda06atF7L4i76aRolS+dVNu/BWUD7j5iaLJVOudT/btAB9MZlozJ2QtHeYvDk5e1
+ +WHnhk3wbaghntECWP6LRnvW20jez2IYZJ6mtcMLpsdFVYmu8WVTu0dd3+hmEjIlxfJMZ
+ K8NT/kaw1vrZWASoED/VqFB5KusDenque/gEz5Mo2KAgZikRKSYSEPL4cenkk9wut3adY
+ zYhp1CuFDhD3Wlyr8qbVZnBSzuoc/k9+jNhnFIdqk/B9IHqFJqHmsvdUW90p15tOIid5f
+ Bxn4IMlP4a3WBGDZzqm6v7I8vdGbhWTPaUSKR8qFzShSTzwzj5qwTNvHb7i2gEk6r3w==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1789757367;
+ c=relaxed/relaxed; t=1789757379;
  h=Received-SPF:DKIM-Signature:X-KAS-Sym:Received:Received:From:To:Cc:
  Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding:X-Spam-Score:X-Spamd-Bar;
- bh=eH2IWQspC2urCpSVYKEIOozONoNs/5C6Y7ly464zTBY=;
- b=W5fjdjwg2tBZ7916L510bkj7T9GQd8NlMM4Vflk2NzcAnjHRKWj+9fA9l5Oe0MeQ9PIM
- 6ZPCoULtPhcOM3r5sKlPlWn895reS0LeoKLlboO7+covi7K4n2/1gJ89O4bfsEu3wgIFI
- ACkh1Zm60QeAJfqIXdVcMBrhr50+e/uTD0HQifFLuSCfAdQMtMTupULuw0Jl6aBn7WKjE
- Mz9YVgIZp4MPEZy72iTPQSsFvjt5WihpD+FvQEXCQLxMfaGFBiWvqTalheixkdGyW8zi7
- xBg4Wf4tAaOEy6/TJY/dIETChIQ2d6V/LwPcupNBfmlWfSg+2Cvu7e7bJ4B2x1Ic07A==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org;
+ bh=mv4AC+taowwAo+GoH7Vfw//yu3tboGbefmD/Cqnpr4M=;
+ b=O4S1vy4oAQNIPanWhqpG5SXZDYMpgGMWlQ2CLSyUV0zAF4OMxUTvnxOmm6ktkiGOnW22
+ hEDd4sc+g3u2qwtN/3AP+uDEeAacDU3IBpyuxN8xdf1GafhheFbTVyHpbJt3jk3GyAKf1
+ /gngCJAcbRXxOfV8ZYXpyFcsustIvazjfjGEG5eH9oa+BudTnXkBM6T1s1Qha9+Y5dQmI
+ OndvIMJ3IZzsmfE7Bxdnh+DxMfhoiJFXZ2LQvD5YyQCC0yuqg239I06j5C2j9TDmVD5o1
+ Cm2EQbPMKTBO/BGEiFvC4hcpNMturQyz1pBaWVUYGi1XtCY7uTh2kj/ca2FWrdHwKZQ==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org;
  dmarc=pass header.from=kuhls.net; 
  dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=dsWAOtYy; 
+ header.s=kas202605290044 header.b=YfNfuZFL; 
  arc=none smtp.remote-ip=85.13.140.57
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-Authentication-Results: smtp3.osuosl.org;
+Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=kuhls.net
-Authentication-Results: smtp3.osuosl.org;
+Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202605290044 header.b=dsWAOtYy
+ header.a=rsa-sha256 header.s=kas202605290044 header.b=YfNfuZFL
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id DD70960E25
- for <buildroot@buildroot.org>; Fri, 18 Sep 2026 18:49:26 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8E7E340AE1
+ for <buildroot@buildroot.org>; Fri, 18 Sep 2026 18:49:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
  s=kas202605290044; t=1789756932;
- bh=eH2IWQspC2urCpSVYKEIOozONoNs/5C6Y7ly464zTBY=;
+ bh=mv4AC+taowwAo+GoH7Vfw//yu3tboGbefmD/Cqnpr4M=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=dsWAOtYyEC51VmueX6ZQLmXO+VNOoZON4T5x8F1SK8cai13dGrv3jWphIVaqAhYLA
- Ez0ozqEFa95BlBmAUw4ISohnb3GjnPnemof7VDefh9rJpqtUDmUKy2erFyYyCPOM6t
- LTZ5+iYGaAgdZy1tNkWYDWWI2v4biryCiAlN4o/oFgftDj4bSYiABc74p5sV9CW0Hk
- MVilYQR7hhxKF2DlZYLQvUlkkOCE7of5JszWYcJ2t1p9wpURD/MkmbFeUNnTDiUF7X
- kV0Qd/2Sq3XHxCbjq93DS4+9burAYlzEhPqwfexLDnCNNqsRrZHO5qKu/Rti7RityB
- 3KN0+AI56+TUQ==
-X-KAS-Sym: v3:f51bdf72230551df:lkseH4ZbqNj6+SWeyhXOROAVDVA4wctn5GqYnvj392NxznN0rSxqdWBYYBdhITxI14gBE1k+pJkBIChL3/t/lCKYI3GtmdM3wrKpFumwg08Wm/sNokIQQ6E7zEBL3K1/hdJasLCtPFWYZLZ4DnysL3d4pK5HKpKudG9dMfXruRPXYqC+sKlv7VCmjdbM67WcbSYib/I5z3KXlTx93kwxaIjh7oHXDaIgSs3BBwdUhzwgu27GIhhGPs84OFj8HKUhaehmsatqjfsuhHQOPWGzMJyclLrqdN8RENcGlb3kAp1RNMG5gE4Srsk7d6rPHzd5pP0v2pHDKySwyfSJf2xgPw==:+yEjfzTeBAbf3fTLJFEIxAL4z7gSpjiSA9q7cNaUr0iyVj+n8McLhfPchUYCQTKiaYSRRtdnvyqpm8U5edUZjZaDn0LgjnYUFPJlLMQizlwpWB+C8NDr0RJ9MHT6rQZNkEJqrMU9HpRhg8Gc4ugwBfsPCqbzsHtDKMaXxNuNU7SHZQ1ukTiyQV56G0q5pclinv3dZXot6QktdQvpv2w6x+2c+lswGPGNk8QvdpueNxJ2JGSQ+Vh4HCquUmxK2sA+pINXTxB/U1VK0PGZbN8loHlC3Qqfrw5idzOKWtbdXe9aCe1vh7u+F1nfJVdTA5HBu3MfM4WRTTb6MJCRdQDo4CUFmZaH8PYTclYZ2cUOx0DKmXu8YZLlmebxeOHrpA0JaUlJy8ULDrAHN9ofB64K44W9E2FrsyWzhO1hICQt4PJ0ryLIeZa+vVGXSZdOkWXuJ5F5YKjKYH05eW4oQ1ZJnkgLg8fE6MuOBwHNz6kL/GLY5Lwcj17yWIIF9d00YHfwBWRNpKPGwMMET+H8MRRgp23Dblv0xAwaEXSp5C9NZ0UjYHLJA1HzgRlggzOieCcX07FYXNIG2zIkZUnzIst4HGO4oUKoS+sxtXDF2uy1Sl0ovG
- ymXinQiG5C6pNAcmt2/+Ila12IAMSmlXiyp2LcjW0u1a/TbQtABRB92wsWqNrXpynFT9R5B/8y2AWi7wC9AmbyYz4K3UOgDU/rfFLdeqv46Ni7kVtax80=
+ b=YfNfuZFLub/bajdoIW1vOb77e5pggBIzr57+drRX7Y69txbf60jdPuMUHqQfjdpWU
+ G8gU9r9j7sLpCxxQ7AkMD0Zim7+cBSAl12s8zup+h5V6QZL7wPy5iyIAl6nrVFSqTM
+ 9hvQcBzE4Q44gDUxy5G+PbSM7UaClhTYFhY/ZXIfnPD+lmBlfCEomt7TujD4jyrnlm
+ xYhHzRMnBMKEs9Evp5W4HkINTyAckhHRxewPvBNl3aA9Etpkqr/MPDZGm9vvAbBic5
+ +lHOfFYQqi/93DRTUYckv8PTr4xj8XHaaka/rK++joG1lPHexusDG7nRVWq24at+Uz
+ qwUWZoBoi5eEw==
+X-KAS-Sym: v3:f51bdf72230551df:lkseH4ZbqNj6+SWeyhXOROAVDVA4wctn5GqYnvj392NxznN0rSxqdWBYYBdhITxI14gBE1k+pJkBIChL3/t/lCKYI3GtmdM3wrKpFumwg08Wm/sNokIQQ6E7zEBL3K1/hdJasLCtPFWYZLZ4DnysL3d4pK5HKpKudG9dMfXruRPXYqC+sKlv7VCmjdbM67WcbSYib/I5z3KXlTx93kwxaIjh7oHXDaIgSs3BBwdUhzwgu27GIhhGPs84OFj8HKUhaehmsatqjfsuhHQOPWGzMJyclLrqdN8RENcGlb3kAp1RNMG5gE4Srsk7d6rPHzd5pP0v2pHDKySwyfSJf2xgPw==:VvZga0iN0ZsQqcdX2Rg4OlHbV2hdKCLjUhpXiPUGO3lleiBuNZq3zbr8c97RHeP6jfUxql82ZtFHYUHjLiU9TIu57IwyWULtXKTGsOg04HNuI+LG843VbhUwaOEPdXLtk2Q89qQZgidw8SYq6ox0EmDTi5EcX2Xfzfeei/SYmuAgLjVv9IzOzbF2aZbWbTX+KJiNoC4Xw3YpBZ0mrjaSqokQ/GszEfGDyShKiSOeAX7cPbKE5WkiOObM/qlCamycRJWfcAcznDsh0GQULUPDRcpP3a11KlW1odzxB3eeLhj+lAkusCBHSBshvTBGQYj20orkxJaUizhQ3f+S5rMso+dlNTD8l6yKBlLZiaVrsf1itDRRLTmZN4wUwp9/yinj/egOsRHstdOzv8aOz+79CuMVfSbPvA/vaz85JJNRY9DMriEHiweMgexiOjP6ndX/iOYtgoQKEVHsnd/OvFnmqtK6nu7yCSljKhVx/YaxqBlV127wvqbf22J9J3L+L2M2Q6TJd40ZNTMVV779HlFPxiZWUyRitlddXuTg7UOUsATZfIrTHhplC+G+QYJR5uM4Q0eF6HQdeFLWU9Io1JwM9ouTNt+fcPPGvFBmNhhAhKIxDX
+ 9UXqci4jvrMcl9cbkuz5F6QNy5psDRRZapAPOgYKSQyWnn1XX+DnZYof9LV13MVQRIkVMdx48AfMlKpJUU7DqyeFoUNM5DkrzFEbMnrf1WaJ4MMfRvdQ==
 Received: from fli4l.lan.fli4l (p54a1b276.dip0.t-ipconnect.de [84.161.178.118])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id E69DFA4C45CD;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 7DC4AA4C4726;
  Fri, 18 Sep 2026 20:42:12 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:59900)
  by fli4l.lan.fli4l with esmtp (Exim 4.100.1)
- (envelope-from <bernd@kuhls.net>) id 1x7dWt-000000007cB-10lF;
+ (envelope-from <bernd@kuhls.net>) id 1x7dWt-000000007cB-0US0;
  Fri, 18 Sep 2026 18:41:47 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Fri, 18 Sep 2026 20:40:49 +0200
-Message-ID: <20260918184140.3631274-28-bernd@kuhls.net>
+Date: Fri, 18 Sep 2026 20:40:48 +0200
+Message-ID: <20260918184140.3631274-27-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260918184140.3631274-1-bernd@kuhls.net>
 References: <20260918184140.3631274-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: /
-Subject: [Buildroot] [PATCH 27/77] package/xtables-addons: bump version to
- 3.31
+X-Spamd-Bar: +
+Subject: [Buildroot] [PATCH 26/77] package/xtables-addons: use kernel-module
+ infra
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -175,83 +175,70 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://codeberg.org/jengelh/xtables-addons/src/tag/v3.31/doc/changelog.rst
+This package does not need the kernel-module infra because the kernel
+module is build by autoconf but the MIPS fix from buildroot commit
+1d8d9e8d6cd824b2a43a0b92d71cfb25a3f9300a is not added to _LINUX_CONFIG_
+FIXUPS causing a build error with this defconfig:
 
-Upstream switched tarball format to zst.
+  BR2_mips64el=y
+  # BR2_MIPS_SOFT_FLOAT is not set
+  BR2_TOOLCHAIN_EXTERNAL=y
+  BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_MIPS64EL_N32_GLIBC_STABLE=y
+  BR2_PER_PACKAGE_DIRECTORIES=y
+  BR2_LINUX_KERNEL=y
+  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+  BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.156"
+  BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+  BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+  BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF=y
+  BR2_PACKAGE_XTABLES_ADDONS=y
+  # BR2_TARGET_ROOTFS_TAR is not set
+  BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
 
-Enabled CONFIG_NETFILTER_XT_MATCH_STRING in kernel config to provide the
-new upstream dependency CONFIG_TEXTSEARCH_BM:
-https://codeberg.org/jengelh/xtables-addons/commit/6b7c62d83ea1b589c3115d959867e0fcbfcf74ea
+  MODPOST /home/buildroot/buildroot/output/build/xtables-addons-3.24/extensions/Module.symvers
+ERROR: modpost: "memcmp" [/home/buildroot/buildroot/output/build/xtables-addons-3.24/extensions/compat_xtables.ko] undefined!
+ERROR: modpost: "register_pernet_subsys" [/home/buildroot/buildroot/output/build/xtables-addons-3.24/extensions/ACCOUNT/xt_ACCOUNT.ko] undefined!
+ERROR: modpost: "_printk" [/home/buildroot/buildroot/output/build/xtables-addons-3.24/extensions/ACCOUNT/xt_ACCOUNT.ko] undefined!
+ERROR: modpost: "nf_register_sockopt" [/home/buildroot/buildroot/output/build/xtables-addons-3.24/extensions/ACCOUNT/xt_ACCOUNT.ko] undefined!
+ERROR: modpost: "unregister_pernet_subsys" [/home/buildroot/buildroot/output/build/xtables-addons-3.24/extensions/ACCOUNT/xt_ACCOUNT.ko] undefined!
+ERROR: modpost: "xt_register_target" [/home/buildroot/buildroot/output/build/xtables-addons-3.24/extensions/ACCOUNT/xt_ACCOUNT.ko] undefined!
+ERROR: modpost: "nf_unregister_sockopt" [/home/buildroot/buildroot/output/build/xtables-addons-3.24/extensions/ACCOUNT/xt_ACCOUNT.ko] undefined!
+ERROR: modpost: "kfree" [/home/buildroot/buildroot/output/build/xtables-addons-3.24/extensions/ACCOUNT/xt_ACCOUNT.ko] undefined!
+ERROR: modpost: "free_pages" [/home/buildroot/buildroot/output/build/xtables-addons-3.24/extensions/ACCOUNT/xt_ACCOUNT.ko] undefined!
+ERROR: modpost: "xt_unregister_target" [/home/buildroot/buildroot/output/build/xtables-addons-3.24/extensions/ACCOUNT/xt_ACCOUNT.ko] undefined!
+WARNING: modpost: suppressed 342 unresolved symbol warnings because there were too many)
 
-Enabled CONFIG_XFRM_USER to fix build errors detected by the Gitlab
-pipelines:
-
-  ERROR: modpost: "crypto_alloc_shash" [pknock/xt_pknock.ko] undefined!
-  ERROR: modpost: "crypto_shash_setkey" [pknock/xt_pknock.ko] undefined!
-  ERROR: modpost: "crypto_shash_init" [pknock/xt_pknock.ko] undefined!
-  ERROR: modpost: "crypto_shash_finup" [pknock/xt_pknock.ko] undefined!
-  ERROR: modpost: "crypto_destroy_tfm" [pknock/xt_pknock.ko] undefined!
-
-Upstream uses these functions for > 10 years so recent changes in the
-Linux kernel dependency handling are responsible for the build errors.
-
-Enabled CONFIG_{INET, NET} to fix a build error detected by the Gitlab
-pipelines for bootlin-powerpc-e500mc-uclibc:
-
-In file included from pknock/xt_pknock.c:31:
-./pknock/../compat_xtables.h:19:9: warning: #warning You need
- CONFIG_NF_CONNTRACK. [-Wcpp]
-   19 | #       warning You need CONFIG_NF_CONNTRACK.
-
-ACCOUNT/xt_ACCOUNT.c:1179:10: error: 'struct nf_sockopt_ops' has no
- member named 'set_optmin'
- 1179 |         .set_optmin = IPT_SO_SET_ACCOUNT_HANDLE_FREE,
+To fix the problem we add the kernel-module infra to the package.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/xtables-addons/xtables-addons.hash | 2 +-
- package/xtables-addons/xtables-addons.mk   | 8 ++++++--
- 2 files changed, 7 insertions(+), 3 deletions(-)
+ package/xtables-addons/Config.in         | 2 +-
+ package/xtables-addons/xtables-addons.mk | 1 +
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/xtables-addons/xtables-addons.hash b/package/xtables-addons/xtables-addons.hash
-index 7bdbbb8578..a77ac1a230 100644
---- a/package/xtables-addons/xtables-addons.hash
-+++ b/package/xtables-addons/xtables-addons.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  3e823f71720519ced31c4c7d2bfaf7120d9c01c59a0843dfcbe93c95c64d81c1  xtables-addons-3.24.tar.xz
-+sha256  e22efc25b7bbb3436d1b7cdc309b1857ea933f7e5c7d88fbe6951a1e3e582a80  xtables-addons-3.31.tar.zst
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE
+diff --git a/package/xtables-addons/Config.in b/package/xtables-addons/Config.in
+index 36a42c7efc..8943276843 100644
+--- a/package/xtables-addons/Config.in
++++ b/package/xtables-addons/Config.in
+@@ -10,7 +10,7 @@ config BR2_PACKAGE_XTABLES_ADDONS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_STATIC_LIBS # extensions are .so
+ 	select BR2_PACKAGE_IPTABLES
+-	select BR2_LINUX_NEEDS_MODULES # not using kernel-module infra
++	select BR2_LINUX_NEEDS_MODULES
+ 	help
+ 	  Xtables-addons is the successor to patch-o-matic(-ng).
+ 	  Likewise, it contains extensions that were not, or are not
 diff --git a/package/xtables-addons/xtables-addons.mk b/package/xtables-addons/xtables-addons.mk
-index a3174725d0..9f70518fed 100644
+index efd8bd98ce..a3174725d0 100644
 --- a/package/xtables-addons/xtables-addons.mk
 +++ b/package/xtables-addons/xtables-addons.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--XTABLES_ADDONS_VERSION = 3.24
--XTABLES_ADDONS_SOURCE = xtables-addons-$(XTABLES_ADDONS_VERSION).tar.xz
-+XTABLES_ADDONS_VERSION = 3.31
-+XTABLES_ADDONS_SOURCE = xtables-addons-$(XTABLES_ADDONS_VERSION).tar.zst
- XTABLES_ADDONS_SITE = https://inai.de/files/xtables-addons
- XTABLES_ADDONS_DEPENDENCIES = iptables linux host-pkgconf
- XTABLES_ADDONS_LICENSE = GPL-2.0+
-@@ -33,10 +33,14 @@ endef
- XTABLES_ADDONS_POST_INSTALL_TARGET_HOOKS += XTABLES_ADDONS_REMOVE_GEOIP_HELPERS
- 
- define XTABLES_ADDONS_LINUX_CONFIG_FIXUPS
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_INET)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NET)
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_ADVANCED)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_STRING)
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK)
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_MARK)
+@@ -39,4 +39,5 @@ define XTABLES_ADDONS_LINUX_CONFIG_FIXUPS
  	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_XFRM_USER)
  endef
  
- $(eval $(kernel-module))
++$(eval $(kernel-module))
+ $(eval $(autotools-package))
 -- 
 2.47.3
 
