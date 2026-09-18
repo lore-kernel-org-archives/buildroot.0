@@ -4,151 +4,153 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11A08C982D2
-	for <buildroot@archiver.kernel.org>; Fri, 18 Sep 2026 04:45:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF957C88E75
+	for <buildroot@archiver.kernel.org>; Fri, 18 Sep 2026 04:46:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 82DA640AE8;
-	Fri, 18 Sep 2026 04:45:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8946640B03;
+	Fri, 18 Sep 2026 04:46:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GAq3t33ajaaN; Fri, 18 Sep 2026 04:45:54 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 9BA9340AE6
+ id AfhcQ7x8O24d; Fri, 18 Sep 2026 04:45:59 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 3119E40AFA
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789706754;
-	b=RZF3i7Kv/juj6wot3U5QtIqPoH36vWJMuCSeVZCeAzo4e+HXlsoxpaPxxv6YZwIv7mKy
-	 poY/hrH+BPbJrhLpvhupnMgMLDM0BuiayQlHmsxrnEyidAvkBD7lbqb7cO833fVkh5QWY
-	 l6UL800OQkX/h+iNrEPvRlfcPD+f5QCnLfkK01ZLPY+7iavX13TJva78FMqYnYX0Ki1D1
-	 QVsWch23O3xTZ01i59sshqItjtS2FheFB1+MN5krBz/R9lmNEg7YvJnnStJT+ulWMQcW6
-	 eAUETxL0ZFdKuAHBG2LYbwiWumLuDDjDc1rUYheetlLwCMqRf0S3btS1U6nA7dZpF2w==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789706759;
+	b=sZSUbeJCpxSp65LLuysOsqCUUKthkH2TfoJkRflotxwZFUFrUkcCmpUF4Iw54tUX79Zp
+	 6a1iQclTunk1962LkkrW/qxy+aSuuVEin4OQHMmCxATQnl2ugEWlecAfaMcePuAV/tJ0H
+	 G6u9TdEsEc4zAv7Lj5gVBEyAAdJ7mvkWb0qDth9CbSwe23Fxvqat+nV3TVG/ASXoYfcwm
+	 hpxcByDnpixSClnVAowEQbRtPTqBrH9nQG9wAUNiOrJpxKi/BA1QIj46IjP14P8KhCN/G
+	 HS3cy2r5Au8Le+304NpZC9KtIIGq1/gpHiIFLZb2sKk1X4xuu9NgJbbT8OrNECRdNFQ==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789706754;
+	c=relaxed/relaxed; t=1789706759;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
 	 DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:Received:Received:
 	 Received:Received:X-CSE-ConnectionGUID:X-CSE-MsgGUID:X-IronPort-AV:
-	 X-Amp-Result:From:To:CC:Date:Message-ID:X-Mailer:MIME-Version:
-	 X-Patchwork-Hint:X-Originating-IP:X-ClientProxiedBy:Subject:
+	 X-Amp-Result:From:To:CC:Date:Message-ID:X-Mailer:In-Reply-To:
+	 References:MIME-Version:X-Originating-IP:X-ClientProxiedBy:Subject:
 	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=x8cTlk2AWdGhfGqgdfZs3YzF7+WmdBndVZpTlAU+OJ8=;
-	b=ZlISPQPcIK+bRlN2mTIj6RZ4R8uMSbiIw/xUzlfo8C9akAltn/6J5YksFUeGdA4XJrbs
-	 s0Ml+xbZQT+SmmWV1RHK9BGS1VgvI9ecpfUARrMfny4ifwmfcCzX6ig672rFKE71HY1bW
-	 Xrq7eaBkbeuUqkOfgsS0q1F4lLw/Z/L0lVXCGTt4gKFzOvl+aXAs1Ij5SpBgMPHwAmX1f
-	 OJtyh5ckjEhikXH8XlR/V18ka/84VQ+/cY2QfTTi0L2XifPcooUX2+zYruMekMNQInA/z
-	 X4zISTijFXmcOjvVfc3um2xbTqTziHApvDpkYO82xkkdvIHa4miQworiAeKTVq+F+YA==
+	bh=PLYMYfIPYeVSAfC/NnTu98onHK4AvFLf4ciN1/W2byU=;
+	b=fCYiz8pYdxI8dDnlFK76QUr6mmxJmxUBDtzLqqXOVdwtsXdWLdYht2cNtsKyZ2Ss9QxZ
+	 WxGQ8HjmBtcVBF0fU5v5q39wxNZS+SedXfiP+rx02Qi7wppiVeDOcL3GWEqQclkOZuAsl
+	 hQ0WZaFqXmCY1qqVtqtAXg1nkDDTIID/y1p3PaFll6GQaPAudIptYs7penBwAsPbymqko
+	 8KvydxQPh0mc/6+ynaMFh67nO8XALpiKwX0BFHi1BS7vHgbkpMIMLMzW6InPCW/TFGQBy
+	 bRyReygevzW5gj7CDynz+LcrK5N9YfXk5TBfBS7dQN6tA8nX4GTu8xPijLJ77286rig==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789706754;
-	bh=x8cTlk2AWdGhfGqgdfZs3YzF7+WmdBndVZpTlAU+OJ8=;
-	h=From:To:CC:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=j1YNvCAfcuquz1m3801WCKdu63kwvUPdogeZXTckA2RfxIL3SV7pWE6U6TZ77XI2p
-	 1+rtytTgT0dXCfK+4KC99IkUcKx7FZQ+S9NPtcoBC6/DZO3Bk+eEYrIOHhMaDC5lSz
-	 3gtaWL3PZKYwp4bl6ZZK1CW3k3zXWvv7ktSau9AIDf7kqszv6vXBr3swAQMBZF7Xau
-	 0Ol38f8aMuaQP36qXVt/v1xbBdzB3XykQgcYgGkKvi34xvMGecDa+2UMDRLRjiwqL1
-	 HKV5B5KeRgIYhXSUqR1IwZo5R91nQ8y55Nfme47M/H7DqYPbF4Da+538Azwq94Jc/i
-	 yYzDYf3ipuZ/g==
+	s=default; t=1789706759;
+	bh=PLYMYfIPYeVSAfC/NnTu98onHK4AvFLf4ciN1/W2byU=;
+	h=From:To:CC:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=TLcn9uo87cd5RPm24PgXDKmR6ySeEpmBTZheS5D1AZXnEnO5Y4fwlHpJGDap5pfTC
+	 GQOEBNj9zSTtUJsfRw6Ns6FMtqgGjUefCJIOGdgxzj3yxNW8ofEPEPsC5YXihyiEVA
+	 ZMps2xYRti9EI2afEtGwFzBTxx4uHFpvLfPsOBjx2hrh+NcZMikLeNXqHd4sPbQYxE
+	 wQT+elvS8r74faoAoYOm2wdaO6HnP7fKulYZvaoFjQrJEknyo1EB2zP7Ck+0USbvgU
+	 Nkjzcv3aGeUL5R7/4FE+h3Ren5m3zALJdlP+5P7LeNgqYgDkUvAbAkF5HAtmYe/Syz
+	 KJdXQRwmB5L5w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9BA9340AE6;
-	Fri, 18 Sep 2026 04:45:54 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 3CA053AF
- for <buildroot@buildroot.org>; Fri, 18 Sep 2026 04:45:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3119E40AFA;
+	Fri, 18 Sep 2026 04:45:59 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id A94B03AF
+ for <buildroot@buildroot.org>; Fri, 18 Sep 2026 04:45:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3A13B81183
- for <buildroot@buildroot.org>; Fri, 18 Sep 2026 04:45:53 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9051B40492
+ for <buildroot@buildroot.org>; Fri, 18 Sep 2026 04:45:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2XGlI0khmAii for <buildroot@buildroot.org>;
- Fri, 18 Sep 2026 04:45:52 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 01F4381182
-Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=80.12.126.238
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789706751;
- b=Q0gMWqPF3YjKJ9lgNx9vw3EgQsaeHnpkOUB9BEHVvPmIxXh9Q/j1Kz1Ol0hqtQJwLT3A
- osmYlV7TIobqxAZUH5kaARvUwg1KqEp45vQADQtusUYXJI3wkgA3pS/V39smyI+gBDj0s
- yupBEYEbEb82Z6qczOpKJzPtvYP/62W8vS9iuqkwgqhAfe6YEWrYhmZHIsWcHxXBk6MtM
- aD7TEAb+CwQCjfT4MpIg2wTprHt5z0i7alqeJR3CiCH5tTDFGrSirQdb9k2xkKniZrFu6
- QVaa/X+oUyB2ZQy/J5c2e6sjwiAOSWui/pJw2wqFhJSUwia37X5r3UemcrlVezRRLmg==
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id O_zn4jLOI7jo for <buildroot@buildroot.org>;
+ Fri, 18 Sep 2026 04:45:55 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org 548BE4008E
+Authentication-Results: smtp2.osuosl.org; arc=none smtp.remote-ip=80.12.210.124
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789706755;
+ b=oI9A6bE14WdEA7IdRx4iKxQCGngKjQ/ug6dSrm87mJq9JzPsbcYbPWfy7h3hfIE+/C9N
+ kXgHI2S5l97Z/Ug6ZJs4Cn74eHBFPnCWqkO9DIy+IT9Q+Tx7LT7VWmNmUQ4e1gtzzDzGe
+ 6ko4LE7pgU7uXiSL21OKG3z/j8telltm2+SXlO+dcH+2Rw5RETcEZ4U7ImwA/px7QlemH
+ SBwAYAEnKgjWPAR5F7O4I0fARYkOPeZtTvtMDQQKOI4CI/SugEwvU7TE4Qmq9kBQjHLEc
+ aWiqGkz8PXqdfvzTp87qJnoFVjQAJ/kfZu2HAH0TTfLckXq5hO4Kuzl170k4+r54pLw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1789706751;
+ c=relaxed/relaxed; t=1789706755;
  h=Received-SPF:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
  Received:Received:Received:Received:X-CSE-ConnectionGUID:
  X-CSE-MsgGUID:X-IronPort-AV:X-Amp-Result:From:To:CC:Subject:Date:
- Message-ID:X-Mailer:MIME-Version:X-Patchwork-Hint:X-Originating-IP:
- X-ClientProxiedBy:Content-Type:Content-Transfer-Encoding;
- bh=iVh4cLcbOh1bNE1TFmucWFlkOficF6bnv+FU3GeYCHs=;
- b=c+9HcD7PKLdz2A9oUtjuYHolehv2w7nNQWczMVcKo7Nms/b2cE2LLGYzKGPXlL/14xnN
- w36jfJdkrEMSEhLvNttFX/9WEhn7VG92BA/kF8g2Onx0xtg0PeI8PE2knaj4pwYAr7Hln
- DNbablxh1jTiKpaNVXOuNzzz5CFLJRUgKqqDuhSsNYwn8xwgbkXegaIbjbeqPrTHIXZ1o
- WU1otobrE1GaENAFdfTlic9wDqT5Eq9wRUfX8AcxIGb+ebAp90tdP28+4W7D7H4c6BPL7
- FrnukH4VcCMDKzJLdjs6pIRKoADlyiNT1VMKfYDO0M18BT6K+xU26suLlR/WQPov36A==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org;
+ Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+ X-Originating-IP:X-ClientProxiedBy:Content-Type:
+ Content-Transfer-Encoding;
+ bh=8bS7yHTiVsya7vuEeDQxvHqKTvVKpCxC3ECklI9ywRg=;
+ b=XYQTqhNEvJ3YDpxBIXzN11PnRJvPm0o6usClagAIE5gEQjc0SuhSVA6FcM4Ax10Tn1HP
+ GYbi865XxywoU9dWEDdkrwvgFDluHIAzZubIlxWapKzRW8ylXqKL0DUIPdjvEGpnD0XPx
+ 7j7E0iS+eV3fmrkEtZEKliVrfJj3xAkm3mhKgO5tKKHPJEm4Qc9vRey83ZBvWqOzR06b1
+ drhufj8+sL7Pg/JcFFJyv+6QGFezDTvvoCHKS0jYU7zdHvZqhh+CcyJhCpduC0iWQSXWc
+ gajBKcadzf3AhKAKmvgeQXXbSGBD2/c38Xv/bfM79rIC4DasKIBvSFsOG1CBswr2yfA==
+ARC-Authentication-Results: i=1; smtp2.osuosl.org;
  dmarc=pass header.from=orange.com; 
  dkim=pass header.d=orange.com header.i=@orange.com header.a=rsa-sha256
- header.s=orange002 header.b="Yof/SuYY"; 
- arc=none smtp.remote-ip=80.12.126.238
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.126.238;
+ header.s=orange002 header.b=NJOaOKJ6; 
+ arc=none smtp.remote-ip=80.12.210.124
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.210.124;
  helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
  receiver=<UNKNOWN> 
-Authentication-Results: smtp1.osuosl.org;
+Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=orange.com
-Authentication-Results: smtp1.osuosl.org; dkim=pass (2048-bit key,
+Authentication-Results: smtp2.osuosl.org; dkim=pass (2048-bit key,
  unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
- header.s=orange002 header.b=Yof/SuYY
-Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.126.238])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 01F4381182
- for <buildroot@buildroot.org>; Fri, 18 Sep 2026 04:45:50 +0000 (UTC)
+ header.s=orange002 header.b=NJOaOKJ6
+Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.210.124])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 548BE4008E
+ for <buildroot@buildroot.org>; Fri, 18 Sep 2026 04:45:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
- t=1789706751; x=1821242751;
- h=from:to:cc:subject:date:message-id:mime-version:
- content-transfer-encoding;
- bh=iVh4cLcbOh1bNE1TFmucWFlkOficF6bnv+FU3GeYCHs=;
- b=Yof/SuYY3FUCMpJ8IGN3Z6vtsap7AyWwIqS9o6J8xFJ8CdixcEC4tSs9
- vMwckDt6aafocVLM+WCPIDqWOEK9/eslfBedlMMRnLQTDs94n+d3UPbiw
- b1mLZGSgUfaJYDBfpwlI0CgeEn20TIcN/g7yU4DIqrALaw8G3ol9DD6pF
- hHGjrk3/Js3NRoi8WGMEYIACW6/SaEIR5KSY6hVEZv741wotEH9klevO/
- 4PnvhU0GGUsnw2rxhIxXFayMeweliydGYVPxJWtNGWD7ep1/SphhCkgIX
- 59G1LNbzKJvO3ONnSni2Xio2NOV811Ag66/IW8gsYC6uN0QZaCavkYfEM g==;
-X-CSE-ConnectionGUID: cSRqYchcR8yZwvFAIHIj9g==
-X-CSE-MsgGUID: CFf6yPjTRiub0Bq00gTDtg==
-Received: from unknown (HELO opfedv3rlp0f.nor.fr.ftgroup) ([x.x.x.x]) by
+ t=1789706755; x=1821242755;
+ h=from:to:cc:subject:date:message-id:in-reply-to:
+ references:mime-version:content-transfer-encoding;
+ bh=8bS7yHTiVsya7vuEeDQxvHqKTvVKpCxC3ECklI9ywRg=;
+ b=NJOaOKJ6x4wBz612lPBOUOIS+ep94kcnAaQLE6Z9c/9t7tJbV5l5ZZ56
+ MXlpgQQjzMsrPsaqoxJChsJSAZXyU7N+vOGY1hX4xZXqnNU/ngb03pwlu
+ sNDvfChVe/U7iNDLRkPi0njWc2KVrFmJwpswAqb4epSHZenozEF36YBoQ
+ byhWJXIU8JVfayz+ltOzNI0/M3mNds2tuZKqQH9w2LqBdIfGNN9qTN1z6
+ LxlrMjDWZKQ9Wo2nlJdYZmbylIkhLnsxYUa2AYxiu3WZ5Mo1g9OqS2TBN
+ NAnp6qw6yGr0Z+TXDk80J156cEX1/7WofC9UCXF/LWYjbrjIKfC8x+ToO g==;
+X-CSE-ConnectionGUID: w3TgT6LgTXStxQyFuMmF/A==
+X-CSE-MsgGUID: GiNhuiHGQK+IC4c0iT1/pg==
+Received: from unknown (HELO opfedv1rlp0g.nor.fr.ftgroup) ([x.x.x.x]) by
  smtp-out.orange.com with ESMTP/TLS/TLS_AES_256_GCM_SHA384;
- 18 Sep 2026 06:45:48 +0200
+ 18 Sep 2026 06:45:52 +0200
 Received: from unknown (HELO OPE16NORMBX506.corporate.adroot.infra.ftgroup)
- ([x.x.x.x]) by opfedv3rlp0f.nor.fr.ftgroup with
- ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2026 06:45:47 +0200
+ ([x.x.x.x]) by opfedv1rlp0g.nor.fr.ftgroup with
+ ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2026 06:45:52 +0200
 Received: from yd-6wlzhs3 [x.x.x.x] by
  OPE16NORMBX506.corporate.adroot.infra.ftgroup
  [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.49;
- Fri, 18 Sep 2026 06:45:46 +0200
+ Fri, 18 Sep 2026 06:45:50 +0200
 Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
- Fri, 18 Sep 2026 06:45:45 +0200
-X-CSE-ConnectionGUID: 9BHEI4J5SlWfGnjgRyM/Hw==
-X-CSE-MsgGUID: mixqzu81RFORxCkP3ae2dw==
-X-IronPort-AV: E=Sophos;i="6.27,103,1787004000"; d="scan'208";a="469705784"
+ Fri, 18 Sep 2026 06:45:50 +0200
+X-CSE-ConnectionGUID: sWnXAAkyQRmUJYfzDPf9Ow==
+X-CSE-MsgGUID: ISheDwrNRLGSlUkyirx4oA==
+X-IronPort-AV: E=Sophos;i="6.27,103,1787004000"; d="scan'208";a="474346809"
 X-Amp-Result: SKIPPED(no attachment in message)
 From: <yann.morin@orange.com>
 To: <buildroot@buildroot.org>
-CC: Vincent Fazio <vfazio@xes-inc.com>, "Yann E . MORIN"
- <yann.morin@orange.com>
-Date: Fri, 18 Sep 2026 06:45:45 +0200
-Message-ID: <cover.1789706718.git.yann.morin@orange.com>
+CC: <yann.morin@orange.com>, Vincent Fazio <vfazio@xes-inc.com>
+Date: Fri, 18 Sep 2026 06:45:48 +0200
+Message-ID: <71588ea1ac7d7cc7f5f5f30fcb9c02e84ec12ccd.1789706718.git.yann.morin@orange.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <cover.1789706718.git.yann.morin@orange.com>
+References: <cover.1789706718.git.yann.morin@orange.com>
 MIME-Version: 1.0
-X-Patchwork-Hint: ignore
 X-Originating-IP: [10.115.27.51]
-X-ClientProxiedBy: OPE16NORMBX606.corporate.adroot.infra.ftgroup
- (10.115.27.30) To OPE16NORMBX506.corporate.adroot.infra.ftgroup
+X-ClientProxiedBy: OPE16NORMBX506.corporate.adroot.infra.ftgroup
+ (10.115.27.26) To OPE16NORMBX506.corporate.adroot.infra.ftgroup
  (10.115.27.26)
-Subject: [Buildroot] [PATCH 0/2 v2] support/size-stats: actually handle .pyc
- files
+Subject: [Buildroot] [PATCH 2/2 v2] support/scripts/size-stats: properly
+ assign pre-compiled .pyc files
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -167,50 +169,73 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: "Yann E. MORIN" <yann.morin@orange.com>
 
-Hello All!
+Since commit 3fed42456693 (package/python3: use the provided pyc
+compiler), we abide by the PEP 3147 guidelines on where the pyc files
+are located. In practice, this means that:
 
-This small two-patch series properly associates .pyc files to the
-corresponding package, to account for the PEP 3147 layout.
+1. BR2_PACKAGE_PYTHON3_PY_ONLY: there is no precompiled file; this was
+   still working so far;
 
-[This is a resend of v2, which did not end up on patchwork.]
+2. BR2_PACKAGE_PYTHON3_PYC_ONLY: there is only the .pyc file in the same
+   directory as the original .py file; tjhis was still working so far,
+   as it uses the same legacy pre-PEP 3147 layout;
 
+3. BR2_PACKAGE_PYTHON3_PY_PYC: for a .py file /foo/bar.py, the
+   corresponding .pyc file will be /foo/__pycache__/bar.pythonX.Y.pyc
+   (where X.Y is the current major.minor python version, e.g. 3.14);
+   this is what is broken now.
+
+Add support for this layout in the size-stats script.
+
+When we associate files to a package, we only have the original name,
+and we must construct the associated filenames. We could construct the
+path to the .pyc file manually (like we do for the legacy layout), ut
+this is brittel, and will break if/when python changes the layout.
+Instead, use importlib's helper cache_from_source(), as suggested by
+Vincent.
+
+Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+Cc: Vincent Fazio <vfazio@xes-inc.com>
+
+---
 Changes v1 -> v2:
-  - use python's cache_from_source() instead of open-coding the
-    path  (Vincent)
+  - use cache_from_source() rather than compute the path manually
+    (Veincent)
+---
+ support/scripts/size-stats | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 2ca7fb5e7bf7b416b72faf709bf1220eef0dc352
-
-  package/wpewebkit: fix build with CMake 4.4 (2026-09-17 17:10:35 +0200)
-
-
-are available as patches in this mail series,
-
-for you to apply patches up to 71588ea1ac7d7cc7f5f5f30fcb9c02e84ec12ccd
-
-  support/scripts/size-stats: properly assign pre-compiled .pyc files (2026-09-18 06:34:49 +0200)
-
-
-----------------------------------------------------------------
-Yann E. MORIN (2):
-      support/scripts/size-stats: prepare for more .py associated files
-      support/scripts/size-stats: properly assign pre-compiled .pyc files
-
- support/scripts/size-stats | 31 ++++++++++++++++++++++++++++---
- 1 file changed, 28 insertions(+), 3 deletions(-)
-
---
-                                        ____________
-.-----------------.--------------------:       _    :------------------.
-|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
-|                 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
-| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
-| yann.morin (at) orange.com           |_="    ,--' | / \ HTML MAIL    |
-'--------------------------------------:______/_____:------------------'
+diff --git a/support/scripts/size-stats b/support/scripts/size-stats
+index fdcaeaa546..c54ef7bc2c 100755
+--- a/support/scripts/size-stats
++++ b/support/scripts/size-stats
+@@ -23,6 +23,7 @@ import argparse
+ import csv
+ import collections
+ import math
++import importlib
+ 
+ try:
+     import matplotlib
+@@ -77,7 +78,16 @@ def add_file(filesdict, relpath, abspath, pkg):
+ def get_associated_files(relpath, abspath):
+     # also check for compiled .pyc file
+     if relpath.endswith(".py"):
++        # Legacy .pyc next to .py, or .pyc-only setup
+         yield (relpath + "c", abspath + "c")
++        # PEP 3147 layout
++        # importlib._bootstrap_external.cache_from_source() works on the
++        # path string, not on actual files being present/absent, and so
++        # it also works for relative paths...
++        yield (
++            importlib._bootstrap_external.cache_from_source(relpath),
++            importlib._bootstrap_external.cache_from_source(abspath),
++        )
+ 
+ 
+ #
+-- 
+2.43.0
 
 ____________________________________________________________________________________________________________
 Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
