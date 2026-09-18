@@ -4,120 +4,121 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F404C982DC
-	for <buildroot@archiver.kernel.org>; Fri, 18 Sep 2026 12:29:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C0F0C982DC
+	for <buildroot@archiver.kernel.org>; Fri, 18 Sep 2026 12:41:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 97D4D81291;
-	Fri, 18 Sep 2026 12:29:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0899B812A5;
+	Fri, 18 Sep 2026 12:41:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id f12_vLJBdpPQ; Fri, 18 Sep 2026 12:29:32 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 8C93181285
+ id z1VN_Xxjt63u; Fri, 18 Sep 2026 12:41:33 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org E47C781294
 Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789734572;
-	b=IQYJFcTT6cnabHE9FRO6cyl2PgOGw7hRW+J/ozVJhIrWctgeHrYmHWrqFRh4AuoD9ejS
-	 Y4vgsR6v7lyvoRCXFxTG2waBfAU3EKI0u/d0kvxHXcEsmiRG8KPbQQVw5eRACuEaCPhIv
-	 uggmMY1ZbB+fC7nQzlEHXeJrSJjT90iV7KK29TWtKc2qVxYcixJ9DrcO6H3HbBr5NXlyh
-	 4kBu1qRn9Yh21QSzPnmuKmyD7kQjRU2JdSMc8KoU2bsDegPyWANXigOrrbyl6024CGgam
-	 yJ/7Ar3JQJ88SnKMReutcI+QIfIplqC2a80b3JyL6Qke4vxxMd+nlrZPKqGhAhHA/ug==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789735293;
+	b=W5SPRWy0O4ulFjM2PBVGMTMWztWn8iiDbVonzOHtvj8Ulvk3vMh9hjK4XheKaZ6NGgpV
+	 ZPklyPX6ArMMTwXtDMVUY5LDvyK1Dsceuryvxiv4bK4mCiKHGDaFZLT+4u00SoXq7pBrK
+	 AQMGNMIHZ6If1n6Q9HjNNwb3Kogq9Y/S3cPYQOA24co2jKHg+KfS5XkNoqX3NVfbHWRP7
+	 ODz3olNBjq0znETEPBQmovC9+0o4MnbglAavD1qMoFCtWaZa/7PaIUIjP3irY6SLyJjna
+	 BYUoI6IwW1yKnwesq+sVkGsfyrSh1O7pIJijxa2Vf5D9ln7tYJk/MG/7w0ENaKGqPTw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789734572;
+	c=relaxed/relaxed; t=1789735293;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 Received:Received:Date:To:Cc:Message-ID:References:MIME-Version:
-	 Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version:Subject:
-	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	 X-Spam-Status:Received:ARC-Filter:X-Greylist:Received-SPF:Received:
+	 Received:DKIM-Signature:From:To:Cc:Date:Message-ID:X-Mailer:
+	 MIME-Version:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=hMgPitiyCfTuLoEvCi7aNWZQiy0OHcaGRy8Xzu3+q34=;
-	b=ccrrLt+XZ9eM6qsS1qgsjI1YBDu13xyGG91nBa9xT+ff51Aa2l3rXKnKwAjH0D1+kxVE
-	 /aErgZ5zrusXtF2yzvZiNsN/DgJZHaMUPdh6i2HN8aPjlZM/H5jqjXSmkU9GcM38C7kJc
-	 WZamE1ZRZS4qmLctzDpBIYwEwqnKKDGE2fe1Tx5PcfuVGsxpm/bLISkZZ4NjhnICKIyUm
-	 qZIGQOZIg8ob9Mb28eDrFkInz+D62dh8zq28zaWXsMYPz0Qqg5T/1UcjyqNfScUbdJzcn
-	 9AgS8+2Gxds1gujHD+4bWbeiAGWsb9P/s9nPHNByYWDkEAJvszmm3KZaz2dS8HcMnig==
+	bh=wuYZ5cI3tRHMLzpg1iYoyv/jg5bl1g8/2qP0ZRHlO98=;
+	b=IuhVEmr8gTXNBLk1bpgJ5gCYcyruV26CR5GEzX3FOyymILe2+m508NE1BFeqKH9GddEg
+	 hkoRoXfIoL7zmAweRjQdHefJMzeXiApdIn0EZZF7U6+hQlEfqw+ZUFF+enNbBtQ3EfQ7m
+	 /7QTk9v5e4ZKY7PtK8gI03l2hox+bAbv1JD3V6XX133l3LKjHY2vJ6lBDCMgh2ghV6LKW
+	 dwY1Num7kv2Qn4nnTlQylb4KUpwqrxFriCTOSKl+2z63UkOHXnk43nlGpBF4tWbbdRyX3
+	 AEjUu+1qjQDkAc+9IBpUDIev5HH+YDRmlPmbQdpmROwrgsfGjgfuJSCE4EYXBGmLZPQ==
 ARC-Authentication-Results: i=2; smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789734572;
-	bh=hMgPitiyCfTuLoEvCi7aNWZQiy0OHcaGRy8Xzu3+q34=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=MNvjwoVFkpfB/vvLkQ2Sv/qPLW4Y5Jy3Zpf/2iK5sbGvbwpF1Jzbg8+sqQVsJECIx
-	 o1yaL4q1Wq7R6fOzJg6+RfrfnuyIj0jYmsjvMfeZm2y2vYRjtBGEI4EjSozaBg2LSO
-	 vhi+Esl99SwcgR+XUePBJCpjYwU/pAXpv2F0HKG+MJFpUHfbF13ei9Q+BkPbfH37ZP
-	 p8kSDo4BU+MlYYQx8jr+/4NKZcchq45di4q/I187CG0xOdletc3lCDT7octxPzrH7U
-	 /LwetSMmvTEQuDZBUyU00r/emN8Fl2UuqMuQ4Ch5JZNdI4++tCzz598uJYq0KSz5bA
-	 hikxjcgjXRtXw==
+	s=default; t=1789735293;
+	bh=wuYZ5cI3tRHMLzpg1iYoyv/jg5bl1g8/2qP0ZRHlO98=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=PSg1brHMfSDY3ikCwOUvbDmjmDHK8sfIvARG77queL1f3rLD6kcLl8J7e+FhToZZ9
+	 h3IxqXGBa1vBPQViP5utsE3e4LiUttfHiOwAP5/VpNMVqMnsajRhIeiBiB4a3G+kBu
+	 J8DPFAPvGBqrfNTY8+IuC3v02Gwv78DgMIvub5Xoyc436uCsRzeWlETs/oQdJ7meo0
+	 P51gftsCicb56te1a9ltrPXFszpSnncfLr8s9YzUbSCSZ4lI6+1L6c9qV2XUL5sAj4
+	 mil56NLyN7yRz2/G1GwJ0uInQYkFKzhkM5bmBH8jepmp2KXcLWn0Y1qQlYLdBnMyMb
+	 VrTdhBaSaKJYg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8C93181285;
-	Fri, 18 Sep 2026 12:29:32 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id BEF76279
- for <buildroot@buildroot.org>; Fri, 18 Sep 2026 12:29:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E47C781294;
+	Fri, 18 Sep 2026 12:41:32 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3EAF642D
+ for <buildroot@buildroot.org>; Fri, 18 Sep 2026 12:41:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B03C640B6F
- for <buildroot@buildroot.org>; Fri, 18 Sep 2026 12:29:30 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2464760D67
+ for <buildroot@buildroot.org>; Fri, 18 Sep 2026 12:41:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 27ln0QZ65XUT for <buildroot@buildroot.org>;
- Fri, 18 Sep 2026 12:29:29 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 3E44440B6C
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789734569;
- b=GKNiXoZT7W6C8o/ZsorMYf5fSXSU24gWkb0t72kuHBoPkNxZ6ZFQCnMGd5VMTRkN9czE
- xFt+5r1OmZ35QP2kVH5t9Qu/H01r0vlG9Y6zuzhzHIxZFYy6CnjhyJHuX+Q21UTeJpF7C
- oliZdBRgGvhTH9WU9XTK0WrSNzv0HeGUxLyoSAaDEkzGYpTj6QSI3u30XJScT1dO3Yk24
- P0dhMK3Jz03l131sz5aqPZh4/Zva5C6DHKfO8XT3jvUAYeNlxQ2Zhet9I2MxMzI9Hw2Rc
- Mrk12v0xVc82Icw16n+haI9SXl/HRzSe5g/h4D4lwGraeDAgGJOSKAUuOHUuHTgB7aQ==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id peTPSkIfXgRb for <buildroot@buildroot.org>;
+ Fri, 18 Sep 2026 12:41:31 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org A34D960D62
+Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=136.243.2.102
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789735291;
+ b=ONYVFezQ4GPKGadGubMnNlnWulYzl3wBbZGFHR/r1zezkfOgbD+agvOjC7Xa+dU4iTZK
+ 6PMEM0k081iX2SbX6S3zWhMSfCiNm6QlEoZuxKLsbERzxOvwCWfEpVnPuebE9vPw7QVdh
+ p94s4N57EtEfG+3vVE50ehAJ0FCW2bhlt9O6jwE0HembbWQdUbVfoquoUyuAD1BlzAM7v
+ Cqn5RUgm9JFgj+gaIdz1aUMo6UtYXQKocWnusa47KGmnJwkfvd5VXlQKM/crk1c1Wc1TP
+ HM665kYkGgtMArN3XYBz8XPnLSQV84T9NLICRPHk1nLs4q+KLfF+niKPLJ/Kjpr7aEg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1789734569;
- h=Received-SPF:Received:Received:Received:DKIM-Signature:Date:From:To:
- Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
- Content-Disposition:Content-Transfer-Encoding:In-Reply-To:
- X-Last-TLS-Session-Version;
- bh=bLwZjXwE0D0nJ6IXQW44Hm+4iatRKdWMUTWfj7HG3cc=;
- b=M84SmU7qvj5vmhjrf6K7FLU8n7L79etFXFNCM8gmCPpW2mRg5h4r8OBcU9OpTqOrAfNJ
- fG1mLrLe5jX+oTBnRT4qqS/5ZmWh5RwTiSVw0GM97+n8H6yNjAiAyjyqB/gA9C0lnVL4w
- dHUjRvjL1DLrAneONctuaR6+zcwDHwKAG5cjQ09zwjRE+x/RxWx85UDEm1OJX3OoWsudr
- /I75klz6AiOaYsxkhq4UHxYV0V5y82qU6KXFdO/1LYjCt5eN9EGiHbh5aPDEZpGh7YTEk
- BpmeHkwBVcRl7lqlDwb7wv+BdlRHjAZkrWUS9HlIWaWO19IuGT9g2l6TQVkLRAMLPHA==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org;
- dmarc=pass header.from=bootlin.com; 
- dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=dXA4F6pJ; 
- arc=none smtp.remote-ip=185.246.84.56
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
- helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3E44440B6C
- for <buildroot@buildroot.org>; Fri, 18 Sep 2026 12:29:27 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-02.galae.net (Postfix) with ESMTPS id C96721A0969;
- Fri, 18 Sep 2026 12:29:24 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 9552060649;
- Fri, 18 Sep 2026 12:29:24 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id B593C1032823C; 
- Fri, 18 Sep 2026 14:29:19 +0200 (CEST)
-Date: Fri, 18 Sep 2026 14:29:18 +0200
-To: Jean-Paul Etienne <fractalclone@gmail.com>
-Cc: buildroot@buildroot.org
-Message-ID: <aq0uT-ghEihRclnw@windsurf>
-References: <20260917-rock-pi-4b-v1-0-a1da4ee05567@gmail.com>
- <20260917-rock-pi-4b-v1-2-a1da4ee05567@gmail.com>
- <aqznoUtW4EIcK_8m@windsurf>
- <CAN7e4jochVOH9Tj19YiFeeOxix=-bn4OhferJC9Mgg=j-AVsDA@mail.gmail.com>
+ c=relaxed/relaxed; t=1789735291;
+ h=X-Greylist:Received-SPF:Received:DKIM-Signature:From:To:Cc:Subject:
+ Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+ bh=nz/UXiZQYZKqyorbze+WEi4x0/4ykkXdQGC5UZtWZhw=;
+ b=Ww2upRz5ruxA78ct9kBkh27a+DhxwXZH4JoTWe8jFoSDXafZfpJUWtHoXRDjkHdgNUG3
+ dxxnUrqKxi8Tov8FFx4/oiZ4Q7GPJ4dhcukcs4tIV1KnOmAxBoNhJ+8iPAxpXLhPrI0h7
+ +xzTk+c/Oa1pWVZzOOqBxzUQjbGQKjCEPkL9m0Wb0Mz1MIc2QN9VVUAFce7M6bnK5CI86
+ 7TpTyriqbN9JTafkTWmoOh94adlQdSNM8Zuk42iKr/9uyEvtIbVQSqBc7vNxyc8xynfQH
+ zfSxvgkoUbC03O6M+1BrBrHiw9VnGP2Z/7zYwbqUchTq+g0Kct/RspEsAwmoagWlyeA==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org;
+ dmarc=pass header.from=n621.de; 
+ dkim=pass header.d=n621.de header.i=@n621.de header.a=rsa-sha256 header.s=dkim
+ header.b=brBSaiyq; 
+ arc=none smtp.remote-ip=136.243.2.102
+X-Greylist: delayed 427 seconds by postgrey-1.37 at util1.osuosl.org;
+ Fri, 18 Sep 2026 12:41:30 UTC
+Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none) header.from=n621.de
+Authentication-Results: smtp3.osuosl.org; dkim=pass (1024-bit key,
+ unprotected) header.d=n621.de header.i=@n621.de header.a=rsa-sha256
+ header.s=dkim header.b=brBSaiyq
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=136.243.2.102;
+ helo=nyx.n621.de; envelope-from=fl@n621.de; receiver=<UNKNOWN> 
+Received: from nyx.n621.de (v4gw.hekate.n621.de [136.243.2.102])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A34D960D62
+ for <buildroot@buildroot.org>; Fri, 18 Sep 2026 12:41:30 +0000 (UTC)
+Received: from charybdis.office.fixme.cloud (localhost [127.0.0.1])
+ by nyx.n621.de (Postfix) with ESMTP id 5FE19E00217;
+ Fri, 18 Sep 2026 14:34:20 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=n621.de; s=dkim;
+ t=1789734860;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=nz/UXiZQYZKqyorbze+WEi4x0/4ykkXdQGC5UZtWZhw=;
+ b=brBSaiyqZYuFg67U4SIWBc3mNqer4KCuuFmd0ewcGHqRU4vgFp7CLDeQM0KDQAXXiZ8+kj
+ YEJqEPotwyO7xD7Q3Z38g4ZpyjR7BY1saH8RiALJMpkCK71w/Dpj/V+JsMAZJl71Xw1XRr
+ 82VHhCep0LeVAgAKLFE2HXe2VmYWt9A=
+From: Florian Larysch <fl@n621.de>
+To: buildroot@buildroot.org
+Cc: Florian Larysch <fl@n621.de>
+Date: Fri, 18 Sep 2026 14:33:37 +0200
+Message-ID: <20260918123409.22775-1-fl@n621.de>
+X-Mailer: git-send-email 2.55.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <CAN7e4jochVOH9Tj19YiFeeOxix=-bn4OhferJC9Mgg=j-AVsDA@mail.gmail.com>
-X-Last-TLS-Session-Version: TLSv1.3
-Subject: Re: [Buildroot] [PATCH 2/3] package/brcmfmac_sdio-firmware: new
- package
+Subject: [Buildroot] [PATCH 1/1] linux: fix pahole discovery when
+ BR2_LINUX_KERNEL_NEEDS_HOST_PAHOLE
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -129,67 +130,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+Around Linux 5.11, upstream started introducing checks that execute
+"pahole --version" for feature discovery (e.g. [1]).
 
-Thanks for your feedback.
+However, when building with BR2_LINUX_KERNEL_NEEDS_HOST_PAHOLE Buildroot
+only lists host-pahole in LINUX_DEPENDENCIES, so it isn't available for
+the configure step when using BR2_PER_PACKAGE_DIRECTORIES. This results
+in the host pahole being used (resulting in host-dependent behavior), or
+no pahole being detected at all when the build host doesn't have it
+(which will then disable Kconfig options that require it).
 
-On Fri, Sep 18, 2026 at 01:08:35PM +0200, Jean-Paul Etienne wrote:
-> Hi=A0Thomas,
-> Before adding this package, I've checked=A0linux-firmware and saw that it=
- does
-> not support=A0brcmfmac43456-sdio.bin firmware
-> required for the AP6256 chip.
-> However, while looking in the=A0brcmfmac_sdio-firmware-rpi package on bui=
-ldroot I
-> see it supports the firmware:
-> =
+Fix this by adding host-pahole to LINUX_KCONFIG_DEPENDENCIES.
 
-> ddf83f2100885b166be52d21c8966db164fdd4e1d816aca2acc67ee9cc28d726
-> =A0brcmfmac43456-sdio.bin
-> 44e0bb322dc1f39a4b0a89f30ffdd28bc93f7d7aaf534d06d229fe56f6198194
-> =A0brcmfmac43456-sdio.txt
-> 2dbd7d22fc9af0eb560ceab45b19646d211bc7b34a1dd00c6bfac5dd6ba25e8a
-> =A0brcmfmac43456-sdio.clm_blob (default_config)
-> =
+A similar issue occurs when running "make linux-menuconfig" and friends
+because PATH deliberately gets stripped when pkg-kconfig.mk builds
+x_CONFIGURATOR_MAKE_ENV. Explicitly pass the pahole path to fix this.
 
-> But brcmfmac_sdio-firmware package has specific firmware and config for t=
-he
-> rockpi4b board as follows:
-> 78085a816d23d9877e3ab872d8eb142646bfde18afd2c7a5b89885327a287d19
-> =A0brcmfmac43456-sdio.radxa,rockpi4b.bin
-> 343d1c79cfe0e10e1777e3de19a0302f748f69fa8356cab2c36ca0cf90bbcf0e
-> =A0brcmfmac43456-sdio.radxa,rockpi4b.txt
-> =
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?h=5f9ae91f7c0dbbc4195e2a6c8eedcaeb5b9e4cbb
 
-> And they are not just symlinks to the default=A0brcmfmac43456-sdio.bin
-> or=A0brcmfmac43456-sdio.txt
-> So I thought this package could be useful to the community especially sin=
-ce it
-> supports a lot of boards.
-> =
+Signed-off-by: Florian Larysch <fl@n621.de>
+---
+ linux/linux.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-> I'll update the patch.
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 3599a10b50..cd80904113 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -125,6 +125,7 @@ endif
+ 
+ ifeq ($(BR2_LINUX_KERNEL_NEEDS_HOST_PAHOLE),y)
+ LINUX_DEPENDENCIES += host-pahole
++LINUX_KCONFIG_DEPENDENCIES += host-pahole
+ else
+ define LINUX_FIXUP_CONFIG_PAHOLE_CHECK
+ 	$(Q)if grep -q "^CONFIG_DEBUG_INFO_BTF=y" $(KCONFIG_DOT_CONFIG); then \
+@@ -387,6 +388,9 @@ LINUX_KCONFIG_EDITORS = menuconfig xconfig gconfig nconfig
+ # therefore host-ccache would be ready, we use HOSTCC_NOCCACHE for
+ # consistency with other kconfig packages.
+ LINUX_KCONFIG_OPTS = $(LINUX_MAKE_FLAGS) HOSTCC="$(HOSTCC_NOCCACHE)"
++ifeq ($(BR2_LINUX_KERNEL_NEEDS_HOST_PAHOLE),y)
++LINUX_KCONFIG_OPTS += PAHOLE="$(HOST_DIR)/bin/pahole"
++endif
+ 
+ # If no package has yet set it, set it from the Kconfig option
+ LINUX_NEEDS_MODULES ?= $(BR2_LINUX_NEEDS_MODULES)
+-- 
+2.55.0
 
-In what direction will you update the patch? I guess the main issue is
-that your package was named just brcmfmac_sdio-firmware, while in fact
-it is specific to the rockpi4b board.
-
-But instead of doing this, why don't you send a patch to
-linux-firmware to add what's missing?
-
-Thomas
--- =
-
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
