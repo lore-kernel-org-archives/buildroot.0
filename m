@@ -1,182 +1,103 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D573C982D7
-	for <buildroot@archiver.kernel.org>; Fri, 18 Sep 2026 17:46:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 314D5C982D7
+	for <buildroot@archiver.kernel.org>; Fri, 18 Sep 2026 17:53:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EEC4660BF7;
-	Fri, 18 Sep 2026 17:45:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D2351812FF;
+	Fri, 18 Sep 2026 17:53:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XqhJZCSUFhIM; Fri, 18 Sep 2026 17:45:59 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org D959C60D56
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=3; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789753559;
-	b=J9o599rDA5AaWIEYwuj09C5dGheWfqluPc9Va0s5br+mRhXYsNf7QTsbeBaFjVT4YdkG
-	 ExfgtzgXOs8J8n8QVzKrYxUebbELu0w/1P7qULc20fYHVFqUC2LUkozkpaqKq+gz8WWef
-	 /bWym5SvQL47wy7pv0mU+97XGORdoF4/41BDsz4SP7Qn4Sme+50i8b+hoRn65lniuAhY6
-	 tud0KWo/O8qQJ4wbMsrlDbBhUTCY5YSLTOhGZmvysQKYobCwsH5eJ/DU1d12zsVwdQ/SU
-	 qWbZ1lsC1/kIjAOKiNEX+FdYDYphye9Qb0fXOC80cytZITFvJiftE1IvebJramDlGUw==
-ARC-Message-Signature: i=3; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789753559;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5WCqSBeZLBmp; Fri, 18 Sep 2026 17:53:18 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org DF6B381303
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789753998;
+	b=gWX85HWeBr5l5vHSieJzCeYOaeuwxf/mS23yTz9HYQUXoDxakf7Xgcj6PwxdDrtFKbj3
+	 VnPIQoCBnTDoLWuWRps33VqZDBWv7bl9fqPTAvkLXMpKko8XYDd3mhJ5c/ng0+c0Nzy3+
+	 DlQjbrCPMZ+7fpNa8HQXmGJ/RqEWaJ6fq6BT2emEskZPnXmCNrQ8+qD8GvbrpNkzd/++m
+	 +p9y07RzsPQGAatPu7XJ9QZUj8F383AYg940H1RR90VIgVXQ8JzTLaBrlec3YQ1ZKoY8j
+	 MPAMm7a0eAAedwrQ689fkF33otyMqgBqXH+Cmc2uJvEkQKc/H6G/XwFOqOuUbrMMqJw==
+ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
+	c=relaxed/relaxed; t=1789753998;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
-	 X-Received:MIME-Version:References:In-Reply-To:From:Date:
-	 X-Gm-Features:Message-ID:To:Cc:Subject:X-BeenThere:X-Mailman-Version:
+	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
+	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
+	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:Content-Type:Errors-To:Sender;
-	bh=MFyOu+TypIuLBbxJA03TS6EqKRnXPsKs6uTJgQxU9P0=;
-	b=Nygvpe0xbkidL7E6YCr8yBydR9m4T9K8wxp4Gx31JXJpzXVAZeDbSBOsVkK8udUWbg8K
-	 PTAhq7n2rTekmn4XMRFT1D7TkBdcxZIOsOa55aFh8URMZwRzvNT9pFsRLrxuBsTZa1pP/
-	 /DopRG8qMmdqsIZzORzBNXhJpIJZuCZI3c4SnGOC2l7uxUtVGrBQcjyjZ2OSJQ98aTqaM
-	 wO0pw+aP/x41uWSFfhQYwHZ3BamPE1WY4jxYZJzxQAuAO8/f0mBRxW3rzv+sAo9PY2AJZ
-	 bOtj7whc3PesPX4mhB2KwjRdP0iMJpnKs6TMKWl6hcaOSpHyJNEP/xiUOrCXQP1WobQ==
-ARC-Authentication-Results: i=3; smtp3.osuosl.org; dmarc=pass header.from=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=ZuueCRix;
-	arc=fail smtp.remote-ip=140.211.166.142
+	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:Errors-To:Sender;
+	bh=roYxvm3Dd18zWlF/1R9EflUhWvQtxKHejptyX/YTiLc=;
+	b=JPzDrL2jy3OpHJIaAAXhQm8S0lUgOgRJWXY4IWoV+lIBU1OMMGHSBQBStTMJlf9keQJk
+	 okz/gn3hJqWoOIbqyIldioHbSBf33ESGB7Q4uq8am3HSZLgfiY+HkJjofnnZbFcTnouJS
+	 MATmQWhNTmObAVHS8lQafz/3HDZXUE5ql9a8hlhj4l+666Uy5vf15oxmavyqaWOG9hb16
+	 vZai3OoR7jVj7zmsvl/0FROu/xeIAxDanuF8SGO7cLN5fJwsoXW2ZpweDZlUv00LymdV9
+	 Sqowy39yY2r8O3cqMSLigtlmmmNgIioe+kOj8luLKnKlSQYDY0rERAVfITLselMHIFw==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789753558;
-	bh=MFyOu+TypIuLBbxJA03TS6EqKRnXPsKs6uTJgQxU9P0=;
-	h=References:In-Reply-To:From:Date:To:Cc:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=V5ibB5ybx90LoPSpfgScvMaS0rqOSmP9lOdgkLUuyz3okERZD7mImwg0egc27oK+N
-	 3NcFLRcowDIs+k8rT3jOnIw4xcN1+zqskky8OvCpCqgXnU0xqx29SMH0sbie4hOFPI
-	 bDBWHgz1cRETTMLXogzdn4oAnwpjJP/ft8E0k0l9dR4+nJmQ/y0uzq1BHB8X2gOKFo
-	 k8WEp44iiIdzwdp7igXRfNUt/XvKwnsvWLxur8Hn4XDxi19e6BIN7z/6B0oukeYSVh
-	 8Q5OboggTb8yhPZ6zP8yKKogv56Zsfp7j6wK2ODSkSbiar5obaI+Cbsq43mNCc83eS
-	 K/OlOhtjKgDCQ==
+	s=default; t=1789753998;
+	bh=roYxvm3Dd18zWlF/1R9EflUhWvQtxKHejptyX/YTiLc=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=JTdg4ADBOQjMQSxIZmDO7K27kX6WyF6zAWgRuTOZEokWUvKlGIeLxmC6uhkaA9xc3
+	 IzlMmJa+cOykGqckt93SLQdfyqGV2W+1F9xsXJ/Dfh56KyswcAp2KBkwIdNtC/BSlV
+	 e1aWOe53S5Gcl06CLMSkP9zuPvWa3xbzP+JQBvqR7EjVj8a6TSFUD3rF/O3Z0BmyXI
+	 pW5rNRCTbcdo1MVx959RzN5sHCtO2POHfCncUBYgMFSeGBezpTIGyNDmigoo4bUgdf
+	 V05kz5a5PL3DuqtpsJh/xGxEzZWyprWZ28PVv2KoGsjQnj/ZZ669mAjjAf/IW+xt3F
+	 aJ7LmNJm6ebsw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D959C60D56;
-	Fri, 18 Sep 2026 17:45:58 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 7071F237
- for <buildroot@buildroot.org>; Fri, 18 Sep 2026 17:45:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DF6B381303;
+	Fri, 18 Sep 2026 17:53:17 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8EEC6224
+ for <buildroot@buildroot.org>; Fri, 18 Sep 2026 17:53:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5636B60D56
- for <buildroot@buildroot.org>; Fri, 18 Sep 2026 17:45:57 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 74BE960C31
+ for <buildroot@buildroot.org>; Fri, 18 Sep 2026 17:53:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hYPxdIjmg7JY for <buildroot@buildroot.org>;
- Fri, 18 Sep 2026 17:45:56 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 2E18E60BF7
-Authentication-Results: smtp3.osuosl.org; arc=pass header.oldest-pass=0
- smtp.remote-ip="2607:f8b0:4864:41::10"
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=pass; t=1789753556;
- b=mMlUvlj26MVkynf0q7rV9lpXf4qUJVNjE60cPfvkRC99HAg7EZj2tjDHrD+mQatJ0rG/
- ytjiuBFNtDuREq7wWijZK8HORp80ZBSAGO5ucM/xqbsdEg9/tNQMMRbe+YyOqPN4+uVww
- IkH9nHLLNVv+GX52kYK4AvtvL6Vr8ZDc2MxCJ0bABVS92r/rCiUPTiIwf/XKmK7bAqzAO
- zjNyjKFxDf6AU/6tR1W7bjhEujYentITBisG0smmHOIudW/Gk3+KB9jiFV9ZXkLS7NX51
- v+IIGNh76tD0dIZSF5nzMNc2wY1nVQcct9Bj+v2LHQsExlkpVkHhqLtxfrFJJML2avg==
-ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1789753556;
- h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
- X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:References:
- In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:
- Content-Type;
- bh=qR8ttLWDItpGcW6wlpvyob8ScR7oaId+C0ZYP21Ez5Q=;
- b=Sg8Vl26ESSBA/gfzxCaaray9a+VaTbzfyB8HJpijRW9eITivGemuUq3LuJvMLV8EIE81
- 3smdN5thZQJaiP/rYfHCq2RhdvXbRnSnUceU9s9MgnyKqgNhEdt0iZZbNPk6bnp44qiRv
- vORngrUsxYBGyUcQU4IAMvDDg56QL3NcR5ec0XykM65nSAYsmn0Jy5fAHQI/+Den7ew7Z
- Iw09PZRDcgnFSEkP6runlw0SOMbymj3WRjnZxWjRFg9gkCqgDfxyTwxA12MMDfAc/ezqS
- /tD++bYOgdt16HuuYtNu2aXjGysrqxP/RCpIyTFIZ5S+sR/UF0FWaOhsY3+0QHFVGFA==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org;
- dmarc=pass header.from=gmail.com; 
- dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20251104 header.b=ZuueCRix; 
- arc=pass header.oldest-pass=0 smtp.remote-ip="2607:f8b0:4864:41::10"
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:41::10; helo=mail-yx2-x10.google.com;
- envelope-from=fractalclone@gmail.com; receiver=<UNKNOWN> 
-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp3.osuosl.org; dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20251104 header.b=ZuueCRix
-Received: from mail-yx2-x10.google.com (mail-yx2-x10.google.com
- [IPv6:2607:f8b0:4864:41::10])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2E18E60BF7
- for <buildroot@buildroot.org>; Fri, 18 Sep 2026 17:45:55 +0000 (UTC)
-Received: by mail-yx2-x10.google.com with SMTP id
- 00721157ae682-85d43ac6090so9814107b3.2
- for <buildroot@buildroot.org>; Fri, 18 Sep 2026 10:45:55 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1789753554; cv=none;
- d=google.com; s=arc-20260327;
- b=EqI+2IZ83Rm3qriBGiBTWLmW793gry4pvPHLCqvRNHrKzX/X9a0ZB4cRBUR1n5Ot1N
- VJcMsCqKQ3Z+CI/OUv8TkW/gcp5wBLNxk86YyygiEgOBqFPFDrurdSqYg0Wls+I2KCNW
- CBD5TxRRZBHuY+cuXKIpMBkdmvFXQPYjabqREptHCwdItGHE2icWhyi/2Y0lQ8MnLD6G
- 88+xpQcG4sjwao+tfs3T6Z6tj8c03ksqTADfi2Cvl6loNGHVVb9Vt1kLgjAb3Ilp+TTI
- 3KHv2G72fxaz4FsgtvEouYXv57a9DiT3a67h9ihZeY1PLsWhKOpgfPb0DgxFIG1Zt8E/
- kzxg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com;
- s=arc-20260327; 
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:dkim-signature;
- bh=qR8ttLWDItpGcW6wlpvyob8ScR7oaId+C0ZYP21Ez5Q=;
- fh=t1HKz4FGwg2rlpSa7EUNbKGYl/IKyrvQ/1p5yhNuG2o=;
- b=oSVn63Tq+TMIske72MzbTVEYUP8Q1gYuCQdPnhNe7w4/vvpNK99RU/CJaQJZq+DLr5
- X/pJVQc6Mbaag7YzfXwZ0bFAT16+3+9ptFsKHlvi5e0CIQN19qD5nRwE0ek1wCY2C10G
- XcTxSdMD2GeKmPF36g4TkzGgeYxe2HrDUotkIx83EFBckUZLzpCTfxYX9S1E+tcpMZqZ
- +RZxw3TyRFO6BL6L2LYdWA+NhvHtvnIviB7cSVWFl6eBY2TWwPGSKFJUJ+IkAqKLxKdM
- +r+5/YyUfxQSKxA5X/+W/So0ePuHuFMomrPnwFQIWtbMUGjXGJLQ8Ez6B923kbtGqSdp
- FSPQ==; darn=buildroot.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1789753554; x=1790358354; darn=buildroot.org;
- h=content-type:cc:to:subject:message-id:date:from:in-reply-to
- :references:mime-version:from:to:cc:subject:date:message-id:reply-to
- :content-type; bh=qR8ttLWDItpGcW6wlpvyob8ScR7oaId+C0ZYP21Ez5Q=;
- b=ZuueCRixYg/CgAixtSw5yVnWv0LXkzoDkCal9jo0eb7Tys0iaHSt2t+EMwarC8abHo
- KYSnTK5K0r4s3acYErP3UbN9Tzrq/egsFPoTmIbypQ59KgEnYFyuZYdw4NBk9I1ShoLT
- zdp16c8QPm3D/R9awUC/aRmPHcwAPPRUZOoD+6KlALCcDW+2pEOy0OvQ/Q+p7Kq6K5UM
- UccFGBcLHBVDXXMDbWDVUK1c7j1q1eK3kOWHzbIn6uf8BbVKBQKSsVgBDZDID+Q2ILyh
- xJ/4wuFsTOnJbBYXSx0sXTMTWGBM7txswo/FjthpMFImNImyJQ6oJz/PExJY4dU5Zcac
- ho+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1789753554; x=1790358354;
- h=content-type:cc:to:subject:message-id:date:from:in-reply-to
- :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to:content-type;
- bh=qR8ttLWDItpGcW6wlpvyob8ScR7oaId+C0ZYP21Ez5Q=;
- b=Nn3i+qCy08a8s0UPe8VRSDQ4x4qBWVjhYef4NgWQhdvUGbwVo0sPf2qIVdeksTTYGw
- ubOYBYU3fZjzKcOW6taw8P96j6g5xnO4lRYmfdAZ8MkZtzaNp1EahodoAffDNvsuE/Hs
- Zt/pshsoFNascnKRAQ0L1kFht0Wrvy60TXB/RvU6YTLLJxU74vCjDJIv4MpXfXyBkXUR
- AN/HkoCLl28z5i/0jPADAiF5pR7+lR1IykcYllchwwqtvKmi6t9fr60CfZ9QFZAP/eYD
- S4w9SRfNda/Xtjsp7ugIzYFjoui2ozopAAsweG7pUETjGkMO31Kamo32c1iev9TOA7q6
- J31A==
-X-Gm-Message-State: AFuF++l5PNPV2v93kMKqivBfnuuTg2w5J/pWAkQ0hS4snFUepVCGSKeL
- PzYfA3NxQYcUlih3KcbG/1EenEnKIj3DTHTxI9og3okBO/PiSwqlxwASQeR3a3nunH3eVKnwrcx
- ziEoNwrcfcdWL15cJ91GbuNcp8MovgX0=
-X-Gm-Gg: AYBFou0c8DuqKjumFlc6zEcPewts/1UZrGReme1hR2wmgaCbkdboutpsRRiqwAH+a3V
- b35bi738/tqfOLojv6uYoESM5I2iZB3KfKV6H38TI1SoKdqDPyOlY6DWeUcvmxYL8nl+DwvMmHI
- W/NFd4wIxDytrarFUYapKMtwazzAALRHe+IYbt9TFZkGXaLkshx4g7t/T+OiNxPryxacwAUG8jX
- ixP0MQbHCswFKp9JJj9naMe3p87kEezuBzuC6TZvFZCjpNoXiF8+9fFLPPosyGAm7SGuvJbz+xk
- cNuWnVXutuqcLxTeYfLnOw2DuP272KPHpPGyIOZ4S8QEhkWYuyyzgWA=
-X-Received: by 2002:a05:690c:82:b0:873:5c7b:c0f8 with SMTP id
- 00721157ae682-89735f6de27mr12115897b3.48.1789753554266; Fri, 18 Sep 2026
- 10:45:54 -0700 (PDT)
-MIME-Version: 1.0
-References: <20260917-rock-pi-4b-v1-0-a1da4ee05567@gmail.com>
- <20260917-rock-pi-4b-v1-2-a1da4ee05567@gmail.com> <aqznoUtW4EIcK_8m@windsurf>
- <CAN7e4jochVOH9Tj19YiFeeOxix=-bn4OhferJC9Mgg=j-AVsDA@mail.gmail.com>
- <aq0uT-ghEihRclnw@windsurf>
-In-Reply-To: <aq0uT-ghEihRclnw@windsurf>
-From: Jean-Paul Etienne <fractalclone@gmail.com>
-Date: Fri, 18 Sep 2026 19:45:43 +0200
-X-Gm-Features: AcwNN1X86NIcSe7dtKlM1wjMRzqxmTl2YXHP_EFS3oQriuZeeNURzQKxqBP7CQk
-Message-ID: <CAN7e4jotGmfe1y_8gR4imH1_YTKoEJJODPK6kfAtpL9hfLzcgQ@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
-Subject: Re: [Buildroot] [PATCH 2/3] package/brcmfmac_sdio-firmware: new
- package
+ id aMFER2A57lwE for <buildroot@buildroot.org>;
+ Fri, 18 Sep 2026 17:53:15 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 9D4A060D5B
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789753995;
+ b=lJgHKDJsHk8JDM6I5CiXCmGUBi9VoS//n3Pn6bVKsN4tbCKRFucfqwVKePibzjs12eKw
+ ZrPwUH4Jtpdz03/DbO1yMnhNR5l/klbvkskUbHByQUIpVJYpjXd+4Uvxl/mHcGEDpmIHV
+ nsAOoO7w4vQC9TMqW5GDAZ1fZtchSXKlIoYVn0RBd5lWMgsvXJaiS7jPL27glKq4kc4sI
+ SbFCx2NelrOxWQwIWgnKPLpyhYuWYFnGRI89ProO25m7BHZtoGzH3pCugUGjIsjiwOgtl
+ 93mGHmh9khzHbxabtmC3GZsZP3UsoVhaY01Pq/JPVr3ROvwNfCUt8TdemOGFKKG+Fag==
+ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
+ c=relaxed/relaxed; t=1789753995;
+ h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
+ X-Git-Newrev:X-Patchwork-Hint:Message-Id;
+ bh=2woHIc2KmepOeeJVIi2jxRbK4n1Chx65Ed9j460edc0=;
+ b=beP/CzSWBhJ0UpZHEBe4SUI56DirBgFmx9DobLWORejhD61T+9zeQmkFpBJehvGn8MAZ
+ tfhMbCUMMMcBapL+ogiYNupgFsDwcC1cJJktMY7dD3m6kk8OpChl6smK46U54oXJv3BUN
+ vORoy20znwGc1eq/whAPpyvBpNoYWJ3c4Fxurr7yIaP6BVsjaCqrSOQb0P1tpqVMwPU3v
+ iuX2b+00NAGr0H4EBVsZzYNxhjP2Q/Gcdjta0owovqTx/m4MBH2yXWGibvSXoeYYtjBjy
+ TB+GbfYAk+I4hRyFb1Av4OaAoaRIwB9fxHHffGuU1G4wOLdC44rS+d/VwrYzDDCrPfg==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org;
+ arc=none smtp.remote-ip=140.211.167.122
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9D4A060D5B
+ for <buildroot@buildroot.org>; Fri, 18 Sep 2026 17:53:15 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 2D634976A3; Fri, 18 Sep 2026 17:52:08 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 18 Sep 2026 19:41:25 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: d24f5fcc20c3ac2b63a75835050559c3f43ceaa6
+X-Git-Newrev: 55cec1d01307f8e93c6ce61c95c22c863fc1ce28
+X-Patchwork-Hint: ignore
+Message-Id: <20260918175208.2D634976A3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libsoup3: bump to 3.7.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -188,156 +109,72 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============9040344990558815308=="
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============9040344990558815308==
-Content-Type: multipart/alternative; boundary="000000000000d66d50065bc578a1"
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/55cec1d01307f8e93c6ce61c95c22c863fc1ce28
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
---000000000000d66d50065bc578a1
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+News:
+- https://download.gnome.org/sources/libsoup/3.7/libsoup-3.7.1.news
+- https://download.gnome.org/sources/libsoup/3.7/libsoup-3.7.2.news
+- https://download.gnome.org/sources/libsoup/3.7/libsoup-3.7.3.news
 
-Hi Thomas,
+Add zstd support which was added upstream:
+https://gitlab.gnome.org/GNOME/libsoup/-/commit/579ff56747c3aea2fa7dcbf125bfbd424b3ac59a
 
-On Fri, Sep 18, 2026 at 2:29=E2=80=AFPM Thomas Petazzoni <
-thomas.petazzoni@bootlin.com> wrote:
+Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/libsoup3/libsoup3.hash |  4 ++--
+ package/libsoup3/libsoup3.mk   | 11 +++++++++--
+ 2 files changed, 11 insertions(+), 4 deletions(-)
 
-> Hello,
->
-> Thanks for your feedback.
->
-> On Fri, Sep 18, 2026 at 01:08:35PM +0200, Jean-Paul Etienne wrote:
-> > Hi Thomas,
-> > Before adding this package, I've checked linux-firmware and saw that it
-> does
-> > not support brcmfmac43456-sdio.bin firmware
-> > required for the AP6256 chip.
-> > However, while looking in the brcmfmac_sdio-firmware-rpi package on
-> buildroot I
-> > see it supports the firmware:
-> >
-> > ddf83f2100885b166be52d21c8966db164fdd4e1d816aca2acc67ee9cc28d726
-> >  brcmfmac43456-sdio.bin
-> > 44e0bb322dc1f39a4b0a89f30ffdd28bc93f7d7aaf534d06d229fe56f6198194
-> >  brcmfmac43456-sdio.txt
-> > 2dbd7d22fc9af0eb560ceab45b19646d211bc7b34a1dd00c6bfac5dd6ba25e8a
-> >  brcmfmac43456-sdio.clm_blob (default_config)
-> >
-> > But brcmfmac_sdio-firmware package has specific firmware and config for
-> the
-> > rockpi4b board as follows:
-> > 78085a816d23d9877e3ab872d8eb142646bfde18afd2c7a5b89885327a287d19
-> >  brcmfmac43456-sdio.radxa,rockpi4b.bin
-> > 343d1c79cfe0e10e1777e3de19a0302f748f69fa8356cab2c36ca0cf90bbcf0e
-> >  brcmfmac43456-sdio.radxa,rockpi4b.txt
-> >
-> > And they are not just symlinks to the default brcmfmac43456-sdio.bin
-> > or brcmfmac43456-sdio.txt
-> > So I thought this package could be useful to the community especially
-> since it
-> > supports a lot of boards.
-> >
-> > I'll update the patch.
->
-> In what direction will you update the patch? I guess the main issue is
-> that your package was named just brcmfmac_sdio-firmware, while in fact
-> it is specific to the rockpi4b board.
->
-> But instead of doing this, why don't you send a patch to
-> linux-firmware to add what's missing?
->
-
-Yep, I'll check that, sorry I did not see your email early.
-
->
-> Thomas
-> --
-> Thomas Petazzoni, co-owner and CEO, Bootlin
-> Embedded Linux and Kernel engineering and training
-> https://bootlin.com
-
-Regards,
-Jean-Paul
-
---000000000000d66d50065bc578a1
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div dir=3D"ltr">Hi=C2=A0Thomas,</div><br><div class=3D"gm=
-ail_quote gmail_quote_container"><div dir=3D"ltr" class=3D"gmail_attr">On F=
-ri, Sep 18, 2026 at 2:29=E2=80=AFPM Thomas Petazzoni &lt;<a href=3D"mailto:=
-thomas.petazzoni@bootlin.com">thomas.petazzoni@bootlin.com</a>&gt; wrote:<b=
-r></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex=
-;border-left:1px solid rgb(204,204,204);padding-left:1ex">Hello,<br>
-<br>
-Thanks for your feedback.<br>
-<br>
-On Fri, Sep 18, 2026 at 01:08:35PM +0200, Jean-Paul Etienne wrote:<br>
-&gt; Hi=C2=A0Thomas,<br>
-&gt; Before adding this package, I&#39;ve checked=C2=A0linux-firmware and s=
-aw that it does<br>
-&gt; not support=C2=A0brcmfmac43456-sdio.bin firmware<br>
-&gt; required for the AP6256 chip.<br>
-&gt; However, while looking in the=C2=A0brcmfmac_sdio-firmware-rpi package =
-on buildroot I<br>
-&gt; see it supports the firmware:<br>
-&gt; <br>
-&gt; ddf83f2100885b166be52d21c8966db164fdd4e1d816aca2acc67ee9cc28d726<br>
-&gt; =C2=A0brcmfmac43456-sdio.bin<br>
-&gt; 44e0bb322dc1f39a4b0a89f30ffdd28bc93f7d7aaf534d06d229fe56f6198194<br>
-&gt; =C2=A0brcmfmac43456-sdio.txt<br>
-&gt; 2dbd7d22fc9af0eb560ceab45b19646d211bc7b34a1dd00c6bfac5dd6ba25e8a<br>
-&gt; =C2=A0brcmfmac43456-sdio.clm_blob (default_config)<br>
-&gt; <br>
-&gt; But brcmfmac_sdio-firmware package has specific firmware and config fo=
-r the<br>
-&gt; rockpi4b board as follows:<br>
-&gt; 78085a816d23d9877e3ab872d8eb142646bfde18afd2c7a5b89885327a287d19<br>
-&gt; =C2=A0brcmfmac43456-sdio.radxa,rockpi4b.bin<br>
-&gt; 343d1c79cfe0e10e1777e3de19a0302f748f69fa8356cab2c36ca0cf90bbcf0e<br>
-&gt; =C2=A0brcmfmac43456-sdio.radxa,rockpi4b.txt<br>
-&gt; <br>
-&gt; And they are not just symlinks to the default=C2=A0brcmfmac43456-sdio.=
-bin<br>
-&gt; or=C2=A0brcmfmac43456-sdio.txt<br>
-&gt; So I thought this package could be useful to the community especially =
-since it<br>
-&gt; supports a lot of boards.<br>
-&gt; <br>
-&gt; I&#39;ll update the patch.<br>
-<br>
-In what direction will you update the patch? I guess the main issue is<br>
-that your package was named just brcmfmac_sdio-firmware, while in fact<br>
-it is specific to the rockpi4b board.<br>
-<br>
-But instead of doing this, why don&#39;t you send a patch to<br>
-linux-firmware to add what&#39;s missing?<br></blockquote><div><br></div><d=
-iv><span style=3D"background-color:transparent">Yep, I&#39;ll check that, s=
-orry I did not see your email early.</span>=C2=A0</div><blockquote class=3D=
-"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(2=
-04,204,204);padding-left:1ex">
-<br>
-Thomas<br>
--- <br>
-Thomas Petazzoni, co-owner and CEO, Bootlin<br>
-Embedded Linux and Kernel engineering and training<br>
-<a href=3D"https://bootlin.com" rel=3D"noreferrer" target=3D"_blank">https:=
-//bootlin.com</a></blockquote><div>Regards,</div><div>Jean-Paul</div><div>=
-=C2=A0</div></div></div>
-
---000000000000d66d50065bc578a1--
-
---===============9040344990558815308==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/package/libsoup3/libsoup3.hash b/package/libsoup3/libsoup3.hash
+index c0b860875c..588390b957 100644
+--- a/package/libsoup3/libsoup3.hash
++++ b/package/libsoup3/libsoup3.hash
+@@ -1,4 +1,4 @@
+-# From https://download.gnome.org/sources/libsoup/3.6/libsoup-3.6.6.sha256sum
+-sha256  51ed0ae06f9d5a40f401ff459e2e5f652f9a510b7730e1359ee66d14d4872740  libsoup-3.6.6.tar.xz
++# From https://download.gnome.org/sources/libsoup/3.7/libsoup-3.7.3.sha256sum
++sha256  4e6a67fb8ff1376577afc24a26c842a347b0034eabf71ef13d0382b1c5bc05e7  libsoup-3.7.3.tar.xz
+ # Locally calculated
+ sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
+diff --git a/package/libsoup3/libsoup3.mk b/package/libsoup3/libsoup3.mk
+index 34a9ed2741..a850fbaa21 100644
+--- a/package/libsoup3/libsoup3.mk
++++ b/package/libsoup3/libsoup3.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-LIBSOUP3_VERSION_MAJOR = 3.6
+-LIBSOUP3_VERSION = $(LIBSOUP3_VERSION_MAJOR).6
++LIBSOUP3_VERSION_MAJOR = 3.7
++LIBSOUP3_VERSION = $(LIBSOUP3_VERSION_MAJOR).3
+ LIBSOUP3_SOURCE = libsoup-$(LIBSOUP3_VERSION).tar.xz
+ LIBSOUP3_SITE = https://download.gnome.org/sources/libsoup/$(LIBSOUP3_VERSION_MAJOR)
+ LIBSOUP3_LICENSE = LGPL-2.0+
+@@ -51,4 +51,11 @@ else
+ LIBSOUP3_CONF_OPTS += -Dgssapi=disabled
+ endif
+ 
++ifeq ($(BR2_PACKAGE_ZSTD),y)
++LIBSOUP3_CONF_OPTS += -Dzstd=enabled
++LIBSOUP3_DEPENDENCIES += zstd
++else
++LIBSOUP3_CONF_OPTS += -Dzstd=disabled
++endif
++
+ $(eval $(meson-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============9040344990558815308==--
