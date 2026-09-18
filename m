@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 312F4C982DA
-	for <buildroot@archiver.kernel.org>; Fri, 18 Sep 2026 13:08:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A63F4C982D8
+	for <buildroot@archiver.kernel.org>; Fri, 18 Sep 2026 13:08:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EEFF940CFB;
-	Fri, 18 Sep 2026 13:08:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7338E40C94;
+	Fri, 18 Sep 2026 13:08:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qqj0xYVpgRY5; Fri, 18 Sep 2026 13:08:04 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org D651B40C94
+ id 4w1UrbkRexTH; Fri, 18 Sep 2026 13:08:07 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 152DE40CBC
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789736884;
-	b=ii3GD0oZzYhXn1zfOTgkI5t6YZAu8BlWBhuy7P6tLLneZpTh8bZLR7NuMrhiuw1PA8LB
-	 /ol69IMIQi1QrFWI5MTQSsC2BDg3jVtqFfphv38VKYySj5Uycdx+QWLocGs8wmXwO9dGv
-	 6An6tFfRdVrhnz0JJDaqdko9xqSR7zZl196ir2gm5QSXEVxuGYMjrvBAaBO2WLRmMQxkE
-	 x7Sdx+4F9qntvwV5nu2vIPJbsMC9GHHs/kSPcjLH5Rm1lGO75xDOmd76aGOwTs7C9Mfrc
-	 aDdk17zerF2qA2K1wHnIjHPJQJZFZioBkVN78pArDFAJ3RBuLZuGYbSMYvgS6itkSTQ==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789736887;
+	b=UMGTxjAmzyo3aNke42njNbRd4VjSC8BVU9n9soawKOSFxIZe6EdUKiokpkYp5Ml2cuCN
+	 XO8fVhZUyXWGJFl+zuexDP+RtO+niILoOoiXGmfe8UyytaXHbufWY74ztKtxdClnlz7wW
+	 Gs2bbR4c5kWaoj3oqX6xMMgEMM9K6qIx47wAZ9nLq+Buwdz7kK0JudcTXv/L4TMZqoGBA
+	 GEEDXWeLKkjN3jJZTrUef3i89tIx12FZT+tSCDFiR//sgWbB7lnBnm2h2XZOkgwgGU7M3
+	 0B4aos8EsvqUXQrTat+J+49bKTFVTbYv2V6pw57uSt/c/7XzX3dCNfeLSm9A3NpKhyg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789736884;
+	c=relaxed/relaxed; t=1789736887;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -32,115 +32,115 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From:Reply-To:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=H8bxquDhtBctpVls362NYeWdY2Tf14flYP6rrFvN8Ks=;
-	b=tVxioMJ6M50L4YIMM/+VOl3sUq7xp+k9vHuaZvfsXOVJNnyE7LR/XAKuBq72OUH/vl79
-	 9Gcz93Sl7LwtaNbDOHriVb3M7L1jrXbwEsL0kfrs5KkzfEVWBGOSGzmpjIWBT40g69N5c
-	 OWfWughDFVT5U26dpBOHEhd2XG8M1vT0clDD3MZFzDcEtx/kcWIxtw+xseqakA1fIb4Eu
-	 8o87PNp/0X+ZqayXBNNqfnikjpRqQyLVbB49QeTQ0gS1jh43FNOR3aQ9mRubZHCeZLJPy
-	 gfPUhiU3DbqOmZV6zNrZ6OYEy6Da+DLzw1bsTJWRMn9WwANGJh0u6pYSGJK8YxM9HhQ==
+	bh=vidr3aVzjnUkpbvfNqhRDnlJY1EiAcvoHwS1q9gIwXE=;
+	b=lC+OMk9UjOv7hPFc73vCHPFs7NvGfVTRVnN52VMGy4Z1FymCq6KXw/ubg0qaa5R8yTiI
+	 vWMCjHMD2ViJJguf/ENoYGyHEr62+1Y7xgEfIx9Hb+j9NHMOeffztOa/vh4RWau89xAtz
+	 VheF1+iOIs7/+8eFaFy34jA2X15JeFLqxVUIXd1QVwl5JrFtN357ChsdKPYQFODNOVphK
+	 Rej8PbC98fIJh95Pk31drNPVLQviy+qclN/m/OlVetJ3E4MWMx6bKq9bA9FSvdK37cpEH
+	 I0MN3lH02LOMcwXKqO0bM+9yd/tzxPEPoO7NjXG2NO+6wCw1a9Wt23UBpmkwitj7EIA==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789736883;
-	bh=H8bxquDhtBctpVls362NYeWdY2Tf14flYP6rrFvN8Ks=;
+	s=default; t=1789736887;
+	bh=vidr3aVzjnUkpbvfNqhRDnlJY1EiAcvoHwS1q9gIwXE=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=k+vNSrUAPgwYHM0P50dRugJfRsUtE1BUgQwC9Tso9zY6Bi/XmORfRBMmRWmCmPkkD
-	 wh8DoZW8zFeubIy/hEcD20qxNnCBhHrxEW0JOGjkFn+fSRO0W3rSM5EVajqCqxrMHh
-	 oS+jMcdQ0WtM/HNmGCxySO9jzU5R1z/yDtk2wK2spLfQdli6kKx765n6yz/TB+NKCT
-	 XE5pWS9kP9FYjR1ltQSOqytrUr5go12OVQqzert7nKxdNnyOZw6qHNIhh77AcVHh5w
-	 IDFq663LH2tgt2EYX11SALKNQ+MYZNnLJfdV+as01UZ/ZIL98/ZtWopq/QU47hRP37
-	 xOIC+38hhKEYA==
+	b=OjoPKF6CKaZChs++9IUWY9FkpRYmTQxXJGGCeVeIto4cX2u2XQhD/B74T6kk148ge
+	 2FJ4K50/sham3hlB2Dzk8gCtv9Juea2cWtkzdAAuF6Gcwqvywv0MyihQzIieHhOsR8
+	 hTbr5+X+5eR/2sMMUfrfWzFiBevyNify8CrhuMdZZYOcJMGqzRCBXUXBSILSH7YUQ9
+	 /b76n/TtnhdfUBPrUTfrZctLFn61z7orfkz0S3D4mp9Kpnfr9JWMZVZ0bDOKQCM5M9
+	 UuGsddVDKr+R608nK9ncZnXQ2mTbQpemCF1LUfzA8VQ+aWN28wZPB9I3NycE54a95s
+	 M5y9jJeXO20IQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D651B40C94;
-	Fri, 18 Sep 2026 13:08:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 152DE40CBC;
+	Fri, 18 Sep 2026 13:08:07 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 1376313D
- for <buildroot@buildroot.org>; Fri, 18 Sep 2026 13:07:51 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id D7DAA13D
+ for <buildroot@buildroot.org>; Fri, 18 Sep 2026 13:07:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0517981183
- for <buildroot@buildroot.org>; Fri, 18 Sep 2026 13:07:51 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D5865811AC
+ for <buildroot@buildroot.org>; Fri, 18 Sep 2026 13:07:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HEOuF9w5JP28 for <buildroot@buildroot.org>;
- Fri, 18 Sep 2026 13:07:49 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 754248116B
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789736869;
- b=rFiCyqtGy9gR/J+Gb1p5fTW0wR25eqz6pLll2yoQRzpmvF/dmDJbISrdFVGjTOW0sIlN
- 1eEs6kf25CfRHh2gA38y6EC8pEEY20eBORFtAe7Vkj1k0Bfq++M/9PbXQxQGpVFrBqszb
- Q7ECcAGJoxsDn1tfoQae9gnLflpUYsmZZ1VYrX9LiDGQzyHs9wrzNmZurwHx4o265jRRC
- Jf36O8C4fKc2p9eRQkByRYV8jCc/se1P39XhvLaRKYB2/+Cq0RHsZJgwaIUXIUZ5wnRmz
- OeAac6Cma9NZC6pLfYt8aMmqJJteZo1YOO4Uj88Y9oKIYnFU8G8TC+5ZdQolOvz1uAQ==
+ id Gl6e5fctir76 for <buildroot@buildroot.org>;
+ Fri, 18 Sep 2026 13:07:52 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org E3C968116B
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789736872;
+ b=YQsqxoEwZaXGgiEgeA633w3ziGsTSe1A2/ZYpKH0g5N4hsGYR8N787gWfKLpnnV3NBET
+ nCRQZWY6EAjBasksvz68E7KNoCLEwhl+yw+T7K60oI3p6uN8z1hAae61ZUhLpYceMHgt5
+ Mwwm1N+kokRSNidddUSzkkz8hmSTYzILOndCElynVbVl5gTAhxNNyHj1GiaFIqiEGr1gy
+ 9+JMSb1e0k91eUWnuiz705w/bev3EeyKdrtKryR0d44fjDwAvLDAhAQfZ+TTFuAJ3o2d0
+ Galzxb2b7gD1ogZv4SjnySE361+9G5JZYM+sQgRvOHJq3QYML5X3HVFun1g70ogWglQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1789736869;
+ c=relaxed/relaxed; t=1789736872;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
  X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
  From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
  MIME-Version:Content-Transfer-Encoding;
- bh=F6i/h2X+guQoXmslgKoBQIK1F4utqI8StCKApQn1mCA=;
- b=OcAiSsx9+QZB1vHoRmPHm3+WYUwvWgVRD0NZcVLYlxYPPYaRsb04Pc+uoBVpnNduxCp9
- HB06tWEVEW+zMlgYTgKPPerVpSFIeEAA4KpWEQGRdblV7D3NNOOylz5FoTnZoZmLUfBZ2
- LY8QLRTI76PGHvGlK5JxuMeF31hMzfh402fZJtM+gbRz++L2wrD96ieh8B3LEoqSpegNx
- YDfqqZp4tkLQTEWHg1BH6Dckd16qhX+KY2OWssXsNFskDFEJuqwdsdjV+YSV2dnf/BFha
- vxwTbvG2GhbuR5DTzCeln68gxaTQv0pYuZCDQKBs4ntJzbT0Z1GC35apR6ZcVqYPdGw==
+ bh=QZ6YkXWmTFv2XegbQpGGuVTSU84EQieG28IU9W+5r5Q=;
+ b=habqlxMgMRYGyU7hWruNWR6SBooyPN0YwvBm/uc0cKIfhemOxtdRqiw6KMFrl+f7eYsg
+ OZmRPEXqJXn00U2aUVHdQBsOIJUUuKbfsOG5ezDPhkp1L9dLf6CS77g+yekh56wd9ZjSp
+ b8OUqmeExAUfDUzcwf4ZzXWEYMUFRpxLTWwYvj1VIj4BiWh1qhnWpdp+3vjOHqN5MC++g
+ PhhVEd71j/vEXzXNm3KANsj4d/TeHKcExfhscgNYdMaQChCzwZdrwU9F+LN69P3K2IBwD
+ 5wmn9AthnA+PpHEQyZ4LSMUlwzqGV2bQirtkqYzu5CILY/PpjWr857YQa0s+lLZQMzg==
 ARC-Authentication-Results: i=1; smtp1.osuosl.org;
  dmarc=pass header.from=mind.be; 
  dkim=pass header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b="g3Ohb9/6"; 
- arc=none smtp.remote-ip="2a00:1450:4864:31::11"
+ header.s=google header.b=enyCqbn+; 
+ arc=none smtp.remote-ip="2a00:1450:4864:31::10"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:31::11; helo=mail-wm2-x11.google.com;
+ client-ip=2a00:1450:4864:31::10; helo=mail-wm2-x10.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-Received: from mail-wm2-x11.google.com (mail-wm2-x11.google.com
- [IPv6:2a00:1450:4864:31::11])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 754248116B
- for <buildroot@buildroot.org>; Fri, 18 Sep 2026 13:07:49 +0000 (UTC)
-Received: by mail-wm2-x11.google.com with SMTP id
- 5b1f17b1804b1-49e6b885ef8so4276365e9.1
- for <buildroot@buildroot.org>; Fri, 18 Sep 2026 06:07:48 -0700 (PDT)
+Received: from mail-wm2-x10.google.com (mail-wm2-x10.google.com
+ [IPv6:2a00:1450:4864:31::10])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E3C968116B
+ for <buildroot@buildroot.org>; Fri, 18 Sep 2026 13:07:51 +0000 (UTC)
+Received: by mail-wm2-x10.google.com with SMTP id
+ 5b1f17b1804b1-49e620fa473so4521795e9.1
+ for <buildroot@buildroot.org>; Fri, 18 Sep 2026 06:07:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1789736867; x=1790341667;
+ d=1e100.net; s=20260707; t=1789736869; x=1790341669;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=F6i/h2X+guQoXmslgKoBQIK1F4utqI8StCKApQn1mCA=;
- b=0VQCIoXZrN+JVmhuSPwRbRFyYVAIeoiTzGb0i53yhX44f+wcImV0eM1Hjf5PwdlUcZ
- 5bH/e0Y+0W+9+dxht4pW/pYZ6hV7rb/IRh5iMm+7z6KLQ19JDOvYvS5SstrGLymXtkls
- Enf7jSM/lvL7sxccnE1OV2ea38flR8xWNLWnuOE4L8NmkIC8vvx4DWE+YMif79OXoeir
- 4EQrrq/arF+mpKMnxg37Ksw50Q80nNX2kkIu58FrsC10rdRpISjortOnCC63gThlAPcA
- GwK7B3hWvJc1JHpuTEkjOHLNKU7PPf5OxkzC6IE6i++KKATo6A/2y1EG6Y9G3J4GSSPT
- OAHg==
+ bh=QZ6YkXWmTFv2XegbQpGGuVTSU84EQieG28IU9W+5r5Q=;
+ b=lHPUx2NRTyLYyc/qfR07YMT6mkZ+U0U6A+bZlxFD81SIwWPBjTlqbRSTDyhnSe2f/s
+ 1zyGAFTgdgzxnSy3Q8eNuZIlXACp6SCNMELWu7R32NyGLCGcXRjAm9mdBtgCnvTvUcEN
+ nM7KaTAVHZZL2fVu2a5vCH1sov1o85a2jTJRGAHXRDbqhzZNwt1AmWGNbkGXJ6kPCM4e
+ mthdxFj7R6PXU2Ozk8cl7e5lQ4u48wszY2WJDN98qM8X9AebpoexwfA+ESAn9wgMnVAH
+ voUtZXzWwznn4X8t0KoI6RWoP6TnNrBDjW9MDbwEmBKZsPIgU2Mkb4inq3AwEhxaB3vT
+ SBQw==
 X-Forwarded-Encrypted: i=1;
- AKwUvByxFk2qJbx9D7PoBk9MzsvGWzJTJ4RkKrJmrEIdapaUMLOF3I3r1VWhB3PYc3wxtAUYRaPGhf5s10g=@buildroot.org
-X-Gm-Message-State: AFuF++kUMOKTW7TIJmUN5j7pQOhCu5vE+qAHv+gr/pI6juOZyuCefskP
- OCgi2h0RlHQASs6R0TE/IrPkvJBX6n6Zn8vnyBYcV8KTZymCVm0HPz89wKUDu9S49Ks=
-X-Gm-Gg: AYBFou3le+bNjetllilPJp3tp/qIX8Vp/HeEg+xtHzo9P6Au05tv6bRMxFpmSf7veMe
- YnzmTggaCREwYBCqEHugteA43+aWj/6Qr39gFofuja9RaNtsm+JucfZQGmYZ7jxUlig0yQ/g6dZ
- EZzpuZibUzGLu31Kx2DiIH0Zoc7O4cL7+19e9c0xN5T3BudPMAiI1Xlo1OhymMSaGwTVCoOonR8
- wAlrW155EgOJxqQo5HeJMIK8QX6/25ENLme/ZIfuiufA4TbrtXEOrbne5ofKzhFIDUhRU47t9Pw
- EVXqcc+rrcroNtkD6sQ7pyYheIXIyGSOIb6OCQakfmgzUpvKoP4Rvq/qCGQwSnsGLqeiAxqOwh9
- soz+/8/BNkL6VopvrvjNxIycwsQPFtz32jErYM9p8WDYlxQ9bE+uNW1qlhS58jMXggucq70TiDo
- mNExlai7ewpKuw9RaLjKAoTNIfRMhofzb7eSQ+pBOrZAd4UOTUgQDBYBdXd+mfQx+u
-X-Received: by 2002:a05:600c:3586:b0:49e:7d69:83b7 with SMTP id
- 5b1f17b1804b1-49fc56f7376mr39180705e9.13.1789736867023; 
- Fri, 18 Sep 2026 06:07:47 -0700 (PDT)
+ AKwUvBzKuvRidD0e7jYumbCBiSpS50ZUuhLaAiDGNAQK2qpZUe/QfpipD2VmjEnNEwHp8fIF41OGbNLAh6s=@buildroot.org
+X-Gm-Message-State: AFuF++n824HzvwFUOHuc3ZMVrB9GBFey60kc0JBA1eZ6wtuSTDjv7pBF
+ sL4axJEONfHBiWVJfG4NsslfiQpSsk06voV9BJGC5iN+M6UQiNJtHCcuQG7WCpfSkf4=
+X-Gm-Gg: AYBFou1Ps+cb0e14P7MVEZJs816Lt9dAU6CaOyzqZxxj4xwZXC5RALrZywcXkPbJw1p
+ TEP+Bv+RrKtnvsL60YtksrjufX/UfmOBOX9TBF13FVsGXWb8GNOHjH/Lk7KpOXSHvoWUERCPpq8
+ yF3ooOBstOCBaez3yYrnLK8IDDVO38VLlpoDM+NJ/mGkhd+Coo+HwFAR0FjF2GYm2jfoRhhfb9c
+ 7xxpo8YUK46tZFi4cwPp1ubc3/Dk+pYvD62Dgccjs+cLdqQSbPS5oum3HqrT1bm3DoSu2u1hnOJ
+ IVdq37n5b8y/bz0t8qr7ffAguTumtuudgJYXYslDXPzB+t4dgUufVZBhRfYM4PGUxYrjDlaMm1J
+ MDjU0EbjbfZ5QpW2t95EnYPYBBqt5Y8fbgH2KCscOTGRDN90UlhAezlNQghGeIAOYKIcPhMkc6r
+ TR5vDiuluZS7mWtuJjefW7lRrgQr38cysJ9/7OT5U3ejypXG2PnlrrdIvuzaSZHR3a
+X-Received: by 2002:a05:600c:5250:b0:49f:bd0d:59f5 with SMTP id
+ 5b1f17b1804b1-49fc5746338mr32330915e9.18.1789736869369; 
+ Fri, 18 Sep 2026 06:07:49 -0700 (PDT)
 Received: from arch ([213.219.153.196]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-49fc52a5b6esm28014425e9.4.2026.09.18.06.07.45
+ 5b1f17b1804b1-49fbd32c5e1sm209597805e9.5.2026.09.18.06.07.48
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 18 Sep 2026 06:07:46 -0700 (PDT)
+ Fri, 18 Sep 2026 06:07:48 -0700 (PDT)
 To: Titouan Christophe <titouan.christophe@mind.be>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri, 18 Sep 2026 15:07:16 +0200
-Message-ID: <20260918130716.160741-1-thomas.perale@mind.be>
+Date: Fri, 18 Sep 2026 15:07:48 +0200
+Message-ID: <20260918130748.161033-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260914141416.130674-1-titouan.christophe@mind.be>
-References: <20260914141416.130674-1-titouan.christophe@mind.be>
+In-Reply-To: <20260915092814.17714-1-titouan.christophe@mind.be>
+References: <20260915092814.17714-1-titouan.christophe@mind.be>
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH for 2025.02.x] package/xz: add patch for
- GHSA-5qpq-xqfv-j9pg
+Subject: Re: [Buildroot] [PATCH for 2025.02.x] package/znc: add patch for
+ CVE-2026-82373
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -161,181 +161,537 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
 > This fixes the following vulnerability:
-> XZ Utils: Invalid write if a decoder is reinitialized after allocation failure
-> See https://github.com/tukaani-project/xz/security/advisories/GHSA-5qpq-xqfv-j9pg
 > 
-> There is still no CVE number assigned to the issue.
+> CVE-2026-82373: Use-after-free when unloading modules, triggered by
+> unprivileged users
 > 
-> (alternative to commit 6f125a653038c9460b515b1f0d4c8c4be37d88c3)
 > Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 
 Applied to 2025.02.x. Thanks
 
 > ---
->  ...t-safe-to-reinit-after-alloc-failure.patch | 32 ++++++
->  ...-a-filter-chain-initialization-error.patch | 98 +++++++++++++++++++
->  package/xz/xz.mk                              |  4 +
->  3 files changed, 134 insertions(+)
->  create mode 100644 package/xz/0006-liblzma-make-lzma-lz-decoder-init-safe-to-reinit-after-alloc-failure.patch
->  create mode 100644 package/xz/0007-liblzma-clean-up-after-a-filter-chain-initialization-error.patch
+>  ...01-fix-crash-while-unloading-modules.patch | 497 ++++++++++++++++++
+>  package/znc/znc.mk                            |   3 +
+>  2 files changed, 500 insertions(+)
+>  create mode 100644 package/znc/0001-fix-crash-while-unloading-modules.patch
 > 
-> diff --git a/package/xz/0006-liblzma-make-lzma-lz-decoder-init-safe-to-reinit-after-alloc-failure.patch b/package/xz/0006-liblzma-make-lzma-lz-decoder-init-safe-to-reinit-after-alloc-failure.patch
+> diff --git a/package/znc/0001-fix-crash-while-unloading-modules.patch b/package/znc/0001-fix-crash-while-unloading-modules.patch
 > new file mode 100644
-> index 0000000000..e948cdee8a
+> index 0000000000..9d8ea6b0cf
 > --- /dev/null
-> +++ b/package/xz/0006-liblzma-make-lzma-lz-decoder-init-safe-to-reinit-after-alloc-failure.patch
-> @@ -0,0 +1,32 @@
-> +From: Lasse Collin <lasse.collin@tukaani.org>
-> +Date: Wed, 9 Sep 2026 14:14:40 +0300
-> +Subject: liblzma: Make lzma_lz_decoder_init() safe to reinit after alloc failure
+> +++ b/package/znc/0001-fix-crash-while-unloading-modules.patch
+> @@ -0,0 +1,497 @@
+> +From: Alexey Sokolov <alexey+znc@asokolov.org>
+> +Date: Sat, 5 Sep 2026 23:09:25 +0100
+> +Subject: Fix crash while unloading modules
 > +
-> +If memory allocation fails and the resulting coder state is reused,
-> +ensure that memory allocation is attempted again. However, coders that
-> +are initialized via lzma_next_filter_init() shouldn't be reinitialized
-> +after failure; they should be cleaned up with lzma_next_end().
+> +The bug allowed unprivileged users to trigger use-after-free while
+> +unloading modules
 > +
-> +Reported-by: GitHub user christos-cantina-security (christos-spearbit)
-> +(cherry picked from commit fe4d763d566a38ad61d4c5022520c25578a3a464)
+> +Note that the fix requires a slight API change for OnEmbeddedWebRequest:
+> +now the callers (webadmin is the only known caller of it) call it via
+> +DoEmbeddedWebRequest() instead. The modules which implement this hook
+> +need no changes.
+> +
+> +CVE-2026-82373
+> +
+> +Found by Claude from Anthropic, reported by Ada Logics.
 > +
 > +---
-> +Upstream: https://github.com/tukaani-project/xz/commit/0917f6d0f03d9add15dda27e0bf2ebfc22aaf67a
-> +CVE: GHSA-5qpq-xqfv-j9pg
+> +Upstream: https://github.com/znc/znc/commit/4b88c64c6e8df29c73568ae1c8b35d797bfa509a
+> +CVE: CVE-2026-82373
 > +Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 > +---
-> + src/liblzma/lz/lz_decoder.c | 1 +
-> + 1 file changed, 1 insertion(+)
+> + include/znc/Modules.h          |  71 ++++++++++++++++++++-
+> + include/znc/main.h             |  30 ++-------
+> + modules/modperl/functions.in   |   2 +-
+> + modules/modpython/functions.in |   2 +-
+> + modules/webadmin.cpp           |  12 ++--
+> + src/Client.cpp                 |  29 +++------
+> + src/Modules.cpp                | 112 +++++++++++++++------------------
+> + 7 files changed, 145 insertions(+), 113 deletions(-)
 > +
-> +diff --git a/src/liblzma/lz/lz_decoder.c b/src/liblzma/lz/lz_decoder.c
-> +index 92913f225..18669300e 100644
-> +--- a/src/liblzma/lz/lz_decoder.c
-> ++++ b/src/liblzma/lz/lz_decoder.c
-> +@@ -276,6 +276,7 @@ lzma_lz_decoder_init(lzma_next_coder *next, const lzma_allocator *allocator,
+> +diff --git a/include/znc/Modules.h b/include/znc/Modules.h
+> +index ec8b36f883..d842390675 100644
+> +--- a/include/znc/Modules.h
+> ++++ b/include/znc/Modules.h
+> +@@ -465,6 +465,9 @@ class CModule {
+> +     void SetNetwork(CIRCNetwork* pNetwork);
+> +     void SetClient(CClient* pClient);
 > + 
-> + 	// Allocate and initialize the dictionary.
-> + 	if (coder->dict.size != alloc_size) {
-> ++		coder->dict.size = 0;
-> + 		lzma_free(coder->dict.buf, allocator);
-> + 		coder->dict.buf = lzma_alloc(alloc_size, allocator);
-> + 		if (coder->dict.buf == NULL)
-> diff --git a/package/xz/0007-liblzma-clean-up-after-a-filter-chain-initialization-error.patch b/package/xz/0007-liblzma-clean-up-after-a-filter-chain-initialization-error.patch
-> new file mode 100644
-> index 0000000000..97aa9a5541
-> --- /dev/null
-> +++ b/package/xz/0007-liblzma-clean-up-after-a-filter-chain-initialization-error.patch
-> @@ -0,0 +1,98 @@
-> +From: Lasse Collin <lasse.collin@tukaani.org>
-> +Date: Wed, 9 Sep 2026 14:14:40 +0300
-> +Subject: liblzma: Clean up after a filter chain initialization error
-> +
-> +Filter coders are initialized using lzma_next_filter_init(). If filter
-> +chain initialization fails, the entire filter chain should be cleaned up
-> +with lzma_next_end(). lzma_raw_encoder_init() and lzma_raw_decoder_init()
-> +have always done this via lzma_raw_coder_init() in filter_common.c.
-> +(Separate cleanup is weird, but it must have made sense to the young me.)
-> +
-> +The following decoders initialize LZMA1 filter directly without using the
-> +raw filter chain API. This avoids needlessly pulling in all other filters
-> +when a program is linked against static liblzma. These functions didn't
-> +call lzma_next_end() after an initialization error, which left the state
-> +available for later reinitialization.
-> +
-> +  - lzma_alone_decoder()
-> +  - lzma_lzip_decoder()
-> +  - lzma_auto_decoder() [*]
-> +  - lzma_microlzma_decoder()
-> +
-> +[*] lzma_auto_decoder() is only indirectly affected due to the first two
-> +    functions. lzma_auto_decoder() itself doesn't need a fix.
-> +
-> +There are also encoder functions that initialize the LZMA1 encoder
-> +directly. They don't have this issue because the whole lzma_stream
-> +is cleaned up when encoder initialization fails.
-> +
-> +Reported-by: GitHub user christos-cantina-security (christos-spearbit)
-> +(cherry picked from commit e5e63d50eac1b4357a5a7a0abd3c5f99a5c47881)
-> +
-> +---
-> +Upstream: https://github.com/tukaani-project/xz/commit/0130b7524227d0bb9f405ecaf0af632a767fa735
-> +CVE: GHSA-5qpq-xqfv-j9pg
-> +Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-> +---
-> + src/liblzma/common/alone_decoder.c     | 8 ++++++--
-> + src/liblzma/common/lzip_decoder.c      | 8 ++++++--
-> + src/liblzma/common/microlzma_decoder.c | 8 ++++++--
-> + 3 files changed, 18 insertions(+), 6 deletions(-)
-> +
-> +diff --git a/src/liblzma/common/alone_decoder.c b/src/liblzma/common/alone_decoder.c
-> +index 78af65157..b2b049b5c 100644
-> +--- a/src/liblzma/common/alone_decoder.c
-> ++++ b/src/liblzma/common/alone_decoder.c
-> +@@ -151,8 +151,12 @@ alone_decode(void *coder_ptr, const lzma_allocator *allocator,
-> + 			}
-> + 		};
+> ++    /** True if the module can be safely unloaded. */
+> ++    bool IsCallStackEmpty() const;
+> ++
+> +     /** This function throws CModule::UNLOAD which causes this module to be unloaded.
+> +      */
+> +     void Unload() { throw UNLOAD; }
+> +@@ -535,9 +538,11 @@ class CModule {
+> +      *  @return The List.
+> +      */
+> +     virtual VWebSubPages& GetSubPages() { return m_vSubPages; }
+> ++  private:
+> +     /** Using this hook, module can embed web stuff directly to different places.
+> +-     *  This method is called whenever embededded modules I/O happens.
+> ++     *  This method is called whenever embedded modules I/O happens.
+> +      *  Name of used .tmpl file (if any) is up to caller.
+> ++     *  Callers call it via `DoEmbeddedWebRequest()`.
+> +      *  @param WebSock Socket for web connection, don't do bad things with it.
+> +      *  @param sPageName Describes the place where web stuff is embedded to.
+> +      *  @param Tmpl Template. Depending on context, you can do various stuff with it.
+> +@@ -547,6 +552,9 @@ class CModule {
+> +     virtual bool OnEmbeddedWebRequest(CWebSock& WebSock,
+> +                                       const CString& sPageName,
+> +                                       CTemplate& Tmpl);
+> ++  public:
+> ++    bool DoEmbeddedWebRequest(CWebSock& WebSock, const CString& sPageName,
+> ++                              CTemplate& Tmpl);
 > + 
-> +-		return_if_error(lzma_next_filter_init(&coder->next,
-> +-				allocator, filters));
-> ++		const lzma_ret ret = lzma_next_filter_init(&coder->next,
-> ++				allocator, filters);
-> ++		if (ret != LZMA_OK) {
-> ++			lzma_next_end(&coder->next, allocator);
-> ++			return ret;
-> ++		}
+> +     /** Called just before znc.conf is rehashed */
+> +     virtual void OnPreRehash();
+> +@@ -1528,6 +1536,9 @@ class CModule {
+> +         m_mssRegistry;  //!< way to save name/value pairs. Note there is no encryption involved in this
+> +     VWebSubPages m_vSubPages;
+> +     std::map<CString, CModCommand> m_mCommands;
+> ++    int m_iCallStackDepth = 0;
+> ++
+> ++    friend struct CModCallProtector;
+> + };
 > + 
-> + 		coder->sequence = SEQ_CODE;
-> + 		break;
-> +diff --git a/src/liblzma/common/lzip_decoder.c b/src/liblzma/common/lzip_decoder.c
-> +index 651a0ae71..30c50286d 100644
-> +--- a/src/liblzma/common/lzip_decoder.c
-> ++++ b/src/liblzma/common/lzip_decoder.c
-> +@@ -238,8 +238,12 @@ lzip_decode(void *coder_ptr, const lzma_allocator *allocator,
-> + 			}
-> + 		};
+> + class CModules : public std::vector<CModule*>, private CCoreTranslationMixin {
+> +@@ -1766,4 +1777,62 @@ class CModules : public std::vector<CModule*>, private CCoreTranslationMixin {
+> +     CClient* m_pClient;
+> + };
 > + 
-> +-		return_if_error(lzma_next_filter_init(&coder->lzma_decoder,
-> +-				allocator, filters));
-> ++		const lzma_ret ret = lzma_next_filter_init(
-> ++				&coder->lzma_decoder, allocator, filters);
-> ++		if (ret != LZMA_OK) {
-> ++			lzma_next_end(&coder->lzma_decoder, allocator);
-> ++			return ret;
-> ++		}
+> ++struct CModCallProtector {
+> ++    explicit CModCallProtector(CModule& pMod) : m_pMod(&pMod) {
+> ++        pMod.m_iCallStackDepth++;
+> ++    }
+> ++    ~CModCallProtector() { m_pMod->m_iCallStackDepth--; }
+> ++
+> ++    CModule* m_pMod;
+> ++};
+> ++
+> ++#ifndef SWIG
+> ++template <typename T, T* (CModule::*Getter)() const, void (CModule::*Setter)(T*)>
+> ++struct CTemporaryModField {
+> ++    CTemporaryModField(CModule& pMod, T* pValue) {
+> ++        m_pMod = &pMod;
+> ++        m_pOldT = (pMod.*Getter)();
+> ++        if (pValue) {
+> ++            (pMod.*Setter)(pValue);
+> ++        }
+> ++    }
+> ++
+> ++    ~CTemporaryModField() { (m_pMod->*Setter)(m_pOldT); }
+> ++
+> ++    CModule* m_pMod;
+> ++    T* m_pOldT;
+> ++};
+> ++
+> ++using CTemporaryModClient =
+> ++    CTemporaryModField<CClient, &CModule::GetClient, &CModule::SetClient>;
+> ++using CTemporaryModNetwork =
+> ++    CTemporaryModField<CIRCNetwork, &CModule::GetNetwork, &CModule::SetNetwork>;
+> ++using CTemporaryModUser =
+> ++    CTemporaryModField<CUser, &CModule::GetUser, &CModule::SetUser>;
+> ++
+> ++// Same as above, but for plural CModules
+> ++template <typename T, T* (CModules::*Getter)() const, void (CModules::*Setter)(T*)>
+> ++struct CTemporaryModsField {
+> ++    CTemporaryModsField(CModules& pMods, T* pValue) {
+> ++        m_pMods = &pMods;
+> ++        m_pOldT = (pMods.*Getter)();
+> ++        if (pValue) {
+> ++            (pMods.*Setter)(pValue);
+> ++        }
+> ++    }
+> ++
+> ++    ~CTemporaryModsField() { (m_pMods->*Setter)(m_pOldT); }
+> ++
+> ++    CModules* m_pMods;
+> ++    T* m_pOldT;
+> ++};
+> ++
+> ++using CTemporaryModsClient =
+> ++    CTemporaryModsField<CClient, &CModules::GetClient, &CModules::SetClient>;
+> ++using CTemporaryModsNetwork =
+> ++    CTemporaryModsField<CIRCNetwork, &CModules::GetNetwork, &CModules::SetNetwork>;
+> ++using CTemporaryModsUser =
+> ++    CTemporaryModsField<CUser, &CModules::GetUser, &CModules::SetUser>;
+> ++#endif
+> ++
+> + #endif  // !ZNC_MODULES_H
+> +diff --git a/include/znc/main.h b/include/znc/main.h
+> +index 7d22fd43d4..28924d2c02 100644
+> +--- a/include/znc/main.h
+> ++++ b/include/znc/main.h
+> +@@ -56,21 +56,12 @@ extern bool ZNC_NO_NEED_TO_DO_ANYTHING_ON_MODULE_CALL_EXITER;
+> + #define _GLOBALMODULECALL(macFUNC, macUSER, macNETWORK, macCLIENT, macEXITER) \
+> +     do {                                                                      \
+> +         CModules& GMods = CZNC::Get().GetModules();                           \
+> +-        CUser* pOldGUser = GMods.GetUser();                                   \
+> +-        CIRCNetwork* pOldGNetwork = GMods.GetNetwork();                       \
+> +-        CClient* pOldGClient = GMods.GetClient();                             \
+> +-        GMods.SetUser(macUSER);                                               \
+> +-        GMods.SetNetwork(macNETWORK);                                         \
+> +-        GMods.SetClient(macCLIENT);                                           \
+> ++        CTemporaryModsUser TempUser(GMods, macUSER);                          \
+> ++        CTemporaryModsNetwork TempNetwork(GMods, macNETWORK);                 \
+> ++        CTemporaryModsClient TempClient(GMods, macCLIENT);                    \
+> +         if (GMods.macFUNC) {                                                  \
+> +-            GMods.SetUser(pOldGUser);                                         \
+> +-            GMods.SetNetwork(pOldGNetwork);                                   \
+> +-            GMods.SetClient(pOldGClient);                                     \
+> +             *macEXITER = true;                                                \
+> +         }                                                                     \
+> +-        GMods.SetUser(pOldGUser);                                             \
+> +-        GMods.SetNetwork(pOldGNetwork);                                       \
+> +-        GMods.SetClient(pOldGClient);                                         \
+> +     } while (false)
 > + 
-> + 		coder->crc32 = 0;
-> + 		coder->sequence = SEQ_LZMA_STREAM;
-> +diff --git a/src/liblzma/common/microlzma_decoder.c b/src/liblzma/common/microlzma_decoder.c
-> +index 882cb2c80..a7720cc2a 100644
-> +--- a/src/liblzma/common/microlzma_decoder.c
-> ++++ b/src/liblzma/common/microlzma_decoder.c
-> +@@ -108,8 +108,12 @@ microlzma_decode(void *coder_ptr, const lzma_allocator *allocator,
-> + 			}
-> + 		};
+> + #define _USERMODULECALL(macFUNC, macUSER, macNETWORK, macCLIENT, macEXITER) \
+> +@@ -84,17 +75,11 @@ extern bool ZNC_NO_NEED_TO_DO_ANYTHING_ON_MODULE_CALL_EXITER;
+> +         }                                                                   \
+> +         if (macUSER != nullptr) {                                           \
+> +             CModules& UMods = macUSER->GetModules();                        \
+> +-            CIRCNetwork* pOldUNetwork = UMods.GetNetwork();                 \
+> +-            CClient* pOldUClient = UMods.GetClient();                       \
+> +-            UMods.SetNetwork(macNETWORK);                                   \
+> +-            UMods.SetClient(macCLIENT);                                     \
+> ++            CTemporaryModsNetwork TempNetwork(UMods, macNETWORK);           \
+> ++            CTemporaryModsClient TempClient(UMods, macCLIENT);              \
+> +             if (UMods.macFUNC) {                                            \
+> +-                UMods.SetNetwork(pOldUNetwork);                             \
+> +-                UMods.SetClient(pOldUClient);                               \
+> +                 *macEXITER = true;                                          \
+> +             }                                                               \
+> +-            UMods.SetNetwork(pOldUNetwork);                                 \
+> +-            UMods.SetClient(pOldUClient);                                   \
+> +         }                                                                   \
+> +     } while (false)
 > + 
-> +-		return_if_error(lzma_next_filter_init(&coder->lzma,
-> +-				allocator, filters));
-> ++		const lzma_ret ret = lzma_next_filter_init(&coder->lzma,
-> ++				allocator, filters);
-> ++		if (ret != LZMA_OK) {
-> ++			lzma_next_end(&coder->lzma, allocator);
-> ++			return ret;
-> ++		}
+> +@@ -109,13 +94,10 @@ extern bool ZNC_NO_NEED_TO_DO_ANYTHING_ON_MODULE_CALL_EXITER;
+> +         }                                                                     \
+> +         if (macNETWORK != nullptr) {                                          \
+> +             CModules& NMods = macNETWORK->GetModules();                       \
+> +-            CClient* pOldNClient = NMods.GetClient();                         \
+> +-            NMods.SetClient(macCLIENT);                                       \
+> ++            CTemporaryModsClient TempClient(NMods, macCLIENT);                \
+> +             if (NMods.macFUNC) {                                              \
+> +-                NMods.SetClient(pOldNClient);                                 \
+> +                 *macEXITER = true;                                            \
+> +             }                                                                 \
+> +-            NMods.SetClient(pOldNClient);                                     \
+> +         }                                                                     \
+> +     } while (false)
 > + 
-> + 		// Pass one dummy 0x00 byte to the LZMA decoder since that
-> + 		// is what it expects the first byte to be.
-> diff --git a/package/xz/xz.mk b/package/xz/xz.mk
-> index c07152ad92..5bbcc95e62 100644
-> --- a/package/xz/xz.mk
-> +++ b/package/xz/xz.mk
-> @@ -27,6 +27,10 @@ XZ_IGNORE_CVES += CVE-2025-31115
->  # 0005-liblzma-Fix-a-buffer-overflow-in-lzma-index-append.patch
->  XZ_IGNORE_CVES += CVE-2026-34743
+> +diff --git a/modules/modperl/functions.in b/modules/modperl/functions.in
+> +index a44c818a62..bfa671191c 100644
+> +--- a/modules/modperl/functions.in
+> ++++ b/modules/modperl/functions.in
+> +@@ -66,7 +66,7 @@ void OnServerCapResult(const CString& sCap, bool bSuccess)
+> + void OnClientAttached()
+> + void OnClientDetached()
+> + EModRet OnTimerAutoJoin(CChan& Channel)
+> +-bool OnEmbeddedWebRequest(CWebSock& WebSock, const CString& sPageName, CTemplate& Tmpl)
+> ++bool OnEmbeddedWebRequest(CWebSock& WebSock, const CString& sPageName, CTemplate& Tmpl)=false
+> + EModRet OnAddNetwork(CIRCNetwork& Network, CString& sErrorRet)
+> + EModRet OnDeleteNetwork(CIRCNetwork& Network)
+> + EModRet OnSendToClient(CString& sLine, CClient& Client)
+> +diff --git a/modules/modpython/functions.in b/modules/modpython/functions.in
+> +index 76ed437a2c..d2914f9dad 100644
+> +--- a/modules/modpython/functions.in
+> ++++ b/modules/modpython/functions.in
+> +@@ -66,7 +66,7 @@ void OnServerCapResult(const CString& sCap, bool bSuccess)
+> + void OnClientAttached()
+> + void OnClientDetached()
+> + EModRet OnTimerAutoJoin(CChan& Channel)
+> +-bool OnEmbeddedWebRequest(CWebSock& WebSock, const CString& sPageName, CTemplate& Tmpl)
+> ++bool OnEmbeddedWebRequest(CWebSock& WebSock, const CString& sPageName, CTemplate& Tmpl)=false
+> + EModRet OnAddNetwork(CIRCNetwork& Network, CString& sErrorRet)
+> + EModRet OnDeleteNetwork(CIRCNetwork& Network)
+> + EModRet OnSendToClient(CString& sLine, CClient& Client)
+> +diff --git a/modules/webadmin.cpp b/modules/webadmin.cpp
+> +index 0b72413813..ac77517c11 100644
+> +--- a/modules/webadmin.cpp
+> ++++ b/modules/webadmin.cpp
+> +@@ -742,7 +742,7 @@ class CWebAdminMod : public CModule {
+> +                 CTemplate& mod = Tmpl.AddRow("EmbeddedModuleLoop");
+> +                 mod.insert(Tmpl.begin(), Tmpl.end());
+> +                 mod["WebadminAction"] = "display";
+> +-                if ((*i)->OnEmbeddedWebRequest(WebSock, "webadmin/channel",
+> ++                if ((*i)->DoEmbeddedWebRequest(WebSock, "webadmin/channel",
+> +                                                mod)) {
+> +                     mod["Embed"] = WebSock.FindTmpl(*i, "WebadminChan.tmpl");
+> +                     mod["ModName"] = (*i)->GetModName();
+> +@@ -816,7 +816,7 @@ class CWebAdminMod : public CModule {
+> +         TmplMod["ChanName"] = pChan->GetName();
+> +         TmplMod["WebadminAction"] = "change";
+> +         FOR_EACH_MODULE(it, pNetwork) {
+> +-            (*it)->OnEmbeddedWebRequest(WebSock, "webadmin/channel", TmplMod);
+> ++            (*it)->DoEmbeddedWebRequest(WebSock, "webadmin/channel", TmplMod);
+> +         }
+> + 
+> +         if (!CZNC::Get().WriteConfig()) {
+> +@@ -1027,7 +1027,7 @@ class CWebAdminMod : public CModule {
+> +                 CTemplate& mod = Tmpl.AddRow("EmbeddedModuleLoop");
+> +                 mod.insert(Tmpl.begin(), Tmpl.end());
+> +                 mod["WebadminAction"] = "display";
+> +-                if ((*i)->OnEmbeddedWebRequest(WebSock, "webadmin/network",
+> ++                if ((*i)->DoEmbeddedWebRequest(WebSock, "webadmin/network",
+> +                                                mod)) {
+> +                     mod["Embed"] = WebSock.FindTmpl(*i, "WebadminNetwork.tmpl");
+> +                     mod["ModName"] = (*i)->GetModName();
+> +@@ -1246,7 +1246,7 @@ class CWebAdminMod : public CModule {
+> +         TmplMod["Name"] = pNetwork->GetName();
+> +         TmplMod["WebadminAction"] = "change";
+> +         FOR_EACH_MODULE(it, make_pair(pUser, pNetwork)) {
+> +-            (*it)->OnEmbeddedWebRequest(WebSock, "webadmin/network", TmplMod);
+> ++            (*it)->DoEmbeddedWebRequest(WebSock, "webadmin/network", TmplMod);
+> +         }
+> + 
+> +         if (!CZNC::Get().WriteConfig()) {
+> +@@ -1670,7 +1670,7 @@ class CWebAdminMod : public CModule {
+> +                 CTemplate& mod = Tmpl.AddRow("EmbeddedModuleLoop");
+> +                 mod.insert(Tmpl.begin(), Tmpl.end());
+> +                 mod["WebadminAction"] = "display";
+> +-                if ((*i)->OnEmbeddedWebRequest(WebSock, "webadmin/user", mod)) {
+> ++                if ((*i)->DoEmbeddedWebRequest(WebSock, "webadmin/user", mod)) {
+> +                     mod["Embed"] = WebSock.FindTmpl(*i, "WebadminUser.tmpl");
+> +                     mod["ModName"] = (*i)->GetModName();
+> +                 }
+> +@@ -1731,7 +1731,7 @@ class CWebAdminMod : public CModule {
+> +         TmplMod["Username"] = sUsername;
+> +         TmplMod["WebadminAction"] = "change";
+> +         FOR_EACH_MODULE(it, pUser) {
+> +-            (*it)->OnEmbeddedWebRequest(WebSock, "webadmin/user", TmplMod);
+> ++            (*it)->DoEmbeddedWebRequest(WebSock, "webadmin/user", TmplMod);
+> +         }
+> + 
+> +         if (!CZNC::Get().WriteConfig()) {
+> +diff --git a/src/Client.cpp b/src/Client.cpp
+> +index 0f60f9a11c..db1ec7a62e 100644
+> +--- a/src/Client.cpp
+> ++++ b/src/Client.cpp
+> +@@ -21,8 +21,8 @@
+> + #include <znc/IRCNetwork.h>
+> + #include <znc/Query.h>
+> + 
+> +-using std::set;
+> + using std::map;
+> ++using std::set;
+> + using std::vector;
+> + 
+> + #define CALLMOD(MOD, CLIENT, USER, NETWORK, FUNC)                             \
+> +@@ -30,10 +30,9 @@ using std::vector;
+> +         CModule* pModule = nullptr;                                           \
+> +         if (NETWORK && (pModule = (NETWORK)->GetModules().FindModule(MOD))) { \
+> +             try {                                                             \
+> +-                CClient* pOldClient = pModule->GetClient();                   \
+> +-                pModule->SetClient(CLIENT);                                   \
+> ++                CModCallProtector Inside(*pModule);                           \
+> ++                CTemporaryModClient TempClient(*pModule, CLIENT);             \
+> +                 pModule->FUNC;                                                \
+> +-                pModule->SetClient(pOldClient);                               \
+> +             } catch (const CModule::EModException& e) {                       \
+> +                 if (e == CModule::UNLOAD) {                                   \
+> +                     (NETWORK)->GetModules().UnloadModule(MOD);                \
+> +@@ -41,13 +40,10 @@ using std::vector;
+> +             }                                                                 \
+> +         } else if ((pModule = (USER)->GetModules().FindModule(MOD))) {        \
+> +             try {                                                             \
+> +-                CClient* pOldClient = pModule->GetClient();                   \
+> +-                CIRCNetwork* pOldNetwork = pModule->GetNetwork();             \
+> +-                pModule->SetClient(CLIENT);                                   \
+> +-                pModule->SetNetwork(NETWORK);                                 \
+> ++                CModCallProtector Inside(*pModule);                           \
+> ++                CTemporaryModClient TempClient(*pModule, CLIENT);             \
+> ++                CTemporaryModNetwork TempNetwork(*pModule, NETWORK);          \
+> +                 pModule->FUNC;                                                \
+> +-                pModule->SetClient(pOldClient);                               \
+> +-                pModule->SetNetwork(pOldNetwork);                             \
+> +             } catch (const CModule::EModException& e) {                       \
+> +                 if (e == CModule::UNLOAD) {                                   \
+> +                     (USER)->GetModules().UnloadModule(MOD);                   \
+> +@@ -55,16 +51,11 @@ using std::vector;
+> +             }                                                                 \
+> +         } else if ((pModule = CZNC::Get().GetModules().FindModule(MOD))) {    \
+> +             try {                                                             \
+> +-                CClient* pOldClient = pModule->GetClient();                   \
+> +-                CIRCNetwork* pOldNetwork = pModule->GetNetwork();             \
+> +-                CUser* pOldUser = pModule->GetUser();                         \
+> +-                pModule->SetClient(CLIENT);                                   \
+> +-                pModule->SetNetwork(NETWORK);                                 \
+> +-                pModule->SetUser(USER);                                       \
+> ++                CModCallProtector Inside(*pModule);                           \
+> ++                CTemporaryModClient TempClient(*pModule, CLIENT);             \
+> ++                CTemporaryModNetwork TempNetwork(*pModule, NETWORK);          \
+> ++                CTemporaryModUser TempUser(*pModule, USER);                   \
+> +                 pModule->FUNC;                                                \
+> +-                pModule->SetClient(pOldClient);                               \
+> +-                pModule->SetNetwork(pOldNetwork);                             \
+> +-                pModule->SetUser(pOldUser);                                   \
+> +             } catch (const CModule::EModException& e) {                       \
+> +                 if (e == CModule::UNLOAD) {                                   \
+> +                     CZNC::Get().GetModules().UnloadModule(MOD);               \
+> +diff --git a/src/Modules.cpp b/src/Modules.cpp
+> +index d553cbb794..2c4c056fa1 100644
+> +--- a/src/Modules.cpp
+> ++++ b/src/Modules.cpp
+> +@@ -36,67 +36,45 @@ bool ZNC_NO_NEED_TO_DO_ANYTHING_ON_MODULE_CALL_EXITER;
+> + #warning "your crap box doesn't define RTLD_LOCAL !?"
+> + #endif
+> + 
+> +-#define MODUNLOADCHK(func)                              \
+> +-    for (CModule * pMod : *this) {                      \
+> +-        try {                                           \
+> +-            CClient* pOldClient = pMod->GetClient();    \
+> +-            pMod->SetClient(m_pClient);                 \
+> +-            CUser* pOldUser = nullptr;                  \
+> +-            if (m_pUser) {                              \
+> +-                pOldUser = pMod->GetUser();             \
+> +-                pMod->SetUser(m_pUser);                 \
+> +-            }                                           \
+> +-            CIRCNetwork* pNetwork = nullptr;            \
+> +-            if (m_pNetwork) {                           \
+> +-                pNetwork = pMod->GetNetwork();          \
+> +-                pMod->SetNetwork(m_pNetwork);           \
+> +-            }                                           \
+> +-            pMod->func;                                 \
+> +-            if (m_pUser) pMod->SetUser(pOldUser);       \
+> +-            if (m_pNetwork) pMod->SetNetwork(pNetwork); \
+> +-            pMod->SetClient(pOldClient);                \
+> +-        } catch (const CModule::EModException& e) {     \
+> +-            if (e == CModule::UNLOAD) {                 \
+> +-                UnloadModule(pMod->GetModName());       \
+> +-            }                                           \
+> +-        }                                               \
+> +-    }
+> +-
+> +-#define MODHALTCHK(func)                                \
+> +-    bool bHaltCore = false;                             \
+> +-    for (CModule * pMod : *this) {                      \
+> +-        try {                                           \
+> +-            CModule::EModRet e = CModule::CONTINUE;     \
+> +-            CClient* pOldClient = pMod->GetClient();    \
+> +-            pMod->SetClient(m_pClient);                 \
+> +-            CUser* pOldUser = nullptr;                  \
+> +-            if (m_pUser) {                              \
+> +-                pOldUser = pMod->GetUser();             \
+> +-                pMod->SetUser(m_pUser);                 \
+> +-            }                                           \
+> +-            CIRCNetwork* pNetwork = nullptr;            \
+> +-            if (m_pNetwork) {                           \
+> +-                pNetwork = pMod->GetNetwork();          \
+> +-                pMod->SetNetwork(m_pNetwork);           \
+> +-            }                                           \
+> +-            e = pMod->func;                             \
+> +-            if (m_pUser) pMod->SetUser(pOldUser);       \
+> +-            if (m_pNetwork) pMod->SetNetwork(pNetwork); \
+> +-            pMod->SetClient(pOldClient);                \
+> +-            if (e == CModule::HALTMODS) {               \
+> +-                break;                                  \
+> +-            } else if (e == CModule::HALTCORE) {        \
+> +-                bHaltCore = true;                       \
+> +-            } else if (e == CModule::HALT) {            \
+> +-                bHaltCore = true;                       \
+> +-                break;                                  \
+> +-            }                                           \
+> +-        } catch (const CModule::EModException& e) {     \
+> +-            if (e == CModule::UNLOAD) {                 \
+> +-                UnloadModule(pMod->GetModName());       \
+> +-            }                                           \
+> +-        }                                               \
+> +-    }                                                   \
+> ++#define MODUNLOADCHK(func)                                       \
+> ++    for (CModule* pMod : *this) {                                \
+> ++        try {                                                    \
+> ++            CModCallProtector inside(*pMod);                     \
+> ++            CTemporaryModClient TempClient(*pMod, m_pClient);    \
+> ++            CTemporaryModUser TempUser(*pMod, m_pUser);          \
+> ++            CTemporaryModNetwork TempNetwork(*pMod, m_pNetwork); \
+> ++            pMod->func;                                          \
+> ++        } catch (const CModule::EModException& e) {              \
+> ++            if (e == CModule::UNLOAD) {                          \
+> ++                UnloadModule(pMod->GetModName());                \
+> ++            }                                                    \
+> ++        }                                                        \
+> ++    }
+> ++
+> ++#define MODHALTCHK(func)                                         \
+> ++    bool bHaltCore = false;                                      \
+> ++    for (CModule* pMod : *this) {                                \
+> ++        try {                                                    \
+> ++            CModCallProtector inside(*pMod);                     \
+> ++            CModule::EModRet e = CModule::CONTINUE;              \
+> ++            CTemporaryModClient TempClient(*pMod, m_pClient);    \
+> ++            CTemporaryModUser TempUser(*pMod, m_pUser);          \
+> ++            CTemporaryModNetwork TempNetwork(*pMod, m_pNetwork); \
+> ++            e = pMod->func;                                      \
+> ++            if (e == CModule::HALTMODS) {                        \
+> ++                break;                                           \
+> ++            } else if (e == CModule::HALTCORE) {                 \
+> ++                bHaltCore = true;                                \
+> ++            } else if (e == CModule::HALT) {                     \
+> ++                bHaltCore = true;                                \
+> ++                break;                                           \
+> ++            }                                                    \
+> ++        } catch (const CModule::EModException& e) {              \
+> ++            if (e == CModule::UNLOAD) {                          \
+> ++                UnloadModule(pMod->GetModName());                \
+> ++            }                                                    \
+> ++        }                                                        \
+> ++    }                                                            \
+> +     return bHaltCore;
+> + 
+> + /////////////////// Timer ///////////////////
+> +@@ -205,6 +183,8 @@ void CModule::SetUser(CUser* pUser) { m_pUser = pUser; }
+> + void CModule::SetNetwork(CIRCNetwork* pNetwork) { m_pNetwork = pNetwork; }
+> + void CModule::SetClient(CClient* pClient) { m_pClient = pClient; }
+> + 
+> ++bool CModule::IsCallStackEmpty() const { return m_iCallStackDepth == 0; }
+> ++
+> + CString CModule::ExpandString(const CString& sStr) const {
+> +     CString sRet;
+> +     return ExpandString(sStr, sRet);
+> +@@ -622,6 +602,11 @@ bool CModule::OnEmbeddedWebRequest(CWebSock& WebSock, const CString& sPageName,
+> +                                    CTemplate& Tmpl) {
+> +     return false;
+> + }
+> ++bool CModule::DoEmbeddedWebRequest(CWebSock& WebSock, const CString& sPageName,
+> ++                                   CTemplate& Tmpl) {
+> ++    CModCallProtector inside(*this);
+> ++    return OnEmbeddedWebRequest(WebSock, sPageName, Tmpl);
+> ++}
+> + // !Webmods
+> + 
+> + bool CModule::OnLoad(const CString& sArgs, CString& sMessage) {
+> +@@ -1953,6 +1938,11 @@ bool CModules::UnloadModule(const CString& sModule, CString& sRetMsg) {
+> +         return false;
+> +     }
+> + 
+> ++    if (!pModule->IsCallStackEmpty()) {
+> ++        sRetMsg = t_f("Module [{1}] is being called, cannot unload.")(sMod);
+> ++        return false;
+> ++    }
+> ++
+> +     bool bSuccess;
+> +     bool bHandled = false;
+> +     _GLOBALMODULECALL(OnModuleUnloading(pModule, bSuccess, sRetMsg),
+> diff --git a/package/znc/znc.mk b/package/znc/znc.mk
+> index ec6287e6de..6767ad8cd3 100644
+> --- a/package/znc/znc.mk
+> +++ b/package/znc/znc.mk
+> @@ -12,6 +12,9 @@ ZNC_CPE_ID_VENDOR = znc
+>  ZNC_DEPENDENCIES = host-pkgconf
+>  ZNC_CONF_OPTS = -DWANT_CYRUS=OFF -DWANT_I18N=OFF -DWANT_PERL=OFF
 >  
-> +# 0006-liblzma-make-lzma-lz-decoder-init-safe-to-reinit-after-alloc-failure.patch
-> +# 0007-liblzma-clean-up-after-a-filter-chain-initialization-error.patch
-> +XZ_IGNORE_CVES += GHSA-5qpq-xqfv-j9pg
+> +# 0001-fix-crash-while-unloading-modules.patch
+> +ZNC_IGNORE_CVES += CVE-2026-82373
 > +
->  XZ_CONF_OPTS = \
->  	--enable-encoders=lzma1,lzma2,delta,x86,powerpc,ia64,arm,armthumb,arm64,sparc,riscv \
->  	--enable-decoders=lzma1,lzma2,delta,x86,powerpc,ia64,arm,armthumb,arm64,sparc,riscv \
+>  ifeq ($(BR2_PACKAGE_ICU),y)
+>  ZNC_DEPENDENCIES += icu
+>  ZNC_CONF_OPTS += -DWANT_ICU=ON
 > -- 
 > 2.55.0
 > 
