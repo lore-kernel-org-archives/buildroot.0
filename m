@@ -1,104 +1,133 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B25F3C982D7
-	for <buildroot@archiver.kernel.org>; Fri, 18 Sep 2026 21:33:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4E81C982D7
+	for <buildroot@archiver.kernel.org>; Fri, 18 Sep 2026 21:40:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 66B5060BCE;
-	Fri, 18 Sep 2026 21:33:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7AF5A40CE5;
+	Fri, 18 Sep 2026 21:40:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MmvcHdHQ8JJJ; Fri, 18 Sep 2026 21:33:47 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 2C63E60BDB
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789767227;
-	b=G0ZPLI3LwEoJJVH0iYQVqdh68ZFOPjMHTu/7x3WiKcszrSXYDn8/zdF02HRuCbuk9V9N
-	 +VAPSYDx+3xiB1mgM8OMhuT0nLbyLOmLyYa5xfMBNr3fbWxDnFyNyywiDvrQI1sa4kSE9
-	 r0uvyvUizHZJKChSXZFJK6qMr3ynSBpcdOfaRnBeoYUlFzqQJUMPbC9yDkKT4b7qtup92
-	 LSJ8CqNOSUrLWQuljLHVAS1WLhJOAEiMHtKh45Bx7cCn3Uzq9nzvTVo0SVYKNrmtjEg6C
-	 Cxoqs3HgvEZMjWGOYnAnAutCzgJvXMe+2DoDOzGktffiaXpHJOJeVKFTXALY1UxKUHQ==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id V0y3zA4C373o; Fri, 18 Sep 2026 21:40:28 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 26A8940CE6
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789767628;
+	b=MT4h3mjlpo456DAZ82JsifGSoiwve3X6nROxAjJYs+z6Jf5zYr6gEBgomC1p2041CF7R
+	 y5dtREex2cMl7f6TC13pah/0OKZDAnrHux3bqkWTyq3dTbYUz4Scv7nEJ/J1i9cfDrXLJ
+	 7ICOR72WW/0uPUw2tNi6Yw3tiYCcpaa3aGPEg6dYAZlQ9Jy4z6yJ5VLmNi6mtaElNlsKN
+	 8yqW4E3G5HxsFhmfSj/jrKoLoaisyjXj1ZWfG8FrTHvNdRT1mgpGC3gBF4ky/xBnTzAWb
+	 f5a22KNt+pDTnno044IIypUfPCC3JGI+orVLDpmVUdu0mA8o4TxVLZn0Eys0Mhiz8RQ==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789767227;
+	c=relaxed/relaxed; t=1789767628;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
-	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
-	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
-	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
-	 Sender;
-	bh=2QR4R+/SnUcncy2uPtntF4y8JAT3/FucASOrcxksLRs=;
-	b=h3n61ZFg85bBX2SmQ4S6l5Nbqngd+q+tku5eDEXkfDUR8q9o33Lj4aTMLTO/GjwNGlAx
-	 NMC8qEnVFke+NdvK3pZHbuaXt9ker79Uh3JwRiZM9QxNSlsj/Z8QmPDuoXZQoXPnZNYfj
-	 J8l79OEZAVxLQun5nXyI/4/9XgaDnWe149Se/wGdbRYlB0RAjpjwIOMSFCUWZmLEvWsdj
-	 ejI66N8WyEywHhFto0IAzjjh3Wd/Niz4XmtFxH9iHI7MxQYaVJLmgXzFNPUNhoD9tVJa1
-	 ZIAmMG9R2jLiDkmfKpwHoV7n4BpTNOZwpl0txSlmLld4783ATm4ECuhtDLYrwC7IqvA==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 Received:Received:Date:To:Cc:Message-ID:References:MIME-Version:
+	 Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version:Subject:
+	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
+	bh=g7UL9yJapD6In+0ftj9dAJABm6Gqef5QO3uKB3w5Yng=;
+	b=CsEE9Cf/LNunsLH6vramsqYKqnYQzYcpyhMhFGP9LSw6EBojF/CcFCjXWvJhUPLLPfYv
+	 YBjBFkxvqrpc5neD2qOTTLAvZnjYjqsH6G2UqMnxy4NcJthDeF6jk6e7WsHS0Ro1+miDb
+	 vhAS72BzAGvBjocbWiuFejD5SpPftzWxxNX/wiR9ArVkkdLoLrPJmBZCjgMZ+PszS4TTl
+	 WM1o+zpnamBIg9TXyn+suAFUqfTXPR3TUMTElK55P/L/vjH7H+izRsYJn9dn5RXLaYLIM
+	 5BRi+C+mY8FEv5loBMvhJZ9Vt+IBwG1mLqrTWnESQs4IDxo2OET0+xmntAKCnaDW0xA==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789767227;
-	bh=2QR4R+/SnUcncy2uPtntF4y8JAT3/FucASOrcxksLRs=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=OdH10JVCDDq9pNokwZy5hhfYDurUVPuglQ1Fl/wXpj2JMPka4Za8N8SIlSF+e7k2D
-	 toSVwNFrgtR/CMpB3ovK2Qu4WlvfSVhO8AVQKbAW33JnRp481TMfMdB76j5FMe5xBo
-	 Q7qtOcKmSGggCZocLDXZeuah56E85oz/9uEkoE++OdhnTMAjgLA1pa0YeAg30a9nlr
-	 vk5AYa8RU/wNFsY/zy3WYdjV+t10QBkNCeLPg2qt3gljWrrO84avB4IKdCsq4FjQBM
-	 0cz4B2NfGbngarcCMoX8JYxiMoeoHd1YL26Xd2/2mN36suWYL5J/fibZWU4JbyBCUG
-	 e+1C5Gpvsg3mA==
+	s=default; t=1789767628;
+	bh=g7UL9yJapD6In+0ftj9dAJABm6Gqef5QO3uKB3w5Yng=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=mS8DbKMpne4KbY3V5F0fZ6AqORhJVBrRTvl1KbdDSKzMnCVJQf2P80F594jBXZCCj
+	 HibbOTEEFanZB1P0vHaRqnfUq8sQqlyqd4/mUidqkCgxwC4jQvH4dw2Nc6/9l2rQbA
+	 x1h5uePlCvFBTeLn6Q0qmNsZYnSAws11SeAqrXaHHhIBXpjBk5A78I0Nhwh6pROP0s
+	 8Vvd9fwrzYY6FjtbYoupg+f/bzrvhxw4lN2dbUGpdKdPAQAeC4swYA6wEbjSmddyUV
+	 7552vqP1DmJdGn6W8HM6WjpmB9tR3rkvgdTwkLbF0nNiIp3AWPHLO5aWQ9EMFDz5Az
+	 1z1VMG3VGgQjg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2C63E60BDB;
-	Fri, 18 Sep 2026 21:33:47 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 2C8C5224
- for <buildroot@buildroot.org>; Fri, 18 Sep 2026 21:33:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 26A8940CE6;
+	Fri, 18 Sep 2026 21:40:28 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4EC431E9
+ for <buildroot@buildroot.org>; Fri, 18 Sep 2026 21:40:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 123F9811D4
- for <buildroot@buildroot.org>; Fri, 18 Sep 2026 21:33:44 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 349B7400AB
+ for <buildroot@buildroot.org>; Fri, 18 Sep 2026 21:40:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oQGwLTif_Cqa for <buildroot@buildroot.org>;
- Fri, 18 Sep 2026 21:33:43 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 0A7E2811CA
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789767223;
- b=RkwT/WgigjJYZ+5ltN0ngrS2J8JULKXdzBkY7fPBwL6Ygr/0l6WTgITaaS2dWr+g//Oy
- PyyTrgf2EURO9IhreCMUz3CTUGIJjZD00rfzqggKHA6MxlDhL2UTu2xamYs2WdjztgPi4
- Hm3C9r+UEwNvxp26ERD3HcH/3503DoosOddyzOiOmHrNQiEFNraZdg2iZUAQUm5yoG2AJ
- mmdNDSzfkr/3nsj5EEpDS/LStSYe02nHPIvRuTk07wmwJO4qndGzVYq//NPM6aAMWjfss
- c8piNYvV4qM5wNDf91hHj08LbUcbuCpt3R0sxx2716aGL7I3p5ZM/8xTT3vrCinLrrQ==
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tbpYF4l7jpul for <buildroot@buildroot.org>;
+ Fri, 18 Sep 2026 21:40:24 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org 8B14D40022
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789767624;
+ b=cUTdpzAn/btF8bYkArgEvLPOhhlwS+br4j0vp7Lw02vxnXnDvRva4Mp+gQhWwmI3e/Pe
+ chk0eaE5T6q65Os35OCjW3qZP/R4sTSvOzs3VGL3ODA60SXqbUkIFG5NYm2PGFEwmFLtW
+ KOgQkG3cRwPwTnvEM7kWweemAm2Irujq+v5lpIU37T1M91ZmIkFFqAvOsCjWFL74CAmtC
+ kTNAoQiDdClZhrLQlQLjhdgKOwvEZDgnsjEcXc+IY8NwOnO2qwbjaK5xYq+BbUsqveKD/
+ YpX8l6ldi41IXurvtQtK56n9dgkuEAYq5KKZ/She76Zhe1IOLxA1+7HQNhpv5OinKSA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1789767223;
- h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
- X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=Q9eao0jnHZ3QrrbFVEZTZ5xyCflrSSSynom2/KckEnw=;
- b=K+7aBmA4kfRx0gnVwAAm/h+YK3tT4vG34QKN3aDIx5vLXoTwaqHtCKcGqx4SgeSrk3Ie
- QY0mpTe7DXTCopEB86ckyMvQ3rZVt1YYWGb812C1L8U/yU13N/99o/RFYq69+Rq5XbJCT
- OU0WumH0XiNFXPnIbuHGvrDdCFFBHnnuHyGgOr34d4alhbq/dVKRqeklpZzQOdXsynwi2
- d+z4esr/3t2MeIywAqm7vZkgKpMbeaiff27WrQdgdCqGCG4KgoG1Th+XmPU8gyosYmfgN
- iz21hWOocjgCxY+PJNgGzRbjoKx5de1pzQ3te8X2ZhqPthqsNWyhgdlmoZTQCwmkq/g==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org;
- arc=none smtp.remote-ip=140.211.167.122
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ c=relaxed/relaxed; t=1789767624;
+ h=Received-SPF:Received:Received:Received:DKIM-Signature:Date:From:To:
+ Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+ Content-Disposition:Content-Transfer-Encoding:In-Reply-To:
+ X-Last-TLS-Session-Version;
+ bh=PuAUEEKNO7G6gS6MfzYrVCTQQAgUhBhcbI5HO2zezMY=;
+ b=CuuMCFPGcVh8NUyujrQt23sfR61AtJXommSwj8Pz2D18XyUgWr6WwGKbNh9J9awPi2hv
+ 3TDyVLlCAzYQAsHAuhyvXQmwidEAU6hdKHDZ5UTygY+ob/RD8KyraTQL0zUX9PeQ5Qj0C
+ bKB50EgVXnJ7WOMLfYD2uspkqhfR8+jPSR536IVbQeOLcSTDpylpqQB/+jllj+3ABaM71
+ 6duQlNSXtfw+4tFTlTYuSOYODLs1tQFSuWtbIxhEfMrWoVY9H4wqQwGjK4C/ohO4iGLgS
+ xfEo4g1uoobfj7c4DphTH+gz8jNdda/zkJQzlXTGUPWlnQVC4Qu4xH7sS51FXhTxBCw==
+ARC-Authentication-Results: i=1; smtp2.osuosl.org;
+ dmarc=pass header.from=bootlin.com; 
+ dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=dkim header.b=GKl1YvYZ; 
+ arc=none smtp.remote-ip=185.171.202.116
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
+ helo=smtpout-04.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0A7E2811CA
- for <buildroot@buildroot.org>; Fri, 18 Sep 2026 21:33:43 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 88998976B0; Fri, 18 Sep 2026 21:32:35 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 18 Sep 2026 23:31:43 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e44b1c4195d14fc5b3960bf01ced0e3697358417
-X-Git-Newrev: c24ae7f2f1bebeea6fd7252987496d9ac1d9b042
-X-Patchwork-Hint: ignore
-Message-Id: <20260918213235.88998976B0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/openscap: allow building when
- crypto backend is not gcrypt
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8B14D40022
+ for <buildroot@buildroot.org>; Fri, 18 Sep 2026 21:40:22 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-04.galae.net (Postfix) with ESMTPS id 82F1AC5847C;
+ Fri, 18 Sep 2026 21:41:05 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 5B93960649;
+ Fri, 18 Sep 2026 21:40:20 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 25F8C10328ADB; 
+ Fri, 18 Sep 2026 23:40:10 +0200 (CEST)
+Date: Fri, 18 Sep 2026 23:40:10 +0200
+To: Afshin Pir <Afshin.Pir@gallagher.com>
+Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>, 
+ Joseph Kogut <joseph.kogut@gmail.com>, David Pierret <david.pierret@smile.fr>, 
+ Danilo Bargen <mail@dbrgn.ch>, Graeme Smecher <gsmecher@threespeedlogic.com>, 
+ Torben Voltmer <mail@t-voltmer.net>, James Hilliard <james.hilliard1@gmail.com>,
+ Manuel Diener <manuel.diener@oss.othermo.de>,
+ Alexander Shirokov <shirokovalexs@gmail.com>, 
+ Sam Voss <sam.voss@gmail.com>, Saeed Kazemi <kazemi.ms@gmail.com>, 
+ Alex Michel <alex.michel@wiedemann-group.com>,
+ Leo Yu-Chi Liang <ycliang@andestech.com>, 
+ Christopher Obbard <obbardc@gmail.com>,
+ Mika Westerberg <mika.westerberg@linux.intel.com>, 
+ Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+Message-ID: <aq2uqSD7ynZ7y32B@windsurf>
+References: <20260805022122.417221-1-afshin.pir@gallagher.com>
+ <aq03yFO5x8DdU9MG@windsurf>
+ <SY8PR01MB9238552908F7113FE349752194872@SY8PR01MB9238.ausprd01.prod.outlook.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <SY8PR01MB9238552908F7113FE349752194872@SY8PR01MB9238.ausprd01.prod.outlook.com>
+X-Last-TLS-Session-Version: TLSv1.3
+Subject: Re: [Buildroot] [PATCH 1/1] support/download: update rust package
+ dependency resolving
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -112,253 +141,60 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0273898243174914703=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0273898243174914703==
-Content-Type: text/plain
-
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/c24ae7f2f1bebeea6fd7252987496d9ac1d9b042
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
-
-When enabling the openscap package and the libnss library _but not_
-libgcrypt, the build can fail on the following error:
-
-  ../src/libopenscap.so.33.1.3: undefined reference to `crapi_init'
-
-The issue is due to the fact that the corresponding Makefile
-systematically forces -DWITH_CRYPTO=gcrypt: openscap CMake
-instrumentation then searches only this backend, fails to find it,
-assumes that no crypto backend is available, and so does not include the
-crapi_object in the final link step.
-
-Commit 7c85f3adf4a8 ("package/openscap: new package") took into account
-the fact that openscap isn't currently able to build if no crypto backend
-is provided (see [0]), and so made sure to force libgcrypt inclusion if
-libnss is not included. Since then, two fixes ([1] and [2]) have been
-integrated upstream to allow building openscap with any backend.
-
-Do not systematically enforce libgcrypt anymore through WITH_CRYPTO:
-rather than testing nss presence, and falling back to libgcrypt, allow
-both to be absent, and so relax the libgcrypt dependency to make it
-optional as well. Bring the two upstream patches allowing openscap build
-without any crypto backend.  Those patches can be dropped once openscap
-v1.4.5 is released.
-
-[0] https://github.com/OpenSCAP/openscap/issues/2310
-[1] https://github.com/OpenSCAP/openscap/commit/d12d820a9493b0a0ee1ad4b0aeaa87da28aa0080
-[2] https://github.com/OpenSCAP/openscap/commit/5b858d1786c025cbd50dfc284b252c3ee6dd99dc
-
-Fixes: https://autobuild.buildroot.org/results/4c905c1b0ee384149c3d85e8f2ebf0af3a12c2ad/
-Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .../0001-Fix-build-without-crypto-support.patch    | 57 ++++++++++++++++++++++
- ...gcrypt-cmake-variables-if-gcrypt-is-not-f.patch | 50 +++++++++++++++++++
- package/openscap/Config.in                         |  5 --
- package/openscap/openscap.mk                       |  9 ++--
- 4 files changed, 110 insertions(+), 11 deletions(-)
-
-diff --git a/package/openscap/0001-Fix-build-without-crypto-support.patch b/package/openscap/0001-Fix-build-without-crypto-support.patch
-new file mode 100644
-index 0000000000..97da60f032
---- /dev/null
-+++ b/package/openscap/0001-Fix-build-without-crypto-support.patch
-@@ -0,0 +1,57 @@
-+From d12d820a9493b0a0ee1ad4b0aeaa87da28aa0080 Mon Sep 17 00:00:00 2001
-+From: Eljees <yurytumanov.r@yandex.ru>
-+Date: Mon, 27 Jul 2026 06:57:38 +0300
-+Subject: [PATCH] Fix build without crypto support
-+
-+Upstream: https://github.com/OpenSCAP/openscap/commit/d12d820a9493b0a0ee1ad4b0aeaa87da28aa0080
-+Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
-+---
-+ src/CMakeLists.txt                   | 2 +-
-+ src/OVAL/probes/CMakeLists.txt       | 2 +-
-+ src/OVAL/probes/crapi/CMakeLists.txt | 7 ++++++-
-+ 3 files changed, 8 insertions(+), 3 deletions(-)
-+
-+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
-+index 5d59bf3f036f..f31ce8040e0a 100644
-+--- a/src/CMakeLists.txt
-++++ b/src/CMakeLists.txt
-+@@ -59,7 +59,7 @@ if (ENABLE_PROBES)
-+ 		)
-+ 	endif()
-+ endif()
-+-if (HAVE_MMAN_H AND (GCRYPT_FOUND OR NSS_FOUND))
-++if (HAVE_MMAN_H)
-+ 	list(APPEND OBJECTS_TO_LINK_AGAINST
-+ 		$<TARGET_OBJECTS:crapi_object>
-+ 	)
-+diff --git a/src/OVAL/probes/CMakeLists.txt b/src/OVAL/probes/CMakeLists.txt
-+index e505908f5842..25e3ca56a0c3 100644
-+--- a/src/OVAL/probes/CMakeLists.txt
-++++ b/src/OVAL/probes/CMakeLists.txt
-+@@ -1,7 +1,7 @@
-+ add_subdirectory("SEAP")
-+ add_subdirectory("probe")
-+ 
-+-if (HAVE_MMAN_H AND CRYPTO_FOUND)
-++if (HAVE_MMAN_H)
-+ 	add_subdirectory("crapi")
-+ endif()
-+ 
-+diff --git a/src/OVAL/probes/crapi/CMakeLists.txt b/src/OVAL/probes/crapi/CMakeLists.txt
-+index 1f3e5a963bbf..3fb6f123c8d6 100644
-+--- a/src/OVAL/probes/crapi/CMakeLists.txt
-++++ b/src/OVAL/probes/crapi/CMakeLists.txt
-+@@ -1,4 +1,9 @@
-+-file(GLOB_RECURSE CRAPI_SOURCES "*.c")
-++if (CRYPTO_FOUND)
-++	file(GLOB_RECURSE CRAPI_SOURCES "*.c")
-++else()
-++	# crapi_init has a no-op implementation for builds without a digest backend.
-++	set(CRAPI_SOURCES "crapi.c")
-++endif()
-+ file(GLOB_RECURSE CRAPI_HEADERS "*.h")
-+ 
-+ add_library(crapi_object OBJECT ${CRAPI_SOURCES} ${CRAPI_HEADERS})
-+-- 
-+2.55.0
-+
-diff --git a/package/openscap/0002-Do-not-use-gcrypt-cmake-variables-if-gcrypt-is-not-f.patch b/package/openscap/0002-Do-not-use-gcrypt-cmake-variables-if-gcrypt-is-not-f.patch
-new file mode 100644
-index 0000000000..d4d3bd2d16
---- /dev/null
-+++ b/package/openscap/0002-Do-not-use-gcrypt-cmake-variables-if-gcrypt-is-not-f.patch
-@@ -0,0 +1,50 @@
-+From 5b858d1786c025cbd50dfc284b252c3ee6dd99dc Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Alexis=20Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-+Date: Tue, 18 Aug 2026 09:38:05 +0200
-+Subject: [PATCH] Do not use gcrypt cmake variables if gcrypt is not found
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Commit d12d820a9493 ("Fix build without crypto support") enabled
-+building the crapi library without a crypto backend, but left the
-+target_include_directories and target_compile_definitions calls
-+unguarded. When no crypto library is available, the GCrypt find module
-+leaves GCRYPT_INCLUDE_DIRS unset, so CMake fails at the generate step
-+with:
-+
-+  CMake Error: The following variables are used in this project, but
-+  they are set to NOTFOUND: GCRYPT_INCLUDE_DIR
-+
-+The test command provided at this time made the build successful because
-+it provided -DCMAKE_DISABLE_FIND_PACKAGE_GCrypt=TRUE, but if no crypto
-+backend is provided, it does not make sense to provide those cmake
-+configuration options preventing dependency search manually.
-+
-+Guard both calls with a CRYPTO_FOUND check so they are only applied when
-+an actual digest backend is present, even without providing
-+-DCMAKE_DISABLE_FIND_PACKAGE_foo
-+
-+Upstream: https://github.com/OpenSCAP/openscap/commit/5b858d1786c025cbd50dfc284b252c3ee6dd99dc
-+Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
-+---
-+ src/OVAL/probes/crapi/CMakeLists.txt | 6 ++++--
-+ 1 file changed, 4 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/OVAL/probes/crapi/CMakeLists.txt b/src/OVAL/probes/crapi/CMakeLists.txt
-+index 3fb6f123c8d6..88cb916b6d96 100644
-+--- a/src/OVAL/probes/crapi/CMakeLists.txt
-++++ b/src/OVAL/probes/crapi/CMakeLists.txt
-+@@ -8,5 +8,7 @@ file(GLOB_RECURSE CRAPI_HEADERS "*.h")
-+ 
-+ add_library(crapi_object OBJECT ${CRAPI_SOURCES} ${CRAPI_HEADERS})
-+ set_oscap_generic_properties(crapi_object)
-+-target_include_directories(crapi_object PUBLIC ${NSS_INCLUDE_DIRS} ${GCRYPT_INCLUDE_DIRS})
-+-target_compile_definitions(crapi_object PUBLIC ${GCRYPT_DEFINITIONS})
-++if (CRYPTO_FOUND)
-++	target_include_directories(crapi_object PUBLIC ${NSS_INCLUDE_DIRS} ${GCRYPT_INCLUDE_DIRS})
-++	target_compile_definitions(crapi_object PUBLIC ${GCRYPT_DEFINITIONS})
-++endif()
-+-- 
-+2.55.0
-+
-diff --git a/package/openscap/Config.in b/package/openscap/Config.in
-index b6deae0a5f..2d932140a7 100644
---- a/package/openscap/Config.in
-+++ b/package/openscap/Config.in
-@@ -1,14 +1,10 @@
- config BR2_PACKAGE_OPENSCAP
- 	bool "openscap"
--	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS  # libgcrypt
- 	depends on !BR2_STATIC_LIBS # dlfcn.h
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # libxmlsec1
- 	depends on BR2_TOOLCHAIN_HAS_ATOMIC # libxmlsec1
- 	select BR2_PACKAGE_LIBCURL
--	# In theory should build without crypto, but in practice it
--	# doesn't: https://github.com/OpenSCAP/openscap/issues/2310
--	select BR2_PACKAGE_LIBGCRYPT if !BR2_PACKAGE_LIBNSS
- 	select BR2_PACKAGE_LIBXML2
- 	select BR2_PACKAGE_LIBXSLT
- 	select BR2_PACKAGE_LIBXMLSEC1
-@@ -22,7 +18,6 @@ config BR2_PACKAGE_OPENSCAP
- 	  https://github.com/OpenSCAP/openscap
- 
- comment "openscap needs a toolchain w/ dynamic library, NPTL, gcc >= 7"
--	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_7
-diff --git a/package/openscap/openscap.mk b/package/openscap/openscap.mk
-index 7da38df345..6fbe097718 100644
---- a/package/openscap/openscap.mk
-+++ b/package/openscap/openscap.mk
-@@ -22,7 +22,6 @@ OPENSCAP_DEPENDENCIES = \
- HOST_OPENSCAP_DEPENDENCIES = \
- 	host-pkgconf \
- 	host-libcurl \
--	host-libgcrypt \
- 	host-libxml2 \
- 	host-libxmlsec1 \
- 	host-libxslt \
-@@ -36,7 +35,6 @@ OPENSCAP_CONF_OPTS = \
- 	-DENABLE_OSCAP_UTIL_VM=OFF \
- 	-DENABLE_PROBES_WINDOWS=OFF \
- 	-DENABLE_TESTS=OFF \
--	-DWITH_CRYPTO=gcrypt \
- 	-DENABLE_PYTHON3=OFF
- 
- HOST_OPENSCAP_CONF_OPTS = \
-@@ -47,7 +45,6 @@ HOST_OPENSCAP_CONF_OPTS = \
- 	-DENABLE_OSCAP_UTIL_VM=OFF \
- 	-DENABLE_PROBES_WINDOWS=OFF \
- 	-DENABLE_TESTS=OFF \
--	-DWITH_CRYPTO=gcrypt \
- 	-DENABLE_PYTHON3=OFF
- 
- ifeq ($(BR2_PACKAGE_ACL),y)
-@@ -60,10 +57,10 @@ endif
- 
- ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
- OPENSCAP_DEPENDENCIES += libgcrypt
--endif
--
--ifeq ($(BR2_PACKAGE_LIBNSS),y)
-+OPENSCAP_CONF_OPTS += -DWITH_CRYPTO=gcrypt
-+else ifeq ($(BR2_PACKAGE_LIBNSS),y)
- OPENSCAP_DEPENDENCIES += libnss
-+OPENSCAP_CONF_OPTS += -DWITH_CRYPTO=nss
- endif
- 
- ifneq ($(BR2_TOOLCHAIN_USES_GLIBC),y)
-
---===============0273898243174914703==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0273898243174914703==--
+SGVsbG8sCgpPbiBGcmksIFNlcCAxOCwgMjAyNiBhdCAwOToyNToyMVBNICswMDAwLCBBZnNoaW4g
+UGlyIHdyb3RlOgoKPiAxLSBSZWdhcmRpbmcgeW91ciBjb25jZXJuIGFib3V0IOKAmG1ha2UgbGVn
+YWwtaW5mb+KAmSwgSSBiZWxpZXZlIG15IGFwcHJvYWNoIGlzIG5vdAo+IHRvbyBtdWNoIHdvcnNl
+IHRoYW4gd2hhdCB3ZSBoYXZlIHJpZ2h0IG5vdy4gQmVjYXVzZSByaWdodCBub3cgd2hlbiB3ZSBy
+dW4gYG1ha2UKPiBsZWdhbC1pbmZvYCwgd2Ugd29u4oCZdCBjb2xsZWN0IHRoZSByZWFsIGxpY2Vu
+c2VzIGZvciBhbGwgZGVwZW5kZW5jaWVzLgoKTm90IGNvbXBsZXRlbHkgY29ycmVjdC4gSXQgaXMg
+dHJ1ZSB0aGF0IHdlIGRvbid0IGxpc3QgaW4gPHBrZz5fTElDRU5TRQp0aGUgbGljZW5zZSBvZiB2
+ZW5kb3JlZCBkZXBlbmRlbmNpZXMgYW5kIGluIDxwa2c+X0xJQ0VOU0VfRklMRVMgYWxsCmxpY2Vu
+c2UgZmlsZXMgZnJvbSB2ZW5kb3JlZCBkZXBlbmRlbmNpZXMuIEhvd2V2ZXI6CgoxLiBXZSBjb3Vs
+ZCBkbyB0aGF0LCBiZWNhdXNlIHRoZSB2ZW5kb3JlZCBkZXBlbmRlbmNpZXMgYXJlIGluIHRoZSB0
+YXJiYWxsLgoKMi4gQXQgbGVhc3QgdGhlIHNvdXJjZSBjb2RlIG9mIHRoZSB2ZW5kb3JlZCBkZXBl
+bmRlbmNpZXMgaXMgaW4gdGhlCiAgIHRhcmJhbGwgZ2VuZXJhdGVkIGJ5IG1ha2UgbGVnYWwtaW5m
+bywgYW5kIHRoYXQgaW5jbHVkZXMgdGhlIGxpY2Vuc2UKICAgZmlsZXMgZm9yIGFsbCB2ZW5kb3Jl
+ZCBkZXBlbmRlbmNpZXMuCgpTbyB5ZXMsIHdoYXQgeW91IHByb3Bvc2UgaXMgd29yc2UgdGhhdCB3
+aGF0IHdlIGhhdmUgcmlnaHQgbm93OiB5b3VyCmFwcHJvYWNoIGFzIGl0IGlzIGRvZXNuJ3QgZXZl
+biBpbmNsdWRlIHRoZSBzb3VyY2UgY29kZSBvZiB2ZW5kb3JlZApkZXBlbmRlbmNpZXMuCgo+IEkg
+ZG9u4oCZdCBiZWxpZXZlIHdlIGNvbGxlY3QgTGljZW5jZSBmaWxlcyBmb3IgYWxsIGRlcGVuZGVu
+Y2llcyBpbnNpZGUgbGljZW5zZXMKPiBmb2xkZXIgb2YgbGVnYWwtaW5mbyByaWdodCBub3cgYXMg
+d2VsbCAoYXQgbGVhc3QgSSBkaWRu4oCZdCBzZWUgYW55dGhpbmcgaW4gdGhlCj4gYnVpbGQgc2Ny
+aXB0cyB0byBkbyB0aGF0KS4gQnV0IGZvciB0aGUgc291cmNlcywgaXQgaXMgdHJ1ZSB0aGF0IHdl
+IGRvbuKAmXQgaGF2ZQo+IGRlcGVuZGVuY3kgc291cmNlcyBpbnNpZGUgbGVnYWwtaW5mbyBmb2xk
+ZXIgd2l0aCBteSBhcHByb2FjaC4gQnV0IGl0IG1heSBiZQo+IHBvc3NpYmxlIHRvIGp1c3QgYWRk
+IHRoZSB3aG9sZSBCUl9DQVJHT19IT01FIGZvbGRlciBhcyBhIGNvbXByZXNzZWQgLnRhci5nego+
+IGluc2lkZSBsZWdhbC1pbmZvIHNvdXJjZXMgdG8gYWRkcmVzcyB0aGUgaXNzdWUuCgpUaHJvd2lu
+ZyB0aGUgZW50aXJlIEJSX0NBUkdPX0hPTUUgbWVhbnMgdGhhdCBpdCB3aWxsIGluY2x1ZGUgdG9u
+cyBvZgp1bnJlbGF0ZWQgY3JhdGVzLiBKdXN0IGlmIG9uZSBkYXkgeW91IGJ1aWx0IGEgQ2FyZ28g
+cGFja2FnZSBpbgpCdWlsZHJvb3QsIGFsbCBpdHMgY3JhdGVzIHdpbGwgYmUgZm9yZXZlciBpbiBC
+Ul9DQVJHT19IT01FLiBJdCBtYWtlcwp0aGUgcmVzdWx0IHF1aXRlIGEgbWVzcyB0aGF0IGlzbid0
+IHJlcHJvZHVjaWJsZSBiZXR3ZWVuIG1hY2hpbmVzLCBhbmQKa2VlcHMgb24gZ3Jvd2luZy4KCj4g
+Mi0gRm9yIHRoZSBjYWxjdWxhdGluZyBoYXNoIG9mIGFsbCBjb2xsZWN0ZWQgZGVwZW5kZW5jeSBz
+b3VyY2VzLCB5b3VyIHBvaW50IGlzCj4gY29tcGxldGVseSBjb3JyZWN0LiBCdXQgY2FyZ28gYWxy
+ZWFkeSBrZWVwcyBjaGVja3N1bSBvZiBlYWNoIGRlcGVuZGVuY3kgc291cmNlCj4gZmlsZSBpbnNp
+ZGUg4oCYLmNhcmdvLWNoZWNrc3VtLmpzb27igJkgZmlsZSBpbnNpZGUgZmV0Y2hlZCBkZXBlbmRl
+bmN5LiBXaGVuZXZlciB0aGUKPiBkZXBlbmRlbmN5IGlzIGdvaW5nIHRvIGJlIGNvbXBpbGVkLCB0
+aGlzIGNoZWNrc3VtIGlzIHZhbGlkYXRlZCBhZ2FpbiB3aGljaAo+IHByZXZlbnRzIGRlcGVuZGVu
+Y3kgc291cmNlIGNoYW5nZS4gSXQgaXMgdHJ1ZSB0aGF0IHNvbWVvbmUgbWF5IGdvIGFuZCBjaGFu
+Z2UKPiBzb3VyY2VzIGFuZCB1cGRhdGUgdGhlIGNoZWNrc3VtIGZpbGUgYWxvbmdzaWRlIGl0LCBi
+dXQgdGhpcyBhcHByb2FjaCB3b3JrcyB3aXRoCj4gdGhlIHZlbmRvcmVkIGRlcGVuZGVuY2llcyBh
+cyB3ZWxsLgoKQXMgSSBzYWlkIGluIG15IHByZXZpb3VzIHJlcGx5LCB0aGlzIHdhcyBhIHdlYWtl
+ciBwb2ludC4gQnV0IGhhdmluZwp0aGUgQnVpbGRyb290IGhhc2ggdmFsaWRhdGUgdGhlIGNvbXBs
+ZXRlIHNvdXJjZSBjb2RlIHRoYXQgc2VydmVzIGFzCmJ1aWxkIGlucHV0IGlzIEkgYmVsaWV2ZSBh
+IHZlcnkgdmFsdWFibGUgYXNwZWN0IG9mIHRoZSBjdXJyZW50CmFwcHJvYWNoLgoKPiBJIGNvbXBs
+ZXRlbHkgYWdyZWUgd2l0aCB5b3VyIHBvaW50cyBvbiB0aGUgZWZmZWN0cyBvZiBteSBhcHByb2Fj
+aCwgYnV0IEnigJltIG5vdAo+IHRvbyBzdXJlIGFib3V0IGhvdyBjb25jZXJuaW5nIHRoZXkgYXJl
+LgoKVGhlIGZpcnN0IHBvaW50IGlzIG5vdCAiY29uY2VybmluZyIsIGl0IGp1c3QgbWFrZXMgeW91
+ciBwcm9wb3NlZAphcHByb2FjaCB1bmZvcnR1bmF0ZWx5IG5vdCBhY2NlcHRhYmxlIGF0IGFsbCwg
+SSdtIGFmcmFpZCA6LwoKVGhvbWFzCi0tIApUaG9tYXMgUGV0YXp6b25pLCBjby1vd25lciBhbmQg
+Q0VPLCBCb290bGluCkVtYmVkZGVkIExpbnV4IGFuZCBLZXJuZWwgZW5naW5lZXJpbmcgYW5kIHRy
+YWluaW5nCmh0dHBzOi8vYm9vdGxpbi5jb20KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRy
+b290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWls
+ZHJvb3QK
