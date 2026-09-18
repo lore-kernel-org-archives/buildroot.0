@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 725FFC982DD
-	for <buildroot@archiver.kernel.org>; Fri, 18 Sep 2026 19:54:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC932C982D7
+	for <buildroot@archiver.kernel.org>; Fri, 18 Sep 2026 19:54:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 248DF60EB8;
-	Fri, 18 Sep 2026 19:54:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9B60960EDB;
+	Fri, 18 Sep 2026 19:54:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id G63_iFx3evSR; Fri, 18 Sep 2026 19:54:45 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 1EA0160DC6
+ id OfTtdvT_K--e; Fri, 18 Sep 2026 19:54:46 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 6E36660EC4
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789761285;
-	b=MLSJkCLd8b8hE19TJ/y6onXG44OkNoMIPjG2XVBu9ea8EXNitqg0l/UoRMAaWi3BtJKC
-	 wt4V5eqEK6JL5VMMvVyIKF5tOX6+ceH0JjZx0IUxuqUDqzDO/fP+gMrYfn7zc4sDJUZT6
-	 hWdXJboRqusogbJrb8HJa/LgdlLPDQsVZcNpwa6LoTUYXcP0MH6weX1Iu011K18mzkECP
-	 08BWd/L8SQbNF8hnp85OAKnsMsuNj2AKEx/vTaoxtULLktemKwY84fItcp04Jl4109cl3
-	 brIKa5RQgQHJPdl7bD4Ho6cSM7RBmn+S57I1x4ZaaOBxDTrne6cR4egn4kziSv5P/DQ==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789761286;
+	b=kJ0cFA6ajGsLptEFsX3wf9fIin+iP+TrbQi/NjSs5KxDMi4qQSN0z2viHCPR5AykB5mZ
+	 9B2jfy2GoS+N2nZ63S3b16xlQmpbTAFgrjKyBnWZWpR4Fy6DFtxXNvQIozZ/le/qlbc6v
+	 GmPJIab995hJEjmFdPjFZTYlYMwqRaysIfgP5HDxT+pXoTGy1K+yuX3uRwKqLGR6CUaYy
+	 aiODNKkLyAWvSWFlnLqx9Siq9Thh3TrEvoR8sS/fLzshi/0eNS9z6inazH46Q0xy9Xt7b
+	 vDBpRrXNCVCRL2Zot7yi6SJz+cJPieSt5dTc6r/x6pn06GaHGra80jYWNfI8o6cn84Q==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789761285;
+	c=relaxed/relaxed; t=1789761286;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,75 +30,75 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=D61zm9qr2SyRkQBnR/lkNmDB2pFR80NBKBzDZS9DPjI=;
-	b=ZsKrYIqnwhCCpjMl3H74hektXLTLs6yjzxvrnTSt6zYQ7Fe8R8rA2m2U6fggK57+Iu1k
-	 90L+RYq+uca+t32fOKJWdTvCcIjEAyyxl/KnuO6KN3KGkwUvwBlUH09EwrvGw6VxrvyUk
-	 pMeJu1+R/inen9uGUni03STOA6ojMqT/hy1Mi/Hm8B8lrEBw/hEMw8MvIKcTGU+kTzetY
-	 dmA9JYz2m1FQ0zcqOoBqMgeJ63SEBD9RoBZWRZ59BBJ1IZOFA8HSSlxHMINOfRBye+ONY
-	 CQ5iPShPmfjAZFmKB/b3iNvp/plKHCYc7r3zOecFUk5ovgRYCWPr+CvMtgdsyDFY9Uw==
+	bh=T5TJosZN3kFg4Ws8AO07z9NRh8tkvyqcpfC8o6iluKM=;
+	b=SOQl34qvnu6YQwoEsv5zKsksyIwTHK7cKM1npnrzywZ67mUQTkbZkhd/7AaqzYL6ySZ/
+	 kkqaDwbuvzOUpLc48rdMaXGmkmIrqCcF2QH6tknRtSXoijrTxZDrvZ998T0S7/kbuOXPs
+	 sUHjCDEXkU9QNWUM13bGdVHcUhWCJXnm2DrtEF79mXB/aPluapISd+UWINkXrr3O7XYlz
+	 MXx5fl2paehYo5hXai0dCcXIkjQbdfYU4z0QivzOkJW2Mepn/VFUQ2i9zJ+uQ0BDN8s1A
+	 a5nZiiD3CMrCp8DMUy+s5ZxLlSgY0p+8ccqHUj4//amnvnjwxBPMZKUbp3JfEWYMkBg==
 ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789761285;
-	bh=D61zm9qr2SyRkQBnR/lkNmDB2pFR80NBKBzDZS9DPjI=;
+	s=default; t=1789761286;
+	bh=T5TJosZN3kFg4Ws8AO07z9NRh8tkvyqcpfC8o6iluKM=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=bMzXKRtdS+dAe/erWyCJtFsUuJ04/hbQlX0U3walLZ3mgTZ16/fkyEL+P3KG3YOtH
-	 JZw7wsbfhrFGRozi4/KjVHfxhnqvf/eSGoIDob1MPWk5dA51DYJr41bI+Siap0F32i
-	 yuOfxLbyPLxJwwb7XFeNhJsSQwjWzvX9muQxbPbxlliPNrc3+dPYM3OKcMwJrD03+u
-	 jjF6hV3wLsgs0PEOZjhLAanLILIsHFBJls76XwCuXLxL2HZrsn/NlzjYbQMV4RIbAa
-	 NhVsR9HdSymagp0FAFQ3Goa7cK78YXEyFBEKWTL39clahQrDHYYXOkPN6zZRiujjZM
-	 gj0+PogOP0pGw==
+	b=helnSilTbFB1G01rwoDjO6Pbpc+uEkm2QYazdmP8Kn8PBRtPjRrBbT8OgOC+6PekS
+	 56n4p3k/Y98/cnISUZjxKHJOqGqJw1XgcB333ARryTYYySK7iBdhc3jgmtfs8Gt857
+	 WPvBFvnNDU+ir9Qfh6yo2ky3biuCXMSdTEsC4uKOGU2tVNqnuK9/52yndYgFHm+SvM
+	 1RF5U1Li4C4jjsFJRW6C/MIUrGgXA78iUAsyB9ogbeUg4SCMksWNODbkJedJLEhSuw
+	 WNOhNGxEc1kEHV9eEInDzCNW7xrZQoqyDClyk2GiqZcc1/G+9YvOIjzKY5fLZmi/Y4
+	 IAWSljMYO1lKg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1EA0160DC6;
-	Fri, 18 Sep 2026 19:54:45 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 4182A42D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6E36660EC4;
+	Fri, 18 Sep 2026 19:54:46 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4D33C25B
  for <buildroot@buildroot.org>; Fri, 18 Sep 2026 19:54:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3415681338
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3E63260DC5
  for <buildroot@buildroot.org>; Fri, 18 Sep 2026 19:54:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZMnfDquN913F for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ezryPmyfhcCf for <buildroot@buildroot.org>;
  Fri, 18 Sep 2026 19:54:41 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 7BE8081301
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 8373D60DC6
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789761281;
- b=U/siScM4rIP3T8V0rw+FWY1KlvGFXu+dNvp5LqjvROzswOwEln2bJ+HtHG00C+dw0I8C
- WLM0do7z3K/6dSH0D1ICK9HVmfEXM8pkkc+Z/AvpaxsNhg7rWKCntzjbeJfhHbqSowAQ8
- gqydhMMSVSvUuajpjMGHf5/nEWmxRL0VFy7Z4N6JOsdLT5VY5nbmso3NJalfZEk5KG9H9
- zoVaUKbUX6MR8DGjq9LMWDBoZ+PVVeH8XVnuhT6mF5lM1QACQemIKJMtYKWrr33QoCKFy
- a2VsSvXRA0Lcp2nwBtdVH4/QlOj+NfIV0s1UhpHtiaC/ENUJEpZ0JZXe39SFaS2RXHQ==
+ b=If5L0La6XegAFAWv9Vs3puYlM3NNK9UJuV8YePRCxZuOHw7uRE4Y/X8R5V99p6+s8vYY
+ 6KRmNq295zCLyw1s0V3vE1WSU7qAIdQ5sn4RzP5YL9ydOqVC6j3IfYC1i8aU/cijW+z9d
+ Wyzjwg07O09JoKViz+SR7s1uCFA5hQi7GNZVKvJsLX9BQbBuS0aM0DbLpyA6mtmgJsASW
+ PPawEgZmiS7PJSKakLe3ARFE9W7UOr8aerxADqkfMqNkIYcEAyO1aE7syssVwi7AfMB36
+ fINY8BcOpx/YRddCGeXhSpuJ/6qqTSP27U2pGhGm+dQkMwnjZ2Y5Qt4Juukj0/mZL2w==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1789761281;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=38IZByewNB9yFML/MnbZ84OG+6ZNkHH8mcoPcG7CDwM=;
- b=Oqi5y5Uys8zbhCiIBX0SfOZQhJlbDvymj/IPl99eLlmez2gKKVxp4J5x4yx5Wk2AXOIu
- TnFuoqhN1a9kPla3RRUyXb8Fr/piRFwuihqNPH4f9NcVHuGNhQL/ZyxlTXHwg10aw4EMM
- I6m36mm8i8gPfi1bAGmlNrh7Ug8J+lSAiY27Gw5Lu2VT2YiodrDev/3CuHzZA3FX8k1R2
- sZ9uhu2epkIAuwJfZniIVqxaj2soW7cfel32N8J+QFc+zSahw1YW4HNJN2mX2UojwgLKW
- /Z8KfuNmjm+VOH54VcLpESrPXyqvaPz0Cnr+rTa14brFOkY0xqv0d4H/31VlJIPHkTA==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org;
+ bh=sUnvJsq3BTr48I838/FMU/pdE+7NXLg4xRADaOVtOgU=;
+ b=jZKVMq9Ly7o6Y+BN3IX9iPVDpDLlt47JpGbVRUL/2DCqC4CW0eCYUM1Mt41AFeD++0gt
+ m/1URdfAANGJzcXrHOTpCXxtpYhlnmEE8hVW7GbADKin1L0tS7KiHvqF/gKPtfNZI++Zv
+ ohQ3N/E/lIQsf/bT8jj+igwX5I77o8CZS0dNrJZBNEKS2YVw+PmFQLNKlHUv750JqOx21
+ x1WnDkaLiTz1LvNuj910VXSUJbJiBdY0TIN2qQ2Ez3sIVl6FcRzbNYwlruyhvdecOJ2DW
+ 5REcWIB795N/R45TNWonH2+jBcPzHtOiMK/yn/9UH/yi0pkZRWF8M9K2lApaLeqM8Rw==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org;
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7BE8081301
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8373D60DC6
  for <buildroot@buildroot.org>; Fri, 18 Sep 2026 19:54:41 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0D121976AB; Fri, 18 Sep 2026 19:53:34 +0000 (UTC)
+ id 18215976A4; Fri, 18 Sep 2026 19:53:34 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 18 Sep 2026 21:53:01 +0200
+Date: Fri, 18 Sep 2026 21:53:23 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 46d379207dd2132f00f89f689284e6e18592bd33
-X-Git-Newrev: 82b1b68a076e93951a10c003fb2eb0b1b53a7934
+X-Git-Oldrev: 82b1b68a076e93951a10c003fb2eb0b1b53a7934
+X-Git-Newrev: f70de5ac394e22546410c10ccfe2806a49060ebf
 X-Patchwork-Hint: ignore
-Message-Id: <20260918195334.0D121976AB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libftdi1: fix build with swig >=
- 4.5.0
+Message-Id: <20260918195334.18215976A4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-pylibfdt: fix build with
+ swig >= 4.5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -118,70 +118,80 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/82b1b68a076e93951a10c003fb2eb0b1b53a7934
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/f70de5ac394e22546410c10ccfe2806a49060ebf
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../libftdi1/0001-python-update-for-SWIG-4.5.patch | 48 ++++++++++++++++++++++
- 1 file changed, 48 insertions(+)
+ ...eplace-removed-SWIG-Python-2-compatibilit.patch | 59 ++++++++++++++++++++++
+ 1 file changed, 59 insertions(+)
 
-diff --git a/package/libftdi1/0001-python-update-for-SWIG-4.5.patch b/package/libftdi1/0001-python-update-for-SWIG-4.5.patch
+diff --git a/package/python-pylibfdt/0001-pylibfdt-Replace-removed-SWIG-Python-2-compatibilit.patch b/package/python-pylibfdt/0001-pylibfdt-Replace-removed-SWIG-Python-2-compatibilit.patch
 new file mode 100644
-index 0000000000..4521ea8e4a
+index 0000000000..fa2b587ddc
 --- /dev/null
-+++ b/package/libftdi1/0001-python-update-for-SWIG-4.5.patch
-@@ -0,0 +1,48 @@
-+From 6c965463223ea46d0b7ae22586cadc150f719f84 Mon Sep 17 00:00:00 2001
++++ b/package/python-pylibfdt/0001-pylibfdt-Replace-removed-SWIG-Python-2-compatibilit.patch
+@@ -0,0 +1,59 @@
++From 5008d1d6a356b8d0a78060da2e1021507d529cff Mon Sep 17 00:00:00 2001
 +From: Jitka Plesnikova <jplesnik@redhat.com>
-+Date: Tue, 11 Aug 2026 13:55:58 +0200
-+Subject: [PATCH] python: update for SWIG 4.5
++Date: Wed, 29 Jul 2026 07:55:56 +0200
++Subject: [PATCH] pylibfdt: Replace removed SWIG Python 2 compatibility macros
 +
-+SWIG 4.5.0 removed Python 2 compatibility macros (PyInt_, PyString_, SWIG_Python_str_*)
-+from its runtime header pyhead.swg (see commit [1]). These macros mapped old Python 2
-+C API names to their Python 3 equivalents. Packages that reference them in custom SWIG
-+typemaps or pre-generated wrapper code now fail to compile.
++SWIG 4.5.0 removed Python 2 compatibility macros (PyInt_*, PyString_*)
++from its runtime header pyhead.swg (see commit 79f7a2b7cb7d). Replace
++them with their Python 3 C API equivalents:
 +
-+This patch replaces all occurrences with the corresponding Python 3 C API functions.
-+The replacements are safe since the macros were already aliased to these exact functions
-+in SWIG's Python 3 code path.
++- PyString_FromString -> PyUnicode_FromString
++- PyString_AsString -> PyBytes_AsString
++- PyInt_AsLong -> PyLong_AsLong
 +
-+[1] https://github.com/swig/swig/commit/79f7a2b7cb7ddc256eba09c8770133148025171d
++The replacements are safe since the macros were already aliased to
++these exact functions in SWIG's Python 3 code path.
 +
-+Upstream: http://developer.intra2net.com/mailarchive/html/libftdi/2026/msg00012.html
++Signed-off-by: Jitka Plesnikova <jplesnik@redhat.com>
++Signed-off-by: Peter Robinson <pbrobinson@gmail.com>
++Signed-off-by: David Gibson <david@gibson.dropbear.id.au>
++
++Upstream: https://github.com/dgibson/dtc/commit/5008d1d6a356b8d0a78060da2e1021507d529cff
++
++python-pylibfdt imports tagged dtc versions and currently waits for a
++new dtc release: https://github.com/devicetree-org/pylibfdt/pull/10
 +
 +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 +---
-+ python/ftdi1.i | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
++ libfdt/libfdt.i | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
 +
-+diff --git a/python/ftdi1.i b/python/ftdi1.i
-+index fac4d16..31e17c6 100644
-+--- a/python/ftdi1.i
-++++ b/python/ftdi1.i
-+@@ -91,7 +91,7 @@ char * str2charp_size(PyObject* pyObj, int * size)
-+ "read_data(context) -> (return_code, buf)"
-+ %enddef
-+ %feature("autodoc", ftdi_read_data_docstring) ftdi_read_data;
-+-%typemap(in,numinputs=1) (unsigned char *buf, int size) %{ $2 = PyInt_AsLong($input);$1 = (unsigned char*)malloc($2*sizeof(char)); %}
-++%typemap(in,numinputs=1) (unsigned char *buf, int size) %{ $2 = PyLong_AsLong($input);$1 = (unsigned char*)malloc($2*sizeof(char)); %}
-+ %typemap(argout,noblock=1) (unsigned char *buf, int size) {
-+         if(result<0)
-+                 $2=0;
-+@@ -136,7 +136,7 @@ char * str2charp_size(PyObject* pyObj, int * size)
-+     int ftdi_get_eeprom_value(struct ftdi_context *ftdi, enum ftdi_eeprom_value value_name, int* value);
-+ %clear int* value;
++diff --git a/libfdt/libfdt.i b/libfdt/libfdt.i
++index 1f9c0471..b1cb9873 100644
++--- a/libfdt/libfdt.i
+++++ b/libfdt/libfdt.i
++@@ -1136,7 +1136,7 @@ typedef uint32_t fdt32_t;
++ 	PyObject *buff;
 + 
-+-%typemap(in,numinputs=1) (unsigned char *buf, int size) %{ $2 = PyInt_AsLong($input);$1 = (unsigned char*)malloc($2*sizeof(char)); %}
-++%typemap(in,numinputs=1) (unsigned char *buf, int size) %{ $2 = PyLong_AsLong($input);$1 = (unsigned char*)malloc($2*sizeof(char)); %}
-+ %typemap(argout,noblock=1) (unsigned char *buf, int size) {
-+         if(result<0)
-+                 $2=0;
-+-- 
-+2.55.0
-+
++ 	if ($1) {
++-		resultobj = PyString_FromString(
+++		resultobj = PyUnicode_FromString(
++ 			fdt_string(fdt1, fdt32_to_cpu($1->nameoff)));
++ 		buff = PyByteArray_FromStringAndSize(
++ 			(const char *)($1 + 1), fdt32_to_cpu($1->len));
++@@ -1169,13 +1169,13 @@ typedef uint32_t fdt32_t;
++         }
++         $1 = PyBytes_AsString($input);
++     %#else
++-        $1 = PyString_AsString($input);   /* char *str */
+++        $1 = PyBytes_AsString($input);   /* char *str */
++     %#endif
++ }
++ 
++ /* typemaps used for fdt_next_node() */
++ %typemap(in, numinputs=1) int *depth (int depth) {
++-   depth = (int) PyInt_AsLong($input);
+++   depth = (int) PyLong_AsLong($input);
++    $1 = &depth;
++ }
++ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
