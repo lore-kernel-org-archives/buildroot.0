@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE5FCC982D7
-	for <buildroot@archiver.kernel.org>; Fri, 18 Sep 2026 18:53:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3666C982D7
+	for <buildroot@archiver.kernel.org>; Fri, 18 Sep 2026 18:53:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7968A60E48;
-	Fri, 18 Sep 2026 18:53:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B07FB40ABD;
+	Fri, 18 Sep 2026 18:53:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yToX0j6Z64I1; Fri, 18 Sep 2026 18:53:05 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 9BD5860E52
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789757585;
-	b=fq3oIGBR3VounT770CFNekJLkvGDttNqws8oXzejxxYjvEJ/99ObT6SNQBoW1vn1Efl9
-	 phaboNP6FAFd8GfafxsJe4iSHwSKIhJ9TB6moiOJyULkWVShn6TpZ0r4sL+y7IpCVNBCj
-	 o2W5pBMEPB/bx7DPnx1dXfipzedQtt/kVKGLHayNOB3Tm1ALsYfaBlsboqoRM1X8XxOra
-	 BsCBoRTpmxKRgZ2ZeuTwro/hYTbnaLwtIHymbllwKMjUid8VJc65K/f9uQslyY+HmrzQg
-	 Z1bwCo5XtE0V4qDsCbDzmTZWwtVirUQnBAMDuZpuykU3xteDiQ2mBN9JEt0gmFKrTaA==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UjBCp9NkwtYa; Fri, 18 Sep 2026 18:53:18 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 159EC40B0C
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789757598;
+	b=hFO7EpNaX+k8NjeysIRBNM85+2zBlZKi+ih0YLvL7wCfsJEgws2kbu3r8xr7U5d5RqVZ
+	 tzI14F3VKBtr4RS7El2wgFKNh8T4y36B3naY5JKssfCVluBle4CrCElsw0dXuC+9k4xEG
+	 Ge6f/x9fVKcsUiCRlkyXvc2Q5+jleKDKMcOd4iFugzFy0Q5O9A0RE6ZVSpM3aPa6dX+BX
+	 romVXRq6NXfSINsaN+mwSsDSPxg8ijU2jZkUnkmWI0b6c+RKMGUeoLLj2yF1aNDLASrzo
+	 9N7OQIK2vYlzP7fjDJx0UmB4vIj5ZeK6oUUo/bVrd4RFvFjmHBQihNv326rLT1DD9Ng==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789757585;
+	c=relaxed/relaxed; t=1789757598;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
@@ -31,103 +31,103 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:Cc:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=WlGHSYqaqW6NA1iJ5vhYQ9U0DyQfsQwxaHvambouax0=;
-	b=O8gxSN+HhxZ+wRJ6/HDWD6SmUlxje9N7M53pF/39G2gb+boyyGCAo7FmrRQgUDWEMJs6
-	 c69d4besQ2LHB6gMc+Lxxkb1NckQN8o9RZ141ifosd/fllIjR05PCIVQZ0jipYVw7cW+M
-	 xJQ+PPIb/HvL2zIrd4gShi8/w52R+63cb+9mIdwlmY0vm3xW4Hfe5j+As5NCkNgv7qJYL
-	 B4Lm5zevs4ioz187jjg+Ey4X1mMpP5qna/XfsEjIqJS7u5RJo3me6jCQDYAgukafeMrEG
-	 NgSHlEv26rkdon6Dr+iAMvvTHYl8Q5yWkMBAooqaCYnqe5UIx+qgpvbrhbfV6MgbY/g==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	bh=iq0pPZTHfKzwh0ivJjMvxyPudSl28xNRwYXAnwKZvtY=;
+	b=Xi8FSfCIHCqWaH5r6YdhsC91OfPl+5285u3q3LcoZ+k3B+tV6aNDmxnSGaJzM5R/+yso
+	 ATAIwmtI+n1uFJGloDZMBju959jDA1T7L+RYjOolnpyg0zTaB9owQy7X8/T2PmMKvIKvW
+	 ef8+7XmW88mMHRcYWdbh0CyFFyXfOItdFfnFg8dTfFb5h6UjacIQm4jPJ0UtPFzAyGXP5
+	 yTJvR8+ZKCCU0Y+pbinnGuc0W8P8So6t8x9Os5WWD93Y46FzCV96pS+3ASGKJUl9//akH
+	 oTeDV5MVxonP4SlxF/M195w9nek35wyJdeh/d9/CQjG18reLkBb+ZQ92o9s3u2ZNx4w==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789757585;
-	bh=WlGHSYqaqW6NA1iJ5vhYQ9U0DyQfsQwxaHvambouax0=;
+	s=default; t=1789757598;
+	bh=iq0pPZTHfKzwh0ivJjMvxyPudSl28xNRwYXAnwKZvtY=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=A2fossFViiqCvWTRKCD4+yXj2Ksdos/E/Ivk7mNdpl87qwZYOSud25N3qkaRTPf7N
-	 KdkOmqk8JI996ixjdUjq4qqB/ZnKy4R+Ey4RNruGFE7xIJ4NerOkm1JnzBWn4j2Cka
-	 lVcoBoaLbQXKBK2+6eN9jNMB3X8cFLg0PFHL+bU0eb57do6YOe7oZL8VWMi8YwkJrQ
-	 6f3PT8ArZ58Plo921OkEUQ4jp9GKxdDgHUqsK/r7EMsNBWEqxL7X5JsCJh3yr9tV5G
-	 WC+Y+5gvs4Ml3ygirX14lZH3zvzyJsZWBsjSPI//pgC/dFo0SZOqK0QYc1BkoTYJpA
-	 QeudCupLLzeRA==
+	b=IKf9RtDEwSqO9fD60BUBq33DxwuiSdgZGhXrruQfgbYCRBmSXjTZ2fuWGsRokkUUs
+	 BiIsIpYqyFx7tRzJSDW3jD9SUGZLon8YMK51/9qCEXA26z34nmm2wMmihUYz3zkfF8
+	 /IQtvfN1kdlKmMcdtTqwkMO8ubk1hCBQdv6Li+9g4xV5SBOmFweW99veMmW/Zrjo74
+	 KKZP3ErGS0IL8hAzNOQfE9VFl266gYmJhNSek8H4EfzRYU6n0AWCdrkw3jCMNMmspN
+	 Y6j3ZiwUJ83hEEq3BxgSYKStfNTN1wshMx7q0G7TZsGhjygm63S5PlDPusOTJxDzJn
+	 eo1hKpM12Iwhw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9BD5860E52;
-	Fri, 18 Sep 2026 18:53:05 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 5705E13D
- for <buildroot@buildroot.org>; Fri, 18 Sep 2026 18:53:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 159EC40B0C;
+	Fri, 18 Sep 2026 18:53:18 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id DEE7213D
+ for <buildroot@buildroot.org>; Fri, 18 Sep 2026 18:53:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 54F51400CE
- for <buildroot@buildroot.org>; Fri, 18 Sep 2026 18:53:04 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D0821812F2
+ for <buildroot@buildroot.org>; Fri, 18 Sep 2026 18:53:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CZ3qEGPdXU-a for <buildroot@buildroot.org>;
- Fri, 18 Sep 2026 18:53:03 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org 614484006F
-Authentication-Results: smtp2.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789757583;
- b=Fh/WIKXA+Xe/Sdi6Ap4FLwfV7L8ScVdzX6o5foDgUHZc3C/3V+rUCnG1KtVQ/IWuvhN5
- 3dCCXBSNrqSMb/LBDfE+T+E9/u3sy1GStyQSWmNO1O4tM44D4JLfdfZACSdZM9NJUPQUg
- zykz6+7o+PbOIhRzNlKHbxCVEg9d4zZ2oucWBWJlFyd6VeUVx6QVikabCsOZvta4uluy9
- S3r69Y4kFg/X5WhdF7ztR/xcU+UdNWSqBJMYdiYezQYP0djEXUYhcF5xVGOyeEsdoAChf
- 03HKxJUQYQvwvJAhN/Khobm64U14bKYs44keMEleQ6bU6PLjaaArdU6c6lGv6w50Q2A==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OkOk1-wVO1P1 for <buildroot@buildroot.org>;
+ Fri, 18 Sep 2026 18:53:15 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 15E0F8124F
+Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789757595;
+ b=TXDlmR98q4IUkcXX1k3nTRwiMk8CoFXoCy3mErcIW5ughdK7QLAbr0OfmxFvR0GR6Uo5
+ uGUtXo1A7zH1g2uUAES1jnIdONo3Q6HhGe7K7ndQfQnWaVMu/0kKWc2O5Bp1ZQg5FzDSp
+ th8yWVq3oTvQBxIXJ3jvzAYkmIGI50JuNxV9KofcFYmhf7A53IagksvdeNSrvoMgmBh5b
+ kgPzuNPNCIsW+fMB5O3LzEDGImjcGaFW1ONFmZDxiF/fhRBBtYvgI2o3h8zEoC5HKxdMd
+ mbPspdwUYDd/8eG8NRTiGvgtepcbkvBXBLxkrC51UUQKnbr+nPtchZfJur8wpS5s+9g==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1789757583;
+ c=relaxed/relaxed; t=1789757595;
  h=Received-SPF:DKIM-Signature:X-KAS-Sym:Received:Received:From:To:Cc:
  Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding:X-Spam-Score:X-Spamd-Bar;
- bh=ZCz9Mm2R+/TZ6AuG54GXRS+f/UieJLdE+h+hRTFL5jc=;
- b=ZjWv3LhYaN2Qw+C0Zn/dnLUMY78oZHHTwiqOqivl2oMNkpPZwTkVfkscgJgMXfzJ3B2W
- 47z0dP4qnv/RsAN5QYLaHT7YQTfHc/r2jonYpxwdKdUFCzZFedN4F6GMIxn9OJCAuZjF9
- fs17BVFCT+XsM4fFSd50a3/YyrEVHWRfDG15wsFUa3mPnMko3uL5BGrzfGuPrrd0GfwVT
- IsvbNgXfFihyixOxbKkVpaVXkj3s+6p4kFB3XYwFiER3w6/r12rxgmYZkhbQr6hf7RxEY
- SxI/pyA49T+7aOC/wNy4gSC0wvdBos+/EkVnMZlfnFdLs6wDTGZjuzw1+CXF8Pf4Vgw==
-ARC-Authentication-Results: i=1; smtp2.osuosl.org;
+ bh=8DOq9pF6vY5RyE33QUqGMA5kBWlQcZDhIuguh1EICpk=;
+ b=XTBiLw5thSRutQtwOmozkT4xpLRTGPjKHp+YipvZwanPu3hCYet2uPH4/lLz6s3DLyBr
+ oe8kgbUadRXHPwes1GoEonIKR8+nSU4ouAMgJn9SRGWmaPSletIH+lmr5eDlP2cAafrKr
+ VyTXPluai/T5D8qSFTKI7mYuBntKxi+6HXdt2bZFXmDt5afCOwHobTcHfOD8fu8AP7fSS
+ eeHLaVRor1fbQ3QikNVATSiihImkkFB6e31zqbPQzqGrcMjlCthXtQ1YgFI3kWsM0oUgQ
+ SBJRMQiAF8zPHM0CJAX8Yqv9sWHU09Q2CUea1zDg0lCcTGom+nCte2E9DWYLcyFSdRw==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org;
  dmarc=pass header.from=kuhls.net; 
  dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=N5AZwRxL; 
+ header.s=kas202605290044 header.b=dqiErNZN; 
  arc=none smtp.remote-ip=85.13.140.57
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-Authentication-Results: smtp2.osuosl.org;
+Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=kuhls.net
-Authentication-Results: smtp2.osuosl.org;
+Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202605290044 header.b=N5AZwRxL
+ header.a=rsa-sha256 header.s=kas202605290044 header.b=dqiErNZN
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 614484006F
- for <buildroot@buildroot.org>; Fri, 18 Sep 2026 18:53:02 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 15E0F8124F
+ for <buildroot@buildroot.org>; Fri, 18 Sep 2026 18:53:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
- s=kas202605290044; t=1789756941;
- bh=ZCz9Mm2R+/TZ6AuG54GXRS+f/UieJLdE+h+hRTFL5jc=;
+ s=kas202605290044; t=1789756942;
+ bh=8DOq9pF6vY5RyE33QUqGMA5kBWlQcZDhIuguh1EICpk=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=N5AZwRxLAoZ6n3A79XA/clMW7UHyS0jPaRiGYk5fHI5KhBFafLlW2SIQyRD5+jr3j
- CNOp6G1nZO/eu4xkCojKWke6Cj/PKZqDJ5EFT4SpDpp2wazbENHHTpBa2lNlvASQ1R
- tBGeNDWo48rW7XuaO6CJ6+l0nnGvyJicqFpl3wbcR+UqO+YKiYOwRP4+hM+H/9mjzN
- rq6iLeWWgT0A5a/doxEbOnMDTflyFrkciDGvVTdry/FplcT335JuyXR6SK7Om8urmm
- +9loSDXJ3wD4LRxL+y7l3S5VQO8RUiP90mM9J/BJHmuJjFqZpLkHgdcVXEjsXLrDCV
- QqjyIY96Ewj4g==
-X-KAS-Sym: v3:f51bdf72230551df:lkseH4ZbqNj6+SWeyhXOROAVDVA4wctn5GqYnvj392NxznN0rSxqdWBYYBdhITxI14gBE1k+pJkBIChL3/t/lCKYI3GtmdM3wrKpFumwg08Wm/sNokIQQ6E7zEBL3K1/hdJasLCtPFWYZLZ4DnysL3d4pK5HKpKudG9dMfXruRPXYqC+sKlv7VCmjdbM67WcbSYib/I5z3KXlTx93kwxaIjh7oHXDaIgSs3BBwdUhzwgu27GIhhGPs84OFj8HKUhaehmsatqjfsuhHQOPWGzMJyclLrqdN8RENcGlb3kAp1RNMG5gE4Srsk7d6rPHzd5pP0v2pHDKySwyfSJf2xgPw==:ZxVPcukYN7qQl9HpgPO/Hw0iBtk6//ocNY4GvYaYR1Le60frGNzQK6aKanhPp9dUIQnOchpy/DihPOgKPULUPYwedW96Q0d10JTDGUOrF6bRno5EIGxmXAj5Nq4dlRwByIlWbLc6DaEm7vtvSokmA+hIr6yWs3FtE5L91J+rqMppFtNvH4gobvjEnOR94yPYzRRkhaZBk0BgLL3mzYGc2PZB1TRcaswNnfw/gy2HOy94R7sPCSS/h8eJXnjqoxHSbM0WxCwrElp+Hs1eyQzLw8Wq3z6pXpH7dcLPRVxgPSChm0K1btg7fncmee3fF0BmqPuJEW4MY6mvgqTX0/S+o6ZMzCVmiGmqJs2bQQPW4xTn2B1+NhJQSsFa8TtbcAAt7FWa6wYbaEd+kCKUU8pFiP8tr3plI/8LTxbjQqrEKLYX8xhzRTO1xEQarAhRkYkg4aX9SWAAY8S4vBwb0uKYvqJShFuec9bQoqoDNa6i10Dgk/AYrTn/a1qMKUfxx9VUQahkRpVIv3z8natP8zjF1Ey1JtU5ycKOdlOth7MbGUGWVMBH14FZlEquRNQOFKF9oFlCvw1Ir7gf4nJuJK/rxKMMAL8XkhB21nuR5/KfPM5cA+
- hNm4/KSsj6SMdrWZhiHhzXey0VvGEqSUrYNu3od8x7pcfvNd0SHvP7jSo0QWcQ5Ac4u9ZbuEKTQp1ZUsRxMUkJTamgaj0avha8yooEKKW5N5mIM6vGgfo=
+ b=dqiErNZNdRDSv2QoX0P+OyHn4D6UWHbsAJpmm0QqSyRRbe1LQFtd4psDPvNurWROb
+ 3zf9G7jY8Eq11BE0NKC47TTsh38CF1Tk3LJjYktGY5WslZVUwBB3VMFmEBefVdtnxn
+ 1Hxt3/256W9AsM4CNPdJ3lmdvgM2rsO001Ptzp9bRuGU0AbqH+vDRQRrg7rkIl5HJr
+ uXzAVFpNLWuIAQ1ZagvCKAZm2eSPPnaedrf9vYvtkfVO+OYKELhFieoMntJiRz+Fgu
+ Shi6t5PjggoVyWmsKXOO3pkREN8luMz3djazp7FFIvS0F748Kysnz1mac3QPkoRSHT
+ vKuagrFNdpcaA==
+X-KAS-Sym: v3:f51bdf72230551df:lkseH4ZbqNj6+SWeyhXOROAVDVA4wctn5GqYnvj392NxznN0rSxqdWBYYBdhITxI14gBE1k+pJkBIChL3/t/lCKYI3GtmdM3wrKpFumwg08Wm/sNokIQQ6E7zEBL3K1/hdJasLCtPFWYZLZ4DnysL3d4pK5HKpKudG9dMfXruRPXYqC+sKlv7VCmjdbM67WcbSYib/I5z3KXlTx93kwxaIjh7oHXDaIgSs3BBwdUhzwgu27GIhhGPs84OFj8HKUhaehmsatqjfsuhHQOPWGzMJyclLrqdN8RENcGlb3kAp1RNMG5gE4Srsk7d6rPHzd5pP0v2pHDKySwyfSJf2xgPw==:XEa7Kcc7WwdrMAL04tIzh+jJ8NfXLpYAbXNZQOFGYggvcdMSqF2dkZJMVbEMfwwjWEr8+baAhfjZ6m2jc0eyIKtw443iosX9XLAt1UHwxkLbLCTZTKBCeptzEq3sAn57tpBIjytMJDuDAkLgVD1QYdN5sQz0SgcDxhWDq7RVWGnWp7Kl88r3dVYWU1eyIR6ecPEbSUP3FxcL1n2eNLTQyOiPhRb3PhIRdrj4RzCuVN+BZTrwfCOr3aSZAW2lpWMjutbhTE4h8wWhP8WzONaDWBWIRNsEkvIeXIiGVpTf7ZaIiBPRYT259IxEXTGsaaA8DMXtpGUYEIpxGQjpNbPn4Bms0UJSQuafjoin+jomwqeAZ0R83qY9UCciiuDXXcyvvy33l8z/pLPd4TW5mLLTtwkraqu2wKHeHmBjKIvErRKQzhfnQ6QQiIzjuo2/6wvHrkETuGl5Mz2MBELUQMzLletf1FfVpfn0lWd6F6nviLlr56GNB3WIIJtAyqhemAM3K4XVgTH5M8l2TGXtac7OE7n85YeQWdaBKD4uhsyWjCA2uRn6Sdqc5JAEyQ+CFXRo4wDbceV1GxEz/5ohvYOxcUGEFdctiakA/QnV0lsufPYU2N
+ MYPl3B1ybcqqXple0myb4vou5xWGVgsjfAMviO1wEVPivAEHagPk7vPBTdvePS/h0J7q+UQVKO
 Received: from fli4l.lan.fli4l (p54a1b276.dip0.t-ipconnect.de [84.161.178.118])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id A8ED8A4C473D;
- Fri, 18 Sep 2026 20:42:21 +0200 (CEST)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 3720DA4C473E;
+ Fri, 18 Sep 2026 20:42:22 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:59900)
  by fli4l.lan.fli4l with esmtp (Exim 4.100.1)
- (envelope-from <bernd@kuhls.net>) id 1x7dWw-000000007cB-2OPA;
- Fri, 18 Sep 2026 18:41:50 +0000
+ (envelope-from <bernd@kuhls.net>) id 1x7dWw-000000007cB-2q4C;
+ Fri, 18 Sep 2026 18:41:51 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Fri, 18 Sep 2026 20:41:07 +0200
-Message-ID: <20260918184140.3631274-46-bernd@kuhls.net>
+Date: Fri, 18 Sep 2026 20:41:08 +0200
+Message-ID: <20260918184140.3631274-47-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260918184140.3631274-1-bernd@kuhls.net>
 References: <20260918184140.3631274-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: /
-Subject: [Buildroot] [PATCH 45/77] package/libesmtp: Fix build with OpenSSL
+X-Spamd-Bar: -
+Subject: [Buildroot] [PATCH 46/77] package/libest: Fix build with OpenSSL
  4.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -175,52 +175,527 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- ...-with-OpenSSL-4.0-opaque-ASN1_STRING.patch | 36 +++++++++++++++++++
- 1 file changed, 36 insertions(+)
- create mode 100644 package/libesmtp/0001-Fix-build-with-OpenSSL-4.0-opaque-ASN1_STRING.patch
+ ...r-opaque-ASN1_STRING-OpenSSL-4-compa.patch |  60 +++
+ ...stead-of-the-ENGINE-API-on-OpenSSL-4.patch |  64 ++++
+ ...-Port-ossl_srv.c-copies-to-OpenSSL-4.patch | 358 ++++++++++++++++++
+ package/libest/Config.in                      |   1 -
+ 4 files changed, 482 insertions(+), 1 deletion(-)
+ create mode 100644 package/libest/0005-Use-accessors-for-opaque-ASN1_STRING-OpenSSL-4-compa.patch
+ create mode 100644 package/libest/0006-Use-providers-instead-of-the-ENGINE-API-on-OpenSSL-4.patch
+ create mode 100644 package/libest/0007-Port-ossl_srv.c-copies-to-OpenSSL-4.patch
 
-diff --git a/package/libesmtp/0001-Fix-build-with-OpenSSL-4.0-opaque-ASN1_STRING.patch b/package/libesmtp/0001-Fix-build-with-OpenSSL-4.0-opaque-ASN1_STRING.patch
+diff --git a/package/libest/0005-Use-accessors-for-opaque-ASN1_STRING-OpenSSL-4-compa.patch b/package/libest/0005-Use-accessors-for-opaque-ASN1_STRING-OpenSSL-4-compa.patch
 new file mode 100644
-index 0000000000..f38435b68a
+index 0000000000..13511f0d27
 --- /dev/null
-+++ b/package/libesmtp/0001-Fix-build-with-OpenSSL-4.0-opaque-ASN1_STRING.patch
-@@ -0,0 +1,36 @@
-+From 0705423e2596a21e2d4e1f3fd492792956a4bad3 Mon Sep 17 00:00:00 2001
-+From: Ravi Kant Sharma <ravi.kant.sharma@canonical.com>
-+Date: Tue, 28 Jul 2026 20:35:48 +0200
-+Subject: [PATCH] Fix build with OpenSSL 4.0 opaque ASN1_STRING
++++ b/package/libest/0005-Use-accessors-for-opaque-ASN1_STRING-OpenSSL-4-compa.patch
+@@ -0,0 +1,60 @@
++From 59695d938e0d23dda2eda124164bc8909ab2ddf5 Mon Sep 17 00:00:00 2001
++From: Karl Smeltzer <karl.smeltzer@canonical.com>
++Date: Fri, 24 Jul 2026 12:54:56 -0700
++Subject: [PATCH] Use accessors for opaque ASN1_STRING (OpenSSL 4
++ compatibility)
 +
-+OpenSSL 4.0 made ASN1_STRING opaque, so direct access to ->data and
-+->length fields no longer compiles. Use ASN1_STRING_get0_data() and
-+ASN1_STRING_length() accessors which are available since OpenSSL 1.1.0.
++OpenSSL 4.0 makes ASN1_STRING (and its typedefs ASN1_OCTET_STRING /
++ASN1_BIT_STRING) opaque. This uses the ASN1_STRING_get0_data() and
++ASN1_STRING_length() accessors instead, while keeping the direct access
++under HAVE_OLD_OPENSSL.
 +
-+Fixes #33
-+
-+Upstream: https://github.com/libesmtp/libESMTP/pull/34
++Upstream: https://github.com/cisco/libest/pull/136
 +
 +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 +---
-+ smtp-tls.c | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
++ src/est/est_client.c | 8 ++++++--
++ src/est/est_server.c | 4 ++++
++ 2 files changed, 10 insertions(+), 2 deletions(-)
 +
-+diff --git a/smtp-tls.c b/smtp-tls.c
-+index 9f3e50e..981284e 100644
-+--- a/smtp-tls.c
-++++ b/smtp-tls.c
-+@@ -599,8 +599,8 @@ check_acceptable_security (smtp_session_t session, SSL *ssl)
++diff --git a/src/est/est_client.c b/src/est/est_client.c
++index 8dff9d9..06ca510 100644
++--- a/src/est/est_client.c
+++++ b/src/est/est_client.c
++@@ -5313,11 +5313,15 @@ EST_ERROR verify_voucher (EST_CTX *ctx)
++         return (EST_ERR_CLIENT_BRSKI_VOUCHER_VERIFY_FAILED);
++     }
 + 
-+ 	      if (name->type == GEN_DNS)
-+ 		{
-+-		  const char *ia5str = (const char *) name->d.ia5->data;
-+-		  size_t ia5len = name->d.ia5->length;
-++		  const char *ia5str = (const char *) ASN1_STRING_get0_data(name->d.ia5);
-++		  size_t ia5len = ASN1_STRING_length(name->d.ia5);
+++#ifdef HAVE_OLD_OPENSSL
++     ctx->brski_retrieved_voucher = pkcs7->d.sign->contents->d.data->data;
++-    ctx->brski_retrieved_voucher_len = pkcs7->d.sign->contents->d.data->length;
+++#else
+++    ctx->brski_retrieved_voucher = (unsigned char *)ASN1_STRING_get0_data(pkcs7->d.sign->contents->d.data);
+++#endif
+++    ctx->brski_retrieved_voucher_len = ASN1_STRING_length(pkcs7->d.sign->contents->d.data);
 + 
-+ 		  hasaltname = 1;
-+ 		  if (strlen (ia5str) == ia5len && match_domain (host, ia5str))
++     EST_LOG_INFO("Voucher verify passed.  Voucher =\n %s",
++-                 pkcs7->d.sign->contents->d.data->data);
+++                 ctx->brski_retrieved_voucher);
++     
++     return (EST_ERR_NONE);
++ }
++diff --git a/src/est/est_server.c b/src/est/est_server.c
++index d047b48..4b4d617 100644
++--- a/src/est/est_server.c
+++++ b/src/est/est_server.c
++@@ -1133,7 +1133,11 @@ int est_tls_uid_auth (EST_CTX *ctx, SSL *ssl, X509_REQ *req)
++          */
++         tls_uid = est_get_tls_uid(ssl, &uid_len, 0);
++         if (tls_uid) {
+++#ifdef HAVE_OLD_OPENSSL
++ 	    i = memcmp_s(tls_uid, uid_len, bs->data, uid_len, &diff);
+++#else
+++	    i = memcmp_s(tls_uid, uid_len, ASN1_STRING_get0_data(bs), uid_len, &diff);
+++#endif
++             if (i == EOK && !diff) {
++                 EST_LOG_INFO("PoP is valid");
++                 rv = EST_ERR_NONE;
 +-- 
 +2.47.3
 +
+diff --git a/package/libest/0006-Use-providers-instead-of-the-ENGINE-API-on-OpenSSL-4.patch b/package/libest/0006-Use-providers-instead-of-the-ENGINE-API-on-OpenSSL-4.patch
+new file mode 100644
+index 0000000000..3ef41c4db6
+--- /dev/null
++++ b/package/libest/0006-Use-providers-instead-of-the-ENGINE-API-on-OpenSSL-4.patch
+@@ -0,0 +1,64 @@
++From fdf43891c4cffd5f9a7776a6195a636988c7aed1 Mon Sep 17 00:00:00 2001
++From: Karl Smeltzer <karl.smeltzer@canonical.com>
++Date: Fri, 24 Jul 2026 12:55:06 -0700
++Subject: [PATCH] Use providers instead of the ENGINE API on OpenSSL 4 (est.h)
++
++OpenSSL 4.0 removes the ENGINE API, so the est_apps_startup() /
++est_apps_shutdown() macros in est.h no longer link: they call
++ENGINE_load_builtin_engines() / ENGINE_cleanup() and friends.
++
++Add OpenSSL >= 4.0 variants of both macros that load the default
++provider instead, keeping the existing variants for older versions,
++matching the HAVE_OLD_OPENSSL pattern already used in this header.
++
++Upstream: https://github.com/cisco/libest/pull/136
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ src/est/est.h | 16 ++++++++++++++++
++ 1 file changed, 16 insertions(+)
++
++diff --git a/src/est/est.h b/src/est/est.h
++index ffbe85f..716dd7e 100644
++--- a/src/est/est.h
+++++ b/src/est/est.h
++@@ -25,6 +25,9 @@
++ #include <openssl/engine.h>
++ #include <openssl/conf.h>
++ #include <openssl/srp.h>
+++#if OPENSSL_VERSION_NUMBER >= 0x40000000L
+++#include <openssl/provider.h>
+++#endif
++ 
++ #ifdef  __cplusplus
++ extern "C" {
++@@ -829,6 +832,13 @@ LIBEST_API EST_ERROR est_disable_performance_timers(EST_CTX *ctx);
++          ENGINE_load_builtin_engines(); \
++          SSL_library_init(); \
++          SSL_load_error_strings(); } while (0)
+++#elif OPENSSL_VERSION_NUMBER >= 0x40000000L
+++#define est_apps_startup()               \
+++    do { ERR_load_crypto_strings();      \
+++         OpenSSL_add_all_algorithms();   \
+++         OSSL_PROVIDER_load(NULL, "default"); \
+++         SSL_library_init();             \
+++         SSL_load_error_strings(); } while (0)
++ #else
++ #define est_apps_startup()               \
++     do { ERR_load_crypto_strings();      \
++@@ -854,6 +864,12 @@ LIBEST_API EST_ERROR est_disable_performance_timers(EST_CTX *ctx);
++          CRYPTO_cleanup_all_ex_data(); \
++          ERR_remove_thread_state(NULL); \
++          ERR_free_strings(); } while (0)
+++#elif OPENSSL_VERSION_NUMBER >= 0x40000000L
+++#define est_apps_shutdown() \
+++    do { CONF_modules_unload(1); \
+++         OBJ_cleanup(); EVP_cleanup(); \
+++         CRYPTO_cleanup_all_ex_data(); \
+++         ERR_free_strings(); } while (0)
++ #else
++ #define est_apps_shutdown() \
++     do { CONF_modules_unload(1); \
++-- 
++2.47.3
++
+diff --git a/package/libest/0007-Port-ossl_srv.c-copies-to-OpenSSL-4.patch b/package/libest/0007-Port-ossl_srv.c-copies-to-OpenSSL-4.patch
+new file mode 100644
+index 0000000000..0a62049fbc
+--- /dev/null
++++ b/package/libest/0007-Port-ossl_srv.c-copies-to-OpenSSL-4.patch
+@@ -0,0 +1,358 @@
++From b2bcfd65b825a2adf8f9f3e8801211fae2332e17 Mon Sep 17 00:00:00 2001
++From: Karl Smeltzer <karl.smeltzer@canonical.com>
++Date: Fri, 24 Jul 2026 12:55:19 -0700
++Subject: [PATCH] Port ossl_srv.c copies to OpenSSL 4
++
++Both ossl_srv.c copies (example/server, test/util) fail to build
++against OpenSSL 4.0 due to relying on removed functionality.
++
++Fixes:
++- Add a shim mapping ASN1_STRING_get0_data() to ASN1_STRING_data() on
++  OpenSSL < 1.1.0, then use the ASN1_STRING_type/length/get0_data
++  accessors unconditionally. These files do not include config.h, so
++  HAVE_OLD_OPENSSL is never defined here; keying on
++  OPENSSL_VERSION_NUMBER is what actually keeps 1.0.x building.
++- Retag DN entries in the msie_hack path with
++  X509_NAME_ENTRY_set_data() instead of writing str->type, which has
++  no setter once the type is opaque.
++- Replace BN_pseudo_rand() with BN_rand(), available on all versions.
++- Ifdef out the FORMAT_ENGINE branch on OpenSSL >= 4.0.
++
++Upstream: https://github.com/cisco/libest/pull/136
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ example/server/ossl_srv.c | 69 +++++++++++++++++++++++----------------
++ test/util/ossl_srv.c      | 67 ++++++++++++++++++++++---------------
++ 2 files changed, 82 insertions(+), 54 deletions(-)
++
++diff --git a/example/server/ossl_srv.c b/example/server/ossl_srv.c
++index b87c2d1..3610e93 100644
++--- a/example/server/ossl_srv.c
+++++ b/example/server/ossl_srv.c
++@@ -90,6 +90,10 @@
++ #include <openssl/bio.h>
++ #include "apps.h"  //taken from openssl/apps/apps.h
++ 
+++#if OPENSSL_VERSION_NUMBER < 0x10100000L
+++#define ASN1_STRING_get0_data ASN1_STRING_data
+++#endif
+++
++ extern BIO *bio_err;
++ BIO *cacerts = NULL;
++ static int msie_hack = 0;
++@@ -317,6 +321,7 @@ EVP_PKEY *load_key(BIO *err, const char *file, int format, int maybe_stdin,
++         BIO_printf(err, "no keyfile specified\n");
++         goto end;
++     }
+++#if OPENSSL_VERSION_NUMBER < 0x40000000L
++     if (format == FORMAT_ENGINE) {
++         if (!e)
++             BIO_printf(err, "no engine specified\n");
++@@ -330,6 +335,7 @@ EVP_PKEY *load_key(BIO *err, const char *file, int format, int maybe_stdin,
++         }
++         goto end;
++     }
+++#endif
++     key = BIO_new(BIO_s_file());
++     if (key == NULL) {
++         ERR_print_errors(err);
++@@ -883,7 +889,7 @@ int rand_serial(BIGNUM *b, ASN1_INTEGER *ai) {
++     if (!btmp)
++         return 0;
++ 
++-    if (!BN_pseudo_rand(btmp, SERIAL_RAND_BITS, 0, 0))
+++    if (!BN_rand(btmp, SERIAL_RAND_BITS, 0, 0))
++         goto error;
++     if (ai && !BN_to_ASN1_INTEGER(btmp, ai))
++         goto error;
++@@ -1304,14 +1310,14 @@ static int do_updatedb(CA_DB *db) {
++ 
++     /* get actual time and make a string */
++     a_tm = X509_gmtime_adj(a_tm, 0);
++-    a_tm_s = (char *) OPENSSL_malloc(a_tm->length+1);
+++    a_tm_s = (char *) OPENSSL_malloc(ASN1_STRING_length(a_tm)+1);
++     if (a_tm_s == NULL) {
++         cnt = -1;
++         goto err;
++     }
++ 
++-    memcpy(a_tm_s, a_tm->data, a_tm->length);
++-    a_tm_s[a_tm->length] = '\0';
+++    memcpy(a_tm_s, ASN1_STRING_get0_data(a_tm), ASN1_STRING_length(a_tm));
+++    a_tm_s[ASN1_STRING_length(a_tm)] = '\0';
++ 
++     if (strncmp(a_tm_s, "49", 2) <= 0)
++         a_y2k = 1;
++@@ -1367,19 +1373,19 @@ int old_entry_print(BIO *bp, ASN1_OBJECT *obj, ASN1_STRING *str) {
++     *(pbuf++) = '\0';
++     BIO_puts(bp, buf);
++ 
++-    if (str->type == V_ASN1_PRINTABLESTRING)
+++    if (ASN1_STRING_type(str) == V_ASN1_PRINTABLESTRING)
++         BIO_printf(bp, "PRINTABLE:'");
++-    else if (str->type == V_ASN1_T61STRING)
+++    else if (ASN1_STRING_type(str) == V_ASN1_T61STRING)
++         BIO_printf(bp, "T61STRING:'");
++-    else if (str->type == V_ASN1_IA5STRING)
+++    else if (ASN1_STRING_type(str) == V_ASN1_IA5STRING)
++         BIO_printf(bp, "IA5STRING:'");
++-    else if (str->type == V_ASN1_UNIVERSALSTRING)
+++    else if (ASN1_STRING_type(str) == V_ASN1_UNIVERSALSTRING)
++         BIO_printf(bp, "UNIVERSALSTRING:'");
++     else
++-        BIO_printf(bp, "ASN.1 %2d:'", str->type);
+++        BIO_printf(bp, "ASN.1 %2d:'", ASN1_STRING_type(str));
++ 
++-    p = (char *) str->data;
++-    for (j = str->length; j > 0; j--) {
+++    p = (char *) ASN1_STRING_get0_data(str);
+++    for (j = ASN1_STRING_length(str); j > 0; j--) {
++         if ((*p >= ' ') && (*p <= '~'))
++             BIO_printf(bp, "%c", *p);
++         else if (*p & 0x80)
++@@ -1505,16 +1511,22 @@ STACK_OF(OPENSSL_STRING) *sigopts, STACK_OF(CONF_VALUE) *policy, CA_DB *db,
++             nid = OBJ_obj2nid(X509_NAME_ENTRY_get_object(ne));
++ #endif
++             
++-            if (str->type == V_ASN1_UNIVERSALSTRING)
+++            if (ASN1_STRING_type(str) == V_ASN1_UNIVERSALSTRING)
++                 ASN1_UNIVERSALSTRING_to_string(str);
++ 
++-            if ((str->type == V_ASN1_IA5STRING)
++-                    && (nid != NID_pkcs9_emailAddress))
++-                str->type = V_ASN1_T61STRING;
+++            if ((ASN1_STRING_type(str) == V_ASN1_IA5STRING)
+++                    && (nid != NID_pkcs9_emailAddress)) {
+++                X509_NAME_ENTRY_set_data(ne, V_ASN1_T61STRING,
+++                        ASN1_STRING_get0_data(str), ASN1_STRING_length(str));
+++                str = X509_NAME_ENTRY_get_data(ne);
+++            }
++ 
++             if ((nid == NID_pkcs9_emailAddress)
++-                    && (str->type == V_ASN1_PRINTABLESTRING))
++-                str->type = V_ASN1_IA5STRING;
+++                    && (ASN1_STRING_type(str) == V_ASN1_PRINTABLESTRING)) {
+++                X509_NAME_ENTRY_set_data(ne, V_ASN1_IA5STRING,
+++                        ASN1_STRING_get0_data(str), ASN1_STRING_length(str));
+++                str = X509_NAME_ENTRY_get_data(ne);
+++            }
++         }
++ 
++         /* If no EMAIL is wanted in the subject */
++@@ -1523,17 +1535,18 @@ STACK_OF(OPENSSL_STRING) *sigopts, STACK_OF(CONF_VALUE) *policy, CA_DB *db,
++ 
++         /* check some things */
++         if ((OBJ_obj2nid(obj) == NID_pkcs9_emailAddress)
++-                && (str->type != V_ASN1_IA5STRING)) {
+++                && (ASN1_STRING_type(str) != V_ASN1_IA5STRING)) {
++             BIO_printf(bio_err,
++                     "\nemailAddress type needs to be of type IA5STRING\n");
++             goto err;
++         }
++-        if ((str->type != V_ASN1_BMPSTRING)
++-                && (str->type != V_ASN1_UTF8STRING)) {
++-            j = ASN1_PRINTABLE_type(str->data, str->length);
++-            if (((j == V_ASN1_T61STRING) && (str->type != V_ASN1_T61STRING))
+++        if ((ASN1_STRING_type(str) != V_ASN1_BMPSTRING)
+++                && (ASN1_STRING_type(str) != V_ASN1_UTF8STRING)) {
+++            j = ASN1_PRINTABLE_type(ASN1_STRING_get0_data(str),
+++                    ASN1_STRING_length(str));
+++            if (((j == V_ASN1_T61STRING) && (ASN1_STRING_type(str) != V_ASN1_T61STRING))
++                     || ((j == V_ASN1_IA5STRING)
++-                            && (str->type == V_ASN1_PRINTABLESTRING))) {
+++                            && (ASN1_STRING_type(str) == V_ASN1_PRINTABLESTRING))) {
++                 BIO_printf(bio_err,
++                         "\nThe string contains characters that are illegal for the ASN.1 type\n");
++                 goto err;
++@@ -1631,8 +1644,8 @@ STACK_OF(OPENSSL_STRING) *sigopts, STACK_OF(CONF_VALUE) *policy, CA_DB *db,
++                     BIO_printf(bio_err,
++                             "The %s field needed to be the same in the\nCA certificate (%s) and the request (%s)\n",
++                             cv->name,
++-                            ((str2 == NULL) ? "NULL" : (char *) str2->data),
++-                            ((str == NULL) ? "NULL" : (char *) str->data));
+++                            ((str2 == NULL) ? "NULL" : (char *) ASN1_STRING_get0_data(str2)),
+++                            ((str == NULL) ? "NULL" : (char *) ASN1_STRING_get0_data(str)));
++                     goto err;
++                 }
++             } else {
++@@ -1935,9 +1948,9 @@ STACK_OF(OPENSSL_STRING) *sigopts, STACK_OF(CONF_VALUE) *policy, CA_DB *db,
++     row[DB_type] = (char *) OPENSSL_malloc(2);
++ 
++     tm = X509_get_notAfter(ret);
++-    row[DB_exp_date] = (char *) OPENSSL_malloc(tm->length+1);
++-    memcpy(row[DB_exp_date], tm->data, tm->length);
++-    row[DB_exp_date][tm->length] = '\0';
+++    row[DB_exp_date] = (char *) OPENSSL_malloc(ASN1_STRING_length(tm)+1);
+++    memcpy(row[DB_exp_date], ASN1_STRING_get0_data(tm), ASN1_STRING_length(tm));
+++    row[DB_exp_date][ASN1_STRING_length(tm)] = '\0';
++ 
++     row[DB_rev_date] = NULL;
++ 
++diff --git a/test/util/ossl_srv.c b/test/util/ossl_srv.c
++index 3efefa4..6ea539a 100644
++--- a/test/util/ossl_srv.c
+++++ b/test/util/ossl_srv.c
++@@ -91,6 +91,10 @@
++ #include <openssl/bio.h>
++ #include "apps.h"  //taken from openssl/apps/apps.h
++ 
+++#if OPENSSL_VERSION_NUMBER < 0x10100000L
+++#define ASN1_STRING_get0_data ASN1_STRING_data
+++#endif
+++
++ extern BIO *bio_err;
++ BIO *cacerts = NULL;
++ static int msie_hack=0;
++@@ -345,6 +349,7 @@ EVP_PKEY *load_key(BIO *err, const char *file, int format, int maybe_stdin,
++ 		BIO_printf(err,"no keyfile specified\n");
++ 		goto end;
++ 		}
+++#if OPENSSL_VERSION_NUMBER < 0x40000000L
++ 	if (format == FORMAT_ENGINE)
++ 		{
++ 		if (!e)
++@@ -361,6 +366,7 @@ EVP_PKEY *load_key(BIO *err, const char *file, int format, int maybe_stdin,
++ 			}
++ 		goto end;
++ 		}
+++#endif
++ 	key=BIO_new(BIO_s_file());
++ 	if (key == NULL)
++ 		{
++@@ -971,7 +977,7 @@ int rand_serial(BIGNUM *b, ASN1_INTEGER *ai)
++ 	if (!btmp)
++ 		return 0;
++ 
++-	if (!BN_pseudo_rand(btmp, SERIAL_RAND_BITS, 0, 0))
+++	if (!BN_rand(btmp, SERIAL_RAND_BITS, 0, 0))
++ 		goto error;
++ 	if (ai && !BN_to_ASN1_INTEGER(btmp, ai))
++ 		goto error;
++@@ -1434,15 +1440,15 @@ static int do_updatedb (CA_DB *db)
++ 
++ 	/* get actual time and make a string */
++ 	a_tm = X509_gmtime_adj(a_tm, 0);
++-	a_tm_s = (char *) OPENSSL_malloc(a_tm->length+1);
+++	a_tm_s = (char *) OPENSSL_malloc(ASN1_STRING_length(a_tm)+1);
++ 	if (a_tm_s == NULL)
++ 		{
++ 		cnt = -1;
++ 		goto err;
++ 		}
++ 
++-	memcpy(a_tm_s, a_tm->data, a_tm->length);
++-	a_tm_s[a_tm->length] = '\0';
+++	memcpy(a_tm_s, ASN1_STRING_get0_data(a_tm), ASN1_STRING_length(a_tm));
+++	a_tm_s[ASN1_STRING_length(a_tm)] = '\0';
++ 
++ 	if (strncmp(a_tm_s, "49", 2) <= 0)
++ 		a_y2k = 1;
++@@ -1508,19 +1514,19 @@ int old_entry_print(BIO *bp, ASN1_OBJECT *obj, ASN1_STRING *str)
++ 	*(pbuf++)='\0';
++ 	BIO_puts(bp,buf);
++ 
++-	if (str->type == V_ASN1_PRINTABLESTRING)
+++	if (ASN1_STRING_type(str) == V_ASN1_PRINTABLESTRING)
++ 		BIO_printf(bp,"PRINTABLE:'");
++-	else if (str->type == V_ASN1_T61STRING)
+++	else if (ASN1_STRING_type(str) == V_ASN1_T61STRING)
++ 		BIO_printf(bp,"T61STRING:'");
++-	else if (str->type == V_ASN1_IA5STRING)
+++	else if (ASN1_STRING_type(str) == V_ASN1_IA5STRING)
++ 		BIO_printf(bp,"IA5STRING:'");
++-	else if (str->type == V_ASN1_UNIVERSALSTRING)
+++	else if (ASN1_STRING_type(str) == V_ASN1_UNIVERSALSTRING)
++ 		BIO_printf(bp,"UNIVERSALSTRING:'");
++ 	else
++-		BIO_printf(bp,"ASN.1 %2d:'",str->type);
++-			
++-	p=(char *)str->data;
++-	for (j=str->length; j>0; j--)
+++		BIO_printf(bp,"ASN.1 %2d:'",ASN1_STRING_type(str));
+++
+++	p=(char *)ASN1_STRING_get0_data(str);
+++	for (j=ASN1_STRING_length(str); j>0; j--)
++ 		{
++ 		if ((*p >= ' ') && (*p <= '~'))
++ 			BIO_printf(bp,"%c",*p);
++@@ -1658,16 +1664,24 @@ static int do_body(X509 **xret, EVP_PKEY *pkey, X509 *x509, const EVP_MD *dgst,
++ #else            
++                             nid = OBJ_obj2nid(X509_NAME_ENTRY_get_object(ne));
++ #endif
++-			if (str->type == V_ASN1_UNIVERSALSTRING)
+++			if (ASN1_STRING_type(str) == V_ASN1_UNIVERSALSTRING)
++ 				ASN1_UNIVERSALSTRING_to_string(str);
++ 
++-			if ((str->type == V_ASN1_IA5STRING) &&
+++			if ((ASN1_STRING_type(str) == V_ASN1_IA5STRING) &&
++ 				(nid != NID_pkcs9_emailAddress))
++-				str->type=V_ASN1_T61STRING;
+++				{
+++				X509_NAME_ENTRY_set_data(ne, V_ASN1_T61STRING,
+++					ASN1_STRING_get0_data(str), ASN1_STRING_length(str));
+++				str=X509_NAME_ENTRY_get_data(ne);
+++				}
++ 
++ 			if ((nid == NID_pkcs9_emailAddress) &&
++-				(str->type == V_ASN1_PRINTABLESTRING))
++-				str->type=V_ASN1_IA5STRING;
+++				(ASN1_STRING_type(str) == V_ASN1_PRINTABLESTRING))
+++				{
+++				X509_NAME_ENTRY_set_data(ne, V_ASN1_IA5STRING,
+++					ASN1_STRING_get0_data(str), ASN1_STRING_length(str));
+++				str=X509_NAME_ENTRY_get_data(ne);
+++				}
++ 			}
++ 
++ 		/* If no EMAIL is wanted in the subject */
++@@ -1676,18 +1690,18 @@ static int do_body(X509 **xret, EVP_PKEY *pkey, X509 *x509, const EVP_MD *dgst,
++ 
++ 		/* check some things */
++ 		if ((OBJ_obj2nid(obj) == NID_pkcs9_emailAddress) &&
++-			(str->type != V_ASN1_IA5STRING))
+++			(ASN1_STRING_type(str) != V_ASN1_IA5STRING))
++ 			{
++ 			BIO_printf(bio_err,"\nemailAddress type needs to be of type IA5STRING\n");
++ 			goto err;
++ 			}
++-		if ((str->type != V_ASN1_BMPSTRING) && (str->type != V_ASN1_UTF8STRING))
+++		if ((ASN1_STRING_type(str) != V_ASN1_BMPSTRING) && (ASN1_STRING_type(str) != V_ASN1_UTF8STRING))
++ 			{
++-			j=ASN1_PRINTABLE_type(str->data,str->length);
+++			j=ASN1_PRINTABLE_type(ASN1_STRING_get0_data(str),ASN1_STRING_length(str));
++ 			if (	((j == V_ASN1_T61STRING) &&
++-				 (str->type != V_ASN1_T61STRING)) ||
+++				 (ASN1_STRING_type(str) != V_ASN1_T61STRING)) ||
++ 				((j == V_ASN1_IA5STRING) &&
++-				 (str->type == V_ASN1_PRINTABLESTRING)))
+++				 (ASN1_STRING_type(str) == V_ASN1_PRINTABLESTRING)))
++ 				{
++ 				BIO_printf(bio_err,"\nThe string contains characters that are illegal for the ASN.1 type\n");
++ 				goto err;
++@@ -1791,7 +1805,8 @@ again2:
++ 					}
++ 				if (j < 0)
++ 					{
++-					BIO_printf(bio_err,"The %s field needed to be the same in the\nCA certificate (%s) and the request (%s)\n",cv->name,((str2 == NULL)?"NULL":(char *)str2->data),((str == NULL)?"NULL":(char *)str->data));
+++					BIO_printf(bio_err,"The %s field needed to be the same in the\nCA certificate (%s) and the request (%s)\n",cv->name,
+++						((str2 == NULL)?"NULL":(char *)ASN1_STRING_get0_data(str2)),((str == NULL)?"NULL":(char *)ASN1_STRING_get0_data(str)));
++ 					goto err;
++ 					}
++ 				}
++@@ -2098,9 +2113,9 @@ again2:
++ 	row[DB_type]=(char *)OPENSSL_malloc(2);
++ 
++ 	tm=X509_get_notAfter(ret);
++-	row[DB_exp_date]=(char *)OPENSSL_malloc(tm->length+1);
++-	memcpy(row[DB_exp_date],tm->data,tm->length);
++-	row[DB_exp_date][tm->length]='\0';
+++	row[DB_exp_date]=(char *)OPENSSL_malloc(ASN1_STRING_length(tm)+1);
+++	memcpy(row[DB_exp_date],ASN1_STRING_get0_data(tm),ASN1_STRING_length(tm));
+++	row[DB_exp_date][ASN1_STRING_length(tm)]='\0';
++ 
++ 	row[DB_rev_date]=NULL;
++ 
++-- 
++2.47.3
++
+diff --git a/package/libest/Config.in b/package/libest/Config.in
+index 3a0328c2f8..bd5f40afae 100644
+--- a/package/libest/Config.in
++++ b/package/libest/Config.in
+@@ -5,7 +5,6 @@ config BR2_PACKAGE_LIBEST
+ 	bool "libest"
+ 	depends on !BR2_STATIC_LIBS # libexecinfo or glibc
+ 	select BR2_PACKAGE_LIBEXECINFO if !BR2_TOOLCHAIN_USES_GLIBC
+-	select BR2_PACKAGE_LIBOPENSSL_ENGINES
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
+ 	select BR2_PACKAGE_SAFECLIB
 -- 
 2.47.3
 
