@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26A4DC982E0
-	for <buildroot@archiver.kernel.org>; Fri, 18 Sep 2026 19:54:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A8DEC982DF
+	for <buildroot@archiver.kernel.org>; Fri, 18 Sep 2026 19:54:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 83B5060DC5;
-	Fri, 18 Sep 2026 19:54:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7D11260EE4;
+	Fri, 18 Sep 2026 19:54:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id l5xRGAUJqX06; Fri, 18 Sep 2026 19:54:49 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org B7CD560EE2
+ id q9brkJxu73s9; Fri, 18 Sep 2026 19:54:51 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 66F2360EE8
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789761289;
-	b=k6khbR5ktPYUozOsesFqtjkekLwyFWgAHSweHSdSqavQkZ5deXykZM8kEmp6yXHShN5n
-	 gCw8cCTRsT2qnZXihL8PFifhAY+HdKQQfOD0dc+wc+PVnPHohPbhIdIQ3g2nmf8zbrtCn
-	 ZIjeXh31xBhabvhAz77XIBKOGe8oHOkjqjSERQdwkx0TNIV0B34kqzhgahZDXLmEY2DYK
-	 rofK+7/jhlCETvW3sPukUrvQ3fWFcy+5OyWyA4UsZ1hUGlrX+8dtwOxaqWxhHAoJUGeyn
-	 YMXT72DrMd0BanfvfZ2EL+COzJ4T6tUfaX7MXN5z4C2Qtvp8mVI1nKdf5q+KSfyx6dQ==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789761291;
+	b=dTgegVryXIVnEV97jEBJFFyoqyY56mw+NhbpW7p66sAHrxvIS84fOnGo1x51v78QZ0o6
+	 jp0IFVe/quhR45Sqn/YgLxCvjr8eb7unXS07CXGlotTdugh4Gb95tDFn+bZdhDgjVbeiS
+	 RckjKkQr7hfABPS7MyK1AK1OudmgKdVrBcH4ls4DeXPmaHXV4I8FHR0vVWPnOO9GjYbjY
+	 V5bjxldlrlPl4+ohvX6rghjHBc+AIvkPlD7usmy94ySnhU1Fj5xS+B8TLjXgL6R17D0Mn
+	 jFY/57T3Gmk9xgpY+mK4PTK527141HgBRmGyW2gr5X4y5F/WisxMYZUIHHRhCcsEJOA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789761289;
+	c=relaxed/relaxed; t=1789761291;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,75 +30,74 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=sRjVJRolwB3UHEjCdroPVX6cl/4x4MS++dNP7eG6ZK0=;
-	b=o/6AOm+Pcn6kLF/9Tv9R/FWzQADYnZiRMjcMmeoXVcJQiaCtTWo1yTjAMCvnN7vyPpk+
-	 /zO03R8eY1RE2DI2dUhw7zdFVYeJ+N5Yp1uzmbt9Z19yjHrCZwf63eZ5EbV0CgcoWYmze
-	 N1JRuTsjHgLIB8rP6ASaUuracp+97n8Po+zKwN4r6rK+xrOd/jVt8E67VFpUoe2XRhWD+
-	 GIGpuQtf+yWWSEauyVl7cB9mnWxsvhCWU5WZLJs0ho0MuFKOCTFYtVfRGFjJpjphuruFp
-	 JxIE8g2IXBJe/c7NsErI7BTx48EEzlusrNM5nQp/WL5NIg4jrzmARcrmdjBesGaklfQ==
+	bh=4GWAq9RyTpDjsdj3X/EHBo6NjdLWeJcr7LYdv3x5ay8=;
+	b=DuvK9vAjfx7nLwpMq6cJw3U+oP7GujG1a+8oArCuxg6SSiPJ78PDBPZ1dV43zE4w42NR
+	 h74xTGYozq11J7aTYaT/w3QZaUX2UuAck/qIk7syOWw7MLqBMeyzdc3JnUtTAIfRhFR2f
+	 aTAyNwji5ZpvsAR/4fuH3EgA/AqJjwDQ6UQWFf4/LSfAX5JEMWEQkxl97qihNc+lbsB1M
+	 Wn0YxlhwbN9zUTZAq7Xpo7+IXIwQbZBd0q1YX0hUVEbQNnP4VdZYS11beyuEIDCWNnixd
+	 ZJpS6qY5ZN0IPdqWlBwOVVBQHfNlS0O8auOO8EaCn3mWo/UefxOaGymAX9I6kU2oR1w==
 ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789761289;
-	bh=sRjVJRolwB3UHEjCdroPVX6cl/4x4MS++dNP7eG6ZK0=;
+	s=default; t=1789761291;
+	bh=4GWAq9RyTpDjsdj3X/EHBo6NjdLWeJcr7LYdv3x5ay8=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=dV1MpV1zGMrXU771OtIGfd8XcWoHnKSr0UjjeMLEJ+4Lqwox7UC5s9+udtH0ZABo6
-	 IXf8hwbz2UE99B5Tlf7lQ0Uv4YtVAVnut0MFaxYTP0vcMl9wxwzBxYmUK3zRdmxN65
-	 uKE3F/5v5Ijbwag7wU79DyYIR1A6aS8UmVfgq34f3R07Nmx3rxE60eN9jckFipNKSJ
-	 WA/jDqBDCmcrT0A3XQ7fAS5S8Id6izmVdJPCTzRX0PLwaCbzzGWUzlLolDXVGcE6tr
-	 gLkkbW9MWc8avW/uXLiSjUOuKfwyzJcjtHOIaZCMfTWp/B+ToforAsamxNIgWC0HSl
-	 W+K807ps88jlA==
+	b=K2PwTdW4YH9Y+EjtA8iLPlLJ7vbPfhxhGIfDp/rZJIpwWxMG+rzS9llGXfEn2DARp
+	 jxaQ7lJD/Yge8i2a8OQK6batSfrhQ8L9+AhkAqAWZhqkXHYfbMC9M5bGOeCaiCmnaR
+	 FaMD6cjAV4EBxx3EIX/zMMKcCRXheQoKPXfbyO4XhSxGxSMx4JxzSeTyJUsxtuhzRl
+	 pjUXpXJ4Gg600RDiELCTozM9jMVhpHbPgpqQVpuVdYEvZJMmJcibQmTm8LtnSdnTQ8
+	 FFqLxeIc+zBCwi2VylM2fZ1RzDb5kZhfuB0gg668P5Or9dmvrFJ4fkMDV08D8AOCfA
+	 YsQ80c1b6ed5Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B7CD560EE2;
-	Fri, 18 Sep 2026 19:54:49 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 5A59B42D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 66F2360EE8;
+	Fri, 18 Sep 2026 19:54:51 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 688E125B
  for <buildroot@buildroot.org>; Fri, 18 Sep 2026 19:54:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4015A60EB8
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4E9F060DC6
  for <buildroot@buildroot.org>; Fri, 18 Sep 2026 19:54:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0rf7C544ewxS for <buildroot@buildroot.org>;
+ id 0fKtz7VhHl59 for <buildroot@buildroot.org>;
  Fri, 18 Sep 2026 19:54:41 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 8F82160DFE
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 9C8C660E9C
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789761281;
- b=p0R7Gz/essu4q6mkIDWhHOltVJfM7/69/QSBsWPUh299JLKgmaaYDHr+IhlwfN1IC7XG
- EHWoRz868ZuaNoQRp8Ly/gxbfuJGD5cFRgsh6lkUkx/LqdFQToZkmb2SqrnCMonKoU+pg
- R8uqOz1hol10sho+RHn1TZHyMyBQ+IZEnkxtmq6VrutsHHEtN9YHvgFwACzxqvzdgino5
- idsbqWjVmZ8aO1SC5HsX3md/ieD0ZkbBlz+qxXJv841cyc6uEdTueF7pahmpyzKyyCg66
- oNJ/uhVhNH4+cFEy3HQhtkh2rupXJd/CqAdq6eGDvRyhupTfARNJeEXJoRJwKIWlJOQ==
+ b=MflQSW4VoFQLHQevkvVQvFGn55xYy5fpyPKpkThF1dLjIrHx6/AE4wTZx7nocmcq16S+
+ NuVy1DQasZF40L4nzqbJnLvCXXMHPOpXn05Xf/ghfOFohEg8SvJ4h48yXtxhJKoVnVlPU
+ X4qvzQNVXhb82f6JZHmR/ad1xsSSVZf58mqaR6QfYy6te7Xd/ujIhLX+ThcjOOHOXAhtj
+ 1bFWf5uszTYyTcmYNpYj6TzzufQpu2TMf/F1zhADdQbykoIr20uo5ZKewyJ7utcJzqib6
+ zCVcwTHWgdlYFzYXLifFRRT1jIKk2bgu0HJBskCuFYskNPHZXwrWyuF8UJqjwUHb55w==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1789761281;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=m/NDxgFzEkVNZFB8eV9LEz83qE+7QJNt/Bm307jPscY=;
- b=k7v6N+ooAcxjzV3WUAXtGQ7SYguNzYno6T/jE7rOkpDuwp04ykmpZtS5bsFWBA3J03aU
- 2Kcu6rVIjcvr3Ql5sKYBElW4bf6nyXt7eMxCdKomYrTvlFXgUusXcY90qYu6mQY/BkiJH
- A99MIGqrB+jyndG05HwUaxyqHBlZE2HjSc9dBG7WMusz3vCXnJJuwVzZrc5+AXkguS4Sf
- SMkqoC4dNhYm0BndeFzqSCL7+heMVji13cfNaLTZ04R2kNa1b2ijW0KuBq6jJs8EMNQdA
- eUP2YalwpiPDamQ/zys/JUinm/2gbFmJiAGFPvhINWduo1kFCxZWhd1qbby9plL50MQ==
+ bh=Fiahzfn1aFblWKsQ1ZO3YyxyYgsblajsS6vVaB/4hIs=;
+ b=BXw60ZStBpjq84SpPsSawXUWbPZ9nOP4qBgesAGbn96l7DLBTbHnta97NksVEQSHVQHc
+ 5bHl/L1XxdW+q/o0ULk5vQUM3J8AHVwOK3CqkjASCwmz7jjOyuinFXfEsXqxaLEZUr4w+
+ uNPKkM5CE1O8LMrC6ETh6S2pUZ6N3t2FXP+pJ+afstdlAchWRSUefUSq8MaQE8UBRsLej
+ BDnGzquU1jSkIXgAm3qtSWj1hRlH2sDdrkoqoaMc7jNkGnLyOoEvBmdHGrkGlEEXvrQfh
+ 0pt849B5zqKJ/fCtoHKVUYZyT0R6TV9lWv5cKc3F6mbmr+YX99RT/OTQvcOJUdB5oIg==
 ARC-Authentication-Results: i=1; smtp3.osuosl.org;
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8F82160DFE
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9C8C660E9C
  for <buildroot@buildroot.org>; Fri, 18 Sep 2026 19:54:41 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 24F58976A8; Fri, 18 Sep 2026 19:53:34 +0000 (UTC)
+ id 3313E976A4; Fri, 18 Sep 2026 19:53:34 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 18 Sep 2026 21:53:30 +0200
+Date: Fri, 18 Sep 2026 21:53:41 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f70de5ac394e22546410c10ccfe2806a49060ebf
-X-Git-Newrev: 0d3fb5c061cb12b020b758806d95bc3f6e5c085d
+X-Git-Oldrev: 0d3fb5c061cb12b020b758806d95bc3f6e5c085d
+X-Git-Newrev: f8a1acdb6c300b32c4b29a9b41e9cafbd1389962
 X-Patchwork-Hint: ignore
-Message-Id: <20260918195334.24F58976A8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/trace-cmd: fix build with swig >=
- 4.5.0
+Message-Id: <20260918195334.3313E976A4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/swig: bump version to 4.5.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -118,53 +117,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/0d3fb5c061cb12b020b758806d95bc3f6e5c085d
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/f8a1acdb6c300b32c4b29a9b41e9cafbd1389962
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
+https://www.swig.org/Release/RELEASENOTES
+
+Added upstream sha1 & sha256 hashes.
+
+Switched _SITE to https.
+
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+Tested-by: Fiona Klute <fiona.klute@gmx.de>  # libselinux
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...oved-Python-2-C-API-macros-for-SWIG-4.5.0.patch | 32 ++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+ package/swig/swig.hash | 4 +++-
+ package/swig/swig.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/trace-cmd/0001-Replace-removed-Python-2-C-API-macros-for-SWIG-4.5.0.patch b/package/trace-cmd/0001-Replace-removed-Python-2-C-API-macros-for-SWIG-4.5.0.patch
-new file mode 100644
-index 0000000000..5f792c9194
---- /dev/null
-+++ b/package/trace-cmd/0001-Replace-removed-Python-2-C-API-macros-for-SWIG-4.5.0.patch
-@@ -0,0 +1,32 @@
-+From 797a541398bbbd55a29ac22ca3fc7271d6627aa5 Mon Sep 17 00:00:00 2001
-+From: Jitka Plesnikova <jplesnik@redhat.com>
-+Date: Sat, 5 Sep 2026 09:34:04 +0200
-+Subject: [PATCH] Replace removed Python 2 C API macros for SWIG 4.5.0
-+ compatibility
-+
-+Downloaded from Fedora:
-+https://src.fedoraproject.org/rpms/trace-cmd/c/eff667a072e69238efc469775585b1b30c056187
-+
-+Upstream: https://bugzilla.kernel.org/show_bug.cgi?id=221966
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ python/ctracecmd.i | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/python/ctracecmd.i b/python/ctracecmd.i
-+index 38564601..2525309e 100644
-+--- a/python/ctracecmd.i
-++++ b/python/ctracecmd.i
-+@@ -218,7 +218,7 @@ static int python_callback(struct trace_seq *s,
-+ 	result = PyObject_Call(context, arglist, NULL);
-+ 	Py_XDECREF(arglist);
-+ 	if (result && result != Py_None) {
-+-		if (!PyInt_Check(result)) {
-++		if (!PyLong_Check(result)) {
-+ 			PyErr_SetString(PyExc_TypeError,
-+ 					"callback must return int");
-+ 			PyErr_Print();
-+-- 
-+2.47.3
-+
+diff --git a/package/swig/swig.hash b/package/swig/swig.hash
+index 21590c422a..f3d4a1829e 100644
+--- a/package/swig/swig.hash
++++ b/package/swig/swig.hash
+@@ -1,5 +1,7 @@
++# From https://sourceforge.net/projects/swig/files/swig/swig-4.5.1
++sha1  fab5ee9e27b703ea964e55abca585567ebac9bcf  swig-4.5.1.tar.gz
++sha256  7fec50b27deddab5455a9633780b6341eddfb96215a7619e93a76eb27178f653  swig-4.5.1.tar.gz
+ # Locally computed:
+-sha256  2af08aced8fcd65cdb5cc62426768914bedc735b1c250325203716f78e39ac9b  swig-4.1.1.tar.gz
+ sha256  f53abaeed775018d519a1b9615f0ca17894772bd9ca21c2a156bf340ac41c13e  LICENSE
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE-GPL
+ sha256  7f50d942373a871211c5efee03f3db2f9efd1cff1002b0ef8e3748baa611a5c2  LICENSE-UNIVERSITIES
+diff --git a/package/swig/swig.mk b/package/swig/swig.mk
+index 71e5e05f96..e277f5049a 100644
+--- a/package/swig/swig.mk
++++ b/package/swig/swig.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-SWIG_VERSION_MAJOR = 4.1
++SWIG_VERSION_MAJOR = 4.5
+ SWIG_VERSION = $(SWIG_VERSION_MAJOR).1
+-SWIG_SITE = http://downloads.sourceforge.net/project/swig/swig/swig-$(SWIG_VERSION)
++SWIG_SITE = https://downloads.sourceforge.net/project/swig/swig/swig-$(SWIG_VERSION)
+ HOST_SWIG_DEPENDENCIES = host-bison host-pcre2
+ HOST_SWIG_CONF_OPTS = \
+ 	--with-pcre \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
