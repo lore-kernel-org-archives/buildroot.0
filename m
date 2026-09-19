@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9FDF8C982D7
-	for <buildroot@archiver.kernel.org>; Sat, 19 Sep 2026 16:00:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04886C982D8
+	for <buildroot@archiver.kernel.org>; Sat, 19 Sep 2026 16:00:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6851340676;
-	Sat, 19 Sep 2026 16:00:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BC86D40676;
+	Sat, 19 Sep 2026 16:00:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GX7fHZDNlJ5j; Sat, 19 Sep 2026 16:00:02 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 584B140ABD
+ id EtWpkB-GHAZg; Sat, 19 Sep 2026 16:00:14 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org C68BD4085B
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789833602;
-	b=CNzySzPUN7yCQkEi1byyIYUbYZt0Hw+BtrR7ZU9EfZGj0j45AnAYUcGAvlJ/gN4woCnz
-	 0g7ZZveFHhtVyTuh7Na/OYoqtSm8e2y8cf8Ygs5AH0nVon4utc3V1LFSkuCpXhySWyFAt
-	 CBjG+FbzGaZA4Z1OS6wwpzIg9byzK0+D7+2ELwLOcGXNSvZF9o24yURMjCzQsBtr4TSZB
-	 eDXCY3cr3XRRhsCP8AzwBPov17BWzTWELl1uFiZ3dnQm0STqv0HbafFXltUH3X24P05we
-	 qAwIl/+uJzKEaKgkiqC2AZbkzMkMQrrSZM05z12a4wLhx4lWD3OXx4o29Cax1/PmXKg==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789833614;
+	b=YHEQXtgyeDSjmD38GO9lLcV4ZCPSRBLYutMrQMP2rUPTTkOJfVrgk9Tou/0ZvR1eha+f
+	 Qt0n4uwF3zpv5icYcKcHeyyRBlQb1/+XZo6f48HfROmFfe7eU3CFQWd2AMwgqv+BUp2Jj
+	 xxTkRUzCL+I2XX2FJ1c+hQOiqskGxCUSISl8X3PL3ebsbJsOBjiTFuxDWrR88L2Mqp785
+	 bs/TC185/1Gu5kZ+MbkNa4F/bYIiMqbtUP6SBEP1c5h5a9WFVyl9+LZVUFkIAqY0LOppd
+	 ++MsJjlM/AKGD1L0tVjAreNBHtG6bHZpJGFpByS0MIpz3D/0LskBBGQ1uGgrdZVkODw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789833602;
+	c=relaxed/relaxed; t=1789833614;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
@@ -31,103 +31,103 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:Cc:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=GOit60ObTpWCEK5qkThzxX8PZoHjUTsm6hb0MInjVMc=;
-	b=kzE/y3YzeiBteG5Me/al7wd1HjPD92wdp5+KF4K9QdRKyBKyd0aqvutm3n8ccVGn5TKu
-	 ZnZS9f9RWP3s86J6FnYUxo82R0IwVWOGQVoxu8PA7Klaeul947Is0PKgBQc5pZsDJQUen
-	 Ff2NDPQ2Ltg/In81Z7EZ7qBSbhmNJNj4K1HQ4H4hdMn44a6fB4/IAkzfkkDk10booH3MJ
-	 kOlBiH2wFnjFPm+lrPAaJvTnQSQFfnX9viTxLv+Z9JPfo3e0E5Hpnq33IY3PTcGg+d0cZ
-	 lTKSDNz2IlC8dKg2azmNb4BMT52hC/xTfOsVdLKUmOJjLgUTJ6JPXfsBvOE310rC1xQ==
+	bh=t/HBc0n9UDMuj86r33h5g9rp3PaYbifHHfOHfRn4qTM=;
+	b=H6qj0gtFrOHSlyaubPwMs9a5Eg5rciG5ZSletmYp0Zr1QekGeob9pCsrZUmk9J1jVuVk
+	 AYCCjAzrO56KVGdgw1GmAod/+MnE3BFlFTEBBUrI8lTXoH8sZqhCaTkZYuVwqn6KfPe69
+	 qbGEP2+Q/me36oxWGUm0qCyvMfRzM41eFpGMQ9UPAEzCtHm6NPiTBjYiOQiRCdcLy8T91
+	 HBrTTUDBSbLU6lTTTp1LbHCEebzVyOWVwyFpfc9PnHYT8NkYlKUgJrmg+//Fp1bWSOV/h
+	 /SDa8P3/2/SCT+Ggxu3Cq8r9sJONSkEyqQfH9clr1MLy0Y5J2Yu/t5BzCzJYIcnRNyw==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789833602;
-	bh=GOit60ObTpWCEK5qkThzxX8PZoHjUTsm6hb0MInjVMc=;
+	s=default; t=1789833614;
+	bh=t/HBc0n9UDMuj86r33h5g9rp3PaYbifHHfOHfRn4qTM=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=opYgfa4n3ZBQZ9LBSq2+D1N3ye0yupWAFE9XK1e1d+Q8h6YcHVFMK8D2ySv1mQy6w
-	 rHWfVATyLhHXgkn7aG1gwstn6A6SzQHoPf79gWR431ggIAJZYJeHfdT2I6zl53I5UC
-	 yocz6AKjptHTdB9azj7Ecvpty0u1wT+ZTxCjl8uzQHTrumn8I9hilA8inbwd3SmHS5
-	 um3wm2Xrz8hX++nv1m1G7w+SA2qEQyb9USUhVJnSe+ryWLV8pwHYGB3HhMQt1l9ZkD
-	 SFNtEO5Yz6AfgPNsoTfr8ymsb5CqS+n4/a3HkDROhPmAhWT2v7DqaA6qwn3TLrB1TK
-	 FAHoQmzVbQ7rg==
+	b=kUjvjPF0gZn0ZZ+papdmNY8ovkLLjsY2VXqsAjDUGgNavrzAaAHAdq2G8E1CRa2+Y
+	 te2wGLVSdKjOhT+NQWWKj8nsWbNyLs9ZXPsPmj4jC/sUc5eBVpOBjwOAnNizR6siTi
+	 MNgQ26+iGCb0hsy84Fj3lnIPCjOCaup1UGxxzzpj/tDywAk9EGvOm4O0eny8Kkmxcq
+	 vtC6XTW3g9FNRxihxQELzXQz31BZ6pJtFUiBqlgHzEYStO7ENhPZnKo1aBtwBVz/se
+	 bSPKskiZI3kA/3K/vXqUqRps+hqGQpO7MzbFLh3UCb3b8qkaVj+vEeXJQWKCy+eJNg
+	 YxGddCbP5UQXw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 584B140ABD;
-	Sat, 19 Sep 2026 16:00:02 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 0843324D
- for <buildroot@buildroot.org>; Sat, 19 Sep 2026 16:00:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C68BD4085B;
+	Sat, 19 Sep 2026 16:00:14 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 129FE37A
+ for <buildroot@buildroot.org>; Sat, 19 Sep 2026 16:00:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 05A2E60664
- for <buildroot@buildroot.org>; Sat, 19 Sep 2026 16:00:00 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 04C73400BA
+ for <buildroot@buildroot.org>; Sat, 19 Sep 2026 16:00:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Xd2srAtd7NZa for <buildroot@buildroot.org>;
- Sat, 19 Sep 2026 15:59:59 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org DDDFD60662
-Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789833599;
- b=QA4J4hsvZPfxrVjX4Az0AE33BSERnN34NqkJGiayVZv/e/5lkMzNKTU1LFHrjF15LC8g
- dCAh2RANHIJ05JJeUUJd9r82Z2751rhF3svpoCGn3y2iU68uGA4PaQsfrvpJHv1rRcL9V
- MvTxwl3Y4YHB9QJucT86UvBQQs/t5g4WuK5YxnskjYZAKET2EGhIKI5SvikJQACV6D5Wn
- isnU7WLzQNhrnAsLwGC17XBm/9edd+44aEhEZQnQyVK7EXV9YEGsivh7NdJfLNKtiXW0o
- Q4PbC6VhKvGntz6ehXh+XLsRLkEIxpMkn06Nsgl6fhkuXW7rol4PrxMjVANYed6RA6g==
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2dZC1P9rFWz2 for <buildroot@buildroot.org>;
+ Sat, 19 Sep 2026 16:00:11 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org 4A22640026
+Authentication-Results: smtp2.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789833611;
+ b=gbO0Q/03N98gQ/ba3L7WuhjytFhrcOtkF4YU3fe149M1FN/Xljha74kkZ3xHSfv+rnKs
+ IJHfgr8/U6ma7Nkg9lqmOfTtR38ZUf57FKI4W3Abf2NWMt901cxet0N7I4GLTevoWfPyt
+ HM1zdNNPVQvBoj7gnxiAb+rJs61HOn6NSI/IHCN2AP7qN4EYznfqsLVJXuwX+tffbems/
+ /VBBQrBKKmCBXWze0GHPT6hgCnJ4QA8iM28iCmSB/OwvwR7lsIy0zCKmVGb5SjD3Gbuwe
+ BaX9pNDvLfCo2b/PC2wPIbN6w+DVX1EMyYiMDBAyU6tCGX0g641bsFqdaqswg/oaw+w==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1789833599;
+ c=relaxed/relaxed; t=1789833611;
  h=Received-SPF:DKIM-Signature:X-KAS-Sym:Received:Received:From:To:Cc:
  Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding:X-Spam-Score:X-Spamd-Bar;
- bh=nEcV8Zlf3YS1pTfNb+fYxXBwOluGekw2Tz3l87wjRZY=;
- b=NcUgGsmzDnVLuVmVogrkGcrLxPR8ENDvK3B3ZA6ARnynKiTanByN/VANiqqB2aRew9oQ
- 0YZEXVENZTqyt99uEzye/gviRIk/yJwtMa5wYqc5a8AspI2RTum3kWtgR6Tv8bWRH+IO2
- fBdIoG6Uuly+Tk9nZxp/F5Bcev4DD8P+PB3E0TW1Zppzu2qTh2+KZ8NTMQuxsSu0keH8o
- KlZiGi7fHNcunVbou0yez7VifstknMjnAb30oAgIN0fSdPqfIwiQ1/K3hwFlE1XiLNHB1
- Xwc0SW7YQeucCfN/2s2kLcSo+RClFuuZOG3ir3CDrqw4S9jhvP3Gl8MKJpUjUWN17Qw==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org;
+ bh=0Se9huhQPQ2KHeyS0iF2czBubDABoDFMXHo5sff4qeQ=;
+ b=CcHMvfpar/aE/FrtqhScQQuVDGbAy/Iw0uWpyAt+QqdO7VZLBPxb1DAn1dShTiPjJIQ2
+ lt5L4laEpJlZeT0rdgUsAHLjqgujPfkMC7Iy2oF3ExEpo9ZMgMZVQ3xlhVwwi297uYyqo
+ kFq8JIpqtchB2966vFySZokRUuKPGs+SCfsrBuW0kTHqmxfAAzkrQr4wlFPg8d6UZpHso
+ Ppm11YbWSQdtyOcBGWRJP/M5Xnmww7rOnvfFP+UbQ7s4DYJ17J/sD7XdAWg8rHVQnmIUk
+ otSWaMAW3jyg93Rptn6ncGIJD4jCd6w57N/fKGdzJhOlJ0Fpufrr85RYYcWnynrxFFA==
+ARC-Authentication-Results: i=1; smtp2.osuosl.org;
  dmarc=pass header.from=kuhls.net; 
  dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=QJ174I8n; 
+ header.s=kas202605290044 header.b=uCPwcSpI; 
  arc=none smtp.remote-ip=85.13.140.57
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-Authentication-Results: smtp3.osuosl.org;
+Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=kuhls.net
-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202605290044 header.b=QJ174I8n
+Authentication-Results: smtp2.osuosl.org; dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202605290044 header.b=uCPwcSpI
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id DDDFD60662
- for <buildroot@buildroot.org>; Sat, 19 Sep 2026 15:59:58 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4A22640026
+ for <buildroot@buildroot.org>; Sat, 19 Sep 2026 16:00:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
  s=kas202605290044; t=1789833530;
- bh=nEcV8Zlf3YS1pTfNb+fYxXBwOluGekw2Tz3l87wjRZY=;
+ bh=0Se9huhQPQ2KHeyS0iF2czBubDABoDFMXHo5sff4qeQ=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=QJ174I8nocCEN7/RHg96sPrI/qT5B/8o6ZQpQLaj8LjdJeePGh9WueWNQr3sTWHuc
- YBLkexrmgImtkpznqQ6OkiFooEh+IGVBgEmUc66MkmfgLN1lOJsGwN4k6Ta24GYhgt
- F1u/KsYZERFms+YeIQznJrEpZ338delrc4pQ/Qer2L2dUyvXG0D41/uNxcNlluFWfo
- nEQgr18DYW2ZtYUpNavSTylOkTTQk8aBeTqkRi6aiPIXkx4Q37sTg2I/zBczp9sjdW
- Jx5Mk5NSekzEz1q59URlb60fmj+A9OXVB1mR3mS883pTPC9/+LFjG3djNKlfb946oU
- /iCSJMkHALwRw==
-X-KAS-Sym: v3:f51bdf72230551df:gmt39DKOa2A41oLFzswc1ak3jJsAy8EKrWYvfkLHTUlP5oBvqhD3SonKR0eCjPDaVkHbtraobmntqgA2CLBBFKi84wi5F2j1ScmOQFzcxDjuD3phZHAssDCx9WZqanntRoYpLogm4rtzjdJapTMxHJxDWQI3Fozz7DrQtNoavUgMfggZ/wpgTHWTNaUG9mA2RKjmYRHmYAUksqtKBePefmpisQbVjO1OHIUZY/59P/gZ43yJbG7q6xpZc3z0u9aLEbL0D61rENpFpAa63AfIDRCewB/vpO97JrlrkKrXMvg6akriPYi1+SiTfhgy1c+iG83rzhag072zLXLQsF4b3g==:pCNcN0s5uPtiSi7hYKQFsD+6idnvuB+jV0e5ty2j6sGqf33KLVW7K1yIbFMVFIsCaNnTokTCbJPpwYslCvqhcfflBMYqcpJxxVaHHveg7baMQTy/JKAm0ktKfwvhrccnd+CAAbIqL0r9ba+rBaGSigpS1AaGdLX4b9QVUHl5VVylg0VmcrDfXVzKhPPgvjafGHr3J+SOXLak1dwHMyJfeFsOEh30R02Edp1scUuyKywIkPc47lcL1xkB8ojlyJJ3WeZmEfvVg2eBIJQYwyDlKlgVgcDM1r0EcaaA9jBFQWyXN9exu27Jd1w93iHGY9VuPgDwcMzv98Q0I2sx6O4NZJ5hKwAg++a7kYb4q7Ij/ATTyAbXcbkfKdiITxDuYmJHt+shXEhWJeixdllAbV7UBq1sG6veAEU/RKYCCFVDF/sH5vsyXdklYJ7J5i/pztHTnbrN7jxbnfkceKk97tmRPfgPPAsTObnTQdJrFNPTjFNRvenHHCLJR3G8XXmSZRTS5gxcj2vdf+kIx8ItTgifP0a/oQQsqC4YEYYmTblGooNxuadjkSaHytkrpXDgoAW23T7BNssHktzMyUC5hng/eMXi5jVpY2bccmEh//mzJ29lh1
- 5/taT1rIp7BY55jpdQHZmHFwShN1oEAfwevBLSeQvZMS+PFqPML46VxVxNMgkGHxEWPA==
+ b=uCPwcSpIpQHRDcjTNXzCeUaLTNq4l/8SlB++jl1IsT3fUnhJW8KPPs0A0Qybf5/Db
+ cDxcY2apEsytr0kGT4aWmkCI2MLks6roy7iG/HzNS6f4uU66KUzIfuMmTQvL/1pnHs
+ Sa3ii3ULL/DhhP345GD+ezEwumB3tvrubBygEKENydogX2/ZnTwHTND22+SvtqPCWS
+ /U3k6w8i0Nw5dbSMoW1G7Nhqh0pvLgQoR9wbDk/EvVMjPNAtp2Y6TvE/xms9dpETzv
+ giHjWIKu9ZkisUx1rVXMi00CozMJbBQJ4pQ4HzA7CTKrT7U+iBRn99nGOo3CVrSwqJ
+ LesdI6MGmih+A==
+X-KAS-Sym: v3:f51bdf72230551df:gmt39DKOa2A41oLFzswc1ak3jJsAy8EKrWYvfkLHTUlP5oBvqhD3SonKR0eCjPDaVkHbtraobmntqgA2CLBBFKi84wi5F2j1ScmOQFzcxDjuD3phZHAssDCx9WZqanntRoYpLogm4rtzjdJapTMxHJxDWQI3Fozz7DrQtNoavUgMfggZ/wpgTHWTNaUG9mA2RKjmYRHmYAUksqtKBePefmpisQbVjO1OHIUZY/59P/gZ43yJbG7q6xpZc3z0u9aLEbL0D61rENpFpAa63AfIDRCewB/vpO97JrlrkKrXMvg6akriPYi1+SiTfhgy1c+iG83rzhag072zLXLQsF4b3g==:Sy6E91u944fTxrgwHK9oJ3e09O2ZVptLC1fz0hi7y5acjitUmT1T0fNoACGQSZoTEatwj8Hi+U7bjlN4MvRO7N2AGtEO/QpdOIwHIvV4czavqejkwHGaTNApybv/iEB+99LXTwB+Zb9I39Mi7Sfjp+2cjsb1b7Bc0x76FE0F6fHOr4mFmV78LE4gwCw0JRTbyfcoU9bdnCxKl6eJbp3oqHi7zZzTuIj5bjmWN3J4VVTaagV6Dm22NcdAHhyh4ZcKWa8zk5Y8VD8q2dT7Nk9HtwriL1BVprp0B6GmkQhzzTo6ZVEXidtdhM98CYiBnTV0z058TOa0vh2iT3c49Iqbio8M+ivdJe6YewxgCavlMXVmbmT0zKOae9DxCnKYgVOI+Iw+koIfleq8NWErJggtzLj6B8z4z212viuWr81lYDehi1y9TyBwCKGMAshIQG9FC75MFifB63SOyvFi+hIN9QHBfYZTgoM8B47ArJec4T+fl+exbCtDRC1vUNsk5yb7Nf4ofVkMTvvMBqmFANVjmdldgCxu/WVKb/EF/eYJWaW/R44Ti6HESC4+TwwjnKApN2g9kYw4cbojrob42c6CmEkH6re/W7t6OY28KZNx/K2UyK
+ 7qKE71l0DpViMraMMQpm4Xpf0F1Ez+oT5ffrJatZqIkcjt0fy85zFh9PRQr6eFeVpZnw==
 Received: from fli4l.lan.fli4l (p54a1b276.dip0.t-ipconnect.de [84.161.178.118])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 4964CA4C47A4;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 70AB1A4C47A5;
  Sat, 19 Sep 2026 17:58:50 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:44948)
  by fli4l.lan.fli4l with esmtp (Exim 4.100.1)
- (envelope-from <bernd@kuhls.net>) id 1x7xSj-000000005Jx-27kF;
+ (envelope-from <bernd@kuhls.net>) id 1x7xSj-000000005Jx-2vCU;
  Sat, 19 Sep 2026 15:58:49 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat, 19 Sep 2026 17:57:30 +0200
-Message-ID: <20260919155845.5776-6-bernd@kuhls.net>
+Date: Sat, 19 Sep 2026 17:57:31 +0200
+Message-ID: <20260919155845.5776-7-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260919155845.5776-1-bernd@kuhls.net>
 References: <20260919155845.5776-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: /
-Subject: [Buildroot] [PATCH v2 05/77] package/resiprocate: remove package
+X-Spamd-Bar: +
+Subject: [Buildroot] [PATCH v2 06/77] package/libcpprestsdk: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -175,197 +175,162 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Build is broken with the upcoming bump of OpenSSL to 4.0.2:
+Quote from Github site https://github.com/microsoft/cpprestsdk
+"This repository was archived by the owner on Jun 1, 2026. It is now
+ read-only."
 
-ssl/Security.cxx:2360:29: error: invalid use of incomplete type 'ASN1_IA5STRING' {aka 'struct asn1_string_st'}
- 2360 |                Data name(uri->data, uri->length);
-
-ssl/Security.cxx: In static member function 'static void resip::BaseSecurity::getCertNames(X509*, std::__cxx11::list<PeerName>&, bool)':
-ssl/Security.cxx:2556:46: error: invalid conversion from 'const X509_NAME*' {aka 'const X509_name_st*'} to 'X509_NAME*' {aka 'X509_name_st*'} [-fpermissive]
- 2556 |    X509_NAME* subject = X509_get_subject_name(cert);
-
-ssl/Security.cxx:2572:51: error: invalid conversion from 'const X509_NAME_ENTRY*' {aka 'const X509_name_entry_st*'} to 'X509_NAME_ENTRY*' {aka 'X509_name_entry_st*'} [-fpermissive]
- 2572 |       X509_NAME_ENTRY* entry = X509_NAME_get_entry(subject,i);
-
-ssl/Security.cxx:2575:53: error: invalid conversion from 'const ASN1_STRING*' {aka 'const asn1_string_st*'} to 'ASN1_STRING*' {aka 'asn1_string_st*'} [-fpermissive]
- 2575 |       ASN1_STRING*      s = X509_NAME_ENTRY_get_data(entry);
-
-Disabling OpenSSL support via configure option -DWITH_SSL=OFF still
-produces a broken build:
-
-SipStack.cxx:450:29: error: expected type-specifier before 'DtlsTransport'
-  450 |             transport = new DtlsTransport(stateMacFifo,
-
-Bug report sent upstream:
-https://github.com/resiprocate/resiprocate/issues/489
-
-No other package depends on resiprocate, no developer registered in
-DEVELOPERS. To not block the bump of OpenSSL we remove this package.
+Building the package with boost >= 1.89 and OpenSSL >= 4.x is broken.
+To not block these version bumps we remove this package.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- Config.in.legacy                     |  7 ++++
- package/Config.in                    |  1 -
- package/resiprocate/Config.in        | 43 --------------------
- package/resiprocate/resiprocate.hash |  3 --
- package/resiprocate/resiprocate.mk   | 60 ----------------------------
- 5 files changed, 7 insertions(+), 107 deletions(-)
- delete mode 100644 package/resiprocate/Config.in
- delete mode 100644 package/resiprocate/resiprocate.hash
- delete mode 100644 package/resiprocate/resiprocate.mk
+ Config.in.legacy                         |  6 +++
+ package/Config.in                        |  1 -
+ package/libcpprestsdk/Config.in          | 34 ---------------
+ package/libcpprestsdk/libcpprestsdk.hash |  3 --
+ package/libcpprestsdk/libcpprestsdk.mk   | 55 ------------------------
+ 5 files changed, 6 insertions(+), 93 deletions(-)
+ delete mode 100644 package/libcpprestsdk/Config.in
+ delete mode 100644 package/libcpprestsdk/libcpprestsdk.hash
+ delete mode 100644 package/libcpprestsdk/libcpprestsdk.mk
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index e6c4361bb9..f1b995b486 100644
+index f1b995b486..2b77f7316e 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
-@@ -146,6 +146,13 @@ endif
+@@ -146,6 +146,12 @@ endif
  
  comment "Legacy options removed in 2026.11"
  
-+config BR2_PACKAGE_RESIPROCATE
-+	bool "resiprocate has been removed"
++config BR2_PACKAGE_LIBCPPRESTSDK
++	bool "libcpprestsdk has been removed"
 +	select BR2_LEGACY
 +	help
-+	  The resiprocate package has been removed because it is
-+	  incompatible with OpenSSL >= 4.x
++	  libcpprestsdk is unmaintained and has been removed
 +
- config BR2_PACKAGE_QT5KNX
- 	bool "qt5knx has been removed"
+ config BR2_PACKAGE_RESIPROCATE
+ 	bool "resiprocate has been removed"
  	select BR2_LEGACY
 diff --git a/package/Config.in b/package/Config.in
-index d556128ce7..d2c2c210d9 100644
+index d2c2c210d9..968ad126bc 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -2116,7 +2116,6 @@ menu "Networking"
- 	source "package/qdecoder/Config.in"
- 	source "package/qpid-proton/Config.in"
- 	source "package/rabbitmq-c/Config.in"
--	source "package/resiprocate/Config.in"
- 	source "package/restclient-cpp/Config.in"
- 	source "package/rtmpdump/Config.in"
- 	source "package/siproxd/Config.in"
-diff --git a/package/resiprocate/Config.in b/package/resiprocate/Config.in
+@@ -2020,7 +2020,6 @@ menu "Networking"
+ 	source "package/libcgicc/Config.in"
+ 	source "package/libcoap/Config.in"
+ 	source "package/libcppconnman/Config.in"
+-	source "package/libcpprestsdk/Config.in"
+ 	source "package/libcurl/Config.in"
+ 	source "package/libdnet/Config.in"
+ 	source "package/libeXosip2/Config.in"
+diff --git a/package/libcpprestsdk/Config.in b/package/libcpprestsdk/Config.in
 deleted file mode 100644
-index ba68ad8e59..0000000000
---- a/package/resiprocate/Config.in
+index 7688021ed0..0000000000
+--- a/package/libcpprestsdk/Config.in
 +++ /dev/null
-@@ -1,43 +0,0 @@
--comment "resiprocate needs a toolchain w/ C++, threads, wchar"
--	depends on BR2_USE_MMU
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
--
--config BR2_PACKAGE_RESIPROCATE
--	bool "resiprocate"
+@@ -1,34 +0,0 @@
+-config BR2_PACKAGE_LIBCPPRESTSDK
+-	bool "libcpprestsdk"
+-	depends on BR2_ENABLE_LOCALE
 -	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on BR2_USE_WCHAR
--	depends on BR2_USE_MMU # fork()
--	select BR2_PACKAGE_C_ARES
--	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
--	help
--	  reSIProcate is a framework that aims to fully implement the
--	  SIP protocol in first class C++. It is intended for use in
--	  other applications, such as the repro SIP proxy.
--
--	  By default this package provides the core libraries: librutil
--	  (utilities), libresip (SIP stack/RFC compliant message
--	  parsing) and libdum (SIP Dialog Usage Manager, a state
--	  machine for SIP dialogs).
--
--	  https://github.com/resiprocate/resiprocate
--
--if BR2_PACKAGE_RESIPROCATE
--
--config BR2_PACKAGE_RESIPROCATE_DTLS_SUPPORT
--	bool "DTLS support"
--	select BR2_PACKAGE_OPENSSL
--	help
--	  Enable DTLS support (requires OpenSSL)
--
--config BR2_PACKAGE_RESIPROCATE_REND
--	bool "resiprocate-rend"
+-	depends on BR2_USE_WCHAR # boost
+-	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-atomic, boost-filesystem
+-	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
+-	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
 -	select BR2_PACKAGE_BOOST
+-	select BR2_PACKAGE_BOOST_ATOMIC
+-	select BR2_PACKAGE_BOOST_CHRONO
+-	select BR2_PACKAGE_BOOST_DATE_TIME
+-	select BR2_PACKAGE_BOOST_FILESYSTEM
+-	select BR2_PACKAGE_BOOST_RANDOM
+-	select BR2_PACKAGE_BOOST_REGEX
 -	select BR2_PACKAGE_BOOST_SYSTEM
+-	select BR2_PACKAGE_BOOST_THREAD
 -	select BR2_PACKAGE_OPENSSL
--	select BR2_PACKAGE_POPT
 -	help
--	  Rend is tool that is was created specifically to load test
--	  gtSIP based presence servers.
+-	  The C++ REST SDK is a Microsoft project for cloud-based
+-	  client-server communication in native code using a modern
+-	  asynchronous C++ API design. This project aims to help C++
+-	  developers connect to and interact with services.
 -
--endif # BR2_PACKAGE_RESIPROCATE
-diff --git a/package/resiprocate/resiprocate.hash b/package/resiprocate/resiprocate.hash
+-	  https://github.com/Microsoft/cpprestsdk
+-
+-comment "libcpprestsdk needs a toolchain w/ NPTL, C++, wchar, locale"
+-	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
+-		!BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_USE_WCHAR || !BR2_ENABLE_LOCALE
+-
+-comment "libcpprestsdk needs exception_ptr"
+-	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+diff --git a/package/libcpprestsdk/libcpprestsdk.hash b/package/libcpprestsdk/libcpprestsdk.hash
 deleted file mode 100644
-index 93a7131141..0000000000
---- a/package/resiprocate/resiprocate.hash
+index 8e398d0c54..0000000000
+--- a/package/libcpprestsdk/libcpprestsdk.hash
 +++ /dev/null
 @@ -1,3 +0,0 @@
--# Locally Computed
--sha256  059fda8f63c456fd61130d468a67655cfeafb5ba8ff5c1d0a55dc383f83e4fba  resiprocate-1.13.2.tar.gz
--sha256  8c93f7d6085486e9d24b7c6f9c662d92e0b65571003ad15d0827bb99fd924261  LICENSE.md
-diff --git a/package/resiprocate/resiprocate.mk b/package/resiprocate/resiprocate.mk
+-# Locally calculated
+-sha256  6bd74a637ff182144b6a4271227ea8b6b3ea92389f88b25b215e6f94fd4d41cb  libcpprestsdk-2.10.18.tar.gz
+-sha256  5c191789f502ac87df83b57008d2fc3e47fbf31315381b5bc4309f6602d0fe97  license.txt
+diff --git a/package/libcpprestsdk/libcpprestsdk.mk b/package/libcpprestsdk/libcpprestsdk.mk
 deleted file mode 100644
-index ab8299302a..0000000000
---- a/package/resiprocate/resiprocate.mk
+index 68d4cf68c1..0000000000
+--- a/package/libcpprestsdk/libcpprestsdk.mk
 +++ /dev/null
-@@ -1,60 +0,0 @@
+@@ -1,55 +0,0 @@
 -################################################################################
 -#
--# resiprocate
+-# libcpprestsdk
 -#
 -################################################################################
 -
--RESIPROCATE_VERSION = 1.13.2
--RESIPROCATE_SITE = $(call github,resiprocate,resiprocate,resiprocate-$(RESIPROCATE_VERSION))
--RESIPROCATE_LICENSE = VSL-1.0, BSD-3-Clause
--RESIPROCATE_LICENSE_FILES = LICENSE.md
--RESIPROCATE_CPE_ID_VENDOR = resiprocate
--RESIPROCATE_INSTALL_STAGING = YES
+-LIBCPPRESTSDK_VERSION = 2.10.18
+-LIBCPPRESTSDK_SITE = $(call github,Microsoft,cpprestsdk,$(LIBCPPRESTSDK_VERSION))
+-LIBCPPRESTSDK_LICENSE = MIT
+-LIBCPPRESTSDK_LICENSE_FILES = license.txt
+-LIBCPPRESTSDK_SUBDIR = Release
+-LIBCPPRESTSDK_INSTALL_STAGING = YES
+-LIBCPPRESTSDK_DEPENDENCIES += host-pkgconf boost openssl
+-LIBCPPRESTSDK_CONF_OPTS = -DWERROR=OFF -DBUILD_SAMPLES=OFF
 -
--RESIPROCATE_CONF_OPTS = -DWITH_C_ARES=ON
--RESIPROCATE_DEPENDENCIES = c-ares
--
--RESIPROCATE_CONF_OPTS += \
--	-DBUILD_QPID_PROTON=OFF \
--	-DBUILD_RECON=OFF \
--	-DBUILD_REFLOW=OFF \
--	-DBUILD_REPRO=OFF \
--	-DBUILD_RETURN=OFF \
--	-DBUILD_TFM=OFF \
--	-DHAVE_CLOCK_GETTIME_MONOTONIC_EXITCODE=0
--
--ifeq ($(BR2_PACKAGE_GEOIP),y)
--RESIPROCATE_CONF_OPTS += -DUSE_MAXMIND_GEOIP=ON
--RESIPROCATE_DEPENDENCIES += geoip
--else
--RESIPROCATE_CONF_OPTS += -DUSE_MAXMIND_GEOIP=OFF
+-ifeq ($(BR2_STATIC_LIBS),y)
+-LIBCPPRESTSDK_CONF_OPTS += \
+-	-DBoost_USE_STATIC_LIBS=ON \
+-	-DBoost_USE_STATIC_RUNTIME=ON
 -endif
 -
--ifeq ($(BR2_PACKAGE_OPENSSL),y)
--RESIPROCATE_CONF_OPTS += -DWITH_SSL=ON
--RESIPROCATE_DEPENDENCIES += openssl host-pkgconf
--else
--RESIPROCATE_CONF_OPTS += -DWITH_SSL=OFF
+-LIBCPPRESTSDK_CXXFLAGS = $(TARGET_CXXFLAGS)
+-
+-ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+-LIBCPPRESTSDK_CXXFLAGS += -latomic
 -endif
 -
--ifeq ($(BR2_PACKAGE_POPT),y)
--RESIPROCATE_CONF_OPTS += -DUSE_POPT=ON
--RESIPROCATE_DEPENDENCIES += popt
+-ifeq ($(BR2_PACKAGE_ZLIB),y)
+-LIBCPPRESTSDK_DEPENDENCIES += zlib
+-LIBCPPRESTSDK_CONF_OPTS += -DCPPREST_EXCLUDE_COMPRESSION=OFF
+-# brotli needs compression
+-ifeq ($(BR2_PACKAGE_BROTLI),y)
+-LIBCPPRESTSDK_DEPENDENCIES += brotli
+-LIBCPPRESTSDK_CONF_OPTS += -DCPPREST_EXCLUDE_BROTLI=OFF
 -else
--RESIPROCATE_CONF_OPTS += -DUSE_POPT=OFF
+-LIBCPPRESTSDK_CONF_OPTS += -DCPPREST_EXCLUDE_BROTLI=ON
+-endif
+-else
+-LIBCPPRESTSDK_CONF_OPTS += -DCPPREST_EXCLUDE_COMPRESSION=ON
 -endif
 -
--ifeq ($(BR2_PACKAGE_RESIPROCATE_DTLS_SUPPORT),y)
--RESIPROCATE_CONF_OPTS += -DUSE_DTLS=ON
+-ifeq ($(BR2_PACKAGE_WEBSOCKETPP),y)
+-LIBCPPRESTSDK_DEPENDENCIES += websocketpp
+-LIBCPPRESTSDK_CONF_OPTS += -DCPPREST_EXCLUDE_WEBSOCKETS=OFF
 -else
--RESIPROCATE_CONF_OPTS += -DUSE_DTLS=OFF
+-LIBCPPRESTSDK_CONF_OPTS += -DCPPREST_EXCLUDE_WEBSOCKETS=ON
 -endif
 -
--ifeq ($(BR2_PACKAGE_RESIPROCATE_REND),y)
--RESIPROCATE_CONF_OPTS += -DBUILD_REND=ON
--RESIPROCATE_DEPENDENCIES += boost
--else
--RESIPROCATE_CONF_OPTS += -DBUILD_REND=OFF
+-ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
+-LIBCPPRESTSDK_CXXFLAGS += -O0
 -endif
+-
+-LIBCPPRESTSDK_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(LIBCPPRESTSDK_CXXFLAGS)"
 -
 -$(eval $(cmake-package))
 -- 
