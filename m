@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7C435C982D8
-	for <buildroot@archiver.kernel.org>; Sat, 19 Sep 2026 16:14:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 624D3C982D7
+	for <buildroot@archiver.kernel.org>; Sat, 19 Sep 2026 16:14:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 42DE540CF0;
-	Sat, 19 Sep 2026 16:14:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2607540CF0;
+	Sat, 19 Sep 2026 16:14:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id s9BtR8Ie_pkH; Sat, 19 Sep 2026 16:14:31 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 327A840D38
+ id am3vc4dI85h7; Sat, 19 Sep 2026 16:14:49 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org F2E5740D3A
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789834471;
-	b=fMeb3RpbmZQBeA6JEkiLCzNtOKmas7Pwa9sz+zbEtL9mLK0CWePxUMVZbEbFOJwGaFuV
-	 cwqmJQNpo20pG6z0YFzBOANXagF9z/z9ZhC1zsj3ZJI/o91cfKMGC8QIsIbCIZTe/M7mr
-	 tBEJajcebaituLGiNRDpbLxGoYv72BZwxOofyzwqCmERdAMn8GfKL/TINumh3OUxEypC0
-	 8K9zekV8NVLJIF3K6Rvz/MDadKQ8jbJ5CkF4x9EHKqiqxHgags1c3wUmCx9x1tGQsqHHB
-	 K4uFgZemkvDqK3GfK3zhYkj99/C0sFfQ5EbiUfHp8f9ymKAU/rV4vYV2hM41HA6Mj6g==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789834489;
+	b=bJqX1TaPFGxsWzDCVKT4JDeS2MDp2/O6lCMUh0Bul4P8qn/kv1pxU25lDaaFfmgfOoPa
+	 TpxsPx8TNURUnKxSbojxE6dTUjDzzHXY4gCyAzKJgyHR8Y27wEFuEfadBz2MvSLpaZKb2
+	 Jsh+lM+GBYpDrthhk4UzJ2alVT2QYv0Ne1cnQs5HilBwWgk4N/b839cSfYltzRCtjMbNX
+	 T1KSigfheKBDFEljBqGnTsPpsEKuWe98UcmCNEJ42btYOUnOfNydRhfyukXc8zHkKmtC+
+	 wB2v1jQoti0vayRv7tbrb7PL410VyfFsw5zNoC8ZRgOvRWehxLvkCS9g4IApB5EMzAg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789834471;
+	c=relaxed/relaxed; t=1789834489;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
@@ -31,106 +31,104 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:Cc:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=HOaNpBA2TvDkLa/xAYN26a7XAMNIUziPUfu/qdRNHec=;
-	b=BfMqV8fZ60dUaYsST/0CPHEzL5vp8iwbpM+7pTTlhY/3gwo4XATcE+jvQGgy1Nh/dzcM
-	 m07jmte4QKbgW8trP8OjLIV3ZzPZVfjR0XD077OfN2uKcqvKL5jaZMmjKgP/OLwxo1qjw
-	 Wex9FRz5Mqysauc9WCoQSBEuSCep7LCEfvR/085jrYp9EpDWK3DgA6qjjvm5VFMDDNaiB
-	 6tVJXJW+GbWjvsaKPKTxLB7iv+Aekt3/sfkNSqEOHZWk//oAOdT2dZ83OJ8w5DTgO4zgM
-	 Z8Cc6wWpLjAKBO9IWZ9IJ48hcWrORRuc022TkF+2ie14xGDB4y1AR/5O00tR5WHl+3Q==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; dmarc=pass header.from=kuhls.net;
-	dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256 header.s=kas202605290044 header.b=jTdeg1Al;
-	arc=fail smtp.remote-ip=140.211.166.142
+	bh=XM8c2fHlOPkt+lAF6ERoWBjnIyj3Fvwq7OZzUeBv7Tc=;
+	b=mp3cppxSuj+YqdECVgYvctv3+E/Ko/m1WJYPHaFyl07UP3Ol6KxTjYpKf+ffCzPPcdxm
+	 QvU5ZepA3hdXEze+46vJVyFNCfy9n1bpLwx9f4XpSOpCtb5T9CPgvBouy19NbjdLAYIK7
+	 Xk+xzLcxFVJwjuMbTwPHIjj6qWj9KCz6AErW8Yu93/qDAX0wB0dLHImwOnjeqBiUkZj9S
+	 1c2K/eBPrjXluRSuIP65vL+O+t64rot/p4Kk5N32uAjKvtFVmeief22KDwHCHHKCdQ21S
+	 Xu/irWJJ88SP6hzfKGlbKI4FVRfSS6Uic/FEudZh5cnFEojQJ+Yk51UNIDrsH50PVLw==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789834471;
-	bh=HOaNpBA2TvDkLa/xAYN26a7XAMNIUziPUfu/qdRNHec=;
+	s=default; t=1789834489;
+	bh=XM8c2fHlOPkt+lAF6ERoWBjnIyj3Fvwq7OZzUeBv7Tc=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=RiJhgp6r7pTIgbEIQMIRmG7wPWR2GPh9j8LDIIihhhJRhF+MRQVJ5JmnhViPrtm+i
-	 HsCvFJ0mFgHuTFo8gvMLiNdD+/B6T1JCl6ncLiGfl36B+UyG5GIfbx91y0I5HW8jF1
-	 dVhrfFMECxJ9rKgcI+5t0Z8MugR/OEnja8oFBTTdtrgXbnZQXMB/+0ObXvaBNk1D/D
-	 ghXdSf6oLszv8mGEelmGq7WsJVkq/0DgWywH289QReAR4YS9YWFK92ZZzG5r2FVClR
-	 pGTi8anvTu45wqBHmQrrfYsNguXKfJSGrItMdKgLwhmKUnXYKzGefN59KIrDw2t9/s
-	 Iuf5QMpftV5PA==
+	b=qZ3GUPx8ARb5B30c3NBhX31P0PZm83UoDffn4UllEUGVT/txPMvo2EukKZx9c6ZM+
+	 Fu5MqFRAJXYimeJAZ/8VOt6/yrBDhChBmN+LovcHT/stlg8SDRUTEFPtTm3Z2NxT6j
+	 g/MTyHnIsxDr4cSrdbnCtYIL9EzZKrLh53HUqpJEaOjHFuoIrVfLY9Ay8Buvisu8+I
+	 TP6wTjhEA7B9ge5Sy3XaoqlsuzaWegKLcdxtFr+0Ya9wULSObGTKuJsXeHTvhgMmmy
+	 aMe7lXHVW0mHmU5SDysby50KX3VWQ0BoKYohyqJK9TG5vRPceh4jRmlU1NDoqlpkyi
+	 gse1Wzzac3XVw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 327A840D38;
-	Sat, 19 Sep 2026 16:14:31 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1B954333
- for <buildroot@buildroot.org>; Sat, 19 Sep 2026 16:14:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F2E5740D3A;
+	Sat, 19 Sep 2026 16:14:48 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id B1BCF333
+ for <buildroot@buildroot.org>; Sat, 19 Sep 2026 16:14:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 01B6B40CF0
- for <buildroot@buildroot.org>; Sat, 19 Sep 2026 16:14:30 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id AD62040085
+ for <buildroot@buildroot.org>; Sat, 19 Sep 2026 16:14:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2RLruu_paLHr for <buildroot@buildroot.org>;
- Sat, 19 Sep 2026 16:14:29 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org BEFEC40D38
-Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789834469;
- b=OQh/9erAx25N2zMAr16LX+G7euuNE00CfJIPOgdAreGSve/mMFXYSEif6+IopDhhDDcL
- 7l4uvO3z245spRB+1Qf+apdaVMpBg46Qv40uhhrhf31jrM4MBitfncYXG26cGUuREbglH
- O+wEcY1l0KQDR457V/0DlVFKlua0Uuv+ilyQs9T/3u3HZ0u0HrmwmZ+yIkppkNqFqxUWO
- bpM16BmICl+9HZiwjbQb6xwOF21Di1l0o7DivmZKTkEaqLdo6k/x2miAx0XVzvrp+Lw2d
- eXuhxAV3HkwV8HtWIfDzP6okzLa3U3f04zn5/rSnl+CG9fUeM2Dk4a3W/J8eSaiK7pg==
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cLCTU8UpXuG2 for <buildroot@buildroot.org>;
+ Sat, 19 Sep 2026 16:14:44 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org 7BBD040026
+Authentication-Results: smtp2.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789834483;
+ b=W6p17ISu2drZQc7A+36SwqKM20zz4bFEN3LfGrFXzUz3WfhelqNF3DHuW1cIG3/fNADB
+ wMqRuKTQmAg2OwncCm1s8OU8kLAkBr3gkgHkX4cNyfhxFNx2Ey7K1vbehpAkaBCiXIDWE
+ aPa11giSsxDeZHX0V+TD+fWg/GibIX3LWks+Z8HdiKd9TcjsT2/7EpEonYMaMPwl/Uvnb
+ XhmaMKqjkZXmu3vInLdPNaeuoVWEizjDLaNQV+r4KIqI1kCx9qKZ8JXmymJd0RdF1HnOp
+ rU9gO98klTmiVJ9QZzVHzh7vMq7IM5NYh/dfNoQx9OxfJGqJxikYN5wA93aNPAxr0Bg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1789834469;
+ c=relaxed/relaxed; t=1789834483;
  h=Received-SPF:DKIM-Signature:X-KAS-Sym:Received:Received:From:To:Cc:
  Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding:X-Spam-Score:X-Spamd-Bar;
- bh=IJC03tXGgJw0D4V9eMbZfpkefgypuWN7oU55xSEMQhI=;
- b=kcUWD/FTcvjd34uAnDLmrYDc3y/l2bIOC93jnaUTSL6pp/L9tM3s6Ceqx/RqSqPyDd4e
- oXSAdnKBstWwb4yG4ECa4rYa7JvSMDXUWOjL/yoUJpNv+VoESWWd/sSs1f+XOV1mp8+Ff
- 6aoUXly8oxt6Sa4PIPJhqbrGXO08cm2RUObuw3N+Php5rUple1C5HSAQ+tA1Dv6tSwFlD
- beyJYGsj5pQoA5xOFzuwmrQMYSoZh8C0+mzO7Vtl+FIJv7k7JwXEq1oqRkc4JKZylqoDx
- ROqEmC+qMpgUQQZzue/cAlLXGDegbgRtpH7ZIHqnLrd7OuZSitPsnDoq404gx/2IseQ==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org;
+ bh=qk29KwtUAf5fMNZiBqR1wkRr6JCIHanZrCPOglje/oU=;
+ b=lZU39Y8yyaoNw15UrIvbImtCpzxmmHuGcladxUtzDHKLLruxc0xCf/b+a8ZIxlUm5mEP
+ fbw/sMajDU10XSNBzZAnupOYRsftbfh5V0myS4yO03fyHxdSXK+Yx20kJcsRCDWgEXn81
+ nSSDZEFv0Gz6paOyz8owo4dIlioRpq8GOqDoTZ3KJRg9X7f9ED7zMxVJ9JR1xMWSz6Whp
+ rRP4hQipV0YblOxGembS+bdrQ/2YtMjLec74t5EtKh2wTA8P9kn4ufWlf3rXuIZRVcJzG
+ Z+LKIhndure1dENoKI9cvkFwoAYFmRDcfWK5DLzI97V3iUYKn3kY/CBaODCK8socZJw==
+ARC-Authentication-Results: i=1; smtp2.osuosl.org;
  dmarc=pass header.from=kuhls.net; 
  dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=jTdeg1Al; 
+ header.s=kas202605290044 header.b=NVdZkWOB; 
  arc=none smtp.remote-ip=85.13.140.57
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-Authentication-Results: smtp4.osuosl.org;
+Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=kuhls.net
-Authentication-Results: smtp4.osuosl.org;
+Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202605290044 header.b=jTdeg1Al
+ header.a=rsa-sha256 header.s=kas202605290044 header.b=NVdZkWOB
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id BEFEC40D38
- for <buildroot@buildroot.org>; Sat, 19 Sep 2026 16:14:28 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7BBD040026
+ for <buildroot@buildroot.org>; Sat, 19 Sep 2026 16:14:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
- s=kas202605290044; t=1789833559;
- bh=IJC03tXGgJw0D4V9eMbZfpkefgypuWN7oU55xSEMQhI=;
+ s=kas202605290044; t=1789833558;
+ bh=qk29KwtUAf5fMNZiBqR1wkRr6JCIHanZrCPOglje/oU=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=jTdeg1AltP3jfAV6C1FhIVFPvGwV4Yf/RpcHZjnnVFGEmg5L+GAtNkIFeSh0eUcrD
- zJQRlbVdwyJFfQVfA/Lt/10Fg2J1f2Ms4iEUWVgfdfKfKf9aOzMelQpBeGs44Q1wHh
- jVX9iSKkI5hATp5T1DmLJ0lZlGBVJqBOfc5PDt46FDBKm4KT9KW97kuvFXKShZpmly
- xcbWMmnJuH1M9i1EQjwV4njoVv+q5V9ZFumF1MZgizzQ+qbt4cSHUe31aU2hiFXeGC
- gT1Ptfr8JsnJELYG/5nRb3JGXHxxxTv1Hqm1veKq5p99wnqc9dCYpEeOuh8L6h+6nI
- ZbgYWCUOImtKg==
-X-KAS-Sym: v3:f51bdf72230551df:gmt39DKOa2A41oLFzswc1ak3jJsAy8EKrWYvfkLHTUlP5oBvqhD3SonKR0eCjPDaVkHbtraobmntqgA2CLBBFKi84wi5F2j1ScmOQFzcxDjuD3phZHAssDCx9WZqanntRoYpLogm4rtzjdJapTMxHJxDWQI3Fozz7DrQtNoavUgMfggZ/wpgTHWTNaUG9mA2RKjmYRHmYAUksqtKBePefmpisQbVjO1OHIUZY/59P/gZ43yJbG7q6xpZc3z0u9aLEbL0D61rENpFpAa63AfIDRCewB/vpO97JrlrkKrXMvg6akriPYi1+SiTfhgy1c+iG83rzhag072zLXLQsF4b3g==:MviKH1h+neTYt+hf84OGS3Y6IhVCNJJkhztiyl9zkW0hJCPs6cYonNsLQpOqQ3cOMEqAraqolyEy/Yz5JfTJ4bMDLBA1JQIZLUhkrJI+Imt7N+lNfR45WO1bA+cDApceYtX4gdbFocHSVVnm6F3PWMd3f9mSHxiwpRvKCiVRJnQNhnW65IOxuI89Ii8sE2VXiqhkij/CTF5t0AbpDlJLh7NDj7JDciWiFcprGsW6aaSROhcDZ9Xo5toNkHrjFI4UXFtMMCPoyRWmh0sPdpvVrfhVJDqHBD0sWTqIBNfXQJ8aOzSZFbJo7BAJ682YvUbPuzt8kucGEbtAaDwLP/MvrCi6mp1bvW9OGAALUrYz5ZJXkY1ysuxnEKJc8QHKXa8sQ3d79W7A95gN2CF86EJfDOB3YHpE9wtLx4ILELwn54rP5YvVXJnwoI/LmgUB0+ql0BJNJWYv2kFPNmBOyG+gnFKxp8r1+wWe0YsGHoX4uveQfLm4yvMFZ84Diqjljju3uDjYBnw5tNIpUrC0fuqV0wuDnP2MFxIiVtTaEYVhPwP2AoklQnidSOgRJqmJP8lIr3EOc2vf6iqyUQXMZml6eBHlmBZqLFsY2wuiHq5HrzRsIn
- apUONJWprvYv5xT9D7LDqpFzFVLGy6T1Wi0tDAmp5onWr7K78hBReXr2nP0drCxYRfxdfQ
+ b=NVdZkWOBQPJ5H8eKmEnL+KgN6oCuYUZpqn/251hKxl9Dt3h1DjBLurJGyJs+VKR8Y
+ ujvBDKLpC+z2JfXVGLIYwEP8iYApo9xZQYFbgaH+MaaBDlZqoPJKHilyTo4amoeWF5
+ RMCo8S5te5lJMWb0BQf4YBXN3YxicxRggUr3puwfERPBurAwG5RwX9NSkfhJuwud28
+ UIdkhPcDZOJBPZr6NfY3Ay2JAp1Hc7Rp59DZLIJ/K7A6wkWN0wtTS3LVbnhuAsP/Om
+ VkIFIti+fPwiiZjSNy+zoqxiSTGb7mtHwWTbEd6lsbe8hDyq8mz/opa4toHkRl9VFi
+ FMqZuERBV2E0g==
+X-KAS-Sym: v3:f51bdf72230551df:gmt39DKOa2A41oLFzswc1ak3jJsAy8EKrWYvfkLHTUlP5oBvqhD3SonKR0eCjPDaVkHbtraobmntqgA2CLBBFKi84wi5F2j1ScmOQFzcxDjuD3phZHAssDCx9WZqanntRoYpLogm4rtzjdJapTMxHJxDWQI3Fozz7DrQtNoavUgMfggZ/wpgTHWTNaUG9mA2RKjmYRHmYAUksqtKBePefmpisQbVjO1OHIUZY/59P/gZ43yJbG7q6xpZc3z0u9aLEbL0D61rENpFpAa63AfIDRCewB/vpO97JrlrkKrXMvg6akriPYi1+SiTfhgy1c+iG83rzhag072zLXLQsF4b3g==:5ajKXpo2oFusV1wR1vjTL9Ski7MaLJwJBqyxdwiZFhzU0LETEO8E8g+SmrX/ZieRftyvzJ9803GnswQvJN+APHZKlJHQlca5TX/JmIDvoXvdEfry/cuGTpoPEWdSu0rCD6ik7wdE6VreKWkhz7kVr58/7qkEo7+7qU9vTLwj1hC1iX7ZLoriXaAFkQoxF4LkLwRq9OdU3qPZPlyUfCjepZShw7OdGx4O9svywdApzRCizelqnlhepXn++TPQ5EKFfMxwMla7mngktKvt2E7GP1TvQRHyKg90DOIT2CjFor+/sM9Dn+6oyncgh8Mptfd+g4FqWxXOZcFMaYWU4DOjm6O7iLPsULIVHyg9R7n3+y/Cf6riGs0PC9A0Bk5IcluAf7YGoezEqhbkxqCAIJZkD3p6bp+LoXOV7A0K6q3MFbBMapt20OcJ5Nhe39GIvf43dri4WjMMbRmktYeXkmxD9XTCe89XFaO6lGHnPw4w/Ho5I7KpS6BITHebPW3L7aOi3ZN6nLY2kE30GrtZev98l7PJYGuCUn2acyWgKVAKij7A9eEGs8LdwRL7GBpRS9RqA3MlYllbGi7+ZHKfJQ8VR1nuMB/GkIZfJ6VgXTlg92TI/L
+ SzU4wnGPKZwxv4NzMg3hxmikDXLZ8Bzr+sUpoYe27Zcc68aCBxhV8PLRRGn3XMeORjjvBv2hs94xM+NokV1gBvRuIzJoT0xez5H2SYjbp2s5yywP0=
 Received: from fli4l.lan.fli4l (p54a1b276.dip0.t-ipconnect.de [84.161.178.118])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 5C94AA4C4860;
- Sat, 19 Sep 2026 17:59:19 +0200 (CEST)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 843D6A4C485D;
+ Sat, 19 Sep 2026 17:59:18 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:44948)
  by fli4l.lan.fli4l with esmtp (Exim 4.100.1)
- (envelope-from <bernd@kuhls.net>) id 1x7xSx-000000005Jx-0KMx;
- Sat, 19 Sep 2026 15:59:03 +0000
+ (envelope-from <bernd@kuhls.net>) id 1x7xSl-000000005Jx-3tD3;
+ Sat, 19 Sep 2026 15:58:52 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat, 19 Sep 2026 17:58:39 +0200
-Message-ID: <20260919155845.5776-75-bernd@kuhls.net>
+Date: Sat, 19 Sep 2026 17:57:42 +0200
+Message-ID: <20260919155845.5776-18-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260919155845.5776-1-bernd@kuhls.net>
 References: <20260919155845.5776-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Spamd-Bar: -
-Subject: [Buildroot] [PATCH v2 74/77] package/uboot-tools: Fix build with
- OpenSSL 4.0.0
+Subject: [Buildroot] [PATCH v2 17/77] package/dovecot{-pigeonhole}: security
+ bump version to 2.4.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -178,322 +176,677 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+2.4.0:
+https://dovecot.org/mailman3/archives/list/dovecot-news@dovecot.org/thread/UYNR6GBP25XEGFCS633SWPR4HXV3NSS3/
+"Pigeonhole versioning has been changed to match Dovecot versioning."
+
+"New 2.4 packages are not compatible with old 2.3 configuration, please
+ carefully review https://doc.dovecot.org/2.4.0/installation/upgrade/2.3-to-2.4.html
+ before installing the new packages."
+
+2.4.1:
+https://dovecot.org/mailman3/archives/list/dovecot-news@dovecot.org/thread/XPT6TA7Y4B4QZZQ2XUE46Z35BDR2X2AA/
+
+2.4.2:
+https://dovecot.org/mailman3/archives/list/dovecot-news@dovecot.org/thread/XTMMPVQ3QKQMYDZ3CZZCXPNHN7OXKS3L/
+Fixes CVE-2025-30189:
+https://dovecot.org/mailman3/archives/list/dovecot-news@dovecot.org/thread/G3K5HMBKW6XOYNBXYV5GUM2GR6WPUD4M/
+
+2.4.3:
+https://dovecot.org/mailman3/archives/list/dovecot-news@dovecot.org/thread/IKIHZX77IPTGSP5WBIPJUOFBUQFKVPE7/
+
+Fixes various CVEs:
+https://dovecot.org/mailman3/archives/list/dovecot-news@dovecot.org/thread/I4KFFV4IKP6M5MS67SWYHKDSDMSNILQG/
+
+* CVE-2025-59028: Invalid base64 authentication can cause DoS for other
+  logins.
+* CVE-2025-59031: decode2text.sh OOXML extraction may follow symlinks
+  and read unintended files during indexing. Fixed by dropping the script.
+* CVE-2026-24031: SQL injection possible if auth_username_chars is
+  configured empty. Fixed escaping to always happen. v2.4 regression.
+* CVE-2026-27859: Excessive RFC 2231 MIME parameters in email would cause
+  excessive CPU usage. Fixed by limiting number of parameters to process.
+* CVE-2026-27860: LDAP query injection possible if auth_username_chars
+  is configured empty. Fixed escaping to always happen. v2.4 regression.
+* CVE-2026-27857: Sending excessive parenthesis causes imap-login to use
+  excessive memory.
+* CVE-2026-27856: Doveadm credentials were not checked using timing-safe
+  checking function.
+* CVE-2026-27855: OTP driver vulnerable to replay attack.
+* CVE-2026-27858: managesieve-login can allocate large amount of memory
+  during authentication.
+* CVE-2025-59032: ManageSieve panic occurs with sieve-connect as a client.
+
+2.4.4:
+https://dovecot.org/mailman3/archives/list/dovecot-news@dovecot.org/thread/YW7GVOH3VVLNAYW2C4TEBTGJW52J7F6H/
+
+Fixes various CVEs:
+https://dovecot.org/mailman3/archives/list/dovecot-news@dovecot.org/thread/YQYBB3NJPNFFJ4SHDU7PLXLRRGHBJKSK/
+
+* CVE-2026-27851: lib-var-expand: Safe filter marks all following pipelines safe.
+* CVE-2026-33603: auth: CRAM-SHA-*-PLUS channel binding could be faked.
+  MITM attacker with a certificate trusted by the client could have
+  bypassed the requirement for channel binding.
+* CVE-2026-40020: IMAP folders can be shared-spammed to everyone.
+* CVE-2026-42006: An attacker can cause uncontrolled memory usage with
+  excessive bracing over IMAP. The fix in CVE-2026-27857 was incomplete.
+* CVE-2026-40016: sieve :contains and :matches operators could have been
+  using excessive amount of CPU. Limit the CPU to sieve_max_cpu_time.
+
+2.4.5:
+https://dovecot.org/mailman3/archives/list/dovecot-news@dovecot.org/thread/D7FJQODYCY23BG3FWUZXCJRCLCPT7RZT/
+
+Fixes various CVEs:
+https://dovecot.org/mailman3/archives/list/dovecot-news@dovecot.org/thread/WT4USR35HN43TGQGVDXPDAMCUTGLVMET/
+
+* CVE-2026-27852: Messages with a huge number of From/To/Cc/etc email addresses
+  could result in excessive memory usage.
+* CVE-2026-33263: Submission: Login service crashes with panic once
+  mail_max_userip_connections limit is reached.
+* CVE-2026-33604: The SMTP outbound dot-stuffing mechanism does not properly
+  escape dots following a bare \r in message bodies, potentially allowing
+  spoofed emails via malicious end-of-DATA injection.
+* CVE-2026-33606: Mail content stored by a user can be crafted so that it is
+  interpreted as dsync protocol commands when an administrator later runs dsync
+  with the stream protocol, for example during a migration.
+* CVE-2026-33607: IMAP LIST command could be used to cause excessive CPU usage.
+* CVE-2026-40014: IMAP THREAD command could have used excessive amount of CPU
+  processing a single email with a massive number of Message-IDs in References
+  header.
+* CVE-2026-40015: Invalid IMAP command sent to imap-hibernate process might
+  crash it.
+* CVE-2026-40017: IMAP THREAD command could have used excessive amount of CPU
+  processing emails with a large number of specially crafted Message-IDs in
+  References header. The fix requires a new dovecot.index.thread file format,
+  which is enabled only after setting dovecot_storage_version or newer. This
+  rebuilds the index, so it will cause some extra CPU usage and extra
+  metacache disk IO usage. It shouldn't cause (much) extra object storage IO,
+  because all the fields should be coming from dovecot.index.cache.
+* CVE-2026-40203: When IMAP COMPRESS=DEFLATE was enabled, an attacker
+  could send mails into a victim's mailbox and observe network traffic to
+  determine whether a secret message matched a known string by comparing
+  compressed response sizes (a CRIME-style attack). The fix resets the
+  compression dictionary after each IMAP command, preventing information from
+  leaking between commands.
+* CVE-2026-40205: If multiple OAUTH scopes were required, then
+  this could have been only partially enforced with certain
+  configurations.
+* CVE-2026-4200: XCLIENT FORWARD allows to forward key only passdb
+  fields without the "forward_" prefix which allows connections from
+  trusted networks to set nopasswd field which allows to skip the
+  authentication.
+* CVE-2026-42391: Pre-login IMAP ID command could have used excessive
+  amount of memory, causing the process to become killed and disconnecting
+  all the other IMAP connections being proxied by the process. Or
+  alternatively it could have caused excessive CPU usage, slowing down
+  all the other IMAP connections being proxied by the process.
+* CVE-2026-42392: If URLAUTH is enabled, sending an invalid IMAP URLFETCH
+  can result in an untagged NO response containing uninitialized memory,
+  potentially leaking sensitive data.
+* CVE-2026-42393: Doveadm password length or API key length could still
+  be determined via timing based attacks.
+* CVE-2026-42395: XCLIENT FORWARD command from login_trusted_networks
+  could have been used to cause login processes to crash.
+* CVE-2026-52681: Sieve resource usage (sieve_max_cpu_time) was tracked
+  in the active Sieve binary. Switching to a different active binary
+  could have been used to reset (bypass) the resource usage.
+* CVE-2026-52687: Using IMAP COMPRESS ZSTD command can cause excessive
+  memory usage in imap-login process, possibly making it reach vsz_limit
+  and kill all the connections being served by the process. Fixed by
+  disabling COMPRESS command with all other compression algorithms than
+  the standard DEFLATE.
+* CVE-2026-73208: In oauth2, scope/aud checking was done with JWT tokens.
+  Now it requires all scopes.
+* CVE-2026-73209: Sending IMAP COMPRESS package containing zero-length
+  frames crashes imap or imap-login process.
+* CVE-2026-33605: managesieve-login: Pre-auth crash. An unauthenticated attacker
+  can crash the ManageSieve login process by sending a small malformed command
+  before authenticating.
+* CVE-2026-40019: v2.4.3 regression: managesieve-login pre-auth infinite loop.
+  An unauthenticated attacker can send a truncated quoted argument to the
+  ManageSieve login process, which makes it spin in an infinite loop consuming CPU.
+* CVE-2026-42007: sieve-editheader: An attacker that has valid credentials can
+  use a Sieve script with the editheader extension to trigger a use-after-free
+  in the mail editing code, and to write memory contents beyond the intended
+  buffer in the delivered mail.
+
+Removed patches which are included in this release.
+
+Added patch 0001 to revert upstream commit which breaks the build:
+
+  CCLD     test-var-expand-crypt
+output/per-package/dovecot/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/9.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld:
+ attempted static link of dynamic object `./.libs/var_expand_crypt.so'
+
+Select libiconv when needed, upstream removed the optional support in
+verion 2.4.2:
+https://github.com/dovecot/core/commit/8dd2ec82f63ba1bf9ddf1b74243e00185ebba9b1
+
+Added optional dependency to pcre2 available since version 2.4.2:
+https://github.com/dovecot/core/commit/38fc1545fe8cf8b97ff3b23f4a4279a0eb344881
+which needs BR2_PACKAGE_PCRE2_32:
+https://github.com/dovecot/core/blob/2.4.5/m4/want_pcre.m4#L9
+
+Ported path fixup for Makefile from dovecot to dovecot-pigeonhole to fix
+build error:
+
+make[6]: *** No rule to make target
+ '/usr/libexec/dovecot/settings-history.py', needed by
+ 'settings-history-pigeonhole.h'.  Stop.
+
+Updated license hashes due to upstream commits:
+https://github.com/dovecot/core/commit/8de4423b61320d93acce56a31844219c3317d43e
+https://github.com/dovecot/core/commit/2a5809c115ed270c26fdca5c9b0c29a369706210
+https://github.com/dovecot/pigeonhole/commit/8020ac138000e7e45f85f352eb15b66fa246f7a2
+
+Added optional support for libkrb5, openldap, postgresql and zstd.
+
+Removed optional support for xz due to its upstream removal:
+https://github.com/dovecot/core/commit/3e44364d4a030159e21d3758bab04ebdb09ef27b
+
+Removed configure option --with-ssl (openssl is already a dependency):
+https://github.com/dovecot/core/commit/6b0b7141a8a50ffc99ad51b4f27c75f876e58616
+
+Removed configure options for zlib (zlib is already a dependency):
+https://github.com/dovecot/core/commit/d666521754b024ce4f1cfee322fcc492673c00a5
+
+Renamed RPCGEN value in _CONF_ENV to silence configure warning:
+./configure: line 34595: __disable_RPCGEN_rquota: command not found
+
+Removed various _CONF_ENV variables due to their upstream removal:
+
+i_cv_inotify_works:
+https://github.com/dovecot/core/pull/107#issuecomment-560056967
+
+i_cv_signed_size_t:
+https://github.com/dovecot/core/commit/52d322449d236d9ac885130abdc024c5549e109c
+
+i_cv_signed_time_t:
+https://github.com/dovecot/core/commit/7cedd93c4ed18344940cb327fce12bd90d83d83b
+
+i_cv_c99_vsnprintf:
+https://github.com/dovecot/core/commit/5dc503907d7ef65293e441603ad80060c34ad502
+
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- ...Add-support-for-OpenSSL-Provider-API.patch | 304 ++++++++++++++++++
- 1 file changed, 304 insertions(+)
- create mode 100644 package/uboot-tools/0003-Add-support-for-OpenSSL-Provider-API.patch
+ .checkpackageignore                           |   1 -
+ docs/manual/migrating.adoc                    |   6 +
+ .../dovecot-pigeonhole.hash                   |   4 +-
+ .../dovecot-pigeonhole/dovecot-pigeonhole.mk  |  12 +-
+ ...xpand-crypt-Link-test-binary-statica.patch |  32 ++++
+ ...g-passdbs-with-identical-driver-args.patch | 137 ------------------
+ ...onfigure-Explicitly-check-for-icu-uc.patch |  28 ----
+ package/dovecot/Config.in                     |  20 +++
+ package/dovecot/dovecot.hash                  |   4 +-
+ package/dovecot/dovecot.mk                    |  68 +++++----
+ 10 files changed, 113 insertions(+), 199 deletions(-)
+ create mode 100644 package/dovecot/0001-Revert-lib-var-expand-crypt-Link-test-binary-statica.patch
+ delete mode 100644 package/dovecot/0001-auth-Fix-handling-passdbs-with-identical-driver-args.patch
+ delete mode 100644 package/dovecot/0002-configure-Explicitly-check-for-icu-uc.patch
 
-diff --git a/package/uboot-tools/0003-Add-support-for-OpenSSL-Provider-API.patch b/package/uboot-tools/0003-Add-support-for-OpenSSL-Provider-API.patch
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 04717ed2af..7e5d774821 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -280,7 +280,6 @@ package/dmalloc/0004-Makefile-use-the-configure-detected-or-user-supplied.patch
+ package/dmalloc/0005-configure-use-LD-instead-of-hard-coding-ld.patch lib_patch.Upstream
+ package/docopt-cpp/0001-only-build-one-target-use-BUILD_SHARED_LIBS-where-appropriate.patch lib_patch.Upstream
+ package/domoticz/S99domoticz Shellcheck
+-package/dovecot/0001-auth-Fix-handling-passdbs-with-identical-driver-args.patch lib_patch.Upstream
+ package/dracut/merged-usr-module-setup.sh Shellcheck
+ package/dropbear/S50dropbear Shellcheck lib_sysv.Indent lib_sysv.Variables
+ package/dt/0001-adjust-os-symlink.patch lib_patch.Upstream
+diff --git a/docs/manual/migrating.adoc b/docs/manual/migrating.adoc
+index 68f09e1bae..86b040a19c 100644
+--- a/docs/manual/migrating.adoc
++++ b/docs/manual/migrating.adoc
+@@ -264,3 +264,9 @@ added to .cargo-checksum.json to clarify that this file is not a
+ security mechanism. Tarballs generated by Cargo-fetched packages have
+ changed, therefore the suffix of such tarballs has been changed from
+ +-cargo5+ to +-cargo6+.
++
++[[migrating-to-2026-11]]
++=== Migration to 2026.11
++
++Due to the update of Dovecot to version 2.4.x the runtime configuration
++files need to be updated.
+diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
+index 247f74fdba..96bf279e24 100644
+--- a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
++++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
+@@ -1,3 +1,3 @@
+ # Locally computed after checking signature
+-sha256  0377db284b620723de060431115fb2e7791e1df4321411af718201d6925c4692  dovecot-2.3-pigeonhole-0.5.21.1.tar.gz
+-sha256  fc9e9522216f2a9a28b31300e3c73c1df56acc27dfae951bf516e7995366b51a  COPYING
++sha256  ad7c478cb3aaa76c5f81f86727a3e6843645b0a1253f5684fb8a0beec0d22925  dovecot-pigeonhole-2.4.5.tar.gz
++sha256  1fc821d394719d8b5337223c1f4bd898a231f2fb559f2cf3ebeda97be8362d6d  COPYING
+diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
+index 4d21ebd395..17ffc1d7cf 100644
+--- a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
++++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-DOVECOT_PIGEONHOLE_VERSION = 0.5.21.1
+-DOVECOT_PIGEONHOLE_SOURCE = dovecot-2.3-pigeonhole-$(DOVECOT_PIGEONHOLE_VERSION).tar.gz
+-DOVECOT_PIGEONHOLE_SITE = https://pigeonhole.dovecot.org/releases/2.3
++DOVECOT_PIGEONHOLE_VERSION_MAJOR = 2.4
++DOVECOT_PIGEONHOLE_VERSION = $(DOVECOT_PIGEONHOLE_VERSION_MAJOR).5
++DOVECOT_PIGEONHOLE_SITE = https://pigeonhole.dovecot.org/releases/$(DOVECOT_PIGEONHOLE_VERSION_MAJOR)
+ DOVECOT_PIGEONHOLE_LICENSE = LGPL-2.1
+ DOVECOT_PIGEONHOLE_LICENSE_FILES = COPYING
+ DOVECOT_PIGEONHOLE_CPE_ID_VENDOR = dovecot
+@@ -15,4 +15,10 @@ DOVECOT_PIGEONHOLE_DEPENDENCIES = dovecot
+ 
+ DOVECOT_PIGEONHOLE_CONF_OPTS = --with-dovecot=$(STAGING_DIR)/usr/lib
+ 
++# fix path to avoid using /usr/lib/dovecot
++define DOVECOT_PIGEONHOLE_POST_CONFIGURE
++	$(SED) 's%^dovecot_pkglibexecdir =.*%dovecot_pkglibexecdir = $(STAGING_DIR)/usr/libexec%' $(@D)/src/plugins/settings/Makefile
++endef
++DOVECOT_PIGEONHOLE_POST_CONFIGURE_HOOKS += DOVECOT_PIGEONHOLE_POST_CONFIGURE
++
+ $(eval $(autotools-package))
+diff --git a/package/dovecot/0001-Revert-lib-var-expand-crypt-Link-test-binary-statica.patch b/package/dovecot/0001-Revert-lib-var-expand-crypt-Link-test-binary-statica.patch
 new file mode 100644
-index 0000000000..9a5071cae3
+index 0000000000..83ba1168ce
 --- /dev/null
-+++ b/package/uboot-tools/0003-Add-support-for-OpenSSL-Provider-API.patch
-@@ -0,0 +1,304 @@
-+From 9f78e701fa5a4faf69119d9fe1e485e76de2fe3b Mon Sep 17 00:00:00 2001
-+From: Eddie Kovsky <ewk@edkovsky.org>
-+Date: Mon, 23 Feb 2026 09:43:22 -0700
-+Subject: [PATCH] Add support for OpenSSL Provider API
++++ b/package/dovecot/0001-Revert-lib-var-expand-crypt-Link-test-binary-statica.patch
+@@ -0,0 +1,32 @@
++From 08a6ca5cfb9d4148d5dedabd0660e06fd3081606 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd@kuhls.net>
++Date: Tue, 25 Aug 2026 21:17:48 +0200
++Subject: [PATCH] Revert "lib-var-expand-crypt: Link test binary statically"
 +
-+The Engine API has been deprecated since the release of OpenSSL 3.0. End
-+users have been advised to migrate to the new Provider interface.
-+Several distributions have already removed support for engines, which is
-+preventing U-Boot from being compiled in those environments.
++This reverts commit 1c6b67195d279836d94e141215c626c20af93af6.
 +
-+Add support for the Provider API while continuing to support the existing
-+Engine API on distros shipping older releases of OpenSSL.
-+
-+This is based on similar work contributed by Jan Stancek updating Linux
-+to use the Provider interface.
-+
-+    commit 558bdc45dfb2669e1741384a0c80be9c82fa052c
-+    Author: Jan Stancek <jstancek@redhat.com>
-+    Date:   Fri Sep 20 19:52:48 2024 +0300
-+
-+        sign-file,extract-cert: use pkcs11 provider for OPENSSL MAJOR >= 3
-+
-+The changes have been tested with the FIT signature verification vboot
-+tests on Fedora 42 and Debian 13. All 30 tests pass with both the legacy
-+Engine library installed and with the Provider API.
-+
-+Signed-off-by: Eddie Kovsky <ewk@edkovsky.org>
-+
-+Upstream: https://github.com/u-boot/u-boot/pull/918
++Upstream: n/a (buildroot specific)
 +
 +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 +---
-+ lib/aes/aes-encrypt.c |   4 +-
-+ lib/rsa/rsa-sign.c    | 102 +++++++++++++++++++++++++++++++++++++++---
-+ 2 files changed, 100 insertions(+), 6 deletions(-)
++ src/lib-var-expand-crypt/Makefile.am | 3 +--
++ 1 file changed, 1 insertion(+), 2 deletions(-)
 +
-+diff --git a/lib/aes/aes-encrypt.c b/lib/aes/aes-encrypt.c
-+index 90e1407b4f0..4fc4ce23247 100644
-+--- a/lib/aes/aes-encrypt.c
-++++ b/lib/aes/aes-encrypt.c
-+@@ -16,7 +16,9 @@
-+ #include <openssl/err.h>
-+ #include <openssl/ssl.h>
-+ #include <openssl/evp.h>
-+-#include <openssl/engine.h>
-++#if !defined(OPENSSL_NO_ENGINE) && !defined(OPENSSL_NO_DEPRECATED_3_0)
-++# include <openssl/engine.h>
-++#endif
-+ #include <uboot_aes.h>
++diff --git a/src/lib-var-expand-crypt/Makefile.am b/src/lib-var-expand-crypt/Makefile.am
++index aa6a3b9b81..12d424a845 100644
++--- a/src/lib-var-expand-crypt/Makefile.am
+++++ b/src/lib-var-expand-crypt/Makefile.am
++@@ -35,9 +35,8 @@ test_libs = \
++ test_var_expand_crypt_SOURCES = test-var-expand-crypt.c
++ test_var_expand_crypt_LDADD = $(test_libs) $(SSL_LIBS) $(LIBDOVECOT_TEST_LIBS)
++ test_var_expand_crypt_DEPENDENCIES = $(module_LTLIBRARIES)
++-test_var_expand_crypt_LDFLAGS = -static
++ if HAVE_WHOLE_ARCHIVE
++-test_var_expand_crypt_LDFLAGS += -export-dynamic -Wl,$(LD_WHOLE_ARCHIVE),../lib/.libs/liblib.a,../lib-json/.libs/libjson.a,../lib-ssl-iostream/.libs/libssl_iostream.a,$(LD_NO_WHOLE_ARCHIVE)
+++test_var_expand_crypt_LDFLAGS = -export-dynamic -Wl,$(LD_WHOLE_ARCHIVE),../lib/.libs/liblib.a,../lib-json/.libs/libjson.a,../lib-ssl-iostream/.libs/libssl_iostream.a,$(LD_NO_WHOLE_ARCHIVE)
++ endif
 + 
-+ #if OPENSSL_VERSION_NUMBER >= 0x10000000L
-+diff --git a/lib/rsa/rsa-sign.c b/lib/rsa/rsa-sign.c
-+index 0e38c9e802f..f456f3c58e6 100644
-+--- a/lib/rsa/rsa-sign.c
-++++ b/lib/rsa/rsa-sign.c
-+@@ -19,7 +19,47 @@
-+ #include <openssl/err.h>
-+ #include <openssl/ssl.h>
-+ #include <openssl/evp.h>
-+-#include <openssl/engine.h>
-++#if OPENSSL_VERSION_MAJOR >= 3
-++# define USE_PKCS11_PROVIDER
-++# include <err.h>
-++# include <openssl/provider.h>
-++# include <openssl/store.h>
-++#else
-++# if !defined(OPENSSL_NO_ENGINE) && !defined(OPENSSL_NO_DEPRECATED_3_0)
-++#  define USE_PKCS11_ENGINE
-++#  include <openssl/engine.h>
-++# endif
-++#endif
-++
-++#ifdef USE_PKCS11_PROVIDER
-++#define ERR(cond, fmt, ...)				\
-++	do {						\
-++		bool __cond = (cond);			\
-++		drain_openssl_errors(__LINE__, 0);	\
-++		if (__cond) {				\
-++			errx(1, fmt, ## __VA_ARGS__);	\
-++		}					\
-++	} while (0)
-++
-++static void drain_openssl_errors(int l, int silent)
-++{
-++	const char *file;
-++	char buf[120];
-++	int e, line;
-++
-++	if (ERR_peek_error() == 0)
-++		return;
-++	if (!silent)
-++		fprintf(stderr, "At main.c:%d:\n", l);
-++
-++	while ((e = ERR_peek_error_line(&file, &line))) {
-++		ERR_error_string(e, buf);
-++		if (!silent)
-++			fprintf(stderr, "- SSL %s: %s:%d\n", buf, file, line);
-++		ERR_get_error();
-++	}
-++}
-++#endif
-+ 
-+ static int rsa_err(const char *msg)
-+ {
-+@@ -94,10 +134,11 @@ err_cert:
-+  *
-+  * @keydir:	Key prefix
-+  * @name	Name of key
-+- * @engine	Engine to use
-++ * @engine	Engine to use or NULL when using pkcs11 provider
-+  * @evpp	Returns EVP_PKEY object, or NULL on failure
-+  * Return: 0 if ok, -ve on error (in which case *evpp will be set to NULL)
-+  */
-++#ifdef USE_PKCS11_ENGINE
-+ static int rsa_engine_get_pub_key(const char *keydir, const char *name,
-+ 				  ENGINE *engine, EVP_PKEY **evpp)
-+ {
-+@@ -157,21 +198,24 @@ static int rsa_engine_get_pub_key(const char *keydir, const char *name,
-+ 
-+ 	return 0;
-+ }
-++#endif
-+ 
-+ /**
-+  * rsa_get_pub_key() - read a public key
-+  *
-+  * @keydir:	Directory containing the key (PEM file) or key prefix (engine)
-+  * @name	Name of key file (will have a .crt extension)
-+- * @engine	Engine to use
-++ * @engine	Engine to use or NULL when using pkcs11 provider
-+  * @evpp	Returns EVP_PKEY object, or NULL on failure
-+  * Return: 0 if ok, -ve on error (in which case *evpp will be set to NULL)
-+  */
-+ static int rsa_get_pub_key(const char *keydir, const char *name,
-+ 			   ENGINE *engine, EVP_PKEY **evpp)
-+ {
-++#ifdef USE_PKCS11_ENGINE
-+ 	if (engine)
-+ 		return rsa_engine_get_pub_key(keydir, name, engine, evpp);
-++#endif
-+ 	return rsa_pem_get_pub_key(keydir, name, evpp);
-+ }
-+ 
-+@@ -207,13 +251,44 @@ static int rsa_pem_get_priv_key(const char *keydir, const char *name,
-+ 		return -ENOENT;
-+ 	}
-+ 
-++#ifdef USE_PKCS11_PROVIDER
-++	EVP_PKEY *private_key = NULL;
-++	OSSL_STORE_CTX *store;
-++
-++	if (!OSSL_PROVIDER_try_load(NULL, "pkcs11", true))
-++		ERR(1, "OSSL_PROVIDER_try_load(pkcs11)");
-++	if (!OSSL_PROVIDER_try_load(NULL, "default", true))
-++		ERR(1, "OSSL_PROVIDER_try_load(default)");
-++
-++	store = OSSL_STORE_open(path, NULL, NULL, NULL, NULL);
-++	ERR(!store, "OSSL_STORE_open");
-++
-++	while (!OSSL_STORE_eof(store)) {
-++		OSSL_STORE_INFO *info = OSSL_STORE_load(store);
-++
-++		if (!info) {
-++			drain_openssl_errors(__LINE__, 0);
-++			continue;
-++		}
-++		if (OSSL_STORE_INFO_get_type(info) == OSSL_STORE_INFO_PKEY) {
-++			private_key = OSSL_STORE_INFO_get1_PKEY(info);
-++			ERR(!private_key, "OSSL_STORE_INFO_get1_PKEY");
-++		}
-++		OSSL_STORE_INFO_free(info);
-++		if (private_key)
-++			break;
-++	}
-++	OSSL_STORE_close(store);
-++
-++	*evpp = private_key;
-++#else
-+ 	if (!PEM_read_PrivateKey(f, evpp, NULL, path)) {
-+ 		rsa_err("Failure reading private key");
-+ 		fclose(f);
-+ 		return -EPROTO;
-+ 	}
-+ 	fclose(f);
-+-
-++#endif
-+ 	return 0;
-+ }
-+ 
-+@@ -226,6 +301,7 @@ static int rsa_pem_get_priv_key(const char *keydir, const char *name,
-+  * @evpp	Returns EVP_PKEY object, or NULL on failure
-+  * Return: 0 if ok, -ve on error (in which case *evpp will be set to NULL)
-+  */
-++#ifdef USE_PKCS11_ENGINE
-+ static int rsa_engine_get_priv_key(const char *keydir, const char *name,
-+ 				   const char *keyfile,
-+ 				   ENGINE *engine, EVP_PKEY **evpp)
-+@@ -293,22 +369,25 @@ static int rsa_engine_get_priv_key(const char *keydir, const char *name,
-+ 
-+ 	return 0;
-+ }
-++#endif
-+ 
-+ /**
-+  * rsa_get_priv_key() - read a private key
-+  *
-+  * @keydir:	Directory containing the key (PEM file) or key prefix (engine)
-+  * @name	Name of key
-+- * @engine	Engine to use for signing
-++ * @engine	Engine to use or NULL when using pkcs11 provider
-+  * @evpp	Returns EVP_PKEY object, or NULL on failure
-+  * Return: 0 if ok, -ve on error (in which case *evpp will be set to NULL)
-+  */
-+ static int rsa_get_priv_key(const char *keydir, const char *name,
-+ 			    const char *keyfile, ENGINE *engine, EVP_PKEY **evpp)
-+ {
-++#ifdef USE_PKCS11_ENGINE
-+ 	if (engine)
-+ 		return rsa_engine_get_priv_key(keydir, name, keyfile, engine,
-+ 					       evpp);
-++#endif
-+ 	return rsa_pem_get_priv_key(keydir, name, keyfile, evpp);
-+ }
-+ 
-+@@ -325,6 +404,7 @@ static int rsa_init(void)
-+ 	return 0;
-+ }
-+ 
-++#ifdef USE_PKCS11_ENGINE
-+ static int rsa_engine_init(const char *engine_id, ENGINE **pe)
-+ {
-+ 	const char *key_pass;
-+@@ -380,6 +460,7 @@ static void rsa_engine_remove(ENGINE *e)
-+ 		ENGINE_free(e);
-+ 	}
-+ }
-++#endif
-+ 
-+ static int rsa_sign_with_key(EVP_PKEY *pkey, struct padding_algo *padding_algo,
-+ 			     struct checksum_algo *checksum_algo,
-+@@ -480,11 +561,13 @@ int rsa_sign(struct image_sign_info *info,
-+ 	if (ret)
-+ 		return ret;
-+ 
-++#ifdef USE_PKCS11_ENGINE
-+ 	if (info->engine_id) {
-+ 		ret = rsa_engine_init(info->engine_id, &e);
-+ 		if (ret)
-+ 			return ret;
-+ 	}
-++#endif
-+ 
-+ 	ret = rsa_get_priv_key(info->keydir, info->keyname, info->keyfile,
-+ 			       e, &pkey);
-+@@ -496,16 +579,21 @@ int rsa_sign(struct image_sign_info *info,
-+ 		goto err_sign;
-+ 
-+ 	EVP_PKEY_free(pkey);
-++
-++#ifdef USE_PKCS11_ENGINE
-+ 	if (info->engine_id)
-+ 		rsa_engine_remove(e);
-++#endif
-+ 
-+ 	return ret;
-+ 
-+ err_sign:
-+ 	EVP_PKEY_free(pkey);
-+ err_priv:
-++#ifdef USE_PKCS11_ENGINE
-+ 	if (info->engine_id)
-+ 		rsa_engine_remove(e);
-++#endif
-+ 	return ret;
-+ }
-+ 
-+@@ -645,11 +733,13 @@ int rsa_add_verify_data(struct image_sign_info *info, void *keydest)
-+ 	ENGINE *e = NULL;
-+ 
-+ 	debug("%s: Getting verification data\n", __func__);
-++#ifdef USE_PKCS11_ENGINE
-+ 	if (info->engine_id) {
-+ 		ret = rsa_engine_init(info->engine_id, &e);
-+ 		if (ret)
-+ 			return ret;
-+ 	}
-++#endif
-+ 	ret = rsa_get_pub_key(info->keydir, info->keyname, e, &pkey);
-+ 	if (ret)
-+ 		goto err_get_pub_key;
-+@@ -726,8 +816,10 @@ done:
-+ err_get_params:
-+ 	EVP_PKEY_free(pkey);
-+ err_get_pub_key:
-++#ifdef USE_PKCS11_ENGINE
-+ 	if (info->engine_id)
-+ 		rsa_engine_remove(e);
-++#endif
-+ 
-+ 	if (ret)
-+ 		return ret;
++ test_var_expand_crypt_CFLAGS = $(AM_CFLAGS) \
 +-- 
 +2.47.3
 +
+diff --git a/package/dovecot/0001-auth-Fix-handling-passdbs-with-identical-driver-args.patch b/package/dovecot/0001-auth-Fix-handling-passdbs-with-identical-driver-args.patch
+deleted file mode 100644
+index 99a2b83563..0000000000
+--- a/package/dovecot/0001-auth-Fix-handling-passdbs-with-identical-driver-args.patch
++++ /dev/null
+@@ -1,137 +0,0 @@
+-From 7bad6a24160e34bce8f10e73dbbf9e5fbbcd1904 Mon Sep 17 00:00:00 2001
+-From: Timo Sirainen <timo.sirainen@open-xchange.com>
+-Date: Mon, 9 May 2022 15:23:33 +0300
+-Subject: [PATCH] auth: Fix handling passdbs with identical driver/args but
+- different mechanisms/username_filter
+-
+-The passdb was wrongly deduplicated in this situation, causing wrong
+-mechanisms or username_filter setting to be used. This would be a rather
+-unlikely configuration though.
+-
+-Fixed by moving mechanisms and username_filter from struct passdb_module
+-to struct auth_passdb, which is where they should have been in the first
+-place.
+-
+-CVE: CVE-2022-30550
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- src/auth/auth-request.c |  6 +++---
+- src/auth/auth.c         | 18 ++++++++++++++++++
+- src/auth/auth.h         |  5 +++++
+- src/auth/passdb.c       | 15 ++-------------
+- src/auth/passdb.h       |  4 ----
+- 5 files changed, 28 insertions(+), 20 deletions(-)
+-
+-diff --git a/src/auth/auth-request.c b/src/auth/auth-request.c
+-index cd08b1fa02..0ca29f3674 100644
+---- a/src/auth/auth-request.c
+-+++ b/src/auth/auth-request.c
+-@@ -534,8 +534,8 @@ auth_request_want_skip_passdb(struct auth_request *request,
+- 			      struct auth_passdb *passdb)
+- {
+- 	/* if mechanism is not supported, skip */
+--	const char *const *mechs = passdb->passdb->mechanisms;
+--	const char *const *username_filter = passdb->passdb->username_filter;
+-+	const char *const *mechs = passdb->mechanisms;
+-+	const char *const *username_filter = passdb->username_filter;
+- 	const char *username;
+- 
+- 	username = request->fields.user;
+-@@ -548,7 +548,7 @@ auth_request_want_skip_passdb(struct auth_request *request,
+- 		return TRUE;
+- 	}
+- 
+--	if (passdb->passdb->username_filter != NULL &&
+-+	if (passdb->username_filter != NULL &&
+- 	    !auth_request_username_accepted(username_filter, username)) {
+- 		auth_request_log_debug(request,
+- 				       request->mech != NULL ? AUTH_SUBSYS_MECH
+-diff --git a/src/auth/auth.c b/src/auth/auth.c
+-index f2f3fda20c..9f6c4ba60c 100644
+---- a/src/auth/auth.c
+-+++ b/src/auth/auth.c
+-@@ -99,6 +99,24 @@ auth_passdb_preinit(struct auth *auth, const struct auth_passdb_settings *set,
+- 	auth_passdb->override_fields_tmpl =
+- 		passdb_template_build(auth->pool, set->override_fields);
+- 
+-+	if (*set->mechanisms == '\0') {
+-+		auth_passdb->mechanisms = NULL;
+-+	} else if (strcasecmp(set->mechanisms, "none") == 0) {
+-+		auth_passdb->mechanisms = (const char *const[]){ NULL };
+-+	} else {
+-+		auth_passdb->mechanisms =
+-+			(const char *const *)p_strsplit_spaces(auth->pool,
+-+				set->mechanisms, " ,");
+-+	}
+-+
+-+	if (*set->username_filter == '\0') {
+-+		auth_passdb->username_filter = NULL;
+-+	} else {
+-+		auth_passdb->username_filter =
+-+			(const char *const *)p_strsplit_spaces(auth->pool,
+-+				set->username_filter, " ,");
+-+	}
+-+
+- 	/* for backwards compatibility: */
+- 	if (set->pass)
+- 		auth_passdb->result_success = AUTH_DB_RULE_CONTINUE;
+-diff --git a/src/auth/auth.h b/src/auth/auth.h
+-index f700e29d5c..460a179765 100644
+---- a/src/auth/auth.h
+-+++ b/src/auth/auth.h
+-@@ -41,6 +41,11 @@ struct auth_passdb {
+- 	struct passdb_template *default_fields_tmpl;
+- 	struct passdb_template *override_fields_tmpl;
+- 
+-+	/* Supported authentication mechanisms, NULL is all, {NULL} is none */
+-+	const char *const *mechanisms;
+-+	/* Username filter, NULL is no filter */
+-+	const char *const *username_filter;
+-+
+- 	enum auth_passdb_skip skip;
+- 	enum auth_db_rule result_success;
+- 	enum auth_db_rule result_failure;
+-diff --git a/src/auth/passdb.c b/src/auth/passdb.c
+-index eb4ac8ae82..f5eed1af4f 100644
+---- a/src/auth/passdb.c
+-+++ b/src/auth/passdb.c
+-@@ -224,19 +224,8 @@ passdb_preinit(pool_t pool, const struct auth_passdb_settings *set)
+- 	passdb->id = ++auth_passdb_id;
+- 	passdb->iface = *iface;
+- 	passdb->args = p_strdup(pool, set->args);
+--	if (*set->mechanisms == '\0') {
+--		passdb->mechanisms = NULL;
+--	} else if (strcasecmp(set->mechanisms, "none") == 0) {
+--		passdb->mechanisms = (const char *const[]){NULL};
+--	} else {
+--		passdb->mechanisms = (const char* const*)p_strsplit_spaces(pool, set->mechanisms, " ,");
+--	}
+--
+--	if (*set->username_filter == '\0') {
+--		passdb->username_filter = NULL;
+--	} else {
+--		passdb->username_filter = (const char* const*)p_strsplit_spaces(pool, set->username_filter, " ,");
+--	}
+-+	/* NOTE: if anything else than driver & args are added here,
+-+	   passdb_find() also needs to be updated. */
+- 	array_push_back(&passdb_modules, &passdb);
+- 	return passdb;
+- }
+-diff --git a/src/auth/passdb.h b/src/auth/passdb.h
+-index 2e95328e5c..e466a9fdb6 100644
+---- a/src/auth/passdb.h
+-+++ b/src/auth/passdb.h
+-@@ -63,10 +63,6 @@ struct passdb_module {
+- 	/* Default password scheme for this module.
+- 	   If default_cache_key is set, must not be NULL. */
+- 	const char *default_pass_scheme;
+--	/* Supported authentication mechanisms, NULL is all, [NULL] is none*/
+--	const char *const *mechanisms;
+--	/* Username filter, NULL is no filter */
+--	const char *const *username_filter;
+- 
+- 	/* If blocking is set to TRUE, use child processes to access
+- 	   this passdb. */
+--- 
+-2.30.2
+-
+diff --git a/package/dovecot/0002-configure-Explicitly-check-for-icu-uc.patch b/package/dovecot/0002-configure-Explicitly-check-for-icu-uc.patch
+deleted file mode 100644
+index ea9aecebde..0000000000
+--- a/package/dovecot/0002-configure-Explicitly-check-for-icu-uc.patch
++++ /dev/null
+@@ -1,28 +0,0 @@
+-From 1ccd5b54a408d12fce0c94ab0bbaedbb5ef69830 Mon Sep 17 00:00:00 2001
+-From: fundawang <fundawang@yeah.net>
+-Date: Sun, 27 Oct 2024 22:11:21 +0800
+-Subject: [PATCH] configure: Explicitly check for icu-uc
+-
+-Ensure we link against libicu-uc when it's split in v76.
+-
+-Upstream: https://github.com/dovecot/core/commit/1ccd5b54a408d12fce0c94ab0bbaedbb5ef69830
+-
+-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+-[Bernd: backported to version 2.3.21.1]
+----
+- m4/want_icu.m4 | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/m4/want_icu.m4 b/m4/want_icu.m4
+-index b656ef9f479..405a73b361f 100644
+---- a/m4/want_icu.m4
+-+++ b/m4/want_icu.m4
+-@@ -1,7 +1,7 @@
+- AC_DEFUN([DOVECOT_WANT_ICU], [
+-   if test "$want_icu" != "no"; then
+-     if test "$PKG_CONFIG" != "" && $PKG_CONFIG --exists icu-i18n 2>/dev/null; then
+--      PKG_CHECK_MODULES(LIBICU, icu-i18n)
+-+      PKG_CHECK_MODULES(LIBICU, icu-i18n icu-uc)
+-       have_icu=yes
+-       AC_DEFINE(HAVE_LIBICU,, [Define if you want ICU normalization support for FTS])
+-     elif test "$want_icu" = "yes"; then
+diff --git a/package/dovecot/Config.in b/package/dovecot/Config.in
+index e109ce6be8..6753160c27 100644
+--- a/package/dovecot/Config.in
++++ b/package/dovecot/Config.in
+@@ -2,8 +2,10 @@ config BR2_PACKAGE_DOVECOT
+ 	bool "dovecot"
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_USE_MMU # fork()
++	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	select BR2_PACKAGE_LIBOPENSSL_ENGINES if BR2_PACKAGE_LIBOPENSSL
+ 	select BR2_PACKAGE_LIBXCRYPT if BR2_TOOLCHAIN_USES_GLIBC
++	select BR2_PACKAGE_PCRE2_32 if BR2_PACKAGE_PCRE2
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_ZLIB
+ 	help
+@@ -32,6 +34,24 @@ comment "mysql support needs a toolchain w/ C++, threads, wchar"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
+ 		!BR2_USE_WCHAR
+ 
++config BR2_PACKAGE_DOVECOT_POSTGRESQL
++	bool "postgresql support"
++	depends on !BR2_sparc # postgresql
++	depends on BR2_USE_WCHAR # postgresql
++	depends on BR2_ENABLE_LOCALE # postgresql
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # postgresql
++	depends on !BR2_OPTIMIZE_FAST # postgresql
++	select BR2_PACKAGE_POSTGRESQL
++	help
++	  Enable PostgreSQL support.
++
++comment "postgresql needs a toolchain w/ wchar, NPTL, locale"
++	depends on !BR2_sparc
++	depends on !BR2_USE_WCHAR
++	depends on !BR2_ENABLE_LOCALE
++	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
++	depends on BR2_OPTIMIZE_FAST
++
+ config BR2_PACKAGE_DOVECOT_SQLITE
+ 	bool "sqlite support"
+ 	select BR2_PACKAGE_SQLITE
+diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
+index fde96f32a5..f29eccb319 100644
+--- a/package/dovecot/dovecot.hash
++++ b/package/dovecot/dovecot.hash
+@@ -1,5 +1,5 @@
+ # Locally computed after checking signature
+-sha256  2d90a178c4297611088bf7daae5492a3bc3d5ab6328c3a032eb425d2c249097e  dovecot-2.3.21.1.tar.gz
+-sha256  319a9830aab406109cd67cb45496587566a8123203d66d037b209ca3e13de02a  COPYING
++sha256  868c2686a61b5f8e00a3e4721789b1ab46e6528fd773a5fbed07a6ecba7731e6  dovecot-2.4.5.tar.gz
++sha256  4825bf42bebc624c4ce283bd6147daa1aa2c874a12af6f7fb7b07a2c793cc131  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
+ sha256  52b8c95fabb19575281874b661ef7968ea47e8f5d74ba0dd40ce512e52b3fc97  COPYING.MIT
+diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
+index a4c799221c..74cacc3200 100644
+--- a/package/dovecot/dovecot.mk
++++ b/package/dovecot/dovecot.mk
+@@ -4,14 +4,16 @@
+ #
+ ################################################################################
+ 
+-DOVECOT_VERSION_MAJOR = 2.3
+-DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).21.1
++DOVECOT_VERSION_MAJOR = 2.4
++DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).5
+ DOVECOT_SITE = https://dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
+ DOVECOT_INSTALL_STAGING = YES
+ DOVECOT_LICENSE = LGPL-2.1, MIT, Public Domain, BSD-3-Clause, Unicode-DFS-2015
+ DOVECOT_LICENSE_FILES = COPYING COPYING.LGPL COPYING.MIT
+ DOVECOT_CPE_ID_VENDOR = dovecot
+ DOVECOT_SELINUX_MODULES = dovecot
++
++# 0001-Revert-lib-var-expand-crypt-Link-test-binary-statica.patch
+ DOVECOT_AUTORECONF = YES
+ 
+ # add host-gettext for AM_ICONV macro needed for autoreconf
+@@ -19,30 +21,22 @@ DOVECOT_DEPENDENCIES = \
+ 	host-gettext \
+ 	host-pkgconf \
+ 	$(if $(BR2_PACKAGE_LIBICONV),libiconv) \
+-	openssl
+-
+-# 0001-auth-Fix-handling-passdbs-with-identical-driver-args.patch
+-# Note: this ignore CVE entry is reported as stale by pkg-stats, but
+-# the NVD database is incorrect:
+-# https://lore.kernel.org/buildroot/20250517181815.02ce0393@windsurf/
+-DOVECOT_IGNORE_CVES += CVE-2022-30550
++	openssl \
++	zlib
+ 
+ DOVECOT_CONF_ENV = \
+-	RPCGEN=__disable_RPCGEN_rquota \
++	RPCGEN=false \
+ 	i_cv_epoll_works=yes \
+-	i_cv_inotify_works=yes \
++	i_cv_gssapi_spnego=yes \
+ 	i_cv_posix_fallocate_works=no \
+-	i_cv_signed_size_t=no \
+ 	i_cv_gmtime_max_time_t=32 \
+-	i_cv_signed_time_t=yes \
+ 	i_cv_mmap_plays_with_write=yes \
+ 	i_cv_fd_passing=yes \
+-	i_cv_c99_vsnprintf=yes \
+ 	lib_cv_va_copy=yes \
+ 	lib_cv___va_copy=yes \
+ 	lib_cv_va_val_copy=yes
+ 
+-DOVECOT_CONF_OPTS = --without-docs --with-ssl=openssl
++DOVECOT_CONF_OPTS = --without-docs
+ 
+ ifeq ($(BR2_PACKAGE_DOVECOT_MYSQL)$(BR2_PACKAGE_DOVECOT_SQLITE),)
+ DOVECOT_CONF_OPTS += --without-sql
+@@ -69,6 +63,14 @@ else
+ DOVECOT_CONF_OPTS += --without-libcap
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBKRB5),y)
++DOVECOT_CONF_ENV += KRB5CONFIG="$(STAGING_DIR)/usr/bin/krb5-config"
++DOVECOT_CONF_OPTS += --with-gssapi=yes
++DOVECOT_DEPENDENCIES += libkrb5
++else
++DOVECOT_CONF_OPTS += --without-gssapi
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBSODIUM),y)
+ DOVECOT_CONF_OPTS += --with-sodium
+ DOVECOT_DEPENDENCIES += libsodium
+@@ -87,6 +89,20 @@ else
+ DOVECOT_CONF_OPTS += --without-pam
+ endif
+ 
++ifeq ($(BR2_PACKAGE_OPENLDAP),y)
++DOVECOT_CONF_OPTS += --with-ldap=yes
++DOVECOT_DEPENDENCIES += openldap
++else
++DOVECOT_CONF_OPTS += --without-ldap
++endif
++
++ifeq ($(BR2_PACKAGE_PCRE2),y)
++DOVECOT_CONF_OPTS += --with-pcre2
++DOVECOT_DEPENDENCIES += pcre2
++else
++DOVECOT_CONF_OPTS += --without-pcre2
++endif
++
+ ifeq ($(BR2_PACKAGE_DOVECOT_MYSQL),y)
+ DOVECOT_CONF_ENV += MYSQL_CONFIG="$(STAGING_DIR)/usr/bin/mysql_config"
+ DOVECOT_CONF_OPTS += --with-mysql
+@@ -95,6 +111,13 @@ else
+ DOVECOT_CONF_OPTS += --without-mysql
+ endif
+ 
++ifeq ($(BR2_PACKAGE_DOVECOT_POSTGRESQL),y)
++DOVECOT_CONF_OPTS += --with-pgsql
++DOVECOT_DEPENDENCIES += postgresql
++else
++DOVECOT_CONF_OPTS += --without-pgsql
++endif
++
+ ifeq ($(BR2_PACKAGE_DOVECOT_SQLITE),y)
+ DOVECOT_CONF_OPTS += --with-sqlite
+ DOVECOT_DEPENDENCIES += sqlite
+@@ -109,18 +132,11 @@ else
+ DOVECOT_CONF_OPTS += --without-lz4
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_XZ),y)
+-DOVECOT_CONF_OPTS += --with-lzma
+-DOVECOT_DEPENDENCIES += xz
+-else
+-DOVECOT_CONF_OPTS += --without-lzma
+-endif
+-
+-ifeq ($(BR2_PACKAGE_ZLIB),y)
+-DOVECOT_CONF_OPTS += --with-zlib
+-DOVECOT_DEPENDENCIES += zlib
++ifeq ($(BR2_PACKAGE_ZSTD),y)
++DOVECOT_CONF_OPTS += --with-zstd
++DOVECOT_DEPENDENCIES += zstd
+ else
+-DOVECOT_CONF_OPTS += --without-zlib
++DOVECOT_CONF_OPTS += --without-zstd
+ endif
+ 
+ # fix paths to avoid using /usr/lib/dovecot
 -- 
 2.47.3
 
