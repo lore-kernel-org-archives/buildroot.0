@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF264C982DA
-	for <buildroot@archiver.kernel.org>; Sat, 19 Sep 2026 10:30:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0CAFCC982D7
+	for <buildroot@archiver.kernel.org>; Sat, 19 Sep 2026 10:30:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7E60460687;
-	Sat, 19 Sep 2026 10:30:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 78129811E2;
+	Sat, 19 Sep 2026 10:30:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Q71d6GKA-Zw8; Sat, 19 Sep 2026 10:30:03 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 80FEA60686
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=3; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789813803;
-	b=rWEiUR4L90W2v1LcHiDZ1pau4YbLF5MAsUbVod950eK3xlqvlpzYzEwHheJAyFV10ZIr
-	 qlqI4VI7Yn1LNb9bZCWSVuxdlAAJ0r8g1zLHuXdWzFLZC7UTDRTPfsrNAYyfNOppcY9rt
-	 s4VjDoJIlB03sNNsjGrAfyTQmc9W5yKTfkk0RkqJ8+M3hPV+jAwQkBOeYyo1RIA+DwAM4
-	 5cRa9q1H6HOHPUqq1OrRwDrrt6Bf/Ru2nX3sVCJap4XaHKmpOg4F+0FlHE1tggxuR47Dm
-	 1RkYzAce8WxPjaGo0GxgqXNDyJrKJctWvTbG2BM2n47bebF3qBwLiHnGZTRwiZWcBxw==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YYOBoo8gAdXV; Sat, 19 Sep 2026 10:30:05 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org EA5F681215
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=3; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789813805;
+	b=bKl3egIN3+NKjJ4LPKoDJ1somDx5Xta7BRBLuU9ExcfKhKBXCqktp62FRk+fRpJCEETi
+	 CmtSvsxL6Hksf+gpf42dqd/YhUnl3kH4n0RABdWtLFTsemuCrrOiS1D13iXmJsf9QIIlP
+	 ieVq+99xL3SVZAjgfY0qJYhxtHnZ83myocXF27bR3vhcCLB9x5PiAWse6frXz7mnzrdP1
+	 i5SDf5/I9WPHXpuqAeY/UBqtbWTcQLOLeWOHNHyvBQcFbnZxxUlzeFRpJu7vxkY6DV/QB
+	 U8UTiJJGgJLdDuELJ2bJnNpur84AjkeWCUHJkDLOQRClWK9gcO0xppe1mPSOahH2rRQ==
 ARC-Message-Signature: i=3; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789813803;
+	c=relaxed/relaxed; t=1789813805;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
@@ -45,49 +45,51 @@ ARC-Message-Signature: i=3; d=osuosl.org; s=arc; a=rsa-sha256;
 	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=vaYigNalomhahfF8f4TD5563MC/UAmhPg14NRB44fY4=;
-	b=hAIVSCy+ULSdINxxKjRLM8d5FbZOfu+lLG8W7xKRvLjOjHZZOaazgbmYfpsth0Ic7LES
-	 Dap2dFT1rbtGeSpOpp9ym0iHX1uKRKg+MTMBnitQJQVqYHqbCVlCYq1OFJk0XhbnokHbp
-	 Yw+RrTXzpdBXqUMAivPGSZm0a5gYxM8NDeYjHTQSn4as+6I6P3hg+IbRnSksWzBF9P9Wy
-	 vtejuw433JmFCEUnPidiaw+f8Vicbl/rS9108T28JCDwnse+buZbDZskXVPCNR6TRRqQa
-	 NLjn8T5jpBomQjXyzQcWqN1XE2/ZIQVaSkILxq46fWRwfhABP9Vy7Y3hHhZ37VIMB5w==
-ARC-Authentication-Results: i=3; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	bh=j2z9FTw2SOV/M3PsGjYLwDjYWebP3jfP7SWgKTejCFU=;
+	b=gtlp7cuYg4YSla4SD7Iq/MQs0/eFP9vXr2I6AixmlIwucwn1XtRW9f3fesoQu+eXnIRY
+	 jB7BSXZLJaqSYXQlBNeZfxw/CImaYfkNvkbVmWjW8IPAxY33aD0gUrBSvGAQqiAZOSHWL
+	 YUPORyWz5xvVzV8otLDntLV+EeBhvGA5FOOkobNcNZM3OBnr435a8eCRMZ/PtMJlwTfXL
+	 YAFFaRDpepPyb53MLOrGr6BSyBuMlXHQysUR9HreLCH4ABcYBK0bfOWka4Q1tkk3oHTF9
+	 xGKLT2NoNNz9gFamXCxzQfst8l+Z4dmEkyF+K7YW69xxcXfYGEBywJE/8shqdgkbHbg==
+ARC-Authentication-Results: i=3; smtp1.osuosl.org; dmarc=pass header.from=outlook.com;
+	dkim=pass header.d=outlook.com header.i=@outlook.com header.a=rsa-sha256 header.s=selector1 header.b=sUhKFR4S;
+	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789813803;
-	bh=vaYigNalomhahfF8f4TD5563MC/UAmhPg14NRB44fY4=;
+	s=default; t=1789813805;
+	bh=j2z9FTw2SOV/M3PsGjYLwDjYWebP3jfP7SWgKTejCFU=;
 	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=Px/DgQJnqA8jFpXP+Dh0Wb9REI1AK5UJuGF1HrRaGvxn07o971EFRiHAZBqZw7YcY
-	 u3/NHlJMVFsG593V7PB5//XN9WbZRrcuImpb5l2evYJ3Q8rspSbhQTPQDhY89BtkTV
-	 BBBnqRpM6uHv1Stfisr4dixJeO1yD9enafxpswwQBakmJbyUXOdVWikkpBi3EcpbP8
-	 iM9f+FSzAmWjSiv6VHA34LwmzqHGEZGvfdX9OGW+79XJGx8tl7anzI3yUg5c8BFiaq
-	 mxCIefXa7M9MKNbjIlv1ch6ijfeDMjE7tHvOAmqCOC2fZ8lVG7j2ijRD3D72VqNBxW
-	 r5Xcp64+mFVaA==
+	b=ZMmZkjPUjTzJn3e7VNmPG9dbQcJfPi1OlhTtM60CWEdG5ZpZGiKdfiLUDdTyjtP7Z
+	 9yaJf40w1a9IkBIhADY3pVWt67WsDAY04xHfTKS5fMRzgYg9Y9BfrXYNgQ8JcUyTA9
+	 SJ62cL93MGL4fuNi/ZdVOZqRJquMg7oKXATHKK/r/9UKHMID4Y2efEsZXej6yxcn9O
+	 Onm0qZS+w7bpzwSqjaFPdrFBJkqx+DSUARo0ePGKeyzpjnW48HTDepFgyEp4U1COA7
+	 uxVprxeyIK6NxB8rlW7CiG89O4teTa3Ux6I8MR7nHziBW34YXK3qvF7q5KsRF+Uh8V
+	 Bo/sPzTTnURtw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 80FEA60686;
-	Sat, 19 Sep 2026 10:30:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EA5F681215;
+	Sat, 19 Sep 2026 10:30:04 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id A2225422
- for <buildroot@buildroot.org>; Sat, 19 Sep 2026 10:29:59 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id DE5E9333
+ for <buildroot@buildroot.org>; Sat, 19 Sep 2026 10:30:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9BC85811E2
- for <buildroot@buildroot.org>; Sat, 19 Sep 2026 10:29:59 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C4463811EF
+ for <buildroot@buildroot.org>; Sat, 19 Sep 2026 10:30:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id l_uLeFa9kGXE for <buildroot@buildroot.org>;
+ id H073Ai5KoHhE for <buildroot@buildroot.org>;
  Sat, 19 Sep 2026 10:29:59 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 836288107D
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 5C787811D4
 Authentication-Results: smtp1.osuosl.org; arc=pass header.oldest-pass=0
  smtp.remote-ip="2a01:111:f403:d40d::"
 ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=pass; t=1789813799;
- b=CCqwHjSN/d6jREBJVSPDYmNiT+OjyxqDrggRRpDpe2mwmlHRK7Qmq6nFdxfU5FD7qWGN
- MI4wDoz8ezBquiHfdkPTB9SPuKWMxwiBLQNgK7HO+LtqSfYAYQ75vWi7Uv7kuyzH7RHft
- X0IJM6Vfrc7TmtMWF4clFrY5yLGM4mfTvMI/Cu5M14eFS2+Wc/exH+rgBe3LBXp2Bk5Pj
- ZYX7FSgZJg79TjIIzLYb++GFry3NV+4Mk21AhHoXMKHycLWmuQ8V7JQl+t12K+yx+CtME
- Uc11H+yKknXzrrPXhD9cOD1w2aMRb0QjwxiXkhzJFtHq8faEgNCv/QjpCyiWoylWkkg==
+ b=suxdI8oXRSOj0foNBY6AhWqfgs3wUwa/GncBbpAAYNGEphIv4D47PWZIwDy5xd8BoPGZ
+ LO2/jNEiK0K7DsDj+NXt2L00yynQRNlfD6AbnZL6zILwVm7zzoOBmbwvbqpMH4Zds2JYB
+ uz8zguFroc2qOL3oY8U1AcEi6Z5ks4bGBH66onEoMnOxxYjZdlE8UI3YlSiiR6t0uChfN
+ Co4sxqaDVximnZ4O/5ER55RqMGoszTO5GvFOyJsr758FtujeyOYcGR3VWBYvimJyRskTQ
+ /kgKtc0nkquBokn4FQ8vlAYESE49EcNfSbQcpN+Ev29sRBz4wA1DaP7QbPrBjEtKykw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1789813799;
  h=Received-SPF:DKIM-Signature:Received:Received:From:To:Cc:Subject:
@@ -107,16 +109,16 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
  X-MS-Exchange-CrossTenant-Id:
  X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
  X-MS-Exchange-Transport-CrossTenantHeadersStamped;
- bh=yTWqjN1NuqzWQ774e2pgfzxAFqZz8gf11iavc2xDGuI=;
- b=cY+V11EKtKU+1fY14zXasucSLxCdT4Y/LUcrIBTdEEbpVtslnLbRDYXoAKOMrliyJTLM
- Eoa6HiWR7lWXlU/PLIeBvZJGqFowkO+NefjBhEKQyt6sgeAn4rIy8Y57sFip0jsuiIGYg
- cvp7CP0NnpXAhDG0EF8qOy39ixoJh7HkF8GhvX3Hw/+xftOlimebwpqJ+t5qAoYsdF3hu
- BshBp70IWfu+NMaWRnQAZMRN1S/TIAyKXSGf89deSNI2+9dtBG7ou1Bq1WSpjGyeLWFsM
- Hzwg8LR4WBeoaYhQbAZCNciEnDHzJgq2+vzyDyWEl0RX8pBbh69CdSoMKvnW9RL1Hmg==
+ bh=KYa7ew/QKV7dIFHoj8/HfsDdmogkhQ9ljh2SYLg7HXU=;
+ b=sceV0G9vqSB5HEyzBamu/VpSqpgFfiI0Qa4GoaWux6xPswj9ZYZ6YY7VYsxgyTNPrWoM
+ 1OQ8TcWamkm/CjR60ujLuvsmsTlRfIehIJaV8XinBVKRZ0Cq+fVNFlUqnkNxNwhBrqS/5
+ 4l4z+V8midBk17CJ0Cya4BENC0NCHHNV3zuxlFemH6LRC6kiMI6/Zp+cX1Ft6QS3APSy3
+ 4y1EVlF1pvL1Qwf11PHsUQrD6H7ckvRnMt1rni1Zgg1IoPiG5+GXwD62GekfmvxTffasf
+ o3o6LsTs7RlwWzu57DCGCV/rcZe8Add6hmnko2hVxJxB+JEfEY9fcx18X80miUSZP8g==
 ARC-Authentication-Results: i=2; smtp1.osuosl.org;
  dmarc=pass header.from=outlook.com; 
  dkim=pass header.d=outlook.com header.i=@outlook.com header.a=rsa-sha256
- header.s=selector1 header.b=qNQorkOK; 
+ header.s=selector1 header.b=sUhKFR4S; 
  arc=pass header.oldest-pass=0 smtp.remote-ip="2a01:111:f403:d40d::"
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:111:f403:d40d::;
  helo=sy8pr01cu002.outbound.protection.outlook.com;
@@ -125,124 +127,126 @@ Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=outlook.com
 Authentication-Results: smtp1.osuosl.org; dkim=pass (2048-bit key,
  unprotected) header.d=outlook.com header.i=@outlook.com header.a=rsa-sha256
- header.s=selector1 header.b=qNQorkOK
+ header.s=selector1 header.b=sUhKFR4S
 Received: from SY8PR01CU002.outbound.protection.outlook.com
  (mail-australiaeastazolkn190100000.outbound.protection.outlook.com
  [IPv6:2a01:111:f403:d40d::])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 836288107D
- for <buildroot@buildroot.org>; Sat, 19 Sep 2026 10:29:58 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5C787811D4
+ for <buildroot@buildroot.org>; Sat, 19 Sep 2026 10:29:59 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=m5x4Y0dKMESLROydoDGp3GwjkWHnyijhrSxC00WENn4Bv8rB0LCcDLnkngPsHXX30FxTFNZib2JUYE4NOGb92SZas1dcCJLrx1ZxbezoZzhr2MSbZTckfW0lDCRSveLS24aF/mXM2AAx3obA48e7AYu2pOX2+qW2CaHUZGLkjbzCRy1VPZnT6leaRmNsen5SLdOLgtmgWZLWNoYlGIZZlArdEe2z7UnI+k9GYZAWGCDgGFyY34RHYJU/kn04HEIYHTAaqTOL+m3UJv/XzfNs5kWYW//dcUR8U57QhVyMHmYQbr3vF/WIY32yh5wJvD2htS00QsR5WbooQnGGOuVK4Q==
+ b=ebiBUgIBI0JZQSI/SVXvPXXyn4kaQM+33JkHKy3TfFTZmRIx0hXAwwhImcWRSqEEp1GV6X4JFB0ClNeRBD1dILucQ7+l/12nmf1Mgdq1e3wGCDEGIDhVo0V4S3b0CdL5dlODJPXXeOj4D7AowJcIVt40peiDri737MXEUbMowGThlVCsIQN7N0DkzJIjV6yUmtKsfT7POTyUxQGvw5Uas2fapnQzajIt7f5ZtqNebo0nHX2RpvPfPqMLFg6sWwBf2PVh6sr7dixxPpX6w24Di6QLn1FC+dB81/+2EX0tMHFvI3PpgAgGUYdJT65w4/y+7EPux/x1SsBwQJU6tQqP7g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=yTWqjN1NuqzWQ774e2pgfzxAFqZz8gf11iavc2xDGuI=;
- b=vtAMA3G1Z4yN0GgPIEdPLn8lFxqWvKlamoxOr75DtdhFivGczyjLR8Wt+uzw4Sbe3yVBPTl4AFDoBvTpbS95cRbN2JPTAIjJc+LUn696ryYPn5WFJD1bYShdIdZdPup/lBbQaqKUeLgj+CQDeDWu4/3jleANE1SPqMQwYqoZMCeKXv33B+Em7qFnfdl9Eo6V+V4HME4QH2P3hivord1jZBTwdC1Ybls9FJVXX31Jkf8RYX1cj+8v4Erngijf3ex/jsIkyJX9iZex74EcmlLsNyQAA1Sj5xCKfJS6YiLnG7MKmZLX68ptll7+URyt1D9+biRPMkOCc/1kkzkDH977UQ==
+ bh=KYa7ew/QKV7dIFHoj8/HfsDdmogkhQ9ljh2SYLg7HXU=;
+ b=FIE/kUvgWJbla4mi38//+idejG2NCfVWBfY16ogRdO1c9w3Qsuai6vpcLZTuXrcb+5ICYXfkLCrNZa9z7BjGQbgstMJ256ZGLzKim2WdUYEXHem30X3dWlFVUiZXCHsnLTKS9rxtk1HDsq2v9FnAAJxlcd/4717tvZScyZgAl4vprkb4bBN8/yzFi2vq25BS0g16VKhQ9+H7sOKoRaIHmk6xqmDvjfqHMlcbHrFQOFCAKAE1DkyI2QqHpEiOfDf98/WCHT/ZUe0IdKtF1Czb8MLeK04aTEXiWFsXxxKLiw/vdvvK7vDC43XaCe5prCUocfEDr08oY84GCO8yj+N36Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=yTWqjN1NuqzWQ774e2pgfzxAFqZz8gf11iavc2xDGuI=;
- b=qNQorkOK1FrZwH1f/Zg4jWacmHjElDswegPDbnrm7q3qEs7UMt1D77hTfgNYK9BRVXnKAuE/2+cANkSbERCA3dteAHI3LoDYPhV8dq3bwMWkMALCIM2wfGNFuNYfCVXLLYSHb1DQ1NvZt6wBBSsNL5Rkfe+9n8qifFFrBVkHHvctnY/f4bd8ZhKkVT0KLjsslNF0TRDX0NHyBI3AX7T7chuL19DRzCmNRVjZlA7FH8FkT05UMdGSjmgiAuj3XJ8OtK3/9APvI6yxdos5bq8gyeCC9nAs3PNkNRDe+qQMUl7TfamTSypmQ5XcM93KPydG6Ql44JgXYPbLqlqHRO1xwA==
+ bh=KYa7ew/QKV7dIFHoj8/HfsDdmogkhQ9ljh2SYLg7HXU=;
+ b=sUhKFR4SwmOLLc2IsuSveeu6rcouOOoxiSZrxCQqiewtAixlrxTfA3H7lAayRPkKBLQIJznTEdfusK3IYBoq8cf4ljTCK9/lx9HqFgFMxgU0DJ1FopEmoWazNAFyrCb58vmi4lBLOXB7Ig3gHHZaU2xnakj3u0/NbWHf4+k37/mJ1UbpL3QGqsSc1YoAxFrdc/TgV+ux9F2KjbScBKtgcYdk4pmQR2XMx220molv6KvvNh7s4EARFaI9uzu0sBXCz35asDqkLvcSrEsQ/7Us9qX2qozcGETRIWq4usMpJdi7CSKIFji1/9mjOhpTXiQ9blVngSOw0pjF3jNHUg5acQ==
 Received: from SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM (2603:10c6:10:261::8) by
  SY7P300MB1433.AUSP300.PROD.OUTLOOK.COM (2603:10c6:10:2c6::17) with
  Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.428.11; Sat, 19 Sep 2026 10:29:51 +0000
+ 15.21.428.11; Sat, 19 Sep 2026 10:29:53 +0000
 Received: from SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM
  ([fe80::338a:60df:663b:c222]) by SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM
  ([fe80::338a:60df:663b:c222%4]) with mapi id 15.21.0428.014; Sat, 19 Sep 2026
- 10:29:51 +0000
+ 10:29:53 +0000
 From: Fengwei Tan <tfx2001@outlook.com>
 To: buildroot@buildroot.org
 Cc: Francois Dugast <francois.dugast.foss@gmail.com>,
  Fengwei Tan <tfx2001@outlook.com>
-Date: Sat, 19 Sep 2026 18:29:02 +0800
-Message-ID: <SY8P300MB00415DCD2BD6282D5B23A6DFB5862@SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM>
+Date: Sat, 19 Sep 2026 18:29:03 +0800
+Message-ID: <SY8P300MB00417C98015AAC4D2A3E3289B5862@SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <SY8P300MB0041D841DA8295DC7F4B2510B5862@SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM>
 References: <SY8P300MB0041D841DA8295DC7F4B2510B5862@SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM>
 X-ClientProxiedBy: SI3PR03CA0006.apcprd03.prod.outlook.com
  (2603:1096:4:297::8) To SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM
  (2603:10c6:10:261::8)
-X-Microsoft-Original-Message-ID: <20260919-bump-visonfive2-v2-2-c6c5ffb1a452@outlook.com>
+X-Microsoft-Original-Message-ID: <20260919-bump-visonfive2-v2-3-c6c5ffb1a452@outlook.com>
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: SY8P300MB0041:EE_|SY7P300MB1433:EE_
-X-MS-Office365-Filtering-Correlation-Id: 24474016-2053-46a8-768b-08df1638f047
-X-MS-Exchange-SLBlob-MailProps: ScCmN3RHayHq8QFbWW6Ra03gxaeZK6u4JOg1srK/Hc+bnDbIyGGj2+bgQL1dIB086bzuDjhEPFn+/T4nkcMngmrE7uejkbbVNaQDoXeI8/3aBP++8jVLFyjcDeHgrD9DObUjJPZJlPzjmDpgbPUQPZog5vZlisffrIjAxvCRXBxXgAzyg7MLsqJWlcZPrPyDgQ+/b80pcIgFo/ACHA4QpKqqvzWnRAA+0/irST1x6uijgd+bfEChMA7U971Pn6dB3JrSBM/TOSgEprGx03prRPBcO7DBAseoUxasgkU4Vq4UTWUNzcg/gxinnUOaAEGzOcF8Yv+x+bWQMm0qyzNRSxsK0pyCThzfaGS0DwYhO1+jmqyxPF5tjDqEfhEdumzenXYkRmCvhRkRJ5dO3lUqMcRorwzOzC4/IO3GyghGcA8lFu7ItznBOlXgC1RpHlY+Cq5UDlRbrlz42xQIhSuWugmahTutjDcMe4V2sDEJ3OYpSLnOOtQUeoHIlBPB+9UDhQSpcduS7MTs5w/FL3BFToB5yWUMifj7WnApMwYtZoVNLQq/kPXJP//9KKYNm7G5m/s2w79g2ti4D/ZvH6xioafxj3pt+qRuyseVnVUTTGJcDlqo2/LrhYYtAXJsK+CxMLFdyCunJcIHWKmJnuyYwwpX9fsi75g7NrcgfWB4i4O6BM5fl314sKIv+MEsql6Ls7euuAujN5XPXNrRFdIdtNdZEe6REuc474GWpgnDqEc=
+X-MS-Office365-Filtering-Correlation-Id: 275726e3-76fd-43bd-c4b7-08df1638f16f
+X-MS-Exchange-SLBlob-MailProps: 0HFyhoHfXaQwDZMjTe2AY5W9TP9tSCo/uuBzNOWimclkRl45CLYZMummScwLKyId0bE61bfB1DWBRVaOQ9uTjUHiLO8j/oyrmQ1BvG/22+uc24guAjSCwCRsu/kYcA+lIIGQOPS6agWJsHoBna8hvepjkHABmwdxQ/VjsFjrec0M1Ec64u2n8+QuWCjvmbs7M09E+oRZ8tA2eS3RMS96DYJpsO+84L0aZ5vVdwnNIkmTUZXDjSZeGXbSTgymJkT8zxPW3aJ0cN7RhDzzaOmmv9/XK13SPxauR0nPT2l/7YQL/IPeC15lr5WOvrYnm39ulGSYLUsfN3r6/4ZzGqlCBdDJM2siiqwQ3Q6X//RkeUQIZjuxG8vwAc72GjtR7L6HBCj5QoRd3Ogyki2BfqOclJs4Fkn+PZkXSWaHh+VNnmy7HT88kEocwSHh8Ay2+tmP+EEJc1Mv9xmrZx2a+UWoyUNL2mmZ+cZrt1Mv4RGb0NQ6Rs4+CwThUQHZcLt42fB1vHE8mVyijYfAMh0V6BlTd+xpW37TpPg43OAzFpl8JVDmaNe8XnfFHgoFF+giPFdw461m33mPNInBG3VpoiGAt5uOJcZa8+TQwqHSO2ag/Xx/F/g9WmhSLKzU6B0OSz+a6mnZafRLhKYXPoP/3j7MeX89OtmbE6zFOObwXAFXQ0QAKAdkT8V0pK7CEl+KLZ1aZuu0ulPjTJhcogCu3H7isKNoH2ywhTnKlPss881RFbEoqN/wIuEfnmg/+HNCzRTUuK4KGYflo7TUGFLg6JkEDXpgZhft0A3TLMbnkxvYmixGvKa7AnwVfufh4oA9lYKdNrvD0nrbGj2nAr7Om68Hld8G6pl8j24icU3xdzkd6aR1tbtsmYPoyQygPhSTTqjsLvnZRCU1pXU=
 X-Microsoft-Antispam: BCL:0;
- ARA:14566002|24021099003|51005399006|15080799012|8060799015|23021999003|5072599009|6090799003|19110799012|25010399006|40105399003|12091999003|2607281247196008|440099028|3412199025|26104999009|1710799026;
-X-Microsoft-Antispam-Message-Info: =?utf-8?B?SWJldkYrSHhWTFpYaGVnTGdwY3VhaWltZEk2UUU2QXl4S3N4RnlPV1BLQS9M?=
- =?utf-8?B?NXpKVlBTWnZPUjZxL0RCUU5uUGUrbzg0RHJHU0NRTUsvRWo2ZHI3bFlCZXpo?=
- =?utf-8?B?OEVtU2hpUHVlK1NVL1JVMktGR0lWODIrb29OdnVUeHJhVkg0TXZXS2ZHWGZh?=
- =?utf-8?B?Ylo3THNkRjNuUU5OQVNZVzN6WHA0RHMrWTAvMURTU0hEd2xQUEdHQVdrcjlP?=
- =?utf-8?B?S0RFNXZsSm8xQVJYc3lxODNudGdobkFZY0cwaS93Yk5FR0tKZnNZdjdDTjE4?=
- =?utf-8?B?THArdHdlY1EzbGIvRlZ3cGd1a1NTU1hXSVJibm1ZRTRsRFJxTTBzR1B4NU5y?=
- =?utf-8?B?eTdpdEh3NnJmT25RMko2eWJ6NTB1ZFA5b0hzcVZTRmwzb0M5UlBCSGRjcTFC?=
- =?utf-8?B?RnkzcTBMVW5CRG51RDJnaytreUNpbitEbjY3WVJkZnZVNEhZbi9XUXVLNy93?=
- =?utf-8?B?ZVlhVG9nUCtwZ29tbE93T1VlNG54bDEzUjdIMlNudXYyRXNjMVN6VVNiSnFj?=
- =?utf-8?B?b2g5V3B1RnJKR2VEaU1sQnQ2Z1lZTThiWTJPZ2xCWTRQK3FCbXNMYjJEQkEr?=
- =?utf-8?B?V241QnVnNWMwb0dKeERHNklKQkpDbEZudFkwRFdmbW5GT2xpNG5VeUkrOFdN?=
- =?utf-8?B?bkpSNmhCdUdSbVF4eXIxdUFvMmFPQXJybUgreWVqK1cvUmcrT1BjRTBJNk9I?=
- =?utf-8?B?YkgrTVBhMXQrTWp2Z29aVG95TmowVU9OUENPak9qUmd2WkpxUG9TczlieUtD?=
- =?utf-8?B?cHpZUkJrMmVKK1BBR3pxT3gxa3U3SGpaZXZoT2JjNzlIYTE1ejdNV2h5WC9J?=
- =?utf-8?B?WXR5eUZYSVdVSlpMQzBtZUhsRlM3UkZXUWhacm9jZUNwelpWczArcDg3N3pr?=
- =?utf-8?B?eWRWcklwR204QWdxSDVoZHFYTXdxN1YvVzE4eGJheWh2UDQ3RlpZS25YQzZK?=
- =?utf-8?B?aWZtZkZSdUZtUjJrdnNGZjBKamFZOW93NG9jR01rdkR5ZTRwYjZwZTF3ekt5?=
- =?utf-8?B?dDRwSnpSRXowNjhLWWRqdm1zZDlqaHloQVg0WHk0bU1MYWxHT3pHRmYvVEox?=
- =?utf-8?B?c2lhOUUzVVJVOWRLZ3Bzd2k4WUJBclRaK1FYalVFY1lXMUc2SG0zWCtWaTl4?=
- =?utf-8?B?VGxNK1lzYXI0WnFkRDVoTFNvWDJhR0diRjZsTmUzQ1hkRm9BcWk4dERZTmIz?=
- =?utf-8?B?amFFYTd6RzZzZHAwdkFNWDNLRlBLVUxtMmpJOW05MmREblp4cW0rZE9BUkNW?=
- =?utf-8?B?RW81T202bzNmK0U1TTVPZUNrdm5TS1NITmlOaVNvYnZUZWhqRVpQSjB0TU9p?=
- =?utf-8?B?RTFhL0J4Rmh6QjZHVzlsaEFVQmxnOXJRc1RVMDEvMVFzU0gxYWVhWnpPN2tJ?=
- =?utf-8?B?cEdwb0lnTDhnZ3c9PQ==?=
+ ARA:14566002|24021099003|12121999013|41001999006|51005399006|15080799012|8060799015|23021999003|5072599009|6090799003|19110799012|25010399006|40105399003|10035399007|1602099012|2607281247196008|440099028|4302099013|3412199025|26104999009|1710799026;
+X-Microsoft-Antispam-Message-Info: =?utf-8?B?M0Rka3FJNjMwYlFsUFdWZVErbEFIaVY5SEM0aGpGUE1LNVo5OHdESWV0Wjg1?=
+ =?utf-8?B?R1FxcU84TE1iM2lDczJyd2FYc3RYNlp2WmZtSi9HNmF1TVZRUUxhRm40Qi8r?=
+ =?utf-8?B?emYvdlRRazFaNWV5dUk4Z0x2aUtzQzFLbldKZWtaTG9Rc2VqcHFTOElGeTZi?=
+ =?utf-8?B?U2JGOThQaXNnTnRlTmJaeXNHd1BSRzhvR2thV0lMYTlsbEhUYW8ycHFpN0hh?=
+ =?utf-8?B?aDdKMGFpc3hHMmgxUGlDUWVoSlhPcm1scnhVc0M4RHIxRlNTVHZlNHl4UkFk?=
+ =?utf-8?B?QnRuUjh1eTFhZmNadnJZKzFzSHpQM3Y5SGFkRDZ4S1IzRE5ZS1dWRXhWa29D?=
+ =?utf-8?B?NlN4VGRnUmdBVmJnRWpEVVZiT0JPaFRZb1Z5dnBBbHUzWjNTL2NYakEvSFpV?=
+ =?utf-8?B?K2VXQnhRQStxUDFPS0xUNjJ2YnYvdjhKRng0QW02cjA0d213MWhyU29HdGJF?=
+ =?utf-8?B?VHFwUHVjRFdMR3ZpQWQrY3VtRGpsWFEvQ3R1UmExNlF4Qm1vRWI2TkF0RzRI?=
+ =?utf-8?B?dnhNVHp1TzIzQjRDWFhVZDBkNXc5RVYvSGU5aVNZV0JIRVA5Y1gyTmtMa2x3?=
+ =?utf-8?B?eWVGbVBiOCtpWWF3am16YU0wTmU5eEgwNE9aaWFkLzY2MkFaUmtSSWZKR0tq?=
+ =?utf-8?B?THVvSGZmazFtVDNVaG9TelV3WURBdjQrbTNUcmFWZno5bzJsamp1UU13b3pj?=
+ =?utf-8?B?TVRYMTdpUzZFZXRoaUplTE9sbG9BWjl0dTVhQTZEZ01DY3ZESDBLakRFeW5k?=
+ =?utf-8?B?WEZTa3NwQVVXWW1DRjlNN0NjL3hLeTExY1E3NXpPVWFrUEhzV2s0bjBZQzB2?=
+ =?utf-8?B?Wkl6WVJLRS9sVUxnaDhkTVFWdndHd3RsdkNNRjBnRmhWTDBxeTBPMGNZUVdV?=
+ =?utf-8?B?YzYzSjZuWUpQdUhsWEp4ZktPVlcxdCtiRUJQWlBVaG1pak1SQlVBZkI1ZjY0?=
+ =?utf-8?B?MW1ndlp5djJCNnhEV3I0MEpGS3BVbEtVZncrZndHMVp4VENhTWpNVCtVcDZU?=
+ =?utf-8?B?VWdieVFxTXJSVm1CTHpnbEY0aEpvK1V4VHFHUklQR1ZWbGRRNG52aXZLQTht?=
+ =?utf-8?B?cEFNdVRtNGNwblk3WHJqYy9yQXhnVkZmQmZjd2hUdjJOc0w2clZzZGdJVUxs?=
+ =?utf-8?B?TFdITkNRRjd0UTVOZlg2Tktib2RwY0oyUWQ4QlU2VUIxNWpiM1dRZ3ZsTVRa?=
+ =?utf-8?B?WmM4dlZTTGFkTjR4ZDh1N1pWWGttVjdKKzVtVVNXeXlSYnVFci82WFhlbGxE?=
+ =?utf-8?B?ZC9SbDFZWlk0WUlOWElUTWp0dmtwc1FsNE5XdWRyN3lkeGpFd3VmdHN0STZk?=
+ =?utf-8?B?dEdqVlFFenByWnk0MUFLdXdCRldqUjlMUU9uSGZMYkdXQm5oYWFUOEtubEdV?=
+ =?utf-8?B?Zk5ma09DQmRWZEpnN2ZSTG1VWW5rbXhMQ0RkR3pFVGdxQVJ5emVobWZJZVJF?=
+ =?utf-8?B?b3dyYkQ0Qm5vN2tUYlpEbVBtT2ZaZUExUmwvVnJ2M0hSaHJRRDRtdm1TSnJ1?=
+ =?utf-8?Q?KA370k=3D?=
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NTV2OUhLYzNEWmQ3aEhZMlBGb3lBN2E5Q2dkeVNHbEJPR01BK0U3by8xRzZO?=
- =?utf-8?B?QmgvZzN5eGRHRmExMDZKTGJCZzRKWk5pVGliZzlKTlhZRHlUMlBJZDdMRnI1?=
- =?utf-8?B?Zm5oOHZ1YitGUzhLa085eGl6ZkxHNG9naFNRckZSS1RFTnVRWVFFVzBMNjZK?=
- =?utf-8?B?SDZtWnQ5S1BBWW9RNk4zMlJ2NjNnbGdxWFE0Mnhib2N2TDFBUHROSkFlVHdt?=
- =?utf-8?B?UWxYWWxTTEYvL29XOTJDUmt0RU15cWVCcmhhcnRQWHlnSHVWeXp0UFBQckpa?=
- =?utf-8?B?UDRWeFBFUFdmaTYvQVlTemRVZFhUemhQa0dMU21UTSs0ZkZDYng3Z3pTTU85?=
- =?utf-8?B?cjhkVDIrbnI0ZDFmR2hHbXhrWTk4WjVITnBCVGNMaFZjQ2hNTU0vT1FaaG9M?=
- =?utf-8?B?ZlFSSUczTGxiUW5wWGZMaUJrYTB0VlhxN1p6RnRVZTFxbUNCTUU2ZEJFTnJp?=
- =?utf-8?B?ZVE4Y0VBWDJwNE8wYWVCUno3RWV1T2paUnROZmgvMmlOTi9KK0c2L0R0YU80?=
- =?utf-8?B?a25ZUmpkOTRselRDaTVCUThpd3lwUm1EOGpDdjVDZDhHM2hIdjExZDVUR1hD?=
- =?utf-8?B?cStYR3VXYnA3dnk3N1VObzVhODZHM3lvQXB6Mi9GY2RsUUh1T3hLeFpiYU5q?=
- =?utf-8?B?VmVtT0NHM1huSTdCTk83U3B3UVVsWkZtdDRQRTNCeW56c2hFcU1pcWU0KzBq?=
- =?utf-8?B?aVZTN01qaTR6eHVQVmtvaXpwVVZjQ0ZQNU9ZMmo3R3IzTC81SVZWODcrczRk?=
- =?utf-8?B?WjQ4ZTNuaWRucHpmZkw0eDdka1c3eHRIalJpUWZJdCtDUXVROHdpQ2w2azFp?=
- =?utf-8?B?RUtmUlI0SHVjWXlzQlNtZ2kvYloreWl0VnNLdWVkRWhSaFhFZTZ3NVM1K2Vi?=
- =?utf-8?B?YlgxdGJ0NHRRd09kOCtGZ29MNG9lTlZySjc5WEJZNzJqZ2Y4QVFrWGVrbllQ?=
- =?utf-8?B?SW9ncnNjazlHWk1Lbnlka1ZpV0I4YUdlN28rT2xuYW9nU0Z1U1NuU0ZMVjBz?=
- =?utf-8?B?eWZvTkY0RFBGU2NhNW04Vk1zZXpkZlZ1VUg1Tk1lbytjdDdxQmpsZzdUdE1o?=
- =?utf-8?B?b3BOZEZCZSt1Q3MyVXZVNG5rYzJiaWJNNmd1aDdGNmJ0ejlHRDhySThnZ0I4?=
- =?utf-8?B?WlZLWWt1VmNxcDJFcTZaVkhiOGpRUW1XRGdqeWt6N0VwWEtEVUMxOWU2Z2pq?=
- =?utf-8?B?d3oxczh4OG5mN2Rpd29nTjNUSkFOT25ZeHFqVlJOMVlKNEFVOStnUVRRMStr?=
- =?utf-8?B?QXlMYkhQdzd2elhwNjVieGhnV0lnR2tpenE1bUE5Y0FJcHk4bDQ3bzlaZTBX?=
- =?utf-8?B?UTFtN3lXQUJIc1IvRTB0ekE4VE9lMmVTTU5QMFlFdkN5eHdUUk9ueU4zQ1BK?=
- =?utf-8?B?d3U2V3k4M3hsWHcyeUNsakxBMWQ1UmJZWk85NGo5cUFDZHowSTF4bDlhOUdM?=
- =?utf-8?B?WHpXdWlLeTZEdENDNm80OTgzeFFDN09Rc1FZNmhhOHllWkJFQmVMZnVYQzNT?=
- =?utf-8?B?ZElNaytVZ3JjZ3ZiWUpPdTcwVXI4OGVHVVAwRENPc2pwdC9zN2RWQ3JCV0wy?=
- =?utf-8?B?TXEwakVUMHFVUWhYLzdiVDREdFVYL1ZLNktQQlpmak5XUFNZb29DakZCaEZq?=
- =?utf-8?B?aDAxcUl5WVN5a1UrZktMQjVrQ1F2eHdVTlQyaFA2M2JJWDlNWmt1cnFHYjlk?=
- =?utf-8?B?YWw1TG1PTW9sZEliZERQMHZXTElyNnhPTW5La2NPRTA0UE5uSFhFa2JndWlK?=
- =?utf-8?B?dE41NmEvVk5qOGFwWjVZNVVRWE5sSEkwanRJRGhOTUFjbmJzRVlwLy9rdU9X?=
- =?utf-8?B?ZGcvUGhqOXdLQnFjYk5nN0N3WXlRVG1zamIrc3lkdHFnOE91QUw1VE9iVWhI?=
- =?utf-8?Q?DH0eQs1qS+Q7e?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NUF1aE41ZllsZGZoWWVVRDB3MVNYdkU2aGFkcjVJdzUyN3hRR0k3aGZrakEr?=
+ =?utf-8?B?ek1hZk1sajNUaEQvWGhHZ05wWTFVUThvRWVITDR0WFR6THNXQ1JHMG5lYjBp?=
+ =?utf-8?B?cUk1cXhVOTRrb2djbW5OQ1pLcDA3M3dCZG4yQkhUWkVBTTNCRFUxM2hhcG1C?=
+ =?utf-8?B?RTVuNHRvVmNRODVjZXNITUd6QmF1NlQ0WVJVRU82QjN5Vm44anRwa0RWU2lS?=
+ =?utf-8?B?VGxxVU9UMmNmY3FVOWdBcGszL1lwMDFSQnVSOHRoMlhUclM4TUpKdUdrTEp3?=
+ =?utf-8?B?YkxRQUtKUFN3OVhWZ1dqS1VZUmJ1SXpKVTZad2pkOVJqdGgxOHB2TzhlSzNj?=
+ =?utf-8?B?SEkyYThkWVFpdWV3SXRHQ0E5TERiWmNpY3ZPREovNWlpZCs3MncvUWlmckpO?=
+ =?utf-8?B?Z1p6M1ZITVEvc1ZKVlFyUklZN3FXd3JGL05UeEEvUEc0L3VmQlhUR1hxKy95?=
+ =?utf-8?B?WXVabklxeFpuaDA0aDRaTCtNb1hjNys4Q0JhakkySW9qT1VHWHpqdWlxNSs5?=
+ =?utf-8?B?cHc1R0swMGF5N0Mxa09lb3Y0VllPTW83S0U3SEVPd29BWU9jeCtLajRSOGFl?=
+ =?utf-8?B?bkU0Qm14bHdSYXIrQWJPNzFyMThuMHNMSWN1SjhpQ2w3cVRwbHpzRm10dVVV?=
+ =?utf-8?B?UzNVVjNnUy9ROUd4bGhCR2R2cGk0Nk1FSWMrUlJUeFNGZVoxRlhEYy9TL1Nr?=
+ =?utf-8?B?NHdHSlJmOU55V1VWSFVQRy82dm16SHJYMDZYTHQwS2NoRTV1d2RqaHhXRGxy?=
+ =?utf-8?B?UkZpcTZNSnZUbHhXSGsvMlZpWC9ySjR2R2JNU094Szk4RHgxMHM3b2dPZ29R?=
+ =?utf-8?B?K0RUOWtqL25iVEppZGFtWXVzZXhBaXNKQk4zaGdTWGpOY3RrbFdlZUJobTQ1?=
+ =?utf-8?B?YVNwUzg0MUkxTytnNnh5ZUFzVU1vUERqd21ya1FZTy9KVGdXaSsyaUxpUk1v?=
+ =?utf-8?B?SDQyckR6V01YWXlUMjFBSlRpVng3T3VIOEszeXRvZHF3bFFQYlMvVzFiYlpY?=
+ =?utf-8?B?eVEzRGRxYk8xdnpOZ3FZa1lWYVE5OUFjTmlmOUlsaE5HMDZ1NW9xNU56ZDlN?=
+ =?utf-8?B?bmxNK0hob0tYTElBcWdwSE1zbjVieWpuZnNUYVJ3YndneWlDZzBZOTV4NitC?=
+ =?utf-8?B?ZHdZdG1zWVRXTWNKcURlVWJnQndZakxBREcxdlJlcnp1bFdKazEzcnR2T2FL?=
+ =?utf-8?B?OHV2cTBFTFUwZThwQXdpczB3Zk50UWMxRVNMNTF6TTkzZTQvRnY2MXZXMXVu?=
+ =?utf-8?B?VUZobmxBZHIydmtkbGljcUk3MmN1UjJmdER0dWk3S0tnT2ZZTmRyWWs1cTJy?=
+ =?utf-8?B?WTIvWG1sbzloakZ6enN1UlpOcldkK0FWK2Y4QjRiYUZtajA0MTZMZ0JCeXQr?=
+ =?utf-8?B?eEZYQUtzUkxvUjgvWHNCUzJ0Y1lyS2FGUEg2VmhScmtOWEVVaGZHSE9YeXJF?=
+ =?utf-8?B?REtSTW5FZlNxakRuelcxRURxKzVLcmZueFdqWGIrWkZCamd0M3JPanhLYWc3?=
+ =?utf-8?B?eGJMQSs3eEcxay9GRTZDMVdBQ1BZSXkydzA3U1NXNEh3dTJuVHRxVHNOcnBw?=
+ =?utf-8?B?bTd1SHo4Q0NScXRYL1JQSDhmTUt0Vy9hWjZIRkdIaTB5TTFIV1BRNXlzaXJa?=
+ =?utf-8?B?V3ovL2hLd0ZQRVliSjV0eDRyM3dqSDZMek1YbHVCQTgzTGpzNWtNTXk4MkRM?=
+ =?utf-8?B?UHVlNS9neU5kZ0kzdnNmSUljM0JobzV6WXZvOHJOZlZiNE5VSjNvVDVOMXU5?=
+ =?utf-8?B?WTNNVDhBdnFjYng1WUU0UkNNbXZoaTNQUDNPZ3htcWFSQkRxbXd6Z2Y0dFdG?=
+ =?utf-8?B?VFJXdFJURkVsY21nZ0dDRDNnOW9VT3ovVGNiVDQ2QjNPT3hkNTFzWHVFRkR3?=
+ =?utf-8?Q?whzlU9Rjk44by?=
 X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 24474016-2053-46a8-768b-08df1638f047
+X-MS-Exchange-CrossTenant-Network-Message-Id: 275726e3-76fd-43bd-c4b7-08df1638f16f
 X-MS-Exchange-CrossTenant-AuthSource: SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Sep 2026 10:29:51.8127 (UTC)
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Sep 2026 10:29:53.7853 (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
 X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: SY7P300MB1433
-Subject: [Buildroot] [PATCH v2 2/4] board/visionfive2: remove non-upstream
- Linux config options
+Subject: [Buildroot] [PATCH v2 3/4] configs/visionfive2: bump Linux to
+ 6.18.51, U-Boot to 2026.07, and OpenSBI to 1.8.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -259,144 +263,236 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Remove vendor-specific config options from linux_defconfig as they are
-not present in the upstream kernel.
+Migrate and clean up removed kernel config options during the upgrade.
 
-Regenerate the defconfig by running:
+Drop uboot and spl partitions from the SD card genimage configuration,
+as U-Boot has deprecated the SD card and eMMC boot modes since
+v2025.10 [1]. Update the rootfs block device in the kernel command line
+accordingly.
 
-  make visionfive2_defconfig
-  make linux-menuconfig
-  # Save and exit without making any changes.
-  make linux-update-defconfig
+Update readme.txt to reflect the new boot flow and instructions.
 
-Fixes: 4567c35d066e ("configs/visionfive2: bump OpenSBI to 1.6, Linux to 6.12.24 and U-Boot to 2025.04")
+[1] https://docs.u-boot.org/en/v2026.07/board/starfive/visionfive2.html#zero-stage-program-loader
+
 Signed-off-by: Fengwei Tan <tfx2001@outlook.com>
 ---
- board/visionfive2/linux_defconfig | 26 +-------------------------
- 1 file changed, 1 insertion(+), 25 deletions(-)
+ board/visionfive2/genimage.cfg                     | 10 --------
+ board/visionfive2/linux_defconfig                  |  7 +++---
+ .../overlay/boot/extlinux/extlinux.conf            |  2 +-
+ board/visionfive2/patches/linux/linux.hash         |  2 +-
+ board/visionfive2/patches/opensbi/opensbi.hash     |  2 +-
+ board/visionfive2/patches/uboot/uboot.hash         |  2 +-
+ board/visionfive2/readme.txt                       | 27 ++++++++++++----------
+ configs/visionfive2_defconfig                      |  8 +++----
+ 8 files changed, 26 insertions(+), 34 deletions(-)
 
+diff --git a/board/visionfive2/genimage.cfg b/board/visionfive2/genimage.cfg
+index 8133e740c0..af7bc70d1a 100644
+--- a/board/visionfive2/genimage.cfg
++++ b/board/visionfive2/genimage.cfg
+@@ -5,16 +5,6 @@ image sdcard.img {
+ 		partition-table-type = "gpt"
+ 	}
+ 
+-	partition spl {
+-		partition-type-uuid = 2E54B353-1271-4842-806F-E436D6AF6985
+-		image = "u-boot-spl.bin.normal.out"
+-	}
+-
+-	partition uboot {
+-		partition-type-uuid = BC13C2FF-59E6-4262-A352-B275FD6F7172
+-		image = "u-boot.itb"
+-	}
+-
+ 	partition rootfs {
+ 		partition-type-uuid = 0FC63DAF-8483-4772-8E79-3D69D8477DE4
+ 		bootable = true
 diff --git a/board/visionfive2/linux_defconfig b/board/visionfive2/linux_defconfig
-index 06942928b5..509cd0f475 100644
+index 509cd0f475..1ca11f4097 100644
 --- a/board/visionfive2/linux_defconfig
 +++ b/board/visionfive2/linux_defconfig
-@@ -22,7 +22,6 @@ CONFIG_PERF_EVENTS=y
- CONFIG_SOC_STARFIVE=y
- CONFIG_NONPORTABLE=y
- CONFIG_SMP=y
--CONFIG_RISCV_AMP=y
- CONFIG_HZ_100=y
- CONFIG_HIBERNATION=y
- CONFIG_PM_STD_PARTITION="PARTLABEL=hibernation"
-@@ -40,6 +39,7 @@ CONFIG_CPU_FREQ_GOV_CONSERVATIVE=y
- CONFIG_CPU_FREQ_GOV_SCHEDUTIL=y
- CONFIG_CPUFREQ_DT=y
- # CONFIG_SECCOMP is not set
-+# CONFIG_GCC_PLUGINS is not set
- CONFIG_MODULES=y
- CONFIG_MODULE_UNLOAD=y
- CONFIG_BINFMT_MISC=y
-@@ -87,7 +87,6 @@ CONFIG_BT_RFCOMM_TTY=y
- CONFIG_BT_BNEP=y
- CONFIG_BT_BNEP_MC_FILTER=y
- CONFIG_BT_BNEP_PROTO_FILTER=y
--CONFIG_BT_AICUSB=y
- CONFIG_CFG80211=y
- CONFIG_MAC80211=y
- CONFIG_RFKILL=y
-@@ -104,7 +103,6 @@ CONFIG_MTD_BLOCK=y
- CONFIG_MTD_CFI=y
- CONFIG_MTD_CFI_ADV_OPTIONS=y
- CONFIG_MTD_SPI_NOR=y
--CONFIG_OF_CONFIGFS=y
- CONFIG_BLK_DEV_LOOP=y
- CONFIG_VIRTIO_BLK=y
- CONFIG_BLK_DEV_NVME=y
-@@ -159,21 +157,15 @@ CONFIG_MARVELL_PHY=y
- CONFIG_MICREL_PHY=y
- CONFIG_MICROCHIP_PHY=y
- CONFIG_MOTORCOMM_PHY=y
--CONFIG_IPMS_CAN=y
- CONFIG_IWLWIFI=y
- CONFIG_IWLDVM=y
- CONFIG_IWLMVM=y
- # CONFIG_RTL_CARDS is not set
--CONFIG_USB_WIFI_ECR6600U=y
--CONFIG_AIC_WLAN_SUPPORT=y
--CONFIG_AIC8800_WLAN_SUPPORT=m
--CONFIG_AIC_LOADFW_SUPPORT=m
- CONFIG_INPUT_EVDEV=y
- # CONFIG_INPUT_KEYBOARD is not set
- # CONFIG_INPUT_MOUSE is not set
- CONFIG_INPUT_TOUCHSCREEN=y
- CONFIG_TOUCHSCREEN_GOODIX=y
--CONFIG_TOUCHSCREEN_TINKER_FT5406=y
- CONFIG_SERIO_LIBPS2=y
- CONFIG_SERIAL_8250=y
- CONFIG_SERIAL_8250_CONSOLE=y
-@@ -221,10 +213,7 @@ CONFIG_V4L_PLATFORM_DRIVERS=y
- CONFIG_V4L_MEM2MEM_DRIVERS=y
- CONFIG_VIDEO_CADENCE_CSI2RX=y
- CONFIG_VIDEO_WAVE_VPU=m
--CONFIG_VIN_SENSOR_OV4689=y
--CONFIG_VIDEO_STF_VIN=y
- CONFIG_VIDEO_IMX219=y
--CONFIG_VIDEO_IMX708=y
- # CONFIG_CXD2880_SPI_DRV is not set
- # CONFIG_MEDIA_TUNER_E4000 is not set
- # CONFIG_MEDIA_TUNER_FC0011 is not set
-@@ -371,13 +360,8 @@ CONFIG_VIDEO_IMX708=y
- # CONFIG_DVB_SP2 is not set
- CONFIG_DRM=y
- CONFIG_DRM_PANEL_JADARD_JD9365DA_H3=y
--CONFIG_DRM_PANEL_STARFIVE_JADARD=y
- CONFIG_DRM_PANEL_SIMPLE=y
- CONFIG_DRM_TOSHIBA_TC358762=y
--CONFIG_DRM_VERISILICON=y
--CONFIG_STARFIVE_INNO_HDMI=y
--CONFIG_STARFIVE_DSI=y
--CONFIG_DRM_IMG_ROGUE=y
- CONFIG_FB=y
- CONFIG_BACKLIGHT_CLASS_DEVICE=y
- CONFIG_SOUND=y
-@@ -389,7 +373,6 @@ CONFIG_SND_SOC_RZ=m
- CONFIG_SND_SOC_STARFIVE=y
+@@ -3,7 +3,6 @@ CONFIG_COMPILE_TEST=y
+ CONFIG_DEFAULT_HOSTNAME="StarFive"
+ CONFIG_SYSVIPC=y
+ CONFIG_POSIX_MQUEUE=y
+-CONFIG_USELIB=y
+ CONFIG_NO_HZ_IDLE=y
+ CONFIG_HIGH_RES_TIMERS=y
+ CONFIG_BPF_SYSCALL=y
+@@ -59,6 +58,7 @@ CONFIG_NF_CONNTRACK=y
+ CONFIG_NF_TABLES=y
+ CONFIG_NFT_CT=y
+ CONFIG_NFT_COMPAT=y
++CONFIG_NETFILTER_XTABLES_LEGACY=y
+ CONFIG_NETFILTER_XT_MATCH_CONNTRACK=y
+ CONFIG_NETFILTER_XT_MATCH_IPCOMP=y
+ CONFIG_NETFILTER_XT_MATCH_IPRANGE=y
+@@ -69,6 +69,7 @@ CONFIG_NETFILTER_XT_MATCH_SOCKET=y
+ CONFIG_NETFILTER_XT_MATCH_STATE=y
+ CONFIG_NETFILTER_XT_MATCH_STRING=y
+ CONFIG_NETFILTER_XT_MATCH_U32=y
++CONFIG_IP_NF_IPTABLES_LEGACY=y
+ CONFIG_NF_TABLES_IPV4=y
+ CONFIG_NFT_DUP_IPV4=y
+ CONFIG_NFT_FIB_IPV4=y
+@@ -197,7 +198,6 @@ CONFIG_THERMAL=y
+ CONFIG_CPU_THERMAL=y
+ CONFIG_DEVFREQ_THERMAL=y
+ CONFIG_THERMAL_EMULATION=y
+-# CONFIG_HISI_THERMAL is not set
+ CONFIG_WATCHDOG=y
+ CONFIG_WATCHDOG_SYSFS=y
+ CONFIG_MFD_AXP20X_I2C=y
+@@ -370,7 +370,6 @@ CONFIG_SND_USB_AUDIO=y
+ CONFIG_SND_SOC=y
+ CONFIG_SND_DESIGNWARE_I2S=y
+ CONFIG_SND_SOC_RZ=m
+-CONFIG_SND_SOC_STARFIVE=y
  CONFIG_SND_SOC_JH7110_PWMDAC=y
  CONFIG_SND_SOC_JH7110_TDM=y
--CONFIG_SND_SOC_AC108=y
  CONFIG_SND_SOC_WM8960=y
- CONFIG_SND_SIMPLE_CARD=y
- CONFIG_UHID=y
-@@ -477,7 +460,6 @@ CONFIG_LEDS_CLASS=y
- CONFIG_LEDS_GPIO=y
- CONFIG_LEDS_TRIGGER_HEARTBEAT=y
- CONFIG_RTC_CLASS=y
--CONFIG_RTC_DRV_STARFIVE=y
- CONFIG_RTC_DRV_GOLDFISH=y
- CONFIG_DMADEVICES=y
- CONFIG_AMBA_PL08X=y
-@@ -492,22 +474,16 @@ CONFIG_CLK_STARFIVE_JH7110_STG=y
- CONFIG_CLK_STARFIVE_JH7110_ISP=y
- CONFIG_CLK_STARFIVE_JH7110_VOUT=y
- CONFIG_MAILBOX=y
--CONFIG_STARFIVE_IPI_MBOX=y
--CONFIG_STARFIVE_MBOX=m
--CONFIG_STARFIVE_MBOX_TEST=m
- # CONFIG_IOMMU_SUPPORT is not set
- CONFIG_RPMSG_CHAR=y
- CONFIG_RPMSG_CTRL=y
--CONFIG_RPMSG_STARFIVE=m
- CONFIG_RPMSG_VIRTIO=y
- CONFIG_PM_DEVFREQ=y
- CONFIG_IIO=y
- CONFIG_IIO_ST_ACCEL_3AXIS=y
- CONFIG_PWM=y
--CONFIG_PWM_OCORES=y
- CONFIG_PHY_STARFIVE_JH7110_PCIE=y
- CONFIG_PHY_STARFIVE_JH7110_USB=y
--CONFIG_PHY_M31_DPHY_RX0=y
- CONFIG_RAS=y
- CONFIG_EXT4_FS=y
- CONFIG_EXT4_FS_POSIX_ACL=y
+@@ -522,7 +521,7 @@ CONFIG_NLS_CODEPAGE_437=y
+ CONFIG_NLS_ISO8859_1=y
+ CONFIG_INIT_STACK_NONE=y
+ CONFIG_CRYPTO_USER=y
+-CONFIG_CRYPTO_TEST=m
++CONFIG_CRYPTO_BENCHMARK=m
+ CONFIG_CRYPTO_USER_API_HASH=y
+ CONFIG_CRYPTO_USER_API_SKCIPHER=y
+ CONFIG_CRYPTO_USER_API_RNG=y
+diff --git a/board/visionfive2/overlay/boot/extlinux/extlinux.conf b/board/visionfive2/overlay/boot/extlinux/extlinux.conf
+index 48d267f725..7934d70e15 100644
+--- a/board/visionfive2/overlay/boot/extlinux/extlinux.conf
++++ b/board/visionfive2/overlay/boot/extlinux/extlinux.conf
+@@ -1,4 +1,4 @@
+ label linux
+   kernel /boot/Image
+   devicetree /boot/jh7110-starfive-visionfive-2-v1.3b.dtb
+-  append console=ttyS0,115200 root=/dev/mmcblk1p3 rootwait
++  append console=ttyS0,115200 root=/dev/mmcblk1p1 rootwait
+diff --git a/board/visionfive2/patches/linux/linux.hash b/board/visionfive2/patches/linux/linux.hash
+index 1213da86b1..b2cfc9b7e7 100644
+--- a/board/visionfive2/patches/linux/linux.hash
++++ b/board/visionfive2/patches/linux/linux.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  643142c1b5991560dd12f950825cc19e4497b95b82641918ecff1177f4130c1d  linux-6.12.24.tar.xz
++sha256  ba2f60f858bf4d1f929101faa356c93dc8b925b17aaa9f95eabd4627758df613  linux-6.18.51.tar.xz
+diff --git a/board/visionfive2/patches/opensbi/opensbi.hash b/board/visionfive2/patches/opensbi/opensbi.hash
+index d7893a1dee..5e2e695bc1 100644
+--- a/board/visionfive2/patches/opensbi/opensbi.hash
++++ b/board/visionfive2/patches/opensbi/opensbi.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  d11702103f177a2914e94eec57ce5ed820296d874f6b6525c4482e55d71a3667  opensbi-1.6.tar.gz
++sha256  fb1ae61a85e966322101acb1c982f84d9eaafc4de7dd474a7d7546d9bb321c6f  opensbi-1.8.1.tar.gz
+diff --git a/board/visionfive2/patches/uboot/uboot.hash b/board/visionfive2/patches/uboot/uboot.hash
+index 80ea21b7cb..ff6e4ed2e2 100644
+--- a/board/visionfive2/patches/uboot/uboot.hash
++++ b/board/visionfive2/patches/uboot/uboot.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  439d3bef296effd54130be6a731c5b118be7fddd7fcc663ccbc5fb18294d8718  u-boot-2025.04.tar.bz2
++sha256  78e8bfc382fe388f9b55aa1daf8c563522a037779b5d4c349d1415e381f1243e  u-boot-2026.07.tar.bz2
+diff --git a/board/visionfive2/readme.txt b/board/visionfive2/readme.txt
+index cc4fece6e9..718494e33e 100644
+--- a/board/visionfive2/readme.txt
++++ b/board/visionfive2/readme.txt
+@@ -1,8 +1,8 @@
+-Starfive VisionFive2
++StarFive VisionFive2
+ ====================
+ 
+ The VisionFive2 is a low-cost RISC-V 64-bit based platform, powered by a
+-Starfive JH7110 processor.
++StarFive JH7110 processor.
+ 
+ https://doc-en.rvspace.org/Doc_Center/visionfive_2.html
+ 
+@@ -24,33 +24,36 @@ If you have a booting device use u-boot and tftp:
+ 
+   # tftpboot 0x82000000 spi-nor.img
+   # sf probe
+-  # sf update 0x82000000 0x0 {filesize}
++  # sf update 0x82000000 0x0 ${filesize}
+ 
+-Otherwise, follow the recovery instruction:
++Otherwise, follow the recovery instructions:
+ 
+ https://doc-en.rvspace.org/VisionFive2/Quick_Start_Guide/VisionFive2_SDK_QSG/recovering_bootloader%20-%20vf2.html
+ 
+ How to write the SD card
+ ========================
+ 
+-Copy the bootable "sdcard.img" onto an SD card with "dd":
++Write "sdcard.img" onto an SD card with "dd":
+ 
+-  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
++  $ sudo dd if=output/images/sdcard.img of=/dev/sdX bs=1M conv=fsync
+ 
+ Preparing the board
+ ===================
+ 
+ Connect a TTL UART cable to pin 6 (GND), 8 (TX) and 10 (RX).
+ 
+-Use the correct mode for booting:
+-- SD card RGPIO_0=1, GRPIO_1=0
+-- SPI NOR flash RGPIO_0=1, GRPIO_1=1
+-
+-Note that Buildroot puts the bootloader both in SPI NOR and on the SD card,
+-so after flashing as instructed above, either boot mode should work.
++Select SPI NOR flash boot mode:
++- RGPIO_0=0, RGPIO_1=0
+ 
+ https://doc-en.rvspace.org/VisionFive2/Quick_Start_Guide/VisionFive2_SDK_QSG/boot_mode_settings.html
+ 
+ Insert your SD card.
+ 
+ Power-up the board using an USB-C cable.
++
++Note that starting with U-Boot v2025.10, booting U-Boot directly from an
++SD card is no longer supported on this board. In this configuration, the
++bootloader is loaded from SPI NOR flash, while the SD card contains the
++Linux kernel, device trees and root filesystem.
++
++https://docs.u-boot.org/en/v2026.07/board/starfive/visionfive2.html#zero-stage-program-loader
+diff --git a/configs/visionfive2_defconfig b/configs/visionfive2_defconfig
+index 8223e6faa1..3e30c0649c 100644
+--- a/configs/visionfive2_defconfig
++++ b/configs/visionfive2_defconfig
+@@ -1,5 +1,5 @@
+ BR2_riscv=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
+ BR2_GLOBAL_PATCH_DIR="board/visionfive2/patches"
+ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_SYSTEM_DHCP="eth0"
+@@ -7,7 +7,7 @@ BR2_ROOTFS_OVERLAY="board/visionfive2/overlay"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/visionfive2/post-image.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.24"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.51"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/visionfive2/linux_defconfig"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -19,14 +19,14 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_OPENSBI=y
+ BR2_TARGET_OPENSBI_CUSTOM_VERSION=y
+-BR2_TARGET_OPENSBI_CUSTOM_VERSION_VALUE="1.6"
++BR2_TARGET_OPENSBI_CUSTOM_VERSION_VALUE="1.8.1"
+ BR2_TARGET_OPENSBI_PLAT="generic"
+ # BR2_TARGET_OPENSBI_INSTALL_JUMP_IMG is not set
+ BR2_TARGET_OPENSBI_ADDITIONAL_VARIABLES="FW_TEXT_START=0x40000000 FW_OPTIONS=0"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.04"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2026.07"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="starfive_visionfive2"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
 
 -- 
 2.55.0
