@@ -4,101 +4,178 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9745FC982D8
-	for <buildroot@archiver.kernel.org>; Sat, 19 Sep 2026 19:13:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C01EFC982D8
+	for <buildroot@archiver.kernel.org>; Sat, 19 Sep 2026 19:20:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7BB4C40CE8;
-	Sat, 19 Sep 2026 19:13:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7E802407C5;
+	Sat, 19 Sep 2026 19:20:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id smfeVNMLFEaH; Sat, 19 Sep 2026 19:13:45 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 1C1CB40CCA
+ id Pq3oTOHsrdX2; Sat, 19 Sep 2026 19:20:51 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 7229A407FF
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789845225;
-	b=ij8cl4atM69J0/xiy+PbcMTE9S36Clo5x9fQkhyMh+oe2WxdY+eotZVOmyWH7QIARrb0
-	 YsLkGVDmGrySI1RbvDvNq7eJPI11flFrRKQxX6+z49o/n/gGjHn1bb45rdwuvN0Nk4kJU
-	 Rhv3Hjjoy/To1H5hW8Ts0kefzz9toDPIeXJBOyXfCXLeIPM9H2DklypZPCQj3wbNZMrmC
-	 6wrlZIlGddgt5/ow0iK9rp+KfJP7MA6C2dOWT4K+mxyH2ThCOYZkdBoDarTq9BKXB0pO/
-	 cze/HYU2TibyKdKEnjAysl58QkXpVrqKTBi4my9auVHBOoHDlu/av1eXuFqYQR6ZMfg==
-ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789845225;
+ARC-Seal: i=3; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789845651;
+	b=gzvK8sebptJigkp6vckGMPf5rFDlYTFXW4xr9cmOjuDHlCQH+kJlqtMnxLts9DB0fBdl
+	 TGsCEMlfTykFomLxQTox1pz94+AdEBPzFq/2acyZyvYUfwmjuH2YDudwUUdYvbI3LMwU/
+	 TDvQkYi2FqFGTlkAS3Xs5lgeRB/UTWEgmIDZq4H8KAgUjgPkRGxOUrdZm85wjw5Wcxwi+
+	 bv8nyvmWcenUBcsIf/x/IgOGmssN4panMCY7F82gvFZxbu/mr7KcKFbiq2KQamAFE0x79
+	 wx+tbqP5Hr5pJdxNev0mbZxDKYjDvng1Wz85FAB9higi85d3/ofuMNqPqKKKG3xtt5Q==
+ARC-Message-Signature: i=3; d=osuosl.org; s=arc; a=rsa-sha256;
+	c=relaxed/relaxed; t=1789845651;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
-	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
-	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
+	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
+	 X-Received:MIME-Version:References:In-Reply-To:From:Date:
+	 X-Gm-Features:Message-ID:To:Cc:Subject:X-BeenThere:X-Mailman-Version:
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=yLxm0RiThvSifppOI2gnEuV9tqkVs3aO/Oe4N9QwpAs=;
-	b=eb/zHdBn3C/tnoT6w2a3qeECXJ3kFhHwbqveIaOekS+Zmifrc7Bt5u532ZopGu3dWJEt
-	 nrQH355FmEE3boBNP+gCekgT6Ot6bozWMSxM7Mk4qCEqTs+kNR58mQiQlVT/lmxLYruct
-	 6HWIpa12z4649gKS5ZpQK9AWrmzwCbMYlKC8XgnyW8fOvfniPDepplsLrBRbCOZ3+PxFb
-	 tLXzhFheKJQDMJiAHT4aV5D/E/jh9/YUjk0GH+ua3oX41zh/luPgQTJNdpJATg9UDlCIv
-	 uKOgVO0cwM+GBiGTzoAUv28NBmVB4B2/+zAYCOfZ0LVUZTivoHy+K9SezOd/vE3Ow2Q==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	 List-Subscribe:Content-Type:Errors-To:Sender;
+	bh=c6aNoStKJzk3Sal7luWLP3PEQkHZJ7Vn9IkVcbjDQn4=;
+	b=njOwCsV62j66CZH7L1SWtnU/4+GCt/wUF7VrC1vKU+HKLY5Oo+M20EKFVA1dAcUonjUW
+	 1Cdet4v2St7vd74eRN62ImGuqxO4GOR2AQsphEndYube9YskK+krGdhtKbTiW7d16HO/Q
+	 PbQpRiKnfhlCjjkSi9TlCHEWJMs5DjwZHM/636B6J8plrkWXwVtRi0Ji0vsM0B51Dc4pA
+	 F5ENPXqeoTy5RkVH0uN/vjFuvqZ4kM7DvSex83jVHz5YL3hTpASapglh551oTLkqVkRCB
+	 9HqA7vFVT6/M6YgcDq6eh+JRtu/x6PrlQcCJ0eVwMj6sN5O2tGM4upF81D8jNLtIT8w==
+ARC-Authentication-Results: i=3; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789845225;
-	bh=yLxm0RiThvSifppOI2gnEuV9tqkVs3aO/Oe4N9QwpAs=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Uzy3a0yYzEw2M+GY50pWylQ24/P5CyYM5+WmzlYBE+at3J4W2ABJC7JbJoJcAWnhk
-	 13CtpbyJspj0oBP8vJhermwa/SL7hb/r3wat83sA3vfaFsfBbvO3GNEpFh8R6CRVhC
-	 yVLMegbRCjoVgubpV5UOBvgr7x4r7Ozi/j2PoMYw4yudjE7dq7T6ZZ3JHokzgvY+jb
-	 Vqo+pxzU/R/8DnLsb1YnWzIjeAdqLefwcfqtfcG3LpVQ02Zd8RBgaT0v+KtFFP39WE
-	 1OH5WQyJ+IZX4FW75PZ/A6buaP6vygBtJbrHRSzRLiiWvf4eD5AEnN8fbInfxc7aa1
-	 8l09E9hCf5AUA==
+	s=default; t=1789845651;
+	bh=c6aNoStKJzk3Sal7luWLP3PEQkHZJ7Vn9IkVcbjDQn4=;
+	h=References:In-Reply-To:From:Date:To:Cc:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=EioTbvSyj2ULLhbJ/a7S4wk8E3nIpXRALVk18PR2+1YWGmhi+xpw1BkJa5gosLVbI
+	 ttlWOHRtMT3l29aivdKIKXj0xarxackidu8ogn401+twgepMGl7pQZZWKcw/zKc79/
+	 c7EkRaKn5R2P+CR/OlXTkXmJPZEWZ2y6IL2UTDgQYGD9GTRT6frQ+IAMns9vxcQ1Mm
+	 gMl4YtC4VqsJTSoik1Ry7NoErFwB/75zo6uVt/NWpyzJ+yqvZ4gZMLHu0twfeOXmlP
+	 yRJuC1alokSaHDWNfNUIhwXhtWQqdEqmkRqZrzqaLnpS2/1CxYZMOpNF2dKskKhLi1
+	 HfqXhtd92H7dg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1C1CB40CCA;
-	Sat, 19 Sep 2026 19:13:45 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id A84E5362
- for <buildroot@buildroot.org>; Sat, 19 Sep 2026 19:13:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7229A407FF;
+	Sat, 19 Sep 2026 19:20:51 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7D06E371
+ for <buildroot@buildroot.org>; Sat, 19 Sep 2026 19:20:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9A5BF4017C
- for <buildroot@buildroot.org>; Sat, 19 Sep 2026 19:13:42 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6EACE4017C
+ for <buildroot@buildroot.org>; Sat, 19 Sep 2026 19:20:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wjZYVBjXSF17 for <buildroot@buildroot.org>;
- Sat, 19 Sep 2026 19:13:41 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org 7AFB240179
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789845221;
- b=YJfzrtbWWYlAVIN8oLoOQWd8I+m0mW2COPaXSCZnD74ZjnCypT0oVlgkBhjpTDFFMiU+
- tnZW/WlfXUa1y4XKTCb6t25tq7rgEqCW0vwl/eotIsfam+9QW8158xc0p1ATf5vyx8oON
- Tu2r6Qno7834RVea/BjyEi7so2RRNAKtV+zLP5g9CFHWN56DUJLmKqqEEQWkWjYgCsD7i
- ZsEVnZeojPxtuzF1B+xIYFbmG+hBfhJK37zNwGjP/hK/1Kz+Qb2483O/GIuZaQv9iIemm
- sIGc6DgtPCT3CIwbSQ/Ld/TEgqBKlMhIyVBeEnujNGoxnn+6IiZz8vD+YT6Im2B0W2g==
-ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1789845221;
- h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
- X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=sBqa1Afp0lmfHDRaW5uXeFmNNzH+hWEBGpGhiUqw2OA=;
- b=XajJgGR06gFLOTSyMMWVLfXRStjxEsmgsSPww/8Ado6HE/eqInhPOIfYOyIuW8Y6ZeMT
- ylO7U4thh/DLkLWSfIrDPUstu5UPhKkLIHhmHdvtssQ3mfFSHubwabVDeLLyp2mpadKtU
- hLqbg4KVD1JB040cz6py0SFXiuRCiWGdEu7MQ+Il/uVEGxLiKgV2DWck8aCEhm0pnDX8v
- KwDcotM78sccJozpeUd8aP/2tZ31wPAOhrhTe0wBsIV8DYVveWTXUCgXcRN09HH/pFGXF
- mqXItmIydio+OLsOkxpn42v/ODPjPdAbdc3dTyS7ZX0IKc/eLh+kuqEdcPHUDwKctGA==
-ARC-Authentication-Results: i=1; smtp2.osuosl.org;
- arc=none smtp.remote-ip=140.211.167.122
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id wzCRgSgJzWlm for <buildroot@buildroot.org>;
+ Sat, 19 Sep 2026 19:20:49 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org 22EEE40179
+Authentication-Results: smtp2.osuosl.org; arc=pass header.oldest-pass=0
+ smtp.remote-ip="2607:f8b0:4864:41::e"
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=pass; t=1789845649;
+ b=gaUJi0oV253LSJ6kU1v4ppJYIlyYHArdyHOV016K9Le0KSfEPJX26uPaIwMdBRGzovmE
+ jWPrcNXFOopqRmiIq9e4zTxYhs5pNzbbMhdzuL9tv39c6oS8/p73yM8wWn+TaWqowR6ii
+ T7vmSR/kIPVMDsjW0kOEkS7MGax3I14MNeg7tKCgRWhj3DXf9b9DhFS/C0fzqquJS8Je4
+ yE7lP003rzI//OPQ1XNpUda4fH40kABt05IaIJQwh37wvxgWXaAQgEE4LbV0IU5j/D1q0
+ KXYtbzOZ5eKRSNXoJqYMO8Q30DzTaGk33bKVj+urxeEaJMANvNQSU0RvFOlsQYdlkIg==
+ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
+ c=relaxed/relaxed; t=1789845649;
+ h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
+ X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:References:
+ In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:
+ Content-Type;
+ bh=uQkwv9oSkxfBikjvJVkOfZ0NRxO95/90J/VbG/vr0XM=;
+ b=HD9qBqYBsZS5V2qRS2Srnpm93mEZDIeO6O4AmNJlHUDfD5hoJn0qbZfHAsgJnc0+q9Zh
+ YVY1igcca3u6tiltM9KgsnSD68fo0KffvR+MpvLYcDYzlpIrxg3QwWzD3lmChWHt2ieJX
+ wkD1nYrIOXWtZq4Y1AKBiyw7v9/I4pzCKppuMNhXJ3ltSXxOyjLlF3VGDiTMR9WZJT/7v
+ OmUb0ibQP0mOfBKnAJ4QVS7Pm6lBJj7dvZy/N0KeigRtb/3VwVekDu8M9wK07hx/386EL
+ 7rCbMOxsTNO+wJ0Cxm7NrdQ/634xyDkA5GMkJGbWWdluit9XDT3eqlf5CGV53iiU7mA==
+ARC-Authentication-Results: i=2; smtp2.osuosl.org;
+ dmarc=pass header.from=gmail.com; 
+ dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20251104 header.b=VwkfCMU9; 
+ arc=pass header.oldest-pass=0 smtp.remote-ip="2607:f8b0:4864:41::e"
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2607:f8b0:4864:41::e;
+ helo=mail-yx2-x0e.google.com; envelope-from=fractalclone@gmail.com;
  receiver=<UNKNOWN> 
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7AFB240179
- for <buildroot@buildroot.org>; Sat, 19 Sep 2026 19:13:41 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6FEE88D6B6; Sat, 19 Sep 2026 19:12:33 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 19 Sep 2026 21:08:24 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0e27b1d8a47c1c9b36e7c5761299495f9a7e8c19
-X-Git-Newrev: c23815ad18883fd47d0065a55e2048dce51ffd03
-X-Patchwork-Hint: ignore
-Message-Id: <20260919191233.6FEE88D6B6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/nxp-bt-wifi-firmware: bump version
- to lf-6.18.20-2.0.0
+Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp2.osuosl.org; dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20251104 header.b=VwkfCMU9
+Received: from mail-yx2-x0e.google.com (mail-yx2-x0e.google.com
+ [IPv6:2607:f8b0:4864:41::e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 22EEE40179
+ for <buildroot@buildroot.org>; Sat, 19 Sep 2026 19:20:48 +0000 (UTC)
+Received: by mail-yx2-x0e.google.com with SMTP id
+ 00721157ae682-895eaf306cfso14489997b3.1
+ for <buildroot@buildroot.org>; Sat, 19 Sep 2026 12:20:48 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1789845647; cv=none;
+ d=google.com; s=arc-20260327;
+ b=qL8zpgkyf2u8aeBwT430HzubGBT3CDX3XRsDdKwooFWHTiz5fkTQkYYcTFTF1sJBm5
+ 2ru72nCf1xAuljkCRRuN2IcPhhDDtm+aqnWnwV0QGXYxq8iP4Du4XcJfTpGWolmBG3yX
+ 9p+NOKRXX99Xrt5Vn9Kc/amZMFSrEQgVpa5UmqFg1f+3eatrk2s4EcG8ajZ1oJpIHuCR
+ vY3GQJNOl63xZZ9ZgRpRowEGnZB3smh09C3YDtTIFJL0lntJgyB5oqjiAHUGfBwccTw5
+ 1+rgkYXtCQTePtHJ7iIn31QdHkWIp4uD3T6q2r6DFFUv7TSaqzPd/l+XP8HjEz2J8yz0
+ 5EvQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com;
+ s=arc-20260327; 
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:dkim-signature;
+ bh=uQkwv9oSkxfBikjvJVkOfZ0NRxO95/90J/VbG/vr0XM=;
+ fh=t1HKz4FGwg2rlpSa7EUNbKGYl/IKyrvQ/1p5yhNuG2o=;
+ b=AVFcuoZcUNzfhhjPwKJvo1bjpsoZNXHdW3KH7g1wlyiwHSiSfjy3f6EiysUm6P9Sbs
+ H8fv8lwVnI0Esk0vt8hrF4bXp2sPIz4sWObeEnLmNuxNHkQMkrOA5uqJcH5bkO+eK23S
+ +mVO9AZHur54RqmpDZ1dCzXXaqYN47F9CHFDDvVbfJHWo8l6wVOt7gfeD6ji5jI3Is/a
+ 3TJ3DBvoBXBhIrsx3wwQ04Sq5zBE+aOeVdUUqH1IxHlnntJlcUCcuNji71o4T4sfrNn3
+ 0Gd+MRF4KdxQU+NBIYI7Xfq4dB45VQgfZR5qlxpAk5nI9DvcHjBcVAm8rBm8PRYYWJXf
+ egzw==; darn=buildroot.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20251104; t=1789845647; x=1790450447; darn=buildroot.org;
+ h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+ :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+ :content-type; bh=uQkwv9oSkxfBikjvJVkOfZ0NRxO95/90J/VbG/vr0XM=;
+ b=VwkfCMU9710kRaYW1RxN/JgTv5Uz6Jws5BpBDfmB1DeAU4nRunZY9VK4z2IZVMgaCB
+ sn9QBynReQq/Z89AoDXMDlQWfRjOarWrbrSIZQ6MFUEhz1v026lBp7vVKBceX1kApnve
+ TQ9mxBVKAtTR+x1uIQNhGog7M7BNSu0NI4S1q7ruO52icSH+WChEveM4g24ijmDilbP7
+ zgSZnR3fMBcOZUdLBRIAAAeNA+Q7PMxxB4NQkkF2/Um5K40W1q7yr8OWL5zB/nVJvGCr
+ uDRrsySrKjVZe8CDFI44p272ODYImgzbEhKRVESO41D6qw5JGVF7h7Lvm3J6acvkFnp8
+ Fo/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20260707; t=1789845647; x=1790450447;
+ h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+ :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to:content-type;
+ bh=uQkwv9oSkxfBikjvJVkOfZ0NRxO95/90J/VbG/vr0XM=;
+ b=KRHJQoKpUMxM7xs0hMrhyhJL1B5jDimw2IWPZAn6V8SDwtZLMpdb+LkclrxQ4FXST1
+ URdXSfPisnRC8Td5bFXiRzoqN0+2c11rHRYZX62jb3PqjnWws2oKz5vZMNhElY4VHW2T
+ 61TUgp5A1QGrmEbXuaIgkN8WeBXDJL8VDsqAu6tYi54VZz4Bh8yHq0RwW48bRz9IJZ/F
+ YqLFKVXF44Tqg8CKKdGLpV93JfUc7tuYv0iOl+ro36xpgrO0tXkewZY4PtqaJ29BszSc
+ RYOU5bgFwf28DS+E2ppnmOua6xt8mVVQZWjhpbgwXJMswRjLPDLqjZyDXLXjb0o7xED5
+ RDVg==
+X-Gm-Message-State: AFuF++kqmz2Yex61Y0X/JchvVgOfBKVZPilxa2GJSNlQ8oRNd5YjqHJx
+ nUdmdhL6QQP9gokOwdR49gEl1AUcuEbnaWlNHVkyIwlPfv7CpFq0WowRyjUM3hHeZzlvwbc/mjg
+ ViWMBOwqY3ohZTP4XRZVO/qbSmr6+5oa3FImf
+X-Gm-Gg: AYBFou0+DkN7iPEs6HTnatBRr1A5dd252Qf4Gru1u4wUpWlGbFfs2Q4yh1XfkX2Qgt3
+ 9C7wAVjhaxI7PmBB+aoEWcWyrzqGLSAvzRDN8RF3e+rQL4sxOB70idgwt0HvBCMrXLjwDuWNo5q
+ i4VR6OQ/FrJb3ZAzyBZ/X5/mYEYlrqkbnuZLvf50976PsfkgJfG3LT1Vy6eK+8WKDtzIv6KG4Gt
+ Hqy2+JXXfsPR2CR6D3wF9gWP8goR7T0n/7jTD6tFdqncHKCH+MVNNmP385cPpxRYnvN+KAVWknx
+ 3uY+6uoGg4QiMlzk1/rFGpIiXWxQ8bhdtZQZeUw4iD74rBcj28Ko+fs=
+X-Received: by 2002:a05:690c:d94:b0:854:b29d:c670 with SMTP id
+ 00721157ae682-897306ffe74mr19101677b3.5.1789845647188; Sat, 19 Sep 2026
+ 12:20:47 -0700 (PDT)
+MIME-Version: 1.0
+References: <20260917-rock-pi-4b-v1-0-a1da4ee05567@gmail.com>
+ <20260917-rock-pi-4b-v1-2-a1da4ee05567@gmail.com> <aqznoUtW4EIcK_8m@windsurf>
+ <CAN7e4jochVOH9Tj19YiFeeOxix=-bn4OhferJC9Mgg=j-AVsDA@mail.gmail.com>
+ <aq0uT-ghEihRclnw@windsurf>
+ <CAN7e4jotGmfe1y_8gR4imH1_YTKoEJJODPK6kfAtpL9hfLzcgQ@mail.gmail.com>
+In-Reply-To: <CAN7e4jotGmfe1y_8gR4imH1_YTKoEJJODPK6kfAtpL9hfLzcgQ@mail.gmail.com>
+From: Jean-Paul Etienne <fractalclone@gmail.com>
+Date: Sat, 19 Sep 2026 21:20:36 +0200
+X-Gm-Features: AcwNN1UVonGqU5HAT4U809UcfPMb123U_juX0hzgrunKsef133gtzQzlaEJcwyw
+Message-ID: <CAN7e4jpdCKT=e8SY75Cb7o4qiC5Jr0w8oj-OaMmAPCDGpW5Fyw@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
+Subject: Re: [Buildroot] [PATCH 2/3] package/brcmfmac_sdio-firmware: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -110,206 +187,201 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0384268272262912222=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/c23815ad18883fd47d0065a55e2048dce51ffd03
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+--===============0384268272262912222==
+Content-Type: multipart/alternative; boundary="00000000000000e62e065bdaea57"
 
-The IW610 module is also available with a USB host interface, while
-the current package only supports its SDIO firmware. This commit
-adds this USB support.
+--00000000000000e62e065bdaea57
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Bump the firmware release to lf-6.18.20-2.0.0, which
-provides the FwImage_IW610_USB firmware, and add a dedicated
-BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_IW610_USB option.
+HI Thomas,
+I've made an MR to linux-firmware and they've refused it because the vendor
+was not
+agreeable to distribute their firmware via linux-firmware. Their response
+in quote below.
 
-The new release also moves firmware files out of the nxp/ directory
-and no longer provides 8801 or 8997 firmware. Update the installation
-paths, make the existing IW610 option explicitly SDIO, and retain legacy
-configuration handling for removed or renamed options.
+> We can't accept BCM43456 firmware, the vendor is Synaptics and they have
+> not agreed
 
-This commit also updates the license hash, after an update from:
-LA_OPT_NXP_Software_License v57 July 2024
-to:
-LA_OPT_NXP_Software_License v63 May 2025
+(and in fact a conversation I had with a VP of Wireless at the vendor
+> refused), to redistribute their
 
-Signed-off-by: Antoine Gennart <antoine.gennart@quimesis.be>
-[Julien:
- - update license hash
- - fix _VERSION to use a tag rather than a branch
-]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- Config.in.legacy                                   | 36 ++++++++++++++++++++++
- package/nxp-bt-wifi-firmware/Config.in             | 32 ++++---------------
- .../nxp-bt-wifi-firmware/nxp-bt-wifi-firmware.hash |  4 +--
- .../nxp-bt-wifi-firmware/nxp-bt-wifi-firmware.mk   | 16 +++++-----
- 4 files changed, 51 insertions(+), 37 deletions(-)
+firmware through linux-firmware.
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 6c222c0e57..565f100e57 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,42 @@ endif
- 
- comment "Legacy options removed in 2026.11"
- 
-+config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_8801
-+	bool "nxp-bt-wifi-firmware 8801 support removed"
-+	select BR2_LEGACY
-+	help
-+	  The 8801 firmware is no longer available in the selected NXP
-+	  firmware release.
-+
-+config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_8997
-+	bool "nxp-bt-wifi-firmware 8997 support removed"
-+	select BR2_LEGACY
-+	help
-+	  The 8997 firmware is no longer available in the selected NXP
-+	  firmware release.
-+
-+config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_8997_SD
-+	bool "nxp-bt-wifi-firmware 8997 SD support removed"
-+	select BR2_LEGACY
-+	help
-+	  The 8997 firmware is no longer available in the selected NXP
-+	  firmware release.
-+
-+config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_8997_PCIE
-+	bool "nxp-bt-wifi-firmware 8997 PCIe support removed"
-+	select BR2_LEGACY
-+	help
-+	  The 8997 firmware is no longer available in the selected NXP
-+	  firmware release.
-+
-+config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_IW610
-+	bool "nxp-bt-wifi-firmware IW610 option renamed"
-+	select BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_IW610_SD
-+	select BR2_LEGACY
-+	help
-+	  The IW610 firmware option was renamed to distinguish SD and
-+	  USB interfaces.
-+
- config BR2_BINUTILS_VERSION_2_44_X
- 	bool "binutils 2.44 has been removed"
- 	select BR2_LEGACY
-diff --git a/package/nxp-bt-wifi-firmware/Config.in b/package/nxp-bt-wifi-firmware/Config.in
-index c707cd05cd..9fe79fa7d6 100644
---- a/package/nxp-bt-wifi-firmware/Config.in
-+++ b/package/nxp-bt-wifi-firmware/Config.in
-@@ -7,36 +7,11 @@ config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE
- 
- if BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE
- 
--config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_8801
--	bool "8801 (SD)"
--	help
--	  NXP 8801 module firmware files.
--
- config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_8987
- 	bool "8987 (SD)"
- 	help
- 	  NXP 8987 module firmware files.
- 
--config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_8997
--	bool "8997"
--	help
--	  NXP 8997 module firmware files.
--
--if BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_8997
--
--choice
--	prompt "8997 WiFi interface"
--
--config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_8997_SD
--	bool "SD"
--
--config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_8997_PCIE
--	bool "PCIe"
--
--endchoice
--
--endif
--
- config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_9098
- 	bool "9098"
- 	help
-@@ -62,11 +37,16 @@ config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_IW416
- 	help
- 	  NXP IW416 module firmware files.
- 
--config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_IW610
-+config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_IW610_SD
- 	bool "IW610 (SD)"
- 	help
- 	  NXP IW610 module firmware files.
- 
-+config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_IW610_USB
-+	bool "IW610 (USB)"
-+	help
-+	  NXP IW610 module firmware files.
-+
- config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_IW612
- 	bool "IW612 (SD)"
- 	help
-diff --git a/package/nxp-bt-wifi-firmware/nxp-bt-wifi-firmware.hash b/package/nxp-bt-wifi-firmware/nxp-bt-wifi-firmware.hash
-index 60e1be03da..dc90b5b9a9 100644
---- a/package/nxp-bt-wifi-firmware/nxp-bt-wifi-firmware.hash
-+++ b/package/nxp-bt-wifi-firmware/nxp-bt-wifi-firmware.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  444351eba2669772a0f62aadbff92b46adb370dcd5228f12e4f5ae2b58554951  nxp-bt-wifi-firmware-lf-6.6.52_2.2.0.tar.gz
--sha256  601fa790c5b4d03579bd182fb4d65a6f329a32faf49db22f98e4608221e861f7  LICENSE.txt
-+sha256  e0ed4da6b52c3fca6fed3b1b7a484d11b720015946a72f04b24363e865fd4d08  nxp-bt-wifi-firmware-lf-6.18.20-2.0.0.tar.gz
-+sha256  3001cf84018c5cb10d183a678f6ec8a928c797616ba06b398d7ca93c0779aaa2  LICENSE.txt
-diff --git a/package/nxp-bt-wifi-firmware/nxp-bt-wifi-firmware.mk b/package/nxp-bt-wifi-firmware/nxp-bt-wifi-firmware.mk
-index f0440ce32a..9b6a932fe4 100644
---- a/package/nxp-bt-wifi-firmware/nxp-bt-wifi-firmware.mk
-+++ b/package/nxp-bt-wifi-firmware/nxp-bt-wifi-firmware.mk
-@@ -4,29 +4,27 @@
- #
- ################################################################################
- 
--NXP_BT_WIFI_FIRMWARE_VERSION = lf-6.6.52_2.2.0
-+NXP_BT_WIFI_FIRMWARE_VERSION = lf-6.18.20-2.0.0
- NXP_BT_WIFI_FIRMWARE_SITE = $(call github,nxp-imx,imx-firmware,$(NXP_BT_WIFI_FIRMWARE_VERSION))
- NXP_BT_WIFI_FIRMWARE_LICENSE = NXP Software License Agreement
- NXP_BT_WIFI_FIRMWARE_LICENSE_FILES = LICENSE.txt
- NXP_BT_WIFI_FIRMWARE_REDISTRIBUTE = NO
- 
--NXP_BT_WIFI_FIRMWARE_FILES_$(BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_8801) += FwImage_8801_SD
--NXP_BT_WIFI_FIRMWARE_FILES_$(BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_8987) += FwImage_8987
--NXP_BT_WIFI_FIRMWARE_FILES_$(BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_8997_SD) += FwImage_8997_SD
--NXP_BT_WIFI_FIRMWARE_FILES_$(BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_8997_PCIE) += FwImage_8997
-+NXP_BT_WIFI_FIRMWARE_FILES_$(BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_8987) += FwImage_8987_SD
- NXP_BT_WIFI_FIRMWARE_FILES_$(BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_9098_SD) += FwImage_9098_SD
- NXP_BT_WIFI_FIRMWARE_FILES_$(BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_9098_PCIE) += FwImage_9098_PCIE
- NXP_BT_WIFI_FIRMWARE_FILES_$(BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_IW416) += FwImage_IW416_SD
--NXP_BT_WIFI_FIRMWARE_FILES_$(BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_IW610) += FwImage_IW610_SD
-+NXP_BT_WIFI_FIRMWARE_FILES_$(BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_IW610_SD) += FwImage_IW610_SD
-+NXP_BT_WIFI_FIRMWARE_FILES_$(BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_IW610_USB) += FwImage_IW610_USB
- NXP_BT_WIFI_FIRMWARE_FILES_$(BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_IW612) += FwImage_IW612_SD
- 
- define NXP_BT_WIFI_FIRMWARE_INSTALL_TARGET_CMDS
--	$(INSTALL) -m 0644 -D $(@D)/nxp/wifi_mod_para.conf \
-+	$(INSTALL) -m 0644 -D $(@D)/wifi_mod_para.conf \
- 		$(TARGET_DIR)/lib/firmware/nxp/wifi_mod_para.conf
--	$(INSTALL) -m 0644 -D $(@D)/nxp/mfguart/helper_uart_3000000.bin \
-+	$(INSTALL) -m 0644 -D $(@D)/mfguart/helper_uart_3000000.bin \
- 		$(TARGET_DIR)/lib/firmware/nxp/helper_uart_3000000.bin
- 	$(foreach f,$(NXP_BT_WIFI_FIRMWARE_FILES_y), \
--		$(INSTALL) -m 0644 -D $(@D)/nxp/$(f)/* $(TARGET_DIR)/lib/firmware/nxp/
-+		$(INSTALL) -m 0644 -D $(@D)/$(f)/* $(TARGET_DIR)/lib/firmware/nxp/
- 	)
- endef
- 
+
+Regards,
+Jean-Paul
+
+On Fri, Sep 18, 2026 at 7:45=E2=80=AFPM Jean-Paul Etienne <fractalclone@gma=
+il.com>
+wrote:
+
+> Hi Thomas,
+>
+> On Fri, Sep 18, 2026 at 2:29=E2=80=AFPM Thomas Petazzoni <
+> thomas.petazzoni@bootlin.com> wrote:
+>
+>> Hello,
+>>
+>> Thanks for your feedback.
+>>
+>> On Fri, Sep 18, 2026 at 01:08:35PM +0200, Jean-Paul Etienne wrote:
+>> > Hi Thomas,
+>> > Before adding this package, I've checked linux-firmware and saw that i=
+t
+>> does
+>> > not support brcmfmac43456-sdio.bin firmware
+>> > required for the AP6256 chip.
+>> > However, while looking in the brcmfmac_sdio-firmware-rpi package on
+>> buildroot I
+>> > see it supports the firmware:
+>> >
+>> > ddf83f2100885b166be52d21c8966db164fdd4e1d816aca2acc67ee9cc28d726
+>> >  brcmfmac43456-sdio.bin
+>> > 44e0bb322dc1f39a4b0a89f30ffdd28bc93f7d7aaf534d06d229fe56f6198194
+>> >  brcmfmac43456-sdio.txt
+>> > 2dbd7d22fc9af0eb560ceab45b19646d211bc7b34a1dd00c6bfac5dd6ba25e8a
+>> >  brcmfmac43456-sdio.clm_blob (default_config)
+>> >
+>> > But brcmfmac_sdio-firmware package has specific firmware and config fo=
+r
+>> the
+>> > rockpi4b board as follows:
+>> > 78085a816d23d9877e3ab872d8eb142646bfde18afd2c7a5b89885327a287d19
+>> >  brcmfmac43456-sdio.radxa,rockpi4b.bin
+>> > 343d1c79cfe0e10e1777e3de19a0302f748f69fa8356cab2c36ca0cf90bbcf0e
+>> >  brcmfmac43456-sdio.radxa,rockpi4b.txt
+>> >
+>> > And they are not just symlinks to the default brcmfmac43456-sdio.bin
+>> > or brcmfmac43456-sdio.txt
+>> > So I thought this package could be useful to the community especially
+>> since it
+>> > supports a lot of boards.
+>> >
+>> > I'll update the patch.
+>>
+>> In what direction will you update the patch? I guess the main issue is
+>> that your package was named just brcmfmac_sdio-firmware, while in fact
+>> it is specific to the rockpi4b board.
+>>
+>> But instead of doing this, why don't you send a patch to
+>> linux-firmware to add what's missing?
+>>
+>
+> Yep, I'll check that, sorry I did not see your email early.
+>
+>>
+>> Thomas
+>> --
+>> Thomas Petazzoni, co-owner and CEO, Bootlin
+>> Embedded Linux and Kernel engineering and training
+>> https://bootlin.com
+>
+> Regards,
+> Jean-Paul
+>
+>
+
+--00000000000000e62e065bdaea57
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">HI Thomas,<div>I&#39;ve made an MR to linux-firmware and t=
+hey&#39;ve refused it because the vendor was not</div><div>agreeable to dis=
+tribute their firmware via linux-firmware. Their response in quote below.</=
+div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;bor=
+der-left:1px solid rgb(204,204,204);padding-left:1ex">We can&#39;t accept B=
+CM43456 firmware, the vendor is Synaptics and they have not agreed</blockqu=
+ote><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;bor=
+der-left:1px solid rgb(204,204,204);padding-left:1ex">(and in fact a conver=
+sation I had with a VP of Wireless at the vendor refused), to redistribute =
+their</blockquote><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px=
+ 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">firmwar=
+e through linux-firmware.</blockquote><div><br></div><div>Regards,</div><di=
+v>Jean-Paul</div></div><br><div class=3D"gmail_quote gmail_quote_container"=
+><div dir=3D"ltr" class=3D"gmail_attr">On Fri, Sep 18, 2026 at 7:45=E2=80=
+=AFPM Jean-Paul Etienne &lt;<a href=3D"mailto:fractalclone@gmail.com">fract=
+alclone@gmail.com</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote"=
+ style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);p=
+adding-left:1ex"><div dir=3D"ltr"><div dir=3D"ltr">Hi=C2=A0Thomas,</div><br=
+><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">On Fri, S=
+ep 18, 2026 at 2:29=E2=80=AFPM Thomas Petazzoni &lt;<a href=3D"mailto:thoma=
+s.petazzoni@bootlin.com" target=3D"_blank">thomas.petazzoni@bootlin.com</a>=
+&gt; wrote:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px =
+0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">Hell=
+o,<br>
+<br>
+Thanks for your feedback.<br>
+<br>
+On Fri, Sep 18, 2026 at 01:08:35PM +0200, Jean-Paul Etienne wrote:<br>
+&gt; Hi=C2=A0Thomas,<br>
+&gt; Before adding this package, I&#39;ve checked=C2=A0linux-firmware and s=
+aw that it does<br>
+&gt; not support=C2=A0brcmfmac43456-sdio.bin firmware<br>
+&gt; required for the AP6256 chip.<br>
+&gt; However, while looking in the=C2=A0brcmfmac_sdio-firmware-rpi package =
+on buildroot I<br>
+&gt; see it supports the firmware:<br>
+&gt; <br>
+&gt; ddf83f2100885b166be52d21c8966db164fdd4e1d816aca2acc67ee9cc28d726<br>
+&gt; =C2=A0brcmfmac43456-sdio.bin<br>
+&gt; 44e0bb322dc1f39a4b0a89f30ffdd28bc93f7d7aaf534d06d229fe56f6198194<br>
+&gt; =C2=A0brcmfmac43456-sdio.txt<br>
+&gt; 2dbd7d22fc9af0eb560ceab45b19646d211bc7b34a1dd00c6bfac5dd6ba25e8a<br>
+&gt; =C2=A0brcmfmac43456-sdio.clm_blob (default_config)<br>
+&gt; <br>
+&gt; But brcmfmac_sdio-firmware package has specific firmware and config fo=
+r the<br>
+&gt; rockpi4b board as follows:<br>
+&gt; 78085a816d23d9877e3ab872d8eb142646bfde18afd2c7a5b89885327a287d19<br>
+&gt; =C2=A0brcmfmac43456-sdio.radxa,rockpi4b.bin<br>
+&gt; 343d1c79cfe0e10e1777e3de19a0302f748f69fa8356cab2c36ca0cf90bbcf0e<br>
+&gt; =C2=A0brcmfmac43456-sdio.radxa,rockpi4b.txt<br>
+&gt; <br>
+&gt; And they are not just symlinks to the default=C2=A0brcmfmac43456-sdio.=
+bin<br>
+&gt; or=C2=A0brcmfmac43456-sdio.txt<br>
+&gt; So I thought this package could be useful to the community especially =
+since it<br>
+&gt; supports a lot of boards.<br>
+&gt; <br>
+&gt; I&#39;ll update the patch.<br>
+<br>
+In what direction will you update the patch? I guess the main issue is<br>
+that your package was named just brcmfmac_sdio-firmware, while in fact<br>
+it is specific to the rockpi4b board.<br>
+<br>
+But instead of doing this, why don&#39;t you send a patch to<br>
+linux-firmware to add what&#39;s missing?<br></blockquote><div><br></div><d=
+iv><span style=3D"background-color:transparent">Yep, I&#39;ll check that, s=
+orry I did not see your email early.</span>=C2=A0</div><blockquote class=3D=
+"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(2=
+04,204,204);padding-left:1ex">
+<br>
+Thomas<br>
+-- <br>
+Thomas Petazzoni, co-owner and CEO, Bootlin<br>
+Embedded Linux and Kernel engineering and training<br>
+<a href=3D"https://bootlin.com" rel=3D"noreferrer" target=3D"_blank">https:=
+//bootlin.com</a></blockquote><div>Regards,</div><div>Jean-Paul</div><div>=
+=C2=A0</div></div></div>
+</blockquote></div>
+
+--00000000000000e62e065bdaea57--
+
+--===============0384268272262912222==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0384268272262912222==--
