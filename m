@@ -4,113 +4,101 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5BBC5C982CC
-	for <buildroot@archiver.kernel.org>; Sat, 19 Sep 2026 12:25:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84968C982CC
+	for <buildroot@archiver.kernel.org>; Sat, 19 Sep 2026 13:05:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0BFF640A59;
-	Sat, 19 Sep 2026 12:25:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E9F6F40B0D;
+	Sat, 19 Sep 2026 13:05:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rYG5Z8nrjIXu; Sat, 19 Sep 2026 12:25:26 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 3F69440A5B
+ id 5qQ5Y_WSsNVh; Sat, 19 Sep 2026 13:05:51 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 05C6D40B05
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789820726;
-	b=B3J76GyQwsg0URVhCaxK55ZwP1jN3hbaV757xhLuz0bwUJW1v38PJFIBVdqsjz/kVz1/
-	 ilqeod9r39dYvh5XR0YiGS+HIOfqz7zhWQzutb3R6NvKXT4dfTo5lyAYMq+GLYf0DLo6a
-	 dotVMI+A1jmeLSOtmjfG6/dXAHV4deHqaJfliQndpPceefYWuyUO60Ht6ucr13Z7WJQad
-	 JFyYLoK0XYB45sUnC68BUMzJmHvv2Y6Rcp+xvkBvDQTO9l4SOUTEs2NLwcLyvlKEIvDM5
-	 ZKmIapGAho6A4hzVKs34MMdgoX3Gjz0vPcTvHPZfFqr73SoGTaTq64OdQDN5aCNqGqw==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789823151;
+	b=hGizd9nQPsNVUxIil0Id74tcde6tmEpmcz81ptX2AbMnI0sH53cpH1mggelolYC8a+Ma
+	 Povgjh2OJD77GTt15OMmKz2xFNkv8luStApyqxRasOKikuzYou9eULq5PpRVp8uSc7YUR
+	 a82MDva812X9p4407ePFtpUarMFNgByN20ehQi9Ikmp1RA8GV0SOv0f4L7w3BiV8xByvn
+	 1VolljvPzVwKvJ/pGcaklCC8KZShMUjPBambkL+3mIWMPDHx+pjIuKccK3T97MbPG2JtM
+	 vhpinitg+50O3LYnqgpVo1CnIqM8ZQF5+a28EmZJac2OMm4X2928zdwaRpGFLJVB6Ug==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789820726;
+	c=relaxed/relaxed; t=1789823151;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 Received:MIME-Version:Date:To:Cc:In-Reply-To:References:User-Agent:
-	 Message-ID:X-Sender:Subject:X-BeenThere:X-Mailman-Version:Precedence:
-	 List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:From:Reply-To:Content-Transfer-Encoding:Content-Type:
-	 Errors-To:Sender;
-	bh=qD2u8ZJXoFeDOJnZZ/DSN2jZStXnFtc0dfgVxDPPs4o=;
-	b=CU3/A5Fhr423+kFbc6/JOSAFxInlDSt06JLv5MJRaDQgvDCUYccwpdbrPHos1jXJKQY9
-	 JwsacNQ2iCwbg1F1pHMwrdQ4u3mGVXWEqq5Ew38uhXc0MGii0TN3QSRRIMSF1RWLRY00H
-	 6aJueOwABSZ6nVtQlYlGGenuH3WHFgG0CdORdKFQAHPYMwc2wo5dzocDjgsMa4bY0Ofz4
-	 SRxfovDjCAx+l8PmBKBvi9ZuS5S+yJ+6abtYGoJZbIVt8Tf/xr6OD2uD7tFlEV9rxgH7x
-	 kVN4Mkb7ffcHsJuHC/X/Iu7iFTSnvq3Edt7+uRkE77xJx1NIAOJG5T2fygLFUPx+3bg==
+	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
+	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
+	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
+	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:Errors-To:Sender;
+	bh=3Y2SuHCcNCKhed32DNGUrUfYCxNXhPpGM2jKFVKEwwA=;
+	b=BKG7ZVyBALr7IP1Qw7bcdz/XEUGR+JoYCXaUkEV7IZzazXQFm01pcQ8mtgjiRAXGAQfB
+	 G/w+/nd4/nQL9RwdBSvaJAI8UOa1FnErk5VHU/uMZ1VQPGp2x9MP6eNUGv97b24accH/t
+	 i9IPYcbipj1TJ5/uJD1dX8DP3co5AQBOrY1ESHwpdcLaMNQQbWHUtpzbNOIKe4R0QKatX
+	 NrqLavsz/6z1fmWf/FRHmy8dp2NJL4q4h+qSFedBT2SLzkWeobvOUDgKyoj9RQMokBb3/
+	 XfjoM7RU1wrkNjMjXJIfzh5KkcSDIhfBtoWQferOhLKU4Xn5ZemDHzWMbeRAzRz3CAA==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789820726;
-	bh=qD2u8ZJXoFeDOJnZZ/DSN2jZStXnFtc0dfgVxDPPs4o=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=V9OweOgN5PQoDJP1rgFfQogVY7+qF/g+oPAsuaq5W4yHhbOfKJZhsVhbGDH9BaMun
-	 9IV8keHOi5zm41b/yoQah48eM1SAKAEDnKqX4nC78r1UnMmTZFitjV9WsGgGsMmCqq
-	 moSrkprOBIcejPKNggQMFI5FFdcCcmpiGQKCBulBPr9wF1ekISedhyf8ik3r8l3exU
-	 X5WdRJ3ajPidZ4c5ElmJOaR2Mrm7SEQIMVf5m+s3P3D9/11ueQ9DurstzjVA1dojyw
-	 qFZBn4Ak2xfk/Lv7Zh/ndqEahVmt6AVroTRYa3u5SbiJvgxTGaVljk0PEFvqn17lUX
-	 LIyJyX3ildDeA==
+	s=default; t=1789823151;
+	bh=3Y2SuHCcNCKhed32DNGUrUfYCxNXhPpGM2jKFVKEwwA=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=f3IImxc2SoWB+wRUgfiAMLe/0kpcu1+PiMrJHZePcqpWhefmq17xTAEUiiNWPnaSv
+	 epYGtNMFkx/viFVHdox7S46/SsJmpCWBRETaJZwlKof3REuvZkM7gyw/uWTzU/y0EJ
+	 jmlD520/Wf44UmqTQbt51cWj6L22u1+W+UIkU4lOiHv25B4+XrWFO2KlesfsSzsLXe
+	 5nPpoqMiooY/2/TeyrNtOT24MAL7XxmhXQWTXnng+KPHMT3wl9V7Y1B9mLe37u2Gew
+	 6G4tdxBackjHMivTvAbSlolAJ0ayoviCjuSigquc7CYpL/NAeU8ZV8RSXtuFhW7HBR
+	 RFSaFOVybzrjA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3F69440A5B;
-	Sat, 19 Sep 2026 12:25:26 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 14EAA362
- for <buildroot@buildroot.org>; Sat, 19 Sep 2026 12:25:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 05C6D40B05;
+	Sat, 19 Sep 2026 13:05:51 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8835F13D
+ for <buildroot@buildroot.org>; Sat, 19 Sep 2026 13:05:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0618C60678
- for <buildroot@buildroot.org>; Sat, 19 Sep 2026 12:25:25 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5D7646067A
+ for <buildroot@buildroot.org>; Sat, 19 Sep 2026 13:05:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XXxXYYooOaPs for <buildroot@buildroot.org>;
- Sat, 19 Sep 2026 12:25:24 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 4BD9D60673
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789820723;
- b=j9/jEsKOBTf7+L4+nvCf31p+SRP7sg2SqINZOnAIaR7b2nJCNa40Sw3VQfYgPs7vo9O/
- 45+lgSVyiEn9qrhQjVWkpWM6ZE1eEhCfUwP6cWPct3DWDHkjOD8ehAtY9u5jO/yP9g3ro
- q0JYAUfI/hSODtkZEkK/FA+SoFMpGzskHbRh+/DIRgpaLODxtGEosJP4+LnntQ7kGZQZz
- ypR1oFIGGxCurkCBNdDiC5MQDclISxzykTvy5pRNWerSwsV+viqvJtL+ZrTdixNKf8k6Q
- ZT4Uz/XPfWW0vPmpKkjxplb7kUGabo7tL3rcRUQGy8j4DQJSnW9PeDRMIKvOUKoEu5w==
+ id re_0mqLbxm_1 for <buildroot@buildroot.org>;
+ Sat, 19 Sep 2026 13:05:47 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 86F8660678
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789823147;
+ b=IOI9yBNFZ4pJthybOMqgBc607VmviBDpAoTnSAVowNT+aHn9MU3I3aZ6y9KIMxYaafnY
+ YGGlFkq0dfyVhBWxNwrsRrDGxA/1qwKcmK+xxhmkL1Rw1wKSGO+eRVg5+MJMl8UA+GckC
+ oVBQPYM1hFDoHQCQecTV2r7ezwp4vZZGUZzWdkndViAVAcSmy2r2H+3s3s1mzaK3XSsbm
+ aIMun7Q6jC1Te+jZMQp6+Foels40rcz80iuVBwOf7UEaH2Mxawqr2FSNHx0VRzWo1ZzIC
+ SrrTpjgVmnbmzuBxfbtNvPegPIT894g12HlaG3R0RrhXerfBAUt3KzTd2janjhkB0bg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1789820723;
- h=Received-SPF:Received:DKIM-Signature:Received:MIME-Version:Date:From:
- To:Cc:Subject:In-Reply-To:References:User-Agent:Message-ID:X-Sender:
- Content-Type:Content-Transfer-Encoding;
- bh=d5Ae+FJKnDE8rsi0bVwKZpp0xt0yfhA5IJFnA+nzTL0=;
- b=hJ2/HsuKEb3JNrgU5ncnAkdKk64aX0lsEsQAOoIH6GmwmVxBx6jeoFG+ta+40dwe2DsZ
- gq63ukXn3WNImQlbHQShnowecJfso5LZVfkDSopPW2qb0FquZXYNWMTBqoH77QRTIiX80
- KKtZ2t/KGZiRgYIDybgiZywFniQ/LvsrXrGbIg5AQHVxsb7uR+V1oTInaGbTGeaNg0sw5
- qIaVsUnCCZfvqpl67npGRv+l2eCuhnUHC77yEYmUaoh1I2XjaArl33ZYvug85kXV3fDaK
- 7Gcx4J977HNIJAv9rBqzFVPdGPNX7J7/FdQ0rneU7b0zP614aVzkOSBU85qC1J34FJQ==
+ c=relaxed/relaxed; t=1789823147;
+ h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
+ X-Git-Newrev:X-Patchwork-Hint:Message-Id;
+ bh=smS8O4Dej6l9u6wGoCMKT4W5+uqfg9IOuZ2RfqTiTb0=;
+ b=fsxJW6DZMc+z/NnFK1lU3sRSpko80nZodSLIA2KNjb/1uIgTTZ72ALjgjh1txkTpFHJ2
+ oGJG7hGcSiY/TKraKUHIwnGFBbKvtz+VxpV7vjabikAPcPbPmyJ9X5OZ4YJiG98FjLZhA
+ ebgitCywYj7KNsMYRZ68SxxN/+5+IS0U846cTSKaq8pmxeIHvT59iiQ5pJod2C8YQlC2W
+ brLWi8PzaNd8dXFUevdxIUQlvkfXB0WHdvO9B9nQ3tXn1aQU/FX/OwFSRO22Bbvktbp2J
+ VgA0ssPNZrB5ltVRCy6VBNCYmcTGg1CRmXNyCe0yT3zx79UbZ5kybG1dNXmiLHc8zmQ==
 ARC-Authentication-Results: i=1; smtp3.osuosl.org;
- dmarc=pass header.from=free.fr; 
- dkim=pass header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b="Wo/SQDcG"; 
- arc=none smtp.remote-ip="2a01:e0c:1:1599::15"
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::15;
- helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4BD9D60673
- for <buildroot@buildroot.org>; Sat, 19 Sep 2026 12:25:22 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPA id 3A2507804FD;
- Sat, 19 Sep 2026 14:25:19 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 19 Sep 2026 14:25:19 +0200
-MIME-Version: 1.0
-Date: Sat, 19 Sep 2026 14:25:19 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20260918222220.3573878-1-bernd@kuhls.net>
-References: <20260918222220.3573878-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.19
-Message-ID: <4ceaafda4961c234c5bcdd5b4a4c917e@free.fr>
-X-Sender: ju.o@free.fr
-Subject: Re: [Buildroot] [PATCH 1/2] package/intel-mediadriver: bump version
- to 26.3.5
+ arc=none smtp.remote-ip=140.211.167.122
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 86F8660678
+ for <buildroot@buildroot.org>; Sat, 19 Sep 2026 13:05:47 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 99E148D59A; Sat, 19 Sep 2026 13:04:38 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 19 Sep 2026 14:25:34 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: f94d8e253117ce4db9bd20bd2720a3e8f98e8342
+X-Git-Newrev: 7162c4daa58c7881d0866f5a64c525bea1c58867
+X-Patchwork-Hint: ignore
+Message-Id: <20260919130439.99E148D59A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/{glibc,
+ localedef}: security bump version to 2.44-48-g1f5026241
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -124,20 +112,73 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 19/09/2026 00:22, Bernd Kuhls wrote:
-> https://github.com/intel/media-driver/releases/tag/intel-media-26.3.5
-> 
-> Rebased patch 0001, needed after upstream commit
-> https://github.com/intel/media-driver/commit/04584f8839ff773f18e4b1542618a00b6fc4de1a
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/7162c4daa58c7881d0866f5a64c525bea1c58867
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Series applied to master, thanks.
+Fixes CVE-2026-8674:
+https://gitlab.com/gnutools/glibc/-/commit/1f5026241027260e9280039698bca031484c82ad
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/glibc/glibc.hash       | 2 +-
+ package/glibc/glibc.mk         | 5 ++++-
+ package/localedef/localedef.mk | 2 +-
+ 3 files changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
+index f541a8d8f8..b32fdada8d 100644
+--- a/package/glibc/glibc.hash
++++ b/package/glibc/glibc.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated (fetched from git)
+-sha256  440f4e6d5b787369c1af241de7ca0692731fff3a0c3d279a98e8827a6ccba5d1  glibc-2.44-40-g30950ce64dbc29db0aedf1d46b6b8eb70b360f0c-git4.tar.gz
++sha256  d55ac4dbe32f36310d7a4b9a38d3796666fe323581825cc530f2000a2209947a  glibc-2.44-48-g1f5026241027260e9280039698bca031484c82ad-git4.tar.gz
+ 
+ # Hashes for license files
+ sha256  edaef632cbb643e4e7a221717a6c441a4c1a7c918e6e4d56debc3d8739b233f6  COPYINGv2
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index 3cddf7c1e3..6e306c7f2c 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -7,7 +7,7 @@
+ # Generate version string using:
+ #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
+ # When updating the version, please also update localedef
+-GLIBC_VERSION = 2.44-40-g30950ce64dbc29db0aedf1d46b6b8eb70b360f0c
++GLIBC_VERSION = 2.44-48-g1f5026241027260e9280039698bca031484c82ad
+ GLIBC_SITE = https://gitlab.com/gnutools/glibc.git
+ GLIBC_SITE_METHOD = git
+ 
+@@ -40,6 +40,9 @@ GLIBC_IGNORE_CVES += CVE-2026-80489
+ # Fixed by 2.44-39-g0b4e41fc51e6aba6216a908961b49b0622b47fa0
+ GLIBC_IGNORE_CVES += CVE-2026-18374
+ 
++# Fixes by 2.44-48-g1f5026241027260e9280039698bca031484c82ad
++GLIBC_IGNORE_CVES += CVE-2026-8674
++
+ # This CVE is considered as not being security issues by
+ # upstream glibc:
+ #  https://security-tracker.debian.org/tracker/CVE-2010-4756
+diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
+index 6904e147d9..f20a05aead 100644
+--- a/package/localedef/localedef.mk
++++ b/package/localedef/localedef.mk
+@@ -7,7 +7,7 @@
+ # Use the same VERSION, SITE, and LICENSE as target glibc
+ # As in glibc.mk, generate version string using:
+ #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
+-LOCALEDEF_VERSION = 2.44-40-g30950ce64dbc29db0aedf1d46b6b8eb70b360f0c
++LOCALEDEF_VERSION = 2.44-48-g1f5026241027260e9280039698bca031484c82ad
+ LOCALEDEF_SOURCE = glibc-$(LOCALEDEF_VERSION)$(BR_FMT_VERSION_git).tar.gz
+ LOCALEDEF_SITE = https://gitlab.com/gnutools/glibc.git
+ LOCALEDEF_SITE_METHOD = git
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
