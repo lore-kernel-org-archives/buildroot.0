@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6364BC982D8
-	for <buildroot@archiver.kernel.org>; Sat, 19 Sep 2026 16:06:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 900EAC982DA
+	for <buildroot@archiver.kernel.org>; Sat, 19 Sep 2026 16:06:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 35FE340BA7;
-	Sat, 19 Sep 2026 16:06:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 589646066E;
+	Sat, 19 Sep 2026 16:06:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MVvLb4NV3Osv; Sat, 19 Sep 2026 16:06:24 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 3939C40B6F
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789833984;
-	b=YlYcE7omR/QikW+lhVJLib/rXtpN86NvIw+V6znJ43YgPVZfbHvpVe4AT/TIumhWyVi6
-	 WktUzMUWiI5yA0IHHy2Yw74WTCEAU/J9uRYvNRFmAfqRzR4xXNQCXZXj5mtBT9M3CRp+w
-	 LAUgRGMH9IX8Uou1/5oEba0hQ/6uQ2Wrf5HFCwbBoWEPn9gdacH9x96G3mSNr8WB2cpKw
-	 rh/v74sTji4T4RVhOPzMRwLDQUscykd8sy0PhC3Mn+DOTuEysgedgOULg0n/DCugWLeDi
-	 3KMjQDjrH2ObQTlf/6CudCdR3p9zF35aLMTigwOkGmDmpD+XzekzfTvly0Fpn/S7Eyg==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VemhhSj0h5vj; Sat, 19 Sep 2026 16:06:35 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 7B52D6069E
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789833995;
+	b=Qm9DNbDocimdn2dTlOiMcBKkOZertUszGwFxmfdPKz/aGv7u0Ptek76Dcx4oHb2c8HML
+	 eK/wvi+AOLzJEYIAEG4deicoW0D2ibNFyMCW3SKBn2/HLxnExzQCOa8I8DLYSFY6rUGy0
+	 dQRdgwPtFroMcMFlL2gLhYl/KJq2zx1DTuD++NP3yifEL1qf/Wx2g7rq3tUERKjYpRaet
+	 F0uA53t0ONmrXfPcLxb6+q1NM/QHc88V5nwus7KKaPluFq3l3An6rj72hW6u/XI9bPBRG
+	 64HEFvrdhCv1si8Jc9iYTw0qdwBebmNnIpVp4BKdDi+O4zXrlmyKvP/MT96aDcTKNUA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789833984;
+	c=relaxed/relaxed; t=1789833995;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
@@ -31,104 +31,104 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:Cc:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=pbgTCu2kUlB2/jVX1NUVMr/nuY/laKuMVLH45HkxeiQ=;
-	b=W6M0Vo/Itu82wxOICAgXNcbaz3SOOQ+8J0J7mCwAeS9b3yPEJS0kYKf/if4kRZyZme1h
-	 6HXV6OOu4LVtxNWB1Pfm002VmQuU+tL320eL64prKgjbQYd2M2CbYvLelj8GD3tncNXO7
-	 FuNz11wPmZXkJYw7XfLTK2dtybeVO7+k4jlOyk2syPVzT0AzSVgZktg0HcUYMHLwdkdu/
-	 hwu8345A7siAhuZiLjunMyAhUxD5AGsjcM/3NJFAFW/CeFzh8Vd09SOIEr7Z5TyUPsaAR
-	 Devur6+gvInfKhp/4t9Bz8cuz/qkFz592EzE9IK5A9CJHo65mpPuC3R1N91DxzwWXNg==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	bh=yI01G0HYBfaPuXR/sGcWH1V2Rkilz9NG3GN6KO9yAmE=;
+	b=Npm9HKcYk54BegG8vlZolvrRWaah+vjS4NkBr75i9aa2z6S1Q9oPGKsRmZjeDVb2cYsg
+	 PoblBGZjBI2EVC8r1ISTPRhU+7QQ8i4jcTEDYnTckGsR8mU6y8a/s8vO6Lrp/7atC2BNL
+	 qERgaIM9BQkP/vikfGGWsq0jpqO8hdQK40zP2Kkn52IRMATYBNYNgV54+O1PJFZ5b1Pwu
+	 Renod4m/5JziWkGog4kvLeVSg12/32mezTZIo0aRsuEWwVU1ktavZUOXM0b5IdWVcCFgk
+	 Xrgq80w/84NrfSECRg869Eco/IJBNtEEaAhEOWTagWl+y2Zvi1WghacZj6YPDGW0aDQ==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789833984;
-	bh=pbgTCu2kUlB2/jVX1NUVMr/nuY/laKuMVLH45HkxeiQ=;
+	s=default; t=1789833995;
+	bh=yI01G0HYBfaPuXR/sGcWH1V2Rkilz9NG3GN6KO9yAmE=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=RxmGl+RzIhuwe6YWjMyg8NXbjOlCQAnuB+EYRt5LUfJt6ej2Jq52Y9hFkGzjFXtZe
-	 JjN2KY++AosxAnV7TD/s4e+Mbiz2oFxZ6K/np7rM7+8P/tT3QKIxP4V3f83sn/m88a
-	 NLfZcSFjGMje7cZHyT4EqEEDhozQ1oxt1+iBx1dPyNxxQtGcyrFX17qLALsKQP82Nu
-	 krep6H/zUpBcDQiDPDs4Zzxizdnqq+aRGixR4Au9I8NGU1RKH9dQ6GRA6EjrlL4pNt
-	 Vahp6xpQmXLVO749iYNxDsOasb5eXWqlEvEugajaSWHCQZQCejzTSfFLD63K5jzHir
-	 52RWdDART+DCg==
+	b=YxGZFVOFxQmbePr+zlocCvKCmpAWK5LTb0srQbME/DhZxgc+DkxzzkNxOQA33eKbF
+	 Hxx0D7l4SqtIfEv5HvxzsVtH4owtN7LdQSWHZwM9o1buRK3YnuxY7i8u0S7+7EfZzw
+	 LQmml6iRZvKKBIqKKGoBrJcG/MYjzZ2fEfO3sJ8MeoNwVdLBmJexyi0VqPYJeBkxmH
+	 jPOCScYpW0oMhAIOkxafT4BgJlOujDA/FP5P1Jn/4VfLES3lDtfvAk9TvoTnUGnQZS
+	 DNIZEFyzhRq/zMd5yfYh3Qi0FBmx/DUeDDV4jzvidtPWEPH4Ha8SUsqy4IzxZfojOs
+	 tHefBf+vx4vQQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3939C40B6F;
-	Sat, 19 Sep 2026 16:06:24 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id B4D0524D
- for <buildroot@buildroot.org>; Sat, 19 Sep 2026 16:06:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7B52D6069E;
+	Sat, 19 Sep 2026 16:06:35 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 81DC937A
+ for <buildroot@buildroot.org>; Sat, 19 Sep 2026 16:06:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9A5798113E
- for <buildroot@buildroot.org>; Sat, 19 Sep 2026 16:06:22 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 73A3840B96
+ for <buildroot@buildroot.org>; Sat, 19 Sep 2026 16:06:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id D80G2tg_uxAs for <buildroot@buildroot.org>;
- Sat, 19 Sep 2026 16:06:21 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 7AC99810F2
-Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789833981;
- b=CtcmhtdWPN5XDO2Y1rBfLSFuXeZmgkBBIFEH64UeNdh7oIzC2pdi4jn0bTn8uvXTBbj9
- UBEJTa7MAgFsK6Wl/qJ6II9pieWaJDvABeja+zuuf2TsLREFdwCuPgPkVLeKAQ9HWsjdk
- 2xlFG49xMnFdTUC4HurkNNX5tMPtCECUjlsgmbCrPjDWe1USMN8p5gVnVykp2v0o5fL74
- 0ssBXf4A9bY1HgZE60f2R9sY0C4ribwP49ykPyWwFp7hhC78yJY0nqQsXabF5Iuo9ph0f
- kdRiJ0OHI+AVILZcEw1q+7DBvemARMfDwJKrNteAElZSUkaKUC5yqkPIHl1MkfpM0bw==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pJnrju3i_Bnw for <buildroot@buildroot.org>;
+ Sat, 19 Sep 2026 16:06:33 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org A327140B6F
+Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789833993;
+ b=pA1SyOgjQtd8QIzxXeuCUklyRDNQ8O1Y5xt1/sbVp+i+D/ZSsXKpK2lQpz4xf7dMpNqO
+ tfOIYTqkL4I65FdEt2xYN5DHpa9LEXCPaN47h6ZmoZNfHIxwVsnL7AFheqdUaP+QvCGu6
+ nr8gIruVwKMAbSm5jw8C+DmPQlnlDCVZ/8EFURKQRMUSwOvRnyqxLN/NLUZ2E9v8jn2l1
+ 5YZK1EokLGkV5RqLGIraT/8slQbhsf2kq2WkvZpaIJiEB0UBtu4EOi0754nk4yGmgv5NZ
+ SPQozm23vH4RRVGOXxAkAUaCgD377ZwM+aSvoqVAt3/a2dPO2g6RKQmjQKJ+8FUyYvQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1789833981;
+ c=relaxed/relaxed; t=1789833993;
  h=Received-SPF:DKIM-Signature:X-KAS-Sym:Received:Received:From:To:Cc:
  Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding:X-Spam-Score:X-Spamd-Bar;
- bh=aQCsiloAFCT6ucxTXMBDv+p0Rxzh3vbuVD6KigvS79s=;
- b=U88AWN2ioyJJVkG9pModEAr9bPY/XJjNBFlzR0dKqn948t+inU2jd7RocJfC842NNfSs
- IkZV589yCgvNToVfHiNk2OGYS25hbwYL9p6gOCh2O26RLH3f6jntJAC+fXUejKV9IuoLh
- zFTozKK+L1Q7hXAPm+Wj42xSmfMq0smsnorCKHUnviQjV9MkEfN0TdK7KUdky7Iss3oLr
- 8Is0sNcrD2fR70sNrrjuFyUjsZKmI88QPRwi0lDaiJ1JGBxNWHHcTEkUkYgcM9EDMibqt
- Y7DoGRvTthu5JzjDbIvkoZK6OCSpMfFQg5EFLeGJwtqVnWWtJuh+7vztnhusyfiQtXQ==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org;
+ bh=6gjTKBsWgf7gvvxXlvkAhgDJ78pKppRYr9REcFqAIho=;
+ b=gExLuvC2ud7WWsGUsaxPeJirI+Yq2rMzK5KhNOTsFqagUlIIX/vtTCHCmSAfGGVU3VAF
+ sr1Yy5/5k8AFY99skf3AutPYEbslVygaYMhRahzUHPhSyQNZz25QWbHrhmyNgJBQkQLYl
+ aVvtfONrfNVeuWHLJ+LM6muA7pj22wnw/vnJswnrSHltG+u4JncDCpvQYDSx+R5QV4uOO
+ Ho5/ZxIweb18WOwgUxxVUJ+ZiVK+ACkfASu3tQILLNR+IyzOXSTxaxaeS7xEYlz0oPde4
+ LcgMPxYzuXSuQKX0iuz2xiiEhDZls0pX0SQQ/JqDzv6BLpPh6G4hyYECulCl+FpuHbw==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org;
  dmarc=pass header.from=kuhls.net; 
  dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=VdnU0JGQ; 
+ header.s=kas202605290044 header.b="ndYr8/k8"; 
  arc=none smtp.remote-ip=85.13.140.57
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-Authentication-Results: smtp1.osuosl.org;
+Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=kuhls.net
-Authentication-Results: smtp1.osuosl.org;
+Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202605290044 header.b=VdnU0JGQ
+ header.a=rsa-sha256 header.s=kas202605290044 header.b=ndYr8/k8
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7AC99810F2
- for <buildroot@buildroot.org>; Sat, 19 Sep 2026 16:06:20 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A327140B6F
+ for <buildroot@buildroot.org>; Sat, 19 Sep 2026 16:06:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
- s=kas202605290044; t=1789833547;
- bh=aQCsiloAFCT6ucxTXMBDv+p0Rxzh3vbuVD6KigvS79s=;
+ s=kas202605290044; t=1789833546;
+ bh=6gjTKBsWgf7gvvxXlvkAhgDJ78pKppRYr9REcFqAIho=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=VdnU0JGQg/uP89bTYXwOnmShzd4Jl2N24hNK/NJzIMC2eUEFOXoNvowHTbnmW7x0E
- vnWY+HDTH4O2Y1nI/cKmQrdk1NZdKwmk50+OQKG1EkxUwXRPXVkb1PdG0Fh1/xlppl
- cAyQVg0sjdJe4Byc3LzpIVkg8ByTV+vhREH8i5GeRc6wVx8T2ca+hXjL8SlP/q+Tw6
- phBTozmtp7kn3W5UupMNmZqXZqOx8mO/f5et7ZzgEEpDeB4OdK8j7KIidT73Bc7G7K
- awOj7rnNCVrDspEh0wBgxVR/UvVteFQFWlb0N5juWjWmSrrMHUrwiTeaF8YhYHHnGN
- dohUrkplMQBZQ==
-X-KAS-Sym: v3:f51bdf72230551df:gmt39DKOa2A41oLFzswc1ak3jJsAy8EKrWYvfkLHTUlP5oBvqhD3SonKR0eCjPDaVkHbtraobmntqgA2CLBBFKi84wi5F2j1ScmOQFzcxDjuD3phZHAssDCx9WZqanntRoYpLogm4rtzjdJapTMxHJxDWQI3Fozz7DrQtNoavUgMfggZ/wpgTHWTNaUG9mA2RKjmYRHmYAUksqtKBePefmpisQbVjO1OHIUZY/59P/gZ43yJbG7q6xpZc3z0u9aLEbL0D61rENpFpAa63AfIDRCewB/vpO97JrlrkKrXMvg6akriPYi1+SiTfhgy1c+iG83rzhag072zLXLQsF4b3g==:JBxaadyOwwwtm1g5PI2oXWwfVkojCR3gVrOZ4/vERDDeHGx0abfRnJTkiQLAIPU78ZnRlrHH/Io52H4NuBuSZiCl3wUdE1BXAZpdwkd0OMVyciN+IhYSPtKqYRpO3jjMl7naFMEmp1i5fUaRcdhB4qM2DO7Se75EDTcv6Nd8K2Z4P6+49tlAk9ZSCxQu+YjB2TON3l16frGy/h84ilxPazovwwpcicDxqGD3DQEf32ldRPlz4Vd+RO+zUz5VPJ4XweVXERB9XPCnzqymsbIykN6vRkUgpQSShhS+zItUWzj8BTt71HXyLXznh3Fu7k66s7hfp1aJV07fG51FSXAsm9hZstmkcxVK1MTPOosjQIcoMTk7kwVA1jz53+GA0r+/njnKHfB4EjaqX0uTRHkL0HxM39J1czF2V3pTQSJPdohlEExhj+iYvrbqmF6252Qvu/j+ocUhg/AfdXRsuSDCYmffFC1Bn/RKL3Z1etL1btyczXhSxsjeoHgRfVJe6GUTO5EEbdTsUyyDJ5vh0mMb2PXk1HGjGmnLZ2WLKT7pL7WG2iYvys1dQ4OvtuEHI0QTnwpw7TxLtLwqTZ4xM2YTpzW3hFgAB4yENoVsHm6sjK1Kha
- ick+oPDVUB8799mYBhGDrrSiXJDxCteADLVoGIB7F2KMbRxRuhmBdmTdi70/b5FZWkRmiD
+ b=ndYr8/k8GCbUC1j63D9jT/OZ5CY05jbV9cDT58w/KTSgSBVgMkUir2dR5Dff7QP3e
+ 4jaX7GlOxg25bXFG0Ck+OPWPiqrf1xl7gJAdZJIS5QUcFq7Faje/S+25tuRIjpIf11
+ VnrvJpylxSxEPGGe4Fdpk0M6Qzx3g43G+8TEVqfRmoPhyrTJNn7uKeKT03XJO5MB/w
+ L+KaRfOIgaFkmKIVyo8Dd3zlDgNd2tR1ehxwdetYUFD+v+lymE3BI1XPz53l/4R9RI
+ e0tuzsZtS2vhs1fYgTRU9XZYs0MiroFWnc+hH5xHi3KGWvYn0bIgRj3Mv+bJ/ArA/A
+ c8tEgRAVl9Uag==
+X-KAS-Sym: v3:f51bdf72230551df:gmt39DKOa2A41oLFzswc1ak3jJsAy8EKrWYvfkLHTUlP5oBvqhD3SonKR0eCjPDaVkHbtraobmntqgA2CLBBFKi84wi5F2j1ScmOQFzcxDjuD3phZHAssDCx9WZqanntRoYpLogm4rtzjdJapTMxHJxDWQI3Fozz7DrQtNoavUgMfggZ/wpgTHWTNaUG9mA2RKjmYRHmYAUksqtKBePefmpisQbVjO1OHIUZY/59P/gZ43yJbG7q6xpZc3z0u9aLEbL0D61rENpFpAa63AfIDRCewB/vpO97JrlrkKrXMvg6akriPYi1+SiTfhgy1c+iG83rzhag072zLXLQsF4b3g==:51V9UKkq+8FJpdvVgn+fmaLj+9eRFso5EQ5pbHa89oxgcgZdQAQ49ef7P022rDm4dot4dxeIRKFH6O6Jo0QmRTUD7R9qLBOOjnj7i1KkW2aQHHBTkYfNKvaHQNdV50IZEWkL7KMsqdzdVE9K9kIzguWp/r6+RNAzmhKdOgwsSMz+au5WCEPVLSOS91VVRLQF5gBmBAdtz8jG/nL30yTFH4NuRJAgyn1RN2YV5VA9cGPPkR4eR6rGlHrz4jqI8FdU2tQCCiqJ2TfJzRoc1HuC62cpR8JZERA8N+bXAMMcHF++g7jux/2PsKmyNyXv8rugSwNvb+no+hP7B2tE+WBZQt9/+Nace/q259uVLbXagVYzSRAL+6t6/xEPUS9twmm000QrvcsJXtTpg6MuQWzKCc/nffcw5RMpCfYOvs0p1gyCNUm20QKhPZdNFWZ1Il2MnVlCCNoC2yRa2nu1AuB4DlKarAdadwkxzjQ6iMtl+SkNd8mwNl3QCDrvvatRiC1wKvU83ELTGZuBwnVhZfna25+BrZaa7NjG2bzsAOTppiECbGCsdoRxX/WUyVMyC5xi5LCRwx9LuXXddbyCISi0Gj/AFOGSK77PUlWX5w4SlmySCF
+ WYYo7hKy/nnkDvA2sm5yYttq5MUioHqebMyglZ16XRRewPG2T+Lv8USIt9cnUP2jbO+KxVO6utsy23Be9FCTiCuH0eE8gCl69ud3cyiOPTuRNyww==
 Received: from fli4l.lan.fli4l (p54a1b276.dip0.t-ipconnect.de [84.161.178.118])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 5EC27A4C47C0;
- Sat, 19 Sep 2026 17:59:07 +0200 (CEST)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 4B59DA4C47BF;
+ Sat, 19 Sep 2026 17:59:06 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:44948)
  by fli4l.lan.fli4l with esmtp (Exim 4.100.1)
- (envelope-from <bernd@kuhls.net>) id 1x7xSo-000000005Jx-3hvs;
+ (envelope-from <bernd@kuhls.net>) id 1x7xSo-000000005Jx-0c8V;
  Sat, 19 Sep 2026 15:58:54 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat, 19 Sep 2026 17:57:54 +0200
-Message-ID: <20260919155845.5776-30-bernd@kuhls.net>
+Date: Sat, 19 Sep 2026 17:57:50 +0200
+Message-ID: <20260919155845.5776-26-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260919155845.5776-1-bernd@kuhls.net>
 References: <20260919155845.5776-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Spamd-Bar: -
-Subject: [Buildroot] [PATCH v2 29/77] package/snort3: Fix build with OpenSSL
- 4.0.0
+Subject: [Buildroot] [PATCH v2 25/77] package/qt6: security bump version to
+ 6.11.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -176,81 +176,365 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+https://code.qt.io/cgit/qt/qtreleasenotes.git/about/qt/6.11.2/release-note.md
+
+Security fixes:
+CVE-2026-16762 in qtbase
+CVE-2026-19248 in qtbase
+CVE-2026-13326 in qtconnectivity
+CVE-2026-8168 in qtsvg
+
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- ...fix-const-qualifiers-for-OpenSSL-4.0.patch | 63 +++++++++++++++++++
- 1 file changed, 63 insertions(+)
- create mode 100644 package/snort3/0002-ssl-fix-const-qualifiers-for-OpenSSL-4.0.patch
+ package/qt6/qt6.mk                            |  2 +-
+ ...e.cpp-remove-is_always_lock_free-sta.patch | 41 -------------------
+ package/qt6/qt6base/qt6base.hash              |  4 +-
+ package/qt6/qt6charts/qt6charts.hash          |  4 +-
+ .../qt6/qt6core5compat/qt6core5compat.hash    |  4 +-
+ .../qt6/qt6declarative/qt6declarative.hash    |  4 +-
+ package/qt6/qt6graphs/qt6graphs.hash          |  4 +-
+ package/qt6/qt6grpc/qt6grpc.hash              |  4 +-
+ .../qt6languageserver/qt6languageserver.hash  |  4 +-
+ package/qt6/qt6mqtt/qt6mqtt.hash              |  2 +-
+ package/qt6/qt6multimedia/qt6multimedia.hash  |  4 +-
+ package/qt6/qt6opcua/qt6opcua.hash            |  2 +-
+ .../qt6/qt6positioning/qt6positioning.hash    |  4 +-
+ package/qt6/qt6quick3d/qt6quick3d.hash        |  4 +-
+ .../qt6quicktimeline/qt6quicktimeline.hash    |  4 +-
+ package/qt6/qt6scxml/qt6scxml.hash            |  4 +-
+ package/qt6/qt6serialbus/qt6serialbus.hash    |  4 +-
+ package/qt6/qt6serialport/qt6serialport.hash  |  4 +-
+ .../qt6/qt6shadertools/qt6shadertools.hash    |  4 +-
+ package/qt6/qt6svg/qt6svg.hash                |  4 +-
+ package/qt6/qt6tools/qt6tools.hash            |  4 +-
+ .../qt6virtualkeyboard.hash                   |  4 +-
+ package/qt6/qt6wayland/qt6wayland.hash        |  4 +-
+ package/qt6/qt6websockets/qt6websockets.hash  |  4 +-
+ 24 files changed, 43 insertions(+), 84 deletions(-)
+ delete mode 100644 package/qt6/qt6base/0001-qtestsupport_core.cpp-remove-is_always_lock_free-sta.patch
 
-diff --git a/package/snort3/0002-ssl-fix-const-qualifiers-for-OpenSSL-4.0.patch b/package/snort3/0002-ssl-fix-const-qualifiers-for-OpenSSL-4.0.patch
-new file mode 100644
-index 0000000000..9f4232901a
---- /dev/null
-+++ b/package/snort3/0002-ssl-fix-const-qualifiers-for-OpenSSL-4.0.patch
-@@ -0,0 +1,63 @@
-+From a32587b0fc22a716b70f242f7a130de003fb3b42 Mon Sep 17 00:00:00 2001
-+From: Jaipaul Cheernam <jaipaul.cheernam@est.tech>
-+Date: Thu, 27 Aug 2026 11:45:48 +0000
-+Subject: [PATCH] ssl: fix const qualifiers for OpenSSL 4.0
-+
-+OpenSSL 4.0 returns const pointers from X509_get_subject_name(),
-+X509_get_issuer_name(), X509_NAME_get_entry(), and
-+X509_NAME_ENTRY_get_data(). Update local variables to match.
-+
-+This is backward-compatible with older OpenSSL versions since
-+assigning non-const to const is always valid.
-+
-+Fixes: https://github.com/snort3/snort3/issues/476
-+
-+Signed-off-by: Jaipaul Cheernam <jaipaul.cheernam@est.tech>
-+
-+Upstream: https://github.com/snort3/snort3/pull/477
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ src/protocols/ssl.cc | 12 ++++++------
-+ 1 file changed, 6 insertions(+), 6 deletions(-)
-+
-+diff --git a/src/protocols/ssl.cc b/src/protocols/ssl.cc
-+index 733d19adf..4afac05dd 100644
-+--- a/src/protocols/ssl.cc
-++++ b/src/protocols/ssl.cc
-+@@ -860,8 +860,8 @@ ParseResult parse_server_certificates(SSLV3ServerCertData* server_cert_data)
-+     while (len > 2 and !(common_name and org_unit))
-+     {
-+         X509* cert = nullptr;
-+-        X509_NAME* cert_subject = nullptr;
-+-        X509_NAME* cert_issuer = nullptr;
-++        const X509_NAME* cert_subject = nullptr;
-++        const X509_NAME* cert_issuer = nullptr;
-+ 
-+         int cert_len = ntoh3(data);
-+         data += 3;
-+@@ -918,8 +918,8 @@ ParseResult parse_server_certificates(SSLV3ServerCertData* server_cert_data)
-+             lastpos = X509_NAME_get_index_by_NID(cert_subject, NID_commonName, lastpos);
-+             if (lastpos != -1)
-+             {
-+-                X509_NAME_ENTRY* e = X509_NAME_get_entry(cert_subject, lastpos);
-+-                ASN1_STRING* asn1_str = X509_NAME_ENTRY_get_data(e);
-++                const X509_NAME_ENTRY* e = X509_NAME_get_entry(cert_subject, lastpos);
-++                const ASN1_STRING* asn1_str = X509_NAME_ENTRY_get_data(e);
-+                 const unsigned char* str_data = ASN1_STRING_get0_data(asn1_str);
-+                 int length = ASN1_STRING_length(asn1_str);
-+                 
-+@@ -941,8 +941,8 @@ ParseResult parse_server_certificates(SSLV3ServerCertData* server_cert_data)
-+             lastpos = X509_NAME_get_index_by_NID(cert_subject, NID_organizationalUnitName, lastpos);
-+             if (lastpos != -1)
-+             {
-+-                X509_NAME_ENTRY* e = X509_NAME_get_entry(cert_subject, lastpos);
-+-                ASN1_STRING* asn1_str = X509_NAME_ENTRY_get_data(e);
-++                const X509_NAME_ENTRY* e = X509_NAME_get_entry(cert_subject, lastpos);
-++                const ASN1_STRING* asn1_str = X509_NAME_ENTRY_get_data(e);
-+                 const unsigned char* str_data = ASN1_STRING_get0_data(asn1_str);
-+                 org_unit_len = ASN1_STRING_length(asn1_str);
-+                 
-+-- 
-+2.47.3
-+
+diff --git a/package/qt6/qt6.mk b/package/qt6/qt6.mk
+index f56a9ff1fa..cff9f5fbc7 100644
+--- a/package/qt6/qt6.mk
++++ b/package/qt6/qt6.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ QT6_VERSION_MAJOR = 6.11
+-QT6_VERSION = $(QT6_VERSION_MAJOR).1
++QT6_VERSION = $(QT6_VERSION_MAJOR).2
+ QT6_SOURCE_TARBALL_PREFIX = everywhere-src
+ QT6_SITE = https://download.qt.io/archive/qt/$(QT6_VERSION_MAJOR)/$(QT6_VERSION)/submodules
+ 
+diff --git a/package/qt6/qt6base/0001-qtestsupport_core.cpp-remove-is_always_lock_free-sta.patch b/package/qt6/qt6base/0001-qtestsupport_core.cpp-remove-is_always_lock_free-sta.patch
+deleted file mode 100644
+index 3347caa8da..0000000000
+--- a/package/qt6/qt6base/0001-qtestsupport_core.cpp-remove-is_always_lock_free-sta.patch
++++ /dev/null
+@@ -1,41 +0,0 @@
+-From 2983318421d623c6c9feff95ff947ca489f4313d Mon Sep 17 00:00:00 2001
+-From: Mitch Curtis <mitch.curtis@qt.io>
+-Date: Mon, 11 May 2026 08:41:08 +0800
+-Subject: [PATCH] qtestsupport_core.cpp: remove is_always_lock_free
+- static_assert
+-
+-This causes a build failure when cross-compiling Qt for MIPS32 targets
+-(e.g. `mips-unknown-linux-musl`, `mipsel-unknown-linux-musl`).
+-
+-Amends 9b938823776865837901f29082301f5624ac2b04.
+-
+-Fixes: QTBUG-146670
+-Change-Id: I170bd9f93c1ef809f56e5b36835e457bbbe8e16c
+-Reviewed-by: Thiago Macieira <thiago.macieira@intel.com>
+-Reviewed-by: Qt Cherry-pick Bot <cherrypick_bot@qt-project.org>
+-
+-Upstream: https://github.com/qt/qtbase/commit/2983318421d623c6c9feff95ff947ca489f4313d
+-[Romain: backport to 6.11.1]
+-Signed-off-by: Romain Naour <romain.naour@smile.fr>
+----
+- src/corelib/kernel/qtestsupport_core.cpp | 4 ----
+- 1 file changed, 4 deletions(-)
+-
+-diff --git a/src/corelib/kernel/qtestsupport_core.cpp b/src/corelib/kernel/qtestsupport_core.cpp
+-index 9bbe1c18e84..5f28cedec68 100644
+---- a/src/corelib/kernel/qtestsupport_core.cpp
+-+++ b/src/corelib/kernel/qtestsupport_core.cpp
+-@@ -8,10 +8,6 @@
+- 
+- using namespace std::chrono_literals;
+- 
+--// Assert that this instantiation of std::atomic is always lock-free so we
+--// know that no code will execute on destruction.
+--static_assert(std::atomic<std::chrono::milliseconds>::is_always_lock_free);
+--
+- QT_BEGIN_NAMESPACE
+- 
+- // ### Qt 7: reduce the default: QTBUG-138160
+--- 
+-2.55.0
+-
+diff --git a/package/qt6/qt6base/qt6base.hash b/package/qt6/qt6base/qt6base.hash
+index 40e42682e0..d7d0d536a3 100644
+--- a/package/qt6/qt6base/qt6base.hash
++++ b/package/qt6/qt6base/qt6base.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.qt.io/official_releases/qt/6.11/6.11.1/submodules/qtbase-everywhere-src-6.11.1.tar.xz.sha256
+-sha256  d9594a31228aa23ad6b531719a29b45f0f3989fe6c136d45767ea179f233c1ac  qtbase-everywhere-src-6.11.1.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/6.11/6.11.2/submodules/qtbase-everywhere-src-6.11.2.tar.xz.sha256
++sha256  5b2e00eccaf5a4d8c14134ffa0ea8dfd0a35ae1ffc7f8d87fa4305a1ed23cf22  qtbase-everywhere-src-6.11.2.tar.xz
+ 
+ # Hashes for license files
+ sha256  e3ba223bb1423f0aad8c3dfce0fe3148db48926d41e6fbc3afbbf5ff9e1c89cb  LICENSES/Apache-2.0.txt
+diff --git a/package/qt6/qt6charts/qt6charts.hash b/package/qt6/qt6charts/qt6charts.hash
+index 0c816b1709..b5b9eac42d 100644
+--- a/package/qt6/qt6charts/qt6charts.hash
++++ b/package/qt6/qt6charts/qt6charts.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.qt.io/official_releases/qt/6.11/6.11.1/submodules/qtcharts-everywhere-src-6.11.1.tar.xz.sha256
+-sha256  3fe3ed318c2a86d1417c5c29cf7494275e8fd4b537cd37453f5599c57365515c  qtcharts-everywhere-src-6.11.1.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/6.11/6.11.2/submodules/qtcharts-everywhere-src-6.11.2.tar.xz.sha256
++sha256  5069e53b81d125509e937c6379cba6d664c562d5a1e5ed28dd383690d4b6fb29  qtcharts-everywhere-src-6.11.2.tar.xz
+ 
+ # Hashes for license files
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSES/GPL-3.0-only.txt
+diff --git a/package/qt6/qt6core5compat/qt6core5compat.hash b/package/qt6/qt6core5compat/qt6core5compat.hash
+index 8be1c65e45..ae2c040d94 100644
+--- a/package/qt6/qt6core5compat/qt6core5compat.hash
++++ b/package/qt6/qt6core5compat/qt6core5compat.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.qt.io/official_releases/qt/6.11/6.11.1/submodules/qt5compat-everywhere-src-6.11.1.tar.xz.sha256
+-sha256  cfcb9fdaa051aad54b0e61b24ac5693b4887a86e07609f665fea67328a6f161b  qt5compat-everywhere-src-6.11.1.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/6.11/6.11.2/submodules/qt5compat-everywhere-src-6.11.2.tar.xz.sha256
++sha256  68c320fe3391096a9f2d870170edf1b67dac8af1d0e51c0c9e5343807f114287  qt5compat-everywhere-src-6.11.2.tar.xz
+ 
+ # Hashes for license files:
+ sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
+diff --git a/package/qt6/qt6declarative/qt6declarative.hash b/package/qt6/qt6declarative/qt6declarative.hash
+index 8245f357d2..0d4f8d3a78 100644
+--- a/package/qt6/qt6declarative/qt6declarative.hash
++++ b/package/qt6/qt6declarative/qt6declarative.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.qt.io/official_releases/qt/6.11/6.11.1/submodules/qtdeclarative-everywhere-src-6.11.1.tar.xz.sha256
+-sha256  52e670f670b0304f534b24f98c47ceb8a41bb710464414ebc9527ec71cc86aa4  qtdeclarative-everywhere-src-6.11.1.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/6.11/6.11.2/submodules/qtdeclarative-everywhere-src-6.11.2.tar.xz.sha256
++sha256  215b7b70517e380123eabc6b92243f3c47b6f016a91d126057dbe53551c6b430  qtdeclarative-everywhere-src-6.11.2.tar.xz
+ 
+ # Hashes for license files:
+ sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
+diff --git a/package/qt6/qt6graphs/qt6graphs.hash b/package/qt6/qt6graphs/qt6graphs.hash
+index db80fb6dde..9cf6314aeb 100644
+--- a/package/qt6/qt6graphs/qt6graphs.hash
++++ b/package/qt6/qt6graphs/qt6graphs.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.qt.io/official_releases/qt/6.11/6.11.1/submodules/qtgraphs-everywhere-src-6.11.1.tar.xz.sha256
+-sha256  84b1138ab68a8e2956439895a4b85eb68dda48ac169da673f67191873b1e0462  qtgraphs-everywhere-src-6.11.1.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/6.11/6.11.2/submodules/qtgraphs-everywhere-src-6.11.2.tar.xz.sha256
++sha256  9f2109854afa45dd144116c11461989c411a17065c63da5068441a1200fb8b21  qtgraphs-everywhere-src-6.11.2.tar.xz
+ 
+ # Hashes for license files
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSES/GPL-3.0-only.txt
+diff --git a/package/qt6/qt6grpc/qt6grpc.hash b/package/qt6/qt6grpc/qt6grpc.hash
+index 5ef08e8bb4..196e4b70ce 100644
+--- a/package/qt6/qt6grpc/qt6grpc.hash
++++ b/package/qt6/qt6grpc/qt6grpc.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.qt.io/official_releases/qt/6.11/6.11.1/submodules/qtgrpc-everywhere-src-6.11.1.tar.xz.sha256
+-sha256  437b04f0c550ccdb1739ca5f9119b73dfa0376564815e8bfc199890643e2a250  qtgrpc-everywhere-src-6.11.1.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/6.11/6.11.2/submodules/qtgrpc-everywhere-src-6.11.2.tar.xz.sha256
++sha256  44414617f0058ff34965fa852027bfcc7e4f71eefca8cd4406c96af22c64ad93  qtgrpc-everywhere-src-6.11.2.tar.xz
+ 
+ # Hashes for license files:
+ sha256  e3ba223bb1423f0aad8c3dfce0fe3148db48926d41e6fbc3afbbf5ff9e1c89cb  LICENSE.Apache-2.0.txt
+diff --git a/package/qt6/qt6languageserver/qt6languageserver.hash b/package/qt6/qt6languageserver/qt6languageserver.hash
+index 2e7348b34f..1ac5820a51 100644
+--- a/package/qt6/qt6languageserver/qt6languageserver.hash
++++ b/package/qt6/qt6languageserver/qt6languageserver.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.qt.io/official_releases/qt/6.11/6.11.1/submodules/qtlanguageserver-everywhere-src-6.11.1.tar.xz.sha256
+-sha256  50008537f2ca54abb3b8dc3f26759864e9cad2b2ad39e92e42fa718de2dd8aef  qtlanguageserver-everywhere-src-6.11.1.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/6.11/6.11.2/submodules/qtlanguageserver-everywhere-src-6.11.2.tar.xz.sha256
++sha256  38bc4272ecf4ca0eb1927227053e52be6b2e05733f46d03422306aace511fc5e  qtlanguageserver-everywhere-src-6.11.2.tar.xz
+ 
+ # Hashes for license files:
+ sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
+diff --git a/package/qt6/qt6mqtt/qt6mqtt.hash b/package/qt6/qt6mqtt/qt6mqtt.hash
+index 178c69a6d3..521b4339d4 100644
+--- a/package/qt6/qt6mqtt/qt6mqtt.hash
++++ b/package/qt6/qt6mqtt/qt6mqtt.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  3714255cb7bd3481b762a9ffd860f43e3180e8a069beb528338bf42799e29ea4  qt6mqtt-6.11.1-git4.tar.gz
++sha256  39551cf7452bc8df60c6d0fd6f0101351c286b9754030f290b258077e7852d83  qt6mqtt-6.11.2-git4.tar.gz
+ 
+ # Hashes for license files
+ sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
+diff --git a/package/qt6/qt6multimedia/qt6multimedia.hash b/package/qt6/qt6multimedia/qt6multimedia.hash
+index 49e30de6c9..5aa64bbf6a 100644
+--- a/package/qt6/qt6multimedia/qt6multimedia.hash
++++ b/package/qt6/qt6multimedia/qt6multimedia.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.qt.io/official_releases/qt/6.11/6.11.1/submodules/qtmultimedia-everywhere-src-6.11.1.tar.xz.sha256
+-sha256  390f8e52ddee3aca5c4de7eead900c84c4fa61ff6d1f0ebea9c7543365c09b0a  qtmultimedia-everywhere-src-6.11.1.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/6.11/6.11.2/submodules/qtmultimedia-everywhere-src-6.11.2.tar.xz.sha256
++sha256  967b5e02ec6b793cdb360622cd6e703132836af983208d678dae4b50f109cd9f  qtmultimedia-everywhere-src-6.11.2.tar.xz
+ 
+ # Hashes for license files
+ sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
+diff --git a/package/qt6/qt6opcua/qt6opcua.hash b/package/qt6/qt6opcua/qt6opcua.hash
+index 45675cc5d1..e05212eaa8 100644
+--- a/package/qt6/qt6opcua/qt6opcua.hash
++++ b/package/qt6/qt6opcua/qt6opcua.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  19f41f945910bd4bef03f7a57d9e5365d1f8b52e7fe8e226922aeec477322aa0  qt6opcua-6.11.1-git4.tar.gz
++sha256  41982d99b93bfde68f9ee5997376cd64f62d0e7cdca1a08e582a034840528ca1  qt6opcua-6.11.2-git4.tar.gz
+ 
+ # Hashes for license files
+ sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
+diff --git a/package/qt6/qt6positioning/qt6positioning.hash b/package/qt6/qt6positioning/qt6positioning.hash
+index b9453d255b..84e727052c 100644
+--- a/package/qt6/qt6positioning/qt6positioning.hash
++++ b/package/qt6/qt6positioning/qt6positioning.hash
+@@ -1,5 +1,5 @@
+-# From https://download.qt.io/official_releases/qt/6.11/6.11.1/submodules/qtpositioning-everywhere-src-6.11.1.tar.xz.sha256
+-sha256  d5e6b91801ae286e7630016caea3bdc5e1978b4291d6741d0d64c125650f78f5  qtpositioning-everywhere-src-6.11.1.tar.xz
++# From https://download.qt.io/official_releases/qt/6.11/6.11.2/submodules/qtpositioning-everywhere-src-6.11.2.tar.xz.sha256
++sha256  d8cf15ad43a3b1520adac64cec5900028525cf75f01a4c82a0002e7ac1ae7499  qtpositioning-everywhere-src-6.11.2.tar.xz
+ 
+ # Hashes for license files
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSES/GPL-2.0-only.txt
+diff --git a/package/qt6/qt6quick3d/qt6quick3d.hash b/package/qt6/qt6quick3d/qt6quick3d.hash
+index 008bda6a22..01f49f2458 100644
+--- a/package/qt6/qt6quick3d/qt6quick3d.hash
++++ b/package/qt6/qt6quick3d/qt6quick3d.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.qt.io/official_releases/qt/6.11/6.11.1/submodules/qtquick3d-everywhere-src-6.11.1.tar.xz.sha256
+-sha256  c76b85de3f8aa2a4bee64987acfef560675c1b378b92076c7c6264613e5b456f  qtquick3d-everywhere-src-6.11.1.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/6.11/6.11.2/submodules/qtquick3d-everywhere-src-6.11.2.tar.xz.sha256
++sha256  3ab8e1f08edb26373a37cf9d42c23e7d092c1334566b953fbb51cb1b936737b4  qtquick3d-everywhere-src-6.11.2.tar.xz
+ 
+ # Hashes for license files
+ sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
+diff --git a/package/qt6/qt6quicktimeline/qt6quicktimeline.hash b/package/qt6/qt6quicktimeline/qt6quicktimeline.hash
+index 233f80cbfa..d239f95eb8 100644
+--- a/package/qt6/qt6quicktimeline/qt6quicktimeline.hash
++++ b/package/qt6/qt6quicktimeline/qt6quicktimeline.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.qt.io/official_releases/qt/6.11/6.11.1/submodules/qtquicktimeline-everywhere-src-6.11.1.tar.xz.sha256
+-sha256  af53f643fd9e4045e1b9ba919998e5c048ca877452c08036c9c8c5ee07ea8c27  qtquicktimeline-everywhere-src-6.11.1.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/6.11/6.11.2/submodules/qtquicktimeline-everywhere-src-6.11.2.tar.xz.sha256
++sha256  250af10500a0c4045dde74e107448a69a44d58af8b7e9a91704a808d5f881d17  qtquicktimeline-everywhere-src-6.11.2.tar.xz
+ 
+ # Hashes for license files
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSES/GPL-3.0-only.txt
+diff --git a/package/qt6/qt6scxml/qt6scxml.hash b/package/qt6/qt6scxml/qt6scxml.hash
+index a38078377c..823f8d2618 100644
+--- a/package/qt6/qt6scxml/qt6scxml.hash
++++ b/package/qt6/qt6scxml/qt6scxml.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.qt.io/official_releases/qt/6.11/6.11.1/submodules/qtscxml-everywhere-src-6.11.1.tar.xz.sha256
+-sha256  8e495245e5d1fe75de612c8a07e4043635407a1979bb1dd588f1751d1390203f  qtscxml-everywhere-src-6.11.1.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/6.11/6.11.2/submodules/qtscxml-everywhere-src-6.11.2.tar.xz.sha256
++sha256  f594c4bba7f8bffb20857973c72895669d6e54df08c8d897f50d15251cec35ff  qtscxml-everywhere-src-6.11.2.tar.xz
+ 
+ # Hashes for license files:
+ sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
+diff --git a/package/qt6/qt6serialbus/qt6serialbus.hash b/package/qt6/qt6serialbus/qt6serialbus.hash
+index ef4e96e1d6..0e2e9ea5ab 100644
+--- a/package/qt6/qt6serialbus/qt6serialbus.hash
++++ b/package/qt6/qt6serialbus/qt6serialbus.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.qt.io/official_releases/qt/6.11/6.11.1/submodules/qtserialbus-everywhere-src-6.11.1.tar.xz.sha256
+-sha256  c46c9c0c8d6815301a669cdbd5866c10bcfb9e56889f5d7da14e11d6ad24f20a  qtserialbus-everywhere-src-6.11.1.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/6.11/6.11.2/submodules/qtserialbus-everywhere-src-6.11.2.tar.xz.sha256
++sha256  8f06c9ba95f6b045ec43f011094e35a4116047310aa24280966541b720df36c1  qtserialbus-everywhere-src-6.11.2.tar.xz
+ 
+ # Hashes for license files:
+ sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
+diff --git a/package/qt6/qt6serialport/qt6serialport.hash b/package/qt6/qt6serialport/qt6serialport.hash
+index 63ed548400..2c90412cdf 100644
+--- a/package/qt6/qt6serialport/qt6serialport.hash
++++ b/package/qt6/qt6serialport/qt6serialport.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.qt.io/official_releases/qt/6.11/6.11.1/submodules/qtserialport-everywhere-src-6.11.1.tar.xz.sha256
+-sha256  9af31a898ffd9a7e4faf6fed845d29e783c716885789055cbe319f3e072d3974  qtserialport-everywhere-src-6.11.1.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/6.11/6.11.2/submodules/qtserialport-everywhere-src-6.11.2.tar.xz.sha256
++sha256  df3a733616444f31b2ecb689218ea1444be91d8628aa3ab8e464c5eb1b17ad8e  qtserialport-everywhere-src-6.11.2.tar.xz
+ 
+ # Hashes for license files:
+ sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
+diff --git a/package/qt6/qt6shadertools/qt6shadertools.hash b/package/qt6/qt6shadertools/qt6shadertools.hash
+index 9ff3f9c88f..29d5aa7756 100644
+--- a/package/qt6/qt6shadertools/qt6shadertools.hash
++++ b/package/qt6/qt6shadertools/qt6shadertools.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.qt.io/official_releases/qt/6.11/6.11.1/submodules/qtshadertools-everywhere-src-6.11.1.tar.xz.sha256
+-sha256  2075052f9b23bcf9de045bbd180037084942f82cce870aab14a1454902c982fc  qtshadertools-everywhere-src-6.11.1.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/6.11/6.11.2/submodules/qtshadertools-everywhere-src-6.11.2.tar.xz.sha256
++sha256  805046b8b7757665586890b375940047e874ae3ab00adb6d3f2b38fc6b200b1c  qtshadertools-everywhere-src-6.11.2.tar.xz
+ 
+ # Hashes for license files:
+ sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
+diff --git a/package/qt6/qt6svg/qt6svg.hash b/package/qt6/qt6svg/qt6svg.hash
+index c5f9dabe2a..aefc24cc62 100644
+--- a/package/qt6/qt6svg/qt6svg.hash
++++ b/package/qt6/qt6svg/qt6svg.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.qt.io/official_releases/qt/6.11/6.11.1/submodules/qtsvg-everywhere-src-6.11.1.tar.xz.sha256
+-sha256  7f3cf02f4824bf03c2c5859ea6db173bf1482a1daf24e6cdf7bc78cfa26a8a94  qtsvg-everywhere-src-6.11.1.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/6.11/6.11.2/submodules/qtsvg-everywhere-src-6.11.2.tar.xz.sha256
++sha256  d594337feca84c26fb67fe87b85e6a5c12fda404b611d905f9d138210c311876  qtsvg-everywhere-src-6.11.2.tar.xz
+ 
+ # Hashes for license files:
+ sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
+diff --git a/package/qt6/qt6tools/qt6tools.hash b/package/qt6/qt6tools/qt6tools.hash
+index f6db07deaf..fb4e655e59 100644
+--- a/package/qt6/qt6tools/qt6tools.hash
++++ b/package/qt6/qt6tools/qt6tools.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.qt.io/official_releases/qt/6.11/6.11.1/submodules/qttools-everywhere-src-6.11.1.tar.xz.sha256
+-sha256  8e61835a679c93fa9c6065b142353c2071ba68e297898937c32a03777fcaf50d  qttools-everywhere-src-6.11.1.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/6.11/6.11.2/submodules/qttools-everywhere-src-6.11.2.tar.xz.sha256
++sha256  9ea75af35c512f7e09e61c8c3af3997f13b4d43bb099cf43fcec470126b4041e  qttools-everywhere-src-6.11.2.tar.xz
+ 
+ # Hashes for license files:
+ sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
+diff --git a/package/qt6/qt6virtualkeyboard/qt6virtualkeyboard.hash b/package/qt6/qt6virtualkeyboard/qt6virtualkeyboard.hash
+index c47d69fa99..af4477bab4 100644
+--- a/package/qt6/qt6virtualkeyboard/qt6virtualkeyboard.hash
++++ b/package/qt6/qt6virtualkeyboard/qt6virtualkeyboard.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.qt.io/official_releases/qt/6.11/6.11.1/submodules/qtvirtualkeyboard-everywhere-src-6.11.1.tar.xz.sha256
+-sha256  a1c6967b326243b2ca8d50bc7b7f7852c3975d9aa6ce4b186ebdf35bb1007e1c  qtvirtualkeyboard-everywhere-src-6.11.1.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/6.11/6.11.2/submodules/qtvirtualkeyboard-everywhere-src-6.11.2.tar.xz.sha256
++sha256  4c6a26734a5c4e4acd5ff9ae5f192a5b883bc4514118f9df2fcf12064e647c2f  qtvirtualkeyboard-everywhere-src-6.11.2.tar.xz
+ 
+ # Hashes for license files:
+ sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
+diff --git a/package/qt6/qt6wayland/qt6wayland.hash b/package/qt6/qt6wayland/qt6wayland.hash
+index 62b7b2ee92..767e35c80f 100644
+--- a/package/qt6/qt6wayland/qt6wayland.hash
++++ b/package/qt6/qt6wayland/qt6wayland.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.qt.io/official_releases/qt/6.11/6.11.1/submodules/qtwayland-everywhere-src-6.11.1.tar.xz.sha256
+-sha256  95788aa502f75441d4edf65932b235f76523084e13dbbb7b9ee2d207b32bd9b3  qtwayland-everywhere-src-6.11.1.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/6.11/6.11.2/submodules/qtwayland-everywhere-src-6.11.2.tar.xz.sha256
++sha256  8eb7615e39332a10f506e8dd70f02d5954bb5949ff54f6dcbf8bd6168222f9df  qtwayland-everywhere-src-6.11.2.tar.xz
+ 
+ # Hashes for license files:
+ sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
+diff --git a/package/qt6/qt6websockets/qt6websockets.hash b/package/qt6/qt6websockets/qt6websockets.hash
+index 505fb2ca59..d20f18f8bd 100644
+--- a/package/qt6/qt6websockets/qt6websockets.hash
++++ b/package/qt6/qt6websockets/qt6websockets.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.qt.io/official_releases/qt/6.11/6.11.1/submodules/qtwebsockets-everywhere-src-6.11.1.tar.xz.sha256
+-sha256  243e3aa11924c8c5c1645e892f62d013caa3766c57512ca926d5b58146646fbf  qtwebsockets-everywhere-src-6.11.1.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/6.11/6.11.2/submodules/qtwebsockets-everywhere-src-6.11.2.tar.xz.sha256
++sha256  2bfe25c383c37f7690e3c59b02c9907d2744cf8527b1f3f1fc2c785b2ff3c9a3  qtwebsockets-everywhere-src-6.11.2.tar.xz
+ 
+ # Hashes for license files:
+ sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
 -- 
 2.47.3
 
