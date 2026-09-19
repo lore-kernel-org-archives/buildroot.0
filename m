@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59F7FC982D7
-	for <buildroot@archiver.kernel.org>; Sat, 19 Sep 2026 19:13:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9745FC982D8
+	for <buildroot@archiver.kernel.org>; Sat, 19 Sep 2026 19:13:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 875A840CDA;
-	Sat, 19 Sep 2026 19:13:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7BB4C40CE8;
+	Sat, 19 Sep 2026 19:13:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cvc2iSqBf9Hf; Sat, 19 Sep 2026 19:13:44 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org BF3554078E
+ id smfeVNMLFEaH; Sat, 19 Sep 2026 19:13:45 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 1C1CB40CCA
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789845223;
-	b=bV5qCg4zwbTIz69NeHd7YYeQHR98DOGx0sVZ7onKfWAxkY0qeLsxobDvlnw3kEApiWw/
-	 G62wXK6WUz70WefWuprO/cDJ+6eFScus4IhTnJLXzflp5xMC7mrhK1d0/iqPD5Qnv3ezI
-	 NK5/77ivNuyaG/1qugW47GXfFRmsDzEWgcysH6ufUdUR05b74ct1sYPQvDCCdw0aX77pG
-	 SXKiSbFG16VeJlyiewUIsWdt3m50mdFIRyxsEFylKOYD35PHMh05Z8X0JwdQjmZsJZQYS
-	 W7XFNdwDQrCQRt8K+TvEcQc23CEjyPXMDDvgTjA3N3DsUGd+SZqahi56trocL3szQow==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789845225;
+	b=ij8cl4atM69J0/xiy+PbcMTE9S36Clo5x9fQkhyMh+oe2WxdY+eotZVOmyWH7QIARrb0
+	 YsLkGVDmGrySI1RbvDvNq7eJPI11flFrRKQxX6+z49o/n/gGjHn1bb45rdwuvN0Nk4kJU
+	 Rhv3Hjjoy/To1H5hW8Ts0kefzz9toDPIeXJBOyXfCXLeIPM9H2DklypZPCQj3wbNZMrmC
+	 6wrlZIlGddgt5/ow0iK9rp+KfJP7MA6C2dOWT4K+mxyH2ThCOYZkdBoDarTq9BKXB0pO/
+	 cze/HYU2TibyKdKEnjAysl58QkXpVrqKTBi4my9auVHBOoHDlu/av1eXuFqYQR6ZMfg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789845223;
+	c=relaxed/relaxed; t=1789845225;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,75 +30,75 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=3GZoMDn/dI80wo7RwCqmqSx20D8XtRcqgX876NXYhRA=;
-	b=NHE4Lh4vPmwoD/2ZWoTYFv4ttkB0LKxYesMDB1wDbmePSV1lge/ERt0n3SsVUrKG61wk
-	 WKemDn4p81n3HY6K59gOPqA+9UjmiECTQJApYVf56/K27Gyp3EVReWL5EwL1yq4vUxMsf
-	 4xiiW4W0PieVA5m4SE49N4KpGNc5B1rUXTdqVkjTX8sNp9rMFUX4EWHnxnV67bFsFTcUx
-	 SpYhY20RrQgfUGIeqXrc31cFDFsqOik3RRFd/ne64CYMMrtIe7y8+SopzH7rVTx+g+GDE
-	 rgrhfDBjrVzultavCr/WbeTu+mc8JaYXj2pZW8HeWPr5grgLiTN+ADUut4N/LBrN8Lg==
+	bh=yLxm0RiThvSifppOI2gnEuV9tqkVs3aO/Oe4N9QwpAs=;
+	b=eb/zHdBn3C/tnoT6w2a3qeECXJ3kFhHwbqveIaOekS+Zmifrc7Bt5u532ZopGu3dWJEt
+	 nrQH355FmEE3boBNP+gCekgT6Ot6bozWMSxM7Mk4qCEqTs+kNR58mQiQlVT/lmxLYruct
+	 6HWIpa12z4649gKS5ZpQK9AWrmzwCbMYlKC8XgnyW8fOvfniPDepplsLrBRbCOZ3+PxFb
+	 tLXzhFheKJQDMJiAHT4aV5D/E/jh9/YUjk0GH+ua3oX41zh/luPgQTJNdpJATg9UDlCIv
+	 uKOgVO0cwM+GBiGTzoAUv28NBmVB4B2/+zAYCOfZ0LVUZTivoHy+K9SezOd/vE3Ow2Q==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789845223;
-	bh=3GZoMDn/dI80wo7RwCqmqSx20D8XtRcqgX876NXYhRA=;
+	s=default; t=1789845225;
+	bh=yLxm0RiThvSifppOI2gnEuV9tqkVs3aO/Oe4N9QwpAs=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Y+HwKR0BzYAIjbcezTCMwZ/ELeYqVW39phKnHifUt5JnSJJoinH843Rll0+OAlcKu
-	 OxKfWdypCFOLranbIDULOlcyu6GT4Zu2Ujcy5DZ+Wg72xPOwCckTVsGLBOjldfGTDY
-	 pl9mR8iZ9RZ6u2fJ2xe5FHbvYDpWwvQa95aIXAAtNSWY+YoSj2KGRcv7/eM7sCeSoR
-	 z17rx5ooDIcBtjEdnpjFXxHRV1Foe4pcZmP1S8UQ5XKCruUW+qeQDsYHg2ubRSSmvU
-	 /2xEmuFi//Cyc2Suq/llhw0klZbdlLXa6+MI7piX6pOaM5yRHt/9aFrIffIbhz5jA6
-	 jLPJQo30c2dSA==
+	b=Uzy3a0yYzEw2M+GY50pWylQ24/P5CyYM5+WmzlYBE+at3J4W2ABJC7JbJoJcAWnhk
+	 13CtpbyJspj0oBP8vJhermwa/SL7hb/r3wat83sA3vfaFsfBbvO3GNEpFh8R6CRVhC
+	 yVLMegbRCjoVgubpV5UOBvgr7x4r7Ozi/j2PoMYw4yudjE7dq7T6ZZ3JHokzgvY+jb
+	 Vqo+pxzU/R/8DnLsb1YnWzIjeAdqLefwcfqtfcG3LpVQ02Zd8RBgaT0v+KtFFP39WE
+	 1OH5WQyJ+IZX4FW75PZ/A6buaP6vygBtJbrHRSzRLiiWvf4eD5AEnN8fbInfxc7aa1
+	 8l09E9hCf5AUA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BF3554078E;
-	Sat, 19 Sep 2026 19:13:43 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 3087013D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1C1CB40CCA;
+	Sat, 19 Sep 2026 19:13:45 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id A84E5362
  for <buildroot@buildroot.org>; Sat, 19 Sep 2026 19:13:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1F1BE4078E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9A5BF4017C
  for <buildroot@buildroot.org>; Sat, 19 Sep 2026 19:13:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gYQl8uxdWGKY for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wjZYVBjXSF17 for <buildroot@buildroot.org>;
  Sat, 19 Sep 2026 19:13:41 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 517C340746
+ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org 7AFB240179
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789845221;
- b=AlyjzF+PhKsZQm8FN1mmQr8eMyHOn5KVGe+ALF7SJu7NohqbcbJwv1BRRTVy++qwIpji
- NH6pKaJE0JMPyGEyFAoXtdx3O0gTbYZtVA2CGr0gQjjK2f7PA4uGvaCPGIRkY9mKzTFl4
- r2vSb3vnlXoVWpuSTKLBux6NEgtn/L1+fyUNp6um9Q0hN5QVoD1Huu2Gmic21sll5cu3e
- 8YWKeScBM8TCoRkLrfcP3hb7U4Ee4GMCts44P5Py2FqKW0DoBCEzZo/8I8NpQDBOo9s/D
- gSSCp5c/fvRe5hsxDoSuDG3Mxgs6h09JBxIdvlZfE7qjwkUOZXASdvbyztdoWLVBWSQ==
+ b=YJfzrtbWWYlAVIN8oLoOQWd8I+m0mW2COPaXSCZnD74ZjnCypT0oVlgkBhjpTDFFMiU+
+ tnZW/WlfXUa1y4XKTCb6t25tq7rgEqCW0vwl/eotIsfam+9QW8158xc0p1ATf5vyx8oON
+ Tu2r6Qno7834RVea/BjyEi7so2RRNAKtV+zLP5g9CFHWN56DUJLmKqqEEQWkWjYgCsD7i
+ ZsEVnZeojPxtuzF1B+xIYFbmG+hBfhJK37zNwGjP/hK/1Kz+Qb2483O/GIuZaQv9iIemm
+ sIGc6DgtPCT3CIwbSQ/Ld/TEgqBKlMhIyVBeEnujNGoxnn+6IiZz8vD+YT6Im2B0W2g==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1789845221;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=j/UaWhIqvJN5xn5BKUIeU71IYmwOacQHw+UEgZBkO6Q=;
- b=q2p72CJus1Om3R3fQrvOh3JV33GrcCcrpuwTJ3eZ+pG1NHn46YdH9msdjkF97agLUM/b
- iuMZLkd14+Te/9kyIyPcqI/9c+1oP54O606AsBAN/WXTOwoIh8P0ZZ2cAmhPwaJF5am5s
- 0B7VXL/T34vf0C/AQfCh2lrcKpO2x4FtTt2yaW3QQMdWirodpR8achkP2Z1EMic3Tdn8s
- HI64zhU2vYPPDdfficAiFlIA45grB1ZeOY1M6+wbPN8VCYWgyfvjF97nrE2Hb2uR8u2RM
- 2PHc0p3yU+vZWYtM3CDuNy9T4TZJE0X+gEx8iyf143+RossR0omH+BnbcFJZazd/gfw==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org;
+ bh=sBqa1Afp0lmfHDRaW5uXeFmNNzH+hWEBGpGhiUqw2OA=;
+ b=XajJgGR06gFLOTSyMMWVLfXRStjxEsmgsSPww/8Ado6HE/eqInhPOIfYOyIuW8Y6ZeMT
+ ylO7U4thh/DLkLWSfIrDPUstu5UPhKkLIHhmHdvtssQ3mfFSHubwabVDeLLyp2mpadKtU
+ hLqbg4KVD1JB040cz6py0SFXiuRCiWGdEu7MQ+Il/uVEGxLiKgV2DWck8aCEhm0pnDX8v
+ KwDcotM78sccJozpeUd8aP/2tZ31wPAOhrhTe0wBsIV8DYVveWTXUCgXcRN09HH/pFGXF
+ mqXItmIydio+OLsOkxpn42v/ODPjPdAbdc3dTyS7ZX0IKc/eLh+kuqEdcPHUDwKctGA==
+ARC-Authentication-Results: i=1; smtp2.osuosl.org;
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 517C340746
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7AFB240179
  for <buildroot@buildroot.org>; Sat, 19 Sep 2026 19:13:41 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 60FB48D5E4; Sat, 19 Sep 2026 19:12:33 +0000 (UTC)
+ id 6FEE88D6B6; Sat, 19 Sep 2026 19:12:33 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 19 Sep 2026 21:08:14 +0200
+Date: Sat, 19 Sep 2026 21:08:24 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f667c1c2061f70d17298fa53236c18578ee9008c
-X-Git-Newrev: 0e27b1d8a47c1c9b36e7c5761299495f9a7e8c19
+X-Git-Oldrev: 0e27b1d8a47c1c9b36e7c5761299495f9a7e8c19
+X-Git-Newrev: c23815ad18883fd47d0065a55e2048dce51ffd03
 X-Patchwork-Hint: ignore
-Message-Id: <20260919191233.60FB48D5E4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/nxp-mwifiex: bump version to
- lf-6.18.20_2.0.0
+Message-Id: <20260919191233.6FEE88D6B6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/nxp-bt-wifi-firmware: bump version
+ to lf-6.18.20-2.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -118,49 +118,197 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/0e27b1d8a47c1c9b36e7c5761299495f9a7e8c19
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/c23815ad18883fd47d0065a55e2048dce51ffd03
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-The previous version fails to build with Linux 6.13 and newer because
-mlinux/moal_main.h includes the removed net/lib80211.h header.
+The IW610 module is also available with a USB host interface, while
+the current package only supports its SDIO firmware. This commit
+adds this USB support.
 
-The header was removed by Linux commit 02f220b52670 ("wifi:
-ipw2x00/lib80211: move remaining lib80211 into libipw").
+Bump the firmware release to lf-6.18.20-2.0.0, which
+provides the FwImage_IW610_USB firmware, and add a dedicated
+BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_IW610_USB option.
 
-The new NXP release skips this obsolete header for kernels newer
-than 6.12.12 and includes the corresponding Linux 6.13 cfg80211 API
-compatibility fixes.
+The new release also moves firmware files out of the nxp/ directory
+and no longer provides 8801 or 8997 firmware. Update the installation
+paths, make the existing IW610 option explicitly SDIO, and retain legacy
+configuration handling for removed or renamed options.
+
+This commit also updates the license hash, after an update from:
+LA_OPT_NXP_Software_License v57 July 2024
+to:
+LA_OPT_NXP_Software_License v63 May 2025
 
 Signed-off-by: Antoine Gennart <antoine.gennart@quimesis.be>
-[Julien: fix _VERSION to use a tag rather than a branch]
+[Julien:
+ - update license hash
+ - fix _VERSION to use a tag rather than a branch
+]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/nxp-mwifiex/nxp-mwifiex.hash | 2 +-
- package/nxp-mwifiex/nxp-mwifiex.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ Config.in.legacy                                   | 36 ++++++++++++++++++++++
+ package/nxp-bt-wifi-firmware/Config.in             | 32 ++++---------------
+ .../nxp-bt-wifi-firmware/nxp-bt-wifi-firmware.hash |  4 +--
+ .../nxp-bt-wifi-firmware/nxp-bt-wifi-firmware.mk   | 16 +++++-----
+ 4 files changed, 51 insertions(+), 37 deletions(-)
 
-diff --git a/package/nxp-mwifiex/nxp-mwifiex.hash b/package/nxp-mwifiex/nxp-mwifiex.hash
-index 559e89cb37..d7d63040dc 100644
---- a/package/nxp-mwifiex/nxp-mwifiex.hash
-+++ b/package/nxp-mwifiex/nxp-mwifiex.hash
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 6c222c0e57..565f100e57 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,42 @@ endif
+ 
+ comment "Legacy options removed in 2026.11"
+ 
++config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_8801
++	bool "nxp-bt-wifi-firmware 8801 support removed"
++	select BR2_LEGACY
++	help
++	  The 8801 firmware is no longer available in the selected NXP
++	  firmware release.
++
++config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_8997
++	bool "nxp-bt-wifi-firmware 8997 support removed"
++	select BR2_LEGACY
++	help
++	  The 8997 firmware is no longer available in the selected NXP
++	  firmware release.
++
++config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_8997_SD
++	bool "nxp-bt-wifi-firmware 8997 SD support removed"
++	select BR2_LEGACY
++	help
++	  The 8997 firmware is no longer available in the selected NXP
++	  firmware release.
++
++config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_8997_PCIE
++	bool "nxp-bt-wifi-firmware 8997 PCIe support removed"
++	select BR2_LEGACY
++	help
++	  The 8997 firmware is no longer available in the selected NXP
++	  firmware release.
++
++config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_IW610
++	bool "nxp-bt-wifi-firmware IW610 option renamed"
++	select BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_IW610_SD
++	select BR2_LEGACY
++	help
++	  The IW610 firmware option was renamed to distinguish SD and
++	  USB interfaces.
++
+ config BR2_BINUTILS_VERSION_2_44_X
+ 	bool "binutils 2.44 has been removed"
+ 	select BR2_LEGACY
+diff --git a/package/nxp-bt-wifi-firmware/Config.in b/package/nxp-bt-wifi-firmware/Config.in
+index c707cd05cd..9fe79fa7d6 100644
+--- a/package/nxp-bt-wifi-firmware/Config.in
++++ b/package/nxp-bt-wifi-firmware/Config.in
+@@ -7,36 +7,11 @@ config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE
+ 
+ if BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE
+ 
+-config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_8801
+-	bool "8801 (SD)"
+-	help
+-	  NXP 8801 module firmware files.
+-
+ config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_8987
+ 	bool "8987 (SD)"
+ 	help
+ 	  NXP 8987 module firmware files.
+ 
+-config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_8997
+-	bool "8997"
+-	help
+-	  NXP 8997 module firmware files.
+-
+-if BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_8997
+-
+-choice
+-	prompt "8997 WiFi interface"
+-
+-config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_8997_SD
+-	bool "SD"
+-
+-config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_8997_PCIE
+-	bool "PCIe"
+-
+-endchoice
+-
+-endif
+-
+ config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_9098
+ 	bool "9098"
+ 	help
+@@ -62,11 +37,16 @@ config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_IW416
+ 	help
+ 	  NXP IW416 module firmware files.
+ 
+-config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_IW610
++config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_IW610_SD
+ 	bool "IW610 (SD)"
+ 	help
+ 	  NXP IW610 module firmware files.
+ 
++config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_IW610_USB
++	bool "IW610 (USB)"
++	help
++	  NXP IW610 module firmware files.
++
+ config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_IW612
+ 	bool "IW612 (SD)"
+ 	help
+diff --git a/package/nxp-bt-wifi-firmware/nxp-bt-wifi-firmware.hash b/package/nxp-bt-wifi-firmware/nxp-bt-wifi-firmware.hash
+index 60e1be03da..dc90b5b9a9 100644
+--- a/package/nxp-bt-wifi-firmware/nxp-bt-wifi-firmware.hash
++++ b/package/nxp-bt-wifi-firmware/nxp-bt-wifi-firmware.hash
 @@ -1,3 +1,3 @@
- # locally computed
--sha256  dcffe6c48babf7db82aac4704b056cffc06a1f80008cd9c23ab0479fc890ba99  nxp-mwifiex-lf-6.6.52_2.2.0.tar.gz
-+sha256  7511600dbad34677d2a5fa93e467a3685af96c517169e9fd1e107da679115ef1  nxp-mwifiex-lf-6.18.20-2.0.0.tar.gz
- sha256  67d461bc478d220fcdf99c59d8ea17fffbd1881718281aa4947eb608fcd568bb  LICENSE
-diff --git a/package/nxp-mwifiex/nxp-mwifiex.mk b/package/nxp-mwifiex/nxp-mwifiex.mk
-index 46678a2c91..019939d93a 100644
---- a/package/nxp-mwifiex/nxp-mwifiex.mk
-+++ b/package/nxp-mwifiex/nxp-mwifiex.mk
-@@ -4,7 +4,7 @@
+ # Locally calculated
+-sha256  444351eba2669772a0f62aadbff92b46adb370dcd5228f12e4f5ae2b58554951  nxp-bt-wifi-firmware-lf-6.6.52_2.2.0.tar.gz
+-sha256  601fa790c5b4d03579bd182fb4d65a6f329a32faf49db22f98e4608221e861f7  LICENSE.txt
++sha256  e0ed4da6b52c3fca6fed3b1b7a484d11b720015946a72f04b24363e865fd4d08  nxp-bt-wifi-firmware-lf-6.18.20-2.0.0.tar.gz
++sha256  3001cf84018c5cb10d183a678f6ec8a928c797616ba06b398d7ca93c0779aaa2  LICENSE.txt
+diff --git a/package/nxp-bt-wifi-firmware/nxp-bt-wifi-firmware.mk b/package/nxp-bt-wifi-firmware/nxp-bt-wifi-firmware.mk
+index f0440ce32a..9b6a932fe4 100644
+--- a/package/nxp-bt-wifi-firmware/nxp-bt-wifi-firmware.mk
++++ b/package/nxp-bt-wifi-firmware/nxp-bt-wifi-firmware.mk
+@@ -4,29 +4,27 @@
  #
  ################################################################################
  
--NXP_MWIFIEX_VERSION = lf-6.6.52_2.2.0
-+NXP_MWIFIEX_VERSION = lf-6.18.20-2.0.0
- NXP_MWIFIEX_SITE = $(call github,nxp-imx,mwifiex,$(NXP_MWIFIEX_VERSION))
- NXP_MWIFIEX_LICENSE = GPL-2.0
- NXP_MWIFIEX_LICENSE_FILES = LICENSE
+-NXP_BT_WIFI_FIRMWARE_VERSION = lf-6.6.52_2.2.0
++NXP_BT_WIFI_FIRMWARE_VERSION = lf-6.18.20-2.0.0
+ NXP_BT_WIFI_FIRMWARE_SITE = $(call github,nxp-imx,imx-firmware,$(NXP_BT_WIFI_FIRMWARE_VERSION))
+ NXP_BT_WIFI_FIRMWARE_LICENSE = NXP Software License Agreement
+ NXP_BT_WIFI_FIRMWARE_LICENSE_FILES = LICENSE.txt
+ NXP_BT_WIFI_FIRMWARE_REDISTRIBUTE = NO
+ 
+-NXP_BT_WIFI_FIRMWARE_FILES_$(BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_8801) += FwImage_8801_SD
+-NXP_BT_WIFI_FIRMWARE_FILES_$(BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_8987) += FwImage_8987
+-NXP_BT_WIFI_FIRMWARE_FILES_$(BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_8997_SD) += FwImage_8997_SD
+-NXP_BT_WIFI_FIRMWARE_FILES_$(BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_8997_PCIE) += FwImage_8997
++NXP_BT_WIFI_FIRMWARE_FILES_$(BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_8987) += FwImage_8987_SD
+ NXP_BT_WIFI_FIRMWARE_FILES_$(BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_9098_SD) += FwImage_9098_SD
+ NXP_BT_WIFI_FIRMWARE_FILES_$(BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_9098_PCIE) += FwImage_9098_PCIE
+ NXP_BT_WIFI_FIRMWARE_FILES_$(BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_IW416) += FwImage_IW416_SD
+-NXP_BT_WIFI_FIRMWARE_FILES_$(BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_IW610) += FwImage_IW610_SD
++NXP_BT_WIFI_FIRMWARE_FILES_$(BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_IW610_SD) += FwImage_IW610_SD
++NXP_BT_WIFI_FIRMWARE_FILES_$(BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_IW610_USB) += FwImage_IW610_USB
+ NXP_BT_WIFI_FIRMWARE_FILES_$(BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_IW612) += FwImage_IW612_SD
+ 
+ define NXP_BT_WIFI_FIRMWARE_INSTALL_TARGET_CMDS
+-	$(INSTALL) -m 0644 -D $(@D)/nxp/wifi_mod_para.conf \
++	$(INSTALL) -m 0644 -D $(@D)/wifi_mod_para.conf \
+ 		$(TARGET_DIR)/lib/firmware/nxp/wifi_mod_para.conf
+-	$(INSTALL) -m 0644 -D $(@D)/nxp/mfguart/helper_uart_3000000.bin \
++	$(INSTALL) -m 0644 -D $(@D)/mfguart/helper_uart_3000000.bin \
+ 		$(TARGET_DIR)/lib/firmware/nxp/helper_uart_3000000.bin
+ 	$(foreach f,$(NXP_BT_WIFI_FIRMWARE_FILES_y), \
+-		$(INSTALL) -m 0644 -D $(@D)/nxp/$(f)/* $(TARGET_DIR)/lib/firmware/nxp/
++		$(INSTALL) -m 0644 -D $(@D)/$(f)/* $(TARGET_DIR)/lib/firmware/nxp/
+ 	)
+ endef
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
