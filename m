@@ -1,104 +1,116 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C979C982DA
-	for <buildroot@archiver.kernel.org>; Sat, 19 Sep 2026 12:24:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5BBC5C982CC
+	for <buildroot@archiver.kernel.org>; Sat, 19 Sep 2026 12:25:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 599476069E;
-	Sat, 19 Sep 2026 12:24:45 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id y7uCko4pNZUp; Sat, 19 Sep 2026 12:24:44 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org D506A60678
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789820684;
-	b=HoatDQIrYQJsC4hmKJ+11w2o6eY6NqzOxys4hpMZ4TmjlstvrqM2dCPhvrovJzsqplN/
-	 BXZClgqaIJH6pGWSkUZPf4KOpYhIKdTah+fu6MhVpYyTrvEy8jdpyXPvRbT3gUX0sEkpl
-	 Xhlqrp+bMOmZu/+GhbdLZcc+0mnkrGE2nbzuZTdRIBIK5bVbnWuu/2BtKRncQY8+0RV9I
-	 sLsvxhglLMWp4p6EwFLbOnHnFPM/sNEh8LCbzjPRfB7/he30BHhyjssfPrizX4AX+qzDG
-	 QdZ9J60feNCUbNEed5khtX3WGVLdEsprIFpc8AVNFlzGMMo9vL5dhqkKvpaC1gsADgw==
-ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789820684;
-	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
-	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
-	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
-	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=im6taf89bpZe+8B1nG6viE32PrSghKjmxAc0qwbNFE4=;
-	b=pvpISneEeb+i7DlUy8ZZY31gY4AN/a2FZfUd635PDaseaU97VKg02nPCBaqT21YQvvp6
-	 fRoVXS2Yph31gSlqGgKFODWJNLZzoJoA8gZR8ZQ9jo+U2z8OFtcvpkPfqinxX9+7Bzsey
-	 9EpTW1dqAOxRCRvwkpJSofTp9De/Mz+aSSWAp8J6wzgQIOg607XvPeAhoFOKqz0MeQF4C
-	 I4dTuAqK+DcP92RoDiZQ/KXZ5L2h59eOe626fgWb7xDVefQNSJaQhFSp1cZU7lnwkbZpF
-	 WUCL9jUV+e3m3MErTkbi/56VbWnazUBw5r+mqcXeH/euWJITgpNJw9szULSxvtciEdw==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789820683;
-	bh=im6taf89bpZe+8B1nG6viE32PrSghKjmxAc0qwbNFE4=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=XJwkJFJUkxb+nNImHVzv0DGvdrIou+8BKulbOYQf+vtk0j03PHrHcs9I3W6Kt3l92
-	 PCa7vx1TWKg9xIQNyK86pG55oANTL2uifYnxhuFJ1a47Sz0iAmHoq7WOCS8wFyW0AS
-	 zKVeRe9+u2hVJBFBisRREnRxXa0F+BuUrJ9aj40Ytn50JreaAlZIvsXV1WiHuzLNle
-	 njIEkIvrOqUv21EuxYQrAffn9bmA6DFwA7jVwL5vtfts7BbysI2e0iyEuruBDIdyBf
-	 9/Alc2+OZ0z3RIcJyGP6iIPkoAz30Eb1FnHNtQJnjpikkOdrJD4yQLE3q0rY/B29kH
-	 LnCxLqY8SZBrA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D506A60678;
-	Sat, 19 Sep 2026 12:24:43 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0FE8C793
- for <buildroot@buildroot.org>; Sat, 19 Sep 2026 12:24:41 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F39F140A5B
- for <buildroot@buildroot.org>; Sat, 19 Sep 2026 12:24:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0BFF640A59;
+	Sat, 19 Sep 2026 12:25:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vZILOSW9XKEA for <buildroot@buildroot.org>;
- Sat, 19 Sep 2026 12:24:40 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 0C53040A59
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789820680;
- b=JnqGS24pdJutQMp8JzrMU8g0MQ8KM/IZ9F+TM1zmiYmZWeGHwtkTyKt/ebZlu+RMpcBM
- RZctGXRel4v/NEPs70HmR+NQS4N3RXogAYTEbQzjIlApkc5NfyZCE+49lK7OKyfPgdAWu
- GSvCwtrRsQrw7rLgmwPY7rsu6PKX4j4IjJVVoYZy8g86EYurDcW0YJYs/JmJxrXvyuH0R
- MiOChV3h3w9yn5696YTN/nYfXWDW63fnV+S8c6/drOBpC07N6Hp8W8FPJfvVxp3q6348A
- wm3Oe4729BWPHkNzt33EvAXj9+SF9AxTH9RlOYjifWA/oP/KrrmQid8bHbwvQz8N2Lg==
+ id rYG5Z8nrjIXu; Sat, 19 Sep 2026 12:25:26 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 3F69440A5B
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789820726;
+	b=B3J76GyQwsg0URVhCaxK55ZwP1jN3hbaV757xhLuz0bwUJW1v38PJFIBVdqsjz/kVz1/
+	 ilqeod9r39dYvh5XR0YiGS+HIOfqz7zhWQzutb3R6NvKXT4dfTo5lyAYMq+GLYf0DLo6a
+	 dotVMI+A1jmeLSOtmjfG6/dXAHV4deHqaJfliQndpPceefYWuyUO60Ht6ucr13Z7WJQad
+	 JFyYLoK0XYB45sUnC68BUMzJmHvv2Y6Rcp+xvkBvDQTO9l4SOUTEs2NLwcLyvlKEIvDM5
+	 ZKmIapGAho6A4hzVKs34MMdgoX3Gjz0vPcTvHPZfFqr73SoGTaTq64OdQDN5aCNqGqw==
+ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
+	c=relaxed/relaxed; t=1789820726;
+	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
+	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 Received:MIME-Version:Date:To:Cc:In-Reply-To:References:User-Agent:
+	 Message-ID:X-Sender:Subject:X-BeenThere:X-Mailman-Version:Precedence:
+	 List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:Content-Transfer-Encoding:Content-Type:
+	 Errors-To:Sender;
+	bh=qD2u8ZJXoFeDOJnZZ/DSN2jZStXnFtc0dfgVxDPPs4o=;
+	b=CU3/A5Fhr423+kFbc6/JOSAFxInlDSt06JLv5MJRaDQgvDCUYccwpdbrPHos1jXJKQY9
+	 JwsacNQ2iCwbg1F1pHMwrdQ4u3mGVXWEqq5Ew38uhXc0MGii0TN3QSRRIMSF1RWLRY00H
+	 6aJueOwABSZ6nVtQlYlGGenuH3WHFgG0CdORdKFQAHPYMwc2wo5dzocDjgsMa4bY0Ofz4
+	 SRxfovDjCAx+l8PmBKBvi9ZuS5S+yJ+6abtYGoJZbIVt8Tf/xr6OD2uD7tFlEV9rxgH7x
+	 kVN4Mkb7ffcHsJuHC/X/Iu7iFTSnvq3Edt7+uRkE77xJx1NIAOJG5T2fygLFUPx+3bg==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1789820726;
+	bh=qD2u8ZJXoFeDOJnZZ/DSN2jZStXnFtc0dfgVxDPPs4o=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=V9OweOgN5PQoDJP1rgFfQogVY7+qF/g+oPAsuaq5W4yHhbOfKJZhsVhbGDH9BaMun
+	 9IV8keHOi5zm41b/yoQah48eM1SAKAEDnKqX4nC78r1UnMmTZFitjV9WsGgGsMmCqq
+	 moSrkprOBIcejPKNggQMFI5FFdcCcmpiGQKCBulBPr9wF1ekISedhyf8ik3r8l3exU
+	 X5WdRJ3ajPidZ4c5ElmJOaR2Mrm7SEQIMVf5m+s3P3D9/11ueQ9DurstzjVA1dojyw
+	 qFZBn4Ak2xfk/Lv7Zh/ndqEahVmt6AVroTRYa3u5SbiJvgxTGaVljk0PEFvqn17lUX
+	 LIyJyX3ildDeA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3F69440A5B;
+	Sat, 19 Sep 2026 12:25:26 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 14EAA362
+ for <buildroot@buildroot.org>; Sat, 19 Sep 2026 12:25:25 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0618C60678
+ for <buildroot@buildroot.org>; Sat, 19 Sep 2026 12:25:25 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XXxXYYooOaPs for <buildroot@buildroot.org>;
+ Sat, 19 Sep 2026 12:25:24 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 4BD9D60673
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789820723;
+ b=j9/jEsKOBTf7+L4+nvCf31p+SRP7sg2SqINZOnAIaR7b2nJCNa40Sw3VQfYgPs7vo9O/
+ 45+lgSVyiEn9qrhQjVWkpWM6ZE1eEhCfUwP6cWPct3DWDHkjOD8ehAtY9u5jO/yP9g3ro
+ q0JYAUfI/hSODtkZEkK/FA+SoFMpGzskHbRh+/DIRgpaLODxtGEosJP4+LnntQ7kGZQZz
+ ypR1oFIGGxCurkCBNdDiC5MQDclISxzykTvy5pRNWerSwsV+viqvJtL+ZrTdixNKf8k6Q
+ ZT4Uz/XPfWW0vPmpKkjxplb7kUGabo7tL3rcRUQGy8j4DQJSnW9PeDRMIKvOUKoEu5w==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1789820680;
- h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
- X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=z78Fp9Y79MPs9U/UJryFx/U+kzRQCXJpa93ebgpRmVc=;
- b=EUuFHyUs4jGEf8Q8WAAyp4C9lfRMCq/BjgGkE/SgOM0T8BLHRnpVYm90j5NakgQ+w7gS
- Q+LEdIuOqfhUQLMC26zOVvoeoxXrufb+gWaKl+rcq0iyg3CwchAurt50dc4zKSvPUKm00
- Tpg9LeNGlqTnpja9nu2s8ufu32J81AprFVOIw8cQFuP5rGNXhCmS8AU+2RCJspJWxFxi9
- E3+iHtm3e50aXn903EOTyoCSTUesxx8dyjwinxpZMQh0r3S+Sf4Z/8LtuCqpk86EWGLc3
- AgVhAB1IVPJoMyZyvALc7dt4CIn4nmqLW6B/w9mum+fYtYe1de+h4DNUFdufRw0YvlQ==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org;
- arc=none smtp.remote-ip=140.211.167.122
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0C53040A59
- for <buildroot@buildroot.org>; Sat, 19 Sep 2026 12:24:40 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 369808D5A9; Sat, 19 Sep 2026 12:23:32 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 19 Sep 2026 13:28:18 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6dce485ca72979ba0575a6ac82d7adfbf512e45a
-X-Git-Newrev: f94d8e253117ce4db9bd20bd2720a3e8f98e8342
-X-Patchwork-Hint: ignore
-Message-Id: <20260919122332.369808D5A9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/intel-vpl-gpu-rt: bump version to
- 26.3.5
+ c=relaxed/relaxed; t=1789820723;
+ h=Received-SPF:Received:DKIM-Signature:Received:MIME-Version:Date:From:
+ To:Cc:Subject:In-Reply-To:References:User-Agent:Message-ID:X-Sender:
+ Content-Type:Content-Transfer-Encoding;
+ bh=d5Ae+FJKnDE8rsi0bVwKZpp0xt0yfhA5IJFnA+nzTL0=;
+ b=hJ2/HsuKEb3JNrgU5ncnAkdKk64aX0lsEsQAOoIH6GmwmVxBx6jeoFG+ta+40dwe2DsZ
+ gq63ukXn3WNImQlbHQShnowecJfso5LZVfkDSopPW2qb0FquZXYNWMTBqoH77QRTIiX80
+ KKtZ2t/KGZiRgYIDybgiZywFniQ/LvsrXrGbIg5AQHVxsb7uR+V1oTInaGbTGeaNg0sw5
+ qIaVsUnCCZfvqpl67npGRv+l2eCuhnUHC77yEYmUaoh1I2XjaArl33ZYvug85kXV3fDaK
+ 7Gcx4J977HNIJAv9rBqzFVPdGPNX7J7/FdQ0rneU7b0zP614aVzkOSBU85qC1J34FJQ==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org;
+ dmarc=pass header.from=free.fr; 
+ dkim=pass header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b="Wo/SQDcG"; 
+ arc=none smtp.remote-ip="2a01:e0c:1:1599::15"
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::15;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4BD9D60673
+ for <buildroot@buildroot.org>; Sat, 19 Sep 2026 12:25:22 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id 3A2507804FD;
+ Sat, 19 Sep 2026 14:25:19 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 19 Sep 2026 14:25:19 +0200
+MIME-Version: 1.0
+Date: Sat, 19 Sep 2026 14:25:19 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20260918222220.3573878-1-bernd@kuhls.net>
+References: <20260918222220.3573878-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.19
+Message-ID: <4ceaafda4961c234c5bcdd5b4a4c917e@free.fr>
+X-Sender: ju.o@free.fr
+Subject: Re: [Buildroot] [PATCH 1/2] package/intel-mediadriver: bump version
+ to 26.3.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -112,47 +124,20 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/f94d8e253117ce4db9bd20bd2720a3e8f98e8342
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 19/09/2026 00:22, Bernd Kuhls wrote:
+> https://github.com/intel/media-driver/releases/tag/intel-media-26.3.5
+> 
+> Rebased patch 0001, needed after upstream commit
+> https://github.com/intel/media-driver/commit/04584f8839ff773f18e4b1542618a00b6fc4de1a
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-https://github.com/intel/vpl-gpu-rt/releases/tag/intel-onevpl-26.3.5
-https://github.com/intel/vpl-gpu-rt/compare/intel-onevpl-26.3.4...intel-onevpl-26.3.5
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash | 2 +-
- package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash b/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash
-index ed08ef3926..76d18cd3dd 100644
---- a/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash
-+++ b/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  afd7c1cda2a5e9f96c21c333ef1b471d97e6325153d31f3ab468617afab0133e  intel-vpl-gpu-rt-26.3.4.tar.gz
-+sha256  92867a0f8c09d81419102a61713e9f98dfd2af3fc9c91c6f4fb6d0c784c8e442  intel-vpl-gpu-rt-26.3.5.tar.gz
- sha256  c31c3cc5fd66d1250dbca1c3d9011a9f874537442ac71c8de80f2f0fed13f297  LICENSE
-diff --git a/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk b/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk
-index 56e77cda12..9bbac624cd 100644
---- a/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk
-+++ b/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--INTEL_VPL_GPU_RT_VERSION = 26.3.4
-+INTEL_VPL_GPU_RT_VERSION = 26.3.5
- INTEL_VPL_GPU_RT_SITE = $(call github,intel,vpl-gpu-rt,intel-onevpl-$(INTEL_VPL_GPU_RT_VERSION))
- INTEL_VPL_GPU_RT_LICENSE = MIT
- INTEL_VPL_GPU_RT_LICENSE_FILES = LICENSE
+Series applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
