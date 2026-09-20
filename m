@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5AE8C982E1
-	for <buildroot@archiver.kernel.org>; Sun, 20 Sep 2026 12:24:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1B4BC982E1
+	for <buildroot@archiver.kernel.org>; Sun, 20 Sep 2026 12:24:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A1DA540B5B;
-	Sun, 20 Sep 2026 12:24:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9444C40B54;
+	Sun, 20 Sep 2026 12:24:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id c-Oa_vgMKTWF; Sun, 20 Sep 2026 12:24:26 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 873A840B49
+ id BVAp96KxsSrS; Sun, 20 Sep 2026 12:24:34 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org C92E740B49
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789907066;
-	b=iO9O0zVx8gDqIdKA3kWGmh4Y/D90k8KuwkjHMyIzeMS/IFODVaviZZJERpdkZAunKQmX
-	 SfaHs9HHs0kthNKi37awmqyY61YgfA1Tbydb7M35kAbUeedvd3BwOHvtWGfBdvXpHEulg
-	 7ZCEy+WJyhdvWlB8SQ5JydlcY6udae80RnW0gZHPky8+sTsKINB5IT79oeQuhAE7T1YYQ
-	 u9eqzX/HjcTGug2qtXcsb0zkqUEFjP/UbuEsa8mfwpkL75MKmrWe80BTaCW39JJWzaBO0
-	 n/wRgp0tSNikS2ZcG6Yv0PLhgU3n5t2gHzIzSUI1yRZfb9cc1Ce0R08GqsdxyI2Fizg==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789907073;
+	b=qLcVccispvasen0aHjdK+Ap0PBhT+Pj//pbaXxsiPzmjZ+JrvuOYjeiwvnOoxiE+gNdh
+	 zVi97oUGJm2WJrJ3DEsJBTc32uRCGm8koZUx8E9PirYgoqwr64dIzbOPy7uhcxF/VZ/MI
+	 BLCZ662/UDJUp5hoSD+wI6wiMRWbDmph0/d66paN/1BY3Kfta6isCAOyOJYFnvG56Vma5
+	 vJGWN+CstLJjBbLLhn8lFNoyG3qfaaI5r5J5qx0hOsQ+EcG5Hiu/F8iwZ7srqsbcSYP5I
+	 02c5mMxXCoZNrhrmpY+c7OqoYrMzlRwlbot32CJMSp3W18IAZXVUgZKesBw4fcuZTNg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789907066;
+	c=relaxed/relaxed; t=1789907073;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -31,91 +31,90 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
 	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=JJRs8WgVFiA1gC9RhvwmfhljC/UFX2k7K5UL0dH7BIc=;
-	b=AoOpzoX5xX9ELZp46tmycBw9bqoj9TF5Rc/sIl5Vm+IwjJ13DSxYhNplBO2HJY32S+3z
-	 +yxPg9UCAfuCeEUNdB+J6YoD00oqW1mgF06BNfN27utUvFBbBFbTpQs6DWucRdWql49Cm
-	 BY4bwVGBG/b/nwhMszth9keyN4MfyQvJBTPzvqSNl2n70F7XRhw3QUFdmZk+WOVm+sBjH
-	 u3lLK+q0yEJZa269E8QrvDsCVZOLL/mtSs1+OSEfD7mDpy3xh7jFvcSdFYABIp99+b+d0
-	 sjtJyw9ypFgb6Vel7UHrEeMeMJgpjCp5xK/8fGEkRoeK32Opo1kmu/O2x/ougZblsnw==
+	bh=wHk3ZNI5Ezovu+uDGG5p+W48KsvIN5WSO2CS+C3m5jk=;
+	b=f/ohexQ5fO06hfOAqhZvnNCxsGD7ujqErXhZbeEk/6M2vXQ526o/j7jSUXYvziFCG1rn
+	 fJRd2aFKHAUeL7THZXSFyoHTBO2pn+IllYUyFkpg+unbJfF8m0fO1X3w7+Qyfi4O5CFgc
+	 ziqKSSr8eNii1dCJf7fdF0S07H84WIaH7DIM+A59r379co/kAdo62dwxlF8b8ZW5ES6PH
+	 Wyn4jWj3lLvt+MsCMmmqL/JrKxd9/Tq2cNTXWrkAclw6NDysDEI0otpMLSXcNbQ5GiUKF
+	 T8yQxDrBXiVAB6rbxdPbapyacocNbhk1ERlGcTXlz/iuajfl8LPThi0Su8/Y57RsJ5Q==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789907066;
-	bh=JJRs8WgVFiA1gC9RhvwmfhljC/UFX2k7K5UL0dH7BIc=;
+	s=default; t=1789907073;
+	bh=wHk3ZNI5Ezovu+uDGG5p+W48KsvIN5WSO2CS+C3m5jk=;
 	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=cpJSjcHUxCGpg5OOLYeqt2URiOoOTOFiPn93y/DYf1W2DAphXbvVbK2OGlHaDWS4I
-	 31IxbdIACwpIUJoLHaYIq67C5GqyaarTyUFCPsojj5+DcvehdwtdK5cXlAuluqTm+K
-	 UwenxaUlPOQUorVfa3HRDukvL7QH6Cs1Yg7qngPIb4P+frd0G9H4h6n9LkGOa6B1uK
-	 n93CrpdrHZp4ZzOov/rrCfdCIc99lxSgQaExp3XbnvdFBJvVCdYlA3HVrDx7ilBPRj
-	 RHHz4EgzGRIt7oeP0ZyCjpZY222YmhBAXCLHONlEwi7Yh00/w7I2t9IF0aFzm9YW8f
-	 6M1QJYiuCjfgg==
+	b=Jp5XtNY5JWXn5hcQp/1hHu5AkuofmPSvJ1uAitF+OillrgVDRNdD6Ljn2L+Ypxbhu
+	 ZR4t1kq8qlOIw87iByj/aNlKJvcH5d/4q4+GygTKT3q5zsVvVmlnYbRkymbXlCiC77
+	 L3pkAxsjuVf8bVVkZ/ds1BFnLUY2eQ/RBjWpiT9uPEu9H2gEflFMY+RsMU4j+npAxl
+	 SjV8IXeGIkQUABN7JIaRsd+wtH3/tP1yCoDr9Ox7wu8lwwFptueu9q8DIfOiYKuJyp
+	 Z4faXoyzxCh9KE86oTB2s0GjcRRpErmlpdIoeb6XZLS0qRYnf9riSsvPfKy45+Nsp+
+	 yIpzB0BbSvtrw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 873A840B49;
-	Sun, 20 Sep 2026 12:24:26 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 06514371
- for <buildroot@buildroot.org>; Sun, 20 Sep 2026 12:24:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C92E740B49;
+	Sun, 20 Sep 2026 12:24:33 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4CAF837A
+ for <buildroot@buildroot.org>; Sun, 20 Sep 2026 12:24:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EC1C7400C7
- for <buildroot@buildroot.org>; Sun, 20 Sep 2026 12:24:24 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 49CC980F01
+ for <buildroot@buildroot.org>; Sun, 20 Sep 2026 12:24:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3vtXIIgC7pP0 for <buildroot@buildroot.org>;
- Sun, 20 Sep 2026 12:24:23 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org 738874005A
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789907063;
- b=ZZJNq/VjJd9qefjJPtJTI7TSBCM/UVJDyKiqikXE4BQR52IP5+J8n/lrtB2W76axdapn
- eapqxLJdccdNOVtQgRYJlod0FvrKxHOQ3vHzS8PRbMFeKQbUspmBFzrIAIhE/5u7EgcRE
- fcvIj+1/oSrx2V4mRUWUjLZyJvpu38Q8VFjT5vKsmND03gZzkiwkV4qMWax1dQjeSZFkc
- lPylDnOvyyws5qGYe7iyL3Gg0CIHAhcXnCNxEwt6WsTIOj2iOw0bmLyemFKRmg1Iqpx3y
- 0lRZIrgqx9s+2JpAAE1wyf1b1s4y2t5hSWp7U5J8gQin4CRIWXYtclHqh1B07ecWFLQ==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id k8RUnO_idueY for <buildroot@buildroot.org>;
+ Sun, 20 Sep 2026 12:24:31 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 056C980F00
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789907071;
+ b=L6S2BFggYY9KPc1YmRgWvTjFKwU0y0T7HpLXVhOg+Fjp7IitAjjDa6I2dOnyLPfUZGIv
+ 3iKFMbL+Ufj2exyIjdiXe7TAbq/3DMLD+ssbdb/foqqdysOgj1kPa0+G6hVEhicbPrMCC
+ JpRMVCzH5ScayYPrWc+K121dnbRxM68DtM/cHKC+XNeCFsfsWo1xG9NZXfMRwmSThy3m/
+ +qdEMK2wTJkONp3eqs4sxVBl/ObvYbioobeD37jI4tBXjruGZzYf+l4FfgiDbvt/pBeMH
+ y9KpOtSA+yvBPrD3biFKVnqwpuj1Pcae0FQmIC3iXtjeiv7CuXddjIG2ot6K791fqkQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1789907063;
+ c=relaxed/relaxed; t=1789907071;
  h=Received-SPF:Received:Received:Received:DKIM-Signature:Date:From:To:
  Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
  Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version;
- bh=Cc8HXG3PpwqeyM1OBUtDJKlycv6OFjej2loZnjoJDeY=;
- b=GKrO2esNa5h7tbTpkBC5jv6ARljV4VgzZSu/JwjcalTT2f+4oCZIqFfzxPQ7PInG2xTo
- xgfI37gpho6dlWMsC49lWtPX2j8ZuizhCZcUz40+dBdnY49s8EAlGq+KmIVPkTM/BGw/s
- 7C8CVT2dEkuF+HdzeZ/M8Jia87MGIV0/hfrFIfCxmf2GARhVcyLppd1n4OPmfER/m1D6F
- 6RWMHA4JFQKnY7rpELZhUeoIy5AvIgBXq59D3xa3U+wBhDphat9bYny85UvkHkD2XqW67
- P/BWNGcZOOtEbgVbal5HO2Cy1i45olpWMa5XKqMxN24AD7QK5XOAfh7wWTxcTXuH46A==
-ARC-Authentication-Results: i=1; smtp2.osuosl.org;
+ bh=Yatl+voLXevks57SjHPBZyDEM70kC9lkA5iW4JC1AVI=;
+ b=UeGq0k2vTgYQEIy7NzsnSxJx8r4qEdu1HcKmw352m+LTF7ZpjB5FeDTcBQQv45yKHxQN
+ lSsqkavIORQ3HxaOi/UdNUPFVYYyPo25Yhbqi3X/zj8AWrXMnFSYtqX35uBZKi/qH+eVt
+ v77ZeI3carjHyEIIchLH4wR1Ou872hFk8dOYzKSQi/iZEVtNPAZg5YScdTXVUMxKDdO5D
+ KlDY6oOi0t/unC55VUm/1fKRdjvk2ZJCpYh0vS37FWXJv0/TjPSgCmP+fvEgcMoPjU4Ue
+ RUJS8MqWRfmt/LMI1JV49E1wAWTp99ImAKUOTYgXnUs4qlbaScgy0HfmmmUFyVLW4Tw==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org;
  dmarc=pass header.from=bootlin.com; 
  dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=CCSwi125; 
- arc=none smtp.remote-ip=185.246.85.4
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
- helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ header.s=dkim header.b=GMGyWOey; 
+ arc=none smtp.remote-ip=185.246.84.56
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
+ helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 738874005A
- for <buildroot@buildroot.org>; Sun, 20 Sep 2026 12:24:22 +0000 (UTC)
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 056C980F00
+ for <buildroot@buildroot.org>; Sun, 20 Sep 2026 12:24:30 +0000 (UTC)
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-03.galae.net (Postfix) with ESMTPS id 98E174E40923;
- Sun, 20 Sep 2026 12:24:19 +0000 (UTC)
+ by smtpout-02.galae.net (Postfix) with ESMTPS id EC64E1A0981;
+ Sun, 20 Sep 2026 12:24:28 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 66384604C9;
- Sun, 20 Sep 2026 12:24:19 +0000 (UTC)
+ by smtpout-01.galae.net (Postfix) with ESMTPS id B9DC9604C9;
+ Sun, 20 Sep 2026 12:24:28 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 104F1103282B4; 
- Sun, 20 Sep 2026 14:24:16 +0200 (CEST)
-Date: Sun, 20 Sep 2026 14:24:14 +0200
+ with ESMTPSA id 9FFC5103282B0; 
+ Sun, 20 Sep 2026 14:24:27 +0200 (CEST)
+Date: Sun, 20 Sep 2026 14:24:26 +0200
 To: Wei Dai <daiwei@sunkaisens.com>
 Cc: buildroot@buildroot.org, 
  =?utf-8?B?SsOpcsO0bWU=?= Pouiller <jezz@sysmic.org>
-Message-ID: <aq_QTowML2VcCocH@windsurf>
+Message-ID: <aq_QdoeQzO0Ubdva@windsurf>
 References: <20260920074056.1320014-1-daiwei@sunkaisens.com>
- <20260920074056.1320014-2-daiwei@sunkaisens.com>
+ <20260920074056.1320014-3-daiwei@sunkaisens.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20260920074056.1320014-2-daiwei@sunkaisens.com>
+In-Reply-To: <20260920074056.1320014-3-daiwei@sunkaisens.com>
 X-Last-TLS-Session-Version: TLSv1.3
-Subject: Re: [Buildroot] [PATCH 2/3] package/strongswan: add eap-aka-3gpp
- support
+Subject: Re: [Buildroot] [PATCH 3/3] package/strongswan: add systemd support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -134,36 +133,23 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-HJello,
-
-On Sun, Sep 20, 2026 at 03:40:55PM +0800, Wei Dai wrote:
-> Add the eap-aka-3gpp plugin, an EAP-AKA backend implementing the
-> 3GPP MILENAGE algorithms in software. Select the EAP-AKA plugin
-> it depends on.
+On Sun, Sep 20, 2026 at 03:40:56PM +0800, Wei Dai wrote:
+> When systemd is enabled, configure strongswan with --enable-systemd
+> and add the systemd dependency. This builds the charon-systemd IKE
+> daemon, which is designed for native systemd integration (using the
+> systemd libraries) and is managed by systemd through a service file,
+> with configuration handled by the swanctl backend.
+> 
+> Pass --disable-systemd when systemd is not selected to keep the
+> build deterministic.
 > 
 > Signed-off-by: Wei Dai <daiwei@sunkaisens.com>
-> ---
->  package/strongswan/Config.in     | 5 +++++
->  package/strongswan/strongswan.mk | 1 +
->  2 files changed, 6 insertions(+)
-> 
-> diff --git a/package/strongswan/Config.in b/package/strongswan/Config.in
-> index 6847ca4f62..827634c071 100644
-> --- a/package/strongswan/Config.in
-> +++ b/package/strongswan/Config.in
-> @@ -135,6 +135,11 @@ config BR2_PACKAGE_STRONGSWAN_EAP_AKA
->  	bool "Enable EAP-AKA"
->  	default y if BR2_PACKAGE_STRONGSWAN_EAP # legacy
->  
-> +config BR2_PACKAGE_STRONGSWAN_EAP_AKA_3GPP
-> +	bool "Enable EAP AKA backend plugin implementing 3GPP MILENAGE algorithms"
-> +	default y if BR2_PACKAGE_STRONGSWAN_EAP # legacy
 
-Since BR2_PACKAGE_STRONGSWAN_EAP_AKA_3GPP is new, there's no point is
-bothering with legacy handling, so I've dropped this line, and applied
-your patch. Thanks!
+Applied to master, thanks!
 
-Thomas
+Best regards,
+
+Thomas Petazzoni
 -- 
 Thomas Petazzoni, co-owner and CEO, Bootlin
 Embedded Linux and Kernel engineering and training
