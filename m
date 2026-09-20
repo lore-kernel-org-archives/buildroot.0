@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96359C982D8
-	for <buildroot@archiver.kernel.org>; Sun, 20 Sep 2026 17:20:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64B8BC982D8
+	for <buildroot@archiver.kernel.org>; Sun, 20 Sep 2026 17:20:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5D11340D90;
-	Sun, 20 Sep 2026 17:20:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3303C40D90;
+	Sun, 20 Sep 2026 17:20:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yW4qog3WoZyT; Sun, 20 Sep 2026 17:20:12 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 6D60D40ED7
+ id sg0fnmKUtOfw; Sun, 20 Sep 2026 17:20:25 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org C6C1040ED7
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789924812;
-	b=T91100VqDlCMtyTR8SSjRSj2f9Y+jOUIQeKSWfnauY46307aUtpGTHLxhfiqPssYEpDY
-	 4nADvtJxP9GmNlY1Q/M9WPJfhv+oWrnPdRW7qvd5cl0wH2hZmGsZVTaXPTs/vFVhHcH7f
-	 Umpqy5o+7HW6e/xMLUjAy6qToaqyo7m1pUDrrvb5retgf0EXLkL7CLU3qqJS0qp6A7HNx
-	 oNWjcIlS58wI2nmlj9tEAKs+p5tQlQyln0x5FpO5pRhGwtt6kU4ilIDkgTw+G9/aqTqxJ
-	 ZNc+gf0wXKc95N5mPFufYZRbxV7p5+oqXOCqtb6+R6yJ+KlVb/7a7m2aeAU2Bo/CiAw==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789924824;
+	b=m+ZHSJV6T6EXC5zBmeJU3UZEQTAUt75BT0GJxudoaJtiQci5cQn9q5S8ubUw2BWB/lch
+	 qSgI6AGow+hiKmX5YGeKHj+sIZS59bSvMtWx57LAj1Pvp70kfuZjWPru0QqxH6i1qTWbC
+	 7wZkMWH+2P21v7u4T4ae3IeTJ4N4pgz2MBnnRc+L98H306oyai9BK3ea8O+Rl7Hg7qOw9
+	 LTm9uJqKEMqhAn5En0nO22iYxq1DMPu88aGHstU1pL4ITsdLyz5htL+UeLDqJ6yYu9nxq
+	 HzcHLJ7qUGLsL7/7658+zlZmFcckAZvZHsro1rCBj6vYD8jEYo9l2rbpIFfdOdJ1cvw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789924812;
+	c=relaxed/relaxed; t=1789924824;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
@@ -31,105 +31,103 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:Cc:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=guRaCbPWBF0MBPBHpqYbP9VcShwEfgdgODXqZv7pj+A=;
-	b=Fow7laI9WBQzG6DK0blpGw/xA/1zs0hXtf3vi2DtFwYnOjX3KAsPLsZ8I5pZeVvlhkHY
-	 zKd8SViBJ3aweUDhvK3qzon+Fz0gGYTQhrbYGR/KLkbEwlmqWDF8vQ+X0/ZA7+/7lF9WA
-	 9LFmt9lyOq1K138LX34/m+AQ0hOOoSkngJdiepGhsPugxVVyt4Hp8DBAQZ9MUUF3hGK4y
-	 qPYlsFjr/Kg0hYsZHuNnmbOuLsJ5bOAC+VA4AZ7HXpo86gOPviEhlNJk8609sLZCDR2wR
-	 Mio1E361BXkiI0IR1qFeBPwkUOSSfUe4WlKyNsy9WKwXrV65R2du4pP7LqdF2ghgLVg==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; dmarc=pass header.from=kuhls.net;
-	dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256 header.s=kas202605290044 header.b="hXYYm/d5";
-	arc=fail smtp.remote-ip=140.211.166.142
+	bh=11Qsww6xNFOB4hvQCLl5DslALqkKTQvo+GbHqTwTHvk=;
+	b=g57AfvvDdEb81M4dwzQrEXTQV1ePV62WSZPluZy2eFP7ekHT2EUYXni2afGOiUacZWyT
+	 iDords7GQ6/nvImTFM3sVztJxWo6+TbCaxi6alSNtjpYuubxfxJrJ9bbT/KBdAH8ROfHE
+	 tehW4SfIz3Cxe4fSByM5CFak0AEvvc75T3vmRh+HOlcVAtO009jLeKRbdSI46PPZcgfFG
+	 98wLogBKcdwH5zIpOjKA9uICAO3gUD5SMm84o7S4LGuQuN7pvIAURQXCajf66wLG50Fka
+	 XkVYmsMjXhGNoMVPnriemeTbsoQuRiF4eerhUWgzLVNNl0eV4FzWW7MyM6xVwJp7cnA==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789924812;
-	bh=guRaCbPWBF0MBPBHpqYbP9VcShwEfgdgODXqZv7pj+A=;
+	s=default; t=1789924824;
+	bh=11Qsww6xNFOB4hvQCLl5DslALqkKTQvo+GbHqTwTHvk=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=JsZRKFReriqCeVclrPfrgye35TacVw5h+qfJAJt/X2tgMGNOrvEDZtpQa4ZOBBVwl
-	 YCV0Bp5wCkNMIm5an6+BPYMEesvfJ1bW3ok9oMkeKQxUSqLYg8NoDWJxtAUnUWW3Nz
-	 dPS06rrhpD3gYSssrUuXkIdMqRBK3KxAd5zF5b0i0l2tuuJNWY+IXsFl/w0pqIoVBr
-	 Ky5lsFRiiB1qvQtYVJLx7URRvlFmf/o2guPVPCgLkMnn6cw4K+TiX/xo9JAlt8jtbC
-	 nQA7zNLlpen6i5Mj1XAmETHAZaxNZp/ew4cAqCd/O15NxSmMnZsQIZXazH8tVj3Ny8
-	 zMQeb7YsPqkMw==
+	b=HgI0irj+KpJPJXA2agTdG6YT216Fsxba9LrGBVQibCtnhLIr3rQkGjhHDEIP6G+bd
+	 tJ7J7ZJfr0M1LCyq7z/Qb2jQ8hynxQ6J0ZUW9uub+xApp5nf7XNindvt6tklnHVGrY
+	 lNp2UmT0AfhcJfLVYRlEsVEMklJ6FLXy5wOb7F29VqJkcO+FhfMvFmUj/m+blho6MU
+	 Q61/VBYBENs+FVWGGjJ6iYAI4R6vbCIgLg2e/TW1kqcl7Hh01OJ6CGG6lJhkjjUZbN
+	 4210ZvzggiVk19rhGfVkr2RfPYrHAJVvvcFbXGxo95D17ytpHvmFlcD+Gf6HhpUFB1
+	 1akcaWhcHLFCQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6D60D40ED7;
-	Sun, 20 Sep 2026 17:20:12 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 4A63025B
- for <buildroot@buildroot.org>; Sun, 20 Sep 2026 17:20:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C6C1040ED7;
+	Sun, 20 Sep 2026 17:20:24 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id B30AC25B
+ for <buildroot@buildroot.org>; Sun, 20 Sep 2026 17:20:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3071540FBC
- for <buildroot@buildroot.org>; Sun, 20 Sep 2026 17:20:11 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 991F54007E
+ for <buildroot@buildroot.org>; Sun, 20 Sep 2026 17:20:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id q64m9VM6R8h4 for <buildroot@buildroot.org>;
- Sun, 20 Sep 2026 17:20:10 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 2EA0540ED7
-Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789924810;
- b=KU1pd9KgC4/VyIZZLfU5sWeeeF/PtdQvCuRPF5zk+4Z3iYBYuVaNGX9IR4wnYFXOYPRe
- L2ydgwR6sr6l6HSVNWZXI/dKr8Ziil3JnX1l1vFkluDhLMIzP3Xynw0u4KORNGTfx34TR
- IOKl15bq4kWTg2TyTepEt3sRmQlwvK1joMw/0d3fhkNxybNRiftS/QTaI3vYUDiswT35M
- c6HT60XvYdfMlsKFKkZkD0fyn8OJK0mC1hy4vT+L4RyHt2tmv2WMiwC2Eakog+DvN4KT/
- KY5ub5asz24nwDXX21Sz1/4ydgB3JBnPXHjhe2e35MFxbP19d272fwPrQPyTS31p3Hg==
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Gnu_lrxoQ7uy for <buildroot@buildroot.org>;
+ Sun, 20 Sep 2026 17:20:22 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org 1E76840022
+Authentication-Results: smtp2.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789924822;
+ b=tM3BlPrFfgnml85Nh0F78DfZ14DGYdvS65D1rjYn7y2DIu3u8/b+yHr0dwcVuc2rV8gH
+ X+XEWpjJ4DRX0UQziMz7cXp+TdsGAk1HYinDw7Hwyo86AtATVgJZsmJUsrXZSvJk+QHlg
+ QsY4H4ZAbXXstIALv4VSVZAN5eIsYjTWbE0QdtteRfBRI6PtOoMrWstbQapXLtu3R/CH9
+ 5JrVv0pzL8vM++qJZ1XoSxxWN5heUHTPvADlTlNwSIMLDYzPoJoyZh3/t3hOTNvY02FxM
+ dxuX/GRW8FlBGC9sy2g6QIrKhAV5aU/hs2DIdiemXQdNVB0HJOx3ZupveD+2fMgEWjw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1789924810;
+ c=relaxed/relaxed; t=1789924822;
  h=Received-SPF:DKIM-Signature:X-KAS-Sym:Received:Received:From:To:Cc:
  Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding:X-Spam-Score:X-Spamd-Bar;
- bh=XhK/dpvVkxLyk/wa3SfzqUeYSLuuQjJ1v8ZuNGsD38c=;
- b=KWaexeV6/DN/DxOkpLe0InGtkMwhjRGRxlzrFcmzKWAIF4EqoRbh17mAvj+HR1znTHrd
- vPjBJLFvxIR7Jajw39vRz/jQmc+ttX8qjL/MOT+oZNE6UsL6QXbZAClqtz/PAjgWX2eq4
- L0WJg69AGQ0/NRpr7arB44g2+xHfnHwCvAssjsTYfXFbs1fybrJ4/SEoK+bBsPFdcF7+g
- hOkk8v1/XMVUM7VXSGwBocCFYAubbuTw3YVniNKOCMhTmTS0ChNQ75AriJ3Nsok+PxrzM
- 5O3hycj8/tQubmdhjdPZGYAXWysL02L+Hdcmg02s6u3iZJN48pHY2YKullVW+a9IZ0g==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org;
+ bh=KBXLPMLh6ffxxa3uv7bBcT2CXD/KL8pG7XR6lg5k81c=;
+ b=UBcnBYgJgjbk6afY1/Rdyhdmi7YWLjZktM2+7Mbku5yzwhSKHU9rFqZOXUaLo7U1Qma3
+ tvepQ/gD2G3BR1CFlCCAijnHkzNYvc+Qr2JEDq5b7eWXyMyT8ogx+cm99dR/orCNxSIkm
+ LK1CJvukt7DDaCJh9blzVRYHyzP+XcGZt+4NtuzlD52pSRTwWliG4BIc2En1aT0tU0lM8
+ X5Fvy3BVAIZ1V4aiXlpJICEG77inpP2B/UuoqWHmr5YjroCbSaYTzWflwNMpJjphukxbp
+ cZjXEeMx/ddZv6aGvgWaeULddSXcW/mhS0v/zeIGD163IHhELrGMyCOakoPTR9nV1ww==
+ARC-Authentication-Results: i=1; smtp2.osuosl.org;
  dmarc=pass header.from=kuhls.net; 
  dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b="hXYYm/d5"; 
+ header.s=kas202605290044 header.b=sqJfCzbw; 
  arc=none smtp.remote-ip=85.13.140.57
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-Authentication-Results: smtp4.osuosl.org;
+Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=kuhls.net
-Authentication-Results: smtp4.osuosl.org;
+Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202605290044 header.b=hXYYm/d5
+ header.a=rsa-sha256 header.s=kas202605290044 header.b=sqJfCzbw
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2EA0540ED7
- for <buildroot@buildroot.org>; Sun, 20 Sep 2026 17:20:10 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1E76840022
+ for <buildroot@buildroot.org>; Sun, 20 Sep 2026 17:20:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
  s=kas202605290044; t=1789924164;
- bh=XhK/dpvVkxLyk/wa3SfzqUeYSLuuQjJ1v8ZuNGsD38c=;
+ bh=KBXLPMLh6ffxxa3uv7bBcT2CXD/KL8pG7XR6lg5k81c=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=hXYYm/d5RsWuvliTPNGft3J3fBWnDTOezjDz8gi+ehAKaEo8eILHHWD6Xh2nzmeaj
- A4FNnuC2nU47rIYVBDQT0l9gEdQpt4TVYS8MT6v+8FgFgWGJjtAaD5Tn1skoOcyPKG
- cSEQzLLVof6KdxsGalwWysOl8Ow/PkOlju3Ln1kD8P/rNSucG3DHjZmFowtkFXydSw
- Z7csz2gIXh66uuUegEhq9Q1N1hmHxcIigCAteXi5QovrF9eWj05P41Sb5WtYVn1cVL
- +MoGWfyl5vtiKmiRHfk8y3ung+72NTqhdbRq5MWzbJxP4a7RxJjZKHZl70NzgQMk1s
- hZRI7YzuyhvPQ==
-X-KAS-Sym: v3:f51bdf72230551df:lHdkWXAlOH3mFYa7MPhN/Q5mZRaSllnUONUXNce4VNqCbu40d29sJoTMWL/UgPpKmiu+oFAK+SGKiz0pvNPHzzdK8865J0NZZhjD1YGG6aDHJWSqGt9pmYaVeClFza2NY+i+npE0hJgg/gHxSjO6xcwlUb6QQuNPO0hdPziIw4dhYYf4DJSWrRRzANCMomoD/RZTgi346Zz0eW33G9Vcp3B7DR+EaybhZMrqLCjEqGCkGFXPOjSjpT0/ayWciGjXWUz3QuiXUZXlIr+lNW1V5S5HyBJCR/w6EnvHAsYJhPTQhQAx4gJVctdz4XTCaIimRq6ACwja3Rp9OR6uCM1UuQ==:OQUFZk5Di639zTVbkbP3E13he5Fh/eUI5ajnC+0S3za8QvRBR/9wbk7Y/b7toyreMwutawhS1nWowFdgZ9enEiIwRI763OB72a7ClGPmv5+y5f5cNjWvrcQDnSHESiMzo3oKGLaiCyis1WqlloSZvvnrgwtL4SRT7h/Bf7osCOvT6ofFH1/AmkgTuAYOm7W9qQ1r3fJJfvgCF07ynJYScZY3OAuYgzKoK9e9cB79tD+DQAHSEIHSuFqto9IaLvAlXwtmDn6MULrPQwg61pO969ooonTqRuY0WI+ALaDhQjMYNgV+bXtOemu2O8zKRa4RyiF++F/Mm9gHTm38AQPUsQSt+Ah0x4HGoM/R+XLSR3kCUZkRZanA/474nG/dc3ltCu+zqgpRdyWlvC58ixNKmYudXfLC75D1lhnnwJGvjPkFhkjyJ+Vgs/rMpSC3bEvLxjiIo5cn2EIxN56KSlAftkFLt1UzEv7o2haX6vXe82iLsjAo1mwm8R5eBooITlFe4LjOK+BtNi7CN/ollVHOhRt8qVmwAdCEPrYHpQP7hhVxJHfQmLrv1xQjfpI0/xBkVKF37neLBoK3pO0hlSa3KzSCfWJETqbBvv+QFvGYQ8JnAD
- PwfhqNkL3iuSJKF9N7anK7KUNL/SbgJB4EP6axO/D3aa2y6rw0epozTq4td6ZwoiPfAjw3OPeqt67n0N8zoNBOR6v7NqP8kNL3FkO+tURnGKymNE58
+ b=sqJfCzbwObBggIbL9KSDA5luq7zzIYhsOBSL8yQU4uM4ZtRnKBxTyTAfKlJzoZuG0
+ +CQf7CfW0PWvR6hTFWv5daa4jkDoGzb/ufUD5PHtoKs2jGV1r+HAHjBJ7IlLdWA6sG
+ CHsxXj40Uiv1x4HlIoPYwyS8w9L4TDeJMM7OQ433kwJfGGCHuDKppfzWmiRr3Lsxcn
+ WVBiCZLhnMjiKR2p79Kc3K1+9MyLff9W1WQbocbi4vkdhigSC2NS+770JIDHWgla5J
+ sl022P8mgvjLZydE/YuDdkL0scdtS/igeSd1scz+0pouxyANmsTfA/sbL4DO8KpHuG
+ 4nq5vlSo8XtZg==
+X-KAS-Sym: v3:f51bdf72230551df:lHdkWXAlOH3mFYa7MPhN/Q5mZRaSllnUONUXNce4VNqCbu40d29sJoTMWL/UgPpKmiu+oFAK+SGKiz0pvNPHzzdK8865J0NZZhjD1YGG6aDHJWSqGt9pmYaVeClFza2NY+i+npE0hJgg/gHxSjO6xcwlUb6QQuNPO0hdPziIw4dhYYf4DJSWrRRzANCMomoD/RZTgi346Zz0eW33G9Vcp3B7DR+EaybhZMrqLCjEqGCkGFXPOjSjpT0/ayWciGjXWUz3QuiXUZXlIr+lNW1V5S5HyBJCR/w6EnvHAsYJhPTQhQAx4gJVctdz4XTCaIimRq6ACwja3Rp9OR6uCM1UuQ==:fctMEcCZ1exQI3HSAfvBw8LmtW6NDNVY27q/WdiwumE+hmh/hTi1b2fuD/CKFsY9Qx2tO0x6zrliokkQrD4IHzvLqz2O/YJqOB4DVbiZK0iOHrL2qKDeTRWtfZD6vCPBEkMQ+a4/m5cL1zI6vthwsy2woaontLqSle3YEBOFMzI5aoB+dB5igo7Eep6PA3QfAQLsos1E/7KtngnZq8L/OZoOHsK/0uUFBJgVsvDK/oSEeP/WE7jLuMenKfIdBg1CZOhwVxZsjPfDY+mgiAi0lTghvWwF6JvtLcfW+ujTPLR8kSgn+1LPMUoGmEMwajpeyxIG4AxPTnBGR92IF8ft3IW3QQ8YjZHW9Vq1M9SfqBUVkGLN12D7ZCEcD4I6VYLHJbv935hxtSQ2QLV/1bmv7JVZ6jV/H/Vy+fvx5fnPv/0hLzTlkOBWnrecJAIpxMgSs4CF1BB6IrY2bgiIkdWI0QQpQsK1WjMVZWiF2odiLg/hc7Q2bRlYiNWIhENV3N6ayiHkRIemM/JW2/I7v/UYQ+7Si8E8aaWY5OrCZGp3YAwR7XrtBjDmRkRhRsjevvDnK5Ke7Q1mOqP1m+bxCW4NFH9RfqgtlWcdKLRGwckmFbRYzY
+ i8x9QTPYb8/cvlDHRYM87mFb+nLlTui4qYSXBjXnhyDWMLG7KVwWQGSI9r4HZ9oRYzxnkdsNQ=
 Received: from fli4l.lan.fli4l (p54a1b276.dip0.t-ipconnect.de [84.161.178.118])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 2D191A4C489D;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id A599BA4C489E;
  Sun, 20 Sep 2026 19:09:24 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:57728)
  by fli4l.lan.fli4l with esmtp (Exim 4.100.1)
- (envelope-from <bernd@kuhls.net>) id 1x8L1c-000000000o7-3wU3;
+ (envelope-from <bernd@kuhls.net>) id 1x8L1d-000000000o7-0EXj;
  Sun, 20 Sep 2026 17:08:25 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sun, 20 Sep 2026 19:07:52 +0200
-Message-ID: <20260920170815.240247-46-bernd@kuhls.net>
+Date: Sun, 20 Sep 2026 19:07:53 +0200
+Message-ID: <20260920170815.240247-47-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260920170815.240247-1-bernd@kuhls.net>
 References: <20260920170815.240247-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: /
-Subject: [Buildroot] [PATCH v5 45/67] package/omniorb: Fix build with
+X-Spamd-Bar: -
+Subject: [Buildroot] [PATCH v5 46/67] package/opensc: Add support for
  OpenSSL 4.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -178,79 +176,349 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/omniorb/0001-openssl4.patch | 63 +++++++++++++++++++++++++++++
- 1 file changed, 63 insertions(+)
- create mode 100644 package/omniorb/0001-openssl4.patch
+ .../0001-Changes-for-OpenSSL-4.0.0.patch      | 333 ++++++++++++++++++
+ 1 file changed, 333 insertions(+)
+ create mode 100644 package/opensc/0001-Changes-for-OpenSSL-4.0.0.patch
 
-diff --git a/package/omniorb/0001-openssl4.patch b/package/omniorb/0001-openssl4.patch
+diff --git a/package/opensc/0001-Changes-for-OpenSSL-4.0.0.patch b/package/opensc/0001-Changes-for-OpenSSL-4.0.0.patch
 new file mode 100644
-index 0000000000..984d5dab25
+index 0000000000..6039cc3fc0
 --- /dev/null
-+++ b/package/omniorb/0001-openssl4.patch
-@@ -0,0 +1,63 @@
-+From: Colin Watson <cjwatson@debian.org>
-+Date: Mon, 1 Jun 2026 11:07:35 +0100
-+Subject: OpenSSL 4.0.0 returns const pointers from X509 functions
++++ b/package/opensc/0001-Changes-for-OpenSSL-4.0.0.patch
+@@ -0,0 +1,333 @@
++From 8ad96adc5fea0cef923a2a679600f3a5c4c5bfce Mon Sep 17 00:00:00 2001
++From: Doug Engert <deengert@gmail.com>
++Date: Wed, 15 Apr 2026 15:10:42 -0500
++Subject: [PATCH] Changes for OpenSSL-4.0.0
 +
-+Origin: upstream, https://sourceforge.net/p/omniorb/svn/6818/
-+Bug-Debian: https://bugs.debian.org/1138480
-+Last-Update: 2026-06-01
++Changes to get OpenSC to compile  with OpenSSl-4.0.0
 +
-+Downloaded from Debian:
-+https://sources.debian.org/src/omniorb-dfsg/4.3.4%2Bds1-1/debian/patches/openssl-4.patch
++OpenSSL says:
++"Opaque Structures: ASN1_STRING has been made opaque, and further work has been
++done to make X509 structures more memory-efficient and const-correct."
 +
-+Upstream: https://sourceforge.net/p/omniorb/svn/6818/
++ASN1_STRING was made opaque thus requiring the use of ASN1_STRING_get0_data,
++and ASN1_STRING_length. These routines have been in OpenSSL since 1.1.1
++and are also in libressl.
++
++ASN1_STRING_get0_data returns a const pointer, so the data can not be changed.
++There  are a number of reverse() functions one of which was reversing the
++bytes in a EC pubkey.
++
++Changes not addressed:
++"Global Cleanup: libcrypto no longer uses atexit() for cleanup;
++OPENSSL_cleanup() now runs in a global destructor."
++
++ On branch OpenSSL-4.0.0
++ Changes to be committed:
++	modified:   src/libopensc/cwa-dnie.c
++	modified:   src/pkcs11/openssl.c
++	modified:   src/pkcs15init/pkcs15-oberthur-awp.c
++	modified:   src/tests/p11test/p11test_case_common.c
++	modified:   src/tools/netkey-tool.c
++	modified:   src/tools/pkcs11-tool.c
++	modified:   src/tools/pkcs15-init.c
++
++Upstream: https://github.com/OpenSC/OpenSC/commit/8ad96adc5fea0cef923a2a679600f3a5c4c5bfce
 +
 +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 +---
-+ src/lib/omniORB/orbcore/http/httpConnection.cc | 6 +++---
-+ src/lib/omniORB/orbcore/ssl/sslConnection.cc   | 6 +++---
-+ 2 files changed, 6 insertions(+), 6 deletions(-)
++ src/libopensc/cwa-dnie.c                |  2 +-
++ src/pkcs11/openssl.c                    | 14 ++++++----
++ src/pkcs15init/pkcs15-oberthur-awp.c    | 16 +++++------
++ src/tests/p11test/p11test_case_common.c | 24 ++++++++--------
++ src/tools/netkey-tool.c                 | 37 +++++++++++++++++--------
++ src/tools/pkcs11-tool.c                 | 22 +++++++--------
++ src/tools/pkcs15-init.c                 |  4 +--
++ 7 files changed, 68 insertions(+), 51 deletions(-)
 +
-+diff --git a/src/lib/omniORB/orbcore/http/httpConnection.cc b/src/lib/omniORB/orbcore/http/httpConnection.cc
-+index 1e70f93..9da18cd 100644
-+--- a/src/lib/omniORB/orbcore/http/httpConnection.cc
-++++ b/src/lib/omniORB/orbcore/http/httpConnection.cc
-+@@ -2554,14 +2554,14 @@ httpConnection::setPeerDetails() {
++diff --git a/src/libopensc/cwa-dnie.c b/src/libopensc/cwa-dnie.c
++index 47f3792dad..6020921dbc 100644
++--- a/src/libopensc/cwa-dnie.c
+++++ b/src/libopensc/cwa-dnie.c
++@@ -646,7 +646,7 @@ static int dnie_set_channel_data(sc_card_t * card, X509 * icc_intermediate_ca_ce
++ 	dnie_private_data_t *priv_data = GET_DNIE_PRIV_DATA(card);
++ 	LOG_FUNC_CALLED(card->ctx);
 + 
-+     int lastpos = -1;
++-	X509_NAME *issuer = X509_get_issuer_name(icc_intermediate_ca_cert);
+++	const X509_NAME *issuer = X509_get_issuer_name(icc_intermediate_ca_cert);
++ 	if (issuer) {
++ 		buf = X509_NAME_oneline(issuer, buf, 0);
++ 		if (!buf) {
++diff --git a/src/pkcs11/openssl.c b/src/pkcs11/openssl.c
++index 0a5d4394a2..a4027339b2 100644
++--- a/src/pkcs11/openssl.c
+++++ b/src/pkcs11/openssl.c
++@@ -463,6 +463,7 @@ static CK_RV gostr3410_verify_data(const CK_BYTE_PTR pubkey, CK_ULONG pubkey_len
++ 	EC_POINT *P;
++ 	BIGNUM *X, *Y;
++ 	ASN1_OCTET_STRING *octet = NULL;
+++	unsigned char *octet_rev = NULL;
++ 	char paramset[2] = "A";
++ 	int r = -1, ret_vrf = 0;
++ #if OPENSSL_VERSION_NUMBER < 0x30000000L
++@@ -516,13 +517,16 @@ static CK_RV gostr3410_verify_data(const CK_BYTE_PTR pubkey, CK_ULONG pubkey_len
++ 		if (group && pubkey_len <= LONG_MAX) {
++ 			const unsigned char *p = pubkey;
++ 			octet = d2i_ASN1_OCTET_STRING(NULL, &p, (long)pubkey_len);
+++			if (octet)
+++				octet_rev = malloc(ASN1_STRING_length(octet));
++ 		}
++-		if (group && octet) {
++-			reverse(octet->data, octet->length);
++-			Y = BN_bin2bn(octet->data, octet->length / 2, NULL);
++-			X = BN_bin2bn((const unsigned char*)octet->data +
++-					octet->length / 2, octet->length / 2, NULL);
+++		if (group && octet && octet_rev) {
+++			memcpy(octet_rev, ASN1_STRING_get0_data(octet), ASN1_STRING_length(octet));
+++			reverse(octet_rev, ASN1_STRING_length(octet));
+++			Y = BN_bin2bn(octet_rev, ASN1_STRING_length(octet) / 2, NULL);
+++			X = BN_bin2bn(octet_rev + ASN1_STRING_length(octet) / 2, ASN1_STRING_length(octet) / 2, NULL);
++ 			ASN1_OCTET_STRING_free(octet);
+++			free(octet_rev);
++ 			P = EC_POINT_new(group);
++ 			if (P && X && Y)
++ 				r = EC_POINT_set_affine_coordinates(group, P, X, Y, NULL);
++diff --git a/src/pkcs15init/pkcs15-oberthur-awp.c b/src/pkcs15init/pkcs15-oberthur-awp.c
++index 22c943127b..fdb06ab6b4 100644
++--- a/src/pkcs15init/pkcs15-oberthur-awp.c
+++++ b/src/pkcs15init/pkcs15-oberthur-awp.c
++@@ -51,21 +51,21 @@ awp_get_commonName(X509 *x)
++    	r = X509_NAME_get_index_by_NID(X509_get_subject_name(x),
++ 		   NID_commonName, -1);
++ 	if (r >= 0)   {
++-		X509_NAME_ENTRY *ne;
++-		ASN1_STRING *a_str;
+++		const X509_NAME_ENTRY *ne;
+++		const ASN1_STRING *a_str;
 + 
-+-    X509_NAME* name = X509_get_subject_name(peer_cert);
-++    const X509_NAME* name = X509_get_subject_name(peer_cert);
-+     lastpos = X509_NAME_get_index_by_NID(name, NID_commonName, lastpos);
++ 		if (!(ne = X509_NAME_get_entry(X509_get_subject_name(x), r)))
++ 			;
++ 		else if (!(a_str = X509_NAME_ENTRY_get_data(ne)))
++ 			;
++-		else if (a_str->type == 0x0C)   {
++-			ret = malloc(a_str->length + 1);
+++		else if (ASN1_STRING_type(a_str) == V_ASN1_UTF8STRING) {
+++			ret = malloc(ASN1_STRING_length(a_str) + 1);
++ 			if (ret)   {
++-				memcpy(ret, a_str->data, a_str->length);
++-				*(ret + a_str->length) = '\0';
+++				memcpy(ret, ASN1_STRING_get0_data(a_str), ASN1_STRING_length(a_str));
+++
+++				*(ret + ASN1_STRING_length(a_str)) = '\0';
++ 			}
++-		}
++-		else    {
+++		} else {
++ 			unsigned char *tmp = NULL;
 + 
-+     if (lastpos == -1)
-+       return;
++ 			r = ASN1_STRING_to_UTF8(&tmp, a_str);
++diff --git a/src/tests/p11test/p11test_case_common.c b/src/tests/p11test/p11test_case_common.c
++index 1dd6eaba67..f571cd1598 100644
++--- a/src/tests/p11test/p11test_case_common.c
+++++ b/src/tests/p11test/p11test_case_common.c
++@@ -776,34 +776,34 @@ int callback_public_keys(test_certs_t *objects,
++ 			switch (o->key_type) {
++ #ifdef EVP_PKEY_ED25519
++ 			case CKK_EC_EDWARDS:
++-				if (strcmp((char *)curve->data, "edwards25519") == 0) {
+++				if (strcmp((char *)ASN1_STRING_get0_data(curve), "edwards25519") == 0) {
++ 					evp_type = EVP_PKEY_ED25519;
++ 					break;
++ #ifdef EVP_PKEY_ED448
++-				} else if (strcmp((char *)curve->data, "edwards448") == 0) {
+++				} else if (strcmp((char *)ASN1_STRING_get0_data(curve), "edwards448") == 0) {
++ 					evp_type = EVP_PKEY_ED448;
++ 					break;
++ #endif /* EVP_PKEY_ED448 */
++ 				}
++ 				debug_print(" [WARN %s ] Unknown curve name. "
++ 					    " expected edwards25519 or edwards448, got %s",
++-						o->id_str, curve->data);
+++						o->id_str, ASN1_STRING_get0_data(curve));
++ 				break;
++ #endif
++ #ifdef EVP_PKEY_X25519
++ 			case CKK_EC_MONTGOMERY:
++-				if (strcmp((char *)curve->data, "curve25519") == 0) {
+++				if (strcmp((char *)ASN1_STRING_get0_data(curve), "curve25519") == 0) {
++ 					evp_type = EVP_PKEY_X25519;
++ 					break;
++ #ifdef EVP_PKEY_X448
++-				} else if (strcmp((char *)curve->data, "curve448") == 0) {
+++				} else if (strcmp((char *)ASN1_STRING_get0_data(curve), "curve448") == 0) {
++ 					evp_type = EVP_PKEY_X448;
++ 					break;
++ #endif /* EVP_PKEY_X448 */
++ 				}
++ 				debug_print(" [WARN %s ] Unknown curve name. "
++ 					    " expected curve25519 or curve448, got %s",
++-						o->id_str, curve->data);
+++						o->id_str, ASN1_STRING_get0_data(curve));
++ 				break;
++ #endif
++ 			default:
++@@ -893,14 +893,14 @@ int callback_public_keys(test_certs_t *objects,
++ 			break;
++ #endif
++ 		}
++-		if (os->length != exp_length) {
+++		if (ASN1_STRING_length(os) != exp_length) {
++ 			debug_print(" [WARN %s ] Invalid length of EC_POINT value. Got %d, expected %d",
++-					o->id_str, os->length, exp_length);
+++					o->id_str, ASN1_STRING_length(os), exp_length);
++ 			return -1;
++ 		}
++ 		key = EVP_PKEY_new_raw_public_key(evp_type, NULL,
++-			(const uint8_t *)os->data,
++-			os->length);
+++				(const uint8_t *)ASN1_STRING_get0_data(os),
+++				ASN1_STRING_length(os));
++ 		if (key == NULL) {
++ 			debug_print(" [WARN %s ] Out of memory", o->id_str);
++ 			ASN1_STRING_free(os);
++@@ -925,8 +925,8 @@ int callback_public_keys(test_certs_t *objects,
++ 			}
 + 
-+-    X509_NAME_ENTRY* ne       = X509_NAME_get_entry(name, lastpos);
-+-    ASN1_STRING*     asn1_str = X509_NAME_ENTRY_get_data(ne);
-++    const X509_NAME_ENTRY* ne       = X509_NAME_get_entry(name, lastpos);
-++    const ASN1_STRING*     asn1_str = X509_NAME_ENTRY_get_data(ne);
++ 			if (EVP_PKEY_get_raw_public_key(o->key, pub, &publen) != 1 ||
++-				publen != (size_t)os->length ||
++-				memcmp(pub, os->data, publen) != 0) {
+++					publen != (size_t)ASN1_STRING_length(os) ||
+++					memcmp(pub, ASN1_STRING_get0_data(os), publen) != 0) {
++ 				debug_print(" [WARN %s ] Got different public"
++ 					"key then from the certificate",
++ 					o->id_str);
++diff --git a/src/tools/netkey-tool.c b/src/tools/netkey-tool.c
++index 23bab2a8ec..683ac182bd 100644
++--- a/src/tools/netkey-tool.c
+++++ b/src/tools/netkey-tool.c
++@@ -144,25 +144,38 @@ static void show_certs(sc_card_t *card)
++ 			if(q[4]==6 && q[5]<10 && q[q[5]+6]==0x30 && q[q[5]+7]==0x82) q+=q[5]+6;
++ 			printf(", Len=%d\n", (q[2]<<8)|q[3]);
++ 			if((c=d2i_X509(NULL,&q,f->size))){
++-				char buf2[2000];
++-				if (X509_NAME_get_text_by_NID(X509_get_subject_name(c), NID_commonName, buf2, sizeof(buf2)) < 0) {
+++				int idx;
+++				const X509_NAME_ENTRY *ne = NULL; /* no free */
+++				const ASN1_STRING *a_str = NULL;  /* no free */
+++				int out_len = 0;
+++				unsigned char *tmp = NULL;
+++
+++				idx = X509_NAME_get_index_by_NID(X509_get_subject_name(c), NID_commonName, -1);
+++				if (idx >= 0 &&
+++						((ne = X509_NAME_get_entry(X509_get_subject_name(c), idx)) != NULL) &&
+++						((a_str = X509_NAME_ENTRY_get_data(ne)) != NULL) &&
+++						((out_len = ASN1_STRING_to_UTF8(&tmp, a_str)) > 0)) {
+++					printf("  Subject-CN: %s\n", tmp);
+++					OPENSSL_free(tmp);
+++					tmp = NULL;
+++				} else {
++ 					sc_log_openssl(card->ctx);
++ 					printf("  Invalid Subject-CN\n");
++-					X509_free(c);
++-					continue;
++ 				}
++-				printf("  Subject-CN: %s\n", buf2);
++-				if (X509_NAME_get_text_by_NID(X509_get_issuer_name(c), NID_commonName, buf2, sizeof(buf2)) < 0) {
+++
+++				idx = X509_NAME_get_index_by_NID(X509_get_issuer_name(c), NID_commonName, -1);
+++				if (idx >= 0 &&
+++						((ne = X509_NAME_get_entry(X509_get_issuer_name(c), idx)) != NULL) &&
+++						((a_str = X509_NAME_ENTRY_get_data(ne)) != NULL) &&
+++						((out_len = ASN1_STRING_to_UTF8(&tmp, a_str)) > 0)) {
+++					printf("  Issuer-CN:  %s\n", tmp);
+++					OPENSSL_free(tmp);
+++					tmp = NULL;
+++				} else {
++ 					sc_log_openssl(card->ctx);
++ 					printf("  Invalid Issuer-CN\n");
++-					X509_free(c);
++-					continue;
++ 				}
++-				printf("  Issuer-CN:  %s\n", buf2);
++ 				X509_free(c);
++-			} else {
++-				sc_log_openssl(card->ctx);
++-				printf("  Invalid Certificate-Data\n");
++ 			}
++ 		} else printf(", empty\n");
++ 	}
++diff --git a/src/tools/pkcs11-tool.c b/src/tools/pkcs11-tool.c
++index 452ac49617..cfc7486faa 100644
++--- a/src/tools/pkcs11-tool.c
+++++ b/src/tools/pkcs11-tool.c
++@@ -7389,8 +7389,8 @@ static int read_object(CK_SESSION_HANDLE session)
++ #endif
++ 				point = EC_POINT_new(group);
++ 				if (os) {
++-					a = os->data;
++-					a_len = os->length;
+++					a = ASN1_STRING_get0_data(os);
+++					a_len = ASN1_STRING_length(os);
++ 					success = EC_POINT_oct2point(group, point, a, a_len, NULL);
++ 				}
++ 				if (!success) { /* Workaround for broken PKCS#11 modules */
++@@ -7464,9 +7464,9 @@ static int read_object(CK_SESSION_HANDLE session)
 + 
-+     // Convert to native code set
-+     cdrMemoryStream stream;
-+diff --git a/src/lib/omniORB/orbcore/ssl/sslConnection.cc b/src/lib/omniORB/orbcore/ssl/sslConnection.cc
-+index f02f3f0..d29d2b8 100644
-+--- a/src/lib/omniORB/orbcore/ssl/sslConnection.cc
-++++ b/src/lib/omniORB/orbcore/ssl/sslConnection.cc
-+@@ -548,14 +548,14 @@ sslConnection::setPeerDetails() {
++ 					a = params;
++ 					if (d2i_ASN1_PRINTABLESTRING(&curve, &a, (long)len) != NULL) {
++-						if (strcmp((char *)curve->data, "edwards25519") &&
++-								strcmp((char *)curve->data, "curve25519")) {
++-							util_fatal("Unknown curve name \"%si\"", curve->data);
+++						if (strcmp((char *)ASN1_STRING_get0_data(curve), "edwards25519") &&
+++								strcmp((char *)ASN1_STRING_get0_data(curve), "curve25519")) {
+++							util_fatal("Unknown curve name \"%si\"", (char *)ASN1_STRING_get0_data(curve));
++ 						}
++ 						ASN1_PRINTABLESTRING_free(curve);
++ 					} else if (d2i_ASN1_OBJECT(&obj, &a, (long)len) != NULL) {
++@@ -7526,26 +7526,26 @@ static int read_object(CK_SESSION_HANDLE session)
++ 					}
++ 				}
 + 
-+     int lastpos = -1;
++-				if (type == CKK_EC_EDWARDS && os->length == BYTES4BITS(256)) /* note extra bit */
+++				if (type == CKK_EC_EDWARDS && len == BYTES4BITS(256)) /* note extra bit */
++ 					raw_pk = EVP_PKEY_ED25519;
++ #ifdef EVP_PKEY_ED448
++-				else if (type == CKK_EC_EDWARDS && os->length == ED448_KEY_SIZE_BYTES)
+++				else if (type == CKK_EC_EDWARDS && len == ED448_KEY_SIZE_BYTES)
++ 					raw_pk = EVP_PKEY_ED448;
++ #endif /* EVP_PKEY_ED448 */
++ #ifdef EVP_PKEY_X25519
++-				else if (type == CKK_EC_MONTGOMERY && os->length == BYTES4BITS(256)) /* note extra bit */
+++				else if (type == CKK_EC_MONTGOMERY && len == BYTES4BITS(256)) /* note extra bit */
++ 					raw_pk = EVP_PKEY_X25519;
++ #endif /*EVP_PKEY_X25519 */
++ #ifdef EVP_PKEY_X448
++-				else if (type == CKK_EC_MONTGOMERY && os->length == BYTES4BITS(448))
+++				else if (type == CKK_EC_MONTGOMERY && len == BYTES4BITS(448))
++ 					raw_pk = EVP_PKEY_X448;
++ #endif /* EVP_PKEY_X448 */
++ 				else
++ 					util_fatal("Invalid or not supported CKK_EC_EDWARDS or CKK_EC_MONTGOMERY public key");
 + 
-+-    X509_NAME* name = X509_get_subject_name(peer_cert);
-++    const X509_NAME* name = X509_get_subject_name(peer_cert);
-+     lastpos = X509_NAME_get_index_by_NID(name, NID_commonName, lastpos);
-+ 
-+     if (lastpos == -1)
-+       return;
-+ 
-+-    X509_NAME_ENTRY* ne       = X509_NAME_get_entry(name, lastpos);
-+-    ASN1_STRING*     asn1_str = X509_NAME_ENTRY_get_data(ne);
-++    const X509_NAME_ENTRY* ne       = X509_NAME_get_entry(name, lastpos);
-++    const ASN1_STRING*     asn1_str = X509_NAME_ENTRY_get_data(ne);
-+ 
-+     // Convert to native code set
-+     cdrMemoryStream stream;
++ 				key = EVP_PKEY_new_raw_public_key(raw_pk, NULL,
++-						(const uint8_t *)os->data,
++-						os->length);
+++						(const uint8_t *)ASN1_STRING_get0_data(os),
+++						ASN1_STRING_length(os));
++ 				ASN1_STRING_free(os);
++ 				if (key == NULL) {
++ 					util_fatal("out of memory");
++diff --git a/src/tools/pkcs15-init.c b/src/tools/pkcs15-init.c
++index e011232987..b978e0677a 100644
++--- a/src/tools/pkcs15-init.c
+++++ b/src/tools/pkcs15-init.c
++@@ -2593,8 +2593,8 @@ do_read_data_object(const char *name, u8 **out, size_t *outlen, size_t expected)
++ static char *
++ cert_common_name(X509 *x509)
++ {
++-	X509_NAME_ENTRY *ne = NULL;
++-	ASN1_STRING *a_str = NULL;
+++	const X509_NAME_ENTRY *ne = NULL;
+++	const ASN1_STRING *a_str = NULL;
++ 	char *out = NULL;
++ 	unsigned char *tmp = NULL;
++ 	int idx, out_len = 0;
 -- 
 2.47.3
 
