@@ -4,118 +4,121 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3FE0C982DA
-	for <buildroot@archiver.kernel.org>; Sun, 20 Sep 2026 21:39:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6BBF6C982DA
+	for <buildroot@archiver.kernel.org>; Sun, 20 Sep 2026 21:39:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3DDEE80CE0;
-	Sun, 20 Sep 2026 21:39:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1642380CD4;
+	Sun, 20 Sep 2026 21:39:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8sw50hFDviEv; Sun, 20 Sep 2026 21:39:17 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 4E50280CD4
+ id 0pFWvvz5_ogn; Sun, 20 Sep 2026 21:39:29 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 1014B80CF2
 Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789940357;
-	b=e7p3VQDQh8emyYU7FdxaxuuuCU/barFCTYagZuC07Raf5NIWG+Y48GRhKIhPSLsme/TX
-	 8da/FPMHV2azVOtqfPBodH+/Iv/UehH3ZrLemLvq5w4r9vD3x6g5087ZYVieJrDA6Nji0
-	 rao5qgpDqIrTKm09l4+P5RpQSWj+FN90QR8g/LLZzqYJyXIi/fJydfKX+ksIaIsCYINGD
-	 LJ5H4kEfyoVb5HTNnM5T2qxhjLcYls2J2TN14phC8ftpxUYlp6yyfWlSla6o/wXUyGnGF
-	 eValsskksswCo18X9g5CrIr52JVASMqIxSIBcBP9+2VjCB0gx1bpBYZD8AhEstcEBeA==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789940369;
+	b=Rc7ZP7Rr9JdP+KhQ61vz0cWqq4j6q/PMigIJl8lmJVH32WURq7i3ZegsmeKSKZLkvqTu
+	 xEt6y0Qvi6u5Y7olHjVm0EEYCcowhRtqlRBsQGJNlynFakaxIotOySdeJNFi2mDyLxSsl
+	 s3RUChCu0RFAqhrNZWz08/xJrJprTvMGfqSk18AjInDmvreEoiYYQsNh8A+3gDLDyB37N
+	 BzjQDQQ7yVHFeU9QfVF9FnuI7XG4y4Xhlc/rGv1fz58tommBSYEJngznKXtN6AbX8/hpw
+	 AXx5o3YEem06bcP7F5dfnlz7b2YdtRe0h6azMG2s8Wu5BkBRyer+YNi4lpl9L33VGaw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789940357;
+	c=relaxed/relaxed; t=1789940369;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
 	 DKIM-Signature:X-KAS-Sym:Received:Received:From:To:Cc:Date:Message-ID:
-	 X-Mailer:MIME-Version:X-Spamd-Bar:Subject:X-BeenThere:
-	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Content-Type:
+	 X-Mailer:In-Reply-To:References:MIME-Version:X-Spamd-Bar:Subject:
+	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=H9/Dr4Me7ACFJuTIeFo6XrR6Ec4z+oCL7I07yFhHJ8I=;
-	b=V6xNUXbboP+O3pQuUlI8pVfwSSL/ZQ1bRBaXBkhd9HhQzP6iydcxhTG6Hp5+bx6LAmB8
-	 yvK/BS0f1NqEP0e+CdkAe/dwjPhZV8v/j909U3pcyQpEhvxqcMDmDsTZSgv1fr+OOpQ8Y
-	 qSiITYMeQX/upTiDiqWINogbdW6sdytMFcuNACMXCsMybRlClGEB1vQD5yf/eS/Xdq+HH
-	 paTh/VabNnE42GKXV3/RkVs1wKO5fVPlNqYJIfbKSU+P6VNwiW6XCxZckwb5jXjRwQ4Ud
-	 WEG0h2a6nTB8Rf/b6M3H3ra60/Ky+V5JD3ukf75lKhu8yNfYITjp0sR5tdrTpu1dCvQ==
-ARC-Authentication-Results: i=2; smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	bh=895lZfyHUAUU1Pt/ETINxOiIYZ5tZzAn60jFc04j5MQ=;
+	b=exMm8nsD2SGPNa93KtLXijpkeOLkMZ5kg8rD3qkpTrfl0Eata9j8d6UPKGxo9r0llyLD
+	 ay1GqYG0sMcnA30EP7h3S7Jg9B/dGuPSvZdhClOHRDscfI65w3E+i1Q25kkdVPc4IoG4/
+	 Pb7g48h/YFeFFlrJRAKrC5CihXkMmYFE2pfdiygVtWH8HMiLxGe4w0mJsdTUawzhuX4kV
+	 C5DCkYA1SVhhLBnZ/Gr0pBKa+j93QUzXQAlB2WoH14v0RtzG/w0TeKdNCMgVywFZ3ohiX
+	 EEuCNKGZGTOlcshZQB2AiGsR7Je0uIiYa4nQ7+IxxRNwWcl+g+pX2vwc7JrwaF1qb5g==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; dmarc=pass header.from=kuhls.net;
+	dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256 header.s=kas202605290044 header.b=EXPTRtdz;
+	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789940357;
-	bh=H9/Dr4Me7ACFJuTIeFo6XrR6Ec4z+oCL7I07yFhHJ8I=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=MtRRf6tV3JTa7VjOIgkZkpiUpZ+ncnMSImYeuiN5PlXIQgqYj9fja+u5Sb0bWDeIQ
-	 St6ZwGo9b6Q7wmoF1Z69qDjbLun3a+BYj/BOZXu3Pcyt40puw3TFPnrFYmmGXlo42T
-	 I4+wJerfuf73vjQHFvpWhSeW1Ms+pUtPPe2zS+r7+5GS0UegpbEZfEw419pu/hAJ1/
-	 kwmcU9UopSlIH68jNqHY5TS5NYua46z3ReEBNZjzRkTAz44ZzwMy2i6q8abUSbgwSJ
-	 DOmO3PHgLEHrFovQ6j10am3Oc5fI0KiIbiheky36WmmckDFaijYrwQ3g7fp+wFLZdQ
-	 cOmTmJzfjUwFA==
+	s=default; t=1789940369;
+	bh=895lZfyHUAUU1Pt/ETINxOiIYZ5tZzAn60jFc04j5MQ=;
+	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=hGdv1jbrLPE0WuIghO+Imtv17t0Ej1T6WhvniHCpU+hLPbEROnEy9qA9zHP6AVtFm
+	 qMVspcGbUqPqtMWeJLkikEUUV34DxoHAHqCrmmvicyQulDx3M5clWwbclvqPVNT50J
+	 IQCqdfOCg+nVGvL0BUAwBYJI9vVrJxeWW6yy4N0XJCdYvfwuLMYma4nxf8nluB2N9N
+	 EOVJQpxbNOwGnSej87wS9bARswGAxe25LvtNe8GR6VlGl2kqxsbLiXIGMCVvb3d7jE
+	 BXCmqiV9UQdWPFN+TsGAra2sGm89QKGwYPt7MbPjETBbIMm8nfvRbqjNd8OMRbfzBK
+	 Tm7Ty3yspIn+w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4E50280CD4;
-	Sun, 20 Sep 2026 21:39:17 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 3F08F386
- for <buildroot@buildroot.org>; Sun, 20 Sep 2026 21:39:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1014B80CF2;
+	Sun, 20 Sep 2026 21:39:29 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 90939380
+ for <buildroot@buildroot.org>; Sun, 20 Sep 2026 21:39:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 24ADE4007B
- for <buildroot@buildroot.org>; Sun, 20 Sep 2026 21:39:16 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8211280E0B
+ for <buildroot@buildroot.org>; Sun, 20 Sep 2026 21:39:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 99cZgM-iQcNS for <buildroot@buildroot.org>;
- Sun, 20 Sep 2026 21:39:13 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org CCB8940024
-Authentication-Results: smtp2.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789940353;
- b=OtMhsNWXGfkeP9MrqMAyTGkYs8ODNOsQMSDdTNurN5+vaF4KJ33cW6RBYVdQyObUbm7N
- js54gH6S/T31qGZZaIvgLuVnR+UDhoy+4frfAcP2Ink6gXZ27bojF2bgez6oJ2M/Zg55N
- diyTarV7D4Ixx6cJb3i2QBmfvDfqL0vK9VIvDG1UCnHcPFLIfmvbsCdoQMJo2k6GbK9so
- TuLQqcOCNGzs0ex2U4USKtp0MvpYnRwqXiVO5b38T2oKALq2mSW6ceLsQFhlRUc2Gs8Pb
- PZpNQWr7nLm01sZxArKvFZeu/DQAdi0bwdxtObYABsaaHjwaHkZ+mW7O/K0JyuERxmg==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id S6CdnPGYaLtg for <buildroot@buildroot.org>;
+ Sun, 20 Sep 2026 21:39:26 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org B261F80E07
+Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789940366;
+ b=Y4zmavh/5SncOZH7XeLPsup/eiwu5ubN6ZS+RYuu6N2HiZqU80l6Yc2Mv/7tsz8r5kth
+ YY+u6yuMTW9o9848xvCnaceyA5GipwbTd8XUzVLPx6a00JtVkal6rHsAQ1y88/R9pdZPb
+ CLa4iEyIdy7PlUg0c47L72QBKk7WKe4b+/PhNQit00/2WhwoOZpWj7d+e4PoOIJJ7KK9Y
+ 6305msBFH/dlva4m6NCvn6ZvKWBwALRaDavvawMS2NEMPyoRVHxaok/sYWAcTJg0+vR8m
+ nfP9JPe1y/s3rWvMKTvgObT9SiHGOsHgwJ5dq/Vnt0F5OMzA/FNs536VnxYew8W/SEQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1789940353;
+ c=relaxed/relaxed; t=1789940366;
  h=Received-SPF:DKIM-Signature:X-KAS-Sym:Received:Received:From:To:Cc:
- Subject:Date:Message-ID:X-Mailer:MIME-Version:
+ Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding:X-Spam-Score:X-Spamd-Bar;
- bh=Y0Dfi6URDI8JKBIXxDcw4XYkUJShv+fS7GiqavJYbFo=;
- b=OEclRYcBY2jcYXAJaW8PBGjar4orpJ6KaxjuqB69Y9XzFl0HgBxmHLDzkx3BbwaYQ3RU
- jEpw0bTudvlsHRkA9fut+tBc9A6E8Y4wI3l+3Y/dfQ4Gz62pikvpNOwDOHXHHzDKHK20i
- 07b1/0iqsnyAa+PsFl5a+fZF+IsP6hQUajnTxk4/pz0XSUKcHmP9z36+QCSsXZL9CveXe
- Z7NqeUbnR1lm5g17Z9Z5pZ5cNdvco03g9XY5rjkcIsAylG59TiBXX00mxh7q4ZZG/33kM
- /l3kmhRSSjQAAfMilhbhicTjbeDojCODNyIho6Y5HPcYtQSo9c8KvexYfl47hrmae6g==
-ARC-Authentication-Results: i=1; smtp2.osuosl.org;
+ bh=61+tL3qh0l+/t+EgJ9AtBo7qXplnbBbdBme07F/kOvU=;
+ b=E3KZkyD3Zxji+GzxvBgY+9YliH2Cqh5JuE0doECtV1KVjGFkureyyJYH+cKhfUOHChtB
+ bG9FfnnvHkxXAc5FPiehB/n5TF3htW1k9EEEe2Asl7mMgxQbh2+mPOy5ALVH2zIgMD7W4
+ 20PH7dUpIC6Day+l5jxF2UcC+zbuC1E96cCYZXapyoEfP55UiTxu2O4QM6oZoTKBK+og6
+ oGM3RNcfIQnJo5AwFovt7uCb8aK/Fn1WDfGb8PcmJcXg2WkWD6Yg20h4F5eCppEBCajf/
+ aEACJmJCqEgLNuaLyauJfa7hKKeOBsxJZqTV1R/KZJoYlMTpbE0oGYiPhtGevWN7lJA==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org;
  dmarc=pass header.from=kuhls.net; 
  dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=KnbhXt3o; 
+ header.s=kas202605290044 header.b=EXPTRtdz; 
  arc=none smtp.remote-ip=85.13.140.57
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-Authentication-Results: smtp2.osuosl.org;
+Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=kuhls.net
-Authentication-Results: smtp2.osuosl.org; dkim=pass (2048-bit key,
+Authentication-Results: smtp1.osuosl.org; dkim=pass (2048-bit key,
  unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=KnbhXt3o
+ header.s=kas202605290044 header.b=EXPTRtdz
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id CCB8940024
- for <buildroot@buildroot.org>; Sun, 20 Sep 2026 21:39:10 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B261F80E07
+ for <buildroot@buildroot.org>; Sun, 20 Sep 2026 21:39:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
  s=kas202605290044; t=1789940347;
- bh=Y0Dfi6URDI8JKBIXxDcw4XYkUJShv+fS7GiqavJYbFo=;
- h=From:To:Cc:Subject:Date:From;
- b=KnbhXt3oDK5qD5ccbb8jzs6d+DG86JcuurtShs0Qm+MBP0OyqcD/8uQm1PC4T4ULT
- zv0L70/DRt8PuUW6xN2zmc0nttyzoXC0+n2V41/00RopNQs37Tx6cYFZZeJnCpd3Ez
- 9iW6JzAC6NcuWezI3sQs4nBtyC8I+gNyZbxEm/lpgHaBqIJ2EmFZ9fSbsESMAx7xAI
- pQz316CW0O8CtVuVvO+A69h5p1WO5bkko77YA4a2WrkZZxAgCvrjo6qvJb6w4ym2ME
- XxFVi0UpH3aYLvD2ImlTJkvObSOG1/oCmmOVROiXQouAk4+Ai8Z7B4n+nmDtshPnAv
- yoNwSB6tAirKQ==
-X-KAS-Sym: v3:f51bdf72230551df:lCKheS9ndnLLT4/f2BHXUkrfR+y86dFsCTmS5bBz4x+JxkFu26PKvBlGIxwbEoZV3EMtFST4Z+Yjco2VyPNCjf0K8YyV44TotU/s/6m7e1dzv1CrNQChbFzHpDFdaeqGlBULAx9L2hDMv6zhejJatdiQkneMrRZCElAm+doYIZfcFv82xVKiwh2EFYcJruuwMTZ//04bitbQcwuVLYhcHaglvfFOiNIzWpATDgyKjpjljYZba0Uo0N3Q0vvY7XTPULpWdgcdx470NDL3BFM9B4gIJYdB8o3O84alnrDZCCb7SZ1DLtA/fQ2cMvAFIRaKFu0NhBkZgIKqCW65wor1bg==:VqfI4T0RE9aGwFf3/bcjIHyZGOaI4xNG7NKvgdO8WotaqJbbUdpIOQsQkLS4hJehudHhmhXLutGn0At+12ZD+EqxBLZd8M8WRFng7/0qDmjjzW80lXlXKcy61chZYBMro5HbGSwUXKUY8NkJ2zYAVQzNNk+mTEJMuAK1+ED6N73/i8YI1AdLlrhBo4OMDMu6nUhYU3E/eLZj7h8ZSvZhTE/t63qrEMy+1+Pe1RkAWHGNntQl5iKR6BQUShtRxVq9VqFgMSCZBHJQ6S1GxuzLkdC8+ZhM1o4qRb1mFToWil1yinr7yih8lEJVIOzUFasR3WuHch0CPgWM3dJAIbWaqq+w3mITRhqSB8faQQFe9gmDyLc1IZrWYwZ6QvDYbie+iELe8bYOre4MwKVpSn3eZooUjFx5Zd+OKLO7qD0HsCWcBdyKNawxImE8cyimeLppBLukMkzc6Q1R7H/BCZNdcdm7+nW6BcScFz6LfQJnQqj3myAWfdfqb/DGCYzzvG5RjdFyxp6wOUXqnrvSk59Ex/Fgv/lXiU0SJsKIgbVEc2IL3L0XdW9BfmfU0iKUhnWu0kcTfxMkbmc9p8M7rLEq44FqaGky57OrYH09S1nHOJ7tOS
- QDAlH/2jiC19gMZmW8JuNtqAKEU6ByKHwv51JfURXi3bM1OqsORymEZ6rZey3obGfZa041FIOX9nIHSVc/vvP5cK7IDCIn9yKYoEtq837SV31s
+ bh=61+tL3qh0l+/t+EgJ9AtBo7qXplnbBbdBme07F/kOvU=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:From;
+ b=EXPTRtdzeeddDgB2NHLk8xy2gKQmobsbXy68FxLX+FZzVUxCWkbbcAVIO+wzuSfHr
+ 1SHkjz0TepyKZ7q0ssqCZu2zhbV3gWNJ+BfYKszQIc5G5nGwPhZg25w8fdn2/vu+ss
+ 3dQVS/W6CxC+S2Me1Oc5U3fk8N+xZONxGvgK/09vmiZjBk7yCiE0ZENxBpb+BZGwtX
+ oCaE+Zae+qkhyfl49NuBBg287lcKjVYJMUyqiAFz1q23GZMYvzEOO8RFpPuY6faiTu
+ JEkkgmYRSneXNDorMuEZQK+2xBpgPyu4OhKbN94hfvNEYvt6qEsoXb7TyelPhRohAO
+ fzPfihrTaztDA==
+X-KAS-Sym: v3:f51bdf72230551df:lCKheS9ndnLLT4/f2BHXUkrfR+y86dFsCTmS5bBz4x+JxkFu26PKvBlGIxwbEoZV3EMtFST4Z+Yjco2VyPNCjf0K8YyV44TotU/s/6m7e1dzv1CrNQChbFzHpDFdaeqGlBULAx9L2hDMv6zhejJatdiQkneMrRZCElAm+doYIZfcFv82xVKiwh2EFYcJruuwMTZ//04bitbQcwuVLYhcHaglvfFOiNIzWpATDgyKjpjljYZba0Uo0N3Q0vvY7XTPULpWdgcdx470NDL3BFM9B4gIJYdB8o3O84alnrDZCCb7SZ1DLtA/fQ2cMvAFIRaKFu0NhBkZgIKqCW65wor1bg==:dyUD3bwRwtttG3lmMSQz9sjsXylZrUAIWZkLhjlkpsXnI1TTlVt3W8Km5sXld8HR3prtH1NZsO2rzqU0TYs/eFzNZYBPv7ugU4tcOHZfTKWiv1bdlt7araJ2bG+ZB1pkdALHM22VYo2bawL7YB6mXwTxKkRJ5E1mZq3ht7D+4gphhX2V0cPPnAGyqYGAAH7XGyBewA1buLRNQyGAeBFEbieAQtGRoxx00uxciNjIkAVnumJ3ukNjmTz7QXcsspwK/Tc0TJ4kxs5xBa1F2HXOA6Rrrpx6zz4TemYVqxwcXkcO07kGBnbUz0kgDD2M0EcifXMTbb0jn8BTGhKyT3o2MAg9QP6etMZ+3uqayFLz6U60+0wATWQtlye4cSxShVngQiE5rSGpuV4pd91gbKKuF+QFsY+qIOYMIUkNXW7iWJfCigcEItNm/+rWLp+ecxuNK88qSCWMGfT5qIdmnWHftsSd7w7BOgt5lva8fP9zct3Ow8Tw0Ru+U9dRukXihs6aTHI6cOqEjHGwVaNRB3xq4z+Ykm4+fDpa2n2m6ZRVynLMVrIPirDX0ysOMrAR7y87CHIufDxpJF4Pp9Ul3Ifzb9qpGtBpvYn36zDZ4FC/NIGj8J
+ CiCJsbHZXCLVA5IzgHLNvbTzlohYL53NqtaisSQ35O4n29sCw7yKYvPw1Ui7mKRXlhoQ==
 Received: from fli4l.lan.fli4l (p54a1b276.dip0.t-ipconnect.de [84.161.178.118])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id CFC92A4C487F;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id F0DA7A4C4886;
  Sun, 20 Sep 2026 23:39:07 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:44740)
  by fli4l.lan.fli4l with esmtp (Exim 4.100.1)
- (envelope-from <bernd@kuhls.net>) id 1x8PFa-000000006Yg-3Fia;
+ (envelope-from <bernd@kuhls.net>) id 1x8PFb-000000006Yg-2QYu;
  Sun, 20 Sep 2026 21:39:07 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
@@ -123,13 +126,14 @@ Cc: Daniel Lang <dalang@gmx.at>, El Mehdi YOUNES <elmehdi.younes@smile.fr>,
  Joseph Kogut <joseph.kogut@gmail.com>,
  Romain Naour <romain.naour@gmail.com>,
  Valentin Korenblit <valentinkorenblit@gmail.com>
-Date: Sun, 20 Sep 2026 23:39:01 +0200
-Message-ID: <20260920213906.905956-1-bernd@kuhls.net>
+Date: Sun, 20 Sep 2026 23:39:02 +0200
+Message-ID: <20260920213906.905956-2-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260920213906.905956-1-bernd@kuhls.net>
+References: <20260920213906.905956-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: -
-Subject: [Buildroot] [PATCH v2 1/6] package/llvm-project/libclc: apply
- mesa-libclc patch set
+X-Spamd-Bar: ++
+Subject: [Buildroot] [PATCH v2 2/6] package/mesa3d: rework OpenCL handling
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -146,1396 +150,154 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://gitlab.freedesktop.org/karolherbst/mesa-libclc/-/commits/llvm_23
+Mesa3D removed the old Clover OpenCL implementation in version 25.2.0
+and kept only RustiCL:
 
-https://gitlab.freedesktop.org/karolherbst/mesa-libclc/-/blob/llvm_23/README.md
-"This is a fork of LLVM's libclc applying some fixes of a known good
- state. [...]
- Alternatively to using this fork distributions can patch their own
- libclc project with the commits titled with "libclc: ..."
+https://lists.freedesktop.org/archives/mesa-announce/2025-August/000815.html
+"[...] the Clover OpenCL implementation has been deleted. RustiCL is now
+ the only OpenCL implementation available [...]"
 
-Needed for mesa3d >= 26.2.0:
-https://lists.freedesktop.org/archives/mesa-announce/2026-August/000863.html
-"One important note for packagers is that there is now a Mesa community
-maintained libclc fork that is verified to pass the OpenCL CTS with
-Mesa/Rusticl, and will fix bugs after an upstream libclc major release
-branch goes EoL. The Mesa build system will pick it up when available,
-and fall back to upstream libclc if not. This libclc fork is not
-verified for any other usages or users of libclc outside of Mesa."
+Since then the option BR2_PACKAGE_MESA3D_OPENCL served no other purpose
+than allowing access to the RustiCL sub-option. This commit merges both
+options and their dependencies.
 
-This patch adds the mesa-libclc to our libclc package instead of adding
-a new mesa-libclc package.
-
-Also update configure options to build with llvm 23.
+Fixes https://gitlab.com/buildroot.org/buildroot/-/work_items/180#note_3501740032
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
-v2: new patch added to series as replacement for a new mesa-libclc
-    package (Julien)
+v2: removed code left-over (Romain)
 
- ...disable-use-of-SPV_KHR_fma-extension.patch |  36 ++
- ...0002-libclc-restore-old-fma-behavior.patch |  65 ++
- ...libclc-add-__clc_mesa_libclc_version.patch |  49 ++
- ...le-fp16-version-of-atan2-and-atan2pi.patch |  56 ++
- ...c-Revert-libclc-Update-remquo-187998.patch | 595 ++++++++++++++++++
- ...bclc-Update-hypot-implementation-185.patch | 171 +++++
- ...vert-libclc-Update-trigpi-functions-.patch | 173 +++++
- ...a-precision-issues-due-to-lack-of-fm.patch |  80 +++
- .../libclc/0009-revert-10644a1-v3.patch       |  37 ++
- package/llvm-project/libclc/libclc.mk         |  11 +-
- 10 files changed, 1270 insertions(+), 3 deletions(-)
- create mode 100644 package/llvm-project/libclc/0001-libclc-disable-use-of-SPV_KHR_fma-extension.patch
- create mode 100644 package/llvm-project/libclc/0002-libclc-restore-old-fma-behavior.patch
- create mode 100644 package/llvm-project/libclc/0003-libclc-add-__clc_mesa_libclc_version.patch
- create mode 100644 package/llvm-project/libclc/0004-libclc-disable-fp16-version-of-atan2-and-atan2pi.patch
- create mode 100644 package/llvm-project/libclc/0005-libclc-Revert-libclc-Update-remquo-187998.patch
- create mode 100644 package/llvm-project/libclc/0006-libclc-Revert-libclc-Update-hypot-implementation-185.patch
- create mode 100644 package/llvm-project/libclc/0007-libclc-Partly-revert-libclc-Update-trigpi-functions-.patch
- create mode 100644 package/llvm-project/libclc/0008-libclc-fix-tgamma-precision-issues-due-to-lack-of-fm.patch
- create mode 100644 package/llvm-project/libclc/0009-revert-10644a1-v3.patch
+ Config.in.legacy                             |  9 ++++++
+ package/mesa3d/Config.in                     | 32 +++++---------------
+ package/mesa3d/mesa3d.mk                     |  8 ++---
+ support/testing/tests/package/test_mesa3d.py |  1 -
+ 4 files changed, 19 insertions(+), 31 deletions(-)
 
-diff --git a/package/llvm-project/libclc/0001-libclc-disable-use-of-SPV_KHR_fma-extension.patch b/package/llvm-project/libclc/0001-libclc-disable-use-of-SPV_KHR_fma-extension.patch
-new file mode 100644
-index 0000000000..482d61dbff
---- /dev/null
-+++ b/package/llvm-project/libclc/0001-libclc-disable-use-of-SPV_KHR_fma-extension.patch
-@@ -0,0 +1,36 @@
-+From 0fdefef847d704b0162cacdbafe01350f4531a61 Mon Sep 17 00:00:00 2001
-+From: Karol Herbst <kherbst@redhat.com>
-+Date: Wed, 22 Jul 2026 13:36:59 +0200
-+Subject: [PATCH] libclc: disable use of SPV_KHR_fma extension
-+
-+Upstream: https://gitlab.freedesktop.org/karolherbst/mesa-libclc/-/commit/0fdefef847d704b0162cacdbafe01350f4531a61
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ libclc/cmake/modules/AddLibclc.cmake | 3 +--
-+ 1 file changed, 1 insertion(+), 2 deletions(-)
-+
-+diff --git a/libclc/cmake/modules/AddLibclc.cmake b/libclc/cmake/modules/AddLibclc.cmake
-+index d84101f..82aa563 100644
-+--- a/libclc/cmake/modules/AddLibclc.cmake
-++++ b/libclc/cmake/modules/AddLibclc.cmake
-+@@ -165,7 +165,7 @@ function(libclc_add_library target_name)
-+     if(LIBCLC_USE_SPIRV_BACKEND)
-+       add_custom_command(OUTPUT ${builtins_lib}
-+         COMMAND ${CMAKE_CLC_COMPILER} -c --target=${ARG_TRIPLE}
-+-                -mllvm --spirv-ext=+SPV_KHR_fma
-++                -mllvm
-+                 -x ir -o ${builtins_lib} ${linked_bc}
-+         DEPENDS ${linked_bc}
-+       )
-+@@ -173,7 +173,6 @@ function(libclc_add_library target_name)
-+       add_custom_command(OUTPUT ${builtins_lib}
-+         COMMAND ${llvm-spirv_exe}
-+                 --spirv-max-version=1.1
-+-                --spirv-ext=+SPV_KHR_fma
-+                 -o ${builtins_lib} ${linked_bc}
-+         DEPENDS ${linked_bc}
-+       )
-+-- 
-+2.47.3
-+
-diff --git a/package/llvm-project/libclc/0002-libclc-restore-old-fma-behavior.patch b/package/llvm-project/libclc/0002-libclc-restore-old-fma-behavior.patch
-new file mode 100644
-index 0000000000..5fe5b2a6b7
---- /dev/null
-+++ b/package/llvm-project/libclc/0002-libclc-restore-old-fma-behavior.patch
-@@ -0,0 +1,65 @@
-+From f55c425b7277bc7178729a4c4335a5ec404d03dc Mon Sep 17 00:00:00 2001
-+From: Karol Herbst <kherbst@redhat.com>
-+Date: Wed, 22 Jul 2026 14:51:19 +0200
-+Subject: [PATCH] libclc: restore old fma behavior
-+
-+Upstream: https://gitlab.freedesktop.org/karolherbst/mesa-libclc/-/commit/f55c425b7277bc7178729a4c4335a5ec404d03dc
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ libclc/clc/lib/spirv/math/clc_fma.inc | 8 ++++----
-+ libclc/opencl/lib/generic/math/fma.cl | 2 +-
-+ libclc/opencl/lib/spirv/math/fma.cl   | 3 ++-
-+ 3 files changed, 7 insertions(+), 6 deletions(-)
-+
-+diff --git a/libclc/clc/lib/spirv/math/clc_fma.inc b/libclc/clc/lib/spirv/math/clc_fma.inc
-+index 42b1cf9..9efdcc4 100644
-+--- a/libclc/clc/lib/spirv/math/clc_fma.inc
-++++ b/libclc/clc/lib/spirv/math/clc_fma.inc
-+@@ -8,9 +8,9 @@
-+ 
-+ _CLC_DEF _CLC_OVERLOAD __CLC_GENTYPE __clc_fma(__CLC_GENTYPE a, __CLC_GENTYPE b,
-+                                                __CLC_GENTYPE c) {
-+-#if __CLC_FPSIZE == 32
-+-  if (!__clc_runtime_has_hw_fma32())
-+-    return __clc_sw_fma(a, b, c);
-+-#endif
-++//#if __CLC_FPSIZE == 32
-++//  if (!__clc_runtime_has_hw_fma32())
-++//    return __clc_sw_fma(a, b, c);
-++//#endif
-+   return __builtin_elementwise_fma(a, b, c);
-+ }
-+diff --git a/libclc/opencl/lib/generic/math/fma.cl b/libclc/opencl/lib/generic/math/fma.cl
-+index 281ee83..a31864f 100644
-+--- a/libclc/opencl/lib/generic/math/fma.cl
-++++ b/libclc/opencl/lib/generic/math/fma.cl
-+@@ -8,7 +8,7 @@
-+ 
-+ #include "clc/math/clc_fma.h"
-+ 
-+-#define __CLC_FUNCTION fma
-++#define __CLC_FUNCTION clc_sw_fma
-+ #define __CLC_BODY "clc/shared/ternary_def.inc"
-+ 
-+ #include "clc/math/gentype.inc"
-+diff --git a/libclc/opencl/lib/spirv/math/fma.cl b/libclc/opencl/lib/spirv/math/fma.cl
-+index b5a44af..ab955a9 100644
-+--- a/libclc/opencl/lib/spirv/math/fma.cl
-++++ b/libclc/opencl/lib/spirv/math/fma.cl
-+@@ -6,10 +6,11 @@
-+ //
-+ //===----------------------------------------------------------------------===//
-+ 
-+-#include "clc/math/clc_fma.h"
-++#include "clc/internal/math/clc_sw_fma.h"
-+ 
-+ #define __CLC_FLOAT_ONLY
-+ #define __CLC_FUNCTION fma
-++#define __CLC_IMPL_FUNCTION(x) __clc_sw_fma
-+ #define __CLC_BODY "clc/shared/ternary_def.inc"
-+ 
-+ #include "clc/math/gentype.inc"
-+-- 
-+2.47.3
-+
-diff --git a/package/llvm-project/libclc/0003-libclc-add-__clc_mesa_libclc_version.patch b/package/llvm-project/libclc/0003-libclc-add-__clc_mesa_libclc_version.patch
-new file mode 100644
-index 0000000000..42fc68d68d
---- /dev/null
-+++ b/package/llvm-project/libclc/0003-libclc-add-__clc_mesa_libclc_version.patch
-@@ -0,0 +1,49 @@
-+From 534609b129e3473b07f8d063c1c7259a07cce93b Mon Sep 17 00:00:00 2001
-+From: Karol Herbst <kherbst@redhat.com>
-+Date: Mon, 20 Jul 2026 16:12:30 +0200
-+Subject: [PATCH] libclc: add __clc_mesa_libclc_version
-+
-+Allows us to detect if we got our own libclc binaries at runtime.
-+
-+Upstream: https://gitlab.freedesktop.org/karolherbst/mesa-libclc/-/commit/534609b129e3473b07f8d063c1c7259a07cce93b
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ libclc/opencl/lib/spirv/CMakeLists.txt |  1 +
-+ libclc/opencl/lib/spirv/version.cl     | 12 ++++++++++++
-+ 2 files changed, 13 insertions(+)
-+ create mode 100644 opencl/lib/spirv/version.cl
-+
-+diff --git a/libclc/opencl/lib/spirv/CMakeLists.txt b/libclc/opencl/lib/spirv/CMakeLists.txt
-+index 6e9e28e..715642c 100644
-+--- a/libclc/opencl/lib/spirv/CMakeLists.txt
-++++ b/libclc/opencl/lib/spirv/CMakeLists.txt
-+@@ -5,6 +5,7 @@ endif()
-+ 
-+ # Non-Vulkan SPIR-V uses a curated subset of generic builtins.
-+ libclc_add_sources(${LIBCLC_OPENCL_TARGET} FILES
-++  version.cl
-+   math/fma.cl
-+ )
-+ 
-+diff --git a/libclc/opencl/lib/spirv/version.cl b/libclc/opencl/lib/spirv/version.cl
-+new file mode 100644
-+index 0000000..96a3410
-+--- /dev/null
-++++ b/libclc/opencl/lib/spirv/version.cl
-+@@ -0,0 +1,12 @@
-++//===----------------------------------------------------------------------===//
-++//
-++// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
-++// See https://llvm.org/LICENSE.txt for license information.
-++// SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
-++//
-++//===----------------------------------------------------------------------===//
-++
-++#include <clc/opencl/opencl-base.h>
-++
-++/* XXYYZZPP */
-++_CLC_DEF uint __clc_mesa_libclc_version() { return 0x23010000; }
-+-- 
-+2.47.3
-+
-diff --git a/package/llvm-project/libclc/0004-libclc-disable-fp16-version-of-atan2-and-atan2pi.patch b/package/llvm-project/libclc/0004-libclc-disable-fp16-version-of-atan2-and-atan2pi.patch
-new file mode 100644
-index 0000000000..23314a990e
---- /dev/null
-+++ b/package/llvm-project/libclc/0004-libclc-disable-fp16-version-of-atan2-and-atan2pi.patch
-@@ -0,0 +1,56 @@
-+From cd0452f7a695165706fe5df85073f86baa46abd4 Mon Sep 17 00:00:00 2001
-+From: Karol Herbst <kherbst@redhat.com>
-+Date: Wed, 22 Jul 2026 17:00:36 +0200
-+Subject: [PATCH] libclc: disable fp16 version of atan2 and atan2pi
-+
-+Fixes math_brute_force/test_bruteforce atan2 atan2pi for half
-+
-+Upstream: https://gitlab.freedesktop.org/karolherbst/mesa-libclc/-/commit/cd0452f7a695165706fe5df85073f86baa46abd4
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ libclc/opencl/lib/generic/math/atan2.cl   | 8 ++++++++
-+ libclc/opencl/lib/generic/math/atan2pi.cl | 8 ++++++++
-+ 2 files changed, 16 insertions(+)
-+
-+diff --git a/libclc/opencl/lib/generic/math/atan2.cl b/libclc/opencl/lib/generic/math/atan2.cl
-+index 2bbac43..640e5a3 100644
-+--- a/libclc/opencl/lib/generic/math/atan2.cl
-++++ b/libclc/opencl/lib/generic/math/atan2.cl
-+@@ -8,6 +8,14 @@
-+ 
-+ #include "clc/math/clc_atan2.h"
-+ 
-++#define __CLC_FLOAT_ONLY
-++#define __CLC_FUNCTION atan2
-++#define __CLC_BODY "clc/shared/binary_def.inc"
-++
-++#include "clc/math/gentype.inc"
-++
-++#undef __CLC_FLOAT_ONLY
-++#define __CLC_DOUBLE_ONLY
-+ #define __CLC_FUNCTION atan2
-+ #define __CLC_BODY "clc/shared/binary_def.inc"
-+ 
-+diff --git a/libclc/opencl/lib/generic/math/atan2pi.cl b/libclc/opencl/lib/generic/math/atan2pi.cl
-+index 2d37e01..be848ae 100644
-+--- a/libclc/opencl/lib/generic/math/atan2pi.cl
-++++ b/libclc/opencl/lib/generic/math/atan2pi.cl
-+@@ -8,6 +8,14 @@
-+ 
-+ #include "clc/math/clc_atan2pi.h"
-+ 
-++#define __CLC_FLOAT_ONLY
-++#define __CLC_FUNCTION atan2pi
-++#define __CLC_BODY "clc/shared/binary_def.inc"
-++
-++#include "clc/math/gentype.inc"
-++
-++#undef __CLC_FLOAT_ONLY
-++#define __CLC_DOUBLE_ONLY
-+ #define __CLC_FUNCTION atan2pi
-+ #define __CLC_BODY "clc/shared/binary_def.inc"
-+ 
-+-- 
-+2.47.3
-+
-diff --git a/package/llvm-project/libclc/0005-libclc-Revert-libclc-Update-remquo-187998.patch b/package/llvm-project/libclc/0005-libclc-Revert-libclc-Update-remquo-187998.patch
-new file mode 100644
-index 0000000000..64de3b2125
---- /dev/null
-+++ b/package/llvm-project/libclc/0005-libclc-Revert-libclc-Update-remquo-187998.patch
-@@ -0,0 +1,595 @@
-+From 9b54a3b2c09228b3c3269c5c62ca2f3128ec6501 Mon Sep 17 00:00:00 2001
-+From: Karol Herbst <kherbst@redhat.com>
-+Date: Wed, 1 Apr 2026 02:44:30 +0200
-+Subject: [PATCH] libclc: Revert "libclc: Update remquo (#187998)"
-+
-+Fixes math_brute_force/test_bruteforce remainder remquo
-+
-+This reverts commit 1a9fe1769a0f9684dc9ecfcb7a2cec2d66077cc3.
-+
-+Upstream: https://gitlab.freedesktop.org/karolherbst/mesa-libclc/-/commit/9b54a3b2c09228b3c3269c5c62ca2f3128ec6501
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ libclc/clc/include/clc/math/remquo_decl.inc      |  34 +--
-+ libclc/clc/lib/generic/math/clc_remquo.cl        |  56 ++---
-+ libclc/clc/lib/generic/math/clc_remquo.inc       | 273 ++++++++++++++++++++--
-+ libclc/clc/lib/generic/math/clc_remquo_stret.inc | 158 -------------
-+ 4 files changed, 287 insertions(+), 234 deletions(-)
-+ delete mode 100644 clc/lib/generic/math/clc_remquo_stret.inc
-+
-+diff --git a/libclc/clc/include/clc/math/remquo_decl.inc b/libclc/clc/include/clc/math/remquo_decl.inc
-+index 8ba6011..cba28a7 100644
-+--- a/libclc/clc/include/clc/math/remquo_decl.inc
-++++ b/libclc/clc/include/clc/math/remquo_decl.inc
-+@@ -6,29 +6,19 @@
-+ //
-+ //===----------------------------------------------------------------------===//
-+ 
-+-typedef struct __CLC_XCONCAT(__clc_remquo_ret_, __CLC_GENTYPE) {
-+-  __CLC_GENTYPE rem;
-+-  __CLC_INTN quo;
-+-} __CLC_XCONCAT(__clc_remquo_ret_, __CLC_GENTYPE);
-++_CLC_OVERLOAD _CLC_DECL __CLC_GENTYPE __CLC_FUNCTION(__CLC_GENTYPE x,
-++                                                     __CLC_GENTYPE y,
-++                                                     private __CLC_INTN *q);
-+ 
-+-#define __CLC_REMQUO_RET_GENTYPE __CLC_XCONCAT(__clc_remquo_ret_, __CLC_GENTYPE)
-++_CLC_OVERLOAD _CLC_DECL __CLC_GENTYPE __CLC_FUNCTION(__CLC_GENTYPE x,
-++                                                     __CLC_GENTYPE y,
-++                                                     global __CLC_INTN *q);
-+ 
-+-_CLC_OVERLOAD _CLC_DECL __CLC_REMQUO_RET_GENTYPE
-+-__clc_remquo_stret(__CLC_GENTYPE x, __CLC_GENTYPE y);
-+-
-+-_CLC_OVERLOAD _CLC_DECL __CLC_GENTYPE __clc_remquo(__CLC_GENTYPE x,
-+-                                                   __CLC_GENTYPE y,
-+-                                                   private __CLC_INTN *q);
-+-
-+-_CLC_OVERLOAD _CLC_DECL __CLC_GENTYPE __clc_remquo(__CLC_GENTYPE x,
-+-                                                   __CLC_GENTYPE y,
-+-                                                   global __CLC_INTN *q);
-+-
-+-_CLC_OVERLOAD _CLC_DECL __CLC_GENTYPE __clc_remquo(__CLC_GENTYPE x,
-+-                                                   __CLC_GENTYPE y,
-+-                                                   local __CLC_INTN *q);
-++_CLC_OVERLOAD _CLC_DECL __CLC_GENTYPE __CLC_FUNCTION(__CLC_GENTYPE x,
-++                                                     __CLC_GENTYPE y,
-++                                                     local __CLC_INTN *q);
-+ #if _CLC_GENERIC_AS_SUPPORTED
-+-_CLC_OVERLOAD _CLC_DECL __CLC_GENTYPE __clc_remquo(__CLC_GENTYPE x,
-+-                                                   __CLC_GENTYPE y,
-+-                                                   generic __CLC_INTN *q);
-++_CLC_OVERLOAD _CLC_DECL __CLC_GENTYPE __CLC_FUNCTION(__CLC_GENTYPE x,
-++                                                     __CLC_GENTYPE y,
-++                                                     generic __CLC_INTN *q);
-+ #endif
-+diff --git a/libclc/clc/lib/generic/math/clc_remquo.cl b/libclc/clc/lib/generic/math/clc_remquo.cl
-+index 502b9e5..e254093 100644
-+--- a/libclc/clc/lib/generic/math/clc_remquo.cl
-++++ b/libclc/clc/lib/generic/math/clc_remquo.cl
-+@@ -6,58 +6,32 @@
-+ //
-+ //===----------------------------------------------------------------------===//
-+ 
-+-#include "clc/math/clc_remquo.h"
-+-
-+ #include "clc/clc_convert.h"
-+-#include "clc/float/definitions.h"
-+ #include "clc/integer/clc_clz.h"
-+-#include "clc/math/clc_copysign.h"
-+-#include "clc/math/clc_fabs.h"
-++#include "clc/internal/clc.h"
-++#include "clc/math/clc_floor.h"
-+ #include "clc/math/clc_flush_if_daz.h"
-+ #include "clc/math/clc_fma.h"
-+-#include "clc/math/clc_frexp.h"
-+ #include "clc/math/clc_ldexp.h"
-+-#include "clc/math/clc_mad.h"
-+-#include "clc/math/clc_recip_fast.h"
-+-#include "clc/math/clc_rint.h"
-+ #include "clc/math/clc_subnormal_config.h"
-+ #include "clc/math/clc_trunc.h"
-+ #include "clc/math/math.h"
-+-#include "clc/relational/clc_isfinite.h"
-+-#include "clc/relational/clc_isnan.h"
-+-#include "clc/relational/clc_signbit.h"
-+-
-+-#define __CLC_FUNCTION __clc_remquo_stret
-+-#define __CLC_BODY "clc_remquo_stret.inc"
-+-#include "clc/math/gentype.inc"
-+-#undef __CLC_FUNCTION
-+-
-+-#define __CLC_FUNCTION __clc_remquo
-+-#define __CLC_BODY "clc_remquo.inc"
-+-#include "clc/math/gentype.inc"
-++#include "clc/shared/clc_max.h"
-+ 
-+-#define __CLC_OUT_ARG3_SCALAR_TYPE int
-+-#define __CLC_OUT_ARG3_ADDRESS_SPACE __private
-+-#define __CLC_BODY "clc/shared/binary_with_out_arg_scalarize.inc"
-+-#include "clc/math/gentype.inc"
-+-#undef __CLC_OUT_ARG3_ADDRESS_SPACE
-++#define __CLC_ADDRESS_SPACE private
-++#include "clc_remquo.inc"
-++#undef __CLC_ADDRESS_SPACE
-+ 
-+-#define __CLC_OUT_ARG3_SCALAR_TYPE int
-+-#define __CLC_OUT_ARG3_ADDRESS_SPACE __local
-+-#define __CLC_BODY "clc/shared/binary_with_out_arg_scalarize.inc"
-+-#include "clc/math/gentype.inc"
-+-#undef __CLC_OUT_ARG3_ADDRESS_SPACE
-++#define __CLC_ADDRESS_SPACE global
-++#include "clc_remquo.inc"
-++#undef __CLC_ADDRESS_SPACE
-+ 
-+-#define __CLC_OUT_ARG3_SCALAR_TYPE int
-+-#define __CLC_OUT_ARG3_ADDRESS_SPACE __global
-+-#define __CLC_BODY "clc/shared/binary_with_out_arg_scalarize.inc"
-+-#include "clc/math/gentype.inc"
-+-#undef __CLC_OUT_ARG3_ADDRESS_SPACE
-++#define __CLC_ADDRESS_SPACE local
-++#include "clc_remquo.inc"
-++#undef __CLC_ADDRESS_SPACE
-+ 
-+ #if _CLC_DISTINCT_GENERIC_AS_SUPPORTED
-+-#define __CLC_OUT_ARG3_SCALAR_TYPE int
-+-#define __CLC_OUT_ARG3_ADDRESS_SPACE
-+-#define __CLC_BODY "clc/shared/binary_with_out_arg_scalarize.inc"
-+-#include "clc/math/gentype.inc"
-+-#undef __CLC_OUT_ARG3_ADDRESS_SPACE
-++#define __CLC_ADDRESS_SPACE generic
-++#include "clc_remquo.inc"
-++#undef __CLC_ADDRESS_SPACE
-+ #endif
-+diff --git a/libclc/clc/lib/generic/math/clc_remquo.inc b/libclc/clc/lib/generic/math/clc_remquo.inc
-+index 649bdd9..79ce0fe 100644
-+--- a/libclc/clc/lib/generic/math/clc_remquo.inc
-++++ b/libclc/clc/lib/generic/math/clc_remquo.inc
-+@@ -6,19 +6,266 @@
-+ //
-+ //===----------------------------------------------------------------------===//
-+ 
-+-#ifdef __CLC_SCALAR
-+-#define __CLC_REMQUO_DEF(addrspace)                                            \
-+-  _CLC_DEF _CLC_OVERLOAD __CLC_GENTYPE __clc_remquo(                           \
-+-      __CLC_GENTYPE x, __CLC_GENTYPE y, addrspace __CLC_INTN *quo_out) {       \
-+-    __CLC_REMQUO_RET_GENTYPE result = __clc_remquo_stret(x, y);                \
-+-    *quo_out = result.quo;                                                     \
-+-    return result.rem;                                                         \
-++_CLC_DEF _CLC_OVERLOAD float __clc_remquo(float x, float y,
-++                                          __CLC_ADDRESS_SPACE int *quo) {
-++  x = __clc_flush_if_daz(x);
-++  y = __clc_flush_if_daz(y);
-++  int ux = __clc_as_int(x);
-++  int ax = ux & EXSIGNBIT_SP32;
-++  float xa = __clc_as_float(ax);
-++  int sx = ux ^ ax;
-++  int ex = ax >> EXPSHIFTBITS_SP32;
-++
-++  int uy = __clc_as_int(y);
-++  int ay = uy & EXSIGNBIT_SP32;
-++  float ya = __clc_as_float(ay);
-++  int sy = uy ^ ay;
-++  int ey = ay >> EXPSHIFTBITS_SP32;
-++
-++  float xr = __clc_as_float(0x3f800000 | (ax & 0x007fffff));
-++  float yr = __clc_as_float(0x3f800000 | (ay & 0x007fffff));
-++  int c;
-++  int k = ex - ey;
-++
-++  uint q = 0;
-++
-++  while (k > 0) {
-++    c = xr >= yr;
-++    q = (q << 1) | c;
-++    xr -= c ? yr : 0.0f;
-++    xr += xr;
-++    --k;
-++  }
-++
-++  c = xr > yr;
-++  q = (q << 1) | c;
-++  xr -= c ? yr : 0.0f;
-++
-++  int lt = ex < ey;
-++
-++  q = lt ? 0 : q;
-++  xr = lt ? xa : xr;
-++  yr = lt ? ya : yr;
-++
-++  c = (yr < 2.0f * xr) | ((yr == 2.0f * xr) & ((q & 0x1) == 0x1));
-++  xr -= c ? yr : 0.0f;
-++  q += c;
-++
-++  float s = __clc_as_float(ey << EXPSHIFTBITS_SP32);
-++  xr *= lt ? 1.0f : s;
-++
-++  int qsgn = sx == sy ? 1 : -1;
-++  int quot = (q & 0x7f) * qsgn;
-++
-++  c = ax == ay;
-++  quot = c ? qsgn : quot;
-++  xr = c ? 0.0f : xr;
-++
-++  xr = __clc_as_float(sx ^ __clc_as_int(xr));
-++
-++  c = ax > PINFBITPATT_SP32 | ay > PINFBITPATT_SP32 | ax == PINFBITPATT_SP32 |
-++      ay == 0;
-++  quot = c ? 0 : quot;
-++  xr = c ? __clc_as_float(QNANBITPATT_SP32) : xr;
-++
-++  *quo = quot;
-++
-++  return xr;
-++}
-++
-++// remquo signature is special, we don't have macro for this
-++#define __CLC_VEC_REMQUO(TYPE, VEC_SIZE, HALF_VEC_SIZE)                        \
-++  _CLC_DEF _CLC_OVERLOAD TYPE##VEC_SIZE __clc_remquo(                          \
-++      TYPE##VEC_SIZE x, TYPE##VEC_SIZE y,                                      \
-++      __CLC_ADDRESS_SPACE int##VEC_SIZE *quo) {                                \
-++    int##HALF_VEC_SIZE lo, hi;                                                 \
-++    TYPE##VEC_SIZE ret;                                                        \
-++    ret.lo = __clc_remquo(x.lo, y.lo, &lo);                                    \
-++    ret.hi = __clc_remquo(x.hi, y.hi, &hi);                                    \
-++    (*quo).lo = lo;                                                            \
-++    (*quo).hi = hi;                                                            \
-++    return ret;                                                                \
-+   }
-+ 
-+-__CLC_REMQUO_DEF(private)
-+-__CLC_REMQUO_DEF(local)
-+-__CLC_REMQUO_DEF(global)
-+-#if _CLC_DISTINCT_GENERIC_AS_SUPPORTED
-+-__CLC_REMQUO_DEF(generic)
-++#define __CLC_VEC3_REMQUO(TYPE)                                                \
-++  _CLC_DEF _CLC_OVERLOAD TYPE##3 __clc_remquo(                                 \
-++      TYPE##3 x, TYPE##3 y, __CLC_ADDRESS_SPACE int##3 * quo) {                \
-++    int2 lo;                                                                   \
-++    int hi;                                                                    \
-++    TYPE##3 ret;                                                               \
-++    ret.s01 = __clc_remquo(x.s01, y.s01, &lo);                                 \
-++    ret.s2 = __clc_remquo(x.s2, y.s2, &hi);                                    \
-++    (*quo).s01 = lo;                                                           \
-++    (*quo).s2 = hi;                                                            \
-++    return ret;                                                                \
-++  }
-++__CLC_VEC_REMQUO(float, 2, )
-++__CLC_VEC3_REMQUO(float)
-++__CLC_VEC_REMQUO(float, 4, 2)
-++__CLC_VEC_REMQUO(float, 8, 4)
-++__CLC_VEC_REMQUO(float, 16, 8)
-++
-++#ifdef cl_khr_fp64
-++
-++#pragma OPENCL EXTENSION cl_khr_fp64 : enable
-++
-++_CLC_DEF _CLC_OVERLOAD double __clc_remquo(double x, double y,
-++                                           __CLC_ADDRESS_SPACE int *pquo) {
-++  ulong ux = __clc_as_ulong(x);
-++  ulong ax = ux & ~SIGNBIT_DP64;
-++  ulong xsgn = ux ^ ax;
-++  double dx = __clc_as_double(ax);
-++  int xexp = __clc_convert_int(ax >> EXPSHIFTBITS_DP64);
-++  int xexp1 = 11 - (int)__clc_clz(ax & MANTBITS_DP64);
-++  xexp1 = xexp < 1 ? xexp1 : xexp;
-++
-++  ulong uy = __clc_as_ulong(y);
-++  ulong ay = uy & ~SIGNBIT_DP64;
-++  double dy = __clc_as_double(ay);
-++  int yexp = __clc_convert_int(ay >> EXPSHIFTBITS_DP64);
-++  int yexp1 = 11 - (int)__clc_clz(ay & MANTBITS_DP64);
-++  yexp1 = yexp < 1 ? yexp1 : yexp;
-++
-++  int qsgn = ((ux ^ uy) & SIGNBIT_DP64) == 0UL ? 1 : -1;
-++
-++  // First assume |x| > |y|
-++
-++  // Set ntimes to the number of times we need to do a
-++  // partial remainder. If the exponent of x is an exact multiple
-++  // of 53 larger than the exponent of y, and the mantissa of x is
-++  // less than the mantissa of y, ntimes will be one too large
-++  // but it doesn't matter - it just means that we'll go round
-++  // the loop below one extra time.
-++  int ntimes = __clc_max(0, (xexp1 - yexp1) / 53);
-++  double w = __clc_ldexp(dy, ntimes * 53);
-++  w = ntimes == 0 ? dy : w;
-++  double scale = ntimes == 0 ? 1.0 : 0x1.0p-53;
-++
-++  // Each time round the loop we compute a partial remainder.
-++  // This is done by subtracting a large multiple of w
-++  // from x each time, where w is a scaled up version of y.
-++  // The subtraction must be performed exactly in quad
-++  // precision, though the result at each stage can
-++  // fit exactly in a double precision number.
-++  int i;
-++  double t, v, p, pp;
-++
-++  for (i = 0; i < ntimes; i++) {
-++    // Compute integral multiplier
-++    t = __clc_trunc(dx / w);
-++
-++    // Compute w * t in quad precision
-++    p = w * t;
-++    pp = __clc_fma(w, t, -p);
-++
-++    // Subtract w * t from dx
-++    v = dx - p;
-++    dx = v + (((dx - v) - p) - pp);
-++
-++    // If t was one too large, dx will be negative. Add back one w.
-++    dx += dx < 0.0 ? w : 0.0;
-++
-++    // Scale w down by 2^(-53) for the next iteration
-++    w *= scale;
-++  }
-++
-++  // One more time
-++  // Variable todd says whether the integer t is odd or not
-++  t = __clc_floor(dx / w);
-++  long lt = (long)t;
-++  int todd = lt & 1;
-++
-++  p = w * t;
-++  pp = __clc_fma(w, t, -p);
-++  v = dx - p;
-++  dx = v + (((dx - v) - p) - pp);
-++  i = dx < 0.0;
-++  todd ^= i;
-++  dx += i ? w : 0.0;
-++
-++  lt -= i;
-++
-++  // At this point, dx lies in the range [0,dy)
-++
-++  // For the remainder function, we need to adjust dx
-++  // so that it lies in the range (-y/2, y/2] by carefully
-++  // subtracting w (== dy == y) if necessary. The rigmarole
-++  // with todd is to get the correct sign of the result
-++  // when x/y lies exactly half way between two integers,
-++  // when we need to choose the even integer.
-++
-++  int al = (2.0 * dx > w) | (todd & (2.0 * dx == w));
-++  double dxl = dx - (al ? w : 0.0);
-++
-++  int ag = (dx > 0.5 * w) | (todd & (dx == 0.5 * w));
-++  double dxg = dx - (ag ? w : 0.0);
-++
-++  dx = dy < 0x1.0p+1022 ? dxl : dxg;
-++  lt += dy < 0x1.0p+1022 ? al : ag;
-++  int quo = ((int)lt & 0x7f) * qsgn;
-++
-++  double ret = __clc_as_double(xsgn ^ __clc_as_ulong(dx));
-++  dx = __clc_as_double(ax);
-++
-++  // Now handle |x| == |y|
-++  int c = dx == dy;
-++  t = __clc_as_double(xsgn);
-++  quo = c ? qsgn : quo;
-++  ret = c ? t : ret;
-++
-++  // Next, handle |x| < |y|
-++  c = dx < dy;
-++  quo = c ? 0 : quo;
-++  ret = c ? x : ret;
-++
-++  c &= (yexp<1023 & 2.0 * dx> dy) | (dx > 0.5 * dy);
-++  quo = c ? qsgn : quo;
-++  // we could use a conversion here instead since qsgn = +-1
-++  p = qsgn == 1 ? -1.0 : 1.0;
-++  t = __clc_fma(y, p, x);
-++  ret = c ? t : ret;
-++
-++  // We don't need anything special for |x| == 0
-++
-++  // |y| is 0
-++  c = dy == 0.0;
-++  quo = c ? 0 : quo;
-++  ret = c ? __clc_as_double(QNANBITPATT_DP64) : ret;
-++
-++  // y is +-Inf, NaN
-++  c = yexp > BIASEDEMAX_DP64;
-++  quo = c ? 0 : quo;
-++  t = y == y ? x : y;
-++  ret = c ? t : ret;
-++
-++  // x is +=Inf, NaN
-++  c = xexp > BIASEDEMAX_DP64;
-++  quo = c ? 0 : quo;
-++  ret = c ? __clc_as_double(QNANBITPATT_DP64) : ret;
-++
-++  *pquo = quo;
-++  return ret;
-++}
-++__CLC_VEC_REMQUO(double, 2, )
-++__CLC_VEC3_REMQUO(double)
-++__CLC_VEC_REMQUO(double, 4, 2)
-++__CLC_VEC_REMQUO(double, 8, 4)
-++__CLC_VEC_REMQUO(double, 16, 8)
-++
-++#endif
-++
-++#ifdef cl_khr_fp16
-++
-++#pragma OPENCL EXTENSION cl_khr_fp16 : enable
-++
-++_CLC_OVERLOAD _CLC_DEF half __clc_remquo(half x, half y,
-++                                         __CLC_ADDRESS_SPACE int *pquo) {
-++  return (half)__clc_remquo((float)x, (float)y, pquo);
-++}
-++__CLC_VEC_REMQUO(half, 2, )
-++__CLC_VEC3_REMQUO(half)
-++__CLC_VEC_REMQUO(half, 4, 2)
-++__CLC_VEC_REMQUO(half, 8, 4)
-++__CLC_VEC_REMQUO(half, 16, 8)
-++
-+ #endif
-+-#endif // __CLC_SCALAR
-+diff --git a/libclc/clc/lib/generic/math/clc_remquo_stret.inc b/libclc/clc/lib/generic/math/clc_remquo_stret.inc
-+deleted file mode 100644
-+index eecc255..0000000
-+--- a/libclc/clc/lib/generic/math/clc_remquo_stret.inc
-++++ /dev/null
-+@@ -1,158 +0,0 @@
-+-//===----------------------------------------------------------------------===//
-+-//
-+-// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
-+-// See https://llvm.org/LICENSE.txt for license information.
-+-// SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
-+-//
-+-//===----------------------------------------------------------------------===//
-+-
-+-#ifdef __CLC_SCALAR
-+-
-+-#if __CLC_FPSIZE == 32 || __CLC_FPSIZE == 64
-+-#define __CLC_REMQUO_EVAL_TYPE __CLC_GENTYPE
-+-#define __CLC_CONVERT_REMQUO_EVAL_TYPE __CLC_CONVERT_GENTYPE
-+-#define __CLC_S_EVAL_TYPE __CLC_S_GENTYPE
-+-#define __CLC_CONVERT_S_EVAL_TYPE __CLC_CONVERT_S_GENTYPE
-+-#elif __CLC_FPSIZE == 16
-+-#define __CLC_REMQUO_EVAL_TYPE __CLC_FLOATN
-+-#define __CLC_CONVERT_REMQUO_EVAL_TYPE __CLC_CONVERT_FLOATN
-+-#define __CLC_S_EVAL_TYPE __CLC_INTN
-+-#define __CLC_CONVERT_S_EVAL_TYPE __CLC_CONVERT_INTN
-+-#endif
-+-
-+-_CLC_DEF _CLC_OVERLOAD _CLC_CONST __CLC_REMQUO_RET_GENTYPE
-+-__clc_remquo_stret(__CLC_GENTYPE x, __CLC_GENTYPE y) {
-+-  // How many bits of the quotient per iteration
-+-
-+-#if __CLC_FPSIZE == 32
-+-  const __CLC_INTN bits = 12;
-+-  const __CLC_GENTYPE max_exp = 0x1.0p+127f;
-+-#elif __CLC_FPSIZE == 64
-+-  const __CLC_INTN bits = 26;
-+-  const __CLC_GENTYPE max_exp = 0x1.0p+1023;
-+-#elif __CLC_FPSIZE == 16
-+-  const __CLC_INTN bits = 11;
-+-  const __CLC_GENTYPE max_exp = 0x1.0p+15h;
-+-#endif
-+-
-+-  // Track low 7 bits of the integral quotient.
-+-  __CLC_INTN q7;
-+-
-+-  __CLC_REMQUO_EVAL_TYPE ax = __CLC_CONVERT_REMQUO_EVAL_TYPE(__clc_fabs(x));
-+-  __CLC_REMQUO_EVAL_TYPE ay = __CLC_CONVERT_REMQUO_EVAL_TYPE(__clc_fabs(y));
-+-
-+-  __CLC_GENTYPE ret;
-+-
-+-  if (ax > ay) {
-+-    __CLC_INTN ex, ey;
-+-
-+-    __CLC_REMQUO_EVAL_TYPE mx = __clc_frexp(ax, &ex);
-+-    --ex;
-+-
-+-    __CLC_REMQUO_EVAL_TYPE my = __clc_frexp(ay, &ey);
-+-    --ey;
-+-
-+-    ax = __clc_ldexp(mx, bits);
-+-    ay = __clc_ldexp(my, 1);
-+-
-+-    __CLC_INTN nb = ex - ey;
-+-    __CLC_REMQUO_EVAL_TYPE ayinv = __clc_recip_fast(ay);
-+-
-+-    __CLC_INTN qacc = 0;
-+-
-+-    while (nb > bits) {
-+-      __CLC_REMQUO_EVAL_TYPE q = __clc_rint(ax * ayinv);
-+-
-+-#if __CLC_FPSIZE == 16
-+-      ax = __clc_mad(-q, ay, ax);
-+-#else
-+-      ax = __clc_fma(-q, ay, ax);
-+-#endif
-+-      __CLC_S_GENTYPE clt = ax < (__CLC_REMQUO_EVAL_TYPE)0.0;
-+-      __CLC_REMQUO_EVAL_TYPE axp = ax + ay;
-+-      ax = clt ? axp : ax;
-+-      ax = __clc_ldexp(ax, bits);
-+-
-+-      __CLC_INTN iq = __CLC_CONVERT_INTN(q);
-+-      iq -= __CLC_CONVERT_INTN(clt) ? 1 : 0;
-+-      qacc = (qacc << bits) | iq;
-+-
-+-      nb -= bits;
-+-    }
-+-
-+-    ax = __clc_ldexp(ax, nb - bits + 1);
-+-
-+-    __CLC_INTN is_odd;
-+-
-+-    // Final iteration
-+-    {
-+-      __CLC_REMQUO_EVAL_TYPE q = __clc_rint(ax * ayinv);
-+-#if __CLC_FPSIZE == 16
-+-      ax = __clc_mad(-q, ay, ax);
-+-#else
-+-      ax = __clc_fma(-q, ay, ax);
-+-#endif
-+-
-+-      __CLC_S_GENTYPE clt = ax < (__CLC_REMQUO_EVAL_TYPE)0.0;
-+-      __CLC_REMQUO_EVAL_TYPE axp = ax + ay;
-+-      ax = clt ? axp : ax;
-+-      __CLC_INTN iq = __CLC_CONVERT_INTN(q);
-+-      iq -= __CLC_CONVERT_INTN(clt) ? 1 : 0;
-+-
-+-      qacc = (qacc << (nb + 1)) | iq;
-+-      is_odd = (iq & 1) != 0;
-+-    }
-+-
-+-    // Adjust ax so that it is the range (-y/2, y/2]
-+-    // We need to choose the even integer when x/y is midway between two
-+-    // integers
-+-    __CLC_S_EVAL_TYPE aq = ((__CLC_REMQUO_EVAL_TYPE)2.0 * ax > ay) |
-+-                           (__CLC_CONVERT_S_EVAL_TYPE(is_odd) &
-+-                            ((__CLC_REMQUO_EVAL_TYPE)2.0 * ax == ay));
-+-    ax = ax - (aq ? ay : (__CLC_REMQUO_EVAL_TYPE)0.0);
-+-
-+-    ax = __clc_ldexp(ax, ey);
-+-    qacc += aq ? 1 : 0;
-+-
-+-    __CLC_S_GENTYPE qneg = __clc_signbit(x) ^ __clc_signbit(y) ? -1 : 0;
-+-    q7 = ((qacc & 0x7f) ^ qneg) - qneg;
-+-
-+-    ret = __clc_signbit(x) ? -ax : ax;
-+-  } else {
-+-    __CLC_S_EVAL_TYPE c = (ax > (__CLC_REMQUO_EVAL_TYPE)0.5 * ay);
-+-    if (__CLC_FPSIZE != 16)
-+-      c |= (ay < max_exp && (__CLC_REMQUO_EVAL_TYPE)2.0 * ax > ay);
-+-
-+-    __CLC_CHARN qsgn = __CLC_CONVERT_CHARN(__clc_signbit(x) == __clc_signbit(y))
-+-                           ? (__CLC_CHARN)1
-+-                           : (__CLC_CHARN)-1;
-+-
-+-    __CLC_GENTYPE t = __clc_mad(y, -__CLC_CONVERT_GENTYPE(qsgn), x);
-+-    ret = c ? t : __clc_flush_if_daz(x);
-+-    q7 = c ? qsgn : 0;
-+-
-+-    __CLC_GENTYPE zero = __clc_copysign(__CLC_FP_LIT(0.0), x);
-+-    ret = ax == ay ? zero : ret;
-+-    q7 = ax == ay ? qsgn : q7;
-+-  }
-+-
-+-  ret = y == __CLC_FP_LIT(0.0) ? __CLC_GENTYPE_NAN : ret;
-+-  q7 = y == __CLC_FP_LIT(0.0) ? 0 : q7;
-+-
-+-  __CLC_S_GENTYPE finite = !__clc_isnan(y) && __clc_isfinite(x);
-+-
-+-  // A defined 0 result for quo with a nan result is an additional OpenCL
-+-  // requirement beyond standard C.
-+-  __CLC_REMQUO_RET_GENTYPE result;
-+-  result.quo = finite ? q7 : 0;
-+-  result.rem = finite ? ret : __CLC_GENTYPE_NAN;
-+-
-+-  return result;
-+-}
-+-
-+-#undef __CLC_REMQUO_EVAL_TYPE
-+-#undef __CLC_CONVERT_REMQUO_EVAL_TYPE
-+-#undef __CLC_S_EVAL_TYPE
-+-#undef __CLC_CONVERT_S_EVAL_TYPE
-+-
-+-#endif // __CLC_SCALAR
-+-- 
-+2.47.3
-+
-diff --git a/package/llvm-project/libclc/0006-libclc-Revert-libclc-Update-hypot-implementation-185.patch b/package/llvm-project/libclc/0006-libclc-Revert-libclc-Update-hypot-implementation-185.patch
-new file mode 100644
-index 0000000000..eb68b65b8e
---- /dev/null
-+++ b/package/llvm-project/libclc/0006-libclc-Revert-libclc-Update-hypot-implementation-185.patch
-@@ -0,0 +1,171 @@
-+From 931f02ef3281fa7bcf14362a7f90edec40825aaf Mon Sep 17 00:00:00 2001
-+From: Karol Herbst <kherbst@redhat.com>
-+Date: Wed, 22 Jul 2026 18:06:52 +0200
-+Subject: [PATCH] libclc: Revert "libclc: Update hypot implementation
-+ (#185873)"
-+
-+Fixes math_brute_force/test_bruteforce hypot
-+
-+This reverts commit 3da14eeacb90b5298805197b96f92551b7759a1d.
-+
-+Upstream: https://gitlab.freedesktop.org/karolherbst/mesa-libclc/-/commit/931f02ef3281fa7bcf14362a7f90edec40825aaf
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ libclc/clc/lib/generic/math/clc_hypot.cl  |  14 ++--
-+ libclc/clc/lib/generic/math/clc_hypot.inc | 101 ++++++++++++++++++++---------
-+ 2 files changed, 75 insertions(+), 40 deletions(-)
-+
-+diff --git a/libclc/clc/lib/generic/math/clc_hypot.cl b/libclc/clc/lib/generic/math/clc_hypot.cl
-+index b609d68..8eef0a5 100644
-+--- a/libclc/clc/lib/generic/math/clc_hypot.cl
-++++ b/libclc/clc/lib/generic/math/clc_hypot.cl
-+@@ -7,17 +7,15 @@
-+ //===----------------------------------------------------------------------===//
-+ 
-+ #include "clc/clc_convert.h"
-+-#include "clc/float/definitions.h"
-++#include "clc/integer/clc_abs.h"
-+ #include "clc/internal/clc.h"
-+-#include "clc/math/clc_fabs.h"
-+-#include "clc/math/clc_fmax.h"
-+-#include "clc/math/clc_frexp_exp.h"
-+-#include "clc/math/clc_ldexp.h"
-++#include "clc/math/clc_fma.h"
-+ #include "clc/math/clc_mad.h"
-+-#include "clc/math/clc_sqrt_fast.h"
-++#include "clc/math/clc_sqrt.h"
-++#include "clc/math/clc_subnormal_config.h"
-+ #include "clc/math/math.h"
-+-#include "clc/relational/clc_isinf.h"
-+-#include "clc/relational/clc_isunordered.h"
-++#include "clc/relational/clc_isnan.h"
-++#include "clc/shared/clc_clamp.h"
-+ 
-+ #define __CLC_BODY "clc_hypot.inc"
-+ #include "clc/math/gentype.inc"
-+diff --git a/libclc/clc/lib/generic/math/clc_hypot.inc b/libclc/clc/lib/generic/math/clc_hypot.inc
-+index 2321fb3..2fa9162 100644
-+--- a/libclc/clc/lib/generic/math/clc_hypot.inc
-++++ b/libclc/clc/lib/generic/math/clc_hypot.inc
-+@@ -10,48 +10,85 @@
-+ // warrants it
-+ 
-+ #if __CLC_FPSIZE == 32
-+-_CLC_OVERLOAD _CLC_DEF _CLC_CONST __CLC_GENTYPE __clc_hypot(__CLC_GENTYPE x,
-+-                                                            __CLC_GENTYPE y) {
-+-  __CLC_GENTYPE a = __clc_fabs(x);
-+-  __CLC_GENTYPE b = __clc_fabs(y);
-+-  __CLC_GENTYPE t = __clc_fmax(a, b);
-+-  __CLC_INTN e = __clc_frexp_exp(t);
-+-
-+-  a = __clc_ldexp(a, -e);
-+-  b = __clc_ldexp(b, -e);
-+-  __CLC_GENTYPE ret = __clc_ldexp(__clc_sqrt_fast(__clc_mad(a, a, b * b)), e);
-+-
-+-  return __clc_isinf(t) ? __CLC_GENTYPE_INF : ret;
-++_CLC_DEF _CLC_OVERLOAD __CLC_GENTYPE __clc_hypot(__CLC_GENTYPE x,
-++                                                 __CLC_GENTYPE y) {
-++  __CLC_UINTN ux = __CLC_AS_UINTN(x);
-++  __CLC_UINTN aux = ux & EXSIGNBIT_SP32;
-++  __CLC_UINTN uy = __CLC_AS_UINTN(y);
-++  __CLC_UINTN auy = uy & EXSIGNBIT_SP32;
-++  __CLC_INTN c = aux > auy;
-++  ux = c ? aux : auy;
-++  uy = c ? auy : aux;
-++
-++  __CLC_INTN xexp = __clc_clamp(
-++      __CLC_AS_INTN(ux >> EXPSHIFTBITS_SP32) - EXPBIAS_SP32, -126, 126);
-++  __CLC_GENTYPE fx_exp =
-++      __CLC_AS_GENTYPE((xexp + EXPBIAS_SP32) << EXPSHIFTBITS_SP32);
-++  __CLC_GENTYPE fi_exp =
-++      __CLC_AS_GENTYPE((-xexp + EXPBIAS_SP32) << EXPSHIFTBITS_SP32);
-++  __CLC_GENTYPE fx = __CLC_AS_GENTYPE(ux) * fi_exp;
-++  __CLC_GENTYPE fy = __CLC_AS_GENTYPE(uy) * fi_exp;
-++
-++  __CLC_GENTYPE retval = __clc_sqrt(__clc_mad(fx, fx, fy * fy)) * fx_exp;
-++
-++  retval = (ux > PINFBITPATT_SP32 || uy == 0) ? __CLC_AS_GENTYPE(ux) : retval;
-++  retval = (ux == PINFBITPATT_SP32 || uy == PINFBITPATT_SP32)
-++               ? __CLC_AS_GENTYPE((__CLC_UINTN)PINFBITPATT_SP32)
-++               : retval;
-++  return retval;
-+ }
-+ 
-+ #elif __CLC_FPSIZE == 64
-+ 
-+-_CLC_OVERLOAD _CLC_DEF _CLC_CONST __CLC_GENTYPE __clc_hypot(__CLC_GENTYPE x,
-+-                                                            __CLC_GENTYPE y) {
-+-  __CLC_GENTYPE a = __clc_fabs(x);
-+-  __CLC_GENTYPE b = __clc_fabs(y);
-+-  __CLC_GENTYPE t = __clc_fmax(a, b);
-+-  __CLC_INTN e = __clc_frexp_exp(t);
-++_CLC_DEF _CLC_OVERLOAD __CLC_GENTYPE __clc_hypot(__CLC_GENTYPE x,
-++                                                 __CLC_GENTYPE y) {
-++  __CLC_ULONGN ux = __CLC_AS_ULONGN(x) & ~SIGNBIT_DP64;
-++  __CLC_INTN xexp = __CLC_CONVERT_INTN(ux >> EXPSHIFTBITS_DP64);
-++  x = __CLC_AS_GENTYPE(ux);
-+ 
-+-  a = __clc_ldexp(a, -e);
-+-  b = __clc_ldexp(b, -e);
-+-  __CLC_GENTYPE ret = __clc_ldexp(__clc_sqrt_fast(__clc_mad(a, a, b * b)), e);
-++  __CLC_ULONGN uy = __CLC_AS_ULONGN(y) & ~SIGNBIT_DP64;
-++  __CLC_INTN yexp = __CLC_CONVERT_INTN(uy >> EXPSHIFTBITS_DP64);
-++  y = __CLC_AS_GENTYPE(uy);
-+ 
-+-  ret = __clc_isunordered(x, y) ? __CLC_GENTYPE_NAN : ret;
-+-  return __clc_isinf(x) || __clc_isinf(y) ? __CLC_GENTYPE_INF : ret;
-+-}
-++  __CLC_LONGN c = __CLC_CONVERT_LONGN(xexp > EXPBIAS_DP64 + 500 ||
-++                                      yexp > EXPBIAS_DP64 + 500);
-++  __CLC_GENTYPE preadjust = c ? 0x1.0p-600 : 1.0;
-++  __CLC_GENTYPE postadjust = c ? 0x1.0p+600 : 1.0;
-+ 
-+-#elif __CLC_FPSIZE == 16
-++  c = __CLC_CONVERT_LONGN(xexp < EXPBIAS_DP64 - 500 ||
-++                          yexp < EXPBIAS_DP64 - 500);
-++  preadjust = c ? 0x1.0p+600 : preadjust;
-++  postadjust = c ? 0x1.0p-600 : postadjust;
-++
-++  __CLC_GENTYPE ax = x * preadjust;
-++  __CLC_GENTYPE ay = y * preadjust;
-+ 
-+-_CLC_OVERLOAD _CLC_DEF _CLC_CONST __CLC_GENTYPE __clc_hypot(__CLC_GENTYPE x,
-+-                                                            __CLC_GENTYPE y) {
-+-  __CLC_FLOATN fx = __CLC_CONVERT_FLOATN(x);
-+-  __CLC_FLOATN fy = __CLC_CONVERT_FLOATN(y);
-+-  __CLC_FLOATN d2 = __clc_mad(fx, fx, fy * fy);
-++  // The post adjust may overflow, but this can't be avoided in any case
-++  __CLC_GENTYPE r = __clc_sqrt(__clc_fma(ax, ax, ay * ay)) * postadjust;
-+ 
-+-  __CLC_GENTYPE ret = __CLC_CONVERT_HALFN(__clc_sqrt_fast(d2));
-++  // If the difference in exponents between x and y is large
-++  __CLC_GENTYPE s = x + y;
-++  c = __CLC_CONVERT_LONGN(__clc_abs(xexp - yexp) > MANTLENGTH_DP64 + 1);
-++  r = c ? s : r;
-++
-++  // Check for NaN
-++  c = __clc_isnan(x) || __clc_isnan(y);
-++  r = c ? __CLC_AS_GENTYPE((__CLC_ULONGN)QNANBITPATT_DP64) : r;
-++
-++  // If either is Inf, we must return Inf
-++  c = x == __CLC_AS_GENTYPE((__CLC_ULONGN)PINFBITPATT_DP64) ||
-++      y == __CLC_AS_GENTYPE((__CLC_ULONGN)PINFBITPATT_DP64);
-++  r = c ? __CLC_AS_GENTYPE((__CLC_ULONGN)PINFBITPATT_DP64) : r;
-++
-++  return r;
-++}
-++
-++#elif __CLC_FPSIZE == 16
-+ 
-+-  return __clc_isinf(x) || __clc_isinf(y) ? __CLC_GENTYPE_INF : ret;
-++_CLC_DEF _CLC_OVERLOAD __CLC_GENTYPE __clc_hypot(__CLC_GENTYPE x,
-++                                                 __CLC_GENTYPE y) {
-++  return __CLC_CONVERT_GENTYPE(
-++      __clc_hypot(__CLC_CONVERT_FLOATN(x), __CLC_CONVERT_FLOATN(y)));
-+ }
-+ 
-+ #endif
-+-- 
-+2.47.3
-+
-diff --git a/package/llvm-project/libclc/0007-libclc-Partly-revert-libclc-Update-trigpi-functions-.patch b/package/llvm-project/libclc/0007-libclc-Partly-revert-libclc-Update-trigpi-functions-.patch
-new file mode 100644
-index 0000000000..062ec0e5a6
---- /dev/null
-+++ b/package/llvm-project/libclc/0007-libclc-Partly-revert-libclc-Update-trigpi-functions-.patch
-@@ -0,0 +1,173 @@
-+From 1e379e04c3fc1457a80d47e0da2a6e242237094c Mon Sep 17 00:00:00 2001
-+From: Karol Herbst <kherbst@redhat.com>
-+Date: Wed, 1 Apr 2026 02:55:52 +0200
-+Subject: [PATCH] libclc: Partly revert "libclc: Update trigpi functions
-+ (#187579)"
-+
-+The initial commit broke sinpi
-+
-+This partly reverts commit 421bf13e4bf1c19a0cc48fbb0af63b902d3118b1
-+
-+Upstream: https://gitlab.freedesktop.org/karolherbst/mesa-libclc/-/commit/1e379e04c3fc1457a80d47e0da2a6e242237094c
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ .../clc/math/clc_sincos_helpers_fp64_decl.inc |   5 +
-+ libclc/clc/lib/generic/math/clc_sinpi.cl             |   8 +-
-+ libclc/clc/lib/generic/math/clc_sinpi.inc            | 106 +++++++++++++++++-
-+ 3 files changed, 115 insertions(+), 4 deletions(-)
-+
-+diff --git a/libclc/clc/include/clc/math/clc_sincos_helpers_fp64_decl.inc b/libclc/clc/include/clc/math/clc_sincos_helpers_fp64_decl.inc
-+index 22081d9..d638d72 100644
-+--- a/libclc/clc/include/clc/math/clc_sincos_helpers_fp64_decl.inc
-++++ b/libclc/clc/include/clc/math/clc_sincos_helpers_fp64_decl.inc
-+@@ -22,6 +22,11 @@ _CLC_DEF _CLC_OVERLOAD __CLC_DOUBLEN __clc_tan_reduced_eval(__CLC_DOUBLEN x,
-+                                                             __CLC_DOUBLEN y,
-+                                                             __CLC_INTN is_odd);
-+ 
-++_CLC_DECL _CLC_OVERLOAD void __clc_sincos_piby4(__CLC_DOUBLEN x,
-++                                                __CLC_DOUBLEN xx,
-++                                                private __CLC_DOUBLEN *sinval,
-++                                                private __CLC_DOUBLEN *cosval);
-++
-+ _CLC_DECL _CLC_OVERLOAD __CLC_INTN __clc_remainder_piby2_small(
-+     __CLC_DOUBLEN x, private __CLC_DOUBLEN *r, private __CLC_DOUBLEN *rr);
-+ 
-+diff --git a/libclc/clc/lib/generic/math/clc_sinpi.cl b/libclc/clc/lib/generic/math/clc_sinpi.cl
-+index bf57dc4..f9bed7e 100644
-+--- a/libclc/clc/lib/generic/math/clc_sinpi.cl
-++++ b/libclc/clc/lib/generic/math/clc_sinpi.cl
-+@@ -6,8 +6,12 @@
-+ //
-+ //===----------------------------------------------------------------------===//
-+ 
-+-#include "clc/math/clc_sincospi.h"
-+-#include "clc/math/clc_sinpi.h"
-++#include "clc/clc_convert.h"
-++#include "clc/float/definitions.h"
-++#include "clc/internal/clc.h"
-++#include "clc/math/clc_fabs.h"
-++#include "clc/math/clc_sincos_helpers.h"
-++#include "clc/math/math.h"
-+ 
-+ #define __CLC_BODY "clc_sinpi.inc"
-+ #include "clc/math/gentype.inc"
-+diff --git a/libclc/clc/lib/generic/math/clc_sinpi.inc b/libclc/clc/lib/generic/math/clc_sinpi.inc
-+index a6e5ee7..264609a 100644
-+--- a/libclc/clc/lib/generic/math/clc_sinpi.inc
-++++ b/libclc/clc/lib/generic/math/clc_sinpi.inc
-+@@ -6,7 +6,109 @@
-+ //
-+ //===----------------------------------------------------------------------===//
-+ 
-++#if __CLC_FPSIZE == 32
-++
-+ _CLC_OVERLOAD _CLC_DEF __CLC_GENTYPE __clc_sinpi(__CLC_GENTYPE x) {
-+-  __CLC_GENTYPE unused_cos;
-+-  return __clc_sincospi(x, &unused_cos);
-++  __CLC_INTN ix = __CLC_AS_INTN(x);
-++  __CLC_INTN xsgn = ix & (__CLC_INTN)0x80000000;
-++  ix ^= xsgn;
-++  __CLC_GENTYPE absx = __clc_fabs(x);
-++  __CLC_INTN iax = __CLC_CONVERT_INTN(absx);
-++  __CLC_GENTYPE r = absx - __CLC_CONVERT_GENTYPE(iax);
-++  __CLC_INTN xodd =
-++      xsgn ^ ((iax & 0x1) != 0 ? (__CLC_INTN)0x80000000 : (__CLC_INTN)0);
-++
-++  // Initialize with return for +-Inf and NaN
-++  __CLC_INTN ir = QNANBITPATT_SP32;
-++
-++  // 2^23 <= |x| < Inf, the result is always integer
-++  ir = ix < PINFBITPATT_SP32 ? xsgn : ir;
-++
-++  // 0x1.0p-7 <= |x| < 2^23, result depends on which 0.25 interval
-++
-++  // r < 1.0
-++  __CLC_GENTYPE a = 1.0f - r;
-++  __CLC_INTN e = 0;
-++
-++  // r <= 0.75
-++  __CLC_INTN c = r <= 0.75f;
-++  a = c ? r - 0.5f : a;
-++  e = c ? 1 : e;
-++
-++  // r < 0.5
-++  c = r < 0.5f;
-++  a = c ? 0.5f - r : a;
-++
-++  // 0 < r <= 0.25
-++  c = r <= 0.25f;
-++  a = c ? r : a;
-++  e = c ? 0 : e;
-++
-++  __CLC_GENTYPE sinval, cosval;
-++  __clc_sincos_piby4(a * M_PI_F, &sinval, &cosval);
-++  __CLC_INTN jr = xodd ^ __CLC_AS_INTN(e != 0 ? cosval : sinval);
-++
-++  ir = ix < 0x4b000000 ? jr : ir;
-++
-++  return __CLC_AS_GENTYPE(ir);
-+ }
-++
-++#elif __CLC_FPSIZE == 64
-++
-++_CLC_OVERLOAD _CLC_DEF __CLC_GENTYPE __clc_sinpi(__CLC_GENTYPE x) {
-++  __CLC_LONGN ix = __CLC_AS_LONGN(x);
-++  __CLC_LONGN xsgn = ix & (__CLC_LONGN)0x8000000000000000L;
-++  ix ^= xsgn;
-++  __CLC_GENTYPE absx = __clc_fabs(x);
-++  __CLC_LONGN iax = __CLC_CONVERT_LONGN(absx);
-++  __CLC_GENTYPE r = absx - __CLC_CONVERT_GENTYPE(iax);
-++  __CLC_LONGN xodd =
-++      xsgn ^
-++      ((iax & 0x1L) != 0 ? (__CLC_LONGN)0x8000000000000000L : (__CLC_LONGN)0L);
-++
-++  // Initialize with return for +-Inf and NaN
-++  __CLC_LONGN ir = QNANBITPATT_DP64;
-++
-++  // 2^23 <= |x| < Inf, the result is always integer
-++  ir = ix < PINFBITPATT_DP64 ? xsgn : ir;
-++
-++  // 0x1.0p-7 <= |x| < 2^23, result depends on which 0.25 interval
-++
-++  // r < 1.0
-++  __CLC_GENTYPE a = 1.0 - r;
-++  __CLC_LONGN e = 0;
-++
-++  //  r <= 0.75
-++  __CLC_LONGN c = r <= 0.75;
-++  __CLC_GENTYPE t = r - 0.5;
-++  a = c ? t : a;
-++  e = c ? 1 : e;
-++
-++  // r < 0.5
-++  c = r < 0.5;
-++  t = 0.5 - r;
-++  a = c ? t : a;
-++
-++  // r <= 0.25
-++  c = r <= 0.25;
-++  a = c ? r : a;
-++  e = c ? 0 : e;
-++
-++  __CLC_GENTYPE api = a * M_PI;
-++
-++  __CLC_GENTYPE sinval, cosval;
-++  __clc_sincos_piby4(api, 0.0, &sinval, &cosval);
-++  __CLC_LONGN jr = xodd ^ __CLC_AS_LONGN(e != 0 ? cosval : sinval);
-++
-++  ir = absx < 0x1.0p+52 ? jr : ir;
-++
-++  return __CLC_AS_GENTYPE(ir);
-++}
-++
-++#elif __CLC_FPSIZE == 16
-++
-++_CLC_OVERLOAD _CLC_DEF __CLC_GENTYPE __clc_sinpi(__CLC_GENTYPE x) {
-++  return __CLC_CONVERT_GENTYPE(__clc_sinpi(__CLC_CONVERT_FLOATN(x)));
-++}
-++
-++#endif
-+-- 
-+2.47.3
-+
-diff --git a/package/llvm-project/libclc/0008-libclc-fix-tgamma-precision-issues-due-to-lack-of-fm.patch b/package/llvm-project/libclc/0008-libclc-fix-tgamma-precision-issues-due-to-lack-of-fm.patch
-new file mode 100644
-index 0000000000..301d8918e1
---- /dev/null
-+++ b/package/llvm-project/libclc/0008-libclc-fix-tgamma-precision-issues-due-to-lack-of-fm.patch
-@@ -0,0 +1,80 @@
-+From 298976d4ddad1c7e0472647bcb50e1336a1bfd1a Mon Sep 17 00:00:00 2001
-+From: Karol Herbst <kherbst@redhat.com>
-+Date: Sat, 25 Jul 2026 18:03:18 +0200
-+Subject: [PATCH] libclc: fix tgamma precision issues due to lack of fma
-+
-+The current tgamma implementation isn't precise enough when certain mads
-+are implemented as unfused.
-+
-+Upstream: https://gitlab.freedesktop.org/karolherbst/mesa-libclc/-/commit/298976d4ddad1c7e0472647bcb50e1336a1bfd1a
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ libclc/clc/lib/generic/math/clc_tgamma.cl  |  1 +
-+ libclc/clc/lib/generic/math/clc_tgamma.inc | 14 +++++++-------
-+ 2 files changed, 8 insertions(+), 7 deletions(-)
-+
-+diff --git a/libclc/clc/lib/generic/math/clc_tgamma.cl b/libclc/clc/lib/generic/math/clc_tgamma.cl
-+index 7e34ac6..c474b68 100644
-+--- a/libclc/clc/lib/generic/math/clc_tgamma.cl
-++++ b/libclc/clc/lib/generic/math/clc_tgamma.cl
-+@@ -13,6 +13,7 @@
-+ #include "clc/math/clc_copysign.h"
-+ #include "clc/math/clc_exp.h"
-+ #include "clc/math/clc_fabs.h"
-++#include "clc/math/clc_fma.h"
-+ #include "clc/math/clc_mad.h"
-+ #include "clc/math/clc_powr.h"
-+ #include "clc/math/clc_recip_fast.h"
-+diff --git a/libclc/clc/lib/generic/math/clc_tgamma.inc b/libclc/clc/lib/generic/math/clc_tgamma.inc
-+index 0b8c354..e49540c 100644
-+--- a/libclc/clc/lib/generic/math/clc_tgamma.inc
-++++ b/libclc/clc/lib/generic/math/clc_tgamma.inc
-+@@ -30,14 +30,14 @@ _CLC_DEF _CLC_OVERLOAD _CLC_CONST __CLC_GENTYPE __clc_tgamma(__CLC_FLOATN x) {
-+       n = 1.0f;
-+ 
-+       while (y > 2.5f) {
-+-        n = __clc_mad(n, y, -n);
-++        n = __clc_fma(n, y, -n);
-+         y = y - 1.0f;
-+-        n = __clc_mad(n, y, -n);
-++        n = __clc_fma(n, y, -n);
-+         y = y - 1.0f;
-+       }
-+ 
-+       if (y > 1.5f) {
-+-        n = __clc_mad(n, y, -n);
-++        n = __clc_fma(n, y, -n);
-+         y = y - 1.0f;
-+       }
-+ 
-+@@ -49,14 +49,14 @@ _CLC_DEF _CLC_OVERLOAD _CLC_CONST __CLC_GENTYPE __clc_tgamma(__CLC_FLOATN x) {
-+       d = x;
-+ 
-+       while (y < -1.5f) {
-+-        d = __clc_mad(d, y, d);
-++        d = __clc_fma(d, y, d);
-+         y = y + 1.0f;
-+-        d = __clc_mad(d, y, d);
-++        d = __clc_fma(d, y, d);
-+         y = y + 1.0f;
-+       }
-+ 
-+       if (y < -0.5f) {
-+-        d = __clc_mad(d, y, d);
-++        d = __clc_fma(d, y, d);
-+         y = y + 1.0f;
-+       }
-+ 
-+@@ -70,7 +70,7 @@ _CLC_DEF _CLC_OVERLOAD _CLC_CONST __CLC_GENTYPE __clc_tgamma(__CLC_FLOATN x) {
-+     __CLC_FLOATN p4 = __clc_mad(y, p3, -0x1.4fcfd6p-1f);
-+     __CLC_FLOATN qt = __clc_mad(y, p4, 0x1.2788ccp-1f);
-+ 
-+-    ret = n / __clc_mad(d, y * qt, d);
-++    ret = n / __clc_fma(d, y * qt, d);
-+     ret = x == 0.0f ? __clc_copysign(__CLC_GENTYPE_INF, x) : ret;
-+     ret = (x < 0.0f && __clc_fract_is_zero(x)) ? FLT_NAN : ret;
-+   } else {
-+-- 
-+2.47.3
-+
-diff --git a/package/llvm-project/libclc/0009-revert-10644a1-v3.patch b/package/llvm-project/libclc/0009-revert-10644a1-v3.patch
-new file mode 100644
-index 0000000000..ad5eb1b98e
---- /dev/null
-+++ b/package/llvm-project/libclc/0009-revert-10644a1-v3.patch
-@@ -0,0 +1,37 @@
-+Restore libclc.pc
-+
-+Revert the upstream removal of libclc.pc
-+https://github.com/llvm/llvm-project/pull/185654
-+
-+which is needed by mesa3d to detect libclc.
-+
-+Upstream: https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/40601#note_3639151
-+
-+Downloaded from
-+https://aur.archlinux.org/cgit/aur.git/tree/revert-10644a1-v3.patch?h=libclc-minimal-git
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+
-+diff -uraN llvm-project/libclc/CMakeLists.txt llvm-project.new/libclc/CMakeLists.txt
-+--- llvm-project/libclc/CMakeLists.txt	2026-06-05 23:42:11.119610382 +0200
-++++ llvm-project.new/libclc/CMakeLists.txt	2026-06-05 23:43:45.639449958 +0200
-+@@ -123,6 +123,9 @@
-+   endif()
-+ endforeach()
-+ 
-++configure_file( libclc.pc.in libclc.pc @ONLY )
-++install( FILES ${CMAKE_CURRENT_BINARY_DIR}/libclc.pc DESTINATION "${CMAKE_INSTALL_DATADIR}/pkgconfig" )
-++
-+ # Determine the clang target triple.
-+ set(clang_triple ${LIBCLC_TARGET})
-+ 
-+diff -uraN llvm-project/libclc/libclc.pc.in llvm-project.new/libclc/libclc.pc.in
-+--- llvm-project/libclc/libclc.pc.in	1970-01-01 01:00:00.000000000 +0100
-++++ llvm-project.new/libclc/libclc.pc.in	2026-06-05 23:21:12.849811269 +0200
-+@@ -0,0 +1,6 @@
-++libexecdir=@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_DATADIR@/clc
-++
-++Name: libclc
-++Description: Library requirements of the OpenCL C programming language
-++Version: @PROJECT_VERSION@
-++Libs: -L${libexecdir}
-diff --git a/package/llvm-project/libclc/libclc.mk b/package/llvm-project/libclc/libclc.mk
-index ff00871747..2f59ca3dec 100644
---- a/package/llvm-project/libclc/libclc.mk
-+++ b/package/llvm-project/libclc/libclc.mk
-@@ -36,13 +36,18 @@ LIBCLC_CONF_OPTS = \
- 	-DCMAKE_EXE_LINKER_FLAGS="$(HOST_LDFLAGS)" \
- 	-DCMAKE_SHARED_LINKER_FLAGS="$(HOST_LDFLAGS)" \
- 	-DCMAKE_MODULE_LINKER_FLAGS="$(HOST_LDFLAGS)" \
--	-DCMAKE_C_COMPILER="$(CMAKE_HOST_C_COMPILER)" \
--	-DCMAKE_CXX_COMPILER="$(CMAKE_HOST_CXX_COMPILER)" \
-+	-DCMAKE_C_COMPILER="$(HOST_DIR)/bin/clang" \
-+	-DCMAKE_CXX_COMPILER="$(HOST_DIR)/bin/clang" \
- 	-DLLVM_CMAKE_DIR="$(HOST_DIR)/lib/cmake/llvm" \
-+	-DLIBCLC_TARGET=spirv64-unknown-unknown \
- 	-DLIBCLC_CUSTOM_LLVM_TOOLS_BINARY_DIR="$(HOST_DIR)/bin"
+diff --git a/Config.in.legacy b/Config.in.legacy
+index bb6257f532..e3824ca927 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,15 @@ endif
  
- HOST_LIBCLC_CONF_OPTS = \
--	-DLIBCLC_TARGETS_TO_BUILD=spirv64-mesa3d-
-+	-DCMAKE_C_COMPILER_FORCED=ON \
-+	-DCMAKE_CXX_COMPILER_FORCED=ON \
-+	-DCMAKE_C_COMPILER="$(HOST_DIR)/bin/clang" \
-+	-DCMAKE_CXX_COMPILER="$(HOST_DIR)/bin/clang" \
-+	-DLIBCLC_TARGET=spirv64-unknown-unknown
+ comment "Legacy options removed in 2026.11"
  
- $(eval $(cmake-package))
- $(eval $(host-cmake-package))
++config BR2_PACKAGE_MESA3D_OPENCL
++	bool "Mesa3D OpenCL support is now provided by RustiCL"
++	select BR2_LEGACY
++	help
++	  Mesa3D removed the old Clover OpenCL implementation and
++	  replaced it by RustiCL. This option served no other purpose
++	  than allowing access to the RustiCL sub-option which was moved
++	  to the main options section.
++
+ config BR2_PACKAGE_LIBCPPRESTSDK
+ 	bool "libcpprestsdk has been removed"
+ 	select BR2_LEGACY
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index e184039150..cb86e6a2a4 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -23,7 +23,6 @@ config BR2_PACKAGE_MESA3D_NEEDS_ELFUTILS
+ 
+ config BR2_PACKAGE_MESA3D_NEEDS_PRECOMP_COMPILER
+ 	bool
+-	select BR2_PACKAGE_MESA3D_OPENCL
+ 	select BR2_PACKAGE_SPIRV_LLVM_TRANSLATOR
+ 	select BR2_PACKAGE_SPIRV_TOOLS
+ 
+@@ -56,35 +55,20 @@ config BR2_PACKAGE_MESA3D_LEGACY_BIND_WAYLAND_DISPLAY
+ 	help
+ 	  Legacy Wayland EGL_WL_bind_wayland_display support.
+ 
+-menuconfig BR2_PACKAGE_MESA3D_OPENCL
+-	bool "OpenCL support"
+-	depends on BR2_PACKAGE_MESA3D_LLVM
+-	depends on BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600 || \
+-		BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_PANFROST || \
+-		BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI || \
+-		BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS || \
+-		BR2_PACKAGE_MESA3D_VULKAN_DRIVER_AMD || \
+-		BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL || \
+-		BR2_PACKAGE_MESA3D_VULKAN_DRIVER_IMAGINATION || \
+-		BR2_PACKAGE_MESA3D_VULKAN_DRIVER_PANFROST || \
+-		(BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS && \
+-		 BR2_PACKAGE_MESA3D_RUSTICL_SUPPORTED_DRIVER)
+-	select BR2_PACKAGE_LLVM_RTTI
+-	select BR2_PACKAGE_CLANG
+-	select BR2_PACKAGE_LIBCLC
+-	select BR2_PACKAGE_HAS_LIBOPENCL
+-if BR2_PACKAGE_MESA3D_OPENCL
+-# libclc dependency is satisfied by
+-# BR2_PACKAGE_MESA3D_LLVM
+ config BR2_PACKAGE_MESA3D_RUSTICL
+-	bool "RustiCL"
++	bool "RustiCL OpenCL support"
++	depends on BR2_PACKAGE_MESA3D_LLVM
+ 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_MESA3D_RUSTICL_SUPPORTED_DRIVER
+ 	select BR2_PACKAGE_HOST_RUSTC
+ 	select BR2_PACKAGE_LLVM_DUMP
++	select BR2_PACKAGE_LLVM_RTTI
++	select BR2_PACKAGE_CLANG
++	select BR2_PACKAGE_LIBCLC
+ 	select BR2_PACKAGE_SPIRV_TOOLS
+ 	select BR2_PACKAGE_SPIRV_LLVM_TRANSLATOR
+ 	select BR2_PACKAGE_OPENCL_ICD_LOADER
++	select BR2_PACKAGE_HAS_LIBOPENCL
+ 	help
+ 	  RustiCL is an OpenCL implementation written in Rust.
+ 	  By default, devices are disabled in RustiCL. If you want
+@@ -93,8 +77,6 @@ config BR2_PACKAGE_MESA3D_RUSTICL
+ 
+ 	  https://docs.mesa3d.org/envvars.html#envvar-RUSTICL_ENABLE
+ 
+-endif # BR2_PACKAGE_MESA3D_OPENCL
+-
+ config BR2_PACKAGE_MESA3D_RUSTICL_SUPPORTED_DRIVER
+ 	bool
+ 
+@@ -554,7 +536,7 @@ config BR2_PACKAGE_PROVIDES_LIBGLES
+ 	default "mesa3d" if BR2_PACKAGE_MESA3D_OPENGL_ES && !BR2_PACKAGE_LIBGLVND
+ 
+ config BR2_PACKAGE_PROVIDES_LIBOPENCL
+-	default "mesa3d" if BR2_PACKAGE_MESA3D_OPENCL
++	default "mesa3d" if BR2_PACKAGE_MESA3D_RUSTICL
+ 
+ endif # BR2_PACKAGE_MESA3D
+ 
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 87c7f427e4..c103345e86 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -50,13 +50,11 @@ else
+ MESA3D_CONF_OPTS += -Dllvm=disabled
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_MESA3D_OPENCL),y)
+-MESA3D_PROVIDES += libopencl
+-MESA3D_DEPENDENCIES += clang libclc
+-endif
+-
+ ifeq ($(BR2_PACKAGE_MESA3D_RUSTICL),y)
++MESA3D_PROVIDES += libopencl
+ MESA3D_DEPENDENCIES += \
++	clang \
++	libclc \
+ 	host-rustc \
+ 	host-rust-bindgen \
+ 	spirv-tools \
+diff --git a/support/testing/tests/package/test_mesa3d.py b/support/testing/tests/package/test_mesa3d.py
+index 24fc6df59e..193aa7a373 100644
+--- a/support/testing/tests/package/test_mesa3d.py
++++ b/support/testing/tests/package/test_mesa3d.py
+@@ -17,7 +17,6 @@ class TestMesa3DRusticl(infra.basetest.BRTest):
+         BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
+         BR2_PACKAGE_MESA3D=y
+         BR2_PACKAGE_MESA3D_LLVM=y
+-        BR2_PACKAGE_MESA3D_OPENCL=y
+         BR2_PACKAGE_MESA3D_RUSTICL=y
+         BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_LLVMPIPE=y
+         BR2_PACKAGE_CLINFO=y
 -- 
 2.47.3
 
