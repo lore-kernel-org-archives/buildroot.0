@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41567C982D8
-	for <buildroot@archiver.kernel.org>; Sun, 20 Sep 2026 14:06:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC099C982DA
+	for <buildroot@archiver.kernel.org>; Sun, 20 Sep 2026 14:06:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0811C40B2C;
-	Sun, 20 Sep 2026 14:06:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A7DF160639;
+	Sun, 20 Sep 2026 14:06:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BZSjgMVNkww9; Sun, 20 Sep 2026 14:06:45 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 22A9740B71
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789913205;
-	b=irvOFDC5dklvVrGh1ucltj7I8aToB/kbq5aTkLP5VcB0YHB/B2c+P7dZ6yISJeJ9e3Z/
-	 z7krEixTvBdO17ykXTQ9EygY0b/lMfAH54hqza0W+RFo+eB6w1lbGTkFeVLPTFMPz/6j+
-	 6F9GejnMvM375HzTrXO1YrEWHdKN6pwiN+xIFLN1qdu5VXtjip8doClsYsHBGKeGqiwMA
-	 fu9kAdKNuOY53Rve/D/RGCjPjxHTucI7PaTxLxb/w59yo0L6hhuqw2VHRNnhsq917VP3p
-	 jk1Dka7kI1ZTxpPRns+BrIeVgmJ6u8Hg1mD81y538cD7XGTs7qoh1qflrCiKI2PWqJA==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id k2v-JxSc9cgz; Sun, 20 Sep 2026 14:06:57 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 564226063A
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789913217;
+	b=HMoxsvIV+QbG/PVqAp0sjlsKMKs1pI8q16fyLTzI4JuaIl0l7JGmkMqpR5NYFEOcHnW/
+	 hBEbkqvDRTM0JaGmYkn7xGOV1uzGYFqvsSHTEvLTzFm8clQmv0ln80LxD3liy2CIBAMY+
+	 45qsTy4gZkpmaPqzaN4jXyBMt1Bkgiy6vJfye/uEB4jZuWigOcWbOY+885J6is0MgpiBQ
+	 lCr/Di04PoP629TpiwlDeg3Haws/dKempHc2pXEAtz2bA19/ZwEQpX2xOmTV4+vQ2UPj/
+	 svL1eOLmukjTt8wT+89q/hOPdF0QCklAAhQnw4QfjvlFebSPH09atVUhzdea9EeB0zQ==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789913205;
+	c=relaxed/relaxed; t=1789913217;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
@@ -31,103 +31,104 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:Cc:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=ZXnqoVLsdTTLOp+gSkudV/wtngJ3K7taQidbBvT8K1U=;
-	b=DsHW8JrtADIN0Ga7J0rVEOwKuNlIFmSDe8rW1ysjB7z0CGrVlVOktVMeXepVbCkcGN0P
-	 VDJ8MRr53bZF70oFZVkpb/IyGSeYMKSy+KKPbsHEQ3CcxIoB/VbikQE2r8MYaCdBubQVS
-	 jQqMAa0vjxKisa63oqr08sEUx4YcKUSLbRi5TVFsmpcrwGtJ8zqnI8ub37SmGiPLpkK3y
-	 NvuCbYmQ2J2jlMEHUR6JOo3Uj7HEFLtagUlIBGngnE0v5uEqcKiAOaMQzeyhtE6ojDMvo
-	 suHZuHpuAVwE/8vJ/UHOQh9iuS/fvzJumhTNE3IPyntLa4XrLZ1po3tTTWPns9AV7+w==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	bh=URJudjj74RJUv3OQ45S7B+cpNX+9uSDo4TNo9f9JzvE=;
+	b=VE8w6ZC6VqF3GociFfGP1/f1oYBqzgB/9240s1Z/uTB3xhYItPqr012bfoqzFlvjFAna
+	 bVW2r3sKnYl58mWrwC0zhjvE/DmA0DEv1j2IiqjhQsZsiXdpN1Gas+oOuOQOprABVQioR
+	 7ok4oUBq6Et0li68Cuvwh6Lo9oqiaHKp6diTi6w7uppLoVK59OOkUesO3sF3WIya5uuYn
+	 /7kO0aKq1tGw+l3aYggh0Yag+Pst3BJf6ojL6Y9Ksi1OvnE1VShjPuxgUBy9RDj9gkAy9
+	 bbfOAsGHYIxaPVTkAj0GGxJnpTWYKVH1MKcyhGdt/jUUuOeJ2+zA+uRZfImulfIunCA==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789913205;
-	bh=ZXnqoVLsdTTLOp+gSkudV/wtngJ3K7taQidbBvT8K1U=;
+	s=default; t=1789913217;
+	bh=URJudjj74RJUv3OQ45S7B+cpNX+9uSDo4TNo9f9JzvE=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=TYS8JorrkDomb2EO3ypQPSlC6XYM/6df76fUPj5+/xW+3LztjXSLQVwNfbIkRAO8G
-	 vQanxRFSYsZbbxNqj1A3xDDriN+YnnpBF3z12gpZFLs48dIqgmjgqVdPI3T1IKshJq
-	 E5ejtMuRBpNOtIGaXGjxMmn1HLTMNnW9plcuHurP02wiav6IqId+gAdXjwQiupfXVG
-	 JGSrJTR1pzO9YlwJcX2GUA2Z41ja0/lySqhrmYsUXI4udSRo2nJhfO4HRwVHu3rgjJ
-	 8uGo5mLS2+hBF2+Bh7/6XY+UkKHT3P7oSTB1IipjMTaRc38owZYhroN4xA1KVALasJ
-	 04yzw2ZT6uSxQ==
+	b=QtPAwjiBwzKzbrSJQ11Pfv2BO3wsQ2pBdK63q4eomEyDeGgjl/PITycJMTwOXDmKH
+	 YjEQMIGfCRDjMy+09tYbH3MCI/sZj17g5lP5WfZapoO2O9efz2cRId9gcaJaHMOtRd
+	 5qW4FAUai7AmzFwYPbYynY08r/YjyKg7BOYvSWE/NuFzsUWGNw5w373/dsRvWQuxEG
+	 L0FNl/0ixuV59Cxn8vHtqFkbVjKo2FzrKwY4fKsY4BIdoC8XncTWYC2N9gfEZvIvLV
+	 EoBzc5xkVibX3xn+xKVYTrQ9VCzXeoizcmS/BFrtzVtqCdz0tc2x6fcnt0kTXdvW3B
+	 yZaKT3YzSEFeQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 22A9740B71;
-	Sun, 20 Sep 2026 14:06:45 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id DD3863AF
- for <buildroot@buildroot.org>; Sun, 20 Sep 2026 14:06:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 564226063A;
+	Sun, 20 Sep 2026 14:06:57 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1437C3AF
+ for <buildroot@buildroot.org>; Sun, 20 Sep 2026 14:06:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DABE8400D1
- for <buildroot@buildroot.org>; Sun, 20 Sep 2026 14:06:41 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 062A680F2B
+ for <buildroot@buildroot.org>; Sun, 20 Sep 2026 14:06:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id i-08OvgnVA6G for <buildroot@buildroot.org>;
- Sun, 20 Sep 2026 14:06:41 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org 916DF40022
-Authentication-Results: smtp2.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789913201;
- b=eZZFnFUuqNNpIojOETJRQVSvQSCfIntZ9K0iaPnpBoBF+fCJ/xgvBbdEO5y7RbCYK7lZ
- KuD6gIejRPDcoLtE8oFmnWI5UcW+l8jNBEC3AdebCMYbWWzc90vMmgobe9JYYEqhLyw59
- 8iprcL3qEWrMBZaiT9a2vmBb/iH7RkTRA4QLaTEiD+wT0Ioh//bz/i+xU8XgIfsvUrmTO
- DMK3H8ZVBQebDUJmFCsqy7oTbOb9iq+0qlhrLJfyaRaekZ00//+khYg0hA/oz8LwG0yU7
- 3GOo8cgws+hf5+0m/PblkPcfoXSQDvNTNH2v9+wcFUK5wxfAlbpfoazn99VHhVH666A==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NLi-Bz2wAP3r for <buildroot@buildroot.org>;
+ Sun, 20 Sep 2026 14:06:54 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 76EF580F01
+Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789913214;
+ b=Q6SbQQYacVsJ4lJqZb2wo9eg2EyViYLN/hZTsIyVUhyQuAtnGOZBTye+hQF4q9iN5Sbh
+ II/VovoG2HjM/DYbHDIgccvQA0T3UsznITY5Rojd0MwrKrzDcYegc13yvnHICAwbj1Ne2
+ y4Vpa+8lADu0vm9kd6NUkkP088dkhFwd1SUgGuhIZ1bG0kqAdFgs8UlNJOu5jySL2TbeD
+ IPcnRk7M4MmzdKHHpb+SY/SNjanmSvbg3HGftVsFPGJPK/PvxxUlHeGMActlfRo84kgPd
+ 8pBL7uTF1oDc9qB96xPtJEsstFxcQYQC+tfVPhZBO+jaNmDexyKePfULY86K1PIP4Iw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1789913201;
+ c=relaxed/relaxed; t=1789913214;
  h=Received-SPF:DKIM-Signature:X-KAS-Sym:Received:Received:From:To:Cc:
  Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding:X-Spam-Score:X-Spamd-Bar;
- bh=IahBK4xjGxvHzz78Sm2BG/dV8inj40Uu1uFvQMB2IQE=;
- b=hMeE/sUfSbP8/FcczHs0Ox2Dv0ChWXe2jCguHWK3CuxdYRRsqZXOR0JLwPx72+wM8J87
- A13M/KyD+f39uaqXsBND9zp0PmQPXzlRdUlRJfS3x21NtFk3NqfBO3BaICmxfLLlKkngS
- NkVp5KGWif1sj+zGe+jUnDzHWYeUsQiWcTVvzb+INvEON5vVOkgAe0W+dQgLHtoTrLHuG
- jhECTXy75HO9YMTDn4BkoZ9lh0hFt1GbfZpKklSsszjGObPLazwTEsfybeOFeGQcM3/rN
- iYDjNrZRwUyxoZJU1We5ITY2J5KGttqVg8wyCOCdo3WCfwEwgir44ZvZ2Rdi+1ATp2w==
-ARC-Authentication-Results: i=1; smtp2.osuosl.org;
+ bh=vlrtVZvHmYfPDJ47aKKr33RL5eELc9JPdXMbfl6cUJo=;
+ b=in4zVtW6Jqkg5mg5P7uA0nmWKDYKsQUKN5HDr9XkdjfEgxWYjlbI1Ugy1tARpa9krE4K
+ 5XA6s/7i9lBlBRBnGg50OaFgeC2rbI+qvrBq7KtPpUn/llTJvbG5NaLXNPdetJ61XMzMS
+ JM6r0SBj8fRIKM42wqWqH3W6lit099hLPZDvgwIsLCBaM+ryLO8S9I7xRhFYm7ruvZ+Vv
+ MoBD8uyQcgcASSdoZWG+nYToMaBC1zPROITIERG4ebj0fGxca9Vc+DoiSZ081i5J7Tfb6
+ os0HTwAm7LNMPxI85KVITzCqUfkxe/MlpxIhLIr3sskq5ahUVjKnw7IWS/Nzl18apTg==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org;
  dmarc=pass header.from=kuhls.net; 
  dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=ed6KPCFK; 
+ header.s=kas202605290044 header.b=R4SRIm6r; 
  arc=none smtp.remote-ip=85.13.140.57
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-Authentication-Results: smtp2.osuosl.org;
+Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=kuhls.net
-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202605290044 header.b=ed6KPCFK
+Authentication-Results: smtp1.osuosl.org; dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202605290044 header.b=R4SRIm6r
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 916DF40022
- for <buildroot@buildroot.org>; Sun, 20 Sep 2026 14:06:38 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 76EF580F01
+ for <buildroot@buildroot.org>; Sun, 20 Sep 2026 14:06:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
- s=kas202605290044; t=1789913167;
- bh=IahBK4xjGxvHzz78Sm2BG/dV8inj40Uu1uFvQMB2IQE=;
+ s=kas202605290044; t=1789913168;
+ bh=vlrtVZvHmYfPDJ47aKKr33RL5eELc9JPdXMbfl6cUJo=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=ed6KPCFK6Fc27mW8FTZzulrE+BKCxSX5YwdvWGmhSzKh0p2Ln7UstFFK85wBC7PWA
- zKiAuPdXx9hpWqofAHFXh1djK3VgvsA9bGzoN8+kYSZYt7vv6v2r9zZS85g1e7zBLY
- qJJczEVRnz3DkMdkpMjpohA+DVHf6eCgFXnttJXofqoKwEueVtjp4ko7u+DqDQr9Ep
- JHm1mnSXjELWxqO6qQAb/8mIPmSj+GJJQqRExxSkWhpCF/YOKAGM0gL3s7s4kaJ1xP
- dkqOGLPS/6WkqTS6UKnTQynuuLTtdPvMjD9qsXvd6r7HFITYbadx16zOCdxzgXvVUH
- HSLTKyLwLUswg==
-X-KAS-Sym: v3:f51bdf72230551df:kLsnpyO7xBQrienfp2HUkZLPIhoTWu0/2yOhSoEwU9REifldITt5uV1ZdfMxSIXWRKvTv9N0MZy0diMQpN0glcVgMpe+EHt4b9SSwIYdetNWrA3E4NHKWfeZ/Yj39hsXFoGsOc8DrIkTkE1cC8EDIzHMfql9Fk3+lmPjxillh8Rm13WqHm12wYfkg5zOONe3wQt1e4nql+laa117tthJT7FrH8LMc8sT6Y5hh1ZURpz+CgjkohF28/JMh91Xek4Jjzq7nWhnLLJK+IRHJUgBaWAXDGJyfMy5p24uZes2P0HVy2Hp1VIUhvBjLxL0/3h3AKkiBTMMXv2yTZN4hJ68hw==:7dFguZGj8kRrEajdVuZSTEhee9gNvR7hSotoN3q1ZZJQcyfkJvTon4BPuJ6dw8Q7I3n6Ld0FLBhaKBhgLtTO9O1VkTqD61xeg+kogYU5RXxIT71MXwn4NFlCYrtMBYEtKfccotR/81xGwc2JNW7pUk+m5Z+5NENTLpZu5c3LbK7pyXLmS/XD5Ka3u6Z7D9o70xxB22VcSU3kSihqD4c6RWXAvk+IASIY1fNy2Bw9/XS7G58Gi44mPmJtGDhLVCVrNB9FSMeyVzqnW4v+3a+ijNj8pYT9IrHOzumm/CKIDqx9TPFSB1HfdkOir2JA+DwZXGiG5+dzR0tOIMG4N0niSr3RY1Fn4fzGjuT6NfnRGRviaPKhFkB3RuUGxxETjEQe6/zXBdvU8mRNEFWcSXo7jnykM/amLL8aEFuUsRcxR5Ag9FywnFgoJUHma9MUy0O0oF0eNs+JrFMWzsiOzNhWCYdidpoyeOmdwbSGztYrICcU1mADas8FuSx9CV2jMxLwexn+oYPmKkAaxRezFPLOVFDYqV3ugojzIRy9oYdWa05ied9XZ8QmIQoeMcHG+3C5NOyk8ntdBOi//0CZsBoWu73zdimV0tHu9cB/ONMdBJLMtO
- mTOjcjBvHeFihg8TeWxuWWUzOpHhIm5zvk2kgugVxm+H1KgniwqXtfIsJQ+2Agw0doCUE066t6SnEasgAG0ilUI9XmaHeoTHd/PD89tX5Zpm3AXMUk
+ b=R4SRIm6rfE3VCBS/QFZbeqrVbrH5Xe+cioVDGjitr8CQlyAKPdKo++BlxvwBaN9t1
+ a/ysR4TXVNp3GncD6DNOR4oIStS2LIsfZrnBhjMus+t9bLeaI9Y6gdbCAReNTuS/Tz
+ dYl3u+fTvJivS2IG9DavTWkpuHUBCirQbFkCl7auGjolnFc8RrIh71eg9wwi4RxhdR
+ VlHym5Vk+42x+ClBV4O/xfkoCDWD9X3Bjzzl01O3ezTHvk8FXgbj1F5SqK37M1EWoI
+ H1UcYGlyzWqcH4TDp03XqWiJfCIct7oTQXIc26lcw7SZ/qmIdfgsMvroLUQUpA4HZf
+ 5jyz8QSa7538g==
+X-KAS-Sym: v3:f51bdf72230551df:kLsnpyO7xBQrienfp2HUkZLPIhoTWu0/2yOhSoEwU9REifldITt5uV1ZdfMxSIXWRKvTv9N0MZy0diMQpN0glcVgMpe+EHt4b9SSwIYdetNWrA3E4NHKWfeZ/Yj39hsXFoGsOc8DrIkTkE1cC8EDIzHMfql9Fk3+lmPjxillh8Rm13WqHm12wYfkg5zOONe3wQt1e4nql+laa117tthJT7FrH8LMc8sT6Y5hh1ZURpz+CgjkohF28/JMh91Xek4Jjzq7nWhnLLJK+IRHJUgBaWAXDGJyfMy5p24uZes2P0HVy2Hp1VIUhvBjLxL0/3h3AKkiBTMMXv2yTZN4hJ68hw==:gFzroy1keHYwEpUvN7r8uJmrgI71w0UJG/xf7zV0C3iUFc8Y8a4g4o1bSxRFNVRR71aDbbrdDb6t0Kbjfs4oYBHHpViZe3PZDB8SH+AmUp+orpXrzwHDtNuLYDfAxaWKCpmTc6XIiaUNvbybRw2GGq9Jlf/X1eKd1FTtj+FmUSHRU6Qg8ahcMjhQOJgsiDa8ELuL3ZhhT0lPjDSVKh68BaKnSPIs1mvXRK+2wakIag47DLHKK3q4xOCOys/5UWUYaYf2cTtg19Rh5hjAikXJaI/dsh/nYMTpyu2xtgbE7waIkSDr0j9vVUrWHggz6GD3JYdmGBFdl2P6npI/r/lZAZSS/M4reRaLc6pOjmMoggONyrycLDOaQSOenF+q+YYRQQftu525VMZ/YQx6+dhTGZdlootms+1YBiN8J8FzsudWTbzlzY76WFsc8ZljQ9+cwvSYhBgcESox/bcLgEXmOdhh0eNGvIaOC/UMvNmO+Wejexapl8ffqS/BmDm522aQXeoh7ENF8nWq+8WceKjbCssZPDTlAgf0cwKwtnOCDi36UG3PWe9tkIbcU+KCmBWQPvrXUzWTjrs0f/jf2ZptPLSuHRdh/72+e5svmhW5wkS55C
+ wZyY+QdY1bGd3o0+GkxwX2H/yUQFgYpjCfw66XCTP2WG0wlp7L7wSSEfqG74XK4HFfRp6HBu751muuJ8jZm4dWkk2yfL8q80VMO3WC2hNLhG+lYBg=
 Received: from fli4l.lan.fli4l (p54a1b276.dip0.t-ipconnect.de [84.161.178.118])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id D7050A4C47FE;
- Sun, 20 Sep 2026 16:06:07 +0200 (CEST)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 08BF7A4C4800;
+ Sun, 20 Sep 2026 16:06:08 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:39216)
  by fli4l.lan.fli4l with esmtp (Exim 4.100.1)
- (envelope-from <bernd@kuhls.net>) id 1x8IBD-000000002J9-0sYJ;
+ (envelope-from <bernd@kuhls.net>) id 1x8IBD-000000002J9-1Vj8;
  Sun, 20 Sep 2026 14:06:07 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sun, 20 Sep 2026 16:05:00 +0200
-Message-ID: <20260920140605.3005461-3-bernd@kuhls.net>
+Date: Sun, 20 Sep 2026 16:05:01 +0200
+Message-ID: <20260920140605.3005461-4-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260920140605.3005461-1-bernd@kuhls.net>
 References: <20260920140605.3005461-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: /
-Subject: [Buildroot] [PATCH v3 02/66] package/qt5/qt5knx: remove package
+X-Spamd-Bar: ++
+Subject: [Buildroot] [PATCH v3 03/66] package/domoticz: bump version to
+ 2026.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -142,7 +143,6 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 Cc: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>,
  Marcin Bis <marcin@bis.org.pl>, Robert Rose <robertroyrose@gmail.com>,
  Yair Ben Avraham <yairba@protonmail.com>,
- Angelo Compagnucci <angelo.compagnucci@gmail.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  =?UTF-8?q?C=C3=A9dric=20Ch=C3=A9pied?= <cedric.chepied@gmail.com>,
  Heiko Thiery <heiko.thiery@gmail.com>,
@@ -173,131 +173,147 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Build is broken with the upcoming bump of OpenSSL to 4.0.2:
+Added new dependency jwt-cpp needed since 2025.1:
+https://github.com/domoticz/domoticz/commit/b30d9e9436ad428a2cbfd1fbb273461bdbf50a82
 
-ssl/qsslsocket_openssl_symbols.cpp: In function 'QDateTime QKnxPrivate::q_getTimeFromASN1(const ASN1_TIME*)':
-ssl/qsslsocket_openssl_symbols.cpp:1352:31: error: invalid use of incomplete type 'const ASN1_TIME' {aka 'const struct asn1_string_st'}
- 1352 |     size_t lTimeLength = aTime->length;
+Added _EXTRA_DOWNLOAD for libwebem after its split from domoticz:
+https://github.com/domoticz/domoticz/commit/7de4834e9959e8a9a21a2b82bb7700ea5af6e618
+to avoid fetching git submodules. Use version number from upstream repo:
+https://github.com/domoticz/domoticz/tree/2026.3/extern
 
-ssl/qsslsocket_openssl_symbols.cpp:1353:35: error: invalid use of incomplete type 'const ASN1_TIME' {aka 'const struct asn1_string_st'}
- 1353 |     char *pString = (char *) aTime->data;
+Raise minimum gcc version because libwebem depends on c++17:
+https://github.com/domoticz/libwebem/blob/master/README.md
 
-ssl/qsslsocket_openssl_symbols.cpp:1355:14: error: invalid use of incomplete type 'const ASN1_TIME' {aka 'const struct asn1_string_st'}
- 1355 |     if (aTime->type == V_ASN1_UTCTIME) {
+Removed configure option USE_BUILTIN_MQTT due to its upstream removal:
+https://github.com/domoticz/domoticz/commit/be95eec094bf524c1ab011eebcd797d3b19b17fc
 
-ssl/qsslsocket_openssl_symbols.cpp:1415:21: error: invalid use of incomplete type 'const ASN1_TIME' {aka 'const struct asn1_string_st'}
- 1415 |     } else if (aTime->type == V_ASN1_GENERALIZEDTIME) {
+Link to libatomic to fix a build error
 
-Last update of the package dates back to 2020:
-https://github.com/qt/qtknx/branches/all
+output/per-package/domoticz/host/opt/ext-toolchain/bin/../lib/gcc/arc-buildroot-linux-uclibc/15.3.0/../../../../arc-buildroot-linux-uclibc/bin/ld:
+ CMakeFiles/domoticz.dir/hardware/Matter.cpp.o:
+ undefined reference to symbol '__atomic_load_8@@LIBATOMIC_1.0'
+
+detected by the Gitlab pipelines which is introduced by upstream
+commit
+https://github.com/domoticz/domoticz/commit/ec5488a7df963af4b260a92bfecea53edc20b136
+that added hardware/Matter.cpp in version 2026.2.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 ---
- Config.in.legacy               |  7 +++++++
- DEVELOPERS                     |  1 -
- package/qt5/Config.in          |  1 -
- package/qt5/qt5knx/Config.in   | 12 ------------
- package/qt5/qt5knx/qt5knx.hash |  6 ------
- package/qt5/qt5knx/qt5knx.mk   | 15 ---------------
- 6 files changed, 7 insertions(+), 35 deletions(-)
- delete mode 100644 package/qt5/qt5knx/Config.in
- delete mode 100644 package/qt5/qt5knx/qt5knx.hash
- delete mode 100644 package/qt5/qt5knx/qt5knx.mk
+ package/domoticz/Config.in     |  7 ++++---
+ package/domoticz/domoticz.hash |  3 ++-
+ package/domoticz/domoticz.mk   | 27 +++++++++++++++++++++++----
+ 3 files changed, 29 insertions(+), 8 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 317c22befc..747683ff5a 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,13 @@ endif
+diff --git a/package/domoticz/Config.in b/package/domoticz/Config.in
+index a0e69a7601..2af63baecf 100644
+--- a/package/domoticz/Config.in
++++ b/package/domoticz/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_DOMOTICZ
+ 	bool "domoticz"
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on !BR2_STATIC_LIBS
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_6 # C++14
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17
+ 	# pthread_condattr_setclock
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # mosquitto
+ 	depends on BR2_INSTALL_LIBSTDCPP
+@@ -17,6 +17,7 @@ config BR2_PACKAGE_DOMOTICZ
+ 	select BR2_PACKAGE_BOOST_THREAD
+ 	select BR2_PACKAGE_CEREAL
+ 	select BR2_PACKAGE_JSONCPP
++	select BR2_PACKAGE_JWT_CPP
+ 	select BR2_PACKAGE_LIBCURL
+ 	select BR2_PACKAGE_MINIZIP_ZLIB
+ 	select BR2_PACKAGE_MOSQUITTO
+@@ -32,11 +33,11 @@ config BR2_PACKAGE_DOMOTICZ
  
- comment "Legacy options removed in 2026.11"
+ 	  http://domoticz.com
  
-+config BR2_PACKAGE_QT5KNX
-+	bool "qt5knx has been removed"
-+	select BR2_LEGACY
-+	help
-+	  The qt5knx package has been removed because it is
-+	  incompatible with OpenSSL >= 4.x
+-comment "domoticz needs lua 5.3 and a toolchain w/ C++, gcc >= 6, NPTL, wchar, dynamic library"
++comment "domoticz needs lua 5.3 and a toolchain w/ C++, gcc >= 7, NPTL, wchar, dynamic library"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
+ 	depends on !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_6 || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_7 || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
+ 		!BR2_USE_WCHAR || BR2_STATIC_LIBS || \
+ 		!BR2_PACKAGE_LUA_5_3
+diff --git a/package/domoticz/domoticz.hash b/package/domoticz/domoticz.hash
+index ae86a67b79..fc3904ade7 100644
+--- a/package/domoticz/domoticz.hash
++++ b/package/domoticz/domoticz.hash
+@@ -1,3 +1,4 @@
+ # Locally computed:
+-sha256  d87113d7cacd0b52b9126fcc1ef24e140a4f7042d5bc6262e86e4b4752f5cf38  domoticz-2024.4.tar.gz
++sha256  10053191b4f6becdf244d2a416b9e655c91d357b51dd8280832c6e36f7d5d5c7  domoticz-2026.3.tar.gz
++sha256  937e31bfb4b414bb33e70cad1403afd023dfff6cebba3213ec62a9c91525dcab  libwebem-9126af0ce3456c24b936dfb20d1b5a8bdb797104.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  License.txt
+diff --git a/package/domoticz/domoticz.mk b/package/domoticz/domoticz.mk
+index 95d3335adb..5387076b97 100644
+--- a/package/domoticz/domoticz.mk
++++ b/package/domoticz/domoticz.mk
+@@ -4,16 +4,30 @@
+ #
+ ################################################################################
+ 
+-DOMOTICZ_VERSION = 2024.4
++DOMOTICZ_VERSION = 2026.3
+ DOMOTICZ_SITE = $(call github,domoticz,domoticz,$(DOMOTICZ_VERSION))
+ DOMOTICZ_LICENSE = GPL-3.0
+ DOMOTICZ_LICENSE_FILES = License.txt
+ DOMOTICZ_CPE_ID_VENDOR = domoticz
 +
- config BR2_PACKAGE_QT5OPCUA
- 	bool "qt5opcua has been removed"
- 	select BR2_LEGACY
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 9af019e627..6d9ab5892c 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -252,7 +252,6 @@ F:	package/python-spidev/
- F:	package/python-web2py/
- F:	package/qpdf/
- F:	package/qt5/qt5coap/
--F:	package/qt5/qt5knx/
- F:	package/qt5/qt5mqtt/
- F:	package/rtl8723ds/
- F:	package/rtl8723ds-bt/
-diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-index f5245e723a..8b4903a5ab 100644
---- a/package/qt5/Config.in
-+++ b/package/qt5/Config.in
-@@ -44,7 +44,6 @@ source "package/qt5/qt5doc/Config.in"
- source "package/qt5/qt5enginio/Config.in"
- source "package/qt5/qt5graphicaleffects/Config.in"
- source "package/qt5/qt5imageformats/Config.in"
--source "package/qt5/qt5knx/Config.in"
- source "package/qt5/qt5location/Config.in"
- source "package/qt5/qt5lottie/Config.in"
- source "package/qt5/qt5mqtt/Config.in"
-diff --git a/package/qt5/qt5knx/Config.in b/package/qt5/qt5knx/Config.in
-deleted file mode 100644
-index 991e93c8cb..0000000000
---- a/package/qt5/qt5knx/Config.in
-+++ /dev/null
-@@ -1,12 +0,0 @@
--config BR2_PACKAGE_QT5KNX
--	bool "qt5knx"
--	help
--	  Qt is a cross-platform application and UI framework for
--	  developers using C++.
--
--	  The Qt KNX module implements the client side of a connection
--	  between a client and a KNXnet/IP server. This connection
--	  can be used to send messages to the KNX bus and to control
--	  the functionalities of the KNX devices.
--
--	  https://doc.qt.io/QtKNX/index.html
-diff --git a/package/qt5/qt5knx/qt5knx.hash b/package/qt5/qt5knx/qt5knx.hash
-deleted file mode 100644
-index 2600a739bc..0000000000
---- a/package/qt5/qt5knx/qt5knx.hash
-+++ /dev/null
-@@ -1,6 +0,0 @@
--# Hash locally calculated
--sha256  1648bd6d7e5d8fc91aaa6db1bf9d2744d0385a087ba78a00080f99f1d5027c8b  qt5knx-5.15.2-git4.tar.gz
--
--# Hashes for license files:
--sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE.GPL3
--sha256  0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652  LICENSE.GPL3-EXCEPT
-diff --git a/package/qt5/qt5knx/qt5knx.mk b/package/qt5/qt5knx/qt5knx.mk
-deleted file mode 100644
-index 91b99aaa87..0000000000
---- a/package/qt5/qt5knx/qt5knx.mk
-+++ /dev/null
-@@ -1,15 +0,0 @@
--################################################################################
--#
--# qt5knx
--#
--################################################################################
--
--QT5KNX_VERSION = 5.15.2
--QT5KNX_SITE = https://code.qt.io/qt/qtknx.git
--QT5KNX_SITE_METHOD = git
--QT5KNX_INSTALL_STAGING = YES
--QT5KNX_LICENSE = GPL-3.0 with exception
--QT5KNX_LICENSE_FILES = LICENSE.GPL3 LICENSE.GPL3-EXCEPT
--QT5KNX_SYNC_QT_HEADERS = YES
--
--$(eval $(qmake-package))
++DOMOTICZ_LIBWEBEM_VERSION = 9126af0ce3456c24b936dfb20d1b5a8bdb797104
++DOMOTICZ_EXTRA_DOWNLOADS = \
++	$(call github,domoticz,libwebem,$(DOMOTICZ_LIBWEBEM_VERSION))/libwebem-$(DOMOTICZ_LIBWEBEM_VERSION).tar.gz
++
++define DOMOTICZ_INSTALL_SUBPROJECTS
++	rm -rf $(@D)/extern/libwebem
++	mkdir -p $(@D)/extern/libwebem
++	$(TAR) --strip-components=1 -C $(@D)/extern/libwebem \
++		-xf $(DOMOTICZ_DL_DIR)/libwebem-$(DOMOTICZ_LIBWEBEM_VERSION).tar.gz
++endef
++DOMOTICZ_POST_EXTRACT_HOOKS += DOMOTICZ_INSTALL_SUBPROJECTS
++
+ DOMOTICZ_DEPENDENCIES = \
+ 	boost \
+ 	cereal \
+ 	host-pkgconf \
+ 	jsoncpp \
++	jwt-cpp \
+ 	libcurl \
+ 	lua \
+ 	minizip-zlib \
+@@ -25,6 +39,11 @@ DOMOTICZ_DEPENDENCIES = \
+ # Disable precompiled header as it needs cmake >= 3.16
+ DOMOTICZ_CONF_OPTS = -DUSE_PRECOMPILED_HEADER=OFF
+ 
++# Uses __atomic_load_8
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
++DOMOTICZ_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
++endif
++
+ # Due to the dependency on mosquitto, domoticz depends on
+ # !BR2_STATIC_LIBS so set USE_STATIC_BOOST and USE_OPENSSL_STATIC to OFF
+ DOMOTICZ_CONF_OPTS += \
+@@ -32,12 +51,12 @@ DOMOTICZ_CONF_OPTS += \
+ 	-DUSE_OPENSSL_STATIC=OFF
+ 
+ # Do not use any built-in libraries which are enabled by default for
+-# jsoncpp, fmt, minizip, sqlite and mqtt
++# jsoncpp, jwt-cpp, minizip and sqlite
+ DOMOTICZ_CONF_OPTS += \
+ 	-DUSE_BUILTIN_JSONCPP=OFF \
++	-DUSE_BUILTIN_JWTCPP=OFF \
+ 	-DUSE_BUILTIN_MINIZIP=OFF \
+-	-DUSE_BUILTIN_SQLITE=OFF \
+-	-DUSE_BUILTIN_MQTT=OFF
++	-DUSE_BUILTIN_SQLITE=OFF
+ 
+ ifeq ($(BR2_PACKAGE_LIBEXECINFO),y)
+ DOMOTICZ_DEPENDENCIES += libexecinfo
 -- 
 2.47.3
 
