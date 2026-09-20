@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26269C982D8
-	for <buildroot@archiver.kernel.org>; Sun, 20 Sep 2026 17:11:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23209C982DA
+	for <buildroot@archiver.kernel.org>; Sun, 20 Sep 2026 17:11:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E39AA40D88;
-	Sun, 20 Sep 2026 17:11:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E3B3040DE9;
+	Sun, 20 Sep 2026 17:11:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Q2lRFC03cQeN; Sun, 20 Sep 2026 17:11:32 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org BC7ED40DD0
+ id 2WP8Rrm7ch1A; Sun, 20 Sep 2026 17:11:45 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 0C9D140DF8
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789924292;
-	b=QFnm50MNXTqxbF8wwYD/dFFQ1D/UgZiAZri8Th3Dqmhk2buVqqPaXSeNZVKKgxqRmjoR
-	 aqOXzFjGcRHus9RlAUc3o931YINI4xahxYDOo1IrPR6soPv+LNCrzYZyeEzyUYZ9B9eOZ
-	 1ytMhQ/JJr48w+yQnvJ0HZ++D+6f+BbAHqfhK5/4PzCjdTSgTPiZT0Fd2CMHBJDyeyGjL
-	 zMZuZguEZs8oYYgNmvv6ZuR9d9Smf7Mcb80FhMAwaL6rLZe1NEdOB0iPgeGJvkoqJNBBI
-	 ZmXTP86kPaoPxznbk7NwrMQ4q0Ju2hOzihSFGkzdtq/FSwuxbtS2+s3Tm6mNqe11KBw==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789924305;
+	b=ot1RclZtqVRfH/k9ZYRd4gpPCmAX2Tivy8jZWe5kuVE+9ltIy44M1KxOHpeOj/cakyTj
+	 zG5mVdtPrDIghli6773vcJIzBXqSAdVCSKPs7YtmVMRoyCzf8aR1ywxAZX5j9KjOdi/Z2
+	 yF7adjWImZhnOvWib5f+kZtvOE1h52D57S/By+mS40QhuXey4veooTEOYoGQHSBFJH4hO
+	 6egmntUArPyoH7s6nEVNiGN8J2IeMiUviyFRj275/BM3AHp0WYem2OD8Sjtsg5GweKbqg
+	 s1TvnVsJ3YnPfb6x9XvTAlIh2r4iAXhjdrOyAZynPFzA0Vb8mHTW4EWQmGrho9HOmjg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789924292;
+	c=relaxed/relaxed; t=1789924305;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
@@ -31,104 +31,104 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:Cc:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=HOaNpBA2TvDkLa/xAYN26a7XAMNIUziPUfu/qdRNHec=;
-	b=ICpV2AvM+uZlLmC76vwhsJIWsP56IOl6vkfSip+vcZL/HMnHvodYgmXirZFm+EuWBfaY
-	 2z8Lr1qdAHIS8d0BWoBBUrjEv4KIuJIvRS0XsSMWdcdd8xO1xNRy/9pZSBTy7ILu2Q/HX
-	 /ejntAuOtTm78GnLVlobDAIUkvMuKud1MjW/7PjkESOjhOclBoNW3xotW6V4GTBvEBt9q
-	 iXGf4ISPPVmuVTZ3f1hIg3AJ99wqw4zPspppwEH69W2kfBS8hNZxUpbaQYFJ3ttJyGT1P
-	 DamSl8yhI13GUHSFMrGiTwPBe+jS2akyOHI+C0/GNBLT5xmUOdhHPXvSBU9wheMtaYw==
+	bh=Tye6tSHh1abjSnt0/bmPBHrBUPt7Gd+H7nLmSetX4P4=;
+	b=FCaYccowFxj01l/L2ciLQOUvbh3ftgCc2pRtGubR0/n1o4hTA+YzrSxntuNPEJaaW8Rb
+	 LzFTJahlNVRdZVgbzP2h8OJ2GQ12hxTgmAFxq8DY+w994qlCVgOf0qI3PpzZDnb7vS0JT
+	 AYmDnhRwBNPsb5NkgBvJ4e6QjwGjCzPWGhRy74o82vDFARWAT7a9LGOg9MSLGltmltnea
+	 Bx5x1O+VT/n3o7b/t6jvHXgR5WQI/ZU+7I0IBTxB/w1VqclOx7/ISKYnpv5P8tBlY6Gg9
+	 gCuGEmtwmA1BtrR3oG47yJiDGMy+aGJU/Y5mRWlvENV81TC+HPM9M8FH0ieU4Exugqg==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789924292;
-	bh=HOaNpBA2TvDkLa/xAYN26a7XAMNIUziPUfu/qdRNHec=;
+	s=default; t=1789924305;
+	bh=Tye6tSHh1abjSnt0/bmPBHrBUPt7Gd+H7nLmSetX4P4=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=Qga031veCqjZW5qOH6tjaAFvQ46AlkzueZH55Ix6PXaXseIeMPVKw/7DxENzgRZfG
-	 xfdjdjsMV/VSBC3Lkszl+OP2GvXILzAJGxz9ZFxK30G2QeWGP1cvQT4KrW2dX0O0P4
-	 RIQ7yRI8f9JpHqv3mjE4gdSSODG+pnfey6zmwx7HDnhAXFhVuVBuGbeCBa29F5VXGf
-	 608ubFt6wRlwsd+wA4WZoqIaQNtZnS8OM+xyy1FM19O3HBUt7rabcxOT3YZPxyXDFa
-	 XJfKgzDSbLV2nv2Kdamsu1wbp7DB43Yja/vqD3fknxE0dELYXd8DbJn5hRo5DqfgJX
-	 5CktxCvtH7Blg==
+	b=hM2oF6pVQ7zKYiEiE93kvws7xZs/OTfMemHY1vwXaIy6vuyVO1+PuF3woWRPapRls
+	 d+N/Ba3oSyX2KMGe3dQgfGdqZjVPqHoVHH7psA/DJkiBddI6RZT/ErKuhqYxi+Ywg/
+	 9WKdcJch1BOBJSPVbYBrQcIA+ac5eIgRldXGASsR3NQp50R8VlaLn56uVBKzUPnM+T
+	 jqW9nVri+Q07uuljom7JAQR0lv6amjUDn7kwmK+BxxS/omDw+1AjOLygfJSyfDmKr+
+	 EEdPTxsiR9TUK6MQIKO1qXSARMG0vUoEqiRy8Bwc17QiK18RK1/IXkJ2gNWZxA9FtX
+	 /UluhseYcDh3A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BC7ED40DD0;
-	Sun, 20 Sep 2026 17:11:32 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 1539937A
- for <buildroot@buildroot.org>; Sun, 20 Sep 2026 17:11:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0C9D140DF8;
+	Sun, 20 Sep 2026 17:11:45 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 497793FA
+ for <buildroot@buildroot.org>; Sun, 20 Sep 2026 17:11:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E402580D91
- for <buildroot@buildroot.org>; Sun, 20 Sep 2026 17:11:30 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2FA2C606F8
+ for <buildroot@buildroot.org>; Sun, 20 Sep 2026 17:11:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7ZFf-mRwEv-6 for <buildroot@buildroot.org>;
- Sun, 20 Sep 2026 17:11:30 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 8600C80D92
-Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789924289;
- b=qR4kWA8EDhnFBMTkD6Lr60VXeWLCLv7L3lzTXTGW1+5eMV6JFVspqMxy5U8CoYsDxKqr
- vrwAxYDv0dqshSHgm3CrU5jx9sTF41/XcB/j0lelfgSplGdVRbFMYlvquAZ8ug9K4hXQ5
- YiEI3G7IfDvKY8RQ2iB2zrNmvKkzmS+0SseUquESR+oYLvJNrDWxIb0Z2doIOpmwZatmz
- cMTfinE0Ajk5ewPD5jSD4mfQMGo2f19tSSNLlWNe27Z8KeVH1/zeyFH+8PRAygX6sR061
- y1R5HyqjQ37rNVof+/8zvh0It/3SPkPgBkwlS3piH2RlrIpcAejQc0wGsWbygM1Lhlg==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vqFVuhB0zX5J for <buildroot@buildroot.org>;
+ Sun, 20 Sep 2026 17:11:42 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 45CF5606FA
+Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789924302;
+ b=Rax3BP08Pa6y2YKjtZSiG5/WvnnumsgRrQjGFkny17A0fb8So/Ncr/mx56cRP8Z3Oz/Y
+ 8R25xPDmJoV/NCW56pxvTQ0InH+1O1ZUm3Uyj34BQblwZYFzL3Ppo1xpkp9KOIbPl92gC
+ giBoJ6knZfP5Ow2lJsPm0qqmijq593gk0vVc4ZW+rBlY6EYiGffVH1Lfr1AHpBP8XiBwr
+ DNB4aS2kDYAlnBAxeq6LKQENNYRzgtBx4gsmwvJ+KNmTBl7NWbzsvRyGUJueUU61eRRpX
+ psDoo+KOX8/6ID79SUEd0H2ZESwIM+9cHgchJOQrVxLtd68E++8PW4R2MNzmxtEziaQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1789924289;
+ c=relaxed/relaxed; t=1789924302;
  h=Received-SPF:DKIM-Signature:X-KAS-Sym:Received:Received:From:To:Cc:
  Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding:X-Spam-Score:X-Spamd-Bar;
- bh=IJC03tXGgJw0D4V9eMbZfpkefgypuWN7oU55xSEMQhI=;
- b=GcvpeadeWxGq5shkO6+q8DZRWF9IiaZGa+R3KjmRL3ea0RpAG9le1eeV7d94jiCC/EkF
- FNkLxwrH2NylVY8n7nwr4W+iPh07pnPDGp5Wbis0TADskqIBURdRgAYgo3knEYQdSES1L
- zp4kQ+6Cqq9apJVqaCjxnEA4hKqYu4oogVrB6WXAVOIzKOP4oTIRJkM6Cx64HaqeImgzi
- VUpJSgE0YSX3KQF9pmutY/eBRTbRt4DwwZVU3KgpsAlZwD/p61M3NhRo4E94PaxyenYbW
- LhHQPRSzEWvqWr80JujI3+7LZnudlapt8lYdQDhaJfEk0duhAyyraLAFhy2ju2HQOHQ==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org;
+ bh=n9qeUgqkQP0378J8HrA1C33nQzJMtFnfsbkk2uRvb7A=;
+ b=lwqv3TSE2xi6xSaVeE6R4NFQd7N7M1Ye93e8dQkVMbZCNDvLPuLRi/BcVd3L4naFw2SN
+ b25pm97TdwT3N+X6rIZWD5yFrApSxKU0wxDdhdoyAC6NURiB3JakrVUnOo9zR0gVuHg2t
+ dcrnbyFGW6UvxcDH4dNC17j10N1LErjpNakbvqhvGKzkX7DIKo+QpJUP6fGyt5EWHZa6l
+ 0ovNjIOl+d73Is+On47qNxIRNKNecAv6hlHnMLM+2Kbzj/VV32cagcrzJuhgGbrPyGDJz
+ /TvE3C3VOBbuO6lefmcKXxbTV6LPX7RVCpZ833zU9jJ7KBINrZlBwQGV2TVDClPClug==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org;
  dmarc=pass header.from=kuhls.net; 
  dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=Z7z6Tm7i; 
+ header.s=kas202605290044 header.b=o2yV5JAw; 
  arc=none smtp.remote-ip=85.13.140.57
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-Authentication-Results: smtp1.osuosl.org;
+Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=kuhls.net
-Authentication-Results: smtp1.osuosl.org;
+Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202605290044 header.b=Z7z6Tm7i
+ header.a=rsa-sha256 header.s=kas202605290044 header.b=o2yV5JAw
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8600C80D92
- for <buildroot@buildroot.org>; Sun, 20 Sep 2026 17:11:29 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 45CF5606FA
+ for <buildroot@buildroot.org>; Sun, 20 Sep 2026 17:11:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
- s=kas202605290044; t=1789924145;
- bh=IJC03tXGgJw0D4V9eMbZfpkefgypuWN7oU55xSEMQhI=;
+ s=kas202605290044; t=1789924146;
+ bh=n9qeUgqkQP0378J8HrA1C33nQzJMtFnfsbkk2uRvb7A=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=Z7z6Tm7iB7OCxoWt8mbp4XIiXmg9OFFPfwl1C2fScpP8IlnmMBcxtq2w6/L6MtXgI
- SgCpFGUzh4SDnhG7EUzXJ43BhtMiclwLN955msuNOfoja+vlv3OCQ+XVT8ie2veXwO
- z1xv7mTylD/lgDknJimuyVCMd0tfaDQOk/Bgs6RaPhS3+76vq/lb5WVJ4GGQbBspV0
- XX3tN6VDN3sr21Nh2MxbAZg7pTM14iv1/w8NIaAwfgyjge6koeLX+KLTpALKP6jPjv
- SlDkZvizOWxWZLbYLLCimvEd3FMqV6SdBAI8QpQIVUvj9ZH8CFL8Vs4iNN25RBHKQE
- qo+8eOkkbSW6A==
-X-KAS-Sym: v3:f51bdf72230551df:lHdkWXAlOH3mFYa7MPhN/Q5mZRaSllnUONUXNce4VNqCbu40d29sJoTMWL/UgPpKmiu+oFAK+SGKiz0pvNPHzzdK8865J0NZZhjD1YGG6aDHJWSqGt9pmYaVeClFza2NY+i+npE0hJgg/gHxSjO6xcwlUb6QQuNPO0hdPziIw4dhYYf4DJSWrRRzANCMomoD/RZTgi346Zz0eW33G9Vcp3B7DR+EaybhZMrqLCjEqGCkGFXPOjSjpT0/ayWciGjXWUz3QuiXUZXlIr+lNW1V5S5HyBJCR/w6EnvHAsYJhPTQhQAx4gJVctdz4XTCaIimRq6ACwja3Rp9OR6uCM1UuQ==:1NB826eVDPETN+l4hVDWyYikyjslCbFvWKtPzXiSOU+N8VD6nDd/VpVp2RzVdJ2OytttrS6KZNvYV2ZqwYQL4XxAUKHc3/ososXXx/fk/VAvSDSlUWcN1KR/5Qp6JsHFeEtWjdCStrU7+xDJnMGor+3Jdan1J0lNSg87Fz+N1TULK7R1tAJG7OzTmfVGe7cVOJuLREEStjcDa4HQsvzZZTDn/wzTb3bk/NuhR5qKkBGMClQ1iHVoeeATu+GUnNscTMnV4rUK4KAtKdhrSfUkOtBlaIQtffA8ZRTm9nZcBJXRSOy1QQENtHbetGSR1bW6PfNSCmfCcn68NFevelkzvrzS4XYt/ncsN94cq/NabsaDPHKvfe8x+CgE+kLOXNNYpJ0cZhvCleet1oEMwGb4gBlU9/ft6DsIhQ6Y9iMSewT++4rTC0qVmq+YSRtHWLpBjNBYRHm3JVrKF77kqCE8LTij2IpdHMJsCS+U0RW1weM+2EL0/guaegVpaPbwq1g10Dsqhl0oXAJ8Eyo4lyX8Tm7cGSOJPfJqJk0LAaopc8Xhg+qpFrCnFeN2FSCHHPfKRP9VlagEcI6iTqXIxclch2Bfj4lFjxDeodqoqGExjnvn2a
- nA0s+ZDNxeStIflOoTYPUs0fTo1HL56iBo2m35Fms8va2fTsscGq/SGr6NnsZJ7eV/s52eLCQ=
+ b=o2yV5JAwLqDqtFrhnbIhxUzGdAp+IR/Q1o5hHa2qb0azhd2O+K8Gj3UWOetwnDJlH
+ +E91sAOh+q9sCfWsT2mU0xZRhcrFQsxck10pKV4KjOwy2SF34hNv+qD2jDgoU+TaXX
+ LGqO7wxVsirpmHtCswnAF3a6A+Yt5a+Ov+/6FF/zyP2OD5D5qzIHYcTi9UqIKo54VF
+ B+khqFU+f5uR2jq9zh9aUgF6CIDqZstguFvBnw5vGYnvLQnukSjGMPUjkmAObEJXVs
+ JCmQNrXJdVxnwQcteXODBTwhGczboolqUU1MfpLGFtA6+laAho7dfhvFCvyGmM0+6W
+ 63XVkonQaIYQg==
+X-KAS-Sym: v3:f51bdf72230551df:lHdkWXAlOH3mFYa7MPhN/Q5mZRaSllnUONUXNce4VNqCbu40d29sJoTMWL/UgPpKmiu+oFAK+SGKiz0pvNPHzzdK8865J0NZZhjD1YGG6aDHJWSqGt9pmYaVeClFza2NY+i+npE0hJgg/gHxSjO6xcwlUb6QQuNPO0hdPziIw4dhYYf4DJSWrRRzANCMomoD/RZTgi346Zz0eW33G9Vcp3B7DR+EaybhZMrqLCjEqGCkGFXPOjSjpT0/ayWciGjXWUz3QuiXUZXlIr+lNW1V5S5HyBJCR/w6EnvHAsYJhPTQhQAx4gJVctdz4XTCaIimRq6ACwja3Rp9OR6uCM1UuQ==:ipHz664rYqwPZKhI/cO9YJ+AKIfFtuTVOvM11HA4GVqSleUc85FZ4hLqMHdVvtXObL0HiYHndJAs5NaAHo6JGoCFZYE+6lQPxBlaFCLTykseurSqXi3+ntx1ddoxuj/8Nx30LWIOVEq9Q27HANDkH37C8QCD2z8MBlMMeO4BD3eP27wKytwDxU3QQkOT3CxTzbDxJqqnMWtb6b///Pap2ozfNn7ekeAf7XozvB3lfC+jFerdO93CQaR2bBfI3fKJmY/Mojkhcg7Sq8qfyW+OMsELaSat9sva6321kWUcxVlsIZKSekk4cqrVMurhuMYxOGDgrQwguyYuoK8B+6UkctD6Ud11HlaNoyZjv7JK07zDRvUjI9ykm8gUlmi6zthNd5TX6yw9+XGl6MCs4LCb35kFsBkv32JZ0LUlZU9U2q9JWUM13L5IQ+cOW0w3TiHvLBgEZAxvg4hkAdpvHjsm2KEjFnj6mBN0hvtgITCqZ6hFyoUe2ynf0tBx5WtxyBB3XoXAR+H2G1UZS9srkEHEYUS59gpjViaEB62iC7xCz7uG8jxSNBsJvq0g9kKgJwxaa7+nlG1gNAGogxRkZNc5KRFURSpImSwuKnAd+TdW8iRFwb
+ XFEAUUyWISbMdY7bTAKtkAmlNmnyriP3wz0jq4uLRcjY5GY47sbJat2XbcG8ymrpMqdNSn//A=
 Received: from fli4l.lan.fli4l (p54a1b276.dip0.t-ipconnect.de [84.161.178.118])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 8C1F7A4C4872;
- Sun, 20 Sep 2026 19:09:05 +0200 (CEST)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 03EEDA4C4873;
+ Sun, 20 Sep 2026 19:09:06 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:57728)
  by fli4l.lan.fli4l with esmtp (Exim 4.100.1)
- (envelope-from <bernd@kuhls.net>) id 1x8L1g-000000000o7-3egT;
+ (envelope-from <bernd@kuhls.net>) id 1x8L1h-000000000o7-0Mxy;
  Sun, 20 Sep 2026 17:08:29 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sun, 20 Sep 2026 19:08:11 +0200
-Message-ID: <20260920170815.240247-65-bernd@kuhls.net>
+Date: Sun, 20 Sep 2026 19:08:12 +0200
+Message-ID: <20260920170815.240247-66-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260920170815.240247-1-bernd@kuhls.net>
 References: <20260920170815.240247-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Spamd-Bar: -
-Subject: [Buildroot] [PATCH v5 64/67] package/uboot-tools: Fix build with
- OpenSSL 4.0.0
+Subject: [Buildroot] [PATCH v5 65/67] package/xmrig: Add support for OpenSSL
+ 4.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -176,317 +176,53 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- ...Add-support-for-OpenSSL-Provider-API.patch | 304 ++++++++++++++++++
- 1 file changed, 304 insertions(+)
- create mode 100644 package/uboot-tools/0003-Add-support-for-OpenSSL-Provider-API.patch
+ .../0001-Fix-build-with-OpenSSL-4.0.0.patch   | 40 +++++++++++++++++++
+ 1 file changed, 40 insertions(+)
+ create mode 100644 package/xmrig/0001-Fix-build-with-OpenSSL-4.0.0.patch
 
-diff --git a/package/uboot-tools/0003-Add-support-for-OpenSSL-Provider-API.patch b/package/uboot-tools/0003-Add-support-for-OpenSSL-Provider-API.patch
+diff --git a/package/xmrig/0001-Fix-build-with-OpenSSL-4.0.0.patch b/package/xmrig/0001-Fix-build-with-OpenSSL-4.0.0.patch
 new file mode 100644
-index 0000000000..9a5071cae3
+index 0000000000..966744abbd
 --- /dev/null
-+++ b/package/uboot-tools/0003-Add-support-for-OpenSSL-Provider-API.patch
-@@ -0,0 +1,304 @@
-+From 9f78e701fa5a4faf69119d9fe1e485e76de2fe3b Mon Sep 17 00:00:00 2001
-+From: Eddie Kovsky <ewk@edkovsky.org>
-+Date: Mon, 23 Feb 2026 09:43:22 -0700
-+Subject: [PATCH] Add support for OpenSSL Provider API
++++ b/package/xmrig/0001-Fix-build-with-OpenSSL-4.0.0.patch
+@@ -0,0 +1,40 @@
++From 357fab10b79e49dc9b8f42dc6cf425a8124a3f40 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd@kuhls.net>
++Date: Sat, 2 May 2026 16:45:38 +0200
++Subject: [PATCH] Fix build with OpenSSL 4.0.0
 +
-+The Engine API has been deprecated since the release of OpenSSL 3.0. End
-+users have been advised to migrate to the new Provider interface.
-+Several distributions have already removed support for engines, which is
-+preventing U-Boot from being compiled in those environments.
++src/base/net/tls/TlsGen.cpp: In member function 'bool
++ xmrig::TlsGen::generate_x509(const char*)':
++src/base/net/tls/TlsGen.cpp:118:32: error: invalid conversion from
++ 'const X509_name_st*' to 'X509_NAME*' {aka 'X509_name_st*'}
++ [-fpermissive]
++  118 |     X509_NAME_add_entry_by_txt(name, "CN", MBSTRING_ASC, reinterpret_cast<const uint8_t *>(commonName), -1, -1, 0);
++      |                                ^~~~
++      |                                |
++      |                                const X509_name_st*
 +
-+Add support for the Provider API while continuing to support the existing
-+Engine API on distros shipping older releases of OpenSSL.
++https://github.com/openssl/openssl/issues/29117
 +
-+This is based on similar work contributed by Jan Stancek updating Linux
-+to use the Provider interface.
-+
-+    commit 558bdc45dfb2669e1741384a0c80be9c82fa052c
-+    Author: Jan Stancek <jstancek@redhat.com>
-+    Date:   Fri Sep 20 19:52:48 2024 +0300
-+
-+        sign-file,extract-cert: use pkcs11 provider for OPENSSL MAJOR >= 3
-+
-+The changes have been tested with the FIT signature verification vboot
-+tests on Fedora 42 and Debian 13. All 30 tests pass with both the legacy
-+Engine library installed and with the Provider API.
-+
-+Signed-off-by: Eddie Kovsky <ewk@edkovsky.org>
-+
-+Upstream: https://github.com/u-boot/u-boot/pull/918
++Upstream: https://github.com/xmrig/xmrig/pull/3808
 +
 +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 +---
-+ lib/aes/aes-encrypt.c |   4 +-
-+ lib/rsa/rsa-sign.c    | 102 +++++++++++++++++++++++++++++++++++++++---
-+ 2 files changed, 100 insertions(+), 6 deletions(-)
++ src/base/net/tls/TlsGen.cpp | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/lib/aes/aes-encrypt.c b/lib/aes/aes-encrypt.c
-+index 90e1407b4f0..4fc4ce23247 100644
-+--- a/lib/aes/aes-encrypt.c
-++++ b/lib/aes/aes-encrypt.c
-+@@ -16,7 +16,9 @@
-+ #include <openssl/err.h>
-+ #include <openssl/ssl.h>
-+ #include <openssl/evp.h>
-+-#include <openssl/engine.h>
-++#if !defined(OPENSSL_NO_ENGINE) && !defined(OPENSSL_NO_DEPRECATED_3_0)
-++# include <openssl/engine.h>
-++#endif
-+ #include <uboot_aes.h>
++diff --git a/src/base/net/tls/TlsGen.cpp b/src/base/net/tls/TlsGen.cpp
++index ad2e648b..59e4f0c9 100644
++--- a/src/base/net/tls/TlsGen.cpp
+++++ b/src/base/net/tls/TlsGen.cpp
++@@ -115,7 +115,7 @@ bool xmrig::TlsGen::generate_x509(const char *commonName)
++     X509_gmtime_adj(X509_get_notAfter(m_x509), 315360000L);
 + 
-+ #if OPENSSL_VERSION_NUMBER >= 0x10000000L
-+diff --git a/lib/rsa/rsa-sign.c b/lib/rsa/rsa-sign.c
-+index 0e38c9e802f..f456f3c58e6 100644
-+--- a/lib/rsa/rsa-sign.c
-++++ b/lib/rsa/rsa-sign.c
-+@@ -19,7 +19,47 @@
-+ #include <openssl/err.h>
-+ #include <openssl/ssl.h>
-+ #include <openssl/evp.h>
-+-#include <openssl/engine.h>
-++#if OPENSSL_VERSION_MAJOR >= 3
-++# define USE_PKCS11_PROVIDER
-++# include <err.h>
-++# include <openssl/provider.h>
-++# include <openssl/store.h>
-++#else
-++# if !defined(OPENSSL_NO_ENGINE) && !defined(OPENSSL_NO_DEPRECATED_3_0)
-++#  define USE_PKCS11_ENGINE
-++#  include <openssl/engine.h>
-++# endif
-++#endif
-++
-++#ifdef USE_PKCS11_PROVIDER
-++#define ERR(cond, fmt, ...)				\
-++	do {						\
-++		bool __cond = (cond);			\
-++		drain_openssl_errors(__LINE__, 0);	\
-++		if (__cond) {				\
-++			errx(1, fmt, ## __VA_ARGS__);	\
-++		}					\
-++	} while (0)
-++
-++static void drain_openssl_errors(int l, int silent)
-++{
-++	const char *file;
-++	char buf[120];
-++	int e, line;
-++
-++	if (ERR_peek_error() == 0)
-++		return;
-++	if (!silent)
-++		fprintf(stderr, "At main.c:%d:\n", l);
-++
-++	while ((e = ERR_peek_error_line(&file, &line))) {
-++		ERR_error_string(e, buf);
-++		if (!silent)
-++			fprintf(stderr, "- SSL %s: %s:%d\n", buf, file, line);
-++		ERR_get_error();
-++	}
-++}
-++#endif
++     auto name = X509_get_subject_name(m_x509);
++-    X509_NAME_add_entry_by_txt(name, "CN", MBSTRING_ASC, reinterpret_cast<const uint8_t *>(commonName), -1, -1, 0);
+++    X509_NAME_add_entry_by_txt((X509_NAME *) name, "CN", MBSTRING_ASC, reinterpret_cast<const uint8_t *>(commonName), -1, -1, 0);
 + 
-+ static int rsa_err(const char *msg)
-+ {
-+@@ -94,10 +134,11 @@ err_cert:
-+  *
-+  * @keydir:	Key prefix
-+  * @name	Name of key
-+- * @engine	Engine to use
-++ * @engine	Engine to use or NULL when using pkcs11 provider
-+  * @evpp	Returns EVP_PKEY object, or NULL on failure
-+  * Return: 0 if ok, -ve on error (in which case *evpp will be set to NULL)
-+  */
-++#ifdef USE_PKCS11_ENGINE
-+ static int rsa_engine_get_pub_key(const char *keydir, const char *name,
-+ 				  ENGINE *engine, EVP_PKEY **evpp)
-+ {
-+@@ -157,21 +198,24 @@ static int rsa_engine_get_pub_key(const char *keydir, const char *name,
++     X509_set_issuer_name(m_x509, name);
 + 
-+ 	return 0;
-+ }
-++#endif
-+ 
-+ /**
-+  * rsa_get_pub_key() - read a public key
-+  *
-+  * @keydir:	Directory containing the key (PEM file) or key prefix (engine)
-+  * @name	Name of key file (will have a .crt extension)
-+- * @engine	Engine to use
-++ * @engine	Engine to use or NULL when using pkcs11 provider
-+  * @evpp	Returns EVP_PKEY object, or NULL on failure
-+  * Return: 0 if ok, -ve on error (in which case *evpp will be set to NULL)
-+  */
-+ static int rsa_get_pub_key(const char *keydir, const char *name,
-+ 			   ENGINE *engine, EVP_PKEY **evpp)
-+ {
-++#ifdef USE_PKCS11_ENGINE
-+ 	if (engine)
-+ 		return rsa_engine_get_pub_key(keydir, name, engine, evpp);
-++#endif
-+ 	return rsa_pem_get_pub_key(keydir, name, evpp);
-+ }
-+ 
-+@@ -207,13 +251,44 @@ static int rsa_pem_get_priv_key(const char *keydir, const char *name,
-+ 		return -ENOENT;
-+ 	}
-+ 
-++#ifdef USE_PKCS11_PROVIDER
-++	EVP_PKEY *private_key = NULL;
-++	OSSL_STORE_CTX *store;
-++
-++	if (!OSSL_PROVIDER_try_load(NULL, "pkcs11", true))
-++		ERR(1, "OSSL_PROVIDER_try_load(pkcs11)");
-++	if (!OSSL_PROVIDER_try_load(NULL, "default", true))
-++		ERR(1, "OSSL_PROVIDER_try_load(default)");
-++
-++	store = OSSL_STORE_open(path, NULL, NULL, NULL, NULL);
-++	ERR(!store, "OSSL_STORE_open");
-++
-++	while (!OSSL_STORE_eof(store)) {
-++		OSSL_STORE_INFO *info = OSSL_STORE_load(store);
-++
-++		if (!info) {
-++			drain_openssl_errors(__LINE__, 0);
-++			continue;
-++		}
-++		if (OSSL_STORE_INFO_get_type(info) == OSSL_STORE_INFO_PKEY) {
-++			private_key = OSSL_STORE_INFO_get1_PKEY(info);
-++			ERR(!private_key, "OSSL_STORE_INFO_get1_PKEY");
-++		}
-++		OSSL_STORE_INFO_free(info);
-++		if (private_key)
-++			break;
-++	}
-++	OSSL_STORE_close(store);
-++
-++	*evpp = private_key;
-++#else
-+ 	if (!PEM_read_PrivateKey(f, evpp, NULL, path)) {
-+ 		rsa_err("Failure reading private key");
-+ 		fclose(f);
-+ 		return -EPROTO;
-+ 	}
-+ 	fclose(f);
-+-
-++#endif
-+ 	return 0;
-+ }
-+ 
-+@@ -226,6 +301,7 @@ static int rsa_pem_get_priv_key(const char *keydir, const char *name,
-+  * @evpp	Returns EVP_PKEY object, or NULL on failure
-+  * Return: 0 if ok, -ve on error (in which case *evpp will be set to NULL)
-+  */
-++#ifdef USE_PKCS11_ENGINE
-+ static int rsa_engine_get_priv_key(const char *keydir, const char *name,
-+ 				   const char *keyfile,
-+ 				   ENGINE *engine, EVP_PKEY **evpp)
-+@@ -293,22 +369,25 @@ static int rsa_engine_get_priv_key(const char *keydir, const char *name,
-+ 
-+ 	return 0;
-+ }
-++#endif
-+ 
-+ /**
-+  * rsa_get_priv_key() - read a private key
-+  *
-+  * @keydir:	Directory containing the key (PEM file) or key prefix (engine)
-+  * @name	Name of key
-+- * @engine	Engine to use for signing
-++ * @engine	Engine to use or NULL when using pkcs11 provider
-+  * @evpp	Returns EVP_PKEY object, or NULL on failure
-+  * Return: 0 if ok, -ve on error (in which case *evpp will be set to NULL)
-+  */
-+ static int rsa_get_priv_key(const char *keydir, const char *name,
-+ 			    const char *keyfile, ENGINE *engine, EVP_PKEY **evpp)
-+ {
-++#ifdef USE_PKCS11_ENGINE
-+ 	if (engine)
-+ 		return rsa_engine_get_priv_key(keydir, name, keyfile, engine,
-+ 					       evpp);
-++#endif
-+ 	return rsa_pem_get_priv_key(keydir, name, keyfile, evpp);
-+ }
-+ 
-+@@ -325,6 +404,7 @@ static int rsa_init(void)
-+ 	return 0;
-+ }
-+ 
-++#ifdef USE_PKCS11_ENGINE
-+ static int rsa_engine_init(const char *engine_id, ENGINE **pe)
-+ {
-+ 	const char *key_pass;
-+@@ -380,6 +460,7 @@ static void rsa_engine_remove(ENGINE *e)
-+ 		ENGINE_free(e);
-+ 	}
-+ }
-++#endif
-+ 
-+ static int rsa_sign_with_key(EVP_PKEY *pkey, struct padding_algo *padding_algo,
-+ 			     struct checksum_algo *checksum_algo,
-+@@ -480,11 +561,13 @@ int rsa_sign(struct image_sign_info *info,
-+ 	if (ret)
-+ 		return ret;
-+ 
-++#ifdef USE_PKCS11_ENGINE
-+ 	if (info->engine_id) {
-+ 		ret = rsa_engine_init(info->engine_id, &e);
-+ 		if (ret)
-+ 			return ret;
-+ 	}
-++#endif
-+ 
-+ 	ret = rsa_get_priv_key(info->keydir, info->keyname, info->keyfile,
-+ 			       e, &pkey);
-+@@ -496,16 +579,21 @@ int rsa_sign(struct image_sign_info *info,
-+ 		goto err_sign;
-+ 
-+ 	EVP_PKEY_free(pkey);
-++
-++#ifdef USE_PKCS11_ENGINE
-+ 	if (info->engine_id)
-+ 		rsa_engine_remove(e);
-++#endif
-+ 
-+ 	return ret;
-+ 
-+ err_sign:
-+ 	EVP_PKEY_free(pkey);
-+ err_priv:
-++#ifdef USE_PKCS11_ENGINE
-+ 	if (info->engine_id)
-+ 		rsa_engine_remove(e);
-++#endif
-+ 	return ret;
-+ }
-+ 
-+@@ -645,11 +733,13 @@ int rsa_add_verify_data(struct image_sign_info *info, void *keydest)
-+ 	ENGINE *e = NULL;
-+ 
-+ 	debug("%s: Getting verification data\n", __func__);
-++#ifdef USE_PKCS11_ENGINE
-+ 	if (info->engine_id) {
-+ 		ret = rsa_engine_init(info->engine_id, &e);
-+ 		if (ret)
-+ 			return ret;
-+ 	}
-++#endif
-+ 	ret = rsa_get_pub_key(info->keydir, info->keyname, e, &pkey);
-+ 	if (ret)
-+ 		goto err_get_pub_key;
-+@@ -726,8 +816,10 @@ done:
-+ err_get_params:
-+ 	EVP_PKEY_free(pkey);
-+ err_get_pub_key:
-++#ifdef USE_PKCS11_ENGINE
-+ 	if (info->engine_id)
-+ 		rsa_engine_remove(e);
-++#endif
-+ 
-+ 	if (ret)
-+ 		return ret;
 +-- 
 +2.47.3
 +
