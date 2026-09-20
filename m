@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25EDCC982D8
-	for <buildroot@archiver.kernel.org>; Sun, 20 Sep 2026 14:11:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34F25C982DA
+	for <buildroot@archiver.kernel.org>; Sun, 20 Sep 2026 14:11:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E3D636064C;
-	Sun, 20 Sep 2026 14:11:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 053C440D88;
+	Sun, 20 Sep 2026 14:11:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id g1YQswiXR9JG; Sun, 20 Sep 2026 14:11:10 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org D804B60672
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789913470;
-	b=AIT5JCUoG1MeYAY/sHaawE+R3vfFySSWrh4hlOw88U7wahEWEQ2Z9fFM4bttdulYXUEk
-	 QHX4T2U14BI0hGlHPsFZpytg8GIDOCKHx4hbq4+oU4tRiD47/MnrJVuvoYnpp//gmKVs/
-	 5iG8sMljreeTZIXkfj2/l47BSxDBIGCwdglsU+QkicJEkvLO21oBTBEgSLzsivHcPn3Cf
-	 PCDik2ucAp9FYf5nsCidDec0FV7XFPB0V023j4T5+eElon5g4JCJ84Kos1SyZM175SPeA
-	 23S9h5Pf2GVZPzYPdGB5gbCyapn/inIi6TdsATg+BATG9Z2r/JS3D2mhRHm9RzDM1lQ==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8zEJCmKXj5qi; Sun, 20 Sep 2026 14:11:22 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 1D77540D8E
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789913482;
+	b=LJUF8N2zZjEb3vhSVnOyj+c2QCMC6/lliyXCHpYSTVfAp3HCorPslWmwDQf+lBA2p8Mm
+	 HiRdQH/CaUCsGNokFg+IgvIoOva2hU/M4yilNNtaNsmvwzguJVmjC4rRGQaLVIH9ACGjn
+	 0y9rxhs04r2WpoNMw87wZ96KkVLV90x7tQwYioqjkZLF2eviyZVMB5fpHiZuJW1vKpEHZ
+	 VwZS0mQvVQDLU83IUzu5jirpCSPQOyIDXtQ10Nml0antBEGBGUv5gbyms7xlIOEoNwx5Y
+	 z+hc4fn0sA77eV2aZeBVqtgsTB8Q15OfrAIyGDjZagXXEdKUYPKoP9AM3/QNE09w/Dg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789913470;
+	c=relaxed/relaxed; t=1789913482;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
@@ -31,105 +31,105 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:Cc:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=rthfJ1MNczkXmFY/TvB9J+i3xeon7CRl6K71JvMjDFc=;
-	b=s5FxezroIu1Ow8TP6FK5LKXc7o0T4vYzrF7vMQpyUpIOGeJUyHslDDyDmUj3CfLWewIE
-	 9WQJVWTr1QfiViF1E+t8hvZTvqyzf/sjcUGDFbRM6idZU8PJYSE3HZO7GYwUUChoMY117
-	 0gXIl9t7/tqbS+ZmV6zuuGe1vgRsUCLlFnEYIW1MSHlwiPtxTsL8dzt9W+5GGuRyiQ1X/
-	 dcjkPmBwOC2Q9RUjaPsdb3tyWskSVD4coEjOZmvzj+S1fWcIbDapBrgrmj4X7u3/S3JkW
-	 wsbwVwvjNPZbgLci3z1Q+86rjTLDo07C4IeAlZkhl2eFjKgBY/s0yAh93bqrMP66Byw==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; dmarc=pass header.from=kuhls.net;
-	dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256 header.s=kas202605290044 header.b=ImBjBxBP;
+	bh=7HJQcqabToS50lIpqdaHWmxm3w2SRGOYz/TVG5/Tzus=;
+	b=UcqmNRcZO1BNxk+Pd5ET2+QlotRjrtChqzlieTYPTsyX/Q9QzMMS1MWHuRGn9rf6k1NJ
+	 ZZSBcbTFK3lI5SeebUGUvPBKSxw8UIqeMzCqDP/K5JQN+p2Tr5aSZOvPyaJTmW+huzzeI
+	 CjKnDG2hq8G9HWF3Gzya87Bbav+GF2hnwZgP0natU8eQ2WyLHHwvg4+QhVw4SIj2QDDyk
+	 k3AU7HSiMQSG6MaQ9499oGBJdRildVv3WPZJvDBhEUcOTzT5wXagtPeU9O4VYlcA0aary
+	 yWDO9Aelvok1ee1r8NBr0J3WiYGo0TFKVrFKbEHk0RMxRWeTTLuUW1ca6EY7Ls4G5sw==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; dmarc=pass header.from=kuhls.net;
+	dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256 header.s=kas202605290044 header.b=LB9qA1oI;
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789913469;
-	bh=rthfJ1MNczkXmFY/TvB9J+i3xeon7CRl6K71JvMjDFc=;
+	s=default; t=1789913482;
+	bh=7HJQcqabToS50lIpqdaHWmxm3w2SRGOYz/TVG5/Tzus=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=PrcXJ4rwXt9C41Q1XGbuqMNojCOY60RvZdhJcb6bh6Zt6sg2+PETZQ6P2kKl6lhsj
-	 XtBOZ7JFByiEBMAIFa5jhUkWEv678iyN+d6bL7xTIqPgaD0wG/PO12TcL/K8aiwETu
-	 DWHk5yNGbpI6mu7moSctubR3rBzsvk0v46Z+3w39HWeVbSHXWxSojb1SkIPvHAIVkq
-	 0vMmJS3peOeN0JKPTDCHa5lZk0cAECT4gF7xicu1Ah6UiMLqC4UpdxgTw8DAmYhw+X
-	 JIUi0Mc5UDCc+vcO0souOEZrAkZPCf4dknrENeJrqA+B89qGgZv9NlMR/dYL7VtEhs
-	 WuPXuqxcoR8JA==
+	b=ZryXF2DTmQK0dsocmdaWBovP8FYccGdjbsGdSrQfE0THpHBYhK4+D7zisrwl/8aGF
+	 /tqhLr3r+oOanyL4CwPfQ7qHG1n5JvgpMiLu0FSUbWwdmgG7LI185SAh52WBOqBwVW
+	 RHrcdGVb/7yM0U18Pu2zxIUbawm4j/Sxk6yL1eaGnltG0oY4H4H8aJ6Pr5Ses3E+ND
+	 DHRx2xyIFrWKkZD86w3sL2OKI3yBdICcZKNVrziWa9wf+8IEWzrSCqToXFnJgZFW0e
+	 ArU2eIGhAScVCwHjjHZ9I5zXKR95O02C8WcZtDIC5H0DX67mQ0R6c8TCybyomff0VO
+	 MosjreGOdQchA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D804B60672;
-	Sun, 20 Sep 2026 14:11:09 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 1DAB5392
- for <buildroot@buildroot.org>; Sun, 20 Sep 2026 14:11:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1D77540D8E;
+	Sun, 20 Sep 2026 14:11:22 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 17605392
+ for <buildroot@buildroot.org>; Sun, 20 Sep 2026 14:11:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0432B606A9
- for <buildroot@buildroot.org>; Sun, 20 Sep 2026 14:11:08 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id F175A40D8E
+ for <buildroot@buildroot.org>; Sun, 20 Sep 2026 14:11:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Cyi-SA8ZNMDE for <buildroot@buildroot.org>;
- Sun, 20 Sep 2026 14:11:07 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org B88296064C
-Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789913467;
- b=TPvKwLIh82W71mqfwK3zpnUD8qyBllmXdZd3EJmzYmkHIrANkbb23K4dal4AKPtli7WN
- vWdmgFAEl4Op+TqsdBLeO9DkRqGTBUEjLb8YIYjOOzdIGKpe/Pursy5x+g/4t30UBbmVO
- 3nuCBrM+tLM7RCKX+Ne4QcCpEqPJVyXEq12NNuY14Sem16NF2pvo2vur5GJWaqZRKECQM
- EoL8+JzAVHeE+HvuUe4ZJNa9kmA2jmWFZImBl9sBDbK/q4taSjB3GF4DBqPkRmEaPZGY8
- 9ls/mhGcavLCFhAHZ9/7LWNWj2QmMZB48RF6AQ86FzP5lE4PghTmDoCKfJ3Sv15p+zw==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5uwOQKhi2GYv for <buildroot@buildroot.org>;
+ Sun, 20 Sep 2026 14:11:19 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 0FCDC40D88
+Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789913479;
+ b=GtUSCy74gTG20Uep/3o0ymLdsKDbptlFQ9UA63qdV68Kv2inRFZlazoZSprjmTYOPucb
+ LpiFskzBUYWqXxo9UVS4nd6WGY0bKemxyLXog8o8GPgzzyKteyrg5UtNme+Q2bb7F62fA
+ KMC/yuVXOnXkrN5u79hg5F7J7dk+oOAcpNKCDxwR61W5XbKOymP7BbaHD0OiYpwDOdPQ0
+ SgFrJzUdXgU5nswGwWvsXTqSN8YtaI2cb+fNxmzrAWOcQPOp2gLTel088WjOypsjgaThg
+ +ozEYel3iXdN4P7sjxVfXhQWt3GuNDpHkjvmG03jSeoTXDBHjAl0JX1oeAuu9Z/u2WQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1789913467;
+ c=relaxed/relaxed; t=1789913479;
  h=Received-SPF:DKIM-Signature:X-KAS-Sym:Received:Received:From:To:Cc:
  Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding:X-Spam-Score:X-Spamd-Bar;
- bh=oWr+HyXqZdC7qkBCzqx/nRb0rgeeo4ZYcfTHo7wFtDI=;
- b=oFJKylEBehp0iyL7G5qBXQUpB3RnbIXO/I9PcCFbVsjcFDBKak9dLjaruq+xL3jUq8Wk
- SKQofPJzzkiO+BkGL/Yt2uxNgQRKGrSxiZ9s5SuybNpIPoOgWIrq+lnEbCiiMwudYZiW1
- ugfBKMSf1h9FzVb1KXSR1x3io7fMllQDcgOOisVREO5kVLSViJ8X8+OJcnuHZTBizbTWK
- lp9nvYOktv28WkH9kKy4qzMKHGbS7yTU3UPN/iBMmoHj+p3EFBiI8a+N03XIHnphsoy5A
- Dhk8RKTyOs+G0EfpVZSPB5mKT3VbEPp/maXuTRrauWNoVmzrioUWhXekydAvK1MG8vA==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org;
+ bh=UTTrzdFT64qWE94loi2rLwOT8Cr/BOq6ifW37i0ttzk=;
+ b=ovYqvRBDQA2bp+/cH/juv+VN8uzFNdNjVvtFLOFQ9Z3seWjQeIAshJwiPP77G8aJ+X1y
+ GTO2So4Bf72JLuU7T2f4sBmLlME7PCnd4OS7x8KoH90MBpwOQwwyl1wbzvKN2Ab/dWt35
+ SEEN6MVLJXSLbDPszpTvRuPiL1HQuGNdDBqdcOp8KsztjdFAbRnkRppiamEIBC0vw7IW/
+ c4EiU+vnW4jljETYo7hJN3yfHPyrXV7XZzY37oRWWlPhqfpH5c+x/q+Vd6/2McPp52CTC
+ HD26WfESV9Dx1VBM2d+ylA6UCIDrQii6Uviu3TpkZVSo/NcB2iWHsiTWkIVKoyJDm0w==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org;
  dmarc=pass header.from=kuhls.net; 
  dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=ImBjBxBP; 
+ header.s=kas202605290044 header.b=LB9qA1oI; 
  arc=none smtp.remote-ip=85.13.140.57
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-Authentication-Results: smtp3.osuosl.org;
+Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=kuhls.net
-Authentication-Results: smtp3.osuosl.org;
+Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202605290044 header.b=ImBjBxBP
+ header.a=rsa-sha256 header.s=kas202605290044 header.b=LB9qA1oI
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B88296064C
- for <buildroot@buildroot.org>; Sun, 20 Sep 2026 14:11:06 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0FCDC40D88
+ for <buildroot@buildroot.org>; Sun, 20 Sep 2026 14:11:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
- s=kas202605290044; t=1789913229;
- bh=oWr+HyXqZdC7qkBCzqx/nRb0rgeeo4ZYcfTHo7wFtDI=;
+ s=kas202605290044; t=1789913230;
+ bh=UTTrzdFT64qWE94loi2rLwOT8Cr/BOq6ifW37i0ttzk=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=ImBjBxBPdv71VjAKbs4oyYkqO97McvbzAcyHUPwLc/7zauT7hQEiNEMbSOG5o47I4
- ZsafpP1I8vVjY6DYoKUdpedf+sf/T3uYEtCRGPT7D1cnNJUmi9kj9cttMkmQSz6DMX
- YsML940Mfv2VrHUyBBqJAxKhv0vX+sXA//2acRudPC+XkswCYzaeCGwgT1Sma1nFIN
- vdfMAzLAAFnDvMmLjQ1nNeLB57IDoF4atdXz6572ZgiyF7M54Puq7k22raX972uXub
- rqf4Gjy0ZQLYupCKHq23G22e7jK3/S5syCdZOgjoGCMgb/fSSy265G/eTXmAqsCgJg
- bILrkYmkoipMQ==
-X-KAS-Sym: v3:f51bdf72230551df:kLsnpyO7xBQrienfp2HUkZLPIhoTWu0/2yOhSoEwU9REifldITt5uV1ZdfMxSIXWRKvTv9N0MZy0diMQpN0glcVgMpe+EHt4b9SSwIYdetNWrA3E4NHKWfeZ/Yj39hsXFoGsOc8DrIkTkE1cC8EDIzHMfql9Fk3+lmPjxillh8Rm13WqHm12wYfkg5zOONe3wQt1e4nql+laa117tthJT7FrH8LMc8sT6Y5hh1ZURpz+CgjkohF28/JMh91Xek4Jjzq7nWhnLLJK+IRHJUgBaWAXDGJyfMy5p24uZes2P0HVy2Hp1VIUhvBjLxL0/3h3AKkiBTMMXv2yTZN4hJ68hw==:ZGWHSKD7CX2O9rZ0wmTYT83zklXUjv4a5lDG6A6qq0ql5t/AodhYP6UHakEVOCPya2GZ651b0P8rl67y2HycR2t3KUrmi1i8azqjy8wUCOKTQXg7Ht0bIdSLtoJzLt+zMnB8FhVHy4dNkn2NF6DNg2Ua5nvBLRCW8+uB35zK4Jlf9C4bt7NkWw9t+hi+KEBETWs+nXmKG/Vd/hRdAvwPmdoXrFaoHG2P8vyxg3/Vz5OP9k9LBf0aPI1BTEHaNdkY+2Dai7j9UgkhYd3YPdHlCp+PxPLASeptlkQlM1W1XqzhQNfFCCz69PAKIVbYq+7ctxFamKNMi0nCc3qwb394zgGRFShUg4tv2oIezh6F9jVec9m4Lpuf0OZdYR3s5++PagACM2INZHbbKIGXBAoQm+JREN/ddeHHGW4w/vd0sZzyKma9iDpaCc9aAhLFRyoImjMcZYMp2x0Vb1sN7P7thfA5TK2IfSI/OzFuHtJwi6P77Jr29RqbDkzcg2QXxQoOVIMArDgMVIoHtINnH8r4c3ggaXdohXZj2IwB+r/OncP/BsQ5q+o378+uEb0+AFP9AyFfx5h9DuJHkZ5/J8MaxuEdOL6u4Cn0NK0/d3UTgfVat7
- J9rs1l98hiqmVuG/TKU3kaHyCKtuhfDoApoJNwYxO2pgCHExEO++3nh5elvM3/CXumfP8i7pzKkAHvrmHT+sj8os5OQefso6QpT+emn515H+VeN2pylBw=
+ b=LB9qA1oI/1oW9vrj3RGsvmcGOyU0NIuCVTBK5+xG3P/5ufUhq9aAuxilm40zkw2A9
+ YWxBTT2nnoalJe1Q2kOqVuYbQZYv1MkorNyyiHxxCfURdj5F84/hpwws+fu9PQnEUZ
+ Xi5oXKqIETnRUaRczwqCwwy2nMre6xjxZRh7g/6XlQXYH0q3ZvErGwd8X+2EyD3jCA
+ OPWDd87zmUXh59C1MnRUuV375K+0vzaCCuMOeu6P9kRlj69df34e4+2MlqnFjDRmi8
+ LXwSXZTsrRxlYwKxdiTMfawZV3kQ8YOiDXirdIZ0B0vCrv0q+vc3gExeCI039czZX7
+ dr2a3d9+qyhdQ==
+X-KAS-Sym: v3:f51bdf72230551df:kLsnpyO7xBQrienfp2HUkZLPIhoTWu0/2yOhSoEwU9REifldITt5uV1ZdfMxSIXWRKvTv9N0MZy0diMQpN0glcVgMpe+EHt4b9SSwIYdetNWrA3E4NHKWfeZ/Yj39hsXFoGsOc8DrIkTkE1cC8EDIzHMfql9Fk3+lmPjxillh8Rm13WqHm12wYfkg5zOONe3wQt1e4nql+laa117tthJT7FrH8LMc8sT6Y5hh1ZURpz+CgjkohF28/JMh91Xek4Jjzq7nWhnLLJK+IRHJUgBaWAXDGJyfMy5p24uZes2P0HVy2Hp1VIUhvBjLxL0/3h3AKkiBTMMXv2yTZN4hJ68hw==:nD57cjP9lhBioS/OiDVxfbyBNd4PbOAXrVyvw2pEMQD5+vnHAA3AGP5kaowQQDft+9j3tk9qcz2petiFwhx+8gaDQwNel6iGbwxgEn2la0hVLG8oi9Sz+0XzuFhYzrAOqn7HrpblEqy6zllejZwHZrSPi6vKaVXQaImZZVVE4vn8aZFX25wq9kGqXxLRlS4jrSDKNwlnoupJqkF/3OfbqikhrmqA9cyz1oh7qcNdcO/QOwZA68Yw/ojiYSq/ifaHcgjRX3/9kA6KFk6salnNP0ljIQNN1C7U0tt+CHfJ/UFwBolOpgmgIL4WifFOCIZdzQrJxr6EghZx2YFr92AYWkPtmkPnLkmmDjheUM7Lkc32lCF1ReSPEgElGCv13lwoS9kFEsmngKf5TXZATcWT7jgTVWekuVkf6/b9lV1h4pLbxCZG8v7rPxSeH0Mh0cYjzlC0yJxnI4whMaSUMYy7Jb1udPA6dFxL2Zcpwk9VIuGHVPrasgsQmhbqpSj8nXWFJigjKA14wJI46oSVtOjKAoXyD0dEWoRvBEH86Oq5rCp1Gj62RgdKQinH52aQia+DFaOmqcTCFqiXSLTH2eiVzlVCtNkUSeh+zZff+QSI50/2Sm
+ wqZGTAbyyqmHpJ4Ql+Hp1oqMBMev6MVzE870Pk2oGTZ68ZbBeL/rrlTldozSECPbRK7+3FeA00
 Received: from fli4l.lan.fli4l (p54a1b276.dip0.t-ipconnect.de [84.161.178.118])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 8A9A9A4C4864;
- Sun, 20 Sep 2026 16:07:09 +0200 (CEST)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 0DA05A4C4865;
+ Sun, 20 Sep 2026 16:07:10 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:39216)
  by fli4l.lan.fli4l with esmtp (Exim 4.100.1)
- (envelope-from <bernd@kuhls.net>) id 1x8IBG-000000002J9-03mr;
+ (envelope-from <bernd@kuhls.net>) id 1x8IBG-000000002J9-0mno;
  Sun, 20 Sep 2026 14:06:10 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sun, 20 Sep 2026 16:05:11 +0200
-Message-ID: <20260920140605.3005461-14-bernd@kuhls.net>
+Date: Sun, 20 Sep 2026 16:05:12 +0200
+Message-ID: <20260920140605.3005461-15-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260920140605.3005461-1-bernd@kuhls.net>
 References: <20260920140605.3005461-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Spamd-Bar: /
-Subject: [Buildroot] [PATCH v3 13/66] package/poco: convert to CMake package
+Subject: [Buildroot] [PATCH v3 14/66] package/poco: bump version to 1.15.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -174,174 +174,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+https://github.com/pocoproject/poco/blob/poco-1.15.3-release/CHANGELOG
 
-Currently when building with make, the cmake config files are not
-generated. This leads to problems when integrating the package in an
-application built with cmake.
-
-The CMake build system links the PDF component against the system
-libpng when POCO_UNBUNDLED is enabled, while the legacy make build
-system always used the bundled copy, so select libpng for the PDF
-component.
-
-POCO_NO_FPENVIRONMENT and POCO_NO_WSTRING are plain preprocessor
-defines rather than CMake options, so pass them through CMAKE_CXX_FLAGS.
-
-Poco is built as a set of shared libraries, so -latomic has to be
-passed via CMAKE_SHARED_LINKER_FLAGS as well.
-
-Disable File2Page along with PageCompiler, and tie the ActiveRecord
-compiler to the ActiveRecord component, to match what the legacy make
-build system omitted.
-
-This patch is based on this one:
-https://lists.buildroot.org/pipermail/buildroot/2026-April/801019.html
-
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Assisted-by: Claude:claude-opus-5
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/poco/Config.in |  1 +
- package/poco/poco.mk   | 98 +++++++++++++++++-------------------------
- 2 files changed, 40 insertions(+), 59 deletions(-)
+ package/poco/poco.hash | 2 +-
+ package/poco/poco.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/poco/Config.in b/package/poco/Config.in
-index 4801b36a24..b0eeaa1dd8 100644
---- a/package/poco/Config.in
-+++ b/package/poco/Config.in
-@@ -94,6 +94,7 @@ config BR2_PACKAGE_POCO_NETSSL_OPENSSL
- 
- config BR2_PACKAGE_POCO_PDF
- 	bool "PDF"
-+	select BR2_PACKAGE_LIBPNG
- 	select BR2_PACKAGE_POCO_JSON
- 	select BR2_PACKAGE_POCO_UTIL
- 	select BR2_PACKAGE_POCO_XML
+diff --git a/package/poco/poco.hash b/package/poco/poco.hash
+index 6979a9a1e4..4c132f9742 100644
+--- a/package/poco/poco.hash
++++ b/package/poco/poco.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  47394ea7ddb7b0a40e1a5be896f8f5dc77cfdc4f561d2e7131ecf582df5a0c3a  poco-1.14.2.tar.gz
++sha256  4f112fea59e0c65f0fffe30a4957f8d66cf41528c21dd9903e6d7550022c794e  poco-1.15.3.tar.gz
+ sha256  c4b1e1e5f36d8331737231fefcc30f5714326aec7c387ad59a8115eb0ba7d6b5  LICENSE
 diff --git a/package/poco/poco.mk b/package/poco/poco.mk
-index 40dcc1c502..63279d530e 100644
+index 63279d530e..7e2a9014bd 100644
 --- a/package/poco/poco.mk
 +++ b/package/poco/poco.mk
-@@ -22,80 +22,60 @@ POCO_DEPENDENCIES = \
- 	$(if $(BR2_PACKAGE_POCO_DATA_SQLITE),sqlite) \
- 	$(if $(BR2_PACKAGE_POCO_DATA_PGSQL),postgresql) \
- 	$(if $(BR2_PACKAGE_POCO_NETSSL_OPENSSL),openssl) \
-+	$(if $(BR2_PACKAGE_POCO_PDF),libpng) \
- 	$(if $(BR2_PACKAGE_POCO_XML),expat)
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--POCO_OMIT = \
--	Data/ODBC \
--	PageCompiler \
--	$(if $(BR2_PACKAGE_POCO_ACTIVERECORD),,ActiveRecord) \
--	$(if $(BR2_PACKAGE_POCO_CPP_PARSER),,CppParser) \
--	$(if $(BR2_PACKAGE_POCO_CRYPTO),,Crypto) \
--	$(if $(BR2_PACKAGE_POCO_DATA),,Data) \
--	$(if $(BR2_PACKAGE_POCO_DATA_MYSQL),,Data/MySQL) \
--	$(if $(BR2_PACKAGE_POCO_DATA_SQLITE),,Data/SQLite) \
--	$(if $(BR2_PACKAGE_POCO_DATA_PGSQL),,Data/PostgreSQL) \
--	$(if $(BR2_PACKAGE_POCO_JSON),,JSON) \
--	$(if $(BR2_PACKAGE_POCO_JWT),,JWT) \
--	$(if $(BR2_PACKAGE_POCO_MONGODB),,MongoDB) \
--	$(if $(BR2_PACKAGE_POCO_NET),,Net) \
--	$(if $(BR2_PACKAGE_POCO_NETSSL_OPENSSL),,NetSSL_OpenSSL) \
--	$(if $(BR2_PACKAGE_POCO_PDF),,PDF) \
--	$(if $(BR2_PACKAGE_POCO_PROMETHEUS),,Prometheus) \
--	$(if $(BR2_PACKAGE_POCO_REDIS),,Redis) \
--	$(if $(BR2_PACKAGE_POCO_UTIL),,Util) \
--	$(if $(BR2_PACKAGE_POCO_XML),,XML) \
--	$(if $(BR2_PACKAGE_POCO_ZIP),,Zip)
-+# PageCompiler and File2Page are code generators that are of no use on
-+# the target, and ODBC support is not wired up in Buildroot.
-+POCO_CONF_OPTS = \
-+	-DENABLE_DATA_ODBC=OFF \
-+	-DENABLE_PAGECOMPILER=OFF \
-+	-DENABLE_PAGECOMPILER_FILE2PAGE=OFF \
-+	-DENABLE_ACTIVERECORD=$(if $(BR2_PACKAGE_POCO_ACTIVERECORD),ON,OFF) \
-+	-DENABLE_ACTIVERECORD_COMPILER=$(if $(BR2_PACKAGE_POCO_ACTIVERECORD),ON,OFF) \
-+	-DENABLE_CPPPARSER=$(if $(BR2_PACKAGE_POCO_CPP_PARSER),ON,OFF) \
-+	-DENABLE_CRYPTO=$(if $(BR2_PACKAGE_POCO_CRYPTO),ON,OFF) \
-+	-DENABLE_DATA=$(if $(BR2_PACKAGE_POCO_DATA),ON,OFF) \
-+	-DENABLE_DATA_MYSQL=$(if $(BR2_PACKAGE_POCO_DATA_MYSQL),ON,OFF) \
-+	-DENABLE_DATA_SQLITE=$(if $(BR2_PACKAGE_POCO_DATA_SQLITE),ON,OFF) \
-+	-DENABLE_DATA_POSTGRESQL=$(if $(BR2_PACKAGE_POCO_DATA_PGSQL),ON,OFF) \
-+	-DENABLE_JSON=$(if $(BR2_PACKAGE_POCO_JSON),ON,OFF) \
-+	-DENABLE_JWT=$(if $(BR2_PACKAGE_POCO_JWT),ON,OFF) \
-+	-DENABLE_MONGODB=$(if $(BR2_PACKAGE_POCO_MONGODB),ON,OFF) \
-+	-DENABLE_NET=$(if $(BR2_PACKAGE_POCO_NET),ON,OFF) \
-+	-DENABLE_NETSSL=$(if $(BR2_PACKAGE_POCO_NETSSL_OPENSSL),ON,OFF) \
-+	-DENABLE_PDF=$(if $(BR2_PACKAGE_POCO_PDF),ON,OFF) \
-+	-DENABLE_PROMETHEUS=$(if $(BR2_PACKAGE_POCO_PROMETHEUS),ON,OFF) \
-+	-DENABLE_REDIS=$(if $(BR2_PACKAGE_POCO_REDIS),ON,OFF) \
-+	-DENABLE_UTIL=$(if $(BR2_PACKAGE_POCO_UTIL),ON,OFF) \
-+	-DENABLE_XML=$(if $(BR2_PACKAGE_POCO_XML),ON,OFF) \
-+	-DENABLE_ZIP=$(if $(BR2_PACKAGE_POCO_ZIP),ON,OFF) \
-+	-DPOCO_UNBUNDLED=ON
-+
-+# POCO_NO_FPENVIRONMENT and POCO_NO_WSTRING are plain preprocessor
-+# defines, not CMake options, so they have to be passed as compiler flags.
-+POCO_CXXFLAGS = $(TARGET_CXXFLAGS)
- 
- ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
--POCO_CONF_OPTS += --no-fpenvironment --no-wstring
-+POCO_CXXFLAGS += -DPOCO_NO_FPENVIRONMENT -DPOCO_NO_WSTRING
- endif
- 
- # architectures missing some FE_* in their fenv.h
- ifeq ($(BR2_sh4a),y)
--POCO_CONF_OPTS += --no-fpenvironment
-+POCO_CXXFLAGS += -DPOCO_NO_FPENVIRONMENT
- endif
- 
- # disable fpenvironment for soft floating point configuration
- ifeq ($(BR2_SOFT_FLOAT),y)
--POCO_CONF_OPTS += --no-fpenvironment
-+POCO_CXXFLAGS += -DPOCO_NO_FPENVIRONMENT
- endif
- 
--POCO_MAKE_TARGET = shared_release
-+POCO_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(POCO_CXXFLAGS)"
- 
--POCO_LDFLAGS=$(TARGET_LDFLAGS)
- ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
--POCO_LDFLAGS += -latomic
-+POCO_CONF_OPTS += \
-+	-DCMAKE_EXE_LINKER_FLAGS=-latomic \
-+	-DCMAKE_SHARED_LINKER_FLAGS=-latomic
- endif
- 
--define POCO_CONFIGURE_CMDS
--	(cd $(@D); $(TARGET_MAKE_ENV) ./configure \
--		--config=Linux \
--		--prefix=/usr \
--		--ldflags="$(POCO_LDFLAGS)" \
--		--omit="$(POCO_OMIT)" \
--		$(POCO_CONF_OPTS) \
--		--unbundled \
--		--no-tests \
--		--no-samples)
--endef
--
--define POCO_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) POCO_TARGET_OSARCH=$(ARCH) CROSS_COMPILE=$(TARGET_CROSS) \
--		POCO_MYSQL_INCLUDE=$(STAGING_DIR)/usr/include/mysql \
--		POCO_MYSQL_LIB=$(STAGING_DIR)/usr/lib/mysql \
--		POCO_PGSQL_INCLUDE=$(STAGING_DIR)/usr/include/postgresql \
--		POCO_PGSQL_LIB=$(STAGING_DIR)/usr/lib/postgresql \
--		DEFAULT_TARGET=$(POCO_MAKE_TARGET) -C $(@D)
--endef
--
--define POCO_INSTALL_STAGING_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) DESTDIR=$(STAGING_DIR) POCO_TARGET_OSARCH=$(ARCH) \
--		DEFAULT_TARGET=$(POCO_MAKE_TARGET) install -C $(@D)
--endef
--
--define POCO_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) DESTDIR=$(TARGET_DIR) POCO_TARGET_OSARCH=$(ARCH) \
--		DEFAULT_TARGET=$(POCO_MAKE_TARGET) install -C $(@D)
--endef
--
--$(eval $(generic-package))
-+$(eval $(cmake-package))
+-POCO_VERSION = 1.14.2
++POCO_VERSION = 1.15.3
+ POCO_SITE = $(call github,pocoproject,poco,poco-$(POCO_VERSION)-release)
+ POCO_LICENSE = BSL-1.0
+ POCO_LICENSE_FILES = LICENSE
 -- 
 2.47.3
 
