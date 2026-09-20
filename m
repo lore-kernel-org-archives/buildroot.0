@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C76EFC982DA
-	for <buildroot@archiver.kernel.org>; Sun, 20 Sep 2026 17:19:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7ABBAC982D8
+	for <buildroot@archiver.kernel.org>; Sun, 20 Sep 2026 17:19:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9058840D90;
-	Sun, 20 Sep 2026 17:19:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4A00240FBC;
+	Sun, 20 Sep 2026 17:19:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HJTpMfJ_5hEL; Sun, 20 Sep 2026 17:19:13 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 2067340F5A
+ id oUhHtipIAGtW; Sun, 20 Sep 2026 17:19:24 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 542D040E30
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789924753;
-	b=XDu9GjOQ5lwReovx9ebuxno0llUG+qmsx02BuAG812vmJGcVCPumXPTGHo+wL4EbDfvP
-	 5usjqvcqIlmKCOEg2ndtsrgtHlHjm1PAdgNQihI3hkvOg+8vd76c3K7CvQo02NYLOH8jX
-	 tXnUYYrDZXWEBiMZMLe5nxUUb7Rje9rxTD2uACPreXGCbGASaS3BS6akIBFx7L9fH+xPo
-	 nXWNF0APMovNTB326JHON5dJY2Y8dnbjr6f9dcLocDwrG7WC7p34uItlOvAFGcPZwua81
-	 jBIxJyApAPySO51W9WJNbwVS5Y2F0x7ElRKMe/EI41kYD9fqBIrIHV+j4FP0/nNarew==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789924764;
+	b=jjeMA4yUcDV8WgtNu+3oO6Ann5iwP49CVkecFwPcnuMo+6c6L/U4NWHXbT1IAAIff0+0
+	 NFlT6rBRcUW/cumVxjOS95gZdCbz4wsL7I4bssqTN7ufkXbwd5PyZyVi+0D9ddCN339x8
+	 T6Rt6vmyX8Jbngt9kGoo9N+AOSTrEbnkbL5wBb8+4zm7Ej/pXfkExarFOpsimVXJTYJY+
+	 WJD2R4SiCYg1jJQZ6rbhM9Rto7NJwwZI5/m31KOBDp2mjUgudf6OfMh1hpa4D066ITYpk
+	 a8G1a3QalzM7HlPkgp+6JzyZ1PSw5viRBQ5u419Fi/we+Imz2VyJhHJi+f8pv/cWdeg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789924753;
+	c=relaxed/relaxed; t=1789924764;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
@@ -31,103 +31,103 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:Cc:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=E8+qqsofRKJaQn3mUqUVdrNlKahRmKK8kQGPLWEHC9s=;
-	b=Zh/iM8GaKghdrZg+vgAXj576RCBKsRjd6Oh12Kq+MfEdZwPLbsrxgn6bmi/LjpUcKx3p
-	 Tjn9mtI//5BQeoelFJIa6MexOgm/KQnOepmXtDYe43WqPzloyia+3H1yDAwywiLIFYJju
-	 idvUb6E63Lyn6QzZmwiA4kifCM5qGMEzTdWNB6FuhN7SZjAJYHDGc+9JqYTEfGLOdiGHo
-	 Ba2JF4Nht68/+iaNy8p+uSPfDoh3QV6oiIwVD+QKEluc47lq3UGSVqzATpjHufS8jNz/i
-	 YQXUzSmZsqOJe2s6jHxGUJvvinSfW6PpIUclp2TMpyTy/pk96FLY1AjxSfg5r/KXIGg==
+	bh=WJzF32aQ1RMys9fT+vk0JJoYyJ/7s3OHnmc8AP32+1c=;
+	b=RLMHipyRa5tWpWtSVkckVGsAlO/J1tpcm0Ewan0oW5SykNIyCdHI9IMzjaXXm19R12PN
+	 O0uMZ/PxDQfNiFd52w/Dx90p6+/FLNK4YnMQZM32Abcbx9nlbbzSu0mmY0sl3YxfI5OxU
+	 INEvSrRESE0P0L+BVVpr/WTQQ9AIXMzIU8lONcyoTXM2ArOT5KWT7aAQ52L4LnnK+5i7z
+	 Odfo1XKD9BhSST2w5auN7aQmQtgey5zl7LKhhuv+fE1M2cJ/zP+XAEVSBDiuBI39OmiPR
+	 4jrMafrVsgKXsvwTAbXCByRosiF4hd9TVEnJuc7RXkyNv+dmdZ+lbntFcFG1YeGhUNg==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789924753;
-	bh=E8+qqsofRKJaQn3mUqUVdrNlKahRmKK8kQGPLWEHC9s=;
+	s=default; t=1789924764;
+	bh=WJzF32aQ1RMys9fT+vk0JJoYyJ/7s3OHnmc8AP32+1c=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=nnIcZ9y5Gu+BsThJDlLvCQvtOEhxN+dVX9TfgYZb3OXjwtQQ7rXHHQbimeYWAx60g
-	 E44MnrHg5ax5MFRD/iqguyQ+VJOTI2rzGceK2iuvNBln2G8AXfa23bcRTKRFoEG1j6
-	 a7e/QwgqdnqsqBd/2CQvfrAfUGShrrx4bho5pL+qo4bPzWzNSd50erigov4m3B5bpV
-	 GP8cWwA+l+BuRk1ZRgTF8iiRL5ZVboo+HanJDwadcF//0CgzlXGmr0LctEWfjlr0ln
-	 6vAdISucZ2DBcn/ih184YzcrfiIC2sWLAnQKyfHGVFSmtujaZWAx2BCthi8KAY3h0U
-	 Y0AIMpYydZRAw==
+	b=PuOCQNrD6b+sCKGtuYMC94mfIIJv1ie52LMQBkcmz6FJg5T7ck+a3mA4q4Bd+mlS/
+	 eklxNGwYhMacTa1uyAJaaZDakIzCgNYCHRcsvf82kycIhBB/J4efLRWZvc1aB8Jza9
+	 Yc3VevzlPN0OsO/IUcmP4z2gtZD2gEV90H7sr3P4ShCzvOa48mZdjwzSTDsxSPzEE/
+	 9vmkbOfYKwAb4bG9+Hgdey3lQX8eHxju1ZWE1nN/UcIEqrua/2Tmgv0zoTsRVbgWsG
+	 ma3LC/HXi56g9MnIGpQ7O11A7q6DtMDTHO9aMj994hIoALxlonlyOhTaHIZk0N8HnI
+	 WLk4y/dr601zg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2067340F5A;
-	Sun, 20 Sep 2026 17:19:13 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id EE22C3FA
- for <buildroot@buildroot.org>; Sun, 20 Sep 2026 17:19:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 542D040E30;
+	Sun, 20 Sep 2026 17:19:24 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 555A13FA
+ for <buildroot@buildroot.org>; Sun, 20 Sep 2026 17:19:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DFA4660601
- for <buildroot@buildroot.org>; Sun, 20 Sep 2026 17:19:11 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 52E9980DC5
+ for <buildroot@buildroot.org>; Sun, 20 Sep 2026 17:19:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DSKw5sleDUJn for <buildroot@buildroot.org>;
- Sun, 20 Sep 2026 17:19:10 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 48D02606FA
-Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789924750;
- b=EBjpiPgDGTo0G35vq1318PS+EOS9mqXT7lcRV4nYpn5sEBc3sW4vlWbUIwITXheERsUN
- 26OCLYcM82G1ADmYCGoDOiww7veHPq9CQRqiBC99Gvocl41ROWeKXfp2585oDizGiCTYI
- SW4wQDZC4VUGU1G9x4rs0HicEqMA4apUtbgLSxq5XtrUTLM8uIXjHkY7hFOrD+EBpPUGt
- x6xwCI3cUijNOMs/p7D0UNTLdqioKfASVQ4ySgGjaiIrvpK+CiRFLLdud7EQWYMsgc58x
- fGgw59Lr9Z6xqH80s48kwvq9nlCNWaMmJ7Bt/4dc1Kw08NEleLzi511SPlihcuL+OTw==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZBnjMHhowLkY for <buildroot@buildroot.org>;
+ Sun, 20 Sep 2026 17:19:22 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 2C3F280DC2
+Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789924762;
+ b=L6iZNqFeFPTZyOUvTUlW1nZ9k4jfJtArRpc0xLxOpvQd8dLhdZCcGv0Fj83MJNUUsxpA
+ 3+4oxsgYD38lf9/90JfNVOZFO5FloPqn2dAsRVgBQyRbx9w9py/hVwNeom/uPsjL/WOHZ
+ zOr9oXOlBDrwVCOVJ7C7EkKvjMZm5Fe/5LMOsD6M+pg7mN2/LGDQzhP+Ymhvyp7/m0uex
+ 9F9F+OG1c7dq9iurYk1XQpFEp5NNAkNUwy3/wIVosii5CW6VpLIG4gmNgvu2tKUFuc6EX
+ IB3L00AquRkBU90KQ7IhtjeZpe7VSJ12furE/TMxYYvSfMwXf6KxoaNGNbDSyc6tBZA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1789924750;
+ c=relaxed/relaxed; t=1789924762;
  h=Received-SPF:DKIM-Signature:X-KAS-Sym:Received:Received:From:To:Cc:
  Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding:X-Spam-Score:X-Spamd-Bar;
- bh=mS4JLavjzPnQeAKk7KeczDb6jqM5ePHP1MWrtE+89LQ=;
- b=UcTCqbzeIGNSdOV7sXO11OTGsZMz4E6f5tRPVjoA8nhpK6Jznql7O33v6nFtKBvYfLkO
- hSaMw44WE1gUb1hF8xr5pS1BhO4YFTDSDNrfoUkeLDd+V7p1/ckcboDjmgK2eOejk0KmS
- wpvON4q6iQsYbbH1yi0fEj6ab+Tj/KVaGkinxLGHpT7O9CQrmTv9K5R7b3FKkSoJvQf1N
- sfI/idzwexuT0GkjqClrek/Ed+9oI8FXKxDpdLf+YV/nc8CkM2q3vX64gD0sqhunOJ4XT
- Mga7Lhs4UGSVXxxe7kyp+dswv1+Xss214pBSCOFVpzo8wMj9j23JuS2O2BzCeRH/aWA==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org;
+ bh=0Gt9QeeoKRBd/HmqYihaOYSmW8EEm7wN5WmmlIkHDmw=;
+ b=MWV59YBw0tcTJHQHGs2yb2c/PzHXsuQnPDybj55E9vFh0fyu4LHp2WWQ43ftDFtrAjtn
+ dOTdSJwev/dWm3EIPaR46PcOvQd2v1xkHCSAP4kBk+ChzRQiHukBPAeNiJzb0wJpFX1xV
+ lovkccv9/mxY83LYbtGAuzoTif5fOe/hst0/RFvdftYdkIzK6Zi7ra42/s6OokJMvNrQ3
+ R+rmahZUDsOXkCWjAxwKMs47CrkhSV/8q7JImHJKOIhj+6LuZQPBG/uYnVho/pWct1QJ7
+ 02EUd4ChTJIhLMsc+GuR3oqTY2w/7LqyIftVLmtxU9O8Jawsg3MJD5WraYfu8VACPUw==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org;
  dmarc=pass header.from=kuhls.net; 
  dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=SDS0bkRo; 
+ header.s=kas202605290044 header.b=MpViejLW; 
  arc=none smtp.remote-ip=85.13.140.57
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-Authentication-Results: smtp3.osuosl.org;
+Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=kuhls.net
-Authentication-Results: smtp3.osuosl.org;
+Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202605290044 header.b=SDS0bkRo
+ header.a=rsa-sha256 header.s=kas202605290044 header.b=MpViejLW
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 48D02606FA
- for <buildroot@buildroot.org>; Sun, 20 Sep 2026 17:19:10 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2C3F280DC2
+ for <buildroot@buildroot.org>; Sun, 20 Sep 2026 17:19:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
  s=kas202605290044; t=1789924162;
- bh=mS4JLavjzPnQeAKk7KeczDb6jqM5ePHP1MWrtE+89LQ=;
+ bh=0Gt9QeeoKRBd/HmqYihaOYSmW8EEm7wN5WmmlIkHDmw=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=SDS0bkRoo7CO7zJDoKS5kRXLkK5ci6d36Bpfjvd7F9KHSIkQLEUeSi4OY8S0KWAY0
- 8T9T4V/LW0N5MBCtEmAvVM2JaCoQu6w+jijk2fYQu4baXBaNiKqeVUrn/iZNK5VB76
- dvdo5Eg6qlz/+5VF59pZwhUtCN+v8bc1BrMaGhRlyM6+qGfa9HGHPXqmeHxQ8ROzC6
- qVoClizEbUG1IcEyKD4R5RvFK8KM8P2tCS4kIQQbaWhxosJPL3qnf01l5as7h+sc/t
- E2ETxsHm37EqCXfx51qUaxwhqU0VPzfNq7yX2Rs//N6vtTj5BiFYExYv0wMUAMl6+t
- jCqU2fMq6LNEA==
-X-KAS-Sym: v3:f51bdf72230551df:lHdkWXAlOH3mFYa7MPhN/Q5mZRaSllnUONUXNce4VNqCbu40d29sJoTMWL/UgPpKmiu+oFAK+SGKiz0pvNPHzzdK8865J0NZZhjD1YGG6aDHJWSqGt9pmYaVeClFza2NY+i+npE0hJgg/gHxSjO6xcwlUb6QQuNPO0hdPziIw4dhYYf4DJSWrRRzANCMomoD/RZTgi346Zz0eW33G9Vcp3B7DR+EaybhZMrqLCjEqGCkGFXPOjSjpT0/ayWciGjXWUz3QuiXUZXlIr+lNW1V5S5HyBJCR/w6EnvHAsYJhPTQhQAx4gJVctdz4XTCaIimRq6ACwja3Rp9OR6uCM1UuQ==:mI+Ep6+jmVv1Mf1ESkVT6WFWs+p05CCu/elDxhmjyUdtAxjTw+6b629N7SvGqNBaPIsM7l7xGh6I4g4gO018kftaCrdPVDuvPEwBZP3OhPXNPAOkPww8FaaXnlCddh7JR/VjvIThaCtidz6aSZU/BNBiq6El8VRbsBWAa1x3SF7ABWkPMkPmjpI20uoUmRCTH05YBC/y8qAek0IU5c+t8m5DePbcUh7SczrZvpGPJhj2D2cJPwDyxdZOnyAc2l3PVwTCpBBc/hhr7HjIbTR7zCA66IGVYqfEHNWd0989raTdBnKpIgRyi9EYYIsaXH6U9qnTLLGDYIl81PxabdYO1ZLqb+6Uf/sSrj83/U6vmXUCDNpj6kJNK3rHwMvv0SuMgxcfj9qsnx1W8Y0+YUnSX61LRwlI9QIlvAtxsc1GL4M1wO5mkkJitGnL5mZfhgCCnv6q5MyjA6wWOYE+0Xu3xfo/M1ma6RwR85IzsOH5obZSGe1wtIZeqVJbGuNZVnRl0igx3OQx6mitcHgHdfZwvEHoJBZN5Gy1RnUG/3tobC6mHV4zyWdllL+sMHkofiVlSogMY0jnmnByzS1ybMf2PMBnEGowt9efsrk8VX2TJrfBFv
- UA0TFyyx2eo6FiZlKVwoiqsqXVcXgil0Fh7oO9AB3Q+VUc+uW3CQs4lJhcbcoy1VlN++OoeHE=
+ b=MpViejLWfSKF5UG5WIgL66/Aobrs83V3rdYWpBNDQOSo01zVcED22/Jd0ZGrh9mDh
+ 014+z47UUcjg9W9vgyGHcGNu4p35H8ft1hUQziDcydOw7DJZMJDWu3A4PLvN5kbBxy
+ qlrDVKcV5sOQZEn2BKpy02/UQyr2fg9qxuq4CFLuhuIhK+weRJaD/HuBugUdHMMQ3S
+ QeZUHZ6/LhEpyG2dZgKq9lVXZXc/srg8rPU6ymN0yP6jPrz4WvrvAXocsSpacxqJmH
+ KDvxQZHivmhhcCku2nVIHrixC1KKj9LZfRaVErb1JvA3lZY8cfHa+ZGQW0lYoev+HW
+ 8eKezC3K3ZObA==
+X-KAS-Sym: v3:f51bdf72230551df:lHdkWXAlOH3mFYa7MPhN/Q5mZRaSllnUONUXNce4VNqCbu40d29sJoTMWL/UgPpKmiu+oFAK+SGKiz0pvNPHzzdK8865J0NZZhjD1YGG6aDHJWSqGt9pmYaVeClFza2NY+i+npE0hJgg/gHxSjO6xcwlUb6QQuNPO0hdPziIw4dhYYf4DJSWrRRzANCMomoD/RZTgi346Zz0eW33G9Vcp3B7DR+EaybhZMrqLCjEqGCkGFXPOjSjpT0/ayWciGjXWUz3QuiXUZXlIr+lNW1V5S5HyBJCR/w6EnvHAsYJhPTQhQAx4gJVctdz4XTCaIimRq6ACwja3Rp9OR6uCM1UuQ==:BWqMABryMqmmOZoN8UQmyzJn0CXsLH/9zpktblvcP4+WW+DR51/9P1rVLoglTNFaQDZqVc2QxWXD+E+rxh//RsqSv7JSkn0UxQVioMm95iqGPua/Xxudv0dgLBcLU/UloDSxtNPRaIjwKKyyeBm3R5GEUSDX6GHEcIeK6OtyWK+nYskF0sgPmx5SC/YgaY9nNLf2vQtzWNKA9gN0YTGuhxcSEGHM6d7t5IFX08Hec2uBqzOW4rsGq9eKUJXSVa/hyjq5GVBzfwt2Jt2rcxmcnP5Z5gnCRohoSowIrhfuMLI26J+Ap/h+FP9iN+ifbJemv3l3xp3vH3F0f+eTWWSLo5QRzmBIJeaUQrUTv2SFR1iucnPk8fOPm6jyPF/+lKWST3SPWqOummd3e7Q4Rc1SGhB6o3GofdnKka8Css5G/znWAcGjUbQ3+QBjqvqqPCq5fJMoUPGPbx72Lm/+YQnsl8e8uIFVUp2U8ruowjrMbnxH0iGWCYJETAfoY1aBIuSzq4zPrP/VjA6w33R2p4oUTONdDrItXuIHFYdTURyxYTaT7HLsvgMx5adpD87SJN5ysr4AuYdsAaaqDa6+MXiixfE+bfQxuElQALom/S6c2LWD6A
+ LOMl6kFH9beqafZXR7+eNF6MHbO9j46SMpuGCvAKxcAAegc+U/r+XTAlb4kys5L8f44NSDVwM=
 Received: from fli4l.lan.fli4l (p54a1b276.dip0.t-ipconnect.de [84.161.178.118])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id ECC2AA4C4898;
- Sun, 20 Sep 2026 19:09:21 +0200 (CEST)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id E3E87A4C489A;
+ Sun, 20 Sep 2026 19:09:22 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:57728)
  by fli4l.lan.fli4l with esmtp (Exim 4.100.1)
- (envelope-from <bernd@kuhls.net>) id 1x8L1c-000000000o7-0P2M;
+ (envelope-from <bernd@kuhls.net>) id 1x8L1c-000000000o7-2Usd;
  Sun, 20 Sep 2026 17:08:24 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sun, 20 Sep 2026 19:07:47 +0200
-Message-ID: <20260920170815.240247-41-bernd@kuhls.net>
+Date: Sun, 20 Sep 2026 19:07:49 +0200
+Message-ID: <20260920170815.240247-43-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260920170815.240247-1-bernd@kuhls.net>
 References: <20260920170815.240247-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: -
-Subject: [Buildroot] [PATCH v5 40/67] package/luvi: Fix build with OpenSSL
+X-Spamd-Bar: /
+Subject: [Buildroot] [PATCH v5 42/67] package/mtd: Fix build with OpenSSL
  4.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -176,419 +176,78 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- .../luvi/0002-feat-support-openssl-4.0.patch  | 403 ++++++++++++++++++
- 1 file changed, 403 insertions(+)
- create mode 100644 package/luvi/0002-feat-support-openssl-4.0.patch
+ ...t-compile-engine-support-if-not-avai.patch | 62 +++++++++++++++++++
+ 1 file changed, 62 insertions(+)
+ create mode 100644 package/mtd/0001-ubifs-utils-Don-t-compile-engine-support-if-not-avai.patch
 
-diff --git a/package/luvi/0002-feat-support-openssl-4.0.patch b/package/luvi/0002-feat-support-openssl-4.0.patch
+diff --git a/package/mtd/0001-ubifs-utils-Don-t-compile-engine-support-if-not-avai.patch b/package/mtd/0001-ubifs-utils-Don-t-compile-engine-support-if-not-avai.patch
 new file mode 100644
-index 0000000000..fa35b70435
+index 0000000000..21fc2ca2fd
 --- /dev/null
-+++ b/package/luvi/0002-feat-support-openssl-4.0.patch
-@@ -0,0 +1,403 @@
-+From 529b4a42eeb2b77f8f8c829f856977c5b50d0b7b Mon Sep 17 00:00:00 2001
-+From: zhaozg <zhaozg@gmail.com>
-+Date: Thu, 16 Apr 2026 14:04:32 +0800
-+Subject: [PATCH] feat: support openssl 4.0
++++ b/package/mtd/0001-ubifs-utils-Don-t-compile-engine-support-if-not-avai.patch
+@@ -0,0 +1,62 @@
++From 50136f0ec6d8c9763889d49b31ca6965189afba5 Mon Sep 17 00:00:00 2001
++From: Sebastian Andrzej Siewior <sebastian@breakpoint.cc>
++Date: Sat, 29 Aug 2026 19:25:02 +0200
++Subject: [PATCH] ubifs-utils: Don't compile engine support if not available
 +
-+Upstream: https://github.com/zhaozg/lua-openssl/commit/529b4a42eeb2b77f8f8c829f856977c5b50d0b7b
++OpenSSL 4.0 dropped engine support which was deprecated since 3.0. The
++replacement is the "providers" API.
++
++Add an ifndef OPENSSL_NO_ENGINE around the engine code so it can be left
++out where it is not supported.
++
++Signed-off-by: Sebastian Andrzej Siewior <sebastian@breakpoint.cc>
++
++Upstream: https://lists.infradead.org/pipermail/linux-mtd/2026-August/114868.html
 +
 +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 +---
-+ deps/lua-openssl/src/asn1.c      | 59 +++++++++++++++++++++++++++++++------------------
-+ deps/lua-openssl/src/crl.c       |  9 ++++----
-+ deps/lua-openssl/src/csr.c       | 30 +++++++++++++++++--------
-+ deps/lua-openssl/src/openssl.c   |  2 ++
-+ deps/lua-openssl/src/private.h   |  2 +-
-+ deps/lua-openssl/src/ssl.c       |  2 +-
-+ deps/lua-openssl/src/x509.c      |  2 +-
-+ deps/lua-openssl/src/xalgor.c    |  2 +-
-+ deps/lua-openssl/src/xname.c     |  2 +-
-+ deps/lua-openssl/test/helper.lua |  2 +-
-+ 10 files changed, 71 insertions(+), 41 deletions(-)
++ ubifs-utils/common/sign.c | 10 +++++++++-
++ 1 file changed, 9 insertions(+), 1 deletion(-)
 +
-+diff --git a/deps/lua-openssl/src/asn1.c b/deps/lua-openssl/src/asn1.c
-+index d7972738..566d78ee 100644
-+--- a/deps/lua-openssl/src/asn1.c
-++++ b/deps/lua-openssl/src/asn1.c
-+@@ -499,7 +499,14 @@ openssl_asn1object_new(lua_State *L)
-+       ret = 1;
-+     }
-+   } else if (lua_isnone(L, 1)) {
-+-    ASN1_OBJECT *obj = ASN1_OBJECT_new();
-++    /* ASN1_OBJECT_new() is deprecated in OpenSSL 4.0,
-++     * but there's no direct replacement for creating an empty object.
-++     * We create an object from a dummy NID instead. */
-++    ASN1_OBJECT *obj = OBJ_nid2obj(NID_undef);
-++    if (obj == NULL) {
-++        /* Fallback: create from empty string */
-++        obj = OBJ_txt2obj("", 1);
-++    }
-+     PUSH_OBJECT(obj, "openssl.asn1_object");
-+     ret = 1;
-+   }
-+@@ -658,11 +665,13 @@ openssl_push_asn1type(lua_State *L, const ASN1_TYPE *type)
-+ {
-+   lua_newtable(L);
++diff --git a/ubifs-utils/common/sign.c b/ubifs-utils/common/sign.c
++index 032a6ac..5f94c0a 100644
++--- a/ubifs-utils/common/sign.c
+++++ b/ubifs-utils/common/sign.c
++@@ -23,11 +23,14 @@
++ #include <openssl/bio.h>
++ #include <openssl/pem.h>
++ #include <openssl/err.h>
++-#include <openssl/engine.h>
++ #include <openssl/cms.h>
++ #include <openssl/conf.h>
++ #include <err.h>
 + 
-+-#define P(V, v)                                                                                    \
-+-  case V_##V: {                                                                                    \
-+-    V *s = (V *)type->value.ptr;                                                                   \
-+-    AUXILIAR_SETLSTR(L, -1, "value", (const char *)s->data, s->length);                            \
-+-    break;                                                                                         \
-++#define P(V, v)                                                  \
-++  case V_##V: {                                                  \
-++    V *s = (V *)type->value.ptr;                                 \
-++    AUXILIAR_SETLSTR(L, -1, "value",                             \
-++                     (const char *)ASN1_STRING_get0_data(s),     \
-++                     ASN1_STRING_length(s));                     \
-++    break;                                                       \
-+   }
-+ 
-+   switch (type->type) {
-+@@ -695,7 +704,7 @@ openssl_push_asn1type(lua_State *L, const ASN1_TYPE *type)
-+ 
-+   default: {
-+     ASN1_STRING *s = (ASN1_STRING *)type->value.asn1_string;
-+-    AUXILIAR_SETLSTR(L, -1, "value", (const char *)s->data, s->length);
-++    AUXILIAR_SETLSTR(L, -1, "value", ASN1_STRING_get0_data(s), ASN1_STRING_length(s));
-+     break;
-+   }
-+   }
-+@@ -1004,8 +1013,9 @@ openssl_asn1group_set(lua_State *L)
-+ {
-+   ASN1_STRING *s = CHECK_GROUP(1, ASN1_STRING, "openssl.asn1group");
-+   int          ret = 1;
-++  int          type = ASN1_STRING_type(s);
-+ 
-+-  switch (s->type) {
-++  switch (type) {
-+   case V_ASN1_INTEGER: {
-+     ASN1_INTEGER *ai = CHECK_OBJECT(1, ASN1_INTEGER, "openssl.asn1_integer");
-+     long          v = luaL_checklong(L, 2);
-+@@ -1044,16 +1054,19 @@ static time_t
-+ ASN1_TIME_get(ASN1_TIME *time, time_t off)
-+ {
-+   struct tm   t;
-+-  const char *str = (const char *)time->data;
-+   size_t      i = 0;
-++  const char *str = (const char *)ASN1_STRING_get0_data(time);
-++  size_t      len = ASN1_STRING_length(time);
-++  int         type = ASN1_STRING_type(time);
-+ 
-++  if (len < 13) return 0;  /* Invalid time format */
-+   memset(&t, 0, sizeof(t));
-+ 
-+-  if (time->type == V_ASN1_UTCTIME) /* two digit year */ {
-++  if (type == V_ASN1_UTCTIME) /* two digit year */ {
-+     t.tm_year = (str[i++] - '0') * 10;
-+     t.tm_year += (str[i++] - '0');
-+     if (t.tm_year < 70) t.tm_year += 100;
-+-  } else if (time->type == V_ASN1_GENERALIZEDTIME) /* four digit year */ {
-++  } else if (type == V_ASN1_GENERALIZEDTIME) /* four digit year */ {
-+     t.tm_year = (str[i++] - '0') * 1000;
-+     t.tm_year += (str[i++] - '0') * 100;
-+     t.tm_year += (str[i++] - '0') * 10;
-+@@ -1086,7 +1099,7 @@ openssl_asn1group_get(lua_State *L)
-+ {
-+   ASN1_STRING *s = CHECK_GROUP(1, ASN1_STRING, "openssl.asn1group");
-+   int          ret = 0;
-+-  switch (s->type) {
-++  switch (ASN1_STRING_type(s)) {
-+   case V_ASN1_INTEGER: {
-+     ASN1_INTEGER *ai = CHECK_OBJECT(1, ASN1_INTEGER, "openssl.asn1_integer");
-+     BIGNUM       *bn = ASN1_INTEGER_to_BN(ai, NULL);
-+@@ -1128,7 +1141,7 @@ openssl_asn1group_i2d(lua_State *L)
-+     break;                                                                                         \
-+   }
-+ 
-+-  switch (s->type) {
-++  switch (ASN1_STRING_type(s)) {
-+     /*
-+     P(ASN1_BOOLEAN);
-+     case V_ASN1_BOOLEAN:
-+@@ -1220,7 +1233,7 @@ openssl_asn1group_d2i(lua_State *L)
-+     break;                                                                                         \
-+   }
-+ 
-+-  switch (s->type) {
-++  switch (ASN1_STRING_type(s)) {
-+     /*
-+     P(ASN1_BOOLEAN);
-+     case V_ASN1_BOOLEAN:
-+@@ -1374,7 +1387,8 @@ openssl_asn1group_eq(lua_State *L)
-+   ASN1_STRING *s = CHECK_GROUP(1, ASN1_STRING, "openssl.asn1group");
-+   ASN1_STRING *ss = CHECK_GROUP(2, ASN1_STRING, "openssl.asn1group");
-+ 
-+-  lua_pushboolean(L, (s->type == ss->type && ASN1_STRING_cmp(s, ss) == 0));
-++  lua_pushboolean(L, (ASN1_STRING_type(s) == ASN1_STRING_type(ss)
-++                      && ASN1_STRING_cmp(s, ss) == 0));
-+   return 1;
-+ }
-+ 
-+@@ -1434,7 +1448,7 @@ openssl_asn1group_toprint(lua_State *L)
-+   unsigned long flags = luaL_optint(L, 2, 0);
-+   BIO          *out = BIO_new(BIO_s_mem());
-+   BUF_MEM      *mem;
-+-  switch (s->type) {
-++  switch (ASN1_STRING_type(s)) {
-+   case V_ASN1_UTCTIME: {
-+     ASN1_TIME *a = (ASN1_TIME *)s;
-+     ASN1_TIME_print(out, a);
-+@@ -1484,7 +1498,7 @@ static int
-+ openssl_asn1group_dup(lua_State *L)
-+ {
-+   ASN1_STRING *s = CHECK_GROUP(1, ASN1_STRING, "openssl.asn1group");
-+-  openssl_push_asn1(L, s, s->type);
-++  openssl_push_asn1(L, s, ASN1_STRING_type(s));
-+   return 1;
-+ }
-+ 
-+@@ -1517,7 +1531,7 @@ openssl_asn1time_adj(lua_State *L)
-+   int        offset_day = luaL_optint(L, 3, 0);
-+   long       offset_sec = luaL_optlong(L, 4, 0);
-+ 
-+-  switch (at->type) {
-++  switch (ASN1_STRING_type(at)) {
-+   case V_ASN1_UTCTIME: {
-+     ASN1_UTCTIME *a = (ASN1_UTCTIME *)at;
-+     ASN1_UTCTIME_adj(a, t, offset_day, offset_sec);
-+@@ -1549,7 +1563,7 @@ openssl_asn1time_diff(lua_State *L)
-+   ASN1_TIME *from = CHECK_OBJECT(1, ASN1_TIME, "openssl.asn1_time");
-+   ASN1_TIME *to = lua_isnoneornil(L, 2) ? NULL : CHECK_OBJECT(2, ASN1_TIME, "openssl.asn1_time");
-+ 
-+-  luaL_argcheck(L, to->type == from->type, 2, "asn1_time with mismatched type");
-++  luaL_argcheck(L, ASN1_STRING_type(to) == ASN1_STRING_type(from), 2, "asn1_time with mismatched type");
-+ 
-+   ret = ASN1_TIME_diff(&day, &sec, from, to);
-+   if (ret == 1) {
-+@@ -1644,12 +1658,13 @@ openssl_push_asn1object(lua_State *L, const ASN1_OBJECT *obj)
-+ int
-+ openssl_push_asn1(lua_State *L, const ASN1_STRING *string, int type)
-+ {
-+-  if ((string->type & V_ASN1_GENERALIZEDTIME) == V_ASN1_GENERALIZEDTIME && type == V_ASN1_UTCTIME)
-++  int strType = ASN1_STRING_type(string);
-++  if ((strType & V_ASN1_GENERALIZEDTIME) == V_ASN1_GENERALIZEDTIME && type == V_ASN1_UTCTIME)
-+     type = V_ASN1_GENERALIZEDTIME;
-+-  else if ((string->type & V_ASN1_UTCTIME) == V_ASN1_UTCTIME && type == V_ASN1_GENERALIZEDTIME)
-++  else if ((strType & V_ASN1_UTCTIME) == V_ASN1_UTCTIME && type == V_ASN1_GENERALIZEDTIME)
-+     type = V_ASN1_UTCTIME;
-+   else if (type == V_ASN1_UNDEF)
-+-    type = string->type;
-++    type = strType;
-+ 
-+   switch (type) {
-+   case V_ASN1_INTEGER: {
-+diff --git a/deps/lua-openssl/src/crl.c b/deps/lua-openssl/src/crl.c
-+index 4950b4ca..2958daa0 100644
-+--- a/deps/lua-openssl/src/crl.c
-++++ b/deps/lua-openssl/src/crl.c
-+@@ -770,7 +770,7 @@ static int openssl_crl_parse(lua_State *L)
-+       lua_setfield(L, -2, "sig_alg");
-+     }
-+ 
-+-    if (sig != NULL && sig->length > 0) {
-++    if (sig != NULL && ASN1_STRING_length(sig) > 0) {
-+       PUSH_ASN1_STRING(L, sig);
-+       lua_setfield(L, -2, "signature");
-+     }
-+@@ -995,16 +995,17 @@ static time_t
-+ ASN1_GetTimeT(const ASN1_TIME *time)
-+ {
-+   struct tm   t;
-+-  const char *str = (const char *)time->data;
-++  const char *str = ASN1_STRING_get0_data(time);
-++  int type = ASN1_STRING_type(time);
-+   size_t      i = 0;
-+ 
-+   memset(&t, 0, sizeof(t));
-+ 
-+-  if (time->type == V_ASN1_UTCTIME) /* two digit year */ {
-++  if (type == V_ASN1_UTCTIME) /* two digit year */ {
-+     t.tm_year = (str[i++] - '0') * 10;
-+     t.tm_year += (str[i++] - '0');
-+     if (t.tm_year < 70) t.tm_year += 100;
-+-  } else if (time->type == V_ASN1_GENERALIZEDTIME) /* four digit year */ {
-++  } else if (type == V_ASN1_GENERALIZEDTIME) /* four digit year */ {
-+     t.tm_year = (str[i++] - '0') * 1000;
-+     t.tm_year += (str[i++] - '0') * 100;
-+     t.tm_year += (str[i++] - '0') * 10;
-+diff --git a/deps/lua-openssl/src/csr.c b/deps/lua-openssl/src/csr.c
-+index b9aaeece..fd4743e8 100644
-+--- a/deps/lua-openssl/src/csr.c
-++++ b/deps/lua-openssl/src/csr.c
-+@@ -120,8 +120,8 @@ static int
-+ copy_extensions(X509 *x, X509_REQ *req, int override)
-+ {
-+   STACK_OF(X509_EXTENSION) *exts = NULL;
-+-  X509_EXTENSION *ext, *tmpext;
-+-  ASN1_OBJECT    *obj;
-++  const X509_EXTENSION *ext, *tmpext;
-++  const ASN1_OBJECT *obj;
-+   int             i, idx, ret = 0;
-+   if (!x || !req) return 1;
-+   exts = X509_REQ_get_extensions(req);
-+@@ -138,7 +138,7 @@ copy_extensions(X509 *x, X509_REQ *req, int override)
-+       do {
-+         tmpext = X509_get_ext(x, idx);
-+         X509_delete_ext(x, idx);
-+-        X509_EXTENSION_free(tmpext);
-++        X509_EXTENSION_free((X509_EXTENSION*)tmpext);
-+         idx = X509_get_ext_by_OBJ(x, obj, -1);
-+       } while (idx != -1);
-+     }
-+@@ -157,7 +157,7 @@ static int
-+ X509_REQ_to_X509_ex(X509_REQ *r, int days, EVP_PKEY *pkey, const EVP_MD *md, X509 **x)
-+ {
-+   X509         *ret = NULL;
-+-  X509_NAME    *xn = NULL;
-++  const X509_NAME *xn = NULL;
-+   EVP_PKEY     *pubkey = NULL;
-+   ASN1_TIME    *notBefore = NULL, *notAfter = NULL;
-+   ASN1_INTEGER *serial = NULL;
-+@@ -412,9 +412,21 @@ static int openssl_csr_sign(lua_State *L)
-+     /*
-+      * In the interests of compatibility, I'll make sure that the bit string
-+      * has a 'not-used bits' value of 0
-++     *
-++     * Instead of directly manipulating the internal flags (which is not allowed
-++     * in OpenSSL 4.0+), we use ASN1_BIT_STRING_set_bit to properly manage the
-++     * unused bits count. Setting the last bit explicitly ensures the unused
-++     * bits count is calculated correctly by OpenSSL.
-+      */
-+-    sig->flags &= ~(ASN1_STRING_FLAG_BITS_LEFT | 0x07);
-+-    sig->flags |= ASN1_STRING_FLAG_BITS_LEFT;
-++    if (siglen > 0) {
-++        /* Set the last bit of the signature to its current value.
-++         * This forces OpenSSL to recalculate and set the unused bits count
-++         * to 0 (since the signature is byte-aligned). */
-++        int last_bit = (siglen * 8) - 1;
-++        int bit_value = (sigdata[siglen - 1] & 1) ? 1 : 0;
-++        ASN1_BIT_STRING_set_bit(sig, last_bit, bit_value);
-++    }
-++
-+     lua_pushboolean(L, 1);
-+     return 1;
-+   } else {
-+@@ -442,7 +454,7 @@ parse x509_req object as table
-+ static int openssl_csr_parse(lua_State *L)
-+ {
-+   X509_REQ  *csr = CHECK_OBJECT(1, X509_REQ, "openssl.x509_req");
-+-  X509_NAME *subject = X509_REQ_get_subject_name(csr);
-++  const X509_NAME *subject = X509_REQ_get_subject_name(csr);
-+   STACK_OF(X509_EXTENSION) *exts = X509_REQ_get_extensions(csr);
-+ 
-+   lua_newtable(L);
-+@@ -457,7 +469,7 @@ static int openssl_csr_parse(lua_State *L)
-+       PUSH_OBJECT(alg, "openssl.x509_algor");
-+       lua_setfield(L, -2, "sig_alg");
-+     }
-+-    if (sig->length) {
-++    if (sig) {
-+       openssl_push_asn1(L, sig, V_ASN1_BIT_STRING);
-+       lua_setfield(L, -2, "signature");
-+     }
-+@@ -585,7 +597,7 @@ static int openssl_csr_subject(lua_State *L)
-+   int       ret = 0;
-+ 
-+   if (lua_isnone(L, 2)) {
-+-    X509_NAME *xn = X509_REQ_get_subject_name(csr);
-++    const X509_NAME *xn = X509_REQ_get_subject_name(csr);
-+     if (xn) {
-+       openssl_push_xname_asobject(L, xn);
-+       ret = 1;
-+diff --git a/deps/lua-openssl/src/openssl.c b/deps/lua-openssl/src/openssl.c
-+index 42004449..985b342b 100644
-+--- a/deps/lua-openssl/src/openssl.c
-++++ b/deps/lua-openssl/src/openssl.c
-+@@ -544,7 +544,9 @@ openssl_initialize()
-+             sizeof(LOPENSSL_VERSION LUA_VERSION OPENSSL_VERSION_TEXT));
-+ #else
-+   OPENSSL_init_ssl(OPENSSL_INIT_ENGINE_ALL_BUILTIN |
-++#if defined (OPENSSL_INIT_ENGINE_OPENSSL)
-+                    OPENSSL_INIT_ENGINE_OPENSSL |
+++#ifndef OPENSSL_NO_ENGINE
+++#include <openssl/engine.h>
 ++#endif
-+                    OPENSSL_INIT_LOAD_CRYPTO_STRINGS |
-+                    OPENSSL_INIT_LOAD_SSL_STRINGS |
-+                    OPENSSL_INIT_ADD_ALL_CIPHERS |
-+diff --git a/deps/lua-openssl/src/private.h b/deps/lua-openssl/src/private.h
-+index c6010209..00728c6a 100644
-+--- a/deps/lua-openssl/src/private.h
-++++ b/deps/lua-openssl/src/private.h
-+@@ -332,7 +332,7 @@ int openssl_push_x509_signature(lua_State *L, const X509_ALGOR *alg, const ASN1_
-+ #define PUSH_ASN1_OCTET_STRING(L, s)      openssl_push_asn1(L, (ASN1_STRING*)(s),  V_ASN1_OCTET_STRING)
-+ #define PUSH_ASN1_STRING(L, s)            openssl_push_asn1(L, (ASN1_STRING*)(s),  V_ASN1_UNDEF)
+++
++ #include "linux_types.h"
++ #include "sign.h"
++ #include "ubifs.h"
++@@ -139,6 +142,7 @@ static EVP_PKEY *read_private_key(const char *private_key_name, X509 **cert)
++ 	*cert = NULL;
 + 
-+-int openssl_push_xname_asobject(lua_State*L, X509_NAME* xname);
-++int openssl_push_xname_asobject(lua_State*L, const X509_NAME* xname);
-+ int openssl_push_bit_string_bitname(lua_State* L, const BIT_STRING_BITNAME* name);
++ 	if (!strncmp(private_key_name, "pkcs11:", 7)) {
+++#ifndef OPENSSL_NO_ENGINE
++ 		ENGINE *e;
++ 		struct {
++ 			const char *url;
++@@ -177,6 +181,10 @@ static EVP_PKEY *read_private_key(const char *private_key_name, X509 **cert)
++ 		}
++ 		*cert = parms.cert;
++ 		fprintf(stderr, "Using cert %p\n", *cert);
+++#else
+++		ssl_err_msg("PKCS#11 ENGINE support not available.");
+++		return NULL;
+++#endif
++ 	} else {
++ 		BIO *b;
 + 
-+ ASN1_OBJECT* openssl_get_asn1object(lua_State*L, int idx, int retnil);
-+diff --git a/deps/lua-openssl/src/ssl.c b/deps/lua-openssl/src/ssl.c
-+index a71d71fd..9a8598fd 100644
-+--- a/deps/lua-openssl/src/ssl.c
-++++ b/deps/lua-openssl/src/ssl.c
-+@@ -158,7 +158,7 @@ openssl_ssl_ctx_new(lua_State *L)
-+     method = TLSv1_client_method();
-+ #endif
-+ 
-+-#ifndef OPENSSL_NO_SSL3_METHOD
-++#if OPENSSL_VERSION_NUMBER < 0x40000000L && !defined(OPENSSL_NO_SSL3_METHOD)
-+   else if (strcmp(meth, "SSLv3") == 0)
-+     method = SSLv3_method();
-+   else if (strcmp(meth, "SSLv3_server") == 0)
-+diff --git a/deps/lua-openssl/src/x509.c b/deps/lua-openssl/src/x509.c
-+index 99096090..4dcc960e 100644
-+--- a/deps/lua-openssl/src/x509.c
-++++ b/deps/lua-openssl/src/x509.c
-+@@ -466,7 +466,7 @@ int openssl_push_x509_signature(lua_State *L, const X509_ALGOR *alg, const ASN1_
-+   if (sig != NULL)
-+   {
-+     lua_pushliteral(L, "sig");
-+-    lua_pushlstring(L, (const char *)sig->data, sig->length);
-++    lua_pushlstring(L, ASN1_STRING_get0_data(sig), ASN1_STRING_length(sig));
-+     lua_rawset(L, i==0 ? -3 : i);
-+   }
-+ 
-+diff --git a/deps/lua-openssl/src/xalgor.c b/deps/lua-openssl/src/xalgor.c
-+index 95957b6f..2d7c5668 100644
-+--- a/deps/lua-openssl/src/xalgor.c
-++++ b/deps/lua-openssl/src/xalgor.c
-+@@ -151,7 +151,7 @@ openssl_xalgor_set(lua_State *L)
-+   obj = OBJ_dup(obj);
-+   if (val) {
-+     val = ASN1_STRING_dup(val);
-+-    ret = X509_ALGOR_set0(alg, obj, val->type, val);
-++    ret = X509_ALGOR_set0(alg, obj, ASN1_STRING_type(val), val);
-+   } else {
-+     ret = X509_ALGOR_set0(alg, obj, 0, NULL);
-+   }
-+diff --git a/deps/lua-openssl/src/xname.c b/deps/lua-openssl/src/xname.c
-+index f2fa9be6..ed5939df 100644
-+--- a/deps/lua-openssl/src/xname.c
-++++ b/deps/lua-openssl/src/xname.c
-+@@ -10,7 +10,7 @@ x509.name module to mapping X509_NAME to lua object.
-+ #include "sk.h"
-+ 
-+ int
-+-openssl_push_xname_asobject(lua_State *L, X509_NAME *xname)
-++openssl_push_xname_asobject(lua_State *L, const X509_NAME *xname)
-+ {
-+   const X509_NAME *dup = X509_NAME_dup(xname);
-+   PUSH_OBJECT(dup, "openssl.x509_name");
-+diff --git a/deps/lua-openssl/test/helper.lua b/deps/lua-openssl/test/helper.lua
-+index ea64feb7..0634ea3c 100644
-+--- a/deps/lua-openssl/test/helper.lua
-++++ b/deps/lua-openssl/test/helper.lua
-+@@ -6,7 +6,7 @@ local M = {}
-+ M.luaopensslv, M.luav, M.opensslv = openssl.version()
-+ M._luaopensslv, M._luav, M._opensslv = openssl.version(true)
-+ M.libressl = M.opensslv:find("^LibreSSL")
-+-M.openssl3 = M.opensslv:find("^OpenSSL 3")
-++M.openssl3 = M.opensslv:find("^OpenSSL 3") or M.opensslv:find("^OpenSSL 4")
-+ 
-+ function M.sslProtocol(srv, protocol)
-+   protocol = protocol or openssl.ssl.default
++-- 
++2.47.3
++
 -- 
 2.47.3
 
