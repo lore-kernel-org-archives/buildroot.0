@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2CA3BC982D0
-	for <buildroot@archiver.kernel.org>; Sun, 20 Sep 2026 10:28:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 536A7C982DA
+	for <buildroot@archiver.kernel.org>; Sun, 20 Sep 2026 10:28:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E02DA60661;
-	Sun, 20 Sep 2026 10:28:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F08B86063F;
+	Sun, 20 Sep 2026 10:28:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wGbchu0rX3br; Sun, 20 Sep 2026 10:28:44 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org EF5F36063F
+ id vVQMdIObPEeb; Sun, 20 Sep 2026 10:28:45 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 4051160684
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789900124;
-	b=nIpjoil1eu0Uh9YHjhyLfYbXVQoJBY72uWAmKF6UvkxxElJyf7dSdaQB1buB5/VKxX5/
-	 KgeyNuDC4FUzDj40t5nqvHn6AisOuCuv23MzZFem0bJcBCfsiNTno2GJgVfIHkks+hIuA
-	 hGNKMScvjSnkU1QLvVcwLezWNlFhFM9WZDzb/OJAEdWZaKkOZTbI3qX2O0uD6twfjzYO5
-	 1mDPsNKWnDrrs28OwMt2J2YUcq0Z+aehNTHcgEZ1P8DR7hbk/qlxo+koQb7vamnYgfPpc
-	 6ZZKx6NlCmrCDzEqUfCv7fzaQTIpq9BrC5otjFDRfAgv2VzI+G1SpCylr3D66eI9yUw==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789900125;
+	b=MEuDfSYIdjcgxVOSWYU77v3IXKvMYzhP6dMqs8MHAlQqKo43PylgMT55JEeN3lKWSBmk
+	 7Om3GDRmKBTY2ehLtCZ/CPZ/fqaQr+b4Bdg59xylvcjTvz35Z6MvGuhKoIgw9bdEwjJG5
+	 35+/w+u1YRZwlklpTaHzNx7ryIjJR/ipbinjUk4Yt1Og+12YSscZB3/et854oOsz0X9lX
+	 aB/xFagwjFpJi9Hlm9WU/iRSj0KUyVi4Zit8HnKtJLOyfCLhIv80H7ziCbeCN/g9T9O8Z
+	 1hdZUqVZTp8LoAiLQpgOtxIrg+WRqO52KDJeCeHj0czQA5UGKZA3eBY10bhwW6ygufg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789900124;
+	c=relaxed/relaxed; t=1789900125;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,75 +30,75 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=ApI3LtNtMeWc70KAlINO2lxpwq2NpCe1qnIwNZyPTcE=;
-	b=m65pWW56LEzrfzHhELbg2QhxOKenzDXVGqbf+DzGU4Y9k8ijwAk7tEeWQwoh+ojQb5XV
-	 yH/pdO+VaFvF1iGnkc952m8LdPPtlVl7aN8pK5w0vUkPse7JEWFnT2Cu/5JFDMVOuru0J
-	 k6A5L6f1Jr1PSsh1AHae7F6aq0Q3nJFPANkyo9YtYBYB6M8+Zp/NE8PA15F9+B41MgGQc
-	 cV5oIyi7k1sunxWXBXq1mq3GTPxhBWHsl6TcV8PnoLbESNQ4ij0DLAhPjFGYhMx6eq0ee
-	 16lIN2isaNLw7R9CxLCXPLfHnsVJnLjkkq2f52+n3qYXdD4GSl0/C/JKvh22RM+57TA==
+	bh=0rDkc8qiiBFahvD6+FvK6oNCTNK4v0KKQJWck9E+FPM=;
+	b=JW8XyfWGGBp0Nac+qpHoG1PGEQznF7hJTcGOXQd/BPzB7/ay0ksyG5R+kSVIPv4qTgg1
+	 Nw1n/qZlAyBiKMXXtbTqXln5PrEhMbpPJM74iQUZmKsTGo8PjGpxuAkp//LIeSI6HcbMh
+	 lkBpV1uwzh5jLqKlizz0DdMSTtr89tL0c28GfpyNthlDx+omxOXXymSmEWPhju8RIlsOP
+	 bn6c9C0fEU/I8dQ12GQJVrFoJuV9vK348qdNYtgJfauVB6GgBpS+AFy9kiwtIjsIbS//I
+	 P4TUW0lQXAHVpfuHIo6pyXLL4aYpBPaaHRE1ILHvlIegENX9xBrvwJO7yy8Tk2NNiKA==
 ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789900124;
-	bh=ApI3LtNtMeWc70KAlINO2lxpwq2NpCe1qnIwNZyPTcE=;
+	s=default; t=1789900125;
+	bh=0rDkc8qiiBFahvD6+FvK6oNCTNK4v0KKQJWck9E+FPM=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=fLG6rXpwQLBRWvzpp/8X9OLCYstsYWfzeDKiybPBR9N0rlsQMaVE+CSchMZgVUFgr
-	 mjgHrIYvXxnKxfSMkPso5cngTIQfZfsVkwoj0vb3xwtwu97T4nJnexEOeODvgHuHmb
-	 402jWdAefi4IuQ9GvJt9Nme1G5+J/Hs6h1zkPIDsfowsm3SyUhsZmU4l7M5eEhpBru
-	 zkfPvnJOLFtS/poXhauAVKdnLM64o2gghDkENgyH0Dit5q+IsdWPQJU7AhRHpMi+Qg
-	 D+BsPkFMsupuf+UUHI052TxryuG0F9L91CHjzne3ClnXyazWogd56XyYr21luKTHRC
-	 SaDVUxPJL4lEw==
+	b=j+idiv9copLU6qdFxwUPmo7xjhjkqz8VZ9AlpaTsekf18fOvxUNwt90U8VDVQA1q0
+	 IGW8DIkqn5ierzf1vAPDKdKg+ZWJkF/wI2Y5tH3gAm9Ammeh3nVgs7s3lFONc9kBVH
+	 eH2b6eOedygSGITQTqNB6Y6Ciixv80kJEilrJpSPcHt0LXXzOjniEQ52A9PTPpC8TN
+	 EU5UQRMH3TGnU3BUWiaJ8I8mJG1eyiVYfkfbKK9NS1yqC1mgjZNFGK85ptNOp7qQJW
+	 46ioHIgKplZTANkBb5egnTZ5ZCpBpOE8euhpDQTMUODTR6wh4sSOsbSo35oQpHRE3b
+	 a2eI7IU5/bewQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EF5F36063F;
-	Sun, 20 Sep 2026 10:28:43 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id C492C24D
- for <buildroot@buildroot.org>; Sun, 20 Sep 2026 10:28:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4051160684;
+	Sun, 20 Sep 2026 10:28:45 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0829E24D
+ for <buildroot@buildroot.org>; Sun, 20 Sep 2026 10:28:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AAA23407BA
+ by smtp4.osuosl.org (Postfix) with ESMTP id E307F4071F
  for <buildroot@buildroot.org>; Sun, 20 Sep 2026 10:28:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Z9natg-Abfaq for <buildroot@buildroot.org>;
+ id khFJ17e6M3RW for <buildroot@buildroot.org>;
  Sun, 20 Sep 2026 10:28:41 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 0480E4071F
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 194E44075D
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789900121;
- b=OYcqVnRMSN++Q3TTtdpjb38nBj/lBWCYEL8bTAN94Frrc2x9CyjzOcWfhZRHttN8WxJG
- QmBg658AprgeVPKCKd1fzbvOzesW86Z1VBIDWYXjEGPCKO+w2XPPO8qGjwR8/Bh5G/TAR
- J8CXlkuG2LT3kGChsS/RVI1NseXPDpB2mx2LwCUnuAl2n5gnOT1vTyWt+SNFrVOAlzD/p
- sgcbWCfjMoAi6ukFnPRShX5fgLIBgsiuPxzXNtukE1mtLbQr1OFfro0AsjJzSKNRKmFhe
- Kd//SRL9zMaJJRVx2T/sS/PJgKzhjJHkMPjHjNt0VZ+3d26fYgCfZwvvfSJha2rwPMA==
+ b=jbSEqODuaKzfATdyb+nqfwhdL20fuVdXnweTENBXy4KZvo0NTvfw9+r4O9SoCYprfAre
+ GyMwVzxcchVIdmYA1AiMUuJufAtqt5kuucTGjJ1Jo6UYjYUBEMAgu2xxo3h8rHCTltUpz
+ 4WV/I1gJ7YABH/YuF+SAVymLRYp1zeyqtN9pLYW2PKLV0ed7BKug5+VjCf/j4WODiOi/I
+ oFM5qYqfwxtjPgdGPlrI5PtLzvn5wTyIwv82dLD9p9G8Z31IaNciNCN9u7lI7IFet2Rh+
+ SwH1jG492URBlw0hwHTgnUD4FgtVmBrmCa+6cmYnZ4/aAoNwjtsl/3D1aOzIdIOHctQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1789900121;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=nYZq6qWDADsrAIZmr+wUPW0cmUKQJupHPPLJIWkcpCg=;
- b=aG8/8Y4ZSD9fVUib1Q8AUo7lGmWGbt5gvdgXaZNWElOgZklwoZY5jcOYhRa5hQTTtMHM
- M8j8PXFUWr/1nRpsO6uev7M9yoSOQVQ9vN9V66/j0iUab+0qIUDgsYFqwdy0w8/LuDEyI
- exIZxcFPCz5SmTf6mTM+RzEv3LKqLjTqohVm4BaMrSOLtOASRPoqzqqLSiBcGnghVMc6L
- ufVwYdPQE/zwcMn/R9eTnJv0NdNdg4TEoP1cbVe9gjRse0XhwmZpOc2D0AYsg33rxdNA6
- YZyyew42TzYfMA0aCQW+++gPH3fHrAIKRfAYbLOiEMwMzqKt82Xkwh7EsnczdpFUYtg==
+ bh=FmaDsJufY/aEWhJqWhjzJ+FYrzuZRyuFYeHoB94Fzjo=;
+ b=Yr2iIAzhbwO4sPrG1NJa5xKfwCzNnrUMPsO3Tx1yG5WCuBhDuOEwFra3iX2ideeOTSM2
+ pfjeS1pJpQRWXe8eh0R9DQr1DfYrUu7jgNdvoNs5xangiUftpsvbMJatTYJnKv1ki36wf
+ Isf+AcoCI0hO31mrjSg5F+pM7m+mirdlcfliTHqhd53zvDw6cP0fThhGCKLpLnKh+chE/
+ HQ2xjlHLd6RSpCa6vu+UAU0hxi5ser5kTz06os/yPPTY+Y4YuEODnpKe58abDOh2aF/Rn
+ eXEVr1WqjIb4iyWFs/ZdGuCAjYsFJifAZqtbmLOp3vj5L7C/O+yYt01njo+NOwg4fkQ==
 ARC-Authentication-Results: i=1; smtp4.osuosl.org;
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0480E4071F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 194E44075D
  for <buildroot@buildroot.org>; Sun, 20 Sep 2026 10:28:41 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C008F8DAD0; Sun, 20 Sep 2026 10:27:32 +0000 (UTC)
+ id C92D38DB1F; Sun, 20 Sep 2026 10:27:32 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Sun, 20 Sep 2026 12:26:02 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e073e5a5596dc0fef60aeef41e456ac52911a0a3
-X-Git-Newrev: 1c78e85430023667fa0aedc5ba646df7fa6376b8
+X-Git-Oldrev: 1c78e85430023667fa0aedc5ba646df7fa6376b8
+X-Git-Newrev: 5f79161e4a8756acdb25c8500de9b2dee663f2ac
 X-Patchwork-Hint: ignore
-Message-Id: <20260920102732.C008F8DAD0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/spirv-llvm-translator: bump
- version to 23.1.1
+Message-Id: <20260920102732.C92D38DB1F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/llvm-project: bump version to
+ 23.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -118,40 +118,123 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/1c78e85430023667fa0aedc5ba646df7fa6376b8
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/5f79161e4a8756acdb25c8500de9b2dee663f2ac
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-https://github.com/KhronosGroup/SPIRV-LLVM-Translator/releases/tag/v23.1.1
+https://discourse.llvm.org/t/llvm-23-1-0-released/91654
+
+Removed compiler-rt patch which is included in this release.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/spirv-llvm-translator/spirv-llvm-translator.hash | 2 +-
- package/spirv-llvm-translator/spirv-llvm-translator.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../0001-libc-Fix-detection-of-cfloat128.patch     | 70 ----------------------
+ package/llvm-project/llvm-project.hash             |  4 +-
+ package/llvm-project/llvm-project.mk               |  4 +-
+ 3 files changed, 4 insertions(+), 74 deletions(-)
 
-diff --git a/package/spirv-llvm-translator/spirv-llvm-translator.hash b/package/spirv-llvm-translator/spirv-llvm-translator.hash
-index c511c79785..cc6a188eeb 100644
---- a/package/spirv-llvm-translator/spirv-llvm-translator.hash
-+++ b/package/spirv-llvm-translator/spirv-llvm-translator.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/llvm-project/compiler-rt/0001-libc-Fix-detection-of-cfloat128.patch b/package/llvm-project/compiler-rt/0001-libc-Fix-detection-of-cfloat128.patch
+deleted file mode 100644
+index 4587dbfd7d..0000000000
+--- a/package/llvm-project/compiler-rt/0001-libc-Fix-detection-of-cfloat128.patch
++++ /dev/null
+@@ -1,70 +0,0 @@
+-From 4e1af872f819782bd233ab21953ab92cf36ff9c3 Mon Sep 17 00:00:00 2001
+-From: Bernd Kuhls <bernd@kuhls.net>
+-Date: Mon, 9 Mar 2026 19:07:10 +0100
+-Subject: [PATCH] [libc] Fix detection of cfloat128
+-
+-Building compiler-rt with aarch64-buildroot-linux-gnu-gcc 15.2 causes a
+-build error:
+-
+-compiler-rt-22.1.0/cmake/Modules/../../libc/src/__support/CPP/type_traits/is_complex.h:44:31:
+- error: 'cfloat128' was not declared in this scope; did you mean 'float128'? [-Wtemplate-body]
+-
+-According to https://gcc.gnu.org/onlinedocs/gcc-15.2.0/gcc/Floating-Types.html
+-__float128 is not available on aarch64.
+-
+-Analyzing the gcc defines for aarch64 seems to prove it:
+-
+-$ aarch64-buildroot-linux-gnu-gcc -v
+-Target: aarch64-buildroot-linux-gnu
+-gcc version 15.2.0 (Buildroot 2026.02-114-gdadec9da56)
+-
+-$ echo | aarch64-buildroot-linux-gnu-gcc -dM -E - | grep __GCC_IEC_559_COMPLEX
+-  #define __GCC_IEC_559_COMPLEX 2
+-
+-$ echo | aarch64-buildroot-linux-gnu-gcc -dM -E - | grep __STDC_IEC_60559_COMPLEX__
+-  #define __STDC_IEC_60559_COMPLEX__ 201404L
+-
+-$ echo | aarch64-buildroot-linux-gnu-gcc -dM -E - | grep -i float128
+-$
+-
+-In contrast gcc for x86_64:
+-
+-$ x86_64-buildroot-linux-gnu-gcc -v
+-Target: x86_64-buildroot-linux-gnu
+-gcc version 15.2.0 (Buildroot 2026.02-112-gd12ac02486)
+-
+-$ echo | x86_64-buildroot-linux-gnu-gcc -dM -E - | grep __GCC_IEC_559_COMPLEX
+-  #define __GCC_IEC_559_COMPLEX 2
+-
+-$ echo | x86_64-buildroot-linux-gnu-gcc -dM -E - | grep __STDC_IEC_60559_COMPLEX__
+-  #define __STDC_IEC_60559_COMPLEX__ 201404L
+-
+-$ echo | x86_64-buildroot-linux-gnu-gcc -dM -E - | grep -i float128
+-  #define __SIZEOF_FLOAT128__ 16
+-
+-This patch changes the or-condition to an and-condition for
+-__STDC_IEC_60559_COMPLEX__ and __SIZEOF_FLOAT128__.
+-
+-Upstream: https://github.com/llvm/llvm-project/pull/185486
+-
+-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+----
+- libc/include/llvm-libc-macros/cfloat128-macros.h | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/libc/include/llvm-libc-macros/cfloat128-macros.h b/libc/include/llvm-libc-macros/cfloat128-macros.h
+-index 5f28cfa21aae..ff4aa530685d 100644
+---- a/libc/include/llvm-libc-macros/cfloat128-macros.h
+-+++ b/libc/include/llvm-libc-macros/cfloat128-macros.h
+-@@ -27,7 +27,7 @@
+- #define LIBC_TYPES_HAS_CFLOAT128
+- #endif
+- #elif defined(__GNUC__)
+--#if (defined(__STDC_IEC_60559_COMPLEX__) || defined(__SIZEOF_FLOAT128__)) &&   \
+-+#if (defined(__STDC_IEC_60559_COMPLEX__) && defined(__SIZEOF_FLOAT128__)) &&   \
+-     (__GNUC__ >= 13 || (!defined(__cplusplus)))
+- #define LIBC_TYPES_HAS_CFLOAT128
+- #endif
+--- 
+-2.47.3
+-
+diff --git a/package/llvm-project/llvm-project.hash b/package/llvm-project/llvm-project.hash
+index 96cdd76c92..35aa544014 100644
+--- a/package/llvm-project/llvm-project.hash
++++ b/package/llvm-project/llvm-project.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/llvm/llvm-project/releases/tag/llvmorg-22.1.8
+-sha256  922f1817a0df7b1489272d18134ee0087a8b068828f87ac63b9861b1a9965888  llvm-project-22.1.8.src.tar.xz
++# From https://github.com/llvm/llvm-project/releases/tag/llvmorg-23.1.0
++sha256  ab1f0e3ec52448c33e8782eaf0422504b87c7b016b22514653ee0d8fcee479ff  llvm-project-23.1.0.src.tar.xz
  # locally calculated
--sha256  8d3d5c31c1ff355dbbf87046f1b94cd1ab5390439a817679ec71484df74cac18  spirv-llvm-translator-22.1.3.tar.gz
-+sha256  9e0bf1beb0ab7edca6cd8c17fd9bbb7ce3dcd520f3e969e0485ff5b00931f929  spirv-llvm-translator-23.1.1.tar.gz
- sha256  e3bc36440fc927c62d5cc24efeefe225a14d4e34ffeb0c92e430625cce9ee444  LICENSE.TXT
-diff --git a/package/spirv-llvm-translator/spirv-llvm-translator.mk b/package/spirv-llvm-translator/spirv-llvm-translator.mk
-index 98e8f45037..21d0b2cf85 100644
---- a/package/spirv-llvm-translator/spirv-llvm-translator.mk
-+++ b/package/spirv-llvm-translator/spirv-llvm-translator.mk
-@@ -4,7 +4,7 @@
+ sha256  8d85c1057d742e597985c7d4e6320b015a9139385cff4cbae06ffc0ebe89afee  LICENSE.TXT
+diff --git a/package/llvm-project/llvm-project.mk b/package/llvm-project/llvm-project.mk
+index 5cbbda6e06..31b2a4dae7 100644
+--- a/package/llvm-project/llvm-project.mk
++++ b/package/llvm-project/llvm-project.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--SPIRV_LLVM_TRANSLATOR_VERSION = 22.1.3
-+SPIRV_LLVM_TRANSLATOR_VERSION = 23.1.1
- SPIRV_LLVM_TRANSLATOR_SITE = $(call github,KhronosGroup,SPIRV-LLVM-Translator,v$(SPIRV_LLVM_TRANSLATOR_VERSION))
- SPIRV_LLVM_TRANSLATOR_LICENSE = NCSA
- SPIRV_LLVM_TRANSLATOR_LICENSE_FILES = LICENSE.TXT
+-LLVM_PROJECT_VERSION_MAJOR = 22
+-LLVM_PROJECT_VERSION = $(LLVM_PROJECT_VERSION_MAJOR).1.8
++LLVM_PROJECT_VERSION_MAJOR = 23
++LLVM_PROJECT_VERSION = $(LLVM_PROJECT_VERSION_MAJOR).1.0
+ LLVM_PROJECT_SITE = https://github.com/llvm/llvm-project/releases/download/llvmorg-$(LLVM_PROJECT_VERSION)
+ LLVM_PROJECT_SOURCE = llvm-project-$(LLVM_VERSION).src.tar.xz
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
