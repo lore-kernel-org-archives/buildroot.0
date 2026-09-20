@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 680BDC982DA
-	for <buildroot@archiver.kernel.org>; Sun, 20 Sep 2026 10:33:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5BF85C982DA
+	for <buildroot@archiver.kernel.org>; Sun, 20 Sep 2026 10:49:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2FBF460624;
-	Sun, 20 Sep 2026 10:33:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0F27940641;
+	Sun, 20 Sep 2026 10:49:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dQpeMtQH9OIG; Sun, 20 Sep 2026 10:33:22 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 2D57860632
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=3; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789900402;
-	b=gHXqBBhnYQsq0oALv2mgJkO3kgax9KRTBpyzskaTazFgHH/lupzk/PTdpj5I9v60J9Hg
-	 3HU3jFE9qP391wMbcXWDBvCsqh40yS0elfiwQfeIj8hu4JgzW0SufvhoAA5uo4/6zWLA3
-	 5HppLTla7k40GIz/9e0GvtMw1g5NvpeGLuH8M8QgiYCqdtjfGE1uqrcS99lYVxPkB2/Ny
-	 Et83IV40RSbglEppULH2aG9TXY7rQqwIQtGPvG/uaN4WvBAm5gv2KPej9ItTYEQNBjzER
-	 kF715YYOesaf/UoAhr9LLa94TdrVmeDSYQwUVvg5mEOWN50IqddoG0+S28JqlTd1dZg==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AFIr7uGykV_L; Sun, 20 Sep 2026 10:49:11 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org F04E840809
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=3; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789901351;
+	b=WxepWOGSSMTgqdpOOlCThIpU92ZHWPD9Dm2xhT1/DQFprGDwn0ZQcu6LC/OK17mmmTi/
+	 ZMTPatkLLG8UK28VCH0WgCU58SGkWrW2uC/O0OwNlFqz3KTmX6IEf+i9gA1zP8LtnM68a
+	 z37gf0Avmb2I40DgpBE9UCU+uD4Nyts3enrCVtS0QFC7DOuV9HJ8CEOsv/ELVUz580zp0
+	 FDDMvt/Sa3yu6IqC9uVi4z21X9tA1BgH/jstU030XBj2ecT7rGnFebjx7yPOtW9uJjDZy
+	 8HcSCham5rLsFXS4T1VrPrgs5XSliDB7y8xwOvAH1P2+zAVxZtk7NVbI6DvWp4+OxxA==
 ARC-Message-Signature: i=3; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789900402;
+	c=relaxed/relaxed; t=1789901351;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -32,149 +32,148 @@ ARC-Message-Signature: i=3; d=osuosl.org; s=arc; a=rsa-sha256;
 	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:Content-Type:
 	 Errors-To:Sender;
-	bh=PCMwcraNlZCpCxPMpd7Wg5FArdJDxHeOcmNvI3tVDbg=;
-	b=ePgFJWELxBW5D5h3j5G4HyqA2k4QKoajEFIFHXrQv0HjKgRygSG3nEeunMpgB5AtaTuG
-	 ZOZL6qQ+dwaLaU7XR2QjhIVln0vNx1g6MBKr6GKsi+x2X9E+lpJkEZfklGAR8mnV3G4Oj
-	 yqZdoaomtet1/MpA06dhw2X9zauwZV2NjnshlemCISC9YG4doYSwShwXQonrh7ZGLR6FN
-	 gzUPf2IgURNijNDnkJ9ehLaA7aKgeZhPGlUjIYy8jeXc2YH0tT4740Je+6xBT5rQZv5ef
-	 7Q+ps8gRjZA7/lrXeytdFmY7LHn6pkNjW0z6m6qBy2fnoTyrhzMnjRZ0ufbTqDAh/ew==
-ARC-Authentication-Results: i=3; smtp3.osuosl.org; dmarc=pass header.from=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=YwrxK+Bl;
-	arc=fail smtp.remote-ip=140.211.166.142
+	bh=9Jt3aoMDvnVbWjUYx0R4QbDjy0aREtERHTvc6OKQrYQ=;
+	b=Uzkv16j/CIIrldDUzqTsvThsvcOeTzXO9HtK3s9S3ogaBq9BrL455S2Gq4M8j8pAxiOS
+	 Z5aYJiHayLc2Xq5qzz5UbE8hf2r77C8GRd11xqIfqTeC1eD9badr5V323+Blzt4hP3tca
+	 TyjgegdbpdFJl2G+aYanCJXkoamoCHNR26koa36HJghxZZju0iz1WWv8ShJO7gNUp0QwG
+	 VKEJ6PN7XOYNdMsOejlPX1x9lhLiZl7NpZyzRWSJLWVwQKS4P3iJjL/hFc2tD3FjBP5SL
+	 TdSTP8Jz+Vxv+exhtRC5l/xvszuNkVQzlcq4IHvk3Nm9T6jp+Qrzx021XLNY3aOAT+w==
+ARC-Authentication-Results: i=3; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789900402;
-	bh=PCMwcraNlZCpCxPMpd7Wg5FArdJDxHeOcmNvI3tVDbg=;
+	s=default; t=1789901351;
+	bh=9Jt3aoMDvnVbWjUYx0R4QbDjy0aREtERHTvc6OKQrYQ=;
 	h=References:In-Reply-To:From:Date:To:Cc:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=PJZdxPlUcn5ZdSXF9xqhJCcpCoqd0Pqsurg+alNTVDLS5eY/j0MU2P20C5DDjNE8z
-	 d/Nsc+JkylcHfNeW+scX2qJgp/f/6ltpDlkjh8uHFyUpXh1JZicLgkONu+VX7ey4NO
-	 LSrI5q36x8C/zwFM6wQsom+5YNeNaEN+hjXvVvrgJc44ltGmfVA3I9xVqb3CNInsi2
-	 ZOVcGgG5dmoyvtbY0hTKXOaw0N9MmqZMAPtSosw/coP16oWyUcqf6kZUrI2UF2YxsC
-	 u7kbmVZON7RCnB312QP0bgMcC59KgMi+tavfFpL8URN45IRoAkuvDd0h7o5kFpdb5Q
-	 f7CEB39h217MQ==
+	b=pNl13DH1xR/F5C6QvqYkx3MxHRV+zHYQuaUl4So2UwNkVXvrmpHeEQ4IL723dzrTW
+	 r9bCc9Dz06ExAyz8IPooaHMBLPy8WP0Y8WbS4+FHMicenfdNuBf4hEKcPGN2TkuXvT
+	 bHda8kRAg4sPWGeKw1WAozqz03vXCOus33zIlOf+AhuMrr3Bo5/W6Fw0x4Ooal+yfx
+	 OgAc5r6B/gEHIT0LRhBjqbaa2rkelDLkxdTcRXCVWpWrmrVj+PDUpftfpOLbZIDP7b
+	 IUyv58bci4AGnR9KiiWdSm9474WiLf9d1EzwFyY5L2EQbGoGjizlz3uwDhETjwrcz3
+	 UzHN3mMnV4pXQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2D57860632;
-	Sun, 20 Sep 2026 10:33:22 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id A4998371
- for <buildroot@buildroot.org>; Sun, 20 Sep 2026 10:33:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F04E840809;
+	Sun, 20 Sep 2026 10:49:10 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 96E4113D
+ for <buildroot@buildroot.org>; Sun, 20 Sep 2026 10:49:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 962D360632
- for <buildroot@buildroot.org>; Sun, 20 Sep 2026 10:33:20 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8868780C77
+ for <buildroot@buildroot.org>; Sun, 20 Sep 2026 10:49:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TshG4gM0vYRx for <buildroot@buildroot.org>;
- Sun, 20 Sep 2026 10:33:19 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org A6A4260624
-Authentication-Results: smtp3.osuosl.org; arc=pass header.oldest-pass=0
- smtp.remote-ip="2607:f8b0:4864:3b::10"
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=pass; t=1789900399;
- b=SlkKtGppyFRu5b2epa7fgDDd7KNNBFn5LI06Vf9bCMn0AXMjKMGgrfsduM5sr+XLuhYT
- 1Uld45FrxRV+tpg4njoTdjBlzCa6eePyih4vCP2bdHAvEvo75VtfH826ah9HGsiQFzRev
- OEOF2NRoPQnPBkZbN/UEKA5RmXhQbdw4jJo2cF5UAKZkkWNKjubRR+dLz1O4O2O52LEGI
- tIOMyS4GDxMIIu+Df8t/3pkEvJD08DxRzpjPYKPbn9REka56BecKP0Q5lPie7qf83oY6H
- QdFMBMIXb7XJP6Gw99cCbQfD6W+pbdu4KfDchJ1SRp9eI/we0b6EtOyVlQw+PhOy0Vw==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9uE2XgobUlxt for <buildroot@buildroot.org>;
+ Sun, 20 Sep 2026 10:49:08 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 694FA808AD
+Authentication-Results: smtp1.osuosl.org; arc=pass header.oldest-pass=0
+ smtp.remote-ip="2607:f8b0:4864:3b::f"
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=pass; t=1789901348;
+ b=J8XPG0Hfmav9yneeCBKxsMqcWTGYm1U9vnPgKYF4cbf6cDfdTTm5gjHrYqrSO91XYG4n
+ ppfAdRS4IxlDZDJ0ZaHrtNr+B3R65SG56g+cGH3Hoq3zIW6mlEFouTQUzllozDfw0NXna
+ G5SMCcweHxIuT8QFu/xKG++xGs0g9Hi3ORNsTTe7MKLsz3hjE1xjpR6L5A3lIMX6kmIWu
+ NLjr4MY4dGh7yiO6Esk9TNWHzT9ntO6BSoVyXstDNxiQMDLsgVuN+NEkuKfrliq03lojH
+ kzmbX6LET9E/xs0/5Bm0ng5y2OKtUqKYuqPd3KfpJq8KarALq/DGJBJNior15YQ7vhw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1789900399;
+ c=relaxed/relaxed; t=1789901348;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
  X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
  MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
  Message-ID:Subject:To:Cc:Content-Type;
- bh=fuWOdB9MI8UeiKAfBwT5KerfgEdvo9pYXYwTVcFg5As=;
- b=TmGdvw9QD72rOphW3HuHbaDX1tGyb9lz9VihorB86DDu8D4wzdoxOABXt3w/MnWayvBf
- aHpDPeAVnMKLumiIvv/AiYvkjOHyeGOnIx66/EBc3oXm4AIIEOjB9WXrS76Uu3QYZBAFm
- VEdSIhD36ehgK4l43XI1hJT/axVe6ByR/1+Uap1gtLZsqSgZbMxiiBlhzEbhhQ1mGQb6E
- F0Ehlj8csJuRqZXrBIjKnGvcHTLbZkmMMO6FO9NMFZtyZR/2cIucqgLLkZdPJw9TRmXZz
- 9IpJjxzR4zfTo4DIGio6QasSdVVPIvThKhThgWGm7Cps5em6DzcxL9TGHQMNRoZ/3Qg==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org;
+ bh=IJ6S6OpupCHTko6dAcnY/XuVERqyhz/TdGY/4lkilX4=;
+ b=K1573qsVJNVoYn2qx4GmR8e1hh2A9R0eX8QeSCTVRv9ghw49N/gK7+ih9kyRKLonu+3R
+ 1hBIlq5Te7xvWBIAmGtbaTKB+JCdP2JhhM17SsSH/d1IslUOvgQYvSqa/Ri8WITHeYhvf
+ ptNsUhCeaI6psiw4ucqFBTwUoFOpHu4diB6zwFPfVXhBoCZg8+ep86YfY1kSo39TPJV1B
+ qtNjNZuxUHbLZnHQoZe2tXnvzTWHYjxtgaPiL3G/nu5OS4uO4KEE4sKM6udv2zYfcVXpq
+ IhJ8g1pxDoVetpxrVXkV52I/srSC4/CmfHNLlf8KMF2a1sCOLKHHvtsOBvklb50ZRnA==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org;
  dmarc=pass header.from=gmail.com; 
  dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20251104 header.b=YwrxK+Bl; 
- arc=pass header.oldest-pass=0 smtp.remote-ip="2607:f8b0:4864:3b::10"
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:3b::10; helo=mail-pz2-x10.google.com;
- envelope-from=aduskett@gmail.com; receiver=<UNKNOWN> 
-Authentication-Results: smtp3.osuosl.org;
+ header.s=20251104 header.b=L1VVts1W; 
+ arc=pass header.oldest-pass=0 smtp.remote-ip="2607:f8b0:4864:3b::f"
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2607:f8b0:4864:3b::f;
+ helo=mail-pz2-x0f.google.com; envelope-from=aduskett@gmail.com;
+ receiver=<UNKNOWN> 
+Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20251104 header.b=YwrxK+Bl
-Received: from mail-pz2-x10.google.com (mail-pz2-x10.google.com
- [IPv6:2607:f8b0:4864:3b::10])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A6A4260624
- for <buildroot@buildroot.org>; Sun, 20 Sep 2026 10:33:18 +0000 (UTC)
-Received: by mail-pz2-x10.google.com with SMTP id
- d2e1a72fcca58-85469a34907so2295310b3a.1
- for <buildroot@buildroot.org>; Sun, 20 Sep 2026 03:33:18 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1789900398; cv=none;
+Authentication-Results: smtp1.osuosl.org; dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20251104 header.b=L1VVts1W
+Received: from mail-pz2-x0f.google.com (mail-pz2-x0f.google.com
+ [IPv6:2607:f8b0:4864:3b::f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 694FA808AD
+ for <buildroot@buildroot.org>; Sun, 20 Sep 2026 10:49:07 +0000 (UTC)
+Received: by mail-pz2-x0f.google.com with SMTP id
+ d2e1a72fcca58-85469b355ffso1251511b3a.1
+ for <buildroot@buildroot.org>; Sun, 20 Sep 2026 03:49:07 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1789901346; cv=none;
  d=google.com; s=arc-20260327;
- b=rZKSew4k4bb33P9HFUCUxsimRry0RXBGaUogX4JnVJKaImxP0CmL/OaY8jX8yTIZsD
- MK2BIBRJ+M0Xjjo46TUWEhk/PH6gcTmXSstEybEYp+KHXP0799HScXbPuHj9Hn07ejLD
- tUtYYlpACrbqH4FQa73+Ewm5yWMRKqWboVpw7yO5i9gFJUB2cJMRAvytORd0O8BVH5WQ
- 4l91ZW5bKGxDCUduYmCAQ5+th4m6XBQE2hk+p8jwwMX3KMASZYtPnPnA4ic4tnCN8FFg
- HgfJ+qZ4KLDvkTylLDpAMkS5SAs+aETCtAWW+92ftQOLPkneYkjGKK1Jnoa9hF7sHA4J
- WAfg==
+ b=YRzLowKSEGMBUkAQnxgGjyrSy1GWSeJhSseGrwIjK8n5jCByoS+PlJzzCdoici/S/f
+ fLeAWdZNQerfYv/qUSc/Ym1tkvrLMEJC4qaYe1cGo0qqX9q4Uxa7ROO7EYtA6/2hTA1F
+ Dtz1pQ/Za+IQfTzW6jTUdilhfTZeyUsd4R9vXTpQpSJJpcju28slUPP0vjgY5Jh5NQgu
+ ivrsnZN0R3rDzbyd+jblp/FnkgzGFeIf7kgH7n+pHzL3CSi0Ly3b9jutycXvurPrWULd
+ BZTl9ek19/Z9LFBZ/fiBwLfaVuirFFzAeKJ7g9iBcYp3jSk/Vk8rlMB3jpgCHNnuZCd7
+ dJ2Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com;
  s=arc-20260327; 
  h=cc:to:subject:message-id:date:from:in-reply-to:references
  :mime-version:dkim-signature;
- bh=fuWOdB9MI8UeiKAfBwT5KerfgEdvo9pYXYwTVcFg5As=;
- fh=iv7i76ZrvvVMU6drdhfngHOCwpP7Xp/gyBm6TYwkEGs=;
- b=WDTaBgu0mdOrg3W4TY2Yc1Vs6ruFtO8lT5+FNFg/Sn1MBJ1XBvtZ2p89y6/+dx5gRh
- y1GTUruWsedftK61+oUlo5TQxdB5JJLtk0NFOOpAtKLiFPT4boNeT9YVmVAU59eS3wEv
- aMHDFBSJ13USRit1zfGfZIe/0PXYuBe4xlgVKlA7TzYTzE2UGFnV6DkW2sXAdCjDvS3C
- o3G2cUYvJP06+IA7zwFERdZvB8z91YYK5zq8pbCt6yo82fIHHjKMpeCbnUfiMmiEwIIH
- OwfhcRwlxDY7GyDr8tDpmYAQ2Af8DyADMhs8sM+o3/Ssp50vTN65EzoViLJVcIZ6sYUY
- dUZg==; darn=buildroot.org
+ bh=IJ6S6OpupCHTko6dAcnY/XuVERqyhz/TdGY/4lkilX4=;
+ fh=kh8pKG+fe6a+B1/3Hq5WDAApo5FiZ3OREVPUrkIGlH4=;
+ b=GnPAhPueW9uH6Maq2TnTDLj1wFCTeGLbuutH4HJVsbSv8WxxfwcCd2toImGzB2EqIo
+ OLlnnSXiAsLOQs3loseJ3+mW/8qV+8Hrfq77bKkU4fBoRqI4RRFWLkexoh67bVrR72h+
+ wUiBeC0w+AHEhR5zIzF4qB03z9lifTSi0KOKtqn8EniP6aDdSnm2kvOSLYhg29UMggr4
+ ym1+BwASYshDifMCQPvVpHtez2J0iXcb83yxbQs2SJ78qgdtunwGThrg9ldO5Vo9Ycmn
+ 8Ekv82+ybVnv0Gs+QPKufm8/FrW3b/1DRzH1x9G5mGqDvlfi4R6Mfu15hRlHjAUSwKBx
+ YsyA==; darn=buildroot.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1789900398; x=1790505198; darn=buildroot.org;
+ d=gmail.com; s=20251104; t=1789901346; x=1790506146; darn=buildroot.org;
  h=content-type:cc:to:subject:message-id:date:from:in-reply-to
  :references:mime-version:from:to:cc:subject:date:message-id:reply-to
- :content-type; bh=fuWOdB9MI8UeiKAfBwT5KerfgEdvo9pYXYwTVcFg5As=;
- b=YwrxK+Bl1Rx5AZ2nFLr76S7NWaTlx98R/m2n1FLeHI3Kek7hEbV2Y0cuELJbrFDJ92
- FzV8ZKTJOEYD2J+6BySDS0FOAy3ViuD0RhLUihvjLfEa/PwqxZUW7PqyN6t4PXbVz4Jn
- 5ttWQtwXxMe8sBVnn3CUUfDyJHMczx0fuv1puxgi6ogggnR3cy69a2agusS6lUTjRQCf
- kvMiHF4KPxBRSxP/0GQovU9F12k3MUS0bCFiztfkd7pJcShRaLFaEnsD7Bqnl0oTMinX
- yDtDrDJym8mLhezljjOyfXT85YaOfQ7r0MSCWzON4UlMs5H1Cs4ROmL7ExNfbb8PwtTX
- nSew==
+ :content-type; bh=IJ6S6OpupCHTko6dAcnY/XuVERqyhz/TdGY/4lkilX4=;
+ b=L1VVts1Wz+N5YGRJDICl64qDg6Pwt3OWDklHW16RKkHSvArFm47H8GfdtsM1opRiv+
+ 95BnfQNtEW1nWgxScc6IlFUCaRhZBCMU6EGA2Xkfu9zGPRcLMmbnbKh8vGBMLXiD2TGl
+ lQYYRLQAbEzHZciRITRz5WWPBAlekyVuan8Rk4iwXPBI42HcVM6AmIKzghEaDmsm4W6F
+ PxqwzMyU5iHQRS0Ld6e1GP7JhSl2HRN2+wKGI9Q4BBet5wAXvdstUp0G6EEpeTR4Jz7u
+ QthlBfurTyRsqDy9GE59hmfeYgkI54GTPd1yuAekWMMyQcs/slCWaj9ZgM53V72k1DJ+
+ QoUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1789900398; x=1790505198;
+ d=1e100.net; s=20260707; t=1789901346; x=1790506146;
  h=content-type:cc:to:subject:message-id:date:from:in-reply-to
  :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to:content-type;
- bh=fuWOdB9MI8UeiKAfBwT5KerfgEdvo9pYXYwTVcFg5As=;
- b=kfLNxmVpASICC6+g7KNd7O/YVTHnHX1cY3FQt2QiKOgm+yWYxMBk8/Dg2gVXXxaKgu
- EY7KBsfzOpzwulwgWnlE0AKgbyIzXtOAhJBWYcLyWwvOvT5VQ4DfZwGWIiTZEHp1wGTz
- HQHELcjwPzBR2GcqBn9ScmUPqTsdP+PMgkc0cq+IkefDPZsIJ5CIiGwZxkyLZVowBpG/
- FcObMY9z57v3v8hLbsLlXEkKzCC/fq7I7fT5/BbzRSWAnxUFC3LFVFS4X/0UPaZKHK+Q
- Wpvs8oq4dmz4pADUhdh5uFdrlUNL/D3DaPDpjiJSTEzhTOQ+uyfs2ZJrzQpVJ/Tk6x9u
- FW3A==
+ bh=IJ6S6OpupCHTko6dAcnY/XuVERqyhz/TdGY/4lkilX4=;
+ b=IelmutETFoaNewlvsGStdTrrtUUEgCFrIkWNjossbwJlfcMTKwoC6o7fXybxwkE6P8
+ bxeWZw0OQCL6mlWfs/Sf703kFqU+3REyQ+9Y2FfdGW7Q+qkkesr+iAzLy2B/WZQs+jRJ
+ DoeA3ma2nQ/9LBwGZdZSb32W8ymxJKXSZQ+6JQZbLuPGoYwK/3c/YulJMNUNEJgrNTCq
+ Zs7hYU8dE6ChzwJ+vpaVS6Mb00m/8VVfHBNUKWzLPmcVp08rLd25ZfZBPYX4eEboyu/S
+ wiZgn57kdH4lLYNqBpNRfOkrawRqwcJkoGZkFrrloHTg2z/56PyYE+hRjZAWOSVmKXFC
+ DzmQ==
 X-Forwarded-Encrypted: i=1;
- AKwUvBx2/4vP65Zt+1tVI5ei8nF/fqe/y1zvVtuBQWDKzI2hjUrmKzEWY51ZjU1+8ZSIxPfvBSwNU8MXQlw=@buildroot.org
-X-Gm-Message-State: AFuF++naXIPlg78mPV3oKgg9o712P89/16qo/OVOpEa2BbLRh7U7pOgr
- +5lK5zeEXzg0APLTPd0KdbmpAd+wiznQVkHtYgMnQ83PAxdaDRvhJ5ykJMoFWrwnuXjSQRSzMAY
- i5CgYI4vLOlMAmqUASQKP3HcojRR3iQE=
-X-Gm-Gg: AYBFou3EAaBHq4yz9pTJ6oCPNTP4mJthYvkhJOS7DvQORxxR6KXoaS7jYu29rR1l9hJ
- 2QmtDRBLEsRmXcrTVC7/lFymDIB9Fr91i6L29X+4RY7dWhIe1DXYps95OzN6WEQEkMrxGEMoxi7
- KIdpFK0T/7hRWl35iTwIMqTyUU2EwIqkbyjL7+Ht2s7y8ugbdQZxE0dUpFDWYfh7xIWvT40JA7b
- Kwp0zxgSiy1NcTI2UYPsXA7M9IesaBEumHS1oXkCbM+z7E3ey3GJOfZTvPNzb6PlfedRYoTT6q2
- rhWXHCPOYPof/qiju3ilwLMDfsc6bpD3X2ksv2UnaOFViSf+w0hXy8QziBMhs9raswOvHvTaMQ3
- gcPBX8idwpHh6WQ==
-X-Received: by 2002:a05:6a20:438e:b0:3d3:b02a:7252 with SMTP id
- adf61e73a8af0-3dd8c57f75dmr14695819637.28.1789900397722; Sun, 20 Sep 2026
- 03:33:17 -0700 (PDT)
+ AKwUvByb9aBQhMyKSn7Z085DYet7rvEZi2ZMC/BXPfWItPy1yI4+8KVFTAu8HXBzWStaVfak9OtZyxtP2jI=@buildroot.org
+X-Gm-Message-State: AFuF++lN/vn/8S5SS1Tit6etsz7JV/CMNsyq5BGVrbfL5nprXrDRGi7E
+ /nDXYEeGu9rHua+O6wM8DFGxjn+immcCTO2s6UvKeX32IdEmRW2vNtEWHCgB8HjvphpNTRmoKH6
+ axAbbfl7NE12hRLTbFvB8v4VGb2Y+cEQ=
+X-Gm-Gg: AYBFou3tD9uyhhSEvqXUKmzkpLGRtOFHdiZXnLaKVCMDM12MYzRTACzGWERPrcSBtIM
+ G6vGUMswNN38/Qbi/KbNLtRHfZx86PTpzkw70vkdWQFZ23A0DzvQrcUSSP11ASGtRa5sT8YmHME
+ +kilqgye0dqHgsBCMoARQQ/mMaVh4D1lhT8+WxPtdjWIZPRBaTjKRYaz244gx1pncnUaoZjHD5C
+ dkS+8qmhlc8REhlZOVkdLwESTXBfzfnwJ+GiJil2zGFUje5Txu+NjFQ1XETuM1UR+3qzJ+foJ3Q
+ +xEAF96G0SF9JaTPWltIhHVuk4w8+a44AGZ1TqDZk1KrFEj8PEUdeSRz4P1PKeINhUmkcD5tp+7
+ 50DRSIrAiJ96DuEE=
+X-Received: by 2002:a05:6a21:390:b0:3c3:bbe6:95de with SMTP id
+ adf61e73a8af0-3dd8c3d18afmr14204993637.6.1789901346268; Sun, 20 Sep 2026
+ 03:49:06 -0700 (PDT)
 MIME-Version: 1.0
 References: <20260919155845.5776-1-bernd@kuhls.net>
  <20260919155845.5776-2-bernd@kuhls.net> <aq-xqh_4_J_v2lQ6@windsurf>
-In-Reply-To: <aq-xqh_4_J_v2lQ6@windsurf>
+ <CAFSsvmpcYXFia=4TuZGKAEpyciugC5nUn4vM6nYTnAQHG_+G-w@mail.gmail.com>
+In-Reply-To: <CAFSsvmpcYXFia=4TuZGKAEpyciugC5nUn4vM6nYTnAQHG_+G-w@mail.gmail.com>
 From: Adam Duskett <aduskett@gmail.com>
-Date: Sun, 20 Sep 2026 12:33:08 +0200
-X-Gm-Features: AcwNN1Vz7vzQ9ZaRzS9-EfUT74_VGILB4W3tk8o0UfIpOy1H0diREBlJ6ElnthU
-Message-ID: <CAFSsvmpcYXFia=4TuZGKAEpyciugC5nUn4vM6nYTnAQHG_+G-w@mail.gmail.com>
+Date: Sun, 20 Sep 2026 12:48:56 +0200
+X-Gm-Features: AcwNN1XBBOrN4LcRNJdyPCX6fgVN3T86NdLZ2bKRu2XwHXXOhggIrpLtlQJOaFs
+Message-ID: <CAFSsvmouCNMVzccaftqanK-qJhoMXUvWQnRKnQ5LLTWzTQZkjg@mail.gmail.com>
 To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Bernd Kuhls <bernd@kuhls.net>, buildroot <buildroot@buildroot.org>, 
  Koen Martens <gmc@sonologic.nl>,
@@ -221,69 +220,110 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============8858234957000148040=="
+Content-Type: multipart/mixed; boundary="===============4496493943948552176=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8858234957000148040==
-Content-Type: multipart/alternative; boundary="00000000000063c166065be7a90a"
+--===============4496493943948552176==
+Content-Type: multipart/alternative; boundary="000000000000ed6a8d065be7e1f7"
 
---00000000000063c166065be7a90a
+--000000000000ed6a8d065be7e1f7
 Content-Type: text/plain; charset="UTF-8"
 
-Hi Thomas;
+Again, I want to reiterate, that I have a patch series that gets Buildroot
+ready for mender 5.1.0 here: ://
+patchwork.buildroot.org/project/buildroot/list/?submitter=43
 
-On Sun, 20 Sept 2026, 12:17 Thomas Petazzoni via buildroot, <
-buildroot@buildroot.org> wrote:
+With zero feedback for over a month. One of them is a simple one line hash
+change to a license. Another is to prevent a warning when sync is called.
 
-> Hello Bernd,
+Why would anyone continue to try and send patches when the response is....
+Nothing. No rejection, no comments, no feedback of any sort. Hours of work
+and testing only to be ignored is a far worse feeling and more frustrating
+than being outright rejected. Not only on the mailing list but also IRC.
+
+So again, it's better to remove the packages completely as the maintainers
+have repeatedly made it clear they do not want to even look at patches to
+maintain these package, let alone respond to me. That way I no longer have
+to patch Buildroot in the external tree, but just provide the packages.
+
+On Sun, 20 Sept 2026, 12:33 Adam Duskett, <aduskett@gmail.com> wrote:
+
+> Hi Thomas;
 >
-> On Sat, Sep 19, 2026 at 05:57:26PM +0200, Bernd Kuhls wrote:
-> > Building the current mender version 3.5.3 with OpenSSL 4.0.2 is broken:
+> On Sun, 20 Sept 2026, 12:17 Thomas Petazzoni via buildroot, <
+> buildroot@buildroot.org> wrote:
 >
-> FYI, I am not a big fan of removing Mender. It is a widely used and
-> modern OTA solution, and it makes a lot of sense to have it packaged
-> in Buildroot.
+>> Hello Bernd,
+>>
+>> On Sat, Sep 19, 2026 at 05:57:26PM +0200, Bernd Kuhls wrote:
+>> > Building the current mender version 3.5.3 with OpenSSL 4.0.2 is broken:
+>>
+>> FYI, I am not a big fan of removing Mender. It is a widely used and
+>> modern OTA solution, and it makes a lot of sense to have it packaged
+>> in Buildroot.
+>>
+>> We have not been the best at merging the patches from Adam Duskett to
+>> keep the Mender packaging up-to-date, but I still believe Mender is
+>> very valuable to have in Buildroot.
 >
-> We have not been the best at merging the patches from Adam Duskett to
-> keep the Mender packaging up-to-date, but I still believe Mender is
-> very valuable to have in Buildroot.
-
-
-I feel like this is an understatement. It's better to say completely
-ignored, including my emails to the original RFC for this patch series. Is
-it worth even keeping these packages in Buildroot when an external tree
-that is actively maintained is available if the maintainers of Buildroot
-refuse to even look at patches to keep mender up to date?
-
-
-
-Its rewrite in C++ in its v4 makes Mender even more relevant I
-> believe.
 >
-> Best regards,
+> I feel like this is an understatement. It's better to say completely
+> ignored, including my emails to the original RFC for this patch series. Is
+> it worth even keeping these packages in Buildroot when an external tree
+> that is actively maintained is available if the maintainers of Buildroot
+> refuse to even look at patches to keep mender up to date?
 >
-> Thomas
-> --
-> Thomas Petazzoni, co-owner and CEO, Bootlin
-> Embedded Linux and Kernel engineering and training
-> https://bootlin.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+>
+>
+> Its rewrite in C++ in its v4 makes Mender even more relevant I
+>> believe.
+>>
+>> Best regards,
+>>
+>> Thomas
+>> --
+>> Thomas Petazzoni, co-owner and CEO, Bootlin
+>> Embedded Linux and Kernel engineering and training
+>> https://bootlin.com
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot@buildroot.org
+>> https://lists.buildroot.org/mailman/listinfo/buildroot
+>>
 >
 
---00000000000063c166065be7a90a
+--000000000000ed6a8d065be7e1f7
 Content-Type: text/html; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-<div dir=3D"auto"><div>Hi Thomas;<br><br><div class=3D"gmail_quote"><div di=
-r=3D"ltr" class=3D"gmail_attr">On Sun, 20 Sept 2026, 12:17 Thomas Petazzoni=
- via buildroot, &lt;<a href=3D"mailto:buildroot@buildroot.org" target=3D"_b=
-lank" rel=3D"noreferrer">buildroot@buildroot.org</a>&gt; wrote:<br></div><b=
-lockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px =
-#ccc solid;padding-left:1ex">Hello Bernd,<br>
+<div dir=3D"auto">Again, I want to reiterate, that I have a patch series th=
+at gets Buildroot ready for mender 5.1.0 here: ://<a href=3D"http://patchwo=
+rk.buildroot.org/project/buildroot/list/?submitter=3D43">patchwork.buildroo=
+t.org/project/buildroot/list/?submitter=3D43</a><div dir=3D"auto"><br></div=
+><div dir=3D"auto">With zero feedback for over a month. One of them is a si=
+mple one line hash change to a license. Another is to prevent a warning whe=
+n sync is called.=C2=A0</div><div dir=3D"auto"><br></div><div dir=3D"auto">=
+Why would anyone continue to try and send patches when the response is.... =
+Nothing. No rejection, no comments, no feedback of any sort. Hours of work =
+and testing only to be ignored is a far worse feeling and more frustrating =
+than being outright rejected. Not only on the mailing list but also IRC.=C2=
+=A0<br></div><div dir=3D"auto"><br></div><div dir=3D"auto">So again, it&#39=
+;s better to remove the packages completely as the maintainers have repeate=
+dly made it clear they do not want to even look at patches to maintain thes=
+e package, let alone respond to me. That way I no longer have to patch Buil=
+droot in the external tree, but just provide the packages.=C2=A0</div></div=
+><br><div class=3D"gmail_quote gmail_quote_container"><div dir=3D"ltr" clas=
+s=3D"gmail_attr">On Sun, 20 Sept 2026, 12:33 Adam Duskett, &lt;<a href=3D"m=
+ailto:aduskett@gmail.com">aduskett@gmail.com</a>&gt; wrote:<br></div><block=
+quote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc=
+ solid;padding-left:1ex"><div dir=3D"auto"><div>Hi Thomas;<br><br><div clas=
+s=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">On Sun, 20 Sept 202=
+6, 12:17 Thomas Petazzoni via buildroot, &lt;<a href=3D"mailto:buildroot@bu=
+ildroot.org" rel=3D"noreferrer noreferrer" target=3D"_blank">buildroot@buil=
+droot.org</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" style=
+=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex">Hello Be=
+rnd,<br>
 <br>
 On Sat, Sep 19, 2026 at 05:57:26PM +0200, Bernd Kuhls wrote:<br>
 &gt; Building the current mender version 3.5.3 with OpenSSL 4.0.2 is broken=
@@ -317,20 +357,21 @@ Thomas<br>
 -- <br>
 Thomas Petazzoni, co-owner and CEO, Bootlin<br>
 Embedded Linux and Kernel engineering and training<br>
-<a href=3D"https://bootlin.com" rel=3D"noreferrer noreferrer noreferrer" ta=
-rget=3D"_blank">https://bootlin.com</a><br>
+<a href=3D"https://bootlin.com" rel=3D"noreferrer noreferrer noreferrer nor=
+eferrer" target=3D"_blank">https://bootlin.com</a><br>
 _______________________________________________<br>
 buildroot mailing list<br>
-<a href=3D"mailto:buildroot@buildroot.org" rel=3D"noreferrer noreferrer" ta=
-rget=3D"_blank">buildroot@buildroot.org</a><br>
+<a href=3D"mailto:buildroot@buildroot.org" rel=3D"noreferrer noreferrer nor=
+eferrer" target=3D"_blank">buildroot@buildroot.org</a><br>
 <a href=3D"https://lists.buildroot.org/mailman/listinfo/buildroot" rel=3D"n=
-oreferrer noreferrer noreferrer" target=3D"_blank">https://lists.buildroot.=
-org/mailman/listinfo/buildroot</a><br>
+oreferrer noreferrer noreferrer noreferrer" target=3D"_blank">https://lists=
+.buildroot.org/mailman/listinfo/buildroot</a><br>
 </blockquote></div></div></div>
+</blockquote></div>
 
---00000000000063c166065be7a90a--
+--000000000000ed6a8d065be7e1f7--
 
---===============8858234957000148040==
+--===============4496493943948552176==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -341,4 +382,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============8858234957000148040==--
+--===============4496493943948552176==--
