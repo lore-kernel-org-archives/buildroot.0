@@ -4,124 +4,100 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3674FC982E6
-	for <buildroot@archiver.kernel.org>; Mon, 21 Sep 2026 16:54:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B492C982ED
+	for <buildroot@archiver.kernel.org>; Mon, 21 Sep 2026 17:18:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C174B60751;
-	Mon, 21 Sep 2026 16:54:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E7F5560749;
+	Mon, 21 Sep 2026 17:18:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Pg65EYeLtS75; Mon, 21 Sep 2026 16:54:45 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 5EAB960740
+ id fCzKCPUsStZ0; Mon, 21 Sep 2026 17:18:16 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 128776070E
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790009685;
-	b=S6h5p/PJlOqIy3kT3m0jZuWWobAD+qF88cvo884Tp4YtJLOv6CDIelPkvUr/ZRNlNeyd
-	 FuqQvSsWuWJoi4j+CpqHPOFJ4ntDm/VnDTuQYajeb2YD72M5SZQLvxXxzfNwzQZuq4wUV
-	 h4OlB3t5ZPwIeBUQ47/b5L4tyHeYf8JWu59jeuSBU97DcstkZQoDmoo/MfNRQxnJJ/uJX
-	 cYmbd7OBicVxC/UJumygcA75qKYFpFtDO/ZrGOCL1Vb/5JqI2FvdHF534nDkNOHj9v/AB
-	 6qr9OSxjQUFDU18TkkoVS7QhN78d9KafiZYloFzhdU00WMkPKsGUqIDltiPW+yXORxw==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790011096;
+	b=HSqq1PoQA3ROEke4In+z6J7aZPZbjvS+n0QXd4BV2+ujoszKb1QjZm3spzZfQ/qsQ0zY
+	 qwGJiOsAJ/ItTGFiC3/ZO0R+hojqt1fdyN6V0Td+eBXJqskEPNlJuS0BVkNCXvyb8IEIL
+	 fytmXsN61QoiycgrAs8w2/p4zxle4BkWQHLOGVJAnKRmtpm89i9bgsX3bxYhCPf8BC57B
+	 L6LqQXkHxyDSfowzGSeTbvPTFWI7JT1osdXWlvUwJwWjQoPVKQ+4g2LvhMBZLbXla7iAF
+	 Tk/EzL/BodfDBKxK3JroEeq4UwJ2qr/lkaG0ohyD2i8gMiku+w4F152ehK2071nAx6g==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1790009685;
+	c=relaxed/relaxed; t=1790011096;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 DKIM-Signature:From:To:Cc:Date:Message-ID:X-Mailer:MIME-Version:
-	 Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=lTn4ocfk0F++ZZLHkHiveCdNTGa19X77fQ55sRn/n5U=;
-	b=GpINyC5EZwHtXgytTfc7dwfsvaTNh/5yAiFvvyTH0OvIxiG6sBylNQyWYB/zj6mJHCW4
-	 jgyjKk3CW91SOWRtIE96sLb8zN7CB6Z5mwc0TYc6/8Z9T0oTFH27nYBMfb0P96BeCwVH2
-	 OvOQWR77EzfNIPBCMOz4JcnD0ARpdYbVKs5zxdQvPRA42I0H9nzdWy6yWZUMcarlgsLfq
-	 GhvzIywf7/a+beNsZA59upUuhu+4L3wBbeUiAQr+OnpY4/9qpMHnnx+TN0SUVLyhiLBuI
-	 0N1O0QYHcEYjjt8ZMl3ZbcauCUVL1FEyeAi8/CWPStZFY4vSAmT6GugvtajiKy60HxQ==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; dmarc=pass header.from=relinux.de;
-	dkim=pass header.d=relinux.de header.i=@relinux.de header.a=rsa-sha256 header.s=uddkim-202310 header.b=T7DmoTJ0;
-	arc=fail smtp.remote-ip=140.211.166.142
+	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
+	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
+	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
+	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:Errors-To:Sender;
+	bh=mGVN6ZTksqnSU/iXuamiov8QE/06cpQDtrjNMsUpX1c=;
+	b=fUwidQWwYzNtC3X61RNJp0xpGvty6fDDk6RINeMZhDdXI2RBsXgM4x6POJAdE3FLRHQ0
+	 YpRSQAqxAlRTrS4vrFgxQxuQuxUes9EfJhmni3GM1rp785cMJdkxpR2qGxgTrb6jIvxDw
+	 XruULQvLPUXTfCPo1Cckg4f7XmA7un3W+QUL2+aAPp72ujFNOwo4GYTyqHi4fjeLxZWSz
+	 qesQXvBMT2UQ8J0KqMKi9CeLIzLklxmJkrgf/UOFigJPJKqDdK2iMgbbIQJMbX6GU1UTA
+	 5qu2LFj/b/mxQTSS7Cg5aTd7gM/unOknzv6aOF2Gzk7WGv8CNC6ztBmST2KgBFiAscA==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1790009685;
-	bh=lTn4ocfk0F++ZZLHkHiveCdNTGa19X77fQ55sRn/n5U=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=KLmD/rRm/8KTqZ1Mzs7Sz2NFqQvq4XctIVPtEvozotvEfZzPn/Ndqhl+/ESPKH5bV
-	 M0mI0uCCQVp/4vYrJ/1KVYZqAj5tj+2TGGQDwmlWwDd62UDYKCkk1OKHT9rUCyfruU
-	 2DPADZfcLqVa26VI22MQ/GJNHSgB1Fr4XDqhcs5ZebmSA5+8/zE40KNf4dgr7hiIpC
-	 sYieP1zkyenjv/bw0OcEBCq1R1vMrOVYTPR1Jzn7uvulogo737/8Q5s0mQDUC0uUn3
-	 JeMG0KeYIE7aU4U2bV8Dox0aEcu8hn6ZLByqSCz+MoVl9+pNLJaimR+pc+3m2iV8bj
-	 6xp2KbIgrD5lQ==
+	s=default; t=1790011096;
+	bh=mGVN6ZTksqnSU/iXuamiov8QE/06cpQDtrjNMsUpX1c=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=mmzg8vYFQ+j2ryUdPjFJQojDyr9EnwU0C0FWGozpc98y0o5ku0EGn2/FRLVJAto7H
+	 OjOad9rDTwhH+vZaNyndJ5yVbyEL4jO2K/g1mGG2uJRtSi0aaqy7jHCJ/Tngz7ymOg
+	 /R4yTlCxLtuyHOB9OYVvbgJp6sW8A+tCH/hONkEZEPpc8kO0nqkK3/K+cJ6+odZHHv
+	 gEouribB1/LV6TvN/6TA0lAgqQjJ4Xve2zdRoNzjKrV6hXK1n3yPpeevVNTLRNw73X
+	 23AaxInB+xyRqbRrgbwek/ZT+629mY8Ryh8m1RWcdg1rSBgAUMzlSA6AHppzsPJl53
+	 xudDOG3598pLA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5EAB960740;
-	Mon, 21 Sep 2026 16:54:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 128776070E;
+	Mon, 21 Sep 2026 17:18:16 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 6C6C512C
- for <buildroot@buildroot.org>; Mon, 21 Sep 2026 16:54:44 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id CB7A32D4
+ for <buildroot@buildroot.org>; Mon, 21 Sep 2026 17:18:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5E51F6071A
- for <buildroot@buildroot.org>; Mon, 21 Sep 2026 16:54:44 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B1D436070E
+ for <buildroot@buildroot.org>; Mon, 21 Sep 2026 17:18:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1szuEBb64zBJ for <buildroot@buildroot.org>;
- Mon, 21 Sep 2026 16:54:43 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 0809C60740
-Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=62.146.106.41
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790009683;
- b=Bj84qV7XsgQWm2rdAoxyHeqyczdk1Q6Sn3f6vNpUV1N9KqEAptKtELMc/lzwu0SkQytb
- G//imTz7L3mdPCsoMBOEvu8kOYh2VEe3H7J1ARpguHovH3ahbZIQ2VSTHShNox+dWcQpL
- jyyHANts8z6MoG2SDICdr2eEmr1PwGPwZMeTUx6JIf4Kz+ePVO9OFNnWemQmKUgVDZnRO
- qqm+JM1dYtxstKdF1d4eIKM8aePzxRwguvUu15Htc0UfIqQJnZTFSrQuU1HbI4a8ZXFX7
- fnQeiyUz7pMgFg1IlGmLp1B4swIVUmxlUJ3Q3ElF0uJ4R7O8+H/sbeNaWAeTzimRJ4Q==
+ id ff5kV7ycABzE for <buildroot@buildroot.org>;
+ Mon, 21 Sep 2026 17:18:13 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org B32CE60684
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790011093;
+ b=fKyMvCREyf3QJF14Y9+P4W6QCW2wvUAtfBRMSGX4Cd8tpohjLfQgNwgnNRd6NVWJtyP1
+ DyNGDCvRCCCRddL+oBlaFxpAIaNPrWSXOjoQx1Mr0raniBSlzOX1K825WkFkvHP794jS0
+ JnfCoxvZ47ssr7y4oz22aGq8gz+j/srdO51crJiAgqYIo4+wKh9A7uSmSGj9fPumXN1Al
+ Gaj7Wj1e5apFQNfvvu5AcvvOviO9Vo2ZV1fZ0iv9v0LiLLmpfIX8SWWa+kopRPPwvb8ML
+ kUEamjWquXgDpSzi0VY0Wv6q+X7SUGivMA/duJa+msV7fLA5Zj6w78gHeZUmANxUKvA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1790009683;
- h=Received-SPF:Received:DKIM-Signature:From:To:Cc:Subject:Date:
- Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
- bh=6i9+hrriThatUDySEF56YZcDuwYqLx6Y99Xp1yxB2Hs=;
- b=OcOt1MABDQNqU7jDmnhm4ICmljXq5U/33xE6OOCEqH/ZkqRFe0JPLq8Np8PAxeN4dhKB
- h5IUHWaIufPQcPkwayNOGyOji4c0YjnY51ZPg5lilWNIqHMOmuCi8jp2sdWoBrx+x2OC5
- WqiWfupXO0E4m4P9s+UaMSJ69DQSkXeMBFyuYEwVGwTg0gOKMIe29SCmJKTXp0luhj5Ut
- ssyQt3UmBg5KrqmrvH6OI1xq7BHXs9K60HvxPTuB1TTuWIVFUQerfQSPXEXKlABlf9iPH
- +vhOiyUx6YTT3T9SHs6g+vzsq6qWQDx7SjutjqNEfbFLYj3RjoOJP79kEZIomyb9v+A==
+ c=relaxed/relaxed; t=1790011093;
+ h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
+ X-Git-Newrev:X-Patchwork-Hint:Message-Id;
+ bh=O7nSf+UOIicRl6IS1aQ0azr68lW9JC8J7svv00ImZXI=;
+ b=e257i3YVTR/ZKRJMO2jLlxe4z8klvf5ChWoRjKPXkwK6QWgl9Raq9oQvxjWvDnilcrjC
+ wI2oTV1VsoFgGgVFHUHDGMtuh3jLU6G1ltA7F2wXZJwCkxw+DjjfSXqhZqHsp/QlA04l0
+ dxY0CpHUmCofB9JcOk/e2bA5TazbFpmUUggJ5M/vyKK24YjMDvyKV5wvNdJ3O1Jh4sZH8
+ xMHoqOldG/vMxJTHSuPPTK9J/6pt2uRvdn4RGoTwjQtJbZhdCRzVnV+u1VZHZ4D6VXsT/
+ /jTOKRiFzZN7G44F1Elp9UiCqi8y/dkJMqf11TjIaFVw0JS0LwKThyI5eEZR/o4fy+A==
 ARC-Authentication-Results: i=1; smtp3.osuosl.org;
- dmarc=pass header.from=relinux.de; 
- dkim=pass header.d=relinux.de header.i=@relinux.de header.a=rsa-sha256
- header.s=uddkim-202310 header.b=T7DmoTJ0; 
- arc=none smtp.remote-ip=62.146.106.41
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.146.106.41;
- helo=smtp04-ext3.udag.de; envelope-from=kirk@relinux.de; receiver=<UNKNOWN> 
-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none) header.from=relinux.de
-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=relinux.de header.i=@relinux.de
- header.a=rsa-sha256 header.s=uddkim-202310 header.b=T7DmoTJ0
-Received: from smtp04-ext3.udag.de (smtp04-ext3.udag.de [62.146.106.41])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0809C60740
- for <buildroot@buildroot.org>; Mon, 21 Sep 2026 16:54:42 +0000 (UTC)
-Received: from localhost (p5091fd1a.dip0.t-ipconnect.de [80.145.253.26])
- by smtp04-ext3.udag.de (Postfix) with ESMTPA id 56E74E04A6;
- Mon, 21 Sep 2026 18:54:40 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=relinux.de;
- s=uddkim-202310; t=1790009680;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding;
- bh=6i9+hrriThatUDySEF56YZcDuwYqLx6Y99Xp1yxB2Hs=;
- b=T7DmoTJ0HO4mcuCE81XRE+tByoA9tbrCLm98hYuE3twVF0UUHBGMN3TzvTEIvD3JTHSBUb
- EH3KVc4FTzMZtqaiWeo4b70965NQrmApCDABS2WwxBzVmgpj72ok6H6MMBB9/HxeCT5Kr2
- RsDmvcmmcPR6z757Mb2HGVZYpuD7dPxlfaYVB4D2TTd6QbreoTQfw4x+7TiPMKASka1X4y
- L/PVdJUtOQVX1ujxa15T2P7rAWrFqMbcIl81Ryt6pyrgBEsjRV8G5blfjWYiBmrGAHlTRQ
- NIlHnb1qO4bQAGRyq8myPUhjegV3+s3XXEUmjFARwkJ6ptxBOWz7gH7gdK1w2A==
-Authentication-Results: smtp04-ext3.udag.de;
- auth=pass smtp.auth=sho@relinux.de smtp.mailfrom=kirk@relinux.de
-From: Stephan Hoffmann <sho@relinux.de>
+ arc=none smtp.remote-ip=140.211.167.122
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id B32CE60684
+ for <buildroot@buildroot.org>; Mon, 21 Sep 2026 17:18:13 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id C4CB8935A7; Mon, 21 Sep 2026 17:17:04 +0000 (UTC)
 To: buildroot@buildroot.org
-Cc: Stephan Hoffmann <sho@relinux.de>
-Date: Mon, 21 Sep 2026 18:54:37 +0200
-Message-ID: <20260921165437.1572124-1-sho@relinux.de>
-X-Mailer: git-send-email 2.55.0
-MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/libhttpserver: bump to version 2.0.0
+Date: Mon, 21 Sep 2026 19:08:55 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 43de288bd1e11149068fe52595f56f33523e0159
+X-Git-Newrev: e88c26904bbdc604eff0cf3029f41de943f1f9d5
+X-Patchwork-Hint: ignore
+Message-Id: <20260921171704.C4CB8935A7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/iniparser: bump version to 4.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -133,87 +109,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Version 2.0.0 requires C++20 and GCC 11 or newer.
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/e88c26904bbdc604eff0cf3029f41de943f1f9d5
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-This major release changes the API exposed to applications. However,
-the 0.x release series is end-of-life, so staying on version 0.19.0 is
-not a viable option.
+https://gitlab.com/iniparser/iniparser/-/releases/v4.3.0
 
-The build system detects GnuTLS through its headers and links to it
-directly. Make this detection deterministic by following the
-libmicrohttpd SSL option and adding the corresponding dependency.
+Bugfix release: fixes stack-buffer-overflows in escape_value(),
+iniparser_getseckeys(), iniparser_getsecnkeys() and
+iniparser_dumpsection_ini(). Adds iniparser_load_buffer() to parse ini
+data from memory and generates version number constants. The SONAME
+major version is unchanged.
 
-https://github.com/etr/libhttpserver/releases/tag/2.0.0
-
-Signed-off-by: Stephan Hoffmann <sho@relinux.de>
+Signed-off-by: Chen Pei <cp0613@linux.alibaba.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/libhttpserver/Config.in          | 6 +++---
- package/libhttpserver/libhttpserver.hash | 2 +-
- package/libhttpserver/libhttpserver.mk   | 8 +++++++-
- 3 files changed, 11 insertions(+), 5 deletions(-)
+ package/iniparser/iniparser.hash | 2 +-
+ package/iniparser/iniparser.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libhttpserver/Config.in b/package/libhttpserver/Config.in
-index 3120059a08..88f3aa0a74 100644
---- a/package/libhttpserver/Config.in
-+++ b/package/libhttpserver/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_LIBHTTPSERVER
- 	bool "libhttpserver"
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_11 # C++20
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_LIBMICROHTTPD
-@@ -12,6 +12,6 @@ config BR2_PACKAGE_LIBHTTPSERVER
- 
- 	  https://github.com/etr/libhttpserver
- 
--comment "libhttpserver needs a toolchain w/ C++, threads, gcc >= 7"
-+comment "libhttpserver needs a toolchain w/ C++, threads, gcc >= 11"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_7
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_11
-diff --git a/package/libhttpserver/libhttpserver.hash b/package/libhttpserver/libhttpserver.hash
-index 03ebdc4a76..b6b1987464 100644
---- a/package/libhttpserver/libhttpserver.hash
-+++ b/package/libhttpserver/libhttpserver.hash
+diff --git a/package/iniparser/iniparser.hash b/package/iniparser/iniparser.hash
+index 27a5fa81aa..7d4ef52266 100644
+--- a/package/iniparser/iniparser.hash
++++ b/package/iniparser/iniparser.hash
 @@ -1,3 +1,3 @@
- # Locally computed:
--sha256  b108769ed68d72c58961c517ab16c3a64e4efdc4c45687723bb45bb9e04c5193  libhttpserver-0.19.0.tar.gz
-+sha256  c44d67aba1e4b6767c0fbb895e1acd643601c1e3ee3de7705a59ed09bcd8c92e  libhttpserver-2.0.0.tar.gz
- sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING.LESSER
-diff --git a/package/libhttpserver/libhttpserver.mk b/package/libhttpserver/libhttpserver.mk
-index 54774e763b..7b7aedef0d 100644
---- a/package/libhttpserver/libhttpserver.mk
-+++ b/package/libhttpserver/libhttpserver.mk
+ # locally computed
+-sha256  67575ed032a544d5359610e5f697af786371bbc3eb01311218ef8adfd3e5e329  iniparser-v4.2.6.tar.gz
++sha256  7a339779ddb37fafbacbf73b176ce968ef9dc5146831b87aba80a18b68355ed4  iniparser-v4.3.0.tar.gz
+ sha256  da809b67f3cc571433b7b97d4253ae1f9d8817770aa859aad202df6bde1d5fde  LICENSE
+diff --git a/package/iniparser/iniparser.mk b/package/iniparser/iniparser.mk
+index d5e4601d2b..1a6fa3fe8b 100644
+--- a/package/iniparser/iniparser.mk
++++ b/package/iniparser/iniparser.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBHTTPSERVER_VERSION = 0.19.0
-+LIBHTTPSERVER_VERSION = 2.0.0
- LIBHTTPSERVER_SITE = $(call github,etr,libhttpserver,$(LIBHTTPSERVER_VERSION))
- LIBHTTPSERVER_LICENSE = LGPL-2.1+
- LIBHTTPSERVER_LICENSE_FILES = COPYING.LESSER
-@@ -15,4 +15,10 @@ LIBHTTPSERVER_CONF_OPTS = \
- LIBHTTPSERVER_AUTORECONF = YES
- LIBHTTPSERVER_DEPENDENCIES = libmicrohttpd
- 
-+ifeq ($(BR2_PACKAGE_LIBMICROHTTPD_SSL),y)
-+LIBHTTPSERVER_DEPENDENCIES += gnutls
-+else
-+LIBHTTPSERVER_CONF_ENV += ac_cv_header_gnutls_gnutls_h=no
-+endif
-+
- $(eval $(autotools-package))
--- 
-2.55.0
-
+-INIPARSER_VERSION = 4.2.6
++INIPARSER_VERSION = 4.3.0
+ INIPARSER_SITE = https://gitlab.com/iniparser/iniparser/-/archive/v$(INIPARSER_VERSION)
+ INIPARSER_SOURCE = iniparser-v$(INIPARSER_VERSION).tar.gz
+ INIPARSER_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
