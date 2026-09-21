@@ -4,128 +4,149 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C331EC982ED
-	for <buildroot@archiver.kernel.org>; Mon, 21 Sep 2026 06:06:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72374C982DE
+	for <buildroot@archiver.kernel.org>; Mon, 21 Sep 2026 06:18:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 31B1440CBC;
-	Mon, 21 Sep 2026 06:06:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DDC24406EE;
+	Mon, 21 Sep 2026 06:18:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Qq7EjUuWVFsr; Mon, 21 Sep 2026 06:06:09 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org EE49E40CB4
+ id sGIWpu5geOfV; Mon, 21 Sep 2026 06:18:11 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org EC4064071F
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789970769;
-	b=F5qt4DDd9ceBNQaIptYRuE0lugyXjYBjQhqZcQ7BactsZIJr37g138YdeV/3p3NmtT60
-	 lJygVyRXjB5dPQT+8KcDCE9dUmAICGVgbYFLzMIUOzGCzTfcUXO+QdLKq9GINuUWC1uDw
-	 Qz4JkkJqY9SFYFhlMh2pEfZPRoW/P6E6buOsZwDuv94b3Lp0UhVTb3eTS8o5eJTvHtZq8
-	 y3oYe7hcfBVBbtwxl4Iv7/wiNe2NSjbpD7m4QA6p+9XR3VfR3ftBIBjK0/PV24jRBo4M8
-	 dxe6YdcwTVIcq4dfW1P1QGOFZ/dM2q4OYY8UaNaGGQOt6/J0TMhBr87AFx47giZN6Tg==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1789971491;
+	b=qdQJ2yMxWnYF6JukZBQv0yQNM207uyeAXOVViNeYUXbKcDzB/dkMahmqe6OrHO5JqQ62
+	 NrRUi3+Yu1ekOO0+G//JUR5znTsz9XvCWjId/Mey3lzyPhH13Cnps3Ag5FjIgcXINUaSc
+	 3TBjkhHFH2oc5gA+X1CA5bP2D9aDC9NuV5i9uXS3nOSm79FerGUg/k7p4kl60U/Xgb01p
+	 VOKlf988q4s1JtAmzqXwCDmKMITW1/vZc1RQIZzQQmR/DHij1J5WMFaL85d3MWCmwWPwi
+	 ti5LCug3axjhuAi+dMMR7g/Ki3f9vgb+ZUgn8Zaw6nAHMNL5TKznN9Xj3Ef0Kug0wPg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1789970769;
+	c=relaxed/relaxed; t=1789971491;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
-	 DKIM-Signature:X-KAS-Sym:Received:Received:From:To:Date:Message-ID:
-	 X-Mailer:MIME-Version:X-Spamd-Bar:Subject:X-BeenThere:
-	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Content-Type:
+	 DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:Received:Received:
+	 Received:Received:X-CSE-ConnectionGUID:X-CSE-MsgGUID:X-IronPort-AV:
+	 X-Amp-Result:From:To:CC:Date:Message-ID:X-Mailer:MIME-Version:
+	 X-Patchwork-Hint:X-Originating-IP:X-ClientProxiedBy:Subject:
+	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=7C7hBBYVxJLAHNntR2GKkyxeya/JdoxKaTykT3cCtzs=;
-	b=WApHCpGdTV/4PXSzhNR5GmCGBVL2C3uejcrF7oEQKbFkdPtpccIUU9ZTFpZCMYF0YN1z
-	 NBNJjCqePFWaTpWAfFujEd5/k5e9URrtiaD83akWm7a+CevQAQEQA6PRRGBwRIs4IfhoV
-	 3ld2altkex6BxVhRvHrGzKow8klgmndOUoxRDCViwj2z+MAqsLQ8ofi3XnJIYMEKyyFKw
-	 nmAhHC1cbHLFzH5JLKcLuT5EUf1V/7dwuAU75dZuPD9KtGr519AXuIU1HDSnRee7XLWGs
-	 bl66cu2zeX3nt9W2G4p6OPQ/wEyd5cA0rjX1zKLPis9/k5o5nPjSjlwlondAyH35Qlw==
+	bh=M0wLaveTakGCMRFjucL2X27XF7Dd5SH6O/QQUs51pEg=;
+	b=WxFLvy/O1zEdYkJpYY0OJ9Tg7a3ON2nd6R7jAQs8ZeLAmT1luLKXpxVDHxMRV54/EMpy
+	 g0kEzbr5J9fUfc8mg5ByJi0sam+gTxzw1428uEq/RZRpK4PDIhuZ/0jLG10UBeMSElH72
+	 3SWGgUh6y/y9E6gWBcTyzhG8Mkqlf0kzs5m5S5JCBql6I9phPIObXdTqo529zIugjcLi1
+	 kjW++l6m+DJTWICldN5qbx3gbV6hQGbUKQMbRUKokQ3gwt6JZF1gBlHEFIlA7bP2v8o+l
+	 sVWZIeXkzi8Oy9nQD/O3E3CnKe+g8Bf7L/X8883PVpbwGjmqKPoz2Dpp1qJNDiUIFgg==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1789970769;
-	bh=7C7hBBYVxJLAHNntR2GKkyxeya/JdoxKaTykT3cCtzs=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	s=default; t=1789971491;
+	bh=M0wLaveTakGCMRFjucL2X27XF7Dd5SH6O/QQUs51pEg=;
+	h=From:To:CC:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=Mxz/bblQwIgRvhgL0t96rZu5KnBhlm6FEF0hEq1iGZUu8ZiF9e6gH7gtKs1ZtPyUi
-	 yd/ylRTIu7vgi7eeGNoeGNFKqingbmC5GoPrkow0iaQYje4f+OaXspH8sVATyvxpb7
-	 JTkxRfqzYX9y5bwaaHJC8sJFVqq6V/dScp4IWH0xz2avI3VFJo8MgCWycrfufxM9ge
-	 Tvxbn3y1sYco3wg+KULwUAie+XMgWCWdvcRsNyvDU7moM2WIwHfZEi/iguDctaKPqL
-	 ebJYC4gb0Hptc9IDtKyMEMqHP/UsXPqMgYEH0tXHJ4JPdP4Aw5kz5Cey6UHZUHGQ+2
-	 xf3V3e2vZN/HA==
+	b=VWp962qyiXXDLY24yrqwkQhdtPmxD8lb2wOYbPpryGpx1ElTuouTbuCsV/Fsb7aaP
+	 6W69RW0/2blp9ugGe1pC8/rGPnezyCH71kwFWnP9h5K1KA9ZJJ1cHZOehH28AtZ5BJ
+	 tSRtC6d62QZmx64MkrNBq8/aao6qTxlrlSbLL5rcPndvs8+rMO5K1ItXlu7LU2RMei
+	 HTGVfjcLUN90vJEurh328O8mJ3UAjJsBL+/szvC0lPp0M2Zd/bC3/3KlBquEb2JMfZ
+	 XOO+bic/JkcitFeJdPp1EHGl+i3mM2XnKR2JNoqV/W8TLEIYUSH49Qa56ItU0HOCft
+	 981AZVhP5Zbrg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EE49E40CB4;
-	Mon, 21 Sep 2026 06:06:08 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 7C98FFEA
- for <buildroot@buildroot.org>; Mon, 21 Sep 2026 06:06:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EC4064071F;
+	Mon, 21 Sep 2026 06:18:10 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6E001392
+ for <buildroot@buildroot.org>; Mon, 21 Sep 2026 06:18:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6240160629
- for <buildroot@buildroot.org>; Mon, 21 Sep 2026 06:06:07 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5372380D09
+ for <buildroot@buildroot.org>; Mon, 21 Sep 2026 06:18:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kaWJyyc1k2jU for <buildroot@buildroot.org>;
- Mon, 21 Sep 2026 06:06:06 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 1844860608
-Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789970766;
- b=H4BnAi0KWLQ46bHvync62sJv4GoZTVLZarjczzV+Sk5Tjo3bnDv/LC59xt4lG8puxkDK
- 8a1xfbC0mKd4SbzvFANJIqd2jVOw7s0vpbzPeh5Phfq9QLpXTzMrVVKgikb97cBI53C7c
- 6STuVmgAbKFc9JR8TzCUYBnPxR/xxlQGwx1UeZbbreyLA05K0Ufii/M9sarnTgIGRrOl8
- zxwV5OSOmzjYNwkzbJEevqv0OT5UhGBW4xey7Sxepkq6cwF2Nt0CjJTKAgoIrE/oIWl2N
- aV6T+cl8mmXao3SwGFzbeXRr0XnMeokygEkNkt/lOYn6fLSN8Ws0bSqXp/FxMmtaVPw==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LyYEn7rhGuf2 for <buildroot@buildroot.org>;
+ Mon, 21 Sep 2026 06:18:08 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 02D0380D05
+Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=80.12.126.239
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1789971488;
+ b=rM5Srvzdpyb40TXb9Y7b/5tJhSKD/xL20RcOX66kiOwSA9P+4KlzauyLoHfOtF8xlKDe
+ 8YRBggOYMp/F30mOmKHv/oxL5W0mBe9vhifPJS8XIsRMUEaR5QRmVCm9wDpqUkXilALIT
+ NDf6g+BEZpxpBz1plo9QwbC9piIe238L/L5bN9pLqf0Zm6rewEUn5nb+avqwd2CIkf9ew
+ DgfePa3+7ROkzDTR78rbrmtlheHeC5iEfCbWI7Xo4cGeiPQ6JPEyvuRGehiaZAM3YI9AT
+ eVKTDDiQrGBXwCyGhf5EiUIEjWhw/AK0U9FJP05nchRmds37ukw4BCwauW/VV3I2OaQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1789970766;
- h=Received-SPF:DKIM-Signature:X-KAS-Sym:Received:Received:From:To:Cc:
- Subject:Date:Message-ID:X-Mailer:MIME-Version:
- Content-Transfer-Encoding:X-Spam-Score:X-Spamd-Bar;
- bh=LxPwlUgMKYshEnW+Ijk3ihZOIeHMfLnbEQ7ZkSdqof8=;
- b=lCF5SFgWZ9laleT3gkBqR/6Iq+zz+EC2lWmHqIawlv9NGrOpUTzWdaCDN/osib0QVAfF
- uLiVQYTHo73nBiVBkdyBUan/d/I0q1MUxljMrEK6yWVDZ9DXVDfOGHZrjEqAeV5GiEoMm
- Y+krXSGZOFAA6HS0hFvoEceOw9pI59YZeOr2IsoaOZaHKFhrTJr2lwEmLVl/0h54K3TVJ
- J0CVFilbwVDFukW6tZuLXggx2NiTl3zeudj2HlzNHTI414UZ/BgGogQpVYJ5Py6gI3i6m
- lrzi/gk7Rw2rfK0Nl7U8fIHJy4vI+hSpTAscCKVGci3IHypBkZ5XxM/OgXyuJUh5rKg==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org;
- dmarc=pass header.from=kuhls.net; 
- dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=cLncW3mY; 
- arc=none smtp.remote-ip=85.13.140.57
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none) header.from=kuhls.net
-Authentication-Results: smtp3.osuosl.org; dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=cLncW3mY
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1844860608
- for <buildroot@buildroot.org>; Mon, 21 Sep 2026 06:06:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
- s=kas202605290044; t=1789970763;
- bh=LxPwlUgMKYshEnW+Ijk3ihZOIeHMfLnbEQ7ZkSdqof8=;
- h=From:To:Cc:Subject:Date:From;
- b=cLncW3mYXYxWZKG14Ye1kVVyLGo/5QvhTMCaKkzb+gxP2bOUKhzdLjqqBkVMhAaFM
- OPV/VE0FxR6yYFWwZF2RiLk5u1MfBqsVPmOOjNjuKHlBMo3+X2leR2xBGFtFb48GCs
- mzyaJyBeUzK5Pv99YulS+V/RdIShL94LLvrlGxZHXzOsC64WU10JMAQDrVxY2Dhk5x
- eJSJ2Tuimu+eVd8WodqEaJLjhF/8gZ7AZ5hZGCEaxlMq06QOG/HOE9qqXmDgckrCMW
- UChZ04/2fCwy7W36nssxrCnlz4Bi+0o22yzn+esSlGQFLmh2QFUqHMvGfsN0OqiLI8
- fWy85jedeHTeQ==
-X-KAS-Sym: v3:f51bdf72230551df:ET0ZYmwHBKs/KzAbiasoecMxobDk9nNTMD5dWFyU5H527uTad3H1XqLPEILx0yICgfKpTj/Nr3x/Iue0V0XIUJrogoheUbUgQq6AzGfsoIyTRTfc0q9qahtjEVrgEPVedpPJK1LUQ/5LQRTBV4q1FlBEhr+V2uwvzijmsW9I+CnwASOtjq7F9Sq0SLotIDo3YPDKgifxQgdpZEngcT++/c08MxztVYa/SE2p2wCu27uaNSyElmwFTPe0EmMDaxa0jmY92/hFPW5YZFscrYO43/KekBXIL0J+f6ossZwJwxBVxSAQzYg4bptChobMwcdFJLPS0glhHURTH6oAwaPwOg==:+b8Lqcci0VjUPql05/BYKJE3FciD7o0jyNkIPc/PwM3tHg1hf+scXI4aA4wZBDgVetxjL8tR/hfyFsTMBzl/DP1P5CT0AwqFEf8HW1Q5rTAbnqJ/g1zXYQhGMy/7Xu+TpAhPy7lC7zSx+fCdUwAMGk5oWmgAHsEogxl2kZi0xIIt7EuE3C+wvRc0P5dy6nO761ZFTnE3ab9toEgDAKKjEBKie3zMsKPXo8LagJmZHQHPFZ5Tzkjv3W3efubFN7qb4Pt+1YUOnV9sFPbGGFe7WjYG98AzBTRYXaviDrsRtsnAVgR4nRfcpdMSAVA3OeKLjTMQ6D7pRz4l7lgy9FVkvRUbl90+N79pwX2UgQT7t+7+W4e2KCcAb8e6aXlCoJfGv/FZgSQ7rZQqSagbmgf/9hCRAA8S4/3hAyIz5vuqy/0lkzmO/MYxHJRGX5QkIBrB1Hl/Ae6uFMADeIn1Ep/xbyTZSLG+GPwFBcc4tlHMW0EG1arPufSH/8NSF10+ze2+CnaKAwXwXn2vhezwCznkwLu21ijxeObyUgRhdPZA56Wltyq+he9bfoJwcY2nNFXaci3AbHlDHLvdnV4GQfqwp/QY/w7w5rDsTCr3sknk0RVPVf
- 0Z/wX9R94VX40XvvZ4
-Received: from fli4l.lan.fli4l (p54a1b329.dip0.t-ipconnect.de [84.161.179.41])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 55B41A4C2845;
- Mon, 21 Sep 2026 08:06:03 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:45262)
- by fli4l.lan.fli4l with esmtp (Exim 4.100.1)
- (envelope-from <bernd@kuhls.net>) id 1x8XAB-00000000882-0DB6;
- Mon, 21 Sep 2026 06:06:03 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
-To: buildroot@buildroot.org
-Date: Mon, 21 Sep 2026 08:06:02 +0200
-Message-ID: <20260921060603.10831-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
+ c=relaxed/relaxed; t=1789971488;
+ h=Received-SPF:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+ Received:Received:Received:Received:X-CSE-ConnectionGUID:
+ X-CSE-MsgGUID:X-IronPort-AV:X-Amp-Result:From:To:CC:Subject:Date:
+ Message-ID:X-Mailer:MIME-Version:X-Patchwork-Hint:X-Originating-IP:
+ X-ClientProxiedBy:Content-Type:Content-Transfer-Encoding;
+ bh=xbrjSSuHtu4bayZ1if8DuKWEfgGuA/gJKkJCXEK7HPY=;
+ b=XgOpiup/hyjmVgrbc+H/j8RU8YrFhSHZITL0szC2ekpL0ILknoJaCnKH3iXsKZZyzIvk
+ PksuPjUQRtSj+/MjAyx4/Vz5mczfFvbxAW2NNaCp3DPkZuBoMoysIl/gjvQzS3u3PmMKo
+ mjZgGr1wQhorgext60r6JYbKIvbYWXjMp/VuhbBsACgNfsc1VDa1Qb8awQL3TjNeMfTue
+ bqxlPZ9CwYYsoQIiAJDqaXlmi8TJNB70CunGb0vlCdYslPb0E3xHmImE3bd2rHze7F2tr
+ 6FcFk1Pvm4RvHdlwZG9wgqcruOwH61xlKq4xSjgvlv4z4akMmjeAEvNI+qedBxUHYrQ==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org;
+ dmarc=pass header.from=orange.com; 
+ dkim=pass header.d=orange.com header.i=@orange.com header.a=rsa-sha256
+ header.s=orange002 header.b=G8cbvNd9; 
+ arc=none smtp.remote-ip=80.12.126.239
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.126.239;
+ helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
+ receiver=<UNKNOWN> 
+Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none) header.from=orange.com
+Authentication-Results: smtp1.osuosl.org; dkim=pass (2048-bit key,
+ unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
+ header.s=orange002 header.b=G8cbvNd9
+Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.126.239])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 02D0380D05
+ for <buildroot@buildroot.org>; Mon, 21 Sep 2026 06:18:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
+ t=1789971488; x=1821507488;
+ h=from:to:cc:subject:date:message-id:mime-version:
+ content-transfer-encoding;
+ bh=xbrjSSuHtu4bayZ1if8DuKWEfgGuA/gJKkJCXEK7HPY=;
+ b=G8cbvNd9uIuwhOay2e/L0zzSZH3qNjJlnP5e4XGNxMqdaFIqWOQgfcqb
+ eS2rCGHf38wUmPNacDUU4PhatNsLL0kfGMmLEc4t3BI0J/NYFLGHYpa1c
+ pZjDL0b3cq/KRlQseUKSVVlXbHbgWx2UePb7wX2y8JeiIUqFCZg0NL4/G
+ 6PvQ8ID/md4aDRq9A4GTmMX99qypoBseRXKpt5Z/rKGMvT8kTkz0P/ptB
+ qjJmcKnASmgNSNv5RF4ym9/SMmD0UvCxg+dcb4Izgc4LKqKSLqlEfabzs
+ mS07AAqVh3a/3elKjH4UZaYBlrsCh/vPszANzmtyiNDlbzY3rr/MEdFAQ Q==;
+X-CSE-ConnectionGUID: VixlA020QyWygEA85W21EQ==
+X-CSE-MsgGUID: sl5EO7sMSUiTB/enNju3Zg==
+Received: from unknown (HELO opfedv3rlp0b.nor.fr.ftgroup) ([x.x.x.x]) by
+ smtp-out.orange.com with ESMTP/TLS/TLS_AES_256_GCM_SHA384;
+ 21 Sep 2026 08:18:04 +0200
+Received: from unknown (HELO OPE16NORMBX506.corporate.adroot.infra.ftgroup)
+ ([x.x.x.x]) by opfedv3rlp0b.nor.fr.ftgroup with
+ ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2026 08:18:04 +0200
+Received: from yd-6wlzhs3 [x.x.x.x] by
+ OPE16NORMBX506.corporate.adroot.infra.ftgroup
+ [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.49;
+ Mon, 21 Sep 2026 08:18:03 +0200
+Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
+ Mon, 21 Sep 2026 08:18:02 +0200
+X-CSE-ConnectionGUID: MozR04UWTve7rAET89KEuQ==
+X-CSE-MsgGUID: oBulno4lQ3iPF7IpLk7Kog==
+X-IronPort-AV: E=Sophos;i="6.27,114,1787004000"; d="scan'208";a="470331148"
+X-Amp-Result: SKIPPED(no attachment in message)
+From: <yann.morin@orange.com>
+To: <buildroot@buildroot.org>
+CC: "Yann E . MORIN" <yann.morin@orange.com>
+Date: Mon, 21 Sep 2026 08:18:02 +0200
+Message-ID: <cover.1789971481.git.yann.morin@orange.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Spamd-Bar: /
-Subject: [Buildroot] [PATCH 1/1] package/linux-firmware: bump version to
- 20260916
+X-Patchwork-Hint: ignore
+X-Originating-IP: [10.115.27.53]
+X-ClientProxiedBy: OPE16NORMBX605.corporate.adroot.infra.ftgroup
+ (10.115.27.29) To OPE16NORMBX506.corporate.adroot.infra.ftgroup
+ (10.115.27.26)
+Subject: [Buildroot] [PATCH 0/3] Update a few packages, some for for security
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -142,51 +163,66 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Updated the hash of the WHENCE file, due to firmware additions and
-firmware changes, but no changes to the redistribution/licensing
-conditions.
+From: "Yann E. MORIN" <yann.morin@orange.com>
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
- package/linux-firmware/linux-firmware.hash | 4 ++--
- package/linux-firmware/linux-firmware.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Hello All!
 
-diff --git a/package/linux-firmware/linux-firmware.hash b/package/linux-firmware/linux-firmware.hash
-index c9cb054689..4c9ac0f141 100644
---- a/package/linux-firmware/linux-firmware.hash
-+++ b/package/linux-firmware/linux-firmware.hash
-@@ -1,5 +1,5 @@
- # From https://mirrors.edge.kernel.org/pub/linux/kernel/firmware/sha256sums.asc
--sha256  f3937ca282ba256242e2b6dbe523df8a80007d29ffd61f56d270190865492ea8  linux-firmware-20260910.tar.xz
-+sha256  f80dcb757a623deda62200c08e0e1a88c76fb6b54964f31b35fa74da1c90ccc5  linux-firmware-20260916.tar.xz
- 
- # Hash for license files
- sha256  8116433f4004fc0c24d72b3d9e497808b724aa0e5e1cd63fc1bf66b715b1e2e9  LICENSES/LICENCE.Abilis
-@@ -50,7 +50,7 @@ sha256  8542aeabf2761935122d693561e16766ce1bcc2b0d003204f9040b7d6d929f2e  LICENS
- sha256  be904cd28cb292b80cdb6cf412ab0d9159d431671e987ad433c1f62e0988a9bc  LICENSES/LICENSE.qcom
- sha256  fc6223d4bfe9f2f9e2eddc44b9fe5721d0caf49f01cb08d602906add686d8c6f  LICENSES/LICENSE.radeon
- sha256  2bdd2e716f05d9737d3f9a20f9a3a3c0caee0e866100ddb0673f1178e42f92b9  LICENSES/LICENSE.sdma_firmware
--sha256  8bc466434be59e1c044cb3821b30b7328859ca250a451bb6c799ffb21ae47f2e  WHENCE
-+sha256  9350832c1e9afc35df50fa8b9793b31d60d78ef963152eec903fc0dbc6b4a559  WHENCE
- sha256  fa43e1b9a13b341a07adca9dbe73d0f9072d7966fdfe811c01f0dd2872d7309a  LICENSES/NOTICE.qcom
- sha256  bef9c828e84f21e7835b4de7daf954a327e1ff777871b58e116039b684c0d604  LICENSES/LICENCE.e100
- sha256  26b3c946f1f378ff25bb3bb7c365d108a2bc0bf08619e5e08bc0e4f9aaa6ee1e  LICENSES/LICENSE.xe
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index c5749513c5..17fb565cb9 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LINUX_FIRMWARE_VERSION = 20260910
-+LINUX_FIRMWARE_VERSION = 20260916
- LINUX_FIRMWARE_SOURCE = linux-firmware-$(LINUX_FIRMWARE_VERSION).tar.xz
- LINUX_FIRMWARE_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/firmware
- LINUX_FIRMWARE_INSTALL_IMAGES = YES
--- 
-2.47.3
+This small series bumps three packages, two of which with security
+fixes.
+
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 43de288bd1e11149068fe52595f56f33523e0159
+
+  package/qt6: security bump version to 6.11.2 (2026-09-20 16:56:55 +0200)
+
+
+are available as patches in this mail series,
+
+for you to apply patches up to e08ef449d915444978f2bc784c9fdb7438d11c98
+
+  package/skopeo: security bump (2026-09-21 08:14:50 +0200)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (3):
+      package/distribution-registry: security bump
+      package/docker-credential-gcr: bump version
+      package/skopeo: security bump
+
+ .../0001-s3-aws-fix-build-for-386.patch            | 45 ----------------------
+ .../distribution-registry.hash                     |  2 +-
+ .../distribution-registry/distribution-registry.mk |  2 +-
+ .../docker-credential-gcr.hash                     |  2 +-
+ .../docker-credential-gcr/docker-credential-gcr.mk |  2 +-
+ package/skopeo/skopeo.hash                         |  2 +-
+ package/skopeo/skopeo.mk                           |  2 +-
+ 7 files changed, 6 insertions(+), 51 deletions(-)
+ delete mode 100644 package/distribution-registry/0001-s3-aws-fix-build-for-386.patch
+
+--
+                                        ____________
+.-----------------.--------------------:       _    :------------------.
+|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
+|                 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
+| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
+| yann.morin (at) orange.com           |_="    ,--' | / \ HTML MAIL    |
+'--------------------------------------:______/_____:------------------'
+
+____________________________________________________________________________________________________________
+Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
+pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
+a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
+Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
+
+This message and its attachments may contain confidential or privileged information that may be protected by law;
+they should not be distributed, used or copied without authorisation.
+If you have received this email in error, please notify the sender and delete this message and its attachments.
+As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
+Thank you.
 
 _______________________________________________
 buildroot mailing list
