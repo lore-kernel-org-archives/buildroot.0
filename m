@@ -4,203 +4,205 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B5B4C982FA
-	for <buildroot@archiver.kernel.org>; Tue, 22 Sep 2026 11:46:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23054C982FF
+	for <buildroot@archiver.kernel.org>; Tue, 22 Sep 2026 11:46:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AA3176068D;
-	Tue, 22 Sep 2026 11:46:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D69BF60762;
+	Tue, 22 Sep 2026 11:46:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TXSLy7fNFmdC; Tue, 22 Sep 2026 11:46:36 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org B8C2E60711
+ id 0u2jCyi7LMjz; Tue, 22 Sep 2026 11:46:44 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org F381660793
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790077596;
-	b=q9fl9soXgWm3rZ1N0Osv5E7Os+PQD1CyLvtqxIl7OQWnWmNsBNG+1D6BZm8LIUiVD0ns
-	 TRlbMxpI4cMfSwZEWwediGeYjfIhfIGHvUkePN/rOcBcQyMh0j1AEPTAL1Xq0KBTZ0QlC
-	 k05BtDxmiGAiqBgFI12lAZiCdtcsiZMRWL70yPkguxklsfuOfXX6GVrlvtfBrwIcYDOxQ
-	 VeP6P7ukI1zuKZVMA39IvUf4la3xO/aKbX1u6frj9Z2NbFT4FmofbSgqcAmLxUzzUNElq
-	 FdH3fAqRG7AdE+NRZ7f64Y6wQMSTQLTOZ/TtR+87bzMlqSXXQxCUngxgE9s361S250w==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790077604;
+	b=TYwxmbjiuSw5MbMtibTz3sGHX5UsjViY19YrLlZuXBMfYdP3jzrSwVz6bnjm7jSwL00n
+	 mUAbKvQmfHgf6nPUn2typIP5cThxSdO59oSsHN6GPnf4SxK+Zwd7T4g1KJmpVGZJOBYmp
+	 IlWfzTMSLJfp/4sWAFUQp0pjXlISNz3CN06O4t+NRH9oXguyA9MhGYKvP2Gv6yb/bnrnd
+	 b3BbLlcLWvpQsiy01CfCIAcSNRwQj7BFuTCl0WfLv8S3EXe8GnH9dnI2X/mWUKP+iWDsa
+	 NZxvTuFrycyXn3kyoW1Z4i/Mj2Jv2QBznd4MMt6/3udKEioN0JDtKj3VWpAEosGuI8w==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1790077596;
+	c=relaxed/relaxed; t=1790077604;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
-	 X-UI-Sender-Class:Received:To:Cc:Date:Message-ID:X-Mailer:
-	 MIME-Version:X-Provags-ID:UI-OutboundReport:Subject:X-BeenThere:
-	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:Content-Type:
-	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=u8iqAL7DFCDcjgo4Ga6ZsU93pji+LBUYN5Keu6CR3ng=;
-	b=gd6GM6zhpZZhbsbeal7r+rlnr28ZbIUMtNjvoLIdt78Jv41KA2kNd4EGKHygBb4bykza
-	 U5wKtd0O4u+XDg9ZP4U8SVETVkOBQ24FtDJcLeOomryRmeYt21cE+Yq3m/uRJ7+GIPtY2
-	 plQON0hTcBQkh7+NZU8BsKUokNVaR0nirs4Z5JllMAp0dlboD+IfBVfFhjQP/e3PdQFL4
-	 CGcutRf9SLa7qlQiRRzfY9b2p8IKjT/InVAqLxyOpqZWoSZgYLN3LyYbEY77dPdpl1hce
-	 Pi+4kEFx5RrfnedEFYOkGB02qQsJf03GHAjIn24z+zZ59YAGn7MdvFtD5NhZNtPGRAg==
+	 X-UI-Sender-Class:Received:To:Cc:Date:Message-ID:X-Mailer:In-Reply-To:
+	 References:MIME-Version:X-Provags-ID:UI-OutboundReport:Subject:
+	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
+	bh=uiCW7V1Ahwm/ydYZ6Oz9V2nJXQQPih48zLY9paVXjL8=;
+	b=FbHZIEQJi97L545OC92h+wc02eHrNu1SuwjQeXLo0iy/2Y7niyPriDx3Q2DIS9C/kS4w
+	 I0zKQDXhnOGlTO4iehQE0A688HNJmNN2VPl3F3WxstsNKH72IikbgLE8rC8Q66LfWCM0b
+	 S6cBqR40/PLe+0/+6VhS2UAyaW6IVEEPDy45E+p3AvLYEVKFBkD+vOMEKQy8f5wYTlWEA
+	 +LnwViVqpamMGaHDpTz91v804ohpuPGTCjSHSFSQgCXZXJEAnKMW7gyKVnRP1MHcZTLPp
+	 BQUeq+/QyLlXoM2OAoVAKsOcNVe0vXO4BkEobUU+9KhD6rNO+pXR0EdVlmKLPoh7+Gw==
 ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1790077596;
-	bh=u8iqAL7DFCDcjgo4Ga6ZsU93pji+LBUYN5Keu6CR3ng=;
-	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=SAmhH2uujtyQN+S0wO2DWtgACvoTq7EKmRLN14UfSt42Z7u7nvjrsYkTXyMPklWX5
-	 1RfAXq0xhj56ak/F5xLGgyrOvqoSZQguKKDv09rUHW2Cm9SeazKv1VUk+RaEu6pDnb
-	 eewqQP82T0/wqMkiqwWo/6lfrHT4VBMsLM9QTXZxXxmSCA7++oC8t+/9dGxRWsYPLb
-	 LwPucsmRQWW0RvuAVfpBkPMaS90kXgfYVL9u98vz4wcpDHqt+qhEr7baH5bh2FZnYw
-	 bVw/P8OnXmKPDt1K6DrMDIT2WpGvc0iBxki02NjRVLbd3m0trRKUakgTy5GEE9OyiS
-	 7I0/OGTCHAGGA==
+	s=default; t=1790077604;
+	bh=uiCW7V1Ahwm/ydYZ6Oz9V2nJXQQPih48zLY9paVXjL8=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=DdXlBItbM1RCC78VMFVXcA0WWteJQlOdfs5HdQeCgXSsyPj4PfptS79KIZVFVa8qm
+	 sb/Zo/yZrGfJfqrR2aLUqEsYBN3Il7hIIjMHebOI6cs/ixMaM6Wl99r4/pPCZ0XMWe
+	 dIpj+I9CGEenGRA/NSQEvzTXPcfCaLwq6UYneubWM/CjeWiWcfI0J20Xdst6Aptqwu
+	 1sXlMYEmT9HmZKzUoF/Zh1BmlmxddI1UN1XnTOBW8wZtJNiKdkeKOnC7u7P/eyG0De
+	 HG8fnH5gzus78t3AM50CbFDxN2LaL+0TsFwkkzG1B7nD88b01Re3H0nQ/iHcloI8zk
+	 Un64ljs9kRZIA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B8C2E60711;
-	Tue, 22 Sep 2026 11:46:36 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 35DAA9D1
- for <buildroot@buildroot.org>; Tue, 22 Sep 2026 11:46:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F381660793;
+	Tue, 22 Sep 2026 11:46:43 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0B3D9A20
+ for <buildroot@buildroot.org>; Tue, 22 Sep 2026 11:46:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 27873407B7
- for <buildroot@buildroot.org>; Tue, 22 Sep 2026 11:46:35 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E5BD460793
+ for <buildroot@buildroot.org>; Tue, 22 Sep 2026 11:46:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id usy7nlnK0FxL for <buildroot@buildroot.org>;
- Tue, 22 Sep 2026 11:46:34 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 8779140778
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790077594;
- b=ryUSyrEyzn+eL28xJtxJAp1r5UbxVjARuVsemIw98RBZ411OX2NPfpGPvXPr6sCGfYzr
- zOrGf01EqdbqUnYLKE/par92oYvVihCOlgb7+jstSiR9beY1H7B2NThSjQ8EPVX3r07jb
- O2isLexhBfaa0f3ek0J6Zf7ESwwNLCFuqRmwDTYR/zOyyc6oM8lkpep1QSKDApCARY25P
- TezLWbn6xuEXiXrWzWlZpcP9EOEnHB5PPZbsfAtG9b5I3lhomC7p7DXLLbeUAA8GNZA2K
- NFSBwwMN2cTXr0aiH8Zv+n0+kMrxJh48v1ghrh1ZiEsl7hIGFM8wchhH5RjqloH1UIQ==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NSl5P4uLRuPy for <buildroot@buildroot.org>;
+ Tue, 22 Sep 2026 11:46:42 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 5FC7C60762
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790077602;
+ b=l0hJMLNLUQ5Z0AVGsNfjwD1tuw1zhJ9CTaMvwBDp6PLcRSr7bk0NuIUBFabVEDI57pXB
+ KgCtDJRZRzwstx2rGoXyu+1DNBQDfZJ02+gBzsIMCAHzLnED3yeDwiw905AHxc2Fef4iA
+ EGp21mBPUvAiJOcJQE56BekefPmzwzBdUYg43esk3i6xLRpn3whmEp27jOucM+Le/COm5
+ mYXBDCJCTKMUmaEshklfuZnV3qFRsmCDG7R7dMFGvocp6UoCpiWYrf4iRnnXh9bhvO4bs
+ l/UKMOipHknBr9/WxwKoMHUPQCHQ4xE7bJR/3ahNPWheAYeGBptjutbGsVVfPgP8bqA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1790077594;
+ c=relaxed/relaxed; t=1790077602;
  h=Received-SPF:DKIM-Signature:X-UI-Sender-Class:Received:From:To:Cc:
- Subject:Date:Message-ID:X-Mailer:MIME-Version:
+ Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding:X-Provags-ID:X-Spam-Flag:UI-OutboundReport;
- bh=mkm6yrKSBPTvEq3dgyqOkofdjE4i+rk94dAHDkVjAIM=;
- b=OpohDv2F/JVsRwcruL2nnNQz59ZwSOAU/1+sEADFONZ0GTbIw3u+4X1QvlYrIwX1ifjP
- wPXW6BDAEGrIuLaL+z/q+u/Ct3ZWU0INqXdO+I/KL1NK26LPHQrhC0I3HxWr3JUKw1cU6
- Ee7qnnmHkKg/zGsBn36NlxpS0nnOCuQU4go+CDamv5OU9RzO4wZw/5AUg+7B72ESeqdS1
- g4uLBV5lju5bRA62ya2HrGY3crn/pKdcEW/FnAByLPaYdniwIAmw2T06Wx5IIY8o38qx/
- v8tH3POwK5hmgs8i7smtPaBDxc/Kzvx6cZ1LOMeKwdw8XEvSz/3UEd0qz+MjO1IW7Vg==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org;
+ bh=FI2wOusr4KfriR9vIS4jWs4mDmvr4TRruh2iZS6/rkA=;
+ b=j6lGTPSPj4MOjW/nBwTuD6bs4zc4kK5M+n8o8xap9tuKhi/5AQhudwfHpzovI2h2pNMU
+ 9r6tVrKGMvsHbicCWM7Ar2o9Z5+LPUzbeRUi1Khzq3mrRSEM3XXmW3R/Hr22rMIDqR7Fn
+ jwH1dnH8XDgZ/GfibCpLCc7bSIN4qPe9SVKcu29n8BZXct6GprzkwiLbthddSnX6MhoAj
+ lCAT8RuQjOOQvD+zgXqFqYbT3goN9LCuSf2LrP7ryaTWJDkL+7HuKxiOb1E6UmYeZPebh
+ sE8hydLnuK40eMT52H3VOeypmFevWQ6v1FYfanTtwBnyKAzk2QMASVK0hzHjzeIQgfQ==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org;
  dmarc=pass header.from=gmx.de; 
  dkim=pass header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
- header.s=s31663417 header.b=D7BNF2uN; 
+ header.s=s31663417 header.b=dPVKnLk3; 
  arc=none smtp.remote-ip=212.227.15.18
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.18;
  helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
 Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8779140778
- for <buildroot@buildroot.org>; Tue, 22 Sep 2026 11:46:32 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5FC7C60762
+ for <buildroot@buildroot.org>; Tue, 22 Sep 2026 11:46:40 +0000 (UTC)
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from client.hidden.invalid by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1M8hV5-1x4sLf0iI5-006xGm; Tue, 22
- Sep 2026 13:46:30 +0200
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1M26rD-1xBRvU1GFl-000MdA; Tue, 22
+ Sep 2026 13:46:33 +0200
 To: buildroot@buildroot.org
 Cc: Norbert Lange <nolange79@gmail.com>, Sen Hastings <sen@hastings.org>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  "Fiona Klute (othermo GmbH)" <fiona.klute@gmx.de>
-Date: Tue, 22 Sep 2026 13:46:10 +0200
-Message-ID: <20260922114613.805843-1-fiona.klute@gmx.de>
+Date: Tue, 22 Sep 2026 13:46:13 +0200
+Message-ID: <20260922114613.805843-4-fiona.klute@gmx.de>
 X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260922114613.805843-1-fiona.klute@gmx.de>
+References: <20260922114613.805843-1-fiona.klute@gmx.de>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:rcywYEubfEZa1mB6E0px8SlDAXOaaQ96EfBYujCDUtlF/EwA0az
- B9lQVRKnV8PafQ00gYQCB+YPdv1yj31EMC4MRfi9pEpBrdRnmQZgKyJ/ciiZCaTQ2VPi4y7
- iabMNbIpFIaOQ4DWd/ZRCt1t0yrDvljR3CtKyu5NI4bgswPUx8s56TbYP1tKN1GQhJoKdU3
- Gn1vdv7ze0k+uveyMP7ug==
-UI-OutboundReport: notjunk:1;M01:P0:P4flTRKrbwM=;3wLpAIks2amOcVkVXutwxhfu8Mw
- sP8z03ESDc+KCHtd5HVdfRGtDWy0bkt/T8fFjo1kQK/uQpb7ejLWiykPLASdj4jcCfhqotUWM
- P+wjJMwqd7nA4+ihbRW0cdyfeAiop/McDhiQR37v3sVt5zryyhHCZ/JNfpjbcEwUK2jDmB07q
- EvQYyftfhJx0HiB//pnUNczKJspJtlo7MUkVsYEU/9zAGEIJSWQjDCO+fR7mKo8H5s5MuHSmd
- wBrQM75g5aJI6Ht56Z1H98qKAjUbNI0BSkyA6jzR5tZq/ksur0UBu5e5B569Nc9HYnYjwzMO5
- wIox65Xvu56+dAatcidr7tqjaV+5rAVcFRDqG//IQCRta/IxUFfKIrPvlOOrY1i4gqTNoxCid
- L5MvsBCWhqfviwVZ4rSQVCiJGgjhL9o+CLA1oRrY+sk14mLhvz/D9m7H+Q80Otf3rjzqwlTtL
- zFjOaGDjYrxbmol63HCSWpmXv1MJS8rI2LCUrD4zZa+4ZKLHmIYov+utEqIc4Zb6DskVaAgch
- 5qZJqUMcx9oUh94aukTtj71BYKfaaAyYDKmQ1Lpe+xjZaSCz6hPg+wKMgLkv1w72xlxj1nuJl
- h8Uahy2sOn6p78BQeVlec/PmUA8LrSQBBh620juNS0IbaQ0mj6UmNW/U0z7WFb7lUqb3ka4Us
- 99Ig3+2XrAqyc2SJ+L/ULt44CU69qBGZJPbNrh1yfI0MR+TmRWqowvHxnTXdwMVUUhwiKm0ap
- wARO5cGK1vNGDIm/oeiYdLLjtoyIJbpuITBy0EB2bDYwUYoa4CQrj5K8ey9+j3zjAU5QHCdHz
- vv3acZSVyg6HZZPkMqR6FBXazn+UD+AUGzYu1Qdquak5nVDNBAFxcaHLCKmRFN/wy4UZLovVg
- ZR5vA3/UeczPk0zhOl0cSuSewfQztuK6bMKvRovGqAyuj41appYsbgWd9+3GuxEWPFfaSoT5V
- gAosYYnS8L7iW5fB3E4Qb7dRVBrfKmGErPxy2wh7ZOYWut2uugd/vlpYNhBVu260GIg3VpLwj
- e07zxLbVD+jQ4h4Ok5SmrZ6pcza0lSgymioRo/+LFppK0J/mDVIoB9hNKFGZqBkCjG/qtEGoF
- oNUBPjwN9ypbjyzIW8rc3gAi012dGtwz9BfG65aKmtoFB8naFlM0W0xcVAyEKmTV2/9bEhRGa
- R0nsh4mAC0dWB5bj41R/TTJVVn6ZMLimYcZ8Am/6tUTQLxvcwEGopVQQ0kxRlJHtdPRwmmX5R
- bfjspcAPDAtTnkQ+LpB9KBJryCgoEVySczdi+V6ICunTNEkcx9hZyu5C7lWSUu0fFPn8UWH/b
- 4kORUbTgQG9pR3sYaML3fMDyQlLcLzq1Dk4QQOj/LWAP1v9ycj2qtQC8HulanLBCokBz2M0AS
- dEl5AhoXmZ3lh9s6q6nW4cCQPbkee7CaVnnI1fkVoHauDH6gDg5iBJgoQ9t/UVMh188+X8onF
- 3/yS7JrkVkSbCOmNjS+kKIW/boKihOczqB0y2r0JOR7Vh+8qJavYc4wTRcXMf8+2xLQ92Q3qc
- L4Itd7zDbO8fl/vfaclUjBWREfM5f7IVAf9+8iioDZJ0Mgz6/AiX6Hd6wF8sz9C6iJDUueBQW
- q9lB0fsaRSMwbvbQQxyQiThtGtfqLKEda0sajXmItup1fzeorGEy6i8chyfEMKtvUaNQOckyy
- 5fAgGnAvjW0MYV1wTl9rbYJMOCRe+xjfOS+QM7PInjPqyeA402bMvxdidRufBv2v+A7ShBSXp
- QRzQWlKZunjp7CJLkOlRho2LWYaxDaBydbYeRfUAnxGuz+6tLEFh2uUbSzF9b77Lms4/1QAfB
- eePwdDRh/cyBxPfjoiaTF780k0JXsmhabecrcpr1q3V5P2VXC+qtG96G64KbG+LOW6xGag08L
- QEGT1kEblDYAcaM7dP5v51EQFaDLt9tvvrt82PKQma1mBmd3gWx+COAKGvEIChmmCT0rDWxBA
- Ml5vGyCnX790euPSFkAjlvmVwbxCkltnNtNdOkS3QhUn5w6w+S3gnPVZs4fwFQ/Gn1kPokRPw
- vL+hrnssjdYQS/j5vNKzWgpm1YS1fwGprouOzVjpwr6tEaBh4ojKTMj6n8DKk32140EG+3zFG
- r9yf/F/QjMKgFdgRj0WRkFOQBoIOFmudODJ5z1XB0r0j/dZzEwHmJjdsm8zj7wCXIZyivpdbL
- Yi2mQGN73ywtKe/DT/+w7aXzKUESlaQz5M0jfxGs89udUQ3aXapC9Eg3aOEl9q/MYtqXZSl4r
- 3k9+XG8pTMT1hIhsLTqoE0fPTgO+KgntoRcC2agRAhHDG9brMaF2VUyVElXdSkCGg947iUy4l
- f0jpkm61Y0yStKgy8UQvkjCxklNEWLf9NqgG+GL7GkE/uYDwqqxKJyDkXxl1QermIIZZyQOZJ
- 3yr0zg0WcTLdT5LKZgs0KtZbSlOFDSG63LYdP3TelxQPNKdeIuWdIsr/RIlt+wxGhdovqEB3v
- vdoI7vfoGHTtqfiCefuZsX2JLBbQ9eslT9bVqxPQrG+W3JIuTr9OSac79uAeB6QbnjBbYk+kg
- 055cEdQMT2r3fQzGCZ/A+yiCs47ttRxBxws+LhrbKNBkOJxAYdhZXGN5lRgWHA4J++VZCDLu4
- SQRh8VeDJgYBu2EW1fM6dmVyMFUG2tH/B4oVEVET/WbtFwbmJOGT2i5JUm5PAhGBNPBLjaMnA
- U+qt2dIt6r8AoQ1vvUh8QP79MggyBcwGwjq/fWpJXhvGc/gaS7qlUnVNTZc02C7pUiCwjS6O8
- UYrbRx4uvJZF31DMg0pxYRu3CB0X4UaTw2DBrrRRVwKLf921tln3dVSVLMtnIDx62eY64aAWs
- OiTdSgTCG2AECp11cJLpjFLi39cB/8jEtKrHozuLfUHnVE2/8qicAUQGRJ/gq8KbZM6s47t2S
- nKXU1iqOGMWqJTFaW+tpz+JOoC4nLAXNZBp6ht3Gnn2LhXgOEgO3wbZSO418u+aQZwFkorJxb
- gIxXrdyFg4qcmnpBYCqEEYCQ1KSbSc01TTKrsq0+ctbnZAK0UR+Tie/F69vcbyX3hCbuSh1+W
- 7VczxHkyeCRlVC50OxQTcMRNafhsmlGoh0f6LFmrJhsgQzPWQqa5heX/8FjpY+Hrv6lmIUjvk
- QnrxKdq09KGA7E7izZM/9D0M0biLk6TlimYbdYtOaTJufoMpwDJtm7Bdzv4vU/A41nCfmzDgV
- 5ROgmFVdq2LrJW115XvYS3CD3wYPzLqe5qMTRmypIllWKzAHbefgPxQfHevKQDG7LyGzlDJu1
- xDsLgKJxpSih0xTpdDKKfkdb4zhl/hOrh+tyPg783TVW3QXNKGnL2XUQ0cG9/8ODoi+vKKC7J
- Zqejs3SJp31vCz6k139Ilftx7lrMFpdf4r5QB/pJBTlpKGpaH93Eivs99Fy3k5nDhV2XfUb18
- r6FS5f+VFC66b0Szh/SGcfxuF3pO8ASYGVv5pOw84t3LrhXgXjDQx9a7yqXswt9smpfI+KtB9
- EZZnaHfLAfTcnaOCizCKCLf3ddBCVfFbkJmEnOSgM29r1CDtfVNk6JgWxw8niV5UdIJcF9n5D
- ZljY6CgitOYQnVFftGSqnxG+rILZKzVHgoRV+r9ml8HnaCMvgT9qjKj3z0YtkwtXhrKSFYjrx
- Xt8Qe0xE5S+flGWnLy4+jwm6aJ/dpOGIcyOcxkTOkSZ+kpzlSGBqYhhKrDywOO9EgBjcCugMn
- eR2coSN0GzyDranhXbSC+C2zI+qnOzpmGUn83jiUg1nyjXAai5S26pP5IqUST11NUW+q2/o9A
- NGu84C4Wvk4PGg7p1ANMT5LvQNKZeuXQUU0hrR2quy5jD1vPYKaCSLm7+lOVyfSZ+oHQtKIzv
- 2xSWVgSeOlNACpnPeQWF0xZRMRLlljmgpxuc3j5zBKJwHJki6hP0byJQP/w/Repn1joWI3NSM
- Poq2XRiap6pc7p1V0YBpzIAMNm6cPAYHUe4vHgJlfTCEm+KO0FC8YnJCeFW6VkoL8o53f0pkZ
- nlWa27dBzYDl1O+CpwCEjsjeiohWkEfqbXpg69jTd7N1DBUAb3PJrJ947wKg21jHD3RnuflEc
- zDqkTnPoPdcW4wU2kx71LbVY2nyvZQLegvtDhIChspUsBB+1zriE6CIlQDyqQiFLZ+zu3xm8W
- nLveZ0mWPfxZRYOOUnqGw/jKrPkdiUwHtYB+kBJC8B1VXY72p0HPT8t5/STgwuMu35X4yTyfo
- pCbxb3B4hDSHryyH+BK9Kgu+YoeHgKFIfOv2pMRvmzArar0bpQ+6jku82Jki3DPM/ZqMItflF
- q001YS8E2oVdoayUt4TwXjAg8/a5T1dq4Vgn938H1LJKXFvcf05L7yxdCJMzrz4eO9KebnlEQ
- TxUPi6o3Y2Z3CyAtYVLNXi4dEnVTG3fHOsMcreiQOszwMhhyfbxyiEIUY+VaZrvY87tjmBUoM
- YFHdw6H8sqajB5HuDE8D0zNL0mVTCNK44K94Vt4NBzKqO7iczKiWSPCqKA7pIpvdGn00WRiBu
- Bkm20BBiJcVsqoQiU1u0ltFwSLZotegyC830bMjyr2f4Hnkkk6amM2vBXGr7dzZo6cSonNVWr
- heOEluU94qDJMSj5yQEua+gGmgEMPjkRlwYqdPILkd/crh4EEQ5VrGcDaWcvFZ/s7xzZCWAhB
- TmLmdRobkhEHtw608VDRtZPZDOhuh1lKrLahsPaH6Dg9IyH2DgsEjjtXOBT5yagoP11mkiSlK
- 8oq4nyyBDsVIZB9J9aGrlQcV+B/jKnWvFrxUtW6jrWTg29b36j4Zp38N7pTr8EbtRQzmqvScA
- 1H3LuPBRJco7lovy3Sqa45UuXEXETZb551mdgWnV41PoPiGtc+s1BMNKr8+o20lYN8QtrlGJU
- X5GygNkmP+XWfvXtDWDMIvih9Pw8RML8Y/XXLZMpVr8g6wKHOSe/WPN9uDxOC7JxYIGunyPhm
- dy+PbzTXuEUZgK6zhaXK0VtcpHTj5Bz0Ronkiv0eo9Kivi2diP7Pi6MzTy/ZEKBMlegQtKh+6
- ni39AveS4qg2RLXRehcmsI+wqWzpSpGk5Yn2Jz9HeVif2jSZu86U2PC+7kre77CjH+e3FBiAl
- EhBnbfymNeE+fEL6olm5W+BS6V1qfXob8c2SefglvPgRarNStu2Hz1XbKkmaOq00n8aciIBhO
- 40aC8qRO2TJJLEMAyXemKFlI3iiJ2PybNJ3gCnV97d0N95lVDn17fFs/ngkYb5x/Al8SO84TM
- /2cnq2gof66wqPmJQdW3qXhPFGdQAqfe1G98AWE7+n4MZB/NWidl2OFt7eGXIzgi+kh91OzUA
- A6wPCI5gl2MXSlzLS6ZCZOTiGgr84hwXtQnPPeS+MFjheAiROIO5eH9T0BoJ54EhzGmnjfsik
- fFuzjUQwqtMdQiXhhZ5cekeAaJQHdXpMDEagPFFqJQR3IluzvofbbFJGGc4Y4Q3jV66fyDH+Y
- SVG4p/MZ098mhjPctPknKSkY+ASkRQY8mpmPXG7yFy7l3SNwGXsaTz4YQMh7WWjyfTqQ8Egrb
- QmqHTNYYe7+Bpezhi0gObsGyHgFISHB2kOlK7c3NdmE7vkCD8RGvtiWX2r8VNFJrJNk8M8Nzr
- wtbf15y3hBOopAb5rm1lw0lrQ+KIy5sju4flCwGCbfB8qVOhxGLAKM4JF2heJRb7ozYF8Fpl2
- crXIUKn4iNcMKthaTTx8ujOgaplG11SJnIk5GgSVKFKM8vbLeXgN9zPuHDbt+pmAEfHDFTsjl
- e9d9rojqCZgELOwBBka48eE5mTJgspV0O46w1qKOWMDJAp1kChfOGI8EpgMRHjaLgajD6HGKA
- mkJcumdeIV9aqNYha9bdcSM5Z04NS1C7KRMDAc8sSpDxL98Qzl8NEMIathzfcHO3sdj1KDgyM
- Gi3bqp7GnPHcHPQHyh7rewl0H9Bbeqh1zlFDdhip7C8crvNuDznuCKHAawJwzCQCNsp1r/Gzc
- x6BBa+Vbx2bTjHQ1LUVS5D3lYV/oymszCOMR8vWF2IeurmztfqhQ+mscJJvx3lnrUavNSyVeV
- aU4+qrySKfyw8QLS6cOLv2QHfLNQHIpssREMN12Ty1ts4SL19GotbSbMtB79o2+yVWAc1wh9y
- rrMGza6quhiZDVhDwK53QUYwuwcREu+g8bR9R90LB6Bt0VdrwSWUPOedj72gvRFhdiT08b8Al
- RxbZ2onvfFlFkp0Qi672ZVfFeNlGXBtCRH0PHnzsBvjiKhVNb9ZNijtAiO90JVtu+JIFAXSrL
- CtK4aJ90pTGjuqZF9rNrExggtHVJQnSANhAeVu+tQTCC7jpfxJC0w8wedzd08kFliHexHQ2eP
- HxoOxQXbXE49z7TG2399oF7zeokKB+CpyigrBf908xyAf+BSfULjJveOH17av1io+t86Ce7sG
- wa0BmYDPV1Tid96kxO5H1OPPnMirITdYjxkXBa/MwYrtpKh/H09ViFHb5F+8QTKpxfhHoBCRB
- SUzsNDXLeqiywzu5pSjgV4cb07BI/LrI3ejXtk4PfWf5yZo4CHv0Gfab7hBHD377OAg0
-Subject: [Buildroot] [PATCH v3 1/4] package/systemd: add ukify fix to find
- systemd-keyutil using --tools
+X-Provags-ID: V03:K1:dcZH+2Gd08vkLEidw4DsD5Cf5A96uc1Vz9A/LvkMTuHs+/KNEIb
+ c7kF3evP/OGehAhqY86JWSwE75dMmiI+kJCx+4MmQzzX61I7+jRSF0cr47d1qEY9ZY15UL0
+ rSy+wNbWyPvZE+593t2lLkqz3lqrEa63FLCgRQmh+JIt7QBpH3PF+6/UeNBLRSNx1OLC4im
+ /DzCFjx+4p0BgIQ/uL9MQ==
+UI-OutboundReport: notjunk:1;M01:P0:oGO8qTXslSc=;KgIzvs8iTMtn/C8xVFSWGLQ506e
+ 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
+Subject: [Buildroot] [PATCH v3 4/4] package/systemd: add option to build
+ host systemd-measure
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -221,70 +223,98 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: "Fiona Klute (othermo GmbH)" <fiona.klute@gmx.de>
 
-The ukify command from host-systemd needs to be told where to search
-for systemd-internal tools using the --tools option, because they are
-installed in $(HOST_DIR)/lib/systemd/, not the default
-/usr/lib/systemd/ location. Without that it will use tools from the
-host system if available, or fail. However, ukify ignores options when
-searching for systemd-keyutil, which is needed to create signed PCR
-policies, e.g. with "ukify --pcr-private-key=...". Add an upstream
-patch that fixes the issue.
+The host package already installs ukify, systemd-measure is required
+if you want ukify to calculate, sign, or show expected PCR values. To
+get systemd-measure, the "blkid", "openssl", and "tpm2" features must
+be enabled [1].
 
-The issue already existed in systemd when ukify was enabled for the
-host build in 9668821a48d176d9b3373b7edd70846255a6c8a4, with systemd
-version v257.10 [1].
-
-[1] https://github.com/systemd/systemd/blob/v257.10/src/ukify/ukify.py#L1166
+[1] https://github.com/systemd/systemd/blob/v258.7/src/measure/meson.build
 
 Signed-off-by: Fiona Klute (othermo GmbH) <fiona.klute@gmx.de>
 ---
-This is technically a standalone bugfix, and could be applied without
-the rest of the series. I've included it here because without it the
-expected PCR values provided by systemd-measure can't be signed.
-
-Changes v2 -> v3:
-* fix backport (patch didn't apply cleanly)
-
 Changes v1 -> v2:
-* patch added
+* rephrase help and commit messages to clarify systemd-measure is not
+  only needed to show expected PCR values, but to get them at all (in
+  particular, to create signed PCR policies).
 
- ...001-ukify-systemd-keyutil-tools-path.patch | 27 +++++++++++++++++++
- 1 file changed, 27 insertions(+)
- create mode 100644 package/systemd/0001-ukify-systemd-keyutil-tools-path.patch
+ package/systemd/Config.in.host | 17 +++++++++++++++--
+ package/systemd/systemd.mk     | 17 ++++++++++++++---
+ 2 files changed, 29 insertions(+), 5 deletions(-)
 
-diff --git a/package/systemd/0001-ukify-systemd-keyutil-tools-path.patch b/package/systemd/0001-ukify-systemd-keyutil-tools-path.patch
-new file mode 100644
-index 0000000000..f5e75d7cd5
---- /dev/null
-+++ b/package/systemd/0001-ukify-systemd-keyutil-tools-path.patch
-@@ -0,0 +1,27 @@
-+From 9d02f0d9a7cdf8bd7f05e2303f7b7784485ebee3 Mon Sep 17 00:00:00 2001
-+From: xiahualiu <49677912+xiahualiu@users.noreply.github.com>
-+Date: Tue, 14 Jul 2026 08:07:29 -0700
-+Subject: [PATCH] Honor options when searching systemd-keyutil
+diff --git a/package/systemd/Config.in.host b/package/systemd/Config.in.host
+index eff71d0d1c..1356af4173 100644
+--- a/package/systemd/Config.in.host
++++ b/package/systemd/Config.in.host
+@@ -1,5 +1,18 @@
+-# Select this if you need host systemd tools (e.g. systemctl)
+ config BR2_PACKAGE_HOST_SYSTEMD
+-	bool
++	bool "host systemd"
+ 	depends on BR2_HOST_GCC_AT_LEAST_8
+ 	select BR2_PACKAGE_HOST_UTIL_LINUX
++	help
++	  Select this if you need host systemd tools (e.g. systemctl)
 +
-+Options includes --tools, the directory in which to search internal tools.
++if BR2_PACKAGE_HOST_SYSTEMD
 +
-+Upstream: https://github.com/systemd/systemd/commit/9d02f0d9a7cdf8bd7f05e2303f7b7784485ebee3
-+[Fiona: rewrite commit message for clarity, backport to v258.7]
-+Signed-off-by: Fiona Klute (othermo GmbH) <fiona.klute@gmx.de>
-+---
-+ src/ukify/ukify.py | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++config BR2_PACKAGE_HOST_SYSTEMD_MEASURE
++	bool "systemd-measure"
++	help
++	  Build host-systemd with the systemd-measure tool. The
++	  host-systemd package installs ukify, systemd-measure is
++	  required if you want ukify to calculate, sign, or show
++	  expected PCR values.
 +
-+diff --git a/src/ukify/ukify.py b/src/ukify/ukify.py
-+index da156d31b3a9..e6f35ee86bab 100755
-+--- a/src/ukify/ukify.py
-++++ b/src/ukify/ukify.py
-+@@ -1374,7 +1374,7 @@ def make_uki(opts: UkifyConfig) -> None:
-+ 
-+     pcrpkey: Union[bytes, Path, None] = opts.pcrpkey
-+     if pcrpkey is None:
-+-        keyutil_tool = find_tool('systemd-keyutil', '/usr/lib/systemd/systemd-keyutil')
-++        keyutil_tool = find_tool('systemd-keyutil', '/usr/lib/systemd/systemd-keyutil', opts=opts)
-+         cmd = [keyutil_tool, 'public']
-+ 
-+         if opts.pcr_public_keys and len(opts.pcr_public_keys) == 1:
++endif # BR2_PACKAGE_HOST_SYSTEMD
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 3223915d40..290c2f1307 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -902,7 +902,6 @@ HOST_SYSTEMD_CONF_OPTS = \
+ 	-Dmode=release \
+ 	-Dutmp=false \
+ 	-Dhibernate=false \
+-	-Dtpm2=disabled \
+ 	-Dldconfig=false \
+ 	-Dresolve=false \
+ 	-Dbootloader=disabled \
+@@ -953,7 +952,6 @@ HOST_SYSTEMD_CONF_OPTS = \
+ 	-Dhtml=disabled \
+ 	-Dsmack=false \
+ 	-Dpolkit=disabled \
+-	-Dblkid=disabled \
+ 	-Didn=false \
+ 	-Dadm-group=false \
+ 	-Dwheel-group=false \
+@@ -1000,7 +998,6 @@ HOST_SYSTEMD_CONF_OPTS = \
+ 	-Dlibcurl=disabled \
+ 	-Dgcrypt=disabled \
+ 	-Dgnutls=disabled \
+-	-Dopenssl=disabled \
+ 	-Dp11kit=disabled \
+ 	-Dlibfido2=disabled \
+ 	-Dpcre2=disabled \
+@@ -1018,6 +1015,20 @@ HOST_SYSTEMD_DEPENDENCIES = \
+ 	host-python-jinja2 \
+ 	host-python-pefile
+ 
++ifeq ($(BR2_PACKAGE_HOST_SYSTEMD_MEASURE),y)
++# host-util-linux (for blkid) is an unconditional dependency
++HOST_SYSTEMD_CONF_OPTS += \
++	-Dtpm2=enabled \
++	-Dblkid=enabled \
++	-Dopenssl=enabled
++HOST_SYSTEMD_DEPENDENCIES += host-openssl host-tpm2-tss
++else
++HOST_SYSTEMD_CONF_OPTS += \
++	-Dtpm2=disabled \
++	-Dblkid=disabled \
++	-Dopenssl=disabled
++endif
++
+ HOST_SYSTEMD_NINJA_ENV = DESTDIR=$(HOST_DIR)
+ 
+ # Fix RPATH After installation
 -- 
 2.55.0
 
