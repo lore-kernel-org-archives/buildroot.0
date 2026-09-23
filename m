@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C2BAC9830E
-	for <buildroot@archiver.kernel.org>; Thu, 24 Sep 2026 18:58:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 700CCC98318
+	for <buildroot@archiver.kernel.org>; Thu, 24 Sep 2026 18:58:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EC59C40F97;
-	Thu, 24 Sep 2026 18:58:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 38CB740FC0;
+	Thu, 24 Sep 2026 18:58:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gNxojY5Rhkfv; Thu, 24 Sep 2026 18:58:35 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org E73CD40F98
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024)
+ with UTF8SMTP id vSs6dRGL0jt3; Thu, 24 Sep 2026 18:58:36 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 32BAC40FC1
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790276315;
-	b=fIrXdP0tXCitmNDZ7iiiON4CYSW3KmRkWmnB4nhGbwR4UkyxDwBRuQ17kfo3E/aeNd5R
-	 eoWNNw6hgSY5sRqRScBAVoFK3kM2AsIxesMbKE3S6Lrd+Ho15hF4sscJEK1KDYNAEj1D2
-	 B5qikvfURn6P4noUWlofTe7LG7+pfUowOAaC8Igc6hcP6zB2LhD9Br7rgL2mSWWIVqxrl
-	 lOj7nQpjaPx6cG4xZWb1jKFEwiPHrEyA4fdJF7wvVkP9nXqstBzDzMifP5+KXAXU3LP2z
-	 ZoL8utqKXeDmQsFF6w5mdX5ZW+zA9+VUq8UAFHc9uiN8lDcgq2e8NIjUgQG/y+J/wlQ==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790276316;
+	b=Np3e+sC8PyEF8f7b7DlTCEsUu6Ew1zK6/PxibDmbqM+eOvmr2OHh9cdPgK8CR/4sethT
+	 0KI1gWStHfK+0BJ3/c3av1Vm5Eu1pKsqy0NBOiit/nHZszNgy1PoqPLrVa8BVNTfLjjxY
+	 +Ph4ir0BV2NZd1hFYfLnjTrd/E9SIxfIyKMXzr3fepL18ii40QvRCAa8vniQEUE2Kucx+
+	 awMhryWJAXyqeMN2i9SHw6xEXMztgOl92PmBXDnh4LpZ7AkBe3lHUOa/aoJcyE0LKIeCd
+	 kEXqlw+p/v9a1lB4nSl1VE9muuQIvedLLCWpZv+2aTG2563OPf9FC2O0DumVYlcFxsw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1790276315;
+	c=relaxed/relaxed; t=1790276316;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,75 +30,75 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
 	 Sender;
-	bh=eDlUirUsktAJcqUgLGEpnaLbC1scydUb0xtaj1sNkZA=;
-	b=lqr1XCdO3gqdQ6RdeQMgJFxxUezBtb9fd30sli55D7YhR4bRVAujyp+txzmC/Cd+N6m6
-	 8vYNv5iW2J8O136XrxG+n1NXvDb7wtGvW7EqE5WIsZtC+9JCavUCZg6+OJhKFQkRzujjP
-	 UJqiNwFEs1S26YOTGMHONdgfXI0haGGHH4RMP7swPsXe7UWbdwP2P0fhaU4IpqI1i3EAH
-	 13bGeSKxDtEeF/+NmvfWSjyAmTBx6Uq63Nu8Jg6iQEHv5w/AhDstsqUkUeBCo+TQCZcfh
-	 1XBtNxBLjUSHe6nHDQ9R0+sSgioTsXNDBbGJlw6tJGoh90HeAaDwmW+BQeINv/dDt0w==
+	bh=tpVUbTR2b8ThhiLSzGcLfqYeBjZUaB9GYNNc4dP1nH4=;
+	b=aQAt+b9RJ6N590prANe2OOecgsGb6VlJnEX1TtV0xq/xbacHcRFwFPhSXNUVuvQkBN3R
+	 QPDfnWB0T9NEy811rIXdV5QzbarlFzO8RV8tnpohYpSiKv0qmvEy6YwVISpQJkxLA+Lms
+	 b+gUR4pvmIygRQs7/NkTi8hpNmqatqBukD8djUVr2DmKVoOM13Vcmfqm3FVBl6Kx5KJLp
+	 l9t6ecXFT4D6uRJTNRPIPH9W3bPrOnrJIdHDTE1hYVNdTMxxJ2veTyF1KnERATmyQoRvZ
+	 kaj8cDyALDQCYKfghvRQGyr+qEuORRzOCR4c7VEJFE9xkpaVC5WgoiUps31+bj2QoGw==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1790276315;
-	bh=eDlUirUsktAJcqUgLGEpnaLbC1scydUb0xtaj1sNkZA=;
+	s=default; t=1790276316;
+	bh=tpVUbTR2b8ThhiLSzGcLfqYeBjZUaB9GYNNc4dP1nH4=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=ZTauK7d/dmmg411BcLY1Ead5pvZfD0ZOhG18+SA6e3WInHWLjpegK3/9ap3nZyveN
-	 Pwd+MdMHOEYBbl6jSuunz994XQltz/vMfDMZea03UOyf9b1q+kWUdd80NhEOLlOaB9
-	 9lggVpAiSvqoDc/kH/W6oi46nDXOlLvA4pIe1cPPzPtP6KSch9ZFLAI+USL9CxZhUj
-	 EvmrXYqlSjYt8YW3qov5qOs2FeGyOKZE9EkNS8qwTRpT14daAo3V7HECHyi8eaxU71
-	 jSTI9zwKD6xrNIkClDzryOHknSV6bYvJle+lVKCC0M0NL/qwiP2c/yTAF8/0q0/73j
-	 iMSk6OACLEpWw==
+	b=DDAVWDavMjHMhr620P9B+An8RZgjarZtEkxIRJPo8VVL5GoBKfYMT25PcISWmhd9D
+	 k1uZvOak771HoH8wIma8sMv05EcrswmztOpQUlSZCVqMXRenreM3v3Url397cZO7sn
+	 YsfwnW0jM6cR8zZqnEwqYvtDvXMGxHnkIqTe1WnldmNQjpTlYMhGmGiOoHlX8UvHAY
+	 wc1EXUTj6FJiL9mDBifCjOf6r2QnLJNOb0PlaURcqfoE9X2uizGMce5SV36wWo0VTC
+	 QWFZ7BPy6WsJqrlpsiGQ3ydo5TisyIZRKPhPBuPEP/zNOSS/bFz3oclSkpKj5a/Xjh
+	 qjPLAsx/+rs8Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E73CD40F98;
-	Thu, 24 Sep 2026 18:58:34 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 7EBB93B7
+	by smtp4.osuosl.org (Postfix) with ESMTP id 32BAC40FC1;
+	Thu, 24 Sep 2026 18:58:36 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8C155328
  for <buildroot@buildroot.org>; Thu, 24 Sep 2026 18:56:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 711054017A
+ by smtp1.osuosl.org (Postfix) with ESMTP id 70A3D81232
  for <buildroot@buildroot.org>; Thu, 24 Sep 2026 18:56:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4ZPk_nmDeGHG for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5kMjRbgcqmCh for <buildroot@buildroot.org>;
  Thu, 24 Sep 2026 18:56:50 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org 9A4B9404C6
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 8EAAF8122B
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790276210;
- b=kOVMDrMD1cukPHX5ZeZmgBuHt7/Kx3CZz77bBmJMQwJzMi9Rk4iWy3T1u2ce7zzEjTSi
- +SFdBUmcT3T44UhjSrI/HOAc+FITV/EntOoW5zTR39CKGAQXHi91XTWYcc205eZPUszzT
- WceomUWkps8sQgoE5caCWEnIQMuvxZR4jQ925TSVDo5I6D8sodDgpAShoKE8Y1CQmI0BZ
- WDVTTFJVW7KYYAGbg8gT2fWSRZxcYI7b2r742QHn761QGID1a/1foNjTuAoBo3Ya8qp/1
- 6yQVCq4SYoDXjL7G7gm0D4N1cNG1wZHvfDjlN8cDa3gMLcmupiurUWvfaRwwSSKF3Hg==
+ b=sJW2bQ2Hg4POCeQRMhMh+PovC1VuVYwgSCzSJsFdD836Jt1nGbDfnYtB0oOMWBAy62VW
+ Hcq7sny4i3lfu4cC4N0LPKXsudPKQtlI6HT0wyt0hzLlGsbybYzB3DkjKosv2TCAbwwMA
+ XN1pL9p6yCBUSve++ObZ83EL+EbYNLdcMjJe8O8Jtaebf3RAbPE6qKOfCvSpHhV0vTxEo
+ XBPXG4o+VwTiI9cfMZ4x6sS4QH5sXgqbxYXZ9STqTGVNSAKxmx07wK4NaToiBgtg032ME
+ Zc3RkXwftCtzLkJtVqV6CKpVOO9Norg0aEif3ugalTSsLZDzgNKMf7wMikNXpqKPeLg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1790276210;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=nQoD8PhWhMx9odmWSTMn8J0WMNvjd98qf7/A4lUO3js=;
- b=QKLe8EVf8JxFIEPjS6cmAIcdB+Cm5uFsJyVrgsECcQHw5EFY9x4yAwn6iCw9XZvuopPG
- rIaU+sqJQccWzFrdj9p2YuQA9gev4JbD1dOLfqPio2hUV9/UH5ftegTDHF2klucC0y5ND
- KNAdpfq8E+pUqAc6UANBiVbzt7BtQ7QrBpWp/wPaQnGOrlgB4QqM/FsGcnMT8NJ8Rkv9w
- xr3anURAMRHLoRhvOP8b/dmpfBD6pbamPtjZFOVNjlZkIUkrU45wiwx3yXmaRGlhXTwi+
- yqmBX3v51WKCrSjK5ptwEzJAGAqwPXIqtdDSmTrGLe1QItP66VLicxLgf5/XUlZlHbQ==
-ARC-Authentication-Results: i=1; smtp2.osuosl.org;
+ bh=gxoUJpGvkVFyLAl1bGWfOoaOmnMlIJ9tKlGaO1t2Gzk=;
+ b=XyOAdpxqzUEjPDxPLlZKR50m9VYEy42+8sARZTcbXu9cgDgfF9onsMM0nf8t3qFc0ktW
+ Lo1D4R9H7rNyMBMp3W683VBNJ2ChuBi+HMRqx03hAXYcVEbRWsA0kUUnAIiGJOapylSkO
+ +ck0WgdQqrUn36Pj6JoaOOERuWk/Rt5XF5SjR+XwexrX7Nf6huW1nPE098fnQ/IkXa48J
+ o07Mth9tCBraVwg7GIX4mmh6svgu5SCEULcTPGs6fC+jllI/X880rd7oJl+nEQ+CkiPB/
+ Ho5A3E0A5eJbtoiN0hgAJtvQo5v+7Gllf49YPMgqZkoqbj69mWWNrLIT6wNYKHhrXFA==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org;
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9A4B9404C6
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8EAAF8122B
  for <buildroot@buildroot.org>; Thu, 24 Sep 2026 18:56:50 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3E160976B0; Thu, 24 Sep 2026 18:55:40 +0000 (UTC)
+ id 323E098330; Thu, 24 Sep 2026 18:55:40 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 23 Sep 2026 17:46:43 +0200
+Date: Wed, 23 Sep 2026 17:46:36 +0200
 X-Git-Refname: refs/heads/2026.08.x
-X-Git-Oldrev: 9521735392b5c4fe5a745b6d8fdfba5e7e51e754
-X-Git-Newrev: 9f273c5a79d819beb4122d13348edd496c659fd2
+X-Git-Oldrev: 4725deea9c38380925129aa4afb10422b434693f
+X-Git-Newrev: 9521735392b5c4fe5a745b6d8fdfba5e7e51e754
 X-Patchwork-Hint: ignore
-Message-Id: <20260924185540.3E160976B0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.08.x] utils/getdeveloperlib.py:
- fix regexp used to find package infra
+Message-Id: <20260924185540.323E098330@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.08.x] package/zabbix: fix build
+ without libcurl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,91 +114,128 @@ From: =?utf-8?b?UmFwaGHvv73vv71sIE3vv73vv71sb3R0ZSB2aWEgYnVpbGRyb290?=
  <buildroot@buildroot.org>
 Reply-To: Raphaël Mélotte <raphael.melotte@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1657889834504833965=="
+Content-Type: multipart/mixed; boundary="===============7195616641175613024=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1657889834504833965==
+--===============7195616641175613024==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/9f273c5a79d819beb4122d13348edd496c659fd2
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/9521735392b5c4fe5a745b6d8fdfba5e7e51e754
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.08.x
 
-There's recently been autobuilder failures on
-toolchain-external-bootlin, but I wasn't getting notified in the daily
-autobuilder e-mail for those failures, which sounded odd as DEVELOPERS
-contains:
+Building zabbix without libcurl enabled would lead to the following
+error:
 
-N:      Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-[...]
-F:      toolchain/
+/usr/bin/ld: .../src/libs/zbxxml/xml.c:515:(.text+0x1c64): undefined reference to `zbx_vector_str_append'
 
-And indeed, testing:
+This issue has been addressed in the upstream commit [1] and backported
+as a patch in Buildroot.
+For more information see the upstream issue [2].
 
-$ ./utils/get-developers -p toolchain-external-bootlin
+This error is reproducible with the following defconfig:
 
-returned nothing.
+cat >.config <<EOF
+BR2_arm=y
+BR2_cortex_a7=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+BR2_PACKAGE_PHP=y
+BR2_PACKAGE_ZABBIX=y
+BR2_PACKAGE_ZABBIX_SERVER=y
+BR2_PACKAGE_ZABBIX_SERVER_COPY_FRONTEND=y
+EOF
+make oldefconfig
+make zabbix
 
-Turns out that the regexp FIND_INFRA_IN_PATCH and FIND_INFRA_IN_MK
-used to find the package infrastructure, and ultimately decide if a
-given .mk file contains a package, was a bit too strict:
+[1] https://git.zabbix.com/projects/ZBX/repos/zabbix/commits/e8333ca2128
+[2] https://support.zabbix.com/browse/ZBX-27635
 
-"^\+\$\(eval \$\((host-)?([^-]*)-package\)\)$"
-
-This would only allow packages named <something>-package or
-host-<something>-package, but the <something> should not contain any
-dash ("-"). So this works fine for cmake-package,
-host-autotools-package, but not for toolchain-external-package where
-<something> is toolchain-external and it contains a dash.
-
-We fix this by relaxing the regexp a bit and allowing any character in
-<something>. Consider the rest of the regexp that expects $(eval
-$(<host>-<something>-package)), it seems highly unlikely to match
-anything else but the line we're interested in.
-
-With this fix:
-
-$ ./utils/get-developers -p toolchain-external-bootlin
-Giulio Benetti <giulio.benetti@benettiengineering.com>
-Romain Naour <romain.naour@gmail.com>
-Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-This issue has existed since the toolchain-external-package
-infrastructure had been added.
-
-Fixes: 1c99d70e5210f9d7b475736e0360ed63d16584f2 ("toolchain-external: introduce toolchain-external-package")
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 592d5c517ef6ed003450189cf0c4d7af8801de59)
+(cherry picked from commit 489aefc22af70996cae8d49694f5646be67d90bb)
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
- utils/getdeveloperlib.py | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ ...ix-server-and-proxy-build-without-libcurl.patch | 69 ++++++++++++++++++++++
+ 1 file changed, 69 insertions(+)
 
-diff --git a/utils/getdeveloperlib.py b/utils/getdeveloperlib.py
-index b5e7b89e72..4321df8bfe 100644
---- a/utils/getdeveloperlib.py
-+++ b/utils/getdeveloperlib.py
-@@ -12,7 +12,7 @@ brpath = os.path.normpath(os.path.join(os.path.dirname(__file__), ".."))
- # Patch parsing functions
- #
- 
--FIND_INFRA_IN_PATCH = re.compile(r"^\+\$\(eval \$\((host-)?([^-]*)-package\)\)$")
-+FIND_INFRA_IN_PATCH = re.compile(r"^\+\$\(eval \$\((host-)?(.*)-package\)\)$")
- 
- 
- def analyze_patch(patch):
-@@ -35,7 +35,7 @@ def analyze_patch(patch):
-     return (files, infras)
- 
- 
--FIND_INFRA_IN_MK = re.compile(r"^\$\(eval \$\((host-)?([^-]*)-package\)\)$")
-+FIND_INFRA_IN_MK = re.compile(r"^\$\(eval \$\((host-)?(.*)-package\)\)$")
- 
- 
- def fname_get_package_infra(fname):
+diff --git a/package/zabbix/0002-fixed-Zabbix-server-and-proxy-build-without-libcurl.patch b/package/zabbix/0002-fixed-Zabbix-server-and-proxy-build-without-libcurl.patch
+new file mode 100644
+index 0000000000..b90c7536da
+--- /dev/null
++++ b/package/zabbix/0002-fixed-Zabbix-server-and-proxy-build-without-libcurl.patch
+@@ -0,0 +1,69 @@
++From 0a29a6b4cfa608e0c2e393125f60f4bbb271e8b8 Mon Sep 17 00:00:00 2001
++From: Artjoms Rimdjonoks <artjoms.rimdjonoks@zabbix.com>
++Date: Mon, 27 Apr 2026 12:36:47 +0300
++Subject: [PATCH] .......PS. [ZBX-27635] fixed Zabbix server and proxy build
++ without libcurl
++
++Merge in ZBX/zabbix from feature/ZBX-27635-7.5 to master
++
++* commit '142cefe8703dd25afaf8c7f05379d61136e773fd':
++  .......PS. [ZBX-27635] fixed or includes
++  .......PS. [ZBX-27635] updated include
++  .......PS. [ZBX-27635] added Changelog
++  .......PS. [ZBX-27635] fixed Zabbix server and proxy build without libcurl
++
++(cherry picked from commit e8333ca2128bf9ac2ab50ee1ee06445766b6192c)
++Upstream: https://github.com/zabbix/zabbix/commit/0a29a6b4cfa608e0c2e393125f60f4bbb271e8b8.patch
++Signed-off-by: Thomas Perale <thomas.perale@mind.be>
++---
++ ChangeLog.d/bugfix/ZBX-27635        | 1 +
++ src/libs/zbxsysinfo/simple/simple.c | 5 ++++-
++ src/zabbix_js/Makefile.am           | 2 +-
++ 3 files changed, 6 insertions(+), 2 deletions(-)
++ create mode 100644 ChangeLog.d/bugfix/ZBX-27635
++
++diff --git a/ChangeLog.d/bugfix/ZBX-27635 b/ChangeLog.d/bugfix/ZBX-27635
++new file mode 100644
++index 000000000000..a8b07470a37d
++--- /dev/null
+++++ b/ChangeLog.d/bugfix/ZBX-27635
++@@ -0,0 +1 @@
+++.......PS. [ZBX-27635] fixed Zabbix server and proxy build without libcurl (arimdjonoks)
++diff --git a/src/libs/zbxsysinfo/simple/simple.c b/src/libs/zbxsysinfo/simple/simple.c
++index 599816c517a1..3bc324a08b1a 100644
++--- a/src/libs/zbxsysinfo/simple/simple.c
+++++ b/src/libs/zbxsysinfo/simple/simple.c
++@@ -25,9 +25,12 @@
++ #include "zbxcomms.h"
++ #include "zbx_discoverer_constants.h"
++ 
+++#if defined(HAVE_LIBCURL) || defined(HAVE_LDAP)
+++#	include "zbxip.h"
+++#endif
+++
++ #ifdef HAVE_LIBCURL
++ #	include "zbxcurl.h"
++-#	include "zbxip.h"
++ #endif
++ 
++ #ifdef HAVE_LDAP
++diff --git a/src/zabbix_js/Makefile.am b/src/zabbix_js/Makefile.am
++index 1e4fd93d9fd2..2ef20fb9f911 100644
++--- a/src/zabbix_js/Makefile.am
+++++ b/src/zabbix_js/Makefile.am
++@@ -9,7 +9,6 @@ zabbix_js_LDADD = \
++ 	$(top_srcdir)/src/libs/zbxembed/libzbxembed.a \
++ 	$(top_srcdir)/src/libs/zbxjson/libzbxjson.a \
++ 	$(top_srcdir)/src/libs/zbxregexp/libzbxregexp.a \
++-	$(top_srcdir)/src/libs/zbxalgo/libzbxalgo.a \
++ 	$(top_srcdir)/src/libs/zbxthreads/libzbxthreads.a \
++ 	$(top_srcdir)/src/libs/zbxmutexs/libzbxmutexs.a \
++ 	$(top_srcdir)/src/libs/zbxprof/libzbxprof.a \
++@@ -23,6 +22,7 @@ zabbix_js_LDADD = \
++ 	$(top_srcdir)/src/libs/zbxhttp/libzbxhttp.a \
++ 	$(top_srcdir)/src/libs/zbxvariant/libzbxvariant.a \
++ 	$(top_srcdir)/src/libs/zbxxml/libzbxxml.a \
+++	$(top_srcdir)/src/libs/zbxalgo/libzbxalgo.a \
++ 	$(top_srcdir)/src/libs/zbxstr/libzbxstr.a \
++ 	$(top_srcdir)/src/libs/zbxnum/libzbxnum.a \
++ 	$(top_srcdir)/src/libs/zbxtime/libzbxtime.a \
 
---===============1657889834504833965==
+--===============7195616641175613024==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -209,4 +246,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============1657889834504833965==--
+--===============7195616641175613024==--
