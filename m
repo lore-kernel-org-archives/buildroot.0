@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8DA77C9830E
-	for <buildroot@archiver.kernel.org>; Thu, 24 Sep 2026 18:58:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7C3F1C98318
+	for <buildroot@archiver.kernel.org>; Thu, 24 Sep 2026 18:58:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5A7F940EC6;
-	Thu, 24 Sep 2026 18:58:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 342C940ED6;
+	Thu, 24 Sep 2026 18:58:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jxx7PGXty72r; Thu, 24 Sep 2026 18:58:00 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 5B4D740EB0
+ id zxZMdMJXfqbe; Thu, 24 Sep 2026 18:58:02 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org BFF2D40EC7
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790276280;
-	b=jqSM5SpW2HaO37tA6eFWoekD/VqU2w1RTTrwUYyiUE5iUptQydvBnQXaH1mjfN6U3z7R
-	 v+M0266RrAY6j8eIuzWJTSFiXRonoKA/N1HI9vszeSdbfaF66/oFKAs8nSIJIZ/KnTDdo
-	 NqAXIhVMx5Tv6XkJL/HqVyd+OqZe2BZfEYfxvqoipaOKhZHTXMX4NGoORyc/VwkUjGHOa
-	 5pmU9xQ8p+qvbjLlNO2/1PLHdW80tuCxBjG7Lg8Zqvu5na8cuiTmSEBrDSCX5ud5TXr/c
-	 XyouFc7zCbQy5gSPJDitinjdgevI6tVO39t6zdzHwMyXIrPPJUGy3J7mMBkr3nG5axg==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790276281;
+	b=rrLzABQGSCqa92vaueedyDEFbpIZpHi7dtF9AdsdSjilKJcI192dZVhOSsWbt+wcSGXK
+	 qgUSPbQg44UBGGMz/0FeIW8Km18rhWyhhuzRvqCx9CqH+Wc45JwPNsc8EeCisXfpXkG7W
+	 wihrrYfue/IgcXKNEE0CaAXgE/khCtW8cpLCSgXBEucUAIOWmm2SYzjzCKWSIyBJ3ezbR
+	 R1gjH9cPBYU3ZYlduP34K8BVc8698i9xoDCEGQI0cNGhGt6TqPY5b0y3ANGi9X3dDq0/Y
+	 m0joMX5Fqvmy9Il+IH/YurNbXul8DuzNun2TI4pUF9P3DNbLgBaH0V6vSp+LV9YOIBA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1790276280;
+	c=relaxed/relaxed; t=1790276281;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,75 +30,75 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
 	 Sender;
-	bh=E5HNhzJVsJZ4AHa+T8eTaS59gmHcPZqeu3DdIJW/Ahc=;
-	b=AMyJKprkItblgYYAZly86hsTHq/tvdrGctRjfsgxpUOmCaufPqcc0bdq/R4nbFZjKOXD
-	 PCFIlunKGWD0jdjAgrmC6cdJO1ew/DnjrR4gFSosGn0JMsM4wwFiuohOQOWJjj2waVjOL
-	 CweB/bhRlTLwPsQetFCpAt6TcZqD7zP0yv5WSHwfgU5oRjZFOiFA94G9v3JMH1EKXjQM/
-	 sZdacxq1luAz8EPJtnJYLdGb4YRYHbmYtUfZTKGutg3jIRFQWcfg8BOAgk4jUmOLd3YOh
-	 5FNsrP/twFdLf51xLXG/qXBlmoHHOCeq093GUuUlX+4R2b3LoFB7OtIYEstAFSthxVw==
+	bh=l0RImRto4dKRTd353PxROftjnk+gZAM/RlL8k7iaYqs=;
+	b=dG6VAU2TeclueUL4R5NBY4DaCeznmcptcbododXQsW506fU1iF3r+RXMUGFjCBT+oSEK
+	 a/fR3Cr/qLBJ5V2Gf7XPDjLmw8/fONnkzu+pkxWGhMPFkQrxDvr4wmGZ15VyhU25BLBjQ
+	 zBB1mTtdSxYq2YcoXABuHRgda8ZWuPg2IIMTP4fGWPBOOMIG9CIzjUz1mlUCzGmI/dsAZ
+	 aByNocDIilDMOTafPax7825NKk7OaSl3LI77rQckn2gOr6AFNZHTpJBy6VBBr93qA4UBO
+	 ZmDLlIJbogdrJFpdXuk8oKdAb0501oxpc7KJ/+ihGgC3jTLstS57s9e02UoTefPNmKQ==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1790276280;
-	bh=E5HNhzJVsJZ4AHa+T8eTaS59gmHcPZqeu3DdIJW/Ahc=;
+	s=default; t=1790276281;
+	bh=l0RImRto4dKRTd353PxROftjnk+gZAM/RlL8k7iaYqs=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=YBNNG5yp3TaIauvX/TNoFBd5gzhi6S3UImyEPFUyX/iI4B137OXKhux4mdLhAGRTc
-	 FtemlpPYPwP41099wQ4/OSBW1XqajMfu76oxvpttvZb1pz/hdJljvjNxCPhbqR/3z8
-	 9p3HzMYzIKUD5Z/4B/LUbtTux2YZCuDTIj8wfxUKAILv1Q8ixbSeasl0zgI5G/L8H0
-	 7fML3I+Dn6pUdwmDUnXfcp0tKwo94ccwC3Hr9c8s/GqpbYaVw8wyGJE52J6t9djU1s
-	 B8M35/s2scmSJsV9JQpBWCwCD2MQOTQhF6AdR077Amn9M0R1OmlkQu9osmw6clQhL+
-	 3S8oszoM3es1A==
+	b=PdAyni6JN6GLoVwKfuk9qotmSDOdTnbCboU1v8O5GvgV3pRgfmda+ARvQyFAJVANf
+	 sUbCowGJ3auqoManHUq0l1Wu/e8a2jO1JpTOntACaGXCQtukQYxb7hcb6dpx3kTr/2
+	 f3wjjKJLCnxCnBQkgXgpZU1UfmfU536uxA961D368XqVrleglEQqVRT6KYjuyXJZm4
+	 cwYqIrkAxJk/jxafbY/r0aEyVzrYd+R6SK4dbPadhJgzvEU4IDOhqG5FVq2QYdA5mC
+	 vBKKf3GmWRR85zS4dVqChy1+GQp45EVGft0BO/UmHMf/ivf8uq6nWu3p0Ux43PvWV8
+	 h7xqc07DaI9Zw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5B4D740EB0;
-	Thu, 24 Sep 2026 18:58:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BFF2D40EC7;
+	Thu, 24 Sep 2026 18:58:01 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 84E9B328
+ by lists1.osuosl.org (Postfix) with ESMTP id 900F3332
  for <buildroot@buildroot.org>; Thu, 24 Sep 2026 18:56:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7549840ACE
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7437540ACD
  for <buildroot@buildroot.org>; Thu, 24 Sep 2026 18:56:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rs8UJmnmU-K5 for <buildroot@buildroot.org>;
+ id Ow3SDUMyKvxn for <buildroot@buildroot.org>;
  Thu, 24 Sep 2026 18:56:47 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 4A98940AC6
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790276205;
- b=qOGaJKpH4OS9PEa1F295xWk2QHVAVRWBp1g6w9oWWhvz1KEWO0njkx3ZzjDYyBYW+iHO
- j9ZNx5kiBAcZfy3rk3Bs3Tjzjx9UxME52vfYNYEeyonk9AT7RUfGVu+djfAJpOPZUz8Xs
- USQnMnB0uAkDLDx1hveI5u1DbW5jjLLJuL0hWSdCiAOFP0G7ov/vLmIhjYnrUennT8MBD
- IUg1NoJAFI6PeeJaSSXlOyO49XG2JpPbJCIELzkukGpJQcKKRfxgNLX9F6lQe3+Tavl6h
- kSg9ipjQa369o8pUhb06ZUUNKsnHfsvhUI1arMe9L/E9cI5bgGUONa4zD3anQUrq3IQ==
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org E07A140AD8
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790276204;
+ b=WjhEkg06RymIpoio6AIYCORpB5BFhBy/2s+ZpnVFY+ga7xOpbNsBTb2XQJTZVNDDZNmF
+ phOXQo4d0f306ciWQQKqfwASxoh7+Q87Wk8ylz8z47WMb3Mpp2wT5coTgjg49fIRkpBaW
+ GXrORu5pXcXXSRv2Q6xk+/1LEI0iiRrhfizrptdVJWdl0T1a9v0ff57/tmjrGXFZt4fHz
+ m5xVbXVz6OZafhhLyu2lCiOZINn2hgfMWK6u9ozcsYQT1giq5WJQhRPAfY2FySsCKVFNv
+ BI8quNUaFoLhoylUR9+2wzgp3EhqlxznU0MaiUKh9dSv+5IFf4Mus+KAVDhGaZWTucQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1790276205;
+ c=relaxed/relaxed; t=1790276204;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=xWrVuZNP/x5G+JKMiOFzR86r1wCSHXZp4HEyY7srcd4=;
- b=POwMQ3caSd3MkvXlYPT3hK/GgWlWlvGLyX60n1FXdbwKNQ/pB4jnzqLSYaxlqQ/AKL+U
- Ag+XpkLh1qZtr1ndVu1Eb/B8Ogrrisi+afY22dAoyT0CbjZI3PasOkDMhGjfJshErjulx
- nxkFIDtiCSlTU7jZyGLuEaKixSt81fgV27WkWiAZ5Ag2xlYe6ARx64jTaK+pfjL/g20n3
- dSpuYARLH63bksWiXPoTAaY63do8hOnu1Pkt+2J+RPK5qTJB3xIxaofBFb1MP2Oe4y4o0
- H7fCRQdLZm8q7dywe6n34HR+MpsYIE+Oo9ZDrrLV2p2kQva1gHtL6CORyVbiv+A/SwA==
+ bh=EGfNl3wkAVmMWpm5aryu7+tyynzEh6NBViPmgw9GK6s=;
+ b=frdY5y7BiPGish69MlioHbcywDxJ/h9RkHDAvDD7TsIEADhA3ta52RpJ5xq0LQ8gwg8E
+ BpGzMgrfSXjmgXGxpHAbjSGOY7jdDKcRUg87HdzGky75B2y7KuXuGz1zjwKWJBDfmIEcC
+ 7ywFW71Fe/O4x4J5nqbLJVQnpeXNCssi/OFo10n4Ah7Jmc2aiMdv0UsoFygNlWw/asZ6W
+ 0Wf+iR5FKZWM8MSwXUfk0WqSYh0pZLQUu/Lc5UCaMgr5uOrfs5Krvbw71ASLKawSh37xc
+ Jof6SCQVwMi+VLdLj4EDbxk6GaVf5OQyyiVblGoUgqfIl6qZWo4CxPtQMKSnBKS5Icg==
 ARC-Authentication-Results: i=1; smtp4.osuosl.org;
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4A98940AC6
- for <buildroot@buildroot.org>; Thu, 24 Sep 2026 18:56:45 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E07A140AD8
+ for <buildroot@buildroot.org>; Thu, 24 Sep 2026 18:56:44 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DF484982D9; Thu, 24 Sep 2026 18:55:34 +0000 (UTC)
+ id 8433B96FF8; Thu, 24 Sep 2026 18:55:34 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 23 Sep 2026 18:34:43 +0200
+Date: Wed, 23 Sep 2026 18:28:55 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 539e6517886996c55b51a3229df3730e14835357
-X-Git-Newrev: f1d99a9c2d7773e8418c09f43d2cf930e75b697f
+X-Git-Oldrev: 8671ebb501c29b036ad414321929f72cd25cf34f
+X-Git-Newrev: 022aa807334b5b14ef0df19a7ae442e048605c74
 X-Patchwork-Hint: ignore
-Message-Id: <20260924185534.DF484982D9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/{glibc,
- localedef}: security bump to version 2.41-163
+Message-Id: <20260924185534.8433B96FF8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/tensorflow-lite:
+ fix Config.in comment
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,67 +114,57 @@ From: =?utf-8?b?UmFwaGHvv73vv71sIE3vv73vv71sb3R0ZSB2aWEgYnVpbGRyb290?=
  <buildroot@buildroot.org>
 Reply-To: Raphaël Mélotte <raphael.melotte@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3200273028728174682=="
+Content-Type: multipart/mixed; boundary="===============4230992497960026240=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3200273028728174682==
+--===============4230992497960026240==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/f1d99a9c2d7773e8418c09f43d2cf930e75b697f
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/022aa807334b5b14ef0df19a7ae442e048605c74
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-Fixes CVE-2026-8674, see
-https://gitlab.com/gnutools/glibc/-/commit/c97fdd483232a831829aaff458a212307f1bf4bc
+This commit fixes 3 issues in the Config.in comment:
 
-(alternative to commit 7162c4daa58c7881d0866f5a64c525bea1c58867)
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+- It is displayed even on unsupported CPU architectures, so we add a
+  "depends on BR2_PACKAGE_TENSORFLOW_LITE_ARCH_SUPPORTS"
+
+- It doesn't mention the need for a glibc toolchain even though that's
+  part of the dependencies
+
+- The requirement for dynamic lib support should be part of the same
+  comment as the other dependencies
+
+Fixes: fd29fee3a3ac0ce45404ed256d2059836c352728 ("package/tensorflow-lite: new package")
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 101d543e38e5be14f2b545362fdc0d795c0fab24)
+[raphael: resolve conflicts]
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
- package/glibc/glibc.hash       | 2 +-
- package/glibc/glibc.mk         | 2 +-
- package/localedef/localedef.mk | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ package/tensorflow-lite/Config.in | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
-index 0243dac049..b4549549a0 100644
---- a/package/glibc/glibc.hash
-+++ b/package/glibc/glibc.hash
-@@ -1,5 +1,5 @@
- # Locally calculated (fetched from git)
--sha256  987c4f5951a25dbdcc0b76deddf4fcb97a122cc4f505d351fd44863936e7d903  glibc-2.41-161-g5dd252cf1d113644b3679f5a158e9ef20217865e-git4.tar.gz
-+sha256  b369d2b38357104ba1b3848bfe4139c6a4dfdaea28ac31b3cf2a3985fb008a93  glibc-2.41-163-gc97fdd483232a831829aaff458a212307f1bf4bc-git4.tar.gz
+diff --git a/package/tensorflow-lite/Config.in b/package/tensorflow-lite/Config.in
+index baaf5b6d86..4c448b0352 100644
+--- a/package/tensorflow-lite/Config.in
++++ b/package/tensorflow-lite/Config.in
+@@ -31,9 +31,8 @@ config BR2_PACKAGE_TENSORFLOW_LITE
  
- # Hashes for license files
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index dfe599b912..34a6175855 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -7,7 +7,7 @@
- # Generate version string using:
- #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
- # When updating the version, please also update localedef
--GLIBC_VERSION = 2.41-161-g5dd252cf1d113644b3679f5a158e9ef20217865e
-+GLIBC_VERSION = 2.41-163-gc97fdd483232a831829aaff458a212307f1bf4bc
- GLIBC_SITE = https://gitlab.com/gnutools/glibc.git
- GLIBC_SITE_METHOD = git
+ 	  https://www.tensorflow.org/
  
-diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
-index e812ce36a7..3412db3c58 100644
---- a/package/localedef/localedef.mk
-+++ b/package/localedef/localedef.mk
-@@ -7,7 +7,7 @@
- # Use the same VERSION, SITE and LICENSE as target glibc
- # As in glibc.mk, generate version string using:
- #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
--LOCALEDEF_VERSION = 2.41-161-g5dd252cf1d113644b3679f5a158e9ef20217865e
-+LOCALEDEF_VERSION = 2.41-163-gc97fdd483232a831829aaff458a212307f1bf4bc
- LOCALEDEF_SOURCE = glibc-$(LOCALEDEF_VERSION)$(BR_FMT_VERSION_git).tar.gz
- LOCALEDEF_SITE = https://gitlab.com/gnutools/glibc.git
- LOCALEDEF_SITE_METHOD = git
+-comment "tensorflow-lite needs a toolchain w/ gcc >= 8, C++, threads"
++comment "tensorflow-lite needs a glibc toolchain w/ gcc >= 8, C++, threads, dynamic libraries"
++	depends on BR2_PACKAGE_TENSORFLOW_LITE_ARCH_SUPPORTS
+ 	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_INSTALL_LIBSTDCPP || \
+-			!BR2_TOOLCHAIN_GCC_AT_LEAST_8 || !BR2_TOOLCHAIN_HAS_THREADS
+-
+-comment "tensorflow-lite needs a toolchain w/ shared libraries"
+-	depends on !BR2_SHARED_LIBS
++			!BR2_TOOLCHAIN_GCC_AT_LEAST_8 || !BR2_TOOLCHAIN_HAS_THREADS || \
++			BR2_STATIC_LIBS
 
---===============3200273028728174682==
+--===============4230992497960026240==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -185,4 +175,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============3200273028728174682==--
+--===============4230992497960026240==--
