@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20039C9830E
-	for <buildroot@archiver.kernel.org>; Thu, 24 Sep 2026 18:57:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1296DC98318
+	for <buildroot@archiver.kernel.org>; Thu, 24 Sep 2026 18:57:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E2A2240AE4;
-	Thu, 24 Sep 2026 18:57:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AF13540E01;
+	Thu, 24 Sep 2026 18:57:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fM1Iy9QxdQrU; Thu, 24 Sep 2026 18:57:42 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org A00AC40CB5
+ id ryOCLKdww6Is; Thu, 24 Sep 2026 18:57:43 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 2044D40CB5
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790276261;
-	b=VCYEBqqHli5fABd/5Ctcqx74aw1rpWQ3dM2wHF65BWDTYmsNyT/Ux6ZVXMNCgf2CnsdT
-	 JaeGfO1jT8JDLJ8ucr0takk/gz2vIP4yR0So/ZCqiSUFMAvPvr8B9xfbgh5+ZTYk2i0Rn
-	 X75vV+VobMzsUWE+u2+pbxerIgpX4AvY6ftmkka2WpgLBrMPy4oOzrpV7OFr0aMHfiMdh
-	 CDpyiUFBlPoWd/8YscHCt4KU3fRg4Zh/4wM1eG6GYxl+FsmKzP/AbHmUQn6ORwxPqhSP1
-	 P2XGQnwRQ8VR9grD/nQm4mLTuxlsMlQL/3VuaxqrIwvy/Q5TA70ajGxuifN2m1VOWFg==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790276263;
+	b=K/IfsP/0+42PC8FHhyQDUwZS8Q1lDJtp5W4rLJ10ZJG/ZQz0fHSaykNT++wZZYz3lF0T
+	 miVszXO2E7cTttlLKluMOod8YsEp7mibYOoib/TcLyqrlBb9dMvwYrntWvtXxQQWaqA52
+	 A630xb9tG8UeSCRQHbG+WKyRlcZTLp2dmvyynE1SgUISD0H6v7YoVNxySaeaKRkRljKHp
+	 Bu9TXjOduuf/wIEy4D/8vHpYmVm9Yzo0BW4BF8Hnr/T3xpjJAxZ2Uv3WEmzKP9Hib0Vwb
+	 KrMAPVtynJxaO4ceoUvlENNo2FWumzOSx47v8jT3ILhivSJcL7c8SB3P2F2AU0XwjiA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1790276261;
+	c=relaxed/relaxed; t=1790276263;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,75 +30,75 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
 	 Sender;
-	bh=ZOYyhBT6abyAC+C4ke+gaHgqu26MiP7v5HlfmAmYHSM=;
-	b=C9d4UxEngvh6LHSttf8s+O5nYvlkvUvyTFcEKoEtuIkC0ydd+0Ky/UM6UNRwokgf6/Zp
-	 gi+IqYABSrIsQD36FUAb9CyaTF37SiP8vqqMutj8ocFl169F44TqhR7sJ9Gm8TlmUFoOc
-	 3OoIeSszjeKBhA6WJC0G10+xs8X2o7/csFsyfIphWQq63SO3K7RKFBbjEA8kku6jmir7S
-	 jVUUTpWdmyQp+PfwptVdASkNUNcUVyZKlquKyXtBqf4fuEFOQLdVzQzWsBQX1FlcTcTGW
-	 ZHl101KnOIuSR4jxDTpnL6Y2xGTt3m90bkKaDsb34iloltjlw1uOv/kHBQ6TgVnKx/Q==
+	bh=VRybCEYXMlsbDSD0WAE1ulKAPi4tBie+Hj+fRlD0Yls=;
+	b=Se6QuraRdcxHOVy+38+h1KiXKmU0ZwJvQsrw8Gzq4HleFHL2ZhPWPOiak8FcQTmT/meg
+	 Gb76B5AHpcFMnYIGtZRn9GGXjXtLD7KHgYr+Wyullx6zBVh6MxDsUn8Egelhpb8iTk/o5
+	 jN2jWyqi2+ZGj7PkhE/bWS4bWDzMau+abmueX7RyIPBIiVLuwwh/JRCoHEZbXfK0ndIbV
+	 p/TnmXGJSPQWtKQdXO7KEqIVMCo2CsZIfpWKTA5j67OdD5OAYrkfJuvObQI5hzWqfM2ml
+	 TZQ+1XWV8L00EXoUrO9rDVuvRSNCxb1qtUqyBIzVlqbdfGVfkLZ598UrL1nUEKkrLAg==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1790276261;
-	bh=ZOYyhBT6abyAC+C4ke+gaHgqu26MiP7v5HlfmAmYHSM=;
+	s=default; t=1790276263;
+	bh=VRybCEYXMlsbDSD0WAE1ulKAPi4tBie+Hj+fRlD0Yls=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=dKsgJt2ZwQTxUKeCAUjrk0IrmQEiG6aSB+HAoeCffaH9960Jmic/yLu1gC3EyyKIL
-	 XVI3SlagEUPiGg7udoTbsaW50f7EgvKCSnQ86mSD0t6neamNPV6o3EETTJ/70MkbFm
-	 Gs0xDUXVQdU9UCvotfvM9ZDD8OgkN+aACBnBH2GiqSS2rMsQwhwzNDpxMYxAhoXSD+
-	 laiBgXKb0QjcEgqbnI+KrFE8Nfz79vl8Y81HiDYhrKNPmEMAdpJN7jKVqmPnawbSrn
-	 RUpbyWOTVsxrvlAIbj06vJEq3hBOQsUkWRBCDo+ckleWO6js1lTlfrd/+HN4RCicio
-	 NZaynMVz9+e9w==
+	b=oO/fhZcXO/BZrx8yF8Fj206qVKL7kKNu4TsHMCnIuoxt+yGFKhXb+KMsx0INL4DyP
+	 D9lvNT0LjpSnL1EJUuBgxBiJd24/McViD8xg4tWALK9iHPZgKVxHOSnykmz2p8nXCw
+	 H2zdCyaF5ED6NfGqJc+ME9bKbXSgABkCu2ZnbFC8PsbOVY+a578UzLhj1tPFRhl2uj
+	 2Wi0iTfAOqtXtW8yRPl6SNb16/f7osehdL8jSxluqQMJnWAjRp3MCCdQ4PLDf+vgUd
+	 8tSUfDAGwQ+0wl3mZrr6p4DS/OdSWiwPrJEA12F4unBQMB7L8OePQbGUuRbMT9x0Ap
+	 sZl0b1z18jnyw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A00AC40CB5;
-	Thu, 24 Sep 2026 18:57:41 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id D9B7D328
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2044D40CB5;
+	Thu, 24 Sep 2026 18:57:43 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id E6C52392
  for <buildroot@buildroot.org>; Thu, 24 Sep 2026 18:56:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CB7F040AC9
+ by smtp4.osuosl.org (Postfix) with ESMTP id CBA5840ACB
  for <buildroot@buildroot.org>; Thu, 24 Sep 2026 18:56:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id to7q5vAnDJw0 for <buildroot@buildroot.org>;
+ id 3L43ZndDPAZb for <buildroot@buildroot.org>;
  Thu, 24 Sep 2026 18:56:45 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 41E8140AB6
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 1F45F40ABB
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790276204;
- b=LD6fQnYN+dE/F+4BXDnUVMtIXhZZRkMql8w/EG5IK5ZDKitYRYkk/8jqnNJ9pbTsaYk/
- iqG2LjlFmpKYADgr5ju4j2vMYN6SvI3Sfa1+sGqxYDnnl5SyF1g55FnVtn8dbBd0zaG1u
- KfeilOtUdzitPZ/dNRqfDzFdak1m13sg2v+9Yl6ZBZ35JT4uADtlpq6dUwVTO0BdIDG3K
- ibMGY2HFF59igjLJHeu9mKj1sn+BjX6ujsQaWPASkKAEeKvtHIlUjTK5MtB5S35RrSwh+
- XB7RZdG4unzmEaNF4WoL1V7S7ejrrQoN7Lc0U/ySUBF7Kv57FK/upb+9tDgdYldbEJA==
+ b=XKI9Rsal6QeFygTFtNKCSx5xpPDzy2gFnPB2AKfIWYGwlnmB36FhkcPGKDc7KOlsjhjR
+ ZOJs/QXpT+pWbNNiA4UjmxR5p19IeSgNysbzR2AK3Wm6Lv8mdmM0oyVwk9CoA9WgE9DT3
+ 6UmOFL/jzJF9KAUY3vTSWo5lSM760vKghxFfWEPZAZTcZKmh2sf2AZuEV2o7ilvmEi8r6
+ stTokCWCS6CFl5ZrX+VYh/sk5/0TcaDYayAjPx6rIl+U5nyhJMJS/HzH6bBspajXIJPSy
+ rxQg22csnRBn+0P+X+5Pc8vQ3uqzPD8ZsikQso+rwhkrZcMMc5Gb5QTpe4UKB/OTzEw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1790276204;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=uuyPRoZVdXI4dcHno0P0cajddJcJW5eajXDO6Z33Vhc=;
- b=NCCvMYpzDoA06LgBI23KNPr+crl7YCuHrzauyC16slAYwUg+CtzIR87CgbAjv0JiDoiG
- 0UPCwCEq3WKB0qaxkm70xm/nprelxFFfDqy63eVchofwM0gPw8lcPorWgyvZRC9LzXYY+
- 8vGPGjm973kDREVhyP5Df7gzO9ph5UKdcKlkDbu5xRlZ6Lb5tpztBiOWpFU/C8OeDhU7h
- dLbmi5nFmlnUoaK+VHsMrLJQsYOy+ZvZJ2ElFpZUtdcDHjEjBsjb59eHnxqGeMS1UlmJg
- yJb9dHNsaUVnXKGoDOibfXBHiJArh5o+fGnCmWC+C0frtKc/xTsa6DioWyf2qpdM7+g==
+ bh=y8drdBX/I2hrAyg/Of3nNFYEJm/c/4j3F7GWsiyei9A=;
+ b=Wdkh7vzLKCwqPT/MsVWNuuk9ighkp5x5omtJEJIqC/rcrOxe7PKWi8D0hvXXjrEWPMdq
+ LuvQrXpJYKT7MKoP6MMcxZ8aAjheZjVbrZBCuI6HiHb3cbx0+LYsJN0mvtd86X2kXxmqN
+ pL66f6pT5c7YO6IC179E4xUP1Fibj8TnsXP9bEsgbgqWzm/ygq6uuPXzlKZZeW83QDQNa
+ pXvR/ti5u/LUfHmgDCxix/HKbBgrjKk7pGdOZ/eVkysvrwAv5oDVQhufNu00RufLlUipD
+ 5DduRXrbiioTIaamYtazSNPgE4cgjslP2ybHj0Kf2ALc1rY+5Rv9vTv53WuCYksrljA==
 ARC-Authentication-Results: i=1; smtp4.osuosl.org;
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 41E8140AB6
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1F45F40ABB
  for <buildroot@buildroot.org>; Thu, 24 Sep 2026 18:56:44 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D8D7A98383; Thu, 24 Sep 2026 18:55:33 +0000 (UTC)
+ id B5EFF98385; Thu, 24 Sep 2026 18:55:33 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 23 Sep 2026 18:21:57 +0200
+Date: Wed, 23 Sep 2026 18:21:32 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 9f12591982c2990578c983c9141258b67ac76f7d
-X-Git-Newrev: ac1ca473b5ed87e996dabd214dc1334ea07bd5f3
+X-Git-Oldrev: 64db8679294b2d118c1a1c6e4ebee218922d1863
+X-Git-Newrev: bae413fe79c2123cf0569aef08b82e5fe62e2f62
 X-Patchwork-Hint: ignore
-Message-Id: <20260924185533.D8D7A98383@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/libabseil-cpp:
- disable for the MIPS n32 ABI
+Message-Id: <20260924185533.B5EFF98385@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/cannelloni: bump
+ to version 2.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,81 +114,91 @@ From: =?utf-8?b?UmFwaGHvv73vv71sIE3vv73vv71sb3R0ZSB2aWEgYnVpbGRyb290?=
  <buildroot@buildroot.org>
 Reply-To: Raphaël Mélotte <raphael.melotte@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5185582388026096264=="
+Content-Type: multipart/mixed; boundary="===============3349981492911239126=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5185582388026096264==
+--===============3349981492911239126==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/ac1ca473b5ed87e996dabd214dc1334ea07bd5f3
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/bae413fe79c2123cf0569aef08b82e5fe62e2f62
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-absl::base_internal::DirectMmap() only implements mmap() via mmap2 for
-the o32 ABI on MIPS:
+For change log, see:
 
-    #if ... (defined(__mips__) && _MIPS_SIM == _MIPS_SIM_ABI32) || ...
+https://github.com/mguentner/cannelloni/releases/tag/v2.0.0
 
-With the n32 ABI, the "remaining 64-bit architectures" fallback is
-selected instead, which fails to build because long is 32-bit there:
+Bump GCC to at least GCC 8 due to the C++20 requirement.
 
-    absl/base/internal/direct_mmap.h: In function 'void* absl::lts_20260107::base_internal::DirectMmap(void*, size_t, int, int, int, off_t)':
-    absl/base/internal/direct_mmap.h:130:39: error: static assertion failed: Platform is not 64-bit
-      130 |   static_assert(sizeof(unsigned long) == 8, "Platform is not 64-bit");
-          |                 ~~~~~~~~~~~~~~~~~~~~~~^~~~
-    absl/base/internal/direct_mmap.h:130:39: note: the comparison reduces to '(4 == 8)'
+Add TCP protocol to the package's description.
 
-direct_mmap.h is included by absl/base/internal/low_level_alloc.cc and
-absl/base/internal/poison.cc, which are always built, so the failure is
-unconditional. Upstream abseil has no support for the n32 ABI, so
-disable the package for that ABI.
+This release also raise cmake version requirement to 3.15, which fixes
+build failures with host-cmake >= 4.x.
 
-Since n32 is the default ABI for BR2_mips64/BR2_mips64el, this affects
-every mips64 build that does not explicitly select n64. The o32
-(BR2_MIPS_OABI32) and n64 (BR2_MIPS_NABI64) ABIs are unaffected, and all
-in-tree mips64 defconfigs use n64.
-
-For the LTS maintainers: the ABI list in direct_mmap.h is identical in
-abseil 20200225 (the version in tree when the arch dependencies were
-introduced) and in the current 20260817.0, so the failure has existed
-ever since mips64 was allowed. It is still reproduced on all maintained
-branches, e.g.:
-
-    2026.02.x https://autobuild.buildroot.net/results/5818407a73cfd3371cd1f726a24df6ceb9afa42d/
-    2025.02.x https://autobuild.buildroot.net/results/5065bda3b91bdbee53559dd97af8ab5a63a1e112/
-
-so a backport is needed there.
-
-Fixes: ae0557403a3a4cbf5354f0ab1784a08623382e5e ("package/libabseil-cpp: add BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS")
 Fixes:
-https://autobuild.buildroot.net/results/f375584f3721d61238b9e43d9926e037802f6141/
+https://autobuild.buildroot.org/results/87d5ab39a84c51f340875ae365d4f39439e81645/
 
-Assisted-by: Claude:claude-opus-5
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 263cfb165e7e3c95ebbac7def2a8729ff0271bcd)
+[Julien: add a commit log comment about fixes with host-cmake 4]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 68c8ff2c9521be62681e2a9ead9dccc8d7106d04)
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
- package/libabseil-cpp/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/cannelloni/Config.in       | 8 ++++----
+ package/cannelloni/cannelloni.hash | 2 +-
+ package/cannelloni/cannelloni.mk   | 2 +-
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/libabseil-cpp/Config.in b/package/libabseil-cpp/Config.in
-index 7b65ec40d0..0750dc5495 100644
---- a/package/libabseil-cpp/Config.in
-+++ b/package/libabseil-cpp/Config.in
-@@ -14,6 +14,10 @@ config BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
- 	default y if BR2_sparc || BR2_sparc64
- 	default y if BR2_x86_64
- 	depends on BR2_TOOLCHAIN_HAS_UCONTEXT
-+	# absl/base/internal/direct_mmap.h only implements DirectMmap()
-+	# with mmap2 for the o32 ABI on MIPS, and its 64-bit fallback
-+	# fails to build with the n32 ABI, where long is 32-bit
-+	depends on !BR2_MIPS_NABI32
+diff --git a/package/cannelloni/Config.in b/package/cannelloni/Config.in
+index e137e60c60..a2a15c0274 100644
+--- a/package/cannelloni/Config.in
++++ b/package/cannelloni/Config.in
+@@ -1,17 +1,17 @@
+ config BR2_PACKAGE_CANNELLONI
+ 	bool "cannelloni"
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # C++20
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_MMU # lksctp-tools
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # lksctp-tools
+ 	depends on !BR2_STATIC_LIBS # lksctp-tools
+ 	help
+-	  A SocketCAN over Ethernet tunnel. The tunnel supports both
++	  A SocketCAN over Ethernet tunnel. The tunnel supports TCP,
+ 	  UDP and SCTP protocols.
  
- config BR2_PACKAGE_LIBABSEIL_CPP
- 	bool "libabseil-cpp"
+ 	  https://github.com/mguentner/cannelloni
+ 
+-comment "cannelloni needs a toolchain w/ C++, threads, dynamic library, gcc >= 4.8"
++comment "cannelloni needs a toolchain w/ C++, threads, dynamic library, gcc >= 8"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || !BR2_TOOLCHAIN_HAS_THREADS
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_8 || !BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU
+diff --git a/package/cannelloni/cannelloni.hash b/package/cannelloni/cannelloni.hash
+index 107415b0ac..625e43d157 100644
+--- a/package/cannelloni/cannelloni.hash
++++ b/package/cannelloni/cannelloni.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  de44b7e327fbf38883f46e51a5afd07de5144f2e44c5f42b7f2f0741165f0b13  cannelloni-1.0.0.tar.gz
++sha256  3dde63727549d4a39154e78b95f4a5dad96af236ca6cef531f347c0b923c74d5  cannelloni-2.0.0.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  gpl-2.0.txt
+diff --git a/package/cannelloni/cannelloni.mk b/package/cannelloni/cannelloni.mk
+index f97a091760..7978cfccf5 100644
+--- a/package/cannelloni/cannelloni.mk
++++ b/package/cannelloni/cannelloni.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CANNELLONI_VERSION = 1.0.0
++CANNELLONI_VERSION = 2.0.0
+ CANNELLONI_SITE = $(call github,mguentner,cannelloni,v$(CANNELLONI_VERSION))
+ CANNELLONI_LICENSE = GPL-2.0
+ CANNELLONI_LICENSE_FILES = gpl-2.0.txt
 
---===============5185582388026096264==
+--===============3349981492911239126==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -199,4 +209,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============5185582388026096264==--
+--===============3349981492911239126==--
