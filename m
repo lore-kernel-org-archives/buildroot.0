@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 565BCC9830E
-	for <buildroot@archiver.kernel.org>; Thu, 24 Sep 2026 18:57:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70205C98318
+	for <buildroot@archiver.kernel.org>; Thu, 24 Sep 2026 18:57:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2732140359;
-	Thu, 24 Sep 2026 18:57:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 34052408D4;
+	Thu, 24 Sep 2026 18:57:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QqNSBhHKdVuV; Thu, 24 Sep 2026 18:57:18 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org D073340B5A
+ id 2qAI6uLu5Rcw; Thu, 24 Sep 2026 18:57:19 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 52140404C1
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790276238;
-	b=HViizhcAwYQFCynncLsXVM7HbRTAEzJqNThXtvBylAFdHlujA9AehsDXYNIw7jPneCgX
-	 42NNcQhSjvjMZ3dId5jd5Zo+mPLVSWrghhZXFZWem5C2IXWWVIbglEQyZ9dhazvDIz4pQ
-	 fbupLj45wxuQifjQY3ZniNzQ+UnPuo/vCtREtdVZrbQD6vwornmS2h8gF9nbWyKEK+KAy
-	 u4lrK4Mz2eeSWt3EgI1ulnsT8py5vvCKXZ+CC2bXD2zc820O1BQHXE6E59MQvVbQDmBjk
-	 RWOUkBBHVW5KBrqAoTH50jdFjgzKbyY+Vlw5Gn1DZOpiBf4yzkel5lWdnzpD4RmFyPQ==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790276239;
+	b=Fcxh9U9bPYQWmPTL61r/2rzm8bVyA8WX9wTWEd48RoVBGiBCtHlcqGzBpgUj/eZzl6Jt
+	 /kjYJiztYV01PZU/v51ivTri1IpY5yDVDH0kiO26zr54KPs1QTyi/ZgxBLF5qnohFFOuu
+	 zqGgYjBgXfAtsj6oN3F2pKZFU2jZ5AsEVHoe5r8z6iHVZ+v28HSzWSgeIIcO8oETARq70
+	 3Ml8QGm7uyv3X0Q07iYrAnrHZCYJqZwg0IVL6/NhL0krycsqbYZYe5Q3O2vNmbgM5GmNy
+	 rMC0h5uZV+OS2FgavfC0bfxFBKMTc1GGmpA/toRL27hTMq9LBQcSjLwe5JzEAfAYflQ==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1790276238;
+	c=relaxed/relaxed; t=1790276239;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,75 +30,75 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
 	 Sender;
-	bh=IIY4gQnOXLmarw8jESreuzN2CIixtZLxa/Lq1J5Hqfc=;
-	b=ewxdcbCUoz0s6bRqUkr12Md027AQxjTw4LcrVYdOc8n8EE718dvRZo7Ff1hiuLkHrrLC
-	 SSvSqWq+2XE0hZl8w0QPSVsfPs/M/vTSINVJgjvdm8LrGBo+gCcGFmC3/QnL+uLRTrdtI
-	 zyWylhb2d5A9xLMAolMPIW+L3IZGdEUxVdHwYLUt866sodPXYLGDy3IBwEGlHZbocqCGt
-	 Hs0YdrA/TRCej+GePf9FZCGWkaQAjH7zM44iYTJIrRgkErOsBKtZ3cqhEjteoVk99teyS
-	 sxYoNlFdxBIHNVyl8yd/7mIAuBV8g/lM6kf1f3w184KPraWPdDw48BHdaMAbr+8G0aw==
+	bh=4QiEQjKLp5B8ADpMUDduEE4try+r7KdCfzki+Wbszog=;
+	b=X3Ya2vcHBehBG/ZQCcPmx91lYBHurOV43Mtn0m6Zx90uJt1I+lsyXuJKuWSWiOddG47b
+	 z74RPyCJ9Mpj+tRHR5htKkuDgrN7/dyh30EIjyYOA6aZNYwLxO2iWkWSqtNiubspdZMcg
+	 GiPrB2lYJCZ8631rpnu+VQztMx/YOPYPWojL6G8e+BN2VREfUFEEm7Y3HSloEfDZsja63
+	 FjcDsgK8jWLNDTjeZMgILlD2vWFZrlwWQIJUM23iHuyrxaVIOw4ef+GMUbvCtSJI9uYhi
+	 LrCSwCPwO7Z/o3h2tfW+3OMa+UWJ56B47sdoLZiPpvnyVZClKmQD47WQcWPUmO38ebA==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1790276237;
-	bh=IIY4gQnOXLmarw8jESreuzN2CIixtZLxa/Lq1J5Hqfc=;
+	s=default; t=1790276239;
+	bh=4QiEQjKLp5B8ADpMUDduEE4try+r7KdCfzki+Wbszog=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=qXBFf2rqM/3djL9lAbieABQcX2FC9mmBn0GEpFgQz3s+EhXhTOpL5aBrMYJGnhVm+
-	 RLkgI6QmBH6tqER8JNqtWA/suwtrM3MHgW5h1iQ3YVMx5NyypjEKqU5dzWhNRJ/Bdj
-	 /0siru2UH2ksJEjgznso3gS0zM2E7E0ZCD2R9UJU98xZr+1NGAS8MWzE79xQQAvygk
-	 /dfLM4RBU8UJPBkTltUJOYQsP0wNKyPatWqx7kJ5o9Mo+1d67NI2ZnsqEMXsdZ7q7Y
-	 lT+eKmuHZcnW2o4KL8qVUSmJG6HPnkwJtxUQ4tRhyZKWdrkdz5x4hGr08KQokO45v/
-	 b0JClgfI9PvAg==
+	b=NMRBwOPKxDKoZafKWOzFBwR25KNyHApPmTSTaBnEHnoS+ZG2ApHqBXm1mMAoTERvp
+	 vEvM8mp0yHG1LeNAqt5tNIHo+Yy3b62Z2QIkWLsTNS7ZBzM2Dbb+ZWY5eOLq6oXOrI
+	 sJYWZXDYgVx8XkqaNCitreVEa47ycECAVsJumnziF1BUYBaB2dHMKAtzEwEukffjse
+	 vZqK5G/rpffNClm+uz0XLfi0HusFL38j/RGf9FYmKYlPXN5nZvlL2RzMIybB3qU9yZ
+	 GyBg4pm1culLFtgAsnlCprBRyQ29my/1kN/Pk+OKbvSiHeONWswi9Bn08p/OwtVqsV
+	 y36zsE125MOwQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D073340B5A;
-	Thu, 24 Sep 2026 18:57:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 52140404C1;
+	Thu, 24 Sep 2026 18:57:19 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 5E40E328
+ by lists1.osuosl.org (Postfix) with ESMTP id 61C553B7
  for <buildroot@buildroot.org>; Thu, 24 Sep 2026 18:56:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3BAE081217
+ by smtp1.osuosl.org (Postfix) with ESMTP id 47F9681209
  for <buildroot@buildroot.org>; Thu, 24 Sep 2026 18:56:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pAQl7-0XBXNG for <buildroot@buildroot.org>;
- Thu, 24 Sep 2026 18:56:43 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org A6CD881209
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790276203;
- b=d9rTG6/3ujEOfS0yNdKzUlJXVb77WZzFuqbnETJouNcXkZi3EOy/fMq6AE7t+3R0JfkH
- wz98I5TyFqRztVQtdbUi/sFw+4aIRzxNAtKBWNy7dqOQKR/OthbGfy4ItuZ7YGzuP5F46
- FOjCda+ozYGZgnsBFIqYrk1eBoAytHlOH01mRxeabd2x7zdQf/nUhAFSM9m3tdmlMn8Ju
- 7Y5KblHsH8O25GLVEPp79fFrT9wnq96dsdbDO96NVt6VajvG30B12LnyROmIIwIQbqAiv
- 4TrsHRu7l+ZLdoeYSQ/nXC5IMxOFmxBEALVNaNCD11/JdTSBlFQkd2tteTOerU46crg==
+ id lsT5m-kB3-Hz for <buildroot@buildroot.org>;
+ Thu, 24 Sep 2026 18:56:44 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 63C4081215
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790276204;
+ b=bHq52kBG2e2leTWC35u2eIuqceYWpYjslyrub2IMw95GENIA/prwQC94Kf577CUx4gAD
+ PQGzyEYczgsiij61LqCw/uyRHNFX+jFiBrzta4Ru6DJZfPsAreVYWQtuKKK4WEzvkXNk8
+ kBks9sBg8v1T4Lu2sxEMpB0ZiRdiP+uUxPuBeWVBCzaruTOIJAmv1ju072u2RaGRO1/82
+ GysFn9OUby/CTz0iklJBwKjaoeZZ7CHJBpAHk4S3kLd+a24XCY4Mvh2ePO6xYaScg5ZPF
+ NVuyiD6wVyi0zuoj7BSlatIltqZ+2Yo/I9pbD4Yg05KEmMvG1MksCuk+GYFQTjl5juQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1790276203;
+ c=relaxed/relaxed; t=1790276204;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=3RCHRqwO7b0Bhi/calJsadnJ3IwGH6Zno9ThaMcIokk=;
- b=k38d5xEVYfF2wPgdi3upIRYRTIe/OJWCMIPlkrv5Z43s9uBMHsHoEKrh6x9TVxi5w0oK
- rjKrNdnEXOirWMYVVm20WiGqmHePP83spLP34hnOVyYlrXTaRbAT1DwqLu+Dc0AQGg1G8
- ccZupbCBIJWJbFCTvxoEz2kV4deWNp/D0cWF5KdgCb3eDuexUrsjdYP/SLcj/4n1o4o7P
- RfguUOrvx5QvCO4XHQIAQ4cfnUme2HLM2maQeujb/Knn7APSxf6YP+ZzlisoEnQxwjNzJ
- 8Hu+j+3zLMQmnlGdzSzYYBtEzxC0RdXoTMbZJQ0HxNl/RjAcNDQu5LrEH2nFhbGItbw==
+ bh=EmdjIlVU5IJdnEfL3HDvN/ZGj4JAtw1kpld/Hdnq3Pc=;
+ b=proslYcR3ifME7c6upuYFT66kLHAcq8jmz1fmpJN2GQNYVrrZZx7dY+CoTepQDpV9UvI
+ b4LosEmJC/alZsuNIWOhRz1JXzCP0tBLZfIyRbw8b1sdmGLzG2ra3wKrlNYBakEhvCSQC
+ xbWQXx+v5+4Bm0EcnP6arqYZo206CLqEbvaHIwiGkkdwogt/FOmOSXi+JPMLmmIoACCoV
+ 17wCZ/zwk8OSiKUYqjouQwfMqgCkvEyhPUlJ/CxTIwfQMUoJXWpur1abSxsS+Pe4uSgg3
+ OoTdh90yl9D0FMQbKCwRU1LLm1S0lDfxAvBSjGdQBrmTAhogeV8dIBaUS8Br7aZUeqw==
 ARC-Authentication-Results: i=1; smtp1.osuosl.org;
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id A6CD881209
- for <buildroot@buildroot.org>; Thu, 24 Sep 2026 18:56:43 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 63C4081215
+ for <buildroot@buildroot.org>; Thu, 24 Sep 2026 18:56:44 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3EC6098385; Thu, 24 Sep 2026 18:55:33 +0000 (UTC)
+ id EFA4B98385; Thu, 24 Sep 2026 18:55:33 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 23 Sep 2026 18:15:41 +0200
+Date: Wed, 23 Sep 2026 18:22:51 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 707a7026fcb906fed9b5b959e282c294afe2eb0e
-X-Git-Newrev: e673c80cb759f592700cc5fa0496f082496f4601
+X-Git-Oldrev: ec746f6b57d48850cb2ee86c94188d4b5c433978
+X-Git-Newrev: 31feeffd69e67590e1410ded429933cc0840859e
 X-Patchwork-Hint: ignore
-Message-Id: <20260924185533.3EC6098385@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/exim: bump
- version to 4.100
+Message-Id: <20260924185533.EFA4B98385@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] linux/linux.mk: forcibly
+ (re)enable Make jobserver for linux-rebuild-with-initramfs target
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,212 +114,120 @@ From: =?utf-8?b?UmFwaGHvv73vv71sIE3vv73vv71sb3R0ZSB2aWEgYnVpbGRyb290?=
  <buildroot@buildroot.org>
 Reply-To: Raphaël Mélotte <raphael.melotte@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4225706630403642716=="
+Content-Type: multipart/mixed; boundary="===============8409219833071033428=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4225706630403642716==
+--===============8409219833071033428==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/e673c80cb759f592700cc5fa0496f082496f4601
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/31feeffd69e67590e1410ded429933cc0840859e
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-https://lists.exim.org/lurker/message/20260820.154633.91995f73.en.html
+Commit 0b9efc991f8a ("linux: use BR2_MAKE", 2023-04-10) replaced $(MAKE)
+with $(BR2_MAKE) in a number of recipes. As a consequence, the child
+make is unable to discover the job server, in some cases. In those
+cases, we get a warning such as:
 
-Rebased patch 0001.
+> warning: jobserver unavailable: using -j1. Add `+' to parent make rule.
 
-Updated patch 0005, the previous version was applied upstream with
-commit 497e9eb7e77ad27ae1d45281e23eefadfaa7a3bc but it did not fix all
-linker errors so we sent a new patch upstream which replaces the
-previous patch.
+See [1] and [2].
 
-Updated hash of GPL-2.0 license file (address, name of president and
-typos), a commit can not be provided from the source tree.
+Falling back to single job can make build considerably longer.
+This longer build time issue can be reproduced in specific
+conditions. This situation happens when:
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 8b009489f53147e652d2c197a1f814daacd33385)
+1. The top GNU Make is using a "pipe" jobserver.
+   This is the default when GNU Make <= 4.3 is used (and v4.3 is the
+   version inside the current Buildroot Docker reference image).
+   Make > 4.3 changed the default jobserver style to "fifo".
+   See [3][4]. With Make > 4.3, the issue can be reproduced by
+   calling "make --jobserver-style=pipe ...".
+2. The root filesystem is an initramfs linked into the Kernel
+  (i.e. using the config BR2_TARGET_ROOTFS_INITRAMFS=y)
+3. Buildroot per-package directories is used
+  (i.e. using the config BR2_PER_PACKAGE_DIRECTORIES=y)
+4. The build is made in parallel, with 2 or more jobs. For example:
+   make -j$(nproc)
+
+Overall, the issue can be reproduced with the commands:
+
+utils/docker-run
+cat >.config <<EOF
+BR2_aarch64=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_PER_PACKAGE_DIRECTORIES=y
+BR2_LINUX_KERNEL=y
+BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+BR2_TARGET_ROOTFS_INITRAMFS=y
+EOF
+make olddefconfig
+make -j$(nproc)
+
+The Linux Kernel is built once (with a fake empty initramfs cpio
+image), when build log is showing ">>> linux 7.2.6 Building". Then,
+at the end of the Buildroot build, once the CPIO filesystem is
+complete, it is integrated inside the Kernel with an extra "make"
+invocation when the build log shows
+">>>   Rebuilding kernel with initramfs".
+
+This second kernel "make" is not expected to rebuild the whole
+kernel, since compiled objects from the first compilation are still
+here. However, in the described conditions, the second kernel is
+fully rebuilt. This is an undesired behaviour. The Make jobserver
+issue adds up to that: this second full kernel is rebuilt with only
+one job, which can significantly increase the build time.
+
+Running the previous example on a host with 128 CPUs:
+without this change, build takes 1h5m,
+with this change, build takes 7m.
+
+Note: using GNU Make >= 4.4 (with a fifo jobserver style by default)
+or removing per-package directories no longer produces the issue.
+For reference, running the example, without this change and without
+per-package directories on the same host, the build takes 10 mins.
+
+This commit improves the situation by prefixing the recipe with "+",
+to inform the parent Make that $(BR2_MAKE) can deal with the job
+server. This will give a chance to do jobs in parallel, in general.
+
+Note: the pkg-generic.mk infra already has '+' for _BUILD_CMDS, which is
+why other $(BR2_MAKE) invocations in linux.mk does not need this '+'.
+See [5].
+
+[1] https://www.gnu.org/software/make/manual/html_node/Error-Messages.html
+[2] https://www.gnu.org/software/make/manual/html_node/MAKE-Variable.html
+[3] https://www.gnu.org/software/make/manual/html_node/Options-Summary.html#index-_002d_002djobserver_002dstyle
+[4] https://cgit.git.savannah.gnu.org/cgit/make.git/commit/?id=7ad2593b2d2bb5b9332f4444d8bf93ac6f958bc6
+[5] https://gitlab.com/buildroot.org/buildroot/-/commit/069b33a30e6d71454ba8cf3b41d1ee2db14549e7
+
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Oleg Lyovin <ovlevin@sberdevices.ru>
+Cc: buildroot@buildroot.org
+Signed-off-by: Laszlo Ersek <laszlo.ersek@arm.com>
+[Julien: extend commit log]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 86a56dcc17cc540c08cc4760af9481636016550d)
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
- .../exim/0001-Build-buildconfig-for-the-host.patch |   5 +-
- ...5-Fix-cross-compile-by-adding-LD-variable.patch | 106 +++++----------------
- package/exim/exim.hash                             |   6 +-
- package/exim/exim.mk                               |   2 +-
- 4 files changed, 31 insertions(+), 88 deletions(-)
+ linux/linux.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/exim/0001-Build-buildconfig-for-the-host.patch b/package/exim/0001-Build-buildconfig-for-the-host.patch
-index 6f4351a50f..2f2e23c1a1 100644
---- a/package/exim/0001-Build-buildconfig-for-the-host.patch
-+++ b/package/exim/0001-Build-buildconfig-for-the-host.patch
-@@ -2,7 +2,7 @@ buildconfig is meant to be executed on the host, so it has to be compiled
- using $(HOSTCC), not $(CC).
- 
- Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
--[Bernd: rebased for version 4.99]
-+[Bernd: rebased for version 4.100]
- Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
- ---
-  OS/Makefile-Base |    4 ++--
-@@ -22,4 +22,5 @@ index 29a6ad3..420ba60 100644
- +	$(FE)$(HOSTCC) $(HOSTCFLAGS) $(INCLUDE) -o buildconfig buildconfig.c
-  
-  
-- util_deps: config ../src/utils/msgid.frag
-+ UTIL_DEPS = $(CONFIG_DEPS) ../src/utils/msgid.frag
-+
-diff --git a/package/exim/0005-Fix-cross-compile-by-adding-LD-variable.patch b/package/exim/0005-Fix-cross-compile-by-adding-LD-variable.patch
-index 99bf5ce667..51383329fd 100644
---- a/package/exim/0005-Fix-cross-compile-by-adding-LD-variable.patch
-+++ b/package/exim/0005-Fix-cross-compile-by-adding-LD-variable.patch
-@@ -1,95 +1,37 @@
--From a47de397eb1f28356086f315a443c288599d8657 Mon Sep 17 00:00:00 2001
-+From cb7d04db69623673e606a3249bc7de1330c8f0b6 Mon Sep 17 00:00:00 2001
- From: Bernd Kuhls <bernd@kuhls.net>
--Date: Sat, 1 Nov 2025 17:00:52 +0100
-+Date: Fri, 4 Sep 2026 18:43:42 +0200
- Subject: [PATCH] Fix cross-compile by adding LD variable
- 
--Fixes cross-build error due to commit
--a449ff8ca50e6df5faee2f1e83e1198c27738dfc.
-+Upstream: https://code.exim.org/exim/exim/pulls/3244
- 
--Hard-coding "ld" when cross-compiling is a bad idea.
--
--Upstream: https://github.com/Exim/exim/pull/98
- Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
- ---
-- src/OS/Makefile-Base      | 10 +++++-----
-- src/OS/Makefile-Default   |  1 +
-- src/src/miscmods/Makefile |  2 +-
-- 3 files changed, 7 insertions(+), 6 deletions(-)
-+ src/miscmods/Makefile | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
- 
--diff --git a/OS/Makefile-Base b/OS/Makefile-Base
--index 5a15b0a6b..0250647f0 100644
----- a/OS/Makefile-Base
--+++ b/OS/Makefile-Base
--@@ -1065,7 +1065,7 @@ dynmodules: buildlookups buildrouters buildtransports buildauths \
-- buildlookups: config
-- 	 @cd lookups && $(MAKE) SHELL=$(SHELL) AR="$(AR)" $(MFLAGS) CC="$(CC)" CFLAGS="$(CFLAGS)" \
-- 	   CFLAGS_DYNAMIC="$(CFLAGS_DYNAMIC)" HDRS="../version.h $(PHDRS)" \
---	   FE="$(FE)" RANLIB="$(RANLIB)" RM_COMMAND="$(RM_COMMAND)" \
--+	   FE="$(FE)" RANLIB="$(RANLIB)" LD="$(LD)" RM_COMMAND="$(RM_COMMAND)" \
-- 	   INCLUDE="$(INCLUDE) $(IPV6_INCLUDE) $(TLS_INCLUDE) $(LOOKUP_INCLUDE)"
-- 	 @echo " "
-- 
--@@ -1074,7 +1074,7 @@ buildlookups: config
-- buildrouters: config
-- 	 @cd routers && $(MAKE) SHELL=$(SHELL) AR="$(AR)" $(MFLAGS) CC="$(CC)" CFLAGS="$(CFLAGS)" \
-- 	   CFLAGS_DYNAMIC="$(CFLAGS_DYNAMIC)" \
---	   FE="$(FE)" RANLIB="$(RANLIB)" RM_COMMAND="$(RM_COMMAND)" HDRS="$(PHDRS)" \
--+	   FE="$(FE)" RANLIB="$(RANLIB)" LD="$(LD)" RM_COMMAND="$(RM_COMMAND)" HDRS="$(PHDRS)" \
-- 	   INCLUDE="$(INCLUDE) $(IPV6_INCLUDE) $(TLS_INCLUDE)"
-- 	 @echo " "
-- 
--@@ -1083,7 +1083,7 @@ buildrouters: config
-- buildtransports: config
-- 	 @cd transports && $(MAKE) SHELL=$(SHELL) AR="$(AR)" $(MFLAGS) CC="$(CC)" CFLAGS="$(CFLAGS)" \
-- 	   CFLAGS_DYNAMIC="$(CFLAGS_DYNAMIC)" \
---	   FE="$(FE)" RANLIB="$(RANLIB)" RM_COMMAND="$(RM_COMMAND)" HDRS="$(PHDRS)" \
--+	   FE="$(FE)" RANLIB="$(RANLIB)" LD="$(LD)" RM_COMMAND="$(RM_COMMAND)" HDRS="$(PHDRS)" \
-- 	   INCLUDE="$(INCLUDE) $(IPV6_INCLUDE) $(TLS_INCLUDE)"
-- 	 @echo " "
-- 
--@@ -1092,7 +1092,7 @@ buildtransports: config
-- buildauths: config
-- 	 @cd auths && $(MAKE) SHELL=$(SHELL) AR="$(AR)" $(MFLAGS) CC="$(CC)" CFLAGS="$(CFLAGS)" \
-- 	   CFLAGS_DYNAMIC="$(CFLAGS_DYNAMIC)" \
---	   FE="$(FE)" RANLIB="$(RANLIB)" RM_COMMAND="$(RM_COMMAND)" HDRS="$(PHDRS)" \
--+	   FE="$(FE)" RANLIB="$(RANLIB)" LD="$(LD)" RM_COMMAND="$(RM_COMMAND)" HDRS="$(PHDRS)" \
-- 	   INCLUDE="$(INCLUDE) $(IPV6_INCLUDE) $(TLS_INCLUDE)"
-- 	 @echo " "
-- 
--@@ -1101,7 +1101,7 @@ buildmisc: config
-- 	   CC="$(CC)" CFLAGS="$(CFLAGS)" \
-- 	     CFLAGS_DYNAMIC="$(CFLAGS_DYNAMIC)" \
-- 	     LDFLAGS_PARTIAL="$(LDFLAGS_PARTIAL)" HDRS="../version.h $(PHDRS)" \
---	     FE="$(FE)" RANLIB="$(RANLIB)" RM_COMMAND="$(RM_COMMAND)" \
--+	     FE="$(FE)" RANLIB="$(RANLIB)" LD="$(LD)" RM_COMMAND="$(RM_COMMAND)" \
-- 	     PERL_CC="$(PERL_CC)" PERL_CCOPTS="$(PERL_CCOPTS)" \
-- 	     PERL_CFLAGS="$(PERL_CFLAGS)" PERL_LFLAGS="$(PERL_LFLAGS)" \
-- 	     INCLUDE="$(INCLUDE) $(IPV6_INCLUDE)" TLS_INCLUDE="$(TLS_INCLUDE)"
--diff --git a/OS/Makefile-Default b/OS/Makefile-Default
--index 858361bf3..c469c7f01 100644
----- a/OS/Makefile-Default
--+++ b/OS/Makefile-Default
--@@ -227,6 +227,7 @@ HOSTNAME_COMMAND=/bin/hostname
-- 
-- RANLIB=ranlib
-- 
--+LD=ld
-- 
-- # EXIM_CHMOD is available to specify a command that is automatically applied
-- # to the Exim binary immediately it is compiled. (I find this useful when
- diff --git a/src/miscmods/Makefile b/src/miscmods/Makefile
--index 1e46d4456..cfae5aac2 100644
-+index 807d6f377..5bac23a7f 100644
- --- a/src/miscmods/Makefile
- +++ b/src/miscmods/Makefile
--@@ -62,7 +62,7 @@ dkim.o:
-- 	$(FE)$(CC) -c $(CFLAGS) $(INCLUDE) pdkim.c
-- 	$(FE)$(CC) -c $(CFLAGS) $(INCLUDE) $(TLS_INCLUDE) signing.c
-- 	$(FE)mv dkim.o dkim_tmp.o
---	$(FE)ld -r -o dkim.o $(LDFLAGS_PARTIAL) \
--+	$(FE)$(LD) -r -o dkim.o $(LDFLAGS_PARTIAL) \
-- 		dkim_tmp.o dkim_transport.o pdkim.o signing.o
-- 
-- # Similarly, we want a single .so for the dynamic-load module
-+@@ -96,7 +96,7 @@ dmarc.o dmarc_native.o:
-+ 	$(FE)$(CC) -c $(CFLAGS) $(INCLUDE) $*.c
-+ 	$(FE)$(CC) -c $(CFLAGS) $(INCLUDE) dmarc_common.c
-+ 	$(FE)mv $@ dmarc_tmp.o
-+-	$(FE)ld -r -o $@ $(LDFLAGS_PARTIAL) dmarc_tmp.o dmarc_common.o
-++	$(FE)$(LD) -r -o $@ $(LDFLAGS_PARTIAL) dmarc_tmp.o dmarc_common.o
-+ 
-+ # dmarc_native is special in the same way as spf_perl
-+ dmarc.so dmarc_native.so:
-+@@ -112,7 +112,7 @@ sieve_filter.o:
-+ 	$(FE)$(CC) -c $(CFLAGS) $(INCLUDE) sieve_filter_body.c
-+ 	$(FE)$(CC) -c $(CFLAGS) $(INCLUDE) sieve_filter_input.c
-+ 	$(FE)mv sieve_filter.o sieve_filter_tmp.o
-+-	$(FE)ld -r -o sieve_filter.o $(LDFLAGS_PARTIAL) \
-++	$(FE)$(LD) -r -o sieve_filter.o $(LDFLAGS_PARTIAL) \
-+ 		sieve_filter_tmp.o sieve_filter_body.o sieve_filter_input.o
-+ 
-+ sieve_filter.so:
- -- 
- 2.47.3
- 
-diff --git a/package/exim/exim.hash b/package/exim/exim.hash
-index 4cdedb724d..c075b2fe96 100644
---- a/package/exim/exim.hash
-+++ b/package/exim/exim.hash
-@@ -1,6 +1,6 @@
- # From https://ftp.exim.org/pub/exim/exim4/00-sha256sums.txt
--sha256  c2d2f80adc7c71d424fd82a46655eaa2d7d9b4ca2e77883eba9076947b7ee627  exim-4.99.5.tar.xz
-+sha256  5bd0a3e353dbfcd5c8174388b824316a61ee2455d9052ea2f0877dee939d33b3  exim-4.100.tar.xz
- # From https://ftp.exim.org/pub/exim/exim4/00-sha512sums.txt
--sha512  28fd15d0d4e0114129fd42140fb5d5920fcd5cbfb6ac816197e3567c3d2ece6ec73367b43bd8d47d2b543adb89ad28a5e4c58a23210887f867a5c41c24e181b5  exim-4.99.5.tar.xz
-+sha512  e7f2cc1ba9af4b1113d9a40b384bf2e5439f539381126018fb9a15d3afaf687fd209d06d1cfa96e61426df0d9f4e7988e49e1192510abc02b2aa19b14b051abc  exim-4.100.tar.xz
- # Locally calculated
--sha256  49240db527b7e55b312a46fc59794fde5dd006422e422257f4f057bfd27b3c8f  LICENCE
-+sha256  edaef632cbb643e4e7a221717a6c441a4c1a7c918e6e4d56debc3d8739b233f6  LICENCE
-diff --git a/package/exim/exim.mk b/package/exim/exim.mk
-index 482c7ca2c1..a8395a2309 100644
---- a/package/exim/exim.mk
-+++ b/package/exim/exim.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--EXIM_VERSION = 4.99.5
-+EXIM_VERSION = 4.100
- EXIM_SOURCE = exim-$(EXIM_VERSION).tar.xz
- EXIM_SITE = https://ftp.exim.org/pub/exim/exim4
- EXIM_LICENSE = GPL-2.0+
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 98aed16861..eba22f5de2 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -692,7 +692,7 @@ linux-rebuild-with-initramfs: rootfs-cpio
+ linux-rebuild-with-initramfs:
+ 	@$(call MESSAGE,"Rebuilding kernel with initramfs")
+ 	# Build the kernel.
+-	$(LINUX_MAKE_ENV) $(BR2_MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) $(LINUX_TARGET_NAME)
++	+$(LINUX_MAKE_ENV) $(BR2_MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) $(LINUX_TARGET_NAME)
+ 	$(LINUX_APPEND_DTB)
+ 	# Copy the kernel image(s) to its(their) final destination
+ 	$(call LINUX_INSTALL_IMAGE,$(BINARIES_DIR))
 
---===============4225706630403642716==
+--===============8409219833071033428==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -330,4 +238,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============4225706630403642716==--
+--===============8409219833071033428==--
