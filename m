@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A084C98324
-	for <buildroot@archiver.kernel.org>; Thu, 24 Sep 2026 18:56:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D8E6C98318
+	for <buildroot@archiver.kernel.org>; Thu, 24 Sep 2026 18:57:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4277B8122D;
-	Thu, 24 Sep 2026 18:56:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A6F1240B20;
+	Thu, 24 Sep 2026 18:56:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id m8HOacmZAOjC; Thu, 24 Sep 2026 18:56:57 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 534188121E
-Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790276217;
-	b=oI7zIHFwbCGIiWrP2g82/0QyP4Jk+etHQ98c5V+jk4RBZLcPPZKSadQ3dbF8csz5DbKN
-	 Mp9xa6hBYzrb9PenLFHwefgTRCRS3fGb+Y+1MVk+uau0RHwJ8wyqgMAKCqN52PK26Iw1X
-	 P2jbMi77HqT3eiVQG9bYPeErT8qL8YDSXJiekj/h+r50rGnL5ZqiUSQ9SFuVE1U4dPXNf
-	 9t2xlnrzkFShZWBQn909qnP8w3OAWIj4NGveW/HEbr3NuEjcB3MgXLR4ktFNIcX6HBOVP
-	 wHUxWr43DF70DGzg56Y1DPOfRWpHXoEhEuzRzLPUiAJlk+cGS32bi8gMKwMdvSh0/RA==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gWsxvWF4JCUL; Thu, 24 Sep 2026 18:56:58 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 941E440B1D
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790276218;
+	b=PzsKKWducr6Vv+5SuRdBK1JryExYYmvoBKkPFEEU8RFXHUTHB0IgBeVwbCB5pfptOXT1
+	 I0QHX1E5hen1j+gXA2O59XGXkg1J/2EK6WLhcSBAG1D/0K0do4HwKv/q1zzDWGcJCcAs+
+	 2qyeSvBb4g1eywdr/uI2kazzzH4613rx273yYY5D4sydR8rTiRBnGaNc+PuQJ7OkXKchO
+	 seINinq7szzbutUVoxyckoyJ73HQxA7uEanrWpWqv96n6YnehAvdEeEQfIfART3JBGqOD
+	 Hz3yNVZ1zkNcs6yMSj81qYWSsTKGABihZVQ80O4zw8LBQchyC8ocdQtA3r5SH1BxPiw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1790276217;
+	c=relaxed/relaxed; t=1790276218;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,75 +30,75 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
 	 Sender;
-	bh=8hAk8hP9nPA+Yf7nfK0BjlMZU08E4MAK7pJJVMZR7OM=;
-	b=JfB1lLsNOCbredwb/iSnDxuq+DD7bbhGVqimHn8d/JwCvf1Zz7USpUqxsR2Tfzae2igi
-	 +MPB3EfLUWH6pT6Ch4mT4R3vd4VuzqiY0dIXuTy6rPWS1doBsK3LkBrBO/YEAYNcxiYDd
-	 Do9vAQXasFmerqb9xYW16HiXTsLv3VkbpmV1Lfy/ox5Y3JC/xvxxWGeuA5gXy6n+et/CV
-	 u1sYa1DLkIsqp15jtbcqewsPZT/VrJcjFHC+Zq4JOEQhQNopPzeToDL5dJObwOoVnhVsB
-	 QXBuE4kiJH8vXvHseAKg/vWVDicOQyESjEL4PaHcAVDXDSFZMa3ybM92cmvPLQhfGeQ==
-ARC-Authentication-Results: i=2; smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	bh=TwCo9SzeZScPiYYE2ORgBRCvYQ2L6W/HhHWZ76KVVDs=;
+	b=GnNKyIM8NYfAHJhF7PFTqIWCJXXIoKoC8qetO0zK5/t9dlpc0C8irAen89vaKH24qT6O
+	 zKWzy0DtJ/BxHtFvnvLmSJc8UEGdR+uSqlhW5E0PYl7i9Ba3ZLztGvOprlsDMNLXMGF96
+	 s4PHNxVe4ZwnV4NSgZmKPamGftQOdEFwGLEhJRP14b7Qs4pgBabXQDuTxk7/iXXLpyARP
+	 MDMmA1oOw5/R64Z+JDDbx6NaE9orhvkJmUQDF4+HF7KQkdkOsvLlianUkL3FuWi9+TGzd
+	 LaQCxD/uIJeRaJYD70iqn4F64hTCCNaipy167wo2wxbOmdCRc3SB++ypA26MdIQPYaA==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1790276217;
-	bh=8hAk8hP9nPA+Yf7nfK0BjlMZU08E4MAK7pJJVMZR7OM=;
+	s=default; t=1790276218;
+	bh=TwCo9SzeZScPiYYE2ORgBRCvYQ2L6W/HhHWZ76KVVDs=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=sFYMll1RAshaK2UGsB2kTjiSPKpINXFtHGlvCcNLaRSs3tTGiBs/H5mHXJN+5VazC
-	 OazoXmp6h89dM9L0p95Ohuq/LkEl91IsSMC7QMBR1vwzAKMWkdz0zXl1dKydxK2y/P
-	 a6ib1ATsP2g1DKzZ0HuAkEPXhAQYAzqTBOTF2cb/SQN17fVXay0S8tiK5qr1Ku+jT8
-	 GEfbA5Bh2JxSZL5DPrKUlrwcvNWHfGskKbD7IfY2h6nYwe2B44EgmeWv2e7zEevlKv
-	 2EhGT+iXNHzuBzuqxj5QZDhXOxINo8P55dIocNmt45Rk2gHkJxpDkiVV8OP+ulqFCy
-	 HNJI6IgcZGcjQ==
+	b=kCMTWP5zKuNHraFnMeau1JXAIo7vvDfUXfEJN5JLBh8hcqsMBKFmocsaD+ZR2i6I2
+	 0xcihlgQzVHcHXFE5WdRmAiBkoplkA3gWzGkZxV9dJI+J71n/El/t9ldt2vzrt54ch
+	 PwdOahg6ld+fVrdpqy9aV673Hf78ss5eYZZBVCO2eec7LmjbHt0wUqumoDuQ4bUjLP
+	 ZFPeY2+nmD9RMrQuqB93MKp1gU+GpBhrULQ+SlfzoIg7a4+iQxPpVKbT05e3iRygBc
+	 pHmj59RRP3mjiP587/OQTAYe5ggVlZRWzRmgAcZm3OF1N56hCFwr8SQfUz4oMlk1B0
+	 f5WCcqcEl1xMw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 534188121E;
-	Thu, 24 Sep 2026 18:56:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 941E440B1D;
+	Thu, 24 Sep 2026 18:56:58 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 028A4328
+ by lists1.osuosl.org (Postfix) with ESMTP id 1D1C5328
  for <buildroot@buildroot.org>; Thu, 24 Sep 2026 18:56:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0084740AD4
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0E4F540AD4
  for <buildroot@buildroot.org>; Thu, 24 Sep 2026 18:56:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FZOnk55XH2SF for <buildroot@buildroot.org>;
+ id ZfIbMNxsLgzI for <buildroot@buildroot.org>;
  Thu, 24 Sep 2026 18:56:43 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 9841840AC0
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 4496840AB8
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790276202;
- b=mMnmi6stQTjqd9LwFUv+x3sw1VVIfmzTfspcMT2hfLGbs5k4yIiPoVUPDPfO1Sv+az1h
- yRe5PS+UanLRfM9a6QbzYX3ZaCBJ+RaxXMajsd8mG1xMDF6lfu6k7Zqp3Dq+4i/B7URzz
- 0ggCHJCykkBQLoFpsjybX6jv/06V6Ujx6Zl2gFHL4fRUFCHBwzXxsVP/11EXk4D4HRdHv
- p8JB92OgDE7UmtF9ZcjgIya6VBHCrCm5JHViVqErmPwIWJ86QqWseXdCwq+4xv33GqLJA
- tMGPN8lAg+AwKjF8xfPRXOY4mKg8hhON82tNGJM8sU4TbXEjcDEsEHsmWGO17HclFzw==
+ b=A7t7ON8FvaihpLPBsm2DeSNR2Y40p82iYEBok4pwJgiIulLm5w8MReVjzEv0oTwXjG7c
+ 8VwkqvGAhDQxI3q6Bp5ACZvYAdGHnKy9kYld5ce1QWapzh8Vav4/D28Atp21Ob/Zs7yRg
+ CmOILLHx3a2wiI9atG2Lj9wOtr79CJIK4vwaS0XIj/RzmdDIX61/n43vIhOjy5VbIItP0
+ P/wz2YaWNmKWgs13Nb+F04BPztEUQlsvSqGv7XRcSMKjKHSdoeN+lK1STrkhGr7Qc+srf
+ V/hMJ0ms+3/UNzAOlhM4/viSKiGnPqeRpP+QY7+MoZtvx4NHivjJ4TbihcgY+0XTjLA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1790276202;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=NLlRTOadhpCPmXHmxdQUaag+B/TE7uke+Ng6I+q0W0s=;
- b=EU5YuKOFSCvWEbqeERkczFxBxy1p4NW9GswKoDUdVMvkgQ7fMKYfXaFEDndCiMq/5tPb
- kyn1mCqwPDuNyTv8qhxWUJjNJQ7o8xMqtVuxCbFMb1IV+Cbqiwnep+l2q1sn3GRL05xeh
- jfV66jHxR3ANEctYEPw8K/2/P2O0iQUBe1g77z8Il2mUEmtMgLk4gADtYCddNYjEnhly3
- Gqc3Bfpqr2BHyETbwaYlKnh6pC7sY+z+12uqLIb+/iwPLesINi/43YIzHJ12ZB/A2ljo/
- 9pjeVtaXxuabV3U7KGrvV6RfAYFF+iu2DBdldc4IoW0UUvldrQujWj9/OxKtEcpbTKA==
+ bh=1zQjMYO51MAeNTOtJ5LFezTeYRay1Zlm/EobwHfGXxc=;
+ b=HEjyHPNCAJOvORGjJrFmULAeRnqHcN34tV7WjtrFUV2oFu9Wy6IIf3tBeX1OK//8OhsO
+ d7E00U50zzMSGwQz8jPRdwtEev6CaDXtveOeG51RaKzytpWuSqVO4/PQpynk+OuorXuZV
+ 7w9kc2F3zygSanRQ5O9lQ43h92FndIFHSsn7DvmOarboMRgaz+IqnQdrLJJoJhKkxPWyZ
+ 9GZaHMIiQ/O5vEkJfHFu3FwnEi86KkHHYq84u+9d+sy1AVpWraGKxGiD8bEhXqR6sxD0F
+ l+izd8vuHdClamzRdc7GNHL3JM4kcBcScgviqEDdZoCf9vZEEX8J9iwHn6TwiOsr1Ew==
 ARC-Authentication-Results: i=1; smtp4.osuosl.org;
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9841840AC0
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4496840AB8
  for <buildroot@buildroot.org>; Thu, 24 Sep 2026 18:56:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3C94698383; Thu, 24 Sep 2026 18:55:32 +0000 (UTC)
+ id DC5D098385; Thu, 24 Sep 2026 18:55:31 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 23 Sep 2026 17:51:38 +0200
+Date: Wed, 23 Sep 2026 17:46:41 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 11ebe0ad2e55f07093d2514bf4bc5cc9dc596377
-X-Git-Newrev: a09e6149f0c6e74de5d352c562a7cadec5cef4b5
+X-Git-Oldrev: 029033171c7194f66e526895268694b355a658d9
+X-Git-Newrev: 9d2c262030be7eb7d402a389fe8e81832754cab0
 X-Patchwork-Hint: ignore
-Message-Id: <20260924185532.3C94698383@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/strongswan: fix
- BR2_PACKAGE_STRONGSWAN_BOTAN dependencies
+Message-Id: <20260924185531.DC5D098385@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] utils/getdeveloperlib.py:
+ fix regexp used to find package infra
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,52 +114,91 @@ From: =?utf-8?b?UmFwaGHvv73vv71sIE3vv73vv71sb3R0ZSB2aWEgYnVpbGRyb290?=
  <buildroot@buildroot.org>
 Reply-To: Raphaël Mélotte <raphael.melotte@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8945407537898334943=="
+Content-Type: multipart/mixed; boundary="===============2105295574861060200=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8945407537898334943==
+--===============2105295574861060200==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/a09e6149f0c6e74de5d352c562a7cadec5cef4b5
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/9d2c262030be7eb7d402a389fe8e81832754cab0
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-BR2_PACKAGE_STRONGSWAN_BOTAN selects BR2_PACKAGE_BOTAN, but since
-commit 10a70b1af67cf79986c2e401f7a54aa850ea82d6, botan needs gcc 11,
-which was not propagated to strongswan's botan option. This commit
-fixes this issue.
+There's recently been autobuilder failures on
+toolchain-external-bootlin, but I wasn't getting notified in the daily
+autobuilder e-mail for those failures, which sounded odd as DEVELOPERS
+contains:
 
-Fixes: 10a70b1af67cf79986c2e401f7a54aa850ea82d6 ("package/botan: needs gcc >= 11")
+N:      Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+[...]
+F:      toolchain/
+
+And indeed, testing:
+
+$ ./utils/get-developers -p toolchain-external-bootlin
+
+returned nothing.
+
+Turns out that the regexp FIND_INFRA_IN_PATCH and FIND_INFRA_IN_MK
+used to find the package infrastructure, and ultimately decide if a
+given .mk file contains a package, was a bit too strict:
+
+"^\+\$\(eval \$\((host-)?([^-]*)-package\)\)$"
+
+This would only allow packages named <something>-package or
+host-<something>-package, but the <something> should not contain any
+dash ("-"). So this works fine for cmake-package,
+host-autotools-package, but not for toolchain-external-package where
+<something> is toolchain-external and it contains a dash.
+
+We fix this by relaxing the regexp a bit and allowing any character in
+<something>. Consider the rest of the regexp that expects $(eval
+$(<host>-<something>-package)), it seems highly unlikely to match
+anything else but the line we're interested in.
+
+With this fix:
+
+$ ./utils/get-developers -p toolchain-external-bootlin
+Giulio Benetti <giulio.benetti@benettiengineering.com>
+Romain Naour <romain.naour@gmail.com>
+Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+This issue has existed since the toolchain-external-package
+infrastructure had been added.
+
+Fixes: 1c99d70e5210f9d7b475736e0360ed63d16584f2 ("toolchain-external: introduce toolchain-external-package")
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit b56072c12692172edbae9ca62c395c6e94d21c0f)
+(cherry picked from commit 592d5c517ef6ed003450189cf0c4d7af8801de59)
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
- package/strongswan/Config.in | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ utils/getdeveloperlib.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/strongswan/Config.in b/package/strongswan/Config.in
-index 22caa2a573..e8b4ff109d 100644
---- a/package/strongswan/Config.in
-+++ b/package/strongswan/Config.in
-@@ -35,12 +35,12 @@ config BR2_PACKAGE_STRONGSWAN_BOTAN
- 	bool "botan"
- 	depends on BR2_PACKAGE_BOTAN_ARCH_SUPPORTS
- 	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_10 # botan
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_11 # botan
- 	select BR2_PACKAGE_BOTAN
+diff --git a/utils/getdeveloperlib.py b/utils/getdeveloperlib.py
+index b5e7b89e72..4321df8bfe 100644
+--- a/utils/getdeveloperlib.py
++++ b/utils/getdeveloperlib.py
+@@ -12,7 +12,7 @@ brpath = os.path.normpath(os.path.join(os.path.dirname(__file__), ".."))
+ # Patch parsing functions
+ #
  
--comment "botan backend needs a toolchain w/ C++, gcc >= 10"
-+comment "botan backend needs a toolchain w/ C++, gcc >= 11"
- 	depends on !BR2_INSTALL_LIBSTDCPP \
--		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_10
-+		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_11
- 	depends on BR2_PACKAGE_BOTAN_ARCH_SUPPORTS
+-FIND_INFRA_IN_PATCH = re.compile(r"^\+\$\(eval \$\((host-)?([^-]*)-package\)\)$")
++FIND_INFRA_IN_PATCH = re.compile(r"^\+\$\(eval \$\((host-)?(.*)-package\)\)$")
  
- config BR2_PACKAGE_STRONGSWAN_OPENSSL
+ 
+ def analyze_patch(patch):
+@@ -35,7 +35,7 @@ def analyze_patch(patch):
+     return (files, infras)
+ 
+ 
+-FIND_INFRA_IN_MK = re.compile(r"^\$\(eval \$\((host-)?([^-]*)-package\)\)$")
++FIND_INFRA_IN_MK = re.compile(r"^\$\(eval \$\((host-)?(.*)-package\)\)$")
+ 
+ 
+ def fname_get_package_infra(fname):
 
---===============8945407537898334943==
+--===============2105295574861060200==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -170,4 +209,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============8945407537898334943==--
+--===============2105295574861060200==--
