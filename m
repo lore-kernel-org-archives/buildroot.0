@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 299DDC98318
-	for <buildroot@archiver.kernel.org>; Thu, 24 Sep 2026 18:59:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC8E4C9830E
+	for <buildroot@archiver.kernel.org>; Thu, 24 Sep 2026 18:59:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F3DB440EB7;
-	Thu, 24 Sep 2026 18:59:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B808A81464;
+	Thu, 24 Sep 2026 18:59:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QwhRCSD6m7pQ; Thu, 24 Sep 2026 18:59:33 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 2A206411AE
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790276373;
-	b=JtqkDMVTJiTam1oFjIBjyLGpGyYCEyvFJGsOh5vs4+M/uwYFNuPXOXCxq6hHe6IAALBo
-	 OOfaNdcwro970rfQPIznTVwUVXDS3ofVd/Z/z2CP/FgIhgNdAfaJOkcm6rZr+zNPR/C3u
-	 KTyq4tr/iYO5ExhYbctXrfqdfor1cB2cv0qaENONaFBESwcHTvwKADSoVknyf4ikhodJm
-	 Xcs8G5YWKnHc6Q7rdLiZFvZxoGNhpdQ/8hJVl/qY9d2rw01PCybmmHHAJ5y5HmBs3tIqr
-	 Sdx4iSV9UzIyTa4sage7CnCR8djnwUx4yzYwhzRXCesDf2MiWAgm230OzUikAUGPA1Q==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id g5omjEEtxIYn; Thu, 24 Sep 2026 18:59:35 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org B8BFF81466
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790276375;
+	b=V16K+3KNZQ6CKICnoqWO5yy4yClJJUE/DvGX++2vD0UzyvP3kMy78C/wfp1MbkzUHCOo
+	 N3R5FVAh74e3GfOji1eXLoIanYEzHREEpkrb7TwW0XxvBltlzWNw2KwW1dosPVZOu2+3d
+	 yTnASGG3hGuZUSGFy9Ff1ZsunDHG9SmDyU2xPw2TGEBc2Zqa5N8OiYUit1GS25rt0ltGF
+	 7qcWN4uXn7Rt4sdS7NVnkpeXgATYEeyznYpFjVZBRgbmMwmebpNVCnGU/ln/CQ0DgmzBy
+	 PfZPqRCmhqqONKlzwid/360ew1lFOOFDGviQsLptmzGPccv7r7Q9y8K+fV9FRLFND8w==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1790276373;
+	c=relaxed/relaxed; t=1790276375;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,75 +30,75 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
 	 Sender;
-	bh=/9UtvmZoUiORc76c/AmaXvN7TELpxHs9j/q5UNjcsMs=;
-	b=chJX8pM9K6xvq3hM/0UUOAe1MJHfNCIS/8b1HjVp3XwNUslwwbame6Ju/dqZbPxI7YPh
-	 XBsdF8zdaqfEYYAlRiop1SQL2wl7Um8vcYgiYwoP7suqC8f9dvWlweU3Y7aai50wqkj9h
-	 3ZM8ohqPlHzHUJyACGef9xdJ8eocPRrbPcrNeLlHOovki4XXWyvm/Qc1jkwieuaexuZGH
-	 FWFr3pikdXmMSdTktM5PMNkRcVpBCoB53Bn3uwPwz0WYOttVM973quTq6zvGNl9t8uvJb
-	 uX8SrrodhC5NxrVWh2aj5CZcKnqbnnB8jKytaTdWGJ4KFHZXQ5PXRdWz50ILWHWTCSw==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	bh=/LS1hsVh/iu+JZYchaGQ0nimkLsXHfy4V39CtnbYaFg=;
+	b=cWOClPaDn2eEPPuzcaPI5Yr/GM1b143prTRcICfOBKBw9CRmNrcNqVZJgTWDxKxqQOiy
+	 C7SseAjGEZBaeiyMe4Ds3apu9LJP3/Ha2f4R+sJIcLO4QQ/bzmEPv/EkN7OuqrPYyTT6a
+	 bpv150wzzM/58Vd8Hs3m2owLulMJuXb88bHqhmUgPH5EE/wHKd4fdF/pYZC4zyFW17Oim
+	 ZDAnCxzky595JXuwnTiDwFKEiHy6uzY9lO5LCqJzi8GI+xYAIRNK+nQTfoHKbnWj7HmtJ
+	 grC5crpaIok259M53SmYg7CsLdOZ7KUG+kzljAN5a13rkeYLDD916dnObp0TEFK/UkA==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1790276373;
-	bh=/9UtvmZoUiORc76c/AmaXvN7TELpxHs9j/q5UNjcsMs=;
+	s=default; t=1790276375;
+	bh=/LS1hsVh/iu+JZYchaGQ0nimkLsXHfy4V39CtnbYaFg=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=D8LqqV2yO7UjJdePKdriGQTUlhgI2gWO51QmwBTSSsKAiaHt5afbe7qO1tOlBmoh8
-	 RvVgrnwg5xsX9MoZXg9swZUKgU9vApIhYo01yPTETcz7T5kHBNrTzwex1iuF9whnKj
-	 3tufdatmvC2IGhqmTKL47rs1/gh8/W+Zn7hbX01G1Kpyunvd/xmm70SgJ3pOyTaAKa
-	 Q1M/OunRZXMY6ZUiO0nb3Nb9V5BlLcTNTP0Y54S0NiGDdRldzcZAHttI6YEeX/PvBB
-	 keBX8ibF0H0lyZlo1rq6v5vBMefJxp3ckdAfwmEEQf1zH86myeXStx1UbyHJeRVfx1
-	 7KCRsuftElFmQ==
+	b=O7asPXy+nH1szHnP1LvvPj0Hfliui3RHuAfq4LkKOwbaemI/nELLzKmzn73PdmZ28
+	 WEK/SW2szybVMHzL8vHkbOSAHbFaFN4GWJf6KYN1afE6x08HInmWarLtKbZFLDbz+g
+	 1RkA4ajodw4rSuwCsOP2VCiKYVhKZbD9cQiuYQDdAH0+WP06TOVQHSrYb3rTfzRU6Q
+	 BIr97oUwX9FMrQuWqtO5EQuMzirhmKmFyf7zZ7rUu8GSRakWJ1BgTSZIWsA8ryPQZk
+	 +lZ9OiHfEb1Bygz26LX9mYny+5Gc8mFZ82GWxSl7+42px3X1Yg+W22PMOV8Hc0qNe6
+	 9sb24nj1TZFlQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2A206411AE;
-	Thu, 24 Sep 2026 18:59:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B8BFF81466;
+	Thu, 24 Sep 2026 18:59:35 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 3215F328
+ by lists1.osuosl.org (Postfix) with ESMTP id 4DE58392
  for <buildroot@buildroot.org>; Thu, 24 Sep 2026 18:56:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 23BBE404D2
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3D88C404D2
  for <buildroot@buildroot.org>; Thu, 24 Sep 2026 18:56:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XqYpuVU9pmiM for <buildroot@buildroot.org>;
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024)
+ with UTF8SMTP id UznEXa8zpZUd for <buildroot@buildroot.org>;
  Thu, 24 Sep 2026 18:56:53 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org 57029404C3
+ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org 7220A404B1
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790276213;
- b=Ha3op33skUaSf+sTVO/C72FF0PsUZNUMRUsjgqg1I0CuzEQkhr7pOW5mq0slKVbg1hR7
- Izkgh/0j5XXNT1OhtDg1io2bS3+Z2M9JBndMnNO5go5SiAC3Ra2FcVzMjFXLNhbzSvhB6
- HcthwQ8/1O1twvWtXmmm1PVLa0ilto99E6ch8jlhzsh1iK0qb7yGoBz46wsil9ZzPgu69
- HLQD5E1SVv0kP0R5WznlnQ3yGa3TS2Jfj7iWZvJG+NIezDGlUg/5Dp89Lr/4e56mEmMXl
- bks6QIGMwIJnl4zfttlYpWXvdAy/PC+47F6LWv28hBRvE6T/HF6s7ieGNrN/bM1p2ng==
+ b=F2+h209NUm683mCpUas08nR41WglstS0XnRNJM5xpSRsxVJDxsEj3AcCfTCGjYiv8DuO
+ kHjLv21Or9cxtKVzxvCATM5jUK1mfAu/JrgBiCzAag3iIKqlLQlIcu89QWtJz5Q9TFprx
+ DrZnicG+GNUhdYqieBDG4IP+4sQKWoTTihlypvhyDn2TQsbfEtswLxMqsjA4Wso7nlinV
+ MT7/fkWvfJtf5CkU0yKh3FvAv+Wo1KAFKMjc2xxjbLXUonBA8ay4REhQ0qXUYlhncHvCr
+ mkY2YOzgK4Gvcg79nBVLyvG74/LAT+dybvCraP92STQfcDOsfqD6ikotKAxqnKWeyNg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1790276213;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=NniG1aF2Ns2X4KdVIYMSiZFwT9oTmFvagtBrMDBe/Ro=;
- b=CthsembBTV0zzWqkh0NVd9DrncoA4X7jBd9sliMR6SYHPxzP1m13D/CvmTBw88ymFNgM
- zdnjn0S7lA5oBsIToDM7T1uUGSe9tgULWw1K59L/TaGsKMceESO6IWUVw/ya75VkiU7yY
- z9WMZ6dmZm5jIaRWBJkiKg3eXh8gH8d3IzSAiL2rRLxKYPuyVeHvi5rPep+T9CT4NWkYa
- TFLI1hkHQe4iVlidIPer2OzVjgAN9PkaihggsMXAXJba63PnkC3XneuwXYepTkI/cGweH
- BBZJBh6RI3qw3MQ7/M+6DZxPei7yyXFZoB3XPTkCyTt8PzWJDEOCnHMBRD6tzztRlKQ==
+ bh=uJspLoy5MxQ0QQ44fsH5ZL0hRtcCXoIxaohzo0eTtjM=;
+ b=T7FfVvgV9tZ/GrewwECaO3pP4Y1+DR6kdNMhJMncPjfoQNEuqgLiiHYqj88XctVlaKqq
+ vEz4WJeNQXcnuqn3YM0SvMiDLRwhwZDZ8tLIhoQHpNR4vDuF/9/hYyfQe5Wu5gnCB0NyA
+ m6GlwDFHEBF1VN4UH9VVbPUH6/MrR1ie6koiNwxYao4KYMnLHi+jNgGmHb9CBLxYzWCPA
+ Q8qx3KqLH2u9+mUmwdZ3qRX2ubCc813AmUE+/bv4c1JGGTnWHvcC2bTE+rvmR8oM9krGn
+ 3lKZHL/SuSVO2ocAY2n/rUgCiXU9qlnNTwqRkU9QzYph8k70BdM64LIZUFUxn7LcCNw==
 ARC-Authentication-Results: i=1; smtp2.osuosl.org;
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 57029404C3
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7220A404B1
  for <buildroot@buildroot.org>; Thu, 24 Sep 2026 18:56:53 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EE7E6982D9; Thu, 24 Sep 2026 18:55:42 +0000 (UTC)
+ id 15E5D982D9; Thu, 24 Sep 2026 18:55:43 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 23 Sep 2026 18:23:44 +0200
+Date: Wed, 23 Sep 2026 18:24:01 +0200
 X-Git-Refname: refs/heads/2026.08.x
-X-Git-Oldrev: a2d0ad8ca1d31c73b48f23ef1db74a5af0dab816
-X-Git-Newrev: c18415c2d991a2fd57ca8c84dbb5693e59a4dd09
+X-Git-Oldrev: 900a64b2fc5724456b2c7b2b72b80ef746357177
+X-Git-Newrev: 3ca262369030b176ae652ebcd901fbcd6e2d81d0
 X-Patchwork-Hint: ignore
-Message-Id: <20260924185542.EE7E6982D9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.08.x] package/unbound: security
- bump version to 1.26.1
+Message-Id: <20260924185543.15E5D982D9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.08.x] package/ghostscript:
+ security bump to version 10.08.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,62 +114,55 @@ From: =?utf-8?b?UmFwaGHvv73vv71sIE3vv73vv71sb3R0ZSB2aWEgYnVpbGRyb290?=
  <buildroot@buildroot.org>
 Reply-To: Raphaël Mélotte <raphael.melotte@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0666059674894649627=="
+Content-Type: multipart/mixed; boundary="===============7053699224643000067=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0666059674894649627==
+--===============7053699224643000067==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/c18415c2d991a2fd57ca8c84dbb5693e59a4dd09
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/3ca262369030b176ae652ebcd901fbcd6e2d81d0
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.08.x
 
-https://nlnetlabs.nl/projects/unbound/download/#unbound-1-26-1
-
-Fixes CVE-2026-81642, CVE-2026-81634, CVE-2026-82717, CVE-2026-77955,
-CVE-2026-78227, CVE-2026-80225, CVE-2026-82720, CVE-2026-85501 &
-CVE-2026-77860.
+https://ghostscript.readthedocs.io/en/gs10.08.0/News.html
+"This release addresses a number of potential security issues."
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 098be4f99a33b9ca67e2edfc92c517a66097fb2a)
+(cherry picked from commit 458441ad76c0a1624b113dfaadbda2c16eccd5bf)
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
- package/unbound/unbound.hash | 6 +++---
- package/unbound/unbound.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/ghostscript/ghostscript.hash | 4 ++--
+ package/ghostscript/ghostscript.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/unbound/unbound.hash b/package/unbound/unbound.hash
-index a6bab2218a..5a0a52a7c8 100644
---- a/package/unbound/unbound.hash
-+++ b/package/unbound/unbound.hash
-@@ -1,8 +1,8 @@
--# From https://nlnetlabs.nl/downloads/unbound/unbound-1.26.0.tar.gz.sha256
-+# From https://nlnetlabs.nl/downloads/unbound/unbound-1.26.1.tar.gz.sha256
- # After checking pgp signature from:
--# https://nlnetlabs.nl/downloads/unbound/unbound-1.26.0.tar.gz.asc
-+# https://nlnetlabs.nl/downloads/unbound/unbound-1.26.1.tar.gz.asc
- # with key: 231018690C4D903EF419146AA144323DEAACDF45
--sha256  77458a7156e275c0b7b17fabcb357cb12445d95cfcb26fb9bb7d5ecba45e0b63  unbound-1.26.0.tar.gz
-+sha256  35a6dc0e425a9282c3426d9a3043144011bf0534aed4b73ab62c52aee0af1503  unbound-1.26.1.tar.gz
+diff --git a/package/ghostscript/ghostscript.hash b/package/ghostscript/ghostscript.hash
+index 94017262df..00cb1378d5 100644
+--- a/package/ghostscript/ghostscript.hash
++++ b/package/ghostscript/ghostscript.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs10071/SHA512SUMS
+-sha512  7b38ca10fa7ab648924f7db3e2e4933c3d18e04c8db1346fca4d4f7b85dfbd7888d5fc46f413613b46429fb47b675a593994c25e50e9de4dcdbee3bdd8a5e449  ghostscript-10.07.1.tar.xz
++# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs10080/SHA512SUMS
++sha512  8006e2a32d03759a905b9548bdd83d4563173041006750e17e428b9eea24ad519aa4452ceecd7c073d3c420a68bf1b07ccc9e0533b1a05935f6b39ea8d9ce875  ghostscript-10.08.0.tar.xz
  
- # Locally calculated
- sha256  8eb9a16cbfb8703090bbfa3a2028fd46bb351509a2f90dc1001e51fbe6fd45db  LICENSE
-diff --git a/package/unbound/unbound.mk b/package/unbound/unbound.mk
-index a3a1baaa94..d6886d4a5d 100644
---- a/package/unbound/unbound.mk
-+++ b/package/unbound/unbound.mk
+ # Hash for license file:
+ sha256  8ce064f423b7c24a011b6ebf9431b8bf9861a5255e47c84bfb23fc526d030a8b  LICENSE
+diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
+index 08e2667981..288efe2674 100644
+--- a/package/ghostscript/ghostscript.mk
++++ b/package/ghostscript/ghostscript.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--UNBOUND_VERSION = 1.26.0
-+UNBOUND_VERSION = 1.26.1
- UNBOUND_SITE = https://nlnetlabs.nl/downloads/unbound
- UNBOUND_INSTALL_STAGING = YES
- UNBOUND_DEPENDENCIES = host-pkgconf expat libevent openssl
+-GHOSTSCRIPT_VERSION = 10.07.1
++GHOSTSCRIPT_VERSION = 10.08.0
+ GHOSTSCRIPT_SOURCE = ghostscript-$(GHOSTSCRIPT_VERSION).tar.xz
+ GHOSTSCRIPT_SITE = https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs$(subst .,,$(GHOSTSCRIPT_VERSION))
+ GHOSTSCRIPT_LICENSE = AGPL-3.0
 
---===============0666059674894649627==
+--===============7053699224643000067==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -180,4 +173,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============0666059674894649627==--
+--===============7053699224643000067==--
