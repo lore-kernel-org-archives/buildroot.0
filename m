@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA4CAC98321
-	for <buildroot@archiver.kernel.org>; Thu, 24 Sep 2026 18:57:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2A53C98318
+	for <buildroot@archiver.kernel.org>; Thu, 24 Sep 2026 18:57:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8177E40ABE;
-	Thu, 24 Sep 2026 18:57:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8C04781220;
+	Thu, 24 Sep 2026 18:57:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3oq6u5NOW3eG; Thu, 24 Sep 2026 18:57:00 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 5C94640B22
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790276220;
-	b=tak9MljHGugQOH+PogYErtj8SKCGG+h1KSwZG/bnQvdXzTTZvYKetg8CrooEfhofCF0m
-	 KZupWHQyurY8v8hWhcx48Ur7LnnS/sm84tlJd0AS6rvLuiuywYdvRpCM2VM3MWZ7qYA/d
-	 2+xWd+apsn4cXbGx75vVxf5yfiAPNxedO01psfjPG798Y0HSzNttZLJsW0O1K3CTdhCy4
-	 vCGYvXlUakuCrNBNKDYViRWCGj75Ls9GU5OIReP1Z2AzpW4w2evK/EPcnvq1rBB4F2HVu
-	 fQZZhTWUe/oX0+ptiPkumLH8GRNq45c71RoX3lNP9FeIvMUZD8NBpW2G/zLQV47oTSg==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zgoX8mJO-Orr; Thu, 24 Sep 2026 18:57:02 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 88A9581226
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790276222;
+	b=Bc8WrjGN1C7yXyqh4ZFtUQGbKru4V3dWVWMd+Y3vDsaEvWluMbOZkOV/kYMvoHrlKgeG
+	 cVqzH7JzVEXHbA/zz4GD16LF6wP3t2J6pSTNp8S4CzN+RXbt1+U02JHUW5CocBMCnMuI+
+	 2oYiWatV01rozc26UJ7exp22/GFTgSqXroOKRwIggzoa4p5NzHwWLvQv+2ZImx9DOkYof
+	 c1RyKCRa/XZ5dEnzXy7BZ4xBUkhuDw7sT8G/cCcFWGJ/G3l9oyu/iDk/xMjDRSiuUpoYB
+	 +ItZfJixTmHVOAOTxuGbnNmLpvBzd0NGe9NbVjtFfyc4/rrtLHrfpmNBFHxOGIrvCAQ==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1790276220;
+	c=relaxed/relaxed; t=1790276222;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,75 +30,75 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
 	 Sender;
-	bh=m6ZH4bJyoDi89TCUAo3PGpblCh+YHbmNnefKZiHnvis=;
-	b=bknj9oKlJ6+J9yNh77RRHDmEQlkHjHDmdTtsfIfeOjsrRNxoOuug42pzH/+Su0nEv9Ef
-	 Si3e5EZwi0PEbezS6JDk/HXGpbE2ZujXuLpe/erkV0d+/xlNAHljSP7tL03nhqMKyAgXa
-	 ply2pp5rUzrUAaUUNRqdU5WB749hBA9MVSXyDmuzbRZt5L/iV7s70c11NByqrjZn5eK3o
-	 48CLovqmqz9gUqMh6Oww5mPUEC+hfO+xL92xhZyUewzp2vyNf6DjdheSIo+6IR7cY+Shv
-	 1EAsG15hWzLrXIvK19bPAbz0SAidAlE0dsgSPiZjSySQ0nwE6M4VBHSmmNUwAlVtLRw==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	bh=lmQqDLHCncuSu0ZiJ2yuKP80WL1TPeH1wEd8LjYn3Aw=;
+	b=SV1I9BQqrrZjlesc2xr/Y1W7JlImBUE7GhQZa3h81blDtV2SGgkQ87ET8jDnTQBJ/5Y7
+	 Ih51yH2DJZiHfTXvHKXHTBcyTCoSBmpLexbXueGBH7oeAmZNozEzw/cgZuE/VKYRGE2LG
+	 XFoAbUZP5pG3XLcLrOrYOB0PrxjQAh/6DK+OZSQJvGBmbyIpOUrgtYh0MO+IZD40JmuDB
+	 0YV1In/CAwJwZCSeasQT87iJVMA1+cx9pZapQ7o5r7LqlFgsTlrJQQvK+2MROO7MmIi+o
+	 nDRdvWa1YNG8hUs+C9N6fCio/pacmkLEeMmUOiatuDDOyctNH+z8uwW9PsgWGe51XEA==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1790276220;
-	bh=m6ZH4bJyoDi89TCUAo3PGpblCh+YHbmNnefKZiHnvis=;
+	s=default; t=1790276222;
+	bh=lmQqDLHCncuSu0ZiJ2yuKP80WL1TPeH1wEd8LjYn3Aw=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=BIbFuWFxqxPfq+gBEm5KTA5pyPVJoxV9LiGQolfGC7+Mz9A13BuvAgXMIB74bLVKk
-	 V4GqBnEO7RGD5rOI92pzBmytuQE2TMkcPcMMfFRYiPbXF2ga9Vj7uvalEUfoB1ue0V
-	 NHpxLvY2xTi+1Zxq9pZ8sEEBhA+dLAnVY6r9XmDL251wtmLHAtYp799mDEdzLcLDeA
-	 0l2NsQyB3tuxNiL0k8q3GkbulW/sDDZGXmKcL9lyLfdr3o7+AqdduKEot4t5vrOnAj
-	 rJ5EfkHvv23kaZo3V0IQxBkpG89pFSyj/Kbqj3KM+gUSbItFxBo1heRFg7FOmXMzo4
-	 XsVUDnQbcYyIw==
+	b=ccd+lTygMt98gCpAjpphIzPhJQReVV7XYv9LSs4+ZI5wgvA6RZVeAGiAu+JF2gOG5
+	 FaZ2tt5rzlzEt+TPosDkBFVAkDCzPpvmDjHzkmIDocPL7MUJ7PTt5O6XopGF94j4oE
+	 3D6hMoBX6H0mOJxCrMXoVeGlnW5iy1PzL0e2O2XOpYNLN5rZ9V0cIVxIUyN8yXR/4m
+	 06DV9I8rY2CRKuPcfJFcU4+72BkM9wson5EPI46KpCfURHBUK/aChTRQzuY0wWJLqD
+	 2UW863mRQwveiqnt8gqBNIZPISZwWv6KNnC/DZg28Q1iZ9bAeDxZRjZkTuo7EDlPb2
+	 IuoMWJ0qctm1g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5C94640B22;
-	Thu, 24 Sep 2026 18:57:00 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 20D4E392
+	by smtp1.osuosl.org (Postfix) with ESMTP id 88A9581226;
+	Thu, 24 Sep 2026 18:57:02 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2211C3B7
  for <buildroot@buildroot.org>; Thu, 24 Sep 2026 18:56:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1072140AD7
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0FB7E40AD6
  for <buildroot@buildroot.org>; Thu, 24 Sep 2026 18:56:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mcNNM53EZmPP for <buildroot@buildroot.org>;
+ id IgxxuHYG5jUi for <buildroot@buildroot.org>;
  Thu, 24 Sep 2026 18:56:43 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 64FE340ABC
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org D5D6940AC3
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790276202;
- b=iqW8IERnJIrbI6O6RHOfSJWMnbCP2XyAFnhhkenWg1GwPM2fnOoI/IZrXOjCWn/DKOdF
- xTDG/wal/C/6Iib8TxGUdCcJWvOkjAl8vf99jzcuzhXznYdWR1g8a7fuFCEveCegGg4KS
- lAONjuvVHnxDnF6Ylxvd/1K+Wedujgm+m9763Vfsj63VqoUEwqTtM3FV/N/aj+G94/e51
- 3GS/0eGiZN7qXTScLBGLgpPqN9nDEadc3uDKmrUZQMrxR/7g+fuQvt/mvY90zDoHBQNJZ
- 0Rs4A+4inSY7qqmgvXFZxdsdfRFg84caQBUxaAQ2ClOrArcmdf7eXIL8Iot4EHJCzIg==
+ b=CFxWedLPkxDDDFdT5l+WzweMtVPfIbYyMWON87bGLEcycOvup8UNS6ubtECtYQ6ncvNx
+ 28LRNdf7U1cpYwUu+E1aRp4oz97l9ewoZcOIoIDMWbFbQBLhRgz+fH4mDen78cQZYyNIQ
+ qQ8N9PNTCfoPT14UjY+teO9uirVf24pW10nJJLd5Y5KaYMM4pL6SPAY6ynnHEvQUeR6Wd
+ EvUYAxZltNMI6/WWhNShTzUo5VMjZzlY4ic/koj2Y7tLnRB6GFbJmAfUY1LuAdQ71a7XZ
+ 8XnkHI9Rz2F4mBJay+LJ7M37yGUvmg47yLSjNMva6X7EvQERp9494DT84S2OTTSdU6w==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1790276202;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=08nmyoRIhfu+zJWyVbsnwHJRih34za96kYd6jwU7t88=;
- b=Xfw9rONc+1OYPkKfRpm1Kg+E4Aa8gCyCVlXr82RiqO3qS/C2VM5Rw2L+NpnogPTmERuv
- 0fDozyPAwwMSItBFRI3wZ9r6sK+j8ogFCeXbNdVB333SYoumAtllpj7lyo+IueonqcC4n
- YorXNZqdtZ40UwFK3N+6HGEz9iTQet/fgOShJFoftR2uPS0Q3/ifiQj0NMz042z72LNg7
- OzPkZwWxDPU+uKLbjwi0CO/qNwDjscvnpSOBpAsg4DgK0XDK/IxazfDnf2MBQXptn9G+/
- 5Q74jgJsBHj64m1nu0QdAB15/O6bg0HQyhC21uKZooqPQCFyP61FB0CDPKuYob50cXA==
+ bh=/SMzHlJHuxCRDIL/og7dMLgxQMmQd/qqYNT7BAihPXI=;
+ b=V9j4eWu6tQUGCg7Pdn4nxvWLm4IcuBfxdeIub0i+InOU0krYR617nkvgEsb+bLDF71co
+ dAwQo2M7X9QShbprtlY6miMi3EDvN8KJ92nkGWyBn8t5g06UY2ecB4ZvkUAlCx5w/ePCJ
+ 1ORrGBNpnSe8wSpNjrGktI1tJWuIesoh8QMf1MNG0yE7uVQh1hqtgXnoXVcDfoSxryeMt
+ bQSsns1b0CAbgoT5sG2bEq1MkvKNwGK+WY3yLqoxbOC4muA8LblaLUfKK/jGigGbB6JhA
+ otGvkbMVrQxX5m+hUO+wBhByL3WO/pMoQSkru5nuhmArEj/SUsetUKIYeoJxc542hBw==
 ARC-Authentication-Results: i=1; smtp4.osuosl.org;
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 64FE340ABC
+ by smtp4.osuosl.org (Postfix) with ESMTP id D5D6940AC3
  for <buildroot@buildroot.org>; Thu, 24 Sep 2026 18:56:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 08BB998385; Thu, 24 Sep 2026 18:55:32 +0000 (UTC)
+ id 7983A98385; Thu, 24 Sep 2026 18:55:32 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 23 Sep 2026 17:47:00 +0200
+Date: Wed, 23 Sep 2026 17:55:37 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 74de5034238b8271dd9143f7894097f5f3e26c0f
-X-Git-Newrev: d75b314ec81b3040520e9eed0ba61f27d8cbf7ff
+X-Git-Oldrev: 8ef0ee30da574187ce9749ac75983e84cd22f6ad
+X-Git-Newrev: f275b8b2c1f22888eadf5f80cbca0786e94d1dbf
 X-Patchwork-Hint: ignore
-Message-Id: <20260924185532.08BB998385@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/sysprof:
- propagate ucontext-related dependency from libdex
+Message-Id: <20260924185532.7983A98385@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/wpewebkit: fix
+ kernel headers dependency due to seccomp select
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,71 +114,63 @@ From: =?utf-8?b?UmFwaGHvv73vv71sIE3vv73vv71sb3R0ZSB2aWEgYnVpbGRyb290?=
  <buildroot@buildroot.org>
 Reply-To: Raphaël Mélotte <raphael.melotte@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8195320504067553317=="
+Content-Type: multipart/mixed; boundary="===============0357053120497028683=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8195320504067553317==
+--===============0357053120497028683==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d75b314ec81b3040520e9eed0ba61f27d8cbf7ff
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/f275b8b2c1f22888eadf5f80cbca0786e94d1dbf
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-BR2_PACKAGE_SYSPROF selects BR2_PACKAGE_LIBDEX but did not propagate:
+In commit
+0e2c958e053fae6e33bc7ca230ac4326a6ac5aaa ("package/libseccomp: bump to
+version 2.5.3"), the kernel headers dependency of seccomp was bumped
+from 3.12 to 3.17, but BR2_PACKAGE_WEBKITGTK_SANDBOX, which is a
+reverse dependency of BR2_PACKAGE_LIBSECCOMP was forgotten.
 
-	depends on BR2_TOOLCHAIN_HAS_UCONTEXT || \
-		BR2_PACKAGE_LIBUCONTEXT_ARCH_SUPPORTS
+This commit fixes this inconsistency.
 
-from libdex. This commit fixes this missing dependency. In terms of
-Config.in comment, we do the same as what libdex is doing: handle it
-as a toolchain dependency (rather than an architecture dependency).
+Fixes: 0e2c958e053fae6e33bc7ca230ac4326a6ac5aaa ("package/libseccomp: bump to version 2.5.3")
 
-This was missed in commit a73ef093f7b40297d69c6813c44fd4626883632e,
-which added the ucontext related dependency to libdex, without
-propagating it to sysprof.
-
-Fixes: a73ef093f7b40297d69c6813c44fd4626883632e ("package/libdex: needs ucontext")
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+CC: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit cd5eab10fef0835dd04841c315c03c45d916bd67)
+(cherry picked from commit 5279b2303c53f61d21bd3c682d008df5875906a0)
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
- package/sysprof/Config.in | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ package/wpewebkit/Config.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/sysprof/Config.in b/package/sysprof/Config.in
-index e89a0e539e..258f549152 100644
---- a/package/sysprof/Config.in
-+++ b/package/sysprof/Config.in
-@@ -9,6 +9,8 @@ config BR2_PACKAGE_SYSPROF
- 	depends on !BR2_OPTIMIZE_FAST # polkit
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_12
-+	depends on BR2_TOOLCHAIN_HAS_UCONTEXT || \
-+		BR2_PACKAGE_LIBUCONTEXT_ARCH_SUPPORTS # libdex
- 	select BR2_PACKAGE_ELFUTILS
- 	select BR2_PACKAGE_JSON_GLIB
- 	select BR2_PACKAGE_LIBDEX
-@@ -21,13 +23,15 @@ config BR2_PACKAGE_SYSPROF
+diff --git a/package/wpewebkit/Config.in b/package/wpewebkit/Config.in
+index 300c95c970..f9c0f7cf42 100644
+--- a/package/wpewebkit/Config.in
++++ b/package/wpewebkit/Config.in
+@@ -73,7 +73,7 @@ if BR2_PACKAGE_WPEWEBKIT
+ config BR2_PACKAGE_WPEWEBKIT_SANDBOX
+ 	bool "sandboxing support"
+ 	depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS # libseccomp
+-	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 # libseccomp
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # libseccomp
+ 	select BR2_PACKAGE_BUBBLEWRAP # runtime
+ 	select BR2_PACKAGE_XDG_DBUS_PROXY # runtime
+ 	select BR2_PACKAGE_LIBSECCOMP
+@@ -81,9 +81,9 @@ config BR2_PACKAGE_WPEWEBKIT_SANDBOX
+ 	  Enable sandboxing of the processes used for network operation,
+ 	  disk asccess, and Web content rendering.
  
- 	  http://sysprof.com
+-comment "sandboxing supports needs a toolchain w/ headers >= 3.12"
++comment "sandboxing supports needs a toolchain w/ headers >= 3.17"
+ 	depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS
+-	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
++	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
  
--comment "sysprof needs a toolchain w/ dynamic library, wchar, threads, C++, gcc >= 7, headers >= 5.12"
-+comment "sysprof needs a toolchain w/ dynamic library, wchar, threads, C++, gcc >= 7, headers >= 5.12, ucontext"
- 	depends on BR2_USE_MMU
- 	depends on BR2_PACKAGE_LIBUNWIND_ARCH_SUPPORTS
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_7 || \
- 		BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP || \
--		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_12
-+		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_12 || \
-+		!(BR2_TOOLCHAIN_HAS_UCONTEXT || \
-+			BR2_PACKAGE_LIBUCONTEXT_ARCH_SUPPORTS)
- 
- comment "sysprof can't be built with Optimize for fast"
- 	depends on BR2_OPTIMIZE_FAST
+ config BR2_PACKAGE_WPEWEBKIT_MULTIMEDIA
+ 	bool "multimedia support"
 
---===============8195320504067553317==
+--===============0357053120497028683==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -189,4 +181,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============8195320504067553317==--
+--===============0357053120497028683==--
