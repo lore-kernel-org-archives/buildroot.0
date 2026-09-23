@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E10FCC98318
-	for <buildroot@archiver.kernel.org>; Thu, 24 Sep 2026 18:59:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E0B0C9830E
+	for <buildroot@archiver.kernel.org>; Thu, 24 Sep 2026 18:59:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8CBD741182;
-	Thu, 24 Sep 2026 18:59:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B86514119A;
+	Thu, 24 Sep 2026 18:59:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zhpvS9vu9p_F; Thu, 24 Sep 2026 18:59:27 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 77DD64116A
+ id O66b30R3j-bB; Thu, 24 Sep 2026 18:59:29 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 2B02941185
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790276367;
-	b=AbfowVDnKVZlgdX+I2Vhpwqspiw70sJqWPhxP1mFzKleTsRRkCw4AJYcWKxTZZU2AftV
-	 2oWEYcmDVqhYn9I13C7TFIueygOLWVnRYMfT0iCu5AFKTYxPlLdbFv0ldqRQScd0THufK
-	 SxKJoynMPt+5sGkG7TBKBsGbvMCpbde+M+VO+xOdtxIkq/qb4duS1R7zGl/V+14iMQQm6
-	 DbhvEtNTNSdsIb0IdMA8WrolDcr/xZJGYcQRCAw/kumSgdYv21X2as1iYyjCVYuZxsV+z
-	 VDRTc/D4xZP90qiXUoEe1s8iURaXW5MpGj1VeU7pSLkheD9nIX7h7/PdSqU+sLUwF1w==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790276369;
+	b=pDVdEnO1rbfShRoyTT8r8Yrl80/OrpIBIt8LDLoedDxA+lja81N59l0NwOYO3ZCNzsaD
+	 3vybKeNKf+RHGtDSuXz5uQNQFhbKGEtg9F5ySsgnzDa5NVo49PY3bgV28BZVttWCbPVNH
+	 4zeIyzxI35h8uAB5dYSkmTKa5YOsMDdQNFD/HEzlzf3dbJfP9ygonF2EDv/YDs8pgMHAR
+	 eYVqNk+GHY6jGY3iDudjRlayTwiaTX1ou5Mh+rXtLEKfUrdHQh2V9pkCrOfVKyKsFgC+v
+	 /0mYNgEW2hgrhV8rWqc34RKLbLxqbd10iezJ4Iwc4lNDWm74d2RI9cJTbQcoCya6N3w==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1790276367;
+	c=relaxed/relaxed; t=1790276369;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,75 +30,75 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
 	 Sender;
-	bh=xtdyWroVoXjT/rDK0V0Pr4Y3XZQinXEPWp++0bjoLo8=;
-	b=hUce72fBlEBoZUFtmQJO7CCq8zgKGCKh8rEnWKkwc0+xOlh/mdaesuvVF/YTOYLJB96e
-	 QikgK2idkuSpeaHmCB3Rb7N293yjABczbN5w0RSAou+WIX4tqS26l0idR+TDAjQxzrRqb
-	 ys0X7s21Fw+wATlIYgA//G/B13cWL/ZAGBQLNglaC9u4sjosqxVmRz4Ex0xOBGFr1Enb8
-	 V2WjSR6pCxuJgkbAS9iP8RjbP6Cc12rzzFWmvzTPm2lFW7Cxk80BDMtU+wwPLkGrIIB9y
-	 zf0cfHx5HRaTbchVm+DIhB7aUKD7fJPlqv27Jp5wFtmEW0Lp5KERS9vDpc6c77z/sbw==
+	bh=UseMGP5OmbwdaRH7hEgMoodRMK83fFcQKR4JLez1Mt4=;
+	b=rPQ5HwBzuEg149EP25j1Mb5k5PkbQX/0djNJkJjrA8eX18uWriH7CxM5RRzaSoRPTmaN
+	 Nn3CAe6zO96qGVwqgYzA+D7SuJH5iwXBS+etLubv9NVLjGxLQMUuxqFlr4uMLCrthroOP
+	 kZVy17WUB3PgtzCfS22nSuyt4ZpLXEz1hLoIy27/qUYV7KHc9VtmyN78+b+bl+Q3h6+QU
+	 HixCt+HNBh9cTnc0qjrixX8bvvJkYsvY5D9VfSPFW04WSVbnSV9GmkGqNiSPOReAAu3Xa
+	 B8JWBN0pnTXdsKf3znkcJFVWrSIBz5jgNsFFfV9B88unfTxir1b+L1w1q1sRIEA/EsQ==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1790276367;
-	bh=xtdyWroVoXjT/rDK0V0Pr4Y3XZQinXEPWp++0bjoLo8=;
+	s=default; t=1790276369;
+	bh=UseMGP5OmbwdaRH7hEgMoodRMK83fFcQKR4JLez1Mt4=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=hikkVPsiihhg1FPGSBKn6niHKYBKJSrbsREyyFzBpL44JLOGmyaZlNm8zPh6hztvX
-	 MyiVrJp8UnrkNCCA92kY9h6Ex+bJwMOcjaFnII07wACEPoVrKJrN++FjAzvEIkLemo
-	 pK/iWqzEHgyAxHlLdkdt0Lcy7zSt6kHSzFeCFrM9nsSNBXIq2ORzhsTmSYLL8CHvNb
-	 2EyZWClRRrC/YqxWWhlQUM53v4zmH2k6NMp7OHAVbmU/rYx0l/XEyJLExHu4lrajTN
-	 zBwRyZB096H2VvmrE594lkqyn+Om2u3TF/VtbiFxOxtK73vq6fPb13CknMwQNIHhab
-	 xV9Rj3PZtix2g==
+	b=NtYPDNe3wtHcAQCeOzPz6qN/Ih8upM/48MSv+GZK38cdQTVakPgJFx3MSrUrL3ovh
+	 Aw6a8CGfYsFy6f49mc26pcQcVBZYzkY/8QE29kyDUCfiyoz4Vx7LSnCkAv68gq5E7J
+	 mM3A2r+HVQUytpV/GBkWktRyibvJvm8J39WZtAr3Ih7YFlStWwuJ2HLAu+S8vK74KJ
+	 jQMaU1v6Y3zvpHO/GF3B+5JbMM5TuUURaplYvBFaQjqlzpcLYo2/f0vODQhbxDICIz
+	 Bp3VQqb1sirNtfR+/fy8GlydvwLYvoqOfzUMQwtpl4RoKrEMZGbv6SXdy+d2AAMyEn
+	 HUKuVz7TKCFOg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 77DD64116A;
-	Thu, 24 Sep 2026 18:59:27 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 23716392
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2B02941185;
+	Thu, 24 Sep 2026 18:59:29 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 28B2A417
  for <buildroot@buildroot.org>; Thu, 24 Sep 2026 18:56:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 099F8404D6
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1221981257
  for <buildroot@buildroot.org>; Thu, 24 Sep 2026 18:56:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jZ9gd6IFuW_y for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DdkXQ5pVSoPS for <buildroot@buildroot.org>;
  Thu, 24 Sep 2026 18:56:53 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org 373D6404CA
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790276213;
- b=S2gux1TeFm+SJKL2hJ7hGsEYLae4siD7EtZjGW3lHCnllnx0V9/VwCm4bUZKvlFXzVPd
- GqE9rEh8wTG8NO/wUsaDilBZxzNEP1O5OBJJBbyKil3AFoQJjp9wHuzNzYNPzuYpbWlX5
- bagcnzpQZKgoriMu73HtuD+LcRrl5VFo+UXTiJW8MidXVJPq0XmQLRbGy/+rShxK3/ru+
- vl993uN0C8SUOzOx4fl6oBfMs8K0yXF9MKbDCGfvlqrPD68uzFp99i+4KhlHwXuU4oIbm
- uh8VdKKZCwlkr1wQP/32VOyN65k0oXiKk0DVjebRx8NKhC6xO6xWj87oVuJ2oZIfDfQ==
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org D85B081069
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790276212;
+ b=ABfyxUIW1NkK3Wp+WuNT86Kb80N92fkI/Ounm5G4Gb657Z2AFd4KJ3enhqzGidsGeMaw
+ RojWpzzOnp7tFmY5OJSTX7oWA4XLllY4HVVvCkO8ASfbMk5lrryJ4IrSMw+J1NK4IUeTo
+ 1c+WmqWHxfIiSfFe8TrDZbqa1hhKf0FFv7dEOkJneCrsZKJHXVe+sTN+bGtpJqmQ2KW2y
+ pfSD+75/2yZ7j5lPOMZcPCR7VZhHUvvYb7CBQCLoUWJ6NPnSnJJQ7ZmwfQAiERR4OTCIl
+ 4GUVkcHcCEERjR+uyogoSavfRpweXSiFhFRaRF0bUkcZHLgLrjPluDGusymSyHVXyVg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1790276213;
+ c=relaxed/relaxed; t=1790276212;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=FHBhI2S5yxSPKzw5JQsROWP6ZpH47Hvj/dlgj3SM8rA=;
- b=m/i3vJPVzvZG7rgJz07W2OyCWc0saggccmRnWAF/Cz3jv2RBVi6g0/2DNuJbWH5JyB01
- sK0peQjYv9ESp39gtbC6zpYhTKTYf4tvfVlaefqbX2eKqTEVZqLypj407MXfypa2TuB9g
- jHHDyeN4IT2NXPOjBqIVxcqVc7KEw/Xo94zTUf2RIHCRLkDJa/fTCf3I9O2c2gLc6e1gs
- mDLMkhZ7svBkh9Jq/BFRV7lbmWVGdqg01FZSXkRWHZYuYDb2PAzKIWdPiEz8YfmeoCyFv
- /5si84VHVLjcKFJK/8JLYki2m0WfVwv8TodOu/1peLANaGIXfY0HTBXRYrBs1gHOZsQ==
-ARC-Authentication-Results: i=1; smtp2.osuosl.org;
+ bh=sC7eIe2JQauYJJ4vJwuSZ0Vbcca+//FsErofnik+/Po=;
+ b=gpE/GHTHYIlyvW6Gy1eHgUjNEvNzhGP68gw8dqfwPGO4D6v94D70pdjvXoLRzuP13xJC
+ td9qF4y+uoATlaGl19qdNw6/9Ijg4jql3eDW3Kq9oemgzbf9PmRHK1qv7OU+V5YtojmWf
+ t8fa/P41vd539cTeXW3qcGzA71PFxpGtYqt3jVwTwcN6c8dIrPqfVPu6II8whwyskRWUM
+ 1Fl5yj+p1nxZFXs8dUORmnpOSpbp8iowQLBUc7nhBq9X9J/XZLKdcEq6nesIDGqq84wML
+ JpehhTfAa/6ji+nSmfFfjaG91n3JtH+DBQLl5d6ban6G+FjCFUy/D/cokVX+6xzEM7g==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org;
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 373D6404CA
- for <buildroot@buildroot.org>; Thu, 24 Sep 2026 18:56:53 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D85B081069
+ for <buildroot@buildroot.org>; Thu, 24 Sep 2026 18:56:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CE739982D9; Thu, 24 Sep 2026 18:55:42 +0000 (UTC)
+ id 7BF3098323; Thu, 24 Sep 2026 18:55:42 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 23 Sep 2026 18:23:04 +0200
+Date: Wed, 23 Sep 2026 18:20:06 +0200
 X-Git-Refname: refs/heads/2026.08.x
-X-Git-Oldrev: 0897fac6ac0c7d4bc5fa74caef196e8a2cb89f21
-X-Git-Newrev: 4a11b107c05cfc58402546d99110e2ae71b73976
+X-Git-Oldrev: 672e27ec30a4cf4a911ec4fe8bf657eb37509b17
+X-Git-Newrev: 266957f4ba809df677b82c3ea0a33222a0521dca
 X-Patchwork-Hint: ignore
-Message-Id: <20260924185542.CE739982D9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.08.x] package/exim: security
- bump version to 4.100.1
+Message-Id: <20260924185542.7BF3098323@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.08.x] package/qemu: host-qemu
+ does not support XOP capable CPUs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,62 +114,78 @@ From: =?utf-8?b?UmFwaGHvv73vv71sIE3vv73vv71sb3R0ZSB2aWEgYnVpbGRyb290?=
  <buildroot@buildroot.org>
 Reply-To: Raphaël Mélotte <raphael.melotte@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6735755050346751431=="
+Content-Type: multipart/mixed; boundary="===============7787347222814917510=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6735755050346751431==
+--===============7787347222814917510==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/4a11b107c05cfc58402546d99110e2ae71b73976
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/266957f4ba809df677b82c3ea0a33222a0521dca
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.08.x
 
-https://lists.exim.org/lurker/message/20260918.121220.0f87338e.en.html
+Commit 1f7efaf89f03 ("package/qemu: do not support x86_steamroller or
+x86_core_avx2") excluded BR2_x86_steamroller from
+BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS. This is still needed, but for a
+different reason than AVX, and the exclusion is incomplete.
 
-Contains the following security fixes:
+steamroller is bdver3, and what the Qemu TCG engine cannot emulate
+there is not AVX, but the Bulldozer-specific XOP, FMA4, TBM and LWP
+extensions. In Qemu 11.0.0 (the version we currently package) and
+11.1.1, target/i386/cpu.c has:
 
-* GCVE-25-2026-09-50-1
-* GCVE-25-2026-09-51-1
-* GCVE-25-2026-09-55-1
-* GCVE-25-2026-09-56-1
+  #define TCG_EXT3_FEATURES (CPUID_EXT3_LAHF_LM | CPUID_EXT3_SVM | \
+            CPUID_EXT3_CR8LEG | CPUID_EXT3_ABM | CPUID_EXT3_SSE4A | \
+            CPUID_EXT3_3DNOWPREFETCH | CPUID_EXT3_KERNEL_FEATURES | \
+            CPUID_EXT3_CMP_LEG)
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 267db9da2b4ed1b0e70e46d97db717ca6aab5d47)
+CPUID_EXT3_XOP, CPUID_EXT3_FMA4, CPUID_EXT3_TBM and CPUID_EXT3_LWP are
+defined in target/i386/cpu.h, but are not part of that mask, i.e. TCG
+does not implement them. Binaries using those instructions therefore
+die with:
+
+  qemu: uncaught target signal 4 (Illegal instruction) - core dumped
+
+This affects the whole Bulldozer family, not only steamroller:
+bulldozer (bdver1), piledriver (bdver2) and excavator (bdver4) are
+equally unsupported, but were never excluded.
+
+Use the newly introduced BR2_X86_CPU_HAS_XOP symbol, which covers all
+four variants, instead of listing BR2_x86_steamroller alone. As for
+AVX512, this disables gobject-introspection and nodejs, which are the
+two packages needing host-qemu in user mode.
+
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Assisted-by: Claude:claude-opus-5
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 22c0ec4fcfe58ff7a292f0a69e3357923f06b349)
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
- package/exim/exim.hash | 4 ++--
- package/exim/exim.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/qemu/Config.in.host | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/exim/exim.hash b/package/exim/exim.hash
-index c075b2fe96..49036ecb1e 100644
---- a/package/exim/exim.hash
-+++ b/package/exim/exim.hash
-@@ -1,6 +1,6 @@
- # From https://ftp.exim.org/pub/exim/exim4/00-sha256sums.txt
--sha256  5bd0a3e353dbfcd5c8174388b824316a61ee2455d9052ea2f0877dee939d33b3  exim-4.100.tar.xz
-+sha256  e9fb41f6724a5b136d64c9d19dbc5f26494af879a3e7e3190f91639eaa79fa0d  exim-4.100.1.tar.xz
- # From https://ftp.exim.org/pub/exim/exim4/00-sha512sums.txt
--sha512  e7f2cc1ba9af4b1113d9a40b384bf2e5439f539381126018fb9a15d3afaf687fd209d06d1cfa96e61426df0d9f4e7988e49e1192510abc02b2aa19b14b051abc  exim-4.100.tar.xz
-+sha512  42b7d59bca187e0e8b3cd85d97ff40fe8de9d807fb12ce38749c30056c92689ce98b09874aec06f1d83fde806fe6193312a98681b56c8baff1acfcf91244bbab  exim-4.100.1.tar.xz
- # Locally calculated
- sha256  edaef632cbb643e4e7a221717a6c441a4c1a7c918e6e4d56debc3d8739b233f6  LICENCE
-diff --git a/package/exim/exim.mk b/package/exim/exim.mk
-index a8395a2309..c52428a800 100644
---- a/package/exim/exim.mk
-+++ b/package/exim/exim.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/qemu/Config.in.host b/package/qemu/Config.in.host
+index 48979fd7ce..fbc989b003 100644
+--- a/package/qemu/Config.in.host
++++ b/package/qemu/Config.in.host
+@@ -22,10 +22,11 @@ config BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
+ 	default y if BR2_sparc64
+ 	default y if BR2_xtensa
+ 	default y if BR2_x86_64
+-	depends on !BR2_x86_steamroller
+-	# The Qemu TCG engine does not implement the AVX512
+-	# instruction set, so binaries built for such CPUs cannot be
+-	# emulated.
++	# The Qemu TCG engine implements neither the XOP instruction set
++	# nor the other Bulldozer-specific extensions (FMA4, TBM, LWP),
++	# and it does not implement the AVX512 instruction set either,
++	# so binaries built for such CPUs cannot be emulated.
++	depends on !BR2_X86_CPU_HAS_XOP
+ 	depends on !BR2_X86_CPU_HAS_AVX512
+ 	depends on !BR2_powerpc_620 && !BR2_powerpc_630
  
--EXIM_VERSION = 4.100
-+EXIM_VERSION = 4.100.1
- EXIM_SOURCE = exim-$(EXIM_VERSION).tar.xz
- EXIM_SITE = https://ftp.exim.org/pub/exim/exim4
- EXIM_LICENSE = GPL-2.0+
 
---===============6735755050346751431==
+--===============7787347222814917510==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -180,4 +196,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============6735755050346751431==--
+--===============7787347222814917510==--
