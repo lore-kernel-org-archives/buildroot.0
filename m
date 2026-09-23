@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27EA9C9830E
-	for <buildroot@archiver.kernel.org>; Thu, 24 Sep 2026 18:56:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA060C9830E
+	for <buildroot@archiver.kernel.org>; Thu, 24 Sep 2026 18:56:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D723F40AAF;
-	Thu, 24 Sep 2026 18:56:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BCDB540ACD;
+	Thu, 24 Sep 2026 18:56:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id m4t79X1ySKXJ; Thu, 24 Sep 2026 18:56:47 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 10BE440ADE
+ id RUrsvVIjgkwY; Thu, 24 Sep 2026 18:56:49 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org F103240ABE
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790276205;
-	b=FxI9BXPjB8KDLeQyGV9vNhr6nPwus+VIEFi3JCQ11Ap0b7oHOqCMGxZlPXpFtilSF75m
-	 tye6eWOPECd/6syks46ygnQrW2fqsBp/402WJcwwt4UJ2xFGqDDqyu5HlOurwaSwkSTj6
-	 AgY9odoquNJcFflTBWIdBO4k22gYLm2CGoOX8J850704u+5qVzQ93YN7kHcsj1O37qLu1
-	 kFr0wOoc4ktdDIw1+7JJFADU21v9VR1SrhvtB30W8CLLPEft+ClMEo37WPMbyoTGcZQ5m
-	 oS9cs+ZFHaGLF59dVH852+hj4drXlDbfRiFYrVjl8LRd32CzUiJNlpj0WWgrcvKq07A==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790276208;
+	b=S3g5MDH/zHr07VHA+ewrPn+mhVLbhqX1T0vWflUcZFPZuXiv4FJeGzxzRyS0mv1L0VYX
+	 4+l90+oOK0o5Fm/XrurIgPMMIGedn2nq3kp4EDQ16UU80bwzX+7aw9rfEVNLT53Ho7bau
+	 rH0okt7mnlXjS+WqeBvlk6Zxoe+p2+0Ez/uKnZvPPGRSdKPqRAHArrwSEJ/nfPSoh0qXa
+	 TEf3fjpxE07jFdTnNOVvzEzP0eETAVKJ9Fsr3k61KOeroLWcp2uADGlw5n9pTzb/0bdvG
+	 +he/hb01qWfY9CPQvbIln/c/cJwN7ZgEwjswOjknuB67RG76h9K/2/6Vs8kFU1ym69w==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1790276205;
+	c=relaxed/relaxed; t=1790276208;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,75 +30,75 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
 	 Sender;
-	bh=6ZPVyhS+Sx4LNJReaznVfJooM1Da8vIXCOBD5iY/RyI=;
-	b=E6t04Q2DTQEY6okhylQMj9eaIZhpVawi++TQrETTIO2iwlZpo6EWo9YvfybByQucctnO
-	 7qN8tIM6+fUWcxykzW376VAqHctjvjXMOKUKRIiQfre8dYSyGKeRM3vVJ7KSG0+L0BcgF
-	 +KvP4PKwogcTvSmrGaqrVubwJt/Cc33RSKPniUWdoow5Q6hnl27uQxYujVovwZXMmwATE
-	 uj9XMEeds7Pszq0g2fsW/93L7DxmerkhpPDY5E+Csng0UeRVBUY8/8D4CT/eBjLsxbmju
-	 joCQFVHGksJ1aNjLv8E13L8ZRCBCY10SSWzCcMKs4JheV8c5beTlqv4RR5WvovJN3GA==
+	bh=RskQhBlEZoG7/fuuzJs2odRrZRpCD2UkvaBzQVO6OM8=;
+	b=FTn9ZHd2AHgQ5Rua86liSma5P64ciA3LF/EKs2gigXChzm+szBarFaLx6BucwyybWcXK
+	 86o8hboRFgHMx5OEjIix/IPPdWGplxir1xnpzSv6anXnFeI4lg5Io0U+5ONrJEmq5KRxW
+	 GTBeK9q10A9N3Cfaoxb2fyW6SjexuRJQrdtHIkTUN/pNWwP1bjttNOAIarY2fwW5mi6Fi
+	 vnVMM0oRcJu4aiqALXvA1grz6PQcfea4Pp4SWwkfNsZpyV+S+D4edMILPzQMSyMEJ0PRh
+	 DVCy8+aicchNwS0QXeRHcShMmywxYBiAv42nvBhq4aplD6HC+NuWxc/G3DQeAUkBDRA==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1790276205;
-	bh=6ZPVyhS+Sx4LNJReaznVfJooM1Da8vIXCOBD5iY/RyI=;
+	s=default; t=1790276208;
+	bh=RskQhBlEZoG7/fuuzJs2odRrZRpCD2UkvaBzQVO6OM8=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=JV/Q3oPAGoLlC7KFPAlQ77NR8tDAa5V+3/cdp09wDGqA7HuzdjMdo9rq6ooiFqI3M
-	 gxyAi6hxVD1W5qP9LvMBIJGop1Lco8shAAAoKYRFwXoL3ztaBbVMxvGxZimHGV6HDs
-	 /1Iwh7OineWKziSIyyXhDd9eUJBw6YpWDWle5nsst25A5IjWMxP2H0oxQeytnihCbM
-	 5s+Lxt4AsYYCHUltsjTi8p5HoLxgniYVYIIZhE1TvyDoAvtgOhf/wu+Z3tF+kXuFxv
-	 rvDV4uGHOr4e/rT1N7dGjt5yqUaJ5bO384tULdzDGXvicXjHpTnYJJY97sOgcSQxLI
-	 Yow5b8yx+XUmQ==
+	b=tGgNNfUqQ4RVLvtRIL7vbz/5NGerK5VUstfTT8WliO9x/mQ6+MP4ICwcBsVJlPnQh
+	 6Q3DZlJnutC7z/b4YsWz4XcLfAZMS6OCrmtrr+wrn9+23lbiW9CoNnhZEppG48l2Va
+	 s4Y5Lo8420hyO7+kDAEUntaCdcTGbu75zXF9q9dgIB3AC0vTAxTPWWngwmrKszRSoe
+	 zrBQhwzjUVHbVgO8X4Ph3UpnoGLvn0deHfiqpBtpVCqYAWfI4LAPdcMGPDOVDhrtsx
+	 9fyAT4szUr9BS8JUr9MBMdFb51eCisNYYQfCF0w4UpTZ188o3JHsM0y07RhnIiEYoN
+	 hNjQetBV04qCg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 10BE440ADE;
-	Thu, 24 Sep 2026 18:56:45 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id EC92A392
- for <buildroot@buildroot.org>; Thu, 24 Sep 2026 18:56:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F103240ABE;
+	Thu, 24 Sep 2026 18:56:47 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 17373392
+ for <buildroot@buildroot.org>; Thu, 24 Sep 2026 18:56:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D32B560847
- for <buildroot@buildroot.org>; Thu, 24 Sep 2026 18:56:42 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 094D540AC9
+ for <buildroot@buildroot.org>; Thu, 24 Sep 2026 18:56:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id o_aUhBOwqw3A for <buildroot@buildroot.org>;
- Thu, 24 Sep 2026 18:56:42 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org EF4D560BBC
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790276202;
- b=iO6KdMCRJAU3NHzEN30uZiYzA+Wcb1P1ZNc7FzhOJmkcjsRNvr2vrvkPtTsuG1Mk3JIg
- v8s8oPjEVM3F/CL7shk6IAlCM29Hd4eqKric1iDQIqTf2VkNw0WRkDeB35Z2udGNhkZto
- Koyeu/jYLV6PS6eGyNi6O88haQIaHUZmmEzTSLt8uEbfPKVJ3a5wM5cSxxLxNkDRxMoXT
- P2ON7vaYRbJMSpP40Z39YxfmrdAHSyAURWVVQwFYQKgbL3y8RBw4UBBWeQ6Th25nSBVnt
- ftZNfPK5bUcik47TvQOLQ/m90mhD93e9SoLy62Fz9I1GDK9DEQnV1U45n7ez5V1hFtA==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ciMAQx63SAyG for <buildroot@buildroot.org>;
+ Thu, 24 Sep 2026 18:56:41 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org C01F640AA7
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790276201;
+ b=MKsR7bSzEf791f1YsIaQu9tEYXls5b/+w2EHifG9HcKifuneHl1M9swyaCNXrED/UmL4
+ z9u118o6Ag9CfhovtXz/A5MB1XuZ7kvq7HGH07JFQRd62xdhXBg8Bfa4PtYb9700aq7kF
+ LNNfTxjB9AukmJ+2pzLXRHH3Imkbw03LnV8Wa4uM/BFtHJ0SSD0LI1xjcl3Xt3COGahJj
+ YXNgIz7b5vUSMqs6kXhs4dH/CJrHHvIq7iHKbfOhPPSn693RA4TCDgX+nO2pKlorrmfYz
+ FoNhYSHX5HuyF2v6FdPALapzzIz33atKhInYIUTVr95BnY6lOhwrWD66n8/sS+r53Og==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1790276202;
+ c=relaxed/relaxed; t=1790276201;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=74O4R1Y5wJXjxwUtkiFG/p6HYpu8m9xruWkpCfVRtzg=;
- b=AiRj52unKLkyWwsw68h2p+xVMYXdTLli9AAU/OlzUKpR+qNwI3+bjjNsHDrDCwX0galK
- UUPqPrz0U9WONVryrSgBhlGcpxNZ0+Hs2JGQHtCibmra6OWN4sWPqRRQ6Arm2ycKkCqyV
- sY0Y+aCPOrpzsI0BQ0s6mGmN6+MPExnzMtUgxXrfhS0Gqe7JlQTEPwHXFZwUAt01X3bAY
- x6VyHqkxbxGTc1BxTn/FV+XoA8xoinftqK4xYMoEJBogh5+TfrnC/u74cFv8uXFfEiHAX
- Jq0bDFgsCgqujkefiaqFbO1jiWowCRX5ri3hkGfD8WyC7pB9KxHJmuHZeAPB4QAYdAQ==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org;
+ bh=ZwQZEUmTReNHzyLd0FAIMzqOifeaSSL3R/+7WUtActc=;
+ b=eaRitIZns1W+UUbBypcDA54d08jq79CwKVrsosb5b8qSzmzOe2HTuS6QDId/z6lp9BQU
+ bWosaDiBDhYXDcs2221aAtBELtuZj8HnpQdz4YtjdHprZEnU8ea4SVibSXg5wR6riIoZk
+ MlgSEtT3fZ8x9QMc28KqoF3esQeQ2AtirNeDaWxEu17FryZdWlb3tiItdBKLN45jT3PQ2
+ eHpVD4dXmxCZk9fJpU+EwLF1qsKF5PnBvn7eBJl7QjDPvCmaal0bcOs6zccgpaVzsnqZ8
+ 8/k2YL+HjIPRz62z4Faon1R+o9IQ5DkQ/sUYuXcg7Xxn9c7/zZ821zjUvDk6quz0CxQ==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org;
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id EF4D560BBC
+ by smtp4.osuosl.org (Postfix) with ESMTP id C01F640AA7
  for <buildroot@buildroot.org>; Thu, 24 Sep 2026 18:56:41 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8686E98385; Thu, 24 Sep 2026 18:55:31 +0000 (UTC)
+ id 6195598387; Thu, 24 Sep 2026 18:55:31 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 23 Sep 2026 17:45:01 +0200
+Date: Wed, 23 Sep 2026 16:57:09 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 75063b2556e76cb6287a873c11aa699927fe63cd
-X-Git-Newrev: bea9b76f1cbab6d7f0601b1f4dc552c503aee597
+X-Git-Oldrev: 0374d408e609df8c88e2b804c2cc548d8a385c31
+X-Git-Newrev: 03fe784a0afa0609723971577e3135d0a1f54e1a
 X-Patchwork-Hint: ignore
-Message-Id: <20260924185531.8686E98385@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/lldpd: rework
- start script
+Message-Id: <20260924185531.6195598387@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/lldpd: bump to
+ version 1.0.20
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,143 +114,58 @@ From: =?utf-8?b?UmFwaGHvv73vv71sIE3vv73vv71sb3R0ZSB2aWEgYnVpbGRyb290?=
  <buildroot@buildroot.org>
 Reply-To: Raphaël Mélotte <raphael.melotte@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0066646818299747242=="
+Content-Type: multipart/mixed; boundary="===============6735559918735079091=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0066646818299747242==
+--===============6735559918735079091==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/bea9b76f1cbab6d7f0601b1f4dc552c503aee597
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/03fe784a0afa0609723971577e3135d0a1f54e1a
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-check-package reports six warnings on S60lldpd: indentation with
-spaces, no DAEMON variable, and shellcheck complaints.
+Release notes:
+https://github.com/lldpd/lldpd/releases/tag/1.0.20
+https://github.com/lldpd/lldpd/releases/tag/1.0.19
 
-The script also masks failures, the exit status of
-"[ $? = 0 ] && echo OK || echo FAIL" is the one of echo, so start and
-stop always return success.  Stopping does not wait for the daemon to
-exit either, so a restart can race the instance on its way out.
-
-Rewrite it after package/busybox/S01syslogd, as the manual asks.  lldpd
-daemonizes and writes the PID file itself, but does not remove it on
-exit, so pass the PID file to both start-stop-daemon and the daemon and
-drop the stale file once the process is gone.  Also pick up arguments
-from /etc/default/lldpd and add the customary reload alias.
-
-Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
-[Julien: remove .checkpackageignore entry to fix check-package error]
+Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 2fd1f6b629862f48e832d7e0379a7b48dc9eae42)
-[raphael: fix conflict in .checkpackageignore]
+(cherry picked from commit 779e7cd7a926671e487d83340d130553ef430ad7)
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
- .checkpackageignore    |  1 -
- package/lldpd/S60lldpd | 80 ++++++++++++++++++++++++++++++++++++--------------
- 2 files changed, 58 insertions(+), 23 deletions(-)
+ package/lldpd/lldpd.hash | 6 +++---
+ package/lldpd/lldpd.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 42973a5311..5bc397bcf1 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -668,7 +668,6 @@ package/lirc-tools/0001-plugins-devinput.c-fix-build-with-musl-1.2.0.patch lib_p
- package/lirc-tools/0002-configure-add-disable-doc-option.patch lib_patch.Upstream
- package/lirc-tools/S25lircd lib_sysv.Indent lib_sysv.Variables
- package/live555/0001-Add-a-pkg-config-file-for-the-shared-libraries.patch lib_patch.Upstream
--package/lldpd/S60lldpd Shellcheck lib_sysv.Indent lib_sysv.Variables
- package/llvm-project/clang/0001-lib-Driver-ToolChains-Gnu-Use-GCC_INSTALL_PREFIX-in-.patch lib_patch.Upstream
- package/llvm-project/libclc/0001-support-out-of-tree-build.patch lib_patch.Upstream
- package/lm-sensors/0001-static-build.patch lib_patch.Upstream
-diff --git a/package/lldpd/S60lldpd b/package/lldpd/S60lldpd
-index 3dfa6c1aa1..79605c2f02 100644
---- a/package/lldpd/S60lldpd
-+++ b/package/lldpd/S60lldpd
-@@ -1,25 +1,61 @@
- #!/bin/sh
--#
--# Controls lldpd.
--#
+diff --git a/package/lldpd/lldpd.hash b/package/lldpd/lldpd.hash
+index 127480095e..f3cefe7b73 100644
+--- a/package/lldpd/lldpd.hash
++++ b/package/lldpd/lldpd.hash
+@@ -1,6 +1,6 @@
+ # Locally computed after checking gpg key
+-# https://media.luffy.cx/files/lldpd/lldpd-1.0.18.tar.gz.gpg
++# https://media.luffy.cx/files/lldpd/lldpd-1.0.20.tar.gz.gpg
+ # using key AEF2348766F371C689A7360095A42FE8353525F9
+-# gpg --verify lldpd-1.0.18.tar.gz.gpg lldpd-1.0.18.tar.gz
+-sha256  4b320675d608901a4a0d4feff8f96bb846d4913d914b0cf75b7d0ae80490f2f7  lldpd-1.0.18.tar.gz
++# gpg --verify lldpd-1.0.20.tar.gz.gpg lldpd-1.0.20.tar.gz
++sha256  61b8cb22d4879e68f7825a2fb8e1e92abb4aba4773977cf0258bc32ed9f55450  lldpd-1.0.20.tar.gz
+ sha256  0e96a5aea65f16e2239231ce4ab90497f8bc3bb8fe6abe9299aade4726ff7c8d  LICENSE
+diff --git a/package/lldpd/lldpd.mk b/package/lldpd/lldpd.mk
+index 1b2cef9865..a3015e9e7d 100644
+--- a/package/lldpd/lldpd.mk
++++ b/package/lldpd/lldpd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--case $1 in
--    start)
--	printf "Starting lldpd: "
--	start-stop-daemon -S -q -p /var/run/lldpd.pid --exec /usr/sbin/lldpd
--	[ $? = 0 ] && echo "OK" || echo "FAIL"
--	;;
--    stop)
--	printf "Stopping lldpd: "
--	start-stop-daemon -K -q -p /var/run/lldpd.pid
--	[ $? = 0 ] && echo "OK" || echo "FAIL"
--	;;
--    restart)
--	$0 stop
--	$0 start
--	;;
--    *)
--	echo "Usage: $0 {start|stop|restart}"
--	exit 1
--	;;
-+DAEMON="lldpd"
-+PIDFILE="/var/run/$DAEMON.pid"
-+
-+LLDPD_ARGS=""
-+
-+# shellcheck source=/dev/null
-+[ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
-+
-+# lldpd daemonizes and creates the PID file itself, so tell it where to
-+# put it, but it does not remove it on exit.
-+start() {
-+	printf 'Starting %s: ' "$DAEMON"
-+	# shellcheck disable=SC2086 # we need the word splitting
-+	start-stop-daemon --start --pidfile "$PIDFILE" \
-+		--exec "/usr/sbin/$DAEMON" \
-+		-- -p "$PIDFILE" $LLDPD_ARGS
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	return "$status"
-+}
-+
-+stop() {
-+	printf 'Stopping %s: ' "$DAEMON"
-+	start-stop-daemon --stop --pidfile "$PIDFILE" \
-+		--exec "/usr/sbin/$DAEMON"
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+		return "$status"
-+	fi
-+	while start-stop-daemon --stop --test --quiet --pidfile "$PIDFILE" \
-+		--exec "/usr/sbin/$DAEMON"; do
-+		sleep 0.1
-+	done
-+	rm -f "$PIDFILE"
-+	return "$status"
-+}
-+
-+restart() {
-+	stop
-+	start
-+}
-+
-+case "$1" in
-+	start|stop|restart)
-+		"$1";;
-+	reload)
-+		# Restart, since there is no true "reload" feature.
-+		restart;;
-+	*)
-+		echo "Usage: $0 {start|stop|restart|reload}"
-+		exit 1
- esac
+-LLDPD_VERSION = 1.0.18
++LLDPD_VERSION = 1.0.20
+ LLDPD_SITE = https://media.luffy.cx/files/lldpd
+ LLDPD_DEPENDENCIES = \
+ 	$(if $(BR2_PACKAGE_CHECK),check) \
 
---===============0066646818299747242==
+--===============6735559918735079091==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -261,4 +176,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============0066646818299747242==--
+--===============6735559918735079091==--
