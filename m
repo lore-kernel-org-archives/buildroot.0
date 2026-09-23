@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25888C98318
-	for <buildroot@archiver.kernel.org>; Thu, 24 Sep 2026 18:58:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33856C98321
+	for <buildroot@archiver.kernel.org>; Thu, 24 Sep 2026 18:58:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E117340BFD;
-	Thu, 24 Sep 2026 18:58:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D907040B8C;
+	Thu, 24 Sep 2026 18:58:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Uxo3APHuSkYM; Thu, 24 Sep 2026 18:58:15 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org DE07A40B8C
+ id eFVfXh1UEX06; Thu, 24 Sep 2026 18:58:16 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 9962040CAA
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790276295;
-	b=kRXW9Lit3aalg206YQYp6EMdfZpugwrpnmMwgZKYsu86Xw4fjNH8XdrTN/xXVeKamDo4
-	 Xo6V+gVJMGd7jG+tDeUvUSVdP403ByAbuxybb6hv/2NM3rd/ol4HBYbdSSt1Pa2Y3gnKj
-	 /D8LwF7B/F/IVZT9oKyJU+q9unQzznQiZHTx4SYc0rxHT0y16bFVM4cCBqeP0PxDpgXx1
-	 PzWPM35YNek6i12NNPXowfjXSk9dGmt9L93yTDY+o/mX6WPudz0lU/ZUfjPGdzTlmtnuS
-	 aZgTPVJNAAQeZf/XfKwAfmiWZ9zBEnCOCYYKceAtHQeHMA033To7Ku7CB7v/vlwpnGQ==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790276296;
+	b=hx8IIZcNqpLZ1n9HJZLoFHyZUodnofk3qFEZ8b1nI3PPGGcAbRbgqkfKgyr7tdrCZAKT
+	 iXCAgXJubOI76zQHKSQYaBmD8ZkFQJivq/2XgtmYTJzMn+I8MA1QPKuwFUD6CM0gt8aL9
+	 seQfaU2l9JQ5UujF/MaRlutKO24a0Hse97R1shJ+UiW1Jn5uQ5Ht4FsPWXsR7coS7nHJX
+	 mVY3bdkzdHPqbV7FeybUijNFm9lfg9BN5fBNjJI1FuW9zqyaxMxU5EpmKl8HoKzIGp1Da
+	 M4eFhURLgwcSx4kMujVIB+qGsonOtKL2KcARjq2D3K42CLY41gfHOaaiYkHdyxDd0iA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1790276295;
+	c=relaxed/relaxed; t=1790276296;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,75 +30,75 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
 	 Sender;
-	bh=ngpuoftgpn4wwudjx6kBnYxKGBYGLt15z/93yOWyfXc=;
-	b=XYP26MEq+56w2cYcUfEAFW+R/M+L+hDYSnLQO49zFm4CqGyApwIKb5n4XzHxyZHDswAC
-	 jDqob/Ulhz8FEXDEyeAHDEuNaCtVspUrAPVJ+L1w9vvpyqbWVN7rpjhiZocO4TCEDGQZy
-	 9/k+yuU41ubtWICPl4Gp2fuABqnaIYH+nzxekNPGsSAV1vVJ5wVnjZg07QXb9Z8S3HRXS
-	 enkbbWy2LW99HgrLVPIPpeW0Vuxxj4e+FzqhuWSng00TcVYCR2JeQD4dFDPVorrWDId2I
-	 mMIK2rXt0xpwAT7bo/DLY5gH54f94GQh1rZwQZu1O31PC4JMhx6PDfHSqUF4i5MSEAQ==
+	bh=mzA3qqPdFqiezAa75mijWZeG/qHFYlLdiC4vlV4x9o0=;
+	b=U8SjdhrmabYyhu0bCYE6WokHJ6qkp1yemln/5Za4unO8GdeOpnhMiNn/dudpmSEdLkZC
+	 gWX0FCzKtBCVUltJrJLD4aHg/crZDkQFoSj6MOXdk6SPR3svgeu/SmnhuFLuD+ho8hqyY
+	 Q9/vTce5wRkmTVUPT+gxMZAyaRnQ9MjliRPqUIr/Bn7zWyVtP9X0Y0wpnGDveO89Zrhl9
+	 UxBf6mV3kas+f6v0Lf5UWLPg8bQTVZR+aI4mjSCInwn574kWPGW/vNwCYpBPRIiCIEbhc
+	 JJgWjk1SVwfnufFpZGQygwqp6JXPvZZRjqj4pHi+tiG3dhII+poKS/lkjjIbbxp5wTQ==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1790276295;
-	bh=ngpuoftgpn4wwudjx6kBnYxKGBYGLt15z/93yOWyfXc=;
+	s=default; t=1790276296;
+	bh=mzA3qqPdFqiezAa75mijWZeG/qHFYlLdiC4vlV4x9o0=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Qwl3tlYZ6oY1jP9fnp0RTngY/P0FpzM730oIfuUlh4xBhzeqY+k050p+ZOZlRUanm
-	 fxq3Gkh4Exkv4eJzmHoF6eicQSf5K9rb3y3qZW1hr3LNQMLNvBumhLxj/uuXRbtipk
-	 hAU7PzWVd7oo+zT0Nx/UfcKmAvSTHAXlnjdE8rFEIwmz3Tjs+39xEmx043aXWduHz2
-	 GIvzL2rl9u3mb293UB+KjkPo5VNIhgJwHCUjvfSg2khFGdRF7UN1uesRaqYNmDLfGg
-	 pGGxbyqguni3zMWoGd9LnPACid9VVyw2IkupxQnNXEVTKwDa1yp5/g6NiTc4e/3vTv
-	 TMiWed/F11/RA==
+	b=LDBg+ggwY9juX7ZF7nIVbt7kSVbOObQbXWVAHhNtNoCWevMWn67IVcD5bufi/H3Tt
+	 zkWrIjTMG3Dp6jKl4bZ8NE74MxlE/iEK5Rjgocne5s4/Vly7goG6ma9wYtEANZCo1e
+	 nUcNZ14PH1BtEzcAfa7vJDtuOdWswD8Xn4pV8cNuY358ocn5XJDhqeoCp33wcgZRCA
+	 5PpiFOQpFAMgT50YCp7PXdYY3bsnplBlrisAvwJve/SzP0t7UvAB5jxp5pLRUY3FEB
+	 pQAw+KSWTaddEJ2BWvTGcszr7xOCNTAhH3bgOnqMSStySPoA0i/4G6e5XnVZwdeDRM
+	 BDuggKbhluGmQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DE07A40B8C;
-	Thu, 24 Sep 2026 18:58:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9962040CAA;
+	Thu, 24 Sep 2026 18:58:16 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 764FC328
+ by lists1.osuosl.org (Postfix) with ESMTP id A36EF328
  for <buildroot@buildroot.org>; Thu, 24 Sep 2026 18:56:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5BBE940AC6
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9567140AC6
  for <buildroot@buildroot.org>; Thu, 24 Sep 2026 18:56:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2exXLj19ZlPa for <buildroot@buildroot.org>;
+ id 4OuoKcnd0Mjv for <buildroot@buildroot.org>;
  Thu, 24 Sep 2026 18:56:48 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 7CDD440AE4
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 6C24240AE9
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790276205;
- b=fxElwfthxieGlzACG+wf9VvV5bRSlh6JLN/MEVO84dr+v/aikp8OJ+T+/bzUm0Ok9Zbr
- i3wAK0zufHSnn3BGdkr8ytLK6FbzNogT7LvLd6M18u9xQT4a/U1wt4cWTVJYDU/96177C
- 1haDe837sIidrRnNdKDuatOCDi7GHN9vyZauUYy/dUcezEwqkFRr3sbXhZ17zAXEfB+xv
- A+3PyYDjEyTZYnKSBUCt0Jl07IXMGEeQOAFmRx5tljsdYClaGMCV+b7rvLCUhvBigt77L
- sQGaA2k2J4nEqlnbU4PdB2eT3rawWI/AtmvHMdQfhwZukwB74nNfF6aQP1w7zoboj+g==
+ b=J87hpwQZAYoxP+w/lnJIZ/wJ4swDFwTYRO1e5aaovUhcfVkE/M3eg1bScd+0q9Q8lSOz
+ TJffSQli6W0yqhDDhoJUMkLq/IBU7BP3abIpQzhIW27Lqbvew4XSjN60n09lSdo30Di7y
+ LaG4fmTD+eqqn4SjyHK0Xc6jl2iLfv8OuWr5riLn5onUaH5ebpgw0VG9GNVqHE/MZVuNu
+ 2bZ06STGwj6cOqvP1kvtUM6tuoUUxgv5eCfqARFcYFEuLVVFwikpw+sFGNHqrS7IixyiV
+ obdW0GYLHB855YtLhKLKue/9U6sqChdU7bO1kELn1161ciIRf5TeVK7DH7y5V2nIJPA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1790276205;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=a5Xti6vp96/DZG3riamWatKLzmtTUFHHbExWekgkpHs=;
- b=lSvEPCsjI6B7AmS2RGBCRo6hPD26jQCN46RDT1cL0xUpw129cPZ3BbadFJuJecNk1mFd
- WC1DhIW9YXXWVIV0Q9slZqT7t3Jhv/EHjnx/E2DbroZSc1VP0TZiJtT8eYDuHZJCSmyze
- 5EGQmMSuNFaj/Eee04dIo/Y/SHfOf7ryJsLbZWyp4x2M6Kb+IUcJn2A18T5ydWsPgt8cw
- 3SRDZF6ov1UBQEVhJ9faSm+6iMyecCSBcIckREeYCytCgS5YSuFnIADgwPirR0cxsJeGu
- ZMLe85vrMBlDO56ePvV4/YKt+d5HS/ZQYsgKTvtO21xVukxQI7EwZlA3/TCAcibJczQ==
+ bh=DLRB815LWoQahOKQMi2Ko+ucWOuQ1yWrcC5FF7UBths=;
+ b=iGqjbmD2LfTjoiX51BtdAV3rzF7vWpOgj/nXm7NF9AQsJHdQtQHAcmee4KBS2gOGvNKj
+ xFCUd7gS2TvVgGPe058FxjbCmOvqOiYTpHDaPIQu/kPGJHtfg949XCJFr5A5LrIG68ydZ
+ mS9rJXOFNZM5gs7xYHQBCQ2xhEY+ydaiXl+XIC1ksFrsIPsCiOb8tq7QTkkF2UyKRAajm
+ 0+758AMU9yNTZKUAfILwZKhykHC5aXnFEIK4sUUKnoIIKmsdCWL8rO78ZMH5/lWeo8tAG
+ Zvi+CarQ78QmAzOMWZZ7kUHiJN2Ql07xVaewgAeLYr9467xdWnKl8QTW3pkcQtftDsA==
 ARC-Authentication-Results: i=1; smtp4.osuosl.org;
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7CDD440AE4
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6C24240AE9
  for <buildroot@buildroot.org>; Thu, 24 Sep 2026 18:56:45 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1FED1976B0; Thu, 24 Sep 2026 18:55:35 +0000 (UTC)
+ id 0E8D4982D9; Thu, 24 Sep 2026 18:55:35 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 23 Sep 2026 18:36:25 +0200
+Date: Wed, 23 Sep 2026 18:36:19 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: c69b8f3aabef79ed73c30eaa19e4fd00cca279a7
-X-Git-Newrev: e1435d6b632b600d297773e5aabcc2ccd40ce902
+X-Git-Oldrev: 917f03d0625bf0b8b07fa8b8c3f4ff15be4246d6
+X-Git-Newrev: c69b8f3aabef79ed73c30eaa19e4fd00cca279a7
 X-Patchwork-Hint: ignore
-Message-Id: <20260924185535.1FED1976B0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/boost: remove
- dependencies on Boost.DateTime
+Message-Id: <20260924185535.0E8D4982D9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x]
+ support/scripts/pkg-stats: sort latest version by state
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,70 +114,117 @@ From: =?utf-8?b?UmFwaGHvv73vv71sIE3vv73vv71sb3R0ZSB2aWEgYnVpbGRyb290?=
  <buildroot@buildroot.org>
 Reply-To: Raphaël Mélotte <raphael.melotte@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4199361707114921996=="
+Content-Type: multipart/mixed; boundary="===============7953160297540599438=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4199361707114921996==
+--===============7953160297540599438==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/e1435d6b632b600d297773e5aabcc2ccd40ce902
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/c69b8f3aabef79ed73c30eaa19e4fd00cca279a7
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-Boost.DateTime is header-only since 1.77.0
-The Boost Release Notes[0] didn't mention it but it was introduced in
-the documentation of DateTime in this commit: [1]
+pkg-stats columns are sorted either alphabetically or numerically. This
+does not make much sense for the "Latest version" column.
+This commit orders the column by whether the package is up-to-date or
+not.
 
-This was bumped in buildroot in d39d8f7cee9b4634e6f490020204f63fae419e8e
-
-So analog to the "header-only" move of Boost.System we have now to
-gradually phase out the dependencies on this library. Ideally before
-the stub is removed as it now happened for Boost.System in 1.89.0.
-
-[0] https://www.boost.org/releases/1.77.0/
-[1] https://github.com/boostorg/date_time/commit/33dc6136f193a100c753c819694d6d11e9ab4123
-
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Franciszek Stachura <fbstachura@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit a235a33cfea320907e330023c1c6ec1645a4374a)
+(cherry picked from commit 95b1e8676c0eec0ca039e2554ed00d33258d49a2)
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
- package/boost/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ support/scripts/pkg-stats | 30 +++++++++++++++++++++++++-----
+ 1 file changed, 25 insertions(+), 5 deletions(-)
 
-diff --git a/package/boost/Config.in b/package/boost/Config.in
-index a9ab4836b5..7b78345798 100644
---- a/package/boost/Config.in
-+++ b/package/boost/Config.in
-@@ -95,6 +95,9 @@ config BR2_PACKAGE_BOOST_DATE_TIME
- 	  A set of date-time libraries based on generic programming
- 	  concepts.
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index 2b2194b9a5..eb6d1836c3 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -44,6 +44,11 @@ RM_API_STATUS_NOT_FOUND = 4
  
-+	  This library is header only since boost 1.77.0. Building a
-+	  stub library is still supported for backward compatibility.
+ HTTP_HEADERS = {'User-Agent': 'buildroot.org pkg-stats'}
+ 
++LATEST_SORT_GOOD = 3
++LATEST_SORT_ERROR = 2
++LATEST_SORT_UNKNOWN = 1
++LATEST_SORT_NEEDS_UPDATE = 0
 +
- config BR2_PACKAGE_BOOST_EXCEPTION
- 	bool "boost-exception"
- 	help
-@@ -200,7 +203,6 @@ config BR2_PACKAGE_BOOST_LOG
- 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-atomic
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # boost-thread
- 	select BR2_PACKAGE_BOOST_ATOMIC
--	select BR2_PACKAGE_BOOST_DATE_TIME
- 	select BR2_PACKAGE_BOOST_FILESYSTEM
- 	select BR2_PACKAGE_BOOST_REGEX
- 	select BR2_PACKAGE_BOOST_THREAD
-@@ -359,7 +361,6 @@ config BR2_PACKAGE_BOOST_WAVE
- 	depends on !BR2_m68k_cf
- 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-thread
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # boost-thread
--	select BR2_PACKAGE_BOOST_DATE_TIME
- 	select BR2_PACKAGE_BOOST_FILESYSTEM
- 	select BR2_PACKAGE_BOOST_THREAD
- 	help
+ 
+ class Defconfig:
+     def __init__(self, name, path):
+@@ -766,7 +771,15 @@ addedCSSRules = [
+ 
+ addedCSSRules.forEach(rule => styleSheet.insertRule(rule));
+ 
+-function sortGrid(sortLabel){
++function byInnerText(el) {
++        return el.innerText;
++}
++
++function byIsLatest(el) {
++        return el.getAttribute('data-latest-sort');
++}
++
++function sortGrid(sortLabel, sortBy=byInnerText){
+ 	let i = 0;
+ 	let pkgSortArray = [], sortedPkgArray = [], pkgStringSortArray = [], pkgNumSortArray = [];
+ 	const git_hash_regex = /[a-f,0-9]/gi;
+@@ -786,10 +799,10 @@ function sortGrid(sortLabel){
+         columnValues.forEach((listing) => {
+                 let sortArr = [];
+                 sortArr[0] = listing.id.replace(sortLabel+"_", "");
+-                if (!listing.innerText){
++                if (!sortBy(listing)) {
+                         sortArr[1] = -1;
+                 } else {
+-                        sortArr[1] = listing.innerText;
++                        sortArr[1] = sortBy(listing);
+                 };
+                 pkgSortArray.push(sortArr);
+         });
+@@ -1011,14 +1024,20 @@ def dump_html_pkg(f, pkg):
+     div_class = ["centered"]
+     div_class.append(f'_{pkg_css_class}')
+     div_class.append("latest_version data")
++    data_latest_sort = None
+     if pkg.latest_version['status'] == RM_API_STATUS_ERROR:
+         div_class.append("version-error")
++        data_latest_sort = LATEST_SORT_ERROR
+     if pkg.latest_version['version'] is None:
+         div_class.append("version-unknown")
++        if data_latest_sort != LATEST_SORT_ERROR:
++            data_latest_sort = LATEST_SORT_UNKNOWN
+     elif pkg.latest_version['version'] != pkg.current_version:
+         div_class.append("version-needs-update")
++        data_latest_sort = LATEST_SORT_NEEDS_UPDATE
+     else:
+         div_class.append("version-good")
++        data_latest_sort = LATEST_SORT_GOOD
+ 
+     if pkg.latest_version['status'] == RM_API_STATUS_ERROR:
+         latest_version_text = "<b>Error</b>"
+@@ -1038,7 +1057,8 @@ def dump_html_pkg(f, pkg):
+         else:
+             latest_version_text += "found by guess"
+ 
+-    f.write(f'  <div id="{data_field_id}" class="{" ".join(div_class)}">{latest_version_text}</div>\n')
++    f.write(f'  <div id="{data_field_id}" data-latest-sort="{data_latest_sort}" \
++        class="{" ".join(div_class)}">{latest_version_text}</div>\n')
+ 
+     # Warnings
+     data_field_id = f'warnings__{pkg_css_class}'
+@@ -1170,7 +1190,7 @@ def dump_html_all_pkgs(f, packages):
+      class="centered hash_file data label"><span>Hash file</span><span></span></div>
+ <div style="grid-column: 8;" onclick="sortGrid(this.id)" id="current_version"
+      class="centered current_version data label"><span>Current version</span><span></span></div>
+-<div style="grid-column: 9;" onclick="sortGrid(this.id)" id="latest_version"
++<div style="grid-column: 9;" onclick="sortGrid(this.id, byIsLatest)" id="latest_version"
+      class="centered latest_version data label"><span>Latest version</span><span></span></div>
+ <div style="grid-column: 10;" onclick="sortGrid(this.id)" id="warnings"
+      class="centered warnings data label"><span>Warnings</span><span></span></div>
 
---===============4199361707114921996==
+--===============7953160297540599438==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -188,4 +235,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============4199361707114921996==--
+--===============7953160297540599438==--
