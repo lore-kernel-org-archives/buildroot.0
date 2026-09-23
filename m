@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57BACC98318
-	for <buildroot@archiver.kernel.org>; Thu, 24 Sep 2026 18:59:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91DFBC98321
+	for <buildroot@archiver.kernel.org>; Thu, 24 Sep 2026 18:59:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2B27A40D79;
-	Thu, 24 Sep 2026 18:59:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5187B4112A;
+	Thu, 24 Sep 2026 18:59:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pKaOivCom9o1; Thu, 24 Sep 2026 18:59:12 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org B04DC40D94
+ id 4LZBfvTNfFjf; Thu, 24 Sep 2026 18:59:14 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 4EE3F410F8
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790276352;
-	b=AV6R4scXuft2xmj9k3Pn+1Z+J36HCtF7hiRN9GCrrnWFYT6Six3nJYeJcpWhloJg7Ecq
-	 nOY88tJwK+V8wbfFIqHtojLCqRWZvNtBmOGetWGfMUpZEwo1s7vGNVd5trWT5mV+Wu2s0
-	 gIfWiO9J0ebtR31F4NXq1+aNJdtT3YK0QL4nRRaUVmSCDCPjMx9adN7BrJvfpk0fTWU8W
-	 p4q62SDmE6Ow87aHoOS6RtY/9ev4B8VssxHOLtKBP8v4gTxlmCpraAyKEHVhc4GmhHpR5
-	 9O9JGoH2hNJxUij3kMX0whz2UnvscqPVQ52QKie8feSGbH6eOoDHoQ1sxiJrEQCxgXg==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790276354;
+	b=HSw6fmVjDesX+sq5jvteogfb6O4u0rUBsbDJXsvweGpTP8YX0md/xcysdqe6SrnXPytn
+	 orv0A4Z1knCIjPNRdl79Hf8dEBfrk2DqMQwL3ibrkETETYJbzbDoZxN9P0zzy4NxUZ9si
+	 RUMbWGYvkrRmUiIWiL5o6Y69SK1u61yHo83Ac0j+YiuejLN/PMyo5Je6fSBwah+hYNgDh
+	 xXVQPvkMOyDbTOn3dezNurRweUABT3YFUdf/WbxD1F6FEbhyDxPeukNxhMnDYTqyC1dpk
+	 hce7lq4CpdGryHvT+Fsyg3XzNdMRQ4G1tJENQGGWV4G50OG3gTCzllfAdoxE/pNsugw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1790276352;
+	c=relaxed/relaxed; t=1790276354;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,75 +30,75 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
 	 Sender;
-	bh=Ab0xIACzrAYBDz16c28dcO4QPmT9gFaUljbpvkT6pqc=;
-	b=EGrJiwWH7ndeTh/TFstSlT0cJ3kR7nS219GnhW4QINvRZ7z+Rmhvp7mDULZgU4WaAicn
-	 iNLgshu6z4IANPNI/k4m8HfpnUB2xzfhao5TWAc1PTA+H/eyQ+lubhWz7cFtM+m6BG0Jz
-	 Wvn/0TLchDA+e5e0bgy3/4LL0+2VC6JvC/lgpOL9O1w9V5FiJi/S4T8J4BI+QPtgaZRCi
-	 XddznwCP1M67xgtWPwqcGwBszC7iyvJpG1Eo/NQGND3xqTw27F4YaDsvy+Byzlm3aJdac
-	 Z0AixWxwcH9OF2yFU7gb/lTO5hKqc0EpjNDfOR1nT1w44cntyXcdhGKUGmDhZuTfiMw==
+	bh=O46nM4/Ur5JwfcrluUejs0lTE9qLX6d6BHgAfhVGqdQ=;
+	b=DGdnmj/XoFpxXyl/tRgUWrvipWfh5DZDzLx1b2CQFKvKW0WO4XbfLMi0ITOMi8d7/o9q
+	 fQCIKCXEVc5vsUFLjPFx/Hh57/vraW9LwEYkAfFQZoNs4FpkN0Sg5nWApVTYteaCUxITg
+	 rb9Nm6FSLfFjT7i5cqPv6sd+ZkoONAg98+hvScVkhMLDsEdJF6QXzFfoEKooy0XHcqU96
+	 IR/f4up1VvxzSItSuaCor3Bqchx03YMTfjzvXJ2k/0bY88tXe2tv13wKVo+160QLA52AQ
+	 x8S9ea0L7ltVO2hHfHrwbao8ydK579k0zEeLlQDfD+KpcLVwtPhrpFcjD+emoUVVt+w==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1790276352;
-	bh=Ab0xIACzrAYBDz16c28dcO4QPmT9gFaUljbpvkT6pqc=;
+	s=default; t=1790276354;
+	bh=O46nM4/Ur5JwfcrluUejs0lTE9qLX6d6BHgAfhVGqdQ=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Ebddm0QaUr3FigZkhkoFDzzupHfE3u+pNcHU7Ljdo+Kh3I8By8OkG0z+B7Vc5ysjY
-	 sFF4UHL3gm6DpoyxVmEtk2AX2QTSukvt465F+eWhgbaz4yfvKoUrhGf0+logN0n+F5
-	 X5kaOXbwK0Lwxm10vYqdCafhO3OdtoSsFlHzCQ14m2ZLZF4Tx8vz5VooKtlUbMcczE
-	 1YbVQAtaEVw5/p5Jk9vhLSLyuxpejysEQCZ3ohAhMV4PZUL6jEPPSCPCRoT7GYg6O5
-	 0xkFAP06lldEXmq1Fm67H+h7BzHHGp3QTeAbWInzYbWJk5snMYwZyZvv2PE1Qy667g
-	 nMqMfQlr+cCpQ==
+	b=pjp/3trEQsVje9H9cTAtwyL+lHUh1RQw5pKYYJCkLxw4aFRnGgeastdWBoppAdECE
+	 pW81V+1Uo9JISxTmAVwjOvLEvr3NPF0KJsEgOCUxjdBbvfiRY942pIJ+ZIUmgkiabr
+	 CN2mybHc5tpA8f1NUkLeLtnODlMwsOq93MKdLC5ajzv8EP6c8TkdvdUTMPJi3acfzi
+	 44G69vJ8UgHxiUwqi6BNlwgkNLABId8Rlv4dLgMNG6zzKRaNCS+3jiL+XLBZEkNANk
+	 znWaIWH47zcvzALvuURliwrwuIeHKPaAobvDS8gHDb3kJdFdom+beeEjVFt2mHu16F
+	 zrYC9lolzLmFQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B04DC40D94;
-	Thu, 24 Sep 2026 18:59:12 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 79A96328
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4EE3F410F8;
+	Thu, 24 Sep 2026 18:59:14 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 84BBE392
  for <buildroot@buildroot.org>; Thu, 24 Sep 2026 18:56:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6AFA0404CD
+ by smtp1.osuosl.org (Postfix) with ESMTP id 67E0B81244
  for <buildroot@buildroot.org>; Thu, 24 Sep 2026 18:56:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5PwEeWjWy8xU for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VcBDb7J28_ic for <buildroot@buildroot.org>;
  Thu, 24 Sep 2026 18:56:52 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org 4B290404B1
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 247C981218
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790276212;
- b=p/ZWvqJbA+JRQrZT56pjoG5/zzkoMiJ6DgszdiIKaZvgtpNv2zqfGPVmdz9iC7+t4TAq
- o/9883ySRnpfcMyVpMP1dkPK0m7ZvysPRhiNPlcUrfSShRx2QzPozJb+8/h9sq6uTPN1k
- KbbePL7p4yTSebQ052vT3leNQFgZtPmjC3ylqAixjWs/anw0BpQKFQdQf4I6sjVNUFatw
- fIh0Q/6HqBgw+nVp1BqK89FSsnHKOLVJmc764Kp9SWknnd8/J/YddyRzwoASzqqCoP3Fb
- NAG9S0AE62bbWoWS4s5ipVDl/mKW+LtSLcxwjkWpoNd2cQV8o1VY8yZ3Z8a8Usp8ROw==
+ b=ZIHJOYcWjGeTKP1pMjVTac9iK3p1UyTbMMwYA3JMPEdmYXk5lBcBgbrj8GVSQWMdpKa5
+ IWVZP0i2KSjgQaIg4cehCguPaiq7iA7X3FneQR0H8FTy1vwQwRWVTNH8hi4z1aJzgY0q1
+ baYybz63G7uGa5Wq4CT+3RbZThBkfrMQta4XGwmNDbLtx2Bd20c7QrN05Ock0X1Loy5Z/
+ O6NByGekrXvq6I6pCn2/rcu8QX401r2n6LHvHKv7si69DmT+6guIOdewBFCyU1PmdLavU
+ /kDpc38CP3bvwXE4+nXTyWzOQwOvhyfGnUVA+eIRb11VPaGZjVCgaVH2EUMgRTR7taw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1790276212;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=d13JBpOZBsnAGLxfySSd/2SIUjjJnwjrvkjfbjAfyUU=;
- b=U9XS7tNYxcdTcptuMNFlcV+dY0BAtUmjvp2P/WwG3XZz2j4EoU66QpOIoZkVclEOpY//
- xyyk4PKZtLuaVnlb3fSqia6uphE20vs0r/5n12K0XWQkUN1S5wQ8itty5slo4HMJIVOGb
- oXmNH/95FQ+7MQL2SSzbgHFTS+3k/Gsd5xEaA3EZ47MTqeFf719dkVWhoyCWhNG32imsi
- izLZLW+BOekvKk6bsHepHHuwwh0b/gEl66yhyuCKqFofNspSIUPlZ7tod9A9Pu9Q2Harb
- /gXW/v9oE3Fqp3UUh8OuQ6UYVVYQSihJa/nrfz/qfEUaQUL/AS7Nitpl9awXnBAG4lg==
-ARC-Authentication-Results: i=1; smtp2.osuosl.org;
+ bh=LTup4E4OJ2pkAKTqGb/7YwIeAqwBIQNFn9hCfHwcYuQ=;
+ b=gBnynxMg/ehz5uDoBzpY3fMhkn2loQKOqBzSTzJqG9LAsD+4dzvQH/KxNqHfMamDgedb
+ QiyIixooTW9RzzJ9yc9AalUT8YEToyv6Lsl+q2Ftr2ETwrTAKFhSHkXUzavKLp0/zGsNu
+ X5+PdvuSsLBcCmUcdeYVFncnaqe43/qFHrhy9AYc5WO8abwQp4Twctm+0aKG0koQlNj0n
+ B/aTQH4z22wk6bjD6agT7fZ5gWIiQvsAYVQbexW8RQQ7GQ3Aq6QuruRbyCRIvVz7Ih0+/
+ Ajx9399usiMsgNvft91XPu+Qkg1gfAWWEEWD+3MHNWJWxQiTduMLJGRIbOmTbMOj8Bg==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org;
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4B290404B1
+ by smtp1.osuosl.org (Postfix) with ESMTP id 247C981218
  for <buildroot@buildroot.org>; Thu, 24 Sep 2026 18:56:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E285594AA9; Thu, 24 Sep 2026 18:55:41 +0000 (UTC)
+ id AFA6C8F0CF; Thu, 24 Sep 2026 18:55:41 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 23 Sep 2026 18:15:42 +0200
+Date: Wed, 23 Sep 2026 18:14:28 +0200
 X-Git-Refname: refs/heads/2026.08.x
-X-Git-Oldrev: 0f4211f335804c0a471504c9e93e02be7cf455eb
-X-Git-Newrev: ebce679ef608828f5576efdbc3397ecb25d30f6c
+X-Git-Oldrev: 93123f25f3da4db2200146e65e608ad525288893
+X-Git-Newrev: bd2a3cc2b027c06a05e718cae16c66ea2ca24665
 X-Patchwork-Hint: ignore
-Message-Id: <20260924185541.E285594AA9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.08.x] package/exim: bump
- version to 4.100
+Message-Id: <20260924185541.AFA6C8F0CF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.08.x] package/bind: security
+ bump version to 9.20.29
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,212 +114,104 @@ From: =?utf-8?b?UmFwaGHvv73vv71sIE3vv73vv71sb3R0ZSB2aWEgYnVpbGRyb290?=
  <buildroot@buildroot.org>
 Reply-To: Raphaël Mélotte <raphael.melotte@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5572494663863664198=="
+Content-Type: multipart/mixed; boundary="===============8717812032688767823=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5572494663863664198==
+--===============8717812032688767823==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/ebce679ef608828f5576efdbc3397ecb25d30f6c
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/bd2a3cc2b027c06a05e718cae16c66ea2ca24665
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.08.x
 
-https://lists.exim.org/lurker/message/20260820.154633.91995f73.en.html
+https://downloads.isc.org/isc/bind9/9.20.29/doc/arm/html/notes.html#notes-for-bind-9-20-28
+"The BIND 9.20.28 release was withdrawn after the discovery of a
+ regression in it during pre-release testing."
 
-Rebased patch 0001.
+https://downloads.isc.org/isc/bind9/9.20.29/doc/arm/html/notes.html#notes-for-bind-9-20-29
+https://downloads.isc.org/isc/bind9/9.20.29/doc/arm/html/changelog.html
+https://seclists.org/oss-sec/2026/q3/801
 
-Updated patch 0005, the previous version was applied upstream with
-commit 497e9eb7e77ad27ae1d45281e23eefadfaa7a3bc but it did not fix all
-linker errors so we sent a new patch upstream which replaces the
-previous patch.
+Fixes CVE-2026-19033, CVE-2026-19662, CVE-2026-19666, CVE-2026-19667,
+CVE-2026-19668, CVE-2026-19941, CVE-2026-75029, CVE-2026-76163,
+CVE-2026-77119, CVE-2026-77692, CVE-2026-78301, CVE-2026-80274,
+CVE-2026-81563 & CVE-2026-81736.
 
-Updated hash of GPL-2.0 license file (address, name of president and
-typos), a commit can not be provided from the source tree.
+Raise the minimum gcc version to 8 to fix a build error found by the
+Gitlab pipelines which would be introduced by this bump due to upstream
+commit:
+https://gitlab.isc.org/isc-projects/bind9/-/commit/a891e7423379e69340e5004a753dc121320ef244
+
+opensslrsa_link.c:53:51: error: initializer element is not constant
+ static const unsigned int rsa_max_modulus_bytes = (rsa_max_modulus_bits + 7) /
+
+make[1]: *** [package/pkg-generic.mk:273:
+ /builds/bkuhls/buildroot/br-test-pkg/bootlin-aarch64-glibc-old/build/bind-9.20.29/.stamp_built]
+ Error 2
+
+According to https://stackoverflow.com/a/67000730 the code needs gcc 8.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 8b009489f53147e652d2c197a1f814daacd33385)
+(cherry picked from commit 6c781be5062dacab1e1e943df9f2887eef351782)
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
- .../exim/0001-Build-buildconfig-for-the-host.patch |   5 +-
- ...5-Fix-cross-compile-by-adding-LD-variable.patch | 106 +++++----------------
- package/exim/exim.hash                             |   6 +-
- package/exim/exim.mk                               |   2 +-
- 4 files changed, 31 insertions(+), 88 deletions(-)
+ package/bind/Config.in | 6 +++---
+ package/bind/bind.hash | 4 ++--
+ package/bind/bind.mk   | 2 +-
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/exim/0001-Build-buildconfig-for-the-host.patch b/package/exim/0001-Build-buildconfig-for-the-host.patch
-index 6f4351a50f..2f2e23c1a1 100644
---- a/package/exim/0001-Build-buildconfig-for-the-host.patch
-+++ b/package/exim/0001-Build-buildconfig-for-the-host.patch
-@@ -2,7 +2,7 @@ buildconfig is meant to be executed on the host, so it has to be compiled
- using $(HOSTCC), not $(CC).
+diff --git a/package/bind/Config.in b/package/bind/Config.in
+index 4eb024b260..7e691a35ca 100644
+--- a/package/bind/Config.in
++++ b/package/bind/Config.in
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_BIND
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # libuv
+ 	depends on BR2_INSTALL_LIBSTDCPP # liburcu
+ 	depends on !BR2_STATIC_LIBS # libuv
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libuv
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8
+ 	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS # liburcu
+ 	select BR2_PACKAGE_LIBCAP
+ 	select BR2_PACKAGE_LIBURCU
+@@ -48,9 +48,9 @@ config BR2_PACKAGE_BIND_TOOLS
  
- Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
--[Bernd: rebased for version 4.99]
-+[Bernd: rebased for version 4.100]
- Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
- ---
-  OS/Makefile-Base |    4 ++--
-@@ -22,4 +22,5 @@ index 29a6ad3..420ba60 100644
- +	$(FE)$(HOSTCC) $(HOSTCFLAGS) $(INCLUDE) -o buildconfig buildconfig.c
-  
-  
-- util_deps: config ../src/utils/msgid.frag
-+ UTIL_DEPS = $(CONFIG_DEPS) ../src/utils/msgid.frag
-+
-diff --git a/package/exim/0005-Fix-cross-compile-by-adding-LD-variable.patch b/package/exim/0005-Fix-cross-compile-by-adding-LD-variable.patch
-index 99bf5ce667..51383329fd 100644
---- a/package/exim/0005-Fix-cross-compile-by-adding-LD-variable.patch
-+++ b/package/exim/0005-Fix-cross-compile-by-adding-LD-variable.patch
-@@ -1,95 +1,37 @@
--From a47de397eb1f28356086f315a443c288599d8657 Mon Sep 17 00:00:00 2001
-+From cb7d04db69623673e606a3249bc7de1330c8f0b6 Mon Sep 17 00:00:00 2001
- From: Bernd Kuhls <bernd@kuhls.net>
--Date: Sat, 1 Nov 2025 17:00:52 +0100
-+Date: Fri, 4 Sep 2026 18:43:42 +0200
- Subject: [PATCH] Fix cross-compile by adding LD variable
+ endif
  
--Fixes cross-build error due to commit
--a449ff8ca50e6df5faee2f1e83e1198c27738dfc.
-+Upstream: https://code.exim.org/exim/exim/pulls/3244
- 
--Hard-coding "ld" when cross-compiling is a bad idea.
--
--Upstream: https://github.com/Exim/exim/pull/98
- Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
- ---
-- src/OS/Makefile-Base      | 10 +++++-----
-- src/OS/Makefile-Default   |  1 +
-- src/src/miscmods/Makefile |  2 +-
-- 3 files changed, 7 insertions(+), 6 deletions(-)
-+ src/miscmods/Makefile | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
- 
--diff --git a/OS/Makefile-Base b/OS/Makefile-Base
--index 5a15b0a6b..0250647f0 100644
----- a/OS/Makefile-Base
--+++ b/OS/Makefile-Base
--@@ -1065,7 +1065,7 @@ dynmodules: buildlookups buildrouters buildtransports buildauths \
-- buildlookups: config
-- 	 @cd lookups && $(MAKE) SHELL=$(SHELL) AR="$(AR)" $(MFLAGS) CC="$(CC)" CFLAGS="$(CFLAGS)" \
-- 	   CFLAGS_DYNAMIC="$(CFLAGS_DYNAMIC)" HDRS="../version.h $(PHDRS)" \
---	   FE="$(FE)" RANLIB="$(RANLIB)" RM_COMMAND="$(RM_COMMAND)" \
--+	   FE="$(FE)" RANLIB="$(RANLIB)" LD="$(LD)" RM_COMMAND="$(RM_COMMAND)" \
-- 	   INCLUDE="$(INCLUDE) $(IPV6_INCLUDE) $(TLS_INCLUDE) $(LOOKUP_INCLUDE)"
-- 	 @echo " "
-- 
--@@ -1074,7 +1074,7 @@ buildlookups: config
-- buildrouters: config
-- 	 @cd routers && $(MAKE) SHELL=$(SHELL) AR="$(AR)" $(MFLAGS) CC="$(CC)" CFLAGS="$(CFLAGS)" \
-- 	   CFLAGS_DYNAMIC="$(CFLAGS_DYNAMIC)" \
---	   FE="$(FE)" RANLIB="$(RANLIB)" RM_COMMAND="$(RM_COMMAND)" HDRS="$(PHDRS)" \
--+	   FE="$(FE)" RANLIB="$(RANLIB)" LD="$(LD)" RM_COMMAND="$(RM_COMMAND)" HDRS="$(PHDRS)" \
-- 	   INCLUDE="$(INCLUDE) $(IPV6_INCLUDE) $(TLS_INCLUDE)"
-- 	 @echo " "
-- 
--@@ -1083,7 +1083,7 @@ buildrouters: config
-- buildtransports: config
-- 	 @cd transports && $(MAKE) SHELL=$(SHELL) AR="$(AR)" $(MFLAGS) CC="$(CC)" CFLAGS="$(CFLAGS)" \
-- 	   CFLAGS_DYNAMIC="$(CFLAGS_DYNAMIC)" \
---	   FE="$(FE)" RANLIB="$(RANLIB)" RM_COMMAND="$(RM_COMMAND)" HDRS="$(PHDRS)" \
--+	   FE="$(FE)" RANLIB="$(RANLIB)" LD="$(LD)" RM_COMMAND="$(RM_COMMAND)" HDRS="$(PHDRS)" \
-- 	   INCLUDE="$(INCLUDE) $(IPV6_INCLUDE) $(TLS_INCLUDE)"
-- 	 @echo " "
-- 
--@@ -1092,7 +1092,7 @@ buildtransports: config
-- buildauths: config
-- 	 @cd auths && $(MAKE) SHELL=$(SHELL) AR="$(AR)" $(MFLAGS) CC="$(CC)" CFLAGS="$(CFLAGS)" \
-- 	   CFLAGS_DYNAMIC="$(CFLAGS_DYNAMIC)" \
---	   FE="$(FE)" RANLIB="$(RANLIB)" RM_COMMAND="$(RM_COMMAND)" HDRS="$(PHDRS)" \
--+	   FE="$(FE)" RANLIB="$(RANLIB)" LD="$(LD)" RM_COMMAND="$(RM_COMMAND)" HDRS="$(PHDRS)" \
-- 	   INCLUDE="$(INCLUDE) $(IPV6_INCLUDE) $(TLS_INCLUDE)"
-- 	 @echo " "
-- 
--@@ -1101,7 +1101,7 @@ buildmisc: config
-- 	   CC="$(CC)" CFLAGS="$(CFLAGS)" \
-- 	     CFLAGS_DYNAMIC="$(CFLAGS_DYNAMIC)" \
-- 	     LDFLAGS_PARTIAL="$(LDFLAGS_PARTIAL)" HDRS="../version.h $(PHDRS)" \
---	     FE="$(FE)" RANLIB="$(RANLIB)" RM_COMMAND="$(RM_COMMAND)" \
--+	     FE="$(FE)" RANLIB="$(RANLIB)" LD="$(LD)" RM_COMMAND="$(RM_COMMAND)" \
-- 	     PERL_CC="$(PERL_CC)" PERL_CCOPTS="$(PERL_CCOPTS)" \
-- 	     PERL_CFLAGS="$(PERL_CFLAGS)" PERL_LFLAGS="$(PERL_LFLAGS)" \
-- 	     INCLUDE="$(INCLUDE) $(IPV6_INCLUDE)" TLS_INCLUDE="$(TLS_INCLUDE)"
--diff --git a/OS/Makefile-Default b/OS/Makefile-Default
--index 858361bf3..c469c7f01 100644
----- a/OS/Makefile-Default
--+++ b/OS/Makefile-Default
--@@ -227,6 +227,7 @@ HOSTNAME_COMMAND=/bin/hostname
-- 
-- RANLIB=ranlib
-- 
--+LD=ld
-- 
-- # EXIM_CHMOD is available to specify a command that is automatically applied
-- # to the Exim binary immediately it is compiled. (I find this useful when
- diff --git a/src/miscmods/Makefile b/src/miscmods/Makefile
--index 1e46d4456..cfae5aac2 100644
-+index 807d6f377..5bac23a7f 100644
- --- a/src/miscmods/Makefile
- +++ b/src/miscmods/Makefile
--@@ -62,7 +62,7 @@ dkim.o:
-- 	$(FE)$(CC) -c $(CFLAGS) $(INCLUDE) pdkim.c
-- 	$(FE)$(CC) -c $(CFLAGS) $(INCLUDE) $(TLS_INCLUDE) signing.c
-- 	$(FE)mv dkim.o dkim_tmp.o
---	$(FE)ld -r -o dkim.o $(LDFLAGS_PARTIAL) \
--+	$(FE)$(LD) -r -o dkim.o $(LDFLAGS_PARTIAL) \
-- 		dkim_tmp.o dkim_transport.o pdkim.o signing.o
-- 
-- # Similarly, we want a single .so for the dynamic-load module
-+@@ -96,7 +96,7 @@ dmarc.o dmarc_native.o:
-+ 	$(FE)$(CC) -c $(CFLAGS) $(INCLUDE) $*.c
-+ 	$(FE)$(CC) -c $(CFLAGS) $(INCLUDE) dmarc_common.c
-+ 	$(FE)mv $@ dmarc_tmp.o
-+-	$(FE)ld -r -o $@ $(LDFLAGS_PARTIAL) dmarc_tmp.o dmarc_common.o
-++	$(FE)$(LD) -r -o $@ $(LDFLAGS_PARTIAL) dmarc_tmp.o dmarc_common.o
-+ 
-+ # dmarc_native is special in the same way as spf_perl
-+ dmarc.so dmarc_native.so:
-+@@ -112,7 +112,7 @@ sieve_filter.o:
-+ 	$(FE)$(CC) -c $(CFLAGS) $(INCLUDE) sieve_filter_body.c
-+ 	$(FE)$(CC) -c $(CFLAGS) $(INCLUDE) sieve_filter_input.c
-+ 	$(FE)mv sieve_filter.o sieve_filter_tmp.o
-+-	$(FE)ld -r -o sieve_filter.o $(LDFLAGS_PARTIAL) \
-++	$(FE)$(LD) -r -o sieve_filter.o $(LDFLAGS_PARTIAL) \
-+ 		sieve_filter_tmp.o sieve_filter_body.o sieve_filter_input.o
-+ 
-+ sieve_filter.so:
- -- 
- 2.47.3
- 
-diff --git a/package/exim/exim.hash b/package/exim/exim.hash
-index 4cdedb724d..c075b2fe96 100644
---- a/package/exim/exim.hash
-+++ b/package/exim/exim.hash
-@@ -1,6 +1,6 @@
- # From https://ftp.exim.org/pub/exim/exim4/00-sha256sums.txt
--sha256  c2d2f80adc7c71d424fd82a46655eaa2d7d9b4ca2e77883eba9076947b7ee627  exim-4.99.5.tar.xz
-+sha256  5bd0a3e353dbfcd5c8174388b824316a61ee2455d9052ea2f0877dee939d33b3  exim-4.100.tar.xz
- # From https://ftp.exim.org/pub/exim/exim4/00-sha512sums.txt
--sha512  28fd15d0d4e0114129fd42140fb5d5920fcd5cbfb6ac816197e3567c3d2ece6ec73367b43bd8d47d2b543adb89ad28a5e4c58a23210887f867a5c41c24e181b5  exim-4.99.5.tar.xz
-+sha512  e7f2cc1ba9af4b1113d9a40b384bf2e5439f539381126018fb9a15d3afaf687fd209d06d1cfa96e61426df0d9f4e7988e49e1192510abc02b2aa19b14b051abc  exim-4.100.tar.xz
- # Locally calculated
--sha256  49240db527b7e55b312a46fc59794fde5dd006422e422257f4f057bfd27b3c8f  LICENCE
-+sha256  edaef632cbb643e4e7a221717a6c441a4c1a7c918e6e4d56debc3d8739b233f6  LICENCE
-diff --git a/package/exim/exim.mk b/package/exim/exim.mk
-index 482c7ca2c1..a8395a2309 100644
---- a/package/exim/exim.mk
-+++ b/package/exim/exim.mk
+-comment "bind needs a toolchain w/ NPTL, dynamic library, C++, gcc >= 4.9"
++comment "bind needs a toolchain w/ NPTL, dynamic library, C++, gcc >= 8"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS \
+-		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
++		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_8
+diff --git a/package/bind/bind.hash b/package/bind/bind.hash
+index 2131f51978..8129fa2d2b 100644
+--- a/package/bind/bind.hash
++++ b/package/bind/bind.hash
+@@ -1,4 +1,4 @@
+-# Verified from https://ftp.isc.org/isc/bind9/9.20.27/bind-9.20.27.tar.xz.asc
++# Verified from https://ftp.isc.org/isc/bind9/9.20.27/bind-9.20.29.tar.xz.asc
+ # with key 706B6C28620E76F91D11F7DF510A642A06C52CEC
+-sha256  145ab7a50b33a06d9d488b5e668c887e754f42acf8954e2b5dc7e238b080e4a0  bind-9.20.27.tar.xz
++sha256  587029508b3b1b43229fae416c97e5543aba45809cefaca98a5004a02a5736c1  bind-9.20.29.tar.xz
+ sha256  9734825d67a3ac967b2c2f7c9a83c9e5db1c2474dbe9599157c3a4188749ebd4  COPYRIGHT
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index 2b42e87d62..a05ef6c362 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--EXIM_VERSION = 4.99.5
-+EXIM_VERSION = 4.100
- EXIM_SOURCE = exim-$(EXIM_VERSION).tar.xz
- EXIM_SITE = https://ftp.exim.org/pub/exim/exim4
- EXIM_LICENSE = GPL-2.0+
+-BIND_VERSION = 9.20.27
++BIND_VERSION = 9.20.29
+ BIND_SOURCE= bind-$(BIND_VERSION).tar.xz
+ BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ BIND_INSTALL_STAGING = YES
 
---===============5572494663863664198==
+--===============8717812032688767823==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -330,4 +222,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============5572494663863664198==--
+--===============8717812032688767823==--
