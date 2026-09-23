@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31576C98318
-	for <buildroot@archiver.kernel.org>; Thu, 24 Sep 2026 18:59:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88F7BC98324
+	for <buildroot@archiver.kernel.org>; Thu, 24 Sep 2026 18:59:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EE704813EC;
-	Thu, 24 Sep 2026 18:59:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 53E78410FE;
+	Thu, 24 Sep 2026 18:59:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Hf6RfLwD0Vm8; Thu, 24 Sep 2026 18:59:07 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org F1C6B813FE
-Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790276347;
-	b=gN2FZDmImnmISsMMkDBjBRknRn7XUDXCmRL3848Etjc6x9QrpaXKDtbQqe1aWjP7kFSf
-	 Rmu+cwmayf3ASPH9sL52rmI8IvvmQrT/YAYe6/JSBIGtbfutJpiMEDdbHbIAlooRVbgI8
-	 n1RpqI17pLx/5xWKqenHWlpIhI13QcR02y6V4RniHu8v/2utsRhwKhX64vy96arFsoTxp
-	 S5T+2E3K8drSiZXFu5HdJMnxTM43A0qu7l6db5/Yfm6RaO3gU2RPU4UKzmFN28YBe8WSk
-	 r6M/yCZaaTYZPcPPUkqU7JAQr06ILltW1TKOsjzt4G99Uk5TktbaJ1kiRLOZ79MPZCw==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0oRWRoElcQOc; Thu, 24 Sep 2026 18:59:08 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 46DF0410F0
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790276348;
+	b=AS+ubb24DnqxeJOufouTr8+Xn2fH5oOmt1LaZXMFjR07WbJViQt/GONLRc13wjx3RqIe
+	 RIi7WLfV8xJ7JuioWXZZG49S+yuo4AkvREeTFlB0NOh5PWWuGiZlq7ow+vXts7GU0Yaiy
+	 cediLWnrt34TPIf38HfcWs/CvLbI0rhzPn+6W6msofE4VqL5NXm5tIJoy+pIs2yo/Pl+B
+	 2nsIylC3F7NFiQDAmnFKmkurGtl0AN4f6YZ9n5xLLrIWGeL3YYdklVTNGFesyqxaMrMoT
+	 Th97wtEgRflxkenPNkMQ/4WW33ga+zesQotXECV1ptLHHZ/W70mM9V3k9rInZA8Giow==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1790276347;
+	c=relaxed/relaxed; t=1790276348;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,75 +30,75 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
 	 Sender;
-	bh=YzvBlzP9Mxxrv1CfUWjlNU2c3rCm8UsQ2lnQ8kDEFPM=;
-	b=LWntCrB3jamVXUlC4sPb8Zdfwhr+22+cZcWbgZoKig109ce49UR48PtxSfS25+7TYF61
-	 LbY3n4c0mm9BQAWg5lAo4PrVYiqNr+KTponpFVw3C7cZjBrD8StraBeqGR2Xb3rl9c5CY
-	 pCHV4UGWZFNvtKodLSQt51B2DHe8oLZG2r0GmHymRxWHUl/9E2auTx+MKU8oidH0OODfJ
-	 DqtfuXL9RUKNlFrQpwTAR/KAPE/Y94Obp3oR2zlDctpFzdgnXWORFzX8QilP4hxNZky05
-	 rw6iGW5g/9q2p7ZiSlbFJcl2r8Vmy00OlilNrSg17rqvdOHWdXzPeeK8l/Q7WmaVjig==
-ARC-Authentication-Results: i=2; smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	bh=PDvgj4GIl0g1Cth3SaOr70JXLTyUlVYYMK4/7JjEQcg=;
+	b=J9K8Fh1LNm6Qo7Mfvvv7PJGTSggivfNAsHG/GxwLxtq2hEmjh+v1ojzUMIB233oZaz8r
+	 u1Ul56kVx7P+NNTvbO6n1Mj9fBxzcn1+pHugMgdg+DFaJO2QeLxhKQxHxeqI5+Pq0Cvfh
+	 ajqSwMgKhb3tYhELOSPriFp9/bdkHCxep0dJ9cXxwL6lyoJWlfeAhisCWW8ZeBbcXMsX2
+	 sENF/XROSyTk/2e8QY+rOMQ/+yJ84v7nrsTF0rmcZLkyXj6K4zHllj3zSE0i+WT4txQix
+	 zEQGCDjZTxVj7vpXjFntRzn8KRisRu6uo8MtKtzSLoZQaWUYKJMJy3KE7YvmrK6c5ZQ==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1790276347;
-	bh=YzvBlzP9Mxxrv1CfUWjlNU2c3rCm8UsQ2lnQ8kDEFPM=;
+	s=default; t=1790276348;
+	bh=PDvgj4GIl0g1Cth3SaOr70JXLTyUlVYYMK4/7JjEQcg=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=MReRWpyaCrB5wC95SCLG4U+Jx1p8X7R4PzXccscmSA+NNJ9Tovbm8UXzCma/K/gVV
-	 M5giNmyXe4/uaTb1Kz7+RfuQsPNRS+Lb3MZJAoGIZ8pDRIZyE17vnAe2eP7Rkl2if0
-	 5ymu0jkz6tE6D94Ggs564r4l9yFG55J3o/KLDsWI5b+lGLb3V/wOjRxuw19pWEgihI
-	 5DOq7Xped83yE0OdlQuKhZpCrvYyVQd8KOJ7C4EbjZRnRRMRLzyoSV7Y1RLT2aL675
-	 fKHTrcrrgp2WgnN8OVIcdpLOc8vJwuYDiJgWYV190eiPUdOpDEVNfcxm03EMpbvn0v
-	 Rx1YeGNcLYPBQ==
+	b=QmerP4Q3fTMYFMr9J6YZh+sB/HR6OQ2/ulJZCZzVA6Du2FLVCYl0kXg4yyp/tqWKl
+	 zH6uJjesN9fXyx5sRdWtFQmoTlJ4kVwlhthBJ+QJWpE83nGC5sLP3AmDStllEj9bd1
+	 85YO+W3hpa2VUUXmBt7TWPJc5LyXbkuxyk31UyRNJ4yTjku+VGsRBxeq9NYMzrqp+N
+	 7jdOBCBkpzwIlc1Dpzmw1HZECrW7Sn7Zgb7zMU6mYJoWbFpTw8q9Iir90h9xBgF9od
+	 fJ27af7OBkGZvvle1SxMjdEgEQ+QCYaPOSqd80D08wIFu1Qte49htQ3QYBOPp9dYrV
+	 xyL0Hy6Zfhp3w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F1C6B813FE;
-	Thu, 24 Sep 2026 18:59:06 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id E49E7332
- for <buildroot@buildroot.org>; Thu, 24 Sep 2026 18:56:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 46DF0410F0;
+	Thu, 24 Sep 2026 18:59:08 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 34305332
+ for <buildroot@buildroot.org>; Thu, 24 Sep 2026 18:56:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C89DC8121E
- for <buildroot@buildroot.org>; Thu, 24 Sep 2026 18:56:52 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1A9BE60BBA
+ for <buildroot@buildroot.org>; Thu, 24 Sep 2026 18:56:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UgTG8gsih8zc for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YwCIjDGpO1Vg for <buildroot@buildroot.org>;
  Thu, 24 Sep 2026 18:56:52 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org F39E181235
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 47D1360847
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790276212;
- b=Q4MqWu0oC7dRHPqau9huInJ1or3K5UGT+w0qQEtXVEFgRWH6VqFEzvxHiHbvFdX8vOHK
- EFifzL+rtg5qKvHkgDWmvYe2Zj0HK/QfnDN4wRxtuTNVfN8SaPghauFHH/hrr38i1nJj1
- j9oWQgyqxiMWKHz3vm0dPXxxOR2smJ2mFYUxGuJZtUXfGg53zpkG69l5v/WiKsKWpOO/8
- YP3XQiMr/EYAO1Z725aF9m9L6cCrI3YjY5XRBz/2z+GXF12gTW8AusNmVwW/sCRo7muYq
- JLVOpjzzkAxcPgYSIckAeS5oxV91kChDuSMFFjrRgy1zGEhM7CUcVgXVRewQOc+INlQ==
+ b=ncFMW9Hf0elzTYoFOIHD4oCH0faRcDZX7jt51k4r4yZfs1KRM6TVczqp01RDAsOy8J9u
+ Aq+Hc3YsqT0YOFeM7qwW9lvU/csoJP92LUdUD99atQxzsirkoDzFRXqeU56smxQZOeRGR
+ SYoqdcXQfqsz8LleiHrkhXvhFyRh3R6t32mzAhwaIP4BzQFB12BRptYdJYBhR6ojpDBza
+ GNpzbpIiWqnv2bsp5dL29Uhm1aVhYFU6Az6XF+2In31kMIvup0aWQEYAknv/SgCwX3Oa8
+ xjn+a0YOmvWzWA96k+lQ4aK/TFAwi3ayvQYtrvGmqH3QfjnC58+W7mCUk3lF8Rm9B/Q==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1790276212;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=fiB7ZMMvXd9XuDGv6SoPVqFXuIE4xi8Yh9qkP0/yyeo=;
- b=Q8rzngIMmd1xs0NoKMAQPs9P4Mip4uTzMGi3B9RwO4elsHk5dqScvsdycFMM32HaTHUD
- eJ174EvlLsjv0jx107JMFd9/YtiBwizzFam2Pc5tYpUzZSpIPCTGkNtzyaBV6zVlGMu0F
- 4Cyb9sJO0otGaKc3kvh51uRDfxhCpoXUwK8SeZeCkHKKSU3FxGO1JCKUqDBLKHDifaKnA
- 71rSFVafiyf92ai9gUA30INMjfTXDSbyjMWWU0Aop6aY1Foa4kipaJPj/iGqRZKUD5Lax
- 6+duiOoE50rJgPefQdYq9WT+kHBtA3lLxN12SQdj3Me27RmFGYvem8hmg7dmkp9Pmnw==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org;
+ bh=OEeYkR7TJsTmRFxqVz3v507o1ErLuV5dyxs/G9A1i08=;
+ b=Oysi/VxjaIQetnMq2DU9uiAVfVOqxfBfKCBBRAtqdXl0HrS3bJdfnzf5ajOAKtoG+ohS
+ ftqPGi7iqIPuG8nR6OBQzE3HqSkZNVmsknFzsG4IqcbmK1ZyBeXdq8XP/v7fMKnHd1UKc
+ 4lypBAlb9D9GMfU7HPGfog7QIneA2RjUTaK5fRJ/iWlcoCKZ5ZAL/LNMpDNcupUFhmjeQ
+ px+Uh7WSWn00blI01L0IYEXF+I2DsMvg5E7QKRmk8yqRFNxazZDEV3tYFN726UHpN9rcu
+ wjPmhsckPWMZRQkFvu64xHe/NZtmM+jDDGnontNV/7/6elB2bZRwKXHC4BRpA556Tnw==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org;
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id F39E181235
- for <buildroot@buildroot.org>; Thu, 24 Sep 2026 18:56:51 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 47D1360847
+ for <buildroot@buildroot.org>; Thu, 24 Sep 2026 18:56:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 971D39832E; Thu, 24 Sep 2026 18:55:41 +0000 (UTC)
+ id D27358D5AB; Thu, 24 Sep 2026 18:55:41 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 23 Sep 2026 18:14:02 +0200
+Date: Wed, 23 Sep 2026 18:15:29 +0200
 X-Git-Refname: refs/heads/2026.08.x
-X-Git-Oldrev: 2e5b9f12fa07a186bab79973cc3a1467b966150f
-X-Git-Newrev: 93123f25f3da4db2200146e65e608ad525288893
+X-Git-Oldrev: 768e3720fc74404b41519c3ee1a3eb7d463c9c1b
+X-Git-Newrev: 0f4211f335804c0a471504c9e93e02be7cf455eb
 X-Patchwork-Hint: ignore
-Message-Id: <20260924185541.971D39832E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.08.x] package/bind: bump
- version to 9.20.27
+Message-Id: <20260924185541.D27358D5AB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.08.x] package/exim: disable
+ valgrind when building with thumb1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,54 +114,66 @@ From: =?utf-8?b?UmFwaGHvv73vv71sIE3vv73vv71sb3R0ZSB2aWEgYnVpbGRyb290?=
  <buildroot@buildroot.org>
 Reply-To: Raphaël Mélotte <raphael.melotte@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1198319804171149020=="
+Content-Type: multipart/mixed; boundary="===============5802901175467223535=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1198319804171149020==
+--===============5802901175467223535==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/93123f25f3da4db2200146e65e608ad525288893
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/0f4211f335804c0a471504c9e93e02be7cf455eb
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.08.x
 
-https://downloads.isc.org/isc/bind9/9.20.27/doc/arm/html/notes.html#notes-for-bind-9-20-27
-https://downloads.isc.org/isc/bind9/9.20.27/doc/arm/html/changelog.html
+src/valgrind.h contains inline asm not compatible with thumb1 so we
+disable valgrind support for thumb1.
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit bdd74f011f88fd1a3d7dc4c2a93a54ed7ce7286b)
+Fixes:
+https://autobuild.buildroot.org/results/720bfa00ca926a398e901366e7ab20d08cfa9a81/
+
+Inspired by buildroot commit 26013972ce568e55a121c21a55afce45bc0675e9.
+
+The oldest build error of this kind dates back to 2022
+https://autobuild.buildroot.net/results/85d/85d8e725a31bc1a3c41b2e388a17ff439274d437/
+so a backport to LTS branches should be considered.
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Tested-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 6c4abe552f34bbbaac9139a0f5ca57de10d1cbcc)
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
- package/bind/bind.hash | 4 ++--
- package/bind/bind.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/exim/exim.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-index 36ff7b2d0a..2131f51978 100644
---- a/package/bind/bind.hash
-+++ b/package/bind/bind.hash
-@@ -1,4 +1,4 @@
--# Verified from https://ftp.isc.org/isc/bind9/9.20.26/bind-9.20.26.tar.xz.asc
-+# Verified from https://ftp.isc.org/isc/bind9/9.20.27/bind-9.20.27.tar.xz.asc
- # with key 706B6C28620E76F91D11F7DF510A642A06C52CEC
--sha256  55248def0f870c4c46b3de72978ea972615131516663188a4564dca1d20bf350  bind-9.20.26.tar.xz
-+sha256  145ab7a50b33a06d9d488b5e668c887e754f42acf8954e2b5dc7e238b080e4a0  bind-9.20.27.tar.xz
- sha256  9734825d67a3ac967b2c2f7c9a83c9e5db1c2474dbe9599157c3a4188749ebd4  COPYRIGHT
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index 172bbf79b5..2b42e87d62 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/exim/exim.mk b/package/exim/exim.mk
+index 5e9746af4d..482c7ca2c1 100644
+--- a/package/exim/exim.mk
++++ b/package/exim/exim.mk
+@@ -104,6 +104,7 @@ define EXIM_CONFIGURE_TOOLCHAIN
+ 	$(call exim-config-add,HOSTCFLAGS,$(HOSTCFLAGS))
+ 	$(call exim-config-add,EXTRALIBS,$(EXIM_EXTRALIBS))
+ 	$(EXIM_FIX_IP_OPTIONS_FOR_MUSL)
++	$(EXIM_DISABLE_VALGRIND)
+ endef
  
--BIND_VERSION = 9.20.26
-+BIND_VERSION = 9.20.27
- BIND_SOURCE= bind-$(BIND_VERSION).tar.xz
- BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- BIND_INSTALL_STAGING = YES
+ ifneq ($(call qstrip,$(BR2_PACKAGE_EXIM_CUSTOM_CONFIG_FILE)),)
+@@ -154,6 +155,13 @@ else ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),)
+ EXIM_CFLAGS = -DNO_EXECINFO
+ endif
+ 
++# src/valgrind.h contains inline asm not compatible with thumb1
++ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
++define EXIM_DISABLE_VALGRIND
++	$(call exim-config-change,NVALGRIND,1)
++endef
++endif
++
+ # We need the host version of macro_predef during the build, before
+ # building it we need to prepare the makefile.
+ define EXIM_BUILD_CMDS
 
---===============1198319804171149020==
+--===============5802901175467223535==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -172,4 +184,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============1198319804171149020==--
+--===============5802901175467223535==--
