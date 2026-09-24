@@ -4,136 +4,101 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4EB9BC98317
-	for <buildroot@archiver.kernel.org>; Thu, 24 Sep 2026 13:41:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A70BC98318
+	for <buildroot@archiver.kernel.org>; Thu, 24 Sep 2026 18:29:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F2819810BA;
-	Thu, 24 Sep 2026 13:41:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7669F811E9;
+	Thu, 24 Sep 2026 18:29:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oUsSvbHmXbIU; Thu, 24 Sep 2026 13:41:16 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org C146881C46
+ id 5zafPrX13MAk; Thu, 24 Sep 2026 18:29:16 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 6109B811EA
 Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790257275;
-	b=rLES6W5JCRk9ztBIrObATr0giaQRXC0XbFwL/c2Qp68k1IQBJZAGtEqEQAV1yDNlo3CY
-	 kvPbayJVsoGalWkXt4R2inud4Uzon+Y036ug96AO1IwdYdDKEu62KPTmRI30tlH5Nt9hQ
-	 pOZBSn8NdET4vev92mspXSK28kPWAh41E5F0C5Hen1EWJ8y4N9cvxHPdhIDCcHghmwsp3
-	 10dqoS6IFVE+oMo1xx39Kcn3HyYxRwT2Ma8dJAwVjVCn90w7w5oci2sSf56rpnjumytA2
-	 9V0Xx4ZZOkVg8GvnVFK4XIkMEFgqNsytKeaN+jBFp0o5WYb6d7sCwN6Th27yEI9y82Q==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790274556;
+	b=k82TrHuLPEeIPysPzijOQMxJaBeVVzpfwDeSUOyukFUB1X4nR2Tfp6T3VTEq+deXQVYy
+	 GLkr7ALv6vaednh+yxIvifAOXtgR9ZHvPhJYAyl6evEh60klyEfdAQAgmXIe5jvGP4CyD
+	 keoc48hamOt+8rowgfO4vqxfxa5Lh59ReoaUC2lvvS94hmA1Zoa1BQj2PJ0vXhxE4OHj/
+	 a5fPRz7NwrvGivBvEGgUemFTHfXqDmYVaNeou8Mw16xkMhCPBFm8nKVAyrZh5BBPoYYsn
+	 aXes70PeNtFoarE+LljkRLHGCZ6IYPRUBldbcROEqC24c8eDBU+cq9vSh6Bk8gKJZYg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1790257275;
+	c=relaxed/relaxed; t=1790274556;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 Received:To:Date:Message-Id:X-Mailer:MIME-Version:Subject:X-BeenThere:
-	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:Content-Type:
+	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
+	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
+	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
+	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=E3lgJqDZsoZCb6jL420W6tsqbHeSG2QxH9oYsolJgbs=;
-	b=iLpKL4BbjLwRiTTD23pzxpP+W9GN1YwBK8JH7Zs3TA6GoZqVSBS3BkHB8poC7snDPYwu
-	 tiLl0pjHfzxXRCQBR8bz3/SJKv+Wx6vI3BouhdZJ2dSUrniylylkC1O4UI+n08qFYseqI
-	 OeTVdO5M8HRBXvvb3eVHDXQG/Jh03Y3q3RUkVVsIcUcF8zN/4NFVm9TpJ3rwnSb4YLqj4
-	 ZJU4YxGxvCtflwdvxutCP0Ajuztz3BDtjGhoPQfhRYxe10y14aCQpSeoGq+GBZecMDdLI
-	 7J4qOAHBvPRsox3L6zMKve03MO22BneIKg8CGleBynfWKukX/Bx1dqGlZT2q8TWkuAQ==
+	bh=83wNe3B6wMLFknbkC1pesJzI79ihmJqJyS8kHn3AKXA=;
+	b=Jl0u0ln0tBB5Y179Aq7EkIT4XLsvxDe13QuOiC+pzs/lkVUd7mw/QjUal2F5wU/oHz+l
+	 kStMV4vYIPcSA7QDiGroJN8VDmwH6sGszF3qIRGMLGEdNVRch7IegTXTdME6xNMCOp8y1
+	 LyMpqdAOVBzdRlZLOIPfnJogHlICFcDhN1hL3hVWKKybUzdnra/yf7EJwJ8OjLtHDQTn0
+	 TYZL958Ls2yW2+ZhPiNOBXcVUf8w9v3UoklfNWo094Eqo7surhCBx8+TjgckyH7A8HAut
+	 JBBXpwaaa5WbtUt97st94c0kN5kHYzYwoHq3uWO5tFm1dMt9YX3SF6mwki4N0sZ+4rw==
 ARC-Authentication-Results: i=2; smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1790257275;
-	bh=E3lgJqDZsoZCb6jL420W6tsqbHeSG2QxH9oYsolJgbs=;
+	s=default; t=1790274556;
+	bh=83wNe3B6wMLFknbkC1pesJzI79ihmJqJyS8kHn3AKXA=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
-	b=C4hyJAkqjnewPou1f71/1ROdhudBd+Vk0IXWRTYOAyp721XaFP02ar1QNffR7L4c6
-	 k6QJY7hXfj/1Q2vSabD0yvOJh6wcFbPKptpvIZa1gs1qbUIkyjGJKoF6jwAOvrN3q9
-	 fgihb1YVOKrOl7vyLiplgyb8AF75lhsfBEAvQlEClrxtE7UrfgoN41UVIDw288J9xJ
-	 Fl6jB7zoaAhJnrRANu2+/IsbEoqgX4jVOe3Vs+H9ERdMXt7QWBI0/UW3RTybgai4XA
-	 BOa6Yxo3owEytWtjWot/hpBjtst4dfwEwulQG5nhmFdpekS9sUnLQ77JU/ldzeDjGJ
-	 CPzkxQp1Iq3qg==
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=NF2yO0JbjHFB5yinM3QQssb3MFcWVy5V/CBror3PeVFlDz3tGnjJISJ6sXTo+wvOd
+	 3yBoSxYoydpb5W5wml1Mr9laAyoai6mrlHeQHc+Cfi7pKO/x12KsVS/LaNKfspeNv5
+	 F+QFIe1l9uo0vHPt/pM5ZFXHewQSa0QgRojhwe0bDn9LNFiCfsdmuT5MN0hDZQzXu7
+	 PcrI+r09uFqlVGs9U6rDJr2bqlEdYM9pPzHOHGyaPBWhn9Or/IxKPCQjqFK202MvpG
+	 njW2IvXkElGDQs2l7tOejD3546QR8cVswU9WUBvmftgD8me/Jhz+tVhzcz/uioPnj3
+	 8s9rCwUrX+lSw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C146881C46;
-	Thu, 24 Sep 2026 13:41:15 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 94CC22F5
- for <buildroot@buildroot.org>; Thu, 24 Sep 2026 13:41:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6109B811EA;
+	Thu, 24 Sep 2026 18:29:16 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id DCE68332
+ for <buildroot@buildroot.org>; Thu, 24 Sep 2026 18:29:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 85F5681C46
- for <buildroot@buildroot.org>; Thu, 24 Sep 2026 13:41:14 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C2A71811EC
+ for <buildroot@buildroot.org>; Thu, 24 Sep 2026 18:29:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id waPF6z9jEkMt for <buildroot@buildroot.org>;
- Thu, 24 Sep 2026 13:41:13 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 2C27681C21
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790257273;
- b=enJoBcGooeKvIvLK2bqx9V3FG1vuF+FjbsDoOSZxYlzUcUMHBFrIPr2qc61EhXDTWaLF
- vDnDXWKDUwUhhvJqZCyLvGjVqH0xkJxcH83yYAtqf2YF3xQCHXaPrdy+copcO+/GcQ2pT
- jl+U5RJnfBnGkGxwaEqyxtAvxv+LCQQMhm9GJ+byorJsqbw/efkCy0MIDFY0fxj1iONdW
- tb7L5lMq04UXIIXY0hm7c3ERDcX+O2Ec8mntrcqrFGpDuY31Wy6COwZnGaCoBxUOqrKJe
- iMeKU3YikAjsEYOgs74KVX+3SchVtjhyqFx7GcOOvtFw71lajvltr6eq2J1/rTyT1bw==
+ id NIdSDv-CE7cF for <buildroot@buildroot.org>;
+ Thu, 24 Sep 2026 18:29:13 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 926C1811E9
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790274553;
+ b=ojM44BfhIEBx3l+uxKKB5YGFUcJbvuyHcip2WSL5cDCz8OpmaXwTZfSebXH1uAsWxxm9
+ iF1Zl/uwR0pjRFP2xVfD789TSVY7dKpIEUETEOeAfB65ZpAS9+KxrO70+RxhTPR6XKAsB
+ lP6sBqa0vN1y9k5Pwjk1jdIOctsqPVueHLbe8V9I6Tx4Vaupy1k4+N0PIEHv1Uce84EhH
+ sPpMgu6+xTBCxuxK0gZfH+Kbkf7JhIUfzeEhp1zqpHzwW8DkFMywb/Z+4VkS3xWQN2XuZ
+ LXYdkcjxf7ZnE6FI6bWO2nw+DfqfI9W2+eWWs4KjBY7R6niP8BCwrh/XR70cW2zwouQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1790257273;
- h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
- X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
- Date:Message-Id:X-Mailer:MIME-Version:Content-Transfer-Encoding;
- bh=EPDKpigdEOUg1VeDGIhZTFrKo4ChotL+Hj0mV2zTa/4=;
- b=FndXf9hZeOqpRCz+4zLrIHSSZdXb51L96tjd/5+yndR6U6y9XnptuLDJpa4zRErDoScx
- pjxNvHEx9OwikxTVn0HUzhktm9EhvpeR47m/2gBASug5p2laFzF63EBNm0wjzhczcWIDe
- Ciw7U12Gxe+xUw+LZPpAqRYeNKTeYGbrNCpwGpoN0S7o5HZvn+S8q3zYeqWaq+AYXtHjN
- EXXkigQBUajLLXJnj++lVa4w+L887OIoeWx12rdwrPCUi6+TnlCaNuRXMrB9+B+8mvKP8
- kirmtfF/FCRtMeWHJWF9hSl/VlsDMNPqbFwwDSC3JOHspz5LlTXr9o14UEIDHFDGzLg==
+ c=relaxed/relaxed; t=1790274553;
+ h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
+ X-Git-Newrev:X-Patchwork-Hint:Message-Id;
+ bh=BUHNjFOWVpXVsjCwyu1jKZWfq6hlPACaUjOt8llhJz0=;
+ b=Rr0SUN9SAkwLWjW/4ITrok2SBc+5Th6TslKmPBiQ3ln20S5epSoj3yYagjrbfxr9WwHc
+ pTKk54sQulClw7P6FygFBbj4SEhuu8QpJ14Mw1dHoyt+VcEoDSquOAUyrt7Iw6jaMRoPF
+ V0erS+avdeYBcI87LAVNDnobl2xjZDfPF4QRjvsb5XHto6PldHfZh8ciIrSgAde1vhie1
+ YQyj2fI9QANC3tvmyB/680pohp/wFG0IS6syQDyBeI+5OHsgpH6Ybb/McmbCcchG77cQL
+ OmUGoEj96qWBWgtR7oVTXPN9LL2O0a6h0Sh4uok7U5ADKHax4Fc7vhulJuwmTylPB9A==
 ARC-Authentication-Results: i=1; smtp1.osuosl.org;
- dmarc=pass header.from=googlemail.com; 
- dkim=pass header.d=googlemail.com header.i=@googlemail.com header.a=rsa-sha256
- header.s=20251104 header.b="KF/N6YrI"; 
- arc=none smtp.remote-ip="2a00:1450:4864:33::10"
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:33::10; helo=mail-ed2-x10.google.com;
- envelope-from=yegorslists@googlemail.com; receiver=<UNKNOWN> 
-Received: from mail-ed2-x10.google.com (mail-ed2-x10.google.com
- [IPv6:2a00:1450:4864:33::10])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2C27681C21
- for <buildroot@buildroot.org>; Thu, 24 Sep 2026 13:41:12 +0000 (UTC)
-Received: by mail-ed2-x10.google.com with SMTP id
- 4fb4d7f45d1cf-6a9a2b95b72so3606768a12.2
- for <buildroot@buildroot.org>; Thu, 24 Sep 2026 06:41:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1790257271; x=1790862071;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to:content-type;
- bh=EPDKpigdEOUg1VeDGIhZTFrKo4ChotL+Hj0mV2zTa/4=;
- b=x+8X1n/xfKDp2IAMtDlAhVWhpafXTAUBM9sLYH6bmZY71MsTrY171y4tukK3Mtsken
- EHhCZwicSBvuRtb55fMQ5rY4ttMxXOAMrWeAX0w/EPqKadv/OEsjrT64oNBgqAmQgGGr
- Z3lokJdU7dY2At5195sP7GU6Fz2BBVAa/+5YwxErnma321SlfA7eleKWLggbDKqoq3Pt
- isxi4JBjf4qwItTIBT+Fru0F18ywpi7uW+ci1j96NM5Nogfcpj3lMEPvJm/0tIeIemy+
- jCkyofI/19qW/GcJdyYDggDUSejbrbrUbbqeiINva7E1ko6h2iyrjpbLm1LiL0AknAGS
- qo7Q==
-X-Gm-Message-State: AFuF++lm3LKX36IcbqYwuv5xj2k2XsOSTxezzJrTiE1xfNU7yw05Y4tT
- zQOrKtSiy83jU2cJT9b97Ji3/s/u28PaXob4y3KJNG0e7S8NPl4vdAFXuBFY8g==
-X-Gm-Gg: AYBFou0u2d3Ohi1ge4ztrgDsQyqI1qCSr7eYcP2WQWtW4Mjll4CEUuGNdMtJWF22tg0
- wjRd6nMWGx5FgU0D9va1JAEsQzpcX7vI6yFGS5gvcy8aCWQe58teAF3Sy6KQ2mqAqhv6Xbj54py
- c5gSw89QT2s37xW1iZEqQBYd6G9u8X/ivBa/VtJpa/WwYBMEfeHuXCkUJhtiDn8bWRFXxabC63A
- tgfgRzl7msVZMwpn7fgmKTqPDkZKI2GrspJW6DZqkKMpHQIuFw718nBe5TGrwdv0IA181l3z23i
- Qezh9nWnZJLtalsTA7lX3IjFb7oFSqPncL1vL94TXxkUvHVcetyV0KxGpHN0eSY37nuGMri48Yo
- vVnqX/PvLGdAbWZDkFdwEAYvEYBFaYNDujS40y+mALqcreLX8eUcBVpjDOkqu5T//ochiQFtweX
- LkkLacH2BdOtRtuqvk3hzu2OmnE/jzOcahlPoi2HNIzkzrvbL+ZWy9fB6eXLMhGf3K1AWO1T3F7
- q5KSrNoki6NoThf6R06zcz0/VqxDqxZskNVJ+ogfQjBFcZi6OLSFw==
-X-Received: by 2002:a05:6402:388f:b0:6a1:7825:5230 with SMTP id
- 4fb4d7f45d1cf-6aac8f8ab9emr2304983a12.16.1790257270314; 
- Thu, 24 Sep 2026 06:41:10 -0700 (PDT)
-Received: from development2.visionsystems.local (mail.visionsystems.de.
- [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
- 4fb4d7f45d1cf-6aab386e5aasm3764988a12.9.2026.09.24.06.41.09
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 24 Sep 2026 06:41:09 -0700 (PDT)
+ arc=none smtp.remote-ip=140.211.167.122
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 926C1811E9
+ for <buildroot@buildroot.org>; Thu, 24 Sep 2026 18:29:13 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 296A69837E; Thu, 24 Sep 2026 18:28:03 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 24 Sep 2026 15:41:09 +0200
-Message-Id: <20260924134109.2415498-1-yegorslists@googlemail.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/pkg-autotools.mk: LIBTOOL_PATCH_HOOK:
- also handle libtool 2.6.x
+Date: Thu, 24 Sep 2026 19:23:33 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 4919a5fecfd64d8ea05a0f7fa1f5e1dd9f0aeb1a
+X-Git-Newrev: 08b06173bd3c95f0fa532b38533e10e558eec602
+X-Patchwork-Hint: ignore
+Message-Id: <20260924182803.296A69837E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/flutter-engine: fix build with
+ pango >= 1.58.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -145,154 +110,84 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Yegor Yefremov via buildroot <buildroot@buildroot.org>
-Reply-To: Yegor Yefremov <yegorslists@googlemail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes:
-https://autobuild.buildroot.org/results/e6159cee14f84569c85a61f77824b2b58d68a4bc/
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/08b06173bd3c95f0fa532b38533e10e558eec602
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Libtool 2.6.x is starting to be used by upstreams when generating
-release tarballs (e.g. cryptsetup-2.8.8). As LIBTOOL_PATCH_HOOK does
-not know about it, ltmain.sh is left unpatched, so libtool relinks
-libraries at install time and adds -L/usr/lib, which is rejected by
-the toolchain wrapper:
+Buildroot commit c3aa6774563d20901fd1370f51ef105180665b54 bumped pango
+to 1.58.0 causing a build error with flutter-engine
 
-i686-buildroot-linux-gnu-gcc: ERROR: unsafe header/library path used in cross-compilation: '-L/usr/lib'
+../../flutter/shell/platform/linux/fl_accessible_text_field.cc:9:1:
+ error: redefinition of 'glib_autoptr_clear_PangoContext'
+    9 | G_DEFINE_AUTOPTR_CLEANUP_FUNC(PangoContext, g_object_unref)
 
-The v2.4.4 patch no longer applies cleanly, so add a v2.6 variant,
-rebased on libtool 2.6.2, and use it for 2.6.x versions.
+../../flutter/shell/platform/linux/fl_accessible_text_field.cc:60:3:
+ error: 'cleanup' argument is not a function
+   60 |   g_autoptr(PangoContext) context = get_pango_context(self);
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Assisted-by: Claude:claude-opus-5
+with this defconfig:
+
+BR2_x86_64=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_PACKAGE_MESA3D=y
+BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SOFTPIPE=y
+BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+BR2_PACKAGE_MESA3D_OPENGL_ES=y
+BR2_PACKAGE_FLUTTER_ENGINE=y
+BR2_PACKAGE_LIBGTK3=y
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/pkg-autotools.mk                     |  2 +
- support/libtool/buildroot-libtool-v2.6.patch | 96 ++++++++++++++++++++
- 2 files changed, 98 insertions(+)
- create mode 100644 support/libtool/buildroot-libtool-v2.6.patch
+ .../0005-Fix-building-on-Pango-1.58.0.patch        | 33 ++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
 
-diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-index 16b21acb6d..da33909881 100644
---- a/package/pkg-autotools.mk
-+++ b/package/pkg-autotools.mk
-@@ -76,6 +76,8 @@ define LIBTOOL_PATCH_HOOK
- 			fi \
- 		elif test $${ltmain_version} = "2.5"; then\
- 			patch -i support/libtool/buildroot-libtool-v2.4.4.patch $${i}; \
-+		elif test $${ltmain_version} = "2.6"; then\
-+			patch -i support/libtool/buildroot-libtool-v2.6.patch $${i}; \
- 		fi \
- 	done
- endef
-diff --git a/support/libtool/buildroot-libtool-v2.6.patch b/support/libtool/buildroot-libtool-v2.6.patch
+diff --git a/package/flutter-engine/0005-Fix-building-on-Pango-1.58.0.patch b/package/flutter-engine/0005-Fix-building-on-Pango-1.58.0.patch
 new file mode 100644
-index 0000000000..b3968b1289
+index 0000000000..9bb475187b
 --- /dev/null
-+++ b/support/libtool/buildroot-libtool-v2.6.patch
-@@ -0,0 +1,96 @@
-+Libtool fixes for cross-compilation, many past contributors/authors.
-+Update based on libtool-2.6.2.
++++ b/package/flutter-engine/0005-Fix-building-on-Pango-1.58.0.patch
+@@ -0,0 +1,33 @@
++From f1c316430713ae7d526f8abc1621b09958aef281 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd@kuhls.net>
++Date: Mon, 21 Sep 2026 22:06:06 +0200
++Subject: [PATCH] Fix building on Pango 1.58.0
 +
-+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
++This version added the autoptr macros which we no longer need to define.
 +
-+--- a/ltmain.sh
-++++ b/ltmain.sh
-+@@ -3008,9 +3008,8 @@
-+ 	# was found and let the user know that the "--tag" command
-+ 	# line option must be used.
-+ 	if test -z "$tagname"; then
-+-	  func_echo "unable to infer tagged configuration with compiler."
-+-	  func_echo "Possible use of unsupported compiler."
-+-	  func_fatal_error "specify a tag with '--tag'. For more information, try '$progname --help'."
-++	  func_echo "defaulting to \`CC'"
-++	  func_echo "if this is not correct, specify a tag with \`--tag'"
-+ #	else
-+ #	  func_verbose "using $tagname tagged configuration"
-+ 	fi
-+@@ -4746,8 +4745,12 @@
-+ 	  # At present, this check doesn't affect windows .dll's that
-+ 	  # are installed into $libdir/../bin (currently, that works fine)
-+ 	  # but it's something to keep an eye on.
-+-	  test "$inst_prefix_dir" = "$destdir" && \
-+-	    func_fatal_error "error: cannot install '$file' to a directory not ending in $libdir"
-++
-++	  #
-++	  # This breaks install into our staging area.  -PB
-++	  #
-++	  #test "$inst_prefix_dir" = "$destdir" && \
-++	  #  func_fatal_error "error: cannot install '$file' to a directory not ending in $libdir"
++Upstream: https://github.com/flutter/flutter/pull/193119
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ .../flutter/shell/platform/linux/fl_accessible_text_field.cc  | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/engine/src/flutter/shell/platform/linux/fl_accessible_text_field.cc b/engine/src/flutter/shell/platform/linux/fl_accessible_text_field.cc
++index e99b123bbfd..f7955a32f07 100644
++--- a/engine/src/flutter/shell/platform/linux/fl_accessible_text_field.cc
+++++ b/engine/src/flutter/shell/platform/linux/fl_accessible_text_field.cc
++@@ -6,7 +6,11 @@
++ #include "flutter/shell/platform/linux/public/flutter_linux/fl_standard_message_codec.h"
++ #include "flutter/shell/platform/linux/public/flutter_linux/fl_value.h"
 + 
-+ 	  if test -n "$inst_prefix_dir"; then
-+ 	    # Stick the inst_prefix_dir data into the link command.
-+@@ -7063,7 +7066,8 @@
-+ 	;;
-+       -all-static | -static | -static-libtool-libs | --static | -Bstatic)
-+ 	case $arg in
-+-	-all-static)
-++	# Make -static behave like -all-static -GZ
-++	-all-static | -static)
-+ 	  if test yes = "$build_libtool_libs" && test -z "$link_static_flag"; then
-+ 	    func_warning "complete static linking is impossible in this configuration"
-+ 	  fi
-+@@ -7072,12 +7076,6 @@
-+ 	  fi
-+ 	  prefer_static_libs=yes
-+ 	  ;;
-+-	-static)
-+-	  if test -z "$pic_flag" && test -n "$link_static_flag"; then
-+-	    dlopen_self=$dlopen_self_static
-+-	  fi
-+-	  prefer_static_libs=built
-+-	  ;;
-+ 	-static-libtool-libs | --static | -Bstatic)
-+ 	  if test -z "$pic_flag" && test -n "$link_static_flag"; then
-+ 	    dlopen_self=$dlopen_self_static
-+@@ -7393,7 +7391,8 @@
-+       prevarg=$arg
-+ 
-+       case $arg in
-+-      -all-static)
-++      # Make -static behave like -all-static -GZ
-++      -all-static | -static)
-+ 	if test -n "$link_static_flag"; then
-+ 	  # See comment for -static flag below, for more details.
-+ 	  func_append compile_command " $link_static_flag"
-+@@ -7695,7 +7694,7 @@
-+ 	continue
-+ 	;;
-+ 
-+-      -static | -static-libtool-libs)
-++      -static-libtool-libs)
-+ 	# The effects of -static are defined in a previous loop.
-+ 	# We used to do the same as -all-static on platforms that
-+ 	# didn't have a PIC flag, but the assumption that the effects
-+@@ -8755,7 +8754,7 @@
-+ 	  *)
-+ 	    if test no = "$installed"; then
-+ 	      func_append notinst_deplibs " $lib"
-+-	      need_relink=yes
-++	      need_relink=no
-+ 	    fi
-+ 	    ;;
-+ 	  esac
-+@@ -11296,6 +11295,10 @@
-+ 	    # Replace all uninstalled libtool libraries with the installed ones
-+ 	    newdependency_libs=
-+ 	    for deplib in $dependency_libs; do
-++	      # Replacing uninstalled with installed can easily break crosscompilation,
-++	      # since the installed path is generally the wrong architecture.  -CL
-++	      newdependency_libs="$newdependency_libs $deplib"
-++	      continue
-+ 	      case $deplib in
-+ 	      *.la)
-+ 		func_basename "$deplib"
--- 
-2.34.1
-
+++// PangoContext g_autoptr macro weren't added until 1.58.0. Add them manually.
+++// https://gitlab.gnome.org/GNOME/pango/-/commit/223b147
+++#if !PANGO_VERSION_CHECK(1, 58, 0)
++ G_DEFINE_AUTOPTR_CLEANUP_FUNC(PangoContext, g_object_unref)
+++#endif
++ // PangoLayout g_autoptr macro weren't added until 1.49.4. Add them manually.
++ // https://gitlab.gnome.org/GNOME/pango/-/commit/0b84e14
++ #if !PANGO_VERSION_CHECK(1, 49, 4)
++-- 
++2.47.3
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
