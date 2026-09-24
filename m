@@ -4,142 +4,160 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5073AC9830E
-	for <buildroot@archiver.kernel.org>; Thu, 24 Sep 2026 09:09:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A253C98311
+	for <buildroot@archiver.kernel.org>; Thu, 24 Sep 2026 09:56:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4689240E25;
-	Thu, 24 Sep 2026 09:08:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0B6C140D79;
+	Thu, 24 Sep 2026 09:56:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zfe_zk92aKhw; Thu, 24 Sep 2026 09:08:58 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 0147140E02
+ id Ri1KQ_7DMnEA; Thu, 24 Sep 2026 09:56:43 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 11CC040D83
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790240938;
-	b=VHqcLGQRuOUeOhT2+2Ux5ujBvgoAeiWE8tupzy52fIRo/g8GDo/zpeWAeN+xarsRasMP
-	 2Qn6F1c26KpPHt4XISt8gSqXR79B0UotgE0ItlYc5JRxr75IBe5anjFUI3VE3OMP1S1Hh
-	 b1sWYLRjUAEQFKMaFjWbePzCqk8c1z11asjuoKe4QYHwpsn1lIq6dYcisovI/xG+bvPaL
-	 G3Bt2J6fbw0G3+h6cBJG8vTUT+6h4RckcKAiWJ3hbDNru+xHBxNOBsMP4dYcV5afQiy8W
-	 QK5nRGPHGShCrRAyTApDOvkyDhFhEivWGveJjRZyq5yMdf6DW/1x22BEkSXH14/7XLQ==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790243803;
+	b=et8qZonIxUPVjLBly8xhHgaXJkg3mRCbP7HQZvkMjnTm1hagKPlU2rersPwgqV+5tJt4
+	 tBIyh+K6FjZDE53QyXr1vTH2u40lfDJIqYvW4cTUvU53A6s3p3pA/51C2oD8V3eJc8odR
+	 1nbciXnzVdFYGtusgLiLCPvfjpENaw2+QRoFnl781LWr7mJJLnbRbpRvWJSyoq8mj8X/p
+	 1Gk6JIGt3EkQeCTWs4yAm4ro35dTvNluwqxIDvySLfTDvCc+oWQAH3mwLQmL7CvdhbTzw
+	 1UpHa5eUvbmSKwwXMQSm6MgRiNZPOlkwcIcMLbCHlWSNWvtpH2RlgFaIu7KqkIE/3+A==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1790240938;
+	c=relaxed/relaxed; t=1790243803;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 Received:To:Cc:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
-	 Reply-To:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=dPK48Kw+0A+2H0mSICEfDRI0mFkdpS/K/TLug0lS6BE=;
-	b=pbAAMddeXxG7YoM7gYrL7yrY4ND1PQBNioHP+AVWq9+qMN55axZpTvvBQjGHPoXIQZX7
-	 qUqthUjc1XNlOWzK3LNYq7dRRHk2OE1XwRJ3qZMj2kN1n6Fepq9fytgv2Y8iyGHmDulcM
-	 9yOy518xTNUyj3ZkopDGviwSkC8smJ6BqJCW0YNrM7BV2gY7mlPajloWO95j9CY+G8pAt
-	 fkvKOSrwttLG18FSHdkKv/a99NFLKKfFc6J7vsBHz+TO63mh9QyrPXtYk1q2gRZEP3E1x
-	 b2JHnJsno+bPzr2yt46HJORdVSh3tw1PVsv59FKfikC0Ewsi4bgOTTYchqrJ7r7FmfA==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
+	 X-Received:Received:From:To:Cc:Date:Message-ID:X-Mailer:MIME-Version:
+	 Organization:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
+	bh=+PuuU2kIlWuFL4DTIn6OCIPMFKFns6dKODMJd3jSjGs=;
+	b=U4eyA99aCNPtB9C6k41FFSWOfgHRqfAPwFi/+UKsDEqTZICZJTLwYKrbltEgqqol1v7c
+	 +1mYmHVUtxZrO7M2ngYestzoQ87HgYSi6r0A2JIhD2kufwt+Lo6OtxdOZdDaHLrmNuT9x
+	 yXIiW5cQZbUvRnbZuUhfaTEklNjLiJOtduZcNRBecektm6DLtV1yheM/5cv25XsYgioLC
+	 i5tTnqGTWMYHKyxiVNBCkZtn5EYxtNmUnEpxSEJ0rdgwvLoWeeq3MIOIv5LOp/91evhgx
+	 sW8Ad9YLFueiKxBVVid9BuYHZeK2NSqVuzUfR+U3Nh3n7DYj7f6IgYp5OErsCMTpLzw==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; dmarc=pass header.from=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=Oc5olOSg;
+	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1790240938;
-	bh=dPK48Kw+0A+2H0mSICEfDRI0mFkdpS/K/TLug0lS6BE=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=QXjudtiC+mgZeen1eEmcm62sFu9DvfbdPLuCrIWqNeJC0mHiNLmAcG1yPXRkBbkuw
-	 hDfnPFpcP6W8SVG0eHKZbROdLyMQwJb6iiHQYv4tjeFRSh42cUA3VV6jzxWjlXFZYz
-	 R1qEcakmx1UVlJWlW27KW6ONiisvuLLswIoiEZCkBesm2ExTBL5xuB6PPqMdxx3Np0
-	 vKYuQVDKGvOHzQcmRI0KX8X1evFmfZzorSeDjsrpTyTyIZc0Q0qkw0nsrNtFe9/Iyx
-	 HrWQulQffjd++ICx+JTo0K+5d8yXYG/gfN/PXB120trMgfnU60nw4pyLRvxP/SbF0A
-	 76lE7lDVnhjMw==
+	s=default; t=1790243803;
+	bh=+PuuU2kIlWuFL4DTIn6OCIPMFKFns6dKODMJd3jSjGs=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=DTnWaFqEihAm+/HwLFjE3eMd3kLnjKKptRtViJeD7xE+eMITJI9ptAvm5477sVzW0
+	 I+bYPLwcQVc8IG0DfPZv/UcbkgRqs+axO8htF5cavUux98EUcWxUiyyYtOeAsUSg+d
+	 5xyfY0a8gKpyo8HLl6n64WkSCyq9OLQjx4kG5pMSL3S7zWUG+3s6MZNftsp3LnyVhy
+	 k3xVQz6y1WOGB1gGyYkiZ4bfeVGsGf2ZnnhHhDgBkBlZe9nkNWrx1hTnBUY17d4nAE
+	 uhBzqWr828DjFgPWSI2HNM4Rbd7VHQPrcTIRcZ6sUnz/KU6Rwnbm9myPSJH2WKHnrC
+	 s9nD8zuiqMF2Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0147140E02;
-	Thu, 24 Sep 2026 09:08:58 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 3CE191FB6
- for <buildroot@buildroot.org>; Thu, 24 Sep 2026 09:08:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 11CC040D83;
+	Thu, 24 Sep 2026 09:56:43 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id F3FDA392
+ for <buildroot@buildroot.org>; Thu, 24 Sep 2026 09:56:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2B5E28126C
- for <buildroot@buildroot.org>; Thu, 24 Sep 2026 09:08:55 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E55DF40D83
+ for <buildroot@buildroot.org>; Thu, 24 Sep 2026 09:56:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6V_ioGngtCJI for <buildroot@buildroot.org>;
- Thu, 24 Sep 2026 09:08:54 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 39C29810E4
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790240934;
- b=LQgWIxLbYdbGbEbVc+lrDcH8msRjPWw5/qL3TB56VP0jeUL8XKDUAEKWH1gej4RUzBMV
- tAd/7hTiaaSRMDtuGuh1bVCX3JAYS35SyX2wprrqMv1rN4MMIkwNafGBAYTu4d4IFPU8f
- 0s/zYcqltR/7YmPANyBwiZ2h0WJuSQs9BJ4UrKHn29Azb+hFU2j7QC5afdKIPDgYRa0A1
- 7pJpL5WqObNw6PiwRYHGdc/1JI8mFENNbL21ca+iNExVgJMa5crJIDrjKPzCEnJTjznDv
- QvuqSkgicFqCjCTY3cTsEbARSUN0JPWvvEakCudZ4vsIbDQRJBIevcsop35f1hWjeYA==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PRzmxYo7E_2k for <buildroot@buildroot.org>;
+ Thu, 24 Sep 2026 09:56:41 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org EF8DD40D79
+Authentication-Results: smtp4.osuosl.org;
+ arc=none smtp.remote-ip="2a00:1450:4864:33::14"
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790243801;
+ b=UveHcBcLlijdH5VYK/MvQ1+0OwdASrH8dsYBMYeU8eE69XQUIlnApQf2OdH1vX5JWOCx
+ XAFEYKSC2tnTBya8GV7454eqnc25bupWbcKzS9rXmwPqmQLU0INiK7VGv6Pu2i3jRT0Bo
+ 0xkf989eP0dEb1/OSB5bXqtiTX4230PvQifIYA/+XSyMHAj4BEWGK9BKUX5DH2jYrHjB0
+ 5A62Y5E56LfHYtE45xv6eYVEhfj48SSPw++vuADjZHEh19xm634UqhHA/xr5UtzvkZhhO
+ rB/n7TSxIbdlViqb9c44v0ozaRSvq/T3lF8e8iNDh7BtqB/MscKSJ59sh0bU2lDsmtg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1790240934;
+ c=relaxed/relaxed; t=1790243801;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
  X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
- Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+ Date:Message-ID:X-Mailer:MIME-Version:Organization:
  Content-Transfer-Encoding;
- bh=SDXA6mc6utaUTWBm8YF66KMuvxDTWHT5/L9t2HYc7EM=;
- b=DGEjhelsnMj6Bv/EljsInXOLElrkaQHig4bluCo0MG9FOlByIG17nzKtW/vJ454f3p54
- T9WeKiuwERcHfmJFJqMa1xkAjycp1A5ySSqyqapDB6KOhwIYHGGEt9R91rRicEomEOTpF
- jsyrHx9I0CfeksAIFzozokNoWfxaMuGwKgHp3EqWCUBCyjbL76Id1MKKONZP1c0pkd/ju
- KoRSrcJQQWKLT6NcDk6yGKBgdC4iEzhDFq3QMIt2U63BeWaRqMwaorlmpL2t4ezVNyeY1
- dc8N5XMfukZMsB88QhC5gvESR3FFXY4fEuDxu4bnL8zeDzxuYs2K29hnE/EHO2tyuGg==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org;
- dmarc=pass header.from=mind.be; 
- dkim=pass header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=YRGdA5vJ; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::634"
+ bh=ki7Dgja3u4Ef4d5P/5kp59nZleiIGojYWI1WU/6NFO0=;
+ b=avxvs7er6spKYrBTX9rL4KW1JRDSvL6x2VlQ+69k7MF/9zcz/jPyLQGB5x1dbMhk4Z1+
+ up+tWUeeqdQCzprsq4HbyhSClzhUhHtlljT0Thzd6x0LITiIWbzkRTzQn711h8Su0OUwj
+ dp577iaNSjKLQqklzsQuEpXaGb/SiChZNpSKseH+NdctIIDOnW4c+6MYAJvheosA12fbR
+ LWWNa5d9bX0VEb7cyxrTWRGEF5f0EUl8v9S8IqLbou4tp5s0gwfS95FqzjkxDTYhOF4Ez
+ QgdhgMYHmv/yrX1PCYw2UIUsEFqKI5CxADIFG4ZPKFiN32BF759+6LJ/WYfolIHgMPw==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org;
+ dmarc=pass header.from=gmail.com; 
+ dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20251104 header.b=Oc5olOSg; 
+ arc=none smtp.remote-ip="2a00:1450:4864:33::14"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::634; helo=mail-ej1-x634.google.com;
- envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com
- [IPv6:2a00:1450:4864:20::634])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 39C29810E4
- for <buildroot@buildroot.org>; Thu, 24 Sep 2026 09:08:52 +0000 (UTC)
-Received: by mail-ej1-x634.google.com with SMTP id
- a640c23a62f3a-c2946aa0d5aso115604666b.0
- for <buildroot@buildroot.org>; Thu, 24 Sep 2026 02:08:52 -0700 (PDT)
+ client-ip=2a00:1450:4864:33::14; helo=mail-ed2-x14.google.com;
+ envelope-from=troglobit@gmail.com; receiver=<UNKNOWN> 
+Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20251104 header.b=Oc5olOSg
+Received: from mail-ed2-x14.google.com (mail-ed2-x14.google.com
+ [IPv6:2a00:1450:4864:33::14])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id EF8DD40D79
+ for <buildroot@buildroot.org>; Thu, 24 Sep 2026 09:56:40 +0000 (UTC)
+Received: by mail-ed2-x14.google.com with SMTP id
+ 4fb4d7f45d1cf-6aa0ee64afdso2251524a12.0
+ for <buildroot@buildroot.org>; Thu, 24 Sep 2026 02:56:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20251104; t=1790243798; x=1790848598; darn=buildroot.org;
+ h=content-transfer-encoding:organization:mime-version:message-id:date
+ :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to
+ :content-type; bh=ki7Dgja3u4Ef4d5P/5kp59nZleiIGojYWI1WU/6NFO0=;
+ b=Oc5olOSg3UFPqQjoSrzKodQ8Lv+X31GkhjyKpK3n448h2eht9YxvEWRVqggSHOITgI
+ Dhm2MxsRB2uh4vaVWbE9hMupfvSHxloVF1T0j2x7EAUlhVgcAupOOmyrF7sgKhsqb177
+ sJqL9KcO8b3UL3bnQeXxAbbOXbi/sNg05nADduqGRHgA42NSUFuAMzprqjn1GlL0+uM0
+ AlSinrSh1qNFj8qnk4cMSTZo9U2/RPVOWDikzYpvRrhaPJUG8Mw1lXGSRH6wZPJRPFZq
+ +qYqpQ0KKEnCsfX7nAIGfsYj/Z6+E96fWkY9xmcZz/MhQI5cFOvAwZ8HBqPWPW2xyqbx
+ Tl+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1790240931; x=1790845731;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to:content-type;
- bh=SDXA6mc6utaUTWBm8YF66KMuvxDTWHT5/L9t2HYc7EM=;
- b=fIUQRmDne8tWuh7gRrCJLoCiPrW9+/FPjTXeE+AlufUIVquXD4g/SZKTB9XuHmIp7v
- mXIXeCeYbej1ZhKHUIWdKd47UIkr2JLmjRssCW+ZJTeA7935+aOmcZgsJUwlNX5wTQQS
- CM4m9RRtdOqeMz7NAuDRShtOBQ9MX1CQdzhUAgIMF3hZErts0DSYHLQ+GzKSd14ZJMxr
- 4zEfOLlk1rWc6xXr/df7XsAP2VA86JNV5j5ZBr8rsU2V1Ix+Kzzh2IT8LdRg+BB0boc3
- gX1ilgDLX1Y10cXpH2uki6QyqV0YkoFCTFQmoHIV9LAk8mGJ27zQibvzeiexJDUou/I2
- S48g==
-X-Gm-Message-State: AFuF++mI7X6fjGb+xWvjIivplFY4S/T6O5eHoUky9aJHfZh7IAb9Iuiv
- rVV91MVqKwY8VLwe6F8ECFnjG0VFIZZa707nnpx7Ykw6X1wdS/iYPfsaD4O62i50+zFq1SMIqoT
- PMLvx
-X-Gm-Gg: AYBFou3uRvyRD4Roe1Il96d7EaXMpoVOPdJsubAccevFdR9tNXNumAF3yIci0Xd77UL
- o6PjOkDgjs/IgsljDwkJLdX/KdnObhfE5EbN1Hbg8abIoFua90Y9F/CdxXoGv2T0W710GCGhEFI
- mVtxZyC8nDxZNbsAcI7f8kDCsK9Ehp34PHCVtrrXTVhdi2Aq1ImE3PH8RJ7bA2Djx7TrueFyG+3
- dh8gRLwgQMmFvvEHMBvg7oSCnuyD4Ia7cwzSgA0PB9FSe6vaWVxevm4SQJiOT6z5VMnM3hfcfg/
- HXdlCmgJeyQIuKALUYvNjSh/6Eb6u9aOlARQWJnJm4h+BXy2WnPnTlkCXS5g8ZZ0vjkBRwFGISE
- 9kcOsgJ2/kdBcXTGFBTHka4rZvBfIlaDhJ/AxDWaf7VBK8ZezoCowWCVwM6nWZZIHjh4ZzPxEUb
- FLX3AU0WhQD9Q5SfFxg8i/iKhLoHE0IgvpDRkMj8DqlyOdRdmt4Le8TdLE0wK/h4j2v7WqRuhgi
- cwG3YemJQo=
-X-Received: by 2002:a17:907:a68b:b0:c25:4d9e:bb28 with SMTP id
- a640c23a62f3a-c2ac21f9188mr146323366b.3.1790240930706; 
- Thu, 24 Sep 2026 02:08:50 -0700 (PDT)
-Received: from dragon.home ([2a02:a03f:63ab:dc01:1291:d1ff:fe92:3b5a])
- by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-c2aae5c5c7asm266235866b.22.2026.09.24.02.08.50
+ d=1e100.net; s=20260707; t=1790243798; x=1790848598;
+ h=content-transfer-encoding:organization:mime-version:message-id:date
+ :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
+ :date:message-id:reply-to:content-type;
+ bh=ki7Dgja3u4Ef4d5P/5kp59nZleiIGojYWI1WU/6NFO0=;
+ b=W9NDeX7C1Pg9Bz1BVxXkM9ftNgShX18GLCCkKa0Du0zlNh/HWghGh/Pz6amZ59AFa4
+ CcS/UiC4hyEB8PNsQS9QuSAW6AMBEXZxl7LhnFE89WVRwO86CKB33GZvhxEGdXTrNlI4
+ zBo09q3YEsFadddt3Dhv19juSd3YNUV4xfva5EYodR0Lgd1UFu9nDE0PbIczr56/IiXv
+ oRcdtGhwF+WbW0JMvWyOQhoStXAeYFEzxbfKpIdl1VwT48jERcTZQ9LApXOYM3dGho9Q
+ sFkJ5Zo8m64gGXUQxdtHkGnd/IuY8ftcS01xKuxo1Vv5aEn+hFPQKqfgVHjcBlrrVrBb
+ xsAw==
+X-Gm-Message-State: AFuF++k0+oRk68bEIwnDjfAIczdRMMC2HfqfmTMUF0ylWBfyjsl2NYJ3
+ KbCpIAE6Ty+1cKxePcgDpsYoM13FHhOcL0lDaTdwm2heNt8bA9RJcAPDaM1hfQ==
+X-Gm-Gg: AYBFou0a8mPNAMHsw8uGFkwyX2NjqJmZMLzV9BFwlKmM6Zgq/Z9NGh1KjKfMh80hRwu
+ gPSOsgk9E/rIQX+SAMLBwzcDz81iw5jFOpYJg3V3hSH9Gykd/fTbZumMd19sne4NGvhROoxSJeF
+ xNnX6NKo1oXf/cKoaaf7sb/tinRtG+ulHRxaSwzw3qkRqwPI1F6SZTvOQqKGPhNDpGcKJPyZpiO
+ UB248jk/iY+WOQe+/m7hIM0t6R9lJWXRqSqWNJASvzVWPFVNUjEtorhMo6BewPa8tP2gn31pytk
+ ADnYIkALxafBOmyj0B7Hi2I8ba8iUYMwpLIjb0jVGuJAO6v9YHUY5wwcxYKNRJoAmMFsxrW0Bs4
+ DAIN6lwdV9upyYK0B0wz9cJ//ViQwEODdDV5xhKFIarh572wmywO51hdibgHl5iM/QjOLQW4Zbd
+ bG4GAGyfkV2IAJ6fqE9M1SLS4WGxrGnmoYz1nb3WSnk9DuB3XiTwAgXgcChoZppT6QljNEbDc/9
+ +yA6Sw1UhsjPcKebH5oYU/lb6/cc364iP/dcQ==
+X-Received: by 2002:a05:6402:518d:b0:6aa:734b:1a2b with SMTP id
+ 4fb4d7f45d1cf-6aac8f846dcmr1691020a12.37.1790243798179; 
+ Thu, 24 Sep 2026 02:56:38 -0700 (PDT)
+Received: from gimli.addiva.ad (h-79-136-22-50.NA.cust.bahnhof.se.
+ [79.136.22.50]) by smtp.gmail.com with ESMTPSA id
+ 4fb4d7f45d1cf-6aab386e5b9sm3512525a12.8.2026.09.24.02.56.36
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 24 Sep 2026 02:08:50 -0700 (PDT)
+ Thu, 24 Sep 2026 02:56:37 -0700 (PDT)
+From: Joachim Wiberg <troglobit@gmail.com>
 To: buildroot@buildroot.org
-Cc: Alistair Francis <alistair@alistair23.me>,
- Neal Frager <neal.frager@amd.com>, matt@thewebers.ws
-Date: Thu, 24 Sep 2026 11:08:12 +0200
-Message-ID: <20260924090812.217731-2-titouan.christophe@mind.be>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260924090812.217731-1-titouan.christophe@mind.be>
-References: <20260924090812.217731-1-titouan.christophe@mind.be>
+Cc: Joachim Wiberg <troglobit@gmail.com>
+Date: Thu, 24 Sep 2026 11:56:34 +0200
+Message-ID: <20260924095634.1298401-1-troglobit@gmail.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2/2] package/xen: bump to version 4.22.0
+Organization: Wires
+Subject: [Buildroot] [PATCH 1/1] package/netsnmp: add option for a read-only
+ agent
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -151,50 +169,66 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Titouan Christophe via buildroot <buildroot@buildroot.org>
-Reply-To: Titouan Christophe <titouan.christophe@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-See the release notes:
-https://wiki.xenproject.org/wiki/Xen_Project_4.22_Release_Notes?ref=xenproject.org
+net-snmp can be built with --enable-read-only, which removes all SET
+support from the agent.  For a device that is only ever polled this is
+a stronger guarantee than withholding write access through VACM, since
+a mistake in the access control configuration can no longer result in a
+writable agent.
 
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+The client applications are unaffected.  Default off, so existing
+configurations build as before.
+
+Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
 ---
- package/xen/xen.hash | 4 ++--
- package/xen/xen.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/netsnmp/Config.in  | 12 ++++++++++++
+ package/netsnmp/netsnmp.mk |  4 ++++
+ 2 files changed, 16 insertions(+)
 
-diff --git a/package/xen/xen.hash b/package/xen/xen.hash
-index c41f0fda60..a6c0291506 100644
---- a/package/xen/xen.hash
-+++ b/package/xen/xen.hash
-@@ -1,6 +1,6 @@
- # Locally computed after checking pgp signature from:
--# https://downloads.xenproject.org/release/xen/4.21.1/xen-4.21.1.tar.gz.sig
-+# https://downloads.xenproject.org/release/xen/4.22.0/xen-4.22.0.tar.gz.sig
- # with key 23E3222C145F4475FA8060A783FE14C957E82BD9
--sha256  e2a69289d6d13c0a71d4f3a39a597741c85c0282d9af1ec5dac495bdcb2872bb  xen-4.21.1.tar.gz
-+sha256  b2a14ca369e3cf26f123a455b1603f3962ae9fcee0b8640a9cc33879de198223  xen-4.22.0.tar.gz
- sha256  9eeacf4e4f91bdbcd16b3282bb86779e3122da032953ebccad4fccdfcf4cb3ac  COPYING
- sha256  aeab99f147957cd25fe8cc008992d5e5426ea73fb7d429923b5428a1ef1a59ce  LICENSES/GPL-2.0
-diff --git a/package/xen/xen.mk b/package/xen/xen.mk
-index 729d213c02..f8a4100bbc 100644
---- a/package/xen/xen.mk
-+++ b/package/xen/xen.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/netsnmp/Config.in b/package/netsnmp/Config.in
+index dff0f18bee..9a740c2db2 100644
+--- a/package/netsnmp/Config.in
++++ b/package/netsnmp/Config.in
+@@ -43,6 +43,18 @@ config BR2_PACKAGE_NETSNMP_WITHOUT_MIB_MODULES
+ 	help
+ 	  Specify which MIB modules to exclude.
  
--XEN_VERSION = 4.21.1
-+XEN_VERSION = 4.22.0
- XEN_SITE = https://downloads.xenproject.org/release/xen/$(XEN_VERSION)
- XEN_SELINUX_MODULES = systemd udev xen
- XEN_LICENSE = GPL-2.0
++config BR2_PACKAGE_NETSNMP_ENABLE_READ_ONLY
++	bool "Read-only agent"
++	depends on BR2_PACKAGE_NETSNMP_SERVER
++	help
++	  Remove all SET support from the agent, so it can be queried
++	  but never written to. Access control still needs to be
++	  configured, but a mistake there can no longer result in a
++	  writable agent.
++
++	  The client applications are unaffected, snmpset is still
++	  built when clients are enabled.
++
+ config BR2_PACKAGE_NETSNMP_ENABLE_DEBUGGING
+ 	bool "Enable debugging code"
+ 	help
+diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
+index 55e5997734..18b5ac36e1 100644
+--- a/package/netsnmp/netsnmp.mk
++++ b/package/netsnmp/netsnmp.mk
+@@ -96,6 +96,10 @@ NETSNMP_CONF_OPTS += --disable-mib-loading
+ NETSNMP_CONF_OPTS += --disable-mibs
+ endif
+ 
++ifeq ($(BR2_PACKAGE_NETSNMP_ENABLE_READ_ONLY),y)
++NETSNMP_CONF_OPTS += --enable-read-only
++endif
++
+ ifneq ($(BR2_PACKAGE_NETSNMP_ENABLE_DEBUGGING),y)
+ NETSNMP_CONF_OPTS += --disable-debugging
+ endif
 -- 
-2.55.0
+2.43.0
 
 _______________________________________________
 buildroot mailing list
