@@ -1,138 +1,139 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD452C9830E
-	for <buildroot@archiver.kernel.org>; Thu, 24 Sep 2026 13:15:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4EB9BC98317
+	for <buildroot@archiver.kernel.org>; Thu, 24 Sep 2026 13:41:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8446440DE5;
-	Thu, 24 Sep 2026 13:15:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F2819810BA;
+	Thu, 24 Sep 2026 13:41:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PxlAjn-q-QuH; Thu, 24 Sep 2026 13:15:39 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 3B01E40D82
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790255739;
-	b=hNVX4F2oWyTqPIuj6Vx4zl2X4LMOb+AsexPjPoCVIhqAlq6PsNFcA5XQe0XcprHBJ7Po
-	 KJNDsIfjZ5LTR7x2UbAXTuLDhjs69qxeKIXUmSyfX9PXvyUuIJG4PyBHK36J2FyujBWmj
-	 n29A6LsE0IzgZQyK44YZZXkqY9Q2664HtmWGB0nD8PFDJDKyCwhrKrs4+oUn2EqK6HOGu
-	 ZOdNDR3jiyyW5X0Pkhco6UCSZVJGNNx/AmRXvANNBBeh5sex6oPwvYxWyMZNyZNwT3CSA
-	 di8yz2OqhpY+DXwrwczW5ojY2x0Jeis4lFyfuzdGQG0WgeuFFjdOCnucdcfvRW+CUzg==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oUsSvbHmXbIU; Thu, 24 Sep 2026 13:41:16 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org C146881C46
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790257275;
+	b=rLES6W5JCRk9ztBIrObATr0giaQRXC0XbFwL/c2Qp68k1IQBJZAGtEqEQAV1yDNlo3CY
+	 kvPbayJVsoGalWkXt4R2inud4Uzon+Y036ug96AO1IwdYdDKEu62KPTmRI30tlH5Nt9hQ
+	 pOZBSn8NdET4vev92mspXSK28kPWAh41E5F0C5Hen1EWJ8y4N9cvxHPdhIDCcHghmwsp3
+	 10dqoS6IFVE+oMo1xx39Kcn3HyYxRwT2Ma8dJAwVjVCn90w7w5oci2sSf56rpnjumytA2
+	 9V0Xx4ZZOkVg8GvnVFK4XIkMEFgqNsytKeaN+jBFp0o5WYb6d7sCwN6Th27yEI9y82Q==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1790255739;
+	c=relaxed/relaxed; t=1790257275;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
 	 X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:X-Received:
 	 Received:To:Date:Message-Id:X-Mailer:MIME-Version:Subject:X-BeenThere:
 	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:Content-Type:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=+2ud7fxbV2vzFghRQLWxRcmjkHVLe94EAiZ865Uparw=;
-	b=EAA5caVBisCDgM8FOEZljVVilGkeiZti8z/OYVP9PtF/d6fyLiJMhCiUVbGEobRQJT1Z
-	 Ud0JJvIq2FqDpEQmFxNOnn9vO0iXm6ttpUWo6NR3pWQzXpLMq8I9i68GQBueNujzIRHh9
-	 Je1ajmtktZWOh/zvbePVUMGcjqZFfgwa3bG1IXxLI4H34fV6HWBJr7SPbh0xPk6ONskwf
-	 ThCXxZizhuMyRCe+9GLbXDm+up+k7SPXODJa+1+oQQYDFp/0PmL1Lc8M3AzPF71Gynkeo
-	 zVFO0KLAH+hZ04TqAUbcf5mMdK9K+g/Br3eGb/3Ts3dSRQRT9Ee5QQV1KKk0yrBy6hA==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	bh=E3lgJqDZsoZCb6jL420W6tsqbHeSG2QxH9oYsolJgbs=;
+	b=iLpKL4BbjLwRiTTD23pzxpP+W9GN1YwBK8JH7Zs3TA6GoZqVSBS3BkHB8poC7snDPYwu
+	 tiLl0pjHfzxXRCQBR8bz3/SJKv+Wx6vI3BouhdZJ2dSUrniylylkC1O4UI+n08qFYseqI
+	 OeTVdO5M8HRBXvvb3eVHDXQG/Jh03Y3q3RUkVVsIcUcF8zN/4NFVm9TpJ3rwnSb4YLqj4
+	 ZJU4YxGxvCtflwdvxutCP0Ajuztz3BDtjGhoPQfhRYxe10y14aCQpSeoGq+GBZecMDdLI
+	 7J4qOAHBvPRsox3L6zMKve03MO22BneIKg8CGleBynfWKukX/Bx1dqGlZT2q8TWkuAQ==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1790255739;
-	bh=+2ud7fxbV2vzFghRQLWxRcmjkHVLe94EAiZ865Uparw=;
+	s=default; t=1790257275;
+	bh=E3lgJqDZsoZCb6jL420W6tsqbHeSG2QxH9oYsolJgbs=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Py7uTtWAlOkdwrFHprCjuuA4j0nF2VpA4dzBWk9N915R3UeuGLRXHabYN5tdTh5WK
-	 xRyQCShHh4lmBCyS1rJdKirqep8Lm9aR9h7oqINCAr5rrMz8THd5mPVsgVqXeT0BKU
-	 C2xvOnMNRXL7MhDfTzPuaa6ZBr7W18zw8XJdEZM/CEy0Iu3BzM1CwqFXhXA/0qth0w
-	 fTA4CYdwuw3+7ppujyHOvNjDVc9xP3DagMTxP5MIfLBqXWJ9qtxdoFh0YO0UTBuLW+
-	 X1wQr2TmL1jxaSJEgF8lsFXHIiIZTVPfYSVsR96WCwQ/dflJTwpUKC4nqaqFKiHJwM
-	 KggQn0X6Os+6A==
+	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
+	b=C4hyJAkqjnewPou1f71/1ROdhudBd+Vk0IXWRTYOAyp721XaFP02ar1QNffR7L4c6
+	 k6QJY7hXfj/1Q2vSabD0yvOJh6wcFbPKptpvIZa1gs1qbUIkyjGJKoF6jwAOvrN3q9
+	 fgihb1YVOKrOl7vyLiplgyb8AF75lhsfBEAvQlEClrxtE7UrfgoN41UVIDw288J9xJ
+	 Fl6jB7zoaAhJnrRANu2+/IsbEoqgX4jVOe3Vs+H9ERdMXt7QWBI0/UW3RTybgai4XA
+	 BOa6Yxo3owEytWtjWot/hpBjtst4dfwEwulQG5nhmFdpekS9sUnLQ77JU/ldzeDjGJ
+	 CPzkxQp1Iq3qg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3B01E40D82;
-	Thu, 24 Sep 2026 13:15:39 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 05678194
- for <buildroot@buildroot.org>; Thu, 24 Sep 2026 13:15:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C146881C46;
+	Thu, 24 Sep 2026 13:41:15 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 94CC22F5
+ for <buildroot@buildroot.org>; Thu, 24 Sep 2026 13:41:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DF62060824
- for <buildroot@buildroot.org>; Thu, 24 Sep 2026 13:15:37 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 85F5681C46
+ for <buildroot@buildroot.org>; Thu, 24 Sep 2026 13:41:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jxLaJF0N3suS for <buildroot@buildroot.org>;
- Thu, 24 Sep 2026 13:15:37 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org EB7D4607B7
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790255737;
- b=R0XpOqmFi/CNixGKMYi2XqXc0vdg+dfEDwkuC2lSRZKV5W+5+faD8s+fFG2sH+Wb3w+w
- fec+NbCscAtPr8N/46NFn3BL3Cm51jrmgGcsFVn5AXWwJnu84NiQPPFzukzpWoPHGl5Q8
- O6QO+ZQoHc6es9j5REMUdm+SFhAf2WpCSoINf0iVLxVODeM7MJe65DZeR86+QsQui5Vt+
- LKZDjGRxfJKavLu4XVLS2TJnUtJFJ8zj0Ek3QGVHPh6jjNEoMNTaHG5TRDZPqw3X6tOLE
- cAZUCtMX8rs/cBVoNpjoWNRNQtRESlMfr29evRARLCBObZb3MWjF44dOJEF+/Wokinw==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id waPF6z9jEkMt for <buildroot@buildroot.org>;
+ Thu, 24 Sep 2026 13:41:13 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 2C27681C21
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790257273;
+ b=enJoBcGooeKvIvLK2bqx9V3FG1vuF+FjbsDoOSZxYlzUcUMHBFrIPr2qc61EhXDTWaLF
+ vDnDXWKDUwUhhvJqZCyLvGjVqH0xkJxcH83yYAtqf2YF3xQCHXaPrdy+copcO+/GcQ2pT
+ jl+U5RJnfBnGkGxwaEqyxtAvxv+LCQQMhm9GJ+byorJsqbw/efkCy0MIDFY0fxj1iONdW
+ tb7L5lMq04UXIIXY0hm7c3ERDcX+O2Ec8mntrcqrFGpDuY31Wy6COwZnGaCoBxUOqrKJe
+ iMeKU3YikAjsEYOgs74KVX+3SchVtjhyqFx7GcOOvtFw71lajvltr6eq2J1/rTyT1bw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1790255737;
+ c=relaxed/relaxed; t=1790257273;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
  X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
  Date:Message-Id:X-Mailer:MIME-Version:Content-Transfer-Encoding;
- bh=iui+h39nDw0Wg27ylzdO5VLjsdBQdnEGwjcgmvRdna4=;
- b=KujU2drdztn/1EIaHUnkF6qjITHZ2OW7UMHRtizaVLmuta5jDTrdfMJtRuarpFmaBM8n
- VhM5woYIwcQEHdMxnuzuz+0l1cDXpF1im4+SoOseJ4SKJDBkFKN/RTla6C2SxzJsx7eg7
- UtRbf68Iw5Y5vztWtNS2LSWKt2qCwS3qlkbj/tHjf/7fZneH3J6ctGOZ7/ySG/zPIJN62
- ZS00pzFxiJaXZhkJ3ONw6MWZdUXu2vSN8Z8Hle1BS+zU+cApegViOvxq6Hc14MsAWb1vP
- VeJSn8LgXECvcMm9UYfhfr9mjMVqJQ3WJ115waHVHNSa+CP7COd5tNzbXpeoB275Z+g==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org;
+ bh=EPDKpigdEOUg1VeDGIhZTFrKo4ChotL+Hj0mV2zTa/4=;
+ b=FndXf9hZeOqpRCz+4zLrIHSSZdXb51L96tjd/5+yndR6U6y9XnptuLDJpa4zRErDoScx
+ pjxNvHEx9OwikxTVn0HUzhktm9EhvpeR47m/2gBASug5p2laFzF63EBNm0wjzhczcWIDe
+ Ciw7U12Gxe+xUw+LZPpAqRYeNKTeYGbrNCpwGpoN0S7o5HZvn+S8q3zYeqWaq+AYXtHjN
+ EXXkigQBUajLLXJnj++lVa4w+L887OIoeWx12rdwrPCUi6+TnlCaNuRXMrB9+B+8mvKP8
+ kirmtfF/FCRtMeWHJWF9hSl/VlsDMNPqbFwwDSC3JOHspz5LlTXr9o14UEIDHFDGzLg==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org;
  dmarc=pass header.from=googlemail.com; 
  dkim=pass header.d=googlemail.com header.i=@googlemail.com header.a=rsa-sha256
- header.s=20251104 header.b=pAfPE+qI; 
- arc=none smtp.remote-ip="2a00:1450:4864:34::10"
+ header.s=20251104 header.b="KF/N6YrI"; 
+ arc=none smtp.remote-ip="2a00:1450:4864:33::10"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:34::10; helo=mail-ej2-x10.google.com;
+ client-ip=2a00:1450:4864:33::10; helo=mail-ed2-x10.google.com;
  envelope-from=yegorslists@googlemail.com; receiver=<UNKNOWN> 
-Received: from mail-ej2-x10.google.com (mail-ej2-x10.google.com
- [IPv6:2a00:1450:4864:34::10])
- by smtp3.osuosl.org (Postfix) with ESMTPS id EB7D4607B7
- for <buildroot@buildroot.org>; Thu, 24 Sep 2026 13:15:36 +0000 (UTC)
-Received: by mail-ej2-x10.google.com with SMTP id
- a640c23a62f3a-c2940ef15c1so257715766b.1
- for <buildroot@buildroot.org>; Thu, 24 Sep 2026 06:15:36 -0700 (PDT)
+Received: from mail-ed2-x10.google.com (mail-ed2-x10.google.com
+ [IPv6:2a00:1450:4864:33::10])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2C27681C21
+ for <buildroot@buildroot.org>; Thu, 24 Sep 2026 13:41:12 +0000 (UTC)
+Received: by mail-ed2-x10.google.com with SMTP id
+ 4fb4d7f45d1cf-6a9a2b95b72so3606768a12.2
+ for <buildroot@buildroot.org>; Thu, 24 Sep 2026 06:41:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1790255734; x=1790860534;
+ d=1e100.net; s=20260707; t=1790257271; x=1790862071;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to:content-type;
- bh=iui+h39nDw0Wg27ylzdO5VLjsdBQdnEGwjcgmvRdna4=;
- b=lzgk3ZQKJC1Tm437miSi/lvyPmy4+rzYGHkeU2uUkUh+AHjAHfSmnSINvExzAnJ9aA
- impa+8iTN6NmCHZweNaKAafykv8OYkROmRWHnCGDh3OneBLiY1FKp8pH/ZspO3dIOWDC
- x2rKZQRlV7HagaurpB67leQa2uBM6Z+27/CcKbTv6NuWSOE0XNTC9tH7Bp4yjJw9PSq2
- 4wVNbYFik0a4JO7JMxSgla2PID/VPy/QfF1os77OOV9hrvuSSy1gfeqfIsYIAi+0PBX1
- LJ3rViTR9i1okkxAymL26yckHyBxzh9m8JaeZsLCLLrdtjDyLNiB5rM/9fhiB/JCig0A
- qRDQ==
-X-Gm-Message-State: AFuF++mKonzjoUxMRG1dpBqKj+6oBO4BUQseFstnmgH1sjgLPevJJ3wu
- FaKtfMTNvM+I5g2S2IBfMV+RL80flt99qzrCLgklC2b7Wuq6e1sB0t+3BJz/5g==
-X-Gm-Gg: AYBFou0AK/qtaNhAF/GxER928WZOfD3jseYLTHm2w6to2EZEezlH3WNVyH80BsULtWL
- HPBabAsXCWueAeFoXhmQipcpJO1Qnn6DVKKZFPqdntNVlXlaD9iVee5C3wY9mq/xfA5RnAmVmnI
- qARwmfHL7qjjepWd5fVN/ynSt9WBnOOJnTRvai8AhI/RsiEKvjYNI78hIiWSu0WnZ6emDfCX+QW
- Hc79kj5DJ/Fn8Hvk3TWwcqsNaJxvoxubVNbMQBsz3zwIvJN/0kjesM7ZpRwWZD4rTvpsTlxcoBV
- hGbzNHCZbL0fSDPsfscYBY96VmZO3nXPnLlSss0+i2mkI4RTAXl8bcJUGDmKCqAUX5lTJBev0WC
- +m4m6TRk2viFGPv+x6cuz2o4zi5TVpxmg1r/c7w3DQAiSg0PVXYk1VCLaoU+hqtn2Px2+XXgxVq
- XId25M5+TWziHzvkysNgnlS3o3nRgwS4CSlK/eVcIwLvq06VpJcImmAHyeYJ8Jr7DjJfxzbf4EH
- XHYx9dKU6Ly6+1dulkZLbjqb6lDDXfF5m9MV/kT0EOzrfN22vntPWSjlRSnpDYm
-X-Received: by 2002:a17:906:9c82:b0:c29:49fd:c98 with SMTP id
- a640c23a62f3a-c2ac24c4c6dmr197903466b.32.1790255734315; 
- Thu, 24 Sep 2026 06:15:34 -0700 (PDT)
+ bh=EPDKpigdEOUg1VeDGIhZTFrKo4ChotL+Hj0mV2zTa/4=;
+ b=x+8X1n/xfKDp2IAMtDlAhVWhpafXTAUBM9sLYH6bmZY71MsTrY171y4tukK3Mtsken
+ EHhCZwicSBvuRtb55fMQ5rY4ttMxXOAMrWeAX0w/EPqKadv/OEsjrT64oNBgqAmQgGGr
+ Z3lokJdU7dY2At5195sP7GU6Fz2BBVAa/+5YwxErnma321SlfA7eleKWLggbDKqoq3Pt
+ isxi4JBjf4qwItTIBT+Fru0F18ywpi7uW+ci1j96NM5Nogfcpj3lMEPvJm/0tIeIemy+
+ jCkyofI/19qW/GcJdyYDggDUSejbrbrUbbqeiINva7E1ko6h2iyrjpbLm1LiL0AknAGS
+ qo7Q==
+X-Gm-Message-State: AFuF++lm3LKX36IcbqYwuv5xj2k2XsOSTxezzJrTiE1xfNU7yw05Y4tT
+ zQOrKtSiy83jU2cJT9b97Ji3/s/u28PaXob4y3KJNG0e7S8NPl4vdAFXuBFY8g==
+X-Gm-Gg: AYBFou0u2d3Ohi1ge4ztrgDsQyqI1qCSr7eYcP2WQWtW4Mjll4CEUuGNdMtJWF22tg0
+ wjRd6nMWGx5FgU0D9va1JAEsQzpcX7vI6yFGS5gvcy8aCWQe58teAF3Sy6KQ2mqAqhv6Xbj54py
+ c5gSw89QT2s37xW1iZEqQBYd6G9u8X/ivBa/VtJpa/WwYBMEfeHuXCkUJhtiDn8bWRFXxabC63A
+ tgfgRzl7msVZMwpn7fgmKTqPDkZKI2GrspJW6DZqkKMpHQIuFw718nBe5TGrwdv0IA181l3z23i
+ Qezh9nWnZJLtalsTA7lX3IjFb7oFSqPncL1vL94TXxkUvHVcetyV0KxGpHN0eSY37nuGMri48Yo
+ vVnqX/PvLGdAbWZDkFdwEAYvEYBFaYNDujS40y+mALqcreLX8eUcBVpjDOkqu5T//ochiQFtweX
+ LkkLacH2BdOtRtuqvk3hzu2OmnE/jzOcahlPoi2HNIzkzrvbL+ZWy9fB6eXLMhGf3K1AWO1T3F7
+ q5KSrNoki6NoThf6R06zcz0/VqxDqxZskNVJ+ogfQjBFcZi6OLSFw==
+X-Received: by 2002:a05:6402:388f:b0:6a1:7825:5230 with SMTP id
+ 4fb4d7f45d1cf-6aac8f8ab9emr2304983a12.16.1790257270314; 
+ Thu, 24 Sep 2026 06:41:10 -0700 (PDT)
 Received: from development2.visionsystems.local (mail.visionsystems.de.
  [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
- 4fb4d7f45d1cf-6aab386e7bcsm3614518a12.10.2026.09.24.06.15.33
+ 4fb4d7f45d1cf-6aab386e5aasm3764988a12.9.2026.09.24.06.41.09
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 24 Sep 2026 06:15:33 -0700 (PDT)
+ Thu, 24 Sep 2026 06:41:09 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Thu, 24 Sep 2026 15:15:33 +0200
-Message-Id: <20260924131533.2302137-1-yegorslists@googlemail.com>
+Date: Thu, 24 Sep 2026 15:41:09 +0200
+Message-Id: <20260924134109.2415498-1-yegorslists@googlemail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/swig: also create a swig4.0 symlink
+Subject: [Buildroot] [PATCH] package/pkg-autotools.mk: LIBTOOL_PATCH_HOOK:
+ also handle libtool 2.6.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -146,61 +147,149 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Yegor Yefremov via buildroot <buildroot@buildroot.org>
 Reply-To: Yegor Yefremov <yegorslists@googlemail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-FindSWIG in CMake searches for swig4.0, swig3.0 and swig2.0 before it
-tries plain swig, and it searches the whole PATH for one name before
-moving on to the next. We only create swig3.0 and swig$(SWIG_VERSION_MAJOR)
-(swig4.5) symlinks in $(HOST_DIR)/bin, so a swig4.0 installed on the
-build machine, as Ubuntu 22.04 does with its swig4.0 package, takes
-precedence over our host-swig for every CMake package that does not pass
-SWIG_EXECUTABLE explicitly. With CMake 3.22.1, libftdi1 with Python
-bindings ends up with
+Fixes:
+https://autobuild.buildroot.org/results/e6159cee14f84569c85a61f77824b2b58d68a4bc/
 
-  -- Found SWIG: /usr/bin/swig4.0 (found suitable version "4.0.2", ...)
+Libtool 2.6.x is starting to be used by upstreams when generating
+release tarballs (e.g. cryptsetup-2.8.8). As LIBTOOL_PATCH_HOOK does
+not know about it, ltmain.sh is left unpatched, so libtool relinks
+libraries at install time and adds -L/usr/lib, which is rejected by
+the toolchain wrapper:
 
-Also create a swig4.0 symlink, and update the comment accordingly.
+i686-buildroot-linux-gnu-gcc: ERROR: unsafe header/library path used in cross-compilation: '-L/usr/lib'
+
+The v2.4.4 patch no longer applies cleanly, so add a v2.6 variant,
+rebased on libtool 2.6.2, and use it for 2.6.x versions.
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Assisted-by: Claude:claude-opus-5
 ---
- package/swig/swig.mk | 15 ++++++++-------
- 1 file changed, 8 insertions(+), 7 deletions(-)
+ package/pkg-autotools.mk                     |  2 +
+ support/libtool/buildroot-libtool-v2.6.patch | 96 ++++++++++++++++++++
+ 2 files changed, 98 insertions(+)
+ create mode 100644 support/libtool/buildroot-libtool-v2.6.patch
 
-diff --git a/package/swig/swig.mk b/package/swig/swig.mk
-index e277f5049a..4dac64dadc 100644
---- a/package/swig/swig.mk
-+++ b/package/swig/swig.mk
-@@ -30,18 +30,19 @@ endef
- 
- HOST_SWIG_POST_INSTALL_HOOKS += HOST_SWIG_INSTALL_WRAPPER
- 
--# CMake looks first at swig3.0, then swig2.0 and then swig. However,
--# when doing the search, it will look into the PATH for swig2.0 first,
--# and then for swig.
-+# CMake looks first for swig4.0, then swig3.0 and swig2.0, and only
-+# then for swig. However, it searches the whole PATH for one name before
-+# trying the next one.
- # While the PATH contains first our $(HOST_DIR)/bin, it also contains
- # /usr/bin and other system directories. Therefore, if there is an
--# installed swig3.0 on the system, it will get the preference over the
--# swig installed in $(HOST_DIR)/bin, which isn't nice. To prevent
--# this from happening we create a symbolic link swig3.0 -> swig, so that
--# our swig always gets used.
-+# installed swig4.0 or swig3.0 on the system, it will get the preference
-+# over the swig installed in $(HOST_DIR)/bin, which isn't nice. To prevent
-+# this from happening we create swig4.0 and swig3.0 symbolic links to
-+# swig, so that our swig always gets used.
- 
- define HOST_SWIG_INSTALL_SYMLINK
- 	ln -fs swig $(HOST_DIR)/bin/swig$(SWIG_VERSION_MAJOR)
-+	ln -fs swig $(HOST_DIR)/bin/swig4.0
- 	ln -fs swig $(HOST_DIR)/bin/swig3.0
+diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+index 16b21acb6d..da33909881 100644
+--- a/package/pkg-autotools.mk
++++ b/package/pkg-autotools.mk
+@@ -76,6 +76,8 @@ define LIBTOOL_PATCH_HOOK
+ 			fi \
+ 		elif test $${ltmain_version} = "2.5"; then\
+ 			patch -i support/libtool/buildroot-libtool-v2.4.4.patch $${i}; \
++		elif test $${ltmain_version} = "2.6"; then\
++			patch -i support/libtool/buildroot-libtool-v2.6.patch $${i}; \
+ 		fi \
+ 	done
  endef
- 
+diff --git a/support/libtool/buildroot-libtool-v2.6.patch b/support/libtool/buildroot-libtool-v2.6.patch
+new file mode 100644
+index 0000000000..b3968b1289
+--- /dev/null
++++ b/support/libtool/buildroot-libtool-v2.6.patch
+@@ -0,0 +1,96 @@
++Libtool fixes for cross-compilation, many past contributors/authors.
++Update based on libtool-2.6.2.
++
++Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
++
++--- a/ltmain.sh
+++++ b/ltmain.sh
++@@ -3008,9 +3008,8 @@
++ 	# was found and let the user know that the "--tag" command
++ 	# line option must be used.
++ 	if test -z "$tagname"; then
++-	  func_echo "unable to infer tagged configuration with compiler."
++-	  func_echo "Possible use of unsupported compiler."
++-	  func_fatal_error "specify a tag with '--tag'. For more information, try '$progname --help'."
+++	  func_echo "defaulting to \`CC'"
+++	  func_echo "if this is not correct, specify a tag with \`--tag'"
++ #	else
++ #	  func_verbose "using $tagname tagged configuration"
++ 	fi
++@@ -4746,8 +4745,12 @@
++ 	  # At present, this check doesn't affect windows .dll's that
++ 	  # are installed into $libdir/../bin (currently, that works fine)
++ 	  # but it's something to keep an eye on.
++-	  test "$inst_prefix_dir" = "$destdir" && \
++-	    func_fatal_error "error: cannot install '$file' to a directory not ending in $libdir"
+++
+++	  #
+++	  # This breaks install into our staging area.  -PB
+++	  #
+++	  #test "$inst_prefix_dir" = "$destdir" && \
+++	  #  func_fatal_error "error: cannot install '$file' to a directory not ending in $libdir"
++ 
++ 	  if test -n "$inst_prefix_dir"; then
++ 	    # Stick the inst_prefix_dir data into the link command.
++@@ -7063,7 +7066,8 @@
++ 	;;
++       -all-static | -static | -static-libtool-libs | --static | -Bstatic)
++ 	case $arg in
++-	-all-static)
+++	# Make -static behave like -all-static -GZ
+++	-all-static | -static)
++ 	  if test yes = "$build_libtool_libs" && test -z "$link_static_flag"; then
++ 	    func_warning "complete static linking is impossible in this configuration"
++ 	  fi
++@@ -7072,12 +7076,6 @@
++ 	  fi
++ 	  prefer_static_libs=yes
++ 	  ;;
++-	-static)
++-	  if test -z "$pic_flag" && test -n "$link_static_flag"; then
++-	    dlopen_self=$dlopen_self_static
++-	  fi
++-	  prefer_static_libs=built
++-	  ;;
++ 	-static-libtool-libs | --static | -Bstatic)
++ 	  if test -z "$pic_flag" && test -n "$link_static_flag"; then
++ 	    dlopen_self=$dlopen_self_static
++@@ -7393,7 +7391,8 @@
++       prevarg=$arg
++ 
++       case $arg in
++-      -all-static)
+++      # Make -static behave like -all-static -GZ
+++      -all-static | -static)
++ 	if test -n "$link_static_flag"; then
++ 	  # See comment for -static flag below, for more details.
++ 	  func_append compile_command " $link_static_flag"
++@@ -7695,7 +7694,7 @@
++ 	continue
++ 	;;
++ 
++-      -static | -static-libtool-libs)
+++      -static-libtool-libs)
++ 	# The effects of -static are defined in a previous loop.
++ 	# We used to do the same as -all-static on platforms that
++ 	# didn't have a PIC flag, but the assumption that the effects
++@@ -8755,7 +8754,7 @@
++ 	  *)
++ 	    if test no = "$installed"; then
++ 	      func_append notinst_deplibs " $lib"
++-	      need_relink=yes
+++	      need_relink=no
++ 	    fi
++ 	    ;;
++ 	  esac
++@@ -11296,6 +11295,10 @@
++ 	    # Replace all uninstalled libtool libraries with the installed ones
++ 	    newdependency_libs=
++ 	    for deplib in $dependency_libs; do
+++	      # Replacing uninstalled with installed can easily break crosscompilation,
+++	      # since the installed path is generally the wrong architecture.  -CL
+++	      newdependency_libs="$newdependency_libs $deplib"
+++	      continue
++ 	      case $deplib in
++ 	      *.la)
++ 		func_basename "$deplib"
 -- 
 2.34.1
 
