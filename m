@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3867DC9830D
-	for <buildroot@archiver.kernel.org>; Fri, 25 Sep 2026 14:44:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6956BC98321
+	for <buildroot@archiver.kernel.org>; Fri, 25 Sep 2026 14:45:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 076CA810D1;
-	Fri, 25 Sep 2026 14:44:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 35FA460D95;
+	Fri, 25 Sep 2026 14:45:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lH4rI0AQS0m4; Fri, 25 Sep 2026 14:44:58 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 1188181327
-Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790347498;
-	b=fLUGBh17Xn5IEC6qYr/S0PCyKAYBVGmwjdYIJorcNADEeD9sBRg9I4oPziYMaWspGzqq
-	 s8USufF8ZpESS4gmMCPiK1Fs/XCKIfToi8A2em3z/TJnw9uFzW+ZjbEl8gNIHCORqG3kY
-	 /dw5LFhGDai+BiSkNRgbC7iyVNSEOatlc3hzipvo0/8Wx73LROYg07NoI/E4y6kr2B0PR
-	 a9hcNGjMdJq1PapqGoQOrVPh8DNwQvxd0AkvmI1WVO9jZNz7CgrD0g0HHnAtCUAq/KEBz
-	 6hRPvB29Qjg+mZENZOrgII6QUnJC/kkuDlU+N6kD7kU3SKf+2p3qOu/suGbcGJj41sA==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ueDd_jfobMv5; Fri, 25 Sep 2026 14:45:02 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 4606A60D9A
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790347502;
+	b=OVaXsUlsQamSMelaIpf6/GJfJL6ExGwRkXC5HaA8lzaABwYIcawyS08Ka2bTDftHL4lR
+	 7MHYh/emaZpZ4UcmpbDYIcSVVsUshOZwAe/R4LDYJjx/qVg2Sb3GbgsI1QcsGC8PAEVQy
+	 mXHsU15qe4gVcdWu6Bx8+cW7eI6rnvvFCv1kY+4uB7uk1tKDp+dN4RuBL/McT0Tebmo20
+	 rgZryi9Su40FqYtfhV+e3MTY6ZLcA1LdF1X4vvz2mU5NY7t8k6elK5Ab1KjgtXAjv32Vc
+	 P4dvyY0Vm3tW6MO2hH8QeBxMi84G15DdluO/CLb7VlHT1PP/cINCZ6Q6lwendxjQ4qw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1790347498;
+	c=relaxed/relaxed; t=1790347502;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -31,116 +31,116 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 MIME-Version:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
 	 Reply-To:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=aj9I9mczLhx7AGyxF0gFvr393cfdGdCIKW26AxK24pA=;
-	b=lTfvfJ1XbwTtSW9OAyMaSAdpNy49osvf4+XR+kvLuFTOe4Olb1bIYfStKbDKtRAecOi5
-	 hAlHp0CXgCrTTuliJh2BG8isYls6eHKB52mc7KXtRM7FOGZNgyZ9blZyN+ujEW14bcQkv
-	 MU08QudsMTWxyxPJHaNe6ky3fo3QGLCQv2e/JqRRn038tBLC9pQW9lWJGLCqlRdhMG1f2
-	 uDN7or7d/yjdpwjjhzXMkTrn9L0fuaACICTK/51sB84AX9UEreHpjfOU4of+iPj9l0PsY
-	 +V7HLS6czo+Umpg2dPMHCBM30327ZkaNAhuKsoohHaXpJ/8tsq28YHXs2b5foKGlw+A==
-ARC-Authentication-Results: i=2; smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	bh=Ru3KUxCJkvc75RrN1bbXzs4NeqXQGDisOboevxcxlN8=;
+	b=Y8Mttj/MppnY0ZqY2mqliEOKFGYffzEcd2AZGKQA9xedILlp9Z50rvfQhe35FtQrpqBw
+	 +s6RIzC4n0ddY/Jzyj8IDBHyaHpgkeRHIH2xrIVMnosJ6Bj5Meb8coQXpXLx5+PA1YdQ9
+	 3VhlKK83q5PsCECPkOgfPdSrAE/KUn06rKUAqlT3LT4n0KyBZhUOaPdOrzA5Ibd5+oS/x
+	 kRQgFy0k5MHly7ZdzPyh/Ui+TlMqSUi7FSDYAjS2dyGXeVrJQRV5hFUEz8ZiMaMzeBAbb
+	 h1VWEdIOnU0laNxa/ITfIjcQRz2KqQ5wnEh4QeFaUyrYe6nw5lTM98os+UumkQ6nqLA==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1790347498;
-	bh=aj9I9mczLhx7AGyxF0gFvr393cfdGdCIKW26AxK24pA=;
+	s=default; t=1790347502;
+	bh=Ru3KUxCJkvc75RrN1bbXzs4NeqXQGDisOboevxcxlN8=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=TyGr0yqhgtLPG0thZQZa6rKtlr5UIV9ojn7BpsaGxEuOGcL5vbFw+Qv2fARyetFL8
-	 q5xq2UHKwUfLMgPpe/RbEQH6q/3v52mt5ok//lbtGVo1nnSBUMAZaMnL7EWGA3k1jA
-	 dRxRHIjhnfNVyX0D/KrVOJmHnEvVVoLKW0qGBcFF1kB7BbJIx1tOZPRGAdv3GKb+54
-	 HUO7XYk8lBTaGIk3BvKinhzqnyJOtsmaF+7/JsdxROesZ+FK2WIBe/+L9YODUUPFkM
-	 n3aPNK9hmRWGMuAovgJEFBpA9Nyin5AwvzMDKubY0L+wkMmbCsHAxcWcI0eFdJGjoe
-	 aEk15/IYEtjkg==
+	b=qPlLhzLaQt3LEH5jKp0aqh5pyF+Vr0y9o8RXVPZkbzeyglL6sV5jrGHPGtvxBazxV
+	 nGffQG9haQ6kP5gX0IthuTnq/wxIUI6Z70ehfXOzDi+o4kaIXsk5Gn2WSl3DbA0NcY
+	 0LMgK9VpPfFB5A7xOa9HV+y5adHvQMOkguNLHjHjN0NZVg88KiwPRpd8/IpAj5jrWh
+	 AzMAYNKlcOJeZJj+FE5E+HuWeSarZPBYH7SOEUD2P+H/XPOCKuoLa6229Q07+l4W2F
+	 LDRHp9yEglQNHDNqaAphwpIa+wAk5W49mnxemElvJiMwK09DH/fTwIFXag2Z2ZZv1+
+	 0WOUkU4YymDGA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1188181327;
-	Fri, 25 Sep 2026 14:44:58 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id BE1FBB00
- for <buildroot@buildroot.org>; Fri, 25 Sep 2026 14:44:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4606A60D9A;
+	Fri, 25 Sep 2026 14:45:02 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 18BCD334
+ for <buildroot@buildroot.org>; Fri, 25 Sep 2026 14:44:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AFBEA811AE
- for <buildroot@buildroot.org>; Fri, 25 Sep 2026 14:44:54 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id F2CCE40475
+ for <buildroot@buildroot.org>; Fri, 25 Sep 2026 14:44:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JyiYCjxHTL9C for <buildroot@buildroot.org>;
- Fri, 25 Sep 2026 14:44:54 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 90BD481327
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790347494;
- b=KBoiUYBmKKuogOdGHa0OtxgNWKSINXwbe9c7AwGvAqwMDpE7yL2f683gTZV5rtf3+eUe
- kX0LnCrpszChxSoqfPj7ux1qQ7i5SFxZl83cPXlxnwNqxdBlVCWN02qki+Ym8WtLbcbXB
- iHDfMYehP4nKiLxcz6ZPR5GDNWl1ptSgFYUHnFe+xZrbYM/KTh1+UvMZ1kJJeL0MoKj2n
- qnZlq9IW9dHDWwpA1mv9ElAHPm6BEoeB0hPoP83X0FcY+cNM7DBx9BJoZPd43tydUL8t+
- KM6R7OijgkmSy1Y36axxVoJvNQiRtFQhLNU0T1hChCSl96ZuJ+UcgLNyDMrr/YQCpIg==
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rEBsHSsjs5mi for <buildroot@buildroot.org>;
+ Fri, 25 Sep 2026 14:44:57 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org E0F2E4016B
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790347497;
+ b=DtwYOyr4bbYFz1y/3V9010tnCgOL1BaoSTa4x1LGioQb+v5yUuQf5R/iuyXrB4HQdMQV
+ plWTV+2YpLNCUD1wxxjKND77EOQ/cj63glMNN5re9UE2eCc9hVViiAIacquM5pE+b7d0g
+ lYQ0NfQBvVhU/aBSQ7YNVK9t7KFqWpP60/qLxw5KKJ3ee0HK+/y0rdYZG+ql2iTm3VnqC
+ zOjDYTY9iXiYUCAO8aLpXnOYT3wu6oZeMiypAzKuRC0DW/Z8Xfzh82Y1j/JSZRvw91Oah
+ LkxWXJj6qcN+3X50buWJYYNBeCeaf3XVFkXm0R3v6zWxSGYtQSQjFxtPtFKsZ/2hQBw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1790347494;
+ c=relaxed/relaxed; t=1790347497;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
  X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
  Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding;
- bh=rJUh2iLnQMZNBtbR6zRUCt6NSgf+S0ybrF1M6bmnTOY=;
- b=qn9I8fH0YM2Bp/4oNxjmj5TLHrtb7Noo6ifWfpzRHaFg4723/xD7p0D7D0C+7farxmvf
- Ne7bVhX9GZyz8BuSxF4fMgnLccsQfUfTKQyRlqs1hlJVa1BsmsyaygLPocP8A5PK2X2gl
- lS5ueDegbLZL7/Su6Y+VaLgTuKLbhQ8yHcchXv7Ci7FPHRJRU9vCkRcL5mfi8/IT/hjR+
- Z7Xpwbh2Zwt6PMnaaCUYJTMtJPgFtpyronot5A+fE+Tp1+WVT1a4lGzw3/Tow3n+E+PCV
- izWS4A3oKOXKFUrxgVm5gsP+Dx8OuYOckPyr9CnAXrTSLLWIve8M0bX1etbB5qXG7Tw==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org;
+ bh=/mysao55Zs6JFcrJnl3QS2b35f697coj7/mC9SXUJ64=;
+ b=nw3SAzBvRkcHJMKuK/NGppReRzekSeMv7ymtUjrLBGwm8pxZu9aokHjL8kcZWjFmP2rX
+ uUuA7pzj0oKaJFrNbklkPSPyGDHPjw+cMTMIAboFelQANwc+MkcrY8Q7P0x1iRDyCMF2j
+ KVDFghoX1a4u2lrXWFZzT29I7cCCmOEAz8yCd7H388q9uJqgYU7K5vwGRIv/IEXn2LXay
+ V8m45nMXxOAdV0zy0n0pHUTA38/VrStzhYu+yjE5+Rm9V+XCp6rnjn5cjMl8LzI+EGHjO
+ j4Au9NEXhF4WK2mc4RrO+arCght2WUg3B/ePNgqf0V5Qo2xzqCDu53sFaFpRN3W8jYg==
+ARC-Authentication-Results: i=1; smtp2.osuosl.org;
  dmarc=pass header.from=mind.be; 
  dkim=pass header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=fp9QLH2O; 
+ header.s=google header.b=RoWC04bV; 
  arc=none smtp.remote-ip="2a00:1450:4864:31::10"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
  client-ip=2a00:1450:4864:31::10; helo=mail-wm2-x10.google.com;
  envelope-from=raphael.melotte@essensium.com; receiver=<UNKNOWN> 
 Received: from mail-wm2-x10.google.com (mail-wm2-x10.google.com
  [IPv6:2a00:1450:4864:31::10])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 90BD481327
- for <buildroot@buildroot.org>; Fri, 25 Sep 2026 14:44:53 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E0F2E4016B
+ for <buildroot@buildroot.org>; Fri, 25 Sep 2026 14:44:56 +0000 (UTC)
 Received: by mail-wm2-x10.google.com with SMTP id
- 5b1f17b1804b1-49e66390995so6115105e9.2
- for <buildroot@buildroot.org>; Fri, 25 Sep 2026 07:44:53 -0700 (PDT)
+ 5b1f17b1804b1-49ff23af865so6502315e9.2
+ for <buildroot@buildroot.org>; Fri, 25 Sep 2026 07:44:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1790347491; x=1790952291;
+ d=1e100.net; s=20260707; t=1790347494; x=1790952294;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=rJUh2iLnQMZNBtbR6zRUCt6NSgf+S0ybrF1M6bmnTOY=;
- b=iHRP1+0o3Wh2JqHFfKFOdepCYQNcPkQJZTHrJLsSfTIvNQaCGHFck4yGQE0EPgnB6y
- IE7YSCRkKuZNX/SvmQkd/AYnI7kamQKFBV4QdhUhxU0o2861xhn2Q8ITPZTAGN5b+fJM
- Mft5OhLhfjOD9D/G1HuFypA+mzydJORww9EKKx5pEadd/6B36fFI6dnwuuYOQ9lvWTm7
- k5FB+QcVDVlAxFvt3yDctuH0HexWYp9iC6cHqAtx6qu7aOiZnPP79hQPvJyJMfv5z4Dr
- 99idowyGuCwNanCBlqa6gZLY8E8vgBckArpHS1wLkSM//l5s0lgo99ps6dLdnklY9yts
- A4+g==
-X-Gm-Message-State: AFuF++lJmARdyygRU88qU+zaoGXuxMeVD57os9MECzoX+OykLnzw0oU+
- de5UajjOdSipq8VcAJt1Y41nhRMr27cPGTfvfYpGyMrqLQ1DQ1AFqMz8PMlXduJWX3/vG3Saqxb
- 45iLUKBTc+w==
-X-Gm-Gg: AYBFou3cLQLFik+UwrE8HKEpzLupYx1MUTOYiC128A6UETfQrwgHyJzqIP8V+yoWACg
- sbRNvMo10LAHWE+Qza8BP4PeLfvMkjb87mURqa5udFLhVKyo7at6SiXBlvH5ULiluyPIDJnw2j/
- zoi+msrt2c3+imS1lY5oP3ykZSR9MkkhFoVNW6jhtaqMPQxTy7O0sQBfTR8qnDWNiufLOh+o3DO
- u7nhSO/uNt0bhApmQyFIzp7fHpmUhsUGMZLu+Mh28CZkT1XT69lTfGqwSDqF4XNtQ2RvODhQt1q
- 5hpWXWowkYOEt+FB6AtoWx5ZTtSmn5xm0lwA9rAeKB9RVK71QMwJ3P6d5W+mRgKwtuhpjMKNM06
- akg9S4jDvSeR+myU07Er5vodMKdE7BTa1dUn1XYOake3JDS8p2Es9xvfi+C+DAmFXnumPjrXNvT
- cVYBmHJDr913JaXRTI/ke5ALbcxoOFoGaZtcZEovc4EPHxEPT/WdmzKjEfNlblHplpa0WHRwi2G
- vXjY2dwI4ynJbnD5GyRewsFMcm/AreTySyjFHelsHY=
-X-Received: by 2002:a05:600c:19cd:b0:49d:2536:402e with SMTP id
- 5b1f17b1804b1-49ff06f7a45mr46625335e9.30.1790347491344; 
- Fri, 25 Sep 2026 07:44:51 -0700 (PDT)
+ bh=/mysao55Zs6JFcrJnl3QS2b35f697coj7/mC9SXUJ64=;
+ b=jIkfPSd9EgKnj9aNqA0ACDbcIstAKPyd6jZo/hDbodEgOEUYHR/Ugqj1st44auf2FD
+ UCswA+1bR1F9k2WCHNy9pcAV9M6QiE1tdp+6O08fuhWEP2+W3uuIhPBc3Q4zt/xPveeL
+ fZvrbZwWCQa4IRqZ3gzP71COfF0rYif2S7issiQjREsmsNRYln5x3d2V8hczsX+G7h2P
+ bDzbgSCnaX6uHCYb1iNDCmkHtGU+XfomWxBYEpVR9tsdeL/YCPcLmfGpv9/60poHmO8m
+ y6gEY1gmrnuOHea+WmN2Q6y/HOpMPUseFpcn0SBkNOzctGA63TyxOyBAsY8ecUBcWdOE
+ l8eA==
+X-Gm-Message-State: AFuF++k5r0NNuI2aepwfpGTpF4DLvwvsvoceCfngcRyg/CeGO9EaLDsX
+ HzIDRfMtNHCBypvszBUD1HViFb76XgdIh8bb1xmho37lge1cmIOKHpTnDV0HFLBeSOVkJwxH7Ee
+ xHuwt2Z3zgA==
+X-Gm-Gg: AYBFou18/ifwyQq9PMKAWkC5Lr55RgE7Wu2LHsyIWRbCc63pcSoGsc1wooEe9JFRnMB
+ f+RfmLK1oDqLGnG8bz7amm2IFy+kdXipVExKdjqq4ODZGYTlG1XvOH+6vwhpaStrRN9DnPWQibt
+ dlEkuQb86s1ddsYA1Z0zYFcMqOa/5iuk/J/wxa4ANMcDClEw5OlF1Ya8SBCHuUkIInJlUKohgIM
+ yPrMGxPPBdVjkWqoEKMH83vM+60SjJVvK4W8VgxV5I9DlJQiT7j05ir2/48hkUH8inE86UrsFZr
+ uNi3M7It8D3/wVNR+0I151iABJS/ISE3CxkykbCRYH1wWX4segSTbwWi2rjX7N/qY0KDl1OJCma
+ TMIC5fVEWha7BXPAPdSEukmYn6x2tvx/zAcqG5O0PijcmM0DbdxXb/mjaNksu8AB07XfKi9zqIn
+ /ZDWpQatHKFD1cf7fTO8NFociw1unylzLlPNH51rnQKQA9bBbLx5pIFmBVw7iNKVCXl6QmUt+yQ
+ BYTODYjDZF+XKWprN2LNbrTrCqpgaP/zY8Gfb3aS45qPI6mHmJm
+X-Received: by 2002:a05:600d:6454:10b0:49f:e80c:3d66 with SMTP id
+ 5b1f17b1804b1-49fe80c3da4mr70305215e9.29.1790347494266; 
+ Fri, 25 Sep 2026 07:44:54 -0700 (PDT)
 Received: from debian-hp-1 (ip-94-140-185-241.reverse.destiny.be.
  [94.140.185.241]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-49fe5cd4271sm228281905e9.5.2026.09.25.07.44.50
+ 5b1f17b1804b1-49ff27eabc1sm67333925e9.15.2026.09.25.07.44.53
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 25 Sep 2026 07:44:50 -0700 (PDT)
+ Fri, 25 Sep 2026 07:44:53 -0700 (PDT)
 To: buildroot@buildroot.org,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+	Bernd Kuhls <bernd@kuhls.net>
 Cc: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
-Date: Fri, 25 Sep 2026 16:44:48 +0200
-Message-ID: <20260925144450.4096808-1-raphael.melotte@mind.be>
+Date: Fri, 25 Sep 2026 16:44:51 +0200
+Message-ID: <20260925144453.4096895-1-raphael.melotte@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260914213922.1847792-1-thomas.petazzoni@bootlin.com>
+In-Reply-To: <20260914220237.3170059-1-bernd@kuhls.net>
 References: 
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/sysprof: propagate ucontext-related
- dependency from libdex
+Subject: Re: [Buildroot] [PATCH 1/1] package/libheif: security bump version
+ to 1.23.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -161,59 +161,55 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> BR2_PACKAGE_SYSPROF selects BR2_PACKAGE_LIBDEX but did not propagate:
+> https://github.com/strukturag/libheif/releases/tag/v1.23.4
 > 
-> 	depends on BR2_TOOLCHAIN_HAS_UCONTEXT || \
-> 		BR2_PACKAGE_LIBUCONTEXT_ARCH_SUPPORTS
+> Fixes the following CVEs:
 > 
-> from libdex. This commit fixes this missing dependency. In terms of
-> Config.in comment, we do the same as what libdex is doing: handle it
-> as a toolchain dependency (rather than an architecture dependency).
+> (CVE numbers will be added when assigned.)
 > 
-> This was missed in commit a73ef093f7b40297d69c6813c44fd4626883632e,
-> which added the ucontext related dependency to libdex, without
-> propagating it to sysprof.
+> CVE-2026-XXXXX (GHSA-vg7w-rp49-4fc2)
+> CVE-2026-XXXXX (GHSA-xrp2-63fq-jm8q)
+> CVE-2026-XXXXX (GHSA-prgh-72vc-3xmc)
+> CVE-2026-XXXXX (GHSA-fqpw-fj22-78w4)
+> CVE-2026-XXXXX (GHSA-4rv4-953r-p24q)
+> CVE-2026-XXXXX (GHSA-rhgw-q5g8-xjh2)
 > 
-> Fixes: a73ef093f7b40297d69c6813c44fd4626883632e ("package/libdex: needs ucontext")
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
 Applied to 2025.02.x, 2026.08.x. Thanks
 
 > ---
->  package/sysprof/Config.in | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
+> Gitlab pipelines passed:
+> https://gitlab.com/bkuhls/buildroot/-/commit/26f96b8a018c60927e1922d74520aa6f6384c5d2
 > 
-> diff --git a/package/sysprof/Config.in b/package/sysprof/Config.in
-> index e89a0e539e..258f549152 100644
-> --- a/package/sysprof/Config.in
-> +++ b/package/sysprof/Config.in
-> @@ -9,6 +9,8 @@ config BR2_PACKAGE_SYSPROF
->  	depends on !BR2_OPTIMIZE_FAST # polkit
->  	depends on BR2_INSTALL_LIBSTDCPP
->  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_12
-> +	depends on BR2_TOOLCHAIN_HAS_UCONTEXT || \
-> +		BR2_PACKAGE_LIBUCONTEXT_ARCH_SUPPORTS # libdex
->  	select BR2_PACKAGE_ELFUTILS
->  	select BR2_PACKAGE_JSON_GLIB
->  	select BR2_PACKAGE_LIBDEX
-> @@ -21,13 +23,15 @@ config BR2_PACKAGE_SYSPROF
+>  package/libheif/libheif.hash | 4 ++--
+>  package/libheif/libheif.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/libheif/libheif.hash b/package/libheif/libheif.hash
+> index 6001e84ce9..78f59f6b67 100644
+> --- a/package/libheif/libheif.hash
+> +++ b/package/libheif/libheif.hash
+> @@ -1,4 +1,4 @@
+> -# From https://github.com/strukturag/libheif/releases/tag/v1.23.3
+> -sha256  11c1179e0e4bec33624b87f22ec42c1e993a40d946d44d26f9c431cf1456a863  libheif-1.23.3.tar.gz
+> +# From https://github.com/strukturag/libheif/releases/tag/v1.23.4
+> +sha256  d0c02b4b0e978f34a1974b6f3eea7975a537bf7a9195ffeea38e7242ff316fdd  libheif-1.23.4.tar.gz
+>  # Locally computed:
+>  sha256  fa81ce652315b013359d6e8e4744335f31a50c7c192907176d3632f78a3b4596  COPYING
+> diff --git a/package/libheif/libheif.mk b/package/libheif/libheif.mk
+> index 1614dafc74..3428646016 100644
+> --- a/package/libheif/libheif.mk
+> +++ b/package/libheif/libheif.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
 >  
->  	  http://sysprof.com
->  
-> -comment "sysprof needs a toolchain w/ dynamic library, wchar, threads, C++, gcc >= 7, headers >= 5.12"
-> +comment "sysprof needs a toolchain w/ dynamic library, wchar, threads, C++, gcc >= 7, headers >= 5.12, ucontext"
->  	depends on BR2_USE_MMU
->  	depends on BR2_PACKAGE_LIBUNWIND_ARCH_SUPPORTS
->  	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
->  		!BR2_TOOLCHAIN_GCC_AT_LEAST_7 || \
->  		BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP || \
-> -		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_12
-> +		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_12 || \
-> +		!(BR2_TOOLCHAIN_HAS_UCONTEXT || \
-> +			BR2_PACKAGE_LIBUCONTEXT_ARCH_SUPPORTS)
->  
->  comment "sysprof can't be built with Optimize for fast"
->  	depends on BR2_OPTIMIZE_FAST
+> -LIBHEIF_VERSION = 1.23.3
+> +LIBHEIF_VERSION = 1.23.4
+>  LIBHEIF_SITE = https://github.com/strukturag/libheif/releases/download/v$(LIBHEIF_VERSION)
+>  LIBHEIF_LICENSE = LGPL-3.0+
+>  LIBHEIF_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
