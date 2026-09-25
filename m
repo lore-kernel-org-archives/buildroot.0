@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52027C98326
-	for <buildroot@archiver.kernel.org>; Fri, 25 Sep 2026 14:45:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E927C98321
+	for <buildroot@archiver.kernel.org>; Fri, 25 Sep 2026 14:45:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1B47F810D1;
-	Fri, 25 Sep 2026 14:45:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D85EF81360;
+	Fri, 25 Sep 2026 14:45:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zbcmD7WKt0ll; Fri, 25 Sep 2026 14:45:09 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 3E6C6811AE
+ id eS66pmYckMAN; Fri, 25 Sep 2026 14:45:13 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org ED83C81338
 Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790347509;
-	b=PtvBCnpvz9DvXKiJKcUF4bptSFeDoBiXRfRukGBEw7mys4BkssHXOcafzrbw9a7Y1eqK
-	 Col8V7KaSVoZdcF8s9ZSxFelZ6cq8J5m1skbeBFJM4RLo+Yf4OrJVWjIs07WuU34CXPPl
-	 EzXZ35G4JxnpZSoniUdalA/GzSezb9M7d1UenTs8voa1rdh+0BB/ywS7L9CsEOVu9Tcsg
-	 uWFV1uIjFBGKBsXLTo5ecPtQ1apeo2UBAJUvM89IbchAqxajq92DlJYBPnF+zdXRsLgTK
-	 Vr2yVaBZruQsdaC3yBE3kNiFqMCt0++u0YwX+Lpy51dVe6waP3/IMZn6pM9GHMyImWg==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790347513;
+	b=IB+6RVQr8r7GUH/A0dAoF3XrAheJDZdf6aP5O694O9q3bYpKuIvHBJ91LC0n7HCpn0nP
+	 pE5fzRfcvpmvSl8hw9lscQels95TiEARdBUHPCsweMDDENlQSfghISe3i5leGKqgZ3pAv
+	 FJPPYI9/Fc1diWK3IfXJifsU2dcKyv9xjNZc4AoMUeaaJYm4ymoAguiTbuLSDk0fF5tog
+	 eDQ53L2vBvBVxiwoLlUUbNM+w/8jhTosvushUODk3HLNW4gILLQF8wjJyeL7du3eYH2Lz
+	 bTuqBZ6CDXT/IDIOry4m+vKwvJ71+vnC3Y1bLmvE7YHYDjZo3ugNg/paD0uUY4vy7qg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1790347509;
+	c=relaxed/relaxed; t=1790347513;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -31,116 +31,115 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 MIME-Version:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
 	 Reply-To:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=E6wrIRwiHMMT/A8QB+gs+5M4hbvln5z++jinZNvlMek=;
-	b=nmcpZpsAfv7DOzpU2zV9tYEPI/wkApQcbPPFRu+F4x5vBQyu83xUh/WcFJ284lFM5b46
-	 ov4oxlw8h0HB4xLqye7cBbx88HovOdh9HAvSN1uXS2+i/ESeaai5oJ1XHCsR3puwCTLt+
-	 CxDCzymezIxMrChIt7HcoQ15P1otx/49FzQkU2H28VwOggBTADviUXJCZm8HrYh42NC0L
-	 D3JJxSOky77nc6wLOEkVazsMgGQElckLlv1VUmIXTWiHcQWhJqAXInSWbQdKHSucr0WWf
-	 5x2jRdR9wz3rAlV6BtF3/K7qB1IlJJsesUy23TFEA/ZdlV3lYoxsAuPb/7i3FsPJXRA==
+	bh=3w+ZYw/R6TZ0ohvvcOb0g3shU7lpY8PCT/sxS14KsL4=;
+	b=kS6ESrsmred0BTG6HaaS5wA1r4sjFUtJ1UVb5pUmKfpV1wuHkUlj20SPtITsvjvDiHz7
+	 2Zc7V8Z3mmHD6HDAROyRYt+n8UseLmchi912vIwWRl6PLdsb4L5/u/bhnibkyE4ZVqasa
+	 apCKaEVgkVXQokuuoVocVUTxm08DbH5L4E1l0w07+r0B1PjNADIIu0AzlW9/Pg+BB0k+U
+	 ondTHhBWTliDDqL3Ka5+Cvf6ddFFjW2uEX4Y71LefTabQq0T1+c5+dt5C2DGt35aW8/+h
+	 M2Vo0o2Z70cF8XYEPPBo48p5TL5zMa4nD7usDdqgWTHso3SjQ+YZeyO+3XuksPUC2lg==
 ARC-Authentication-Results: i=2; smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1790347509;
-	bh=E6wrIRwiHMMT/A8QB+gs+5M4hbvln5z++jinZNvlMek=;
+	s=default; t=1790347513;
+	bh=3w+ZYw/R6TZ0ohvvcOb0g3shU7lpY8PCT/sxS14KsL4=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=GUZ5ioQxZ3FqH4U4Q1H6egPmrMYxmW0YR5tjymPfq8Zyt7GzApQgjCDatyrMR8ZFx
-	 ORZ5ygvLM4OESBBSM0QZM9HqxDU2+N+796fEaugdAjipMgzsMQrNAk8I+3zwp4eKGS
-	 O3jM1T+YgfwkwiKf8Wcq2YVj8FQCgsGQP/p3MCZr5AwRK2/ggIBkzc++zGq56T5cSv
-	 apL6wfDkbfXAmyhQlYKbGl1jS8jTFw1NZ96YNs89VDwrn+xzsbVwETfzqxYrJma5zj
-	 I0FtbmuYPKRGyhD86Tl7q/dg5jIyyBJ6ALaABz4X/R4v1ougAUexH5wlI5QmHUjzYm
-	 BK8Lruh7MB/Kw==
+	b=qFVy2zRUEDM9dNgNOChJV/VVMg0XfFqIk8iH0VQzeGGqpi5+Jc9dHNCKgFY3Y+cjX
+	 5A28V04/STkG0OpwsaIsmR2JQD40zd/Nf9qQ80ym0TQ9elQKfKuxd4NAKK57adHdPy
+	 1T110xbuYRZUl6ewEvAtH2X5S8W5wsBPjSPnT77hIOsTGmxq/lve5xjmzUoeInBQwk
+	 5BgHn/06tyARFxUMOEl+bO/Cwy3Gkh3D+SHQZ/t8vdGr1KrvHDNbXHuupWkH1lSfU1
+	 i3+pHIEvYpEE+uaTy+cEakHjKGqTnwHdHzeJxAaMqXkol6cUu5OulN9gKkdV44YOyz
+	 WzO6m+mP3mOlw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3E6C6811AE;
-	Fri, 25 Sep 2026 14:45:09 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 846AF332
- for <buildroot@buildroot.org>; Fri, 25 Sep 2026 14:45:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id ED83C81338;
+	Fri, 25 Sep 2026 14:45:12 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 15D51334
+ for <buildroot@buildroot.org>; Fri, 25 Sep 2026 14:45:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7654440790
- for <buildroot@buildroot.org>; Fri, 25 Sep 2026 14:45:04 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0818540181
+ for <buildroot@buildroot.org>; Fri, 25 Sep 2026 14:45:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MT9YFddVr4Xo for <buildroot@buildroot.org>;
- Fri, 25 Sep 2026 14:45:04 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 7AB4740BD4
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790347503;
- b=Ud6MmpDD+JBRBp6Xh03pVewWavnCux6MwOYJSv26IOLdtoI54kwQR+4H2YkItN27Zlzn
- YWJsoFH1F9Og0VHV060Uz5wXe3fO4HbEN0hZ9sW4oRElU5pzIGIVpNhSbURx+IMBoYzqf
- 8MEa1Sq4Z4AkgLVMAQnrKghizkioxOULl5vJWaRU7+nIDfG6Kc7YdaMdwuUKPazhglsfR
- e7ceLyejhRi6AgjZCmU4nGkJFYrJrhxF3nFswgqu5z+Lw3SSgwffYl+VGaM5aHmNlCeg5
- uliwC3GrzhlfAdJq4Wgdc+ZgLKRnOGPyEYsUy1sBIXaIO6gmTQC1T6L987e2YY/qbww==
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1xglBH5EEsS4 for <buildroot@buildroot.org>;
+ Fri, 25 Sep 2026 14:45:09 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org D2E0E4016B
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790347509;
+ b=ZAqro9W7EY+Gn73XN3h/j0SwhDu9HDB/GZIlcVrkvOw1sh6sgP9WMCOCXac7iiLq6Eq+
+ jmIFUzrhDc6HdApYq61rLHh3thunpi6sXAixPiUl9sjYYXVO9rGRL5R/PbqJoJ88mMzm3
+ 6NOMkS9YgrPWlwvOviGqIhz37BgRRxVsdST1kYztQ50cHpnTbLx/hJLYyyFW5YVsqFLw5
+ uoc+w4F1KwHCNNnoWjwmaOfIC/wWBCLhKSB7bGyQBqHtzKWxxeRUXdvFLrPbV3/gPCDws
+ JiHFY9QYrNAYIs0rEz/u4JblARig7uza0XGO1R6jdKVPCr4xwuO2RVjVQjfaWbVGQ7A==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1790347503;
+ c=relaxed/relaxed; t=1790347509;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
  X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
  Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding;
- bh=ermURpj7nQMsN6hixtG/OMAiNZqabbiVDoaCmuIzwHg=;
- b=nhxUHcmTmEekReDsey23UlH76StN/kCKB1MeXNyG/CAqo1Vo+0ef+NPhXJuwqHd6PWVw
- IGyOxuQKYnmqXE/JIjtYxFp/xmHKYbLp2D1WKsrGZ5NWvLrNPPiYcaTGmWOq8yrBZ9eyw
- 4kQ08ix3jIeW2lT4uTPInpilZJ+ORMJa8c1a8qIGAroB6Ezjf47R0wICh257bZsd/2IZP
- P1HgzpLMW6EYoIDYA9yycJFwp72xADU44nLJwhIzPe5+heE/wBkHr0W8gzBqeIjchwPmN
- NUiiTBo2JhbvD9QZdgpfisYzGvvDHLA7ouiWF24/Xpq2yU06YUGvyWbZCiaE96fxl4A==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org;
+ bh=XG5r6CMR9+bHUbOC8Z9nPZC34GWtZaOLtoRTj4tLXkI=;
+ b=TaNyqK1BiAZLOnnSRwt47JwouXyLroxqscK7IVoAgODEvn9xQxd0kV/aVC7oy2QLcxCb
+ WQH4OnKGx06aGEOmW4TN/En8QCLr4js6DeKpyH9WFzNebIi6bPpwgAc10y6jHjTONq7DO
+ xnNhc6Bs6q4ODONiC90RoQv1Guj6Eq1MpcIYCGq5H1z5e5MgKvE05MxYqvt6wu1Imy7tU
+ EMc+P8mCABWMsM+AXz5QUQ+WaB3Jy87OuCeK6eMNvb2h3qxY1TBOtMr/7NWdil9ZExb3g
+ G5M4iuaKfE93zTTh1XI868Bf06RDNIJnrDxdwKlm0sJ0TSTYOD62/fnfjUGlnn7nxog==
+ARC-Authentication-Results: i=1; smtp2.osuosl.org;
  dmarc=pass header.from=mind.be; 
  dkim=pass header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=Ldk4WCj3; 
- arc=none smtp.remote-ip="2a00:1450:4864:31::11"
+ header.s=google header.b=PhLD5W+a; 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::42b"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:31::11; helo=mail-wm2-x11.google.com;
+ client-ip=2a00:1450:4864:20::42b; helo=mail-wr1-x42b.google.com;
  envelope-from=raphael.melotte@essensium.com; receiver=<UNKNOWN> 
-Received: from mail-wm2-x11.google.com (mail-wm2-x11.google.com
- [IPv6:2a00:1450:4864:31::11])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7AB4740BD4
- for <buildroot@buildroot.org>; Fri, 25 Sep 2026 14:45:03 +0000 (UTC)
-Received: by mail-wm2-x11.google.com with SMTP id
- 5b1f17b1804b1-49b912e2406so5158735e9.1
- for <buildroot@buildroot.org>; Fri, 25 Sep 2026 07:45:03 -0700 (PDT)
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
+ [IPv6:2a00:1450:4864:20::42b])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D2E0E4016B
+ for <buildroot@buildroot.org>; Fri, 25 Sep 2026 14:45:07 +0000 (UTC)
+Received: by mail-wr1-x42b.google.com with SMTP id
+ ffacd0b85a97d-48870973bddso379683f8f.1
+ for <buildroot@buildroot.org>; Fri, 25 Sep 2026 07:45:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1790347501; x=1790952301;
+ d=1e100.net; s=20260707; t=1790347505; x=1790952305;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=ermURpj7nQMsN6hixtG/OMAiNZqabbiVDoaCmuIzwHg=;
- b=f/LcLPOaDa218+y4OB0EdmyTzGRjMqKdVVeqK9N1gfKJ8OvX/jLNBQOi4yRVNoFYSF
- pwHD4etKtYJN643XGQRs7271Y58EdDdd/zok0D2vBIZ/2h1HOxMv/VCJWD9XwEfb0hlp
- FZ7uKyZgSKLHrlSXEpWFRTYhvon56NAKpkS7+dNAYaA0USvZ5b5pXURs5SN0yx2LO09E
- aeEvWAYFVHAdEePhZOEDYt8CpTT9L3EeP7R/wLn2wHZXOvcyQfc2Sj4zeZsC5mJgESMI
- LsukrRctHKMGizewhOa0sMCIpVgH1l1bFrU6kMb/huZtN0RhjWqdTG7pdVTjI1POe5EH
- VJZQ==
-X-Gm-Message-State: AFuF++lMJxxQrCwVRo84ThNZKMPTUOqbs2MGFx0IzYA/KQZF6DqdvybJ
- TFy1XYtcl1gyChXBzSwoM1nh/v5+2GHPEWzYDveYhOGdZXnkVqMCnl+R+jXVYD6XytKFSbGS+CS
- di4WWMabudw==
-X-Gm-Gg: AYBFou0sl2q0qIHHLEmZaKh3K4uX+ws3frqXQNGJMuPOJDqvq7gOS7B2+QUFImA7NGw
- oyXr+VSshFRYt/CcFyN8+vCU/Ch1nDqFjZBHp1HP1ZamIiu0XWGt7uKSVKq9ponI4TNrCACgUEx
- +WaDNYMblTGK1jn15EAavav+NyGd2RvP35eXT0Yp7/ZemezN/nPXUbKp1OI4ZnGx2p5cakNWxcP
- kXQoRmN9RuCK8cUuti/2aA5EKT+ZEB7GvCcUL1Dpc5AgZawmXJLHjYZUX8BTbVbccUDBlOkYgS1
- vp2bzwn0iLvnxsk118tlHJFRTuDN9LKyrqEC0+zu41mvsYlIdhyLgRQ9rY6Uv7XtIJlU5SEwPzl
- kXe/lp5vQapEwJ2EAIM8AcsW6Ca1pBAb275+V4ao19i9tubqNEw46cKBpTXJeqKcR+2XH/npB2O
- nkBnG6iO2E2ZHS2yMjqnbiQu3gI+k/1KlXl3R6uwSG7D00OIF9X67zcmF6UaF57d9HCmEelbmt7
- d3eGtxOnS0OI+iszH/NC438iOAPIC8LCYPlWE5VtQ==
-X-Received: by 2002:a05:600c:3b01:b0:49f:ce79:7a8d with SMTP id
- 5b1f17b1804b1-49fe670b3e3mr107552715e9.17.1790347501298; 
- Fri, 25 Sep 2026 07:45:01 -0700 (PDT)
+ bh=XG5r6CMR9+bHUbOC8Z9nPZC34GWtZaOLtoRTj4tLXkI=;
+ b=DdJFYLj4xVD2YnslXXwozpyCCBdriEeAlKT0/ns9mXpzCghgF3Qicaz/gTF6OoJpjt
+ G13dxI9uwpSx0Qs7tztKMgsntO9403/MkxT+jNn8xY0jyMI5Y70Tz6+sNkNsy27e9e03
+ Z7vLt1mwm5zcE8pDMDHQHQQegV4iVdc8IS1K5BxKY3sCqG6ef52GV/YhVxMs1HMwwC8j
+ FJHqWu5vV2g2IWYEbQJ+8XPcMCSZCw9NIq/gJYgbRhy8z+40N8z6xj/+7NhA2ipC0na+
+ sMbSmo3q9hpp3uKQQkGfvfm8UlZYpClciRfh2jBXUQPK3NgC02zYUn+4xClVqWDwgkXt
+ PfdQ==
+X-Gm-Message-State: AFuF++kMgjnxKq9lCFZ1xiMjPAFYlPRP9MrDNST2Tnfln3DDEQuzzzHM
+ GhvvKZfYtbelBQGsACYFHHwQIOvyUKupjkNIvGzeGiS2TVYCHfLO/Glb+lel9i0ittu95j1g9+4
+ MvASXZzqZ9A==
+X-Gm-Gg: AYBFou1ZnnFMIEU0l5s+OHuWKiSDmN6vt8v2lyjcEUaDbOGJ6hKAMohHGH+3eU/Ssb1
+ KG/HJ6DUswZ8rFWOp2ZRTl0B0eajBvsZ3NU/yjZPknpmWsw4ElYLUNBcFDsJ+cGQzJGdRScILqQ
+ iKSl0O9vUfGHl8PEqKt4OuDgaQVgcf0KHDwMgLvx7kAef8o0zjKtgoJqoyj8jTArLmHRb4i7ykM
+ 7CYRZ04lHQCk3dc8nWyxfiD7QI76iprCJ5aOYdI52DSvQMRI4RdXQA5S1R9OTNY0AbeJjf4nzj4
+ U1rF+QT8GxawvPpz1ZSHNKGEVSk22AQoRruuI7uO0m+fD+w4Aeg+xwRdq9CNXlg5p0wgHynFwu9
+ zOxkAosh5VdfWGLDycklwC2puaCVEyykpngyiu/Rsup3qzKEDKMA4U0tU4hpVDsFTHB98HZ5Rzl
+ YyfYadHVzt3MQWDeFJG/8hLKRoHXZfcCpdT/pbnDPQEay8j9YwKyBp0H5Zm0gXUvW+s0zTB4nCG
+ PnlqFLz/jJRg/ZEqecNnwY96lGR4m9Z59MTKu6zkw==
+X-Received: by 2002:a05:6000:1861:b0:487:e:f4f6 with SMTP id
+ ffacd0b85a97d-488716dd323mr13354029f8f.15.1790347505544; 
+ Fri, 25 Sep 2026 07:45:05 -0700 (PDT)
 Received: from debian-hp-1 (ip-94-140-185-241.reverse.destiny.be.
  [94.140.185.241]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-49fef60cc72sm46454985e9.3.2026.09.25.07.45.00
+ ffacd0b85a97d-4887a349a0esm10739518f8f.10.2026.09.25.07.45.04
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 25 Sep 2026 07:45:00 -0700 (PDT)
+ Fri, 25 Sep 2026 07:45:05 -0700 (PDT)
 To: buildroot@buildroot.org,
-	Michael Nosthoff <buildroot@heine.tech>
+	Thomas Perale <thomas.perale@mind.be>
 Cc: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
-Date: Fri, 25 Sep 2026 16:44:57 +0200
-Message-ID: <20260925144500.4097068-1-raphael.melotte@mind.be>
+Date: Fri, 25 Sep 2026 16:45:01 +0200
+Message-ID: <20260925144503.4097160-1-raphael.melotte@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260915074215.620475-2-buildroot@heine.tech>
+In-Reply-To: <20260915095653.279455-1-thomas.perale@mind.be>
 References: 
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/wpewebkit: propagate gst1-libav
- architecture dependency
+Subject: Re: [Buildroot] [PATCH] package/zabbix: update SITE
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -161,49 +160,36 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> BR2_PACKAGE_WPEWEBKIT_MULTIMEDIA selects BR2_PACKAGE_GST1_LIBAV, which
-> depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS, but doesn't propagate
-> this dependency. In practice, there is no issue, as webkitgtk is only
-> available on a subset of CPU architectures, while
-> BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS makes ffmpeg available on pretty much
-> all CPU architectures, except Cortex-M, m68k coldfire, and some
-> specific cases of OpenRISC, which are not supported by webkitgtk.
+> Zabbix version 7.2 is no longer maintained. The version 7.0 is the LTS
+> and the stable moved to 7.4 [1]. The source location moved from "stable"
+> to "oldstable" directory.
 > 
-> But for the sake of having correct dependency propagation, let's fix
-> this.
+> This error is present in the autobuilder since the 22nd of May.
 > 
-> The other packages selected by BR2_PACKAGE_WPEWEBKIT_MULTIMEDIA have
-> dependencies that are already handled at the top-level
-> BR2_PACKAGE_WPEWEBKIT option.
+> [1] https://endoflife.date/zabbix
 > 
-> Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
-> CC: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Acked-by: Adrian Perez de Castro <aperez@igalia.com>
-> Acked-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Fixes: https://autobuild.buildroot.org/results/636/636c4514c67f1b0fcd20976d064f17b0e0a314fe//
+> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 
 Applied to 2025.02.x, 2026.08.x. Thanks
 
 > ---
+>  package/zabbix/zabbix.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> this is a 1:1 copy of da906556371ca3728b05ea4f33402891288cc027 which does
-> the same for webkitgtk.
-> 
-> ---
->  package/wpewebkit/Config.in | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/wpewebkit/Config.in b/package/wpewebkit/Config.in
-> index 03e9eaf59e..4a747a22c9 100644
-> --- a/package/wpewebkit/Config.in
-> +++ b/package/wpewebkit/Config.in
-> @@ -87,6 +87,7 @@ comment "sandboxing supports needs a toolchain w/ headers >= 3.17"
+> diff --git a/package/zabbix/zabbix.mk b/package/zabbix/zabbix.mk
+> index caa69fda38..50bdfed609 100644
+> --- a/package/zabbix/zabbix.mk
+> +++ b/package/zabbix/zabbix.mk
+> @@ -6,7 +6,7 @@
 >  
->  config BR2_PACKAGE_WPEWEBKIT_MULTIMEDIA
->  	bool "multimedia support"
-> +	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS # gst1-libav
->  	select BR2_PACKAGE_GSTREAMER1
->  	select BR2_PACKAGE_GST1_PLUGINS_BAD
->  	select BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_DEBUGUTILS
+>  ZABBIX_VERSION_MAJOR = 7.2
+>  ZABBIX_VERSION = $(ZABBIX_VERSION_MAJOR).13
+> -ZABBIX_SITE = https://cdn.zabbix.com/zabbix/sources/stable/$(ZABBIX_VERSION_MAJOR)
+> +ZABBIX_SITE = https://cdn.zabbix.com/zabbix/sources/oldstable/$(ZABBIX_VERSION_MAJOR)
+>  ZABBIX_SELINUX_MODULES = zabbix
+>  ZABBIX_LICENSE = AGPL-3.0
+>  ZABBIX_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
