@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3109CC9830D
-	for <buildroot@archiver.kernel.org>; Fri, 25 Sep 2026 14:43:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71FB6C98324
+	for <buildroot@archiver.kernel.org>; Fri, 25 Sep 2026 14:43:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F1F3860D7A;
-	Fri, 25 Sep 2026 14:43:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 47BA160DA5;
+	Fri, 25 Sep 2026 14:43:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PqgGTK5np3V5; Fri, 25 Sep 2026 14:43:52 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 1160060D84
+ id MrMAlDVXC-en; Fri, 25 Sep 2026 14:43:57 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 5ED5860D97
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790347432;
-	b=nMaP6LinCk7lM9Q7I2Cqbo6OhecX4ilLH/y1WdwX3HlofyQAy4vX6BfxliW/+/F1Znxp
-	 OptkqJrjuI2G4pOG5+NzGQsnbrzKCdMrmq1CLvPkCTo3TWupTD8MjeXi582NWG4Nvgame
-	 ZqOPt6JU5w4cINIzZzYmwLEQSdAK4QqJo6DrDzabuKDNZ5HbSPMQOH7N5SYghg0iWowbh
-	 qKwAk55ZhtQQ8RXahvCwe5IPhzm8OJ/kQSUr8UB45ntXGZJjLFz006ZGy9nhVUcb8pU1e
-	 Ittz2dNzProkK+nwuK2rD1tY1U5aCsuP5RMioD1RpULPEEYl6VSWRynYwpnJNGhcc4A==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790347437;
+	b=bPyHcm8cJOUt0Klj6lef6GUqCYLf+j3SCDlCaNzo3G3zCV8QzcDs2OwNd8RJiufCNHd4
+	 dDDnSwRAoz0gBMskVYENmyC9zj/KfaRuNThdYw3vr7/l+j7WpbHn+/vHLpnud55ILoEgR
+	 ao9O2vYkU4gKY0RLYHfUqGqtZ/AA+Nh2MgrZSyAmdUnNLb8q5dH/+fZ5V6JHsu0HolzVt
+	 6ZJNaSjBPehnzvrdv7w3Nf2zhKF/7N8cBkmWLB+HsQS5HUnEd74UQA0LE4RF/qWqP+mMv
+	 0H0IZaRjKYRcDE4Av3KJAMrW2F44JwnKY015q1DW0ELGm/HUsqgyBW8SI8hOOmHHbWw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1790347432;
+	c=relaxed/relaxed; t=1790347437;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -31,116 +31,116 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 MIME-Version:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
 	 Reply-To:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=Td9Id+2rqDBo6SKu0n0hi4I1US/U1/DhxyIUPlbH3X0=;
-	b=OVWKBTsixwX/zzEElPG4Kua/d3KgSySt3XUB2PsrZPngzrKX2TVpDNQzEnzMIyzBA3wQ
-	 TO0BtUTmp3cI0jxuUrYOeed9toAVSmRgyVT9u7UyK2b4EWxfO1T80i7zMe4Db1pxMr8L3
-	 Bc1MnFGKqZTlf0iQnssjxQXrtR9TN+XcLFsPnNHGpAcePp+fXwYkd3Yfp3TPYx6nBCoxO
-	 iht3LM3OmctaGmoUvlc+KPx+s+pow2KPF2RR4AW/u1KzkPvdXaDTIU8xN8kV7oV7qGjic
-	 nCWf6q81KAVxfyo4uG2aDm2faY3cLrruccv6ZUj0Cinl1rb4VNKWh82BPFP9DKqoiXw==
+	bh=f3talheVyvuEp40ncahMnhzdKLorrAIwdeACEynZZHo=;
+	b=c0TgPAp24cXGqjnCFqRSWIjFfPOamABW6aqPiahUO6YXLMuSIGh3Vve8H6vwMfcW+ssO
+	 ZKwYfBT0xTUiRTnJD+FzBpHD5ATErQSOE+4Bb9SpbLxsCvJGbHqUCZ2CtSgjZ/0iWjYnG
+	 8FqTcF2yIbY9NpMLU0f0zZ1uq9BqEIMbdFcVc9OpyWPXZV6Vc5b24klTRjYESxo0Z8g5w
+	 jCbLlgd+Oa0HwyMgTcTQkPYdLu/UTng+csVYOeec3/7bh3JWSsPpZEn2SSQm9oDxA6qgj
+	 Pepq26ftO+KL1byOHCbutYnHalonJ94VscjvKTeWND0m/ufUGGfrbf39yk+N3kLWp2g==
 ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1790347432;
-	bh=Td9Id+2rqDBo6SKu0n0hi4I1US/U1/DhxyIUPlbH3X0=;
+	s=default; t=1790347437;
+	bh=f3talheVyvuEp40ncahMnhzdKLorrAIwdeACEynZZHo=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=GTfFUfgJHfQxiBtZ5xGsbpcoJUQe9qYYhuG8BzeoSCwTTE5PzHirWPS/hjOi2ytij
-	 3K7eG76BngnKiot+AZbCkpq6E2H9PgMPj3BfaazdkZTQhpEibAysN2KVAwgx/Tcjeu
-	 rAZgWF2NKgYX2eq4puXaBK8im20753MZfdo4RgOD4rydbYK00/499ORVOZSIJtyDEq
-	 eiy6Nu+5Yux+wCvBMvBMWIRXZPY/4lUZiDkvgbJxfmyqXKQ6ZVs5zOxFeFyOzR1LZm
-	 ZN81D+9Elxz3McjMMJthDtllpguUejlkiSOPr9cMlpqP1sNxt7lY1WUJ289CWqkMMC
-	 aRNlYJvnlk0Tg==
+	b=NWKzavwC8Gs4aNd9PP84H/lhOHDBZotrfHCKRSP+nI06ijVmu/6hhR6QESU9OCyjw
+	 OWT6n49mQkj8Uljbp6K5+PqP+2uoILMzFmp8jMwJki6/4z/SVXlalVqM7lL3zp1ErQ
+	 OYY9DmHTQPQa4I+XCnGC1YCXWh89A2lEgaC31QyYf0cCDTAV30q88WCQUtmhCEZVvx
+	 K+4SCLfDx88NY9RRlrGJsHO1i0LL5SrLoXSA+AO5/fxpDQd9EcZ36WWYKvRAxCuoCs
+	 Px7E8+Jrq4athynxm6wtzhW4BqXeoToDw6fGx5P5OQETReMkXIcrLbeo55UlEEEZm7
+	 npIRAa673XbHw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1160060D84;
-	Fri, 25 Sep 2026 14:43:52 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 44A8B334
- for <buildroot@buildroot.org>; Fri, 25 Sep 2026 14:43:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5ED5860D97;
+	Fri, 25 Sep 2026 14:43:57 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id C8064332
+ for <buildroot@buildroot.org>; Fri, 25 Sep 2026 14:43:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 36474407FC
- for <buildroot@buildroot.org>; Fri, 25 Sep 2026 14:43:50 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B981F60DBF
+ for <buildroot@buildroot.org>; Fri, 25 Sep 2026 14:43:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NB6_johgCcjQ for <buildroot@buildroot.org>;
- Fri, 25 Sep 2026 14:43:49 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 1BCDD40790
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790347429;
- b=jEGHZCuNSZTQoeQG8cmAX1TpinF64ysCAuxVlx3W7EHXh9KbMx26kXp43hOWtzRaDez9
- 6wHGrr9C65qjm6IhqC/x8VQZS//hRkyw8KOYedJjy+YU8Rhis2muzGKLiCatG4SziikQ+
- fXFwQIE4biNgbf38/BNB0Ftx2seXKf/KxypRv45a1rzVVDS3TIKwWBTg7/YI0YEBiCy7I
- uTI4E55OI0P2Ns8aJvZcle2IIVRaGlfLJ05DUQ1UbLrUlVRqHd7qO6zm9VazeweQiqr1L
- 3WJ/j101O9vhkgXypw6BmtyvR43sB5uz+Orkz2hI9rApwEM+RwownoHigrZ8+BaMXvg==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4NjNjk8Ku15d for <buildroot@buildroot.org>;
+ Fri, 25 Sep 2026 14:43:53 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 8DC9060D95
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790347432;
+ b=PFvotyKpDAdevRXDCs1oMagKUj6hBay3lrYqmF4oUm87YBHDGbhdrlBKqgcfRrTmVe+F
+ uIo59YMGbkuWEwO5/8Mar7BemUkFTHv+d4AKt8bYjyjjgYmdHYmIBaGa5+qh1ZDRvVoOS
+ 8o2iqb3BnGm5z8DdaHuMECe0X0cnc0Z3CY/1TyGDDX0ufFjp9PIyyMQNoKvfmRPVZ+Mtt
+ //CvZtUu7eMnfEZB6Yp5kqxvAhaP2WtkonnZMeJlXIb+6ZU2S11ush39wfaE8t5Ym6NQn
+ euGy5AyiDAluTlIvdtaAdoUgUu8vuX/c1cWk5B97vgYf+GWpAgYeWKnVmY8n/Vhd6zw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1790347429;
+ c=relaxed/relaxed; t=1790347432;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
  X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
  Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding;
- bh=18/SzCsyRsXk363R6Or5F7wxzflI5g6DGaEi4GI3L+8=;
- b=SSEjla4HEvbSCjekEAOOoFD25yD2o8m22iAEhQ7Yx/2nHgrtbnmTLMtmuJYFkgqrMg0s
- L98IyBcmHOfiMur48xpuaaWMp4vqyYdcbvDA8vIWS8u/oPhaQICVndl8UKEuUrUDD4xte
- uDck2UO2QgleWt87o+lQpeJCSvPN3DBxL+EEl/tunvd7ClptZn22mTLrLDRsnGoKaXASW
- UPBiSfp2dRWimSDABDlka0gMJBv3GikvqzWizHz9bC0geAIDeWtBSrh407WnGDold7nA/
- Ime2Ry/k3VRfZFkeZG5m9fk4VFKfu7GiFQQY8T/gv3chk4Xm0M0mvbmp732/yQM96Ag==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org;
+ bh=HAEpgucp3lqXkNwmSziGrFd6786Fu/gwczLTrkstnz8=;
+ b=I2t6SqMVcVtN6YPCtQ33CFVygbxw6JOtWs7f89fl/Ob16HDI11/uFZvsTWqkSnz3+g2x
+ 41S+gol3B+694smSCNookbQf8scp+a32Cz/J2gW6Tf+IRD9AeqXtyWt8aqyRiMAadQ3Tj
+ plqUeir4/SBbwvqSVZ07IGAy7y3xkyO6xix0NJff7POk0s60qjZX/S7yxz7xAQi1wjdjS
+ lbi/jjcsibu/Ex+btt+a100KOr+9iqhiI7Y4qNwRWOnEskdD6nMnoycSbocR94fWoFw01
+ sw9lSCIxn1du4PMlVHR7lF/QwFV9YqlmuISgfm3wCR8E0kKtXpiQp30+sKGStNLmTLQ==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org;
  dmarc=pass header.from=mind.be; 
  dkim=pass header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b="Y9FL/In6"; 
- arc=none smtp.remote-ip="2a00:1450:4864:30::f"
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a00:1450:4864:30::f;
- helo=mail-wr2-x0f.google.com; envelope-from=raphael.melotte@essensium.com;
- receiver=<UNKNOWN> 
-Received: from mail-wr2-x0f.google.com (mail-wr2-x0f.google.com
- [IPv6:2a00:1450:4864:30::f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1BCDD40790
- for <buildroot@buildroot.org>; Fri, 25 Sep 2026 14:43:48 +0000 (UTC)
-Received: by mail-wr2-x0f.google.com with SMTP id
- ffacd0b85a97d-48882c1f261so169723f8f.0
- for <buildroot@buildroot.org>; Fri, 25 Sep 2026 07:43:48 -0700 (PDT)
+ header.s=google header.b=amm78b8P; 
+ arc=none smtp.remote-ip="2a00:1450:4864:30::10"
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:30::10; helo=mail-wr2-x10.google.com;
+ envelope-from=raphael.melotte@essensium.com; receiver=<UNKNOWN> 
+Received: from mail-wr2-x10.google.com (mail-wr2-x10.google.com
+ [IPv6:2a00:1450:4864:30::10])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8DC9060D95
+ for <buildroot@buildroot.org>; Fri, 25 Sep 2026 14:43:52 +0000 (UTC)
+Received: by mail-wr2-x10.google.com with SMTP id
+ ffacd0b85a97d-4843c3ea1f6so541678f8f.0
+ for <buildroot@buildroot.org>; Fri, 25 Sep 2026 07:43:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1790347427; x=1790952227;
+ d=1e100.net; s=20260707; t=1790347430; x=1790952230;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=18/SzCsyRsXk363R6Or5F7wxzflI5g6DGaEi4GI3L+8=;
- b=UFP7c9j5uKzWt9KHXP23w/w9gUL+qrIGlCnnmZGWMm6ST7GmIgQl0ATIEMZdbXOpUc
- 1dlm9WcMQtk5ZLlm68qSP36pvowLmrxwaQ/Ix9LmGLWte4kO1GGCdRPxqhfyL7gksFfc
- VVFIv8WZgwd2dfDMKopZKbzX3yQrWFX4YJR/rtUe69cDkI8Fst3e1YumpTOUxssARqQc
- fiVdsX/xLX6DUVCQL8gV0QOdX4dTI9fwnq45UsLg/TTLNvfkTms8SnBGmDHbCRcmXfl5
- VThFbaZ68PL2yAByVWACGgiNzoBxh4KYqIvMVjJzeBcOZLmCdLqK29g/Pf+3Ofzfyb8T
- hF5w==
-X-Gm-Message-State: AFuF++mKrTUPzOcSiwAhVt2Xv4VJTzkD8GPkcgaQu4/R1HcukgR78Qhy
- sZdqv01VyJ8AdgW9wgwnYKQtlwwKiQ0x0IE7ZO4p9diL8uHLr5hFB7XFe6KjyxHlK8qpLVpJ+W+
- 4ndRSeljLww==
-X-Gm-Gg: AYBFou1KH+PnwAWkUBEdjLjlRYUvPmWp6F2lOYQTJmzK9VfXYzTtSmLnv5pCvKoOA2t
- J4RKzq5/Xm1ZzVFFuL/DaLtxcnMvEPmnMvzM82pMLggognK76h2KeE1l7cUcmWXonJ6MHV5EXCb
- HG3HnWgUvds2FpcFIn7VJZU/GCsxSOkXJADvTttqI6AFyFudcxiCoLo2DWnnHTerszxNvkFUte6
- dADFGREDfrDcX0/5bC3Rl19ONVwz//YIshfUUj7UkAtuct1fBnjR9gDVMAYxHiF3JrwRMDdgfov
- wb1wOs8NCL70Y64xQzqg5Qpy+avjg37e0E2tm2Q6jnBaS0JWa46pw+/1RtWdDi17VHXu9fGVbtG
- 30RlnNx8EGPr4O6dS7Dx4eBGgxGTXyogIJ3WmZq7dS6Z8Bdo6wIQZreh01ScNsbkCBM0m1ZbZOg
- 9BUI8s3kbVABaZvru5/4Xo066Ww3xLzPH6HQCo1wa4WgRq+t5m1qHMeuj3XNQHX2DUT8CWNBJpv
- 4HQObBJDWxM/M3GEv6AWQ3dicUNza+INBtZ9gQldA==
-X-Received: by 2002:a05:6000:2383:b0:488:81d4:8bfc with SMTP id
- ffacd0b85a97d-48881d48c0bmr3008332f8f.11.1790347426747; 
- Fri, 25 Sep 2026 07:43:46 -0700 (PDT)
+ bh=HAEpgucp3lqXkNwmSziGrFd6786Fu/gwczLTrkstnz8=;
+ b=HmxbgXJDKa8I7fafkIzOr60boFwOQ2UEswheE5knSnsx2q2z9ZSJTT+3OusVXOyIm5
+ 8beEdLVr4v6MXI3fUoEsubQ0HzgZmHB3z6310WAaNcPsVYcTnmVr56R12uc36ZTk14Ln
+ PHse1HujBBJkyg2sFfP/DzYO0t+8iEtlQVFwjOVHOAJznKugS0DXAnxJW/9B0mpwnp1j
+ e/XNM25WFpYzhpVkLwVlyrfVI6JCFtLAhZHOK2uN/bWpeyfULu6lfHDC5nsWWTmMZXTR
+ IPFKEAegy7D7nSt1sQmI8958zVOviAPFRxSBsUbZYM10ngE8kkowG6sczNU4RVLjXfzi
+ Uxnw==
+X-Gm-Message-State: AFuF++lGj8TeRTd/Yn0YBZUDUY8HuXHmOTs3h5vkdOa5n8g3eOBvzsHW
+ 3+4R2Ms3C/uBit7MqHjgwLne6HGGngBb1IXZ1GYpcMnkYeXAk7A3Tx41HFVACb4bvqvt0qqyycV
+ 1kJgvYTFTpw==
+X-Gm-Gg: AYBFou0uuLIGwa2/caRzf9LDD/rpZEwVrdazROJkHU8aGhHxo1DaneBZ9OjBqXsmLDn
+ p/RY86Zp2YFkXC7ZThI1auUno5X/P4Tf8V4DIYG7BY/2Z5zQI8CvuvW+yyUodBynp9qeoYIM5j9
+ Jx29EqNpoOnCOBlYjGr3tZ8Y9/cGXQ5R3QgepeoWmRTwztznNAnQ2CRaIGkaO05TsWDZYkMf52z
+ ofxsoKXcsGeMt0jZlUWSKRZyIY9IgpMVa1NgVE1pDr9e6PW08fDRyp2AwuDhIdoyI9J37ZHlPyV
+ UeC+HSK6eQX3Q12c4lrvWOpBzlU6VsO4BBsDXqChYw/4Chv1MN/uol+wmNt70IxhXWcThVpA0P9
+ M0FTYBhytfIPxL7WJ5TIn8edra8x/NJK9JJ1HZXJ1Utzx1dH7AabKpi4Ed/iZGFnOZ6ie9CgbcA
+ n5WVSr430BPPiSuoLlU5toROhcylZIzjqF6zwtA/0xozEBP2YjI5cvgxr73vzAOP8ZMD9jyIq5p
+ UD8qi5IcoITSLfVM/bZyRWjbnlgc+PWLjRC7lboGA==
+X-Received: by 2002:a05:600c:4f4d:b0:49c:dadb:18a7 with SMTP id
+ 5b1f17b1804b1-49fe66cbb21mr124025225e9.10.1790347430199; 
+ Fri, 25 Sep 2026 07:43:50 -0700 (PDT)
 Received: from debian-hp-1 (ip-94-140-185-241.reverse.destiny.be.
  [94.140.185.241]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-4887a35fb05sm8492685f8f.20.2026.09.25.07.43.46
+ 5b1f17b1804b1-49fe5cd4c8dsm174728505e9.3.2026.09.25.07.43.49
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 25 Sep 2026 07:43:46 -0700 (PDT)
+ Fri, 25 Sep 2026 07:43:49 -0700 (PDT)
 To: buildroot@buildroot.org,
-	Julien Olivain <ju.o@free.fr>
+	Bernd Kuhls <bernd@kuhls.net>
 Cc: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
-Date: Fri, 25 Sep 2026 16:43:44 +0200
-Message-ID: <20260925144345.4095137-1-raphael.melotte@mind.be>
+Date: Fri, 25 Sep 2026 16:43:46 +0200
+Message-ID: <20260925144348.4095216-1-raphael.melotte@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260905144548.61238-1-ju.o@free.fr>
+In-Reply-To: <20260906105309.3690634-1-bernd@kuhls.net>
 References: 
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] support/testing: test_erlang: new
- runtime test
+Subject: Re: [Buildroot] [PATCH 1/2] package/exim: disable valgrind when
+ building with thumb1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -161,85 +161,54 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
+> src/valgrind.h contains inline asm not compatible with thumb1 so we
+> disable valgrind support for thumb1.
+> 
+> Fixes:
+> https://autobuild.buildroot.org/results/720bfa00ca926a398e901366e7ab20d08cfa9a81/
+> 
+> Inspired by buildroot commit 26013972ce568e55a121c21a55afce45bc0675e9.
+> 
+> The oldest build error of this kind dates back to 2022
+> https://autobuild.buildroot.net/results/85d/85d8e725a31bc1a3c41b2e388a17ff439274d437/
+> so a backport to LTS branches should be considered.
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+> Tested-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 
 Applied to 2025.02.x, 2026.08.x. Thanks
 
 > ---
-> Patch tested in:
-> https://gitlab.com/jolivain/buildroot/-/jobs/16325100707
-> ---
->  DEVELOPERS                                   |  1 +
->  support/testing/tests/package/test_erlang.py | 48 ++++++++++++++++++++
->  2 files changed, 49 insertions(+)
->  create mode 100644 support/testing/tests/package/test_erlang.py
+>  package/exim/exim.mk | 8 ++++++++
+>  1 file changed, 8 insertions(+)
 > 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 1fd93b1de5..4b8d8155b8 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1903,6 +1903,7 @@ F:	support/testing/tests/package/test_dosfstools.py
->  F:	support/testing/tests/package/test_dosfstools/
->  F:	support/testing/tests/package/test_dpdk.py
->  F:	support/testing/tests/package/test_ed.py
-> +F:	support/testing/tests/package/test_erlang.py
->  F:	support/testing/tests/package/test_ethtool.py
->  F:	support/testing/tests/package/test_ethtool/
->  F:	support/testing/tests/package/test_exfatprogs.py
-> diff --git a/support/testing/tests/package/test_erlang.py b/support/testing/tests/package/test_erlang.py
-> new file mode 100644
-> index 0000000000..a765cec843
-> --- /dev/null
-> +++ b/support/testing/tests/package/test_erlang.py
-> @@ -0,0 +1,48 @@
-> +import os
+> diff --git a/package/exim/exim.mk b/package/exim/exim.mk
+> index 5e9746af4d..482c7ca2c1 100644
+> --- a/package/exim/exim.mk
+> +++ b/package/exim/exim.mk
+> @@ -104,6 +104,7 @@ define EXIM_CONFIGURE_TOOLCHAIN
+>  	$(call exim-config-add,HOSTCFLAGS,$(HOSTCFLAGS))
+>  	$(call exim-config-add,EXTRALIBS,$(EXIM_EXTRALIBS))
+>  	$(EXIM_FIX_IP_OPTIONS_FOR_MUSL)
+> +	$(EXIM_DISABLE_VALGRIND)
+>  endef
+>  
+>  ifneq ($(call qstrip,$(BR2_PACKAGE_EXIM_CUSTOM_CONFIG_FILE)),)
+> @@ -154,6 +155,13 @@ else ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),)
+>  EXIM_CFLAGS = -DNO_EXECINFO
+>  endif
+>  
+> +# src/valgrind.h contains inline asm not compatible with thumb1
+> +ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
+> +define EXIM_DISABLE_VALGRIND
+> +	$(call exim-config-change,NVALGRIND,1)
+> +endef
+> +endif
 > +
-> +import infra.basetest
-> +
-> +
-> +class TestErlang(infra.basetest.BRTest):
-> +    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-> +        """
-> +        BR2_PACKAGE_ERLANG=y
-> +        BR2_TARGET_ROOTFS_CPIO=y
-> +        # BR2_TARGET_ROOTFS_TAR is not set
-> +        """
-> +
-> +    def test_run(self):
-> +        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-> +        self.emulator.boot(arch="armv7",
-> +                           kernel="builtin",
-> +                           options=["-initrd", cpio_file])
-> +        self.emulator.login()
-> +
-> +        # We check the program can execute.
-> +        self.assertRunOk("erl -version")
-> +
-> +        # We check can print a message from the command line.
-> +        msg = "Hello Buildroot!"
-> +        erl_expr = f"io:format(\"{msg}~n\"), halt()."
-> +        cmd = f"erl -noshell -eval '{erl_expr}'"
-> +        out, ret = self.emulator.run(cmd)
-> +        self.assertEqual(ret, 0)
-> +        self.assertEqual(out[0], msg)
-> +
-> +        # We check we can exit with a specific code.
-> +        exit_code = 123
-> +        erl_expr = f"halt({exit_code})."
-> +        cmd = f"erl -noshell -eval '{erl_expr}'"
-> +        out, ret = self.emulator.run(cmd)
-> +        self.assertEqual(ret, exit_code)
-> +        self.assertEqual(len(out), 0)
-> +
-> +        # We check we can do basic arithmetic.
-> +        val1 = 1234
-> +        val2 = 5678
-> +        erl_expr = f"X = {val1} * {val2}, io:format(\"~p~n\", [X]), halt()."
-> +        cmd = f"erl -noshell -eval '{erl_expr}'"
-> +        out, ret = self.emulator.run(cmd)
-> +        self.assertEqual(ret, 0)
-> +        expected_result = val1 * val2
-> +        self.assertEqual(int(out[0]), expected_result)
+>  # We need the host version of macro_predef during the build, before
+>  # building it we need to prepare the makefile.
+>  define EXIM_BUILD_CMDS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
