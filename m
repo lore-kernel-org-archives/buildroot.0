@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1EF39C9830D
-	for <buildroot@archiver.kernel.org>; Fri, 25 Sep 2026 06:43:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6DBC5C98321
+	for <buildroot@archiver.kernel.org>; Fri, 25 Sep 2026 06:43:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DF64681206;
-	Fri, 25 Sep 2026 06:43:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 326664083D;
+	Fri, 25 Sep 2026 06:43:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WTBluJiOO6VW; Fri, 25 Sep 2026 06:43:21 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org CEF9881219
-Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790318600;
-	b=m6dDGXcVv/9HtBF4C5W9lvLgEN6m8kLs6vBw7Lbve0Gla7GdjDEYk5fTJLE11GsRJ7wO
-	 Rw7TFoxhOEqsxHYWw9Tv5IdXjBQrabzptx4VNylBmgQ5hqvjZJEzVIcNbhu2LIGwE8yGN
-	 nUpUkVpp1hOZEoGU4/MRk6kUAvJXkQOD8NKtp/SXfvEeVA7cZEatxMbKET9LF5k5NuWiH
-	 oTet+ODv/oJX0EpjE/nb+OGjQVO4Zhvd5UO5CCHyiME8Wummdh8KRSNA3F70tAztrNNrM
-	 IpdVh/Gy82vldqFJej+w3R1tTS1i23G6Z7OhE3DMRdwjhOKHAqbeUiZBqAKPuiTdT5w==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZU52pDMBVD4e; Fri, 25 Sep 2026 06:43:23 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 3733640B10
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790318603;
+	b=jcKDwN4Z1r5+2hkWYMR772rxyS5xT7I8QbZD2CNbls+JJaYq0h3wiXkqmItkPgkW3HEK
+	 c8WyXY1KFi0UYyBHexqTuL6+l0DmcLzO26jOa5tywwZdvG2MY2vaPrFCT1wGRNy4TDOn6
+	 R1wlEYpiIn/6lNu5cJZc2C2lc2ARvmXUJwR8xNdCi7lXwRSNPVfA40cgGPfoPnaQVo4Q9
+	 aD1pPOG3sweyz7fJjX8lYktoiV+rqug3Rf/ZtXHpE2mn55a+jfAZQcCfP7eZdqXVHJX/j
+	 PaqK7LLYIcOpSUtmZRcOGVoKA7Ym/UT75OiuqxwNxTsajgyHZP9oBwxLjNqr5FuzRoQ==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1790318600;
+	c=relaxed/relaxed; t=1790318603;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -32,135 +32,134 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:Cc:Content-Type:Content-Transfer-Encoding:Errors-To:
 	 Sender;
-	bh=RQ1RssD3wrz6m65VZMlhFoPiN5dsxR4aNwFWtvjyEEY=;
-	b=KsYQGEk4xHw9s77N5xC9xzqE0vlaZ94cY87kxhZ78zIBTKirtBsiJw/wncT0WERVi9eR
-	 siyVLJU4zDoCfNf4hApnpzm4qNhFNFpDTZUb2EL2MoJ5FatQhVjniuoGxh5qH7XTttCoo
-	 d2dL5eyyVAF36rvFJdAn8qmiWrJQeaAbJHynoqPTSmh6I/wYACzD+xEvrFiffj111hXMH
-	 760JZMyXAw2/A/eQVWUrHvw297KWqDOrH+Rv2jdff7rh9EOyZXwpAUr6Nv45lQ7fR1u4H
-	 rh/O3h+rMpGWGBG+XyVNwM8CkBKGz8X6pkSgfbFcfpNf9HiJM0EvpFH0eCqQBJhaIrA==
-ARC-Authentication-Results: i=2; smtp1.osuosl.org; dmarc=pass header.from=amarulasolutions.com;
-	dkim=pass header.d=amarulasolutions.com header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google header.b=ipmWfCTe;
-	arc=fail smtp.remote-ip=140.211.166.142
+	bh=9L+pugMuebMxPPhPOJDtcMt1+spaNHzmw6Y3fhULouM=;
+	b=ntiaHrDwzluiv+lGcaWzfj3aKNzf2YHEhqSdD8mFVYa91rTCLdPOkVFzwI8BOdSy0D7U
+	 7Q8MWBelo6QyjCahZNhMAgc6KUf7cnLkgL03wNdYT0Rt+x7NeYUMMF8B6vef6n9pnBBuv
+	 HKhq+yC015bK7N4zB292eYbKTQY8h5SXn1hBdsxMuWTx/7JdSk2YUW3xIVy20DqiaDIoB
+	 vnoGBRxyAoPRXJsh4rfKfwAaCr25QlDVxpoA5TvUsNf8VJPQDkz5sUFaJNErz/SAOjn6I
+	 /dxnBf7tIU4FXknXriGw+qLksDAg+/T/eyklaX9b0YW8hrgwM6HLawq2+nM0zbajH6w==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1790318600;
-	bh=RQ1RssD3wrz6m65VZMlhFoPiN5dsxR4aNwFWtvjyEEY=;
+	s=default; t=1790318603;
+	bh=9L+pugMuebMxPPhPOJDtcMt1+spaNHzmw6Y3fhULouM=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=U72cmfBeT5fUztqeeDNoThRbfwVexMsKWGsB+EEAGZIZEsKET3cqoPhuxA9HzNr8n
-	 Ckm736NlheXz0eYULW55FAzZDyvybE8ed4UJ+hgms3maNCHQ+A1d4AaeLWlrWmj8p/
-	 J0VQ1jjcMDPp0RaV9OyS43Nk+qjkZx7sm8JMpA/OVTK2eEEN1664Ne8exeVfd4jKmp
-	 t4rOMFKj3qRGl6PggMLvf/+3Y5dHseK/NO3/Q2+1VY4MZNJkmd58wW9vdIhNrEfBP5
-	 HzflqZdhzekh0IyLFf4bz7u/+WtFjh3v5EWlEwASnZ+V1xJ4dwYWlHB+0EgZ91QKei
-	 Z0JMzeCONqEeg==
+	b=D+4d6EczSAKkLFQvQxvpZMcUXIznZ7Se7aJnnzfBvDjuO981N7M+kYBeTwXX1ut75
+	 PjEV89Ze/L5mpAjuH588YflCxWOoQiqSAJMzs2EKPNqM0dwQ/0w6DOrXPtDp0i3RqA
+	 AsJHaPv8uZExX9wIz0/g6M7KkAfwsHA4frxjl1hdmamIHOOy7NLosNUT2VsACB1urB
+	 XuBy+naxPwnR6/XwYCpTLk2yizeU+BGgM5jbWuo1jpMjxipGqmrtRd4kGut8LwVlJh
+	 67AS3WtEOxI1ikRr6gHu6tdCt68UFVOIHHC0BFlEr3CNKywaFEY7dInU4X3Jxsum/Z
+	 ouTeJXw0YRDZw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CEF9881219;
-	Fri, 25 Sep 2026 06:43:20 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 4F52B32F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3733640B10;
+	Fri, 25 Sep 2026 06:43:23 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id C1AED35A
  for <buildroot@buildroot.org>; Fri, 25 Sep 2026 06:43:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3E01381217
+ by smtp2.osuosl.org (Postfix) with ESMTP id B3CD9401E3
  for <buildroot@buildroot.org>; Fri, 25 Sep 2026 06:43:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ec3xz5IdkmnP for <buildroot@buildroot.org>;
- Fri, 25 Sep 2026 06:43:17 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 0422D81208
-Authentication-Results: smtp1.osuosl.org;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2oovNS0p5p-q for <buildroot@buildroot.org>;
+ Fri, 25 Sep 2026 06:43:18 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org B6B0140079
+Authentication-Results: smtp2.osuosl.org;
  arc=none smtp.remote-ip="2a00:1450:4864:31::10"
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790318597;
- b=SoWBIa0m8MSxmZRamvQBWPBE+9sqOiC9fT3yw1Nl64zVYSahVM9A3RG1zzTs657796Vk
- JxjG/dlcQNQIfTat0F6gB9WAShQfnPmx8cp2QMgvsPRq2jWjlTxd6qvLAwDXWVqf4zOLF
- 5Peife246Y7a0RMi1pmPxDGqXEMKkvvwT3VmiFUwGZpn1TkrCko/PkiPlQhsLoL/a/sMH
- X9GYGnuxPNMsogqOgdp36nU82kEesqGpfehhPle6PSLscwBnzCgcsNqsYbMo1pH/9QSwo
- /q/DSnpAWq0urNNyCbY0RPzyGvDrrV1+cGMpFE3n2P9z8xcfEh0G0e+RbUiMF/vBBWw==
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790318598;
+ b=k9EDnQa/dWiHLbp1eIx7ViZxHo7wD0RaQKNgDTByHhUiSIvpeAmDG08dLMRjjinNl777
+ ec27EN56yWsHLLNTUc0nIFekmV8PODmHN1fGDjHJdoL96P+U9anGspkq5Pm6zTKK+CLV2
+ dyikxytMgCDnu5F2mmr/FnuGtg+vaB3pgYl/iSkhbDcz6jlTyOixZMeQ2s1Egkl4KXTRF
+ KNvn+gL3W4sND2hlX0t4RNM5ZKy22gzu+NOCfTe+apsxrm3PZTfeylVrXlqXBKu0kNacI
+ UgbRf9rsxAkEEJukgy+cK81sbpftmWlVmZ+MbNuBbzBLuFcn7Qvvy3Dv2mZ7pwA401w==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1790318597;
+ c=relaxed/relaxed; t=1790318598;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
  X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
  Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding;
- bh=NyB/LB17yMC2PyrbWg24mMu9CT5cPQVqGOL3o80HKIg=;
- b=fiudQT3ru3Lv+k+o090gaB/Fp52i45kIhrw9Wt7w1CSxgqO7OBwOU9hyj51ED9oSixbS
- 6nLMIS10evrD/iuWK6YWO+Czco5pBOPavElPRoRjMCRJa7xxIut3jPyURn1RJ4jMxvwkL
- S9FeOeNTfeUJNWS5Y1CAS4bcM7f8AQEkP1aK5modfI1Mtq1x4LpKLlF9n+MZfYPykXBTW
- J3hltMzQ/PTvfFKTYNP0RmS/lx3WBR+Ki+JV3gWz1GZBkPdUrmX9jjYZKFWauoX55ExN1
- QtgXMXMWSKjevxCCXouedholx3xJxUMziq6A2Kor+5thfv3cpc2aOewiRG9DAyrvT7g==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org;
+ bh=O5P5nkyq0hPCVocnpTwOrn9Pkk7unn0FdtvmXk4STK8=;
+ b=BjxzSW1YkqdF+KRHFoYucCaqicJrZ8OtrGqALV0kxqP+9+hC+EK27AzteioaqsH5uNPG
+ xdKndgDd/FfYHJ0snuAH12HaQR464Pfk+MwZX4piydCJOJadGF8F0/5UKztSajpJOxc8A
+ RnF47xIubt2fLydXrRcKRGKUTbwy4v2RN/QRt0fJrbKuo+04N5kG0qZa9+1ZmLva8qsDI
+ GIH8aFMKdpQG6cnEwt+XJVEm/GZtJzCBWwuX2zr5QcG5naUdhkrFRTTnJwPZdVidFAq9c
+ o6U9Ni7DBZHyUk0wSs62s3F/m3i5Sy0rF7gLNesbGm7aY7JBryo826fakR+4PcoAoyQ==
+ARC-Authentication-Results: i=1; smtp2.osuosl.org;
  dmarc=pass header.from=amarulasolutions.com; 
  dkim=pass header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=ipmWfCTe; 
+ header.a=rsa-sha256 header.s=google header.b=WdH87V+k; 
  arc=none smtp.remote-ip="2a00:1450:4864:31::10"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
  client-ip=2a00:1450:4864:31::10; helo=mail-wm2-x10.google.com;
  envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-Authentication-Results: smtp1.osuosl.org; dmarc=pass (p=none dis=none)
+Authentication-Results: smtp2.osuosl.org; dmarc=pass (p=none dis=none)
  header.from=amarulasolutions.com
-Authentication-Results: smtp1.osuosl.org; dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=ipmWfCTe
+Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key) header.d=amarulasolutions.com
+ header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
+ header.b=WdH87V+k
 Received: from mail-wm2-x10.google.com (mail-wm2-x10.google.com
  [IPv6:2a00:1450:4864:31::10])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0422D81208
- for <buildroot@buildroot.org>; Fri, 25 Sep 2026 06:43:16 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B6B0140079
+ for <buildroot@buildroot.org>; Fri, 25 Sep 2026 06:43:17 +0000 (UTC)
 Received: by mail-wm2-x10.google.com with SMTP id
- 5b1f17b1804b1-49b912d37b5so2969905e9.2
- for <buildroot@buildroot.org>; Thu, 24 Sep 2026 23:43:16 -0700 (PDT)
+ 5b1f17b1804b1-49febbce9afso3223305e9.3
+ for <buildroot@buildroot.org>; Thu, 24 Sep 2026 23:43:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1790318595; x=1790923395;
+ d=amarulasolutions.com; s=google; t=1790318596; x=1790923396;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to:content-type;
- bh=NyB/LB17yMC2PyrbWg24mMu9CT5cPQVqGOL3o80HKIg=;
- b=ipmWfCTeG3eWVPGjkngAGIlHpOdjVuYZlr1K+TNMiz8dkzpN/r2xUmZBuuJh01EmlX
- g9FXFO29/yXMWXIdRDes5Y/q65G8gjcU2YAGTmUNeHfXTMxDuHjfWfVOrdt9Kf7D7ZOf
- q7bfpCNlnLYvJl7L4Jwqu92ditEMJxBN6EPA8=
+ bh=O5P5nkyq0hPCVocnpTwOrn9Pkk7unn0FdtvmXk4STK8=;
+ b=WdH87V+kVT635wyeG+wbibLedxQd9KaYwx2hbYbP4/gyR3WOU2o+1pErE2ND7kSYBE
+ l03B/GB/sMiQNOj8Uu9GbfMhT86BdCwFEXEYFKRridnU6hW22bhUo3f4l3Q0dJ2Qjj7S
+ GSsUyqV7yMvEqE6yC7xY8y1PXV42ysJkky0cI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1790318595; x=1790923395;
+ d=1e100.net; s=20260707; t=1790318596; x=1790923396;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=NyB/LB17yMC2PyrbWg24mMu9CT5cPQVqGOL3o80HKIg=;
- b=WjFr8X2PqFyjOlQ6eIcXk83rkqZezNkRa2aR8wM8JNCxQZc1tbBUPJE4fngH3dprfi
- 0uc2DROixOtCdLNc0Um2YD3uXuufqnpifhDieWq+8/bmYraDfPslGklqjcSigYBcQ2cV
- T6BT18Y3qDvrxOet+Uhy4Ytzmmsg3e3QcPPRLRwEHSJAuRK8HZedpWYtyAybHhloHQD6
- rIzs7oXJuUf4BuNou4xtPRjC8xEPb8hjhl6uXksRb2NLHLgdQX3xEEMqg9CTxP5EPgC9
- RcKSrGpj2EX2qg78XEtCbIRrsTSogsd43wmbbwg8374kfeB9OKv5rw92WN3UEaLlOIry
- rXxQ==
-X-Gm-Message-State: AFuF++lQJdgWK/6zFmD1nM1t1dN+k0iYWrhyp+5VaMsjS/eLAKL9gsql
- 7p7cimxDyfeij0a3cNUrVNn5DbTOesZxzbe/ArgIN0xEPqa7ZYDXIsKxiRACbeahRKK8kygdFtv
- fRzEuds4=
-X-Gm-Gg: AYBFou1CEo+uqDaTZYr9SqOKqvHWlsFhRbh1Y2HE0vDQtP7ga/OPvzfxXxbnzv436wG
- 4N+vyX83+o/bJZGsncTyUufqiZGLqcEYawdu8E9gDb9SKjjv255XICM7E1MEeIrvPKCqb++nFWM
- 1kM+hjfSe14tFT49R+/li9q3PjCjHcWMw00Bbe40QKUYCLqw4vo22kG1xH56WYIkZofQvCpdCrK
- D6iqHwNXZ93XM/bkUbAIvCXbdbOJ2Kpj2SZA/o3wTYZurc21XoyvUTy9liYqPmBHvIWssUOHMfB
- kDlVpqzqytuMZjhNoLwKVodpfR7iygebY95We+9P7W/sW2rykHWqkKPPkLjX0o/i3C+IZ6BSpdC
- KJFwugM6FZ0BLuWXrxATlqBRKKaZCKwy8Vsejjcaq+0BL+ff9+7MCRkdWApHGm5r8vFuET0/juZ
- 94EKBnaYY2LfWVuQMsDWr7RC/XSrSjQ65kt/TPuM7ETIQOsMeOUATPIZbSc/n0efRqunLyGxYPY
- h5D4KEGlQM9JI9gBRIMQZSM/cqO5ZKlUXnTMK6i6aVh/DhPOUw62DqZ2+AeF4zirFuEMJCgyzjV
- dMqRc592D19RPJ9qiRPl3t9gOdZjdTnYroK99u7SgAarvyRfgZGC1ZbdUTguGTrFA8Xx7Vk=
-X-Received: by 2002:a05:600c:4e8b:b0:49f:ce78:356a with SMTP id
- 5b1f17b1804b1-49fe66fb018mr81759845e9.27.1790318594524; 
- Thu, 24 Sep 2026 23:43:14 -0700 (PDT)
+ bh=O5P5nkyq0hPCVocnpTwOrn9Pkk7unn0FdtvmXk4STK8=;
+ b=C7vvsBfz4FO+GWQ98+bhjHQBYfeu1rNRBx83+79YAiOfUs3tycT8dDr75ARNNEs2Ac
+ wndF71Vx2jpdChIc0MU1J+MR/g5FtO2vM1Sz/mzsz5ZlpMpH4S5L7rnhN8wHPrRnOGPG
+ te3o3qWO2RE+NZMjxxH/VQaZpsMK2h191diQ9IILgO11NaTHfmT644llcYfJMBw97G+l
+ yNHnIUP4qr3NbMYizQRUuuGg59wVSyStPjAUwZT3/HTN9E7koGuY7lX/sjYJV2fpQTl7
+ M4MzD4F9Lu95IwWsWaHj6RuVjPXhPGDuvwHf8ePzlf1iVY2NIn6x870aizfQO34HkeWe
+ ZetQ==
+X-Gm-Message-State: AFuF++kE9eXmCzsmlh+/40ZV8WynD0A32KreHitUFjuE/Puu6mY5nAKa
+ s2Igfxff64ovp+NWCOi92ZTBQpVU6Bb0oHUkgP70mkqiMlfVf4f3fRmriBDn7fQaHY5Iu6ikP7d
+ Sspe7Y6g=
+X-Gm-Gg: AYBFou3SbnaMqA0Q137sgzTu5IRA2mPhVStvFD6Bfw1oN/IIxBqbczlgqo2Sn4nRmSx
+ 1uoi7/wiOvfgZIAOM6bZAuQ+gd4Dvm2DAaAHGWqlMPAfZrjwO3KRQ+IalyMaJB2AgHbHLJZhALK
+ e7bcz6on2A0J7X4KwdWocxGn63Flj+xw3nfJO1nJVKUfRWg8ug7X0qZ0eUMp4KtFI8LqF6ys1qb
+ ZAQIvUIxj9IPOXFJ1QKPcAFsLX7mQN1BfjaN+cwDegr4+zQkkHl99KP61a2VTthGeQn5fSJgK8W
+ egpsKu9XaZtsqUs0FmwUIwSaiwUEDR+cIuwGrwK09mgOi9gn9yPuVCtgNKhU6oTvs5hNDMWmrHh
+ Ina8Lv2VMXLWLLDVmjPhi4B/JC06kM4N/WwBx7sEE52u6ErFWx7naNStIcOTKHUNEAscidsidUR
+ 7YD38wmspG3Tm5slC0Fw/5EQ1k6DOC3KvkNutjYfyNrQ9JGUFx2ufArE11+vzG2gOAg6qJMcuwr
+ BeTuRBhhFIbPAwQDcntaPhFlwbgHLoZwyuOgTf2Av2zIoVbvbIxDAXz7kYiTbfqoCrj9Izw8ju5
+ rSR/9PwpIpdsdM50y0PDiYQGmSc6LhrrX+HZSCDg43iZWfzTZC0ZWKSO6LYqFRwo2abyiZ8=
+X-Received: by 2002:a05:600c:83c5:b0:499:bf0e:95c8 with SMTP id
+ 5b1f17b1804b1-49fe66c8623mr78638385e9.1.1790318595912; 
+ Thu, 24 Sep 2026 23:43:15 -0700 (PDT)
 Received: from dario-ThinkPad-P14s-Gen-5.homenet.telecomitalia.it
  (host-79-14-29-58.business.telecomitalia.it. [79.14.29.58])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-49fe5df44f9sm115584445e9.11.2026.09.24.23.43.12
+ 5b1f17b1804b1-49fe5df44f9sm115584445e9.11.2026.09.24.23.43.14
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 24 Sep 2026 23:43:13 -0700 (PDT)
+ Thu, 24 Sep 2026 23:43:15 -0700 (PDT)
 From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Fri, 25 Sep 2026 08:42:55 +0200
-Message-ID: <20260925064257.1162394-5-dario.binacchi@amarulasolutions.com>
+Date: Fri, 25 Sep 2026 08:42:56 +0200
+Message-ID: <20260925064257.1162394-6-dario.binacchi@amarulasolutions.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260925064257.1162394-1-dario.binacchi@amarulasolutions.com>
 References: <20260925064257.1162394-1-dario.binacchi@amarulasolutions.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v6 4/6] package/pkg-qmake: support Qt6
+Subject: [Buildroot] [PATCH v6 5/6] package/qwt: enable build with Qt6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -184,98 +183,78 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The qmake infrastructure hardcodes qt5base as the Qt provider. Select
-the Qt major version from BR2_PACKAGE_QT5, which is mutually exclusive
-with BR2_PACKAGE_QT6, and use it to pick the qt<N>base dependency, the
-QT<N>_QMAKE command and the QT<N>_QT_CONF_FIXUP hook.
-
-The header sync hook now takes the version from QT<N>_VERSION_MAJOR and
-QT<N>_VERSION instead of hardcoding 5.15.
-
-Document in the manual which Qt base package is added to the dependencies.
+Version 6.3.0 added support for Qt6, so enable building Qwt with Qt6 as
+well.
 
 Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 ---
 
 Changes v4 -> v5:
-  - Drop the hardcoded Qt versions, only select the major version from
-    BR2_PACKAGE_QT5
-  - Take the version for the header sync hook from QT<N>_VERSION_MAJOR
-    and QT<N>_VERSION
-  - Document in the manual which Qt base package is added to the
-    dependencies
-  - Update the commit message
+  - OpenGL option depends on BR2_PACKAGE_QT6_GL_SUPPORTS
 
- docs/manual/adding-packages-qmake.adoc |  4 ++++
- package/pkg-qmake.mk                   | 18 +++++++++++++-----
- 2 files changed, 17 insertions(+), 5 deletions(-)
+ package/qwt/Config.in | 22 ++++++++++++++--------
+ package/qwt/qwt.mk    |  4 ++++
+ 2 files changed, 18 insertions(+), 8 deletions(-)
 
-diff --git a/docs/manual/adding-packages-qmake.adoc b/docs/manual/adding-packages-qmake.adoc
-index e09da166b909..1d97556abe79 100644
---- a/docs/manual/adding-packages-qmake.adoc
-+++ b/docs/manual/adding-packages-qmake.adoc
-@@ -55,6 +55,10 @@ All the package metadata information variables that exist in the
- xref:generic-package-reference[generic package infrastructure] also
- exist in the QMake infrastructure.
+diff --git a/package/qwt/Config.in b/package/qwt/Config.in
+index 736ccc2a5ea5..7b0e068ad131 100644
+--- a/package/qwt/Config.in
++++ b/package/qwt/Config.in
+@@ -1,9 +1,13 @@
+ config BR2_PACKAGE_QWT
+ 	bool "qwt"
+-	depends on BR2_PACKAGE_QT5
+-	select BR2_PACKAGE_QT5BASE_GUI
+-	select BR2_PACKAGE_QT5BASE_WIDGETS # printsupport
+-	select BR2_PACKAGE_QT5BASE_CONCURRENT
++	depends on BR2_PACKAGE_QT5 || BR2_PACKAGE_QT6
++	select BR2_PACKAGE_QT5BASE_GUI if BR2_PACKAGE_QT5
++	select BR2_PACKAGE_QT5BASE_WIDGETS if BR2_PACKAGE_QT5 # printsupport
++	select BR2_PACKAGE_QT5BASE_CONCURRENT if BR2_PACKAGE_QT5
++	select BR2_PACKAGE_QT6BASE_GUI if BR2_PACKAGE_QT6
++	select BR2_PACKAGE_QT6BASE_WIDGETS if BR2_PACKAGE_QT6
++	select BR2_PACKAGE_QT6BASE_PRINTSUPPORT if BR2_PACKAGE_QT6
++	select BR2_PACKAGE_QT6BASE_CONCURRENT if BR2_PACKAGE_QT6
+ 	help
+ 	  Qwt is a graphics extension to the Qt GUI application
+ 	  framework. It provides a 2D plotting widget and more.
+@@ -14,15 +18,17 @@ if BR2_PACKAGE_QWT
  
-+The Qt base package the package is built against, +qt5base+ or
-++qt6base+, is automatically added to its dependencies, depending on
-+whether +BR2_PACKAGE_QT5+ or +BR2_PACKAGE_QT6+ is enabled.
-+
- A few additional variables, specific to the QMake infrastructure, can
- also be defined.
+ config BR2_PACKAGE_QWT_SVG
+ 	bool "SVG support"
+-	select BR2_PACKAGE_QT5SVG
++	select BR2_PACKAGE_QT5SVG if BR2_PACKAGE_QT5
++	select BR2_PACKAGE_QT6SVG if BR2_PACKAGE_QT6
  
-diff --git a/package/pkg-qmake.mk b/package/pkg-qmake.mk
-index ccf78692e885..7f73c3087b5f 100644
---- a/package/pkg-qmake.mk
-+++ b/package/pkg-qmake.mk
-@@ -20,11 +20,19 @@
- #
- ################################################################################
+ config BR2_PACKAGE_QWT_MATHML
+ 	bool "MathML support"
  
-+# Qt5 and Qt6 are mutually exclusive
+ config BR2_PACKAGE_QWT_OPENGL
+ 	bool "OpenGL support"
+-	depends on BR2_PACKAGE_QT5_GL_AVAILABLE
+-	select BR2_PACKAGE_QT5BASE_OPENGL
+-	select BR2_PACKAGE_QT5BASE_OPENGL_LIB
++	depends on BR2_PACKAGE_QT5_GL_AVAILABLE || BR2_PACKAGE_QT6_GL_SUPPORTS
++	select BR2_PACKAGE_QT5BASE_OPENGL if BR2_PACKAGE_QT5
++	select BR2_PACKAGE_QT5BASE_OPENGL_LIB if BR2_PACKAGE_QT5
++	select BR2_PACKAGE_QT6BASE_OPENGL if BR2_PACKAGE_QT6
+ 
+ endif
+diff --git a/package/qwt/qwt.mk b/package/qwt/qwt.mk
+index 67292ee025be..0e835c700e16 100644
+--- a/package/qwt/qwt.mk
++++ b/package/qwt/qwt.mk
+@@ -18,8 +18,12 @@ QWT_CONFIG += -e 's%/features%/mkspecs/features%'
+ 
+ ifeq ($(BR2_PACKAGE_QWT_SVG),y)
+ QWT_CONFIG += -e 's/^.*QWT_CONFIG.*QwtSvg.*$$/QWT_CONFIG += QwtSvg/'
 +ifeq ($(BR2_PACKAGE_QT5),y)
-+QT_VERSION_MAJOR = 5
-+else
-+QT_VERSION_MAJOR = 6
+ QWT_DEPENDENCIES += qt5svg
+ else
++QWT_DEPENDENCIES += qt6svg
 +endif
-+QT_BASE = qt$(QT_VERSION_MAJOR)base
-+
- #
- # Hook to sync Qt headers
- #
- define QT_HEADERS_SYNC_HOOK
--	sed -e '/^MODULE_VERSION/s/5\.15\.[3456789]/$(QT5_VERSION)/' -i \
-+	sed -e '/^MODULE_VERSION/s/$(subst .,\.,$(QT$(QT_VERSION_MAJOR)_VERSION_MAJOR))\.[0-9]*/$(QT$(QT_VERSION_MAJOR)_VERSION)/' -i \
- 		$($(PKG)_BUILDDIR)/.qmake.conf
- 	touch $($(PKG)_BUILDDIR)/.git
- endef
-@@ -45,15 +53,15 @@ define inner-qmake-package
- $(2)_INSTALL_STAGING_OPTS	?= install
- $(2)_INSTALL_TARGET_OPTS	?= $$($(2)_INSTALL_STAGING_OPTS)
- 
--ifneq ($(1),qt5base)
--$(2)_DEPENDENCIES 		+= qt5base
-+ifneq ($(1),$(QT_BASE))
-+$(2)_DEPENDENCIES 		+= $(QT_BASE)
- endif
- 
- ifeq ($$($(2)_SYNC_QT_HEADERS),YES)
- $(2)_PRE_CONFIGURE_HOOKS        += QT_HEADERS_SYNC_HOOK
- endif
- 
--$(2)_POST_PREPARE_HOOKS += QT5_QT_CONF_FIXUP
-+$(2)_POST_PREPARE_HOOKS += QT$(QT_VERSION_MAJOR)_QT_CONF_FIXUP
- 
- #
- # Configure step. Only define it if not already defined by the package
-@@ -62,7 +70,7 @@ $(2)_POST_PREPARE_HOOKS += QT5_QT_CONF_FIXUP
- ifndef $(2)_CONFIGURE_CMDS
- define $(2)_CONFIGURE_CMDS
- 	cd $$($(2)_BUILDDIR) && \
--	$$(TARGET_MAKE_ENV) $$($(2)_CONF_ENV) $$(QT5_QMAKE) $$($(2)_CONF_OPTS)
-+	$$(TARGET_MAKE_ENV) $$($(2)_CONF_ENV) $$(QT$(QT_VERSION_MAJOR)_QMAKE) $$($(2)_CONF_OPTS)
- endef
++else
+ QWT_CONFIG += -e 's/^.*QWT_CONFIG.*QwtSvg.*$$/\# QWT_CONFIG += QwtSvg/'
  endif
  
 -- 
