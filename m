@@ -1,146 +1,156 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32313C9830D
-	for <buildroot@archiver.kernel.org>; Fri, 25 Sep 2026 14:47:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D3CDC98321
+	for <buildroot@archiver.kernel.org>; Fri, 25 Sep 2026 14:56:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C362D60EAF;
-	Fri, 25 Sep 2026 14:47:47 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ygaz8RRv02VF; Fri, 25 Sep 2026 14:47:45 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 89CEF60E8E
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790347665;
-	b=j6Xw3OoNLonL6DIDlo83DA5HfYxRUQbyhLROkiK5AQJSrLcOJW/lCNgp75WyT+3aCngZ
-	 Wm3Y12pn8Zn6r8UNcfYAe61MEPYFExCJ9nm6C5JxrqrF8gByFZnBFrFDWIwBqS0+UStpM
-	 SFShjn5qjnpn5T1JwFCyVXrDf4N9ToGTgAUjEG2jtmqrV2eAi1xBJ7URR+gMsmS7GVTpI
-	 16eHkowtSrL0MLjxLx62PihFyT6TaIJ+v72h4wLLzxYXnWK9B9TLgboFzGrTYHXqzKqdZ
-	 GOdeW0xec/Ap1vhN4DI3MN66xeqSfzBVpSm7pO/xkJJfseAMFpSOlmeGsfbcFjDQv2w==
-ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1790347665;
-	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 Received:To:Cc:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
-	 Reply-To:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=aJ0+CwLMYFg5QH4IfINj+Sgm6fCSW9PW7JLloz/DY6A=;
-	b=Jlud6NzPbvaP3A3SPeko/llnKi0i0+lFevwDk+Khh0CfmmYN1ZyasUgaGJASV1EyJiEY
-	 3a0v2u5YmqWkzuG/v0oap8O4rM20lqhWvEcXXwwSDPNtf5yOGtsaq04OcS9JTI6m2h8yi
-	 LsAFjHyMjpgI5xc9oNsXc++z3PT5rOQmLOd6Pz73AYf3AOng9/5a4Cl7v4XpjWQlQy2gd
-	 LB9gkpwW4ClNRxRPEundnhjK7wZoFeHx0UMRzpPsqyZmNY+teNLk8Rgkj1K44YSux2YkK
-	 TcY/UJ9de5L100uWx0sgHrRMCqs+TNEJc/TsF5J8HlRA1SFgiTvL76F5mzMiiu6zK9w==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1790347665;
-	bh=aJ0+CwLMYFg5QH4IfINj+Sgm6fCSW9PW7JLloz/DY6A=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=VThuySAM5mwMqfpuGPZm2Is6wfab02z0EzkPzamRO4KZD2dvougsMz95u7l/UzzIP
-	 20GUHzTSnkbnVrDfFst/HIFUPwoaOrEGaMiL8qAL/3ZLAbVmS6t2ztEmuRJII4iAVC
-	 pWWln/YHJytEVIjKF+be/Xd25eG9ahNqMUCIkVqdzi2Hfjf7F29Jk3G4Ib+z5XG2fp
-	 cVH84dM/BM8CadZhme4XUf2gg3+PVR1iEyvHM5uMgmNe7etiWKyEnnH1bSPwBUSL5u
-	 /fBBHdaoVLre+HchKy2O+ECk4sQPL0s3RLqM4b2gzRmjFp07faz2vJQ+2OJosXqvyV
-	 p07b5SFu65+Kg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 89CEF60E8E;
-	Fri, 25 Sep 2026 14:47:45 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 7FE3E332
- for <buildroot@buildroot.org>; Fri, 25 Sep 2026 14:47:44 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 65E4F81448
- for <buildroot@buildroot.org>; Fri, 25 Sep 2026 14:47:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1E7E581347;
+	Fri, 25 Sep 2026 14:56:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VscD-D9gI7so for <buildroot@buildroot.org>;
- Fri, 25 Sep 2026 14:47:43 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 08CA8812A4
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790347663;
- b=p4M6/vZrrQtZZvRUG6JyavO5ZCoFTuiOTUy69m59P5uDqyPd37Y3VweaFGnJXk9Gfb8A
- UK/9/SX9X2I8wkLozGoO0fHoStnGP46ANOKeqdTYVT5wTRO+mYuh77sfqbhJcq76wvjLQ
- GpK0UKaOUBekOz8ye0ajJksZ0hWXTgueCrMqiNxDYyKXQEM5FV5zbomqR5XlOZUpHLTir
- eAQJVkjqa6uxFn4MxbZvR724+svttcGUhH9ZUz0U8CxWLhF/oAPCrjFT2CrgDtPvKhqGi
- hKtRtSEDbNElomxgRBhqHsIyq9VzOerlbMhUcJBXe5WIbwq13FgyMqkv2iTiZB0WJeg==
+ id Vw0exNLZLqIj; Fri, 25 Sep 2026 14:56:49 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 3AF8D8134D
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790348209;
+	b=joxXukbzOo1qRe/N/t/3aFG92oNQjxV0y7zXPefXaGzQnELoNLJ5sU7YkAUe/RpADZFY
+	 svRRcgsXOUvP8/lCkbpiOXtz5ZrF5jQS9LKy3AGgscqPiOKkEJ5E0vnx7zpyM5qxcl0g9
+	 Luw3GpJyYAe1m5zUkoJa/rHB9I/KG3WZYDnAk8jdZFm1s3Hrfhc1EU3cD0I7jCpbtuPPb
+	 uKe5QQmnFoaKDmG0o+o7z49wOcncP7kHMfC81vRnH196pO9TC18osK5LLKc49MbkQdlIx
+	 w1kKKX4/M0qMPtkoTOt1/MyuxoGuPiEC0hVK2iSEr3gOdt0whwqE1PeOhAbYWY1F/rQ==
+ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
+	c=relaxed/relaxed; t=1790348209;
+	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
+	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
+	 X-Received:Received:From:To:Date:Message-ID:X-Mailer:MIME-Version:
+	 Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:Cc:
+	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
+	bh=4nyW8hfhTCWaiIkNTyynb55nQIxBc3VHznr1TyJgsu0=;
+	b=VYFK+OxIZngoboWLOoBdEx2WD2rAQQon1yv0PWfTcx5iHxom1K2L4PX0sbqsZSmZKGNY
+	 cXHJtrvf3ZSj+d6cu895K/MMxHpKqQOUQJeyXGIvvvYwX6JcvvjH2qAdxh0Pk96F8b19m
+	 SmhvjUHxv2+ogXWxF/A6HY3ebr7rpbLjLWqU4FYBUyZkrPTgLdOCG00stOt8aNjzuGzOf
+	 WL9FBVIeLZLT1cyZsE5qRNbzSFrIkIas5btwxbbgb0E9GoElA7wSfJHPG2q2kqldiAKqb
+	 6nqCU+dYGr+5+Y1nl9TZpSb8wLXhf1F2hOtvAVW8iqtOI4hA64ZXv7Fme90BKx8Rg9Q==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1790348209;
+	bh=4nyW8hfhTCWaiIkNTyynb55nQIxBc3VHznr1TyJgsu0=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:Cc:From;
+	b=fLAOMghrbtS2EvQ8P6wudlywMxrvbPuKODBgsazjEcWoYB/0M4SiUHNTyLqYDgNhL
+	 GhMBuizGzh2dZhCOWepDKE5s6LjNQAgD0L57tReUHvg4m92sIkdx3FwVoTkdW9AFGP
+	 5mWubsU7mXbTj3pWejO0EHRiZmXlp1oJCkWwdoC4NF8U+PacSd7KAVlmoepu14MpYP
+	 V8U2vAPZg84egHr83hDFiu7OZdftkRAGShSvHROvzbevOk2RDm1KfZwceT3EGYmtCU
+	 TULUtCBH6H8TUpcR59Ou9d5zhh7r2GlTyovKXuPakcnUfUPF6DT3IXoh2YyiPoA7xn
+	 jmDwaI3HeqczQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3AF8D8134D;
+	Fri, 25 Sep 2026 14:56:49 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id A02AF332
+ for <buildroot@buildroot.org>; Fri, 25 Sep 2026 14:56:47 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8E6A140CBD
+ for <buildroot@buildroot.org>; Fri, 25 Sep 2026 14:56:47 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WVoYhDJEWv3I for <buildroot@buildroot.org>;
+ Fri, 25 Sep 2026 14:56:47 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 7AC0A40CB7
+Authentication-Results: smtp4.osuosl.org;
+ arc=none smtp.remote-ip="2a00:1450:4864:30::f"
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790348207;
+ b=sL1M5d/mXy8BKo8VOomaiEEnGEQtNkkIsulDfxBRK1HjKIN4aXnPOKC/kJzTFWo2v+3m
+ 293oFWDEkx6M2EFc6XumJV8h113UTzxnQx3kNPjBSBz2Aa8+GYwB5RL1qsMeXzxijjXlK
+ YC6enXnepXDUdKrK7V3x2evzxKJZr6oOfmMxaJMGL0hjNXZKppyI0LsZlK90o0Irrphs6
+ hnux8BPOHRNxw01YkxkDvf5f2EYeEdbjgola9HGrhAH+K4M0iz0mNru3XnVr5HCWUNe6F
+ ev3PQXnsGHxmpcDrfyRZJ7wY8zrzsumLNGbWda2c2wdpnJpuldiCNjAo+UsjYR3165g==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1790347663;
+ c=relaxed/relaxed; t=1790348207;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
  X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
- Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
- Content-Transfer-Encoding;
- bh=pnbz33CsinHFUYaeOzs4Dl4ysxoIQ3cp4Wa0FPZAF6s=;
- b=I+5FyElxEzBVrRoWe3EJ8JWnBZzsErTNMgzikszD3NxAfgenQUu/TN5d1kF/7NILz1+n
- zSPDLYrJQYWd4ot0PEYzXgXXwLHgKncoStay7MhyNn7eqsUnoDsxJpxbYjIbvKgKUHliA
- WHCl2OWzd9PwQWWOyOSd7gwTU0RfeDoPbB+486t3w/kdJD/v5Gp/JcvF9MUG1KCAUQnu9
- 0SOUmInuR/5twWKrDEIeCRQQ1jx3tboWxc8cmm95BWA2Wa2iJ+8ei2v81qSDgidYRFK86
- Ov1anckzk/knKWnsFUc97fOEkGxNAYlPvbFmOi9LvFjUnjjE9LaejFrTj3jTw5JDkaw==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org;
- dmarc=pass header.from=mind.be; 
- dkim=pass header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=UnwH5rq7; 
- arc=none smtp.remote-ip="2a00:1450:4864:31::11"
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:31::11; helo=mail-wm2-x11.google.com;
- envelope-from=raphael.melotte@essensium.com; receiver=<UNKNOWN> 
-Received: from mail-wm2-x11.google.com (mail-wm2-x11.google.com
- [IPv6:2a00:1450:4864:31::11])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 08CA8812A4
- for <buildroot@buildroot.org>; Fri, 25 Sep 2026 14:47:43 +0000 (UTC)
-Received: by mail-wm2-x11.google.com with SMTP id
- 5b1f17b1804b1-49cd38e0e5dso12917885e9.2
- for <buildroot@buildroot.org>; Fri, 25 Sep 2026 07:47:42 -0700 (PDT)
+ Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+ bh=1LC+XOvg3BUIQ4yyqjmKlOzZVw+e8pEqtUWzWyddhAU=;
+ b=dIqCKq+iAAioxGkBUnzD0GyOBfPwZCqhxF00HAeyI5LY3NTPS29pvWQ4AdXnNukfZlzI
+ 31kyMs+KW2hrtt04XAfpWmvnZLIPTfNor5X5fCGwbuZ9G4rppJXAqnGX8upWM1ERhk1Rb
+ GqY2t52w2MdB5xsTZ+/LP40rFAN52cDJS+FDnBmlYeAyGoUCI3lozdkQCy7nYEE+6/Xxz
+ 8e58f7E08cNlXqQK1aRbdbR5F1vyoPt/PpQgWArciSXB5JukGLm+6Nn+/VKMfEEivmca2
+ EU1sTbJOCM11Pwb4DX5zPrUUrphDLQh5BngX2SVd2C3UorLbGFSpF9W8E//cGUkcnew==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org;
+ dmarc=none header.from=vodden.com; 
+ dkim=pass header.d=vodden.com header.i=@vodden.com header.a=rsa-sha256
+ header.s=google header.b=MHJTeA5m; 
+ arc=none smtp.remote-ip="2a00:1450:4864:30::f"
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a00:1450:4864:30::f;
+ helo=mail-wr2-x0f.google.com; envelope-from=richard@vodden.com;
+ receiver=<UNKNOWN> 
+Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none) header.from=vodden.com
+Authentication-Results: smtp4.osuosl.org; dkim=pass (1024-bit key,
+ unprotected) header.d=vodden.com header.i=@vodden.com header.a=rsa-sha256
+ header.s=google header.b=MHJTeA5m
+Received: from mail-wr2-x0f.google.com (mail-wr2-x0f.google.com
+ [IPv6:2a00:1450:4864:30::f])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7AC0A40CB7
+ for <buildroot@buildroot.org>; Fri, 25 Sep 2026 14:56:46 +0000 (UTC)
+Received: by mail-wr2-x0f.google.com with SMTP id
+ ffacd0b85a97d-48881a62e09so382281f8f.2
+ for <buildroot@buildroot.org>; Fri, 25 Sep 2026 07:56:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=vodden.com; s=google; t=1790348204; x=1790953004; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+ bh=1LC+XOvg3BUIQ4yyqjmKlOzZVw+e8pEqtUWzWyddhAU=;
+ b=MHJTeA5mqFFq1A9QBRIBTV0bfZfU6st41hXKQQUeRpncRhtRYjUYmM/2T7wAwFB/Se
+ SNcp0QbqQy9+wvXjUtPy2MRKTdxSmOyJ9/SafctI69EF80yJZdjKSyYUoHZuk/Xg0vM0
+ 3NO7s4k6Wb6UlRwg/rYtvbJAISvVRFGFurljM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1790347661; x=1790952461;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to:content-type;
- bh=pnbz33CsinHFUYaeOzs4Dl4ysxoIQ3cp4Wa0FPZAF6s=;
- b=S8hyoIe3T0Au+pjjHodGsbcxn/k6ooSiqZl0wUI5OXzV8YbhUJ8tHO0DPVQWMp+IrP
- JjqfCH6OX+DZH+fViuwKlARQvjG2FOmZm2xgS+yPQf1m0TI0/H5JHS2wYbtnrC3rA/NZ
- 1svKECr1cIiJAADANFenV80K7d7iHdWtBVVz4mPx1bjL1MDww840EiGctL2fLzGCIhvS
- 1tPcq3HNJZFg4nelcyn06ACKPEqxHlvkdv8UFkyJC0UFhLYLecZ3dRpKEhGHy/k/nTE7
- 0pO/L+5wHWGW3CyyCFSBc+A9kWLTtiJ6F09rmqXsUJQDY8xn8JmgATu9zDCfqSQHL6f0
- kMWg==
-X-Gm-Message-State: AFuF++lqMPv4q/gn9+9bnQNt17anjkxDqtlHDMRQgI023Sdh89BUvVDd
- rAJG4gXWtsHdx/6cT1dPRMOSgmjcfsihJD1cCC4Pqb+xRXy5hqlVCieh77rbUwAmb8/fZj0pcXd
- majPF3PMrOA==
-X-Gm-Gg: AYBFou0tco51WdXp6sRHSPpKAMcWfJtMpTIWJIawkYVZ3uc47lRREpQKNOgUib8ETcF
- xN3QvlqSHK0gA28U79ca+qMnD/HHT0PfAXGRIe35NkNfsEv3q3muQ9PPQkqXxc0IfzZVhzErYrZ
- ambd1cFVJAkBHoB4IER3knMIEzki3iWCLBwfSY+U/g00ME/pXjdKPYa57b2LRDHzJ5QruwRzyA9
- rXn5huS5qxowsKjEgX96+dp8yE1703J8ibaUm4eNxEjdaAGMkMQ6hghf+qg8qA4uIaCDWe8Eynr
- g2QEsEgLILMAzx4qL7wOzy+yNjVWcLymeesSyiQ6elnxJtCRIbqkGVJmZuSs1sskTAgU1iOto7o
- upexmV7M0bBRUEOAFgWQRoS1Kykw0jECT4xAn7BqzW+CcVQ5Oixs9T73PGRc5/b4PwwATvQz3k2
- ho3egyVoYEYUceDa1GVMC4iqebJdIGVIVRXFmtKRrWUMqYvK9cYVhms3KmHaEfiSSzWPKBDJke9
- qZfJalwTCVpgsV6Jdhk+kQiH78Y9lTxMc0ZFyIXnA==
-X-Received: by 2002:a05:600c:3e06:b0:49f:f099:6f9b with SMTP id
- 5b1f17b1804b1-49ff0997088mr43488935e9.13.1790347661140; 
- Fri, 25 Sep 2026 07:47:41 -0700 (PDT)
-Received: from debian-hp-1 (ip-94-140-185-241.reverse.destiny.be.
- [94.140.185.241]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-49ff044422asm63498815e9.2.2026.09.25.07.47.40
+ d=1e100.net; s=20260707; t=1790348204; x=1790953004;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to:content-type;
+ bh=1LC+XOvg3BUIQ4yyqjmKlOzZVw+e8pEqtUWzWyddhAU=;
+ b=j8hHB0YKKTkz3Cg+zWSVzh0PTbeoIFMUdT1tQKa/yk0b80MlxYIHxfLSu0gM3WbZch
+ 6R8HYn6MNcKKDLgu743DQ/ExDBLGYqpIHxaiDRl7BvY3iBmjKkaP0x4Cf98ViJ+DY/AT
+ SMEnqGFS/LyVrbV8UZdCekNZZLno6FDO67CWV85DbebZ58Zcw5vPoz322sIGRlVHUF42
+ lcI0TTt1naC6JJKDv2cTLKq03esFhWTP3K/+0QAHERyTkr1tfiiFSwNcGDXUs9rM6LUE
+ QttW6RiGS6LA7T7QwnXvqGe8OjPgzM6DVrwjQ0Wcf2uXPRQX0MPqsyJeXx67l+tFzR5p
+ 9FwQ==
+X-Gm-Message-State: AFuF++mZmPq84UFhlxkBO/rCnQKnZrRwENqK8YfbZi1hL34NHsBwzL2y
+ 3sPSAnSriatTKbvfYFpgpp3Ly94c0RE8Adz7RalSEJCoo/Bfo7MUAAC3aR9BWjQC6sAFxc2opIt
+ hTSqB0f13Ug==
+X-Gm-Gg: AYBFou3iYbb/EdyDurbIcsxB5mUh3Q0CEmO41PvRj3fYS/1W2bMevg7xbGmfzp7MFph
+ pEkGPbF0VQlENrPNRrbZg3kDYnW8iMJvcqCszZTvA5qA9wMA3C2TRkQYPQhDSD30ytf8GTNhQr7
+ fYtU/yKKQB0iN0MLxoNWLAg7UzaJ61oq43y6uWppNdMQCschdn8uuyM0pHhMzRA01fgMALiw4h1
+ kH6sGuJNLm9P8+XRUNDyEHm3S6hP4GtVg6t7gUhmvyvHARpYhvUN1KKvKBqi3pgoQr9ievNIjn8
+ XaQWDAlrNu1tZ+o7SSmeGXU5T1rTsjen0YpLF0tAzxB/01akERz2ADRlnsY72FGk+/CBbCCZex1
+ rL+CWIvxgAOAkeSbTCiHj5zET+LfZYX5AjcAbIfv6DjLtJKvzmdkOotlV+wIJcLT/xcocHuCOob
+ 1X71GbUmAw9QItyFS532/TAng66/ssseQXYKre6+MyfbProzhlf78p8RSvwHHlty/fa3s/GU+zh
+ /27r+aBEAbJx8BhVwY2zJRmqUDd2oxqb4Hgtx5CeEW8q2crnl4sbV1ocC6cuMbO
+X-Received: by 2002:a5d:5e88:0:b0:487:9a9:6d24 with SMTP id
+ ffacd0b85a97d-4887171a503mr9626143f8f.19.1790348204150; 
+ Fri, 25 Sep 2026 07:56:44 -0700 (PDT)
+Received: from LargePixelCollider.localdomain ([154.61.62.140])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-4887a3625ccsm8046779f8f.22.2026.09.25.07.56.43
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 25 Sep 2026 07:47:40 -0700 (PDT)
-To: buildroot@buildroot.org,
-	Fengwei Tan <tfx2001@outlook.com>
-Cc: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
-Date: Fri, 25 Sep 2026 16:47:37 +0200
-Message-ID: <20260925144739.4101511-1-raphael.melotte@mind.be>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <SY8P300MB0041A241A227D8AC8B1C8488B5BD2@SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM>
-References: 
+ Fri, 25 Sep 2026 07:56:43 -0700 (PDT)
+From: Richard Vodden <richard@vodden.com>
+To: buildroot@buildroot.org
+Date: Fri, 25 Sep 2026 15:55:19 +0100
+Message-ID: <20260925145521.54655-1-richard@vodden.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v2] support/testing: add FLAT stack size
- test case
+Subject: [Buildroot] [PATCH RESEND 0/2] boot/opensbi: support building an
+ out-of-tree platform
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -152,197 +162,87 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: =?utf-8?q?Rapha=C3=ABl_M=C3=A9lotte_via_buildroot?=
- <buildroot@buildroot.org>
-Reply-To: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
+Cc: Leo Yu-Chi Liang <ycliang@andestech.com>,
+ Alistair Francis <alistair@alistair23.me>, Mark Corbin <mark@dibsco.co.uk>,
+ Angelo Compagnucci <angelo.compagnucci@gmail.com>,
+ Kanak Shilledar <kanakshilledar@gmail.com>, Julien Olivain <ju.o@free.fr>,
+ Richard Vodden <richard@vodden.com>,
+ Francois Dugast <francois.dugast.foss@gmail.com>,
+ Thomas Bonnefille <thomas.bonnefille@bootlin.com>,
+ Romain Naour <romain.naour@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-In reply of:
-> Add an infrastructure test case to verify that the per-package
-> <PKG>_FLAT_STACKSIZE variable correctly configures the stack size in the
-> generated FLAT binary header.
-> 
-> Signed-off-by: Fengwei Tan <tfx2001@outlook.com>
+Resending: I sent this on 2026-08-13 and it hasn't had any comments. The
+patches are unchanged, rebased onto current master.
 
-Applied to 2025.02.x, 2026.08.x. Thanks
+OpenSBI can build a platform that lives outside its source tree via
+PLATFORM_DIR. For a board whose platform is not upstream - as is the case
+for LiteX/VexRiscv - that is considerably simpler than patching a platform
+directory into the OpenSBI source or maintaining a custom tarball, and it
+decouples the platform from the OpenSBI release so upstream can be tracked.
 
-> ---
-> As we discussed in [1], this patch adds a simple test case to verify
-> that $(PKG)_FLAT_STACKSIZE works as expected.
-> 
-> I have also pushed this patch to GitLab CI, and the test job passed
-> successfully [2].
-> 
-> [1] https://lore.kernel.org/buildroot/SY8P300MB0041233A165784A8729859B2F8A32@SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM/
-> [2] https://gitlab.com/tfx2001/buildroot/-/jobs/16053520032
-> 
-> Changes in v2:
-> - No code changes. Settled on the FLAT header inspection approach as a
->   lightweight solution, since no feedback was received on the RFC version
-> - Link to RFC: https://lore.kernel.org/buildroot/SY8P300MB0041166E9B5D56A3796BD3D6F8A12@SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM/
-> ---
->  DEVELOPERS                                         |  3 +++
->  .../core/br2-external/flat-stacksize/Config.in     |  1 +
->  .../core/br2-external/flat-stacksize/external.desc |  1 +
->  .../core/br2-external/flat-stacksize/external.mk   |  1 +
->  .../package/flat-stacksize-test/Config.in          |  7 ++++++
->  .../package/flat-stacksize-test/Makefile           | 15 ++++++++++++
->  .../flat-stacksize-test/flat-stacksize-test.mk     | 22 ++++++++++++++++++
->  .../package/flat-stacksize-test/main.c             |  3 +++
->  support/testing/tests/core/test_flat_stacksize.py  | 27 ++++++++++++++++++++++
->  9 files changed, 80 insertions(+)
-> 
-> 
-> ---
-> base-commit: 9a1c11c9971b454b3b38c4eb111ac5e42a15cf1c
-> change-id: 20260912-flat-stacksize-test-793fe88e43bb
-> 
-> Best regards,
-> --  
-> Fengwei Tan <tfx2001@outlook.com>
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 97eb2d9cac..ed59f11309 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1124,6 +1124,9 @@ F:	configs/freescale_imx6ullevk_defconfig
->  N:	Falco Hyfing <hyfinglists@gmail.com>
->  F:	package/python-pymodbus/
->  
-> +N:	Fengwei Tan <tfx2001@outlook.com>
-> +F:	support/testing/tests/core/test_flat_stacksize.py
-> +
->  N:	Fiona Klute <fiona.klute@gmx.de>
->  F:	package/*/S*
->  F:	package/panel-mipi-dbi-firmware/
-> diff --git a/support/testing/tests/core/br2-external/flat-stacksize/Config.in b/support/testing/tests/core/br2-external/flat-stacksize/Config.in
-> new file mode 100644
-> index 0000000000..cdb4e9f057
-> --- /dev/null
-> +++ b/support/testing/tests/core/br2-external/flat-stacksize/Config.in
-> @@ -0,0 +1 @@
-> +source "$BR2_EXTERNAL_FLAT_STACKSIZE_PATH/package/flat-stacksize-test/Config.in"
-> diff --git a/support/testing/tests/core/br2-external/flat-stacksize/external.desc b/support/testing/tests/core/br2-external/flat-stacksize/external.desc
-> new file mode 100644
-> index 0000000000..f9c1a745e0
-> --- /dev/null
-> +++ b/support/testing/tests/core/br2-external/flat-stacksize/external.desc
-> @@ -0,0 +1 @@
-> +name: FLAT_STACKSIZE
-> diff --git a/support/testing/tests/core/br2-external/flat-stacksize/external.mk b/support/testing/tests/core/br2-external/flat-stacksize/external.mk
-> new file mode 100644
-> index 0000000000..82900bf036
-> --- /dev/null
-> +++ b/support/testing/tests/core/br2-external/flat-stacksize/external.mk
-> @@ -0,0 +1 @@
-> +include $(sort $(wildcard $(BR2_EXTERNAL_FLAT_STACKSIZE_PATH)/package/*/*.mk))
-> diff --git a/support/testing/tests/core/br2-external/flat-stacksize/package/flat-stacksize-test/Config.in b/support/testing/tests/core/br2-external/flat-stacksize/package/flat-stacksize-test/Config.in
-> new file mode 100644
-> index 0000000000..67cf9964f5
-> --- /dev/null
-> +++ b/support/testing/tests/core/br2-external/flat-stacksize/package/flat-stacksize-test/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_FLAT_STACKSIZE_TEST
-> +	bool "flat-stacksize-test"
-> +	depends on BR2_BINFMT_FLAT && !BR2_USE_MMU
-> +	help
-> +	  Package for testing the $(PKG)_FLAT_STACKSIZE variable, which
-> +	  defines the stack size of an application built into the
-> +	  FLAT binary format.
-> diff --git a/support/testing/tests/core/br2-external/flat-stacksize/package/flat-stacksize-test/Makefile b/support/testing/tests/core/br2-external/flat-stacksize/package/flat-stacksize-test/Makefile
-> new file mode 100644
-> index 0000000000..dc7681bf56
-> --- /dev/null
-> +++ b/support/testing/tests/core/br2-external/flat-stacksize/package/flat-stacksize-test/Makefile
-> @@ -0,0 +1,15 @@
-> +O ?= $(CURDIR)
-> +
-> +CANONICAL_O := $(shell mkdir -p $(O) >/dev/null 2>&1)$(realpath $(O))
-> +
-> +TARGET := $(CANONICAL_O)/flat_stacksize_test
-> +
-> +all: $(TARGET)
-> +
-> +$(TARGET): main.c
-> +	$(CC) $(CFLAGS) -o $@ main.c
-> +
-> +clean:
-> +	rm -f $(TARGET)
-> +
-> +.PHONY: all clean
-> diff --git a/support/testing/tests/core/br2-external/flat-stacksize/package/flat-stacksize-test/flat-stacksize-test.mk b/support/testing/tests/core/br2-external/flat-stacksize/package/flat-stacksize-test/flat-stacksize-test.mk
-> new file mode 100644
-> index 0000000000..64695ad2dc
-> --- /dev/null
-> +++ b/support/testing/tests/core/br2-external/flat-stacksize/package/flat-stacksize-test/flat-stacksize-test.mk
-> @@ -0,0 +1,22 @@
-> +################################################################################
-> +#
-> +# flat-stacksize-test
-> +#
-> +################################################################################
-> +
-> +# Define a stack size that is different from the default FLAT
-> +# stack size (4096 bytes).
-> +FLAT_STACKSIZE_TEST_FLAT_STACKSIZE = 8192
-> +
-> +define FLAT_STACKSIZE_TEST_BUILD_CMDS
-> +	$(TARGET_MAKE_ENV) $(MAKE) \
-> +		-C $(FLAT_STACKSIZE_TEST_PKGDIR) O=$(@D) \
-> +		$(TARGET_CONFIGURE_OPTS)
-> +endef
-> +
-> +define FLAT_STACKSIZE_TEST_INSTALL_TARGET_CMDS
-> +	$(INSTALL) -D -m 0755 $(@D)/flat_stacksize_test \
-> +		$(TARGET_DIR)/usr/bin/flat_stacksize_test
-> +endef
-> +
-> +$(eval $(generic-package))
-> diff --git a/support/testing/tests/core/br2-external/flat-stacksize/package/flat-stacksize-test/main.c b/support/testing/tests/core/br2-external/flat-stacksize/package/flat-stacksize-test/main.c
-> new file mode 100644
-> index 0000000000..9b6bdc2ec2
-> --- /dev/null
-> +++ b/support/testing/tests/core/br2-external/flat-stacksize/package/flat-stacksize-test/main.c
-> @@ -0,0 +1,3 @@
-> +int main(void) {
-> +    return 0;
-> +}
-> diff --git a/support/testing/tests/core/test_flat_stacksize.py b/support/testing/tests/core/test_flat_stacksize.py
-> new file mode 100644
-> index 0000000000..ab41fadbc8
-> --- /dev/null
-> +++ b/support/testing/tests/core/test_flat_stacksize.py
-> @@ -0,0 +1,27 @@
-> +import os
-> +
-> +import infra.basetest
-> +
-> +
-> +class TestFlatStackSize(infra.basetest.BRTest):
-> +    br2_external = [infra.filepath("tests/core/br2-external/flat-stacksize")]
-> +    config = """
-> +        BR2_arm=y
-> +        BR2_cortex_m4=y
-> +        BR2_TOOLCHAIN_EXTERNAL=y
-> +        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-> +        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7M_UCLIBC_STABLE=y
-> +        # BR2_TARGET_ROOTFS_TAR is not set
-> +        BR2_PACKAGE_FLAT_STACKSIZE_TEST=y
-> +        """
-> +
-> +    def test_run(self):
-> +        binary = os.path.join(
-> +            self.builddir, "target", "usr", "bin", "flat_stacksize_test"
-> +        )
-> +        self.assertTrue(os.path.exists(binary))
-> +
-> +        # Check the FLAT binary header really carries the stack size
-> +        # declared by the package (8192 = 0x2000).
-> +        out = infra.run_cmd_on_host(self.builddir, ["arm-linux-flthdr", binary])
-> +        self.assertIn("Stack Size:   0x2000\n", out)
+Patch 1 replaces the BR2_TARGET_OPENSBI_PLAT string with a choice of
+reference platform, external platform, or no platform. Three existing
+conditionals compared that symbol against the empty string; they are moved
+to !BR2_TARGET_OPENSBI_PLAT_NONE, as leaving them referring to the removed
+symbol would silently have disabled INSTALL_JUMP_IMG and INSTALL_DYNAMIC_IMG
+and produced no firmware at all. The 13 in-tree defconfigs that set the old
+symbol are converted, and a Config.in.legacy entry carries an existing value
+over to the reference platform.
+
+Tested when I first sent this:
+
+ - The external platform path is what builds OpenSBI 1.5.1, 1.6 and 1.9 for
+   a LiteX/VexRiscv rv32 target here; all three boot to a shell on hardware
+   (ALINX AX7035, xc7a35t).
+ - qemu_riscv64_virt_defconfig builds clean and installs its firmware from
+   build/platform/generic/firmware/, exercising the reference platform path.
+   The resulting fw_jump.bin boots under qemu-system-riscv64 to a login
+   prompt (OpenSBI v1.6, Linux 6.18.7).
+
+What I've re-checked since the rebase:
+
+ - All 13 converted defconfigs generate a configuration and resolve
+   OPENSBI_PLAT=generic, and none of them sets BR2_LEGACY.
+ - An old-style configuration setting BR2_TARGET_OPENSBI_PLAT="generic" still
+   converts to BR2_TARGET_OPENSBI_PLAT_REF with the name carried over, and
+   sets BR2_LEGACY as expected.
+ - check-symbols is clean, and the checkpackagelib and checksymbolslib unit
+   tests pass. check-package reports nothing on the changed files beyond the
+   two missing-BR2_DOWNLOAD_FORCE_CHECK_HASHES warnings master already has on
+   the sipeed_lichee_rv defconfigs.
+
+Richard Vodden (2):
+  boot/opensbi: allow building against an external platform
+  DEVELOPERS: add Richard Vodden for boot/opensbi
+
+ Config.in.legacy                        | 18 ++++++++
+ DEVELOPERS                              |  3 ++
+ boot/opensbi/Config.in                  | 55 +++++++++++++++++++------
+ boot/opensbi/opensbi.mk                 | 16 +++++--
+ configs/andes_ae350_45_defconfig        |  3 +-
+ configs/hifive_unleashed_defconfig      |  3 +-
+ configs/hifive_unmatched_defconfig      |  3 +-
+ configs/nezha_defconfig                 |  3 +-
+ configs/pine64_star64_defconfig         |  3 +-
+ configs/qemu_riscv32_virt_defconfig     |  3 +-
+ configs/qemu_riscv64_virt_defconfig     |  3 +-
+ configs/sipeed_lichee_rv_defconfig      |  3 +-
+ configs/sipeed_lichee_rv_dock_defconfig |  3 +-
+ configs/sipeed_licheepi_4a_defconfig    |  3 +-
+ configs/spike_riscv32_defconfig         |  3 +-
+ configs/spike_riscv64_defconfig         |  3 +-
+ configs/visionfive2_defconfig           |  3 +-
+ 17 files changed, 103 insertions(+), 28 deletions(-)
+
+
+base-commit: a962be2eea146e06661712159698bc7cbf3305f2
+-- 
+2.47.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
