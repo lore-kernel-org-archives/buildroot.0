@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15CDDC9830D
-	for <buildroot@archiver.kernel.org>; Fri, 25 Sep 2026 14:43:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80E9CC98321
+	for <buildroot@archiver.kernel.org>; Fri, 25 Sep 2026 14:43:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C607D60D7A;
-	Fri, 25 Sep 2026 14:43:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 287BB60DB2;
+	Fri, 25 Sep 2026 14:43:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SOmO6akY2y8F; Fri, 25 Sep 2026 14:43:42 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org E67EB606BB
+ id VwEgZNY1aRg4; Fri, 25 Sep 2026 14:43:44 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 21A5060D90
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790347422;
-	b=NgvutghBZTyNuoVCg1qFJMLN7KvL9JOBt7vstax/2NTVHhDZOC3rfmLHJCIyp5o/MxIM
-	 9LIBcocdogMAYJS9MT2h8RxHyyocVcYh5RhD/Fu8rmeTTD4hdnSdE26DQGb9M4jk+2iZk
-	 6qxeRACfYLTPDX94cmss1sHMWMl4cp5s86t14RNAyQOiFp8DMoj3fAWPQlf4qsZ4kRQhN
-	 g+P4Yi74CkgWdV94ceKNKcvXy7U21BGBRWCGZ2NSY77RR05Mv4pqhnv7n2Lgzqj1j5/Yw
-	 WXc8IMTFWr4Fk2Ee5VYcyeDnJ8ilRPy9vpqNS9FcnHZeSVgZ6LrcxskqWjMEjFwrP4Q==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790347424;
+	b=ZQC+/jzMbMbeNR8eEYBfRyqcUEJ+b2tMMmOc797NKNYkhtefGTe64HvVt5K5On+TMuCR
+	 Hmq9i6wggHFQhhShHz44+ArWRB7hpktOXa3vhWGbOWzVrMZpFuCdnB1SEQsZveWjP1bUn
+	 RxL2whUneHxSpe7+I5bSxvHJvdb3LcjM6Z+p5Hklu3DRZlrLDA01hdHG1UwilFPXAPTnr
+	 6ANlrAKlKiQvJr9/n18k2LNLCpAcJYu/kyWac+mO0KESufi394r5VAU2daIEtUUyFymQS
+	 +yCBXyiTBQ1YSuTQtTTMnjcGmvIi1Wzyq5U01vGm7gEDI8XRkxiGD9t59HRkHGa8VzQ==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1790347422;
+	c=relaxed/relaxed; t=1790347424;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -31,115 +31,115 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 MIME-Version:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
 	 Reply-To:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=rZeRBc3Tb1GiEHtuvBa+W0hTizhzJC+c7ETAunxlp14=;
-	b=Nx9Br1/qoVK80F5T6IBsvtVXa+BEshCvoOxUffYxL1K+CWG7yPWY04REnWXRX2VE9tzP
-	 keqQWJ791Jbal3iLRTcWWeVvS4fkyyecszCAgtXrn/2guJBLJEBQPpK/X6Ldu3TiujyN7
-	 jV1Nkl5IDBXhlOT9r8BHiODQdt/D+Kng126nZdnsmI7a9Geg1P9Omt7mF08ffRx6Zaqq/
-	 YTkdbHHN+d+ByNDk6KwOC2n32/79dLbgnPkRfGMaUVBhueQQB7XtEBarj3nxwl9WkdH8J
-	 tT5ItJnWJlcWImXBe+O95VzYdN48S/Q/GkxKW7PnrPh5ii0AubPoCer901jVEcZRSUg==
+	bh=yU/TdbzBCMbTBS9fUiytWnHdOGylGPP68RJBLzxe804=;
+	b=d69038qmW/apXVrs9ccSWCft0p6uakNiAImvB8Yw2mhMirqh9PFDUlBlBkVVzAewwRSj
+	 shfSDcdybvg8N3a9NRP67d8CNI1fqZHSV3LSaGA8pX3X/f54I1cLEAmxK7hNr1FUFPVos
+	 g+SkkoMggpkXSnW7IVahR3f2f7rOaZZGDnD0aQULON7ftlOJk/6IVvSlUqdJOArxNRUIJ
+	 3D487Uw+m8bntRHVwUTuawg5kTa3W4pHvGT2KJxyWGjyXjTE2GI6T/aXq+mBV1KAtojdM
+	 5gergRXINNRrOoPFJ5/HMqE9T7dn7N0vixFqWsGR6kOCT+uxJ6cWdZ1F4K6aXmUarGA==
 ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1790347422;
-	bh=rZeRBc3Tb1GiEHtuvBa+W0hTizhzJC+c7ETAunxlp14=;
+	s=default; t=1790347424;
+	bh=yU/TdbzBCMbTBS9fUiytWnHdOGylGPP68RJBLzxe804=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=HuhBSo8P514dlt1vDuOJgJzKs8FSO5m5pvr91haIrMF9ht4zwJqFUviPewruVUb4M
-	 sUzH6La0SXC0Spes9stJ2kW/tl7eu1XQDm7qCAgLZV6gowv6M1qFRciUgmLYq7YtSf
-	 vxWt6FZAl2KBMPvBcnMYQXGQEejOH2XGXkVNWFaYcJrhMRTxCuZ8WJUY193cnoLvSs
-	 okjdVFnIOkFt7hA/jOliP0WoDeolqfZVzgpWJKXA+PmBssjYMmzcbL2in7l+2Iy2JL
-	 E43aThxC9qq92vP66xVLvyjKXiob+2oPgwuiLnl8/qgAD/Z3mCOStpY1las/CiqLY7
-	 43gBsfqlYLLRA==
+	b=q2se1xVFdYAu91VnCDKTa1DLk6hKVy0Iz1jVl0mCAOZSLiJenmGVyCT7fGJEz+epD
+	 R7NSA8W74z6bS4WXWWMAUGcK7bH8aoBlLCLo7lPmuTCCpUAW/8lm1jwa/qckILz4Xf
+	 N5tfpIApoKCGLVzUZfgQW2mMRUgq+jT4FJh6X2D/E+6pLpKsoDQXK9GCCNGtbSsYIU
+	 K3OCqVMf4TjX9JOArojJIt/XXc1Tv+n8gvfgdzfupFXeArBb7nl2bzc3QfLPmbQA8Z
+	 da62XuKLKOVdsop4NnAghdTxmfXuoofDi6CCZX4O1JUDfLcmVT4y5+dOotYxo6pfd4
+	 Ip9TR9k27W+oQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E67EB606BB;
-	Fri, 25 Sep 2026 14:43:41 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 2BA69334
- for <buildroot@buildroot.org>; Fri, 25 Sep 2026 14:43:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 21A5060D90;
+	Fri, 25 Sep 2026 14:43:44 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id EBC9E332
+ for <buildroot@buildroot.org>; Fri, 25 Sep 2026 14:43:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 29A1740790
- for <buildroot@buildroot.org>; Fri, 25 Sep 2026 14:43:40 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D184A40475
+ for <buildroot@buildroot.org>; Fri, 25 Sep 2026 14:43:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yPM8VjKeCfLL for <buildroot@buildroot.org>;
- Fri, 25 Sep 2026 14:43:39 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org A049B407FC
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790347419;
- b=ZAadwWnDNLiOToPknY8tBY/7FHQNxOKWHhNmyoUC9tET+yyaEmshAE6DDR8ZkbQcwh7o
- uIhCU1H/TlanSU69/0yzhB4HZ4mlKMVQd6zVW+Qpua5NaZ1MAuWP9GibkzoRe1PeUUPr3
- 3WOHlcqXqOD/7ubv3JzAzS6SgXg2ktLvh4L+tAFczA6K35r2ZO0c2ApplFpdbBH72cW0H
- 8dplayJJ+Qi5S5CHtpcoSo4UuxIEXNCXpIbknrJVK2PUKxdCasMmYsWqkSfbttox/1N7u
- A9oWNK0TboP2Pvh5H6TSR2xXnZDdaEXQca5JXWbR73tFTZDpyoxNpwe9MwSZGmCuHjg==
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id w3PaLpK_qqUs for <buildroot@buildroot.org>;
+ Fri, 25 Sep 2026 14:43:42 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org C7DFA4016B
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790347422;
+ b=LN6KfXcyLPhsYh9NNOw54Glb27iRi3RbGSOLFMNgVQXuQ+NZv+KUNrnCk+cTU7bCca5C
+ 9zvG/vARhRBJUYLzs5EVB0HCooO8qtED3v3IKpghUDru1AUbVJop59VQtQUYMYhNcXwd0
+ v6F+OO60K2guo28uhxppnfgANg1zLqfQSF0Vc+DM26ZMVxwolitqZY2pgLapJY6Y5b76l
+ Z6w43WPKMRwozaEe+ZlEzUBn8mxEVSNtJeAoaTpASBnrLfyDCqe5zkO2TVAyX/T91lkNP
+ zElKVTFHi60L9kj/U0KmTNLsGkuNXJOMfO3LU7ztcAgCiQ15ak2sTOYI+qEeuQHzoWg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1790347419;
+ c=relaxed/relaxed; t=1790347422;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
  X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
  Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding;
- bh=fPwro6nW33XYvG4UF82KCIQcmWxktzu6SbENyOaFEow=;
- b=fm3ZHo4bofmLWWTTUipDpe+HlFh8ItpEcF7IsLrIw2Be0YyGWsNmTgERQ8GCy2X80/rO
- lDcu5KvpVsZzHCMABECaMV7wZ3qRcrDMJiX3TaVQyhcvW5zFGXU/X6cCId2XhneA012LF
- 1CBRKF2D7HXo5peZvfh0cehrbfKbCtBmQtnM1m+71IRI0RO6zJM+p+XDaPXZ1Vp+5lrlc
- cJsW0qHLJqyoGwQB7Ia3xz/c5YbX+K19pIVwNDggde1pBkISsyeytJaITql1DJHMRoK08
- 5S+Jy4K27fvEGA28M0Duxna+Mv/WRrCGakT3Ni22YG5/Pv9EqJuhfWmb8r6WF8pkPjQ==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org;
+ bh=UIvQiPneV3RQVAsJ04nHgNLfRB9bVYKI+OgXR9n+Jxk=;
+ b=QCEIaNsbYQTePphEmujFB7RUmGZPObRjvOC0bohttBrsJoSX0dtA/Di5anE2oGqoD/lJ
+ N7iqrX7nvcadxoelO7qW8o3GxUm+reokAV/57mFQwiK8CmV3SeHawWchZhT5MXlnHPvvP
+ JpHgLkW7Bg/Jb5guDHsljARE3sewvXPBqwLv6qRzB1delQFfw19eQw8Z0GcSTh1IBfKnO
+ uICuo09kCrqlJ7iZu10/Ko71Ew3mNkCWNNiF+plHJPeuG076BqEjEfDgb6pJgdwbOKXcY
+ /QvxHH4DJt61OSE7cghjxXK0MW02qdc1DrZWfB65F9oRvjVNwbbZcJRozbcd9P9Umhw==
+ARC-Authentication-Results: i=1; smtp2.osuosl.org;
  dmarc=pass header.from=mind.be; 
  dkim=pass header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=OgiPe9hT; 
+ header.s=google header.b=YmcKkYmj; 
  arc=none smtp.remote-ip="2a00:1450:4864:31::10"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
  client-ip=2a00:1450:4864:31::10; helo=mail-wm2-x10.google.com;
  envelope-from=raphael.melotte@essensium.com; receiver=<UNKNOWN> 
 Received: from mail-wm2-x10.google.com (mail-wm2-x10.google.com
  [IPv6:2a00:1450:4864:31::10])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A049B407FC
- for <buildroot@buildroot.org>; Fri, 25 Sep 2026 14:43:38 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C7DFA4016B
+ for <buildroot@buildroot.org>; Fri, 25 Sep 2026 14:43:41 +0000 (UTC)
 Received: by mail-wm2-x10.google.com with SMTP id
- 5b1f17b1804b1-49d097b4939so6145555e9.0
- for <buildroot@buildroot.org>; Fri, 25 Sep 2026 07:43:38 -0700 (PDT)
+ 5b1f17b1804b1-49cd38e0f79so5907355e9.3
+ for <buildroot@buildroot.org>; Fri, 25 Sep 2026 07:43:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1790347416; x=1790952216;
+ d=1e100.net; s=20260707; t=1790347419; x=1790952219;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=fPwro6nW33XYvG4UF82KCIQcmWxktzu6SbENyOaFEow=;
- b=SLjm/BrtankJp28bftAFqAQOp3Lf468Qsb+EgkWTUX5phPWdWAw6G9jBpnr2H4dwdP
- RT68lgwmkGAnkKtWx5B8ek5U5aT39lfPfRIePeJSCjX0kWiFsTkFWUARGZBaT0xSjT2Z
- tvLU0gq8F5gjS54PYj2LmfMytA0lw8bYEA+YPnePjv1wv+IQ+iOltqgTLdnJlZzy/3Kv
- tJWceHnl7x4+gQ0vRloUrC7BqbZCSyazoAoiJZan6PLWQKoUAHOxbxwW/8dSFpI1pW9j
- VkExxdhUF903vYSUYCn7JrzjdOL4JCMYHYcU/KjYpQ+B6bwukvzyDVgkA86fKzTa2u2V
- K45Q==
-X-Gm-Message-State: AFuF++mRmiCk1/TgWc2282z0WPhT9yMFo6QvcDoCWORtrG7aR/JOgkb/
- 4ribRO865XMmtBTtTMIG9ILD8aLj8Zi6pRstDR4KecriwMZcSTMpxUD6R48KA7nGEG+F0+iD7uo
- 1Zn2YRtIvbw==
-X-Gm-Gg: AYBFou3WPjsix1RlLmnWC3TPOuCdBH9mpkjJuCN1b252WVAjZmKJ3lBc5oMa8kkRiSn
- XqlUZ0SyzpSMBFuR5iUEgjpkxu/LkgdR3XHL8cFGVH9KVO2VL+d+l8fH986zTJs8L8ie4EXFpCy
- d14PPS13Y/HRe+/T7ZnwwGql2IM5p0YGE+qHd7W8Qha4ndDA/lKQtVe/TTPRAWCwMWgcJgyhNbZ
- zfaiu6xru2kbBbxTvrM7OPHFBSB+Ba4LHlXOiloLRMB1zL3TnnJ9jauFZIkruJI0I2DkJk/W8/N
- IvRtJZtV74L8dQRJ4OiUGyCQZ4WrBL6R7oP2qV1JKBTJHGsPBtZZSSi0P9i/+crxWrSabUx4miH
- oy6iM5QT19/QsBCjMQgZgbqsnuInk/eLhBNH8IrTV668UEt+ikA4ZTGI9d4dyn49csn7DZ6mNUn
- wGaP2ONnGIMSPVyB8mmM7tHk03c4Csmr6h9Iv7bTgvVolC3QX7S8b6lhX+3aGmPILdNdEXMegPQ
- gTQyt/j0C0xHQPJUR8Nu6fVYH15IbbVV32mUx6vGg==
-X-Received: by 2002:a05:600c:34d4:b0:495:6e68:5df2 with SMTP id
- 5b1f17b1804b1-49fe66d07c9mr97379805e9.12.1790347416296; 
- Fri, 25 Sep 2026 07:43:36 -0700 (PDT)
+ bh=UIvQiPneV3RQVAsJ04nHgNLfRB9bVYKI+OgXR9n+Jxk=;
+ b=uC0lqKrk3GhLZW86cv6algKKBfe3JNWON+Dynb6tnaFeipjn2MYm4AiIvaTjUW2Kx6
+ dBv4sOOniRGD+UiUOcSIP/rytkEvqSdHZAxAodEIGdI1jJcG2RyOjhvu12BcLauQ6GW0
+ TlWOxfo+Ay1zJOic4P5g9k0GwlIjO3YTTC5+uF4vH6RTwhapCVhD0mZ8Vx54lPet0HFn
+ PITl080OSOurTTvAnb0fRpf1N9y82FZ2RRhYNQ71KAmW/ZPoJGfnhJEcVVINNmk+IlRN
+ kefd/9rIB416Tmzy1AuJyleBKKHhQHDPj3lfPKzdOSOATKaGD/883PUfm7g9jXMovubg
+ xLWw==
+X-Gm-Message-State: AFuF++kGTX25lGtBKUFO2kneRLi3+iunv8CSvbsN2e+7wYvMmS4AxoaQ
+ elE+QFeL3+gvr19Fgc0VmqzeRYEbsqe3SGiySMh0aE+2NIt42tRCi+SyInmAZ8Bdlqn0Od0lZZA
+ E7PCCdSCvjw==
+X-Gm-Gg: AYBFou1iNErKFvIi79QKb9DOQIujeIKNeyxqrEp+JvA798eLhKNFH6sAxsoa/1uaaCF
+ dAmDcqVTzcTYnjq+NYf/a5/p2V7avzoCCKD0vctDcD/TSync+Zy4OyQzbya5HcfbXebSIMyr+D6
+ Qup4iZgI0zjjvRp+/+3q9hXqTsKZg4XSLC3/GmLqqS73MxML7VRxHcUDB8AP7xzimSyYKCp3iet
+ 1YNk3wpF2sizst9twvKP1W0kdLhPWEzHHDpTOIfJ66ifqbskWiTxgHIE1qMwOS/W1Q6B8HC7j2h
+ cHGWx/zGVSgbZ3VuzZYpQg0Sezb7CFRESeQnvYk4B5ez9OgKl+epiF2CjWwiMDxNX7HdQ3tNblr
+ 28VNFbyDOSM4y+xSzsptu4wgtHBaXV0tZiZ4si/y8lyQ5rgMdWW7OpAVupu2ymbA99Q4ERTKf4h
+ 39S75ytHqsufyspABT92fgL/hWFwUhHctIJubVrjsChIcU5HqYmWlrxLsQGr+v2GCkV4rguIYDR
+ uDFzU4Ob7+kocU9WJ9gp5zfIC/pO02cc5sxVH3r3Q==
+X-Received: by 2002:a05:600c:870c:b0:49e:6050:9fbe with SMTP id
+ 5b1f17b1804b1-49fe66d76camr109686415e9.15.1790347419225; 
+ Fri, 25 Sep 2026 07:43:39 -0700 (PDT)
 Received: from debian-hp-1 (ip-94-140-185-241.reverse.destiny.be.
  [94.140.185.241]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-4887a6456f8sm7316535f8f.26.2026.09.25.07.43.35
+ 5b1f17b1804b1-49fe5df44f9sm145232885e9.11.2026.09.25.07.43.38
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 25 Sep 2026 07:43:35 -0700 (PDT)
+ Fri, 25 Sep 2026 07:43:38 -0700 (PDT)
 To: buildroot@buildroot.org, Sebastian Michel <sebastian.michel@oss.othermo.de>
 Cc: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
-Date: Fri, 25 Sep 2026 16:43:33 +0200
-Message-ID: <20260925144334.4094863-1-raphael.melotte@mind.be>
+Date: Fri, 25 Sep 2026 16:43:36 +0200
+Message-ID: <20260925144338.4094943-1-raphael.melotte@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260825073605.68465-1-sebastian.michel@oss.othermo.de>
+In-Reply-To: <20260825074344.74193-1-sebastian.michel@oss.othermo.de>
 References: 
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/mali-t76x: add missing license
- information
+Subject: Re: [Buildroot] [PATCH] package/sound-theme-borealis: add missing
+ license information
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -160,55 +160,36 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Added MALI_T76X_STRIP_COMPONENTS = 0 as tar archive follows nonstandard layout with license file being in the topmost directory
-> 
 > Signed-off-by: Sebastian Michel <sebastian.michel@oss.othermo.de>
 
 Applied to 2025.02.x, 2026.08.x. Thanks
 
 > ---
->  package/mali-t76x/mali-t76x.hash | 1 +
->  package/mali-t76x/mali-t76x.mk   | 9 +++++++--
->  2 files changed, 8 insertions(+), 2 deletions(-)
+>  package/sound-theme-borealis/sound-theme-borealis.hash | 1 +
+>  package/sound-theme-borealis/sound-theme-borealis.mk   | 2 ++
+>  2 files changed, 3 insertions(+)
 > 
-> diff --git a/package/mali-t76x/mali-t76x.hash b/package/mali-t76x/mali-t76x.hash
-> index a754b98074..751d0e7bf2 100644
-> --- a/package/mali-t76x/mali-t76x.hash
-> +++ b/package/mali-t76x/mali-t76x.hash
+> diff --git a/package/sound-theme-borealis/sound-theme-borealis.hash b/package/sound-theme-borealis/sound-theme-borealis.hash
+> index 575cf31c8c..336c039892 100644
+> --- a/package/sound-theme-borealis/sound-theme-borealis.hash
+> +++ b/package/sound-theme-borealis/sound-theme-borealis.hash
 > @@ -1,2 +1,3 @@
->  # Locally computed:
->  sha256  5a0b00438edc8066b374481d3332a43c07ec2bd3bc73265983a968970f754902  mali-t76x_r5p0-06rel0_linux_1+fbdev.tar.gz
-> +sha256  b0ca7cedaf4f604a1c863ea71f741d6ca1474aebac7e606ec43d725b3c74cc63  END_USER_LICENCE_AGREEMENT.txt
-> \ No newline at end of file
-> diff --git a/package/mali-t76x/mali-t76x.mk b/package/mali-t76x/mali-t76x.mk
-> index 387685c033..05d7d4812c 100644
-> --- a/package/mali-t76x/mali-t76x.mk
-> +++ b/package/mali-t76x/mali-t76x.mk
-> @@ -10,9 +10,14 @@ MALI_T76X_SITE = http://malideveloper.arm.com/downloads/drivers/binary/$(MALI_T7
->  MALI_T76X_DEPENDENCIES = mesa3d-headers
->  MALI_T76X_INSTALL_STAGING = YES
->  MALI_T76X_PROVIDES = libegl libgles
-> +MALI_T76X_LICENSE = ARM Mali GPU EULA (LES-PRE-20376)
-> +MALI_T76X_LICENSE_FILES = END_USER_LICENCE_AGREEMENT.txt
-> +MALI_T76X_REDISTRIBUTE = NO
-> +MALI_T76X_STRIP_COMPONENTS = 0
-> +
+>  # Locally calculated
+>  sha256  dd80a9c6317de29d42786ba7d95b114b64d06ec6c0c17dd18df853a5c668e727  Borealis_sound_theme_ogg-0.9a.tar.bz2
+> +sha256  b21ac6d124efc0a25c1f9eae9cab321fc1a41979468eb9293c1a9218a5493e9f  README
+> diff --git a/package/sound-theme-borealis/sound-theme-borealis.mk b/package/sound-theme-borealis/sound-theme-borealis.mk
+> index 9242837bec..f37b54f5f8 100644
+> --- a/package/sound-theme-borealis/sound-theme-borealis.mk
+> +++ b/package/sound-theme-borealis/sound-theme-borealis.mk
+> @@ -8,6 +8,8 @@ SOUND_THEME_BOREALIS_VERSION = 0.9a
+>  SOUND_THEME_BOREALIS_SITE = http://ico.bukvic.net/Linux/Borealis_soundtheme
+>  SOUND_THEME_BOREALIS_SOURCE = \
+>  	Borealis_sound_theme_ogg-$(SOUND_THEME_BOREALIS_VERSION).tar.bz2
+> +SOUND_THEME_BOREALIS_LICENSE = Artistic License (non-GPL/LGPL commercial use prohibited)
+> +SOUND_THEME_BOREALIS_LICENSE_FILES = README
 >  
->  define MALI_T76X_INSTALL_STAGING_CMDS
-> -	$(INSTALL) -m 755 $(@D)/*.so $(STAGING_DIR)/usr/lib/
-> +	$(INSTALL) -m 755 $(@D)/fbdev/*.so $(STAGING_DIR)/usr/lib/
->  
->  	$(INSTALL) -D -m 0644 package/mali-t76x/egl.pc \
->  		$(STAGING_DIR)/usr/lib/pkgconfig/egl.pc
-> @@ -21,7 +26,7 @@ define MALI_T76X_INSTALL_STAGING_CMDS
->  endef
->  
->  define MALI_T76X_INSTALL_TARGET_CMDS
-> -	$(INSTALL) -m 755 $(@D)/*.so $(TARGET_DIR)/usr/lib/
-> +	$(INSTALL) -m 755 $(@D)/fbdev/*.so $(TARGET_DIR)/usr/lib/
->  endef
->  
->  $(eval $(generic-package))
+>  define SOUND_THEME_BOREALIS_INSTALL_TARGET_CMDS
+>  	for f in $(@D)/*.ogg ; do \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
