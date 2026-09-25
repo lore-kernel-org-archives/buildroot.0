@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD436C98321
-	for <buildroot@archiver.kernel.org>; Fri, 25 Sep 2026 14:44:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3867DC9830D
+	for <buildroot@archiver.kernel.org>; Fri, 25 Sep 2026 14:44:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A499460DAD;
-	Fri, 25 Sep 2026 14:44:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 076CA810D1;
+	Fri, 25 Sep 2026 14:44:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IMxtjHyJR0IZ; Fri, 25 Sep 2026 14:44:56 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org B69D060D95
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790347496;
-	b=TBIkUb5yUWh3uwZcGJqucYr1ImYiWjWwjtV3sVKAk6j/wO2/4rFV8UmeTl5FgB1ApCId
-	 Yc6rBkimcldmSEyb6O0j4xsMzSYRIwm+L5a8uNniV7XfUbF7Zkng8Oy7W5fNNkHN5JZxd
-	 96Nms8bSYTHUFPrOn7fQtmK0JYEz/AFj9ub0afPIUsRALa64A5Tfd09Gv12uYiHyk3bcD
-	 JOUVJgWmXHrS6gGoerN2PRgupT7KuxEQauV88M0ODdkEG/8IwGFuSb6uUHwwVkieH7MEu
-	 bMcMJP2ivR17mhOoYhRThGW7HwM38TAkhT0U3x3tJiC/lC868/7byHF+YzrM7HzzY/Q==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lH4rI0AQS0m4; Fri, 25 Sep 2026 14:44:58 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 1188181327
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790347498;
+	b=fLUGBh17Xn5IEC6qYr/S0PCyKAYBVGmwjdYIJorcNADEeD9sBRg9I4oPziYMaWspGzqq
+	 s8USufF8ZpESS4gmMCPiK1Fs/XCKIfToi8A2em3z/TJnw9uFzW+ZjbEl8gNIHCORqG3kY
+	 /dw5LFhGDai+BiSkNRgbC7iyVNSEOatlc3hzipvo0/8Wx73LROYg07NoI/E4y6kr2B0PR
+	 a9hcNGjMdJq1PapqGoQOrVPh8DNwQvxd0AkvmI1WVO9jZNz7CgrD0g0HHnAtCUAq/KEBz
+	 6hRPvB29Qjg+mZENZOrgII6QUnJC/kkuDlU+N6kD7kU3SKf+2p3qOu/suGbcGJj41sA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1790347496;
+	c=relaxed/relaxed; t=1790347498;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -31,116 +31,116 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 MIME-Version:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
 	 Reply-To:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=CZJUvkUJW3Tj9GjXkthAjUBsuEHGf1y++QU6ih2rN+Q=;
-	b=iDA8L9/i+8eRfjZ575U157xakgeafo8qybO6qq79Y182pn6c8Ra4wxy3PfDBcoLStqSZ
-	 kCrbC/4Sfes3X3Ql24A7HPPPluYcGsj9xjdNnpl1aECZLVcrMOfBv1fykWU+sEKozKZVf
-	 XzH8rc7V50rdqqaozAr1Tvo6c2ndyO/vqk/x8koALQ6k3c2P5UXBbNrX6zocbEkhvWXAL
-	 krUYaOLfyHqSzRvS88b7rRWrouRNYsYwsdeI8AXIQjScFmeXkhcKHBOI8MxG2Z57bvppO
-	 VoLO9sqAwPeOJwXFWBdxTeE17Ck47B+JgFgCYeNb6CbVWwLtR479B/On7qVS8K/B0uw==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	bh=aj9I9mczLhx7AGyxF0gFvr393cfdGdCIKW26AxK24pA=;
+	b=lTfvfJ1XbwTtSW9OAyMaSAdpNy49osvf4+XR+kvLuFTOe4Olb1bIYfStKbDKtRAecOi5
+	 hAlHp0CXgCrTTuliJh2BG8isYls6eHKB52mc7KXtRM7FOGZNgyZ9blZyN+ujEW14bcQkv
+	 MU08QudsMTWxyxPJHaNe6ky3fo3QGLCQv2e/JqRRn038tBLC9pQW9lWJGLCqlRdhMG1f2
+	 uDN7or7d/yjdpwjjhzXMkTrn9L0fuaACICTK/51sB84AX9UEreHpjfOU4of+iPj9l0PsY
+	 +V7HLS6czo+Umpg2dPMHCBM30327ZkaNAhuKsoohHaXpJ/8tsq28YHXs2b5foKGlw+A==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1790347496;
-	bh=CZJUvkUJW3Tj9GjXkthAjUBsuEHGf1y++QU6ih2rN+Q=;
+	s=default; t=1790347498;
+	bh=aj9I9mczLhx7AGyxF0gFvr393cfdGdCIKW26AxK24pA=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=KT1H6KK4VVsZFsgG0nCLDwV/vaLgF1TOvd/fs05RX7bZstMLxBuM7Fp7odDFnVMgE
-	 3nhE1KrdxYXpMZs5DEuh3GrwIt40dP1wEG2GqhDiwBMojJDXoNES3mQtW5BFL02aqV
-	 14a4zVw8TKcBb8BXIRnTEN5fR/cO6ZsM7hkBKeAtW1KGpHExhB4c1M++DCDjVIaDPE
-	 8zNdRuGsnynNc8yQf4nfXpmi/og913pw5CWNquRqhwRKx1LKiKw/G7HGFVsr4VbmRK
-	 bEe/DpYIp+4ghrDrAIYdfbbO9raofB9EkVKulJtg2z6b2jk6spa8U9FcWtcoZSUqkR
-	 gxXKdhVFfgAUQ==
+	b=TyGr0yqhgtLPG0thZQZa6rKtlr5UIV9ojn7BpsaGxEuOGcL5vbFw+Qv2fARyetFL8
+	 q5xq2UHKwUfLMgPpe/RbEQH6q/3v52mt5ok//lbtGVo1nnSBUMAZaMnL7EWGA3k1jA
+	 dRxRHIjhnfNVyX0D/KrVOJmHnEvVVoLKW0qGBcFF1kB7BbJIx1tOZPRGAdv3GKb+54
+	 HUO7XYk8lBTaGIk3BvKinhzqnyJOtsmaF+7/JsdxROesZ+FK2WIBe/+L9YODUUPFkM
+	 n3aPNK9hmRWGMuAovgJEFBpA9Nyin5AwvzMDKubY0L+wkMmbCsHAxcWcI0eFdJGjoe
+	 aEk15/IYEtjkg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B69D060D95;
-	Fri, 25 Sep 2026 14:44:56 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 93D9A334
- for <buildroot@buildroot.org>; Fri, 25 Sep 2026 14:44:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1188181327;
+	Fri, 25 Sep 2026 14:44:58 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id BE1FBB00
+ for <buildroot@buildroot.org>; Fri, 25 Sep 2026 14:44:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7A8F9407FC
- for <buildroot@buildroot.org>; Fri, 25 Sep 2026 14:44:51 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id AFBEA811AE
+ for <buildroot@buildroot.org>; Fri, 25 Sep 2026 14:44:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pZ8rq0e7owsW for <buildroot@buildroot.org>;
- Fri, 25 Sep 2026 14:44:50 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 4B34440790
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790347490;
- b=GsTmqWHNJIOHMw+eVIZXuyFq5scjm8FNGmX/14ZMHerN4xOYQDqC7S7BGFiOXqx5OOF9
- 4N+fm8Ps1/XBLdnFy3Y357IPsRKeDAW5k/8t4XKOQNBUsOvsoyNzg9YlVnhFRdtFJhPlf
- wNf4VkZB1NbMr3uqOVdld2WsrD3Z+DxXKqBS+kNfKJ5vP56E26T99SPvfmYo6bJE5LJlU
- ZWZtfquVs+jxn1ZOFBCBiZasd2u0L7hmlx+Bzx/I6wpp28bILPN2v3dok3jj0b4Um5lEf
- tP26uxvMXGSDQHawHOQ956DbGwdY78Wye4ArBMvFCjh28RPFqM4V4RAbuPE9YOilZxw==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JyiYCjxHTL9C for <buildroot@buildroot.org>;
+ Fri, 25 Sep 2026 14:44:54 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 90BD481327
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790347494;
+ b=KBoiUYBmKKuogOdGHa0OtxgNWKSINXwbe9c7AwGvAqwMDpE7yL2f683gTZV5rtf3+eUe
+ kX0LnCrpszChxSoqfPj7ux1qQ7i5SFxZl83cPXlxnwNqxdBlVCWN02qki+Ym8WtLbcbXB
+ iHDfMYehP4nKiLxcz6ZPR5GDNWl1ptSgFYUHnFe+xZrbYM/KTh1+UvMZ1kJJeL0MoKj2n
+ qnZlq9IW9dHDWwpA1mv9ElAHPm6BEoeB0hPoP83X0FcY+cNM7DBx9BJoZPd43tydUL8t+
+ KM6R7OijgkmSy1Y36axxVoJvNQiRtFQhLNU0T1hChCSl96ZuJ+UcgLNyDMrr/YQCpIg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1790347490;
+ c=relaxed/relaxed; t=1790347494;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
  X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
  Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding;
- bh=iNPgaLUBqA+s2i+pKWPZm3M9iUcA2P+Vl0Ub1UUvcNU=;
- b=Mm0TJg+9LjKzSP63e4t1cDFEHYjCj33home8L4eF2OWw9rNZ8kK751KaknZd+Hr2zZ5H
- N3Gj/b3gkhhc0ZMpKyUDtbzPpTpJFzs6W9F1qOxuYWGtWSMsiKsn8h53RALn9hPqGmsFV
- 6+Slb0DYEiadz0wmTCBq6EVuVgg7MSU7HO1rSKvoK+GiUduqFjc0HZV6fuier4dITeYbW
- oHs75SHyzZSt6GVvE5qkmg/9X6TJl5Wq1+Vn5GPLvySRjdkjVgpjliigczYg3bLe1grt6
- a19IHj575nhP+VDy99qcu+Xcq5Nn3Fe8aX1XgwJDNtU0CHPx8V6kJ4jmiAPvblRptpw==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org;
+ bh=rJUh2iLnQMZNBtbR6zRUCt6NSgf+S0ybrF1M6bmnTOY=;
+ b=qn9I8fH0YM2Bp/4oNxjmj5TLHrtb7Noo6ifWfpzRHaFg4723/xD7p0D7D0C+7farxmvf
+ Ne7bVhX9GZyz8BuSxF4fMgnLccsQfUfTKQyRlqs1hlJVa1BsmsyaygLPocP8A5PK2X2gl
+ lS5ueDegbLZL7/Su6Y+VaLgTuKLbhQ8yHcchXv7Ci7FPHRJRU9vCkRcL5mfi8/IT/hjR+
+ Z7Xpwbh2Zwt6PMnaaCUYJTMtJPgFtpyronot5A+fE+Tp1+WVT1a4lGzw3/Tow3n+E+PCV
+ izWS4A3oKOXKFUrxgVm5gsP+Dx8OuYOckPyr9CnAXrTSLLWIve8M0bX1etbB5qXG7Tw==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org;
  dmarc=pass header.from=mind.be; 
  dkim=pass header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=cWFWgW5T; 
- arc=none smtp.remote-ip="2a00:1450:4864:31::11"
+ header.s=google header.b=fp9QLH2O; 
+ arc=none smtp.remote-ip="2a00:1450:4864:31::10"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:31::11; helo=mail-wm2-x11.google.com;
+ client-ip=2a00:1450:4864:31::10; helo=mail-wm2-x10.google.com;
  envelope-from=raphael.melotte@essensium.com; receiver=<UNKNOWN> 
-Received: from mail-wm2-x11.google.com (mail-wm2-x11.google.com
- [IPv6:2a00:1450:4864:31::11])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4B34440790
- for <buildroot@buildroot.org>; Fri, 25 Sep 2026 14:44:50 +0000 (UTC)
-Received: by mail-wm2-x11.google.com with SMTP id
- 5b1f17b1804b1-49e7bcb94d3so7625705e9.2
- for <buildroot@buildroot.org>; Fri, 25 Sep 2026 07:44:49 -0700 (PDT)
+Received: from mail-wm2-x10.google.com (mail-wm2-x10.google.com
+ [IPv6:2a00:1450:4864:31::10])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 90BD481327
+ for <buildroot@buildroot.org>; Fri, 25 Sep 2026 14:44:53 +0000 (UTC)
+Received: by mail-wm2-x10.google.com with SMTP id
+ 5b1f17b1804b1-49e66390995so6115105e9.2
+ for <buildroot@buildroot.org>; Fri, 25 Sep 2026 07:44:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1790347488; x=1790952288;
+ d=1e100.net; s=20260707; t=1790347491; x=1790952291;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=iNPgaLUBqA+s2i+pKWPZm3M9iUcA2P+Vl0Ub1UUvcNU=;
- b=MiD5Y2Gl+qis6EaRs+fQa1qrATOB27Qus9vU0oMcal2rZP4YuDqSG1+NTRJbP9zsN9
- 4M6LjuzU0oAkEcfOzRpyd9wipS13j3WOnHBWagI+2f4CUQNda0JFTPrgo20g7gsMyRsC
- Z0/b3lUCTKJehYl0hnCFXleR1MhTQZCvWxqJt8RN/tDArmT5SKuGtv4HnZleCPMl0nuv
- m8xNuLOP6dIrTm7huosqk/9r0S69e+W2PKGrMFBwYoP6uXtGJtTqt6tMA5ptOAz0aZrp
- 1cjugkuilZZSOi5EwhUYmQGjHerlzwBpWFUnLk75kZIriStF93vCZ3S2vnU3IPehdaGx
- QZsQ==
-X-Gm-Message-State: AFuF++kG+fmKhYXgXEaYAAdTFW2UoqbkrchpjaOp4RJ9rd9jJZWLfMEa
- hyCrpJvTzzlLfz4dmFFiw8VLrGDMk5iZnHlUvHnqU4IEbXasNDfvicixmMTxozC/LnEtsWFAYVR
- IbliYvXivwg==
-X-Gm-Gg: AYBFou0kMGY6LqvwtWd6LxiUv1mXzjU7PVRkLhWuBkCSBDfA70SERvnb+4IYejahDFF
- aXw3DBzcoKKN0Lftda7PgVX0ddHFMw2lhCzgSjWau4lPljIWGXUBpa0ozGuxRBvPL0MMTu8wK5f
- Om6qWCI4UjA6QTmdxEC/Fw98crmvrACJ64KK43JiPodTxAdW6BIGWNCmGVtAzGGGuv6tDRL5Ztj
- jXEUXKMhNg4qR5VQ1GAp+en0JWQG280JpbJj6XZov7cjivy1jQEtIn8WHS76LU8xuNf+COj1ISn
- v5zoKqkLw1OqCFSqmxYTjd17u47hHugOb9xBT02p7/R/VvfFqb7/btNPNBrqd3GivBcbCEXc3FR
- /BROIMWMNbQFLesT3hXRujkX2SysjofFhmv6rCsTIuAyouCMPfqdZOWlZ6PBHMZaXz13y+3Q9yB
- XIXY3+RVbOEkz9bcdHUZAMhdtbM4kC9p/xLKdxX/z5G6/4W+vMWafnn4aDwMiGF4zPYBsrcjnSX
- Vz7IGMc89Dg05gLMnQSveaKEo5tOWCUAuw6jEXsbw==
-X-Received: by 2002:a05:600c:19c6:b0:49f:ce72:e930 with SMTP id
- 5b1f17b1804b1-49fe66ff2a5mr111785315e9.34.1790347488151; 
- Fri, 25 Sep 2026 07:44:48 -0700 (PDT)
+ bh=rJUh2iLnQMZNBtbR6zRUCt6NSgf+S0ybrF1M6bmnTOY=;
+ b=iHRP1+0o3Wh2JqHFfKFOdepCYQNcPkQJZTHrJLsSfTIvNQaCGHFck4yGQE0EPgnB6y
+ IE7YSCRkKuZNX/SvmQkd/AYnI7kamQKFBV4QdhUhxU0o2861xhn2Q8ITPZTAGN5b+fJM
+ Mft5OhLhfjOD9D/G1HuFypA+mzydJORww9EKKx5pEadd/6B36fFI6dnwuuYOQ9lvWTm7
+ k5FB+QcVDVlAxFvt3yDctuH0HexWYp9iC6cHqAtx6qu7aOiZnPP79hQPvJyJMfv5z4Dr
+ 99idowyGuCwNanCBlqa6gZLY8E8vgBckArpHS1wLkSM//l5s0lgo99ps6dLdnklY9yts
+ A4+g==
+X-Gm-Message-State: AFuF++lJmARdyygRU88qU+zaoGXuxMeVD57os9MECzoX+OykLnzw0oU+
+ de5UajjOdSipq8VcAJt1Y41nhRMr27cPGTfvfYpGyMrqLQ1DQ1AFqMz8PMlXduJWX3/vG3Saqxb
+ 45iLUKBTc+w==
+X-Gm-Gg: AYBFou3cLQLFik+UwrE8HKEpzLupYx1MUTOYiC128A6UETfQrwgHyJzqIP8V+yoWACg
+ sbRNvMo10LAHWE+Qza8BP4PeLfvMkjb87mURqa5udFLhVKyo7at6SiXBlvH5ULiluyPIDJnw2j/
+ zoi+msrt2c3+imS1lY5oP3ykZSR9MkkhFoVNW6jhtaqMPQxTy7O0sQBfTR8qnDWNiufLOh+o3DO
+ u7nhSO/uNt0bhApmQyFIzp7fHpmUhsUGMZLu+Mh28CZkT1XT69lTfGqwSDqF4XNtQ2RvODhQt1q
+ 5hpWXWowkYOEt+FB6AtoWx5ZTtSmn5xm0lwA9rAeKB9RVK71QMwJ3P6d5W+mRgKwtuhpjMKNM06
+ akg9S4jDvSeR+myU07Er5vodMKdE7BTa1dUn1XYOake3JDS8p2Es9xvfi+C+DAmFXnumPjrXNvT
+ cVYBmHJDr913JaXRTI/ke5ALbcxoOFoGaZtcZEovc4EPHxEPT/WdmzKjEfNlblHplpa0WHRwi2G
+ vXjY2dwI4ynJbnD5GyRewsFMcm/AreTySyjFHelsHY=
+X-Received: by 2002:a05:600c:19cd:b0:49d:2536:402e with SMTP id
+ 5b1f17b1804b1-49ff06f7a45mr46625335e9.30.1790347491344; 
+ Fri, 25 Sep 2026 07:44:51 -0700 (PDT)
 Received: from debian-hp-1 (ip-94-140-185-241.reverse.destiny.be.
  [94.140.185.241]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-49fedec53c4sm93215645e9.4.2026.09.25.07.44.47
+ 5b1f17b1804b1-49fe5cd4271sm228281905e9.5.2026.09.25.07.44.50
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 25 Sep 2026 07:44:47 -0700 (PDT)
+ Fri, 25 Sep 2026 07:44:50 -0700 (PDT)
 To: buildroot@buildroot.org,
-	Peter Korsgaard <peter@korsgaard.com>
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
-Date: Fri, 25 Sep 2026 16:44:45 +0200
-Message-ID: <20260925144447.4096737-1-raphael.melotte@mind.be>
+Date: Fri, 25 Sep 2026 16:44:48 +0200
+Message-ID: <20260925144450.4096808-1-raphael.melotte@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260914190646.3827872-1-peter@korsgaard.com>
+In-Reply-To: <20260914213922.1847792-1-thomas.petazzoni@bootlin.com>
 References: 
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/x11r7/xlib_libXfont2: security bump
- to version 2.0.9
+Subject: Re: [Buildroot] [PATCH] package/sysprof: propagate ucontext-related
+ dependency from libdex
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -161,50 +161,59 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Fixes the following vulnerabilities:
+> BR2_PACKAGE_SYSPROF selects BR2_PACKAGE_LIBDEX but did not propagate:
 > 
-> - CVE-2026-59679: Font Server Client encoding Out-Of-Bounds Read/Write
-> - CVE-2026-44950: Font Server Client Cumulative Glyph Data Heap Buffer
->   Overflow
+> 	depends on BR2_TOOLCHAIN_HAS_UCONTEXT || \
+> 		BR2_PACKAGE_LIBUCONTEXT_ARCH_SUPPORTS
 > 
-> For more details, see the advisory:
-> https://lists.x.org/archives/xorg-announce/2026-August/003734.html
+> from libdex. This commit fixes this missing dependency. In terms of
+> Config.in comment, we do the same as what libdex is doing: handle it
+> as a toolchain dependency (rather than an architecture dependency).
 > 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> This was missed in commit a73ef093f7b40297d69c6813c44fd4626883632e,
+> which added the ucontext related dependency to libdex, without
+> propagating it to sysprof.
+> 
+> Fixes: a73ef093f7b40297d69c6813c44fd4626883632e ("package/libdex: needs ucontext")
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
 Applied to 2025.02.x, 2026.08.x. Thanks
 
 > ---
->  package/x11r7/xlib_libXfont2/xlib_libXfont2.hash | 6 +++---
->  package/x11r7/xlib_libXfont2/xlib_libXfont2.mk   | 2 +-
->  2 files changed, 4 insertions(+), 4 deletions(-)
+>  package/sysprof/Config.in | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/x11r7/xlib_libXfont2/xlib_libXfont2.hash b/package/x11r7/xlib_libXfont2/xlib_libXfont2.hash
-> index 86e972a0e8..d5813b3e24 100644
-> --- a/package/x11r7/xlib_libXfont2/xlib_libXfont2.hash
-> +++ b/package/x11r7/xlib_libXfont2/xlib_libXfont2.hash
-> @@ -1,5 +1,5 @@
-> -# From https://lists.x.org/archives/xorg-announce/2026-July/003715.html
-> -sha256  f556c0e1093a4e6911cc90bc4b106d201902ee187fd74af206ff162f7e6a24d5  libXfont2-2.0.8.tar.xz
-> -sha512  e14cc3fa03d7baa4554ee5754ab33f69ac1da3d509c686a5f705fde8cd07772be564d68cc18d9fd0beb5ed7b2f864fcd7f6bf4983f5c0db08a9c747d0e001531  libXfont2-2.0.8.tar.xz
-> +# From https://lists.x.org/archives/xorg-announce/2026-August/003735.html
-> +sha256  f042a370666815e7b941e9b7019024755bd1c6c2954afbfa515af378251799e2  libXfont2-2.0.9.tar.xz
-> +sha512  ccd6d6abf6aa814a940d137813dba638f8259c3672abf00808d82df033c1026ae29d40c9068da4f112637338ad0d0fc15818a4afa9369a626c8f17e466b4fa72  libXfont2-2.0.9.tar.xz
->  # Locally calculated
->  sha256  3b1047f0d45584973866a40e3eedc74aea4c6ac636960d650ae05af603e6d1a8  COPYING
-> diff --git a/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk b/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk
-> index a881a4c55b..e8db0004f8 100644
-> --- a/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk
-> +++ b/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
+> diff --git a/package/sysprof/Config.in b/package/sysprof/Config.in
+> index e89a0e539e..258f549152 100644
+> --- a/package/sysprof/Config.in
+> +++ b/package/sysprof/Config.in
+> @@ -9,6 +9,8 @@ config BR2_PACKAGE_SYSPROF
+>  	depends on !BR2_OPTIMIZE_FAST # polkit
+>  	depends on BR2_INSTALL_LIBSTDCPP
+>  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_12
+> +	depends on BR2_TOOLCHAIN_HAS_UCONTEXT || \
+> +		BR2_PACKAGE_LIBUCONTEXT_ARCH_SUPPORTS # libdex
+>  	select BR2_PACKAGE_ELFUTILS
+>  	select BR2_PACKAGE_JSON_GLIB
+>  	select BR2_PACKAGE_LIBDEX
+> @@ -21,13 +23,15 @@ config BR2_PACKAGE_SYSPROF
 >  
-> -XLIB_LIBXFONT2_VERSION = 2.0.8
-> +XLIB_LIBXFONT2_VERSION = 2.0.9
->  XLIB_LIBXFONT2_SOURCE = libXfont2-$(XLIB_LIBXFONT2_VERSION).tar.xz
->  XLIB_LIBXFONT2_SITE = https://xorg.freedesktop.org/archive/individual/lib
->  XLIB_LIBXFONT2_LICENSE = MIT
+>  	  http://sysprof.com
+>  
+> -comment "sysprof needs a toolchain w/ dynamic library, wchar, threads, C++, gcc >= 7, headers >= 5.12"
+> +comment "sysprof needs a toolchain w/ dynamic library, wchar, threads, C++, gcc >= 7, headers >= 5.12, ucontext"
+>  	depends on BR2_USE_MMU
+>  	depends on BR2_PACKAGE_LIBUNWIND_ARCH_SUPPORTS
+>  	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
+>  		!BR2_TOOLCHAIN_GCC_AT_LEAST_7 || \
+>  		BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP || \
+> -		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_12
+> +		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_12 || \
+> +		!(BR2_TOOLCHAIN_HAS_UCONTEXT || \
+> +			BR2_PACKAGE_LIBUCONTEXT_ARCH_SUPPORTS)
+>  
+>  comment "sysprof can't be built with Optimize for fast"
+>  	depends on BR2_OPTIMIZE_FAST
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
