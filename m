@@ -4,154 +4,139 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99709C9831E
-	for <buildroot@archiver.kernel.org>; Sat, 26 Sep 2026 03:36:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E91D8C98328
+	for <buildroot@archiver.kernel.org>; Sat, 26 Sep 2026 09:38:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EFF7960DA8;
-	Sat, 26 Sep 2026 03:36:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CFA3E606F3;
+	Sat, 26 Sep 2026 09:37:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gfuK8r2IdqfO; Sat, 26 Sep 2026 03:36:18 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org B1D5D60B66
+ id 9H-hLC5J0aLo; Sat, 26 Sep 2026 09:37:58 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 129FF6067F
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790393778;
-	b=ZsXH/WqADZWb6f5Bx3tG0qmicxMfgNC9FYdHLlm8zaUp6Ax+YQyqhnpECKUbo5MQm3M+
-	 GBFYgDFgpNgMMjp8rp0w9o+GcphrCrJnVha3bTKkaxM43Dk71h1GW/IKKDB/iDWw4LmJo
-	 lXfdFLnLOscvyVrM19lhaGVrMuihp0jaF3nZTQuchbnhck8P/kMMbzU2mVpyEicolIuRU
-	 E+8NJqRfrHJ279RcuNVZ3mEiPLVl4u3ocfINAhkgNuZXitIYkcQu318Eznk2IKw3sO8+q
-	 vB+MS6tKlXjj3lUWAV8DuoZtx6rRbgFo7XHE765XsOmZfdBxKvYispcklaHUVieHXZQ==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790415478;
+	b=qapT12MF1yMImmNwHupwxP9/g4Clq+Iou6uBiTBmFm9FWd9g/5//Q8IwDjEs4PBq2IJd
+	 fb57MDKSQCCNUh33zkoix5NKOMyJe3IMN14w50M0ljMbNMBQDC7wdPUPfZKiV3oC4LYW4
+	 i9Z85ObwueVQ8VdyTJucI473zxQekm24KjQTlNFw0ceq8MkA0XrK3jHzj68TCHsHDg2Uq
+	 FJ5yI2QziIR10TqhJ4oNMypRN/H+Yoyuq+K+LO+uzvLUGTUBpl7cxRRChWqBXuQXPUAWU
+	 l9AdmFJnABrVcQMVL93DI/75qHC8zN6bJ+GUobArw8h8UbSuAHKp1EoKK6NDqKmBsUg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1790393778;
+	c=relaxed/relaxed; t=1790415478;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
-	 X-Received:Received:Message-ID:MIME-Version:To:From:Date:Subject:
-	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:Content-Type:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
+	 DKIM-Signature:X-KAS-Sym:Received:Received:From:To:Date:Message-ID:
+	 X-Mailer:MIME-Version:X-Spamd-Bar:Subject:X-BeenThere:
+	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=CLGCTV2v0wxHygW0DhhblyS6/xDMKHUytRstl4IP9iw=;
-	b=eeQeAPp6w5WTZTfceo5JjrBpp6lQ6nuDsNhFKqblc8/9v22f/3tPjZ6JDUjCZp9wusfY
-	 LMCoRyh4zpnd+Y+hwLUA/Ul7qCmFhT96iBv3EWcw51+QNJDWP22BwIrXNo1XCR0PjM7ct
-	 1mmrqQJWm7Wmq2YhFjlZbdauYBEtx1QQmdazzAzCZALCY1pY8BSZftpmWagtdXnDLhEUr
-	 njEgygDXzrWI+ZZ/dVOC7KjB3yTYV4eSbutCfdmaAndbUuh4MYFsRNHkUyamdLSmyOdM1
-	 5Pdg6GVaV5jqLB8tcLFpHjxz87+5jp++1yD6uw7rvFdmPdkCoHkD+CX+tnEM4SmCvZw==
+	bh=NT23L6n79Rn7VCDtYzGWeu3tDT4zr4uaGExj462TjpA=;
+	b=pu0QH9tbAls2CY9cDZi50EG50q7v69b/ra5Vz820D35Xe55TMO1CRP6qvGUv+XgfqTOy
+	 dhdPmXkAE/9HBA14we7BAWZcK/tqtOsxpWLu2Qu0C+WqkMhL9cJbF6Sv5JHUur6q37c7y
+	 l0ihx09S1+XyWv9KK/KFY0ThR3r8KueVfbwvjoWkIM5er5z2OskD1TdLYRKSIIifK0QLy
+	 UrPR1PLib/UeqZTY4G1fWZZKgcTgcBrE5L8LQhytAV0Sw+tdk6lH2jqt1MzVkGyKE1xuE
+	 U0ZiII6cFA1fPR4YCKZDMMmRrEAvT9H9OaUlQtJnIgfrbS4rvMxNtv+IX0B5W64A6CA==
 ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1790393778;
-	bh=CLGCTV2v0wxHygW0DhhblyS6/xDMKHUytRstl4IP9iw=;
-	h=To:From:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	s=default; t=1790415478;
+	bh=NT23L6n79Rn7VCDtYzGWeu3tDT4zr4uaGExj462TjpA=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=ObPKpckFv0rbSMHIIljc8LNuLGYGr5DxamEaBXp4K8Gs8Sg47xFrxo1c37UrLn26k
-	 USgTQj5NDOp7jvx+c3UUl9Hs9p6PIGf+qhJh8Iw6r5BNjwQtrFW/ltj1FF7pf2HTkG
-	 QwBgxre8YVH8KC/OznEqBKntF5NcCU+lmKfGV7ZRLmo0/svDe7Sqrb/Sq+w57t7fPE
-	 9xdDYXufHyZ53grFcJgviCCD4p/SM8bjqbLGI3G77+nt5Q9WfcSSC7Ib/ak75QkJuI
-	 xr+ugxihBfRnb3QAEVcKxSa6wCmpUwKuH0xI0tf3EvzgKwJ+Rpkviy8MAhkzEBoxKG
-	 7uWDPahBv1kKQ==
+	b=WKmcE6Eky3S9pc7gyfJ9vXGn0f5qkFhofT81ba+IBhg/+Gc/SFcss3T+w/ZCehdMf
+	 YY88kTWNi5yIU4c6TeTnB0HiG05GZjJvCsI5DalgP30AdRZlIM9XtUgWS/1qNvJ1K4
+	 s8NE2Ezn+cPqGrYk4+57k7GGD8JimyEbw7SDEXmcuipu0YaF0dzl0YTzFLuyudniP6
+	 GJtZI8iQc6jUEjsEfJQc7EmibkfZQTxdFbDS6KkDCaZDYyP1Q2wMSJhHE5+rGEzgb3
+	 URn3vLYRansVMEFjDdtzjtWogir44ypMlDxdsDRddTI0rgeeQx3H/uWXqga5/W/2hb
+	 GccczEGsMcArQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B1D5D60B66;
-	Sat, 26 Sep 2026 03:36:18 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id A8AA34B8
- for <buildroot@buildroot.org>; Sat, 26 Sep 2026 03:36:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 129FF6067F;
+	Sat, 26 Sep 2026 09:37:58 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1EC9F329
+ for <buildroot@buildroot.org>; Sat, 26 Sep 2026 09:37:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8D38B40082
- for <buildroot@buildroot.org>; Sat, 26 Sep 2026 03:36:17 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1C87440549
+ for <buildroot@buildroot.org>; Sat, 26 Sep 2026 09:37:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 54dIiQ5II4xu for <buildroot@buildroot.org>;
- Sat, 26 Sep 2026 03:36:16 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org 103D340062
-Authentication-Results: smtp2.osuosl.org;
- arc=none smtp.remote-ip="2a00:1450:4864:31::11"
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790393776;
- b=Dh72Ykbfbbu6anabopwf7csgmsbMau6OIeaNz7SVR+iOdQYPq4IG20rc7EJZT3j8PmEe
- Kd/h1Y3D71rJSwtsUpSyuqMsP9qKNYzvhzLCxnHVBU0SP0Nv9pbCDpgrGE4n0sefUAgvd
- r9NaAuhvnXgx6j5Ur15vLCLC3mpMHfKRz/ZdFQrYNZVzjzRRlckOKDncEYtZvfR+w2M2g
- 1oNZtwgYCig4OWo9GxHg2SFWljQO3oTGcT+TC6PdzhgiVKAuZs1gby6et74Okui1h8OA5
- erpjNHKbTnIdDRgyFr1buMOEILMjVCw/eytwYd0Fdckt52pTQDJ9C/Ou86cKhVibHww==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Glwm5VM6tvwo for <buildroot@buildroot.org>;
+ Sat, 26 Sep 2026 09:37:55 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org C1DEA40543
+Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790415475;
+ b=dMrkH9amx5LBEJ8VLl4o8/fXHNjznzHlkQbnNlxhyNHAXMO0tYpDLmi9eqb4/R1UYSBM
+ c8uiI/dfSCikO+Vg1pspIIzqKWea1mchO5fTCNIDL3FOSu2/GLF2BIW0q2FZ+qrl1Q8v5
+ v5gWw2UucXRVkkGIgk0y6bxXv/27gZhoMd+flQ+utKylO6K9cZooFLXSWHt+FGZvqW8NZ
+ LweQrLgwW4BsY9xi/vCc9B4pO7wv/+fkcUEyaTjYi8CSD4IrJOeSZlZPdcnFLQC3Re0lZ
+ aV53toVcSrqsELYdJoV4tlVy508Z5I/gWDqSwEGzA/YcOTomI96YaOyw7TEHUCydArA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1790393776;
- h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
- X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Message-ID:
- Content-Type:MIME-Version:Content-Transfer-Encoding:Subject:To:From:
- Date; bh=SCPDig1SPSq8+++Og/ezF9UB4Y3ET+cpKI/anhymVrc=;
- b=JFAIMS4oL4vfjWYn4nPdYH70gVJmI18AmN5srQ6TrNgXM9NpZfL2ctF8s8aPLdAqkUWd
- fpFUSPF8IH8Ply8Eh2ZmzmiUPfgCe1eRCUIoXcRtn42qMmlPEym5QsRdQSBdjD8pVmp6d
- LCtA3veDkdnWko5PkfCqN5/wTAI2eLhLR4GypbMhdJDcOjep4iDOJY2MwCymx0SX2S3Nr
- DS1he+G/ZB2+UvfPoGExt5NkhDLTcFdxPgauosoFQrrMfQISIscSijWwX6dQfjcK12cB7
- vjQpdIjctXPdCS5b5CY/OdX+G26ohikSVNuNjGDWAYlmTo437v4zP1TKlbVpU8a4hRA==
-ARC-Authentication-Results: i=1; smtp2.osuosl.org;
- dmarc=pass header.from=gmail.com; 
- dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20251104 header.b=Y1l+qT1u; 
- arc=none smtp.remote-ip="2a00:1450:4864:31::11"
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:31::11; helo=mail-wm2-x11.google.com;
- envelope-from=buildroot.notifications@gmail.com; receiver=<UNKNOWN> 
-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp2.osuosl.org; dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20251104 header.b=Y1l+qT1u
-Received: from mail-wm2-x11.google.com (mail-wm2-x11.google.com
- [IPv6:2a00:1450:4864:31::11])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 103D340062
- for <buildroot@buildroot.org>; Sat, 26 Sep 2026 03:36:15 +0000 (UTC)
-Received: by mail-wm2-x11.google.com with SMTP id
- 5b1f17b1804b1-49e8185e037so8093865e9.3
- for <buildroot@buildroot.org>; Fri, 25 Sep 2026 20:36:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1790393773; x=1790998573; darn=buildroot.org;
- h=date:from:to:subject:content-transfer-encoding:mime-version
- :content-type:message-id:from:to:cc:subject:date:message-id:reply-to
- :content-type; bh=SCPDig1SPSq8+++Og/ezF9UB4Y3ET+cpKI/anhymVrc=;
- b=Y1l+qT1u9nyMuSJf7FgJEuUy2CfHTed0Hq1DkvlfJVMcOILtdlAObNtx1qsl308Ym8
- fS4jo7Kf8ZQuuu1MOdbaIyb3iGzxD3KeuGk37UXS35Rlny+YCCOboZ1StEpYnFtVjavG
- bOyFHEpvTS3TusyAEMnsGsJJoc4eVltiJT30x4/HMeKYK8KKhGvPNUJNunW0te0UI8zh
- xT73mWlf6rfTrftECZ7g5HZMHg+rjib3UONXwrfvZPXE4Cqx6Zi1J1EG9TZ3riWKpYFY
- QkLFCEVZkLFlJlXzmIGUBWzp6i+hbM63M92K41ub6NdtK2HZwRVAu2F6n7cKwO2CfSAw
- LL1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1790393773; x=1790998573;
- h=date:from:to:subject:content-transfer-encoding:mime-version
- :content-type:message-id:x-gm-gg:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to:content-type;
- bh=SCPDig1SPSq8+++Og/ezF9UB4Y3ET+cpKI/anhymVrc=;
- b=aA9q/P6W+ppfsELxgD6iUCVK+ALZwNert7Mu9CyrUwQ7isPx9s9KA/yu/trJX1OtXO
- eYR6TOTsQ1H4SDVJ0f5JmkxC3Dankr4IeU/egmIVwH7fQ5lGl6ZlZ3za8gFdeaTO44fb
- 0RJQIP0nEu871UzMKVFhOfSa2sDWqCVjghLXm+nsY3OqOd4RjzhvuclDqj+sTDRCDAFe
- sRcOdpuY4LHs++qortDBH9iCdi0ZjSQFHXczj00e/z7nGS5H1WFhqLrdUFBx6F5yWaHE
- 3/WTb1/HBCUgGDzggtHrEGkAhXDZwC6YfHh9LnFbaNIRE9wpQES2coH1N4i2W32DpcIT
- i9LA==
-X-Gm-Message-State: AFuF++l5dbd8eaMCvjrhozopfUFKyys0GqWF/GHosySLSr2cNHXex0Yr
- P5SAlPB/wBX5TPMnIZH+M3908pAeNZc/zN0r6MDRb2USQiHudEZjRJWadUQR5M5/
-X-Gm-Gg: AYBFou0Zn9yMapsCjvPRIEDSWNprQPWI0helnyahPrFxOxy7zcqckK+2hfjxY5eDSfW
- 1KXmLS3IFbHJcABj1g4BUWHd+3+5AtCTO7CLN0Dzp+buyYZXws2tv0UeZZoJfhe4hK3ENvNMWeM
- SrqzrSJwvD13emXqK+Kd1hjNtNgb1ZZe/ZxdI/Oe3NPlPg1vZgafC7Hlcg2/xzM2lKCugmyJRjy
- kmQjXYZNbRfZAq6aIykjgFglnz31VrardrC6XI2BZGWwRmMLUmi1Sh+UjEe+5l2yGFewvoO/OD9
- /xwUNSLY2x/xh4EeaU/hqshEx27pJ3+hFQBQYjcKC4yjFh0DkVJwGBhmj/0N0VCcTctB0/9hRUk
- OuOqcEETMwRxcBQK6R3QdhOZPfARlfyc+ohTZx0Ellc6g5ZCvLcC6TJvELQV8crLq56nxpwPYsA
- wYuJTuj4KE7dW0lu42a3rXlicE5sc1ZdN0WXRPf6Zv9WuOgfqrmNc878iCDkundE6VSi7jok9dO
- Cs=
-X-Received: by 2002:a05:600c:609a:b0:49c:dca2:ac47 with SMTP id
- 5b1f17b1804b1-49ff06b2db4mr76164095e9.2.1790393773414; 
- Fri, 25 Sep 2026 20:36:13 -0700 (PDT)
-Received: from [138.201.205.61] ([2a01:4f8:173:1526::2])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-49fe5ce4941sm190233065e9.6.2026.09.25.20.36.12
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 25 Sep 2026 20:36:12 -0700 (PDT)
-Message-ID: <6ab73dac.1fb8f4c1.1a9819.d3b1@mx.google.com>
-MIME-Version: 1.0
+ c=relaxed/relaxed; t=1790415475;
+ h=Received-SPF:DKIM-Signature:X-KAS-Sym:Received:Received:From:To:
+ Subject:Date:Message-ID:X-Mailer:MIME-Version:
+ Content-Transfer-Encoding:X-Spam-Score:X-Spamd-Bar;
+ bh=53ZAFqsxRVcn5Od/pwa372rfUi2geiDJEtDtSFAG5Gc=;
+ b=iTDZkqemfqSEyZwpxgDYUi2ag5rwnQfdQsYJ7Kzljbl+7NxwdbPyhQdScjUVifyraTQR
+ HF8tm07aP4vLjrJdH06QsXlD/gC6RhI3rs46Ef8oR5PNMT+XT3wrm8Wrx8s8NvIIivTJM
+ as7x2YMG6O+GsFg+Y5pD0i9nKz9MOcZcNbJ8IdHIEfUJntdXStNtFNOX2BXQq+1SU0dki
+ looVLkIBGmxd2b8vqkhWCcUbVN6Mozn3e6Po6HXLg2By9MYqtio+9zSZ9tsXC7yKXfXPJ
+ MoJk8Xz0MgY3JnyBCD8dGMCOTlBfo/786EJJU1loqloqdTdX1V77qXuS9MiX8Mlua9Q==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org;
+ dmarc=pass header.from=kuhls.net; 
+ dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202605290044 header.b=t87BCJOB; 
+ arc=none smtp.remote-ip=85.13.140.57
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none) header.from=kuhls.net
+Authentication-Results: smtp4.osuosl.org; dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202605290044 header.b=t87BCJOB
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C1DEA40543
+ for <buildroot@buildroot.org>; Sat, 26 Sep 2026 09:37:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
+ s=kas202605290044; t=1790415468;
+ bh=53ZAFqsxRVcn5Od/pwa372rfUi2geiDJEtDtSFAG5Gc=;
+ h=From:To:Subject:Date:From;
+ b=t87BCJOB93b3LMNjRzDGW1S9khzNosqSQqMcULGDHGrpfnUsH9tyPpmVNVaZRGQPt
+ 1ttQjAr3mJkKYyLZsP38CTuK5uqbHhF7nE2mrmKSERn1Dx9GHJhpzFZ1YsZNYwe3d/
+ f5Y8Mh10m5FS92devahYhYaGAs7QVI2eZ22Lso1OSADWh1aUAQn6u6JlYLZW6R9O8d
+ bdnU4MJO4FAao4IFFn3yUcA86ntyjLS7aXYPWteWUpO2ry1BjB0RJzwUPByN1hWqkg
+ oKiBtBXJ6WKui0JmVXXgZ7rtwnZOlMOtqz6+FVHBvkf0Se8Kx2Px7+/2hXy2IcoAht
+ WjpOwhUUk0Y3g==
+X-KAS-Sym: v3:f51bdf72230551df:LlAPysI8K1NTIfd+9mnKJLwsfpXoJDKfGxFmNMiVtLZau
+ lreMxOIdSkZxzwAUSY5lCL91DpMwBl0KRIU43ZfXcZ3dsnbVAgXD4hRAcXuQwKRPdh7d9DfRYRM
+ 5aVn9Xf82bkkGSUN47jEZKeq2WUMt1iNUvh0Pr7aonX7d+ymnvgsgbhrNDM88JQ7j9j9lzkj+y4
+ xu2Kv11zDadpVL1pcxIJodYKdeTDh3OxPhpSDAcV5Y0l0JEv/wn/4LKfw205ZQhGSm+jWxVFhIA
+ R+ASiUta1JQvHqUE0Gq/Jc4dbJLDlVXIwa+kEeKfJgAYG6Rugge2qPUN15eyvRIYusySRuIQ==:
+ IaYBCwg1NojhPzi11ILCTcsQdH6tiVKBPCLXOeu/Mj0x5Gh4/baMM/Rsudawnis/06ZSP6e+ue0
+ QTfYU8j4SXnMQ9+9V6z4ZrSwC/z2JdXw3q7RF1HKMij8Yjlo7ZfKQEN7jkuvfuaQcV2hogbfGNo
+ hMhn6HnYig+8qpiZLOT2m889rtCVLNgY7t4TmwTu1XzrDdmzbUz/Si0II6zE+crp++LE6TODvxo
+ /qns5Yvxbd5iZ/pnMSK2kFBvKAhWnpTMv2YO0gfdl5HeOpeXBP9ECO5fcJ4AwJXLWriA7/RLiQA
+ j20yMsBALQjP5/GqZY8ja/5ObymmtTwIOSWa/BU7ewWGXnBNmbxAV8TVgjnvh6CvvWkRlQo8kFX
+ XJ39Ir2UQbkgIzvsYhxohwMoKbOI9xcyCodiXnm7d+0sqZlzCyrgzW5G+xdUB1q79hcM4Q+pvt6
+ fgxuEDXb3YgIShn456PdcTZt1yzviXRfEFfprvv4KTuuZTrPkUBMEn+bSeUmQ1otgbw81b89SjN
+ 2XfLA45KoHhdnkR8ZWD6hFGRv8AAaUqJscgNBvQyqMsn0dpikLbh86xmwfnCGkHOrPxMIS1sBBE
+ DnIEvLcMzVI5ZXUBEYnCVMOi12ISQBCRTp4oyNxfHCWP
+Received: from fli4l.lan.fli4l (p5b3a0325.dip0.t-ipconnect.de [91.58.3.37])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 6C49FA4C4B99
+ for <buildroot@buildroot.org>; Sat, 26 Sep 2026 11:37:48 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:44746)
+ by fli4l.lan.fli4l with esmtp (Exim 4.100.1)
+ (envelope-from <bernd@kuhls.net>) id 1xAOqq-000000003he-0XZ2
+ for buildroot@buildroot.org; Sat, 26 Sep 2026 09:37:48 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-From: Buildroot Notifications <buildroot.notifications@gmail.com>
-Date: Sat, 26 Sep 2026 03:36:12 -0000
-Subject: [Buildroot] [autobuild.buildroot.org] Daily results for 2026-09-25
+Date: Sat, 26 Sep 2026 11:37:48 +0200
+Message-ID: <20260926093748.73670-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
+MIME-Version: 1.0
+X-Spamd-Bar: -
+Subject: [Buildroot] [PATCH 1/1] package/samba4: bump version to 4.25.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -168,145 +153,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+https://www.samba.org/samba/history/samba-4.25.0.html
 
-Autobuild statistics for 2026-09-25
-===================================
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+Gitlab pipelines passed:
+https://gitlab.com/bkuhls/buildroot/-/commits/8ff6ce57eb0eda3888ae9ebe2a8571a9f457ef6a
 
-      branch |  OK | NOK | TIM | TOT |
-  2025.02.x  |  2  |  6  |  0  |  8  |
-  2026.05.x  |  0  |  2  |  0  |  2  |
-  2026.08.x  |  3  |  1  |  0  |  4  |
-    master   | 26  | 33  |  0  | 59  |
+with the same exceptions as seen with the bump to 4.24.7:
+https://patchwork.buildroot.org/project/buildroot/patch/20260910203818.2550925-1-bernd@kuhls.net/
 
-Classification of failures by reason for master
------------------------------------------------
+This bump does not introduce new build errors.
 
-                   bird-2.15.1 | 2 
-             bubblewrap-0.12.0 | 2 
-                host-wine-11.0 | 2 
-                 libclc-23.1.1 | 2 
-               libepoxy-1.5.10 | 2 
-               tcf-agent-1.8.0 | 2 
-           uboot-tools-2026.07 | 2 
-am33x-cm3-fb484c5e54f2e31cf... | 1 
-                   ccrypt-1.11 | 1 
-          cloudflared-2026.6.1 | 1 
-              cryptsetup-2.8.8 | 1 
-        edk2-edk2-stable202602 | 1 
-                  ffmpeg-6.1.5 | 1 
-                 libclc-23.1.2 | 1 
-libesmtp-v1.1.0-14-g335ee8d... | 1 
-          libmicrohttpd-1.0.10 | 1 
-                 openmpi-4.1.8 | 1 
-                openocd-0.12.0 | 1 
-                   perl-5.42.3 | 1 
-                  prboom-2.5.0 | 1 
-                    proj-9.8.0 | 1 
-                 rtl_433-25.02 | 1 
-                s6-dns-2.4.0.0 | 1 
-                       unknown | 1 
-x264-baee400fa9ced6f5481a72... | 1 
-                 xenomai-3.2.5 | 1 
+ package/samba4/samba4.hash | 4 ++--
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-
-Detail of failures for master
------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    arm      | am33x-cm3-fb484c5e54f2e31cf... | NOK | https://autobuild.buildroot.org/results/9ba5aa40e64f4999c02c3154b9d8bfa574216030 | ORPH
-    i686     |          bird-2.15.1           | NOK | https://autobuild.buildroot.org/results/042cd51ee4dc8cfc51d31ebb61001c1a349f1cee |     
-loongarch64  |          bird-2.15.1           | NOK | https://autobuild.buildroot.org/results/edcb3e615cba0b6418429b4c37d217c2a983fc57 |     
- aarch64_be  |       bubblewrap-0.12.0        | NOK | https://autobuild.buildroot.org/results/d1d11877d57cbf62140827abeb3cd870d8fe2ff3 |     
-    i686     |       bubblewrap-0.12.0        | NOK | https://autobuild.buildroot.org/results/893be7b36ddc01b55bb651079905a838b0ed2bb6 |     
-    i686     |          ccrypt-1.11           | NOK | https://autobuild.buildroot.org/results/bb674b38053ec564ff3703881ab6ce7e98532ed9 | ORPH
-    i686     |      cloudflared-2026.6.1      | NOK | https://autobuild.buildroot.org/results/2f6aa8028893c2eaf3f89a44c103dc73eca8c699 |     
-    i686     |        cryptsetup-2.8.8        | NOK | https://autobuild.buildroot.org/results/cb2be16847b7bf3636e755438ced18e1ea127cca |     
-    i686     |     edk2-edk2-stable202602     | NOK | https://autobuild.buildroot.org/results/0c17fbdd66dbbc09ef66c727c1a704b6856cb4cb |     
-    i686     |          ffmpeg-6.1.5          | NOK | https://autobuild.buildroot.org/results/d3f74120efa0bf7b6c861d298a32c5527f0219b9 |     
-    i686     |         host-wine-11.0         | NOK | https://autobuild.buildroot.org/results/e86b405fed3bbd21b996def89afa5c93a49d828c |     
-    i686     |         host-wine-11.0         | NOK | https://autobuild.buildroot.org/results/d76ee95afde44fffd3d892296bc6788b6074f080 |     
-   x86_64    |         libclc-23.1.1          | NOK | https://autobuild.buildroot.org/results/276995eb4de88be67c5d47893754337fd53aafa5 |     
-    i686     |         libclc-23.1.1          | NOK | https://autobuild.buildroot.org/results/f09c43300ae7ab11223c7b0e0e9f1c1ace4908ff |     
-   x86_64    |         libclc-23.1.2          | NOK | https://autobuild.buildroot.org/results/9d7c680255d9cb49438f9b7c0910bb352c588801 |     
-    i686     |        libepoxy-1.5.10         | NOK | https://autobuild.buildroot.org/results/834c5047c9734569d8bd30e54db5a8701e4a232a |     
-    i686     |        libepoxy-1.5.10         | NOK | https://autobuild.buildroot.org/results/703f5efe31eaab4bc5c3fa308b883a62ab1a596c |     
-   x86_64    | libesmtp-v1.1.0-14-g335ee8d... | NOK | https://autobuild.buildroot.org/results/c490fc7ed1fc8bd72d056d88603fc2c7c33d1a54 | ORPH
-  mips64el   |      libmicrohttpd-1.0.10      | NOK | https://autobuild.buildroot.org/results/10f33829552059264104623353a9ec1584b08e4f |     
-    i686     |         openmpi-4.1.8          | NOK | https://autobuild.buildroot.org/results/8db77e7dc6cd4b293be5b12243dfad4593f149f4 |     
-    i686     |         openocd-0.12.0         | NOK | https://autobuild.buildroot.org/results/95077d5cb538deba85d927e561121871d7725901 | ORPH
-    i686     |          perl-5.42.3           | NOK | https://autobuild.buildroot.org/results/e76ebd2616fa764ff039a7eedd5c8a647f80f6d5 |     
-    i686     |          prboom-2.5.0          | NOK | https://autobuild.buildroot.org/results/002d0df6b387d4d26a2dfeb387cc79c6236c2218 | ORPH
-    i686     |           proj-9.8.0           | NOK | https://autobuild.buildroot.org/results/add8ed0badcd61f33850b9327b1b9c472b2c5905 |     
-    i686     |         rtl_433-25.02          | NOK | https://autobuild.buildroot.org/results/94d681b71d704b5e644b1640085789e288289cb8 |     
-    i686     |         s6-dns-2.4.0.0         | NOK | https://autobuild.buildroot.org/results/12efaed39087337949010c2565df45d356d46f15 |     
-    i686     |        tcf-agent-1.8.0         | NOK | https://autobuild.buildroot.org/results/c929bde55b50bfa1ebac9e2bbc917d2c4e36ac02 |     
-    i686     |        tcf-agent-1.8.0         | NOK | https://autobuild.buildroot.org/results/84970982639cc13aec3a2c84b26940bb856ae5d0 |     
-    i686     |      uboot-tools-2026.07       | NOK | https://autobuild.buildroot.org/results/592fef0545d43cd8f2d9a63e69a3ee8ead9a83f2 | ORPH
-    i686     |      uboot-tools-2026.07       | NOK | https://autobuild.buildroot.org/results/e8964140a434285753ecaa3e757868baeadbb7af | ORPH
-    i686     |            unknown             | NOK | https://autobuild.buildroot.org/results/0a0d267de308ecb4427948545e44e098fea486e1 |     
-    i686     | x264-baee400fa9ced6f5481a72... | NOK | https://autobuild.buildroot.org/results/2b1e27351d380a36a1904e6c01eb8d928685fcf5 |     
-    i686     |         xenomai-3.2.5          | NOK | https://autobuild.buildroot.org/results/71085b2dc117683068658b5a282f4640a29c2301 |     
-
-
-Classification of failures by reason for 2026.08.x
---------------------------------------------------
-
-python-remi-2022.7.27-37-g1... | 1 
-
-
-Detail of failures for 2026.08.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-  aarch64    | python-remi-2022.7.27-37-g1... | NOK | https://autobuild.buildroot.org/results/77fda21caaadcfb7aea6ba2b39302e0049987cc5 |     
-
-
-Classification of failures by reason for 2026.05.x
---------------------------------------------------
-
-            host-go-src-1.26.6 | 1 
-               pulseaudio-17.0 | 1 
-
-
-Detail of failures for 2026.05.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    i686     |       host-go-src-1.26.6       | NOK | https://autobuild.buildroot.org/results/0a1f52e28d45725fe2a1a0cfd261afffca155b06 |     
-    sh4      |        pulseaudio-17.0         | NOK | https://autobuild.buildroot.org/results/84290151e23dfe2c4866d226c73e8e570bde8385 | ORPH
-
-
-Classification of failures by reason for 2025.02.x
---------------------------------------------------
-
-                  delve-1.22.1 | 1 
-            gdk-pixbuf-2.42.12 | 1 
-                 gerbera-2.4.1 | 1 
-                 logsurfer-1.8 | 1 
-                  mender-3.5.3 | 1 
-                   swipl-9.2.9 | 1 
-
-
-Detail of failures for 2025.02.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    i686     |          delve-1.22.1          | NOK | https://autobuild.buildroot.org/results/24b4746377275938d2ca55b56149b1f8c9b31794 |     
-    i586     |       gdk-pixbuf-2.42.12       | NOK | https://autobuild.buildroot.org/results/684195d023f485deacd94fb39a72732d133ec644 | ORPH
-powerpc64le  |         gerbera-2.4.1          | NOK | https://autobuild.buildroot.org/results/c34b60bfe441e1453be6894442e5510335afda94 |     
-    i586     |         logsurfer-1.8          | NOK | https://autobuild.buildroot.org/results/186872fa9ecb6ddb4cc51157a7c79a9c61365056 |     
-  riscv64    |          mender-3.5.3          | NOK | https://autobuild.buildroot.org/results/bc371de530678cac7695393702ae7c375b9297c4 |     
-  aarch64    |          swipl-9.2.9           | NOK | https://autobuild.buildroot.org/results/7369bf74c3464570848efa06db817e471ea20c1f |     
-
-
-
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index d62e325f82..10d881b093 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://download.samba.org/pub/samba/stable/samba-4.24.7.tar.asc
+-sha256  45b7747a47452eff2b2159a44cc63eb43690d339fd1069088e023a015fed06c7  samba-4.24.7.tar.gz
++# https://download.samba.org/pub/samba/stable/samba-4.25.0.tar.asc
++sha256  2e2cb7296833b35b8f7a7fb76045e0c57adc0c2cd03264b37df5d58e40f28437  samba-4.25.0.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index a9e1577e26..88d2c598c4 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SAMBA4_VERSION = 4.24.7
++SAMBA4_VERSION = 4.25.0
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
 -- 
-https://autobuild.buildroot.org
+2.47.3
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
