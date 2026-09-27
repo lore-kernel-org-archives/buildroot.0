@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80CE8C98324
-	for <buildroot@archiver.kernel.org>; Sun, 27 Sep 2026 11:00:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C42E3C9830E
+	for <buildroot@archiver.kernel.org>; Sun, 27 Sep 2026 11:00:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4A6ED60714;
-	Sun, 27 Sep 2026 11:00:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8E42A40DCB;
+	Sun, 27 Sep 2026 11:00:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DL_oeOLjMnRY; Sun, 27 Sep 2026 11:00:17 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org F20D260719
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790506817;
-	b=sQ8En/8RGfi3PYCMNAdmDcGGE+2V8EqWMPrj+lRK+DuxiRfThAe3Q43b/sFkSEvG0YkT
-	 3j0Q4JHy3C42/RIit3XViTW4Qtg6+AQL5jRxgidryYK3onMMDu7AU4PQBhjEaTfoL0kjW
-	 v+VCI/yEVhFKbrE1oW8lD8YUFrCoMzE3hCp/pIuTRVnN0/23uzyL+vZN4wYTb1GLjQpSn
-	 203FxQT6TLuUQcAviHhxN9tLFo3TicujXq4ZQtb+7YHQU8/qGwbUDiyh8lO0c57+MYiVd
-	 rtTkEDpol9h0cF6f4hZvh3QWF/PAX16bBdZjoQsAZvXSqyiTvUnL1bPStnE2/x3ytzw==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GtusXuACPET9; Sun, 27 Sep 2026 11:00:30 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 3F05540DFC
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790506830;
+	b=btAYlf2EVmmhyRc4Lb0d0v9/3pOO6TUo70iLSPiDYbxz6vLQLfO4Iv7cMgjzNlbbI1f0
+	 mXL9BjhYL+zv6pEbcvA1Wzdjr/SkSP8gKmP8b7k/o1O4t5kY2hV+K77nh4XN77tFm4jGG
+	 4yB079iJfACC2y2J7HkX91hTGcnr+JbUPhlUdQ0PXvsEXK899HuPe7j/rxdMXcggEG8/b
+	 qvio1x74N3uOh1OFEptebo8LEdfyEFyj6kBqVFID76f4vFOzbLKgQ2FFAQ7dpSG75yixZ
+	 wMBJ5abqlTjvRMgYvYhPLjxcr1YPDzlmMxhP8cEjpGfDO7dZMVvkwrBDzrv5ZxMnDvA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1790506817;
+	c=relaxed/relaxed; t=1790506830;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
@@ -31,117 +31,117 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:Cc:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=h9V9DvEsO7x8jI2ITNb4wkkMGrVBZHdRYLgIHVxuCfo=;
-	b=jPfmHASHNGAPB29EIcfxeHGTG+J+GnrbgtqHUgsW4a5Cnlv8Kk2Zmn3HigYq4ANb09h4
-	 TrdpK7up8FW6wyrs5KqFv+luNbUP/+MkloLRnsOF0KUAb+ta0FvAGeWWtC2hLIHa2tinf
-	 q6WcG88/jMNmvmfTzcRWrqVQuJVWUbSVhnEmSo4+RoIH7cDE4RBEBG73axs3A8UaikZGL
-	 Cuf9yXXPWjPWrw0iWGv8/3hU2NXWWjBxNVFhrwUZm0HwMG07viiy1iVLQsk7Hf+5PdlgO
-	 MrJ4AAU5iI7UjaMGMmbZUYVvl/VO2+Qragmmvx/1bvYSg3a5Ykx0sfb6udZjBfNIr6g==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	bh=WJzF32aQ1RMys9fT+vk0JJoYyJ/7s3OHnmc8AP32+1c=;
+	b=eap+MAeVPQO7gj277BWUvQkVTHepXSaLu4SHtKj7kqnwH5zq/Rn2SZNLiXdM/3+1uUSe
+	 uaqOex7oYVr2amFs3uN1n5BlCLe+4Uh17CgqkZal/7Zhgrt+PTBY0sT5x12tYbg6Ao6w/
+	 9X27xe4LSuAi951A+SX5lgqiZDf1HlH1JpPpY0i1x0yTI4RGJu9u9k8Vt01tjNHd7SfGB
+	 nrfDwhZUcvgVbSRvPBlUDrNfAkx6kUPKq/QTGHcLSIeyzmCxnssktln4Q+U0lmvjYz6li
+	 Jg/zwBrPsQnYMcBxXbdHwKKBsr1YoQkpGDlXMkAwk9N0KEm16k3iK2+sz2Ze8R2f6ZQ==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1790506817;
-	bh=h9V9DvEsO7x8jI2ITNb4wkkMGrVBZHdRYLgIHVxuCfo=;
+	s=default; t=1790506830;
+	bh=WJzF32aQ1RMys9fT+vk0JJoYyJ/7s3OHnmc8AP32+1c=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=Q1K34eQt7tQ2zluIdTV3AQxRTmxpBY4A7kXZ9VC88479VCe/IevLHb3hlcJZm5kga
-	 VcT/VGRGwPTQQXkuwMRJVfcMDUWmFfpwUQla5aA/4BzAm+DPx+PcSq6BrUho2X2YJj
-	 RQN4Lk3L2QddsV5jdmbPIG6fd8gmlDAd9E+odDgP1MDYEh9yCsw1QLU39187FcBbWK
-	 D26gIUxTz0hioV+uPjbLGjXb8WpTtpC/hew8v7/r2CFfTQSBFOk+au2LHA1RE7DZIv
-	 CFeXKog+Ot22hMTzS1Pjn7mDwEzd7DTRKiELu7CevntDPU5HqbkRTN9hDU79dBs25u
-	 Kh1SK9venZ7tA==
+	b=IOuAijOCbPc6xA+adYDBuWKgBd1brN7hhndVZZ4jQIprRQyKEWBepOeV0UTPp6NES
+	 u6X4P2rrHh90WmlVDLofBiPcIGiLAC0mOlxYJbuuOYtGVFEYSMcwlc7IvVwFXAXIzO
+	 BA65wZtXSI5vULVoqYtWBCfmiYnlqNcczdLfiYdASqLECWpXZMd8QGCYg2c4yrM4gM
+	 E2twCiEDYOiF9IXSZIbDoG09wmu9ceDGoD0qqXXsR5Ppm1Y0xK5yeni90IPyz/9Yoh
+	 Mb2N6DyGGSiYbqjYqoFk8/pVT14GOjONpW8CnNAO3ojEJqGe9H89+BiBmlQSVoImxS
+	 FIkOxNDatQAGw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F20D260719;
-	Sun, 27 Sep 2026 11:00:16 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 4B593335
- for <buildroot@buildroot.org>; Sun, 27 Sep 2026 11:00:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3F05540DFC;
+	Sun, 27 Sep 2026 11:00:30 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 669DCD1
+ for <buildroot@buildroot.org>; Sun, 27 Sep 2026 11:00:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 30E1B40DDF
- for <buildroot@buildroot.org>; Sun, 27 Sep 2026 11:00:16 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5841F6071D
+ for <buildroot@buildroot.org>; Sun, 27 Sep 2026 11:00:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id agxrpk376yTA for <buildroot@buildroot.org>;
- Sun, 27 Sep 2026 11:00:15 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 20EE940DD6
-Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790506815;
- b=fa+/wkc4Zx/p2aliwD5sp2ZgTRYOCWrnBvWPaX5G7ToOu2YzoqztPiEoJiBHF9opN9dB
- IsmHdNYx+UIUezQ6PiAkcDmS3VSzwjzLluh82cKTvDvwucWdHb4w4d7GTBbpRLQzd7RzJ
- JuCKG9mjJqP8ZiEtSNJgiJZV7up9MIjt8Jn5UxtXFJPsWSiP0ivoiH4qFAK9kNeKNkB5N
- 9NSIpI8yHgpBWu9y+TaTKqGpL/2UigP62KSjBR1EvCD43HcRhgZprQzai6mFbM0mvA6K0
- I2ujU0uSHZ7eMBrsBqYCtWdzDDptX6aptcAytmO1y+eAojROjeO+HBqgeqSr4HmPZsA==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id flXxhg2oRtZ2 for <buildroot@buildroot.org>;
+ Sun, 27 Sep 2026 11:00:28 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org E879B6071C
+Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790506828;
+ b=rfMqA1H7f1cYGnghWbSvOiZy9KcD9rZr5SbLKvTzTDEWsv43iQad3mECyM+MPC1DKgpw
+ yCKZyepcFzQQdsOOsyJPL49cuHDZA9d50cTE0PvtjRz4iJW6FwOUaVcaA9x8S0UULFU+I
+ VcG7uty76WcviXqCpe0rxkzPtzxNi8Ln94Y8xAsYSTTaFb6s6ZCiK+swwyGjY4u+szoJp
+ /8h2uhIpUgeSuAqhzf5Tz8mWqI7t9Yi9Edl3pRXCvnopKPnkD+g0hqSxjJzAX1iO9baUF
+ 4Q9qYDIPmjL+tLwhUEC8tFcSg77X0lw17AKkaUu+iCU4HOVjAa/hlRvGgTeQ2bkW2RA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1790506815;
+ c=relaxed/relaxed; t=1790506828;
  h=Received-SPF:DKIM-Signature:X-KAS-Sym:Received:Received:From:To:Cc:
  Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding:X-Spam-Score:X-Spamd-Bar;
- bh=tNcWLgZUF0uKr3pKBT9yNpyNdkYQrZgjcsM3anDk9R4=;
- b=TAJWGdqZR3COoKZXQZiJYKNWBgHmrU60Xtm49XDGqAapA03UHGAfnWfuA8xXKETk6JBw
- q0cdiBeATelLjgPAQrghgIUsJs91/eWfbBZWV5Q87jXiGtJhMJXuOycOtlb4iqPLbUHfC
- 9jgMuozcPxJ5Sr0rpGiyTsSGX8J1Y7lJmgvgXkERL2dn4GzjfBgxPaTCAocLw56TMzhE5
- ZkhFZyZ4xVSxJVl71UNv3nwf2mV2PMxpA1uMKNUeTCXZL/YOVTRgCQuUCv3b30dqEN0yv
- +eyC48z9+u3wT+ui3koVgStibXgaYmBio3gUvUq8fVSrUY/H72XCux6r/KFUhW54hJQ==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org;
+ bh=0Gt9QeeoKRBd/HmqYihaOYSmW8EEm7wN5WmmlIkHDmw=;
+ b=iyDtuFTItG8SpF2a1112pKpQP/FJx4uc3pBgkqvmo8OZFzF920MCyPbcozTSWYHj0omi
+ sOZSeceR5Y5zBI43tWW4lk47Do910I5Iw95iiYTsVDMlNfEGhsWNBEwsXL1lPzxIwS72p
+ TcdmvJm/ycezPhAyZ3uYMpf6vOcHxdJk19N78nyv6nc/2rqfDZWRTDzUg3aTE9/TJ5N0J
+ ci+3ybGcagEjewA5cIlaC5EpBBwJgS5dkzS4wqbY5baLrlz1srG3dSrryQxjKObTdxqqw
+ nB8W7EYJHTfI+sj6Gtt2FjP9FoijtZ1alE1p1aUxic/VUn6pfCCbDxnLTbBeajftgyA==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org;
  dmarc=pass header.from=kuhls.net; 
  dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=Lm5r2xNt; 
+ header.s=kas202605290044 header.b=SU7V685q; 
  arc=none smtp.remote-ip=85.13.140.57
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-Authentication-Results: smtp4.osuosl.org;
+Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=kuhls.net
-Authentication-Results: smtp4.osuosl.org;
+Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202605290044 header.b=Lm5r2xNt
+ header.a=rsa-sha256 header.s=kas202605290044 header.b=SU7V685q
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 20EE940DD6
- for <buildroot@buildroot.org>; Sun, 27 Sep 2026 11:00:15 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E879B6071C
+ for <buildroot@buildroot.org>; Sun, 27 Sep 2026 11:00:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
- s=kas202605290044; t=1790505872;
- bh=tNcWLgZUF0uKr3pKBT9yNpyNdkYQrZgjcsM3anDk9R4=;
+ s=kas202605290044; t=1790505873;
+ bh=0Gt9QeeoKRBd/HmqYihaOYSmW8EEm7wN5WmmlIkHDmw=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=Lm5r2xNt/5QDZqlXwZdfL5GdUeo/MB7mSZV9yqFOZphcQoYhsMezk7391KPAjeMJB
- 8lrMUf1/7D9ZMw6c/21k+vaOJhxAeKvh90org/mgA69nPUWmAew/c4zPjPHI6oxNE4
- oA9AyyTrl2kyKEMf7VL4I+O9V7kTLfJJKqPo+OTkYo1cl5cUKtIET49tP9KK08gT/4
- TAVWX6ZDb3jG/yNQT5K72w7VrYzElZNiG3DCpybz9DbDepxlRdTz6U3Bczf6kLNhc5
- anAzB7XXN/mw1bxBw7NT+WdZ4NMWmfp2dIQb+2ubWYzYyFDNFmLU3IWMF1sTihD3Ld
- 6OWAqVJCQV6nw==
+ b=SU7V685qw8Jt5Ii8WIbyTkCFID7VKdvnwtPuJBIRSwaX4Y0yoFOBpVeNZVgJkNirm
+ 0XaTFa1ZOEBBB/UIddk6w2RlSIvdQa0wCQorn27AaW/mipAAMfakqupd861lMmpBZI
+ v6TSLiSRWy/vSuz+Yjdh+2RLTts+rTtmStn9vyZdp8YFXLpwvdHzsifB76eZnDDOhy
+ 9ta7BVULzPS4Gdrk/2Q9LWPhopfd5NtHJoFJtzy973MRAAuctevInUqA15SLalJtxT
+ RW0jnPwBu1TkLlU4Zxyn1lOWdGj4r2YIPRAqeRwviFzC7mP/kg5+dN0ra4IE+qhEKD
+ f6CvVfeWU0iPQ==
 X-KAS-Sym: v3:f51bdf72230551df:E60HSyKhvB/hjcOqjRN2FvcietonHg90tfBpdvJcFX1mV
  R+j6vuZST8LDBP8bI0YRByE7nnM8zo+J+Ss4/QfhH2rb1nZfmO3VL3WnTn4nRbVwBJk3fqEiiBR
  BcIUKL3D+tUbUY93P8XEXOPODFFTmbLRGZyG36MuC0yO1SCN7BpjWHnbwmJ351icj6h05v9k2IN
  Bt/GPH999d0pB27dQV9xkwjqVNcmstoO0TQaQ2Cjw4/UgevRPy7drDGL0hLAagZjTYF6H8SZSRj
  XAHROvBIIhQEG70eTpyXHeSoGFZnWeYqBa4vq9sbHMsU9OvNLLKcoUiiZ7ymf97ke0uUad1g==:
- mgVxOUHxroONX9FxK33d1iiuHBpFWcMlb7178ymlWegepK67r7Ae0MF3yI0Unyh2geeC1q7rOv+
- R5Sm8PAIekcSkhl9VDvhszqOjUn6dc7vXakThqLYGwewz43NfpTXPBUEzu8bwB9HuEy6y5GPNgK
- SpyK5O0j9JEcTEejony+DpnuDqBDVMBk/KyCBn5z8r+YuY0/VVy1PG5kQLPAN+DKUOYNhai6m7s
- 28C8LrVo2H9xaCZMCe0QHuZJP8GYkWEeIgmVH4wfc1xwGjOB8lbq8Fi6spMttzlbQXIVX3njisp
- kujAZ306MXXUzjfGnTxebe8Ng7LVCMLtZjHGMdwH4X1wyt0aOTuAUPqvAaJtnQgt8rZ+ln77w5Q
- 3SWcKXH0TscK+UK+oQsP+6wSCSOU5zAwAs2VTwurTAKotHWPEPQ1HV1kNSQC1KqHUnY9lomKEL/
- 9g81c6b30/8xgMKyBvOEo0rQseV0MGr2YSR5uqKm8Gz/Z4itNXtLBNsTV3djlStYfvPeuR/p3yr
- m0nguPMVd/CTfunZOg54ivyj/44RW6tlHSbt0ESAkEoOK31a6rLEMEawzjXwbYpMGGx4tpVC9gs
- 5DObCVvu6vZxeY/VuFDqZ870Xr3F8PEfYboSkkJVPYgBf+JxLLmITmQf3x/5SJIYrWIkMkGHA95
- wOLQznLengaqSCNmHLzhh4I1mYiqAtfiztoVQy9rsjFdafHIWyT3WRx83yKC/3Q==
+ wZ1yuZ592+WGRpvv1JmseqtjBWa2x/hmiMuK7pK2DXBfezrVqH7c1Uj/LJQ1D4r4NvagVpO45gx
+ bfNh/7mb8EPpJIuxX/cen9H1Kil87niPi7PTS0BLT/S/J1DR72f46yqXon9GJ9yAIqESCCMzekU
+ NcGwMuD5+YOOI+G6kz27a2qtzWimn//F8JXjWLp+/OwwpC54KV/bnioT4WWmEBcGmjwmIkMXI5S
+ XiUMf6Y5NaMLcS26uirB7DcKgM+o099QMjIrD4BgeLsZ0HoO4DILgJ54hugYs8cDr0Y724oZrAG
+ ydVpGJWxzdVA8pAId/bJbjwFi+I2hMxXJ5OR3+kWGHsnIyDAt6LVb9WIy2SddguQdaAZIqrXrQ4
+ TRI+alYjOAGRBuqPbARI6O4ktzLCgIv9Wti9moySOaDRueexZGh+XjK1SYo+GuGqNDpYMxkytcK
+ LC+zNsicJp2qeDTS2cef7+gy54GkrkN+ZblMy2uPKoHeOxuTTA58RLDhBd22HMdw34TW9vJmdg2
+ v6xFUQXyCl+QKO46yUHeom++K4RHm3dwzr/ZhYpokDC6lzWpUW8K5sJzaEzYpj5krfHtig6PICb
+ ZEvQr7hj+A+SlNPDalVQEKH3T95JUoiG/elyMVF2svXHG4yr7/jzK+NhEG28vvrMAaajRNOb/cw
+ vB+Xd+29p/oJzpBMpvtOU
 Received: from fli4l.lan.fli4l (p5b3a0584.dip0.t-ipconnect.de [91.58.5.132])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 2C191A4C50A4;
- Sun, 27 Sep 2026 12:44:32 +0200 (CEST)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 542D6A4C50A6;
+ Sun, 27 Sep 2026 12:44:33 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:52850)
  by fli4l.lan.fli4l with esmtp (Exim 4.100.1)
- (envelope-from <bernd@kuhls.net>) id 1xAmLf-0000000007a-1RyO;
+ (envelope-from <bernd@kuhls.net>) id 1xAmLf-0000000007a-2E7O;
  Sun, 27 Sep 2026 10:43:11 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sun, 27 Sep 2026 12:42:34 +0200
-Message-ID: <20260927104301.1801638-57-bernd@kuhls.net>
+Date: Sun, 27 Sep 2026 12:42:35 +0200
+Message-ID: <20260927104301.1801638-58-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260927104301.1801638-1-bernd@kuhls.net>
 References: <20260927104301.1801638-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: -
-Subject: [Buildroot] [PATCH v6 56/82] package/mender-artifact: Fix build
- with OpenSSL 4.0.0
+X-Spamd-Bar: /
+Subject: [Buildroot] [PATCH v6 57/82] package/mtd: Fix build with OpenSSL
+ 4.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -187,196 +187,78 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- .../0001-openssl-v4-update.patch              | 180 ++++++++++++++++++
- 1 file changed, 180 insertions(+)
- create mode 100644 package/mender-artifact/0001-openssl-v4-update.patch
+ ...t-compile-engine-support-if-not-avai.patch | 62 +++++++++++++++++++
+ 1 file changed, 62 insertions(+)
+ create mode 100644 package/mtd/0001-ubifs-utils-Don-t-compile-engine-support-if-not-avai.patch
 
-diff --git a/package/mender-artifact/0001-openssl-v4-update.patch b/package/mender-artifact/0001-openssl-v4-update.patch
+diff --git a/package/mtd/0001-ubifs-utils-Don-t-compile-engine-support-if-not-avai.patch b/package/mtd/0001-ubifs-utils-Don-t-compile-engine-support-if-not-avai.patch
 new file mode 100644
-index 0000000000..010872e69f
+index 0000000000..21fc2ca2fd
 --- /dev/null
-+++ b/package/mender-artifact/0001-openssl-v4-update.patch
-@@ -0,0 +1,180 @@
-+Fix build with OpenSSL 4.0
++++ b/package/mtd/0001-ubifs-utils-Don-t-compile-engine-support-if-not-avai.patch
+@@ -0,0 +1,62 @@
++From 50136f0ec6d8c9763889d49b31ca6965189afba5 Mon Sep 17 00:00:00 2001
++From: Sebastian Andrzej Siewior <sebastian@breakpoint.cc>
++Date: Sat, 29 Aug 2026 19:25:02 +0200
++Subject: [PATCH] ubifs-utils: Don't compile engine support if not available
 +
-+Downloaded from Ubuntu:
-+https://git.launchpad.net/ubuntu/+source/golang-github-mendersoftware-openssl/tree/debian/patches/0004-openssl-v4-update.patch?h=applied/ubuntu/stonking-devel
++OpenSSL 4.0 dropped engine support which was deprecated since 3.0. The
++replacement is the "providers" API.
 +
-+Upstream: not applicable, upstream moved to c++ in newer versions
++Add an ifndef OPENSSL_NO_ENGINE around the engine code so it can be left
++out where it is not supported.
 +
-+[Bernd: rebased for vendored download by buildroot infra]
++Signed-off-by: Sebastian Andrzej Siewior <sebastian@breakpoint.cc>
++
++Upstream: https://lists.infradead.org/pipermail/linux-mtd/2026-August/114868.html
++
 +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ ubifs-utils/common/sign.c | 10 +++++++++-
++ 1 file changed, 9 insertions(+), 1 deletion(-)
 +
-+diff -uNr mender-3.5.3.orig/vendor/github.com/mendersoftware/openssl/engine.go mender-3.5.3/vendor/github.com/mendersoftware/openssl/engine.go
-+--- mender-3.5.3.orig/vendor/github.com/mendersoftware/openssl/engine.go	2024-05-24 12:07:27.000000000 +0200
-++++ mender-3.5.3/vendor/github.com/mendersoftware/openssl/engine.go	2026-09-20 18:37:50.270612314 +0200
-+@@ -15,6 +15,7 @@
-+ package openssl
++diff --git a/ubifs-utils/common/sign.c b/ubifs-utils/common/sign.c
++index 032a6ac..5f94c0a 100644
++--- a/ubifs-utils/common/sign.c
+++++ b/ubifs-utils/common/sign.c
++@@ -23,11 +23,14 @@
++ #include <openssl/bio.h>
++ #include <openssl/pem.h>
++ #include <openssl/err.h>
++-#include <openssl/engine.h>
++ #include <openssl/cms.h>
++ #include <openssl/conf.h>
++ #include <err.h>
 + 
-+ /*
-++#include "shim.h"
-+ #include "openssl/engine.h"
-+ */
-+ import "C"
-+@@ -33,18 +34,18 @@
-+ 	cname := C.CString(name)
-+ 	defer C.free(unsafe.Pointer(cname))
-+ 	e := &Engine{
-+-		e: C.ENGINE_by_id(cname),
-++		e: C.X_ENGINE_by_id(cname),
-+ 	}
-+ 	if e.e == nil {
-+ 		return nil, fmt.Errorf("engine %s missing", name)
-+ 	}
-+-	if C.ENGINE_init(e.e) == 0 {
-+-		C.ENGINE_free(e.e)
-++	if C.X_ENGINE_init(e.e) == 0 {
-++		C.X_ENGINE_free(e.e)
-+ 		return nil, fmt.Errorf("engine %s not initialized", name)
-+ 	}
-+ 	runtime.SetFinalizer(e, func(e *Engine) {
-+-		C.ENGINE_finish(e.e)
-+-		C.ENGINE_free(e.e)
-++		C.X_ENGINE_finish(e.e)
-++		C.X_ENGINE_free(e.e)
-+ 	})
-+ 	return e, nil
-+ }
-+diff -uNr mender-3.5.3.orig/vendor/github.com/mendersoftware/openssl/hostname.c mender-3.5.3/vendor/github.com/mendersoftware/openssl/hostname.c
-+--- mender-3.5.3.orig/vendor/github.com/mendersoftware/openssl/hostname.c	2024-05-24 12:07:27.000000000 +0200
-++++ mender-3.5.3/vendor/github.com/mendersoftware/openssl/hostname.c	2026-09-20 18:32:37.854514981 +0200
-+@@ -6,6 +6,7 @@
-+  */
-+ 
-+ #include <openssl/x509.h>
-++#include <openssl/x509v3.h>
-+ 
-+ #ifndef X509_CHECK_FLAG_ALWAYS_CHECK_SUBJECT
-+ 
-+diff -uNr mender-3.5.3.orig/vendor/github.com/mendersoftware/openssl/key.go mender-3.5.3/vendor/github.com/mendersoftware/openssl/key.go
-+--- mender-3.5.3.orig/vendor/github.com/mendersoftware/openssl/key.go	2024-05-24 12:07:27.000000000 +0200
-++++ mender-3.5.3/vendor/github.com/mendersoftware/openssl/key.go	2026-09-20 18:38:13.462370202 +0200
-+@@ -303,7 +303,7 @@
-+ 	keyID := C.CString(id)
-+ 	defer C.free(unsafe.Pointer(keyID))
-+ 
-+-	key := C.ENGINE_load_private_key(e.e, keyID, nil, nil)
-++	key := C.X_ENGINE_load_private_key(e.e, keyID, nil, nil)
-+ 	if key == nil {
-+ 		return nil, errors.New("cannot load private key, ENGINE_load_private_key error")
-+ 	}
-+diff -uNr mender-3.5.3.orig/vendor/github.com/mendersoftware/openssl/shim.c mender-3.5.3/vendor/github.com/mendersoftware/openssl/shim.c
-+--- mender-3.5.3.orig/vendor/github.com/mendersoftware/openssl/shim.c	2024-05-24 12:07:27.000000000 +0200
-++++ mender-3.5.3/vendor/github.com/mendersoftware/openssl/shim.c	2026-09-20 18:36:02.855038372 +0200
-+@@ -382,7 +382,9 @@
-+ 	int rc = 0;
-+ 
-+ 	OPENSSL_config(NULL);
-++#if OPENSSL_VERSION_NUMBER < 0x40000000L && !defined(OPENSSL_NO_ENGINE)
-+ 	ENGINE_load_builtin_engines();
+++#ifndef OPENSSL_NO_ENGINE
+++#include <openssl/engine.h>
 ++#endif
-+ 	SSL_load_error_strings();
-+ 	SSL_library_init();
-+ 	OpenSSL_add_all_algorithms();
-+@@ -403,6 +405,46 @@
-+ 	return 0;
-+ }
-+ 
-++ENGINE *X_ENGINE_by_id(const char *id) {
-++#if OPENSSL_VERSION_NUMBER < 0x40000000L && !defined(OPENSSL_NO_ENGINE)
-++	return ENGINE_by_id(id);
-++#else
-++	return NULL;
-++#endif
-++}
 ++
-++int X_ENGINE_init(ENGINE *e) {
-++#if OPENSSL_VERSION_NUMBER < 0x40000000L && !defined(OPENSSL_NO_ENGINE)
-++	return ENGINE_init(e);
-++#else
-++	return 0;
-++#endif
-++}
-++
-++int X_ENGINE_free(ENGINE *e) {
-++#if OPENSSL_VERSION_NUMBER < 0x40000000L && !defined(OPENSSL_NO_ENGINE)
-++	return ENGINE_free(e);
-++#else
-++	return 0;
-++#endif
-++}
-++
-++int X_ENGINE_finish(ENGINE *e) {
-++#if OPENSSL_VERSION_NUMBER < 0x40000000L && !defined(OPENSSL_NO_ENGINE)
-++	return ENGINE_finish(e);
-++#else
-++	return 0;
-++#endif
-++}
-++
-++EVP_PKEY *X_ENGINE_load_private_key(ENGINE *e, const char *key_id, UI_METHOD *ui_method, void *callback_data) {
-++#if OPENSSL_VERSION_NUMBER < 0x40000000L && !defined(OPENSSL_NO_ENGINE)
-++	return ENGINE_load_private_key(e, key_id, ui_method, callback_data);
-++#else
-++	return NULL;
-++#endif
-++}
-++
-+ void * X_OPENSSL_malloc(size_t size) {
-+ 	return OPENSSL_malloc(size);
-+ }
-+@@ -480,7 +522,7 @@
-+ }
++ #include "linux_types.h"
++ #include "sign.h"
++ #include "ubifs.h"
++@@ -139,6 +142,7 @@ static EVP_PKEY *read_private_key(const char *private_key_name, X509 **cert)
++ 	*cert = NULL;
 + 
-+ const SSL_METHOD *X_SSLv3_method() {
-+-#ifndef OPENSSL_NO_SSL3_METHOD
-++#if OPENSSL_VERSION_NUMBER < 0x40000000L && !defined(OPENSSL_NO_SSL3_METHOD) && !defined(OPENSSL_NO_DEPRECATED_1_1_0) && !defined(OPENSSL_NO_DEPRECATED_3_0)
-+ 	return SSLv3_method();
-+ #else
-+ 	return NULL;
-+@@ -488,11 +530,15 @@
-+ }
-+ 
-+ const SSL_METHOD *X_TLSv1_method() {
-++#if OPENSSL_VERSION_NUMBER < 0x40000000L && !defined(OPENSSL_NO_TLS1_METHOD) && !defined(OPENSSL_NO_DEPRECATED_1_1_0) && !defined(OPENSSL_NO_DEPRECATED_3_0)
-+ 	return TLSv1_method();
++ 	if (!strncmp(private_key_name, "pkcs11:", 7)) {
+++#ifndef OPENSSL_NO_ENGINE
++ 		ENGINE *e;
++ 		struct {
++ 			const char *url;
++@@ -177,6 +181,10 @@ static EVP_PKEY *read_private_key(const char *private_key_name, X509 **cert)
++ 		}
++ 		*cert = parms.cert;
++ 		fprintf(stderr, "Using cert %p\n", *cert);
 ++#else
-++	return NULL;
+++		ssl_err_msg("PKCS#11 ENGINE support not available.");
+++		return NULL;
 ++#endif
-+ }
++ 	} else {
++ 		BIO *b;
 + 
-+ const SSL_METHOD *X_TLSv1_1_method() {
-+-#if defined(TLS1_1_VERSION) && !defined(OPENSSL_SYSNAME_MACOSX)
-++#if OPENSSL_VERSION_NUMBER < 0x40000000L && defined(TLS1_1_VERSION) && !defined(OPENSSL_SYSNAME_MACOSX) && !defined(OPENSSL_NO_TLS1_1_METHOD) && !defined(OPENSSL_NO_DEPRECATED_1_1_0) && !defined(OPENSSL_NO_DEPRECATED_3_0)
-+ 	return TLSv1_1_method();
-+ #else
-+ 	return NULL;
-+@@ -500,7 +546,7 @@
-+ }
-+ 
-+ const SSL_METHOD *X_TLSv1_2_method() {
-+-#if defined(TLS1_2_VERSION) && !defined(OPENSSL_SYSNAME_MACOSX)
-++#if OPENSSL_VERSION_NUMBER < 0x40000000L && defined(TLS1_2_VERSION) && !defined(OPENSSL_SYSNAME_MACOSX) && !defined(OPENSSL_NO_TLS1_2_METHOD) && !defined(OPENSSL_NO_DEPRECATED_1_1_0) && !defined(OPENSSL_NO_DEPRECATED_3_0)
-+ 	return TLSv1_2_method();
-+ #else
-+ 	return NULL;
-+diff -uNr mender-3.5.3.orig/vendor/github.com/mendersoftware/openssl/shim.h mender-3.5.3/vendor/github.com/mendersoftware/openssl/shim.h
-+--- mender-3.5.3.orig/vendor/github.com/mendersoftware/openssl/shim.h	2024-05-24 12:07:27.000000000 +0200
-++++ mender-3.5.3/vendor/github.com/mendersoftware/openssl/shim.h	2026-09-20 18:38:33.117854985 +0200
-+@@ -40,6 +40,13 @@
-+ /* shim  methods */
-+ extern int X_shim_init();
-+ 
-++/* Engine methods */
-++extern ENGINE *X_ENGINE_by_id(const char *id);
-++extern int X_ENGINE_init(ENGINE *e);
-++extern int X_ENGINE_free(ENGINE *e);
-++extern int X_ENGINE_finish(ENGINE *e);
-++extern EVP_PKEY *X_ENGINE_load_private_key(ENGINE *e, const char *key_id, UI_METHOD *ui_method, void *callback_data);
-++
-+ /* Library methods */
-+ extern void X_OPENSSL_free(void *ref);
-+ extern void *X_OPENSSL_malloc(size_t size);
++-- 
++2.47.3
++
 -- 
 2.47.3
 
