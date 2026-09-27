@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59556C9830E
-	for <buildroot@archiver.kernel.org>; Sun, 27 Sep 2026 10:46:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29C3BC98324
+	for <buildroot@archiver.kernel.org>; Sun, 27 Sep 2026 10:47:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1589E40816;
-	Sun, 27 Sep 2026 10:46:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E6EC2407FE;
+	Sun, 27 Sep 2026 10:47:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4TIRXosNavBy; Sun, 27 Sep 2026 10:46:57 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org A599040835
+ id yufW0oPeTi4X; Sun, 27 Sep 2026 10:47:09 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 098B74084E
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790506017;
-	b=D1EesPZu/ZvO9k1wO6977Vodc8OqcL16DCLTzoFtRoChQI3q7S9uO/ML7nQMy/Q7Ey30
-	 geP/JxfABWStMP0BUqKxHXrsV5Ehy6a2DjjTAc3xQtPjDNYIsBFHGrAtZ6JZWqUbraJWv
-	 TUBjb8yx1MAQdHEjY4d7o/IeohRj6BD3UPiAqgrvg01SxzN/IIRKqg2ZPKW99kuK4poxA
-	 zVG3sZw+EEs/4rISEpE26LsrP7D7h5ZPFlifYtQGDdCaCbTnRAON/bTGmIQDeGRgoZ7w7
-	 7/sZEr2m/BCZ8bv79xlv1gq8kDcO4koZnGSptHml0szrl+0nrHI2Yapj6n2y1WYftLQ==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790506029;
+	b=eJuFWCahmM1zUzHIyV03IJTA2hsK7QnqGIV94tiAYJ06LVoiQNxm7133FeSVcD5ALmdA
+	 nh+uFjySmq4N1oiZd9WpbQzXz/r8B/yS2hKmhgpaLEv4VujEQrkPAnljJxC/ASbWWv4r4
+	 s4vmH+IbmnVq3QH3T/i5TFcUacE1JQuOmjfFZXbg8DdA/c1h04p2c7ewYLSwCvF0+69fs
+	 5C4PTrUV5+aHZPCgA3oWtBKTqlcjU3xQfbooH1sEZcR6QryrcD1QTV8mfshUieKUbOTr1
+	 aq6BFYLuN57H6bUrdBkafLwZoci0pVOEUXgeifY91riKRZTaiemOfp3zAGhL6eMeonw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1790506017;
+	c=relaxed/relaxed; t=1790506029;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
@@ -31,117 +31,118 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:Cc:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=SejVdTFrYmIv/TQv7dQ48F1QCWg7uY75T27igrz1QTU=;
-	b=VmqJKzPzgIMhUPcjowLFRYmriSC5CXsHeksZQ5o2TgH7kh3H/Avk3SmQyzqIv781nVP+
-	 3i9pmf2YmOUxcgGmYjuWvntwqFk2T62PKuhTq2kz9KoThSQ2pNCd+U/qhzwlU5UlBK5z7
-	 3DPISwFPK+lFf5lRHGgoNtHLpHLYAYD+ongqGaiVbyZl9yvbcFswnGQKPwlToji3DMVwK
-	 3ZgA4n9MC6Jzx+yMIOPZbpqOS26dgzHdglP1bXpJxNQLFxRFh1cwUa/9MDWqvtWQD6LTQ
-	 cH+ruxejm47mEisZD5i4/jNy5R2B0E0Rb5xM6JlCRnKAKxfvtlwijQJTz5KGU6kmD6A==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	bh=9TLHPQ4ROuimtB7mO644o6aJnJzeswyG9IqO88KyurQ=;
+	b=BzAWZXXX6GDPOX62jiQ7PFkjtTYdVbgRJLDaPU9k6IBlVMXwMyfhmq15WEgBzHYlL19q
+	 IG9gN2VB0DVOXbBpzX/tnXQTj8xvI73VkEJ3DkvZDjoYtB1qTqqrJitK3W1SYYppn94vf
+	 huJe3TLybxRQmvhMBXhPEoM0HJHP/2+1mMudZl0Mwee3dZEX3h9pU/L/iPdskZ/mOxjR5
+	 y3sgHEpgjACugfhwiPqQj5cN5IoSV8LxCb+6GU5g1sjDgKMvRUxmpzR15E8BDZiwefuv9
+	 c3d1LVX28MebTctPGAQFzfb7lMq4356BNPuqlDhFRvQvESFsBTzk3koy3vLcwjN51ZA==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; dmarc=pass header.from=kuhls.net;
+	dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256 header.s=kas202605290044 header.b=rMG9IYT8;
+	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1790506017;
-	bh=SejVdTFrYmIv/TQv7dQ48F1QCWg7uY75T27igrz1QTU=;
+	s=default; t=1790506029;
+	bh=9TLHPQ4ROuimtB7mO644o6aJnJzeswyG9IqO88KyurQ=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=JQVaOka15BREzLdXjX5hIFL4R3g66a7k9m3qhHAtjznkspTMNkf8QFgoHXOucKc3w
-	 SmZboNMR57X41ONfww11UqoX1Hhbp/2AKlMbLJ5crykv8PI7C9fI3YV4P137p/ER1u
-	 0PMeoG/6kMc5SmJ9GDFKFVBUT5NJQ8itCgpSdyV3a27Jj5RF47iHViIeKIN6qMrmdx
-	 VnctH2qpY6FcQm/Blk5nr7QNoaNrOvB7T66so95JEDWsDb4qbCehpp1aT6FZwDFJC/
-	 N/x4Ee13DeKKHYPLU6cpc45+qxti5JxLMOtSuOEY6Y4TXSqT8ns5Iissbei0RDzNS/
-	 JS0UhGFrWagPg==
+	b=A9beSfMvPMCmBnBqOiWutZm3tX1lKyNg5MhGLYtY74PcOXBAA2cmkxRUVcc4W+gjq
+	 4PUCBRbQIvDpt+1UHOrMemFjy/ErkTZaxuXQcBuvG1sz7e4GMcp1DNRHu+dgZF0StE
+	 uzMSVFc5zw3kKcFpKbgaX9qswumwTJFikmeIZgD4rY7dMWj/MoOPb0V1xCzgWzu8wc
+	 4Za0P+WF2y9L2rJWN4g8suRXSIErB6Wp+WqgV1gR7I95txZ/DXYyqHVspUtUg2j2W7
+	 EGA3XSldcDOeO2U7HbrhbZHhqjDy6R4HFQ6fu5YbCOwFJ8e2hWGjAFFd0Iseg1OAVO
+	 YO68NDaFdFbgw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A599040835;
-	Sun, 27 Sep 2026 10:46:57 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 97588335
- for <buildroot@buildroot.org>; Sun, 27 Sep 2026 10:46:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 098B74084E;
+	Sun, 27 Sep 2026 10:47:09 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id A9589334
+ for <buildroot@buildroot.org>; Sun, 27 Sep 2026 10:47:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7CFE0810AF
- for <buildroot@buildroot.org>; Sun, 27 Sep 2026 10:46:56 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A70C34084E
+ for <buildroot@buildroot.org>; Sun, 27 Sep 2026 10:47:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qh7JbnQ5xpsA for <buildroot@buildroot.org>;
- Sun, 27 Sep 2026 10:46:55 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org DFBC8810AE
-Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790506015;
- b=ONyK8FZDNoqhXZ1hcT9+hfjZRHAkcRexxufiV0r3pVXYC+SLdVV7r733ARQ9agO2pLF4
- SMysbUqxsxzaOzhlJAD0iWIuHosFpovL1sOshLyY8nDfshiXtyoQLhyIfgKENVuYDMzje
- qrep67FYz0adsl5PriV3uSR4G8LPmpHlORcc6JmjE7OAQDTgi+tW0nUwyhMLd0P7Kn1K1
- plZyWYL0z/FMERcaiBI0QX602Ctm+5IzDFW2Awlkw6xLIneAyiJ+qhSvKq3TFJiuOTc5e
- prH7CcW5fbZAmoZpOplVJSHQBey+uDA6zS1J0kUlkOzxtXqmws1clcrtb0sqs+t+hnw==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UPUyURVma7CW for <buildroot@buildroot.org>;
+ Sun, 27 Sep 2026 10:47:07 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org B73CF407FE
+Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790506027;
+ b=PLi0GbeFMt0L2wlQbL29Fqc6mk/+SNuZe6nDHiMWEv9DdPYm/Yo0uEeekLM0iXcHWOet
+ qUrDFdfYUoALAaV0doISWP29hktQGE5a0jrAIpDo0zZnNdbMbDE7+K/E/6Tv3lV6YNo8g
+ tBK5ykJP6gr0yiBejFscuYWAaFJKi3Tm9pCYNqIrP141I9pijwuiXzc/eeSmMWQnJiU7o
+ Pe3HGlRBtHzKIL2L3l0ePky8zBRa45FZoMSEFyzdx4D+S3TsEKJahj1V48cRZUKF1Qrpa
+ zSHKFUrYQ69BH19gTU3mGU486MpWyGdYaDPXPM6hF26lFa2NOMzoanXDHeWrQXimDWA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1790506015;
+ c=relaxed/relaxed; t=1790506027;
  h=Received-SPF:DKIM-Signature:X-KAS-Sym:Received:Received:From:To:Cc:
  Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
- Content-Transfer-Encoding:X-Spam-Score:X-Spamd-Bar;
- bh=wbb7Fhx7Eq9PL+6rS0pQNNwtXMerAQnvNerFGS28ftg=;
- b=Rhexo2QXHcO8ZPEyNzEJrJ6/AJjLN5MNm1eUjAWeKd9z4qCtZeoonDuT3g7wlWtfVHUj
- FxkK7C949FiwNt8kdCFu5+T346wPr+m64I9TBdbOcGGJptweYeR57pRalELW5vsn/Vvpo
- p4y/iUO3HJPXx5o6J1YEljHa0XeRHf9xCNnyOIFD7iup5g5yOukY0GrZu6MQhq7/jALlV
- 1ZL7IZqE+ImmtAlUoUfePCo9voClHFu3tdWKawD6Q+UyuXvrS/awYYCFHpOGzT/cBTHBy
- YdVSIza22ZKllJPxOWVZ/SF/CPskFJ6Qd2tvx9nQboj/sasKDezsLdDnM1/LsSJv/kg==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org;
+ Content-Type:Content-Transfer-Encoding:X-Spam-Score:X-Spamd-Bar;
+ bh=paJHYDhT3NPHWu3JbU5vAYV7xq6YLok15BvHVQ/Yl0o=;
+ b=D1menLEMx4qvxH7QzRrNWAy8TzBeLQgDKpaUP8t9th9QBErLl7VEyZF7mBll6X6JYLn+
+ ZYQkrqVaFrtnHqUE93YgtGp//XdgVL7cnHsFSKBNVpqg5MpdCNbOZbmrXCnFcBJYF+Y/H
+ t12lJjV63EMIsXXg9s1Y3ZFqoStbXDYQrEn/mHp3k5bC9gq/9dp9N9Z0ABVyN4FDCKOE1
+ 1NxTb902SDlSdMwJ1aiWdK2oU7keZ9FyTKI8Rr/4NsHRxKMOGSLxdZ8c+8h0NebsbeQJb
+ c3l3aIL0FITFvhZ/eUkTXvC2Y3cvLuL9z4dAcrF8AKi+EmGp1Fism95kml72/cbJGPg==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org;
  dmarc=pass header.from=kuhls.net; 
  dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=JhLavnFr; 
+ header.s=kas202605290044 header.b=rMG9IYT8; 
  arc=none smtp.remote-ip=85.13.140.57
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-Authentication-Results: smtp1.osuosl.org;
+Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=kuhls.net
-Authentication-Results: smtp1.osuosl.org;
+Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202605290044 header.b=JhLavnFr
+ header.a=rsa-sha256 header.s=kas202605290044 header.b=rMG9IYT8
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id DFBC8810AE
- for <buildroot@buildroot.org>; Sun, 27 Sep 2026 10:46:53 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B73CF407FE
+ for <buildroot@buildroot.org>; Sun, 27 Sep 2026 10:47:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
- s=kas202605290044; t=1790505829;
- bh=wbb7Fhx7Eq9PL+6rS0pQNNwtXMerAQnvNerFGS28ftg=;
+ s=kas202605290044; t=1790505831;
+ bh=paJHYDhT3NPHWu3JbU5vAYV7xq6YLok15BvHVQ/Yl0o=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=JhLavnFrr61qyUnppH11loS+2cVn5T9c3yKS5LsdWCV/hPIj6iU9nw5svD0S98731
- /R4pfLmTUwJsrCsP677EtJ1oGk5YVlTBOYMK5nrsPCY6LKHWHzEh1o4f7OTZi4axw5
- aIjfvhDn+Ow/973z2OqAP0jv0XKRbnNMIiD//8qve71AizeReuCThdvZL/knFS9PXC
- Gzu8Hw9bSIVHTISzG8kASMCLAk9O5sVRB+1KU5H85rFv8rRdxUP8C41vBR7BBwNJO7
- 9q6VUOeaSrLaZPKHbqSufKNkZ67foI5zJ2xzdF7bXpTki9qK9ynMd5Xbl/nBAlhrnN
- sDdQoMYHcjcnw==
+ b=rMG9IYT8treJia1GAYDfBjKpc//ORINnEpCNW+5A+aP7xFucuujypLbEv2ymo3RT+
+ mojOCF2D2TNNwUlR/2NO0JvqPPtlO04snhE3kzILXGtWYymt4Pqwa5B4TtfP2bPLQ2
+ HWGPKQNTosRf3sq7gQt0eS2i1VDGvro+7psZQ8gdNYHgEmAiZd51J0h1w+YFrm3Dsu
+ nCyoIkChFSvzIsNauh+Xqep7UqMXmTdnAIhxjndUbtAqMO+FdtWsl6yJneOlAqF4jH
+ FKt2cnE5E4Glc6LVLkfYeM11N6mOxxnNf1ihuvPP6JW3ZdXmBe31JlKY2bG+JnKW5/
+ 2zjy4o/MkZRQw==
 X-KAS-Sym: v3:f51bdf72230551df:E60HSyKhvB/hjcOqjRN2FvcietonHg90tfBpdvJcFX1mV
  R+j6vuZST8LDBP8bI0YRByE7nnM8zo+J+Ss4/QfhH2rb1nZfmO3VL3WnTn4nRbVwBJk3fqEiiBR
  BcIUKL3D+tUbUY93P8XEXOPODFFTmbLRGZyG36MuC0yO1SCN7BpjWHnbwmJ351icj6h05v9k2IN
  Bt/GPH999d0pB27dQV9xkwjqVNcmstoO0TQaQ2Cjw4/UgevRPy7drDGL0hLAagZjTYF6H8SZSRj
  XAHROvBIIhQEG70eTpyXHeSoGFZnWeYqBa4vq9sbHMsU9OvNLLKcoUiiZ7ymf97ke0uUad1g==:
- 2giOsXM6bjZl6+Th3t5iGv/foNQGLMoU4bRO4+e5rbKJPkDJlDqNFYdVzw68PiJUjqeonzF0kMm
- 1QOfU8VlUn5kMNCipV4Ku2pejYjTfTcGbHfYULTEVtL6onRiBYd3u7MF5s1hlCWZH8jETBd+D1m
- Te+xl6NufYTSP34WpIAFSvQxc7RuaJLfBJj2pypscSjB8X9oXr3kbt8EeMc6ucSqcvtMUmIiyIF
- l46MCz9L+VTzRb4AAghGQ6qM4TA18gYKdAEBv6mtfFqc7BXNJ83rcm2m/ZL4T4IyfY9EvH5bAo6
- B5QZnf+XDkJX6RwuU51Ay5WslTNLxSn5TpNIWuf+ug9GN+W5O+RGNKq1sJM9HIO4UEjnkuxii0+
- VNDiRgfvZSnAqacHmiYDaTjEwknZeZMi1qV+FFQPJ2bsB37pT0AfTlu1KtUvygWL518Va/JvKzr
- Lnrdrcfy/gGnuDyGyFyNBNOzzAi5PY5AVUuc/gpOydFjppoYA1ecK722Weg9j0wJEu5aet61KGk
- cN2hDU0Dx7VIWVn55o9gSXgaQ1y7P5b159OcKlXF/CYLMtxY47e5Uv/V867en/P8Rwt8uFCAunI
- FP2W7wBNe8Ir00FaWPLCO5S5Sum+COT/Jgx0ockL1Jno2hcajLH8sx9zzvEJQe2GbTdjFZRFDU2
- eHrUZU2adf7XM5r2lXtrLerKDesgU55MVmlC2CbzmKcoFhcpD8AY23NkR63nLxg==
+ Rt92J5lVICXesoM56WfIb98Bp0sw8chpFc6Q4kQt1DBQ576H/n/a7IIE7/BezAMozURy8pE51qA
+ 4FymTdlzB0Q84OulApTSkp6ImeKYfgzkkSL6NLlDkYyf+Unws+I4qjYBmUEUVQUzBOy8bNLVCN8
+ YhKwxS6wHzEi5ATIO1gI0heoBwzUABy45Il5+GttdTWLIXT9FiUmSL4TqKj4YfTjPkU7li6cOYJ
+ AbQEy2PGj2iEJWjspVPwLm4W36VA87BGHHDY37FJCEwsReHO+XbbJ/xu63Pl5HoNRQjqHGLqvQg
+ BTcTkBu0460e9TsTib81dyukQswQ4Cr5TMEvSmCy3CyZKvM9uoRHAMemFqRT/6tHGR91Dy7mewX
+ Zq7N+UjQe8gAMhz1iThFFGfjBNHW6ixu7ZQvYPEhj9fJH9ybC6q/UXufNV2V2f9P9WTmlNriEvF
+ kOLOreyAeaJUICGy2pOi6PRz/4Lj3CPgBuxwBgzhIBI4Ge14UKvM9MGU0YnGsux+RqEAts2/A/s
+ UNTDA30ecno+SJqZWd7XiACa7LdZlQ6VdwYRJCIA6XlI0BMdMc93yXvd4xNIinWdRfVm5h/AD2U
+ /+ERpTVe4fGZVYtZIN7ykWfvocA5j88PB3HMPikSCdbt6qTOzQRaVCv5HFCW94E6Jw==
 Received: from fli4l.lan.fli4l (p5b3a0584.dip0.t-ipconnect.de [91.58.5.132])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id C344CA4C4F79;
- Sun, 27 Sep 2026 12:43:49 +0200 (CEST)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 05E41A4C4F6E;
+ Sun, 27 Sep 2026 12:43:51 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:52850)
  by fli4l.lan.fli4l with esmtp (Exim 4.100.1)
- (envelope-from <bernd@kuhls.net>) id 1xAmLh-0000000007a-462V;
+ (envelope-from <bernd@kuhls.net>) id 1xAmLi-0000000007a-19nl;
  Sun, 27 Sep 2026 10:43:14 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sun, 27 Sep 2026 12:42:44 +0200
-Message-ID: <20260927104301.1801638-67-bernd@kuhls.net>
+Date: Sun, 27 Sep 2026 12:42:45 +0200
+Message-ID: <20260927104301.1801638-68-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260927104301.1801638-1-bernd@kuhls.net>
 References: <20260927104301.1801638-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Spamd-Bar: -
-Subject: [Buildroot] [PATCH v6 66/82] package/qt5/qt5base: Add support for
- OpenSSL 4.0.0
+Subject: [Buildroot] [PATCH v6 67/82] package/rauc: Fix build with OpenSSL
+ 4.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -180,338 +181,52 @@ Cc: Marcin Bis <marcin@bis.org.pl>, Robert Rose <robertroyrose@gmail.com>,
  James Hilliard <james.hilliard1@gmail.com>,
  Giulio Benetti <giulio.benetti@benettiengineering.com>,
  Karoly Kasza <kaszak@gmail.com>, Martin Bark <martin@barkynet.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Support for OpenSSL 4 was added to the Qt 6.x OpenSSL plugin by commit
-https://invent.kde.org/qt/qt/qtbase/-/commit/e806630e694d89f567cffa9c982d1f471089ecd8
-contained in the 6.12 branch.
-
-OpenSSL support in Qt 5.x is not plugin-based, the move occured in
-version 6.2.0:
-https://invent.kde.org/qt/qt/qtbase/-/commit/d385158d5213ef568b7629e2aa4a818016bbffac
-
-The upstream repo is not updated anymore:
-https://community.kde.org/Qt5PatchCollection
-https://mail.kde.org/pipermail/distributions/2026-May/001690.html
-
-To enable support for OpenSSL 4 in qt5base we add a patch set mentioned
-in the OpenSSL issue https://github.com/openssl/openssl/issues/29117
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
- package/qt5/qt5base/0009-openssl4.patch |  52 +++++++++
- package/qt5/qt5base/0010-openssl4.patch | 139 ++++++++++++++++++++++++
- package/qt5/qt5base/0011-openssl4.patch |  89 +++++++++++++++
- 3 files changed, 280 insertions(+)
- create mode 100644 package/qt5/qt5base/0009-openssl4.patch
- create mode 100644 package/qt5/qt5base/0010-openssl4.patch
- create mode 100644 package/qt5/qt5base/0011-openssl4.patch
-
-diff --git a/package/qt5/qt5base/0009-openssl4.patch b/package/qt5/qt5base/0009-openssl4.patch
-new file mode 100644
-index 0000000000..19e70e876b
---- /dev/null
-+++ b/package/qt5/qt5base/0009-openssl4.patch
-@@ -0,0 +1,52 @@
-+Fix build with OpenSSL 4.x
-+
-+Downloaded from
-+https://github.com/botovq/ports/commit/bb50119f0a15fdda547ffbf1e8d947d92470ed4e
-+
-+Upstream: n/a (QT 5.x is not updated anymore)
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+
-+Index: src/network/ssl/qsslcertificate_openssl.cpp
-+--- a/src/network/ssl/qsslcertificate_openssl.cpp.orig
-++++ b/src/network/ssl/qsslcertificate_openssl.cpp
-+@@ -123,11 +123,11 @@ QByteArray QSslCertificate::serialNumber() const
-+     QMutexLocker lock(QMutexPool::globalInstanceGet(d.data()));
-+ #endif
-+     if (d->serialNumberString.isEmpty() && d->x509) {
-+-        ASN1_INTEGER *serialNumber = q_X509_get_serialNumber(d->x509);
-++        const ASN1_INTEGER *serialNumber = q_X509_get_serialNumber(d->x509);
-+         QByteArray hexString;
-+-        hexString.reserve(serialNumber->length * 3);
-+-        for (int a = 0; a < serialNumber->length; ++a) {
-+-            hexString += QByteArray::number(serialNumber->data[a], 16).rightJustified(2, '0');
-++        hexString.reserve(q_ASN1_STRING_length(serialNumber) * 3);
-++        for (int a = 0; a < q_ASN1_STRING_length(serialNumber); ++a) {
-++            hexString += QByteArray::number(q_ASN1_STRING_get0_data(serialNumber)[a], 16).rightJustified(2, '0');
-+             hexString += ':';
-+         }
-+         hexString.chop(1);
-+@@ -251,10 +251,10 @@ QMultiMap<QSsl::AlternativeNameEntryType, QString> QSs
-+                 QHostAddress ipAddress;
-+                 switch (len) {
-+                 case 4: // IPv4
-+-                    ipAddress = QHostAddress(qFromBigEndian(*reinterpret_cast<quint32 *>(genName->d.iPAddress->data)));
-++                    ipAddress = QHostAddress(qFromBigEndian(*reinterpret_cast<const quint32 *>(q_ASN1_STRING_get0_data(genName->d.iPAddress))));
-+                     break;
-+                 case 16: // IPv6
-+-                    ipAddress = QHostAddress(reinterpret_cast<quint8 *>(genName->d.iPAddress->data));
-++                    ipAddress = QHostAddress(reinterpret_cast<const quint8 *>(q_ASN1_STRING_get0_data(genName->d.iPAddress)));
-+                     break;
-+                 default: // Unknown IP address format
-+                     break;
-+@@ -511,8 +511,8 @@ static QVariant x509ExtensionToValue(X509_EXTENSION *e
-+ 
-+             // keyid
-+             if (auth_key->keyid) {
-+-                QByteArray keyid(reinterpret_cast<const char *>(auth_key->keyid->data),
-+-                                 auth_key->keyid->length);
-++                QByteArray keyid(reinterpret_cast<const char *>(q_ASN1_STRING_get0_data(auth_key->keyid)),
-++                                 q_ASN1_STRING_length(auth_key->keyid));
-+                 result[QLatin1String("keyid")] = keyid.toHex();
-+             }
-+ 
-diff --git a/package/qt5/qt5base/0010-openssl4.patch b/package/qt5/qt5base/0010-openssl4.patch
-new file mode 100644
-index 0000000000..8bcd5b1664
---- /dev/null
-+++ b/package/qt5/qt5base/0010-openssl4.patch
-@@ -0,0 +1,139 @@
-+Fix build with OpenSSL 4.x
-+
-+Downloaded from
-+https://github.com/botovq/ports/commit/bb50119f0a15fdda547ffbf1e8d947d92470ed4e
-+
-+Upstream: n/a (QT 5.x is not updated anymore)
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+
-+disable EVP_PKEY_param_check(),
-+use the old versions of sk_new(), ..., sk_value()
-+disable SSL_CONF_CTX
-+
-+Index: src/network/ssl/qsslsocket_openssl_symbols.cpp
-+--- a/src/network/ssl/qsslsocket_openssl_symbols.cpp.orig
-++++ b/src/network/ssl/qsslsocket_openssl_symbols.cpp
-+@@ -146,16 +146,27 @@ DEFINEFUNC2(int, BN_is_word, BIGNUM *a, a, BN_ULONG w,
-+ DEFINEFUNC(int, EVP_CIPHER_CTX_reset, EVP_CIPHER_CTX *c, c, return 0, return)
-+ DEFINEFUNC(int, EVP_PKEY_up_ref, EVP_PKEY *a, a, return 0, return)
-+ DEFINEFUNC2(EVP_PKEY_CTX *, EVP_PKEY_CTX_new, EVP_PKEY *pkey, pkey, ENGINE *e, e, return nullptr, return)
-++#ifndef LIBRESSL_VERSION_NUMBER
-+ DEFINEFUNC(int, EVP_PKEY_param_check, EVP_PKEY_CTX *ctx, ctx, return 0, return)
-++#endif
-+ DEFINEFUNC(void, EVP_PKEY_CTX_free, EVP_PKEY_CTX *ctx, ctx, return, return)
-+ DEFINEFUNC(int, RSA_bits, RSA *a, a, return 0, return)
-+ DEFINEFUNC(int, DSA_bits, DSA *a, a, return 0, return)
-++#ifndef LIBRESSL_VERSION_NUMBER
-+ DEFINEFUNC(int, OPENSSL_sk_num, OPENSSL_STACK *a, a, return -1, return)
-+ DEFINEFUNC2(void, OPENSSL_sk_pop_free, OPENSSL_STACK *a, a, void (*b)(void*), b, return, DUMMYARG)
-+ DEFINEFUNC(OPENSSL_STACK *, OPENSSL_sk_new_null, DUMMYARG, DUMMYARG, return nullptr, return)
-+ DEFINEFUNC2(void, OPENSSL_sk_push, OPENSSL_STACK *a, a, void *b, b, return, DUMMYARG)
-+ DEFINEFUNC(void, OPENSSL_sk_free, OPENSSL_STACK *a, a, return, DUMMYARG)
-+ DEFINEFUNC2(void *, OPENSSL_sk_value, OPENSSL_STACK *a, a, int b, b, return nullptr, return)
-++#else
-++DEFINEFUNC(int, sk_num, STACK *a, a, return -1, return)
-++DEFINEFUNC2(void, sk_pop_free, STACK *a, a, void (*b)(void*), b, return, DUMMYARG)
-++DEFINEFUNC(_STACK *, sk_new_null, DUMMYARG, DUMMYARG, return nullptr, return)
-++DEFINEFUNC2(void, sk_push, _STACK *a, a, void *b, b, return, DUMMYARG)
-++DEFINEFUNC(void, sk_free, _STACK *a, a, return, DUMMYARG)
-++DEFINEFUNC2(void *, sk_value, STACK *a, a, int b, b, return nullptr, return)
-++#endif // LIBRESSL_VERSION_NUMBER
-+ DEFINEFUNC(int, SSL_session_reused, SSL *a, a, return 0, return)
-+ DEFINEFUNC2(qssloptions, SSL_CTX_set_options, SSL_CTX *ctx, ctx, qssloptions op, op, return 0, return)
-+ DEFINEFUNC(int, SSL_CTX_get_security_level, const SSL_CTX *ctx, ctx, return -1, return)
-+@@ -244,7 +255,8 @@ DEFINEFUNC2(void, BIO_set_shutdown, BIO *a, a, int shu
-+ 
-+ DEFINEFUNC(long, ASN1_INTEGER_get, ASN1_INTEGER *a, a, return 0, return)
-+ DEFINEFUNC2(int, ASN1_INTEGER_cmp, const ASN1_INTEGER *a, a, const ASN1_INTEGER *b, b, return 1, return)
-+-DEFINEFUNC(int, ASN1_STRING_length, ASN1_STRING *a, a, return 0, return)
-++DEFINEFUNC(int, ASN1_STRING_length, const ASN1_STRING *a, a, return 0, return)
-++DEFINEFUNC(int, ASN1_STRING_type, const ASN1_STRING *a, a, return 0, return)
-+ DEFINEFUNC2(int, ASN1_STRING_to_UTF8, unsigned char **a, a, ASN1_STRING *b, b, return 0, return)
-+ DEFINEFUNC4(long, BIO_ctrl, BIO *a, a, int b, b, long c, c, void *d, d, return -1, return)
-+ DEFINEFUNC(int, BIO_free, BIO *a, a, return 0, return)
-+@@ -358,12 +370,14 @@ DEFINEFUNC2(int, SSL_CTX_use_PrivateKey, SSL_CTX *a, a
-+ DEFINEFUNC2(int, SSL_CTX_use_RSAPrivateKey, SSL_CTX *a, a, RSA *b, b, return -1, return)
-+ DEFINEFUNC3(int, SSL_CTX_use_PrivateKey_file, SSL_CTX *a, a, const char *b, b, int c, c, return -1, return)
-+ DEFINEFUNC(X509_STORE *, SSL_CTX_get_cert_store, const SSL_CTX *a, a, return nullptr, return)
-++#ifndef LIBRESSL_VERSION_NUMBER
-+ DEFINEFUNC(SSL_CONF_CTX *, SSL_CONF_CTX_new, DUMMYARG, DUMMYARG, return nullptr, return);
-+ DEFINEFUNC(void, SSL_CONF_CTX_free, SSL_CONF_CTX *a, a, return ,return);
-+ DEFINEFUNC2(void, SSL_CONF_CTX_set_ssl_ctx, SSL_CONF_CTX *a, a, SSL_CTX *b, b, return, return);
-+ DEFINEFUNC2(unsigned int, SSL_CONF_CTX_set_flags, SSL_CONF_CTX *a, a, unsigned int b, b, return 0, return);
-+ DEFINEFUNC(int, SSL_CONF_CTX_finish, SSL_CONF_CTX *a, a, return 0, return);
-+ DEFINEFUNC3(int, SSL_CONF_cmd, SSL_CONF_CTX *a, a, const char *b, b, const char *c, c, return 0, return);
-++#endif
-+ DEFINEFUNC(void, SSL_free, SSL *a, a, return, DUMMYARG)
-+ DEFINEFUNC(STACK_OF(SSL_CIPHER) *, SSL_get_ciphers, const SSL *a, a, return nullptr, return)
-+ DEFINEFUNC(const SSL_CIPHER *, SSL_get_current_cipher, SSL *a, a, return nullptr, return)
-+@@ -871,15 +885,20 @@ bool q_resolveOpenSslSymbols()
-+     RESOLVEFUNC(AUTHORITY_INFO_ACCESS_free)
-+     RESOLVEFUNC(EVP_PKEY_up_ref)
-+     RESOLVEFUNC(EVP_PKEY_CTX_new)
-++#ifdef LIBRESSL_VERSION_NUMBER
-+     RESOLVEFUNC(EVP_PKEY_param_check)
-++#endif
-+     RESOLVEFUNC(EVP_PKEY_CTX_free)
-+     RESOLVEFUNC(RSA_bits)
-++
-++#ifndef LIBRESSL_VERSION_NUMBER
-+     RESOLVEFUNC(OPENSSL_sk_new_null)
-+     RESOLVEFUNC(OPENSSL_sk_push)
-+     RESOLVEFUNC(OPENSSL_sk_free)
-+     RESOLVEFUNC(OPENSSL_sk_num)
-+     RESOLVEFUNC(OPENSSL_sk_pop_free)
-+     RESOLVEFUNC(OPENSSL_sk_value)
-++#endif
-+     RESOLVEFUNC(DH_get0_pqg)
-+     RESOLVEFUNC(SSL_CTX_set_options)
-+     RESOLVEFUNC(SSL_CTX_get_security_level)
-+@@ -985,6 +1004,7 @@ bool q_resolveOpenSslSymbols()
-+     RESOLVEFUNC(ASN1_INTEGER_get)
-+     RESOLVEFUNC(ASN1_INTEGER_cmp)
-+     RESOLVEFUNC(ASN1_STRING_length)
-++    RESOLVEFUNC(ASN1_STRING_type)
-+     RESOLVEFUNC(ASN1_STRING_to_UTF8)
-+     RESOLVEFUNC(BIO_ctrl)
-+     RESOLVEFUNC(BIO_free)
-+@@ -1096,12 +1116,14 @@ bool q_resolveOpenSslSymbols()
-+     RESOLVEFUNC(SSL_CTX_use_RSAPrivateKey)
-+     RESOLVEFUNC(SSL_CTX_use_PrivateKey_file)
-+     RESOLVEFUNC(SSL_CTX_get_cert_store);
-++#ifndef LIBRESSL_VERSION_NUMBER
-+     RESOLVEFUNC(SSL_CONF_CTX_new);
-+     RESOLVEFUNC(SSL_CONF_CTX_free);
-+     RESOLVEFUNC(SSL_CONF_CTX_set_ssl_ctx);
-+     RESOLVEFUNC(SSL_CONF_CTX_set_flags);
-+     RESOLVEFUNC(SSL_CONF_CTX_finish);
-+     RESOLVEFUNC(SSL_CONF_cmd);
-++#endif
-+     RESOLVEFUNC(SSL_accept)
-+     RESOLVEFUNC(SSL_clear)
-+     RESOLVEFUNC(SSL_connect)
-+@@ -1254,13 +1276,13 @@ bool q_resolveOpenSslSymbols()
-+ //==============================================================================
-+ QDateTime q_getTimeFromASN1(const ASN1_TIME *aTime)
-+ {
-+-    size_t lTimeLength = aTime->length;
-+-    char *pString = (char *) aTime->data;
-++    size_t lTimeLength = q_ASN1_STRING_length(aTime);
-++    const char *pString = (const char *) q_ASN1_STRING_get0_data(aTime);
-+     auto isValidPointer = [pString, lTimeLength](const char *const probe){
-+         return size_t(probe - pString) < lTimeLength;
-+     };
-+ 
-+-    if (aTime->type == V_ASN1_UTCTIME) {
-++    if (q_ASN1_STRING_type(aTime) == V_ASN1_UTCTIME) {
-+ 
-+         char lBuffer[24];
-+         char *pBuffer = lBuffer;
-+@@ -1333,7 +1355,7 @@ QDateTime q_getTimeFromASN1(const ASN1_TIME *aTime)
-+         result = result.addSecs(lSecondsFromUCT);
-+         return result;
-+ 
-+-    } else if (aTime->type == V_ASN1_GENERALIZEDTIME) {
-++    } else if (q_ASN1_STRING_type(aTime) == V_ASN1_GENERALIZEDTIME) {
-+ 
-+         if (lTimeLength < 15)
-+             return QDateTime(); // hopefully never triggered
-diff --git a/package/qt5/qt5base/0011-openssl4.patch b/package/qt5/qt5base/0011-openssl4.patch
-new file mode 100644
-index 0000000000..23451b2912
---- /dev/null
-+++ b/package/qt5/qt5base/0011-openssl4.patch
-@@ -0,0 +1,89 @@
-+Fix build with OpenSSL 4.x
-+
-+Downloaded from
-+https://github.com/botovq/ports/commit/bb50119f0a15fdda547ffbf1e8d947d92470ed4e
-+
-+Upstream: n/a (QT 5.x is not updated anymore)
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+
-+use compat defines for STACK and INIT_SETTINGS
-+disable EVP_PKEY_param_check
-+map q_OPENSSL_sk_*() to q_sk_*()
-+disable SSL_CONF_CTX
-+use old signature of CRYPTO_free()
-+
-+Index: src/network/ssl/qsslsocket_openssl_symbols_p.h
-+--- a/src/network/ssl/qsslsocket_openssl_symbols_p.h.orig
-++++ b/src/network/ssl/qsslsocket_openssl_symbols_p.h
-+@@ -80,6 +80,13 @@ QT_BEGIN_NAMESPACE
-+ 
-+ #define DUMMYARG
-+ 
-++#ifdef LIBRESSL_VERSION_NUMBER
-++typedef _STACK STACK;
-++typedef STACK OPENSSL_STACK;
-++typedef void OPENSSL_INIT_SETTINGS; 
-++#endif
-++
-++
-+ #if !defined QT_LINKED_OPENSSL
-+ // **************** Shared declarations ******************
-+ // ret func(arg)
-+@@ -236,14 +243,31 @@ int q_EVP_CIPHER_CTX_reset(EVP_CIPHER_CTX *c);
-+ Q_AUTOTEST_EXPORT int q_EVP_PKEY_up_ref(EVP_PKEY *a);
-+ EVP_PKEY_CTX *q_EVP_PKEY_CTX_new(EVP_PKEY *pkey, ENGINE *e);
-+ void q_EVP_PKEY_CTX_free(EVP_PKEY_CTX *ctx);
-++#ifndef LIBRESSL_VERSION_NUMBER
-+ int q_EVP_PKEY_param_check(EVP_PKEY_CTX *ctx);
-++#endif
-+ int q_RSA_bits(RSA *a);
-++#ifndef LIBRESSL_VERSION_NUMBER
-+ Q_AUTOTEST_EXPORT int q_OPENSSL_sk_num(OPENSSL_STACK *a);
-+ Q_AUTOTEST_EXPORT void q_OPENSSL_sk_pop_free(OPENSSL_STACK *a, void (*b)(void *));
-+ Q_AUTOTEST_EXPORT OPENSSL_STACK *q_OPENSSL_sk_new_null();
-+ Q_AUTOTEST_EXPORT void q_OPENSSL_sk_push(OPENSSL_STACK *st, void *data);
-+ Q_AUTOTEST_EXPORT void q_OPENSSL_sk_free(OPENSSL_STACK *a);
-+ Q_AUTOTEST_EXPORT void * q_OPENSSL_sk_value(OPENSSL_STACK *a, int b);
-++#else // LIBRESSL_VERSION_NUMBER
-++int q_sk_num(STACK *a);
-++#define q_OPENSSL_sk_num(a) q_sk_num(a)
-++void q_sk_pop_free(STACK *a, void (*b)(void *));
-++#define q_OPENSSL_sk_pop_free(a, b) q_sk_pop_free(a, b)
-++STACK *q_sk_new_null();
-++#define q_OPENSSL_sk_new_null() q_sk_new_null()
-++void q_sk_push(STACK *st, void *data);
-++#define q_OPENSSL_sk_push(st, data) q_sk_push(st, data)
-++void q_sk_free(STACK *a);
-++#define q_OPENSSL_sk_free q_sk_free
-++void *q_sk_value(STACK *a, int b);
-++#define q_OPENSSL_sk_value(a, b) q_sk_value(a, b)
-++#endif // LIBRESSL_VERSION_NUMBER
-+ int q_SSL_session_reused(SSL *a);
-+ 
-+ #if OPENSSL_VERSION_MAJOR < 3
-+@@ -373,7 +397,8 @@ void q_SSL_set_psk_use_session_callback(SSL *s, q_SSL_
-+ bool q_resolveOpenSslSymbols();
-+ long q_ASN1_INTEGER_get(ASN1_INTEGER *a);
-+ int q_ASN1_INTEGER_cmp(const ASN1_INTEGER *x, const ASN1_INTEGER *y);
-+-int q_ASN1_STRING_length(ASN1_STRING *a);
-++int q_ASN1_STRING_length(const ASN1_STRING *a);
-++int q_ASN1_STRING_type(const ASN1_STRING *a);
-+ int q_ASN1_STRING_to_UTF8(unsigned char **a, ASN1_STRING *b);
-+ long q_BIO_ctrl(BIO *a, int b, long c, void *d);
-+ Q_AUTOTEST_EXPORT int q_BIO_free(BIO *a);
-+@@ -515,12 +540,14 @@ int q_SSL_CTX_use_PrivateKey(SSL_CTX *a, EVP_PKEY *b);
-+ int q_SSL_CTX_use_RSAPrivateKey(SSL_CTX *a, RSA *b);
-+ int q_SSL_CTX_use_PrivateKey_file(SSL_CTX *a, const char *b, int c);
-+ X509_STORE *q_SSL_CTX_get_cert_store(const SSL_CTX *a);
-++#ifndef LIBRESSL_VERSION_NUMBER
-+ SSL_CONF_CTX *q_SSL_CONF_CTX_new();
-+ void q_SSL_CONF_CTX_free(SSL_CONF_CTX *a);
-+ void q_SSL_CONF_CTX_set_ssl_ctx(SSL_CONF_CTX *a, SSL_CTX *b);
-+ unsigned int q_SSL_CONF_CTX_set_flags(SSL_CONF_CTX *a, unsigned int b);
-+ int q_SSL_CONF_CTX_finish(SSL_CONF_CTX *a);
-+ int q_SSL_CONF_cmd(SSL_CONF_CTX *a, const char *b, const char *c);
-++#endif
-+ void q_SSL_free(SSL *a);
-+ STACK_OF(SSL_CIPHER) *q_SSL_get_ciphers(const SSL *a);
-+ const SSL_CIPHER *q_SSL_get_current_cipher(SSL *a);
--- 
-2.47.3
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+U2lnbmVkLW9mZi1ieTogQmVybmQgS3VobHMgPGJlcm5kQGt1aGxzLm5ldD4KLS0tCiAuLi5OMV9T
+VFJJTkdfZ2V0MF9kYXRhLWFuZC1BU04xX1NUUklOR18ucGF0Y2ggfCA0OCArKysrKysrKysrKysr
+KysrKysrCiAxIGZpbGUgY2hhbmdlZCwgNDggaW5zZXJ0aW9ucygrKQogY3JlYXRlIG1vZGUgMTAw
+NjQ0IHBhY2thZ2UvcmF1Yy8wMDAxLXNpZ25hdHVyZS11c2UtQVNOMV9TVFJJTkdfZ2V0MF9kYXRh
+LWFuZC1BU04xX1NUUklOR18ucGF0Y2gKCmRpZmYgLS1naXQgYS9wYWNrYWdlL3JhdWMvMDAwMS1z
+aWduYXR1cmUtdXNlLUFTTjFfU1RSSU5HX2dldDBfZGF0YS1hbmQtQVNOMV9TVFJJTkdfLnBhdGNo
+IGIvcGFja2FnZS9yYXVjLzAwMDEtc2lnbmF0dXJlLXVzZS1BU04xX1NUUklOR19nZXQwX2RhdGEt
+YW5kLUFTTjFfU1RSSU5HXy5wYXRjaApuZXcgZmlsZSBtb2RlIDEwMDY0NAppbmRleCAwMDAwMDAw
+MDAwLi5iYTgwMzJjNmU3Ci0tLSAvZGV2L251bGwKKysrIGIvcGFja2FnZS9yYXVjLzAwMDEtc2ln
+bmF0dXJlLXVzZS1BU04xX1NUUklOR19nZXQwX2RhdGEtYW5kLUFTTjFfU1RSSU5HXy5wYXRjaApA
+QCAtMCwwICsxLDQ4IEBACitGcm9tIDEwMWFhY2FmODJkMjUwYmZiOGU1ODFlMDAyYjJjMzgwODY5
+MDgwZWYgTW9uIFNlcCAxNyAwMDowMDowMCAyMDAxCitGcm9tOiBCcnVubyBUaG9tc2VuIDxicnVu
+by50aG9tc2VuQGdtYWlsLmNvbT4KK0RhdGU6IFNhdCwgMTEgQXByIDIwMjYgMTc6MDY6MTAgKzAy
+MDAKK1N1YmplY3Q6IFtQQVRDSF0gc2lnbmF0dXJlOiB1c2UgQVNOMV9TVFJJTkdfZ2V0MF9kYXRh
+IGFuZCBBU04xX1NUUklOR19sZW5ndGgKK01JTUUtVmVyc2lvbjogMS4wCitDb250ZW50LVR5cGU6
+IHRleHQvcGxhaW47IGNoYXJzZXQ9VVRGLTgKK0NvbnRlbnQtVHJhbnNmZXItRW5jb2Rpbmc6IDhi
+aXQKKworVXNlIEFTTjFfU1RSSU5HX2dldDBfZGF0YSgpIGFuZCBBU04xX1NUUklOR19sZW5ndGgo
+KSBmdW5jdGlvbnMKK2FsbG93IGFuIEFTTjFfU1RSSU5HIHN0cnVjdHVyZSB0byBiZSBtYW5pcHVs
+YXRlZC4gQXZvaWQgZXJyb3JzCitsaWtlIHRoaXMgd2hlbiBjb21waWxpbmcgYWdhaW5zdCBPcGVu
+U1NMIDQuMDoKKworZXJyb3I6IGludmFsaWQgdXNlIG9mIGluY29tcGxldGUgdHlwZWRlZiDigJhB
+U04xX09DVEVUX1NUUklOR+KAmSB7YWthIOKAmHN0cnVjdCBhc24xX3N0cmluZ19zdOKAmX0KKwor
+U2lnbmVkLW9mZi1ieTogQnJ1bm8gVGhvbXNlbiA8YnJ1bm8udGhvbXNlbkBnbWFpbC5jb20+CisK
+K1Vwc3RyZWFtOiBodHRwczovL2dpdGh1Yi5jb20vcmF1Yy9yYXVjL2NvbW1pdC8xMDFhYWNhZjgy
+ZDI1MGJmYjhlNTgxZTAwMmIyYzM4MDg2OTA4MGVmCisKK1NpZ25lZC1vZmYtYnk6IEJlcm5kIEt1
+aGxzIDxiZXJuZEBrdWhscy5uZXQ+CistLS0KKyBzcmMvc2lnbmF0dXJlLmMgfCA0ICsrLS0KKyAx
+IGZpbGUgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspLCAyIGRlbGV0aW9ucygtKQorCitkaWZmIC0t
+Z2l0IGEvc3JjL3NpZ25hdHVyZS5jIGIvc3JjL3NpZ25hdHVyZS5jCitpbmRleCBkMmFjYWM2Yi4u
+OTFiZTdiYjcgMTAwNjQ0CistLS0gYS9zcmMvc2lnbmF0dXJlLmMKKysrKyBiL3NyYy9zaWduYXR1
+cmUuYworQEAgLTEzNDQsNyArMTM0NCw3IEBAIGdib29sZWFuIGNtc19nZXRfdW52ZXJpZmllZF9t
+YW5pZmVzdChHQnl0ZXMgKnNpZywgR0J5dGVzICoqbWFuaWZlc3QsIEdFcnJvciAqKmVyCisgCQkJ
+CSJtaXNzaW5nIG1hbmlmZXN0IGluIGlubGluZSBzaWduYXR1cmUiKTsKKyAJCWdvdG8gb3V0Owor
+IAl9CistCWlmICghKCpjb250ZW50KS0+ZGF0YSB8fCAoKCpjb250ZW50KS0+bGVuZ3RoIDw9IDAp
+KSB7CisrCWlmICgoQVNOMV9TVFJJTkdfZ2V0MF9kYXRhKCpjb250ZW50KSA9PSBOVUxMKSB8fCAo
+QVNOMV9TVFJJTkdfbGVuZ3RoKCpjb250ZW50KSA8PSAwKSkgeworIAkJZ19zZXRfZXJyb3IoCisg
+CQkJCWVycm9yLAorIAkJCQlSX1NJR05BVFVSRV9FUlJPUiwKK0BAIC0xMzUzLDcgKzEzNTMsNyBA
+QCBnYm9vbGVhbiBjbXNfZ2V0X3VudmVyaWZpZWRfbWFuaWZlc3QoR0J5dGVzICpzaWcsIEdCeXRl
+cyAqKm1hbmlmZXN0LCBHRXJyb3IgKiplcgorIAkJZ290byBvdXQ7CisgCX0KKyAKKy0JdG1wID0g
+Z19ieXRlc19uZXcoKCpjb250ZW50KS0+ZGF0YSwgKCpjb250ZW50KS0+bGVuZ3RoKTsKKysJdG1w
+ID0gZ19ieXRlc19uZXcoQVNOMV9TVFJJTkdfZ2V0MF9kYXRhKCpjb250ZW50KSwgQVNOMV9TVFJJ
+TkdfbGVuZ3RoKCpjb250ZW50KSk7CisgCWlmICghdG1wKSB7CisgCQlnX3NldF9lcnJvcl9saXRl
+cmFsKAorIAkJCQllcnJvciwKKy0tIAorMi40Ny4zCisKLS0gCjIuNDcuMwoKX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlz
+dApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFp
+bG1hbi9saXN0aW5mby9idWlsZHJvb3QK
