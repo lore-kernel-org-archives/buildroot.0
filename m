@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D617C9830E
-	for <buildroot@archiver.kernel.org>; Sun, 27 Sep 2026 10:48:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5923C98324
+	for <buildroot@archiver.kernel.org>; Sun, 27 Sep 2026 10:48:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1872D605E6;
-	Sun, 27 Sep 2026 10:48:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 86BE740501;
+	Sun, 27 Sep 2026 10:48:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tFzm6-ErsJ3M; Sun, 27 Sep 2026 10:48:37 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 17914605F5
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790506117;
-	b=a8xb3U7R2tA3/38T2BGKj9Qzmi1KwM5/Jh+t/IyLN4Fs/TBGqQHUG56784Rp2ZPLGlq9
-	 9qjrrzfEuUXh8oQZADryAb7P0QhzokMjLH0n4cVieDm3IhKPSDDj2DyQ8JDqX6Mav9AiS
-	 7UxVUBj7dbIjY42VFrMXIddp1RCagVYP8QRiYwXcKi5UOYb7yircY6oVvw48Qr6kh6aD4
-	 5by+Enfe0hs6StCa4EIoYztJ5jJyNr8d08LqJSJcLYcR1hjjFJucqFw+Er6I14mvDJsoP
-	 mskiGcfUytBUZpxLn44ghqLjuuFSDNdC2INut9+9ATsMVILawUVdfVU+S0M1ZMO/Frw==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CGAT-5grWkMR; Sun, 27 Sep 2026 10:48:49 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 4AC7A4050A
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790506129;
+	b=J3OA6k1tGUlSF8h1kKPRx6qnN4PafAMqoJbanVZShqrbCGXu7LkIzQ+dyuJMUyoHWbkM
+	 BbLHxcDuKVUmlyn25hRDDO90q7UiaS5AAi5Imxhf8NLGSISREpKfkHeOnSMToUwh8eiMe
+	 0bPEFQul3T3uFW78vU+K6C0E9vFgC8kUj8Hm6Crpv51XY73nIfLqzaYZN344EylmR77jl
+	 QYd0AEJefDQYMvzZv0WuVuYo8Pm3uG8OEbeJpkRtJkRTG00gz+nDusj30x1PyU3iR1Ohe
+	 8r5uLkou7+jxhw+2uK+hGtbJay5EVRWH3KwFBnt7eGRtlu5JfG2+X4RLg8yvkAXVWQQ==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1790506117;
+	c=relaxed/relaxed; t=1790506129;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
@@ -31,119 +31,117 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:Cc:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=nLodmBzWyaseImhT9sqxjeRFfOH1smt353dHfG4f0Q0=;
-	b=rz0r0+Fi9XWVtgqAoB4ttQsqjrGAcW4xFJkvqerDhcOa7Rbngo5SRVkGxC39MkW9e7Hb
-	 GA1TRFTZTCLOA5H0iLhS+WEjDJWNAAPttsZsMGpht/eYP9HFm1iSNcYOHb4ze1hJd9vd/
-	 ZACkg053tUIfFuEmt1MVxz4SXfnuAbQEfnV8Zcd++4iJOPTZw0mX9kpES5Wy9keH7CFoc
-	 YTdecBsETvPNp7lBg64fqgBLngYnIW/hFUR7p4IAze1N9LDxl2KMlXVoDTHYOsAqIJvxF
-	 MRZqHm9F1lZuH1aXPA+o0jBZ8uoWIK3TG59oMxvgl2p3h2fdG4ixd6lzpk+kgQGfYdQ==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; dmarc=pass header.from=kuhls.net;
-	dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256 header.s=kas202605290044 header.b="GGj/R8hW";
-	arc=fail smtp.remote-ip=140.211.166.142
+	bh=LkCRmXzEA14VekCqJmC8pfyK8xjF+wrdKE3bdo/HKPI=;
+	b=qwMkTXMj+6SCsHBKSXRg9ZOhhx4WYUetKsnM1Ooszof9SFswjs5xvmzElvkoXFZBfkQ5
+	 KppCjTOtIBDQAIbPmZZtm6xH27nFdcAMbnlRHrdG11gpNEqWCtUkAy938RxQNIqP8RgZr
+	 J/HbcZDb4EByvyK3kt5GRZ2RVqYzMy4MeYfi/qrKOpjFKCTS6kuv9Y50KbQw4wYupxQsP
+	 igwUjsUfuI0vvR2e+JfPcXtpi0HyG8L3wiuh8hnIZZFk2zZp9x9ejYNxu1MPFxextfRQ2
+	 SpGiwP5zLKj8wlp2z9wRDFlDhnsPHy94CJZPJPSbd7W8JYaDA46bymjdDstDF/r7ySQ==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1790506117;
-	bh=nLodmBzWyaseImhT9sqxjeRFfOH1smt353dHfG4f0Q0=;
+	s=default; t=1790506129;
+	bh=LkCRmXzEA14VekCqJmC8pfyK8xjF+wrdKE3bdo/HKPI=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=JhDmw31OnbCG+NoS7rOxsw4x1u0b6syQ3hkOSBxGbmHBxzKM6FEJGqwXZHLoUcrh0
-	 G/kJoJ5BRJyg0nJgCsFQaeNzHpYjtgf6d05chZP5ha0RjG40oHPKz8Tjd2AF0a2w50
-	 MDkeFtgAKPBYV6m3qNjAqkNJwry8+nhApd+kBl7wgkhG8U1eLFE0vkxFVjKNbWQZ1n
-	 BYz2kBfzbrMPCwHpjwd+HXYwegrpeXIF2sCbtj3cAXrHTJdTtOQA+MIrv1WDYErafr
-	 ljg0ImJGVt6S8gwYrs1zrAsJS70AiSgJIxBbgpYEwhT1W9/HKVpTe8IKwG0eogeI4j
-	 mSBJnhiqWibiw==
+	b=XBqUK4IVrRZMPdzNESj/rsMchXJMVKSHH1uZepun+pUSu7Ajt+8IFRWZJNIWcU5AX
+	 dDGJXxOS9tckiIr4GpPDHwe8JlE+AdmabQeH+r6MuhRKHh5AaEU72MtF70zIEWm+5j
+	 UFaWCPu5Gic/dprXVdx/OZ/HKJIeQgfG5xSVntzQSSFPFpW6bL5g5gH1IDaL1NSU29
+	 tyBu/NRCvo3mvJnZi20KJonUDNGrZnoogQNGJT0Zz/9u5Tx63/gh5Wn9mJkQLYXNoc
+	 /WlBPeud1hdm+1EKQ549Gw19aoHOEcxGPJvdamMclcopala6dVnR6/U3T/RMuKe/zl
+	 3rJ3ymF+b1vJg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 17914605F5;
-	Sun, 27 Sep 2026 10:48:37 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 857CC334
- for <buildroot@buildroot.org>; Sun, 27 Sep 2026 10:48:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4AC7A4050A;
+	Sun, 27 Sep 2026 10:48:49 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5B725335
+ for <buildroot@buildroot.org>; Sun, 27 Sep 2026 10:48:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 82AC5605F5
- for <buildroot@buildroot.org>; Sun, 27 Sep 2026 10:48:35 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 412C0810C3
+ for <buildroot@buildroot.org>; Sun, 27 Sep 2026 10:48:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9jEgOgm_je3p for <buildroot@buildroot.org>;
- Sun, 27 Sep 2026 10:48:34 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 51FE8605E6
-Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790506114;
- b=FDoqFVaTk+vRd+Kz6zhe5c3tRlD+XJUS1XXACGHKAHDP0lkVhCX/BBjizfAvk0iwCFdU
- q7ZcBgehlDR7V6kE8jemu8ItCuMTtzgIoaxSk1GGMTpizWXMDIhRhXfzEXte0JjgJE1wr
- VW28Sd3O7Vv0ZpEfvwLF6QCsRkXCXHfdDelAhI9bNl37M0n37hlDD/md6NlPJtQVA/zeN
- YXKWleS6Y0oTQ/U0xJB/2Y+AXsHJA9U1z5FaUkLCiteSEpvacuw6z9AfKEgcwYZIHL6UR
- v4Xgyu9GhRoMOexR5Z4xC02GI/AQJNFMspymNmH9y7meXvNiSTKmlS89TB3V9X5MMEw==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jXfs1-fay2FM for <buildroot@buildroot.org>;
+ Sun, 27 Sep 2026 10:48:46 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org DAE45810C2
+Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790506126;
+ b=gWq5Tm2KjB28tkqBLQowgYPO8AWWbOXmdgPdfhZ6uesrgL7CtgtWVzs0/i6HVqh8kIQi
+ xvGkXHK+VOC+lFNhmX4NpfP9Zl11zXGRsSBw+/8NJLctM1o11P/Oh0fysYvOdcPg3bmvM
+ dv2a05NMRpADiXIVUTxISUAhmZa+ZZDwI4RTFFmVgEtb1xNGN2jnaPv9qgeTCAwcs/dP0
+ dMPUwsYc1yUCswNZp48RCoD6UOGFzXqq3NLmhEABtCTXvQg9PEegGbMe8EHX/Fb4Z3X3O
+ 5d3RNFmvlVbLLRg0AAABeQldXV6iny5MldRRpX3bnv+BTWkGmUByxMqdrcn+rz5lAqw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1790506114;
+ c=relaxed/relaxed; t=1790506126;
  h=Received-SPF:DKIM-Signature:X-KAS-Sym:Received:Received:From:To:Cc:
  Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding:X-Spam-Score:X-Spamd-Bar;
- bh=TASkiw1ospBBsSRdHzLiYsz8Jx6DnDQGaM/U7tGIge0=;
- b=MxLnt3nwTNmdyJtVX81/9Fiso1I4WO0E/DhMCC6rDZtXxeOmr9oDEM4YUsvSXYsT8xmD
- I+5h+jKmFhMn+ZXrs8Nm/3pJ5mP1/aKtiyeAFOSPuclK6HOR0f5EL8ZYESLr1wzE81ORs
- NvPAoP4EC0CrN+6YjOfDIvQr5R9zmJeJUnxT0wJ/ZHVq0vxSZGCIxOnA1qbEyvfNq8/8X
- mVZ/oGRv8wHMcy/4HFic5TfIUm9RthU6GGe4z/aBIhfBtQO8HsgzgEyW9p5jBt6I4pCAx
- u7VsMPeVaZ+gq8PkgG8ivSa1/NjynlP78yVzBtjQ291ooLwWqnZweYlD11AGVORK5Zg==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org;
+ bh=El5Eb0+i8zpcTDiZtpWOe9Z2uNOQ4hE8n0T93bTQeys=;
+ b=MrlyNolCeyXn9HYwnzKGhvDhkHfGJ1R1Z09gNJbtQUKThq//M9h4sSVyN41CJZOtxreQ
+ DixjNI69qnBHwJYJE2XN3OLFf2zlcDaGx5JNpUByz/7h+KlwxjPKTKfKTxsML/ckp6fIu
+ +l6QesKCHaI2tU7aQGBpFN2dDqUtlL73e2LYq6Ns6fDtj6vQYOZWm/8zeyJa7eSn41OpI
+ sh33xMOuFFHZ4UkIPS4bP9mgJE35BupuwG84ThqvFiPDySHHF3ALmEK53xkZTF2SP4Cji
+ j2B4V0pYKo0qejHz6S/yCo7bKku46tjgsbUu9sBD4XywiPiXBo08lIzEwipAPNuXM6A==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org;
  dmarc=pass header.from=kuhls.net; 
  dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b="GGj/R8hW"; 
+ header.s=kas202605290044 header.b=cb1SxdBL; 
  arc=none smtp.remote-ip=85.13.140.57
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-Authentication-Results: smtp3.osuosl.org;
+Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=kuhls.net
-Authentication-Results: smtp3.osuosl.org;
+Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202605290044 header.b=GGj/R8hW
+ header.a=rsa-sha256 header.s=kas202605290044 header.b=cb1SxdBL
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 51FE8605E6
- for <buildroot@buildroot.org>; Sun, 27 Sep 2026 10:48:34 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DAE45810C2
+ for <buildroot@buildroot.org>; Sun, 27 Sep 2026 10:48:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
- s=kas202605290044; t=1790505839;
- bh=TASkiw1ospBBsSRdHzLiYsz8Jx6DnDQGaM/U7tGIge0=;
+ s=kas202605290044; t=1790505840;
+ bh=El5Eb0+i8zpcTDiZtpWOe9Z2uNOQ4hE8n0T93bTQeys=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=GGj/R8hWOy7tjuBF5b+hmdySr0aDCPeaDe88dMiddZvKXiIEHtHMyIGkpjzchgdQ3
- acvKgAdhHy0vSNOBAvGJeL/NBlKq1rYFMLaaTKrtednH/L6h6UEW6zgZ5tz+kUvnW2
- bdFOZ6ItbAWIEXvI4RVK4X0aKsyr4lE9cLbVxGmsRECX+5cJQubZiZNVwn/2aXeENx
- Iq8UXgi0z5N9lvBWyVy2714WIWbftPEVjE/XU8nwPVgmh+ftTwp1wzDmimO0Fcwvtt
- 66eLGxFttlzV1bvjdPuYpEJHd3jFo6mo7EnHo1/BBUgNCLoHmp3MKtT2pQCBIcMr8T
- TqYzxUMLt+pQA==
+ b=cb1SxdBL1+vxWGkJSNVGAX1ER/hsn51RIGplGcrP+uMcpo2bi6MNvnJD2mLkHHEgR
+ 8clsKrCJZxMT4jVWbu6xbs6CscRp5Au/JbAWJaRyXtU3TEtArZiZ73AKT1ZNK+j/RO
+ V63ZTctD7W/aFd++uKa0UVh/ayjz3RgVf/tB3Gy7SF5/1Sa/aCFPNkyD7E76pc1I+s
+ ekyPXbjJ/i5EhTB2fRF30gO1CuBSYDZ/XD8/99H7u4mvOSJ6nluFmkUSKJwbvucNHd
+ YwNv0ma8mW80HsgZvjHMbBNU4+/7km2udRpsonA2y4u03FXP8gLfxhZv7MeymAhQYn
+ C+khbKGWk7BnA==
 X-KAS-Sym: v3:f51bdf72230551df:E60HSyKhvB/hjcOqjRN2FvcietonHg90tfBpdvJcFX1mV
  R+j6vuZST8LDBP8bI0YRByE7nnM8zo+J+Ss4/QfhH2rb1nZfmO3VL3WnTn4nRbVwBJk3fqEiiBR
  BcIUKL3D+tUbUY93P8XEXOPODFFTmbLRGZyG36MuC0yO1SCN7BpjWHnbwmJ351icj6h05v9k2IN
  Bt/GPH999d0pB27dQV9xkwjqVNcmstoO0TQaQ2Cjw4/UgevRPy7drDGL0hLAagZjTYF6H8SZSRj
  XAHROvBIIhQEG70eTpyXHeSoGFZnWeYqBa4vq9sbHMsU9OvNLLKcoUiiZ7ymf97ke0uUad1g==:
- gsrs6qbnkJkwmfH+BHV/SKQVdMo/NrAaJeFsmu+34aRGwykNm8FAWm1BQd+1g8JwHjb9GGvibXN
- Kb48m/bemp639ZwBQs/3fhElVa1LJj7d6gqD8grSbA6WSOfnJFM9C9wDOYwW01LWFfvxXnCcY9U
- i0WStz+BrE849jWHjTMln+vBmdzYOZj0Be7shyx+MAoCYmc0aUyQxodYVR0IsE48RXLzG1MeSd2
- 3yjhd/vugRQzz3RmAVe4x+RPWdBSTtFct3qY/4PQYPa9CTiWcpweIw0hY0BnF0/q/DX3F4S4Hu0
- Pe7qrPCa4gn8GBVSxIXG6KM4oeQ50a37PJUtgnf/JN8sqFSWq1C5RUVjEMt00frwvXqW+YvxlNK
- 4WdAebol/QeabubepCBgwzFRKHnkRTAib+mcQ9Z2kpH/S92sfTlRdvD2GzWisOY6QvFM4J8ZUkX
- 31ZVRTUURy9USIewp3IOfX+2tvKH4YFJXT+VvNc+ItI5QfYqPlnIdpDvYAIbH0Fy1dJZyoZZUsi
- K8fJFbrVb7L6E3XceHbhR3K1oS7sHXWsjo8hHbLEgZ4fLjI5QuReXlVDGbtCBteeXFnt4yk2TlY
- YjE9w6sK2WfmnFDlJUiFnDgZkAA+XCmR4CHPY2u3utbu1AVwHMsYq6BLvsxZi8198govPzbMIVh
- zOK4xrY/kI8K/aqGxTaOo
+ HJ2ejSB+TZaA4jmogRu50l903DAP22G+GZu0m7ugrfILdnlIxzxjSuFsYZUf52cvAfWjlS4IPfX
+ Ye6J+EtMFa0+njoErTbf2ZsYeJOJra5pSOQoXIobygBuliXGahLhk9D7x0f5qL59Sx4a3iU1Ejm
+ G3//Pav/tKfksYdlzcYcyXH2nKI9WxndnNBLmvTgIZ+NYDIaPNx3frxMK4lJSIRPn/9KWlM640d
+ KSEGhcuctTR3K/QAq3j249HRId3JJFbARNlU7eLE2epQDzh346JnOjL5DSYKd0/Ij+1U2F+hacd
+ XxzJ30TMwJmuWAwbgnpK50gkiG92FPIMbkW3cZJRYjMiR/dpi5HcKNpqK9Xj63H0SqTRZFMecHZ
+ w2Q6mYJCiaY78PUZu9EkKJdmSINcE8n4/jp1lm/X9khJSTccr506/5MLqSN3xM5XkR3+OIOJUuc
+ Qnakhd95AqUq3n444oVfWAC2KjherJjUreeRDELv0jWt7qGGownLr3j37pCSCDWr2dM+s0c27yj
+ u9+VozusnrG3HTPyzKnUWvjZFT0XdLDkkYf7tq52eYmfCqOxHyaPymfQyHrYD5PdJly9gjIP1zd
+ OVpdCvmCtiP6FF7N5QVcN4JrUzzmCA4LJ8Y+Dvl/RtuiDraYPZF1OJaVqCk2HQu9HwHCKWIdUuF
+ G75eAHQgLIAaMvPsCguR5
 Received: from fli4l.lan.fli4l (p5b3a0584.dip0.t-ipconnect.de [91.58.5.132])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 325EEA4C4F80;
- Sun, 27 Sep 2026 12:43:59 +0200 (CEST)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 5931CA4C4F87;
+ Sun, 27 Sep 2026 12:44:00 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:52850)
  by fli4l.lan.fli4l with esmtp (Exim 4.100.1)
- (envelope-from <bernd@kuhls.net>) id 1xAmLj-0000000007a-1633;
+ (envelope-from <bernd@kuhls.net>) id 1xAmLj-0000000007a-1f4n;
  Sun, 27 Sep 2026 10:43:15 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sun, 27 Sep 2026 12:42:52 +0200
-Message-ID: <20260927104301.1801638-75-bernd@kuhls.net>
+Date: Sun, 27 Sep 2026 12:42:53 +0200
+Message-ID: <20260927104301.1801638-76-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260927104301.1801638-1-bernd@kuhls.net>
 References: <20260927104301.1801638-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: -
-Subject: [Buildroot] [PATCH v6 74/82] package/systemd: Fix build with
- OpenSSL 4.0.0
+X-Spamd-Bar: /
+Subject: [Buildroot] [PATCH v6 75/82] package/thrift: Fix build with
+ LibreSSL and OpenSSL 4.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -187,100 +185,222 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Buildroot commit cf2471a9d958b0eaa2db3508e96b465eaa481f3e bumped the
+package from 0.14.1 to 0.22.0 which includes upstream commit
+https://github.com/apache/thrift/commit/98be76fc033f1d66bcfd09d4a22b86e8061e89c2
+
+This commit added OPENSSL_thread_stop() which is not provided by
+LibreSSL causing a build error.
+
+To fix the problem we add an upstream patch which is a merged version
+of LibreSSL fixes[1] and fixes for the upcoming OpenSSL bump to 4.0.0.
+
+Fixes:
+https://autobuild.buildroot.net/results/242/242ea99f1c1c29fcc364d59a6a7efc8f11bcf76e/
+
+[1] https://github.com/apache/thrift/pull/3736
+
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- ...compilation-with-openssl-4.0.0-beta1.patch | 86 +++++++++++++++++++
- 1 file changed, 86 insertions(+)
- create mode 100644 package/systemd/0001-various-fix-compilation-with-openssl-4.0.0-beta1.patch
+ ...sport-Make-it-compatible-with-OpenSS.patch | 193 ++++++++++++++++++
+ 1 file changed, 193 insertions(+)
+ create mode 100644 package/thrift/0002-THRIFT-6170-transport-Make-it-compatible-with-OpenSS.patch
 
-diff --git a/package/systemd/0001-various-fix-compilation-with-openssl-4.0.0-beta1.patch b/package/systemd/0001-various-fix-compilation-with-openssl-4.0.0-beta1.patch
+diff --git a/package/thrift/0002-THRIFT-6170-transport-Make-it-compatible-with-OpenSS.patch b/package/thrift/0002-THRIFT-6170-transport-Make-it-compatible-with-OpenSS.patch
 new file mode 100644
-index 0000000000..d38be8d51b
+index 0000000000..7a5cfc5ce1
 --- /dev/null
-+++ b/package/systemd/0001-various-fix-compilation-with-openssl-4.0.0-beta1.patch
-@@ -0,0 +1,86 @@
-+From 693ecaac7e12c120d1323478b2433d77367aa0c9 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Zbigniew=20J=C4=99drzejewski-Szmek?= <zbyszek@amutable.com>
-+Date: Tue, 14 Apr 2026 18:59:07 +0200
-+Subject: [PATCH] various: fix compilation with openssl-4.0.0-beta1
++++ b/package/thrift/0002-THRIFT-6170-transport-Make-it-compatible-with-OpenSS.patch
+@@ -0,0 +1,193 @@
++From e460f4277fabede007c751969ab8fc161eadaa16 Mon Sep 17 00:00:00 2001
++From: Sebastian Andrzej Siewior <sebastian@breakpoint.cc>
++Date: Sun, 30 Aug 2026 10:19:00 +0200
++Subject: [PATCH] THRIFT-6170: transport: Make it compatible with OpenSSL 4.0
 +
-+Various types have been made opaque, so we need to use some accessor
-+functions.
++Make it compatible with OpenSSL 4.0:
++- Don't use ERR_remove_state(). It has been an empty stub since OpenSSL
++  1.1.0 and got finally removed in 4.0-
 +
-+Upstream: https://github.com/systemd/systemd/commit/693ecaac7e12c120d1323478b2433d77367aa0c9
++- SSLv3_method(), TLSv1_method(), TLSv1_1_method() and TLSv1_2_method()
++  have been removed. The recommendation is to use TLS_method() instead.
++  LATEST points to TLSv1_2_method which is not going to work.
++  Make SSLTLS and LATEST point to TLS_method() for newer OpenSSL which
++  uses the highest supported protocol version.
++  Adjust the testsuite to only test those two.
 +
-+[Bernd: rebased for 258.7]
++- The return value of a few functions such as X509_get_subject_name()
++  has been made const. Use the const pointer only for newer OpenSSL.
++
++- While at it, pull the libressl related change from #3736
++
++Client: cpp,c_glib.
++
++Signed-off-by: Sebastian Andrzej Siewior <sebastian@breakpoint.cc>
++
++Upstream: https://github.com/apache/thrift/pull/3761
++
 +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 +---
-+ src/sbsign/sbsign.c      |  5 +++--
-+ src/shared/pkcs11-util.c | 15 ++++++++-------
-+ 2 files changed, 11 insertions(+), 9 deletions(-)
++ .../c_glib/transport/thrift_ssl_socket.c      | 11 ++++++++++
++ lib/cpp/src/thrift/transport/TSSLSocket.cpp   | 20 +++++++++++++++----
++ lib/cpp/test/SecurityFromBufferTest.cpp       | 10 ++++++++++
++ lib/cpp/test/SecurityTest.cpp                 | 10 ++++++++++
++ 4 files changed, 47 insertions(+), 4 deletions(-)
 +
-+diff --git a/src/sbsign/sbsign.c b/src/sbsign/sbsign.c
-+index ee1c0f77ab..f54dacf65a 100644
-+--- a/src/sbsign/sbsign.c
-++++ b/src/sbsign/sbsign.c
-+@@ -262,8 +262,9 @@ static int spc_indirect_data_content_new(const void *digest, size_t digestsz, ui
-+                 return log_error_errno(SYNTHETIC_ERRNO(EIO), "Failed to get SpcPeImageData object: %s",
-+                                        ERR_error_string(ERR_get_error(), NULL));
++diff --git a/lib/c_glib/src/thrift/c_glib/transport/thrift_ssl_socket.c b/lib/c_glib/src/thrift/c_glib/transport/thrift_ssl_socket.c
++index d6c7bb2ba..0681831cb 100644
++--- a/lib/c_glib/src/thrift/c_glib/transport/thrift_ssl_socket.c
+++++ b/lib/c_glib/src/thrift/c_glib/transport/thrift_ssl_socket.c
++@@ -285,7 +285,9 @@ thrift_ssl_socket_close (ThriftTransport *transport, GError **error)
++       SSL_shutdown(ssl_socket->ssl);
++       SSL_free(ssl_socket->ssl);
++       ssl_socket->ssl = NULL;
+++#if OPENSSL_VERSION_NUMBER < 0x40000000L
++       ERR_remove_state(0);
+++#endif
++   }
++   return thrift_socket_close(transport, error);
++ }
++@@ -710,7 +712,9 @@ void thrift_ssl_socket_finalize_openssl(void)
++   ERR_free_strings();
++   EVP_cleanup();
++   CRYPTO_cleanup_all_ex_data();
+++#if OPENSSL_VERSION_NUMBER < 0x40000000L
++   ERR_remove_state(0);
+++#endif
++ }
 + 
-+-        idc->data->value->value.sequence->data = TAKE_PTR(peidraw);
-+-        idc->data->value->value.sequence->length = peidrawsz;
-++        if (!ASN1_STRING_set(idc->data->value->value.sequence, peidraw, peidrawsz))
-++                return log_error_errno(SYNTHETIC_ERRNO(EIO), "Failed to set ASN1_STRING data.");
-++
-+         idc->messageDigest->digestAlgorithm->algorithm = OBJ_nid2obj(NID_sha256);
-+         if (!idc->messageDigest->digestAlgorithm->algorithm)
-+                 return log_error_errno(SYNTHETIC_ERRNO(EIO), "Failed to get SHA256 object: %s",
-+diff --git a/src/shared/pkcs11-util.c b/src/shared/pkcs11-util.c
-+index 165fefbea1..96b25c4ac3 100644
-+--- a/src/shared/pkcs11-util.c
-++++ b/src/shared/pkcs11-util.c
-+@@ -555,7 +555,11 @@ int pkcs11_token_read_public_key(
-+                         return log_debug_errno(SYNTHETIC_ERRNO(EIO), "Failed to init an EVP_PKEY_CTX for EC.");
 + 
-+                 OSSL_PARAM ec_params[8] = {
-+-                        OSSL_PARAM_octet_string(OSSL_PKEY_PARAM_PUB_KEY, os->data, os->length)
-++                        /* We need to drop the const from the data param, because ec_params is
-++                         * modified below. But we'll not modify ec_params[0]. */
-++                        OSSL_PARAM_octet_string(OSSL_PKEY_PARAM_PUB_KEY,
-++                                                (unsigned char *) ASN1_STRING_get0_data(os),
-++                                                ASN1_STRING_length(os)),
-+                 };
++@@ -832,6 +836,12 @@ thrift_ssl_socket_context_initialize(ThriftSSLSocketProtocol ssl_protocol, GErro
++ {
++   SSL_CTX* context = NULL;
++   switch(ssl_protocol){
+++#if OPENSSL_VERSION_NUMBER >= 0x40000000L
+++    case SSLTLS:
+++    case LATEST:
+++      context = SSL_CTX_new(TLS_method());
+++      break;
+++#else
++     case SSLTLS:
++       context = SSL_CTX_new(SSLv23_method());
++       break;
++@@ -849,6 +859,7 @@ thrift_ssl_socket_context_initialize(ThriftSSLSocketProtocol ssl_protocol, GErro
++     case TLSv1_2:
++       context = SSL_CTX_new(TLSv1_2_method());
++       break;
+++#endif
++     default:
++       g_set_error (error, THRIFT_TRANSPORT_ERROR,
++ 		   THRIFT_SSL_SOCKET_ERROR_CIPHER_NOT_AVAILABLE,
++diff --git a/lib/cpp/src/thrift/transport/TSSLSocket.cpp b/lib/cpp/src/thrift/transport/TSSLSocket.cpp
++index 48b96ebf7..e8d69a329 100644
++--- a/lib/cpp/src/thrift/transport/TSSLSocket.cpp
+++++ b/lib/cpp/src/thrift/transport/TSSLSocket.cpp
++@@ -157,7 +157,7 @@ void cleanupOpenSSL() {
++ #endif
++   EVP_cleanup();
++   CRYPTO_cleanup_all_ex_data();
++-#if OPENSSL_VERSION_NUMBER >= 0x10100000
+++#if OPENSSL_VERSION_NUMBER >= 0x10100000 && !defined(LIBRESSL_VERSION_NUMBER)
++   // Do nothing unless an openssl derivative is detected
++ #  if !defined(OPENSSL_IS_BORINGSSL) && !defined(OPENSSL_IS_AWSLC)
++   // https://www.openssl.org/docs/man1.1.1/man3/OPENSSL_thread_stop.html
++@@ -180,6 +180,10 @@ static char uppercase(char c);
 + 
-+                 _cleanup_free_ void *order = NULL, *p = NULL, *a = NULL, *b = NULL, *generator = NULL;
-+@@ -683,13 +687,10 @@ int pkcs11_token_read_x509_certificate(
-+                 CK_OBJECT_HANDLE object,
-+                 X509 **ret_cert) {
++ // SSLContext implementation
++ SSLContext::SSLContext(const SSLProtocol& protocol) {
+++#if OPENSSL_VERSION_NUMBER >= 0x40000000L
+++  if (protocol == SSLTLS || protocol == LATEST) {
+++    ctx_ = SSL_CTX_new(TLS_method());
+++#else
++   if (protocol == SSLTLS) {
++     ctx_ = SSL_CTX_new(SSLv23_method());
++ #ifndef OPENSSL_NO_SSL3
++@@ -192,6 +196,7 @@ SSLContext::SSLContext(const SSLProtocol& protocol) {
++     ctx_ = SSL_CTX_new(TLSv1_1_method());
++   } else if (protocol == TLSv1_2) {
++     ctx_ = SSL_CTX_new(TLSv1_2_method());
+++#endif
++   } else {
++     /// UNKNOWN PROTOCOL!
++     throw TSSLException("SSL_CTX_new: Unknown protocol");
++@@ -405,7 +410,7 @@ void TSSLSocket::close() {
++     SSL_free(ssl_);
++     ssl_ = nullptr;
++     handshakeCompleted_ = false;
++-#if OPENSSL_VERSION_NUMBER >= 0x10100000
+++#if OPENSSL_VERSION_NUMBER >= 0x10100000 && !defined(LIBRESSL_VERSION_NUMBER)
++     // Do nothing unless an openssl derivative is detected
++ #  if !defined(OPENSSL_IS_BORINGSSL) && !defined(OPENSSL_IS_AWSLC)
++     // https://www.openssl.org/docs/man1.1.1/man3/OPENSSL_thread_stop.html
++@@ -800,9 +805,16 @@ void TSSLSocket::authorize() {
++   }
 + 
-+-        _cleanup_free_ char *t = NULL;
-+         CK_ATTRIBUTE attribute = {
-+                 .type = CKA_VALUE
-+         };
-+         CK_RV rv;
-+-        _cleanup_(X509_freep) X509 *x509 = NULL;
-+-        X509_NAME *name = NULL;
-+         int r;
++   // extract commonName
+++#if OPENSSL_VERSION_NUMBER >= 0x40000000L
+++  const X509_NAME* name = X509_get_subject_name(cert);
+++  const X509_NAME_ENTRY* entry;
+++  const ASN1_STRING* common;
+++#else
++   X509_NAME* name = X509_get_subject_name(cert);
+++  X509_NAME_ENTRY* entry;
+++  ASN1_STRING* common;
+++#endif
++   if (name != nullptr) {
++-    X509_NAME_ENTRY* entry;
++     unsigned char* utf8;
++     int last = -1;
++     while (decision == AccessManager::SKIP) {
++@@ -812,7 +824,7 @@ void TSSLSocket::authorize() {
++       entry = X509_NAME_get_entry(name, last);
++       if (entry == nullptr)
++         continue;
++-      ASN1_STRING* common = X509_NAME_ENTRY_get_data(entry);
+++      common = X509_NAME_ENTRY_get_data(entry);
++       int size = ASN1_STRING_to_UTF8(&utf8, common);
++       if (host.empty()) {
++         host = (server() ? getPeerHost() : getHost());
++diff --git a/lib/cpp/test/SecurityFromBufferTest.cpp b/lib/cpp/test/SecurityFromBufferTest.cpp
++index 08f76b3f2..1ff64087a 100644
++--- a/lib/cpp/test/SecurityFromBufferTest.cpp
+++++ b/lib/cpp/test/SecurityFromBufferTest.cpp
++@@ -235,6 +235,16 @@ BOOST_AUTO_TEST_CASE(ssl_security_matrix) {
++           continue;
++         }
++ #endif
+++#if OPENSSL_VERSION_NUMBER >= 0x40000000L
+++	if (!(si == apache::thrift::transport::SSLTLS ||
+++	      si == apache::thrift::transport::LATEST) ||
+++	    !(ci == apache::thrift::transport::SSLTLS ||
+++	      ci == apache::thrift::transport::LATEST))
+++	{
+++		// Only SSLTLS / LATEST is supported.
+++		continue;
+++	}
+++#endif
 + 
-+         r = dlopen_p11kit();
-+@@ -713,15 +714,15 @@ int pkcs11_token_read_x509_certificate(
-+                                        "Failed to read X.509 certificate data off token: %s", sym_p11_kit_strerror(rv));
++         boost::mutex::scoped_lock lock(mMutex);
 + 
-+         const unsigned char *p = attribute.pValue;
-+-        x509 = d2i_X509(NULL, &p, attribute.ulValueLen);
-++        _cleanup_(X509_freep) X509 *x509 = d2i_X509(NULL, &p, attribute.ulValueLen);
-+         if (!x509)
-+                 return log_debug_errno(SYNTHETIC_ERRNO(EBADMSG), "Failed to parse X.509 certificate.");
++diff --git a/lib/cpp/test/SecurityTest.cpp b/lib/cpp/test/SecurityTest.cpp
++index 86640bd68..44815dfc7 100644
++--- a/lib/cpp/test/SecurityTest.cpp
+++++ b/lib/cpp/test/SecurityTest.cpp
++@@ -364,6 +364,16 @@ BOOST_AUTO_TEST_CASE(ssl_security_matrix)
++                     continue;
++                 }
++ #endif
+++#if OPENSSL_VERSION_NUMBER >= 0x40000000L
+++		if (!(si == apache::thrift::transport::SSLTLS ||
+++		     si == apache::thrift::transport::LATEST) ||
+++		    !(ci == apache::thrift::transport::SSLTLS ||
+++		      ci == apache::thrift::transport::LATEST))
+++                {
+++                    // Only SSLTLS / LATEST is supported.
+++                    continue;
+++                }
+++#endif
 + 
-+-        name = X509_get_subject_name(x509);
-++        const X509_NAME *name = X509_get_subject_name(x509);
-+         if (!name)
-+                 return log_debug_errno(SYNTHETIC_ERRNO(EBADMSG), "Failed to acquire X.509 subject name.");
-+ 
-+-        t = X509_NAME_oneline(name, NULL, 0);
-++        _cleanup_free_ char *t = X509_NAME_oneline(name, NULL, 0);
-+         if (!t)
-+                 return log_debug_errno(SYNTHETIC_ERRNO(EIO), "Failed to format X.509 subject name as string.");
++                 boost::mutex::scoped_lock lock(mMutex);
 + 
 +-- 
 +2.47.3
