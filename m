@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33F67C98324
-	for <buildroot@archiver.kernel.org>; Sun, 27 Sep 2026 10:45:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62AE4C9830E
+	for <buildroot@archiver.kernel.org>; Sun, 27 Sep 2026 10:45:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F222660640;
-	Sun, 27 Sep 2026 10:44:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 36064407F4;
+	Sun, 27 Sep 2026 10:45:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 05sLINL4Y35b; Sun, 27 Sep 2026 10:44:59 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 254C56062C
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790505899;
-	b=LslSzDutDhUh599DHPCXd+RFtqBG0gUd4lCp8ajj7t+SoetEhZFK/YIa26Aaz5CTtmdV
-	 pLonh/A7TvDvAEVAnYT73rrOm7aC5jInvT9FL9djJt7H7WQT7kJVT6ML7mFNwiQLnAOG7
-	 MYuXpZCpNlect5Ubw4DBueFwzkeMwogWoDWRu/JQV1nCENpLIktl221RpBuZbuQaJ2P+n
-	 sv/WA82EvK2CMp4FaceHG/GU6gp7dA1f6fVwWHMvzWPihNLDqZYZnqq6OxrFhUS3GrH6+
-	 ktWqFVob7VTm8vxXJkCVu4/icq2Ao9qIHPZktaRJQif9NMRSDpqMVpzfLiKb0tyV5HA==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Ci-icVBAytgy; Sun, 27 Sep 2026 10:45:11 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 576D7407FE
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790505911;
+	b=saNf2VVAJsMsbFZd8zKORmbUf3eGtQK0Mi+QZvXKRbN6mJiAWusx5Zia35rnj7tSYizO
+	 4boH7xHiyztfgeuG968BZUHb1219+Ya+pLQv3i/sSggn8eS/VfgGnJP35Ji+pygWBiRq1
+	 t0ORAcU1r/7pTA6md/6F/Gr5WMyWe8rmiH3smF2Smu/Ome3krJPA7/9sqis7yypHDWlis
+	 nvzsp3eSp0nfgO29otePKLFjXknXOs82O4iTqYn2oPbg73rVGrQ/SpYRVmfrdrzEASXLq
+	 jlrvyvayoc1VX6ats14goDOF3hHjzyJPJ50C/GK9IwXWFzJ40zpFQNQBBhHcm7j40rw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1790505899;
+	c=relaxed/relaxed; t=1790505911;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
@@ -31,116 +31,117 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:Cc:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=0VbkXkk1xpEOQhMO+zVipGweQU7rpa5j5oBRNvrA59g=;
-	b=PEX6w6fKNrGl40X9yqfsjGKJAVaWAtvj07cOA77q1qS/x75yux8iD8ASk0ulZxYK0Z0D
-	 rw1oR4bGJKK5+3oP1y8ICrtLf+83TyZKtIs2NZrE85EunkIgONKbkT8oDSYjqltR8zryZ
-	 M9xz6jvcskK3lxuIws5glT8Uv+N+YxTYIRmDfjLLGEG7LO82uUYcu/PuRS2iXz4hybx3w
-	 kva1FZ7ytMkRV7iq49xnXDEnvn9D7fgk1aQZ7z3r5mOgHRjz5GCUf5g+2oNzs0IjHHgA2
-	 ilWOGzXtS+Io0DEU5pdcRnuNCwgp4g5Mlm4GWin3zmozeWPY40q8tuX7PTLonM/vLYw==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	bh=GGs7uWKUh9Hdz4fO48uKpdxJ/E0UJInPHgwzFM549Y8=;
+	b=nGHZnZFnT6l9qEm4VfCySKU6yXc398NdrXYqcumEeJcPERGF1rlNGPd3lvhbHW1FBf45
+	 KaFXDgbO4y/cLJH6M6ssB3eqG1MPLxflYUZZsKN1BxxEpfTqDvGou93RsdOwJWz7j1bhc
+	 nqqflCF/7EnNpQkaqUHUjZrrzKxeo25qopfUVQSrsbpXs+rDSauV6oIoHremR3sp+s/0d
+	 nraxAKiJ4ToQNy71oviH+PvX/UBAnwPw1GRbOVLRgYHE0P1qGgYcFq414opL9oovUg+q1
+	 Hm7WN+sN+Px+b65TjJs4IaP57Ec7RppUc9VAv122ieyrr6U4dmhUDunQTS8ov85qB5w==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1790505899;
-	bh=0VbkXkk1xpEOQhMO+zVipGweQU7rpa5j5oBRNvrA59g=;
+	s=default; t=1790505911;
+	bh=GGs7uWKUh9Hdz4fO48uKpdxJ/E0UJInPHgwzFM549Y8=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=W2QZN0MfsWuhD7M/cRtn0f5N8FPjFFCP5R+KebnMaalIuXFYmj40tNA4WX+hdE7IA
-	 PbU7tOwl6jiyQhKJ9/4NyUaNBXQHr26qS4E/e5hl6IWcTqoSglxN3Mi4hJNFlizMFl
-	 nZqtsh4jiDE0o/k8Da+ANmZ4A0V4SXBtKbGX5Sc7NIl4RCIewBMXn9yuSHCHPYkyQv
-	 P/F5BTFefIsL0feZK395DRKSzOphS9Pt1KxJ77EcXeLXtYdUeBpGc59itL1B1JKQ+1
-	 0IEmPngQFQO+4PfKqxBHjA4eRCFUh/bZME0mg+13vaL4b45YE4mq3GhD6bRHzVoqz3
-	 d0bNz8MuJqk6w==
+	b=T/HYo7QudUONByDdj4+dP6BUY5kIJGfA29T+MwGCT2oqTpzE73Px1e043GmVKkT07
+	 VdAivG7ekDpSGiE727+4HINrekpycipo9QmxkdeGqQf4RNe9ggZItRDrS6oXIkI3fn
+	 tjLngD4fU8d5LDQNjTs+3TclavOzJrXyYdi7ioyvkkkwsJ98Zsx/ZHT2b5OJoIXUAZ
+	 LXObq02tKvnqcA1wLTfPgwUdna6/k7Qg+gK8xUf8tNmlAr1KFlkWV/zecTf1fU1mZ1
+	 Kd+LsMVmwxeNySnZBPKI5eYVtKE10o3XMJVtWu5AKz24/RT64hvbAFRT+3Grqx0pLe
+	 /RoK06rMhSEIQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 254C56062C;
-	Sun, 27 Sep 2026 10:44:59 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id AC531334
- for <buildroot@buildroot.org>; Sun, 27 Sep 2026 10:44:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 576D7407FE;
+	Sun, 27 Sep 2026 10:45:11 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 993D9334
+ for <buildroot@buildroot.org>; Sun, 27 Sep 2026 10:45:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9DBDD810C0
- for <buildroot@buildroot.org>; Sun, 27 Sep 2026 10:44:57 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8B1F740059
+ for <buildroot@buildroot.org>; Sun, 27 Sep 2026 10:45:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iHq_N0vHOVUT for <buildroot@buildroot.org>;
- Sun, 27 Sep 2026 10:44:57 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org B5200810B9
-Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790505896;
- b=cGfee6C5bbi7HrJIP/Jf7VK7aR4ec8Sub+BxyD1Q6ZcDIstAFfB+0si2psrZh3BifB6H
- SlJQRRmPp9nhVuiUcg+7DH8x0ibj4OQwUGNH6bn4XJHrhrwGmIpd9gPmflBsi/5XlU1/U
- 7YsVL5PIuyV922V0ZfOSvp1c+DFnRz0mcwO5Y/DAAhjOklM19IZTPaKkd/y6KHWtdNrJd
- 8lcDvxcrvKzySWAZCSRUZvemA6Bvhbks3f8aheznOp0itzGoB5JNCxaYfFeX7X/vhhBGh
- yo2nADV37Xu6z9QDbkExEUq3ZGODNMNJJ4E3rBgKnsEpp2VsVi7ONYJelsMs1XBAZuw==
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rWkS3fccr4QV for <buildroot@buildroot.org>;
+ Sun, 27 Sep 2026 10:45:09 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org 7CD5B40068
+Authentication-Results: smtp2.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790505909;
+ b=BJ3F/XvoP7YV+3rSS/gQz55gPYSQar9XW4jh2xzpOmytNCpFsAC23XTLQuZci/FK0inA
+ mGqFZyOoClTmijLqRvAdz81wVAbGvEkwLp3UFdlos584fDtQD5fODV63oVO/t7fiVKPoy
+ QAWm2luy2MVmkKraJS9u9J96wescMi3cKBzgfsaGtsaS4C7GZ2a477DBuPYC13BzoPnOo
+ 8QPmrqdC5PSX08OFEXo/RDj+Lj+LgPDyHUh9/xwT5E8mBAbTPZ0aL3r/X0yg5Pwljrc4L
+ cnBbdclF8Wuen4dizbrGsn7en7gNuOqZfqhe6c2/vZk/iJwRJH5xtRcotQH3GONB6Tw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1790505896;
+ c=relaxed/relaxed; t=1790505909;
  h=Received-SPF:DKIM-Signature:X-KAS-Sym:Received:Received:From:To:Cc:
  Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding:X-Spam-Score:X-Spamd-Bar;
- bh=uKC7KxSy17C813qamL3f705ZVvnyKQr8JXL0DuQ+7mI=;
- b=ATgTmDmmVt+0k4nhPxHvIil46gs5EnJ1F6SXmPfpaOO8EUGyfi5H1wsdaXBU0zf7hI7r
- bLuGMbiknVZ7OBfT15EtmEvioR66Gl9wfoerH7AfZ/vVwyWr1z6PKq7l2M7e1qnUiKp/n
- FrPntv1kofI+z04nxHk/2Hf7w8jsgbKl9lav9tljrujdteeMTW/xC5XFg3nfC0bELZJdZ
- W+mo5Gnx7CavkIkV2MvwPjjRu7at5KXZAWnFBHv7DebBMlbW6Z20/sAeRLAO0e4sObyTy
- QzQ5lpPVG4V+sI6kqjq/78nnB/I94/q6kG/302Magj4g1MAi3yOpGrXKv3DnkHaHK6Q==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org;
+ bh=zPioJdvjd31rVP7sd+skVXwbvZlHA6REaKrk0GWe//Q=;
+ b=L/pTurXuDnxnTt0GqPs6p9aLevpJuBtD9pBu0QFglphRP5tANL0Ob7yKOBscV+LCrCRQ
+ y3oDC9eL7ngJNmlEwhM0wbXEp7LkTb3M2XEijNfn1kkv2wY2kMjhlmFND6+PojSSCjd+D
+ a8ZXecEew5BPvmfl5I+WljPvm4xa5V6UiTpEHdoWDrVe3RqieNEE5CukF7lFzyeytTGVS
+ NcjOBp/fwv5lIm3vQ3s+YMODuMT8+qkRQocfzvS5rTFzrvZkTLqIEHhxo04lPJLN3gcDn
+ 7ijs4TGQNmSNtNgJHk1H+CkBn/pfZMcwqNmZ723VNsKxqlmJ2/dh6DGvDLaoevLV7wQ==
+ARC-Authentication-Results: i=1; smtp2.osuosl.org;
  dmarc=pass header.from=kuhls.net; 
  dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=cWy0IZDG; 
+ header.s=kas202605290044 header.b=fsOoTMXJ; 
  arc=none smtp.remote-ip=85.13.140.57
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-Authentication-Results: smtp1.osuosl.org;
+Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=kuhls.net
-Authentication-Results: smtp1.osuosl.org;
+Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202605290044 header.b=cWy0IZDG
+ header.a=rsa-sha256 header.s=kas202605290044 header.b=fsOoTMXJ
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B5200810B9
- for <buildroot@buildroot.org>; Sun, 27 Sep 2026 10:44:56 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7CD5B40068
+ for <buildroot@buildroot.org>; Sun, 27 Sep 2026 10:45:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
- s=kas202605290044; t=1790505819;
- bh=uKC7KxSy17C813qamL3f705ZVvnyKQr8JXL0DuQ+7mI=;
+ s=kas202605290044; t=1790505820;
+ bh=zPioJdvjd31rVP7sd+skVXwbvZlHA6REaKrk0GWe//Q=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=cWy0IZDG0cuBI1DzuqJf+wfes3Cnc7dea3pBxPqtDewCxwrda++OEQu3j8HsUZJIp
- AnHiGRAcfxnohg2mERI05zC6F8gCKcZhGsysOKxhZjioTtXpSoi7ndcpSGIqCbJHlq
- YYq7juGBZ5Rc6JVYDURJaEMnkXMBFEol5H4zktKJxMq0TsZsIoYwO3rjosqOWczga0
- xWzgPVKPVjMrauhcCPkgqVjFFzMwEh5e++xAeYEY9jgXM+un70YHCG0qEpnZoXHb5q
- 1chfCqVC2pkmk7e1ICY1k32UeLuTmgVtQWqA46EBhaxAqcoGKeNg36RqMeqdQj0Z2Z
- kMrvW44H8q+bg==
+ b=fsOoTMXJFRQKrmyn3aZRD3BTWZjk8HD991h9ru1av4exFdrJocxXHeWvihBBQoSet
+ OsSYojSczpwD9ar+wUs5+0kLK7yY1psgaKGiGN7xPAPrJTzY+1dmIUjVF4tTiU3h5u
+ DcL6BbQIci9pJyPyndXpM08aWvyv5E5PMKgz565kMNdTuMmUEwiza/8OsyWFiweljm
+ 8q1zM9/lx2gSv2a0pUFO2nyCnYPrs5HObZqA/m/d0kY0G3OC6ywoW9VY1uS1jD9urn
+ hF6/BNBxYoDkK2hR6mq3q3q73r3AErWKOfZGbhyW2bV9bVSlUX9GXhe0UqnS4mQ/1k
+ 7K84xt2m3paUw==
 X-KAS-Sym: v3:f51bdf72230551df:E60HSyKhvB/hjcOqjRN2FvcietonHg90tfBpdvJcFX1mV
  R+j6vuZST8LDBP8bI0YRByE7nnM8zo+J+Ss4/QfhH2rb1nZfmO3VL3WnTn4nRbVwBJk3fqEiiBR
  BcIUKL3D+tUbUY93P8XEXOPODFFTmbLRGZyG36MuC0yO1SCN7BpjWHnbwmJ351icj6h05v9k2IN
  Bt/GPH999d0pB27dQV9xkwjqVNcmstoO0TQaQ2Cjw4/UgevRPy7drDGL0hLAagZjTYF6H8SZSRj
  XAHROvBIIhQEG70eTpyXHeSoGFZnWeYqBa4vq9sbHMsU9OvNLLKcoUiiZ7ymf97ke0uUad1g==:
- kWB/rw53abRiUBMhoJ4zgOVm0qrGSqwxK1S1aGSlJCRl5XMgjtXUxhLaEmGIf1ROyKxtCy6ceAQ
- HMt/3HydesPprxfmyPZH5umN88DlwVT60UfFWiiNzbGGBwmI1QacynDTthhKzRz1wJ6tLtSJura
- DVGyhHGRZTN9dM9NqtWGHzBzMhsL2GlxhmOiTc6WlFe9FE6YgSYh0n11OLRVvAJxeWtYbwL8te7
- HRcMr8patP1dPRmtkg4iNhmVnKz90rDBzHPEc197Mb/24Zf6uPVJHUTTDNMeBEzwxsGpjW9/96a
- W9HTrjhWwbRr8BEBc4wQ7RRaYgWGyO+miAjpBef8NcCiF9Y+TYDWFhSuuIMRFkWDasn9OMGdrkr
- s22B8xNjbOQm+o+We7GCROMvqt0/ktG0iAlWEj9HN3s7mu3BtjRyAx3tsLp89KG1knnUjm5oECJ
- Bgk9BSvyt6BRLN8clgL9tNbVZtYu4gYQOGOP/KbuHzXAzZ0rXVzqhTs1YghwlC3/ubx7bHJ8z34
- kJ112A/VzoN9OXqrLusdplZo2Y2YNTsTXr875+Pe+tucU9RvehqpyPWFyndrWe6RwuFgS0ECN3Y
- EzG7HzQg3uiB0yzNqjzh52O/XPKwwofBm9AOgMqpn/eu5j8s6GFAez0m8PakL/p1/3U9j7oue9D
- pWhIDr4x74Kvx2Jh3PNYyxAtVahivpx1+pTYWdL0+76G3DGj/oUK4Ye/qxWDr
+ 1w7sw/NvQ4vQ3tE3pMKC5/gvBMlzEiwQAOmuJnloFdU5lwaqKgCP6Kh7NHTd0UvMTaMb2+8Y/vU
+ Ozb9+25Y1A1iwdzawM9X3L3ZHf35F58Bo5dyiE6LJBgyteR75uWVqBzcixgcrkUCPIsUzjWWFLs
+ LhaPDS+T4flIeZh401nv9GC66YAZ7zwYxWuDY0g/38G0RRK2MR2cHQ6anWSgoNs8ki4YUzZeJEQ
+ DGpNvlZ0h/FjIuz9DPGfc1vcJRg1iVDSKnv2JzM/yqrke3V8wCNZiyhC18hNkzP2NZT/o4lRJfh
+ pmqCiIWZBdJ2Fmy4mVY8dRZxanRS2FYAYCYpWN78Wr4gl1c3KEtHmDv4LOdVAuS8B4dwfH6B8hz
+ H4jG55uIe/qA4RdkAKyfg+0RFjAm05ozdreVD7GgfaZC16aboPlz9p4tJY/ZnS10PtOmCXbP5ri
+ NccZElnfN9QNRpSA+UDPF0pAs61tJuACKl/Hsg3NSHrWC+gapbySxPzP6TZUyBPp6h16bK8t7kr
+ ZDbL6Mywlcj+1JgdsADium+ub035+1bpGX2s17bNUyjrI9CqBo029XuezkEDPfod43gCZFzpcWC
+ lewEgIaPrLCCzSZoZEQvliZ/77yYFrBGezMm/yocnUOZ+LHinRx1Pz864Y6Tx/MaqV8LY/RfMzI
+ MltaoYkhWApNMOntts9Yi
 Received: from fli4l.lan.fli4l (p5b3a0584.dip0.t-ipconnect.de [91.58.5.132])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 17584A4C102F;
- Sun, 27 Sep 2026 12:43:39 +0200 (CEST)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 4FC4BA4C4801;
+ Sun, 27 Sep 2026 12:43:40 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:52850)
  by fli4l.lan.fli4l with esmtp (Exim 4.100.1)
- (envelope-from <bernd@kuhls.net>) id 1xAmLa-0000000007a-049d;
- Sun, 27 Sep 2026 10:43:06 +0000
+ (envelope-from <bernd@kuhls.net>) id 1xAmLf-0000000007a-2inw;
+ Sun, 27 Sep 2026 10:43:12 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sun, 27 Sep 2026 12:42:03 +0200
-Message-ID: <20260927104301.1801638-26-bernd@kuhls.net>
+Date: Sun, 27 Sep 2026 12:42:36 +0200
+Message-ID: <20260927104301.1801638-59-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260927104301.1801638-1-bernd@kuhls.net>
 References: <20260927104301.1801638-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: +
-Subject: [Buildroot] [PATCH v6 25/82] package/libp11: bump version to 0.4.20
+X-Spamd-Bar: -
+Subject: [Buildroot] [PATCH v6 58/82] package/netsnmp: Fix build with
+ OpenSSL 4.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -184,38 +185,117 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/OpenSC/libp11/blob/libp11-0.4.20/NEWS
-
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/libp11/libp11.hash | 4 ++--
- package/libp11/libp11.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ .../0002-libsnmp-Fix-OpenSSL-4-build.patch    | 99 +++++++++++++++++++
+ 1 file changed, 99 insertions(+)
+ create mode 100644 package/netsnmp/0002-libsnmp-Fix-OpenSSL-4-build.patch
 
-diff --git a/package/libp11/libp11.hash b/package/libp11/libp11.hash
-index 8a31a6f39e..10ab7388ad 100644
---- a/package/libp11/libp11.hash
-+++ b/package/libp11/libp11.hash
-@@ -1,4 +1,4 @@
--# From https://github.com/OpenSC/libp11/releases/tag/libp11-0.4.18
--sha256  9292de67ca73aba1deacf577c9086b595765f36ef47712cfeb49fa31f6e772fb  libp11-0.4.18.tar.gz
-+# From https://github.com/OpenSC/libp11/releases/tag/libp11-0.4.20
-+sha256  a125e0310ff10c189fc1b32a9652101486ea94a6b07c677a30e90e3638d2db48  libp11-0.4.20.tar.gz
- # Locally computed:
- sha256  d80c9d084ebfb50ea1ed91bfbc2410d6ce542097a32c43b00781b83adcb8c77f  COPYING
-diff --git a/package/libp11/libp11.mk b/package/libp11/libp11.mk
-index 51a44f5b3d..38cc1c2e6d 100644
---- a/package/libp11/libp11.mk
-+++ b/package/libp11/libp11.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBP11_VERSION = 0.4.18
-+LIBP11_VERSION = 0.4.20
- LIBP11_SITE = https://github.com/OpenSC/libp11/releases/download/libp11-$(LIBP11_VERSION)
- LIBP11_DEPENDENCIES = openssl host-pkgconf
- LIBP11_INSTALL_STAGING = YES
+diff --git a/package/netsnmp/0002-libsnmp-Fix-OpenSSL-4-build.patch b/package/netsnmp/0002-libsnmp-Fix-OpenSSL-4-build.patch
+new file mode 100644
+index 0000000000..e92dffff02
+--- /dev/null
++++ b/package/netsnmp/0002-libsnmp-Fix-OpenSSL-4-build.patch
+@@ -0,0 +1,99 @@
++From 1c70efc4334629ba278ea75a071d4dbabc198df8 Mon Sep 17 00:00:00 2001
++From: Ravi Kant Sharma <ravi.kant.sharma@canonical.com>
++Date: Fri, 12 Jun 2026 13:52:20 +0200
++Subject: [PATCH] libsnmp: Fix OpenSSL 4 build
++
++[ bvanassche: edited patch description and fixed OS/X build ]
++Fixes: https://github.com/net-snmp/net-snmp/pull/1101
++
++Upstream: https://github.com/net-snmp/net-snmp/commit/66736ece08dc2b4050acaf234e6959d21c89cb02
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ snmplib/snmp_openssl.c | 39 ++++++++++++++++++++++-----------------
++ 1 file changed, 22 insertions(+), 17 deletions(-)
++
++diff --git a/snmplib/snmp_openssl.c b/snmplib/snmp_openssl.c
++index 4471a7a9d3..0bd1a65882 100644
++--- a/snmplib/snmp_openssl.c
+++++ b/snmplib/snmp_openssl.c
++@@ -234,6 +234,7 @@ void
++ netsnmp_openssl_cert_dump_names(X509 *ocert)
++ {
++     int              i, onid;
+++    int              oname_value_type;
++     X509_NAME_ENTRY *oname_entry;
++     ASN1_STRING     *oname_value;
++     X509_NAME       *osubj_name;
++@@ -252,8 +253,9 @@ netsnmp_openssl_cert_dump_names(X509 *ocert)
++         oname_entry = X509_NAME_get_entry(osubj_name, i);
++         netsnmp_assert(NULL != oname_entry);
++         oname_value = X509_NAME_ENTRY_get_data(oname_entry);
+++        oname_value_type = ASN1_STRING_type(oname_value);
++ 
++-        if (oname_value->type != V_ASN1_PRINTABLESTRING)
+++        if (oname_value_type != V_ASN1_PRINTABLESTRING)
++             continue;
++ 
++         /** get NID */
++@@ -268,7 +270,7 @@ netsnmp_openssl_cert_dump_names(X509 *ocert)
++ 
++         DEBUGMSGT(("9:cert:dump:names",
++                    "[%02d] NID type %d, ASN type %d\n", i, onid,
++-                   oname_value->type));
+++                   oname_value_type));
++         DEBUGMSGT(("9:cert:dump:names", "%s/%s: '%s'\n", prefix_long,
++                    prefix_short, ASN1_STRING_get0_data(oname_value)));
++     }
++@@ -433,30 +435,33 @@ _extract_oname(const GENERAL_NAME *oname)
++                 rtn = strdup(buf);
++             break;
++ 
++-        case GEN_IPADD:
++-            if (oname->d.iPAddress->length == 4) {
++-                sprintf(ipbuf, "%d.%d.%d.%d", oname->d.iPAddress->data[0],
++-                        oname->d.iPAddress->data[1],
++-                        oname->d.iPAddress->data[2],
++-                        oname->d.iPAddress->data[3]);
+++        case GEN_IPADD: {
+++            const int iplen = ASN1_STRING_length(oname->d.iPAddress);
+++            const unsigned char *const ipdata =
+++                ASN1_STRING_get0_data(oname->d.iPAddress);
+++
+++            if (iplen == 4) {
+++                sprintf(ipbuf, "%d.%d.%d.%d", ipdata[0],
+++                        ipdata[1],
+++                        ipdata[2],
+++                        ipdata[3]);
++                 rtn = strdup(ipbuf);
++-            }
++-            else if ((oname->d.iPAddress->length == 16) ||
++-                     (oname->d.iPAddress->length == 20)) {
+++            } else if (iplen == 16 || iplen == 20) {
++                 char *pos = ipbuf;
++                 int   j;
++-                for(j = 0; j < oname->d.iPAddress->length; ++j) {
++-                    *pos++ = VAL2HEX(oname->d.iPAddress->data[j]);
+++
+++                for (j = 0; j < iplen; ++j) {
+++                    *pos++ = VAL2HEX(ipdata[j]);
++                     *pos++ = ':';
++                 }
++                 *pos = '\0';
++                 rtn = strdup(ipbuf);
++-            }
++-            else
+++            } else {
++                 NETSNMP_LOGONCE((LOG_WARNING, "unexpected ip addr length %d\n",
++-                       oname->d.iPAddress->length));
++-
+++                       iplen));
+++            }
++             break;
+++        }
++         default:
++             DEBUGMSGT(("openssl:cert:san", "unknown/unsupported type %d\n",
++                        oname->type));
++-- 
++2.47.3
++
 -- 
 2.47.3
 
