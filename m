@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8365C98324
-	for <buildroot@archiver.kernel.org>; Sun, 27 Sep 2026 10:59:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05B4BC9830E
+	for <buildroot@archiver.kernel.org>; Sun, 27 Sep 2026 10:59:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 79B7040D81;
-	Sun, 27 Sep 2026 10:59:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C778F60698;
+	Sun, 27 Sep 2026 10:59:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aEG6CrerPCj7; Sun, 27 Sep 2026 10:59:02 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 9645A40DA7
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790506742;
-	b=nM/5QaCGfsBsYJBT+CRo1j4Bw9WgQXAslJoiiNBQfRHcKnwHqEfb1CCXI7O57XJo7Rhp
-	 wl5P4cUMivg5wM4HxF9ngRx/ZGK3mUsh2A1GyrF8SuLBBjsimMRBcpaaDJBXscNNqb9lX
-	 Fo2ttTRtKbPVRqVnJgby4Axbx1lQwwkeUECigFXWGHo+yLMS8kMOMSQ1HLwxZIwWY18kc
-	 lz4hDUOWDuf24mAn43OWk+oGQc4T1eUZrY0tCV2EVCGlZ5l16Nk/ZztJc8zCwoYCtmVkX
-	 zJF6+MniyeegGuTSMGNmaI5tr+X9jvavvb/4ofuAzQY/sVx2nQoePkTvJtwVuG7RTCw==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xIHAv5KqX6Ze; Sun, 27 Sep 2026 10:59:15 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 2561B606DA
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790506755;
+	b=NjXrJHtvTxILgQsRAV7UFeo2bwfQM1VI2wO2IJPJ7SjbDEgIgzhEj6nQoG+uzNOyjQth
+	 Ojsrdn3uwMJsHrBgP+3DAMTt+sJ6Z/wHA7y1OK6WAhBLVZiNPp6PZJ6obK+D4vYvxt8IB
+	 IBRWO1Kqj1Ar88i7d76eO28pjDQhojxiCNHdXk/1D8gNZc+0QS2Zse+5/bJsVra3lQVT6
+	 +WjQI5fFuplFt6VPg8raqVs/SQ5MdNJwuPeBch+2+ATUz5hXu56Tv9LSOuQp9Z9wv1K3I
+	 VBMyt5woWbLAlYAJSW9m8nSqnL0rrmctufcuB3TM/OBWp4kBMcvg5dakDLBBcFJxqFg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1790506742;
+	c=relaxed/relaxed; t=1790506755;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
@@ -31,63 +31,63 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:Cc:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=tH+EW8kcNsdCyYVkZMejNz4pjeMcTH2xewUmSBd8sAI=;
-	b=GBr8/xb2OMTLhWgP7oN8k6dQhvkcjNriuHAOlqQDXthSQDUKZX9uf9nA7H9q4godtwTt
-	 o0rP05ZPQ4LypfHshnZGKhXjj862wFETTPMHUcE4MPHxMoL81Hu6VykOkurT5QCJ8MsI9
-	 PL/XjD1wqrhKl5SKTOCOtayO3AzfjrU8V6ZCklHt6Xtq7RHqpMXbxCRN1KmclckkWduZY
-	 AvDQydhd1+J9p8j6g2k/mb8TQ6kRfd+UPVl/lxQo/p3m3jP903JRZaiyv+YQBrNc1beoH
-	 Lx2IJu7h/qRA6DHzNywa4R5+tHVY39ghFjVZ5XOIwWrkJOAoCkxdevstgvwASViLSuQ==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	bh=Ucz7e82WxgousALhhDGR1EfTybQC8SX3d/SPLOkG3qs=;
+	b=NRkOTkQHiW7FobUBHsusNCgn/hbnVxB8mN2v8rnKLe7XOgQEdNrHD0lAl4JwK72Z0fs+
+	 fS1EiKzeVO9dbLIo7oXqQ5wZV4iRz8vjafnqrBnQJUNiWZmXSMmrVo/gnammJhv3YGHqZ
+	 fZdZ2geIh5EBy0LJCf4O0Ue4cQLsO0/FLvoA4H4sZXkFerRLedV4TXDYVdLFAaaitB2pE
+	 x39rtP2+QWrTAjswncv34Qxd/SEm4xR2sJFQFuY2J1TnY1UTfY5Z9BjCCePH6P2UnFVcm
+	 I8ci8+ePLNPGVNCPnY3EG0XBG/W8slZrMPvKPiT9p4MCoBnTAT9jNGk/93fOJoEbaJw==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1790506742;
-	bh=tH+EW8kcNsdCyYVkZMejNz4pjeMcTH2xewUmSBd8sAI=;
+	s=default; t=1790506755;
+	bh=Ucz7e82WxgousALhhDGR1EfTybQC8SX3d/SPLOkG3qs=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=rr9oNBYUkIph1aKfepfo/keF9nBYj7yM0c8P99fAobQ9joIFpH05FCZE53xKJqTPz
-	 l20nMf5RuXRk+/du2DCoMimAdlC3le/a63nPh8nrwTFjfSKD7GjzsHKTt1aIRmcQFi
-	 OkPE4PVkZ9+3BGIgAl/dscqwjjLGxwFudGzUoy7ex0TrjKEYepTrJzXwZw8lXKwPPj
-	 zHdufcv8uMKWVIGc0ua+22cB4guBfIKYrMTPaQscN6gJoXV0ZWf4PMJzGcCwrr7DGR
-	 Lrx2h3NIVWeoBiX2jmlMyySc17SU7Txb6BiAtaw6H6PXfEwB41MpawYRjWcEd0F57m
-	 DD0Q65blazG9Q==
+	b=mfGbQO96RGFaCNscSEZ4G+MdJoU16OJaZXhRwAtj+sZXchekA6ua24hP1HgshG6Gm
+	 X9MVDMHmVOcyCwoX//5BFRuTpFaID3jkv+1LGrUDVCXWNJZly2Tu4s2wOxnQOpugiP
+	 cjO8PNILBAsd2subEe4/ORGNc/55UaWfYB5cV6hbpphggL42264Vi6cNuih4iulK9r
+	 PpO3m2kkJ5TTGYT6Rbfn5iUV25rnx4aDf3imABZfpmnG3HCbq1zDMdltzv+yrx4Hbx
+	 K100qEAbti8c8pzx1zJKf4FEvDkgaR0HpbR0bG6bIKvhVUeIPzm2j0sjjdhUYoU7Dt
+	 BDFRWmWWR9mzg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9645A40DA7;
-	Sun, 27 Sep 2026 10:59:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2561B606DA;
+	Sun, 27 Sep 2026 10:59:15 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 55707335
- for <buildroot@buildroot.org>; Sun, 27 Sep 2026 10:59:00 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id CCBF6335
+ for <buildroot@buildroot.org>; Sun, 27 Sep 2026 10:59:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3B64840068
- for <buildroot@buildroot.org>; Sun, 27 Sep 2026 10:59:00 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B299240068
+ for <buildroot@buildroot.org>; Sun, 27 Sep 2026 10:59:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FLp18w4Ip_GY for <buildroot@buildroot.org>;
- Sun, 27 Sep 2026 10:58:59 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org 4720A40059
+ id 4N0xGuH0PUQz for <buildroot@buildroot.org>;
+ Sun, 27 Sep 2026 10:59:12 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org DFCD940059
 Authentication-Results: smtp2.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790506739;
- b=DRjyH0ZcnKgDYYwGb915+09l5HtUtDwzBtiTurp8Di7reRSQVD8ZY+Y/4pMSF6jeL5Yt
- MImfdX/9/Q5D9o/vkjGyk28Cn/doVrEeyOwZodrtMnovbq4g32irH3jfzEhApZZKLLZJ8
- ctzy99M5nCTQUTuerzXB2wgmMurJ78Q+cPJIqhrSJzgRK7Jp/Jicu2Uc5jhG44z+O2WQQ
- UE4fRzwAlJ9RrqgnPtjG7W03O6GpFZzpoKvXImQlIEMdadikm0GiCX16zXZK6tenIZ9Na
- UdhwMruhTV1il7gqJZ7CEMIAOY1W2GUDcJIxv5W3FRfwZYIPiCaXOHZI8PuJPRw+oLw==
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790506752;
+ b=Y4E/+qZgwl5Vt1XR0Zd1pbdp/9v/sLvn7SPRHUTwS/5hhNiJmUbt8trK18kALmwqylCN
+ jy5XrimZ1pynswBkIyRukdpMaiHba5EHrVnJD+lctf98ALtTJ/t9rytur55pj4NE1HotW
+ sqFwTNmhdBxBr3Gja9WgQ1IDECVG5vDz5h3c4QkPq++b5NqDt192pACvFsJdtbFLHgWlJ
+ pc6PFOU4A12cfEJzeQAEpxjwaUE4pvIbMW+sYEmD8YFmem5/UwYBUtushrhtxCsvVSOrk
+ E3gr8aLj8pDpFnsFwNugwMNLbbow76XWRokfkEHQhr4mPbiZHIRpA6vaT1KPsJnqmuw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1790506739;
+ c=relaxed/relaxed; t=1790506752;
  h=Received-SPF:DKIM-Signature:X-KAS-Sym:Received:Received:From:To:Cc:
  Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding:X-Spam-Score:X-Spamd-Bar;
- bh=+4EdXqD6TRYywnK0De2ieQHSmJx+VQOLVyo01PSIuGY=;
- b=qeADIUv35TYqJz9ClPuM/V4zZ6JwMm4DY2d92pSwo76vRi9Hanz6nT6WS59ku6KatS+x
- 7okf0EGCMaE+2VZnIJet0qEjDId35HSVMRnl8F+B7bqUV7pgV93RO10ElaMHaV3BnAJu9
- 7upqQmCR7jDB5o6R0u6syGpA+bYo9jN/ZBjTXVqj+fjIQrRu0HTAipEBQqs0590AF+Cft
- NVJn8qiUPUkkrkQ/2kHz70Q1HeXGi7k+Q3ekPgOWsw4iZyWqTbDSy0kjGVjOvOzNZyI5a
- EazPZW7dGL0lagVOkXUtmEVUs5qAwp60WKLEFmMQiOqIHUqocpDpiJvmysX7XfSItKw==
+ bh=UUQhSERNaqV+RnDSJMFt/3+MnfHu5avWT+1tn5xaakQ=;
+ b=JyE3LKKjqdyKRfVFFujE5CWUdkGpmyHSM/Bwoq/eonOU4iCp3wLJUaveY/l/0XIIPjIh
+ CTlntglCdRPQCzj5QY/SWdMK4iKpVbmvQNpkj0Ssg3buC72RFN5xunQkilax8B1DHCyry
+ wwx5SFodAljBLKMYaZOK+fAXoU1zKH8+pfFv7hZ+cRejSqDS8wqcZTlCqFL/u7SWDOvKL
+ oLa+tvtFlJYk8ishBkJh7CtEcAGbll6zUTIPD6ogv2c06AAwlHUOD8f0YyjJd61VcxEHy
+ d29E1JGBW3iLvDHqp4e5fMuMhe8Tmo5MKL+ww7tsn56+qeXFizubowSiCYVzAqeHg2g==
 ARC-Authentication-Results: i=1; smtp2.osuosl.org;
  dmarc=pass header.from=kuhls.net; 
  dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=tet1Xrhs; 
+ header.s=kas202605290044 header.b=gtU3E3ZW; 
  arc=none smtp.remote-ip=85.13.140.57
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
@@ -95,53 +95,53 @@ Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=kuhls.net
 Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202605290044 header.b=tet1Xrhs
+ header.a=rsa-sha256 header.s=kas202605290044 header.b=gtU3E3ZW
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4720A40059
- for <buildroot@buildroot.org>; Sun, 27 Sep 2026 10:58:57 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id DFCD940059
+ for <buildroot@buildroot.org>; Sun, 27 Sep 2026 10:59:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
- s=kas202605290044; t=1790505868;
- bh=+4EdXqD6TRYywnK0De2ieQHSmJx+VQOLVyo01PSIuGY=;
+ s=kas202605290044; t=1790505869;
+ bh=UUQhSERNaqV+RnDSJMFt/3+MnfHu5avWT+1tn5xaakQ=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=tet1XrhsTua4r1LPG0PsIzTOjmu1RprHbNXGI3GPPKl5PZ235n33PX/o8K7VEiajl
- tlR8j7/kZPuqE0BVI36KqmZgs/rE/WPw07HYoRohnI0+6XDsoD5SZ90R4nq24PkSke
- M5COkg8/SjfOA+ovnbPqm2mbtfkO8Z1C8ToxbqZt7spd+/cvVH/4uKoBDWK1yr0bDs
- 7zDOMbw0RYDVk+9FuNa1N8LFI4eklOPZFzjK/+HKaTJeSz/14S84kRdjBvlStQIlCO
- l9rf+lDvKqclJDORt5XMB2yl9LxzGCU3CZitkPXxnbXGjrgesFwlfU25nH3e2Vf5d+
- oAoKiFS3ZArdA==
+ b=gtU3E3ZWDzNcdN2u3Usr/It4wmgiPr+GJ/kfILWK3/O7ZXQhgRxu/0gdczQnAwGAB
+ LYIYXh4pnJGa78mckIr4NUrBe5Qh/1vZKZgjGvtBQ2Eold7jgM7egb0KI4oEyTv3gD
+ UF4znV886TzUuKAfTqEd/QFaUV4xI6XF2ADbMkYeaRxiqmEFkVDJ3OnUmZCwk3Xgzm
+ sCF6kVuUsnQ/xuBzIhPoHR0n1UmEJ28rMN03CxLufs5cVwKh8bHhDr7DMZNAwDPSAk
+ 1XZXfBQJ7bHUemqOxlQ3xhpTaNJ2Wld7azKl7csQBISx3VCXUzKcl7uzdUd259wUev
+ svsn2Qp04oYOg==
 X-KAS-Sym: v3:f51bdf72230551df:E60HSyKhvB/hjcOqjRN2FvcietonHg90tfBpdvJcFX1mV
  R+j6vuZST8LDBP8bI0YRByE7nnM8zo+J+Ss4/QfhH2rb1nZfmO3VL3WnTn4nRbVwBJk3fqEiiBR
  BcIUKL3D+tUbUY93P8XEXOPODFFTmbLRGZyG36MuC0yO1SCN7BpjWHnbwmJ351icj6h05v9k2IN
  Bt/GPH999d0pB27dQV9xkwjqVNcmstoO0TQaQ2Cjw4/UgevRPy7drDGL0hLAagZjTYF6H8SZSRj
  XAHROvBIIhQEG70eTpyXHeSoGFZnWeYqBa4vq9sbHMsU9OvNLLKcoUiiZ7ymf97ke0uUad1g==:
- bM8za5x/4G7xMmJ1Uw6jivPQV8RA4Ur0Z8QGKXfWZ9RQiQm+jeq+J8jqCesxY6xWsE2tJeCTi2Q
- 4jroViVasIsAJ2WaHpGZ+Lwp6KduhQR567n42RzJMY7Rs06Kf4Ga+MF0sa/hJcvWTksbjJweEr/
- 6BByYuMf38czuUWZpqrxHYGT1SVY/GycUGWRuxk1z3aPv+uoEglXlcRY1S5uCRum+e8NSEcB/hn
- X2YX49jMdEP6p3JqzqwtR4Fd8elKqcgsz7+OzL9kgRnGQGImSwqg4mIDMFv+GQPHgbIdPFyeqAr
- uLbsGT+T20YsNhsZKL9VROjh0Bz0HL6C96sTVlbjHxV4JLBoQ10R/h173gVrfgzxQMYrEQkDc8q
- qRqvBRtPelz/xf63BSD/HS4kMkRaA/dDU45vyuOXF0H09Y9K6/2MT/eEZbnG+IqYFnHdCNYhJnt
- DEq9iLVyCkcBLAEHokw9QSKemZKoqB0NnAv5uXfJF91r1NP5ujYXsE2WEupXd1l4NuZRGfhMPju
- SWW+9a3G6ACcEbn5jICyO0bUzTkhT4xlFAWirACLLgDHg3UY/dix6RUp+EbPRkGRM3yEMyPadTE
- y9ygYFnRDNro+H84S1FXnocinSv9Mc5VtfokR2vE2qr7y1M0HV32MJd+55iLBPE0wPh+pl11/TC
- vi0I23dfcZdSF2xe1vBZk
+ /CYoGS84qm2tybBwkqSgGaf2Oi+UFdrBQYa6CHieSaAMklK71zWtuSloa4ydNjwJqVgkndPBAVr
+ UQnKKGGz7zEar2G6hVYER6RpnIjO0CZMFqw/xqeZclafi8heC3EjA7Nz9v0oxTPD2cicTtfLctk
+ ecpduolxF5//ca1Dn2ZsEjI4MCyZcpM0RGPyCegOBFIrT/kdHDw2lJDUHxlpCzebLcdbaT6jCQG
+ HWFTuBhgZ4Vqu47PWwn+R2RhychXZ/DR0oOIpF/ShGi8nZ/YbBNHQKgDW7sn4M2TIcKRlpf2B58
+ poD1e3bE3GZb4oYRfdI97KMiT5h5jK8sEVqugmwPul5aATK4W5FHZVuQAIXWGe8PWlUcwJgro44
+ Brx4VuYPSVPYM2GzwGe8w/C6n5xV1gjEg9Tiij5S8ZAiiqolu1supbK8Jw7g0QDbTbsLM0PH4lp
+ cULZYiPrh7r31d1UzY/b/m0aGe7RBfVYV6gs66DfHpoOeEFYZHyOy4ayyQw3Eaveqj5NgdrOXCH
+ L/Xgo3eWPPySj2OEy8lwZI6JO8HN4ppXLOtuLSpnVxYoS9ypPB1mhSgPEuujXyHwY1RNo3YD5JW
+ Xr+/iOcquo8vm+IFWNMGRRZy63vVEnRdFxfYnJDwZO15xbB8QCekuopIleJorOyBHgOtTUIevTd
+ IeJDhqn0BWlkimGW9kZdGSW7B00U7R6gY1h/cRQPuY7351rSSXt0wNn9uq2J3heg=
 Received: from fli4l.lan.fli4l (p5b3a0584.dip0.t-ipconnect.de [91.58.5.132])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 91B3FA4C4F72;
- Sun, 27 Sep 2026 12:44:28 +0200 (CEST)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id B7738A4C5091;
+ Sun, 27 Sep 2026 12:44:29 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:52850)
  by fli4l.lan.fli4l with esmtp (Exim 4.100.1)
- (envelope-from <bernd@kuhls.net>) id 1xAmLd-0000000007a-3nyH;
+ (envelope-from <bernd@kuhls.net>) id 1xAmLe-0000000007a-0Uef;
  Sun, 27 Sep 2026 10:43:10 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sun, 27 Sep 2026 12:42:27 +0200
-Message-ID: <20260927104301.1801638-50-bernd@kuhls.net>
+Date: Sun, 27 Sep 2026 12:42:29 +0200
+Message-ID: <20260927104301.1801638-52-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260927104301.1801638-1-bernd@kuhls.net>
 References: <20260927104301.1801638-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Spamd-Bar: -
-Subject: [Buildroot] [PATCH v6 49/82] package/lftp: Add support for OpenSSL
- 4.0.0
+Subject: [Buildroot] [PATCH v6 51/82] package/libkrb5: Add support for
+ OpenSSL 4.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -187,72 +187,603 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- .../0002-allow-build-with-OpenSSL-4.x.patch   | 56 +++++++++++++++++++
- 1 file changed, 56 insertions(+)
- create mode 100644 package/lftp/0002-allow-build-with-OpenSSL-4.x.patch
+ ...eck_host-to-verify-KKDCP-server-cert.patch | 252 ++++++++++++++
+ ...Improve-future-OpenSSL-compatibility.patch | 327 ++++++++++++++++++
+ 2 files changed, 579 insertions(+)
+ create mode 100644 package/libkrb5/0002-Use-X509_check_host-to-verify-KKDCP-server-cert.patch
+ create mode 100644 package/libkrb5/0003-Improve-future-OpenSSL-compatibility.patch
 
-diff --git a/package/lftp/0002-allow-build-with-OpenSSL-4.x.patch b/package/lftp/0002-allow-build-with-OpenSSL-4.x.patch
+diff --git a/package/libkrb5/0002-Use-X509_check_host-to-verify-KKDCP-server-cert.patch b/package/libkrb5/0002-Use-X509_check_host-to-verify-KKDCP-server-cert.patch
 new file mode 100644
-index 0000000000..258d08fb2d
+index 0000000000..d1411cf0d5
 --- /dev/null
-+++ b/package/lftp/0002-allow-build-with-OpenSSL-4.x.patch
-@@ -0,0 +1,56 @@
-+From e5d53bcb31b1f3792c6ab321e20d566b9a4ff0a5 Mon Sep 17 00:00:00 2001
-+From: Rudi Heitbaum <rudi@heitbaum.com>
-+Date: Sat, 21 Mar 2026 03:56:46 +0000
-+Subject: [PATCH] allow build with OpenSSL 4.x
++++ b/package/libkrb5/0002-Use-X509_check_host-to-verify-KKDCP-server-cert.patch
+@@ -0,0 +1,252 @@
++From f5bbfa4821cf590a4748f96d0e016bc0485e95c4 Mon Sep 17 00:00:00 2001
++From: Greg Hudson <ghudson@mit.edu>
++Date: Wed, 25 Feb 2026 19:05:40 -0500
++Subject: [PATCH] Use X509_check_host() to verify KKDCP server cert
 +
-+Upstream: https://github.com/lavv17/lftp/commit/e5d53bcb31b1f3792c6ab321e20d566b9a4ff0a5
++In the k5tls module, rely on X509_check_host() and
++X509_check_ip_asc(), which were added in OpenSSL 1.0.2, instead of
++doing our own verification.
++
++There is one notable difference in behavior: X509_check_host() admits
++wildcards with a prefix or suffix (but not both) within the label,
++like "kdc*.mydomain.com".  The old code only allows a wildcard to
++match a complete label.
++
++ticket: 9198 (new)
++
++Upstream: https://github.com/krb5/krb5/commit/f5bbfa4821cf590a4748f96d0e016bc0485e95c4
 +
 +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 +---
-+ src/lftp_ssl.cc | 12 ++++++------
-+ 1 file changed, 6 insertions(+), 6 deletions(-)
++ src/plugins/tls/k5tls/openssl.c | 211 +-------------------------------
++ 1 file changed, 6 insertions(+), 205 deletions(-)
 +
-+diff --git a/src/lftp_ssl.cc b/src/lftp_ssl.cc
-+index f53edf24..49328f74 100644
-+--- a/src/lftp_ssl.cc
-++++ b/src/lftp_ssl.cc
-+@@ -1022,8 +1022,8 @@ const char *lftp_ssl_openssl::strerror()
-+ int lftp_ssl_openssl::verify_crl(X509_STORE_CTX *ctx)
++diff --git a/src/plugins/tls/k5tls/openssl.c b/src/plugins/tls/k5tls/openssl.c
++index aab67c01cbc..42d72dc9ec2 100644
++--- a/src/plugins/tls/k5tls/openssl.c
+++++ b/src/plugins/tls/k5tls/openssl.c
++@@ -71,218 +71,19 @@ flush_errors(krb5_context context)
++     }
++ }
++ 
++-/* Return the passed-in character, lower-cased if it's an ASCII character. */
++-static inline char
++-ascii_tolower(char p)
++-{
++-    if (KRB5_UPPER(p))
++-        return p + ('a' - 'A');
++-    return p;
++-}
++-
++-/*
++- * Check a single label.  If allow_wildcard is true, and the presented name
++- * includes a wildcard, return true and note that we matched a wildcard.
++- * Otherwise, for both the presented and expected values, do a case-insensitive
++- * comparison of ASCII characters, and a case-sensitive comparison of
++- * everything else.
++- */
++-static krb5_boolean
++-label_match(const char *presented, size_t plen, const char *expected,
++-            size_t elen, krb5_boolean allow_wildcard, krb5_boolean *wildcard)
++-{
++-    unsigned int i;
++-
++-    if (allow_wildcard && plen == 1 && presented[0] == '*') {
++-        *wildcard = TRUE;
++-        return TRUE;
++-    }
++-
++-    if (plen != elen)
++-        return FALSE;
++-
++-    for (i = 0; i < elen; i++) {
++-        if (ascii_tolower(presented[i]) != ascii_tolower(expected[i]))
++-            return FALSE;
++-    }
++-    return TRUE;
++-}
++-
++-/* Break up the two names and check them, label by label. */
++-static krb5_boolean
++-domain_match(const char *presented, size_t plen, const char *expected)
++-{
++-    const char *p, *q, *r, *s;
++-    int n_label;
++-    krb5_boolean used_wildcard = FALSE;
++-
++-    n_label = 0;
++-    p = presented;
++-    r = expected;
++-    while (p < presented + plen && *r != '\0') {
++-        q = memchr(p, '.', plen - (p - presented));
++-        if (q == NULL)
++-            q = presented + plen;
++-        s = r + strcspn(r, ".");
++-        if (!label_match(p, q - p, r, s - r, n_label == 0, &used_wildcard))
++-            return FALSE;
++-        p = q < presented + plen ? q + 1 : q;
++-        r = *s ? s + 1 : s;
++-        n_label++;
++-    }
++-    if (used_wildcard && n_label <= 2)
++-        return FALSE;
++-    if (p == presented + plen && *r == '\0')
++-        return TRUE;
++-    return FALSE;
++-}
++-
++-/* Fetch the list of subjectAltNames from a certificate. */
++-static GENERAL_NAMES *
++-get_cert_sans(X509 *x)
++-{
++-    int ext;
++-    X509_EXTENSION *san_ext;
++-
++-    ext = X509_get_ext_by_NID(x, NID_subject_alt_name, -1);
++-    if (ext < 0)
++-        return NULL;
++-    san_ext = X509_get_ext(x, ext);
++-    if (san_ext == NULL)
++-        return NULL;
++-    return X509V3_EXT_d2i(san_ext);
++-}
++-
++-/* Fetch a CN value from the subjct name field, returning its length, or -1 if
++- * there is no subject name or it contains no CN value. */
++-static int
++-get_cert_cn(X509 *x, char *buf, size_t bufsize)
++-{
++-    X509_NAME *name;
++-
++-    name = X509_get_subject_name(x);
++-    if (name == NULL)
++-        return -1;
++-    return X509_NAME_get_text_by_NID(name, NID_commonName, buf, bufsize);
++-}
++-
++-/* Return true if text matches any of the addresses we can recover from x. */
++-static krb5_boolean
++-check_cert_address(X509 *x, const char *text)
++-{
++-    char buf[1024];
++-    GENERAL_NAMES *sans;
++-    GENERAL_NAME *san = NULL;
++-    ASN1_OCTET_STRING *ip;
++-    krb5_boolean found_ip_san = FALSE, matched = FALSE;
++-    int n_sans, i;
++-    int name_length;
++-    struct in_addr sin;
++-    struct in6_addr sin6;
++-
++-    /* Parse the IP address into an octet string. */
++-    ip = ASN1_OCTET_STRING_new();
++-    if (ip == NULL)
++-        return FALSE;
++-    if (inet_pton(AF_INET, text, &sin)) {
++-        ASN1_OCTET_STRING_set(ip, (unsigned char *)&sin, sizeof(sin));
++-    } else if (inet_pton(AF_INET6, text, &sin6)) {
++-        ASN1_OCTET_STRING_set(ip, (unsigned char *)&sin6, sizeof(sin6));
++-    } else {
++-        ASN1_OCTET_STRING_free(ip);
++-        return FALSE;
++-    }
++-
++-    /* Check for matches in ipaddress subjectAltName values. */
++-    sans = get_cert_sans(x);
++-    if (sans != NULL) {
++-        n_sans = sk_GENERAL_NAME_num(sans);
++-        for (i = 0; i < n_sans; i++) {
++-            san = sk_GENERAL_NAME_value(sans, i);
++-            if (san->type != GEN_IPADD)
++-                continue;
++-            found_ip_san = TRUE;
++-            matched = (ASN1_OCTET_STRING_cmp(ip, san->d.iPAddress) == 0);
++-            if (matched)
++-                break;
++-        }
++-        sk_GENERAL_NAME_pop_free(sans, GENERAL_NAME_free);
++-    }
++-    ASN1_OCTET_STRING_free(ip);
++-
++-    if (found_ip_san)
++-        return matched;
++-
++-    /* Check for a match against the CN value in the peer's subject name. */
++-    name_length = get_cert_cn(x, buf, sizeof(buf));
++-    if (name_length >= 0) {
++-        /* Do a string compare to check if it's an acceptable value. */
++-        return strlen(text) == (size_t)name_length &&
++-               strncmp(text, buf, name_length) == 0;
++-    }
++-
++-    /* We didn't find a match. */
++-    return FALSE;
++-}
++-
++-/* Return true if expected matches any of the names we can recover from x. */
++-static krb5_boolean
++-check_cert_servername(X509 *x, const char *expected)
++-{
++-    char buf[1024];
++-    GENERAL_NAMES *sans;
++-    GENERAL_NAME *san = NULL;
++-    unsigned char *dnsname;
++-    krb5_boolean found_dns_san = FALSE, matched = FALSE;
++-    int name_length, n_sans, i;
++-
++-    /* Check for matches in dnsname subjectAltName values. */
++-    sans = get_cert_sans(x);
++-    if (sans != NULL) {
++-        n_sans = sk_GENERAL_NAME_num(sans);
++-        for (i = 0; i < n_sans; i++) {
++-            san = sk_GENERAL_NAME_value(sans, i);
++-            if (san->type != GEN_DNS)
++-                continue;
++-            found_dns_san = TRUE;
++-            dnsname = NULL;
++-            name_length = ASN1_STRING_to_UTF8(&dnsname, san->d.dNSName);
++-            if (dnsname == NULL)
++-                continue;
++-            matched = domain_match((char *)dnsname, name_length, expected);
++-            OPENSSL_free(dnsname);
++-            if (matched)
++-                break;
++-        }
++-        sk_GENERAL_NAME_pop_free(sans, GENERAL_NAME_free);
++-    }
++-
++-    if (matched)
++-        return TRUE;
++-    if (found_dns_san)
++-        return matched;
++-
++-    /* Check for a match against the CN value in the peer's subject name. */
++-    name_length = get_cert_cn(x, buf, sizeof(buf));
++-    if (name_length >= 0)
++-        return domain_match(buf, name_length, expected);
++-
++-    /* We didn't find a match. */
++-    return FALSE;
++-}
++-
++ static krb5_boolean
++ check_cert_name_or_ip(X509 *x, const char *expected_name)
 + {
-+     X509_OBJECT *obj=0;
-+-    X509_NAME *subject=0;
-+-    X509_NAME *issuer=0;
-++    const X509_NAME *subject=0;
-++    const X509_NAME *issuer=0;
-+     X509 *xs=0;
-+     X509_CRL *crl=0;
-+     X509_REVOKED *revoked=0;
-+@@ -1436,7 +1436,7 @@ void lftp_ssl_openssl::check_certificate()
-+     unsigned char *nulstr = (unsigned char *)"";
-+     unsigned char *peer_CN = nulstr;
++     struct in_addr in;
++     struct in6_addr in6;
+++    int r;
 + 
-+-    X509_NAME *name = X509_get_subject_name(server_cert) ;
-++    const X509_NAME *name = X509_get_subject_name(server_cert) ;
-+     if(name)
-+       while((j = X509_NAME_get_index_by_NID(name, NID_commonName, i))>=0)
-+         i=j;
-+@@ -1446,7 +1446,7 @@ void lftp_ssl_openssl::check_certificate()
-+        UTF8 etc. */
++     if (inet_pton(AF_INET, expected_name, &in) != 0 ||
++-        inet_pton(AF_INET6, expected_name, &in6) != 0) {
++-        return check_cert_address(x, expected_name);
++-    } else {
++-        return check_cert_servername(x, expected_name);
++-    }
+++        inet_pton(AF_INET6, expected_name, &in6) != 0)
+++        r = X509_check_ip_asc(x, expected_name, 0);
+++    else
+++        r = X509_check_host(x, expected_name, 0, 0, NULL);
+++    return r == 1;
++ }
 + 
-+     if(i>=0) {
-+-      ASN1_STRING *tmp = X509_NAME_ENTRY_get_data(X509_NAME_get_entry(name,i));
-++      const ASN1_STRING *tmp = X509_NAME_ENTRY_get_data(X509_NAME_get_entry(name,i));
++ static int
+diff --git a/package/libkrb5/0003-Improve-future-OpenSSL-compatibility.patch b/package/libkrb5/0003-Improve-future-OpenSSL-compatibility.patch
+new file mode 100644
+index 0000000000..6b68af89e9
+--- /dev/null
++++ b/package/libkrb5/0003-Improve-future-OpenSSL-compatibility.patch
+@@ -0,0 +1,327 @@
++From 5e4e8452328804948d042235bbf58ca457795857 Mon Sep 17 00:00:00 2001
++From: Bob Beck <beck@openssl.org>
++Date: Mon, 16 Feb 2026 15:15:55 -0700
++Subject: [PATCH] Improve future OpenSSL compatibility
++
++Avoid calling deprecated OpenSSL functions when compiling against
++versions of OpenSSL where they are deprecated.  Add
++-DOPENSSL_NO_DEPRECATED to the linux-clang-openssl CI build to help
++detect calls to deprecated functions in the future.
++
++Use const pointer variables to hold values retrieved by accessors
++which will return const pointers in OpenSSL 4.0.  Define macros to
++make certain functions accept these const pointers in versions of
++OpenSSL where they don't already do so.
++
++Use accessor functions instead of direct field access for ASN1_STRING
++values, as the type will become opaque in OpenSSL 4.0.
++
++The PKINIT code is written to assume that DHX support was not present
++until OpenSSL 1.1, but it was added in release 1.0.2, causing a
++compilation error against 1.0.2 from a double definition of
++EVP_PKEY_DHX.  Minimally fix the compilation error.  (The custom DHX
++marshalling code to support 1.0.x could be removed, as 1.0.2 is the
++minimum version after commit f5bbfa4821cf590a4748f96d0e016bc0485e95c4,
++but the plan is to remove 1.0.x compatibility shortly.)
++
++Contains work by Frederik Wedel-Heinen
++<frederik.wedel-heinen@dencrypt.dk> and Dimitri John Ledkov
++<dimitri.ledkov@surgut.co.uk>.
++
++[ghudson@mit.edu: combined numerous commits; added compatibility
++macros; rewrote commit message; fixed 1.0.2 compatibility issue]
++
++Upstream: https://github.com/krb5/krb5/commit/5e4e8452328804948d042235bbf58ca457795857
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ .github/workflows/build.yml                   | 10 ++--
++ .../preauth/pkinit/pkinit_crypto_openssl.c    | 54 ++++++++++++++-----
++ src/plugins/tls/k5tls/openssl.c               | 26 +++++++--
++ 3 files changed, 68 insertions(+), 22 deletions(-)
++
++diff --git a/.github/workflows/build.yml b/.github/workflows/build.yml
++index f12422d19a..97f1082c59 100644
++--- a/.github/workflows/build.yml
+++++ b/.github/workflows/build.yml
++@@ -16,17 +16,17 @@ jobs:
++                     - name: linux-clang
++                       os: ubuntu-latest
++                       compiler: clang
++-                      makevars: CPPFLAGS=-Werror
+++                      flags: -Werror
++                       configureopts: --enable-asan
++                     - name: linux-clang-openssl
++                       os: ubuntu-latest
++                       compiler: clang
++-                      makevars: CPPFLAGS=-Werror
+++                      flags: -Werror -DOPENSSL_NO_DEPRECATED
++                       configureopts: --with-crypto-impl=openssl
++                     - name: linux-gcc
++                       os: ubuntu-latest
++                       compiler: gcc
++-                      makevars: CPPFLAGS=-D_FORTIFY_SOURCE=3
+++                      flags: -D_FORTIFY_SOURCE=3
++         steps:
++             - name: Checkout repository
++               uses: actions/checkout@v1
++@@ -39,7 +39,7 @@ jobs:
++             - name: Build
++               env:
++                 CC: ${{ matrix.compiler }}
++-                MAKEVARS: ${{ matrix.makevars }}
+++                FLAGS: ${{ matrix.flags }}
++                 CONFIGURE_OPTS:  ${{ matrix.configureopts }}
++               run: |
++                 # For the ksu tests, allow homedir access from other users.
++@@ -49,7 +49,7 @@ jobs:
++                 cd src
++                 autoreconf
++                 ./configure --enable-maintainer-mode --with-ldap $CONFIGURE_OPTS --prefix=$HOME/inst
++-                make $MAKEVARS
+++                make CPPFLAGS="$FLAGS"
++                 make check
++                 make install
++                 (cd clients/ksu && make check-ksu)
++diff --git a/src/plugins/preauth/pkinit/pkinit_crypto_openssl.c b/src/plugins/preauth/pkinit/pkinit_crypto_openssl.c
++index d1fe18e5ab..aa969aa37c 100644
++--- a/src/plugins/preauth/pkinit/pkinit_crypto_openssl.c
+++++ b/src/plugins/preauth/pkinit/pkinit_crypto_openssl.c
++@@ -209,13 +209,20 @@ create_identifiers_from_stack(STACK_OF(X509) *sk,
++ #define EVP_MD_CTX_new EVP_MD_CTX_create
++ #define EVP_MD_CTX_free EVP_MD_CTX_destroy
++ #define ASN1_STRING_get0_data ASN1_STRING_data
+++#define X509_STORE_CTX_set0_trusted_stack X509_STORE_CTX_trusted_stack
 + 
-+       /* In OpenSSL 0.9.7d and earlier, ASN1_STRING_to_UTF8 fails if the input
-+          is already UTF-8 encoded. We check for this case and copy the raw
-+@@ -1522,8 +1522,8 @@ int lftp_ssl_openssl::verify_callback(int ok,X509_STORE_CTX *ctx)
-+    if(cert!=prev_cert)
-+    {
-+       int depth          = X509_STORE_CTX_get_error_depth(ctx);
-+-      X509_NAME *subject = X509_get_subject_name(cert);
-+-      X509_NAME *issuer  = X509_get_issuer_name(cert);
-++      const X509_NAME *subject = X509_get_subject_name(cert);
-++      const X509_NAME *issuer  = X509_get_issuer_name(cert);
-+       char *subject_line = X509_NAME_oneline(subject, NULL, 0);
-+       char *issuer_line  = X509_NAME_oneline(issuer, NULL, 0);
-+       Log::global->Format(3,"Certificate depth: %d; subject: %s; issuer: %s\n",
++ /*
++- * 1.1 adds DHX support, which uses the RFC 3279 DomainParameters encoding we
+++ * 1.0.2 adds DHX support, which uses the RFC 3279 DomainParameters encoding we
++  * need for PKINIT.  For 1.0 we must use the original DH type when creating
++  * EVP_PKEY objects.
++  */
+++#ifndef EVP_PKEY_DHX
++ #define EVP_PKEY_DHX EVP_PKEY_DH
+++#endif
+++
+++/* Make X509_NAME_print_ex() accept a const name pointer by adding a cast. */
+++#define X509_NAME_print_ex(a, b, c, d)          \
+++    X509_NAME_print_ex(a, (X509_NAME *)b, c, d)
++ 
++ /* 1.1 makes many handle types opaque and adds accessors.  Add compatibility
++  * versions of the new accessors we use for pre-1.1. */
++@@ -295,6 +302,10 @@ compat_ECDSA_SIG_set0(ECDSA_SIG *sig, BIGNUM *r, BIGNUM *s)
++ #define EVP_PKEY_get_bits EVP_PKEY_bits
++ #define EVP_PKEY_get_base_id EVP_PKEY_base_id
++ 
+++/* Make X509_dup() accept a const pointer by adding a cast. */
+++#define X509_dup(a) X509_dup((X509 *)a)
+++#define i2d_X509_NAME(a, b) i2d_X509_NAME((X509_NAME *)a, b)
+++
++ /*
++  * Convert *dh to an EVP_PKEY object, taking ownership of *dh and setting it to
++  * NULL.  On error, return NULL and do not take ownership of or change *dh.
++@@ -318,6 +329,11 @@ dh_to_pkey(DH **dh)
++ }
++ #endif /* OPENSSL_VERSION_NUMBER < 0x30000000L */
++ 
+++#if OPENSSL_VERSION_NUMBER < 0x40000000L
+++/* Make X509V3_EXT_d2i() accept a const pointer by adding a cast. */
+++#define X509V3_EXT_d2i(a) X509V3_EXT_d2i((X509_EXTENSION *)a)
+++#endif
+++
++ /* Encode a bignum as an ASN.1 integer in DER. */
++ static int
++ encode_bn_der(const BIGNUM *bn, uint8_t **der_out, int *len_out)
++@@ -1134,6 +1150,13 @@ oerr_cert(krb5_context context, krb5_error_code code, X509_STORE_CTX *certctx,
++     return oerr(context, code, _("%s (depth %d): %s"), msg, depth, errstr);
++ }
++ 
+++/* Convert an OpenSSL ASN.1 string value to krb5_data, without copying. */
+++static inline krb5_data
+++asn1string_to_data(ASN1_STRING *s)
+++{
+++    return make_data((char *)ASN1_STRING_get0_data(s), ASN1_STRING_length(s));
+++}
+++
++ krb5_error_code
++ pkinit_init_plg_crypto(krb5_context context,
++                        pkinit_plg_crypto_context *cryptoctx)
++@@ -1775,7 +1798,7 @@ cms_signeddata_create(krb5_context context,
++             goto cleanup;
++         X509_STORE_CTX_init(certctx, certstore, id_cryptoctx->my_cert,
++                             id_cryptoctx->intermediateCAs);
++-        X509_STORE_CTX_trusted_stack(certctx, id_cryptoctx->trustedCAs);
+++        X509_STORE_CTX_set0_trusted_stack(certctx, id_cryptoctx->trustedCAs);
++         if (!X509_verify_cert(certctx)) {
++             retval = oerr_cert(context, 0, certctx,
++                                _("Failed to verify own certificate"));
++@@ -2002,7 +2025,7 @@ cms_signeddata_verify(krb5_context context,
++         unsigned char *d;
++         *is_signed = 0;
++         octets = CMS_get0_content(cms);
++-        if (!octets || ((*octets)->type != V_ASN1_OCTET_STRING)) {
+++        if (!octets || (ASN1_STRING_type(*octets) != V_ASN1_OCTET_STRING)) {
++             retval = KRB5KDC_ERR_PREAUTH_FAILED;
++             krb5_set_error_message(context, retval,
++                                    _("Invalid pkinit packet: octet string "
++@@ -2058,7 +2081,8 @@ cms_signeddata_verify(krb5_context context,
++         /* We cannot use CMS_dataInit because there may be no digest */
++         octets = CMS_get0_content(cms);
++         if (octets)
++-            out = BIO_new_mem_buf((*octets)->data, (*octets)->length);
+++            out = BIO_new_mem_buf(ASN1_STRING_get0_data(*octets),
+++                                  ASN1_STRING_length(*octets));
++         if (out == NULL)
++             goto cleanup;
++     } else {
++@@ -2118,7 +2142,7 @@ cms_signeddata_verify(krb5_context context,
++ 
++         /* add trusted CAs certificates for cert verification */
++         if (idctx->trustedCAs != NULL)
++-            X509_STORE_CTX_trusted_stack(cert_ctx, idctx->trustedCAs);
+++            X509_STORE_CTX_set0_trusted_stack(cert_ctx, idctx->trustedCAs);
++         else {
++             pkiDebug("unable to find any trusted CAs\n");
++             goto cleanup;
++@@ -2156,7 +2180,7 @@ cms_signeddata_verify(krb5_context context,
++         i = X509_verify_cert(cert_ctx);
++         if (i <= 0) {
++             int j = X509_STORE_CTX_get_error(cert_ctx);
++-            X509 *cert;
+++            const X509 *cert;
++ 
++             cert = X509_STORE_CTX_get_current_cert(cert_ctx);
++             reqctx->received_cert = X509_dup(cert);
++@@ -2316,7 +2340,7 @@ crypto_retrieve_X509_sans(krb5_context context,
++     krb5_principal *princs = NULL;
++     char **upns = NULL;
++     unsigned char **dnss = NULL;
++-    X509_EXTENSION *ext = NULL;
+++    const X509_EXTENSION *ext = NULL;
++     GENERAL_NAMES *ialt = NULL;
++     GENERAL_NAME *gen = NULL;
++ 
++@@ -2379,8 +2403,7 @@ crypto_retrieve_X509_sans(krb5_context context,
++         gen = sk_GENERAL_NAME_value(ialt, i);
++         switch (gen->type) {
++         case GEN_OTHERNAME:
++-            name.length = gen->d.otherName->value->value.sequence->length;
++-            name.data = (char *)gen->d.otherName->value->value.sequence->data;
+++            name = asn1string_to_data(gen->d.otherName->value->value.sequence);
++             if (princs != NULL &&
++                 OBJ_cmp(plgctx->id_pkinit_san,
++                         gen->d.otherName->type_id) == 0) {
++@@ -2414,12 +2437,13 @@ crypto_retrieve_X509_sans(krb5_context context,
++         case GEN_DNS:
++             if (dnss != NULL) {
++                 /* Prevent abuse of embedded null characters. */
++-                if (memchr(gen->d.dNSName->data, '\0', gen->d.dNSName->length))
+++                if (memchr(ASN1_STRING_get0_data(gen->d.dNSName), '\0',
+++                           ASN1_STRING_length(gen->d.dNSName)))
++                     break;
++                 pkiDebug("%s: found dns name = %s\n", __FUNCTION__,
++-                         gen->d.dNSName->data);
+++                         ASN1_STRING_get0_data(gen->d.dNSName));
++                 dnss[d] = (unsigned char *)
++-                    strdup((char *)gen->d.dNSName->data);
+++                    strdup((char *)ASN1_STRING_get0_data(gen->d.dNSName));
++                 if (dnss[d] == NULL) {
++                     pkiDebug("%s: failed to duplicate dns name\n",
++                              __FUNCTION__);
++@@ -3094,8 +3118,10 @@ int
++ pkinit_openssl_init(void)
++ {
++     /* Initialize OpenSSL. */
+++#if OPENSSL_VERSION_NUMBER < 0x10100000L
++     ERR_load_crypto_strings();
++     OpenSSL_add_all_algorithms();
+++#endif
++     return 0;
++ }
++ 
++@@ -4766,7 +4792,7 @@ crypto_retrieve_X509_key_usage(krb5_context context,
++ }
++ 
++ static krb5_error_code
++-rfc2253_name(X509_NAME *name, char **str_out)
+++rfc2253_name(const X509_NAME *name, char **str_out)
++ {
++     BIO *b = NULL;
++     char *str;
++@@ -5227,7 +5253,7 @@ create_identifiers_from_stack(STACK_OF(X509) *sk,
++     int i = 0, sk_size = sk_X509_num(sk);
++     krb5_external_principal_identifier **krb5_cas = NULL;
++     X509 *x = NULL;
++-    X509_NAME *xn = NULL;
+++    const X509_NAME *xn = NULL;
++     unsigned char *p = NULL;
++     int len = 0;
++     PKCS7_ISSUER_AND_SERIAL *is = NULL;
++diff --git a/src/plugins/tls/k5tls/openssl.c b/src/plugins/tls/k5tls/openssl.c
++index 42d72dc9ec..7763327b7a 100644
++--- a/src/plugins/tls/k5tls/openssl.c
+++++ b/src/plugins/tls/k5tls/openssl.c
++@@ -38,6 +38,24 @@
++ #include <openssl/x509v3.h>
++ #include <dirent.h>
++ 
+++#if OPENSSL_VERSION_NUMBER < 0x10100000L
+++/* Make X509_get_subject_name() accept a const pointer by adding a cast. */
+++#define X509_get_subject_name(a) X509_get_subject_name((X509 *)a)
+++
+++/* OpenSSL 1.0 did not have TLS_client_method(); use the best alternative. */
+++#define TLS_client_method() SSLv23_client_method()
+++#endif
+++
+++#if OPENSSL_VERSION_NUMBER < 0x40000000L
+++/*
+++ * OpenSSL 4.0 constifies the result of X509_STORE_CTX_get_current_cert() and
+++ * the input of X509_check_host() and X509_check_ip_asc().  For prior versions,
+++ * make the latter two functions accept const pointers via a cast.
+++ */
+++#define X509_check_host(a, b, c, d, e) X509_check_host((X509 *)a, b, c, d, e)
+++#define X509_check_ip_asc(a, b, c) X509_check_ip_asc((X509 *)a, b, c)
+++#endif
+++
++ struct k5_tls_handle_st {
++     SSL *ssl;
++     char *servername;
++@@ -51,9 +69,11 @@ MAKE_INIT_FUNCTION(init_openssl);
++ int
++ init_openssl(void)
++ {
+++#if OPENSSL_VERSION_NUMBER < 0x10100000L
++     SSL_library_init();
++     SSL_load_error_strings();
++     OpenSSL_add_all_algorithms();
+++#endif
++     ex_context_id = SSL_get_ex_new_index(0, NULL, NULL, NULL, NULL);
++     ex_handle_id = SSL_get_ex_new_index(0, NULL, NULL, NULL, NULL);
++     return 0;
++@@ -72,7 +92,7 @@ flush_errors(krb5_context context)
++ }
++ 
++ static krb5_boolean
++-check_cert_name_or_ip(X509 *x, const char *expected_name)
+++check_cert_name_or_ip(const X509 *x, const char *expected_name)
++ {
++     struct in_addr in;
++     struct in6_addr in6;
++@@ -89,7 +109,7 @@ check_cert_name_or_ip(X509 *x, const char *expected_name)
++ static int
++ verify_callback(int preverify_ok, X509_STORE_CTX *store_ctx)
++ {
++-    X509 *x;
+++    const X509 *x;
++     SSL *ssl;
++     BIO *bio;
++     krb5_context context;
++@@ -246,7 +266,7 @@ setup(krb5_context context, SOCKET fd, const char *servername,
++         return KRB5_PLUGIN_OP_NOTSUPP;
++ 
++     /* Do general SSL library setup. */
++-    ctx = SSL_CTX_new(SSLv23_client_method());
+++    ctx = SSL_CTX_new(TLS_client_method());
++     if (ctx == NULL)
++         goto error;
++ 
 -- 
 2.47.3
 
