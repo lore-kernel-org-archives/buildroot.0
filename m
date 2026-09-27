@@ -1,103 +1,115 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0F01C98324
-	for <buildroot@archiver.kernel.org>; Sun, 27 Sep 2026 10:27:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08027C9830E
+	for <buildroot@archiver.kernel.org>; Sun, 27 Sep 2026 10:27:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 31421407E7;
-	Sun, 27 Sep 2026 10:27:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 933D76064B;
+	Sun, 27 Sep 2026 10:27:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id G31b7n83di2X; Sun, 27 Sep 2026 10:27:04 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 33203407CD
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790504824;
-	b=cCtO6pMZJWwhNrn+pVhzawbgtBCLzG4Fi45t7i5pd3kthZmsDyYMov1Y2I1jANpMxN9Z
-	 LzynSetljLHDMJfxlfDm6OFqFw8orZWRsIlteRFYeKI5ryeJKK3yBmJYIIuqb40WR9vl3
-	 uozB8h62KEbaMmXnaSBkMQJAufS6qaFz+w7IUuuq/xIlEdJsu2InGH9sccKKSjYMKcmnf
-	 98tN7pBBDdwL0JtmIR31cl7GUCq8Ygcq9xjMS9NwGSJrutFht7zWGiQrn/sosdtue/oPv
-	 doymOn8w34GfogyHsua7Z/ZHWaSIRupOvbINMwpPTnwGwJ4lDCIT0tda6vabu1Io7wA==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oNMfTdi0E02s; Sun, 27 Sep 2026 10:27:20 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 93DBD6060E
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790504840;
+	b=RWyi3miJB5rWpsOHaHZV275ug7kr5kYpwL1XuN6HVqClPX1o6lgGC3aYEWxw4Y/sj/nA
+	 CLi3kBqqW+yqL4wtJGzTxDUdolVgIISA2YJfLrs3ixmolODFoseBOQR1Pncvaziawx9qd
+	 S2Y5s07a4JrLmHr18URk8vctiLrN+rhUh3zeihaEDZS0B9LRF4NbMfHAAi8fGzHWVgx+k
+	 M7BbOzmU36LHqnBhmv0WUXsagpwC0ZAyQpvavPlG5QOyfKkCdmiyzPXrbXk6fBdiW+ROU
+	 E7PBURyWdxlivDcUFzDqwOIpfCg4DhCTxll5+vHcrgffKjrVqtmQuh0UzcMp8e7V5hg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1790504824;
+	c=relaxed/relaxed; t=1790504840;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
-	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
-	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
-	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
-	 Sender;
-	bh=o4ihiP9YegH4tGaUlyBFoE4HCp8OlrXKs//svHF4nag=;
-	b=e5H8aEpBvWPbN+q8PLmscu6KyxL3wUZPgcqhwN4C/m7N2r9tLlq30jotWxeWtZz5z4Wx
-	 dVivutcwffcgS9bUdd4w0NlbFfmbqZopFEibF7ksHm/y6q4B83aN5iymCE5AXoQtCZK05
-	 xQWLumU+YIM8lB+2YjXmCU2DQj11WWBVpPFXQpTRnXHOQQnKqqSnBmPK/iLPwTZR5Utr5
-	 yWVJ0IeNH1dWuKEFC1nFZd8Rptja9NuVclwKyet0p7rOwASy4c3hfzmoAtBl/L+HRlkIM
-	 DiSoofPRZIEJzLTQPE3MqvBWrhba80MZYNnd2u1kHoykzM8A4/KbnrXaTWBxXqK6AWQ==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 Received:MIME-Version:Date:To:Cc:In-Reply-To:References:User-Agent:
+	 Message-ID:X-Sender:Subject:X-BeenThere:X-Mailman-Version:Precedence:
+	 List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:Content-Transfer-Encoding:Content-Type:
+	 Errors-To:Sender;
+	bh=9G/FtM96qvnFgh4gB9yDKnhWwR4o8KhKv7oq9SmmNmc=;
+	b=ZFEQpKV6a48Hqai2EVEVDPEU5yWXVMFWZtcCD3v/Fitl1CfJJ3ba3UZK96XU/bjicIa0
+	 ykEFubSmok7OwRfdnz1hWSTtTLOdyWe4YHVf45HLKSlPxFV31qsHUjDYGyeKTRETgaXAr
+	 6wXPV3QLW5VM1+PaIbwXQWQAGNZQHCLzvC498Q+R4fWi4J22DjSBG4A670+/Rz+aRSiza
+	 fqVqNTFw+MvU0vpyBdVB9UvIWWLCHbgIyJVYHzYknMyi01ox1Fd1dvjj3Nu6d5WbOfwjF
+	 DpJ33rHfMZi33++1Yfk3pqCP0XVk0bFH7pw8V0m17A8au43tAZef49fEr574M1zdxsw==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1790504824;
-	bh=o4ihiP9YegH4tGaUlyBFoE4HCp8OlrXKs//svHF4nag=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=XRSslK3CB2Jgwjs8UFBqKUyJdubLgNX4Hi56678c87AtfsHJOgL+37mhRtqjb1Vpo
-	 lE8kPLMhoRzQ5hQKg8ny6geL5QZrLdn1vLZqC/3UAqJLRA1W7aVG88lIQ7IgLpNeLE
-	 +Fhgojlpwdkm4MykvuVjGMb+egIInQEGYHFf4QVTzc7+RLgiTxGq+p7oFfRTclhlhY
-	 ybFsh7rxhajOHjW2wY0lORBxErGxYG8zhpFUCvPfYwpzxX2xuQWnTmCvsssQ0fYyQd
-	 7rqchtw70Aq36cmozUb69rRBEPL/niVapAE8ifSieN1WLuWbJ6RRHrD2AL3OzyoPOU
-	 6ILLQkFZrZ9pA==
+	s=default; t=1790504840;
+	bh=9G/FtM96qvnFgh4gB9yDKnhWwR4o8KhKv7oq9SmmNmc=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=NVCU2XaddybbmAwEhqAS+OO0D3Zfqi1bbZwc1dMJ3BJTwF2A62zhheQQszUGZrrxY
+	 lFCmJGB1evmcWkcdb3MLZfLtxrz7U0YtG1PHxebdmjcSaZnB5pqkQenu9/OZyXVW5u
+	 3sBZL0l3q8w+IDrnBv0zOBOotdi8sEAR1bN/XiZE5suI9+knoPwdrJh7wTwNmhZ38Q
+	 6HP++ctMXSwFr1CaknikZkW+VX3P+KXMwxWihNRO+LQzEzJ6waKq0MdBPVBqYJjdbi
+	 Rh+3uRF0TMWcBej2x0cHCZx3XDQWn7zWcHYtWY2KrQ1FgXw3z1yh7cp1Q9WT2tNQsz
+	 DGjTBGFSmz8rg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 33203407CD;
-	Sun, 27 Sep 2026 10:27:04 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id EC145D1
- for <buildroot@buildroot.org>; Sun, 27 Sep 2026 10:27:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 93DBD6060E;
+	Sun, 27 Sep 2026 10:27:20 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 49C4C335
+ for <buildroot@buildroot.org>; Sun, 27 Sep 2026 10:27:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CE581407CD
- for <buildroot@buildroot.org>; Sun, 27 Sep 2026 10:27:01 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2E72C40068
+ for <buildroot@buildroot.org>; Sun, 27 Sep 2026 10:27:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OqiceboR4-7O for <buildroot@buildroot.org>;
- Sun, 27 Sep 2026 10:27:00 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 97FF3405A4
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790504820;
- b=A0RH0YayEyCZNKKGLcsYL9p1sSHh7XtiXfEKGeUOLH4fhGqpcb0fJa9xDt57wUrymEkr
- gHD1mJSsH+c3HPOSzmShoIEWOlFLQqMppCSrEQEN3MLNACJ1A/K41LOW04UVLphIFalK6
- DypGZfeI3KDCXV+37F+nUGSc4l0gFukaLVXw4vExE6RCmLHo8ScqZa/Ipi/9Ww+cQIWbq
- G+hYQwPDbP6XZ5CziITXjXKMs2JmUdxF6PKO6SIEyUOMmTJ3yaxtjD/EN0FMbscE4N3es
- 0rhlS9yoaoJKvrqrumm2VdRw9wiclIxZ6MrNVilrvvNNksSSpDo4gnnSfRUbAS4Bs0w==
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id S86xYKVdFZ3J for <buildroot@buildroot.org>;
+ Sun, 27 Sep 2026 10:27:18 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org 78D1340059
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790504837;
+ b=Snn0XnokS5wNjKTzmiWMBC0/92PntA/jg1mRXL92mvwFIcVv3cqsMmw7hM7cemWH9Y3g
+ tb/OBa3P5gV0/iovYWEedqy9HA51mUfMBpAnbE1KrFwTMZOdJxdA75hP5HVOWwZsOoJQ/
+ mnkKU//Vq1tsrtGsxI+SA+GrtzWwo7i6Y78WZe5rVE4EIFjkPR8FVIhYNLtfCBcLUiCuB
+ PYDhWOXAavpRJ4bq+sEi/AbkwRRPWzwVFRCb3GqVusbrJ8qenduqdVkWqWsJgR3ECl+tn
+ gKbF5AUUuQLax43i3pmfI28JZFVYkp0ChTZfW0JsOEVjdvr2yUoetRv3cLrVLJhdgfw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1790504820;
- h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
- X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=7HdjWJyAxI+Z9eSL8ru7Kv/ANY4cKYzBig0HQOCpV7w=;
- b=EaihutE/5bTj/5aUkCYgiO7xnsslktgdlV2+kwm9Ei8VuBqLy6HiF7XcasMeOrAAtwTW
- I1MeDbRvmiEtsQpEpl5EMh7yKjoeAcJXLiv204XZOTD16vh+NcrN8YbF34MwKWsR7grZm
- /Gk9nkZQqxfqNZoNh17ib1za2oSGJa0PAYn8QhGFrKrFa9O68Dn3PWESPBRW3TEFj1bq7
- UJnIzORjKcr9mWyQjAGEndDZu1SWhFPucOtFsZN2mwLrOMWF3yLgHNanCjaA1d9qOdT2X
- 90Xqx5RCbdmH/SWNRepykabpJ/HuoQ1RCndU2eAOwjz5aXMloWhNpNsfIxrCZ/tqvdg==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org;
- arc=none smtp.remote-ip=140.211.167.122
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 97FF3405A4
- for <buildroot@buildroot.org>; Sun, 27 Sep 2026 10:27:00 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B9C4291045; Sun, 27 Sep 2026 10:25:48 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 27 Sep 2026 12:09:40 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 236fd61a83a2a6f4c666b6e53f79c27ccdd4591a
-X-Git-Newrev: 633d368bae51b20081e31d5d8925705e62f806ef
-X-Patchwork-Hint: ignore
-Message-Id: <20260927102548.B9C4291045@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/wireshark: security bump to v4.4.19
+ c=relaxed/relaxed; t=1790504837;
+ h=Received-SPF:Received:DKIM-Signature:Received:MIME-Version:Date:From:
+ To:Cc:Subject:In-Reply-To:References:User-Agent:Message-ID:X-Sender:
+ Content-Type:Content-Transfer-Encoding;
+ bh=dJwCeNVPo3G5mL7wcV+rasVQBfMg8UYPHKB+db40o10=;
+ b=SjmiGhfE3CX6R+4LAHX3j+1O4p7a2o/7L7BwFk47MC9ia91uTlHiW3DvgnkxNTJo5Yw/
+ smULFshtl6unNbZiYNs8xGtckXiTfAL6OZ+5Ga1mIuBj3z3OKYVS2z8mb0n1+vtnLc1vh
+ ErlKGizntAStQt6m6TzDoVZH88NHi6YqOgaU7LQdAUr/GkOhJ86napojr+ZxP7NO3VP2l
+ 018DQVVmnGS3FGSZDpowDCY0kz9qIq3msmEyvm+Ts7r86Ud3qCALHmVQ86XWIFfKokHXj
+ BMY1nTQXRyryhwjWgRv5YL0CUSDXxeiYTpJLtoI75NqSRbpQEQmzn594kfIMOlZR/MA==
+ARC-Authentication-Results: i=1; smtp2.osuosl.org;
+ dmarc=pass header.from=free.fr; 
+ dkim=pass header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=YiN52plf; 
+ arc=none smtp.remote-ip="2a01:e0c:1:1599::13"
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 78D1340059
+ for <buildroot@buildroot.org>; Sun, 27 Sep 2026 10:27:17 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id A2F9919F5BE;
+ Sun, 27 Sep 2026 12:27:13 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 27 Sep 2026 12:27:13 +0200
+MIME-Version: 1.0
+Date: Sun, 27 Sep 2026 12:27:13 +0200
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20260927085308.2871714-1-giulio.benetti@benettiengineering.com>
+References: <20260927085308.2871714-1-giulio.benetti@benettiengineering.com>
+User-Agent: Webmail Free/1.6.19
+Message-ID: <cb14dfb8de885d7e0ccd8784c75e51c1@free.fr>
+X-Sender: ju.o@free.fr
+Subject: Re: [Buildroot] [PATCH] package/wireshark: security bump to v4.4.19
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -111,132 +123,57 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0543880661428644519=="
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0543880661428644519==
-Content-Type: text/plain
-
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/633d368bae51b20081e31d5d8925705e62f806ef
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
-
-Fixes the following vulnerabilities:
-
-- wnpa-sec-2026-93 · SCTP protocol dissector crash.
-  https://www.wireshark.org/security/wnpa-sec-2026-93
-  CVE-2026-95389.
-
-- wnpa-sec-2026-96 · IEEE C37.118 Synchrophasor protocol dissector
-  memory leak.
-  https://www.wireshark.org/security/wnpa-sec-2026-96
-  CVE-2026-95395.
-
-- wnpa-sec-2026-97 · SPDY protocol dissector crash.
-  https://www.wireshark.org/security/wnpa-sec-2026-97
-  CVE-2026-95387.
-
-- wnpa-sec-2026-98 · Microsoft Network Monitor file parser large loop.
-  https://www.wireshark.org/security/wnpa-sec-2026-98
-  CVE-2026-95394.
-
-- wnpa-sec-2026-99 · CSN.1 protocol dissector crash.
-  https://www.wireshark.org/security/wnpa-sec-2026-99
-  CVE-2026-95393.
-
-- wnpa-sec-2026-100 · MBIM protocol dissector crash. wsbuglink:21549,
-  https://www.wireshark.org/security/wnpa-sec-2026-100
-  CVE-2026-95392.
-
-- wnpa-sec-2026-101 · Sharkd utility crash.
-  https://www.wireshark.org/security/wnpa-sec-2026-101
-  CVE-2026-95388.
-
-- wnpa-sec-2026-102 · Frame protocol metadissector crash.
-  https://www.wireshark.org/security/wnpa-sec-2026-102
-  CVE-2026-96422.
-
-- wnpa-sec-2026-103 · USB HID protocol dissector infinite loop and
-  memory leak.
-  https://www.wireshark.org/security/wnpa-sec-2026-103
-  CVE-2026-96421.
-
-- wnpa-sec-2026-104 · RF4CE protocol dissector crash.
-  https://www.wireshark.org/security/wnpa-sec-2026-104
-  CVE-2026-96417.
-
-- wnpa-sec-2026-105 · Toshiba file parser crash.
-  https://www.wireshark.org/security/wnpa-sec-2026-105
-  CVE-2026-xxx.
-
-- wnpa-sec-2026-106 · Profile import crash and possible code execution.
-  https://www.wireshark.org/security/wnpa-sec-2026-106
-  CVE-2026-96419.
-
-- wnpa-sec-2026-107 · TIFF protocol dissector infinite loop.
-  https://www.wireshark.org/security/wnpa-sec-2026-107
-  CVE-2026-96418.
-
-- wnpa-sec-2026-108 · X11 protocol dissector crash.
-  https://www.wireshark.org/security/wnpa-sec-2026-108
-  CVE-2026-96423.
-
-- wnpa-sec-2026-109 · IEEE 802.11 protocol dissector crash.
-  https://www.wireshark.org/security/wnpa-sec-2026-109
-  CVE-2026-96416.
-
-- wnpa-sec-2026-110 · Catapult DCT2000 protocol dissector crash.
-  https://www.wireshark.org/security/wnpa-sec-2026-110
-  CVE-2026-96415.
-
-For more information on the version bump, see:
-  - https://www.wireshark.org/docs/relnotes/wireshark-4.4.19.html
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/wireshark/wireshark.hash | 6 +++---
- package/wireshark/wireshark.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
-index 3d8fdb6131..b17f4bcf17 100644
---- a/package/wireshark/wireshark.hash
-+++ b/package/wireshark/wireshark.hash
-@@ -1,6 +1,6 @@
--# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-4.4.18.txt
--sha1  482fecbe21a876f53a26bf5beaa5b0ee0ad16e50  wireshark-4.4.18.tar.xz
--sha256  f77a7939983758383797fed0a34a491f785e541cca397a7a44e9cdd7c6f847c6  wireshark-4.4.18.tar.xz
-+# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-4.4.19.txt
-+sha1  46c2805407197048d90dc7eac9f0a4a19d13815a  wireshark-4.4.19.tar.xz
-+sha256  0499dddc0aeea500bc65196714e1e01097742efbc479a2d67a9a8b5dd57d6d04  wireshark-4.4.19.tar.xz
- 
- # Locally calculated
- sha256  edaef632cbb643e4e7a221717a6c441a4c1a7c918e6e4d56debc3d8739b233f6  COPYING
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index c500a49336..a67b915b5b 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIRESHARK_VERSION = 4.4.18
-+WIRESHARK_VERSION = 4.4.19
- WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
- WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
- WIRESHARK_LICENSE = wireshark license
-
---===============0543880661428644519==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0543880661428644519==--
+T24gMjcvMDkvMjAyNiAxMDo1MywgR2l1bGlvIEJlbmV0dGkgd3JvdGU6Cj4gRml4ZXMgdGhlIGZv
+bGxvd2luZyB2dWxuZXJhYmlsaXRpZXM6Cj4gCj4gLSB3bnBhLXNlYy0yMDI2LTkzIMK3IFNDVFAg
+cHJvdG9jb2wgZGlzc2VjdG9yIGNyYXNoLgo+ICAgaHR0cHM6Ly93d3cud2lyZXNoYXJrLm9yZy9z
+ZWN1cml0eS93bnBhLXNlYy0yMDI2LTkzCj4gICBDVkUtMjAyNi05NTM4OS4KPiAKPiAtIHducGEt
+c2VjLTIwMjYtOTYgwrcgSUVFRSBDMzcuMTE4IFN5bmNocm9waGFzb3IgcHJvdG9jb2wgZGlzc2Vj
+dG9yCj4gICBtZW1vcnkgbGVhay4KPiAgIGh0dHBzOi8vd3d3LndpcmVzaGFyay5vcmcvc2VjdXJp
+dHkvd25wYS1zZWMtMjAyNi05Ngo+ICAgQ1ZFLTIwMjYtOTUzOTUuCj4gCj4gLSB3bnBhLXNlYy0y
+MDI2LTk3IMK3IFNQRFkgcHJvdG9jb2wgZGlzc2VjdG9yIGNyYXNoLgo+ICAgaHR0cHM6Ly93d3cu
+d2lyZXNoYXJrLm9yZy9zZWN1cml0eS93bnBhLXNlYy0yMDI2LTk3Cj4gICBDVkUtMjAyNi05NTM4
+Ny4KPiAKPiAtIHducGEtc2VjLTIwMjYtOTggwrcgTWljcm9zb2Z0IE5ldHdvcmsgTW9uaXRvciBm
+aWxlIHBhcnNlciBsYXJnZSBsb29wLgo+ICAgaHR0cHM6Ly93d3cud2lyZXNoYXJrLm9yZy9zZWN1
+cml0eS93bnBhLXNlYy0yMDI2LTk4Cj4gICBDVkUtMjAyNi05NTM5NC4KPiAKPiAtIHducGEtc2Vj
+LTIwMjYtOTkgwrcgQ1NOLjEgcHJvdG9jb2wgZGlzc2VjdG9yIGNyYXNoLgo+ICAgaHR0cHM6Ly93
+d3cud2lyZXNoYXJrLm9yZy9zZWN1cml0eS93bnBhLXNlYy0yMDI2LTk5Cj4gICBDVkUtMjAyNi05
+NTM5My4KPiAKPiAtIHducGEtc2VjLTIwMjYtMTAwIMK3IE1CSU0gcHJvdG9jb2wgZGlzc2VjdG9y
+IGNyYXNoLiB3c2J1Z2xpbms6MjE1NDksCj4gICBodHRwczovL3d3dy53aXJlc2hhcmsub3JnL3Nl
+Y3VyaXR5L3ducGEtc2VjLTIwMjYtMTAwCj4gICBDVkUtMjAyNi05NTM5Mi4KPiAKPiAtIHducGEt
+c2VjLTIwMjYtMTAxIMK3IFNoYXJrZCB1dGlsaXR5IGNyYXNoLgo+ICAgaHR0cHM6Ly93d3cud2ly
+ZXNoYXJrLm9yZy9zZWN1cml0eS93bnBhLXNlYy0yMDI2LTEwMQo+ICAgQ1ZFLTIwMjYtOTUzODgu
+Cj4gCj4gLSB3bnBhLXNlYy0yMDI2LTEwMiDCtyBGcmFtZSBwcm90b2NvbCBtZXRhZGlzc2VjdG9y
+IGNyYXNoLgo+ICAgaHR0cHM6Ly93d3cud2lyZXNoYXJrLm9yZy9zZWN1cml0eS93bnBhLXNlYy0y
+MDI2LTEwMgo+ICAgQ1ZFLTIwMjYtOTY0MjIuCj4gCj4gLSB3bnBhLXNlYy0yMDI2LTEwMyDCtyBV
+U0IgSElEIHByb3RvY29sIGRpc3NlY3RvciBpbmZpbml0ZSBsb29wIGFuZAo+ICAgbWVtb3J5IGxl
+YWsuCj4gICBodHRwczovL3d3dy53aXJlc2hhcmsub3JnL3NlY3VyaXR5L3ducGEtc2VjLTIwMjYt
+MTAzCj4gICBDVkUtMjAyNi05NjQyMS4KPiAKPiAtIHducGEtc2VjLTIwMjYtMTA0IMK3IFJGNENF
+IHByb3RvY29sIGRpc3NlY3RvciBjcmFzaC4KPiAgIGh0dHBzOi8vd3d3LndpcmVzaGFyay5vcmcv
+c2VjdXJpdHkvd25wYS1zZWMtMjAyNi0xMDQKPiAgIENWRS0yMDI2LTk2NDE3Lgo+IAo+IC0gd25w
+YS1zZWMtMjAyNi0xMDUgwrcgVG9zaGliYSBmaWxlIHBhcnNlciBjcmFzaC4KPiAgIGh0dHBzOi8v
+d3d3LndpcmVzaGFyay5vcmcvc2VjdXJpdHkvd25wYS1zZWMtMjAyNi0xMDUKPiAgIENWRS0yMDI2
+LXh4eC4KPiAKPiAtIHducGEtc2VjLTIwMjYtMTA2IMK3IFByb2ZpbGUgaW1wb3J0IGNyYXNoIGFu
+ZCBwb3NzaWJsZSBjb2RlIGV4ZWN1dGlvbi4KPiAgIGh0dHBzOi8vd3d3LndpcmVzaGFyay5vcmcv
+c2VjdXJpdHkvd25wYS1zZWMtMjAyNi0xMDYKPiAgIENWRS0yMDI2LTk2NDE5Lgo+IAo+IC0gd25w
+YS1zZWMtMjAyNi0xMDcgwrcgVElGRiBwcm90b2NvbCBkaXNzZWN0b3IgaW5maW5pdGUgbG9vcC4K
+PiAgIGh0dHBzOi8vd3d3LndpcmVzaGFyay5vcmcvc2VjdXJpdHkvd25wYS1zZWMtMjAyNi0xMDcK
+PiAgIENWRS0yMDI2LTk2NDE4Lgo+IAo+IC0gd25wYS1zZWMtMjAyNi0xMDggwrcgWDExIHByb3Rv
+Y29sIGRpc3NlY3RvciBjcmFzaC4KPiAgIGh0dHBzOi8vd3d3LndpcmVzaGFyay5vcmcvc2VjdXJp
+dHkvd25wYS1zZWMtMjAyNi0xMDgKPiAgIENWRS0yMDI2LTk2NDIzLgo+IAo+IC0gd25wYS1zZWMt
+MjAyNi0xMDkgwrcgSUVFRSA4MDIuMTEgcHJvdG9jb2wgZGlzc2VjdG9yIGNyYXNoLgo+ICAgaHR0
+cHM6Ly93d3cud2lyZXNoYXJrLm9yZy9zZWN1cml0eS93bnBhLXNlYy0yMDI2LTEwOQo+ICAgQ1ZF
+LTIwMjYtOTY0MTYuCj4gCj4gLSB3bnBhLXNlYy0yMDI2LTExMCDCtyBDYXRhcHVsdCBEQ1QyMDAw
+IHByb3RvY29sIGRpc3NlY3RvciBjcmFzaC4KPiAgIGh0dHBzOi8vd3d3LndpcmVzaGFyay5vcmcv
+c2VjdXJpdHkvd25wYS1zZWMtMjAyNi0xMTAKPiAgIENWRS0yMDI2LTk2NDE1Lgo+IAo+IEZvciBt
+b3JlIGluZm9ybWF0aW9uIG9uIHRoZSB2ZXJzaW9uIGJ1bXAsIHNlZToKPiAgIC0gaHR0cHM6Ly93
+d3cud2lyZXNoYXJrLm9yZy9kb2NzL3JlbG5vdGVzL3dpcmVzaGFyay00LjQuMTkuaHRtbAo+IAo+
+IFNpZ25lZC1vZmYtYnk6IEdpdWxpbyBCZW5ldHRpIDxnaXVsaW8uYmVuZXR0aUBiZW5ldHRpZW5n
+aW5lZXJpbmcuY29tPgoKQXBwbGllZCB0byBtYXN0ZXIsIHRoYW5rcy4KX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApi
+dWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1h
+bi9saXN0aW5mby9idWlsZHJvb3QK
