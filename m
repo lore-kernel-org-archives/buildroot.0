@@ -4,141 +4,101 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5630CA5FA2
-	for <buildroot@archiver.kernel.org>; Mon, 28 Sep 2026 11:50:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24088CA5FA2
+	for <buildroot@archiver.kernel.org>; Mon, 28 Sep 2026 11:50:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C2B8680D7A;
-	Mon, 28 Sep 2026 11:50:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E25CC80C5D;
+	Mon, 28 Sep 2026 11:50:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DmdDBH4CyHox; Mon, 28 Sep 2026 11:50:09 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org A0F7980D60
+ id FNUJxZRyCxOj; Mon, 28 Sep 2026 11:50:49 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 094D580D6E
 Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790596209;
-	b=UU2jIU2YkalmvAqS2GEsOyBc4fN53iO+rK06vFeOY7eEtWzkUGQ1U1appm7Vpn2dLLVO
-	 Kqwq3jn6ftf+wLkFpVgfTqTF8AzOtgt1XJD5MEKPx++wZvQFjQnU8Y++C7yJH0cn4YMeh
-	 6iEStE/017VxN8pyxN8Fo9Rtxxj0sZQtO1mNsLalWobEqsGg/uRCgLtVLwX+5Hh9SsTJi
-	 KyjPmRyaHFK2AMLlkG70VPm49f6RzGu67O9Y+GiHES3ucATok4EO/f1Q6fVk4aHq7b5ki
-	 N+GtlTKDCzxFRXc+daSeD/RO9pyTP1G3iAJSFPTja9Z6PaDg2oNaQI8x21p+AKMZyKA==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790596249;
+	b=eniAwgxJEMyUbO/zCVUG7CaxNBIYOSKRxbW7W2P3I+rPZkIlku6QbocILaenWtgowYjJ
+	 n0Qz+Ll0jVfSc0+l3oYaP0PVmCcNUj/oEHn4YoinFain/KM6OMNCPrNiPgmfV15MCCyE7
+	 uwTPQAffUbu5Gs+IQxq2Pq0e7Eh11j/GuP/DBk/gpUvEssUjHTzKKQpYYHLlB5gJ0dvS+
+	 qp0YicRyTB78+ts8tM0E5c6dcNPhDND3810qxgKJI4vCg7sOgYiH7Weewu16rOZwaTOLk
+	 ueqxWydujpj+DTYRKeWWZc7+/6CXm6TV3tDet0yCrx1O0iZ0390jtIy6Jy53ALki/sg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1790596209;
+	c=relaxed/relaxed; t=1790596249;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 Received:Received:Date:To:Cc:Message-ID:References:MIME-Version:
-	 Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version:Subject:
-	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=q7mjczIcitvuBVmuN15sK1nm1OGRlaVKejsNw0ma7M0=;
-	b=J80btS5daoET2KSAVYLELQ35hhfEvZRhnq7ZldyhmzaPFqnxBo6WrqrQZ0ybj+quqnOj
-	 cDGKH5Iksylngj3PaMAfUZx8S7hVv7WYwHZYxDCwurWB6jp9fhJIKN1abhoImFVzsxdwA
-	 k/mmX7IAEfLbplooFBSpcHJ6mFSGmI+hgthOopoxM0HHIk5O/p8dDHtW0KLwi4wpk1bOt
-	 GiDx8zbpCHexHagqbDF++G/VM88zt1QHnMC0xLbsuWXc0ZtWdU5FvUCRlA0zO3IKCkLM6
-	 yFmSw2lw6vTSfXRUvjtbnsC+c2yNhlZetl1W0qNDYghoi+xXY/+I/b+PNaAxgmBw1uw==
+	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
+	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
+	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
+	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:Errors-To:Sender;
+	bh=CIfH6hjHASAe/su9nWyhchaXn7vktpZrqb9+ZNfYCKw=;
+	b=Yu3uCKq6xQD2LyyXiT9E4xJOyzUKzkOAzcOVeJ8/I1KVfGDWijF5jT3cEJmzCNETsyWU
+	 hOxTwDLTU1uiHDF96cSSXWk0KDmBzpsYeXgtrNGeoCCmSdYtFVFDB+NiDrRiswXNiBOzK
+	 2ZAwNVRA+zkQ5cwyoyX6xNhomiWnRAgpFi7Z1pIRhI8KP31xiWQGuYUx/5waTfrwoCW6h
+	 RUzh0Sek1B16nEwpAj/KpJefi7CLUf+cepsgyW9buSZzVl8gdtaP//aK02ZNnNUR5SJNi
+	 NUi5v6quFVvr4F+90bPvH0B9STKP0uqjWkFqfbqfCKGL/uNv8UqMYHIfv6xzEYtDYGg==
 ARC-Authentication-Results: i=2; smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1790596209;
-	bh=q7mjczIcitvuBVmuN15sK1nm1OGRlaVKejsNw0ma7M0=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=mjjs0njL/ofw/4GE4cnEj51FcTT2OoUrka3q5NeSXio96svRuUYH690ExBXgjVo00
-	 d4FWzciDH48Kr6Z4v5hid/bL2HsAbOcR9XtdE4rBO9MrUYDeTKT2+u2ugxyUS8SM9M
-	 0tD99QQOvwNpVbsnTrZ15h4RTfYkEp9vGXrBOLlMG+LW/GPrHe5NB1hOv3j+kpZ/rG
-	 uLLAcqyIdfMt4itPmt7Zi4gz053M16wPFbVkIiQvwLubk7sMlNJIXVBlJljrHwG5cR
-	 UEl32AKWyyIbCRLBzkq1ikroIXA6E+2ZMNgZ5t8cPpKRcgv6mX6NpYBbM8AfcBOP8g
-	 8EDMOAemmkWHA==
+	s=default; t=1790596249;
+	bh=CIfH6hjHASAe/su9nWyhchaXn7vktpZrqb9+ZNfYCKw=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=A5ht65usLf+Ah7iT7FIDagCQZQz3sFI369pPPlFRfzDE2Wq8Wf0iKFzZEnks5BRqQ
+	 GaRkVc9OWpYwoJJIdcVUBXP2DE9OFlvNypu7/TH/fNvbGiSglEAt2i+HEvdb3ZGtpF
+	 ZF3LlVagkqfd4CdMHMneOebrhv3wr14ZGf1k22H1leXZbuzwVb+3ZrhqK/1JE5qaOr
+	 sbt2vYwTGfEuIoeNqST05tee0D685qWQIImq0+nWsVEhZp0PB3USYDtYY4DRWhuLQx
+	 5om9ALUkg3JIHBO0Q+S3RKPirfKx04s7oplr8ijGMGeKBU/DQ6A/DqZxT8Cn4bVuqZ
+	 L2wniLxlanvlA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A0F7980D60;
-	Mon, 28 Sep 2026 11:50:09 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 718CE32F
- for <buildroot@buildroot.org>; Mon, 28 Sep 2026 11:50:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 094D580D6E;
+	Mon, 28 Sep 2026 11:50:49 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4CB783D8
+ for <buildroot@buildroot.org>; Mon, 28 Sep 2026 11:50:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 62FC560631
- for <buildroot@buildroot.org>; Mon, 28 Sep 2026 11:50:08 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 32AC060631
+ for <buildroot@buildroot.org>; Mon, 28 Sep 2026 11:50:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id P3g0921wOSQy for <buildroot@buildroot.org>;
- Mon, 28 Sep 2026 11:50:07 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 1D2E3605EE
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790596207;
- b=lJIRhf7eAiYLmoUg8sgJuTPSOuiR/FhZWhULW5u03JpOGgXFU0TNHlV5OHq7/I+9+Vqd
- BYjJZMLhRL6PSq06pMfXjvVF6X+VToDPeVHCI5YLEVVkuyC4RXF2QLV01bOnxtH6wcMj5
- SGS6lwSyX5l4Yv3NQqcONS4juZ4whE6WK906EvtLhL5qUwsbmcipbSHQ4Rb+A5R93AHgC
- sz0ooATm88zbyA3xnml0lU0v0nLU8tqy2TU+YACJUSnniB29ggTv+GFFQ4HNGiUA453Lr
- GW5KoSd8FENqsVqqrndH9ug95NI3ezJxUT6eVQTUQWqV1/82mxpzn8XR1tw+NDhzQDw==
+ id iyDavhGB5-8B for <buildroot@buildroot.org>;
+ Mon, 28 Sep 2026 11:50:47 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 81871605EE
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790596247;
+ b=BtvTDmxYnoqZ3E3aNbkpV14F98bgb2AUVyzlPjmQeqn3er3Ep2kza+pHChs2EtHHY3ol
+ kqITUGW1SnzXwpwMvuB82pJ85qnEEpbAzMZEY5kdkERfvvJh13jpUaRGX1YOFzlzZNi7f
+ k9mh/Vy3UDa37Ow6orJnhlW7Y1SAdZePzy2hRcoQz8NgQt6mBNgmjjFnpHaClckWTC3MQ
+ q3Q2y31ZiBrZBz99oVdX/zi/2BvcfXJaeboh2wnPFeG+ckd0exnbTFSYDne7Ti6nr72oA
+ 1bWb9AUQ+GIe+KHZ8n/kjd8OXrEBphl9+UEAT1ngRn2LTs9aHq10yUmL6opvbzqiYSQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1790596207;
- h=Received-SPF:Received:Received:Received:DKIM-Signature:Date:From:To:
- Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
- Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version;
- bh=TQAXNthkOgYUb3lUQn+6zz8y3aEhM2YyVTRubjZAKQg=;
- b=Ww1kEANeyDJimmg8iM7WeCC2XpJng9lCX5Dvf/1OctsY3GT9hZ2L0hY6PlV14mtl5qhS
- miR3H/zUYibAZPDEx0dlSxT/E8ZBSc0zUsHfSd6oAmwj9NLQ/7x61AD5lYkfaLslCyzvb
- bpxUYOTZfdmeCpQxbXb1dlapFhhL9lJdqQhWqpgc2o+H0ENAB5dTooHCqW2Q9q2I6hSLx
- gGdoTDLqhqUCg243x8eA77BUOicDtmbbAFQBJoey3OV9l1dROSOMpUYo25eaLgFAF9QAQ
- IzfV8Gn5ZTHAwXNAJjisXAR07wM30QO4pWl22ZzlDaREERpig4F/jZrru02ZRM35maw==
+ c=relaxed/relaxed; t=1790596247;
+ h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
+ X-Git-Newrev:X-Patchwork-Hint:Message-Id;
+ bh=/LMQ+6pylVIU8i2yXVz+9UyvfNDGdcgZv2VNDbJvpAc=;
+ b=OBL4ro91msKDNE2Mcbu3S29OsLoYB0U2qz4gebMM08wKoUc9rO8C8J1LX/YSkfkSBqhU
+ inCpi2EhVDzBJG6L4MFwFC+IDHG+7g9siIymesaYu7cZpeduXK645Bqa6/cR5W599GUFw
+ dd9pgwH9sHtwTf4tTSohUBBLyls7nH/7HKgy2g3bGxgywoHF7tUlRiKRh2RKMdwBKYd++
+ i+Wg+pvXMmyBf8JiICHOOAdZFivTDbZKbwZgJ0LXYoZT16367/Is985LXkccRIqnEisyT
+ GpBNUVR8+mDsbqLa8HuyGuVqUZzxrwShjmDG4WVpCHjmmxpvvqyfSkXl3YVMidk2Mng==
 ARC-Authentication-Results: i=1; smtp3.osuosl.org;
- dmarc=pass header.from=bootlin.com; 
- dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=IiDXH2IK; 
- arc=none smtp.remote-ip=185.246.84.56
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
- helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ arc=none smtp.remote-ip=140.211.167.122
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1D2E3605EE
- for <buildroot@buildroot.org>; Mon, 28 Sep 2026 11:50:04 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-02.galae.net (Postfix) with ESMTPS id 2417F1A103F;
- Mon, 28 Sep 2026 11:50:02 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id E226F601BD;
- Mon, 28 Sep 2026 11:50:01 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id BA3F1102F1ECB; 
- Mon, 28 Sep 2026 13:49:54 +0200 (CEST)
-Date: Mon, 28 Sep 2026 13:49:54 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org, Marcin Bis <marcin@bis.org.pl>, 
- Robert Rose <robertroyrose@gmail.com>, Yair Ben Avraham <yairba@protonmail.com>,
- Angelo Compagnucci <angelo.compagnucci@gmail.com>,
- Simon Dawson <spdawson@gmail.com>, 
- =?utf-8?Q?C=C3=A9dric_Ch=C3=A9pied?= <cedric.chepied@gmail.com>,
- Heiko Thiery <heiko.thiery@gmail.com>, 
- Philipp Richter <richterphilipp.pops@gmail.com>,
- Titouan Christophe <titouan.christophe@mind.be>, 
- Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Joris Lijssens <joris.lijssens@gmail.com>, 
- Thomas Devoogdt <thomas@devoogdt.com>,
- Brandon Maier <brandon.maier@collins.com>, 
- Francois Perrad <francois.perrad.86@gmail.com>,
- =?utf-8?Q?No=C3=A9?= Rubinstein <noe.rubinstein@gmail.com>, 
- Norbert Lange <nolange79@gmail.com>, Luca Ceresoli <luca.ceresoli@bootlin.com>,
- Andrey Yurovsky <yurovsky@gmail.com>,
- =?utf-8?B?QW5kcsOp?= Zwing <nerv@dawncrow.de>, 
- Daniel Price <daniel.price@gmail.com>, David GOUARIN <dgouarin@gmail.com>, 
- Gregory Dymarek <gregd72002@gmail.com>, Stefan Ott <stefan@ott.net>, 
- Romain Naour <romain.naour@gmail.com>,
- Philippe Reynes <philippe.reynes@softathome.com>, 
- Sen Hastings <sen@hastings.org>, Fabrice Fontaine <fabrice.fontaine@orange.com>,
- James Hilliard <james.hilliard1@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>, 
- Karoly Kasza <kaszak@gmail.com>, Martin Bark <martin@barkynet.com>
-Message-ID: <arpUXnSAJr41yG3l@windsurf>
-References: <20260927104301.1801638-1-bernd@kuhls.net>
- <20260927104301.1801638-62-bernd@kuhls.net>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20260927104301.1801638-62-bernd@kuhls.net>
-X-Last-TLS-Session-Version: TLSv1.3
-Subject: Re: [Buildroot] [PATCH v6 61/82] package/opensc: Add support for
- OpenSSL 4.0.0
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 81871605EE
+ for <buildroot@buildroot.org>; Mon, 28 Sep 2026 11:50:47 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 32D139830F; Mon, 28 Sep 2026 11:49:35 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 28 Sep 2026 13:50:21 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 0edc67470bd781477d0cbf0269cc608b7feaf32f
+X-Git-Newrev: a9d4e45d9590c9358e42454fc8c3be5bddccfff2
+X-Patchwork-Hint: ignore
+Message-Id: <20260928114935.32D139830F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/netsnmp: fix build with OpenSSL
+ 4.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -152,23 +112,126 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, Sep 27, 2026 at 12:42:39PM +0200, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/a9d4e45d9590c9358e42454fc8c3be5bddccfff2
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Applied to master, thanks!
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../netsnmp/0002-libsnmp-Fix-OpenSSL-4-build.patch | 99 ++++++++++++++++++++++
+ 1 file changed, 99 insertions(+)
 
-Best regards,
-
-Thomas Petazzoni
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/netsnmp/0002-libsnmp-Fix-OpenSSL-4-build.patch b/package/netsnmp/0002-libsnmp-Fix-OpenSSL-4-build.patch
+new file mode 100644
+index 0000000000..e92dffff02
+--- /dev/null
++++ b/package/netsnmp/0002-libsnmp-Fix-OpenSSL-4-build.patch
+@@ -0,0 +1,99 @@
++From 1c70efc4334629ba278ea75a071d4dbabc198df8 Mon Sep 17 00:00:00 2001
++From: Ravi Kant Sharma <ravi.kant.sharma@canonical.com>
++Date: Fri, 12 Jun 2026 13:52:20 +0200
++Subject: [PATCH] libsnmp: Fix OpenSSL 4 build
++
++[ bvanassche: edited patch description and fixed OS/X build ]
++Fixes: https://github.com/net-snmp/net-snmp/pull/1101
++
++Upstream: https://github.com/net-snmp/net-snmp/commit/66736ece08dc2b4050acaf234e6959d21c89cb02
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ snmplib/snmp_openssl.c | 39 ++++++++++++++++++++++-----------------
++ 1 file changed, 22 insertions(+), 17 deletions(-)
++
++diff --git a/snmplib/snmp_openssl.c b/snmplib/snmp_openssl.c
++index 4471a7a9d3..0bd1a65882 100644
++--- a/snmplib/snmp_openssl.c
+++++ b/snmplib/snmp_openssl.c
++@@ -234,6 +234,7 @@ void
++ netsnmp_openssl_cert_dump_names(X509 *ocert)
++ {
++     int              i, onid;
+++    int              oname_value_type;
++     X509_NAME_ENTRY *oname_entry;
++     ASN1_STRING     *oname_value;
++     X509_NAME       *osubj_name;
++@@ -252,8 +253,9 @@ netsnmp_openssl_cert_dump_names(X509 *ocert)
++         oname_entry = X509_NAME_get_entry(osubj_name, i);
++         netsnmp_assert(NULL != oname_entry);
++         oname_value = X509_NAME_ENTRY_get_data(oname_entry);
+++        oname_value_type = ASN1_STRING_type(oname_value);
++ 
++-        if (oname_value->type != V_ASN1_PRINTABLESTRING)
+++        if (oname_value_type != V_ASN1_PRINTABLESTRING)
++             continue;
++ 
++         /** get NID */
++@@ -268,7 +270,7 @@ netsnmp_openssl_cert_dump_names(X509 *ocert)
++ 
++         DEBUGMSGT(("9:cert:dump:names",
++                    "[%02d] NID type %d, ASN type %d\n", i, onid,
++-                   oname_value->type));
+++                   oname_value_type));
++         DEBUGMSGT(("9:cert:dump:names", "%s/%s: '%s'\n", prefix_long,
++                    prefix_short, ASN1_STRING_get0_data(oname_value)));
++     }
++@@ -433,30 +435,33 @@ _extract_oname(const GENERAL_NAME *oname)
++                 rtn = strdup(buf);
++             break;
++ 
++-        case GEN_IPADD:
++-            if (oname->d.iPAddress->length == 4) {
++-                sprintf(ipbuf, "%d.%d.%d.%d", oname->d.iPAddress->data[0],
++-                        oname->d.iPAddress->data[1],
++-                        oname->d.iPAddress->data[2],
++-                        oname->d.iPAddress->data[3]);
+++        case GEN_IPADD: {
+++            const int iplen = ASN1_STRING_length(oname->d.iPAddress);
+++            const unsigned char *const ipdata =
+++                ASN1_STRING_get0_data(oname->d.iPAddress);
+++
+++            if (iplen == 4) {
+++                sprintf(ipbuf, "%d.%d.%d.%d", ipdata[0],
+++                        ipdata[1],
+++                        ipdata[2],
+++                        ipdata[3]);
++                 rtn = strdup(ipbuf);
++-            }
++-            else if ((oname->d.iPAddress->length == 16) ||
++-                     (oname->d.iPAddress->length == 20)) {
+++            } else if (iplen == 16 || iplen == 20) {
++                 char *pos = ipbuf;
++                 int   j;
++-                for(j = 0; j < oname->d.iPAddress->length; ++j) {
++-                    *pos++ = VAL2HEX(oname->d.iPAddress->data[j]);
+++
+++                for (j = 0; j < iplen; ++j) {
+++                    *pos++ = VAL2HEX(ipdata[j]);
++                     *pos++ = ':';
++                 }
++                 *pos = '\0';
++                 rtn = strdup(ipbuf);
++-            }
++-            else
+++            } else {
++                 NETSNMP_LOGONCE((LOG_WARNING, "unexpected ip addr length %d\n",
++-                       oname->d.iPAddress->length));
++-
+++                       iplen));
+++            }
++             break;
+++        }
++         default:
++             DEBUGMSGT(("openssl:cert:san", "unknown/unsupported type %d\n",
++                        oname->type));
++-- 
++2.47.3
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
