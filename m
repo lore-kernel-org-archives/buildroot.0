@@ -1,141 +1,103 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 096FEC9833E
-	for <buildroot@archiver.kernel.org>; Mon, 28 Sep 2026 10:56:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79B04CA5FA2
+	for <buildroot@archiver.kernel.org>; Mon, 28 Sep 2026 11:07:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8A76580C94;
-	Mon, 28 Sep 2026 10:56:48 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dMgftns2q2hf; Mon, 28 Sep 2026 10:56:48 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org C202E80D2B
-Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790593007;
-	b=J9tIG29siXgkyKGZmLrgqu7yWwxV8fU0o6QgnQ97E/s02pbHnbppPdX/EapVRsRlyuNM
-	 JryrY+mcYyFZoVrBcoLncCw6xH3m+57n/HXy7vf/OaMBT8RIhXQlq1/3a6EnKeHuljrBv
-	 U2zvvWRXmfOJRuDiZzA8lGiE9TcSMymn/ZA49wV20li6gorZjQCra8R5vwMBNSs5Q1x9w
-	 BHCciinkpwAglj1IXQJyfP0pyAqtpORNlTsCccxZ8vgHEosPd8BqmN4UuQUkgS+m+N/MX
-	 ikv8IViWkvsn2EhZV3RpY/xcaAxNaW0nUctahrlo4rhyN7/W3tYZiSPgA8E+yDZfgFg==
-ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1790593007;
-	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 Received:To:Cc:Date:Message-ID:X-Mailer:MIME-Version:Subject:
-	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=5AoOMu+Pj7BKVvDyIw+zMlSmF4LsUf7k8wEh31uvHhI=;
-	b=dQ+/mexYxKKyYYoFC1YMrOjR+DXs7F8MkUEcyKnFCLnw+dyGSlNKVQ83pucbttfV9TuK
-	 P0wjj1WmyDBrNJXMZYXNl0HYjyH3cayzOS2NeaszV5uGjED37WhmslvZ+gcVfftEnoudd
-	 /fpMIm143L/B9UpeOgE6mEc1SovUgsU61Pvg9hhy8KoVUd22XYZyoFYBwvTnlqj0A1bpF
-	 TCeNcBBjjZigk4vj9qEoLXI+z0B6CYwryJfgY9j+1cIWXXLMW49Pid3Nqv0NOO5LBUCkR
-	 Q29D1LkXrRZeSeW9NzyBvaZFm26gVl20jYvkN2n6MP2LatNYCPnuhqomy0Fh/sS02HQ==
-ARC-Authentication-Results: i=2; smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1790593007;
-	bh=5AoOMu+Pj7BKVvDyIw+zMlSmF4LsUf7k8wEh31uvHhI=;
-	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=rBvgJ/QoUCxEhCE+4O4DGIdqF8t5baBQyBBKijU0EoOHAM4PP+I29iQCU45v5zKsU
-	 /KruFa+R3MT34qBjVPM7fr74jAjjjOr3cvmIQ9uCvfP5XD0OnSpcOl3CECfeNUm28I
-	 6NkGqRjv/0Ulz13H0k7VzXqNgdRGtXR1URHD+NhtLHRSPaFRICzc8cw4OqnhNJSH7a
-	 3NleLQzX6HWrcbnLHllLoeuFjJDPbKnwvD1qoQyKiOq0QkHgMxMVApTWjWh0LDX86i
-	 QB0u6TgDU3qtibVS27vgO2jOA3+i7WcOk1cg20TAHFtF4Hm5lUE9w6tk2OeXhTj2YP
-	 txJejmelqu23w==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C202E80D2B;
-	Mon, 28 Sep 2026 10:56:47 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 7FBE1361
- for <buildroot@buildroot.org>; Mon, 28 Sep 2026 10:56:46 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 65AA2405D1
- for <buildroot@buildroot.org>; Mon, 28 Sep 2026 10:56:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2986D405E0;
+	Mon, 28 Sep 2026 11:07:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6SjuQeYPMRtt for <buildroot@buildroot.org>;
- Mon, 28 Sep 2026 10:56:45 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org B601540583
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790593005;
- b=blBLOMS5cK8C+vOPxa2BDQWLNnCUH29b/bZvraZCXH3LxzFYwF+7QT9MzJIev+q1xer2
- tu7YpGP06PtCVS2ZAZ6zEGFdKzdctTgCA2/PkI6tnGvQAadqN9cd8Csv0H1ybgNJ3iwyR
- nS2FXXFvA1zvesm/XJ2o0Q2vL6/AJfp0F7xpJQ9b2v+BHOKf7CbDmcBPkx6COIJChevyf
- a0QtNhsubnxNUQ4jiLNCDhWHjDQC4rlngn1TbbIXtcWkS+lAs06+xu0bKM9twfBfi4/qE
- eL/WtGDdfeDypk3PAFx68Nz/RLlVIEIYkfVlzHbVUgHZKrpr29oZLSGv+iCjvYq6srQ==
+ id VmIoy-JqWXae; Mon, 28 Sep 2026 11:07:40 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 32127405C5
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790593660;
+	b=te3zA64qfxR4H4hpyGiwJujfr8xzuKmfl0LGmjg3ssykjsgT3imefugF3DNB7LMBoS20
+	 s75LfCFnU3sBYtV72VudbZuAVkTrqZzBDNDbyi1Jc8iOKnFxRvHXA+zc3vrCVu5yJCBKr
+	 T/J1rjrUMO6CdLwGXbZRguCHzVxrgxuEF6HoD0FZZ0Pf3BFtGIDkq+aqpPcMvc3C3cxGf
+	 WjLrdW6OOQD20I373zBZt8hlQ4ofnX7yUZTEmSXi3vxRhqYBMFfYeZm7gN7qzIvD0Pqzk
+	 IbR+s3ZGEnZKIgB2M66ahHx+Zi6Aa4oFN2Llom50azKRxj9wVmshABp1UTdy8ChzOOg==
+ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
+	c=relaxed/relaxed; t=1790593660;
+	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
+	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
+	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
+	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
+	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:Errors-To:Sender;
+	bh=qqcMCHztUtfY3iLHXoHekmDaWd1TPVMQKYxAxnIOJaY=;
+	b=dpcpT5XHEU5kSKhFrHvZExoscRV/ADsOO0kQl6RPEkL8MWi/aP9aB5Vmd49p8XQAw4oy
+	 +jzUHyDfD82RBhU42aTV3g4VdmirWWG/xB79vrqVDGhinEE27zsm4hiz0rhmpuLQJi6+r
+	 hSZaLgMEok2d7X6uRoqJJQYdPWb0yiCXgv85oActsMRkUi/izbO8VRj4SHjLysLiyIfH5
+	 D7WCoCmeutgpe/q23siZfmV+rGiLU1fGzlWUQVzTuSEBnBEAlBeU85jqOFlV8s+njWiNB
+	 xehPUOASvl3vQTe7L7VWfyL3cfkaLDypSjsGM5JTPXFYvaD41ceAWbr1887065GC06A==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1790593660;
+	bh=qqcMCHztUtfY3iLHXoHekmDaWd1TPVMQKYxAxnIOJaY=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=raaweKUGZ1i6YkfN753IgfQ/f7a7Ve0PBhuoNykbJ++9veuxPQ+cSa/5EFwBuefnJ
+	 j0kKViqr4tXhnKlmkECIrwMm8tEgL6GIK2FAPSCI7Yr7iypm2fIoh0dpnWWZB2LNb+
+	 TBoMe51Jvsid4x84raifBIBTMMnpId4/HyQE7jgUAjo0bG4uh4LYfz1/suQgv+J4kX
+	 jf1bSJ01sxMaaQNmOpUMhGTYLo6AiBoTHbTq4Jn7DI2QGA37ni6bsoTDTiLvkyMRHL
+	 OYabFd9VKiYzVfPn257/NtyWpqEn/HXjiM2PLLUIZMsFG+VQ8Tp4iQrMPIf1Uzn21W
+	 yAurFYsh4Oggg==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 32127405C5;
+	Mon, 28 Sep 2026 11:07:40 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8C0B024E
+ for <buildroot@buildroot.org>; Mon, 28 Sep 2026 11:07:38 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 714FA80A98
+ for <buildroot@buildroot.org>; Mon, 28 Sep 2026 11:07:38 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WbJ_A5LlWkke for <buildroot@buildroot.org>;
+ Mon, 28 Sep 2026 11:07:37 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 6CE1F80A06
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790593657;
+ b=oWlLndkV5hmB3mpEKmLX2I//psGXu/8JZPQv5EzUe3AWC/jXRqh4g6E59LxQ+/O+/hDg
+ MbE2X5bj3nh8throGzmLxMeZomFYvaD3HgqLVA6eMYoepgm7lWLFNXIWjM/48eJdCWzh1
+ 0dbgYnpPid5QR+S9YQ19x7D8K/XvRGA3DDolIV+R3OmhFCfd+sBMaulQ+6YRr3Vmy8KNR
+ lDuCuGazl38TvNWTpTcWd8SDZpSl5wKaS3J9ijJs8RUbu1mKZt1PTWJAdMZgtJxf1jbQc
+ bAIvdLf6kWZ3tm4PsER72esxKjMmRfU4BDVWMihDZaYwge9tRXV3WembRHiddzH7EFw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1790593005;
- h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
- X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
- Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
- bh=/ci+NYvMnr8YK7BgKecW98VcNuCYvaTo9f0tOqFaEVo=;
- b=Jjbu1AOLCFEDbb28yLjGAZl2Jmo2sOV7um3OPtutuWrHVZrOhcCVz5XR33TqnjEsVT2A
- xS/mnS20AN4+HdNpYm+r5WeGArWH9cq/yR1P82ACdOqr6SSP9jUEfCFwYuf/qTMLUAe+B
- tUgcawXSFPV05EZLbQMo4RiAeEK7dyLjatr235dkP9LbrCjqNqgMt1djmsYdbQF4ykfCB
- vwyw7mRUhbXVuAtK3grFrrATjDeh2LC4jEVnFitXcJ5YMEwmTfhhoipQGzeQPdXIC7gHG
- t+tqkreeQRHGfVLty47/rvZtslRyEfpcGXYeKzH3td+RxWAm6zoouHKSHKXr917Czfg==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org;
- dmarc=pass header.from=mind.be; 
- dkim=pass header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=AM0rITh2; 
- arc=none smtp.remote-ip="2a00:1450:4864:33::f"
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a00:1450:4864:33::f;
- helo=mail-ed2-x0f.google.com; envelope-from=titouan.christophe@essensium.com;
+ c=relaxed/relaxed; t=1790593657;
+ h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
+ X-Git-Newrev:X-Patchwork-Hint:Message-Id;
+ bh=AjyviVntgIfuSr7Mpwyfp5gO7hiUGJPkuTnl3HlQ1eA=;
+ b=bDwdzdHNSSK+qtdOl0GAyju73Bxo3cS0FgBPtYw3BxPQ1Bl1xpbXsfa4mxek+MvjRnyr
+ GsedfvNdnL6DKtTT4mwOlT61EL0CWLvIBB2GTD1FYGAbRh2CrdWt9xAhMsMFEYmY7yxIt
+ WXvgOZ6MPzHsE/4D+NnN65EL/xbGAf6rYwmNUrwsRdPEx166l17lzBy3nSdHxgQjbYwBv
+ PYCrqyxe7+2YeSlFOe0LYM+6mBwxA6Iu17v8nCFnIg+2DOv+BIUZ8zojPehk+uDCj/h3b
+ sj/gLTRvYdVgaB46iEjcbso/TOvEYD/LOBK6eVMc/GyFl28V6zHda4OLoFoXveut8XA==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org;
+ arc=none smtp.remote-ip=140.211.167.122
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-Received: from mail-ed2-x0f.google.com (mail-ed2-x0f.google.com
- [IPv6:2a00:1450:4864:33::f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B601540583
- for <buildroot@buildroot.org>; Mon, 28 Sep 2026 10:56:43 +0000 (UTC)
-Received: by mail-ed2-x0f.google.com with SMTP id
- 4fb4d7f45d1cf-6a99cd5115bso4781492a12.3
- for <buildroot@buildroot.org>; Mon, 28 Sep 2026 03:56:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1790593002; x=1791197802;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to:content-type;
- bh=/ci+NYvMnr8YK7BgKecW98VcNuCYvaTo9f0tOqFaEVo=;
- b=sd/ia1jd8EhqHdrtmEknQC2I1pzOYxPdAMde7Xaa0VyR2s5J3r0cxTN6dCaRWVNIGY
- tM8uVJZ/HFCFGiEphOtoLKCKOTtTFjwdyC7wRtJNgUKakpnVU63DG30RSggw415F+5RJ
- To+hwZJNn5XSijeea7pwSyFKJjDEE9TXFXML0IU31TeK3fJl2PQJIaHo/XVjNeP/TGE+
- erujf/O8jnldMqirQulqJ4VdlOHCi1XrKR8O64kCDv4orNiWtHyz7gfS3ZJ6g2zWo2dA
- CXvvsXWG8FuohldD+YMyyZXkCfGNCTEjnZF2URbWtZCs2FeI2xBBGOSspOs0W56mLxwh
- 7Q2w==
-X-Gm-Message-State: AFuF++nMKf0kEOi8UxxAsY2+K9qP9lNtG1iT5epxez5RiAUmXx07TUM2
- 0a43wUekDZLjee/9yYaIARkGyf4CoeiCHft8n7WJlw0yM2RC1kDMN1YmddpfBE/AasuXSGVb7Kn
- XHxiB
-X-Gm-Gg: AYBFou2INDFCCf3X7rv15OnF4gA7QFHdeRpkPMgYk0rtQpU4RFVR6A8I90jo9FlzYb3
- xd7FvF6ytZD+XWo8XZslgJ14Wm1lS3ci47UPpQ3gC2oZSyagXs7jQOt3QR3U2xL7RHcNmd5cYu5
- BXValWlt1Xe8Fd+2/OcMvdVPn5LecHvygKj8EWwSd+KwkM6YPX2Le7Mfn3Qn13dfZ7IzdmYXsA6
- GNAn+zJFYRqfXOw7Tgbu8TGkD/2/sbagsEhGvxtKE6mNXNk5OOj+W1AX5GJ2XBMnRTbfjHWKL9Y
- TPVxEZjmUgQh2pzg2t8Um7k8K6hHIOH5wUaH0XYaAP8JoMyjZl+nL2l7LgmJc3lgP7fEI6gD+Lg
- aztHyPZJwdPAx1F4MXVcDABmM3/T9sqU6G3+emlJrKO516asb9P/CaoEspy1dCM0U8OIWYIfmXU
- JNQM6GwMNDgwqOhmOAilZxEEhIxX/rFUQUTb7rEe8B47H2CZhWtj7CxtQULdM+hMrO6m/fk2Qz+
- 8532/HtCxd6uUBh9FDYRWRKdZYJHW+opzFxE1NePlEx/5Or9ks=
-X-Received: by 2002:a17:907:6c10:b0:c2d:bcf7:37f9 with SMTP id
- a640c23a62f3a-c2dbcf74374mr386246566b.26.1790593001596; 
- Mon, 28 Sep 2026 03:56:41 -0700 (PDT)
-Received: from dragon.home (154.186-200-80.adsl-dyn.isp.belgacom.be.
- [80.200.186.154]) by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-c2ae757857bsm444989166b.24.2026.09.28.03.56.40
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 28 Sep 2026 03:56:41 -0700 (PDT)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6CE1F80A06
+ for <buildroot@buildroot.org>; Mon, 28 Sep 2026 11:07:37 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 353D78D9DB; Mon, 28 Sep 2026 11:06:25 +0000 (UTC)
 To: buildroot@buildroot.org
-Cc: Bernd Kuhls <bernd@kuhls.net>
-Date: Mon, 28 Sep 2026 12:56:34 +0200
-Message-ID: <20260928105634.825845-1-titouan.christophe@mind.be>
-X-Mailer: git-send-email 2.55.0
-MIME-Version: 1.0
-Subject: [Buildroot] [PATCH for 2025.02.x] package/php: security bump to
- v8.3.35
+Date: Mon, 28 Sep 2026 13:06:42 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: df39c8c52422c44d30cc70879b5d222569cf5cad
+X-Git-Newrev: 441ccd8dab358a725bbf3b70e8e698314f71edb4
+X-Patchwork-Hint: ignore
+Message-Id: <20260928110625.353D78D9DB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libsoup3: fix static build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -147,49 +109,111 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Titouan Christophe via buildroot <buildroot@buildroot.org>
-Reply-To: Titouan Christophe <titouan.christophe@mind.be>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This fixes many vulnerabilities, see the changelog at
-https://www.php.net/ChangeLog-8.php#8.3.35
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/441ccd8dab358a725bbf3b70e8e698314f71edb4
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+Since the bump to 3.7.3, libsoup unconditionally includes <dlfcn.h>
+in soup-init.c to detect whether libsoup2 is loaded in the same
+process. Static-only toolchains such as uClibc-ng without shared
+library support don't provide this header, so the build fails:
+
+../libsoup/soup-init.c:21:10: fatal error: dlfcn.h: No such file or directory
+
+Add a patch, submitted upstream, that checks for dlfcn.h at configure
+time and skips the libsoup2 detection when it is not available.
+
+Fixes:
+https://autobuild.buildroot.org/results/4effebe5fc12146749e704dd56f695363cc8fbc3
+
+Fixes: 55cec1d01307f8e93c6ce61c95c22c863fc1ce28 ("package/libsoup3: bump to 3.7.3")
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Assisted-by: Claude:claude-opus-5
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...only-use-dlopen-when-dlfcn.h-is-available.patch | 67 ++++++++++++++++++++++
+ 1 file changed, 67 insertions(+)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index dd336f0e65..99ce84673e 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From https://www.php.net/downloads.php
--sha256  e293ed620cec74651bb4a071317892a478aa6840fab22db45c72d77cd42f9676  php-8.3.33.tar.xz
-+sha256  ff4630fbbbd94359134b7d3c223db59329905bdc4f5a9ef93d257b48e358619a  php-8.3.35.tar.xz
- 
- # License file
- sha256  b42e4df5e50e6ecda1047d503d6d91d71032d09ed1027ba1ef29eed26f890c5a  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 3389b9c530..497ccc49e4 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PHP_VERSION = 8.3.33
-+PHP_VERSION = 8.3.35
- PHP_SITE = https://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
--- 
-2.55.0
-
+diff --git a/package/libsoup3/0001-soup-init-only-use-dlopen-when-dlfcn.h-is-available.patch b/package/libsoup3/0001-soup-init-only-use-dlopen-when-dlfcn.h-is-available.patch
+new file mode 100644
+index 0000000000..e2caa3c52b
+--- /dev/null
++++ b/package/libsoup3/0001-soup-init-only-use-dlopen-when-dlfcn.h-is-available.patch
+@@ -0,0 +1,67 @@
++From 9dae8238db84a1ce2aeb61cce41af4718157172b Mon Sep 17 00:00:00 2001
++From: Yegor Yefremov <yegorslists@googlemail.com>
++Date: Sun, 27 Sep 2026 12:03:53 +0200
++Subject: [PATCH] soup-init: only use dlopen() when dlfcn.h is available
++
++Commit 1296cbf983f0 ("soup-init: Use libdl instead of gmodule in
++`soup2_is_loaded` check") unconditionally includes <dlfcn.h> on
++non-Windows platforms. Static-only toolchains (e.g. uClibc-ng built
++without shared library support) don't provide this header, so the
++build fails:
++
++../libsoup/soup-init.c:21:10: fatal error: dlfcn.h: No such file or directory
++
++Check for dlfcn.h at configure time and skip the libsoup2 detection
++when it is not available. Without dynamic loading, libsoup2 cannot be
++loaded into the process at runtime anyway.
++
++Upstream: https://gitlab.gnome.org/GNOME/libsoup/-/merge_requests/571
++Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
++Assisted-by: Claude:claude-opus-5
++---
++ libsoup/soup-init.c | 9 ++++++---
++ meson.build         | 4 ++++
++ 2 files changed, 10 insertions(+), 3 deletions(-)
++
++diff --git a/libsoup/soup-init.c b/libsoup/soup-init.c
++index 3392e8e..a57db6e 100644
++--- a/libsoup/soup-init.c
+++++ b/libsoup/soup-init.c
++@@ -17,7 +17,7 @@
++ #include <windows.h>
++ 
++ HMODULE soup_dll;
++-#else
+++#elif defined (HAVE_DLFCN_H)
++ #include <dlfcn.h>
++ #endif
++ 
++@@ -26,8 +26,11 @@ soup2_is_loaded (void)
++ {
++ 	gboolean result = FALSE;
++ 
++-	/* Skip on PE/COFF, as it doesn't have a flat symbol namespace */
++-#ifndef G_OS_WIN32
+++	/* Skip on PE/COFF, as it doesn't have a flat symbol namespace,
+++	 * and on platforms without dlopen() support (e.g. static-only
+++	 * toolchains).
+++	 */
+++#if !defined (G_OS_WIN32) && defined (HAVE_DLFCN_H)
++ 	gpointer handle;
++ 	gpointer func;
++ 
++diff --git a/meson.build b/meson.build
++index 4422215..3140ceb 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -167,6 +167,10 @@ libpsl_required_version = '>= 0.20'
++ libpsl_dep = dependency('libpsl', version : libpsl_required_version,
++   fallback : ['libpsl', 'libpsl_dep'])
++ 
+++if cc.has_header('dlfcn.h')
+++    cdata.set('HAVE_DLFCN_H', '1')
+++endif
+++
++ if cc.has_function('gmtime_r', prefix : '#include <time.h>', args : default_source_flag)
++     cdata.set('HAVE_GMTIME_R', '1')
++ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
