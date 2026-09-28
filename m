@@ -4,141 +4,100 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50F1BC9833F
-	for <buildroot@archiver.kernel.org>; Mon, 28 Sep 2026 11:51:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 538B7CA5FA2
+	for <buildroot@archiver.kernel.org>; Mon, 28 Sep 2026 11:59:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1DEBA80D97;
-	Mon, 28 Sep 2026 11:51:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1816180D7A;
+	Mon, 28 Sep 2026 11:59:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JwrCw3JhMbnl; Mon, 28 Sep 2026 11:51:01 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 43FE380D74
+ id cZPrm_h2Nckm; Mon, 28 Sep 2026 11:59:07 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 09F6880D7B
 Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790596261;
-	b=UxlokMue6cplC2oUK/XYvyq/1Lh4cX9thrXm4jJ/+G7wJngRZPFsRtf0oUMPF29/FZ1b
-	 O57lJbjiFmhxqaMfjR6ZB0CowvIQaux/DeEzCp7+m4ECphRc08gU4sP21SYqnvBaMRjdL
-	 t8p4pZj5xOPn8ZzoE0RogpSZ0l6vUxVg84grlWRa/gv9A84sv5ICDwdMcFWC+oFD9kOpx
-	 q4mOdjDHxHiDR7X/c0vMJcxJZ2S5MFx/KNDlcxWId9RbuYK3VTe8/XHT4NUJQOXVUrvgI
-	 p0VLu3SJyxtSqkCcz2DWOAUg2sXHBdxphyfL+vxysMg0+Pyury7WHoyRLdKtWR7AaDA==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790596747;
+	b=q+DF9o1VYvpMh/8KAqjH6KCdBSuIRfbIy+H03wjJdIA/VAWkjpufxxQxnPK5yclR0eS7
+	 aNIj8D4lLBqN+4L3XXSJJKFf0ZJB05D+iEZZ+ZhrJtPE6AuJBYa14j5/HRNyEodFdLo/B
+	 S+xOZtea6wS/quQvg+1qhobMW5N5DgqJbDZ2ZjyK8iq2H5tpfRg+VDnUy00o2JO1aUPoM
+	 4a5ak8jcX3nmgaGzvits2NS6zgdUn8ivmmRo5IiFvPFh4sxLdDmVMw148zHo0IP+uO9Bo
+	 /X9BPh43/hmatIEN5H29Vd/40NKo1w0lswfXSDeC3RUM69u4yMb17ivjU6DRMU9Lcmw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1790596261;
+	c=relaxed/relaxed; t=1790596747;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 Received:Received:Date:To:Cc:Message-ID:References:MIME-Version:
-	 Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version:Subject:
-	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=zHtp+lrmPXz18ZxIuGlo2KhxUJ/pUfxzaEw5zp0xk+E=;
-	b=RIyH+u385az40R2M0A0JS6iDFP3F60s+mkoOxe+O1ld/gLPYlucWtzCVFZTjSYWGNagI
-	 Zbnn/SJJ+xJJqSpM+gTtXVVnNePlaJK/Nz73P1obK5rtuIGOkKRIGKgi4DDtNXiKzzsFG
-	 4pRPY1AbgM19ZF7mZfiQPbihU56CviybCNkX05rzJkfLikU2tey6DwGbDkAVdHx2XJqhT
-	 WkFHqeD70Fw+5KjqrUd4EBjA2vMCHOirvgldbCp/teSD9mGDsfT9P4BPhFDzQT9p7b1uw
-	 h3iFb8Y8FjfyPfnr9kC/fC84hmuPl7fc07hR94sWEP48L7B3vTkglgdcASNrmBYr5Ww==
+	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
+	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
+	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
+	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:Errors-To:Sender;
+	bh=luA1oTjc1RL87rrmhUeSyaEubl6ofe0sOZvX+Vd4z5g=;
+	b=mv+gyod4L5XRbBa91nrQK9DtFkxLiM0kHZC1OtATDJBbwU7PZ6H6RX73FNfzNIldg6ND
+	 i7UMSFC4/UimunmXrKpHYwK7j/9yb7jF2LGIA1yiIdqxPQIYvtLZ54kolmFuLh/ZioS9k
+	 E4lDPhIG4ylRXw28FLCTZLs9SmI9OkJJR6p6Qs96YYybRD9NJko0zNXhWDtQ4uVUdTVPt
+	 0h7jaTo5YnuLWR79d4w2hUe0OgN8xtFFCTiSYebcHBvg2sAyrsI8fK3oVlE9fubookYTA
+	 E8ORx2XX2Kc0tLdQ2H2yf97ujq1TVpqQ0ep0R1/mn4+WaylR8YoqvKw2TVxd9VKacDg==
 ARC-Authentication-Results: i=2; smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1790596261;
-	bh=zHtp+lrmPXz18ZxIuGlo2KhxUJ/pUfxzaEw5zp0xk+E=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=PnqPf10JS/6RI+d/UmuxjOyktSGrZo0u9//pLxa6UYj1Phlf4kiT9nrmTO0fLhGJK
-	 Z6Lw8tbshkvxznqTkljFsul9ZM2UiHHC96o/OuGDnmRxUZM8fBihmKzIrEtH8aoTWm
-	 g3cO5wvyyZhZKtJTMf/JA9X+8HQSvfVBvftXsiXvbocIwZ+VHTJ6DrrTL/g3jcRMCr
-	 8C3TJBHovxlsQlxBFkPVzeNuPhOFMbZhdPKhy8YU11FNKK0wFPgljlF1vkEWWEsapL
-	 lzxv9YCY344QnVeIX5KReCAHZ2bAifP5LCgxC5GZx2KCZLgYTkK7EJiaNt4KJMu8KT
-	 zBjw+rmCU/BvQ==
+	s=default; t=1790596747;
+	bh=luA1oTjc1RL87rrmhUeSyaEubl6ofe0sOZvX+Vd4z5g=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=EuSADAojUI7ZHYfGvBvMfnxC7ZFqxlOzQKRabKOtIXdjSs6IHBhFCacT8VTS2kFJI
+	 8XsteSMkNwTrxNFrsBuE/sQYOX4R3gSap+DJEJC3audrnQZMuXp7qjb0oKrn0oe5T6
+	 3RBv/WfQ/U7bBOgJGG1lzqa0hklx9hXgyWJ7r88Z1v4SKIvlmtCLik08GY9WVlyYlw
+	 lpJk4M16U1NSbdFH9tKWwWoKyVuWTA70sVM0mRkVDgPjiM6hWVUJfrt89x+WS3GM+d
+	 lQHfCnh8R/1YmgbhkQgW0VZ/lNoAUT188VuRgc7A0aXb+a16mLEy7KWfq4+wG/6EVK
+	 7tquw//7gtRgA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 43FE380D74;
-	Mon, 28 Sep 2026 11:51:01 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 81F593D8
- for <buildroot@buildroot.org>; Mon, 28 Sep 2026 11:51:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 09F6880D7B;
+	Mon, 28 Sep 2026 11:59:07 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id DDA7622B
+ for <buildroot@buildroot.org>; Mon, 28 Sep 2026 11:59:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7F87E60631
- for <buildroot@buildroot.org>; Mon, 28 Sep 2026 11:51:00 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C35B1405A2
+ for <buildroot@buildroot.org>; Mon, 28 Sep 2026 11:59:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id v-ikGVOT-rq3 for <buildroot@buildroot.org>;
- Mon, 28 Sep 2026 11:50:59 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 86942605EE
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790596259;
- b=SLvfE/vd/3Bxt8PwDIP0Br4yv+Se4bjHpDz0m/VVPZzXUcBpl5EVsWWHWXdz6iSSFv7x
- DCpPDKl6A/kuwnuQk7ig6hJNRR5nggctajotp3clRWTYse4gxT+4ClgUV43C34HQo7lWI
- vX1riXehi29oeCrQjb9sZzIZjSo7c8mDddVRp8btl44WuyitvxBHxYEnIH4bs0qo5pKAK
- jgvv7il/q3JQcS9GEL0C0D83xaZpEjr7MB1YHxtbk9HszLQea8+qzKLb05ZT48oAp++x9
- +X072hFyl5izAL5veEyylB84XftOuy8lzOPp1XeJp3wqkkeu8hDZ6ZBUgxiR8ubmqkg==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OxcBrXyjYusw for <buildroot@buildroot.org>;
+ Mon, 28 Sep 2026 11:59:04 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org DC7264059A
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790596744;
+ b=lGRr8qKCsiSOA13h3+7Nx2AWozJpAriqOb8f7JOhR3aQC7cdlUA8YUEfXiisjFGZ/zCs
+ 97o+VNy9D0mmr5LYjKbQ7PJDycihOcf4mWAh/D/WxRZII19iandl7hz5Q2NOsSXk727rT
+ oho8p070hGQBUIdJHF3kgwLcPqVlc+2mbGDP6/U5Aj2shgdQT9H/goUe+IZ4ECdkDB4H2
+ mnD+iHJRupVIpwK3sI5LwapiQeIttGGw5qnHnysY2kWI3LIiA8nqGJH6n3fclskjbhp7H
+ Z23eGFkUMfzEwmDUJUMcO8I2DziFREv8HQFKqEn/GveouPObZtgLk4IOgpGkTehL/hg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1790596259;
- h=Received-SPF:Received:Received:Received:DKIM-Signature:Date:From:To:
- Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
- Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version;
- bh=ipVqzwJILrH99+U1VtbvOkzkS2ukkcyzDsYNrFtLVfk=;
- b=G/vCmIGfV4/moNwTf4ypA40FxmeNsWLew6QT7STvpRyCg8K/rC1JGDur2NaUNulciqt4
- bFFn9nlEVz+MTSPm5sIeUmqZg+VNb/QsyCuNDkgCvaE5miYnUFe9tBDVbvU8lUtk4gNyJ
- X8ITQu0cdqBs+ycR4VMFm8C6km/Pq/H1URlVxQRxMq/54VPGi8zn/ux0iqsRb3knXFZgk
- QGYcA0pdleUTuD/haq9KOsnbePBJnp6YNClH02H1T/5oY1+wEBno1APxhn8b3VlAh0qTS
- /PyBA9GAJ7okLcV3hkwnnGuq2y7HRYKz9FZkwvV7RY2pCpH3SaDVSi0xXe/S5UMqrPA==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org;
- dmarc=pass header.from=bootlin.com; 
- dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=bCKIwxXW; 
- arc=none smtp.remote-ip=185.246.85.4
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
- helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ c=relaxed/relaxed; t=1790596744;
+ h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
+ X-Git-Newrev:X-Patchwork-Hint:Message-Id;
+ bh=EFNJvlCVBUMD0o9Sk7kQzNl2HXM4SjtGhKNRx2TW+0g=;
+ b=JhqIn/j1RQfA/3BChaQ3M+LCDi3pWqzE6HjgAM10PpzMJVOgNx5s8z8by0og7D/KFdgF
+ aNsCh8JM/5dFjYSmeEfTSuTqWEy6aktycGti8zbi8VSX8894aCdBDWwEL4FzLRCSnkEJ+
+ VuXVxe60qbSUfgjavrA/1/20ZFGCYIPkS+0uT9V2BFhmCSiRiwJhP4JWK4WXJK76a4dno
+ A1uBrZXsuNjX3KKYnrMIhlonhu2yslYOYGdrJwk3wuycOQJ/ZMqVRYKgXqxydZ+NJIpPI
+ ri76wz6yRV2UyLCxvYNytlb+7Mz7AM0OVq14XQmADtMTll67c1NQ5WxsWGZbnkmZCQA==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org;
+ arc=none smtp.remote-ip=140.211.167.122
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 86942605EE
- for <buildroot@buildroot.org>; Mon, 28 Sep 2026 11:50:58 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-03.galae.net (Postfix) with ESMTPS id 2D4D74E410A4;
- Mon, 28 Sep 2026 11:50:57 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id F1D7E601BD;
- Mon, 28 Sep 2026 11:50:56 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id C854C102F1ECB; 
- Mon, 28 Sep 2026 13:50:50 +0200 (CEST)
-Date: Mon, 28 Sep 2026 13:50:50 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org, Marcin Bis <marcin@bis.org.pl>, 
- Robert Rose <robertroyrose@gmail.com>, Yair Ben Avraham <yairba@protonmail.com>,
- Angelo Compagnucci <angelo.compagnucci@gmail.com>,
- Simon Dawson <spdawson@gmail.com>, 
- =?utf-8?Q?C=C3=A9dric_Ch=C3=A9pied?= <cedric.chepied@gmail.com>,
- Heiko Thiery <heiko.thiery@gmail.com>, 
- Philipp Richter <richterphilipp.pops@gmail.com>,
- Titouan Christophe <titouan.christophe@mind.be>, 
- Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Joris Lijssens <joris.lijssens@gmail.com>, 
- Thomas Devoogdt <thomas@devoogdt.com>,
- Brandon Maier <brandon.maier@collins.com>, 
- Francois Perrad <francois.perrad.86@gmail.com>,
- =?utf-8?Q?No=C3=A9?= Rubinstein <noe.rubinstein@gmail.com>, 
- Norbert Lange <nolange79@gmail.com>, Luca Ceresoli <luca.ceresoli@bootlin.com>,
- Andrey Yurovsky <yurovsky@gmail.com>,
- =?utf-8?B?QW5kcsOp?= Zwing <nerv@dawncrow.de>, 
- Daniel Price <daniel.price@gmail.com>, David GOUARIN <dgouarin@gmail.com>, 
- Gregory Dymarek <gregd72002@gmail.com>, Stefan Ott <stefan@ott.net>, 
- Romain Naour <romain.naour@gmail.com>,
- Philippe Reynes <philippe.reynes@softathome.com>, 
- Sen Hastings <sen@hastings.org>, Fabrice Fontaine <fabrice.fontaine@orange.com>,
- James Hilliard <james.hilliard1@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>, 
- Karoly Kasza <kaszak@gmail.com>, Martin Bark <martin@barkynet.com>
-Message-ID: <arpUlvCOAcj5Ks-_@windsurf>
-References: <20260927104301.1801638-1-bernd@kuhls.net>
- <20260927104301.1801638-59-bernd@kuhls.net>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20260927104301.1801638-59-bernd@kuhls.net>
-X-Last-TLS-Session-Version: TLSv1.3
-Subject: Re: [Buildroot] [PATCH v6 58/82] package/netsnmp: Fix build with
- OpenSSL 4.0.0
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id DC7264059A
+ for <buildroot@buildroot.org>; Mon, 28 Sep 2026 11:59:04 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id A1B779830F; Mon, 28 Sep 2026 11:57:52 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 28 Sep 2026 13:51:32 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: a9d4e45d9590c9358e42454fc8c3be5bddccfff2
+X-Git-Newrev: 7dab0537a0c414a5282f1918550f06a2dbfcdd2b
+X-Patchwork-Hint: ignore
+Message-Id: <20260928115752.A1B779830F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libopenssl: remove patch 0002
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -152,23 +111,119 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, Sep 27, 2026 at 12:42:36PM +0200, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/7dab0537a0c414a5282f1918550f06a2dbfcdd2b
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Applied to master, thanks!
+Patch was committed upstream in a slightly different version
+https://github.com/openssl/openssl/commit/098404128383ded87ba390dd74ecd9e2ffa6f530
+and was first released in version 3.0 which was added to buildroot with
+commit 3c66f65a6a549930870f2c0d98abb5ca9321d2a5.
 
-Best regards,
+Added Upstream: tag to patch 0001.
 
-Thomas Petazzoni
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+Renumbered patch 0003 and updated Upstream: tag.
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .checkpackageignore                                |  2 --
+ ...roducible-build-do-not-leak-compiler-path.patch |  2 ++
+ ...se-ELFv2-ABI-on-some-ppc64-big-endian-sys.patch | 37 ----------------------
+ ...s.patch => 0002-Revert-Fix-static-builds.patch} |  3 +-
+ 4 files changed, 4 insertions(+), 40 deletions(-)
+
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 6d2a024e07..bd3766988d 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -502,8 +502,6 @@ package/libnfc/0001-autotools-make-example-build-optional.patch lib_patch.Upstre
+ package/libnss/0001-Bug-1801182-Allow-overriding-OS_ARCH-OS_TEST-and-OS_.patch lib_patch.Upstream
+ package/libodb-mysql/0001-fix-syntax-issue-while-checking-ldflags.patch lib_patch.Upstream
+ package/libodb-mysql/0002-mariadb-FTBFS-fix.patch lib_patch.Upstream
+-package/libopenssl/0001-Reproducible-build-do-not-leak-compiler-path.patch lib_patch.Upstream
+-package/libopenssl/0002-Configure-use-ELFv2-ABI-on-some-ppc64-big-endian-sys.patch lib_patch.Upstream
+ package/liboping/0001-fix-utf8-support.patch lib_patch.Upstream
+ package/liboping/0002-Open-raw-sockets-when-adding-hosts-not-when-doing-th.patch lib_patch.Upstream
+ package/liboping/0003-Fix-compile-break-with-GCC-7-buffer-overflow-with-snprintf.patch lib_patch.Upstream
+diff --git a/package/libopenssl/0001-Reproducible-build-do-not-leak-compiler-path.patch b/package/libopenssl/0001-Reproducible-build-do-not-leak-compiler-path.patch
+index 9353c1ae90..f4baf916e3 100644
+--- a/package/libopenssl/0001-Reproducible-build-do-not-leak-compiler-path.patch
++++ b/package/libopenssl/0001-Reproducible-build-do-not-leak-compiler-path.patch
+@@ -5,6 +5,8 @@ Subject: [PATCH] Reproducible build: do not leak compiler path
+ 
+ Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+ 
++Upstream: https://github.com/openssl/openssl/pull/5218 (rejected)
++
+ [Rebased on openssl-1.1.1.a]
+ Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+ ---
+diff --git a/package/libopenssl/0002-Configure-use-ELFv2-ABI-on-some-ppc64-big-endian-sys.patch b/package/libopenssl/0002-Configure-use-ELFv2-ABI-on-some-ppc64-big-endian-sys.patch
+deleted file mode 100644
+index f74576beae..0000000000
+--- a/package/libopenssl/0002-Configure-use-ELFv2-ABI-on-some-ppc64-big-endian-sys.patch
++++ /dev/null
+@@ -1,37 +0,0 @@
+-From b57cc2e4ee21babacbffc243626de72c248068ea Mon Sep 17 00:00:00 2001
+-From: Andy Polyakov <appro@openssl.org>
+-Date: Sun, 5 May 2019 18:30:55 +0200
+-Subject: [PATCH] Configure: use ELFv2 ABI on some ppc64 big endian systems
+-
+-If _CALL_ELF is defined to be 2, it's an ELFv2 system.
+-Conditionally switch to the v2 perlasm scheme.
+-
+-Reviewed-by: Paul Dale <paul.dale@oracle.com>
+-Reviewed-by: Richard Levitte <levitte@openssl.org>
+-(Merged from https://github.com/openssl/openssl/pull/8883)
+-[vfazio: fixup for 1.1.1d]
+-Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
+-[rebased on openssl-1.1.1i]
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- Configure | 4 ++++
+- 1 file changed, 4 insertions(+)
+-
+-diff --git a/Configure b/Configure
+-index 15054f9..ac3206e 100755
+---- a/Configure
+-+++ b/Configure
+-@@ -1686,6 +1686,10 @@ unless ($disabled{asm}) {
+-     }
+- }
+- 
+-+if ($target eq "linux-ppc64" && !$disabled{asm}) {
+-+       $target{perlasm_scheme} = "linux64v2" if ($predefined_C{_CALL_ELF} == 2);
+-+}
+-+
+- # Check for makedepend capabilities.
+- if (!$disabled{makedepend}) {
+-     # If the attribute makedep_scheme is defined, then we assume that the
+--- 
+-2.25.0
+-
+diff --git a/package/libopenssl/0003-Revert-Fix-static-builds.patch b/package/libopenssl/0002-Revert-Fix-static-builds.patch
+similarity index 97%
+rename from package/libopenssl/0003-Revert-Fix-static-builds.patch
+rename to package/libopenssl/0002-Revert-Fix-static-builds.patch
+index 10ca97a240..daeece2a0f 100644
+--- a/package/libopenssl/0003-Revert-Fix-static-builds.patch
++++ b/package/libopenssl/0002-Revert-Fix-static-builds.patch
+@@ -5,7 +5,8 @@ Subject: [PATCH] Revert "Fix -static builds"
+ 
+ This reverts commit cfd7225fbb9507b2e443a494459bdaab5236d29d.
+ 
+-Upstream: https://github.com/openssl/openssl/issues/14574#issuecomment-817209126
++Upstream: https://github.com/openssl/openssl/issues/14574#issuecomment-3791009156
++(rejected)
+ 
+ Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+ [Dario: make the patch to be applied with fuzz factor 0]
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
