@@ -4,154 +4,101 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C71A6CA5FAB
-	for <buildroot@archiver.kernel.org>; Tue, 29 Sep 2026 03:23:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B499CA5FA1
+	for <buildroot@archiver.kernel.org>; Tue, 29 Sep 2026 06:36:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4CF1540383;
-	Tue, 29 Sep 2026 03:23:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AC6114054E;
+	Tue, 29 Sep 2026 06:36:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id b4C6PlZtOTcw; Tue, 29 Sep 2026 03:23:02 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 3D54140355
+ id 3I1nJuHfb0gQ; Tue, 29 Sep 2026 06:36:01 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 72D2740541
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790652182;
-	b=LJO/MawKHJKmO80KCaAO/FItakzL5Z3RX8jawto+f16oVKiccwjcjRKnExh1eqkFohjs
-	 yJ/j/FT6t0tT7lJzmKcAabqIqnGPVy+IiUvZoNgkb//Tbpd4WehzRwxPc/+CsFwhApdKW
-	 LhyDeq2shN0+rEVAh7pOqsnL/VLN5VEOy/WvuDyln8lYDrrGP9MN+qLYNxn4CLEMj7umC
-	 nRMvO8HeKROGn0PVCwPC8T+6aXGeVw2UOEhQ7EcRm9KO0IlvAL5J2dhq4kQ5ulVABz1hw
-	 EnuV8Pdj+E+bwOk4HrJ2OKTFr+i7E+yVKf6EGEFV5bz7FcEHW4NwVQCkaNUPqMa5q5A==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790663761;
+	b=FhpOSQ125c72sKcY4WLBZlOTKfm2NFl35aAhH7yVxKGs1rCfhr4n1RN+ghGjon/pTEzf
+	 OZDmC0kAiYYXW+PVtbE9VLX8rh7dndcLyP6oZw08lPiRfcBI4AYIKypvl/WXvISBPBUGo
+	 hK+8uOkpolfQKl66ySeK++SzZZSCAztSI0EKl8yPRzOxOOHeDEXbiMSs+MH1RyPpLadSe
+	 2XCWeC/Uka9dKCWFYn4hbcbci+rdIjJ2C3yoYQqXLEaFo8BKQWKMDaYUVHdeX5iMb7f/x
+	 r2Rh7YbkjcKF4cnZKM7U2b+L6nj6xNIH0chcRgZwIFWAGN7CGKN+XmcsUuxqBTpgqcw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1790652182;
+	c=relaxed/relaxed; t=1790663761;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
-	 X-Received:Received:Message-ID:MIME-Version:To:From:Date:Subject:
-	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:Content-Type:
+	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
+	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
+	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
+	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=H/h2hz+ZHlbNoj8NZLChdf4RjXko8DkO4BjAP6qpsGM=;
-	b=p+LzBYnqXEYrTM9QmqSikl+hzXyJ6wFI3RpiHU3KU+KM/NZEHF9ZibbniFk+XIWVezm2
-	 EGytIRApn2aQ2qv2Lkx/ShjZmwyjrBmlMq+muGvaFScnWWbVLIdZ8pyANZjY2XelprQmT
-	 HT2aFLakQQt5O3KtEXopuiGGXkvaE7Q/CY9i11xPpZQi+wtUKZ6kMJYpxa8I6hsEgPhPV
-	 UZwQDUNaUbwDjQNnKUgDoNJ5KGLF8bSc1rst1y/qOIhwiORwrAi8VRptWDD7bNuPjhrFW
-	 WS/FJJCnHj5hT6mCQm+Um6jcoY5+sxjexO9aoLxBwBygtexwQSzHzy4nFcAz3xRwDPA==
+	bh=Mztsxt57r0x/+O2abrV/dzrsPDyEkmEVT56JIE3BRK4=;
+	b=MAK40QGe3QkViZW1uOPYIlWXtP0ORhMNcy5z9T5VImq55Cbf3qriS3ZZoeqPtt5Ws228
+	 uf8F8kuvto3aTFX2Rcqc3VPFylTbsdAxj0lCIed4U5G1cNZp3k6NZEx6Eq4khHSEVI2Ge
+	 qisdJ+SOqrZW4qBZzoT4N4vjDNpc/MJCSdmuH0MTktRjdzjeimXMQchHK+Nc8UUK07gjt
+	 UiKOQvBQDwEOFFrTkXf953u/2spwjv2R4vgdkNA6JM2V+ncN/0nMztv7zfgwgiFyuKW69
+	 jszfmXhR1eZBliY5QqXLCUNApmz5AmNoUGT5xXnjFRJMXkJSkVk1nNkk/AH9gIyBJDg==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1790652182;
-	bh=H/h2hz+ZHlbNoj8NZLChdf4RjXko8DkO4BjAP6qpsGM=;
-	h=To:From:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=Shs56IX9da4aFILQ0XwnnJfyY8oLMH/Y6Up8NLfsCcC4ZREnWSfRTSl0qmpRJd0iF
-	 BGhMlQ1ZgkDHC4nPddpRSSgPzHfX5PlvaeTxjGDUaYyVFOc/atsEH1uwni6Nc3kHJ3
-	 ojUUxvDojFstZ1w0B7iMf2xdV97FJWsmjfo82vc1I7ovrAUdvlTn/3/NAbsiXjPUNr
-	 c+2hgeMXdn5RG4WS4MEGNBG793GkHAqnqSo2D9HH2VL8FQq/qpb6+Mh6rL20MC6WfJ
-	 wPVutUoNqaX9xMP/x0wwX5IE3HTQoRz6UXGNSVUK/eOl/cohTzPBKP8PbDHcZM/UvG
-	 en/cgWz9rCMlQ==
+	s=default; t=1790663761;
+	bh=Mztsxt57r0x/+O2abrV/dzrsPDyEkmEVT56JIE3BRK4=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=EfOMG0ogVGnYcPkMcDOes7ALd5NW81u6oYlMnOKAf7ecrkqESXl1KgO8Zm+7TMMWd
+	 DE19HS2yLEBUpqvDtNKG2msLdDpuSmKRWtSGUCdCaXbt3S17G5oyoyr7FRH3PLB0kr
+	 DcbSQgiBS/eKZ2OiwOaJVTdmKyv8TkPBtD8ZEVshqdSQyoZG+CZe1fmREFW6oxlLDs
+	 BRGGfgy/h6hok61467Y8bghD5/PxD9YSfxv9aPMknk4Q3wzzh0F3n9evHFn8sEgKiE
+	 F0BF9lqWhxq02lRPQX4U1ti59NqNwepb7YKBteb08RAV8pRWEU/hilZAYUh4J0ABHQ
+	 RcwTr8qdbsEFw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3D54140355;
-	Tue, 29 Sep 2026 03:23:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 72D2740541;
+	Tue, 29 Sep 2026 06:36:01 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 106E7335
- for <buildroot@buildroot.org>; Tue, 29 Sep 2026 03:23:01 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id B9897335
+ for <buildroot@buildroot.org>; Tue, 29 Sep 2026 06:35:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E9AFD80B08
- for <buildroot@buildroot.org>; Tue, 29 Sep 2026 03:23:00 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9929B80A47
+ for <buildroot@buildroot.org>; Tue, 29 Sep 2026 06:35:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sk02vkJpfVnL for <buildroot@buildroot.org>;
- Tue, 29 Sep 2026 03:23:00 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 80F5E80AE3
-Authentication-Results: smtp1.osuosl.org;
- arc=none smtp.remote-ip="2a00:1450:4864:31::11"
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790652180;
- b=dT/SkUdecqyNlr534jpEvS7UbyHklQTveDtsBo2Ikkw/ohx94l1D8bN+4TuVuwQdd7V3
- Z+7NbYZpFPcosq/TL2WeMagKXHXtd8wYHa5yzhMnV41CtHXJfBuLipX4LLUdhfbXJBhLt
- lGPyBFTUOJ89xtVdmpICxHJXa8seCdh+95f3QYefwljvLeIeQIEpGrnc9rdAGdHxZ5Lyi
- 9+BTLvtGvMaBd3L0iI218vswcKGbS4HD9jnX7y2RaF/msMEHAyiODBuGWJH69vH+gafyv
- dZZZ1iheEiBAC3Bul1xtrEJUDHjnsG7ByyfdW5zj4M6UXwSN6X0qRj6jBx0sW7i7zFw==
+ id 7FIKTGISVM7W for <buildroot@buildroot.org>;
+ Tue, 29 Sep 2026 06:35:58 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org B31E9809EB
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790663758;
+ b=pAATOZUFWAXrntA1cWeB/+4I6woT1qVfvlEa4HnQDWrec7jbCtWjJd6kCkCIQnW+D21T
+ 9+AMHUTgWvGf0wXCdtmVFdidDFE2OWCqOMRWqsA/PJwDRIZJhDm/R03zuhtwAWkN4Eb/X
+ k4nt75a+JXPB9ZN5t7lSBFVarpMPfKSeqRhL+65sKSYCh1twAr/DGspbeLSiWTKGrcue0
+ 8mjw1Og1W5VyVnkmO37Tn5iVxm9dJdEQ/mcpNuleQk9iNQNFX17YVQ86nQmb2Xt4eMrfI
+ xwPVGeHra5eCst/4O16QFeCvS7Pnv5pRKulN1qlKJMMxce9GzRX77gIpnalcj/vxihA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1790652180;
- h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
- X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Message-ID:
- Content-Type:MIME-Version:Content-Transfer-Encoding:Subject:To:From:
- Date; bh=7Mnooo5O5I3gO9ABacum25mLFasoSO9g0DRxKiIXT0c=;
- b=e0sceo0n3Tke0rQTkVqZvMWlrrZA0VsyrOcZ+2KQHE1ARJ9Pf4UV2jowHn0yCoN1rZJX
- n2+65bEiBQGO5FQdWlO7e0ILi/8goxdW3i50nr+Zec1urCGP1w4TE1wDlPE7ZwbwekzEW
- r97lZXaPaMtUqkzkzjTngIB27t8+oy/Ux3R2K5ZC24vcf8gH7p79tQoVUH4iCeoti/inp
- H5Ht6PrVVlUteo6UXfdtORLn1sJ+pburnbv8HrxMfzjzCBkknB+uUcuOE12XYxCTeTZWd
- fqzxEzmk1gwMRcTJevYm96oVBtwkYx9ewris2EnGOLXWCRibA/U79+X1PUCq0lr8vSQ==
+ c=relaxed/relaxed; t=1790663758;
+ h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
+ X-Git-Newrev:X-Patchwork-Hint:Message-Id;
+ bh=42WiUCd1/Uoo5s+uUN2ooQYiyG4gvlSkbbgKCHMWqos=;
+ b=sxXdrnPF3sJHIfjTR132pJiZWLafNsPjCZnAjng/S/Fm3wB1G84GY7fzZFo5Y9VusuMc
+ I61yZPuyMURFvDcvXoYLazmCeNM+GXhuBPLFFH7wJxmRqwVeG8sfEe2RWY5e5WmUiw3LV
+ 4gSaTsjUCo+dP2anATu3zhS2hvLUHTT6g+Mq1C87/lRrO9wcDfZTLcjeMb818AsdwsD76
+ BTd8jSSAqVsbnBVuxfoGLjxzGM3SbnpWypLEhOCijcjoBbSTGqwZnj+YqlkZ9bmJZwY98
+ dWwhTKHWxx/s9SREHIoNnInTu/czCL2FCl4XbZ+Zz/KigjDDnVsNK5VSKKvXfIM63+Q==
 ARC-Authentication-Results: i=1; smtp1.osuosl.org;
- dmarc=pass header.from=gmail.com; 
- dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20251104 header.b=ClgFCSS0; 
- arc=none smtp.remote-ip="2a00:1450:4864:31::11"
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:31::11; helo=mail-wm2-x11.google.com;
- envelope-from=buildroot.notifications@gmail.com; receiver=<UNKNOWN> 
-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20251104 header.b=ClgFCSS0
-Received: from mail-wm2-x11.google.com (mail-wm2-x11.google.com
- [IPv6:2a00:1450:4864:31::11])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 80F5E80AE3
- for <buildroot@buildroot.org>; Tue, 29 Sep 2026 03:22:58 +0000 (UTC)
-Received: by mail-wm2-x11.google.com with SMTP id
- 5b1f17b1804b1-49e8185e037so20439915e9.3
- for <buildroot@buildroot.org>; Mon, 28 Sep 2026 20:22:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1790652177; x=1791256977; darn=buildroot.org;
- h=date:from:to:subject:content-transfer-encoding:mime-version
- :content-type:message-id:from:to:cc:subject:date:message-id:reply-to
- :content-type; bh=7Mnooo5O5I3gO9ABacum25mLFasoSO9g0DRxKiIXT0c=;
- b=ClgFCSS0jIZxDVBGz/Od87gI4jQtUpDcIwqsimbZ7nax20E5Fu3Vg8/A5nLOkxoK6L
- zR8nvucMI0IjPsmR07cnPKGqBCOYjRAfCE4tiwpYFG6VA9943TR/u9qLKdKsKDVc2YnR
- Rl8DTHd6OJmIkuAHR7KFUSO1zh980ZKAYqcO9zcztBZzulEMNQl9GUaQYc6HXJ5EgMen
- pU+bRoFuX2TFRRGvMKMHilemTiPUrv3paiMwg8J5MCHDKQgOkVSD1v4j2MZ4Hk2Qz73L
- vZdQZs6UNvzvMGoufPgKzuQwvRjgHOzfvwkSX+Kiiao9IJn4neBryQkaUkXMnjIxlS3A
- 2J9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1790652177; x=1791256977;
- h=date:from:to:subject:content-transfer-encoding:mime-version
- :content-type:message-id:x-gm-gg:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to:content-type;
- bh=7Mnooo5O5I3gO9ABacum25mLFasoSO9g0DRxKiIXT0c=;
- b=0E0Tl0MoS8BWI6qrgqNBsjlUUEBsIRJyUjfcgC0G4oKoUhaB5RqUKlDVxu2fSj20Ay
- EyK2wvLlF4UrEdj7leLt3XxrmHOwpx8z76yXgHzC/MX379u96dKrC06iGsitc9h2ovLt
- 1S2hqNIhp+sdrh2I+NNCwJp4QPim3gEuK3vYbGTtGN+jebWoGGuKcs0YC51sDLSXGjw0
- bR8tuRTS4iBZ5qpzW1JxQN2V7bXzuqjT42pyq0uG1GQO/5teu1gilDASGXuJzEktVF3G
- gNrGoMPqt75Y0RS+OSqp08u/Dfb2RUh+fjV4NoUMcP3lINwL7mBQ8W8W3xbsj3nLJY0P
- cufw==
-X-Gm-Message-State: AFuF++mT1qNpkbciEJGBUqUasMLnYkDK/mZ6EXIIf6RhUzAulzCaxl5l
- /jrE79bV+3ZwnQTqyOsnIPmIJY9rvLwEWvqd42BU9C5VTSXw1Ov/ogAphSb2aRqX
-X-Gm-Gg: AYBFou0dZTUhwEg0kZaDml8c8dMD0mhP95jBWT1T6mUUl7z5JSnq8h5iy0fXWQYQtC5
- pY7jaAnXB3gFdMFx0Ydm0/IAO6zevTqlm0aMIWyPAPcqrL9HeLdPtVo4JHZvbSAmIwsgFgsw4/4
- Z2Hap5bj0mSq94LK8MOgaV7As3g+XUd/y67OALqD+PkA27ZqA//1RZQsJd2PO3glZ9UthMvdnlw
- Np5RDPMQ47EG7ONa77QCrtUDtqqCi/vq/Tz64QakzarTNIMjGj0RD3/HZnWyDzClUf3DA9Up/N+
- T70TnqjPb7BDoNTe81jgzrB1lWOiN9rZbmveH6IAjlZCn0qRMiZO2fGGwqrsnDPZHzFRWLGZV70
- H0lNzayWvZg1NKUpi0ccFz8RZuCVpHpyuM30GPQfaiWoVXuNRylxnrOjtYP/Gxa+1NWaso08Zwl
- QmsGkpN1xfWGGo4jr5pdykHuwg0gWao8b5WxxW2nwIXMC3zJ8lCu6kWVt82nFTI6AewlYb8W68l
- Xw=
-X-Received: by 2002:a05:600c:638f:b0:49c:d26a:cf70 with SMTP id
- 5b1f17b1804b1-49ff06c9a80mr184010595e9.15.1790652176677; 
- Mon, 28 Sep 2026 20:22:56 -0700 (PDT)
-Received: from [138.201.205.61] ([2a01:4f8:173:1526::2])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4a00d45ce1csm26550055e9.3.2026.09.28.20.22.56
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 28 Sep 2026 20:22:56 -0700 (PDT)
-Message-ID: <6abb2f10.25575acf.3c1d65.aefc@mx.google.com>
-MIME-Version: 1.0
+ arc=none smtp.remote-ip=140.211.167.122
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id B31E9809EB
+ for <buildroot@buildroot.org>; Tue, 29 Sep 2026 06:35:58 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 008B990004; Tue, 29 Sep 2026 06:34:45 +0000 (UTC)
 To: buildroot@buildroot.org
-From: Buildroot Notifications <buildroot.notifications@gmail.com>
-Date: Tue, 29 Sep 2026 03:22:56 -0000
-Subject: [Buildroot] [autobuild.buildroot.org] Daily results for 2026-09-28
+Date: Tue, 29 Sep 2026 08:35:41 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 54ccee7e6763801a48451cac52e9cb93ebee3b7c
+X-Git-Newrev: 1ad0796f2b40eb8dadc43e95dd1d56708b191375
+X-Patchwork-Hint: ignore
+Message-Id: <20260929063446.008B990004@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing: bubblewrap: new runtime
+ test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -163,154 +110,169 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/1ad0796f2b40eb8dadc43e95dd1d56708b191375
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Autobuild statistics for 2026-09-28
-===================================
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS                                       |   1 +
+ support/testing/tests/package/test_bubblewrap.py | 127 +++++++++++++++++++++++
+ 2 files changed, 128 insertions(+)
 
-      branch |  OK | NOK | TIM | TOT |
-  2025.02.x  |  2  |  6  |  0  |  8  |
-  2026.05.x  |  1  |  2  |  0  |  3  |
-  2026.08.x  |  1  |  0  |  0  |  1  |
-    master   | 22  | 40  |  1  | 63  |
-
-Classification of failures by reason for master
------------------------------------------------
-
-                       unknown | 4 
-              cryptsetup-2.8.8 | 2 
-   openvmtools-11.3.5-18557794 | 2 
-            18xx-ti-utils-R8.8 | 1 
-                    attr-2.6.0 | 1 
-                   bird-2.15.1 | 1 
-          cloudflared-2026.6.1 | 1 
-                cryptopp-8.9.0 | 1 
-             dahdi-linux-3.3.0 | 1 
-                   dante-1.4.4 | 1 
-      docker-cli-buildx-0.25.0 | 1 
-        edk2-edk2-stable202602 | 1 
-                  ffmpeg-6.1.5 | 1 
-      freeradius-server-3.2.10 | 1 
-            host-go-src-1.27.0 | 1 
-host-google-breakpad-f49c2f... | 1 
-            host-mfgtools-0.02 | 1 
-            igd2-for-linux-2.2 | 1 
-kvmtool-7ad32e5514aca2b6d19... | 1 
-               libecoli-0.11.3 | 1 
-               libepoxy-1.5.10 | 1 
-                libsoup3-3.7.3 | 1 
-  nxp-mwifiex-lf-6.18.20-2.0.0 | 1 
-                openocd-0.12.0 | 1 
-      passt-2026_07_28.f8df3f1 | 1 
-               pcsc-lite-2.1.0 | 1 
-                   perl-5.42.3 | 1 
-               pulseaudio-17.0 | 1 
-                        qprint | 1 
-         s6-networking-2.7.0.4 | 1 
-     s6-portable-utils-2.3.0.4 | 1 
-             sigsum-go-v0.14.1 | 1 
-sunxi-cedarx-b8f52d913f7372... | 1 
-               tcf-agent-1.8.0 | 1 
-               tcpreplay-4.5.2 | 1 
-               valgrind-3.26.0 | 1 
-
-
-Detail of failures for master
------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    i686     |       18xx-ti-utils-R8.8       | NOK | https://autobuild.buildroot.org/results/f8f17e919c2deec15189e9758d76141148598146 |     
-  mips64el   |           attr-2.6.0           | NOK | https://autobuild.buildroot.org/results/881c349f61962cb7838b8bc535543ce8ed7b0f9e |     
-    i586     |          bird-2.15.1           | NOK | https://autobuild.buildroot.org/results/97813254806dfb7d660aab562148883fe507a64b |     
-    i686     |      cloudflared-2026.6.1      | NOK | https://autobuild.buildroot.org/results/7d5ea93ad8359fffdb4d01d84910a82c3883cf22 |     
-    i686     |         cryptopp-8.9.0         | NOK | https://autobuild.buildroot.org/results/8721db53036ebe9bccadf34c580c08e09849ec69 |     
-    i686     |        cryptsetup-2.8.8        | NOK | https://autobuild.buildroot.org/results/1372f6e3137f7106ae4c5b5019622baad47a7e1b |     
-    i686     |        cryptsetup-2.8.8        | NOK | https://autobuild.buildroot.org/results/45e8ceec4b7889d4442e83b39d4a68eb2e1df35a |     
-    i686     |       dahdi-linux-3.3.0        | NOK | https://autobuild.buildroot.org/results/43a75881db7559c6d5dd8a8564b2e97f82667d6d | ORPH
-    i686     |          dante-1.4.4           | NOK | https://autobuild.buildroot.org/results/0022d8460db43ccb358f8f2f98e99ecf7dd7ab7a | ORPH
-    i686     |    docker-cli-buildx-0.25.0    | NOK | https://autobuild.buildroot.org/results/1ae798ffec94fb5971d5c1b5e4f5c3e1e12ae548 | ORPH
-    i686     |     edk2-edk2-stable202602     | NOK | https://autobuild.buildroot.org/results/88aab279e50c0a965e4d226a9fc81835bf1474b8 |     
-    i686     |          ffmpeg-6.1.5          | NOK | https://autobuild.buildroot.org/results/d23d9a028e53a61bad6f98e66ed5fada44b43117 |     
-    i686     |    freeradius-server-3.2.10    | NOK | https://autobuild.buildroot.org/results/d81d0795776f030ac8b22906527f621aa4517a12 |     
-    i686     |       host-go-src-1.27.0       | NOK | https://autobuild.buildroot.org/results/dd8db0f9bed182002e57d4062236281673179a3b |     
-    i686     | host-google-breakpad-f49c2f... | NOK | https://autobuild.buildroot.org/results/53e38e6a800f4dee8ada9960cb248233413ee39c |     
-    arm      |       host-mfgtools-0.02       | NOK | https://autobuild.buildroot.org/results/3c6227407983035ac6669c6566fa242d049292a8 |     
-    i686     |       igd2-for-linux-2.2       | NOK | https://autobuild.buildroot.org/results/98389547976c73ffde67c8333aecc5a863b1d57f |     
-    arm      | kvmtool-7ad32e5514aca2b6d19... | NOK | https://autobuild.buildroot.org/results/28cceed974b3f116475f6154cd4763273ec35add | ORPH
-    i686     |        libecoli-0.11.3         | NOK | https://autobuild.buildroot.org/results/625a2b75e12161af7cb23fafb6d0809ebc573be0 |     
-  mips64el   |        libepoxy-1.5.10         | NOK | https://autobuild.buildroot.org/results/12e1a71c6a2ff87cf66b596f580c09a58ffc00b6 |     
-    i686     |         libsoup3-3.7.3         | NOK | https://autobuild.buildroot.org/results/a2af71fccaefbaa378b98048010a4b8f5535e752 |     
-    i686     |  nxp-mwifiex-lf-6.18.20-2.0.0  | NOK | https://autobuild.buildroot.org/results/4c5efa1e73232ad12b32e0657ba5c91c24c258b3 |     
-powerpc64le  |         openocd-0.12.0         | NOK | https://autobuild.buildroot.org/results/1b5dc42edd77350fec3fa9f7af76910bd36fd662 | ORPH
-    i686     |  openvmtools-11.3.5-18557794   | NOK | https://autobuild.buildroot.org/results/c39f46e5e55da1772dac307cdef09c54f95b735f |     
-    i686     |  openvmtools-11.3.5-18557794   | NOK | https://autobuild.buildroot.org/results/a77e3b098cda59faa99572f6967ec1cf1c58b34e |     
-    i686     |    passt-2026_07_28.f8df3f1    | NOK | https://autobuild.buildroot.org/results/095676c96a9f1e68fe7099ccd4da5ef1e2613cd5 | ORPH
-    i686     |        pcsc-lite-2.1.0         | NOK | https://autobuild.buildroot.org/results/8e8cfa0fab6aec836b6fc5d9b1114e38aac5737d | ORPH
-    i686     |          perl-5.42.3           | NOK | https://autobuild.buildroot.org/results/548672fb8e2395a0195c0b638569a02c217b8258 |     
-   mipsel    |        pulseaudio-17.0         | NOK | https://autobuild.buildroot.org/results/08ace2159c54d4683bc2ffa84e5730eb9b58a3b6 | ORPH
-  mips64el   |             qprint             | TIM | https://autobuild.buildroot.org/results/97efa78b73fc00dcb12ba9b85abf335a18e2a693 |     
-    i686     |     s6-networking-2.7.0.4      | NOK | https://autobuild.buildroot.org/results/8a2fc5be530d11543239acb05df80930cc9d2d52 |     
-   x86_64    |   s6-portable-utils-2.3.0.4    | NOK | https://autobuild.buildroot.org/results/4f8d1ddc7f380295081233ce24b9f1a5aff0a8b5 |     
-    i686     |       sigsum-go-v0.14.1        | NOK | https://autobuild.buildroot.org/results/f7ea572f3dafe26f967a7026b4b5ff299893e31a |     
-    arm      | sunxi-cedarx-b8f52d913f7372... | NOK | https://autobuild.buildroot.org/results/b503678ff9dbe7da2858651b8edb940c468f625f | ORPH
-    i686     |        tcf-agent-1.8.0         | NOK | https://autobuild.buildroot.org/results/7f07a99b704b3b140701d1e5eebb334aedf48f33 |     
-   x86_64    |        tcpreplay-4.5.2         | NOK | https://autobuild.buildroot.org/results/1db3e924c659c8edff026568ffbfc576d5222db9 | ORPH
-    i686     |            unknown             | NOK | https://autobuild.buildroot.org/results/243b2a99d27d6b789a47836f87df4167ab3493a5 |     
-    i686     |            unknown             | NOK | https://autobuild.buildroot.org/results/96bb2824e4da5dfc28ee434f98df181b1086bb70 |     
-    i686     |            unknown             | NOK | https://autobuild.buildroot.org/results/217187d2d40f29472dace3cef0c2faa533986f55 |     
-    i686     |            unknown             | NOK | https://autobuild.buildroot.org/results/dea8cf02615f0dd1afdcdb757f716b609367216e |     
-    i686     |        valgrind-3.26.0         | NOK | https://autobuild.buildroot.org/results/ccd8e4b04e55ea316f71132e3f5ad55a347db4c5 | ORPH
-
-
-Classification of failures by reason for 2026.05.x
---------------------------------------------------
-
-            igd2-for-linux-2.2 | 1 
-      passt-2025_06_11.0293c6f | 1 
-
-
-Detail of failures for 2026.05.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    i686     |       igd2-for-linux-2.2       | NOK | https://autobuild.buildroot.org/results/ed178830bcee6d115693e0ba2e1aea34b2ac75d6 |     
-    i686     |    passt-2025_06_11.0293c6f    | NOK | https://autobuild.buildroot.org/results/73a1409848dc1c32064ef55fab91d3524d6e3a23 | ORPH
-
-
-Classification of failures by reason for 2025.02.x
---------------------------------------------------
-
-                   duma-2.5.21 | 1 
-        host-python-lxml-5.3.0 | 1 
-              libeXosip2-5.3.0 | 1 
-             libtorrent-0.13.8 | 1 
-               openblas-0.3.30 | 1 
-                   perl-5.40.5 | 1 
-
-
-Detail of failures for 2025.02.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    i686     |          duma-2.5.21           | NOK | https://autobuild.buildroot.org/results/d818ea5f0dedd3b0067ea6be70f0168c700f497b | ORPH
-   x86_64    |     host-python-lxml-5.3.0     | NOK | https://autobuild.buildroot.org/results/8f456fe27f000a37023f42c621fc0cee1a420a73 |     
-    i686     |        libeXosip2-5.3.0        | NOK | https://autobuild.buildroot.org/results/5ca7ecc7f2295ae8e2a45e056b78327835f37b06 |     
-    arm      |       libtorrent-0.13.8        | NOK | https://autobuild.buildroot.org/results/f125a62d3a8072ceebcceeef21f5f1056c9eb377 | ORPH
-  riscv64    |        openblas-0.3.30         | NOK | https://autobuild.buildroot.org/results/081962789dedc1a8fc9467be02e918097c4036be |     
-    i686     |          perl-5.40.5           | NOK | https://autobuild.buildroot.org/results/a18ee15342cb4b15d891a34911cc9deb9f5408c8 |     
-
-
-
--- 
-https://autobuild.buildroot.org
+diff --git a/DEVELOPERS b/DEVELOPERS
+index f4b746290e..d62bfaafb3 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1899,6 +1899,7 @@ F:	support/testing/tests/package/test_bitcoin.py
+ F:	support/testing/tests/package/test_brotli.py
+ F:	support/testing/tests/package/test_btrfs_progs.py
+ F:	support/testing/tests/package/test_btrfs_progs/
++F:	support/testing/tests/package/test_bubblewrap.py
+ F:	support/testing/tests/package/test_bzip2.py
+ F:	support/testing/tests/package/test_compressor_base.py
+ F:	support/testing/tests/package/test_connman.py
+diff --git a/support/testing/tests/package/test_bubblewrap.py b/support/testing/tests/package/test_bubblewrap.py
+new file mode 100644
+index 0000000000..624b331e5e
+--- /dev/null
++++ b/support/testing/tests/package/test_bubblewrap.py
+@@ -0,0 +1,127 @@
++import os
++
++import infra.basetest
++
++
++class TestBubblewrap(infra.basetest.BRTest):
++    # Bubblewrap uses mount_setattr(2) introduced in Kernel 5.12:
++    # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=2a1867219c7b27f928e2545782b86daaf9ad50bd
++    # The Buildroot prebuilt Kernel is 5.10. To avoid testing
++    # Bubblewrap with its fallback code, we build a newer kernel.
++    # https://github.com/containers/bubblewrap/blob/v0.13.0/bind-mount.c#L27-L31
++    config = \
++        """
++        BR2_aarch64=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_LINUX_KERNEL=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.53"
++        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
++        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++        BR2_PACKAGE_BUBBLEWRAP=y
++        BR2_TARGET_ROOTFS_EXT2=y
++        BR2_TARGET_ROOTFS_EXT2_4=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def test_run(self):
++        disk = os.path.join(self.builddir, "images", "rootfs.ext4")
++        kern = os.path.join(self.builddir, "images", "Image")
++        bootargs = ["root=/dev/vda"]
++        qemu_opts = ["-M", "virt", "-cpu", "cortex-a57", "-m", "512M",
++                     "-drive", f"file={disk},if=virtio,format=raw"]
++        self.emulator.boot(arch="aarch64",
++                           kernel=kern,
++                           kernel_cmdline=bootargs,
++                           options=qemu_opts)
++        self.emulator.login()
++
++        # Check the program can execute
++        self.assertRunOk("bwrap --version")
++
++        # We set an arbitrary message used as test data.
++        msg = "Hello Buildroot!"
++
++        # We create three files to test the sandbox functionality.
++        # One fully hidden to the sandbox, one passed as read-only and
++        # one passed as fully read-write.
++        dirs = ["hidden", "read-only", "read-write"]
++        for d in dirs:
++            self.assertRunOk(f"mkdir -p /mnt/{d}")
++            self.assertRunOk(f"echo {d} > /mnt/{d}/file.txt")
++
++        # We start the sandbox.
++        cmd = [
++            "bwrap",
++            "--ro-bind /bin /bin",
++            "--ro-bind /lib /lib",
++            "--symlink lib /lib64",
++            "--ro-bind /usr /usr",
++            "--ro-bind /mnt/read-only /mnt/read-only",
++            "--bind /mnt/read-write /mnt/read-write",
++            "--proc /proc",
++            "--dev /dev",
++            "--unshare-pid",
++            "--new-session",
++            "sh"
++        ]
++        self.assertRunOk(" ".join(cmd))
++
++        # The "--unshare-pid" option creates a new PID namespace.
++        # In this new namespace, Bubblewrap act as the PID-1 process.
++        # We check the PID-1 executable is bwrap.
++        out, ret = self.emulator.run("readlink -f /proc/1/exe")
++        self.assertEqual(ret, 0)
++        self.assertEqual(out[0], "/usr/bin/bwrap")
++
++        # Inside the sandbox, we should not see the /root home
++        # directory.
++        self.assertRunOk("test ! -d /root")
++
++        # Inside the sandbox, we should not be able to remove a file
++        # from /bin, even as the root user.
++        self.assertRunNotOk("rm -f /bin/ls")
++
++        # We check the hidden file is not visible.
++        self.assertRunNotOk("cat /mnt/hidden/file.txt")
++
++        # We check the read-only file is readable.
++        out, ret = self.emulator.run("cat /mnt/read-only/file.txt")
++        self.assertEqual(ret, 0)
++        self.assertEqual(out[0], "read-only")
++
++        # We also check the read-only file cannot be written.
++        cmd = f"echo '{msg}' > /mnt/read-only/file.txt"
++        self.assertRunNotOk(cmd)
++
++        # We check the read-write file is readable.
++        cmd = "cat /mnt/read-write/file.txt"
++        out, ret = self.emulator.run(cmd)
++        self.assertEqual(ret, 0)
++        self.assertEqual(out[0], "read-write")
++
++        # We check the read-write file is also writable.
++        cmd = f"echo '{msg}' > /mnt/read-write/file.txt"
++        _, ret = self.emulator.run(cmd)
++        self.assertEqual(ret, 0)
++
++        # We exit from the sandbox.
++        self.assertRunOk("exit")
++
++        # Since we exited the sandbox, we check the PID-1
++        # is no longer bwrap.
++        out, ret = self.emulator.run("readlink -f /proc/1/exe")
++        self.assertEqual(ret, 0)
++        self.assertNotEqual(out[0], "/usr/bin/bwrap")
++
++        # We should now be able to read the hidden file.
++        out, ret = self.emulator.run("cat /mnt/hidden/file.txt")
++        self.assertEqual(ret, 0)
++        self.assertEqual(out[0], "hidden")
++
++        # We check the writable file now contains our test message.
++        cmd = "cat /mnt/read-write/file.txt"
++        out, ret = self.emulator.run(cmd)
++        self.assertEqual(ret, 0)
++        self.assertEqual(out[0], msg)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
