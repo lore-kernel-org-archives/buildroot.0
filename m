@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4BEA4CA5FCB
-	for <buildroot@archiver.kernel.org>; Thu,  1 Oct 2026 14:22:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE53CCA5FD4
+	for <buildroot@archiver.kernel.org>; Thu,  1 Oct 2026 14:22:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 25C6960BEB;
-	Thu,  1 Oct 2026 14:22:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 42B6260D66;
+	Thu,  1 Oct 2026 14:22:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QqW0gL4O4kLB; Thu,  1 Oct 2026 14:22:46 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 006FE60B26
+ id SQzzHL3AXd8i; Thu,  1 Oct 2026 14:22:49 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 4EC1960D64
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790864566;
-	b=UVmMoLH6b/+fgH0Oey9AEtHK8Ftm8KaSy+qfKbSFroAmuQu7aBF4GXshclD8hQkI6X3K
-	 VFYhiZH8QO83RcuPCJ3mg1lBVyiITUJECgbuF5J4tGKnBW6lHqYIVkay34h0AVh1UH1wh
-	 ETrw0XGj6EGK7DMlv54EUOpZNID7ffxzISdmFt0gnUgTobhbgF8YUdg58wT6TRGzznNew
-	 oMwKCtiAwGKs0XUXVlsUhpn3xhkP7h8ebhzDIXRiZXzvRplj0Jq7NDMbrUYeDA9OQz9Ef
-	 B+hd4SYBJpeRqDa0Sap47oWHXyZWJeggY0buOtFG1QwoHuCch7BKLQtKhC9EjVWweyA==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790864569;
+	b=SEsk3Ck7onsWLbT+aPTCpBh7fUdkbfqjwlbbDywvZIt41HyCp8MPsBypCpz2ao45gQSH
+	 TZHT2u4+miKqdTEZdLs40btsh1IEKLZtfIcY0Nn9q5+W7tXcnVT124VV/i7S7wMAZbl2p
+	 q+Nz4RKydwe19ryxFpeQBndd781sKgquOY7Ga4+HJ3uepsVzwi0MzbyqDr5zZaXYmdZlO
+	 KcWgCbGeSut3LwGwviBPzlB7d/LCQLi+6uDe2Fbk5iXCXBSQCtokS859Mf9gCRGndPQCz
+	 79aZdH6MSQMcBhBGcXv8nsWF4tn2uo+kbnEdNr7QWSddAtN0yGEXW7d7+xX016Gs+mw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1790864566;
+	c=relaxed/relaxed; t=1790864569;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,75 +30,75 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
 	 Sender;
-	bh=JTjIAGx/Sxvkvfw4t9rVqQ1LLJNTv/o44ca2MiNnnHI=;
-	b=UXUsXrnfFrHphBqsUfer+bKsMhoQUEPM2hVCjNsw9nFCMJ9s+Yd8aINgHCaUU8xYpeAf
-	 Ut33+IWhnlK+Ri0WGhIrUO8qAfovCuFO/JBRSwpzTnJPJytcrJjMb7R38NWJ577QwCovn
-	 2f3pujei797mWA0klTipRGCU/vGuloNVp/+gzSXypJ4zUWgwOiZgORBRlTWYla8fv3j+F
-	 u1O5jY9H4q33OZaKbNLE+WLAZwPvR1C+tkIELhbbXBl/4Ejcx89ADZ+V5FvHv+rU3tq5f
-	 5vC/CbFIZS83w7dKxCCG84TmE8EUvS65s/k0vcbAoScBtngeQWftUTxvRteoYEU61Bg==
+	bh=6eg2RLRf0ytEyYF1Hp8gdP6HI+Zoav1PHFFOejIjeUw=;
+	b=WcaeMDesK1apPZ/A0ILuN6qPe9b8HXYx6kBPTAZW8cYztJTdYBlC1+HzLQVbtEd/N8u+
+	 tU/se55G4aZvg+askZArwEedKm6h5FBDIf0CuXVghqOB2o2R2DxC7i/TtwhpOFDEwADp3
+	 wSP7VWc6+zKXYWdDffh+lHIqFoX00XZ7vppWlN8V3W03ppJfgUkCwASSSImjVASSIkRyA
+	 31RbxKkiTdWasxuYbQFor52J+YyiPCKTslNWq/rFRSfTmjCgoefpjrSP3OS3vCDBr+75B
+	 NMODsz6+kd803xzNriBnAJ/QibErhTSYdV5h3sT5AwywsSjXsex0JPsr7OS+VUGjp7A==
 ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1790864566;
-	bh=JTjIAGx/Sxvkvfw4t9rVqQ1LLJNTv/o44ca2MiNnnHI=;
+	s=default; t=1790864569;
+	bh=6eg2RLRf0ytEyYF1Hp8gdP6HI+Zoav1PHFFOejIjeUw=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=VEo7MyJrpYq5w60s71FeR+hPlRwfW4/Zfx3Epn0i0VpOemHKrKJBRoYcG+z9DXiIK
-	 tCXS9ese//HRz3LEJZqx5NDahJLlERJe7cj2melzv5EvSkYTdFDUI6xDYHBt3ovgGI
-	 MzPmVQGMwdF6x1/su2lYXetgEdmUtAvr5zBfLwutidh0s5yTWexHb93KagWg7M9epQ
-	 VCVo4I5nrANtQlB8lL37VtQ88c+ikXKiWoQYuPSzBSEc+YWfQQxRRXTypBltNv0B1j
-	 CUPSf2QWm88QrvL6UaPUEkw56EWBs2T3gRuqruPdUwry71ANXZuTHwdacM8uMq2SK6
-	 YzFek+Lh9gNcw==
+	b=OxNe2ln9wJ0DxxmwBYz4sDuEg4RvWzOYnwTrEKDurDVboTPTvwXAoZLFkLZ4hMNo9
+	 UMrxCGLbTsrwo3ypMh1/hnemy9NeEsO5lD95HZzbZMfXowHtnNe7qwLa7IZJ+I+M6+
+	 eCWdPWHLUpv0bI3zLXAJtSnTP0VuiSc7dvgIsiDg4iT1YnVoEQOVquBpB5BmAewxWM
+	 g0Q26cCVjpQ+poiOy94yFy9uHm5MsUUN8CNaipvz7v9CzH/ot5+kgHhmqLOt/xu8aD
+	 M6FdVeILtyngdAyIqs9o3QxcLbUVl8lapuWmu2K/I1ktns17fN+SlXsUa5U2Tbx2FM
+	 UVRbExA583vbg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 006FE60B26;
-	Thu,  1 Oct 2026 14:22:45 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 9FF30D22
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4EC1960D64;
+	Thu,  1 Oct 2026 14:22:49 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id B8077263
  for <buildroot@buildroot.org>; Thu,  1 Oct 2026 14:22:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 91AC340528
+ by smtp2.osuosl.org (Postfix) with ESMTP id A9AB240528
  for <buildroot@buildroot.org>; Thu,  1 Oct 2026 14:22:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Cju4tVnwx3MJ for <buildroot@buildroot.org>;
+ id czRWhjL1xdNz for <buildroot@buildroot.org>;
  Thu,  1 Oct 2026 14:22:40 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org D15154052A
+ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org 8063940098
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790864560;
- b=fyfEgniukNknQsWXvowAiCbR0MzQWRQuTZkdfp1CFPnBU43vEN1vhyMJqJUsp0sRfUOu
- UVCzKuhcp5jxu6FSwdOqIeREIoj9sS1GabeNmET52N7dpG6wCEZrsFgqSixZaz54axoia
- rZOssqhsk7W1AmvzlTb2JaJwqk+G+gUAXCc8jYl1/UHHXjnoWwcleZlydnC8rjZlMwepQ
- fXOyPtOgExKalz3US3RJ9hOnFMmsAJ6xHYbFiKw0y5n5uXYNDRO3UTagpDdf7bZ++qDlO
- ruYlghBxKMfn7nlxv00eWS6sdErIq7XKPldsktf/lw6Jxkp1yoQoa/0eo7toiygxPug==
+ b=G2lFYFcg8ORtC3vUQB5I+KXzmTj5QBXwFhCn+PYOSUXkQ8ZwVR/NY36DbJTF9oKpNx+u
+ XQFv2Js8VPYO6BD+zQqJVWTSnkms2nF/XgzAmi6LXolTZOgE4tNBlz1fZVlbVR0JEEe4p
+ IRK2tSleEWuTY0rL10GXZ2vEdeV7q+1cWEqCY2Cn+eUazdKYCxuzf8qd5VXaxZfpR40xS
+ 2lx+AtH65MNx25EiNLESqCrub8mM4lu1sozcPL3TDFOR7oErxPjyzhcnSSMOy/Wl8xuzn
+ k0HARNrYRLupSnbUZygrhGd9K0jPp+rzShKF9r65qZteOYOF776LMw3aLTGleUDMqjg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1790864560;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=3nYsRI23jPC+OLNWS7xPegQC1iRrYnuogFK59Ues1j8=;
- b=tH9FLh7I6v3/TA9jgQVTNrturCvdrVN5Y7ryXzRiVoFXg39txYqiR5h4l9CiXhCdvIB1
- lSJUZOMRMVVteYOVAa4IEsEsqGrJtsjzlXuPSOrvOuFnN/JDqXjdlu6wneCGCyDTNiXmP
- WpJ6er5wdnpCUayl12QCXaJJd+2Y2jBvY+deu9vKJYDqlVJswOiu3fD/OjZDN6Bq0a15Z
- Inlib1VBkyTArnyp2Zuy1DhY6/SzYuI0uSaqV4+mwXLSZ3g1lE/nhiTpgW+iOkV4XrgKG
- 0gKEiYKVffhFipMa9cEbQoxXO0f7jcFbNrHRTzeYRnk5ZMwvy7Ce2e5lDJHXxFJ7N0g==
+ bh=HSGB/KRp35bhugFVOycVOgNprzGMErSyz9ca6GKskno=;
+ b=Ul7mwMvEDcyu024xhywgEGfLRluYL9gigaebSGCuu0I0+6oeplxu73ucFgajdpHlGaHD
+ uazwlbuP4OfOOpE6X3MlSmS/7O+SYKSf1U+9u5ArE9weZLRnNs2cIm8UUNOVGvLy2jWsc
+ C41t+uAFl6Q2fzvj6W9UHO8v3qjGCgm9ynaA10a1kvaKzxyonTTMPP1uEBQ0QHTdJUi0I
+ 0Dl06QNMVBq2F9jB10uQAoyxeUnuthdOk4uMboPLy3eKU3JjxfIpigiQnSA6L3Q3r5Cao
+ OrxwjEyURqKAcPlXH7o/XdKxqOj0XXTUxIH26GyH4XgjioRnN0Gv6YRPt2WnNVUvRHA==
 ARC-Authentication-Results: i=1; smtp2.osuosl.org;
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id D15154052A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8063940098
  for <buildroot@buildroot.org>; Thu,  1 Oct 2026 14:22:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 254229843E; Thu,  1 Oct 2026 14:21:27 +0000 (UTC)
+ id C56679843E; Thu,  1 Oct 2026 14:21:26 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 30 Sep 2026 16:28:50 +0200
+Date: Wed, 30 Sep 2026 16:07:37 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: aa6bb24b7214a630199babbae4c000736bc75651
-X-Git-Newrev: d6abe0e90650b92e9d22a3d21986f697f3b29f2a
+X-Git-Oldrev: e0dd5372bd55d3bcda425386a32c45ec4083c88e
+X-Git-Newrev: 01b162ff939da94cb83f49c548d8f81be73e8957
 X-Patchwork-Hint: ignore
-Message-Id: <20261001142127.254229843E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/wireshark:
- security bump to v4.4.13
+Message-Id: <20261001142126.C56679843E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/mrouted: fix
+ invalid daemon path in S41mrouted
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,104 +114,51 @@ From: =?utf-8?b?UmFwaGHvv73vv71sIE3vv73vv71sb3R0ZSB2aWEgYnVpbGRyb290?=
  <buildroot@buildroot.org>
 Reply-To: Raphaël Mélotte <raphael.melotte@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7066878700239759997=="
+Content-Type: multipart/mixed; boundary="===============6717557982520789718=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7066878700239759997==
+--===============6717557982520789718==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d6abe0e90650b92e9d22a3d21986f697f3b29f2a
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/01b162ff939da94cb83f49c548d8f81be73e8957
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-For more information on the version bump, see:
-  - https://www.wireshark.org/docs/relnotes/wireshark-4.4.13.html
-  - https://www.wireshark.org/docs/relnotes/wireshark-4.4.12.html
-  - https://www.wireshark.org/docs/relnotes/wireshark-4.4.11.html
-  - https://www.wireshark.org/docs/relnotes/wireshark-4.4.10.html
+S41mrouted hard-coded /sbin/mrouted, but mrouted has always installed
+to /usr/sbin/mrouted. This went unnoticed with BR2_ROOTFS_MERGED_USR=y,
+but the daemon fails to start without it.
 
-Fixes the following vulnerabilities:
+Also drop the script's executable bit to match other sysv init
+scripts that do not set it.
 
-- CVE-2025-11626:
-    MONGO dissector infinite loop in Wireshark 4.4.0 to 4.4.9 and 4.2.0 to
-    4.2.13 allows denial of service
+Introduced in c25115daf2b2761a2f0f411790c6d24b460c7999
+(package/mrouted: add sysv init script).
 
-    https://www.cve.org/CVERecord?id=CVE-2025-11626
-
-- CVE-2025-13499:
-    Kafka dissector crash in Wireshark 4.6.0 and 4.4.0 to 4.4.10 allows
-    denial of service
-
-    https://www.cve.org/CVERecord?id=CVE-2025-13499
-
-- CVE-2025-13946:
-    MEGACO dissector infinite loop in Wireshark 4.6.0 to 4.6.1 and 4.4.0
-    to 4.4.11 allows denial of service
-
-    https://www.cve.org/CVERecord?id=CVE-2025-13946
-
-- CVE-2026-0959:
-    IEEE 802.11 protocol dissector crash in Wireshark 4.6.0 to 4.6.2 and
-    4.4.0 to 4.4.12 allows denial of service
-
-    https://www.cve.org/CVERecord?id=CVE-2026-0959
-
-- CVE-2026-0960:
-    HTTP3 protocol dissector infinite loop in Wireshark 4.6.0 to 4.6.2
-    allows denial of service
-
-    https://www.cve.org/CVERecord?id=CVE-2026-0960
-
-- CVE-2026-0961:
-    BLF file parser crash in Wireshark 4.6.0 to 4.6.2 and 4.4.0 to 4.4.12
-    allows denial of service
-
-    https://www.cve.org/CVERecord?id=CVE-2026-0961
-
-- CVE-2026-0962:
-    SOME/IP-SD protocol dissector crash in Wireshark 4.6.0 to 4.6.2 and
-    4.4.0 to 4.4.12 allows denial of service
-
-    https://www.cve.org/CVERecord?id=CVE-2026-0962
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 2aaeb10bce055d63ea0855914a8fbac4f6390611)
+(cherry picked from commit d8f408b1f16d067d2e676f3db91e7b337aebe160)
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
- package/wireshark/wireshark.hash | 6 +++---
- package/wireshark/wireshark.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/mrouted/S41mrouted | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
-index 88eb7ef494..87d5781eed 100644
---- a/package/wireshark/wireshark.hash
-+++ b/package/wireshark/wireshark.hash
-@@ -1,6 +1,6 @@
--# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-4.4.9.txt
--sha1  dc91c68b03b389645fa6dade92960863d74bca1d  wireshark-4.4.9.tar.xz
--sha256  60551dc787f41e87aeaa1e9c33304f9008037e3baf9fa11aef9c2d584cc0b54b  wireshark-4.4.9.tar.xz
-+# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-4.4.13.txt
-+sha1  2e85bc1231775283d3e1593ce700566e0dc4efb9  wireshark-4.4.13.tar.xz
-+sha256  cdaaf455954b45990651ba334ddcc691ee446fcfb332e78d27b0a8451f22dc0f  wireshark-4.4.13.tar.xz
- 
- # Locally calculated
- sha256  edaef632cbb643e4e7a221717a6c441a4c1a7c918e6e4d56debc3d8739b233f6  COPYING
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index 9ccd8f9a9e..196ac63271 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIRESHARK_VERSION = 4.4.9
-+WIRESHARK_VERSION = 4.4.13
- WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
- WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
- WIRESHARK_LICENSE = wireshark license
+diff --git a/package/mrouted/S41mrouted b/package/mrouted/S41mrouted
+old mode 100755
+new mode 100644
+index 7dca258255..d653425719
+--- a/package/mrouted/S41mrouted
++++ b/package/mrouted/S41mrouted
+@@ -11,7 +11,7 @@ MROUTED_ARGS="-w 30"
+ start() {
+ 	printf 'Starting %s: ' "$DAEMON"
+ 	# shellcheck disable=SC2086 # we need the word splitting
+-	start-stop-daemon -S -q -p "$PIDFILE" -x "/sbin/$DAEMON" \
++	start-stop-daemon -S -q -p "$PIDFILE" -x "/usr/sbin/$DAEMON" \
+ 		-- $MROUTED_ARGS
+ 	status=$?
+ 	if [ "$status" -eq 0 ]; then
 
---===============7066878700239759997==
+--===============6717557982520789718==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -222,4 +169,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============7066878700239759997==--
+--===============6717557982520789718==--
