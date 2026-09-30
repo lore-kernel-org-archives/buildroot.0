@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE53CCA5FD4
-	for <buildroot@archiver.kernel.org>; Thu,  1 Oct 2026 14:22:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EDB5FCA5FCB
+	for <buildroot@archiver.kernel.org>; Thu,  1 Oct 2026 14:22:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 42B6260D66;
-	Thu,  1 Oct 2026 14:22:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8B54560D68;
+	Thu,  1 Oct 2026 14:22:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SQzzHL3AXd8i; Thu,  1 Oct 2026 14:22:49 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 4EC1960D64
+ id 8VbGnk1XQvOK; Thu,  1 Oct 2026 14:22:52 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org E2CFE60D71
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790864569;
-	b=SEsk3Ck7onsWLbT+aPTCpBh7fUdkbfqjwlbbDywvZIt41HyCp8MPsBypCpz2ao45gQSH
-	 TZHT2u4+miKqdTEZdLs40btsh1IEKLZtfIcY0Nn9q5+W7tXcnVT124VV/i7S7wMAZbl2p
-	 q+Nz4RKydwe19ryxFpeQBndd781sKgquOY7Ga4+HJ3uepsVzwi0MzbyqDr5zZaXYmdZlO
-	 KcWgCbGeSut3LwGwviBPzlB7d/LCQLi+6uDe2Fbk5iXCXBSQCtokS859Mf9gCRGndPQCz
-	 79aZdH6MSQMcBhBGcXv8nsWF4tn2uo+kbnEdNr7QWSddAtN0yGEXW7d7+xX016Gs+mw==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790864572;
+	b=RKA9g6ItVg1PC5lkBoXXBF1oc8G4sVMFt/acv0O/WOdz/5mln5fP/ZrIdKi9e1WkysAk
+	 1keFjbV3C3doengqmMhPYoaonBNeFHsJ+u1mHxbekO0U9mZ2UpLqQYddU5thor4oux2eT
+	 dLcFjSuTwK4DG5h/PZsyHbLHO3UhCS6HmvEFn66fIpcfJbmk1P1+k/erX4pJUl1qvqSH1
+	 Fbi6zX7xdsajnf75Pn8Y+8P4Bz3ZBJWDDEvZTlCoMn9rN30OMTxEupgyPjQFwsCOy8xxW
+	 wwRfV+E9a15+hfipefRUrKre7p49UhRHwRCZOlo1f/k7HJ+m+2KiswDL3enl7lWrVTA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1790864569;
+	c=relaxed/relaxed; t=1790864572;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,75 +30,75 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
 	 Sender;
-	bh=6eg2RLRf0ytEyYF1Hp8gdP6HI+Zoav1PHFFOejIjeUw=;
-	b=WcaeMDesK1apPZ/A0ILuN6qPe9b8HXYx6kBPTAZW8cYztJTdYBlC1+HzLQVbtEd/N8u+
-	 tU/se55G4aZvg+askZArwEedKm6h5FBDIf0CuXVghqOB2o2R2DxC7i/TtwhpOFDEwADp3
-	 wSP7VWc6+zKXYWdDffh+lHIqFoX00XZ7vppWlN8V3W03ppJfgUkCwASSSImjVASSIkRyA
-	 31RbxKkiTdWasxuYbQFor52J+YyiPCKTslNWq/rFRSfTmjCgoefpjrSP3OS3vCDBr+75B
-	 NMODsz6+kd803xzNriBnAJ/QibErhTSYdV5h3sT5AwywsSjXsex0JPsr7OS+VUGjp7A==
+	bh=SUtFKTnrgnbPe3QEmSkyZka9SmypGA2fGng3+8niMUM=;
+	b=UPCKkBPOGll1lZfbbfZODqBkqa13m+7CldbKSOqh9oRAAuthQAcTWVjZyL6BqgcqXLEr
+	 82MiTPVct9UWEPXrjyjOilzgYFgaE0REoyuneWfijD2vZRbhKEBEecGFEJNun3SDcx4y7
+	 s52YTfdXM/oenkzeSDbNis+wUCY4b+fKo5aXihzzELmBMHfuFyl14SFR8YWiEVEhrCcpt
+	 kPnJzIYdO4UpuqF5J5mvC21zbWWnJHPyaqBAfNWbGveIgDi7WAfw19vnGihpj10NfHyUL
+	 hFneZo9s0RKrR6zXiIR4zPKt4BBTVw8npLYNEGiBeE14sxmY/CyXpw+lwBzAYSyV6Qw==
 ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1790864569;
-	bh=6eg2RLRf0ytEyYF1Hp8gdP6HI+Zoav1PHFFOejIjeUw=;
+	s=default; t=1790864572;
+	bh=SUtFKTnrgnbPe3QEmSkyZka9SmypGA2fGng3+8niMUM=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=OxNe2ln9wJ0DxxmwBYz4sDuEg4RvWzOYnwTrEKDurDVboTPTvwXAoZLFkLZ4hMNo9
-	 UMrxCGLbTsrwo3ypMh1/hnemy9NeEsO5lD95HZzbZMfXowHtnNe7qwLa7IZJ+I+M6+
-	 eCWdPWHLUpv0bI3zLXAJtSnTP0VuiSc7dvgIsiDg4iT1YnVoEQOVquBpB5BmAewxWM
-	 g0Q26cCVjpQ+poiOy94yFy9uHm5MsUUN8CNaipvz7v9CzH/ot5+kgHhmqLOt/xu8aD
-	 M6FdVeILtyngdAyIqs9o3QxcLbUVl8lapuWmu2K/I1ktns17fN+SlXsUa5U2Tbx2FM
-	 UVRbExA583vbg==
+	b=b+ZnB4qxz2YH7X1lOkZDSwSitLtmkrjk1UU51l9aH2uqyF5aFGx0U7UWZAl2f8ROz
+	 l+BZsItCvFlQN3U4NBMhnsq93C6LW80vOEwJyR9jEoIbfILBFFI6AsitY6GPEw/rHD
+	 nSzbWWdG2dVpEUdDJ+IdJy4xwQOHvB3jdzbS81HytAFN+QdU1PEZ9YPCM9Y8KME1IT
+	 bIZHv3JLF3ZhiQPQO6L7k96OgkKneJEdILiPm+cCN5v7Fj2BAaG/LOYNt1ZzQ8FypA
+	 k7MQk64DXxMALkXd/5+xTKBGJgZamL3XfLxHxk3oQAyowY61wotiRT6Xh1Sr/PvmEX
+	 WT2OMxTbKQD+Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4EC1960D64;
-	Thu,  1 Oct 2026 14:22:49 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id B8077263
+	by smtp3.osuosl.org (Postfix) with ESMTP id E2CFE60D71;
+	Thu,  1 Oct 2026 14:22:51 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id B9B231FE5
  for <buildroot@buildroot.org>; Thu,  1 Oct 2026 14:22:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A9AB240528
+ by smtp1.osuosl.org (Postfix) with ESMTP id AB5AF80F56
  for <buildroot@buildroot.org>; Thu,  1 Oct 2026 14:22:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id czRWhjL1xdNz for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Pbs99xGpDvu8 for <buildroot@buildroot.org>;
  Thu,  1 Oct 2026 14:22:40 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org 8063940098
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org A4C3C80DF4
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790864560;
- b=G2lFYFcg8ORtC3vUQB5I+KXzmTj5QBXwFhCn+PYOSUXkQ8ZwVR/NY36DbJTF9oKpNx+u
- XQFv2Js8VPYO6BD+zQqJVWTSnkms2nF/XgzAmi6LXolTZOgE4tNBlz1fZVlbVR0JEEe4p
- IRK2tSleEWuTY0rL10GXZ2vEdeV7q+1cWEqCY2Cn+eUazdKYCxuzf8qd5VXaxZfpR40xS
- 2lx+AtH65MNx25EiNLESqCrub8mM4lu1sozcPL3TDFOR7oErxPjyzhcnSSMOy/Wl8xuzn
- k0HARNrYRLupSnbUZygrhGd9K0jPp+rzShKF9r65qZteOYOF776LMw3aLTGleUDMqjg==
+ b=E92ulSSRK5eDYPYzqOV+3WVTq2K4i5jeM8TPPwcEbofoylp+K+VWiLCb1m9rUHRhdZLm
+ +ZVtqRDkXI2sDmmvvDexpiCnaVoeIV7Plcn7gfN1g/xZrcubvPyjs+xkqOWeiQhI6mjGb
+ z3JK/JNWffe6eIKrqquAMpzWWaeWCV1HlbSiy5q13f7mA1dWoXXYKWDF6H5J+6Z4wyPf8
+ wS2lENJ7hUBABYM6VqMlCldNnjeUqdB9DSL7MRp+Mbp1mqmzgzZnurqCwwWDM3RMTdNOc
+ o5sZ1TlcEeCqNmkCgxt4s/AyNAGVwTBYoeD6/uMrmZxRSV3FcKNRVLzCxfVswPLkENQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1790864560;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=HSGB/KRp35bhugFVOycVOgNprzGMErSyz9ca6GKskno=;
- b=Ul7mwMvEDcyu024xhywgEGfLRluYL9gigaebSGCuu0I0+6oeplxu73ucFgajdpHlGaHD
- uazwlbuP4OfOOpE6X3MlSmS/7O+SYKSf1U+9u5ArE9weZLRnNs2cIm8UUNOVGvLy2jWsc
- C41t+uAFl6Q2fzvj6W9UHO8v3qjGCgm9ynaA10a1kvaKzxyonTTMPP1uEBQ0QHTdJUi0I
- 0Dl06QNMVBq2F9jB10uQAoyxeUnuthdOk4uMboPLy3eKU3JjxfIpigiQnSA6L3Q3r5Cao
- OrxwjEyURqKAcPlXH7o/XdKxqOj0XXTUxIH26GyH4XgjioRnN0Gv6YRPt2WnNVUvRHA==
-ARC-Authentication-Results: i=1; smtp2.osuosl.org;
+ bh=gxfi6GDOMG+A9PPAnCvXelokxcI+lkX8WGHbgK+vJFs=;
+ b=qIGKxsKTOe1qWpQM5EnHc3Pp+vR2GVhKbg/G82J0oJJbys/RNyKUZlKiMp/iz+RpAU8G
+ uWf82OOPbjJeFho/QNuKNmfbHLUdYCTHIEq9jDxPGLg7+v3bev9Z6tEv/cnn6skj18f6z
+ CDRgiGTyQMUipX3VuyS50iG8ANge164kFHhJA+K2hIPwXsq4Dbm3sBTGmiFoW7X8OFApF
+ uw0jPwJM1jJVApQwrgL3gsMYvW8J9qQcxC2ZCWwX6i0tSLN2xZG69zC96Ujspv3vCyT0n
+ TFD/z6y+Isd546VD3nV/d3DOXsh7x9oOJpWHPObJfH9COxQxPlINBD666RRiZziOqrA==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org;
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8063940098
+ by smtp1.osuosl.org (Postfix) with ESMTP id A4C3C80DF4
  for <buildroot@buildroot.org>; Thu,  1 Oct 2026 14:22:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C56679843E; Thu,  1 Oct 2026 14:21:26 +0000 (UTC)
+ id EC5669843D; Thu,  1 Oct 2026 14:21:26 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 30 Sep 2026 16:07:37 +0200
+Date: Wed, 30 Sep 2026 16:08:47 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: e0dd5372bd55d3bcda425386a32c45ec4083c88e
-X-Git-Newrev: 01b162ff939da94cb83f49c548d8f81be73e8957
+X-Git-Oldrev: 9efe87bc7d74b088816b8cc44a56d8d182e1a53b
+X-Git-Newrev: 7d178d679d2e6af3a9878a45d796a801f6d33733
 X-Patchwork-Hint: ignore
-Message-Id: <20261001142126.C56679843E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/mrouted: fix
- invalid daemon path in S41mrouted
+Message-Id: <20261001142126.EC5669843D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/bubblewrap:
+ security bump to version 0.13.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,51 +114,66 @@ From: =?utf-8?b?UmFwaGHvv73vv71sIE3vv73vv71sb3R0ZSB2aWEgYnVpbGRyb290?=
  <buildroot@buildroot.org>
 Reply-To: Raphaël Mélotte <raphael.melotte@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6717557982520789718=="
+Content-Type: multipart/mixed; boundary="===============4439858624245514964=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6717557982520789718==
+--===============4439858624245514964==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/01b162ff939da94cb83f49c548d8f81be73e8957
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/7d178d679d2e6af3a9878a45d796a801f6d33733
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-S41mrouted hard-coded /sbin/mrouted, but mrouted has always installed
-to /usr/sbin/mrouted. This went unnoticed with BR2_ROOTFS_MERGED_USR=y,
-but the daemon fails to start without it.
+While there are no CVEs for this Bubblewrap release, it includes a fix
+to ensure that arguments that receive a path are not empty (which before
+treated those as the root directory: a bit of a footgun!), and that is a
+follow-up to the security fixes included in 0.12.0.
 
-Also drop the script's executable bit to match other sysv init
-scripts that do not set it.
+Additionally, it patches a number of build failures, which fixes e.g.:
 
-Introduced in c25115daf2b2761a2f0f411790c6d24b460c7999
-(package/mrouted: add sysv init script).
+  https://autobuild.buildroot.org/results/2eb2d222daaadc2eb16b42fa2ec102ab0689f038
+  https://autobuild.buildroot.org/results/674413f089ce9b80a59058674b3ef6879e1d389c
 
-Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+Release notes:
+
+  https://github.com/containers/bubblewrap/releases/tag/v0.13.0
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit d8f408b1f16d067d2e676f3db91e7b337aebe160)
+(cherry picked from commit 0867818a73dd5884898be9bb226062ffe7c45dfe)
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
- package/mrouted/S41mrouted | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/bubblewrap/bubblewrap.hash | 4 ++--
+ package/bubblewrap/bubblewrap.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/mrouted/S41mrouted b/package/mrouted/S41mrouted
-old mode 100755
-new mode 100644
-index 7dca258255..d653425719
---- a/package/mrouted/S41mrouted
-+++ b/package/mrouted/S41mrouted
-@@ -11,7 +11,7 @@ MROUTED_ARGS="-w 30"
- start() {
- 	printf 'Starting %s: ' "$DAEMON"
- 	# shellcheck disable=SC2086 # we need the word splitting
--	start-stop-daemon -S -q -p "$PIDFILE" -x "/sbin/$DAEMON" \
-+	start-stop-daemon -S -q -p "$PIDFILE" -x "/usr/sbin/$DAEMON" \
- 		-- $MROUTED_ARGS
- 	status=$?
- 	if [ "$status" -eq 0 ]; then
+diff --git a/package/bubblewrap/bubblewrap.hash b/package/bubblewrap/bubblewrap.hash
+index e150e1495d..43b22dcb5e 100644
+--- a/package/bubblewrap/bubblewrap.hash
++++ b/package/bubblewrap/bubblewrap.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/containers/bubblewrap/releases/download/v0.12.0/bubblewrap-0.12.0.tar.xz.sha256sum
+-sha256  9760d007363e3abba7c747489910f9f82d9fca53ba3bd3282e396fa3c97a3314  bubblewrap-0.12.0.tar.xz
++# From https://github.com/containers/bubblewrap/releases/tag/v0.13.0
++sha256  4734237473c0e5d695e4e9034a34e43b2dbf5164655bd13fa59ae376b2b7a765  bubblewrap-0.13.0.tar.xz
+ 
+ # Hash for license files:
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/bubblewrap/bubblewrap.mk b/package/bubblewrap/bubblewrap.mk
+index cb31406c8f..dcc3c23d7c 100644
+--- a/package/bubblewrap/bubblewrap.mk
++++ b/package/bubblewrap/bubblewrap.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BUBBLEWRAP_VERSION = 0.12.0
++BUBBLEWRAP_VERSION = 0.13.0
+ BUBBLEWRAP_SITE = https://github.com/containers/bubblewrap/releases/download/v$(BUBBLEWRAP_VERSION)
+ BUBBLEWRAP_SOURCE = bubblewrap-$(BUBBLEWRAP_VERSION).tar.xz
+ BUBBLEWRAP_DEPENDENCIES = host-pkgconf libcap
 
---===============6717557982520789718==
+--===============4439858624245514964==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -169,4 +184,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============6717557982520789718==--
+--===============4439858624245514964==--
