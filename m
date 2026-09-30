@@ -4,139 +4,123 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95513CA5FA7
-	for <buildroot@archiver.kernel.org>; Tue, 29 Sep 2026 19:33:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5DF6CCA5FA5
+	for <buildroot@archiver.kernel.org>; Wed, 30 Sep 2026 02:23:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 45A57407B2;
-	Tue, 29 Sep 2026 19:33:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 130D74082F;
+	Wed, 30 Sep 2026 02:23:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xtA6fqYebgVX; Tue, 29 Sep 2026 19:33:48 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 2D67A40766
+ id t4HfYSjCzIaO; Wed, 30 Sep 2026 02:23:29 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 5801940770
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790710428;
-	b=rLQl+WzCRTJTK90holt4fn358i854v4DyzlPieJMkVbQ7QeU53HtHOZwXEdhMOI9FWYD
-	 f6nKyM+xddzdhI20bhpHMW94mypbD+DogqJkBfJVgtqYrDtXRXM4mlAYYO3Dzjm1WRROw
-	 gMbmrP5LSqaNkB8Zjwf5GVRJ3jFVVOcba1nXZpgo2IQw/CrEeywoq1ZLU9AO3wjNY/Ri8
-	 tVHaUGgxN4bEgvbvJEzZoblJky7T6zNLAogaJVdh6uOaATCCN0HNOFgbDi3ChE61z0sqg
-	 Efq7BK4NGTiWedUOHar1p3oxShJKpG2Q01lRMTmThcQ8OD6y4YhNWXvxH1Rt5sn60Mg==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790735009;
+	b=Ya4UZHWhcWsSNfW7KL69yid9K3VdHUh4hgU1Y6PHG45EcfP7h56HZh9Zpi4jJEzTSxfS
+	 agXq7EuiNBDkl0pRFQiH4+u4/TR2PfCRlCPMZjya+J7U2K7xdS47KzCeEh1LrfPpDYpHM
+	 S6lre0wAkvyJTtuVZfqBQ/aXZZspwsTPm82FUDxPcoS+sMxE72aRdHMJ2BJwYFMysFM+c
+	 48xwcF6tgtEtcmpjeD9AzzNbamoEXInjmTvp1zeDH2lWVm+zx67qtsr3W/lBt7QccmO1A
+	 JqqUuRWjFpO5wuGDRpP3DgQ32dMOXI22g31qMII3t/plMUTHL3HyhubbW/O5vZOBRrw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1790710428;
+	c=relaxed/relaxed; t=1790735009;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
-	 DKIM-Signature:X-KAS-Sym:Received:Received:From:To:Date:Message-ID:
-	 X-Mailer:MIME-Version:X-Spamd-Bar:Subject:X-BeenThere:
-	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Content-Type:
-	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=7jqMaYVl0hA4aGxoeFwa+IPhdaZvz36PzS/w0ICAMvw=;
-	b=eajvtGJHRSZPS1YOToOhoyu300g+LoVwI8+Uy4hpIEbZiwGL1h+fGzFceujccHeqj7d3
-	 pTEhByDgdkFtj4GKtj2L3eHUA+ICJ+hRctChWezPsdCTzvo5c0s5xhEryJtglX3S/skA2
-	 5tQeqYLSJt/DxoEwnMKvSZeyDiX9hc2ft/d3+sTzR57J4aD9QzxECS8sKnrvWqB/sHQN3
-	 ZgX6q0Lg77W9ERMx8pCWDFqG0B04GGawnwasG0e19bWFCBF/6zj9kYeS4qs0Znlqo0h29
-	 9SfBnVp0+ZKIFKohuOTlxW+RlexIF2HTDKtgAJfiSZ6ghWQH4t1kjr+x0L878AQqG5w==
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 DKIM-Signature:From:To:Cc:Date:Message-ID:X-Mailer:MIME-Version:
+	 Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
+	bh=VgpvoWR1M5GX0h0FxTZt2gtIZMxt63nciL24ZJ4e7Dc=;
+	b=TzvNAeaEBW7XGpBb/ReTfU7DgjT6yJtloZXDYunfKbbcDFHC2FIFB5Ns67fpitSQQy9t
+	 eJSZk2gtNvocYC5s9RWQSBFLplDYy7cYput+KolJyNqPPXJkrBMWQV7kTa8cv74ivjavz
+	 FzJ/FWoyEGLrtLU6Y0Z9yzDDs/MTsn+m1z4h9toY9RxrnMGrn115VYNLyuR43y5MN+TWl
+	 TyjATLoF4m0/4SBUwnyp36o6VeIFsGk8ZcW3Gw5FfRfBBIou99tH0JX7p0TGLe40OdTbw
+	 eknVFebTgzrWiRcu6IkODKfqV2INH1rAxUmR4jbxJb976vlv1azFDRnlCJowGlEgFpg==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1790710428;
-	bh=7jqMaYVl0hA4aGxoeFwa+IPhdaZvz36PzS/w0ICAMvw=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	s=default; t=1790735009;
+	bh=VgpvoWR1M5GX0h0FxTZt2gtIZMxt63nciL24ZJ4e7Dc=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=RYddROTs8HbL1DZBb1sWEYymFwQd/N4aWfLXMooT1lIOeHKS046OcGidnp+rFx5Zx
-	 F5q3XYf4OZL731FaVPqEh0dmtBHAftzAZbDr2jogF2xW0ICRfsIpb2UDmnHLLSIbnd
-	 mhm1lnyMmDYmH8Bv6RjvfaMi/Vck3mn3Rbh5fxhuT2lRTqcz/w9jTjMKReEUGHz+YK
-	 sGTYrk3QPqbUIPpPUpCXHa/Y4XglmYRNxIs2cTWL4zAJ6RLczWtOlmka1ybQc6/uIY
-	 Qx9DNCeva9GH1534yiEzjHZ1uC6y8ce35npPcKSIIfRM5vCBrwwAp+WZAjOoz463A8
-	 NRmUDMZzihN4g==
+	b=mhG+15R+Hr0A1MjplTQPc9TYx+4jz6X+hoSGcSIzkELq4rvYLZKj8xLoozV2TgiVq
+	 GqJe9xAPJD8cDtdaxfBbw5FNX/ITF2pEx993/Q45hkZDnUHzgFLOYTp14ladJgD5Tn
+	 0sWF1emYUdAsB3zF+eF6e8rNOETXrXlis+lQgYN0SkUK8fIH7Ekv1euP1MN5h6ymhT
+	 rsaiy2b/2v9Fa+YB1lH3zAUANxryIJqP+Llp3DhfY76M478zMHMI8tanR+GiPPHqpQ
+	 m1JyVs9wayVZjGgtWnTEJ1WFsRgDJ5iYNck8RXWxkHiuMy2NHNmA+Js6EiXH6YpPXu
+	 MW07Uiz9X4Hqg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2D67A40766;
-	Tue, 29 Sep 2026 19:33:48 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 8BBB624E
- for <buildroot@buildroot.org>; Tue, 29 Sep 2026 19:33:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5801940770;
+	Wed, 30 Sep 2026 02:23:29 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id D181832F
+ for <buildroot@buildroot.org>; Wed, 30 Sep 2026 02:23:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7D7BB4032B
- for <buildroot@buildroot.org>; Tue, 29 Sep 2026 19:33:46 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C235B81006
+ for <buildroot@buildroot.org>; Wed, 30 Sep 2026 02:23:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id t9ITtMznZCND for <buildroot@buildroot.org>;
- Tue, 29 Sep 2026 19:33:45 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org 1DA12400D5
-Authentication-Results: smtp2.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790710425;
- b=NQ6XQM0p48S7yELrTzoCU9El0KZxKXZ2QT9FxLwEIZRingITwd6p9EY0vve8+zutDl+J
- zsovR8y0jaZ1bJDg0uqqE8f/SGbWH6c/2hLIuutt9tFBQunkxhEJfV9i9tKc3Aen01Fe1
- yueKwpOmmeXkdddPJ8UPr1grJCn4um+N5SMyP1bnA3zdPDNEa5mPS8Bdhx6Dau8DF2PFq
- 0exwiy6/k+W/WyYox7eYLWQJ0RH8ZvdGp4POQTuuQvgpwMc0sOL8NwFBxZe5X5F7ubkWo
- DXTZYJ3VGNcIV3uHcMpIzD88NCOwCS4cGSTlUir4J7wqFCUelQfSvvCBlcqRk3GFaQw==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RFLDg8GQ_JvS for <buildroot@buildroot.org>;
+ Wed, 30 Sep 2026 02:23:26 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 1197180EE3
+Authentication-Results: smtp1.osuosl.org;
+ arc=none smtp.remote-ip=213.167.242.64
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790735006;
+ b=I+LftH05t6OiSkGPh0rdQTULIwwz5O363KDyyyBbc2Lqb4EWE3P+YyvCqSdukNqgFtri
+ Ow6VDBiye4IKcoiige03YY/0GT5Mpsd08hRFWGRBqawzAY1BW8eTWX2D2Ih6KAp2ihudw
+ KiKp1g5P736ZKCB/Q8HKpINO6x4FuKAgrPXTE1SZRl+Crq8w0giVrZSDs4qFFMxC+NKOj
+ AAOjueNyY5P0gtfqhbgTADntwZdbXLGRqJ1YOAAisjtPAYvXd1Y8mvGtNAignyjLf7mp2
+ jFvKudBC65TKw+llm4/p3XbG7FEBVGpGeRhpAbBqDp6XUqfBaJ9Mga3KiJw7yiGFquw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1790710425;
- h=Received-SPF:DKIM-Signature:X-KAS-Sym:Received:Received:From:To:
- Subject:Date:Message-ID:X-Mailer:MIME-Version:
- Content-Transfer-Encoding:X-Spam-Score:X-Spamd-Bar;
- bh=mlatQ899+fGYypeAGJq2+PrClGddSJij4EvBO3NEecM=;
- b=GSjCSTo+v0xjI7yt6+Clk9F4j6GQbKOTwer43Nzr63xmGBMKGC9sHImzzthjrWRlJket
- 0mwX37favZUsdwqPxECL7ODs9kXucJBKusEcBaxl2F+/2Ag7bxEOGBXMOlxMPFs7139oG
- 0ErElD/omosGqZFle3SmVhS3vTjozMV/FfNIgy+HeaNDBFYUQiKvpZscbnVs1tOmvnaOC
- Wi2mrob3lSuhzoXsFGEo7HozsHSy2hVtsW/yUJttcw7sgEga6mK16xAi61LM5R8YWzZrf
- WQSq0OIpo4fa7SVLEJxv5ENGApPuTo43psCdJzcPhCwbqZ5sUHCriQyZ+x3psC1jyMA==
-ARC-Authentication-Results: i=1; smtp2.osuosl.org;
- dmarc=pass header.from=kuhls.net; 
- dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=ja5O9Ska; 
- arc=none smtp.remote-ip=85.13.140.57
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none) header.from=kuhls.net
-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202605290044 header.b=ja5O9Ska
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1DA12400D5
- for <buildroot@buildroot.org>; Tue, 29 Sep 2026 19:33:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
- s=kas202605290044; t=1790710422;
- bh=mlatQ899+fGYypeAGJq2+PrClGddSJij4EvBO3NEecM=;
- h=From:To:Subject:Date:From;
- b=ja5O9Skab9Ut6rQhV6qrB7/OXCFJXCFfWFBjCA7kkg+Ur2O0tZ9rWGxBGIJMUMEsR
- LDfrSlKhq+ENlGoInYGD4GyBc7o5TIAdWJRO0KOoYBU1tdyiZ7mZdVLGRY5YExYI6a
- MC+J7CSJTXeiIr0k3yry88E3LN68OJYDU6qcGurkpV+GZsNf3xj2TNI7zdbpYbWjMH
- b5aK6BSc4IbN1i153ZGVFARLZ03PAayRB/mFdUKwmF965a/LIo0lVqBjwBKXbN36Jz
- alZzlI58X0gUYm3dm3mUk+ApeMF5e1Fo/ZL6V3fFk8zN1I/NrLvFYNTg6qU6TjckyN
- /o8Rol82EMW9w==
-X-KAS-Sym: v3:f51bdf72230551df:TZyObzTwpxMOQXtnJQn8js2C51INGe6YlfElLpVV6ulQF
- IjK6dCamVXzbXeTmQkPgFCxzUES0HjdeiJaxT3op0qo+9QV+SYdSHkqHykUE++sSeDLvLlsiUDa
- L3Gq7WqN554AZ3tna5JZjEOjaVnXk9OeO78AndazUnbOl06ocHVqYH7r9iny+SDUc8sM/HhaaVx
- qTyJBVj5MAMeu/aerVTfkV49LtN/SySu2WUvHepHtbgpjpyPgxfvX1C02C06KjaFeQibj//hXyd
- 3ePGjCDCd8uugHcRtXpJH/ZScCrCTQqEZLgt1t4kaC8QrylOKGUV5LF2+vevAwBxzfKcF7Rg==:
- YA1fclDjQp2o4jcnetaQGUgCugOHj6nsbzWa/tNQSWnmT+xIqe10NACvXEyxX9FC3n7VbZV19xn
- D2UeXr0FrUEUijLB1zaviwc/xBtIlmJHO6IYwBbfiwrH2F/X6J/S9/Fba1UMw40I1W9Hr2CYUTV
- clseqwS7QlmCdbU8j64aQci9BUyH1y43Sp3SAH1z8UagSs1VhOdZYHxsT5BF0GXysnYXlE3XFoq
- ud3ezBkweaththUc1zgynAjLIKhi88jyEuOh8INg4gdxOTKh9hNwONGEX+OWF+9F8Mn0O6UHiQm
- UMncVAmj7IideKVUNxCsxj3oTKhhHPj7a2F/PMIH4kTJJPuvNL+BoLM01TXb2NjTgSx0cwKz+R/
- iVV/RbihN22wMHshN97ggZKbKOsnBwYQZX0XVy1MdMmrcybskj3IlEBKopD1CMeA7uDhbD1o/tA
- RqP0K2t9zvag++f/ps2J1Amj9HAvytbpYdYO2WrRDca4+Q65E5rzDxPY8GwHqqk/gilA85FpMnr
- EH+KscfdCO7RAHKKGzKKkOTCJWh7L8y1+GFJhha4SrxlHHSOREUvTJ3GZ2tCB/dII84uN0+KdNu
- fnIlXPMF2utSbBEHTUgZgmmdhwo0KjUJWMpALv6rn9/0zA==
-Received: from fli4l.lan.fli4l (p5b3a0584.dip0.t-ipconnect.de [91.58.5.132])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 6DB27A4C2F15
- for <buildroot@buildroot.org>; Tue, 29 Sep 2026 21:33:42 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:49606)
- by fli4l.lan.fli4l with esmtp (Exim 4.100.1)
- (envelope-from <bernd@kuhls.net>) id 1xBda9-000000007xh-3Wk4
- for buildroot@buildroot.org; Tue, 29 Sep 2026 19:33:42 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+ c=relaxed/relaxed; t=1790735006;
+ h=Received-SPF:Received:DKIM-Signature:From:To:Cc:Subject:Date:
+ Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+ bh=XZX54akjgHn7gluDL/KlHoSrXaVWRym1matPNrzWJBA=;
+ b=qxcawLqiS+b44Eo4/ISjpa0yKA1hBCHDsHAHGdlusWzEF7OG1yIm2UbCqtAcheo2DDOh
+ vaEXJq8cfPj+6DhkvR8wPQIForURZPcojxZEQ79G76jBKxHKt4j3raeqRMhrwrTCbdzPy
+ 42N+EBIWAYmfbz9mdkrC/wKIhkUpVDRqIJKINHa4AAHZWXzJDQlb7lXAzfZ4A1s+UqYGp
+ b7aSZia0fjLDVRlOa6ewR7UFcRDwSro/fROGzUaaV6JY2nnoQmw1fbp+O4QKsAOGna9Yz
+ u98DRuuCOIxG3Sg+88ZSxUXPVNKcT7VyUu7Ca32cBBCKTXa/qikvFXx0S3Zg9FZ0i8A==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org;
+ dmarc=pass header.from=ideasonboard.com; 
+ dkim=pass header.d=ideasonboard.com header.i=@ideasonboard.com
+ header.a=rsa-sha256 header.s=mail header.b=NO3rWtVq; 
+ arc=none smtp.remote-ip=213.167.242.64
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=213.167.242.64;
+ helo=perceval.ideasonboard.com; envelope-from=paul.elder@ideasonboard.com;
+ receiver=<UNKNOWN> 
+Authentication-Results: smtp1.osuosl.org; dmarc=pass (p=none dis=none)
+ header.from=ideasonboard.com
+Authentication-Results: smtp1.osuosl.org; dkim=pass (1024-bit key,
+ unprotected) header.d=ideasonboard.com header.i=@ideasonboard.com
+ header.a=rsa-sha256 header.s=mail header.b=NO3rWtVq
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com
+ [213.167.242.64])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1197180EE3
+ for <buildroot@buildroot.org>; Wed, 30 Sep 2026 02:23:25 +0000 (UTC)
+Received: from neptunite.hamster-moth.ts.net (unknown
+ [IPv6:2400:2411:160:2f00:5ebe:c680:ee8f:e17f])
+ by perceval.ideasonboard.com (Postfix) with ESMTPSA id AB95D5E;
+ Wed, 30 Sep 2026 04:21:28 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+ s=mail; t=1790734890;
+ bh=ioXiDnTNRY7kRdF3RoTDU+XjIcSFwz2idajrzkbF70M=;
+ h=From:To:Cc:Subject:Date:From;
+ b=NO3rWtVqKaBw5HRsSK04lijXp4Mdc4Wcw0VT24/Ny1ss8azA+0TDb109Th1BjEggk
+ GRdOKOytblPqJJYrLMp1yiWdpq3YEpIOJD4/s2XB7SZABvyPqssEHz+nRGAk+/bOtg
+ hAGAoROD4QFPDQunAaURYL6VHsUDjggLCA1t6JcU=
+From: Paul Elder <paul.elder@ideasonboard.com>
 To: buildroot@buildroot.org
-Date: Tue, 29 Sep 2026 21:33:42 +0200
-Message-ID: <20260929193342.1905539-1-bernd@kuhls.net>
+Cc: laurent.pinchart@ideasonboard.com, sakari.ailus@iki.fi,
+ Paul Elder <paul.elder@ideasonboard.com>,
+ Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Wed, 30 Sep 2026 11:23:03 +0900
+Message-ID: <20260930022304.541411-1-paul.elder@ideasonboard.com>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Spamd-Bar: /
-Subject: [Buildroot] [PATCH 1/1] package/rsync: bump to version 3.5.1
+Subject: [Buildroot] [PATCH v2] package/raw2rgbpnm: Add package for
+ raw2rgbpnm
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -153,61 +137,91 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://download.samba.org/pub/rsync/NEWS#3.5.1
+Add package for raw2rgbpnm. It is a tool for converting raw images to
+RGB PNM. While the original repo is at:
+https://git.retiisi.eu/?p=~sailus/raw2rgbpnm.git
+A mirror is hosted on freedesktop:
+https://gitlab.freedesktop.org/camera/raw2rgbpnm
+so use that instead, as it likely has more resources for maintenance and
+availability.
 
-Switched to sha256 tarball hash provided by upstream.
+As the build is simple and has no dependencies nor releases, use the
+commit ID of the head of master branch at the moment.
 
-Added configure options to handle new optional dependency to libidn2:
-https://github.com/RsyncProject/rsync/commit/f0177d82a8fcbbebaac2bdf556f983160ae03988
+Signed-off-by: Paul Elder <paul.elder@ideasonboard.com>
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
-Gitlab pipelines passed:
-https://gitlab.com/bkuhls/buildroot/-/commit/1915a4f7200942fdd6203b07debc24b57ad70502
+Changes in v2:
+- fix formatting
+- use commit id instead of branch
+- add hash
 
- package/rsync/rsync.hash | 5 ++---
- package/rsync/rsync.mk   | 9 ++++++++-
- 2 files changed, 10 insertions(+), 4 deletions(-)
+This patch is based on 2026.08.
+---
+ package/Config.in                  |  1 +
+ package/raw2rgbpnm/Config.in       |  6 ++++++
+ package/raw2rgbpnm/raw2rgbpnm.hash |  5 +++++
+ package/raw2rgbpnm/raw2rgbpnm.mk   | 14 ++++++++++++++
+ 4 files changed, 26 insertions(+)
+ create mode 100644 package/raw2rgbpnm/Config.in
+ create mode 100644 package/raw2rgbpnm/raw2rgbpnm.hash
+ create mode 100644 package/raw2rgbpnm/raw2rgbpnm.mk
 
-diff --git a/package/rsync/rsync.hash b/package/rsync/rsync.hash
-index 84cdaf680b..3fc2603049 100644
---- a/package/rsync/rsync.hash
-+++ b/package/rsync/rsync.hash
-@@ -1,5 +1,4 @@
--# Locally calculated after checking pgp signature
--# https://rsync.samba.org/ftp/rsync/src/rsync-3.5.0.tar.gz.asc
--sha256  c7ffd1ef653e99540f661e47cb00b7f9cad1ee6b972399b16f93d672656e0d33  rsync-3.5.0.tar.gz
-+# From https://github.com/RsyncProject/rsync/releases/tag/v3.5.1
-+sha256  c55f9c9dc10fb8bec397b399a0fdded53cc9a2d8e30891bb0d63724d25c37bef  rsync-3.5.1.tar.gz
- # Locally calculated
- sha256  85c19ea50a224c2d0067a69c083584e5717b40b76610ec1218f91385775067dd  COPYING
-diff --git a/package/rsync/rsync.mk b/package/rsync/rsync.mk
-index 391659a33d..af18dbf608 100644
---- a/package/rsync/rsync.mk
-+++ b/package/rsync/rsync.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RSYNC_VERSION = 3.5.0
-+RSYNC_VERSION = 3.5.1
- RSYNC_SITE = https://rsync.samba.org/ftp/rsync/src
- RSYNC_LICENSE = GPL-3.0+ with exceptions
- RSYNC_LICENSE_FILES = COPYING
-@@ -34,6 +34,13 @@ else
- RSYNC_CONF_OPTS += --disable-acl-support
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBIDN2),y)
-+RSYNC_CONF_OPTS += --enable-idn
-+RSYNC_DEPENDENCIES += libidn2
-+else
-+RSYNC_CONF_OPTS += --disable-idn
-+endif
+diff --git a/package/Config.in b/package/Config.in
+index 6058800682b4..6d9daeadafec 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -195,6 +195,7 @@ menu "Development tools"
+ 	source "package/mawk/Config.in"
+ 	source "package/patch/Config.in"
+ 	source "package/pkgconf/Config.in"
++	source "package/raw2rgbpnm/Config.in"
+ 	source "package/ripgrep/Config.in"
+ 	source "package/sed/Config.in"
+ 	source "package/subversion/Config.in"
+diff --git a/package/raw2rgbpnm/Config.in b/package/raw2rgbpnm/Config.in
+new file mode 100644
+index 000000000000..3d8f36459f4e
+--- /dev/null
++++ b/package/raw2rgbpnm/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_RAW2RGBPNM
++	bool "raw2rgbpnm"
++	help
++	  Convert raw bayer images to RGB PNM for easier viewing
 +
- ifeq ($(BR2_PACKAGE_LZ4),y)
- RSYNC_DEPENDENCIES += lz4
- RSYNC_CONF_OPTS += --enable-lz4
++	  https://gitlab.freedesktop.org/camera/raw2rgbpnm
+diff --git a/package/raw2rgbpnm/raw2rgbpnm.hash b/package/raw2rgbpnm/raw2rgbpnm.hash
+new file mode 100644
+index 000000000000..5ac2c4fbf5e6
+--- /dev/null
++++ b/package/raw2rgbpnm/raw2rgbpnm.hash
+@@ -0,0 +1,5 @@
++# Locally computed
++sha256  3d0df8cca5f3e1fd45c9f1e76344413ea58a753d93b9764272dad0498a482cfb  raw2rgbpnm-f28b903ca63b4c221dc011df5edf1d51eea533d7-git4.tar.gz
++
++# license files
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
+diff --git a/package/raw2rgbpnm/raw2rgbpnm.mk b/package/raw2rgbpnm/raw2rgbpnm.mk
+new file mode 100644
+index 000000000000..fc6d9064a0fc
+--- /dev/null
++++ b/package/raw2rgbpnm/raw2rgbpnm.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# raw2rgbpnm
++#
++################################################################################
++
++RAW2RGBPNM_SITE = https://gitlab.freedesktop.org/camera/raw2rgbpnm
++RAW2RGBPNM_SITE_METHOD = git
++RAW2RGBPNM_VERSION = f28b903ca63b4c221dc011df5edf1d51eea533d7
++
++RAW2RGBPNM_LICENSE = GPL-2.0-only
++RAW2RGBPNM_LICENSE_FILES = LICENSE
++
++$(eval $(meson-package))
 -- 
 2.47.3
 
