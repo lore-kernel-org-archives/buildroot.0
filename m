@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65E85CA5FD4
-	for <buildroot@archiver.kernel.org>; Thu,  1 Oct 2026 14:23:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D61BCA5FD2
+	for <buildroot@archiver.kernel.org>; Thu,  1 Oct 2026 14:23:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3745560DC0;
-	Thu,  1 Oct 2026 14:23:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DEF0B60D87;
+	Thu,  1 Oct 2026 14:23:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024)
- with UTF8SMTP id 4j15-tyxZ_Xk; Thu,  1 Oct 2026 14:23:21 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 5BB6960D67
+ with UTF8SMTP id msQmYu0QjuAg; Thu,  1 Oct 2026 14:23:24 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 100B960DD5
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790864601;
-	b=Zpn85D6sEzwvdPAYVYNDGnsBvwsujjttinBWJMOarqhppPRBLVG2qM5zLAnbxEFPz+UG
-	 sKvRpXiBxwBP4Y65zBJXzoTVPoCBv7oKXDOQhI2bZBlQL+A2obBL6rluLM8PiRlimoFXd
-	 iANPPuHnFsDUUEh3Eh5xPjU9rh2ipCkanrHU7/CE37OEZzv6hFdf/HX40u+/Nuju86/yG
-	 P2+Tjs1uncXMT1srlo+pcuMXEW08nzbmJTiuX/7PKi5sfYXxgKf9eiDNq0/nnQAiQ08O2
-	 ka3uoikOQ+6NIDuj3PDHLEDhbK7H8synJNKk3J72MIoHwTPKJywnRx1te04yZuOSJ+A==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790864603;
+	b=Nm8/30XnVc32yWtwVjhW/OMoJytDY5mSJILeTfuSe4xlxkxT2yXj25iPO40r1ExgG+j7
+	 BxwmdgeDerRzOlYfoKjpxKOzkP1U+hRENyj5NVmhbjVB1pLZ4QIKFQR/NoAKK/bo+jdR+
+	 tvidpTsKFloD0NaDNnZkME9/xQAjLRrPLszRlPICnISweo0o52QauwWb0mm5pfiUVRq4b
+	 6z6PGaBIBsQsvjQMf/h/lNU70MNOVwvy52MCuEym0tY2DIb6HFp/x98NGwCiI/qmPmlCe
+	 rVCVWOmWPYRPPtOM+mOdwA0idxwPaOtbOTBJKXc1swCTNRlIyEdbdHyr8e865HtfXkQ==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1790864601;
+	c=relaxed/relaxed; t=1790864603;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,75 +30,75 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
 	 Sender;
-	bh=5fgXYSKB7lc27WUVd8istZTHx0gHc1vXtoY0VSbd71Y=;
-	b=mJMYwXCdIAbdKcrkTD95muSTi38nCn6gRFLe3Lqte+Y77QAzSJc1MIP2iLy2b9fTLaLo
-	 uVtQEDQDMb2kntwidjUIvx0i4JsHTyPePUQ04OL8mauNvrmi5oxsgvRhyLrnQAGOIC7h+
-	 j/URPtWIEBV3dJF8WU9cUuFEluTFBJ4adjO4v8RN8B8Je5W7jcCFYM/7YBMOl0qjsy+sB
-	 eURieTCUbj/W7GxKYQv6nR7UOA3kTGdSVZ0Oh8xRoIEawj49pRWIDxoC4giBhaho9gpwA
-	 /+juRc/MKYRZsymDHnOEJTNLzCA9/87CPjASmoPVhakG+uOcWTKlr30h1cA6+Oncwuw==
+	bh=OIJa8Y+d4qyThzWNpHsXFELBm12NjSPpr/2c7XSr6Ys=;
+	b=L8yBkQ3IJcXm0mzWpSoQFSV+8Ah0pMHm8EIx4ImPkno8D7BCvK7xqDTboQmhHtJHEvM6
+	 0qndrXVLgtdLx0vJasPti+CJ8Yi8CNS852aBTK0JCNqfVEAhvjwwu76248W0+OHfov/GW
+	 R+QxNfQOWBxPZRkO9VS8OjFuv3xeD1HCTkGrX0CzUjrcL4ofW0TPUdVMoVRDPO2rgf/YI
+	 LTVwckFgB4m0Renc09UliV96lcOzQDoLLqfMqz46iV+w3e0IoYVQMYi6zQytWfHsahq6r
+	 DG7vIC2ayVlBwJX47y5gs9BLfUMrq6wXrVNe780qjj/OithoUMBK9A2vwfvwtOe6H/g==
 ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1790864601;
-	bh=5fgXYSKB7lc27WUVd8istZTHx0gHc1vXtoY0VSbd71Y=;
+	s=default; t=1790864603;
+	bh=OIJa8Y+d4qyThzWNpHsXFELBm12NjSPpr/2c7XSr6Ys=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=QvfwIfIA/1/LiWLi0HmaKZVYC7KoNmeXudSi1eaGr51XhnfIqUevC/HxeOoolbPLx
-	 LxyfSsckpQkbG6nKB/6F+A9xfo2TdJBZr69D0azLCc1F8/rQ6yO8RB7Q7TGnsVKfj0
-	 wkC+GjuXT4faSLxfbQxn+wGu9EpsFv8MtZxJCXefRDsf4p+tBDA3Fl1hmhxoD5Iui6
-	 GHgYePUmeC9cKfPrLgVoDMLuDngG8DM0yfNoAuZu6faOmWmFiOb8VPdACTkzYnDIgH
-	 0nGu9gxHTjQ1hvH2xuuXZ9Vl3JKwH4oH8DNTPf2a6s42EdLLsBzbI28uu9FXnt7Q6M
-	 hTBY/loU1TiTg==
+	b=TTVEQvSWCgUayoTS25MBQe5/HVJbGhd5Wx+2kfcZ7R/6/Bnzvi9Eo4oiryl7XpgRc
+	 sjb7+G/26auoTk3gULOm0KiSzUNsXTXXvXbFUpf5TFEIosVceTOKLQ15QlpaAix5M6
+	 dObiOo2jwl446Gl6tXiO8XoBKU+L6A/LHuAKhAaK8Kgwq0esqjybFiZw/z48D+wTb8
+	 cd54P+GN5RhFn7YjgljzlZ8NgfAk3xpXeeruYsB9ED7+HTpKAP7P8KH7yweliIge8f
+	 KL6r64/aBqf+XJcQ1QEK1z0Q19AFYQk56NgMtOQ9uUBtcoqQHVow8w4Yv8uxjvqx+M
+	 ijvfMuUfOIojg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5BB6960D67;
-	Thu,  1 Oct 2026 14:23:21 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id A22FDD22
+	by smtp3.osuosl.org (Postfix) with ESMTP id 100B960DD5;
+	Thu,  1 Oct 2026 14:23:23 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id A4920116C
  for <buildroot@buildroot.org>; Thu,  1 Oct 2026 14:22:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 86BBA40538
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5205A80E57
  for <buildroot@buildroot.org>; Thu,  1 Oct 2026 14:22:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 97wRqtnBNURB for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kRSQQxZ4R4np for <buildroot@buildroot.org>;
  Thu,  1 Oct 2026 14:22:42 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org D508240512
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org B81D680DD8
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790864562;
- b=WsbEYuJGlZxgEWmVbmLzXrPvAPJX38WcQfNevJ4llICGwucIHxX0UTRx2OjuMdWSFgaO
- FzPeDABQFIBJucNEM2HSM7BwfPT3sF9yl3USf0YpQv3KAuW5ShgBMclJ88WNDPWDyqGKn
- ZO807nmWuz9wF8W1Drcdv/QacxxXU8OQDxPu8cd2ba5bDTGuU248YSJnenUEcL0eddnLO
- uzEwAfP+BRut/2YkRQY2SuUBhQE1m0YLoYqDrmN4jvn9hA5hBs3DQ/6BTA1VLeSn+jNU3
- nt/riQeWuUuXzMltEfpBSr6ersmyba9qxPOftgjRsQbc18nImrQb6TF0xDzV6eEwXHQ==
+ b=pK1NyJre7eBCQ1AaDqP+SwLnGznU/IGqyFEIIW15gsVB+gnTYqAuZ9wre/dxdlrSKqTj
+ hXRxRI7sugeE54N5SMA0mEGwO2+QGeWjvrZaEAADpKY5piGyTKHcvBj1v3LB2uX8IsiNQ
+ LMry901bz6C1PHtTdfJBFQJm3yJ4MWFYPnDlGRFLbE7+9wwQasl9SeZeLJ3E+CgyKpaKV
+ 5uVQsnOyn9cabFcIQtzFCE1hbBlrSwAa1zqIR0M8oQYstXC1ILNplEHrfBe9D262iBnHA
+ 1StjMQccIDkGM7Bv9PCr6H3t7VXNeUgb2cAw96uyS8OVQsT8LtD5mGvflL0X0jdFcTQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1790864562;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=YgJi8xSvRjJh/xxXa7qNnrkF0ZRhIT7JXhVkd9JUHJk=;
- b=dI/EsR2Et9ousJZND8xk39K1r0xr2+r6/8tjVQGRGhX2CFkEijxRAxu6PW2jArCRBQqW
- e8twqeLB0IXOzc/FUrxBPSWtGHBuHzrIVVwVIAKrYTzSmvA7Z639cw68s5kPmBxjca0pQ
- arUgAjnDNvVM429hkvjb4Xhpz8eON8P26IdrJBuc03gbsWtbaLLdgCnCzjrG1Oaa/MXtq
- vpKQbY8v/YfFQ2I//5i73IBB+zjJTDTocf81NPzHhX7gkQ7BRKXyhW/zNx1cKTYNipEOm
- d8tRYK+i7oxAbe+2tyW4VXrXpRxisWZcw+ONNk5iJQr+ku2V8bGf+vO/n1agznaPsXA==
-ARC-Authentication-Results: i=1; smtp2.osuosl.org;
+ bh=xTlVkx1RNs6Zq0RV/QV5YmupYtcqveAOhT8vSpXIv8A=;
+ b=E8R3Ti5q9ktfl1nNrdfnpFdaKdDsa+z+vjwFSdxJPe0EsBsmGxI/Ft5b+jIAXMyXTmQ6
+ XsVYBdNhFPRBFMnz85GCcE6ODK7avaf7muF6akPd79GpC3SHap5u3xL9Hye8yHhl0SE8r
+ q2ivIcn1C1Pv8byxLpni9fqpIoD/a22FLB0Seyq6+GZvqZY3xMWLXto2Y2acuwhzBW2/s
+ hjxNYkRln1rG1XBp2+g69+Nf1Knsz5Kt6+gtWMp67g0WryCb0hz79TrIth8e2GAtRNNAW
+ DaJ+UMVdnJKeCFmlJXlXiYT260xSWM1pOGElQF/eur2NCJ4T5OGLu+qbSaJxVe+mc7g==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org;
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id D508240512
+ by smtp1.osuosl.org (Postfix) with ESMTP id B81D680DD8
  for <buildroot@buildroot.org>; Thu,  1 Oct 2026 14:22:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1CAE49844E; Thu,  1 Oct 2026 14:21:29 +0000 (UTC)
+ id 0B8199843D; Thu,  1 Oct 2026 14:21:29 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 30 Sep 2026 16:06:12 +0200
+Date: Wed, 30 Sep 2026 14:45:33 +0200
 X-Git-Refname: refs/heads/2026.08.x
-X-Git-Oldrev: b0bb3ff02dad7dcbcd83c40fb253c855519b4219
-X-Git-Newrev: 3f0be30e3cae01cbd4bec36658d77f9b44e20975
+X-Git-Oldrev: 2e52ae72a2d7ca0e40c3b85570de0a51bfb4c37c
+X-Git-Newrev: f5ab048daed6e7d17f33ec9417ecda7f725501a3
 X-Patchwork-Hint: ignore
-Message-Id: <20261001142129.1CAE49844E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.08.x] package/skopeo: use new
- upstream location
+Message-Id: <20261001142129.0B8199843D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.08.x] package/skopeo: bump
+ version to 1.24.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,51 +114,51 @@ From: =?utf-8?b?UmFwaGHvv73vv71sIE3vv73vv71sb3R0ZSB2aWEgYnVpbGRyb290?=
  <buildroot@buildroot.org>
 Reply-To: Raphaël Mélotte <raphael.melotte@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1336007735205792577=="
+Content-Type: multipart/mixed; boundary="===============1198524674551649456=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1336007735205792577==
+--===============1198524674551649456==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/3f0be30e3cae01cbd4bec36658d77f9b44e20975
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/f5ab048daed6e7d17f33ec9417ecda7f725501a3
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.08.x
 
-The upstream location has changed (with a forward from the old one, so
-we did not notice earlier) [0] [1], with 1.23.0 the first release being
-made from the new location, which was accounted for in 96aac440dd79
-(package/skopeo: bump version to 1.23.0) as it required the change of
-the gomod, but where the new location was missed.
+https://github.com/podman-container-tools/skopeo/releases/tag/v1.24.0
 
-Eventually switch to the new location now.
-
-[0] https://github.com/podman-container-tools/skopeo/pull/2854
-[1] https://github.com/podman-container-tools/go.podman.io/pull/6
-
-Reported-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
-Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
-(cherry picked from commit a489e7c212b1e8b6d5ccc23bfa0b9c8e1a4621f4)
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit be60575e606cbadfcca99e819141d1ea8c501a17)
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
- package/skopeo/skopeo.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/skopeo/skopeo.hash | 2 +-
+ package/skopeo/skopeo.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/package/skopeo/skopeo.hash b/package/skopeo/skopeo.hash
+index abd68d13f7..8a9fb22133 100644
+--- a/package/skopeo/skopeo.hash
++++ b/package/skopeo/skopeo.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  de96bfc2bb523c852af675ffdadd934484812ce190aa8620e1d5fd6c51442e25  skopeo-1.23.0-go2.tar.gz
++sha256  1eea9364e344c4d6cb398fac53bc387663d19690552003b43c75819e8bb55527  skopeo-1.24.0-go2.tar.gz
+ sha256  716a8b80635c394681e652823e1e42e411ad2d254e1f202403422d74f4b0b106  LICENSE
 diff --git a/package/skopeo/skopeo.mk b/package/skopeo/skopeo.mk
-index 5a22658611..5d23cbf451 100644
+index c2fe201c7c..354998b175 100644
 --- a/package/skopeo/skopeo.mk
 +++ b/package/skopeo/skopeo.mk
-@@ -5,7 +5,7 @@
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- SKOPEO_VERSION = 1.24.1
--SKOPEO_SITE = $(call github,containers,skopeo,v$(SKOPEO_VERSION))
-+SKOPEO_SITE = $(call github,podman-container-tools,skopeo,v$(SKOPEO_VERSION))
+-SKOPEO_VERSION = 1.23.0
++SKOPEO_VERSION = 1.24.0
+ SKOPEO_SITE = $(call github,containers,skopeo,v$(SKOPEO_VERSION))
  
  SKOPEO_LICENSE = Apache-2.0
- SKOPEO_LICENSE_FILES = LICENSE
 
---===============1336007735205792577==
+--===============1198524674551649456==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -169,4 +169,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============1336007735205792577==--
+--===============1198524674551649456==--
