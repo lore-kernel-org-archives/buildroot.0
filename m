@@ -4,220 +4,141 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2EF6CA5FC4
-	for <buildroot@archiver.kernel.org>; Wed, 30 Sep 2026 19:53:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1231CA5FC4
+	for <buildroot@archiver.kernel.org>; Wed, 30 Sep 2026 20:37:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 89AEA811EC;
-	Wed, 30 Sep 2026 19:53:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 77DCF81204;
+	Wed, 30 Sep 2026 20:37:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wZ8EDoyQP8AZ; Wed, 30 Sep 2026 19:53:45 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 83C89811E3
+ id Vsin4FT6zk_p; Wed, 30 Sep 2026 20:37:51 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 4287180FAB
 Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=3; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790798025;
-	b=SYyBhkqtwkhtitRtVPkJcDHvA/cqL4i7BP5STW7hCfdavwdUVgahgfJysyUUfakx7DJ6
-	 HtmAMOfnzqKcoPc5TbysAUl1g/RFGKw3UQXe/zzhp1dbM04y+k5zgVBGnLS0RA2eivaso
-	 PEfT05pxoG+tOUBSkNHG55lyldNCb+775zdjMVsJnjLCs5m3YeqfI0nf2n9/RIhVcbWoe
-	 qSTzswvPYsl/krtGB1hPwoXs6NHFsXCTZFMKZi9TD/97tZRVJ5AY2UcTAv+QNpJY84YRE
-	 qPcwA7nm7Lt41pyiV8Udor9JpJ5B055JMa3yhPdlnKQBSvms/jAtswE3fN4XwnUZ/EQ==
-ARC-Message-Signature: i=3; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1790798025;
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790800671;
+	b=Aqd2wL3J6plPYsqXK3r3BZvzRLkcWZjNmaWfmhEheDYnU4n3ZYl6Qvnyl3xQozoERBc0
+	 S4aoN0q1PnFUDUeb6CMO8nDgWRzd234Xn+TqXTpDWfOJW+izIBlG97NEh7dlvt5hbgd/t
+	 V3pETNUpeW6b42Hy4BchRdoGKgpZcDH4OutKRI/35OTob9ZZ5lbKK2fIkSubsKA0HQUv/
+	 woTssC28i3bhfsH25snbkhKaVfwemLRWdRx1c9gEIjNbbw3S5hrw7r/on45pOZINDVwGI
+	 1kYYEzjG4vBMfF1Tp3QYvrGU7B1l7VyqdAIvOEl7zE3gbIFPgPRCIeTz6APNVhQZLJQ==
+ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
+	c=relaxed/relaxed; t=1790800671;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
-	 DKIM-Signature:Received:Received:From:To:CC:Thread-Topic:Thread-Index:
-	 Date:Message-ID:Accept-Language:Content-Language:X-MS-Has-Attach:
-	 X-MS-TNEF-Correlator:x-ms-publictraffictype:
-	 x-ms-traffictypediagnostic:x-ms-office365-filtering-correlation-id:
-	 x-ms-exchange-atpmessageproperties:x-ms-exchange-senderadcheck:
-	 x-microsoft-antispam:x-microsoft-antispam-message-info:
-	 x-forefront-antispam-report:
-	 x-ms-exchange-antispam-messagedata-chunkcount:
-	 x-ms-exchange-antispam-messagedata-0:MIME-Version:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-AuthAs:X-MS-Exchange-CrossTenant-AuthSource:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-originalarrivaltime:
-	 X-MS-Exchange-CrossTenant-fromentityheader:
-	 X-MS-Exchange-CrossTenant-id:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped:Subject:X-BeenThere:
-	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Content-Type:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 Received:From:To:Cc:Date:Message-ID:X-Mailer:MIME-Version:Subject:
+	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=ZC0zCP7xtvVXINPn9Cq6n2ydJtuUC2mSlrUbhueSkk0=;
-	b=Jm29POa9oS68nVfwIo8GHJHA2KNFxnkqa2eOzypy4l7o5ws/y+AYo2AXfx1nPsZcrocF
-	 5C82A3TLUjuj44m7XiQdl656B5VQzIjMNJNKxNMShlqQ2vB1nf50t2908EBPtbdv8HrJ4
-	 sN7Jna1MeR3OKnlwuXEzmHmDAK7/y4qdzvXhK/yx58HK7u6juhXRuVudwJZ5fj6YdcK4J
-	 XdBsxz2V8gmiY7yTPAyeEsStzIRWraysjonyHS67XFA7qa0O7Ap8MYSVZV8+I2E3pLOgB
-	 Xw3TZAEHZ5ew3SVaeKr9FoItB1GUBauY8YW0skyzFwf1BEnShjLbws1fANSqSs+xIUg==
-ARC-Authentication-Results: i=3; smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	bh=2PWEqdKQsW9smXJoALNCe/k9FeI4LCyGGSF00CeEP/0=;
+	b=lYYiXFpuZlk3SIP1zcfA6GpaXyIoCa/MJjm5PS+q00XUg8njNQkXR5fseDxsIzmq5IIM
+	 DJh2nRdlF0kMAY4kzEsWsBOnkCFwJkzRSuswmM7A6T0+ZMvpZaQqv8e5+84qP8YUjE066
+	 APG94reZF7SXFlEZfipN3UqDU6RxQlo1gEK438F7aw7O2UIP2lrkg6yL78C2SaDLNA3QC
+	 ss8aF5dphxdB/1TdNoUNuLgKSduoB8wpS8/PxfLK+uBXbnslfmGNSxExup5rXJYtv0BFb
+	 Nc9k1Bhp1ThRF6ZVocTkKJH7DnkxuJ+99JxE4Eum2cT84K2FYOnwdNNZHCzIeoRIo4w==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1790798025;
-	bh=ZC0zCP7xtvVXINPn9Cq6n2ydJtuUC2mSlrUbhueSkk0=;
-	h=From:To:CC:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	s=default; t=1790800671;
+	bh=2PWEqdKQsW9smXJoALNCe/k9FeI4LCyGGSF00CeEP/0=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=hPMVIAjK/VMInrA2rJolXbI+xiJttPqLHCqBXmlddie8AZLkzxYBCr6xeABczfPDv
-	 rZAMITwOsMKNDgyR+VsDaFv3SYO0UJO7WQLkSxBqkgMvDBcuFUs3PtSz1Xt44vWPzg
-	 8cb0KUQuLadd03HAAFuMvG5CreZdGgBQR4Ad1iFPCx/ikfbkCxRyJGvmt5GDEUNHC5
-	 QOgtz4Ck2Wz5Ik7rzhpKvfC2ZqnSaV4cvMjotKDC4/r7QL8i1mkPMmOnQhIOBllgNj
-	 NPtbtYwVKbnoewoLqMRqWgZp/V9w9oayV54aeRsvkG8QJBxy2CthDes0ZZXP5Whdy+
-	 0FuX9SDJ0rb9g==
+	b=NKKJTa7PlNs1yghYw2aMI5U/ZAxs5B/BrNjn2IGtsXSjPlKQTks9AIylQ4C6IJcmQ
+	 xtQhx0HPLe9/ecEfMjyMDEr/ziLd4/uXt3AcMAJYwhjYrwSopdVPs1i5Pe8U58d1em
+	 nMpyhBCjWHap1MuFHol9mhF4ozh57PqPnH6bdFzBXIvHM3Lx2FqDKSZxENFy+c8BDD
+	 Ki+cVyREHE1xArw8AHkTrbLvxrMLPTvBTKuW3+yeLramC2Evg0p9aU4fGaLUijxqbj
+	 vMGCaSi5OGcKX9UztMqfRCwvCiBtAqfRKjn2eEa20Nz4uFV4C5rTr+Jc79FcthuJYU
+	 76O6N1qHAEX2g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 83C89811E3;
-	Wed, 30 Sep 2026 19:53:45 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id B4B9934E
- for <buildroot@buildroot.org>; Wed, 30 Sep 2026 19:53:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4287180FAB;
+	Wed, 30 Sep 2026 20:37:51 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 697A0116C
+ for <buildroot@buildroot.org>; Wed, 30 Sep 2026 20:37:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A34CC404B3
- for <buildroot@buildroot.org>; Wed, 30 Sep 2026 19:53:43 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4F55660A41
+ for <buildroot@buildroot.org>; Wed, 30 Sep 2026 20:37:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7u7HtYXTGnrj for <buildroot@buildroot.org>;
- Wed, 30 Sep 2026 19:53:42 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org E87B8404A8
-Authentication-Results: smtp2.osuosl.org; arc=pass header.oldest-pass=0
- smtp.remote-ip="2001:489a:2202:c::61e"
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=pass; t=1790798022;
- b=QIQ02lvquDCVHb8//8s1ZMTjMKJCwonaqzjQPEaS7/uwr+II4rZ1hlj/d0VNRlwigNrZ
- uEjnUR4lxmGto/dKnls4/Itn35pbhJOD2kEjJtLmYe8XaJ0tCcAMcexINNXUpUSUZIde7
- YRACf7y1OOlo/vgc0XWyOFumRZTY9sm7mVVeM37pDzHUueHKwMhNn8o2EWNR5NwJ02tuH
- E8sfI1lyEfnYL46N5s2cEbOGdliPIDdicDd9us7LSk39JFBtk52CT8r+LTjLuy4ufdDtg
- dapyUsXk1QutJ7vbJoH2Y1BAhaCerlFVA6EDchFqwEnn/cx6O5mkaKZX6G8KYeGBcqw==
-ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1790798022;
- h=Received-SPF:DKIM-Signature:Received:Received:From:To:CC:Subject:
- Thread-Topic:Thread-Index:Date:Message-ID:Accept-Language:
- Content-Language:X-MS-Has-Attach:X-MS-TNEF-Correlator:
- x-ms-publictraffictype:x-ms-traffictypediagnostic:
- x-ms-office365-filtering-correlation-id:
- x-ms-exchange-atpmessageproperties:x-ms-exchange-senderadcheck:
- x-microsoft-antispam:x-microsoft-antispam-message-info:
- x-forefront-antispam-report:
- x-ms-exchange-antispam-messagedata-chunkcount:
- x-ms-exchange-antispam-messagedata-0:Content-Type:
- Content-Transfer-Encoding:MIME-Version:X-OriginatorOrg:
- X-MS-Exchange-CrossTenant-AuthAs:X-MS-Exchange-CrossTenant-AuthSource:
- X-MS-Exchange-CrossTenant-Network-Message-Id:
- X-MS-Exchange-CrossTenant-originalarrivaltime:
- X-MS-Exchange-CrossTenant-fromentityheader:
- X-MS-Exchange-CrossTenant-id:
- X-MS-Exchange-Transport-CrossTenantHeadersStamped;
- bh=4F7toeVdVIvYRYg1w7nqiK1dJBdT/mVuKCItYSky5bc=;
- b=ivsQI4Ry1bLLhjoi2EtXLVk9/xzEvoSakqpvEAZQ9/+s/b9jyRama8znJk5prwn46Gx/
- 0TtxIRiidzrlu+iCueA/6k4fkOGjkVQ0PXbsNrOemlTeiPQwfxS8DsqNr2ImD7wxXMen7
- vQA+1RJZ3sPqOc3KnJuo7/XvO7iKvhmc4yD+FWgiZxD2bix6aCQCy+Ul9u9rIWMYizI0E
- 8JKsPYgnE6mWLIWGv7Npqx1OjPiz4fMHa9uy9g2ag20JocNLgBwRlPbFA/RQPa5OkZRsa
- 3DjTGawWmTLTT4QhF/VoVRlX8SJYfCRwRZ+3rT3pV6nBcQi1XNpxkgafuwHmpbKoz4g==
-ARC-Authentication-Results: i=2; smtp2.osuosl.org;
- dmarc=pass header.from=xes-inc.com; 
- dkim=pass header.d=xes-inc.com header.i=@xes-inc.com header.a=rsa-sha256
- header.s=selector1 header.b=PjnZf2Ce; 
- arc=pass header.oldest-pass=0 smtp.remote-ip="2001:489a:2202:c::61e"
-Received-SPF: Permerror (mailfrom) identity=mailfrom;
- client-ip=2001:489a:2202:c::61e;
- helo=usg02-bn3-obe.outbound.protection.office365.us;
- envelope-from=vfazio@xes-inc.com; receiver=<UNKNOWN> 
-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none) header.from=xes-inc.com
-Authentication-Results: smtp2.osuosl.org; dkim=pass (2048-bit key,
- unprotected) header.d=xes-inc.com header.i=@xes-inc.com header.a=rsa-sha256
- header.s=selector1 header.b=PjnZf2Ce
-Received: from USG02-BN3-obe.outbound.protection.office365.us
- (mail-bn3usg02on061e.outbound.protection.office365.us
- [IPv6:2001:489a:2202:c::61e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E87B8404A8
- for <buildroot@buildroot.org>; Wed, 30 Sep 2026 19:53:41 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector5401; d=microsoft.com; cv=none;
- b=VJOn9og2XxHvadQteY4Uq90CdYEiqlmEL/JxBxn9L6in7x9UoKsadyg0KLnJkkdk+2qdjWFA4nTBnckQUOkyobKpMWujpBY1+JJ2Ywsgkz/wB2Pyf8oulSb/FdXf1IqxnobjYCPH3TdP9ME1cuyupZADsCU7LmgvgzZv7xgMJLMJ9JH5sNy7i9ej8Fofqsg4vIS/QDHISn206bOzeWUcwQ7vl/O+E6t/6LnkPdgp2NXaA5BmAp5acye+2l5+7Izt4FWe07IgRzZzGZsEYDZdRabTbsm8sj46gA2DNYdPNImthSbm8v9bVsUoZVNlv2fjm7qifqQdQYF5GlH3xgFBkQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector5401;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4F7toeVdVIvYRYg1w7nqiK1dJBdT/mVuKCItYSky5bc=;
- b=PbBzZzZJvgyiuqvJT8nLbhYP2/dnu+LWDroSZlr2brC29nbbQfDm63chV9viVlu8Ont/d0qO/fH9tcWyjNkRVPl/hz19AcXnPzRIUMwaFyRziVUMJke36qF6Oh7/MIN3NdDNZLcmhpp9V7H+e2JNA3DCIyycApNdSmzcoitf/WE3pG1bTL0iqMpMszLe1JkXtpLqwx8QFOeHssbPBdGjEpVAdJhTxO/SW6dZpayNXHgw+tKC8Z7IbOOWhwfaM17vI+PF+K8wIdhwuD9YdipFzT5TlFFr1P+d52oGENee4b7yVbWqHrvhyWnFju/aRiQATwvF03BPhIiJt2y5XiyMPA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=xes-inc.com; dmarc=pass action=none header.from=xes-inc.com;
- dkim=pass header.d=xes-inc.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xes-inc.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4F7toeVdVIvYRYg1w7nqiK1dJBdT/mVuKCItYSky5bc=;
- b=PjnZf2CeC07HpRML2gTnJghCQOsKUJJZZy4lEXD7kXPiWZOHg8PxUE8jF7fjaUrYtUYk3xd0CtJ/nWf6VqVR7owy54ewgLbwcqm17bcuNFlZhIPz4CtOb2d6nWdlGBCxnL/Kaonr1+tCAXfJ2F85UgBhJHEVNKniHLuKN80gt5CDhrDmKTFcPrUA0KdagAErYpA1IF1dMUrYnSi5QJCmcZYEHD40jG8K9EXmOIOkbI8ybdNHH7bY6GqpmoDejguR3OVduSZAexqKoj0jgs7nAUq2RlZRJxtD1GaYLW1l7/E/+KZxlxbnbXszffI8Zm47e7gQX6amUKgwddnbaOYQug==
-Received: from PH1P110MB1603.NAMP110.PROD.OUTLOOK.COM (2001:489a:200:18b::15)
- by BNAP110MB2142.NAMP110.PROD.OUTLOOK.COM (2001:489a:200:1a9::19)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.451.26; Wed, 30 Sep
- 2026 19:53:36 +0000
-Received: from PH1P110MB1603.NAMP110.PROD.OUTLOOK.COM
- ([fe80::de5f:f4ab:6e45:cf52]) by PH1P110MB1603.NAMP110.PROD.OUTLOOK.COM
- ([fe80::de5f:f4ab:6e45:cf52%5]) with mapi id 15.21.0451.026; Wed, 30 Sep 2026
- 19:53:36 +0000
-From: Vincent Fazio <vfazio@xes-inc.com>
-To: "buildroot@buildroot.org" <buildroot@buildroot.org>
-CC: Bernd Kuhls <bernd@kuhls.net>
-Thread-Topic: Python 3.15 update
-Thread-Index: Ad1RE40+MrYggCTjQgCbDQ0+6nqxgQ==
-Date: Wed, 30 Sep 2026 19:53:36 +0000
-Message-ID: <PH1P110MB1603290227FF3E6B8C2942A99F8BA@PH1P110MB1603.NAMP110.PROD.OUTLOOK.COM>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=xes-inc.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PH1P110MB1603:EE_|BNAP110MB2142:EE_
-x-ms-office365-filtering-correlation-id: 6c03b032-7acb-40d2-54b9-08df1f2c83f2
-x-ms-exchange-atpmessageproperties: SA
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
- ARA:13230040|366016|23010399003|41320700013|1800799024|55112099003|18002099003|38070700021|10067099003|56012099006;
-x-microsoft-antispam-message-info: TXQkdiAxf3lmRi0CWl2g6A1fui95yVeDWrK1qd+Yfm46XUamhMZzJxbVnWQdhJEh1IkTXltDSGrC3tx+sdt7e0f/RDzcDkBr+bqKqNLAvZL/lyVPejd+yfM0+v+uAaLmYy5WJKPMgdkJ0jPffDQq/Ue3OtLCcsSCUFizPmgwS37XO0KkdbIxRG6up5gF/MAWv2dSkO1ItPPPWqklG+LhTQuZSSwOxQwd8gTumegqsOeUunhSrBBZojHcEKAxrLy4efBr4yoM71yhJnQQLOvQiD4VHU0n3LDG3A/6AghoBm7cdoX6aUrKaHBqzdJ0E3PNtpMhVJ5VqxCEDhERCUJhULJjv/jXI0PlMJ0dfqefMK3eDARf4MEC6wq14mdjgMkBU2BldsPTNgyIrOzsoEbEC6Kwb+gqQuzTYXPGVeAlXlupeZ6+Oirkcew0BSZLd3oMY5pkEf0vQ1dtbvkbKtmb65PKgOq12EQkAZIthop2g0jQmdptCCVAeAi36GVSoPbks3fgYtMOPhXu0pTfHZJArgouGs0yN0WFeWb1JPTScVABP20M8Vab10CKHa1jtocBCBNHgB2s3vTjsuEUkN36LCyQ5XuojV496T++6ergciJBdn8gEUI5wxVfZ4yd8t8+ZSYJuu4LBEELXm5kpYH8+kSIJF3/yfrR1YA+gvDSF2ZJFRdzvwXJbHngR5TS5d6ZgWXeh6QOrA08mTBjCV1uA3+k/GrkZyzQ4B7nYvrBIZg=
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:PH1P110MB1603.NAMP110.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
- SFS:(13230040)(366016)(23010399003)(41320700013)(1800799024)(55112099003)(18002099003)(38070700021)(10067099003)(56012099006);
- DIR:OUT; SFP:1101; 
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?iFevwwS8L8PDXuNYxxA9WJi9NEAyvp1kpSujOsB4k9aiSdAwBmid1xlTPYoW?=
- =?us-ascii?Q?q26eavB/6pRD8mCApKHKQPcWB7FmWOT7ZS2koIivzD/v8od0L3uYhwbOBK+q?=
- =?us-ascii?Q?ae0vv6c3zH8jfKN4ht76f6/pjsZ/TeIld6OWk3lCfK+db45I7/Qm7bbXACxQ?=
- =?us-ascii?Q?3tP2AN3cq+qQWT7hDOetV7ZdsmRnJxnJhLfEA9rGQlnhQ9yDdkSGElakrsLX?=
- =?us-ascii?Q?2LFsX/qJRIV38ZhxdgQlYOjeE3Xa6arDGNz1o2sljeMZ3Prnsm9pSJp7Qd58?=
- =?us-ascii?Q?kKYRrWRw6BRbbWXxc0QTQpxZNrw0qU9T2AmcJwJKB4sMQug7pOO9uBYG6XOm?=
- =?us-ascii?Q?Q+zJ3xEucM+KP8Jx5fRwIQYp6tqNh7TM3PZ72Scit7KokUfEKaJ5R7ZLj3pf?=
- =?us-ascii?Q?kY43WW+R5BeZKmAd+K3ZDwQS7Yb/ISj0Ze0N34XO+w1gQir/Lf6Pa5uDyqwq?=
- =?us-ascii?Q?kpwTFSSuzgyC1M1WytVu3Si3XLUaOc0F/9JmRHUr7Byz0vJ6tA+kILT3YFHS?=
- =?us-ascii?Q?QPBl+lsAjfRlEVi6H/dJJhR8ghN1mfEx8jl7ZJsUZNns9blsC2sejCueBjh0?=
- =?us-ascii?Q?gpJEE+AVKmngoLf6Xp8j8C/Lghwj71hzDeC5f73YC+fMkeoCwTQnZTItCxXc?=
- =?us-ascii?Q?11C/NJWsnTYt2Zb1tCuDsIHrrxaMoyuFdzSJeTN68AnakMCiJuhQgjro0lrL?=
- =?us-ascii?Q?mswqGLZlDx0mf4WCvhlEuCZMhEP/TwiuG8tPXjESjS55CwVske7XMYSUjZyS?=
- =?us-ascii?Q?MhZM2qcD/ey3H7cbYVX4ERAXDtZrrbLd3muK6XOffhuL3ppM1ITH6Gt+WWab?=
- =?us-ascii?Q?4v/QvJDCDxUHLi4kFz+LxgkyMdCjBBSibZ/eWUSjVCI7dDJA4XipMlLE3cYl?=
- =?us-ascii?Q?UUUGld4Nlyw0p6rBzAuBX/kcO2pwa6DJPXoB4i12MgfjzCzPUCuAaIbNjna2?=
- =?us-ascii?Q?FMVURRWMUW18VkTq+EOuuVBTSN5JfReB1QU8lPWD4UGbuYNRIe0IGAZv41Vy?=
- =?us-ascii?Q?nR+c95pWnCyFUjHAQHHh+KcYZz5K2q57y3U5VnChuBYPry3zE4wWdaCbFWAc?=
- =?us-ascii?Q?7VfY41F6QJz9jTlG+r9enKdCDtl6RpW1fjLxwqnb2PRDB3D4TIOzn1CQnHyV?=
- =?us-ascii?Q?iGjXgYzsDzxjmxlob4pWLtgcagGGoysT/wdvG+uFb6rNN+yGPcCZCAZzZ8O5?=
- =?us-ascii?Q?BW7Baj4ytlkb2eee0aNUJursDxrd5X1FeyHeH8KfbbUI2bCknzmxoCcpmFgd?=
- =?us-ascii?Q?7nHRUwQCiExuVXRaZ4fNjpEM51dNugcdl4p4EitZ/LZERzaN7dfixKzSehuV?=
- =?us-ascii?Q?QSM9t0QYZGqUTVPImnxI/oRAsSaIVBevHWCcrZz8ICsD0NuqWKC2puiegMQp?=
- =?us-ascii?Q?QcunLkrAfqmWOFP4+boTmVVS2LtWLvWf4jM3Xd3LXh29SKi1Yax3BaiHbEhH?=
- =?us-ascii?Q?wVTX8XY/ZOrjF7h/QKMmjpd07oSJ6vu/DhEIXSzEuXz0egav4euEb7Z4n+cc?=
- =?us-ascii?Q?96iaqYbYVekC1yOLhj0AHMw+G0gSSLDz4o9XHK+PrWBYBqvybTOhO/u+nxoV?=
- =?us-ascii?Q?yIcM5BUrETXOhYv6uIxQaHOBnMxp/mVgXFcWZS1FlWKZoVWuDw9L7/Msv4r3?=
- =?us-ascii?Q?i1tA6nBTVizNriscAzI3FsdfJ9cb/yRuxx6VuRxK+U3I?=
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id EUlgMxvyTua3 for <buildroot@buildroot.org>;
+ Wed, 30 Sep 2026 20:37:48 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org C097F605AD
+Authentication-Results: smtp3.osuosl.org;
+ arc=none smtp.remote-ip=74.125.225.141
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790800668;
+ b=d/Zz0GksOYTwNotfbkMZSOZQZmiXmuCELFaWB6wfgyvsVF1vwKTfHA7zcO8MlLYsH0bR
+ tHbfTlIRpo0CpwLbeDaqib14FnNsK9P2MxaqUmUoAn/7QC8e1fpKWXWHxh2ODMQMnDZ6L
+ 2spC4PCrmLC0w07lL7JhEa6wbRagVWrb2JhZdta7PJQeILjvd0xxwgWRK4KekXNlJZ5/w
+ G2oGrKXkLDLaOQoXNJyh+eNxRpDSFOkJI48oQEy3eNMioeYOkkML/1LuXebG1BaxngHiG
+ MBCUMq7aoY1rM2yBqhLKRM3Aepy0lBXbXZ5esTiIXMe1vs9ggUuDnudZxwNPkERygoA==
+ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
+ c=relaxed/relaxed; t=1790800668;
+ h=Received-SPF:Received:X-Google-DKIM-Signature:X-Gm-Message-State:
+ X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:Date:Message-ID:
+ X-Mailer:MIME-Version:Content-Transfer-Encoding;
+ bh=ouqo+8VO2s5y5p6+HgoS7Gqqpd3kCje/xSjS1LK23g8=;
+ b=Q9EZJfLcKrkRJQo2kQgnXNWw7gE3Xhgrqs6erWrCNbVet7DVieXVRybPD3qyeUV2vB7k
+ /Fc/QF81gysvOmV674obzdovX4mEEBnfvVGf92/eKx6u8nuzpzW+DZlq4HYltqAOgE+SE
+ sV1Tq6Os5bCC1Ake7OLF+Yol0eOUexynD+9Baxk6jRryG0qaq+fSco4qSlS5eajclROkI
+ YFlo81+6ja0Qd/MBP5NMoSUE+2GZOYjbdrQ5EJ0cVOaA+iGLm37bZJPXr5nq264BlQKqz
+ fhA5oihXBvhmoeflwrT8l7/d5wM2onWF9MACqCmS587UGChmy8etgiHnViPPBXudq3g==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org;
+ dmarc=none header.from=devoogdt.com; 
+ arc=none smtp.remote-ip=74.125.225.141
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=74.125.225.141;
+ helo=mail-wm2-f13.google.com; envelope-from=thomas.devoogdt@gmail.com;
+ receiver=<UNKNOWN> 
+Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none) header.from=devoogdt.com
+Received: from mail-wm2-f13.google.com (mail-wm2-f13.google.com
+ [74.125.225.141])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C097F605AD
+ for <buildroot@buildroot.org>; Wed, 30 Sep 2026 20:37:47 +0000 (UTC)
+Received: by mail-wm2-f13.google.com with SMTP id
+ 5b1f17b1804b1-49e7bcb94d3so43858185e9.2
+ for <buildroot@buildroot.org>; Wed, 30 Sep 2026 13:37:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20260707; t=1790800665; x=1791405465;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to:content-type;
+ bh=ouqo+8VO2s5y5p6+HgoS7Gqqpd3kCje/xSjS1LK23g8=;
+ b=Wds+SbV439lstLi3Kp8+VB2NnBdvqc3mWmTrrRlskn+w8hB8YnpCjbVrCIz6BeSur0
+ 55rvgQ+q5THfR+1yVsdHABNUEc3qhMeNOTylf0cMtp7A+TomkYxj2y4uFgpOXy3FXcol
+ D9WKAe5Tmin8xa7AQ8YxkrsvVpyd3c9afmiHW8cxFpECsKKB6swf5PqIprjoX+PAQqQC
+ DXJL2k4ERPr0QooREuVHNvzcqwmrmI9BaSZMDlAcLBAUVAEaY7ngLzj3GsOLHgFiCRv4
+ 15aoaWUut05sDIfZsEzpJxUku5BjSGdxBp0XKcCRJQsFj7mOxFtU8oHD+CY8VfLqS8jV
+ S4mw==
+X-Gm-Message-State: AFuF++lmi3UrE3/L8hHd/u0geGfhneP2Qvlnyby3ZpC3EoT0Ou/lCiE5
+ hEKg0MESXreT84JcfuhtavhVvziXyhwgth5oee7OLArKYZm3tyY2bbA3mtxYfp5C
+X-Gm-Gg: AYBFou0Inq5JU314KNp08WsZAhXjypLUUP540amko+AiJ283M5VLucNv0W6DGK2O92W
+ 5IPtB0/JceronO0BMJa3fn1ZXI6UHXq5dQulCylIwttTiuSrcHLDuWVUQIlo6I3Ephj4TPCyYYQ
+ eOgis7lOl0U1C7L8xF8tLsyAC/PWAw0l9ZKBz55Zj5dL2Ko3LuQATSXV754BgbhV/crWBkGhNzH
+ DGjz2f8f4FtFJrlvvPZBe8YOPvfWyjbreWEV0Pv5y2RpHloHoWWJ9AGA/G+/s/gMpzwkxHKvbnV
+ LW3ltIFxR5iMSWk51v3TppN5qXJUUaNqVwhuogK080a9JQduK9z1F6zhdm8q5TZe04nkeyoIYOx
+ v3N8eTPHZ5GSdW8KWvgHd6qCIfq2dvb/No92W3cvrlB2rDbX8/KvlkcqRF0YQvRnxePHT8Lm9fp
+ xBFimv1nqIRWVBK+bYV6eSLeYxOJY8QHCbtZjqBhXbFBJ0GsUnq/sd4E2dUyNsJwjM84zHon7/k
+ cama1KRoLYrPziRNunCeixZ7ufyou4VAptp64u7H7uj2XHxIhtphBkcvLfGmC8vEoetkL1PpBkm
+ 6chf/GvzUvB6aQHbYnkMBld23rrc5Ac=
+X-Received: by 2002:a05:600c:1d2a:b0:49c:fc6e:8caf with SMTP id
+ 5b1f17b1804b1-4a01b11c737mr47574635e9.19.1790800664789; 
+ Wed, 30 Sep 2026 13:37:44 -0700 (PDT)
+Received: from KORLIN44614.barco.com ([2a02:a03f:eb5f:fa00:304b:f68b:5c4:281])
+ by smtp.googlemail.com with ESMTPSA id
+ 5b1f17b1804b1-4a01f96d01csm6588025e9.2.2026.09.30.13.37.43
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 30 Sep 2026 13:37:44 -0700 (PDT)
+From: Thomas Devoogdt <thomas@devoogdt.com>
+To: buildroot@buildroot.org
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Thomas Devoogdt <thomas@devoogdt.com>
+Date: Wed, 30 Sep 2026 22:37:41 +0200
+Message-ID: <20260930203741.3900469-1-thomas@devoogdt.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-OriginatorOrg: xes-inc.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH1P110MB1603.NAMP110.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6c03b032-7acb-40d2-54b9-08df1f2c83f2
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Sep 2026 19:53:36.2510 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 2925f1cd-bdc3-4a76-bb38-6159e20a17f1
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BNAP110MB2142
-Subject: [Buildroot] Python 3.15 update
+Subject: [Buildroot] [PATCH] core: allow host-cmake to be built with ccache
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -234,18 +155,240 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-As Python 3.15 is scheduled for release tomorrow per the release page [0] I figured I'd ask if anyone is working on the bump already?
+host-cmake takes a long time to build, but it is never built with
+ccache: host-ccache is a cmake package, so when no suitable cmake is
+available on the build host, host-ccache depends on host-cmake, and
+host-cmake cannot depend on host-ccache.
 
-Bernd, I know you did this last year.
+However, the packages in the host-ccache dependency chain (ccache,
+hiredis, blake3) only need cmake 3.18, while BR2_HOST_CMAKE_AT_LEAST
+may be much higher, e.g. 4.3 for mosquitto. So a cmake from the build
+host is often suitable to build host-ccache, even if it is not
+suitable for the other packages.
 
-Typically I try to start earlier than now to test on the release candidates but I'm a bit behind. I also don't want to duplicate work someone is already doing.
+Thus, when BR2_CCACHE is enabled, look for a separate cmake of at
+least 3.18, exposed as BR2_CMAKE_NOCCACHE and
+BR2_CMAKE_NOCCACHE_HOST_DEPENDENCY, and use it in pkg-cmake.mk for
+all packages that set <PKG>_ADD_CCACHE_DEPENDENCY = NO, as those can
+by definition not depend on a host-cmake built with ccache.
 
-If someone is already testing this out, lmk, otherwise I will start tracking this work in Gitlab similar to what I did for 3.13 [1].
+When that cmake is found on the build host, host-cmake depends on
+host-ccache, and uses it for both the bootstrap (--enable-ccache) and
+the main build (CMAKE_<LANG>_COMPILER_LAUNCHER). Otherwise, host-cmake
+is built without ccache, as before.
 
--Vincent
+Additionally, when BR2_PACKAGE_HOST_CMAKE is enabled, use host-cmake
+for all cmake packages instead of the one from the build host.
 
-[0]: https://peps.python.org/pep-0790/
-[1]: https://gitlab.com/buildroot.org/buildroot/-/work_items/95
+Tested with a system cmake 3.28, and without one (by passing
+BR2_CMAKE_CANDIDATES=nonexistent):
+ - system cmake, host-cmake enabled: host-ccache is built with the
+   system cmake and host-cmake with ccache; a rebuild of host-cmake
+   with a warm cache takes 2m06s, with 1502/1736 cache hits;
+ - no system cmake: host-cmake is built without ccache and is used to
+   build host-ccache, no circular dependency;
+ - system cmake too old for BR2_HOST_CMAKE_AT_LEAST (mosquitto
+   enabled): host-ccache still uses the system cmake.
+
+Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+---
+ docs/manual/ccache-support.adoc          |  5 +++++
+ package/cmake/Config.in.host             |  3 +++
+ package/cmake/cmake.mk                   | 15 ++++++++++++---
+ package/pkg-cmake.mk                     | 21 ++++++++++++++-------
+ support/dependencies/check-host-cmake.mk | 24 ++++++++++++++++++++++++
+ 5 files changed, 58 insertions(+), 10 deletions(-)
+
+diff --git a/docs/manual/ccache-support.adoc b/docs/manual/ccache-support.adoc
+index 86cb4a150dc..45af6dfd41d 100644
+--- a/docs/manual/ccache-support.adoc
++++ b/docs/manual/ccache-support.adoc
+@@ -15,6 +15,11 @@ speed up the build process.
+ +Enable compiler cache+ in +Build options+. This will automatically
+ build +ccache+ and use it for every host and target compilation.
+ 
++Since +ccache+ is built with CMake, a suitable CMake from the build
++machine (at least 3.18) is used for +ccache+ and its dependencies. This
++allows +host-cmake+, if needed, to be built with +ccache+ as well.
++Without such a CMake, +host-cmake+ is built first, without +ccache+.
++
+ The cache is located in the directory defined by the +BR2_CCACHE_DIR+
+ configuration option, which defaults to
+ +$HOME/.buildroot-ccache+. This default location is outside of
+diff --git a/package/cmake/Config.in.host b/package/cmake/Config.in.host
+index b8221a7d222..f4dea749e12 100644
+--- a/package/cmake/Config.in.host
++++ b/package/cmake/Config.in.host
+@@ -8,6 +8,9 @@ config BR2_PACKAGE_HOST_CMAKE
+ 	  generate native makefiles and workspaces that can be used in
+ 	  the compiler environment of your choice.
+ 
++	  When enabled, this cmake is used to build all CMake
++	  packages, instead of a cmake from the build machine.
++
+ 	  http://www.cmake.org/
+ 
+ # The minimum system cmake version we expect if 3.18 as provided by
+diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
+index 098f6e91582..632fa2bf781 100644
+--- a/package/cmake/cmake.mk
++++ b/package/cmake/cmake.mk
+@@ -12,8 +12,15 @@ CMAKE_LICENSE = BSD-3-Clause
+ CMAKE_LICENSE_FILES = LICENSE.rst
+ CMAKE_CPE_ID_VALID = YES
+ 
+-# The package is a dependency to ccache so ccache cannot be a dependency
++# host-cmake can only use ccache when host-ccache is built with a system cmake
++ifeq ($(BR2_CCACHE):$(BR2_CMAKE_NOCCACHE_HOST_DEPENDENCY),y:)
++HOST_CMAKE_BOOTSTRAP_OPTS = --enable-ccache
++HOST_CMAKE_CCACHE_OPTS = \
++	-DCMAKE_C_COMPILER_LAUNCHER=$(CCACHE) \
++	-DCMAKE_CXX_COMPILER_LAUNCHER=$(CCACHE)
++else
+ HOST_CMAKE_ADD_CCACHE_DEPENDENCY = NO
++endif
+ 
+ # CMake is a particular package:
+ # * CMake can be built using the generic infrastructure or the cmake one.
+@@ -43,7 +50,7 @@ CMAKE_CONF_OPTS = \
+ HOST_CMAKE_CFLAGS = $(shell echo $(HOST_CFLAGS) | sed -r "s%$(HOST_CPPFLAGS)%%")
+ HOST_CMAKE_CXXFLAGS = $(shell echo $(HOST_CXXFLAGS) | sed -r "s%$(HOST_CPPFLAGS)%%")
+ 
+-# We may be a ccache dependency, so we can't use ccache
++# ccache is enabled via bootstrap options, not via CC/CXX
+ HOST_CMAKE_CONFIGURE_OPTS = \
+ 	$(HOST_CONFIGURE_OPTS) \
+ 	CC="$(HOSTCC_NOCCACHE)" \
+@@ -55,7 +62,9 @@ define HOST_CMAKE_CONFIGURE_CMDS
+ 		$(HOST_CMAKE_CONFIGURE_OPTS) \
+ 		CFLAGS="$(HOST_CMAKE_CFLAGS)" \
+ 		./bootstrap --prefix=$(HOST_DIR) \
+-			--parallel=$(PARALLEL_JOBS) -- \
++			--parallel=$(PARALLEL_JOBS) \
++			$(HOST_CMAKE_BOOTSTRAP_OPTS) -- \
++			$(HOST_CMAKE_CCACHE_OPTS) \
+ 			-DCMAKE_C_FLAGS="$(HOST_CMAKE_CFLAGS)" \
+ 			-DCMAKE_CXX_FLAGS="$(HOST_CMAKE_CXXFLAGS)" \
+ 			-DCMAKE_EXE_LINKER_FLAGS="$(HOST_LDFLAGS)" \
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index f572bdebb3d..d205f6c5dcc 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -103,7 +103,7 @@ define $(2)_CONFIGURE_CMDS
+ 	rm -f CMakeCache.txt && \
+ 	PATH=$$(BR_PATH) \
+ 	$$(if $$(BR2_INSTALL_LIBSTDCPP),,CXX=/bin/false) \
+-	$$($$(PKG)_CONF_ENV) $$(BR2_CMAKE) $$($$(PKG)_SRCDIR) \
++	$$($$(PKG)_CONF_ENV) $$($$(PKG)_CMAKE) $$($$(PKG)_SRCDIR) \
+ 		-G$$($$(PKG)_GENERATOR) \
+ 		-DCMAKE_MAKE_PROGRAM="$$($$(PKG)_GENERATOR_PROGRAM)" \
+ 		-DCMAKE_TOOLCHAIN_FILE="$$(HOST_DIR)/share/buildroot/toolchainfile.cmake" \
+@@ -135,7 +135,7 @@ define $(2)_CONFIGURE_CMDS
+ 	PKG_CONFIG_LIBDIR="$$(HOST_DIR)/lib/pkgconfig:$$(HOST_DIR)/share/pkgconfig" \
+ 	PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
+ 	PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
+-	$$($$(PKG)_CONF_ENV) $$(BR2_CMAKE) $$($$(PKG)_SRCDIR) \
++	$$($$(PKG)_CONF_ENV) $$($$(PKG)_CMAKE) $$($$(PKG)_SRCDIR) \
+ 		-G$$($$(PKG)_GENERATOR) \
+ 		-DCMAKE_MAKE_PROGRAM="$$($$(PKG)_GENERATOR_PROGRAM)" \
+ 		-DCMAKE_INSTALL_SO_NO_EXE=0 \
+@@ -174,7 +174,14 @@ endif
+ # primitives to find {C,LD}FLAGS, add it to the dependency list.
+ $(2)_DEPENDENCIES += host-pkgconf
+ 
++# Packages that host-ccache depends on can't use a host-cmake built with ccache
++ifeq ($$($(2)_ADD_CCACHE_DEPENDENCY),NO)
++$(2)_CMAKE = $$(BR2_CMAKE_NOCCACHE)
++$(2)_DEPENDENCIES += $(BR2_CMAKE_NOCCACHE_HOST_DEPENDENCY)
++else
++$(2)_CMAKE = $$(BR2_CMAKE)
+ $(2)_DEPENDENCIES += $(BR2_CMAKE_HOST_DEPENDENCY)
++endif
+ 
+ #
+ # Build step. Only define it if not already defined by the package .mk
+@@ -183,11 +190,11 @@ $(2)_DEPENDENCIES += $(BR2_CMAKE_HOST_DEPENDENCY)
+ ifndef $(2)_BUILD_CMDS
+ ifeq ($(4),target)
+ define $(2)_BUILD_CMDS
+-	$$(TARGET_MAKE_ENV) $$($$(PKG)_BUILD_ENV) $$(BR2_CMAKE) --build $$($$(PKG)_BUILDDIR) -j$(PARALLEL_JOBS) $$($$(PKG)_BUILD_OPTS)
++	$$(TARGET_MAKE_ENV) $$($$(PKG)_BUILD_ENV) $$($$(PKG)_CMAKE) --build $$($$(PKG)_BUILDDIR) -j$(PARALLEL_JOBS) $$($$(PKG)_BUILD_OPTS)
+ endef
+ else
+ define $(2)_BUILD_CMDS
+-	$$(HOST_MAKE_ENV) $$($$(PKG)_BUILD_ENV) $$(BR2_CMAKE) --build $$($$(PKG)_BUILDDIR) -j$(PARALLEL_JOBS) $$($$(PKG)_BUILD_OPTS)
++	$$(HOST_MAKE_ENV) $$($$(PKG)_BUILD_ENV) $$($$(PKG)_CMAKE) --build $$($$(PKG)_BUILDDIR) -j$(PARALLEL_JOBS) $$($$(PKG)_BUILD_OPTS)
+ endef
+ endif
+ endif
+@@ -198,7 +205,7 @@ endif
+ #
+ ifndef $(2)_INSTALL_CMDS
+ define $(2)_INSTALL_CMDS
+-	$$(HOST_MAKE_ENV) $$($$(PKG)_BUILD_ENV) $$(BR2_CMAKE) --install $$($$(PKG)_BUILDDIR) $$($$(PKG)_INSTALL_OPTS)
++	$$(HOST_MAKE_ENV) $$($$(PKG)_BUILD_ENV) $$($$(PKG)_CMAKE) --install $$($$(PKG)_BUILDDIR) $$($$(PKG)_INSTALL_OPTS)
+ endef
+ endif
+ 
+@@ -208,7 +215,7 @@ endif
+ #
+ ifndef $(2)_INSTALL_STAGING_CMDS
+ define $(2)_INSTALL_STAGING_CMDS
+-	$$(TARGET_MAKE_ENV) $$($$(PKG)_BUILD_ENV) DESTDIR=$$(STAGING_DIR) $$(BR2_CMAKE) --install $$($$(PKG)_BUILDDIR) $$($$(PKG)_INSTALL_STAGING_OPTS)
++	$$(TARGET_MAKE_ENV) $$($$(PKG)_BUILD_ENV) DESTDIR=$$(STAGING_DIR) $$($$(PKG)_CMAKE) --install $$($$(PKG)_BUILDDIR) $$($$(PKG)_INSTALL_STAGING_OPTS)
+ endef
+ endif
+ 
+@@ -218,7 +225,7 @@ endif
+ #
+ ifndef $(2)_INSTALL_TARGET_CMDS
+ define $(2)_INSTALL_TARGET_CMDS
+-	$$(TARGET_MAKE_ENV) $$($$(PKG)_BUILD_ENV) DESTDIR=$$(TARGET_DIR) $$(BR2_CMAKE) --install $$($$(PKG)_BUILDDIR) $$($$(PKG)_INSTALL_TARGET_OPTS)
++	$$(TARGET_MAKE_ENV) $$($$(PKG)_BUILD_ENV) DESTDIR=$$(TARGET_DIR) $$($$(PKG)_CMAKE) --install $$($$(PKG)_BUILDDIR) $$($$(PKG)_INSTALL_TARGET_OPTS)
+ endef
+ endif
+ 
+diff --git a/support/dependencies/check-host-cmake.mk b/support/dependencies/check-host-cmake.mk
+index e3676903198..52ea9271a56 100644
+--- a/support/dependencies/check-host-cmake.mk
++++ b/support/dependencies/check-host-cmake.mk
+@@ -8,9 +8,33 @@
+ BR2_CMAKE_VERSION_MIN = $(BR2_HOST_CMAKE_AT_LEAST)
+ 
+ BR2_CMAKE_CANDIDATES ?= cmake cmake3
++
++# When host-cmake is enabled, use it for all packages.
++ifeq ($(BR2_PACKAGE_HOST_CMAKE),y)
++BR2_CMAKE = $(HOST_DIR)/bin/cmake
++BR2_CMAKE_HOST_DEPENDENCY = host-cmake
++else
+ BR2_CMAKE ?= $(call suitable-host-package,cmake,\
+ 	$(BR2_CMAKE_VERSION_MIN) $(BR2_CMAKE_CANDIDATES))
+ ifeq ($(BR2_CMAKE),)
+ BR2_CMAKE = $(HOST_DIR)/bin/cmake
+ BR2_CMAKE_HOST_DEPENDENCY = host-cmake
+ endif
++endif
++
++# cmake for packages that host-ccache depends on (<PKG>_ADD_CCACHE_DEPENDENCY
++# = NO). A suitable system cmake is preferred, so host-cmake can then itself
++# be built with ccache. The minimum is the one required by ccache.
++BR2_CMAKE_NOCCACHE_VERSION_MIN = 3.18
++
++ifeq ($(BR2_CCACHE),y)
++BR2_CMAKE_NOCCACHE ?= $(call suitable-host-package,cmake,\
++	$(BR2_CMAKE_NOCCACHE_VERSION_MIN) $(BR2_CMAKE_CANDIDATES))
++ifeq ($(BR2_CMAKE_NOCCACHE),)
++BR2_CMAKE_NOCCACHE = $(HOST_DIR)/bin/cmake
++BR2_CMAKE_NOCCACHE_HOST_DEPENDENCY = host-cmake
++endif
++else
++BR2_CMAKE_NOCCACHE = $(BR2_CMAKE)
++BR2_CMAKE_NOCCACHE_HOST_DEPENDENCY = $(BR2_CMAKE_HOST_DEPENDENCY)
++endif
+-- 
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
