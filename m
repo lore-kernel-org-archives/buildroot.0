@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1AE6CA5FCE
-	for <buildroot@archiver.kernel.org>; Thu,  1 Oct 2026 22:50:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1EF2CA5FCE
+	for <buildroot@archiver.kernel.org>; Thu,  1 Oct 2026 23:18:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2B58160802;
-	Thu,  1 Oct 2026 22:50:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 29D9B80D66;
+	Thu,  1 Oct 2026 23:18:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CwVSILj1JwuD; Thu,  1 Oct 2026 22:50:08 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 98DFC607E4
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790895008;
-	b=Rw7gEJi/wuHUrnicOxBioWA2QVnaqAmKwWinOoV25/RuDXDPPa+d/HZ5fPJRPwXD/7OR
-	 rM4KUEfEJ0ywC+2/s9/PskuiuGarOKcQiSmVzgX4K7dTOS+pRMDjZrt6c40HE+s2p5Gom
-	 qfLW5ddvcv2gW90N9AURhfsmFxj6CibI49W8TC9cqT4CSWHiMHPGXQXVqSKYeAhRzXWtl
-	 /1HK9EbZPrkYzfifV2WV8ChqGyiW+7tyYulvJq/PUurxtmBvT1IAlGy8XDj4vj+GgbLMo
-	 7pLxUvrwR4K50RVgirmuFPvbc1nJICmUFyQhGMbh0zEqcmSi7vH2LrVj9+30iPvFSmw==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 46-U0mBiZDgD; Thu,  1 Oct 2026 23:18:00 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org D15B580BE8
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790896680;
+	b=cbZH7oxxokFCNjyv5MQAagAX/DCcwAv6OuEUb05Wq6cGWjdTKmFtrnoUjVo6JNTgwi6W
+	 bHOJ8C8P1ON50PYUAriJalosDFIQzIVffC5fkwvVGdNllzq8YEoO4Di5hj2lYIbHbpl5x
+	 HfsgrRD1DhbrEE4eEpOiDfNdbREl/U0+bpd382xXzQKxCsrp3KqQaJCuzC+pwuJgGlCyw
+	 rT2+CJNMqeww5Lz/h8ztdd2J4BFjYfLKTD1sWVdICxadE0JiW8gQHdYQy1Kgji500xGev
+	 +xpDQS2YP6jJ7m8aazPDCo0rOntQB2ar9YSB66lh+lP34XA6neb6rcttKV3/phIqwGA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1790895008;
+	c=relaxed/relaxed; t=1790896680;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:From:
@@ -30,58 +30,58 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=hfpgivv2CwYyXuITkYsuTGmG+N40xbntRunp8ciPcNg=;
-	b=rI1+P7N1MyE7JK/OVl5PbXVOu+zKI+ezicN5V9mYyKv9SHejKg24cfpZFItiC9Va8mUM
-	 i6gLrnYO4YsXgnJgTAJTjQdNm/8pA+7WMVrW/JVeKgC0g/rRQH9/IpJ8A38vkmi7WuYGi
-	 y15kQqsiZXDdN+m3DOjnAkcyc5HH/qRDLskgzSgMya6l1/lMZv8gX1OXDtrFN8yJc9GEb
-	 uJDJkFf0eWC/WiG4Qwo95c59xhAxFKlBjWF1p/juhlT5BX89y2K+mv5CcFWDlSCXSDf5B
-	 y4BFepz2MgTzXyh9SXnW5Pdpiy0+mKAKqBQD1mZb748UDxUYEyfDgjfyPc8qUYqP+Pg==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	bh=uz1TZzeFYIsl+NSNQG53q1zrPz0o6/OXeIZqf5kfTyM=;
+	b=EKMUTc0f0niwUMr+Dp+06qZeq24om7so0eOy8mCWnlupLN9kzv+9CAFTu4uKLbTjskeN
+	 hn800WCD+JjKCvT0fVs4ab7yO61oSuO+9CLY3id1aG7LH+QCmHRO6YWkZD14P9ANw0f3B
+	 qIR43JcLzQJAUKj0JdsGh1sTNkeRXYuTeJSg2faPqk+3dFUt3U8aHoC7nbFSXiCRZwQYM
+	 9GpmHGjKmPEcNfbiolaNe8VD4dISeD8NvePcQDuMVL9zS2V0wWcSAbQkD/7kGIh1L4KY2
+	 dltSTM/76zQrA/SETbXn10sHk4+WRsRxYSrbZ41RXcJNf8js6P9EYNzuZDQVZ/TopQg==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1790895008;
-	bh=hfpgivv2CwYyXuITkYsuTGmG+N40xbntRunp8ciPcNg=;
+	s=default; t=1790896679;
+	bh=uz1TZzeFYIsl+NSNQG53q1zrPz0o6/OXeIZqf5kfTyM=;
 	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=DHtKWMzoJFwBf2WIsrbXqf5yz/c5jvxO9nfIXo6+Q/nyaCwhqaNBbvZL/mrUZLUUC
-	 5mAZffeFgPGgHLj4crUgys5kb7Kk1JAw/2lOnu2BDLWyjFWTLdCUdgEgH0bNW3/Xlc
-	 eHe0HrCswT+Pz0ExfaWukf9/qV5dB8tjEwYNXUPB0mZaRD9VyHjNOFUDXBXrS7vKmV
-	 QkCMMcbodH0tYE/O1aakT8iHIo8zxKLdRM3wgMqgrUsZUE8IqKY+5uRNLaUN1QhONo
-	 Iv/KSnljlOTC57vN8IK+EcpSzJANmk1G8AyCdSyyIq7dtV0vCo0DgwLPPmrD8npXoT
-	 xLSR4TU+Wv2Kg==
+	b=DuVJqykeJcJ2WUmVsuPqLtjqQddV06e4+yc5ElJQIJmtbm9CRP/cO8fzPib1xkNeQ
+	 TXwiftSVAGJhQyu+eTf32Xym7lxzmAzXCt8XakLOyM1TdZfqzHIGnhYJibRmReVa1t
+	 yyVVuNfQigvPX6E4hFqYCMkrtT4N7zNyt8Nz54Ji8UYsiQrsFS/OJhdLuvy/8IBnoL
+	 Z/ErptMrb7QAjGfmWKQV96f/b321eglOLWIWUlie/7HQijORJSEhhsrW7HefRRnG9x
+	 2sI+vW/XNHGq7x2UiRbgfLuoz3GckCzJU3Q1ep8URoBWRc/1tV0AhV1qrngse6qbsc
+	 6/7zziLx33eoA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 98DFC607E4;
-	Thu,  1 Oct 2026 22:50:08 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id C7AB332F
- for <buildroot@buildroot.org>; Thu,  1 Oct 2026 22:50:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D15B580BE8;
+	Thu,  1 Oct 2026 23:17:59 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id C1F2332F
+ for <buildroot@buildroot.org>; Thu,  1 Oct 2026 23:17:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A306C40B9A
- for <buildroot@buildroot.org>; Thu,  1 Oct 2026 22:50:06 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A7F654084B
+ for <buildroot@buildroot.org>; Thu,  1 Oct 2026 23:17:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Fv6alTFDO2PY for <buildroot@buildroot.org>;
- Thu,  1 Oct 2026 22:50:04 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 77BF640BFB
+ id oL-aerKPiaBs for <buildroot@buildroot.org>;
+ Thu,  1 Oct 2026 23:17:56 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org B19094080B
 Authentication-Results: smtp4.osuosl.org;
  arc=none smtp.remote-ip=207.191.199.123
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790895004;
- b=kgyTTzkvjnjJ1aT+q9fTuCEIVBOUZCKNaGJqtAK6Bq/b+GMAlWYMkLlVwwUoplraKHmw
- L19grEPjhxbJJFiY9Rw13i5zORlXw5j+lmz3MgKSR1OPeouE6vFUZCOkJ3ALZU9cBLNoM
- 6JIuO2gifPXNi3l/RIJKEvohYSqzrz+xB1GlZOGRfUeEGuxEl0loxZCZC2uiCLJee57US
- RhieFVLgdRmNgP7Jp2c3VLL0XmW8bdrTm1n/n9LoPnPAGAdeNwdy9y2JCpsNtJGj5Sc1Z
- kZPsYOQ26Oltcztvt3AgUN/e0mLE50CYdmPWYpXPUnMm3iPQBn3jHZPYZcmrJEzEO8g==
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790896675;
+ b=WJDSwdUl4buoJIg/HVhA3ML4GVHWyZZMy2LHgyr6uCl2hHyLunEsBgfzHDoz6Sn62PvU
+ hamzd8EDBJM3wyLZa/dJ+6U/5DlIYbKp8bf4UamxKufVtSG9QDYusSDgZuY0CKhgvMlrA
+ M8olACd/aR7O4rdiclyc4YUIlIBW1Rn1XuoVjue5yBW6T4fZNEzMjp28xfxcD6hlnK6iM
+ 8ohuUPnUBGvCyiUejBjnWKJtAeVuyKK2Z/p2jT7V3of+fKOmUMFyD6CSoCDxRsNpCwy+Z
+ iP8yb+ittg+C/CcbT1GOE/EjCJKqYLOtSqBfVpngHOpeH2VHAQNLLnn/nJ395Y/gOpw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1790895004;
+ c=relaxed/relaxed; t=1790896675;
  h=Received-SPF:Received:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
  MIME-Version:Content-Transfer-Encoding;
- bh=OA6VjhOaujck1AlD1v3GgOfrUywx3nOPyvLhH4+aO9g=;
- b=fG0rdVap9XBW6ZzIZSdjYJ3gVO1F3RGSnnoPUsnqfHW4psOUxLh37euFGWdbeu3V+gAz
- wIbml6NVb4fEGZFz1C1w7bWJxXGUnO/fWe2K/3GnW6xZ0A4EaWaWs3G/7A4sN9mxxmnCq
- esQoJDq5zyyjN3OgCD+8+ffBXlco/a6aWx+DaOlaLtInZ7iefLfjxLqU92I1qSNEK3O3k
- faOgRg1PPNn3S0WHz+LY+y+KkCSazllcrP4HTH8KEp05UnOrUpfPyS4wzXiatVqetIroN
- 5KCm9MdrW/Iqbt2mGAieoatCcaTtTJ8QmF7hprcq3WSVJrIX+jASbyVwsyI5WU+dssA==
+ bh=Vvh4coo7/bdano69v7bAnHgMJNHajTGl3wUQTTWS/iE=;
+ b=bH9DqL/saTrSrDrTgRW1YA0N4WcpJhok4Q6v4WhOV5710iZheTu+gEC5ADO5FRpAojlX
+ 8s68UeRzQIKVkwOyWmoA4TpDEjrRRQRZqHvh/o2VssjfEACQhzS6eE/f9OnEsedf1jCGK
+ Cmg3tJ14+07rBqa7vBFYiiKtoZ3/suGV0J3Yr1CFhQIDFLrOpsTRGnKmQnh7jTYY2f3h8
+ f+waLDMikXfEDdRLSV+UahnLgZ5riMLzjB3NuS1lLCthgeDKfDcUl1RWZpWCVxBChS2wF
+ TvKMUdgUAmzW7delCiY6xGTQKE0s8p4fOkv2UPl7RIT6+ucYuquXTQEjJ/usDynS/Iw==
 ARC-Authentication-Results: i=1; smtp4.osuosl.org;
  dmarc=none header.from=realitydiluted.com; 
  arc=none smtp.remote-ip=207.191.199.123
@@ -92,26 +92,27 @@ Authentication-Results: smtp4.osuosl.org; dmarc=none (p=none dis=none)
  header.from=realitydiluted.com
 Received: from home.bethel-hill.org
  (207-191-199-123.dhcp.imoncommunications.net [207.191.199.123])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 77BF640BFB
- for <buildroot@buildroot.org>; Thu,  1 Oct 2026 22:50:02 +0000 (UTC)
-Received: from localhost.centaur.lan ([127.0.0.1]:43120
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B19094080B
+ for <buildroot@buildroot.org>; Thu,  1 Oct 2026 23:17:54 +0000 (UTC)
+Received: from localhost.centaur.lan ([127.0.0.1]:34650
  helo=home.bethel-hill.org)
  by home.bethel-hill.org with esmtp (Exim 4.98.2)
  (envelope-from <sjhill@realitydiluted.com>)
- id 1xCPbB-00000001CjE-0ELw; Thu, 01 Oct 2026 22:49:57 +0000
+ id 1xCQ26-00000001D2b-2sZ2; Thu, 01 Oct 2026 23:17:46 +0000
 From: "Steven J. Hill" <sjhill@realitydiluted.com>
 To: buildroot@buildroot.org
 Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
  Ibai Erkiaga <ibai.erkiaga-elorza@amd.com>,
  Neal Frager <neal.frager@amd.com>, Romain Naour <romain.naour@gmail.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- "Steven J. Hill" <steven.hill@collins.com>
-Date: Thu,  1 Oct 2026 22:49:52 +0000
-Message-ID: <20261001224952.287250-1-sjhill@realitydiluted.com>
+ "Steven J. Hill" <steven.hill@collins.com>,
+ "Steven J. Hill" <sjhill@realitydiluted.com>
+Date: Thu,  1 Oct 2026 23:17:44 +0000
+Message-ID: <20261001231744.288451-1-sjhill@realitydiluted.com>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] toolchain/toolchain-bare-metal-buildroot: Add
- C++ support with newlib
+Subject: [Buildroot] [PATCH 1/1 v2]
+ toolchain/toolchain-bare-metal-buildroot: Add C++ support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -130,27 +131,33 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: "Steven J. Hill" <steven.hill@collins.com>
 
+Add C++ support for bare metal toolchains.
+
 Signed-off-by: Steven J. Hill <steven.hill@collins.com>
+Signed-off-by: Steven J. Hill <sjhill@realitydiluted.com>
 ---
- .../binutils-bare-metal.mk                    |   6 +
- package/gcc-bare-metal/Config.in              |  10 ++
- .../gcc-bare-metal-final.hash                 |  25 +++++
- .../gcc-bare-metal-final.mk                   | 103 +++++++++++++++++
- .../gcc-bare-metal-initial.hash               |  25 +++++
- .../gcc-bare-metal-initial.mk                 |  77 +++++++++++++
- package/gcc-bare-metal/gcc-bare-metal.hash    |  17 +++
- package/gcc-bare-metal/gcc-bare-metal.mk      |  83 ++++++--------
- package/newlib-bare-metal-nano/Config.in      |  17 +++
+V1->V2
+- Removed headers and footers throughout.
+- Fix missing gcc version in hash files.
+---
+ .../binutils-bare-metal.mk                    |   6 ++
+ package/gcc-bare-metal/Config.in              |   5 +
+ .../gcc-bare-metal-final.hash                 |  20 ++++
+ .../gcc-bare-metal-final.mk                   |  98 +++++++++++++++++
+ .../gcc-bare-metal-initial.hash               |  20 ++++
+ .../gcc-bare-metal-initial.mk                 |  72 +++++++++++++
+ package/gcc-bare-metal/gcc-bare-metal.hash    |  10 ++
+ package/gcc-bare-metal/gcc-bare-metal.mk      |  80 +++++---------
+ package/newlib-bare-metal-nano/Config.in      |  12 +++
  .../newlib-bare-metal-nano.hash               |   1 +
- .../newlib-bare-metal-nano.mk                 | 105 ++++++++++++++++++
- package/newlib-bare-metal/Config.in           |  17 +++
- .../newlib-bare-metal/newlib-bare-metal.hash  |   7 ++
- .../newlib-bare-metal/newlib-bare-metal.mk    |  14 ++-
- .../toolchain-bare-metal-buildroot/Config.in  |  35 ++++++
+ .../newlib-bare-metal-nano.mk                 | 100 ++++++++++++++++++
+ package/newlib-bare-metal/Config.in           |  12 +++
+ .../newlib-bare-metal/newlib-bare-metal.mk    |   9 +-
+ .../toolchain-bare-metal-buildroot/Config.in  |  28 +++++
  .../configs/README.md                         |  47 ++++++++
- .../configs/riscv64-unknown-elf.config        |  40 +++++++
- .../toolchain-bare-metal-buildroot.mk         |  10 ++
- 18 files changed, 586 insertions(+), 53 deletions(-)
+ .../configs/riscv64-unknown-elf.config        |  35 ++++++
+ .../toolchain-bare-metal-buildroot.mk         |   5 +
+ 17 files changed, 506 insertions(+), 54 deletions(-)
  create mode 100644 package/gcc-bare-metal/Config.in
  create mode 100644 package/gcc-bare-metal/gcc-bare-metal-final/gcc-bare-metal-final.hash
  create mode 100644 package/gcc-bare-metal/gcc-bare-metal-final/gcc-bare-metal-final.mk
@@ -192,35 +199,27 @@ index 343bf44c4d..4e3f01f7aa 100644
 +endif
 diff --git a/package/gcc-bare-metal/Config.in b/package/gcc-bare-metal/Config.in
 new file mode 100644
-index 0000000000..ad7b8f16f1
+index 0000000000..298885e26e
 --- /dev/null
 +++ b/package/gcc-bare-metal/Config.in
-@@ -0,0 +1,10 @@
+@@ -0,0 +1,5 @@
 +# Copyright 2026 Rockwell Collins
-+# Data Rights (LICENSE.txt): RESTRICTED RIGHTS
-+# Notices     (NOTICES.txt):
-+# Security Classification: UNCLASSIFIED
 +
 +config BR2_PACKAGE_BARE_METAL_GCC_FINAL
 +	bool
 +	default y if BR2_TOOLCHAIN_BARE_METAL_BUILDROOT
-+
-+# Security Classification: UNCLASSIFIED
 diff --git a/package/gcc-bare-metal/gcc-bare-metal-final/gcc-bare-metal-final.hash b/package/gcc-bare-metal/gcc-bare-metal-final/gcc-bare-metal-final.hash
 new file mode 100644
-index 0000000000..12140d04d0
+index 0000000000..e25d9b8dc2
 --- /dev/null
 +++ b/package/gcc-bare-metal/gcc-bare-metal-final/gcc-bare-metal-final.hash
-@@ -0,0 +1,25 @@
-+# Copyright 2026 Rockwell Collins
-+# Data Rights (LICENSE.txt): RESTRICTED RIGHTS
-+# Notices     (NOTICES.txt):
-+# Security Classification: UNCLASSIFIED
-+
+@@ -0,0 +1,20 @@
 +# From https://gcc.gnu.org/pub/gcc/releases/gcc-8.4.0/sha512.sum
 +sha512  6de904f552a02de33b11ef52312bb664396efd7e1ce3bbe37bfad5ef617f133095b3767b4804bc7fe78df335cb53bc83f1ac055baed40979ce4c2c3e46b70280  gcc-8.4.0.tar.xz
 +# From https://gcc.gnu.org/pub/gcc/releases/gcc-14.4.0/sha512.sum
 +sha512  725ed8bdd43ef1726ffe8b5e8615a13e247fac9575b7626ae013a2975d000ea213212dc414b2f2631ac4785c1c8beca85555222faf9904d3b2fa6a3807a83a15  gcc-14.4.0.tar.xz
++# From https://gcc.gnu.org/pub/gcc/releases/gcc-15.2.0/sha512.sum
++sha512  89047a2e07bd9da265b507b516ed3635adb17491c7f4f67cf090f0bd5b3fc7f2ee6e4cc4008beef7ca884b6b71dffe2bb652b21f01a702e17b468cca2d10b2de  gcc-15.2.0.tar.xz
 +# From https://gcc.gnu.org/pub/gcc/releases/gcc-15.3.0/sha512.sum
 +sha512  0de9e296153b52c021b1c7e63c9c62151d7a0ac03f23ce6e9f772c1b0eb783f6acdd81cc4567bfe4128a6f64968c2cfc8eff40b36229cba7425349f7d637c654  gcc-15.3.0.tar.xz
 +# From https://gcc.gnu.org/pub/gcc/releases/gcc-16.2.0/sha512.sum
@@ -235,14 +234,12 @@ index 0000000000..12140d04d0
 +sha256  a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING3.LIB
 +sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING.LIB
 +sha256  9d6b43ce4d8de0c878bf16b54d8e7a10d9bd42b75178153e3af6a815bdc90f74  COPYING.RUNTIME
-+
-+# Security Classification: UNCLASSIFIED
 diff --git a/package/gcc-bare-metal/gcc-bare-metal-final/gcc-bare-metal-final.mk b/package/gcc-bare-metal/gcc-bare-metal-final/gcc-bare-metal-final.mk
 new file mode 100644
-index 0000000000..3bd041cd87
+index 0000000000..08c36769c5
 --- /dev/null
 +++ b/package/gcc-bare-metal/gcc-bare-metal-final/gcc-bare-metal-final.mk
-@@ -0,0 +1,103 @@
+@@ -0,0 +1,98 @@
 +################################################################################
 +#
 +# gcc-bare-metal-final
@@ -250,9 +247,6 @@ index 0000000000..3bd041cd87
 +################################################################################
 +
 +# Copyright 2026 Rockwell Collins
-+# Data Rights (LICENSE.txt): RESTRICTED RIGHTS
-+# Notices     (NOTICES.txt):
-+# Security Classification: UNCLASSIFIED
 +
 +GCC_BARE_METAL_FINAL_VERSION = $(GCC_BARE_METAL_VERSION)
 +GCC_BARE_METAL_FINAL_SITE = $(GCC_BARE_METAL_SITE)
@@ -344,23 +338,18 @@ index 0000000000..3bd041cd87
 +
 +$(eval $(generic-package))
 +$(eval $(host-autotools-package))
-+
-+# Security Classification: UNCLASSIFIED
 diff --git a/package/gcc-bare-metal/gcc-bare-metal-initial/gcc-bare-metal-initial.hash b/package/gcc-bare-metal/gcc-bare-metal-initial/gcc-bare-metal-initial.hash
 new file mode 100644
-index 0000000000..12140d04d0
+index 0000000000..e25d9b8dc2
 --- /dev/null
 +++ b/package/gcc-bare-metal/gcc-bare-metal-initial/gcc-bare-metal-initial.hash
-@@ -0,0 +1,25 @@
-+# Copyright 2026 Rockwell Collins
-+# Data Rights (LICENSE.txt): RESTRICTED RIGHTS
-+# Notices     (NOTICES.txt):
-+# Security Classification: UNCLASSIFIED
-+
+@@ -0,0 +1,20 @@
 +# From https://gcc.gnu.org/pub/gcc/releases/gcc-8.4.0/sha512.sum
 +sha512  6de904f552a02de33b11ef52312bb664396efd7e1ce3bbe37bfad5ef617f133095b3767b4804bc7fe78df335cb53bc83f1ac055baed40979ce4c2c3e46b70280  gcc-8.4.0.tar.xz
 +# From https://gcc.gnu.org/pub/gcc/releases/gcc-14.4.0/sha512.sum
 +sha512  725ed8bdd43ef1726ffe8b5e8615a13e247fac9575b7626ae013a2975d000ea213212dc414b2f2631ac4785c1c8beca85555222faf9904d3b2fa6a3807a83a15  gcc-14.4.0.tar.xz
++# From https://gcc.gnu.org/pub/gcc/releases/gcc-15.2.0/sha512.sum
++sha512  89047a2e07bd9da265b507b516ed3635adb17491c7f4f67cf090f0bd5b3fc7f2ee6e4cc4008beef7ca884b6b71dffe2bb652b21f01a702e17b468cca2d10b2de  gcc-15.2.0.tar.xz
 +# From https://gcc.gnu.org/pub/gcc/releases/gcc-15.3.0/sha512.sum
 +sha512  0de9e296153b52c021b1c7e63c9c62151d7a0ac03f23ce6e9f772c1b0eb783f6acdd81cc4567bfe4128a6f64968c2cfc8eff40b36229cba7425349f7d637c654  gcc-15.3.0.tar.xz
 +# From https://gcc.gnu.org/pub/gcc/releases/gcc-16.2.0/sha512.sum
@@ -375,14 +364,12 @@ index 0000000000..12140d04d0
 +sha256  a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING3.LIB
 +sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING.LIB
 +sha256  9d6b43ce4d8de0c878bf16b54d8e7a10d9bd42b75178153e3af6a815bdc90f74  COPYING.RUNTIME
-+
-+# Security Classification: UNCLASSIFIED
 diff --git a/package/gcc-bare-metal/gcc-bare-metal-initial/gcc-bare-metal-initial.mk b/package/gcc-bare-metal/gcc-bare-metal-initial/gcc-bare-metal-initial.mk
 new file mode 100644
-index 0000000000..702d7ccd6c
+index 0000000000..931c2a1d1e
 --- /dev/null
 +++ b/package/gcc-bare-metal/gcc-bare-metal-initial/gcc-bare-metal-initial.mk
-@@ -0,0 +1,77 @@
+@@ -0,0 +1,72 @@
 +################################################################################
 +#
 +# gcc-bare-metal-initial
@@ -390,9 +377,6 @@ index 0000000000..702d7ccd6c
 +################################################################################
 +
 +# Copyright 2026 Rockwell Collins
-+# Data Rights (LICENSE.txt): RESTRICTED RIGHTS
-+# Notices     (NOTICES.txt):
-+# Security Classification: UNCLASSIFIED
 +
 +GCC_BARE_METAL_INITIAL_VERSION = $(GCC_BARE_METAL_VERSION)
 +GCC_BARE_METAL_INITIAL_SITE = $(GCC_BARE_METAL_SITE)
@@ -458,18 +442,11 @@ index 0000000000..702d7ccd6c
 +endef
 +
 +$(eval $(host-autotools-package))
-+
-+# Security Classification: UNCLASSIFIED
 diff --git a/package/gcc-bare-metal/gcc-bare-metal.hash b/package/gcc-bare-metal/gcc-bare-metal.hash
-index 1e1003eec9..12140d04d0 100644
+index 1e1003eec9..49f87e25bb 100644
 --- a/package/gcc-bare-metal/gcc-bare-metal.hash
 +++ b/package/gcc-bare-metal/gcc-bare-metal.hash
-@@ -1,8 +1,25 @@
-+# Copyright 2026 Rockwell Collins
-+# Data Rights (LICENSE.txt): RESTRICTED RIGHTS
-+# Notices     (NOTICES.txt):
-+# Security Classification: UNCLASSIFIED
-+
+@@ -1,8 +1,18 @@
 +# From https://gcc.gnu.org/pub/gcc/releases/gcc-8.4.0/sha512.sum
 +sha512  6de904f552a02de33b11ef52312bb664396efd7e1ce3bbe37bfad5ef617f133095b3767b4804bc7fe78df335cb53bc83f1ac055baed40979ce4c2c3e46b70280  gcc-8.4.0.tar.xz
 +# From https://gcc.gnu.org/pub/gcc/releases/gcc-14.4.0/sha512.sum
@@ -488,20 +465,15 @@ index 1e1003eec9..12140d04d0 100644
  sha256  a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING3.LIB
  sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING.LIB
 +sha256  9d6b43ce4d8de0c878bf16b54d8e7a10d9bd42b75178153e3af6a815bdc90f74  COPYING.RUNTIME
-+
-+# Security Classification: UNCLASSIFIED
 diff --git a/package/gcc-bare-metal/gcc-bare-metal.mk b/package/gcc-bare-metal/gcc-bare-metal.mk
-index 4ec154bb53..6bf90c9cb5 100644
+index 4ec154bb53..f4b92c1000 100644
 --- a/package/gcc-bare-metal/gcc-bare-metal.mk
 +++ b/package/gcc-bare-metal/gcc-bare-metal.mk
-@@ -4,15 +4,21 @@
+@@ -4,15 +4,18 @@
  #
  ################################################################################
  
 +# Copyright 2026 Rockwell Collins
-+# Data Rights (LICENSE.txt): RESTRICTED RIGHTS
-+# Notices     (NOTICES.txt):
-+# Security Classification: UNCLASSIFIED
 +
  GCC_BARE_METAL_VERSION = 16.2.0
  GCC_BARE_METAL_SITE = $(BR2_GNU_MIRROR)/gcc/gcc-$(GCC_BARE_METAL_VERSION)
@@ -517,7 +489,7 @@ index 4ec154bb53..6bf90c9cb5 100644
  HOST_GCC_BARE_METAL_DEPENDENCIES = \
  	host-binutils-bare-metal \
  	host-gmp \
-@@ -20,16 +26,15 @@ HOST_GCC_BARE_METAL_DEPENDENCIES = \
+@@ -20,16 +23,15 @@ HOST_GCC_BARE_METAL_DEPENDENCIES = \
  	host-mpfr \
  	host-isl
  
@@ -540,7 +512,7 @@ index 4ec154bb53..6bf90c9cb5 100644
  
  ifeq ($(BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_MULTILIB),y)
  HOST_GCC_BARE_METAL_MULTILIB = "--enable-multilib"
-@@ -43,54 +48,28 @@ HOST_GCC_BARE_METAL_CONF_OPTS = \
+@@ -43,54 +45,26 @@ HOST_GCC_BARE_METAL_CONF_OPTS = \
  	--localstatedir=$(HOST_DIR)/var \
  	$(if $$($$(PKG)_OVERRIDE_SRCDIR),,--disable-dependency-tracking) \
  	$(QUIET) \
@@ -577,6 +549,14 @@ index 4ec154bb53..6bf90c9cb5 100644
 -			RANLIB_FOR_TARGET=$(HOST_DIR)/bin/$(arch_tuple)-ranlib
 -	)
 -endef
+-
+-define HOST_GCC_BARE_METAL_BUILD_CMDS
+-	$(foreach arch_tuple, $(TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH_TUPLE), \
+-		$(HOST_MAKE_ENV) $(MAKE) \
+-			$(HOST_GCC_BARE_METAL_MAKE_OPTS) \
+-			-C $(@D)/build-$(arch_tuple)
+-	)
+-endef
 +	--with-isl=$(HOST_DIR) \
 +	--with-newlib \
 +	--disable-shared \
@@ -591,17 +571,6 @@ index 4ec154bb53..6bf90c9cb5 100644
 +	--disable-nls \
 +	--disable-tm-clone-registry
  
--define HOST_GCC_BARE_METAL_BUILD_CMDS
--	$(foreach arch_tuple, $(TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH_TUPLE), \
--		$(HOST_MAKE_ENV) $(MAKE) \
--			$(HOST_GCC_BARE_METAL_MAKE_OPTS) \
--			-C $(@D)/build-$(arch_tuple)
--	)
--endef
-+ifneq ($(BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_CONFIG_DIR),"")
-+include $(shell grep -v '^\s*#' $(wildcard $(subst ",,$(BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_CONFIGS))/*)
-+endif
- 
 -define HOST_GCC_BARE_METAL_INSTALL_CMDS
 -	$(foreach arch_tuple, $(TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH_TUPLE), \
 -		$(HOST_MAKE_ENV) $(MAKE) \
@@ -609,20 +578,19 @@ index 4ec154bb53..6bf90c9cb5 100644
 -			-C $(@D)/build-$(arch_tuple)
 -	)
 -endef
-+include $(sort $(wildcard package/gcc-bare-metal/*/*.mk))
++ifneq ($(BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_CONFIG_DIR),"")
++include $(shell grep -v '^\s*#' $(wildcard $(subst ",,$(BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_CONFIGS))/*)
++endif
  
 -$(eval $(host-autotools-package))
-+# Security Classification: UNCLASSIFIED
++include $(sort $(wildcard package/gcc-bare-metal/*/*.mk))
 diff --git a/package/newlib-bare-metal-nano/Config.in b/package/newlib-bare-metal-nano/Config.in
 new file mode 100644
-index 0000000000..6e066e5e57
+index 0000000000..1e16240ea4
 --- /dev/null
 +++ b/package/newlib-bare-metal-nano/Config.in
-@@ -0,0 +1,17 @@
+@@ -0,0 +1,12 @@
 +# Copyright 2026 Rockwell Collins
-+# Data Rights (LICENSE.txt): RESTRICTED RIGHTS
-+# Notices     (NOTICES.txt):
-+# Security Classification: UNCLASSIFIED
 +
 +config BR2_PACKAGE_NEWLIB_BARE_METAL_NANO
 +	bool
@@ -634,8 +602,6 @@ index 0000000000..6e066e5e57
 +	  of non-MCU features.
 +
 +	  https://github.com/32bitmicro/newlib-nano-1.0
-+
-+# Security Classification: UNCLASSIFIED
 diff --git a/package/newlib-bare-metal-nano/newlib-bare-metal-nano.hash b/package/newlib-bare-metal-nano/newlib-bare-metal-nano.hash
 new file mode 120000
 index 0000000000..f5ffcdfaba
@@ -646,10 +612,10 @@ index 0000000000..f5ffcdfaba
 \ No newline at end of file
 diff --git a/package/newlib-bare-metal-nano/newlib-bare-metal-nano.mk b/package/newlib-bare-metal-nano/newlib-bare-metal-nano.mk
 new file mode 100644
-index 0000000000..d6b9d6fd59
+index 0000000000..38a95ae7dc
 --- /dev/null
 +++ b/package/newlib-bare-metal-nano/newlib-bare-metal-nano.mk
-@@ -0,0 +1,105 @@
+@@ -0,0 +1,100 @@
 +################################################################################
 +#
 +# newlib-bare-metal-nano
@@ -657,9 +623,6 @@ index 0000000000..d6b9d6fd59
 +################################################################################
 +
 +# Copyright 2026 Rockwell Collins
-+# Data Rights (LICENSE.txt): RESTRICTED RIGHTS
-+# Notices     (NOTICES.txt):
-+# Security Classification: UNCLASSIFIED
 +
 +NEWLIB_BARE_METAL_NANO_VERSION = $(NEWLIB_BARE_METAL_VERSION)
 +NEWLIB_BARE_METAL_NANO_SITE = $(NEWLIB_BARE_METAL_SITE)
@@ -753,17 +716,12 @@ index 0000000000..d6b9d6fd59
 +ifneq ($(BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_CONFIG_DIR),"")
 +include $(shell grep -v '^\s*#' $(wildcard $(subst ",,$(BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_CONFIGS))/*)
 +endif
-+
-+# Security Classification: UNCLASSIFIED
 diff --git a/package/newlib-bare-metal/Config.in b/package/newlib-bare-metal/Config.in
-index 1ff3d5d8ec..285ca3ca3b 100644
+index 1ff3d5d8ec..8b064af1e4 100644
 --- a/package/newlib-bare-metal/Config.in
 +++ b/package/newlib-bare-metal/Config.in
-@@ -1,2 +1,19 @@
+@@ -1,2 +1,14 @@
 +# Copyright 2026 Rockwell Collins
-+# Data Rights (LICENSE.txt): RESTRICTED RIGHTS
-+# Notices     (NOTICES.txt):
-+# Security Classification: UNCLASSIFIED
 +
  config BR2_PACKAGE_NEWLIB_BARE_METAL
  	bool
@@ -777,39 +735,15 @@ index 1ff3d5d8ec..285ca3ca3b 100644
 +	  usable on embedded products.
 +
 +	  https://sourceware.org/git/newlib-cygwin.git
-+
-+# Security Classification: UNCLASSIFIED
-diff --git a/package/newlib-bare-metal/newlib-bare-metal.hash b/package/newlib-bare-metal/newlib-bare-metal.hash
-index 69d34600d7..9816668bcc 100644
---- a/package/newlib-bare-metal/newlib-bare-metal.hash
-+++ b/package/newlib-bare-metal/newlib-bare-metal.hash
-@@ -1,3 +1,8 @@
-+# Copyright 2026 Rockwell Collins
-+# Data Rights (LICENSE.txt): RESTRICTED RIGHTS
-+# Notices     (NOTICES.txt):
-+# Security Classification: UNCLASSIFIED
-+
- # Locally calculated
- sha256  6ff27e3bf022666f43f7802255be680eeff722ac181b1725d21e2e8318604ee3  newlib-4.6.0.20260123.tar.gz
- 
-@@ -6,3 +11,5 @@ sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYIN
- sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING.LIB
- sha256  4ef33c7bdd57f5fa8fbe3bdc0200245ab91c564c2ef530d95bbe7fd4070757cd  COPYING.LIBGLOSS
- sha256  f3afe48e4bc6ed8466a42e9dacb6be1d8f9cbf5aac15cb8e474a5ccde8b40ef6  COPYING.NEWLIB
-+
-+# Security Classification: UNCLASSIFIED
 diff --git a/package/newlib-bare-metal/newlib-bare-metal.mk b/package/newlib-bare-metal/newlib-bare-metal.mk
-index 5881993d3a..48389f0bed 100644
+index 5881993d3a..c8f1c9e8da 100644
 --- a/package/newlib-bare-metal/newlib-bare-metal.mk
 +++ b/package/newlib-bare-metal/newlib-bare-metal.mk
-@@ -4,10 +4,15 @@
+@@ -4,10 +4,12 @@
  #
  ################################################################################
  
 +# Copyright 2026 Rockwell Collins
-+# Data Rights (LICENSE.txt): RESTRICTED RIGHTS
-+# Notices     (NOTICES.txt):
-+# Security Classification: UNCLASSIFIED
 +
  NEWLIB_BARE_METAL_VERSION = 4.6.0.20260123
  NEWLIB_BARE_METAL_SITE = https://sourceware.org/ftp/newlib
@@ -819,7 +753,7 @@ index 5881993d3a..48389f0bed 100644
  NEWLIB_BARE_METAL_ADD_TOOLCHAIN_DEPENDENCY = NO
  NEWLIB_BARE_METAL_LICENSE = GPL-2.0, GPL-3.0, LGPL-2.1, LGPL-3.0
  NEWLIB_BARE_METAL_LICENSE_FILES = \
-@@ -52,6 +57,7 @@ define NEWLIB_BARE_METAL_CONFIGURE_CMDS
+@@ -52,6 +54,7 @@ define NEWLIB_BARE_METAL_CONFIGURE_CMDS
  		CONFIG_SITE=/dev/null \
  		$(@D)/configure \
  			$(NEWLIB_BARE_METAL_CONF_OPTS) \
@@ -827,7 +761,7 @@ index 5881993d3a..48389f0bed 100644
  			--target=$(arch_tuple)
  	)
  endef
-@@ -74,3 +80,9 @@ define NEWLIB_BARE_METAL_INSTALL_STAGING_CMDS
+@@ -74,3 +77,7 @@ define NEWLIB_BARE_METAL_INSTALL_STAGING_CMDS
  endef
  
  $(eval $(generic-package))
@@ -835,22 +769,11 @@ index 5881993d3a..48389f0bed 100644
 +ifneq ($(BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_CONFIG_DIR),"")
 +include $(shell grep -v '^\s*#' $(wildcard $(subst ",,$(BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_CONFIGS))/*)
 +endif
-+
-+# Security Classification: UNCLASSIFIED
 diff --git a/toolchain/toolchain-bare-metal-buildroot/Config.in b/toolchain/toolchain-bare-metal-buildroot/Config.in
-index 7ba579b570..b801fae622 100644
+index 7ba579b570..90f957aed4 100644
 --- a/toolchain/toolchain-bare-metal-buildroot/Config.in
 +++ b/toolchain/toolchain-bare-metal-buildroot/Config.in
-@@ -1,3 +1,8 @@
-+# Copyright 2026 Rockwell Collins
-+# Data Rights (LICENSE.txt): RESTRICTED RIGHTS
-+# Notices     (NOTICES.txt):
-+# Security Classification: UNCLASSIFIED
-+
- if BR2_TOOLCHAIN_BARE_METAL_BUILDROOT
- 
- config BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH
-@@ -26,6 +31,36 @@ config BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_MULTILIB
+@@ -26,6 +26,34 @@ config BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_MULTILIB
  	  When enabled, this option will apply to all architecture
  	  tuples in the list.
  
@@ -885,8 +808,6 @@ index 7ba579b570..b801fae622 100644
 +source "package/newlib-bare-metal-nano/Config.in"
  
  endif # BR2_TOOLCHAIN_BARE_METAL_BUILDROOT
-+
-+# Security Classification: UNCLASSIFIED
 diff --git a/toolchain/toolchain-bare-metal-buildroot/configs/README.md b/toolchain/toolchain-bare-metal-buildroot/configs/README.md
 new file mode 100755
 index 0000000000..af8cb99f09
@@ -942,14 +863,11 @@ index 0000000000..af8cb99f09
 +2. The architecture config files could support extra options for the `build` and `install` stages.
 diff --git a/toolchain/toolchain-bare-metal-buildroot/configs/riscv64-unknown-elf.config b/toolchain/toolchain-bare-metal-buildroot/configs/riscv64-unknown-elf.config
 new file mode 100644
-index 0000000000..7615514776
+index 0000000000..0daabd76a3
 --- /dev/null
 +++ b/toolchain/toolchain-bare-metal-buildroot/configs/riscv64-unknown-elf.config
-@@ -0,0 +1,40 @@
+@@ -0,0 +1,35 @@
 +# Copyright 2026 Rockwell Collins
-+# Data Rights (LICENSE.txt): RESTRICTED RIGHTS
-+# Notices     (NOTICES.txt):
-+# Security Classification: UNCLASSIFIED
 +
 +BINUTILS_BARE_METAL_EXTRA_CONF_OPTS_riscv64-unknown-elf = \
 +	--with-abi=lp64d \
@@ -984,20 +902,15 @@ index 0000000000..7615514776
 +	--disable-nls \
 +	CFLAGS_FOR_TARGET="-Os -D_POSIX_MODE -ffunction-sections -fdata-sections    -mcmodel=medlow" \
 +	CXXFLAGS_FOR_TARGET="-Os -D_POSIX_MODE -ffunction-sections -fdata-sections    -mcmodel=medlow"
-+
-+# Security Classification: UNCLASSIFIED
 diff --git a/toolchain/toolchain-bare-metal-buildroot/toolchain-bare-metal-buildroot.mk b/toolchain/toolchain-bare-metal-buildroot/toolchain-bare-metal-buildroot.mk
-index 71063fcee4..c0c770f176 100644
+index 71063fcee4..eeeacffaf3 100644
 --- a/toolchain/toolchain-bare-metal-buildroot/toolchain-bare-metal-buildroot.mk
 +++ b/toolchain/toolchain-bare-metal-buildroot/toolchain-bare-metal-buildroot.mk
-@@ -4,8 +4,18 @@
+@@ -4,7 +4,12 @@
  #
  ################################################################################
  
 +# Copyright 2026 Rockwell Collins
-+# Data Rights (LICENSE.txt): RESTRICTED RIGHTS
-+# Notices     (NOTICES.txt):
-+# Security Classification: UNCLASSIFIED
 +
  TOOLCHAIN_BARE_METAL_BUILDROOT_DEPENDENCIES = newlib-bare-metal
 +ifeq ($(BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_NANO),y)
@@ -1006,9 +919,6 @@ index 71063fcee4..c0c770f176 100644
  TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH_TUPLE = $(call qstrip,$(BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH))
  TOOLCHAIN_BARE_METAL_BUILDROOT_ADD_TOOLCHAIN_DEPENDENCY = NO
  
- $(eval $(virtual-package))
-+
-+# Security Classification: UNCLASSIFIED
 -- 
 2.47.3
 
