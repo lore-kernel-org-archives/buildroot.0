@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A5FBCA5FD4
-	for <buildroot@archiver.kernel.org>; Thu,  1 Oct 2026 12:56:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75BC7CA5FD2
+	for <buildroot@archiver.kernel.org>; Thu,  1 Oct 2026 12:56:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0D34540D7E;
-	Thu,  1 Oct 2026 12:56:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id ABE2340D92;
+	Thu,  1 Oct 2026 12:56:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TT1ZjtW9Mpsp; Thu,  1 Oct 2026 12:56:31 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 4084F40CC3
+ id k68bax-iBwMf; Thu,  1 Oct 2026 12:56:33 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org CC3ED40D8D
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790859391;
-	b=WW6sONwwuLETIIlH4AupbqN+JZoYNrWilsDSHD/QfTceelT3ChizDWKxpph+iAF83LhP
-	 hle95I8agweRs2tKZ2Ej2Ja3DDVw15gUXmGwE++potIc/qJeCzL2xApMeH/tG54W88+s1
-	 7W5mUAfMzWjjsf5TV4hGaI1bAAer7Z8roLeyqthQiSa62OTIwQCvbnl71HTXGpGdDUUwD
-	 MX2tlHMqJJii7kqyKibrwglQgikrye5q1iDbaa6rs82Saqpd8k6mzq9Md1GZ+0Cea9sXO
-	 PAmI8pSsSupDr6Rucli4XjEiRMQWfhZ3lqmKRXIbXLrcXnRvp1PiboYdz7O4M11knpQ==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790859392;
+	b=dCwDDtScdTO2UQGkCCxawJ7emFa1XOFaS27Tn4eKt5dVm+XDiYWtxwGA5wIW6ZePvejB
+	 N8LiFfmh/s28OIilVyyJivkGnQ3yZstH5lRQ060I5fsvhHlkDUmXu1kN2clw4TnVs26YD
+	 +WrAOd1/oEkXHsYQyUdSypmLGS+wrJH6HDn27JZRnncwZFrlb2o01zAWWX80wY9h2S7nK
+	 it2eGxLG2AURhooMvEff9EB5QRnfrngOAlogTlCLI7Gx9UFEpYEP3UmF/LnmfDhWV7JQt
+	 XwgGQLrV4QQQZeBZVFgMTog/LGPGSaCPPh8ZqM1L2P98aGapB9kYPBMBvy4uJ70iwVQ==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1790859391;
+	c=relaxed/relaxed; t=1790859392;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:To:
@@ -31,80 +31,80 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:Content-Type:Content-Transfer-Encoding:
 	 Errors-To:Sender;
-	bh=GzqLeDvBHrHFf1FGDD5DarPcXqBxexKSxsyMVL69hbA=;
-	b=cbgwuV85qn1xSjNr8gIY1JgN4jwRclBQ2t/hXa7qqudkkpvHmNVo3/0b15oUMa9wb9i8
-	 DEoSYHlLKqnoyDg+enSaqQngw+cRVH6PIhvENsYXeslaH2rRnpwyVQ/USfhsTSQPpShko
-	 1KutNSE/eWK/bGE+QzA2YjcS2m0oFMdOmqrQ1wF6ARjnQPswCWS3AbbNtKLCvKL0vp/OH
-	 E8SPIZmxX1R8NqoULwHHlhymJPlo+ASEeBcpNlDbWKApYDfkUH+z9ke9HVQbWt2+8Gkqj
-	 Vnfx4h5cA7zB63qcdj6JscN9e2ZSd41mdFqycsTYrjk2H/Yp7VQWKhoCoBSsxY3UqKg==
+	bh=ta29gdqCp+zyy/1vUev5BszMq+EBkq5qM9d8RsAB+KM=;
+	b=TW7f/eD3PjCt7rRynMODijRTDEY3B15KcO3ohSn1UMQkcvx/Ww3mMFq/RW2IEGVuk302
+	 2JzD+KE9e248fUCuoYSssx17mm3pV+7NmkLN4/8dVzbhOCwnJcghwz7xLu+1zEfE8KlvQ
+	 xKgP0GaGPsMzj06epFRL7zJGB8SJ7bs90qYCkBfsANfkhpikFKkqpXvsscdNlj0Byb1a6
+	 oZAjtL2Y78bL5LvJTBhWDr+IJ6MXuYBp84JU/VEhXiCqfyKcu6tzPshjG1B1yiMACA+ke
+	 gMDbZpN1h33RDRU7VP1H1DiKK6L1cSXBgvMksziU3MtkCHr+skn6u2SDDP6zGwa7xXw==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1790859391;
-	bh=GzqLeDvBHrHFf1FGDD5DarPcXqBxexKSxsyMVL69hbA=;
+	s=default; t=1790859392;
+	bh=ta29gdqCp+zyy/1vUev5BszMq+EBkq5qM9d8RsAB+KM=;
 	h=To:Date:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
 	 From;
-	b=JlZdY2EbUFHTplZSZ5XB8WvN8wWvQwDCXePKAZqVPMFM5WPgpQIOIM6SNCoR0MMur
-	 sUVefzFwrUZNt8qsReURWHdBzBmiGlJtlWfYQrRfnjo9WMxBqeMxKUFROksxfGoMAd
-	 jtrUg/rRFx3AEwp06scQNP2G3BZ1pVkEtp8zlR/LmaFxZU5eBBQdTz5UfQ7Fa3UdCi
-	 tOh3s12mSDFwwC6EO+8+zVbxfbrfaerUMlWESi/wJXc7RF26WG8591w3Cc+YNxcFC0
-	 cN+BCVZpH37IXhqHSau57N9qNYgJHqrRYLvVY13KBbpz4B4+VhsJo83kYYoaNz4Od7
-	 LS61LwbG4uUtg==
+	b=TXStEiz1dcLQXrQMYT8DtV6yGz+d+HcM2U/XFv9AfvXI/zPLlX+0abyH8V9i2mWfP
+	 qiqzUIhDgq1rDWQ09aTb/zfk3yBKr6cq2RLhCef3y7aiEWnvtPe9mBIrZANtJrT6CK
+	 Krs7wLxmHDFctSq34SnlPsmgUED87yn8/iFh3Q/ugBFptp3ouKyaOLjaOqztENRODk
+	 NNxiv5dCZlicFuuzNveGAC9oyMGc0MyuGiFLcii5Osvcj5zDm3hsuRQgELEWpDolZH
+	 zT+ofwlZnoTpVZ1l6lVROxrsnIiJ0j8r9p19D+V9oarKIKHx2cT1QxYsxjy9lTBL2V
+	 meYHdTSZ2PaUA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4084F40CC3;
-	Thu,  1 Oct 2026 12:56:31 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id F3146263
- for <buildroot@buildroot.org>; Thu,  1 Oct 2026 12:56:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CC3ED40D8D;
+	Thu,  1 Oct 2026 12:56:32 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3D144263
+ for <buildroot@buildroot.org>; Thu,  1 Oct 2026 12:56:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DA16240BEC
- for <buildroot@buildroot.org>; Thu,  1 Oct 2026 12:56:27 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 22C3181317
+ for <buildroot@buildroot.org>; Thu,  1 Oct 2026 12:56:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id C5iX3eoSJpB9 for <buildroot@buildroot.org>;
- Thu,  1 Oct 2026 12:56:26 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 6EAE440C9C
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790859386;
- b=lIi6WB/i3Mal8of0EQPuRKTAwKKvOZ/v4LyoeVMfBAXLxoCtO72t03iXg8aflzwtAneb
- rL4c5pE6/IDh0ggoMkSkosVTq1K9Bvazl+7UUoRoJERZnMXkprSfaZHop23HFWEZ0Gsav
- I0sTDskV2oXxxee++XxRhUpQvut+vsXy8f4YxluPIsUFwUo763e4xTZ57i4EDObqZttUu
- 9oRGGYL6Q3RyPErEVr9dMUiJ74d9QUULlV2fjXb/et6NhHpjnwRI4aPTB9Wfqukopuq5i
- HFOro432FamjhNfsxh1bdO4yXxqmYqg6m+/S1SFE6JQ3kUOqe3igv2hJHpQQRHBBWJQ==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zoUysTzdK8o4 for <buildroot@buildroot.org>;
+ Thu,  1 Oct 2026 12:56:29 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 5924781235
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790859388;
+ b=W2oOqi6U8uICStttXivmdPjcyGUujBwlxo3DrL8V6Mj+IcQCaNeZRLXslRybgYrVmq8l
+ u6rxWyczGudZWE7UDLhojmS+aBHMI3w/Nlfm/QsoGxu3EimbSg15XYYqheGbp+tgirHNI
+ nYw5LFECDFWja3Gig71GROoSQZ4Dt1gsc4NpGUyRNgkbQIoPu0ndor12bJ6IdJ0aAjgYW
+ 2u4inTcdsdHhUMKmnKDgQBIYscEtQ9U3aWc2A3DXpbC0JlsOQKSbULdEqfQp14hvdpWuu
+ hDqYgIJNOb6WduDsixvNQVoa46drd0bj1M5X6yO+MYBTs+WrxoowHaqesmVUWe0eYgA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1790859386;
+ c=relaxed/relaxed; t=1790859388;
  h=Received-SPF:Received:DKIM-Signature:From:To:Cc:Subject:Date:
  Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding:X-Last-TLS-Session-Version;
- bh=48evOzN2c8GEe9++fpIAkCInOdZRR8WXCvPi92Y9TM8=;
- b=kk5oy4ESP2/MRDnq1BoMGoMEomW6iHvLFuGczF0zyIVXH+X4qgtTTPjUioPcwRezxFGK
- 9HHFj590ZLB4u0Zr3zoHc0yQkT7D7nLmH+l2REKCtqMS11p0xYYsMSkg4Oa7T7DOXyHgH
- +HO4+5y4RnQteLYGbWl5fF11wC48ECBa/TTYyL98EAi7KejKeEe3Tgs40dCQDJVZEICuB
- IX1oxyqNYjzVQ4RmA0zghspzjFu4sv/nZdb1GXZ6CR4/wTfsG9WXUtdtmCbHtTWghXKon
- TGoEocE7BXGHa87DHrOOKNUdwSiLNN4HLoqctkIQJWeSIn9LrlIYoghT3Ueo5kfQLXg==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org;
+ bh=ikpKyo9Zbpml7hmLLrfELyP+IwKO1zp8IkVlNV6P5oE=;
+ b=dJvKHuiV4FrNozNNysRLcfNjaRKswazO8Ke0JdxEg7kmNG2oveIvw6SkKNmxkflU6RDD
+ CMhCqtsBIoXBGASXOV+7FdbEJ8q+ueP23qeTBUHBU4I1CSV3bMKTLPUNQJwJTZy0nifL9
+ Z0dg6d7aZs2qbY4Dv1SFxiCCkpI1QNqkfEGYizyy2dJQa012oNpo0UmS+CTgXRnLMWNGe
+ B3S2FTDrPcc/HTqzaLep1YkS/qcymWwQljQZ6eQXXNL5ATMeD//gFySI9unrGrGRAXByn
+ GEUA9LLWiCeGicDlLNmUMR02zU3zOU/xq8bsY4Xy4uWDL9PY5S/ujgT6knhzRxJmgjw==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org;
  dmarc=pass header.from=heine.tech; 
  dkim=pass header.d=heine.tech header.i=@heine.tech header.a=rsa-sha256
- header.s=dkim header.b="hSTj/MMU"; 
+ header.s=dkim header.b=q5BkrjlA; 
  arc=none smtp.remote-ip="2a01:4f8:1c0c:5073::1"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
  client-ip=2a01:4f8:1c0c:5073::1; helo=mail.heine.tech;
  envelope-from=buildroot@heine.tech; receiver=<UNKNOWN> 
 Received: from mail.heine.tech (mail.heine.tech [IPv6:2a01:4f8:1c0c:5073::1])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6EAE440C9C
- for <buildroot@buildroot.org>; Thu,  1 Oct 2026 12:56:26 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5924781235
+ for <buildroot@buildroot.org>; Thu,  1 Oct 2026 12:56:27 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 0EF211814C0; Thu, 01 Oct 2026 14:56:24 +0200 (CEST)
+ with ESMTPSA id B09A01814C1; Thu, 01 Oct 2026 14:56:25 +0200 (CEST)
 To: buildroot@buildroot.org
-Date: Thu,  1 Oct 2026 14:56:04 +0200
-Message-ID: <20261001125613.2347873-2-buildroot@heine.tech>
+Date: Thu,  1 Oct 2026 14:56:05 +0200
+Message-ID: <20261001125613.2347873-3-buildroot@heine.tech>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20261001125613.2347873-1-buildroot@heine.tech>
 References: <20261001125613.2347873-1-buildroot@heine.tech>
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
-Subject: [Buildroot] [PATCH 2/4] package/sqlitecpp: disable stack_protection
+Subject: [Buildroot] [PATCH 3/4] package/sqlitecpp: needs threads
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -123,32 +123,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SQLiteCpp has an internal setting for stack protection which
-defaults to "on".
-Since Buildroot passes this options itself this is not needed.
+SQLiteCpp has an unconditional dependency on threads.
 
-Fixes:
-br-test-pkg/bootlin-x86-i686-musl
-https://gitlab.com/heinemml/buildroot/-/jobs/16865965418
+fixes:
+br-test-pkg/br-arm-full-nothread
+https://gitlab.com/heinemml/buildroot/-/jobs/16865965420
 
 Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 ---
- package/sqlitecpp/sqlitecpp.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/sqlitecpp/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/sqlitecpp/sqlitecpp.mk b/package/sqlitecpp/sqlitecpp.mk
-index 95ddc953cb..418860fc6d 100644
---- a/package/sqlitecpp/sqlitecpp.mk
-+++ b/package/sqlitecpp/sqlitecpp.mk
-@@ -14,6 +14,7 @@ SQLITECPP_INSTALL_STAGING = YES
- SQLITECPP_CONF_OPTS = \
- 	-DSQLITECPP_INTERNAL_SQLITE=OFF \
- 	-DSQLITECPP_RUN_CPPLINT=OFF \
--	-DSQLITECPP_RUN_CPPCHECK=OFF
-+	-DSQLITECPP_RUN_CPPCHECK=OFF \
-+	-DSQLITECPP_USE_STACK_PROTECTION=OFF
+diff --git a/package/sqlitecpp/Config.in b/package/sqlitecpp/Config.in
+index 31de9a3904..614c46cb54 100644
+--- a/package/sqlitecpp/Config.in
++++ b/package/sqlitecpp/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_SQLITECPP
+ 	bool "sqlitecpp"
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++11
+ 	select BR2_PACKAGE_SQLITE
+ 	select BR2_PACKAGE_SQLITE_ENABLE_COLUMN_METADATA
+@@ -10,5 +11,6 @@ config BR2_PACKAGE_SQLITECPP
  
- $(eval $(cmake-package))
+ 	  https://github.com/SRombauts/SQLiteCpp
+ 
+-comment "sqlitecpp needs a toolchain w/ C++11, gcc >= 4.9"
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
++comment "sqlitecpp needs a toolchain w/ C++11, threads, gcc >= 4.9"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
 -- 
 2.43.0
 
