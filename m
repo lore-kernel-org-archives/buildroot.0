@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BC4B9CA5FDD
-	for <buildroot@archiver.kernel.org>; Fri,  2 Oct 2026 15:12:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95144CA5FC4
+	for <buildroot@archiver.kernel.org>; Fri,  2 Oct 2026 15:12:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6C6E860BBB;
-	Fri,  2 Oct 2026 15:12:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5507940D8F;
+	Fri,  2 Oct 2026 15:12:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Gl7ztxk4MOwT; Fri,  2 Oct 2026 15:12:55 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 0D12B60880
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790953975;
-	b=BdzNtKyrz+IOLahPdyh9J2lFq+mjXhZFwbpXDbtR9LBkQ84JSdopp4WiTg4VAKIIPrUG
-	 kUouw9LvE4HT1eRmQrYw1HmS3BMBz/eLoV+XlFum30j4UMDrJJaLC9I00qi+yrLgzMIMZ
-	 vDctkZlbxDd9GaKNJhrNU2vR8f1LjtgwDuGAiYA7vyxtozPWPh5TjY42MitLlsMUr038C
-	 BZJca4TXyROD+QMqMoB7E6S7a8DnNqD73zQcLU+HHZ2BfsMR9ugcVVXVX74UBMZmwZjA6
-	 zB6iLVHnEzP36lfdXtQjKW2YlWEYDGZ10cT2ujDKd1dsxfh5Jdtbb5Qhn0zr+9te/YA==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NU8VDLydeA5H; Fri,  2 Oct 2026 15:12:57 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 6710540D76
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790953977;
+	b=NZ739GDDYcWllhEq/C4EIOmzKUl0jKyuF3GxL8yMzlOOHlbc3Ftpc931NNPFVaVWo5Yg
+	 uY0aOpQHYMzirCWzAtQtclA6SEGA5gC5sId+9Vlo7rlC9fDlAR3AWRbT/pw3bQpOSXtwG
+	 YdvotIG6OZL7xb4nhkyyNPIXpckrRuMEnWR37QiSvnld0GSmhZ3g2dEJDr4kmn7gX7PIu
+	 xgnsAw/sURPtuURcf4+yVWBvg0QsmPIZTX+tDxNABJTrLBrNKr5iMrM0EyvWOs7Ry6cGX
+	 y7MBFv0NhA+PSkSjJRg2mRdbPAIC/swPy/7oqI8B9yQwgbP3Dkox1STlQU8TPPpw+GQ==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1790953975;
+	c=relaxed/relaxed; t=1790953977;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
@@ -31,180 +31,179 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
 	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=vzXJSFLg+KCIzP06VFSk/Mw1mWgsCrzUGO/TzhIPtCU=;
-	b=iZeGqWn+RcPvJHPnKgMFbb/+pLWvjqQfITl+6rgzSh3sla/OjWSUym0GezpAmL164mCQ
-	 pdnMjDZ2uWnnby6ISAhDWCI2Y9soHDN0+hAr0eeZWKFRUuyrfAs53YFoLXNC2logARh+f
-	 N/bzg04DIN5XRVwkFQKrMd5biBewvgK3epXuYRuQvTzj1FLqzDy0bjmYNdd6WGd0+HUhJ
-	 wWY6sA+J1RQsQ+b+KFuSPrWOBJBOl5MKOzIhZ7Rf/alKCuoo53AovAKGpaBjvrm0GINX+
-	 S+x5JqHvnt2U6Qs4Srm+ryMDB+8qWcQNvx/VoNpGTloKouakVQ103iDdth/2b2W8eSA==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	bh=1oJR3WOaE0E6UuljtdNstkmRaPkR13m6eVzyW2SHf2Q=;
+	b=OJsMd1U2ZoY5IHAPlS3SFQ+M4BvnjkzGDRuWVbYlT3uccHpNH+Yik8aQM3VKUyma6/pp
+	 e8cm1deijI9cOvyNkMZkkDYts8bGHJyP95VUOHToktVUkgNmBiiG/zujXDFWV/J8aIvxr
+	 wO2EyebwVfdKXA/QKByj/qxD2cpi7epU/qZHNPhWd4R0qDw2u0tbDIh/mdU9ECnd4iA4m
+	 dOoljF5ye54JJGu9vkso3yORkeS+mQmWPiP85Wp4Rlp8EXPfrV8Ni1SkGM5104dF2051i
+	 EFnJbZhWT49gEEKX/Ts9JaNGTWavBQ0aLzfse0ot00quTCJy/keo9jgNHECa38L5s/w==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1790953975;
-	bh=vzXJSFLg+KCIzP06VFSk/Mw1mWgsCrzUGO/TzhIPtCU=;
+	s=default; t=1790953977;
+	bh=1oJR3WOaE0E6UuljtdNstkmRaPkR13m6eVzyW2SHf2Q=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=TPw9Fi1UMIi52Se/uB3vazMpHy8MawkxnlN0j4/GVoQiMmAk/m5PjVWLxUr3mGSqx
-	 2bs3A3sA5cmhYRUDjILD6yDZ/h8Jngv9CmhTCaI/l0DpG5xmgVBwWYqYYxnaH2KbNU
-	 1tOQADgpJ0ZX92r3vyAUZ3B8S103aGxQDbswLLofd+5mtV4aVgMiX5YkkV2ZxhIiIx
-	 ogBJS085tZvy5iPdZMELaFPb50pmXnAjzDNo/50K9HxW+dJ+DHLseDdgtPy19E8Vs1
-	 4ZEqbc1ZnwubRMmsgCo5/95P8IdumNK9yB4Wi13J5WI6/g6aym6PTB9lSQoAiJpD/U
-	 a1z6PLgi+Gvsw==
+	b=ecVasFDLALcXOZp7jD0R1IOYLhaorLfXE/xxDojfv3TXKmya81NgbzGml3s6mP06W
+	 zD/43rxDOkx3Vxq0opNryMRf4LhG0e/IOfaxmOfa7yALOUGf5G5pJxXrnom7cghzz7
+	 v5u52OqX4LS097pINF6RaSjKxZbUq+aIMIyZYg8She7oFoBB5EJdTpEYfZuOzEX+Td
+	 uMFuxxbTa9dRdgAY8PMGPBztKg4kmTBuGwK+DuTw7ltvqlruiy1DiN00aabmVqTOGN
+	 9mZS1QN3s3YCW3Zlbr8njNJUpKxYkITsDxLV5eqqM7n9nC3uSUvGg4jJHjTDZrvtrY
+	 ubJaPqMJzFWeg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0D12B60880;
-	Fri,  2 Oct 2026 15:12:55 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 4290A2E0
- for <buildroot@buildroot.org>; Fri,  2 Oct 2026 15:12:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6710540D76;
+	Fri,  2 Oct 2026 15:12:57 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id DA639435
+ for <buildroot@buildroot.org>; Fri,  2 Oct 2026 15:12:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 340E481204
- for <buildroot@buildroot.org>; Fri,  2 Oct 2026 15:12:54 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C0AA640D7E
+ for <buildroot@buildroot.org>; Fri,  2 Oct 2026 15:12:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UMtsMIKZauLd for <buildroot@buildroot.org>;
- Fri,  2 Oct 2026 15:12:53 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 6C08A811FD
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790953973;
- b=BioLKThWKh+VHOf7mMvNIvX+oGsVuBH0DTA+5mixcgGq0WnQRPpWxucG3uBUVDA5o6aG
- sM1VANzDk/95IsI4RPIIiLwu4lZf9m8TmF4nD+vYrjMjb2CAlbTuCRCjgJOUoJ+RuFj2r
- 4Zdi0Nb3F3p8BtYLAcAHp+bHL3xPqkzKf3Ej+tQwn1xmCzbto4zLccqK+DUut442u7USo
- 7jfz0LaM7GbPtvh+qsn4mmo2iOdMD6wEquhTNtzFrgaiNP9yJeTCAdnoPAcbI6nf0LCry
- 1ICgblPKbqWD9J9EX8Flv9GLD7lc4NP4c8FrQTMv+DvxumMNRZPMMX/qJwVsF9GFZzg==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2gCxhEnvfIqL for <buildroot@buildroot.org>;
+ Fri,  2 Oct 2026 15:12:55 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org AF56740D76
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790953975;
+ b=GsDl5jKn8EPTaVOfVXBvNauNj2QXfYcFTtS6kWhG+KtBkVZHt6l+cyLtgiu7XWYY2zhx
+ VD75qkIkjk4unYYy7k/7Yf/B3MSW/xvBWg1a/qlFoMx+w9sYM3LiVoE3/ToT0VfhSt3FW
+ wP93tD2HKcYLMeookhW8RoDLVlqesAvpFJNnIb0xZ5PUz3IFr0FqlgeSPTz2wciAoG0uu
+ jHSCkN+Au74rqlGZp1bwnIubdK1mNGdjEj+7ft3zyjXhN2aYdbM3HuyWXP9AoKPqAnN2P
+ Wueke0IwyUVgJvsFAXRA6tYdzGPrsbF0zdJxrF/mdoEq3kQ94RqA72/MCifNlI/Xmkg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1790953973;
+ c=relaxed/relaxed; t=1790953975;
  h=Received-SPF:DKIM-Signature:X-UI-Sender-Class:Received:From:To:Cc:
  Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding:X-Provags-ID:X-Spam-Flag:UI-OutboundReport;
- bh=jguI21K6SszG+vek/GfEjo517T5sGzLyOirFFHuudMc=;
- b=n9JQ7XDNmStUmrCvyfwjTxci+9A40bVmwv8XzzShSciiXcjcUhjhD05Zexqj+exxh9Cs
- z0lxbM6ehBk0ZLScPTknOoXttSP4GkTaq9ohvAeI5UQk6zdB/m5xIYWvgHxgaBR6DjDtF
- paBj5bb982L4SnhU6N0ZIae5qbjNX+YZTI+xz8rVszgZrrgw7NrN2bJnbln6u7I1M06zi
- fMad7k9WXs4YWDoleAHXvPtWigOoiuT3TIi2vDcNamj9wLHdhunZztqp+eydBieR6mjS1
- 0kppe1KNTamc2oTSH5X6Ip8dhyMBelJtoCBay2KJ3YJWeEOTHIuL/sbdvERibqLndCw==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org;
+ bh=iY0/l9SZNIxv+/S6ibwi7LG6yoL9P/s83hFZI5evKIM=;
+ b=UPIYFx38aJQTF7zvGYEU+8vtlRFApadYFgoVgiEK/Y8JpABB4VZ44z1DNJbGS24K0kVi
+ pgZXo+tdlUEHu+Cu3cK59LlV4WOGkPKFLytErbVkkbgn5EHCjuTo0ZpRwDRHSbxqRqHyt
+ asQKHMLs9N7uqaS14vaMEnPNLsw3je/HeXz/abAA9C/eouLRVUx/zRs2oBMHjp8c6GKRt
+ q4c+LdFMufbq2XPQT4xug0swo4AqOpoeAEWTdD9qKpX3I6hLG7D0AitIrt+1ulPUxkm1n
+ effMsSzxH0sI0SmBV8m37kl+6wRfVc+Km05WWdb2opUle+Cdjh+70HYy84NvDMPQtXw==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org;
  dmarc=pass header.from=gmx.de; 
  dkim=pass header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
- header.s=s31663417 header.b="ENUZE/Hm"; 
- arc=none smtp.remote-ip=212.227.17.20
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.20;
+ header.s=s31663417 header.b=uP5JLrMx; 
+ arc=none smtp.remote-ip=212.227.17.22
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.22;
  helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6C08A811FD
- for <buildroot@buildroot.org>; Fri,  2 Oct 2026 15:12:51 +0000 (UTC)
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id AF56740D76
+ for <buildroot@buildroot.org>; Fri,  2 Oct 2026 15:12:53 +0000 (UTC)
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from client.hidden.invalid by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mg6Zq-1wV5aU0kes-00ZWLM; Fri, 02
- Oct 2026 17:12:44 +0200
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MmlTC-1wSumh2ElS-00otUS; Fri, 02
+ Oct 2026 17:12:45 +0200
 To: buildroot@buildroot.org
 Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
  Norbert Lange <nolange79@gmail.com>, Sen Hastings <sen@hastings.org>,
  "Fiona Klute (othermo GmbH)" <fiona.klute@gmx.de>
-Date: Fri,  2 Oct 2026 17:12:24 +0200
-Message-ID: <20261002151226.867507-2-fiona.klute@gmx.de>
+Date: Fri,  2 Oct 2026 17:12:25 +0200
+Message-ID: <20261002151226.867507-3-fiona.klute@gmx.de>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261002151226.867507-1-fiona.klute@gmx.de>
 References: <20261002151226.867507-1-fiona.klute@gmx.de>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:lK+jxTyPZqejqCiUFKpyVS1wM1lxI/Lyw6M7X7JgKzQDSyBBjAn
- 8VKBUEOMaR4ffkaXHsYJXMjwbRob8JX6aVASrMIEKh3KgQ+BFXpl1A0oXgHRo+EdOpRAcce
- 3UU0+zQ4sr8UM42xTr2MTXuleRGKhVdSqnOwMSmU3YvWZGle05eStkQdklQI3WC10HxWG5e
- n3je6fY11mYScHHjwP7ZA==
-UI-OutboundReport: notjunk:1;M01:P0:6u/XjC/D7n4=;U/eWr8L+rqvmHZnBfsgjeeTpGSL
- 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
- Tr/1siLMx7HlsuLGQ==
-Subject: [Buildroot] [PATCH 1/3] package/systemd/systemd-libudev: new
- bootstrap subpackage
+X-Provags-ID: V03:K1:A5DgH1ekyj0HBpLrpRwQGh8lG1ctQIjSM9T/fVss7xZdZPGJrot
+ pEbLG7fMBKOw00XNj+zuUYfaJ2dWJvUZTW8LLo12MxOV0eOpDkQ9bxW56oVKQZI4Cgg0T+j
+ omOUbYAHGY/4zf6/rE54yI0p+Zu3wN1klh3bTsHdvfjn6Pkiy+bqS3aPUixoz8sJCzVxvG6
+ 7/e2NsGtwHq82lyduEPQA==
+UI-OutboundReport: notjunk:1;M01:P0:T16cBW+PSPw=;nJwbOE6VT7vUrGwEYAbL3pzIHjG
+ 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
+Subject: [Buildroot] [PATCH 2/3] package/lvm2: set unconditional dependency
+ with "=", not "+="
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -225,337 +224,29 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: "Fiona Klute (othermo GmbH)" <fiona.klute@gmx.de>
 
-Some packages that may be in the dependency chain of systemd
-(depending on configuration) depend on libudev, at least for optional
-features. An example is lvm2: It needs libudev to allow using udev's
-built-in "blkid" implementation, instead of calling "blkid -o udev",
-which Busybox's blkid does not support.
-
-However, lvm2 is a dependency of cryptsetup (because it provides
-libdevmapper), and cryptsetup is a dependency of systemd if enabled,
-creating a loop if the virtual libudev package is provided by the main
-systemd package.
-
-Create a bootstrap package for systemd-libudev, which installs only
-libudev and its development header and pkgconf file to staging, so
-packages that need libudev can be built before systemd. The libudev
-installed to the target is still provided by the main systemd package.
+This is a simple style fix.
 
 Signed-off-by: Fiona Klute (othermo GmbH) <fiona.klute@gmx.de>
 ---
- package/systemd/Config.in                     |   7 +-
- package/systemd/systemd-libudev/Config.in     |  21 ++
- .../systemd-libudev/systemd-libudev.hash      |   1 +
- .../systemd-libudev/systemd-libudev.mk        | 195 ++++++++++++++++++
- package/systemd/systemd.mk                    |  11 +-
- 5 files changed, 228 insertions(+), 7 deletions(-)
- create mode 100644 package/systemd/systemd-libudev/Config.in
- create mode 120000 package/systemd/systemd-libudev/systemd-libudev.hash
- create mode 100644 package/systemd/systemd-libudev/systemd-libudev.mk
+This patch could also be applied without the rest of the series, no
+functional change.
 
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index 4c19a884b4..75b9a12464 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -26,8 +26,8 @@ menuconfig BR2_PACKAGE_SYSTEMD
- 	depends on BR2_HOST_GCC_AT_LEAST_8 # host-systemd
- 	select BR2_ROOTFS_MERGED_USR
- 	select BR2_ROOTFS_MERGED_BIN
--	select BR2_PACKAGE_HAS_LIBUDEV
- 	select BR2_PACKAGE_HAS_UDEV
-+	select BR2_PACKAGE_SYSTEMD_LIBUDEV # bootstrap subpackage
- 	select BR2_PACKAGE_DBUS if !BR2_PACKAGE_DBUS_BROKER # runtime
- 	select BR2_PACKAGE_LIBCAP
- 	select BR2_PACKAGE_LIBXCRYPT
-@@ -108,9 +108,6 @@ menuconfig BR2_PACKAGE_SYSTEMD
+ package/lvm2/lvm2.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+index 8db1899ed4..21fd5134c1 100644
+--- a/package/lvm2/lvm2.mk
++++ b/package/lvm2/lvm2.mk
+@@ -25,7 +25,7 @@ LVM2_CONF_OPTS += \
+ 	--disable-nls \
+ 	--with-symvers=no
  
- if BR2_PACKAGE_SYSTEMD
+-LVM2_DEPENDENCIES += host-pkgconf
++LVM2_DEPENDENCIES = host-pkgconf
  
--config BR2_PACKAGE_PROVIDES_LIBUDEV
--	default "systemd"
--
- config BR2_PACKAGE_PROVIDES_UDEV
- 	default "systemd"
- 
-@@ -636,3 +633,5 @@ config BR2_PACKAGE_SYSTEMD_VMSPAWN
- 	  https://www.freedesktop.org/software/systemd/man/systemd-vmspawn.html
- 
- endif
-+
-+source "package/systemd/systemd-libudev/Config.in"
-diff --git a/package/systemd/systemd-libudev/Config.in b/package/systemd/systemd-libudev/Config.in
-new file mode 100644
-index 0000000000..d9c2687500
---- /dev/null
-+++ b/package/systemd/systemd-libudev/Config.in
-@@ -0,0 +1,21 @@
-+config BR2_PACKAGE_SYSTEMD_LIBUDEV
-+	bool
-+	depends on BR2_PACKAGE_SYSTEMD_ARCH_SUPPORTS
-+	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	depends on BR2_TOOLCHAIN_HAS_SSP
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8
-+	select BR2_PACKAGE_HAS_LIBUDEV
-+	select BR2_PACKAGE_LIBCAP
-+	select BR2_PACKAGE_LIBXCRYPT
-+	select BR2_PACKAGE_UTIL_LINUX
-+	select BR2_PACKAGE_UTIL_LINUX_LIBS
-+	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
-+
-+if BR2_PACKAGE_SYSTEMD_LIBUDEV
-+
-+config BR2_PACKAGE_PROVIDES_LIBUDEV
-+	default "systemd-libudev"
-+
-+endif
-diff --git a/package/systemd/systemd-libudev/systemd-libudev.hash b/package/systemd/systemd-libudev/systemd-libudev.hash
-new file mode 120000
-index 0000000000..c5f620b916
---- /dev/null
-+++ b/package/systemd/systemd-libudev/systemd-libudev.hash
-@@ -0,0 +1 @@
-+../systemd.hash
-\ No newline at end of file
-diff --git a/package/systemd/systemd-libudev/systemd-libudev.mk b/package/systemd/systemd-libudev/systemd-libudev.mk
-new file mode 100644
-index 0000000000..b0c9d063ae
---- /dev/null
-+++ b/package/systemd/systemd-libudev/systemd-libudev.mk
-@@ -0,0 +1,195 @@
-+################################################################################
-+#
-+# systemd-libudev
-+#
-+################################################################################
-+
-+# Some packages that may be in the dependency tree of systemd
-+# (e.g. lvm2, via cryptsetup) need libudev to build. This package
-+# installs libudev only to STAGING_DIR to break the dependency loop.
-+SYSTEMD_LIBUDEV_VERSION = $(SYSTEMD_VERSION)
-+SYSTEMD_LIBUDEV_SOURCE = $(SYSTEMD_SOURCE)
-+SYSTEMD_LIBUDEV_SITE = $(SYSTEMD_SITE)
-+SYSTEMD_LIBUDEV_LICENSE = $(SYSTEMD_LICENSE)
-+SYSTEMD_LIBUDEV_LICENSE_FILES = $(SYSTEMD_LICENSE_FILES)
-+SYSTEMD_LIBUDEV_INSTALL_STAGING = YES
-+SYSTEMD_LIBUDEV_INSTALL_TARGET = NO
-+SYSTEMD_LIBUDEV_DEPENDENCIES = \
-+	$(BR2_COREUTILS_HOST_DEPENDENCY) \
-+	host-gperf \
-+	host-python-jinja2 \
-+	libcap \
-+	libxcrypt \
-+	util-linux-libs \
-+	$(TARGET_NLS_DEPENDENCIES)
-+SYSTEMD_LIBUDEV_PROVIDES = libudev
-+SYSTEMD_LIBUDEV_CFLAGS = $(SYSTEMD_CFLAGS)
-+
-+# Disable everything that can be disabled, we only need libudev.
-+SYSTEMD_LIBUDEV_CONF_OPTS = \
-+	-Dsplit-bin=true \
-+	--prefix=/usr \
-+	--libdir=lib \
-+	--sysconfdir=/etc \
-+	--localstatedir=/var \
-+	-Dcreate-log-dirs=false \
-+	-Dvcs-tag=false \
-+	-Dmode=release \
-+	-Dacl=disabled \
-+	-Dadm-group=false \
-+	-Danalyze=false \
-+	-Dapparmor=disabled \
-+	-Daudit=disabled \
-+	-Dbacklight=false \
-+	-Dbinfmt=false \
-+	-Dblkid=enabled \
-+	-Dbootloader=disabled \
-+	-Dbpf-framework=disabled \
-+	-Dbzip2=disabled \
-+	-Dcoredump=false \
-+	-Dcreate-log-dirs=false \
-+	-Ddbus-interfaces-dir=no \
-+	-Ddbus=disabled \
-+	-Ddefault-compression='auto' \
-+	-Ddefault-dns-over-tls=no \
-+	-Ddefault-dnssec=no \
-+	-Ddefault-locale='C.UTF-8' \
-+	-Ddefault-user-shell=/bin/sh \
-+	-Ddns-over-tls=false \
-+	-Defi=false \
-+	-Delfutils=disabled \
-+	-Denvironment-d=false \
-+	-Dfdisk=disabled \
-+	-Dfirst-boot-full-preset=false \
-+	-Dfirstboot=false \
-+	-Dfuzz-tests=false \
-+	-Dgcrypt=disabled \
-+	-Dglib=disabled \
-+	-Dgnutls=disabled \
-+	-Dgshadow=false \
-+	-Dhibernate=false \
-+	-Dhomed=disabled \
-+	-Dhostnamed=false \
-+	-Dhtml=disabled \
-+	-Dhwdb=false \
-+	-Didn=false \
-+	-Dima=false \
-+	-Dimportd=disabled \
-+	-Dinitrd=false \
-+	-Dinstall-tests=false \
-+	-Dipe=false \
-+	-Dkernel-install=false \
-+	-Dkexec-path=/usr/sbin/kexec \
-+	-Dkmod-path=/usr/bin/kmod \
-+	-Dldconfig=false \
-+	-Dlibarchive=disabled \
-+	-Dlibcryptsetup-plugins=disabled \
-+	-Dlibcryptsetup=disabled \
-+	-Dlibcurl=disabled \
-+	-Dlibfido2=disabled \
-+	-Dlibidn2=disabled \
-+	-Dlibidn=disabled \
-+	-Dlibiptc=disabled \
-+	-Dlibmount=enabled \
-+	-Dloadkeys-path=/usr/bin/loadkeys \
-+	-Dlocaled=false \
-+	-Dlog-message-verification=disabled \
-+	-Dlogind=false \
-+	-Dlz4=disabled \
-+	-Dmachined=false \
-+	-Dman=disabled \
-+	-Dmicrohttpd=disabled \
-+	-Dmount-path=/usr/bin/mount \
-+	-Dmountfsd=false \
-+	-Dnetworkd=false \
-+	-Dnologin-path=/bin/false \
-+	-Dnspawn=disabled \
-+	-Dnsresourced=false \
-+	-Dnss-myhostname=false \
-+	-Dnss-mymachines=disabled \
-+	-Dnss-resolve=disabled \
-+	-Dnss-systemd=false \
-+	-Doomd=false \
-+	-Dopenssl=disabled \
-+	-Dp11kit=disabled \
-+	-Dpam=disabled \
-+	-Dpasswdqc=disabled \
-+	-Dpcre2=disabled \
-+	-Dpolkit=disabled \
-+	-Dportabled=false \
-+	-Dpstore=false \
-+	-Dpwquality=disabled \
-+	-Dqrencode=disabled \
-+	-Dquotacheck=false \
-+	-Drandomseed=false \
-+	-Dremote=disabled \
-+	-Drepart=disabled \
-+	-Dresolve=false \
-+	-Drfkill=false \
-+	-Dseccomp=disabled \
-+	-Dselinux=disabled \
-+	-Dsetfont-path=/usr/bin/setfont \
-+	-Dsmack=false \
-+	-Dstoragetm=false \
-+	-Dsulogin-path=/usr/sbin/sulogin \
-+	-Dsysext=false \
-+	-Dsystem-gid-max=999 \
-+	-Dsystem-uid-max=999 \
-+	-Dsysupdate=disabled \
-+	-Dsysupdated=disabled \
-+	-Dsysusers=false \
-+	-Dsysvinit-path= \
-+	-Dsysvrcnd-path= \
-+	-Dtests=false \
-+	-Dtimedated=false \
-+	-Dtimesyncd=false \
-+	-Dtmpfiles=false \
-+	-Dtpm2=false \
-+	-Dtpm=false \
-+	-Dukify=disabled \
-+	-Dumount-path=/usr/bin/umount \
-+	-Durlify=false \
-+	-Duserdb=false \
-+	-Dutmp=false \
-+	-Dvconsole=false \
-+	-Dvmlinux-h=disabled \
-+	-Dvmspawn=disabled \
-+	-Dwheel-group=false \
-+	-Dxdg-autostart=false \
-+	-Dxenctrl=disabled \
-+	-Dxkbcommon=disabled \
-+	-Dxz=disabled \
-+	-Dzlib=disabled \
-+	-Dzstd=disabled
-+
-+ifneq ($(SYSTEMD_FALLBACK_HOSTNAME),)
-+SYSTEMD_LIBUDEV_CONF_OPTS += -Dfallback-hostname=$(SYSTEMD_FALLBACK_HOSTNAME)
-+endif
-+
-+ifeq ($(BR2_PACKAGE_ACL),y)
-+SYSTEMD_LIBUDEV_DEPENDENCIES += acl
-+SYSTEMD_LIBUDEV_CONF_OPTS += -Dacl=enabled
-+else
-+SYSTEMD_LIBUDEV_CONF_OPTS += -Dacl=disabled
-+endif
-+
-+ifeq ($(BR2_PACKAGE_KMOD),y)
-+SYSTEMD_LIBUDEV_DEPENDENCIES += kmod
-+SYSTEMD_LIBUDEV_CONF_OPTS += -Dkmod=enabled
-+else
-+SYSTEMD_LIBUDEV_CONF_OPTS += -Dkmod=disabled
-+endif
-+
-+# Build only libudev, libudev.pc is not part of the pre-defined
-+# target.
-+SYSTEMD_LIBUDEV_NINJA_OPTS = libudev src/libudev/libudev.pc
-+
-+define SYSTEMD_LIBUDEV_INSTALL_STAGING_CMDS
-+	$(HOST_MAKE_ENV) DESTDIR=$(STAGING_DIR) $(HOST_DIR)/bin/meson install -C $(@D)/buildroot-build --no-rebuild --tags libudev
-+	$(INSTALL) -m 0644 -D $(@D)/src/libudev/libudev.h \
-+		$(STAGING_DIR)/usr/include/libudev.h
-+	$(INSTALL) -m 0644 -D $(@D)/buildroot-build/src/libudev/libudev.pc \
-+		$(STAGING_DIR)/usr/lib/pkgconfig/libudev.pc
-+endef
-+
-+$(eval $(meson-package))
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 290c2f1307..d122bf8229 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -10,8 +10,10 @@
- # - If yes, propagate the dependencies to BR2_INIT_SYSTEMD
- # - If the required kernel options have changed, update the Config.in
- #   help text and the list of KCONFIG_ENABLE_OPT.
--# - Check if there are new meson_options. Make sure all options are set
--#   explicitly (usually to default value).
-+# - Check if there are new meson_options. Make sure all options are
-+#   set explicitly (usually to default value). Same in
-+#   package/systemd/systemd-libudev, except options not needed for
-+#   libudev should be disabled.
- # - If there are new services:
- #   - create new options for them (if they really are optional);
- #   - create a new _USER if necessary;
-@@ -58,11 +60,12 @@ SYSTEMD_DEPENDENCIES = \
- 	libcap \
- 	libxcrypt \
- 	util-linux-libs \
-+	systemd-libudev \
- 	$(TARGET_NLS_DEPENDENCIES)
- 
- SYSTEMD_SELINUX_MODULES = systemd udev xdg
- 
--SYSTEMD_PROVIDES = libudev udev
-+SYSTEMD_PROVIDES = udev
- 
- SYSTEMD_CONF_OPTS += \
- 	-Dcreate-log-dirs=false \
-@@ -1052,3 +1055,5 @@ HOST_SYSTEMD_POST_INSTALL_HOOKS += HOST_SYSTEMD_FIX_RPATH
- 
- $(eval $(meson-package))
- $(eval $(host-meson-package))
-+
-+include package/systemd/systemd-libudev/systemd-libudev.mk
+ # LVM2 uses autoconf, but not automake, and the build system does not
+ # take into account the toolchain passed at configure time.
 -- 
 2.55.0
 
