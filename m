@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6181CA5FE0
-	for <buildroot@archiver.kernel.org>; Fri,  2 Oct 2026 19:35:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 527D9CA5FDD
+	for <buildroot@archiver.kernel.org>; Fri,  2 Oct 2026 19:35:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A946040B78;
-	Fri,  2 Oct 2026 19:35:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 12D898135A;
+	Fri,  2 Oct 2026 19:35:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oM4J01-b5xON; Fri,  2 Oct 2026 19:35:22 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org CB0FF40DC6
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790969721;
-	b=oGn4Yoo5boB1AwVWfsVqysHS3X7QN/g8lIo2QQ3frxEuRT14imF5EgPn2dviv9NKj6Ln
-	 nfpq2f7Oz84jsPSnkjYK5kInEtn/EIDm/ArghP2A2zk+BtuWzIDrurYQw7WYxBAPxClqb
-	 m+GqcDim//c4ZAGHQJUiLWPxc2KbrIhw/JDcRA9JFn9mIks1C5IeGNxHUlKD41sPIq14l
-	 Z0P6JmujiyvCFnt6w7GYcZHSBlm9M0bSGZxt1sk7EdWAQ6QNy6bnd2Aet6WPzKQXs8RD3
-	 6I2A3fk1qEjLJZ88dtwxDYOOVzIlfL4kGPJsojyeEm7U4bhfAI0tF/k1a930XXA6s/w==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id q1z42NdLKJHk; Fri,  2 Oct 2026 19:35:23 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 2091681354
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790969723;
+	b=b+nLo8E9b1rdqXx8aiyGNqTr8+8n7cfBfgOL2sS9HJf2AYPKjHUEpc3hZmBZa5RJOGfc
+	 r5PqUGVhaLjUxKP1SpGrjgtQMDm1U63FKq4u9CL3T9qaZpJtvtnJomCFmZgQoqF+VeNXP
+	 TTnuwr30we+TkdbQftbBBKWtLQrSiYjXGSCUt9g+S8SnTNm+0eS3scyz5BX/5Y1q5y9g6
+	 8v76zYM5JZshjcRuXSbO2PJhEdyOf2a4oPRADPsEiOBEUi0Yq3wRcn9bUPBka7LS9v0Kg
+	 b8CJePvvvmiCi+6h81kk3ocdLLm6opUCnNHb+Of4i/AlD9Mr5/OmFiOiMuyToe3U4oA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1790969721;
+	c=relaxed/relaxed; t=1790969723;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,74 +30,74 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=L55njQhnFLQSz4HSONTI22NaDlngfDxN7/8s2d90chk=;
-	b=IfLc2gFyx8594NS3B5qPkn+FC0UIKgyvkwjNlq05DkKEET226fmOxOTN+wN84Ph4dpIu
-	 GTFPuzmX5PeAjdOlRatDN/8MCrX9O3fFZCqkIZu67hwnH9Wk/sGdK1rlvsJDoLVchvZUI
-	 3bKF+gIT1y66d8tRod6zty4yN/OB/KoBmvz7gFsSGnFDjYDXmKSlYyMrx4FPYuWQsXmNh
-	 TZrJoBXyE7M359tlPqcFQ+XoQ12d2QQ2zlv8oBpBzWe9EAYuML9bVZiiHoCLUaPvYxx1m
-	 E9L37YzHbBDR1vkNljEFqgG9+brHoMjrRXdDNHNtFddppNmGQnDV8hDPg/pgH6vkrug==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	bh=vByvkTHhGgazqZpWbsMbhSqy6a7tOrJmmNqR8m8Serw=;
+	b=eeSMS2C3l1ocjZc6IhhGlHzz4vxlg6z3zBO02SQ+7CyuB50Q5rkkRMdxYc4+l1wZvDsR
+	 +Dke2ciKY9cjgu6+o+KDmoB2WyUT4FPOKWgH7ZwQhT+k34narZyDVSz646K9GHzrD4w3m
+	 Pvwp3z+0qUHJGF8UhK1SWCqzlP5KN63PeHYSNcsUisaMlMoC8hhEWaFQhuJv9RCbi/gJr
+	 ywVq8bVQIk6QIgrVETrUNRxuZ7UDD/UxCfIli7/7yHifpTm69Bi1AQ/CinZZtNYS+E7VK
+	 +qVys+4797ZNq1laaHkG+mkCF6sFpVUrqJVO4GEOr2XlW5ra1pnSltk+R9COpKj23WA==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1790969721;
-	bh=L55njQhnFLQSz4HSONTI22NaDlngfDxN7/8s2d90chk=;
+	s=default; t=1790969723;
+	bh=vByvkTHhGgazqZpWbsMbhSqy6a7tOrJmmNqR8m8Serw=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Ih6ytb4jWdebfe3iP4er4JvayY8CGqyn4vvskWuMF0ZqcNq491jm8n8Rxai2FTlW4
-	 dmHNBzEjeVLUZk1c8BWVv9FOdr+pw5exwYJfOabbVWiizuwID/d6P9VJT6QjV9HPCl
-	 SGlsDctiWdboek40UP4Y24qHMMz0qJ8w6tr9UUdtvVGFtVpFlPwACLC8F/1FTwYg9w
-	 N2phNVbgvHsjKE2CWdUojNZ7J5rWCMu4XFR/QOcIcbE4AqxFVLSlrgxPhOFf5dc8OP
-	 GY42fmz1xtglRH0e8NP3X3h2ZSj7yfY8ZktIFhOX2HFSiir6mbMqKQWooVttLHnFU4
-	 2V26rKaooL/IA==
+	b=X4bzYvJPzPmvlF0Ym/i8IQCfKmZhostg+jeFoFC+OOtBeKotBjDjDrAEh/f4oWhhm
+	 PgX+gtaQcItftgQiTW0wNceclwqAWm+fK+/8xbb+omdzxc4ygQtsm5Qz8SMhqYiaaj
+	 devEJ8ZsHZI+D9dxxnd2vtZ9uI1aJrqZZV5wec2vOEYnwYrDZf64UTEjJq5qesWveq
+	 qZKaMjA7JwZrJ99yRMwpDml2fFVtsLkhANuPR4gEcg13sjyPzj4/dO6frPfWQuBILE
+	 YE5VnSp5+tYye3FKZOYtG8m77N+YaDpPFA4fiTjIrxJc8Fs5aEJiGplqUx4/A4vDeG
+	 N+5WSqVd9ew/w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CB0FF40DC6;
-	Fri,  2 Oct 2026 19:35:21 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 241BB1D2
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2091681354;
+	Fri,  2 Oct 2026 19:35:23 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 62F66282
  for <buildroot@buildroot.org>; Fri,  2 Oct 2026 19:35:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 15D098133E
+ by smtp4.osuosl.org (Postfix) with ESMTP id 554D540B78
  for <buildroot@buildroot.org>; Fri,  2 Oct 2026 19:35:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YEMovjLT8I1l for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0L0blRq14wAX for <buildroot@buildroot.org>;
  Fri,  2 Oct 2026 19:35:18 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 4D3FF810DD
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 4EB2340DC6
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790969718;
- b=aW3KA++KWxrR8swHhFLI94hCTgNxK8FKhgmHOAO6QMMkTwrc0SmEo9OLGX80NZ0RcjCg
- 5aactj8b0H6a9FoEtBXtNMqbIr5flp6Lw5wuj8QRnKaCX9LkCpUzIhvOmid1ZEL19JUwu
- pciM/7l0P/NuClRuAMgmr0HWJeGD7U8MxExAVEW88EVTAYNA2noNDTQfZJd2oTEn7GFtt
- DALYcj062yRPRSgdrIdKSg+bID9nC2cYzNHR03rh0A+AKDs9iKxupjt3lC01P8lkCanZt
- yoOOMER5mikz9kEIEozym2IW7GALMWwSRRk60GzWi+MWOqBDuF1WbbFRbiSNsSyxIGw==
+ b=lD84rzyewgAnAn6kCgFY/g2gshGrFI1WaqJVrWLiO4yDmpP1nn8sOPS6f4Fd1xL0sccp
+ Hr7KPhz14IxKPOmvCgd5OrcuZKpA44bfx6yO+FBCNArTZp5MmAGAWPK3ToBlFq/7hu7a4
+ PhhP6oGRMYkgL8ERfRITwKWg1peUJCibSy7yea4AzAEvTkcbhLOqGVfWCX8SA3K2LiFct
+ RxgHgASLrd8m4dsp1sIVKvCLzPiHLRtzuVHwg6zOb+48D6awgOi6e1uY2uDS42M8yt2fK
+ 1GbeOMbNq3NZojMaOWL+ZSbSt76mLhzmtJnxCBDyVs+QfrCUdUAQnpTg89lS/lJ8KLA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1790969718;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=3iJ8NQ775FFaXf7DFKoFp5X9GpNTN4USJz8TLukdT6Y=;
- b=in0slL355cNZbx/2Zi65eayZwbDmT0JlBTEluIIsWBDjjer+UHmhXYl4tz3i73wfrCd/
- MI/odUWcDsUynFEtRDvmHMXKQtZZoSpqwnhYsF2f6RN35G6wPDSFJrRuXeeqfGLlWo0nv
- a+lFXpi3WDkcfBMNauNABlm2Z8GIUtJWaHNd2OboBsu7ohqbqyCxphEsOhPxvpr4Oseu3
- MTk21CelbZ550IptuzDV3tWggsnahMojSRW+3shy1jjvUPLOCWJ99kr17l+U542BHASTt
- duRqoooCwOFruEy38uSkEYRRVap/RjmptDFkgienEovKGD0PSxGe1OGHAWuq7FA9yGQ==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org;
+ bh=iLtSoGhPP8GtcF6b6QWc55gkdCs50yqJYXnOS9npXnY=;
+ b=A+OCT3GoeYYuTrdjIlIK7IM9zTccs66Fh+Pov2VtWCEyZU/AunTq1yYoRF7RIFRpC4lW
+ snd4NGlDPg1M3eHem+CmZ8CTa5gZ8D2+CNL0NaqogIB+3SeY9iOj83KYNS+ronintf/Jf
+ 7zbi0ST9UlqLx+bqqywN9Uu9IShVPKbn4HNhdPQP4oATCWDqWBd7ExMhOf5vReRa8ZC1x
+ I07RARRdA3SaheOAPVZKwiO+zTX8VW9iN4qemGPWwHdC4o029FCSnq+NCCHXLHLK3wp8c
+ BLkMFb/+DUq1+JYs2jqDvcd43jQPPKqaiEHxH8ac4XY8ENQB/QWEa+IHCPnNXS4hJ8w==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org;
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4D3FF810DD
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4EB2340DC6
  for <buildroot@buildroot.org>; Fri,  2 Oct 2026 19:35:18 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E679C886C2; Fri,  2 Oct 2026 19:34:03 +0000 (UTC)
+ id 00086886C3; Fri,  2 Oct 2026 19:34:03 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 2 Oct 2026 21:33:51 +0200
+Date: Fri, 2 Oct 2026 21:34:40 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3a5c80cd9ac03f050e818babe28a250793574327
-X-Git-Newrev: fe21a5fe307239c842f5a095fe4f8e53c5c3e352
+X-Git-Oldrev: fe21a5fe307239c842f5a095fe4f8e53c5c3e352
+X-Git-Newrev: 845982a4f4a5057c88d5a88f59642ee97b05638c
 X-Patchwork-Hint: ignore
-Message-Id: <20261002193403.E679C886C2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gzip: bump version to 1.15
+Message-Id: <20261002193404.00086886C3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/lzip: bump version to 1.26
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -117,47 +117,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/fe21a5fe307239c842f5a095fe4f8e53c5c3e352
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/845982a4f4a5057c88d5a88f59642ee97b05638c
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-- bump version to 1.15 (for details see [1] and [2])
+- bump version to 1.26 (for details see [1])
 
-[1] https://cgit.git.savannah.gnu.org/cgit/gzip.git/tree/NEWS?id=e6263160768c73f6117f3c1de78291a60f2cb796
-[2] https://lists.gnu.org/r/bug-gzip/2026-09/msg00030.html
+[1] https://lists.nongnu.org/archive/html/lzip-bug/2026-03/msg00005.html
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/gzip/gzip.hash | 4 ++--
- package/gzip/gzip.mk   | 2 +-
+ package/lzip/lzip.hash | 4 ++--
+ package/lzip/lzip.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gzip/gzip.hash b/package/gzip/gzip.hash
-index 90c9be4e6e..ddf5e38f0f 100644
---- a/package/gzip/gzip.hash
-+++ b/package/gzip/gzip.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking pgp signature
--# https://ftp.gnu.org/gnu/gzip/gzip-1.14.tar.xz.sig
-+# https://ftp.gnu.org/gnu/gzip/gzip-1.15.tar.xz.sig
- # using key 155D3FC500C834486D1EEA677FD9FCCB000BEEEE
--sha256  01a7b881bd220bfdf615f97b8718f80bdfd3f6add385b993dcf6efd14e8c0ac6  gzip-1.14.tar.xz
-+sha256  9aa0cc780dec156b8282844833b342ab7cb08c25d2cd9a1869cdd0df31deff48  gzip-1.15.tar.xz
+diff --git a/package/lzip/lzip.hash b/package/lzip/lzip.hash
+index ec8a86b29f..64829c3ce7 100644
+--- a/package/lzip/lzip.hash
++++ b/package/lzip/lzip.hash
+@@ -1,4 +1,4 @@
+-# From https://lists.nongnu.org/archive/html/lzip-bug/2025-01/msg00012.html
+-sha256  09418a6d8fb83f5113f5bd856e09703df5d37bae0308c668d0f346e3d3f0a56f  lzip-1.25.tar.gz
++# From https://lists.nongnu.org/archive/html/lzip-bug/2026-03/msg00005.html
++sha256  641cf30961525cbe3b340cc883436c8854e9f5032f459f444de4782b621e6572  lzip-1.26.tar.gz
  # Locally calculated
- sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
-diff --git a/package/gzip/gzip.mk b/package/gzip/gzip.mk
-index e79de4c99e..1c74089147 100644
---- a/package/gzip/gzip.mk
-+++ b/package/gzip/gzip.mk
+ sha256  022e9c2e9cc1aac3622313df6f971fbb39c1d1b0cb45324c16b8a1fe231c5ea6  COPYING
+diff --git a/package/lzip/lzip.mk b/package/lzip/lzip.mk
+index 9c8c54a8b1..de8cbf038f 100644
+--- a/package/lzip/lzip.mk
++++ b/package/lzip/lzip.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GZIP_VERSION = 1.14
-+GZIP_VERSION = 1.15
- GZIP_SOURCE = gzip-$(GZIP_VERSION).tar.xz
- GZIP_SITE = $(BR2_GNU_MIRROR)/gzip
- # Some other tools expect it to be in /bin
+-LZIP_VERSION = 1.25
++LZIP_VERSION = 1.26
+ LZIP_SITE = http://download.savannah.gnu.org/releases/lzip
+ LZIP_LICENSE = GPL-2.0+
+ LZIP_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
