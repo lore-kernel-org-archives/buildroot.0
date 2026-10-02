@@ -4,101 +4,113 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 236DFCA5FE0
-	for <buildroot@archiver.kernel.org>; Fri,  2 Oct 2026 19:45:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6D4DCA5FDD
+	for <buildroot@archiver.kernel.org>; Fri,  2 Oct 2026 19:46:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DA9A340CA6;
-	Fri,  2 Oct 2026 19:45:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9654240DDD;
+	Fri,  2 Oct 2026 19:46:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RUI6cIzSEaSb; Fri,  2 Oct 2026 19:45:13 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 9C21340DC4
+ id 1JFBBCcMzvbC; Fri,  2 Oct 2026 19:46:39 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 4405F40DC4
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790970313;
-	b=DmeJ3l6ZDKR5hUFl3ZHOVI1YOAC36sTAoYrd61R/9GzeMKE6hXPSkJmvOXrjhAI3dz6y
-	 chDrCKjDfjN3BGpJYChYHIPEgdCc8pcabsxPAAN9nZh0SNLrVbZvamVO9PrSnk3oCf0J4
-	 wLC1andp0EWFI9s8z0IhQZ+Z9oMi+SWbvnrfUkfLJ1U+p81k9m1So2g/XIC7OgpwP/0xB
-	 Z3Eno5Ovi5ZHQbwUr0NQif9VJsW4lBtJRqjuMB3Qr2nDjgd5BQHFIyr9zWdD+AwNkYV+3
-	 tnsT5ifCoiW6VqrAmojkWC7wkCiZQs6UalvoFOwabDVAWW6jt94bYF1Piyt2GaRMFrA==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790970399;
+	b=k7Kcln7i7O809m2MPD37fNjopr5VtekbS0MWBTrNHFYL62D0H+R+znvofFv/HTGf6POa
+	 jtDdOF7UGAAfvfpQBMmaAWHLIV4a1q8npvT+ZyJD3fD8xo3Tdps/sZOyE4ojwEghpDuwI
+	 cc3hSZ/5AnYJVnhh7XoeyCkYa16t3qXSHHGp1/vuivONZD0AmrbTKNqCDr8VYHeMVBwkD
+	 yDS3BMhNwUuK3KaVFU27e9L7WogI/PlMxdL3GHcLcyyNIwCUqNAQEx+yKtudZpo1kni2+
+	 WvgZL9g88ZL8LZlwlCpbNKH54R/kTsvT2epz7oGqVNWJuBOLOS+FMV4dd92vngtrJZg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1790970313;
+	c=relaxed/relaxed; t=1790970399;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
-	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
-	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
-	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
-	 Sender;
-	bh=MF/PYeThmsJVTPP/EGGxVPrpF3KL8RnhV8CK3nH/1VM=;
-	b=RlylkS9dc3hbIZxcGnVRXMiV5+06FiG1U8NjwcPgrBLmm1Olj7t3uziPvu3j+P4VmQQY
-	 1vliFLcbQQj3Ozp6kb7CI24dZqvtYstluyHgubfyEXJf2lW4nlgYXquloFcZIwNhxI+gp
-	 7aILKG6t8XYSEGtNCE0fkpZ305bRbDqmED0vzJu6RQ1ROa4edf13zpwpu+4KmPs8otleC
-	 TglYLyx18DIU6huPrAVFk3xahDKGodlZnhmTS2FHwyjmEpK9Q04ifoqB/Rvf2DG+5tTBH
-	 bRmB+rWQeZr/bHo97O7t2RlsOCS1WcooFp2sPhsccxMc431uPHzjHIGQUA9bi74qhyQ==
+	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 Received:MIME-Version:Date:To:Cc:In-Reply-To:References:User-Agent:
+	 Message-ID:X-Sender:Subject:X-BeenThere:X-Mailman-Version:Precedence:
+	 List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:Content-Transfer-Encoding:Content-Type:
+	 Errors-To:Sender;
+	bh=PUOeMlfxHvFJ9JW/HnoO5UkSnhGGTeW428hxqEjJ4QY=;
+	b=WcsZPm0jr7fzU2nLL8aWaWJkUWe3NQRy1NEq0Qswxl7OT0aV9nzQaaujsDUGjK2UlRWf
+	 m2R0Qobz9S6z929KP2T+CJemAcRfpkR/qYtRQ30zoJYOQdi0KMk7KsMhrfIjuvDuAMrLq
+	 TmhrzrEX48uFH3XVnhVdi69JyXmcKPyglTCEqbMqTojvqyOpffn+eKfyDaNt2Cw3c6jw9
+	 9/jOKaqu39UceAvZXZQ41ZR7XR9TQkhCf0stwGPzZGBY37fwZc5IOe6Pe4GkhK28Dxj7r
+	 43DCy1iOMLZh7uLfBFpb35GUjJ+z3lPqJTkSZ69SCmZosWKCBoYh53dv8LbDFoldjtQ==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1790970313;
-	bh=MF/PYeThmsJVTPP/EGGxVPrpF3KL8RnhV8CK3nH/1VM=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=O6QlZj21wfQx6kB650FDuKb4SkXXYGKGPZIe4ZGICENW8AzlzWmO0eM/+0xZeRIgs
-	 O0AG6fPuY8jhXLE+0ixPc4wR7bMS6PSpgchTOvp9asuyVOtx5Q4blzyMuiUDTzqnTm
-	 42gEBL0x8UHwXMKuv3r+Lb0un8bIrYkABlaFbv7kDHyblTm3QS5sWgNNalKhyFSa5A
-	 /vGVcI+N1cPQFxrtC9BNPgvhpAvjbz+QlrziOf+CNVpSNJYnPnG1XSIOb6rujLPWXt
-	 9tQh/nVhBuoEC/20g6Cj9dOmlFBzatqV7lOA4pH7pxVOL9jQ1lSEuWnCqZKVBp5rx2
-	 i3O7gsD/bdmGw==
+	s=default; t=1790970399;
+	bh=PUOeMlfxHvFJ9JW/HnoO5UkSnhGGTeW428hxqEjJ4QY=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=fHfJ45fwUXaYuVJyuMRIgK1Ww2qYjn4qDyTFMeXWxRlAj9AIzWRa348lRJc2vp57m
+	 ljct6ZJJtsB6Xjg+CzAcIl+5Bye5D1nLB32ucj0n9K3SRPXbhN+CRktDSyYgTIU/kr
+	 Bqrp0wyh4YMtFUPAXqXhACt7zmRsW0uu2vV/t+eCzN0K7jY3YCCQAuSETj57UfSizl
+	 1BDAAycYR0Ja2dH203PxF0FNFl25tMzTtonplyIYB0DNzNbpWAJVneCqpdcapiEWuQ
+	 dTOa0DSMVps8qHlfy0LJ7BdC8DqWUyJTb/iw4YFuNoFKoJ2qLeEX5fazvJOPuE6XhJ
+	 ZRU1rki9YX3rQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9C21340DC4;
-	Fri,  2 Oct 2026 19:45:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4405F40DC4;
+	Fri,  2 Oct 2026 19:46:39 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 15CA5282
- for <buildroot@buildroot.org>; Fri,  2 Oct 2026 19:45:12 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 7569934E
+ for <buildroot@buildroot.org>; Fri,  2 Oct 2026 19:46:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F056D60659
- for <buildroot@buildroot.org>; Fri,  2 Oct 2026 19:45:11 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 66F6460659
+ for <buildroot@buildroot.org>; Fri,  2 Oct 2026 19:46:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VzjDfp4lBinS for <buildroot@buildroot.org>;
- Fri,  2 Oct 2026 19:45:10 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 894686064B
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790970310;
- b=VRkcoktw+iA8fbyrShPnG/RBye9dvXcEJG0vA24fCucad0nwuEferU3YMCAlluPQmk/T
- gx1RK37jk8IypGX31v5VMiXfrDoNCKe8cUOC01Fk/auvwHLx1mNj1UYjo1V/votjMsidR
- dgO/1sCa0QJ/9WVpKFpuOFcYX7ZvxXnjwZHq05wd8t0pfiSWq+wu0cNK6OjX+GEsmL4Js
- HgqHSvfNmDTw22WKCfAPQ1Yvz4SASGuQTvxHEZ0h274Ag9yaxroURmVsJ2JryBoe8s1z+
- rO9cNNrHNYdUnfmotOcJHdzo4gNfpEdU8Ev7S2McPZrxWBwft8V0z+NH0zLHl7QtK5Q==
+ id bXQLragOzLgl for <buildroot@buildroot.org>;
+ Fri,  2 Oct 2026 19:46:36 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 78DFE6065E
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790970396;
+ b=jcHTkyxzXhBb0Zv2cDDgL3CpA9jbdQzeqSEtBfIg/vQ6utcgbc/sm4YTYu7AMW5uNuNF
+ bbQOpLKgDESzMQz+BwydYKvrpXDwsfjQbIs5BbzifaJOXvfgkqWlehksboHHaIRRxfCBe
+ UcLhcyosljWsyY97jon6dSOU7P9t3khVYbWZWcp+634TbTajs5KDb58uJ9KAZQSxs5xFQ
+ bBh4zt464AfxdkioDKW9wry+hmj9ukU8zylCg9drua9CVCa2+wJ4UmmZlOqKmUMIn3i7T
+ uIFxAgC2owx1rMWW4jpmub0vFMCn6Dn3w++ybNJ2QTvGll+OXRSGX/82f/FFZDk7aNg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1790970310;
- h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
- X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=1qEB1qjtRYIdev3rNerFBLTyHzYoeT5ue9/FlTzqvSk=;
- b=O1QRRPwiGf2aTMU0AUkkFPaUYJkIZcutXJk7pamuDisw1sBRjZYVZxZDgD18RMj1CMjA
- b/9WFrlgPfK1U4rjqRr9azsHlPKsyrfB5E44lfGCuUCxDYC1fBK4mgfhgGkqu+R08Yemm
- 6bQ/iHt5UQDeLRVL+j0VTROwlPnhXAPEDB5stZse0Bv1dQrRc4TbCow5g8WoibYfMjDSW
- 4eSlWnuYzbiJr3ChYdqhZJQsO5vUsuRAqZeEFMoEyO3geOwY+QL7DawMFbUc38jM1uRbo
- JphX8CK6ZHcKyOIJh+5io3aG0jhtwYdbAA+zSB3VfOTy88UwR0qLjMou9fMLZXkcXMQ==
+ c=relaxed/relaxed; t=1790970396;
+ h=Received-SPF:Received:DKIM-Signature:Received:MIME-Version:Date:From:
+ To:Cc:Subject:In-Reply-To:References:User-Agent:Message-ID:X-Sender:
+ Content-Type:Content-Transfer-Encoding;
+ bh=8W6nnXCqxzBmzevOo46NXL2igE+sKVDCV1rafY60tf0=;
+ b=iIXAuz2KyIo7EamkohFc8LJ0L/d3VDMvTgkmTzBe/wIohkUfzsj9HhKGI1UZ1tccmHuu
+ Ci5b6zhfmUigjjy2fOJRolszWTEK82UoEGVYd8hIGg0tkFNyfQhopsq5MfzhuK7bX6qBA
+ nq2ycIFcdAxRFcMbQkxidaKf/khyXkFSwdv2fU/6lwk9DSE9rD8XDOuADZ/IQeOyssaA5
+ Sx+IEF51WIK69TUSLNi53IPeOz0J2UoVszKkkntnzgizo8KQQDPoFsndHx0FOyeVWGooK
+ pTebJl+4DUWBTIKdFX6rmnpmHvcqsS8KWUCdN2jxJ31BOX+bNmw4fTzj5jM2oOS4O5A==
 ARC-Authentication-Results: i=1; smtp3.osuosl.org;
- arc=none smtp.remote-ip=140.211.167.122
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 894686064B
- for <buildroot@buildroot.org>; Fri,  2 Oct 2026 19:45:10 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2BDB1886BD; Fri,  2 Oct 2026 19:43:56 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 2 Oct 2026 21:44:19 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 12961c9a23ebd76b2b5de44770effebe6d08bf8f
-X-Git-Newrev: 47dfe8439945c84287bf6dbed11bce64a92d11fb
-X-Patchwork-Hint: ignore
-Message-Id: <20261002194356.2BDB1886BD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/apache: security bump to version
- 2.4.69
+ dmarc=pass header.from=free.fr; 
+ dkim=pass header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=ek8Muvps; 
+ arc=none smtp.remote-ip="2a01:e0c:1:1599::12"
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 78DFE6065E
+ for <buildroot@buildroot.org>; Fri,  2 Oct 2026 19:46:34 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id 047A013F86A;
+ Fri,  2 Oct 2026 21:46:30 +0200 (CEST)
+Received: from 199.151.230.94.awnet.cz ([94.230.151.199:60922])
+ via 199.151.230.94.awnet.cz ([94.230.151.199]) by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Fri, 02 Oct 2026 21:46:30 +0200
+MIME-Version: 1.0
+Date: Fri, 02 Oct 2026 21:46:30 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20261002064029.2224102-1-bernd@kuhls.net>
+References: <20261002064029.2224102-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.19
+Message-ID: <d29895861df21e5c1f1cfbb2653f890c@free.fr>
+X-Sender: ju.o@free.fr
+Subject: Re: [Buildroot] [PATCH 1/1] package/apache: security bump to
+ version 2.4.69
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -112,256 +124,178 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8788182135161661327=="
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8788182135161661327==
-Content-Type: text/plain
-
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/47dfe8439945c84287bf6dbed11bce64a92d11fb
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
-
-https://downloads.apache.org/httpd/CHANGES_2.4.69
-
-Fixes the following security issues:
-
-  *) SECURITY: CVE-2026-93546: mod_dav_fs namespace overflow
-     (cve.mitre.org)
-     Integer overflow in mod_dav_fs in Apache HTTP Server through
-     2.4.68 allows an authenticated WebDAV client with write access
-     to crash worker processes and persistently corrupt a directory's
-     property database via PROPPATCH requests declaring many XML
-     namespaces.
-     Credits: Zhen Kong
-
-  *) SECURITY: CVE-2026-79768: mod_userdir information disclosure
-     (cve.mitre.org)
-     Path equivalence: '/./' (single dot directory) vulnerability in
-     Apache HTTP Server's mod_userdir module when configured
-     withÂ absolute non-wildcard UserDir directive (the 2nd form
-     inÂ https://httpd.apache.org/docs/2.4/mod/mod_userdir.html#userdir
-     )
-     This issue affects Apache HTTP Server: from 2.4.0 through 2.4.68.
-     Credits: Vlatko Kosturjak, Marlink Cyber
-
-  *) SECURITY: CVE-2026-73637: mod_auth_digest DoS attack
-     (cve.mitre.org)
-     Use after free in mod_auth_digest in Apache Software Foundation
-     Apache HTTP Server before 2.4.69 on all platforms allows an
-     unauthenticated remote client to cause authentication state
-     corruption via concurrent Digest authentication requests when
-     AuthDigestNcCheck is enabled or AuthDigestNonceLifetime is set
-     to 0.
-     Users are recommended to upgrade to version 2.4.69, which fixes
-     this issue.
-     Credits: Zhen Kong
-
-  *) SECURITY: CVE-2026-73636: mod_auth_digest one-time-nonce replay
-     attack (cve.mitre.org)
-     Authentication bypass by capture-replay in mod_auth_digest in
-     Apache Software Foundation Apache HTTP Server 2.4.x on all
-     platforms allows a man-in-the-middle (MITM) attacker to replay
-     captured digest authentication credentials via crafted requests
-     that trigger garbage collection of the client's shared memory
-     entry when AuthDigestNonceLifetime is set to 0.
-     Users are recommended to upgrade to version 2.4.69, which fixes
-     this issue.
-     Credits: Hyojae Lee
-
-  *) SECURITY: CVE-2026-63718: mod_proxy_uwsgi Transfer-Encoding
-     response smuggling (cve.mitre.org)
-     Inconsistent Interpretation of HTTP Requests ('HTTP
-     Request/Response Smuggling') response smuggling vulnerability in
-     Apache HTTP Server via mod_proxy_uwsgi and a crafted uwsgi
-     response with Transfer-Encoding.
-     This issue affects Apache HTTP Server: from 2.4.30 through
-     2.4.68.
-     Credits: Qing Xu
-
-  *) SECURITY: CVE-2026-63686: mod_xml2enc crash on charset
-     conversion failure (cve.mitre.org)
-     A NULL pointer dereference in mod_xml2enc in Apache Software
-     Foundation Apache HTTP Server before 2.4.69 on all platforms
-     allows an untrusted backend server to cause a denial of service
-     via a proxied response with a charset whose conversion partially
-     succeeds then fails.
-     Users are recommended to upgrade to version 2.4.69, which fixes
-     this issue.
-     Credits: Lucian Nitescu
-
-  *) SECURITY: CVE-2026-63292: mod_vhost_alias stack overflow
-     (cve.mitre.org)
-     Stack-based buffer overflow in mod_vhost_alias in Apache
-     Software Foundation Apache HTTP Server through 2.4.68 on all
-     platforms allows a remote client to cause a denial of service or
-     potentially execute arbitrary code via an HTTP request with a
-     Host header exceeding 8192 bytes when VirtualDocumentRoot uses a
-     hostname format specifier and LimitRequestFieldSize is raised
-     above the default.
-     Users are recommended to upgrade to version 2.4.69, which fixes
-     this issue.
-     Credits: Hyojae Lee
-
-  *) SECURITY: CVE-2026-63045: mod_proxy_ftp PASV address handling
-     (cve.mitre.org)
-     Improper validation of FTP PASV reply address in mod_proxy_ftp
-     in Apache Software Foundation Apache HTTP Server through 2.4.68
-     on all platforms allows, in forward proxy configurations, an
-     untrusted FTP server to cause the proxy to open a data
-     connection to an arbitrary third-party host via a crafted PASV
-     response.
-     Users are recommended to upgrade to version 2.4.69, which fixes
-     this issue.
-     Credits: Zhen Kong
-
-  *) SECURITY: CVE-2026-59797: mod_ssl SSLRequire allows .htaccess
-     ap_expr file-function (cve.mitre.org)
-     Improper Privilege Management vulnerability in Apache HTTP
-     Server's mod_ssl via SSLRequire and file-related expressions.
-     This issue affects Apache HTTP Server: from 2.4.0 through 2.4.68.
-     Credits: kimchunbok
-
-  *) SECURITY: CVE-2026-59685: Out-of-Bounds Write in
-     ap_directory_walk() Canonical-Name Rewrite on
-     CASE_BLIND_FILESYSTEM (cve.mitre.org)
-     Out-of-bounds Write vulnerability in Apache HTTP Server on
-     Windows while processing paths with 8.3 names that may grow when
-     expanded.
-     This issue affects Apache HTTP Server: from 2.4.0 through 2.4.68.
-     Credits: Dhiraj Mishra
-
-  *) SECURITY: CVE-2026-58415: mod_dav_fs property database read
-     access (cve.mitre.org)
-     Internal state files accessible to external parties in
-     mod_dav_fs in Apache Software Foundation Apache HTTP Server
-     before 2.4.69 on all platforms allows a remote client to read
-     WebDAV dead properties of resources it cannot author via a GET
-     request for the .DAV state directory
-     This issue affects Apache HTTP Server: from 2.4.0 through 2.4.68.
-     Credits: ì�´ì§€ì›… (kimchunbok)
-
-  *) SECURITY: CVE-2026-57941: mod_http2 use-after-free / wild write
-     via shared session->bbtmp re-entrancy (cve.mitre.org)
-     Use After Free vulnerability in Apache HTTP Server's
-     mod_http2Â via shared session->bbtmp re-entrancy
-     This issue affects Apache HTTP Server: from 2.4.0 through 2.4.68.
-     Credits: Lucian Nitescu
-
-  *) SECURITY: CVE-2026-56449: mod_proxy_html: crash in dump_content
-     (cve.mitre.org)
-     Out-of-bounds Write vulnerability in Apache HTTP Server's
-     mod_proxy_html with crafted HTTP response bodies.
-     This issue affects Apache HTTP Server: from 2.4.0 through 2.4.68.
-     Credits: Lucian Nitescu
-
-  *) SECURITY: CVE-2026-56154: mod_rewrite use-after-free via
-     %{LA-U:HTTP:...} (cve.mitre.org)
-     Use After Free vulnerability in Apache HTTP Server's mod_rewrite
-     when using lookahead (%{LA-U:HTTP:...})
-     This issue affects Apache HTTP Server: from 2.4.0 through 2.4.68.
-     Credits: Nebula Security (@nebusecurity)
-
-  *) SECURITY: CVE-2026-56153: mod_charset_lite: Heap overflow in
-     finish_partial_char (cve.mitre.org)
-     Out-of-bounds Write vulnerability in Apache HTTP Server's
-     mod_charset_lite.
-     This issue affects Apache HTTP Server: from 2.4.0 through 2.4.68.
-     Credits: Bartlomiej Dmitruk at striga.ai
-
-  *) SECURITY: CVE-2026-48005: mod_auth_digest reauthentication
-     attack (cve.mitre.org)
-     Missing authentication checks in mod_auth_digest in Apache
-     Software Foundation Apache HTTP Server before 2.4.69 on all
-     platforms allows an unauthenticated remote client to cause a
-     denial of service (forced re-authentication) via forged
-     Authorization headers when Digest authentication is enabled with
-     AuthDigestNcCheck .
-     Users are recommended to upgrade to version 2.4.69, which fixes
-     this issue.
-     Credits: lokerxx
-
-  *) SECURITY: CVE-2026-47360: mod_session: Session cookie not
-     removed during internal redirect (cve.mitre.org)
-     Exposure of Sensitive Information to an Unauthorized Actor
-     vulnerability in Apache HTTP Server's mod_session_cookie module.
-     Â
-     When SessionCookieRemove changes across internal redirects, the
-     session cookie may still be passed to a backend server.
-     This issue affects Apache HTTP Server: from 2.4.0 through 2.4.68.
-     Credits: lokerxx
-
-  *) SECURITY: CVE-2026-46729: mod_heartmonitor denial of service
-     (cve.mitre.org)
-     NULL Pointer Dereference vulnerability in Apache HTTP Servers
-     mod_heartmonitor over unicast listener.
-     This issue affects Apache HTTP Server: from 2.4.0 through 2.4.68.
-     Credits: Zhang San
-
-  *) SECURITY: CVE-2026-42528: mod_dav shared lock overflow
-     (cve.mitre.org)
-     A memory calculation bug in mod_dav in Apache httpd 2.4.67 and
-     earlier allows an attacker with permission to create WebDAV
-     locks to crash server child processes.
-     Users are recommended to upgrade to version 2.4.69, which fixes
-     this issue
-     Credits: Zhenpeng (Leo) Lin at depthfirst
-
-  *) SECURITY: CVE-2026-42356: limited RCE for some internal
-     redirects to non-CGI files in CGI directories (cve.mitre.org)
-     Deployment of wrong handler vulnerability in Apache HTTP Server
-     allows the target of some internal redirects from CGI programs
-     to also be treated as CGI and executed. The target must already
-     be in a directory enabled for CGI and have no other extension
-     understood by mod_mime.
-     This issue affects Apache HTTP Server: from 2.4.60 through
-     2.4.68.
-     Credits: Feliks Penconek
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/apache/apache.hash | 6 +++---
- package/apache/apache.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/apache/apache.hash b/package/apache/apache.hash
-index e8ed8c0df6..453a22b965 100644
---- a/package/apache/apache.hash
-+++ b/package/apache/apache.hash
-@@ -1,5 +1,5 @@
--# From https://archive.apache.org/dist/httpd/httpd-2.4.68.tar.bz2.{sha256,sha512}
--sha256  68c74d4df38c26bed4dfbdb8f3baf1eb532f3872357becc1bba5d136f6b63c06  httpd-2.4.68.tar.bz2
--sha512  134a5bbd3ffe97523ac750490531bcb9441c532cedf0229aa006aa1368e9d25040507c6f519bed6754044f62c371f7c7f9a11b6a311f79b9680d478bf4373eb3  httpd-2.4.68.tar.bz2
-+# From https://archive.apache.org/dist/httpd/httpd-2.4.69.tar.bz2.{sha256,sha512}
-+sha256  c5e6ebc66e349b87d7fc6916ae7cc2a808ed348003de134cf9e9d89d3e2cc73d  httpd-2.4.69.tar.bz2
-+sha512  ca9c5808eef7a0d8d88148b0d2d6045b5a0151823f09afc786b283cef9990036a9c7bc53d043e2f67b6ec06db05f655aa961cb875fa7ad0911fa04fdd295bd93  httpd-2.4.69.tar.bz2
- # Locally computed
- sha256  47b8c2b6c3309282a99d4a3001575c790fead690cc14734628c4667d2bbffc43  LICENSE
-diff --git a/package/apache/apache.mk b/package/apache/apache.mk
-index debc999bcd..04400d5e4a 100644
---- a/package/apache/apache.mk
-+++ b/package/apache/apache.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--APACHE_VERSION = 2.4.68
-+APACHE_VERSION = 2.4.69
- APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
- APACHE_SITE = https://archive.apache.org/dist/httpd
- APACHE_LICENSE = Apache-2.0
-
---===============8788182135161661327==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8788182135161661327==--
+T24gMDIvMTAvMjAyNiAwODo0MCwgQmVybmQgS3VobHMgd3JvdGU6Cj4gaHR0cHM6Ly9kb3dubG9h
+ZHMuYXBhY2hlLm9yZy9odHRwZC9DSEFOR0VTXzIuNC42OQo+IAo+IEZpeGVzIHRoZSBmb2xsb3dp
+bmcgc2VjdXJpdHkgaXNzdWVzOgo+IAo+ICAgKikgU0VDVVJJVFk6IENWRS0yMDI2LTkzNTQ2OiBt
+b2RfZGF2X2ZzIG5hbWVzcGFjZSBvdmVyZmxvdwo+ICAgICAgKGN2ZS5taXRyZS5vcmcpCj4gICAg
+ICBJbnRlZ2VyIG92ZXJmbG93IGluIG1vZF9kYXZfZnMgaW4gQXBhY2hlIEhUVFAgU2VydmVyIHRo
+cm91Z2gKPiAgICAgIDIuNC42OCBhbGxvd3MgYW4gYXV0aGVudGljYXRlZCBXZWJEQVYgY2xpZW50
+IHdpdGggd3JpdGUgYWNjZXNzCj4gICAgICB0byBjcmFzaCB3b3JrZXIgcHJvY2Vzc2VzIGFuZCBw
+ZXJzaXN0ZW50bHkgY29ycnVwdCBhIGRpcmVjdG9yeSdzCj4gICAgICBwcm9wZXJ0eSBkYXRhYmFz
+ZSB2aWEgUFJPUFBBVENIIHJlcXVlc3RzIGRlY2xhcmluZyBtYW55IFhNTAo+ICAgICAgbmFtZXNw
+YWNlcy4KPiAgICAgIENyZWRpdHM6IFpoZW4gS29uZwo+IAo+ICAgKikgU0VDVVJJVFk6IENWRS0y
+MDI2LTc5NzY4OiBtb2RfdXNlcmRpciBpbmZvcm1hdGlvbiBkaXNjbG9zdXJlCj4gICAgICAoY3Zl
+Lm1pdHJlLm9yZykKPiAgICAgIFBhdGggZXF1aXZhbGVuY2U6ICcvLi8nIChzaW5nbGUgZG90IGRp
+cmVjdG9yeSkgdnVsbmVyYWJpbGl0eSBpbgo+ICAgICAgQXBhY2hlIEhUVFAgU2VydmVyJ3MgbW9k
+X3VzZXJkaXIgbW9kdWxlIHdoZW4gY29uZmlndXJlZAo+ICAgICAgd2l0aMOCIGFic29sdXRlIG5v
+bi13aWxkY2FyZCBVc2VyRGlyIGRpcmVjdGl2ZSAodGhlIDJuZCBmb3JtCj4gICAgICBpbsOCIGh0
+dHBzOi8vaHR0cGQuYXBhY2hlLm9yZy9kb2NzLzIuNC9tb2QvbW9kX3VzZXJkaXIuaHRtbCN1c2Vy
+ZGlyCj4gICAgICApCj4gICAgICBUaGlzIGlzc3VlIGFmZmVjdHMgQXBhY2hlIEhUVFAgU2VydmVy
+OiBmcm9tIDIuNC4wIHRocm91Z2ggMi40LjY4Lgo+ICAgICAgQ3JlZGl0czogVmxhdGtvIEtvc3R1
+cmphaywgTWFybGluayBDeWJlcgo+IAo+ICAgKikgU0VDVVJJVFk6IENWRS0yMDI2LTczNjM3OiBt
+b2RfYXV0aF9kaWdlc3QgRG9TIGF0dGFjawo+ICAgICAgKGN2ZS5taXRyZS5vcmcpCj4gICAgICBV
+c2UgYWZ0ZXIgZnJlZSBpbiBtb2RfYXV0aF9kaWdlc3QgaW4gQXBhY2hlIFNvZnR3YXJlIEZvdW5k
+YXRpb24KPiAgICAgIEFwYWNoZSBIVFRQIFNlcnZlciBiZWZvcmUgMi40LjY5IG9uIGFsbCBwbGF0
+Zm9ybXMgYWxsb3dzIGFuCj4gICAgICB1bmF1dGhlbnRpY2F0ZWQgcmVtb3RlIGNsaWVudCB0byBj
+YXVzZSBhdXRoZW50aWNhdGlvbiBzdGF0ZQo+ICAgICAgY29ycnVwdGlvbiB2aWEgY29uY3VycmVu
+dCBEaWdlc3QgYXV0aGVudGljYXRpb24gcmVxdWVzdHMgd2hlbgo+ICAgICAgQXV0aERpZ2VzdE5j
+Q2hlY2sgaXMgZW5hYmxlZCBvciBBdXRoRGlnZXN0Tm9uY2VMaWZldGltZSBpcyBzZXQKPiAgICAg
+IHRvIDAuCj4gICAgICBVc2VycyBhcmUgcmVjb21tZW5kZWQgdG8gdXBncmFkZSB0byB2ZXJzaW9u
+IDIuNC42OSwgd2hpY2ggZml4ZXMKPiAgICAgIHRoaXMgaXNzdWUuCj4gICAgICBDcmVkaXRzOiBa
+aGVuIEtvbmcKPiAKPiAgICopIFNFQ1VSSVRZOiBDVkUtMjAyNi03MzYzNjogbW9kX2F1dGhfZGln
+ZXN0IG9uZS10aW1lLW5vbmNlIHJlcGxheQo+ICAgICAgYXR0YWNrIChjdmUubWl0cmUub3JnKQo+
+ICAgICAgQXV0aGVudGljYXRpb24gYnlwYXNzIGJ5IGNhcHR1cmUtcmVwbGF5IGluIG1vZF9hdXRo
+X2RpZ2VzdCBpbgo+ICAgICAgQXBhY2hlIFNvZnR3YXJlIEZvdW5kYXRpb24gQXBhY2hlIEhUVFAg
+U2VydmVyIDIuNC54IG9uIGFsbAo+ICAgICAgcGxhdGZvcm1zIGFsbG93cyBhIG1hbi1pbi10aGUt
+bWlkZGxlIChNSVRNKSBhdHRhY2tlciB0byByZXBsYXkKPiAgICAgIGNhcHR1cmVkIGRpZ2VzdCBh
+dXRoZW50aWNhdGlvbiBjcmVkZW50aWFscyB2aWEgY3JhZnRlZCByZXF1ZXN0cwo+ICAgICAgdGhh
+dCB0cmlnZ2VyIGdhcmJhZ2UgY29sbGVjdGlvbiBvZiB0aGUgY2xpZW50J3Mgc2hhcmVkIG1lbW9y
+eQo+ICAgICAgZW50cnkgd2hlbiBBdXRoRGlnZXN0Tm9uY2VMaWZldGltZSBpcyBzZXQgdG8gMC4K
+PiAgICAgIFVzZXJzIGFyZSByZWNvbW1lbmRlZCB0byB1cGdyYWRlIHRvIHZlcnNpb24gMi40LjY5
+LCB3aGljaCBmaXhlcwo+ICAgICAgdGhpcyBpc3N1ZS4KPiAgICAgIENyZWRpdHM6IEh5b2phZSBM
+ZWUKPiAKPiAgICopIFNFQ1VSSVRZOiBDVkUtMjAyNi02MzcxODogbW9kX3Byb3h5X3V3c2dpIFRy
+YW5zZmVyLUVuY29kaW5nCj4gICAgICByZXNwb25zZSBzbXVnZ2xpbmcgKGN2ZS5taXRyZS5vcmcp
+Cj4gICAgICBJbmNvbnNpc3RlbnQgSW50ZXJwcmV0YXRpb24gb2YgSFRUUCBSZXF1ZXN0cyAoJ0hU
+VFAKPiAgICAgIFJlcXVlc3QvUmVzcG9uc2UgU211Z2dsaW5nJykgcmVzcG9uc2Ugc211Z2dsaW5n
+IHZ1bG5lcmFiaWxpdHkgaW4KPiAgICAgIEFwYWNoZSBIVFRQIFNlcnZlciB2aWEgbW9kX3Byb3h5
+X3V3c2dpIGFuZCBhIGNyYWZ0ZWQgdXdzZ2kKPiAgICAgIHJlc3BvbnNlIHdpdGggVHJhbnNmZXIt
+RW5jb2RpbmcuCj4gICAgICBUaGlzIGlzc3VlIGFmZmVjdHMgQXBhY2hlIEhUVFAgU2VydmVyOiBm
+cm9tIDIuNC4zMCB0aHJvdWdoCj4gICAgICAyLjQuNjguCj4gICAgICBDcmVkaXRzOiBRaW5nIFh1
+Cj4gCj4gICAqKSBTRUNVUklUWTogQ1ZFLTIwMjYtNjM2ODY6IG1vZF94bWwyZW5jIGNyYXNoIG9u
+IGNoYXJzZXQKPiAgICAgIGNvbnZlcnNpb24gZmFpbHVyZSAoY3ZlLm1pdHJlLm9yZykKPiAgICAg
+IEEgTlVMTCBwb2ludGVyIGRlcmVmZXJlbmNlIGluIG1vZF94bWwyZW5jIGluIEFwYWNoZSBTb2Z0
+d2FyZQo+ICAgICAgRm91bmRhdGlvbiBBcGFjaGUgSFRUUCBTZXJ2ZXIgYmVmb3JlIDIuNC42OSBv
+biBhbGwgcGxhdGZvcm1zCj4gICAgICBhbGxvd3MgYW4gdW50cnVzdGVkIGJhY2tlbmQgc2VydmVy
+IHRvIGNhdXNlIGEgZGVuaWFsIG9mIHNlcnZpY2UKPiAgICAgIHZpYSBhIHByb3hpZWQgcmVzcG9u
+c2Ugd2l0aCBhIGNoYXJzZXQgd2hvc2UgY29udmVyc2lvbiBwYXJ0aWFsbHkKPiAgICAgIHN1Y2Nl
+ZWRzIHRoZW4gZmFpbHMuCj4gICAgICBVc2VycyBhcmUgcmVjb21tZW5kZWQgdG8gdXBncmFkZSB0
+byB2ZXJzaW9uIDIuNC42OSwgd2hpY2ggZml4ZXMKPiAgICAgIHRoaXMgaXNzdWUuCj4gICAgICBD
+cmVkaXRzOiBMdWNpYW4gTml0ZXNjdQo+IAo+ICAgKikgU0VDVVJJVFk6IENWRS0yMDI2LTYzMjky
+OiBtb2Rfdmhvc3RfYWxpYXMgc3RhY2sgb3ZlcmZsb3cKPiAgICAgIChjdmUubWl0cmUub3JnKQo+
+ICAgICAgU3RhY2stYmFzZWQgYnVmZmVyIG92ZXJmbG93IGluIG1vZF92aG9zdF9hbGlhcyBpbiBB
+cGFjaGUKPiAgICAgIFNvZnR3YXJlIEZvdW5kYXRpb24gQXBhY2hlIEhUVFAgU2VydmVyIHRocm91
+Z2ggMi40LjY4IG9uIGFsbAo+ICAgICAgcGxhdGZvcm1zIGFsbG93cyBhIHJlbW90ZSBjbGllbnQg
+dG8gY2F1c2UgYSBkZW5pYWwgb2Ygc2VydmljZSBvcgo+ICAgICAgcG90ZW50aWFsbHkgZXhlY3V0
+ZSBhcmJpdHJhcnkgY29kZSB2aWEgYW4gSFRUUCByZXF1ZXN0IHdpdGggYQo+ICAgICAgSG9zdCBo
+ZWFkZXIgZXhjZWVkaW5nIDgxOTIgYnl0ZXMgd2hlbiBWaXJ0dWFsRG9jdW1lbnRSb290IHVzZXMg
+YQo+ICAgICAgaG9zdG5hbWUgZm9ybWF0IHNwZWNpZmllciBhbmQgTGltaXRSZXF1ZXN0RmllbGRT
+aXplIGlzIHJhaXNlZAo+ICAgICAgYWJvdmUgdGhlIGRlZmF1bHQuCj4gICAgICBVc2VycyBhcmUg
+cmVjb21tZW5kZWQgdG8gdXBncmFkZSB0byB2ZXJzaW9uIDIuNC42OSwgd2hpY2ggZml4ZXMKPiAg
+ICAgIHRoaXMgaXNzdWUuCj4gICAgICBDcmVkaXRzOiBIeW9qYWUgTGVlCj4gCj4gICAqKSBTRUNV
+UklUWTogQ1ZFLTIwMjYtNjMwNDU6IG1vZF9wcm94eV9mdHAgUEFTViBhZGRyZXNzIGhhbmRsaW5n
+Cj4gICAgICAoY3ZlLm1pdHJlLm9yZykKPiAgICAgIEltcHJvcGVyIHZhbGlkYXRpb24gb2YgRlRQ
+IFBBU1YgcmVwbHkgYWRkcmVzcyBpbiBtb2RfcHJveHlfZnRwCj4gICAgICBpbiBBcGFjaGUgU29m
+dHdhcmUgRm91bmRhdGlvbiBBcGFjaGUgSFRUUCBTZXJ2ZXIgdGhyb3VnaCAyLjQuNjgKPiAgICAg
+IG9uIGFsbCBwbGF0Zm9ybXMgYWxsb3dzLCBpbiBmb3J3YXJkIHByb3h5IGNvbmZpZ3VyYXRpb25z
+LCBhbgo+ICAgICAgdW50cnVzdGVkIEZUUCBzZXJ2ZXIgdG8gY2F1c2UgdGhlIHByb3h5IHRvIG9w
+ZW4gYSBkYXRhCj4gICAgICBjb25uZWN0aW9uIHRvIGFuIGFyYml0cmFyeSB0aGlyZC1wYXJ0eSBo
+b3N0IHZpYSBhIGNyYWZ0ZWQgUEFTVgo+ICAgICAgcmVzcG9uc2UuCj4gICAgICBVc2VycyBhcmUg
+cmVjb21tZW5kZWQgdG8gdXBncmFkZSB0byB2ZXJzaW9uIDIuNC42OSwgd2hpY2ggZml4ZXMKPiAg
+ICAgIHRoaXMgaXNzdWUuCj4gICAgICBDcmVkaXRzOiBaaGVuIEtvbmcKPiAKPiAgICopIFNFQ1VS
+SVRZOiBDVkUtMjAyNi01OTc5NzogbW9kX3NzbCBTU0xSZXF1aXJlIGFsbG93cyAuaHRhY2Nlc3MK
+PiAgICAgIGFwX2V4cHIgZmlsZS1mdW5jdGlvbiAoY3ZlLm1pdHJlLm9yZykKPiAgICAgIEltcHJv
+cGVyIFByaXZpbGVnZSBNYW5hZ2VtZW50IHZ1bG5lcmFiaWxpdHkgaW4gQXBhY2hlIEhUVFAKPiAg
+ICAgIFNlcnZlcidzIG1vZF9zc2wgdmlhIFNTTFJlcXVpcmUgYW5kIGZpbGUtcmVsYXRlZCBleHBy
+ZXNzaW9ucy4KPiAgICAgIFRoaXMgaXNzdWUgYWZmZWN0cyBBcGFjaGUgSFRUUCBTZXJ2ZXI6IGZy
+b20gMi40LjAgdGhyb3VnaCAyLjQuNjguCj4gICAgICBDcmVkaXRzOiBraW1jaHVuYm9rCj4gCj4g
+ICAqKSBTRUNVUklUWTogQ1ZFLTIwMjYtNTk2ODU6IE91dC1vZi1Cb3VuZHMgV3JpdGUgaW4KPiAg
+ICAgIGFwX2RpcmVjdG9yeV93YWxrKCkgQ2Fub25pY2FsLU5hbWUgUmV3cml0ZSBvbgo+ICAgICAg
+Q0FTRV9CTElORF9GSUxFU1lTVEVNIChjdmUubWl0cmUub3JnKQo+ICAgICAgT3V0LW9mLWJvdW5k
+cyBXcml0ZSB2dWxuZXJhYmlsaXR5IGluIEFwYWNoZSBIVFRQIFNlcnZlciBvbgo+ICAgICAgV2lu
+ZG93cyB3aGlsZSBwcm9jZXNzaW5nIHBhdGhzIHdpdGggOC4zIG5hbWVzIHRoYXQgbWF5IGdyb3cg
+d2hlbgo+ICAgICAgZXhwYW5kZWQuCj4gICAgICBUaGlzIGlzc3VlIGFmZmVjdHMgQXBhY2hlIEhU
+VFAgU2VydmVyOiBmcm9tIDIuNC4wIHRocm91Z2ggMi40LjY4Lgo+ICAgICAgQ3JlZGl0czogRGhp
+cmFqIE1pc2hyYQo+IAo+ICAgKikgU0VDVVJJVFk6IENWRS0yMDI2LTU4NDE1OiBtb2RfZGF2X2Zz
+IHByb3BlcnR5IGRhdGFiYXNlIHJlYWQKPiAgICAgIGFjY2VzcyAoY3ZlLm1pdHJlLm9yZykKPiAg
+ICAgIEludGVybmFsIHN0YXRlIGZpbGVzIGFjY2Vzc2libGUgdG8gZXh0ZXJuYWwgcGFydGllcyBp
+bgo+ICAgICAgbW9kX2Rhdl9mcyBpbiBBcGFjaGUgU29mdHdhcmUgRm91bmRhdGlvbiBBcGFjaGUg
+SFRUUCBTZXJ2ZXIKPiAgICAgIGJlZm9yZSAyLjQuNjkgb24gYWxsIHBsYXRmb3JtcyBhbGxvd3Mg
+YSByZW1vdGUgY2xpZW50IHRvIHJlYWQKPiAgICAgIFdlYkRBViBkZWFkIHByb3BlcnRpZXMgb2Yg
+cmVzb3VyY2VzIGl0IGNhbm5vdCBhdXRob3IgdmlhIGEgR0VUCj4gICAgICByZXF1ZXN0IGZvciB0
+aGUgLkRBViBzdGF0ZSBkaXJlY3RvcnkKPiAgICAgIFRoaXMgaXNzdWUgYWZmZWN0cyBBcGFjaGUg
+SFRUUCBTZXJ2ZXI6IGZyb20gMi40LjAgdGhyb3VnaCAyLjQuNjguCj4gICAgICBDcmVkaXRzOiDD
+rO+/vcK0w6zCp+KCrMOs4oC64oCmIChraW1jaHVuYm9rKQo+IAo+ICAgKikgU0VDVVJJVFk6IENW
+RS0yMDI2LTU3OTQxOiBtb2RfaHR0cDIgdXNlLWFmdGVyLWZyZWUgLyB3aWxkIHdyaXRlCj4gICAg
+ICB2aWEgc2hhcmVkIHNlc3Npb24tPmJidG1wIHJlLWVudHJhbmN5IChjdmUubWl0cmUub3JnKQo+
+ICAgICAgVXNlIEFmdGVyIEZyZWUgdnVsbmVyYWJpbGl0eSBpbiBBcGFjaGUgSFRUUCBTZXJ2ZXIn
+cwo+ICAgICAgbW9kX2h0dHAyw4IgdmlhIHNoYXJlZCBzZXNzaW9uLT5iYnRtcCByZS1lbnRyYW5j
+eQo+ICAgICAgVGhpcyBpc3N1ZSBhZmZlY3RzIEFwYWNoZSBIVFRQIFNlcnZlcjogZnJvbSAyLjQu
+MCB0aHJvdWdoIDIuNC42OC4KPiAgICAgIENyZWRpdHM6IEx1Y2lhbiBOaXRlc2N1Cj4gCj4gICAq
+KSBTRUNVUklUWTogQ1ZFLTIwMjYtNTY0NDk6IG1vZF9wcm94eV9odG1sOiBjcmFzaCBpbiBkdW1w
+X2NvbnRlbnQKPiAgICAgIChjdmUubWl0cmUub3JnKQo+ICAgICAgT3V0LW9mLWJvdW5kcyBXcml0
+ZSB2dWxuZXJhYmlsaXR5IGluIEFwYWNoZSBIVFRQIFNlcnZlcidzCj4gICAgICBtb2RfcHJveHlf
+aHRtbCB3aXRoIGNyYWZ0ZWQgSFRUUCByZXNwb25zZSBib2RpZXMuCj4gICAgICBUaGlzIGlzc3Vl
+IGFmZmVjdHMgQXBhY2hlIEhUVFAgU2VydmVyOiBmcm9tIDIuNC4wIHRocm91Z2ggMi40LjY4Lgo+
+ICAgICAgQ3JlZGl0czogTHVjaWFuIE5pdGVzY3UKPiAKPiAgICopIFNFQ1VSSVRZOiBDVkUtMjAy
+Ni01NjE1NDogbW9kX3Jld3JpdGUgdXNlLWFmdGVyLWZyZWUgdmlhCj4gICAgICAle0xBLVU6SFRU
+UDouLi59IChjdmUubWl0cmUub3JnKQo+ICAgICAgVXNlIEFmdGVyIEZyZWUgdnVsbmVyYWJpbGl0
+eSBpbiBBcGFjaGUgSFRUUCBTZXJ2ZXIncyBtb2RfcmV3cml0ZQo+ICAgICAgd2hlbiB1c2luZyBs
+b29rYWhlYWQgKCV7TEEtVTpIVFRQOi4uLn0pCj4gICAgICBUaGlzIGlzc3VlIGFmZmVjdHMgQXBh
+Y2hlIEhUVFAgU2VydmVyOiBmcm9tIDIuNC4wIHRocm91Z2ggMi40LjY4Lgo+ICAgICAgQ3JlZGl0
+czogTmVidWxhIFNlY3VyaXR5IChAbmVidXNlY3VyaXR5KQo+IAo+ICAgKikgU0VDVVJJVFk6IENW
+RS0yMDI2LTU2MTUzOiBtb2RfY2hhcnNldF9saXRlOiBIZWFwIG92ZXJmbG93IGluCj4gICAgICBm
+aW5pc2hfcGFydGlhbF9jaGFyIChjdmUubWl0cmUub3JnKQo+ICAgICAgT3V0LW9mLWJvdW5kcyBX
+cml0ZSB2dWxuZXJhYmlsaXR5IGluIEFwYWNoZSBIVFRQIFNlcnZlcidzCj4gICAgICBtb2RfY2hh
+cnNldF9saXRlLgo+ICAgICAgVGhpcyBpc3N1ZSBhZmZlY3RzIEFwYWNoZSBIVFRQIFNlcnZlcjog
+ZnJvbSAyLjQuMCB0aHJvdWdoIDIuNC42OC4KPiAgICAgIENyZWRpdHM6IEJhcnRsb21pZWogRG1p
+dHJ1ayBhdCBzdHJpZ2EuYWkKPiAKPiAgICopIFNFQ1VSSVRZOiBDVkUtMjAyNi00ODAwNTogbW9k
+X2F1dGhfZGlnZXN0IHJlYXV0aGVudGljYXRpb24KPiAgICAgIGF0dGFjayAoY3ZlLm1pdHJlLm9y
+ZykKPiAgICAgIE1pc3NpbmcgYXV0aGVudGljYXRpb24gY2hlY2tzIGluIG1vZF9hdXRoX2RpZ2Vz
+dCBpbiBBcGFjaGUKPiAgICAgIFNvZnR3YXJlIEZvdW5kYXRpb24gQXBhY2hlIEhUVFAgU2VydmVy
+IGJlZm9yZSAyLjQuNjkgb24gYWxsCj4gICAgICBwbGF0Zm9ybXMgYWxsb3dzIGFuIHVuYXV0aGVu
+dGljYXRlZCByZW1vdGUgY2xpZW50IHRvIGNhdXNlIGEKPiAgICAgIGRlbmlhbCBvZiBzZXJ2aWNl
+IChmb3JjZWQgcmUtYXV0aGVudGljYXRpb24pIHZpYSBmb3JnZWQKPiAgICAgIEF1dGhvcml6YXRp
+b24gaGVhZGVycyB3aGVuIERpZ2VzdCBhdXRoZW50aWNhdGlvbiBpcyBlbmFibGVkIHdpdGgKPiAg
+ICAgIEF1dGhEaWdlc3ROY0NoZWNrIC4KPiAgICAgIFVzZXJzIGFyZSByZWNvbW1lbmRlZCB0byB1
+cGdyYWRlIHRvIHZlcnNpb24gMi40LjY5LCB3aGljaCBmaXhlcwo+ICAgICAgdGhpcyBpc3N1ZS4K
+PiAgICAgIENyZWRpdHM6IGxva2VyeHgKPiAKPiAgICopIFNFQ1VSSVRZOiBDVkUtMjAyNi00NzM2
+MDogbW9kX3Nlc3Npb246IFNlc3Npb24gY29va2llIG5vdAo+ICAgICAgcmVtb3ZlZCBkdXJpbmcg
+aW50ZXJuYWwgcmVkaXJlY3QgKGN2ZS5taXRyZS5vcmcpCj4gICAgICBFeHBvc3VyZSBvZiBTZW5z
+aXRpdmUgSW5mb3JtYXRpb24gdG8gYW4gVW5hdXRob3JpemVkIEFjdG9yCj4gICAgICB2dWxuZXJh
+YmlsaXR5IGluIEFwYWNoZSBIVFRQIFNlcnZlcidzIG1vZF9zZXNzaW9uX2Nvb2tpZSBtb2R1bGUu
+Cj4gICAgICDDggo+ICAgICAgV2hlbiBTZXNzaW9uQ29va2llUmVtb3ZlIGNoYW5nZXMgYWNyb3Nz
+IGludGVybmFsIHJlZGlyZWN0cywgdGhlCj4gICAgICBzZXNzaW9uIGNvb2tpZSBtYXkgc3RpbGwg
+YmUgcGFzc2VkIHRvIGEgYmFja2VuZCBzZXJ2ZXIuCj4gICAgICBUaGlzIGlzc3VlIGFmZmVjdHMg
+QXBhY2hlIEhUVFAgU2VydmVyOiBmcm9tIDIuNC4wIHRocm91Z2ggMi40LjY4Lgo+ICAgICAgQ3Jl
+ZGl0czogbG9rZXJ4eAo+IAo+ICAgKikgU0VDVVJJVFk6IENWRS0yMDI2LTQ2NzI5OiBtb2RfaGVh
+cnRtb25pdG9yIGRlbmlhbCBvZiBzZXJ2aWNlCj4gICAgICAoY3ZlLm1pdHJlLm9yZykKPiAgICAg
+IE5VTEwgUG9pbnRlciBEZXJlZmVyZW5jZSB2dWxuZXJhYmlsaXR5IGluIEFwYWNoZSBIVFRQIFNl
+cnZlcnMKPiAgICAgIG1vZF9oZWFydG1vbml0b3Igb3ZlciB1bmljYXN0IGxpc3RlbmVyLgo+ICAg
+ICAgVGhpcyBpc3N1ZSBhZmZlY3RzIEFwYWNoZSBIVFRQIFNlcnZlcjogZnJvbSAyLjQuMCB0aHJv
+dWdoIDIuNC42OC4KPiAgICAgIENyZWRpdHM6IFpoYW5nIFNhbgo+IAo+ICAgKikgU0VDVVJJVFk6
+IENWRS0yMDI2LTQyNTI4OiBtb2RfZGF2IHNoYXJlZCBsb2NrIG92ZXJmbG93Cj4gICAgICAoY3Zl
+Lm1pdHJlLm9yZykKPiAgICAgIEEgbWVtb3J5IGNhbGN1bGF0aW9uIGJ1ZyBpbiBtb2RfZGF2IGlu
+IEFwYWNoZSBodHRwZCAyLjQuNjcgYW5kCj4gICAgICBlYXJsaWVyIGFsbG93cyBhbiBhdHRhY2tl
+ciB3aXRoIHBlcm1pc3Npb24gdG8gY3JlYXRlIFdlYkRBVgo+ICAgICAgbG9ja3MgdG8gY3Jhc2gg
+c2VydmVyIGNoaWxkIHByb2Nlc3Nlcy4KPiAgICAgIFVzZXJzIGFyZSByZWNvbW1lbmRlZCB0byB1
+cGdyYWRlIHRvIHZlcnNpb24gMi40LjY5LCB3aGljaCBmaXhlcwo+ICAgICAgdGhpcyBpc3N1ZQo+
+ICAgICAgQ3JlZGl0czogWmhlbnBlbmcgKExlbykgTGluIGF0IGRlcHRoZmlyc3QKPiAKPiAgICop
+IFNFQ1VSSVRZOiBDVkUtMjAyNi00MjM1NjogbGltaXRlZCBSQ0UgZm9yIHNvbWUgaW50ZXJuYWwK
+PiAgICAgIHJlZGlyZWN0cyB0byBub24tQ0dJIGZpbGVzIGluIENHSSBkaXJlY3RvcmllcyAoY3Zl
+Lm1pdHJlLm9yZykKPiAgICAgIERlcGxveW1lbnQgb2Ygd3JvbmcgaGFuZGxlciB2dWxuZXJhYmls
+aXR5IGluIEFwYWNoZSBIVFRQIFNlcnZlcgo+ICAgICAgYWxsb3dzIHRoZSB0YXJnZXQgb2Ygc29t
+ZSBpbnRlcm5hbCByZWRpcmVjdHMgZnJvbSBDR0kgcHJvZ3JhbXMKPiAgICAgIHRvIGFsc28gYmUg
+dHJlYXRlZCBhcyBDR0kgYW5kIGV4ZWN1dGVkLiBUaGUgdGFyZ2V0IG11c3QgYWxyZWFkeQo+ICAg
+ICAgYmUgaW4gYSBkaXJlY3RvcnkgZW5hYmxlZCBmb3IgQ0dJIGFuZCBoYXZlIG5vIG90aGVyIGV4
+dGVuc2lvbgo+ICAgICAgdW5kZXJzdG9vZCBieSBtb2RfbWltZS4KPiAgICAgIFRoaXMgaXNzdWUg
+YWZmZWN0cyBBcGFjaGUgSFRUUCBTZXJ2ZXI6IGZyb20gMi40LjYwIHRocm91Z2gKPiAgICAgIDIu
+NC42OC4KPiAgICAgIENyZWRpdHM6IEZlbGlrcyBQZW5jb25lawo+IAo+IFNpZ25lZC1vZmYtYnk6
+IEJlcm5kIEt1aGxzIDxiZXJuZEBrdWhscy5uZXQ+CgpBcHBsaWVkIHRvIG1hc3RlciwgdGhhbmtz
+LgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJv
+b3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVp
+bGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
