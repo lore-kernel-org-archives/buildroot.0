@@ -1,118 +1,159 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1EF2CA5FCE
-	for <buildroot@archiver.kernel.org>; Thu,  1 Oct 2026 23:18:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40B9ACA5FCE
+	for <buildroot@archiver.kernel.org>; Fri,  2 Oct 2026 03:29:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 29D9B80D66;
-	Thu,  1 Oct 2026 23:18:02 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 46-U0mBiZDgD; Thu,  1 Oct 2026 23:18:00 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org D15B580BE8
-Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790896680;
-	b=cbZH7oxxokFCNjyv5MQAagAX/DCcwAv6OuEUb05Wq6cGWjdTKmFtrnoUjVo6JNTgwi6W
-	 bHOJ8C8P1ON50PYUAriJalosDFIQzIVffC5fkwvVGdNllzq8YEoO4Di5hj2lYIbHbpl5x
-	 HfsgrRD1DhbrEE4eEpOiDfNdbREl/U0+bpd382xXzQKxCsrp3KqQaJCuzC+pwuJgGlCyw
-	 rT2+CJNMqeww5Lz/h8ztdd2J4BFjYfLKTD1sWVdICxadE0JiW8gQHdYQy1Kgji500xGev
-	 +xpDQS2YP6jJ7m8aazPDCo0rOntQB2ar9YSB66lh+lP34XA6neb6rcttKV3/phIqwGA==
-ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1790896680;
-	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:From:
-	 To:Cc:Date:Message-ID:X-Mailer:MIME-Version:Subject:X-BeenThere:
-	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Content-Type:
-	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=uz1TZzeFYIsl+NSNQG53q1zrPz0o6/OXeIZqf5kfTyM=;
-	b=EKMUTc0f0niwUMr+Dp+06qZeq24om7so0eOy8mCWnlupLN9kzv+9CAFTu4uKLbTjskeN
-	 hn800WCD+JjKCvT0fVs4ab7yO61oSuO+9CLY3id1aG7LH+QCmHRO6YWkZD14P9ANw0f3B
-	 qIR43JcLzQJAUKj0JdsGh1sTNkeRXYuTeJSg2faPqk+3dFUt3U8aHoC7nbFSXiCRZwQYM
-	 9GpmHGjKmPEcNfbiolaNe8VD4dISeD8NvePcQDuMVL9zS2V0wWcSAbQkD/7kGIh1L4KY2
-	 dltSTM/76zQrA/SETbXn10sHk4+WRsRxYSrbZ41RXcJNf8js6P9EYNzuZDQVZ/TopQg==
-ARC-Authentication-Results: i=2; smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1790896679;
-	bh=uz1TZzeFYIsl+NSNQG53q1zrPz0o6/OXeIZqf5kfTyM=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=DuVJqykeJcJ2WUmVsuPqLtjqQddV06e4+yc5ElJQIJmtbm9CRP/cO8fzPib1xkNeQ
-	 TXwiftSVAGJhQyu+eTf32Xym7lxzmAzXCt8XakLOyM1TdZfqzHIGnhYJibRmReVa1t
-	 yyVVuNfQigvPX6E4hFqYCMkrtT4N7zNyt8Nz54Ji8UYsiQrsFS/OJhdLuvy/8IBnoL
-	 Z/ErptMrb7QAjGfmWKQV96f/b321eglOLWIWUlie/7HQijORJSEhhsrW7HefRRnG9x
-	 2sI+vW/XNHGq7x2UiRbgfLuoz3GckCzJU3Q1ep8URoBWRc/1tV0AhV1qrngse6qbsc
-	 6/7zziLx33eoA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D15B580BE8;
-	Thu,  1 Oct 2026 23:17:59 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id C1F2332F
- for <buildroot@buildroot.org>; Thu,  1 Oct 2026 23:17:57 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A7F654084B
- for <buildroot@buildroot.org>; Thu,  1 Oct 2026 23:17:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B8A8240BA9;
+	Fri,  2 Oct 2026 03:29:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oL-aerKPiaBs for <buildroot@buildroot.org>;
- Thu,  1 Oct 2026 23:17:56 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org B19094080B
+ id 6fnx3vK-vh9m; Fri,  2 Oct 2026 03:29:32 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org AAE0340BE1
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1790911772;
+	b=UHAt/GuDfruLW+cOIKyxYn3quy/kW1h76nFoQgkUGNwGZhF2XyY6vHNdOKOzjA7Yy39M
+	 htUZCPt4kw9YZnKePmic/SfpjRsp9e5dkI+2RJv1cihJ18XhyQZJp2Bt3tbX4WJWbx1Gl
+	 cm2BDC4mEGlSA/7Jx71YTbV7cqlz8xuW4oVpSSmWdXDFxFPaVVstszAPlVxJhsAHEjMVj
+	 xfmxfXt9oaOTYiAwVcRJxWVNnesBngQ+1vDVrKuC7jpeZHbboy7j6SLt5qhqZlfggCMV4
+	 lcFAPmhxAfBeuuNhLElAhVMKUxNpC6N5CfahD8lcQEkYkOfqCR9RWjTPsXcC9G4kJqg==
+ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
+	c=relaxed/relaxed; t=1790911772;
+	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
+	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
+	 X-Received:Received:Message-ID:MIME-Version:To:From:Date:Subject:
+	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:Content-Type:
+	 Content-Transfer-Encoding:Errors-To:Sender;
+	bh=qp3D7izaGI3U8Us9b5bMZhwUdYvB4+W3oKmpEwUxX/o=;
+	b=U9IyT7gypR8UQ89JqUPmqCQUXR/y9zWz7m3yQxJXAecNe8Q3ETBu9erHkaESmT2uOzWu
+	 itNM7toqD+Kk2EfmNUvbN8NwdAaiMShRbR77YlXZx/rzL611MCR+FZ5l9o/btyRWEir8e
+	 pKqEoESe1qQP6TSrEyBakYFFi6wwr09JeLPBGLzTyc56eeIRkwv5WQaIaDRbYSbArtgIS
+	 kyv/4axDyWReSEcwA8mbw3R9ius6k6jBdxM0xGLoA2x9ioEEWY4EC1pD5OflTruHRmUWv
+	 7y4iTDIJPsM1S7z9jPIGQbUR0BmNteUq/zi75NFOFrPecOSh3+RkdtBTOj0mjUdPISw==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; dmarc=pass header.from=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=Cpd6QePk;
+	arc=fail smtp.remote-ip=140.211.166.142
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1790911772;
+	bh=qp3D7izaGI3U8Us9b5bMZhwUdYvB4+W3oKmpEwUxX/o=;
+	h=To:From:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=arisw70oLwe835NUoRbTsEisVrmnIKg/xp5euQ09XAN3Ut8f/7TzEb/Ov4fR0Nrak
+	 qIPfAUnCkd/E2EGRKBmgpfmXvCxnyoohB6ysExMZL4yRz2kw6oJCjYV/JgwLQEDEox
+	 YYRU4KFVpIJOeV5UxWXgQflxHA4VcLO5QIcE/fn+EvT9+o2uSGnAScEcP8MWP7aK3s
+	 Yn/W5ujRVVDhoKz60e1d59fKpoIxG0df++rUOmNIBMT7EzpNUTNZHoDMurdd8/oY+J
+	 zJU3MwBz5DrSoo6JZxLcUmc44oc8CSO6Ch0TEdnL0Z4wJQBQAjziwwIC6I0ECm/efh
+	 PaUyiuCJ2H5AA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id AAE0340BE1;
+	Fri,  2 Oct 2026 03:29:32 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id C6107282
+ for <buildroot@buildroot.org>; Fri,  2 Oct 2026 03:29:31 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id AA75540BEC
+ for <buildroot@buildroot.org>; Fri,  2 Oct 2026 03:29:31 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OVLTwxfsEq6Q for <buildroot@buildroot.org>;
+ Fri,  2 Oct 2026 03:29:30 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 448D640BA9
 Authentication-Results: smtp4.osuosl.org;
- arc=none smtp.remote-ip=207.191.199.123
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790896675;
- b=WJDSwdUl4buoJIg/HVhA3ML4GVHWyZZMy2LHgyr6uCl2hHyLunEsBgfzHDoz6Sn62PvU
- hamzd8EDBJM3wyLZa/dJ+6U/5DlIYbKp8bf4UamxKufVtSG9QDYusSDgZuY0CKhgvMlrA
- M8olACd/aR7O4rdiclyc4YUIlIBW1Rn1XuoVjue5yBW6T4fZNEzMjp28xfxcD6hlnK6iM
- 8ohuUPnUBGvCyiUejBjnWKJtAeVuyKK2Z/p2jT7V3of+fKOmUMFyD6CSoCDxRsNpCwy+Z
- iP8yb+ittg+C/CcbT1GOE/EjCJKqYLOtSqBfVpngHOpeH2VHAQNLLnn/nJ395Y/gOpw==
+ arc=none smtp.remote-ip="2a00:1450:4864:31::11"
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1790911770;
+ b=mgmDKERNQuWPtbjcjrRSl3jE5c8mj5PurA92lYqW5mqNLlHYaHC3vsQLmWAK3OvpKXjq
+ UJlvtWKHq+ykJdj6aZU2srCcKIUk6qwX6tR96jeLYDbRAlkJgFaqvNV3FZBYcm8eyhDAJ
+ uPnPgnrA4HQDQbxNDxkogwVBUmShb+25jrF3GR6s4NOYDR97+yONGsRtpV6R2kM8nYElE
+ QLF4DLG9WQinKx24CSrcHQocTVPXSGY1qaNFEYfl599Bys31tfqL93G6HQosQTzsidAAG
+ SSfUttJkkqSnP51DDvEpPYUT/AfBuH3XEy3eMGrWrj6UJo3h8lPuJk6U7YF5mREIQNQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1790896675;
- h=Received-SPF:Received:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
- MIME-Version:Content-Transfer-Encoding;
- bh=Vvh4coo7/bdano69v7bAnHgMJNHajTGl3wUQTTWS/iE=;
- b=bH9DqL/saTrSrDrTgRW1YA0N4WcpJhok4Q6v4WhOV5710iZheTu+gEC5ADO5FRpAojlX
- 8s68UeRzQIKVkwOyWmoA4TpDEjrRRQRZqHvh/o2VssjfEACQhzS6eE/f9OnEsedf1jCGK
- Cmg3tJ14+07rBqa7vBFYiiKtoZ3/suGV0J3Yr1CFhQIDFLrOpsTRGnKmQnh7jTYY2f3h8
- f+waLDMikXfEDdRLSV+UahnLgZ5riMLzjB3NuS1lLCthgeDKfDcUl1RWZpWCVxBChS2wF
- TvKMUdgUAmzW7delCiY6xGTQKE0s8p4fOkv2UPl7RIT6+ucYuquXTQEjJ/usDynS/Iw==
+ c=relaxed/relaxed; t=1790911770;
+ h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
+ X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Message-ID:
+ Content-Type:MIME-Version:Content-Transfer-Encoding:Subject:To:From:
+ Date; bh=RFjPa2+WZO01CRPBw0HgTLPLIWvrk757wAKURArXUks=;
+ b=AgJ/Y7xy2I1mfBBBaXkmAYKT5b2pvLD+EuRUYzDJ9ZDisGwlruXRMZx+n1ytBBsJLTc5
+ tnJvxVP4JzcNs5V54XB2cpN6322614SEC+QQ2ySLIuEh5mOd6ROnW5ayFVdzdEXowWg9V
+ uXKJjLR3UFNKvG4BhSf0NQFdtK0wVnUHEpZy4Cp4i2+57rlvSU3tVQdnP4fvpPKwywco+
+ FlUmKpekZsG6cB5ed0MQF95px+72+racb+yQGoUiyW+ITHVhrUvZx2c5HdKHXVIgyHagU
+ v6PtG1+Qn/7oY68K174wehn9YrEPUKo85cwVkOhwhTJuxiX3on4bfd0tNOzUS5XI1LA==
 ARC-Authentication-Results: i=1; smtp4.osuosl.org;
- dmarc=none header.from=realitydiluted.com; 
- arc=none smtp.remote-ip=207.191.199.123
-Received-SPF: Permerror (mailfrom) identity=mailfrom; client-ip=207.191.199.123;
- helo=home.bethel-hill.org; envelope-from=sjhill@realitydiluted.com;
- receiver=<UNKNOWN> 
-Authentication-Results: smtp4.osuosl.org; dmarc=none (p=none dis=none)
- header.from=realitydiluted.com
-Received: from home.bethel-hill.org
- (207-191-199-123.dhcp.imoncommunications.net [207.191.199.123])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B19094080B
- for <buildroot@buildroot.org>; Thu,  1 Oct 2026 23:17:54 +0000 (UTC)
-Received: from localhost.centaur.lan ([127.0.0.1]:34650
- helo=home.bethel-hill.org)
- by home.bethel-hill.org with esmtp (Exim 4.98.2)
- (envelope-from <sjhill@realitydiluted.com>)
- id 1xCQ26-00000001D2b-2sZ2; Thu, 01 Oct 2026 23:17:46 +0000
-From: "Steven J. Hill" <sjhill@realitydiluted.com>
-To: buildroot@buildroot.org
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Ibai Erkiaga <ibai.erkiaga-elorza@amd.com>,
- Neal Frager <neal.frager@amd.com>, Romain Naour <romain.naour@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- "Steven J. Hill" <steven.hill@collins.com>,
- "Steven J. Hill" <sjhill@realitydiluted.com>
-Date: Thu,  1 Oct 2026 23:17:44 +0000
-Message-ID: <20261001231744.288451-1-sjhill@realitydiluted.com>
-X-Mailer: git-send-email 2.47.3
+ dmarc=pass header.from=gmail.com; 
+ dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20251104 header.b=Cpd6QePk; 
+ arc=none smtp.remote-ip="2a00:1450:4864:31::11"
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:31::11; helo=mail-wm2-x11.google.com;
+ envelope-from=buildroot.notifications@gmail.com; receiver=<UNKNOWN> 
+Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp4.osuosl.org; dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20251104 header.b=Cpd6QePk
+Received: from mail-wm2-x11.google.com (mail-wm2-x11.google.com
+ [IPv6:2a00:1450:4864:31::11])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 448D640BA9
+ for <buildroot@buildroot.org>; Fri,  2 Oct 2026 03:29:29 +0000 (UTC)
+Received: by mail-wm2-x11.google.com with SMTP id
+ 5b1f17b1804b1-4a00d8bec5aso22813635e9.2
+ for <buildroot@buildroot.org>; Thu, 01 Oct 2026 20:29:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20251104; t=1790911768; x=1791516568; darn=buildroot.org;
+ h=date:from:to:subject:content-transfer-encoding:mime-version
+ :content-type:message-id:from:to:cc:subject:date:message-id:reply-to
+ :content-type; bh=RFjPa2+WZO01CRPBw0HgTLPLIWvrk757wAKURArXUks=;
+ b=Cpd6QePkhfygHp0bmbGh5EC4MSSFixHaczQOUbXYsvp8RKzvLNJ5boa3YQcYYqpy0X
+ a7dl9Q9B/LRYxzzYuQOUwUs5NwWXTJqfm8Y4DObuYzmKrAdCnMGiKSLRF+usx92kfU8r
+ TWOvmWiR7DXIvkgtQJwbk9OUzRdciPYjNch0ro/FUGYUwGA8F1DUPprdsOPsBg1+lLtB
+ GerBbwKCJvVerj6HJYHUHTK9kaZpZu9pcSkpHY5CuUDULXr2uHRZXB3yQE71wgj3LT6f
+ JByOS++v7c6JtYU7aWzy7j3kqlQYWSyIc7DoA729dKuYs/a2GqLnMmUqbFybo0RZedcB
+ pGuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20260707; t=1790911768; x=1791516568;
+ h=date:from:to:subject:content-transfer-encoding:mime-version
+ :content-type:message-id:x-gm-gg:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to:content-type;
+ bh=RFjPa2+WZO01CRPBw0HgTLPLIWvrk757wAKURArXUks=;
+ b=KGd7sJ7Gg2w0nuq+fOwWCdf2R/fnD96vItZ89N/jCZw72MgjvcIUO0v//qrWi4+gW3
+ q7SH96cVRn6z5Ketp35SwcH5TIt+nOry0JgNJ8u6DNq+LzYSlOliylgkc6Z8dRLjeCcF
+ wSLuvO0N0PagnhABwidyuHKUFZJnCojfUoghTYjFmfAm1MhGtdPzxHSvLsyVmam9coTa
+ cIqfEazJGMZSzcG0r5qYrfL/NENaEWh4LQlgHCWNt++obzIQ1WGGDaJSp5fzQh62sH+D
+ fjUXMzn/8+I+lys46JZltllSUUl/RLRN1G1IaWdP+gpPZ5C5ppcFdHUTFwFuW6ynB1Fi
+ ry+Q==
+X-Gm-Message-State: AFuF++kRwSzYIIVatfwtv9bL9FR+a68YLY/PFjOGEuhTZme1tJdOGF2U
+ 25m0SzFsFcXjoX5Hl6eY3X9nq2P80yaFfIBQe9nYOjKwNoJNVwtCO0jXqZu171+i
+X-Gm-Gg: AYBFou00fE+Xgku7Sjoif1CfLwNT7SZPBIMl9V+PVr0quOu3OIi6gBW1JnjQpzin32T
+ JiwyRQPWkhN2SEvnuhH8zYnDvr8o/ZQKjPhbBdnDi7pFy8sfzcd2JOhyi9ipwmQA9Bozuqzrd+4
+ vYw+MV7ss6qM5XG5ALk52TOoyKq9HGVSGxUqt4aE6DLH69Vv+u0JP3x3HfmfaPQyIurzGG6SdJc
+ n3Hiu9637GXICrHC50HzhP9nvbKYqNnGR4QMR9iVCNg26UKzoXV85e+e4O/Bvs68afp8UC1Yu0w
+ Ir37WI/PO6XOxAhGjbI6BXPGafWo4WL8eA7F2/Cl7/EO1i69HcohfeL1xU/xPapqEbS+j1RVks1
+ K4gAL8TuTGI2+04yLpqqUt13r1Vr2LBdvuw4B0B1NUHNhTkCKGQozpF998E6yukPBbxIJ9BSxSd
+ b2dpRqVksPkcLJgmntecmvLTKNooQWekb0mJYrsyYabRKG4xBOyFnKKcLQtlMdsFExD+6KJmWG1
+ w==
+X-Received: by 2002:a05:600c:350b:b0:499:bf8c:cfd1 with SMTP id
+ 5b1f17b1804b1-4a027523045mr22173075e9.2.1790911767564; 
+ Thu, 01 Oct 2026 20:29:27 -0700 (PDT)
+Received: from [138.201.205.61] ([2a01:4f8:173:1526::2])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-4a0280d1e38sm32169585e9.13.2026.10.01.20.29.27
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 01 Oct 2026 20:29:27 -0700 (PDT)
+Message-ID: <6abf2517.5cd83af4.38fd24.8da2@mx.google.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1 v2]
- toolchain/toolchain-bare-metal-buildroot: Add C++ support
+To: buildroot@buildroot.org
+From: Buildroot Notifications <buildroot.notifications@gmail.com>
+Date: Fri, 02 Oct 2026 03:29:27 -0000
+Subject: [Buildroot] [autobuild.buildroot.org] Daily results for 2026-10-01
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -129,799 +170,152 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: "Steven J. Hill" <steven.hill@collins.com>
+Hello,
 
-Add C++ support for bare metal toolchains.
+Autobuild statistics for 2026-10-01
+===================================
 
-Signed-off-by: Steven J. Hill <steven.hill@collins.com>
-Signed-off-by: Steven J. Hill <sjhill@realitydiluted.com>
----
-V1->V2
-- Removed headers and footers throughout.
-- Fix missing gcc version in hash files.
----
- .../binutils-bare-metal.mk                    |   6 ++
- package/gcc-bare-metal/Config.in              |   5 +
- .../gcc-bare-metal-final.hash                 |  20 ++++
- .../gcc-bare-metal-final.mk                   |  98 +++++++++++++++++
- .../gcc-bare-metal-initial.hash               |  20 ++++
- .../gcc-bare-metal-initial.mk                 |  72 +++++++++++++
- package/gcc-bare-metal/gcc-bare-metal.hash    |  10 ++
- package/gcc-bare-metal/gcc-bare-metal.mk      |  80 +++++---------
- package/newlib-bare-metal-nano/Config.in      |  12 +++
- .../newlib-bare-metal-nano.hash               |   1 +
- .../newlib-bare-metal-nano.mk                 | 100 ++++++++++++++++++
- package/newlib-bare-metal/Config.in           |  12 +++
- .../newlib-bare-metal/newlib-bare-metal.mk    |   9 +-
- .../toolchain-bare-metal-buildroot/Config.in  |  28 +++++
- .../configs/README.md                         |  47 ++++++++
- .../configs/riscv64-unknown-elf.config        |  35 ++++++
- .../toolchain-bare-metal-buildroot.mk         |   5 +
- 17 files changed, 506 insertions(+), 54 deletions(-)
- create mode 100644 package/gcc-bare-metal/Config.in
- create mode 100644 package/gcc-bare-metal/gcc-bare-metal-final/gcc-bare-metal-final.hash
- create mode 100644 package/gcc-bare-metal/gcc-bare-metal-final/gcc-bare-metal-final.mk
- create mode 100644 package/gcc-bare-metal/gcc-bare-metal-initial/gcc-bare-metal-initial.hash
- create mode 100644 package/gcc-bare-metal/gcc-bare-metal-initial/gcc-bare-metal-initial.mk
- create mode 100644 package/newlib-bare-metal-nano/Config.in
- create mode 120000 package/newlib-bare-metal-nano/newlib-bare-metal-nano.hash
- create mode 100644 package/newlib-bare-metal-nano/newlib-bare-metal-nano.mk
- create mode 100755 toolchain/toolchain-bare-metal-buildroot/configs/README.md
- create mode 100644 toolchain/toolchain-bare-metal-buildroot/configs/riscv64-unknown-elf.config
+      branch |  OK | NOK | TIM | TOT |
+  2025.02.x  |  5  |  6  |  0  | 11  |
+  2026.05.x  |  1  |  3  |  0  |  4  |
+  2026.08.x  |  1  |  1  |  0  |  2  |
+    master   | 22  | 34  |  1  | 57  |
 
-diff --git a/package/binutils-bare-metal/binutils-bare-metal.mk b/package/binutils-bare-metal/binutils-bare-metal.mk
-index 343bf44c4d..4e3f01f7aa 100644
---- a/package/binutils-bare-metal/binutils-bare-metal.mk
-+++ b/package/binutils-bare-metal/binutils-bare-metal.mk
-@@ -37,6 +37,7 @@ HOST_BINUTILS_BARE_METAL_CONF_OPTS = \
- 	--disable-shared \
- 	--enable-lto \
- 	--disable-initfini-array \
-+	--disable-nls \
- 	$(HOST_BINUTILS_BARE_METAL_MULTILIB) \
- 	--disable-werror
- 
-@@ -49,6 +50,7 @@ define HOST_BINUTILS_BARE_METAL_CONFIGURE_CMDS
- 		CONFIG_SITE=/dev/null \
- 		$(@D)/configure \
- 			$(HOST_BINUTILS_BARE_METAL_CONF_OPTS) \
-+			$(BINUTILS_BARE_METAL_EXTRA_CONF_OPTS_$(arch_tuple)) \
- 			--target=$(arch_tuple)
- 	)
- endef
-@@ -70,3 +72,7 @@ define HOST_BINUTILS_BARE_METAL_INSTALL_CMDS
- endef
- 
- $(eval $(host-autotools-package))
-+
-+ifneq ($(BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_CONFIG_DIR),"")
-+include $(shell grep -v '^\s*#' $(wildcard $(subst ",,$(BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_CONFIGS))/*)
-+endif
-diff --git a/package/gcc-bare-metal/Config.in b/package/gcc-bare-metal/Config.in
-new file mode 100644
-index 0000000000..298885e26e
---- /dev/null
-+++ b/package/gcc-bare-metal/Config.in
-@@ -0,0 +1,5 @@
-+# Copyright 2026 Rockwell Collins
-+
-+config BR2_PACKAGE_BARE_METAL_GCC_FINAL
-+	bool
-+	default y if BR2_TOOLCHAIN_BARE_METAL_BUILDROOT
-diff --git a/package/gcc-bare-metal/gcc-bare-metal-final/gcc-bare-metal-final.hash b/package/gcc-bare-metal/gcc-bare-metal-final/gcc-bare-metal-final.hash
-new file mode 100644
-index 0000000000..e25d9b8dc2
---- /dev/null
-+++ b/package/gcc-bare-metal/gcc-bare-metal-final/gcc-bare-metal-final.hash
-@@ -0,0 +1,20 @@
-+# From https://gcc.gnu.org/pub/gcc/releases/gcc-8.4.0/sha512.sum
-+sha512  6de904f552a02de33b11ef52312bb664396efd7e1ce3bbe37bfad5ef617f133095b3767b4804bc7fe78df335cb53bc83f1ac055baed40979ce4c2c3e46b70280  gcc-8.4.0.tar.xz
-+# From https://gcc.gnu.org/pub/gcc/releases/gcc-14.4.0/sha512.sum
-+sha512  725ed8bdd43ef1726ffe8b5e8615a13e247fac9575b7626ae013a2975d000ea213212dc414b2f2631ac4785c1c8beca85555222faf9904d3b2fa6a3807a83a15  gcc-14.4.0.tar.xz
-+# From https://gcc.gnu.org/pub/gcc/releases/gcc-15.2.0/sha512.sum
-+sha512  89047a2e07bd9da265b507b516ed3635adb17491c7f4f67cf090f0bd5b3fc7f2ee6e4cc4008beef7ca884b6b71dffe2bb652b21f01a702e17b468cca2d10b2de  gcc-15.2.0.tar.xz
-+# From https://gcc.gnu.org/pub/gcc/releases/gcc-15.3.0/sha512.sum
-+sha512  0de9e296153b52c021b1c7e63c9c62151d7a0ac03f23ce6e9f772c1b0eb783f6acdd81cc4567bfe4128a6f64968c2cfc8eff40b36229cba7425349f7d637c654  gcc-15.3.0.tar.xz
-+# From https://gcc.gnu.org/pub/gcc/releases/gcc-16.2.0/sha512.sum
-+sha512  c51c30ca7422d0cbecf504b2e0f33c3aca31e0f90a76b65217f465163fa6fa17b3f5de39e145c47e5bab90ac0ce7fff3b03c8d553ae36e01faaea5a50f8648d1  gcc-16.2.0.tar.xz
-+
-+# Locally calculated (fetched from Github)
-+sha512  2de7cf47333a4092b02d3bb98f4206f14966f1d139a724d09cf3b22f8a43ae0c704f33e6477d6367a03c29b265480dc900169e9d417006c5d46f0ae446b8c6f1  gcc-or1k-musl-5.4.0-20170218.tar.gz
-+
-+# Locally calculated
-+sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING3
-+sha256  a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING3.LIB
-+sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING.LIB
-+sha256  9d6b43ce4d8de0c878bf16b54d8e7a10d9bd42b75178153e3af6a815bdc90f74  COPYING.RUNTIME
-diff --git a/package/gcc-bare-metal/gcc-bare-metal-final/gcc-bare-metal-final.mk b/package/gcc-bare-metal/gcc-bare-metal-final/gcc-bare-metal-final.mk
-new file mode 100644
-index 0000000000..08c36769c5
---- /dev/null
-+++ b/package/gcc-bare-metal/gcc-bare-metal-final/gcc-bare-metal-final.mk
-@@ -0,0 +1,98 @@
-+################################################################################
-+#
-+# gcc-bare-metal-final
-+#
-+################################################################################
-+
-+# Copyright 2026 Rockwell Collins
-+
-+GCC_BARE_METAL_FINAL_VERSION = $(GCC_BARE_METAL_VERSION)
-+GCC_BARE_METAL_FINAL_SITE = $(GCC_BARE_METAL_SITE)
-+GCC_BARE_METAL_FINAL_SOURCE = $(GCC_BARE_METAL_SOURCE)
-+GCC_BARE_METAL_FINAL_LICENSE = $(GCC_BARE_METAL_SOURCE)
-+GCC_BARE_METAL_FINAL_LICENSE_FILES = $(GCC_BARE_METAL_LICENSE)
-+GCC_BARE_METAL_FINAL_CPE_ID_VENDOR = gnu
-+GCC_BARE_METAL_FINAL_CPE_ID_PRODUCT = gcc
-+
-+GCC_BARE_METAL_FINAL_ADD_TOOLCHAIN_DEPENDENCY = NO
-+GCC_BARE_METAL_FINAL_INSTALL_STAGING = YES
-+
-+GCC_BARE_METAL_FINAL_DL_SUBDIR = $(HOST_GCC_BARE_METAL_DL_SUBDIR)
-+HOST_GCC_BARE_METAL_FINAL_DL_SUBDIR = $(GCC_BARE_METAL_FINAL_DL_SUBDIR)
-+
-+HOST_GCC_BARE_METAL_FINAL_DEPENDENCIES = \
-+	$(HOST_GCC_BARE_METAL_DEPENDENCIES) \
-+	newlib-bare-metal-nano
-+
-+HOST_GCC_BARE_METAL_FINAL_EXCLUDES = \
-+	$(HOST_GCC_BARE_METAL_EXCLUDES)
-+
-+HOST_GCC_BARE_METAL_FINAL_MAKE_OPTS = \
-+	$(HOST_GCC_BARE_METAL_MAKE_OPTS) \
-+	all-gcc \
-+	all-target-libgcc
-+
-+HOST_GCC_BARE_METAL_FINAL_INSTALL_OPTS = \
-+	$(HOST_GCC_BARE_METAL_INSTALL_OPTS)
-+
-+HOST_GCC_BARE_METAL_FINAL_CONF_OPTS = \
-+	$(HOST_GCC_BARE_METAL_CONF_OPTS) \
-+	$(HOST_GCC_BARE_METAL_FINAL_MULTILIB) \
-+	$(call qstrip,$(BR2_EXTRA_GCC_CONFIG_OPTIONS)) \
-+	--with-build-time-tools=$(HOST_DIR)/$(GNU_TARGET_NAME)/bin \
-+	--with-native-system-header-dir=/usr/include \
-+	--enable-languages=c,c++ \
-+	--enable-lto \
-+	--disable-shared \
-+	--disable-threads \
-+	--enable-languages=c,c++ \
-+	--enable-tls \
-+	--with-newlib \
-+	--disable-libmudflap \
-+	--disable-libssp \
-+	--disable-libquadmath \
-+	--disable-libgomp \
-+	--disable-nls \
-+	--disable-tm-clone-registry \
-+	--disable-multilib
-+
-+HOST_GCC_BARE_METAL_FINAL_GCC_LIB_DIR = $(HOST_DIR)/$(GNU_TARGET_NAME)/lib*
-+
-+define HOST_GCC_BARE_METAL_FINAL_CONFIGURE_CMDS
-+	$(foreach arch_tuple, $(TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH_TUPLE), \
-+		mkdir -p $(@D)/build-$(arch_tuple) && \
-+		cd $(@D)/build-$(arch_tuple) && \
-+		$(HOST_CONFIGURE_OPTS) \
-+		CFLAGS="$(HOST_CFLAGS)" \
-+		LDFLAGS="$(HOST_LDFLAGS)" \
-+		MAKEINFO=missing \
-+		CONFIG_SITE=/dev/null \
-+		$(@D)/configure \
-+			$(HOST_GCC_BARE_METAL_FINAL_CONF_OPTS) \
-+			$(GCC_FINAL_BARE_METAL_EXTRA_CONF_OPTS_$(arch_tuple)) \
-+			--target=$(arch_tuple) \
-+			--with-sysroot=$(HOST_DIR)/$(arch_tuple)/sysroot \
-+			AR_FOR_TARGET=$(HOST_DIR)/bin/$(arch_tuple)-ar \
-+			RANLIB_FOR_TARGET=$(HOST_DIR)/bin/$(arch_tuple)-ranlib
-+	)
-+endef
-+
-+define HOST_GCC_BARE_METAL_FINAL_BUILD_CMDS
-+	$(foreach arch_tuple, $(TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH_TUPLE), \
-+		$(HOST_MAKE_ENV) $(MAKE) \
-+			$(HOST_GCC_BARE_FINAL_METAL_MAKE_OPTS) \
-+			-C $(@D)/build-$(arch_tuple)
-+	)
-+endef
-+
-+define HOST_GCC_BARE_METAL_FINAL_INSTALL_CMDS
-+	$(foreach arch_tuple, $(TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH_TUPLE), \
-+		$(HOST_MAKE_ENV) $(MAKE) \
-+			-C $(@D)/build-$(arch_tuple) \
-+			$(HOST_GCC_BARE_METAL_FINAL_INSTALL_OPTS) \
-+			install
-+	)
-+endef
-+
-+$(eval $(generic-package))
-+$(eval $(host-autotools-package))
-diff --git a/package/gcc-bare-metal/gcc-bare-metal-initial/gcc-bare-metal-initial.hash b/package/gcc-bare-metal/gcc-bare-metal-initial/gcc-bare-metal-initial.hash
-new file mode 100644
-index 0000000000..e25d9b8dc2
---- /dev/null
-+++ b/package/gcc-bare-metal/gcc-bare-metal-initial/gcc-bare-metal-initial.hash
-@@ -0,0 +1,20 @@
-+# From https://gcc.gnu.org/pub/gcc/releases/gcc-8.4.0/sha512.sum
-+sha512  6de904f552a02de33b11ef52312bb664396efd7e1ce3bbe37bfad5ef617f133095b3767b4804bc7fe78df335cb53bc83f1ac055baed40979ce4c2c3e46b70280  gcc-8.4.0.tar.xz
-+# From https://gcc.gnu.org/pub/gcc/releases/gcc-14.4.0/sha512.sum
-+sha512  725ed8bdd43ef1726ffe8b5e8615a13e247fac9575b7626ae013a2975d000ea213212dc414b2f2631ac4785c1c8beca85555222faf9904d3b2fa6a3807a83a15  gcc-14.4.0.tar.xz
-+# From https://gcc.gnu.org/pub/gcc/releases/gcc-15.2.0/sha512.sum
-+sha512  89047a2e07bd9da265b507b516ed3635adb17491c7f4f67cf090f0bd5b3fc7f2ee6e4cc4008beef7ca884b6b71dffe2bb652b21f01a702e17b468cca2d10b2de  gcc-15.2.0.tar.xz
-+# From https://gcc.gnu.org/pub/gcc/releases/gcc-15.3.0/sha512.sum
-+sha512  0de9e296153b52c021b1c7e63c9c62151d7a0ac03f23ce6e9f772c1b0eb783f6acdd81cc4567bfe4128a6f64968c2cfc8eff40b36229cba7425349f7d637c654  gcc-15.3.0.tar.xz
-+# From https://gcc.gnu.org/pub/gcc/releases/gcc-16.2.0/sha512.sum
-+sha512  c51c30ca7422d0cbecf504b2e0f33c3aca31e0f90a76b65217f465163fa6fa17b3f5de39e145c47e5bab90ac0ce7fff3b03c8d553ae36e01faaea5a50f8648d1  gcc-16.2.0.tar.xz
-+
-+# Locally calculated (fetched from Github)
-+sha512  2de7cf47333a4092b02d3bb98f4206f14966f1d139a724d09cf3b22f8a43ae0c704f33e6477d6367a03c29b265480dc900169e9d417006c5d46f0ae446b8c6f1  gcc-or1k-musl-5.4.0-20170218.tar.gz
-+
-+# Locally calculated
-+sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING3
-+sha256  a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING3.LIB
-+sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING.LIB
-+sha256  9d6b43ce4d8de0c878bf16b54d8e7a10d9bd42b75178153e3af6a815bdc90f74  COPYING.RUNTIME
-diff --git a/package/gcc-bare-metal/gcc-bare-metal-initial/gcc-bare-metal-initial.mk b/package/gcc-bare-metal/gcc-bare-metal-initial/gcc-bare-metal-initial.mk
-new file mode 100644
-index 0000000000..931c2a1d1e
---- /dev/null
-+++ b/package/gcc-bare-metal/gcc-bare-metal-initial/gcc-bare-metal-initial.mk
-@@ -0,0 +1,72 @@
-+################################################################################
-+#
-+# gcc-bare-metal-initial
-+#
-+################################################################################
-+
-+# Copyright 2026 Rockwell Collins
-+
-+GCC_BARE_METAL_INITIAL_VERSION = $(GCC_BARE_METAL_VERSION)
-+GCC_BARE_METAL_INITIAL_SITE = $(GCC_BARE_METAL_SITE)
-+GCC_BARE_METAL_INITIAL_SOURCE = $(GCC_BARE_METAL_SOURCE)
-+GCC_BARE_METAL_INITIAL_LICENSE = $(GCC_BARE_METAL_LICENSE)
-+GCC_BARE_METAL_INITIAL_LICENSE_FILES = $(GCC_BARE_METAL_LICENSE_FILES)
-+
-+HOST_GCC_BARE_METAL_INITIAL_DL_SUBDIR = $(HOST_GCC_BARE_METAL_DL_SUBDIR)
-+
-+HOST_GCC_BARE_METAL_INITIAL_DEPENDENCIES = \
-+	$(HOST_GCC_BARE_METAL_DEPENDENCIES)
-+
-+HOST_GCC_BARE_METAL_INITIAL_EXCLUDES = \
-+	$(HOST_GCC_BARE_METAL_EXCLUDES)
-+
-+HOST_GCC_BARE_METAL_INITIAL_MAKE_OPTS = \
-+	$(HOST_GCC_BARE_METAL_MAKE_OPTS) \
-+	all-gcc \
-+	all-target-libgcc
-+
-+HOST_GCC_BARE_METAL_INITIAL_INSTALL_OPTS = \
-+	$(HOST_GCC_BARE_METAL_INSTALL_OPTS)
-+
-+HOST_GCC_BARE_METAL_INITIAL_CONF_OPTS = \
-+	$(HOST_GCC_BARE_METAL_CONF_OPTS) \
-+	--enable-languages=c \
-+	--disable-__cxa_atexit \
-+	--disable-largefile \
-+	--disable-libstdcxx-pch \
-+	$(call qstrip,$(BR2_EXTRA_GCC_CONFIG_OPTIONS))
-+
-+define HOST_GCC_BARE_METAL_INITIAL_CONFIGURE_CMDS
-+	$(foreach arch_tuple, $(TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH_TUPLE), \
-+		mkdir -p $(@D)/build-$(arch_tuple) && \
-+		cd $(@D)/build-$(arch_tuple) && \
-+		$(HOST_CONFIGURE_OPTS) \
-+		MAKEINFO=missing \
-+		CONFIG_SITE=/dev/null \
-+		$(@D)/configure \
-+			$(HOST_GCC_BARE_METAL_INITIAL_CONF_OPTS) \
-+			$(GCC_INITIAL_BARE_METAL_EXTRA_CONF_OPTS_$(arch_tuple))\
-+			--target=$(arch_tuple) \
-+			--with-sysroot=$(HOST_DIR)/$(arch_tuple)/sysroot \
-+			AR_FOR_TARGET=$(HOST_DIR)/bin/$(arch_tuple)-ar \
-+			RANLIB_FOR_TARGET=$(HOST_DIR)/bin/$(arch_tuple)-ranlib
-+	)
-+endef
-+
-+define HOST_GCC_BARE_METAL_INITIAL_BUILD_CMDS
-+	$(foreach arch_tuple, $(TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH_TUPLE), \
-+		$(HOST_MAKE_ENV) $(MAKE) \
-+			$(HOST_GCC_BARE_INITIAL_METAL_MAKE_OPTS) \
-+			-C $(@D)/build-$(arch_tuple)
-+	)
-+endef
-+
-+define HOST_GCC_BARE_METAL_INITIAL_INSTALL_CMDS
-+	$(foreach arch_tuple, $(TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH_TUPLE), \
-+		$(HOST_MAKE_ENV) $(MAKE) \
-+			$(HOST_GCC_BARE_METAL_INTIAL_INSTALL_OPTS) \
-+			-C $(@D)/build-$(arch_tuple)
-+	)
-+endef
-+
-+$(eval $(host-autotools-package))
-diff --git a/package/gcc-bare-metal/gcc-bare-metal.hash b/package/gcc-bare-metal/gcc-bare-metal.hash
-index 1e1003eec9..49f87e25bb 100644
---- a/package/gcc-bare-metal/gcc-bare-metal.hash
-+++ b/package/gcc-bare-metal/gcc-bare-metal.hash
-@@ -1,8 +1,18 @@
-+# From https://gcc.gnu.org/pub/gcc/releases/gcc-8.4.0/sha512.sum
-+sha512  6de904f552a02de33b11ef52312bb664396efd7e1ce3bbe37bfad5ef617f133095b3767b4804bc7fe78df335cb53bc83f1ac055baed40979ce4c2c3e46b70280  gcc-8.4.0.tar.xz
-+# From https://gcc.gnu.org/pub/gcc/releases/gcc-14.4.0/sha512.sum
-+sha512  725ed8bdd43ef1726ffe8b5e8615a13e247fac9575b7626ae013a2975d000ea213212dc414b2f2631ac4785c1c8beca85555222faf9904d3b2fa6a3807a83a15  gcc-14.4.0.tar.xz
-+# From https://gcc.gnu.org/pub/gcc/releases/gcc-15.3.0/sha512.sum
-+sha512  0de9e296153b52c021b1c7e63c9c62151d7a0ac03f23ce6e9f772c1b0eb783f6acdd81cc4567bfe4128a6f64968c2cfc8eff40b36229cba7425349f7d637c654  gcc-15.3.0.tar.xz
- # From https://gcc.gnu.org/pub/gcc/releases/gcc-16.2.0/sha512.sum
- sha512  c51c30ca7422d0cbecf504b2e0f33c3aca31e0f90a76b65217f465163fa6fa17b3f5de39e145c47e5bab90ac0ce7fff3b03c8d553ae36e01faaea5a50f8648d1  gcc-16.2.0.tar.xz
- 
-+# Locally calculated (fetched from Github)
-+sha512  2de7cf47333a4092b02d3bb98f4206f14966f1d139a724d09cf3b22f8a43ae0c704f33e6477d6367a03c29b265480dc900169e9d417006c5d46f0ae446b8c6f1  gcc-or1k-musl-5.4.0-20170218.tar.gz
-+
- # Locally calculated
- sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING3
- sha256  a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING3.LIB
- sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING.LIB
-+sha256  9d6b43ce4d8de0c878bf16b54d8e7a10d9bd42b75178153e3af6a815bdc90f74  COPYING.RUNTIME
-diff --git a/package/gcc-bare-metal/gcc-bare-metal.mk b/package/gcc-bare-metal/gcc-bare-metal.mk
-index 4ec154bb53..f4b92c1000 100644
---- a/package/gcc-bare-metal/gcc-bare-metal.mk
-+++ b/package/gcc-bare-metal/gcc-bare-metal.mk
-@@ -4,15 +4,18 @@
- #
- ################################################################################
- 
-+# Copyright 2026 Rockwell Collins
-+
- GCC_BARE_METAL_VERSION = 16.2.0
- GCC_BARE_METAL_SITE = $(BR2_GNU_MIRROR)/gcc/gcc-$(GCC_BARE_METAL_VERSION)
- GCC_BARE_METAL_SOURCE = gcc-$(GCC_BARE_METAL_VERSION).tar.xz
--
- GCC_BARE_METAL_LICENSE = GPL-2.0, GPL-3.0, LGPL-2.1, LGPL-3.0
- GCC_BARE_METAL_LICENSE_FILES = COPYING COPYING3 COPYING.LIB COPYING3.LIB
- GCC_BARE_METAL_CPE_ID_VENDOR = gnu
- GCC_BARE_METAL_CPE_ID_PRODUCT = gcc
- 
-+HOST_GCC_BARE_METAL_DL_SUBDIR = gcc
-+
- HOST_GCC_BARE_METAL_DEPENDENCIES = \
- 	host-binutils-bare-metal \
- 	host-gmp \
-@@ -20,16 +23,15 @@ HOST_GCC_BARE_METAL_DEPENDENCIES = \
- 	host-mpfr \
- 	host-isl
- 
--# Don't build documentation. It takes up extra space / build time,
--# and sometimes needs specific makeinfo versions to work
--HOST_GCC_BARE_METAL_CONF_ENV = MAKEINFO=missing
-+HOST_GCC_BARE_METAL_EXCLUDES = \
-+	libjava/* libgo/*
- 
- HOST_GCC_BARE_METAL_MAKE_OPTS = \
--	$(HOST_GCC_COMMON_MAKE_OPTS) \
--	all-gcc \
--	all-target-libgcc
-+	gcc_cv_prog_makeinfo_modern=no
- 
--HOST_GCC_BARE_METAL_INSTALL_OPTS = install-gcc install-target-libgcc
-+HOST_GCC_BARE_METAL_INSTALL_OPTS = \
-+	install-gcc \
-+	install-target-libgcc
- 
- ifeq ($(BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_MULTILIB),y)
- HOST_GCC_BARE_METAL_MULTILIB = "--enable-multilib"
-@@ -43,54 +45,26 @@ HOST_GCC_BARE_METAL_CONF_OPTS = \
- 	--localstatedir=$(HOST_DIR)/var \
- 	$(if $$($$(PKG)_OVERRIDE_SRCDIR),,--disable-dependency-tracking) \
- 	$(QUIET) \
--	--disable-shared \
--	--disable-initfini-array \
--	--disable-__cxa_atexit \
--	--disable-libstdcxx-pch \
--	--with-newlib \
--	--disable-threads \
--	--enable-plugins \
--	--with-gnu-as \
--	--disable-libitm \
--	--without-long-double-128 \
--	--without-headers \
--	--enable-languages=c \
- 	$(HOST_GCC_BARE_METAL_MULTILIB) \
- 	--with-gmp=$(HOST_DIR) \
- 	--with-mpc=$(HOST_DIR) \
- 	--with-mpfr=$(HOST_DIR) \
--	--with-isl=$(HOST_DIR)
--
--define HOST_GCC_BARE_METAL_CONFIGURE_CMDS
--	$(foreach arch_tuple, $(TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH_TUPLE), \
--		mkdir -p $(@D)/build-$(arch_tuple) && \
--		cd $(@D)/build-$(arch_tuple) && \
--		$(HOST_CONFIGURE_OPTS) \
--		$(HOST_GCC_BARE_METAL_CONF_ENV) \
--		CONFIG_SITE=/dev/null \
--		$(@D)/configure \
--			$(HOST_GCC_BARE_METAL_CONF_OPTS) \
--			--target=$(arch_tuple) \
--			--with-sysroot=$(HOST_DIR)/$(arch_tuple)/sysroot \
--			AR_FOR_TARGET=$(HOST_DIR)/bin/$(arch_tuple)-ar \
--			RANLIB_FOR_TARGET=$(HOST_DIR)/bin/$(arch_tuple)-ranlib
--	)
--endef
--
--define HOST_GCC_BARE_METAL_BUILD_CMDS
--	$(foreach arch_tuple, $(TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH_TUPLE), \
--		$(HOST_MAKE_ENV) $(MAKE) \
--			$(HOST_GCC_BARE_METAL_MAKE_OPTS) \
--			-C $(@D)/build-$(arch_tuple)
--	)
--endef
-+	--with-isl=$(HOST_DIR) \
-+	--with-newlib \
-+	--disable-shared \
-+	--disable-threads \
-+	--disable-tls \
-+	--disable-libatomic \
-+	--disable-libgomp \
-+	--disable-libitm \
-+	--disable-libmudflap \
-+	--disable-libquadmath \
-+	--disable-libssp \
-+	--disable-nls \
-+	--disable-tm-clone-registry
- 
--define HOST_GCC_BARE_METAL_INSTALL_CMDS
--	$(foreach arch_tuple, $(TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH_TUPLE), \
--		$(HOST_MAKE_ENV) $(MAKE) \
--			$(HOST_GCC_BARE_METAL_INSTALL_OPTS) \
--			-C $(@D)/build-$(arch_tuple)
--	)
--endef
-+ifneq ($(BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_CONFIG_DIR),"")
-+include $(shell grep -v '^\s*#' $(wildcard $(subst ",,$(BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_CONFIGS))/*)
-+endif
- 
--$(eval $(host-autotools-package))
-+include $(sort $(wildcard package/gcc-bare-metal/*/*.mk))
-diff --git a/package/newlib-bare-metal-nano/Config.in b/package/newlib-bare-metal-nano/Config.in
-new file mode 100644
-index 0000000000..1e16240ea4
---- /dev/null
-+++ b/package/newlib-bare-metal-nano/Config.in
-@@ -0,0 +1,12 @@
-+# Copyright 2026 Rockwell Collins
-+
-+config BR2_PACKAGE_NEWLIB_BARE_METAL_NANO
-+	bool
-+	default y if BR2_PACKAGE_NEWLIB_BARE_METAL
-+	help
-+	  newlib-nano is an open source C library (libc) targeting
-+	  embedded microcontrollers (MCU). Implementation focus is on
-+	  code and data size reduction through optimization and removal
-+	  of non-MCU features.
-+
-+	  https://github.com/32bitmicro/newlib-nano-1.0
-diff --git a/package/newlib-bare-metal-nano/newlib-bare-metal-nano.hash b/package/newlib-bare-metal-nano/newlib-bare-metal-nano.hash
-new file mode 120000
-index 0000000000..f5ffcdfaba
---- /dev/null
-+++ b/package/newlib-bare-metal-nano/newlib-bare-metal-nano.hash
-@@ -0,0 +1 @@
-+../newlib-bare-metal/newlib-bare-metal.hash
-\ No newline at end of file
-diff --git a/package/newlib-bare-metal-nano/newlib-bare-metal-nano.mk b/package/newlib-bare-metal-nano/newlib-bare-metal-nano.mk
-new file mode 100644
-index 0000000000..38a95ae7dc
---- /dev/null
-+++ b/package/newlib-bare-metal-nano/newlib-bare-metal-nano.mk
-@@ -0,0 +1,100 @@
-+################################################################################
-+#
-+# newlib-bare-metal-nano
-+#
-+################################################################################
-+
-+# Copyright 2026 Rockwell Collins
-+
-+NEWLIB_BARE_METAL_NANO_VERSION = $(NEWLIB_BARE_METAL_VERSION)
-+NEWLIB_BARE_METAL_NANO_SITE = $(NEWLIB_BARE_METAL_SITE)
-+NEWLIB_BARE_METAL_NANO_SOURCE = $(NEWLIB_BARE_METAL_SOURCE)
-+NEWLIB_BARE_METAL_NANO_DEPENDENCIES = newlib-bare-metal
-+NEWLIB_BARE_METAL_NANO_ADD_TOOLCHAIN_DEPENDENCY = NO
-+NEWLIB_BARE_METAL_NANO_LICENSE = $(NEWLIB_BARE_METAL_LICENSE)
-+NEWLIB_BARE_METAL_NANO_LICENSE_FILES = $(NEWLIB_BARE_METAL_LICENSE_FILES)
-+NEWLIB_BARE_METAL_NANO_CPE_ID_VENDOR = $(NEWLIB_BARE_METAL_CPE_ID_VENDOR)
-+NEWLIB_BARE_METAL_NANO_CPE_ID_PRODUCT = $(NEWLIB_BARE_METAL_CPE_ID_PRODUCT)
-+
-+NEWLIB_BARE_METAL_NANO_INSTALL_STAGING = YES
-+NEWLIB_BARE_METAL_NANO_INSTALL_TARGET = NO
-+
-+NEWLIB_BARE_METAL_NANO_CONF_OPTS = \
-+	--build=$(GNU_HOST_NAME) \
-+	--prefix=/usr \
-+	--exec-prefix=/usr \
-+	--sysconfdir=/etc \
-+	--localstatedir=/var \
-+	--program-prefix="" \
-+	$(if $$($$(PKG)_OVERRIDE_SRCDIR),,--disable-dependency-tracking) \
-+	$(QUIET) \
-+	--enable-newlib-io-c99-formats \
-+	--enable-newlib-io-long-long \
-+	--enable-newlib-io-float \
-+	--enable-newlib-io-long-double \
-+	--with-tooldir=/usr
-+
-+define NEWLIB_BARE_METAL_NANO_CONFIGURE_CMDS
-+	$(foreach arch_tuple, $(TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH_TUPLE), \
-+		mkdir -p $(@D)/build-$(arch_tuple) && \
-+		cd $(@D)/build-$(arch_tuple) && \
-+		mkdir -p $(@D)/build-$(arch_tuple)/tmp-install && \
-+		PATH=$(BR_PATH) \
-+		CONFIG_SITE=/dev/null \
-+		$(@D)/configure \
-+			$(NEWLIB_BARE_METAL_NANO_CONF_OPTS) \
-+			$(NEWLIB_BARE_METAL_NANO_EXTRA_CONF_OPTS_$(arch_tuple))\
-+			--enable-multilib \
-+		        --prefix=$(@D)/build-$(arch_tuple)-nano/tmp-install \
-+		        --enable-newlib-reent-small \
-+		        --disable-newlib-fvwrite-in-streamio \
-+		        --disable-newlib-fseek-optimization \
-+		        --disable-newlib-wide-orient \
-+		        --enable-newlib-nano-malloc \
-+		        --disable-newlib-unbuf-stream-opt \
-+		        --enable-lite-exit \
-+		        --enable-newlib-global-atexit \
-+		        --enable-newlib-nano-formatted-io \
-+		        --disable-newlib-supplied-syscalls \
-+			--enable-multilib \
-+		        --disable-nls \
-+		        CFLAGS_FOR_TARGET="-Os -ffunction-sections -fdata-sections    -mcmodel=medlow" \
-+		        CXXFLAGS_FOR_TARGET="-Os -ffunction-sections -fdata-sections    -mcmodel=medlow" \
-+			--target=$(arch_tuple)
-+	)
-+endef
-+
-+define NEWLIB_BARE_METAL_NANO_BUILD_CMDS
-+	$(foreach arch_tuple, $(TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH_TUPLE), \
-+		PATH=$(BR_PATH) $(MAKE1) \
-+			$(NEWLIB_BARE_METAL_NANO_MAKE_OPTS) \
-+			-C $(@D)/build-$(arch_tuple)
-+	)
-+endef
-+
-+define NEWLIB_BARE_METAL_NANO_INSTALL_STAGING_CMDS
-+	$(foreach arch_tuple, $(TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH_TUPLE), \
-+		PATH=$(BR_PATH) $(MAKE1) \
-+			$(NEWLIB_BARE_METAL_NANO_MAKE_OPTS) \
-+			-C $(@D)/build-$(arch_tuple) \
-+			DESTDIR=$(@D)/build-$(arch_tuple)/tmp-install \
-+			install
-+		cp -a $(@D)/build-$(arch_tuple)/tmp-install/usr/lib/libc.a \
-+			$(HOST_DIR)/$(arch_tuple)/sysroot/usr/lib/libc_nano.a
-+		cp -a $(@D)/build-$(arch_tuple)/tmp-install/usr/lib/libm.a \
-+			$(HOST_DIR)/$(arch_tuple)/sysroot/usr/lib/libm_nano.a
-+		cp -a $(@D)/build-$(arch_tuple)/tmp-install/usr/lib/libg.a \
-+			$(HOST_DIR)/$(arch_tuple)/sysroot/usr/lib/libg_nano.a
-+		cp -a $(@D)/build-$(arch_tuple)/tmp-install/usr/lib/libgloss.a \
-+			$(HOST_DIR)/$(arch_tuple)/sysroot/usr/lib/libgloss_nano.a
-+		mkdir -p $(HOST_DIR)/$(arch_tuple)/sysroot/usr/include/newlib-nano
-+		cp -a $(@D)/build-$(arch_tuple)/tmp-install/usr/include/newlib.h \
-+			$(HOST_DIR)/$(arch_tuple)/sysroot/usr/include/newlib-nano
-+	)
-+endef
-+
-+$(eval $(generic-package))
-+
-+ifneq ($(BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_CONFIG_DIR),"")
-+include $(shell grep -v '^\s*#' $(wildcard $(subst ",,$(BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_CONFIGS))/*)
-+endif
-diff --git a/package/newlib-bare-metal/Config.in b/package/newlib-bare-metal/Config.in
-index 1ff3d5d8ec..8b064af1e4 100644
---- a/package/newlib-bare-metal/Config.in
-+++ b/package/newlib-bare-metal/Config.in
-@@ -1,2 +1,14 @@
-+# Copyright 2026 Rockwell Collins
-+
- config BR2_PACKAGE_NEWLIB_BARE_METAL
- 	bool
-+	default y if BR2_TOOLCHAIN_BARE_METAL_BUILDROOT
-+	help
-+	  Newlib is a C library intended for use on embedded systems.
-+
-+	  Newlib is a C standard library implementation intended for use
-+	  on embedded systems. It is a conglomeration of several library
-+	  parts, all under free software licenses that make them easily
-+	  usable on embedded products.
-+
-+	  https://sourceware.org/git/newlib-cygwin.git
-diff --git a/package/newlib-bare-metal/newlib-bare-metal.mk b/package/newlib-bare-metal/newlib-bare-metal.mk
-index 5881993d3a..c8f1c9e8da 100644
---- a/package/newlib-bare-metal/newlib-bare-metal.mk
-+++ b/package/newlib-bare-metal/newlib-bare-metal.mk
-@@ -4,10 +4,12 @@
- #
- ################################################################################
- 
-+# Copyright 2026 Rockwell Collins
-+
- NEWLIB_BARE_METAL_VERSION = 4.6.0.20260123
- NEWLIB_BARE_METAL_SITE = https://sourceware.org/ftp/newlib
- NEWLIB_BARE_METAL_SOURCE = newlib-$(NEWLIB_BARE_METAL_VERSION).tar.gz
--NEWLIB_BARE_METAL_DEPENDENCIES = host-gcc-bare-metal
-+NEWLIB_BARE_METAL_DEPENDENCIES = host-gcc-bare-metal-initial
- NEWLIB_BARE_METAL_ADD_TOOLCHAIN_DEPENDENCY = NO
- NEWLIB_BARE_METAL_LICENSE = GPL-2.0, GPL-3.0, LGPL-2.1, LGPL-3.0
- NEWLIB_BARE_METAL_LICENSE_FILES = \
-@@ -52,6 +54,7 @@ define NEWLIB_BARE_METAL_CONFIGURE_CMDS
- 		CONFIG_SITE=/dev/null \
- 		$(@D)/configure \
- 			$(NEWLIB_BARE_METAL_CONF_OPTS) \
-+			$(NEWLIB_BARE_METAL_CONF_OPTS_$(arch_tuple)) \
- 			--target=$(arch_tuple)
- 	)
- endef
-@@ -74,3 +77,7 @@ define NEWLIB_BARE_METAL_INSTALL_STAGING_CMDS
- endef
- 
- $(eval $(generic-package))
-+
-+ifneq ($(BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_CONFIG_DIR),"")
-+include $(shell grep -v '^\s*#' $(wildcard $(subst ",,$(BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_CONFIGS))/*)
-+endif
-diff --git a/toolchain/toolchain-bare-metal-buildroot/Config.in b/toolchain/toolchain-bare-metal-buildroot/Config.in
-index 7ba579b570..90f957aed4 100644
---- a/toolchain/toolchain-bare-metal-buildroot/Config.in
-+++ b/toolchain/toolchain-bare-metal-buildroot/Config.in
-@@ -26,6 +26,34 @@ config BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_MULTILIB
- 	  When enabled, this option will apply to all architecture
- 	  tuples in the list.
- 
-+config BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_NANO
-+	bool "Enable nano"
-+	select BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_MULTILIB
-+	select BR2_PACKAGE_NEWLIB_BARE_METAL_NANO
-+	help
-+	  Build the nano newlib libraries to allow support for
-+	  other languages like c++ and FORTRAN.
-+
-+	  When enabled, this option will apply to all architecture
-+	  tuples in the list.
-+
-+config BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_CONFIGS
-+	string "Additional config options"
-+	help
-+	  Search the specified directory for tuple config files with
-+	  additional options for the toolchain build stages. For
-+	  example, if the user specified two bare metal toolchains to be
-+	  built:
-+
-+	  > BARE_METAL_BUILDROOT_ARCH="microblazeel-buildroot-elf \
-+	  >     riscv64-unknown-elf"
-+
-+	  The CONFIG_DIR directory would have invidual config files:
-+
-+	  > microblazeel-buildroot-elf.config
-+	  > riscv64-unknown-elf.config
-+
- source "package/newlib-bare-metal/Config.in"
-+source "package/newlib-bare-metal-nano/Config.in"
- 
- endif # BR2_TOOLCHAIN_BARE_METAL_BUILDROOT
-diff --git a/toolchain/toolchain-bare-metal-buildroot/configs/README.md b/toolchain/toolchain-bare-metal-buildroot/configs/README.md
-new file mode 100755
-index 0000000000..af8cb99f09
---- /dev/null
-+++ b/toolchain/toolchain-bare-metal-buildroot/configs/README.md
-@@ -0,0 +1,47 @@
-+# Bare Metal Toolchain
-+The original bare metal toolchain was for compiling only standard C code. Bare metal toolchains are for building code targeting micro-controllers. As such, multi threading, large block memory allocation and MMU are not supported. A bare metal toolchain only requires three software packages:
-+
-+1. binutils
-+2. gcc
-+3. newlib-baremetal
-+
-+Because the bare metal toolchain packages can use multiple bare metal toolchains. The configure, build and install targets in each makefile loop through each of the specified toolchain tuples as shown. Package `binutils` is built for every architecture, then `gcc` for the architectures and finally `newlib` for each.
-+
-+## Target-specific Options
-+While adding C++ support to the bare metal toolchain, it was clear that additional configuration options would be necessary as each processor architecture's toolchain was built. The configuration and build options will undoubtedly be different for each bare metal toolchain combination or tuple. We need a simple and intuitive way to handle this. The new configuration `BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_CONFIG_DIR` option was added. When specified, the bare metal packages will include any and all files found at the path for all five stages of the toolchain build for any toolchain target specified. Currently, the config files only support `configure` options for each of the five build stages. A single line was added to each of the `configure` command loops:
-+```
-+        $(GCC_INITIAL_BARE_METAL_EXTRA_CONF_OPTS_$(arch_tuple)) \
-+```
-+As each target toolchain is built, it will only use the options specifically for that architecture. Using fictional configuration options:
-+```
-+BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-xilinx-elf riscv64-unknown-elf"
-+BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_CONFIG_DIR="board/madness/bare-metal"
-+```
-+Inside the directory `board/madness/bare-metal` we could have two files:
-+```
-+riscv64-unknown-elf.config
-+microblazeel-xilinx-elf.config
-+```
-+For the riscv64 example, the config file could look like:
-+```
-+BINUTILS_BARE_METAL_EXTRA_CONF_OPTS_riscv64-unknown-elf = \
-+        --with-abi=lp64d \
-+        --with-arch=rv64gc \
-+        --with-isa-spec=20191213
-+
-+GCC_INITIAL_BARE_METAL_EXTRA_CONF_OPTS_riscv64-unknown-elf = \
-+        --with-abi=lp64d \
-+        --with-arch=rv64gc \
-+        --with-isa-spec=20191213 \
-+        --with-system-zlib \
-+        CFLAGS_FOR_TARGET="-Os -mcmodel=medlow" \
-+        CXXFLAGS_FOR_TARGET="-Os -mcmodel=medlow"
-+```
-+There is nothing to prevent a user from putting everything in one file. It would be a terrible idea, but it would still work. So, at each stage of the bare metal toolchain the options would be included in with base configuration options of binutils and gcc initial stage steps. A complete sample config file can be found in the same directory as this file.
-+
-+## Toolchain Upgrade for C++ Support
-+The bare metal toolchain now supports C++. Since a second stage compiler is needed for C++ (and other languages), the build steps are identical to those used for the traditional buildroot toolchain. The `gcc-bare-metal` package was completely rewritten to match the organization and steps of the `gcc` package. In order to support C++, the `newlib-bare-metal-nano` package was added to provide a micro C-runtime of sorts that would make gcc happy when building C++ support. The `binutils-bare-metal` and `newlib-bare-metal` were largely unchanged.
-+
-+## Future Work
-+1. Support other languages like D and FORTRAN. This is fairly trivial to add, but it is highly likely a number of config and build options will need to be tuned.
-+2. The architecture config files could support extra options for the `build` and `install` stages.
-diff --git a/toolchain/toolchain-bare-metal-buildroot/configs/riscv64-unknown-elf.config b/toolchain/toolchain-bare-metal-buildroot/configs/riscv64-unknown-elf.config
-new file mode 100644
-index 0000000000..0daabd76a3
---- /dev/null
-+++ b/toolchain/toolchain-bare-metal-buildroot/configs/riscv64-unknown-elf.config
-@@ -0,0 +1,35 @@
-+# Copyright 2026 Rockwell Collins
-+
-+BINUTILS_BARE_METAL_EXTRA_CONF_OPTS_riscv64-unknown-elf = \
-+	--with-abi=lp64d \
-+	--with-arch=rv64gc \
-+	--with-isa-spec=20191213
-+
-+GCC_INITIAL_BARE_METAL_EXTRA_CONF_OPTS_riscv64-unknown-elf = \
-+	--with-abi=lp64d \
-+	--with-arch=rv64gc \
-+	--with-isa-spec=20191213 \
-+	--with-system-zlib \
-+	CFLAGS_FOR_TARGET="-Os -mcmodel=medlow" \
-+	CXXFLAGS_FOR_TARGET="-Os -mcmodel=medlow"
-+
-+GCC_FINAL_BARE_METAL_EXTRA_CONF_OPTS_riscv64-unknown-elf = \
-+	--with-abi=lp64d \
-+	--with-arch=rv64gc \
-+	--with-isa-spec=20191213 \
-+	--with-system-zlib \
-+	--without-zstd \
-+	--with-specs='%{!mcmodel*:-mcmodel=medlow}' \
-+	CFLAGS_FOR_TARGET="-Os -mcmodel=medlow" \
-+	CXXFLAGS_FOR_TARGET="-Os -mcmodel=medlow"
-+
-+NEWLIB_BARE_METAL_CONF_OPTS_riscv64-unknown-elf = \
-+	--enable-newlib-register-fini \
-+	--disable-nls \
-+	CFLAGS_FOR_TARGET="-Os -D_POSIX_MODE -ffunction-sections -fdata-sections    -mcmodel=medlow" \
-+	CXXFLAGS_FOR_TARGET="-Os -D_POSIX_MODE -ffunction-sections -fdata-sections    -mcmodel=medlow"
-+
-+NEWLIB_BARE_METAL_NANO_CONF_OPTS_riscv64-unknown-elf = \
-+	--disable-nls \
-+	CFLAGS_FOR_TARGET="-Os -D_POSIX_MODE -ffunction-sections -fdata-sections    -mcmodel=medlow" \
-+	CXXFLAGS_FOR_TARGET="-Os -D_POSIX_MODE -ffunction-sections -fdata-sections    -mcmodel=medlow"
-diff --git a/toolchain/toolchain-bare-metal-buildroot/toolchain-bare-metal-buildroot.mk b/toolchain/toolchain-bare-metal-buildroot/toolchain-bare-metal-buildroot.mk
-index 71063fcee4..eeeacffaf3 100644
---- a/toolchain/toolchain-bare-metal-buildroot/toolchain-bare-metal-buildroot.mk
-+++ b/toolchain/toolchain-bare-metal-buildroot/toolchain-bare-metal-buildroot.mk
-@@ -4,7 +4,12 @@
- #
- ################################################################################
- 
-+# Copyright 2026 Rockwell Collins
-+
- TOOLCHAIN_BARE_METAL_BUILDROOT_DEPENDENCIES = newlib-bare-metal
-+ifeq ($(BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_NANO),y)
-+TOOLCHAIN_BARE_METAL_BUILDROOT_DEPENDENCIES += host-gcc-bare-metal-final
-+endif
- TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH_TUPLE = $(call qstrip,$(BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH))
- TOOLCHAIN_BARE_METAL_BUILDROOT_ADD_TOOLCHAIN_DEPENDENCY = NO
- 
+Classification of failures by reason for master
+-----------------------------------------------
+
+                   dante-1.4.4 | 3 
+                 libclc-23.1.2 | 2 
+        ltp-testsuite-20260529 | 2 
+                       unknown | 2 
+          aardvark-dns-v1.17.1 | 1 
+                   atftp-0.8.0 | 1 
+                   bird-2.15.1 | 1 
+                    ccid-1.5.2 | 1 
+          cloudflared-2026.6.1 | 1 
+cpuinfo-8a1772a0c5c447df2d1... | 1 
+      docker-cli-buildx-0.25.0 | 1 
+                  dpdk-25.11.2 | 1 
+            ecryptfs-utils-111 | 1 
+                    emlog-0.70 | 1 
+              execline-2.9.6.1 | 1 
+      freeradius-server-3.2.10 | 1 
+                   iotools-1.8 | 1 
+                  iozone-3.508 | 1 
+              libeXosip2-5.3.0 | 1 
+             libfm-extra-1.3.2 | 1 
+                  libmms-0.6.4 | 1 
+                openocd-0.12.0 | 1 
+                   perl-5.42.3 | 1 
+                        qprint | 1 
+                 rtptools-1.22 | 1 
+                 s6-rc-0.5.5.0 | 1 
+               tcf-agent-1.8.0 | 1 
+uclibc-ng-test-132c6134d691... | 1 
+ustream-ssl-5a81c108d20e247... | 1 
+               valgrind-3.26.0 | 1 
+
+
+Detail of failures for master
+-----------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+   x86_64    |      aardvark-dns-v1.17.1      | NOK | https://autobuild.buildroot.org/results/e0d96a89d06c46b452dcb323fdfbc9b41a1e644a | ORPH
+    i686     |          atftp-0.8.0           | NOK | https://autobuild.buildroot.org/results/49a1898d43d8295be1ce41ef63c4f20b82cd6d20 |     
+    i686     |          bird-2.15.1           | NOK | https://autobuild.buildroot.org/results/7dab8279f8357b50812b885879d66dee47ed7fdd |     
+    i686     |           ccid-1.5.2           | NOK | https://autobuild.buildroot.org/results/3b58ec22981b0e5b40d4c978adb9ba16e4059f2f | ORPH
+    i686     |      cloudflared-2026.6.1      | NOK | https://autobuild.buildroot.org/results/4b6fc85b10dd0739a40fd6a14f81bb2386879615 |     
+    arm      | cpuinfo-8a1772a0c5c447df2d1... | NOK | https://autobuild.buildroot.org/results/f14e4afacaa61021463c457def1cad3c81d35f29 |     
+    i686     |          dante-1.4.4           | NOK | https://autobuild.buildroot.org/results/191235077b2aad35d9ad6c1d401287ab5cdca38e | ORPH
+   x86_64    |          dante-1.4.4           | NOK | https://autobuild.buildroot.org/results/a93e4c19829b5aec18c025263ebd275feb7b1008 | ORPH
+powerpc64le  |          dante-1.4.4           | NOK | https://autobuild.buildroot.org/results/23087c78567b8ab20fa65c7325c202c4a7ce42ac | ORPH
+    i686     |    docker-cli-buildx-0.25.0    | NOK | https://autobuild.buildroot.org/results/d69de9cde608a3797ca14a20788446c25b7eb161 | ORPH
+  aarch64    |          dpdk-25.11.2          | NOK | https://autobuild.buildroot.org/results/bef8abc5382e1aa9f74e04f65f1aa11ba8081fc3 |     
+    i686     |       ecryptfs-utils-111       | NOK | https://autobuild.buildroot.org/results/bc830b150100288168c46335f049c6a5a760bfad |     
+    i686     |           emlog-0.70           | NOK | https://autobuild.buildroot.org/results/1ce47f8cbec6cc84e54650f078f196cc39466732 |     
+   mipsel    |        execline-2.9.6.1        | NOK | https://autobuild.buildroot.org/results/04737fe34e2d2ea66a519f91db8b6c698eb03205 |     
+    i686     |    freeradius-server-3.2.10    | NOK | https://autobuild.buildroot.org/results/0f63b29820b6f3be31fe23cfd208948f0f917d44 |     
+powerpc64le  |          iotools-1.8           | NOK | https://autobuild.buildroot.org/results/a6dbbc77df4ed62182cbf11f5ff685683265eca8 |     
+  aarch64    |          iozone-3.508          | NOK | https://autobuild.buildroot.org/results/947874ee3942f4133c3a5b716f8ea198284776d6 |     
+    i686     |         libclc-23.1.2          | NOK | https://autobuild.buildroot.org/results/d8dc24981f08dd5efd05a52a3f23fc933b34c436 |     
+    i686     |         libclc-23.1.2          | NOK | https://autobuild.buildroot.org/results/4246df34ddbcfa3826949ac0bf00e3287ff9edaa |     
+    i686     |        libeXosip2-5.3.0        | NOK | https://autobuild.buildroot.org/results/f3f757418d0cd70766b31fa47e754d41b4fdd99a |     
+powerpc64le  |       libfm-extra-1.3.2        | NOK | https://autobuild.buildroot.org/results/484e2f3f45e530be750f27d7b15178f3d5e1c39d | ORPH
+    i686     |          libmms-0.6.4          | NOK | https://autobuild.buildroot.org/results/eea54d6dcb1e28c65d2d57095e3c28abcd7623a5 | ORPH
+    i686     |     ltp-testsuite-20260529     | NOK | https://autobuild.buildroot.org/results/c78bf1ed788fd8188109f7766ae8d06579894e5e |     
+    i686     |     ltp-testsuite-20260529     | NOK | https://autobuild.buildroot.org/results/c6568beb3bee2ba6d961b49e293dd2cc8c0ba755 |     
+   xtensa    |         openocd-0.12.0         | NOK | https://autobuild.buildroot.org/results/3eb84b362e135ee6ec1af3aaaf122cc77245fc0a | ORPH
+    i686     |          perl-5.42.3           | NOK | https://autobuild.buildroot.org/results/31cdcb01c3f6028918d0556a365f935325d6ca3f |     
+    i586     |             qprint             | TIM | https://autobuild.buildroot.org/results/b321eb65a3c8568f0a666773e921c8292d4e9d2e |     
+    i686     |         rtptools-1.22          | NOK | https://autobuild.buildroot.org/results/c1b18f5c6503eadfcee6235e95c9a01588ea924f | ORPH
+    or1k     |         s6-rc-0.5.5.0          | NOK | https://autobuild.buildroot.org/results/0a3b2a2e96f43455013e730f4474a9ac5c773fe0 |     
+    i586     |        tcf-agent-1.8.0         | NOK | https://autobuild.buildroot.org/results/f3892d3d47760b341b054b7fff77a79f81488138 |     
+loongarch64  | uclibc-ng-test-132c6134d691... | NOK | https://autobuild.buildroot.org/results/e7b3b12d89ed64b9f414ad3404597ac5c23048f6 |     
+    i686     |            unknown             | NOK | https://autobuild.buildroot.org/results/aa179500a295d6f867d147f3c6997b85a0eb073f |     
+    i686     |            unknown             | NOK | https://autobuild.buildroot.org/results/79a0d5d1bcdbd1f08ae6bb6b2f9f2f49c707e03e |     
+    i686     | ustream-ssl-5a81c108d20e247... | NOK | https://autobuild.buildroot.org/results/ca40e33db4e50385606d7f3bfd3f1f465b589940 | ORPH
+    i686     |        valgrind-3.26.0         | NOK | https://autobuild.buildroot.org/results/5694835d2adaae04f03109c0d43abc6198f8f2ea | ORPH
+
+
+Classification of failures by reason for 2026.08.x
+--------------------------------------------------
+
+          pkcs11-helper-1.31.0 | 1 
+
+
+Detail of failures for 2026.08.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    i686     |      pkcs11-helper-1.31.0      | NOK | https://autobuild.buildroot.org/results/4a939d07c0d1af81ab6b9a0602d5894e281c5b9d | ORPH
+
+
+Classification of failures by reason for 2026.05.x
+--------------------------------------------------
+
+                host-gperf-3.3 | 1 
+            jpeg-turbo-3.1.4.1 | 1 
+        ltp-testsuite-20260130 | 1 
+
+
+Detail of failures for 2026.05.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    i686     |         host-gperf-3.3         | NOK | https://autobuild.buildroot.org/results/d8fd6974fbf3772887c89b979346efe1cd9a8eae | ORPH
+   x86_64    |       jpeg-turbo-3.1.4.1       | NOK | https://autobuild.buildroot.org/results/d2de517ae9de615a6e9bd9ef0ad29f8ca9b83013 |     
+    i686     |     ltp-testsuite-20260130     | NOK | https://autobuild.buildroot.org/results/cda7a1d3cbe457a3b59bbcc58991a33c3f1bc085 |     
+
+
+Classification of failures by reason for 2025.02.x
+--------------------------------------------------
+
+        host-python-lxml-5.3.0 | 2 
+             bubblewrap-0.12.0 | 1 
+            gdk-pixbuf-2.42.12 | 1 
+             libgphoto2-2.5.27 | 1 
+package/linux-headers/linux... | 1 
+
+
+Detail of failures for 2025.02.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    mips     |       bubblewrap-0.12.0        | NOK | https://autobuild.buildroot.org/results/a11c5f820ce64e4858991da8af6b2fe9420fc5ac |     
+  riscv64    |       gdk-pixbuf-2.42.12       | NOK | https://autobuild.buildroot.org/results/13a959d04bf4122648281570d4abe53b49c75919 | ORPH
+    i686     |     host-python-lxml-5.3.0     | NOK | https://autobuild.buildroot.org/results/4f3ed520a8daa34135ccc3301dc65e188896f437 |     
+    i686     |     host-python-lxml-5.3.0     | NOK | https://autobuild.buildroot.org/results/5b341dbcc68fb9e3a50231b6113857787e0c2e7b |     
+    i686     |       libgphoto2-2.5.27        | NOK | https://autobuild.buildroot.org/results/09f2756d3d26a9e27ef596428c84d37c5d2d5bb2 |     
+    i686     | package/linux-headers/linux... | NOK | https://autobuild.buildroot.org/results/e95a4014655ef87557debb111870885ccb3fa7f3 |     
+
+
+
 -- 
-2.47.3
-
+https://autobuild.buildroot.org
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
