@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B6F0CA5FED
-	for <buildroot@archiver.kernel.org>; Sat,  3 Oct 2026 13:57:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4C40CA5FDD
+	for <buildroot@archiver.kernel.org>; Sat,  3 Oct 2026 13:57:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 17B7D8169B;
-	Sat,  3 Oct 2026 13:57:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A4120814C9;
+	Sat,  3 Oct 2026 13:57:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fXw84mvvVrEl; Sat,  3 Oct 2026 13:57:54 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org ED0B080D4B
+ id HYMTg2idgCny; Sat,  3 Oct 2026 13:57:55 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 92F2E815D1
 Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791035874;
-	b=nmnDjqqDz2CpX2OpXIDgiWjFusUGdD6UQ9glBXsbcc9f/i4LOdsUpIfzuMVESy0aWwtx
-	 xW06PIpuwSGbBrJX3aoWZZEg5pvObMM84i/GG2gzFhDsCJ4rErkGn5ePXBlLY5Cu4fe/V
-	 8PEsfDjCj+Kcud7nYs2MOR77+95roCJikAbKZAX+0fC46ltGHzpM+lzmqnczZ1n1JACeH
-	 5FuyF7QVHmeVI8Ne2DfdXwk0qcF11qRoqe4rQe15YGKN6z+59wS+bPxgrm1vT2WhT0ZQT
-	 LP0TXe8wUgQmB9dfOWlW5J2bug8Pofl5jj+W9XSKDCDJflKU0RVqN8cl8CEYWpyjXpA==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791035875;
+	b=QswRREEdcjPO6Mp1Ar98/ajzauj6EbbM7Wic2J6QfW23ODF9NKWvWVcZ+KXAToJAOuOV
+	 gh03EY5ECJJeZw/7Mq3tsjbfSkVlEtdSqCJS5QoCwtYW0+wREhZqj9mEeltaM7xtWqFMo
+	 tnxkAVirrCxuvNay4JhlZZIGlkFtq2l+jMlqghBThjmSmkYkXJQ9q6nlEzAndyhcfCifO
+	 tXwjjtEoBtxd+zGYOZcDr3bhoDeBpVmopLNxLOpeJ6fms0Hz1eikvTqpzK0fsSRAFRVxq
+	 jcFWqgHBAjuwoNla9CmUoTUOqMMhNY7NPCxRWAV+Hbl0XNHPOOCNPwokSRgp37Yjxtw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791035874;
+	c=relaxed/relaxed; t=1791035875;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,74 +30,75 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=2naCKnE8c2BxHdwAAGA00AJCDv8j+qA1mXytg05a7zY=;
-	b=FYrFO7qdUDO7zThmTGom08wUKDOuWBpyY3UtwQ892SSHMlaZCgPpFSAhB8Yx4a8NTTFK
-	 USgFpngtSpDpeM3cIJLJf5ilT0OFIk1ZuxxeC3iZjj+IQ3U41cK0vTO8OWhWBSBFcRS5i
-	 yKVQQkMucar/kNWb2sP8xlmP3RXSEqMSn8x8Y2Pv6JC5AEdjXCUPX/OlSuCkrmtRPkqSi
-	 2IXKMShP9zX+P3gQ5TBTF8t6imRCjFrbphylhfWwxrXcrylu85jj0AR4XUurgaG1QfzSe
-	 340DZeMgzcW/mcC1/OaO+nY60466oN2gFGHhmY4mAh+RKUdrq2exliAWLva5+DO2+Hw==
+	bh=sHtFKKff6OyFKA8y2iPJd9C9oC/+AW2JO3PFy4i+lXI=;
+	b=enrFMpOou3EsSXs6OjS5C18kntbKDBsNliQPPcoLpkjaCXVvPrsKC0Nf4GoxUp3pRj96
+	 TscYRG65EjkvoBlAQ4JbV0qWvaMeLoN9+iF/imCkT8LRqRwlZNuJbLGi5sIZt3adihw5J
+	 c4tLVLlGJuvfkszd2ISSKjlcl5RLeHGIJF/bYdqa6XbCwNiF5dZZqRYNXLDlGJyQ8ePOU
+	 tGIsEfdCgkbnNp9z4N84VmxrECVzqqDTH07mnEwm3RNn4gCYFz6w6gOufn3BNGxlqO5BU
+	 Qpmn/73Qji6epJs3+p8XFVhTloV9ydplh2o4siK5d1hgxpopcbpJH5SsXGGscU11qag==
 ARC-Authentication-Results: i=2; smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791035874;
-	bh=2naCKnE8c2BxHdwAAGA00AJCDv8j+qA1mXytg05a7zY=;
+	s=default; t=1791035875;
+	bh=sHtFKKff6OyFKA8y2iPJd9C9oC/+AW2JO3PFy4i+lXI=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Ih053bNToqVoNAn9jaKbQCP6wkNjA+weQLmEEVHU9WXBuuqFTbghae4M8JZABLUb+
-	 aF4sJihQhkIGDJNiBmial72QZ05XRoIQr8ZG7IxXqZzdGk/xPmy4ABQO84v5sltIKB
-	 0LdmQMJA7VEe4iRNxTBHXPbV1P5xbgp1v+MAPVgv+SlnqbiSKI98N1RJa5ohrXpinA
-	 oUBZ4EjnwQp4rz7+Y8ZcTSiJblJVjmDz/vXpVILxjHQKoaABkNy7ua1NKvSMHv81Zk
-	 XpfB+RXQOd36iYK36ZgFskovQpfLyGiyd2f54uiUuGxfZaFIjtUW3z/Cgbu0K3vpPB
-	 1s0cotfTjG9KA==
+	b=Z7A6PnY8lVAwd1A7uPI7Wqrv5xRj55/0GOSa94DiCo+km2HJvwO1MxBvgG78firLM
+	 oXUD6xwUounN2ZVDyBoyO5YLY6+XeLGJMXeqZrxbvb2PREKjHMvqLNwWcYG0n6G05v
+	 qwpcLR8D40eH/cH61R5IlJkFh8cHp9EXxcMantZaaie3unqXSh4PuNMUckbkLzzgkD
+	 Y7hlu8QgmmE7yXr/cJ1CYE6U5zHg1m+Uo5zkd7X/Ct1oLSKpVD0CSK2ZFMzRX6EP9H
+	 C0d9yjapB7LElZG/3pdfAAEFN/tGeGRgxWtWBbEO7Mhng9GIXsjWmtYBZgUuivpgc1
+	 6LoUrr5PdvAPg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ED0B080D4B;
-	Sat,  3 Oct 2026 13:57:53 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 39F51A14
+	by smtp1.osuosl.org (Postfix) with ESMTP id 92F2E815D1;
+	Sat,  3 Oct 2026 13:57:55 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 396C29DF
  for <buildroot@buildroot.org>; Sat,  3 Oct 2026 13:56:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 17AE7414E1
- for <buildroot@buildroot.org>; Sat,  3 Oct 2026 13:56:58 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E988941503
+ for <buildroot@buildroot.org>; Sat,  3 Oct 2026 13:56:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Srt7sPiquXz9 for <buildroot@buildroot.org>;
+ id V2Ej-UMEJjDb for <buildroot@buildroot.org>;
  Sat,  3 Oct 2026 13:56:56 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org A835A414F9
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 21F36414EC
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791035816;
- b=E0r1JmruqFYqFwdahiFk5QkQ+aHl0ZXw6LsR58VS0+3bXKaeBh68rNnbESS5aO93dIPO
- O8g33V1iwNmkVMkRYUc9kzMyGMhWE33C4LyrLobFgmeR6IeFIvbAIWeEVeuWowvLk/DGA
- lN62N7tr3SO6ysEa1GOrjJm6xp6Z3Kd/QK3egp1HGR+YR7oLA2rZMs04njHNkCI1wKRgl
- jyXVmc/rs1zIf7lR72E1JSq7pxgh15SlS1XGxjpfc3hCUVm/2NmmW8h6ukoEgunxPShY7
- 4sDgCaT9hiBbNc7TFnbIcenMBs5N0Yh1uJmpMAjx3xNWJQpsyoW8Ufz4/nMw+3BZYJA==
+ b=kP4CDEZ/415hURyv1wJpN96WQu61BN3x6cJPjsdDByNHo8ErfZWX0sAMURhbu/zFSh5M
+ ncvW48pZ0swGKUbfB9VqLFLTYcEeASYNecBJrIQM7N/vheiOcouRRBfYMeg/AEm8366AS
+ d5JZJIV5n6QOsQVivu9ciQUe4ijHdobxzCMpho7aTQUDfaD1EO+PNOmA4dhnKnHRmzMxZ
+ 80Iff9AIQ0I+1ztrmKo6aU29NEBgblfGxzRvwua46PuLNBb/BscUoP7gnUSbpBhmATiAX
+ Ae6gZupZXHw5tSfBsn941KNHdI6MHP0jDpRQLNoWs1eAl39miDVPND/1myQdXfrIJqA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1791035816;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=vgsTVAWgPP7oS0YC6H2ZO/HFIRtgveHSRaBZfWKNHAs=;
- b=dhK59NomlzHOPgrV3sGBru5voexIHUWZBYjbSprzxpCztZ9M4jxaxdcbZGhzztC7r93p
- qJ4LKq3vjnxT9/Z2DQauGq0P3YbBZd/XwqTF3ZLvz1R5q/DrqNWeS54t3xLsLilLKvz9+
- 8gWloGQoRFOJ0PRUw3CEy8C619fTpR8zedchz84T+uKUgfW4pY7Zei7JXnd9FM+z+hRdv
- m7PzY0KSU5tLSi65NXht8DjoKg6AaouBlB+AunlKqrybGLZ5KT6kQ65eG55/Zxm/O04SI
- NyAuRLyk+e8ZMoXzkMxckt2c74OiWLH1uJmcP8NhBAP8TeCgMMAM/ewV9IEREDWLkXQ==
+ bh=AtWN9ewr9cZks2qcxl3L8W8OSO6vyjvL1M8kjtRED7k=;
+ b=J+Wp1FKQ5r3LhDYioJpDt6EweJ3QJ9ii4prZ90eRaYaS3sRFrGiwILmSOKWuFoULG1jX
+ KyozoQJhq9VbMuTrpo44ROzgBWdBz1uE0la0eiMKcaEYt/LLIKFr0qU0QihmAhytE6dGF
+ VwroiiyvLS+/sCSziUDREPyJnm6WJjX1ZktUCeXmeL26BZLlat433u3V4R/tAO0yjtSE+
+ gmfESbTJosA4WSIccO4XqyeIApj5704aqVVhUOQQBOeM8ccjFuk2LVWAmTtHpeVfBBwzK
+ pgHHx2DP9egVqNTG1GTuVQcmvvaUcFwaNRiC/FAF1v/Ex34BKSoeSEDSPtz+um7+3WA==
 ARC-Authentication-Results: i=1; smtp4.osuosl.org;
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A835A414F9
+ by smtp4.osuosl.org (Postfix) with ESMTP id 21F36414EC
  for <buildroot@buildroot.org>; Sat,  3 Oct 2026 13:56:56 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F31E488699; Sat,  3 Oct 2026 13:55:41 +0000 (UTC)
+ id 6D7EB88EF8; Sat,  3 Oct 2026 13:55:41 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 3 Oct 2026 15:44:00 +0200
+Date: Sat, 3 Oct 2026 15:43:44 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b5ea4614a2b110d50eb8bf2f28bbc73b31c3827d
-X-Git-Newrev: dd673499e1def085fa1cdcf9c0ed092a40e8cb24
+X-Git-Oldrev: d2cada09f9a3a47e49d1bbdcc5775896b276dc13
+X-Git-Newrev: ed36bce744d66b6392adfed64f8e01c03b95ff48
 X-Patchwork-Hint: ignore
-Message-Id: <20261003135541.F31E488699@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-cbor2: bump to version 6.1.5
+Message-Id: <20261003135541.6D7EB88EF8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-sentry-sdk: bump to version
+ 2.71.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -117,97 +118,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/dd673499e1def085fa1cdcf9c0ed092a40e8cb24
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/ed36bce744d66b6392adfed64f8e01c03b95ff48
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
-
-Switch to the setuptools-rust build backend and vendor the Rust
-dependencies. The pure Python implementation is no longer available.
-
-Propagate the Rust architecture dependency to python-zlmdb.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-cbor2/Config.in         |  3 ++-
- package/python-cbor2/python-cbor2.hash |  5 ++---
- package/python-cbor2/python-cbor2.mk   | 12 ++++++------
- package/python-zlmdb/Config.in         |  2 ++
- 4 files changed, 12 insertions(+), 10 deletions(-)
+ package/python-sentry-sdk/python-sentry-sdk.hash | 4 ++--
+ package/python-sentry-sdk/python-sentry-sdk.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-cbor2/Config.in b/package/python-cbor2/Config.in
-index ba9383f787..c0a114e1f2 100644
---- a/package/python-cbor2/Config.in
-+++ b/package/python-cbor2/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_PYTHON_CBOR2
- 	bool "python-cbor2"
-+	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
- 	help
--	  Pure Python CBOR (de)serializer with extensive tag support.
-+	  CBOR (de)serializer with extensive tag support.
- 
- 	  https://cbor2.readthedocs.io/
-diff --git a/package/python-cbor2/python-cbor2.hash b/package/python-cbor2/python-cbor2.hash
-index b4d3025889..4ec5434b49 100644
---- a/package/python-cbor2/python-cbor2.hash
-+++ b/package/python-cbor2/python-cbor2.hash
-@@ -1,5 +1,4 @@
--# md5, sha256 from https://pypi.org/pypi/cbor2/json
--md5  21a7e1096c25ef19a81730e2c0ce05a6  cbor2-5.9.0.tar.gz
--sha256  85c7a46279ac8f226e1059275221e6b3d0e370d2bb6bd0500f9780781615bcea  cbor2-5.9.0.tar.gz
-+# Locally calculated after vendoring
-+sha256  c0be697accd3e106feb9a082f52b6c6e2b83428148ab78ce6732a76c380233f8  python-cbor2-6.1.5-cargo6.tar.gz
+diff --git a/package/python-sentry-sdk/python-sentry-sdk.hash b/package/python-sentry-sdk/python-sentry-sdk.hash
+index f1d47352c2..322dd2cefa 100644
+--- a/package/python-sentry-sdk/python-sentry-sdk.hash
++++ b/package/python-sentry-sdk/python-sentry-sdk.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/sentry-sdk/json
+-md5  05b3bf19415d54f831e52d83e4371ce9  sentry_sdk-2.58.0.tar.gz
+-sha256  c1144d947352d54e5b7daa63596d9f848adf684989c06c4f5a659f0c85a18f6f  sentry_sdk-2.58.0.tar.gz
++md5  079f53404c6f8059a7ae6e39842548d0  sentry_sdk-2.71.0.tar.gz
++sha256  7beb27a22f06396f3a05510c3da6ea10e1c79e02e859993c27ce4ff074e296d6  sentry_sdk-2.71.0.tar.gz
  # Locally computed sha256 checksums
- sha256  a6afd126d8f545a15166a22f25fadff4b9fb4978bbdd17e97d97d950b66d2fef  LICENSE.txt
-diff --git a/package/python-cbor2/python-cbor2.mk b/package/python-cbor2/python-cbor2.mk
-index bb8944f861..b35fba187a 100644
---- a/package/python-cbor2/python-cbor2.mk
-+++ b/package/python-cbor2/python-cbor2.mk
-@@ -4,18 +4,18 @@
+ sha256  2a140d660f462812fa290bc740d04633126c5ec45d84b79b569e127b0eeddd0b  LICENSE
+diff --git a/package/python-sentry-sdk/python-sentry-sdk.mk b/package/python-sentry-sdk/python-sentry-sdk.mk
+index 585a1c2cda..645b2665a0 100644
+--- a/package/python-sentry-sdk/python-sentry-sdk.mk
++++ b/package/python-sentry-sdk/python-sentry-sdk.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_CBOR2_VERSION = 5.9.0
--PYTHON_CBOR2_SOURCE = cbor2-$(PYTHON_CBOR2_VERSION).tar.gz
--PYTHON_CBOR2_SITE = https://files.pythonhosted.org/packages/bd/cb/09939728be094d155b5d4ac262e39877875f5f7e36eea66beb359f647bd0
--PYTHON_CBOR2_SETUP_TYPE = setuptools
-+PYTHON_CBOR2_VERSION = 6.1.5
-+PYTHON_CBOR2_SOURCE_PYPI = cbor2-$(PYTHON_CBOR2_VERSION).tar.gz
-+PYTHON_CBOR2_SITE_PYPI = https://files.pythonhosted.org/packages/39/34/d443914ea562a985ccb357682e17b7190d5d58eff797c741379be47a8f31
-+PYTHON_CBOR2_SITE = $(PYTHON_CBOR2_SITE_PYPI)/$(PYTHON_CBOR2_SOURCE_PYPI)?buildroot-path=filename
-+PYTHON_CBOR2_SETUP_TYPE = setuptools-rust
-+PYTHON_CBOR2_CARGO_MANIFEST_PATH = rust/Cargo.toml
- PYTHON_CBOR2_LICENSE = MIT
- PYTHON_CBOR2_LICENSE_FILES = LICENSE.txt
- PYTHON_CBOR2_CPE_ID_VENDOR = agronholm
- PYTHON_CBOR2_CPE_ID_PRODUCT = cbor2
- PYTHON_CBOR2_DEPENDENCIES = host-python-setuptools-scm
--PYTHON_CBOR2_ENV = CBOR2_BUILD_C_EXTENSION=1
- HOST_PYTHON_CBOR2_DEPENDENCIES = host-python-setuptools-scm
--HOST_PYTHON_CBOR2_ENV = CBOR2_BUILD_C_EXTENSION=0
- 
- $(eval $(python-package))
- $(eval $(host-python-package))
-diff --git a/package/python-zlmdb/Config.in b/package/python-zlmdb/Config.in
-index 007ca72723..884cfff182 100644
---- a/package/python-zlmdb/Config.in
-+++ b/package/python-zlmdb/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_PYTHON_ZLMDB
- 	bool "python-zlmdb"
- 	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS # python-numpy
-+	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # python-cbor2
- 	depends on BR2_INSTALL_LIBSTDCPP # python-numpy
- 	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL # python-numpy
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_9 # python-numpy
-@@ -20,6 +21,7 @@ config BR2_PACKAGE_PYTHON_ZLMDB
- 	  https://github.com/crossbario/zlmdb
- 
- comment "python-zlmdb needs a glibc or musl toolchain w/ C++, gcc >= 9"
-+	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
- 	depends on !BR2_INSTALL_LIBSTDCPP || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_9 || \
+-PYTHON_SENTRY_SDK_VERSION = 2.58.0
++PYTHON_SENTRY_SDK_VERSION = 2.71.0
+ PYTHON_SENTRY_SDK_SOURCE = sentry_sdk-$(PYTHON_SENTRY_SDK_VERSION).tar.gz
+-PYTHON_SENTRY_SDK_SITE = https://files.pythonhosted.org/packages/26/b3/fb8291170d0e844173164709fc0fa0c221ed75a5da740c8746f2a83b4eb1
++PYTHON_SENTRY_SDK_SITE = https://files.pythonhosted.org/packages/67/93/9ef70bfb7346c778caf09b7cd10c17c33f601f2d17019fa1aedcda738b5f
+ PYTHON_SENTRY_SDK_SETUP_TYPE = setuptools
+ PYTHON_SENTRY_SDK_LICENSE = MIT
+ PYTHON_SENTRY_SDK_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
