@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A245CA5FE3
-	for <buildroot@archiver.kernel.org>; Sat,  3 Oct 2026 07:16:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D6A5CA5FE3
+	for <buildroot@archiver.kernel.org>; Sat,  3 Oct 2026 07:17:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1A5D340FF5;
-	Sat,  3 Oct 2026 07:16:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6B04C605D9;
+	Sat,  3 Oct 2026 07:17:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id o4d87ISWKJdL; Sat,  3 Oct 2026 07:16:54 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 2F2D941001
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791011814;
-	b=RIDwbEA5kTxfQFhMxGVvJZQcfMK5kFi2ndmjqP5ma5M7Inb0sMxTIrx+ehy3O2umJMtJ
-	 0Q/vnpG/AA3pkTHc8dlQxwQ6M6hYookDCaVOcncjV6R6xL9JuHZCqAH66S35X+DltW+Ob
-	 9HK235Kzxp8e6AYpYShU5yULYWpbvq0H1WKVosLWaYJRBC0EqSHpd660sJUrzhfmaS/Bx
-	 X/8tUq8s3t6UJy7/KDOFf5ibt7rxtD7zJymrR8XOhfoF8oFJXKq4AxHf+ySBbkYiz4Rvc
-	 d/yK6LPYh+g8BElkAtW+D7akB/qxpzyg7BG1ZJxiea1007y8psw9Pu6zjsOZWcaGGoQ==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id t5UE02B9K2eN; Sat,  3 Oct 2026 07:17:06 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 7573B6064F
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791011826;
+	b=boiP21gTtXSQXNysy1nsFaS1hvrF8kI755MX9mnRjV+qj5XENLjfPbR0Gr299SLFFXSl
+	 jsjOEJDYBCu1yx90SLGGAcq1o5c4ivIU0AvuaDacVblHtCEvgRzZoHPckkXuX5d2VG7Gn
+	 Xl9HL+MDHCXZsH64Rb49aLZL8vEkq7+x5MbgX38tGqHUYqysrfJhXyy4H61Baj9+nZ2kP
+	 2GrppbW91zexsif0qhJPaBlmv7elyBUe/KMf/RXyKGaj04UfuEzOqHHxVDrczR8Bta2ek
+	 UvHxmqhyRb/0kuJvQiCFQFpaCNCSBkoDui6z1wzUkJ/rrPI9gKbTL9/fDL1y1hy3nSA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791011814;
+	c=relaxed/relaxed; t=1791011826;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
@@ -31,116 +31,118 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:Cc:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=r0h7AsYauYrwW6g+5b0sFsal4oDKI9TBtOk6xXbduNM=;
-	b=jH6Odf+HSIGUa2XI++pHHrVn6cxHqkihU9PaEghauOZ2d2pr+fCD67+xbwCh/AULvdsy
-	 icQP4y+Vi3isTCIcJTVprdAFSlfauH7SonIVOOtEJ3hQvYzy9gjvq2yUjBBwLibtUvbAt
-	 1GjsMFaouJryeMMuPLBGMty4Pl19KW/VwaHmXT0i83SywZzRlMVuibpFxF1iQC7qZ/Ze7
-	 GYZgRcstDlUwm5TfClOlFr1GUA6Ds5llRh5X88MNzHafe3x589rrpcCPKIw6EiL2myeBD
-	 Y2OW5xGQroIrVu6fQITEfvFCDmz2AXMA3f1KQAdPWU+6gWyG//dcDxxFAe6EQuwh8Sw==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	bh=ulsBqWAADfSwxwKtvTap1b9MCaN8Bm7XrXlMXyDpsjE=;
+	b=TJARjYhSVXNpHyM0sR8a3RrQyguxsTM30EsitGOj6OPC8st/WLEvKc6bBy9fWgOiCLau
+	 QcC72ECRqz+Bkpuh/x+imrAcqZNaGyj2yOM7zL3ZY9FDAaECbjR07sBS1/3qZgnfrLEY+
+	 b17UsOasb3G/e+m1Hk1Au4cGYSv7dNERv19ms6D4gxhL4iMhKVtyh0tNaSONWlbkiAnkf
+	 XYRjATbYhI9pepTgUNCqKU77lQn03ixebh07CbDZpCKVHlglxNS160AQY2hbciRMlMGW5
+	 lAm/mVOLjBLdFyPDHoFNQTObmvBIEBH5ZvcMRtsdOJericNb2xHiXCIrJob8SMNfDGw==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; dmarc=pass header.from=kuhls.net;
+	dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256 header.s=kas202605290044 header.b=liqH87co;
+	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791011814;
-	bh=r0h7AsYauYrwW6g+5b0sFsal4oDKI9TBtOk6xXbduNM=;
+	s=default; t=1791011826;
+	bh=ulsBqWAADfSwxwKtvTap1b9MCaN8Bm7XrXlMXyDpsjE=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=OjzUzwrihyRAosgHRUfYLDXhDQ/067sTVysoNiwjn4ofXl//XCsnc+Qa8fhxR+hUP
-	 SHFSclEw3Qgy5pP8Gb8Mjp73RrnXQDo8FSCPHfCvbSyouChkfLafBkO0bp+fD0L+P3
-	 ftrZ2LWAHvkHUZXPmjqhBK4NUarhSKJX48efqZNq3mAIU52HQev+AqAgaFoR6Fm38G
-	 lRWSAWZkNglYBb9vRheOBHeeUggfCQ4Kg2yiCDRtwTVy4hcMzqbpASSwad8NNkaXAS
-	 Q7dve4MEPpf5BHDR94LcqqUm8TbZETh3RVw8WJGBw4YafGvVtuGqnbRNYMkMFyDO7z
-	 zdOaTx2jt8q3A==
+	b=CFFodOWazBjQaRKykEqHgXh/ufSwgDNe8uiPseSEZFAmxEJrWUBn9I/aG4F5FA9A+
+	 p2nJecVN957SM0kqC1qpNBXjMQD9shXaYtlbnunvGGEgJWmOB3P+TTN67c/cwV5LTs
+	 Y44j3XHf7hPdv8kkq3Nerwt0aN++LS3tQvaEDKflDax4n0n15QdaJP1RhttBwH3ngx
+	 dAhUCzdL2/Bko9yfnVDfV6CBmO0QE2D7h+i1JKotxUebmcVADKDaEqtjQb6pOCdEGW
+	 rZ/UACs7BySWqWnVuhWV5pRpzNnuPZCQTRcWSYSUNwXfl7cwPb5BcowDovfKhU4xu9
+	 M5e+Y1D/4i/mw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2F2D941001;
-	Sat,  3 Oct 2026 07:16:54 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 99E2E1D2
- for <buildroot@buildroot.org>; Sat,  3 Oct 2026 07:16:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7573B6064F;
+	Sat,  3 Oct 2026 07:17:06 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1F66D34E
+ for <buildroot@buildroot.org>; Sat,  3 Oct 2026 07:17:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 802B240059
- for <buildroot@buildroot.org>; Sat,  3 Oct 2026 07:16:52 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 055B76064F
+ for <buildroot@buildroot.org>; Sat,  3 Oct 2026 07:17:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DA0xJcQQI4re for <buildroot@buildroot.org>;
- Sat,  3 Oct 2026 07:16:51 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org 850E040050
-Authentication-Results: smtp2.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791011811;
- b=C4AkbBPhdH+PuGTQnklNCX+pxrygOCe/fp78hyNMvq6sOwG4MdP3lq4UaONwfwoEl/5Z
- OKNEJporeMi+PxZCmRtbwaj+IaQeIENbzkAedUbHfRhMLrtBV6vfMgRX+QX0f1cLqfQAH
- +iZt3iwdlg8vbPc79H5dkpOoClRO8TkqdPXeVAysvdndDygkxklFs7+ndrHv1JZE5N0M5
- IYYE3G2lNxM2BNnbSezonQTZU3g6J/ff1EmtEXUKB5ngjEweZEtkmPcO8uT38NRjZK8mN
- Lo3SqMI/h8FYie6moXpSyO7n/cMoObQiG42wvmolL9Ul0SOg93b3dvDnNI1lmOHM0KA==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0LgwT-zqBzXv for <buildroot@buildroot.org>;
+ Sat,  3 Oct 2026 07:17:04 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 08737605D9
+Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791011824;
+ b=NoFA+0sWQbEcnS5ipa4JrUX8TsYL5jzUhNtdEWGdm1V2RHqo3nSyCD0NVz7R2STeBZKB
+ cilaBeS0ELASmKB/ujmqiOQyzHh77+E0yYDwJ8MkiosM4LfQvyoc25gTmlJH7g8tKYzHi
+ t8dzvM/38Wh4CJn2eZ0xoEnY0/0bbbpHQuW3znvoVyhnhjV12QlZvFI0ECU00+0PQ7ukm
+ vM2anELECEmqrsU7WxZPxUzVHkd3d34Dot0cp204fN1fe1OBro2zXYZKG1O+zkAChQVUC
+ SjeajBdjDCGJVQRYYcowXj7boxW/LOfsDenMG2RKP4sUQxBM05DiuOliyN4s3nqWkrw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1791011811;
+ c=relaxed/relaxed; t=1791011824;
  h=Received-SPF:DKIM-Signature:X-KAS-Sym:Received:Received:From:To:Cc:
  Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding:X-Spam-Score:X-Spamd-Bar;
- bh=/PwAp8uAuhH18NEkS7dV2NeIgsX9K7bZ1uzaRj4m61c=;
- b=TSapr2U2h8KbnmHY1verX9m5tvoZ5O8Bn7KmzantgA3t/Y7R92Axm0utr6GO70nxuulg
- tzqPCPwmcgI83giuiGuDNTlq+hNjzI8P9wt3Y7OHHUNBL/eH7wtvDAbobTzPUacY2ofAP
- dY+HLllpsSwRJSCoRvyK3DYGVlvhi/YfKiYN2TPStjoBDsHSRvXCJYp207GE6s4aUzFa/
- Vd6AKEXS6L5SohmNDM1DYI0YnMMJFkFECiZRASgVnVY9B54eQNl6BF/YoRsguhJYn8/eR
- HKzdJJ1A0gu03V9PlYw/VSrD4cO3wtEhVXR780+8ZV7wfAjBmh31xSGzqaQmbx2Fp3g==
-ARC-Authentication-Results: i=1; smtp2.osuosl.org;
+ bh=QikmD9lpduULVGp1Y0bJT4GXeMvgGV4VVwcErI7MX/w=;
+ b=HW/HQcKQboWe3KHHKF/Utq4bwLpEtL3Iu4cPTOxjYT9hJ7L4/n+ggN2GEUbCT3RgOh3j
+ xePngO5rf+NP5lIE2B4KHoaR4yn+qKgqopHiawnjSbHTSf3ynEPc/UyFOptGVvrZ0gGeh
+ 09xc6HTMKyOdv8vlshQClvEPgAqRL5lIR8yyW/7D3KCA5IAKv5YcK3+dXQOEXZaumwo9e
+ NiPiLFuHBhuDC22NhWUqJXrumZ6zgJcUvSalLvvUdyFMK1hEHUCC4NUPIwxOIDMjjrrlY
+ h/N8QUzYiChgg+b+05pShRMOpenaSMNWcePD93DPLzOVTKaZu2MUBgLdj41msHPJi1g==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org;
  dmarc=pass header.from=kuhls.net; 
  dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=korARbGy; 
+ header.s=kas202605290044 header.b=liqH87co; 
  arc=none smtp.remote-ip=85.13.140.57
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-Authentication-Results: smtp2.osuosl.org;
+Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=kuhls.net
-Authentication-Results: smtp2.osuosl.org;
+Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202605290044 header.b=korARbGy
+ header.a=rsa-sha256 header.s=kas202605290044 header.b=liqH87co
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 850E040050
- for <buildroot@buildroot.org>; Sat,  3 Oct 2026 07:16:51 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 08737605D9
+ for <buildroot@buildroot.org>; Sat,  3 Oct 2026 07:17:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
  s=kas202605290044; t=1791010935;
- bh=/PwAp8uAuhH18NEkS7dV2NeIgsX9K7bZ1uzaRj4m61c=;
+ bh=QikmD9lpduULVGp1Y0bJT4GXeMvgGV4VVwcErI7MX/w=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=korARbGy6kvuQv5hFSbFU4kHuaap9D9lAxvvpohA9JHeXJIHLxWsT0hLbPVDp5nPZ
- uiGZWcdMIKMQfvQW3AADfY/L+jUqUVmaujMucW7lshKTXdlriEMZE/OILtImnpwWdW
- 5uGpUBtVT+ynnD+KFeA5MjzFiYMuYagxZ5FM0so7JUv1+f9HD0vnyiM/ntGU4a3mtk
- mu5k93g4AxislKPydyMcuwmZXWO9CIwRVxjnVCSDPuRiDYcws0TCW9HGmTzn0pkoGQ
- Wk18CoQt1ahL/z6OWVX6IOGLKICdeVv+JM6V5UcLEi+Zkl+4neOtwu6Dn4NRYiKCjR
- L/iiiWhxOFttw==
+ b=liqH87coAMXvm2lsV8AzpYOpsstj3BREKwotSL3F0Gy9pTgd7Gwda3jS7Q7JUPzPs
+ GNXDdmnRKXp4CXXUxeNYlnAHWhCxkKtF+/i1ePWg0PGcnxYvZQ6iAJHenbWuenicbT
+ QG1GsO0j+DxAdZfmlA9irfZcL121OGOaNcKRsBJEiKfOlVjmsyfgx+FqWZBz8mGjdX
+ vjHKpwkMgkd62r03/AC9wLTuMrNjc/nVBgclj07ZBZUYuE2d6msGoPOct5EKCaAkQb
+ j1gr2QmL+TyqlNp+pveeez/xDIsOdF+UT3XCgBPkDHw12RTSQ3HBVC2XEUgCIdrMcM
+ K81G/xs5OfMKg==
 X-KAS-Sym: v3:f51bdf72230551df:VqMTyGEcl2GJp/akTftrKMgcPyezivNX+fOLOm9ncnigH
  pNFvxOG3DbE5s98QwUKc0+pVLoDU9niaXtrdppC307xvfy2ZRvK81G4RIKqo5daA5GNZSwddO5w
  qLhxMnBm1ZL/vu3uvejsivYqpikrzacdo7+61qTZJJ9eL6iWs8tJ+vv6P6mwr6nRgjCRtv3Rwzq
  +JQSM4Woxf1JlUmiYTM175O4JgoLN/VF3JIDkRpmn8CEnEYfiQ0wZ4omAbqIJqsY9QV1EiODtvQ
  /YbmJc9J/NA6DXwTO2eQ2zs/WqqYsDZlGWMNnp9VEvu1hCfuFnOalkQDg8qJ+aPdWX61oK4w==:
- cty5IJWoW8gFAPyN8WDLtZlXIvWgnU0CX4/8IYW8h2f6so8CKIxKJwyxsFh26LQ2XWZO9J5YRQw
- 0wcz2ffjYKssnnPlNotLdQLPuJiJcowLlJH37fICh5lmJfAKwN1CWGp7mIdHFg4IQGHRN51w0ra
- Na9dM10WpS6hHsSkXFS6UgHDy0wt4AQTLQouVPaAxcVaGnCLZkWpMhskTC8h9GMclSUW/Qq51od
- kBItpC2aqJ3sJzhCOCp36QTegY5HOVNKmTZs+xvBxknQvU6izrokfmL83WKMBlpjGQvkioy25Cg
- VZ9zdGyBrsl4clwmFfVCfPyA2r6h92uCAatGNh7QXC/p6H57P20VoHuZxRH5/T+JEsiWHC525nT
- otBl5WiTP7XFv3xLTfsTn8PHgKOLoVC7UaWlnwfm6fMkr0ftAIm43VvE0/YMRkUqMldnR1lhpSY
- WtWwWEi3wjkR1l9k1c0KqvGwgyxQA7ya4vFDlOrrGSA40ulfxTAfadWSdhvF1YL6ipmA3FpQsRG
- A8SQCru0L1k/otBwovPbRPCdDon8jC8Ee19OIpxLPRLLgxmE0LrYFSt6dgSQA0iuf8rjEncE1t3
- L5rS44kl640pW41VOeCvtdTmnULUVV3UGhHirpDLyhc1avSpquJMyMGRAKOYqTLK
+ 61iABehV64m+qrt5uD7atUjunjbuhoPcnLJYT2vxoDAZBZXJoXzlAB7u0b3lK4TOG68kuvGJgpb
+ HWQ+OHkTf8qLV/ISvq258IVOKWOcHOkWHfmk6WA1AVo+oR36sTHNb1wLQ/i5cIDjk6r8Awg7Oic
+ FhFsWTO1B5zFQeQMPyHnTgANN+X5Wm6riTFw7WhEyJTlKKufe55k5aPVyd4xzcz2IKwE8XNQKe/
+ U3QxF6205ZmhiA6uOeWD5prnFEu5i/IoyZa5jG3K4QtGSY15JKOvJiQD8k4TCNDFQxyZZsVD2Ss
+ mZHZCGvv/wzVliEYINddJwdmn5cGS9NT5rfp3wCu62RAN1JNYRVolSA5yGjvVCD6G1MG6u0wgFz
+ p/OW1ErYyqWG1OidWcp1oifEce0mOlGO0KpfIKIu86iwP0lPccCtm3uY/cDdRilnjdnZYn3Myq+
+ fkIFlpcCATjXiapTvJrkjUFm9LTCGU9EI7tiAi6oFBo3Ct6nKr2emFQDuxQdDZtfw5O9F2ttME3
+ jPa4PnX2Jidji/A7RS1O31Ekq4jhmCHfucAhc1Q6OAc4ObWZvg9znXZJ+owkSRxAli2DoYtTCAC
+ z1NA/s6Ut3HUUijrsESePO/uyz79G3ZMIIYCQVQ/gIkanczhZ9MObfzyMavbRCjH
 Received: from fli4l.lan.fli4l (p5b3a03df.dip0.t-ipconnect.de [91.58.3.223])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id B5A21A4C5466;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id E5B1BA4C5469;
  Sat,  3 Oct 2026 09:02:15 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:55754)
  by fli4l.lan.fli4l with esmtp (Exim 4.100.1)
- (envelope-from <bernd@kuhls.net>) id 1xCtkc-000000007Zo-0oRt;
+ (envelope-from <bernd@kuhls.net>) id 1xCtkc-000000007Zo-17fi;
  Sat, 03 Oct 2026 07:01:42 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat,  3 Oct 2026 08:59:47 +0200
-Message-ID: <20261003070128.1295458-15-bernd@kuhls.net>
+Date: Sat,  3 Oct 2026 08:59:48 +0200
+Message-ID: <20261003070128.1295458-16-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20261003070128.1295458-1-bernd@kuhls.net>
 References: <20261003070128.1295458-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Spamd-Bar: --
-Subject: [Buildroot] [PATCH 015/114] package/python-daphne: bump version to
- 4.2.3
+Subject: [Buildroot] [PATCH 016/114] package/python-dataproperty: bump
+ version to 1.1.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -158,42 +160,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+https://github.com/thombashi/DataProperty/releases/tag/v1.1.1
+
+License hash changed due to year update:
+https://github.com/thombashi/DataProperty/commit/da381f606e06572d990cd22f69fb02ae6a7c1892
+
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Cc: James Hilliard <james.hilliard1@gmail.com>
 Cc: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/python-daphne/python-daphne.hash | 4 ++--
- package/python-daphne/python-daphne.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-dataproperty/python-dataproperty.hash | 6 +++---
+ package/python-dataproperty/python-dataproperty.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-daphne/python-daphne.hash b/package/python-daphne/python-daphne.hash
-index e0619c6463..fbafd0a199 100644
---- a/package/python-daphne/python-daphne.hash
-+++ b/package/python-daphne/python-daphne.hash
+diff --git a/package/python-dataproperty/python-dataproperty.hash b/package/python-dataproperty/python-dataproperty.hash
+index 49ce188898..bf5127e816 100644
+--- a/package/python-dataproperty/python-dataproperty.hash
++++ b/package/python-dataproperty/python-dataproperty.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/daphne/json
--md5  10ce77cd61e3b048bac7fe4539800f37  daphne-4.2.1.tar.gz
--sha256  5f898e700a1fda7addf1541d7c328606415e96a7bd768405f0463c312fcb31b3  daphne-4.2.1.tar.gz
-+md5  2418ee7efc15d3ba3f44a05f78808929  daphne-4.2.3.tar.gz
-+sha256  1c458f81926b37301cadc8ec1b6316d9a5db53fba061fc4826610395fe5d5c81  daphne-4.2.3.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/dataproperty/json
+-md5  b10a82d8c35a1e69f58b921aa7d7f063  dataproperty-1.1.0.tar.gz
+-sha256  b038437a4097d1a1c497695c3586ea34bea67fdd35372b9a50f30bf044d77d04  dataproperty-1.1.0.tar.gz
++md5  d5381879e224554ea0e3b8cc46f60f19  dataproperty-1.1.1.tar.gz
++sha256  a83af82a234edda5378a36fb092bc90dd554646c5e58202a310acf468ae81bc8  dataproperty-1.1.1.tar.gz
  # Locally computed sha256 checksums
- sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
-diff --git a/package/python-daphne/python-daphne.mk b/package/python-daphne/python-daphne.mk
-index 69f5a9f466..065ac5e8f2 100644
---- a/package/python-daphne/python-daphne.mk
-+++ b/package/python-daphne/python-daphne.mk
+-sha256  36289157e371aaae5b5d3ba4be87359ed07548cdc7a9f19ff61dc67cfc536a9c  LICENSE
++sha256  72418b897d8a5817d1c858112e42e71b77cb251948c3753be5e15b59c20dc8d6  LICENSE
+diff --git a/package/python-dataproperty/python-dataproperty.mk b/package/python-dataproperty/python-dataproperty.mk
+index 060de7cab5..191cf02b1c 100644
+--- a/package/python-dataproperty/python-dataproperty.mk
++++ b/package/python-dataproperty/python-dataproperty.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_DAPHNE_VERSION = 4.2.1
-+PYTHON_DAPHNE_VERSION = 4.2.3
- PYTHON_DAPHNE_SOURCE = daphne-$(PYTHON_DAPHNE_VERSION).tar.gz
--PYTHON_DAPHNE_SITE = https://files.pythonhosted.org/packages/cd/9d/322b605fdc03b963cf2d33943321c8f4405e8d82e698bf49d1eed1ca40c4
-+PYTHON_DAPHNE_SITE = https://files.pythonhosted.org/packages/ed/23/81d442839029f3f343e536650ee49dbfb5a444520876fadb5b5f19f33c02
- PYTHON_DAPHNE_SETUP_TYPE = setuptools
- # https://github.com/django/daphne/blob/master/LICENSE
- PYTHON_DAPHNE_LICENSE = BSD-3-Clause
+-PYTHON_DATAPROPERTY_VERSION = 1.1.0
++PYTHON_DATAPROPERTY_VERSION = 1.1.1
+ PYTHON_DATAPROPERTY_SOURCE = dataproperty-$(PYTHON_DATAPROPERTY_VERSION).tar.gz
+-PYTHON_DATAPROPERTY_SITE = https://files.pythonhosted.org/packages/0b/81/8c8b64ae873cb9014815214c07b63b12e3b18835780fb342223cfe3fe7d8
++PYTHON_DATAPROPERTY_SITE = https://files.pythonhosted.org/packages/f1/6f/a801320bb388d965be9c370ec753cc33120e6cbe0069fa05644f05821975
+ PYTHON_DATAPROPERTY_SETUP_TYPE = setuptools
+ PYTHON_DATAPROPERTY_LICENSE = MIT
+ PYTHON_DATAPROPERTY_LICENSE_FILES = LICENSE
 -- 
 2.47.3
 
