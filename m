@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C559CA5FF1
-	for <buildroot@archiver.kernel.org>; Sat,  3 Oct 2026 15:57:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6654CA5FEC
+	for <buildroot@archiver.kernel.org>; Sat,  3 Oct 2026 15:57:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 19E8A6104F;
-	Sat,  3 Oct 2026 15:57:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7E0B681753;
+	Sat,  3 Oct 2026 15:57:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 76ZmkIX0lZNi; Sat,  3 Oct 2026 15:57:05 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 10CA461054
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791043025;
-	b=D7rQ+SnGuLSabEq0++YVSAReVMPLyd6ZGbrDLfxxv3uKMABZ0LtleXOh7q0x71ETbMEk
-	 wEtQRB8o5B/oYYW05llUA93Y1GzrIvUCXedlcefRmWmzCr20ECOXzBofQ95TYcES/ICrS
-	 UZO0jPwWcD3cpolhIZHJ+SpxkJgkkJhzLOKPH/1p+SjwjfIOlb4y8QCZVVkEG7ROZ75rW
-	 1X+1CSFcVT7gAmaC9M8AeGyp38Gg6kbYeRNiSz+aJybZln6Om7O5egX8d6SQO1xOesXcj
-	 Bk8PDyPkMlanxhn4lzDTQ1JxNEQ1ToJ01e00uTlp5mQcUlo9kEVwevEi8Sgc6namn6A==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ycb8tktzSAvO; Sat,  3 Oct 2026 15:57:07 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 3A4238186A
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791043027;
+	b=cct3xP30P0E29ZP6VLhAHzfqQLg8mYWXfZe0OfCIMRiJAWmPCEFMfTOf+oBy3K51mOW2
+	 2cC0+7jeFXkMV5LXFJkVx4mHlWMNwY4If5uTIdv4OmSeEADD1toQJEsT/KRR4+zYyF0SZ
+	 5ylM2r3xScPE19gqp4wgQ/jDevp6gj+liwJswENM5hsh+9sAQtC9Q2TovC12XEFIunlgi
+	 J+iRnvblgWnjFI/UhcpeWfQbtX6DGQJqOc7ZQr0vwvJs3ZaHgYku899aAtCjQmWNsrPEt
+	 jq9jBcCoXSnlUQ0nhNEAZion7UjeJWeQFfm7a6w33MlyhirNvk0pLnD1iQJtWtN8iUA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791043025;
+	c=relaxed/relaxed; t=1791043027;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,75 +30,75 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=ZTs+yACOuOoyJVnBWCLq/qn52xHiHvbVjSq+tTZ7EZ8=;
-	b=BPbE7jpBxtLt1VnLLMzLA6DvxtKu535m4WhnpxVl0lfAVeaplVmhrVXdXtNKIH1zSqc+
-	 8GGOpyOKxnLpzTr4pBiXjKBVEx1+b7kkwPjxg2Gr0lMkfmvRwb9ArqiQHQZSADSe+lSna
-	 h/Mpy/MPYXE7LJqMFvoRdjGTLkTEc8OSBj1LU5LjvJxvlOEAfIHIZrBCgvsU3szXEy5sX
-	 b2a2Xbh8LLqoecwANuwDzxq39Qb7MQo0kr8z01yZq0q5gGUfCW4ZIogYG3dRSs5iuTgrH
-	 hdYkzJLgkUWfG5F+0yuA9xjCjXoYMt9Eb0MFtTQ0sR0PBs870cFXHbTbw32ez30tlzQ==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	bh=ME+De7U8GZZzYE0QvM/1Ym7YeWLvvya9LyqZ1LH6qPw=;
+	b=BQPnHf9Z9Al2O2FNOgktncalkf1D7adRzMVDWySCrhde8yR/xgjfcCd89rDwqWA4I1MK
+	 1fWaH1tcWdk/sQxW9pNLrJmhdXc3+bIw5r2+njwUtXTwNWp8Pe3R5GXu6r4tZ8qPJlOna
+	 7jCSHUpckuqRTwPrcQsu2CLX/2uLOp03XRR6Ua15j5bJElcQAHeDk/Vwyy97QZCz2gPaC
+	 OzCdFUXuI+TMjH2nUhrMTStDc4tNR3axVj1GyDqtoPVZ7Ub8Et0MyiWtUunCfwQCBMT5k
+	 Q6hf367e+OKwNwNQFIZjIkK2H+/W0NvtsOAKslUi/pzeDkmJP/nQ5v8IGk8d8wvUuXg==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791043025;
-	bh=ZTs+yACOuOoyJVnBWCLq/qn52xHiHvbVjSq+tTZ7EZ8=;
+	s=default; t=1791043027;
+	bh=ME+De7U8GZZzYE0QvM/1Ym7YeWLvvya9LyqZ1LH6qPw=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=rEIIM1LTrmwie266BZfeihn0GrYadOsexqF2ZERF+qGDxE5iOFjIZDfdzPtLVFqxY
-	 tB8vTCbTeLMg4IcOHTt8z8c5FySYPP5D61EQZeI00EfVw1uDg3bePMuYLYgH9zOExv
-	 PKbsp7NiYOqczM+TYYzX4eYaSWaYq2pHrYulSzZAvZtex+XvWvU3VcD12Q8VXogal4
-	 TwUYSnwrkCj3JRZBPWR7hmxvIqfFB6PsFANPmiR6uHUFqcTpOlfZtRHeXTW/Sq4rej
-	 TsH2xsmw0aCC0VmAxdu6wWkicJ6dIrTcp6rUmWtRp4ACj0JODYp7wl1Eo++d1vRPbT
-	 bmnMBHrgtmVYQ==
+	b=k4XVKfQDuLd/FKVIvcwDHQq0XMLJUbJWfWq/0v/MGYa9mim5XOTLeiM8WpcN+1h49
+	 DbMNc5qN6yswppFgiZ+/mW6tg1DjOf3r/d/XETe72cTc3BAFyJaZ6sHM4xr2nfKlm4
+	 SO+feqP6ODJOh7AVvXUVMjWIXwTjwmWmJVNXLelIdhHJBYIgCf97iJSJROCd7hf7z/
+	 ozQBUoseJDOuRC2NmcFwsAeKW251LpNkMSb2yXTJGiQJQFtV7lRdrEgd8OcshecPow
+	 YKA0GG7mScYD5jH7pd8Bu4gD+UBMId31HO273U2Wi4Lt5neRPhMzgq/0cZGI7oBh5B
+	 /R0kV9PPwX8HA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 10CA461054;
-	Sat,  3 Oct 2026 15:57:05 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 6FB79335
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3A4238186A;
+	Sat,  3 Oct 2026 15:57:07 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7C4ED4B7
  for <buildroot@buildroot.org>; Sat,  3 Oct 2026 15:54:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5C2566066E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6021F6067E
  for <buildroot@buildroot.org>; Sat,  3 Oct 2026 15:54:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ooBzNF9UN1kY for <buildroot@buildroot.org>;
- Sat,  3 Oct 2026 15:54:09 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 0863C60689
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791042847;
- b=jM9Y4g03aWChQNjDlZEvj3r0HrOVKVagK+V6dnndXnNnlW1Tuqg68kY+sjmIAcbqVwNp
- rFXQccHliyumu1FQqwX5XjqiYqC7Q9lah50OvkHn1DCT0WE2E5MWFgqK1228wpDbvaL92
- Md4G5XFgMUMwS42VJFFGqRqhBOFzaDSr2f4afxMYUv6FCAyx1QPrtRbd70uf5LQTnXW+/
- STjjzSNDm1eIAORn/2GUCqX4NDxw+egut+Rsqep3Zso47IR2y0iTwJT6nXxlpvF4DFQJh
- 1X/yj58al8pZl46Yc8n/DSAvBc/Xt9ObvVDRhEiy1xP167UNKgjfZcMUPWU5ksuUvUw==
+ id NqSQU7lpqANP for <buildroot@buildroot.org>;
+ Sat,  3 Oct 2026 15:54:10 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 4E72C606C7
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791042848;
+ b=lOf67PzIrX6FKcHGW1PzLfbKQROuN4d2kegZnK9ZpUYE7/L2Oo8qyAVu0UPBwoUNU8kG
+ i6NP0fmzrhHiZSJ7b2d+8lgAlS5pe57MTKgPKqUZChdMPVkBdIt9cHITOX0RgFBIOCyPr
+ rR4/6/Pc7lRoMzL+IijazLSUH/7Zpd9oLsaK2URHetMMF7meF90gSlUFHdkOXSKpw5C2s
+ zI6SEjmJXAjxk+0CAaApqQ6Gu5Vha1KyH5Xr4Qs/Nu8binRwWaG87p6hGlUJ8LJ/NfVXz
+ Vwnpdui2h9XnTyVAlOyScMHQw8q7RcoUpWvywI21IhOAf5ufbbJzR2Ypf8UEq/691+Q==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1791042847;
+ c=relaxed/relaxed; t=1791042848;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=9/Y0KV6wElf8V/A2K47xewfWPHqPSg5oOIqzuymS3UU=;
- b=Ki3M91wRPcFA1B8ynqJDtM0tCWbfksg4wKnxY0SPnnxW74CcY1L2ntGgVnKpBDeZEPWn
- 5ENeEvEaAZQx0fh2N3iHVS3q4gEwwbgQmMHxXq29YJWAd8cHfSX3+bx9ZMO+miATEc/xE
- jH648NXlccpK9m8zPPV+FwZU07n0tI9bMARf3oJq9UpeFzxjrChgKtq6WBkIzMjs0RvRp
- Ev2r7QyjeXg6vuk1VrDgg6ggQm6tr/Wym6sOH230CgUjgfwuKErflI7Qmi8t6oiDeuzTJ
- kq5J/PSyMx2axOLJDa8tsJXMN40S4jmM+Xqegd6WkM7clq0qZY1FftRG47YinS3YUrw==
+ bh=3O+SzAkXsazO+T4O67WuNUamDjx+1GNaG8H/lONPWS0=;
+ b=Gst/0t3kwN22pIuilW4IP+A5rop6CH0faujkGyVdRhCMOIVQID5JwzD7LfbWs6Hr2xH0
+ Ru3ZfBtAOUWFwB8saTYTU00UWDHFJOChFPN3ScXav8uVhUPx1DFy4dR5fct2NAU9stYBl
+ Rfihtwq6T6IIRgpM/34kRytyJHGMHR4afl8WxihDrzhcb4yER091PIulu0dpvs5E4h7C7
+ 80S1d/S9GYV3HmGTzQ4jW1CLyMWRhCOZrF3HCy44cNT4MCzPLUFEqRIQCUK8mzxnMsqHh
+ FXiI+qh1rIgHbynvaz9TPf/RUJczSSGpLokrL8h7d8Xk43Vd2qQGSykpg3btrZWIMYA==
 ARC-Authentication-Results: i=1; smtp3.osuosl.org;
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0863C60689
- for <buildroot@buildroot.org>; Sat,  3 Oct 2026 15:54:07 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4E72C606C7
+ for <buildroot@buildroot.org>; Sat,  3 Oct 2026 15:54:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 497C38A39C; Sat,  3 Oct 2026 15:52:52 +0000 (UTC)
+ id 8EC008A31E; Sat,  3 Oct 2026 15:52:53 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 3 Oct 2026 17:44:11 +0200
+Date: Sat, 3 Oct 2026 17:44:29 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 43c6cc430226224db3e8eaca374931f6337627c6
-X-Git-Newrev: 7e5ce8011ce9a204a4c221bf32ef09acde11faca
+X-Git-Oldrev: 938a13fd35bbb868403b9809141770595e82296b
+X-Git-Newrev: 01d4a3ec930885131b02f09eac021e03b09461e8
 X-Patchwork-Hint: ignore
-Message-Id: <20261003155252.497C38A39C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-dtschema: bump version to
- 2026.9
+Message-Id: <20261003155253.8EC008A31E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-matplotlib-inline: bump
+ version to 0.2.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -118,7 +118,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/7e5ce8011ce9a204a4c221bf32ef09acde11faca
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/01d4a3ec930885131b02f09eac021e03b09461e8
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
@@ -126,38 +126,38 @@ Cc: James Hilliard <james.hilliard1@gmail.com>
 Cc: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-dtschema/python-dtschema.hash | 4 ++--
- package/python-dtschema/python-dtschema.mk   | 4 ++--
+ package/python-matplotlib-inline/python-matplotlib-inline.hash | 4 ++--
+ package/python-matplotlib-inline/python-matplotlib-inline.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-dtschema/python-dtschema.hash b/package/python-dtschema/python-dtschema.hash
-index 77da1aa801..5acbcf0e05 100644
---- a/package/python-dtschema/python-dtschema.hash
-+++ b/package/python-dtschema/python-dtschema.hash
+diff --git a/package/python-matplotlib-inline/python-matplotlib-inline.hash b/package/python-matplotlib-inline/python-matplotlib-inline.hash
+index 6370d2ce87..bd86592bf8 100644
+--- a/package/python-matplotlib-inline/python-matplotlib-inline.hash
++++ b/package/python-matplotlib-inline/python-matplotlib-inline.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/dtschema/json
--md5  7ab2a44de9a5c91fe5fda9f45c1dcb4d  dtschema-2026.4.tar.gz
--sha256  10cd0ffe239f8d88913390ac5d8213fae382e87a20643b21c65714ded82a4460  dtschema-2026.4.tar.gz
-+md5  5409d40ee24f16fdda2814c63ecb9a4f  dtschema-2026.9.tar.gz
-+sha256  d50aa00414f09b7aadc776afabe623915b8f94e59d6eddef80920d6505cba671  dtschema-2026.9.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/matplotlib-inline/json
+-md5  25b1b460ee846df0d4d5d92dc8e6664c  matplotlib_inline-0.2.1.tar.gz
+-sha256  e1ee949c340d771fc39e241ea75683deb94762c8fa5f2927ec57c83c4dffa9fe  matplotlib_inline-0.2.1.tar.gz
++md5  20174d6e66b812e9e26ea1ed6bc0201c  matplotlib_inline-0.2.2.tar.gz
++sha256  72f3fe8fce36b70d4a5b612f899090cd0401deddc4ea90e1572b9f4bfb058c79  matplotlib_inline-0.2.2.tar.gz
  # Locally computed sha256 checksums
- sha256  ca0d66263406dc684fe9db60577b234f65ffdf620d7e041c708e969447b69111  LICENSE.txt
-diff --git a/package/python-dtschema/python-dtschema.mk b/package/python-dtschema/python-dtschema.mk
-index d61592004a..6f6b0e6b18 100644
---- a/package/python-dtschema/python-dtschema.mk
-+++ b/package/python-dtschema/python-dtschema.mk
+ sha256  8521b036c6448e0e0aa7213d4713b6fdee0f4c64c9f320450f77346bf5c0e8e4  LICENSE
+diff --git a/package/python-matplotlib-inline/python-matplotlib-inline.mk b/package/python-matplotlib-inline/python-matplotlib-inline.mk
+index 54c4a18661..0fe043cd71 100644
+--- a/package/python-matplotlib-inline/python-matplotlib-inline.mk
++++ b/package/python-matplotlib-inline/python-matplotlib-inline.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_DTSCHEMA_VERSION = 2026.4
-+PYTHON_DTSCHEMA_VERSION = 2026.9
- PYTHON_DTSCHEMA_SOURCE = dtschema-$(PYTHON_DTSCHEMA_VERSION).tar.gz
--PYTHON_DTSCHEMA_SITE = https://files.pythonhosted.org/packages/f8/f0/3990f821c088a6107ce1ca1906fd123aebf3c2a0a4c82cb41d7d52664bc3
-+PYTHON_DTSCHEMA_SITE = https://files.pythonhosted.org/packages/25/61/0ec805ea47bc1411bcecc65d2f9fcb129455c0f859624fdc06c4a22f8579
- PYTHON_DTSCHEMA_SETUP_TYPE = setuptools
- PYTHON_DTSCHEMA_LICENSE = BSD-2-Clause
- PYTHON_DTSCHEMA_LICENSE_FILES = LICENSE.txt
+-PYTHON_MATPLOTLIB_INLINE_VERSION = 0.2.1
++PYTHON_MATPLOTLIB_INLINE_VERSION = 0.2.2
+ PYTHON_MATPLOTLIB_INLINE_SOURCE = matplotlib_inline-$(PYTHON_MATPLOTLIB_INLINE_VERSION).tar.gz
+-PYTHON_MATPLOTLIB_INLINE_SITE = https://files.pythonhosted.org/packages/c7/74/97e72a36efd4ae2bccb3463284300f8953f199b5ffbc04cbbb0ec78f74b1
++PYTHON_MATPLOTLIB_INLINE_SITE = https://files.pythonhosted.org/packages/bd/c0/9f7c9a46090390368a4d7bcb76bb87a4a36c421e4c0792cdb53486ffac7a
+ PYTHON_MATPLOTLIB_INLINE_SETUP_TYPE = flit
+ PYTHON_MATPLOTLIB_INLINE_LICENSE = BSD-3-Clause
+ PYTHON_MATPLOTLIB_INLINE_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
