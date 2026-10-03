@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A601CA5FEC
-	for <buildroot@archiver.kernel.org>; Sat,  3 Oct 2026 13:57:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB8DDCA5FDD
+	for <buildroot@archiver.kernel.org>; Sat,  3 Oct 2026 13:57:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 14F71816FF;
-	Sat,  3 Oct 2026 13:57:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8F78A60F8C;
+	Sat,  3 Oct 2026 13:57:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TZpfefr97yug; Sat,  3 Oct 2026 13:57:51 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org CA869816FB
-Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791035871;
-	b=J3moZfTjgnt50Edxh97SAnLz1YDul+UpplhhN6A7ik/lZt8LvqqB5qos9Dgcis77DYzx
-	 3MF10N6fCkAPYhbU0mzDwoCTRl8aai0HIDCpD1Iuyc7Fq58fbBuaODs2sggK2HyHx102L
-	 fkhqgqRtmIFVhMqJ/kUn0MjJ9oAGbzATuR14IUu0ooMGg7E4siDJwu2HrPOcXt44L5nmo
-	 Vy4EP4DQVqcES0UOatexhOqkc6HpAL1aTTqN8CgjBgQ5p4ciaT3PHDk+icTAy4q6FH7kb
-	 ngiWW4VskwobDRgUsAXUchVU++LjR9VGHJ5ke9/kJv1uNN1wGLFsqgnkRGcOdG43s1Q==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ulVPmKLSKInP; Sat,  3 Oct 2026 13:57:52 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 9C9A860F58
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791035872;
+	b=sUpmpa1tJbOlD0MEyANyDYzbkJXysyjNplU6ftbsPo5yhlomSVTQTdwtgSH2b1USgKkD
+	 ZIOX5qHulUIjmpGq0LA2az6YvdP/1b3Z+KC6mJxu+vOlGnq2j1eDqM2MDeQljqZUsGQGc
+	 IOBzKESTdXPFEcvTBg6zwqLd7vfpn5R5xWv07zG7Wko7u0IQJbayl7OIcc1HbgDUwEEzX
+	 1Yjiat09LYN9702JLnd4pEkz+2YPu3ZyNr186ROP4DdCa1l8ulMysZIElhFobQkUliuIw
+	 SlTU6nkjM4fYio9M/3d5VzrVBOmq0V2vl+LvRPBQaYLAvjO6onfKHmcAitKD2Gc4MIQ==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791035871;
+	c=relaxed/relaxed; t=1791035872;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,75 +30,75 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=acYALEArpEnxpqaV9n4fes/ILf/YFgECkAA8gML+6ug=;
-	b=KpRSdwQsUA/418CIzBc2EUO7MoeEYGMA20qjHcv/4tSiODdiKusFvB/G/7G85sW+Bnt+
-	 O65a3HIhnOghATpTIA9GbwfP97q8j/bjqngO1VTgqtnbkCPH09KZYSi3FpfG9nFm77gTk
-	 UIWtDC1mtSEBDbA7HdyZYeawOif98vbel9zwPnSrubXhEkw4IZs09qcjQ49bTcoYMJRn+
-	 y9nCXR14KXBEZ41h51XANT5dAUqTkYXdUAMb015UVENCI26ooFT4x+cu6AQHWjKp7+gWQ
-	 9Iwa6pPr/FobtSTsRQODQzw6NNa7bqGBrYBbf4DLG7wuTLZrEld1wLh885MxKTrl7tQ==
-ARC-Authentication-Results: i=2; smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	bh=n8AzxyruriATQkC3C+VGbp5V6s73KVbsRnlJBcVtiuc=;
+	b=kbocR76zmp4V+aOoFZnqr4vQ1kj/WTkg53KiQLKknv6C2vmmsd0AkIdGELjQx9nXOVAb
+	 1icaeDGgPtQsP8CjpLeGDu8qVeaHztLisD4q1RiaQQLXy4tmkX3Bsin+sewDN8KQq7onC
+	 V+SaQznX2Nw1zHGdrMpQloEKXF3m8srwEq71tRfBy50TEFGMiHmfZea1I2D5osKCj9mud
+	 3ZevgHiFCYFC63/4pGA7uuTXUFxd6JkhMf7FKiApMsw1wJd0/f6On0TlfvXHOZBwc1qjQ
+	 tpwaFS5l1t4Onhs307IUmrJ9aSuuktQzsuOtJ24AQRNg16aMig+WdYh6RdaEMRKikhA==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791035871;
-	bh=acYALEArpEnxpqaV9n4fes/ILf/YFgECkAA8gML+6ug=;
+	s=default; t=1791035872;
+	bh=n8AzxyruriATQkC3C+VGbp5V6s73KVbsRnlJBcVtiuc=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=n3LZbrJwlGRnjk5XTlkX1+fDdVqlxgQQW9P9FubI1qntcOYwxIFXxWE3OMOVGxR5I
-	 wrTZNEHzrCVcyOH4oeZpe9Rtxgoc0bZlOEZ/1C2CyVSoHQrIIBYufssDAV+zsUW7Rk
-	 kO2WgF/Eb4oJ5yXKYc3fMTwCIu20idqPqSu4WA8ooXatWUWhwXMJ/ALv/NKdn5yc0A
-	 m/IRWWRe4AeNc2QSh+mzRqmP4XSNALeyY48DR+hjAXbUofFZ1k4pOF0PgC6Rc9nGoj
-	 pkFaVjPQYrRMU1rpG4hJ7ai6u892dnDxn2P+hO1GvXoIKkCS6izisP4gYqTq4jepJP
-	 pwDPyNB6oF6jg==
+	b=fiF36Rj4vDPiCLdv25imU2oC/+o6eOyNzM/UfcwdbQOcOX4KdQfnhidQ622AANfQY
+	 NNvi6SzcMFKRsDP6DE7amqtZXb0R9XzvwxiVAS6RsPcFOx1878kWVsPN72DcUATREm
+	 VL1L1QNXQ8bQMRiKv6A/ksMKLT2xR/iiPUJiPmWJYVvHOe01W4xndqJe4d0GWN/O22
+	 LXfPOjNEl0F08dVmdtSnukAE1BUpW+9k3H1hP5M3m2ZkTrCaz232edJgTMyvCRgTlW
+	 BrvCJF+h5AIeZO2udGJ1M9LMwbQZ57QR5uaWAyq2qWyxHFfoQBZc7guT1KXHyYGPBb
+	 sqAG0Sz4xI7Uw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CA869816FB;
-	Sat,  3 Oct 2026 13:57:50 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 321E5A13
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9C9A860F58;
+	Sat,  3 Oct 2026 13:57:52 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 38F6D4B7
  for <buildroot@buildroot.org>; Sat,  3 Oct 2026 13:56:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CC719414FB
- for <buildroot@buildroot.org>; Sat,  3 Oct 2026 13:56:57 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1FCEB414E3
+ for <buildroot@buildroot.org>; Sat,  3 Oct 2026 13:56:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cbLu2RK1KiQG for <buildroot@buildroot.org>;
- Sat,  3 Oct 2026 13:56:56 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 61F3A414EF
+ id 9LGxnWjyrfqv for <buildroot@buildroot.org>;
+ Sat,  3 Oct 2026 13:56:57 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org C0DC4414F8
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791035816;
- b=d4QIgIc6prJab+KRoZbxCVQo8lPr3X73pCivtT5GCHEHyZGym/e/6bBAQaUGFV2DvUml
- UdCBZ+PuEB97+9ro5SKtLsrJLEnAhP+pztSVU2GYY3TDnJM1UBNbVDLO+VFjtaiXI261F
- wT+IN1IclXaaCKR3Ez0WZxyhq8nE3uOz4enwoTO2JMt2Kp73IocMPliGOTsoFx7ORLwnd
- 3SgMqX+P9dyCNyAnux5BYLxP9O5SsmPWDbjorIBNQm8BWGBinpyAxaYxX5lkKYzPH2kTY
- IVkMi5ftbZZHm7DWVeLA+lVl7nneYfyOr43SkcKR6n7a/yiHuJsRV4Dfo2zB8bglQ/A==
+ b=cEV8+N4bBjgeL5JbJ55c2t8CFX/oLlp0y1vLkGZGQDnycxQsAPNLjoAwR7oTUISN52Bf
+ Nvysq4S/pJpdsrd5rQPB0rbQQ8Bsg7lOwp1VcD3ScDD7wx6z+KypeAUXBw87yb2IdwvXM
+ uC7aNwKslynNZONQLOJT0ZcjAwGVTRGaZsz6H3Hce/o1MeoZd/gxw8dmqRvhbxmCyCZ09
+ QDXVo8POoyghyL/aPqmSNTfwmNu40DbxC2e+1AWPmx8yUo5GpZGIhbdDkhFZNwdksn1IS
+ 4IE3BnF6tbOYTV9PyRUGAdQbh+/HVI8wyEj/ddJQmk4YFrfcALpOvxQdwR/ndHcb0zA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1791035816;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=wfO+evVKHdxQOtnE9d7++TPcTVou+MaQpmmdngl4Vko=;
- b=eM0hbLTc+vrPUPm+IWOM9e7MZgFe4udVc3OGWlRx1XUq894s/X0jlObG5Q2XAtbBBrH4
- pdEfwTJACoEDKIpmUr4PmLII6du2rmehIIN4HQ8ynmww31K9tjsZU5yIUujPq5IPZKq4t
- C202wzbqTdjUBcgX031BJI1DQZOGCuKHtNG3uu5HuldNOKC6k7UFapODkBBfmyYvZ9Y4l
- WX5bXzBtj4iBe2Rm8oNxnnC2OqkaPa0Ck3pMVHx7raIQF8OZ8tbCb4k0DPb09ULPqPmAx
- GY46BevE/LVqkvefHJatfOUtdM34hImQCRP69yML+605B0gg15Esm1OPw3ZruRCSEfg==
+ bh=6uhCYLHkA7KiANem95S4G7P8W+D72iCBrojW9UOHGMw=;
+ b=GlFqRfOKxedxkK3B2y92y756hWgZrG1l7qwF1gjiNXmDPuJWTqK1N117i3mrLOHUYYGF
+ ClDaxmBHyy0oIiL4HdQRxH4gaGAqvUtCWbx1N8p7kvylughpfOtS0Af52RDoRvR+RoGwD
+ 5GuMdRqodn8z5Oi7QOoTqm0HyraUl6BtNjgIh8qbS5wcR7m9o36tzBDESUTGMHc2V1TFV
+ nxFx8YaYiSQ17jW9QTXkMyjW5U39WHZSB6a2cjc0Q6ytRQQb0Bkjsib2t3ukNhI0Uu6eF
+ fnZlnAavJ2eX7kQSCiQQmSQ8pQOm+3Dpl73T0v3nvb4xgoPOwGbgfSK+cZIKnM4YYJA==
 ARC-Authentication-Results: i=1; smtp4.osuosl.org;
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 61F3A414EF
+ by smtp4.osuosl.org (Postfix) with ESMTP id C0DC4414F8
  for <buildroot@buildroot.org>; Sat,  3 Oct 2026 13:56:56 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id ACD5088699; Sat,  3 Oct 2026 13:55:41 +0000 (UTC)
+ id 1769B88731; Sat,  3 Oct 2026 13:55:42 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 3 Oct 2026 15:43:51 +0200
+Date: Sat, 3 Oct 2026 15:44:02 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a199cf5594d67cd91fcfbb5408530bf7afaa2ee7
-X-Git-Newrev: 58ba800c62ce183eadfe216a25826d0efe3f2673
+X-Git-Oldrev: 08904d2a3d56f5b96035b681146eaf8b7bf6b422
+X-Git-Newrev: caf8356f76c5bdea2b9888f732b22032a9a0c5f6
 X-Patchwork-Hint: ignore
-Message-Id: <20261003135541.ACD5088699@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-typing-inspection: bump to
- version 0.4.4
+Message-Id: <20261003135542.1769B88731@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-hatchling: bump to version
+ 1.32.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -118,44 +118,54 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/58ba800c62ce183eadfe216a25826d0efe3f2673
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/caf8356f76c5bdea2b9888f732b22032a9a0c5f6
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+
+Add new host-python-tomlkit dependency.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-typing-inspection/python-typing-inspection.hash | 4 ++--
- package/python-typing-inspection/python-typing-inspection.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-hatchling/python-hatchling.hash | 4 ++--
+ package/python-hatchling/python-hatchling.mk   | 5 +++--
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-typing-inspection/python-typing-inspection.hash b/package/python-typing-inspection/python-typing-inspection.hash
-index 71ee5943a8..ba13d7b128 100644
---- a/package/python-typing-inspection/python-typing-inspection.hash
-+++ b/package/python-typing-inspection/python-typing-inspection.hash
+diff --git a/package/python-hatchling/python-hatchling.hash b/package/python-hatchling/python-hatchling.hash
+index 8443d4f412..82a28deb79 100644
+--- a/package/python-hatchling/python-hatchling.hash
++++ b/package/python-hatchling/python-hatchling.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/typing-inspection/json
--md5  9271faadd8476a3600e9cf9d428d812c  typing_inspection-0.4.2.tar.gz
--sha256  ba561c48a67c5958007083d386c3295464928b01faa735ab8547c5692e87f464  typing_inspection-0.4.2.tar.gz
-+md5  9eb41f5bca1969b126f61febeb516a51  typing_inspection-0.4.4.tar.gz
-+sha256  547274fa6b0a561ccf549cc9524b999a578e737d015d8709d021f9d0d13bea47  typing_inspection-0.4.4.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/hatchling/json
+-md5  52ab8110a3a114ddeeb7dd82a624ca53  hatchling-1.29.0.tar.gz
+-sha256  793c31816d952cee405b83488ce001c719f325d9cda69f1fc4cd750527640ea6  hatchling-1.29.0.tar.gz
++md5  537991c82a1c02b1c5023fec65972966  hatchling-1.32.4.tar.gz
++sha256  c4468f73144c054d2aab4ef0f0378c43b9878bf07f8ffd6b79690e970d375f07  hatchling-1.32.4.tar.gz
  # Locally computed sha256 checksums
- sha256  804b59b25f2c31bd278f9202a19ae49a3945aa2664387e2d0a128c7cacc61ec3  LICENSE
-diff --git a/package/python-typing-inspection/python-typing-inspection.mk b/package/python-typing-inspection/python-typing-inspection.mk
-index c0af54056d..74db189565 100644
---- a/package/python-typing-inspection/python-typing-inspection.mk
-+++ b/package/python-typing-inspection/python-typing-inspection.mk
+ sha256  7f143a8127ad4873862d70854b5bd2abd0085aa73e64fd2b08704a3b9f5c07fc  LICENSE.txt
+diff --git a/package/python-hatchling/python-hatchling.mk b/package/python-hatchling/python-hatchling.mk
+index e82cb8d5b4..4a116d8837 100644
+--- a/package/python-hatchling/python-hatchling.mk
++++ b/package/python-hatchling/python-hatchling.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_TYPING_INSPECTION_VERSION = 0.4.2
-+PYTHON_TYPING_INSPECTION_VERSION = 0.4.4
- PYTHON_TYPING_INSPECTION_SOURCE = typing_inspection-$(PYTHON_TYPING_INSPECTION_VERSION).tar.gz
--PYTHON_TYPING_INSPECTION_SITE = https://files.pythonhosted.org/packages/55/e3/70399cb7dd41c10ac53367ae42139cf4b1ca5f36bb3dc6c9d33acdb43655
-+PYTHON_TYPING_INSPECTION_SITE = https://files.pythonhosted.org/packages/a3/26/b09b8010994eccc3c09092e6b34058f36a460eea2d4c3e8b910c695975a0
- PYTHON_TYPING_INSPECTION_SETUP_TYPE = hatch
- PYTHON_TYPING_INSPECTION_LICENSE = MIT
- PYTHON_TYPING_INSPECTION_LICENSE_FILES = LICENSE
+-PYTHON_HATCHLING_VERSION = 1.29.0
++PYTHON_HATCHLING_VERSION = 1.32.4
+ PYTHON_HATCHLING_SOURCE = hatchling-$(PYTHON_HATCHLING_VERSION).tar.gz
+-PYTHON_HATCHLING_SITE = https://files.pythonhosted.org/packages/cf/9c/b4cfe330cd4f49cff17fd771154730555fa4123beb7f292cf0098b4e6c20
++PYTHON_HATCHLING_SITE = https://files.pythonhosted.org/packages/f6/97/b5312f01a8c6daf729a9d272dd442e0c546dbcc630495788786c4b567ed0
+ PYTHON_HATCHLING_LICENSE = MIT
+ PYTHON_HATCHLING_LICENSE_FILES = LICENSE.txt
+ PYTHON_HATCHLING_SETUP_TYPE = pep517
+@@ -14,6 +14,7 @@ HOST_PYTHON_HATCHLING_DEPENDENCIES = \
+ 	host-python-packaging \
+ 	host-python-pathspec \
+ 	host-python-pluggy \
++	host-python-tomlkit \
+ 	host-python-trove-classifiers
+ 
+ $(eval $(host-python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
