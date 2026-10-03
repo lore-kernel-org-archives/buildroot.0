@@ -4,116 +4,101 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 535BACA5FEC
-	for <buildroot@archiver.kernel.org>; Sat,  3 Oct 2026 16:29:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49399CA5FEC
+	for <buildroot@archiver.kernel.org>; Sat,  3 Oct 2026 16:31:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1A0A180D43;
-	Sat,  3 Oct 2026 16:29:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 14571812F6;
+	Sat,  3 Oct 2026 16:31:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4xfN79QNpeep; Sat,  3 Oct 2026 16:29:50 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 5C4BF812F6
+ id 3AXGTV85ERoT; Sat,  3 Oct 2026 16:31:04 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 1E0D8812FE
 Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791044990;
-	b=bJqjs+j1yuWPU/eznk73UUFPRIPn0ylrHRl7+k7zP5WB8Bx3uXEZkcwsF4yvavmcUa7P
-	 zEzTTw1MbrcY1wpJwIm78i6cPzzo6JVnDCIwOOdDc3C/4H0QI4WNO25RGD51G0/zdK7oW
-	 uSBdyw8CsUYgn5nKgWYk8QFtygz+Pe6fnvKmixvq2aH3cTkmUYIsw/bd11awgd4zTRxhR
-	 OOWC6vw5KtmV1/4gYQ5WtFTVhtTUXg0dJSBTdDBf3YDq5cM6aJSAmwVGeY7+NflFq46Qp
-	 /h5o2XA7qoVPRmV1yJY4i2et+Nj3yJy7NjJF/WLUpS0jA2pjadTZSEYJEV2ER+kJrLQ==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791045064;
+	b=Ney9daDD9ivw9tR/5EUy/tjNoFWXGSO7lKQne9ja8L9KECLTgCxLEoHbmKhmkRYsao1L
+	 VT/gYdwMsqXuxAoIooZJvm69SQ4v+lLkiIB04dcyQXCZP0CqdwcL6qwasZauatBeoK6cI
+	 DC84Pll2pHAOv/ooj1hFumdAcFv5s3kGeLg5t4D5f95Rqit72ilMeTpDTtwBRypbIOWch
+	 mKwFf16cQBiIgAIdU4EyVBwFeKpr/cyf3fbjTJjY0kE6b62DOL/ZUjxvT6NuGoP/fu/Np
+	 QOUNj5oPH+oGYFDK8UUP8icYwfvPDIf1jlMgCklSxsrmqrfnWok70RhEOm+UXhVUAIg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791044990;
+	c=relaxed/relaxed; t=1791045064;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 Received:Received:Date:To:Cc:Message-ID:References:MIME-Version:
-	 Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version:Subject:
-	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=6QInAYnxmdoGC6MBYAzCK4Miztv09/LVuvkSWfc3kLA=;
-	b=CTzBcsuRwxfK0Nn0I/RHF27oWZ3u4Fa5YmuKjF1yn/1L0uXJIk699hRpvO684EXTGTCX
-	 1lbnA6FoUPI0IAYUNd10ixHfWsxP8p8Giu9+vPef6AhDO0ahOqS2O04MQKUTn61b4gtA1
-	 PGCqVxrdI/neilU17DelhlpOuo4Fl6vI/S805nPR6dWcHPQSwOP3qZylHamwmulWEMqqG
-	 ghU8NswSAwMw7dg+coXNDMFVMDjPWfokmnd2DwEmkASJbpgCTYxINrllyOHndWia8iTa+
-	 b+/2OSDXyj/cnjqgzRq++fm0lnGaSy8voKCBS7hTSMaI2L1HwSnEb0KfSu1ypV2rOjg==
+	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
+	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
+	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
+	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:Errors-To:Sender;
+	bh=d93rURALIgDILH/qyhCH5IlbPhWoN2fgbd1w58f/ngw=;
+	b=cn5eridDYcwXBdIC62IGRavmpzSlPnr5QRiMCpz0tM3HJIFHAnvtObs9N7hwA9eciso7
+	 +zaecSLbQTkgnfWrf4JSIAodMojaGLLZGGT4LGBBXkvUTud1WX6bW5yhXUlHr0efsFPVU
+	 bCQPhLCv8i5HD0EaALKSKV9tX/4yOs2MJ55iqT+8A2p7Q73XZMjZAnd/lfeCpkOfo+oVS
+	 H/07n5NXAaCTpEzkrcBlowLmoYgTn78Q8jjn90913gCxu22eXuC+AWzfK47ygad0Ay0h0
+	 SeUt9/cNDIgEfIhTgOGxafQG01Fzv+tcLtj1PUzm3a0VxPbhFN4CJAiYmLGXAFDTq3w==
 ARC-Authentication-Results: i=2; smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791044990;
-	bh=6QInAYnxmdoGC6MBYAzCK4Miztv09/LVuvkSWfc3kLA=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=JtOmLOOPhdTnQ259zzYLQP0JUBfNZOvK/A2n5EUuYLZy26vpisTiJ8nnkyKM7sJIq
-	 GlHpGfmjOsrI5Bd0d75gXoIaDHeEvKQGDU/7ELT3qMF3MA8tqeRt1jjitZnbZD5G7X
-	 9KGJggy6sBhAAzUUNHOwAbWXmLGHop8uBAkMeC1i1DkZXe5qPMr+N5QOItmu1oco+a
-	 BR3LzZ7UGn40yol38x+Ps+SBUsCz3KkbBgS2oMxMUerzy3rVQehdMDEe//JjcDZj3t
-	 RN76k7tOaIIY6oZA/3eJWaIBZ4p7Jq3vUqo9n3V6hmvMBiPJyBg3tWQ7qmYYkJdIup
-	 kRptB8lo/Ec8w==
+	s=default; t=1791045064;
+	bh=d93rURALIgDILH/qyhCH5IlbPhWoN2fgbd1w58f/ngw=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=Chw7stDNrLAtTsRWx6lvT6ZW7kWs3ykm5nn6sDal2v4B8KZdOwnuY6hMvYD+mnYRq
+	 2Ox9YX5O0Veuzibb0i3BaT+yMLZZCkKfKIwTT6urmlU2U0O5wTDfwnnXOBbGt5zxtx
+	 hcN22DThE8KlJoP8usVLevuSDkJKWDkfPNgvU5neF4fbDjnO/Dobz/JsmlEbocCqo3
+	 fxQVaTFJH1tUNUzDwAQlTiGk6NPaHQS24sBgZ/IS2FGy9uCMm8GUDEtqaBesCwho4w
+	 4Sx3css3XisxyJRcpJrL0UskvVA+/+ezuNh8NQlIjOz2BemPefsrTgfu/B8keQv3ho
+	 1Sk8qHiBQ2/lw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5C4BF812F6;
-	Sat,  3 Oct 2026 16:29:50 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 292EC335
- for <buildroot@buildroot.org>; Sat,  3 Oct 2026 16:29:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1E0D8812FE;
+	Sat,  3 Oct 2026 16:31:04 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id C696D335
+ for <buildroot@buildroot.org>; Sat,  3 Oct 2026 16:31:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0FABA606A2
- for <buildroot@buildroot.org>; Sat,  3 Oct 2026 16:29:49 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B869E40048
+ for <buildroot@buildroot.org>; Sat,  3 Oct 2026 16:31:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HdkaM62Cg4uq for <buildroot@buildroot.org>;
- Sat,  3 Oct 2026 16:29:48 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 22E09606D9
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791044988;
- b=HQfKxLJ5b7+USGTrYKu4Uwwweu1lAVoRSCwiQmUITvHc/W9mJFRG8D73s3NuS9PU8Cc0
- hwDx/JMcQ+xaWWPouR0TvGMKeBsEyM09l9LEkMY4ejXL5/tRWRAr50GaqVeKNDiR4OhtO
- Y+x9DFjvC6sd9shqgjnl3AEX3DRjRnyN/iTgXKL9hKdP6Dl14xdwll33vsrg2MY4tWkTK
- 1+MuefdQeBl7pPRdKqDgQykmFekJhjXGwfTstFifOryn9dztZdAiydehQFIhyGhZ1ub1j
- W+mgcu+NU74H6zFn8KxESCUjFMMgfnXNrU74L7GXAxuVDmpXgAQN6Mus5KdvM4E+mJg==
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PeEgeNsGkdXq for <buildroot@buildroot.org>;
+ Sat,  3 Oct 2026 16:31:01 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org 07FDC40024
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791045061;
+ b=bPsVbigokYM/Xn4l76fZec7OYWPGIctkRKtFTxYIownh2j4G+ov6kFGIRc0lQpQFANL3
+ 8ePLcv+GzxWXtfXSrer/dWcnYeP7uFPsEuMzZUqV3h0yJXfcnYvdQwAGBD07ErL7YkF+y
+ /3a+6jzyGAVSz9LzRs19NzAEsBTdchJ/xBhaUdktCutJ8rJfzPrPDaTjxX1ljCgk9Oy9i
+ 1EJAIlzY3Dl6DTT+HYrJWJdmcjGMXFFPwbwAh3tJgFwdxJsO+yAmgKtZrEgPulEfSa0NY
+ /6bqlaOxJVER0aRPi0oEprnJqthBfUGrJdgBapxh1tJuCI/wPX+aEP+xbgsZxOa2pHQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1791044988;
- h=Received-SPF:Received:Received:Received:DKIM-Signature:Date:From:To:
- Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
- Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version;
- bh=0YAwPRlkpwaGVX6XhTyetiAvbRK3rhM1rHK46Jj6F3I=;
- b=cVdi1ElGbL1lIsYmWSBqbV3JarSj3dK0gvcZl5dqQpCBw/1fm+1gtdTxGA5KvcWJwDoO
- O83clD+EgLR9L9upPeiT3ju/hNZ84SGnCeewGvxtahj4iqa7xfHP/QEdD5PLdMdGwOmVt
- tEam8LtyI0XrkOd9bBygC3fpVIZKanD/t+rKK3tyzjmc++rZMFEGY39njBTFSEkE4Se2c
- xAjtl8wEJUALMDL64KMfQ+yGeLvIaW/uclsFJopB9nkrN5VpCd8KW84k4G/o6wqQWTh1N
- E3drX006DpLwspbxWTc0Bxo5YNZDvtd/gJCuDx676BFU7XFjsNKz38UBOCzoMJ6K54g==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org;
- dmarc=pass header.from=bootlin.com; 
- dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=xHzjKo1e; 
- arc=none smtp.remote-ip=185.246.84.56
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
- helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ c=relaxed/relaxed; t=1791045061;
+ h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
+ X-Git-Newrev:X-Patchwork-Hint:Message-Id;
+ bh=NZ6aq0620AAZi7EEbLt7SOlRjkrqZqApqcQbZ2eyIDk=;
+ b=bw2WwstCCoBSS2oJdsZwxtgvRX3MYnRaJ/pW+V94cq0i7uRZ2IzgRyN1gIU7EDFdIK30
+ d1qgWwyr/GhLvSPnIbMZtgey5urGE7/6qcWyGdW8TODS6kQBW2M+v8cfpHgF5q8eCWQzs
+ Z6fiHvGR5wb+F/zNqAIzOB46AG1+AvUpS9lpdIWuhwHcHs5VIQCtT0E0fLvHdOFOAQShv
+ k5qgVs18zXtt+P0Cs64kdHz5yrY4SBzQb5DB464SsVjQDzCBOG899CAOC2qEYK00iPCxl
+ AHfaTtT8nTl2XjXLdJVIS7Zxal43iQ48YssUTK7CS8hfrnnLJJPemYfua5I/k8tsJ9Q==
+ARC-Authentication-Results: i=1; smtp2.osuosl.org;
+ arc=none smtp.remote-ip=140.211.167.122
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 22E09606D9
- for <buildroot@buildroot.org>; Sat,  3 Oct 2026 16:29:47 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-02.galae.net (Postfix) with ESMTPS id 687BB1A1108;
- Sat,  3 Oct 2026 16:29:46 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 37073604FF;
- Sat,  3 Oct 2026 16:29:46 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 32DFD10328170; 
- Sat,  3 Oct 2026 18:29:44 +0200 (CEST)
-Date: Sat, 3 Oct 2026 18:29:43 +0200
-To: Fiona Klute <fiona.klute@gmx.de>
-Cc: buildroot@buildroot.org
-Message-ID: <asEtc8dt0Kpm0PTz@windsurf>
-References: <20260904165427.1893579-1-fiona.klute@gmx.de>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20260904165427.1893579-1-fiona.klute@gmx.de>
-X-Last-TLS-Session-Version: TLSv1.3
-Subject: Re: [Buildroot] [PATCH 1/1] package/e2fsprogs: enable libarchive
- for host package
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 07FDC40024
+ for <buildroot@buildroot.org>; Sat,  3 Oct 2026 16:31:01 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 45553886F7; Sat,  3 Oct 2026 16:29:46 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 3 Oct 2026 18:30:39 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: b1990243cad222ec438fe14ac26976b85981e08a
+X-Git-Newrev: 6c9c2b71e6db0bc9c16747b341439e8bb21bb7d8
+X-Patchwork-Hint: ignore
+Message-Id: <20261003162946.45553886F7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] linux: fix pahole discovery when
+ BR2_LINUX_KERNEL_NEEDS_HOST_PAHOLE
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -127,29 +112,61 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, Sep 04, 2026 at 06:54:27PM +0200, Fiona Klute via buildroot wrote:
-> From: "Fiona Klute (othermo GmbH)" <fiona.klute@gmx.de>
-> 
-> mke2fs need libarchive to populate a newly created filesystem from a
-> tarball with "-d tarball|-". Enable it in HOST_E2FSPROGS_CONF_OPTS,
-> and add a dependency on host-libarchive.
-> 
-> Signed-off-by: Fiona Klute (othermo GmbH) <fiona.klute@gmx.de>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/6c9c2b71e6db0bc9c16747b341439e8bb21bb7d8
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Applied to master, thanks!
+Around Linux 5.11, upstream started introducing checks that execute
+"pahole --version" for feature discovery (e.g. [1]).
 
-Best regards,
+However, when building with BR2_LINUX_KERNEL_NEEDS_HOST_PAHOLE Buildroot
+only lists host-pahole in LINUX_DEPENDENCIES, so it isn't available for
+the configure step when using BR2_PER_PACKAGE_DIRECTORIES. This results
+in the host pahole being used (resulting in host-dependent behavior), or
+no pahole being detected at all when the build host doesn't have it
+(which will then disable Kconfig options that require it).
 
-Thomas Petazzoni
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+Fix this by adding host-pahole to LINUX_KCONFIG_DEPENDENCIES.
+
+A similar issue occurs when running "make linux-menuconfig" and friends
+because PATH deliberately gets stripped when pkg-kconfig.mk builds
+x_CONFIGURATOR_MAKE_ENV. Explicitly pass the pahole path to fix this.
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?h=5f9ae91f7c0dbbc4195e2a6c8eedcaeb5b9e4cbb
+
+Signed-off-by: Florian Larysch <fl@n621.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ linux/linux.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 3599a10b50..cd80904113 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -125,6 +125,7 @@ endif
+ 
+ ifeq ($(BR2_LINUX_KERNEL_NEEDS_HOST_PAHOLE),y)
+ LINUX_DEPENDENCIES += host-pahole
++LINUX_KCONFIG_DEPENDENCIES += host-pahole
+ else
+ define LINUX_FIXUP_CONFIG_PAHOLE_CHECK
+ 	$(Q)if grep -q "^CONFIG_DEBUG_INFO_BTF=y" $(KCONFIG_DOT_CONFIG); then \
+@@ -387,6 +388,9 @@ LINUX_KCONFIG_EDITORS = menuconfig xconfig gconfig nconfig
+ # therefore host-ccache would be ready, we use HOSTCC_NOCCACHE for
+ # consistency with other kconfig packages.
+ LINUX_KCONFIG_OPTS = $(LINUX_MAKE_FLAGS) HOSTCC="$(HOSTCC_NOCCACHE)"
++ifeq ($(BR2_LINUX_KERNEL_NEEDS_HOST_PAHOLE),y)
++LINUX_KCONFIG_OPTS += PAHOLE="$(HOST_DIR)/bin/pahole"
++endif
+ 
+ # If no package has yet set it, set it from the Kconfig option
+ LINUX_NEEDS_MODULES ?= $(BR2_LINUX_NEEDS_MODULES)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
