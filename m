@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE877CA5FE3
-	for <buildroot@archiver.kernel.org>; Sat,  3 Oct 2026 10:15:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1FBE6CA5FDD
+	for <buildroot@archiver.kernel.org>; Sat,  3 Oct 2026 10:16:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AB55B412BE;
-	Sat,  3 Oct 2026 10:15:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E135A60EFF;
+	Sat,  3 Oct 2026 10:16:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MDU8Bc51U4KI; Sat,  3 Oct 2026 10:15:13 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org BDD12412C0
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791022513;
-	b=UOkIuRFgSKnTY5g5b7cOf8c5xvk+w8sre/J0DvaFl+pVgF5qHe8V6dLxjuFnVuhzmodO
-	 0sRReFDli/Jicdgys19nU/DCLVFU2Np1hGfdFIHxqXuy2Fhcz40vDhj8TXNimfR1svIII
-	 5CryoKYdqPFp3G1BP0YGPU1NnX4xVg1HLwfyiyWiToZzATHnq2K97EpTL3z0IP4lIBthU
-	 UPlT5sSayGI25YMvCqysvoFVSMYhh637YI6pPKh13S91Wt8woIahhg9i+Nkf00e8ek8Z5
-	 /YrQxgnNJJp8xq5UJNFvVtCDNkN5SGZf07T6yxa7m13aOfCOff0LUo6xKbubyxwxndg==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9Oe7qGzgYU2h; Sat,  3 Oct 2026 10:16:01 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 25E7F60EF8
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791022561;
+	b=m/1V9hF6GaF2IfV/M2VF2Jd1X33nUs+LD6yNLIEBnT+k0gR7Uol2suxpUWG69qYsBap/
+	 MXCy44rL0KTDsFNSMi5r2jhQwS5rNwt2+srcAvpAKp80AVNW59C+687j6eggwRSFR6XPE
+	 GP4b93H08YCLmp51PO+j5F4kxTMeWZurXOFFVceEwi5AqOn0u5asa21P6Ddw2xWGHRF3R
+	 /VFDcQKnmEadL6YjUP/RHS/r4RNNUqE5R5wV9lFez7y6j13EdVbkFnN4ntc5LP9eoxmA6
+	 v5/Di9I7Be3x9/ybGyTbvc5hyQRhquDHyFQaVGB2LHshxmT3ioYbdIz189bhPgTehwA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791022513;
+	c=relaxed/relaxed; t=1791022561;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
@@ -32,81 +32,81 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:Content-Transfer-Encoding:Content-Type:
 	 Errors-To:Sender;
-	bh=Wg9VnuLKcqDg2qFBOL4b+yj0D4DI2vw/sebGQ2YOYMs=;
-	b=Je9uXBSkx8Q6KxDMncxKhLgeo7qwUFEUwN4GC1VSxeBSlmfQlNSfo5E1HpByAAN4P6pE
-	 Gpic+9gnOaAk1wtFIK00whdp65qSHU4tPTaS2CaW3Gq+iXUnpugVWgRL+ZAD5zPjyCoHm
-	 DHf0Cs2pWDHR2otkswxihWGKVznTvNW8qHLVHVjA/oxvUr9bRdRGeLy+6xYKcQh42U8ND
-	 2+jq/5uXr9k6l+RpCBdDovxaQP3Q1oH+erW3t2wtsh6vX3SM/mi2fdEj09iXBRASK3wqE
-	 /3NdUC5j0h6BMhDSp1ahSvaLIt3ZEdAhWGdTOkI9FAUD0Kp3G83PbjrrPgMqX+FDJcg==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	bh=atyEhl39lxl7QF97A+nA3Gfg1Rx/+MJG6/RktrqWHHU=;
+	b=pt1LQNlUpaKJr9HoW/+HxC1bFpygB9d7kg+2YZhtuAtQhj3uB5XajFlFl7AVxQMDzscI
+	 b6HvlcpQ+qwb/iIarYGRrRE5frC/dw9vOreuxKzZOwVVUuGPppBRojQ9gRbVVv1/XBl8x
+	 iIV6Q1CkUL/udKx1SPjzCnIpU3egAgoLV4M8bPg3w0BNXtq089tjwh+5TQPlp3blp+/n9
+	 s8VVYhJQ9FY7CGJrwR1sCVB5S/4iCpgVflHtc2Acrnp0TVkgHzbK+99OapLu1UWIG9vHG
+	 HxfcYS9M8SFShlFCyv/2cwK3f43WPJEPDjgY6PPHJcyw3mZZacBpZnSUcFLfmvJkNiw==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791022513;
-	bh=Wg9VnuLKcqDg2qFBOL4b+yj0D4DI2vw/sebGQ2YOYMs=;
+	s=default; t=1791022561;
+	bh=atyEhl39lxl7QF97A+nA3Gfg1Rx/+MJG6/RktrqWHHU=;
 	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=DSspZisNDsJIq2c2VvgGxroPnqzbfnJE7MrajtxkeSzSZOzZlRwkfq9i/AeAHNBlC
-	 65AYDqWlA0dCXuzjeaijMx+e78THIkzCqsA/iKt7UVvHJzcQSeros4+YlVIEm2jTZB
-	 Uv/zeRIVfhvcb8C8kG1ZTfeIjeGUI8CO0TWhR4IDJwPvWGOvMTdHbebIj8cnhIwXiR
-	 b2K9/709kNw1Pcl+IXUQeVMcP/EW0j9AP87b2lqjreRtmU/ce9RNRzvQNp2a89w4eK
-	 Ow9Fcxd5woU9v9iQC8OXPdJLKZyxEGYuNYBySsCV1q9QraqvyETgYYlppsnT3fzbTa
-	 GCon8KT3JCd2g==
+	b=U9SVQehaEipm46tCNnwc+Rxo4mUoS6qhyAhx0UBSgPPNheRtRspFVgKkOrMg+Bwa0
+	 SyYOQjGFswyZKkSku+eSmAi+MXaHUY73P1v/8zVdTcCqObaxCGfoYeOo5jFh1pEnil
+	 pZH/NIdiTgIqomctCt92yYsrvihw+rPb1NgijXvjyiIcV5lSKd7Kq/kEf8ejkXbk0K
+	 6obHnHEzuT8lm/bhMuBqQtEI7RrPnVJdteyACG9Ljo9ZfmbaZs4txi23uf7E8kSOJD
+	 fwEgZNE0jW/KLoz5JIhUQsi+ZsksAUZpsTC8+MEdM2WNXa/TrpjA2RPzPHdb68mcW6
+	 Q2KxsGHoM56Tw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BDD12412C0;
-	Sat,  3 Oct 2026 10:15:13 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 6A5D134E
- for <buildroot@buildroot.org>; Sat,  3 Oct 2026 10:15:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 25E7F60EF8;
+	Sat,  3 Oct 2026 10:16:01 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 372C534E
+ for <buildroot@buildroot.org>; Sat,  3 Oct 2026 10:16:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9C0A181102
- for <buildroot@buildroot.org>; Sat,  3 Oct 2026 10:15:09 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1C6FA4007C
+ for <buildroot@buildroot.org>; Sat,  3 Oct 2026 10:16:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Cc8VfSkyt7X8 for <buildroot@buildroot.org>;
- Sat,  3 Oct 2026 10:15:09 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 618B380F6D
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791022509;
- b=eVyNt4GiLM9vWO7PFITHUQ+F6+VEhTPXziZym543LGti+yHBfSdAd3tNyLna+8WWPSRb
- zcV8izZjnjQP8XgCCcWeWISvMtlx0Ai+gOvAvFLfEyiRr170d/vSjBqjCa8/jloorKsLV
- TSBjIbJHdi69h+W04+3XNHLVZrX8+JkIloUB/Mly+ExTVmRdmCMSjqrySGNR5Uy/GQq95
- sf6VHgcILN3piz13n/zzmihqikdwV4cOgRyC8rIB7SwZsj3Fb+9TsW+biGuZ6s6q1wkZ2
- ClULScIK7vaZ+PgYPIZ/NZ5tJ2El6vxJ8kRGVH/4iqURettuoTlfBjenrlLK8F2/AdA==
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5ziDNW-_PdPw for <buildroot@buildroot.org>;
+ Sat,  3 Oct 2026 10:15:59 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org 7B71940059
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791022559;
+ b=aMA4fHCJNwA6jz7Jy+l8s2cL9oPH2bg2Q19FiXZU5WMfy4BNlObhg2EEQNC6WD7dJREO
+ J8n3Jqt5YQ1Xkmc7VPFr/17icKRX4CD77hYst+c9v73gzr4lIgL/Jjx1wUBczmkGuvOno
+ oJ/g9uAfVBuRYd3rTqV/LdfmtHjESicDrSZLDNhYo08Vm/wki6KzANa3h5iFuGh44TA22
+ U6dfU+q+1+PxVDH1HXgigefly07Wy7JewqA7iMIsSNe9KDKKO69RdUdqBQd7TUv4+F9Nv
+ JNzIqL3yCfCIucBGuhEGMbC3d2aQY/0OII+pQTJv03rM4tIUida8JHhChEOehbvEhXQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1791022509;
+ c=relaxed/relaxed; t=1791022559;
  h=Received-SPF:DKIM-Signature:X-UI-Sender-Class:Received:Message-ID:
  Date:MIME-Version:User-Agent:Subject:To:Cc:References:
  Content-Language:From:Autocrypt:In-Reply-To:Content-Type:
  Content-Transfer-Encoding:X-Provags-ID:X-Spam-Flag:UI-OutboundReport;
- bh=ZfOm8wlIB+dWBveO3BsHSPU66QbB6jX46NcahrGG5XI=;
- b=qp+rG4SNmQVFJTS7E2S2h84O98Jz3uSk2ALpbIuwD2rrUX791Y9uXEVCmWjlsK8qrL2Z
- H2LdXcoWmk8xa4FVCyEZu/y4av8mqUftDRr38Loe9ta9ieAlXrjOTIus4ILbSmmbvcBvZ
- Rg5bjRv8bi5pcqHxg7TwkF/c9JTqO3B3ph+cOo3eI2GGXUKI3n1sYEg+JqtqguMGWqWqI
- CEYsPM5KqBwRSuF6tltvgIwncfCts0jSU4qumLSGjuxCU5i7d2xADLG7i2dm9cdWXRINX
- mepsqVGzXrMbXfDze7H2J6/xStk+MvPwAmvTQ+MuPsm35G4vSoanAFsaShYu69hKabA==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org;
+ bh=a2Cx3/OHVFPsHUNuEdOz0AV6NO59xCO+3mgcTgDVjfk=;
+ b=aRFMH6+67X3Ptc9Z15zZiI3xKIBFyBmRg8h51HqmGhfxpm1pqF6v7RX+pmR1HHepsLhU
+ BshihS4NG9STJ9ZS1eDXoRW+8aP1wZsjVZf4/Z9oh6MuXwfgyMcTic1P1rhdHFtUitDwK
+ 2GcULhWX3ucIuZQlBlSnWub8TKdIfdWvHmYooUZHykBwOg99ijIevrc0CG6qo7ckowZQB
+ KohnDcj0UobQc2o8OgGj39jMVLALt9wQb9bRdPutqmVV2kwqF9E0ayhRkkC+815emRr0z
+ EQmupRrOp0cgbKxaG8h7k4ml0gZkMPaYWeAOYwz7o8gYmX0p+0kgPxgxPTHR4lk1nWA==
+ARC-Authentication-Results: i=1; smtp2.osuosl.org;
  dmarc=pass header.from=gmx.de; 
  dkim=pass header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
- header.s=s31663417 header.b=kQMXGJDm; 
- arc=none smtp.remote-ip=212.227.17.20
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.20;
+ header.s=s31663417 header.b=N01GeBEg; 
+ arc=none smtp.remote-ip=212.227.17.22
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.22;
  helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 618B380F6D
- for <buildroot@buildroot.org>; Sat,  3 Oct 2026 10:15:07 +0000 (UTC)
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7B71940059
+ for <buildroot@buildroot.org>; Sat,  3 Oct 2026 10:15:56 +0000 (UTC)
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from client.hidden.invalid by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MqaxU-1wqpMP1m40-00m7jG; Sat, 03
- Oct 2026 12:15:05 +0200
-Message-ID: <8da08f7b-a6e2-4a61-a115-ea8f47becc2b@gmx.de>
-Date: Sat, 3 Oct 2026 12:15:04 +0200
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mkpex-1wqZjZ3Q1X-00mQXk; Sat, 03
+ Oct 2026 12:15:54 +0200
+Message-ID: <32b3219c-254e-461f-92a4-388070c2e242@gmx.de>
+Date: Sat, 3 Oct 2026 12:15:54 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 To: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
 Cc: James Hilliard <james.hilliard1@gmail.com>
 References: <20261003070128.1295458-1-bernd@kuhls.net>
- <20261003070128.1295458-39-bernd@kuhls.net>
+ <20261003070128.1295458-44-bernd@kuhls.net>
 Content-Language: en-US, de-DE-1901, de-DE
 Autocrypt: addr=fiona.klute@gmx.de; keydata=
  xsFNBFrLsicBEADA7Px5KipL9zM7AVkZ6/U4QaWQyxhqim6MX88TxZ6KnqFiTSmevecEWbls
@@ -151,105 +151,105 @@ Autocrypt: addr=fiona.klute@gmx.de; keydata=
  bCn+vBDsJwD9Hcht1eVRxnIq745SQ0naL48Q3HGpKdXZpJoBQZ8bSAFhRSb3m+P4PE272rLY
  6FCkqS+UeX7RBpPkkIDoL7WS9HdvDHuQ751D56WkTnIpoF+sgW6tOEcfgFrYf3rVvh6G3B8S
  FPSOJuHYnwzMFrDNxQQKb0uS/j1s2dnlS55MouCvd5pShM5iRFzE7k3CMeS4NkhFim0=
-In-Reply-To: <20261003070128.1295458-39-bernd@kuhls.net>
-X-Provags-ID: V03:K1:kiG66fh5bhkNlEyDehwEIoSY4JwHhsRL1v/EimbWPklc7QG92AJ
- cBu13v/aCLxaNcANGTXtiTm+ul4bZnz5CQA9wIWo0U3CBmmkPxbFJrwyO9/y3HWIpgoOfeh
- tkp8uNJ62R9Wo0W9PEGd1jIAW/h2lbeTJMsNV5yAmytKH8wx0ufJtARnSoNQw6anqCQPEFX
- RomqAH1WUsCLO10cMnLSw==
-UI-OutboundReport: notjunk:1;M01:P0:6cs74qodAvc=;90BfJ1cnANAG1Kz1A7SNEbwnRon
- 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
- p7YExH4NhY4MDXMt2TljpZMFAP2rJ/bjPqR9F0=
-Subject: Re: [Buildroot] [PATCH 039/114] package/python-markdown-it-py: bump
- version to 4.2.0
+In-Reply-To: <20261003070128.1295458-44-bernd@kuhls.net>
+X-Provags-ID: V03:K1:eDGB9sroHe6dzJzNyfpNaNRtDsqL1HQcGVroBrkQZSO4yCAnEmW
+ lKjMLkci1S6c6cn12LlCRaSJaeyIqnUNBJ/s2I+rEPn8LXKyImAN2TxYcnrInsfCV9io8jo
+ B+ZFZxG8FASyjF/lLmc+UNNmgEBt63eDmwbR/uLjf+p56lrHAsUFvrohufHDOpkI2S2Mt4N
+ f7nCRfXBQkSpw9ap+pbhg==
+UI-OutboundReport: notjunk:1;M01:P0:GdJmff4jCeU=;/5agS8yrCQFE8IVwULX4Jw3NQ6x
+ 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
+Subject: Re: [Buildroot] [PATCH 044/114] package/python-mdit-py-plugins:
+ bump version to 0.6.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -270,46 +270,44 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Am 03.10.26 um 09:00 schrieb Bernd Kuhls:
 > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> Cc: Fiona Klute <fiona.klute@gmx.de>
 > Cc: James Hilliard <james.hilliard1@gmail.com>
 > Cc: Yegor Yefremov <yegorslists@googlemail.com>
 
 Applied to master, thank you.
 
 > ---
->   package/python-markdown-it-py/python-markdown-it-py.hash | 4 ++--
->   package/python-markdown-it-py/python-markdown-it-py.mk   | 4 ++--
+>   package/python-mdit-py-plugins/python-mdit-py-plugins.hash | 4 ++--
+>   package/python-mdit-py-plugins/python-mdit-py-plugins.mk   | 4 ++--
 >   2 files changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/package/python-markdown-it-py/python-markdown-it-py.hash b/package/python-markdown-it-py/python-markdown-it-py.hash
-> index c1c6881ee1..c9d6197cf6 100644
-> --- a/package/python-markdown-it-py/python-markdown-it-py.hash
-> +++ b/package/python-markdown-it-py/python-markdown-it-py.hash
-> @@ -1,6 +1,6 @@
->   # md5, sha256 from https://pypi.org/pypi/markdown-it-py/json
-> -md5  175fe39a7fbec21878606db1947bc9ea  markdown_it_py-4.0.0.tar.gz
-> -sha256  cb0a2b4aa34f932c007117b194e945bd74e0ec24133ceb5bac59009cda1cb9f3  markdown_it_py-4.0.0.tar.gz
-> +md5  1b83a25193ec6c26c3ed83002419b51a  markdown_it_py-4.2.0.tar.gz
-> +sha256  04a21681d6fbb623de53f6f364d352309d4094dd4194040a10fd51833e418d49  markdown_it_py-4.2.0.tar.gz
+> diff --git a/package/python-mdit-py-plugins/python-mdit-py-plugins.hash b/package/python-mdit-py-plugins/python-mdit-py-plugins.hash
+> index 4537d908af..bb29e571e4 100644
+> --- a/package/python-mdit-py-plugins/python-mdit-py-plugins.hash
+> +++ b/package/python-mdit-py-plugins/python-mdit-py-plugins.hash
+> @@ -1,5 +1,5 @@
+>   # md5, sha256 from https://pypi.org/pypi/mdit-py-plugins/json
+> -md5  8afddf3e020778a9d4490f43ce469d2a  mdit_py_plugins-0.5.0.tar.gz
+> -sha256  f4918cb50119f50446560513a8e311d574ff6aaed72606ddae6d35716fe809c6  mdit_py_plugins-0.5.0.tar.gz
+> +md5  78fcde535f69c580e9bdc4393ef2a8bd  mdit_py_plugins-0.6.1.tar.gz
+> +sha256  a2bca0f039f39dbd35fb74ae1b5f998608c437463371f0ff7f49a19a17a114d0  mdit_py_plugins-0.6.1.tar.gz
 >   # Locally computed sha256 checksums
 >   sha256  4a2260d6e2cd0f5a151a1e86dbfe7d3ed552b1e2beabf9941c1ba5c49cbce484  LICENSE
->   sha256  792c48c5a849a15fdf9e37e8bcf9e6d1dd13b32b46c642a748a0a46a9919d473  LICENSE.markdown-it
-> diff --git a/package/python-markdown-it-py/python-markdown-it-py.mk b/package/python-markdown-it-py/python-markdown-it-py.mk
-> index 0b2666cc03..35ea875ab3 100644
-> --- a/package/python-markdown-it-py/python-markdown-it-py.mk
-> +++ b/package/python-markdown-it-py/python-markdown-it-py.mk
+> diff --git a/package/python-mdit-py-plugins/python-mdit-py-plugins.mk b/package/python-mdit-py-plugins/python-mdit-py-plugins.mk
+> index dcbec98089..c324f1badf 100644
+> --- a/package/python-mdit-py-plugins/python-mdit-py-plugins.mk
+> +++ b/package/python-mdit-py-plugins/python-mdit-py-plugins.mk
 > @@ -4,9 +4,9 @@
 >   #
 >   ################################################################################
 >   
-> -PYTHON_MARKDOWN_IT_PY_VERSION = 4.0.0
-> +PYTHON_MARKDOWN_IT_PY_VERSION = 4.2.0
->   PYTHON_MARKDOWN_IT_PY_SOURCE = markdown_it_py-$(PYTHON_MARKDOWN_IT_PY_VERSION).tar.gz
-> -PYTHON_MARKDOWN_IT_PY_SITE = https://files.pythonhosted.org/packages/5b/f5/4ec618ed16cc4f8fb3b701563655a69816155e79e24a17b651541804721d
-> +PYTHON_MARKDOWN_IT_PY_SITE = https://files.pythonhosted.org/packages/06/ff/7841249c247aa650a76b9ee4bbaeae59370dc8bfd2f6c01f3630c35eb134
->   PYTHON_MARKDOWN_IT_PY_SETUP_TYPE = flit
->   PYTHON_MARKDOWN_IT_PY_LICENSE = MIT
->   PYTHON_MARKDOWN_IT_PY_LICENSE_FILES = LICENSE LICENSE.markdown-it
+> -PYTHON_MDIT_PY_PLUGINS_VERSION = 0.5.0
+> +PYTHON_MDIT_PY_PLUGINS_VERSION = 0.6.1
+>   PYTHON_MDIT_PY_PLUGINS_SOURCE = mdit_py_plugins-$(PYTHON_MDIT_PY_PLUGINS_VERSION).tar.gz
+> -PYTHON_MDIT_PY_PLUGINS_SITE = https://files.pythonhosted.org/packages/b2/fd/a756d36c0bfba5f6e39a1cdbdbfdd448dc02692467d83816dff4592a1ebc
+> +PYTHON_MDIT_PY_PLUGINS_SITE = https://files.pythonhosted.org/packages/59/fc/f8d0863f8862f25602c0404d75568e89fb6b4109804645e5cdfb1be5cf56
+>   PYTHON_MDIT_PY_PLUGINS_SETUP_TYPE = flit
+>   PYTHON_MDIT_PY_PLUGINS_LICENSE = MIT
+>   PYTHON_MDIT_PY_PLUGINS_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
