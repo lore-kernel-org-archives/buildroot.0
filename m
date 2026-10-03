@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18A34CA5FE3
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B72CCA5FDD
 	for <buildroot@archiver.kernel.org>; Sat,  3 Oct 2026 10:07:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 18E5F41129;
-	Sat,  3 Oct 2026 10:07:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C218C60E8B;
+	Sat,  3 Oct 2026 10:07:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IStANroBTMjM; Sat,  3 Oct 2026 10:07:12 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org E9A0E41110
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791022032;
-	b=VXe5L2hgdUPdKDAGfHlXtIxHOfS6NVI+AnE1fKwi+vuJF1PWVA6i5FyaAAR8f55dOE2U
-	 F1dNyDUALBdnmTnZOEz1GAwkqshq3FrJEwAdEnH09UYK2hQJWTgJvOMRBAN3csYKCAo55
-	 UP88F1Jp37ARM7Mw9DV4r6/QB5YwbjABMPstcl+D7rkqbnybWyVaVrB6mIb9i7RwBl+Ok
-	 0uht5muVucsmzsY8N8GGk1T+Uglwdc3od7DvnFJEdUFoX45ntsOxvcbwBCFn4Bg2vhbFl
-	 Z0+a23WQAuNAfg4wlUpCYKPk9NcuwlNV6dkwNbFC3G+cnZLaMoReHCYo6olnQt8NXfg==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nkZoSYEf_T4m; Sat,  3 Oct 2026 10:07:11 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 7C16A60E79
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791022030;
+	b=ZmffrPKScS2V8ryHjiugeKT5pd5q6OMpAOD++i+WITvkyLsSXQbRX0OY3H2R9vSVvduU
+	 0imQHNcXq/L0pqGa8jh5WvjZdDsoBvcT/WnXh82xTHpvWHc51DCZcIx/TwwApUsjtJMxx
+	 YDjImBcxBxETprHFB4jAO/xPgNcmOxYmaJvWFptGm3EtHCygi4BR9uzi5E7TiqbaZh053
+	 xURBC+uzUp34kRSZuotCXxkvHChTQFxK/epS9tq1d2Y8fgP3Fsp9E2yGZP/XDOslu3f2c
+	 50cBOSfYHmsPi1NTRlMcr2LGCXTC5Pbx4ZvWDgFvwovkNTRVUfO1TeAr2OcwWuPYyvA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791022032;
+	c=relaxed/relaxed; t=1791022030;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,74 +30,75 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=TlEc9bQFqQZyO3J9KctRjVxO/TVjtmJ2ChhOpbHi0ts=;
-	b=MXr8F474wxC9lWS5D6DHXkjSs0iN4IDWJs2DH9ZY10vOue/70BUTxWCwrcVqSdgULGkG
-	 yasr7MwUumkWpj7v2rTerpjloXqZDDx2Xr7EHmVvzMiwx9ouK6NpRdAFZm89o9YIjd96J
-	 Kjbi1LdbKyjExBiu9VujcWH9HBINXBtz8OD2tnllcsqkiizC9oCkEyLP+Y6xtaxAu8YPl
-	 /8kBYZLl4BVWGdXqEZ872C16VvwzxCLMDAt/MVeeZWVbbQxpYhuRsceGJSkXiS4/9/W+F
-	 UgPE4N+UtAzx35FQancq55haekkkGgderWyk0Key70gL3xybZUONhCb2AKhkBrYdyTw==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	bh=gXIspp1k/5XANz7FbnGoD6tTVzHZgBs1tyWxc9g4vBk=;
+	b=gjpLEnC+8VN2At8VGwCLqAw8j+DJIaB4MzwskOY9L1aCRJbbfWEWtPD4nRijWdwjas2a
+	 mSni9YWLyvfVpwKCM/GBvLv+tu4yN0qPr1BfUCJl6Pi1Af3aOtrvb6XoyiaonsYsWv8DV
+	 zYMwjJX/aBPuM03feBCPffOCD/KZbJQDr1lax3K6c9/qvgp4iJUv89GuLjdG52oXs2jjm
+	 t9ChyrkIkXkpSwyjsaFfALVbF94uey345JlElSvc+FyzYqJU4Y21uXl6vtNYjZYjCVOwB
+	 W6nE8VosWXa7XMbuUOfhtIZ+iuOq8QSEaMfdsBidLwjGhXn4NNtGGcuK0fg7a6fj6uA==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791022032;
-	bh=TlEc9bQFqQZyO3J9KctRjVxO/TVjtmJ2ChhOpbHi0ts=;
+	s=default; t=1791022030;
+	bh=gXIspp1k/5XANz7FbnGoD6tTVzHZgBs1tyWxc9g4vBk=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=DrA2zC22A7Etk7yaHC0APpr8uNYj9dLgwEE8wi9mvledH/tdPII4FNMEUOxNmKp6L
-	 c6I24PNzH6iUALsFg+d0Bt18zRx4DzjEe62ycRmfhTbT5SxJEZN1lEGcmGpOCaRy27
-	 DkgHjSfjqeGL2T1jX2Xj2rSreGp8q7XAFGgINnDOqjsct0vnH9tKvcI21jnBz7sv6R
-	 KFZY00UVO+H+1dIAm7cBwCS3xAESTvN5raxHWbgt2GLyki9Tl7NohyslkT+UdVnkD3
-	 z9G2ECMQ87wlV0NXup1ZZi9DUkLtLkOUxOufK259dkP3qu2xnNq9f6saEsCgi8R/zp
-	 BZmp7ewMAyNxw==
+	b=fki7ddPqBVw2IFGnW87nQTDatd7rjGLpPd97mYgJWgHD695yzzh5GfBR7JY/AJczG
+	 SOa3iuLaWEn8xraPOZKMo8C/WZrm3MLBTW03KYzRsbBrEd5rodKcp7PWs09E3+6NTi
+	 dAnbtAk09P5KDHQlQdb85AFw5vs4ftehcOP3/r74L1PD6Rn69Ihc/uSywSjaNYnwr/
+	 U/wtzlgcu4G95sLMlmskXeXZLV5GRA13+fOkLmvTmGUEJYFZLID5DFpfhgnB8uy5Lw
+	 cww0UHgjdEeDEEtPvaX94G3zlvjOnej1bYXMXFvyyypz+LZG5OHPdMuvvDpFuQg1eA
+	 ALqaEsSrW8EKg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E9A0E41110;
-	Sat,  3 Oct 2026 10:07:11 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 41652179
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7C16A60E79;
+	Sat,  3 Oct 2026 10:07:10 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 28137179
  for <buildroot@buildroot.org>; Sat,  3 Oct 2026 10:07:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 278B1400AF
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0E1A68122B
  for <buildroot@buildroot.org>; Sat,  3 Oct 2026 10:07:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zEbRi8H1_AGd for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fxQ_2j9c5cUq for <buildroot@buildroot.org>;
  Sat,  3 Oct 2026 10:07:08 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org 3C07C4007C
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 638F480DDD
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791022028;
- b=THBkrCfOBq/K8KxD7YrCj+XMqI6IIMkcXrNJQzYRXkkKWmQ5SFu4tic5Xcs7/8sTAcPU
- h8/Nz3KxfbrsFcLaupyL3o9GoyvhRDp31Y6ijpRudlcDLQEAxhOPDemK/v2GW1wxq285s
- 7QLMSR2O1M74LJTe0SPXv4WFD4FIh3ZI2W+5cM4bapok+eZBQTgKiEco9acyqLOYyYunb
- BvxpSKZbKBdAXb/Dk3DmWR+yyct7Uw1u+3GiCD+t/CrE1Z8Ev7GXHIIfVONhfxlp7SeNU
- lpjwPhsKYA6BFdxdUa3qYlEw8PIKCakczHa0lOcz+1l0xTQWB7qAB1mzU0AqtU88wJg==
+ b=Aa2k6VITlhZ9mF7L3Wp0tXjHYKedlWnNAhI+9I31jvmVTKZbmxGlLT6SILQptU2Nj7aS
+ X9HrcjJGGfLRhR8yY2SihWMneFRxlVBjIOHJrdV46vm889nv5H8wMONjwaNTaVGTefbv1
+ bSvtAnU1IhyiSss87DemE9nGTZoOsyB0/wpEtVVyzIqQiVE11MC6OzkMy4Af0S2NyKNvJ
+ hJUoYrvGMs1uWCnYiGE/8KCuT3XhmSpzco6ZWwsGiaOWtlDWu6ha8FapRs2TqKrNPaBog
+ ZnBHwal24GktWJbX/GP1+XGO7hz1ZFRHoJ5frRAlJ9OpTnATspcUIkFCPYeK0LMd2Og==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1791022028;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=vYEHFWBPW4ejM0lsb5JUWVpXytFnaO24RnfI8k1HlAw=;
- b=abaSynu0Jt41LHjywXZGUuSCjFPxdKQzW0KPFngXrexrawX2lVMYAV09y57stAtiO5A4
- JoyEv/6AZy7jB+mDisLj0UqGB7muxVLMsujIIUSydhbhe7LcSmk93mqkR14pWQL/nz0m8
- hj2F949Vo//Lnn0CNQQoPMywN9ez3cxFzb3PaSCi2GcmIxpYhU/k5yaQ5GghNst4bfPId
- yR1dp9BdXqWk/Dv2DFSSJoznGuqNbpBLu35BMLcUUVXys/tNcQd007o+m8/3M7T4NwYgi
- 5yaD9cpS0wcH/W5Qxi/l2kdKKtfAUT3ydJJieqdLPcT9mnyX0F7rmE6NzS0iU7N9BUA==
-ARC-Authentication-Results: i=1; smtp2.osuosl.org;
+ bh=riKMMZj/9YS3iMLLTZgnYEOCKiCDzabJFj0kjxupxBs=;
+ b=ahh5nbpr0SIiiHMsy7tjr5DPtfxa3UhPwg4bfNjBsF9xucEejs9RODZwxBbfEZZEudZ+
+ JYMn06nxTcVfTVKZmw1mLMJX3WV02a+X51pFvq4LYNAgsmBIHeSYq2s2C8KNkCzKKR9mq
+ H/LHwu7RsZDkUoUrWX8XinPrIyRNVr9G9sKL8BDw4J3h04JdbdezTKzHVIQ5aQ/1qRmQo
+ jblw7fhVhIyR51nsqklSoxe+WjVCS3QiEw8FbvRoQtjsKaauze4Mb+cbnXpJXRMJpuxrX
+ ock2z8j/GNQsm5JkJ5TjSKZ+Qr/pwbtbEA5FicEuv/PuY/xLJdKWgaV7sFbaAiFTKGw==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org;
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3C07C4007C
+ by smtp1.osuosl.org (Postfix) with ESMTP id 638F480DDD
  for <buildroot@buildroot.org>; Sat,  3 Oct 2026 10:07:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 941DA8191C; Sat,  3 Oct 2026 10:05:53 +0000 (UTC)
+ id BF4DD7FA75; Sat,  3 Oct 2026 10:05:53 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 3 Oct 2026 12:06:27 +0200
+Date: Sat, 3 Oct 2026 12:06:29 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7bb353814c1ed765ec4d634fe47201bd93d60dc2
-X-Git-Newrev: 77e4be3ed6002e0c9e36d9d32aa26261b52d6c40
+X-Git-Oldrev: 88adb4c3c13f04af1e34b06c2c9ef49bfac6382e
+X-Git-Newrev: 4d369f9093975b532983f565f1b7013d7d6d709a
 X-Patchwork-Hint: ignore
-Message-Id: <20261003100553.941DA8191C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/dbus-python: bump to version 1.5.0
+Message-Id: <20261003100553.BF4DD7FA75@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-bitarray: bump to version
+ 3.11.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -117,103 +118,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/77e4be3ed6002e0c9e36d9d32aa26261b52d6c40
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/4d369f9093975b532983f565f1b7013d7d6d709a
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-https://gitlab.freedesktop.org/dbus/dbus-python/-/blob/dbus-python-1.5.0/NEWS
-
-Migrate from autotools to meson build system.
-
-Update the license file list for upstream's REUSE conversion. Keep the
-full set of split license texts in DBUS_PYTHON_LICENSE_FILES so
-legal-info can hash them, but leave DBUS_PYTHON_LICENSE unchanged: the
-GPL-3.0+ with exception text applies to the unused Autoconf macro, and
-the extra dbus-gmain MIT files are not installed.
-
-COPYING hash changed due to REUSE formatting:
-https://gitlab.freedesktop.org/dbus/dbus-python/-/commit/f83a62c27203553c04c375ff663d9d99273670c9
-
-subprojects/dbus-gmain/COPYING hash changed due to REUSE formatting:
-https://gitlab.freedesktop.org/dbus/dbus-python/-/commit/ab33ebefc5ca34486509e3a87591ad2e883b9549
-
-Removed autoconf-related license files due to upstream commit
-https://gitlab.freedesktop.org/dbus/dbus-python/-/commit/b286e65d1e4c88db16876e31e6b1b63eaefab2f8
-
-Switched back to gz tarball as provided by upstream.
-
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-[Bernd:
- - bumped to 1.5.0
- - updated license files and tarball URL]
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/dbus-python/dbus-python.hash | 10 +++++++---
- package/dbus-python/dbus-python.mk   | 29 ++++++++++++++---------------
- 2 files changed, 21 insertions(+), 18 deletions(-)
+ package/python-bitarray/python-bitarray.hash | 4 ++--
+ package/python-bitarray/python-bitarray.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/dbus-python/dbus-python.hash b/package/dbus-python/dbus-python.hash
-index 8d1609dec7..ce04474291 100644
---- a/package/dbus-python/dbus-python.hash
-+++ b/package/dbus-python/dbus-python.hash
-@@ -1,6 +1,10 @@
- # Locally calculated after checking pgp signature
--sha256  92bdd1e68b45596c833307a5ff4b217ee6929a1502f5341bae28fd120acf7260  dbus-python-1.2.18.tar.gz
-+sha256  ac94ce330879108e5d37105164cc14b595bdf9326d2ce4a5acad6c1ab2bf6476  dbus_python-1.5.0.tar.gz
- 
- # Locally calculated
--sha256  1e4562245383fdb5203b1769789e5b28bba21af4923aea7e8b2614f7f93623c0  COPYING
--sha256  064523e3ab64d6f03904132b2cc4a1bd8500586edb4cd050c2ff2b96aed4c33b  dbus-gmain/COPYING
-+sha256  c5324f0629698cbe01dde8e3b802c3331601ebf98c3c65918520ba5eca66c930  COPYING
-+sha256  b85dcd3e453d05982552c52b5fc9e0bdd6d23c6f8e844b984a88af32570b0cc0  LICENSES/MIT.txt
-+sha256  118fdd408a78866c5b776864650f4a6006616b5bd0793a63924c91febba0b2b8  subprojects/dbus-gmain/COPYING
-+sha256  93bb4f7417aa775bab9026cc3d0af28aeb64451fc5a8ec651876785edd8eaf9b  subprojects/dbus-gmain/LICENSES/AFL-2.1.txt
-+sha256  aaf135472f81c5b4a0dca9367e5bb5e9750032b5bebe5442b36e4c0a47430df3  subprojects/dbus-gmain/LICENSES/GPL-2.0-or-later.txt
-+sha256  b85dcd3e453d05982552c52b5fc9e0bdd6d23c6f8e844b984a88af32570b0cc0  subprojects/dbus-gmain/LICENSES/MIT.txt
-diff --git a/package/dbus-python/dbus-python.mk b/package/dbus-python/dbus-python.mk
-index 16b22d4821..1a69de0215 100644
---- a/package/dbus-python/dbus-python.mk
-+++ b/package/dbus-python/dbus-python.mk
-@@ -4,25 +4,24 @@
+diff --git a/package/python-bitarray/python-bitarray.hash b/package/python-bitarray/python-bitarray.hash
+index 990dda1348..8661d21936 100644
+--- a/package/python-bitarray/python-bitarray.hash
++++ b/package/python-bitarray/python-bitarray.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/bitarray/json
+-md5  7199aad3582d77d568cd673a3477a6f6  bitarray-3.8.1.tar.gz
+-sha256  f90bb3c680804ec9630bcf8c0965e54b4de84d33b17d7da57c87c30f0c64c6f5  bitarray-3.8.1.tar.gz
++md5  07b44aa7a18fa6f800bf30cbe4a6e978  bitarray-3.11.0.tar.gz
++sha256  bf19437ec00ec3d40aef82eaeedc14cf4000be9b635c4f5049796506e6630dd8  bitarray-3.11.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  e19b1180b6ee73307a8545716be9b36318cf4f926aaf3eb43f7fde3396a102dd  LICENSE
+diff --git a/package/python-bitarray/python-bitarray.mk b/package/python-bitarray/python-bitarray.mk
+index bdfe0494ee..c803b4793b 100644
+--- a/package/python-bitarray/python-bitarray.mk
++++ b/package/python-bitarray/python-bitarray.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--DBUS_PYTHON_VERSION = 1.2.18
--DBUS_PYTHON_SITE = http://dbus.freedesktop.org/releases/dbus-python
-+DBUS_PYTHON_VERSION = 1.5.0
-+DBUS_PYTHON_SOURCE = dbus_python-$(DBUS_PYTHON_VERSION).tar.gz
-+DBUS_PYTHON_SITE = https://dbus.freedesktop.org/releases/dbus-python
- DBUS_PYTHON_INSTALL_STAGING = YES
- DBUS_PYTHON_LICENSE = MIT (dbus-python), AFL-2.1 or GPL-2.0+ (dbus-gmain)
--DBUS_PYTHON_LICENSE_FILES = COPYING dbus-gmain/COPYING
-+DBUS_PYTHON_LICENSE_FILES = \
-+	COPYING \
-+	LICENSES/MIT.txt \
-+	subprojects/dbus-gmain/COPYING \
-+	subprojects/dbus-gmain/LICENSES/AFL-2.1.txt \
-+	subprojects/dbus-gmain/LICENSES/GPL-2.0-or-later.txt \
-+	subprojects/dbus-gmain/LICENSES/MIT.txt
- DBUS_PYTHON_DEPENDENCIES = dbus libglib2 python3 host-python3
- HOST_DBUS_PYTHON_DEPENDENCIES = host-dbus host-libglib2 host-python3
- 
- DBUS_PYTHON_CONF_ENV = \
--	PYTHON=$(HOST_DIR)/bin/python3 \
--	PYTHON_INCLUDES="`$(STAGING_DIR)/usr/bin/python3-config --includes`" \
--	PYTHON_LIBS="`$(STAGING_DIR)/usr/bin/python3-config --ldflags`" \
--	PYTHON_EXTRA_LIBS="`$(STAGING_DIR)/usr/bin/python3-config --libs --embed`"
-+	_PYTHON_SYSCONFIGDATA_NAME=$(PKG_PYTHON_SYSCONFIGDATA_NAME) \
-+	PYTHONPATH=$(PYTHON3_PATH)
- 
--HOST_DBUS_PYTHON_CONF_ENV = \
--	PYTHON=$(HOST_DIR)/bin/python3 \
--	PYTHON_INCLUDES="`$(HOST_DIR)/bin/python3-config --includes`" \
--	PYTHON_LIBS="`$(HOST_DIR)/bin/python3-config --ldflags`" \
--	PYTHON_EXTRA_LIBS="`$(HOST_DIR)/bin/python3-config --libs --embed`"
--
--$(eval $(autotools-package))
--$(eval $(host-autotools-package))
-+$(eval $(meson-package))
-+$(eval $(host-meson-package))
+-PYTHON_BITARRAY_VERSION = 3.8.1
++PYTHON_BITARRAY_VERSION = 3.11.0
+ PYTHON_BITARRAY_SOURCE = bitarray-$(PYTHON_BITARRAY_VERSION).tar.gz
+-PYTHON_BITARRAY_SITE = https://files.pythonhosted.org/packages/fc/47/b5da717e7bbe97a6dc4c986f053ca55fd3276078d78f68f9e8b417d1425a
++PYTHON_BITARRAY_SITE = https://files.pythonhosted.org/packages/04/f7/6765577df59e2345036e435f7e983e1c291d67b7d76a51918eff04ad1494
+ PYTHON_BITARRAY_SETUP_TYPE = setuptools
+ PYTHON_BITARRAY_LICENSE = Python-2.0
+ PYTHON_BITARRAY_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
