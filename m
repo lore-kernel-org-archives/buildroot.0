@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE0FCCA5FEC
-	for <buildroot@archiver.kernel.org>; Sat,  3 Oct 2026 16:16:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 137A5CA5FDD
+	for <buildroot@archiver.kernel.org>; Sat,  3 Oct 2026 16:16:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6D7B0605F1;
-	Sat,  3 Oct 2026 16:16:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BD7E5814BA;
+	Sat,  3 Oct 2026 16:16:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id d4Jg-ANUVzwv; Sat,  3 Oct 2026 16:16:53 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 8F3946068A
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791044213;
-	b=Xdjoi8wnYjVj3X/khZdjpz4BJ9baAibgr5J4rNNwCWdQszXJXp0rdnmgh6VaUD2qXroB
-	 xMpzChHYnPuEuZWX/niZ9oRlEEcDvWOD9E4i3H5Tg78LFAV6NED4f7RU1roQejD47SgUV
-	 s+3BDGh+YBL0CgSMFS2agyrmo6pC95D6UxO8s8ntNL4dff27Z7Iudb+z1p4qpIkAz8gW7
-	 jopXHO+ectmyCyf8RGlXVYrcrBmnKt5ZWjvRKb8wHjyGpF8/l3O5g3LstDbTeNtGxlDSC
-	 kV4lkA8mKPz2bcCyyVJjvuTmvpUtt5QTt6w9Is2sEU159DqyO0yg24C5rCE/rT72QrA==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RVcDtWxkBpwT; Sat,  3 Oct 2026 16:16:55 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org D797E8149A
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791044215;
+	b=FYtAOaJm3Z5H+GR2o+WZGu/26XdqHyaCMVUVYvig59zll7NC5iC6AmzRM1dYSqyxva93
+	 o3qbSCbWVjgBFVuHSjYdwUu9lI3fHTtBtRlyCZ0D0rbsdQi3JWkqv6/gfbiIZrQHoZi/r
+	 /cG+lJGklY/y4r+3RgRKMkq98Q1sdkpzMRHjVockMx2l8sCfgRL831CM79Xi4webAdptB
+	 neUcdGyOB3GyP8zVB111MbwpKzuEcDc2MytSmGXWuh6qZrOjlonkTfwTW1jEgky4NMSc9
+	 X0oOoVkHDrul2fSIe9w0Rc7R+90W6RqvE+7X1rDBP//rgj6rBq9+uPbDVojbUR1gSIg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791044213;
+	c=relaxed/relaxed; t=1791044215;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,74 +30,75 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=lY2RglTwVyONNqOhs4aoSvUq/fZw9wd7nDhdM5mNL60=;
-	b=B3IJgDRzUZG2vq6dTJb9su9nzEyCGFhccVqENu+2Mr1tUfcvhGoIdaDaanaNQDWt9eaN
-	 weXCv5PmGmFM5o/jHifBxtiNkafFsP4CYchGS0W+rAzW/eg7t2CniB2lvy9Q8u+BI/FEd
-	 yT03NdW47Dz3hcBrvEyDCzPSuqIvTG2TWOz1oUZt/JfCCN3pDP+tEAaJbBTUl6lnC30aC
-	 uL6sagzHr+HXq6llLzvE1d8vZqHbfDPagQijaeUJGx1OWclfi3rvsAcr1dJ5CYLHoxJzb
-	 EH746ZWgEQYOzj+h1+Igp1tTLwDqH7BtyZOVIDNr/2sUdpR5+495kyXIaxFo4L6Ltcw==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	bh=OPme9we4sDzH8h9+rbbKMDdTo659gsyFs5wo4bmqrN0=;
+	b=osFwo9qaAgeIob9VHLvKQIzN18cam8ZhFMi+YnE89eFbm3MvfePNTViG/NJUDyr3kFgw
+	 tMQUXB61FDU/oHgV0JlKgCBmZJ9TPQOgYqdQCRr0T/MmvCci7UkPxy1vw4jUlGYFm3VtU
+	 7VogNhsIsODgA8fwCpWLP2UBqvn4832QuBNC3uLoQL0aJ5cMkbXrh8l5TgjeXZPc10N9T
+	 N7UZskUMJck9OGt8FGap4NHKY2Y9Mlra12FDAjalg9Yed1Bv3jIYsblWVAyluwhRCRyqb
+	 WFRMaX+HH8pAfy2yU3xCdxic+BTw1f0pr+J9YYuzBIml8axlKFj/4TFLXOR+xAWV3lA==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791044213;
-	bh=lY2RglTwVyONNqOhs4aoSvUq/fZw9wd7nDhdM5mNL60=;
+	s=default; t=1791044214;
+	bh=OPme9we4sDzH8h9+rbbKMDdTo659gsyFs5wo4bmqrN0=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=SBwIK6Skt1MtuRmg4CCTTCRoh7J2U7qXq2FPhGRgqXk4bQLT9mIKaTVd1jDQfCefQ
-	 K/Mgvif48nU1Bq8n3dhiSPyRgqftjHcVXkFTYPRnfIMbdmjRoiYouHW74uAWZsNWyo
-	 mmTWOcMB5UcQ9w6b1S41o2GHYGVQ07Yku3930fIRYTqclepp7i5b0IwC2cP4j2Swsd
-	 4jpBUXLPA9M8JS0Vkzg5B1neFj+g4cNStciVIXxKSr/IlqwPmt5qY/N3RdvGS3DITC
-	 zzGxYjibP9qbjDJEIPAc+ZPhLmqRVgC3iOGbzzv86F0E8u8ZS6J+ZHqXdyNZwEUSB9
-	 16f6+lnFnuEFA==
+	b=BWC8hPJjcb3+uMRjVshhGbu4qjSb/WUv2H0hJeRZoHC+TwJflSvN4cyo//mf2SXSW
+	 2AFmUozuO2Kb6NuRynF23NoUuoI0K01WsaGZuvX3hx5L/PQ7xi0/sXY/Or9OjywS06
+	 95UQ2SlGFwDvfiQMg3YcXFz7gn5dBADYxc2ub/Qwia/M7wcPuJdHcBM4lmXL737EjZ
+	 cJ36mbXvV+WhY11wPTbgsDACSxtaEPTBPQbRSXIqCI5LOodQhQtyCBJswxyXowTBvc
+	 eIk9wANl075StK3y1pDAYGaQkmzfwYI7mOqP6LVp8lG594fb4+ttpOvmLPq04az/SF
+	 K21rgNzRBT6pg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8F3946068A;
-	Sat,  3 Oct 2026 16:16:53 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id D065A335
+	by smtp1.osuosl.org (Postfix) with ESMTP id D797E8149A;
+	Sat,  3 Oct 2026 16:16:54 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id E319C476
  for <buildroot@buildroot.org>; Sat,  3 Oct 2026 16:16:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CDD1C605F1
+ by smtp2.osuosl.org (Postfix) with ESMTP id D33AA40048
  for <buildroot@buildroot.org>; Sat,  3 Oct 2026 16:16:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mexux2UXeXtj for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HMmtN-txIcnC for <buildroot@buildroot.org>;
  Sat,  3 Oct 2026 16:16:51 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 29AB46068A
+ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org 313BD40024
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791044211;
- b=f2O8q2PTqEQeMNLXvNbTEwonIdeQ7NPs+ILmeAW7boRnICGYc0xQCQTTRgINcum50lXE
- czbJEQLIlvC5oye4nXZE7mMLZv6l4z0PhSlkqtuBVHw+284iEE+r6DEgH5K+uUt5L/8Rv
- H/mAdtRwEKrjqhrK6jQM2sIRqaBdPkOqdy9di0K14UiTpktITxrE/oCfl4m9p2/AhuxE4
- iLeIBFbkmFyubxO9rTL7c4q7ONG1UujDpWE6f8yKqLdEUYxQURIP+EXWsWsO/mdOJ9vQO
- 5Z1K0xLU4R9C2Tip27RrhsmYXorLsnwA/Sib/Gk+Rw0FoqePRX8/6VJBc09DFAN/nFw==
+ b=Oz/xzkv3iBH8RCIUyLKbQuecN4Z0r0ST1fE1Oe5lRqn2uyOIJeFYZQM67Yyzik203Y+I
+ +V+d6ACLLOrRTCvVgn1YKVl9pdLBRbP062TXydFV3nD46DPQ3c1hmwF2QZluSQKXPQDMz
+ GMs63KhTjVGvdWuZeYJCvE7ft3PcBIC/7Syf0oL2eYX+cfZ37IBrdaM1ph4wVdVBs5bpG
+ Q5SiwFC87KKG0j2PH/GN7OIOJgRZkjZ4M+Z71peW7rSs4aVGekiVaYPFeheEi4VyJWakF
+ XzdOhjdnvGDHhKYgD+7jUYTwR3McxsqhQsr1J+n5D1OmPeda88fAUakOv8BJXl0cp1Q==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1791044211;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=cMtQ+JoqBMeu65o8sIS5NK32MHDEg1QeiSxR1EmaV08=;
- b=A/Qi/hYvvE4duPG/cPKK+P8n+LrPlBmgbRvHW7tDRNK/VI9Vs3jrh4vD5V0ORIOxDkYy
- amxiVHLc9d4STOYXNks7Q1M+DjUknd0kBh6vgFPSnOKHvITgCeKwbjxS9ZN7tgorFH3Ma
- N0q5ek21FrILlMsmSNzZ+/MTEVqUwjKvulsia8ffvKVzVo1cgJG8gcIGiDHaGXCvbcf4P
- 8Ss4ykPc28X+gzLjsCdpQ4EvtG0NRDbRvxucg2dXIYDy0CuzIphIcVqdJ8mqAngKP2ry5
- sbXmW1Am9AJHx4eRAe8OOKlyW2h5t3YdS6ZYhOsez0xQxvRxBOpeRvVJQmRF++rWz2w==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org;
+ bh=A9Eoe3fXbnPUSuFKyv9youi4dh7plGGSqHSfRnE6kLI=;
+ b=l1oHRKFTMSOGT4zBKnupcFbvmnamuBXGcHHSoAy+yynlV+NdbRUSZJsaHYDI3eEMrci1
+ V1SU8N3mQghTggDtBn4Cw6QV13c+zwYGoBNOqLzIOlAK+PjdEmghJXhx5g43c4vEydG+C
+ hw6msShYxZHByRufhfsprrO2rac8LjEGO2otFXyPi2/2066HqwYsrUpV5ue/qnonLfO+9
+ /3CDmoLlYP3XORj2D9jxbtClAsEsqTzvPJQKaLdS73XBxoNangHkD7gi96p4LWJ+Q3vKf
+ quAUF222BNiUkuEVie9i7CR1SJohUc5MvgN3FCWaSezIT0tX//KoYR1v6FpPnT6Zq+w==
+ARC-Authentication-Results: i=1; smtp2.osuosl.org;
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 29AB46068A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 313BD40024
  for <buildroot@buildroot.org>; Sat,  3 Oct 2026 16:16:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 657398908D; Sat,  3 Oct 2026 16:15:36 +0000 (UTC)
+ id 590F4886DD; Sat,  3 Oct 2026 16:15:36 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 3 Oct 2026 18:16:36 +0200
+Date: Sat, 3 Oct 2026 18:03:36 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 510003c0411a915d71709417e53d2bd62be9f999
-X-Git-Newrev: 7ed738bf5d3cb7a3184a2c4e4ac61258fbe6d012
+X-Git-Oldrev: 6ffe6f923cb9ae634934a8ecad329b60f0f7d35d
+X-Git-Newrev: 510003c0411a915d71709417e53d2bd62be9f999
 X-Patchwork-Hint: ignore
-Message-Id: <20261003161536.657398908D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gnu-efi: fix license information
+Message-Id: <20261003161536.590F4886DD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/suricata: security bump version to
+ 8.0.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -117,43 +118,57 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/7ed738bf5d3cb7a3184a2c4e4ac61258fbe6d012
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/510003c0411a915d71709417e53d2bd62be9f999
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Split the confusing "and/or" for gnulib, so dual-licensed and GPL-only
-parts are clearly noted, and add the missing LGPL license. Lines in
-GNU_EFI_LICENSE are ordered the same way as the information is given
-in the LICENSE file.
+https://forum.suricata.io/t/suricata-8-0-5-and-7-0-16-released/6315
 
-The license situation of inc/subst/elf.h is curious: The file itself
-is licensed under LGPL-2.1-or-later, and used in gnu-efi under
-LGPL-3.0-or-later (accompanied by the appropriate license files),
-which in turn allows using it for object code under different terms
-with certain conditions (see section 3 of LGPL 3.0, as noted in the
-gnu-efi LICENSE file).
+Fixes CVE-2026-45764, CVE-2026-45766, CVE-2026-45769, CVE-2026-45768,
+CVE-2026-46387, CVE-2026-45759, CVE-2026-45762, CVE-2026-45765,
+CVE-2026-45747, CVE-2026-45770, CVE-2026-46352, CVE-2026-45767,
+CVE-2026-45763, CVE-2026-45751, CVE-2026-45752 & CVE-2026-45761
 
-Signed-off-by: Fiona Klute (othermo GmbH) <fiona.klute@gmx.de>
+https://forum.suricata.io/t/suricata-8-0-6-and-7-0-17-released/6391
+
+Fixes CVE-2026-63452, CVE-2026-63450, CVE-2026-63449, CVE-2026-57227,
+CVE-2026-57229, CVE-2026-63446, CVE-2026-63448, CVE-2026-57224,
+CVE-2026-63447, CVE-2026-63451, CVE-2026-57222 & CVE-2026-57228
+
+https://forum.suricata.io/t/suricata-8-0-7-released/6467
+
+Fixes 67 security bugs, all CVEs are pending.
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/gnu-efi/gnu-efi.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/suricata/suricata.hash | 2 +-
+ package/suricata/suricata.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gnu-efi/gnu-efi.mk b/package/gnu-efi/gnu-efi.mk
-index f615df91bc..f979b65c31 100644
---- a/package/gnu-efi/gnu-efi.mk
-+++ b/package/gnu-efi/gnu-efi.mk
-@@ -9,8 +9,10 @@ GNU_EFI_SITE = $(call github,ncroxon,gnu-efi,$(GNU_EFI_VERSION))
- GNU_EFI_INSTALL_STAGING = YES
+diff --git a/package/suricata/suricata.hash b/package/suricata/suricata.hash
+index 15f7e666b3..a5b7807d60 100644
+--- a/package/suricata/suricata.hash
++++ b/package/suricata/suricata.hash
+@@ -1,5 +1,5 @@
+ # Locally computed:
+-sha256  81cee7bae69848a9751b2ce0867620eefa52b192e79c20b5eac897600b28b191  suricata-8.0.4.tar.gz
++sha256  a9d46a9c8f40e81f8a6df3ecc2c5a9a8e8da985876299108d92da547c013ba8c  suricata-8.0.7.tar.gz
  
- GNU_EFI_LICENSE = \
--	BSD-3-Clause and/or GPL-2.0+ (gnuefi), \
-+	BSD-3-Clause or GPL-2.0+ (gnuefi), \
- 	BSD-3-Clause (efilib), \
-+	LGPL-3.0-or-later (inc/subst/elf.h), \
-+	GPL-2.0+ (tests, some IDE & CI files), \
- 	BSD-2-Clause-Patent (EDK2 routines)
- GNU_EFI_LICENSE_FILES = \
- 	LICENSE \
+ # Hash for license files:
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/suricata/suricata.mk b/package/suricata/suricata.mk
+index 56bbc0c89b..d77652162c 100644
+--- a/package/suricata/suricata.mk
++++ b/package/suricata/suricata.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SURICATA_VERSION = 8.0.4
++SURICATA_VERSION = 8.0.7
+ SURICATA_SITE = https://www.openinfosecfoundation.org/download
+ SURICATA_LICENSE = GPL-2.0
+ SURICATA_LICENSE_FILES = COPYING LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
