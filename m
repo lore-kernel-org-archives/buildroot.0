@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6317DCA5FE3
-	for <buildroot@archiver.kernel.org>; Sat,  3 Oct 2026 06:53:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2B26CA5FDD
+	for <buildroot@archiver.kernel.org>; Sat,  3 Oct 2026 06:53:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E767760628;
-	Sat,  3 Oct 2026 06:53:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 958BD40B68;
+	Sat,  3 Oct 2026 06:53:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LzZzv6rescLj; Sat,  3 Oct 2026 06:53:31 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 13E996061C
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791010411;
-	b=juhsbKDpa34Qjx+yhLsmXMDYvUG47Y1WRtkCDeb5VxyJ5Kl5C/As8TZuSVE/Ge/XUo6U
-	 qfM/Q6Suhv9rKtnwriuqmPs74qVB6UEpGN0ZVvh1sIPb5HLDEIdrvLO/efUrb6zRJVSez
-	 kCTo65lP1T0CQnw8mqcoL683652sdDNvAjmQPOhaUeAsNsoby65RED8zyd3oxmljWR/N9
-	 gtit59ss6ZLhWYOPltM8LDHWT2mhGD1flLTz77ue1+m7b/lBrz2cLpz8PFSqyQCPPZ7pn
-	 Llllm02haFslT8BsRcGymHxToOnaiDEcKtYWiTD9v1eCZ97lsMWFF/LuSbYbRFFrPMQ==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xne4LFVpdXoG; Sat,  3 Oct 2026 06:53:32 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 7857640B9D
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791010412;
+	b=f0z3GRB6I2KI8k3Mgn7GKCNBgZeFQ76/Eh7UD5Ocpd/5uFVTZXfphedbujgkPQPlR78M
+	 +5eX7O2O5nKVZKWbPUgBWUcE3q694/rr4sfwkubBhPVVVJV9fgQkvLnvGSSSMOFGdd/vL
+	 bPB10ujRhwTjJOi8zFMa/pd5mJAO8mCxvX3hRUPz9Ro1W78dknhuAqRnI3ItOcxRDTH5M
+	 Y4d32s9sXpykZNpfEP8AW0/ZvIgUvGBnI66eTiYmj/OBr5sP6PkW77d3zgUeES0lOIOje
+	 E846ZTgv8mcbz0X8bPVv0T3UZIkJO/RQV1zvQI3omG6+w9Srh53MKQVUZjzOM6994Iw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791010411;
+	c=relaxed/relaxed; t=1791010412;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,75 +30,74 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=80rBgCWV2w3/AfKS6yPtFt52kREIIOEVKhH2/3ZbcK0=;
-	b=pFkyBeUGmiRpP2EOARoUCMoWeYZw1EcNNWtPTxR/d+jZqhB+/n3xfVjc0bSaSYy7gppT
-	 pJCFBQyCiPLfUICWkj7RERZzQpiuMUKj2sipoNvmFIvIjdU+V98dah6fw4hlegmqgQCkN
-	 GsQjDvfS2muZxqloLTJmJKs2dw79NXr2cLn9+R6TGph2oG4YvvZd5cTYWxikVlmKKU6lf
-	 xLSmVsPaFpYCl0t8wc2mggby2H/Z8UefaK4AwPOTCphTIOABYXEVBYf3bcPhVHy+XFMIr
-	 ncjxtFvkjgCXiPEP7OyQwzg7MOeRcOpt3WlOxOT4vI2jgiHztus3VNAXj/Y+yINQEvw==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	bh=PDtbsEuiZQgG7bYpBjH64KjOjuFtOndKvV9TdzboOlg=;
+	b=YOav8DIAISnXXNYsxkRxgAU9RjgaUyPUMepumZ+80mhxGiWKf8Q5gsfYN7BkvuDiauY6
+	 rpsRGatfm64zWc2jbL0euw4tKE8oSEYOBoCPaKBu1R07ViOflCptWl+EVmKnPSFnhsTTB
+	 VQvRtxbl3BfpRvjsUUoeh2jO9BLsBTNTVGYW6A2/W1bA2EeYbNGPGgaQmaVvX2/FA2Dte
+	 132dv7ngKFi+XgmZQ4tN+3fyOT9KZrGPbbRBnVWbB5XmSqwozLqo43ag2s+KGQPoFlbyG
+	 TEgE0pOqcjwLKoro/yRxfBbkeX4tFF0UV8wmwyLtIplGzpZwKtOzgVNp0THLQJCeUfg==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791010411;
-	bh=80rBgCWV2w3/AfKS6yPtFt52kREIIOEVKhH2/3ZbcK0=;
+	s=default; t=1791010412;
+	bh=PDtbsEuiZQgG7bYpBjH64KjOjuFtOndKvV9TdzboOlg=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=lHy9VS2yIixwX+8rsaWph60u+J/T66ncey4HG8x8VBuUxo3+73/VAVbOSXJQV2v5a
-	 AGfOZzKhkng13v7UVcZ9k/w7ZnL+9rZkm39p9Cc5PvKLemuYsjABCF7y3tVd/X1qJg
-	 tcoLpK0VLb7oseyI1SsGGUBBt4mxZcMCyHnmknCLzp9iHykUTJ+gAC67Ho0G2z2Dsk
-	 v5H89Km5ebXEENyixR00orqTmP14NzvSr8D+8IbNvV3aRIcaRPp1klhBOnwTLmGwds
-	 b1dF7GTSfWHreZaEEi44qjnZhaTtneFg7y3STpJveBAw9LIYNpptzjnL7gy+KicEju
-	 UqIq/3zTLG8aQ==
+	b=AWZ7NpohrKfy3vnX8JvZggYyL7RbAbYnjzYVw1HzLqBCJSVOrj0qtn49x43u9gx7m
+	 cfrbWgcM9BfUglwPEDkn2wH6/ltIH//s64z83UzG4LGgoSnwdho9vu46aIuqV+vxGj
+	 836yqKnVEGa4APm6XW6hXWRvK9HkRbF86VjchM8qR0IggpWUQsFu+uRxDql69AQAMa
+	 WFv11jGgptHQxBhF0By6KHgcsNI9xjBpDNJLYC8C9JTVt1pRwyJejztETyCBlM+l2A
+	 FXbNXXejxdJxmKaHNfgQHvzUCnZpECPpMrPyVwyvk9xFJCEPWvyC9LPPCaa21hbuJV
+	 L9GukVyWi17cw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 13E996061C;
-	Sat,  3 Oct 2026 06:53:31 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id C24EB2E0
- for <buildroot@buildroot.org>; Sat,  3 Oct 2026 06:53:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7857640B9D;
+	Sat,  3 Oct 2026 06:53:32 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0E8A52E0
+ for <buildroot@buildroot.org>; Sat,  3 Oct 2026 06:53:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A81FA40059
+ by smtp1.osuosl.org (Postfix) with ESMTP id E8A8B810A8
  for <buildroot@buildroot.org>; Sat,  3 Oct 2026 06:53:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PDigGDwtZl_8 for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kh-kBCiHDwjJ for <buildroot@buildroot.org>;
  Sat,  3 Oct 2026 06:53:29 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org 124BA40050
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 1286E81094
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791010409;
- b=Z87hE2qt3k8BMJrtSfuZQtF/Kt41fgJP6OTh646O+0WXVRniBh3Sbt6y1Z6PAd/wR6q3
- V4DLytMJ4LWk/ghepcUyC8IDdOBvi5x4FSLUWotxmPb26W8LV1/E0IjkUZ4l/UXqwfc3Q
- uMVvIsDDa+6Dj+wXppjT+d4ehRUFdkofG59NqoDWT1mJ9PLbC3kZCAEE5888Re7i9s3Tb
- ZjGTK0B9yCohDYVAotyU0evoOKn5AjcwNYJTevfxmh69gvkOj7fyH71KppKWCauIo39AZ
- rBAUKHCEjd2GVyMSLuioYj8iHn+gCKONvWUkzQGkSfiiVMirb3Sy5+TLbiAdoTWFmhA==
+ b=cBO62/bqZteo9EYtEDWLkA8T9oCJOLU++Rq4keaYsT5uSUJ5bFLDNUnfhs3/zRuXudPu
+ 8Y/b9zXwBUUs2WV13CRFQf+4Ebtg/TxiDmvFtA8JVUKeBjaYWrk/VgT6WwuuM3PNgeODS
+ /yXKE8TYLQt7wuJt6KOOUZd20rgfMd2HkIr+xcLtN5luMAkAiz8+GUZ7eXLa4oiT4jM5N
+ Op1jueGiPQyr8zgpduh+kMU4DMA6caxNwa7sH3Yr7k+feFIZJSmcTt0blKr0ACzwfifMN
+ i2K52s6B32OLXIlRi0NuIbnhyXUSpmz9AoZVy9hNhaWRv5T0bc4poDmbra7JirfMH6g==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1791010409;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=szJMrgfhjO9aq/xCVAqbbxr4UgDcTitUTaQHVH7KyAk=;
- b=A112LA3kuDeUNXyB6uYDh3uQl+cwfjBqQi29yx0/S01ph7HiZIkhbowBv7gTxZMLKZyi
- z5Zy60puakU6j8IM0xiq2hqtJEdPqpQh5WPDSkcJ6Fwfu4nz5j3MYUR6LKIUZV8TiDCmn
- 75igRgf4kwSS3z9xZNgCumk1WIrpT+PVY61QbZWYZOdYE38Dy5TgdDlp0QNZp0bDJHKKC
- s+X2AY0w9LUpclHCp8eXHEc1V7yCO3PfKZ9JVMw2JlI1oJxUuNT8pHvM0GXy3Ezui/tEb
- gaPm7J2SaofGTMmMDbsCnMkaySvkQv7KB50sC3Kj7hGohKYcEokP35Z51xZWamVY1NQ==
-ARC-Authentication-Results: i=1; smtp2.osuosl.org;
+ bh=sNeyeNooeuMuR1tgDSerHgVcyuCVlBeNn5/2PEStINs=;
+ b=URiQSDThRH8u6rdNqL3Pihom/Zloo6xCNZWwXrKNjROTpNbFAfDhk+lWjekbs8lIpIbi
+ yk9v2bRwNfjpSJteeHA2jNjMBV1ssOhvnXJu1g6lD5+kQX8zcnBgfvqceG/jAYklY3QsF
+ hJwBfqWpV1dZqzHlRWjBBd998+ktD3CVSplxvbWFojQ/rQoLcRGpI89xMPKm/xpBq/3GD
+ 3Dn5+GoLk45dBD37s6sT05BQfT41NbzcHq1TkVErWFioRHxuWUAOeupH/BGxw46yyOW8w
+ uTWDVtR8WAz6i4N/Abtw2qIIjmofVH5S0BdXiUPj+FPKifcAsx/uC3tH+YsZxn1AC+A==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org;
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 124BA40050
- for <buildroot@buildroot.org>; Sat,  3 Oct 2026 06:53:28 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1286E81094
+ for <buildroot@buildroot.org>; Sat,  3 Oct 2026 06:53:29 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 578B388752; Sat,  3 Oct 2026 06:52:14 +0000 (UTC)
+ id 627FA884C5; Sat,  3 Oct 2026 06:52:14 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 3 Oct 2026 08:53:11 +0200
+Date: Sat, 3 Oct 2026 08:53:12 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 97e7c6d82fadd52e88ea9db8f19f714a627cd942
-X-Git-Newrev: 60b07db9cf00fbd5ce036d8b85e8526b65d8d4c5
+X-Git-Oldrev: 60b07db9cf00fbd5ce036d8b85e8526b65d8d4c5
+X-Git-Newrev: 0691aac1de75377b3dd8d36965ab4a128d5e9cb1
 X-Patchwork-Hint: ignore
-Message-Id: <20261003065214.578B388752@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/tailscale: don't overwrite
- tailscaled when using merged bin
+Message-Id: <20261003065214.627FA884C5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/nmap: bump version to 7.991
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -118,42 +117,83 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/60b07db9cf00fbd5ce036d8b85e8526b65d8d4c5
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/0691aac1de75377b3dd8d36965ab4a128d5e9cb1
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-When merged bin was added in Buildroot commit
-428ac6fcc4c286dd013ada411bf1ab5c0ad11614 the tailscaled package
-started overwriting the tailscaled binary with a broken symlink when
-BR2_ROOTFS_MERGED_BIN=y as it assumed /usr/bin and /usr/sbin were not
-merged.
+Added patch to fix build error introduced by upstream commit
+https://github.com/nmap/nmap/commit/a24082eee41fcabf7fa180020e1771af3226b358
+which was first added to this release.
 
-To ensure this doesn't happen only apply the symlink when
-BR2_ROOTFS_MERGED_BIN is not selected.
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Tested-by: TIAN Yuanhao <tianyuanhao3@163.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/tailscale/tailscale.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ ...-NSE-if-compiling-without-Lua-support.-Cl.patch | 29 ++++++++++++++++++++++
+ package/nmap/nmap.hash                             |  6 ++---
+ package/nmap/nmap.mk                               |  2 +-
+ 3 files changed, 33 insertions(+), 4 deletions(-)
 
-diff --git a/package/tailscale/tailscale.mk b/package/tailscale/tailscale.mk
-index 86039fd4b1..f231022476 100644
---- a/package/tailscale/tailscale.mk
-+++ b/package/tailscale/tailscale.mk
-@@ -22,10 +22,12 @@ define TAILSCALE_INSTALL_INIT_SYSTEMD
- 		$(TARGET_DIR)/usr/lib/systemd/system/tailscaled.service
- endef
+diff --git a/package/nmap/0002-Do-not-call-NSE-if-compiling-without-Lua-support.-Cl.patch b/package/nmap/0002-Do-not-call-NSE-if-compiling-without-Lua-support.-Cl.patch
+new file mode 100644
+index 0000000000..54cafdafbc
+--- /dev/null
++++ b/package/nmap/0002-Do-not-call-NSE-if-compiling-without-Lua-support.-Cl.patch
+@@ -0,0 +1,29 @@
++From 4c36cf12f246b52a8d510bdde8becd5c5b3bf8b5 Mon Sep 17 00:00:00 2001
++From: nnposter <nnposter@e0a8ed71-7df4-0310-8962-fdc924857419>
++Date: Wed, 12 Aug 2026 19:29:05 +0000
++Subject: [PATCH] Do not call NSE if compiling without Lua support. Close #3434
++
++Upstream: https://github.com/nmap/nmap/commit/4c36cf12f246b52a8d510bdde8becd5c5b3bf8b5
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ nmap.cc | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/nmap.cc b/nmap.cc
++index b94c71223..70206daed 100644
++--- a/nmap.cc
+++++ b/nmap.cc
++@@ -1858,7 +1858,9 @@ void nmap_free_mem() {
++   AllProbes::service_scan_free();
++   traceroute_hop_cache_clear();
++   nsock_set_default_engine(NULL);
+++#ifndef NOLUA
++   close_nse();
+++#endif
++ }
++ 
++ int nmap_main(int argc, char *argv[]) {
++-- 
++2.47.3
++
+diff --git a/package/nmap/nmap.hash b/package/nmap/nmap.hash
+index 17f9eb7f5e..bbdb81ec4f 100644
+--- a/package/nmap/nmap.hash
++++ b/package/nmap/nmap.hash
+@@ -1,6 +1,6 @@
+-# From https://nmap.org/dist/sigs/nmap-7.99.tar.bz2.digest.txt (lowercase)
+-sha256  df512492ffd108e53a27a06f26d8635bbe89e0e569455dc8ffef058c035d51b2  nmap-7.99.tar.bz2
+-sha512  9ff69659b76573eb10b6e472a0217032fd5fed20f0ac971b3736a4222fb6251c5fbf381ebea7ede313b8ff2feac90a848f645000c61200772d01b843594f4ba4  nmap-7.99.tar.bz2
++# From https://nmap.org/dist/sigs/nmap-7.991.tar.bz2.digest.txt (lowercase)
++sha256  a5d507f29437bef3bedd4771ff9aaa8fc1c2a109ddba1f5b1cf12027456929be  nmap-7.991.tar.bz2
++sha512  d87836eedd453f4f5e55075b50640a6ad61cb5dbc1f887dbaf725fa8c32b6a472d838d174c68a2efa749b3b028512d2f0467aea0ff0b5f5752df714db62f8320  nmap-7.991.tar.bz2
  
-+ifeq ($(BR2_ROOTFS_MERGED_BIN),)
- define TAILSCALE_INSTALL_SYMLINK
- 	ln -f -s ../bin/tailscaled $(TARGET_DIR)/usr/sbin/tailscaled
- endef
- TAILSCALE_POST_INSTALL_TARGET_HOOKS += TAILSCALE_INSTALL_SYMLINK
-+endif
+ # Locally calculated
+ sha256  9d9a9a763c0e6145172cfe7d8483e23b38ce60b6c79a82e4894242917bdae6d3  LICENSE
+diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
+index b04d8b080d..0dd96d2b95 100644
+--- a/package/nmap/nmap.mk
++++ b/package/nmap/nmap.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- define TAILSCALE_LINUX_CONFIG_FIXUPS
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_IPV6)
+-NMAP_VERSION = 7.99
++NMAP_VERSION = 7.991
+ NMAP_SITE = https://nmap.org/dist
+ NMAP_SOURCE = nmap-$(NMAP_VERSION).tar.bz2
+ NMAP_DEPENDENCIES = liblinear libpcap
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
