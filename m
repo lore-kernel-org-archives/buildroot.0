@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 253E2CA5FED
-	for <buildroot@archiver.kernel.org>; Sat,  3 Oct 2026 13:58:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7BE5CA5FDD
+	for <buildroot@archiver.kernel.org>; Sat,  3 Oct 2026 13:58:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EF6A481778;
-	Sat,  3 Oct 2026 13:58:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B436681756;
+	Sat,  3 Oct 2026 13:58:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YyKpn4jYDt6n; Sat,  3 Oct 2026 13:58:04 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org EE57181756
+ id Xlq1q7SLktrp; Sat,  3 Oct 2026 13:58:05 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 9B15E8179A
 Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791035884;
-	b=QdXkO48TLHsDJQCldk5mgjgrvy8QA2QMGdgrDV3hU39gHiUL+6ck6TJ1SjGvwGH+Xr5O
-	 ZO43SRD0RZ/4saJlblB9/GjFHUBj2S9D6znnZqEadOPhaFbYXkSBRSzGl+6pfVwDG8Yw9
-	 SwUd+GweJMkgBrD2VetEpzbsIpdQkR8Zf1aPNDqahaQRb7iRf7sDvGjRzbSd64hyYd3oV
-	 t2gzOESpKkL5f3wk6mYwq2Yv9ldgQt4OKVoEyfsO5jiD53kFFPjFSeFO/C3Vxp3oE4JBT
-	 hoo8ee/lb5Bmlc5yZstkxDND/LTczuT+jJIwSHu0B/3tz6+FVlxsoIziwLI/B1BSUtw==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791035885;
+	b=BolBdmMyo5b1k9sniP1/iAtRMIolZeVpmlJeRACIIHNIh40tq+4MQ2S7UUuXIE6C2Zaj
+	 KYbKsyPjZgwfwV5ErQ93Uk2P3rahcjZSvcFPcLCZuWxHqJINKBDG1Aah0hT12bhLMw1Zo
+	 J4BAgNWz2NYh1uXY3ML5quqsEdld8uUin/9k56wwOHffQ9r0pWjPhbQ/0wC+VZUfHm0FJ
+	 C5NyXsESGMYOUCDvEMibPSNoLFS00UWrqx4iec1PPfCGZKZhJf87hkEu1MVlnE6JCI8T/
+	 b9z6EK4vpj+nuf2nESq4IWFelaMq1OmPYtWXqay1I5Dm4SPUZCr4dQwlB8XCidIeuEQ==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791035884;
+	c=relaxed/relaxed; t=1791035885;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,74 +30,74 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=X1K69TEIfg0uMxVXUuIAYe1TACVyKHq+vZEpOlZWlZ0=;
-	b=gSuTSNSHD5pPzpzVBuLECeKInsjmysdYVO1ntl6dHV6zmXaLeE9OlmxK6bls9ONRhBR8
-	 CUq9Gpcdb7mpkZIUgrBIDdiKXOr6gNrrz5DFG8FNHwDY8bcdJ+Ar9MBBz000wJiYJP9mx
-	 pG+M2JH2OrAPy0cJ1PQPYiFwwesu7/vx0T7iTkGlaoK2hePpNJ1iY/iFzM/yA8GQ5XoXp
-	 kCgVKQRD0DOkNrmmdLcfaFxQmt8dSJx7ElZzBaITSk07mkoy5r/t5CXBIH/vdOV2Kt2Xp
-	 03Xvg1xtAxkN4Z9VxjEG8eXJMkD12jtWST87leT9e9r6445X5LojHu0bgb8GL773FoQ==
+	bh=vhdLn8BPhF1S8L+nUE8SAbi0DTDJtmTjjOZIYHaX6Xo=;
+	b=lTcGNGOTXH3803cJmTHOB4mxi8dzDO6FqXF8dVSATaOxieMOZHO0w0GYpezUo8h7jQ2d
+	 Zy3W0vVS/27plZ6OfziXNoM1/XgacakHGRiDsFuexkgTCOGHJVvfUIyVp7LZFyihRfHBT
+	 7WdFGWppmPMtdEv3ZxVVAx6QzcsXRg0/rknbLEwRK426GDkC6YeCqQz4NihRMtT/efd1c
+	 Uv3AzR94vneMdb9Xv+0DYKAU34C/t0MJgTNvD/SVC+o9fHBXQo2CHTQ0WmlO929YA6FGQ
+	 NULkDbs4m8fJyKrNiz6Nqa5nboUCS6XpId401mZlsN84YAeHcHbwTnV5JXZCNG0Whug==
 ARC-Authentication-Results: i=2; smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791035884;
-	bh=X1K69TEIfg0uMxVXUuIAYe1TACVyKHq+vZEpOlZWlZ0=;
+	s=default; t=1791035885;
+	bh=vhdLn8BPhF1S8L+nUE8SAbi0DTDJtmTjjOZIYHaX6Xo=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=pZ4lDxADg9t/K0qN/EQEBTfhvXekdgwDbxFJNwsOfsXt8W/N+er9Do0Xm0BjcNMt8
-	 kZka2pqCLaXZNnzTct3dMX89DZLkDu7bT0jCEj04J+9mRbm0VzyXH+QDThQI7smuxJ
-	 xG9PMGXTg3ATc8DZzlhZ6DJhPRtXkZrghphjYazy3pqRXqd15PALsnFZYCS0JaEBEl
-	 9A9NG2H3acRqF7aIgfzvDxt0gjf8ONvJOvwTlQy5Qa4PjBl7/WvTmAQla1mmCBuRIu
-	 uGQIAJHR+47BN3QryI2pysLGqbkzaz3NLWWk056sWUcdAjOgP4SVx2DhHwPZDBhJ8W
-	 HGS8mzyOcdTRw==
+	b=cHZ8kSDUfRIU5oaGj8zTo9dpyhol3vy3lfgByy9P4eAvgOcxGiFq6m5wf0115rpF/
+	 EQb2q818sloXw8ZQi9B2APVkBKZzLk4Q+RHbEx8Rj5rYLTJxjvNh9Rl8JVVuigrksg
+	 Wvixjz7LF9psaIbmV/d2u9ElELvHuGHIZHySpd4ayR1UbuO8d+Qbm8a9+K+r7wBy45
+	 arEu+x1PJR5VL0SCnXSA4HXUfm16YwqrarRP1q7IoShwVVRuY8SpaAhMqSbKwZtbM7
+	 JXMolUK+EK5ck9FsGxqhnrEjrxhtrwp1rUuNEnhCBKtF6QRZmPfjq+eoQ9uB9ii5il
+	 mh0cKcJi50yhA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EE57181756;
-	Sat,  3 Oct 2026 13:58:03 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id C8FBC9DF
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9B15E8179A;
+	Sat,  3 Oct 2026 13:58:05 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id CBF4CA0F
  for <buildroot@buildroot.org>; Sat,  3 Oct 2026 13:56:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B38A4414E3
+ by smtp4.osuosl.org (Postfix) with ESMTP id B32BD414E2
  for <buildroot@buildroot.org>; Sat,  3 Oct 2026 13:56:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eYcA0XrcGqAc for <buildroot@buildroot.org>;
+ id HCDdkV1gzuEG for <buildroot@buildroot.org>;
  Sat,  3 Oct 2026 13:56:57 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org DA9AC414FA
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org CD1C1414C9
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791035816;
- b=aeG5LmLIfO7au35rOfoh5BtgY9KJsSh6lpZQJh9K/A6DDJO5bBS2jsbvf22NQLxxIGJ2
- nETI7+Cvb2Lpel/3PjJhjxEKmsPO8qx5Q9T6XECNWWKy6Pynu8bHB27nXy0DiEAwSDDf5
- QIOpB7VrNSj47KQcECreUsoHM+UE4M+f3iLHB9JXf1F8P5HN4SnXWBx5YFKAZhOpYTEy8
- lD/7ZOjde5WQbCB6C6t2atlc44F8HWt6NrUw4NiPAm7BKDJuN3+aDhAX+OhP8nd3D0Q1D
- XI4EhcNv1NxxSPg0kACoX1c5bFQCjoIc0AjbU6yap7HOQw3qEqa2nnOXVLM164xw5pA==
+ b=XY9xtHi7RVpWnQi0PKt7T/X/1SphIdLtql3y+acHCF2k9uH9G619AqVhNTHJqpy+ws2G
+ QCLY2ImEo6pP45GHdUL/qH13QCZvuoFBXwrRJaHzynN3Ozikj/Hsp8KIH8TBFlEPEAwu4
+ dEZlteyCAF4JAnZIYurHE2TfHQS0amdpXFz0BgL+x9VJK1cjs6uWcKVZ8LFcTdaWbYhrz
+ CWz+xfAslFtvSiHsRf2PWX6jjHb+NvXJnTK9VvJ2GwHj1j/7ghmhCQwxxSkFCO5MXRyFX
+ qOpc8FbgQslAqg74iQji8BeX1S1zeAtfMZJSwDFA0I6V3AF2qFyHD1GR122gsO4HeGQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1791035816;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=DJRb4G2XAq3zUFteOdbDm/2uVJ987DjbNW8/RF9fELY=;
- b=PIIdJGCbp83ZR+vV6wxiPqIk40AU13XvFc0qYtsTxpxRSE5jq2bVduWmt95c8JY1PEaz
- mFhYi+blXMg07V0780WasqLPSWgG1cMfywve0z0qQii/D4Q8WfhLuJ8mr097xU6mu+HAz
- NMRqiXSNDgJYuf5NeNq/I6hCfMbndknNUUVC6mLQnXffJqG2yA2dTYRkigs+nrcuA/z5E
- wTgj1gv/OItMefE97gtT2B+Hv02oykvxra3C5dD4SAutFNsfYe2f2KUS9aGIz15HU4yO+
- vIUPee0u2ogVirTtZ0106aY/lkYeAMhUbDzS65dzMryGhf1uYD5Edtsza0ZnkmbVceg==
+ bh=1rlrZTKygLA6MohHQiIlUFo0EDrDYyv+t+F6CpjpqTw=;
+ b=YlcTm2ktdPQp9ap6mzS1n2KYqfOr35n5v56eKMpUjzN/bd2nLWJX1NeNF426D0RCUcfm
+ lDZqwEf+2nMrNZ6SEuwnCI0JNyxWBBlsCfsRsuhcmAd4HyUQk9n3GfvkQQRvgllRXlget
+ 9gra4yvBEVB1+JkkKxMUMBG1CHBc0o/4Znuawv9knKi9KiPlGxnj1jI6Gz6PNVQh99sf/
+ 0Cz9ep9yga6/XBQLtuaq5WwNYFKTXG8pae1g2i2AMFh5n8GpzRquXSCX/Y8NJLYZJZZJI
+ NZI2gDqGuxSyF3xfqsz+xcccWBkPOA55kMdsHSymZEnyIxGpGglWTGvf5bf4Tse3opw==
 ARC-Authentication-Results: i=1; smtp4.osuosl.org;
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id DA9AC414FA
+ by smtp4.osuosl.org (Postfix) with ESMTP id CD1C1414C9
  for <buildroot@buildroot.org>; Sat,  3 Oct 2026 13:56:56 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3136C88731; Sat,  3 Oct 2026 13:55:42 +0000 (UTC)
+ id 2452288699; Sat,  3 Oct 2026 13:55:42 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 3 Oct 2026 15:44:05 +0200
+Date: Sat, 3 Oct 2026 15:44:04 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3bb3557f667b756f9eed14a161679d0f9306170d
-X-Git-Newrev: 5764b6893677086932ca6fa7595f413d3ac17b8f
+X-Git-Oldrev: caf8356f76c5bdea2b9888f732b22032a9a0c5f6
+X-Git-Newrev: 3bb3557f667b756f9eed14a161679d0f9306170d
 X-Patchwork-Hint: ignore
-Message-Id: <20261003135542.3136C88731@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-mako: bump to version 1.4.3
+Message-Id: <20261003135542.2452288699@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-lxml: bump to version 6.1.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -117,48 +117,52 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/5764b6893677086932ca6fa7595f413d3ac17b8f
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/3bb3557f667b756f9eed14a161679d0f9306170d
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Update license hash due to copyright year update:
-https://github.com/sqlalchemy/mako/commit/155f9568dfd5e46b8325b8fd466227dcedf07202
+Update license hash due to additional notices for CPython code and
+libraries bundled in upstream wheels:
+https://github.com/lxml/lxml/commit/fbf0ae1d38d156fbd9de61d8092bc2766f07819f
+https://github.com/lxml/lxml/commit/0e9989972a6c430277f962054db9c4cf19ec28c0
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-mako/python-mako.hash | 6 +++---
- package/python-mako/python-mako.mk   | 4 ++--
+ package/python-lxml/python-lxml.hash | 6 +++---
+ package/python-lxml/python-lxml.mk   | 4 ++--
  2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-mako/python-mako.hash b/package/python-mako/python-mako.hash
-index a6aa68ee34..39bfca8cac 100644
---- a/package/python-mako/python-mako.hash
-+++ b/package/python-mako/python-mako.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/mako/json
--md5  92390c7e8897e69da67a593a96e88c71  mako-1.3.12.tar.gz
--sha256  9f778e93289bd410bb35daadeb4fc66d95a746f0b75777b942088b7fd7af550a  mako-1.3.12.tar.gz
-+md5  4b7555300a75b951bf99aa067cbb3633  mako-1.4.3.tar.gz
-+sha256  cd6537fe88d5fec315c55c2f8529bc4ce7a9a352ad7db3eeaa6a66e2dd4ec37a  mako-1.4.3.tar.gz
+diff --git a/package/python-lxml/python-lxml.hash b/package/python-lxml/python-lxml.hash
+index a58aa720b5..af8a9ebee6 100644
+--- a/package/python-lxml/python-lxml.hash
++++ b/package/python-lxml/python-lxml.hash
+@@ -1,8 +1,8 @@
+ # md5, sha256 from https://pypi.org/pypi/lxml/json
+-md5  ac9a945976227fd854d3e9e034e52ca1  lxml-6.0.2.tar.gz
+-sha256  cd79f3367bd74b317dda655dc8fcfa304d9eb6e4fb06b7168c5cf27f96e0cd62  lxml-6.0.2.tar.gz
++md5  15ecfaf666e0a881667005cc96e0a343  lxml-6.1.3.tar.gz
++sha256  45222d94ddd511536f3b2f7d9deae3b2339b4ce0f075f1ca25703b07cad9dd21  lxml-6.1.3.tar.gz
  # Locally computed sha256 checksums
--sha256  68d7064e53e3ffa8e9f420a9e604bd2e2059d9c330492fa6ebd4eb3d48111689  LICENSE
-+sha256  8c1d171bc5d341ad9cd33d5e2c39b96a82c7bd49b3ae89a470c37e5822232054  LICENSE
-diff --git a/package/python-mako/python-mako.mk b/package/python-mako/python-mako.mk
-index 0f52fa2185..c008967bd8 100644
---- a/package/python-mako/python-mako.mk
-+++ b/package/python-mako/python-mako.mk
-@@ -4,9 +4,9 @@
+-sha256  41d49dd406aa0e1548a6d5f21a30d6bf638b3cd96eb7289dd348d83ed2e40392  LICENSES.txt
++sha256  388fa99f3bde4447cd5a4cbb114037be026854db6cfe89e112691c1d8abdcf3c  LICENSES.txt
+ sha256  69edb445c1335a8312d4c09271847e9956d84f0d9f724d125340cc3fad767b2a  doc/licenses/BSD.txt
+ sha256  0497ae8138811ef4466ede653bab7a59feb3d3c14f9ed50fc33a00aeb5bec32e  doc/licenses/elementtree.txt
+ sha256  56c5b13f28b78958890c36e3249c34c169041e42ebcfdce8080f3324ba2bf4de  src/lxml/isoschematron/resources/rng/iso-schematron.rng
+diff --git a/package/python-lxml/python-lxml.mk b/package/python-lxml/python-lxml.mk
+index d12f65dd8c..bd12065d5d 100644
+--- a/package/python-lxml/python-lxml.mk
++++ b/package/python-lxml/python-lxml.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--PYTHON_MAKO_VERSION = 1.3.12
-+PYTHON_MAKO_VERSION = 1.4.3
- PYTHON_MAKO_SOURCE = mako-$(PYTHON_MAKO_VERSION).tar.gz
--PYTHON_MAKO_SITE = https://files.pythonhosted.org/packages/00/62/791b31e69ae182791ec67f04850f2f062716bbd205483d63a215f3e062d3
-+PYTHON_MAKO_SITE = https://files.pythonhosted.org/packages/5a/09/e07c4b5579a79f4b16f8d4f29f6c54514ac787c4ad506b8c4f28a0e6b0bf
- PYTHON_MAKO_SETUP_TYPE = setuptools
- PYTHON_MAKO_LICENSE = MIT
- PYTHON_MAKO_LICENSE_FILES = LICENSE
+-PYTHON_LXML_VERSION = 6.0.2
+-PYTHON_LXML_SITE = https://files.pythonhosted.org/packages/aa/88/262177de60548e5a2bfc46ad28232c9e9cbde697bd94132aeb80364675cb
++PYTHON_LXML_VERSION = 6.1.3
++PYTHON_LXML_SITE = https://files.pythonhosted.org/packages/23/ad/28ecd7cb894d172f3c9c80a075eeeb2017ac62e3632cee05a5f9493547eb
+ PYTHON_LXML_SOURCE = lxml-$(PYTHON_LXML_VERSION).tar.gz
+ 
+ # Not including the GPL, because it is used only for the test scripts.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
