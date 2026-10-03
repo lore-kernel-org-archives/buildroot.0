@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 969A8CA5FED
-	for <buildroot@archiver.kernel.org>; Sat,  3 Oct 2026 15:54:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F613CA5FDD
+	for <buildroot@archiver.kernel.org>; Sat,  3 Oct 2026 15:54:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 538E781082;
-	Sat,  3 Oct 2026 15:54:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CD083606EB;
+	Sat,  3 Oct 2026 15:54:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id p8MnG7PbUeGs; Sat,  3 Oct 2026 15:54:25 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 6DC3381305
-Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791042865;
-	b=kRVTqzDHruUOBlbBAQbIWDoY9HGpasaPbEDwaHuu5gCsNKbWiG5gSxjODUSc7TGxbHvd
-	 ITwIcL2/QCzEAWaw1ClCqmVzVU6sdm7UNu6rxGeyc1X1grytWlLoRo7P0CI8O8c1MYSSD
-	 6GvyLz0rcgUK1fblFOoBljM1JWK1dkgalvn3+/yv1FSq6Seq37XMJqLaMzIMciR2F497W
-	 6Oo2ROvlgZtElXAQmPBnhj6BQRfcDWTiHoiA6khQYH0XOr0wfIVMfXWj9iDMzUbMmjmjS
-	 zdZzRa8W53plbb5UNXSe9FmKQixqVhn9MYgJAOtMXeIjuW+tZBOwgtmp5M1a1ekupUg==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CalHZ2owe3lC; Sat,  3 Oct 2026 15:54:27 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org C1B04606E7
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791042866;
+	b=PdGzytu0wLGfFYbka1VMZ8gTs1sTn0zXT5o4/wsWZU1gHZs6UWu5G5d13L6n3JjY/Tu/
+	 Lw86QWUDVCw4NE45lssEuAoBVDIauDllEE7hzkqHRG6ndwKhWsd1Z7OwD40+svATLbcIW
+	 M1cRX4Pn0qp/3UrYpSTcCz6ujtSDCNa+7qWXeBtKNIJ01IrciQlJjf2RXV9qp2+InzD3u
+	 lSXdL/5hjKgiM0I2xAOD9/GLFKw1b1uZO2ydY77jiBfRFDsTktXA6xk3XyD5FIXOWMOgB
+	 vQEi04iScppqjy1ijPChEHjwWXQ/90uo23j4BTV5MPOAUu0hUiqXpMJMsBlVUKRkCFQ==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791042865;
+	c=relaxed/relaxed; t=1791042866;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,75 +30,75 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=WgvWhr3yEKhOzrhmhzIhkVhXoMHl73krwWpqXBCFzL8=;
-	b=j5AOEt0muDX+KKI4cY+nRJYuU1qxXZ1H5K88inTo2WvZGn2nA0hGdzZKgV3NCqzAeCXU
-	 IUR2oEVhEwJokbdO2Lr0RTocfvoGrETWnTubx81J3V8+6WyiJ43aSMsvGS/GLN4eoeeua
-	 UtQy3vxckaxzczrRWFgyIlWtKOmfERpNgJ7R+45SvvPvfqlVheuwbtYJAaeuliGvfijg7
-	 B04esVQKM0iOkjkyklYqvM7ADq5nuYsnP9fs07bliCVbUlbOWUC1GLiVTyob2zAkyI3Am
-	 7ZgIxWPFoDV7kiwMpCg4ZdrTDgpN5L4doVk6YbMuJ8Pfk+DGtIu8/hjWbSC6kFg/EuA==
-ARC-Authentication-Results: i=2; smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	bh=FI+cAcGn7A9a7v71dMql2IydkcBQJa3hfWBvpC3X1ws=;
+	b=nLEyQqK2V1Mq5JmPkqVLlRlxk+aGyUj96IquXApZZOdFh2jxK9hYOTZwzzj0xLMWs7Fd
+	 LoyrWcYRT0aviaVLCrBR3OFyQ4ZwfhbOGL9xR0BQJiTjM1PlSocn+TU8fZAkrRzD6Qz+9
+	 MDf8mU19DQtAFkxWjsZ6t8S4oiZa5ZB8uIQfiXjMZtrNxczbBQF4lGgQtg9gJdbYeaQ+k
+	 aOpsLxpnqIOpjqthUzHvEc2ZerQRH8ts1AmpdUVZUBFPukULqESRkuLaW5vG86CMo11Bd
+	 FHSceVpj8WtoKeOR9hWPjDpJY1TXkrayOwXgzFGmfTtJdYuIpq3DTIIxUL/BTP0Y5Jg==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791042865;
-	bh=WgvWhr3yEKhOzrhmhzIhkVhXoMHl73krwWpqXBCFzL8=;
+	s=default; t=1791042866;
+	bh=FI+cAcGn7A9a7v71dMql2IydkcBQJa3hfWBvpC3X1ws=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=EljNJc1yfyWNkj1OpEs9bxueBCP8SREmc3NnHDtK4Cc1ESS9isF2KGqqtTGmPBlQq
-	 H8YrOCoqyb3Qs+Oy766O2BLIIKf4NOAXeyR1FRB1CeuDrcDnLMIqo953yjbCWQK7rg
-	 tOgc0Eh8Kij0+R9WryRB5VMV+b5bDQ9ZahucXiI3shiHJIZXJqStHNXBIUYpwZ5g99
-	 xZV6BI3bMIkn2j3jOOQAbljbgAlF2/N4ZT7F7YAANg3Y0hRDNA8AC5NViHzkR1GKon
-	 NZkiKPOffj3PqIiX9n5UJbLrJOv4fju2NbBSX6Ot8dylwXSD+xtRtwA3foelK+dchG
-	 8AdCUBuBu7ibQ==
+	b=n0+194clEoe/UqEVpT+SRCGH1QEr4aZh6ScT0BP2GBo9XucLuR7ruwAi/6+q5BrBe
+	 nPE49SfXY4ZBK4E84ZwXwID/neZ/XsjlcKjX47sJvfJHJ+G9e+lzkkVLN7anXK+R2R
+	 S24FQxMbNaqzO5xxlECXyy/rQXJlfF8p3POmZHsAW2mLvm8iD5YRGFhaEN3pJOkULh
+	 pt8AWBXcKv4UlOtIjoYp3IYB8dm8dLn32Jdb7c6XXej9fB+3+l7e65ro+7nGdOsl3v
+	 d7fuNG/19Xj91vSf8uj+H5Rgvx/M4E8rj1hmYuHbFctqBD+T5lb6oY5/x6mkWCD+va
+	 M53i7VJLa2V+g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6DC3381305;
-	Sat,  3 Oct 2026 15:54:25 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id EA2AE1D2
+	by smtp3.osuosl.org (Postfix) with ESMTP id C1B04606E7;
+	Sat,  3 Oct 2026 15:54:26 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id EEF76335
  for <buildroot@buildroot.org>; Sat,  3 Oct 2026 15:54:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D10C2400AF
+ by smtp3.osuosl.org (Postfix) with ESMTP id D490A6069F
  for <buildroot@buildroot.org>; Sat,  3 Oct 2026 15:54:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id inlfaMMxkuKX for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XHNPzzRokYpG for <buildroot@buildroot.org>;
  Sat,  3 Oct 2026 15:54:04 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org 2778140024
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791042844;
- b=kTm/33+DXHqPL51/KRQJbv0uCK30lxAgRfnLhSNda14bG0ESRnf0wbsAcp6NuWT3Rs1z
- CtaUI7BZr3r92vYDbDQroDwWWElRsj0aGNVfNtTI9aE+luvxBgVWT83+Bm2BwAqKJHOUr
- G6OWtx0Ii1tgG/fbC6iKjFyq3lbBTSd0UPbf6mNaVMrRHQA1W6NCs1EAb5KYTmvrU/0JB
- pjt6yqb//HLtLhWgKqthxO3RBmbYV4KTmag3ugVULqMw6Stw28agPeUPH02B6/nh/r2tY
- KtipoGOOCgyhSg+/1S1sRsec+KdP/kJGfgTDlLO26gOtqfMVon7yUgUjAYlFEgN/3MA==
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 93DFE6064C
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791042843;
+ b=iidzRWJj9hQxpbL1qn/q8JhrjBjyfTW8Zl1yodCDvU7UYNnHonSZIw66D2UOVwMqwFhG
+ A9XfE6V+t0fzB7dvHBH2F05xCN5rzSTmLQ0tqiAlxzFej3kkVidQL7qc2v8+gX7iTRfWO
+ oGDTQ8/TorNPXdZ+36IcrY2vJHPAeXYBs1tszXSyxSSehn2bzfrcnckIKxI72oimv2xLX
+ 36nXyyA/r21rkA7h+cUHv+dW5uMBmFg4XFZ5BwgR1lf8JNHrD8difqExZIBmnUzrNEuEF
+ ZFkLYFsmwtNeEva1YDJLOd117QfQGWMUO9dPfLFmiEWaXVI8SJ/N8w/DuPZF0jAqDMA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1791042844;
+ c=relaxed/relaxed; t=1791042843;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=GxidPpCJOzt2lKJzUXfybMR/1UVXvfUHEzqNsf2Q7pM=;
- b=nFYVxGNmD1Na9ZxCoCBqSZ67x4U2IYaztaU2JYQQJ4LrxttteFlv40vrAfCHLGWuS42F
- s8BaV0c0lih1D/0quYygnZhm+3PheeGzWOgdfneytcJ1hhULqiHg1hapg6zy3Wx1P5lpF
- fQkx59Gph14wXbo/YW4p7ohNr9JuUgANuuL353w5JaEmoe43Z7RPB0+KeD2x9iLMj16Xl
- GR34sgZRHARGIlmSnNWR5rwPccpUDzfTzbhsTBc4QxS9Eds3VEglJKvqSLHXQ7xgiwNwO
- 1Vopn1TuFu8gGCr+CDvrC5dA2VVxuL9Ae7wozT8+sA1Xm3jRCUAYqOQkN0NGNdXedkQ==
-ARC-Authentication-Results: i=1; smtp2.osuosl.org;
+ bh=6CPyKUAnJ8hITq0CgEqY/jTfXqavFpwzyrRhK+Vmh30=;
+ b=Gwl4QMwoBmYPOP7v5VcipcwJE80nSNrPXMsLidrpuswJ8S6QCaPcm40BB85vMCiYtdz2
+ 9d4sK1pr1eyL6YdtdHJUhTjBqQxrvjc+cqIcubObA+tTV/fqcG6PwTqvhyLZvcNDKNK7x
+ +Mn91Yck2DTomRh8saE+rJRHUcCwBkFlQVbUmSoWic/Fj++qemXummFIVxzxnEFxIJrRc
+ wA+FJCAF3B6fWGnn5JIg+qVsv42qcLwHdtVtK+/3hB3g9dJaiU7auA0AryJDkFWJMH3C2
+ 05B5vHLXwBPrCN5K7we5DSdgS0a7KIZwaK8P7gQ6xAyM+//QoK1ZSeyFcPDG5/mhx5g==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org;
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2778140024
- for <buildroot@buildroot.org>; Sat,  3 Oct 2026 15:54:04 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 93DFE6064C
+ for <buildroot@buildroot.org>; Sat,  3 Oct 2026 15:54:03 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 695228A31E; Sat,  3 Oct 2026 15:52:49 +0000 (UTC)
+ id D479D886F7; Sat,  3 Oct 2026 15:52:48 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 3 Oct 2026 17:43:23 +0200
+Date: Sat, 3 Oct 2026 17:43:15 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: eba383f8865feb10cab10bb6b3ca4019ae19cc99
-X-Git-Newrev: e6c8ed197c1c5d037f6dccd1ff583aac2dcb8938
+X-Git-Oldrev: 30b9a89e233202840fa061218c2f8322e6bb9909
+X-Git-Newrev: 5bea1d30aa7e0c26ddac1d17a03377f67f60de47
 X-Patchwork-Hint: ignore
-Message-Id: <20261003155249.695228A31E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pydal: bump version to
- 20260520.0
+Message-Id: <20261003155248.D479D886F7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-yatl: bump version to
+ 20260805.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -118,47 +118,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/e6c8ed197c1c5d037f6dccd1ff583aac2dcb8938
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/5bea1d30aa7e0c26ddac1d17a03377f67f60de47
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Cc: James Hilliard <james.hilliard1@gmail.com>
 Cc: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-pydal/python-pydal.hash | 4 ++--
- package/python-pydal/python-pydal.mk   | 4 ++--
+ package/python-yatl/python-yatl.hash | 4 ++--
+ package/python-yatl/python-yatl.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pydal/python-pydal.hash b/package/python-pydal/python-pydal.hash
-index 89589abd62..22d0114dec 100644
---- a/package/python-pydal/python-pydal.hash
-+++ b/package/python-pydal/python-pydal.hash
+diff --git a/package/python-yatl/python-yatl.hash b/package/python-yatl/python-yatl.hash
+index 5e11fcc17d..7cf7c0485a 100644
+--- a/package/python-yatl/python-yatl.hash
++++ b/package/python-yatl/python-yatl.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pydal/json
--md5  681d6bc922b202ac950c769164034d0f  pydal-20260313.1.tar.gz
--sha256  2df8de415dda8821f0a291cd66459fb889b28458ee6501778f682e55530847e9  pydal-20260313.1.tar.gz
-+md5  21ca33debbc8a022137143d4b04dbaa4  pydal-20260520.0.tar.gz
-+sha256  a1a01d28655231b7e0893ca13e9c92084549f7761042e1ae9ef70d37146737c4  pydal-20260520.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/yatl/json
+-md5  aa1ee295477870a084a891f864fb6f0f  yatl-20230507.3.tar.gz
+-sha256  a7d60abff563d7eb680f4f97efb107b60b32f80061c45bf4fab15c4ea2a057e2  yatl-20230507.3.tar.gz
++md5  520fff685092743ec36879f439cc8bc0  yatl-20260805.1.tar.gz
++sha256  ca09b1a4be97dece288db44a98dbdd3070f889381e503bc5be7603829879e92e  yatl-20260805.1.tar.gz
  # Locally computed sha256 checksums
  sha256  1f711e93f1e0c2eec576e2e60597dc2ed6f0a661e4749c6b8a39f0d4a72be468  LICENSE.txt
-diff --git a/package/python-pydal/python-pydal.mk b/package/python-pydal/python-pydal.mk
-index 94cc264b44..45ccb2e888 100644
---- a/package/python-pydal/python-pydal.mk
-+++ b/package/python-pydal/python-pydal.mk
+diff --git a/package/python-yatl/python-yatl.mk b/package/python-yatl/python-yatl.mk
+index aaafef8988..4006f59374 100644
+--- a/package/python-yatl/python-yatl.mk
++++ b/package/python-yatl/python-yatl.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYDAL_VERSION = 20260313.1
-+PYTHON_PYDAL_VERSION = 20260520.0
- PYTHON_PYDAL_SOURCE = pydal-$(PYTHON_PYDAL_VERSION).tar.gz
--PYTHON_PYDAL_SITE = https://files.pythonhosted.org/packages/68/51/c6ae7cfa615718812f974560b24001aff542ee6739232fd689e87ba75b1f
-+PYTHON_PYDAL_SITE = https://files.pythonhosted.org/packages/20/4e/1d576fcb6857f56cd0aeb413c387044fd609140628d1c401b7ae29ee6190
- PYTHON_PYDAL_LICENSE = BSD-3-Clause
- PYTHON_PYDAL_LICENSE_FILES = LICENSE.txt
- PYTHON_PYDAL_SETUP_TYPE = setuptools
+-PYTHON_YATL_VERSION = 20230507.3
++PYTHON_YATL_VERSION = 20260805.1
+ PYTHON_YATL_SOURCE = yatl-$(PYTHON_YATL_VERSION).tar.gz
+-PYTHON_YATL_SITE = https://files.pythonhosted.org/packages/bd/3b/723a667a24512a299e1e139608e787c3b24b7819302c15c7aac09c3bec68
++PYTHON_YATL_SITE = https://files.pythonhosted.org/packages/33/bf/5456f2fa12811b4ce4dd82741ad781d834ff4f4865b75f775e50c3e9ac3e
+ PYTHON_YATL_SETUP_TYPE = setuptools
+ PYTHON_YATL_LICENSE = BSD-3-Clause
+ PYTHON_YATL_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
