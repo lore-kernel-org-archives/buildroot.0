@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92D84CA5FDD
-	for <buildroot@archiver.kernel.org>; Sat,  3 Oct 2026 10:07:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B131CA5FE8
+	for <buildroot@archiver.kernel.org>; Sat,  3 Oct 2026 10:07:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 66C8360EA2;
-	Sat,  3 Oct 2026 10:07:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C801B41188;
+	Sat,  3 Oct 2026 10:07:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9HGWVHJKGsOB; Sat,  3 Oct 2026 10:07:30 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 7AEA860E8C
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791022050;
-	b=Oaq44aW7jMnlh/iFbNXICgDGmC7o5Vl9SQlYdx+jRgA69Oz/p2n/a38pA3X4wwlsoiQs
-	 wMtul/xBeHrfuKzXYeXC1CbudKAAINDMbzcOgPH0TrbXdZkFruNqUPJ4tt8jVcMrrXIp/
-	 vg8khF25hq/H5otXclxXDo7aQ3NYCqHJ6SANnC6K7PeVenmOp1z8O/rQW8Mvsd7vIBDEw
-	 2ymqFhFfU8bX2wa37UUl6UDc29fYu+G+kWEd4Kys1eIUEVlPrQ/HE0xH4C0zupMDqOtt9
-	 IkpeeJ70Ten8ih9ce3fyqKEZYKtbgFJHZciH4HCudbxe0ncX2JAqAWSe/dgtDBiHTbA==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id brKjVR2H7Aak; Sat,  3 Oct 2026 10:07:32 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org D089F4111B
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791022052;
+	b=S+dvDd0T867cYg/s2qXok8OMErONaOHkbcOb4VQEIfcEqqTtDs/lcyRIzV4ZDX6yaV+s
+	 8rS5KutndziZq6JmGMWui0Mj95r4j2ktlmf8ApUH9WaFACO/hbbmYlxv0s/I2GDTSEIJb
+	 n5kEPdamoZfm/Bll7zo9bNTFdEENokN+YAtOd9d/aOr67/zEyLRdnbokW+/EIta7ee07N
+	 9l2mtaDSqgNmCqB/g4TWx57kKMGmris3j8ZQ2TP+vTrA0aZYHd7q9fzVvWnvf2ZagfgSn
+	 zI5DQsAagHF5MXuHFe6Uwx6WTrG2WdTiHhoGwUW96HShKBihrElEyDXSHnyThp6xcgg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791022050;
+	c=relaxed/relaxed; t=1791022052;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,75 +30,75 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=ocENnTJynPy+E9VpMYd0heWfSDZJFKCYDiAlripOEsM=;
-	b=HHfX2qVL2z827W40xcCwSgaYB6vQLg3I1cVVtW2d0voFrRra8yccd2mwHDFW2hq3GMMh
-	 8OuVVI/pHXqfWa68nHroRbWHJ1lRoChskaRmPQPT0/pKo5rnXI3X7qIWcKZV3kFbTxW9u
-	 ntSY9S3APb0qi6EQWV7wgnIuDpY4xgujpDv4zNEQUqryGGTl5KkyVjtJzB0kknj5+oTOu
-	 IrxtVxX4sIeQ1jiWK80zhewQOeAeNZfFjKGRuCB+4sZTlyYP7JcUd1FYECah/CnuB1q3k
-	 WoE/bD4SomgGGfU8f7brUtC+vpR8W/NjhyzyKB5R9zzA0AQwHvqzLNNhHp/389vJI8A==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	bh=2j8zcxLmmLq0YFU6pKdi3NgzZhX9F5ltkwJiCDwK3Xo=;
+	b=OtHc00AC7uaLop93hHN/zveoLVp30pBmgderog8whUHvwIrsrh47XqtNVehdLS07ksM5
+	 ZbiBGXHGJ97EHYZNbYDglDwYFKH41QlXsq+KQNe0FozpGYhYl8wkhzZ0iGT1ab7UB2PC3
+	 TBPFcNRK61u0cRO1eFYneBI0TViyp3P1/XoZoH9HQAdlDFva/ejUvbVyc72ImSghkb9gx
+	 vVWEpaqZ3ZBOawYb0gshag4IRAPMDgqIYayuCtsdVkbbmNllr2RHRqY1LI0KHQAFe52yV
+	 DUnDbndLgAt59iK+q5ytKEUKXCEzkfj/gp911zIHzGhV5sb3rPDGwx1C09tXYy+O0hA==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791022050;
-	bh=ocENnTJynPy+E9VpMYd0heWfSDZJFKCYDiAlripOEsM=;
+	s=default; t=1791022051;
+	bh=2j8zcxLmmLq0YFU6pKdi3NgzZhX9F5ltkwJiCDwK3Xo=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=UU3/yeEMxuBUUhMrJd/DVYi47goCKxZ3ionLM1gkgQH3E4YwhRrUy8wDuncE0xBvr
-	 DlWNZhLvcQX9SN8bYbkNZei0zMJY88iRDLk8jbKjh1MZZ9/PV51YyIGpq20xgZdPwQ
-	 8mxHXRPBRAB2y534LigSyCfPb3gUBVE9DZYQAF94EHVTjPYHCl7xQuRasQWw/CfGbR
-	 JULTMZWYF7hBeVVfUxbaD4gH1QgqGRSA3s+VNsxQwMOVs6cNk2Q9fHrI3SJxgBmcoL
-	 KdT0WM4Z//OU5jc6c0LQ3sgfBry0E3SqJ+sraZR14Gs0PTczHb9h85oDCQQlGVrJ1d
-	 piG0zZoPX2qoA==
+	b=gLR2pAb8DWFqHqcX3DJ8zxHvfqognqDY3ejFTRr4GpHXX1gKUJxJN2cIqVxfBb1t9
+	 UqIR6uDH8JrlI6zHU8oJhf5JGiUv2W50Wqqz7qJUFNuGH18NyRx/VT9AIR5OLtZLkQ
+	 7JGq1qpc53EEvIJJq5kKKMIXCjwCyVb5HPLpl1Y85duOahV+jNZxwl+dYb1ruklnjU
+	 OJ7cDdp3SpcJDv3k7kpO2bgTZQG3FyszRtoEapIOZI3HYKlR6q6/WoSvUXg8sq0X1Z
+	 1bXesYYhpWM1MZCm15+Bv8w3kodlBbw+UN5UhqQtEhXGfDsizingW2/B2P1dI6htFk
+	 aJem72bs6exag==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7AEA860E8C;
-	Sat,  3 Oct 2026 10:07:30 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 3B2E3335
+	by smtp4.osuosl.org (Postfix) with ESMTP id D089F4111B;
+	Sat,  3 Oct 2026 10:07:31 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4C8044B7
  for <buildroot@buildroot.org>; Sat,  3 Oct 2026 10:07:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 14DBE60E9C
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3D8918122B
  for <buildroot@buildroot.org>; Sat,  3 Oct 2026 10:07:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nQj3aYCPz60i for <buildroot@buildroot.org>;
- Sat,  3 Oct 2026 10:07:08 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 614DC60E79
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791022028;
- b=XCT0zqokW1lgsU0PLwwOH8zhILD0/jZ3rPPjcZZNEkN0G3+nOUL6/JHG3qURBhG/eQbo
- wfatpARJo9beBZF+4VX48i3nZoStty7v7hBVPMR+Fld2NdcwkSLCpYNOjVjF5jlJS6StT
- IyWp4zA6+K8RBCBDQtL1Wcr4F6mzz5oT7OIfCSEqHfeQdLqeybr18zTJBSMl6PO+NMlwq
- wMTEcW5kMNbgs3jWlccqSB3WhNyuec0xkTK3VuaGruqeD8ppdHIn8uEIeSt0NST2jHt+d
- ZkEo/gzwcWHlUe9YaCkMQN3PH8xwhh2JfETHaEo6gSUmRM9g1O4M7FInlZFEYACVlVA==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aMFQQzjvyuAu for <buildroot@buildroot.org>;
+ Sat,  3 Oct 2026 10:07:09 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 80366811ED
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791022029;
+ b=CpBFr2JjSoQnCALTTAHJjfL95ZcCw04iy7hzNwyvRTTF/3rlmI+Xs1PLDuOrYREvRdOh
+ NzU+o4HteoNHq5k5OrC2CVZbllEc0v8nO97nKSxL1HzDhUQS33xKqYYQN0UOEfgAmAdWA
+ M3SyAi7wyzRSYQcsclmm1U22bizJtTl5UhwSsAhJwLzA0TA0qSyBJ4cupzu2w2AK4qwnM
+ 0CL/Ei+6MrbTG2pR0mQuy6VouxX7enE5mKesb2OBnuktJLnuIN/FwSowgAVSwKP+ankUu
+ Y+HVaW2evj+lNKTVxonKqikl0PP9KqMPdmFu8vjTMJ7zI59uHEBlRHrqrXO/biYD/Cw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1791022028;
+ c=relaxed/relaxed; t=1791022029;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=GU6QoMUgJ+uAIqqzDgWX9YHwhowOPxI7v6pNXOA6MW0=;
- b=jLh10WORqS3PI0alP0z7l2FuQqCXnfrjXetz4qzP2Mv14BtbBqyIHQeV9QkfE1WULhEi
- Vjdbq1/YnA+4YEUL1PXRkOQaPprkERgkgT2C7JeVzpCpuJto8ShPaegVJTHIMSGbwLp8Z
- mMUapP3YtkKWY7MLyK+sw5KPjBzSX2TUzyblpcJknfKuJruZznaMwSEsWGVmukXrArUkh
- roiMDFTwQBDqls5XClQ8AkUCrY8cJK4nYe4F40xT4zAesvDBuXg9U7Y7wPewoYnuFbW7x
- JBb2uI08cOQeGhyUy8bMcAlxVpwxfMp51o6SGRSAPhlj4OayD38lC3Jcm1p5T6oJZsA==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org;
+ bh=1BPT1OdH3BJsca243EexiESzz9bQIfNNo2LotcbV9JQ=;
+ b=OAYzp+82PFPk17kWPWThbhhbSxLO7JCrjZfroHDHbv3uiRz0Pv8NteQ5kQe5MVSiFW8n
+ kBw5UIYsB10s9ym1rkLEn6liNlIG1y4WJAtFvhT808QdgEyPK+We4ULh5K1C/1PxSEIQS
+ 0JzLNf3yMOhGibgMAwtjL3eZoX5x21tY4tcdPIrf5be+/Ia9nlZ/h2ur7+EiMY5vtzzOZ
+ wgqA6hmR2+5EYwZ0aoASwk0egDTqwKi+FXm+znsNAC6sS1uiWCJYh934QJ1qC12SMFaLC
+ e7UgvzfnOUk+qGk71mmWDb56dn4quWAWdGdyY905mA84sIuE5ne+SooDrflc5p/93JQ==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org;
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 614DC60E79
- for <buildroot@buildroot.org>; Sat,  3 Oct 2026 10:07:08 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 80366811ED
+ for <buildroot@buildroot.org>; Sat,  3 Oct 2026 10:07:09 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B2B838191C; Sat,  3 Oct 2026 10:05:53 +0000 (UTC)
+ id DF6CA88801; Sat,  3 Oct 2026 10:05:54 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 3 Oct 2026 12:06:28 +0200
+Date: Sat, 3 Oct 2026 12:06:47 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3abe799e44cf05d86f97a48a9e04e39c7b663587
-X-Git-Newrev: 88adb4c3c13f04af1e34b06c2c9ef49bfac6382e
+X-Git-Oldrev: ed53d2bc9e36e06c1ef5c756761571af443188d8
+X-Git-Newrev: b6fcedf51699b064ce4c01d29cdc173df41ecedd
 X-Patchwork-Hint: ignore
-Message-Id: <20261003100553.B2B838191C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-babel: bump to version
- 2.18.0
+Message-Id: <20261003100554.DF6CA88801@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-soupsieve: bump to version
+ 2.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -118,48 +118,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/88adb4c3c13f04af1e34b06c2c9ef49bfac6382e
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/b6fcedf51699b064ce4c01d29cdc173df41ecedd
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
-
-Update license hash due to copyright year update:
-https://github.com/python-babel/babel/commit/56c63caf50b18b152541b5dcafd51f645d867074
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-babel/python-babel.hash | 6 +++---
- package/python-babel/python-babel.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-soupsieve/python-soupsieve.hash | 4 ++--
+ package/python-soupsieve/python-soupsieve.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-babel/python-babel.hash b/package/python-babel/python-babel.hash
-index 436e49a9bc..154c6ce306 100644
---- a/package/python-babel/python-babel.hash
-+++ b/package/python-babel/python-babel.hash
+diff --git a/package/python-soupsieve/python-soupsieve.hash b/package/python-soupsieve/python-soupsieve.hash
+index e604cd2d1d..f2c11f1315 100644
+--- a/package/python-soupsieve/python-soupsieve.hash
++++ b/package/python-soupsieve/python-soupsieve.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/babel/json
--md5  726d2ed119255a011d248ac0c9caa24a  babel-2.17.0.tar.gz
--sha256  0c54cffb19f690cdcc52a3b50bcbf71e07a808d1c80d549f2459b9d2cf0afb9d  babel-2.17.0.tar.gz
-+md5  b5ea9705c2ad6f8c630e4a66d3dd2cfa  babel-2.18.0.tar.gz
-+sha256  b80b99a14bd085fcacfa15c9165f651fbb3406e66cc603abf11c5750937c992d  babel-2.18.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/soupsieve/json
+-md5  8c20930a780872dafd6f22175398ccf7  soupsieve-2.8.3.tar.gz
+-sha256  3267f1eeea4251fb42728b6dfb746edc9acaffc4a45b27e19450b676586e8349  soupsieve-2.8.3.tar.gz
++md5  411ed4ba0a31ea6cd7025bda680b0834  soupsieve-2.10.tar.gz
++sha256  49e9380d7d2905463583bafe285e818c7366a9ed7b3aee221c1ac79c905d8bc0  soupsieve-2.10.tar.gz
  # Locally computed sha256 checksums
--sha256  7801a84fe811279cb350bdb4fb18f94c36b18ef813fa6aac043b6c6d39484d0d  LICENSE
-+sha256  86bad5758c7859ba06251f8f12eee885eca31369923dfb2b87a7c13c3634d870  LICENSE
-diff --git a/package/python-babel/python-babel.mk b/package/python-babel/python-babel.mk
-index 57e372fc1a..659db0fd83 100644
---- a/package/python-babel/python-babel.mk
-+++ b/package/python-babel/python-babel.mk
+ sha256  76a0acdb98c3a63681e20b6f096699ef8cad5fb35d56eef8387e0fa71d797a9a  LICENSE.md
+diff --git a/package/python-soupsieve/python-soupsieve.mk b/package/python-soupsieve/python-soupsieve.mk
+index 04d33f67be..1c4279ce06 100644
+--- a/package/python-soupsieve/python-soupsieve.mk
++++ b/package/python-soupsieve/python-soupsieve.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_BABEL_VERSION = 2.17.0
-+PYTHON_BABEL_VERSION = 2.18.0
- PYTHON_BABEL_SOURCE = babel-$(PYTHON_BABEL_VERSION).tar.gz
--PYTHON_BABEL_SITE = https://files.pythonhosted.org/packages/7d/6b/d52e42361e1aa00709585ecc30b3f9684b3ab62530771402248b1b1d6240
-+PYTHON_BABEL_SITE = https://files.pythonhosted.org/packages/7d/b2/51899539b6ceeeb420d40ed3cd4b7a40519404f9baf3d4ac99dc413a834b
- PYTHON_BABEL_SETUP_TYPE = setuptools
- PYTHON_BABEL_LICENSE = BSD-3-Clause
- PYTHON_BABEL_LICENSE_FILES = LICENSE
+-PYTHON_SOUPSIEVE_VERSION = 2.8.3
++PYTHON_SOUPSIEVE_VERSION = 2.10
+ PYTHON_SOUPSIEVE_SOURCE = soupsieve-$(PYTHON_SOUPSIEVE_VERSION).tar.gz
+-PYTHON_SOUPSIEVE_SITE = https://files.pythonhosted.org/packages/7b/ae/2d9c981590ed9999a0d91755b47fc74f74de286b0f5cee14c9269041e6c4
++PYTHON_SOUPSIEVE_SITE = https://files.pythonhosted.org/packages/71/c3/1b817965ac12dc002d7c9cd7dfffdd7d4fbf9b45763ef2ffe7b86ee94670
+ PYTHON_SOUPSIEVE_SETUP_TYPE = hatch
+ PYTHON_SOUPSIEVE_LICENSE = MIT
+ PYTHON_SOUPSIEVE_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
