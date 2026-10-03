@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5BB35CA5FEC
-	for <buildroot@archiver.kernel.org>; Sat,  3 Oct 2026 15:55:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C617ACA5FDD
+	for <buildroot@archiver.kernel.org>; Sat,  3 Oct 2026 15:55:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 005786064C;
-	Sat,  3 Oct 2026 15:55:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DA4DA606E8;
+	Sat,  3 Oct 2026 15:55:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id whv__Bwd6g88; Sat,  3 Oct 2026 15:55:40 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 8513C606C4
+ id 6jjApBQy_f8u; Sat,  3 Oct 2026 15:55:44 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 97778606DE
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791042940;
-	b=nPM1iTtJmrdRoURDJ5e3IJsc5NbnaXZ1MiSwgKnNqF+IUiZjHGIgOMsr0FRKnHqFMKrv
-	 /mpJZwONpdtyz4tOOGgZu3XwpImyI3TUwz3AVA3V2lqqAtI3x+2z2VZGOdcD7IkEK9jJe
-	 MkJD4+baKyDofu9iAKirCI8cW+bSwzLUjus3samK1eqBp1bWBQpagnxRxzkiOoHn389A/
-	 /AFk3/cCmF8q06oSZHle16iOOvqhS4nZpkWdpCNIIfXuhSwWFfoNo58LrNRIfveGhPQx4
-	 kN37lvlHu3C+/9fJ4F8PJ9mst4wrYvRpOj1qCBzHaiBYIJnHUdozjm4AQ43lqE0fcpA==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791042943;
+	b=BRRMe2K0gY8aqwxC4yh3bTcQhdkHpxQeaHn38k97cYCBahqCvydwSfLjwLAk1J5y7PhU
+	 Wa/IT/UH2dmRzZdMhgjD+LYiNVlv5BEPKoZAR/En4cIdt6PQeI18A1awCAtJRcOzMvIpa
+	 wB0h3qz2vHAXdFW3uH/R5H35xPFrWSsH/S/6sS+iynfiu4Szcbju7ffmkRcXfM8p8BnQR
+	 Rc/asqNt1T0mXWNM61P0mefa/j0af05nTJXMGHNZ4ok98plYYfxsMxC54M0G45ZzC7/nL
+	 8y3qvYXAEqPsC6DlelodwISX68Nel4Qs+DMpdmGPjHDyxz1YTw/AYDyTXfcqCzgEYzQ==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791042940;
+	c=relaxed/relaxed; t=1791042943;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,75 +30,75 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=CNRLnENCfzhBASJ8btXuaB1I4rzbvmDvxccb+qtwKfc=;
-	b=a7vEfnP+DZFJ+kxerKxLPNpha2NQlWE0wDPTAyWLh8VQvm+YC5ZL3HChye6QQLOQO1jU
-	 tQ+J6sPXCibFskkKneT/bAu0R3p2gwZlrq33atvim47LFzyTYpcMdI9rJcTSBO+vR6PRq
-	 MyywpZeVPFBslEhJaoPpwzNKDMacQ7eYoERjuh56UhHhIGyKZSC/GMHzpfK86VgeY+fVW
-	 4hCruWPt8vZeQtpBSdEBmA5RIPST5PXFnMtILPaUP8fpvqCOzcjI6gyAfyayVjpOENkJU
-	 lBNyH5Z2SYITWWKsSpJpge/arDRsM18DU/VFx7WL5yMexA9GBCRE19qY/akwQgMyhsw==
+	bh=yX73pKSn/dzJs6cT+FKoXtU+C24Ta5wjZT5k1wdwado=;
+	b=ZmEhdxoz8MP6cP+wh9iEYaG6zvsLlGQJW/GwHbdh4i0Pkg3mGv/pTpoabYxvB/Vs4yiN
+	 rOn6KsAIBPQQqeMQe8MRAQSV3ic0GYAqXeIeTuIl8VIOW6t9tXdjfAcCp5xKFN+qLWOOD
+	 K1j8cwrbkc/BAyqorupe1E942F7LQ64ROO1WUMPuUhGDUr1fyy9sBoAou9ikUYh3oAtB0
+	 XeQ5QhJtv0I/oU6iXK9W+++/5w9pQcRuV4KdLY+zfq5D8toxJcurlQWNY1YYY4bgQ2P+E
+	 dvXyprc/SmAkdU1zfP8Y9gFXvSgSBdFquqCFwgm7yAqTDbiIQK5DP4M5bS6L+oxAeCw==
 ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791042940;
-	bh=CNRLnENCfzhBASJ8btXuaB1I4rzbvmDvxccb+qtwKfc=;
+	s=default; t=1791042943;
+	bh=yX73pKSn/dzJs6cT+FKoXtU+C24Ta5wjZT5k1wdwado=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=L6FfaLLDBovZ2LPYr/VyKAmdx4vlaPRVQPpMCMBwHL1GFCWwr/WZ+gRko5ROJ9DFV
-	 ui5EiFM5BXo3bJQk6dhiMC4Dt0W35BpqLQeGSg/8ztxpKx2paJ8nL7TlGvgOy8ccWB
-	 VBe5g+tYGlaIuemIsuhSrEPnSviEj52oag4Hsu0zsEYsXdDFUsYtLxmqVCtWMZIH/X
-	 yBLi2ZavtvKvkyPyoL5i2KZeXdBJNX6QPVcZiwYEASq6AtDUOxyyO61ptlIIaTCdgA
-	 NDzRdMDWVXmxIlqbCqa3t3I2w6EhNoLXOy6KDimKRDzasuzSutbG+PH+64yDkiVnzh
-	 mBScuiDXWzQJA==
+	b=a+SrcHwBrJJwM94KPLZLiFmcjWpPyQqiq0uVBlLF8nm7+deUh4KDj1MlqmeYqHPaZ
+	 /BzqqChCJq96DqiA4PI5jDCrS5ASLAq4hdsF75keeGbHSWV1sNxI1II95VI8FNP54e
+	 QUVx2rMGlNVm61Fw7gv9Vc6BryArTexPK0NTClZ8yz9eOWNHx3v3deUHn4KdM31JRZ
+	 N1qGwKKAgCE9l2EsHeIj/I8gwsY3DKpcn1ruDnWhS4q68OZwX2KZl92ahKxp8NIJDN
+	 z+YDfSFirPVWaPnpIXQ8BfJeP6Omt5/ai+1OBUZlFEXmZDhCvyjWW+/xXeJkaV7rbT
+	 grnlXIASnxnVg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8513C606C4;
-	Sat,  3 Oct 2026 15:55:40 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 703AF1D2
+	by smtp3.osuosl.org (Postfix) with ESMTP id 97778606DE;
+	Sat,  3 Oct 2026 15:55:43 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 99B17476
  for <buildroot@buildroot.org>; Sat,  3 Oct 2026 15:54:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6037240049
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9795F40024
  for <buildroot@buildroot.org>; Sat,  3 Oct 2026 15:54:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8W2JujUoxZOz for <buildroot@buildroot.org>;
+ id WiOb5sOt7l-i for <buildroot@buildroot.org>;
  Sat,  3 Oct 2026 15:54:06 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org B39F840024
+ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org D9058400D2
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791042846;
- b=DZDcpr9H/yXfCtOjQ6cikt1OPl7g+7gm3NLVmvgbRJX4bsY27JJh22aValq5Il5eIiPn
- rK6vn6l+zMLI6+ZI1wyGGcwXw9OBm/csPLdG+JnPK6WbuKGWqdKoN5LR5UzZYHP1DuYyi
- 0W9UnOgi68ZhKZ1NE9Fmsp9g1+m3KQJRxWoJJJgUJ77uajAJd5P/FKfDhCbOpRYAoCYdR
- 8d2fW4eBjyqZ7mmAdN68+JGlZjIn6eEX+cjeYFGntwn9IXtPYbW43/3V3FUCwrAQESlD9
- oiqsM8Atc0FrzkaZHwL9Mm+FvOtNRPs+NagBfj4HEThSK53X+n8OcMb5Xir030Y6bnw==
+ b=DjOgsXoN3ZAElsNmur3VoKtPztASa1hdpBYa1FNfunCePbRvGIr4/HE1zMZfNgDaQtvk
+ iBMyjrjMrrbFMSrJgSJD/fWtXEDiY1kDItUdtP3uLk+BjMCgZesLSfkW8uylEosMCqnMs
+ Vde5vqcNx4LmV/xob8HQsxrpmHDNxMHEd0mpVVMl2aMaH1AGrs3Ish2/s9/+DCeAuNQg1
+ ApBjaWw/LHvQIIbqEEUjv7b+uVVyGlshtwrqy+gApRxp7WuP1o5O0pEr2qWeXVU/rSJOd
+ XBsHgUJJyxQszl8PGVt94/5zPrO8HY65KgVynnpHsDD9SHxpteQONbFKtPWMpG/IOug==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1791042846;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=zng1GalWaZ1nw4H2BPCtfupyC1+9BmS6bjKSgtmA7+k=;
- b=QCsCZiKVePJb/Db0VBBLx3zmP7O2UIDAa4pssBmafv0J8H3Z5f6KbhGawzbChX/uf8/V
- +ZoIAH4CYpJD5p5OUuhX3sWr5ko1LwtOz0bBmrR6sf/LmI0R7xPtC4ePVzbEftlEphM+A
- pgs8gkeXTTYyAWuxi/a+l+f4SRDszDgJAJgCXUK9fjc8uQ8Usyma/ynsuVEXUxWmTqmLY
- sZ2L81r3sFMs/7/23HVl8raiEw5dG8CfJaXOdlNRihaMtk0aNT8JWe46B3qezZ3aSwIG4
- vYji48mfFNYhy1EYFQJxJj7zw00Nng0POSTHbv0MiNLjMwJEa3X/gRCq0IWCzz/8K3g==
+ bh=wLOpca7O10UhS6TWWAzkj8oCpPHdvx/hG1q2ZjXxSlc=;
+ b=l4IBmclUozz2HOTXagR0a1Q5Syx6ohRcRUl7xq4zUXyMmJNF9qUKmzOCUukO9g35UY0I
+ tURJngziQhIILHsEVlBBjfcjrX1HA5wgKVueBX0jbPlfVGM5wFFGnhwml2DaA4pAPFTeV
+ o2bikMfQdw1E0NcinjpeAOWTuSbQnNlrSvy/6pqCx0/UgIycLCgy8ULKY0rSejlyiF1KG
+ wzE1+vXtM7GKTU7V3Ry6TC9RZUBvgfmM9jAAejxLALdDqsSlRIssrNyPGRn9BVzZEahlw
+ UXonuA4VPCAW4C6UkF4NEI7IaLr5o0HuS2yDnaUuyBZrIt+n9Np8g8CyvkFhNuVcDoA==
 ARC-Authentication-Results: i=1; smtp2.osuosl.org;
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B39F840024
+ by smtp2.osuosl.org (Postfix) with ESMTP id D9058400D2
  for <buildroot@buildroot.org>; Sat,  3 Oct 2026 15:54:06 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0092D8A39C; Sat,  3 Oct 2026 15:52:52 +0000 (UTC)
+ id 2689C8A574; Sat,  3 Oct 2026 15:52:52 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 3 Oct 2026 17:44:07 +0200
+Date: Sat, 3 Oct 2026 17:44:09 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1383236e2e1ce1936739408e69b7b30063d3f590
-X-Git-Newrev: 16bea591ff67164b79fc8e2caf49c4e8d7d10ba8
+X-Git-Oldrev: c4f4aa6313042769f360c8345a5da1439fff4593
+X-Git-Newrev: 8809a9459f746053520e6f73bb6d3f81e21c4181
 X-Patchwork-Hint: ignore
-Message-Id: <20261003155252.0092D8A39C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-asttokens: bump version to
- 3.0.2
+Message-Id: <20261003155252.2689C8A574@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-docker: bump version to
+ 7.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -118,46 +118,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/16bea591ff67164b79fc8e2caf49c4e8d7d10ba8
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/8809a9459f746053520e6f73bb6d3f81e21c4181
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Cc: James Hilliard <james.hilliard1@gmail.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
 Cc: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-asttokens/python-asttokens.hash | 4 ++--
- package/python-asttokens/python-asttokens.mk   | 4 ++--
+ package/python-docker/python-docker.hash | 4 ++--
+ package/python-docker/python-docker.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-asttokens/python-asttokens.hash b/package/python-asttokens/python-asttokens.hash
-index ef108bd0d6..2498c49e12 100644
---- a/package/python-asttokens/python-asttokens.hash
-+++ b/package/python-asttokens/python-asttokens.hash
+diff --git a/package/python-docker/python-docker.hash b/package/python-docker/python-docker.hash
+index c8f8e7501a..7585ff255a 100644
+--- a/package/python-docker/python-docker.hash
++++ b/package/python-docker/python-docker.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/asttokens/json
--md5  50670141dde921f807d8257be4a5df9c  asttokens-3.0.1.tar.gz
--sha256  71a4ee5de0bde6a31d64f6b13f2293ac190344478f081c3d1bccfcf5eacb0cb7  asttokens-3.0.1.tar.gz
-+md5  63ce30cc87fd0d7e5dc1f1f48fd31164  asttokens-3.0.2.tar.gz
-+sha256  3ecdbd8f2cc195f53ccada3a613538bb5f9ef6f6869129f13e03c30a677b8fe2  asttokens-3.0.2.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/docker/json
+-md5  04e92a7b6dc8b88dde3c7cca6850b277  docker-7.1.0.tar.gz
+-sha256  ad8c70e6e3f8926cb8a92619b832b4ea5299e2831c14284663184e200546fa6c  docker-7.1.0.tar.gz
++md5  a6f97d4f81fc342dfaf9b4d3d5b154cc  docker-7.2.0.tar.gz
++sha256  cebb93773d334f778e023a7ee352a8d6e13ab1bd3b863a4d4a59dec897df43ac  docker-7.2.0.tar.gz
  # Locally computed sha256 checksums
- sha256  62fb8a3a9621dc2388174caaabe9c2317b694bb9a1d46c98bcf5655b68f51be3  LICENSE
-diff --git a/package/python-asttokens/python-asttokens.mk b/package/python-asttokens/python-asttokens.mk
-index 4040a7bb73..6fbc924180 100644
---- a/package/python-asttokens/python-asttokens.mk
-+++ b/package/python-asttokens/python-asttokens.mk
+ sha256  f2f0b07fa5e492c11d27aa0d2f3f1a0e64b9d17f32d8aa489ae2af9609af33b2  LICENSE
+diff --git a/package/python-docker/python-docker.mk b/package/python-docker/python-docker.mk
+index 582d9ee1d0..3d26f2ebfc 100644
+--- a/package/python-docker/python-docker.mk
++++ b/package/python-docker/python-docker.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_ASTTOKENS_VERSION = 3.0.1
-+PYTHON_ASTTOKENS_VERSION = 3.0.2
- PYTHON_ASTTOKENS_SOURCE = asttokens-$(PYTHON_ASTTOKENS_VERSION).tar.gz
--PYTHON_ASTTOKENS_SITE = https://files.pythonhosted.org/packages/be/a5/8e3f9b6771b0b408517c82d97aed8f2036509bc247d46114925e32fe33f0
-+PYTHON_ASTTOKENS_SITE = https://files.pythonhosted.org/packages/25/1e/faf0f247f6f881b98fc4d6d07e14085cb89d13665084e6d6ac1dc2c03d0b
- PYTHON_ASTTOKENS_SETUP_TYPE = setuptools
- PYTHON_ASTTOKENS_LICENSE = Apache-2.0
- PYTHON_ASTTOKENS_LICENSE_FILES = LICENSE
+-PYTHON_DOCKER_VERSION = 7.1.0
++PYTHON_DOCKER_VERSION = 7.2.0
+ PYTHON_DOCKER_SOURCE = docker-$(PYTHON_DOCKER_VERSION).tar.gz
+-PYTHON_DOCKER_SITE = https://files.pythonhosted.org/packages/91/9b/4a2ea29aeba62471211598dac5d96825bb49348fa07e906ea930394a83ce
++PYTHON_DOCKER_SITE = https://files.pythonhosted.org/packages/88/7f/731ff914b0255d3d065f45fd4e626d4b8c95dbcbaada049f337a6ac16410
+ PYTHON_DOCKER_SETUP_TYPE = hatch
+ PYTHON_DOCKER_LICENSE = Apache-2.0
+ PYTHON_DOCKER_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
