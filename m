@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E6C3CA5FDD
-	for <buildroot@archiver.kernel.org>; Sat,  3 Oct 2026 13:57:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73CC1CA5FED
+	for <buildroot@archiver.kernel.org>; Sat,  3 Oct 2026 13:57:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E3C91606A2;
-	Sat,  3 Oct 2026 13:57:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 315DA81553;
+	Sat,  3 Oct 2026 13:57:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2jwGxbOS8lNF; Sat,  3 Oct 2026 13:57:32 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org F267260F4C
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791035852;
-	b=PxqoyNhdnJZXJIRRCYDgI3VVmFfQd+yIGQUfeCyrnaqlrZX7kVULx7Cd+G3IpyshCWTs
-	 xERTbMPS1HQQskCMaITu10jl5ZKFE4iCmbcwK3Qr7Fg7Kl+y3cRN1/oc/qr8W9NE7aJGy
-	 BnpO20rPCh+p24cAImgjXYtj+YdE7oivUeTY8x8Msqwu6DkbhwNUCTriYJ3O/3buAPZRB
-	 DUmOHagN+1pNNHP50hwQzTLI6gIVFJ04EGaKcmKmTISCRKZfdXGDzKVNJpfJRCxd1QVv9
-	 0rlXQo9KMEiRIQlfH5b+/I1zFXCWcJs8VauXeBHfroicWjFZoD3vIEjYrubb/L/A5Sw==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iClyZuL5hq5e; Sat,  3 Oct 2026 13:57:33 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 4F51F81568
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791035853;
+	b=LeEMtj+juNhaERx4XVEGeXQaM5di8SYHYxkv7i7XTasMbCjKXim/BMZ3Digq+AfnDE/M
+	 TxjA/9kSGREnCttCa8mg6nW+5pAMgyciISmuUiJ2Cs/OosNP4/kdjSxPyJeQIsTOC4aNw
+	 QM+bXg9McCT0kKvh+8tCgi3i2allZjHXW/uhVaEnYSKSjpFABpHHvA2UeR2/YaL6oELqv
+	 fDYDRciHHIW0UJT9FlyOigarT2GeRSVpKrMhkGJPUv+iLqMdkq7z3gjVvP1he0Cp50zD6
+	 cu7ml2n2QaZ8RojlMaOPCLP8+YaEqR5bb5zjqwQ6p5pN3SuSvARfT3CveF178o2WqZQ==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791035852;
+	c=relaxed/relaxed; t=1791035853;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,75 +30,75 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=qADVMjsgRRCreHSy1o445ESdgVRar9q10twWprqLyDI=;
-	b=J10t7QagWoFSnr4z8ONF86jkvtj4je7NU/WSFtjr/1094OZrFJmWNieXLe6kFVq/zDGB
-	 A8KVHny+IFbiJ2ztVpSvTojAtZhnYzZ4QjLcSns2+DrU7F3NAMpG1uvP5XRW5dGrt7tND
-	 +uEOvWJruRsNBvYgO8zxto4fzS0Jjw3YTdW5IQjjATC5an28v3Dh93z1eR8hnzq4tr7Aa
-	 SH7jJI6uCh2G10eeI6lh9eoOZXwGZ0vDb6Lb9BAyaEqMMvNAt54XgZWTgwvigJ893YH8W
-	 3WBEe3G137gm1W2nQfqHzMAbrTlgEfZOowl81cRYOxeGQqrShzXDCLKQf8IMwb7RbQg==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	bh=mmBxJyR+dGa7p6dfYS5PiUEBScu6eK7TTkzfsyG11+Y=;
+	b=WUnZWdBp0WpbTtnQ0RRDCiWDKkdSiYPyLTjMPN0RoAtwCru+78b/0KVmAp+y5bWFcpi4
+	 zlfKSkwhkVJEFEwRvnIYaX+Qg9V/IqG7GhUlNMDgAn8YCVdjhZBHAq4KM1Uztt0I+cF8x
+	 0yoj27LK+c8/V12qy+LNvf+IFbaRqE71Kkv5Ebp6QzwQM3WlB0pYNb5kv7OyztK9HR33E
+	 RNT9Vqr9ZqSr+zjEgwoxCc2o0zy3858xVM7+5rRLYa9ndU4vR8TY29nS35BZLIsPmqSiM
+	 E+3M+zzJkjXCdCpUwuvbXjw/vmddD6hWs3JBNCkik4rMAx8sXgbMDkFGJzY694REzTg==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791035852;
-	bh=qADVMjsgRRCreHSy1o445ESdgVRar9q10twWprqLyDI=;
+	s=default; t=1791035853;
+	bh=mmBxJyR+dGa7p6dfYS5PiUEBScu6eK7TTkzfsyG11+Y=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=NyjX+miFM7BYt/x39u1xztgsOG4qj5lOIH9mcNKzXOmIInXB+CXFysgIiAMTwJkIs
-	 xkmoJ/Ma3UhMxAgg8hoiyxNj8xvs6rdQx3lVP6DGAxv+ScBM+J5QiPqr8OwB/0gFMh
-	 bxmkAHeft/AKbg1yk9Y8ee2eK8SSLgErFQTb+Y/xV7E/u1vu/jNJ4jdgYQ09+wmzFZ
-	 y/Z2K1WVje61ZYhngh8Fjccgj30LVzfKjorP2+/QitF1wrLONQHQK/mWUu9Ef8kD3P
-	 eVsrRy8xfDWbeY9MLQEKCj2jZojHGCTWnbWM+LuQiH0vBdYGxvh6Czm1KOuDgccq3R
-	 17VuCmiGJAflg==
+	b=ZsoHdA109iV018gdYN8nN9v1+g0FgNqmD5G7dHDWb/+yg/Xg5QZfJ0bMGdX6APrw5
+	 a7h8J4XUdRtnfRa7fGOGQMW734x/uUjfGtQ99H5D+qiQQxcdu3BwVHmspX6S0bu01m
+	 wTIEVspiBrEjIKByvjQW0NMf/yK3FxzAcoXMRggFiVHQSAmUG9dJYQxyhE+4UjuAbf
+	 /wj8PpPG6ppVyqXeGv9ob2GBp9uveqU7Wdfdnm1qwS+r7exeWjn1POVkFaTdbqjtk1
+	 5V6RjRnJtalQylG/IYVAU+VijD6anx5mPWyvFkZ6ZHlb475k2s/5VznbTDAJDlFQI+
+	 s1hE4sZTwIRew==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F267260F4C;
-	Sat,  3 Oct 2026 13:57:31 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 88CC1179
- for <buildroot@buildroot.org>; Sat,  3 Oct 2026 13:56:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4F51F81568;
+	Sat,  3 Oct 2026 13:57:33 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0574D476
+ for <buildroot@buildroot.org>; Sat,  3 Oct 2026 13:56:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7A173414E5
+ by smtp4.osuosl.org (Postfix) with ESMTP id D7DD3414FD
  for <buildroot@buildroot.org>; Sat,  3 Oct 2026 13:56:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jVgufwar7OcF for <buildroot@buildroot.org>;
+ id iflo6Ms23jmF for <buildroot@buildroot.org>;
  Sat,  3 Oct 2026 13:56:56 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 07014414E7
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 5577D414F1
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791035816;
- b=WpzMjw/LYHE2DZiO95gCDa6X5p4GVhc9Wo8jsgVqSG+8eaBT1FA9jAjwIpqqhx+rTkOZ
- 31mWwq6V38YrUh1osnk/5Vy0/4EqqmRIJOx8biwQqDnO61ANtoLc1TM8A17ZwBZwNI1Y9
- OOipggpsFW3gheRx9mM2KNwhFCWtFZz241P9/wr+KnE5qSapnu7/+UTqF5hfNbKEDsATE
- kBmiGoSdr6xm/TIqlSMP/1VJzOSWHFYIE7vVUw4TRBVVB6TNZ5hph1r2tCKc+2nKHNNos
- 9F7CkgrVsDeUpNeCz3nzRv5PaDNimoSYAfNgcj93iYRY9HTR68/7Zpwdd538rwAj+6A==
+ b=nwP0Mz686gv/0qV1NaiqPoWu/7/XVGqM0pTYjxCB0Yzh20HdTBAAvtSt8V/60XIfFmPk
+ 89R1bIne6hHU+ByK/IB7cjhJ/++y5hjBV0+fxuJChuVvtWCOj7QdI7iadcLKMzq3Lm/Pt
+ mnr1cgYvVc+M+xn550uYwlACcr1C4gHMoIwf88aCNBTfgy2LHsRUxjg39prs0Yc+WXIGb
+ 86xD1/Yu3H9OCMIYXu25sVgpS+QM0dsWDgKvGGPD1ideVsZktzwah81r6iYdeWv9N5+jD
+ 9u4a7a58qyGWY/EBQ7uqHsrjeK4MmhZExyU7oNOnEUjz5SkQkEd/gP4Nj8KSMbjhOWg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1791035816;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=+UoeNL48/RmwWohizTE8yzHqDVjhHMyZSMSp7a5gwa4=;
- b=Wu1z8BR8KKOpwQwjG4RwGYYEColyp7WRFmePu76ERklghOQn4mMQUP3tpwYYmIV5D2p1
- O3nytvY4Cp+cWD4vaxQ6PhNRjxQ+vgJyQesETDsu4L0STU2VukniqKwjLUIDBng+n1nzJ
- jOxwEawap/foNGCprgFDZ2litm+4MVY+RnpHSiZSwy5mCjiLuLjkyKzojfkE9XxKgYIKs
- mlRjS9us0/qa0lGkbVG4xbzbct9fenuLLPsEgxHazMpgEzVfhInpSiAmEpbq8b0vGIEGw
- aR0Lc+6MVt+dAgS+Yy5vPcAZ6kZs3IrBDSyzWNX+b96tpBmwCtImsfRacWVz/jdqgsw==
+ bh=emyneMoe5wqwtX4j8N4ItiwNHAWh9URJnP5p54VdmiQ=;
+ b=jLFv/ZKmIcrpJbLrdJ2ig/cYKpxjDyOszKVqnocV2rx6sb+7P/MLzoFydzk8t6tWBM80
+ rr0RiHk5TWlxraJ1UALtadBnF1HExC3IKqgcOUatygGfTYbKMhCP5UxhyZrda4l/nU9BS
+ mTx3bXkysM9bIzX+R8ObOg16IdizB4dULeJ+rYdwwaUG3x6W43t08WrUc8N86XOQiKrdw
+ yy5itb2VNYc+ocuE9RXJwKdE0hIw9pKkuDUhmID+D+I9fYDrXNlKe37/d7pUGVnkAa6Dj
+ 39jrGnrtN/BeQqAE/NkIdV7ozm+ny2XOPKjh+2h2lO6s3RVYiTBGh2pmIJuNF0+oCSA==
 ARC-Authentication-Results: i=1; smtp4.osuosl.org;
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 07014414E7
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5577D414F1
  for <buildroot@buildroot.org>; Sat,  3 Oct 2026 13:56:56 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 52A3788FDB; Sat,  3 Oct 2026 13:55:41 +0000 (UTC)
+ id A046C814CE; Sat,  3 Oct 2026 13:55:41 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 3 Oct 2026 15:43:42 +0200
+Date: Sat, 3 Oct 2026 15:43:50 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b942389570f38a81589504f753f5cd9b2ccc2acb
-X-Git-Newrev: 42803538e946b14e402580300ea75f17af3f111e
+X-Git-Oldrev: 3eb9b971f077a376860d8836ab25b7fa51cf2af2
+X-Git-Newrev: a199cf5594d67cd91fcfbb5408530bf7afaa2ee7
 X-Patchwork-Hint: ignore
-Message-Id: <20261003135541.52A3788FDB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pyproject-hooks: bump to
- version 1.3.3
+Message-Id: <20261003135541.A046C814CE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-trove-classifiers: bump to
+ version 2026.9.21.13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -118,44 +118,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/42803538e946b14e402580300ea75f17af3f111e
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/a199cf5594d67cd91fcfbb5408530bf7afaa2ee7
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-pyproject-hooks/python-pyproject-hooks.hash | 4 ++--
- package/python-pyproject-hooks/python-pyproject-hooks.mk   | 4 ++--
+ package/python-trove-classifiers/python-trove-classifiers.hash | 4 ++--
+ package/python-trove-classifiers/python-trove-classifiers.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pyproject-hooks/python-pyproject-hooks.hash b/package/python-pyproject-hooks/python-pyproject-hooks.hash
-index 54e85e7173..e1482bf433 100644
---- a/package/python-pyproject-hooks/python-pyproject-hooks.hash
-+++ b/package/python-pyproject-hooks/python-pyproject-hooks.hash
+diff --git a/package/python-trove-classifiers/python-trove-classifiers.hash b/package/python-trove-classifiers/python-trove-classifiers.hash
+index c29f05b40d..d9ba083cb5 100644
+--- a/package/python-trove-classifiers/python-trove-classifiers.hash
++++ b/package/python-trove-classifiers/python-trove-classifiers.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pyproject-hooks/json
--md5  ed3dd1b984339e83e35f676d7169c192  pyproject_hooks-1.2.0.tar.gz
--sha256  1e859bd5c40fae9448642dd871adf459e5e2084186e8d2c2a79a824c970da1f8  pyproject_hooks-1.2.0.tar.gz
-+md5  4946aadbb25ac57019c431257e910583  pyproject_hooks-1.3.3.tar.gz
-+sha256  defda19b854fa0d3bd4f76ea4ddcba8abd7dcfcdd585a6690ade050744fc5f43  pyproject_hooks-1.3.3.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/trove-classifiers/json
+-md5  693310e0edde305e2086b7b4cff5fedc  trove_classifiers-2026.4.28.13.tar.gz
+-sha256  c85bb8a53c3de7330d1699b844ed9fb809a602a09ac15dc79ad6d1a509be0676  trove_classifiers-2026.4.28.13.tar.gz
++md5  4149c5d52f727c8d75fbc843f965953d  trove_classifiers-2026.9.21.13.tar.gz
++sha256  0a9ebc8d4e2f3e8a22848c5258033035bec17a3012ac3fea16dbaa764489eb71  trove_classifiers-2026.9.21.13.tar.gz
  # Locally computed sha256 checksums
- sha256  1b22b049b5267d6dfc23a67bf4a84d8ec04b9fdfb1a51d360e42b4342c8b4154  LICENSE
-diff --git a/package/python-pyproject-hooks/python-pyproject-hooks.mk b/package/python-pyproject-hooks/python-pyproject-hooks.mk
-index 7edbd64294..31013f9715 100644
---- a/package/python-pyproject-hooks/python-pyproject-hooks.mk
-+++ b/package/python-pyproject-hooks/python-pyproject-hooks.mk
+ sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
+diff --git a/package/python-trove-classifiers/python-trove-classifiers.mk b/package/python-trove-classifiers/python-trove-classifiers.mk
+index 645f57af33..fc7d2a2afd 100644
+--- a/package/python-trove-classifiers/python-trove-classifiers.mk
++++ b/package/python-trove-classifiers/python-trove-classifiers.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYPROJECT_HOOKS_VERSION = 1.2.0
-+PYTHON_PYPROJECT_HOOKS_VERSION = 1.3.3
- PYTHON_PYPROJECT_HOOKS_SOURCE = pyproject_hooks-$(PYTHON_PYPROJECT_HOOKS_VERSION).tar.gz
--PYTHON_PYPROJECT_HOOKS_SITE = https://files.pythonhosted.org/packages/e7/82/28175b2414effca1cdac8dc99f76d660e7a4fb0ceefa4b4ab8f5f6742925
-+PYTHON_PYPROJECT_HOOKS_SITE = https://files.pythonhosted.org/packages/6d/5d/f2ddeef4a855a102aaae5e97826a0260007522ab504421b75addfdb1517c
- PYTHON_PYPROJECT_HOOKS_SETUP_TYPE = flit-bootstrap
- PYTHON_PYPROJECT_HOOKS_LICENSE = MIT
- PYTHON_PYPROJECT_HOOKS_LICENSE_FILES = LICENSE
+-PYTHON_TROVE_CLASSIFIERS_VERSION = 2026.4.28.13
++PYTHON_TROVE_CLASSIFIERS_VERSION = 2026.9.21.13
+ PYTHON_TROVE_CLASSIFIERS_SOURCE = trove_classifiers-$(PYTHON_TROVE_CLASSIFIERS_VERSION).tar.gz
+-PYTHON_TROVE_CLASSIFIERS_SITE = https://files.pythonhosted.org/packages/04/af/88fdebf242bc7bc4957c96c5358a2b2b0f07e5001401906783a521ea9f54
++PYTHON_TROVE_CLASSIFIERS_SITE = https://files.pythonhosted.org/packages/bf/93/af436dfaa845cab5d96f0adbc1e4f3730532d37fa249e4eb796fb1d7fc82
+ PYTHON_TROVE_CLASSIFIERS_SETUP_TYPE = setuptools
+ PYTHON_TROVE_CLASSIFIERS_LICENSE = Apache-2.0
+ PYTHON_TROVE_CLASSIFIERS_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
