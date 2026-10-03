@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51F0ACA5FDD
-	for <buildroot@archiver.kernel.org>; Sat,  3 Oct 2026 15:56:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E862ACA5FEC
+	for <buildroot@archiver.kernel.org>; Sat,  3 Oct 2026 15:56:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 295AF817FD;
-	Sat,  3 Oct 2026 15:56:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9352C60EBB;
+	Sat,  3 Oct 2026 15:56:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id y4h369gRC7NE; Sat,  3 Oct 2026 15:56:52 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 4362B817AB
-Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791043012;
-	b=NujXTK/lj7Pxs+usRtdoPfxDbng1fKbCkVzYyTToi2hMtTB7UJOYvPesU5+DpraSc34N
-	 I2trtatKQ0rImxjvtv1LH3C7D987P4viqpZaU42NXrqhHdTmwmY1LoGZS/Zvs0IcnA139
-	 5fK7ZMqk6WbC3HysTk0Rd1X3IwCgmKE4bZXNAKdTsmd3bOQ4Y4tOmLVxexSkGG+XrnRMt
-	 0BpdqUnNcXTHN9DAMYfYhAnV+EqxjKDNcL98PlrVrzT0B9VmNJvUYvnU30iXVzuJQJw1a
-	 W3yDPQobnwSjhlMbc9Rx1oSGa5N7IxHRwxcD/sDcEjycWnFa1I3+wQ48wJrIEGfbuzA==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id yT6R12lMR_Hy; Sat,  3 Oct 2026 15:56:53 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 929E26102E
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791043013;
+	b=kzeMl5BswGTSN7e9JCuZzkkDTF/A6PAWIuADOjqgbesqR2YX8iwMVTfbBTOcTuv19Vfp
+	 msjKXkXVyEkYAO5BVE0LfFYfukmkT/bZNgnh2oGaSw5rpvoRkv4eNcuhoA2L86I8o8phY
+	 elSLs9qZHpwoFN6KOR0P6yagUI9giJ0siaDMohEiEjQtzt4SoO0h3IgdNydkxSRBxQeGj
+	 wzoGy9suQlVOVcJyydqHuxOdfWLD/DcqDqHBlxO0FY5mSd5jMo+2c+YAnBMr3jkIidbqL
+	 /ST2O1Vi9Ed3EJTNkf4QFGYlqucQne48iys8wqaOOOaZVYeCoAaBVFeymP/mc24vEuA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791043012;
+	c=relaxed/relaxed; t=1791043013;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,74 +30,75 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=tfaHac8YtaDn7MeB8Guu81QJSAackIIiVSx48tfOYh4=;
-	b=Nmj3yM6lROcTkMAIJ/fhC1OUoCCS+B4ZybPhq9Iym2bYCtFwgTqWtzGm+xRQ/Db1OP9w
-	 UaBqGZbiP5udrPCyCUJYbmDYWc/l6lBGCk0AMz4II7QcXoNML0k300+8OoEP+bMwqnRAJ
-	 mj+JH4SYtopG073GIbb09cv4wXHBkMZQwGgFUmx3CQJiQiqxZpRNmsHFmXosXorU3jNqb
-	 Vgp5qx3sS5UkTfMxL8JXJl90GJ6sXjf+D09Vrz7R6QLQNpQQINuiggmqej0ks5EYPfTt3
-	 v4k0szFkGhoJ25Rv+sMT75QNxfqrMYKOH+mGWq6DjrJWB+mbfBFHRyHEuLw228QI9dQ==
-ARC-Authentication-Results: i=2; smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	bh=tKer9il6qKMFUaUrPaWYwE1+m+w/hDkn4TfHSLVxMc0=;
+	b=V+WSCehGJRPaF8INceI6L5eH0A4Tvafqy0Rz0Qu9e4yiXoLFxRFjvVNC+lst6ghirvSz
+	 NlH05fh4NnrM1Z48TGPYyuQ99CnLg6euFX6Obl5bDKIXtc30ljbQ7QctSAsyyjXcpeiWG
+	 w3YI4tpMJH0/W2xQ6CvTBrA4zRoof3zs3f9l3+dox4yaugkQh3zxTSyOBr8JxRPERnQmV
+	 hQMsdmoBlqed+Vi/2C8ryEPKGXEZIA74Ri1cQ0lt/8rtJJrtGB1A4GgvMzzCa9jhh8fyN
+	 VZgJonzUtsXzUoELUGH51QbIixNBm1rwotIlkk37+62VZkgbIlEmJ6pxuLR3b0aUl3g==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791043012;
-	bh=tfaHac8YtaDn7MeB8Guu81QJSAackIIiVSx48tfOYh4=;
+	s=default; t=1791043013;
+	bh=tKer9il6qKMFUaUrPaWYwE1+m+w/hDkn4TfHSLVxMc0=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=VZAkZuz6sIMUbFVjYoIvcNTf85dL0lAyKOFmDOvwrBYL33W+NQ2m+NCmSDEodt1Gs
-	 hgbq/kUqHt81aQS/AKggBNDnpO2/LDKd6PxTfyTGJKUc4Hpj3gHA3bHN8jpRUN+vg6
-	 Xjr1aWq7LjwZ6i8aNOlUXTbxU8CrUxllqLVmVtGJ6/eNTbj4/+OWGWqVwP1CCayuDT
-	 BtbpKXfJ2X8lxhLaB9g96iBrOV6LUKxKMofKJ2KIT4DH7VfiivYpgeh+Yt9CPB3jpx
-	 De4581kCXx4oMtJvFJMDav1p0d9Dx3KSQr0s3xDDjO/jqIYpupYUhFF0wGvv9fI3Jt
-	 q96ne6pYfa+MA==
+	b=MNXrxNMPuORKJhzuUYoqwvK3CpNeQPoD/zNvqHkXBgKE59FcJWzvsjowH5xN50fEs
+	 FX8SoveiZXIa6ygJ6bL3MuSdpfibCthRNw+Pae6Wp57tbouVHExRkHSpq9Kv4jUhph
+	 LwwAphKEk1woCQvJwH0rJR/v2qq1LC/f/fEFfTFDGutaGiJzszWSTYJSjGKp9/i2lb
+	 spOmxUnfQf8owVxviXZxVuvU+19O0UctXybkUgpOyQFXy2oqE32szP+pxSYX7fFr5r
+	 lSK32lyD/q1WJNKb3p10/zEs1XqUkaajaRNgRFMSFLI3yWAeOh4UKd0pVQX7wwsRY3
+	 uqV9fIBk2hi3A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4362B817AB;
-	Sat,  3 Oct 2026 15:56:52 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id D8542335
- for <buildroot@buildroot.org>; Sat,  3 Oct 2026 15:54:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 929E26102E;
+	Sat,  3 Oct 2026 15:56:53 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 024FD335
+ for <buildroot@buildroot.org>; Sat,  3 Oct 2026 15:54:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BC0DF60673
+ by smtp3.osuosl.org (Postfix) with ESMTP id DD4356067E
  for <buildroot@buildroot.org>; Sat,  3 Oct 2026 15:54:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CMzcgXdQIQkx for <buildroot@buildroot.org>;
+ id hwN19wbfoUgZ for <buildroot@buildroot.org>;
  Sat,  3 Oct 2026 15:54:10 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 1EABC6069F
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 7B927606DB
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791042848;
- b=UvZLEqsAIpbhjwVFWwjxXbcuegsPYu4ftrwEEnOJpIkeUUCaeVHWLuy3b/aGbc3DPnap
- d2Nn5spE26XkmlmImAkQ3ddUHhvCzTSoCCXYiTcjAS0kJ3exn+JiyoPvruau6GcoWP0or
- Zhaq5zjpQEND8sBSfdXGYmp8HEodIrEHgIezPUAZYtAwHgpaC1doUdD8dy+c2YAe6p87C
- JYpW3g9+oOk3UsApVw9XXKmcqu+QshZGQEXip3qDdoAyzuURhTHnVPj+8HsKR0eMEFZWH
- LdlWCl/cYlx7TQ80I9Imkjhh9JJjdlT9FFfFE3QrgM4eiy+Ki6dlNNFrEOMb+xqrQKg==
+ b=T0NBR30RAzE9BNFlqTVOZyBdL06hgWwC7Ffya6PrYx2VMVeInXZvcdU7DLcES5JyM0ag
+ FHk6bWhpI5WIRqOf4hfC1bO1hgg4Z0zd8lBYV8XifAs0ze+AZMnAwfEKAUiCCt1cOT6gr
+ /IIKOfMjiNz7rmXaqF/aBSvGtSTA+vQPg+9gHP0x09opnVFt/n0ZThE8QEt1TRqt13uHS
+ mWTBDBiLLZ3+68yh7qblS1jR+kM8dujjAE3Fl5yWa08h+RZtWeRJgprXYSbbG8QXQ4/LV
+ v83wJV3pgyraMG8Pmllr9q0M1QACK7wmMTMdmoEMav1fpEYgdIE4SSvf5Wg1zM2H6WA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1791042848;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=3pwVBudByuIo2fLK7dMvvTRESS6z5dFN/EesdnY0W2Y=;
- b=QrgJO7stkQfTHW0IDeYJIDEufeBJPrdzLFZH4Z1LwgOr1Waw9w5Hx3sFrWxtF9gZzCuj
- cbcOGGrsdUYXbGdQd41b67D2NSGM4jOZaTaXqtxohurzA78gJSzR0MMG0wxNtcEAcQ5tK
- AdtGh3ms2xsYVUbEvDNv7146dTX8PB+o+BfX/u/qgn4a1vY7570IbjzaOGATShImDp/uN
- 4t8bdkC72vNVregpou5dccroI+Cbzh8nGLLf+i4C8wczYgfdxr1L6v8HEQzDUoR87RE+C
- Mpv/etq3CI8q11QTWHIt28xWbbu2qjV+AYmVGi/WdEmhttCV/M5mYgmGi9RkGKGENwA==
+ bh=NfenqBo48ReDJEOAtwSfwUwvLfny23MBs3WCJ8pzdjQ=;
+ b=T1ZtI+R3iIl7LHT/waaVTGvV8+97+7xMWKzUBVdVAwzJBF5qTZZ/QCRU/4p/iiRdGcmy
+ GQPuuLtwe2Fu/wsDIcdRYiy3omR54CnnwW5ytftucZzgLOKTkjmXGTjbAACOLsrrE0GjV
+ +tLfV90+q/RMr39c+gb22JzOHomQOY2VyaEjrETjMb/h+eidTMampDJUrTwWVYzmgV/c4
+ iABVBDr9bAO8n+Gt1UIGYArp3TJuqmuBuemE3Mzn5IXh6yAn6kXh8ilH+4ui+C9J/Fqxu
+ rc4QoMXd8IoGO9dqR39y8eEwAPHYNuZhdOMr+Jiv/V+e6NnJ7hMFtwn7sX6gFN8dsQA==
 ARC-Authentication-Results: i=1; smtp3.osuosl.org;
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1EABC6069F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7B927606DB
  for <buildroot@buildroot.org>; Sat,  3 Oct 2026 15:54:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5EDFE886C6; Sat,  3 Oct 2026 15:52:53 +0000 (UTC)
+ id BBADE886DD; Sat,  3 Oct 2026 15:52:53 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 3 Oct 2026 17:44:26 +0200
+Date: Sat, 3 Oct 2026 17:44:31 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d2b49a43a8194a3b352c6de5820519c8edde06d2
-X-Git-Newrev: d72da002ac4277c9761cbbcd6cdcfc2dbf9d44bc
+X-Git-Oldrev: d6064d8bc0157c8a8b9ff2fc8eb4951708baf5e2
+X-Git-Newrev: 7e70754b9938fbcec0e6effa4d1cd8c229e43474
 X-Patchwork-Hint: ignore
-Message-Id: <20261003155253.5EDFE886C6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-lmdb: bump version to 2.3.0
+Message-Id: <20261003155253.BBADE886DD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-mistune: bump version to
+ 3.3.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -117,7 +118,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d72da002ac4277c9761cbbcd6cdcfc2dbf9d44bc
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/7e70754b9938fbcec0e6effa4d1cd8c229e43474
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
@@ -125,38 +126,38 @@ Cc: James Hilliard <james.hilliard1@gmail.com>
 Cc: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-lmdb/python-lmdb.hash | 4 ++--
- package/python-lmdb/python-lmdb.mk   | 4 ++--
+ package/python-mistune/python-mistune.hash | 4 ++--
+ package/python-mistune/python-mistune.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-lmdb/python-lmdb.hash b/package/python-lmdb/python-lmdb.hash
-index ad111605bc..62ffc2e446 100644
---- a/package/python-lmdb/python-lmdb.hash
-+++ b/package/python-lmdb/python-lmdb.hash
+diff --git a/package/python-mistune/python-mistune.hash b/package/python-mistune/python-mistune.hash
+index b5478a6d57..1dc3277c31 100644
+--- a/package/python-mistune/python-mistune.hash
++++ b/package/python-mistune/python-mistune.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/lmdb/json
--md5  f6f491b825302966f63b3fdee2ef80fd  lmdb-2.2.0.tar.gz
--sha256  53020e20305c043ea6e68089bc242d744fba6073cdb268332299ba6dda2886d4  lmdb-2.2.0.tar.gz
-+md5  0fb37c0c840141773ac8b4b0e9679fd9  lmdb-2.3.0.tar.gz
-+sha256  260f443640ee2da3cfd059a84258659319ff39ca912c16bf9748c324076b9d09  lmdb-2.3.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/mistune/json
+-md5  26272a8d5ee997f80b32a93e51a24b54  mistune-3.2.0.tar.gz
+-sha256  708487c8a8cdd99c9d90eb3ed4c3ed961246ff78ac82f03418f5183ab70e398a  mistune-3.2.0.tar.gz
++md5  d04c3e2670b837ddc418f3a70d4357d3  mistune-3.3.4.tar.gz
++sha256  58b5c96d6fcb61190dfe5fae498d2b2065f99cf61e9649418fd54cf1ada86dfe  mistune-3.3.4.tar.gz
  # Locally computed sha256 checksums
- sha256  310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
-diff --git a/package/python-lmdb/python-lmdb.mk b/package/python-lmdb/python-lmdb.mk
-index ba3d257fdd..b5a0db5dd6 100644
---- a/package/python-lmdb/python-lmdb.mk
-+++ b/package/python-lmdb/python-lmdb.mk
+ sha256  539013fd8e19f744f8bf0e27a532bbff54cd689ecef7a800f56ae5dc824be870  LICENSE
+diff --git a/package/python-mistune/python-mistune.mk b/package/python-mistune/python-mistune.mk
+index b67700b1a7..30868d8e47 100644
+--- a/package/python-mistune/python-mistune.mk
++++ b/package/python-mistune/python-mistune.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_LMDB_VERSION = 2.2.0
-+PYTHON_LMDB_VERSION = 2.3.0
- PYTHON_LMDB_SOURCE = lmdb-$(PYTHON_LMDB_VERSION).tar.gz
--PYTHON_LMDB_SITE = https://files.pythonhosted.org/packages/21/44/d94934efaf8f887b6959f131fde740fcaa831edfd13eb5425574637cddd5
-+PYTHON_LMDB_SITE = https://files.pythonhosted.org/packages/aa/0b/17f271b2d2d314da9c9bc7620676ede1feca5f565f3a46045319351f7bc2
- PYTHON_LMDB_LICENSE = OLDAP-2.8
- PYTHON_LMDB_LICENSE_FILES = LICENSE
- PYTHON_LMDB_DEPENDENCIES = host-python-cffi host-python-patch-ng
+-PYTHON_MISTUNE_VERSION = 3.2.0
++PYTHON_MISTUNE_VERSION = 3.3.4
+ PYTHON_MISTUNE_SOURCE = mistune-$(PYTHON_MISTUNE_VERSION).tar.gz
+-PYTHON_MISTUNE_SITE = https://files.pythonhosted.org/packages/9d/55/d01f0c4b45ade6536c51170b9043db8b2ec6ddf4a35c7ea3f5f559ac935b
++PYTHON_MISTUNE_SITE = https://files.pythonhosted.org/packages/7b/92/328a294a6de83bacb95bed01f04e0eaff4e3616ee359fc821a5dfc539b02
+ PYTHON_MISTUNE_LICENSE = BSD-3-Clause
+ PYTHON_MISTUNE_LICENSE_FILES = LICENSE
+ PYTHON_MISTUNE_SETUP_TYPE = setuptools
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
