@@ -1,120 +1,104 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E282CA5FDD
-	for <buildroot@archiver.kernel.org>; Sat,  3 Oct 2026 13:18:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4058CA5FEC
+	for <buildroot@archiver.kernel.org>; Sat,  3 Oct 2026 13:19:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AE25F811FD;
-	Sat,  3 Oct 2026 13:18:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6927C41457;
+	Sat,  3 Oct 2026 13:19:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ABviF8Ln1fCn; Sat,  3 Oct 2026 13:18:21 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org CE11981204
-Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791033500;
-	b=ryGY1QG5Xl10Y/Etlpzwio71sxFQVEBbXR8c3xRZQZasuAmctzbwnitxXxN8MvuORZ02
-	 YVW4pUG8KMZb++J82vRHoE8QvZjJIwriQnQm2rM6lTaO0bsx4ekhBY5W5GlbWDVD80gKd
-	 NL7yQDycmLB0pbgRsxd1vNa2HPFDQC5Up9CqDtdioPrach7Phgr3WoWJzHzaZZWF/cuOL
-	 fmFDQveG4cSvrbwdZf7wkiBe5J0KiqUhvbUl5WVuvgF68rZ7q5w34ztBJrMRh15bkalYz
-	 N6NL5wkjQFfCXrnhbuQ1qHU8py6yN19F1aGPMzocnHXsJL3ChRMdSOxfX7FiFTPbs2w==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fc-Bh798vjXr; Sat,  3 Oct 2026 13:19:17 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 70F8D41402
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791033557;
+	b=MeyTUNhx32L2yOdCuoLo0m6kyLMcHocsEwDR6FMclEtMo+iTbWPScJ/dWc8OpGCjKJKl
+	 9Z9FCApVJvipS37jXtYh7F9txELFc9mER2QYaLPIpp/flyuTpHKqz2IryTtH1zjJAlW8c
+	 Fy1G1FzwgP5r9VAfqRk35rGHJ7XhzpYWtOJqyWaiiWijUEbgBFRyZu8flKWojBvhLGn/Q
+	 EN//pejOPRwZRmIqbQzGVmHXlNKe1E8URkT5lCDcuGxJxJkJqrxyaJ430q1WlpPge33y3
+	 nCuQQ2JmNV732Jt8nz/6tZbPdk9hAx7fLao5qFKk2dKfsVvXYaR53RQwrMnE9R2g0WA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791033500;
+	c=relaxed/relaxed; t=1791033557;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 Received:Received:Date:To:Cc:Message-ID:References:MIME-Version:
-	 Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version:Subject:
-	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=M4vgYxsb1wRmXKCSZ3r1DvDaSY4WkXPiT6kdk0AdY/Y=;
-	b=pnzpTY5Qc/pK/AXuaof+2ksI7IumRSQzZgOdHsOh6yp4aVB9mHeOCwtq8B4X5aAxOCkU
-	 Kcq9nZHY1kO3+CQNTOkQz/Xu9d33+ZFTEC8DEVTsCNfqxB9CBPuUqrUsz+p6q85EGc0Ok
-	 R5WvErMcbnQci5KoD885jrArf/nXQ0YjM41HnDQsMSUXjYkGNI6TLlGKGWl5Mgpodu/bC
-	 QO9h16wIBdXAHAs28vhYMPKRwTV+JwcESG+6+l2kTQJaiBWap5dbUltPE1doVfyIsOeW/
-	 QX1oRINqQHKV6YFV4y16sstONcK744aWPruARqRPvvZM+s8X4SbyXNOKKBw3t9ogOAA==
-ARC-Authentication-Results: i=2; smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
+	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
+	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
+	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:Errors-To:Sender;
+	bh=tbnyiIG6YTNjmvpny4CIKSJKQJAbAZWj39ZpXZoBpTA=;
+	b=VTy2VZ2tM+Wuq2J0ix78TSzYoK17IvIAOfUOgzhNlinen7PJkgjnlCPLzeKHiHfvfuiD
+	 G0ZJYRpLRZm+FWnr8dVElrnyKbdiD21LsQX7hiVISpA1a8px0hmbYktMGfRDkk9tGAPoR
+	 cZvDCk71VxO+cH7Y8/KijS9Yn7PUv6MFQM41gW1eOtbdqNonnw1b83nDaNvl2eR2aXnUE
+	 nHSP7II+96bqFzwPbfbyux4XlOsxVAJZuKzcSS5DqyCLsZrJcNJN3koHF+rIFAFFqqSOa
+	 vkHdnaqIfdsfzsiBwA1xwLBFuZYMcCVSFvFIx54+noy/C7LzLYUYpiJ47aRudlqaKcw==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791033500;
-	bh=M4vgYxsb1wRmXKCSZ3r1DvDaSY4WkXPiT6kdk0AdY/Y=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=SF9fE1C9nk4PMY3g9bAYpF11cXrQlD6TQnNxlVuBgzilyyiDBmFhgp3Ex4PjE+nDi
-	 4t2MaisTcOvPlIwjJ0DdUuUpy6qU4yTyGw/FcaPD2SLx8pQitznFGzmu8+hkUolc40
-	 UywzFnaXs65I3eh6//Y/oPBbc2jzg77KrxE/qbvrO2zIVH4cn6Id/vbwVXth6L4DWT
-	 fs2NFR5Er8W/G7YoD0k+geeJLnggYw27F5uSTMtU8OVOsIGqpPZgU1lBnKj7bka9L3
-	 wxIoDijd13RIyAEH19vjyVv3y2ykGYJIy1MHUvUt7W/i/rQGNhcTEkCG05imnxo/wP
-	 5qvGJ5xlBvHyA==
+	s=default; t=1791033557;
+	bh=tbnyiIG6YTNjmvpny4CIKSJKQJAbAZWj39ZpXZoBpTA=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=Sl3pUeIKLto55Iixok5g6vaIkt+W3IqySV3vsYArqdauRt2CTteddOD/HuK80Lkn1
+	 pR6aN68OMomTFceyhWsPX+rA973xTa94RFfG7BAZRsKc4zrKhSq4i2tPNWhmFvTuKv
+	 gor/YIINlL+ZrKMnfJQqrlGljoL7C5Be+1dVMGcs8c/c4mplYrU0mIj/PJvpXp3ljT
+	 a/BWZ8F9YdbLFlbtomFOG5iM3D+xN3GzdeoVn3UekBqojq5LVFq0IWxRApG8yFq8TC
+	 fmfCykU+JJeoS3KI6lQx0AmRPocMllgIWyS4IJ9mYvkXptLGX0502uDniEJ6YT5jYq
+	 ocb+txdiCCKfw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CE11981204;
-	Sat,  3 Oct 2026 13:18:20 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 48F0F2E0
- for <buildroot@buildroot.org>; Sat,  3 Oct 2026 13:18:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 70F8D41402;
+	Sat,  3 Oct 2026 13:19:17 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7F2FA2E0
+ for <buildroot@buildroot.org>; Sat,  3 Oct 2026 13:19:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3A9D96067E
- for <buildroot@buildroot.org>; Sat,  3 Oct 2026 13:18:17 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 652CF6067E
+ for <buildroot@buildroot.org>; Sat,  3 Oct 2026 13:19:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Fc1OSBhFQuzu for <buildroot@buildroot.org>;
- Sat,  3 Oct 2026 13:18:16 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 5EB766067D
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791033496;
- b=hTY5+N2qYAgFRZuF1R8yJ5sxAb6txeJ4Da/NoBcykf6dbXMPBslFhxraYyTHnJKLY+If
- HDV3oDoJ3P5tH4iVD4rf4rE3RLSxbDO6iOsmQW9kqk+UPH0fk+I5nOxLJ2IYEovOZrx2S
- eH6yE4NwPjcMmKVBTb59QGN2k9tsNAO9N8XtG02eDnkkOo4UV89tz4ORXvb+R1GeCo1gx
- 7LPph0Chkc7/YVkZiicjPQY7fwR/4QKiE/afJQmQKbqcRSV7GBFdK8FKTbLp9IKMzAZay
- k6iUWb+g5im4TJJ5t/1vIqGY4DRJJE39H2l11D4VbmsTPF1/S431U/PhMgumgjH1USw==
+ id 5Gj0Yc1kj-iq for <buildroot@buildroot.org>;
+ Sat,  3 Oct 2026 13:19:15 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 902BD6067D
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791033555;
+ b=MsLQ5/YS5pUjDzmcsXP8fhetUJzYqS5LlOS8s71hQ1f1eLyoDsXXGgJrMhlYF+7Fcxxw
+ 2VcDXBYB4a0FRjwqBqMPRDdFsqZId0p3pNQETRuYriwVgBjLDI2dNVjnCEpOTT2xUoDrK
+ yXFMLx1kqxWWb5cLrmMgRqnAX/lY8kyD3J2Sd3TKAd26arVj2rhhvsR5uoMcfbvnH0+nr
+ Su4vC00ggyKRfb/XG9+iZ8n+o2GnQJOKaAq6F/9aHO74JtVcBnwxROUT38RFMJQsUzvxX
+ WTA0Lpkp5yRcSsVb6wSXhfoy2U3jLQhwfZxCrhMk9QNC9DkVLghI0tVlFZOLXZ+55jA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1791033496;
- h=Received-SPF:Received:Received:Received:DKIM-Signature:Date:From:To:
- Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
- Content-Disposition:Content-Transfer-Encoding:In-Reply-To:
- X-Last-TLS-Session-Version;
- bh=3L4pxUJf8ybZVgriYCT0mVGEbfJFsFJnk1E4mqkmjpg=;
- b=S5ulB6Wfjulb6MrBqvCEkRMucuiNn0in++ulG1kh9bmkOPELUUX/KCZyZKwxQHSOhShS
- ceVrO9yqEPeDVJ5u9laTvc08nUe04rMWoTzGRg8x0a2cBJyPjPT3kof9jWLg4tVbXn4Zu
- DUBfvg1Qm7PD4khngc2gOyHtqSY2ADTMrVBKzf1K3gUdHfJbZkakMiL1tU9L+K/M8a+ll
- kYFYzzVVYRDwsEUwZMJCJTNjNHCs4gp48lrPicBLpc9DZylBJFsyXb7ro9wzDEfGeG6Le
- 3fXDzjSFaug40t0T3WPOEd5fZUu81WVd3GNOoiy3/5KB9J5A8Knp3xCS42iWRmgR0Qg==
+ c=relaxed/relaxed; t=1791033555;
+ h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
+ X-Git-Newrev:X-Patchwork-Hint:Message-Id;
+ bh=w87FAlavfwZOrkWl6Nr1k46cyrmj4qedl3nUnpYQnJU=;
+ b=NOKqcA6SP8v+Wl9b4CfY2WSmA+PAAf2nWiRq8OCByUhVtxtrW6YSVT1Vrxg0dpiPoS8L
+ RKc0Wz5LrtKo3WWqWJ40DRrPloQcx6wWiJ+8f3qalBUeS52mAYtlj0zlIRisJf3d5JP3U
+ y/AdfOpJP3vF9FcRaJo1+xiiLVKldX9NH7ImM+s2ZVatwjikAz7EwHhWFnSDfurSl3pW9
+ qbzGD1d26+aP6qtesKnnu3i51MgVU7s2r+vvqPLZvNHhc3xXAw6BP2yvJ7fW8stUFB9cs
+ F7oLayI1JDehZpoLxbasiw11fEuZ0dK8Hbi15SqJg2Tn7DuCR5ZITfMVdhSfnc5LslQ==
 ARC-Authentication-Results: i=1; smtp3.osuosl.org;
- dmarc=pass header.from=bootlin.com; 
- dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b="wgQ+/fvi"; 
- arc=none smtp.remote-ip=185.246.84.56
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
- helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ arc=none smtp.remote-ip=140.211.167.122
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5EB766067D
- for <buildroot@buildroot.org>; Sat,  3 Oct 2026 13:18:15 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-02.galae.net (Postfix) with ESMTPS id CE0A51A10BF;
- Sat,  3 Oct 2026 13:18:13 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 93010604FF;
- Sat,  3 Oct 2026 13:18:13 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 01DF8103282A8; 
- Sat,  3 Oct 2026 15:18:11 +0200 (CEST)
-Date: Sat, 3 Oct 2026 15:18:11 +0200
-To: =?utf-8?B?QmrDuHJu?= Damstedt Rasmussen <contact@bearware.dk>
-Cc: buildroot@buildroot.org, Tudor Holton <buildroot@tudorholton.com>
-Message-ID: <asEAVp1amsQVJIQM@windsurf>
-References: <20261002202935.943329-1-contact@bearware.dk>
- <20261002202935.943329-2-contact@bearware.dk>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20261002202935.943329-2-contact@bearware.dk>
-X-Last-TLS-Session-Version: TLSv1.3
-Subject: Re: [Buildroot] [PATCH 2/2] package/openjdk: CPE ID for openjdk
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 902BD6067D
+ for <buildroot@buildroot.org>; Sat,  3 Oct 2026 13:19:15 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id D627488758; Sat,  3 Oct 2026 13:18:00 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 3 Oct 2026 15:18:56 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 894cbeddafddf9322411fcb5257861c1d0df3ea7
+X-Git-Newrev: 8a01c8eba9935dfc8f487bed50b5b695aca6077f
+X-Patchwork-Hint: ignore
+Message-Id: <20261003131800.D627488758@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gawk: add upstream fix for systems
+ without MPFR and GMP
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -128,44 +112,104 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/8a01c8eba9935dfc8f487bed50b5b695aca6077f
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-On Fri, Oct 02, 2026 at 10:29:35PM +0200, Bj=F8rn Damstedt Rasmussen wrote:
-> This allows OpenJDK to checked for CVEs.
-> =
+Fixes build error with host-gcc-final:
 
-> The automatically generated OPENJDK_CPE_ID_VERSION cannot be used
-> because OPENJDK_VERSION includes a '+', e.g. "25.0.2+10". NVD will not
-> accept a version number with '+'.
+options.cc:27216:2: error: #error 0Wabsolute-value does not have a Var() flag
+27216 | #error 0Wabsolute-value does not have a Var() flag
 
-Could you add some evidence in the commit message that these are the
-correct CPE identifierS?
+$ head -n1 output/build/host-gcc-final-16.2.0/build/gcc/options.cc
+  /* This file is auto-generated by optc-gen.awk.  */
 
-> +OPENJDK_CPE_ID_VENDOR =3D oracle
-> +OPENJDK_CPE_ID_PRODUCT =3D openjdk
+introduced by the bump of gawk to 5.4.1 with buildroot commit
+aa3db5b4e15c8dd67914d58c8d03ae2df3c92cab.
 
-This line is not needed, as it's already the default.
+Fixes:
+https://autobuild.buildroot.net/results/672/6727e71716af3df8e2175a50740388bc669e5462/
 
-> +# Override automatic CPE ID because '+' in $(OPENJDK_VERSION) is an inva=
-lid for CPE check
-> +OPENJDK_CPE_ID_VERSION =3D $(OPENJDK_VERSION_MAJOR).$(OPENJDK_VERSION_MI=
-NOR)
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...ound-fix-for-systems-without-MPFR-and-GMP.patch | 63 ++++++++++++++++++++++
+ 1 file changed, 63 insertions(+)
 
-Also, should the same information be added to the openjdk-bin package?
-
-Thanks!
-
-Thomas
--- =
-
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/gawk/0001-Workaround-fix-for-systems-without-MPFR-and-GMP.patch b/package/gawk/0001-Workaround-fix-for-systems-without-MPFR-and-GMP.patch
+new file mode 100644
+index 0000000000..f2377592c5
+--- /dev/null
++++ b/package/gawk/0001-Workaround-fix-for-systems-without-MPFR-and-GMP.patch
+@@ -0,0 +1,63 @@
++From 3cfe33f90aa3899dac3d4e933e3c1ee9ee21491d Mon Sep 17 00:00:00 2001
++From: "Arnold D. Robbins" <arnold@skeeve.com>
++Date: Tue, 14 Jul 2026 10:14:50 +0300
++Subject: [PATCH] Workaround fix for systems without MPFR and GMP.
++
++Upstream: https://cgit.git.savannah.gnu.org/cgit/gawk.git/commit/?id=bf85f8a3175af703597082d4c7e0abc2066a44d3
++https://lists.gnu.org/archive/html/bug-gawk/2026-10/msg00003.html
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ awk.h | 23 ++++++++++++++---------
++ 1 file changed, 14 insertions(+), 9 deletions(-)
++
++diff --git a/awk.h b/awk.h
++index dbad0d810..f4a84300f 100644
++--- a/awk.h
+++++ b/awk.h
++@@ -406,17 +406,24 @@ typedef struct exp_node {
++ 		} nodep;
++ 
++ 		struct {
++-#ifdef HAVE_MPFR
++ 			union {
++ 				AWKNUM fltnum;
+++#ifdef HAVE_MPFR
++ 				mpfr_t mpnum;
++ 				mpz_t mpi;
++-			} nm;
++-			int rndmode;
++ #else
++-			AWKNUM fltnum;
++-			int for_alignment_only;	// especially on 32-bit
++-#endif
+++				// 7/2026:
+++				// This is a workaround for systems that build
+++				// gawk without MPFR and GMP.  The NODE struct
+++				// desperately needs to be refactored.
+++#if SIZEOF_VOID_P == 4
+++				char alignment[28];
+++#else	// SIZEOF_VOID_P != 4
+++				char alignment[48];
+++#endif	// SIZEOF_VOID_P != 4
+++#endif	// HAVE_MPFR
+++			} nm;
+++			int rndmode;	// only used for MPFR.
++ 			char *sp;
++ 			size_t slen;
++ 			int idx;
++@@ -561,10 +568,8 @@ typedef struct exp_node {
++ #ifdef HAVE_MPFR
++ #define mpg_numbr	sub.val.nm.mpnum
++ #define mpg_i		sub.val.nm.mpi
++-#define numbr		sub.val.nm.fltnum
++-#else
++-#define numbr		sub.val.fltnum
++ #endif
+++#define numbr		sub.val.nm.fltnum
++ #define typed_re	sub.val.typre
++ 
++ /*
++-- 
++2.47.3
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
