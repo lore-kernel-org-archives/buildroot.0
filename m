@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95D1CCA5FDD
-	for <buildroot@archiver.kernel.org>; Sat,  3 Oct 2026 07:14:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F375FCA5FDD
+	for <buildroot@archiver.kernel.org>; Sat,  3 Oct 2026 07:14:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6C76A40F53;
-	Sat,  3 Oct 2026 07:14:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C0E4F40F98;
+	Sat,  3 Oct 2026 07:14:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nVc2Ou_iWyJL; Sat,  3 Oct 2026 07:14:39 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 7536F40EFA
+ id sb2yrxoMTIiI; Sat,  3 Oct 2026 07:14:52 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org D25A040F2A
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791011679;
-	b=jVYtAQVJc1dl6Mfik8IDYGNem1kf2+aPJPDzjwSQkna6SKudrw33VImUK3CCFj3lwjw4
-	 ysUpX8n32Bf+XlLsxbjnySA9Upq8Y07dGZDM4VLyRjSDvGvXkLIMWo5o1+IjFmPAd/pkM
-	 PYTOJ8rMbHmggeZ+VBAteCt/KjJGKNz2PEtfwIbqF8hacF1YtjN8DN4OXLfp3MBVPTGwL
-	 aX5occB6VcfLfp/MW8SbfURxwkrER3axeF7yvfM2f/rXnRo9S/SZQhoOqP6HVfKMzR/Wf
-	 As2gRQS3GxkvCS88LPnGWXos+FimQMLVZEWE5vGtiACKbT7JL/CUqhy2Fj1E8NBhBKA==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791011691;
+	b=r6VzjqHc0J51hOHj5o4TnBXg3VvoMEnOHP6P9v2WasdoaBgAJpH6O7jhPOajoPhAHFaz
+	 P0z35j+dQ2j22jiFGisg4l+pRQo5pdhk6ar/9uZzfNkqthQiOpkiMMQS0GpDVigCzyF1q
+	 2UloN3INQIwPYfdYiDnrTvBsn1EZ4SYubadIUMU/ufDnFCOoDQWaOjnhoC/VfPGYS+l0z
+	 uYkQfdQVAnDHL9XK2z1hqcEKBHznOijNYvy/S94IkG67z9Xj6a4eQgEXBKFcAEmpEM0Tk
+	 EQNLBFzjKU2elIsLsKIPMeF6fxMv3cbKigdvc3jT/XGGtPGI/3/oNzQviH9kZNYIKXw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791011679;
+	c=relaxed/relaxed; t=1791011691;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
@@ -31,63 +31,63 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:Cc:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=EYquNhqcyZ21gr9AodVWaoSx3W8wwJbyO3xJIkBwb7A=;
-	b=cI+plSTbRB5b+jJGp0kyMuTv3gddvI7AJWGfey9nNyj1KnXICB7GRNqCc2YkdbnySGs6
-	 J7HcrbEzdi1ncSGKLHInVhJmxPn7XBd8gMiTeQ6aLlo5VqKhy1d+uRXeVg+u85nYMxf5r
-	 erTPgkBpcfQ2uFLzxqaFN/Ja2CrUe/e9t+mhn7TxU0WR5OaeuCyTYqGsJFLnRLiuEuvNo
-	 61Amjs1EZmPmaV1gc1FkVrK9sJyGXpoeERSot7GM6QL6Pur3aEtvdTlX8Fahm9k5B4uT9
-	 T0hgTItCbN9Z3wVznwHOU984d9PSqvXuxmBZt0ZRCRHGh7FqkZnlGYHwxfhM2/qyK/g==
+	bh=3zR3w7OL99uO+sgxcgxZ8WYyN8+iiLgQL1WBWAJfbuU=;
+	b=seF0z9vLMOqJ1lJ59c3Acnxmp8/bGD1nR75/TGhqsNhTGYx+kXQG2tIMXmUmJ2OjL8dK
+	 g0/p7FWiLvSt05yGLTWmSr9O1Ed4o1vBLxAQA/bkW4f2hZxmfonztF0vXgQOgXEetBmsP
+	 YMnqXTlxbsofzefCiQR7s3Lv+ic5ACE4Te0gIoOBolrwBv10sBQbUIEqj6kpxdOV8mJgG
+	 Vyobee7oTQTjxKVNOtJBRZqaPd4EowaeZMW1kFw8794E9KGluIGqeKX6Vt+IcmIBGjUIr
+	 MfZiPLIuhbyU8/qXuUHD2ATJ5nkIEciUMp9PElL8HPBQ1wNRGJRj5mmv5abUJrU25yA==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791011679;
-	bh=EYquNhqcyZ21gr9AodVWaoSx3W8wwJbyO3xJIkBwb7A=;
+	s=default; t=1791011691;
+	bh=3zR3w7OL99uO+sgxcgxZ8WYyN8+iiLgQL1WBWAJfbuU=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=SY/2i60ls4ze554wao56z7F79fZG/ywbwGr6U2qpi9wVLJO7APtCnHU45Av3p4D8Z
-	 W41QnYEIpLOSqqoocbUfMdrMa39pKixDFGrXPc5JWyZjMtndPI6odcRB6p138ojten
-	 xzWupP9vrUs6AJHYhn3OVVDdpepD/4l6avuVwc983Il6QS/DF3UTgoA9NywXmR+CPF
-	 P+lbUZ4crMbIAtvG1jXauMav6OUdVPc1GO/vDMlOGFces0O9FLUTO9y+n6EIDap9jI
-	 S5XNUstfeoUTJ6TqE0yyGuK92TkcVyouMLKM4AP9bdiwTzmmAXsi9aCSc0IJEOFKxo
-	 fWtb9hmbkZ9Ow==
+	b=gqnMS8m304pdPe3Ez6UFWofycZT5Kzw/CYV4gneiz0vO+TA4IiBmscgcxiYHO7R8V
+	 9/F9O/K8z8lIJbhxMEy2KPIZFfxiOGN/4Bvqqi3apkvzEpt6RrxlcdudnBLuzfWYkp
+	 TkboEkkKL4C3veHE0P1jvb3VVDqZbdRZSxHIpbFi1Jp0KlIz27kqD5oGlPpTwV0CQ1
+	 2pRVLViMoNLzgI5j7TXkJ+mnH0jPUAkoQVCAj65xv/c7SN1B/NP7ov+h1CNsl5h/tB
+	 Q9xIfXCwRH0zE94HYFYl3eqAGdx1vhOupd7ZCdQpIP4iWPodBHrz4jusYfcdRK91Hk
+	 lU2bNx3eZDmVA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7536F40EFA;
-	Sat,  3 Oct 2026 07:14:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D25A040F2A;
+	Sat,  3 Oct 2026 07:14:51 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 406F81D2
- for <buildroot@buildroot.org>; Sat,  3 Oct 2026 07:14:38 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 5E3971D2
+ for <buildroot@buildroot.org>; Sat,  3 Oct 2026 07:14:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3D7E240059
- for <buildroot@buildroot.org>; Sat,  3 Oct 2026 07:14:38 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 432A440059
+ for <buildroot@buildroot.org>; Sat,  3 Oct 2026 07:14:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id U-9uesRKSDXk for <buildroot@buildroot.org>;
- Sat,  3 Oct 2026 07:14:37 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org 3FA2D40050
+ id Fj-QjqY9uLzX for <buildroot@buildroot.org>;
+ Sat,  3 Oct 2026 07:14:49 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org 4B2BB40050
 Authentication-Results: smtp2.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791011677;
- b=Ms1cK7ZCvubdpUXcrdiZFk/5GadsBtjvG5i5EQABIrWAdI6IvrOt2dbtkfhaB+XvEI8J
- kM+fAGoLfydowsosNH3u+YdZKOx8xYgk4aszNTwNyA17h3im4OtbLwKqJLK56SPcZ4bD6
- MKtZsOaOEP1KNLkqwATCSbtR33bXjtQTnOV2JwsCznRXlUc5qHWebizBvV8Fjdckow9Ep
- os+Cn/wSHgmixEdLR+O+H7AvO2aamC8Gm4ZoACbrOJJn/zNOhCtCAMBOFtpcFJJd7M/cf
- SCaQbBnNtkgJeXx98CwAnqow1pnkZwvMKkVCopayxjXSmJ4sJ6f7IML4/U2wgrl9SxA==
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791011689;
+ b=Kpw/2S0aIbWmdvPdZ2a9RYFnNdbKehr01ptTgCtnsa7v40ak74W4O2P6cfUGeBe3KKvu
+ 4EwP3st2ybMX0Um1yzuCkLdnaYoOVQ1pndnvDhOFAzSh7e6d1CbiXm0901w+1UP7/HfmM
+ +crHFnycHLa3sastDHXIgyKWcboQeA/EW0//81OepZ5i30MjAUaEQ4LPWMnWWxSD99mNp
+ NZIeRo08R3USmU4e+xShxtkRv0e0Hdiyi66O+kCNH4XruVhg7uz+BPCOVvVW3CutDfrLF
+ tSaRT4EALwn5wvdkYtaLrr35+emIn27RZOUj4O9o0mJWVIig1VxzSHTv7cOk7QhkjDA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1791011677;
+ c=relaxed/relaxed; t=1791011689;
  h=Received-SPF:DKIM-Signature:X-KAS-Sym:Received:Received:From:To:Cc:
  Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding:X-Spam-Score:X-Spamd-Bar;
- bh=0fi66EVv5mfjCPcWpItGKj6Cpa4hbK+RtIIkKLyQGUA=;
- b=PVAzPjwqPwm6RMqEi3yV/Ij3eTqZIPgxXIW/w3MfouZDCpKLufqoLLuUht+Z9LmTg00I
- ELAAqOc8Hfz89byGfuOI28eYLDPD2cMsMalHdVmcPF7C7CQVhCoM0gR5nGKImbIjBaveM
- qKiKzyM3iTRdvhZQnAT7zrqN2bgQvLrO4omLbF96FY4pxpc19XoonwMnVGpsV7brTEk6k
- ebUiURGVAKp+A7nAFC5kipVopF/4CXKIWbCF4p9ehsuTd4JaOtz02EeQds4XoZJJk+Uvg
- BuocayXRqvzQnhDmV2mEiheiwrc7hngUni1vS7hNrHQM0kcxwDZzkLkRnnUf+4S64BQ==
+ bh=+2Xr8DnkAfYhlpAF5IMu/6OrTDuyFUH1E7tQPwdYUoY=;
+ b=CAu/g+eWPDPnBmh1Ho+qJmdYuOnWSytPEvRu6vRHhl5TDWofro4C4Jv1A6rsM3Tt2Y5d
+ LcRigOnYajiwTDe/tFQdtt91XI/ns6nkPOzgk+aHa1QwblONwQ2vwFqH6rJeP/CRdQ7A/
+ Jf7k4uhkvMmSq2xQIqfsbkH9Y/4X5IVY+kTGcSNuyi3JOhFgDr9qUAfocaROW9EeD8hiA
+ 046OFffD7BZYmzfviIaRnQli7GXkbhD+sI4wa82Uy8WoWtxIwSGdvq5pk8HzhOAj1UswZ
+ yQHWt+Ler+4WHpfX5+7+Foktk0J3vlrWh4ud5S4fNffuZ7rgYpJoeUtfuW0TcEJmjFg==
 ARC-Authentication-Results: i=1; smtp2.osuosl.org;
  dmarc=pass header.from=kuhls.net; 
  dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=k0qibyUV; 
+ header.s=kas202605290044 header.b=XAdCslSp; 
  arc=none smtp.remote-ip=85.13.140.57
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
@@ -95,52 +95,52 @@ Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=kuhls.net
 Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202605290044 header.b=k0qibyUV
+ header.a=rsa-sha256 header.s=kas202605290044 header.b=XAdCslSp
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3FA2D40050
- for <buildroot@buildroot.org>; Sat,  3 Oct 2026 07:14:37 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4B2BB40050
+ for <buildroot@buildroot.org>; Sat,  3 Oct 2026 07:14:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
  s=kas202605290044; t=1791010933;
- bh=0fi66EVv5mfjCPcWpItGKj6Cpa4hbK+RtIIkKLyQGUA=;
+ bh=+2Xr8DnkAfYhlpAF5IMu/6OrTDuyFUH1E7tQPwdYUoY=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=k0qibyUVjK6sD7QHAbUsoYitdo3+TgrDeCIXhboW8LtzFUVOGLJGTrWHKFlr8bJQl
- 7Xgkgl4Xvo2l6M00j1B87zOr8EqPskmwpxKZKN2NWk6J0TuMDc2lfNMoHQSY6EfY8F
- MnOcNgevN/R8nj1QWL5dAdcN7hJd2fc5K6Nsnwg7JBv0PKcn+DNxXJT6Vxb0Ezc1pN
- CNGQJT6lGS6hVKrJZsSCfDiF0Gt7dOuLxkgDnI05jmUIhPEBfhQJBUd13udQujJdBe
- uF8qaABSFjp7eQmZzls3OuEELLJe9OxSCgNG8icPM1tPe073pppX3QVUdiTcg6Cw/M
- qIhPrM5O3wUgA==
+ b=XAdCslSpvfxzMQKu1tlmHj/MU0AYndxGbPVsDEwxz9sj9Iw1e7wO3RdFbtaIEzILr
+ RcJ/VShSNaBu+0h9wjUljAoa51quGxT80gnizzISOx7PLsqaFfHDk7eUCZb7j3FrSr
+ WTtXW1crdmvP1lw4Az34okBqCbOQAVHh8tQ7laFw3GvJ1ioifETc84EkjiM//3yHxC
+ Ue9hb3C/UBF2kc769yikMi7CWA1Y+Fjrsl+z+mKJu1aLdC7CXcc5DZnW4TwGCMLowL
+ UfE/XzaUw18YFtCUfBVtVDGzssX6iB44/tuNlIhNfEbnUZ1roZyfPAzmhYt0Pk0XMm
+ VBZTX6mYBiX9Q==
 X-KAS-Sym: v3:f51bdf72230551df:VqMTyGEcl2GJp/akTftrKMgcPyezivNX+fOLOm9ncnigH
  pNFvxOG3DbE5s98QwUKc0+pVLoDU9niaXtrdppC307xvfy2ZRvK81G4RIKqo5daA5GNZSwddO5w
  qLhxMnBm1ZL/vu3uvejsivYqpikrzacdo7+61qTZJJ9eL6iWs8tJ+vv6P6mwr6nRgjCRtv3Rwzq
  +JQSM4Woxf1JlUmiYTM175O4JgoLN/VF3JIDkRpmn8CEnEYfiQ0wZ4omAbqIJqsY9QV1EiODtvQ
  /YbmJc9J/NA6DXwTO2eQ2zs/WqqYsDZlGWMNnp9VEvu1hCfuFnOalkQDg8qJ+aPdWX61oK4w==:
- gnVykxPdtrFEJfF7BiInSY99VxHLRR5cEPQy+CJzZqi3lpK1hMDXS49C4wZuVNlDmtYCKte/rFi
- NgukIm8QtBSw950q7rCyRXPI0VSA448h7NG2a8pk2JPPnDngaJAt0tszOqBEdBvDbAAoMzH35ku
- U+ebaKmYCTkzBUorPYmeFoUJIeOwKNu3Wb6hgHX2J1FCs758dOdPnYQQvc7sdXbECnrtdIh4aV/
- crUL6JXKALNy7U4n6OVE/ZtGP1hMbdhPf1/Xc8aPiMtwmPBKNVuDuh3wghV2/s4iN9Q8CTBFSUI
- 25hg9/ZcTm04jQbYks8T0TR2BkdgvHsA0EkLuT6OWD9d5lwx//uXPJNwL13kiVxGtsmOTYr2sYR
- 22qzqX/HZL1Q5RmZVi00+1Cq6aD7web5FmNGxJpvRZjd3ZKwLiUvfYrQXGar79lupku7uVYMvJ2
- wssstAgFO4N1xCLjhqW1FTpeQ+9HFMZWPL0fR2jL6eSIwJiYgktuEnbn0iKC4TfQK43uoIJy5/Y
- hp3wPLy4Q60ahLnMz1TmIMoUOSiVLc6ABeiclVsP+iAGhdZiPHdbQkXiXap1+1tiLIEOZYlXmT0
- KlbF2tW0D3kF6zcDtxAPgnZv7bK9EuM3ISLkjL5dWKz8czOHU4qaTg0npGDxyuQt
+ HJERnVrXKAXKMyXjhusoS0pdjFAjKM1XX8xFdZD+aeWur4WEG/aDYCcCArVJ5wFIxKCF6Ak0i0P
+ /UwFICUKQuDXAzITApqqYs/uXQpXs/pmG+7S6eip43prrk4o+Kf0qqLGGrJ7R8x+/zSLbwAhwK3
+ eMWJfzJZxdlUqBLtTAsD/MQgDGFdgiGH4BK33T429Ew2u4UBX0GG5Nr5P4b0RPuPeiuQqvkTFn7
+ 146knx3iOCAtB4RFpgObocXgjK+q0LrMNkY8X+0KRYq8suLDYup2e7aBXaNNR6Btfpv1JzL613V
+ 2yUPytozfOEF3sGH5FPih7oCN4zZ3Z86JcJP8CrZcSIeF8t7YxoEKVL2UgglyRiqwdOS36B4/OF
+ Omni0RoSkUoL3CcDGADUVQEP0kgLOLFqGZ35g3dxtq/tnVueg/9rpWgmpBEEe0qS6rgdkGXAP18
+ IwkoB51xL2o40pMJrJmmg/w+nSo35DRzq0BCM8lZZyR1Xac+FVUoakahbOweT0AsPcjL8zPK8rJ
+ a2fAiHwZQKzkBXlHBfl48IA6iU2LMyXoBlCNS1BHt4/a+XzJ2s5Oo7dMl18YJbdq5ZdWjPQ/aCV
+ eSOwADZ3Jp2kxnCcs0Y0H68We82X1QJ/zmtSXXMYrgz+g5S5hCTOHxl+dML1FKLGwA==
 Received: from fli4l.lan.fli4l (p5b3a03df.dip0.t-ipconnect.de [91.58.3.223])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 98942A4C544A;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id C5FA6A4C53C2;
  Sat,  3 Oct 2026 09:02:13 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:55754)
  by fli4l.lan.fli4l with esmtp (Exim 4.100.1)
- (envelope-from <bernd@kuhls.net>) id 1xCtki-000000007Zo-3ug9;
+ (envelope-from <bernd@kuhls.net>) id 1xCtkj-000000007Zo-02cO;
  Sat, 03 Oct 2026 07:01:48 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat,  3 Oct 2026 09:01:13 +0200
-Message-ID: <20261003070128.1295458-101-bernd@kuhls.net>
+Date: Sat,  3 Oct 2026 09:01:14 +0200
+Message-ID: <20261003070128.1295458-102-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20261003070128.1295458-1-bernd@kuhls.net>
 References: <20261003070128.1295458-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: +
-Subject: [Buildroot] [PATCH 101/114] package/python-types-psutil: bump
- version to 7.2.2.20260906
+X-Spamd-Bar: --
+Subject: [Buildroot] [PATCH 102/114] package/python-types-python-dateutil:
+ bump version to 2.9.0.20260807
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -162,38 +162,38 @@ Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Cc: James Hilliard <james.hilliard1@gmail.com>
 Cc: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/python-types-psutil/python-types-psutil.hash | 4 ++--
- package/python-types-psutil/python-types-psutil.mk   | 4 ++--
+ .../python-types-python-dateutil.hash                         | 4 ++--
+ .../python-types-python-dateutil.mk                           | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-types-psutil/python-types-psutil.hash b/package/python-types-psutil/python-types-psutil.hash
-index 0b2e5aa7c7..514f2c1eb1 100644
---- a/package/python-types-psutil/python-types-psutil.hash
-+++ b/package/python-types-psutil/python-types-psutil.hash
+diff --git a/package/python-types-python-dateutil/python-types-python-dateutil.hash b/package/python-types-python-dateutil/python-types-python-dateutil.hash
+index 9f8e30447b..99eff042b3 100644
+--- a/package/python-types-python-dateutil/python-types-python-dateutil.hash
++++ b/package/python-types-python-dateutil/python-types-python-dateutil.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/types-psutil/json
--md5  d4d19bc7bb21bd5ff2c909e425760f79  types_psutil-7.2.2.20260130.tar.gz
--sha256  15b0ab69c52841cf9ce3c383e8480c620a4d13d6a8e22b16978ebddac5590950  types_psutil-7.2.2.20260130.tar.gz
-+md5  ab8af16b81139afcaeaf1ac4d32a650c  types_psutil-7.2.2.20260906.tar.gz
-+sha256  93abf22cf9a62b915f724e433bde702995ac274865425fd4a76d1d9b5828da1a  types_psutil-7.2.2.20260906.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/types-python-dateutil/json
+-md5  59a73a1592656ca894f6c61eb8f2a0b3  types_python_dateutil-2.9.0.20260305.tar.gz
+-sha256  389717c9f64d8f769f36d55a01873915b37e97e52ce21928198d210fbd393c8b  types_python_dateutil-2.9.0.20260305.tar.gz
++md5  e6fb2bbea5ab3d9c1756cef961e2806c  types_python_dateutil-2.9.0.20260807.tar.gz
++sha256  e0b8a90d464c8684c66b7b8e4556d9074afdddcc56ca45323f0987134f9e7034  types_python_dateutil-2.9.0.20260807.tar.gz
  # Locally computed sha256 checksums
  sha256  295f8538c94ae5c3043301cf7cff1c852dab6a786a8ddee471e061b40d5ecabe  LICENSE
-diff --git a/package/python-types-psutil/python-types-psutil.mk b/package/python-types-psutil/python-types-psutil.mk
-index 4a596de1b1..0e0875345a 100644
---- a/package/python-types-psutil/python-types-psutil.mk
-+++ b/package/python-types-psutil/python-types-psutil.mk
+diff --git a/package/python-types-python-dateutil/python-types-python-dateutil.mk b/package/python-types-python-dateutil/python-types-python-dateutil.mk
+index cece2e4fb1..f5b44c836f 100644
+--- a/package/python-types-python-dateutil/python-types-python-dateutil.mk
++++ b/package/python-types-python-dateutil/python-types-python-dateutil.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_TYPES_PSUTIL_VERSION = 7.2.2.20260130
-+PYTHON_TYPES_PSUTIL_VERSION = 7.2.2.20260906
- PYTHON_TYPES_PSUTIL_SOURCE = types_psutil-$(PYTHON_TYPES_PSUTIL_VERSION).tar.gz
--PYTHON_TYPES_PSUTIL_SITE = https://files.pythonhosted.org/packages/69/14/fc5fb0a6ddfadf68c27e254a02ececd4d5c7fdb0efcb7e7e917a183497fb
-+PYTHON_TYPES_PSUTIL_SITE = https://files.pythonhosted.org/packages/97/0a/f48b9b0ab5ba8599fd117309e345152bf82c756c72be2ff0f635780c2792
- PYTHON_TYPES_PSUTIL_SETUP_TYPE = setuptools
- PYTHON_TYPES_PSUTIL_LICENSE = Apache-2.0
- PYTHON_TYPES_PSUTIL_LICENSE_FILES = LICENSE
+-PYTHON_TYPES_PYTHON_DATEUTIL_VERSION = 2.9.0.20260305
++PYTHON_TYPES_PYTHON_DATEUTIL_VERSION = 2.9.0.20260807
+ PYTHON_TYPES_PYTHON_DATEUTIL_SOURCE = types_python_dateutil-$(PYTHON_TYPES_PYTHON_DATEUTIL_VERSION).tar.gz
+-PYTHON_TYPES_PYTHON_DATEUTIL_SITE = https://files.pythonhosted.org/packages/1d/c7/025c624f347e10476b439a6619a95f1d200250ea88e7ccea6e09e48a7544
++PYTHON_TYPES_PYTHON_DATEUTIL_SITE = https://files.pythonhosted.org/packages/c8/4e/b3fa538f9cb38dfece0d6ccf6d3d0d925bdedb144fb9c8129dfc007cd003
+ PYTHON_TYPES_PYTHON_DATEUTIL_SETUP_TYPE = setuptools
+ PYTHON_TYPES_PYTHON_DATEUTIL_LICENSE = Apache-2.0
+ PYTHON_TYPES_PYTHON_DATEUTIL_LICENSE_FILES = LICENSE
 -- 
 2.47.3
 
