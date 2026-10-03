@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5EA93CA5FDD
-	for <buildroot@archiver.kernel.org>; Sat,  3 Oct 2026 14:01:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12A32CA5FDD
+	for <buildroot@archiver.kernel.org>; Sat,  3 Oct 2026 14:01:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2479581492;
-	Sat,  3 Oct 2026 14:01:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 05A1681656;
+	Sat,  3 Oct 2026 14:01:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WNkx64mnQOU9; Sat,  3 Oct 2026 14:01:14 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 5C6288145A
+ id E80As3NHuFsj; Sat,  3 Oct 2026 14:01:16 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org D67EE81551
 Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791036074;
-	b=rd/Qg/xAzqTEAjTEPaA9kd0uUUB/Vik8TKz/80yczhAC9w3XfwAAQSqIfeIb8przWwZy
-	 YRhc/kPi8/4NVoU+qtCo+jPBe9h7WUom50Fv7d7A301YRTAw+xyuzP30H+2vHgnssPl1Z
-	 w1HRPguLy7ss3Fay6P1Pq0T3DRYDL5TEx5CIB4crti+vYFzVr5cOUWSiX354ZMmXlyKbB
-	 BP5uf1QYgWn8JgA3K8wT1MgjY3dH+PxiTvMb9OO3YqZXJXKB5YOwglImUCIGakE24Mngu
-	 szpIympqVZQGQLCPmagEW58OHG9NFhoFMlU9wFIcq3/cXIWgbfpmMUZuEzZ2LOhdhqQ==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791036076;
+	b=kkA2+BpT7kebZz24jdVwgVp12yTf224jK0DQ5ktzVAJg4+NysJ3rC09MSvJn9I4LYTK7
+	 c6KN6xWm5l8uzhvwTcE+INMGWyAsEJLxwouGDLHseEprZjBpQccMbRaPkqXu3QiY5Nf4T
+	 alqqYJr9viwHZCbG36kNjGoWTeG+8p8+Nt0Ci0BG96xcCRtoXBLu+8jYX5XxbzMNOPy8J
+	 R7PCpjlHvop9qlXDorpFtng22dEFY0dlb3dIgFSV5DpcLh3FXtcza6ffMA9GBnCOXGVLo
+	 6YbhPCs80nAVziR3AC4FTxnMGI6AQy4R48GMv6cwcOI1qt8Rl93Sk4GV8Aj8f/W7s9A==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791036074;
+	c=relaxed/relaxed; t=1791036076;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,75 +30,75 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=D9BoyciVCCiVPLb8zAy6mGlRiAyC+E5J6Tzm9XWX42M=;
-	b=pthHwW7//mVjewHlTtvgEhZ5d1OedOH1WsCD5P6uUS+HYC3IpzotJ3R/zYBft5QBPt1e
-	 z061uQBzZndO+LRdd191xrCOTSaSn5bKV7s4EKJkfrAkpdFJVVuTba1TBx7d8vB5P8e47
-	 D46DBrscOKH5TqvlOraAg2oEkd7uLo1JlKeYNfCBmaZDhml7q/wp+5CDyPJUW1DEeTSk1
-	 rKMWLcTeN3tERJ/m0Ujw5r8CoHSfmxLykdSz/lK+EZ+rzCHjDdOL25nj8mgQEzaFx58H+
-	 BWWrs81Umg+748M2lfnV2hV9TGHF6+OpbMh08uxcDP+uY8er3WtDqpkC+dqV/1oge0Q==
+	bh=Rsfie2sX1ibPUhmbKuNpbh5RskSqu6CYQok5js07nRE=;
+	b=SPxAbGa9YafCIF4YPfUlWs9SFKgHz74T5H1pS802Hcc/4SOc9xcPQoI6NWBWKdjLkCfh
+	 duzcWPo7ATBKA8DfdQMh0436skBpv5R0ELZh7rjmS/W1ZVuwwpNkpaTemwsl8yXkURr28
+	 3KkHYauiFwkhPuFYzrl6IsjRyGG9kb94GcEoCgAH4mhFdkUgqF5nwTDymNx7EzpdXX1mD
+	 zu/2xfR/jC8FBZj8xHSj20mAPI/6K8nac07a7b/kQd2AJTfdsUj9G8eIMOUAI6P/Z4nDr
+	 kV/DhZeSPavPMSw1Dw0595j9uJfmDMZxc9rXIKIliQ/hnCmSCY3KBw8xAAWSZ5jrsDQ==
 ARC-Authentication-Results: i=2; smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791036074;
-	bh=D9BoyciVCCiVPLb8zAy6mGlRiAyC+E5J6Tzm9XWX42M=;
+	s=default; t=1791036076;
+	bh=Rsfie2sX1ibPUhmbKuNpbh5RskSqu6CYQok5js07nRE=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=nIL+rQ/oxfqucsDPdB5EH4bBaYX5rGu0wVemviqbGTHjcXEp5KsMQGAEjik1zX+C7
-	 +yJqD8IHNOsQFFtjoHDGIlofCqoGljpMTmdVTwDx2b7IEoH7cG83uIksf6d5HtweCi
-	 TWtDtXXKZOVXh039JcHDkl9m8+cMhVid/OjhEzwczVPFo3HYZsviXgP3gywqeNvdC3
-	 cItRRA/YGpHPIDqL4w4h9bGAihFYhzi4c9y6HxqWPgsHroeJsabxEGl/kzYijERHtE
-	 eWQ73eKJKN2VG1DlixQ9yYja1YYyaW4bmwaD8J+GgQue4b7mS/5irqxM3s4aK+prc9
-	 17/HfBattkhqg==
+	b=UYXMJDj8GNGMYJOB+3Q3RfQJsznVEWCds3ePN9qEwOSi76PE3RVSKlWsK13JEi1cf
+	 Q5DM6afDdlR7MvJbGerRra/aAU/b9cDo4SNYvHhnjF4IpOf8wBEoxmvZOCun1wSadI
+	 +cvR6mXVXoJ6Jra1QfBJOjfYvofu0swDb8Jgt1Y/qX6Uf+XrmtZlh7qUmSddJpskUZ
+	 tFnjCAideQIjJSFzi19w9WTr0ozD5049hyt1LxXx2/zkdET56SF1LSVVpelyFEBD8j
+	 jiBUeDuxn7ceVGRJHVY1kem3ijG47xJEOF7PvdxlpDC1dt+JmWRPCYyre9EY+WxQUe
+	 V6b8Y4mtv7nbQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5C6288145A;
-	Sat,  3 Oct 2026 14:01:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D67EE81551;
+	Sat,  3 Oct 2026 14:01:15 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 26B01476
+ by lists1.osuosl.org (Postfix) with ESMTP id 3523D4B7
  for <buildroot@buildroot.org>; Sat,  3 Oct 2026 14:01:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 18BE240064
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1B7A140063
  for <buildroot@buildroot.org>; Sat,  3 Oct 2026 14:01:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SsCEDzkKf670 for <buildroot@buildroot.org>;
+ id 3v-FMJIoEgoA for <buildroot@buildroot.org>;
  Sat,  3 Oct 2026 14:01:11 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org 6AFC340063
+ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org 6374B40024
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791036071;
- b=hUR2PIU56eI0pv/L79gQ8w2RQqC7HW7rpvth306+5bBJX+osmc3l2BKU2ikyCZVfFDPU
- M5mbPHuHDBCztJQ6iJ9yz6kKrwWbuMzTk20sHz9YCi8OjY5L4cW9sLSPSSXUf9pKBrh0k
- nq8WuWroghTymJ4EY9hvfYYLmlPQ4NC6+KXUsdkBUOgzguCfLIsR1yTY00/xKaH1nx61I
- OLqBla7/HT62IiRb6Vzif+Vm9Sc6UppYMeu+hYluMhDPz+9qVYzJ9OVpYlpzs9/3O0+tn
- A1qtpS53ynmqtJsrVLqX72ra+6yQoW/hC30N0fzkqjR0N6YGAELbUUvqmTNPmap4+0w==
+ b=gsbT9EgDA8XDiDkKn3prcc/wQxeRVj3oWE/B2vr9zbgjwXp1EhhdlVtUkCKitJ0JY774
+ sLlwr1tD+h6kbdW+jvle1NWTbQU6XZO2eKZ9eKCnQv4c3algfODINl+PVH8ipmYHHFYUI
+ ye36jlYWX+WhytuCiVjqbYf3dH79H/p42ldZwzrgJ7hewsYlKJ3eudeRGBy+DTifbIBsw
+ qa6WHHhJb9IYiAmHBeURLPJZJzzDAnDuqyxeSIstIRoQ1PB0diyMvVWSVbTpuo+I7Ruhj
+ Hr5RVvMnzmM+KukHjTSfXZw8k0p+lkmTJ6nXZpXoWw4cT8BjV0/Djpq/E7tC/gLLj9w==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1791036071;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=hqEvVu2Ru1nSlJBgHCwaRneyv/4Ew2z8h6o98n1lfhY=;
- b=HiOhLbC26Abl7RtH4eUFti91QHJv9csLwdprMkRDE9zw9kxXAGEGBG6UfYzZEMPuwLSj
- 11z6ug29yXzBCVU4cru8tm0wFc7NsHV0cHrOl+UHNSNhDCmCp8JbHDmN46R9gBp1yODzd
- Sq2wUvw470GnFD7kEhCK1m8EoEI+DJgB9jKqHGtKMgz1gtlZwEp+/T6dvVRhsRDN/rzee
- 2j4qEfyvP3VK5QRPFdf61Kte374p40X5O+eAIuV6VrU3B2QyvVWApd7FwTJW2Ne1KZC03
- pbKsYq2n1V7ZDG9QfRNxwfog/wbZedgop+6S+MkT7oF+c0B/bXZ9E0X7WSICm2CWbzw==
+ bh=qL4Ww1pL0qXgV0cynN77yeg/eiO34MyGPcyGJPij0ak=;
+ b=nLRzzyAbhlXGuUSz4O8qbMKbIxy9wmQ/BihpnKjaC1XHMUaj5NBicT+XiDH1osh+U6Nm
+ NafjL6R84VFkkZrB1kb7tfBkygSMHJpsftO2hHFWoqcj4dyNGn5lmzGFnFP98AuCTLcOM
+ XjVPGozIBHGG6c7J0nGo1D29EHPrpdXt4uQG+29mqIauDMjlyUp0trTS1DaZzkiPVvNxA
+ araY9p4vC4Z8Jja3NKSAgGJ85t1GjwLnwh0F99+Hv16MW3y3roJ9ckbt8AptpU6EBe9Nk
+ 3nVn+WxEyzKu1kUvCjxq83JyXasFbag5OqcKBOjIfb4/HMNkH67WIoEzo8A94OgI8IQ==
 ARC-Authentication-Results: i=1; smtp2.osuosl.org;
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6AFC340063
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6374B40024
  for <buildroot@buildroot.org>; Sat,  3 Oct 2026 14:01:11 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A86CD8A3F3; Sat,  3 Oct 2026 13:59:56 +0000 (UTC)
+ id 9E7998A39C; Sat,  3 Oct 2026 13:59:56 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 3 Oct 2026 15:58:27 +0200
+Date: Sat, 3 Oct 2026 15:58:15 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a205fa58d2261a33479cf64ad6bcc96b374ae948
-X-Git-Newrev: 9611b785816f2546bd69a56b9329f09b0c246874
+X-Git-Oldrev: 9dc679ed9f7008340f8027169faa1b224c2bc4a2
+X-Git-Newrev: a205fa58d2261a33479cf64ad6bcc96b374ae948
 X-Patchwork-Hint: ignore
-Message-Id: <20261003135956.A86CD8A3F3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-rpds-py: bump version to
- 2026.6.3
+Message-Id: <20261003135956.9E7998A39C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/{glibc,
+ localedef}: security bump version to 2.44-57-g34106fee6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -118,44 +118,67 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/9611b785816f2546bd69a56b9329f09b0c246874
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/a205fa58d2261a33479cf64ad6bcc96b374ae948
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-https://github.com/crate-py/rpds/releases/tag/v2026.6.3
+Fixes CVE-2026-97399:
+https://gitlab.com/gnutools/glibc/-/commit/34106fee698c83eb0af71d4d0381e66b399be746
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-rpds-py/python-rpds-py.hash | 2 +-
- package/python-rpds-py/python-rpds-py.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/glibc/glibc.hash       | 2 +-
+ package/glibc/glibc.mk         | 5 ++++-
+ package/localedef/localedef.mk | 2 +-
+ 3 files changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-rpds-py/python-rpds-py.hash b/package/python-rpds-py/python-rpds-py.hash
-index 32593a1f7c..6da82fab0f 100644
---- a/package/python-rpds-py/python-rpds-py.hash
-+++ b/package/python-rpds-py/python-rpds-py.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after vendoring
--sha256  9a3d3078a2fc34efd16e22b73c61f6a25ae61e26d5b3dc84d656cc0b716de4b1  python-rpds-py-0.30.0-cargo6.tar.gz
-+sha256  0bcddb46502750f8e9547ab666db13115d798364b6a21a59c6474a3fa157a522  python-rpds-py-2026.6.3-cargo6.tar.gz
- # Locally computed sha256 checksums
- sha256  314e4e91be3baa93c0fb4bccc9e4e97cd643eb839b065af921782c2175fe9909  LICENSE
-diff --git a/package/python-rpds-py/python-rpds-py.mk b/package/python-rpds-py/python-rpds-py.mk
-index 12ff7e1fb9..40a0080a00 100644
---- a/package/python-rpds-py/python-rpds-py.mk
-+++ b/package/python-rpds-py/python-rpds-py.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
+index 439fe1f140..51e29673c3 100644
+--- a/package/glibc/glibc.hash
++++ b/package/glibc/glibc.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated (fetched from git)
+-sha256  2ba6ee9ed5177a792fcce4da13225800f0cb3a2413a459e7864b8843eb5cb790  glibc-2.44-55-gc90398e00571476711792baacb6d92bd2a7b6891-git4.tar.gz
++sha256  902d628994c2f3b30af4a7f507835079852cc8ed21d8a7f340e45dc5dae148bf  glibc-2.44-57-g34106fee698c83eb0af71d4d0381e66b399be746-git4.tar.gz
  
--PYTHON_RPDS_PY_VERSION = 0.30.0
-+PYTHON_RPDS_PY_VERSION = 2026.6.3
- PYTHON_RPDS_PY_SOURCE_PYPI = rpds_py-$(PYTHON_RPDS_PY_VERSION).tar.gz
--PYTHON_RPDS_PY_SITE_PYPI = https://files.pythonhosted.org/packages/20/af/3f2f423103f1113b36230496629986e0ef7e199d2aa8392452b484b38ced
-+PYTHON_RPDS_PY_SITE_PYPI = https://files.pythonhosted.org/packages/aa/2a/9618a122aeb2a169a28b03889a2995fe297588964333d4a7d67bdf46e147
- PYTHON_RPDS_PY_SITE = $(PYTHON_RPDS_PY_SITE_PYPI)/$(PYTHON_RPDS_PY_SOURCE_PYPI)?buildroot-path=filename
- PYTHON_RPDS_PY_SETUP_TYPE = maturin
- PYTHON_RPDS_PY_LICENSE = MIT
+ # Hashes for license files
+ sha256  edaef632cbb643e4e7a221717a6c441a4c1a7c918e6e4d56debc3d8739b233f6  COPYINGv2
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index a838ac1a81..435a97361b 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -7,7 +7,7 @@
+ # Generate version string using:
+ #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
+ # When updating the version, please also update localedef
+-GLIBC_VERSION = 2.44-55-gc90398e00571476711792baacb6d92bd2a7b6891
++GLIBC_VERSION = 2.44-57-g34106fee698c83eb0af71d4d0381e66b399be746
+ GLIBC_SITE = https://gitlab.com/gnutools/glibc.git
+ GLIBC_SITE_METHOD = git
+ 
+@@ -46,6 +46,9 @@ GLIBC_IGNORE_CVES += CVE-2026-8674
+ # Fixed by 2.44-55-gc90398e00571476711792baacb6d92bd2a7b6891
+ GLIBC_IGNORE_CVES += CVE-2026-89092
+ 
++# Fixed by 2.44-57-g34106fee698c83eb0af71d4d0381e66b399be746
++GLIBC_IGNORE_CVES += CVE-2026-97399
++
+ # This CVE is considered as not being security issues by
+ # upstream glibc:
+ #  https://security-tracker.debian.org/tracker/CVE-2010-4756
+diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
+index e4bfce1a3a..becbdfae7f 100644
+--- a/package/localedef/localedef.mk
++++ b/package/localedef/localedef.mk
+@@ -7,7 +7,7 @@
+ # Use the same VERSION, SITE, and LICENSE as target glibc
+ # As in glibc.mk, generate version string using:
+ #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
+-LOCALEDEF_VERSION = 2.44-55-gc90398e00571476711792baacb6d92bd2a7b6891
++LOCALEDEF_VERSION = 2.44-57-g34106fee698c83eb0af71d4d0381e66b399be746
+ LOCALEDEF_SOURCE = glibc-$(LOCALEDEF_VERSION)$(BR_FMT_VERSION_git).tar.gz
+ LOCALEDEF_SITE = https://gitlab.com/gnutools/glibc.git
+ LOCALEDEF_SITE_METHOD = git
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
