@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C058BCA5FDD
-	for <buildroot@archiver.kernel.org>; Sat,  3 Oct 2026 10:07:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B2E3CA5FE8
+	for <buildroot@archiver.kernel.org>; Sat,  3 Oct 2026 10:07:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8DDCC60E79;
-	Sat,  3 Oct 2026 10:07:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D3D8740F2E;
+	Sat,  3 Oct 2026 10:07:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5Zy8EntuKpuK; Sat,  3 Oct 2026 10:07:20 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 99E2860E8E
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791022040;
-	b=gXMBdHwvjSHQ9cXwxIwvCfc+zNcK22JyTPHhW2eDbTdt153dk5B+yc9JT6n47OPxBFLL
-	 6cyM/lwN26/CjsTrivLZMqEf9lxmVGiHFwWoADC8duSw+xXs6xqKB2IPPzhx7zvBMcLWf
-	 evTV9gZqNi/z12ujmYdDBKuRjPdV+XeBsC/ETzPSew1SkRtTpHnSdLa0oRcMEMv6AETIQ
-	 xTdFUyK8JVWrpQlAdM/l1qzZXsXPCZW+N0Rkz2xNb/MRzRqReJjrAk5PJc6FTNv43rr58
-	 dY8qf6cuJ7kjeu2cyOljyV6jjgJ7mf+ULMEHSbWA13AaNJf+QBChfaqlXf2jClpgudQ==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2E3vQ7bC3y-G; Sat,  3 Oct 2026 10:07:22 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org DAA8F40EB8
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791022042;
+	b=K1xjz1E9FIZfjkfe/mcLlVvqDbIjgUCUtpLtt2S97LlSjKWTzzUKLzdO2dDiONQYDC0X
+	 id2qolxbxUZFQJ4Ab9NbXKns8tN6e3APnONNtOpZxETHuIrwRHCUUChBhzYNN7l2y2LUs
+	 MOowod61ALhI504n4tVrr2Ch+Xc+Sy+hGT78w/1DMo2HJxNATTIB/DYiGcz5CSR7pGTTM
+	 aPk18vvKIlO1I7nwiDGJW2GXvaixBW5wlRVoRb+ui/OrNOz/2v+JyO1r+JWW3fk26Cxvy
+	 yMrL5tZCrE945wDsOHixnt9ymogFzAVpu8vtkpqMwSGgOn9uvXtzTGMx9UenhAL4IZw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791022040;
+	c=relaxed/relaxed; t=1791022042;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,75 +30,75 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=h9a70gG8Y5QhBASKUeWcVKDMqReYruvQhvzIhBPBd+M=;
-	b=jTCrJu9NTxl1hJk5E3xrrlo3h3cSPNh4K+iLkkvodW7cL80NSCfDJou0RsSGprq2jxk/
-	 a69thuB5e4PNPWXQWsktU5p227+3pktXssjT9TottH0wsBZIh6sCu5nn+JnKCeXB88Lju
-	 ANwL0DqY209cOufeItkGTWcRwmEruj8vPwW5HGNHoh3XbE3e0oz3D9QrawkllODp0Zqu/
-	 lrpoqDfCdDcfA37qAxrxugGbs7couqVruWBtGp4o4fxAgxqpoeipuGas/KKaC5EEaEoyl
-	 VVMmBmBWJev+LED8G6K1fIvaB5ceNsZPJkdxkHVcP68fBcRHj5/J3xbqeYeTYxT9JzA==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	bh=IcBj0ywDDs+I/ZvAYbf0b6HyPIZ4Akp5g7u0jLloAUQ=;
+	b=YG5rmSwgW5j4aWbEHWQGu7lxg2Psj/UGBUeGYY+P9YmUqFceZ6u+xNsALQQ+k0y5uMII
+	 Ndmhrmb/7zeUyqqRnXCwXKkRTk2atf+v/k6qKHd8IEEoZ0EBcaMgQ5yds1TZsWEwG1s9H
+	 svgvrNCjpzWz+YANWNtB0df7Mt+LCo0Ry75BjSrecqZoSNe4tOWuDOr5PsLneMYPLagou
+	 o6kJAJsIzigICrhfuAPPiOWAOA7aj5E50WjE3GkR0qrk5KYfuKHuI2GUWSjpwjvCB/bId
+	 9+BV1RzOyUega+Ocpt2zRJdqfK/U2tbmtLIxq/6FyUjKePWzgUXxDpFj7xKPfHJsIjA==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791022040;
-	bh=h9a70gG8Y5QhBASKUeWcVKDMqReYruvQhvzIhBPBd+M=;
+	s=default; t=1791022042;
+	bh=IcBj0ywDDs+I/ZvAYbf0b6HyPIZ4Akp5g7u0jLloAUQ=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Ii3sufxFqtoo0T0zFfiagL/3GvIRmgvCY0mMLq/fHjmr3QDifQ0kxe1BvTFLfOX7k
-	 Xp2xlcmVvZBtgVy1n7TmCWdNIHPUgycuEXvCQZ4csluAI3fvvxPzJwp3HDBkRkBLL8
-	 o4eG+2D8/mdU9Q5MUP6xZoGgyiU1WTGqzUp2sON3n22j0JOliL+n+H3omDsRNwK4aB
-	 WP298NTyOMiH4GNOEWSkqXxxQjkI2rm+4zOv13DnYrHD+2pPXaqPcmgkoOlYVU/uuu
-	 LDwRbuufdMzLt/vmyT5DqqtyLKB9yhBwvvVZpehLrMdzRa6OyyTIoCOIDuKQpGgQlO
-	 4wohPi/OPqlVw==
+	b=VTBgR7Walcrx7EU30kVsqVMMfu7BfCvbIXL1VXWzrnG8Ui8tbVe9xBfplyEivalG0
+	 Nyb0RaH0ncnyo/hxm2bMNXFm7TnZMT+YLkTWMGfpJY87hBOEIZVvB3C5sSvK4K9HLD
+	 iEK3IEvMq0bf/Kt+UH95rqFKCofVVEoxNFYyv7hgmoMgY9ZJ1/KLq5I3BGL3uP6xN/
+	 AmzdY3UiVipbCqAv/rDlWPOqmttZjq4KyrPjnIdpL5mdWIkmXPR4kIT/pThyE3S4Hf
+	 xADWKrdKKsqNu1lxi1/EDhDl26T6IVs0BBvKhDskkLoijINfaLne6NkawV67ULcCmf
+	 pJYs7IELTtAPw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 99E2860E8E;
-	Sat,  3 Oct 2026 10:07:20 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id F0C60476
- for <buildroot@buildroot.org>; Sat,  3 Oct 2026 10:07:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DAA8F40EB8;
+	Sat,  3 Oct 2026 10:07:21 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1B2E8476
+ for <buildroot@buildroot.org>; Sat,  3 Oct 2026 10:07:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D5BA28122B
- for <buildroot@buildroot.org>; Sat,  3 Oct 2026 10:07:09 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0ACC860E9B
+ for <buildroot@buildroot.org>; Sat,  3 Oct 2026 10:07:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1TnRBLcQnrOH for <buildroot@buildroot.org>;
- Sat,  3 Oct 2026 10:07:09 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 121C780DDD
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791022029;
- b=gIRq49cpzJ3r1YIw5z8P3PswoBiIyDQdBGN2UBo8IjrLPPcLD1KDaeBmpD81mEl6KsZe
- INxFqyG5smqC86jB/JmWoHDDu+BSSljk0bD7t2ld+ozTIIIXIKcGQJXM6mbJc65yNjqgs
- xnnzEnaQwFWCiSsA9JI/ZFc2//bRMzbciShJw3+RZJ0oD8kgCayXHR3ypp97+2Gacy1Z1
- FLm9ebR2kNXvbhn3TlbqU5pK7fjcJrfJI1qzo47Yf53RF+3O/CVlCk8l2yGue8yhKeYFo
- 3KBH0puiOGvqFaSJxx+FbwmGhyoCqJ5Dd52bXRGXlP1md+0atGLPeTgp9LHnb/0iJzA==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2VBI8imhCHPG for <buildroot@buildroot.org>;
+ Sat,  3 Oct 2026 10:07:08 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 92B0A60E81
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791022028;
+ b=U/37TIL3LvQC/zjhK/EKXwyzBonF55x5WMJIMDfFWt5re50Cu+k15LFU/hkCj2jj5F5H
+ JJD+gFKY2+XIuJ1fw7rYCXxQOuih+KAeBcJp2jW2a+Qa4m0ewYKIE1b4eoBj9qLZMTBE/
+ E+Dt6mXZw1ZW5uNPjx/lWGoqmPU3qBBUNWSX8PASmWbveid0nJ8Tewo1yIxG9a7CYyI2Y
+ o97kUEIGrCxBzOB5E5hUQ68aeVzKrjLh2aBgVB6WQ1zlzF6XoduXT1Vx9Db0wYJHOlWGY
+ 8V5CCzCYmv5N9K5YCw9stbhdxwFE0X+4cIsT8Hf8DNA7bgTi5fy5MnIu1sRyjSRsw7g==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1791022029;
+ c=relaxed/relaxed; t=1791022028;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=eGsPZ7uZMWZV/XAaRxHo2GxwOhWLEFph7XxJPOamOA0=;
- b=fIY2UqCG0yRjYoGFO8ewBJTWIuJqC9XVrPAGSHfimEBrkvhnOTMBTH3YJml3JjQXSZtG
- 6Asc+LDdAIY4SkCkscWsqbEbJ2QfEbyS2J/qn06X7mionHmy24WLj4cp2GBRSgKN3OO6k
- HyMhLOOPlhYFfJq2Ce8XerkEsjIGX/FTGZ7L6efrkXunDOOhcGeWTXQBDtc7igrhiREoN
- DYpKbv5rM9wENC5KXaeaMU+jRdul6GW2cazmKsxMkllBndJqRu4hrPzXqugY2gc9xHeDx
- Vsv8s/VFFUMrjiSejQzc8qfF1huZztbvvi86ZOH5Igjpc4XPdoDJToMY4nWmeV2WNWQ==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org;
+ bh=Suu48LdJafKhaTQDg3wnO9xMeGNKbHlgHx8RapZHcHQ=;
+ b=DG3wkD1Gd3p3Wp+ZEgoy0JcucIudOXpr/TqzNlQG4mOIsY4O8AkWz4QNqa1ddRJjq+EE
+ 57RG7CBVCPhmi5LYY7mykd8+kGF1/sTj+Z5TP8HxDVN1bkN6FVxzKy5mRipHKtUzQkF1f
+ IoIoG3BpD74LKBTAvXBft1xqI5z2VAKgstN6KQm+qSXQKz20ErqHJeuutisj1OApQs6YB
+ pPQXKL2m4WfgqDBfj91nUYHy5YNEGGksTpEVDPp4LNzV8teCWE+ge4Je4DyeIxLsZfhy9
+ nqphXhemT7WpQ0ME0Q+QaAmbMpih6QlcrtA7Hy93YooUAa3R2HxXQ0xMkxfgm84hoZQ==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org;
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 121C780DDD
- for <buildroot@buildroot.org>; Sat,  3 Oct 2026 10:07:09 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 92B0A60E81
+ for <buildroot@buildroot.org>; Sat,  3 Oct 2026 10:07:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 70BA988801; Sat,  3 Oct 2026 10:05:54 +0000 (UTC)
+ id F05C0886EB; Sat,  3 Oct 2026 10:05:53 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 3 Oct 2026 12:06:39 +0200
+Date: Sat, 3 Oct 2026 12:06:32 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d2e77bfea12a94ac749acf6684db3a61427d3f3f
-X-Git-Newrev: b894d68617e8a780fdd50ae54133b18cc4683cfd
+X-Git-Oldrev: c6d8479db6fa72308dacab4e19f00cdc5e1ba84e
+X-Git-Newrev: ca05d08240534037abae328ed33256a394304997
 X-Patchwork-Hint: ignore
-Message-Id: <20261003100554.70BA988801@busybox.osuosl.org>
-Subject: [Buildroot] [git commit]
- package/python-magic-wormhole-mailbox-server: bump to version 0.8.0
+Message-Id: <20261003100553.F05C0886EB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-ecdsa: bump to version
+ 0.19.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -118,59 +118,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/b894d68617e8a780fdd50ae54133b18cc4683cfd
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/ca05d08240534037abae328ed33256a394304997
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
-
-Add the python-setuptools runtime dependency.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-magic-wormhole-mailbox-server/Config.in                | 1 +
- .../python-magic-wormhole-mailbox-server.hash                         | 4 ++--
- .../python-magic-wormhole-mailbox-server.mk                           | 4 ++--
- 3 files changed, 5 insertions(+), 4 deletions(-)
+ package/python-ecdsa/python-ecdsa.hash | 4 ++--
+ package/python-ecdsa/python-ecdsa.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-magic-wormhole-mailbox-server/Config.in b/package/python-magic-wormhole-mailbox-server/Config.in
-index 1ebcdb85a4..5a7e1b8d7d 100644
---- a/package/python-magic-wormhole-mailbox-server/Config.in
-+++ b/package/python-magic-wormhole-mailbox-server/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_PYTHON_MAGIC_WORMHOLE_MAILBOX_SERVER
- 	select BR2_PACKAGE_PYTHON3_SQLITE # runtime
- 	select BR2_PACKAGE_PYTHON_ATTRS # runtime
- 	select BR2_PACKAGE_PYTHON_AUTOBAHN # runtime
-+	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
- 	select BR2_PACKAGE_PYTHON_TWISTED # runtime
- 	help
- 	  This package is the main server that Magic-Wormhole clients
-diff --git a/package/python-magic-wormhole-mailbox-server/python-magic-wormhole-mailbox-server.hash b/package/python-magic-wormhole-mailbox-server/python-magic-wormhole-mailbox-server.hash
-index d701edfc72..c40de3b68c 100644
---- a/package/python-magic-wormhole-mailbox-server/python-magic-wormhole-mailbox-server.hash
-+++ b/package/python-magic-wormhole-mailbox-server/python-magic-wormhole-mailbox-server.hash
+diff --git a/package/python-ecdsa/python-ecdsa.hash b/package/python-ecdsa/python-ecdsa.hash
+index 85ba70bc6f..97503f5529 100644
+--- a/package/python-ecdsa/python-ecdsa.hash
++++ b/package/python-ecdsa/python-ecdsa.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/magic-wormhole-mailbox-server/json
--md5  29a3ab90583e6858a74f11c3f485a77c  magic_wormhole_mailbox_server-0.6.0.tar.gz
--sha256  b1bf145f3a26d905ebff6820407976d57614f1ad8b9806210e9c4e36579a1f79  magic_wormhole_mailbox_server-0.6.0.tar.gz
-+md5  3e99431631c57ff9ceb54dbdd1f05a74  magic_wormhole_mailbox_server-0.8.0.tar.gz
-+sha256  c6426c4658cc66722bec0f4231bd52e8088e43379a8508776208dd0252a58273  magic_wormhole_mailbox_server-0.8.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/ecdsa/json
+-md5  f23885cc901dfeb73d3eb56ebc80dd56  ecdsa-0.19.1.tar.gz
+-sha256  478cba7b62555866fcb3bb3fe985e06decbdb68ef55713c4e5ab98c57d508e61  ecdsa-0.19.1.tar.gz
++md5  8071b518f3f3235e5ecb9b710314e592  ecdsa-0.19.2.tar.gz
++sha256  62635b0ac1ca2e027f82122b5b81cb706edc38cd91c63dda28e4f3455a2bf930  ecdsa-0.19.2.tar.gz
  # Locally computed sha256 checksums
- sha256  4a9cc2415c52cef591b6822eee68fed36d7e6d80284b09638cff61d762d99060  LICENSE
-diff --git a/package/python-magic-wormhole-mailbox-server/python-magic-wormhole-mailbox-server.mk b/package/python-magic-wormhole-mailbox-server/python-magic-wormhole-mailbox-server.mk
-index 616d72dfbf..10c6dcf360 100644
---- a/package/python-magic-wormhole-mailbox-server/python-magic-wormhole-mailbox-server.mk
-+++ b/package/python-magic-wormhole-mailbox-server/python-magic-wormhole-mailbox-server.mk
+ sha256  3eca9845773d2e5b8cc9d8c119d345f00a4806e4bd660d4a3d6cdf9c0e9d8bb2  LICENSE
+diff --git a/package/python-ecdsa/python-ecdsa.mk b/package/python-ecdsa/python-ecdsa.mk
+index b1ac6fe1b8..ed6b9b0ea0 100644
+--- a/package/python-ecdsa/python-ecdsa.mk
++++ b/package/python-ecdsa/python-ecdsa.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_MAGIC_WORMHOLE_MAILBOX_SERVER_VERSION = 0.6.0
-+PYTHON_MAGIC_WORMHOLE_MAILBOX_SERVER_VERSION = 0.8.0
- PYTHON_MAGIC_WORMHOLE_MAILBOX_SERVER_SOURCE = magic_wormhole_mailbox_server-$(PYTHON_MAGIC_WORMHOLE_MAILBOX_SERVER_VERSION).tar.gz
--PYTHON_MAGIC_WORMHOLE_MAILBOX_SERVER_SITE = https://files.pythonhosted.org/packages/source/m/magic_wormhole_mailbox_server
-+PYTHON_MAGIC_WORMHOLE_MAILBOX_SERVER_SITE = https://files.pythonhosted.org/packages/ae/ad/6670956e0e464c43b6366b274e12839ba6cae17e714dd68a73cd2a9d81d8
- PYTHON_MAGIC_WORMHOLE_MAILBOX_SERVER_SETUP_TYPE = setuptools
- PYTHON_MAGIC_WORMHOLE_MAILBOX_SERVER_LICENSE = MIT
- PYTHON_MAGIC_WORMHOLE_MAILBOX_SERVER_LICENSE_FILES = LICENSE
+-PYTHON_ECDSA_VERSION = 0.19.1
++PYTHON_ECDSA_VERSION = 0.19.2
+ PYTHON_ECDSA_SOURCE = ecdsa-$(PYTHON_ECDSA_VERSION).tar.gz
+-PYTHON_ECDSA_SITE = https://files.pythonhosted.org/packages/c0/1f/924e3caae75f471eae4b26bd13b698f6af2c44279f67af317439c2f4c46a
++PYTHON_ECDSA_SITE = https://files.pythonhosted.org/packages/25/ca/8de7744cb3bc966c85430ca2d0fcaeea872507c6a4cf6e007f7fe269ed9d
+ PYTHON_ECDSA_SETUP_TYPE = setuptools
+ PYTHON_ECDSA_LICENSE = MIT
+ PYTHON_ECDSA_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
