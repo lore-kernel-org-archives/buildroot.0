@@ -4,100 +4,115 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2C4ACA5FCE
-	for <buildroot@archiver.kernel.org>; Sun,  4 Oct 2026 07:06:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5579DCA5FCE
+	for <buildroot@archiver.kernel.org>; Sun,  4 Oct 2026 07:07:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9FC1060632;
-	Sun,  4 Oct 2026 07:06:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DD7576061F;
+	Sun,  4 Oct 2026 07:07:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IE8fUJXLSlqc; Sun,  4 Oct 2026 07:06:14 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org A35BC6061D
+ id OYPUdPmQ6m-k; Sun,  4 Oct 2026 07:07:45 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 9DD6460625
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791097574;
-	b=dUbMQIncUfA8m9Fs13VvbOlNzMa36xsMbv9y+yld0BEDH42iIYKoO1ErQdsaQO64jvPe
-	 ObDM2qKS/17LHjlT9dxhoaoMVx+670oDOczQLviBs15qpCt1r84U4beXvw6O1CFGRX+70
-	 gyibDQLf4w1i8bEKIYIv5K+M4MlcDGGPhdMBWJDlKQFvtUD9IWf7iNhfFJOGiMj6/VZ70
-	 BmKUhipHT9g4e3qV68lN1BkR6VmksEK649ZdJsAixhnEZCeyS3XPb4iczdv1gA0QlddW4
-	 PHOimbLoXF0ErN/gUpSKiTf6clc0FnBORKRkkccsSRgV4GNzRsZgZtSGp02Sp184evQ==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791097665;
+	b=iQs25rU7uVhOhXGx0667Lm8rrRTvdyt/7oTCYFncyVrgrAF6aDOcJES/CcWNw8iSxBcd
+	 HBUPwfFnsSWvSuQQelFTzsoQVGLBOCAwesM0ktJ136ZT0hTxG9XOyoe/NY8j2aga+gke3
+	 UhwR0nT81wkdxkoBu1+Ab6KzFOGDD2jK4mCHBrxkpoc0TP/UEX96/qkHjPtm8C7UEazhN
+	 /FJ8Z07JEruBQS358MDStSJ5kXcWFwFWFJY+mlD77Jcqxn1Z/aG0o5VHLRI+8qA+Gd29Y
+	 n9DmPpwZ9Mucr/T4weIU3k7Zmvk4phZ0+la3jmWWCzdfhKDlfZ4B6j9bAtlV3VJKBFQ==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791097574;
+	c=relaxed/relaxed; t=1791097665;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
-	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
-	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
-	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=2Pj/Su2NEky2GOE9jz9xYslVadJt5bsFOyePNlFkClg=;
-	b=B8PkI3vmnAe8WvQw64boECPJB6wGBt1h/aWwJAGEyIvsuR6U2MshyizRnsDsSB5Qn5+7
-	 p7O4vInwvBAMhROmcrypWzOzfDimdLU5TLX1l/eLJn+GyCbv45x3HpRhIhA+vs6U4gWjn
-	 1uYzJ1hFgbTsQDmRFCwzbVzMk2BLhUSCWlGJF0PsJZrJXFj4asgwU5NelgOc+6VLfG4uC
-	 hTVyHos29fba8udtWhEFFDZmgeV8Vx9thz7mcSOfhwyY5xz19nYhexe6EL/uSiNk3qWER
-	 H/yOqIoWgbI16L/7IkzV7BxQTpwWoJpcSl49spX4PnfKBNCEm3cu+zbyRGwIM/d9sxA==
+	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 Received:Received:Date:To:Cc:Message-ID:References:MIME-Version:
+	 Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version:Subject:
+	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
+	bh=EAjdo8xDXDZ7zBILRDyftzO8JP+q79OKeItcM5VF4aM=;
+	b=HWGgdfdxGsdg9hg3Fuv2oNHHZJ0/vFuExOUXKFIt1ZUG3yu/WujTFJp5+mgSagYsEEeR
+	 W4NX/TU5f3WPSnLYlUfh7WxF9jbXvYm27T1GNWQqkanH7ShhDewGEyG6+nQ4sU1Y8Fibb
+	 MppdznUFQE4+4klsEjZFyF9cAZ3FNuuDRdPAIuxDPGPkzJBpL/rZTZh1k4CPsUx2MFSzD
+	 xQnojbYqOe6FT5ngMMxbX8313n6O7ozJKFIcfz8/wgsoOh75B3VQx83eQvcA5nUHT3Yub
+	 RZwYFlf8nHf+npz7/did8z2swXlhVripFB2lTjN1e/dT5R765PjrvLp1hG3qOWpta6A==
 ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791097574;
-	bh=2Pj/Su2NEky2GOE9jz9xYslVadJt5bsFOyePNlFkClg=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=MfFf9jm4Mvas7urK1JrhhrmGXJMb6HhZJQJ9lDuVknHhAo/4mTv67ovDvNlX8Sq0p
-	 GxNnljAXPayuaHoZeK3ky5pjqNz1pFRzASRecynzw1iu7P1wf1CxqRzbnQog2OKhin
-	 Fit5U4XlHGV/V1QuQ5ozv26zcuqrxdaqpj08rhNQAsiHIHVh/GJ+UWA1YkVVS7vFCI
-	 nrOt1tEX+PJB8VGuAqiza8+nlrm/S6CXoaBIh2+dwYPhuW7M1DqFM4pxsKBNrh2tXN
-	 k3iQQ4TinR6SFh0cBgud1gJ34Xn9j5WQgnbtif1dKHVznn83rLASsfrjNQKuhPBc0s
-	 4WblxSK9G/WXg==
+	s=default; t=1791097665;
+	bh=EAjdo8xDXDZ7zBILRDyftzO8JP+q79OKeItcM5VF4aM=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=e2QjIUHEXCh/r+IK+9GJRAEmeVZJF5VpevdZwCUozpNMfhjxGxJvC6IgCBgyZSAVx
+	 4Ahc1D2PRqc3ymYMYN/XwDPQUHPBfDZxqYUbNaok8F66oVoexbJVY2ASbhE+FmnUG/
+	 7TjUomAqzu/qQ3Dsl8Y3ioONWE9a/GR/geWkfJVMSka+LXAUrDKCFP3nfpAUuyeuJ3
+	 4SVT5mfBOIdkXwdMkQxDiekiQjfLZHfJA4elAlH+4pF08o7/AOqOWmNSir7nIa44Gx
+	 xvClU8biy3TWm2xdqe76cLNjqL+qOm0MzFnbi6G+OdqamRI6QfapNOUy5i3aS14IkF
+	 HHS9rPhPiZfkA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A35BC6061D;
-	Sun,  4 Oct 2026 07:06:14 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 8E3F21A6
- for <buildroot@buildroot.org>; Sun,  4 Oct 2026 07:06:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9DD6460625;
+	Sun,  4 Oct 2026 07:07:45 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id DDFD71A6
+ for <buildroot@buildroot.org>; Sun,  4 Oct 2026 07:07:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 740816061D
- for <buildroot@buildroot.org>; Sun,  4 Oct 2026 07:06:12 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C447880DD7
+ for <buildroot@buildroot.org>; Sun,  4 Oct 2026 07:07:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0CSRIU1mUuyz for <buildroot@buildroot.org>;
- Sun,  4 Oct 2026 07:06:11 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org B687D605E7
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791097571;
- b=Qv/cQ0W6GSFgWpdXI9H34bxIskN4lQxpYhP8OXS/Dn6zJ0TGQ0OgDSa5/Li2EdAiZ6Bq
- cVhv8g6+WdSBj45HLqT4K3LJVF79ypgxVMFb8C8bE3MieO/HB1ZSyepK+BOQidKTjYHXi
- C5VQecuSmvnD6agIFgAsQ0zRMFkDKWIpXa+jygBHGStYbZSy7DPrJYOxOf384DVieSp/R
- pBUA7Jbx4/ddP5u4sCPFiVZEL7KXVXDw4rDdwtn3ee/r2ZdhvbRrxwoG5rAg5s6hTHrv6
- 5TOxaQ9CR7ZIBD3uyQ26yfXjjo0M0qEt1jd0sX7OEu5I+Pdx6YiHaAsCDTHCBpu4gvQ==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id mAObP5DI9hRK for <buildroot@buildroot.org>;
+ Sun,  4 Oct 2026 07:07:42 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 3BEF180D96
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791097662;
+ b=lqsbBYRfOvCMXRFF8G4c7YsfEac8G7+XQLPJ3P6ugyKH3ATA3OtZapZvmIsd2LlC9jH7
+ ZP1/AYh09fM0omoAp05RCty2laST/PN6tMl8fDmTS8kCxak0/um+H5I0D4Ug7CAxzZgWf
+ oYPOwHGM9dTE1RIjl/rfbcmKcUgl/1HN3A4qgnmdte0voXLZ6LP23xLwO3QNsdbFfSJvt
+ n/kqhAHojZ8EYORBfXPTG2xRgC0Iwoafnzen2rsncV8kRr8S2RMbx4DCZ8xJxFMYNYM+b
+ XYYppr1FP4T5k+cZ2hroxW1HQulTIKMbcaK+Qg5oHvVLpu5tC5vqhwkoWlYaQZpxVyg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1791097571;
- h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
- X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=L9w4yGflNEaQggxkAYyWG95Es/sqNzlkfDNS6cv7X/s=;
- b=BXAT4WMBAKwMERlp6t/9e3nLmH9TKxZUw7DEtA6iRt4SmimTgjaeXZ3in9Vleh37CHwD
- cgV3ZjmNFRzZrxV8wi7xY8CN0DahOw8uQfW6zE1mOErHcmIfOu3ViLYa/H4ACL/CKymC/
- 5btSXXulT0Dcd5MZfS6AX6zk8DsBBSKbAvSaJB3WH0M0nfd9gAHj69dPG535fZLkMXdJF
- BKzU1/IyPhWG6eZoCFA9pH9nCsxQk/ysI63F1clbobAiMeOpS1MjVTWo9hqN05qtC4W+y
- 3gmAcTTElmxxMfzqGLSK/1m8llBt4I98XLdZzDVVV29roPfSA4X1IOYEiiHcKRGKOMA==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org;
- arc=none smtp.remote-ip=140.211.167.122
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ c=relaxed/relaxed; t=1791097662;
+ h=Received-SPF:Received:Received:Received:DKIM-Signature:Date:From:To:
+ Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+ Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version;
+ bh=i5TGYgRni4rfIWPmvJGTPfYn55c0YwqeCYcYBl9uAqU=;
+ b=Tr2gAczG1kA+DLTocIJ3sNCm57agbvdCon/gSZ90YNyvKtE6N3ilM1xUSJqss3UzthSW
+ +mI/zi4YYM2icx9XzuGIAfFmRDvjg6VrPYVLZu/+UJd/YueR8Y+sS2XMNZ0IVDs2nAQDG
+ lbQrKKX6azM3//EZ03mRZnvp9v4EWdmwDdssAbVymW2OUE3lYai5oCsxFZ2yG+aLL8REA
+ uHZ2UPjusZ3zKMNekBemT/TKTwl/RGgbsNr+vLpohGX7JM4bHWHG+fiqZi/3qJdK9kJA7
+ IOXMBj+TmxNu3oEC7hhowvssGyZnWg0EomsZKlaxxmvVKLmftLI78qVfP6x3myTa1bg==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org;
+ dmarc=pass header.from=bootlin.com; 
+ dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=dkim header.b=Ugxvyktk; 
+ arc=none smtp.remote-ip=185.246.84.56
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
+ helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id B687D605E7
- for <buildroot@buildroot.org>; Sun,  4 Oct 2026 07:06:11 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A4D3D8B68B; Sun,  4 Oct 2026 07:04:56 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 4 Oct 2026 09:04:43 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 569b91bada811b822d9eba59c8af16169c4b2783
-X-Git-Newrev: fca0899dd6cbeb9e6c7442d4b53513f7a29e98f4
-X-Patchwork-Hint: ignore
-Message-Id: <20261004070456.A4D3D8B68B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mpg123: remove MMU dependency
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3BEF180D96
+ for <buildroot@buildroot.org>; Sun,  4 Oct 2026 07:07:41 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-02.galae.net (Postfix) with ESMTPS id C74261A1121
+ for <buildroot@buildroot.org>; Sun,  4 Oct 2026 07:07:38 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 8A423604FE;
+ Sun,  4 Oct 2026 07:07:38 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 6427F103282A8; 
+ Sun,  4 Oct 2026 09:07:35 +0200 (CEST)
+Date: Sun, 4 Oct 2026 09:07:34 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org, Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
+Message-ID: <asH65OsCbxwkLTux@windsurf>
+References: <20260926130006.243930-1-bernd@kuhls.net>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20260926130006.243930-1-bernd@kuhls.net>
+X-Last-TLS-Session-Version: TLSv1.3
+Subject: Re: [Buildroot] [PATCH 1/1] package/mpg123: remove MMU dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -111,87 +126,52 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/fca0899dd6cbeb9e6c7442d4b53513f7a29e98f4
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On Sat, Sep 26, 2026 at 03:00:06PM +0200, Bernd Kuhls wrote:
+> Buildroot commit f0862592b3caf5bc9cd347fd29634673cfbbabd7 added the
+> dependency to BR2_USE_MMU in 2014.
+> Upstream made fork() optional in 2022:
+> https://github.com/madebr/mpg123/commit/91f75fc026e37d88d25229b81c58bcf8d6d2a8eb
+> 
+> This change reveals a previously hidden build error with the toolchain
+> bootlin-armv7m-uclibc:
+> 
+> src/libmpg123/synth_arm_accurate.S: Assembler messages:
+> src/libmpg123/synth_arm_accurate.S:22: Error: selected processor does
+>  not support ARM opcodes
+> src/libmpg123/synth_arm_accurate.S:31: Error: attempt to use an ARM
+>  instruction on a Thumb-only processor --
+>  `stmfd sp!,{r4,r5,r6,r7,r8,r9,r10,r11,lr}'
+> src/libmpg123/synth_arm_accurate.S:33: Error: attempt to use an ARM
+>  instruction on a Thumb-only processor -- `add r0,r0,#64'
+> [...]
 
-Buildroot commit f0862592b3caf5bc9cd347fd29634673cfbbabd7 added the
-dependency to BR2_USE_MMU in 2014.
+So the ARM support needs support for ARM instructions.
 
-Upstream made fork() optional in 2022:
-https://github.com/madebr/mpg123/commit/91f75fc026e37d88d25229b81c58bcf8d6d2a8eb
+> To fix the problem we limit ARM code to !BR2_ARM_INSTRUCTIONS_THUMB2.
 
-This change reveals a previously hidden build error with the toolchain
-bootlin-armv7m-uclibc:
+Therefore it is most logical to require BR2_ARM_CPU_HAS_ARM than
+!BR2_ARM_INSTRUCTIONS_THUMB2.
 
-src/libmpg123/synth_arm_accurate.S: Assembler messages:
-src/libmpg123/synth_arm_accurate.S:22: Error: selected processor does
- not support ARM opcodes
-src/libmpg123/synth_arm_accurate.S:31: Error: attempt to use an ARM
- instruction on a Thumb-only processor --
- `stmfd sp!,{r4,r5,r6,r7,r8,r9,r10,r11,lr}'
-src/libmpg123/synth_arm_accurate.S:33: Error: attempt to use an ARM
- instruction on a Thumb-only processor -- `add r0,r0,#64'
-[...]
+So I've changed:
 
-To fix the problem we limit ARM code to BR2_ARM_CPU_HAS_ARM.
+> +ifeq ($(BR2_arm)x$(BR2_ARM_INSTRUCTIONS_THUMB2),yx)
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/mpg123/Config.in      | 1 -
- package/mpg123/mpg123.mk      | 2 +-
- package/squeezelite/Config.in | 2 --
- 3 files changed, 1 insertion(+), 4 deletions(-)
+to:
 
-diff --git a/package/mpg123/Config.in b/package/mpg123/Config.in
-index 73ca1c740c..8cbc3a4758 100644
---- a/package/mpg123/Config.in
-+++ b/package/mpg123/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_MPG123
- 	bool "mpg123"
--	depends on BR2_USE_MMU # fork - in the application
- 	help
- 	  Fast, free and portable MPEG audio player for Unix. It
- 	  supports MPEG 1.0/2.0 layers 1, 2 and 3.
-diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
-index 17445395ae..e6c90ce685 100644
---- a/package/mpg123/mpg123.mk
-+++ b/package/mpg123/mpg123.mk
-@@ -26,7 +26,7 @@ ifeq ($(BR2_aarch64),y)
- MPG123_CPU = aarch64
- endif
- 
--ifeq ($(BR2_arm),y)
-+ifeq ($(BR2_arm)$(BR2_ARM_CPU_HAS_ARM),yy)
- ifeq ($(or $(BR2_ARM_CPU_HAS_NEON),$(BR2_ARM_CPU_HAS_VFPV2)),y)
- MPG123_CPU = arm_fpu
- else
-diff --git a/package/squeezelite/Config.in b/package/squeezelite/Config.in
-index a034759143..0bdc43ce6c 100644
---- a/package/squeezelite/Config.in
-+++ b/package/squeezelite/Config.in
-@@ -2,7 +2,6 @@ config BR2_PACKAGE_SQUEEZELITE
- 	bool "squeezelite"
- 	depends on BR2_USE_WCHAR # flac
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
--	depends on BR2_USE_MMU # mpg123
- 	depends on !BR2_STATIC_LIBS # dlopen
- 	select BR2_PACKAGE_ALSA_LIB
- 	select BR2_PACKAGE_ALSA_LIB_MIXER
-@@ -44,6 +43,5 @@ config BR2_PACKAGE_SQUEEZELITE_VISEXPORT
- endif
- 
- comment "squeezelite needs a toolchain w/ wchar, NPTL, dynamic library"
--	depends on BR2_USE_MMU
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS_NPTL \
- 		|| BR2_STATIC_LIBS
+ifeq ($(BR2_arm)$(BR2_ARM_CPU_HAS_ARM),yy)
+
+and applied. Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
