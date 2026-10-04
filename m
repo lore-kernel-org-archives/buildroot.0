@@ -1,104 +1,118 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7DAD9CA5FCE
-	for <buildroot@archiver.kernel.org>; Sun,  4 Oct 2026 15:55:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19478CA5FCE
+	for <buildroot@archiver.kernel.org>; Sun,  4 Oct 2026 15:55:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 443B96060C;
-	Sun,  4 Oct 2026 15:55:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DC213809CE;
+	Sun,  4 Oct 2026 15:55:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9_hzGPRZ8-Ey; Sun,  4 Oct 2026 15:55:08 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 4728960612
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791129308;
-	b=ODMQHXPl2LGLPC46dJTojbnOpBv7Gl2KMrIPS6nMaFxLD2AySjnCCsd+5jPz31y/C5A3
-	 T8pIEIDXkvt5uf/05dMIU7b+/Z9qz/vr8tpyIcXyT5NcYLNHBPWt5TlHlQrdmdI5SQf3Z
-	 jmfK+LIEpGKIOWjhy2oUQiAfC+mgy1OXb7iu/uQil0+VsVHLTdj/OB0fx263FI4+Q9Mzx
-	 QlxvGpUAZTCNSdR6mCn7mk6B2mRpD63+tvwvHe2mkQj9ANVe0PTqefvKK1JgnU7vFy7TU
-	 HEUeAlWkajmNnP2A7/8XSCq2FjpUonwfVprtyOTOPPiYB8wQJsXXjJURhIF1G/EAkBg==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0HQYjHcgF9Am; Sun,  4 Oct 2026 15:55:27 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org A35AE809E7
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791129327;
+	b=Tc+87uROpMLg7vWKWBqJPcqqXIarrmofI5woSHGfLvSxOs1/tYJPRRBc4j5byCKbkrZ5
+	 HqFCYIQoaiHq9BqMhioztTZ0Rue+vDqvDbbY+maDWpa2X5caM4o1LzFCBJAb7So44fFzU
+	 Lpb4WEpQW4vH9x2ktbYkRO0DKYlM5nIlhdbmzZ8zIhF2Y9cxAmUMuPzDMOs0Svqe+A8sc
+	 2M7P9pua2heOMivdVz76Qiy2oJQGmHf5XrGxdnKosMJpXlX2GAdqBHw4N/4eJxX1WMfJ5
+	 KAVFPBW7ssp4fut5CAVH/caYG/8tuBGtcCx6bA2ResPbyYRuNhaGi6GqKGhtD3I9E4Q==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791129308;
+	c=relaxed/relaxed; t=1791129327;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
-	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
-	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
-	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=CM0BJJeBrNZtrwor646lKAD4vOyJV7VxBUsnvd5zAbo=;
-	b=n+x/el3DjV0OotM1Ydvo2UIxeSXZo6YAWNXp8CzUjmaiYhW024m+ZLMhWyWGwwFejad9
-	 /GfoINWufb1nUf+1k1Nx215a7F2wmu+CySpMw2B/rOLMCNUnIdpYN/Z0ggj5KmTTTunq1
-	 ZavSqzsNYUBGp8tonSfAdg6sJhLvD1cjsjbQvvMJ1cVdjKdZtz+pmY3FHIPOX5XQnYTJl
-	 /pTnE9Xnmo3CEdFepiGc5JgF9zuJhRbPlIqJy7hxDopvSC8EMeeI0Num5zDEIOPAM2k59
-	 G5OgB9/ggX0jDvGsqJ8J6Qq6MBaIaklsBEwfrdyu5BfJeLrr8WHU9pyfXVeIbJMsOPQ==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 Received:Received:Date:To:Cc:Message-ID:References:MIME-Version:
+	 Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version:Subject:
+	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
+	bh=+e+ro5t7Bc7wMOoMoZGdA0o4NCeXNo9NPs5x6k3cHo8=;
+	b=YOOJhnm205ioJW6L+H5BVjH51TMLLV68bJ63Nd8xGc7WAiqafDFe7eqsMPGKSyhSsO6L
+	 rwMMVoJTI63zSBJ6ujRKxp1b9CE/Q5P1h4AkX1ucfRrw9rVJqkJy7dBVEBQyHpxM1SaiG
+	 ciFSvc3X1BmaCF7xU27/5uNAs3JNG/o2HSZLajcOkt63KtAn7XIM/+loTLigeDJVxpmYb
+	 vWHP5zDvRzhqcrGr62AFVHph6IDmV6Misj0j2YdHiW9gbO1N5EOujBtQfsubnL9lZzZOs
+	 P3O+8HcHPEAARaNRxAL3B5qfNdRVW7/+asnqOmVp4PpvnJnh7GBnfgxw+LSH8LmbESg==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791129308;
-	bh=CM0BJJeBrNZtrwor646lKAD4vOyJV7VxBUsnvd5zAbo=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=btIynnF6T5jWlKdZDaB/YfkKIiA0oaX/kLDT6m1RxJflTk7p6MLbbFe3iyZCWh2Rt
-	 i9U10HEWoVFux0kUu2ukisW0WVEkXNDW4FV0UtbD+y+PZ759CKztT8xRqNwk4viOzr
-	 AsgQ8it4fOaG92WgLKj8iKjk8Zchf1tAaP9lXIhh84fJDQoXfhk+jRpYBeGcSPdbUq
-	 jGLjf3tmuD+/Y/sgn2FqB2ZBihNdsJYaJwtgHZAw9uU9uri/HLZceFNUF05mr9iEA5
-	 8hSJJQ+BXCp31fePPKwO9nZXdx9JyL9JTK8xZkU8PWbNas0enicHSVvt4qzcGFRSUv
-	 8d5UNlK7pSiYw==
+	s=default; t=1791129327;
+	bh=+e+ro5t7Bc7wMOoMoZGdA0o4NCeXNo9NPs5x6k3cHo8=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=D21ORi9lZwVz6TZVRgGQt4DjWh2rI+i2cWJNfmC8ZrEBUP8TdCAWvaPc6I/3gWqgg
+	 OwwUJxf8jAwb+YIKBG3PWzLJ7Kr6PfAL1nCpPO09qnQYs1Eh6cKwMQi2YDvJ30tc9R
+	 SQ9RrI2UFUMnCAi0HBKDTfmpKa3P5BvYOIG8gsGvify3h2G0RHmle/QlqluXnXLePd
+	 HSgW6Tmq9tU63wzBVf9r735hjhnoW0dgcLuYUjodxrMY1dZpj62lBe44mKmrAbOhGM
+	 CkVOwl3kHiewQAhfZLOjUYeq+yAgLlMrIrnHxeoLFj95eFfDan6Uth14QO5GIdF4ol
+	 /UEbMxlXvmRNQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4728960612;
-	Sun,  4 Oct 2026 15:55:08 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id BEC3B2E0
- for <buildroot@buildroot.org>; Sun,  4 Oct 2026 15:55:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A35AE809E7;
+	Sun,  4 Oct 2026 15:55:27 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3E2B12E0
+ for <buildroot@buildroot.org>; Sun,  4 Oct 2026 15:55:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A4A606060D
- for <buildroot@buildroot.org>; Sun,  4 Oct 2026 15:55:05 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 23F4E6060C
+ for <buildroot@buildroot.org>; Sun,  4 Oct 2026 15:55:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lhD6QFfq0-Cq for <buildroot@buildroot.org>;
- Sun,  4 Oct 2026 15:55:05 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org F3C6760602
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791129305;
- b=MtstktQhmmppJWo3iQ0FbEi/qqYR9YWhlH99Zb2WyJzdb+xBD6hcRmTf/VFiHIBFu6o7
- kLuvdURryT69LbR2WueLNYlY7XqQiKnpS/L+Bpoixl882yPVCQsiPfOOcVqFpFxsvhMKg
- 74GbbfFHt5N3xl09zBBj95DD8JI6p7XtGqYbPcEKkFL1c8stAkFUAmSWuACNLD5x1rXCz
- hadnMd6IO58Ljzuvg2jIE/V3Kur6c/muh1a6UU6Dh3gnYpDjwvm4wpRXfiBUAfpqiLM8L
- FyHdxaVhvOJKA0UOBgrG0ER0jHcBnl6qnnA0EYD7yoOid848yCB2rusmPIf2cE/4Ugw==
+ id DizOcAonsSOg for <buildroot@buildroot.org>;
+ Sun,  4 Oct 2026 15:55:25 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org B54EF60602
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791129325;
+ b=ANuu0czPMbGKGTsAISXJeaCyTMacK1BH4BO0kr29ddab14vLoNanJnHCXko0Dn6F2+QE
+ kOVvLwzZrqxS/HCG960UE5Wi159gu3410pvuTSg+0Okl/+UY4pvQQo/cOPMG+K18ObgeW
+ WE3X/GDegaxF1Jwk5IT/6S5y7dUFqGEk6eKK+jxWHNU4DCjuP8QEyy+9FjL4g6qPrEEpi
+ kCKvFT0EhqiVHWv90MbvYR/T24dt5tls+yy5pz+EWQ2ws5/0JGa4oyh3cHDqxl3EYwec6
+ K8dJfqoCKzP/f4RdC7pQl6UNz6kVe9tnZUJwuTw6/BSlK/MHxvbZK7A7SwOsmZH97yw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1791129305;
- h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
- X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=19wgpYgqNkte/E0h9dLCrgMtJcEj/yzZcUx4ze3XJc0=;
- b=raiq1YdBCkKlYtiPmk0mYUwZYA1+UEB+95EveKDYasnJ2rffXn9IeabBeRRZVj7W6KPM
- oUXYwcQfjtGkCcp+IOaq+ovxSpiWqbE6EgluoRTMVEbA6lWuCC5TtvNj9y1FXTuv/9DlJ
- mS9lNX3BrcnRy9SEwe6sYiU01x3BStbhZutsARrDBFFIPR2RtxSCOy5a6mXI9eMRYE/Oc
- DdNzYOrcUZBYGiwgS8fvfQ75cxlRwy91DXnpqakLwFHeAm30g+uoXt44Q8QU80aw3wBWy
- o2OBn539y3eOrwC7Yw7kA/qoMBSk3CVr3rAJ6JAtu5DMr4VwycmoEybw+Yg8ucJYxqQ==
+ c=relaxed/relaxed; t=1791129325;
+ h=Received-SPF:Received:Received:Received:DKIM-Signature:Date:From:To:
+ Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+ Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version;
+ bh=mFsPUrsPjBXV5ZcLirpHJ51HUHQMes+KHpJp+ZKT+w8=;
+ b=ZJcr+P2NrTvDDLDDfyasKrXw5UdVUh2a9EHUWkMCslGRbvM6Nufe3MHxtq/Yc3tLnQ+j
+ KxIONB3mRAb1YczroxnCJ+aAHcnq9KQnLtF0AE6jozJ9L3J21VRCfDjm9bsd8rD1klAy1
+ 43+6GtsxYs8Tj1OHmLhDKWLuVAJDVziSSOa1NyyD9wdDJHipcr7AC8K0T7Nenikw1agKe
+ sLjr9fUyvOOMXVhL7w24BbaQA/jlroZMiS3HHCv61qM+hW+IU2QtpMG201SbyiKKH6c32
+ 3roC5EBo3PHPbymD3UmQPw0BLInALXdAJG/OsC7j606Bq4nMLzHrZicNmfg42I0bLLw==
 ARC-Authentication-Results: i=1; smtp3.osuosl.org;
- arc=none smtp.remote-ip=140.211.167.122
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ dmarc=pass header.from=bootlin.com; 
+ dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=dkim header.b=T4NSBNei; 
+ arc=none smtp.remote-ip=185.246.84.56
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
+ helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id F3C6760602
- for <buildroot@buildroot.org>; Sun,  4 Oct 2026 15:55:04 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BA7418B6C0; Sun,  4 Oct 2026 15:53:49 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 4 Oct 2026 17:54:34 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ab2c02907005727b935cd40cb3c6a4c4f83d3adf
-X-Git-Newrev: 42c3ecb29356fef0df652f8e4b231d225a3e5162
-X-Patchwork-Hint: ignore
-Message-Id: <20261004155349.BA7418B6C0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/dhcpcd: fix check-package warnings
- in S41dhcpcd
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B54EF60602
+ for <buildroot@buildroot.org>; Sun,  4 Oct 2026 15:55:24 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-02.galae.net (Postfix) with ESMTPS id AF2821A112F
+ for <buildroot@buildroot.org>; Sun,  4 Oct 2026 15:55:21 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 3E4DC604FE;
+ Sun,  4 Oct 2026 15:55:21 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 162E210328192; 
+ Sun,  4 Oct 2026 17:55:19 +0200 (CEST)
+Date: Sun, 4 Oct 2026 17:55:18 +0200
+To: Waldemar Brodkorb <wbx@openadk.org>
+Cc: buildroot@buildroot.org
+Message-ID: <asJ24vxAuv_JAjm7@windsurf>
+References: <asJRgy5lq_7AenBu@waldemar-brodkorb.de>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <asJRgy5lq_7AenBu@waldemar-brodkorb.de>
+X-Last-TLS-Session-Version: TLSv1.3
+Subject: Re: [Buildroot] [PATCH] package/valgrind: bump to 3.27.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -112,111 +126,26 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/42c3ecb29356fef0df652f8e4b231d225a3e5162
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On Sun, Oct 04, 2026 at 03:15:47PM +0200, Waldemar Brodkorb wrote:
+> See here for a ChangeLog:
+> https://valgrind.org/docs/manual/dist.news.html
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 
-Update S41dhcpcd:
+Applied to master, thanks!
 
-- use plain "dhcpcd" for DAEMON (instead of "/sbin/dhcpcd"), adjust
-  PIDFILE accordingly and while at it use quotation marks for variable
-  definitions
-- fix indent (tabs vs. spaces)
+Best regards,
 
-Fixes:
-
-  $ ./utils/check-package package/dhcpcd/*
-  package/dhcpcd/S41dhcpcd:6: Do not include path in DAEMON (https://nightly.buildroot.org/#adding-packages-start-script)
-  package/dhcpcd/S41dhcpcd:8: Incorrect PIDFILE value  (https://nightly.buildroot.org/#adding-packages-start-script)
-  package/dhcpcd/S41dhcpcd:13: should be indented with tabs (https://nightly.buildroot.org/#adding-packages-start-script)
-  package/dhcpcd/S41dhcpcd:17: should be indented with tabs (https://nightly.buildroot.org/#adding-packages-start-script)
-  package/dhcpcd/S41dhcpcd:21: should be indented with tabs (https://nightly.buildroot.org/#adding-packages-start-script)
-  package/dhcpcd/S41dhcpcd:25: should be indented with tabs (https://nightly.buildroot.org/#adding-packages-start-script)
-  package/dhcpcd/S41dhcpcd:30: should be indented with tabs (https://nightly.buildroot.org/#adding-packages-start-script)
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .checkpackageignore      |  1 -
- package/dhcpcd/S41dhcpcd | 46 +++++++++++++++++++++++-----------------------
- 2 files changed, 23 insertions(+), 24 deletions(-)
-
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 95cb5eccc5..a23cb51c77 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -274,7 +274,6 @@ package/dcron/S90dcron lib_sysv.Variables
- package/dhcp/S80dhcp-relay Shellcheck lib_sysv.Variables
- package/dhcp/S80dhcp-server Shellcheck lib_sysv.Variables
- package/dhcp/dhclient-script Shellcheck lib_shellscript.TrailingSpace
--package/dhcpcd/S41dhcpcd lib_sysv.Indent lib_sysv.Variables
- package/dmalloc/0001-configure-fix-build-on-mips.patch lib_patch.Upstream
- package/dmalloc/0003-configure-allow-overriding-some-tests.patch lib_patch.Upstream
- package/dmalloc/0004-Makefile-use-the-configure-detected-or-user-supplied.patch lib_patch.Upstream
-diff --git a/package/dhcpcd/S41dhcpcd b/package/dhcpcd/S41dhcpcd
-index 55794f4075..e52e935da2 100644
---- a/package/dhcpcd/S41dhcpcd
-+++ b/package/dhcpcd/S41dhcpcd
-@@ -3,31 +3,31 @@
- # Start/stop dhcpcd
- #
- 
--DAEMON=/sbin/dhcpcd
--CONFIG=/etc/dhcpcd.conf
--PIDFILE=/var/run/dhcpcd/pid
-+DAEMON="dhcpcd"
-+CONFIG="/etc/dhcpcd.conf"
-+PIDFILE="/var/run/$DAEMON/pid"
- 
- [ -f $CONFIG ] || exit 0
- 
- case "$1" in
--  start)
--	echo "Starting dhcpcd..."
--	start-stop-daemon -S -x "$DAEMON" -p "$PIDFILE" -- -f "$CONFIG"
--	;;
--  stop)
--	echo "Stopping dhcpcd..."
--	start-stop-daemon -K -x "$DAEMON" -p "$PIDFILE" -o
--	;;
--  reload|force-reload)
--	echo "Reloading dhcpcd configuration..."
--	"$DAEMON" -s reload
--	;;
--  restart)
--	"$0" stop
--	sleep 1 # Prevent race condition: ensure dhcpcd stops before start.
--	"$0" start
--	;;
--  *)
--	echo "Usage: $0 {start|stop|restart|reload|force-reload}"
--	exit 1
-+	start)
-+		echo "Starting dhcpcd..."
-+		start-stop-daemon -S -x "/sbin/$DAEMON" -p "$PIDFILE" -- -f "$CONFIG"
-+		;;
-+	stop)
-+		echo "Stopping dhcpcd..."
-+		start-stop-daemon -K -x "/sbin/$DAEMON" -p "$PIDFILE" -o
-+		;;
-+	reload|force-reload)
-+		echo "Reloading dhcpcd configuration..."
-+		"$DAEMON" -s reload
-+		;;
-+	restart)
-+		"$0" stop
-+		sleep 1 # Prevent race condition: ensure dhcpcd stops before start.
-+		"$0" start
-+		;;
-+	*)
-+		echo "Usage: $0 {start|stop|restart|reload|force-reload}"
-+		exit 1
- esac
+Thomas Petazzoni
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
