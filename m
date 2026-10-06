@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D165CA5FFE
-	for <buildroot@archiver.kernel.org>; Tue,  6 Oct 2026 16:38:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7023CA5FED
+	for <buildroot@archiver.kernel.org>; Tue,  6 Oct 2026 16:38:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F019F406CF;
-	Tue,  6 Oct 2026 16:38:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 833E2607F6;
+	Tue,  6 Oct 2026 16:38:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1KDqF4Q0NlmL; Tue,  6 Oct 2026 16:38:32 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org B27E9406DF
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791304712;
-	b=T9p8EfJGwjHGiTCpaeOASpw1Gz3eXrs8ksk98w+p5ELEst1TjsTP4x0PN3KZ7VESixoV
-	 aP+5ZrK7F+tYQUrio1bj8zsJ12W2I2HACD02cNEMeH0JTwo4XJkUFDRQH8Ilmwd8kKOQQ
-	 Do07bqPBBqMIp3USpjY7OqKRVyjxo1orEnvQ3wORPVuP1LapyhiyNLmqDYWfZrmNzLz/y
-	 5LsULGDtsTjucwiEHhhIM1Y0Uy3FKUAp1z4YCUW+fJiBcb1ZzJ01+m+Nr2jqW79N+C5CD
-	 nlTMfsWPconRj53WBoT5FVw+IeNAWMfj3zRS+oRaQGi9i5Fr6IVkIBHbcpWqsENNn3g==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id e0YiRvUwMSpf; Tue,  6 Oct 2026 16:38:34 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org F3A6360817
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791304714;
+	b=mrp5tWG6kxRAqTUrNqOipFWf+ExYn8QvzKB/jd+WAWWMKp8hOnISS+DyAsHSOxHWTwDr
+	 A9wcgeq7ujSKYUSgjU5/rDIKsYxGLMb9kAigh0l/MOE8LxBsQi65Y72aoGSnZHh9NqyY4
+	 R3jddmc88w2eE1WGmA1uzM+9xZYZ20y5ICUfxOcnGG5Re7h/De0DMDWLhnLy6ABg0QgQI
+	 2i0SpQnwlbII9yK1cLdm8RO1HFwa1V+zd3AeeuSHb8vL+ZUShwctnVkW0VfsJf+hYnJlC
+	 ZL3uCmuFM+V1B7gHMJt2AaPInMZrx9PQiIgfjNeAZR4fJorB+6+I+statGApGd0WaHw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791304712;
+	c=relaxed/relaxed; t=1791304714;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
@@ -31,115 +31,118 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=ynQdFciz6C1Iw3RusVEKpjZj63wNI/oGnLfA8xkJxfQ=;
-	b=NB1sTuYt3cMvgc/cpiVVHJO3k0A1Niz4D2z/gwA9kOEC6KaeHhv3M2lgDYWBtnM9KQUq
-	 EK8rrAwBPzLT9L821T/m9TO9x2io0BrZ0zmT/H7T+C4OKpEbu2AbhJhN5phFymZJ6mzyQ
-	 CM4eGTQ6eBpByclDT+8Op0oj9i/fcm08oJeUFIMNXlbJn96dvwROthi7B9jeRSMZHwORx
-	 P55inr2RUNQl/NPEv/i6NBhQgYYde9aPzFYESdMC49zrTbkLPDSwKVpZ+YVwrQmSjyi7e
-	 E020pd0yGHfb6gyIBsNGcQo2UKE2m9DgQBU5z8KDunY6xAI9XSH4W/i2pQHdk+EATbg==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	bh=E8+qqsofRKJaQn3mUqUVdrNlKahRmKK8kQGPLWEHC9s=;
+	b=fy1LnML7Gz6ZyG45fZi+5GRxHHFroZ1WpfhH2Lr+YpmH+TipBBd2TH0PN8xp8CFdLpYq
+	 uY1IpyYHjWWp1zE2gZx1trEkR53oYaTmksiIHWMuXQbe6kaiIVOrYYgRVi9rVdccs1b6V
+	 mMtpYVq9zVcz7Jed83WCbdrHKI6rOgspa/RFrNrqOD3GiI28OR25syLJfbEBaqRSW9Yvy
+	 BSziBkIwWBW5L6kf1fyzZtXOweEIwrCPkYvvFzzsYj6pLy6nE32846FP+MuGBz+V0/EEU
+	 /2sT9A3mzYE1EhLIWn18ln0ZEHdtBJqhczc8Z7qQfKvcRrh4kU//6afefd+cgJhQwuw==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; dmarc=pass header.from=kuhls.net;
+	dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256 header.s=kas202605290044 header.b=h6FFBOc1;
+	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791304712;
-	bh=ynQdFciz6C1Iw3RusVEKpjZj63wNI/oGnLfA8xkJxfQ=;
+	s=default; t=1791304714;
+	bh=E8+qqsofRKJaQn3mUqUVdrNlKahRmKK8kQGPLWEHC9s=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=RBbJLQocYCc5hqVv/zfV4uqMztPE2HBsSXP45gzaDgaebdHpqkY6iL6DbLOJh2cxI
-	 h3O8No6E4erDip44WAMWT4s4pOcJ/fcjqKrzPphx1bDNsjWQSeialbA4k72nW8th4v
-	 innYgXLzm/PB2EWT+6/WgBs0yMUjWofJlQP4v9XqealN+XSUABjJ442OlQAscQScFw
-	 BLQzqzdGQxwNCQAZnjpkcAU1WXPjDvgFLwJWECxFJZCnhYDfjwhX7Xdhv7/KSLSvWi
-	 rxmo1GHbNqwZ/UQa03680xHM6IWgN1RGJnQhHeH4VNnhEdmeTYTEgfmvuGUMzAWUn7
-	 WojdNgl6Nx31w==
+	b=owJS46QqsAR4R1tcYEjPDJITSWbwVAzyX3XJO60s90k8P4RSiIyLcKf5eWTrB30J3
+	 enIiSq1gjMqsNl7G88PVOqdHerRjOn0LJFvsXH3+B2XLCtpY4HOBF1sZ9nC6QVamRb
+	 SfgVvKRe4nzxTJXdXAW3kxzsIPapp4VS8yacS5fBN0Sim4lD+MBQCysE1JNa2/p2fi
+	 VuBZ+gjQTEbf8R/7LOjYBLDs4ARL0X/UKCeSYMZT7jd49QsHNKps0UVJ9fkfsg2sbE
+	 CSC6HflCob17Tlyo9FRvi2SVtTdAeJ3oUmzqxihPbPLxB+32ODJiw4Dr2WpyoegQco
+	 9FqUWxSUF4k9A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B27E9406DF;
-	Tue,  6 Oct 2026 16:38:32 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 83A31317
- for <buildroot@buildroot.org>; Tue,  6 Oct 2026 16:34:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F3A6360817;
+	Tue,  6 Oct 2026 16:38:33 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 73CF6317
+ for <buildroot@buildroot.org>; Tue,  6 Oct 2026 16:34:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8038480DF3
- for <buildroot@buildroot.org>; Tue,  6 Oct 2026 16:34:03 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6EF12608B3
+ for <buildroot@buildroot.org>; Tue,  6 Oct 2026 16:34:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XEz7Ye68yGd4 for <buildroot@buildroot.org>;
- Tue,  6 Oct 2026 16:34:02 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org F334D80E3F
-Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791304441;
- b=n11wCP/I0rQpES6ZLHVlhxyIafyH3pxxawMkzpknHQVHW8qBGsrqjoGnhfXSMjacMq5k
- qBZqKmboNakw+ZJOsn/AQpbWlS4Nappu5/alAm070E/XJKrRxmnpXonT0qb6S4q9zfHD6
- /rJ6JA9MRDNeAL6hd0o/owmQ873z9CXaYF1fuIBakaJDS0fW56/HhrtNuuKXYedjqA/uo
- GZPBMB8vvP9kLPGz4IBMkNrsaAR6lOMNNFW8a/hWs6kTvsbK0Aj1osGXguawXLuRXTWsJ
- hBl/0napir1TVVXnVMLYqn69Jz1EAEPCe4RnyxHUhwVbVBQSPw1bll0XWdQm1mLQ4lg==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id v2n6Uya-KpGj for <buildroot@buildroot.org>;
+ Tue,  6 Oct 2026 16:34:13 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 3829C60A8A
+Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791304453;
+ b=PMQ35HDO7Dcet9ZfJ6ykVJauAJm0y4tvlxXLKpo4rb8Q8P3oBztQNm3GWe2rTV7cEBJw
+ v5BM/ebUp5eEHdIkviGDu6BfmPGCZRndJmax3f8g67fdUJDpJg7AG+CISXSuDC3obIyc3
+ jnwGwBzKlAFrpqXLMbDtmISphKEFDo/Egg1Qi5eCqxcFFvlOwLoUwstZO94QOdTP/s5pd
+ ihzmBXuJPGAkhQS9K5g9gXVGgYkK3JOZ9dL11wmooC8j2QCezoxATGFR7ucK02iapswAg
+ 9rRMTA1RNML9jPJsxrBfyWFAG4NxB8EmlbUZFEIQElMqn9IQK/DeipBBPoirGV4YsUg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1791304441;
+ c=relaxed/relaxed; t=1791304453;
  h=Received-SPF:DKIM-Signature:X-KAS-Sym:Received:Received:From:To:
  Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
- Content-Type:Content-Transfer-Encoding:X-Spam-Score:X-Spamd-Bar;
- bh=hHtGrvCc0Nq0/qU7xQRkX0dQFi4H2HOwBxSnC0YTaeg=;
- b=KWmI1k4rF1H/5tiRV6Fuxm/vsdLuWfn9SopafqUJ61upltPBfpCSStjiJbhFnQKEaRnx
- 0nywEgTWkYRWaS/5e4nEkwfDOxu3xXenBNORdiUlKY87IFJIzQNWIiigpTT7jcm+rM3Sx
- k7Kcj5nO/V5O4Vc0A2gZx2/xJwNmhVUFpaoXmWxlNroSEP3J2rRrYZcLQavcijoZ5saz1
- s332xaMumOoHk51oM5rntN3Xn2X/wc2G3wcneIsW9JqusgYF5Lq8R2SIMXC07IIM7NEsm
- 5+tAdluY0vkAlV6fiezhuygYzjjixwzEAjQ8EjMRO0uRtZRU2jmGBvk2LAYCOZfYszQ==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org;
+ Content-Transfer-Encoding:X-Spam-Score:X-Spamd-Bar;
+ bh=mS4JLavjzPnQeAKk7KeczDb6jqM5ePHP1MWrtE+89LQ=;
+ b=V/l7J9QMSr/DBVnA86FAZB1TukJwXV6ZZeIYKjleI0F08o1FTJ5kljoSfqaopm5pDv9l
+ iWpr6Aizxlwju+EwvZWDn2L408VUbvKMd+NDIytiXSTTiuibNIuXoK/aWvNM5dV2/DnB+
+ r9dWs74gLijAdw45G22X5in2gJAfmvri+2o5tnNCzWs8byTYpLEzf5qP5vKucTbiXkC7r
+ oB5T/A/Xe9dpBKnxumE7Db9c9QBVSJL5Xisj18e9Wx1YnUGXsngA4g1b0IjaHhbn3wdlm
+ BYwb5RK0XC32OM+uevFZE9wFoaDETbXiJdaqzsQKiB1wt7K5h43HL6FSoAqD/+lUd+Q==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org;
  dmarc=pass header.from=kuhls.net; 
  dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=iNA01821; 
+ header.s=kas202605290044 header.b=h6FFBOc1; 
  arc=none smtp.remote-ip=85.13.140.57
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-Authentication-Results: smtp1.osuosl.org;
+Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=kuhls.net
-Authentication-Results: smtp1.osuosl.org;
+Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202605290044 header.b=iNA01821
+ header.a=rsa-sha256 header.s=kas202605290044 header.b=h6FFBOc1
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id F334D80E3F
- for <buildroot@buildroot.org>; Tue,  6 Oct 2026 16:34:00 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3829C60A8A
+ for <buildroot@buildroot.org>; Tue,  6 Oct 2026 16:34:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
  s=kas202605290044; t=1791303710;
- bh=hHtGrvCc0Nq0/qU7xQRkX0dQFi4H2HOwBxSnC0YTaeg=;
+ bh=mS4JLavjzPnQeAKk7KeczDb6jqM5ePHP1MWrtE+89LQ=;
  h=From:To:Subject:Date:In-Reply-To:From;
- b=iNA01821fd6zApK7SRJyd12zYs8DK+MtZMJfTCkk+7gXt6QOWiohEcErN5HseJtLf
- +48INzJXNjFQ7EO1ZSiFvVXZ8l2x1qdxXZdpAQMTdkAEOPysYsW6vv9FESw8v+JsC2
- IwFzgBinmbrAQ6ERoaaJRY4feiQQfAnZm8QnDggP2gHX/W02OXbHN3oU/uWFStMMS2
- eycfl8ltu6jCUcQUyWkG8lg10zJ3QWJV6vxZeLee1UXrZ1O8Fe7b1fXEbgSYRA371H
- DZttqtJ9iRZ+sgOaCBy/DUeFdQ+IACfyXTC0zXQSPPem5Lpke2eNjCt1auNZwRancD
- pgPYZSnuDsw+Q==
+ b=h6FFBOc17XQ9UqNvT0u8r6JiEV6Bsdx4HL2rVcEV+/53oEjCMg78EQFQRYrO/fS52
+ q9zXc2ZVSA+zzn08UEROAPhsJdyvAl5sO+rJ+ivbvOT6iePOVgBCbFSuyk3zPnegcf
+ YNTnOeK9AHZklLJlKTTkHXuQWRVuOISVTpjOaIOSOPBCX5gY0j6m/fJOINCTlJGUT5
+ su/PkGsJLPL10DPSbiYMxD5np40/cIzBy1nSnLYYeV25KrPDrmliRV/vX4Bj+QPSky
+ 1Y07Q01mo294mA87hxdEwJghZg5M4dAES0BYaFt1FS3xtjcQ0yvVOXrtZJlRRH0SPG
+ 094y7eRVPlITg==
 X-KAS-Sym: v3:f51bdf72230551df:UVRrC5WRPqTrQZ2snRs6ADaGTIs1fNMELseztNLkGZaoG
  nDVoIWJAJHxWOAZfar7ySv6hURHCYEJ486jY0wSzH4bn6X9oZtMeJOWXJWfbXQl4RiwCyrj/m57
  15sQ0uumxbq4Ni0Jg8upgOj44d4LDRY4qAHg+axEDZVbYP0g0yE2r2HU5OlzQlUaGimeYmMwhfI
  C2XbfRi5reOEXID85lh2h/YKBFEVYOpWHl87Xd6mrYgK6QCyW0YmzXJKF3rsfBDAdGW7GiuVnBc
  u7jtTtCWAX8A4fqyTLJm9T3xE0yk3CafN3r54xhVAFfUDD2DDyyj4LyhMirWwrBiHdxCKemg==:
- 4F+Y7qMZFeOk2PEo7W6xFgirU29LHy5LHK5myPx3usp3LOfZAzDm7OIFiURTZy7ktS4lmnrSGCd
- CFIaW0VnzWdlt/WZjdBgt9dcNPhmEJcRcgxAGXNmDcXd/z3FoQWGXzRK/SWb0c5vnN/sOCGDVUA
- mtJUUj1ikiRVcUseKVqzU7MYmu1VTSNp9be6UsdQVNDI7qmq5znrwIShRdNS/wKd9dvoDoyJx+N
- Jvgw9A56WwSn0TY1ZVUiqgx+7l59e5Y4Rs4JhvclrFGpUHRGaTReScS+JHATNxQ9ht/WbsASQap
- gPcIPOKevs45ANbuN+YuJQMNqw3VzVDQRAs0mI947MjtG9s2J8cIZ5tq9b8c3A8ncisF+KVFpPG
- DHs3Lt4B61D3U4cHgOVTqgZ4/IfKVCXfe/LL0lpfLbqFV2DugCh66m8kSYdpij1ZjE2UesDMEp/
- JiLY0un98Kf+X7w4ENftW/S83IP84WiPlXzQ5sJNJX3/9geQsLiz1FGl6zdklf5iEhI4NhP39Zr
- PBUBrz2XFBCymsW2OHgPwea6Ks6t9sAHhiutA08jiGTWBVPspDG
+ 6oWNsjqKTY8t9Uyx4oOvdzLYLvKNnOS1GAuU3wjqcfLHr7Q/ROe/D1NZYc1TVp7vIrLjPLIyhm1
+ QPQElTi2V0uysTfApLf0IdKOOPivHGis9VcS4ixUpYgVC/LTgBPn8WP3VqxJw79Yawea7WPRo1A
+ 5HyNb8GKZ4ZtH6Km3lWuv4TFNY5bHQp/1LJAZQxd03Ts1XIkb4OFm9R51Pi6yWS+rLv3EcHEj0v
+ CBlsRMN+dCSF4HDEcVecgDz5ZO8g1Hc61rlwaPoxQNOxgnyTqvLfX8gprkNwyYIM9N3hbx3rlcc
+ gORkAVsW0ceW5wSErJiq/4Mslt/V6symOCzX2XwOZdUFProBUEqkogGpOY7g142yLPCOJox912A
+ imVRFgC2kr7KeYhrORn+9aS2JvU3pL/Mby1sfcNcWVm3z4wLk2vaOprTsrBTWXy3L8uUhFemCUp
+ Xw0jsnIUnb5PTuVFW8VmcB4GGNWRpliZlr3xoJP9iYMSNznDVmwa8tVq38Q7YCLaB4Ak1sx/rcq
+ ROfwaHNu+/n/RwlOVETOlPHjlGR0n3UB/cI6vmtM5QtrDnEZ4SgwwbMu1yhE9hI6XzK9TufwYWL
+ pla06i0=
 Received: from fli4l.lan.fli4l (p5b3a03df.dip0.t-ipconnect.de [91.58.3.223])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id AE8D9A4C5535
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id DFA08A4C5537
  for <buildroot@buildroot.org>; Tue,  6 Oct 2026 18:21:50 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:58872)
  by fli4l.lan.fli4l with esmtp (Exim 4.100.1)
- (envelope-from <bernd@kuhls.net>) id 1xE7uk-000000000ir-3tVM
- for buildroot@buildroot.org; Tue, 06 Oct 2026 16:21:14 +0000
+ (envelope-from <bernd@kuhls.net>) id 1xE7ul-000000000ir-0Sm6
+ for buildroot@buildroot.org; Tue, 06 Oct 2026 16:21:15 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Tue,  6 Oct 2026 18:20:19 +0200
-Message-ID: <20261006162106.3439373-39-bernd@kuhls.net>
+Date: Tue,  6 Oct 2026 18:20:20 +0200
+Message-ID: <20261006162106.3439373-40-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20261006162106.3439373-1-bernd@kuhls.net>
 References: <20261006162106.3439373-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: ---
-Subject: [Buildroot] [PATCH v8 38/84] package/luvi: bump version to
- 102-g9fa6c141a
+X-Spamd-Bar: --
+Subject: [Buildroot] [PATCH v8 39/84] package/luvi: Fix build with OpenSSL
+ 4.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -151,152 +154,430 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-VGhpcyBidW1wIGluY2x1ZGVzIGEgYnVtcCBvZiB0aGUgbHVhLW9wZW5zc2wgc3VibW9kdWxlCmh0
-dHBzOi8vZ2l0aHViLmNvbS9sdXZpdC9sdXZpL2NvbW1pdC85OGZhMTBmMjgyM2Q0YTliYjkzMzA2
-YmY0NDVkNTk2YWE4YzRhNzVmCndoaWNoIGlzIGEgcHJlcmVxdWlzaXRlIGZvciB0aGUgdXBjb21p
-bmcgYnVtcCBvZiBPcGVuU1NMIHRvIDQuMC4yLgoKUmVtb3ZlZCBwYXRjaGVzIDAwMDEgJiAwMDAy
-IHdoaWNoIGFyZSBpbmNsdWRlZCBpbiB0aGlzIGJ1bXAuCgpSZW51bWJlcmVkIGFuZCByZWJhc2Vk
-IHJlbWFpbmluZyBwYXRjaC4KClNpZ25lZC1vZmYtYnk6IEJlcm5kIEt1aGxzIDxiZXJuZEBrdWhs
-cy5uZXQ+Ci0tLQogLi4uTGlzdHMudHh0LW9ubHktcmVxdWlyZS1hLUMtY29tcGlsZXIucGF0Y2h9
-IHwgIDkgKystCiAuLi5seS1kaXNhYmxlLUdDQy1kaWFnbm9zdGljcy1pbi1vY3NwLmMucGF0Y2gg
-fCA4MCAtLS0tLS0tLS0tLS0tLS0tLS0tCiAuLi5pc2FibGUtV2luY29tcGF0aWJsZS1wb2ludGVy
-LXR5cGVzLWYucGF0Y2ggfCA1NCAtLS0tLS0tLS0tLS0tCiBwYWNrYWdlL2x1dmkvbHV2aS5oYXNo
-ICAgICAgICAgICAgICAgICAgICAgICAgfCAgMiArLQogcGFja2FnZS9sdXZpL2x1dmkubWsgICAg
-ICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIDUgZmlsZXMgY2hhbmdlZCwgNyBpbnNlcnRp
-b25zKCspLCAxNDAgZGVsZXRpb25zKC0pCiByZW5hbWUgcGFja2FnZS9sdXZpL3swMDAzLUNNYWtl
-TGlzdHMudHh0LW9ubHktcmVxdWlyZS1hLUMtY29tcGlsZXIucGF0Y2ggPT4gMDAwMS1DTWFrZUxp
-c3RzLnR4dC1vbmx5LXJlcXVpcmUtYS1DLWNvbXBpbGVyLnBhdGNofSAoODklKQogZGVsZXRlIG1v
-ZGUgMTAwNjQ0IHBhY2thZ2UvbHV2aS8wMDAxLVNlbGVjdGl2ZWx5LWRpc2FibGUtR0NDLWRpYWdu
-b3N0aWNzLWluLW9jc3AuYy5wYXRjaAogZGVsZXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvbHV2aS8w
-MDAyLUNNYWtlTGlzdHMudHh0LWRpc2FibGUtV2luY29tcGF0aWJsZS1wb2ludGVyLXR5cGVzLWYu
-cGF0Y2gKCmRpZmYgLS1naXQgYS9wYWNrYWdlL2x1dmkvMDAwMy1DTWFrZUxpc3RzLnR4dC1vbmx5
-LXJlcXVpcmUtYS1DLWNvbXBpbGVyLnBhdGNoIGIvcGFja2FnZS9sdXZpLzAwMDEtQ01ha2VMaXN0
-cy50eHQtb25seS1yZXF1aXJlLWEtQy1jb21waWxlci5wYXRjaApzaW1pbGFyaXR5IGluZGV4IDg5
-JQpyZW5hbWUgZnJvbSBwYWNrYWdlL2x1dmkvMDAwMy1DTWFrZUxpc3RzLnR4dC1vbmx5LXJlcXVp
-cmUtYS1DLWNvbXBpbGVyLnBhdGNoCnJlbmFtZSB0byBwYWNrYWdlL2x1dmkvMDAwMS1DTWFrZUxp
-c3RzLnR4dC1vbmx5LXJlcXVpcmUtYS1DLWNvbXBpbGVyLnBhdGNoCmluZGV4IGM2OGUwNWJkYzcu
-LjU1MGMwZmVjZjggMTAwNjQ0Ci0tLSBhL3BhY2thZ2UvbHV2aS8wMDAzLUNNYWtlTGlzdHMudHh0
-LW9ubHktcmVxdWlyZS1hLUMtY29tcGlsZXIucGF0Y2gKKysrIGIvcGFja2FnZS9sdXZpLzAwMDEt
-Q01ha2VMaXN0cy50eHQtb25seS1yZXF1aXJlLWEtQy1jb21waWxlci5wYXRjaApAQCAtMTIsNiAr
-MTIsNyBAQCBTaWduZWQtb2ZmLWJ5OiBUaG9tYXMgRGV2b29nZHQgPHRob21hc0BkZXZvb2dkdC5j
-b20+CiAKIFVwc3RyZWFtOiBodHRwczovL2dpdGh1Yi5jb20vcmljaGdlbDk5OS9taW5pei9jb21t
-aXQvMzgzZTU1MWNjY2Y0MWZjMmNlMTE3NzcxMmQ2YTM3YTg1ZDkzNjY0MgogCitbQmVybmQ6IHJl
-YmFzZWQgZm9yIDEwMi1nOWZhNmMxNDFhXQogU2lnbmVkLW9mZi1ieTogQmVybmQgS3VobHMgPGJl
-cm5kQGt1aGxzLm5ldD4KIC0tLQogIGRlcHMvbWluaXovQ01ha2VMaXN0cy50eHQgfCA1ICsrKy0t
-CkBAIC0zNCwxNCArMzUsMTQgQEAgaW5kZXggMTU2ZGY4My4uZTA5MzNmOCAxMDA2NDQKICAgIHNl
-dChDTUFLRV9DX1NUQU5EQVJEIDkwKQogICAgc2V0KENNQUtFX1ZFUkJPU0VfTUFLRUZJTEUgT04p
-CiAgICAjIHNldChDTUFLRV9DX1ZJU0lCSUxJVFlfUFJFU0VUIGhpZGRlbikKLUBAIC0zMDksNiAr
-MzA5LDcgQEAgaWYoQlVJTERfRlVaWkVSUykKK0BAIC0yOTgsNiArMjk4LDcgQEAgaWYoQlVJTERf
-RlVaWkVSUykKICBlbmRpZigpCiAgCiAgaWYoQlVJTERfVEVTVFMpCiArICBlbmFibGVfbGFuZ3Vh
-Z2UoQ1hYKQotICAgc2V0KENNQUtFX0NYWF9TVEFOREFSRCAyMCkKLSAgIHNldChDTUFLRV9DWFhf
-U1RBTkRBUkRfUkVRVUlSRUQgWUVTKQotIAorCXNldChDTUFLRV9DWFhfU1RBTkRBUkQgMjApCisJ
-c2V0KENNQUtFX0NYWF9TVEFOREFSRF9SRVFVSVJFRCBZRVMpCisJCiAtLSAKIDIuNDcuMwogCmRp
-ZmYgLS1naXQgYS9wYWNrYWdlL2x1dmkvMDAwMS1TZWxlY3RpdmVseS1kaXNhYmxlLUdDQy1kaWFn
-bm9zdGljcy1pbi1vY3NwLmMucGF0Y2ggYi9wYWNrYWdlL2x1dmkvMDAwMS1TZWxlY3RpdmVseS1k
-aXNhYmxlLUdDQy1kaWFnbm9zdGljcy1pbi1vY3NwLmMucGF0Y2gKZGVsZXRlZCBmaWxlIG1vZGUg
-MTAwNjQ0CmluZGV4IGQyOWJhMzdiY2YuLjAwMDAwMDAwMDAKLS0tIGEvcGFja2FnZS9sdXZpLzAw
-MDEtU2VsZWN0aXZlbHktZGlzYWJsZS1HQ0MtZGlhZ25vc3RpY3MtaW4tb2NzcC5jLnBhdGNoCisr
-KyAvZGV2L251bGwKQEAgLTEsODAgKzAsMCBAQAotRnJvbSA1MmJjMzZmNWE1NDg1NDM4MzVjMjRi
-ODdlN2I3YjcyYTMyN2IxZGY3IE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQotRnJvbTogUkRXIDxk
-dWNrd2hhbGVAbWFpbC5ydT4KLURhdGU6IFN1biwgMTQgU2VwIDIwMjUgMDA6MzM6MTAgKzAyMDAK
-LVN1YmplY3Q6IFtQQVRDSF0gU2VsZWN0aXZlbHkgZGlzYWJsZSBHQ0MgZGlhZ25vc3RpY3MgaW4g
-b2NzcC5jCi0KLUdDQyAxNCBmYWlscyB0byBjb21waWxlIHRoZSBsaWJyYXJ5IGJlY2F1c2UgLVdp
-bmNvbXBhdGlibGUtcG9pbnRlci10eXBlcyBpcyBub3cgZmF0YWwuCi1TaW5jZSB0aGUgd2Fybmlu
-ZyBpcyBhbHJlYWR5IGRpc2FibGVkIGZvciBjbGFuZyBoZXJlLCBtaWdodCBhcyB3ZWxsIGluY2x1
-ZGUgR0NDIGFsc28uCi1OZWVkbGVzcyB0byBzYXksIHRoaXMgaXMgYSB3b3JrYXJvdW5kIGFuZCBh
-IHByb3BlciBmaXggd291bGQgcmVxdWlyZSB1cHN0cmVhbSBjaGFuZ2VzLgotCi1VcHN0cmVhbTog
-aHR0cHM6Ly9naXRodWIuY29tL3poYW96Zy9sdWEtb3BlbnNzbC9jb21taXQvYmZlZWRiZThjMDZk
-OGI0NDAwZmE2NzBlZGVjZDQ1MmE0MzNkZGFjNAotW1JvbWFpbjoKLSAgLSByZWJhc2Ugb24gbHVh
-LW9wZW5zc2wgMC45LjAtMAotICAtIGZvcm1hdCB0aGUgcGF0Y2ggYXMgbHV2aSBwYXRjaCAocGF0
-Y2hpbmcgbHVhLW9wZW5zc2wgc3VibW9kdWxlKQotXQotU2lnbmVkLW9mZi1ieTogUm9tYWluIE5h
-b3VyIDxyb21haW4ubmFvdXJAc21pbGUuZnI+Ci0tLS0KLSBkZXBzL2x1YS1vcGVuc3NsL3NyYy9v
-Y3NwLmMgfCAyMiArKysrKysrKysrKysrKysrKysrKysrCi0gMSBmaWxlIGNoYW5nZWQsIDIyIGlu
-c2VydGlvbnMoKykKLQotZGlmZiAtLWdpdCBhL2RlcHMvbHVhLW9wZW5zc2wvc3JjL29jc3AuYyBi
-L2RlcHMvbHVhLW9wZW5zc2wvc3JjL29jc3AuYwotaW5kZXggYWM2N2E1My4uMDBlM2I2MSAxMDA2
-NDQKLS0tLSBhL2RlcHMvbHVhLW9wZW5zc2wvc3JjL29jc3AuYwotKysrIGIvZGVwcy9sdWEtb3Bl
-bnNzbC9zcmMvb2NzcC5jCi1AQCAtMTgzLDE1ICsxODMsMjYgQEAgc3RhdGljIGludCBvcGVuc3Ns
-X29jc3BfcmVxdWVzdF9yZWFkKGx1YV9TdGF0ZSAqTCkKLSAgIEJJTyAqYmlvID0gbG9hZF9iaW9f
-b2JqZWN0KEwsIDEpOwotICAgaW50IHBlbSA9IGx1YV9nZXR0b3AoTCkgPiAxID8gYXV4aWxpYXJf
-Y2hlY2tib29sZWFuKEwsIDIpIDogMDsKLSAKLSsjaWYgZGVmaW5lZChfX0dOVUNfXykKLSsjcHJh
-Z21hIEdDQyBkaWFnbm9zdGljIHB1c2gKLSsjcHJhZ21hIEdDQyBkaWFnbm9zdGljIGlnbm9yZWQg
-Ii1XaW5jb21wYXRpYmxlLXBvaW50ZXItdHlwZXMiCi0rI2VuZGlmCi0rCi0gI2lmIGRlZmluZWQo
-X19jbGFuZ19fKQotICNwcmFnbWEgY2xhbmcgZGlhZ25vc3RpYyBwdXNoCi0gI3ByYWdtYSBjbGFu
-ZyBkaWFnbm9zdGljIGlnbm9yZWQgIi1XaW5jb21wYXRpYmxlLXBvaW50ZXItdHlwZXMiCi0gI2Vu
-ZGlmCi0gICBPQ1NQX1JFUVVFU1QgKnJlcSA9IHBlbSA/IFBFTV9yZWFkX2Jpb19PQ1NQX1JFUVVF
-U1QoYmlvLCBOVUxMLCBOVUxMKQotICAgICAgICAgICAgICAgICAgICAgICAgICAgOiBkMmlfT0NT
-UF9SRVFVRVNUX2JpbyhiaW8sIE5VTEwpOwotKwotKyNpZiBkZWZpbmVkKF9fR05VQ19fKQotKyNw
-cmFnbWEgR0NDIGRpYWdub3N0aWMgcG9wCi0rI2VuZGlmCi0rCi0gI2lmIGRlZmluZWQoX19jbGFu
-Z19fKQotICNwcmFnbWEgY2xhbmcgZGlhZ25vc3RpYyBwb3AKLSAjZW5kaWYKLSsKLSAgIEJJT19m
-cmVlKGJpbyk7Ci0gCi0gICBpZiAocmVxKQotQEAgLTM1OSwxNSArMzcwLDI2IEBAIHN0YXRpYyBp
-bnQgb3BlbnNzbF9vY3NwX3Jlc3BvbnNlX3JlYWQobHVhX1N0YXRlICpMKQotICAgaW50IHBlbSA9
-IGx1YV9nZXR0b3AoTCkgPiAxID8gYXV4aWxpYXJfY2hlY2tib29sZWFuKEwsIDIpIDogMDsKLSAg
-IGludCByZXQgPSAwOwotIAotKyNpZiBkZWZpbmVkKF9fR05VQ19fKQotKyNwcmFnbWEgR0NDIGRp
-YWdub3N0aWMgcHVzaAotKyNwcmFnbWEgR0NDIGRpYWdub3N0aWMgaWdub3JlZCAiLVdpbmNvbXBh
-dGlibGUtcG9pbnRlci10eXBlcyIKLSsjZW5kaWYKLSsKLSAjaWYgZGVmaW5lZChfX2NsYW5nX18p
-Ci0gI3ByYWdtYSBjbGFuZyBkaWFnbm9zdGljIHB1c2gKLSAjcHJhZ21hIGNsYW5nIGRpYWdub3N0
-aWMgaWdub3JlZCAiLVdpbmNvbXBhdGlibGUtcG9pbnRlci10eXBlcyIKLSAjZW5kaWYKLSAgIE9D
-U1BfUkVTUE9OU0UgKnJlcyA9IHBlbSA/IFBFTV9yZWFkX2Jpb19PQ1NQX1JFU1BPTlNFKGJpbywg
-TlVMTCwgTlVMTCkKLSAgICAgICAgICAgICAgICAgICAgICAgICAgICA6IGQyaV9PQ1NQX1JFU1BP
-TlNFX2JpbyhiaW8sIE5VTEwpOwotKwotKyNpZiBkZWZpbmVkKF9fR05VQ19fKQotKyNwcmFnbWEg
-R0NDIGRpYWdub3N0aWMgcG9wCi0rI2VuZGlmCi0rCi0gI2lmIGRlZmluZWQoX19jbGFuZ19fKQot
-ICNwcmFnbWEgY2xhbmcgZGlhZ25vc3RpYyBwb3AKLSAjZW5kaWYKLSsKLSAgIGlmIChyZXMpCi0g
-ICB7Ci0gICAgIFBVU0hfT0JKRUNUKHJlcywgIm9wZW5zc2wub2NzcF9yZXNwb25zZSIpOwotLS0g
-Ci0yLjUxLjAKLQpkaWZmIC0tZ2l0IGEvcGFja2FnZS9sdXZpLzAwMDItQ01ha2VMaXN0cy50eHQt
-ZGlzYWJsZS1XaW5jb21wYXRpYmxlLXBvaW50ZXItdHlwZXMtZi5wYXRjaCBiL3BhY2thZ2UvbHV2
-aS8wMDAyLUNNYWtlTGlzdHMudHh0LWRpc2FibGUtV2luY29tcGF0aWJsZS1wb2ludGVyLXR5cGVz
-LWYucGF0Y2gKZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IGI2NThmZWQyMDIuLjAwMDAw
-MDAwMDAKLS0tIGEvcGFja2FnZS9sdXZpLzAwMDItQ01ha2VMaXN0cy50eHQtZGlzYWJsZS1XaW5j
-b21wYXRpYmxlLXBvaW50ZXItdHlwZXMtZi5wYXRjaAorKysgL2Rldi9udWxsCkBAIC0xLDU0ICsw
-LDAgQEAKLUZyb20gYzgyYzE0N2U4M2Q2YTIxZjU3MjM1M2JmNmU5NWRjZjNhNzM2NDkwYyBNb24g
-U2VwIDE3IDAwOjAwOjAwIDIwMDEKLUZyb206IFJvbWFpbiBOYW91ciA8cm9tYWluLm5hb3VyQHNt
-aWxlLmZyPgotRGF0ZTogU2F0LCAxMyBTZXAgMjAyNSAyMzoyMTowNCArMDIwMAotU3ViamVjdDog
-W1BBVENIXSBDTWFrZUxpc3RzLnR4dDogZGlzYWJsZSBXaW5jb21wYXRpYmxlLXBvaW50ZXItdHlw
-ZXMgZm9yIGdjYwotID49IDE0Ci1NSU1FLVZlcnNpb246IDEuMAotQ29udGVudC1UeXBlOiB0ZXh0
-L3BsYWluOyBjaGFyc2V0PVVURi04Ci1Db250ZW50LVRyYW5zZmVyLUVuY29kaW5nOiA4Yml0Ci0K
-LUJhY2twb3J0IHBhcnRpYWxseSBhIHBhdGNoIFsxXSBkaXNhYmxpbmcgR0NDIDE0IHdhcm5pbmcK
-LVdpbmNvbXBhdGlibGUtcG9pbnRlci10eXBlcy4KLQotRnJvbSBbMV06Ci0ibHVhLW9wZW5zc2wg
-dHJpZ2dlcmluZyB0aGUgaW5jb21wYXRpYmxlIHBvaW50ZXIgdHlwZXMgZXJyb3IgYnkKLXNpbGVu
-Y2luZyB0aGUgd2FybmluZywgd2hpY2ggbHVhLW9wZW5zc2wgZG9lcyBpbnRlcm5hbGx5IGJ1dCBv
-bmx5IGZvcgotY2xhbmcuIgotCi1MYXRlc3QgbHVhLW9wZW5zc2wgdmVyc2lvbiAoMC45LjEtMCkg
-YWxzbyBkaXNhYmxlIHRoaXMgd2FybmluZ8KgWzJdLgotCi1GaXhlczoKLWh0dHBzOi8vZ2l0bGFi
-LmNvbS9idWlsZHJvb3Qub3JnL2J1aWxkcm9vdC8tL2pvYnMvMTEyNzExMjQ0MzAgKFRlc3RMdXZp
-KQotCi1bMV0gaHR0cHM6Ly9naXRodWIuY29tL2x1dml0L2x1dmkvY29tbWl0Lzg1ZDdkN2JmNTFi
-YzUyMzE1OWFkNTc5ZDg0NmNiZWZiYmZmMzhmZGIKLVsyXSBodHRwczovL2dpdGh1Yi5jb20vemhh
-b3pnL2x1YS1vcGVuc3NsL2NvbW1pdC9iZmVlZGJlOGMwNmQ4YjQ0MDBmYTY3MGVkZWNkNDUyYTQz
-M2RkYWM0Ci0KLVVwc3RyZWFtOiBodHRwczovL2dpdGh1Yi5jb20vbHV2aXQvbHV2aS9jb21taXQv
-ODVkN2Q3YmY1MWJjNTIzMTU5YWQ1NzlkODQ2Y2JlZmJiZmYzOGZkYgotCi1TaWduZWQtb2ZmLWJ5
-OiBSb21haW4gTmFvdXIgPHJvbWFpbi5uYW91ckBzbWlsZS5mcj4KLS0tLQotIENNYWtlTGlzdHMu
-dHh0IHwgOCArKysrKysrKwotIDEgZmlsZSBjaGFuZ2VkLCA4IGluc2VydGlvbnMoKykKLQotZGlm
-ZiAtLWdpdCBhL0NNYWtlTGlzdHMudHh0IGIvQ01ha2VMaXN0cy50eHQKLWluZGV4IDBiMDAwN2Qu
-LmJmMTBkZTUgMTAwNjQ0Ci0tLS0gYS9DTWFrZUxpc3RzLnR4dAotKysrIGIvQ01ha2VMaXN0cy50
-eHQKLUBAIC0xNDEsNiArMTQxLDE0IEBAIGlmIChXSU4zMikKLSAgIGFkZF9saWJyYXJ5IChsdXZp
-X3JlbmFtZWQgc3JjL2x1dmlfcmVuYW1lZC5jKQotIGVuZGlmICgpCi0gCi0raWYgKENNQUtFX0Nf
-Q09NUElMRVJfSUQgTUFUQ0hFUyAiQ2xhbmd8R05VIikKLSsgIGFkZF9jb21waWxlX29wdGlvbnMo
-LVduby1pbmNvbXBhdGlibGUtcG9pbnRlci10eXBlcykKLStlbmRpZigpCi0rCi0raWYoVU5JWCkK
-LSsgIGFkZF9kZWZpbml0aW9ucygtV2FsbCkKLStlbmRpZigpCi0rCi0gaWYgKFdJVEhfTFVBX0VO
-R0lORSBTVFJFUVVBTCBMdWEpCi0gICBhZGRfZGVmaW5pdGlvbnMoLURXSVRIX1BMQUlOX0xVQSkK
-LSBlbmRpZiAoKQotLS0gCi0yLjUxLjAKLQpkaWZmIC0tZ2l0IGEvcGFja2FnZS9sdXZpL2x1dmku
-aGFzaCBiL3BhY2thZ2UvbHV2aS9sdXZpLmhhc2gKaW5kZXggZDg4MjU0ODdkYi4uNGIzMjJjMTE5
-ZSAxMDA2NDQKLS0tIGEvcGFja2FnZS9sdXZpL2x1dmkuaGFzaAorKysgYi9wYWNrYWdlL2x1dmkv
-bHV2aS5oYXNoCkBAIC0xLDMgKzEsMyBAQAogIyBMb2NhbGx5IGNhbGN1bGF0ZWQKLXNoYTI1NiAg
-ZjkzM2JmMTg5OWE1NDE5YjI2ZDQ2ZDdmMTExYWFhNTAxMDE4MzE5MjI3MTZmZmFlZDYyZTM1NWIx
-YmM5ZGUxZCAgbHV2aS12Mi4xNS4wLWdpdDQudGFyLmd6CitzaGEyNTYgIDhkZWUxNDc3M2ZmYTU5
-ZTMwMTVjMmYzOTIzZDRmYjYyZjAwMjE5NjFhYTU2NjkzNzNmNmJjZjU1Mzg0N2M3M2IgIGx1dmkt
-MTAyLWc5ZmE2YzE0MWFiZjI0YTVhN2ZlNDljYTM5MzM1MjEwZmExYmUzYWI0LWdpdDQudGFyLmd6
-CiBzaGEyNTYgIGNmYzc3NDliOTZmNjNiZDMxYzNjNDJiNWM0NzFiZjc1NjgxNDA1M2U4NDdjMTBm
-M2ViMDAzNDE3YmM1MjNkMzAgIExJQ0VOU0UudHh0CmRpZmYgLS1naXQgYS9wYWNrYWdlL2x1dmkv
-bHV2aS5tayBiL3BhY2thZ2UvbHV2aS9sdXZpLm1rCmluZGV4IDc4ZGU3NmFhNDUuLjE1N2Q5YTE0
-MDEgMTAwNjQ0Ci0tLSBhL3BhY2thZ2UvbHV2aS9sdXZpLm1rCisrKyBiL3BhY2thZ2UvbHV2aS9s
-dXZpLm1rCkBAIC00LDcgKzQsNyBAQAogIwogIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKIAotTFVW
-SV9WRVJTSU9OID0gdjIuMTUuMAorTFVWSV9WRVJTSU9OID0gMTAyLWc5ZmE2YzE0MWFiZjI0YTVh
-N2ZlNDljYTM5MzM1MjEwZmExYmUzYWI0CiBMVVZJX1NJVEUgPSBodHRwczovL2dpdGh1Yi5jb20v
-bHV2aXQvbHV2aS5naXQKIExVVklfU0lURV9NRVRIT0QgPSBnaXQKIExVVklfR0lUX1NVQk1PRFVM
-RVMgPSBZRVMKLS0gCjIuNDcuMwoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9y
-ZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ .../luvi/0002-feat-support-openssl-4.0.patch  | 403 ++++++++++++++++++
+ 1 file changed, 403 insertions(+)
+ create mode 100644 package/luvi/0002-feat-support-openssl-4.0.patch
+
+diff --git a/package/luvi/0002-feat-support-openssl-4.0.patch b/package/luvi/0002-feat-support-openssl-4.0.patch
+new file mode 100644
+index 0000000000..fa35b70435
+--- /dev/null
++++ b/package/luvi/0002-feat-support-openssl-4.0.patch
+@@ -0,0 +1,403 @@
++From 529b4a42eeb2b77f8f8c829f856977c5b50d0b7b Mon Sep 17 00:00:00 2001
++From: zhaozg <zhaozg@gmail.com>
++Date: Thu, 16 Apr 2026 14:04:32 +0800
++Subject: [PATCH] feat: support openssl 4.0
++
++Upstream: https://github.com/zhaozg/lua-openssl/commit/529b4a42eeb2b77f8f8c829f856977c5b50d0b7b
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ deps/lua-openssl/src/asn1.c      | 59 +++++++++++++++++++++++++++++++------------------
++ deps/lua-openssl/src/crl.c       |  9 ++++----
++ deps/lua-openssl/src/csr.c       | 30 +++++++++++++++++--------
++ deps/lua-openssl/src/openssl.c   |  2 ++
++ deps/lua-openssl/src/private.h   |  2 +-
++ deps/lua-openssl/src/ssl.c       |  2 +-
++ deps/lua-openssl/src/x509.c      |  2 +-
++ deps/lua-openssl/src/xalgor.c    |  2 +-
++ deps/lua-openssl/src/xname.c     |  2 +-
++ deps/lua-openssl/test/helper.lua |  2 +-
++ 10 files changed, 71 insertions(+), 41 deletions(-)
++
++diff --git a/deps/lua-openssl/src/asn1.c b/deps/lua-openssl/src/asn1.c
++index d7972738..566d78ee 100644
++--- a/deps/lua-openssl/src/asn1.c
+++++ b/deps/lua-openssl/src/asn1.c
++@@ -499,7 +499,14 @@ openssl_asn1object_new(lua_State *L)
++       ret = 1;
++     }
++   } else if (lua_isnone(L, 1)) {
++-    ASN1_OBJECT *obj = ASN1_OBJECT_new();
+++    /* ASN1_OBJECT_new() is deprecated in OpenSSL 4.0,
+++     * but there's no direct replacement for creating an empty object.
+++     * We create an object from a dummy NID instead. */
+++    ASN1_OBJECT *obj = OBJ_nid2obj(NID_undef);
+++    if (obj == NULL) {
+++        /* Fallback: create from empty string */
+++        obj = OBJ_txt2obj("", 1);
+++    }
++     PUSH_OBJECT(obj, "openssl.asn1_object");
++     ret = 1;
++   }
++@@ -658,11 +665,13 @@ openssl_push_asn1type(lua_State *L, const ASN1_TYPE *type)
++ {
++   lua_newtable(L);
++ 
++-#define P(V, v)                                                                                    \
++-  case V_##V: {                                                                                    \
++-    V *s = (V *)type->value.ptr;                                                                   \
++-    AUXILIAR_SETLSTR(L, -1, "value", (const char *)s->data, s->length);                            \
++-    break;                                                                                         \
+++#define P(V, v)                                                  \
+++  case V_##V: {                                                  \
+++    V *s = (V *)type->value.ptr;                                 \
+++    AUXILIAR_SETLSTR(L, -1, "value",                             \
+++                     (const char *)ASN1_STRING_get0_data(s),     \
+++                     ASN1_STRING_length(s));                     \
+++    break;                                                       \
++   }
++ 
++   switch (type->type) {
++@@ -695,7 +704,7 @@ openssl_push_asn1type(lua_State *L, const ASN1_TYPE *type)
++ 
++   default: {
++     ASN1_STRING *s = (ASN1_STRING *)type->value.asn1_string;
++-    AUXILIAR_SETLSTR(L, -1, "value", (const char *)s->data, s->length);
+++    AUXILIAR_SETLSTR(L, -1, "value", ASN1_STRING_get0_data(s), ASN1_STRING_length(s));
++     break;
++   }
++   }
++@@ -1004,8 +1013,9 @@ openssl_asn1group_set(lua_State *L)
++ {
++   ASN1_STRING *s = CHECK_GROUP(1, ASN1_STRING, "openssl.asn1group");
++   int          ret = 1;
+++  int          type = ASN1_STRING_type(s);
++ 
++-  switch (s->type) {
+++  switch (type) {
++   case V_ASN1_INTEGER: {
++     ASN1_INTEGER *ai = CHECK_OBJECT(1, ASN1_INTEGER, "openssl.asn1_integer");
++     long          v = luaL_checklong(L, 2);
++@@ -1044,16 +1054,19 @@ static time_t
++ ASN1_TIME_get(ASN1_TIME *time, time_t off)
++ {
++   struct tm   t;
++-  const char *str = (const char *)time->data;
++   size_t      i = 0;
+++  const char *str = (const char *)ASN1_STRING_get0_data(time);
+++  size_t      len = ASN1_STRING_length(time);
+++  int         type = ASN1_STRING_type(time);
++ 
+++  if (len < 13) return 0;  /* Invalid time format */
++   memset(&t, 0, sizeof(t));
++ 
++-  if (time->type == V_ASN1_UTCTIME) /* two digit year */ {
+++  if (type == V_ASN1_UTCTIME) /* two digit year */ {
++     t.tm_year = (str[i++] - '0') * 10;
++     t.tm_year += (str[i++] - '0');
++     if (t.tm_year < 70) t.tm_year += 100;
++-  } else if (time->type == V_ASN1_GENERALIZEDTIME) /* four digit year */ {
+++  } else if (type == V_ASN1_GENERALIZEDTIME) /* four digit year */ {
++     t.tm_year = (str[i++] - '0') * 1000;
++     t.tm_year += (str[i++] - '0') * 100;
++     t.tm_year += (str[i++] - '0') * 10;
++@@ -1086,7 +1099,7 @@ openssl_asn1group_get(lua_State *L)
++ {
++   ASN1_STRING *s = CHECK_GROUP(1, ASN1_STRING, "openssl.asn1group");
++   int          ret = 0;
++-  switch (s->type) {
+++  switch (ASN1_STRING_type(s)) {
++   case V_ASN1_INTEGER: {
++     ASN1_INTEGER *ai = CHECK_OBJECT(1, ASN1_INTEGER, "openssl.asn1_integer");
++     BIGNUM       *bn = ASN1_INTEGER_to_BN(ai, NULL);
++@@ -1128,7 +1141,7 @@ openssl_asn1group_i2d(lua_State *L)
++     break;                                                                                         \
++   }
++ 
++-  switch (s->type) {
+++  switch (ASN1_STRING_type(s)) {
++     /*
++     P(ASN1_BOOLEAN);
++     case V_ASN1_BOOLEAN:
++@@ -1220,7 +1233,7 @@ openssl_asn1group_d2i(lua_State *L)
++     break;                                                                                         \
++   }
++ 
++-  switch (s->type) {
+++  switch (ASN1_STRING_type(s)) {
++     /*
++     P(ASN1_BOOLEAN);
++     case V_ASN1_BOOLEAN:
++@@ -1374,7 +1387,8 @@ openssl_asn1group_eq(lua_State *L)
++   ASN1_STRING *s = CHECK_GROUP(1, ASN1_STRING, "openssl.asn1group");
++   ASN1_STRING *ss = CHECK_GROUP(2, ASN1_STRING, "openssl.asn1group");
++ 
++-  lua_pushboolean(L, (s->type == ss->type && ASN1_STRING_cmp(s, ss) == 0));
+++  lua_pushboolean(L, (ASN1_STRING_type(s) == ASN1_STRING_type(ss)
+++                      && ASN1_STRING_cmp(s, ss) == 0));
++   return 1;
++ }
++ 
++@@ -1434,7 +1448,7 @@ openssl_asn1group_toprint(lua_State *L)
++   unsigned long flags = luaL_optint(L, 2, 0);
++   BIO          *out = BIO_new(BIO_s_mem());
++   BUF_MEM      *mem;
++-  switch (s->type) {
+++  switch (ASN1_STRING_type(s)) {
++   case V_ASN1_UTCTIME: {
++     ASN1_TIME *a = (ASN1_TIME *)s;
++     ASN1_TIME_print(out, a);
++@@ -1484,7 +1498,7 @@ static int
++ openssl_asn1group_dup(lua_State *L)
++ {
++   ASN1_STRING *s = CHECK_GROUP(1, ASN1_STRING, "openssl.asn1group");
++-  openssl_push_asn1(L, s, s->type);
+++  openssl_push_asn1(L, s, ASN1_STRING_type(s));
++   return 1;
++ }
++ 
++@@ -1517,7 +1531,7 @@ openssl_asn1time_adj(lua_State *L)
++   int        offset_day = luaL_optint(L, 3, 0);
++   long       offset_sec = luaL_optlong(L, 4, 0);
++ 
++-  switch (at->type) {
+++  switch (ASN1_STRING_type(at)) {
++   case V_ASN1_UTCTIME: {
++     ASN1_UTCTIME *a = (ASN1_UTCTIME *)at;
++     ASN1_UTCTIME_adj(a, t, offset_day, offset_sec);
++@@ -1549,7 +1563,7 @@ openssl_asn1time_diff(lua_State *L)
++   ASN1_TIME *from = CHECK_OBJECT(1, ASN1_TIME, "openssl.asn1_time");
++   ASN1_TIME *to = lua_isnoneornil(L, 2) ? NULL : CHECK_OBJECT(2, ASN1_TIME, "openssl.asn1_time");
++ 
++-  luaL_argcheck(L, to->type == from->type, 2, "asn1_time with mismatched type");
+++  luaL_argcheck(L, ASN1_STRING_type(to) == ASN1_STRING_type(from), 2, "asn1_time with mismatched type");
++ 
++   ret = ASN1_TIME_diff(&day, &sec, from, to);
++   if (ret == 1) {
++@@ -1644,12 +1658,13 @@ openssl_push_asn1object(lua_State *L, const ASN1_OBJECT *obj)
++ int
++ openssl_push_asn1(lua_State *L, const ASN1_STRING *string, int type)
++ {
++-  if ((string->type & V_ASN1_GENERALIZEDTIME) == V_ASN1_GENERALIZEDTIME && type == V_ASN1_UTCTIME)
+++  int strType = ASN1_STRING_type(string);
+++  if ((strType & V_ASN1_GENERALIZEDTIME) == V_ASN1_GENERALIZEDTIME && type == V_ASN1_UTCTIME)
++     type = V_ASN1_GENERALIZEDTIME;
++-  else if ((string->type & V_ASN1_UTCTIME) == V_ASN1_UTCTIME && type == V_ASN1_GENERALIZEDTIME)
+++  else if ((strType & V_ASN1_UTCTIME) == V_ASN1_UTCTIME && type == V_ASN1_GENERALIZEDTIME)
++     type = V_ASN1_UTCTIME;
++   else if (type == V_ASN1_UNDEF)
++-    type = string->type;
+++    type = strType;
++ 
++   switch (type) {
++   case V_ASN1_INTEGER: {
++diff --git a/deps/lua-openssl/src/crl.c b/deps/lua-openssl/src/crl.c
++index 4950b4ca..2958daa0 100644
++--- a/deps/lua-openssl/src/crl.c
+++++ b/deps/lua-openssl/src/crl.c
++@@ -770,7 +770,7 @@ static int openssl_crl_parse(lua_State *L)
++       lua_setfield(L, -2, "sig_alg");
++     }
++ 
++-    if (sig != NULL && sig->length > 0) {
+++    if (sig != NULL && ASN1_STRING_length(sig) > 0) {
++       PUSH_ASN1_STRING(L, sig);
++       lua_setfield(L, -2, "signature");
++     }
++@@ -995,16 +995,17 @@ static time_t
++ ASN1_GetTimeT(const ASN1_TIME *time)
++ {
++   struct tm   t;
++-  const char *str = (const char *)time->data;
+++  const char *str = ASN1_STRING_get0_data(time);
+++  int type = ASN1_STRING_type(time);
++   size_t      i = 0;
++ 
++   memset(&t, 0, sizeof(t));
++ 
++-  if (time->type == V_ASN1_UTCTIME) /* two digit year */ {
+++  if (type == V_ASN1_UTCTIME) /* two digit year */ {
++     t.tm_year = (str[i++] - '0') * 10;
++     t.tm_year += (str[i++] - '0');
++     if (t.tm_year < 70) t.tm_year += 100;
++-  } else if (time->type == V_ASN1_GENERALIZEDTIME) /* four digit year */ {
+++  } else if (type == V_ASN1_GENERALIZEDTIME) /* four digit year */ {
++     t.tm_year = (str[i++] - '0') * 1000;
++     t.tm_year += (str[i++] - '0') * 100;
++     t.tm_year += (str[i++] - '0') * 10;
++diff --git a/deps/lua-openssl/src/csr.c b/deps/lua-openssl/src/csr.c
++index b9aaeece..fd4743e8 100644
++--- a/deps/lua-openssl/src/csr.c
+++++ b/deps/lua-openssl/src/csr.c
++@@ -120,8 +120,8 @@ static int
++ copy_extensions(X509 *x, X509_REQ *req, int override)
++ {
++   STACK_OF(X509_EXTENSION) *exts = NULL;
++-  X509_EXTENSION *ext, *tmpext;
++-  ASN1_OBJECT    *obj;
+++  const X509_EXTENSION *ext, *tmpext;
+++  const ASN1_OBJECT *obj;
++   int             i, idx, ret = 0;
++   if (!x || !req) return 1;
++   exts = X509_REQ_get_extensions(req);
++@@ -138,7 +138,7 @@ copy_extensions(X509 *x, X509_REQ *req, int override)
++       do {
++         tmpext = X509_get_ext(x, idx);
++         X509_delete_ext(x, idx);
++-        X509_EXTENSION_free(tmpext);
+++        X509_EXTENSION_free((X509_EXTENSION*)tmpext);
++         idx = X509_get_ext_by_OBJ(x, obj, -1);
++       } while (idx != -1);
++     }
++@@ -157,7 +157,7 @@ static int
++ X509_REQ_to_X509_ex(X509_REQ *r, int days, EVP_PKEY *pkey, const EVP_MD *md, X509 **x)
++ {
++   X509         *ret = NULL;
++-  X509_NAME    *xn = NULL;
+++  const X509_NAME *xn = NULL;
++   EVP_PKEY     *pubkey = NULL;
++   ASN1_TIME    *notBefore = NULL, *notAfter = NULL;
++   ASN1_INTEGER *serial = NULL;
++@@ -412,9 +412,21 @@ static int openssl_csr_sign(lua_State *L)
++     /*
++      * In the interests of compatibility, I'll make sure that the bit string
++      * has a 'not-used bits' value of 0
+++     *
+++     * Instead of directly manipulating the internal flags (which is not allowed
+++     * in OpenSSL 4.0+), we use ASN1_BIT_STRING_set_bit to properly manage the
+++     * unused bits count. Setting the last bit explicitly ensures the unused
+++     * bits count is calculated correctly by OpenSSL.
++      */
++-    sig->flags &= ~(ASN1_STRING_FLAG_BITS_LEFT | 0x07);
++-    sig->flags |= ASN1_STRING_FLAG_BITS_LEFT;
+++    if (siglen > 0) {
+++        /* Set the last bit of the signature to its current value.
+++         * This forces OpenSSL to recalculate and set the unused bits count
+++         * to 0 (since the signature is byte-aligned). */
+++        int last_bit = (siglen * 8) - 1;
+++        int bit_value = (sigdata[siglen - 1] & 1) ? 1 : 0;
+++        ASN1_BIT_STRING_set_bit(sig, last_bit, bit_value);
+++    }
+++
++     lua_pushboolean(L, 1);
++     return 1;
++   } else {
++@@ -442,7 +454,7 @@ parse x509_req object as table
++ static int openssl_csr_parse(lua_State *L)
++ {
++   X509_REQ  *csr = CHECK_OBJECT(1, X509_REQ, "openssl.x509_req");
++-  X509_NAME *subject = X509_REQ_get_subject_name(csr);
+++  const X509_NAME *subject = X509_REQ_get_subject_name(csr);
++   STACK_OF(X509_EXTENSION) *exts = X509_REQ_get_extensions(csr);
++ 
++   lua_newtable(L);
++@@ -457,7 +469,7 @@ static int openssl_csr_parse(lua_State *L)
++       PUSH_OBJECT(alg, "openssl.x509_algor");
++       lua_setfield(L, -2, "sig_alg");
++     }
++-    if (sig->length) {
+++    if (sig) {
++       openssl_push_asn1(L, sig, V_ASN1_BIT_STRING);
++       lua_setfield(L, -2, "signature");
++     }
++@@ -585,7 +597,7 @@ static int openssl_csr_subject(lua_State *L)
++   int       ret = 0;
++ 
++   if (lua_isnone(L, 2)) {
++-    X509_NAME *xn = X509_REQ_get_subject_name(csr);
+++    const X509_NAME *xn = X509_REQ_get_subject_name(csr);
++     if (xn) {
++       openssl_push_xname_asobject(L, xn);
++       ret = 1;
++diff --git a/deps/lua-openssl/src/openssl.c b/deps/lua-openssl/src/openssl.c
++index 42004449..985b342b 100644
++--- a/deps/lua-openssl/src/openssl.c
+++++ b/deps/lua-openssl/src/openssl.c
++@@ -544,7 +544,9 @@ openssl_initialize()
++             sizeof(LOPENSSL_VERSION LUA_VERSION OPENSSL_VERSION_TEXT));
++ #else
++   OPENSSL_init_ssl(OPENSSL_INIT_ENGINE_ALL_BUILTIN |
+++#if defined (OPENSSL_INIT_ENGINE_OPENSSL)
++                    OPENSSL_INIT_ENGINE_OPENSSL |
+++#endif
++                    OPENSSL_INIT_LOAD_CRYPTO_STRINGS |
++                    OPENSSL_INIT_LOAD_SSL_STRINGS |
++                    OPENSSL_INIT_ADD_ALL_CIPHERS |
++diff --git a/deps/lua-openssl/src/private.h b/deps/lua-openssl/src/private.h
++index c6010209..00728c6a 100644
++--- a/deps/lua-openssl/src/private.h
+++++ b/deps/lua-openssl/src/private.h
++@@ -332,7 +332,7 @@ int openssl_push_x509_signature(lua_State *L, const X509_ALGOR *alg, const ASN1_
++ #define PUSH_ASN1_OCTET_STRING(L, s)      openssl_push_asn1(L, (ASN1_STRING*)(s),  V_ASN1_OCTET_STRING)
++ #define PUSH_ASN1_STRING(L, s)            openssl_push_asn1(L, (ASN1_STRING*)(s),  V_ASN1_UNDEF)
++ 
++-int openssl_push_xname_asobject(lua_State*L, X509_NAME* xname);
+++int openssl_push_xname_asobject(lua_State*L, const X509_NAME* xname);
++ int openssl_push_bit_string_bitname(lua_State* L, const BIT_STRING_BITNAME* name);
++ 
++ ASN1_OBJECT* openssl_get_asn1object(lua_State*L, int idx, int retnil);
++diff --git a/deps/lua-openssl/src/ssl.c b/deps/lua-openssl/src/ssl.c
++index a71d71fd..9a8598fd 100644
++--- a/deps/lua-openssl/src/ssl.c
+++++ b/deps/lua-openssl/src/ssl.c
++@@ -158,7 +158,7 @@ openssl_ssl_ctx_new(lua_State *L)
++     method = TLSv1_client_method();
++ #endif
++ 
++-#ifndef OPENSSL_NO_SSL3_METHOD
+++#if OPENSSL_VERSION_NUMBER < 0x40000000L && !defined(OPENSSL_NO_SSL3_METHOD)
++   else if (strcmp(meth, "SSLv3") == 0)
++     method = SSLv3_method();
++   else if (strcmp(meth, "SSLv3_server") == 0)
++diff --git a/deps/lua-openssl/src/x509.c b/deps/lua-openssl/src/x509.c
++index 99096090..4dcc960e 100644
++--- a/deps/lua-openssl/src/x509.c
+++++ b/deps/lua-openssl/src/x509.c
++@@ -466,7 +466,7 @@ int openssl_push_x509_signature(lua_State *L, const X509_ALGOR *alg, const ASN1_
++   if (sig != NULL)
++   {
++     lua_pushliteral(L, "sig");
++-    lua_pushlstring(L, (const char *)sig->data, sig->length);
+++    lua_pushlstring(L, ASN1_STRING_get0_data(sig), ASN1_STRING_length(sig));
++     lua_rawset(L, i==0 ? -3 : i);
++   }
++ 
++diff --git a/deps/lua-openssl/src/xalgor.c b/deps/lua-openssl/src/xalgor.c
++index 95957b6f..2d7c5668 100644
++--- a/deps/lua-openssl/src/xalgor.c
+++++ b/deps/lua-openssl/src/xalgor.c
++@@ -151,7 +151,7 @@ openssl_xalgor_set(lua_State *L)
++   obj = OBJ_dup(obj);
++   if (val) {
++     val = ASN1_STRING_dup(val);
++-    ret = X509_ALGOR_set0(alg, obj, val->type, val);
+++    ret = X509_ALGOR_set0(alg, obj, ASN1_STRING_type(val), val);
++   } else {
++     ret = X509_ALGOR_set0(alg, obj, 0, NULL);
++   }
++diff --git a/deps/lua-openssl/src/xname.c b/deps/lua-openssl/src/xname.c
++index f2fa9be6..ed5939df 100644
++--- a/deps/lua-openssl/src/xname.c
+++++ b/deps/lua-openssl/src/xname.c
++@@ -10,7 +10,7 @@ x509.name module to mapping X509_NAME to lua object.
++ #include "sk.h"
++ 
++ int
++-openssl_push_xname_asobject(lua_State *L, X509_NAME *xname)
+++openssl_push_xname_asobject(lua_State *L, const X509_NAME *xname)
++ {
++   const X509_NAME *dup = X509_NAME_dup(xname);
++   PUSH_OBJECT(dup, "openssl.x509_name");
++diff --git a/deps/lua-openssl/test/helper.lua b/deps/lua-openssl/test/helper.lua
++index ea64feb7..0634ea3c 100644
++--- a/deps/lua-openssl/test/helper.lua
+++++ b/deps/lua-openssl/test/helper.lua
++@@ -6,7 +6,7 @@ local M = {}
++ M.luaopensslv, M.luav, M.opensslv = openssl.version()
++ M._luaopensslv, M._luav, M._opensslv = openssl.version(true)
++ M.libressl = M.opensslv:find("^LibreSSL")
++-M.openssl3 = M.opensslv:find("^OpenSSL 3")
+++M.openssl3 = M.opensslv:find("^OpenSSL 3") or M.opensslv:find("^OpenSSL 4")
++ 
++ function M.sslProtocol(srv, protocol)
++   protocol = protocol or openssl.ssl.default
+-- 
+2.47.3
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
