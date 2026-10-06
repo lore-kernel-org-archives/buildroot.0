@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1FD73CA6001
-	for <buildroot@archiver.kernel.org>; Tue,  6 Oct 2026 16:29:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6517ECA5FED
+	for <buildroot@archiver.kernel.org>; Tue,  6 Oct 2026 16:29:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D2B054054D;
-	Tue,  6 Oct 2026 16:29:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 306A7607EF;
+	Tue,  6 Oct 2026 16:29:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IHXzHcL_B8td; Tue,  6 Oct 2026 16:29:44 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org DBFE8405AB
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791304184;
-	b=pqy2ey1BBUjYBNUZw4Puws9B/NQe4PIls9Gl18dvyeBQdHWIlw8ndbGbtMHy6pWCT3UB
-	 HVFhVfIPZrdXkkDFKumGcHdd5dZITPT8oJGjMAww8neffFX1c8nO71bbYWHyRWhkQf7iu
-	 efJPAbJoDi9bpSDfV1uKWJd758dbSQvzLyFoPbGFeyoDxiwK2jPzfGXP1+NDKVMptp0ss
-	 9ZNuCrGMVhVuhLudJ0Tdv7Nk4Vs7+4oAkRk4LvZsB2+O7DfQeN7F66eAIMOT8apiF/I4p
-	 S+U7sE1SoaCW2AyEJqArOtU2WI7twAtHnTOPa8nUZCvxUA2npY8aMg1Y9+fQbNZDArQ==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dpwHDFjZmMWW; Tue,  6 Oct 2026 16:29:45 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 34260606DB
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791304185;
+	b=sS+xgYLrAbJj7mve6pCqoOmzqVTQe6eBJPVTH6NF56oDqMsHe888t5Qlj6PpyMkoT1xz
+	 6dCDaMUVFOJ04AAeQv/QkG/EnDmNlOdaYRqLEuiJ6fLrelfLLs+wHdHkBtm6sz/MUw/G6
+	 68KqffdXm8ym5IFIuKm/pe9zW1rVAfdSRDvjjAoHSqF4AHunHsQLCWKIkkql7Y7oPoNqu
+	 UE4fout4+MTEMhaMMip0h9tpP7C4OZph7S54Bba0c5Yi6v/kdGz8tHYDQklo5s7lo+zzC
+	 LxNyyR6Tskrxojmqs6vrBd9hlNDMNxeVcuRfaUKp4hv+K9U9qo1CL1CYeTmuK46hEOw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791304184;
+	c=relaxed/relaxed; t=1791304185;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
@@ -31,63 +31,63 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=egRYj0AUALEmu5GAay6IUSbVyvt7FtzPoDQOq+9jyRU=;
-	b=bQ3GxqfgYdXdIye+7VxSth84KS3DwVm343eu1llSVK+BlRObwLA8Udkp1uZbIwkIGcGZ
-	 uujgAjK/4OTVPubZl5uQnaXyxd/DEHCmleaR9kHsu7wWAJbEECD9dDtaiabtTaOlOSpQM
-	 2CZNu0jtAZcBXcE6/jRzGEIxWh0KPMyGEdS5xmDeE+xNFOgy7iclQqFN8dFc/8ITG3FEC
-	 rxng4kz7oh6m6fmfJnazzBH04GQiRp0nBbvpiVCWXcnD6Wyhftw+DtzWFZRqMDaM5pcZ1
-	 zLrtW7Dvf0RitrQArmScL6gKtT40JvW9Daoas39UDb6Kj6Daw9et0mpIuwFjfM+U0HQ==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	bh=nlOtvmdst+oCb769zmCOS6DHYlsd5C0Bw8vPz04wQmk=;
+	b=e7EiFf0LIY4BYP+glMJ3NTmnaXit9CXa8S7nJSkufZuQcDtOTsgXH7yVDrGD5WGH2HYL
+	 4xar29zOqmPr8AExthXJCbJHu/QlzS64P2v7cp5ISWpjIoYh/2b5k+o+p38EV6XuawijM
+	 LEzQ/riYNRz+OnJIVOc0qqYdz2WntuzGp0YvVvHfXJ83utNtcag00xMddVFaEnlAMEjLP
+	 EoPGQceYWJFTUbAq92HOhElCWL/8sYyLG2Kd9RE9Z2IiSDz6nbMc1m/bgZYY4LYZmtake
+	 PiIwl+n9GSGg+Ir9rGxuRUIiMIcOwehHgX/hpxG9Rev7yiGI8dFm2cQzoQWGYY6nTXA==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791304183;
-	bh=egRYj0AUALEmu5GAay6IUSbVyvt7FtzPoDQOq+9jyRU=;
+	s=default; t=1791304185;
+	bh=nlOtvmdst+oCb769zmCOS6DHYlsd5C0Bw8vPz04wQmk=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=MIh++yPl3iQ5I06UL3h1CRr+IeujJWJ7QEaUcHCt5Oq/m6+x3wp68cmLsGHlKjm/B
-	 0f7S+BQ/MHn2lpfS1Tq+yQYBjriiUsSvNkz9HiLFyI8XKG5L5SOTyHtVSuTOyXt9Zs
-	 pTdzLX+x1LEeTPh1t5y5bASsj4ZQUzu+EghIMJxhf0Eh6Z3zuwyJKwRd7ZH3bB4FPf
-	 wnUdlIdc3pUJFbHCAK3s2IgZHkTlVBuQ3ZszAhVf4nKJIKyqEi09WYkswS7P4yljgl
-	 WqFLAu0IYdPYYO0chYelsHvCiOSRPqDTr8CzbZyUNjHm/UREOqkuWGXFRYAueDmQ1C
-	 0DEKLFKWTE9YA==
+	b=n98Nx8PkTIzsqtE9jnGofhJ605kJX0sVcyI1/d0mhRGFjb3ydkMnVH6UXjsQOwD9o
+	 KZUSL+OUfhreefr1kV4cd0xA02vqigu3i5ZvJjWSmPpZu23gNJLsV17l7+aKWTIptk
+	 Z3ptLik3Xwxb2jyT/QCS1Kbt6fTQqxm+iz/bsFYjMYqAfXZnbfBs54rfhKXJByMVWa
+	 5jjkwaD3Ukww4cAOxm0762uQFutkFUrsELCe8hInkd20aLeDvvTuXP8lAZCOnqfn45
+	 r5jgLRycWjC4ZTD+zDMTf5VyNgV28wPIi+OZu6p9+2gFc50XoAZv+Hweif7hKLbwhy
+	 ZnSs6eGhDTXsg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DBFE8405AB;
-	Tue,  6 Oct 2026 16:29:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 34260606DB;
+	Tue,  6 Oct 2026 16:29:45 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 46EA334E
- for <buildroot@buildroot.org>; Tue,  6 Oct 2026 16:22:54 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 63722317
+ for <buildroot@buildroot.org>; Tue,  6 Oct 2026 16:23:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 449E240274
- for <buildroot@buildroot.org>; Tue,  6 Oct 2026 16:22:54 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 49A0B40274
+ for <buildroot@buildroot.org>; Tue,  6 Oct 2026 16:23:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sjHKoRn6gk4x for <buildroot@buildroot.org>;
- Tue,  6 Oct 2026 16:22:53 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org 8C18A4009F
+ id Ks05Mn-in-vR for <buildroot@buildroot.org>;
+ Tue,  6 Oct 2026 16:23:05 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org 9E32F4009F
 Authentication-Results: smtp2.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791303773;
- b=VB5+QymUTRoAnynIqfXCKxD/jrbs8+vZ7RFD/8PLCI8GAuKSL9Nni3MbiwVJSn/K7hcV
- 1UzaZSUorF2QI1NREXcjooHnKs2WkPsQFEMIYpgsBXUEXQnqHZlbITXJSAKZnjDe3I570
- qV2g5LDtHVNskmKw/6wmDFra/UL9WNO1e8XXNb0+UVrtueX4kZJ/EmtqIiDoc6a9B/7uW
- jD5/lB5pWhohxpD/jGuMH5AnrrqSQvDN6gR4kRiJsdeqko1p7oD4HZb66XPznmaecQHy+
- PrWSFVjW+JKqJ9TEbFGvlvBWn0IWpB1UP4DfNVnJSCs9VAeIJ++uidBXXoNTFSSUPDw==
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791303785;
+ b=PJ7G3ado7xb3Lqu4czpyFpuimkyid2eSfUUEa/p3ZLlDOko0YXZQsAD2ixI4tR2zqwiJ
+ m3gA8++4mRSX3EVGZp1WerJ3iFO2D8LNheF0SwjLFMBDP7u2oIekO5mHcCcWJykJCiNKn
+ GgJN+kuM9yalbEM/i3NcFu9P4TyV6lhyRew6Z7HHDspG/XseHyC8Lki2YYKircB9k/s6F
+ k6Cc+5pCQKeO9h8XVcdcp8Q8LCHnp/c3X+W/Rb0/WyLDHwDdMDXkwucjWwftICuMRJofY
+ eajhGY3t6yzyTRGbW8VXVgbJhZAVP/qHdV1F9OId7io78nechGoihh2AfcGUTW+cfdA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1791303773;
- h=Received-SPF:DKIM-Signature:X-KAS-Sym:Received:Received:From:To:Cc:
+ c=relaxed/relaxed; t=1791303785;
+ h=Received-SPF:DKIM-Signature:X-KAS-Sym:Received:Received:From:To:
  Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding:X-Spam-Score:X-Spamd-Bar;
- bh=Iqza05Z6AQM+v/sZnXLgaepNeeIFR6gzEtIQT6+1Eck=;
- b=Blb4uVVK86FRTp+IDKGvwPMddqcRhXbRnRPHkj1zQxNmmAu9NUfllms4DrcaFXLCEAuY
- tludh9Hoqy8X1gTInrGpQLAA6RI+t3UeESz1pb5XSMs83HGjy+wThzQ6XGJeyVBsMvDm8
- 0DS4lIL1ogC8iWSLWTV48TS/xwXq8VjfSEz5Bk7GgJ+EIkUM2lBW0UGBBzJryRy6c8KpH
- ruAwlHpyNm6ox5HNhK6XSTc5gzC5rhJWLK8lEHL/VATzbXORzzqCdwIKC5R1KKnAFT9Wo
- CTLCe/t2Eiw8zLU0Gwv3bUY+R1gIGkzypZDBnhjde7clwUhBSh1jBruknS4oHdEzDgQ==
+ bh=pNZBPyZeOlBaRCbAAyVSNvXj1naepQ/zMPBj6+ASrAc=;
+ b=FXR8b1623PIjKwvY5UoYZANCWCymx6lo51sUHLVB2XXykzzGZY59VmyVTSNuWEcOJj6V
+ LOhcV4cth9UpIMPlOI/zpKbQniSZXsLAIZK2kp++Xc4xHm3er4GbhQo5SrUrvbY0dL6mP
+ 2Fmcu8dod9ALMDJHegI9zeRU08D+gIjfTQDXtv403sBvUnpKg8FmOkDXQoI/fT4bSdMMR
+ +4sbPpR3SDKW3+ggUoU5Jvu6ka5zRoag8f1JZfoJrROQ51CrHHH9Uo6Rps44Ep6ozAi8G
+ NPUZNVcU+TfrsFd+/hAAM7ZHn3Tv54LoPv6MbHF4N/N5czoqsE6Hm91+uwu18A4eg4w==
 ARC-Authentication-Results: i=1; smtp2.osuosl.org;
  dmarc=pass header.from=kuhls.net; 
  dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=O089V0ec; 
+ header.s=kas202605290044 header.b="VDiczj/8"; 
  arc=none smtp.remote-ip=85.13.140.57
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
@@ -95,52 +95,52 @@ Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=kuhls.net
 Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202605290044 header.b=O089V0ec
+ header.a=rsa-sha256 header.s=kas202605290044 header.b=VDiczj/8
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 8C18A4009F
- for <buildroot@buildroot.org>; Tue,  6 Oct 2026 16:22:53 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9E32F4009F
+ for <buildroot@buildroot.org>; Tue,  6 Oct 2026 16:23:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
- s=kas202605290044; t=1791303671;
- bh=Iqza05Z6AQM+v/sZnXLgaepNeeIFR6gzEtIQT6+1Eck=;
- h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=O089V0ec6tHNJQrn6PhP5n3++a1AD+a+lzqB63mRoU2vcu/+neFis4TRlJkzMnIrf
- QNCFfaQ3YqaKdzr/ype6pDAwKtsl9Aj86MhVYIR4L8ax7EkT0rHZfqfVVpjAgJd2VQ
- O25qpyuXNmlMF9kQfIcuv2St+Fnq6A6o5mgRXoSvq57FIrK1Etj0+XsJhNU+5TAnHr
- ESAFDc/xYu1o57c1GDsb0s6YIxNAFcPt5a037PaAFfOF/M69XQTtrdHZ46sq1j4/Xr
- bl4Gv6Fy71fLXNAefznHyV+kwzFiIX0DO+zswXwj6NdixKhsSvRw3NsOuYOakSkK1O
- XrHdDL63PZVMg==
+ s=kas202605290044; t=1791303702;
+ bh=pNZBPyZeOlBaRCbAAyVSNvXj1naepQ/zMPBj6+ASrAc=;
+ h=From:To:Subject:Date:In-Reply-To:From;
+ b=VDiczj/8MhP8jIfdGsole58jx0G16V/5ePoUe7kKT3vv+Z1GcvfEiGAa8YeRAgj/D
+ YA1bHYIehZilHME9Ft6OLMQSs5HkSPamL42VIVDmx2JCiOkHzZ5dkWkey7puQTlqaw
+ Ns5/nkGT7RC1PjO8XxZKpXMiqDQG4DJ7hxvYrH83GJK4DNyfvjRu+l07Lnogh22b90
+ iRwHFl6ZkiUZVudWGskZbq0c/ESne5QS5lKh0PjPhhYFYxu2FZn824ZI7m1QRrJwb0
+ maXbsjUd0+qpu8l02x4W1S4h17cQWi6oole3FQsuuUZDK8fm4mTbARl3NWvslqlRDC
+ GJHS9vbLZrFxg==
 X-KAS-Sym: v3:f51bdf72230551df:UVRrC5WRPqTrQZ2snRs6ADaGTIs1fNMELseztNLkGZaoG
  nDVoIWJAJHxWOAZfar7ySv6hURHCYEJ486jY0wSzH4bn6X9oZtMeJOWXJWfbXQl4RiwCyrj/m57
  15sQ0uumxbq4Ni0Jg8upgOj44d4LDRY4qAHg+axEDZVbYP0g0yE2r2HU5OlzQlUaGimeYmMwhfI
  C2XbfRi5reOEXID85lh2h/YKBFEVYOpWHl87Xd6mrYgK6QCyW0YmzXJKF3rsfBDAdGW7GiuVnBc
  u7jtTtCWAX8A4fqyTLJm9T3xE0yk3CafN3r54xhVAFfUDD2DDyyj4LyhMirWwrBiHdxCKemg==:
- tSf4j68EG2i4jiWEhHGWEc5uH6FFKrMtgkIaD4GsPCgnrw/raSbSgziUkz3ow6U75beNXqPYMr4
- 7MjPR4ZTV2wzNNE3p5SgNsi6PPqfuosUzS9WwHU51MOnuoKbBnAzi65yQbxif8X5dsoSq2UK4sR
- Ck4USg4QYAKx2coeVF+me1LdReX4LHVwQ1n9zr/MrTWLv/bjGYzWJhIXke0LhjTSCRJe0+JPu8u
- z2kssO2RxNH2kc27LJZ30sqv9AYfTRZqQiC4Un0rtN0xZ1/VyQG07liQvDfl0OLD5df0dQ+pwFP
- 7gpn0EkZ/N6zZbhfc6Wl1rwXxm5XGGDYt5Vhr+Z3NMolRXD51ZlD73zAitX8R2nKmeyfVbKrUhr
- 7GbnwMavAAxzAUb3otH5fxQO59gNwfXeZvj+6vJMf+yt9N2e+CYzKG3scebvhjmMCrHkxa+KAid
- Or5GvLaMYqgCcmfLIoxjVmbUe6iHwOJkr2UHB2JLhYqsirMuwetM7D+LCGksakgqxhdfmvv7YgY
- PSnv7O9q5/iCH/M5tLYTiEdGaKhMBKCwEY/WI0FDg0vbb3HWK1x4P2/GrYQPCSQa9TjEL9Ah4sB
- ZJ5m3Gt9Yab8zQ5epWUOH4mZRyqSs1zOTYZgMGSWiXLeAg==
+ yh2GQDoIV5MPcNeXRGos2eBDug6/TM68IAFFyCxGHLjmjxhtoNGhO8JJxB6fCVyEIdvsn231eZw
+ r4d8lfn1KTmYhM095muy8LRWCm4UJEiKeVY8cvd3pQfEaj5WEC2JfKccAgg9FQC2BvMEHzMMXbA
+ 14/5x0jx8kJ5aBUMSpimaFf28+rFOkyoAesH6aXnDYCY+6ac+Ai4ZfO8XMS7+q8awng6Pf1i4ik
+ JsjaqMsuHLwG2+b9mXgVeiokZ24uAXiE7rymT6R8bgIR1FLn3F1IWN3DkR/9xvGUQJ8HeqYNoJe
+ vOqda42N+qAjEAq/N1mIq8UvOynT1XOKKFlUkSEme5QvztXbQq1KrzmY87MD9xt16N/6J5awkW0
+ lK6rMMivfd2zu2hOCaOCvdfZ3H2vmJGt7ydToJIw5ez+efABegJnYvS6UnzzrgQtZkIWRl69T3I
+ Bozh1Vi2igEoCwDPZQD+13nSVvQ1nRNHVmh5tgX0oOsFNqpXJCFkMjqb+RWCyxZaNa5hR1QMl6J
+ sdlH71JRo6N6/HE7qoSysoXfbbSW5pzav6myhMvdwPjybWgISBl4cCz2VpeE+4FwGwdebU/UK4j
+ TwMWRQ==
 Received: from fli4l.lan.fli4l (p5b3a03df.dip0.t-ipconnect.de [91.58.3.223])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 30FA6A4C491A;
- Tue,  6 Oct 2026 18:21:11 +0200 (CEST)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 38BE9A4C3F9E
+ for <buildroot@buildroot.org>; Tue,  6 Oct 2026 18:21:42 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:58872)
  by fli4l.lan.fli4l with esmtp (Exim 4.100.1)
- (envelope-from <bernd@kuhls.net>) id 1xE7uh-000000000ir-0WBB;
- Tue, 06 Oct 2026 16:21:10 +0000
+ (envelope-from <bernd@kuhls.net>) id 1xE7ut-000000000ir-30tU
+ for buildroot@buildroot.org; Tue, 06 Oct 2026 16:21:23 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Tue,  6 Oct 2026 18:19:49 +0200
-Message-ID: <20261006162106.3439373-9-bernd@kuhls.net>
+Date: Tue,  6 Oct 2026 18:21:03 +0200
+Message-ID: <20261006162106.3439373-83-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20261006162106.3439373-1-bernd@kuhls.net>
 References: <20261006162106.3439373-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: +
-Subject: [Buildroot] [PATCH v8 08/84] package/boost: add switch for
- boost-process
+X-Spamd-Bar: /
+Subject: [Buildroot] [PATCH v8 82/84] package/kodi-skin-confluence: bump
+ version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -157,72 +157,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Michael Nosthoff <buildroot@heine.tech>
-
-since boost 1.86 this is a buildable module.
-
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Cc: Michael Nosthoff <buildroot@heine.tech>
-Cc: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/boost/Config.in | 22 ++++++++++++++++++++++
- package/boost/boost.mk  |  2 ++
- 2 files changed, 24 insertions(+)
+ package/kodi-skin-confluence/kodi-skin-confluence.hash | 2 +-
+ package/kodi-skin-confluence/kodi-skin-confluence.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/boost/Config.in b/package/boost/Config.in
-index 45b98ec0a2..736255a33c 100644
---- a/package/boost/Config.in
-+++ b/package/boost/Config.in
-@@ -287,6 +287,28 @@ config BR2_PACKAGE_BOOST_NOWIDE
- 	help
- 	  Library for cross-platform, unicode aware programming.
+diff --git a/package/kodi-skin-confluence/kodi-skin-confluence.hash b/package/kodi-skin-confluence/kodi-skin-confluence.hash
+index 9cde584da2..9974b4a3bc 100644
+--- a/package/kodi-skin-confluence/kodi-skin-confluence.hash
++++ b/package/kodi-skin-confluence/kodi-skin-confluence.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  ae7177ad7f06fdb38ba0e217b2ac3e4375cf29a7792f2eaa70003286410521a0  kodi-skin-confluence-b049aa8b6bab50518de72783efd219680047d6d9.tar.gz
++sha256  8043658a939e141305d6acd426a5a5be3a35ec1b94baba23fde069e4a1ff0f00  kodi-skin-confluence-da60e21de4a87581a8526c9409625e9f21cc7a33.tar.gz
+ sha256  89931c1fb1f3716694175763cf3221cfcd63d6935031cf6b4512d17ffe5d9860  LICENSE.txt
+diff --git a/package/kodi-skin-confluence/kodi-skin-confluence.mk b/package/kodi-skin-confluence/kodi-skin-confluence.mk
+index 31d6b37380..2a83eb5994 100644
+--- a/package/kodi-skin-confluence/kodi-skin-confluence.mk
++++ b/package/kodi-skin-confluence/kodi-skin-confluence.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_BOOST_PROCESS
-+	bool "boost-process"
-+	depends on BR2_PACKAGE_BOOST_CONTEXT_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # boost-context
-+	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # boost-context
-+	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-filesystem
-+	select BR2_PACKAGE_BOOST_CONTAINER
-+	select BR2_PACKAGE_BOOST_CONTEXT
-+    select BR2_PACKAGE_BOOST_DATE_TIME
-+	select BR2_PACKAGE_BOOST_FILESYSTEM
-+	help
-+	  Library to create processes in a portable way.
-+
-+comment "boost-process needs a toolchain w/ C++11, gcc>=4.8"
-+	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+
-+comment "boost-process needs a toolchain not affected by GCC bug 64735"
-+	depends on BR2_PACKAGE_BOOST_CONTEXT_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # boost-context
-+	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-filesystem
-+	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-+
- config BR2_PACKAGE_BOOST_PROGRAM_OPTIONS
- 	bool "boost-program_options"
- 	help
-diff --git a/package/boost/boost.mk b/package/boost/boost.mk
-index 87a576f277..37ec918aef 100644
---- a/package/boost/boost.mk
-+++ b/package/boost/boost.mk
-@@ -60,6 +60,7 @@ HOST_BOOST_FLAGS = --without-icu --with-toolset=gcc \
- 	math \
- 	mpi \
- 	nowide \
-+	process \
- 	program_options \
- 	python \
- 	random \
-@@ -142,6 +143,7 @@ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_LOG),,log)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_MATH),,math)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_MPI),,mpi)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_NOWIDE),,nowide)
-+BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_PROCESS),,process)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_PROGRAM_OPTIONS),,program_options)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_PYTHON),,python)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_RANDOM),,random)
+-KODI_SKIN_CONFLUENCE_VERSION = b049aa8b6bab50518de72783efd219680047d6d9
++KODI_SKIN_CONFLUENCE_VERSION = da60e21de4a87581a8526c9409625e9f21cc7a33
+ KODI_SKIN_CONFLUENCE_SITE = $(call github,xbmc,skin.confluence,$(KODI_SKIN_CONFLUENCE_VERSION))
+ KODI_SKIN_CONFLUENCE_LICENSE = GPL-2.0
+ KODI_SKIN_CONFLUENCE_LICENSE_FILES = LICENSE.txt
 -- 
 2.47.3
 
