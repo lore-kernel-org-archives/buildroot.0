@@ -4,100 +4,112 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6EA55CA5FFE
-	for <buildroot@archiver.kernel.org>; Tue,  6 Oct 2026 14:30:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43AE8CA5FFE
+	for <buildroot@archiver.kernel.org>; Tue,  6 Oct 2026 14:30:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 00E7240635;
-	Tue,  6 Oct 2026 14:30:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 465EB40557;
+	Tue,  6 Oct 2026 14:30:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wMPcM2XIRitu; Tue,  6 Oct 2026 14:30:27 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org C880540613
+ id D7O7QIh-Psy1; Tue,  6 Oct 2026 14:30:30 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 36F5540659
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791297027;
-	b=SnBDyEWFSJBlWi90SYXqpzFOZot4C/efrHlEvBlQ2uBz2khzI1KMaLWBv5leS9nlysmf
-	 OV8RAxAJ75IARyr8gH0VDBxFfzl45GATDo5l5vV0PYGO1Ju2eSz+GjqqqHT9g2hYEZaMx
-	 r76lx93fIElnxKtQLdABb10Mimstjddie8gqxvsd18i/QVjlx41GXLvaBY3Dyv+W0wuuR
-	 /xHdZzENarPnD+PfFZTQhK7xf3trW9K1R8gF7UXayk4l8GV3ytGrJTD1r+yn/OrE/tcPO
-	 qBR98hG/4A7xosCC8biTjRNVuKFoCAU2UbJfFRGVRZatHc6HFsSSIiisE3fJuc4m8XA==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791297030;
+	b=qiduAsxE6GokoaQgOZFD6W8WWgxKIFxkSANaKWq6cZqcRn2g1u6FcoLJ163H+YV+Enos
+	 IMs0Ylmkf4XDon59hVdMeSAs7oVQzH1g0xCEyUKPPzJFDBuNgqBl3W7oQdahDJl8C0BuV
+	 bqZLayh60QKF/UFd1qAocv/wI/HRQUMcvPZjDWoQt9A9C4gsLjvZTpB+Lq8WPZfHQxB3c
+	 r8nVa/SAjEShhOd7nxy8eKrurcnAoBU2XnbDWHj0UZlgbzZQBWi0ipn7+/pk5fjUQF2ZY
+	 Jw/NBIFI5erQ+C4i2u5gwUwfRTD4oHqQww5I2baQ/7lc79WZF+wOa7IjScf8ALq6sVQ==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791297027;
+	c=relaxed/relaxed; t=1791297030;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
-	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
-	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
-	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=y152QvIcu6gFd1IQunZvspeinSdDuV7Mm4Y+bOnWXG8=;
-	b=K48wLomQqoCFL1ZmuoTdLqVPpUbvj/mfiKcIBRtjjdjRV8jX8NJbgtdTjT/+7aM0aeSV
-	 bbSgvmjh7Rgn1OtdSUXa8Yet8YwLI4VUx0LIHr003Ma42FcvcGuUVpsn1WilKoCwCSrG5
-	 E6/BTFfb5NoOpU/aFRDgar/jHOvbiYvIub0bYoLgDDRZeiLrzCHmUndPxHafn/DLYjStx
-	 ilUVlKntTSzKVK92kOYctdLLwqnqocRNQcUrlrKAXvqLi8/yL26gAmd43amXBPf96c1ns
-	 QtLqykMK82dnR7f2E2yTg64Jdul2e3sGtNrNWlhW8rc+tmHBjlgcqFH1T5jIKY2E5/w==
+	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 Received:MIME-Version:Date:To:Cc:In-Reply-To:References:User-Agent:
+	 Message-ID:X-Sender:Subject:X-BeenThere:X-Mailman-Version:Precedence:
+	 List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:Content-Transfer-Encoding:Content-Type:
+	 Errors-To:Sender;
+	bh=qchfnfzEyQk7NQ+ED3P/Jk7Vi+QSId3HYVyVi2C+g7c=;
+	b=J3gaKaue6R3AB6tVzXYvfDccpAzfO+wSD5/W40kKb8MJxRdiRAejSOEYkwc2iKpWLKFG
+	 6+e+9rgvcWxIsvmWiQBalAVd5HR9+dPBRLVWGTjKYYRb9LxdZODuwQzJK5Tq2ZWi/YuzI
+	 wSDnNdOkTu+nhnQDDW6+DgFeFrX3Uax19L4LC7NyqyU7GLia2yhbcY0BE0eofvjIu/x4E
+	 zh4TYhFOspigOpPgkAMfSsU5XSygPKAjUmLGbAP0yHsQ4ZjimeF45cVcFxRWzvgoV0JRr
+	 +nur34zLIRFksQZ7qsGIe/nVrb92M8LkEkLjd0p6KrMT1WVAf+L/a10gL2MRmJQjTqg==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791297027;
-	bh=y152QvIcu6gFd1IQunZvspeinSdDuV7Mm4Y+bOnWXG8=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=kWstn9drujit1ixrZwYyi/KRaPpttvrlHSt2ntFQrX8bukc6yXaXXftC/bpdUEInN
-	 n2fpKWnw9sk3pOrcCB54UpVRYvF9xmQ130BoJen6MJvRMwKd0I/YE2C24QmqBko2Ug
-	 7S8/jDsvnJx2e53sobn89hnyHfNuvpXaZPyVBNiS1iTNG5Cs7lZW1N2oW+huVjdPDx
-	 ZlndX8Cj4E0pVJTk8439GEfPcN22FzyD+hM+yYF67tdGCcD1CTheaRLZXKXL+6Upqk
-	 Jp9Eeulw8WB86UXYMheuk45IzauGp+ZgOhA42rtr1hkM6LFcVux1MV5UkwNeg7SsT4
-	 ru6SJxhyLfrgQ==
+	s=default; t=1791297030;
+	bh=qchfnfzEyQk7NQ+ED3P/Jk7Vi+QSId3HYVyVi2C+g7c=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=l1yU1fGiTgCiBDfUvpMMLkTJtEKgbGWdkvldoGEUALluuomjsOxM0oTmEsb2eY+zc
+	 IpJS9djO6noax2R+xQ4ER13aufirzzVCl76vYAQSYnHSWMCPc4mEFmDeiOOrZPEU11
+	 h3IXK75S6Y+IOLpIJsQ056DZIl0yVicC+UJk7ErGu1RMEPw7QkcC247BSMcqDM9lKa
+	 064lWek1x2ZN9iz5qY84NEeZQUBx1jp7KQdO4qLwfjmqrqZE+I/UVk7k3AqdHC81P0
+	 HkpFmdI7set9wtYD2dSRMexkdEXVX3nhuEYhHaqdRSLELniZM0jvr0IU8IfpCKqbw/
+	 0ootDfi++hWjA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C880540613;
-	Tue,  6 Oct 2026 14:30:27 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 12B48341
- for <buildroot@buildroot.org>; Tue,  6 Oct 2026 14:19:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 36F5540659;
+	Tue,  6 Oct 2026 14:30:30 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 960CC317
+ for <buildroot@buildroot.org>; Tue,  6 Oct 2026 14:20:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 009A780D6E
- for <buildroot@buildroot.org>; Tue,  6 Oct 2026 14:19:57 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7C083607D8
+ for <buildroot@buildroot.org>; Tue,  6 Oct 2026 14:20:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CB-G3f0yFks9 for <buildroot@buildroot.org>;
- Tue,  6 Oct 2026 14:19:55 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org BD55980D60
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791296395;
- b=IJdL0rhRVgsyiJazNJ+aEX0+HkNbplF3pHOYjF+7EDJBIgGTJAtBnuLPwnnW+E3LLiej
- mYfC/xA3wzqZMZbNPh5KqRgAZ8TP7S2WVTq+LoLuLCV08Db05Y2EifPAIvkaGPk24+lXh
- OXjaXaFNNr76KKBHUfLcQFspndEzICjHo4jpfZMms2DV/zfKj50o2WadWF1+iZHFVVAZD
- ctzEYVFrVTBFLb44cwcuiN4RUna5hD9qZCxGilgX9jg/ZIQ6DyITheCD2ZYXfce2ARkUR
- cEW42RBBSy/HfgFO7RwzOb8CU4hyBFGurMnZ5H1HCNt9dNoHIFJw2r8N04Weh3fSfYg==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DnnTOC3jPajS for <buildroot@buildroot.org>;
+ Tue,  6 Oct 2026 14:20:51 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 15D0A607CA
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791296451;
+ b=bxM3Cf2FiHhu0ETPALRxFRYBWEXJSI9jKbVvRjWAAFasbd5EV8Anx/Tv7kEh0FNVZamu
+ 4/37sjSpykCAlxooK3gHVkGwIDqJJ8M2YCLzZ4ZUrYzwWP9yTbcGfexxf26C/B0krg1wL
+ RTpK12DYfPdONxA+y4hdLbU+blqb8KvKB1qu6/i1ZZR7CO79XUbuN6CNoxzHdGxIzLn4m
+ XwPWYCImKFGabpyjY+ebQi2ODJ3x9+OK6nOdKP3+V4yTVn2hCSXPRy1ZcnLX13rlsP5Ly
+ lezY2uggJuVD6DUvpwEfegDvWKkFqIJzEzYr2+pbWMmQanttYBK1lYkzypkpgEUtI0w==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1791296395;
- h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
- X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=DeuTMwqUAp7hRYyZ8DdoAFAosk5lQePzxu8b2Sfg6Hg=;
- b=mxuGYrF+SyEZ5NjQ8WKlnPCxdIlgtgABWhhaOF9qzfKH7C0s2F0xWEUqXQYjpsr+T37f
- A1zrTO/POPnWsepXB7RqSDcayFoPnDZcuoiCHIVlvCTHXo519ViTh9rtZmAUm4MgsMe9A
- NkAaZUJ8Zocty+2BunRklGObNbWwdUf6PPUliAN8cVpw4tPVSaRx/hVnOo/RB7lQHInIS
- RFfQPk1oRAOOfksED/xgv/8DUgQKR7rxae+dCjvKr6SOYFY0a0hfCAicoGskhjF1yOYS8
- VPszerAqXb0OTk0kPrMj+EHcOrwi/3c+2OxZJ83Z7PPS3Hb1sjdCIBLfXbLaVmyzbyQ==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org;
- arc=none smtp.remote-ip=140.211.167.122
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id BD55980D60
- for <buildroot@buildroot.org>; Tue,  6 Oct 2026 14:19:55 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8806E8D562; Tue,  6 Oct 2026 14:18:39 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 6 Oct 2026 16:07:54 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8cfad4f0f4b9fcb616b99b0fc6ae01e460d909d5
-X-Git-Newrev: 40c2d541c03a1dcce448b3a9d7a0ca2c4bbf9527
-X-Patchwork-Hint: ignore
-Message-Id: <20261006141839.8806E8D562@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gerbera: bump version to 3.3.0
+ c=relaxed/relaxed; t=1791296451;
+ h=Received-SPF:Received:DKIM-Signature:Received:MIME-Version:Date:From:
+ To:Cc:Subject:In-Reply-To:References:User-Agent:Message-ID:X-Sender:
+ Content-Type:Content-Transfer-Encoding;
+ bh=qW5bgGRIVG5q24O6RRyHKPd4oF2UgAnFGpCbm3ZGfiQ=;
+ b=UepcGSbIqcgdwN+E+3xfyGjmH+pBJCKjsf8MrUMj45Uft+Sz27H7j/HNXs6bRV14E2R9
+ BCvLtCZr2IDZy7JzaamkrKDGebi64JqijT9ySPxv8JRKv/vcj6Wkszov223Hl13FSBAVH
+ Y36pdrFnZtUL065Rc24Q9myl4hhMaOERPp20cBiOuQK2B4H7A6+Q9RyBk7iNeAYl5fGQk
+ MWpBkT6VhRIadla39rAIbU5eNCkUYy5ubQMUkHz4wTPzbC8/Dhm73AfmzAG+44EfZ15N7
+ 45p1iiIAIA2iiDOuJ4yrwEW3TyT+XRrUS9wyhp9qR73qU9zT2/WUYXzFmccPWQKgh7A==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org;
+ dmarc=pass header.from=free.fr; 
+ dkim=pass header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=hZsDzZWj; 
+ arc=none smtp.remote-ip=212.27.42.5
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 15D0A607CA
+ for <buildroot@buildroot.org>; Tue,  6 Oct 2026 14:20:50 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id AFEC560128;
+ Tue,  6 Oct 2026 16:20:46 +0200 (CEST)
+Received: from 199.151.230.94.awnet.cz ([94.230.151.199:37496])
+ via 199.151.230.94.awnet.cz ([94.230.151.199]) by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Tue, 06 Oct 2026 16:20:46 +0200
+MIME-Version: 1.0
+Date: Tue, 06 Oct 2026 16:20:46 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org, Fabrice Fontaine <fontaine.fabrice@gmail.com>
+In-Reply-To: <20261004181326.1944737-1-bernd@kuhls.net>
+References: <20261004181326.1944737-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.19
+Message-ID: <1598ccd35ed4ab19e57a09f96a949ea9@free.fr>
+X-Sender: ju.o@free.fr
+Subject: Re: [Buildroot] [PATCH 1/1] package/gerbera: bump version to 3.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -111,257 +123,19 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/40c2d541c03a1dcce448b3a9d7a0ca2c4bbf9527
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 04/10/2026 20:13, Bernd Kuhls wrote:
+> https://github.com/gerbera/gerbera/blob/v3.3.0/ReleaseNotes.md
+> 
+> Removed patches which are included in this release.
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-https://github.com/gerbera/gerbera/blob/v3.3.0/ReleaseNotes.md
-
-Removed patches which are included in this release.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- .../gerbera/0001-Fix-the-following-errors.patch    | 148 ---------------------
- package/gerbera/0002-Fix-the-following-error.patch |  47 -------
- package/gerbera/gerbera.hash                       |   2 +-
- package/gerbera/gerbera.mk                         |   2 +-
- 4 files changed, 2 insertions(+), 197 deletions(-)
-
-diff --git a/package/gerbera/0001-Fix-the-following-errors.patch b/package/gerbera/0001-Fix-the-following-errors.patch
-deleted file mode 100644
-index c474d32aab..0000000000
---- a/package/gerbera/0001-Fix-the-following-errors.patch
-+++ /dev/null
-@@ -1,148 +0,0 @@
--From 7caa9ae9ebf5c4cded5a292701528ff1d5c4946e Mon Sep 17 00:00:00 2001
--From: Downtown Allday <downtownallday@gmail.com>
--Date: Fri, 3 Apr 2026 09:31:07 -0400
--Subject: [PATCH] Fix the following errors: error: no member named 'strerror'
-- in namespace 'std' error: no member named 'memcpy' in namespace 'std' error:
-- no member named 'strchr' in namespace 'std'
--
--all of these require <cstring>. see:
--https://en.cppreference.com/w/cpp/string/byte/strerror
--https://en.cppreference.com/w/cpp/string/byte/memcpy
--https://en.cppreference.com/w/cpp/string/byte/strchr
--
--Upstream: https://github.com/gerbera/gerbera/commit/7caa9ae9ebf5c4cded5a292701528ff1d5c4946e
--
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-----
-- src/config/setup/config_setup_path.cc | 1 +
-- src/content/inotify/mt_inotify.cc     | 1 +
-- src/iohandler/mem_io_handler.cc       | 1 +
-- src/util/grb_fs.cc                    | 1 +
-- src/util/grb_net.cc                   | 1 +
-- src/util/string_converter.cc          | 1 +
-- src/util/thread_executor.cc           | 1 +
-- src/util/thread_runner.h              | 1 +
-- src/util/tools.cc                     | 1 +
-- src/util/url_utils.cc                 | 1 +
-- 10 files changed, 10 insertions(+)
--
--diff --git a/src/config/setup/config_setup_path.cc b/src/config/setup/config_setup_path.cc
--index cdb7244e4..a10e3c9f2 100644
----- a/src/config/setup/config_setup_path.cc
--+++ b/src/config/setup/config_setup_path.cc
--@@ -31,6 +31,7 @@
-- #include "util/logger.h"
-- 
-- #include <pugixml.hpp>
--+#include <cstring>
-- 
-- bool ConfigPathSetup::checkPathValue(std::string& optValue, std::string& pathValue) const
-- {
--diff --git a/src/content/inotify/mt_inotify.cc b/src/content/inotify/mt_inotify.cc
--index e938e60a1..e140b5f4f 100644
----- a/src/content/inotify/mt_inotify.cc
--+++ b/src/content/inotify/mt_inotify.cc
--@@ -52,6 +52,7 @@
-- #include <sys/select.h>
-- #include <thread>
-- #include <unistd.h>
--+#include <cstring>
-- #ifdef SOLARIS
-- #include <sys/filio.h> // FIONREAD
-- #endif
--diff --git a/src/iohandler/mem_io_handler.cc b/src/iohandler/mem_io_handler.cc
--index 21e4a1960..ba16a10d7 100644
----- a/src/iohandler/mem_io_handler.cc
--+++ b/src/iohandler/mem_io_handler.cc
--@@ -35,6 +35,7 @@
-- #include "mem_io_handler.h" // API
-- 
-- #include "exceptions.h"
--+#include <cstring>
-- 
-- MemIOHandler::MemIOHandler(const void* buffer, int length)
--     : buffer(new char[length])
--diff --git a/src/util/grb_fs.cc b/src/util/grb_fs.cc
--index cd3e612a7..09c892f2e 100644
----- a/src/util/grb_fs.cc
--+++ b/src/util/grb_fs.cc
--@@ -30,6 +30,7 @@ Gerbera - https://gerbera.io/
-- #include <fcntl.h>
-- #include <fstream>
-- #include <sstream>
--+#include <cstring>
-- #include <sys/stat.h>
-- #include <unistd.h>
-- 
--diff --git a/src/util/grb_net.cc b/src/util/grb_net.cc
--index 8986bfa4a..68395e001 100644
----- a/src/util/grb_net.cc
--+++ b/src/util/grb_net.cc
--@@ -30,6 +30,7 @@ Gerbera - https://gerbera.io/
-- #include <ifaddrs.h>
-- #include <netdb.h>
-- #include <regex>
--+#include <cstring>
-- 
-- #ifdef SOLARIS
-- #include <sys/sockio.h>
--diff --git a/src/util/string_converter.cc b/src/util/string_converter.cc
--index fa11e1de2..21e2760d9 100644
----- a/src/util/string_converter.cc
--+++ b/src/util/string_converter.cc
--@@ -42,6 +42,7 @@
-- 
-- #include <array>
-- #include <vector>
--+#include <cstring>
-- #if FMT_VERSION >= 100202
-- #include <fmt/ranges.h>
-- #endif
--diff --git a/src/util/thread_executor.cc b/src/util/thread_executor.cc
--index 669856272..ca0a1755c 100644
----- a/src/util/thread_executor.cc
--+++ b/src/util/thread_executor.cc
--@@ -34,6 +34,7 @@
-- #include "thread_executor.h" // API
-- 
-- #include "util/logger.h"
--+#include <cstring>
-- 
-- ThreadExecutor::~ThreadExecutor()
-- {
--diff --git a/src/util/thread_runner.h b/src/util/thread_runner.h
--index a2e55f8eb..08dbc8b9c 100644
----- a/src/util/thread_runner.h
--+++ b/src/util/thread_runner.h
--@@ -36,6 +36,7 @@
-- #include <mutex>
-- #include <pthread.h>
-- #include <thread>
--+#include <cstring>
-- 
-- using ThreadProc = std::function<void(void* target)>;
-- 
--diff --git a/src/util/tools.cc b/src/util/tools.cc
--index 2174ff352..cc1877286 100644
----- a/src/util/tools.cc
--+++ b/src/util/tools.cc
--@@ -43,6 +43,7 @@
-- #include <queue>
-- #include <regex>
-- #include <sstream>
--+#include <cstring>
-- 
-- #ifdef __HAIKU__
-- #define _DEFAULT_SOURCE
--diff --git a/src/util/url_utils.cc b/src/util/url_utils.cc
--index efb4099ec..3127d53fb 100644
----- a/src/util/url_utils.cc
--+++ b/src/util/url_utils.cc
--@@ -30,6 +30,7 @@ Gerbera - https://gerbera.io/
-- #include <fmt/ranges.h>
-- #endif
-- #include <sstream>
--+#include <cstring>
-- 
-- // URL FORMATTING CONSTANTS
-- #define URL_UI_PARAM_SEPARATOR '?'
-diff --git a/package/gerbera/0002-Fix-the-following-error.patch b/package/gerbera/0002-Fix-the-following-error.patch
-deleted file mode 100644
-index 01f135bbed..0000000000
---- a/package/gerbera/0002-Fix-the-following-error.patch
-+++ /dev/null
-@@ -1,47 +0,0 @@
--From 9507706136fde8c324d95d5c84c78bae1703bafc Mon Sep 17 00:00:00 2001
--From: Downtown Allday <downtownallday@gmail.com>
--Date: Fri, 3 Apr 2026 09:34:00 -0400
--Subject: [PATCH] fix the following error: error: no member named 'format' in
-- namespace 'fmt'
--
--the comment in fmt/core.h says including 'format' via core is deprectated:
--// Using fmt::format via fmt/core.h has been deprecated since version 11
--// and now requires an explicit opt in.
--#ifdef FMT_DEPRECATED_HEAVY_CORE
--#  include "format.h"
--#endif
--
--Upstream: https://github.com/gerbera/gerbera/commit/9507706136fde8c324d95d5c84c78bae1703bafc
--
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-----
-- src/database/search_handler.h | 2 +-
-- src/exceptions.h              | 2 +-
-- 2 files changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/src/database/search_handler.h b/src/database/search_handler.h
--index ac5afb1b7..c1c99d00d 100644
----- a/src/database/search_handler.h
--+++ b/src/database/search_handler.h
--@@ -32,7 +32,7 @@
-- #include "util/tools.h"
-- 
-- #include <algorithm>
---#include <fmt/core.h>
--+#include <fmt/format.h>
-- #include <map>
-- #include <memory>
-- #include <tuple>
--diff --git a/src/exceptions.h b/src/exceptions.h
--index 180e63ad4..e5ed74f3d 100644
----- a/src/exceptions.h
--+++ b/src/exceptions.h
--@@ -34,7 +34,7 @@
-- #ifndef __EXCEPTIONS_H__
-- #define __EXCEPTIONS_H__
-- 
---#include <fmt/core.h>
--+#include <fmt/format.h>
-- #include <stdexcept>
-- #include <string>
-- 
-diff --git a/package/gerbera/gerbera.hash b/package/gerbera/gerbera.hash
-index 42e2d13951..d292a5df5d 100644
---- a/package/gerbera/gerbera.hash
-+++ b/package/gerbera/gerbera.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  6b89d0c416b6d98e34634e5b1121f340315d60b088e9e6b2fca423488760030f  gerbera-3.2.1.tar.gz
-+sha256  79db1b4d9fcfafe5cb6a30eb29174f912f1b2c04a644bd5fe5075bccad10eb97  gerbera-3.3.0.tar.gz
- sha256  cae4138373be41fd2be75faf41ce7efbcf49fb17d0e05ad1c51cc01ac335b9b6  LICENSE.md
-diff --git a/package/gerbera/gerbera.mk b/package/gerbera/gerbera.mk
-index bb00fc89e9..d50e59f591 100644
---- a/package/gerbera/gerbera.mk
-+++ b/package/gerbera/gerbera.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GERBERA_VERSION = 3.2.1
-+GERBERA_VERSION = 3.3.0
- GERBERA_SITE = $(call github,gerbera,gerbera,v$(GERBERA_VERSION))
- GERBERA_LICENSE = GPL-2.0
- GERBERA_LICENSE_FILES = LICENSE.md
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
