@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C4C3CA6006
-	for <buildroot@archiver.kernel.org>; Tue,  6 Oct 2026 16:30:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D59F0CA5FFC
+	for <buildroot@archiver.kernel.org>; Tue,  6 Oct 2026 16:30:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5CCAA40674;
-	Tue,  6 Oct 2026 16:30:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 701D680D96;
+	Tue,  6 Oct 2026 16:30:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9rZMHRwEqUYh; Tue,  6 Oct 2026 16:30:21 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 76F5A4061A
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791304221;
-	b=p4ZhFexYr3MYi8F6H0iGnJq0zGljj2AkJdHQq/rje/QQn9eVOVTf0a+ym9g3rhyAQ5n9
-	 u417lOvxIpWiz6O76rK2dauoBlu/C/ED+CSiKFbLeLEThQpUsi64V+gpn7DkytyioYoJW
-	 kYQWEPOZuwAfh2llfgJIhYDIdY0f4l6ntMCkXz3BfKf392kulFFeeb8WGGppYBi5i8RNp
-	 R9SokS1Uz9aum7484c//0gbi4Znl9jtb6BYDeEQLG3iTucfTxbkYJVuYKuP7PoAbg1VB8
-	 uOS23RZjGDg/fIcsOXtS8OAcjT8h6ufiQso3JTvd7hOPVX/qEy+MO3OqRoQ4cmBzATQ==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ROye85s0LAZ1; Tue,  6 Oct 2026 16:30:24 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 295EE80DC7
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791304224;
+	b=JLtUq6FNebZ006+a5K/QYCHpYN39ST0lCdPUUYEOzJQDSsKOyOErnFnb4jZKYOg0nkW+
+	 ktTNGsGsB88uUka8xMwkXZUFv6Gd1PCEovt5dCXijwljGAZGD80ZXTZnU+akeLAIOqjVT
+	 9vsj/dJLEPP+1OSiWr8XK0pKmt5FzrX99m38g1+7PZ+qgxPi4+HE0Xp1t0uA9VRcmkGyi
+	 EwSL9I9SSpe66PBnil4G+LTITdx3Un4eGbs9f1RPoVCKWAHXAXtIXurd17w2n2iyteFhb
+	 Vwq+LMEGtCIcbP7pgN8sjGpzN0jH1YqGxf4L/Bv9brA1OTvFuukD/EX0MnOvdSysWIw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791304221;
+	c=relaxed/relaxed; t=1791304224;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
@@ -31,116 +31,116 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=YBt32S6Uf/6Uh5i1qWElljGdcI32pZDk1Er82WSVeRM=;
-	b=eRgKwgAAEsgCOuPBj4LjSwDWyKf4uAk3ds9hbdDm2ZxhysiIfWBF/9fRRr2BPgMhYdF4
-	 YuB4NFaK//rodAzzijnOPfc/sm1Lw4Ud0GOZQ9crHxdgw0M8cS05nmQXDFyJOsDrETyHN
-	 vKhn5nly52toV7fnjRailKCt5Pa64Rau568Ejx+B73yQLinyX9MlI8LMz5T3VZG4hs2GI
-	 xRg/APBqeP6u4DKptbak3/IEs1Q/jh7y06HWhdBPX550aLg6xTOu+1qZ6lKfJQzNIfXhJ
-	 X8qCHFdzl7CmUBVG+8v+iYSNPIy+LQk0DR5ZNeE5/CoJLIspwPSqOADI+ysHdkLY1+Q==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	bh=ZBgLRrUMyg0mpUkyaZMatFTb1lAaCa8JLlS0qz2gobU=;
+	b=BjyznNeHJuLDO7ISdJr2nB95tWwac+/LNPUtnS9evL4Xsiy2Z6Ci2gFF9CpniqaUBju7
+	 x5oSr5eAc+ulfu7q63yw3CA6jc2x+t2sWlagf/FojYVY1fCZ+UfAXXhy4oi4sEoeW1bVv
+	 jLTEg4+Zk6WH3rWt/jYN2dK3YzOSqcqeSeDwI0JMgk7E0c4Nwrym9DGj9rPCvFdQrZQJw
+	 cjiXlk8R98mnIcoahScdgW3/vQad6XWtjdGWyezPsFM3O0VYgc0PdS9+EwTS59Pchc7yB
+	 KuOUW2UyBNNTuMRTe/5px6cbANmtCBI71uA1jOBjH3vdQaWsPgplSSTDM13a+KUOD1A==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791304221;
-	bh=YBt32S6Uf/6Uh5i1qWElljGdcI32pZDk1Er82WSVeRM=;
+	s=default; t=1791304224;
+	bh=ZBgLRrUMyg0mpUkyaZMatFTb1lAaCa8JLlS0qz2gobU=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=aUWkD0pkxPQYpUbgUBqqrSmTMurwemTk098YjU3l/GZeIUgKCAZZ01KigthyNgqd4
-	 9QELuT193Tv4CaEvN+eu67lqpjORteFhMGlFSYYk1NQ8xc2GM/RDFIhLvDPjWrghZK
-	 CrEU4MwqX00r7jlCncOnFm0/CfZt3obYKltJ4y+h+0K51hd5PGbBEU1QzCeKTfysJn
-	 XZO3vC9aqqTcCT5JaTS699cdVgM2pwet2o1VyxfKOcUeXTA30ITJ1s36ctptHbQF/Z
-	 bghXt8063/6Xu/3WEYzskkKXu901ODS8YEi3XsM0juv87hyBv4/0SxIV3C7Oe9git1
-	 27G/+O+gKlKFg==
+	b=sDqoFCmPRp0EWNSpX4G12HEiZuRKKINADGnzg3MXIx7pkVM0h19Rd3ow5MKZdg7c9
+	 h2+iOlZd+u04hjlQ2LsTQ3uy8aGCOHLb2Nvev7nXf3dRhVrzRQ/7xaRupzWSkXaWkV
+	 09Fn9sP5NuGHXd8CFLbc8bomKyrvcF4SwyvU3PHfD1WMswcL6fHuSPxZqJVNXFWgtB
+	 uRweQrTdhucMnn4P4qKRK2t2FRKEw1eejlSyUYPqvx9djKnxUhcAt9773Phanraz7b
+	 imGJ8CafilV3eS6Q7IidUe1cxLH7cj8H+2GyWqeGEOz2U3oZEcRYXFe7E6rTW+oRM9
+	 kcgvvKAYvfl7A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 76F5A4061A;
-	Tue,  6 Oct 2026 16:30:21 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 3C48F317
- for <buildroot@buildroot.org>; Tue,  6 Oct 2026 16:25:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 295EE80DC7;
+	Tue,  6 Oct 2026 16:30:24 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0B421341
+ for <buildroot@buildroot.org>; Tue,  6 Oct 2026 16:25:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2243980D8C
- for <buildroot@buildroot.org>; Tue,  6 Oct 2026 16:25:11 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E50A1606DB
+ for <buildroot@buildroot.org>; Tue,  6 Oct 2026 16:25:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3qFPwba-Ywp5 for <buildroot@buildroot.org>;
- Tue,  6 Oct 2026 16:25:10 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org 4763B809B1
-Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791303910;
- b=djPLgF3V/LuFx/peGRIKiaPOylA5lwM3S8Utbshl/rHXiZu1UmpxPWfz6NhcDOWVAxvO
- EGYX/6cWaKBXVosS1i6RrzowcuZth9YnvqcZeKBStkwFENzMPNcPd/1n8iZpNY0MYWVrP
- 2EpR8klXvzOwqc8YJEe1GBMYhT2YM2fv3zoTSyYou6N2XNwXPuOx76ltb1gUM+uRaY5m3
- 16P0FnvDGdEkUJ63rXYcQwdc0Sgrbx4gXQCxtJmkKBri3C2oQWE18+F0/Kk5nr/hv6B8n
- vMP76EPFdnvi617J8MZs75amXJ65d+vJ8YPab1dEcFL7gZkjNNthslv/TbjqsLgc31Q==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id udIZNT1naZcX for <buildroot@buildroot.org>;
+ Tue,  6 Oct 2026 16:25:35 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org E0766606BF
+Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791303935;
+ b=F+Qv9WYPH+8yRgHCrO0xBZvwYH6rDesSFhDFIE2AcvVkUob8rRdb2V+0nOdrEr82jR++
+ p94IAbp2IC3YRCzsYptkGYWoKYn+dPv3+n/no4zO3L6vJfNwf35vcEWjNYRFxHGlbEX8b
+ s7RwhLlMGaPl2RPp9k//7cSuZFqn14y3cvgB2d5VAgXhBjjd1BwtmSomEkL8jYHkPOb+/
+ 8/TokPnwcMl6xr5Sm6w5dC560BGBQvS/uzkrXjCy4AHlSPgWDIjq55fP+/mVHv/4vZNl9
+ VqyZ24+JWz5lpanncN658ACs/d0m6mKcUvWRwd+m3Ns3Bxmu5c1YjUve7b+PzksKx3w==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1791303910;
+ c=relaxed/relaxed; t=1791303935;
  h=Received-SPF:DKIM-Signature:X-KAS-Sym:Received:Received:From:To:
  Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding:X-Spam-Score:X-Spamd-Bar;
- bh=XwKQEnzBAHqTeZySi1o+lNTXj4vtAZN/G+QMQLgp4iA=;
- b=rreq17/Fl024IxTH9uowxnsxEF44jc4DBOv1uJNpsMZnyiKqJVf1GAHUVXqnmszbPGBq
- QDr+9yfe+5fpbMkh4C1nz1R1OxUTRTZ02Xjz60gFDK37jNvAz9+evTgbbpMSTTtKUP6Dk
- KFaP1YK9Q/BcqPebLgr22oNnR/ZaeDywoB+kssrrZJcZvgEZhjzM5O8U+OZXxvsp68Huc
- Ta8MShTJ+8mK34i+VWT34eScmLyL5YWOphkVUDBNCGW97reAdeoDwWIMhWXi3W/kPiAhI
- FIrh7RGTuG2J1dWQH8x2fdDX3UY8856xr4e/5+pVy8nXPWPaQM+f7i2aAjJihK9QLSw==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org;
+ bh=n/+LGAEZJLiIorP17BCoVnupvWfgZyfVfxYMnovnNqY=;
+ b=ODnHWOaD3pdGe0J7SuE8/ufBHpsHQYzLIdxCS748XPhfcRWyuNRHNN03CkpEPFJ+tj67
+ WuWRtayXB8iEgXqd8hzW/2qb+RXz3G63yfH7yqabb7K8TfMxrCYWx4Q3sP7yEf/DImjze
+ O1i8iyhgkO81qUPK2kAvMrCL9IyRoA70qHMTZ1cjmVNyP5kWI/UX2bhVH2gk6Scaj0dbf
+ ERdrrJljpVtpr70ZTCBNkpiHtaqShnhEk6IdToZTSAovukZU1KBVscJAyCXzq6fYQEjKE
+ 5Wb/451e3cL4ocUfzDKvBBRThfYcg1GF3ZipbUSfZrauLcZCMAlaXuDu/PocPfF3m+w==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org;
  dmarc=pass header.from=kuhls.net; 
  dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=I0GhpHC6; 
+ header.s=kas202605290044 header.b=sqLXB84k; 
  arc=none smtp.remote-ip=85.13.140.57
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-Authentication-Results: smtp1.osuosl.org;
+Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=kuhls.net
-Authentication-Results: smtp1.osuosl.org;
+Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202605290044 header.b=I0GhpHC6
+ header.a=rsa-sha256 header.s=kas202605290044 header.b=sqLXB84k
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4763B809B1
- for <buildroot@buildroot.org>; Tue,  6 Oct 2026 16:25:10 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E0766606BF
+ for <buildroot@buildroot.org>; Tue,  6 Oct 2026 16:25:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
  s=kas202605290044; t=1791303704;
- bh=XwKQEnzBAHqTeZySi1o+lNTXj4vtAZN/G+QMQLgp4iA=;
+ bh=n/+LGAEZJLiIorP17BCoVnupvWfgZyfVfxYMnovnNqY=;
  h=From:To:Subject:Date:In-Reply-To:From;
- b=I0GhpHC6slz9PhR5fhzQokJsBVIAWnx6sk/0NlzdglGgJEGQIXdjtRg3AYXHs+ZSC
- 1TadyvETTMKzSDKHckrczjzTY/7UWGOuom+jS9U/x6VDUZLCsxOU15gokr7la7gKyo
- 1Fq3cUfP+V8Cuy6P8emzkIWHIZ3ZzmD8RWNlxkJey0gmO1LLHFNK4LxFRxYcyXMUzp
- nnDGV4poOOshnQCoW5c/YShFNUiPUMvmAXp4GZcsDHRBVGt525t3KeLWb0ov3CK8IM
- lu8UwTrDa20C48Ysd5PrzpkSMrWz5FyReYs33dhd6xrDTVbYcz9yBl+vlTkSSGBTYw
- FZGnuMWIe1b6Q==
+ b=sqLXB84khuvyuh/kxzN1xT+nVjwPxlSmwZHKITS4p0neKRNDLFLhumaXujBJgjBkS
+ hJcDybU5adN7u0gFbA2i59aiAuAS3BeUz3ssW61OtCIfgONcbmzj+apOBWGt4WdOMa
+ vhJ2VZiU0kl5U0jRjyMqiDVpxLIiENSrTclniMqaAuOsLnP6On0yonEq1bfOP/Fizh
+ XN1tDQgZ6iGTdXN2dXHzDmm3W7Jjj91FRTN/JopQVru9IpmVY9vyzY87jdoeMrsmtM
+ nVxKDKdGugl9+4nutk2CasZ0U8jFGX2y78ju4EzW/u5E5guD51wELqrQHZlxO8IuTA
+ knZ2TnYxVOqGA==
 X-KAS-Sym: v3:f51bdf72230551df:UVRrC5WRPqTrQZ2snRs6ADaGTIs1fNMELseztNLkGZaoG
  nDVoIWJAJHxWOAZfar7ySv6hURHCYEJ486jY0wSzH4bn6X9oZtMeJOWXJWfbXQl4RiwCyrj/m57
  15sQ0uumxbq4Ni0Jg8upgOj44d4LDRY4qAHg+axEDZVbYP0g0yE2r2HU5OlzQlUaGimeYmMwhfI
  C2XbfRi5reOEXID85lh2h/YKBFEVYOpWHl87Xd6mrYgK6QCyW0YmzXJKF3rsfBDAdGW7GiuVnBc
  u7jtTtCWAX8A4fqyTLJm9T3xE0yk3CafN3r54xhVAFfUDD2DDyyj4LyhMirWwrBiHdxCKemg==:
- xQgeRKEplDYmGV9Ft88OmvX3rM8/QSwyFcHqyE7x7kbmF4l3wIw5U8l+AAEHndUBydeM4fWroJK
- Zld27jw7hW5xvtlr9QIhikPqvyWzSdRXB68V7Sz1TJGP6rY++UVzvr+/GcciPejLBRNEF4REq6+
- bLa19/T14vDF1gCSs8NKXjSzZp185Ch7AKEgcagFIl8HetZJNybRcSLtbE1oeq7cCELhurzWqGi
- 6NiiVK/RbUDGsman3AmVzny6V37A8gk8ZhlEYP0chVzd+KHtNs+SCEMvo+c9dQqLSS7+QZSsxx2
- etCuYR56AcwcP9ne53i0OS560p1XjTZtT2JTOKrzfGKPKJdNUg/BSoA5miMn949ZqzvwBJTUz2i
- lT3b0+xn7/XCxMwLau/MKXZQxrapV6KnAviEEuZ6somj80U4qvM+42FWK/DePlXRTTaicNc76X5
- /+WUmoD0CjFDTlPCR1+NlFwCFvWv1HAUqkbrsWJfOGZkyNXQuj6UxhEm4wxy1Oknq/aNHVHoFvQ
- OZXmzizOs0JU0TblQf2IOCy8wm6/i+uHfeZGYxxL9qCX6zTxNDyfiN2mHdz5HLK9Kx+Cw8eKT3/
- 6uQ2ExM=
+ 1TZ/hbiiEmA/JW6FQ6l26tlzHcjETo16G9N16Y7bxzUNKywW4WsREbpZbFOLlc3vo213wRbZHvI
+ OOwKM2w/PKZahvpf85O4BR5UCIcxNlJZgyCewRtKo0mfxkLtyIWqE7Mv0O+DgJoXLDtTjYHbX5l
+ 4f+a5AAuDL8iVf/l9//5w8KYSobPyh5Nv5Uhw1vCy0N9kDa+76I2fxFrF2iDdJSm7r57qhUVbiW
+ C07WRWhbLwrA7wawEQHYjEgG6/3fJvu16NB52fOOFY77TcWS/QWYhATY230w+kgGfhLSFoFpE4C
+ RO3NtPELXgXot+536syUesxOlJy3zP6LzcW+1wv0eJ0RJyH7m3NxQdmzUmD9PN7wTUVOqzVcqiS
+ ZbrUSTwXMx0oA4EBc7YFkAZmCTheOeRF8lA0fjg4RONb6wiNxy+nRvcOBWcgyWNRwDwIkULOfWV
+ JGVE+qG5ZX58Bl2o66mqLQv8cnPB0MKjNUBeIbKUhivNwNyAgzlgjycfLtsqNWDegmmQ207H30O
+ UT04shkPKZqpp13olZ1D0Q91ztCll69sUFX/8xwJjBbf2+TLmK0tU8YRwWw/MjiUrn9RudRAsBD
+ A5TXgwg=
 Received: from fli4l.lan.fli4l (p5b3a03df.dip0.t-ipconnect.de [91.58.3.223])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 74AFCA4C50B4
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id CBAF6A4C520A
  for <buildroot@buildroot.org>; Tue,  6 Oct 2026 18:21:44 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:58872)
  by fli4l.lan.fli4l with esmtp (Exim 4.100.1)
- (envelope-from <bernd@kuhls.net>) id 1xE7uq-000000000ir-49iV
- for buildroot@buildroot.org; Tue, 06 Oct 2026 16:21:20 +0000
+ (envelope-from <bernd@kuhls.net>) id 1xE7ur-000000000ir-3cN9
+ for buildroot@buildroot.org; Tue, 06 Oct 2026 16:21:21 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Tue,  6 Oct 2026 18:20:49 +0200
-Message-ID: <20261006162106.3439373-69-bernd@kuhls.net>
+Date: Tue,  6 Oct 2026 18:20:51 +0200
+Message-ID: <20261006162106.3439373-71-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20261006162106.3439373-1-bernd@kuhls.net>
 References: <20261006162106.3439373-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: /
-Subject: [Buildroot] [PATCH v8 68/84] package/bento4: bump version to
- 1.6.0-641-6-Piers
+X-Spamd-Bar: --
+Subject: [Buildroot] [PATCH v8 70/84] package/kodi-audiodecoder-*: mass
+ version bump to Piers
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -157,48 +157,178 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/xbmc/Bento4/releases
-
-Removed -std=c++11 from cflags due to upstream commit which added
-compatibility with c++20:
-https://github.com/xbmc/Bento4/commit/9380a868a74252fa53c80174a3e942168e6c0d85
-
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/bento4/bento4.hash | 2 +-
- package/bento4/bento4.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ .../kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.hash    | 2 +-
+ package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk  | 2 +-
+ .../kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.hash  | 2 +-
+ .../kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk    | 2 +-
+ .../kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.hash    | 2 +-
+ package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk  | 2 +-
+ .../kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.hash    | 2 +-
+ package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.mk  | 2 +-
+ .../kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.hash    | 2 +-
+ package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk  | 2 +-
+ .../kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.hash  | 2 +-
+ .../kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk    | 2 +-
+ .../kodi-audiodecoder-vgmstream.hash                            | 2 +-
+ .../kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.mk  | 2 +-
+ 14 files changed, 14 insertions(+), 14 deletions(-)
 
-diff --git a/package/bento4/bento4.hash b/package/bento4/bento4.hash
-index b933c74d2d..bbb10785d1 100644
---- a/package/bento4/bento4.hash
-+++ b/package/bento4/bento4.hash
+diff --git a/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.hash b/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.hash
+index d011e38fe9..84eb36bd80 100644
+--- a/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.hash
++++ b/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256  f1f8cfa4f7cb651b609e587f825607cb4b06fe5b08af876fd0154a434f9a5315  bento4-1.6.0-641-Omega.tar.gz
-+sha256  cb5006cd30889238760556e6148f69be34fef4dc48e8d895a9822f805504a5c0  bento4-1.6.0-641-6-Piers.tar.gz
- sha256  7daae92c8628ada28def8d096fe2fde298b72ec3e2d64a3c408afce38edb361b  Documents/LICENSE.txt
-diff --git a/package/bento4/bento4.mk b/package/bento4/bento4.mk
-index 569e320a2f..bb91c9b65b 100644
---- a/package/bento4/bento4.mk
-+++ b/package/bento4/bento4.mk
+ # Locally computed
+-sha256  b2828685f1c353bf7123d0f9e88b28f53064388f6ea3ee357b8fb22d5c237ac8  kodi-audiodecoder-modplug-21.0.2-Omega.tar.gz
++sha256  9a0b5bfce44d937726529a5c32d1f33e4d70261eeed5ace443dffd1d159641f1  kodi-audiodecoder-modplug-22.0.2-Piers.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk b/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk
+index 15a1d96635..9f3e089527 100644
+--- a/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk
++++ b/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--BENTO4_VERSION = 1.6.0-641-Omega
-+BENTO4_VERSION = 1.6.0-641-6-Piers
- BENTO4_SITE = $(call github,xbmc,Bento4,$(BENTO4_VERSION))
- BENTO4_INSTALL_STAGING = YES
- BENTO4_LICENSE = GPL-2.0+
-@@ -20,6 +20,6 @@ endif
+-KODI_AUDIODECODER_MODPLUG_VERSION = 21.0.2-Omega
++KODI_AUDIODECODER_MODPLUG_VERSION = 22.0.2-Piers
+ KODI_AUDIODECODER_MODPLUG_SITE = $(call github,xbmc,audiodecoder.modplug,$(KODI_AUDIODECODER_MODPLUG_VERSION))
+ KODI_AUDIODECODER_MODPLUG_LICENSE = GPL-2.0+
+ KODI_AUDIODECODER_MODPLUG_LICENSE_FILES = LICENSE.md
+diff --git a/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.hash b/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.hash
+index d743433027..7093b6c48e 100644
+--- a/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.hash
++++ b/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  4c82bf0ffab2d09f26b84d382fd00f70695d5f6a6d781be2818f9f5e10bc675a  kodi-audiodecoder-nosefart-21.0.2-Omega.tar.gz
++sha256  f0b89b0ac85c2248c6aeafba1b805c2c21524fe5dd229f2a5ba362b3ea8dd313  kodi-audiodecoder-nosefart-22.0.3-Piers.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk b/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk
+index ca45739a02..ede46e0698 100644
+--- a/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk
++++ b/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- BENTO4_CONF_OPTS += \
- 	-DBUILD_APPS=OFF \
--	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -std=c++11 -fPIC -DAP4_PLATFORM_BYTE_ORDER=$(BENTO4_BYTE_ORDER)"
-+	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -fPIC -DAP4_PLATFORM_BYTE_ORDER=$(BENTO4_BYTE_ORDER)"
+-KODI_AUDIODECODER_NOSEFART_VERSION = 21.0.2-Omega
++KODI_AUDIODECODER_NOSEFART_VERSION = 22.0.3-Piers
+ KODI_AUDIODECODER_NOSEFART_SITE = $(call github,xbmc,audiodecoder.nosefart,$(KODI_AUDIODECODER_NOSEFART_VERSION))
+ KODI_AUDIODECODER_NOSEFART_LICENSE = GPL-2.0+
+ KODI_AUDIODECODER_NOSEFART_LICENSE_FILES = LICENSE.md
+diff --git a/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.hash b/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.hash
+index 87cf151859..c03bf7434f 100644
+--- a/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.hash
++++ b/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  c7d10dd65baed2db1272ff57fde76f0b268a4a434d57022539c4dc5bf6f8b54e  kodi-audiodecoder-sidplay-21.0.2-Omega.tar.gz
++sha256  1657509ee534600bec9f66cd651e7d6342502fde1a213e81a807eb17feb3c565  kodi-audiodecoder-sidplay-22.0.3-Piers.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk b/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk
+index d98fc4a7f5..a99cd32f9f 100644
+--- a/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk
++++ b/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- $(eval $(cmake-package))
+-KODI_AUDIODECODER_SIDPLAY_VERSION = 21.0.2-Omega
++KODI_AUDIODECODER_SIDPLAY_VERSION = 22.0.3-Piers
+ KODI_AUDIODECODER_SIDPLAY_SITE = $(call github,xbmc,audiodecoder.sidplay,$(KODI_AUDIODECODER_SIDPLAY_VERSION))
+ KODI_AUDIODECODER_SIDPLAY_LICENSE = GPL-2.0+
+ KODI_AUDIODECODER_SIDPLAY_LICENSE_FILES = LICENSE.md
+diff --git a/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.hash b/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.hash
+index 0ebd6cf128..16e353d2e7 100644
+--- a/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.hash
++++ b/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  98afd81a9653efd9c6fe69dd7918755c75a4671322b793a35bce610acac0d128  kodi-audiodecoder-snesapu-21.0.2-Omega.tar.gz
++sha256  5bffae158b9e02d2fba2fca7950fc9497dc65928f90ab336f37ae51819b662a7  kodi-audiodecoder-snesapu-22.0.3-Piers.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.mk b/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.mk
+index aa8178c55a..03b3e121a4 100644
+--- a/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.mk
++++ b/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_AUDIODECODER_SNESAPU_VERSION = 21.0.2-Omega
++KODI_AUDIODECODER_SNESAPU_VERSION = 22.0.3-Piers
+ KODI_AUDIODECODER_SNESAPU_SITE = $(call github,xbmc,audiodecoder.snesapu,$(KODI_AUDIODECODER_SNESAPU_VERSION))
+ KODI_AUDIODECODER_SNESAPU_LICENSE = GPL-2.0+
+ KODI_AUDIODECODER_SNESAPU_LICENSE_FILES = LICENSE.md
+diff --git a/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.hash b/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.hash
+index 560c93b74f..9d463dd168 100644
+--- a/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.hash
++++ b/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  089ddd6c890e571f69eda0a85077d8ffe91c4b31fd0f9e20f47d4053c1e984a8  kodi-audiodecoder-stsound-21.0.2-Omega.tar.gz
++sha256  c40edfdc694f62d0ce0129f93b16fafa97cf254526d8d874a473560819c31894  kodi-audiodecoder-stsound-22.0.3-Piers.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk b/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk
+index 2bd37a8e04..086e2ff6ff 100644
+--- a/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk
++++ b/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_AUDIODECODER_STSOUND_VERSION = 21.0.2-Omega
++KODI_AUDIODECODER_STSOUND_VERSION = 22.0.3-Piers
+ KODI_AUDIODECODER_STSOUND_SITE = $(call github,xbmc,audiodecoder.stsound,$(KODI_AUDIODECODER_STSOUND_VERSION))
+ KODI_AUDIODECODER_STSOUND_LICENSE = GPL-2.0+
+ KODI_AUDIODECODER_STSOUND_LICENSE_FILES = LICENSE.md
+diff --git a/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.hash b/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.hash
+index 22e7015ff8..5240efc8a6 100644
+--- a/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.hash
++++ b/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  eb7bee9453825f86275ae05c4561fb52ee7fd9fa21857e303933cb57d28ccc4b  kodi-audiodecoder-timidity-21.0.2-Omega.tar.gz
++sha256  90354522f51889c341541694bc964f24a4739c342c0c8f28ae3c002ac41eebbf  kodi-audiodecoder-timidity-22.0.3-Piers.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk b/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk
+index c165492416..ab417ee150 100644
+--- a/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk
++++ b/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_AUDIODECODER_TIMIDITY_VERSION = 21.0.2-Omega
++KODI_AUDIODECODER_TIMIDITY_VERSION = 22.0.3-Piers
+ KODI_AUDIODECODER_TIMIDITY_SITE = $(call github,xbmc,audiodecoder.timidity,$(KODI_AUDIODECODER_TIMIDITY_VERSION))
+ KODI_AUDIODECODER_TIMIDITY_LICENSE = GPL-2.0+
+ KODI_AUDIODECODER_TIMIDITY_LICENSE_FILES = LICENSE.md
+diff --git a/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.hash b/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.hash
+index 010315db59..27a721d85d 100644
+--- a/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.hash
++++ b/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  6f5dddc0e6161426b8c40bfd1136ca555588db27ae78c02178b6ac5da93b377c  kodi-audiodecoder-vgmstream-21.0.2-Omega.tar.gz
++sha256  c6ae413f47d9261f3a20cd4e2d380b44a57a82a93d03ddfdf2ac0666b230ac6b  kodi-audiodecoder-vgmstream-22.0.3-Piers.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.mk b/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.mk
+index 66beec0a37..74a5f05a0e 100644
+--- a/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.mk
++++ b/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_AUDIODECODER_VGMSTREAM_VERSION = 21.0.2-Omega
++KODI_AUDIODECODER_VGMSTREAM_VERSION = 22.0.3-Piers
+ KODI_AUDIODECODER_VGMSTREAM_SITE = $(call github,xbmc,audiodecoder.vgmstream,$(KODI_AUDIODECODER_VGMSTREAM_VERSION))
+ KODI_AUDIODECODER_VGMSTREAM_LICENSE = GPL-2.0+
+ KODI_AUDIODECODER_VGMSTREAM_LICENSE_FILES = LICENSE.md
 -- 
 2.47.3
 
