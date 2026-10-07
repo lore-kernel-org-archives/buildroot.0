@@ -4,164 +4,181 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4172BCA5FFC
-	for <buildroot@archiver.kernel.org>; Wed,  7 Oct 2026 11:15:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9552ACA5FF1
+	for <buildroot@archiver.kernel.org>; Wed,  7 Oct 2026 11:17:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CDF42606B0;
-	Wed,  7 Oct 2026 11:15:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5540B606CA;
+	Wed,  7 Oct 2026 11:17:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0TXXZonHM2PO; Wed,  7 Oct 2026 11:15:32 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org C4A4B606CA
+ id f58iKLdSPRhl; Wed,  7 Oct 2026 11:17:12 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp3.osuosl.org 75147606A6
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791371732;
-	b=hI+p4PHsQFjV0xHFNOFPfCX++QB361J9gmIr4irkdwhvjPOVr4C7kkKlMZ+qsf2tCiJa
-	 epZB7WRcRqnfBSBcwJru3r+ehhIw4cGKcpt3h5GMWBHPB+qfn4AlE3jj+avLiAzvjnseK
-	 AQUyV/01OLrAGOTr4vzWmkLVtXewTUnpoM0Al/KVoZDwW0xOvVNQPlUnQhu2y+0nhlWkQ
-	 d8CkWUj+LOZ+E7SEt1vJFWtvFOh3/2fceQsniWLaK4GnQ3Gkn0P7Ai/6xYjgH/OuCug8c
-	 VthAB5AYJl8gJ8ve2VAsr4IODIra4xfoe87WM0tg79WaKwLa4J/n0QaEoNqiD6SaKnA==
-ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791371732;
+ARC-Seal: i=3; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791371832;
+	b=aUrLvUKqEOMe1y6LE+XxiLiKiYOEQaWOYCQ6ppMAAS7mTS1xlNaU+LG2oOeT/c3eIcKP
+	 pvofZDKh6Ysebh2N2/HrthIdFeXzDDUkm2E9phCa0IWeQ7dA3iRURoGwjt3N73vEKDoY8
+	 nSXXzBtANzgFSKvthz+0KKHNvTHHyRBIQTXZfgkpLOd+G87JbxY8eIpsEe2xEdL/2FISE
+	 OyqEoshtMNkM7v2H8vVIp7qhertAjgv602Vatf+Kz3AqZmQ3U5227ciBRqkiu0uX/bLXb
+	 FJYoNiTyuUhUFunRwuHDDgCzFDgrDZyxpKZKRz6crzxfzwNToWe+ZY6O1TnLWbXosbA==
+ARC-Message-Signature: i=3; d=osuosl.org; s=arc; a=rsa-sha256;
+	c=relaxed/relaxed; t=1791371832;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
 	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
-	 X-Received:Received:Date:From:To:Cc:Message-ID:References:
-	 MIME-Version:Content-Disposition:In-Reply-To:Subject:X-BeenThere:
-	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Content-Type:
-	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=FCpfOs6drnY0RR6/xo6b3yyCdRLfK9Np5QEJnIlEyYs=;
-	b=lrXogBkYrzDHihT0kwTMYLts6dr51yRXGX3v9D4x2d3r9xwDh5Pgrazuuc+09Bap4K7O
-	 0uqHwdHYvFBE3VhCsGODJAVJwbKODHlBxGMR5I2+Nv9C6Q7yOpNKhDyTNnqE90DhIIl3v
-	 cjZzDbUD7dn57soyqnzfdLiPFu+dqTI8b48jmVbBTYKJo2tlXN42aEi/e/eHkeQ4lJIn3
-	 nN2B0NB8URbjfKAwnxYwIjBFHmYFW7Hm04xn5ZhhD4D+t0YwPr2JWcE8PYTaURCg/RCnU
-	 HtZUF/b9gS1z9KHaCLILCRen9GGK5WXKaLYHAlFauPolxkej5c5PzfvLcmpFb5YNyWQ==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+	 X-Received:MIME-Version:References:In-Reply-To:From:Date:
+	 X-Gm-Features:Message-ID:To:Cc:Subject:X-BeenThere:X-Mailman-Version:
+	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:Content-Type:Errors-To:Sender;
+	bh=2IuuO7O9EoIZnGbD0pCPKtEu8PgO4JSG8e0mZIAOcVM=;
+	b=K1fBeHZeyiHwK9c+Vl1KwngB/ETk4FC7ihcoqmbf9h7QEAeDcHR9C3HTdycIqMCjdie1
+	 A7EHAOD7L8UYkOF29ybivu/mpt5atg5hnozS9aiD77vPIKDqdVk/RMjsTvZuztT2iEWUQ
+	 /22zfo0nbkpTzeDh/2m8CiXmZUAc5AJ+6ReAT/bOMu372AgnhYHCK0iBtVyqGkFQE43g0
+	 4REsUPgml9UZjPRoD5oEst+Ys6L4DsQtVU1Q6uD4hmKLGkRWJ9sbo0hNLhDtPN29nrWvR
+	 GsjSAeNYu4SiFb7j3Y+M3x5canosoQsQhkxR0guN1HvOwmLrl9h8Lwc1I+NOcrc2QTA==
+ARC-Authentication-Results: i=3; smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791371732;
-	bh=FCpfOs6drnY0RR6/xo6b3yyCdRLfK9Np5QEJnIlEyYs=;
-	h=Date:From:To:Cc:References:In-Reply-To:Subject:List-Id:
+	s=default; t=1791371832;
+	bh=2IuuO7O9EoIZnGbD0pCPKtEu8PgO4JSG8e0mZIAOcVM=;
+	h=References:In-Reply-To:From:Date:To:Cc:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=KpOeMP5TTMOmgx0XZ9K2uRqElSLpbVKaXFZiQ38esDXMQPxihHB25HcZOpHBCoUtl
-	 1w27Z18vW47vScbpC50aHl6hFoTxkqjbyNmuNpoQbIJ591CvhieZxVJ1+SlnucgXHR
-	 Jvwxse32uVCnSHgQz2WZ/Lo4oQrrh2Cu54hd0rRdLSWV0hgr/U7Z5WlYLFYgbSoAOw
-	 zum+FstGBIK9rsrvb5XSVbRyQOiejzLFhFxY1cfWTbaIuNfvl7b8+5AYfZAtFSndfR
-	 AlZL9tblpL+47kGWmlP/MCN4wRzJ04Em8oLKAzcVCflGouZLGi8LZ3OaQ863aR1liH
-	 3VJ3NX8SqcAcQ==
+	b=AQ5N7Jh0r5+si/Ch0AZ7BpOXJDbeICLO2N2WWBGGYTOWv3rre7j0X5iBzUIU7dJBm
+	 Xupj8oOiOGw62jBHe3GG8lrs1ileifFxjlnW4MQKiAjXjXxHVlPpCD1gN3yxHFt2DS
+	 6JqEGBawzxMS+gJrDbD3Sc7aDgJUSE1qgLrumb/OJuPJogt7mLFQQJ7GgdpxuAJgTF
+	 KmUEYqcwks6pDOP/+Rk0fsaPe0Rh+/WVHhmZqaTXXfSEJ59A0Dcy0f2tbNP9oP2uCR
+	 Lef8k6sH5aJHWN7ha3lrhIDdzx4jyKAuv1w3Tyy7jMNqJDkmdhgqvjMKVE34+reG86
+	 a08wO/fPogedA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C4A4B606CA;
-	Wed,  7 Oct 2026 11:15:32 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 594CA22B
- for <buildroot@buildroot.org>; Wed,  7 Oct 2026 11:07:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 75147606A6;
+	Wed,  7 Oct 2026 11:17:12 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id ED60A32F
+ for <buildroot@buildroot.org>; Wed,  7 Oct 2026 11:11:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3F38140080
- for <buildroot@buildroot.org>; Wed,  7 Oct 2026 11:07:25 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id DE6194062B
+ for <buildroot@buildroot.org>; Wed,  7 Oct 2026 11:11:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 71weTycypZnH for <buildroot@buildroot.org>;
- Wed,  7 Oct 2026 11:07:24 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp2.osuosl.org 1882240057
-Authentication-Results: smtp2.osuosl.org;
- arc=none smtp.remote-ip="2a00:1450:4864:20::32f"
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791371244;
- b=IyF7RWaAyqxlPB2yP8DEDavaOccTHgFJvZyVEWt0AHBYv+5qiHeOiVZnNSM7YeCXwzz9
- Z37gjOGaWNHk4TVWo5EJ0S6i/rI89wlN7c/aLJ2O1eqOt44DhkiUJ4XK0gEPy1HGc2qLC
- c3Whm1JRADWAwNf+A/iHPh2YSKp4LgJ/dbLq0fyn9C4lm2WZrW7zp0jKSDQEyz0N5YH2n
- uVtyfLzS6E6sk79SAW4d/QXiVEqEqLtbpdeEbX7b5Q1oyZGhHVEYUY5Z7aOho7GG6Tcjo
- uaZxHH92wfDZy7D1xQFSdK4BcYzKpqEyTHY6DtEmtKVWg9Vpo0vjC2ottCBsS8/9lEg==
-ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1791371244;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XsM721fnTLb7 for <buildroot@buildroot.org>;
+ Wed,  7 Oct 2026 11:11:39 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org DA506404EB
+Authentication-Results: smtp4.osuosl.org; arc=pass header.oldest-pass=0
+ smtp.remote-ip="2607:f8b0:4864:20::b131"
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=pass; t=1791371499;
+ b=oyl7VoNFxbq8DrvBHVu0Lx9JF2gntKRRQI3yonHQlBZFQnM4fIqaQ9kkVwY1SgWULuvz
+ s+i9NMMh+mUT4Pi2IfCNeKbHQLfUtowupu2FoKG+/h158+ntLiyvoxxqfz1wen1SI9szs
+ iJOVd+y7w8nk45mdwk3WR4lbabd9NTnrOLdIlg3MGEU6PGJwbiUuyWXF4+PC4i9KKQHTk
+ VuWJaPfyR181zZNov4L6Mq6Hn3xsIi0Do5DriDIWcQFC1o7vTpXH2ofW9Yqxr5IhzGMFR
+ WMPe5fIHzYYmJC9UISkjpZEvwq8X+2LieKVTLac5TBaPMENySTN378sKVBVFU9I+GVw==
+ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
+ c=relaxed/relaxed; t=1791371499;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
- X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Date:From:To:Cc:
- Subject:Message-ID:References:MIME-Version:Content-Type:
- Content-Disposition:In-Reply-To;
- bh=nuKn91qxNRc89cXJrw0XdKvpYgtI7DcIk2+YRGVOZ5Q=;
- b=PuPi2R62V72+ndeQyAQ4cwSg9vbSdGM0vmAb2fWP2hsRUq+fY09+xCLnTO5shsfEOIJm
- NbZ4NmLhSvMqUl1tXX7BE2alQm5Szxesx+ld/neKjKlxPjIsUzB+lbdb7u5jzRC29Cnot
- lUzb4vbpwqQwcbqGIKfWdIQODwjHM3am68BSCnBMcFSFZzKigTCeBA6XfckXrc8qUNS9l
- xou9eOU+QGUbFth8o+GW+DaX6q0wlCUKqRQRpVeeWc2dm+2R/CpwG/0nzblLMz+WDv0h2
- QBd66TTL519OYP0e4gdtalwRej/ynNX8O4AL6NUK2lKIOspnIZmzPDl25+fU2E1/FXw==
-ARC-Authentication-Results: i=1; smtp2.osuosl.org;
+ X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:References:
+ In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:
+ Content-Type;
+ bh=/aHNoDY3wzVkYB4LabIfU8fhtk92J2aw6xCos/58Os8=;
+ b=oKZm4iYuuFQ5eJSeq7bxxrQKv0r8O3FW+JMNos/gaPElOghNG20N3BT+vqSr6g5UtDbe
+ sESz/shQvCclhxPY+43EV2xI9WCHDKhJrdFkFGs6C9NWN4UnGNFnnsqSchvit0Bp7KGgH
+ VMLoDkzsMMBR9J+J4WFUKj6WS9gIVv9/xd0HInO3CLnbzKB04uaXyhZYDcqUFllO7x8nk
+ l1mdgsn36TqGbIfn9iAYQ+h8ypXSTp5cnPhOfSU9aZOitA0Quq8+8Tc/OdF2m9mL+21sY
+ FlvCVulxoQzbrpVtQ5SKQdo99JGQSepaKvXC0npGSzlRnTYbsXeMd/7VrLG4JI8jExA==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org;
  dmarc=pass header.from=gmail.com; 
  dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20251104 header.b="pY/99WC/"; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::32f"
+ header.s=20251104 header.b=PjBDqfXE; 
+ arc=pass header.oldest-pass=0 smtp.remote-ip="2607:f8b0:4864:20::b131"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
- envelope-from=thecharlesjenkins@gmail.com; receiver=<UNKNOWN> 
-Authentication-Results: smtp2.osuosl.org;
+ client-ip=2607:f8b0:4864:20::b131; helo=mail-yx1-xb131.google.com;
+ envelope-from=fractalclone@gmail.com; receiver=<UNKNOWN> 
+Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20251104 header.b=pY/99WC/
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
- [IPv6:2a00:1450:4864:20::32f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1882240057
- for <buildroot@buildroot.org>; Wed,  7 Oct 2026 11:07:21 +0000 (UTC)
-Received: by mail-wm1-x32f.google.com with SMTP id
- 5b1f17b1804b1-4980fe6b3beso11254925e9.0
- for <buildroot@buildroot.org>; Wed, 07 Oct 2026 04:07:21 -0700 (PDT)
+Authentication-Results: smtp4.osuosl.org; dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20251104 header.b=PjBDqfXE
+Received: from mail-yx1-xb131.google.com (mail-yx1-xb131.google.com
+ [IPv6:2607:f8b0:4864:20::b131])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id DA506404EB
+ for <buildroot@buildroot.org>; Wed,  7 Oct 2026 11:11:38 +0000 (UTC)
+Received: by mail-yx1-xb131.google.com with SMTP id
+ 956f58d0204a3-675617e81f9so2001617d50.3
+ for <buildroot@buildroot.org>; Wed, 07 Oct 2026 04:11:38 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1791371497; cv=none;
+ d=google.com; s=arc-20260327;
+ b=Cho9dHwO1dlaszmbJH11/6z+enWcdyJAtwg4uSuuLlczUuor7Gf6O1ea43gwVi2/lC
+ jJUhcaXnrl9pAsijTFu6Qxfo3T+1WL9EdJYchtjf7uSLqQhgId02jz97ixVGrabeacee
+ Nv/awtMrJLgoG2Ven0I2cDo+j3+yM+1QMFVa0uQDBPMvLcylNKe1EROHX7uzq9yvDulh
+ S/8uDvRjXYoLJc77WCpn6W9bG6suaFKoHAsCae8sIFJmW76W+0yBj7NKMVcgM3ThPJk9
+ 1t4SRnL3I7uHxQmHPSdpFbnsq5CO8P7kNskfDSIO2wV4zhxawosYNaGXXcY9InZnvQqi
+ lxZg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com;
+ s=arc-20260327; 
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:dkim-signature;
+ bh=/aHNoDY3wzVkYB4LabIfU8fhtk92J2aw6xCos/58Os8=;
+ fh=t1HKz4FGwg2rlpSa7EUNbKGYl/IKyrvQ/1p5yhNuG2o=;
+ b=pfakkQl42BJcPQi64ospwcaBHUCzGmRcnP4rmy3PCjGp6vZ0B4TMa7En8VKFo2tRpf
+ mg7kjsfPnoDrZ+LIrknTSDIIETUxqK23sFnfM0WHpoUEv3RLXqINJE3c3B1ian1ZZnzT
+ PdsTY292EPcFfSHnTWqzmmKo0JFw4d2I9SLsP1OO4wlfMks1RA1x8Ze1RvRc3g3xtx/9
+ Z2o4kwc6p4sQE+/H+HOtN/C3pxebM27A1CcNS+GWNGEvsYHgGzMRRsVi1JmuN5TTvtGT
+ 8iO79OIurq+QUyaeN5w3QIrk7Z533EOzoOrFiSFPJdIngh1vzXo+DJGYeH0eZiAbSh+d
+ r9hQ==; darn=buildroot.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1791371240; x=1791976040; darn=buildroot.org;
- h=in-reply-to:content-disposition:content-type:mime-version
- :references:message-id:subject:cc:to:from:date:from:to:cc:subject
- :date:message-id:reply-to:content-type;
- bh=nuKn91qxNRc89cXJrw0XdKvpYgtI7DcIk2+YRGVOZ5Q=;
- b=pY/99WC/OdKAMIkaT5QS5nKcqy2ENmaTF9MuMHheMVvoZwpBF4qOs9d9tuBB4JXimn
- ScfmCiv4jn7rDfug2ZaTjF+wL3/dOU08btNpPvhnznTfe4jdIpUUduJeKuDrum4538cr
- NNe9Y+MlS2PLPRwkllMS4ht9nP9IdVGMKzxFbwSmuqHj1hZ8F1nlyCSbQNpYnXmg6dWx
- oGh8Ni4lP5AYaexvOdTfpQmYQo+RPeDVg1RgzdmqddKqr0CEXZQfBVeIjI3OW34vJc/P
- z26NlGR4//YO+/7jHAKY79AlUvAzch2n/5G+Hb1O6xJ0Z79Cy6sthj7YqOdHO0PCyEva
- 43kA==
+ d=gmail.com; s=20251104; t=1791371497; x=1791976297; darn=buildroot.org;
+ h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+ :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+ :content-type; bh=/aHNoDY3wzVkYB4LabIfU8fhtk92J2aw6xCos/58Os8=;
+ b=PjBDqfXEuSw7cfT7pKXWHc6EQFPfS+llYDEjsOlRa4+I7iPQVtPK9YkhJIncRuRXr0
+ hA4MEfuhgnHX/pV11aMzoR1T7eTzzAINvwpa2PSk0MAYxGVI81OarJbGLvKn9Ffd9s+6
+ NRNMefefq2LNGWgp0YpPjRRexJNdyPOQ70UiN2HIWdAxzpYcJj3Iqw70PxDfcRbp3IiF
+ P+y8j9X71ekkMeolC7PenvDZrx630gwmMXQLzOxPc8DiY1c5G5t2klhVJFBg9TwJ7HzD
+ 96AVzD5Crh7SaZaoYCyFDN3hQmPuiysXyg9HSXTIfYMcxqTSSRdSvZ+V1WNyaDYxwV4t
+ ljVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1791371240; x=1791976040;
- h=in-reply-to:content-disposition:content-type:mime-version
- :references:message-id:subject:cc:to:from:date:x-gm-gg
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
- :content-type;
- bh=nuKn91qxNRc89cXJrw0XdKvpYgtI7DcIk2+YRGVOZ5Q=;
- b=gzmJ9q3ft7t47Xqmh0uHMZi/GxjBi8rO6D0m863Hzs0aZ/A/yEtgDZS6qu9NtEOBWJ
- O+C2ThVwYUPOLm5VhJBYmZFGzNK2CEbgxvhG3rkmABROk+3oQ+H7J7HhnDqR38nBIxN4
- i7cnwQF9OF/aW5p9uETPQ/JAjuZuHjOIl1H5pVw8kRSTZf+aI+4fIZXB09Hv//n1LEcZ
- iQQlOyxvq/Z+jwv8Dq8GaOmfiZJxBHHFyJHVXSRgYievPUSZQob/Pprw+Xsy004xQuKc
- stmhxHEo7AehceEkMZamIWHLfZgG+a8TnN1d4OYClnHWEFRsyX5yBNluJSubcFXzj1jN
- io6A==
-X-Gm-Message-State: AFuF++nwYtXKJHMyLu1xKVN4Ms94mHGbMJ0ewvX4t9Kcp26cITSsn3fy
- nciDQi29f5SWPD59t3Zo0wVXTUuyhpzXhCUauxFGh6wta/udlM7xBI02EsnMtfRb
-X-Gm-Gg: AYBFou19JPNX4NXcZtFe9nDt/0Fk81qNsBgS5CGZ8ofFJW9yRsGQ1yZtGKcFJuwI5Lg
- oB+HDOcBS7MuTOQsBFhdAQrbPxAr9VmQJqsZpl3/fD+zr2yX5+CrP4SuYQ2ZUYx7EmKKvPyCUxK
- f9SI7vYknVHJQZJq2LcUjeS81eWWXmWAsNzEbUf/vSE9idvbR9H0zjWoLizC8RZJhvrvHy1sxhB
- pNoAfiYFJoEo0NvSKy6ciSTkvDWbNm2pxvdlNzmz8avnMNG4xb/bPO9Dj24QvYa+Z1AGnd4zYH3
- qGviBOxX2QsZ1UxJHWT698c2qY4RRMNszbu0vKZdvWkR6fczWGNEwUkLiFrtIyPHpqZyQYojUiI
- 9qzyVWqQVGgD18hspL3xeDAwArrgSge2fN0TM8WUpJ84L+IDpX7vZB2FryDqVu9dy1lYQp6uE5m
- S3v8hqEtM/ZP/hcFqYARCMcWwPrLBKnbQ7qIBOciYhmX31AUFdgF3Nto7zKcwuQVVYHiEnMmDGz
- JUvAJR36rqT0Rcey6OzzkAzz+dgr+g/+4ebd7qh7+aGxmquTVpA4gumgzRdw8U=
-X-Received: by 2002:a05:600c:8707:b0:4a0:1b14:d009 with SMTP id
- 5b1f17b1804b1-4a1800cb098mr32981115e9.1.1791371239580; 
- Wed, 07 Oct 2026 04:07:19 -0700 (PDT)
-Received: from blinky (90-182-211-1.rcp.o2.cz. [90.182.211.1])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4a17f51beffsm64746245e9.2.2026.10.07.04.07.18
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 07 Oct 2026 04:07:19 -0700 (PDT)
-Date: Wed, 7 Oct 2026 04:07:17 -0700
-From: Charlie Jenkins <thecharlesjenkins@gmail.com>
-To: Bastien Curutchet <bastien.curutchet@bootlin.com>
-Cc: buildroot@buildroot.org,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <asYn5Z6J9aX3h1tS@blinky>
-References: <20260727-perf-fix-v1-1-6bffb9146263@bootlin.com>
+ d=1e100.net; s=20260707; t=1791371497; x=1791976297;
+ h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+ :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to:content-type;
+ bh=/aHNoDY3wzVkYB4LabIfU8fhtk92J2aw6xCos/58Os8=;
+ b=UBv83jBVVXo1vfhTFCBHLBS/w3R8NX/iwshH4LvcKWtbXZ6aZ8M2Xql1RBgObWVIFp
+ 5j/78YtPImR0+mlUeV4Gm0q0mAd9cLyXwtQShTx+ZuY4srTUVuLL76USF3w6X6vFoAZu
+ FoU4fWz+KcFQmhI0XpuXzk0sV9xJ+OCtAAwvQ2B4n6LypQBmxzUNvzKL4lWE+3exV4qo
+ unIh7uhIWtEQfWVaUD47tijWMv2qiJfLL4DCWmbPnri/U+uxSx/rJ5sfQH8/Xlnp7U2m
+ nCC8W/ymqeXJRHAgA+owWJisNgp7wlR2nuM9kiu4A86nG9KmyO2Y48x8sF1XKwRFvvk9
+ 4IBg==
+X-Gm-Message-State: AFq9FYLqGUyj0dcIehGmgXclb4rgGO9oZpauBNbUVnwGYOjNp25SRLs2
+ cvsEIwVfU4SyNjt34kZb8kV33gxiBn+87oaGW3K9svuoAOjbozYy5yMvwRyXOos2gCwSHEFHB4j
+ 4ZfESmJR9g7tLyofEnbEHV6Z/LIpF7Z4=
+X-Gm-Gg: AYBFou2CTcqSbz8lXNa+nEMOpFrDCm2Ky4WUz+5y2Hq2ifyUF1X2OtswQ0UWQKZI5s8
+ Em+1vRWsJHqOqWOLZdBalDuST/pdTez16UkjWt93sW8cEX+s2huMf3zrnlCxEBKXcx3WLKbPcks
+ ovTTjAff2GSH0tYLakpxBW8ZVK1AJu56cwEXBoo8/CiraDzzRB/s0nn1ja/03VT7dsiaaCDg1xW
+ UuRygNmRDOC07Ea42lMkaEttpchqmW4IY6V8HgY2XHCyITr0nriQEGNRoLcXfeIHYNMybxzLc0A
+ axl8NZx8aoQhsNYLSB8NTJbws0StMABuD2z9MvdnPiC/ISqT2TE0
+X-Received: by 2002:a05:690e:4849:b0:675:4453:fb3c with SMTP id
+ 956f58d0204a3-6790a46ffa1mr961582d50.64.1791371496990; Wed, 07 Oct 2026
+ 04:11:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20260727-perf-fix-v1-1-6bffb9146263@bootlin.com>
-Subject: Re: [Buildroot] [PATCH] packages/linux-tools: perf: explicitily
- disable rust if not selected
+References: <20260917-rock-pi-4b-v1-0-a1da4ee05567@gmail.com>
+ <20260917-rock-pi-4b-v1-2-a1da4ee05567@gmail.com> <aqznoUtW4EIcK_8m@windsurf>
+ <CAN7e4jochVOH9Tj19YiFeeOxix=-bn4OhferJC9Mgg=j-AVsDA@mail.gmail.com>
+ <aq0uT-ghEihRclnw@windsurf>
+ <CAN7e4jotGmfe1y_8gR4imH1_YTKoEJJODPK6kfAtpL9hfLzcgQ@mail.gmail.com>
+ <CAN7e4jpdCKT=e8SY75Cb7o4qiC5Jr0w8oj-OaMmAPCDGpW5Fyw@mail.gmail.com>
+ <aq-ghf1VzxlgtHpn@windsurf>
+ <CAN7e4jrtoeqcmEPECsEX9GWmxe-B-8khQYXOPqm9UBAZOEUpCQ@mail.gmail.com>
+In-Reply-To: <CAN7e4jrtoeqcmEPECsEX9GWmxe-B-8khQYXOPqm9UBAZOEUpCQ@mail.gmail.com>
+From: Jean-Paul Etienne <fractalclone@gmail.com>
+Date: Wed, 7 Oct 2026 13:11:24 +0200
+X-Gm-Features: AclHuK9sXyiQczl98CySi45AOKArqiPShbthjZbUycDdaOiyfB6FpVkiJdKmzVQ
+Message-ID: <CAN7e4jpAMRduxWF6nPLUphR_Ju1PbuTXGiyGM6ts936pw72tbA@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
+Subject: Re: [Buildroot] [PATCH 2/3] package/brcmfmac_sdio-firmware: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -173,77 +190,144 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============8942965907329922288=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, Jul 27, 2026 at 03:03:46PM +0200, Bastien Curutchet via buildroot wrote:
-> Since kernel v7.0, perf uses `rustc --version` to know whether or not
-> rust is available. If rust is installed on the host, this `rustc
-> --version` works fine but then the perf build fails with following error
-> (on aarch64) if the host-rust isn't selected:
-> 
-> rustc  /home/bastien/embedded-linux-imx93-frdm-labs/integration/buildroot/output/build/linux-7.1.3/tools/perf/tests/workloads/code_with_type.a
-> error[E0463]: can't find crate for `std`
->   |
->   = note: the `aarch64-unknown-linux-gnu` target may not be installed
->   = help: consider downloading the target with `rustup target add aarch64-unknown-linux-gnu`
-> 
-> error: aborting due to 1 previous error
-> 
-> Add a dependency to host-rustc if already enabled, explicitily disable
-> perf's rust part otherwise
-> 
-> Signed-off-by: Bastien Curutchet <bastien.curutchet@bootlin.com>
-> ---
->  package/linux-tools/linux-tool-perf.mk.in | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/package/linux-tools/linux-tool-perf.mk.in b/package/linux-tools/linux-tool-perf.mk.in
-> index 3238948d76..9718d83121 100644
-> --- a/package/linux-tools/linux-tool-perf.mk.in
-> +++ b/package/linux-tools/linux-tool-perf.mk.in
-> @@ -134,6 +134,12 @@ else
->  PERF_MAKE_FLAGS += NO_LIBTRACEEVENT=1
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_HOST_RUSTC),y)
-> +PERF_DEPENDENCIES += host-rustc
+--===============8942965907329922288==
+Content-Type: multipart/alternative; boundary="000000000000bd3090065d3e2d24"
 
-Even with this dependency I am still getting the std error. I am
-building for riscv64. Does this resolve for you?
+--000000000000bd3090065d3e2d24
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-There is the Kconfig BR2_PACKAGE_LINUX_TOOLS_PERF_NEEDS_HOST_PYTHON3,
-maybe instead of depending on RUSTC when enabled should this introduce
-an option similar to the python option?
+Hi Thomas,
+any news about that?
+Regards,
+Jean-Paul
 
-Rust is also only being used by a linux perf test case so it's not
-really even needed for regular perf usage.
 
-- Charlie
+On Mon, Sep 21, 2026 at 1:29=E2=80=AFPM Jean-Paul Etienne <fractalclone@gma=
+il.com>
+wrote:
 
-> +else
-> +PERF_MAKE_FLAGS += NO_RUST=1
-> +endif
-> +
->  # We really do not want to build the perf documentation, because it
->  # has stringent requirement on the documentation generation tools,
->  # like xmlto and asciidoc), which may be lagging behind on some
-> 
-> ---
-> base-commit: cdeeb9b9c688b5bcdcc80bf89f2c046b0bd55bb8
-> change-id: 20260724-perf-fix-f14d1c7fb681
-> 
-> Best regards,
-> -- 
-> Bastien Curutchet <bastien.curutchet@bootlin.com>
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+> Hi Thomas,
+>
+> On Sun, Sep 20, 2026 at 11:01=E2=80=AFAM Thomas Petazzoni <
+> thomas.petazzoni@bootlin.com> wrote:
+>
+>> Hello,
+>>
+>> On Sat, Sep 19, 2026 at 09:20:36PM +0200, Jean-Paul Etienne wrote:
+>>
+>> > I've made an MR to linux-firmware and they've refused it because the
+>> > vendor was not agreeable to distribute their firmware via
+>> > linux-firmware. Their response in quote below.
+>> >
+>> >     We can't accept BCM43456 firmware, the vendor is Synaptics and
+>> >     they have not agreed (and in fact a conversation I had with a VP
+>> >     of Wireless at the vendor refused), to redistribute their
+>> >     firmware through linux-firmware.
+>>
+>> Meh, vendors. OK. But then maybe we need to find a better package name
+>> that clarifies how this package is different from the other brcmfmac
+>> firmware packages? I guess everybody is forking this everywhere to add
+>> its own variant that contains board-specific tweaks?
+>>
+>
+>
+> The other package name is brcmfmac_sdio-firmware-rpi, which contains
+> WiFi and Bluetooth firmware binaries only for raspberry PI boards.
+> The brcmfmac_sdio-firmware contains firmware binaries for other boards.
+> I've named it to package brcmfmac_sdio-firmware so that it matches the
+> repo name
+> in github. The repo is maintained by LibreELEC, same as
+> brcmfmac_sdio-firmware-rpi.
+>
+> Regards,
+> Jean-Paul
+>
+>
+>
+> Thomas
+>> --
+>> Thomas Petazzoni, co-owner and CEO, Bootlin
+>> Embedded Linux and Kernel engineering and training
+>> https://bootlin.com
+>>
+>
+
+--000000000000bd3090065d3e2d24
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hi Thomas,<div>any news about that?</div><div>Regards,</di=
+v><div>Jean-Paul</div><div><br></div></div><br><div class=3D"gmail_quote gm=
+ail_quote_container"><div dir=3D"ltr" class=3D"gmail_attr">On Mon, Sep 21, =
+2026 at 1:29=E2=80=AFPM Jean-Paul Etienne &lt;<a href=3D"mailto:fractalclon=
+e@gmail.com">fractalclone@gmail.com</a>&gt; wrote:<br></div><blockquote cla=
+ss=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid =
+rgb(204,204,204);padding-left:1ex"><div dir=3D"ltr"><div dir=3D"ltr">Hi Tho=
+mas,</div><br><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_at=
+tr">On Sun, Sep 20, 2026 at 11:01=E2=80=AFAM Thomas Petazzoni &lt;<a href=
+=3D"mailto:thomas.petazzoni@bootlin.com" target=3D"_blank">thomas.petazzoni=
+@bootlin.com</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" styl=
+e=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);paddin=
+g-left:1ex">Hello,<br>
+<br>
+On Sat, Sep 19, 2026 at 09:20:36PM +0200, Jean-Paul Etienne wrote:<br>
+<br>
+&gt; I&#39;ve made an MR to linux-firmware and they&#39;ve refused it becau=
+se the<br>
+&gt; vendor was not agreeable to distribute their firmware via<br>
+&gt; linux-firmware. Their response in quote below.<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0We can&#39;t accept BCM43456 firmware, the vendor i=
+s Synaptics and<br>
+&gt;=C2=A0 =C2=A0 =C2=A0they have not agreed (and in fact a conversation I =
+had with a VP<br>
+&gt;=C2=A0 =C2=A0 =C2=A0of Wireless at the vendor refused), to redistribute=
+ their<br>
+&gt;=C2=A0 =C2=A0 =C2=A0firmware through linux-firmware.<br>
+<br>
+Meh, vendors. OK. But then maybe we need to find a better package name<br>
+that clarifies how this package is different from the other brcmfmac<br>
+firmware packages? I guess everybody is forking this everywhere to add<br>
+its own variant that contains board-specific tweaks?<br></blockquote><div><=
+br></div><div><br></div><div>The other package name is brcmfmac_sdio-firmwa=
+re-rpi, which contains</div><div>WiFi and Bluetooth firmware binaries only =
+for raspberry PI boards.</div><div>The=C2=A0brcmfmac_sdio-firmware contains=
+ firmware binaries for other boards.</div><div><span style=3D"background-co=
+lor:transparent">I&#39;ve named it to package=C2=A0brcmfmac_sdio-firmware s=
+o that it matches the repo name</span></div><div><span style=3D"background-=
+color:transparent">in github. The repo is maintained by LibreELEC, same as=
+=C2=A0</span>brcmfmac_sdio-firmware-rpi.</div><div><span style=3D"backgroun=
+d-color:transparent"><br></span></div><div><span style=3D"background-color:=
+transparent">Regards,</span></div><div><span style=3D"background-color:tran=
+sparent">Jean-Paul</span></div><div><span style=3D"background-color:transpa=
+rent"><br><br></span></div><div><br></div><blockquote class=3D"gmail_quote"=
+ style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);p=
+adding-left:1ex">
+Thomas<br>
+-- <br>
+Thomas Petazzoni, co-owner and CEO, Bootlin<br>
+Embedded Linux and Kernel engineering and training<br>
+<a href=3D"https://bootlin.com" rel=3D"noreferrer" target=3D"_blank">https:=
+//bootlin.com</a><br>
+</blockquote></div></div>
+</blockquote></div>
+
+--000000000000bd3090065d3e2d24--
+
+--===============8942965907329922288==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8942965907329922288==--
