@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0035FCA5FF1
-	for <buildroot@archiver.kernel.org>; Wed,  7 Oct 2026 08:09:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C4D1CA6002
+	for <buildroot@archiver.kernel.org>; Wed,  7 Oct 2026 08:09:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9A3264072B;
-	Wed,  7 Oct 2026 08:09:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AC53B406A3;
+	Wed,  7 Oct 2026 08:09:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id v-9XBXZMV1xM; Wed,  7 Oct 2026 08:09:20 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 20BB9406AB
+ id ecWV-u1ICUGy; Wed,  7 Oct 2026 08:09:21 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 4A121406EE
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791360560;
-	b=OJ7+0cDblXR030gX704a6yP7mtNxd4Vd+uy+cGMGrY1dyDSobG25IXnEHBOoZeMYvLjE
-	 0tUxTuVacpo+04QRBKIsyvs5G6XbwoIto5b6B+rBExUv1tzMb8oG4Vm7saf8UA0UK0D6E
-	 RXfIdVOmKQPOXSNFbh/cYZ59hKO2BiweOCzHkqrOAuFCK3Lpwq/QTaqk+x3XWgAN44ExP
-	 hs6yStYscE/+OGRRjpW6DSsc/+6bmiw5xcvIYsMNilTEy2/7RIaxApR8DQl712q3Yk+XL
-	 O73nrnSS4aZkF3tXkwa3ju5+s+QNjYmVW3xci/fOzgLwm5BDrq2/GITQ1A+LbagFh0w==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791360561;
+	b=DsbE5VdI+hDKjC1R9/yds+vG3gfR9BabXUFCG8y9x51NQfw/bwgbYagOhXDutN2WqgVM
+	 QHdOERxwhy808n5k1s6XmrngP5Z3RSzd1O8t1N3vcTQW+6puUoZzXyrGI/IJSJk7q4ARa
+	 KBEPJHZ1XCbJXgW9FcZtq8Fe22jMnYuyXNCgFcN6HncWY7ZoHXPVQj5iDR3XX+CLLoL4s
+	 uXYsiSPr0iNgFFP3tt7QgYLLWVWmGUN8poQgI3rJqPGDnZlClI+3j207kjI2BXLE5CQYO
+	 W2YU261P4ibL2Y2UwIVXZznp2mdytuF+qEDiXpiV2W++fkpvP64XXbRLnpgYKXu40Qw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791360560;
+	c=relaxed/relaxed; t=1791360561;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -31,89 +31,89 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
 	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=WNT96+yg5n2oMcrOFPhbuKXgAkVvIy1L1wnZA8QnBMA=;
-	b=elzZxKOAl3a6FxBbnZrje2V6E9btcWLwkKdXRwI5rejspQrQKcnw+1e8IUTuaJb5Ezb8
-	 fmzAxvOXxQpm04nAOiqzD6Pq6WKHJ0uomY5qAQLUiFaK8lrA7FsiiyDE0r1DKjlU7p4g4
-	 YBFT9RbVqMyB6sDsKoCqj84OgSSRTqxwFQiALKYZiG72cWDaStajUQbQ9+xvhnILwkLBO
-	 BQyEguurQsbrhPfv0bdpwpYd5xxG7uQzmhXPkqatBdvz5Ac1UGjnJC1C6WVLfltoSXt5q
-	 +VJij5JW9pur0Cwt5NFB/ZIViCt5jdTMduxHapyqwf4+YzG0hyfIxnz3cpntqpDbfVw==
+	bh=KMHXzaROxzXjckOkLnqOPMTZjlAgUSW2kaVaOq6MpnA=;
+	b=hXOAQ1LYY7I7EbumhMAN7DyhFbgSIJd6YPvA462Iff8414pabkGxC0qHVob8nORY2rLx
+	 GIOgNqihj+rTZWShr/U6JFp0y+FhqWm0cXIZ+c1Mwsn0zJLAAPJlVFObggna8yoofxqUY
+	 KJd9ohcWNp2JH33476h82cglJ40IfZaCfFDb61eQWn+5V4si3J23YsIbWPFWp8g4rPVp7
+	 PsGvFD+RcEKDKwQIxjqvsjJO1hjyKUcIY+gNjedcMYMNJwlHAYuhnnGvfSJ8yIAQCJubS
+	 00d02sm3+2L6vzBpIXDvSVzFKTLjm4CIEf1sowJLvGHCinaGKvfaYemzpE+Qg+xO5BQ==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791360560;
-	bh=WNT96+yg5n2oMcrOFPhbuKXgAkVvIy1L1wnZA8QnBMA=;
+	s=default; t=1791360561;
+	bh=KMHXzaROxzXjckOkLnqOPMTZjlAgUSW2kaVaOq6MpnA=;
 	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=scubpY9AipH5arwPimfvgOqGXdekA74Qvo4g5PqQWtvo6IEJehV+chlP/muPo45GQ
-	 KZpqxvvasj0KnKE/W5nWOQHRrZMOBTUfscdNqW0jYmVDUR4LsO2FrK16TxNc0Cpqu4
-	 hpRwbjly31PKgMmzSAJIKBzfymWUusi0Pe0DmSei7ngDHAy7UfJSjHjMpgKIV3MqE5
-	 PzGd5ZeKluO3tlJLXs5mrRqcpZyeIh9DjMm2rpISjeZucV/TCwtVvZxcQS3wcz6h3O
-	 NAhV/UJ6PwNL3TPnUNPTWw6cHLCM8emvUxsUrui2hV10epfT04nD2mPtPokzZttFew
-	 hZr3qw8xRlalQ==
+	b=iyecR7fVOM9I3KHyXgJrrBAK+yCOKIyrYLt+JDqwHv5lyRj8KOtnp/FUyaJsYX2IS
+	 mBuBX7BB6ULFAbtZqkBCgbqe3kv2TyFYrqp8AzjHCSRna9e/Vqg0JoWc0S68IIHlwF
+	 nqo8ym5geamAi1ssgmkytUjWSKQxHpgci/NR8Lelmzj3eMNZibo8NUqakCAxDoG4VL
+	 ASdSJU63XNVtxf8TIToZfL+p1IIrgZQY1FAA4Vk4jQqo3/cdBIFYiosm58g+227RJF
+	 7hgSjisD/zsrX+LdbOX1qRSMMcrUJjsS5nLCGSJC54/zrQ2YPllxUi9xA+cHPxD58z
+	 pCqfMTBIgQTNA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 20BB9406AB;
-	Wed,  7 Oct 2026 08:09:20 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id B87F132F
- for <buildroot@buildroot.org>; Wed,  7 Oct 2026 08:03:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4A121406EE;
+	Wed,  7 Oct 2026 08:09:21 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1769C317
+ for <buildroot@buildroot.org>; Wed,  7 Oct 2026 08:03:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 121FC80DB5
- for <buildroot@buildroot.org>; Wed,  7 Oct 2026 08:03:10 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id ECE504032B
+ for <buildroot@buildroot.org>; Wed,  7 Oct 2026 08:03:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id b2hjcddvCZtH for <buildroot@buildroot.org>;
- Wed,  7 Oct 2026 08:03:08 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.0 smtp1.osuosl.org BF63480A90
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791360188;
- b=d+c/Hi44iNik/dV7ihVLLspxPR+OtwuSxbfZ7zAQKx1OaKlywe7RoCJtP94Kg/UDg8Bz
- 5rHJar+6WIB4aWiGY4DOYizyZwqM6am61T8rdlUpkIfFc8KynHsOGcufFMYOHqCpx/mGd
- tuL5t4w5ObqvoRQ8xBshI41db+y/reYCVJ9de3eoswtZxwM82gkUCjtXzjyVuDnx4Boj0
- 0+NZWqQtEpWn2rqvNf9GAbadHz+BEjmJ17GIeJTqamiWIJwBV6531LEgjKUz1o8Tk9l6N
- 92nJvEIahBHWMe04gV0Q8wb8qBdlVxZb4APWiJHq1xm5eMzlcgIKq+N2mA2F364AdEA==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id topNs7P7zRxM for <buildroot@buildroot.org>;
+ Wed,  7 Oct 2026 08:03:18 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.0 smtp4.osuosl.org 63B8640318
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791360198;
+ b=b3SWxmYHvlZUsXmg0u2CvPZulDdZEyPwWR5K+SiU9+9HSWzRgvcU1GFoL04KlSdFACCl
+ gIQwcDYU/g37gatQL1Xx5IC756kDtU6Lau2tjCIAbJjd2sI8mbCJbOmiLhdeG40zgnyRh
+ wOE0DyAbSO1gA7x6WA4i3FmMp1PluR8LYg1DPlMmOTXVCXwOs0cos5sYEJLy+UlpN57ul
+ iVP2ufHoUvHhqpeILHAYMroQYADYGbT8Yd8bcBJ0cnBLY2c/8adSyof1UjIUVYgDpmYFB
+ Bct8DxYXiYvB68lnzfhvaMOmzIsFOXAq97l3GYswrOrmKSpRb7b0c2N1LiFUMJjPjIQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1791360188;
+ c=relaxed/relaxed; t=1791360198;
  h=Received-SPF:Received:Received:Received:DKIM-Signature:Date:From:To:
  Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
  Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version;
- bh=ZUHYZNMR/C6DQ/OOxXmlcYaiiHaaV/Q/GWRu5fHQpOc=;
- b=KUpUnma0nEDTGnyLr24kLwufCzsymyrez1+FeOd24TFSajMbLMWqBiPZmxgGvMS3OPlm
- FZcMfVmi3NyT3HRNDqoFShmhtBliDzO9A2v2CVoFFFEmcDY7Rg7ZsbR7X9LnTfcIzIlIO
- 8DO683GN2odrkz1jvbitGBxZrkrZgDca07ryUEfWTuXPS4ay9ln5jjCG2jEtRYJOVQKqR
- CLXSqMFWMyRKjqafPqj+VESWXZgYE1VkIqYM+K33GqHkd8tyT4kSWqmgobtFTw7lfOWgN
- sgMiwdi+8NIw0e/SmiQprzZyvce9ayBZeSJahamZXo3mMmdTh54x08mEfVwOT1tdLzA==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org;
+ bh=Wzo+5lu1Wj25FPVSocKoncpBGLiYmnl4ha97HFlhoNE=;
+ b=MmtLhMFCrxOBtb9X7TsHEQnHWTbMvTGtGJlfnEZnq9NL4uJhKZzpfQuvXwvU7rKBzJ7L
+ 0Yw+H1JLC+srYsPIn/Y6BHlf1qT39WnFucEEDJScUARwTyekccMiIk/pUY6HJ6gxXcqkM
+ DtlPOX62IgxvqBV6NR7X08MLXvKGte+dv2JzW3Ivhgh2O4NoTWN4rTgnuzHv2HVlhtF5U
+ 7sgNcyQKtqf6xK67Rx3dUkRhIPSqAmrIz5LivFHc21x+Xx0DqjGUB+xkDz99qoHl0BExg
+ 3I8zEwFXpumJnwWesGA19htJHs30N5U0q6Y5FY2ifSq8FuAwIaQdsMgAmTHjmlLi2Tw==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org;
  dmarc=pass header.from=bootlin.com; 
  dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=PUCegeqW; 
- arc=none smtp.remote-ip=185.246.84.56
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
- helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ header.s=dkim header.b=brnIkkjt; 
+ arc=none smtp.remote-ip=185.246.85.4
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
+ helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BF63480A90
- for <buildroot@buildroot.org>; Wed,  7 Oct 2026 08:03:07 +0000 (UTC)
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 63B8640318
+ for <buildroot@buildroot.org>; Wed,  7 Oct 2026 08:03:17 +0000 (UTC)
 Received: from smtpout-01.galae.net (unknown [212.83.139.233])
- by smtpout-02.galae.net (Postfix) with ESMTPS id 1FBD81A116F
- for <buildroot@buildroot.org>; Wed,  7 Oct 2026 07:54:07 +0000 (UTC)
+ by smtpout-03.galae.net (Postfix) with ESMTPS id CD1E44E4119A
+ for <buildroot@buildroot.org>; Wed,  7 Oct 2026 07:57:38 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id D1B216074B;
- Wed,  7 Oct 2026 07:53:46 +0000 (UTC)
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 6CB0D6074B
+ for <buildroot@buildroot.org>; Wed,  7 Oct 2026 07:57:23 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 93FD010333956; 
- Wed,  7 Oct 2026 09:53:45 +0200 (CEST)
-Date: Wed, 7 Oct 2026 09:53:44 +0200
-To: James Hilliard <james.hilliard1@gmail.com>
-Cc: buildroot@buildroot.org, Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Message-ID: <asX6R74TC4XMSXDo@windsurf>
-References: <20261006195933.2225477-1-james.hilliard1@gmail.com>
+ with ESMTPSA id A5E55103308A7; 
+ Wed,  7 Oct 2026 09:57:22 +0200 (CEST)
+Date: Wed, 7 Oct 2026 09:57:21 +0200
+To: Maxime Chevallier <maxime.chevallier@bootlin.com>
+Cc: buildroot@buildroot.org
+Message-ID: <asX7W8r75WzGv8jv@windsurf>
+References: <20261004213116.39415-1-maxime.chevallier@bootlin.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20261006195933.2225477-1-james.hilliard1@gmail.com>
+In-Reply-To: <20261004213116.39415-1-maxime.chevallier@bootlin.com>
 X-Last-TLS-Session-Version: TLSv1.3
-Subject: Re: [Buildroot] [PATCH 1/1] package/rust: use cargo environment
- during installation
+Subject: Re: [Buildroot] [PATCH v2] package/linux-tools: selftests: Use
+ KHDR_INCLUDES to locate the headers
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -132,29 +132,27 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, Oct 06, 2026 at 01:59:33PM -0600, James Hilliard wrote:
-> Pass HOST_PKG_CARGO_ENV to x.py dist, as is already done for x.py build.
-> This ensures Cargo uses Buildroot's configured CARGO_HOME instead of
-> falling back to the user's default cache, and keeps the host RUSTFLAGS
-> consistent between the build and installation steps.
+On Sun, Oct 04, 2026 at 11:31:15PM +0200, Maxime Chevallier via buildroot wrote:
+> Since v6.7 [1], the KHDR_DIR variable isn't used anymore by the kernel
+> selftest Makefiles to locate the kernel headers. Instead, KHDR_INCLUDES
+> is used to specify their location. It was only available between v6.5
+> and v6.7.
 > 
-> Fixes:
->  - https://autobuild.buildroot.net/results/02b/02b2fc6ba7329852d7bf6ae4935c120c4de47b3e
+> Keep KHDR_DIR for compatibility with v6.5 to v6.7 kernels, while
+> KHDR_INCLUDES is used by both pre 6.5 and post 6.7 kernels.
 > 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> Let's pass it with the "-isystem" flag, as is done in the default values
+> used in the selftest makefiles.
+> 
+> [1]: 43e8832fed08 ("Revert "selftests: error out if kernel header files are not yet built"")
+> 
+> Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
 
-Thanks for the patch. Since when does this problem exist? Of course it
-exists since x.py support was introduced, but did it become visible
-because of a new package, or package update?
+Applied to master, thanks!
 
-As it's a fix, we need to have sufficient information in the commit
-message about which commit introduced the issue, so that our LTS
-branch maintainers can understand whether it needs to be backported or
-not.
+Best regards,
 
-Thanks a lot!
-
-Thomas
+Thomas Petazzoni
 -- 
 Thomas Petazzoni, co-owner and CEO, Bootlin
 Embedded Linux and Kernel engineering and training
