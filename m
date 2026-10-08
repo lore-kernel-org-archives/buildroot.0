@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B312CA6017
-	for <buildroot@archiver.kernel.org>; Sat, 10 Oct 2026 09:27:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3207CA6017
+	for <buildroot@archiver.kernel.org>; Sat, 10 Oct 2026 09:27:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 23FA360B48;
-	Sat, 10 Oct 2026 09:27:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E717660B38;
+	Sat, 10 Oct 2026 09:27:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id alEZJMrsnPjZ; Sat, 10 Oct 2026 09:27:33 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 2346960B36
+ id wXwmj3JaoB2V; Sat, 10 Oct 2026 09:27:34 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org AE28660BAC
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791624453;
-	b=R6R/DfZpLeZjT7/0xY7PQQVKuRqFBSIYp+oO8FOxclFkLB45HxRFL+lon5gq9xnz+yx6
-	 n0UWTOTufGYqUT8ip63xq55onBn7DlMKlOaBvY6ya5NdWlQbry03KimBHjkogV6lPcqYT
-	 0JnTXolFvhHBZCup2mDtsYxNNE4N+DJ3W9Z//xqlhFC/haD8C4QH1mdA/d6LHKbC89hvX
-	 euhohkOiVWbXk1Al0SypKfgB9LWbVNu7Aqp5N+pmFQgSV0O7NgCSjnE0mvb2ENCh5xoUF
-	 JTTMiSkUoJOGxf1lqfnsKtPRPbmPQYQjsHvUDr3CYbrpFVl0x81gyjD3pE5jki3Z4uQ==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791624454;
+	b=d8sQCv4W50Alegl+dfoEYRKnJUJrZPJHuWVYrrqg4sXISS5LORVFNQYFMdxWoOduxkt5
+	 G0HilDiWFpvK7wByUhB/LdsfeLzaHLIGqzTxGczYdtWPY5sEZ1wgPTrMDveZ9GJXidat+
+	 fG1CnG0cRROj51vItdYf76wwTOJW4lDP1cFTNwPRqGi2ll8iN0d/UQC0huHGyHU+MTC1c
+	 KnmQlib3XJnIu3PgIo1aENQZlWmB6X63c+5FQAVycNlnPM9ntUE0XaoDMnBLwfQNd77oi
+	 7B42o9eHwKJUKsSC81zLDuNXkTTvmv2bWo64iEUM6JXJvIWHWxJ7/Z+Wjs1LT85DBGg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791624453;
+	c=relaxed/relaxed; t=1791624454;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,76 +30,76 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
 	 Sender;
-	bh=62IuEPnYS1nFnEoA9wPK/oQQDlhtj1QUajVKras0CT4=;
-	b=IImSnQOKQ/jYDn2EpYNk+Ov0W4OZr08qJmcYufJkmz8NEAMP8OPaKggyytHXjHRRrHf/
-	 5EJNCWHgh6fu6rjgpOIAC7mfRpNWFMshAhBRg3A/06q1aU4U5lGpBftndvfSd1E0FM0me
-	 X+5ZJwTrXfFz7gfypUmMgDs2F0TSMZZM3+xYlgYh2waxss/KDJg/YcMi48RsMKQmR6iaG
-	 HpRIsbzEyreAwF1KJkV2k7Mofb6s7jeb12YnNcXkzrBmsrDBrkiCzlLhV0WPq3NfcsHlK
-	 RBHWRoXqj0TbZo0mfEgHpR108K+yyj9nM157tPim9BoMdg7gLIOcoI8zk5QkBURmoJQ==
+	bh=xsx2vLI/3Xoop/u77rG2w0XQU+rYIxbzvgj7WDQBUWs=;
+	b=SOZr+vOuc6ujIdbPU5gf9lMw/lyQYvjrOhw7FAAcUsBgXRjDRtBvSXxY/d3ahzFNfSox
+	 oAGDWbv97ePS64D2gwcP+l37w1mbqsPfGNCzV4sRy0iRQCx831k729tXuwWFqYQbk55k0
+	 hpuw/0STejOve8J9YjnETCg67/Fyz69i9ZOtR0fAIBr592RH7i5jW+sultlT51G2QtBC+
+	 ttiFecpMwwbVFbZB70vXUiWDZpKHyN0JERQEgDDyTTYvQ2RrUIl/MEnZ2H2Znga2ISoaS
+	 haZYUxD/PARrofhNiBkzxMhimOxOkoKBYafg0cF5MYCXW3IlybHojoj2mJztQ7F1ndg==
 ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791624453;
-	bh=62IuEPnYS1nFnEoA9wPK/oQQDlhtj1QUajVKras0CT4=;
+	s=default; t=1791624454;
+	bh=xsx2vLI/3Xoop/u77rG2w0XQU+rYIxbzvgj7WDQBUWs=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=blUH5lgWdsJoBw+7rcBDzbTBkIudekIjNj4w6foW2rvNLJ6vclV5AJwhyO9XUarNh
-	 d4vzzScQKl78ejR5zJGUswySvk9MlybVrTQ0DHdAVhcU3EKybpt9/86EdIlWiI2oGs
-	 PnN08RnPMEFWQl0VbmuYg5gzfxS1iMQshznjdAyQ6m+nHYmYyLVTNoc4x2cKUaaXEy
-	 XA3rPZSwA702t3foBxYOptNKnWo9qNL7X5aynpFtzL8jrkT7QgKzKnj6ddisGnWWU6
-	 +6aadrqxQEfEtcYTgc6MKbE8Xf4ysYtl70e2OUfIUvUfEdufZ5r8EHOT3C4wYTdXTR
-	 XAqUQZC2E402Q==
+	b=fgZ9kJ1PJmZE1i8yYqrZOKwlcoHRP0Po74bEe/wMCmFjJkQsa2flno74WrCjiSon3
+	 4nDkVmrdoUVN9ZzeUlKjq08aJAfXw5I8IJFY1us3J1NGHLBR3JKCLzHmRvO1+lXZYT
+	 RYvnHRXdC9hWATSQOHaGZ1MemcL038CxrAYu5IpPG6AtTcn9VAY/kNC+zjtyy4xPZF
+	 ZUUaKKCenpQXQrqBeLzwkJsokBcrmQEsMODoR+fp/8OpT3FG/fU4eoMqOGZAGX0+wg
+	 5dmSE25ff/9EtO3ZXi2EN4TLs5O2hZzkg8ouv4HCgdmvfZBX/ypa1zpdItW5UAedqR
+	 A46kxdG/R7GRQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2346960B36;
-	Sat, 10 Oct 2026 09:27:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AE28660BAC;
+	Sat, 10 Oct 2026 09:27:34 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 2CB6BA64
+ by lists1.osuosl.org (Postfix) with ESMTP id 367B9DE0
  for <buildroot@buildroot.org>; Sat, 10 Oct 2026 09:27:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 166F1811E7
+ by smtp1.osuosl.org (Postfix) with ESMTP id 32037811E7
  for <buildroot@buildroot.org>; Sat, 10 Oct 2026 09:27:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CBBFwolY1QUk for <buildroot@buildroot.org>;
+ id cy6j8UTqG1Cw for <buildroot@buildroot.org>;
  Sat, 10 Oct 2026 09:27:21 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 6052881149
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 49AE68112C
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791624441;
- b=AOGKJwGQWvaeZ2LE1u0DoigoSawCpFTFDLkbwddohtsi7C0erczYU0/0jD/3FM4gDRkd
- 1qy7BWSZto4lGJMwOaJu3OR1RQJNpbMS/8HyqlwlTjPlKYZprjP1TpYgSm4rF6yU4h7qy
- yKQFrAYbuz7I01L2bZGQgRslYTZfhCIYKAnv2JxgEMWqjhVqRFl5iSABkjwH9Di/MoGz2
- Sxaivzlj2bHVb8HqEg3do5lFJwzPDKzi/qqH4NdCpG1X8d0NVZZHi3L6dlHc4btUeOJWN
- RtrVwm1J2rknPS0AUn6k76uL2Kss5lbUbF9Lo9SX1zD850dddtJC/ZfvS4Wb0YfHFdg==
+ b=U6BoIidcrxT1w5Vq5ifjFeym/Uu9VQ2OP3z2paC/Kk/qZms7sPn/PYI3zSwpHMavevTo
+ jc0AEPore5Uyf2hYI0nxxEtfwCzqD+oWdmwXgiM79CeZGxgsTImqQeA6PKuLuDx3BuY7P
+ jPYHQI46GjRRsuuT6xGCwMFPJdFY8KDnf0Hb0XGL/e3BQkIxZf20I930ZWqjbVErAEzbm
+ mOZGlJ8F59afA9FxfxEvHADqvzGDgnNTE0rG9E4Y1QbgtDaJipeAUbwC94heGvZY51/4O
+ 7mQg00T4UFNuKkB0C04zMf29QH8i0dTQohp3hxdDqZnIrwZKCtnzBhSygvmd249jD8A==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1791624441;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=KaurfD0kQKeGbwna83Dg98NN3y9ra+d2xj1MIZ3r5BY=;
- b=o4WZNciEg1eCKYtJlzOGGz4rQmNwAXvM49Vwi+6cplyiRPVgA0erEthlhzUEuT5Arg0H
- 9XdQ8Epkw8v+bgeFCVmjyC1uKZPC5nLQj8KwVSMkyEFz0bbgWd9MmdOv1HH4EKPImfB8U
- X+1QC6ImwI2Kt3DrbsULOozf0f4FLJTQyVNIN3ileIswrGwollgZTBAZHoiRUrI3ZKFCV
- YREvqpU3iq/S/3r+YFr7kT1+5zFmhzHPoYZhrz37wbTfWgHlQCiurFLFXe7RmDB2WVYdh
- lNXqHCbbQkPd94Q0/cxjjaI1qyYonRISjgLRwmf2A47ZSVZinhjc/pEZQGY/CFZUf9g==
+ bh=rJKONGrppyqa9xOfXzVXdvzvQVIkOHsnmPUzm+AL9Y0=;
+ b=lDt759a/6Omn2uTtmW1poO05Lj9xLbxSdmLwtrUMshr1hxKlWnweIVgPaivk88ZAFSsG
+ UJfYuKb16sTENTnCqjY3Vsdu57w3RrnYUtKURCVn8/OJB7LwdsxmmvZgUnat7qH4L5OJp
+ d/CSFdT6lA4dRoqYA1X+nfRimxSfUL7Amg93d1mhdPagLoGnGIa4yzWxuMTDYEz2/8kZi
+ XHIdcW7O0/Vo19cv9c0Jz03F4TI9BQosiw7rWOIdNCweDxSGUXyRKyTnmawDMQD3emtrl
+ 4yeeWjj198Ax4n8puDYiRSkvQ/K8vmr3O8fKtpUzM3QCY3fuYFtKrKaAG8SgKUEWqgw==
 ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6052881149
+ by smtp1.osuosl.org (Postfix) with ESMTP id 49AE68112C
  for <buildroot@buildroot.org>; Sat, 10 Oct 2026 09:27:21 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4A6868F1BD; Sat, 10 Oct 2026 09:26:03 +0000 (UTC)
+ id 320668F0B1; Sat, 10 Oct 2026 09:26:03 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 8 Oct 2026 11:50:12 +0200
+Date: Thu, 8 Oct 2026 11:48:12 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 886d11f39e38e95f755721c2d39cf61e29e6e0bc
-X-Git-Newrev: 30f18d0456decbd22d7b92e6bc222250c1274e6b
+X-Git-Oldrev: f56bc5ffed61b597f3137b6e6c9a7bc656c88222
+X-Git-Newrev: 4e0db0269a5e60d30ada0cf97bfc5064c8fbd503
 X-Patchwork-Hint: ignore
-Message-Id: <20261010092603.4A6868F1BD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/pcre2: security
- bump to version 10.49
+Message-Id: <20261010092603.320668F0B1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] support/testing:
+ bubblewrap: new runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -115,60 +115,172 @@ From: =?utf-8?b?UmFwaGHvv73vv71sIE3vv73vv71sb3R0ZSB2aWEgYnVpbGRyb290?=
  <buildroot@buildroot.org>
 Reply-To: Raphaël Mélotte <raphael.melotte@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1798044228655170089=="
+Content-Type: multipart/mixed; boundary="===============4290832222175118487=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1798044228655170089==
+--===============4290832222175118487==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/30f18d0456decbd22d7b92e6bc222250c1274e6b
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/4e0db0269a5e60d30ada0cf97bfc5064c8fbd503
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-https://github.com/PCRE2Project/pcre2/releases/tag/pcre2-10.49
-
-This is a security-only release, to address GHSA-r9hj-j2rw-4q3m:
-https://github.com/PCRE2Project/pcre2/security/advisories/GHSA-r9hj-j2rw-4q3m
-
-Switched to sha256 tarball hash provided by upstream.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 99ea0fbb3db76057a77bbd618cfbd188c69a6f86)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 1ad0796f2b40eb8dadc43e95dd1d56708b191375)
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
- package/pcre2/pcre2.hash | 5 ++---
- package/pcre2/pcre2.mk   | 2 +-
- 2 files changed, 3 insertions(+), 4 deletions(-)
+ DEVELOPERS                                       |   1 +
+ support/testing/tests/package/test_bubblewrap.py | 127 +++++++++++++++++++++++
+ 2 files changed, 128 insertions(+)
 
-diff --git a/package/pcre2/pcre2.hash b/package/pcre2/pcre2.hash
-index 90991322a2..3d75858727 100644
---- a/package/pcre2/pcre2.hash
-+++ b/package/pcre2/pcre2.hash
-@@ -1,6 +1,5 @@
--# Locally calculated after checking pgp signature:
--# https://github.com/PCRE2Project/pcre2/releases/download/pcre2-10.48/pcre2-10.48.tar.bz2.sig
--sha256  b6c68fdf6f3ac31388b50aa89ff0fc49c00c987c16e7b5146491d12003f2c8ed  pcre2-10.48.tar.bz2
-+# From https://github.com/PCRE2Project/pcre2/releases/tag/pcre2-10.49
-+sha256  53c156e1ba416a20da8e65395daa132da0d80e76910424caca3fcdae7831d384  pcre2-10.49.tar.bz2
- # Locally computed
- sha256  197d8a73ffee0d6b09adba2f9c677b5f5aede24edf89258a68e48248d010d811  LICENCE.md
- sha256  5f216505c0f6ea3273caec89e766eef93cdeb7bbb0c429f9360116d7c938feeb  deps/sljit/LICENSE
-diff --git a/package/pcre2/pcre2.mk b/package/pcre2/pcre2.mk
-index ea841f482e..a3e74e32b1 100644
---- a/package/pcre2/pcre2.mk
-+++ b/package/pcre2/pcre2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PCRE2_VERSION = 10.48
-+PCRE2_VERSION = 10.49
- PCRE2_SITE = https://github.com/PCRE2Project/pcre2/releases/download/pcre2-$(PCRE2_VERSION)
- PCRE2_SOURCE = pcre2-$(PCRE2_VERSION).tar.bz2
- PCRE2_LICENSE = BSD-3-Clause
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 82d60cf430..29acec54ad 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1819,6 +1819,7 @@ F:	support/testing/tests/package/test_bitcoin.py
+ F:	support/testing/tests/package/test_brotli.py
+ F:	support/testing/tests/package/test_btrfs_progs.py
+ F:	support/testing/tests/package/test_btrfs_progs/
++F:	support/testing/tests/package/test_bubblewrap.py
+ F:	support/testing/tests/package/test_bzip2.py
+ F:	support/testing/tests/package/test_compressor_base.py
+ F:	support/testing/tests/package/test_connman.py
+diff --git a/support/testing/tests/package/test_bubblewrap.py b/support/testing/tests/package/test_bubblewrap.py
+new file mode 100644
+index 0000000000..624b331e5e
+--- /dev/null
++++ b/support/testing/tests/package/test_bubblewrap.py
+@@ -0,0 +1,127 @@
++import os
++
++import infra.basetest
++
++
++class TestBubblewrap(infra.basetest.BRTest):
++    # Bubblewrap uses mount_setattr(2) introduced in Kernel 5.12:
++    # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=2a1867219c7b27f928e2545782b86daaf9ad50bd
++    # The Buildroot prebuilt Kernel is 5.10. To avoid testing
++    # Bubblewrap with its fallback code, we build a newer kernel.
++    # https://github.com/containers/bubblewrap/blob/v0.13.0/bind-mount.c#L27-L31
++    config = \
++        """
++        BR2_aarch64=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_LINUX_KERNEL=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.53"
++        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
++        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++        BR2_PACKAGE_BUBBLEWRAP=y
++        BR2_TARGET_ROOTFS_EXT2=y
++        BR2_TARGET_ROOTFS_EXT2_4=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def test_run(self):
++        disk = os.path.join(self.builddir, "images", "rootfs.ext4")
++        kern = os.path.join(self.builddir, "images", "Image")
++        bootargs = ["root=/dev/vda"]
++        qemu_opts = ["-M", "virt", "-cpu", "cortex-a57", "-m", "512M",
++                     "-drive", f"file={disk},if=virtio,format=raw"]
++        self.emulator.boot(arch="aarch64",
++                           kernel=kern,
++                           kernel_cmdline=bootargs,
++                           options=qemu_opts)
++        self.emulator.login()
++
++        # Check the program can execute
++        self.assertRunOk("bwrap --version")
++
++        # We set an arbitrary message used as test data.
++        msg = "Hello Buildroot!"
++
++        # We create three files to test the sandbox functionality.
++        # One fully hidden to the sandbox, one passed as read-only and
++        # one passed as fully read-write.
++        dirs = ["hidden", "read-only", "read-write"]
++        for d in dirs:
++            self.assertRunOk(f"mkdir -p /mnt/{d}")
++            self.assertRunOk(f"echo {d} > /mnt/{d}/file.txt")
++
++        # We start the sandbox.
++        cmd = [
++            "bwrap",
++            "--ro-bind /bin /bin",
++            "--ro-bind /lib /lib",
++            "--symlink lib /lib64",
++            "--ro-bind /usr /usr",
++            "--ro-bind /mnt/read-only /mnt/read-only",
++            "--bind /mnt/read-write /mnt/read-write",
++            "--proc /proc",
++            "--dev /dev",
++            "--unshare-pid",
++            "--new-session",
++            "sh"
++        ]
++        self.assertRunOk(" ".join(cmd))
++
++        # The "--unshare-pid" option creates a new PID namespace.
++        # In this new namespace, Bubblewrap act as the PID-1 process.
++        # We check the PID-1 executable is bwrap.
++        out, ret = self.emulator.run("readlink -f /proc/1/exe")
++        self.assertEqual(ret, 0)
++        self.assertEqual(out[0], "/usr/bin/bwrap")
++
++        # Inside the sandbox, we should not see the /root home
++        # directory.
++        self.assertRunOk("test ! -d /root")
++
++        # Inside the sandbox, we should not be able to remove a file
++        # from /bin, even as the root user.
++        self.assertRunNotOk("rm -f /bin/ls")
++
++        # We check the hidden file is not visible.
++        self.assertRunNotOk("cat /mnt/hidden/file.txt")
++
++        # We check the read-only file is readable.
++        out, ret = self.emulator.run("cat /mnt/read-only/file.txt")
++        self.assertEqual(ret, 0)
++        self.assertEqual(out[0], "read-only")
++
++        # We also check the read-only file cannot be written.
++        cmd = f"echo '{msg}' > /mnt/read-only/file.txt"
++        self.assertRunNotOk(cmd)
++
++        # We check the read-write file is readable.
++        cmd = "cat /mnt/read-write/file.txt"
++        out, ret = self.emulator.run(cmd)
++        self.assertEqual(ret, 0)
++        self.assertEqual(out[0], "read-write")
++
++        # We check the read-write file is also writable.
++        cmd = f"echo '{msg}' > /mnt/read-write/file.txt"
++        _, ret = self.emulator.run(cmd)
++        self.assertEqual(ret, 0)
++
++        # We exit from the sandbox.
++        self.assertRunOk("exit")
++
++        # Since we exited the sandbox, we check the PID-1
++        # is no longer bwrap.
++        out, ret = self.emulator.run("readlink -f /proc/1/exe")
++        self.assertEqual(ret, 0)
++        self.assertNotEqual(out[0], "/usr/bin/bwrap")
++
++        # We should now be able to read the hidden file.
++        out, ret = self.emulator.run("cat /mnt/hidden/file.txt")
++        self.assertEqual(ret, 0)
++        self.assertEqual(out[0], "hidden")
++
++        # We check the writable file now contains our test message.
++        cmd = "cat /mnt/read-write/file.txt"
++        out, ret = self.emulator.run(cmd)
++        self.assertEqual(ret, 0)
++        self.assertEqual(out[0], msg)
 
---===============1798044228655170089==
+--===============4290832222175118487==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -179,4 +291,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============1798044228655170089==--
+--===============4290832222175118487==--
