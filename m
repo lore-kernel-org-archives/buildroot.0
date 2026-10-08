@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 258B5CA9EC0
-	for <buildroot@archiver.kernel.org>; Sat, 10 Oct 2026 09:27:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4FF65CA9EBE
+	for <buildroot@archiver.kernel.org>; Sat, 10 Oct 2026 09:27:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E1F7160ED4;
-	Sat, 10 Oct 2026 09:27:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DFFEB608FB;
+	Sat, 10 Oct 2026 09:27:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Jin3aeONp5h2; Sat, 10 Oct 2026 09:27:54 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org C9038608FB
+ id 7rxEcTI3d8eo; Sat, 10 Oct 2026 09:27:55 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 6D9B460EE2
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791624473;
-	b=KQX1iObm/kD8kEkX6zYtyG7oSkPNpzjaLudm7Y8F8ZoND7c9H5BwYwyj+W9y2cjeS9jM
-	 206FWa/o/8M4eYu6Pr9308YrIKRncAEFmhmzF6Lqy7oDmzmRn6mPvIJZjJ1p2QQ5wE1UY
-	 mWVuVs0VT+EAw7M4DKDitfx6RzdoJ7SuMhA9vCFthbr3JKb9coySXbvW/X0CNP90Da45J
-	 Z/CSuiUDt4z46HuafkzcWVE8b04KVpSggoA6Fbo+pPxfB2P9e9oMLsUl0+CdFlkPxZbWh
-	 sZ4kecTtAmza6uMq2AZAXJKa92Bzk1iY3ul3A1hNymMPwMwWpn1D9lXnyn/G6p6SopQ==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791624475;
+	b=AQIGGPZhIPyZvN/YUKcML8Ur5gmZg0vB00gep0jVYK3EcuHhRUF4LUn6LIc6TeGgN+Ad
+	 CXt6zeCvx/fzeUlmKWjgvXv5UNdRVILZsr5Cn7CbHvQ6bwC/bJCi1JwN5PXsBzNpMXhYj
+	 338dp2HxZ3axLXDT7We9UhDYoGPBtJyeGveohtu+YyhS1P+iNTvNHgn6HSHVoEjvzOEYU
+	 mAPoe8Z5dw+uGRGg2dtBOyNUAiFNR/TO8Rmu7Nsjn8+ITiBMv3LoxIEok0i5x1EkN7EQm
+	 +n3yRMG6/Uen11UBE1chrLSUpqRqRBpc4joTDHp7NNvyK1CzRvQIN2K2tkfa1LG9fsQ==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791624473;
+	c=relaxed/relaxed; t=1791624475;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,76 +30,76 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
 	 Sender;
-	bh=J6vwRxX1eHauV6XMXrvz96XsoopRI7PmRXY52F6ulyE=;
-	b=ZZItg/JpLQ45QT6ipcDGO/NaynxIZbjF7SFNmbMGte7YMtoXihLbK4DkMc8BJR6PjqpE
-	 yEidNe25GQZKzOCg9vSf7wSEPaNeP+jkoooXtPMJO9spcPyKbKVxmcdoK8S5Pl/pmz0yV
-	 TKfGt6J7a2T9xzRo9dXGTL+m8Hv1pG7dXDV+l/7wZdVI3PoGlIud4hVcX9BHLP9REMNdq
-	 dqr/X/aLxvi4Grb5ZByXCN94h1t2pvRhrzirp/TM1cYIpizB/x+w65xHYKIbL/2yQweou
-	 YEzvVCv5YP90HC91nymheBX+LPW+MhppTz41pv490MfHVs9RTuPfhWRRcsiF9O4gztA==
+	bh=e87MEnrdGCwhjNn8QqyqQhvfhzrZQqHVF6zh8jhpf94=;
+	b=MpSfXYmZR3r3ugcIuRFXVY6K3p8nAO9wfaoormIx6/GvEPI1P6EXYsNl2PX84VbBDGBc
+	 Mv48LcTQMKwiFIoybv4NNfld21P8wh/7ZHPihP7YC2Z3lO4XyJ6AbxSwvadBS6pzDdqtV
+	 emRoi/YiGDSwc1qwVttPfqBvzO0wCUmogLEHdDUp+W6Moc9U/TbBPeSuV8gnV/DzL7a9D
+	 p3B6hGIPsZusMXPaERO+vLnmh7/9ti7q8qYpQ1N4aLO3SpJMxP2NjqwlBjv1n1xog5y2A
+	 fbA2+MF8Ukbu1lrODIjjaNC5tIn7PCCeV8Fatcc0GuKmGOCHU2su55zgnMW+cQHqyTQ==
 ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791624473;
-	bh=J6vwRxX1eHauV6XMXrvz96XsoopRI7PmRXY52F6ulyE=;
+	s=default; t=1791624475;
+	bh=e87MEnrdGCwhjNn8QqyqQhvfhzrZQqHVF6zh8jhpf94=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=NWqxXxjFf/8c2wlIv5PqBQXA40k/uXBQTCtk8h3nurL8wpP6382pFW+lu3tLPmbdh
-	 Af6Utc55qeWKL7IcxDh0IFduG1VBCdEmnUQh1Sz7nQe+8jTszKB7iIqpYPHn/cG0XM
-	 MbnqB/yVQri6tAYuuObvG/inAZcqPGDSm87zce2NBZ3mWyEFmE5qvKU+G/87xEj1gK
-	 kEtRpk1MDHnfHRhMlbw61oPQohYFSr5y9qFeGi6YI8+v+ViggVz53pAjEwXcDx5fzw
-	 9hcHN4mTI7VXIJNVjMgmsGmVSCIPM4IIjdhmesLXHMqVWc/+e7hxE6yJCGYrwyfHDU
-	 o+zW4YoQ/Vosg==
+	b=VsbE2faHAg8e0C0+XLqoTrx7HhKXRlXjf6ke/wT5wlL12XDZLCo6sMuCUGhTMbYB6
+	 ohxhP9cFDyO7eG76jPbSJnMzkag/PmoH63ebkM8HLFmzYo7wf0h6OpHVC/pXBVQgdO
+	 qrNTq4LAlHr4PCfBHOAOsmxWLs/NVg1fT/YDwBi6EQCMMpBttqvUm+Bsw+3ah3t4hL
+	 2cUmLVjpeAh9rX3rpo2RlWkDX77fyRROZccm0chk1DA3933eEbSZjgMrhJMs3i5foL
+	 WGOEjkG0akxwq0KzMDBEpntAZYkUGQAD55UENQtJGB3HIe5O2uMqsK1K9dCoPs6lZN
+	 oCD/JDY9jPX0g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C9038608FB;
-	Sat, 10 Oct 2026 09:27:53 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 383A475
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6D9B460EE2;
+	Sat, 10 Oct 2026 09:27:55 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5D50CDDF
  for <buildroot@buildroot.org>; Sat, 10 Oct 2026 09:27:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1BB8380F85
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4B21E80F85
  for <buildroot@buildroot.org>; Sat, 10 Oct 2026 09:27:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VjP1b1qnYzPd for <buildroot@buildroot.org>;
+ id QRi4-eobnZeJ for <buildroot@buildroot.org>;
  Sat, 10 Oct 2026 09:27:22 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org BAA2F81173
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791624441;
- b=K+RDSMfYmMcZocfcbpumZCfA0XBh0K0ND9Ev/qNAy4NoGa3rLBDrn+H40kRO9ZvphDvS
- jh/EA7AP6VqqDfg48kLiwPLat+9J5ekvkSYtVZ4AQqFiRtNDc4HvjyPPazP3VlG5nD0QC
- Wuwk3BYUJKLSOovDkQtIbvuzCOKV1QXUsQiIBZ/mHq1gUn7Udezmi749BqPugNEh6c5a3
- 1bab3y94fEMcDa76VJIneh05zAuGw7hYuZPK6Rb3SIYMHJqTWQcW51lXqe/3EG/zbx5S2
- qTgF8K51rXmpzvr/OVj148dg0ygV9HC0q7MZtQVJ9zQ+S8YCzl85Q3bn1WMMUNfS0hg==
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 1654C81186
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791624442;
+ b=f/8IfJ4cStdKpo1Ith3P73Eax7aiDBXiQl0CfrDf/PFlOk29I0RvxW6FLxchP/j1F+Ly
+ dLip5Xwoqky6GAYUQoJlcl8n2IrblBotBi6rZC7O6Ms4GWWer4U/FnkStyGSJrq1TY0EY
+ Yk5P+Gv9Fc7LAguTLV9LDCqck3e0OzS1jPcAM/r4IdAt/j8rV4GDsHqUYqEtGb7mGb7tx
+ jYjTHBh3SrjW32vpTUpuBc3/tm8HiDXxuGmKYFseJewNfCHYuw67ap2iq3gBBKEQ1cQIr
+ kKdgaWTsRkwOO6ORj9YrXyywbYjkDZeQwlRfiAcObXgmVXFnXjZcCAt++qN9+eibmGw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1791624441;
+ c=relaxed/relaxed; t=1791624442;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=dgELFeSAlmbxYrRCz+/J/haDC/OGqPsIAUAe3rq6tdo=;
- b=DQv/ls4/fqTiZiRrRV09HG3KDy61ONsw6cEMCQ8kLMRWRfg8a6tc4iHPuxt1N/8LGAlH
- MfzOS7/iTNrPdMu2dofnVRWr0Uvkb2TE8BjQTlx55DX6Ay7S7IlOwRqxRzWsfQ0x7iBnB
- NrAvQNb07rfG+ARfC1k5+KKSUBWrQC178k0QT37IzG8O53wzFMzAdge1IQkD7UVQxJIeg
- mVM7rIUmmB8OHRuEWejkKzrWSbpuL026bqGgQVo6AMnOt84Kbwxz7tBia+xh2Z5sj65zj
- o+rsh5FWcKTZQxorpZDG4bVGCg/WP3SW6hAt8bltVe+Ux/EMo46cldjuu6SdW5oLxeQ==
+ bh=6G9vMIeHD1Hy8buAuZonaQO5WMAoazwTz1iBK2s0zfI=;
+ b=PW0oKcCe+0/G8qYfdBmhOMF5scfpeg43eogAO//WjH3rNUpDPhnGPBIUPVK1V05q1Ya+
+ rvuA0BGeFoB3iCXoF3rT/mum5mphOYnwYaYKgJrh8MVDXlQRdsJhvB3RbIp7Albyu78gY
+ GIdq0goSiFOYXdGKfHfFLvdUMaqJ1dskp+BHc1ZeQQzMldxI/i6NMLC0QTeuJrZkH3Xel
+ 5dTf2fkeoXYvLqGdGKAJPGrRdar6DYValDHUTyj0dIadfbe2i3NoKn24z4ou1FhfyoIBJ
+ Y37Y4L9GzRDf9QzzZTA7eKFwlViFTbXlpsNbqLUSJRqSmQA+pGF4KwGHUygGBzNKUWA==
 ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id BAA2F81173
- for <buildroot@buildroot.org>; Sat, 10 Oct 2026 09:27:21 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1654C81186
+ for <buildroot@buildroot.org>; Sat, 10 Oct 2026 09:27:22 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A3C958F1BD; Sat, 10 Oct 2026 09:26:03 +0000 (UTC)
+ id F41B38F0B1; Sat, 10 Oct 2026 09:26:03 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 8 Oct 2026 12:01:55 +0200
+Date: Thu, 8 Oct 2026 12:07:51 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 2a90512d09369ac8cd044f51f4019dcd8cfc21ba
-X-Git-Newrev: d26ff664dbf313c16c1b0426300e69bb6df9d030
+X-Git-Oldrev: b8d6d076888e5af4c6fdff7bbce2318b69be7bc4
+X-Git-Newrev: bc6c924679d28d9f017222015fa5bcef87e74ee3
 X-Patchwork-Hint: ignore
-Message-Id: <20261010092603.A3C958F1BD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/erlang: fix build
- with BR2_TIME_BITS_64
+Message-Id: <20261010092603.F41B38F0B1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/python-twisted:
+ security bump version to 26.4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -115,125 +115,65 @@ From: =?utf-8?b?UmFwaGHvv73vv71sIE3vv73vv71sb3R0ZSB2aWEgYnVpbGRyb290?=
  <buildroot@buildroot.org>
 Reply-To: Raphaël Mélotte <raphael.melotte@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8945006094522861777=="
+Content-Type: multipart/mixed; boundary="===============0044019881725224301=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8945006094522861777==
+--===============0044019881725224301==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d26ff664dbf313c16c1b0426300e69bb6df9d030
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/bc6c924679d28d9f017222015fa5bcef87e74ee3
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-erts/emulator/sys/unix/sys_time.c undefines _FILE_OFFSET_BITS before
-including system headers. With BR2_TIME_BITS_64=y, Buildroot passes
--D_TIME_BITS=64, which glibc only accepts together with
-_FILE_OFFSET_BITS=64, so the build fails with:
+https://github.com/twisted/twisted/blob/twisted-26.4.0/NEWS.rst
 
-  error: #error "_TIME_BITS=64 is allowed only with _FILE_OFFSET_BITS=64"
+Fixes CVE-2026-42304.
 
-Backport the upstream commit that removes this ancient workaround.
+Updated license hash due to copyright year bump:
+https://github.com/twisted/twisted/commit/ac504cc8088734e0bcb8c9b372d52534bf9252e9
 
-Fixes:
-https://autobuild.buildroot.org/results/72443d8e794451cbc4063e906d6b2405021cb52f
-
-Assisted-by: Claude:claude-opus-5-5
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Cc: James Hilliard <james.hilliard1@gmail.com>
+Cc: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit b2005938aed8798b2ce2df7733dcb75394b2d6b7)
+(cherry picked from commit e325baa39cc45b350ce142e1e209a134a1d62355)
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
- package/erlang/0002-otp-Fix-build-on-Yocto.patch | 80 ++++++++++++++++++++++++
- 1 file changed, 80 insertions(+)
+ package/python-twisted/python-twisted.hash | 6 +++---
+ package/python-twisted/python-twisted.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/erlang/0002-otp-Fix-build-on-Yocto.patch b/package/erlang/0002-otp-Fix-build-on-Yocto.patch
-new file mode 100644
-index 0000000000..9f4de3508e
---- /dev/null
-+++ b/package/erlang/0002-otp-Fix-build-on-Yocto.patch
-@@ -0,0 +1,80 @@
-+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?John=20H=C3=B6gberg?= <john@erlang.org>
-+Date: Wed, 13 Dec 2023 16:34:04 +0100
-+Subject: [PATCH] otp: Fix build on Yocto
-+
-+A workaround to avoid breaking "micro level process accounting on
-+/proc/self" broke the build on Yocto. As this is a really ancient
-+workaround (pre-2009) and the comment is unclear about what
-+actually breaks, we'll try removing it to see if this is still a
-+problem.
-+
-+Upstream: https://github.com/erlang/otp/commit/c38fc7c62e818273870340f3faf83cc3905e1cf1
-+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-+---
-+ erts/configure                    |  9 ---------
-+ erts/emulator/sys/unix/sys_time.c | 10 ----------
-+ make/autoconf/otp.m4              |  9 ---------
-+ 3 files changed, 28 deletions(-)
-+
-+diff --git a/erts/configure b/erts/configure
-+index 1d573b4..0b046dd 100755
-+--- a/erts/configure
-++++ b/erts/configure
-+@@ -24417,15 +24417,6 @@ else $as_nop
-+ /* end confdefs.h.  */
-+ 
-+ /* gethrvtime procfs ioctl test */
-+-/* These need to be undef:ed to not break activation of
-+- * micro level process accounting on /proc/self
-+- */
-+-#ifdef _LARGEFILE_SOURCE
-+-#  undef _LARGEFILE_SOURCE
-+-#endif
-+-#ifdef _FILE_OFFSET_BITS
-+-#  undef _FILE_OFFSET_BITS
-+-#endif
-+ #include <stdlib.h>
-+ #include <unistd.h>
-+ #include <string.h>
-+diff --git a/erts/emulator/sys/unix/sys_time.c b/erts/emulator/sys/unix/sys_time.c
-+index eb2c47b..f60e345 100644
-+--- a/erts/emulator/sys/unix/sys_time.c
-++++ b/erts/emulator/sys/unix/sys_time.c
-+@@ -22,16 +22,6 @@
-+ #  include "config.h"
-+ #endif
-+ 
-+-/* These need to be undef:ed to not break activation of
-+- * micro level process accounting on /proc/self 
-+- */
-+-#ifdef _LARGEFILE_SOURCE
-+-#  undef _LARGEFILE_SOURCE
-+-#endif
-+-#ifdef _FILE_OFFSET_BITS
-+-#  undef _FILE_OFFSET_BITS
-+-#endif
-+-
-+ #include <stdlib.h>
-+ #include "sys.h"
-+ #include "global.h"
-+diff --git a/make/autoconf/otp.m4 b/make/autoconf/otp.m4
-+index f543101..984ee1a 100644
-+--- a/make/autoconf/otp.m4
-++++ b/make/autoconf/otp.m4
-+@@ -2705,15 +2705,6 @@ dnl
-+ AC_MSG_CHECKING([if gethrvtime works and how to use it])
-+ AC_RUN_IFELSE([AC_LANG_SOURCE([[
-+ /* gethrvtime procfs ioctl test */
-+-/* These need to be undef:ed to not break activation of
-+- * micro level process accounting on /proc/self 
-+- */
-+-#ifdef _LARGEFILE_SOURCE
-+-#  undef _LARGEFILE_SOURCE
-+-#endif
-+-#ifdef _FILE_OFFSET_BITS
-+-#  undef _FILE_OFFSET_BITS
-+-#endif
-+ #include <stdlib.h>
-+ #include <unistd.h>
-+ #include <string.h>
+diff --git a/package/python-twisted/python-twisted.hash b/package/python-twisted/python-twisted.hash
+index f3cf53bcaa..beb1c7f3b5 100644
+--- a/package/python-twisted/python-twisted.hash
++++ b/package/python-twisted/python-twisted.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/twisted/json
+-md5  845d6782c2236ef764f3849948f4bfad  twisted-25.5.0.tar.gz
+-sha256  1deb272358cb6be1e3e8fc6f9c8b36f78eb0fa7c2233d2dbe11ec6fee04ea316  twisted-25.5.0.tar.gz
++md5  931ac3e39a52c490f85d36bcb4c77369  twisted-26.4.0.tar.gz
++sha256  dbfd0fe1ee409d0243fdd7a6a6ff14f4948cec1fd78e0376291f805e1501fae9  twisted-26.4.0.tar.gz
+ # Locally computed sha256 checksums
+-sha256  16b7f6825ee8aaed193e7fcfaee67ab493087302c700483f8991f22b70c539e1  LICENSE
++sha256  d7a2f74fe5c2b3f610052b75b5a131728c49823b28088893dacacf8d58849a4d  LICENSE
+diff --git a/package/python-twisted/python-twisted.mk b/package/python-twisted/python-twisted.mk
+index 8db5d3750c..09198d2afc 100644
+--- a/package/python-twisted/python-twisted.mk
++++ b/package/python-twisted/python-twisted.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_TWISTED_VERSION = 25.5.0
++PYTHON_TWISTED_VERSION = 26.4.0
+ PYTHON_TWISTED_SOURCE = twisted-$(PYTHON_TWISTED_VERSION).tar.gz
+-PYTHON_TWISTED_SITE = https://files.pythonhosted.org/packages/13/0f/82716ed849bf7ea4984c21385597c949944f0f9b428b5710f79d0afc084d
++PYTHON_TWISTED_SITE = https://files.pythonhosted.org/packages/db/97/6e9beb1e78247ae6dc34114f27d538cf2cb183c4afcd3609dfdf2b0439c8
+ PYTHON_TWISTED_SETUP_TYPE = hatch
+ PYTHON_TWISTED_LICENSE = MIT
+ PYTHON_TWISTED_LICENSE_FILES = LICENSE
 
---===============8945006094522861777==
+--===============0044019881725224301==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -244,4 +184,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============8945006094522861777==--
+--===============0044019881725224301==--
