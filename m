@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 332B4CA9EC0
-	for <buildroot@archiver.kernel.org>; Sat, 10 Oct 2026 09:22:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99E93CA9EBE
+	for <buildroot@archiver.kernel.org>; Sat, 10 Oct 2026 09:22:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EBF89608F5;
-	Sat, 10 Oct 2026 09:22:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5C65B4095A;
+	Sat, 10 Oct 2026 09:22:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024)
- with UTF8SMTP id DFcWrHVmWJlp; Sat, 10 Oct 2026 09:22:24 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 04B4F608D4
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791624144;
-	b=aww5QkL66E2ckiUnCoUoXm6MyumEvbkXq//2+FjwJiEX4mmJNLWgmhZ8O2XIYaX/MpGD
-	 RdkfRapBreNXaA81KZE2yI9aBTQzoeJ9slj/5PlXDVYkAPv2zQGYkeIQfpEBPUy2Kx97o
-	 Y8jrjSFJbMZ7qSKmL+0n+aQyIZbyfTOBMhTvu8eUPT6RnLe6Rp4ZfUTLFdUhQpjfUlgUk
-	 loV+EI5o6PyXyCQLiWRLwknU2JB0uYnXzJUvF4QGtJZgFu6zHhG6BGd76AyLu74m8xqfM
-	 zK91YaqZHrB+2UEP3yNme1V7vzXjvyppDggLoo9dU7aadWwmXThDLMIzul0heMsVMng==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id e5zPDnxKBL2I; Sat, 10 Oct 2026 09:22:27 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 819EF4087B
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791624147;
+	b=FHgtIDDk1MGOySkqVyNETmEo6PoreeRG3LO1M5RHrDUdagtW8WVXvickuyM8I8DQnEG3
+	 U8+GvuB0WnJiUYnjhzHsz/rS4Tnn7CeB4lYelwWsT+v4fcyiGI3wtD18PEDgFMrD5Cix/
+	 FccYP/USClpCrFVkSnW+OW7QbJcNJoqOXu1Ead8O9zqx3Wl6dbIhDn93iKVy2UfXsG2qO
+	 mdQkhasmvz9KyUOuswnsnb6/DnkfZc9h4nPOJ/KeScQgwHNSIKiTBeAnmIZR/ZqjT/rpa
+	 cHgSRcoQgDUeZKgpGLyY1JOYaja0d+5NntcZ8dookhvhuTAY7YM9EsERHqVt4IpOkEg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791624144;
+	c=relaxed/relaxed; t=1791624147;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,76 +30,76 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
 	 Sender;
-	bh=N97hFzAGS78V9XFHMt6NHNO+ssP0iDn/6vhTn72tsYo=;
-	b=UpK5YDZVVQ3uPKZYWl/OVLrDJG17K4/1AbezHr28tmlal43aJr01Ryvj2dQwi0vZt76d
-	 85wMtGRauwm36kQgAz6CBC4IMiLhbnar8Z6MOMiQKX3WUhLXw6tlp2e9dMvi2nMxcIo7v
-	 pUcE80uXr8ufVIt2m9EUJfPvdEv82cIn0pPNb46XBiQUxgZBUDtETjsOZOEs4LsmvQ50g
-	 IV6JTs/R+5q/ea2O9GnfrkDDdin0KhBR0C7Pr0VJ+8vDjaZZCoutZMeJN6V6W4VZ7+wWB
-	 7+FFmHOC6XCYsjL8IWR9csqCYN0103Yii9UJZCYjEB09cRXxetrUkRXFZ4e/ZNQGc+g==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
+	bh=jyCeoe0FX9vacvn8HvfvT8lXKj6RxGRucaSF9t2shwI=;
+	b=i6qnYW65bnggoX5WvPxntEKKV6iDkihZYy4ZoGPAX+41ji+D64yyVmBk63QMmNM3UF3v
+	 gkoRBaBOkK1yS/g8+QkGRMb1v+VnOBOMYHdCXoyUnpwf2RUeYQPZ+AlJMtMuS51A72Faa
+	 CcCmHBfooVRr1KewARSQmkzqyrxD3b3xH1g70yx3uzEjEMPW+RYxGCXPLaeVGnDfy0fBl
+	 UcoMHX9A/OOwSLT8951BFOFpS9EA5pu37OUyB217GRYJ2KmXEimrmJtouNgnoZ7JKa1BD
+	 rU/kULLlOw+i1nSYiF+l2zbHvuhHtJFsVPZ3klDminQF1R4aE+92ktGpBmbmXTtST/w==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791624144;
-	bh=N97hFzAGS78V9XFHMt6NHNO+ssP0iDn/6vhTn72tsYo=;
+	s=default; t=1791624147;
+	bh=jyCeoe0FX9vacvn8HvfvT8lXKj6RxGRucaSF9t2shwI=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=r8EunN863aZELRnjkibwWll0zoc4HQyazNpedCNZV6YEZvISFVcIGC9EW6c5n+tiG
-	 zMqvU8DeTYTRLK3tIbBZ9pPKbWfxBq4m8/CxjOdIVEBuv6L1IfTzrWHAO5ZY3gRTVf
-	 I9cjwuB22HMw/sjO3cSFWqDDzMLS/I44XVtB+mhHJ81QwzZzMyFBpuEDr/OhQS+prz
-	 PGmrRVMaktfFcE3+9yTuz6DYgCNE8qaFPH4t1FZih/fku1eAo/1srt49GGbnl+idwD
-	 oxqHw0UhW/fLk12xrbiLzjcceTykugn03Gr21DpboAYeZG8+TtPySrD3xL8OrEMS66
-	 1ZOjUjOeZQZQg==
+	b=IzOK+8bNppOLPMHSuE8FF4+BfqkFjUdPga+bPY3P9WehnD14M9EgpEcP+KTFfSAGJ
+	 Eg0Bj9RX7uGmJgsuy8UOucCs0rsSPjFnh4Ed6y+59RrXfuhSQa0BIoG4H4gfAWsfY4
+	 rRMCAnyyyv8WzkuukXBrSwu31v1Wc+ejjd+cLysPOfDhaITRGLFO3ypPltBmGAN6pN
+	 kZNPoBm698JmnqcTeDQbJbQb86PN8PgvPGy0ITzz+GLMgqNrEPRJ7bUBrf9jDxi4xQ
+	 CqT4r99453VTlYXcV43fBVRTAjk/AoP0UecG2J5vvlKpQGVx2CydXtUf/Qg8xqtB3g
+	 kz4dQ2TDZadzQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 04B4F608D4;
-	Sat, 10 Oct 2026 09:22:24 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id AA1B9FBF
+	by smtp4.osuosl.org (Postfix) with ESMTP id 819EF4087B;
+	Sat, 10 Oct 2026 09:22:27 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id E4A64DE2
  for <buildroot@buildroot.org>; Sat, 10 Oct 2026 09:21:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9BF3C60670
+ by smtp1.osuosl.org (Postfix) with ESMTP id C6757811FC
  for <buildroot@buildroot.org>; Sat, 10 Oct 2026 09:21:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RIe9rXJmh2-I for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZgYbyhdRHlfC for <buildroot@buildroot.org>;
  Sat, 10 Oct 2026 09:21:28 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org E19946066D
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791624087;
- b=rDsbSbJSS94RzmTmj1bKDtVwXuMXzl58U9lWxziGP7rP/Usp0U5md3MHIvvzRMyK7iMR
- IoCHE63xrbaHt235wgngfQiC2TpJ/utNs9Ni3V6J5hC762SehcVWsT++EYmt3ghPkJ4Wn
- pYrueT3eN4Gjpugc5fpJnS9qApBhMDTQj3/eh0gxB+T4eNlkyecgiFZeptEyKN7xj3NGw
- T+d/6KMU57egv4lIYDdKzVNF8ahCi6Bn37iqU60dYJCyUHbg4K6TpAwqjAWPlu43X5VuC
- CzON25jVCIxAen279OzSb29GyineI90muPMKHyjwnemIhmeDAHRy/+2OCDpzMVHsmTg==
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org F1C428121D
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791624088;
+ b=mM3+UOWyWOb/QNPLpyXMTU3pnw2bCwWlpARdhjDKpe1k1+4XIaeAyOX6dKJQ4D4QMFrw
+ yihEn+SOsj39VuYKlefRNDndieFzHn2ULitXK8dIwyKFyaU02RXQCewsVQRZxvaLtmX8t
+ JYau+ipPWd/3zMhml9BGzprguMkwJs7/64qLdcfIaH3y3uDIaicIPEI68fvr+gJvdMUgq
+ F7owV0rPHNQXxEoBFLwcWR/jdA0WIKVcFLVowK302T/nj9d6cvQ0pJCm2gUFn6Eu0FrEF
+ 6edlagu6iuI19xM/qtnvhJ1wUyM5y/zG4Kt+ywNgB55VAF8F+7hPMcX60Peu8y/SbGw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1791624087;
+ c=relaxed/relaxed; t=1791624088;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=SdlZ/vzJheIlZfUVhUKO5K8DIGdgb7M4td8SurpeSFc=;
- b=Rv1H3yXP3L6DwblCJWT3aACxn81dKgPy36xuc2rddlxN9Nu0wVNRJMW9A5WYMpS1OH9c
- BpW42Gr3F2fwNukgrO11aDWT1G7bAv+CKVOTsVmDh7zCRfcpeaVBBC8kwoifqNKEp1mZr
- v+MK2Igp6I/JPYnbzbgWT7bxEI+iwrBxEddI2ncjkhhAVUpM7wMOpkyLACyzE18U00nkS
- yFTXbDCHHavGIuUk0sDynJQwhwD0guiTLcNglLZKzesBmROgz/fYlmd6rRlYWAuVPe0gC
- u6JMK9dil6ojDk+gVykaI1RbS7cgJ+8kMCT+1mp5R2PY3iENbCLfuGbSxE+u+1ksq9A==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+ bh=8Lb/CjNFDVyARwRDLA3itdTkhVmxtZ0WC7Lzxl2ctjI=;
+ b=shgc1LgltGJnjWP/YihQFf1dIAH5oX732fGPLM0gbzFhfBR3bO914czLpcy2hbmedK3V
+ 3lPpDOgQ74NlNTe6pAbig2GKrSWOByPKKVOx5N9FZg2tBQdgGxFpR3P/AUCMyCvLNzxCe
+ UZvQFe8mHDlnT7XsFPu3aoHC6HAzzdWWpidbwIIxYWUTyMjjJRLzPWbNf/iZHjMFgdC9L
+ pGnPD6YgRGsm9fwaxFmxi10D3BYyUn4j1Ea39kdjDnxHd4qY3mFKyS3pipsyezLuXpBKC
+ y/LqkQJryAm3L3KKT9ypfMLRWh84unyfKYq9Eta0HHKQwueOV8rWv4M9DQTWQHRuQoA==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E19946066D
+ by smtp1.osuosl.org (Postfix) with ESMTP id F1C428121D
  for <buildroot@buildroot.org>; Sat, 10 Oct 2026 09:21:27 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CB86B8F0B1; Sat, 10 Oct 2026 09:20:09 +0000 (UTC)
+ id DBAE88F065; Sat, 10 Oct 2026 09:20:09 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 8 Oct 2026 12:29:56 +0200
+Date: Thu, 8 Oct 2026 12:31:01 +0200
 X-Git-Refname: refs/heads/2026.08.x
-X-Git-Oldrev: 71a0aff9cf58791f2b777f2e52f1505270a8b16d
-X-Git-Newrev: 98ef053c24c4a8c533fd41c5e23f335353801613
+X-Git-Oldrev: 98ef053c24c4a8c533fd41c5e23f335353801613
+X-Git-Newrev: 789bf2f21fb281bc946775c5d8ab51407f49809b
 X-Patchwork-Hint: ignore
-Message-Id: <20261010092009.CB86B8F0B1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.08.x] package/openjdk-bin: add
- proper CPE ID information
+Message-Id: <20261010092009.DBAE88F065@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.08.x] package/mpg123: remove
+ MMU dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -115,48 +115,92 @@ From: =?utf-8?b?UmFwaGHvv73vv71sIE3vv73vv71sb3R0ZSB2aWEgYnVpbGRyb290?=
  <buildroot@buildroot.org>
 Reply-To: Raphaël Mélotte <raphael.melotte@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5276676773466114882=="
+Content-Type: multipart/mixed; boundary="===============3111424874358255212=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5276676773466114882==
+--===============3111424874358255212==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/98ef053c24c4a8c533fd41c5e23f335353801613
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/789bf2f21fb281bc946775c5d8ab51407f49809b
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.08.x
 
-The CPE ID on openjdk version 21.0.2 in NVD:
-https://nvd.nist.gov/products/cpe/search/results?keyword=cpe:2.3:a:oracle:openjdk:21.0.2:*:*:*:*:*:*:*
+Buildroot commit f0862592b3caf5bc9cd347fd29634673cfbbabd7 added the
+dependency to BR2_USE_MMU in 2014.
 
-HOST_OPENJDK_BIN_CPE_ID_VERSION has be overwritten to match NVD's
-versioning.
+Upstream made fork() optional in 2022:
+https://github.com/madebr/mpg123/commit/91f75fc026e37d88d25229b81c58bcf8d6d2a8eb
 
-Signed-off-by: Bjørn Damstedt Rasmussen <contact@bearware.dk>
+This change reveals a previously hidden build error with the toolchain
+bootlin-armv7m-uclibc:
+
+src/libmpg123/synth_arm_accurate.S: Assembler messages:
+src/libmpg123/synth_arm_accurate.S:22: Error: selected processor does
+ not support ARM opcodes
+src/libmpg123/synth_arm_accurate.S:31: Error: attempt to use an ARM
+ instruction on a Thumb-only processor --
+ `stmfd sp!,{r4,r5,r6,r7,r8,r9,r10,r11,lr}'
+src/libmpg123/synth_arm_accurate.S:33: Error: attempt to use an ARM
+ instruction on a Thumb-only processor -- `add r0,r0,#64'
+[...]
+
+To fix the problem we limit ARM code to BR2_ARM_CPU_HAS_ARM.
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit b174bfd0b29b8ad81b4e583c022aa6449a6f237c)
+(cherry picked from commit fca0899dd6cbeb9e6c7442d4b53513f7a29e98f4)
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
- package/openjdk-bin/openjdk-bin.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/mpg123/Config.in      | 1 -
+ package/mpg123/mpg123.mk      | 2 +-
+ package/squeezelite/Config.in | 2 --
+ 3 files changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/package/openjdk-bin/openjdk-bin.mk b/package/openjdk-bin/openjdk-bin.mk
-index 5f1922dea5..4a21cbb460 100644
---- a/package/openjdk-bin/openjdk-bin.mk
-+++ b/package/openjdk-bin/openjdk-bin.mk
-@@ -29,6 +29,11 @@ HOST_OPENJDK_BIN_VERSION = $(HOST_OPENJDK_BIN_VERSION_MAJOR).$(HOST_OPENJDK_BIN_
- HOST_OPENJDK_BIN_SOURCE = OpenJDK$(HOST_OPENJDK_BIN_VERSION_MAJOR)U-jdk_$(HOST_OPENJDK_BIN_DOWNLOAD_ARCH_NAME)_linux_hotspot_$(HOST_OPENJDK_BIN_VERSION).tar.gz
- HOST_OPENJDK_BIN_SITE = https://github.com/adoptium/temurin$(HOST_OPENJDK_BIN_VERSION_MAJOR)-binaries/releases/download/jdk-$(subst _,%2B,$(HOST_OPENJDK_BIN_VERSION))
+diff --git a/package/mpg123/Config.in b/package/mpg123/Config.in
+index 73ca1c740c..8cbc3a4758 100644
+--- a/package/mpg123/Config.in
++++ b/package/mpg123/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_MPG123
+ 	bool "mpg123"
+-	depends on BR2_USE_MMU # fork - in the application
+ 	help
+ 	  Fast, free and portable MPEG audio player for Unix. It
+ 	  supports MPEG 1.0/2.0 layers 1, 2 and 3.
+diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
+index 17445395ae..e6c90ce685 100644
+--- a/package/mpg123/mpg123.mk
++++ b/package/mpg123/mpg123.mk
+@@ -26,7 +26,7 @@ ifeq ($(BR2_aarch64),y)
+ MPG123_CPU = aarch64
+ endif
  
-+# Override automatic CPE ID because '_' in $(HOST_OPENJDK_BIN_VERSION) is not used by NVD
-+HOST_OPENJDK_BIN_CPE_ID_VENDOR = oracle
-+HOST_OPENJDK_BIN_CPE_ID_PRODUCT = openjdk
-+HOST_OPENJDK_BIN_CPE_ID_VERSION = $(HOST_OPENJDK_BIN_VERSION_MAJOR).$(HOST_OPENJDK_BIN_VERSION_MINOR)
-+
- HOST_OPENJDK_BIN_LICENSE = GPL-2.0+ with exception
- HOST_OPENJDK_BIN_LICENSE_FILES = legal/java.prefs/LICENSE legal/java.prefs/ASSEMBLY_EXCEPTION
+-ifeq ($(BR2_arm),y)
++ifeq ($(BR2_arm)$(BR2_ARM_CPU_HAS_ARM),yy)
+ ifeq ($(or $(BR2_ARM_CPU_HAS_NEON),$(BR2_ARM_CPU_HAS_VFPV2)),y)
+ MPG123_CPU = arm_fpu
+ else
+diff --git a/package/squeezelite/Config.in b/package/squeezelite/Config.in
+index a034759143..0bdc43ce6c 100644
+--- a/package/squeezelite/Config.in
++++ b/package/squeezelite/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_SQUEEZELITE
+ 	bool "squeezelite"
+ 	depends on BR2_USE_WCHAR # flac
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+-	depends on BR2_USE_MMU # mpg123
+ 	depends on !BR2_STATIC_LIBS # dlopen
+ 	select BR2_PACKAGE_ALSA_LIB
+ 	select BR2_PACKAGE_ALSA_LIB_MIXER
+@@ -44,6 +43,5 @@ config BR2_PACKAGE_SQUEEZELITE_VISEXPORT
+ endif
  
+ comment "squeezelite needs a toolchain w/ wchar, NPTL, dynamic library"
+-	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS_NPTL \
+ 		|| BR2_STATIC_LIBS
 
---===============5276676773466114882==
+--===============3111424874358255212==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -167,4 +211,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============5276676773466114882==--
+--===============3111424874358255212==--
