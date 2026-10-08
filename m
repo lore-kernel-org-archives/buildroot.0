@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1900CA6017
-	for <buildroot@archiver.kernel.org>; Sat, 10 Oct 2026 09:21:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D9C6CA9EC0
+	for <buildroot@archiver.kernel.org>; Sat, 10 Oct 2026 09:21:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B87CA4095A;
-	Sat, 10 Oct 2026 09:21:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2DA86608DC;
+	Sat, 10 Oct 2026 09:21:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 21M-rhuPwuB2; Sat, 10 Oct 2026 09:21:37 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org D590C4094B
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791624097;
-	b=V+n+3hmbxwcwpO1FnEMp5rzHbnTZAtJs/LaFek39e8oVghvz36pytwXR1zRsYJu+6vYb
-	 5CV/CRKW7GbiCHCeeYpESP+K+0T4g/HlBdNMivOhFuQHBR+1LwH5ZnU0yUAaTRnkyv7lt
-	 ktDgmIuNK3X0MLPCExPyMUFwwJWRAjTemqGcp+UsVTNDTIexPKkEL7/9Zwj0JkLVhKW2Z
-	 qDefXBw6qVOFjGgYvFdyRu72JkDL36ZSeWxkocfXkxdWifZxXcgbDyWsBCBtSerfQv1N0
-	 cNC8P6DNy67Zk+Rew1Pyjs3TJALapsKfGYwTkvBzNblEWVhgjfLoWQo4HKBMVEpXlRg==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZNJsNg7nDdaE; Sat, 10 Oct 2026 09:21:35 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 18EEF608E6
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791624095;
+	b=S0siKBXETIBqxceBVGQ9TtnpouSiy45CCJrKY+equ1LnoF25dMgd5LYX8hDVSN7x8NLr
+	 zrhfyZ1BInGrqFuS2Oe/w8hqmbUEWxScSUHyaq1N6wfQPNTOPgOR4YHvCCjdH685nYbKB
+	 MGmrbB38XKqtLoCHBb6HonM55ZmsmaaZCCrQEbo10q15GYiuUB6LEpodzAMHWe+jyzGNu
+	 X8osywagFSrwLV7VZRf5KH3IrnbTCq7gPJQhoHzbrW1i0woj6s4KKeUcCQzH6hhnkUjKc
+	 yl4C2V3X1hiMsbt2oUlgaZgMg0XfpKaiwho+U21GvZO+MP/Io8kWwxdHv9kzMV2Mt9A==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791624097;
+	c=relaxed/relaxed; t=1791624095;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,76 +30,76 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
 	 Sender;
-	bh=FYzDB7zDTy1IWzIgW/rLixM8nGY+mDHhRxIoG5SDiKg=;
-	b=AeeSufLJgMcUT8ZADaocjKq4yuWmQGhuO/35OThRJsr47A5qO3/ncg/CSkAoe39/tTal
-	 GqsDnao7dn6w8ZZ4viuCmbES69D1iRCZh/SKrNj6bqwtbKZCwhtzfXVo5F1KTOrMxV9Xe
-	 kEVMU7kc2tfQAXEG1FpsjeyRGY7ZQo4f4Zy+rl28QJ/Cjd3epUuMIq+2hrAzhwzjQosQI
-	 pfQZO14H+keb39+p1wxXVxVJP+EBPjQ2RwfFp8Rd3n51jgO/LMPkUqpbhzbFjtx0wPOT9
-	 BgDWJG6/GMYScQWWfu277xMZ5Hp0G2eMDLqe+889nK8h5xFPfIIKlJuSWIcDQoVgNHw==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
+	bh=hKehP9G544SRIwgQFry0ran3cTwg1Anj0Hom8/j6Q/4=;
+	b=tRZaJPsWsIL7Q9zEaiEVDuTDZTQ6shXw/D2FYquqVI9NX+LhvAkGkoijROF/d5tvKZJ8
+	 py9QpG0kbM3NoS95IfJZ/2yYTYgyAG1tyIQSG/mzH7BlKALv2O5bPfyM+XFo5q55MlJwQ
+	 troktUJvAxrtFgD7agYHnOdhW8CGhzvAQJoWuiaqnr7CM+xlviH6QlG9RG7fHgS3kNGG6
+	 7+gKJse2VGJfIKrned/DLBr7F4we9pHjWQPk9uux9UewAQNIxtYtC5kLZRa1/I98FF0vY
+	 slaU+uJe+AYxIGGrpeyhwm+biGbaqBXiOXo7DUboyEOpwxLs5i1JBddXt+ydIvGtYIA==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791624096;
-	bh=FYzDB7zDTy1IWzIgW/rLixM8nGY+mDHhRxIoG5SDiKg=;
+	s=default; t=1791624095;
+	bh=hKehP9G544SRIwgQFry0ran3cTwg1Anj0Hom8/j6Q/4=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=UYRxjKrSiyQZvcKRoSlQ7Wy7xMh2XROdEVrzWFf870JEPrPRozz4i/2ySm9qqH0vR
-	 UGGeObRic6hEs4Btk5rdlcCI9W4e1rGFJgJNQExZAd5w+Im9zqUsTyuUdCAPv9rmeZ
-	 EBJRKgRr39RkWYvn0zR9CIvnINqljrEbdG7u0lHI6yb6ezHEJmaf/e1SpezTCGXo1Z
-	 ILxzjxasBCSWVFNSRTMdfK9K9kubYUL0haVhF/XncwUX9aCoF5mQzH5UtO5xBHzCka
-	 Ejf/vMj0qNbBVYhbUcrD5D8biyYjkVYU1dcWScquvwnlVp/ZyRmHPo3aWdYcAU5HsQ
-	 QjzH/EhV/FTPQ==
+	b=iohA47T4raYkDEnXwqqFh1cGf8gq3P3TwVLXYN/U0Nk4Ms2BsmZUiVpUeBvedaDTs
+	 bWq+fvPx7nFg7dN+rTCzTLSxCDxu/57iMKanrcJvlRFiFoVp5KvvEGh6Y031EmWzrV
+	 XPEDEE2tZAXLU9zq/Ti//YBG7hPfL0fw0vazEbmelLK3g0QALm+LldkrUzQVnAl6/9
+	 hVX/GF7GvrfyTF2wykyVNhCpPSR6rD+TSeCFhSTBH+y+Af991NydXHliivNSOB5G+Z
+	 TO8410a7H4sv0uDV+Gi668Usb6lqNRNzdmh2tXafWHFuqvFM8XW2YapvtebLxZ1hAa
+	 dTcS9YDO0X+Cg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D590C4094B;
-	Sat, 10 Oct 2026 09:21:36 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 77553DE1
+	by smtp3.osuosl.org (Postfix) with ESMTP id 18EEF608E6;
+	Sat, 10 Oct 2026 09:21:35 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 73DAE356
  for <buildroot@buildroot.org>; Sat, 10 Oct 2026 09:21:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 64C87608C3
+ by smtp4.osuosl.org (Postfix) with ESMTP id 63CEF40935
  for <buildroot@buildroot.org>; Sat, 10 Oct 2026 09:21:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NCYbqM80qs1z for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Vo33TCJAfYc5 for <buildroot@buildroot.org>;
  Sat, 10 Oct 2026 09:21:26 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 7D97B6066C
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 7D8004093F
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791624086;
- b=UZGHOXWWVNnYPhdLoeuMGpSNGnSzHzGEYOg6jNKq4n1jfhpPWU0zJSURmo7BgzrlWSGS
- qA/GTlc4rqH24UnBGCEroUb3Mj0Sd2Gq7zsTNeIxr7WydRiUwtc+v4gcNFYi3B7PBLyX8
- 4aZii1t5eeQf1Vntz5JPncsbHQygUvwMZCQkkMo60eGdrZqLkG3HrJSAlCDLGQCBAeejd
- DnfYSQo17G7DAbcEceKueW7rmrWZ6FN7rl10DnXPA4HMbPRxQ4F6g4K1ZJZ8qN7NuS0ut
- c1mkhyVIAA3QM9/n5snCiIL7sxQuNoC/VjBnlQC+EZvbIYJM43xCoY6148gaRZb2KJQ==
+ b=mqUqj9TG1twhGLJsEyBKM+Yx+HiObKQ/DzoFQmvoiyUR6Lre4O3o25kG6bVJgxSzJF8R
+ 5KkZHli2dB7aTqNIOnXmt5kcAdcY2Ew4allU6OwjGtyajACUCNKFdu9b5luKcCdFZIrUz
+ ADQDqaRY7SSducRZdDUlj7LtfNt1ztD+O5CKcpb+fzdD+89RQBBXIKht4yNU5593XgUwA
+ 7cztcUhi26aHTVUAhZiDJ9QLQtYPoGFGA6XZbBJcy3fuGSPTgnCXFRSbUJrZh8RRSEyBs
+ P2iBISifUybaR5Bhvs8Z2Eq0H63m6Ejb22reQP6Szw0Jg0nghbqJhUG2QrvcNPQ4TVA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1791624086;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=NkeJW1t2aZW/eR/nTMbgIPOTwc8kZSex8lbYxY2j+PA=;
- b=RbDH1YeNbEzajdA5xPIroQlCbocNwYHVGxGtri1losUx6mVT1CocPV9RflGMDec4U71Z
- 0h0Y4MYCpQMY3WvHJssmbpDkTxZGkNopsymyIuA4SIillQ3qSD4QQGpX/FrGShqm5iuKV
- oLS9oCCDBGl63nCg9LetoqeMds3xkoPwQ2PwqpxWCXu7cKKEoV9pHbeoQU+DC3E4281rW
- EEm2W4KO3U/3lAqb6ORRfEBmJtTIJgrJMSema0NkNMUfEGpafEfCjbo4vobK9AxdlxcrR
- 3BtU7KHtmM6yAaUIBUAipNpQiGacrGqvkaD79AwU6vLKQ8JhmsixJ2HsHWXEirPC2xA==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+ bh=1gxWDY22YWJz7xisXyFYrkPQsQHy/vCShLsboqUfW60=;
+ b=V8b/Aq9ynDgRAHL4v9i21XUY8CnMhYchN7m7jCl3/MyfEcYni/aEVk/G3hwxpeA9bn7w
+ v/5QpoI2e4ftE7XRZghB0dc4fMoFDOFVBoUjfejXu9cNte5qhxIkvact2iFXCRj/nTzhj
+ Pp45plWEu2Gu2U1Hw5MA6QCmb7fDc/jcCpWnP9pDnZt2VABwqNwVFh5DRS4rfSzloV23h
+ C8/BKo4fHimYK4sqkygfHAJvALJYlq4dfMoJlt4Atil1Fa7EYDT6zDvu6/iW2qH6R1nQZ
+ AaGUFbxbNKxU2FJu+LsflMIgWYg8ps7w5sP28Tzzns72jYckzRa57cZPDuv4MKEAl8g==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7D97B6066C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7D8004093F
  for <buildroot@buildroot.org>; Sat, 10 Oct 2026 09:21:26 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6791D8F065; Sat, 10 Oct 2026 09:20:08 +0000 (UTC)
+ id 5A5158F0B8; Sat, 10 Oct 2026 09:20:08 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 8 Oct 2026 11:50:25 +0200
+Date: Thu, 8 Oct 2026 11:50:14 +0200
 X-Git-Refname: refs/heads/2026.08.x
-X-Git-Oldrev: 319bbad24c5c369dc85bccc24330536befb9eb93
-X-Git-Newrev: 5b418e0645ea26dfa031f70a06d39c2cb0af4216
+X-Git-Oldrev: c16ecc649448bbb273cc48f415d44b167ef3b199
+X-Git-Newrev: 319bbad24c5c369dc85bccc24330536befb9eb93
 X-Patchwork-Hint: ignore
-Message-Id: <20261010092008.6791D8F065@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.08.x] package/libopenssl:
- security bump to version 3.6.5
+Message-Id: <20261010092008.5A5158F0B8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.08.x] package/pcre2: security
+ bump to version 10.49
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -115,96 +115,60 @@ From: =?utf-8?b?UmFwaGHvv73vv71sIE3vv73vv71sb3R0ZSB2aWEgYnVpbGRyb290?=
  <buildroot@buildroot.org>
 Reply-To: Raphaël Mélotte <raphael.melotte@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6412148297635059019=="
+Content-Type: multipart/mixed; boundary="===============0466534061606778153=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6412148297635059019==
+--===============0466534061606778153==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/5b418e0645ea26dfa031f70a06d39c2cb0af4216
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/319bbad24c5c369dc85bccc24330536befb9eb93
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.08.x
 
-https://github.com/openssl/openssl/releases/tag/openssl-3.6.5
+https://github.com/PCRE2Project/pcre2/releases/tag/pcre2-10.49
 
-This release incorporates the following bug fixes and mitigations:
+This is a security-only release, to address GHSA-r9hj-j2rw-4q3m:
+https://github.com/PCRE2Project/pcre2/security/advisories/GHSA-r9hj-j2rw-4q3m
 
-Fixed DTLS retransmissions of handshake messages from a stale buffer offset.
-(CVE-2026-84782)
-
-Fixed excessive memory allocation in relative CRLDP processing.
-(CVE-2026-35189)
-
-Fixed QUIC unvalidated amplification credit may be over-accounted.
-(CVE-2026-35191)
-
-Fixed potential CPU DoS via O(n^2) fragment reassembly in QUIC.
-(CVE-2026-42772)
-
-Fixed a timing side-channel in scalar multiplication for mon-NIST EC curves.
-(CVE-2026-54872)
-
-Fixed QUIC STREAM fragment metadata DoS.
-(CVE-2026-54873)
-
-Fixed non-constant-time SM2 scalar multiplication on ARM64 and RISC-V.
-(CVE-2026-54875)
-
-Fixed out-of-bounds access after SSL_set_SSL_CTX() during a handshake.
-(CVE-2026-72897)
-
-Fixed QUIC connection-level flow control was not enforced for streams.
-(CVE-2026-75804)
-
-Fixed a NULL pointer dereference in CMP client revocation response handling.
-(CVE-2026-75805)
-
-Fixed an unauthenticated and undersized DTLS 1.2 AEAD record causing DoS.
-(CVE-2026-75806)
-
-Fixed a timing side-channel in SM2 signature generation.
-(CVE-2026-77696)
-
-Fixed an unbounded RETIRE_CONNECTION_ID backlog in QUIC stack
-implementation.
-(CVE-2026-84784)
+Switched to sha256 tarball hash provided by upstream.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 97a94e01efa24d9a9b7a410a42cd0fe312e65197)
+(cherry picked from commit 99ea0fbb3db76057a77bbd618cfbd188c69a6f86)
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
- package/libopenssl/libopenssl.hash | 4 ++--
- package/libopenssl/libopenssl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/pcre2/pcre2.hash | 5 ++---
+ package/pcre2/pcre2.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
-index 46ac5589dc..b7083cc3d7 100644
---- a/package/libopenssl/libopenssl.hash
-+++ b/package/libopenssl/libopenssl.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/openssl/openssl/releases/download/openssl-3.6.4/openssl-3.6.4.tar.gz.sha256
--sha256  9bffaa1ad1e07b354c21bd3324ec02fa15579f45a7d0494b3e74bc449b7333ef  openssl-3.6.4.tar.gz
-+# From https://github.com/openssl/openssl/releases/download/openssl-3.6.5/openssl-3.6.5.tar.gz.sha256
-+sha256  a2157c2830efdec3788939b00c9b0638306d3f0bbb76dc4832ee503bb397df98  openssl-3.6.5.tar.gz
- 
- # License files
- sha256  7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a  LICENSE.txt
-diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
-index 9b3eec4baa..4aad749eec 100644
---- a/package/libopenssl/libopenssl.mk
-+++ b/package/libopenssl/libopenssl.mk
+diff --git a/package/pcre2/pcre2.hash b/package/pcre2/pcre2.hash
+index 90991322a2..3d75858727 100644
+--- a/package/pcre2/pcre2.hash
++++ b/package/pcre2/pcre2.hash
+@@ -1,6 +1,5 @@
+-# Locally calculated after checking pgp signature:
+-# https://github.com/PCRE2Project/pcre2/releases/download/pcre2-10.48/pcre2-10.48.tar.bz2.sig
+-sha256  b6c68fdf6f3ac31388b50aa89ff0fc49c00c987c16e7b5146491d12003f2c8ed  pcre2-10.48.tar.bz2
++# From https://github.com/PCRE2Project/pcre2/releases/tag/pcre2-10.49
++sha256  53c156e1ba416a20da8e65395daa132da0d80e76910424caca3fcdae7831d384  pcre2-10.49.tar.bz2
+ # Locally computed
+ sha256  197d8a73ffee0d6b09adba2f9c677b5f5aede24edf89258a68e48248d010d811  LICENCE.md
+ sha256  5f216505c0f6ea3273caec89e766eef93cdeb7bbb0c429f9360116d7c938feeb  deps/sljit/LICENSE
+diff --git a/package/pcre2/pcre2.mk b/package/pcre2/pcre2.mk
+index ea841f482e..a3e74e32b1 100644
+--- a/package/pcre2/pcre2.mk
++++ b/package/pcre2/pcre2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBOPENSSL_VERSION = 3.6.4
-+LIBOPENSSL_VERSION = 3.6.5
- LIBOPENSSL_SITE = https://github.com/openssl/openssl/releases/download/openssl-$(LIBOPENSSL_VERSION)
- LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
- LIBOPENSSL_LICENSE = Apache-2.0
+-PCRE2_VERSION = 10.48
++PCRE2_VERSION = 10.49
+ PCRE2_SITE = https://github.com/PCRE2Project/pcre2/releases/download/pcre2-$(PCRE2_VERSION)
+ PCRE2_SOURCE = pcre2-$(PCRE2_VERSION).tar.bz2
+ PCRE2_LICENSE = BSD-3-Clause
 
---===============6412148297635059019==
+--===============0466534061606778153==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -215,4 +179,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============6412148297635059019==--
+--===============0466534061606778153==--
