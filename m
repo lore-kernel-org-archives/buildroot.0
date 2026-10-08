@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B36DFCA6017
-	for <buildroot@archiver.kernel.org>; Sat, 10 Oct 2026 09:22:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A660CA9EBE
+	for <buildroot@archiver.kernel.org>; Sat, 10 Oct 2026 09:22:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 66D90608CE;
-	Sat, 10 Oct 2026 09:22:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2F35260A7B;
+	Sat, 10 Oct 2026 09:22:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024)
- with UTF8SMTP id GTzFJZ8XtX6Y; Sat, 10 Oct 2026 09:22:25 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 9050F60A5B
+ with UTF8SMTP id GgoAdsM1cuAe; Sat, 10 Oct 2026 09:22:29 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org C612B60909
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791624145;
-	b=a0iQV1wyyZrnRM9y7oOj7kKOx6ktB37ZZGiXY7X2rylrGOqjk0U6SIEhHlqi3cw7mrTZ
-	 qT+tPzaltx4RKI1+DIO23yETU8nOpG1w3VzQAjndeg4OR58+Or8/HsbCIKamr94xZVejy
-	 YvJ78QwpKRzv3qw7tLkbbhEbKiInj8pjlI5dzMwQyRnc01pOJJvh26qcifih2Jd8VtwMc
-	 fD0fMQVTzPSxB9J4wiIIx5q/uc+vpEaFzQt9osQ1wAOTzGUBuKK0SwLL1E8NVv1nKMfg+
-	 KwTRIZZzUUcMkCmyKSmwEiEo7Sc9OyjB5Qpnge+O2Uz4zhTI0engKw3usiCLlhMkEiw==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791624148;
+	b=VI0gH8VFHMPfCDocqcDhDDbvZfDFoz1rFG9EWog0U7S8NOlRZiivyrRT1uWzXnpgIU1w
+	 rqbz8zX/M6osysYSfWrPS7xiPRcPeaAvEKl3BKHIg0SqTufvvTUrtG4qOCXpAxndTXUo6
+	 Njx9DAhEq+TTjIFM5CVCYzjJSJMbsUz9M3/Q8INIOUhfi8jWoB84msFUxNRe/kQvvPLqj
+	 gouRszESnbrmY1PkoozqoCu9Mh31d2E8opWySbMew5ZRwOeCGQgdQ1GRVfdZvr06nwX+F
+	 3uYupfifJnq2lQeuGb3IMQbKGcjfNZZqhg0VH/1o2C4MhORwzfFHnjessdwAcbBZ6Zg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791624145;
+	c=relaxed/relaxed; t=1791624148;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,76 +30,76 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
 	 Sender;
-	bh=BSZ0x8K4EynrOpJUcXVI31oOOB+h8EXOh5bBOeGOXjo=;
-	b=c/qUR/iTrnxAWun3FEaMGJBs/JzdyngGtuVrYVRkc9ScrRqw/ek1OCo+hwPKTIq8BTdp
-	 JP/3xIJ4n6P7vKWUp3dCJfJC2qLmR0Yh3VQW11SiP1rZi0I+D0A85pvfzkehUB+s44Zrg
-	 P5jzE/u8QpG3gf5ZSXoZ64cVXOX2pdsLgXIUKpddovIEspgeY0g9ac4X3dVlbgEc1pA+b
-	 CQX52dcTvCg3id49v9+IBxzbdbe5VSPPNlBKimPdXCylXYDi7tszYhXcl8x2nWXSvPs0d
-	 I3BYOf3jW8TWE/hlSDmokUW6oGfBkKwXQ+ad8Y3yIeZgO2tl2HBUvY8KtGK/NF/LDgg==
+	bh=ltZZlTcHiWrd4VfnqNdKu9kGLxI3Ynf+hgW9Lr9fKSk=;
+	b=VSus0Jdg3OBv9xalTQlAyFidceQB6dzd4/z6iacBQthkcpf1HjhinbpQjo7y4zI4+dvo
+	 UozPfF1E6KmGxoqzTnxpf1KrkuS68GPytOTMKSnyNQ134pxFWMtqDuyiGQg8j54vPJVTo
+	 Ctca61BTZ8FsTpllmA7LkuHCiqd0/7p9vjG5RJy5C679H8L1l6TfqaCGHkoSnllxs2npm
+	 7fRFDY/luBhbhkQBZonpFGjzcph2SqVqHK4VbIdRVCThrjP4t33iNNtJEDk3b3AOAGiLC
+	 dVDnB7LfjTZ9n0EPqiiSbiiYvZmb6gJ766jfqSRSNBfjcBEqzILS+K1IJYJ18l1EBuw==
 ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791624145;
-	bh=BSZ0x8K4EynrOpJUcXVI31oOOB+h8EXOh5bBOeGOXjo=;
+	s=default; t=1791624148;
+	bh=ltZZlTcHiWrd4VfnqNdKu9kGLxI3Ynf+hgW9Lr9fKSk=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=DxQ7aBlUvjAOvJgo0+o5O68//qh+uRsdu5owQ2KXNPh3HUeSsXlchFBSMkVaBJwaP
-	 s3n4hEhXYn46DJgzeRDFoyTMV9GoDMUFOszSTOU0s4l+9bnt2V7y6U8RLY4NAxFu/N
-	 u/MfT+HD7RIgL9ZdJbLk3HIuhlX7KBUKaaiO4qpaCkJAeQ5yT7xp08+SLJmOGo6fBM
-	 gEirOwyQRLrGI5ZjTdKCmAWgYKrQKAZ78jNRi1Ni+ffn8FHQ6m+zUpzEgGVCPheECw
-	 KHE8hke+YQEQek91RvnWdmLoZTaNa6e5SpxNo//qzTp28Je5thijBXFOlqjeuNPxZH
-	 Tbe9hSlO319bw==
+	b=m9e2v6xrcQlxCqhByRQXdTbAlhxdDXM/IZm9dDdfV7BYSyLLyvu2CnUqFVo5S4Dad
+	 QsmVMJ0SMbFcW12z0/9iEMDTPJY4ZRRbDh5OIcuNb3L90FAkvPAF/XBg0XT3Yge+KH
+	 Zr7sdBYh8A3F1nNra+SM3vgrSwIQ9hzqz0nYFfAA0HGxTWfglZ8n/GjruL9glq41A4
+	 3LZDEBGN6WBgfUTRosMhAEUzj4IBOMkz3wrg/fE/kbmCkS/cqymgikoWa79mKMyaKE
+	 t+/f6+WnrCTCxhPeoKpTIw+xUqLZb14p8kjR0/cIDDYGBefbOztczfTWZH4DkL/K9o
+	 i3S4HcV6fezFA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9050F60A5B;
-	Sat, 10 Oct 2026 09:22:25 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id DD2B775
- for <buildroot@buildroot.org>; Sat, 10 Oct 2026 09:21:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C612B60909;
+	Sat, 10 Oct 2026 09:22:28 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0185F356
+ for <buildroot@buildroot.org>; Sat, 10 Oct 2026 09:21:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CD2E760623
+ by smtp1.osuosl.org (Postfix) with ESMTP id E5C148121D
  for <buildroot@buildroot.org>; Sat, 10 Oct 2026 09:21:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pmbX1BFHPG5q for <buildroot@buildroot.org>;
- Sat, 10 Oct 2026 09:21:27 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 4D94B60808
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791624087;
- b=jnSmNRDrLBG8cSLa8GOyIaRnxVNImVjztVLD9aHmsTV/u9zf7X/vV4k0A6tAho1r29x4
- Afo22u2bUyMyhCPM2PhkgsCbcZzlfFHrdch0P+HgH03+WZ5P3TlZThUc7EYOh3mNE8v6r
- jCI6wSRvxbSGe0fcvMX4dEbIxCc9/K9qmbJPw7Vxhnmlcj6j58s8JfiK+fb8KO5D+KEBp
- 793ZEyxBfl0cihraiI9a9SaFJlw0F2yVPu4jhqeDe5vMbuYEIZxBNuAz50skgOVsyYv5s
- Pw5ltdIG6BQMQS81aTTmA9RQzDwHNf6iOzvkQ76a/wqG/pl3GspCy1oEVTzp9J/vIGQ==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7ebLjWDrLqTk for <buildroot@buildroot.org>;
+ Sat, 10 Oct 2026 09:21:28 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 30FA1812F1
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791624088;
+ b=BadcYMC0ivJmfwTVoto//yE40BuE1dYiYE638tFpn0UPjB5XtB9ZmIaSAXMhoYoOTBCW
+ m7ZCoTzeLGHftHTgEjhCrhhmNaVka/kK05z1VWVYyuToZIEkytpfOhS1AtRI5v/jM4zTP
+ dGHMYCvhzEPAxYa0yWShj0naBxldVObQY5VSoEpGWlkafe1iHS0Un+lwrgvVj/I8hEgvA
+ Fh4V68+ob3tedvhnHKAL4CnXMMUVmcXI1VPTDsElbx697NDSKphbI1huudiaYbg13djHC
+ iQWi/yEk+BUSMDrQLMctMCci92znhRf5PlGUbnXZyDERdHDLmNanjtNonzcjIgTVGFg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1791624087;
+ c=relaxed/relaxed; t=1791624088;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=i3Qs2dNVrmAtaA9WLnj0tDdH91ZiOgE8aieeI/t+Unc=;
- b=MpEVF4SJPWrSOR9QU5Sno/lpPRnoeHbZiOrLCY4Pq4lwyUYInF7ubkqs016BWHvDVEJe
- xttFaxvSPImLNxURSmC9QOrkP36ovllAFNNcwdzd7VsbaKdXbkmo40/ak1HGaEtNUIt7k
- lX8FeylCExQfK9PqVcGoAMLDmV0Sv0DSTII/LGkbllKwLM0t+nHaOY2Vg10iDMAypL3x6
- u2dcwcEJBdyWQVaxN1ubukkJnuVwFR4qYYxdirUpQiPUCka8ap7rFOShRQKSt/j20rlw1
- QgOEIsjXQiBqguDYQcZWFZ6CNkG6BKyK7cNk6qQ8bP2vFODLaWSxdhR4fhnaDZCrRgg==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+ bh=7TZN8ngGdRfknge1O9FNU0wrR3lD0V6DvowNJ4OTwdU=;
+ b=btvNhYF2yO7Yk/o1vvOIQAORFQa6omjZsewvW8JcPhFiTLZGuQVzsTMS+bPFcYFqY4p3
+ woVIalJevXSFM6UzsQYa+XZdZ1uNP86CFyAUr4G9Ww1nnIngUbp+BaWgsnPS16vbavrBe
+ tFYnYO5DabE/9lK4zcjfUGplvkQYg2bvEUg3Y5kPm3QBWozMZnW1IavhqoI5kQFL3INen
+ Gc34vIxNC8aW3EM5yGFtZuohhPgFHIH+namnywAnu8ln8l0Xxv4gvVsdIQQqQX4sXcXEK
+ 0cZ4B2Y/ChTz5AKwY3fO86GfSUcOjPDhc2d2mm/HNa3xBZk+BhJWIAAStjFmq0ZVKyw==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4D94B60808
- for <buildroot@buildroot.org>; Sat, 10 Oct 2026 09:21:27 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 30FA1812F1
+ for <buildroot@buildroot.org>; Sat, 10 Oct 2026 09:21:28 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 37DA98F065; Sat, 10 Oct 2026 09:20:09 +0000 (UTC)
+ id 1AAE28F0B1; Sat, 10 Oct 2026 09:20:10 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 8 Oct 2026 12:08:30 +0200
+Date: Thu, 8 Oct 2026 12:33:57 +0200
 X-Git-Refname: refs/heads/2026.08.x
-X-Git-Oldrev: f6d5135cc67f212ef0c63c42cabc92e9dfa974ff
-X-Git-Newrev: bcdaf252070fd4b742b84744bc200ff344142a0e
+X-Git-Oldrev: b42d59e25f59ac01a21beb5eed59d26d3f7288ef
+X-Git-Newrev: a345a04442abeff4f9cc3a4608ca919e6f328a64
 X-Patchwork-Hint: ignore
-Message-Id: <20261010092009.37DA98F065@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.08.x] package/tcpreplay:
- security bump to version 4.6.1
+Message-Id: <20261010092010.1AAE28F0B1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.08.x] package/libheif: security
+ bump version to 1.23.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -115,339 +115,63 @@ From: =?utf-8?b?UmFwaGHvv73vv71sIE3vv73vv71sb3R0ZSB2aWEgYnVpbGRyb290?=
  <buildroot@buildroot.org>
 Reply-To: Raphaël Mélotte <raphael.melotte@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6894948326763880152=="
+Content-Type: multipart/mixed; boundary="===============4509286244199523874=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6894948326763880152==
+--===============4509286244199523874==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/bcdaf252070fd4b742b84744bc200ff344142a0e
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/a345a04442abeff4f9cc3a4608ca919e6f328a64
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.08.x
 
-Fixes the following security issues:
+https://github.com/strukturag/libheif/releases/tag/v1.23.5
 
-4.5.4: GHSA-2wmf-4p77-784q, GHSA-5cjx-62pj-pmgq, GHSA-pfqg-243f-8q25,
-       GHSA-pjh6-6hrw-vcwr, GHSA-ww62-mxv7-pg55
-4.5.5: GHSA-27v4-xhfx-g2rx, GHSA-777w-9599-w8g4, GHSA-jj65-mrgg-f5fx,
-       GHSA-m655-53p4-6qm8, GHSA-p7xp-4gj2-x56c, GHSA-v8c4-9w98-9v6v
-4.6.0: GHSA-5q26-7fxx-v8fh, GHSA-fwcr-mqg6-hqmx, GHSA-m6w7-8497-g9c9
-4.6.1: GHSA-4hqm-8v2c-9pwj, GHSA-p3f2-88rg-9mch, GHSA-pmmx-m8p5-969j
+Fixes the following CVEs:
 
-Release notes:
-https://github.com/appneta/tcpreplay/releases/tag/v4.5.3
-https://github.com/appneta/tcpreplay/releases/tag/v4.5.4
-https://github.com/appneta/tcpreplay/releases/tag/v4.5.5
-https://github.com/appneta/tcpreplay/releases/tag/v4.6.0
-https://github.com/appneta/tcpreplay/releases/tag/v4.6.1
+(CVE numbers will be added when assigned.)
 
-Since 4.6.0, CMake is upstream's recommended build system, so convert
-the package to it. The option parsers, tcpedit_stub.h and man pages
-are pre-generated in the release tarball, so disable autogen, python3
-and asciidoctor to not depend on what's installed on the host.
+CVE-2026-XXXXX (GHSA-v8qw-hwjv-44hw)
+CVE-2026-XXXXX (GHSA-qwpf-5wf7-r996)
+CVE-2026-XXXXX (GHSA-9c75-9g8r-4728)
+CVE-2026-XXXXX (GHSA-r7gr-2xm2-23wf)
+CVE-2026-XXXXX (GHSA-q492-cfcm-895h)
 
-Add patches to:
-- make WITH_TCPDUMP work when cross compiling
-- find fts_read() in musl-fts' libfts (replaces passing -lfts)
-- fix a struct ethhdr redefinition in txring.h with musl
-
-TX_RING support, which is always detected on Linux, unconditionally
-uses pthreads, so add a dependency on BR2_TOOLCHAIN_HAS_THREADS.
-
-Fixes:
-https://autobuild.buildroot.org/results/1db3e924c659c8edff026568ffbfc576d5222db9
-
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Assisted-by: Claude:claude-opus-5-5
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 6ffe6f923cb9ae634934a8ecad329b60f0f7d35d)
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 5feefc6be00f40e6333feb9b2a9710c0c463fee6)
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
- ...ix-tcpdump-detection-when-cross-compiling.patch | 43 ++++++++++++
- .../0002-build-look-for-fts_read-in-libfts.patch   | 77 ++++++++++++++++++++++
- .../0003-txring.h-fix-build-with-musl.patch        | 41 ++++++++++++
- package/tcpreplay/Config.in                        |  5 ++
- package/tcpreplay/tcpreplay.hash                   |  4 +-
- package/tcpreplay/tcpreplay.mk                     | 33 ++++++----
- 6 files changed, 187 insertions(+), 16 deletions(-)
+ package/libheif/libheif.hash | 4 ++--
+ package/libheif/libheif.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/tcpreplay/0001-cmake-fix-tcpdump-detection-when-cross-compiling.patch b/package/tcpreplay/0001-cmake-fix-tcpdump-detection-when-cross-compiling.patch
-new file mode 100644
-index 0000000000..efcc291636
---- /dev/null
-+++ b/package/tcpreplay/0001-cmake-fix-tcpdump-detection-when-cross-compiling.patch
-@@ -0,0 +1,43 @@
-+From d7e8593b515e53f6f6b7e2df496955568146ecdd Mon Sep 17 00:00:00 2001
-+From: Yegor Yefremov <yegorslists@googlemail.com>
-+Date: Tue, 29 Sep 2026 11:21:30 +0200
-+Subject: [PATCH] cmake: fix tcpdump detection when cross compiling
-+
-+WITH_TCPDUMP names the tcpdump binary on the machine tcpreplay will run
-+on. When cross compiling, that path doesn't exist on the build machine,
-+so the EXISTS check always fails and --verbose gets disabled.
-+
-+Trust WITH_TCPDUMP when cross compiling, and accept WITH_TCPDUMP=no
-+(like WITH_LIBDNET=no) to skip the host find_program() lookup, which
-+would otherwise pick up the build machine's tcpdump.
-+
-+Upstream: https://github.com/appneta/tcpreplay/pull/1152
-+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-+Assisted-by: Claude:claude-opus-5-5
-+---
-+ cmake/OptionalDeps.cmake | 8 ++++++--
-+ 1 file changed, 6 insertions(+), 2 deletions(-)
-+
-+diff --git a/cmake/OptionalDeps.cmake b/cmake/OptionalDeps.cmake
-+index 6c73a20e..5239630a 100644
-+--- a/cmake/OptionalDeps.cmake
-++++ b/cmake/OptionalDeps.cmake
-+@@ -177,12 +177,16 @@ endif()
-+ # tcpdump binary (--with-tcpdump → WITH_TCPDUMP)
-+ # ---------------------------------------------------------------------------
-+ set(HAVE_TCPDUMP "")
-+-if(WITH_TCPDUMP)
-++if(WITH_TCPDUMP STREQUAL "no")
-++    set(TCPDUMP_PATH "")
-++elseif(WITH_TCPDUMP)
-+     set(TCPDUMP_PATH ${WITH_TCPDUMP})
-+ else()
-+     find_program(TCPDUMP_PATH tcpdump PATHS /usr/sbin /sbin /usr/local/sbin)
-+ endif()
-+-if(TCPDUMP_PATH AND EXISTS ${TCPDUMP_PATH})
-++# When cross compiling, WITH_TCPDUMP is a path on the target, which can't
-++# be checked for existence on the build machine.
-++if(TCPDUMP_PATH AND (EXISTS "${TCPDUMP_PATH}" OR (CMAKE_CROSSCOMPILING AND WITH_TCPDUMP)))
-+     set(HAVE_TCPDUMP 1)
-+     message(STATUS "Using tcpdump in ${TCPDUMP_PATH}")
-+ else()
-diff --git a/package/tcpreplay/0002-build-look-for-fts_read-in-libfts.patch b/package/tcpreplay/0002-build-look-for-fts_read-in-libfts.patch
-new file mode 100644
-index 0000000000..ce5344316e
---- /dev/null
-+++ b/package/tcpreplay/0002-build-look-for-fts_read-in-libfts.patch
-@@ -0,0 +1,77 @@
-+From a829c8a247cfb688f6c2103d750f72a1f0fc348a Mon Sep 17 00:00:00 2001
-+From: Yegor Yefremov <yegorslists@googlemail.com>
-+Date: Tue, 29 Sep 2026 11:33:40 +0200
-+Subject: [PATCH] build: look for fts_read() in libfts
-+
-+On musl and uClibc, fts_*() is not part of the C library but provided
-+by the standalone musl-fts library (libfts). Look for it there when
-+it's neither in libc nor in libbsd, in both configure.ac and CMake.
-+
-+Without this, cross builds against these C libraries have to pass
-+-lfts by hand, and with CMake that doesn't work for static builds, as
-+CMAKE_EXE_LINKER_FLAGS ends up before the objects on the link line:
-+
-+  tcpreplay.c:(.text.startup+0x1e8): undefined reference to `fts_open'
-+
-+Upstream: https://github.com/appneta/tcpreplay/pull/1153
-+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-+Assisted-by: Claude:claude-opus-5-5
-+---
-+ cmake/ConfigureChecks.cmake | 7 ++++++-
-+ cmake/config.h.cmake        | 3 +++
-+ configure.ac                | 5 +++--
-+ 3 files changed, 12 insertions(+), 3 deletions(-)
-+
-+diff --git a/cmake/ConfigureChecks.cmake b/cmake/ConfigureChecks.cmake
-+index 5b829a5d..b8c81aeb 100644
-+--- a/cmake/ConfigureChecks.cmake
-++++ b/cmake/ConfigureChecks.cmake
-+@@ -365,12 +365,17 @@ if(NOT HAVE_INET_ADDR)
-+     message(FATAL_ERROR "We need inet_addr.  See bug 26")
-+ endif()
-+ 
-+-# Haiku: fts_*() lives in libbsd
-++# Haiku: fts_*() lives in libbsd; musl and uClibc: in the standalone libfts
-+ check_function_exists(fts_read HAVE_FTS_READ)
-+ if(NOT HAVE_FTS_READ)
-+     check_library_exists(bsd fts_read "" HAVE_LIBBSD)
-+     if(HAVE_LIBBSD)
-+         list(APPEND TCPR_SYSTEM_LIBS bsd)
-++    else()
-++        check_library_exists(fts fts_read "" HAVE_LIBFTS)
-++        if(HAVE_LIBFTS)
-++            list(APPEND TCPR_SYSTEM_LIBS fts)
-++        endif()
-+     endif()
-+ endif()
-+ 
-+diff --git a/cmake/config.h.cmake b/cmake/config.h.cmake
-+index 15531ca3..12084d28 100644
-+--- a/cmake/config.h.cmake
-++++ b/cmake/config.h.cmake
-+@@ -232,6 +232,9 @@
-+ /* Do we have libdnet? */
-+ #cmakedefine HAVE_LIBDNET @HAVE_LIBDNET@
-+ 
-++/* Define to 1 if you have the 'fts' library (-lfts). */
-++#cmakedefine HAVE_LIBFTS @HAVE_LIBFTS@
-++
-+ /* Define to 1 if you have the 'gen' library (-lgen). */
-+ #cmakedefine HAVE_LIBGEN @HAVE_LIBGEN@
-+ 
-+diff --git a/configure.ac b/configure.ac
-+index 20e4f465..00fd13bd 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -718,8 +718,9 @@ if test x$inet_addr = xno ; then
-+     AC_MSG_ERROR([We need inet_addr.  See bug 26])
-+ fi
-+ 
-+-dnl On Haiku fts_*() functions are in libbsd.
-+-AC_CHECK_FUNC(fts_read,,[AC_CHECK_LIB(bsd, fts_read)])
-++dnl On Haiku fts_*() functions are in libbsd, on musl and uClibc in the
-++dnl standalone libfts (musl-fts).
-++AC_CHECK_FUNC(fts_read,,[AC_CHECK_LIB(bsd, fts_read,,[AC_CHECK_LIB(fts, fts_read)])])
-+ 
-+ dnl #####################################################
-+ dnl Checks for tuntap device support
-diff --git a/package/tcpreplay/0003-txring.h-fix-build-with-musl.patch b/package/tcpreplay/0003-txring.h-fix-build-with-musl.patch
-new file mode 100644
-index 0000000000..6bbe2314e2
---- /dev/null
-+++ b/package/tcpreplay/0003-txring.h-fix-build-with-musl.patch
-@@ -0,0 +1,41 @@
-+From da763d37b2b275ef977e5a9bf4424bbe1fb2b22d Mon Sep 17 00:00:00 2001
-+From: Yegor Yefremov <yegorslists@googlemail.com>
-+Date: Tue, 29 Sep 2026 11:33:40 +0200
-+Subject: [PATCH] txring.h: fix build with musl
-+
-+Commit 78076385 ("txring: fix __GLIBC_MINOR typo and include the header
-+that defines the TX_RING API (#1043)") made the libc check work, so
-+non-glibc C libraries now include <linux/if_ether.h>. On musl, that
-+clashes with <netinet/if_ether.h>, included later via sendpacket.h:
-+
-+  netinet/if_ether.h:122:1: error: redefinition of struct or union 'struct ethhdr'
-+
-+<net/ethernet.h> is available on all Linux C libraries, so use it
-+unconditionally.
-+
-+Upstream: https://github.com/appneta/tcpreplay/pull/1154
-+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-+Assisted-by: Claude:claude-opus-5-5
-+---
-+ src/common/txring.h | 6 ------
-+ 1 file changed, 6 deletions(-)
-+
-+diff --git a/src/common/txring.h b/src/common/txring.h
-+index 59dabd1a..0c1e4bfd 100644
-+--- a/src/common/txring.h
-++++ b/src/common/txring.h
-+@@ -38,14 +38,8 @@
-+ 
-+ #ifdef HAVE_TX_RING
-+ 
-+-#if __GLIBC__ >= 2 && __GLIBC_MINOR__ >= 1
-+ #include <net/ethernet.h> /* the L2 protocols */
-+ #include <linux/if_packet.h>
-+-#else
-+-#include <asm/types.h>
-+-#include <linux/if_ether.h> /* The L2 protocols */
-+-#include <linux/if_packet.h>
-+-#endif
-+ #include <pthread.h>
-+ 
-+ struct txring_s {
-diff --git a/package/tcpreplay/Config.in b/package/tcpreplay/Config.in
-index 9e5509114e..dc3645dce6 100644
---- a/package/tcpreplay/Config.in
-+++ b/package/tcpreplay/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_TCPREPLAY
- 	bool "tcpreplay"
- 	depends on BR2_USE_MMU # fork()
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_LIBPCAP
- 	select BR2_PACKAGE_MUSL_FTS if !BR2_TOOLCHAIN_USES_GLIBC
- 	help
-@@ -8,3 +9,7 @@ config BR2_PACKAGE_TCPREPLAY
- 	  saved with tcpdump or other tools which write pcap(3) files.
- 
- 	  http://tcpreplay.appneta.com/
-+
-+comment "tcpreplay needs a toolchain w/ threads"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/tcpreplay/tcpreplay.hash b/package/tcpreplay/tcpreplay.hash
-index 4307fa60fc..023830f9a5 100644
---- a/package/tcpreplay/tcpreplay.hash
-+++ b/package/tcpreplay/tcpreplay.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://github.com/appneta/tcpreplay/releases/download/v4.5.2/tcpreplay-4.5.2.tar.xz.asc
-+# https://github.com/appneta/tcpreplay/releases/download/v4.6.1/tcpreplay-4.6.1.tar.xz.asc
- # using key 84E4FA215C934A7D97DC76D5E9E2149793BDE17E
--sha256  2df15bc6d49f96a77617d137049f998193bbae95c1a31b04ca02856a24cbf384  tcpreplay-4.5.2.tar.xz
-+sha256  14b96e3565d6e66e813000d0d510afeaecb871f2b533182c391c6ccf948c3e21  tcpreplay-4.6.1.tar.xz
- sha256  07cf5e92d475287a7d1663b33097f40cae5adf03ed8920fcd4374e3dfb48c8ad  docs/LICENSE
-diff --git a/package/tcpreplay/tcpreplay.mk b/package/tcpreplay/tcpreplay.mk
-index 32bcf8d278..4a50e88aaf 100644
---- a/package/tcpreplay/tcpreplay.mk
-+++ b/package/tcpreplay/tcpreplay.mk
-@@ -4,40 +4,45 @@
+diff --git a/package/libheif/libheif.hash b/package/libheif/libheif.hash
+index 78f59f6b67..30265f4aab 100644
+--- a/package/libheif/libheif.hash
++++ b/package/libheif/libheif.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/strukturag/libheif/releases/tag/v1.23.4
+-sha256  d0c02b4b0e978f34a1974b6f3eea7975a537bf7a9195ffeea38e7242ff316fdd  libheif-1.23.4.tar.gz
++# From https://github.com/strukturag/libheif/releases/tag/v1.23.5
++sha256  fd9036064c4432f0550d15072ddf34956a248279ee9aeaff0fba3fa0f77d8f1a  libheif-1.23.5.tar.gz
+ # Locally computed:
+ sha256  fa81ce652315b013359d6e8e4744335f31a50c7c192907176d3632f78a3b4596  COPYING
+diff --git a/package/libheif/libheif.mk b/package/libheif/libheif.mk
+index 3428646016..cd171b9637 100644
+--- a/package/libheif/libheif.mk
++++ b/package/libheif/libheif.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TCPREPLAY_VERSION = 4.5.2
-+TCPREPLAY_VERSION = 4.6.1
- TCPREPLAY_SITE = https://github.com/appneta/tcpreplay/releases/download/v$(TCPREPLAY_VERSION)
- TCPREPLAY_SOURCE = tcpreplay-$(TCPREPLAY_VERSION).tar.xz
- TCPREPLAY_LICENSE = GPL-3.0
- TCPREPLAY_LICENSE_FILES = docs/LICENSE
- TCPREPLAY_CPE_ID_VENDOR = broadcom
--TCPREPLAY_CONF_ENV = \
--	ac_cv_path_ac_pt_PCAP_CONFIG="$(STAGING_DIR)/usr/bin/pcap-config" \
--	LIBS="$(TCPREPLAY_LIBS)"
--TCPREPLAY_CONF_OPTS = --with-libpcap=$(STAGING_DIR)/usr \
--	--enable-pcapconfig
- TCPREPLAY_DEPENDENCIES = libpcap
-+# The option parsers, tcpedit_stub.h and man pages are pre-generated in
-+# the release tarball, so don't use autogen, python3 or asciidoctor from
-+# the host.
-+TCPREPLAY_CONF_OPTS = \
-+	-DENABLE_PCAPCONFIG=ON \
-+	-DPCAP_CONFIG_EXECUTABLE=$(STAGING_DIR)/usr/bin/pcap-config \
-+	-DAUTOGEN_EXECUTABLE=OFF \
-+	-DPYTHON3_EXECUTABLE=OFF \
-+	-DASCIIDOCTOR_EXECUTABLE=OFF \
-+	-DPCAPNAV_CONFIG_EXECUTABLE=OFF
- 
- ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),)
- TCPREPLAY_DEPENDENCIES += musl-fts
--TCPREPLAY_LIBS += -lfts
- endif
- 
- ifeq ($(BR2_STATIC_LIBS),y)
--TCPREPLAY_CONF_OPTS += --enable-dynamic-link=no
--TCPREPLAY_LIBS += `$(STAGING_DIR)/usr/bin/pcap-config --static --libs`
-+TCPREPLAY_CONF_OPTS += -DENABLE_STATIC_LINK=ON
-+else
-+TCPREPLAY_CONF_OPTS += -DENABLE_STATIC_LINK=OFF
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBDNET),y)
- TCPREPLAY_DEPENDENCIES += libdnet
--TCPREPLAY_CONF_OPTS += --with-libdnet=$(STAGING_DIR)/usr
-+TCPREPLAY_CONF_OPTS += -DWITH_LIBDNET=$(STAGING_DIR)/usr
- else
--TCPREPLAY_CONF_OPTS += --without-libdnet
-+TCPREPLAY_CONF_OPTS += -DWITH_LIBDNET=no
- endif
- 
- ifeq ($(BR2_PACKAGE_TCPDUMP),y)
--TCPREPLAY_CONF_ENV += ac_cv_path_tcpdump_path=/usr/sbin/tcpdump
-+TCPREPLAY_CONF_OPTS += -DWITH_TCPDUMP=/usr/sbin/tcpdump
- else
--TCPREPLAY_CONF_ENV += ac_cv_path_tcpdump_path=no
-+TCPREPLAY_CONF_OPTS += -DWITH_TCPDUMP=no
- endif
- 
--$(eval $(autotools-package))
-+$(eval $(cmake-package))
+-LIBHEIF_VERSION = 1.23.4
++LIBHEIF_VERSION = 1.23.5
+ LIBHEIF_SITE = https://github.com/strukturag/libheif/releases/download/v$(LIBHEIF_VERSION)
+ LIBHEIF_LICENSE = LGPL-3.0+
+ LIBHEIF_LICENSE_FILES = COPYING
 
---===============6894948326763880152==
+--===============4509286244199523874==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -458,4 +182,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============6894948326763880152==--
+--===============4509286244199523874==--
