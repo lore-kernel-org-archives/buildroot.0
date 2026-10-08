@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5DB23CA9EBE
-	for <buildroot@archiver.kernel.org>; Sat, 10 Oct 2026 09:27:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D8D7CA9EBE
+	for <buildroot@archiver.kernel.org>; Sat, 10 Oct 2026 09:27:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 20FA6608B6;
-	Sat, 10 Oct 2026 09:27:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C8A6260A57;
+	Sat, 10 Oct 2026 09:27:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5PWPdrwCc9Zm; Sat, 10 Oct 2026 09:27:22 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 5429860633
+ id sHZCw5o5rHqL; Sat, 10 Oct 2026 09:27:26 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org CE98F607B2
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791624442;
-	b=L5MDvMEjguHbO8czSh5k4VgOTGj+Z87x7/WOSHrL9IKajCRCBzN9HJN1gA/H/Fyyxw4m
-	 YMI/B/dh8HvPkDQKrNUbQ20mzdKUBGiNhKLI6MFnMshGigqxdZDDEEU8lV+31VWHblNx+
-	 sF909WM3YEAqu2pM+yVfQ7xePTcL8SB1VIQzeyMsz7VQhdDyO2ThQJLbZoPfBIgdAVEmt
-	 zp1T6rW3bzBg7z6MWGubL/l5eYYLLCiIx0Uo90SnZJO5qooEZkyZPHZwrwQF53vo/MNJW
-	 I3BPuqEjMY/ZmUBViOOMrnixvCvaFZXLFiKbNLHHCVTAy3FcEXKx7CYBFiIdUCAljQg==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791624445;
+	b=XNUazSh18ygVEDwqP8m8sVNWw0OrpxosoAyHBkCQHz2bcLTd5hiOcDuD7RG0A7ZZHKkg
+	 FfT1YLH19+gWDCxXJ1Lf3xCRwjrqAwrohNWw8V6ZVwf2aUIJ2M0zGon2Y+CyF4Hdc9sKk
+	 XYAoRvjbDvF7HlfzcDr0LE+V536CiJcodXDYQawo/nEcSEBxPkFN37ACbUGe2JWL+6IUP
+	 TJ8viJrKrvnjP+UXQsPjmNaNVUBRYrsmsSbTUUxOkv2/r4I81kQNhQ/+bAmqY9TaCQAiN
+	 F1B99KGcVTZ9NF/v1K6pPcYIS11vvw0GupsZ8qmS3ZT7vlGKvIuJPFLsqYy/YGIG1IA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791624442;
+	c=relaxed/relaxed; t=1791624445;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,76 +30,76 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
 	 Sender;
-	bh=rtGNnqvgqX5gFYLU5oZvuGZDGiAHFnh5hYbqhn8jUMI=;
-	b=T13aZiQLyNiT09FmWIK5e0zct6NIK2kuM0jzKqpDWYfCVXHyXAbl0Yxo7EeNeWEuGv/1
-	 ge/Y/woPxHOLlfF/C+xeymr11i/0PuxMfgHDpOe8BIcSP5IAh4OSF9jQYOgjLn4pGOqLc
-	 Bi01DtBJIhB8wbafE3azVUceyL/vyR6hxK20Uddtq4hiIpgiVBwP3/zTRFOuT/L9yqJ1V
-	 ySXM72/Cl2NgttK9EeEoDNdKWffQnKoYSNOjJQ4FaGP8uA6eM5naZF7tQt0bVDBIJuTL8
-	 uJztgFhNpdmZceVbKIqcseI3flYpLu0K6b/ZRiDE7u6V5dBY8ICuePYT0si+2ktOdUg==
+	bh=dHMCy/npfSRj2ZM9u/OyBDMEU7oAEqIvSKK275kkk2M=;
+	b=OSc8xl+uUkxiTReHQ0IDUh9MVvBg16LfsLvjrUduqIu90wSroDeOHlIuQPbmPCHuWvcU
+	 22x4LaMdQxB1c9ECNJovF4T0G/YigLkepI998XNVsj6vBpXEzKLc9I/NVeizHA8Q9UFJk
+	 nU0NRCvjhy22ChP8ogsOD6WxJvT5WAD5fE5UOZnlSDy171KNtpLxtGJ71bU8ScH06PYHt
+	 BwEYIwHD3nvSwGGfF45W6+z2k2YCLDAbKxxdWv4geW7lGvljPYgG2b2MlkGmLrXkowAbv
+	 jnBSPVhQwD2gXtlQ8VhrwOFs8QbYj6zY8AN9QLQN/eOocTDOIsyfyzNjVk5MB5OpjCw==
 ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791624442;
-	bh=rtGNnqvgqX5gFYLU5oZvuGZDGiAHFnh5hYbqhn8jUMI=;
+	s=default; t=1791624445;
+	bh=dHMCy/npfSRj2ZM9u/OyBDMEU7oAEqIvSKK275kkk2M=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=RcNf8E+jECnCoBu1cSJ9sxQXDjFUFSVilU5Pk7R46cdtlOfJ6BUURYQLE7aNMpGE6
-	 VqBxy05jxrecylY/WTQDE27Ik9VYkE1F0Tdzfcu5BnecX9Uk45zUGKToB0uXyhqmJW
-	 N3AOl/jVuNohCdUuBQw3M6kY8Sqfu+ckHWMMFqm/cKz7Xu6rxoFYuO1g15GV+r0w1/
-	 RhLXcjMjDLsez3Wvtg7fkz4kfNuPpQ51PgLgbMCnEfhbdualosHjKg4O0CcE/DNj3m
-	 qZrhCVyGshcuzhS1thRfbQ5QgueObY5JG5+iYNM5ZjjnU47cBzNPjONtJWSK+l8QEs
-	 WoW0xDgZRYZUg==
+	b=QZmO8f/7Rv2AQN20Uu/ItKqiFPer0yf22JTSufa6LpiYV/FFyzWwzwri4c2nTM91g
+	 1OMv/IF3GTimcspfrND4MT4GTcS9lhO3lfw8yhfRoJr3tPEn0WtgyjRbCDPAsa+Kym
+	 YrfTIwg3xcM/aAz2nJO8uDenPAk+6s2rmtjd4AW7EJKJSX/0poQAlu8oRoZqBfvd+6
+	 vzi+quxM2VUvahWNOnkdfgWYz33tzSQ8Hwo6enf4PaIYGkDWU87u4Pinb/oOCtcLE1
+	 V2s5gxJq8TM4G3UwV32Kalhecg9uG1vwRSQu4NroX5fQDYDRrP3LVPNk/UEJo+6sQJ
+	 9vc0hmGzQesMg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5429860633;
-	Sat, 10 Oct 2026 09:27:22 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id A0A6B9D1
+	by smtp3.osuosl.org (Postfix) with ESMTP id CE98F607B2;
+	Sat, 10 Oct 2026 09:27:25 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id EF8D49D1
  for <buildroot@buildroot.org>; Sat, 10 Oct 2026 09:27:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9150081172
+ by smtp1.osuosl.org (Postfix) with ESMTP id D5B4481186
  for <buildroot@buildroot.org>; Sat, 10 Oct 2026 09:27:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vy3pH-YjEL0p for <buildroot@buildroot.org>;
+ id XoaTJSS2pw1Y for <buildroot@buildroot.org>;
  Sat, 10 Oct 2026 09:27:21 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 00BB68111D
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 2A6D481123
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791624441;
- b=ZpWYeujmYjWVTk8UTqN3+wB7ReDLUhuBfktloqF6mxTc7glF08/KBvizx4E+L0Lk95ST
- C6KVGnkOD80eiOwVTT7tahbB8Mb2OvqyE9wPjHQB13CvgrM+CbwIMJCFJFMrsx0ogsSpB
- ISV5j8RHrI2sEl9tX2aNy9h6PTGw1mCe2wABBteBFK/wXCep5u7/qDPGcM12xIbonTUae
- 7yCty5yLY1CsnXC/+XwsSYdZJI4CkX7ntuUn/G0S9G/CSIDyYQjEZue8gKaLqh9rZxKHm
- BGsfW362BsKCnOIHDr4soyS96ZyZbocMNZrKkCz5G04ODWOe6VUomjKPimnRmx6+AYg==
+ b=jrXX3HjP6vr/5oKn/2WZT8gJjGIrsJugt2EROZOQm3K8l3JFblBGTXZwL0IGqGGe1N/D
+ hjqKxvEJVn/tRuP6apOah9D6HwKgm+QvYeMUU91g+1SyQ9KsHZrh/pDWcGQ54UhxnlsGo
+ wAVxzI/4CMZVtS9tAd1idjbcw0Tzmz7oksGCzAlb/heH31CWg0V6yxTSzFvJI5ukqCS7b
+ VdzPVQev0HAqmTQTvwrcswuGJP19n5z2aLrnmBPVL6A/8agJgKxBDU8MGO+34WDsnqcQU
+ zHYkpXXQ/GWJwIVqnA8kpCZGRKJC/SHM65E2cPQ+avC312JJY1FE/YV9IwbSLFeMp7Q==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1791624441;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=BWEK7Ji7VRbpFive4ZsVxQ90Pocdl9KogBEWb5yPj0g=;
- b=LpDeowHdS/C8AIf1wXKOP2c4kWF0VoX5xnLvHj5CD5dki265cSt9EIHSlLUojz3YGkXJ
- G3T6j/V5f3Ogd+3oH7h/NJ0TJARmbs+d7lg5s4nbscFq5Mxmxm0Pmfr12YNcPKZRzw+4Y
- HbW8JSsMW1beyhkDKxbzNZlv9G1NmSTZxiNsnVV2LUcu1QGilsVwGqHbBQMb1/SJKT6ho
- niF5Y/fXNhKpvlYgCmL+6XY40mAoebZB3HncVmefqKFFY87GSSfbYK1ccjd/K0QOVjRM7
- BGHn0bCXGDonU9ymagh3ISmoRJtkXM6IQMUl2mLDFn0Z13Z0VIAg4dWE9W2i46PwqyQ==
+ bh=KV90JXVoP6eLmDfdn9pMntptFNQkmmGib7BF/+Gb6ec=;
+ b=mjfg7KohpVeD+VA2t1y2QGontPYWaYinl276rzmG+C140t7KcHDMGw+rlfe/s/NMLUxE
+ yQs+6UDBxtFjsiDvhWeMQ0kGKa7ooXk/rvCrfAfXZhOcOIhWMCCdVWb2GLPPCbNXvyPuZ
+ cBuZCCDlykFHiYVteXD2tRPhN1+Me3ggHcEYLByincLoopNyEJdc7Z+vef9LeicRWrjjU
+ ySTOtcVgw4SB6dVeaEO2Liqnvx4bk2Ufv/YmhlfhQc0ln+Iy+Q7uWmaxt/PoQRIs14AST
+ +mP8gp9LMavWT36QVLets+DdSf48sVAhyJApfVkbyUfnxVFQoA72uNYVjKH1lHab2og==
 ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 00BB68111D
- for <buildroot@buildroot.org>; Sat, 10 Oct 2026 09:27:20 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2A6D481123
+ for <buildroot@buildroot.org>; Sat, 10 Oct 2026 09:27:21 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CC9738F0B1; Sat, 10 Oct 2026 09:26:02 +0000 (UTC)
+ id 053BD8F0B1; Sat, 10 Oct 2026 09:26:03 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 1 Oct 2026 18:00:49 +0200
+Date: Thu, 8 Oct 2026 11:28:20 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 393f0196a3d356dad8e736e7db09cf066fb044e9
-X-Git-Newrev: d1362323bdd6bddf871be5f3b7943983127fbd1d
+X-Git-Oldrev: b658ef139f96368f678ad4f3f85fcdfc1ea33051
+X-Git-Newrev: 1f979294809978baa39af14050adf19213fa97b2
 X-Patchwork-Hint: ignore
-Message-Id: <20261010092602.CC9738F0B1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] CHANGES: mention the
- wireshark bump for 2025.02.19
+Message-Id: <20261010092603.053BD8F0B1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/wireshark: fix
+ support for lua
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -115,37 +115,49 @@ From: =?utf-8?b?UmFwaGHvv73vv71sIE3vv73vv71sb3R0ZSB2aWEgYnVpbGRyb290?=
  <buildroot@buildroot.org>
 Reply-To: Raphaël Mélotte <raphael.melotte@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7996840092144889472=="
+Content-Type: multipart/mixed; boundary="===============4745081570210521168=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7996840092144889472==
+--===============4745081570210521168==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d1362323bdd6bddf871be5f3b7943983127fbd1d
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/1f979294809978baa39af14050adf19213fa97b2
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
+Since version 4.4.0 of wireshark, support for Lua 5.3 and 5.4 has been
+added, and support for Lua 5.1 and 5.2 has been removed. See
+https://www.wireshark.org/docs/relnotes/wireshark-4.4.0.html
+
+This fixes an infinite loop during the build, as for some reason when
+Lua 5.1 is available, the CMake check for Lua 5.3 or 5.4 loops
+indefinitely, with cmake taking up 100% of one CPU core.
+
+Fixes: 49fa20e6678ee32e4b26979f5cb4d149876fbedd ("package/wireshark: bump to latest upstream stable v4.4.9")
+Signed-off-by: Francois Perrad <francois.perrad.86@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit c4c6ad81bfa4dd5b12c230c450dbf798c5a1542d)
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
- CHANGES | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/wireshark/wireshark.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index 3fa203de0e..71b96f6377 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,9 @@
-+2025.02.19, unreleased
-+
-+	Changes with potentially large impact:
-+
-+	- Wireshark was bumped from 4.2 to 4.4.
-+
- 2025.02.18, released September 10, 2026
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index a67b915b5b..c394f85beb 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
+@@ -109,8 +109,7 @@ else
+ WIRESHARK_CONF_OPTS += -DENABLE_LIBXML2=OFF
+ endif
  
- 	Important / security related fixes:
+-# no support for lua53 yet
+-ifeq ($(BR2_PACKAGE_LUA_5_1),y)
++ifeq ($(BR2_PACKAGE_LUA_5_3)$(BR2_PACKAGE_LUA_5_4),y)
+ WIRESHARK_CONF_OPTS += -DENABLE_LUA=ON
+ WIRESHARK_DEPENDENCIES += lua
+ else
 
---===============7996840092144889472==
+--===============4745081570210521168==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -156,4 +168,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============7996840092144889472==--
+--===============4745081570210521168==--
