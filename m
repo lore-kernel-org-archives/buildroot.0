@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8DC45CA9EBE
-	for <buildroot@archiver.kernel.org>; Sat, 10 Oct 2026 09:22:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D26DECA6017
+	for <buildroot@archiver.kernel.org>; Sat, 10 Oct 2026 09:22:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6338E6067C;
-	Sat, 10 Oct 2026 09:22:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9EA9A40966;
+	Sat, 10 Oct 2026 09:22:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PJGgdqbPx-YE; Sat, 10 Oct 2026 09:21:58 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org BFE1E608DE
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791624118;
-	b=KyLfLaCegyMOQEy7Fh7bmXqxOysEiz08Aqrtkq6xPKJ96d6PPOlXaJHNEIIfMKToCl7O
-	 mVkG1j9bpGxDwN5hprOyPtYmz6fAOI6pIqGxmaHnQdkGPaH07udDJi1xu6MAYAjbDfE7w
-	 wTOvzw6q5cpKlSX5HWupr+duZXwMwnYWpUS/OpM1IoIAe/XxFrswngX8zno+KwGl5fAg1
-	 ObYyf6xaQ/uZeExzEmA+f08LWR3Ew66roR4K16BlIgRIJOZc4shhaKt5yhPT4uymVXSb+
-	 i8M4E3xB1bUafAO1J+Dppf8mf/fqiyhBD/+cY71+TEPhB2krHyrhjpoybNXO4eUh01A==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Lfw3TMGlq_RL; Sat, 10 Oct 2026 09:22:01 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org BE2EB40959
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791624120;
+	b=DqzxjxT4xuzFFJ3y0sjq9kfEgS+pDi9QPBCKYmZHHXpplGDGW8O7ywcPayTqxK5WhQoF
+	 GkZpdkCfUOcST9R+st1A41Ii2YHQtE4DIbymfzgprfl/D27Iqg5D8zekmZ4/Mc5X9ewGX
+	 4G7M3cqyykHuGVwzJzltbBk903mpu6qK055HdNE99kbDEh2Nla6sIPLwIc5zmp8TGTG61
+	 G3/rk6ju0DITsFLzmYKRAw8XUGgODAl0ht/KwbGWWOXTSmfXw+h0Z5d4lLoWXkiUvdcQY
+	 m8bOeLdx0Kvcfi+7fiNoUjZ7woZAkxSNEYueGqsCnDjNztu1BjfTODsb64knKpN3cvA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791624118;
+	c=relaxed/relaxed; t=1791624120;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,76 +30,76 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
 	 Sender;
-	bh=QgdO66eFxIkYdLJA2fT7gqYVgWyB2GRCWpFowbiafm0=;
-	b=BWlxLx7eBxGAa2Hj+6FMYfzADPaHVerJrgWrGsvLSUW7j3+f5QyepCuy/r8zZfa+GLAz
-	 ZMg8JFScwP52pyNmJilSyWaqxo6x9ai0E2xjP5i70jZwd+qRX/h3nPAGy2v8T3eSz3Hd1
-	 7y/VFwa+GSUgw+cHXnI29H3pBYpxzoWDfZSnOb5RnNhRkOiiTGREgl/a/FBJAseJ3VX+t
-	 /EjQfWcwxX/I0xEIp+5kPYIhGa/Ec+wFtuRQfjy4RHQFk5CkpmR6a+/Cq9sIpBfFxpBWj
-	 62rSg/nGksIyM3pBne8iRDQaOTVMjAgjy+1paxgDDoNaVkYHFwK2ROvdBKJodbN+Zkg==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
+	bh=vmv7kAYtUE2Q7CZ6R5wXO71Yg3AZ4WiQ6zfOVC0uRYU=;
+	b=UPiY02i8fEbYSgq+5rscsC1lS5/Wd4JlYmG76dkO60DswmIThPQPFs/YmuNgGYGrLO73
+	 5zMBe7m1VABk1HyHaWbpAzKSordBfW4MSZdfh2ZguVk2MgU3b80WUNjsKOznvjjnTHNnu
+	 OJnLIknpkXMBLBZpog6FJYFvilB4JmCJFJCaYY1kNUaTyKYMfixhBQOScoEWUEnA2EAwx
+	 8RwQ5jc2qiWdrjSCsTkGEAEhhxGiv2Ha6RNA/1H0rNIyHlOpPPeE1+jeuAAU00srJdCsg
+	 gRN9E29vXB8a4a8VtA41zcd7OCW6X4LUbpiYFl+9pr6n6IBe/DB+aomzq7aOA0pkj8w==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791624118;
-	bh=QgdO66eFxIkYdLJA2fT7gqYVgWyB2GRCWpFowbiafm0=;
+	s=default; t=1791624120;
+	bh=vmv7kAYtUE2Q7CZ6R5wXO71Yg3AZ4WiQ6zfOVC0uRYU=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=fnjfrq1dInX5FMACxft6Qhdddv3dGrjXhqCKrUoci4ynsVfGx+Ytbm41mQfSGeNcP
-	 GvW7Yqm+ew1KYYgtvqTQBdtmsdG2w4tilFgwdOi357LDBYBe2vY+ewr7St1u7g7OJP
-	 G+nBcnrqCrpLpBJYTl6GrojxsgX82HFscBtVcFs9HIBr8OmfQl0VNUK3kGH3Kv06Iv
-	 T4bQACA45rVqRN7m3Uw0UHl4iq5DJtV/XX6VudGzGJWMGtxvq85zzcYWwNq8wbGXrF
-	 oMUEUIoTQq9GkY0YV7VGsCuBiXOMOPo9y4wXD0EDRyDGZmLw7nkxjBghLZX2e+Gvk3
-	 DYlZeeau76GEw==
+	b=ciy3jHdxfPs+qaKGM3sbu+3SHvWobNVGe2c2UnxYcD4yqt69HWR+Z4LKH1W1+CJzt
+	 oZEvrz16s2pQIcwwZU8PybcgGRYPX1YK8RyolRvmyrIoYmTxOb2UQor2RRFUiBMp+f
+	 IIPM1bVq9EZW8rJHMaIYcKwJYQ/J3TmQa5pqdPR092M4CFCxJo9BxY3rohDNmItITE
+	 TRzgHu07FpOdv8VPmsYzwDk0e/q35zjUb4uv3Sb6GjqHUljOPp2g9pCq6uxJ6VYwyc
+	 eZvWY4P+KTPqSFfe/fUc36P3ek/qllFuzL8kZAmqy1BfeCZAIiHZLhBO3dx9D71rmi
+	 jYgnH8eWy85TA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BFE1E608DE;
-	Sat, 10 Oct 2026 09:21:58 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 6402FA64
+	by smtp4.osuosl.org (Postfix) with ESMTP id BE2EB40959;
+	Sat, 10 Oct 2026 09:22:00 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 67E04356
  for <buildroot@buildroot.org>; Sat, 10 Oct 2026 09:21:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 52D15608B4
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4A6EE81316
  for <buildroot@buildroot.org>; Sat, 10 Oct 2026 09:21:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PsbDHk--9y5h for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VMTbZR5hc1H0 for <buildroot@buildroot.org>;
  Sat, 10 Oct 2026 09:21:27 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 697746066C
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 409E0812D1
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791624087;
- b=nrIAdqWWuFqqxirMBV6ujl7thviXY2lKBHY53MU0rh+OUCEztMyTkoxGHZ5NqFZLpvRM
- +kiDKoLak5iRxPbpuJtWUU7ECd7UDK0j8N37hpzVMWWfkSvedJKJkw06PFmrwkpTwkMJ6
- H8oQXyaijFvu9nL/TFIcCFXImV/tDJ0nM1KzU9BWN8ahBhOvYe+QqQ06yt8ex+cBt75Yh
- 4xodQtXWEqNAH92wZYNkjmG3rp7RCaiDwfPWrSswnyZ+t0CGk5h2sM0lZeCvh7LKXlxF0
- ht1qWve70jjBl6fSpFL7RYD4EIYpdpCaLjSQ09nXxhJ2qPafWNaaa4KdmQG40zxXNxA==
+ b=jIO0ECr/BxJkY+bH5YUB9oiBhbLbeufYozqDnj4QkkArgQSed/PVxXdCDPO4z0hAba7Q
+ zbQIJebVFgi4d7DS0i/CKHH8ccTtvnM5xMIR/+8ARiUAr60LfIKdQXawSEl/WROuJQuF2
+ THdxVycdKRDqEbMvY5I/NMsVa5dJJwldbpQBDGFKcMU6+AZgdSxm0B1ycXRzCCk95Xln3
+ cvA4ueXtnYHRi68rbeu9gVq2og/Nsq8nCAXGcgg1Ehe3QRtp3om7dhaaywJDjMmT5GM4h
+ 1+QQaSr01vTVJil2xAdsYtwFdqiyOUjy7w6mAl1VBhx1ijHZ8QX/z0iOZhfU3CGVowA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1791624087;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=hGmAsHSEMUpAKHjpAsBHkRZJbaOLLVK2AbZTqyXT08o=;
- b=MlImaemR32Gv9j5iV1NUkiboF+VsarM8SfQJqSEjOvvUw/N1rXvvg4WYz1wPqNlxpcr9
- xzRmR9jUCX7lrFmtwjxF9vmaOTTgNlWIMtHe1bQeFXtjAJCVoMTZrCeXZd4REFfSZCmfe
- g6RFqQS0XRxOORlDxTZWWJc1zB62marTUOdOvkzlzYN/ZokV/peHFfbZpOa4QNb1XwzkU
- saR3i9fz+jo5rKmhvld6IGmCBqvwq+3TiZcOGlmraxxSfDOanZSha3aoT9MGbqYltzr/c
- 6oDk9ude6O/zuiEpDII66i5Nc6IWCujvdQmSnsqRAsmacsjKf6cu8bYAhDA8K3b8TNw==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+ bh=3j0a2YXe9ZAMycl6x6y3SnxIjbv6H/+oyIHaBR3ldHg=;
+ b=keGt3Dhenl5/fyNZffHJWBEFgyn9s9bMztboQJWutusgZRVC5clAfl73KHj1XnKCCeZ9
+ isvCv88zgaq7Iq9BRlhuXxndbPoCHytMDECat2V6hRTBlkh7n3l9zp4hTcZjixubWpi1d
+ M2OnE+hFI0ZI3H4iACH3iRnOaDCXwWYekp58EgjKBOIQydrOXUq8pD1CyZLqC7eVpV1Vc
+ C1uZaFx2iiHPeMriRaBlw2D9vboR+zuiCKGQO/etlv67P9AQAAJsDrgsjG45qj8tutfeX
+ pzUTA7aGybCF+NQejMZ/q6wO7bwqEox6oh3fQDm1+oLIcBzfVI3+017Jya23QhEJ+fQ==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 697746066C
+ by smtp1.osuosl.org (Postfix) with ESMTP id 409E0812D1
  for <buildroot@buildroot.org>; Sat, 10 Oct 2026 09:21:27 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 53E1E8F065; Sat, 10 Oct 2026 09:20:09 +0000 (UTC)
+ id 2AAD08F0B8; Sat, 10 Oct 2026 09:20:09 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 8 Oct 2026 12:26:20 +0200
+Date: Thu, 8 Oct 2026 12:08:16 +0200
 X-Git-Refname: refs/heads/2026.08.x
-X-Git-Oldrev: 6d271094e808ab66f1222845896b63aa2111038d
-X-Git-Newrev: 0679bed2f647a89a747125c98a0af9ba599fdcf4
+X-Git-Oldrev: f25fc6742f64368c8f03fa1a8ef7b3105c959d9a
+X-Git-Newrev: f6d5135cc67f212ef0c63c42cabc92e9dfa974ff
 X-Patchwork-Hint: ignore
-Message-Id: <20261010092009.53E1E8F065@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.08.x] package/gnu-efi: fix
- license information
+Message-Id: <20261010092009.2AAD08F0B8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.08.x] package/haproxy: allow
+ Lua 5.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -115,54 +115,42 @@ From: =?utf-8?b?UmFwaGHvv73vv71sIE3vv73vv71sb3R0ZSB2aWEgYnVpbGRyb290?=
  <buildroot@buildroot.org>
 Reply-To: Raphaël Mélotte <raphael.melotte@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2246025644560909990=="
+Content-Type: multipart/mixed; boundary="===============3469620260714342414=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2246025644560909990==
+--===============3469620260714342414==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/0679bed2f647a89a747125c98a0af9ba599fdcf4
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/f6d5135cc67f212ef0c63c42cabc92e9dfa974ff
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.08.x
 
-Split the confusing "and/or" for gnulib, so dual-licensed and GPL-only
-parts are clearly noted, and add the missing LGPL license. Lines in
-GNU_EFI_LICENSE are ordered the same way as the information is given
-in the LICENSE file.
+see commit "MEDIUM: lua: Add support for the Lua 5.4"
+https://github.com/haproxy/haproxy/commit/08ed98fd7963968de49593304fdd9234812845a4
 
-The license situation of inc/subst/elf.h is curious: The file itself
-is licensed under LGPL-2.1-or-later, and used in gnu-efi under
-LGPL-3.0-or-later (accompanied by the appropriate license files),
-which in turn allows using it for object code under different terms
-with certain conditions (see section 3 of LGPL 3.0, as noted in the
-gnu-efi LICENSE file).
-
-Signed-off-by: Fiona Klute (othermo GmbH) <fiona.klute@gmx.de>
+Signed-off-by: Francois Perrad <francois.perrad.86@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 7ed738bf5d3cb7a3184a2c4e4ac61258fbe6d012)
+(cherry picked from commit 5d36891dcee1a806c32ed926376aa8ed90855064)
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
- package/gnu-efi/gnu-efi.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/haproxy/haproxy.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/gnu-efi/gnu-efi.mk b/package/gnu-efi/gnu-efi.mk
-index f615df91bc..f979b65c31 100644
---- a/package/gnu-efi/gnu-efi.mk
-+++ b/package/gnu-efi/gnu-efi.mk
-@@ -9,8 +9,10 @@ GNU_EFI_SITE = $(call github,ncroxon,gnu-efi,$(GNU_EFI_VERSION))
- GNU_EFI_INSTALL_STAGING = YES
+diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
+index f75f18e031..d1d29645af 100644
+--- a/package/haproxy/haproxy.mk
++++ b/package/haproxy/haproxy.mk
+@@ -40,7 +40,7 @@ HAPROXY_MAKE_OPTS += USE_THREAD=1
+ endif
+ endif
  
- GNU_EFI_LICENSE = \
--	BSD-3-Clause and/or GPL-2.0+ (gnuefi), \
-+	BSD-3-Clause or GPL-2.0+ (gnuefi), \
- 	BSD-3-Clause (efilib), \
-+	LGPL-3.0-or-later (inc/subst/elf.h), \
-+	GPL-2.0+ (tests, some IDE & CI files), \
- 	BSD-2-Clause-Patent (EDK2 routines)
- GNU_EFI_LICENSE_FILES = \
- 	LICENSE \
+-ifeq ($(BR2_PACKAGE_LUA_5_3),y)
++ifeq ($(BR2_PACKAGE_LUA_5_3)$(BR2_PACKAGE_LUA_5_4),y)
+ HAPROXY_DEPENDENCIES += lua
+ HAPROXY_MAKE_OPTS += \
+ 	LUA_LIB_NAME=lua \
 
---===============2246025644560909990==
+--===============3469620260714342414==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -173,4 +161,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============2246025644560909990==--
+--===============3469620260714342414==--
