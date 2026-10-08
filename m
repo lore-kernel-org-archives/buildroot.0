@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D490CA6017
-	for <buildroot@archiver.kernel.org>; Sat, 10 Oct 2026 09:28:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F02C2CA9EBE
+	for <buildroot@archiver.kernel.org>; Sat, 10 Oct 2026 09:28:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4FD7E608C5;
-	Sat, 10 Oct 2026 09:28:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B80FB60F0C;
+	Sat, 10 Oct 2026 09:28:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MVUyisHzYVxr; Sat, 10 Oct 2026 09:28:05 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 2D10C60F12
+ id fyuGstnhFxpN; Sat, 10 Oct 2026 09:28:08 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 4990360F1B
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791624485;
-	b=leFlsJfUq2hAm5zbWdD0OZb1Tj4dI4lZ8NFAzeeKqnMpQ0Gs1w4PiJM7/JhHtgEHKRwX
-	 PzDhRtnH0BZCODzLn2dJqPj+ok4l991n1sCnP7XSNRmJnfnKgBpGDsxF7ij0nM5Q071Gd
-	 uahqZxAj9B7H6fIDZZukP4ZMYW+mOw+ky7BEWtcU17kc3F2TEXRRHEgJhzj+UW3GGOzZa
-	 v4UOkqaWJgI/9cYvPsXKc50S1y4HbbBhj1CE1ddv8387vOR9XSHKvlUJK8E8aDZ1umB6t
-	 yn31O5M/geCDERc1n9HVkGL65/E2p8uJL81QgFVu+9jbWBWs6OmALvK0d5SE/dZ2Fzw==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791624487;
+	b=ASNSKYkla4qxOWlASb+CgCwUS8eMGjvOhlzt8u2ujw3Z1BcUj5U8jY+F/5OsRThx9XYB
+	 lm1VcoAa/oKK9VA/jVAqOvis9F9xVdvltMUyScIrouEPaAKox2ZERAO0gBnsKeIuIYMfj
+	 G3z0O1bQmU8g+CONiTsYe1ZiFwVKd9mV57FayKIhgokoioxYWwrh5SDR6EIHi43ZehxE2
+	 lKAAyHLO6Z52Vc5cAl6xaCnEYC5enXMvp6Gj24wU95GzlSam3SVoHBFWgtP6WngojzeWe
+	 DUMZp2A51Cyi1i6WVFt1PzfbucGVCZ3NIPOL9gNTU0a3cqRE/RHjOsrxHRurk2iak2g==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791624485;
+	c=relaxed/relaxed; t=1791624487;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,76 +30,76 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
 	 Sender;
-	bh=4lap+SvO8tRg7fWTVEm6ZqqzNL5J2eajj8SDtkpiLLE=;
-	b=k/fNWfEtJRLfRiahxtu8xVQ+6XBF/A+DdrBw2NLPqaoRlAcnA+OZBhLu/cDEts5yq7fx
-	 XBow5i2RTiZNJmLTfEcWK08eWX43UUkf3BiabBt+zbYp8iW/O0jVKRMASXi1T+Eiw5h1K
-	 aBOatse/lNfC4VQ77o/Aypeg0sptmVNx6gO887cJt/EfMGVuxBcJXIQNdsDXTAUUjBgxG
-	 rPQjWgk1WMyxCrASQ9CemhIndHuNoV/PWvN9fWHXgyWVaxZ59wZvU6GMfbjeNkWvCyYJd
-	 0hTwkyYvtDluiCOwfjPdVfudy8uUQMg2wBhle6m5xAH2kkNVBmaKiERq6qyOXJeXzHw==
+	bh=sMHDfcWRXOl2DGQVHWdf6eZxXX8tZne0sBWkucRQvRA=;
+	b=enGX021c+jgDgJnAY0N6hM5Ec2a9ADXAEu32FKmFchRGlwg30K//gEfPo3rNKaa6JNo8
+	 t2AXe/wmSMjeL2UvdgPcwZizehGXL8hzoVAUKdMd72a5L/BJdQohjUMPKkAfkGmBlq0Oo
+	 UQlbOjhWBKnafYpSYW9Fi/1f12ZL3QffuydbLqDxneRzWzShse3R3DsmVKYW8NynqCk8G
+	 N6E8ITWAApClSb2YKsH8ru3WM+6M9JVbURuFOLJZozs230DQq1DvIa+qGpkY3QXwW88gE
+	 w2J4vNP4II4KQyWsvEruoeRd4IHApPfwlti5dc9CwwvtlP+XLvNnwwFn6Xn7WvjuSLA==
 ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791624485;
-	bh=4lap+SvO8tRg7fWTVEm6ZqqzNL5J2eajj8SDtkpiLLE=;
+	s=default; t=1791624487;
+	bh=sMHDfcWRXOl2DGQVHWdf6eZxXX8tZne0sBWkucRQvRA=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=OXMel3CXpqE4XtAOLy0LPVSkYOLh22TZvAsi+HLyrL8adX+2xBiPcBf7Gc7n9Ek4L
-	 3t9ZKAE88eKGya7GxpUil6SST4IamfMtPIC59YU2CgR4tdtPziKvn4gI7+DkocKSb3
-	 ckKHfAohfwxmiubSEmQJ9kRuGJCPIUpiNYMx1HNUvg/Tc2/DtjFVB2gscdebrH8DX5
-	 srnMAEy4SNrPTlyYrYiqAFgZGbD4RDYHPZnIVIYEtOZQnCD23EDa88FvQ1LjFvn+4r
-	 LnJ56dPvjrPTd+uOIMgwMdsjYqZqzKPxzSxQ+AEoAPiYawGo52CyiXPsXBjRijGiUa
-	 hBYQasy082Aaw==
+	b=Vgkc51RvV6r2tyIwzDJwJ3zw+sQixqVLqvQDRHRkSpXrmL12ZAyjnbsWmEfhXaUSI
+	 2hMgp0USNoa9/77kQyjNKxfP85dnhyNL3BFflrdCYmNVCWT/UZNKpei/PsrDkm931s
+	 8uQdux6jvM97afshrrvRUU4QjAttprLJwfm/N/ErCGey8nYgvsIAGQQIdVhVUrByYP
+	 rCT/F0Yc9ckN2WNUk4b4Ox7c2BGp5qS8i/xoB3t0XBwsMaM4tKq/C75sC94xVG/CZC
+	 Eg3MUwbQzOEWKetHm/cyEag42RHcFKMX/pKeoD0HDcl1BpEY3QvFXlbba7fRoxp94s
+	 WrcvfGfKUmRDg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2D10C60F12;
-	Sat, 10 Oct 2026 09:28:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4990360F1B;
+	Sat, 10 Oct 2026 09:28:07 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 87A7075
+ by lists1.osuosl.org (Postfix) with ESMTP id 8A0C4DDF
  for <buildroot@buildroot.org>; Sat, 10 Oct 2026 09:27:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7852881126
+ by smtp1.osuosl.org (Postfix) with ESMTP id 87D3880F85
  for <buildroot@buildroot.org>; Sat, 10 Oct 2026 09:27:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Wns-JgOM1x3o for <buildroot@buildroot.org>;
+ id Ibls1-gGUb8M for <buildroot@buildroot.org>;
  Sat, 10 Oct 2026 09:27:22 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 6325481166
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 7E97C81170
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791624442;
- b=qnCUiLz0z2xcp3rfecw2QKkVOEkpNcm7Z0pgKim2Tj4WGy9pMNxFedd9ANYFQHOikDyC
- TDqsEaWHEhWxS/NeESxKohLIYJPFphSNC3KzqA+za3BgcBgmeIZdn5zfeq9f2lzeMdp6m
- iVs1t5JsFZjO+6VXVPaiAwT0JLVJZGhvSBTA2xIiTA5np+QouEBxQi4k4FaWUGOvYo2ex
- uV0ZELhHwIb9XBeXfobhMdgkkpTb0XEH7TOOgozKm1xJ4x3Rds/i5nR92SzznSoF5sdhE
- tv1420tQOpXOU7t92wF2pDN0De4PSZ+p7RtW4ZxXurglpPCOotnGUdIOFsvhussWfjg==
+ b=H81wzDarR14pAmsnZHPFDiYNGV84fIH7pB4VoCl6Qk+chUYoPOb2ZwwF6J6GjKT6ifuD
+ Z1YbZalmCK0OdemMpj4fd9DgjSqYscMOUEnjIXtYrotXbQTG8TsONV2m0tQUTXz6BDHYD
+ SfYvE+xg7zPwu2X0AS09W/lsq5PUg8UObA7ZrxSU4HnuE6jNGKMBKmDCVVMQG9I2CwhDE
+ 42qJ6F245DEUN0X1rezt7g9cMjDCPrmOcmx3cC4JJrqi5BfriVc/7MdTChGhAp3qttDyY
+ EoEzO0u4Z6XvbQ9KBDOlhE584DQPHz/CJIDL7LiKdW5P/jTrAYen8MpM3djOGTYiSCA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1791624442;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=6/P637P9nHHzMZpqQ3D+N4old2cAuZpT0xrFdxcsp4E=;
- b=Eg4b5g7P28NXrkkAMM5KxYUzRs79yLz1wQK5Dn3RcsJvs9o/daUrxG1VALgvqGZzSGIb
- 5YGfDAyfrwFCvERwKHtK9SDgkXGxn+sEXAiBWm3uchW5isaskv0evdbdrmpQXM5ST8oHy
- Ug1HqdrR/kwdgdEq5UuG6o+zqZsNsM7Iob81vcazWcOTVgI7dQOJNOGqJuk1LcSTC5AUy
- s/dQIweNJ14mAiQK6KN65FqgJnqOgY+eRjALDyRgk3hVjE44q0sb+Glu0F5z3iVWwRLbZ
- jtH07PRzZz+WYF2M/BkrhlgXSEuLRf9UTWCStF8HIyMiN48j0NEOM1z02yCHgfR4cpw==
+ bh=wi3BG8YDYh8xPqvXRXI0Xk5qOlqm3Cj9Y2awloIhT+U=;
+ b=ESpqylDJfYCr7PsWUbjEKN7Jv0b94i67p2RvVZUKSB7Q6tNYF5LfivRD0lYD6a5FGJYu
+ rjWITqYhz5tpMh7JRrJnZPvl2eFx+bkTrvHIOqd6Aie/bikSB6OCVTz1aG5ev4/8SMiZa
+ BTLv8GurSm6+MzaBFzQ+38+RVawt8VV3jaMqjPuhyogfIVFGiM1SLQHsxd148AGPbQsFL
+ CyF1dMeaURMzUwv3yhVQhheMhJplAhXS4N0UfMEm+cWDnOpdCOFnDlJFx/wqlxsUkytxi
+ QaUe8izowBKERmSdourxHhlN6EOo+HBis85XSJ0wN9vOojCBC+3NHfP53VV6kPU/Nnw==
 ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6325481166
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7E97C81170
  for <buildroot@buildroot.org>; Sat, 10 Oct 2026 09:27:22 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4C9D78F1BD; Sat, 10 Oct 2026 09:26:04 +0000 (UTC)
+ id 67BD58F1BD; Sat, 10 Oct 2026 09:26:04 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 8 Oct 2026 12:26:46 +0200
+Date: Thu, 8 Oct 2026 12:56:40 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 5cf40d817a0667c40565b26f402f14813c19b724
-X-Git-Newrev: 9b01c2a336ef77720f6d20f97b19f513c05a8545
+X-Git-Oldrev: 4029acf22e775a3fb2154ed75f333bace90bd392
+X-Git-Newrev: c26b6aeb411ac040fadf6015570d548195b7405f
 X-Patchwork-Hint: ignore
-Message-Id: <20261010092604.4C9D78F1BD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/chrony: add
- 50-chrony.list for systemd-timedated
+Message-Id: <20261010092604.67BD58F1BD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/libseccomp:
+ security bump to version 2.6.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -115,66 +115,64 @@ From: =?utf-8?b?UmFwaGHvv73vv71sIE3vv73vv71sb3R0ZSB2aWEgYnVpbGRyb290?=
  <buildroot@buildroot.org>
 Reply-To: Raphaël Mélotte <raphael.melotte@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0446013553384487369=="
+Content-Type: multipart/mixed; boundary="===============3389882951168399798=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0446013553384487369==
+--===============3389882951168399798==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/9b01c2a336ef77720f6d20f97b19f513c05a8545
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/c26b6aeb411ac040fadf6015570d548195b7405f
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-systemd-timedated discovers NTP services from ntp-units.d/*.list.
-Buildroot's chrony package never installs one: on a systemd image
-without timesyncd, 'timedatectl status' reports
+The upstream changelog [1] lists three security fixes (without CVEs):
 
-    NTP service: n/a
+* Incorrect 64-bit comparison merge in libseccomp can weaken seccomp filters
+  https://github.com/seccomp/libseccomp/security/advisories/GHSA-4q85-33p6-j5g6
 
-and 'timedatectl set-ntp on' fails with
+* Oversized seccomp filters can trigger libseccomp double free
+  https://github.com/seccomp/libseccomp/security/advisories/GHSA-46fr-jh49-xvhx
 
-    Failed to set ntp: NTP not supported
+* Oversized seccomp filters can trigger libseccomp heap corruption
+  https://github.com/seccomp/libseccomp/security/advisories/GHSA-2hqh-5c36-grrm
 
-even though chronyd is running.
+[1] https://github.com/seccomp/libseccomp/releases/tag/v2.6.1
 
-Install 50-chrony.list, following the convention set by Debian,
-Fedora and Arch, so timedatectl can manage chrony.
-
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Scott Fan <fancp2007@gmail.com>
-Signed-off-by: TIAN Yuanhao <tianyuanhao3@163.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 079f168792e1520b615c64d436ed3bb100d9b6f5)
+Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 18f6446b4f29571c3cdd0c241baa975de011edce)
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
- package/chrony/50-chrony.list | 1 +
- package/chrony/chrony.mk      | 3 +++
- 2 files changed, 4 insertions(+)
+ package/libseccomp/libseccomp.hash | 4 ++--
+ package/libseccomp/libseccomp.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/chrony/50-chrony.list b/package/chrony/50-chrony.list
-new file mode 100644
-index 0000000000..6b9cca00bb
---- /dev/null
-+++ b/package/chrony/50-chrony.list
-@@ -0,0 +1 @@
-+chrony.service
-diff --git a/package/chrony/chrony.mk b/package/chrony/chrony.mk
-index 642e1d8fd6..2c0a7980f1 100644
---- a/package/chrony/chrony.mk
-+++ b/package/chrony/chrony.mk
-@@ -85,6 +85,9 @@ endef
- define CHRONY_INSTALL_INIT_SYSTEMD
- 	$(INSTALL) -D -m 644 package/chrony/chrony.service \
- 		$(TARGET_DIR)/usr/lib/systemd/system/chrony.service
-+	# advertise chrony.service to systemd-timedated
-+	$(INSTALL) -D -m 644 $(CHRONY_PKGDIR)/50-chrony.list \
-+		$(TARGET_DIR)/usr/lib/systemd/ntp-units.d/50-chrony.list
- endef
+diff --git a/package/libseccomp/libseccomp.hash b/package/libseccomp/libseccomp.hash
+index aaadc8424e..58aee03e6c 100644
+--- a/package/libseccomp/libseccomp.hash
++++ b/package/libseccomp/libseccomp.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/seccomp/libseccomp/releases/tag/v2.6.0 (PGP-signed checksum)
+-sha256  83b6085232d1588c379dc9b9cae47bb37407cf262e6e74993c61ba72d2a784dc  libseccomp-2.6.0.tar.gz
++# From https://github.com/seccomp/libseccomp/releases/tag/v2.6.1 (PGP-signed checksum)
++sha256  501f66c667225d53791b97e1d7cf85ab764c297d04881f60f38f451c4b0ee1be  libseccomp-2.6.1.tar.gz
+ # Locally calculated
+ sha256  102900208eef27b766380135906d431dba87edaa7ec6aa72e6ebd3dd67f3a97b  LICENSE
+diff --git a/package/libseccomp/libseccomp.mk b/package/libseccomp/libseccomp.mk
+index 26585b1887..e1d1271d71 100644
+--- a/package/libseccomp/libseccomp.mk
++++ b/package/libseccomp/libseccomp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- $(eval $(generic-package))
+-LIBSECCOMP_VERSION = 2.6.0
++LIBSECCOMP_VERSION = 2.6.1
+ LIBSECCOMP_SITE = https://github.com/seccomp/libseccomp/releases/download/v$(LIBSECCOMP_VERSION)
+ LIBSECCOMP_LICENSE = LGPL-2.1
+ LIBSECCOMP_LICENSE_FILES = LICENSE
 
---===============0446013553384487369==
+--===============3389882951168399798==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -185,4 +183,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============0446013553384487369==--
+--===============3389882951168399798==--
