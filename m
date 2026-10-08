@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55A69CA9EC0
-	for <buildroot@archiver.kernel.org>; Sat, 10 Oct 2026 09:28:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB023CA9EBE
+	for <buildroot@archiver.kernel.org>; Sat, 10 Oct 2026 09:28:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1F70F60EFB;
-	Sat, 10 Oct 2026 09:28:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AE99C60EE1;
+	Sat, 10 Oct 2026 09:28:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6xZJ-JqtCnrD; Sat, 10 Oct 2026 09:27:59 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 26E3B60EF8
+ id z5tCwlooVk7W; Sat, 10 Oct 2026 09:28:00 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 940F060EF8
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791624479;
-	b=HpM6Xu1Ggp7q9+H67jl7Irg4NHgPaM/fKrRFEYG/HTAglJpoYROO5BJ8DkMjBaN1FJ8d
-	 kK51EP/7q32FBJ8C0BLXLUchDmTe5Nyzf3NwoG/WMSLuRvV0XGUTweSWcZjeDzJXhwcud
-	 VTeYqSaYqLWCUtb0DnSg7GErVrt5OSZZWZB4IT/L0igHCsMSMSoADf2TriMOjj0CkpsG5
-	 AnNpCR5gKvAFDZ+WpA8XwZq2pg7oRpgM73A4df/DlIE4jN10u5n398bzVs/p5TN82DGGx
-	 sBonRdGln6KPBkEnnh4UA0ngibRZbFgStbZ4fRR5YwHD4AFXuXroFX0MsddtqET8TrQ==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791624480;
+	b=BeMy5DNcHdjZJ30JcYru1mWRWQlF8d32eNQus33+8EC9DdYkKO+ewrZlKCDFe87U4bpY
+	 6UUOTJVeDMbf3utkdMaYAJ+GWQjGu8Vxp4+3iwi0b/HEJ4aI9mSXOAqPGXL5ruRiJiXyK
+	 OQAYU10vZzOV7m4cfQxncpiHi6WtvovZmw1EKyvfGxCiNu6T7aBUd0xncMNQAxQ3nVnTg
+	 o23FS1YHLiKjWwXTZ+L8L4J3WrSnXMCw82TnQMQ4c3XwNu3LCTQboKjldGOtECDpb30jl
+	 3QNfk4BKkR5YzKyrSwjiS2LP1z5eHukFLUbyPJeDTqQ6f+OvNXWz7zBS3qkWDFA8L1A==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791624479;
+	c=relaxed/relaxed; t=1791624480;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,76 +30,76 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
 	 Sender;
-	bh=Kd/55aI6wUBKDkKExleIKP1WHKf41l1v7B8M6kA96Ao=;
-	b=UMKBkvJxzFYGfqOiwoD73KkZH143IndJ4FJUF/hnU1hXemp/hjBwgjSxQQnY1JnGjBl+
-	 qQwTj9dfIkfzLOFDKZ/03kry6ZiNQKwXQltfFkwYM8HDBi5l+k5eoU0BiZwz9JH7ezyzt
-	 YOC6ywVhjowEqkHNGICfnTlwDMeWlPqBxWuKk3kL6+0FpgmbwdzxvwDRs8edZLN/G+Rdl
-	 8zT9j462GT3LeOSMKwigohoo7JtvyU0Szh0rr93HpxdjR2eZIRTWiqh436rgSShUSXlmv
-	 zjvzwi8eQmAK8JeWzKMJnsUYChBjhIR9UizoOE299UmXsbaT5zduDgOG2yZnngUjF9w==
+	bh=rTxt+wXPFYLRLn1MSHCP7SoklsOrLsxQHk+QYmTpYwc=;
+	b=pxSDgkl53NrCjcVG052GGnPhmsS4Na6AAEYGc2wMLsqJiJhwpu+bj4qG6Qk0NGob289S
+	 YAOF38zJ//83IIEXKxUvMaPs7aMy8KVnLSDge1yZpm2weg/pqnyvKHwMXJvfPgZ+YYaKJ
+	 UH14OnFt/r23SVmei8WQvnj6rRpNE3h74ElZu3I7iuFtBcj/XE3+e7sAt2D2lJU+dteKu
+	 V4KgeqmzUncRRP9oi9xiS5zeaiw3SE0LJEVlhAr5CwlrtHLEj0MXDr3peQEwMDPvESy7s
+	 9EazqiV71b+CKi44Sl8UU0v/qxcUaQ45kGhLg6jITcS/58RopBcHRyBIgEQurapturA==
 ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791624479;
-	bh=Kd/55aI6wUBKDkKExleIKP1WHKf41l1v7B8M6kA96Ao=;
+	s=default; t=1791624480;
+	bh=rTxt+wXPFYLRLn1MSHCP7SoklsOrLsxQHk+QYmTpYwc=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=iHdOhDx467eqVcwiTblSNpAIUCj5MYkDu92cykNfWWwLMaJByTSWI6zZIDigCDhGz
-	 BObx2lSEjzMjeGUgTJPbopuENrNtH9NPlR1NiIPOkVebyDqv/gmXb06jj2q58RAI3I
-	 ryu7FBKJ4og1pEaHooIrQfCLPELzF70al+q+J5+vouDiT+Uo5lPdeyKWGc55mA1jZ4
-	 uOr9jGrixGHXCyjV63Qt3tOpOCjZJsix87Z8dUcUasomlFzDqCin/rTijQ6pc5YwKB
-	 8IM034OLA/jGN5o7LaYHCNfEViAQVh7ZvZ2b4X4txQxRttL/xVdMMGV/oSeqrswl0G
-	 40ji+bIkjpOzw==
+	b=OrHl+Y4Z3LbLOFWfqPC5xbAH6l/Nmc2KRTXyAr8ggJO6A1OpzF7QH31gqgNxlUS77
+	 sogIUPoXe3C0k/9m6FhaeTNfR7JoW4R50oZWLPBUj4vwLOHsxrTWIDI8ZijspIhvTz
+	 Bpkm3Wy+2+iZMc0FkAnDWmi38c6zcV6cdwKv8Jv6wBAr2gFV4Z6M51txb3Y3ATuz1G
+	 tw9qdHsf1x/qz4ba6KJB1kleqn/iKpbJn52Gzm/08wG6LSSQ+0VfS/eA54NqVrYSkJ
+	 ANCZVPhd5g4EKQcjzH3idrwQzFW4lTodyCpUFhb+m+fqeuoy45Y7i8txdM1s+TNjJB
+	 bzOQAB/KLtHNA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 26E3B60EF8;
-	Sat, 10 Oct 2026 09:27:59 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 752DB9D1
+	by smtp3.osuosl.org (Postfix) with ESMTP id 940F060EF8;
+	Sat, 10 Oct 2026 09:28:00 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 758F5DE0
  for <buildroot@buildroot.org>; Sat, 10 Oct 2026 09:27:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6221140345
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5AFB081149
  for <buildroot@buildroot.org>; Sat, 10 Oct 2026 09:27:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id laoDQYBBGCHk for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Zw9BN0gzjXJr for <buildroot@buildroot.org>;
  Sat, 10 Oct 2026 09:27:22 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org AD40F40318
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 70CF5811E7
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791624442;
- b=dwMdSKHEG7nD95R9G1DhgH5Oj7Gj/HJ4u2W38imoA0Fb1I8LnJ4+cmgV3wNoOwjaIYue
- SEuMwG3P1Qay8HwmehKRtSao1W3US/Jtt8+YzMC9OU4wmarKIeF0MeKWgL9lK0oThnPuK
- n/pWxiJFop05C/eJifKwjG2LnGoqaXuFQKvJVquvUovtLXhwlMqcXZyLG/K5VTj1B47jk
- aZkQQJ24MNARL72IRQnpHQCKk6ItPFoD7zCzNWhpkzBthIb/LAQhhwwXetm7It6clZlsM
- 0y/lRpZjdW9GNZymi4x87hN7B5cyZE65pTwBdtguSbCnDlNH4pES6S1yFSUkDNhUZJg==
+ b=Q+KQizClBxwuqr9Srtvh1EmIB6LJtInur6a3PngSkRd0Y4VHY+RD57TSdOa5aOm2q5z7
+ COH+bzi6QMGqGWkQtnQllVvvdRvaRzMt7QPh4j4t5WbVQw8NX1VN4luYRDkPyq5Zrnko9
+ 8x9JFCsWIUusaTOM8jFAwhGGLMcReuvieF7AMAjekdS+5z48hrrlvR/MbqdAEswvveT4+
+ ft1T1bUOp5QUMnh99pdjr1UCrTeibBEl4zB5Ea48rwLh/iGutZpG9FCg7icsOE9eGvsWF
+ S9hVnhz1bv60ibyV6VwXuAz2tbWbSxONLfwWR8CvaNZOpddo35v+50d5nsZV3F+3mjg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1791624442;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=DbqasEebQq8o8MBAunmk4ev1+2YUUZ4Ib6y/qDFPxDU=;
- b=MKNsOKesdn/X9cZhHvHybcjhIwrL4MEtcsrPDrU8iVIr+bh1MnwWn60HZcnyptpHo/lq
- 6iYPw0YdmVPHLWJYZisFgRK0I+n8ap42fRLnHNQHoEH4f5TewP6tKlUnRBYT8SMQSKcSR
- G7YPNBmD6Sa0Gmx9fwkF3dZV1g4zws6ZTJRNDJ5lPwIiNb+fMMJ54pUx1clySKDtd5XOe
- Hxh8nE0gbX9wOQ4TrZXgSvcPesFFuRe8lAJRroKwXA9CYaIKWjyw9Me7e7H5j16dDcYwp
- 39laPsTYmtw/kYx2XH8/anAjhXR5oGYDSBWdMtmfuE5+Ae1g/ZxmF/2JMOzhlkov4Eg==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
+ bh=IHz0VBBKsudB19VaXqpv96aajLc/X1rykgSR+tUQcI4=;
+ b=DVXApnWEYUoQ/ig8zYcFZmshRgZGXRySMMeycdacWtP1WUrBkxupQXCPkyuu5XYsWh2j
+ KV0eigGUjO9uwc/SIr+bl4kcUYZEAnwJNPR9ET61IFnd8DxudztlClnjAxBRtnAWuJi2e
+ KN21CNe/WvNSh47zqZr4q0izJhm2GI8lH1qNkB2qiziVzWY0EG5VKfESHjaqQitulf1qX
+ eW63rZKRx9KppMTleUOVuQ0mqyB4smlUANxPvaEh6+i01ezwnuZ+BuZEhy310vMVTUR4v
+ AArCGBBnrj62FPAh4VsaNkhIo6xR5e4DAyftGCzTA0C3pda7nsS49qHphOKPN+TvPgA==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id AD40F40318
+ by smtp1.osuosl.org (Postfix) with ESMTP id 70CF5811E7
  for <buildroot@buildroot.org>; Sat, 10 Oct 2026 09:27:22 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 974248F1BF; Sat, 10 Oct 2026 09:26:04 +0000 (UTC)
+ id 5A0538F0B1; Sat, 10 Oct 2026 09:26:04 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 8 Oct 2026 12:56:40 +0200
+Date: Thu, 8 Oct 2026 12:56:39 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: d143df8d07624f9c3179780a7254849c989ebd94
-X-Git-Newrev: 12d976476947ab4bea0954bbfbd2796838a75703
+X-Git-Oldrev: 9b01c2a336ef77720f6d20f97b19f513c05a8545
+X-Git-Newrev: 4029acf22e775a3fb2154ed75f333bace90bd392
 X-Patchwork-Hint: ignore
-Message-Id: <20261010092604.974248F1BF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/openjdk-bin: add
- proper CPE ID information
+Message-Id: <20261010092604.5A0538F0B1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/libseccomp: bump
+ to version 2.6.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -115,48 +115,63 @@ From: =?utf-8?b?UmFwaGHvv73vv71sIE3vv73vv71sb3R0ZSB2aWEgYnVpbGRyb290?=
  <buildroot@buildroot.org>
 Reply-To: Raphaël Mélotte <raphael.melotte@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0743363248847069301=="
+Content-Type: multipart/mixed; boundary="===============7692415247458607930=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0743363248847069301==
+--===============7692415247458607930==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/12d976476947ab4bea0954bbfbd2796838a75703
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/4029acf22e775a3fb2154ed75f333bace90bd392
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-The CPE ID on openjdk version 21.0.2 in NVD:
-https://nvd.nist.gov/products/cpe/search/results?keyword=cpe:2.3:a:oracle:openjdk:21.0.2:*:*:*:*:*:*:*
+For change log, see:
+https://github.com/seccomp/libseccomp/blob/v2.6.0/CHANGELOG
 
-HOST_OPENJDK_BIN_CPE_ID_VERSION has be overwritten to match NVD's
-versioning.
+This commit also enables LoongArch64 support,
+added in upstream commit:
+https://github.com/seccomp/libseccomp/commit/6966ec77b195ac289ae168c7c5646d59a307f33f
 
-Signed-off-by: Bjørn Damstedt Rasmussen <contact@bearware.dk>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit b174bfd0b29b8ad81b4e583c022aa6449a6f237c)
+Signed-off-by: Preyas <preyas17@zohomail.in>
+[Julien:
+ - add link to change log
+ - enable loongarch64 support
+]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 4f9600c2f97039b4ad6eb66087a7654805536a76)
+[raphael: drop BR2_loongarch64 because it's unsupported on 2025.02.x]
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
- package/openjdk-bin/openjdk-bin.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/libseccomp/libseccomp.hash | 4 ++--
+ package/libseccomp/libseccomp.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/openjdk-bin/openjdk-bin.mk b/package/openjdk-bin/openjdk-bin.mk
-index e6c74cf6d8..5d8c29f080 100644
---- a/package/openjdk-bin/openjdk-bin.mk
-+++ b/package/openjdk-bin/openjdk-bin.mk
-@@ -25,6 +25,11 @@ HOST_OPENJDK_BIN_VERSION = $(HOST_OPENJDK_BIN_VERSION_MAJOR).$(HOST_OPENJDK_BIN_
- HOST_OPENJDK_BIN_SOURCE = OpenJDK$(HOST_OPENJDK_BIN_VERSION_MAJOR)U-jdk_$(HOST_OPENJDK_BIN_DOWNLOAD_ARCH_NAME)_linux_hotspot_$(HOST_OPENJDK_BIN_VERSION).tar.gz
- HOST_OPENJDK_BIN_SITE = https://github.com/adoptium/temurin$(HOST_OPENJDK_BIN_VERSION_MAJOR)-binaries/releases/download/jdk-$(subst _,%2B,$(HOST_OPENJDK_BIN_VERSION))
+diff --git a/package/libseccomp/libseccomp.hash b/package/libseccomp/libseccomp.hash
+index b80efd68f5..aaadc8424e 100644
+--- a/package/libseccomp/libseccomp.hash
++++ b/package/libseccomp/libseccomp.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/seccomp/libseccomp/releases/tag/v2.5.5
+-sha256  248a2c8a4d9b9858aa6baf52712c34afefcf9c9e94b76dce02c1c9aa25fb3375  libseccomp-2.5.5.tar.gz
++# From https://github.com/seccomp/libseccomp/releases/tag/v2.6.0 (PGP-signed checksum)
++sha256  83b6085232d1588c379dc9b9cae47bb37407cf262e6e74993c61ba72d2a784dc  libseccomp-2.6.0.tar.gz
+ # Locally calculated
+ sha256  102900208eef27b766380135906d431dba87edaa7ec6aa72e6ebd3dd67f3a97b  LICENSE
+diff --git a/package/libseccomp/libseccomp.mk b/package/libseccomp/libseccomp.mk
+index 10d57bb78c..26585b1887 100644
+--- a/package/libseccomp/libseccomp.mk
++++ b/package/libseccomp/libseccomp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# Override automatic CPE ID because '_' in $(HOST_OPENJDK_BIN_VERSION) is not used by NVD
-+HOST_OPENJDK_BIN_CPE_ID_VENDOR = oracle
-+HOST_OPENJDK_BIN_CPE_ID_PRODUCT = openjdk
-+HOST_OPENJDK_BIN_CPE_ID_VERSION = $(HOST_OPENJDK_BIN_VERSION_MAJOR).$(HOST_OPENJDK_BIN_VERSION_MINOR)
-+
- HOST_OPENJDK_BIN_LICENSE = GPL-2.0+ with exception
- HOST_OPENJDK_BIN_LICENSE_FILES = legal/java.prefs/LICENSE legal/java.prefs/ASSEMBLY_EXCEPTION
- 
+-LIBSECCOMP_VERSION = 2.5.5
++LIBSECCOMP_VERSION = 2.6.0
+ LIBSECCOMP_SITE = https://github.com/seccomp/libseccomp/releases/download/v$(LIBSECCOMP_VERSION)
+ LIBSECCOMP_LICENSE = LGPL-2.1
+ LIBSECCOMP_LICENSE_FILES = LICENSE
 
---===============0743363248847069301==
+--===============7692415247458607930==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -167,4 +182,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============0743363248847069301==--
+--===============7692415247458607930==--
