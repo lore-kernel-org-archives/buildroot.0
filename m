@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB4F9CA6017
-	for <buildroot@archiver.kernel.org>; Sat, 10 Oct 2026 09:22:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1CADCCA9EBE
+	for <buildroot@archiver.kernel.org>; Sat, 10 Oct 2026 09:22:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 969CD4094C;
-	Sat, 10 Oct 2026 09:22:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DCBFD6067C;
+	Sat, 10 Oct 2026 09:22:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PMO4zR_ZBwBY; Sat, 10 Oct 2026 09:22:05 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org AC80E40958
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791624125;
-	b=JxfvyJviHneSsQPx3f7gOVjWpsUeY7Em4e7q5aflqFJ+r38HBG4mJk/Gscl4jXMlo/YC
-	 1nBC9Y6okVnB1n2aNVoPR0jKZO659qag1a2xJ+181biS7V39TG3SsUIbPDkS1ymcClek9
-	 LbZWttoW6Y3FUgcBpBLXaOHyEmSwp0QkLO22iBip5NpqTxt4aOKGZQ66HIzdKhSiXjzBk
-	 NGQ+ZRKATSX3R6MGfHqbsNS+IQ3hZGzmzIaBEfD1jgnI/ArWaC8kAv2poZ2rh0tqP2mxK
-	 qaEiYLqWz3qCz+szO47rPp12hJRHy71ozLJ2X+l4+dds7YqUy3Z9kxZa0/iqubxAPuA==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id T8fv-IO_QvHv; Sat, 10 Oct 2026 09:22:09 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org ED0BA60A55
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791624127;
+	b=FgBHGbVqkL2jRLeG929z9gozi5D/F/a5mcnw1k9V27t5N4W/DzCzfyE1iwEn01MuuQPf
+	 iANvRA2UQ/9myu6FZ6JVnGY7N2UGRzERzHAitSycJBCSbsx4/v/jBX0y9bJudvZjFGX+X
+	 fhh7HhCsVRkQTD8Z+unK/sUksX1WpJ4t5d2yLcbMPjbYXwiSYtJ3YjNnEd66f6i8AYDhW
+	 vBh2jX45Xm1pVcPLjfHpvGtrQzPZp7lyJuJpMKoSgAYisVfZdXBjsHjS4DXUcVtAyXxWc
+	 +JjO8NTXRSJAy3kxIwAPb8F7xRaDWqvjYz+a9aAk9o1xhBZcoDDPzsZnouh2MWqD+Tw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791624125;
+	c=relaxed/relaxed; t=1791624127;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,76 +30,76 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
 	 Sender;
-	bh=urlsmx9TwZ6nj7gSxkARXsw9FUvQYZqxAttX65XRzho=;
-	b=QwyKMk40XPajQb6llbKPG8PfVSH2fYYXy2cJpdHDJwE4ZCQulEoSOyIlrXf6vtUtUfFn
-	 0YRYBCJcFlw942RZPOmL4W6hyJG5q4mAFCR3f1JIglojHB6a1Zx9NrS7xTC6CGiP6+B9m
-	 l0J2w2GsdA1I21jjFuqz33GrL0wmjg8gJfntn6RUxsgwt/pjtlMYhAedMb79FMKPaxcvv
-	 EkX3AYBJiXO7KoQRrJe7JusHMKQHZt3O6q5gDaBcp/aQ+KHPYO415SYLkKN4kyAmK2ggg
-	 yx3ENV0oYDo843HdmLDE2134HwULsi5M/1p8yWM7MnLGBQlNi+kp/qJ7OCP8uWfiUvA==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
+	bh=ZbHFT6PwC7nf7V/OnqLbQdw482LgBvS4WmMySZW9oGg=;
+	b=goEukdTGKp1KMYIcCfDnHX2f/zLfjSKFLAfqDJ5yqrdatBpoyILbNnuewNnfVSmJvCe5
+	 PWfOJd0GxIi5yQXrMCA+GbikbW4MALnnY53aqLV6N1arogLwLWZ9UtJWbzrW0WPtzUviO
+	 qnAybPiSBnu5Vp9s85bFaagqcX4qSLAuI42dxBu969pucaQRjQQ/awSjY2SG6Jt2yC+8S
+	 0eUTmAUdTfAMb5LNkz/yOQrzTZcSKz+Z/+nM8U1crOiUNekRjTQVQ8au0BlekqaCmBp12
+	 vAT5uzSueawD7PaVn6wVJ8+uRV11aCyR8rtA3AKdtRmbHvLWC+AhcMxih1ViN9qWRYQ==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791624125;
-	bh=urlsmx9TwZ6nj7gSxkARXsw9FUvQYZqxAttX65XRzho=;
+	s=default; t=1791624127;
+	bh=ZbHFT6PwC7nf7V/OnqLbQdw482LgBvS4WmMySZW9oGg=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=qEaSiIY9OtgX4Cjb7PJtbrMD+D4E1r9i+a3pNLxobfw1R14nORgMtLTWZdij3YwtZ
-	 3w5Q4392VppTjoPGUdhxy2tA4h8rYf8APJyrA0FRiOHckmZSz8PSzNBGCxqmU4+w3G
-	 qchkRJrfMcvOIhicY0JI1DvDpqfmCjRRUobPM6TwjmwzZ7Ghn06OLv++A38h4MYIbY
-	 bFpPgiiKFFMcsCixT2HThXzjn9Ld+W6qb69JflnKZrTxImaFSC22qUAPrbtWYFBmaS
-	 qskEPGJWKmSdBIElagky45sJcxAE3lAwgp1WR8l7EXuw1h/2g5juLznV9Noc/DBkdi
-	 o2JxOi6zah3Xg==
+	b=P8UIFZfZ7T4KGs0icgbjHkqy0IGXoVowoEt/7tN37vJRfWf7kN4Zc8zTYkBH83RKo
+	 JwJAEHG8uUCIt3bPxKiA+wZW7qjidAgeibPwqZSKD2dmc4wrtGpN9fFd1+rgtadcYZ
+	 u/HqVaSfrZOVK8wNKD7nKqZu4cRZ/ixsEFRsbQS1CYtPpRkjoWYCeM/3nC2HoJWJ+2
+	 LcdaPwV949IZ+7+tmZ+Xi7Ni3PTPU0yWASnINyjC63ySdSecapOErOeFwcrjA/b8/S
+	 3y2E7yvEMjlQWOr7R7o/cSJEta9rkU3vkuNb7MCvaIQhqVcm+b6BhhivIExWLIa+Zq
+	 xuWDGIi/4Q3RQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AC80E40958;
-	Sat, 10 Oct 2026 09:22:05 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 6DBC5DE2
+	by smtp3.osuosl.org (Postfix) with ESMTP id ED0BA60A55;
+	Sat, 10 Oct 2026 09:22:06 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6FBCDDEF
  for <buildroot@buildroot.org>; Sat, 10 Oct 2026 09:21:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 513EB60727
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6CF85812D1
  for <buildroot@buildroot.org>; Sat, 10 Oct 2026 09:21:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7DDRkzy6vOeN for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bnPtLuhDS_VA for <buildroot@buildroot.org>;
  Sat, 10 Oct 2026 09:21:27 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 355F5607B2
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 5D5E6812D6
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791624087;
- b=lwnreUGXs5GnnQ1Xp5k5xxGCdeZ6GaSOUgaid9A4yvv+GulG8nZGkCOj3EtC5rZXNJjy
- sKRm8O/FxUfgTzo2DX8Z3fDjSYuRrRcoA41SURGwO+7UO9vRJKUHRoSw4gtmuvf4tomvX
- 1GF5BuOtsZ1QzQ2wyxpCpVJH+qX5iERndNi2FVRdT+4HGt0vOZq242B/eQeZn7oSBX+at
- H3a5tH6VdbH9XuXP0vXjSxNfkBep/ydcJoP/XQcn4fJBo1OfMWT0K1hRNJkTjlrUToElG
- oqtS5sRB9dhbeG5g4qQJgeuSEro9I4Y+dEK5fK/NsVvkC5h7tf3Ru1nN3kTaEOvNpOw==
+ b=TRDZi3MpcKKhfVMCv27uXr+ryVgBRDgY4MZluuBHQ2HeMBMQVo1R5NCJRrBfJKrT9Xh+
+ tHaXzmWneqMDm56jxdJqpIDNR8uX5UpdbVUTkSo1Ws32rjk5ha/Mi0WPbQGvOgYa43isB
+ WEIUdOvlVl7BZ+SX2p4bGpSYb9r2wny1s9wO+j2XVMHLb757oLZYqAocC3/iULKMGxXQF
+ 66Mra6EI/NjieP+wIYqpqqHwqO8aAyLVhFZi9sTGcJLh/8Yrep7r/00KZx8rvtY167w1E
+ Vipk6GPH/fA4M+jzyIm/YneTz4slbrysPpSWFREMzgwVq1yf9gQLtRgHTeXGxpblalA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1791624087;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=kyo0L1Ah64Q5rnOBu3+mitFKAZQUDVhCXCWsfHeX18c=;
- b=ZZGRPhv3qA7ITu3htONA7RtR+1ZWi/aij1bzkbYm4TtXmp5s0vxvNQLyf2QzmigFoHzP
- Xars+jEQg7RPSjv8HQ0j0jKEv90s6q3N1OcEWikWnoHZqB6X4wujtoAdmYxbKhr1imzU7
- IXMsDOzeqZAHhBAMo8KL+PmQtPVaZkhcjdr5VU43xMaZAOtBVWVJTij+AB7l5TzkkPzrh
- ZvCtAaTI9HqwfcHxTkaF5ff5deqhCFvVHt7LNmvOZyjDenwLFOIPs1RGwqrsu0xZs4InZ
- wNMZvTVmtgR/2csqXB3jeqf5SYYrL2FlED761YWJylhexG4ezKATE8+Y8soJ050AHog==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+ bh=D2abDbxRpe4ZQ1z81XRDDWw18rLHks/JnrNKlKDfAtE=;
+ b=QHUCMkD+M7FIWh77LTMKW+4pfrrvI3pq+gXe9RzOmuOzscUAwFhli1HPEEJTcyLExo8n
+ IU6qU7MRfgVLCuSzDiVEslHkb8LNSx1cSqRHaND3fcz96FIV7dXQGGKW+tR/8y2vToppY
+ ZDPZnlLJ4OzK8rzIENwGLMIvfu89iFPmolHFY1lckwvVdHvL67TnVUsE+uNCFId/QfG3m
+ vq6rk92mrAZWd8/dnNuDmRWKwf0ydygTcA7q4+W6Osz5246dluz9sFb5RvypG8l9OvL/w
+ trlFdJ47Yh9Jz5RN4UcHGBirj0ZnuzQQ6/Nk/nmO+gieTNb/IlZQvcjYTsp5lql+rxw==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 355F5607B2
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5D5E6812D6
  for <buildroot@buildroot.org>; Sat, 10 Oct 2026 09:21:27 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1F42B8F065; Sat, 10 Oct 2026 09:20:09 +0000 (UTC)
+ id 473B48F0B1; Sat, 10 Oct 2026 09:20:09 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 8 Oct 2026 12:07:55 +0200
+Date: Thu, 8 Oct 2026 12:09:12 +0200
 X-Git-Refname: refs/heads/2026.08.x
-X-Git-Oldrev: 385c25f4b0badc277b6f2fe8a2ea108098a49360
-X-Git-Newrev: f25fc6742f64368c8f03fa1a8ef7b3105c959d9a
+X-Git-Oldrev: bcdaf252070fd4b742b84744bc200ff344142a0e
+X-Git-Newrev: 6d271094e808ab66f1222845896b63aa2111038d
 X-Patchwork-Hint: ignore
-Message-Id: <20261010092009.1F42B8F065@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.08.x] package/python-twisted:
- security bump version to 26.4.0
+Message-Id: <20261010092009.473B48F0B1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.08.x] package/suricata:
+ security bump version to 8.0.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -115,65 +115,68 @@ From: =?utf-8?b?UmFwaGHvv73vv71sIE3vv73vv71sb3R0ZSB2aWEgYnVpbGRyb290?=
  <buildroot@buildroot.org>
 Reply-To: Raphaël Mélotte <raphael.melotte@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3276720314757400308=="
+Content-Type: multipart/mixed; boundary="===============5150162419727796389=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3276720314757400308==
+--===============5150162419727796389==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/f25fc6742f64368c8f03fa1a8ef7b3105c959d9a
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/6d271094e808ab66f1222845896b63aa2111038d
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.08.x
 
-https://github.com/twisted/twisted/blob/twisted-26.4.0/NEWS.rst
+https://forum.suricata.io/t/suricata-8-0-5-and-7-0-16-released/6315
 
-Fixes CVE-2026-42304.
+Fixes CVE-2026-45764, CVE-2026-45766, CVE-2026-45769, CVE-2026-45768,
+CVE-2026-46387, CVE-2026-45759, CVE-2026-45762, CVE-2026-45765,
+CVE-2026-45747, CVE-2026-45770, CVE-2026-46352, CVE-2026-45767,
+CVE-2026-45763, CVE-2026-45751, CVE-2026-45752 & CVE-2026-45761
 
-Updated license hash due to copyright year bump:
-https://github.com/twisted/twisted/commit/ac504cc8088734e0bcb8c9b372d52534bf9252e9
+https://forum.suricata.io/t/suricata-8-0-6-and-7-0-17-released/6391
+
+Fixes CVE-2026-63452, CVE-2026-63450, CVE-2026-63449, CVE-2026-57227,
+CVE-2026-57229, CVE-2026-63446, CVE-2026-63448, CVE-2026-57224,
+CVE-2026-63447, CVE-2026-63451, CVE-2026-57222 & CVE-2026-57228
+
+https://forum.suricata.io/t/suricata-8-0-7-released/6467
+
+Fixes 67 security bugs, all CVEs are pending.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Cc: James Hilliard <james.hilliard1@gmail.com>
-Cc: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit e325baa39cc45b350ce142e1e209a134a1d62355)
+(cherry picked from commit 510003c0411a915d71709417e53d2bd62be9f999)
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
- package/python-twisted/python-twisted.hash | 6 +++---
- package/python-twisted/python-twisted.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/suricata/suricata.hash | 2 +-
+ package/suricata/suricata.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-twisted/python-twisted.hash b/package/python-twisted/python-twisted.hash
-index f3cf53bcaa..beb1c7f3b5 100644
---- a/package/python-twisted/python-twisted.hash
-+++ b/package/python-twisted/python-twisted.hash
+diff --git a/package/suricata/suricata.hash b/package/suricata/suricata.hash
+index 15f7e666b3..a5b7807d60 100644
+--- a/package/suricata/suricata.hash
++++ b/package/suricata/suricata.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/twisted/json
--md5  845d6782c2236ef764f3849948f4bfad  twisted-25.5.0.tar.gz
--sha256  1deb272358cb6be1e3e8fc6f9c8b36f78eb0fa7c2233d2dbe11ec6fee04ea316  twisted-25.5.0.tar.gz
-+md5  931ac3e39a52c490f85d36bcb4c77369  twisted-26.4.0.tar.gz
-+sha256  dbfd0fe1ee409d0243fdd7a6a6ff14f4948cec1fd78e0376291f805e1501fae9  twisted-26.4.0.tar.gz
- # Locally computed sha256 checksums
--sha256  16b7f6825ee8aaed193e7fcfaee67ab493087302c700483f8991f22b70c539e1  LICENSE
-+sha256  d7a2f74fe5c2b3f610052b75b5a131728c49823b28088893dacacf8d58849a4d  LICENSE
-diff --git a/package/python-twisted/python-twisted.mk b/package/python-twisted/python-twisted.mk
-index 8db5d3750c..09198d2afc 100644
---- a/package/python-twisted/python-twisted.mk
-+++ b/package/python-twisted/python-twisted.mk
-@@ -4,9 +4,9 @@
+ # Locally computed:
+-sha256  81cee7bae69848a9751b2ce0867620eefa52b192e79c20b5eac897600b28b191  suricata-8.0.4.tar.gz
++sha256  a9d46a9c8f40e81f8a6df3ecc2c5a9a8e8da985876299108d92da547c013ba8c  suricata-8.0.7.tar.gz
+ 
+ # Hash for license files:
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/suricata/suricata.mk b/package/suricata/suricata.mk
+index 56bbc0c89b..d77652162c 100644
+--- a/package/suricata/suricata.mk
++++ b/package/suricata/suricata.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_TWISTED_VERSION = 25.5.0
-+PYTHON_TWISTED_VERSION = 26.4.0
- PYTHON_TWISTED_SOURCE = twisted-$(PYTHON_TWISTED_VERSION).tar.gz
--PYTHON_TWISTED_SITE = https://files.pythonhosted.org/packages/13/0f/82716ed849bf7ea4984c21385597c949944f0f9b428b5710f79d0afc084d
-+PYTHON_TWISTED_SITE = https://files.pythonhosted.org/packages/db/97/6e9beb1e78247ae6dc34114f27d538cf2cb183c4afcd3609dfdf2b0439c8
- PYTHON_TWISTED_SETUP_TYPE = hatch
- PYTHON_TWISTED_LICENSE = MIT
- PYTHON_TWISTED_LICENSE_FILES = LICENSE
+-SURICATA_VERSION = 8.0.4
++SURICATA_VERSION = 8.0.7
+ SURICATA_SITE = https://www.openinfosecfoundation.org/download
+ SURICATA_LICENSE = GPL-2.0
+ SURICATA_LICENSE_FILES = COPYING LICENSE
 
---===============3276720314757400308==
+--===============5150162419727796389==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -184,4 +187,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============3276720314757400308==--
+--===============5150162419727796389==--
