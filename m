@@ -1,161 +1,166 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C01D1CA6012
-	for <buildroot@archiver.kernel.org>; Fri,  9 Oct 2026 07:49:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07D77CA6012
+	for <buildroot@archiver.kernel.org>; Fri,  9 Oct 2026 07:49:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6460E4091C;
-	Fri,  9 Oct 2026 07:49:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AFF9D813EE;
+	Fri,  9 Oct 2026 07:49:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Iv-RrWVj_m5G; Fri,  9 Oct 2026 07:49:45 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 7D4174091E
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791532185;
-	b=OLSJyRhNOj6g+4iT7NQUotI2kKLtzmsUKmZYHW6PLUOVv/5Ty+kNQg76l5aGFTADQQlo
-	 4nZoLAdHD0p0f0u1Ntw9dyMuunAGP+X0tDTE4MuBSpXaHN0COceoThm8jrS3plC3Oo5Zz
-	 eoBXgHhOwgztNBHpWbZ9Qg/XAQZy9UEO9zGnwLwiH9c/uz4qnBJRvbLZTE8MR3c2Rb3no
-	 iy5Pha6M9v83AAHp0mDufFGT46JcwsJPGPPxeM5+ufQpBDDu8LIQwBb9pvXFacv5yPp//
-	 auLo9SHTB2GsjpyY6Hi1TsCHdNKheg5ItUjut4H3XqVT+DgYU0IZXp8JxFhj12WtJTw==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WpfyGPVuvosR; Fri,  9 Oct 2026 07:49:49 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org C4881813F5
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791532188;
+	b=lGTUxde3qjKJugvXK/5d0XlkTZiSD6pr+9QJZ7cFFq1+OmeXUz2YMd1+7NpexTeFTBX+
+	 wxJ4ug7ItWR3dWhRsxFBCVogBIPvZ8y9WYo2nZ8A2ktN6NhfnDMBA9I3O8g9knKMMRQlA
+	 +sFoEIQBOW+2bTRoRpn21Q+5Sdu0Jjh1TBXjNtz4Dlxg0jc7Od326uwX2E1TVz9AqfUXk
+	 ETQhJlBpVmBVYWooGEZtbIruZziATCXdGzlfTPA1OyS34u1X+0wvGJgJUkzgKUhAb7YY4
+	 VNjVsw8F8Lfo/hOMfURApUfAnbs3FHbKN9gSmobaMofCuRFCS1YjOnwUNLnSKUZA4Uw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791532185;
+	c=relaxed/relaxed; t=1791532188;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
 	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
-	 X-Received:Received:From:To:Cc:Date:Message-ID:X-Mailer:MIME-Version:
-	 Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=+CShjkJOQsONe+3ym8oBqP5w/QNhyJ0o76Hzzj7N3kw=;
-	b=IyhrR7Y6JvRJomiCWdZAkGDmK4OMJ5hbd3P515slT3TqvOFy5hIPeiPYoVGyR8k8MpZX
-	 nQ1UXfZjb+kQgb3hmWtKfaKU2jFOscN3ZNrdtYPfr64cpxFHggDgDeUml1JshRjiLfwsv
-	 cCTn3ig/w5a3bjaAex+7v6R860N+VbVmksyPlbXnqBtJCGRj1zeUAfe4nqAF4giO0Df1n
-	 3hboB1D0AXmLbQW3Tt1ROuMiPcSQqfGuDg6yP1JNCbv2DT6N2udM3iYd2fr0H3PMxu592
-	 4LI7l6qbFw4tqsl41QhK8+TIrQBvJ+ph0NTYJ5ucRrtvnOWp3qywVKe0qM0Y/kPiVWg==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
-	dmarc=pass header.from=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b="BHg/I2mo";
+	 X-Received:Received:From:To:Cc:Date:Message-ID:X-Mailer:In-Reply-To:
+	 References:MIME-Version:Subject:X-BeenThere:X-Mailman-Version:
+	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:Content-Type:Content-Transfer-Encoding:Errors-To:
+	 Sender;
+	bh=LjNuYLlRfeXK0KFeZKYl84Z9mQt3jmImCafryT6mXKA=;
+	b=JADkx+E259UonO7mwnxPIM2eO3i456tDkUA5ZVNqkLVviRsyDkLhyAHYyxsB0O5yN0Dy
+	 Piubbg7e8z00zkBN1/GCh/sh9j7o2u+KQcuaR9rALc+sw0erTUCLL0khPMez0gOtx3r1k
+	 AmUaSNSFCC1W8BFsL10PYm2cA+Yf0n7CtpZt4QbEeaYIp9Qqx1praprchj43/BBBpa3ZE
+	 d9FzsUIgu7p7kS0ExkDCzarkZO4sP3prXkT6Jx9YJs8ucjahf8ms/E2MvVaSJoTpis7RF
+	 DpFZY4q+6t9n68IcVubBp/7BgL6CqwYl/kH+RqOqY5vr+FAQ1NG3Dn5SHZ1HHSbsTLw==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791532185;
-	bh=+CShjkJOQsONe+3ym8oBqP5w/QNhyJ0o76Hzzj7N3kw=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=QYAjcqZEueSZ0I3bYv2qKye+2k/+j5vXc3YP37RL3sfd5apGNIQPiRFULlmFXk9z9
-	 cG1H8fg78lGUaMLBGQPD7APGDdyDqYgQCHoOq3QVGnOSz0BbDBR2soc6PQF9MhF9VA
-	 MEeSo5UrJF4FuyVH0pah7PCxVSLD+imW6Jnuxk+gkde9yNCYOkUx/KaecbG5LDsjQq
-	 mGwFXoc6gbGCwAGCU+nSule+cLFU21Op6RNpxAJMDEdImgDeH5FVeln4j/sgaysC7y
-	 8miWBQeqaa/Pz7EtsGyKXv21jxcNbwb0pLjzk6Y9zDGPIQsecS9mk5fpkL6GlgKBqt
-	 /NnhFyHNbycGA==
+	s=default; t=1791532188;
+	bh=LjNuYLlRfeXK0KFeZKYl84Z9mQt3jmImCafryT6mXKA=;
+	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=AdtYruDoGlGa0YGKJbQyOZFfXrLClOo7yhx0Crk1+4daQF9rllEqnFuZIG82ZrzsN
+	 zUT661CyhxOqYainENLllrQe7WR4kp7nCBACWUTfVRqPQ16msLa5p1n0/TaFAG8guy
+	 pp9dYUeJbw8gD5xopFBG+1yJUlfwg8mRBI6yRMawd1025LP4oVRmhnYshiGvLXbrIy
+	 VW8JnPinX7fVI6WoFmbY9vbC2Q1VNqODBBRfcXZutnTiQdbOdw/bX6c/KCiqxKdRlV
+	 PL4PQgN0Z4bR077GOspxUbW7hx617WXGOQlyUUv3gBurq8/iGm0FJdBspzedFhe/Ws
+	 kYajLRisY5dZw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7D4174091E;
-	Fri,  9 Oct 2026 07:49:45 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 81DA7356
- for <buildroot@buildroot.org>; Fri,  9 Oct 2026 07:49:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C4881813F5;
+	Fri,  9 Oct 2026 07:49:48 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 109FA75
+ for <buildroot@buildroot.org>; Fri,  9 Oct 2026 07:49:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 678044091E
- for <buildroot@buildroot.org>; Fri,  9 Oct 2026 07:49:44 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0262A6084A
+ for <buildroot@buildroot.org>; Fri,  9 Oct 2026 07:49:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xsF9CoRkKLE0 for <buildroot@buildroot.org>;
- Fri,  9 Oct 2026 07:49:43 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 4C8664091C
-Authentication-Results: smtp4.osuosl.org;
- arc=none smtp.remote-ip="2a00:1450:4864:20::62e"
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791532183;
- b=Mr95CjyAeDtfjartI3p4OvTolZgct+zkt5rDoH5e4lrJzdj5CwMWsUAloiJ0NkRsOmJi
- n6lZkM9OIKK+W37/zACQJH3vAIa+/hwCILobjz6d2XNj5o/30j0vlm02/OOqjmsYHdFjQ
- yClDsm6owHYremgjN9Yxdj+apVaU7jC0z8aodg562l/RYKwIMu4GVO7uUBok2UP+k255+
- OGLSWerE2Dhm93w3NZlFvjdxttfkSVAnDfotpmGWFZD/Us8XAMCameEOXmpelM8e9yd63
- 5crh8yK+DgaGVQooNmtQnq6FaG9CFaoyZ6WZpwu3ZIOcq4ujYStuoTxK/PbaEtAjLUw==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JJU38UUl_J1U for <buildroot@buildroot.org>;
+ Fri,  9 Oct 2026 07:49:46 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org C7B0B606A0
+Authentication-Results: smtp3.osuosl.org;
+ arc=none smtp.remote-ip="2a00:1450:4864:20::633"
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791532186;
+ b=lbpw87K1fxXVTm1w9cGsAznxEsDhUcTnDii2S/N/JrFr6ALpuP+cQg8xNJil4Tv1MkOp
+ eo2mkuQGXrmYc7mdiDZ67Cumz9yq//EYtK3GsOMbEW9nKl3ZVmOC3fM8/UyE7ECPRktIT
+ r2fKasgVpDBv0NM/AA09kSnA+OPebHiS19zkkiX8JHYjQJZhLA/UXNdAbFIm9lM1r+zIq
+ owVWg5ZcIpW6yL7Yt3IOA6APxf3SsHmIDSfojyz8z04uJ9SD3zsUHR3KOVhnck4G8snTf
+ /2i6LCNrqbHuo7Wd8No4YnvQ+exSuAXVGNNS4ENV4AA2cX7uML7Cp8D40WW+V1HZdIg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1791532183;
+ c=relaxed/relaxed; t=1791532186;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
  X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
- Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
- bh=DPlOmYkbrSlvURodJWxdqnXv7aP+tv57t/frDn1VWp8=;
- b=Wzy6Ft5wMPLV0Sakt1Ley6tty1eA+JmnMwgbC1/VNOXrq9S4eG8C9lTukuvZ22wKzghE
- h81nT5HKq3gtZpY26ZbUxiqZOui/s4bWX+P84S0ivCZZH5LuRCHltP+BAbA+sR5FXcM0G
- u/pAtpN5RdTb7068OXlUwAVeTOVP0PS/9nCEPVOPqLiBwJ8T2v8qkqpFuiYqLwGGYTn/D
- hC7sKThmCVvDZJmGJvZbvAKjG/pHHOFQnAjZZEqZx7WYEE9d17TkUdHarDVQ0K/zwwdV5
- gWKOhZLBOrufMAgADElq/egZLjaTrtoLU3ZIc1IKoKgIChZghMUte8GEzb5CXkltnvw==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
+ Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+ Content-Transfer-Encoding;
+ bh=zviC/GXogNPoyUP3SYn9BqsamdBn8aXS1+1OxfvK9DY=;
+ b=h9PAa6u93/ODqqsglauME/ubqTJEwapABfLL95ghqsXh2BL4L32DFiA2MYTdhT2SKDa/
+ QkjEETiAsbRGDWikUE72DY9CmfxH2VCYOZjJcUPFuwdTl+nTvJx2/B62dgK5L2vmBhe1n
+ XVtWqS1rqozPU73QbTkDNbGXdu343jeeKqxj3dk+0TJwe3uvEosBiG/zoD9OpbIdeZooe
+ 7cZz9zB/UH6aWW0CLtE5foRiAM7cq0j8bdV/aFviJeXtUWtMWhl8505iOVVYHj66Y0Tf6
+ oqTKDP3ra65mJXVThE1YbzpvyB1KuKkASfj/GNw0raWtWw2IRAff3yIks3we9KZ4sUg==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
  dmarc=pass header.from=gmail.com;
  dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20251104 header.b="BHg/I2mo"; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::62e"
+ header.s=20251104 header.b=OO5s3uby; 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::633"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::62e; helo=mail-ej1-x62e.google.com;
+ client-ip=2a00:1450:4864:20::633; helo=mail-ej1-x633.google.com;
  envelope-from=mr.zoltan.gyarmati@gmail.com; receiver=<UNKNOWN> 
-Authentication-Results: smtp4.osuosl.org;
+Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp4.osuosl.org; dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20251104 header.b=BHg/I2mo
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com
- [IPv6:2a00:1450:4864:20::62e])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4C8664091C
- for <buildroot@buildroot.org>; Fri,  9 Oct 2026 07:49:43 +0000 (UTC)
-Received: by mail-ej1-x62e.google.com with SMTP id
- a640c23a62f3a-c2e5e801487so614384166b.3
- for <buildroot@buildroot.org>; Fri, 09 Oct 2026 00:49:42 -0700 (PDT)
+Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20251104 header.b=OO5s3uby
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com
+ [IPv6:2a00:1450:4864:20::633])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C7B0B606A0
+ for <buildroot@buildroot.org>; Fri,  9 Oct 2026 07:49:45 +0000 (UTC)
+Received: by mail-ej1-x633.google.com with SMTP id
+ a640c23a62f3a-c31a34de844so111025766b.3
+ for <buildroot@buildroot.org>; Fri, 09 Oct 2026 00:49:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1791532181; x=1792136981; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
- bh=DPlOmYkbrSlvURodJWxdqnXv7aP+tv57t/frDn1VWp8=;
- b=BHg/I2mowP+gOCSY4Uk3eSLYDHIH5Q0Yqw9Cp/spV5am9lM7ZQq1Wcxr0VcMfL7lXH
- ZVf1A5PlIGLLbrq+xOFvRyzoPNe3ahPYnHRMQoK3Cn7rHyVypfbdoHsSMrD9VU63RZ7Y
- wGDNYX6Tn7KigX+XN11T5X+YQqqPUkrUz3Twx7MBXb3Srm57VGyTKO9KasToDWE2Dsy6
- izeu2QmhRI4A8mCUjf4g7WMM6GL+A0jFlZ9HPP95JdyZ+SVOQ49NS+/kbwbuSjelmEK2
- MffpS/zYRFHO5kctwLy+C7Xjj5KVfWnXW0NBACTb8OyK2SXoimYOhjSfdxKmmQDlZjzB
- SBZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1791532181; x=1792136981;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ d=gmail.com; s=20251104; t=1791532183; x=1792136983; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to:content-type;
- bh=DPlOmYkbrSlvURodJWxdqnXv7aP+tv57t/frDn1VWp8=;
- b=NQWDKnz7KBxUoTcyV9uvj+tszn9IVWftmdzcHxcHdWPSbpHfPV/+qRv3d891CQHL99
- DXSDpGfL0wNPc/YAktl+PCrsWGNILwSPOYrhibdPitxNfEP+qWkTsccdtXaZkABOlsBk
- FrMiPcj8j3diZlKqD2Ue1U/Qal/KR/3JBF4riMfzcfwwgpXQNXKqr2tvlDj67J2/YPSk
- AxinshdZUEkEt1MWJcNE1JqPCmaED1RMc2Bb/esiycc+W0YaBlXFnkLzQXb4Q1wOkrrg
- mATAcWiBQV9Nr+gNq64krNvPaOzxLdv3UcB7HqVB2Wad7K6jgazYRw+xYQYBBuI773yn
- GMWw==
-X-Gm-Message-State: AFq9FYJYm6nbs7iIKPvZ0Y2O1ckfjkMr3qz+yKKZNl+aCJLQPUxOCjA6
- H7EYnwQuQdVs1IVOAx4/32FkSrbGgFvvLsPRTRiXc09/Sp+pdbXd0YqpawFfTw==
-X-Gm-Gg: AYBFou1QSHOfbcviR/5e7bDKadIjb4JCJcaxOK7326tnTzlfFGP4Tuli52t9rpH3bzc
- sfAJpIJI4bjOrOhotIvKf6EWa5udTCQApMto1+zA06GTBkpn0YFrCtV3rX4ukT2TOldcMeQuV0d
- RqfD/aE97vPIFLvrAVoZatFC2Nc3AcSgEDEaRY2YbtC9WoeyMyh5lH9rdoBPZQNwyRXGJS1aBHS
- qeDGYexPhHAjggSIuSPcjpYTioiDMKsJQ+BaPdFWOVKbRDwd43sGrP+cpfTE7+hHKEF8O8UU2Qj
- kliTCfruM2OaQYntTP9axPqHHtqfPZZQgcTdKwhBxSbukrMwgfFsaQHYnRkNg2gFZZ5cIqToaer
- Z2k6Cv2UJbOq3oHO8w/a+jatKAMmo6CTeP2Ce2CJopaSUblIo8ARNqMbsZyRxaGPLMojvYaPpqk
- S4rJAGZtmbZXk31aa1AwGj44VxzGd7/OWaapZkxHOXBYuoDsTIx6Ne4ziNvUmFrC8CO6sADUZb3
- ytMQ2LG+IJ5Ac3/zfkvrWjgyZBu4v1/elRaCRl6BI+MXzTjB+yKTcPBBddH
-X-Received: by 2002:a17:907:9801:b0:c2d:be57:f73a with SMTP id
- a640c23a62f3a-c31a9fcedffmr111799566b.13.1791532180882; 
- Fri, 09 Oct 2026 00:49:40 -0700 (PDT)
+ bh=zviC/GXogNPoyUP3SYn9BqsamdBn8aXS1+1OxfvK9DY=;
+ b=OO5s3ubyW/rbB4A46HQ76ZmY7lPIOdk9GCtvxZWwzFhnUJKNqXUO0zyTdoyEfzW78v
+ YNtuuM73RrXwaZIsWiN25Pycom43cj3t+q0YNN5EpEObd3QYqjK7tuOhcoLHDrJbzhUj
+ IseIul0GbBn8tv7PD71SWU6/wziB6V8zCw401jPbia9EMTj+fTtrGdmREvA8nnXVms9J
+ Agfz67anII09h2At5KxbQVSNYiX3o57j1zwHur0BSFO95PHhRNAp2jEJED+Oxu4pJeta
+ 7q8AByFuWSBiSAJN8GHJjMjmiF9heuA/rp+xk0EirF986OhUR0gL049/8l6LYegmUeqB
+ Fh9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20260707; t=1791532183; x=1792136983;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to:content-type;
+ bh=zviC/GXogNPoyUP3SYn9BqsamdBn8aXS1+1OxfvK9DY=;
+ b=uYIsmFRji3Zi/l20ighLa9wnNaFfguaOliakE51Z4M6NSuNRgMtzfGYf4n+qyKPd9D
+ b8vuKShNGDQsgTFeb6KQMwFzHUo5CUegRyUq5qyLt7miykAjzcdAtX6fc5nPX4WpG8CM
+ 6mgs4rVHEWWy+nBtJ4S7FLiiwlYt1OlMgjiY+rLLrwA3k/qLhNDB4xRgB7tE6HL7s8Hl
+ u/TGiLu2mE+vxJDe/TnP229AtFGHshsWywoyR2pGrbTEANbW3242Eu6d0cmI2Ns7JLt8
+ ZX453LiIbZfuWaFukjJWwn4Z4aQ1YfXUKN6XC7eZouaIUbzirk5OPCvUd8a5NWgzMkrM
+ XV0Q==
+X-Gm-Message-State: AFq9FYKfeZL3zG5C7dX48HGPdT+HNcM7mJzL7yxGvGPkgMT0ZOZiXzIO
+ r3tth69zZeLmxIPc1EMG/1rViHeAP0TA57mkaiMtSjJ3BGLDCbtYkmFBLLnDhQ==
+X-Gm-Gg: AYBFou38H2+ljfTnoCZJN9O4t8JKQc5z1d2slHKLKuhETpUpKlbkJCXGtvkM1aEO8vG
+ QzMg0p4VXGu/PSTMyJq+Xkwl+N9EuDB2KBnxUKSVFCm6Wf0KvioaSJtkprAEQvEDkpLtQNvQBXs
+ USvbnYfJ4ZXQCKApEJFhI1emMJ9sy6eOvLQ45i8Wyly/uchqJ9LwlYeDdeaUKw4AQXsiKCfsMBL
+ 9Lf36EGy7zy+vXfG6HgViTvX9v9moMrE21mTix5IHDQknyF0zoek9z4DM42z7pFcjdtp1FA5moQ
+ KfNYWTtKJYssSkqd2KFOADH8MOTDBV6RFImWZ1ZhZplD+XMVxX4E5pqO8Cq3Z05VbnV3oTGQjiF
+ 46GUPxjb5LdwHbBL0aNClTNUjmzAV3jk5Lm0LOX8M31pzCdmsSBZmKHMyXdcy6cONQEoHVSslz+
+ JzWjTmv+DEooHeum79zVxUTtMaTZZevJlBvHsxBOIsrVi70K/rluVloLXpZDClZfj5QFjsmQIu/
+ ivxuFBPSwaSXYvcZoDgGXKH0A/PmnTJprlUghS1XKuzlF6Z6A==
+X-Received: by 2002:a17:907:3ccb:b0:c31:5d7a:eb97 with SMTP id
+ a640c23a62f3a-c31aa0b47ddmr103909566b.40.1791532183350; 
+ Fri, 09 Oct 2026 00:49:43 -0700 (PDT)
 Received: from PECS-93BMLD4.foss.net (254C249B.nat.pool.telekom.hu.
  [37.76.36.155]) by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-c31a9a38050sm56277966b.24.2026.10.09.00.49.39
+ a640c23a62f3a-c31a9a38050sm56277966b.24.2026.10.09.00.49.42
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 09 Oct 2026 00:49:39 -0700 (PDT)
+ Fri, 09 Oct 2026 00:49:42 -0700 (PDT)
 From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
 To: buildroot@buildroot.org
 Cc: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-Date: Fri,  9 Oct 2026 09:49:35 +0200
-Message-ID: <20261009074937.992939-1-mr.zoltan.gyarmati@gmail.com>
+Date: Fri,  9 Oct 2026 09:49:36 +0200
+Message-ID: <20261009074937.992939-2-mr.zoltan.gyarmati@gmail.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20261009074937.992939-1-mr.zoltan.gyarmati@gmail.com>
+References: <20261009074937.992939-1-mr.zoltan.gyarmati@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/3] package/libusb-compat: bump to version 0.1.9
+Subject: [Buildroot] [PATCH 2/3] package/libusb-compat: add option to
+ build/install examples
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -172,37 +177,59 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://github.com/libusb/libusb-compat-0.1/releases/tag/v0.1.9
+The examples are not installed by upstream, and their names conflict
+with other packages (lsusb from busybox/usbutils, testlibusb from the
+libusb examples), so install them in /usr/libexec/libusb-compat/examples.
 
 Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
 ---
- package/libusb-compat/libusb-compat.hash | 2 +-
- package/libusb-compat/libusb-compat.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libusb-compat/Config.in        | 11 +++++++++++
+ package/libusb-compat/libusb-compat.mk | 14 ++++++++++++++
+ 2 files changed, 25 insertions(+)
 
-diff --git a/package/libusb-compat/libusb-compat.hash b/package/libusb-compat/libusb-compat.hash
-index b22fa5434d..ea3a89187c 100644
---- a/package/libusb-compat/libusb-compat.hash
-+++ b/package/libusb-compat/libusb-compat.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  d199c173fd3cd9d27c7f4bb6608befc7eb761984e6664da7d9d4386ff66fe6fc  libusb-compat-0.1.8.tar.gz
-+sha256  b09aa33e943080352041ea3d5ac01fd90ea96e9337212865de0dda776886dbb9  libusb-compat-0.1.9.tar.gz
- sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING
+diff --git a/package/libusb-compat/Config.in b/package/libusb-compat/Config.in
+index 076d7b8d77..5efa9bbe3d 100644
+--- a/package/libusb-compat/Config.in
++++ b/package/libusb-compat/Config.in
+@@ -5,3 +5,14 @@ config BR2_PACKAGE_LIBUSB_COMPAT
+ 	  libusb-0.1 compatibility layer for libusb-1.0.
+ 
+ 	  http://libusb.info/
++
++if BR2_PACKAGE_LIBUSB_COMPAT
++
++config BR2_PACKAGE_LIBUSB_COMPAT_EXAMPLES
++	bool "build libusb-compat examples"
++	help
++	  Build and install the libusb-compat example programs (lsusb,
++	  testlibusb and hotplug_monitor) in
++	  /usr/libexec/libusb-compat/examples.
++
++endif
 diff --git a/package/libusb-compat/libusb-compat.mk b/package/libusb-compat/libusb-compat.mk
-index b54dbded27..4e78a213b7 100644
+index 4e78a213b7..c8dabe2068 100644
 --- a/package/libusb-compat/libusb-compat.mk
 +++ b/package/libusb-compat/libusb-compat.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+@@ -20,5 +20,19 @@ LIBUSB_COMPAT_CONF_ENV += \
+ 			   |sed -r -e '/\(SONAME\)/!d; s/.*\[(.+)\]$$/\1/'`
+ endif
  
- LIBUSB_COMPAT_VERSION_MAJOR = 0.1
--LIBUSB_COMPAT_VERSION = $(LIBUSB_COMPAT_VERSION_MAJOR).8
-+LIBUSB_COMPAT_VERSION = $(LIBUSB_COMPAT_VERSION_MAJOR).9
- LIBUSB_COMPAT_SITE = https://github.com/libusb/libusb-compat-0.1/releases/download/v$(LIBUSB_COMPAT_VERSION)
- LIBUSB_COMPAT_DEPENDENCIES = host-pkgconf libusb
- HOST_LIBUSB_COMPAT_DEPENDENCIES = host-pkgconf host-libusb
++ifeq ($(BR2_PACKAGE_LIBUSB_COMPAT_EXAMPLES),y)
++LIBUSB_COMPAT_CONF_OPTS += --enable-examples-build
++# Examples are not installed by upstream, and their names conflict
++# with other packages (e.g. lsusb, testlibusb), so install them in a
++# package-specific directory.
++define LIBUSB_COMPAT_INSTALL_TARGET_EXAMPLES
++	$(foreach example,lsusb testlibusb hotplug_monitor,
++		$(INSTALL) -D -m0755 $(@D)/examples/$(example) \
++			$(TARGET_DIR)/usr/libexec/libusb-compat/examples/$(example)
++	)
++endef
++LIBUSB_COMPAT_POST_INSTALL_TARGET_HOOKS += LIBUSB_COMPAT_INSTALL_TARGET_EXAMPLES
++endif
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 -- 
 2.43.0
 
