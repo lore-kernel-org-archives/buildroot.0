@@ -1,104 +1,116 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D79ECA601F
-	for <buildroot@archiver.kernel.org>; Fri,  9 Oct 2026 19:31:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E8C5CA601E
+	for <buildroot@archiver.kernel.org>; Fri,  9 Oct 2026 19:32:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F3F2B608BD;
-	Fri,  9 Oct 2026 19:31:19 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 71OFbALdO_Cw; Fri,  9 Oct 2026 19:31:19 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 16410607B2
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791574279;
-	b=JDmWpHU6kRDuh1wqg3yOdLM5dAQlVGLucP/4y0Wf3VxwcttNIpfBj6L9g5mMcJPz3U/W
-	 FcleIGL9tjVcFCT65PFiwzzirPuy/Y4k2nVfwovsANqrsmfwc6bc98d0q0Pdp6Hy8CfnJ
-	 rrGQgZDFMv5kRVaMBXwCyd038B0UfLfQcFM+Zn45OYj+Ymdbf65WLvy2pJ39e8RGWlXSo
-	 BVJU+xzPDsgvcORJSegAGef7BJEFjiL+ariMvy/4tUV6QWDup4COwNFD5Ip6Tj8k7jp/r
-	 kV8g93o2X+IEALo8BciwZmEGS3oNukyb5M5ZIhnCQkfMTD67CWYcUaSHZumvTiDNWAw==
-ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791574279;
-	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
-	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
-	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
-	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=wtD+KHFlONgqJmrLOMeTwmvtK1ORLxYN8qPLILLsSbQ=;
-	b=TO5WmetEmdSybCWs4Fdb+sIDnBIgzL2NywMAkBvUaHg3BsVZPiDoXqpljn73MtRxRCka
-	 Zy8k7QhXBUe+S+oHeTeKokriGUKSKwz26Fto8/ZSfz+UV0BSEC7VzZi3gXZwAkJ6w7Fi+
-	 5hfdt53ju7vMUSCJSmZB5tAYZCSb79pF/sLPhJ6Wvdsihi9m5JfeDcznyu/F4FgUTpSaf
-	 WlWzVr/n5Z5KR96FEJT51mY1kaaWqOSD6hNwLqj38BmBGpCQIVbIt2WXy43HltRFKJcAm
-	 1pjuXol4YuNAEIA2Zv4sG7TzSKMnC/YzKnZK/TlIJ1UJJa7l1+JaLbfkt77I7+YLrHQ==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
-	arc=fail smtp.remote-ip=140.211.166.142
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791574279;
-	bh=wtD+KHFlONgqJmrLOMeTwmvtK1ORLxYN8qPLILLsSbQ=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=GGX0FxkLPKTcobcJvAdqEkhs9na2H508wAEOy8q4F9HRB7aRmBmyI4MPGKPmLMs1Y
-	 tcUEmSLzWF+ixLRUaZIKqL1POL5z4pIbg1rYQpicAEN11QSfGoq3qNgdDZ0PiIGki4
-	 tQJDmQmc35vVmoDhiHSDLLgDBnXtPRdC8I8FQAbqmLEmJ6XtaNcx/6KAH2hIwqd0MU
-	 xkxAWrZZKKp6bA0O5l4ox0vb8k39zZSHe9GkUWy6gfvc0AFid+Rkx8V8DwauVM6vt6
-	 AG6OijiF3PFREoi90ZijWPTsuNoF2OETjMu+qxdWTsZG1gfnpBbVwGrA6zlqimCXxQ
-	 OFOuo0xiVloXQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 16410607B2;
-	Fri,  9 Oct 2026 19:31:19 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 58E5513B
- for <buildroot@buildroot.org>; Fri,  9 Oct 2026 19:31:17 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3D56B81496
- for <buildroot@buildroot.org>; Fri,  9 Oct 2026 19:31:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8F6468149C;
+	Fri,  9 Oct 2026 19:32:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rDFX-IWgH_JK for <buildroot@buildroot.org>;
- Fri,  9 Oct 2026 19:31:16 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 3B58A81490
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791574276;
- b=j1k17Hud6eHnQ7dPMxEpT1PaH62n0hG5DU+tumAp6GOIhg0oKnaVbEX0Nh3EBjya8ufS
- p0/w2SLFPEFgxABInHR4Zdc3NAmf2XpPPbLqEOhH/AF0ALNdMGKgKbpfqnu0yv8I1av5u
- dwq0pngOOoonpsIQXCreccs8/mpalqwBmfo3kjs0VO+RLek17+yA9Idd45pjN8VfQFI37
- bBeb+UfsH+9TpcbHcUUrEqPtRzBdWUwZq3HSQLPkXreS6PYwUruOOFa56gw+/PqypvIm+
- 4ajaaQJVxOAemV7FLfZASWE/gA1tvxyT2ur8vGoEu2TOeDlu5o2dJAzoLQHAkZgSJvA==
+ id WfqpCHvFvl_B; Fri,  9 Oct 2026 19:32:03 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 80AB781496
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791574323;
+	b=fkh5KxWl0PeQNgqyZgCcDIW7hmAQs6T8lGoTXUIJC0kiFmKfC2JTSnOz3Z2sVx8NcVl0
+	 /haM/L9XJCQqGusvDydiF2SzyhAfX+unrr9rzYmFFiBuDuvOpVOR1lHE53c0UU04AKndt
+	 kqYybv+S4YXOL/ScBYBkcaIhcWgcNSIEhBWK0Ju02K0NfddMDxXW8UeYxpKxcEpVJI20e
+	 47U+j1PJRu7pnDkbb09IbAFIY57c+ynAFSgFerLxRyaEy15g8Qw7P6s7MIs+rdkumEMjI
+	 zq8X0lJzzI9w3NnlpJanwQYGEkXDflJK4o5tUrTgFFdvduLip7Fj0fqgATVAbXU/DpA==
+ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
+	c=relaxed/relaxed; t=1791574323;
+	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
+	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 Received:MIME-Version:Date:To:Cc:In-Reply-To:References:User-Agent:
+	 Message-ID:X-Sender:Subject:X-BeenThere:X-Mailman-Version:Precedence:
+	 List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:Content-Transfer-Encoding:Content-Type:
+	 Errors-To:Sender;
+	bh=shSVUqFS0dgA1LT7iHRwgEOhFzmZ3+tTRkOagviqbkE=;
+	b=rHeFBPvAz8/AmgLVu3WzbFbnhWgc1bXZYiRzujGgtzyMrlLezKw3adUd/pxjuT19nRgl
+	 tXQRrZaRjIJhk5jEqubUKz0kBYLZN/28UQIX0RMqbWaAEbJYTrcfbpoaa6oJWuPxUOS9X
+	 tKSFpb7E+mlpaY6EIEmMgf3jUlCMgrJcmSxzcINQfNrubKwE/Jwd608RwZsUDPlMZ0clQ
+	 p+ETPYlnbF+F4Z9+rNZhhaalpy3M2CpF87yzT1cT6bFzu/Pqc64Y5S+5aeuSwvP+wmVQn
+	 rYgikC4DiMuNa4KLAMOPpwVLM59Hg/9hVmu1Q/AG+GzoMzeTm8CkyP8gj01ePg85mdA==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
+	arc=fail smtp.remote-ip=140.211.166.142
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1791574323;
+	bh=shSVUqFS0dgA1LT7iHRwgEOhFzmZ3+tTRkOagviqbkE=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=NQfcDvm47+mOtciSF4nm9IUY3xBwu2u/QBScixSuj6N+xgfmyRMIOrw021hH5xjkY
+	 mzAbtFRIfCYhn2rCHf4SnkEzZ1iQuwUczwY2B04Q8uuWwUvxFt3qR2xrGm6BUzBwTH
+	 J19PcLYanTNlqTA5HxxvUa0fufw/yZNX/Psyt/jYB0LN3arleDNKwKFnut6psB7r1R
+	 a5YrBcyxTuukHYXK6KtcvhmCepKom/tDWEKKcBPEJO6VJndzbjGDileJ1pENiaHpRU
+	 3WL26hIEuhQbvSqTyb75JzNz7rBA8NtJ+zFP5tnqpGdmQJ/IB+JSvCZ8ipiHwggKyI
+	 IebaJkTutJUtg==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 80AB781496;
+	Fri,  9 Oct 2026 19:32:03 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id E9D8C13B
+ for <buildroot@buildroot.org>; Fri,  9 Oct 2026 19:32:01 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id CFEDA4070C
+ for <buildroot@buildroot.org>; Fri,  9 Oct 2026 19:32:01 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 91WHpkkiimsj for <buildroot@buildroot.org>;
+ Fri,  9 Oct 2026 19:32:01 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 7268640426
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791574321;
+ b=fF2KejakNqlEYKI/7bT7bxsrjWRZC8RL2d7P8KRbcZ2GUJ5dPfqCfCXKGxYI4S5nICrs
+ KNBJlA0DyWLr9RvmafXzS/BkyqoShhUAkuU4os7gNd7hW9BuOXaMKMDuq2Q6ivFlbxWZO
+ 5Fmxn0BPoFSeU/2bExOvoxOIyks9KhBrSAsWkEvEfUjuv1sLkWSujQXKPq7pmNa7dUcWc
+ srL3unWoly593bdoKHBsjdJ2vemx58MitSnXGUgfTx2su+6Ym+SBjXHxCytozsRtCBKrz
+ H4E+uvHAAWtGZ9H7TDMXXxmkAvrq8F1trgZJUJ1o2DeVaYLLViZB3OUNc56HM8iOT9g==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1791574276;
- h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
- X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=v0YgaLrGzZpNAWQrNuqULg8eSeqd3l4u7njliJpXpTw=;
- b=DM/B3l9AoyL8XNesACEgputfxHS1OF3WwCgOFiXVxzRFQzi6PY/EFRf1QHN4KJZO3/dz
- h1ZMLRA4RnezC2UpGGAH5Es952+9dk1sDjc5DHvmgLEVWbUYuwvW5ksDhbK24XruWvaHD
- IpE9Og7j8ogHtfdZCQqz4Se/wa0sS6x6fIB133E4hdCROKTgD8vcRZ9Nf73oiZRBiAXNV
- QXkBJgb6yAIfBuMLNbNAmEWjgCkNJ04bvVCBvOUmI5G5S2Y1cgbr49B+swUonGGUpjAr0
- dNzEZLQMtT6kDZDXJvoWwGW9yMNwN1TGtZImAXSBnOVYXLPqH1xola250ywBT0JeLZw==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
- arc=none smtp.remote-ip=140.211.167.122
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3B58A81490
- for <buildroot@buildroot.org>; Fri,  9 Oct 2026 19:31:16 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5C5C08E03F; Fri,  9 Oct 2026 19:29:58 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 9 Oct 2026 21:29:14 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1869ded4bbf1cb9cfd9b26e6717978cda7d4f977
-X-Git-Newrev: 0522d9af895473a34c0a467e72e70d6d6e2a853e
-X-Patchwork-Hint: ignore
-Message-Id: <20261009192958.5C5C08E03F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/shadowsocks-libev: update the site
+ c=relaxed/relaxed; t=1791574321;
+ h=Received-SPF:Received:DKIM-Signature:Received:MIME-Version:Date:From:
+ To:Cc:Subject:In-Reply-To:References:User-Agent:Message-ID:X-Sender:
+ Content-Type:Content-Transfer-Encoding;
+ bh=ptVtRpCBZZt9ZnvQoEW+HARh+Aq7c2nBWBXAO2LDrjA=;
+ b=cyCoUXacrdnzzhnwvjm3D43m64QwqUpOAohsfs57YV3ajTyERwYAh2vffgrIBbQRR2qF
+ JLBM56/M793DEmOd8sAmxG03AJZwSDfPe0GPJTkwXu+IN0XstrhAcq82OMoBjIROWijtF
+ oTEPoiowO/iFY99WEP5ezCNUzNMkSCGpdr/bATOi3PhP1NyWCrSU6Mhnw8GaeAGKyu7+A
+ hSJAg2TG18dKRJvyDBfp37ReuhR5PMp8UVK6j73d9cJ7imvTgQ2ZQgAU+wL2w20M9m1Oo
+ kjFcxLP/lCNP5Awxlt/d0ieuhAcTBsBMn8Dstz9pb1ffkRYKF7H/N/stW97RGk7Ue1A==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
+ dmarc=pass header.from=free.fr;
+ dkim=pass header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=iEeWY2Tg; 
+ arc=none smtp.remote-ip="2a01:e0c:1:1599::12"
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7268640426
+ for <buildroot@buildroot.org>; Fri,  9 Oct 2026 19:31:58 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id D7CFA13F861;
+ Fri,  9 Oct 2026 21:31:55 +0200 (CEST)
+Received: from 199.151.230.94.awnet.cz ([94.230.151.199:53130])
+ via 199.151.230.94.awnet.cz ([94.230.151.199]) by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Fri, 09 Oct 2026 21:31:55 +0200
+MIME-Version: 1.0
+Date: Fri, 09 Oct 2026 21:31:55 +0200
+To: Yegor Yefremov <yegorslists@googlemail.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20261009143448.1559850-1-yegorslists@gmail.com>
+References: <20261009143448.1559850-1-yegorslists@gmail.com>
+User-Agent: Webmail Free/1.6.19
+Message-ID: <c9943c51166cb92aef6d98c4808b5993@free.fr>
+X-Sender: ju.o@free.fr
+Subject: Re: [Buildroot] [PATCH] package/shadowsocks-libev: update the site
  URL to shadowsocks-c
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -113,61 +125,25 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/0522d9af895473a34c0a467e72e70d6d6e2a853e
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 09/10/2026 16:34, Yegor Yefremov wrote:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
+> 
+> The upstream repository was renamed from shadowsocks-libev to
+> shadowsocks-c. GitHub still redirects the old URL, but the README names
+> shadowsocks/shadowsocks-c as the canonical repository.
+> 
+> The v3.3.6 tag points to the same commit in the renamed repository, so
+> the tarball and its hash are unchanged.
+> 
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> Assisted-by: Claude:claude-opus-5
 
-The upstream repository was renamed from shadowsocks-libev to
-shadowsocks-c. GitHub still redirects the old URL, but the README names
-shadowsocks/shadowsocks-c as the canonical repository.
-
-The v3.3.6 tag points to the same commit in the renamed repository, so
-the tarball and its hash are unchanged.
-
-See upstream commits:
-https://github.com/shadowsocks/shadowsocks-c/commit/bdc77408cbe86ea90a6415222878ec1cfb2bb0c5
-https://github.com/shadowsocks/shadowsocks-c/commit/bff687bd3479aa3b630bba13847f44ef480c9da1
-
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Assisted-by: Claude:claude-opus-5
-[Julien: add references to upstream commits renaming the project]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/shadowsocks-libev/Config.in            | 2 +-
- package/shadowsocks-libev/shadowsocks-libev.mk | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/shadowsocks-libev/Config.in b/package/shadowsocks-libev/Config.in
-index b5be19f939..939bf5d2bc 100644
---- a/package/shadowsocks-libev/Config.in
-+++ b/package/shadowsocks-libev/Config.in
-@@ -14,7 +14,7 @@ config BR2_PACKAGE_SHADOWSOCKS_LIBEV
- 	  Shadowsocks-libev is a lightweight secured SOCKS5 proxy for
- 	  embedded devices and low-end boxes.
- 
--	  https://github.com/shadowsocks/shadowsocks-libev
-+	  https://github.com/shadowsocks/shadowsocks-c
- 
- config BR2_PACKAGE_SHADOWSOCKS_LIBEV_CONNMARKTOS
- 	bool "connmarktos support in ss-server"
-diff --git a/package/shadowsocks-libev/shadowsocks-libev.mk b/package/shadowsocks-libev/shadowsocks-libev.mk
-index 778daf37b9..75c0d58be1 100644
---- a/package/shadowsocks-libev/shadowsocks-libev.mk
-+++ b/package/shadowsocks-libev/shadowsocks-libev.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- SHADOWSOCKS_LIBEV_VERSION = v3.3.6
--SHADOWSOCKS_LIBEV_SITE = https://github.com/shadowsocks/shadowsocks-libev.git
-+SHADOWSOCKS_LIBEV_SITE = https://github.com/shadowsocks/shadowsocks-c.git
- SHADOWSOCKS_LIBEV_SITE_METHOD = git
- SHADOWSOCKS_LIBEV_GIT_SUBMODULES = YES
- SHADOWSOCKS_LIBEV_LICENSE = GPL-3.0+, BSD-2-Clause (libbloom), BSD-3-Clause (libcork, libipset)
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
