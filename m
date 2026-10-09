@@ -1,166 +1,117 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B442CA6012
-	for <buildroot@archiver.kernel.org>; Fri,  9 Oct 2026 07:49:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CCC7BCA6012
+	for <buildroot@archiver.kernel.org>; Fri,  9 Oct 2026 07:56:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7F5676087E;
-	Fri,  9 Oct 2026 07:49:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6EC8140921;
+	Fri,  9 Oct 2026 07:56:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hoBuWEHA631B; Fri,  9 Oct 2026 07:49:51 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 907FF6084A
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791532191;
-	b=ntVNVyEu0/+TDuqT32zzZF2X4MBUe9h5ifizKxL7daflYaXUk8RgExw1cN/+QRynAByj
-	 y40/+2iqyFU05ygyzlUqU7Qb2XDa5n9vpxrit+pA854wxv3Sw1i2h/tmaCkpWblyWZ2+6
-	 f6B2m4P3CfcVa6+Ha6zpkssbuIudni8oLIpZ4PxNzaKlg1T9Z1w0BnZkaJnuqXKPHfb5J
-	 Nw/ZR47DyKAAFKUZbAoHuGRVLiNDpi5eduSL3f4FRmpoECHEPJXufgn+/5pQIf4tZ/FQX
-	 CtvixiA+GMNCvtzXVJI0Em6paTWgaK1ImXq9vu3WbtCz2RhpvKIM85MXakUG2Tc6bsw==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wtE93sLRKnRd; Fri,  9 Oct 2026 07:56:27 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 83A4F4091E
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791532587;
+	b=eu3fXsZYU4FSfZylMAxMXZK6Vw/6OV9XlOYG9giSKp8v/Lxav2ZcFkg+6/huwQA8IJz+
+	 CON70Boc32/LN+8pwNwJRrmDfLFTdcl9eFIOxLAS1Nzbqmx7FvTQW+AAcyzPqw3u/Kxz5
+	 hru25013gObw/QtwKpgXet0TPZg1w+5WQqCJQKDs0eh02ZmY2PdBbjBU9eiE3J52Yp/Bl
+	 dXG1oVUpmfkJuLDL4ssCaPrdK5835FLiSnUGQT9ITWSdFelAMA3im8WyNZjwKkoRpwX1h
+	 zQcrabqjPOvF/q0HCrqCQDxhU4sla35QHoVRcr88AX3gHWVtaZWrZHMERyfFe2d+nCw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791532191;
+	c=relaxed/relaxed; t=1791532587;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
-	 X-Received:Received:From:To:Cc:Date:Message-ID:X-Mailer:In-Reply-To:
-	 References:MIME-Version:Subject:X-BeenThere:X-Mailman-Version:
-	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:Content-Type:Content-Transfer-Encoding:Errors-To:
-	 Sender;
-	bh=fbI6NUKYGj5Ch8xmTdOs5DihSr/DEqMlUfvNHRiwU/8=;
-	b=N0XwmEGEZMPr/5+F8XeD94Py4dA084x/CNlIcR3tSFaAK+Uh0tEeL6xhPLOZSbS9+97Z
-	 4DJeJc0fdq0YJWajXFLDZca8q2AaLEb6TzAjl1QwmEZKc1za3SmrqzQC6aMbAO19Frj1R
-	 8fAFAVowUAQ56GNOTcVn5nLIBka2D6PayWrWy3OQp5cUznW/Y+X1laijBo48jyC2lq2VH
-	 z4nAgIPPPKQQ7MRO1r4P1MFwnLoVWQzG5HR/+ZAsCMFNZf9FgGmcMsIpqZz25W0FB57vS
-	 jnyRjc1BYLFZ5wrPQy6ayWb166C1Mfe3qvDerikhTclvJ1oGzojSEz3lJK+GNixvikQ==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
+	 DKIM-Signature:Received:Date:From:To:Message-ID:MIME-Version:
+	 Content-Disposition:X-Operating-System:Subject:X-BeenThere:
+	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:Content-Type:
+	 Content-Transfer-Encoding:Errors-To:Sender;
+	bh=9c1RasJ9x/2gl4T+X4xS+irDafoKsPIXzlOmdE5IeqY=;
+	b=IC4hEji2CLh7vfD815d7brXRoqTc9LOeyQlRKhcyr6NbrnfN9JHR0fw6Fns7FpJtZjA8
+	 xFv/Jvft0InI6oHxDfxVjnAamAH1w5JH6jKz9+LDdY6k4oJZZ5P9Jvp1iaFivzQbHmaPO
+	 x3JkILdoFP/Qsr28WO+lFv42tF57Xr74Ju8WU0YSv91lv9+vGvZQ+S+wROUKQ5HUzAP+m
+	 DGoDSO7CnqCNupYEC9suP4AmsKQrQ1i6a0/3KTiiCTf8+YsG6QQuQMEQ6MK2F/ukAic3J
+	 KjTtxWw+NSB1iWe3S9MIcfgsnT3CFqWtqZ3cToI31mqo8hwsoqNoIGc49vJi7R5CyHA==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791532191;
-	bh=fbI6NUKYGj5Ch8xmTdOs5DihSr/DEqMlUfvNHRiwU/8=;
-	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=RAEuDZXjWfJOw0Sfdp7OUy9kve3DN1xjuiC+9WDq+Fti5pPdfJKq8xrpP4aLeHAI1
-	 aOU7De/OjbXyfpZtJvk2Ux/KnIuKjx4RUL/RbJl7fschJJSWayeBETGVO/BXJ7d5KK
-	 +nuSOv9U93RhK+WfVBGb6GrsKPFtbjzLVNHYBki4K4hqBUv92Cjmgp0+yZuOwdzG4H
-	 wC/S7P81dZol/3QK/h6e/a2QPOAYaunug0KSp5UZ54yHM7N/0Y1PVpH0cOXxcIVetx
-	 T8q+VSEJ7s2MGAWkzz4ML8YNiyshRoU2ALVddtyBdsUeedpwTl3yPu2puEidR2AT4H
-	 46t7xFA6jdttQ==
+	s=default; t=1791532587;
+	bh=9c1RasJ9x/2gl4T+X4xS+irDafoKsPIXzlOmdE5IeqY=;
+	h=Date:From:To:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=WM8bjZqeniGGMsiyGaMSh0M7xfs9xSaCy/Pf7fHCXNc3eo1Irl17NLkHrAQ62YXxQ
+	 hkFJJRk/bRbgEGrKYj3L1kKCK+X25M0BS9lFAkeDOlYqxWSKStPdZtFNH3oBwfc7s1
+	 AgBmJ17DSu/82h/FmacHbJxypyviLcgwVXzfZMlde7kyjuKRvsA9pZlEECru+PCYz7
+	 UNl5Vh3QrkL+ZuoNoS25c4ZT9SNR1aGiBFRzQYCr4OT6xPeGqCsl/qieXLLRB0KYic
+	 fqdVw6JUCtA3rpbXdwQXZeBIqkWh9mCqcu/IkGZUhc8PlGlNXGFU3+JY/Was77SvNw
+	 cZ3BBSiKuGgQQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 907FF6084A;
-	Fri,  9 Oct 2026 07:49:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 83A4F4091E;
+	Fri,  9 Oct 2026 07:56:27 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id C078E356
- for <buildroot@buildroot.org>; Fri,  9 Oct 2026 07:49:49 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 92047356
+ for <buildroot@buildroot.org>; Fri,  9 Oct 2026 07:56:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A682F813F9
- for <buildroot@buildroot.org>; Fri,  9 Oct 2026 07:49:49 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 837A0813F9
+ for <buildroot@buildroot.org>; Fri,  9 Oct 2026 07:56:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Oy7DhL-QHeMW for <buildroot@buildroot.org>;
- Fri,  9 Oct 2026 07:49:49 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org B047A813F3
-Authentication-Results: smtp1.osuosl.org;
- arc=none smtp.remote-ip="2a00:1450:4864:20::629"
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791532189;
- b=KYIFrkC/gaORaGcA6CrNYN2oAlnw8OPfKsnNnRnnNqghHfogCfiDEzGGp+KxqSoBCQvA
- R2w56g6KwJOWfGZPqS7NSejF/H+MHG5eL2239Ov+f/cDVHFLQ1CXtmuxvs//ljKY+gnb2
- BA3N+xgGcwAAO4arMK0N+xeVKKDL0bgtqyu1qERgd+obDTF2zUCEaY3PxLa2kDq4YDJNv
- /LWoR3n1zMgkP8wB1vkWdhCBlhVU6BDbwkiJRNnw/vRvsIbiulqAsjP5UP6sDt47+Ke/o
- xXikBDdWz3ojG6npSTuZlb5bYXNaUMS/32/6jHOWuJR/5x7MaVrp5TfkNZThga+ouBQ==
+ id M9u0wndWlWmp for <buildroot@buildroot.org>;
+ Fri,  9 Oct 2026 07:56:25 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 6B7CA813F6
+Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=89.238.66.15
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791532585;
+ b=EyD2Iv13xwY0P8v6E5VIZ4pCtIFYTM1pfbA2otR0XG7me9P/+5oJykAcRDc4Wk2xo+wF
+ vzBVS45WUewALvW62WmWHi3e+3Joc8UBiPwgRXsqZlTdgsfU74Reasc/2osOFYs2ViJWV
+ rYvg7RpSM45NTMCzdBRcVa+/HwpUs/J4qW5CkU8u/z72T6+uPHtMphX8uoan0VPOkapMg
+ uSTT++Kn1Jm/2hxSVRBk7NlGMcXSv71V0ntCEy9Ru0inHap8djL8qVERQhlZ9l9BeIvrl
+ +Jv6f7Fl8emBVi4uSzmk1o02lLsrRYQ/rk5agViTmHMMXbRa+XodIOfxuKnoD9+FLjA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1791532189;
- h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
- X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
- Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
- Content-Transfer-Encoding;
- bh=3twUPwvQIMd6D/EOdRs7xIZv0YWjrR4ObOAZeEhVQ/c=;
- b=WSRl0MeTYOJ5f9JR+69upFJzO/WDVUOdpDS5OqxTValzCuGvylVb+o4Hy/ILYkqinzl3
- wr0c+wG7uq5LfjZYODDwp4QGwK5TpGLAie4AhyxV3fExscrUX3GgB/ta8gSVaDWJ55Zfa
- i5gXAL0YffiiJth4pVQIGnam87Ia1yIIZN3iol3M6lf/54vnNPSo6xNp+nFsjewzUdaiT
- M9eWNVjTIHtbb8W6qflCSPCaEMt5MdRd2kohbW98dBA6/KT1Fkh42dGpAsYxQlDvdi0K9
- 9dChdf8S7Yqw7MpPRWCtvqXYSX8JkMEhyBCXL99ECw4OCSZyVcbKnWVaovzw2pOOQyA==
+ c=relaxed/relaxed; t=1791532585;
+ h=Received-SPF:DKIM-Signature:Received:Date:From:To:Subject:Message-ID:
+ MIME-Version:Content-Type:Content-Disposition:X-Operating-System;
+ bh=TcCt8CLZwU8sOPJcHpKXn3QE8pH/QLzF/I9cMv1jMtc=;
+ b=krPXSHCpGUbojwZ29QWphYeCvVjc9YefMY32BOyx+c+Y2Ss7XR4TfKHOyD2PaYCasCS+
+ Aa4PpmCkUn9CyN8jlHuU+tMqgCGtH8cS3HCYp2cDCkTNPLVUcKOa/T4nZxB6L8hsa4Yd2
+ sF7fz2juUnJZ6BaZd26AMd5p1D80muF5IohIpvo8V/TNxTITgZcUFx4RrGq16NeJaFywv
+ wOP8aIpUf+4wpnwrX0QejHQioMVcpOQcC2Kc80t2jUKjZSJ50p7swS4FZkn5nv9JwZXjX
+ RfY6ZXHGyMyuOMB6ubCWP44/r8ZXI3irU2C0OFKQZB0mfWzBQo7PqfMxPLJrWsqNmNQ==
 ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
- dmarc=pass header.from=gmail.com;
- dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20251104 header.b=RcCfDqh5; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::629"
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::629; helo=mail-ej1-x629.google.com;
- envelope-from=mr.zoltan.gyarmati@gmail.com; receiver=<UNKNOWN> 
+ dmarc=none header.from=openadk.org;
+ arc=none smtp.remote-ip=89.238.66.15
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.238.66.15;
+ helo=helium.openadk.org; envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
 Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20251104 header.b=RcCfDqh5
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com
- [IPv6:2a00:1450:4864:20::629])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B047A813F3
- for <buildroot@buildroot.org>; Fri,  9 Oct 2026 07:49:48 +0000 (UTC)
-Received: by mail-ej1-x629.google.com with SMTP id
- a640c23a62f3a-c2e4df2e26fso508985766b.2
- for <buildroot@buildroot.org>; Fri, 09 Oct 2026 00:49:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1791532186; x=1792136986; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to:content-type;
- bh=3twUPwvQIMd6D/EOdRs7xIZv0YWjrR4ObOAZeEhVQ/c=;
- b=RcCfDqh5wGx3ejTmiH4YJVN2UdhEkG9++kGizDbX6eLoNByCEQhFncuRkb3l1wSfQV
- moUFpmhdL2aj/Iirq1ffz+J0M3V138DFYtZahcmYDgo8itdKplHVfHBLlYIKTeP1iTB7
- DwRt+QScp882MmKwkxWgIs71hrvM/lFTQ3Qk4Cij30tRuYvkhV9z6sG7pDzaSTWc278X
- ZH0/r3vcyvlhCJ1+Lf6NM0/qjO+gryLhNERaWsiV+YbAIwzOCStL5JSmJDlc8m7ykkMQ
- YE2frwl/vx8oyuMMgLWedC7ECpjJeXV0oKI2/EREeSf/oiB9TxaScPpUYyrdOodZlKOB
- U9Bg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1791532186; x=1792136986;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to:content-type;
- bh=3twUPwvQIMd6D/EOdRs7xIZv0YWjrR4ObOAZeEhVQ/c=;
- b=RY9vzXclVe7BiMSke6xLEZhsbwLLD267Q3kgAQ8PDWVVMvtDHjrVBXqo1rivN0RGyf
- QVNFu/pWjdf9LfScPexm0d6ReXtoS5pWSCg0UNN7wCNULoVrkgm/O0t669foIZ5vZRnU
- G/4Dkyn1m3MHE1LzLkO1n3WLCzWW3yRpzHRlJkxK63FJIHnoJVVNimx/saZr+q+ABOeK
- mzJmK/Ed25SDmMiLoR0Am4dTXC1DRIiCCz392ippmhdEdGM4ywiIVWRYMqYr7xIcffIW
- uS5oehWOvo8c+7iET6WQnVTm2DvWzYmvwq8gkWEIwijTfUqG6V5jg9pZNlIzakQ+gs+i
- njJw==
-X-Gm-Message-State: AFq9FYKbpXPC8X5fZ+zFg3nXRz8ztOAZtKaqhfWXnIacxoPHDjmsn4AV
- 4FdQCVAM9X58mXvXfzw0z9fOGkHiQHdJSfAN+XY6Cbs1LaneVbSP/dxDsiGdLQ==
-X-Gm-Gg: AYBFou2whFwJhEGoo4PJG9TbbV9ThXUpwBP8w9Xi3ag4lGARH/BtEFCKcbumblADg9k
- KCv4rGLYCHEiNXolyMy2sNRiLC2NhtTPbl8/ltkAO0W2X7PWRnfZMO/xQHsWM5ite6mmevHAmXw
- ZTMl7PNUj2YKQNX7KLUZQGRulpY7hBlLGh2isz3KxAuncfNRF8mS11X5gmoiZTirYdYYYivrV0Z
- 2M7E8icwIf826jWwMcnOtL+7e/YVM4AgOaQGMDH+5GKqCyiw2qDdLQAyg75ljwz9ygJVN8SEHvD
- bw43xuHOEJbNVaUJIKveTCu1apFFrleaVhCxcV0fG/y6s9JWDKNZ4CB62MwAIKQ5dq9ZFBD2YId
- BYhFnWxwZWSUdAY78yWK+aeT+BWaEEuM/gzvs1k9eik7TzSKGKB4WY+hi6S6MIWb1g6IwXjYthW
- H0F8fMGxbs1G7CnwRbCy4iHWP/87n9kJefoV8sTZmW51gazkiLxj2XjUqUCyxPrLZPCQ1gT7dEo
- swXJuugSZue1fsRzsoBGqkpUJaapz4Wtyex0jN89t57nv2G6UszrWxclkby
-X-Received: by 2002:a17:907:3d4d:b0:c26:1649:47b2 with SMTP id
- a640c23a62f3a-c31a9fd82bcmr101460366b.40.1791532186211; 
- Fri, 09 Oct 2026 00:49:46 -0700 (PDT)
-Received: from PECS-93BMLD4.foss.net (254C249B.nat.pool.telekom.hu.
- [37.76.36.155]) by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-c31a9a38050sm56277966b.24.2026.10.09.00.49.44
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 09 Oct 2026 00:49:45 -0700 (PDT)
-From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+ dmarc=none (p=none dis=none) header.from=openadk.org
+Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6B7CA813F6
+ for <buildroot@buildroot.org>; Fri,  9 Oct 2026 07:56:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=openadk.org; s=2022;
+ t=1791532582; bh=Zxx9xRgYqciG3Vuyr+mpL8DeabE6ntrEGVSEccoha2k=;
+ h=Date:From:To:Subject:From;
+ b=gvp6TJUDOv0p3xcuBF4Zizunn/X6hA2FDgC/N82nfuHwbHqkFDDNNWmmCbI1xioZc
+ NUPBzQ3SvQgeiTOKnicI4arMUIqgrRS1JhSZNsR3iH9woUYZjA/NmhyBqeGCUAEoi1
+ DL/MH5gKACkdq8fncCITNrOScPDyS9/vC7jsjhl/Nwhm8U0K2mhz9wMsxhv4ZnWAUu
+ Kkkr60mxXtTmPLdIgk4NcxM0nUUVl6wNfMaaoX82vkblqsmOQV/3P+qM7ZjfHb0v6L
+ 34Iys3MgfP1VPN5bTDvAupDPVqzxYbR+CjXr+ybxRP30T+N5eRpnT2N6ZeWkEGVXw7
+ MDH+5c4fJwZsQ==
+Received: by helium.openadk.org (Postfix, from userid 1000)
+ id 91B1E31E0BD4; Fri, 09 Oct 2026 09:56:22 +0200 (CEST)
+Date: Fri, 9 Oct 2026 09:56:22 +0200
+From: Waldemar Brodkorb <wbx@openadk.org>
 To: buildroot@buildroot.org
-Cc: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-Date: Fri,  9 Oct 2026 09:49:37 +0200
-Message-ID: <20261009074937.992939-3-mr.zoltan.gyarmati@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20261009074937.992939-1-mr.zoltan.gyarmati@gmail.com>
-References: <20261009074937.992939-1-mr.zoltan.gyarmati@gmail.com>
+Message-ID: <asieJnFzk1h4R5z6@waldemar-brodkorb.de>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 3/3]
- support/testing/tests/package/test_libusb_compat: new runtime test
+Content-Disposition: inline
+X-Operating-System: Linux 6.12.107+deb13-amd64 x86_64
+Subject: [Buildroot] [PATCH] package/quickjs: enable uClibc support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -177,100 +128,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
----
- DEVELOPERS                                    |  2 +
- .../tests/package/test_libusb_compat.py       | 58 +++++++++++++++++++
- .../test_libusb_compat/linux-usb.fragment     |  2 +
- 3 files changed, 62 insertions(+)
- create mode 100644 support/testing/tests/package/test_libusb_compat.py
- create mode 100644 support/testing/tests/package/test_libusb_compat/linux-usb.fragment
+The internal Buildroot toolchain does support FENV
+in uClibc since commit 4c5039b80ebbe42db35af189afcff7fb7d5cace6.
+Tested in Qemu system emulation for aarch64.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 32ac338dc8..c850878e57 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -3628,4 +3628,6 @@ F:	package/quazip/
- F:	package/shapelib/
- F:	package/simple-mail/
- F:	package/tinc/
-+F:	support/testing/tests/package/test_libusb_compat.py
-+F:	support/testing/tests/package/test_libusb_compat/
- F:	support/testing/tests/package/test_quazip.py
-diff --git a/support/testing/tests/package/test_libusb_compat.py b/support/testing/tests/package/test_libusb_compat.py
-new file mode 100644
-index 0000000000..d0bb57d4cc
---- /dev/null
-+++ b/support/testing/tests/package/test_libusb_compat.py
-@@ -0,0 +1,58 @@
-+import os
-+
-+import infra.basetest
-+
-+
-+class TestLibusbCompat(infra.basetest.BRTest):
-+    # enable USB 2.0 support so we can test the USB enumeration in qemu
-+    linux_fragment = \
-+        infra.filepath("tests/package/test_libusb_compat/linux-usb.fragment")
-+    config = \
-+        f"""
-+        BR2_aarch64=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-+        BR2_LINUX_KERNEL=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.73"
-+        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
-+        BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{linux_fragment}"
-+        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+        BR2_PACKAGE_LIBUSB=y
-+        BR2_PACKAGE_LIBUSB_COMPAT=y
-+        BR2_PACKAGE_LIBUSB_COMPAT_EXAMPLES=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        BR2_TARGET_ROOTFS_CPIO_GZIP=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    examples_dir = "/usr/libexec/libusb-compat/examples"
-+
-+    def test_run(self):
-+        img = os.path.join(self.builddir, "images", "rootfs.cpio.gz")
-+        kern = os.path.join(self.builddir, "images", "Image")
-+        # We add a USB keyboard device for the test.
-+        self.emulator.boot(arch="aarch64",
-+                           kernel=kern,
-+                           kernel_cmdline=["console=ttyAMA0"],
-+                           options=["-M", "virt", "-cpu", "cortex-a57", "-m", "256M",
-+                                    "-initrd", img,
-+                                    "-device", "usb-ehci,id=ehci",
-+                                    "-device", "usb-kbd,bus=ehci.0"])
-+        self.emulator.login()
-+
-+        # The lsusb example prints "idVendor:idProduct" for every
-+        # device. We expect the Linux Foundation 2.0 root hub
-+        # (1d6b:0002) and the QEMU USB keyboard (0627:0001).
-+        output, exit_code = self.emulator.run(f"{self.examples_dir}/lsusb")
-+        self.assertEqual(exit_code, 0)
-+        self.assertIn("1d6b:0002", output)
-+        self.assertIn("0627:0001", output)
-+
-+        # The testlibusb example opens every device and prints its
-+        # descriptors. The keyboard should show up as a HID
-+        # (bInterfaceClass 3) device.
-+        output, exit_code = self.emulator.run(f"{self.examples_dir}/testlibusb -v")
-+        self.assertEqual(exit_code, 0)
-+        self.assertIn("bInterfaceClass:    3", "\n".join(output))
-diff --git a/support/testing/tests/package/test_libusb_compat/linux-usb.fragment b/support/testing/tests/package/test_libusb_compat/linux-usb.fragment
-new file mode 100644
-index 0000000000..d9abd2821e
---- /dev/null
-+++ b/support/testing/tests/package/test_libusb_compat/linux-usb.fragment
-@@ -0,0 +1,2 @@
-+CONFIG_USB=y
-+CONFIG_USB_EHCI_HCD=y
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ package/quickjs/Config.in | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/package/quickjs/Config.in b/package/quickjs/Config.in
+index 0ae0389b2e..99f1c66be5 100644
+--- a/package/quickjs/Config.in
++++ b/package/quickjs/Config.in
+@@ -3,8 +3,6 @@ config BR2_PACKAGE_QUICKJS
+ 	depends on !BR2_microblaze # fenv.h lacks FE_{DOWN,UP}WARD
+ 	depends on !BR2_sh # fenv.h lacks FE_{DOWN,UP}WARD
+ 	depends on !BR2_STATIC_LIBS
+-	# No way to check for fenv support.
+-	depends on !BR2_TOOLCHAIN_USES_UCLIBC
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C11/stdatomic.h
+ 	depends on BR2_HOST_GCC_AT_LEAST_4_9 # C11/stdatomic.h
+ 	depends on BR2_USE_MMU # fork()
+@@ -15,9 +13,9 @@ config BR2_PACKAGE_QUICKJS
+ 
+ 	  https://bellard.org/quickjs/
+ 
+-comment "quickjs needs a glibc or musl toolchain w/ gcc >= 4.9, host gcc >= 4.9, dynamic library"
++comment "quickjs needs a toolchain w/ gcc >= 4.9, host gcc >= 4.9, dynamic library"
+ 	depends on !BR2_microblaze
+ 	depends on !BR2_sh
+ 	depends on BR2_USE_MMU
+-	depends on BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_UCLIBC || \
++	depends on BR2_STATIC_LIBS || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || !BR2_HOST_GCC_AT_LEAST_4_9
 -- 
-2.43.0
+2.47.3
 
 _______________________________________________
 buildroot mailing list
