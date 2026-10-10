@@ -4,147 +4,101 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01FEDCA9EBE
-	for <buildroot@archiver.kernel.org>; Sat, 10 Oct 2026 10:02:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9FBECA9EC0
+	for <buildroot@archiver.kernel.org>; Sat, 10 Oct 2026 10:15:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B07CE407D6;
-	Sat, 10 Oct 2026 10:02:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 19A0F408D7;
+	Sat, 10 Oct 2026 10:15:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4P2jdBFBtbSL; Sat, 10 Oct 2026 10:02:01 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 88538407D8
+ id PfmQbuv5zoxf; Sat, 10 Oct 2026 10:15:35 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 60ED14089B
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791626521;
-	b=oNYfcHg2622BYB/9hpx0nNFgr9BVwiqSu6znXNdeDwJvVEKHZKlGTvvA4QyGWhQFUnFJ
-	 JjG4HzdlCrNBS6qrmM51E2TM0wJYNuNsXHlMTjgxcbPCaq1cd9Pdw8Y+tncHKH1IE0a5K
-	 8BHpXf56ln5ECKGWvRl27m+a9YDLSFNysrHQK0jzQVHI7RbIylBxvEWseetDz1ZEQRZQo
-	 T5NtqdwiMmIFcMKGujGw4RCREIMSfbwZAJ56UZyk82bGq5Ik40Pe3UIKAnULX9DjBYkZJ
-	 BCBUgWzwubQruEqMOTmNdqL2XWAErmqP9Ra3xn3BBeY09BZA7KbcIr4ryRoBpWTFp4g==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791627335;
+	b=dtUM8Br/O1HPn7grSqN1qRy8cHLtzQlOu+RbFV0c5hgxK9M3DrQLmEHrGLwzqKC4zQHm
+	 a1piU53ILtPx9tVVh0/+ziGf8G6U9gzTFnesMiOSDGBHwFoqN7AgupVwmVWyJXRnAnl2W
+	 ZOkMglmMHdypmMKSWy7Z5RtHPIFLbiVv3tHJqxNcIEJx3fO+IaCvPXjEPOGbTX7QpA4H3
+	 WnR4d6YFY8NCc9UkCE7JoH70bdDVRSy68Fx/tkaNnkv+wN673ea+sMNTE4xmn+QqAqUZJ
+	 AKzWgdUqlkopmh9JPjdSD11WQwlIwX4+JzLi0s/RaRl+9Jruvf5EUQ7lXKua/Tz0KSg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791626521;
+	c=relaxed/relaxed; t=1791627335;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 X-Google-DKIM-Signature:X-Forwarded-Encrypted:X-Gm-Message-State:
-	 X-Gm-Gg:X-Received:Received:To:Cc:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Subject:X-BeenThere:
-	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:Content-Type:
+	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
+	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
+	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
+	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=h2YbovbUVYuCewyPAljVZL5Mr21ZtKPDewkhhzxOrLE=;
-	b=KlayL462z9ZLSjGW9nsmRF+AsktYQaSS3Rqz/RFLsojXFuKCnvN+f6aXGzFkka/0pCON
-	 7kjFo4hVCxDGhJO9CRHj+svcU0wTo4WhucIj+09Tc3kDXpMYa+qNnilTFVLJs6rXJdRqf
-	 hycdkusqk7p7BbLvWms2nB0/2td2n03hLozKTSRfOGIxvrS12GwrNarKIgeA5XHG1WbzB
-	 IvgkYkNOJTJsyQay/HG1YRwHJsiKQAgBRlAdAQuHs7KtyfTFjFXaxxrPuSubbUb1Rj2fL
-	 IpWGhRAhiMmW2UzGIiwPEsgUhsom84EITNd6oXbsD0dRyKqBN4RiwaZmr99hZqnBoOg==
+	bh=cu9nCilkGhGbcw4mLj0v1JD7PAXL6/Oxm7fUqtEM+L4=;
+	b=na+1p5Qt0CD6RuwtUf9VRw34tlt+UIoj1cjwBQ7WeUnl7SmcRCfmp6Ep8hLRxBsEgmwR
+	 LyDIJh94x70+GmHmoAY33A2q5cWd8IGOXG4pla6sUh2TaMXiiWbp036rxBCf80X3nYE5z
+	 0Bx7c3n7lKx7bA7Hzt2MPOO0lzv8nlrKB1cTBsIyEvmM2vgieor8wJ0KZysFTPZNh+hZm
+	 98K3z95YyRpwFC8Mqt5TnoKfIM72BTzzxVIklKfvXZfSNFjXdEf/3l19pBLb/FqaRc5Ee
+	 mGF+sV7alex0L9Xf03vj3LgIVCxiWQU0MXJXxgOUngnuuX4bhT+/pxT/FX1vfZpQBZQ==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791626521;
-	bh=h2YbovbUVYuCewyPAljVZL5Mr21ZtKPDewkhhzxOrLE=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=jquWpyhhspX3QsuSzdwQyPBKRiZd203vVNDSBj/71vFfokZm+9QJwKyqCtaXYXM9T
-	 n2WBwUhAmus+36MOF3QnsbOPbrHT9eKpRt81L2GbDH7ILbOGIg9dsO2L+jaP3BpoFU
-	 XxvZjTkm9lrwTC6uKtvNqdrEllS8jN+eYvNbtaFc+atFekc4bPuqeJkXrpLTC7RsAi
-	 J1my2SSJUYs2BIyqP8mt6w8qWkJow/9SRcg4IMzA4bcuouJIgIMrdImE5CEBtMWfsi
-	 eoBAgIKJxHBBKtEZEh1lvKbqvBaEx4jqGvKQyIsWcpGvMLHvUIeftE5yU/C/5IUPTh
-	 8/Cu1JvPMqXbA==
+	s=default; t=1791627335;
+	bh=cu9nCilkGhGbcw4mLj0v1JD7PAXL6/Oxm7fUqtEM+L4=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=jCiwKrFngwQwaKo9Q3oz4QSPM/O2B6ejZtrPlSN+h7KWntk25o3rObCsxy2IuHMaP
+	 kru+dxhJU9pwP2SJTOdFcKUH6ViYLap8rh9ylxGca0crndVh+iMmqLuk9v7U+px+QU
+	 IRUVOoIzQEr/3gfXlakKju0555mPMJV6X3/M54NUfrFxXx5TGbuLX6r+DpiASdrLOI
+	 LBRKZ6eBYJfAnHUDwN6Y2ud3n2ihYrO9qPY0Sk5487HX4xILNPRUJXcVr24wtj/9rM
+	 Ix6gCvKQ2bimUiLUz6KqVLEBoXasFHOLZt/wie8ZAwBP7qGeECEaAQQ3xyCN8XTMcX
+	 0KlhgCPLS8/PA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 88538407D8;
-	Sat, 10 Oct 2026 10:02:01 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 7DC671DE
- for <buildroot@buildroot.org>; Sat, 10 Oct 2026 10:01:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 60ED14089B;
+	Sat, 10 Oct 2026 10:15:35 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id D6FB42E0
+ for <buildroot@buildroot.org>; Sat, 10 Oct 2026 10:15:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4203D407D8
- for <buildroot@buildroot.org>; Sat, 10 Oct 2026 10:01:59 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C84B260662
+ for <buildroot@buildroot.org>; Sat, 10 Oct 2026 10:15:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GrYaUINz4a2E for <buildroot@buildroot.org>;
- Sat, 10 Oct 2026 10:01:58 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org BB47C407D6
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791626518;
- b=MrJlzm8affZcJYYy1Jt0mLZtNR9y+l8CHx9sDWTupQUuJ2hNoFEl2bYwQU4YXVDxHvai
- ZoGajJCOeSJjvQ/0SjibLZ6YKmNpxpwvSKpusm8Dlgb6TGMybHyVKW5ayAjfoIK4c4VEW
- w7YIa69+QypB/UIzvFr9jtEgUIW0xiqs/bU19+2WhWBkoay/bjilJM7oZNz/YoUXPFKfG
- PShieHvqSm//op8dU2Bo9k4xnvO3cu9NU9SkFhwaP9VHi5uNVlUpOBO9QDKJ/12B5mTnC
- GAe/XCrOBCh8h2i0iv8CKUZqEuDiVks45jtOliTuxHNeI7IIr3OooemJelGpyfu7sDw==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XoXvj5oO2wSF for <buildroot@buildroot.org>;
+ Sat, 10 Oct 2026 10:15:33 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 5FB3960622
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791627333;
+ b=lhTrZMGtBaGhdK+lDikDophE6808ifg6nf4BK13Kv/RdsXxPjfg7kY4qcKy871INtQT0
+ 7muMrIO6eipCQLQp8UNUHtQP/dmo9nTOrHV/4FVUMv83TYsDMO9+aovO6OuJPSRaQqkGs
+ P7aDr6Ua5hdwRXi92MPoolUqwBkYz61bXrrzCTA0jIR7HmTayHLcsOXo4Alm4ahNismOK
+ Oihi9FZqTZprNYwwSJbofCAjdFuwB1l3qsjzidaEx7UheUVB4QhOTYtG3yBs2tMDe0feR
+ AeFFNQGZLLyj+4W03hFwPtnlr9lB94ROEX7YnygQgg5495LjqoKLehlctWg/nxxRoqA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1791626518;
- h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
- X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
- From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
- MIME-Version:Content-Transfer-Encoding;
- bh=a7QPEg9pxO8SRM4cvfAK67hrJsMboOKw7/RfvU5lNQI=;
- b=pWTByV/QZOJUsyQzZr911H09g8q1oux75366WNdlJXkf8L64cLbMyETXS2rveyKavBT+
- cdFYsyTMBq9eodCt5SVVqMGRT6c4Q2Wtob0QfXZiRVYOJKsdeeWLvsl0jvGfiN/W5SwSd
- 1I0v4J0974q2awR3PwBh11T7hzbFz9x9bkh2F1Eyt+UMgkq760lgdLrJmydEWZLtIJTpb
- 9d1y5l5l4S/NGZ0LFNobSaZAFAn83KftyS+KnPkkZyJDR6wbJJr1EjOSTxrsE6NTQZSmn
- Bl9aADbavTeaTCmMtZISuzkU1lBSoIOqHxoGOfxq1+EP8wzEVus8q5gwjYS8MdXmd3w==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
- dmarc=pass header.from=mind.be;
- dkim=pass header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=WOwLM44q; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::336"
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
- envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
- [IPv6:2a00:1450:4864:20::336])
- by smtp4.osuosl.org (Postfix) with ESMTPS id BB47C407D6
- for <buildroot@buildroot.org>; Sat, 10 Oct 2026 10:01:57 +0000 (UTC)
-Received: by mail-wm1-x336.google.com with SMTP id
- 5b1f17b1804b1-4a1698ea378so4138215e9.2
- for <buildroot@buildroot.org>; Sat, 10 Oct 2026 03:01:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1791626515; x=1792231315;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to:content-type;
- bh=a7QPEg9pxO8SRM4cvfAK67hrJsMboOKw7/RfvU5lNQI=;
- b=YCHG4NX9Dj+eX9X8Ott+7C0FT2Ul6/Yguf0uSTGlMBpPBLUPSkrgWajEuaFSA5SF8w
- XQ+GuN8GWCr0gegPjeqJjCnbmVYorRwOY3zaNdDAq4546z6BwA3e+0vnyKNUPAPKqPJU
- Qz3l0Sd+B7umjex7KVsvdXXm6fFtjQp51dH/I+OSu1AS4ZBRigmfNoBfhDdDZUvNn7K1
- PMS4xWfkuqnqFdFS7UTzluv0DjdFgj5A21AyBGevkIWtFLx1lB0X4Yuz6e8b9wM4VusL
- jZjrxUcx1NysTPmLh6uHb14ytILa45oWICgft1xffLqo5NaFLNvnTTLsu69OXWEDz6hb
- HsYA==
-X-Forwarded-Encrypted: i=1;
- AKwUvBzHTwB0a0dmBP6mfb3Evh0sAN3aV7pvTr50MKs9LfjdhuxcS8nh20iVL74QyWLH19Qi7f3vPbPf+bI=@buildroot.org
-X-Gm-Message-State: AFq9FYJkN2TRB06pKjQAr9bg4wRivCNjbU3uGMitIBvagtZ/KM1wQfGf
- KxAhBnU8km40m58xl9uNEI7xjT37X0oIpeDL3wLquMCleXrKpYc4Lxpf6DpO+d/00ak=
-X-Gm-Gg: AYBFou1FmRROYyNHWGHYFHKFpIyGG3Tv36l62Xfnv1et1bC19QZYYR5c4Oql67LZ8bz
- FKf+sfP2pYc7IIkOxBIu6F/SY/C1qkpQz9fQJfNPB3hxtqND/C60ziwS8hPPobK36pc87gGlrLb
- eN81QuEWc6y/hXCc3XMjQxxzOfW2RFOyIVRflQlCulmBbdXRDCmBM/qwMMaxU5muCQPS4DEa3mw
- C1Xty1AczTkqbdiiTW0g/ca0N/alSYXEHZh71yLO/ub7iK5KRnoBFWFd6gA21lX/ci/wd2fVEp2
- Wbqk9d8dw0fmsbnx/RbNw6CA9DtQsCLzLGG2/BxsLSzhKmzifTj4f1Viovl65XbALuqOGo7Ll8c
- 9EB6LUBAdip0TPCCfUi5lvIkLuw75Zpzm2A5qICiWRrcT1UxcqVsDgd970ntG6qO0yf7uIk2qza
- hozqwY1Y0OHEAPendYWkQRnaxVGoDSaAvyVjbZXOZv0VoMd1dB4qvwRYdhBFyn4KAz8fjooHSgq
- J1igbu+HsnTBwuRstgMkdg3vllt2iYcNVcgMzlWqbij7ZN/HU3UWw8E
-X-Received: by 2002:a05:600c:46cc:b0:4a0:8b1:f5c with SMTP id
- 5b1f17b1804b1-4a18e4b583fmr81388445e9.22.1791626515494; 
- Sat, 10 Oct 2026 03:01:55 -0700 (PDT)
-Received: from mindpad (2001-1aeb-401-dd00-f938-e455-e8cc-7064.ip6.tmcz.cz.
- [2001:1aeb:401:dd00:f938:e455:e8cc:7064])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4a18bb68abfsm131253565e9.0.2026.10.10.03.01.52
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 10 Oct 2026 03:01:53 -0700 (PDT)
-To: Yegor Yefremov <yegorslists@googlemail.com>
-Cc: Thomas Perale <thomas.perale@mind.be>, buildroot@buildroot.org,
- chakrabortyshubham66@gmail.com, thomas.petazzoni@bootlin.com,
- Ricardo Martincoski <ricardo.martincoski@datacom.com.br>
-Date: Sat, 10 Oct 2026 12:01:52 +0200
-Message-ID: <20261010100152.490887-1-thomas.perale@mind.be>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260930211826.2349920-1-yegorslists@gmail.com>
-References: <20260930211826.2349920-1-yegorslists@gmail.com>
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/atop: fix musl build
+ c=relaxed/relaxed; t=1791627333;
+ h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
+ X-Git-Newrev:X-Patchwork-Hint:Message-Id;
+ bh=iCfdJS8Ib4rpl/wEfSq1U0GmI1COYLpUeB/6Rn+DXbo=;
+ b=EJH5OSYyx77Q3XNC/w3X5g5EqBHHQDk8adiGta6KxLZgjetlz9q4Tshp/YVvT9Z2ByGE
+ pHPONonNQurHlbPWmxgy/Xabrsy7VJcvH5CImF2gXEaQzuzjyvYjWdBH1NedtJXM6v74b
+ ib0EyYJ2V5rSeE886ptVlNCVMJkYfJsT9DrNlcxanuytkXi/4akVW/7LrStOiAaB1Ai90
+ yEwNf/Z5VvJW7lAsgzg4DddbHZmfzVbaCEY7bbmRdQQSomqdn2nOagIffuEPXdR5QYTuT
+ 1xZ4iPKDdFHazwJ3+pLdqPm7S4I2jUNYJrEhFE0SNxbz9Pi26yj0SilzuTLILf1QPZQ==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+ arc=none smtp.remote-ip=140.211.167.122
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5FB3960622
+ for <buildroot@buildroot.org>; Sat, 10 Oct 2026 10:15:33 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 36D91901F5; Sat, 10 Oct 2026 10:14:15 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 10 Oct 2026 12:07:10 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 74437ca52b90408e93b26f00d262641a6145cfd6
+X-Git-Newrev: 5301a7465325b33eeb29094d1ba5c26c3705bc62
+X-Patchwork-Hint: ignore
+Message-Id: <20261010101415.36D91901F5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/squid: fix build with OpenSSL 4.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -156,126 +110,397 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Perale via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Perale <thomas.perale@mind.be>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi,
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/5301a7465325b33eeb29094d1ba5c26c3705bc62
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Tested by modifying `support/testing/tests/package/test_atop.py` to use musl
-library.
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../squid/0001-Fix-OpenSSL-4.0-compatibility.patch | 368 +++++++++++++++++++++
+ 1 file changed, 368 insertions(+)
 
-I would just add the reference to the buildroot commit that made the bump: 2110131cab2a613567c99491ba540bb33440e46c
-
-Tested-By: Thomas Perale <thomas.perale@mind.be>
-
-In reply of:
-> Since the bump to version 2.13.0, atop fails to build with musl:
-> 
-> drawbar.c:2336:33: error: implicit declaration of function 'waddwstr'; did you mean 'waddstr'? [-Wimplicit-function-declaration]
-> 
-> (Before 2.13.0, the same configurations already failed earlier on
-> uClibc because _POSIX_C_SOURCE was defined without a value. Upstream
-> fixed that in 2.13.0 by giving it an explicit value, but the same
-> pattern remains for _XOPEN_SOURCE.)
-> 
-> ncurses only declares its wide-character API, including waddwstr(),
-> when NCURSES_WIDECHAR is set. If the application does not set it,
-> curses.h derives it from the feature test macros:
-> 
->   #if defined(_XOPEN_SOURCE_EXTENDED) || \
->       (defined(_XOPEN_SOURCE) && (_XOPEN_SOURCE - 0 >= 500))
-> 
-> drawbar.c defines _XOPEN_SOURCE with an empty value, which makes the
-> check evaluate as 0 >= 500 and fail.
-> 
-> This only breaks with musl because of the C library's <features.h>,
-> which curses.h pulls in through <stdio.h> before doing the check.
-> glibc and uClibc both redefine _XOPEN_SOURCE to 700 and define
-> _XOPEN_SOURCE_EXTENDED whenever _GNU_SOURCE is set, which drawbar.c
-> does, so the empty definition gets fixed up. musl never modifies the
-> application's feature test macros, so the empty value reaches
-> curses.h and the wide-character prototypes are left out.
-> 
-> Add a patch that defines _XOPEN_SOURCE as 700, matching the
-> _POSIX_C_SOURCE value of 200809L that is already used.
-> 
-> Fixes:
->  - https://autobuild.buildroot.org/results/914c1d8fa0fc8bbef64e4a64d58e5941d0077a3e
->  - https://autobuild.buildroot.org/results/b91/b91ea0722202de0d1fdeeaeea167fd1b21b6d5d6
-> 
-> Assisted-by: Claude:claude-opus-5-5
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-
-> ---
->  ...xplicit-value-for-_XOPEN_SOURCE-macr.patch | 48 +++++++++++++++++++
->  1 file changed, 48 insertions(+)
->  create mode 100644 package/atop/0001-drawbar-define-explicit-value-for-_XOPEN_SOURCE-macr.patch
-> 
-> diff --git a/package/atop/0001-drawbar-define-explicit-value-for-_XOPEN_SOURCE-macr.patch b/package/atop/0001-drawbar-define-explicit-value-for-_XOPEN_SOURCE-macr.patch
-> new file mode 100644
-> index 0000000000..d526d58433
-> --- /dev/null
-> +++ b/package/atop/0001-drawbar-define-explicit-value-for-_XOPEN_SOURCE-macr.patch
-> @@ -0,0 +1,48 @@
-> +From 54799216beac63a195cd6d34b22476fc15a80295 Mon Sep 17 00:00:00 2001
-> +From: Yegor Yefremov <yegorslists@googlemail.com>
-> +Date: Wed, 30 Sep 2026 10:59:49 +0200
-> +Subject: [PATCH] drawbar: define explicit value for _XOPEN_SOURCE macro
-> +
-> +drawbar.c uses the wide-character curses function waddwstr(). ncurses
-> +only declares its wide-character API when NCURSES_WIDECHAR is set,
-> +which curses.h derives from the feature test macros:
-> +
-> +  #if defined(_XOPEN_SOURCE_EXTENDED) || \
-> +      (defined(_XOPEN_SOURCE) && (_XOPEN_SOURCE - 0 >= 500))
-> +
-> +drawbar.c defines _XOPEN_SOURCE without a value, so _XOPEN_SOURCE - 0
-> +evaluates to 0 and the check fails.
-> +
-> +With glibc and uClibc this goes unnoticed, because their <features.h>
-> +redefines _XOPEN_SOURCE to 700 (and defines _XOPEN_SOURCE_EXTENDED)
-> +whenever _GNU_SOURCE is set. musl does not touch the application's
-> +feature test macros, so the empty definition reaches curses.h
-> +unchanged and the build fails:
-> +
-> +drawbar.c:2336:33: error: implicit declaration of function 'waddwstr'; did you mean 'waddstr'? [-Wimplicit-function-declaration]
-> +
-> +Define _XOPEN_SOURCE as 700, which matches the already explicit
-> +_POSIX_C_SOURCE value of 200809L (both refer to POSIX.1-2008).
-> +
-> +Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> +Upstream: https://github.com/Atoptool/atop/pull/415
-> +---
-> + drawbar.c | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/drawbar.c b/drawbar.c
-> +index 651a81e..e4db0d6 100644
-> +--- a/drawbar.c
-> ++++ b/drawbar.c
-> +@@ -104,7 +104,7 @@
-> + // the other.
-> + /////////////////////////////////////////////////////////////////////////////
-> + #define _POSIX_C_SOURCE	200809L
-> +-#define _XOPEN_SOURCE
-> ++#define _XOPEN_SOURCE	700
-> + #define _GNU_SOURCE
-> + #define _DEFAULT_SOURCE
-> + 
-> +-- 
-> +2.34.1
-> +
-> -- 
-> 2.34.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+diff --git a/package/squid/0001-Fix-OpenSSL-4.0-compatibility.patch b/package/squid/0001-Fix-OpenSSL-4.0-compatibility.patch
+new file mode 100644
+index 0000000000..a0c3abff4f
+--- /dev/null
++++ b/package/squid/0001-Fix-OpenSSL-4.0-compatibility.patch
+@@ -0,0 +1,368 @@
++From 144a59fec3d7a4bd7f0c3e71934156e1a56ebabc Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Pavol=20=C5=BD=C3=A1=C4=8Dik?= <pzacik@redhat.com>
++Date: Wed, 6 May 2026 17:18:58 +0200
++Subject: [PATCH] Fix OpenSSL 4.0 compatibility
++
++Replace direct ASN1 structure field access with accessor functions.
++and use ASN1_STRING_set() instead of direct field assignment.
++
++Fix issues caused by X509* API constness changes; in some cases,
++casting the const away is necessary to keep compatibility with
++OpenSSL 3.
++
++Downloaded from Fedora:
++https://src.fedoraproject.org/rpms/squid/blob/rawhide/f/squid-7.5-openssl4.patch
++
++Upstream: https://github.com/squid-cache/squid/pull/2501
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ .../cert_generators/file/certificate_db.cc    |  2 +-
++ src/ssl/gadgets.cc                            | 92 +++++++++++--------
++ src/ssl/gadgets.h                             |  4 +-
++ src/ssl/support.cc                            | 18 ++--
++ 4 files changed, 66 insertions(+), 50 deletions(-)
++
++diff --git a/src/security/cert_generators/file/certificate_db.cc b/src/security/cert_generators/file/certificate_db.cc
++index 4b729b316..35849aa63 100644
++--- a/src/security/cert_generators/file/certificate_db.cc
+++++ b/src/security/cert_generators/file/certificate_db.cc
++@@ -335,7 +335,7 @@ Ssl::CertificateDb::addCertAndPrivateKey(std::string const &useKey, const Securi
++     }
++ 
++     const auto tm = X509_getm_notAfter(cert.get());
++-    row.setValue(cnlExp_date, std::string(reinterpret_cast<char *>(tm->data), tm->length).c_str());
+++    row.setValue(cnlExp_date, std::string(reinterpret_cast<const char *>(ASN1_STRING_get0_data(tm)), ASN1_STRING_length(tm)).c_str());
++     const auto subject = OneLineSummary(*X509_get_subject_name(cert.get()));
++     row.setValue(cnlName, subject.get());
++     row.setValue(cnlKey, useKey.c_str());
++diff --git a/src/ssl/gadgets.cc b/src/ssl/gadgets.cc
++index 06b8b79dd..100ee6a46 100644
++--- a/src/ssl/gadgets.cc
+++++ b/src/ssl/gadgets.cc
++@@ -259,20 +259,31 @@ static bool replaceCommonName(Security::CertPointer & cert, std::string const &r
++     if (cn.length() > 2 && *cn.begin() == '[' && *cn.rbegin() == ']')
++         cn = cn.substr(1, cn.size()-2);
++ 
++-    X509_NAME *name = X509_get_subject_name(cert.get());
+++    const X509_NAME *subject = X509_get_subject_name(cert.get());
+++    if (!subject)
+++        return false;
+++
+++    X509_NAME *name = X509_NAME_dup(subject);
++     if (!name)
++         return false;
+++
++     // Remove the CN part:
++     int loc = X509_NAME_get_index_by_NID(name, NID_commonName, -1);
++-    if (loc >=0) {
++-        X509_NAME_ENTRY *tmp = X509_NAME_get_entry(name, loc);
++-        X509_NAME_delete_entry(name, loc);
+++    if (loc >= 0) {
+++        X509_NAME_ENTRY *tmp = X509_NAME_delete_entry(name, loc);
++         X509_NAME_ENTRY_free(tmp);
++     }
++ 
++     // Add a new CN
++-    return X509_NAME_add_entry_by_NID(name, NID_commonName, MBSTRING_ASC,
++-                                      (unsigned char *)(cn.c_str()), -1, -1, 0);
+++    if (!X509_NAME_add_entry_by_NID(name, NID_commonName, MBSTRING_ASC,
+++                                     (unsigned char *)(cn.c_str()), -1, -1, 0)) {
+++        X509_NAME_free(name);
+++        return false;
+++    }
+++
+++    int ret = X509_set_subject_name(cert.get(), name);
+++    X509_NAME_free(name);
+++    return ret;
++ }
++ 
++ const char *Ssl::CertSignAlgorithmStr[] = {
++@@ -301,9 +312,9 @@ static void
++ printX509Signature(const Security::CertPointer &cert, std::string &out)
++ {
++     const ASN1_BIT_STRING *sig = Ssl::X509_get_signature(cert);
++-    if (sig && sig->data) {
++-        const unsigned char *s = sig->data;
++-        for (int i = 0; i < sig->length; ++i) {
+++    if (sig && ASN1_STRING_get0_data(sig)) {
+++        const unsigned char *s = ASN1_STRING_get0_data(sig);
+++        for (int i = 0; i < ASN1_STRING_length(sig); ++i) {
++             char hex[3];
++             snprintf(hex, sizeof(hex), "%02x", s[i]);
++             out.append(hex);
++@@ -377,7 +388,7 @@ mimicAuthorityKeyId(Security::CertPointer &cert, Security::CertPointer const &mi
++         X509_EXTENSION *ext;
++         // Check if the issuer has the Subject Key Identifier extension
++         const int indx = X509_get_ext_by_NID(issuerCert.get(), NID_subject_key_identifier, -1);
++-        if (indx >= 0 && (ext = X509_get_ext(issuerCert.get(), indx))) {
+++        if (indx >= 0 && (ext = const_cast<X509_EXTENSION *>(X509_get_ext(issuerCert.get(), indx)))) {
++             issuerKeyId.reset((ASN1_OCTET_STRING *)X509V3_EXT_d2i(ext));
++         }
++     }
++@@ -418,8 +429,7 @@ mimicAuthorityKeyId(Security::CertPointer &cert, Security::CertPointer const &mi
++     unsigned char *ext_der = nullptr;
++     int ext_len = ASN1_item_i2d((ASN1_VALUE *)theAuthKeyId.get(), &ext_der, ASN1_ITEM_ptr(method->it));
++     Ssl::ASN1_OCTET_STRING_Pointer extOct(ASN1_OCTET_STRING_new());
++-    extOct.get()->data = ext_der;
++-    extOct.get()->length = ext_len;
+++    ASN1_STRING_set(extOct.get(), ext_der, ext_len);
++     Ssl::X509_EXTENSION_Pointer extAuthKeyId(X509_EXTENSION_create_by_NID(nullptr, NID_authority_key_identifier, 0, extOct.get()));
++     if (!extAuthKeyId.get())
++         return false;
++@@ -471,7 +481,7 @@ mimicExtensions(Security::CertPointer & cert, Security::CertPointer const &mimic
++     int nid;
++     for (int i = 0; (nid = extensions[i]) != 0; ++i) {
++         const int pos = X509_get_ext_by_NID(mimicCert.get(), nid, -1);
++-        if (X509_EXTENSION *ext = X509_get_ext(mimicCert.get(), pos)) {
+++        if (X509_EXTENSION *ext = const_cast<X509_EXTENSION *>(X509_get_ext(mimicCert.get(), pos))) {
++             // Mimic extension exactly.
++             if (X509_add_ext(cert.get(), ext, -1))
++                 ++added;
++@@ -482,7 +492,7 @@ mimicExtensions(Security::CertPointer & cert, Security::CertPointer const &mimic
++                 // that the more stringent requirements are met.
++ 
++                 const int p = X509_get_ext_by_NID(cert.get(), NID_key_usage, -1);
++-                if ((ext = X509_get_ext(cert.get(), p)) != nullptr) {
+++                if ((ext = const_cast<X509_EXTENSION *>(X509_get_ext(cert.get(), p))) != nullptr) {
++                     ASN1_BIT_STRING *keyusage = (ASN1_BIT_STRING *)X509V3_EXT_d2i(ext);
++                     ASN1_BIT_STRING_set_bit(keyusage, KeyEncipherment, 1);
++ 
++@@ -495,8 +505,7 @@ mimicExtensions(Security::CertPointer & cert, Security::CertPointer const &mimic
++                                                 (const ASN1_ITEM *)ASN1_ITEM_ptr(method->it));
++ 
++                     ASN1_OCTET_STRING *ext_oct = ASN1_OCTET_STRING_new();
++-                    ext_oct->data = ext_der;
++-                    ext_oct->length = ext_len;
+++                    ASN1_STRING_set(ext_oct, ext_der, ext_len);
++                     X509_EXTENSION_set_data(ext, ext_oct);
++ 
++                     ASN1_OCTET_STRING_free(ext_oct);
++@@ -518,7 +527,7 @@ mimicExtensions(Security::CertPointer & cert, Security::CertPointer const &mimic
++ SBuf
++ Ssl::AsnToSBuf(const ASN1_STRING &buffer)
++ {
++-    return SBuf(reinterpret_cast<const char *>(buffer.data), buffer.length);
+++    return SBuf(reinterpret_cast<const char *>(ASN1_STRING_get0_data(&buffer)), ASN1_STRING_length(&buffer));
++ }
++ 
++ /// OpenSSL ASN1_STRING_to_UTF8() wrapper
++@@ -547,7 +556,7 @@ Ssl::ParseAsSimpleDomainNameOrIp(const SBuf &text)
++ }
++ 
++ std::optional<AnyP::Host>
++-Ssl::ParseCommonNameAt(X509_NAME &name, const int cnIndex)
+++Ssl::ParseCommonNameAt(const X509_NAME &name, const int cnIndex)
++ {
++     const auto cn = X509_NAME_ENTRY_get_data(X509_NAME_get_entry(&name, cnIndex));
++     if (!cn) {
++@@ -576,7 +585,7 @@ Ssl::ParseCommonNameAt(X509_NAME &name, const int cnIndex)
++ static bool
++ addAltNameWithSubjectCn(Security::CertPointer &cert)
++ {
++-    X509_NAME *name = X509_get_subject_name(cert.get());
+++    const X509_NAME *name = X509_get_subject_name(cert.get());
++     if (!name)
++         return false;
++ 
++@@ -610,7 +619,7 @@ static bool buildCertificate(Security::CertPointer & cert, Ssl::CertificatePrope
++     // returns a pointer to the existing subject name. Nothing to clean here.
++     if (properties.mimicCert.get()) {
++         // Leave subject empty if we cannot extract it from true cert.
++-        if (X509_NAME *name = X509_get_subject_name(properties.mimicCert.get())) {
+++        if (const X509_NAME *name = X509_get_subject_name(properties.mimicCert.get())) {
++             // X509_set_subject_name will call X509_dup for name
++             X509_set_subject_name(cert.get(), name);
++         }
++@@ -656,7 +665,7 @@ static bool buildCertificate(Security::CertPointer & cert, Ssl::CertificatePrope
++     bool useCommonNameAsAltName = true;
++     // mimic the alias and possibly subjectAltName
++     if (properties.mimicCert.get()) {
++-        unsigned char *alStr;
+++        const unsigned char *alStr;
++         int alLen;
++         alStr = X509_alias_get0(properties.mimicCert.get(), &alLen);
++         if (alStr) {
++@@ -667,7 +676,7 @@ static bool buildCertificate(Security::CertPointer & cert, Ssl::CertificatePrope
++         // certificates with CN unrelated to subjectAltNames.
++         if (!properties.setCommonName) {
++             int pos = X509_get_ext_by_NID(properties.mimicCert.get(), NID_subject_alt_name, -1);
++-            X509_EXTENSION *ext=X509_get_ext(properties.mimicCert.get(), pos);
+++            X509_EXTENSION *ext = const_cast<X509_EXTENSION *>(X509_get_ext(properties.mimicCert.get(), pos));
++             if (ext) {
++                 if (X509_add_ext(cert.get(), ext, -1))
++                     ++addedExtensions;
++@@ -922,20 +931,23 @@ Ssl::WritePrivateKey(Ssl::BIO_Pointer &bio, const Security::PrivateKeyPointer &p
++ }
++ 
++ Ssl::UniqueCString
++-Ssl::OneLineSummary(X509_NAME &name)
+++Ssl::OneLineSummary(const X509_NAME &name)
++ {
++     return Ssl::UniqueCString(X509_NAME_oneline(&name, nullptr, 0));
++ }
++ 
++ bool Ssl::sslDateIsInTheFuture(char const * date)
++ {
++-    ASN1_UTCTIME tm;
++-    tm.flags = 0;
++-    tm.type = 23;
++-    tm.data = (unsigned char *)date;
++-    tm.length = strlen(date);
++-
++-    return (X509_cmp_current_time(&tm) > 0);
+++    ASN1_UTCTIME *tm = ASN1_UTCTIME_new();
+++    if (!tm)
+++        return false;
+++    if (!ASN1_UTCTIME_set_string(tm, date)) {
+++        ASN1_UTCTIME_free(tm);
+++        return false;
+++    }
+++    int result = X509_cmp_current_time(tm);
+++    ASN1_UTCTIME_free(tm);
+++    return (result > 0);
++ }
++ 
++ /// Print the time represented by a ASN1_TIME struct to a string using GeneralizedTime format
++@@ -945,14 +957,18 @@ static bool asn1timeToGeneralizedTimeStr(ASN1_TIME *aTime, char *buf, int bufLen
++     // UTCTime has the form YYMMDDHHMMSS[Z | [+|-]offset]
++     // GeneralizedTime has the form YYYYMMDDHHMMSS[Z | [+|-] offset]
++ 
+++    const unsigned char *data = ASN1_STRING_get0_data(aTime);
+++    int length = ASN1_STRING_length(aTime);
+++    int type = ASN1_STRING_type(aTime);
+++
++     // length should have space for data plus 2 extra bytes for the two extra year fields
++     // plus the '\0' char.
++-    if ((aTime->length + 3) > bufLen)
+++    if ((length + 3) > bufLen)
++         return false;
++ 
++     char *str;
++-    if (aTime->type == V_ASN1_UTCTIME) {
++-        if (aTime->data[0] > '5') { // RFC 2459, section 4.1.2.5.1
+++    if (type == V_ASN1_UTCTIME) {
+++        if (data[0] > '5') { // RFC 2459, section 4.1.2.5.1
++             buf[0] = '1';
++             buf[1] = '9';
++         } else {
++@@ -960,11 +976,11 @@ static bool asn1timeToGeneralizedTimeStr(ASN1_TIME *aTime, char *buf, int bufLen
++             buf[1] = '0';
++         }
++         str = buf +2;
++-    } else // if (aTime->type == V_ASN1_GENERALIZEDTIME)
+++    } else // if (type == V_ASN1_GENERALIZEDTIME)
++         str = buf;
++ 
++-    memcpy(str, aTime->data, aTime->length);
++-    str[aTime->length] = '\0';
+++    memcpy(str, data, length);
+++    str[length] = '\0';
++     return true;
++ }
++ 
++@@ -996,8 +1012,8 @@ bool Ssl::certificateMatchesProperties(X509 *cert, CertificateProperties const &
++         return true;
++ 
++     if (!properties.setCommonName) {
++-        X509_NAME *cert1_name = X509_get_subject_name(cert);
++-        X509_NAME *cert2_name = X509_get_subject_name(cert2);
+++        const X509_NAME *cert1_name = X509_get_subject_name(cert);
+++        const X509_NAME *cert2_name = X509_get_subject_name(cert2);
++         if (X509_NAME_cmp(cert1_name, cert2_name) != 0)
++             return false;
++     } else if (properties.commonName != CommonHostName(cert))
++diff --git a/src/ssl/gadgets.h b/src/ssl/gadgets.h
++index e0c60c3a3..4c487596b 100644
++--- a/src/ssl/gadgets.h
+++++ b/src/ssl/gadgets.h
++@@ -160,7 +160,7 @@ bool WriteX509Certificate(BIO_Pointer &bio, const Security::CertPointer & cert);
++ bool WritePrivateKey(BIO_Pointer &bio, const Security::PrivateKeyPointer &pkey);
++ 
++ /// a RAII wrapper for the memory-allocating flavor of X509_NAME_oneline()
++-UniqueCString OneLineSummary(X509_NAME &);
+++UniqueCString OneLineSummary(const X509_NAME &);
++ 
++ /**
++   \ingroup SslCrtdSslAPI
++@@ -285,7 +285,7 @@ const char *CommonHostName(X509 *x509);
++ SBuf AsnToSBuf(const ASN1_STRING &);
++ 
++ /// interprets X.509 Subject or Issuer name entry (at the given position) as CN
++-std::optional<AnyP::Host> ParseCommonNameAt(X509_NAME &, int);
+++std::optional<AnyP::Host> ParseCommonNameAt(const X509_NAME &, int);
++ 
++ /// interprets the given buffer as either a textual representation of an IP
++ /// address (if possible) or a domain name without wildcard support (otherwise)
++diff --git a/src/ssl/support.cc b/src/ssl/support.cc
++index e7872035c..09f268a7e 100644
++--- a/src/ssl/support.cc
+++++ b/src/ssl/support.cc
++@@ -272,23 +272,23 @@ ParseSubjectAltName(const GENERAL_NAME &san)
++ 
++         // RFC 5280 section 4.2.1.6 signals IPv4/IPv6 address family using data length
++ 
++-        if (san.d.iPAddress->length == 4) {
+++        if (ASN1_STRING_length(san.d.iPAddress) == 4) {
++             struct in_addr addr;
++             static_assert(sizeof(addr.s_addr) == 4);
++-            memcpy(&addr.s_addr, san.d.iPAddress->data, sizeof(addr.s_addr));
+++            memcpy(&addr.s_addr, ASN1_STRING_get0_data(san.d.iPAddress), sizeof(addr.s_addr));
++             const Ip::Address ip(addr);
++             return AnyP::Host::ParseIp(ip);
++         }
++ 
++-        if (san.d.iPAddress->length == 16) {
+++        if (ASN1_STRING_length(san.d.iPAddress) == 16) {
++             struct in6_addr addr;
++             static_assert(sizeof(addr.s6_addr) == 16);
++-            memcpy(&addr.s6_addr, san.d.iPAddress->data, sizeof(addr.s6_addr));
+++            memcpy(&addr.s6_addr, ASN1_STRING_get0_data(san.d.iPAddress), sizeof(addr.s6_addr));
++             const Ip::Address ip(addr);
++             return AnyP::Host::ParseIp(ip);
++         }
++ 
++-        debugs(83, 3, "unexpected length of an IP address SAN: " << san.d.iPAddress->length);
+++        debugs(83, 3, "unexpected length of an IP address SAN: " << ASN1_STRING_length(san.d.iPAddress));
++         return std::nullopt;
++     }
++ 
++@@ -856,7 +856,7 @@ Ssl::InitClientContext(Security::ContextPointer &ctx, Security::PeerOptions &pee
++ 
++ /// \ingroup ServerProtocolSSLInternal
++ static const char *
++-ssl_get_attribute(X509_NAME * name, const char *attribute_name)
+++ssl_get_attribute(const X509_NAME * name, const char *attribute_name)
++ {
++     static char buffer[1024];
++     buffer[0] = '\0';
++@@ -879,7 +879,7 @@ ssl_get_attribute(X509_NAME * name, const char *attribute_name)
++ const char *
++ Ssl::GetX509UserAttribute(X509 * cert, const char *attribute_name)
++ {
++-    X509_NAME *name;
+++    const X509_NAME *name;
++     const char *ret;
++ 
++     if (!cert)
++@@ -933,7 +933,7 @@ const char *
++ Ssl::GetX509CAAttribute(X509 * cert, const char *attribute_name)
++ {
++ 
++-    X509_NAME *name;
+++    const X509_NAME *name;
++     const char *ret;
++ 
++     if (!cert)
++@@ -1484,7 +1484,7 @@ void Ssl::InRamCertificateDbKey(const Ssl::CertificateProperties &certProperties
++     if (certProperties.mimicCert) {
++         if (auto *sig = Ssl::X509_get_signature(certProperties.mimicCert)) {
++             origSignatureAsKey = true;
++-            key.append((const char *)sig->data, sig->length);
+++            key.append((const char *)ASN1_STRING_get0_data(sig), ASN1_STRING_length(sig));
++         }
++     }
++ 
++-- 
++2.47.3
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
