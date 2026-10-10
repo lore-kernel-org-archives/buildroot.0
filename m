@@ -1,120 +1,105 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6F44CA6017
-	for <buildroot@archiver.kernel.org>; Sat, 10 Oct 2026 07:06:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E16EACA9EBE
+	for <buildroot@archiver.kernel.org>; Sat, 10 Oct 2026 07:08:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 776ED6066C;
-	Sat, 10 Oct 2026 07:06:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5BAFC81218;
+	Sat, 10 Oct 2026 07:08:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aJuCC_cLgtQB; Sat, 10 Oct 2026 07:06:00 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 4A2C460663
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791615960;
-	b=itTX2iWKuLe3/O1avI2qbXRdrgrHCrYMFPafuvdXFftzMye4UkYHR7Se7IP18XTDx/O1
-	 wCbJCT+tQBQrMhRLDnzaDY86kaB8lQJbm0ChXMhnF1sZl6DOpcMvM5WdPvUS2Lfv2pnf4
-	 YOyoAy5SAGVylIDCeYCPB8x0g5AMfNPuRjpDLSKnaOSIO7Bzno5NnXcflCulo4MROetM9
-	 HzSxl1coIOTbTU1DmFUUJJJDlYHFMQrdfNyP/XD1svg6CU2W8Yuf/ZO8ZwntGxtqYo3is
-	 A9IFMAhcd+S8ukcS8hw88JFwz0LgHQC5vqHlqvsUiv+1cpBhnJxU3j7y5pjyllJehOA==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4E0vXH58fq0J; Sat, 10 Oct 2026 07:08:49 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 6E41181209
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791616129;
+	b=LCEyyj/WJnlLTbiFckr4Yy0fqGG0ByLOGgsY8WbnD8LmeSMxW0PaHdid+MQ7VdZtgF/j
+	 ASKjYeiPk0n/XOgcjlErDlerbvSB8rK1MO+Vj03KuaL9Pf5hH1qW7mWm+rGk4aS0kp1sF
+	 Yu5ORf5+TlBLAkUEc8SyirLqUGKQCN+4KDkJJgKUi7nSKCsvj9bJJRI67/RilVoxAz/Bd
+	 f6xMnyuCPA4FEkjmL8D1UqexBGIYKPe9SPPUlvVk3ufGEoy7jtZkBPY9GsZPDDpUyxd0y
+	 vcF29/eURCtL8XNTcA203yruBpmvahoE2rbLzSk7RH77a9J1iIVUdHVJWo6uulFD9NA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791615960;
+	c=relaxed/relaxed; t=1791616129;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 Received:Received:Date:To:Cc:Message-ID:References:MIME-Version:
-	 Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version:Subject:
-	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=l2wJU2uwLUGVM3Btm30gd3bjsMu6eD3A+gmX1zXmSE4=;
-	b=DI8oqP8nWHK0+fvKG2V3XTMO4p01QNS9ZYfo+YGH9Dgk2UQoyg8cpGoBeOUU2frTUtkY
-	 VlVc0uI6m8T9rpDiy2fjE0Lb4sL2/gKS1ZIKwxxdE9JIhunALIyb6h90OKwObE2+UfLa2
-	 6lbZl1YXjQPnQjZYJCFEPk1ng9HmejXfq1EVvqvuSDUZlXao6e5i1fEQfdSzgh2xMeQlI
-	 i8iL6Wsr9av8Rri7xl+ozK139F1SYWEZX09QV7cTTHGAjD2WN299nZeSpMEajha2b79si
-	 HkKwCn3K9xWVfe/pPokFjpmv2dmlWO9vwVUoZoqSqAcgw41FPx5aOJvspBgRas+SsXw==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
+	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
+	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
+	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
+	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:Errors-To:Sender;
+	bh=EiYEWASZX/gHHC162qH8naaNfIDEViPcABD2QWHG20Y=;
+	b=UgRSNcXVYcn+Y5hEaYf2lhEVs37YIOkjpo6sEgfffp9Ur6UzT0q5MlAayn30YRLIohgi
+	 Bfv68ekegCqaq7b/mSZjZUOl7j59JkPnVg8Fxxg0px2N0ibfVfv11Rjatgf7kj8oC/O+v
+	 wLt7Oi5L217udgPCsVBja+Xd3+42lpyUvO9I4QhdApGjBt3ImXx12aCJf8kUWIa14rd6t
+	 koFBhP91Dzh1tcwG44IoPrMeg8VizcpQyBuBzSajoLQ6epPYxdzk3EHh/90weNfEVkSzr
+	 7aKujgZH9i8Z0BxpvZhwCRO4GLcb1XcDmF7xRnhVvp/K7qbtRZjDo8APUfc3kX1tciQ==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791615960;
-	bh=l2wJU2uwLUGVM3Btm30gd3bjsMu6eD3A+gmX1zXmSE4=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=P6/C0HjrqgWRCRRqpJ6yGmqL6ERFGW620tDrLezHKnENvISY1cdeQJcW3hdc0RxZq
-	 vJiAJrmmPfJK+AuAB3pEKzVWULYzQs4aqNo0SbhkWgAGSuAM1cRtBxe6kARI/esC3B
-	 eRaxGKJHcFXjUC0yMa2uAn6AQ5+xbRDALaquQipMZjQiwrfsenMcxRACgignvbU01u
-	 bL2J4wJYYyCXAkr/dw6l8AhfEqs9ZKGQ1MA1CXjznAAWHti3mCwbq4Ciwptb303PCp
-	 262e9sNaSFTynItOb+LFt09/xP5k4SedbfXSyWjMWlHHht8Lp4vgDy2mqZmjtaTu5y
-	 TrTQWJovQTFDA==
+	s=default; t=1791616129;
+	bh=EiYEWASZX/gHHC162qH8naaNfIDEViPcABD2QWHG20Y=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=en2ja7LUDNmccVY7fSBoEVTRRz9SqpbGyT+pTBjafMrjUkfgJnrg6pXhyfNxz11Xc
+	 5QnxuOGw8cl/LTlXRiMFGRpXdOvuUwDcATX9QFIdtWSwarPVC6bcg3mYl4qatZl9si
+	 6MAChcZbWKeTnNrCeFDyJIsYPIr+/aYOJWKpZ9j9b/KhthT0SaYmsKfIbZQXCPsWjA
+	 oFG19f1VFFWCCqyPONwtr0F5OWB50H5Q3Z6OLKRqEquSsouJZjBW9kJVQ7dflsjLiS
+	 dB7De5G8mycD9eWZcKx0oxByXNWwkW6EW2WqRlZTB/LRDIq2h659D5cqvsNZCmxjaw
+	 K5N0bmtI/q28Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4A2C460663;
-	Sat, 10 Oct 2026 07:06:00 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id B5E9375
- for <buildroot@buildroot.org>; Sat, 10 Oct 2026 07:05:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6E41181209;
+	Sat, 10 Oct 2026 07:08:49 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id C648BA64
+ for <buildroot@buildroot.org>; Sat, 10 Oct 2026 07:08:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9B3BB40068
- for <buildroot@buildroot.org>; Sat, 10 Oct 2026 07:05:58 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C383C81209
+ for <buildroot@buildroot.org>; Sat, 10 Oct 2026 07:08:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DUIuzMCffKt0 for <buildroot@buildroot.org>;
- Sat, 10 Oct 2026 07:05:57 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 3EF9C40004
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791615957;
- b=TV8jGESYg/c9oioVakM/VU91NCZDjlAgSdo8jkv9OHkLyPY2r75YRNGj4geTNuaD70eG
- vsq8Dg7m204UpOD0qcnmt+TWTTumqyKtPwQPk25gASK3zqDeTnuhOqIK5rBFbiYGP1sQQ
- iz+LMZpi+Vd4G18PO2wk4OsR5W8Kkd5hd97XfmgkXvC+3jbTUSOGYfgDkFTs/Do5QvNq8
- ig1oZWb/M5J+q9JVLiqva99y9V8+Gasek3RhTcxxisyoErnQgUifzKxaprtuR102C2MVK
- MRF9GPWwIm11/XlNImEs0mqLnDp5Rv2UNvPiHSJnGVHACHa0p+6eOXDdMGNhzldcT+g==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WyPE7YL74wGY for <buildroot@buildroot.org>;
+ Sat, 10 Oct 2026 07:08:46 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 1C44C81205
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791616126;
+ b=HNU1Csem0ZwV0+bxQ13Yi3Qj1YGwh/p7pjFph/Ia8WYiw5P2Z9NbDaZEHPZ3cqA8/UCd
+ EkH+SVYcLLMS+YVbdlg3I8x/ca5txGxw2kEJyC7vOnKBxEAMGZ2/ffoYShV6F+U4SqPMB
+ Q/ppzrRDn/2PvvhNUP/s8BOz3u+Wmf3lpCzK85gpvzfh6NpXq/dWlyRWWC0vOineYz1Gq
+ MFBnvn/hidjrvmmGJOREHKhkVyS8X+BkhEDgeK3mkJF0rOUAAnkVANYUWRpz/T76X0bLT
+ 5GVXR3uXIvprLv8afJWCaC11yma8xI8KOQ/6ABCy8pg+fPXf7wR748AaIWcQF7klS4w==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1791615957;
- h=Received-SPF:Received:Received:Received:DKIM-Signature:Date:From:To:
- Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
- Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version;
- bh=IgOZzuUKtZitsCmFm7fUmL5/Sh10oOs7cLWeM8w4KSo=;
- b=URXfzULnlnoyy9J6IDYqE66eWwaIJBcfGFtnNoU3h19cPreqFqKRWt2CV5vPVuENYM84
- 9luTCKsxpanA1a2om3hoxBVHJ44ADp0qGSCVa54E4HkllNqiC4wC1b+ZjXQKxYWfoQDiT
- 1JO4Hke8b/L3GtPfJ9Bt+SpvFHeO7Thv9CJH3yGx99weR6PBYFRXi1hCGC26sJf+vuIIg
- OOhNk+1xHHW8bews8qgHVoYNTJRpvLCzgk9CX3/1RD7pCcX9KefOq8SvhA7gp3/caHUyr
- 3/0OiM+er9e2yml3rIijMAlqB+N31TXfW0GE6HtqK4VkCJdDKNCwIFCVi7ogQ61rWkQ==
-ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
- dmarc=pass header.from=bootlin.com;
- dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=xcGiVEHi; 
- arc=none smtp.remote-ip=185.246.85.4
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
- helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ c=relaxed/relaxed; t=1791616126;
+ h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
+ X-Git-Newrev:X-Patchwork-Hint:Message-Id;
+ bh=vWrga5rMBgsaib3mLt8wGc3mgnKB3S4d+xocqqinSbA=;
+ b=Ok2ODkvRDssgXMmzXur9LxTsBJITUKUKwBx0U+vQwNQ2/x2famOtANI8Ec84MIE80et4
+ S0h/0HOwWDsOzUMfhnQNXl3RtsZYE5eBJ3msKkSxrClKu0YG02YuBjhsXO/bcbVEgrdvw
+ JL+18dRdD+vKxJEoNZeM9yG43DKzQOkonPm4vo6LBJwQLqyNvcDGIsaUwzPK/rG15yCGu
+ xWLdB6zZP2Fe5tYD5v4uLyb1Wd4VjbLUEE0Dn06nzKeQTvv7os+rgOUp4mME7KWt1Hq9A
+ Hwk1rQumecg9zvmF2EJFWVnSsQjOl58E+FV4HatAm7j7tWmmntgQXaBaQ5eDRhwOIsg==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
+ arc=none smtp.remote-ip=140.211.167.122
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3EF9C40004
- for <buildroot@buildroot.org>; Sat, 10 Oct 2026 07:05:56 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-03.galae.net (Postfix) with ESMTPS id 0FB154E411CB
- for <buildroot@buildroot.org>; Sat, 10 Oct 2026 07:05:54 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id CCD7C6075C;
- Sat, 10 Oct 2026 07:05:53 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id C437211D70BC3; 
- Sat, 10 Oct 2026 09:05:52 +0200 (CEST)
-Date: Sat, 10 Oct 2026 09:05:51 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-Message-ID: <asniCZ4ltvtZWCh5@windsurf>
-References: <20261006162106.3439373-1-bernd@kuhls.net>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20261006162106.3439373-1-bernd@kuhls.net>
-X-Last-TLS-Session-Version: TLSv1.3
-Subject: Re: [Buildroot] [PATCH v8 00/84] Bump libopenssl, python3, kodi,
- ffmpeg
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1C44C81205
+ for <buildroot@buildroot.org>; Sat, 10 Oct 2026 07:08:46 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id DD4DF8E644; Sat, 10 Oct 2026 07:07:27 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 10 Oct 2026 09:06:22 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 8198b6b3c9c824755ca3b7aba9be0b18e7526575
+X-Git-Newrev: 1e401eddad884bb92ec5c0075845575209a3c374
+X-Patchwork-Hint: ignore
+Message-Id: <20261010070727.DD4DF8E644@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing: quazip: refactor to have
+ a base class for the Qt{5, 6} test classes
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -128,66 +113,69 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, Oct 06, 2026 at 06:19:41PM +0200, Bernd Kuhls wrote:
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/1e401eddad884bb92ec5c0075845575209a3c374
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-> This series consists of the following parts:
-> 
-> 0001-0003: package removals
-> 0004-0056: - version bumps that provide compatibility with OpenSSL 4.x
->            - upstream fixes for packages without a released version that
->              provides compatibility with OpenSSL 4.x
->            0006-0021 belong to the boost patch series
->            The luvi package needs to be bumped first so the upstream fix
->            for OpenSSL 4.x can be applied
-> 
-> Until here this is the latest version of the libopenssl bump series.
-> None of the patches 0001-0056 depend on the libopenssl bump, they all
-> build fine with libopenssl 3.6.x.
-> 
-> 0057-0060: build fixes for ffmpeg 9.0.2
-> 
-> None of the patches 0057-0060 depend on the ffmpeg bump.
-> 
-> The following changes will break bisectability...
-> 
-> 0061-0062: bump python3 to 3.15.0rc3 (RFC)
->            This bump depends on the ncurses fix
->            This bump will break kodi 21.3
-> 
-> 0063:      bump libopenssl to 4.0.3
->            Due to the python3 bump no new breakages are expected
-> 
-> 0064-0065: bump ffmpeg to 9.0.2
->            libcamera-apps 1.10.1 is incompatible with our current ffmpeg
->            version, to reduce the impact on bisectability we bump it
->            right before the ffmpeg bump
->            This bump will add a further breakage to kodi 21.3
-> 
-> 0066-0068: version bumps to prepare the kodi bump
->            These bump are incompatible with our current kodi version
-> 
-> 0069-0084: bump kodi to 22.0rc1-Piers (RFC)
+Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ support/testing/tests/package/test_quazip.py | 26 +++++++++++---------------
+ 1 file changed, 11 insertions(+), 15 deletions(-)
 
-If the python 3.15 and ffmpeg 9.0.2 bumps break Kodi 21.3, isn't it
-possible to bump Kodi to 22.x *before* bumping Python to 3.15 and
-ffmpeg to 9.0.2 ?
-
-Generally speaking, this series is too long, and you're reposting it
-too frequently. Can I suggest that we try to iron out each topic one
-at a time?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/support/testing/tests/package/test_quazip.py b/support/testing/tests/package/test_quazip.py
+index 154481fe4a..b1bcdb7e07 100644
+--- a/support/testing/tests/package/test_quazip.py
++++ b/support/testing/tests/package/test_quazip.py
+@@ -3,10 +3,10 @@ import os
+ import infra.basetest
+ 
+ 
+-class TestQuazipQt6(infra.basetest.BRTest):
++class TestQuazipBase(infra.basetest.BRTest):
++    __test__ = False
+     config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
+         """
+-        BR2_PACKAGE_QT6=y
+         BR2_PACKAGE_QUAZIP=y
+         BR2_PACKAGE_QUAZIP_INSTALL_TESTS=y
+         BR2_TARGET_ROOTFS_CPIO=y
+@@ -23,21 +23,17 @@ class TestQuazipQt6(infra.basetest.BRTest):
+         self.assertRunOk("/usr/bin/qztest", 120)
+ 
+ 
+-class TestQuazipQt5(infra.basetest.BRTest):
+-    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++class TestQuazipQt5(TestQuazipBase):
++    __test__ = True
++    config = TestQuazipBase.config + \
+         """
+         BR2_PACKAGE_QT5=y
+-        BR2_PACKAGE_QUAZIP=y
+-        BR2_PACKAGE_QUAZIP_INSTALL_TESTS=y
+-        BR2_TARGET_ROOTFS_CPIO=y
+         """
+ 
+-    def test_run(self):
+-        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
+-        self.emulator.boot(arch="armv5",
+-                           kernel="builtin",
+-                           options=["-initrd", cpio_file])
+-        self.emulator.login()
+ 
+-        # qztest returns non-zero if any of the tests failed
+-        self.assertRunOk("/usr/bin/qztest", 120)
++class TestQuazipQt6(TestQuazipBase):
++    __test__ = True
++    config = TestQuazipBase.config + \
++        """
++        BR2_PACKAGE_QT6=y
++        """
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
